@@ -1,0 +1,56 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "retained_pr": 897,
+  "retained_pr_head": "f24a5260e60fba234f1e094dec1bba2522cd3403",
+  "superseded_duplicate_prs": [885, 886, 896],
+  "authority_adjudication": {
+    "base_control": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json",
+    "base_control_schema": "4.1",
+    "base_control_blob_sha": "fd0fe11764be7240e08a08245a70ad24f12b4387",
+    "execution_addendum": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json",
+    "execution_addendum_schema": "4.2-execution-boundary-addendum",
+    "execution_addendum_status": "ACTIVE",
+    "execution_addendum_mode": "FREE_ONLY",
+    "execution_addendum_bound_base_blob_sha": "fd0fe11764be7240e08a08245a70ad24f12b4387",
+    "composition_result": "MATCH: 4.2 explicitly losslessly composes over the exact current 4.1 blob and preserves unmentioned FREE_ONLY/provider rules",
+    "preserved_together_forbidden": true
+  },
+  "adjudication": {
+    "pr897": "RETAIN_DIRECT_TOGETHER_DONOR: uses active 4.2 status/mode/preserved_hard_rules and secret lookup tripwire while preserving the canonical v2 preflight validator",
+    "pr896": "WEAKER_DUPLICATE: reads only 4.1 mode and omits the 4.2 execution-boundary hard-rule surface",
+    "pr886": "CLOSED_DUPLICATE: introduced CLAY_PROVIDER_MODE as a parallel authority and was based before the canonical v2 preflight-validator repair",
+    "whole_provider_gate": "STILL_OPEN: direct Together guard is not the complete FREE_ONLY_PROVIDER_ADMISSION_RECEIPT/v2 or FREE_ONLY_FALLBACK_CHAIN_RECEIPT/v1; exported direct/fallback routing still needs one machine-readable cost-class admission before every secret/key lookup and network hop"
+  },
+  "execution_observation": {
+    "pr897_workflow_run_mini_cognition": 32571129031,
+    "pr897_workflow_job_mini_cognition": 97026621630,
+    "pr897_workflow_run_direct_admission": 32571128887,
+    "pr897_workflow_job_direct_admission": 97026621366,
+    "mini_cognition_steps": null,
+    "direct_admission_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS",
+    "runtime_test_credit": 0,
+    "semantic_test_fail_claim": false
+  },
+  "unusual_experiment": {
+    "claimed_by_this_adjudication": false,
+    "reason": "parallel same-trigger work already declared unusual interventions and no immutable shared macrocycle_id is available; this receipt is source/control adjudication plus regression classification only"
+  },
+  "provider_activity": {
+    "together_secret_read_by_this_organ": false,
+    "authenticated_preflight": false,
+    "network_request": false,
+    "upload": false,
+    "price_request": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "acceptance": "DIRECT TOGETHER SOURCE FENCE RETAINED; EXACT RUNTIME UNOBSERVED; FALLBACK/COST-CLASS PROVIDER GATE OPEN; WHOLE PRODUCT IN_PROGRESS",
+  "next_gate": "first actually-started authorized exact isolated execution of PR897 focused regression, then fuse the same canonical cost-class admission across the exported direct/fallback provider chain before any key lookup or network I/O"
+}

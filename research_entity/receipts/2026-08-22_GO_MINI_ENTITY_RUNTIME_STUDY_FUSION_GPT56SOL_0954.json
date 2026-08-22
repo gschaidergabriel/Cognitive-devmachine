@@ -87,10 +87,12 @@
     "evidence_class": "MECHANISM_ONLY_NOT_PRODUCT_RUNTIME_PASS"
   },
   "unusual_experiment_coordination": {
-    "credited_global_slot": "PR 727 Preset-Amputation",
-    "race": "this organ began the SQLite fault analysis before PR 727's reservation became visible",
+    "credited_global_slot": "Same-Version Artifact Identity Collision Audit recorded on main, expanded by commit 4fa6c00356ce9fbaa231e2c8cb0328b591ab6efe",
+    "credited_result": "FOUND_REAL_MULTI_ARTIFACT_VERSION_COLLISION",
+    "pr_727_preset_amputation": "RETAINED_AS_FUTURE_DISCRIMINATOR_NOT_EXECUTED_THIS_GO",
+    "race": "this organ began a separate SQLite fault analysis before the already-consumed global slot became visible in current shared state",
     "credit_for_this_organ": "NOT_CREDITED_AS_SECOND_UNUSUAL_EXPERIMENT",
-    "negative_result": "parallel organs currently lack an atomic shared reservation for the one-unusual-experiment-per-go law"
+    "negative_result": "parallel organs currently lack an atomic shared reservation/read barrier for the one-unusual-experiment-per-go law"
   },
   "durable_actions": [
     "GitHub review 4998760406 on PR 727 records epistemic, atomicity, source-order and execution-evidence blockers",
@@ -102,7 +104,8 @@
     "persist exactly one machine-readable study row keyed to output/generation inside the same SQLite transaction",
     "append exactly one public fenced state box from that same committed record",
     "converge Clay source and tests on fresh-DB init -> DB profile read -> generic inference_generate",
-    "obtain an actually-started exact-head isolated run for focused regressions including Preset-Amputation and crash/rollback cases",
+    "obtain an actually-started exact-head isolated run for ordinary focused regressions and crash/rollback cases",
+    "execute Preset-Amputation only in a later macro-cycle if its unusual-experiment slot is explicitly available",
     "after structured convergence, repeat real remote-provider and real local-model quality gates separately"
   ],
   "non_claims": [

@@ -1,0 +1,110 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "receipt_branch_base_main_sha": "5425212a89d657c2682f1a71912ffb324931a142",
+  "source_repair": {
+    "pull_request": 929,
+    "pr_head_sha": "35a6b6745a1114ed19b15b89ea6b532f8f2afe35",
+    "merge_sha": "3303585bf7822cde92caf99e2cf2dd37ea3c158b",
+    "status": "MERGED_SOURCE_MECHANISM",
+    "defect": "SFT-v2 corpus manifest bound stale Qwen2.5 base-model names even though model/provider choice is campaign-external and the current primary paid-training base is Qwen/Qwen3.5-0.8B.",
+    "evidence_boundary": "The stale names were corpus provenance metadata, not proof that generated training messages contained model/provider literals or that learned weights encoded those identities.",
+    "repair": [
+      "remove base_primary and base_ablation from corpus manifest",
+      "add model_binding_policy=campaign_external_not_corpus_identity",
+      "add provider_binding_policy=campaign_external_not_corpus_identity",
+      "add deterministic exact-byte/model-literal regression",
+      "bind direct-0.8B workflow checkout to exact pull-request head SHA"
+    ]
+  },
+  "exact_source_blobs_executed": {
+    "the artefact/blogpost_entity/mini_cognition/generate_sft_v2.py": "3b8bce53bfa624fff6f21182c381ccba153135b8",
+    "the artefact/blogpost_entity/mini_cognition/test_corpus_model_neutrality_v2.py": "5d7ecb850a92d9a8d4a897aaa15d4872ba3068ec",
+    "the artefact/blogpost_entity/mini_cognition/validate_corpus_v2.py": "90db81209ae83cb55ec29ce6d0469c6cc93ba1e2",
+    "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py": "5c36b401497c299fb13e368dc3e8de485769ecbb",
+    "the artefact/blogpost_entity/mini_cognition/claycode_syntax_v1.py": "ca9612016a166da0ae3495e08d9f73ace9cb96af"
+  },
+  "unusual_experiment": {
+    "local_intervention_count": 1,
+    "count_for_global_macrocycle": "UNRESOLVED_NO_UPSTREAM_ID",
+    "id": "CORPUS_MANIFEST_MODEL_IDENTITY_AMPUTATION",
+    "hypothesis": "Model/provider identity is external campaign configuration rather than SFT-v2 corpus identity; removing stale model metadata should leave all generated training and validation messages byte-identical.",
+    "counterhypothesis": "The model-base metadata is coupled to generated training bytes or hides model/provider literals in the learned targets.",
+    "intervention": "Remove only stale corpus-manifest model-base identity and replace it with explicit campaign-external model/provider binding policy, then regenerate with the exact merged generator blob.",
+    "isolated_execution": {
+      "source_identity_method": "Git blob SHA-1 recomputed locally for exact reconstructed GitHub blobs before execution",
+      "model_neutrality_test": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "result": "PASS"
+      },
+      "observed_train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+      "observed_validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+      "known_qwen_together_literals_in_generated_train_validation": 0,
+      "result": "MECHANISM_SUPPORTED"
+    }
+  },
+  "full_current_corpus_regeneration_validation": {
+    "classification": "BOUNDED_EXACT_GIT_BLOB_LOCAL_COMPONENT_PASS",
+    "generator_returncode": 0,
+    "canonical_validator_returncode": 0,
+    "train_lines": 1485,
+    "validation_lines": 165,
+    "train_unique": 1485,
+    "validation_unique": 165,
+    "train_structural_invalid": 0,
+    "validation_structural_invalid": 0,
+    "exact_cross_split_overlap": 0,
+    "prompt_cross_split_overlap": 0,
+    "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+    "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+    "validator_ok": true,
+    "note": "This closes the offline corpus-generation/validation discriminator for the executed exact blobs. It is not whole-product or hosted-runner acceptance."
+  },
+  "hosted_exact_pr_execution": {
+    "workflow": "claycog-08b-direct-admission",
+    "run_id": 32571329633,
+    "job_id": 97027091436,
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT",
+    "semantic_test_failure_observed": false
+  },
+  "execution_policy": {
+    "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "observed_program_state_free_only": true,
+    "together_credentialed_preflight_allowed_now": false,
+    "provider_network_execution_allowed_now": false
+  },
+  "together": {
+    "secret_used": false,
+    "provider_call": false,
+    "upload": false,
+    "model_limits_call": false,
+    "price_estimate": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "claims": {
+    "corpus_manifest_model_provider_neutrality_repair": "MERGED",
+    "model_neutrality_amputation_mechanism": "SUPPORTED_BY_EXACT_BLOB_ISOLATED_EXECUTION",
+    "full_1650_row_current_generator_canonical_validation": "VERIFIED_FOR_EXECUTED_EXACT_BLOBS",
+    "github_hosted_exact_runner": "BLOCKED_EXECUTION_ADMISSION",
+    "authenticated_together_admission": "CURRENTLY_FORBIDDEN_BY_FREE_ONLY_AND_NOT_EXECUTED",
+    "training": "NOT_STARTED",
+    "trained_checkpoint_quality": "UNVERIFIED",
+    "q4_k_m": "UNVERIFIED",
+    "peak_rss_lt_1_gib_ctx_2048": "UNVERIFIED",
+    "whole_mini_entity": "IN_PROGRESS"
+  },
+  "next_gate": "While FREE_ONLY remains true, continue provider-independent OOD/evaluation and native profile-v2 parity/exact runtime work. Do not access Together credentials/network. If FREE_ONLY is later explicitly cleared, refresh exact current source/policy and perform no-create authenticated provider preflight before any separately authorized billed create."
+}

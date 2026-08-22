@@ -1,0 +1,78 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_directive_refreshed": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "fresh_base_sha": "2f9fda0a70d5fc483b73782733d3680a093ef470",
+  "candidate_branch": "chatgpt/go-claycog-ood-depth-20260822-1525",
+  "candidate_head_before_receipt": "15a5d4334feee94f6a56fd43d4dcb7c7e409446d",
+  "pull_request": 866,
+  "parallel_fusion_observed": {
+    "comment_and_string_semantic_spoof": "already fused to main by #838 / e073e3577334d4dce723ffca378e61528bf0ed24",
+    "top_level_canonical_validator": "already fused to main by #862 / 2f9fda0a70d5fc483b73782733d3680a093ef470",
+    "superseded_pr_closed": 847
+  },
+  "remaining_defect": "OOD semantic-call scoring had no brace-depth contract, so a required function-like semantic marker nested under non-canonical/dead control flow such as if false { hyper_alt(...) } could still receive semantic credit after strings/comments were hardened.",
+  "unusual_experiment": {
+    "name": "COMMENT_AND_DEAD_BRANCH_SEMANTIC_MARKER_SPOOF",
+    "count_for_this_go": 1,
+    "initial_result": "outside-string-only extraction rejected quoted spoofing but counted comment and dead-branch calls",
+    "post_parallel_fusion_unique_result": "after #838 closed comments, dead-control-flow call depth remained the non-duplicate discriminator"
+  },
+  "delta": [
+    "extend existing claycode_calls_v2.py authority with brace depth; do not add a second parser",
+    "require OOD action/state function-like semantic markers at canonical turn-body depth 1",
+    "keep cfg(...) nested expression markers visible",
+    "require exact omega OOD outer calls at turn-body depth while global real-call counts still reject hidden duplicates",
+    "add test_eval_call_depth_v1.py and CI entry"
+  ],
+  "bounded_mechanism_reproduction": {
+    "dead_branch_hyper_alt_depth": 2,
+    "dead_branch_top_level_credit": false,
+    "top_level_hyper_alt_depth": 1,
+    "top_level_credit": true,
+    "nested_cfg_visible": true
+  },
+  "adjacent_regression_evidence_from_same_go": {
+    "sft_v2_train_lines": 1485,
+    "sft_v2_validation_lines": 165,
+    "train_structural_invalid": 0,
+    "validation_structural_invalid": 0,
+    "exact_cross_split_overlap": 0,
+    "prompt_cross_split_overlap": 0,
+    "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+    "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+    "note": "this regression was performed on the stricter top-level candidate before #862 independently fused that validator to main; it supports compatibility but is not exact runtime credit for PR #866"
+  },
+  "github_actions": {
+    "run_id": 32562274215,
+    "job_id": 97005602392,
+    "conclusion": "failure",
+    "visible_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS",
+    "test_credit": "NONE"
+  },
+  "main_movement_after_fresh_base": {
+    "observed_main_at_pr_creation": "299061fb3030a6b97bb24e3e8dc1598b25c643ae",
+    "difference_from_fresh_base": "one unrelated agentZero/bewertung/bewertungen.jsonl.meta.json metadata change",
+    "semantic_overlap_with_candidate": false
+  },
+  "together": {
+    "network_call": false,
+    "dataset_upload": false,
+    "billed_create": false,
+    "training_started": false,
+    "secret_exposed": false
+  },
+  "claims": {
+    "source_candidate": true,
+    "mechanism_supported": true,
+    "exact_github_actions_runtime_verified": false,
+    "trained_model_quality_verified": false,
+    "whole_mini_entity_pass": false
+  },
+  "next_gate": "execute PR #866 exact checks on an admitted runner, then fuse only if current main has no new overlapping semantic implementation"
+}

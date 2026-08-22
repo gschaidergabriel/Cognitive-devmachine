@@ -1,0 +1,62 @@
+{
+  "schema": "clay-go-native-source-closure-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "base_main_sha": "456e3e4d6853ff5b3a85300bdbe2367818e15052",
+  "branch": "gpt56sol/go-native-source-closure-20260822-1309",
+  "evidence_parent_commit": "5986f5ee0c525d583c3f5573c067c20b27062998",
+  "problem": "The canonical native source is split: mini_entity.c contains quoted includes while build_native_bound.py historically hashed only the top-level wrapper. Therefore implementation chunks could change without changing the provenance source_sha recorded by the builder. check_native_reference.py also treated source presence as reproducibility progress even when the current source version differs from the credited historical 0.6.0 artifact.",
+  "observed_current_source": {
+    "top_level": "the artefact/blogpost_entity/native/mini_entity.c",
+    "top_level_shape": "five quoted local includes",
+    "implementation_version_observed": "mini-entity/0.7.0-dev1",
+    "credited_historical_version": "mini-entity/0.6.0"
+  },
+  "delta": [
+    "build_native_bound.py now computes a deterministic transitive quoted-local-include closure identity",
+    "each closure file records relative path, byte size and SHA-256",
+    "the closure SHA-256, not wrapper-only SHA-256, seeds deterministic compilation and is persisted in provenance schema v2",
+    "missing local includes and local include paths escaping the native source root fail closed",
+    "check_native_reference.py now imports the same closure identity and refuses to call mere source presence reproducibility",
+    "the historical 0.6 checker now reports a current-source version mismatch when canonical source is 0.7.0-dev1"
+  ],
+  "exact_source_bytes": {
+    "build_native_bound.py_git_blob_sha1": "7abdcdd8665089f54b3ddd63f73842165c49a04b",
+    "build_native_bound.py_sha256": "30114df068152f92364315238bec5228a12f55f0c985c80f31b964f201737368",
+    "test_build_native_bound.py_git_blob_sha1": "a8e43695d43bc144da73dff1189baac34933aca6",
+    "test_build_native_bound.py_sha256": "1f3b55fb950f9089f1bff32628df49f09d1a6734d4e711e4e76dc0db5aa628e6",
+    "check_native_reference.py_sha256_local_candidate": "b74633f30c485bea654af9e4c4e2af4645d98c14aca21740d4adc34818a52533"
+  },
+  "isolated_execution": {
+    "surface": "current ChatGPT isolated container",
+    "command_class": "python unittest + py_compile",
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "syntax_compile": "PASS",
+    "scope": "PROVENANCE_HELPER_MECHANISM_ONLY"
+  },
+  "unusual_experiment": {
+    "name": "TRANSITIVE_INCLUDE_MUTATION_PROVENANCE_LESION",
+    "count_for_this_go": 1,
+    "intervention": "mutate a quoted included implementation chunk while leaving the top-level C wrapper byte-identical",
+    "old_top_level_identity_prediction": "unchanged",
+    "closure_identity_prediction": "changed",
+    "observed": "top-level SHA stayed equal while closure SHA changed",
+    "result": "SUPPORTED"
+  },
+  "counterhypothesis": "Top-level source hashing is sufficient because compiler output changes whenever an included file changes.",
+  "counterhypothesis_result": "REJECTED_FOR_PROVENANCE: output drift may reveal a change after compilation, but the build receipt would still misidentify which source bytes were admitted and cannot source-bind the artifact before/independent of output comparison.",
+  "not_claimed": [
+    "native Mini Entity ELF rebuild PASS",
+    "same-environment repeat-build byte identity for current 0.7.0-dev1 source",
+    "credited historical 0.6.0 ELF reproducibility",
+    "cross-environment reproducibility",
+    "real remote provider acceptance",
+    "real local model acceptance",
+    "whole Mini Entity final acceptance"
+  ],
+  "next_discriminator": "Execute build_native_bound.py against the exact canonical 0.7.0-dev1 source closure in an admitted sandbox with sqlite3/libcurl/json-c development inputs, require two byte-identical builds, capture the new source-closure receipt and ELF digest, then run the native fixture/atomicity regressions against that exact ELF."
+}

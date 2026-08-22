@@ -505,6 +505,19 @@ class ProfilePipelineRuntime(clay.Runtime):
             current = current[int(part)] if isinstance(current, list) else current[part]
         return current
 
+    @staticmethod
+    def _iter_persisted_string_leaves(value: Any):
+        """Yield JSON string values that can be persisted; object keys are policy-neutral."""
+        stack = [value]
+        while stack:
+            current = stack.pop()
+            if isinstance(current, str):
+                yield current
+            elif isinstance(current, dict):
+                stack.extend(current.values())
+            elif isinstance(current, list):
+                stack.extend(current)
+
     def _provider_chat_json(self, p: dict[str, Any]) -> dict[str, Any]:
         provider = p["provider"]
         if self.provider_override is not None:
@@ -594,20 +607,15 @@ class ProfilePipelineRuntime(clay.Runtime):
 
             patterns = [re.compile(pattern, re.I) for pattern in gate.get("leak_patterns", [])]
             secrets_now = [value for value in self._active_secrets if value]
-
-            def scan(value: Any) -> None:
-                text = str(value)
+            for text in self._iter_persisted_string_leaves(payload):
                 if any(pattern.search(text) for pattern in patterns):
                     raise PipelineFault("LEAK_PATTERN")
                 if any(secret in text for secret in secrets_now):
                     raise PipelineFault("SECRET_LEAK")
 
-            scan(payload[contract["title_field"]])
-            scan(payload[contract["intro_field"]])
             allowed = set(compiled["allowed_evidence_refs"])
             metrics = compiled["personality_state"]
             for section in payload[contract["sections_field"]]:
-                scan(section[contract["section_text_field"]])
                 refs = section.get(contract["section_evidence_field"], [])
                 if gate.get("require_evidence_per_section", True) and not refs:
                     raise PipelineFault("SECTION_WITHOUT_EVIDENCE")

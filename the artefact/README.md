@@ -184,6 +184,16 @@ The native pipeline remains a separate whole-product acceptance frontier. Curren
 
 Native acceptance continues to require exact-current execution of the relevant neutrality, secret-isolation, profile-v2 semantic admission/parity, atomicity, generation-CAS and local inference contracts. Keep fail-closed guards in place where full profile parity is not yet implemented.
 
+## Structured reference effect-surface guard — 2026-08-22
+
+The canonical Clay run already requires `pipeline_profile_read` and `inference_generate`, while the Python structured reference runtime still exposes the legacy `profile_load` / `provider_chat_json` surface and is therefore **not converged**.
+
+This `go` hardens `check_structured_contract_sync.py` to schema v2. Runtime support now counts only when Python AST evidence binds each required effect through all three executable layers: the `allowed_effects` admission set, the `effect()` dispatch, and the concrete handler method. Mentions in comments, docstrings or dead string literals do not count. Retained legacy effects in admission or dispatch keep the gate closed.
+
+One bounded source-level poison regression (`COMMENT_ONLY_EFFECT_SURFACE_POISON`) plus ordinary controls passed 3/3 under Python 3.13.5 in the current isolated ChatGPT container. This is **source/mechanism evidence only**: it does not implement the missing reference effects and gives zero exact product-runtime credit.
+
+The next implementation step remains a fresh-current-main convergence of DB-resident `pipeline_profile_read` plus generic `inference_generate`, preserving the recursive persisted-string leak gate and the newest staged-cognition/provenance owner contract, followed by exact authorized isolated execution.
+
 ## Evidence law
 
 Always distinguish:

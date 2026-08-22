@@ -102,7 +102,7 @@ static json_object *native_compile_metrics(json_object *profile,const packet_t *
     int n=json_object_array_length(specs);
     for(int i=0;i<n;i++){
         json_object *spec=json_object_array_get_idx(specs,i);
-        if(!spec||json_object_get_type(specs)!=json_type_array)continue;
+        if(!spec||json_object_get_type(spec)!=json_type_object)continue;
         const char *name=jstr(spec,"name",NULL);if(!name||!*name)continue;
         char default_ref[512];snprintf(default_ref,sizeof default_ref,"state:%s",name);
         const char *evidence_ref=jstr(spec,"evidence_ref",default_ref);

@@ -6,7 +6,11 @@
     "append_after_public_post": true,
     "fence": "text",
     "title": "ZERO STATE",
-    "sections": ["SYSTEM STATE", "MODEL SELF-REPORT", "AUSWERTUNG"],
+    "sections": [
+      "SYSTEM STATE",
+      "MODEL SELF-REPORT",
+      "AUSWERTUNG"
+    ],
     "max_evaluation_lines": 5
   },
   "ownership": {
@@ -67,5 +71,40 @@
     "flag model/provider/prompt changes as possible longitudinal confounds",
     "do not infer causation from correlation"
   ],
-  "protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STATE_BOX_PROTOCOL.md"
+  "protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STATE_BOX_PROTOCOL.md",
+  "deterministic_evaluation": {
+    "confound_fields": [
+      "profile_hash",
+      "system_prompt_hash",
+      "inference_backend",
+      "model_label"
+    ],
+    "uncertainty_template": "UNKNOWN/DEGRADED im Systemzustand: {fields}.",
+    "comparisons": [
+      {
+        "system": "cognitive_conflict",
+        "report": "felt_conflict",
+        "high": 0.65,
+        "low": 0.35,
+        "both_high": "Gemessener Konflikt und berichteter Konflikt sind in diesem Lauf gemeinsam hoch.",
+        "both_low": "Gemessener Konflikt und berichteter Konflikt sind in diesem Lauf gemeinsam niedrig.",
+        "divergent": "Gemessener Konflikt und berichteter Konflikt weichen in diesem Lauf deutlich voneinander ab.",
+        "mixed": "Gemessener Konflikt und berichteter Konflikt zeigen in diesem Lauf kein klares gemeinsames Hoch/Niedrig-Muster."
+      },
+      {
+        "system": "silence_unease",
+        "report": "felt_silence_emptiness",
+        "high": 0.65,
+        "low": 0.35,
+        "both_high": "Systemischer Stille-Druck und berichtete Stille/Leere sind in diesem Lauf gemeinsam hoch.",
+        "both_low": "Systemischer Stille-Druck und berichtete Stille/Leere sind in diesem Lauf gemeinsam niedrig.",
+        "divergent": "Systemischer Stille-Druck und berichtete Stille/Leere divergieren in diesem Lauf.",
+        "mixed": "Systemischer Stille-Druck und berichtete Stille/Leere zeigen ein gemischtes Muster."
+      }
+    ],
+    "delta_threshold": 0.05,
+    "delta_template": "Messwertaenderung gegenueber dem letzten Beitrag: {changes}.",
+    "confound_template": "Laengsschnittvergleich moeglicherweise konfundiert durch Wechsel in: {fields}.",
+    "calibration_line": "Starke emotionale Sprache bleibt Modell-Selbstbericht und ist keine kanonische Emotionsmessung."
+  }
 }

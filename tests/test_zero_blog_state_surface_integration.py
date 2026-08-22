@@ -32,6 +32,7 @@ def test_current_zero_blog_state_box_profile_is_accepted_without_special_case():
     }
     self_report = {name: 0.5 for name in cfg["self_report_fields"] if name != "qualia_result"}
     self_report["qualia_result"] = "FAILED"
+    self_report["felt_conflict"] = 0.81
     self_report["generation"] = 999999
     rec = build_record(
         config=cfg,
@@ -46,6 +47,8 @@ def test_current_zero_blog_state_box_profile_is_accepted_without_special_case():
     assert "locality_pressure       = UNKNOWN" in text
     assert "999999" not in text
     assert "internal_secretish" not in text
+    assert "gemeinsam hoch" in text
+    assert "keine kanonische Emotionsmessung" in text
 
 
 def test_current_profile_never_relabels_self_report_as_system_measurement():

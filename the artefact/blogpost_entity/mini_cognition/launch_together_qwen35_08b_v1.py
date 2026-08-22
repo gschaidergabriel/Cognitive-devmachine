@@ -11,6 +11,8 @@ RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=flo
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00")); FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
+PROVIDER_POLICY_REL=Path("research_entity/claycode/autonomous/PROVIDER_EXECUTABLE_POOL.json")
+PAID_PROVIDER_ADMISSION_MODES={"PAID_ALLOWED"}
 
 def validate_static_contract():
     if MODEL!=EXPECTED_MODEL: raise SystemExit(f"MODEL_OVERRIDE_REJECTED expected {EXPECTED_MODEL!r}, got {MODEL!r}")
@@ -21,6 +23,36 @@ def validate_static_contract():
 def local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
     subprocess.run([sys.executable,str(V2_VALIDATOR),str(TRAIN),str(VALID)],check=True)
+
+def provider_policy_path():
+    for root in (HERE,*HERE.parents):
+        candidate=root/PROVIDER_POLICY_REL
+        if candidate.is_file(): return candidate
+    raise SystemExit(f"BLOCKED_BEFORE_LAUNCH provider=together cost_class=PAID reason=PROVIDER_POLICY_MISSING path={PROVIDER_POLICY_REL}")
+
+def load_provider_execution_policy():
+    path=provider_policy_path()
+    try: policy=json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e: raise SystemExit(f"BLOCKED_BEFORE_LAUNCH provider=together cost_class=PAID reason=PROVIDER_POLICY_UNREADABLE path={path} error={type(e).__name__}") from e
+    if not isinstance(policy,dict): raise SystemExit(f"BLOCKED_BEFORE_LAUNCH provider=together cost_class=PAID reason=PROVIDER_POLICY_INVALID path={path}")
+    return policy
+
+def assert_together_provider_admitted():
+    policy=load_provider_execution_policy(); mode=str(policy.get("mode","") or "").strip().upper()
+    if mode not in PAID_PROVIDER_ADMISSION_MODES:
+        raise SystemExit(f"BLOCKED_BEFORE_LAUNCH provider=together cost_class=PAID mode={mode or 'UNKNOWN'} secret_lookup=0 network_attempts=0")
+    return policy
+
+def read_together_api_key():
+    api_key=os.environ.get("TOGETHER_API_KEY","")
+    if not api_key: raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
+    return api_key
+
+def new_together_client():
+    assert_together_provider_admitted()
+    api_key=read_together_api_key()
+    from together import Together
+    return Together(api_key=api_key)
 
 def sha256_file(p):
     h=hashlib.sha256()
@@ -114,9 +146,7 @@ def created_job_identity_mismatches(meta,expected):
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
-    if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
-    from together import Together
-    client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)
+    client=new_together_client();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)
     if args.create:require_create_confirmation(fp);assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix)
     tf=client.files.upload(file=str(TRAIN),purpose="fine-tune",check=True);vf=client.files.upload(file=str(VALID),purpose="fine-tune",check=True);wait_file(client,tf.id);wait_file(client,vf.id)
     est=estimate_price(client,tf.id,vf.id);price=float(est.estimated_total_price)
@@ -124,7 +154,7 @@ def main():
     if not est.allowed_to_proceed:raise SystemExit("Together price/admission endpoint does not allow this job")
     if price>MAX_USD:raise SystemExit(f"BUDGET_ABORT estimated ${price:.2f} > ${MAX_USD:.2f}")
     if not args.create:print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fp} for this exact create");return
-    assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix);intent=arm_create_intent(fp,suffix);cc=new_zero_retry_create_client(Together)
+    assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix);intent=arm_create_intent(fp,suffix);cc=new_zero_retry_create_client(type(client))
     try:job=cc.fine_tuning.create(**create_payload(tf.id,vf.id,suffix))
     except Exception as e:update_create_intent(intent,"UNKNOWN_REMOTE_CREATE",error_class=type(e).__name__);raise SystemExit("CREATE_OUTCOME_UNKNOWN; do not retry until exact provider reconciliation") from e
     update_create_intent(intent,"JOB_KNOWN",job_id=job.id)

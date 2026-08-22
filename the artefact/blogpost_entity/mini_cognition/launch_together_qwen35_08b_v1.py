@@ -4,6 +4,8 @@ import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
+REPO_ROOT=HERE.parents[2]
+CONTROL_PATH=REPO_ROOT/"research_entity"/"claycode"/"CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json"
 TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"; V2_VALIDATOR=HERE/"validate_corpus_v2.py"
 EXPECTED_MODEL="Qwen/Qwen3.5-0.8B"; MODEL=os.environ.get("CLAYCOG_08B_MODEL",EXPECTED_MODEL)
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
@@ -11,6 +13,20 @@ RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=flo
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00")); FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
+
+def active_research_mode():
+    try:
+        data=json.loads(CONTROL_PATH.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise SystemExit(f"PROVIDER_CONTROL_UNRESOLVED {CONTROL_PATH}: {type(e).__name__}") from e
+    mode=str(data.get("mode","")).strip().upper()
+    if not mode:
+        raise SystemExit(f"PROVIDER_CONTROL_MODE_MISSING {CONTROL_PATH}")
+    return mode
+
+def assert_provider_execution_admitted():
+    if active_research_mode()=="FREE_ONLY":
+        raise SystemExit("FREE_ONLY_PROVIDER_REJECTED_BEFORE_SECRET_OR_NETWORK")
 
 def validate_static_contract():
     if MODEL!=EXPECTED_MODEL: raise SystemExit(f"MODEL_OVERRIDE_REJECTED expected {EXPECTED_MODEL!r}, got {MODEL!r}")
@@ -113,7 +129,7 @@ def created_job_identity_mismatches(meta,expected):
     return out
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();assert_provider_execution_admitted();validate_static_contract();local_checks()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)

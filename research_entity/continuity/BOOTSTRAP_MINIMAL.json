@@ -1,5 +1,5 @@
 {
-  "schema_version": "6.0",
+  "schema_version": "6.1",
   "entity_display_name": "Clay",
   "active_program": "BLOGPOST_ENTITY_ALL_IN_ONE",
   "active_stage": "BLOGPOST_ENTITY_CLAY",
@@ -7,16 +7,19 @@
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_artifact": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
-  "generic_runtime": "tools/clay_effect_runtime.py",
-  "tests": "the artefact/blogpost_entity/test_blogpost_entity.py",
-  "mission": "Finish and empirically prove one persistent all-in-one Zero/EntityOS Blogpost Entity ClayCode module.",
-  "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; model narrative is never canonical self-state authority",
-  "mistral": {
-    "model": "mistral-medium-latest",
-    "free_key_names": ["MISTRAL_API_KEY", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY"],
-    "secret_rule": "never expose or commit token values"
+  "portable_release_shape": ["BLOGPOST_ENTITY.clay executable", "blogpost_entity.db SQLite MiniUnifiedDB"],
+  "mission": "Finish and empirically prove one persistent portable all-in-one Blogpost/Mini Entity; default Zero blog personality, provider and editable system prompt runtime-configurable.",
+  "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; model narrative is never canonical state authority",
+  "provider_law": {
+    "default": "Mistral chat-completions",
+    "identity": "provider is replaceable inference only",
+    "runtime_config": ["endpoint", "model", "api_token", "auth_header", "auth_prefix", "request_template", "response_pointer"],
+    "system_prompt": "runtime-editable",
+    "architecture_guard": "immutable and higher priority than editable prompt",
+    "secret_rule": "never expose, print or commit token values"
   },
-  "go": "Maximal swarm cycle on BLOGPOST_ENTITY.clay only: refresh, fan-out, hypotheses, counterhypotheses, implement, sandbox-test, falsify, fuse/hypofuse, fix, retest, persist.",
-  "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances the blogpost entity.",
+  "go": "Maximal swarm cycle on the single Blogpost/Mini Entity only: refresh, fan-out, hypotheses, counterhypotheses, implement, sandbox-test, falsify, fuse/hypofuse, fix, retest, persist.",
+  "swarm_product_rule": "swarm is research/build orchestration only; product runtime is exactly one entity",
+  "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances the mini entity.",
   "together_api": "FORBIDDEN"
 }

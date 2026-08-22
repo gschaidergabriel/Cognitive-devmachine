@@ -1,0 +1,59 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "ff2eb063284c9e41dd399c13be1e4b73ae7bf0c9",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "paid_training_base": "Qwen/Qwen3.5-0.8B",
+  "current_execution_policy": "FREE_ONLY gate remains canonical; Together is rejected before secret lookup/network while free_only=true",
+  "finding": {
+    "class": "CREATE_AUTHORIZATION_COST_DRIFT_GAP",
+    "base_launcher_blob": "baba0d17f8f6181c833a19af09b4b5807a84cfa0",
+    "mechanism": "When paid execution is later explicitly opened, billed-create confirmation binds campaign fingerprint but not the live estimated USD. An old approval can therefore survive a changed estimate beneath the USD 18 hard cap.",
+    "impact": "Future paid create authorization is not bound to the exact live preflight cost."
+  },
+  "unusual_experiment": {
+    "name": "PRICE_DRIFT_AFTER_PREFLIGHT",
+    "count_for_this_go": 1,
+    "intervention": "Keep campaign fingerprint fixed while changing estimated USD from 4.00 to 17.99.",
+    "pre_repair_observation": "confirmation remains valid because price is absent from the confirmation input",
+    "result": "FALSIFIED_COST_BINDING",
+    "scope": "source/mechanism only; no provider request or billing"
+  },
+  "repair": {
+    "launcher_blob": "daaf38d63d71707dcc1cfe3e589b73368ff32abd",
+    "test_blob": "30c38faa79d12f3588d353e6b278b4da90779ab3",
+    "preserved_current_main_gates": [
+      "FREE_ONLY supervisor rejection before secret/network",
+      "canonical validate_corpus_v2.py gate",
+      "provider-created identity verification for suffix/checkpoints/LR/warmup/method/Full type",
+      "random_seed verification from create response rather than retrieve schema"
+    ],
+    "changes": [
+      "CLAYCOG_CREATE_AUTHORIZATION replaces raw campaign-fingerprint confirmation",
+      "authorization SHA-256 binds campaign_fingerprint plus canonical live estimated_usd",
+      "confirmation occurs only after current estimate and budget gate",
+      "preflight schema v3 exposes create_authorization",
+      "create-intent schema v3 records authorized_estimated_usd and create_authorization",
+      "NaN, infinity and negative price estimates fail closed",
+      "any live price drift requires fresh authorization"
+    ]
+  },
+  "isolated_exact_blob_evidence": {
+    "environment": "authorized isolated ChatGPT Linux container",
+    "candidate_launcher_git_blob": "daaf38d63d71707dcc1cfe3e589b73368ff32abd",
+    "candidate_test_git_blob": "30c38faa79d12f3588d353e6b278b4da90779ab3",
+    "git_blob_identity_matched_written_branch": true,
+    "py_compile": "PASS",
+    "candidate_regression": "16/16 PASS",
+    "provider_network_called": false,
+    "together_secret_used": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "evidence_boundary": "MECHANISM_SUPPORTED_EXACT_BLOBS only. No authenticated Together preflight, billed training, tuned quality, Q4_K_M, RSS <1 GiB, local_exec integration, whole-repository runtime or whole Mini Entity PASS is claimed.",
+  "next": "Keep FREE_ONLY fail-closed while policy says free_only=true. If later explicitly opened, run authenticated preflight-only model_limits, server file validation and live estimate, then require fresh owner authorization for that exact price-bound token before billed create."
+}

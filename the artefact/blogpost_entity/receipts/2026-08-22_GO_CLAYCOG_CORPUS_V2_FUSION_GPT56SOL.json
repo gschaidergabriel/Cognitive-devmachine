@@ -1,0 +1,62 @@
+{
+  "schema": "claycog-corpus-v2-fusion/v1",
+  "date": "2026-08-22",
+  "executor": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "base_main": "1f9f3d0455c87b2ea67b0665a3131871d0c3b69c",
+  "branch": "gpt56sol/go-claycog-v2-final-fusion-20260822-1409",
+  "scope": "replace v1 random-split paid-training candidate with leakage-resistant v2 while reusing the single canonical Together create authority",
+  "v1_falsifier": {
+    "classification": "ORDINARY_CORPUS_FALSIFIER_NOT_UNUSUAL_EXPERIMENT",
+    "method": "replay deterministic v1 generator choice/signature space under seed 20260822 and test whether validation generation signatures are absent from train",
+    "rows": 1650,
+    "distinct_generation_signatures": 70,
+    "validation_rows": 165,
+    "validation_signatures_unseen_in_train": 0,
+    "validation_rows_whose_generation_signature_exists_in_train": 165,
+    "conclusion": "v1 structural validity remains useful, but its random validation split is not credited as a strong generalization discriminator"
+  },
+  "v2": {
+    "schema": "claycog-sft/v2",
+    "examples": 1800,
+    "train": 1620,
+    "validation": 180,
+    "families": 9,
+    "per_family": 200,
+    "validation_per_family": 20,
+    "split": "family_stratified_heldout_value_domains",
+    "train_unique_rows": 1620,
+    "validation_unique_rows": 180,
+    "exact_train_validation_row_overlap": 0,
+    "exact_train_validation_user_prompt_overlap": 0,
+    "train_sha256": "ad132881aee5b794a1a81a56bc51af99d09d04c2fdff769f48cf192afa0d2a21",
+    "validation_sha256": "fad0e7a2613e54c3027ca5de8d8917ff3408a8a8a644439be764152648396e6f",
+    "hash_evidence": "reproduced in prior isolated exact-generator execution of the same deterministic v2 semantics; final branch PR runner remains the exact-byte admission gate"
+  },
+  "single_path_fusion": {
+    "canonical_create_authority": "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py",
+    "main_hardening_merge": "1f9f3d0455c87b2ea67b0665a3131871d0c3b69c",
+    "adapter": "the artefact/blogpost_entity/mini_cognition/launch_together_v2.py",
+    "adapter_scope": "patch TRAIN/VALID to v2 and replace local corpus checks only; delegates main() and all paid-create/fingerprint/account-ledger/local-intent/zero-retry semantics to canonical launcher",
+    "duplicate_paid_create_implementation": false
+  },
+  "experiment_accounting": {
+    "global_unusual_experiment_for_concurrent_go": "owned by merged #780 fail-closed ambiguous-create fault injection",
+    "this_delta_consumes_additional_unusual_experiment": false
+  },
+  "training_state": {
+    "together_api_secret_used": false,
+    "live_server_preflight": false,
+    "paid_job_created": false,
+    "byom_compatibility": "OPEN_API_GATE",
+    "reason": "no Together credential mounted in this execution and public model table does not itself establish a compatible Qwen2.5 fine-tuning template"
+  },
+  "promotion_boundaries": {
+    "consciousness": "NOT_INFERRED",
+    "mathematical_correctness": "NOT_INFERRED",
+    "tuned_quality": "UNKNOWN_NOT_TRAINED",
+    "micro_agent_superiority": "UNCLAIMED",
+    "q4_k_m_peak_rss_under_1gib": "UNCLAIMED"
+  },
+  "next": "exact PR admission -> merge if green -> credentialed preflight on exact corpus v2 fingerprint -> create at most one job only if live BYOM/template admission and <=USD18 server estimate pass"
+}

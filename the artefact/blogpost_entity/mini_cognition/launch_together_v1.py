@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Together BYOM launcher for the 0.5B ClayCode cognition campaign.
 
-Default mode is preflight: regenerate/validate corpus, upload/validate files, check the
-Together template, and print a server price estimate. A billed training job is created
-only with --create after all gates pass.
+Default mode is preflight: regenerate/validate corpus, prove intrinsic-vocabulary closure,
+upload/validate files, check the Together template, and print a server price estimate.
+A billed training job is created only with --create after all gates pass.
 
 Together's current regular catalog has no native 0.5B Qwen entry. We therefore use BYOM
 with Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family catalog-template candidate. Compatibility is
@@ -27,6 +27,9 @@ def run_local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v1.py")],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_sft_v1.py"),str(TRAIN)],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_sft_v1.py"),str(VALID)],check=True)
+    # Dedicated semantic-closure receipt surface: syntax-looking ClayCode that calls an
+    # undefined/wrong-arity cognition intrinsic must never reach upload/training.
+    subprocess.run([sys.executable,str(HERE/"audit_intrinsic_closure_v1.py")],check=True)
 
 def wait_file(client,file_id):
     while True:
@@ -80,6 +83,7 @@ def main():
         "estimated_usd":price,
         "allowed_to_proceed":bool(estimate.allowed_to_proceed),
         "price_detail":objdict(estimate),
+        "intrinsic_closure_gate":"REQUIRED_BEFORE_UPLOAD",
         "compatibility_status":"UNPROVEN_UNTIL_TOGETHER_ACCEPTS_BYOM_CHECKPOINT",
     }
     print(json.dumps(report,indent=2,default=str))

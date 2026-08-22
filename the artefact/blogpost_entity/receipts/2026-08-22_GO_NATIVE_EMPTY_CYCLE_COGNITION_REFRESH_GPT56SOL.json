@@ -1,0 +1,52 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "canonical_main_observed_before_delta": "40cf97b1e1e001ef8555edd5a2700bc6ac890dbb",
+  "native_donor_pr": 764,
+  "native_branch": "gpt56sol/go-mini-native-runtime-guards-20260822-1328",
+  "native_head_after_repair": "c945b48e7ccfeaace8fa518324584e04317c7ca0",
+  "unusual_experiment": {
+    "name": "DONOR_BODY_VS_HEAD_VERIFIED_EMPTY_CONTRACT_FALSIFIER",
+    "count_for_this_go": 1,
+    "question": "Does PR #764's exact head actually implement its stated correction that verified-empty windows still traverse inference/persistence?",
+    "observation": "No. Before repair, exact branch mini_entity_part04.inc returned immediately when packet.n==0, while the canonical BLOGPOST_ENTITY.clay has no pre-inference empty-window shortcut and the PR body itself says the shortcut was removed.",
+    "result": "FALSIFIED",
+    "repair": "Removed the packet.n==0 early return. Verified-empty windows now continue through canonical compile -> inference -> gate -> commit, are reported quiet=true, and advance generation. The runtime guard test now requires two runner invocations, generation 2, two outputs and two study rows across eventful then verified-empty cycles.",
+    "evidence_scope": "SOURCE-BOUND REPAIR ONLY; executable credit remains open until an admitted runner actually executes the updated head."
+  },
+  "native_execution_admission": {
+    "previous_exact_head_run": 32557368363,
+    "previous_job": 96993581783,
+    "previous_job_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_TEST_FAILURE",
+    "updated_head_workflow_observation_at_receipt_write": "NO_RUN_OBSERVED_YET"
+  },
+  "cognition_refresh": {
+    "current_main_launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py",
+    "launcher_blob": "2216e62b592dec4da55a922daa22dd2387470750",
+    "current_main_launcher_state": "Merged #818 already removes the guessed Together template default and binds an exact 40-hex Hugging Face revision into campaign identity and create.",
+    "together_docs_checked": [
+      "https://docs.together.ai/docs/fine-tuning/supported-models",
+      "https://docs.together.ai/docs/fine-tuning/byom",
+      "https://www.together.ai/pricing"
+    ],
+    "provider_observation": "Current public Full fine-tuning catalog lists Qwen3.5 0.8B/2B/4B/9B/27B and Qwen3.6 27B, but no Qwen2/Qwen2.5 Full-FT template. BYOM requires a Together base whose architecture matches the custom checkpoint. Therefore Qwen3.5-0.8B is not evidence of compatibility for owner-locked Qwen2.5-0.5B.",
+    "pricing_observation": "Standard supervised Full Fine-Tuning up to 16B is currently listed at USD 0.54 per 1M processed tokens; provider price estimation remains the pre-create authority for the exact uploaded campaign.",
+    "secret_available_to_this_organ": false,
+    "provider_preflight_executed": false,
+    "billed_create_executed": false,
+    "money_spent_usd": 0,
+    "remaining_blocker": "Obtain an actually admitted Qwen2/Qwen2.5-compatible Full-FT Together base/template or an owner-admitted alternate runner without changing the 0.5B research question."
+  },
+  "non_claims": [
+    "No native runtime PASS on the repaired head.",
+    "No Together BYOM compatibility claim.",
+    "No paid training or checkpoint quality claim.",
+    "No Q4_K_M or <1 GiB RSS claim.",
+    "No whole Mini Entity PASS."
+  ]
+}

@@ -5,6 +5,7 @@
   "trigger": "go extra lang",
   "classification": "TOGETHER_QWEN25_05B_BYOM_CATALOG_BLOCKED",
   "canonical_base_main": "62b292a8097c5b53731ef6804704cf9938872616",
+  "canonical_main_refreshed_during_go": "811248da844a5aa5361500ceec91a088c4f0c042",
   "working_branch": "gpt56sol/go-claycog-together-v2-20260822-1409",
   "source_head_before_receipt": "bb2d305e4d1909236e5f24f14442f756c30a9121",
   "owner_directive": {
@@ -88,19 +89,39 @@
   "bounded_execution": {
     "environment": "isolated ChatGPT container; mirrored relevant branch source slice; no network/provider call",
     "python_compile": "PASS",
-    "unit_contract_tests": {
+    "launcher_contract_tests": {
       "passed": 10,
       "failed": 0,
       "duration_seconds": 0.002
     },
-    "scope": "MECHANISM_SUPPORTED_BOUNDED_CHAT_SANDBOX; not an exact GitHub checkout runtime receipt and not Together API acceptance"
+    "scope": "MECHANISM_SUPPORTED_BOUNDED_CHAT_SANDBOX; not an exact GitHub checkout provider-runtime receipt and not Together API acceptance"
   },
-  "unusual_experiment": {
-    "count_for_this_go": 1,
-    "name": "template_and_sdk_surface_collision_falsifier",
-    "intervention": "Expose only SDK-v2 fake methods while withholding every implicit Together template; require 0.5B target preservation, fail-closed template admission and zero implicit billed create calls.",
-    "result": "PASS",
-    "meaning": "The repaired launcher no longer regresses to stale API names or silently crosses the provider/catalog architecture boundary."
+  "coordination_fusion": {
+    "overlapping_pr": 776,
+    "overlapping_pr_head": "ac7854660e45dbec3ea804c391f297e39d28e37c",
+    "overlap_class": "COMPLEMENTARY_NOT_DUPLICATE",
+    "pr_776_delta": "tightens strict ClayCode promotion validation against string/comment/control-flow smuggling",
+    "this_branch_delta": "repairs Together launcher/API contract and fails closed on absent Qwen2-compatible provider template",
+    "independent_pr_776_replication": {
+      "environment": "isolated ChatGPT container; mirrored PR source and deterministic generator",
+      "generated_examples": 1650,
+      "train_lines": 1485,
+      "train_bad": 0,
+      "validation_lines": 165,
+      "validation_bad": 0,
+      "train_sha256": "bc1753771ed0f818865a3118f754ac5b10d67bc3ae885f668201f66566028eb2",
+      "validation_sha256": "81a6bb9fc0a210affffa84590c27ad2fc76c93fa24c4112e6573552227e512ce",
+      "focused_validator_tests_passed": 9,
+      "focused_validator_tests_failed": 0,
+      "scope": "independent bounded replication; not provider training evidence"
+    }
+  },
+  "unusual_experiment_coordination": {
+    "count_added_by_this_branch": 0,
+    "global_experiment_already_consumed_by_pr": 776,
+    "global_experiment_name": "architecture_substitution_falsifier",
+    "global_result": "REJECT_QWEN3_5_0_8B_AS_QWEN2_5_0_5B_BYOM_TEMPLATE",
+    "this_branch_fake_client_test_classification": "REGRESSION_ONLY_NOT_A_SECOND_UNUSUAL_EXPERIMENT"
   },
   "execution_environment": {
     "together_sdk": "NOT_INSTALLED",

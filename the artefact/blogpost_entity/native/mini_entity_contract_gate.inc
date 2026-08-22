@@ -36,16 +36,9 @@ static int profile_contract_valid(json_object *p){
     return 1;
 }
 
-static int looks_like_profile(json_object *p){
-    if(!p||json_object_get_type(p)!=json_type_object)return 0;
-    json_object *schema=jget(p,"schema"),*pid=jget(p,"profile_id"),*inf=jget(p,"inference"),*personality=jget(p,"personality");
-    if(schema&&json_object_get_type(schema)==json_type_string&&!strncmp(json_object_get_string(schema),"clay-pipeline-profile/",22))return 1;
-    return pid&&inf&&personality;
-}
-
 static json_object *parse_json_profile_guarded(const char *s){
     json_object *o=parse_json(s);
-    if(o&&looks_like_profile(o)&&!profile_contract_valid(o)){json_object_put(o);die("PROFILE_CONTRACT_REJECTED");}
+    if(o&&!profile_contract_valid(o)){json_object_put(o);return NULL;}
     return o;
 }
 
@@ -61,6 +54,9 @@ static char *active_profile_json_checked(sqlite3 *db,char **profile_id_out){
     char actual[65];sha_hex(raw,strlen(raw),actual);
     if(!copy||strcmp(copy,actual)){free(copy);free(raw);free(pid);die("PROFILE_HASH_MISMATCH");}
     free(copy);
+    json_object *checked=parse_json_profile_guarded(raw);
+    if(!checked){free(raw);free(pid);die("PROFILE_CONTRACT_REJECTED");}
+    json_object_put(checked);
     if(profile_id_out)*profile_id_out=pid;else free(pid);
     return raw;
 }
@@ -133,8 +129,7 @@ static char *model_output_gated(json_object *profile,sqlite3 *edb,const char *sy
     return out;
 }
 
-/* Redirect only later native call sites (part04) through the invariant wrappers. */
-#define parse_json parse_json_profile_guarded
+/* Redirect only later native call sites (part04) through invariant wrappers. */
 #define active_profile_json active_profile_json_checked
 #define build_user_prompt build_user_prompt_checked
 #define model_output model_output_gated

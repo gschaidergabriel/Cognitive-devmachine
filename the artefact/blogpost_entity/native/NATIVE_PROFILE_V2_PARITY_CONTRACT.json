@@ -1,5 +1,5 @@
 {
-  "schema": "mini-entity-native-profile-v2-parity-contract/v2",
+  "schema": "mini-entity-native-profile-v2-parity-contract/v3",
   "canonical_profile_schema": "clay-pipeline-profile/v2",
   "canonical_pipeline": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
   "canonical_reference_runtime": "tools/clay_profile_pipeline_runtime.py",
@@ -41,6 +41,58 @@
       "provider_chat_json"
     ],
     "promotion_requires": "The canonical reference runtime must expose exactly the current pipeline effect responsibility surface before it can serve as the semantic parity oracle for native-v2 promotion. Missing current effects or retained legacy alternate effects keep admission fail-closed."
+  },
+  "reference_runtime_fresh_main_fusion": {
+    "status": "NARROW_FRESH_MAIN_EXTRACTION_REQUIRED",
+    "reason": "Existing structured-runtime convergence donors predate substantial current-main hardening and are not safe whole-branch merge candidates.",
+    "donors": [
+      {
+        "pull_request": 727,
+        "role": "PREFERRED_MECHANISM_DONOR_ONLY",
+        "reuse": [
+          "db_resident_profile_read_with_integrity_check",
+          "current_effect_names",
+          "generic_inference_generate",
+          "embedded_profile_secret_rejection",
+          "read_only_evidence_queries",
+          "local_exec_parent_environment_isolation"
+        ],
+        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED"
+      },
+      {
+        "pull_request": 728,
+        "role": "SECONDARY_MECHANISM_DONOR_ONLY",
+        "reuse": [
+          "db_resident_profile_shape",
+          "current_effect_names",
+          "generic_inference_dispatch_shape"
+        ],
+        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED",
+        "known_regression_if_copied_verbatim": "local_exec child inherits the parent environment unless current isolation is restored"
+      }
+    ],
+    "must_preserve_or_strengthen": [
+      "recursive_persisted_string_leak_gate",
+      "active_secret_rejection",
+      "db_profile_integrity_hash",
+      "embedded_profile_secret_value_rejection",
+      "read_only_evidence_queries",
+      "local_exec_parent_environment_isolation",
+      "exactly_once_consumption",
+      "generation_cas",
+      "atomic_commit",
+      "canonical_three_argument_run_boundary",
+      "one_current_effect_surface_only",
+      "fail_closed_native_v2_admission_until_exact_runtime_receipt"
+    ],
+    "must_not_introduce": [
+      "second_profile_state_authority",
+      "external_profile_file_as_mandatory_runtime_state",
+      "provider_or_application_identity_in_executable",
+      "generic_host_shell_effect_path",
+      "study_or_presentation_side_path_required_for_reference_effect_convergence"
+    ],
+    "promotion_requires": "Extract only the needed reference responsibilities onto a freshly bound current-main branch, retain or strengthen every listed fence, align structured tests to the canonical three-argument run boundary, then obtain exact-source authorized runtime evidence."
   },
   "required_source_adapters_from_shipped_v2": [
     "json_snapshot",
@@ -99,6 +151,7 @@
     "runtime_receipt": null,
     "promotion_requires": [
       "canonical_reference_runtime_effect_surface_matches_current_pipeline_before_reference-equivalent claims",
+      "fresh-main reference convergence preserves the machine-readable fusion fences",
       "all_required_contracts_implemented_on_one_native_path",
       "exact_source_bound_build_of_candidate",
       "shipped_v2_profile_executes_with_reference-equivalent_compile_and_gate_semantics",

@@ -68,6 +68,9 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(commit_data,"compiled",compiled)
   map_set(commit_data,"collected",collected)
   map_set(commit_data,"generated",generated)
+  // The exact prompt participates in longitudinal confound hashing. It must cross the
+  // same causal/commit boundary rather than being reconstructed or silently dropped.
+  map_set(commit_data,"prompt",prompt)
   let committed = phase("pipeline_commit",entity_db,source_db,profile,previous,commit_data)
   require committed.ok
 
@@ -80,5 +83,9 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(result,"inference_kind",profile.inference.kind)
   map_set(result,"canonical_state_hash",compiled.canonical_state_hash)
   map_set(result,"packet_hash",compiled.packet_hash)
+  // Empty strings mean no public postprocessor is configured. When configured, the
+  // caller receives the exact state box committed atomically with the output/study row.
+  map_set(result,"state_box_text",committed.state_box_text)
+  map_set(result,"state_box_payload_hash",committed.state_box_payload_hash)
   return result
 }

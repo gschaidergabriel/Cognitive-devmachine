@@ -16,9 +16,9 @@ class TogetherCtor:
     def __init__(self,**kw):type(self).last=kw
 class Tests(unittest.TestCase):
     def setUp(self):
-        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
+        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov,self.oc=m.TRAIN,m.VALID,m.CONTROL_PATH;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
     def tearDown(self):
-        m.TRAIN,m.VALID=self.ot,self.ov;self.t.cleanup()
+        m.TRAIN,m.VALID,m.CONTROL_PATH=self.ot,self.ov,self.oc;self.t.cleanup()
         if self.c is None:os.environ.pop(m.CREATE_CONFIRM_ENV,None)
         else:os.environ[m.CREATE_CONFIRM_ENV]=self.c
         if self.l is None:os.environ.pop(m.CREATE_LEDGER_DIR_ENV,None)
@@ -62,6 +62,22 @@ class Tests(unittest.TestCase):
     def test_provider_training_identity_substitution_fails_closed(self):
         expected=self._full_expected();substituted=types.SimpleNamespace(**{**expected,"learning_rate":9e-4,"warmup_ratio":.5,"training_method":types.SimpleNamespace(**expected["training_method"]),"training_type":types.SimpleNamespace(type="Lora",lora_r=16)})
         mm=m.created_job_identity_mismatches(substituted,expected);self.assertEqual(mm["learning_rate"],{"expected":1e-5,"observed":9e-4});self.assertEqual(mm["warmup_ratio"],{"expected":.03,"observed":.5});self.assertEqual(mm["training_type"],{"expected":{"type":"Full"},"observed":{"type":"Lora"}})
+    def test_free_only_and_invalid_controls_fail_closed(self):
+        control=Path(self.t.name)/"control.json";m.CONTROL_PATH=control
+        cases=[
+            ({"status":"ACTIVE","mode":"FREE_ONLY","preserved_hard_rules":{"free_only":True,"together_forbidden":True}},"FREE_ONLY_PROVIDER_REJECT"),
+            ({"status":"INACTIVE","mode":"PAID","preserved_hard_rules":{}},"PROVIDER_EXECUTION_CONTROL_NOT_ACTIVE"),
+            ({"status":"ACTIVE","mode":7,"preserved_hard_rules":{}},"PROVIDER_EXECUTION_CONTROL_MALFORMED"),
+        ]
+        for payload,marker in cases:
+            control.write_text(json.dumps(payload),encoding="utf-8")
+            with self.assertRaises(SystemExit) as cm:m.require_provider_execution_admission()
+            self.assertIn(marker,str(cm.exception))
+    def test_provider_control_precedes_secret_lookup_and_sdk_import(self):
+        src=Path(m.__file__).read_text(encoding="utf-8");body=src.split("def main():",1)[1]
+        guard=body.index("require_provider_execution_admission()")
+        self.assertLess(guard,body.index('os.environ.get("TOGETHER_API_KEY")'))
+        self.assertLess(guard,body.index("from together import Together"))
     def test_zero_retry(self):
         TogetherCtor.last=None;m.new_zero_retry_create_client(TogetherCtor);self.assertEqual(TogetherCtor.last,{"max_retries":0})
 if __name__=="__main__":unittest.main()

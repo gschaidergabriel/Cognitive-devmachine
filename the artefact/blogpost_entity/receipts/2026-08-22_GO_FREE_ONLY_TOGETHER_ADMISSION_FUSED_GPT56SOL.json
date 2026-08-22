@@ -1,0 +1,67 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "base_main_sha": "827b40021a5cfa9044c741ded1eb838897ba140a",
+  "branch": "gpt56sol/go-free-only-provider-gate-fused-20260822-1844",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "supervisor_control": {
+    "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "observed_schema": "8.32",
+    "mode": "FREE_ONLY",
+    "required_boundary": "PAID/SUBSCRIPTION/UNKNOWN must fail before secret/key lookup and network I/O"
+  },
+  "finding": {
+    "status": "SOURCE_DEFECT_CONFIRMED",
+    "path": "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py",
+    "mechanism": "the owner-selected Together Qwen3.5-0.8B launcher was hard-bound to a paid provider but had no machine-readable FREE_ONLY/cost-class gate before TOGETHER_API_KEY lookup and Together import/network use",
+    "impact": "active FREE_ONLY control could be violated by direct invocation even though billed create still had fingerprint and budget fences"
+  },
+  "parallel_fusion": {
+    "main_delta_observed_during_go": "f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d",
+    "main_receipt_observed": "827b40021a5cfa9044c741ded1eb838897ba140a",
+    "donor_mechanism": "canonical v2 preflight validation via validate_corpus_v2.py",
+    "fusion_rule": "retain current main canonical v2 validator repair and add only the provider admission fence; do not restore the superseded validate_sft_v2.py path"
+  },
+  "delta": {
+    "provider_mode_env": "CLAY_PROVIDER_MODE",
+    "default_mode": "FREE_ONLY",
+    "direct_together_cost_class": "PAID",
+    "free_only_admission": "only machine-classified FREE is admitted",
+    "paid_allowed_mode": "explicit PAID_ALLOWED remains available for a separately authorized non-FREE_ONLY cycle",
+    "unknown_cost_class": "always rejected",
+    "gate_position": "after static argument/model checks and before corpus subprocesses, TOGETHER_API_KEY lookup, Together import, file upload, model_limits, estimate_price, create, or any provider network path",
+    "existing_paid_create_fences_preserved": true,
+    "canonical_v2_preflight_validator_preserved": true
+  },
+  "regressions_added": {
+    "free_only_cost_class_matrix": "FREE admitted; PAID/SUBSCRIPTION/UNKNOWN rejected; unknown mode rejected",
+    "fallback_chain_mechanism": "synthetic [PAID,SUBSCRIPTION,UNKNOWN,FREE] chain admits only FREE under the same predicate",
+    "secret_network_tripwire": "entry-path test installs canary secret plus secret/import/socket tripwires and expects PROVIDER_ADMISSION_BLOCK before any tripwire can fire",
+    "scope": "deterministic source/mechanism regression for the direct Together lane; does not prove exported AgentZero GLM/Sonnet router wiring"
+  },
+  "unusual_experiment": {
+    "status": "NOT_EXECUTED_BY_THIS_ORGAN_COORDINATION_FAIL_CLOSED",
+    "reason": "during this same minute current main gained another go receipt for the same 0.8B launcher declaring LAUNCHER_PRECHECK_TARGET_EXISTENCE_FALSIFIER as its one unusual experiment; no immutable shared macrocycle_id is available to prove these are different macrocycles, so this organ adds regression coverage only and claims no additional unusual experiment"
+  },
+  "execution": {
+    "vercel_executable_sandbox_surface": "NOT_EXPOSED_BY_AVAILABLE_CONNECTOR",
+    "github_exact_branch_runtime": "PENDING_PR_RUNNER_ADMISSION",
+    "runtime_credit": "ZERO_UNTIL_ACTUAL_STEPS_EXECUTE",
+    "provider_network_attempts_by_this_organ": 0,
+    "provider_secret_lookup_by_this_organ": false
+  },
+  "together": {
+    "credentialed_preflight": false,
+    "upload": false,
+    "price_call": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "acceptance": "SOURCE_REPAIR_CANDIDATE; DIRECT TOGETHER FREE_ONLY MECHANISM COVERED; EXACT RUNTIME UNVERIFIED; EXPORTED FALLBACK ROUTER STILL OPEN; WHOLE PRODUCT IN_PROGRESS",
+  "next_gate": "exact PR runner must actually execute the fused launcher regression; then wire/verify the same machine-readable cost-class admission on the exported direct/fallback provider router before every key lookup and network hop"
+}

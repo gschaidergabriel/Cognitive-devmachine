@@ -27,7 +27,26 @@ jobs:
           printf 'sha=%s\n' "$GITHUB_SHA"
           git rev-parse HEAD
           git status --short
-      - name: Run strict ClayCode admission regression
+      - name: Regenerate and validate ClayCode corpus
         run: |
           set -euo pipefail
-          python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
+          D='the artefact/blogpost_entity/mini_cognition'
+          python3 "$D/generate_sft_v1.py"
+          python3 "$D/validate_sft_v1.py" "$D/train_v1.jsonl"
+          python3 "$D/validate_sft_v1.py" "$D/validation_v1.jsonl"
+      - name: Generate held-out OOD specifications
+        run: |
+          set -euo pipefail
+          D='the artefact/blogpost_entity/mini_cognition'
+          python3 "$D/generate_eval_ood_v1.py"
+          python3 "$D/generate_eval_ood_v2.py"
+      - name: Run adversarial evaluator falsifiers
+        run: |
+          set -euo pipefail
+          D='the artefact/blogpost_entity/mini_cognition'
+          PYTHONPATH="$D" python3 "$D/test_eval_outputs_v1_adversarial.py"
+      - name: Run Together create safety regressions offline
+        run: |
+          set -euo pipefail
+          D='the artefact/blogpost_entity/mini_cognition'
+          PYTHONPATH="$D" python3 "$D/test_launch_together_safety_v1.py"

@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """Together BYOM launcher for the generic 0.5B ClayCode cognition campaign.
 
-Default mode is preflight. It regenerates/validates the selected corpus, uploads and
-validates files, checks the Together template's full-FT limits, asks Together for a
-server-side price/admission estimate, and writes a local receipt. A billed training job
-is created only with --create.
+Default mode is preflight. It regenerates/validates the selected corpus, runs the
+leakage/diversity gate for v2, uploads and validates files, checks the Together
+template's full-FT limits, asks Together for a server-side price/admission estimate,
+and writes a local receipt. A billed training job is created only with --create.
 
-Important boundary: the price/model-limit preflight does NOT prove that Together can
-load the exact BYOM checkpoint. `from_hf_model` compatibility is only credited when the
-create endpoint actually accepts the pinned HF model/revision. The script therefore
-reports that state explicitly instead of calling template admission BYOM compatibility.
+Important boundary: price/model-limit preflight does NOT prove Together can load the
+exact BYOM checkpoint. Together's current CLI says `from_hf_model` should match the
+base architecture and size, while Together's public BYOM/Hugging-Face guide describes
+similar architecture/approximate size and gives a cross-size example. Therefore the
+0.5B -> 7B template candidate remains an empirical API gate: compatibility is credited
+only if the create endpoint accepts the pinned HF model/revision. No source-only
+compatibility claim is allowed.
 """
 import argparse
 import hashlib
@@ -68,7 +71,18 @@ def run_local_checks(corpus_version):
     subprocess.run([sys.executable, str(generator)], check=True)
     subprocess.run([sys.executable, str(HERE / "validate_sft_v1.py"), str(train)], check=True)
     subprocess.run([sys.executable, str(HERE / "validate_sft_v1.py"), str(valid)], check=True)
-    return train, valid
+    quality = None
+    if corpus_version == "v2":
+        proc = subprocess.run(
+            [sys.executable, str(HERE / "corpus_quality_gate_v2.py"), str(train), str(valid)],
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+        quality = json.loads(proc.stdout)
+        if not quality.get("ok"):
+            raise RuntimeError("v2 corpus quality gate returned non-ok without nonzero exit")
+    return train, valid, quality
 
 
 def campaign_identity(*, hf_model, hf_revision, train, valid, corpus_version):
@@ -92,25 +106,41 @@ def campaign_identity(*, hf_model, hf_revision, train, valid, corpus_version):
 
 
 def find_existing_job(client, suffix):
-    """Fail closed against blind duplicate create when the SDK exposes job suffixes."""
+    """Fail closed against blind duplicate create using suffix/output-name evidence."""
     try:
         listing = client.fine_tuning.list()
         rows = getattr(listing, "data", listing)
         if rows is None:
             return None
         for job in rows:
-            if getattr(job, "suffix", None) == suffix:
+            job_suffix = getattr(job, "suffix", None)
+            output_name = str(getattr(job, "model_output_name", "") or "")
+            if job_suffix == suffix or (suffix and suffix in output_name):
                 return job
     except Exception as exc:
         raise RuntimeError(f"cannot prove duplicate-create safety: {exc}") from exc
     return None
 
 
+def template_risk(hf_model, template):
+    if hf_model.startswith("Qwen/Qwen2.5-0.5B") and "7B" in template.upper():
+        return {
+            "classification": "CROSS_SIZE_BYOM_OPEN_API_GATE",
+            "reason": "0.5B HF checkpoint paired with 7B Qwen2.5 training template; current Together sources differ on exact size requirement",
+            "credit": "NO_COMPATIBILITY_CREDIT_BEFORE_CREATE_ACCEPTANCE",
+        }
+    return {
+        "classification": "UNRESOLVED_BYOM_COMPATIBILITY",
+        "reason": "BYOM compatibility is provider/runtime evidence, not inferred from naming",
+        "credit": "NO_COMPATIBILITY_CREDIT_BEFORE_CREATE_ACCEPTANCE",
+    }
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--create", action="store_true", help="create billed fine-tuning job after all preflight gates")
     ap.add_argument("--instruct-ablation", action="store_true", help="use Qwen/Qwen2.5-0.5B-Instruct BYOM checkpoint")
-    ap.add_argument("--corpus", choices=("v1", "v2"), default="v2", help="dataset generation to train; default v2 compositional")
+    ap.add_argument("--corpus", choices=("v1", "v2"), default="v2", help="dataset generation to train; default v2 leakage-resistant compositional corpus")
     ap.add_argument("--hf-revision", default=None, help="pin HF revision; create requires a non-floating revision")
     args = ap.parse_args()
 
@@ -122,7 +152,7 @@ def main():
     if args.create and hf_revision in ("", "main", "master"):
         raise SystemExit("CREATE_ABORT: pin CLAYCOG_HF_REVISION/--hf-revision to an immutable HF revision")
 
-    train, valid = run_local_checks(args.corpus)
+    train, valid, quality = run_local_checks(args.corpus)
     campaign, campaign_sha = campaign_identity(
         hf_model=hf_model,
         hf_revision=hf_revision,
@@ -131,6 +161,7 @@ def main():
         corpus_version=args.corpus,
     )
     suffix = f"claycog05b-{args.corpus}-{campaign_sha[:12]}"
+    risk = template_risk(hf_model, TEMPLATE)
 
     client = Together()
     limits = client.fine_tuning.model_limits(model_name=TEMPLATE)
@@ -159,6 +190,7 @@ def main():
         "campaign_sha256": campaign_sha,
         "suffix": suffix,
         "campaign": campaign,
+        "corpus_quality": quality,
         "training_file_id": train_file.id,
         "validation_file_id": valid_file.id,
         "training_file_status": str(getattr(train_meta, "processing_status", "UNKNOWN")),
@@ -167,6 +199,7 @@ def main():
         "max_job_usd": MAX_USD,
         "allowed_to_proceed": bool(estimate.allowed_to_proceed),
         "template_full_training": bool(getattr(limits, "supports_full_training", False)),
+        "template_risk": risk,
         "price_detail": objdict(estimate),
         "byom_compatibility": "UNPROVEN_UNTIL_CREATE_ACCEPTS_PINNED_FROM_HF_MODEL",
         "job_started": False,

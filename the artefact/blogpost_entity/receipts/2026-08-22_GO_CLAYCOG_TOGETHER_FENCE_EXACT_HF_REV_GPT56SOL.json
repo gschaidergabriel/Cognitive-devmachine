@@ -1,0 +1,90 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "program": "mini-entity-pipeline-all-in-one",
+  "classification": "SFT_V2_EXACT_HF_REVISION_PRESERVED_TOGETHER_QWEN2_CATALOG_BLOCKED",
+  "canonical_main_join": "cc8449642a76ff74467e02da78ecd38853d6dd76",
+  "branch": "gpt56sol/go-claycog-together-fence-revision-v3-20260822",
+  "canonical_training": {
+    "schema": "claycog-sft/v2",
+    "primary_model": "Qwen/Qwen2.5-0.5B",
+    "primary_revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "instruct_model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "instruct_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "train_rows": 1485,
+    "validation_rows": 165,
+    "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+    "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62"
+  },
+  "provider_findings": [
+    "Together BYOM requires a Together fine-tuning catalog base whose architecture matches from_hf_model; size should be as close as the catalog allows.",
+    "The current public Full-FT table has no Qwen2/Qwen2.5 base.",
+    "Qwen/Qwen3.5-0.8B is not a silent substitute because its upstream architecture/model_type differs from Qwen2.5-0.5B.",
+    "The historical Qwen/Qwen2.5-7B-Instruct-Turbo default is not in the current public Full-FT table and is rejected as an automatic training-template default.",
+    "Current Together Python SDK main exposes get_model_limits(model=...), limits.full_training, FileResponse.processed, hf_model_revision and string SFT/full price-estimation arguments."
+  ],
+  "implementation_delta": {
+    "launcher_blob": "2216e62b592dec4da55a922daa22dd2387470750",
+    "readme_blob": "40f1f0ddf33586282f09421ec2a1724446cdac2c",
+    "preserved_from_main_cc844": [
+      "exact SFT-v2 dataset bytes",
+      "exact primary/instruct Hugging Face commit SHAs",
+      "hf_model_revision inside deterministic campaign fingerprint",
+      "hf_model_revision persisted in local CREATE intent",
+      "hf_model_revision passed to Together create",
+      "full-fingerprint create confirmation",
+      "account duplicate campaign scan",
+      "atomic secret-free 0600 CREATE_ARMED ledger",
+      "UNKNOWN_REMOTE_CREATE ambiguity fence",
+      "zero-retry billed create",
+      "USD18 single-job ceiling"
+    ],
+    "added": [
+      "no guessed Together training-template default",
+      "explicit compatible-template admission before provider operations",
+      "SDK-v2 get_model_limits/full_training gate",
+      "FileResponse.processed completion path with legacy read fallback",
+      "SDK-v2 string training_method/training_type price estimate",
+      "provider regression suite"
+    ]
+  },
+  "bounded_regression": {
+    "environment": "isolated OpenAI Linux container; locally reconstructed relevant semantics; no network/provider call",
+    "python_compile": "PASS",
+    "existing_revision_fingerprint_create_safety": {"passed": 8, "failed": 0},
+    "provider_contract": {"passed": 9, "failed": 0},
+    "combined": {"passed": 17, "failed": 0, "duration_seconds": 0.008},
+    "fixture_note": "An initial provider-test attempt lacked local dummy train/validation files for campaign_descriptor and produced FileNotFoundError. After adding those test fixtures, the unchanged implementation passed 17/17; the initial error is classified TEST_ENVIRONMENT_FIXTURE_MISSING, not product-code failure.",
+    "scope": "BOUNDED_MECHANISM_REGRESSION_PASS_NOT_PROVIDER_ACCEPTANCE"
+  },
+  "sdk_upstream": {
+    "repository": "togethercomputer/together-python",
+    "head": "cc9f25369987e73bcd037be955833c37ac8a9109",
+    "hf_model_revision_supported": true
+  },
+  "coordination": {
+    "pr_805": "superseded after exact-head merge conflict caused by main #800 adding HF revision binding",
+    "pr_789": "older pre-SFT-v2 stale attempt; superseded",
+    "main_800": "fused/preserved exact HF revision identity rather than overwritten",
+    "one_unusual_experiment_added_here": 0
+  },
+  "provider_execution": {
+    "api_key_observed": false,
+    "upload": false,
+    "price_preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "cost_usd": 0
+  },
+  "evidence_boundary": {
+    "source_mechanism_supported": true,
+    "Together_Qwen2_5_0_5B_admitted": false,
+    "checkpoint_trained": false,
+    "model_OOD_promoted": false,
+    "Q4_K_M_RSS_under_1GiB": false,
+    "whole_mini_entity_pass": false
+  },
+  "next_gate": "Admit this fail-closed provider correction on top of exact-HF-revision main. Then refresh Together's Full-FT catalog/authenticated limits. Only if an architecture-compatible Qwen2/Qwen2.5 base is available should no-bill preflight run, followed by the existing exact-fingerprint USD18 gate and one exactly-once create."
+}

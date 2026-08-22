@@ -106,10 +106,14 @@ def update_create_intent(p,status,job_id=None,error_class=None):
         try:tmp.unlink()
         except OSError:pass
 def new_zero_retry_create_client(cls): return cls(max_retries=0)
+def _identity_observed(value,want):
+    if isinstance(want,dict):
+        return {key:_identity_observed(_field(value,key,None),child) for key,child in want.items()}
+    return value
 def created_job_identity_mismatches(meta,expected):
     out={}
     for key,want in expected.items():
-        got=_field(meta,key,None)
+        got=_identity_observed(_field(meta,key,None),want)
         if got!=want:out[key]={"expected":want,"observed":got}
     return out
 
@@ -129,7 +133,7 @@ def main():
     try:job=cc.fine_tuning.create(**create_payload(tf.id,vf.id,suffix))
     except Exception as e:update_create_intent(intent,"UNKNOWN_REMOTE_CREATE",error_class=type(e).__name__);raise SystemExit("CREATE_OUTCOME_UNKNOWN; do not retry until exact provider reconciliation") from e
     update_create_intent(intent,"JOB_KNOWN",job_id=job.id)
-    expected={"training_file":tf.id,"validation_file":vf.id,"model":MODEL,"n_epochs":EPOCHS,"n_evals":EVALS,"random_seed":RANDOM_SEED}
+    expected={"training_file":tf.id,"validation_file":vf.id,"model":MODEL,"suffix":suffix,"n_epochs":EPOCHS,"n_evals":EVALS,"n_checkpoints":1,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_method":training_method(),"training_type":training_type()}
     try:meta=client.fine_tuning.retrieve(id=job.id)
     except Exception as e:raise SystemExit(f"JOB_CREATED_IDENTITY_VERIFY_UNAVAILABLE job_id={job.id}; inspect this exact job, do not create another: {type(e).__name__}") from e
     mismatches=created_job_identity_mismatches(meta,expected)

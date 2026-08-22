@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-22T04:06:42Z. **3999 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-22T04:36:42Z. **4005 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T10:19:20+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T10:56:48+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3901 |
+| baunotiz | 3907 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2342 |
-| baunotiz | bauverlauf.jsonl | 1511 |
+| baunotiz | git-commit | 2345 |
+| baunotiz | bauverlauf.jsonl | 1514 |
 | baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3999 · Gegenhypothese: 0 von 3999
+## Hypothese: 0 von 4005 · Gegenhypothese: 0 von 4005
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T10:19:20+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: gate Mini Entity 0.7 on source-bound executable reproduction
+
+`baunotiz-bauverlauf-dbfc2c41c61e491a03ef` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:56:48+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: gate Mini Entity 0.7 on source-bound executable reproduction
+
+`baunotiz-git-8b42c02d2714cf3401030f58712c0f83bf4efbac` · baunotiz · git-commit · 2026-08-22T10:56:48+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: gate Mini Entity 0.7 on source-bound executable reproduction
 
 ### native: fix Mini Entity source split boundary
 
@@ -214,22 +230,6 @@ feat: add deterministic generic state-box reference algorithm
 ### research: bind UNKNOWN red guard into Mini Entity fusion receipt
 
 `baunotiz-bauverlauf-79ab9b8f32e20b6bafbc` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:06:03+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: bind UNKNOWN red guard into Mini Entity fusion receipt
-
-`baunotiz-git-3835d841b6bf78d5db042555670aef6268eb9d30` · baunotiz · git-commit · 2026-08-22T10:06:03+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind UNKNOWN red guard into Mini Entity fusion receipt
-
-### fix: remove duplicate state-box delta key
-
-`baunotiz-bauverlauf-95a8d5d4afd5bbeba8db` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:05:22+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

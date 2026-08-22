@@ -1,0 +1,207 @@
+name: Mini Entity 0.7 source-bound repro gate
+
+on:
+  push:
+    branches:
+      - gpt56sol/go-mini-0-7-repro-20260822-1309
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-repro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Bind checkout identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "HEAD=$(git rev-parse HEAD)"
+          echo "TREE=$(git rev-parse HEAD^{tree})"
+          echo "DIRTY=$(test -z "$(git status --porcelain)" && echo false || echo true)"
+          sha256sum \
+            'the artefact/blogpost_entity/native/mini_entity.c' \
+            'the artefact/blogpost_entity/native/mini_entity_part00.inc' \
+            'the artefact/blogpost_entity/native/mini_entity_part01.inc' \
+            'the artefact/blogpost_entity/native/mini_entity_part02.inc' \
+            'the artefact/blogpost_entity/native/mini_entity_part03.inc' \
+            'the artefact/blogpost_entity/native/mini_entity_part04.inc'
+
+      - name: Install native build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential pkg-config libsqlite3-dev libcurl4-openssl-dev libjson-c-dev sqlite3 jq
+
+      - name: Repeat source-bound build
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/mini07
+          python3 'the artefact/blogpost_entity/native/build_native_bound.py' \
+            --source 'the artefact/blogpost_entity/native/mini_entity.c' \
+            --output /tmp/mini07/mini_entity.clay \
+            --receipt /tmp/mini07/build_receipt.json \
+            --version-label mini-entity/0.7.0-dev1 \
+            --source-date-epoch 1787360400 \
+            --repeat 3 | tee /tmp/mini07/build_stdout.json
+          /tmp/mini07/mini_entity.clay --version
+          sha256sum /tmp/mini07/mini_entity.clay
+          jq -e '.build_definition.repeat_byte_identity == true' /tmp/mini07/build_receipt.json
+          jq -e '.version_label == "mini-entity/0.7.0-dev1"' /tmp/mini07/build_receipt.json
+
+      - name: Binary application-neutral string audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          if strings /tmp/mini07/mini_entity.clay | grep -Eai 'zero_blog|Gasthaus|Maurer|T_OMEGA|Gabriel|Andreas'; then
+            echo 'replaceable application/personality semantics leaked into binary'
+            exit 1
+          fi
+
+      - name: Fresh DB is neutral
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/mini07/mini_entity.clay init /tmp/mini07/entity.db
+          /tmp/mini07/mini_entity.clay status /tmp/mini07/entity.db | tee /tmp/mini07/status_neutral.json
+          jq -e '.generation == 0 and .active_profile == null and .profile_present == false' /tmp/mini07/status_neutral.json
+          /tmp/mini07/mini_entity.clay source-init /tmp/mini07/source.db
+
+      - name: Configure fixture local_exec without shell or token
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp 'the artefact/blogpost_entity/presets/zero_blog.json' /tmp/mini07/zero_blog.json
+          cp 'the artefact/blogpost_entity/presets/zero_blog_state_box.json' /tmp/mini07/state_box.json
+          printf 'fixture-model-bytes\n' > /tmp/mini07/model.gguf
+          cat > /tmp/mini07/fixture_runner.py <<'PY'
+          import json, pathlib, sys
+          prompt_path = pathlib.Path(sys.argv[1])
+          _ = prompt_path.read_text(encoding='utf-8')
+          print(json.dumps({
+              'ueberschrift':'Fixture',
+              'einleitung':'Bounded local-exec fixture.',
+              'abschnitte':[{'text':'evidence-bound fixture output','evidence_refs':['fixture:event'],'state_claims':[]}],
+              'neuer_erzaehlfaden':'fixture continuity',
+              'neue_gespiegelte_hypothesen':[],
+              'phaenomenologie':{'status':'UNKNOWN'},
+              'qualia_probe':{'status':'UNKNOWN','confidence':0.0},
+              'moralische_reibung':'UNKNOWN',
+              'notiz_an_mich':'fixture only',
+              'longitudinal_self_report':{'uncertainty':0.2,'qualia_clarity':'UNKNOWN'}
+          }, ensure_ascii=False))
+          PY
+          /tmp/mini07/mini_entity.clay preset-apply /tmp/mini07/entity.db /tmp/mini07/zero_blog.json
+          /tmp/mini07/mini_entity.clay state-box-apply /tmp/mini07/entity.db /tmp/mini07/state_box.json
+          /tmp/mini07/mini_entity.clay set-local-model /tmp/mini07/entity.db /tmp/mini07/model.gguf
+          /tmp/mini07/mini_entity.clay set-local-runner-json /tmp/mini07/entity.db '["/usr/bin/python3","/tmp/mini07/fixture_runner.py","{{PROMPT_FILE}}"]'
+
+      - name: Local fixture run and atomic persistence
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/mini07/mini_entity.clay source-add /tmp/mini07/source.db test event-1 '{"measurement_status":"MEASURED","value":7}'
+          /tmp/mini07/mini_entity.clay run /tmp/mini07/entity.db /tmp/mini07/source.db | tee /tmp/mini07/run1.json
+          jq -e '.ok == true and .generation == 1 and .source_count == 1 and .inference_kind == "local_exec"' /tmp/mini07/run1.json
+          test "$(sqlite3 /tmp/mini07/entity.db 'select generation from entity_state where id=1;')" = '1'
+          test "$(sqlite3 /tmp/mini07/entity.db 'select count(*) from outputs;')" = '1'
+          test "$(sqlite3 /tmp/mini07/entity.db 'select count(*) from study_rows;')" = '1'
+          test "$(sqlite3 /tmp/mini07/source.db "select consumed_generation from mini_entity_events where source_id='event-1';")" = '1'
+          test "$(sqlite3 /tmp/mini07/entity.db 'pragma integrity_check;')" = 'ok'
+          test "$(sqlite3 /tmp/mini07/source.db 'pragma integrity_check;')" = 'ok'
+
+      - name: Failed inference consumes nothing
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/mini07/mini_entity.clay source-add /tmp/mini07/source.db test event-fail '{"measurement_status":"MEASURED","value":8}'
+          /tmp/mini07/mini_entity.clay set-local-runner-json /tmp/mini07/entity.db '["/bin/false"]'
+          set +e
+          /tmp/mini07/mini_entity.clay run /tmp/mini07/entity.db /tmp/mini07/source.db >/tmp/mini07/fail.out 2>/tmp/mini07/fail.err
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          grep -q 'INFERENCE_FAILED_NO_COMMIT' /tmp/mini07/fail.err
+          test "$(sqlite3 /tmp/mini07/entity.db 'select generation from entity_state where id=1;')" = '1'
+          test "$(sqlite3 /tmp/mini07/entity.db 'select count(*) from outputs;')" = '1'
+          test "$(sqlite3 /tmp/mini07/entity.db 'select count(*) from study_rows;')" = '1'
+          test -z "$(sqlite3 /tmp/mini07/source.db "select coalesce(consumed_generation,'') from mini_entity_events where source_id='event-fail';")"
+          /tmp/mini07/mini_entity.clay set-local-runner-json /tmp/mini07/entity.db '["/usr/bin/python3","/tmp/mini07/fixture_runner.py","{{PROMPT_FILE}}"]'
+          /tmp/mini07/mini_entity.clay run /tmp/mini07/entity.db /tmp/mini07/source.db >/tmp/mini07/recover.json
+          jq -e '.generation == 2 and .source_count == 1' /tmp/mini07/recover.json
+
+      - name: Application profile replacement preserves continuing state
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq '.profile_id="lab_reporter" | .identity.entity_name="LabReporter" | .identity.role="neutral laboratory reporter" | .identity.audience="operators" | .identity.language="en" | .personality.system_prompt="You are a neutral laboratory reporter. Use only supplied evidence and preserve UNKNOWN." | .personality.public_style="Concise neutral laboratory prose."' /tmp/mini07/zero_blog.json > /tmp/mini07/lab.json
+          before_gen="$(sqlite3 /tmp/mini07/entity.db 'select generation from entity_state where id=1;')"
+          before_outputs="$(sqlite3 /tmp/mini07/entity.db 'select count(*) from outputs;')"
+          /tmp/mini07/mini_entity.clay preset-apply /tmp/mini07/entity.db /tmp/mini07/lab.json
+          test "$(sqlite3 /tmp/mini07/entity.db 'select generation from entity_state where id=1;')" = "$before_gen"
+          test "$(sqlite3 /tmp/mini07/entity.db 'select count(*) from outputs;')" = "$before_outputs"
+          /tmp/mini07/mini_entity.clay source-add /tmp/mini07/source.db test event-2 '{"measurement_status":"MEASURED","value":9}'
+          /tmp/mini07/mini_entity.clay run /tmp/mini07/entity.db /tmp/mini07/source.db | tee /tmp/mini07/run_lab.json
+          jq -e '.profile_id == "lab_reporter" and .generation == 3 and .inference_kind == "local_exec"' /tmp/mini07/run_lab.json
+
+      - name: Bounded unusual experiment - two-way generation CAS race
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/mini07/slow_runner.py <<'PY'
+          import json, pathlib, sys, time
+          _ = pathlib.Path(sys.argv[1]).read_text(encoding='utf-8')
+          time.sleep(0.75)
+          print(json.dumps({
+              'ueberschrift':'Race fixture','einleitung':'race',
+              'abschnitte':[{'text':'race','evidence_refs':['fixture:race'],'state_claims':[]}],
+              'neuer_erzaehlfaden':'race','neue_gespiegelte_hypothesen':[],
+              'phaenomenologie':{'status':'UNKNOWN'},
+              'qualia_probe':{'status':'UNKNOWN','confidence':0.0},
+              'moralische_reibung':'UNKNOWN','notiz_an_mich':'race',
+              'longitudinal_self_report':{'uncertainty':0.3}
+          }))
+          PY
+          /tmp/mini07/mini_entity.clay set-local-runner-json /tmp/mini07/entity.db '["/usr/bin/python3","/tmp/mini07/slow_runner.py","{{PROMPT_FILE}}"]'
+          /tmp/mini07/mini_entity.clay source-add /tmp/mini07/source.db test event-race '{"measurement_status":"MEASURED","value":10}'
+          g0="$(sqlite3 /tmp/mini07/entity.db 'select generation from entity_state where id=1;')"
+          o0="$(sqlite3 /tmp/mini07/entity.db 'select count(*) from outputs;')"
+          s0="$(sqlite3 /tmp/mini07/entity.db 'select count(*) from study_rows;')"
+          set +e
+          /tmp/mini07/mini_entity.clay run /tmp/mini07/entity.db /tmp/mini07/source.db >/tmp/mini07/race_a.out 2>/tmp/mini07/race_a.err & a=$!
+          /tmp/mini07/mini_entity.clay run /tmp/mini07/entity.db /tmp/mini07/source.db >/tmp/mini07/race_b.out 2>/tmp/mini07/race_b.err & b=$!
+          wait "$a"; ra=$?
+          wait "$b"; rb=$?
+          set -e
+          echo "race_exit_codes=$ra,$rb"
+          cat /tmp/mini07/race_a.err /tmp/mini07/race_b.err || true
+          test $(( (ra==0) + (rb==0) )) -eq 1
+          g1="$(sqlite3 /tmp/mini07/entity.db 'select generation from entity_state where id=1;')"
+          o1="$(sqlite3 /tmp/mini07/entity.db 'select count(*) from outputs;')"
+          s1="$(sqlite3 /tmp/mini07/entity.db 'select count(*) from study_rows;')"
+          test "$g1" -eq $((g0+1))
+          test "$o1" -eq $((o0+1))
+          test "$s1" -eq $((s0+1))
+          test "$(sqlite3 /tmp/mini07/source.db "select consumed_generation from mini_entity_events where source_id='event-race';")" = "$g1"
+          cat /tmp/mini07/race_a.out /tmp/mini07/race_b.out
+
+      - name: Final integrity and evidence summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(sqlite3 /tmp/mini07/entity.db 'pragma integrity_check;')" = 'ok'
+          test "$(sqlite3 /tmp/mini07/source.db 'pragma integrity_check;')" = 'ok'
+          echo '=== BUILD RECEIPT ==='
+          cat /tmp/mini07/build_receipt.json
+          echo '=== FINAL STATE ==='
+          sqlite3 -json /tmp/mini07/entity.db 'select generation,active_profile from entity_state where id=1; select count(*) as outputs from outputs; select count(*) as study_rows from study_rows;'
+          echo '=== SOURCE EVENTS ==='
+          sqlite3 -json /tmp/mini07/source.db 'select source_id,consumed_generation from mini_entity_events order by source_id;'

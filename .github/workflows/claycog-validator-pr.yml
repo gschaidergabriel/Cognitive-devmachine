@@ -27,7 +27,16 @@ jobs:
           printf 'sha=%s\n' "$GITHUB_SHA"
           git rev-parse HEAD
           git status --short
-      - name: Run strict ClayCode admission regression
+      - name: Run strict ClayCode validator regression
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
+      - name: Run Together create-safety regression
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'
+      - name: Run v3 local corpus and OOD admission
+        run: |
+          set -euo pipefail
+          unset TOGETHER_API_KEY || true
+          python3 'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' --local-only

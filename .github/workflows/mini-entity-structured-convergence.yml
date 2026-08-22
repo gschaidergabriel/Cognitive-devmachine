@@ -14,6 +14,7 @@ on:
       - 'the artefact/blogpost_entity/check_structured_contract_sync.py'
       - 'tools/clay_profile_pipeline_runtime.py'
       - 'tools/claycode_structured_backend.py'
+      - 'tools/mini_entity_profile_import.py'
       - '.github/workflows/mini-entity-structured-convergence.yml'
 
 permissions:
@@ -35,6 +36,7 @@ jobs:
           python -m py_compile
           tools/clay_profile_pipeline_runtime.py
           tools/claycode_structured_backend.py
+          tools/mini_entity_profile_import.py
           'the artefact/blogpost_entity/state_box_reference.py'
           'the artefact/blogpost_entity/check_structured_contract_sync.py'
       - name: Enforce Clay reference-contract convergence

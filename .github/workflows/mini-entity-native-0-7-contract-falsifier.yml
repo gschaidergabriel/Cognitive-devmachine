@@ -14,24 +14,26 @@ permissions:
 jobs:
   native-contract-gates:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - name: Install native build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends build-essential libsqlite3-dev libjson-c-dev libcurl4-openssl-dev sqlite3
+
       - name: Build exact branch source
         shell: bash
         run: |
           set -euo pipefail
-          gcc -O2 -Wall -Wextra -std=c11 \
+          gcc -O2 -Wall -Wextra -Werror -Wno-deprecated-declarations -std=c11 \
             -o /tmp/mini_entity.clay \
             "the artefact/blogpost_entity/native/mini_entity.c" \
             -lsqlite3 -ljson-c -lcurl
-          /tmp/mini_entity.clay --version | tee /tmp/version.txt
+          test "$(/tmp/mini_entity.clay --version)" = 'mini-entity/0.7.0-dev1'
           sha256sum /tmp/mini_entity.clay | tee /tmp/binary.sha256
-      - name: Verify output gate, secret-profile rejection, and profile hash fail closed
+
+      - name: Immutable semantic gate and rollback matrix
         shell: bash
         run: |
           set -euo pipefail
@@ -48,18 +50,58 @@ jobs:
                 "sections_field":"sections",
                 "section_text_field":"text",
                 "section_evidence_field":"evidence_refs",
+                "section_claims_field":"state_claims",
                 "continuity_field":"continuity",
                 "autobiographical_hypotheses_field":"hypotheses"
               }
             },
+            "state_metrics":[
+              {"name":"load","evidence_ref":"state:load","status":"VERIFIED","value":0.4},
+              {"name":"unknown_metric","evidence_ref":"state:unknown_metric","status":"UNKNOWN","value":0.0}
+            ],
             "inference":{"kind":"local_exec","max_tokens":64,"temperature":0.0},
-            "gate":{"require_evidence_per_section":false,"require_hash_echo":true,"leak_patterns":["FORBIDDEN_LEAK"]}
+            "gate":{
+              "max_claim_overshoot":0.05,
+              "require_evidence_per_section":true,
+              "require_hash_echo":true,
+              "leak_patterns":["FORBIDDEN_LEAK"]
+            }
           }
           JSON
           printf 'fixture-model\n' >/tmp/model.gguf
           cat >/tmp/runner <<'PY'
           #!/usr/bin/env python3
-          print("THIS_IS_NOT_JSON")
+          import json,re,sys
+          prompt=open(sys.argv[1],encoding='utf-8').read()
+          mode=open('/tmp/mode',encoding='utf-8').read().strip()
+          def take(name):
+              m=re.search(r'^'+re.escape(name)+r'=([0-9a-f]{64})$',prompt,re.M)
+              assert m, name
+              return m.group(1)
+          if mode == 'malformed':
+              print('THIS_IS_NOT_JSON')
+              raise SystemExit
+          packet=take('packet_hash_expected')
+          state=take('canonical_state_hash_expected')
+          section={'text':'ok','evidence_refs':['ev-1','state:load'],'state_claims':{'load':0.4}}
+          payload={
+              'title':'ok','intro':'ok','sections':[section],
+              'continuity':'continue','hypotheses':[],
+              'packet_hash_seen':packet,
+              'canonical_state_hash_seen':state
+          }
+          if mode == 'missing_evidence': section['evidence_refs']=[]
+          elif mode == 'unknown_ref': section['evidence_refs']=['ev-1','not:admitted']
+          elif mode == 'unverified_claim':
+              section['evidence_refs']=['ev-1','state:unknown_metric']
+              section['state_claims']={'unknown_metric':0.0}
+          elif mode == 'overshoot': section['state_claims']={'load':0.9}
+          elif mode == 'missing_metric_ref': section['evidence_refs']=['ev-1']
+          elif mode == 'bad_packet_hash': payload['packet_hash_seen']='0'*64
+          elif mode == 'bad_state_hash': payload['canonical_state_hash_seen']='0'*64
+          elif mode == 'leak': payload['title']='FORBIDDEN_LEAK'
+          elif mode != 'valid': raise SystemExit('unknown mode '+mode)
+          print(json.dumps(payload,separators=(',',':')))
           PY
           chmod 0755 /tmp/runner
 
@@ -70,53 +112,40 @@ jobs:
           /tmp/mini_entity.clay set-local-runner-json /tmp/entity.db '["/tmp/runner","{{PROMPT_FILE}}"]'
           /tmp/mini_entity.clay source-add /tmp/source.db observation ev-1 '{"measured":1}'
 
-          # Gate A: malformed model output must not advance generation or consume evidence.
-          set +e
-          /tmp/mini_entity.clay run /tmp/entity.db /tmp/source.db >/tmp/bad.out 2>/tmp/bad.err
-          rc=$?
-          set -e
-          test "$rc" -ne 0
-          grep -q 'OUTPUT_CONTRACT_GATE_REJECTED_NO_COMMIT' /tmp/bad.err
-          python3 - <<'PY'
-          import sqlite3
-          e=sqlite3.connect('/tmp/entity.db')
-          s=sqlite3.connect('/tmp/source.db')
-          assert e.execute('select generation from entity_state where id=1').fetchone()[0] == 0
-          assert e.execute('select count(*) from outputs').fetchone()[0] == 0
-          assert s.execute("select consumed_generation from mini_entity_events where source_id='ev-1'").fetchone()[0] is None
-          print('PASS: malformed output rejected before atomic commit')
-          PY
+          assert_pristine() {
+            test "$(sqlite3 /tmp/entity.db 'select generation from entity_state where id=1;')" = 0
+            test "$(sqlite3 /tmp/entity.db 'select count(*) from outputs;')" = 0
+            test "$(sqlite3 /tmp/entity.db 'select count(*) from study_rows;')" = 0
+            test "$(sqlite3 /tmp/source.db "select count(*) from mini_entity_events where source_id='ev-1' and consumed_generation is null;")" = 1
+          }
+          reject_mode() {
+            printf '%s\n' "$1" >/tmp/mode
+            set +e
+            /tmp/mini_entity.clay run /tmp/entity.db /tmp/source.db >"/tmp/$1.out" 2>"/tmp/$1.err"
+            rc=$?
+            set -e
+            test "$rc" -ne 0
+            grep -q 'OUTPUT_CONTRACT_GATE_REJECTED_NO_COMMIT' "/tmp/$1.err"
+            assert_pristine
+          }
 
-          # Gate B: a valid output may commit exactly once. Runner reads bound hashes from prompt.
-          cat >/tmp/runner <<'PY'
-          #!/usr/bin/env python3
-          import json,re,sys
-          prompt=open(sys.argv[1],encoding='utf-8').read()
-          def take(name):
-              m=re.search(r'^'+re.escape(name)+r'=([0-9a-f]{64})$',prompt,re.M)
-              assert m, name
-              return m.group(1)
-          print(json.dumps({
-              'title':'ok','intro':'ok','sections':[{'text':'ok','evidence_refs':[]}],
-              'continuity':'continue','hypotheses':[],
-              'packet_hash_seen':take('packet_hash_expected'),
-              'canonical_state_hash_seen':take('canonical_state_hash_expected')
-          },separators=(',',':')))
-          PY
-          chmod 0755 /tmp/runner
+          # Ordinary falsifiers only. The go-cycle unusual experiment was already consumed elsewhere.
+          for mode in malformed missing_evidence unknown_ref unverified_claim overshoot missing_metric_ref bad_packet_hash bad_state_hash leak; do
+            reject_mode "$mode"
+          done
+
+          printf 'valid\n' >/tmp/mode
           /tmp/mini_entity.clay run /tmp/entity.db /tmp/source.db | tee /tmp/good.json
-          python3 - <<'PY'
-          import sqlite3
-          e=sqlite3.connect('/tmp/entity.db')
-          s=sqlite3.connect('/tmp/source.db')
-          assert e.execute('select generation from entity_state where id=1').fetchone()[0] == 1
-          assert e.execute('select count(*) from outputs').fetchone()[0] == 1
-          assert e.execute('select count(*) from study_rows').fetchone()[0] == 1
-          assert s.execute("select consumed_generation from mini_entity_events where source_id='ev-1'").fetchone()[0] == 1
-          print('PASS: valid output committed exactly once with study row')
-          PY
+          test "$(sqlite3 /tmp/entity.db 'select generation from entity_state where id=1;')" = 1
+          test "$(sqlite3 /tmp/entity.db 'select count(*) from outputs;')" = 1
+          test "$(sqlite3 /tmp/entity.db 'select count(*) from study_rows;')" = 1
+          test "$(sqlite3 /tmp/source.db "select consumed_generation from mini_entity_events where source_id='ev-1';")" = 1
+          test "$(sqlite3 /tmp/entity.db 'pragma integrity_check;')" = ok
 
-          # Gate C: embedded secret values are not valid profile configuration.
+      - name: Secret profile bytes fail before persistence
+        shell: bash
+        run: |
+          set -euo pipefail
           python3 - <<'PY'
           import json
           p=json.load(open('/tmp/profile.json'))
@@ -129,15 +158,12 @@ jobs:
           set -e
           test "$rc" -ne 0
           grep -q 'PROFILE_CONTRACT_REJECTED' /tmp/secret.err
-          python3 - <<'PY'
-          import sqlite3
-          db=sqlite3.connect('/tmp/entity.db')
-          raw=db.execute("select profile_json from profiles where profile_id='contract_probe'").fetchone()[0]
-          assert 'DO_NOT_STORE_THIS' not in raw
-          print('PASS: secret-valued profile rejected before persistence')
-          PY
+          ! grep -Fq 'DO_NOT_STORE_THIS' /tmp/entity.db
 
-          # Gate D: DB-resident profile bytes cannot drift away from their stored digest.
+      - name: DB profile tamper fails without state or evidence mutation
+        shell: bash
+        run: |
+          set -euo pipefail
           /tmp/mini_entity.clay source-add /tmp/source.db observation ev-2 '{"measured":2}'
           python3 - <<'PY'
           import sqlite3
@@ -155,14 +181,27 @@ jobs:
           set -e
           test "$rc" -ne 0
           grep -q 'PROFILE_HASH_MISMATCH' /tmp/tamper.err
-          python3 - <<'PY'
-          import hashlib,sqlite3
-          e=sqlite3.connect('/tmp/entity.db')
-          s=sqlite3.connect('/tmp/source.db')
-          raw,stored=e.execute("select profile_json,profile_sha256 from profiles where profile_id='contract_probe'").fetchone()
-          assert hashlib.sha256(raw.encode()).hexdigest()!=stored
-          assert e.execute('select generation from entity_state where id=1').fetchone()[0] == 1
-          assert e.execute('select count(*) from outputs').fetchone()[0] == 1
-          assert s.execute("select consumed_generation from mini_entity_events where source_id='ev-2'").fetchone()[0] is None
-          print('PASS: profile digest mismatch rejected without state/evidence mutation')
-          PY
+          test "$(sqlite3 /tmp/entity.db 'select generation from entity_state where id=1;')" = 1
+          test "$(sqlite3 /tmp/entity.db 'select count(*) from outputs;')" = 1
+          test "$(sqlite3 /tmp/entity.db 'select count(*) from study_rows;')" = 1
+          test "$(sqlite3 /tmp/source.db "select count(*) from mini_entity_events where source_id='ev-2' and consumed_generation is null;")" = 1
+          test "$(sqlite3 /tmp/entity.db 'pragma integrity_check;')" = ok
+
+      - name: Bounded evidence summary
+        shell: bash
+        run: |
+          echo 'NATIVE_0_7_SEMANTIC_GATE_SOURCE_CANDIDATE=true'
+          echo 'MALFORMED_OUTPUT_ROLLBACK=PASS_IF_JOB_GREEN'
+          echo 'MISSING_EVIDENCE_ROLLBACK=PASS_IF_JOB_GREEN'
+          echo 'UNKNOWN_EVIDENCE_REF_ROLLBACK=PASS_IF_JOB_GREEN'
+          echo 'UNVERIFIED_STATE_CLAIM_ROLLBACK=PASS_IF_JOB_GREEN'
+          echo 'STATE_CLAIM_OVERSHOOT_ROLLBACK=PASS_IF_JOB_GREEN'
+          echo 'STATE_CLAIM_METRIC_EVIDENCE_ROLLBACK=PASS_IF_JOB_GREEN'
+          echo 'HASH_ECHO_ROLLBACK=PASS_IF_JOB_GREEN'
+          echo 'LEAK_PATTERN_ROLLBACK=PASS_IF_JOB_GREEN'
+          echo 'VALID_ATOMIC_COMMIT=PASS_IF_JOB_GREEN'
+          echo 'PROFILE_SECRET_PERSISTENCE=REJECTED_IF_JOB_GREEN'
+          echo 'PROFILE_TAMPER=REJECTED_IF_JOB_GREEN'
+          echo 'UNUSUAL_EXPERIMENT=NOT_CONSUMED_HERE'
+          echo 'REAL_MODEL_QUALITY=NOT_CREDITED_FIXTURE_ONLY'
+          echo 'TOGETHER=FORBIDDEN_NOT_USED'

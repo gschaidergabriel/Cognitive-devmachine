@@ -4,9 +4,10 @@ Source-closure semantics remain owned by test_build_native_bound_source_closure.
 Local-runner environment isolation, including active and verified-empty execution,
 is exercised by test_native_local_env_isolation.py. Presentation neutrality and
 fail-closed canonical-v2 admission remain first-class source falsifiers. The complete
-profile-v2 promotion surface is bound by test_native_v2_parity_contract.py.
+profile-v2 promotion surface is bound by test_native_v2_parity_contract.py. Active
+profile digest consistency is exercised by test_native_profile_integrity_runtime.py.
 
-This adapter exposes all five suites through one canonical workflow entry without
+This adapter exposes all six suites through one canonical workflow entry without
 creating a second runtime or acceptance path.
 """
 from __future__ import annotations
@@ -44,9 +45,14 @@ _v2_parity = _load(
     "test_native_v2_parity_contract.py",
     "mini_entity_v2_parity_contract_tests",
 )
+_profile_integrity = _load(
+    "test_native_profile_integrity_runtime.py",
+    "mini_entity_profile_integrity_runtime_tests",
+)
 
 SourceClosureTests = _closure.SourceClosureTests
 NativeLocalEnvIsolationTests = _env.NativeLocalEnvIsolationTests
 NativeStateBoxBinaryNeutralityTests = _presentation.NativeStateBoxBinaryNeutralityTests
 NativeSemanticAdmissionSourceTests = _semantic.NativeSemanticAdmissionSourceTests
 NativeProfileV2ParityContractTests = _v2_parity.NativeProfileV2ParityContractTests
+NativeProfileIntegrityRuntimeTests = _profile_integrity.NativeProfileIntegrityRuntimeTests

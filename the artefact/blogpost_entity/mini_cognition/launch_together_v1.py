@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 """Together BYOM launcher for the 0.5B ClayCode cognition campaign.
 
-Default mode is preflight: regenerate/validate corpus, upload/validate files, check the
-Together template, and print a server price estimate. A billed training job is created
-only with --create after all gates pass and the operator binds create authorization to
-the exact deterministic campaign fingerprint.
+Default mode is preflight: regenerate the leakage-resistant v2 corpus, run strict
+ClayCode structural validation plus corpus diversity/leakage gates, upload/validate
+files, check the Together template, and print a server price estimate. A billed
+training job is created only with --create after all gates pass and the operator binds
+create authorization to the exact deterministic campaign fingerprint.
 
 Together's regular catalog has no native 0.5B Qwen entry. We therefore use BYOM with
 Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family catalog-template candidate.
 Template model_limits and price estimation do NOT prove BYOM compatibility because they
-do not validate from_hf_model. BYOM compatibility remains open until Together accepts
-(and subsequently starts) the requested HF checkpoint under the selected template.
+do not validate from_hf_model. Current Together sources also differ in how strictly
+they phrase template-size matching. BYOM compatibility therefore remains an empirical
+API gate until Together accepts (and subsequently starts) the requested HF checkpoint
+under the selected template.
 
 Billed-create safety is deliberately stricter than ordinary API use. The CREATE call is
 made through a zero-retry SDK client and is preceded by an atomic local campaign intent
@@ -23,8 +26,8 @@ import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
-TRAIN=HERE/"train_v1.jsonl"
-VALID=HERE/"validation_v1.jsonl"
+TRAIN=HERE/"train_v2.jsonl"
+VALID=HERE/"validation_v2.jsonl"
 HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL","Qwen/Qwen2.5-0.5B")
 TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-7B-Instruct-Turbo")
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
@@ -35,9 +38,17 @@ CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT_STATUSES={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
 def run_local_checks():
-    subprocess.run([sys.executable,str(HERE/"generate_sft_v1.py")],check=True)
+    subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_sft_v1.py"),str(TRAIN)],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_sft_v1.py"),str(VALID)],check=True)
+    proc=subprocess.run(
+        [sys.executable,str(HERE/"corpus_quality_gate_v2.py"),str(TRAIN),str(VALID)],
+        check=True,text=True,capture_output=True,
+    )
+    quality=json.loads(proc.stdout)
+    if not quality.get("ok"):
+        raise RuntimeError("v2 corpus quality gate returned non-ok without nonzero exit")
+    return quality
 
 def wait_file(client,file_id):
     while True:
@@ -63,7 +74,8 @@ def sha256_file(path):
 
 def campaign_descriptor(hf_model):
     return {
-        "schema":"claycog-05b-together-campaign/v1",
+        "schema":"claycog-05b-together-campaign/v2",
+        "corpus_schema":"claycog-sft/v2",
         "from_hf_model":hf_model,
         "template_model":TEMPLATE,
         "training_sha256":sha256_file(TRAIN),
@@ -76,6 +88,11 @@ def campaign_descriptor(hf_model):
         "learning_rate":1e-5,
         "warmup_ratio":0.03,
         "n_checkpoints":1,
+        "required_corpus_quality":{
+            "train_exact_unique_rate":1.0,
+            "validation_exact_unique_rate":1.0,
+            "exact_cross_split_overlap":0,
+        },
     }
 
 def campaign_fingerprint(hf_model):
@@ -235,7 +252,7 @@ def main():
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     hf_model="Qwen/Qwen2.5-0.5B-Instruct" if args.instruct_ablation else HF_MODEL
 
-    run_local_checks()
+    quality=run_local_checks()
     fingerprint=campaign_fingerprint(hf_model)
     suffix=campaign_suffix(fingerprint)
 
@@ -272,6 +289,8 @@ def main():
         "mode":"preflight" if not args.create else "create",
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
+        "corpus_schema":"claycog-sft/v2",
+        "corpus_quality":quality,
         "from_hf_model":hf_model,
         "template_model":TEMPLATE,
         "epochs":EPOCHS,
@@ -280,6 +299,7 @@ def main():
         "allowed_to_proceed":bool(estimate.allowed_to_proceed),
         "price_detail":objdict(estimate),
         "template_admission_status":"MODEL_LIMITS_FULL_FT_ACCEPTED",
+        "template_size_contract":"OPEN_PROVIDER_GATE_CURRENT_DOCS_NOT_FULLY_CONSISTENT",
         "byom_compatibility_status":"UNPROVEN_UNTIL_CREATE_ACCEPTS_FROM_HF_MODEL_AND_TRAINING_STARTS",
     }
     print(json.dumps(report,indent=2,default=str))
@@ -323,6 +343,7 @@ def main():
         "job_id":job.id,
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
+        "corpus_schema":"claycog-sft/v2",
         "from_hf_model":hf_model,
         "template_model":TEMPLATE,
         "full_fine_tune":True,

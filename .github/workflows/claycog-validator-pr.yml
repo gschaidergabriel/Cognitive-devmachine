@@ -35,6 +35,9 @@ jobs:
             'the artefact/blogpost_entity/mini_cognition/claycode_calls_v2.py' \
             'the artefact/blogpost_entity/mini_cognition/eval_outputs_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/generate_eval_compositional_ood_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_eval_compositional_exact_vector_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_eval_surface_copy_baseline_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_semantic_call_admission_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_eval_call_depth_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' \
@@ -60,10 +63,12 @@ jobs:
           python3 generate_sft_v2.py
           python3 validate_corpus_v2.py train_v2.jsonl validation_v2.jsonl
           git diff --exit-code -- corpus_manifest_v2.json
-      - name: Run exact omega OOD promotion regression
+      - name: Run exact omega OOD promotion regressions
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_eval_exact_vector_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_compositional_exact_vector_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_surface_copy_baseline_v1.py'
       - name: Run shared semantic-call admission regression
         run: |
           set -euo pipefail
@@ -79,11 +84,20 @@ jobs:
           python3 generate_eval_compositional_ood_v1.py
           python3 - <<'PY'
           import json
+          from collections import Counter
           from pathlib import Path
           rows=[json.loads(line) for line in Path('eval_compositional_ood_v1.jsonl').read_text().splitlines() if line.strip()]
-          assert len(rows)==320, len(rows)
-          assert len({x['id'] for x in rows})==320
+          assert len(rows)==400, len(rows)
+          assert len({x['id'] for x in rows})==400
           families={x['family'] for x in rows}
-          assert len(families)==6, families
-          print({'cases':len(rows),'unique_ids':320,'families':sorted(families),'role':'evaluation_only'})
+          assert len(families)==7, families
+          surface=[x for x in rows if x['family']=='compositional_surface_invariance_omega']
+          assert len(surface)==80
+          assert Counter(x['surface_form'] for x in surface)=={
+              'evidence_first':20,'contract_first':20,'inputs_first':20,'record_fields':20
+          }
+          assert all('typed_args=' not in x['prompt'] for x in surface)
+          assert sum('expected_omega' in x for x in rows)==160
+          print({'cases':len(rows),'unique_ids':400,'families':sorted(families),
+                 'surface_invariance_cases':80,'exact_vector_cases':160,'role':'evaluation_only'})
           PY

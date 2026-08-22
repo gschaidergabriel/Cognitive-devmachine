@@ -1,0 +1,35 @@
+name: mini-native-version-lineage
+
+on:
+  push:
+    branches:
+      - gpt56sol/go-native-lineage-fence-20260822-1320
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/native/build_native_bound.py'
+      - 'the artefact/blogpost_entity/native/check_native_reference.py'
+      - 'the artefact/blogpost_entity/native/test_native_version_lineage.py'
+      - 'the artefact/blogpost_entity/native/mini_entity.c'
+      - 'the artefact/blogpost_entity/native/mini_entity_part*.inc'
+      - 'research_entity/rooms/PROGRAM_STATE.json'
+      - '.github/workflows/mini-native-version-lineage.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  native-version-lineage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile provenance tools
+        run: >-
+          python -m py_compile
+          'the artefact/blogpost_entity/native/build_native_bound.py'
+          'the artefact/blogpost_entity/native/check_native_reference.py'
+      - name: Run deterministic version-lineage fences
+        run: python -m pytest 'the artefact/blogpost_entity/native/test_native_version_lineage.py' -q

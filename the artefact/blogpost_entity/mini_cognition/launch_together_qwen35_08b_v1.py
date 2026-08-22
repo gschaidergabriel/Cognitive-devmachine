@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Fail-closed direct Together Full-FT launcher for ~1B ClayCode cognition."""
-import argparse, hashlib, json, os, subprocess, sys, time
+import argparse, hashlib, inspect, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
@@ -56,11 +56,22 @@ def sha256_file(p):
     return h.hexdigest()
 def training_method(): return {"method":"sft","train_on_inputs":"auto"}
 def training_type(): return {"type":"Full"}
-def campaign_descriptor(): return {"schema":"claycog-08b-together-direct-campaign/v2","model":MODEL,"training_sha256":sha256_file(TRAIN),"validation_sha256":sha256_file(VALID),"epochs":EPOCHS,"evals":EVALS,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_method":training_method(),"training_type":training_type(),"n_checkpoints":1}
+def create_contract():
+    method=training_method();typ=training_type()
+    if typ.get("type")!="Full":raise SystemExit("CREATE_CONTRACT_REJECT expected Full training type")
+    return {"training_method":method["method"],"train_on_inputs":method["train_on_inputs"],"lora":False}
+def campaign_descriptor(): return {"schema":"claycog-08b-together-direct-campaign/v3","model":MODEL,"training_sha256":sha256_file(TRAIN),"validation_sha256":sha256_file(VALID),"epochs":EPOCHS,"evals":EVALS,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_method":training_method(),"training_type":training_type(),"create_contract":create_contract(),"n_checkpoints":1}
 def campaign_fingerprint(): return hashlib.sha256(json.dumps(campaign_descriptor(),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode()).hexdigest()
-def campaign_suffix(fp): return "claycog08b-v2-"+fp[:24]
+def campaign_suffix(fp): return "claycog08b-v3-"+fp[:24]
 def objdict(x): return x.model_dump() if hasattr(x,"model_dump") else x.dict() if hasattr(x,"dict") else x if isinstance(x,dict) else str(x)
 def _field(x,n,d=None): return x.get(n,d) if isinstance(x,dict) else getattr(x,n,d)
+
+def assert_sdk_create_contract(client):
+    try:params=inspect.signature(client.fine_tuning.create).parameters
+    except (TypeError,ValueError) as e:raise SystemExit(f"SDK_CREATE_SIGNATURE_UNAVAILABLE {type(e).__name__}") from e
+    required={"training_method","train_on_inputs","lora"};missing=sorted(required-set(params))
+    if missing:raise SystemExit("SDK_CREATE_CONTRACT_REJECT missing="+",".join(missing))
+    return params
 
 def get_full_training_limits(client):
     limits=client.fine_tuning.model_limits(model_name=MODEL)
@@ -77,7 +88,7 @@ def wait_file(client,file_id,timeout_seconds=FILE_WAIT_SECONDS):
         if time.monotonic()>=deadline: raise TimeoutError(f"Timed out waiting for Together file processing: {file_id}")
         time.sleep(5)
 def estimate_price(client,train_id,valid_id): return client.fine_tuning.estimate_price(training_file=train_id,validation_file=valid_id,model=MODEL,n_epochs=EPOCHS,n_evals=EVALS,training_method=training_method(),training_type=training_type())
-def create_payload(train_id,valid_id,suffix): return {"training_file":train_id,"validation_file":valid_id,"model":MODEL,"n_epochs":EPOCHS,"n_evals":EVALS,"n_checkpoints":1,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"suffix":suffix,"training_method":training_method(),"training_type":training_type()}
+def create_payload(train_id,valid_id,suffix): return {"training_file":train_id,"validation_file":valid_id,"model":MODEL,"n_epochs":EPOCHS,"n_evals":EVALS,"n_checkpoints":1,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"suffix":suffix,**create_contract()}
 
 def _items(x):
     if x is None:return []
@@ -115,7 +126,7 @@ def arm_create_intent(fp,suffix):
     d=create_ledger_dir(); d.mkdir(parents=True,exist_ok=True,mode=0o700)
     try:os.chmod(d,0o700)
     except OSError:pass
-    p=create_ledger_path(fp); payload={"schema":"claycog-together-create-intent/v2","fingerprint":fp,"campaign_suffix":suffix,"status":"CREATE_ARMED","campaign":campaign_descriptor(),"created_unix":int(time.time())}; data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode()
+    p=create_ledger_path(fp); payload={"schema":"claycog-together-create-intent/v3","fingerprint":fp,"campaign_suffix":suffix,"status":"CREATE_ARMED","campaign":campaign_descriptor(),"created_unix":int(time.time())}; data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode()
     try:fd=os.open(str(p),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
     except FileExistsError:assert_no_local_create_intent(fp);raise
     with os.fdopen(fd,"wb",closefd=True) as f:f.write(data);f.flush();os.fsync(f.fileno())
@@ -151,15 +162,15 @@ def main():
     assert_provider_execution_allowed()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
-    client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)
+    client=Together();assert_sdk_create_contract(client);get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)
     if args.create:require_create_confirmation(fp);assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix)
     tf=client.files.upload(file=str(TRAIN),purpose="fine-tune",check=True);vf=client.files.upload(file=str(VALID),purpose="fine-tune",check=True);wait_file(client,tf.id);wait_file(client,vf.id)
     est=estimate_price(client,tf.id,vf.id);price=float(est.estimated_total_price)
-    print(json.dumps({"schema":"CLAYCOG_08B_TOGETHER_DIRECT_PREFLIGHT/v2","mode":"create" if args.create else "preflight","campaign_fingerprint":fp,"campaign_suffix":suffix,"model":MODEL,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_type":training_type(),"estimated_usd":price,"allowed_to_proceed":bool(est.allowed_to_proceed),"price_detail":objdict(est),"model_limits_full_ft":True,"byom_fields":"ABSENT_BY_DESIGN"},indent=2,default=str))
+    print(json.dumps({"schema":"CLAYCOG_08B_TOGETHER_DIRECT_PREFLIGHT/v3","mode":"create" if args.create else "preflight","campaign_fingerprint":fp,"campaign_suffix":suffix,"model":MODEL,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_method":training_method(),"training_type":training_type(),"create_contract":create_contract(),"estimated_usd":price,"allowed_to_proceed":bool(est.allowed_to_proceed),"price_detail":objdict(est),"model_limits_full_ft":True,"byom_fields":"ABSENT_BY_DESIGN"},indent=2,default=str))
     if not est.allowed_to_proceed:raise SystemExit("Together price/admission endpoint does not allow this job")
     if price>MAX_USD:raise SystemExit(f"BUDGET_ABORT estimated ${price:.2f} > ${MAX_USD:.2f}")
     if not args.create:print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fp} for this exact create");return
-    assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix);intent=arm_create_intent(fp,suffix);cc=new_zero_retry_create_client(Together)
+    assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix);intent=arm_create_intent(fp,suffix);cc=new_zero_retry_create_client(Together);assert_sdk_create_contract(cc)
     try:job=cc.fine_tuning.create(**create_payload(tf.id,vf.id,suffix))
     except Exception as e:update_create_intent(intent,"UNKNOWN_REMOTE_CREATE",error_class=type(e).__name__);raise SystemExit("CREATE_OUTCOME_UNKNOWN; do not retry until exact provider reconciliation") from e
     update_create_intent(intent,"JOB_KNOWN",job_id=job.id)

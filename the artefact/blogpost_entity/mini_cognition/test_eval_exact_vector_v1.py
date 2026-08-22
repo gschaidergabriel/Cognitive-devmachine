@@ -62,7 +62,7 @@ assert unk.returncode==1 and json.loads(unk.stdout)['unknown_output_ids']==['une
 # comment lines, but OOD semantic credit must require real calls outside comments.
 from eval_outputs_v1 import semantic_ok
 from validate_sft_v1 import validate_code
-from claycode_calls_v2 import call_set
+from claycode_calls_v2 import call_set, fn_counts
 
 hyper=next(s for s in specs if s['family']=='hyperposition_ood')
 comment_hyper=(HEAD+
@@ -71,7 +71,7 @@ comment_hyper=(HEAD+
     '  // collapse_guard(hp,"R6_required")\n'+TAIL)
 assert validate_code(comment_hyper)==[]
 assert not semantic_ok(comment_hyper,hyper)
-assert not any(call.startswith('hyper_alt(') for call in call_set(comment_hyper))
+assert fn_counts(comment_hyper).get('hyper_alt',0)==0
 
 omega=next(s for s in specs if s['family']=='omega_valid_ood')
 e=omega['expected_omega']
@@ -87,9 +87,10 @@ for g in e['validators']:
 comment_omega+='  // omega_commit_candidate(c,w)\n'+TAIL
 assert validate_code(comment_omega)==[]
 assert not semantic_ok(comment_omega,omega)
-assert not any(call.startswith('omega_commit_candidate(') for call in call_set(comment_omega))
+assert fn_counts(comment_omega).get('omega_commit_candidate',0)==0
 
 block='/* omega_commit_candidate(c,w) */\n'+oracle_output(omega)
-assert 'omega_commit_candidate(c,w)' not in call_set(block) or call_set(block).count('omega_commit_candidate(c,w)')==1
+assert fn_counts(block).get('omega_commit_candidate',0)==1
+assert 'omega_commit_candidate(c,w)' in call_set(block)
 
-print(json.dumps({'attack_rejected':True,'attack_semantic_rate':ar['semantic_gate_rate'],'omega_valid_attack_semantic':ar['by_family']['omega_valid_ood']['semantic'],'oracle_passed':True,'duplicate_id_rejected':True,'unknown_id_rejected':True,'comment_smuggling_rejected':True,'comment_only_hyper_calls':0,'comment_only_omega_commit_calls':0},indent=2))
+print(json.dumps({'attack_rejected':True,'attack_semantic_rate':ar['semantic_gate_rate'],'omega_valid_attack_semantic':ar['by_family']['omega_valid_ood']['semantic'],'oracle_passed':True,'duplicate_id_rejected':True,'unknown_id_rejected':True,'comment_smuggling_rejected':True,'comment_only_hyper_calls':0,'comment_only_omega_commit_calls':0,'block_comment_ignored':True},indent=2))

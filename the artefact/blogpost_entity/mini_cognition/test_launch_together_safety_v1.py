@@ -17,15 +17,24 @@ class ConstructorFake:
 
 class SafetyTests(unittest.TestCase):
     def setUp(self):
-        self.tmp=tempfile.TemporaryDirectory(); p=Path(self.tmp.name); self.old=(mod.TRAIN,mod.VALID)
+        self.tmp=tempfile.TemporaryDirectory(); p=Path(self.tmp.name); self.old=(mod.TRAIN,mod.VALID,mod.TEMPLATE)
         mod.TRAIN=p/"train.jsonl"; mod.VALID=p/"valid.jsonl"; mod.TRAIN.write_text('{"messages":[]}\n'); mod.VALID.write_text('{"messages":[1]}\n')
         os.environ[mod.CREATE_LEDGER_DIR_ENV]=str(p/"ledger"); self.hf=mod.PRIMARY_HF_MODEL; self.rev=mod.PRIMARY_HF_REVISION
+        self.template="Qwen/Qwen2.5-7B-Instruct-Turbo"; mod.TEMPLATE=self.template
     def tearDown(self):
-        mod.TRAIN,mod.VALID=self.old; self.tmp.cleanup()
+        mod.TRAIN,mod.VALID,mod.TEMPLATE=self.old; self.tmp.cleanup()
         for name in (mod.CREATE_CONFIRM_ENV,mod.CREATE_LEDGER_DIR_ENV,"CLAYCOG_HF_MODEL","CLAYCOG_HF_REVISION","CLAYCOG_INSTRUCT_HF_MODEL","CLAYCOG_INSTRUCT_HF_REVISION"): os.environ.pop(name,None)
         ConstructorFake.calls.clear()
-    def test_fingerprint_binds_dataset_training_config_and_hf_revision(self):
-        a=mod.campaign_fingerprint(self.hf,self.rev); self.assertEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.VALID.write_text('{"messages":[2]}\n'); self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.VALID.write_text('{"messages":[1]}\n'); self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,"1"*40))
+    def test_fingerprint_binds_dataset_training_config_hf_revision_and_template(self):
+        a=mod.campaign_fingerprint(self.hf,self.rev); self.assertEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.VALID.write_text('{"messages":[2]}\n'); self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.VALID.write_text('{"messages":[1]}\n'); self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,"1"*40)); mod.TEMPLATE="Qwen/Qwen2.5-other-template"; self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.TEMPLATE=self.template
+    def test_template_requires_explicit_qwen2_compatible_candidate(self):
+        mod.TEMPLATE=""
+        with self.assertRaises(SystemExit) as missing: mod.resolve_template()
+        self.assertIn("TOGETHER_TEMPLATE_BLOCKED",str(missing.exception))
+        mod.TEMPLATE="Qwen/Qwen3.5-0.8B"
+        with self.assertRaises(SystemExit) as mismatch: mod.resolve_template()
+        self.assertIn("ARCHITECTURE_ABORT",str(mismatch.exception))
+        mod.TEMPLATE=self.template; self.assertEqual(self.template,mod.resolve_template())
     def test_exact_revision_defaults_and_custom_override_fail_closed(self):
         self.assertEqual((mod.PRIMARY_HF_MODEL,mod.PRIMARY_HF_REVISION),mod.resolve_hf_source(False)); self.assertEqual((mod.INSTRUCT_HF_MODEL,mod.INSTRUCT_HF_REVISION),mod.resolve_hf_source(True)); os.environ["CLAYCOG_HF_MODEL"]="example/custom-qwen2"
         with self.assertRaises(SystemExit): mod.resolve_hf_source(False)
@@ -49,7 +58,7 @@ class SafetyTests(unittest.TestCase):
     def test_create_intent_is_atomic_exclusive_secret_free_and_revision_bound(self):
         fp=mod.campaign_fingerprint(self.hf,self.rev); suffix=mod.campaign_suffix(fp); os.environ["TOGETHER_API_KEY"]="SHOULD_NOT_ENTER_LEDGER"
         try:
-            path=mod.arm_create_intent(fp,self.hf,self.rev,suffix); data=path.read_text(); payload=json.loads(data); self.assertEqual("CREATE_ARMED",payload["status"]); self.assertEqual(self.rev,payload["campaign"]["hf_model_revision"]); self.assertNotIn("SHOULD_NOT_ENTER_LEDGER",data); self.assertEqual(0o600,path.stat().st_mode & 0o777)
+            path=mod.arm_create_intent(fp,self.hf,self.rev,suffix); data=path.read_text(); payload=json.loads(data); self.assertEqual("CREATE_ARMED",payload["status"]); self.assertEqual(self.rev,payload["campaign"]["hf_model_revision"]); self.assertEqual(self.template,payload["campaign"]["template_model"]); self.assertNotIn("SHOULD_NOT_ENTER_LEDGER",data); self.assertEqual(0o600,path.stat().st_mode & 0o777)
             with self.assertRaises(SystemExit): mod.arm_create_intent(fp,self.hf,self.rev,suffix)
         finally: os.environ.pop("TOGETHER_API_KEY",None)
     def test_billed_create_client_disables_sdk_retries(self): mod.new_zero_retry_create_client(ConstructorFake); self.assertEqual([{"max_retries":0}],ConstructorFake.calls)

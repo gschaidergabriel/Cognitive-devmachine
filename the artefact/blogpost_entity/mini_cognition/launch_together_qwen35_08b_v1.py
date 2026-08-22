@@ -4,6 +4,7 @@ import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
+CONTROL_PATH=HERE.parents[2]/"research_entity"/"claycode"/"CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json"
 TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"
 EXPECTED_MODEL="Qwen/Qwen3.5-0.8B"; MODEL=os.environ.get("CLAYCOG_08B_MODEL",EXPECTED_MODEL)
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
@@ -22,6 +23,15 @@ def local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_sft_v2.py"),str(TRAIN),"--against",str(VALID)],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_sft_v2.py"),str(VALID),"--against",str(TRAIN)],check=True)
+
+def require_provider_execution_admission():
+    try: control=json.loads(CONTROL_PATH.read_text(encoding="utf-8"))
+    except Exception as e: raise SystemExit(f"PROVIDER_EXECUTION_CONTROL_UNREADABLE {CONTROL_PATH}: {type(e).__name__}") from e
+    if control.get("status")!="ACTIVE": raise SystemExit("PROVIDER_EXECUTION_CONTROL_NOT_ACTIVE")
+    mode=control.get("mode"); rules=control.get("preserved_hard_rules")
+    if not isinstance(mode,str) or not isinstance(rules,dict): raise SystemExit("PROVIDER_EXECUTION_CONTROL_MALFORMED")
+    if mode=="FREE_ONLY" or rules.get("free_only") is True or rules.get("together_forbidden") is True:
+        raise SystemExit("FREE_ONLY_PROVIDER_REJECT Together paid fine-tuning is blocked before secret lookup and network I/O")
 
 def sha256_file(p):
     h=hashlib.sha256()
@@ -114,7 +124,7 @@ def created_job_identity_mismatches(meta,expected):
     return out
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks();require_provider_execution_admission()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)

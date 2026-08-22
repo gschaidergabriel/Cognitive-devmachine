@@ -1,0 +1,57 @@
+{
+  "schema": "mini-entity-native-profile-integrity-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "canonical_base_at_rejoin": "c7219e8fa7929d5e5a4fcd756aa07e815a32db75",
+  "fresh_main_branch": "gpt56sol/go-native-profile-integrity-freshmain-20260822-1318",
+  "draft_pr": 747,
+  "superseded_parallel_pr": 744,
+  "live_fusion": {
+    "canonical_source_closure_commit": "915723c0961a495be72f8a8075b4577a036f47f2",
+    "decision": "DROP_DUPLICATE_BUILDER_KEEP_ONLY_UNIQUE_PROFILE_INTEGRITY_DELTA",
+    "reason": "canonical main source-closure implementation is stronger because it also rejects dynamic/unbound includes"
+  },
+  "finding": {
+    "classification": "DB_PROFILE_HASH_NOT_ENFORCED_ON_READ",
+    "observed_main_blob": "856af5c0126a3a86ed51872ffe9078a4c1fab8e1",
+    "observation": "preset-apply persists profile_json with profile_sha256, but active_profile_json on canonical main read only profile_id and profile_json; stored profile bytes could drift from their recorded digest without runtime fail-closed detection",
+    "security_scope": "integrity consistency only; an unkeyed digest stored in the same DB is not authentication against an actor able to rewrite both profile bytes and digest"
+  },
+  "repair": {
+    "candidate_part01_blob": "519c2dee8152eecd6206499c103277f20536fd4e",
+    "behavior": [
+      "read profile_sha256 with the active profile",
+      "reject missing or malformed digest metadata",
+      "recompute SHA-256 over exact stored profile_json bytes before exposing them to status/run",
+      "reject mismatch before profile bytes enter runtime cognition/configuration"
+    ]
+  },
+  "runtime_falsifier": {
+    "path": "the artefact/blogpost_entity/native/test_native_profile_integrity_runtime.py",
+    "git_blob": "e79d90c149d184b3d7d7e15db9bc0695f9f0d003",
+    "cases": [
+      "valid imported profile hash accepted",
+      "direct profile_json drift rejected with PROFILE_HASH_MISMATCH and generation unchanged",
+      "malformed stored digest metadata rejected with PROFILE_HASH_METADATA_INVALID"
+    ],
+    "execution_status": "PENDING_ADMITTED_RUNNER"
+  },
+  "runner_observation": {
+    "workflow": "Research Entity Identity Guard",
+    "run_id": 32556704655,
+    "head": "4e61849d288e1e3046d27f8808bf7424d1fa178e",
+    "conclusion": "failure",
+    "job": "identity-guard",
+    "steps": null,
+    "credit": "ZERO_TEST_CREDIT_PRE_STEP_ADMISSION_FAILURE"
+  },
+  "current_main_advanced_during_cycle": "e261757fa21538ea24a6ff174b7b55d9929fcb94",
+  "new_main_gate": ".github/workflows/mini-entity-native-0-7-repro.yml",
+  "next_discriminator": "A pull_request synchronize after e261757 should invoke the canonical native 0.7 repro workflow; if a runner actually starts, require this PR's profile-integrity runtime falsifier to be executed as an additional native gate before merge/promotion.",
+  "together_api": "FORBIDDEN_NOT_USED",
+  "vps_testing": "NOT_USED",
+  "acceptance": "IN_PROGRESS"
+}

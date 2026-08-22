@@ -1,0 +1,57 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "branch": "gpt56sol/go-omega-comment-spoof-fix-current-20260822-1511",
+  "base_main_sha": "702440d7cd701e42d996cf8b9221d5d515a26e7d",
+  "scope": "canonical positive typed-omega promotion checker",
+  "one_unusual_experiment": {
+    "id": "OMEGA_COMMENT_SPOOF",
+    "hypothesis": "raw substring counting in exact_omega_ok can credit expected omega vector fields when every omega token appears only in comment lines and no executable omega_* line exists",
+    "pre_patch_source_blobs": {
+      "eval_outputs_v1.py": "3554e8ba5f9fd2e02f7b22066ac8209920ec679a",
+      "validate_sft_v1.py": "c7659d023e86587bb9eb6bd5f330bc9a9e3e5ed2"
+    },
+    "isolated_semantic_reproduction": {
+      "validate_code_errors": [],
+      "exact_omega_ok": true,
+      "uncommented_omega_lines": 0,
+      "result": "FALSIFIED_CANONICAL_EXACTNESS_MECHANISM"
+    }
+  },
+  "repair": {
+    "mechanism": "score normalized non-empty stripped lines; require each expected omega vector field as one exact line; count omega field families only from real line prefixes; reject real omega_reject lines",
+    "post_patch_blobs": {
+      "eval_outputs_v1.py": "cdce6f284bda16f0e8282a58fafd447981642e00",
+      "test_eval_exact_vector_v1.py": "4db11d97088d67d41841d3b502e3e0f6a236b269"
+    },
+    "regression_only_recheck": {
+      "comment_spoof_semantic_accepts": false,
+      "oracle_semantic_accepts": true
+    }
+  },
+  "coordination": {
+    "main_advanced_during_cycle": true,
+    "compared_from": "659cc2471b73bcefebb6a57694e6737cc2107cc5",
+    "compared_to": "702440d7cd701e42d996cf8b9221d5d515a26e7d",
+    "overlap_with_omega_files": false,
+    "fresh_main_transplant": true
+  },
+  "evidence_boundary": {
+    "pre_patch_falsifier": "MECHANISM_FALSIFIED_IN_ISOLATED_SEMANTIC_REPRODUCTION",
+    "post_patch": "MECHANISM_SUPPORTED_IN_ISOLATED_SEMANTIC_REPRODUCTION",
+    "exact_branch_checkout_test": "NOT_YET_CREDITED",
+    "github_actions": "PENDING_OR_UNOBSERVED",
+    "together_provider_call": false,
+    "paid_training": false,
+    "money_spent_usd": 0
+  },
+  "external_provider_refresh": {
+    "together_cli_contract": "from_hf_model should match selected base model architecture and size",
+    "together_public_marketing": "advertises broad Hugging Face/open-source fine-tuning compatibility",
+    "interpretation": "Qwen2.5-0.5B provider compatibility remains empirical/open; do not substitute Qwen3.5-0.8B merely by size"
+  },
+  "next": "run the existing exact-vector regression on exact fresh-main branch bytes; only after this gate is fused may tuned-model positive omega promotion evidence be credited"
+}

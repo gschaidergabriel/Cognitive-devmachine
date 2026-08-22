@@ -1,0 +1,107 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "authority_refresh": {
+    "joined_main_initial": "ed58970b66fb37243d1d5aff8a8de11b30b38714",
+    "joined_main_after_parallel_fusion": "f6efe39a68dac15c907f63d3f3a64beac078b6ca",
+    "execution_policy": "FREE_ONLY",
+    "provider_execution": "FORBIDDEN_WHILE_FREE_ONLY"
+  },
+  "source_delta": {
+    "pull_request": 950,
+    "code_head_before_receipt": "bfb00d9a0ac1730cd8b6428182e606a1a5f5f5cf",
+    "files": [
+      "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json",
+      "the artefact/blogpost_entity/native/test_native_v2_parity_contract.py"
+    ],
+    "claim": "SOURCE_CONTRACT_AND_FALSIFIER_CANDIDATE",
+    "changes": [
+      "bind canonical phase order pipeline_init before pipeline_profile_read",
+      "separate effect-name parity from reference authority semantics",
+      "require a real DB-resident pipeline_profile_read handler through entity_db",
+      "require a real generic inference_generate handler consuming inference configuration",
+      "retain legacy _profile_load and _provider_chat_json handlers as fail-closed semantic violations",
+      "keep native-v2 admission FAIL_CLOSED_UNTIL_EXACT_PARITY"
+    ]
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "LEGACY_NAME_ALIAS_SEMANTICS_TRAP",
+    "class": "bounded static authority-counterfactual",
+    "hypothesis": "matching current effect labels is sufficient evidence that the Python reference runtime has converged to DB-profile and generic-inference authority semantics",
+    "counterhypothesis": "a string-only rename can satisfy the name gate while preserving the legacy external-profile and provider-chat authority handlers",
+    "intervention": "on the exact observed legacy reference structure, replace only quoted effect labels profile_load -> pipeline_profile_read and provider_chat_json -> inference_generate; retain handler bodies and handler names",
+    "observed": {
+      "before_name_gate_missing": [
+        "pipeline_profile_read",
+        "inference_generate"
+      ],
+      "before_name_gate_stale": [
+        "profile_load",
+        "provider_chat_json"
+      ],
+      "after_string_rename_name_gate_missing": [],
+      "after_string_rename_name_gate_stale": [],
+      "after_string_rename_semantic_violations": [
+        "MISSING_DB_PROFILE_HANDLER",
+        "MISSING_DB_PROFILE_ENTITY_AUTHORITY",
+        "LEGACY_EXTERNAL_PROFILE_HANDLER_PRESENT",
+        "MISSING_GENERIC_INFERENCE_HANDLER",
+        "MISSING_GENERIC_INFERENCE_CONFIG_AUTHORITY",
+        "LEGACY_PROVIDER_CHAT_HANDLER_PRESENT"
+      ],
+      "result": "COUNTERHYPOTHESIS_VERIFIED_AT_MECHANISM_SCOPE"
+    },
+    "scope_limit": "Executed as an isolated static source-structure discriminator over the exact observed relevant legacy handler/effect structure; it is not a full exact-blob runtime acceptance run."
+  },
+  "execution_evidence": {
+    "github_pr_head_runs": [
+      {
+        "run_id": 32574374357,
+        "workflow": "Research Entity Identity Guard",
+        "job_id": 97034430142,
+        "conclusion": "failure",
+        "visible_steps": 0,
+        "classification": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE"
+      },
+      {
+        "run_id": 32574374327,
+        "workflow": "Mini Entity native 0.7 exact repro",
+        "job_id": 97034430155,
+        "conclusion": "failure",
+        "visible_steps": 0,
+        "classification": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE"
+      }
+    ],
+    "authorized_started_runner_with_visible_test_steps": false,
+    "runtime_test_credit": "ZERO",
+    "whole_product_pass": false
+  },
+  "remaining_frontier": {
+    "primary": "converge tools/clay_profile_pipeline_runtime.py and structured tests to the canonical three-argument DB-profile plus inference_generate contract without weakening the new authority-semantics gate",
+    "secondary": "after reference convergence, execute exact current source in an authorized started isolated runner and only then reconsider native profile-v2 parity admission",
+    "donors": [
+      "PR #727 mechanisms only",
+      "PR #728 mechanisms only"
+    ],
+    "do_not": [
+      "do not satisfy parity by quoted-string rename only",
+      "do not revive external profile_path as runtime authority",
+      "do not grant runtime PASS from pre-step GitHub failures",
+      "do not execute paid/provider training while FREE_ONLY"
+    ]
+  },
+  "provider_and_spend": {
+    "provider_secret_accessed": false,
+    "provider_network_call": false,
+    "together_preflight": false,
+    "upload": false,
+    "billed_create": false,
+    "training_started": false,
+    "usd_spent": 0
+  }
+}

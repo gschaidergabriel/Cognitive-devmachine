@@ -40,12 +40,43 @@ class NativeReferenceCheckerTests(unittest.TestCase):
             "CURRENT_SOURCE_IS_DIFFERENT_VERSION_NOT_CREDITED_REBUILD",
         )
         self.assertEqual(report["source_build_binding"], "NOT_PROVEN_BY_THIS_CHECKER")
+        self.assertIn(report["program_state_identity_schema"], {"legacy_generic", "historical_explicit"})
         self.assertTrue(
             any(
                 item.startswith("CANONICAL_SOURCE_VERSION_DIFFERS_FROM_CREDITED_ARTIFACT")
                 for item in report["errors"]
             )
         )
+
+    def test_program_state_71_explicit_historical_identity_is_preferred(self):
+        version, digest, schema = checker.credited_state_identity(
+            {
+                "historical_credited_version": "mini-entity/0.6.0",
+                "historical_binary_sha256": "historical-digest",
+                "current_source_version": "mini-entity/0.7.0-dev1",
+                "version": "must-not-win",
+                "binary_sha256": "must-not-win",
+            }
+        )
+        self.assertEqual(version, "mini-entity/0.6.0")
+        self.assertEqual(digest, "historical-digest")
+        self.assertEqual(schema, "historical_explicit")
+
+    def test_legacy_program_state_identity_remains_bounded_compatible(self):
+        version, digest, schema = checker.credited_state_identity(
+            {"version": "mini-entity/0.6.0", "binary_sha256": "legacy-digest"}
+        )
+        self.assertEqual(version, "mini-entity/0.6.0")
+        self.assertEqual(digest, "legacy-digest")
+        self.assertEqual(schema, "legacy_generic")
+
+    def test_partial_explicit_historical_identity_fails_closed(self):
+        with self.assertRaisesRegex(
+            RuntimeError, "PROGRAM_STATE_CREDITED_NATIVE_IDENTITY_MISSING"
+        ):
+            checker.credited_state_identity(
+                {"historical_credited_version": "mini-entity/0.6.0"}
+            )
 
     def test_multiple_source_version_labels_fail_closed(self):
         with tempfile.TemporaryDirectory() as td:

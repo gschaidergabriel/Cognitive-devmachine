@@ -1,0 +1,58 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "ff9e86b02fce611f19a36934b46887ada8ba6590",
+  "branch": "gpt56sol/go-08b-provider-job-identity-20260822-1839",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "product": "application-neutral Mini Entity pipeline + MiniUnifiedDB + optional replaceable approximately-1B ClayCode cognition attachment",
+  "finding": {
+    "id": "DIRECT_08B_POST_CREATE_IDENTITY_UNDERBOUND",
+    "status": "SOURCE_DEFECT_CONFIRMED",
+    "pre_fix_launcher_blob": "42f98aff1c08a2fa6f444763e66783898526be25",
+    "detail": "The campaign fingerprint and billed create bound n_checkpoints, learning_rate, warmup_ratio, training_method and training_type, but post-create provider retrieve verification omitted those fields. A provider-returned job with the same files/model/epochs/seed but substituted bound training metadata could therefore receive created_job_identity=VERIFIED."
+  },
+  "unusual_experiment": {
+    "name": "DIRECT_08B_PROVIDER_HYPERPARAMETER_SUBSTITUTION",
+    "count": 1,
+    "counter_reality": "Provider returns the known job id and core dataset/model identity but substitutes one fingerprint-bound training field such as learning_rate, warmup_ratio, training_type, training_method or n_checkpoints.",
+    "pre_fix_prediction": "The old post-create verifier cannot reject a substituted field that is absent from its expected identity map.",
+    "post_fix_obligation": "Every substituted fingerprint-bound provider-visible training field is detected as JOB_CREATED_IDENTITY_MISMATCH."
+  },
+  "repair": {
+    "launcher_commit": "f2f4292dd6f33524759b67a59926c60148608b44",
+    "launcher_blob": "624b10b68cef534e0a0e1238e6ab50e5ca18b058",
+    "test_commit": "d7a853334b10b43b8fdba4901794946863131288",
+    "test_blob": "cd3d3e83616c3c9b52c565dffb0db4c02a952ce0",
+    "provider_identity_fields": [
+      "training_file",
+      "validation_file",
+      "model",
+      "n_epochs",
+      "n_evals",
+      "n_checkpoints",
+      "random_seed",
+      "learning_rate",
+      "warmup_ratio",
+      "training_method",
+      "training_type"
+    ],
+    "nested_provider_model_normalization": true
+  },
+  "primary_external_evidence": {
+    "provider": "Together",
+    "supported_model_fact": "Current Together Full fine-tuning documentation lists Qwen/Qwen3.5-0.8B.",
+    "retrieve_schema_fact": "Current Together fine-tuning job retrieval documentation exposes learning_rate, warmup_ratio, training_method and training_type, so these create-bound fields are provider-verifiable after create.",
+    "pricing_fact": "Current public standard Full SFT pricing for models up to 16B is USD 0.54 per 1M processed tokens; exact job cost still requires provider preflight."
+  },
+  "execution": {
+    "exact_pr_execution": "PENDING",
+    "provider_preflight": "NOT_RUN_NO_AUTHORIZED_SECRET_IN_THIS_SESSION",
+    "billed_create": "NOT_RUN_NOT_AUTHORIZED_FOR_THIS_EXACT_FINGERPRINT",
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "acceptance": "SOURCE_REPAIR_CANDIDATE_UNTIL_EXACT_PR_EXECUTION",
+  "whole_product_pass": false
+}

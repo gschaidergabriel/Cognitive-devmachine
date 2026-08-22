@@ -1,12 +1,12 @@
 {
-  "schema": "mini-entity-native-profile-v2-parity-contract/v2",
+  "schema": "mini-entity-native-profile-v2-parity-contract/v3",
   "canonical_profile_schema": "clay-pipeline-profile/v2",
   "canonical_pipeline": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
   "canonical_reference_runtime": "tools/clay_profile_pipeline_runtime.py",
   "canonical_shipped_profile": "the artefact/blogpost_entity/presets/zero_blog.json",
   "required_pipeline_phases": [
-    "pipeline_profile_read",
     "pipeline_init",
+    "pipeline_profile_read",
     "pipeline_state_read",
     "pipeline_collect",
     "pipeline_compile",
@@ -16,8 +16,8 @@
     "pipeline_commit"
   ],
   "required_reference_effect_surface": [
-    "pipeline_profile_read",
     "pipeline_init",
+    "pipeline_profile_read",
     "pipeline_state_read",
     "pipeline_collect",
     "pipeline_compile",
@@ -41,6 +41,26 @@
       "provider_chat_json"
     ],
     "promotion_requires": "The canonical reference runtime must expose exactly the current pipeline effect responsibility surface before it can serve as the semantic parity oracle for native-v2 promotion. Missing current effects or retained legacy alternate effects keep admission fail-closed."
+  },
+  "reference_runtime_authority_semantics": {
+    "status": "FAIL_CLOSED_MISMATCH",
+    "violations": [
+      "MISSING_DB_PROFILE_HANDLER",
+      "MISSING_DB_PROFILE_ENTITY_AUTHORITY",
+      "LEGACY_EXTERNAL_PROFILE_HANDLER_PRESENT",
+      "MISSING_GENERIC_INFERENCE_HANDLER",
+      "MISSING_GENERIC_INFERENCE_CONFIG_AUTHORITY",
+      "LEGACY_PROVIDER_CHAT_HANDLER_PRESENT"
+    ],
+    "required": [
+      "pipeline_profile_read is a real handler, not an effect-name alias",
+      "pipeline_profile_read reads canonical profile state through entity_db/MiniUnifiedDB",
+      "external profile-file loading is configuration/import only and is not a runtime effect authority",
+      "inference_generate is a real generic handler, not a provider_chat_json alias",
+      "inference_generate consumes runtime inference configuration rather than a fixed provider responsibility",
+      "legacy _profile_load and _provider_chat_json handlers are deauthorized from the reference runtime"
+    ],
+    "promotion_requires": "Effect-name parity is necessary but insufficient. The reference runtime must also transfer profile authority to entity_db/MiniUnifiedDB and inference responsibility to the generic inference configuration path. A string-only rename must remain fail-closed."
   },
   "required_source_adapters_from_shipped_v2": [
     "json_snapshot",
@@ -98,8 +118,9 @@
     "blocker": "CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY",
     "runtime_receipt": null,
     "promotion_requires": [
-      "canonical_reference_runtime_effect_surface_matches_current_pipeline_before_reference-equivalent claims",
-      "all_required_contracts_implemented_on_one_native_path",
+      "canonical_reference_runtime_effect_surface_matches_current pipeline before reference-equivalent claims",
+      "canonical_reference_runtime_authority_semantics match DB-profile and generic-inference responsibilities; effect-name aliases alone are insufficient",
+      "all_required_contracts_implemented_on_one native path",
       "exact_source_bound_build_of_candidate",
       "shipped_v2_profile_executes_with_reference-equivalent_compile_and_gate_semantics",
       "adversarial_hash_evidence_claim_leak_secret_and_atomicity_matrix_passes",

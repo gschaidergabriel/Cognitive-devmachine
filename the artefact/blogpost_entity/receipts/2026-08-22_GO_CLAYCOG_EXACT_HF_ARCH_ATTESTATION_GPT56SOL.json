@@ -1,0 +1,63 @@
+{
+  "schema": "claycog-hf-architecture-gate-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "mini-entity-pipeline-all-in-one",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "base_main_sha": "40cf97b1e1e001ef8555edd5a2700bc6ac890dbb",
+  "branch": "gpt56sol/go-claycog-hf-arch-attestation-20260822-1511",
+  "owner_target": {
+    "model": "Qwen/Qwen2.5-0.5B",
+    "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "architecture": "Qwen2ForCausalLM",
+    "model_type": "qwen2"
+  },
+  "current_provider_public_contract": {
+    "together_full_ft_smallest_qwen": "Qwen/Qwen3.5-0.8B",
+    "qwen2_or_qwen2_5_full_ft_template_listed": false,
+    "byom_requires_matching_architecture": true,
+    "classification": "TOGETHER_PROVIDER_CATALOG_BLOCKED_FOR_OWNER_LOCKED_QWEN2_05B",
+    "evidence_checked_utc": "2026-08-22T08:20:00Z"
+  },
+  "delta": {
+    "helper": "the artefact/blogpost_entity/mini_cognition/hf_architecture_attestation_v1.py",
+    "helper_blob_sha": "dcb351eed7eb58002745158442c03d66da12e76c",
+    "test": "the artefact/blogpost_entity/mini_cognition/test_hf_architecture_attestation_v1.py",
+    "shell": "the artefact/blogpost_entity/mini_cognition/train_together_v1.sh",
+    "shell_blob_sha": "9818d14a7ef815c926e7c02a777d3d2d0a0af8ba",
+    "ci": ".github/workflows/claycog-validator-pr.yml",
+    "law": "before Together upload/price/create, exact 40-hex Hugging Face config revisions for owner target and candidate template must locally attest identical model_type and at least one common architecture; custom-code configs fail closed; local match remains non-provider admission"
+  },
+  "one_unusual_experiment": {
+    "id": "qwen35_08b_family_substitution_attack",
+    "counter_reality": "silently use Together's smallest current Qwen full-FT model Qwen/Qwen3.5-0.8B as template for owner-locked Qwen/Qwen2.5-0.5B",
+    "target_observed": "qwen2 / Qwen2ForCausalLM",
+    "substitute_observed": "qwen3_5 / Qwen3_5ForConditionalGeneration",
+    "expected": "HF_ARCHITECTURE_MISMATCH before Together provider operations",
+    "observed": "PASS_REJECTED_FAIL_CLOSED",
+    "promotion_claim": false
+  },
+  "isolated_execution": {
+    "environment": "ChatGPT isolated Python sandbox",
+    "exact_helper_blob_bound": true,
+    "helper_blob_recomputed": "dcb351eed7eb58002745158442c03d66da12e76c",
+    "unit_tests": "5/5 PASS",
+    "shell_blob_bound": true,
+    "shell_bash_n": "PASS",
+    "provider_network_call": false,
+    "together_secret_mounted": false,
+    "dataset_upload": false,
+    "price_preflight": false,
+    "billed_create": false,
+    "money_spent_usd": 0
+  },
+  "evidence_boundary": {
+    "architecture_match_local_only": true,
+    "together_compatibility_proven": false,
+    "training_started": false,
+    "model_quality_proven": false,
+    "quantized_under_1gib_proven": false
+  },
+  "next_gate": "wait for or obtain an actually listed Together Full-FT Qwen2/Qwen2.5 template, bind its exact HF revision, run this attestation gate, then authenticated model-limits + server-side dataset validation + price preflight; only after exact fingerprint and <=USD18 may one exactly-once billed create be considered"
+}

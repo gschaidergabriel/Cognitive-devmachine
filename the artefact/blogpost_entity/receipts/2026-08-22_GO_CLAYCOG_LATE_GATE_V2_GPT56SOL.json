@@ -1,0 +1,137 @@
+{
+  "schema": "claycog-go-late-gate-v2/v1",
+  "date": "2026-08-22",
+  "executor": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "canonical_join": {
+    "base_main_sha": "f231b2d93893eccf8a91850ba0512908456995f9",
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+    "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+    "branch": "go/2026-08-22-claycog-late-gate-fusion-r2",
+    "branch_base_is_current_main_at_creation": true
+  },
+  "source_findings": [
+    {
+      "id": "LATE_GATE_NEGATIVE_SUPERVISION_GAP",
+      "observed": "v1 has 360 full-gate omega commit examples and 180 invalid omega examples whose explicit validation path stops at grammar/types/schema; stale-generation and crash-unknown concepts exist elsewhere but are not separately trained as late omega gate rejects",
+      "risk": "a small model can learn the visual full-gate commit pattern without equally strong negative supervision at authority/generation boundaries"
+    },
+    {
+      "id": "OOD_LATE_GATE_COVERAGE_GAP",
+      "observed": "v1 OOD has 80 valid omega, 40 invalid omega, 40 Hyperposition and 40 identity-neutrality probes, with no dedicated authority-denied or stale-generation families",
+      "risk": "promotion aggregate can hide the highest-cost fail-closed failure modes"
+    },
+    {
+      "id": "OFFLINE_GATE_ORDER",
+      "observed": "the launcher required TOGETHER_API_KEY before local corpus validation",
+      "risk": "credential absence blocks deterministic local readiness work even though it requires no network"
+    },
+    {
+      "id": "FOOTER_DIRECTIVE_DRIFT",
+      "observed": "PROGRAM_STATE and the newer owner directive authorize the bounded 0.5B Together training campaign, while the current visible footer still printed the older blanket Together forbidden rule and older stage",
+      "risk": "future workers can regress to superseded policy from a mandatory visible status source"
+    }
+  ],
+  "parallel_work_fusion": {
+    "new_main_seen_during_cycle": "f231b2d93893eccf8a91850ba0512908456995f9",
+    "merged_parallel_change": "PR #772 billed-create idempotency/fingerprint guard",
+    "action": "abandoned first branch as superseded and rebuilt the delta from f231b2d so the canonical launcher retains campaign fingerprint binding, account duplicate checks and no-blind-retry behavior",
+    "regression_avoided": "a separate v2 launcher without PR #772 idempotency was not proposed for merge"
+  },
+  "source_delta": {
+    "generate_sft_v2": {
+      "commit": "16d7304dcd3b02d9fd054b5ee143d273399eaf72",
+      "examples_total_expected": 1970,
+      "train_expected": 1773,
+      "validation_expected": 197,
+      "augmentation_examples": 320,
+      "families": {
+        "omega_authority_reject": 80,
+        "omega_generation_reject": 80,
+        "omega_missing_cfg_reject": 80,
+        "recovery_unknown_no_replay": 80
+      }
+    },
+    "generate_eval_ood_v2": {
+      "commit": "f1e2f6c2ab1f7631741eda3082d8d4ee6babed81",
+      "cases_expected": 300,
+      "base_cases": 200,
+      "new_cases": 100,
+      "new_cases_per_family": 25
+    },
+    "validate_gate_coverage_v2": {
+      "commit": "90a4120fdf77313813397ffb62ebae4e157a930f",
+      "minimum_per_new_family": 64,
+      "reject_path_commit_is_violation": true
+    },
+    "canonical_launcher_fusion": {
+      "commit": "dc39745c5fcbbe06428a5890f1cd6cb67db9f398",
+      "path": "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py",
+      "uses_corpus": "claycog-sft/v2",
+      "local_only_without_api_key": true,
+      "retains_pr772_fingerprint_confirmation": true,
+      "retains_account_duplicate_checks": true,
+      "retains_second_duplicate_check_before_create": true,
+      "retains_usd18_budget_gate": true,
+      "paid_create_requires_explicit_create_flag": true
+    },
+    "status_footer_coherence": {
+      "commit": "cb29d3c40fb266bbd4c3fac2109c8f6aed36a4e3",
+      "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+      "together_policy": "product/inference identity forbidden; bounded owner-authorized 0.5B training allowed"
+    }
+  },
+  "bounded_isolated_mechanism_smoke": {
+    "classification": "MECHANISM_SUPPORTED_WITH_INTERFACE_COMPATIBLE_V1_STUB_NOT_EXACT_REPOSITORY_CHECKOUT",
+    "python_compile_new_v2_sources": "PASS",
+    "generated_examples": 1970,
+    "generated_train": 1773,
+    "generated_validation": 197,
+    "structural_invalid_train": 0,
+    "structural_invalid_validation": 0,
+    "gate_coverage_counts": {
+      "omega_authority_reject": 80,
+      "omega_generation_reject": 80,
+      "omega_missing_cfg_reject": 80,
+      "recovery_unknown_no_replay": 80
+    },
+    "gate_coverage_violations": 0,
+    "ood_cases": 300,
+    "launcher_local_only": "PASS_IN_INTERFACE_COMPATIBLE_FIXTURE",
+    "credit_boundary": "does not establish exact branch corpus hashes, real model behavior, Together API acceptance, or trained-checkpoint quality"
+  },
+  "external_current_verification": {
+    "together_supported_models": "current fine-tuning table lists Qwen3.5-0.8B as the smallest displayed Qwen full-FT entry; Qwen2.5-0.5B is not a native listed full-FT entry",
+    "together_byom": "BYOM permits an external Hugging Face CausalLM under 100B when paired with a Together base template whose architecture and sequence-length constraints fit; from_hf_model is the custom checkpoint",
+    "together_pricing": "standard SFT full fine-tuning up to 16B is USD0.54 per 1M processed tokens and current pricing states a USD4 minimum charge per job",
+    "compatibility_conclusion": "Qwen2.5-0.5B BYOM compatibility remains OPEN until the exact checkpoint/template create path is accepted and training reaches a started state"
+  },
+  "together_execution": {
+    "api_secret_present_in_execution_environment": false,
+    "network_preflight_executed": false,
+    "server_dataset_validation_executed": false,
+    "price_estimate_received": false,
+    "paid_job_started": false,
+    "duplicate_create_attempted": false
+  },
+  "unusual_experiment": {
+    "consumed": false,
+    "count": 0,
+    "note": "this cycle used deterministic source review, corpus/OOD design, regression-style mechanism checks and policy fusion only"
+  },
+  "promotion_boundaries": {
+    "consciousness": "NOT_INFERRED",
+    "mathematical_correctness": "NOT_INFERRED",
+    "micro_agent_superiority": "UNCLAIMED",
+    "under_1gib_rss": "UNCLAIMED",
+    "together_byom_compatibility": "OPEN",
+    "trained_checkpoint": "DOES_NOT_EXIST_YET"
+  },
+  "next_exact_gate": [
+    "execute launch_together_v1.py --local-only from an admitted exact checkout of this branch and persist actual v2 train/validation hashes",
+    "when TOGETHER_API_KEY is mounted, run preflight without --create to obtain server file validation, template limits and exact price estimate",
+    "only after exact preflight fingerprint and duplicate-account check may the bounded billed create be considered",
+    "after training: held-out OOD v2 vs untuned 0.5B and larger general-model baseline, then Q4_K_M and measured peak RSS <1GiB at context 2048"
+  ],
+  "acceptance": "IN_PROGRESS_SOURCE_DELTA_COMMITTED_TRAINING_NOT_STARTED"
+}

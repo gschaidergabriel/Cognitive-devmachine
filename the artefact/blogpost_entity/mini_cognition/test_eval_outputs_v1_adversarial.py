@@ -77,3 +77,19 @@ def test_hyperposition_cardinality_is_counted():
     assert semantic_token_count(out,"hyper_alt(hp,")==3
     assert semantic_match(out,{"must_contain":["collapse_guard(hp,\"R6_required\")"],"min_occurrences":{"hyper_alt(hp,":3}})
     assert not semantic_match(out,{"must_contain":[],"min_occurrences":{"hyper_alt(hp,":4}})
+
+
+def main():
+    tests=[
+      test_comment_only_omega_cannot_spoof_semantics,
+      test_string_literal_cannot_spoof_active_statement,
+      test_real_omega_still_passes,
+      test_hyperposition_cardinality_is_counted,
+    ]
+    for test in tests:
+        test()
+    print(f"{len(tests)} adversarial evaluator tests PASS")
+
+
+if __name__=="__main__":
+    main()

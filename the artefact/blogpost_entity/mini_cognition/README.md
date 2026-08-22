@@ -73,8 +73,9 @@ template or the same corpus on another full-FT runner rather than silently chang
 
 Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
 corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.
-At 3 train epochs + 2 validation evaluations the rough order of magnitude is about **1.85M processed tokens,
-~$1.00 training cost**, but the Together server estimate is authoritative.
+At 3 train epochs + 2 validation evaluations the raw token arithmetic is roughly **1.85M processed tokens / ~$1.00**,
+but Together currently documents a **$4.00 minimum charge per fine-tuning job**. The Together server estimate/admission
+response is authoritative, and the campaign still hard-aborts above the configured `$18` single-job ceiling.
 
 ## 0.5B RAM gate
 

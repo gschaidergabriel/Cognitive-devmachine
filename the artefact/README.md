@@ -12,6 +12,16 @@ Current authority:
 
 The product is **IN_PROGRESS**. Source presence, a green component test, a generated corpus, a fine-tuning job, a quantized file, or an inference demo never implies whole-product acceptance.
 
+## Latest go re-entry — 2026-08-22
+
+Current source reality is newer than `PROGRAM_STATE.json` 7.5 and must not be regressed to that stale blocker list.
+
+- Cognition PR #862 / merge `2f9fda0a70d5fc483b73782733d3680a093ef470` is now canonical: the one SFT-v2 ClayCode validator requires runtime bindings and `return c` at the turn-body level; any omega commit requires an exact top-level commit plus exactly one grammar/types/schema/authority/generation gate, exact runtime-config authority/generation, and rejects comments, dead/nested control-flow gates, duplicate gates/commits and reject+commit. Exact validator blob `3b9bdcd37cdc40a5c3fa48647d44737f38bc3fb1` was independently reconstructed in an isolated Linux container; `py_compile`, a valid omega control, dead-control rejection and comment-smuggling rejection passed. Donor evidence for the same exact blob had focused 16/16 gate tests plus all 1,485 train + 165 validation SFT-v2 targets structurally valid under their exact expected hashes.
+- OOD semantic calls are also no longer raw-substring-only after #838 / `e073e3577334d4dce723ffca378e61528bf0ed24`: the canonical evaluator uses a comment/string-safe non-executing call extractor. This go's single unusual experiment, `ESCAPED_QUOTE_MARKER_SHADOW`, reproduced that raw text can contain a marker while the real-call count is zero; the merged extractor rejected the spoof.
+- The three previously confirmed native source defects now all have bounded source fixes: #769 canonical profile-v2 fail-closed admission, #830 presentation-language neutrality, and #850 local-exec parent-secret isolation. #861 / `00a14d78e3312b7683e1bea62dd980bffcda0146` additionally reconciles the exact-repro workflow with the #769 fail-closed contract by using an admitted neutral fixture for generic local-exec/rollback checks while separately preserving canonical v2 rejection. These are source/mechanism improvements only until the exact fused runtime path actually executes.
+- Exact PR-head GitHub Actions attempts still terminate before any visible step (`steps=null`), including the #862 ClayCog admission run. This is execution-admission/control-plane failure with zero runtime test credit, not a code-test failure and not PASS.
+- No Together provider request, upload, billed create or training occurred in this go. Architecture-compatible qwen2 Full-FT provider/runner admission remains the paid-campaign blocker; model quality, GGUF Q4_K_M and measured <1 GiB RSS remain downstream gates.
+
 ## Product target
 
 The release shape is deliberately small and replaceable:
@@ -86,7 +96,7 @@ SFT v2 preserves the 1,650-example campaign while eliminating that defect:
 - train SHA-256: `3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93`;
 - validation SHA-256: `ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62`.
 
-The canonical runtime-binding validator additionally rejects hidden second fixed identity/role/goal/personality bindings even when an output also contains the required runtime-config binding text.
+The canonical validator now combines the runtime-binding gate with exact top-level omega admission. Required identity/role/goal/personality bindings cannot be spoofed from strings or moved under nested control flow, and omega commit/gate credit cannot be supplied by comments, dead control flow or duplicates.
 
 Relevant files:
 
@@ -120,7 +130,7 @@ Therefore BYOM compatibility remains **OPEN/BLOCKED on a compatible admitted qwe
 
 Public pricing refreshed on 2026-08-22 lists standard Full SFT up to 16B at **USD 0.54 / 1M processed tokens** with a **USD 4 minimum job charge**. Those numbers remain provider facts, not a quote for this exact custom checkpoint. Under the owner USD 18 single-job gate, price is therefore not the current blocker; **architecture-compatible provider admission is**.
 
-The current exact PR admission workflow also compiles the canonical launcher/create-safety/provider-contract boundary and runs both no-network create-safety and SDK-v2 provider-contract regressions. Exact GitHub-hosted runner attempts remain admission-blocked before any visible step (`steps=null`). This is runner admission failure with zero test credit, not a ClayCog test failure and not PASS.
+The current exact PR admission workflow also compiles the canonical launcher/create-safety/provider-contract boundary and runs both no-network create-safety and SDK-v2 provider-contract regressions. Campaign identity now additionally binds seed/effective learning-rate/warmup and verifies created-job identity after durable `JOB_KNOWN` persistence. Exact GitHub-hosted runner attempts remain admission-blocked before any visible step (`steps=null`). This is runner admission failure with zero test credit, not a ClayCog test failure and not PASS.
 
 ## Native Mini Entity 0.7 — current evidence
 
@@ -157,7 +167,7 @@ Native 0.7 is **not promotable yet**. The three previously confirmed current-mai
 
 A donor review during the same `go` also falsified the older #764 branch/body claim that its verified-empty pre-inference shortcut had already been removed: the exact donor head still contained that shortcut. The donor was repaired for evidence continuity, but main advanced through #769/#830, so the broad donor was intentionally not merged. Only its still-orthogonal secret-isolation mechanism was extracted onto fresh main as #850.
 
-The existing native exact-repro workflow now has a source-level expectation mismatch: it applies the shipped `zero_blog` profile-v2 and expects successful `local_exec`, while #769 intentionally blocks profile-v2 until full parity exists. This workflow must be reconciled without weakening #769: use an admitted simple profile for backend/secret regression and separately assert canonical v2 fail-closed behavior until full parity is implemented.
+PR #861 / merge `00a14d78e3312b7683e1bea62dd980bffcda0146` reconciles the canonical native exact-repro workflow with the #769 fail-closed contract without weakening it: generic local-exec secret isolation and rollback are exercised through an admitted neutral fixture profile, while the shipped canonical v2 profile is separately required to remain fail-closed until parity exists. The remaining blocker is executable admission itself plus coherent profile-v2 compile + post-inference `pipeline_gate` parity, not a known workflow expectation contradiction.
 
 The original defect evidence is durable at:
 
@@ -168,7 +178,7 @@ Current fusion/re-entry evidence is durable at:
 - `blogpost_entity/receipts/2026-08-22_GO_MAIN_REENTRY_NATIVE_COGNITION_GPT56SOL.json`
 - `blogpost_entity/receipts/2026-08-22_GO_LOCAL_EXEC_ENV_FRESH_MAIN_GPT56SOL.json`
 
-The next native promotion attempt must use the exact current fused source, reconcile the exact-repro workflow with the #769 fail-closed contract, source-bound rebuild it, rerun the secret/semantic/atomicity/CAS matrix, and then separately close full native profile-v2 compile+`pipeline_gate` parity. Do not remove the fail-closed v2 guard merely to obtain a green runtime path.
+The next native promotion attempt must use the exact current fused source, source-bound rebuild it, rerun the secret/semantic/atomicity/CAS matrix under the #861 split contract, and then separately close full native profile-v2 compile+`pipeline_gate` parity. Do not remove the fail-closed v2 guard merely to obtain a green runtime path.
 
 ## Inference backends
 
@@ -206,15 +216,16 @@ The two required lanes now converge cleanly:
 ```text
 NATIVE
 #769 fail-closed v2 admission + #830 presentation neutrality + #850 local_exec parent-secret isolation fused
--> reconcile canonical exact-repro workflow with #769 without weakening fail-closed semantics
--> exact source-bound rebuild
++ #861 exact-repro workflow aligned with fail-closed semantics
+-> exact fused source-bound rebuild/runtime execution when an admitted runner actually starts
 -> repeat secret/semantic/atomicity/CAS falsifiers
 -> implement coherent canonical profile-v2 compile envelope + post-inference pipeline_gate parity
 -> remove v2 fail-closed guard only after exact parity evidence
 -> release provenance/portability gates
 
 COGNITION
-SFT v2 + strict runtime-binding/omega/OOD gates + exact provider-contract/campaign-identity/architecture-discriminator CI coverage
+SFT v2 + #862 exact top-level canonical admission + #838 real-call OOD semantics + exact typed-omega OOD gate
++ exact provider-contract/campaign-identity/architecture-discriminator safety fences
 -> GitHub runner admission remains blocked before steps; zero exact-runner test credit
 -> compatible qwen2 Full-FT runner/template admission
 -> fingerprint-bound budget preflight
@@ -235,6 +246,7 @@ Do not let either lane claim the other lane's acceptance.
 - `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_TOGETHER_BYOM_TEMPLATE_CONTRACT_GPT56SOL.json`
 - `blogpost_entity/receipts/2026-08-22_GO_MAIN_REENTRY_NATIVE_COGNITION_GPT56SOL.json`
 - `blogpost_entity/receipts/2026-08-22_GO_LOCAL_EXEC_ENV_FRESH_MAIN_GPT56SOL.json`
+- `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_TOPLEVEL_OMEGA_FRESH_FUSION_GPT56SOL.json`
 
 ## Acceptance boundary
 

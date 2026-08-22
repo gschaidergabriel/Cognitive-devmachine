@@ -19,6 +19,7 @@ def exact_omega_ok(output, expected):
     authority_expr=expected["authority_expr"]
     generation_expr=expected["generation_expr"]
     validators=expected["validators"]
+    lines=[line.strip() for line in output.splitlines() if line.strip()]
     required=[
       f'omega_bind(w,"operation",{q(operation)})',
       f'omega_schema(w,{q(schema)})',
@@ -28,19 +29,19 @@ def exact_omega_ok(output, expected):
     ]
     required.extend(f'omega_arg(w,{q(a["name"])},{q(a["value"])},{q(a["type"])})' for a in args)
     required.extend(f'omega_validate(w,{q(g)})' for g in validators)
-    if any(output.count(x)!=1 for x in required):
+    if any(lines.count(x)!=1 for x in required):
         return False
-    if output.count('omega_bind(w,"operation",')!=1:
+    if sum(1 for x in lines if x.startswith('omega_bind(w,"operation",'))!=1:
         return False
-    if output.count('omega_arg(w,')!=len(args):
+    if sum(1 for x in lines if x.startswith('omega_arg(w,'))!=len(args):
         return False
-    if output.count('omega_schema(w,')!=1 or output.count('omega_authority(w,')!=1 or output.count('omega_generation(w,')!=1:
+    if sum(1 for x in lines if x.startswith('omega_schema(w,'))!=1 or sum(1 for x in lines if x.startswith('omega_authority(w,'))!=1 or sum(1 for x in lines if x.startswith('omega_generation(w,'))!=1:
         return False
-    if output.count('omega_validate(w,')!=len(validators):
+    if sum(1 for x in lines if x.startswith('omega_validate(w,'))!=len(validators):
         return False
-    if output.count('omega_commit_candidate(c,w)')!=int(expected.get("commit_count",1)):
+    if lines.count('omega_commit_candidate(c,w)')!=int(expected.get("commit_count",1)):
         return False
-    if 'omega_reject(' in output:
+    if any(x.startswith('omega_reject(') for x in lines):
         return False
     return True
 

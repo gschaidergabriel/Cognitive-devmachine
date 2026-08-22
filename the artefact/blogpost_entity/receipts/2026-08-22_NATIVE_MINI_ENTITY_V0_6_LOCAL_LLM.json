@@ -3,7 +3,7 @@
   "date": "2026-08-22",
   "version": "mini-entity/0.6.0",
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
-  "binary_sha256": "2aa8ebe9d20a683b62627cfe9e20f245390b1422afaa805b42b2dddbc976eed3",
+  "binary_sha256": "27ad1fc3f134efacabe89102a86ac5876d62bb7c9d9b1e6d0ca95c36c60e7bd1",
   "platform": "linux-x86_64 ELF",
   "architecture": {
     "binary_identity": "application-neutral and inference-neutral processing pipeline",
@@ -21,14 +21,20 @@
     "output_persisted": true,
     "generation_after_run": 1,
     "pending_events_after_run": 0,
+    "outputs_after_run": 1,
     "sqlite_integrity_check": "ok"
   },
   "preset_contract": {
     "schema": "clay-pipeline-profile/v2",
+    "profile_id": "zero_blog",
+    "identity_object_loaded": true,
+    "personality_system_prompt_loaded": true,
+    "inference_object_loaded": true,
     "zero_blog_is_editable": true,
     "preset_can_select_local_exec": true,
     "preset_does_not_contain_api_secret": true
   },
+  "retest_output": "Zero: Die lokale Pipeline hat genau die gelieferte Evidenz verarbeitet.",
   "falsification_notes": [
     "The exercised model file and runner were fixtures proving the local-model transport/contract; this is not evidence of real LLM quality.",
     "No authorized Mistral/API secret was mounted in this chat sandbox, so real remote-provider acceptance remains uncredited.",

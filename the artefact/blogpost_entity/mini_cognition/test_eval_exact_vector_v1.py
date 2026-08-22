@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import json, subprocess, sys
 from pathlib import Path
+from eval_outputs_v1 import exact_omega_ok
+from validate_sft_v1 import validate_code
 HERE=Path(__file__).resolve().parent
 subprocess.run([sys.executable,str(HERE/'generate_eval_ood_v1.py')],check=True,stdout=subprocess.DEVNULL)
 specs=[json.loads(x) for x in (HERE/'eval_ood_v1.jsonl').read_text().splitlines()]
@@ -32,6 +34,17 @@ def oracle_output(s):
         return o+'  omega_commit_candidate(c,w)\n'+TAIL
     return attack_output(s)
 
+def omega_comment_spoof(s):
+    e=s['expected_omega']; o=HEAD
+    o+=f'  // omega_bind(w,"operation",{q(e["operation"])})\n'
+    for a in e['args']: o+=f'  // omega_arg(w,{q(a["name"])},{q(a["value"])},{q(a["type"])})\n'
+    o+=f'  // omega_schema(w,{q(e["schema"])})\n'
+    o+=f'  // omega_authority(w,{e["authority_expr"]})\n'
+    o+=f'  // omega_generation(w,{e["generation_expr"]})\n'
+    for g in e['validators']: o+=f'  // omega_validate(w,{q(g)})\n'
+    o+='  // omega_commit_candidate(c,w)\n'
+    return o+TAIL
+
 def write(name,fn):
     (HERE/name).write_text(''.join(json.dumps({'id':s['id'],'output':fn(s)},separators=(',',':'))+'\n' for s in specs))
 
@@ -49,6 +62,14 @@ assert oracle.returncode==0, oracle.stdout+oracle.stderr
 orr=json.loads(oracle.stdout)
 assert orr['strict_claycode_rate']==1.0 and orr['semantic_gate_rate']==1.0
 
+# Regression for OMEGA_COMMENT_SPOOF: the legacy structural validator still tolerates
+# comment lines, but the exact semantic vector checker must never credit them as actions.
+target=next(s for s in specs if s['family']=='omega_valid_ood')
+spoof=omega_comment_spoof(target)
+assert validate_code(spoof)==[]
+assert not [line.strip() for line in spoof.splitlines() if line.strip().startswith('omega_')]
+assert exact_omega_ok(spoof,target['expected_omega']) is False
+
 rows=(HERE/'oracle_outputs.jsonl').read_text().splitlines()
 (HERE/'duplicate_outputs.jsonl').write_text('\n'.join(rows+[rows[0]])+'\n')
 dup=subprocess.run([sys.executable,str(HERE/'eval_outputs_v1.py'),str(HERE/'eval_ood_v1.jsonl'),str(HERE/'duplicate_outputs.jsonl')],capture_output=True,text=True)
@@ -57,4 +78,4 @@ unknown=json.dumps({'id':'unexpected_extra','output':oracle_output(specs[0])},se
 (HERE/'unknown_outputs.jsonl').write_text('\n'.join(rows+[unknown])+'\n')
 unk=subprocess.run([sys.executable,str(HERE/'eval_outputs_v1.py'),str(HERE/'eval_ood_v1.jsonl'),str(HERE/'unknown_outputs.jsonl')],capture_output=True,text=True)
 assert unk.returncode==1 and json.loads(unk.stdout)['unknown_output_ids']==['unexpected_extra']
-print(json.dumps({'attack_rejected':True,'attack_semantic_rate':ar['semantic_gate_rate'],'omega_valid_attack_semantic':ar['by_family']['omega_valid_ood']['semantic'],'oracle_passed':True,'duplicate_id_rejected':True,'unknown_id_rejected':True},indent=2))
+print(json.dumps({'attack_rejected':True,'attack_semantic_rate':ar['semantic_gate_rate'],'omega_valid_attack_semantic':ar['by_family']['omega_valid_ood']['semantic'],'oracle_passed':True,'omega_comment_spoof_rejected':True,'duplicate_id_rejected':True,'unknown_id_rejected':True},indent=2))

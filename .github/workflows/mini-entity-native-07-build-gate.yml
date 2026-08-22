@@ -1,0 +1,82 @@
+name: mini-entity-native-07-build-gate
+
+on:
+  push:
+    branches:
+      - gpt56sol/go-native-07-build-gate-20260822-0954
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/native/mini_entity.c'
+      - 'the artefact/blogpost_entity/native/mini_entity_part*.inc'
+      - 'the artefact/blogpost_entity/native/build_native_bound.py'
+      - '.github/workflows/mini-entity-native-07-build-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  native-07:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gcc binutils pkg-config libsqlite3-dev libcurl4-openssl-dev libjson-c-dev
+      - name: Source-bound repeat build
+        run: |
+          python 'the artefact/blogpost_entity/native/build_native_bound.py' \
+            --source 'the artefact/blogpost_entity/native/mini_entity.c' \
+            --output "$RUNNER_TEMP/mini_entity.clay" \
+            --receipt "$RUNNER_TEMP/native_build_provenance.json" \
+            --version-label 'mini-entity/0.7.0-dev1' \
+            --source-date-epoch 1787368684 \
+            --repeat 2
+      - name: Verify native identity and neutral bootstrap
+        run: |
+          set -euo pipefail
+          BIN="$RUNNER_TEMP/mini_entity.clay"
+          test "$($BIN --version)" = 'mini-entity/0.7.0-dev1'
+          "$BIN" init "$RUNNER_TEMP/entity.db"
+          "$BIN" status "$RUNNER_TEMP/entity.db" | tee "$RUNNER_TEMP/status.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          status=json.loads(Path(os.environ['RUNNER_TEMP']).joinpath('status.json').read_text())
+          assert status['ok'] is True
+          assert status['version']=='mini-entity/0.7.0-dev1'
+          assert status['generation']==0
+          assert status['profile_present'] is False
+          PY
+      - name: Verify source DB substrate
+        run: |
+          set -euo pipefail
+          BIN="$RUNNER_TEMP/mini_entity.clay"
+          "$BIN" source-init "$RUNNER_TEMP/source.db"
+          "$BIN" source-add "$RUNNER_TEMP/source.db" fixture evt-1 '{"status":"PASS","note":"isolated ordinary regression"}'
+          python - <<'PY'
+          import os, sqlite3
+          from pathlib import Path
+          db=sqlite3.connect(Path(os.environ['RUNNER_TEMP'])/'source.db')
+          row=db.execute('SELECT source_id,kind,consumed_generation FROM mini_entity_events').fetchone()
+          assert row==('evt-1','fixture',None)
+          assert db.execute('PRAGMA integrity_check').fetchone()[0]=='ok'
+          db.close()
+          PY
+      - name: Preserve provenance summary
+        if: always()
+        run: |
+          if test -f "$RUNNER_TEMP/native_build_provenance.json"; then
+            python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'native_build_provenance.json'
+          d=json.loads(p.read_text())
+          print('version_label=',d['version_label'])
+          print('artifact_sha256=',d['subject']['sha256'])
+          print('source_sha256=',d['build_definition']['source']['sha256'])
+          print('repeat_hashes=',d['build_definition']['repeat_hashes'])
+          print('repeat_byte_identity=',d['build_definition']['repeat_byte_identity'])
+          PY
+          fi

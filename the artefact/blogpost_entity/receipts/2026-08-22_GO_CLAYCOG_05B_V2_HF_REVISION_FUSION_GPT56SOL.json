@@ -3,23 +3,28 @@
   "date": "2026-08-22",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
-  "base_main_sha": "263c14f9858d820dec54a8d4da1454cf08e5be40",
+  "initial_branch_base_main_sha": "263c14f9858d820dec54a8d4da1454cf08e5be40",
+  "pr_base_observed_after_rejoin": "6a0eb97661133cc688ba321b2e4d23003c5eada7",
   "branch": "gpt56sol/go-claycog-05b-revision-v2-final-20260822",
-  "scope": "bind leakage-free SFT v2 paid Together campaign to exact Hugging Face source revision while preserving the merged zero-retry create-intent ledger",
+  "pr": 800,
+  "scope": "bind leakage-free SFT v2 paid Together campaign to exact Hugging Face source revision while preserving the merged zero-retry create-intent ledger and all prior canonical safety regressions",
   "coordination": {
     "preserved_main_deltas": [
       "#772 deterministic campaign fingerprint and account duplicate guard",
       "#780 zero-retry billed create plus atomic UNKNOWN_REMOTE_CREATE ledger",
-      "#787 leakage-free SFT v2 canonical paid-training corpus"
+      "#787 leakage-free SFT v2 canonical paid-training corpus",
+      "#796 canonical runtime-binding validation convergence",
+      "6a0eb976 current Together BYOM architecture/size contract correction"
     ],
-    "superseded_candidate": "PR #779 was based before #780/#787 and must not be merged as canonical",
-    "canonical_fusion_rule": "one launcher, one safety test path, v2 corpus only"
+    "superseded_candidate": "PR #779 was closed unmerged after #780/#787 made it stale",
+    "canonical_fusion_rule": "one launcher, one safety test path, SFT v2 only; no duplicate semantic path",
+    "diff_hardening": "The first #800 branch revision compacted canonical files and removed an existing regression test. That presentation was rejected during adversarial review and replaced in-place with a formatting-preserving minimal semantic delta that restores all prior tests."
   },
   "exact_hf_identity": {
     "primary": {"model":"Qwen/Qwen2.5-0.5B","revision":"060db6499f32faf8b98477b0a26969ef7d8b9987"},
     "instruct_ablation": {"model":"Qwen/Qwen2.5-0.5B-Instruct","revision":"7ae557604adf67be50417f59c2c2f167def9a775"}
   },
-  "implemented_invariant": "v2 dataset bytes + training config + HF model + exact HF revision -> campaign fingerprint -> deterministic suffix -> atomic local intent -> at most one admitted billed create",
+  "implemented_invariant": "SFT-v2 dataset bytes + training config + HF model + exact HF revision -> campaign fingerprint -> deterministic suffix -> atomic local intent -> at most one admitted billed create",
   "implemented_delta": {
     "campaign_descriptor_binds_hf_model_revision": true,
     "campaign_fingerprint_changes_on_revision_only_change": true,
@@ -33,40 +38,55 @@
   "unusual_experiment": {
     "count_for_this_user_go": 1,
     "name": "qwen25_qwen35_architecture_discriminator",
+    "hypothesis": "The smallest publicly documented Qwen Full-FT template, Qwen3.5-0.8B, could be an automatic fallback for Qwen2.5-0.5B BYOM.",
+    "counterhypothesis": "It is a distinct model architecture and therefore not a valid architecture-matched BYOM fallback.",
     "observation": "Qwen2.5-0.5B exposes Qwen2ForCausalLM/qwen2 while Qwen3.5-0.8B exposes Qwen3_5ForConditionalGeneration/qwen3_5.",
     "outcome": "REJECT_AUTOMATIC_QWEN35_FALLBACK",
     "note": "Existing #772/#780 fault injections were regression-only and did not consume an additional unusual-experiment slot in this macro-cycle."
   },
   "bounded_isolated_validation": {
     "py_compile": "PASS",
-    "safety_tests": "8/8 PASS",
+    "safety_tests": "9/9 PASS",
     "covered": [
+      "dataset mutation changes campaign fingerprint",
       "revision-only mutation changes campaign fingerprint",
       "default primary/instruct exact revisions resolve",
       "custom model without revision rejects",
       "malformed revision rejects",
-      "account duplicate suffix guard preserved",
-      "zero-retry billed client preserved",
+      "full exact create confirmation remains required",
+      "account duplicate suffix guard remains active",
+      "ambiguous create already visible in provider account remains blocked",
+      "zero-retry billed client remains active",
       "UNKNOWN_REMOTE_CREATE local ledger blocks retry with stale provider projection",
       "0600 create intent excludes secret and includes exact HF revision",
-      "JOB_KNOWN remains bound to exact fingerprint"
+      "JOB_KNOWN remains bound to exact fingerprint and revision"
     ],
-    "staged_v2_launcher_sha256": "d0b587fc0d8eb16f839413ce1365373db5e50706574a3fd42e9ef0493957a887",
-    "staged_test_sha256": "bb7f005e55fb189e6e3c9ec3d74fb419c770a9ea9aaa1037c65475985bebf0bc",
-    "credit_scope": "SOURCE_AND_MECHANISM_SUPPORTED_ONLY"
+    "launcher_sha256": "7f23827ed335d0616975d7a23c965078086039e66e7d90c605465fde8f1d791b",
+    "test_sha256": "19bf00653e4138089be3fa2337ed08972aaf8a1a31eb939fe2e9235832a04bf3",
+    "environment_note": "An unrelated artifact-tool spreadsheet warmup emitted a startup warning, but py_compile and the 9-test unittest process both exited 0.",
+    "credit_scope": "SOURCE_AND_MECHANISM_SUPPORTED_ONLY; GitHub PR runners failed before test steps and add no execution credit"
   },
   "external_contract": {
-    "together_byom": "Current BYOM documentation exposes hf_model_revision and requires architecture-compatible training templates.",
-    "together_finetune_catalog": "Current documented full-FT table does not list Qwen2/Qwen2.5; compatibility remains a live API gate.",
+    "together_byom": "Current dedicated BYOM documentation exposes hf_model_revision, requires architecture compatibility, and advises the closest available size/context subject to authenticated admission; exact parameter-size equality is not required.",
+    "together_finetune_catalog": "Current documented Full-FT table does not list Qwen2/Qwen2.5.",
     "qwen35_fallback": "Rejected because current public configs identify a different architecture family."
+  },
+  "github_runner_evidence": {
+    "claycog_validator_run": 32559613789,
+    "claycog_validator_job": 96999092864,
+    "identity_guard_run": 32559613781,
+    "identity_guard_job": 96999092712,
+    "observed": "both jobs concluded failure with steps=null and logs_url=null",
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_TEST_STEPS; NOT_CODE_TEST_FAILURE; ZERO_RUNTIME_CREDIT"
   },
   "gate_after_delta": {
     "together_api_secret_in_current_execution": false,
     "provider_preflight": "NOT_EXECUTED",
-    "byom_compatibility": "OPEN_API_GATE_NO_SECRET",
+    "public_documentation_blocker": "No publicly documented qwen2/qwen2.5 Full-FT Together training template is currently present.",
+    "byom_compatibility": "OPEN_AUTHENTICATED_SERVICE_ADMISSION",
     "training_job_started": false,
     "cost_incurred_usd": 0,
-    "next_exact_step": "With an authorized TOGETHER_API_KEY in isolated execution, run the v2 preflight against this exact source: model_limits first, then v2 upload/validation/estimate. If the server admits the configured template and <=USD18 gate, bind the exact printed fingerprint and create at most one job."
+    "next_exact_step": "With TOGETHER_API_KEY mounted only in an authorized isolated execution, first enumerate/validate a currently admitted qwen2-compatible Full-FT template before any dataset upload. If none exists, do not create a paid Together job; move the unchanged canonical SFT v2 corpus to another owner-admitted full-FT runner or request Together support. If a compatible template exists, run the fingerprint-bound preflight, enforce <=USD18, and create at most one job."
   },
   "claims_not_made": [
     "Together accepts Qwen2.5-0.5B BYOM",
@@ -74,6 +94,7 @@
     "OOD promotion passed",
     "Q4_K_M peak RSS below 1 GiB",
     "micro-agent superiority",
-    "consciousness or mathematical correctness"
+    "consciousness or mathematical correctness",
+    "native Mini Entity 0.7 acceptance"
   ]
 }

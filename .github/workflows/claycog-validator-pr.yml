@@ -33,7 +33,9 @@ jobs:
           python3 -m py_compile \
             'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py' \
-            'the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py'
+            'the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py' \
+            'the artefact/blogpost_entity/mini_cognition/hf_architecture_attestation_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_hf_architecture_attestation_v1.py'
       - name: Run strict ClayCode and paid-create safety regressions
         run: |
           set -euo pipefail
@@ -41,6 +43,7 @@ jobs:
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_corpus_v2.py'
           python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'
           python3 'the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_hf_architecture_attestation_v1.py'
       - name: Regenerate and validate exact SFT v2 corpus
         run: |
           set -euo pipefail

@@ -1,5 +1,5 @@
 // Generic persistent text-entity processing pipeline.
-// Application identity, sources, prompts, metrics, provider and output schema are profile data.
+// Application identity, sources, prompts, metrics, inference backend and output schema are DB/profile data.
 // The compiled binary owns only orchestration and invariant enforcement.
 module clay.entity_pipeline
 
@@ -7,11 +7,6 @@ fn payload(key:String, value:String)->Map {
   let m = map_new()
   map_set(m,key,value)
   return m
-}
-
-fn load_profile(profile_path:String)->Map {
-  let p = payload("path",profile_path)
-  return effect("profile_load",p)
 }
 
 fn phase(kind:String, entity_db:String, source_db:String, profile:Map, previous:Map, data:Map)->Map {
@@ -24,8 +19,11 @@ fn phase(kind:String, entity_db:String, source_db:String, profile:Map, previous:
   return effect(kind,p)
 }
 
-fn run(entity_db:String, source_db:String, profile_path:String, secret_file:String)->Map {
-  let loaded = load_profile(profile_path)
+fn run(entity_db:String, source_db:String, secret_file:String)->Map {
+  // Active application/personality/inference profile is persistent DB state.
+  // External preset JSON is only an import/configuration surface, never a mandatory runtime file.
+  let profile_req = payload("entity_db",entity_db)
+  let loaded = effect("pipeline_profile_read",profile_req)
   require loaded.ok
   let profile = loaded.profile
 
@@ -44,12 +42,14 @@ fn run(entity_db:String, source_db:String, profile_path:String, secret_file:Stri
   let prompt = phase("pipeline_build_prompt",entity_db,source_db,profile,previous,compiled)
   require prompt.ok
 
-  let provider_request = map_new()
-  map_set(provider_request,"provider",profile.provider)
-  map_set(provider_request,"system",prompt.system)
-  map_set(provider_request,"user",prompt.user)
-  map_set(provider_request,"secret_file",secret_file)
-  let generated = effect("provider_chat_json",provider_request)
+  // One inference contract for remote APIs, loopback local servers or local model runners.
+  // Inference is replaceable cognition, never entity identity/state authority.
+  let infer = map_new()
+  map_set(infer,"inference",profile.inference)
+  map_set(infer,"system",prompt.system)
+  map_set(infer,"user",prompt.user)
+  map_set(infer,"secret_file",secret_file)
+  let generated = effect("inference_generate",infer)
   require generated.ok
 
   let gate_data = map_new()
@@ -73,6 +73,7 @@ fn run(entity_db:String, source_db:String, profile_path:String, secret_file:Stri
   map_set(result,"generation",committed.generation)
   map_set(result,"source_count",compiled.source_count)
   map_set(result,"profile_id",profile.profile_id)
+  map_set(result,"inference_kind",profile.inference.kind)
   map_set(result,"canonical_state_hash",compiled.canonical_state_hash)
   map_set(result,"packet_hash",compiled.packet_hash)
   return result

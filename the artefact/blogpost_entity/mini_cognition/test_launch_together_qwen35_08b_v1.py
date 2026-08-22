@@ -14,6 +14,9 @@ class Client:
 class TogetherCtor:
     last=None
     def __init__(self,**kw):type(self).last=kw
+class EnvProbe:
+    def __init__(self):self.get_calls=[]
+    def get(self,key,default=None):self.get_calls.append(key);return "sentinel"
 class Tests(unittest.TestCase):
     def setUp(self):
         self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
@@ -34,6 +37,26 @@ class Tests(unittest.TestCase):
         self.assertEqual(Path(validate[1]).name,"validate_corpus_v2.py")
         self.assertEqual(validate[2:],[str(m.TRAIN),str(m.VALID)])
         self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertTrue(run.call_args_list[1].kwargs["check"])
+    def test_provider_execution_mode_is_fail_closed(self):
+        p=Path(self.t.name)/"provider-policy.json"
+        p.write_text('{"mode":"FREE_ONLY"}\n',encoding="utf-8")
+        self.assertEqual(m.provider_execution_mode(p),"FREE_ONLY")
+        with self.assertRaisesRegex(SystemExit,"FREE_ONLY_PROVIDER_REJECTED"):
+            m.require_paid_provider_admission(p)
+        p.write_text('{"mode":"PAID_ALLOWED"}\n',encoding="utf-8")
+        self.assertEqual(m.require_paid_provider_admission(p),"PAID_ALLOWED")
+        p.write_text('{"mode":"UNKNOWN"}\n',encoding="utf-8")
+        with self.assertRaisesRegex(SystemExit,"PROVIDER_EXECUTION_MODE_UNRECOGNIZED"):
+            m.require_paid_provider_admission(p)
+        p.write_text('{"mode":7}\n',encoding="utf-8")
+        with self.assertRaisesRegex(SystemExit,"PROVIDER_EXECUTION_MODE_UNRESOLVED"):
+            m.require_paid_provider_admission(p)
+    def test_free_only_rejects_before_provider_secret_lookup(self):
+        p=Path(self.t.name)/"provider-policy.json";p.write_text('{"mode":"FREE_ONLY"}\n',encoding="utf-8");probe=EnvProbe()
+        with mock.patch.object(m,"PROVIDER_EXECUTION_POLICY",p),mock.patch.object(m,"local_checks"),mock.patch.object(m.os,"environ",probe),mock.patch.object(m.sys,"argv",["launcher"]):
+            with self.assertRaisesRegex(SystemExit,"FREE_ONLY_PROVIDER_REJECTED"):
+                m.main()
+        self.assertEqual(probe.get_calls,[])
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

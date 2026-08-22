@@ -1,5 +1,5 @@
 {
-  "schema_version": "6.5",
+  "schema_version": "6.6",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY",
@@ -40,7 +40,7 @@
       "version": "mini-entity/0.6.0",
       "platform": "linux-x86_64",
       "form": "application-neutral and inference-neutral ELF executable",
-      "binary_sha256": "2aa8ebe9d20a683b62627cfe9e20f245390b1422afaa805b42b2dddbc976eed3",
+      "binary_sha256": "27ad1fc3f134efacabe89102a86ac5876d62bb7c9d9b1e6d0ca95c36c60e7bd1",
       "fresh_db_mode": "neutral"
     },
     "local_llm_fixture_run": {
@@ -52,13 +52,14 @@
       "output_persisted": true,
       "generation": 1,
       "pending_events_after_run": 0,
+      "outputs": 1,
       "sqlite_integrity_check": "ok",
       "classification": "LOCAL_BACKEND_CONTRACT_PASS_MODEL_QUALITY_UNCREDITED"
     },
     "tested_behaviors": [
       "fresh database is application-neutral",
       "Zero/blog/personality is replaceable preset data",
-      "preset import can change identity/personality without rebuild",
+      "preset import loads profile identity and personality without rebuild",
       "preset can choose API or local_exec inference",
       "local model path can replace API token",
       "local runner argv is configured as JSON and executed without shell",

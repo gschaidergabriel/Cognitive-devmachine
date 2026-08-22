@@ -55,9 +55,16 @@ class Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             os.environ[m.CREATE_LEDGER_DIR_ENV]=td;fp=m.campaign_fingerprint();p=m.arm_create_intent(fp,m.campaign_suffix(fp));self.assertEqual(stat.S_IMODE(p.stat().st_mode),0o600);self.assertEqual(m.read_create_ledger(fp)["campaign"]["training_type"],{"type":"Full"})
     def test_created_job_identity_mismatch_detection(self):
-        expected={"training_file":"t","validation_file":"v","model":m.MODEL,"n_epochs":3,"n_evals":2,"random_seed":3407}
-        good=types.SimpleNamespace(**expected);self.assertEqual(m.created_job_identity_mismatches(good,expected),{})
-        bad=types.SimpleNamespace(**{**expected,"random_seed":9});mm=m.created_job_identity_mismatches(bad,expected);self.assertEqual(mm["random_seed"],{"expected":3407,"observed":9})
+        expected=m.expected_created_job_identity("t","v")
+        good=types.SimpleNamespace(**{**expected,"training_type":types.SimpleNamespace(type="Full"),"training_method":types.SimpleNamespace(method="sft",train_on_inputs="auto")})
+        self.assertEqual(m.created_job_identity_mismatches(good,expected),{})
+        bad=types.SimpleNamespace(**{**expected,"random_seed":9,"learning_rate":2e-5,"warmup_ratio":.2,"n_checkpoints":7,"training_type":types.SimpleNamespace(type="LoRA")})
+        mm=m.created_job_identity_mismatches(bad,expected)
+        self.assertEqual({"random_seed","learning_rate","warmup_ratio","n_checkpoints","training_type"},set(mm))
+    def test_created_job_identity_covers_fingerprint_bound_training_fields(self):
+        expected=m.expected_created_job_identity("t","v")
+        for field in ("n_checkpoints","random_seed","learning_rate","warmup_ratio","training_method","training_type"):
+            self.assertIn(field,expected)
     def test_zero_retry(self):
         TogetherCtor.last=None;m.new_zero_retry_create_client(TogetherCtor);self.assertEqual(TogetherCtor.last,{"max_retries":0})
 if __name__=="__main__":unittest.main()

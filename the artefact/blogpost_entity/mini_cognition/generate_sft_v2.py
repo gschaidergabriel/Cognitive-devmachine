@@ -138,7 +138,7 @@ def main():
     m={"schema":"claycog-sft/v2","seed":20260822,"examples":1650,"train":1485,"validation":165,
        "families":list(TOTALS),"family_totals":TOTALS,"family_validation":VALID,
        "train_unique":1485,"validation_unique":165,"exact_cross_split_overlap":0,"prompt_cross_split_overlap":0,
-       "base_primary":"Qwen/Qwen2.5-0.5B","base_ablation":"Qwen/Qwen2.5-0.5B-Instruct",
+       "model_binding_policy":"campaign_external_not_corpus_identity","provider_binding_policy":"campaign_external_not_corpus_identity",
        "identity_job_policy":"runtime_config_only","assistant_target_representation":"ClayCode_only",
        "train_sha256":sha(out/"train_v2.jsonl"),"validation_sha256":sha(out/"validation_v2.jsonl")}
     (out/"corpus_manifest_v2.json").write_text(json.dumps(m,indent=2,sort_keys=True)+"\n",encoding="utf-8")

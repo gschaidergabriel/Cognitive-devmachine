@@ -1,0 +1,61 @@
+{
+  "schema": "mini-entity-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_base": "456e3e4d6853ff5b3a85300bdbe2367818e15052",
+  "branch": "gpt56sol/go-native-profile-integrity-20260822-1310",
+  "observed_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "observed_stage": "MINI_ENTITY_PIPELINE_CLAY",
+  "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "finding": {
+    "primary": "The existing source-bound builder hashed only mini_entity.c even though native 0.7 moved nearly all code into local quoted .inc units. Mutating an included unit could therefore leave the recorded entry-source SHA unchanged.",
+    "secondary": "The native active-profile read path stored profile_sha256 but did not verify it before using profile_json. A DB mutation could silently drift runtime application/inference configuration away from its stored profile hash."
+  },
+  "delta": {
+    "build_native_bound.py": {
+      "git_blob": "4079ba75a6591f7f84f93838daa7ce676fca2805",
+      "provenance_schema": "mini-entity-native-build-provenance/v2",
+      "changes": [
+        "recursively hash the complete repository-local quoted include closure",
+        "bind -frandom-seed to source_closure.sha256 rather than entry-unit sha only",
+        "record path, sha256 and size for every source-closure file",
+        "fail closed on include-root escape, missing local include, non-regular source, oversized source and symlinked source path segments"
+      ]
+    },
+    "test_build_native_bound_source_closure.py": {
+      "git_blob": "e96f215c20663c201c3583404c08d1dcae54f1cf",
+      "cases": 4
+    },
+    "mini_entity_part01.inc": {
+      "git_blob": "519c2dee8152eecd6206499c103277f20536fd4e",
+      "change": "verify active profile_json against stored profile_sha256 before exposing it to status/run; mismatches fail closed"
+    }
+  },
+  "isolated_execution": {
+    "environment": "OpenAI isolated Linux container",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "exact_blob_binding": {
+      "build_native_bound.py": "4079ba75a6591f7f84f93838daa7ce676fca2805",
+      "test_build_native_bound_source_closure.py": "e96f215c20663c201c3583404c08d1dcae54f1cf",
+      "method": "git hash-object on reconstructed exact GitHub branch bytes before execution"
+    },
+    "command": "python3 -m pytest -q test_build_native_bound_source_closure.py",
+    "result": "4 passed in 0.03s",
+    "exit_code": 0
+  },
+  "evidence_class": {
+    "source_closure_builder": "EXACT_BLOB_MECHANISM_SUPPORTED",
+    "native_profile_hash_guard": "SOURCE_CANDIDATE_UNEXECUTED",
+    "full_native_0_7_build": "NOT_EXECUTED_IN_THIS_CYCLE",
+    "real_remote_provider": "NOT_EXECUTED",
+    "real_local_model_quality": "NOT_EXECUTED",
+    "whole_product": "IN_PROGRESS"
+  },
+  "counterhypothesis": "Quoted include files are already implicitly bound because the compiler reads them. Rejected for provenance: the produced ELF depends on them, but the prior receipt source identity did not record them and its deterministic seed did not change when an include changed.",
+  "next_discriminator": "Reconstruct/fetch the exact branch native source closure in an authorized isolated build surface, run build_native_bound.py v2 with repeat >=2, require all six native source files in the receipt, then execute the profile-tamper runtime falsifier before real local/API model acceptance.",
+  "together_api": "FORBIDDEN_NOT_USED",
+  "vps_testing": "NOT_USED"
+}

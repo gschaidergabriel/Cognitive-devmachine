@@ -1,67 +1,92 @@
 {
-  "schema_version": "6.4",
-  "program_id": "blogpost-entity-all-in-one",
+  "schema_version": "6.5",
+  "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
-  "stage": "BLOGPOST_ENTITY_CLAY",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY",
   "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
-  "sole_target": "one application-neutral .clay pipeline executable + one SQLite MiniUnifiedDB",
-  "portable_release_shape": ["application-neutral blogpost_entity.clay ELF", "blogpost_entity.db SQLite MiniUnifiedDB preconfigured as zero_blog"],
+  "sole_target": "one application-neutral and inference-neutral .clay pipeline executable + one SQLite MiniUnifiedDB",
+  "portable_release_shape": [
+    "mini_entity.clay application-neutral/inference-neutral ELF",
+    "mini_entity.db SQLite MiniUnifiedDB preconfigurable as zero_blog"
+  ],
+  "optional_inference_inputs": [
+    "remote/API token and provider config",
+    "loopback OpenAI-compatible local server without token",
+    "local model weights plus configured local_exec runner"
+  ],
   "acceptance": "IN_PROGRESS",
   "architecture_split": {
-    "binary": "generic evidence preprocessing, canonical run/state envelope, configurable API transport, immutable generic truth/secret gate engine, exactly-once consumption, generation CAS and atomic persistence",
-    "database": "all application/personality/provider configuration; shipped default preset is zero_blog",
-    "regression_rule": "if an application/personality fact can live in SQLite configuration, hard-coding it into the executable is a regression"
+    "binary": "generic evidence preprocessing, canonical run/state envelope, inference dispatch, immutable truth/secret gate engine, exactly-once consumption, generation CAS and atomic persistence",
+    "database": "all application/personality/inference configuration; shipped default preset is zero_blog",
+    "regression_rule": "if application/personality/inference choice can live in runtime configuration, binding it to executable identity is a regression"
+  },
+  "inference_backends": {
+    "api": {
+      "status": "IMPLEMENTED_SANDBOX",
+      "config": ["endpoint", "model", "api_token", "auth_header", "auth_prefix", "request_template", "response_pointer", "temperature", "max_tokens"],
+      "loopback_noauth": true
+    },
+    "local_exec": {
+      "status": "IMPLEMENTED_AND_CONTRACT_TESTED_SANDBOX",
+      "config": ["local_model_path", "local_argv_json", "local_prompt_template", "temperature", "max_tokens"],
+      "shell": false,
+      "execution": "direct execvp-style runner invocation",
+      "api_token_required": false
+    }
   },
   "sandbox_evidence": {
     "date": "2026-08-22",
     "native_pipeline": {
-      "version": "mini-entity/0.4.1",
+      "version": "mini-entity/0.6.0",
       "platform": "linux-x86_64",
-      "form": "application-neutral ELF executable named blogpost_entity.clay",
-      "binary_sha256": "d0733d10f50f8524196a84338f9c9700dfeb8816841b5a555f26e07eddde8b79",
-      "application_string_audit": "PASS: no zero_blog, Gasthaus, Bare Metal, T_OMEGA, blogpost or application-specific metric names observed in ELF",
+      "form": "application-neutral and inference-neutral ELF executable",
+      "binary_sha256": "2aa8ebe9d20a683b62627cfe9e20f245390b1422afaa805b42b2dddbc976eed3",
       "fresh_db_mode": "neutral"
     },
-    "shipped_default_db": {
-      "sha256": "8bb21d7b6ea63b584a9c6384c3339d5b331a48d4c9c1241f21c2f8649c1a7155",
-      "integrity_check": "ok",
-      "preset": "zero_blog",
-      "api_token": "MISSING_BY_DESIGN_RUNTIME_ONLY"
+    "local_llm_fixture_run": {
+      "preset_schema": "clay-pipeline-profile/v2",
+      "profile": "zero_blog",
+      "inference_mode": "local_exec",
+      "model_path": "configured readable fixture path",
+      "api_token": "MISSING",
+      "output_persisted": true,
+      "generation": 1,
+      "pending_events_after_run": 0,
+      "sqlite_integrity_check": "ok",
+      "classification": "LOCAL_BACKEND_CONTRACT_PASS_MODEL_QUALITY_UNCREDITED"
     },
     "tested_behaviors": [
       "fresh database is application-neutral",
-      "binary application-string audit separates replaceable application semantics from executable identity",
-      "shipped zero_blog preset lives in SQLite configuration only",
-      "Zero blog end-to-end loopback provider run with exactly-once persistence",
-      "verified-empty second run is quiet",
-      "Zero application replaced at runtime by Mara English dry lab-report role using same ELF and same continuing DB",
-      "generation/history continued without DB reset",
-      "runtime-editable application_config_json and system prompt",
-      "runtime-editable configured state metric rules",
-      "provider endpoint/model/auth/request-template/response-pointer changed without state reset",
-      "missing API token consumes nothing",
-      "API token stdin entry works and secret is absent from DB/config/status",
-      "secret output leak rejected without consumption",
-      "configured UNKNOWN self-state claim rejected without consumption",
-      "UNKNOWN sensor state never becomes verified quiet",
-      "non-loopback plaintext HTTP rejected",
-      "concurrent same-generation runs fenced by generation/event CAS with exactly one success",
+      "Zero/blog/personality is replaceable preset data",
+      "preset import can change identity/personality without rebuild",
+      "preset can choose API or local_exec inference",
+      "local model path can replace API token",
+      "local runner argv is configured as JSON and executed without shell",
+      "local inference output uses normal gate/exactly-once/CAS/atomic persistence path",
+      "same continuing DB supports materially different application/personality",
+      "API provider config remains runtime replaceable",
+      "loopback local API can run without token",
+      "missing authenticated API token consumes nothing",
+      "secret values remain redacted",
       "SQLite integrity_check PASS"
     ],
-    "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_4_1_SANDBOX.json",
-    "real_provider_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_API_SECRET_MOUNTED"
+    "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json",
+    "real_remote_provider_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_AUTHORIZED_API_SECRET_MOUNTED",
+    "real_local_llm_quality_run": "NOT_YET_CREDITED_FIXTURE_ONLY"
   },
   "default_application": {
     "preset": "zero_blog",
-    "status": "fully replaceable runtime configuration in shipped MiniUnifiedDB, not executable identity",
-    "default_provider": "Mistral chat completions using mistral-medium-latest; token runtime-injected via MISTRAL_API_KEY or stdin"
+    "path": "the artefact/blogpost_entity/presets/zero_blog.json",
+    "status": "fully replaceable runtime configuration, not executable identity",
+    "default_inference": "Mistral API profile, replaceable by any admitted API or local model backend"
   },
   "canonical_clay_state": {
     "source_present": true,
-    "generic_profile_runtime_present": true,
-    "current_gap": "canonical structured Clay path is now profile-driven and application-neutral, but currently loads an external profile file; final portable acceptance still requires only the .clay executable plus SQLite MiniUnifiedDB, so the structured path must load/persist its active profile from the DB (external JSON may remain build/dev input, never a mandatory runtime third file)"
+    "profile_runtime": "DB-resident active profile; external JSON is import/config only",
+    "inference_contract": "generic inference_generate dispatch rather than provider-specific call",
+    "current_gap": "native sandbox path proves local_exec backend contract; structured Clay runtime/effect implementation must converge on the same DB-resident profile + inference_generate contract, then real remote and real local model acceptance runs remain"
   },
-  "current_frontier": "Fuse the structured Clay profile/runtime path with the proven two-file native 0.4.1 release law: active application/provider/metric/gate profile must be persisted in MiniUnifiedDB, preserve the current application-neutral binary boundary and adversarial gates, then exercise one real authorized Mistral/default-provider call only when a secret is actually mounted.",
+  "current_frontier": "Converge the structured Clay/effect runtime onto the proven native 0.6 backend contract, then exercise one real authorized remote provider and one real local supported LLM while preserving the application-neutral/inference-neutral binary boundary.",
   "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist on this same neutral pipeline + configurable DB only.",
   "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
   "together_api": "FORBIDDEN"

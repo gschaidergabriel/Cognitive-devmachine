@@ -1,0 +1,44 @@
+{
+  "schema": "clay-go-cognition-seed-job-identity/v2",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main_sha": "e073e3577334d4dce723ffca378e61528bf0ed24",
+  "scope": "non-duplicate campaign reproducibility delta on exact current main; no provider network or paid action",
+  "global_unusual_experiment_accounting": {
+    "consumed_elsewhere_in_same_go": true,
+    "canonical_merge": "bfd318c6f35a0b8b32b60c7cbaa404801f22c997",
+    "id": "QWEN25_05B_VS_SMALLEST_CURRENT_TOGETHER_QWEN_FULLFT_TEMPLATE_ARCHITECTURE_FALSIFIER",
+    "this_delta_adds_another_unusual_experiment": false
+  },
+  "code_identity": {
+    "launcher_git_blob": "5fddf4d35f3c382c17b372a4b0c534df432076db",
+    "safety_test_git_blob": "734641e113c9bcf963083d83438e31b6cd72c5eb"
+  },
+  "delta": [
+    "campaign fingerprint schema v2 binds explicit learning_rate, warmup_ratio and random_seed",
+    "atomic create-intent schema v2 persists the same seed-bound campaign descriptor",
+    "create passes the exact seed and effective training hyperparameters",
+    "JOB_KNOWN is persisted immediately after a returned job id before follow-up reads",
+    "created job is retrieved and provider-visible training_file, validation_file, model, from_hf_model, hf_model_revision, n_epochs, n_evals and random_seed are compared against the authorized campaign",
+    "verification transport failure or identity mismatch never creates a replacement job"
+  ],
+  "bounded_isolated_regression": {
+    "py_compile": "PASS",
+    "launcher_safety_tests": "10/10 PASS",
+    "network": "NONE",
+    "provider_create_called": false,
+    "spend_usd": 0,
+    "limitation": "current exact-main composite CI, including offline campaign and provider-contract regressions, still requires an actually-started GitHub runner"
+  },
+  "current_main_fusion": {
+    "provider_free_campaign_identity": "706b0f27d0424a22e108d1cf69e01746796bd86b",
+    "static_byom_architecture_gate": "bfd318c6f35a0b8b32b60c7cbaa404801f22c997",
+    "ood_comment_smuggling_gate": "e073e3577334d4dce723ffca378e61528bf0ed24",
+    "native_profile_v2_fail_closed": "659cc2471b73bcefebb6a57694e6737cc2107cc5",
+    "native_state_box_neutrality": "b2d49a8e0e88b01927e9673a38dab9fbeb175b97"
+  },
+  "provider_admission": "BLOCKED_NO_CURRENT_PUBLIC_QWEN2_COMPATIBLE_FULL_FT_TEMPLATE_AND_FREE_ONLY_NETWORK_EXECUTION_PROHIBITED",
+  "native_remaining_frontier": "local_exec parent-environment secret isolation plus exact source-bound post-fusion runtime rerun and later full canonical profile-v2 parity",
+  "claim_boundary": "MECHANISM_SUPPORTED_BOUNDED_EXACT_BLOBS; no provider admission, training, model quality, quantized RSS, native whole acceptance or whole Mini Entity PASS"
+}

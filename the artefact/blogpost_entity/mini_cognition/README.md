@@ -54,6 +54,8 @@ The current source candidate hardens `validate_sft_v1.py` with:
 
 **Evidence boundary:** the mutation bundle was observed to fail under the old admission and pass under the hardened logic. The full 1,650-target regression exists as source but must not be called exact runtime PASS until an actually-started authorized isolated runner executes the exact branch/source identity.
 
+A focused GitHub-hosted workflow now exists on `main` to run this admission regression on future `mini_cognition` pull-request updates. Workflow existence is not test evidence; only an actually-started job with visible steps earns runtime credit.
+
 Historical corpus hashes from the generator before this admission change remain:
 - train SHA-256: `bc1753771ed0f818865a3118f754ac5b10d67bc3ae885f668201f66566028eb2`;
 - validation SHA-256: `81a6bb9fc0a210affffa84590c27ad2fc76c93fa24c4112e6573552227e512ce`.

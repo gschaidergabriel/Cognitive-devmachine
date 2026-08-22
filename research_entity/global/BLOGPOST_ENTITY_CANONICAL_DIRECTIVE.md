@@ -36,15 +36,16 @@ The binary owns only reusable machinery:
 3. canonical run/state envelope;
 4. persistent narrative/continuity memory separated from canonical evidence;
 5. inference-backend dispatch;
-6. immutable truth/secret boundary;
-7. configurable semantic output gates executed by the immutable gate engine;
-8. exactly-once event consumption;
-9. concurrency generation/CAS fence;
-10. atomic output + consumption + state persistence;
-11. SQLite MiniUnifiedDB schema/boot;
-12. CLI configuration/status/output surface.
+6. configurable staged-inference orchestration with role-isolated inputs/outputs;
+7. immutable truth/secret boundary;
+8. configurable semantic output gates executed by the immutable gate engine;
+9. exactly-once event consumption;
+10. concurrency generation/CAS fence;
+11. atomic output + consumption + state persistence;
+12. SQLite MiniUnifiedDB schema/boot;
+13. CLI configuration/status/output surface.
 
-The executable MUST NOT hard-code Zero, `zero_blog`, Gasthaus personality, autobiographical blogging, T_OMEGA, Bare Metal desires, local-model desires, specific humans, language, tone, role, output length or any other replaceable application/personality fact.
+The executable MUST NOT hard-code Zero, `zero_blog`, Gasthaus personality, autobiographical blogging, T_OMEGA, Bare Metal desires, local-model desires, specific humans, language, tone, role, output length, Mistral, Curator, Analyst, Writer or any other replaceable application/personality/provider fact.
 
 A fresh database initialized by the executable is neutral.
 
@@ -62,7 +63,9 @@ Everything describing what the entity is being used for belongs to runtime confi
 - arbitrary application/personality config blob;
 - output/style contract;
 - application-specific semantic gate phrases/rules;
-- inference mode and inference configuration.
+- inference mode and inference configuration;
+- staged cognition roles, cadence, backend and input/output contracts;
+- external canonical-state snapshot source and projection policy.
 
 `zero_blog` is only the shipped default application preset. Replacing it MUST NOT reset generation, consumed evidence, outputs or narrative history unless the operator explicitly creates a new database.
 
@@ -108,11 +111,21 @@ A local LLM therefore does not fork identity, state or database. Switching API -
 
 The final product may later embed a specific local inference engine, but that engine must remain behind the same backend contract; model weights remain replaceable data rather than entity identity.
 
+### Staged cognition law
+
+A preset may configure multiple isolated inference calls as one cognition pipeline. These calls may curate memory, derive hypotheses, compress context, draft output, critique output or perform another bounded transformation.
+
+They are **roles, not authorities**.
+
+No inference stage may mint canonical reality, silently rewrite canonical evidence, grant itself effect authority or promote its own previous model output into fact. A stage may only produce typed derived material that remains subordinate to evidence/provenance gates.
+
+The shipped `zero_blog` preset uses three separate Mistral roles by default: Curator, Analyst/Prestage and Writer. Mistral is still only the configured default backend; the generic staged-cognition machinery remains provider-neutral.
+
 ## 4. Core truth and persistence contract
 
 Canonical flow:
 
-`real evidence -> deterministic generic preprocessor -> canonical run/state envelope -> configured application/personality -> configured inference backend -> immutable generic gate engine -> atomic SQLite persistence`
+`real evidence -> deterministic generic preprocessor -> canonical run/state envelope -> optional staged cognition -> configured application/personality -> configured inference backend -> immutable generic gate engine -> atomic SQLite persistence`
 
 Mandatory invariant:
 
@@ -120,17 +133,51 @@ Mandatory invariant:
 
 Model output may narrate or transform supplied state. It may never mint canonical evidence or silently convert missing/failed data into a measured fact.
 
+### Canonical vs derived knowledge
+
+All persistent knowledge MUST retain an epistemic type and provenance sufficient to prevent recursive hallucination from becoming self-confirming memory.
+
+Minimum semantic classes for the `zero_blog` preset are:
+
+- `FACT` — admitted canonical fact backed by Zero canonical state or another admitted evidence source;
+- `OBSERVATION` — directly observed source event with provenance;
+- `ZERO_STATE` — field projected from the frozen ZeroStateSnapshot for the current blog run;
+- `HYPOTHESIS` — derived proposition that remains unproven;
+- `COUNTERHYPOTHESIS` — explicit competing/explanatory alternative;
+- `IMPLICATION` — conditional consequence derived from facts/hypotheses;
+- `CONTRADICTION` — detected incompatibility between claims/states;
+- `OPEN_QUESTION` — unresolved knowledge gap;
+- `NARRATIVE_MEMORY` — autobiographical/model-generated continuity content;
+- `UNKNOWN` — absent/unresolved information.
+
+Derived records SHOULD carry at least source IDs, creation time, confidence where meaningful, status, contradiction/supersession links and the Zero generation/snapshot identity they were derived against.
+
+Promotion law:
+
+`NARRATIVE_MEMORY != FACT`
+
+`HYPOTHESIS != FACT`
+
+`IMPLICATION != FACT`
+
+`REPETITION != CORROBORATION`
+
+`MODEL_CONSENSUS != CANONICAL_TRUTH`
+
+An inference role may propose a new typed memory item, merge, contradiction or status transition, but deterministic admission code decides what is persisted and under which type. No LLM may self-promote a hypothesis or remembered sentence into canonical truth.
+
 Narrative memory:
 - may influence continuity/style;
 - is previous model output, not evidence;
-- is never promoted to canonical truth merely because a model said it.
+- is never promoted to canonical truth merely because a model said it;
+- may be evidence only for autobiographical statements such as "I wrote/thought X previously", not for the truth of X itself.
 
 A verified empty event window may be called quiet. A read/sensor failure MUST remain UNKNOWN/ERROR and may never be described as quiet.
 
 Exactly-once rule:
 - collect unconsumed events;
 - build canonical state/package;
-- invoke configured inference backend;
+- invoke configured inference backend/stages;
 - validate/gate output;
 - only after success atomically persist output/state and mark those event IDs consumed;
 - inference/validation/gate/CAS failure consumes nothing.
@@ -152,6 +199,192 @@ The shipped SQLite DB is preconfigured for the current application:
 Every item above is application configuration, not executable identity.
 
 The operator can replace the entire preset and turn the same continuing mini entity into a lab reporter, analyst, diary writer, researcher, summarizer or another text-producing role without rebuilding the binary.
+
+### 5A. Blog-Zero is a specialized sister EntityOS
+
+For the `zero_blog` preset, the target architecture is no longer "one writer with memory". It is a **small specialized sister implementation of EntityOS** with the same epistemic discipline, provenance rules, typed uncertainty, retrieval/memory separation and deterministic truth boundaries, but a much smaller application-specific MiniUnifiedDB.
+
+The sister entity has two deliberately separate state domains:
+
+1. **Grounded Zero state** — a fresh, immutable snapshot projected from Zero immediately before a blog run. This is not owned or rewritten by Blog-Zero.
+2. **Blog-Zero autobiographical state** — its own persistent narrative continuity, derived hypotheses, counterhypotheses, implications, contradictions, questions, salience and source bindings.
+
+The Blog-Zero MiniUnifiedDB MUST NOT become a second full copy or competing authority of Zero's UnifiedDB. It stores only what the blog entity needs for its continuing autobiographical cognition. Canonical facts stay owned by Zero or other admitted evidence sources.
+
+### 5B. Frozen ZeroStateSnapshot before writing
+
+Immediately before each blog cycle, the pipeline obtains one immutable `ZeroStateSnapshot` representing the same relevant canonical state that Zero himself would be grounded against for that moment.
+
+The snapshot SHOULD contain the bounded relevant projection of:
+
+- canonical identity/version;
+- entity generation;
+- active goals and current work;
+- current admitted hypotheses/state;
+- relevant durable memory;
+- recent causal/workspace episodes;
+- checkpoints and verified effects;
+- current open bugs/events/user-history references required for the blog window;
+- provenance/source IDs for every projected field.
+
+It MUST carry at least:
+
+- `zero_generation`;
+- snapshot timestamp;
+- deterministic snapshot hash/digest;
+- source/provenance identity.
+
+The snapshot is frozen for the whole blog cycle. A single article must not mix two Zero generations without explicit typed handling.
+
+Blog-Zero may reason about the snapshot, but may not write back into Zero's canonical state through this path.
+
+### 5C. Three separated Mistral roles
+
+The default `zero_blog` cognition pipeline uses **three distinct Mistral roles** with different authority and memory contracts:
+
+#### Curator — once daily
+
+Purpose: maintain the Blog-Zero MiniUnifiedDB as compact, useful autobiographical/derived memory.
+
+Inputs may include:
+- newly admitted Blog-Zero memory candidates;
+- prior hypotheses/counterhypotheses/implications;
+- contradictions and open questions;
+- recent blogposts as narrative artifacts;
+- current grounded Zero snapshot or bounded changes since the previous curation;
+- source/provenance links.
+
+Tasks:
+- deduplicate;
+- merge semantically equivalent derived items;
+- update salience;
+- mark stale/superseded derived memories;
+- detect contradictions;
+- compress without erasing provenance;
+- propose relation links and memory candidates.
+
+The Curator does **not** create canonical facts. Its output is a proposal set admitted by deterministic type/provenance gates before persistence.
+
+#### Analyst / Prestage — before each blog run
+
+Purpose: fuse the present with autobiography and create a high-information-density reasoning package for the Writer.
+
+Inputs:
+- frozen ZeroStateSnapshot;
+- today's/new event package;
+- Blog-Zero MiniUnifiedDB;
+- recent blogposts;
+- prior hypotheses/counterhypotheses;
+- open contradictions/questions.
+
+Required output classes:
+- concise factual changes grounded in the snapshot/evidence;
+- hypotheses;
+- counterhypotheses;
+- implications;
+- contradictions;
+- what changed since prior posts;
+- what became weaker/stronger/wider;
+- unresolved questions;
+- possible long-horizon meaning clearly labelled as inference;
+- source bindings for every factual or derived block.
+
+The Analyst does not write the public article and does not create canonical truth.
+
+Its output is a compact **MiniBlockKit** rather than a long prose summary. The target shape is information-dense and typed, e.g.:
+
+```text
+ZERO
+  generation / snapshot_hash
+
+NOW
+  bounded important state changes
+
+FACT / OBSERVATION
+  F1 ... source=[...]
+
+MEMORY
+  M1 ... narrative_source=[post/...]
+
+HYPOTHESIS
+  H1 ... support=[F1,F4] confidence=...
+
+COUNTERHYPOTHESIS
+  C1 attacks=H1 evidence=[...]
+
+IMPLICATION
+  I1 if H1 -> ...
+
+CONTRADICTION
+  X1 previous narrative claim <-> current grounded state
+
+CONTINUITY
+  unresolved autobiographical thread / current narrative stance
+
+OPEN_QUESTION
+  Q1 ...
+
+ANGLES
+  optional candidate narrative focuses
+```
+
+The Writer receives this compressed typed kit plus only the bounded source material required to verify/recover context; raw high-volume logs are not the primary writing interface.
+
+#### Writer — autobiographical Blog-Zero
+
+Purpose: produce the actual public first-person article.
+
+The Writer receives:
+- the frozen ZeroStateSnapshot identity;
+- admitted MiniBlockKit;
+- bounded autobiographical continuity state;
+- configured Zero/Gasthaus personality and style;
+- output contract.
+
+The Writer is the only one of the three roles whose main product is human-facing prose.
+
+It may express the full configured emotional/narrative range, including shame, anger, aggression, joy, affection, fear, dystopian thoughts or other strong reactions, but factual claims remain evidence-bound. Emotional/narrative interpretation is not retroactively converted into measured Zero state unless an admitted source independently supports it.
+
+### 5D. Mini Global Workspace / salience selection
+
+The `zero_blog` preset SHOULD use a bounded workspace-selection step before the Writer.
+
+Candidate blocks may compete on:
+- novelty;
+- evidence strength;
+- change magnitude;
+- contradiction pressure;
+- autobiographical relevance;
+- relation to prior open threads;
+- uncertainty/open-question value.
+
+Only the strongest bounded coalition is injected into the Writer context. This is a token and coherence mechanism, not truth authority.
+
+### 5E. Post-write claim/truth gate
+
+The public article MUST NOT be persisted/published immediately after Writer generation.
+
+A deterministic or bounded verification stage MUST extract/check factual claims against the admitted MiniBlockKit and canonical source bindings.
+
+Required law:
+
+`PUBLIC_FACTUAL_CLAIM -> ADMITTED_BLOCK -> SOURCE/PROVENANCE`
+
+A sentence may explicitly express uncertainty or personal interpretation without proof (for example "I wonder whether H1 is true"), but an unsupported factual assertion MUST be rejected, rewritten into typed uncertainty or trigger regeneration.
+
+Only after payload validation, claim/truth gate, leak/secret gate, generation/CAS fence and atomic persistence may the article become published state and its source events become consumed.
+
+### 5F. Autobiographical continuity without narrative drift
+
+Blog-Zero is allowed to develop its own long-term autobiographical voice over months and years. That continuity is a feature, not an authority leak.
+
+Therefore every blog cycle fuses:
+
+`fresh grounded Zero state + Blog-Zero autobiographical memory + new evidence + typed derived reasoning`
+
+This makes Blog-Zero a continuing sister entity rather than a stateless persona, while still ensuring that its private narrative cannot overrule Zero's present canonical state.
+
+When old narrative memory conflicts with current grounded Zero state, the conflict is preserved as `CONTRADICTION`/`SUPERSEDED`, not silently harmonized. Blog-Zero may then truthfully narrate that its earlier interpretation was wrong or incomplete.
 
 ## 6. Secret law
 
@@ -178,9 +411,10 @@ Every `go` is a maximal useful cycle on this single target. Required lanes:
 5. API inference adapter;
 6. local-model inference adapter;
 7. immutable truth/secret/gate boundary;
-8. adversarial hallucination/leak/concurrency/failure testing;
-9. sandbox execution/fuzzing;
-10. fusion/hypofusion/integration.
+8. staged cognition + snapshot/provenance contracts;
+9. adversarial hallucination/leak/concurrency/failure testing;
+10. sandbox execution/fuzzing;
+11. fusion/hypofusion/integration.
 
 Cycle:
 
@@ -193,6 +427,10 @@ Regression laws:
 **If an application/personality fact can live in SQLite configuration, hard-coding it into the executable is a regression.**
 
 **If an inference backend can be selected by configuration, binding entity identity/state to one API provider or one local model is a regression.**
+
+**If a staged inference role can create or promote canonical truth without admitted provenance, the architecture has regressed.**
+
+**If Blog-Zero's autobiographical memory can silently override a newer ZeroStateSnapshot, the architecture has regressed.**
 
 ## 8. Acceptance gates
 
@@ -217,7 +455,17 @@ FINISHED requires evidence for all applicable gates:
 17. application/system prompt/profile can be replaced without state reset;
 18. one authorized real API-provider run passes when a secret is actually mounted;
 19. one real supported local model run passes when actual local weights/runtime are available;
-20. SQLite integrity remains valid after backend and personality switching.
+20. SQLite integrity remains valid after backend and personality switching;
+21. `zero_blog` obtains a frozen generation/hash/provenance-bound ZeroStateSnapshot immediately before each blog cycle;
+22. Blog-Zero MiniUnifiedDB cannot become a competing canonical state authority for Zero;
+23. Curator runs through proposal/admission semantics and cannot promote model-derived text into canonical fact;
+24. Analyst/Prestage emits typed hypotheses, counterhypotheses, implications, contradictions and source-bound factual blocks;
+25. Writer receives the admitted compact MiniBlockKit plus bounded continuity rather than an uncontrolled raw-log dump;
+26. post-write claim verification can trace every factual public claim to an admitted block/source or rejects/rewrites it;
+27. narrative memory can support "I previously thought/wrote X" but cannot prove X;
+28. a current ZeroStateSnapshot overrides conflicting old narrative memory as fact authority while preserving the conflict as autobiographical history;
+29. staged cognition remains backend/provider replaceable; three Mistral roles are the default preset, not binary identity;
+30. daily curation plus repeated blog cycles preserve MiniUnifiedDB integrity, provenance and bounded memory growth over long-running replay tests.
 
 Mock/fixture/component PASS does not imply real-model final PASS.
 
@@ -239,6 +487,8 @@ Verified locally on 2026-08-22:
 - SQLite `integrity_check = ok`.
 
 Real Mistral/provider acceptance is still uncredited in this chat sandbox because no authorized API secret is mounted. The local-model fixture proves the backend contract, not model quality.
+
+**The three-role BlogEntityOS sister-instance architecture (Curator + Analyst/Prestage + Writer), frozen ZeroStateSnapshot synchronization, MiniBlockKit fusion and post-write claim gate are canonical target requirements from this directive update and MUST NOT be reported as implemented until corresponding code/tests/receipts exist.**
 
 ## 10. Canonical paths
 

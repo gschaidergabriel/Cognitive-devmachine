@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-22T03:36:42Z. **3976 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-22T04:06:42Z. **3999 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T10:06:08+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T10:19:20+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3878 |
+| baunotiz | 3901 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2330 |
-| baunotiz | bauverlauf.jsonl | 1500 |
+| baunotiz | git-commit | 2342 |
+| baunotiz | bauverlauf.jsonl | 1511 |
 | baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3976 · Gegenhypothese: 0 von 3976
+## Hypothese: 0 von 3999 · Gegenhypothese: 0 von 3999
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,166 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T10:06:08+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### native: fix Mini Entity source split boundary
+
+`baunotiz-bauverlauf-9cf2399c1578b649ccfe` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:19:20+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### native: fix Mini Entity source split boundary
+
+`baunotiz-git-e18cb8fa763fe675af9c5223e2bfcfd90dd007ce` · baunotiz · git-commit · 2026-08-22T10:19:20+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+native: fix Mini Entity source split boundary
+
+### native: add Mini Entity configuration and CLI surface
+
+`baunotiz-bauverlauf-f9fd03b9a2872855450c` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:18:04+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### native: add Mini Entity configuration and CLI surface
+
+`baunotiz-git-fd5e110aa72ba1e08ef0d4556a28c794a04dbd8f` · baunotiz · git-commit · 2026-08-22T10:18:04+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+native: add Mini Entity configuration and CLI surface
+
+### native: add atomic study and source-CAS commit layer
+
+`baunotiz-bauverlauf-ffb6927142f8c0616fb2` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:17:42+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### native: add atomic study and source-CAS commit layer
+
+`baunotiz-git-cebde0eacda97329b233e4ff8ba3f3830f560d3f` · baunotiz · git-commit · 2026-08-22T10:17:42+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+native: add atomic study and source-CAS commit layer
+
+### native: add Mini Entity inference boundary
+
+`baunotiz-bauverlauf-1f5ee2f27007f4a667ec` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:17:12+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### native: add Mini Entity inference boundary
+
+`baunotiz-git-ba1dbb166e27d36dc7cad4bf1a580b21351913ff` · baunotiz · git-commit · 2026-08-22T10:17:12+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+native: add Mini Entity inference boundary
+
+### native: add Mini Entity profile and evidence packet layer
+
+`baunotiz-bauverlauf-a7932e8bf400e7000e2f` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:16:53+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### native: add Mini Entity profile and evidence packet layer
+
+`baunotiz-git-6facbcecf02ef9a4f58babc9e503672b19d86b8b` · baunotiz · git-commit · 2026-08-22T10:16:53+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+native: add Mini Entity profile and evidence packet layer
+
+### native: add Mini Entity core and state substrate
+
+`baunotiz-bauverlauf-dd6d807f76cfd903e636` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:16:34+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### native: add Mini Entity core and state substrate
+
+`baunotiz-git-20a0f65f10094cc557c6d0441e0aa5995475a1de` · baunotiz · git-commit · 2026-08-22T10:16:34+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+native: add Mini Entity core and state substrate
+
+### native: add source-bound Mini Entity 0.7 entry unit
+
+`baunotiz-bauverlauf-38fd33854139c0c975c4` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:16:14+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### native: add source-bound Mini Entity 0.7 entry unit
+
+`baunotiz-git-b46f11f4bec1b7d82f7a6f751b200e28cc10147e` · baunotiz · git-commit · 2026-08-22T10:16:14+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+native: add source-bound Mini Entity 0.7 entry unit
+
+### state: advance state-box mechanism and native provenance frontier
+
+`baunotiz-bauverlauf-64a8845a717e8ba5e295` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:08:25+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### state: advance state-box mechanism and native provenance frontier
+
+`baunotiz-git-b9e1104bcafa00b95152968ea9f6dde91b89f3b0` · baunotiz · git-commit · 2026-08-22T10:08:25+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+state: advance state-box mechanism and native provenance frontier
+
+### evidence: record deterministic state-box reference support
+
+`baunotiz-bauverlauf-42769bb721a18ae67747` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:07:56+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### evidence: record deterministic state-box reference support
+
+`baunotiz-git-74a1510dd43da6d97c14f3fc613ee1f1176711b7` · baunotiz · git-commit · 2026-08-22T10:07:56+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+evidence: record deterministic state-box reference support
+
+### test: add state-box epistemic and determinism falsifiers
+
+`baunotiz-bauverlauf-fff3f16242ab1186ad36` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:07:23+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### test: add state-box epistemic and determinism falsifiers
+
+`baunotiz-git-2526ca946937ff2df9425c68c408e487a8bca437` · baunotiz · git-commit · 2026-08-22T10:07:23+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+test: add state-box epistemic and determinism falsifiers
 
 ### feat: add deterministic generic state-box reference algorithm
 
@@ -70,166 +230,6 @@ research: bind UNKNOWN red guard into Mini Entity fusion receipt
 ### fix: remove duplicate state-box delta key
 
 `baunotiz-bauverlauf-95a8d5d4afd5bbeba8db` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:05:22+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### fix: remove duplicate state-box delta key
-
-`baunotiz-git-45c750ab1340782a50e106209c0047dc4091484a` · baunotiz · git-commit · 2026-08-22T10:05:22+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-fix: remove duplicate state-box delta key
-
-### config: make Zero state-box interpretation machine-executable
-
-`baunotiz-bauverlauf-60e518802a9c105f0952` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:05:08+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### config: make Zero state-box interpretation machine-executable
-
-`baunotiz-git-f2cb2ad5cde5d3d4d301aa1d91a5f2264d78b5fc` · baunotiz · git-commit · 2026-08-22T10:05:08+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-config: make Zero state-box interpretation machine-executable
-
-### research: correct go unusual-experiment coordination record
-
-`baunotiz-bauverlauf-00ad327fa2901d397943` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:04:33+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: correct go unusual-experiment coordination record
-
-`baunotiz-git-830238fdf5b3ef93c0b510f2e2160ecf43b7b1b9` · baunotiz · git-commit · 2026-08-22T10:04:33+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: correct go unusual-experiment coordination record
-
-### test: add structured Clay contract convergence guard
-
-`baunotiz-bauverlauf-75b1ed7bf8112643e32c` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:03:55+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### test: add structured Clay contract convergence guard
-
-`baunotiz-git-c34e236dd42db73e7fa8453ad2197d3e82812436` · baunotiz · git-commit · 2026-08-22T10:03:55+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-test: add structured Clay contract convergence guard
-
-### research: fuse Mini Entity runtime and study-surface findings
-
-`baunotiz-bauverlauf-0774f40595041eff5e3c` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:03:42+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: fuse Mini Entity runtime and study-surface findings
-
-`baunotiz-git-8df8e34eac5b12be2579b2f24f257f3afa52f20f` · baunotiz · git-commit · 2026-08-22T10:03:42+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: fuse Mini Entity runtime and study-surface findings
-
-### docs: bind all observed Mini Entity 0.6 artifact identities
-
-`baunotiz-bauverlauf-301713010b7df07614f0` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:02:25+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### docs: bind all observed Mini Entity 0.6 artifact identities
-
-`baunotiz-git-6264fba3d9abb89fedf378e645e7cf7e799e1001` · baunotiz · git-commit · 2026-08-22T10:02:25+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-docs: bind all observed Mini Entity 0.6 artifact identities
-
-### build: add source-bound repeatable native provenance wrapper
-
-`baunotiz-bauverlauf-ae223a4f5fa099d53e52` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:01:46+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### build: add source-bound repeatable native provenance wrapper
-
-`baunotiz-git-98e1ff6b1b435835fa276bb0171d2dad26d1c3d1` · baunotiz · git-commit · 2026-08-22T10:01:46+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-build: add source-bound repeatable native provenance wrapper
-
-### evidence: expand 0.6 same-version artifact collision audit
-
-`baunotiz-bauverlauf-0f149d47883801ab0723` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:00:36+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### evidence: expand 0.6 same-version artifact collision audit
-
-`baunotiz-git-4fa6c00356ce9fbaa231e2c8cb0328b591ab6efe` · baunotiz · git-commit · 2026-08-22T10:00:36+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-evidence: expand 0.6 same-version artifact collision audit
-
-### state: expose native artifact reproducibility blocker
-
-`baunotiz-bauverlauf-861c63eac87afa74f452` · baunotiz · bauverlauf.jsonl · 2026-08-22T09:59:52+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### state: expose native artifact reproducibility blocker
-
-`baunotiz-git-45fc5701bb240bab291f33206fb0e6baeee0a65b` · baunotiz · git-commit · 2026-08-22T09:59:52+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-state: expose native artifact reproducibility blocker
-
-### evidence: record go native artifact identity reconciliation
-
-`baunotiz-bauverlauf-71200819b74191f33066` · baunotiz · bauverlauf.jsonl · 2026-08-22T09:59:32+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### evidence: record go native artifact identity reconciliation
-
-`baunotiz-git-b4dfaf17c3c6193d253384ce704e43148a78ae65` · baunotiz · git-commit · 2026-08-22T09:59:32+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-evidence: record go native artifact identity reconciliation
-
-### test: add native Mini Entity provenance gate
-
-`baunotiz-bauverlauf-84b96bcd050a64881b0a` · baunotiz · bauverlauf.jsonl · 2026-08-22T09:57:58+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

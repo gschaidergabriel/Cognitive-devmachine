@@ -27,7 +27,32 @@ jobs:
           printf 'sha=%s\n' "$GITHUB_SHA"
           git rev-parse HEAD
           git status --short
-      - name: Run strict ClayCode admission regression
+      - name: Run v1 strict ClayCode admission regression
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
+      - name: Run Together paid-create safety regression
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'
+      - name: Regenerate and validate compositional SFT v2
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_sft_v2.py
+          python3 validate_sft_v1.py train_v2.jsonl
+          python3 validate_sft_v1.py validation_v2.jsonl
+      - name: Generate compositional held-out OOD v2
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_eval_ood_v2.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[json.loads(x) for x in Path('eval_ood_v2.jsonl').read_text().splitlines() if x.strip()]
+          assert len(rows)==320, len(rows)
+          assert len({x['id'] for x in rows})==320
+          assert all(x['must_contain'] for x in rows)
+          print({'ood_v2_cases':len(rows),'unique_ids':320})
+          PY

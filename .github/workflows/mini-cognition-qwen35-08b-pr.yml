@@ -35,7 +35,8 @@ jobs:
             launch_together_qwen35_08b_v1.py \
             test_eval_exact_vector_v1.py \
             test_eval_compositional_exact_vector_v1.py \
-            test_launch_together_qwen35_08b_v1.py
+            test_launch_together_qwen35_08b_v1.py \
+            test_free_only_qwen35_08b_v1.py
       - name: Regenerate and validate SFT v2
         run: |
           python generate_sft_v2.py
@@ -46,4 +47,6 @@ jobs:
           python test_eval_exact_vector_v1.py
           python test_eval_compositional_exact_vector_v1.py
       - name: Direct Together launcher no-network safety
-        run: python test_launch_together_qwen35_08b_v1.py
+        run: |
+          python test_launch_together_qwen35_08b_v1.py
+          python test_free_only_qwen35_08b_v1.py

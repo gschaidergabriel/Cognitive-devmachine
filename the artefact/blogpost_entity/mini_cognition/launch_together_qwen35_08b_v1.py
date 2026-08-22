@@ -5,12 +5,20 @@ from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
 
-def _default_supervisor_policy():
+def _default_repo_root():
     try:
-        repo_root=HERE.parents[2]
+        return HERE.parents[2]
     except IndexError:
-        return HERE/"__missing_supervisor_policy__"
-    return repo_root/"research_entity"/"claycode"/"autonomous"/"SUPERVISOR_INBOX.json"
+        return HERE
+
+REPO_ROOT=_default_repo_root()
+EXECUTION_CONTROL_CANDIDATES=(
+    REPO_ROOT/"research_entity"/"claycode"/"CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json",
+    REPO_ROOT/"research_entity"/"claycode"/"CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json",
+)
+
+def _default_supervisor_policy():
+    return REPO_ROOT/"research_entity"/"claycode"/"autonomous"/"SUPERVISOR_INBOX.json"
 
 SUPERVISOR_POLICY=_default_supervisor_policy()
 TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"; V2_VALIDATOR=HERE/"validate_corpus_v2.py"
@@ -36,8 +44,40 @@ def assert_provider_execution_allowed(path=None):
     if current_free_only(path):
         raise SystemExit(
             f"FREE_ONLY_PROVIDER_REJECT cost_class=PAID provider=Together model={MODEL} "
-            "before_secret_lookup=true before_network=true"
+            "before_secret_lookup=true before_network=true source=supervisor_inbox"
         )
+
+def active_repository_execution_controls(paths=None):
+    controls=[]
+    for raw_path in (EXECUTION_CONTROL_CANDIDATES if paths is None else tuple(paths)):
+        path=Path(raw_path)
+        if not path.exists():
+            continue
+        try:
+            doc=json.loads(path.read_text(encoding="utf-8"))
+        except Exception as e:
+            raise SystemExit(f"EXECUTION_CONTROL_UNREADABLE {path}: {type(e).__name__}") from e
+        if not isinstance(doc,dict):
+            raise SystemExit(f"EXECUTION_CONTROL_INVALID {path}: expected object")
+        if doc.get("status")=="ACTIVE":
+            controls.append((path,doc))
+    return controls
+
+def assert_active_repository_provider_allowed(paths=None):
+    for path,doc in active_repository_execution_controls(paths):
+        rules=doc.get("preserved_hard_rules") or {}
+        if not isinstance(rules,dict):
+            raise SystemExit(f"EXECUTION_CONTROL_INVALID {path}: preserved_hard_rules must be object")
+        mode=str(doc.get("mode","") or "").upper()
+        if mode=="FREE_ONLY" or rules.get("free_only") is True or rules.get("together_forbidden") is True:
+            try:
+                label=str(path.relative_to(REPO_ROOT))
+            except ValueError:
+                label=str(path)
+            raise SystemExit(
+                f"FREE_ONLY_PROVIDER_REJECT cost_class=PAID provider=Together model={MODEL} "
+                f"before_local_paid_work=true before_secret_lookup=true before_network=true source=active_control path={label}"
+            )
 
 def validate_static_contract():
     if MODEL!=EXPECTED_MODEL: raise SystemExit(f"MODEL_OVERRIDE_REJECTED expected {EXPECTED_MODEL!r}, got {MODEL!r}")
@@ -144,7 +184,7 @@ def created_job_identity_mismatches(meta,expected):
     return out
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();assert_active_repository_provider_allowed();local_checks()
     assert_provider_execution_allowed()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together

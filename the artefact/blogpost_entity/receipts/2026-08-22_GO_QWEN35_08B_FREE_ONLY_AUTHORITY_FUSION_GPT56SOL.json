@@ -1,0 +1,70 @@
+{
+  "schema": "clay-go-qwen35-free-only-authority-fusion/v3",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "target_main_sha": "1cff984085909652e75a4ea8a667139e18576ab0",
+  "target_main_tree": "aaf9320313ab067daf419101d72fc3640e2fe544",
+  "branch": "gpt56sol/go-free-only-authority-fusion-20260822-1844",
+  "pull_request": 914,
+  "claim_class": "SOURCE_DELTA_PLUS_BOUNDED_LOCAL_MECHANISM_EVIDENCE",
+  "current_main_observation": {
+    "provider_gate_present": true,
+    "provider_gate_source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json verified_updates.free_only",
+    "active_control_authority_present": true,
+    "active_control_mode": "FREE_ONLY",
+    "active_control_preserved_hard_rules": {"free_only": true, "together_forbidden": true},
+    "residual_defect": "The direct paid Together lane trusts derived Supervisor Inbox state as its execution-policy read. A stale or incorrectly false Inbox value must never override the ACTIVE 4.1/4.2 repository control authority."
+  },
+  "fusion_delta": {
+    "authority_order": [
+      "ACTIVE repository execution controls",
+      "Supervisor Inbox derived/verified state",
+      "provider secret/client/network path"
+    ],
+    "active_control_paths": [
+      "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json",
+      "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json"
+    ],
+    "behavior": "Any existing ACTIVE control with mode FREE_ONLY, free_only=true, or together_forbidden=true rejects the paid Together lane before local paid-lane corpus work, secret lookup, Together import, client construction, or network. The already-canonical Supervisor Inbox guard remains as an additional downstream fail-closed check.",
+    "no_env_override": true,
+    "canonical_validator_preserved": "validate_corpus_v2.py",
+    "provider_job_identity_fence_preserved": true
+  },
+  "adjudicated_parallel_work": {
+    "pr_886": "Superseded intent: caller-controlled CLAY_PROVIDER_MODE=PAID_ALLOWED was not acceptable as authority and its head carried older validator bytes.",
+    "main_free_only_fusion": "Main subsequently added a Supervisor-Inbox FREE_ONLY guard; this v3 delta narrows to authority precedence rather than duplicating that guard."
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment_consumed": false,
+    "shared_macrocycle_experiment": "FREE_ONLY_SECRET_NETWORK_TRIPWIRE",
+    "this_delta_use": "regression-only authority-order reproduction; no second unusual intervention"
+  },
+  "bounded_local_evidence_from_pre-rebase_equivalent_guard": {
+    "python_compile": "PASS",
+    "then_current_launcher_tests": "9/9 PASS",
+    "authority_tests": "3/3 PASS",
+    "provider_network_calls": 0,
+    "training_started": false,
+    "money_spent_usd": 0
+  },
+  "exact_current_source_review": {
+    "main_inbox_guard_observed": true,
+    "main_validate_corpus_v2_observed": true,
+    "main_full_provider_job_identity_verification_observed": true,
+    "active_4_2_free_only_observed": true,
+    "exact_pr_runner": "UNOBSERVED_AT_RECEIPT_WRITE"
+  },
+  "external_provider_fact_refresh": {
+    "scope": "public documentation only; no credentialed provider request",
+    "finding": "Together Full SFT remains a paid capability with a documented minimum job charge, so the direct Together training lane is non-free and must remain dormant under current FREE_ONLY authority."
+  },
+  "nonclaims": [
+    "credentialed Together preflight PASS",
+    "Together training PASS",
+    "model quality PASS",
+    "RAM gate PASS",
+    "whole Mini Entity PASS"
+  ],
+  "next_gate": "Run the exact PR-head cognition workflow in an actually-started admitted runner. Separately keep FREE_ONLY_FALLBACK_CHAIN_RECEIPT/v1 open for the exported direct/fallback provider router; this Together-lane authority delta does not mint router-wide credit."
+}

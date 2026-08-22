@@ -1,4 +1,4 @@
-# Mandatory Clay Visible Status Footer — Blogpost Entity
+# Mandatory Clay Visible Status Footer — Blogpost / Mini Entity
 
 Status: CURRENT
 Owner directive: `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
@@ -15,15 +15,16 @@ Canonical: <current main SHA>
 Organ: <worker/provenance>
 Trigger: <none|go|other>
 Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
-Program: Blogpost Entity all-in-one
+Program: Blogpost / Mini Entity all-in-one
 Stage: BLOGPOST_ENTITY_CLAY
-Goal: finish and prove the persistent Zero/EntityOS Blogpost Entity as one canonical `the artefact/blogpost_entity/BLOGPOST_ENTITY.clay` module
-Mistral: free key family only; secrets never exposed; live PASS requires an actually mounted key and successful sandbox call
-Truth law: UNKNOWN != ZERO != ERROR != MEASURED; narrative model cannot mint canonical self-state
-Swarm: architecture · ClayCode/runtime · state/evidence · personality/claim-gate · Mistral · adversarial · tests · fusion/hypofusion
+Goal: one portable persistent mini entity — one `.clay` executable + one SQLite MiniUnifiedDB; default Zero blog personality, runtime-configurable provider/token/system prompt
+Provider: Mistral default profile only; provider/model/token/request/response adapter replaceable without forking state; secrets never exposed
+Prompt law: editable personality/system prompt below immutable architecture truth guard
+Truth law: UNKNOWN != ZERO != ERROR != MEASURED; narrative model cannot mint canonical state
+Swarm: research/build orchestration only — architecture · ClayCode/runtime · state/evidence · personality/claim-gate · provider · adversarial · tests · fusion/hypofusion
 Together API: FORBIDDEN
 Current frontier: <dynamic>
 Acceptance: IN_PROGRESS|PASS|BLOCKED|UNRESOLVED
-Evidence note: local/component/mock PASS does not imply real-Mistral final PASS
+Evidence note: local/component/mock PASS does not imply real-provider final PASS
 Short commands: go · fusion · hypofusion · claycode · gwt · unifieddb · atomic · dump
 ```

@@ -2,6 +2,7 @@
 import importlib.util
 import unittest
 from pathlib import Path
+from generate_sft_v2 import build as build_v2
 
 HERE=Path(__file__).resolve().parent
 SPEC=importlib.util.spec_from_file_location("claycog_validate",HERE/"validate_sft_v1.py")
@@ -64,6 +65,25 @@ class RuntimeBindingGateTests(unittest.TestCase):
         code=valid_code('  state_note(c,"x","unterminated)\n')
         errors=V.validate_code(code)
         self.assertIn('unterminated_string',errors)
+
+    def test_unknown_intrinsic_is_rejected(self):
+        self.assertIn('unknown_intrinsic:mystery_focus',V.validate_code(valid_code('  mystery_focus(c,"x")\n')))
+
+    def test_wrong_intrinsic_arity_is_rejected(self):
+        self.assertIn('arity:focus_set:3!=2',V.validate_code(valid_code('  focus_set(c,"x","y")\n')))
+
+    def test_literal_punctuation_does_not_corrupt_arity(self):
+        self.assertEqual(V.validate_code(valid_code('  focus_set(c,"literal,(with),commas")\n')),[])
+
+    def test_sft_v2_paid_training_targets_are_intrinsic_closed(self):
+        train,validation=build_v2()
+        self.assertEqual((len(train),len(validation)),(1485,165))
+        bad=[]
+        for split,rows in (("train",train),("validation",validation)):
+            for i,row in enumerate(rows):
+                errors=V.validate_code(row["messages"][-1]["content"])
+                if errors: bad.append((split,i,row["family"],errors))
+        self.assertEqual(bad,[],bad[:20])
 
 
 if __name__=='__main__':

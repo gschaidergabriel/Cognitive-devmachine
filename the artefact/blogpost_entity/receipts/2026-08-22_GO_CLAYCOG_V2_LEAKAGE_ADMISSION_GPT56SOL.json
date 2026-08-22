@@ -1,13 +1,14 @@
 {
-  "schema": "claycog-v2-leakage-admission-receipt/v1",
+  "schema": "claycog-v2-leakage-admission-receipt/v2",
   "date": "2026-08-22",
   "executor": "GPT-5.6 Sol",
   "trigger": "go",
   "repository": "gschaidergabriel/clay-global-research-entity",
   "branch": "gpt56sol/go-claycog-v2-leakage-admission-20260822-1409",
+  "pull_request": 786,
   "branch_base_at_creation": "62b292a8097c5b53731ef6804704cf9938872616",
-  "refreshed_main_before_receipt": "cb46a34dff51d309e25fb909758a129f379c7497",
-  "candidate_head_before_receipt": "dafd86dfeda683cd3bb172d99a0e07095f947d44",
+  "refreshed_main_after_parallel_fusion": "1f9f3d0455c87b2ea67b0665a3131871d0c3b69c",
+  "candidate_head_before_this_receipt_update": "ed36a184ef4354482524a6b834997db460045db9",
   "owner_authority": {
     "directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
     "base_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
@@ -56,7 +57,7 @@
     "bounded_isolated_train_validation_structural_bad": 0,
     "bounded_isolated_validation_train_structural_bad": 0,
     "bounded_isolated_cross_overlap": 0,
-    "exact_repository_runner_reproduction": "OPEN_UNTIL_PR_WORKFLOW_EXECUTES"
+    "generalization_boundary": "exact disjointness is necessary but not sufficient; separate OOD v2 remains the promotion/generalization surface"
   },
   "ood_v2": {
     "generator": "the artefact/blogpost_entity/mini_cognition/generate_eval_ood_v2.py",
@@ -80,7 +81,7 @@
     "qwen25_05b_architecture": "Qwen2ForCausalLM / qwen2",
     "visible_qwen35_08b_architecture": "Qwen3_5ForConditionalGeneration / qwen3_5",
     "conclusion": "No public-catalog Qwen2-compatible template is currently established. Compatibility is not declared impossible; it remains an empirical API/provider gate.",
-    "v2_launcher_change": "remove guessed default template and require explicit CLAYCOG_TOGETHER_TEMPLATE after current compatible candidate is confirmed",
+    "v2_launcher_change": "no template default; explicit CLAYCOG_TOGETHER_TEMPLATE is mandatory after a current compatible candidate is identified",
     "source_urls": [
       "https://docs.together.ai/docs/fine-tuning/supported-models",
       "https://docs.together.ai/docs/fine-tuning/byom",
@@ -89,13 +90,26 @@
       "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json"
     ]
   },
-  "main_fusion": {
-    "new_main_commit_idempotent_create": "f231b2d93893eccf8a91850ba0512908456995f9",
-    "new_main_commit_pr_admission_runner": "cb46a34dff51d309e25fb909758a129f379c7497",
-    "v2_preserves_idempotent_create": true,
+  "parallel_main_fusion": {
+    "idempotent_create_commit": "f231b2d93893eccf8a91850ba0512908456995f9",
+    "pr_admission_runner_commit": "cb46a34dff51d309e25fb909758a129f379c7497",
+    "ambiguous_create_commit": "1f9f3d0455c87b2ea67b0665a3131871d0c3b69c",
     "v2_campaign_fingerprint": "exact train/validation SHA + from_hf_model + explicit template + epochs/evals/training config",
-    "duplicate_account_job_check": "before remote file allocation on create and immediately before billed create",
-    "ambiguous_create_policy": "never blind retry; inspect account job ledger"
+    "account_duplicate_fence": "before remote allocation on create and immediately before billed create",
+    "local_create_intent": "atomic O_EXCL 0600 ledger before remote billed POST",
+    "sdk_create_retry_policy": "max_retries=0",
+    "ambiguous_remote_result": "UNKNOWN_REMOTE_CREATE; retry blocked until exact provider reconciliation",
+    "v2_safety_regression": "the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v2.py"
+  },
+  "exact_pr_execution": {
+    "workflow": "claycog-v2-admission",
+    "first_run_id": 32559383547,
+    "first_job_id": 96998523280,
+    "first_run_conclusion": "failure",
+    "first_job_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT",
+    "semantic_test_failure": false,
+    "rerun_policy": "do not treat repeated pre-step admission failures as product regressions"
   },
   "documentation_delta": {
     "the_artefact_readme_old_endpoint": "ClayVerse single-container candidate",
@@ -114,12 +128,12 @@
     "whole_mini_entity_pass": false
   },
   "next_discriminators": [
-    "execute the exact PR-head claycog-v2-admission workflow on an actually-started GitHub-hosted runner",
+    "obtain an actually-started exact PR-head v2 admission run; current GitHub-hosted run failed before visible steps",
     "if a current Qwen2-compatible Together template becomes available, run preflight only and capture model_limits/file-validation/price without billed create",
     "only after exact fingerprint authorization and compatibility/admission evidence, create one billed full-SFT job",
     "evaluate tuned checkpoint against untuned 0.5B and at least one larger general model on the exact OOD suite",
     "quantize accepted checkpoint to Q4_K_M and measure real peak process RSS at context 2048",
     "integrate through existing generic local_exec path without resetting MiniUnifiedDB state"
   ],
-  "claim_class": "SOURCE_MECHANISM_SUPPORTED_V2_EXACT_PR_RUNTIME_OPEN_TRAINING_NOT_STARTED"
+  "claim_class": "SOURCE_MECHANISM_SUPPORTED_V2_EXACT_PR_EXECUTION_ADMISSION_BLOCKED_TRAINING_NOT_STARTED"
 }

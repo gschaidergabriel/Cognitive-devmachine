@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """Together BYOM launcher for the 0.5B ClayCode cognition campaign.
 
-Default mode is preflight: regenerate/validate corpus, upload/validate files, check the
-Together template, and print a server price estimate. A billed training job is created
-only with --create after all gates pass and the operator binds create authorization to
-the exact deterministic campaign fingerprint.
+Default mode is preflight: regenerate/validate corpus, validate a *current explicit*
+Together full-fine-tuning template, upload/validate files, and print a server price
+estimate. A billed training job is created only with --create after all gates pass and
+the operator binds create authorization to the exact deterministic campaign fingerprint.
 
-Together's regular catalog has no native 0.5B Qwen entry. We therefore use BYOM with
-Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family catalog-template candidate.
-Template model_limits and price estimation do NOT prove BYOM compatibility because they
-do not validate from_hf_model. BYOM compatibility remains open until Together accepts
-(and subsequently starts) the requested HF checkpoint under the selected template.
+Provider admission is fail-closed. Together BYOM requires `model` to be a base from its
+fine-tuning catalog whose architecture matches `from_hf_model`. The owner-locked target
+Qwen/Qwen2.5-0.5B is Qwen2ForCausalLM. At the 2026-08-22 catalog snapshot there is no
+Qwen2/Qwen2.5 full-FT base, and the nearest Qwen3.5-0.8B entry is a different
+Qwen3_5ForConditionalGeneration architecture. Therefore this launcher has NO guessed
+Together template default. Set CLAYCOG_TOGETHER_TEMPLATE only after refreshing the
+catalog and identifying an architecture-compatible admitted base.
 
 Billed-create safety is deliberately stricter than ordinary API use. The CREATE call is
 made through a zero-retry SDK client and is preceded by an atomic local campaign intent
@@ -26,10 +28,11 @@ HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v2.jsonl"
 VALID=HERE/"validation_v2.jsonl"
 HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL","Qwen/Qwen2.5-0.5B")
-TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-7B-Instruct-Turbo")
+TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE") or None
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
 EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00"))
+FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"
 CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT_STATUSES={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
@@ -38,14 +41,52 @@ def run_local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_corpus_v2.py"),str(TRAIN),str(VALID)],check=True)
 
-def wait_file(client,file_id):
+def require_explicit_template(template):
+    if not template:
+        raise SystemExit(
+            "NO_COMPATIBLE_TOGETHER_TEMPLATE_CONFIGURED: current 2026-08-22 Together full-FT catalog "
+            "has no verified Qwen2/Qwen2.5 base for Qwen2ForCausalLM. Refresh the catalog and set "
+            "CLAYCOG_TOGETHER_TEMPLATE only after an architecture-compatible base appears."
+        )
+    return template
+
+def get_full_training_limits(client,template):
+    """Current Together SDK-v2 capability gate. Old SDK names are rejected, not guessed."""
+    fine_tuning=client.fine_tuning
+    get_limits=getattr(fine_tuning,"get_model_limits",None)
+    if get_limits is None:
+        raise SystemExit("TOGETHER_SDK_V2_REQUIRED: fine_tuning.get_model_limits(model=...) unavailable")
+    limits=get_limits(model=template)
+    if getattr(limits,"full_training",None) is None:
+        raise SystemExit(f"Template is not full-FT capable: {template}")
+    return limits
+
+def wait_file(client,file_id,timeout_seconds=FILE_WAIT_SECONDS):
+    """Wait for current FileResponse.processed; tolerate legacy status only as read fallback."""
+    deadline=time.monotonic()+timeout_seconds
     while True:
         meta=client.files.retrieve(file_id)
-        status=str(meta.processing_status)
+        if getattr(meta,"processed",None) is True:
+            return meta
+        status=str(getattr(meta,"processing_status","") or "").upper()
         if status=="COMPLETED": return meta
-        if status in ("INVALID_FORMAT","FAILED"):
+        if status in ("INVALID_FORMAT","FAILED","ERROR"):
             raise RuntimeError(f"Together rejected {file_id}: {status} {getattr(meta,'validation_report',None)}")
+        if time.monotonic()>=deadline:
+            raise TimeoutError(f"Timed out waiting for Together file processing: {file_id}")
         time.sleep(5)
+
+def estimate_full_sft_price(client,train_file_id,valid_file_id,template):
+    """Use the current Together Python SDK-v2 string contract for a read-only estimate."""
+    return client.fine_tuning.estimate_price(
+        training_file=train_file_id,
+        validation_file=valid_file_id,
+        model=template,
+        n_epochs=EPOCHS,
+        n_evals=EVALS,
+        training_method="sft",
+        training_type="full",
+    )
 
 def objdict(x):
     if hasattr(x,"model_dump"): return x.model_dump()
@@ -62,7 +103,7 @@ def sha256_file(path):
 
 def campaign_descriptor(hf_model):
     return {
-        "schema":"claycog-05b-together-campaign/v1",
+        "schema":"claycog-05b-together-campaign/v2",
         "from_hf_model":hf_model,
         "template_model":TEMPLATE,
         "training_sha256":sha256_file(TRAIN),
@@ -70,7 +111,7 @@ def campaign_descriptor(hf_model):
         "epochs":EPOCHS,
         "evals":EVALS,
         "training_method":"sft",
-        "training_type":"Full",
+        "training_type":"full",
         "train_on_inputs":"auto",
         "learning_rate":1e-5,
         "warmup_ratio":0.03,
@@ -179,7 +220,7 @@ def arm_create_intent(fingerprint,hf_model,suffix):
     except OSError: pass
     path=create_ledger_path(fingerprint)
     payload={
-        "schema":"claycog-together-create-intent/v1",
+        "schema":"claycog-together-create-intent/v2",
         "fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "status":"CREATE_ARMED",
@@ -229,22 +270,26 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--create",action="store_true",help="create billed fine-tuning job after exact-fingerprint preflight")
     ap.add_argument("--instruct-ablation",action="store_true",help="use Qwen/Qwen2.5-0.5B-Instruct BYOM checkpoint")
+    ap.add_argument("--template",help="explicit current Together full-FT base; must match checkpoint architecture")
     args=ap.parse_args()
     if not os.environ.get("TOGETHER_API_KEY"):
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     hf_model="Qwen/Qwen2.5-0.5B-Instruct" if args.instruct_ablation else HF_MODEL
 
+    global TEMPLATE
+    if args.template:
+        TEMPLATE=args.template
+    require_explicit_template(TEMPLATE)
+
     run_local_checks()
     fingerprint=campaign_fingerprint(hf_model)
     suffix=campaign_suffix(fingerprint)
 
-    # Keep Together import behind the credential/local-validation boundary so pure safety
+    # Keep Together import behind credential/local-validation boundary so pure safety
     # tests can execute without the SDK and no network-capable object exists before checks.
     from together import Together
     client=Together()
-    limits=client.fine_tuning.model_limits(model_name=TEMPLATE)
-    if not getattr(limits,"supports_full_training",False):
-        raise SystemExit(f"Template is not full-FT capable: {TEMPLATE}")
+    limits=get_full_training_limits(client,TEMPLATE)
 
     # On create, bind human/operator intent to exact deterministic bytes before remote
     # uploads, then check both local and account ledgers before allocating remote files.
@@ -257,17 +302,10 @@ def main():
     valid_file=client.files.upload(file=str(VALID),purpose="fine-tune",check=True)
     wait_file(client,train_file.id); wait_file(client,valid_file.id)
 
-    estimate=client.fine_tuning.estimate_price(
-        training_file=train_file.id,
-        validation_file=valid_file.id,
-        model=TEMPLATE,
-        n_epochs=EPOCHS,
-        n_evals=EVALS,
-        training_method={"method":"sft","train_on_inputs":"auto"},
-        training_type={"type":"Full"},
-    )
+    estimate=estimate_full_sft_price(client,train_file.id,valid_file.id,TEMPLATE)
     price=float(estimate.estimated_total_price)
     report={
+        "schema":"CLAYCOG_05B_TOGETHER_PREFLIGHT/v2",
         "mode":"preflight" if not args.create else "create",
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
@@ -280,6 +318,7 @@ def main():
         "price_detail":objdict(estimate),
         "template_admission_status":"MODEL_LIMITS_FULL_FT_ACCEPTED",
         "byom_compatibility_status":"UNPROVEN_UNTIL_CREATE_ACCEPTS_FROM_HF_MODEL_AND_TRAINING_STARTS",
+        "provider_catalog_boundary":"EXPLICIT_TEMPLATE_REQUIRED_NO_AUTOMATIC_FALLBACK",
     }
     print(json.dumps(report,indent=2,default=str))
     if not estimate.allowed_to_proceed:

@@ -1,0 +1,92 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "joined_main_sha": "62b292a8097c5b53731ef6804704cf9938872616",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "result_class": "SOURCE_DELTA_PLUS_BOUNDED_ISOLATED_FALSIFIER",
+  "findings": [
+    "Current canonical program is the neutral Mini Entity pipeline plus optional replaceable 0.5B ClayCode cognition; the older ClayVerse container bootstrap is superseded for active product work.",
+    "PR 770 carrying the 0.5B ClayCode corpus/spec/launcher was already merged before this cycle; training remained not started in current PROGRAM_STATE.",
+    "Together BYOM documentation requires architecture match and advises choosing the closest available size; if all catalog templates are larger, choose the smallest. Therefore 0.5B-to-7B size difference alone is not a deterministic incompatibility claim.",
+    "Together's price-estimate surface does not bind from_hf_model or hf_model_revision, so estimate success is a budget/data/template gate and cannot prove BYOM checkpoint compatibility.",
+    "Together create supports hf_model_revision and the job-list response exposes suffix/status/model/training metadata, enabling a reproducible server-ledger replay fence.",
+    "Current mandatory visible status footer on main was stale relative to the newer owner directive and incorrectly stated Together was fully forbidden; branch delta reconciles that policy surface."
+  ],
+  "source_delta": {
+    "branch": "gpt56sol/go-claycog-paid-boundary-20260822",
+    "pre_receipt_head": "07178c4838619f6ec6b68f79473c3526cc37b829",
+    "launcher_path": "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py",
+    "launcher_git_blob": "b51bd3fa1fa69f7a127980bba6490467818c2dd6",
+    "launcher_sha256": "2088d6c40d669b052989f789680c6a5ffd92bfa7b0d8d3c091d96a5a740bfeb2",
+    "test_path": "the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py",
+    "test_git_blob": "7206fa0f23de46f39af93fc7874a29f259507bf7",
+    "readme_git_blob": "85ac54aa782c27eaf7c1fe1b515dce6d8eeba402",
+    "footer_git_blob": "f3eb07b066fba92a9f588ebad6d857ecd57b7f4b",
+    "mechanisms": [
+      "billed create requires exact 40-hex Hugging Face commit pin",
+      "campaign fingerprint binds model/revision/template/train+validation SHA-256 and training hyperparameters",
+      "deterministic Together suffix derives from campaign fingerprint",
+      "server job ledger is checked before create",
+      "same-campaign pending/queued/running/compressing/uploading/cancel_requested/completed jobs hard-abort",
+      "error/cancelled same-campaign jobs require exact explicit --retry-job-id",
+      "preflight report explicitly labels estimate scope and checkpoint compatibility as unproven"
+    ]
+  },
+  "isolated_execution": {
+    "environment": "OpenAI isolated Linux container",
+    "python": "3.13.5",
+    "network": "DNS to github.com unavailable; no external provider call was attempted",
+    "exact_source_binding": "local executed launcher git-blob SHA b51bd3fa1fa69f7a127980bba6490467818c2dd6 equals GitHub branch launcher blob; local executed test git-blob SHA 7206fa0f23de46f39af93fc7874a29f259507bf7 equals GitHub branch test blob",
+    "commands": [
+      "python3 -m py_compile launch_together_v1.py test_launch_together_safety_v1.py",
+      "python3 test_launch_together_safety_v1.py -v"
+    ],
+    "tests_run": 6,
+    "tests_passed": 6,
+    "tests_failed": 0
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "paid-create same-campaign replay simulation",
+    "intervention": "fake Together job ledger injected same fingerprint-derived suffix under pending/running/completed/error states",
+    "prediction": "active/final jobs always abort; terminal error requires exact reviewed job id before retry",
+    "observed": "prediction matched in bounded deterministic tests",
+    "cost": 0,
+    "secret_used": false,
+    "network_used": false
+  },
+  "native_lane_review": {
+    "donor_pr": 769,
+    "status_observed": "OPEN_DRAFT_NOT_MERGEABLE_AT_CURRENT_REFRESH",
+    "finding": "current native 0.7 main still lacks the donor's fail-closed canonical profile-v2 semantic admission boundary; donor documents missing canonical collect/probe/compile envelope and post-inference pipeline gate",
+    "action_this_cycle": "reviewed, not duplicated or force-merged; exact parity remains separate native frontier"
+  },
+  "training_state": {
+    "together_api_key_mounted": false,
+    "server_preflight_executed": false,
+    "paid_job_created": false,
+    "job_id": null,
+    "compatibility": "OPEN_API_GATE",
+    "budget_gate_usd": 18.0,
+    "campaign_ceiling_eur": 20.0
+  },
+  "nonclaims": [
+    "No Together BYOM compatibility is claimed.",
+    "No price estimate from the live Together account is claimed.",
+    "No training job or checkpoint quality is claimed.",
+    "No Q4_K_M runtime RSS result is claimed.",
+    "No native Mini Entity 0.7 runtime PASS is claimed.",
+    "No whole Mini Entity product PASS is claimed."
+  ],
+  "next_discriminators": [
+    "With TOGETHER_API_KEY mounted only in an authorized execution environment, run preflight-only and record file validation, model_limits and authoritative price estimate without --create.",
+    "Resolve and pin the exact Hugging Face commit for Qwen/Qwen2.5-0.5B before any billed create.",
+    "Only if preflight remains within budget, run one owner-authorized create and treat BYOM checkpoint admission as empirical; never duplicate the fingerprinted campaign blindly.",
+    "After checkpoint completion: OOD/base/larger-model evaluation, Q4_K_M quantization, measured peak RSS <1 GiB at context 2048, then generic local_exec integration.",
+    "For native 0.7, rebase/fuse the semantic admission donor or implement full canonical profile-v2 compile+gate parity, then execute the exact transitive-source-bound build/runtime/fault matrix on an admitted runner."
+  ]
+}

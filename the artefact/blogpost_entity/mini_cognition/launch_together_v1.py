@@ -5,19 +5,27 @@ Default mode is preflight: regenerate/validate corpus, upload/validate files, ch
 Together template, and print a server price estimate. A billed training job is created
 only with --create after all gates pass.
 
-Together's current regular catalog has no native 0.5B Qwen entry. We therefore use BYOM
-with Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family catalog-template candidate. Compatibility is
-an empirical API gate; a template/checkpoint mismatch must fail closed before promotion. We do not silently
-fall back to a Qwen3.5 template because BYOM requires matching architecture.
+Together's current regular fine-tuning catalog has no native 0.5B Qwen entry. We therefore
+use BYOM with Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family template candidate.
+Compatibility is an empirical API gate; a template/checkpoint mismatch must fail closed.
+We do not silently fall back to Qwen3.5 because the current Qwen3.5 checkpoints expose a
+different architecture family from Qwen2.5.
+
+BYOM source revisions are pinned to exact Hugging Face commit SHAs. A custom model override
+must provide its own explicit 40-hex revision; a moving repository main is never admitted
+for a billed create.
 """
-import argparse, json, os, subprocess, sys, time
+import argparse, json, os, re, subprocess, sys, time
 from pathlib import Path
 from together import Together
 
 HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v1.jsonl"
 VALID=HERE/"validation_v1.jsonl"
-HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL","Qwen/Qwen2.5-0.5B")
+PRIMARY_HF_MODEL="Qwen/Qwen2.5-0.5B"
+PRIMARY_HF_REVISION="060db6499f32faf8b98477b0a26969ef7d8b9987"
+INSTRUCT_HF_MODEL="Qwen/Qwen2.5-0.5B-Instruct"
+INSTRUCT_HF_REVISION="7ae557604adf67be50417f59c2c2f167def9a775"
 TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-7B-Instruct-Turbo")
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
 EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
@@ -42,6 +50,25 @@ def objdict(x):
     if hasattr(x,"dict"): return x.dict()
     return str(x)
 
+def exact_revision(model, revision_env, default_model, default_revision):
+    revision=os.environ.get(revision_env,"").strip()
+    if not revision:
+        if model!=default_model:
+            raise SystemExit(f"{revision_env} is required when overriding {default_model} with {model}")
+        revision=default_revision
+    if not re.fullmatch(r"[0-9a-fA-F]{40}",revision):
+        raise SystemExit(f"{revision_env} must be an exact 40-hex Hugging Face commit SHA")
+    return revision.lower()
+
+def resolve_hf_source(instruct_ablation):
+    if instruct_ablation:
+        model=os.environ.get("CLAYCOG_INSTRUCT_HF_MODEL",INSTRUCT_HF_MODEL)
+        revision=exact_revision(model,"CLAYCOG_INSTRUCT_HF_REVISION",INSTRUCT_HF_MODEL,INSTRUCT_HF_REVISION)
+    else:
+        model=os.environ.get("CLAYCOG_HF_MODEL",PRIMARY_HF_MODEL)
+        revision=exact_revision(model,"CLAYCOG_HF_REVISION",PRIMARY_HF_MODEL,PRIMARY_HF_REVISION)
+    return model,revision
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--create",action="store_true",help="create billed fine-tuning job after preflight")
@@ -49,7 +76,7 @@ def main():
     args=ap.parse_args()
     if not os.environ.get("TOGETHER_API_KEY"):
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
-    hf_model="Qwen/Qwen2.5-0.5B-Instruct" if args.instruct_ablation else HF_MODEL
+    hf_model,hf_revision=resolve_hf_source(args.instruct_ablation)
 
     run_local_checks()
     client=Together()
@@ -74,6 +101,7 @@ def main():
     report={
         "mode":"preflight" if not args.create else "create",
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "epochs":EPOCHS,
         "evals":EVALS,
@@ -96,6 +124,7 @@ def main():
         validation_file=valid_file.id,
         model=TEMPLATE,
         from_hf_model=hf_model,
+        hf_model_revision=hf_revision,
         n_epochs=EPOCHS,
         n_evals=EVALS,
         n_checkpoints=1,
@@ -108,6 +137,7 @@ def main():
     print(json.dumps({
         "job_id":job.id,
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "full_fine_tune":True,
         "estimated_usd":price,

@@ -20,8 +20,7 @@ def validate_static_contract():
 
 def local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
-    subprocess.run([sys.executable,str(HERE/"validate_sft_v2.py"),str(TRAIN),"--against",str(VALID)],check=True)
-    subprocess.run([sys.executable,str(HERE/"validate_sft_v2.py"),str(VALID),"--against",str(TRAIN)],check=True)
+    subprocess.run([sys.executable,str(HERE/"validate_corpus_v2.py"),str(TRAIN),str(VALID)],check=True)
 
 def sha256_file(p):
     h=hashlib.sha256()

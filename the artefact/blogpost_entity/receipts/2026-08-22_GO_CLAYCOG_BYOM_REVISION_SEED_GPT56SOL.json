@@ -1,0 +1,49 @@
+{
+  "schema": "claycog-byom-reproducibility/v1",
+  "date": "2026-08-22",
+  "trigger": "go extra lang",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "source_main": "afbca677205ad54e5080afe0443e3092773615e2",
+  "branch": "gpt56sol/claycog-byom-revision-seed-20260822",
+  "problem": "The existing fingerprinted, atomic, zero-retry Together create path bound the Hugging Face repository name but not an immutable HF commit revision or explicit training random seed. A mutable model ref could therefore change checkpoint bytes without changing the intended model name, and seed provenance was implicit rather than campaign-bound.",
+  "checkpoint_identity": {
+    "primary_model": "Qwen/Qwen2.5-0.5B",
+    "primary_hf_revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "instruct_ablation_model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "instruct_hf_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "custom_model_policy": "A custom CLAYCOG_HF_MODEL requires an explicit exact 40-hex CLAYCOG_HF_REVISION."
+  },
+  "delta": [
+    "Campaign schema advanced to claycog-05b-together-campaign/v2.",
+    "Campaign fingerprint now binds exact hf_model_revision, learning rate, warmup ratio and random_seed in addition to the existing dataset digests/model/template/epochs/evals/training type/checkpoint count.",
+    "Atomic create-intent ledger schema advanced to v2 and stores the same revision- and seed-bound campaign descriptor.",
+    "Billed create passes hf_model_revision and explicit random_seed to Together while preserving max_retries=0 and UNKNOWN_REMOTE_CREATE fail-closed semantics.",
+    "After a returned job id, JOB_KNOWN is durably persisted before provider identity verification. The follow-up retrieve checks training/validation file ids, template, from_hf_model, hf_model_revision, epochs, evals and random_seed; mismatch or verification transport failure blocks replacement create and preserves the known job id."
+  ],
+  "exact_blobs": {
+    "launcher": "35351b2f831c58f6063d5154253359cfe60532d0",
+    "existing_safety_test": "b5ac9d983fac3061247ede6c0acdd7be547005a5",
+    "new_revision_seed_test": "9db8b678633f6e29db23612d879a27af9a9f6661"
+  },
+  "isolated_regression": {
+    "surface": "authorized isolated local Linux execution reconstructed from exact Git blobs",
+    "git_clone_attempt": "NETWORK_ADMISSION_BLOCKED_DNS; not classified as code failure",
+    "blob_hash_reconstruction": "MATCHED_ALL_THREE_EXPECTED_GIT_BLOBS",
+    "py_compile": "PASS",
+    "existing_create_safety": {"tests": 8, "passed": 8, "failed": 0},
+    "revision_seed_identity": {"tests": 5, "passed": 5, "failed": 0},
+    "together_sdk_network_calls": 0,
+    "billed_create_calls": 0,
+    "money_spent_usd": 0
+  },
+  "external_contract_basis": {
+    "together_byom": "Current Together BYOM supports specifying an HF checkpoint revision and requires architecture-compatible training template selection; authenticated service admission remains open.",
+    "together_create": "Current fine-tuning create contract exposes hf_model_revision and random_seed.",
+    "hf_revision_pins": "Resolved current public Hugging Face commit identities were captured before this delta."
+  },
+  "claim_boundary": "This proves bounded launcher reproducibility/safety mechanisms only. It does not prove a qwen2-compatible Together Full-FT template exists, BYOM compatibility, authenticated preflight, paid training start, checkpoint quality, OOD promotion, quantized RSS, native 0.7 acceptance, consciousness or whole Mini Entity PASS.",
+  "result": "MECHANISM_SUPPORTED_EXACT_BLOB_EXECUTION",
+  "next": "Merge without replacing newer parallel Together safety work. With an authorized mounted API key, first enumerate/admit a qwen2-compatible Full-FT template before upload; if none exists, do not spend. If admitted, run exact fingerprinted preflight and exactly one budget-gated create."
+}

@@ -6,20 +6,22 @@
   "program": "mini-entity-pipeline-all-in-one",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
   "canonical_main_at_fusion_join": "afbca677205ad54e5080afe0443e3092773615e2",
+  "canonical_main_at_rejoin": "cc8449642a76ff74467e02da78ecd38853d6dd76",
   "branch": "go/claycog-top-level-omega-fusion-20260822",
   "supersedes_local_pr": 776,
   "changed_blobs": {
     "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py": "3b9bdcd37cdc40a5c3fa48647d44737f38bc3fb1",
-    "the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py": "e0a417279302405aa7634173bd06738ba48fc6b9"
+    "the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py": "3ba755e4c38a104b7ac220e17c8ee52e515b9657"
   },
   "parallel_fusion": {
     "observed_main_progress": [
       "main independently hardened runtime binding multiplicity/exact runtime cfg semantics",
       "main independently made validate_corpus_v2 delegate to validate_sft_v1 as the canonical ClayCode validator",
-      "main independently hardened exact OOD omega-vector scoring"
+      "main independently hardened exact OOD omega-vector scoring",
+      "main added exact SFT-v2 corpus regeneration/hash regression and exact Hugging Face revision binding for the paid campaign"
     ],
     "retained_gap": "canonical validate_sft_v1 still credited omega commit/gates/authority/generation by raw substring and counted canonical binding lines without requiring brace-depth-1 placement",
-    "decision": "do not merge stale PR 776 wholesale; preserve main's stronger binding and v2 delegation work, then add only top-level statement and exact omega admission semantics to the canonical validator"
+    "decision": "do not merge stale PR 776 wholesale; preserve all newer main work and add only top-level statement and exact omega admission semantics to the canonical validator"
   },
   "repair": {
     "bindings": "preserve one-and-only-one structural binding call and additionally require the canonical runtime cfg binding exactly once at brace depth 1",
@@ -36,12 +38,15 @@
     "network_source_fetch": "BLOCKED_DNS",
     "method": "execute locally reconstructed files only after git hash-object matched GitHub blob ids",
     "validator_blob": "3b9bdcd37cdc40a5c3fa48647d44737f38bc3fb1",
-    "test_blob": "e0a417279302405aa7634173bd06738ba48fc6b9",
+    "merged_test_blob": "3ba755e4c38a104b7ac220e17c8ee52e515b9657",
     "current_main_v2_validator_blob": "90db81209ae83cb55ec29ce6d0469c6cc93ba1e2",
     "blob_matches": true,
     "py_compile": "PASS",
-    "focused_tests": {"passed": 16, "failed": 0, "result": "PASS"},
+    "focused_runtime_and_omega_tests": {"passed": 16, "failed": 0, "result": "PASS"},
     "current_main_v2_delegation_check": "PASS: exact current-main validate_corpus_v2 loaded the candidate validate_sft_v1 and canonical minimal ClayCode returned zero validation errors",
+    "canonical_corpus_v2_regression_preserved_in_merged_test": true,
+    "canonical_corpus_v2_regression_executed_in_local_container": false,
+    "canonical_corpus_v2_local_blocker": "current exact generator/corpus bytes were not locally mounted and container network DNS is unavailable",
     "classification": "EXACT_BLOB_FOCUSED_FUSION_PASS_NOT_FULL_CORPUS_PASS"
   },
   "one_unusual_experiment_for_entire_go": {
@@ -52,12 +57,13 @@
   },
   "together": {
     "owner_checkpoint": "Qwen/Qwen2.5-0.5B",
+    "exact_hf_revision_now_bound_on_main": true,
     "architecture_matching_template": "UNRESOLVED_PROVIDER_GATE",
     "api_secret_mounted": false,
     "dataset_uploaded": false,
     "training_job_started": false,
     "billed_action": false
   },
-  "evidence_boundary": "16/16 exact focused blob tests and exact current-main v2 delegation compatibility do not establish full generated-v2-corpus acceptance, Together BYOM compatibility, trained checkpoint quality, Q4_K_M RSS, local_exec integration or whole Mini Entity acceptance.",
-  "next_exact_gate": "Rejoin latest main, run the current v2 corpus generator plus canonical v2 corpus validator against this exact fused validator in an admitted isolated executor, then only after architecture-matching Together preflight consider server validation/upload and billed training."
+  "evidence_boundary": "16/16 exact focused blob tests and exact current-main v2 delegation compatibility do not establish full generated-v2-corpus acceptance under this candidate, Together BYOM compatibility, trained checkpoint quality, Q4_K_M RSS, local_exec integration or whole Mini Entity acceptance.",
+  "next_exact_gate": "Run the preserved CanonicalCorpusV2Tests on the exact merged PR checkout. If it passes, promote only the validator fusion. Separately, with owner-authorized environment-only Together credentials, perform architecture-matching provider preflight before any upload or billed create."
 }

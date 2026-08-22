@@ -59,9 +59,9 @@ The historical launcher filename is retained, but it now regenerates and validat
 after **preflight**. It checks the Together training template, validates/uploads files only after that gate, prints the
 server price estimate, and prints a deterministic `campaign_fingerprint`. It does not create a billed job.
 
-The fingerprint binds the exact v2 training/validation file digests plus `from_hf_model`, template, epochs, evaluations,
-training method/type, learning rate, warmup ratio and checkpoint count. A create must be authorized against exactly
-that preflight identity:
+The fingerprint binds the exact v2 training/validation file digests plus `from_hf_model`, **`hf_model_revision`**,
+template, epochs, evaluations, training method/type, learning rate, warmup ratio and checkpoint count. A create must be
+authorized against exactly that preflight identity:
 
 ```bash
 export CLAYCOG_CREATE_FINGERPRINT=<exact campaign_fingerprint from the same preflight>
@@ -70,8 +70,22 @@ python3 launch_together_v1.py --create
 
 A missing or stale fingerprint fails closed. Before remote file allocation on create, the launcher scans the account
 for an existing job carrying the deterministic campaign suffix. It repeats the duplicate check immediately before
-the billed create to narrow the check/use race. If the create transport outcome is ambiguous, **never blind-retry
-`--create`**: list/retrieve existing fine-tuning jobs first.
+the billed create to narrow the check/use race. The billed POST uses a zero-retry client and an atomic local create-intent
+ledger. If the create transport outcome is ambiguous, the local ledger remains `UNKNOWN_REMOTE_CREATE`; **never blind-retry
+`--create`** until the exact provider state is reconciled.
+
+### Exact Hugging Face source identity
+
+The default BYOM source is pinned to an exact Hugging Face commit instead of moving repository `main`:
+
+- `Qwen/Qwen2.5-0.5B` -> `060db6499f32faf8b98477b0a26969ef7d8b9987`;
+- `Qwen/Qwen2.5-0.5B-Instruct` -> `7ae557604adf67be50417f59c2c2f167def9a775`.
+
+The selected revision is part of the campaign fingerprint, persisted inside the local create-intent campaign descriptor,
+emitted in preflight/create evidence, and passed to Together as `hf_model_revision`. Changing only the model revision
+therefore produces a different paid-campaign identity. A custom `CLAYCOG_HF_MODEL` requires an exact 40-hex
+`CLAYCOG_HF_REVISION`; the instruct equivalents are `CLAYCOG_INSTRUCT_HF_MODEL` and
+`CLAYCOG_INSTRUCT_HF_REVISION`. Missing or malformed revisions fail closed.
 
 ### Together 0.5B caveat — refreshed 2026-08-22
 
@@ -83,10 +97,12 @@ The owner-required weights remain `Qwen/Qwen2.5-0.5B`. The default
 `Qwen/Qwen2.5-7B-Instruct-Turbo` value is therefore only a **live API probe**, not an assumed compatible training
 template. `model_limits` is checked before file upload; if it does not report Full-FT support, the campaign stops.
 `model_limits` and price estimation still do not prove `from_hf_model` compatibility: that remains OPEN until Together's
-create path accepts the exact checkpoint/template pair and the job actually reaches training.
+create path accepts the exact checkpoint/revision/template tuple and the job actually reaches training.
 
-Do not silently fall back to Qwen3.5-0.8B: that changes the owner-defined research question. If Together has no admitted
-Qwen2-compatible Full-FT template, use the same 0.5B full-SFT corpus on another owner-admitted full-FT runner.
+Do not silently fall back to Qwen3.5-0.8B. The current Qwen2.5-0.5B configuration is `Qwen2ForCausalLM` / `qwen2`,
+whereas Qwen3.5-0.8B is `Qwen3_5ForConditionalGeneration` / `qwen3_5`; an automatic fallback changes the architecture
+family and the owner-defined research question. If Together has no admitted Qwen2-compatible Full-FT template, use the
+same 0.5B full-SFT corpus on another owner-admitted full-FT runner.
 
 Together's current standard SFT Full Fine-Tuning rate for models up to 16B is `$0.54 / 1M processed tokens`, with a
 current `$4.00` minimum charge per standard job. V2 is roughly 2.51 MB train + 0.285 MB validation; character/4 arithmetic

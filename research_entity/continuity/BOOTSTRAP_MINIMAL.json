@@ -1,5 +1,5 @@
 {
-  "schema_version": "6.5",
+  "schema_version": "6.6",
   "entity_display_name": "Clay",
   "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
@@ -14,14 +14,14 @@
     "optional replaceable local model attachment when local inference is selected",
     "owner-required candidate generic 0.5B ClayCode cognition checkpoint once promoted"
   ],
-  "mission": "Finish and empirically prove one persistent portable multi-use mini entity: executable contains only the generic processing pipeline; Zero blog/personality and inference backend are fully editable runtime configuration; build and test a reusable 0.5B ClayCode cognition attachment with no fixed name/job.",
+  "mission": "Finish and empirically prove one persistent portable multi-use Mini Entity: executable contains only the generic processing pipeline; Zero blog/personality and inference backend are fully editable runtime configuration; build and test a reusable 0.5B ClayCode cognition attachment with no fixed name/job.",
   "hard_split": {
     "binary": "evidence -> generic preprocessor -> canonical envelope -> configured inference backend -> generic gates -> exactly-once/CAS -> atomic SQLite persistence",
     "database": "profile/personality/system prompt/application blob/API and local-inference settings plus default zero_blog preset",
     "cognition_weights": "generic ClayCode/GRF/Hyperposition/omega cognition only; identity/job/application stay runtime-configured",
     "regression": "never hard-code replaceable Zero/blog/personality/provider/model semantics into executable or checkpoint identity"
   },
-  "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; model narrative/cognition is never canonical state authority",
+  "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; REPORTED != MEASURED; model narrative/cognition is never canonical state or effect authority",
   "inference_law": {
     "remote_api": "runtime-configurable remote text generation",
     "local_server": "localhost/OpenAI-compatible text generation without token when configured",
@@ -30,28 +30,50 @@
     "identity": "switching inference backend or model must not reset MiniUnifiedDB state/history"
   },
   "claycog_05b": {
-    "status": "SOURCE_AND_CORPUS_READY_TRAINING_NOT_STARTED",
+    "status": "SFT_V2_CANONICAL_TRAINING_NOT_STARTED",
     "base": "Qwen/Qwen2.5-0.5B",
+    "ablation": "Qwen/Qwen2.5-0.5B-Instruct",
     "spec": "the artefact/blogpost_entity/mini_cognition/CLAYCODE_COGNITION_V1.md",
-    "corpus": "claycog-sft/v1 1650 examples, 1485 train, 165 validation, 0 structural invalid locally",
-    "ood": "200 held-out promotion probes",
+    "corpus": {
+      "canonical_schema": "claycog-sft/v2",
+      "examples": 1650,
+      "train": 1485,
+      "validation": 165,
+      "train_unique": 1485,
+      "validation_unique": 165,
+      "exact_cross_split_overlap": 0,
+      "prompt_cross_split_overlap": 0,
+      "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+      "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+      "v1_status": "REJECTED_AS_PAID_TRAINING_INPUT_DUPLICATE_HEAVY_VALIDATION_LEAKAGE"
+    },
+    "ood": "current-main 200-case held-out promotion suite; semantic/intrinsic hardening remains under active fusion",
     "structured_action": "typed omega; commit only after grammar/type/schema/authority/generation validation",
-    "together": "BYOM compatibility OPEN; owner-authorized training only; USD18 single-job gate; no job started",
+    "together": "owner-authorized bounded training only; current public Full-FT catalog has no admitted Qwen2/Qwen2.5 template observed; 7B same-family candidate is not accepted as 0.5B compatibility proof; compatibility remains OPEN/BLOCKED pending exact compatible provider admission; USD18 single-job gate; no job started",
+    "paid_create_safety": "exact campaign fingerprint + local create-intent ledger + zero-retry billed CREATE + UNKNOWN_REMOTE_CREATE fail-closed reconciliation",
     "deployment": "Q4_K_M candidate must measure peak RSS <1GiB at ctx 2048"
   },
+  "native_lane": {
+    "current_source_version": "mini-entity/0.7.0-dev1",
+    "source_bound_build_mechanisms": "PRESENT",
+    "current_acceptance": "EXACT_CURRENT_0_7_REPEAT_BUILD_RUNTIME_FAULT_MATRIX_STILL_OPEN"
+  },
   "sandbox_local_backend": {
-    "version": "mini-entity/0.6.0",
-    "status": "CONTRACT_TESTED",
+    "historical_credited_version": "mini-entity/0.6.0",
+    "status": "CONTRACT_TESTED_HISTORICAL_SCOPE_ONLY",
     "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json",
     "real_model_quality": "NOT_YET_CREDITED_FIXTURE_ONLY"
   },
   "default_application": "the artefact/blogpost_entity/presets/zero_blog.json",
-  "go": "Maximal swarm cycle on this one neutral pipeline + configurable DB. Until 0.5B promotion/falsification every go also advances ClayCode/GRF/Hyperposition/omega corpus, OOD, Together BYOM/preflight/training status, benchmark, quantization, measured RSS and local_exec integration.",
+  "go": "Maximal swarm cycle on this one neutral pipeline + configurable DB. Until 0.5B promotion/falsification every go also advances leakage-free ClayCode corpus, intrinsic/semantic admission, held-out OOD, provider/template admission, budget-gated full-SFT status, matched benchmark, quantization, measured RSS and local_exec integration.",
   "swarm_product_rule": "swarm is research/build orchestration only; product runtime is exactly one entity",
-  "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances this mini entity.",
+  "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT work is donor evidence only unless it advances this Mini Entity.",
   "together_api": {
     "product_identity": "FORBIDDEN",
+    "inference_requirement": "NONE",
     "training_campaign_05b": "OWNER_AUTHORIZED_BUDGET_GATED",
-    "secret_policy": "ENVIRONMENT_ONLY_NEVER_COMMIT"
-  }
+    "secret_policy": "ENVIRONMENT_ONLY_NEVER_COMMIT",
+    "job_started": false
+  },
+  "state_sync_note": "PROGRAM_STATE.json still contains stale v1 cognition fields on main at this branch point and must be reconciled without deleting unrelated native/runtime evidence."
 }

@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-22T19:06:45Z. **4523 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-22T19:36:45Z. **4531 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T21:38:08+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-23T01:48:17+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 4425 |
+| baunotiz | 4433 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2606 |
-| baunotiz | bauverlauf.jsonl | 1771 |
+| baunotiz | git-commit | 2610 |
+| baunotiz | bauverlauf.jsonl | 1775 |
 | baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 4523 · Gegenhypothese: 0 von 4523
+## Hypothese: 0 von 4531 · Gegenhypothese: 0 von 4531
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,38 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T21:38:08+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind triple same-source adapter red replication
+
+`baunotiz-bauverlauf-4268be342235f54814b3` · baunotiz · bauverlauf.jsonl · 2026-08-23T01:48:17+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind triple same-source adapter red replication
+
+`baunotiz-git-33b2a3753bf9b3b3c83951050291f58b4d0bad92` · baunotiz · git-commit · 2026-08-23T01:48:17+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind triple same-source adapter red replication
+
+### research: bind triple same-source adapter red replication
+
+`baunotiz-bauverlauf-a67fbff840490c5b6aff` · baunotiz · bauverlauf.jsonl · 2026-08-23T01:44:14+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: bind triple same-source adapter red replication
+
+`baunotiz-git-d3eb6f68cb96f21f147eab7990a43df6048d6850` · baunotiz · git-commit · 2026-08-23T01:44:14+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: bind triple same-source adapter red replication
 
 ### claycode supervisor: bind Gen276 PTY red recurrence to exact-runtime gate
 
@@ -208,40 +240,4 @@ test(reference): fuse single profile authority invariant
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 Correct local receipt accounting to the shared 19:49 go macrocycle. The sole unusual slot remains the RFC6901 response-pointer falsifier; local shims/poisons are ordinary regressions.
-
-### evidence: join this go receipts to shared macrocycle
-
-`baunotiz-git-90f8f99bfdd92dd6de9fb73489610b400daa9b97` · baunotiz · git-commit · 2026-08-22T20:08:37+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-evidence: join this go receipts to shared macrocycle
-
-Correct local receipt accounting to the shared 19:49 go macrocycle. The sole unusual slot remains the RFC6901 response-pointer falsifier; local shims/poisons are ordinary regressions.
-
-### Merge PR #969: bind single profile authority gate
-
-`baunotiz-bauverlauf-8d105a506914f4097d17` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:06:35+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Fuse the native MiniUnifiedDB profile-authority convergence guard and joined macrocycle receipt. Source/architecture guard only; no runtime PASS, no additional unusual experiment.
-
-### Merge PR #969: bind single profile authority gate
-
-`baunotiz-git-06799ff2cd6ebffdd56521fc6a7fd0f6b6d67ef0` · baunotiz · git-commit · 2026-08-22T20:06:35+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Merge PR #969: bind single profile authority gate
-
-Fuse the native MiniUnifiedDB profile-authority convergence guard and joined macrocycle receipt. Source/architecture guard only; no runtime PASS, no additional unusual experiment.
-
-### contract(reference): bind native profile authority convergence gate
-
-`baunotiz-bauverlauf-d03fbad6d7cf34234492` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:06:12+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Fail closed on a second active-profile authority and on local_exec subprocesses without an explicit child environment. Source contract only; no runtime PASS implied.
 

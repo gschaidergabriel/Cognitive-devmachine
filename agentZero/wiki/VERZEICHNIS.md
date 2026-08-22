@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-22T19:06:44Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T19:36:44Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 665 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2507 Artikel, 1426 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **umfeld** (2507 Artikel, 1427 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -73,8 +73,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-git-1fa4e2d9c80f5f455b1002171324e65` · baunotiz
 - **Verfassung: Zero denkt+programmiert in ClayCode; alles nach ClayCode -- elegant/iterativ/interkonnek** — `baunotiz-bauverlauf-cb869bdc23b6c977008e` · baunotiz
 - **claycode inbox: bind PR787 dependency closure and zero-step blocker** — `baunotiz-git-14041fb6b046008b81d671c4cd2c789` · baunotiz
-- **claycode supervisor: bind PR787 dependency-closure candidate and zero-step head** — `baunotiz-git-d41bcabab36ddb113e3d4bf639ba3be` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-bauverlauf-5ea4e51e61f07c0dc41d` · baunotiz
+- **claycode supervisor: bind PR787 dependency-closure candidate and zero-step head** — `baunotiz-git-d41bcabab36ddb113e3d4bf639ba3be` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-git-372397141f5d2058aa7a42e076fbb63` · baunotiz
 - **Verfassung: ClayCode-only-Kognition fuer GANZ Zero (Uebersetzer ClayCode->Deutsch, Vorstufe in ClayC** — `baunotiz-git-a8fa3c76ee3f7a31dd6b6efdbce5e30` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-bauverlauf-53da5ecc5a3716ab4c18` · baunotiz
@@ -115,8 +115,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-git-a896a05284b897f0f87fad5fd609888` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `bau-entityos-a896a05284b8` · bau
 - **agentZero: ehrliche GWT-GRF-Messung 2026-08-22 (hilft GRF/ClayCode beim Architektur-Entwurf; ClayCod** — `baunotiz-git-4287d32fe86f645e2b26b1da3d05e81` · baunotiz
-- **EntityOS-Architektur-Skizze 2026-08-22: praezise, live-verifizierte Referenz (Architekt, ClayCode, H** — `baunotiz-bauverlauf-8b66f512790664a9c4d2` · baunotiz
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `bau-entityos-f307559b870f` · bau
+- **EntityOS-Architektur-Skizze 2026-08-22: praezise, live-verifizierte Referenz (Architekt, ClayCode, H** — `baunotiz-bauverlauf-8b66f512790664a9c4d2` · baunotiz
 - **EntityOS-Architektur-Skizze 2026-08-22: praezise, live-verifizierte Referenz (Architekt, ClayCode, H** — `baunotiz-bauverlauf-5525b89bbe7d57f3b96d` · baunotiz
 - **B7 geprueft: EffectGate als Wand, nicht als Bibliothek** — `baunotiz-bauverlauf-462835fb3706b7b7831e` · baunotiz
 - **EntityOS-Architektur-Skizze 2026-08-22: praezise, live-verifizierte Referenz (Architekt, ClayCode, H** — `baunotiz-git-bcc426dfd16fd2364f9029002516731` · baunotiz

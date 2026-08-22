@@ -1,0 +1,80 @@
+{
+  "schema": "claycog-05b-together-template-falsifier/v2",
+  "date": "2026-08-22",
+  "executor": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main_sha": "cb46a34dff51d309e25fb909758a129f379c7497",
+  "branch": "gpt56sol/go-05b-template-fusion-current-20260822",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "parallel_fusion": {
+    "preserved_idempotent_create_merge": "f231b2d93893eccf8a91850ba0512908456995f9",
+    "preserved_status_footer_merge": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+    "preserved_exact_pr_runner_merge": "cb46a34dff51d309e25fb909758a129f379c7497",
+    "rule": "This delta is rebuilt from the moved current main and does not overwrite the parallel fingerprint/duplicate-create mechanism."
+  },
+  "target": {
+    "primary_hf_model": "Qwen/Qwen2.5-0.5B",
+    "primary_hf_revision": "285c998059f3e217fe1f05e241d55b5c5eef5bd3",
+    "ablation_hf_model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "ablation_hf_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "architecture": "Qwen2ForCausalLM",
+    "model_type": "qwen2",
+    "required_training": "full SFT through an admitted Qwen2-compatible Together template or another owner-admitted full-FT runner without changing the target model"
+  },
+  "current_primary_evidence": {
+    "together_supported_models": "https://docs.together.ai/docs/fine-tuning/supported-models",
+    "together_byom": "https://docs.together.ai/docs/fine-tuning/byom",
+    "together_pricing": "https://docs.together.ai/docs/fine-tuning/pricing",
+    "together_estimate_price_api": "https://docs.together.ai/reference/finetuneestimateprice",
+    "together_python_sdk": "https://github.com/togethercomputer/together-py/blob/main/src/together/resources/fine_tuning.py",
+    "qwen25_target_config": "https://huggingface.co/Qwen/Qwen2.5-0.5B/blob/main/config.json",
+    "qwen35_counterfactual_config": "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json"
+  },
+  "findings": [
+    "The public Together fine-tuning supported-model table checked on 2026-08-22 lists no Qwen2/Qwen2.5 training base.",
+    "The old implicit Qwen/Qwen2.5-7B-Instruct-Turbo value is inference-visible but is not documented as a currently supported fine-tuning base; inference visibility is not training-template evidence.",
+    "Together BYOM requires architecture compatibility between the external Hugging Face checkpoint and the selected Together base/template.",
+    "The current estimate-price request does not expose from_hf_model or hf_model_revision, so price admission cannot establish BYOM checkpoint compatibility.",
+    "The current Together Python create API exposes both from_hf_model and hf_model_revision; the external checkpoint can therefore be pinned at actual create.",
+    "The current main idempotency mechanism did not include hf_model_revision in campaign identity and retained an implicit template default; this delta closes both gaps while preserving duplicate-create guards."
+  ],
+  "unusual_experiment": {
+    "count_for_this_user_triggered_go": 1,
+    "name": "template_mirage_qwen35_08b_substitution",
+    "counter_reality": "Use the currently documented smallest Qwen full-fine-tuning base, Qwen3.5-0.8B, as the template for Qwen2.5-0.5B because the vendor family and parameter count are close.",
+    "target_architecture": "Qwen2ForCausalLM / qwen2",
+    "candidate_architecture": "Qwen3_5ForConditionalGeneration / qwen3_5",
+    "result": "REJECT",
+    "reason": "The candidate is a different model generation and conditional-generation/multimodal architecture. Parameter-count proximity does not satisfy Together's architecture-match law.",
+    "note": "The existing PR #772 ambiguous-create fault is only regression-rerun by this branch; it is not counted as a new unusual experiment."
+  },
+  "source_delta": {
+    "launcher_fusion_commit": "7094e545bff85e3039fd5a4a664d034a34cf389f",
+    "safety_test_commit": "ee43e2d3b0f9d0fa8a7e0cab41e324617b9560b8",
+    "pr_runner_commit": "5910dfc8fb9747f87c3ac093aed6f4fba1bbf7e1",
+    "readme_commit": "8fe990bebda113308a353a67ec4a0b620081eb39",
+    "mechanisms": [
+      "remove implicit Together fine-tuning template default",
+      "require an explicitly verified Qwen2-compatible full-FT template",
+      "reject Qwen3-family substitution locally",
+      "pin primary and ablation Hugging Face revisions",
+      "include hf_model_revision and explicit template in campaign fingerprint schema v2",
+      "pass hf_model_revision to Together create",
+      "preserve exact-fingerprint operator authorization and duplicate account-job guards from PR #772",
+      "extend exact PR CI to py_compile and run launcher safety regression as well as strict corpus admission"
+    ]
+  },
+  "execution": {
+    "authenticated_together_api_called": false,
+    "together_secret_available_to_this_executor": false,
+    "real_file_upload": false,
+    "real_server_price_estimate": false,
+    "paid_job_created": false,
+    "spend_usd": 0.0,
+    "exact_pr_checkout_runner_status": "PENDING_UNTIL_PR_RUN",
+    "classification": "PRIMARY_SOURCE_FALSIFIER_PLUS_SOURCE_FUSION; TOGETHER_RUNTIME_UNEXECUTED"
+  },
+  "current_blocker": "No currently documented Qwen2/Qwen2.5 Together full-fine-tuning template is available. A credentialed model_limits/create admission is required before Together compatibility can be claimed.",
+  "next_discriminator": "Open the fused PR and require the exact-checkout corpus + launcher-safety runner. With TOGETHER_API_KEY mounted only in an authorized execution environment and a currently verified Qwen2-compatible template name, run preflight first. If model_limits rejects every Qwen2-compatible candidate, retain Qwen2.5-0.5B and change only the training runner rather than silently pivoting to Qwen3.5-0.8B.",
+  "acceptance": "IN_PROGRESS"
+}

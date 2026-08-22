@@ -3,16 +3,16 @@
   "date": "2026-08-22",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
-  "macrocycle_id": null,
-  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "macrocycle_id": "go-20260822T1949+07-gpt56sol-mini-reference",
+  "macrocycle_identity_status": "JOINED_POST_FUSION",
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
-  "stage": "MINI_ENTITY_PIPELINE_CLAY",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
   "initial_main_sha": "ee3e72e99b7abface25d4113776799f674ccf2ad",
-  "refreshed_main_sha": "ad5992ef98bbe954f44e640368928f96617bdddf",
-  "refreshed_main_tree_sha": "ea21a776df67b2749309befa1b94bbdd5e175dfb",
+  "candidate_base_main_sha": "ad5992ef98bbe954f44e640368928f96617bdddf",
+  "latest_main_observed_after_review": "df8c25d526206ea6ac5722dbe3e3a9b11981dd3c",
   "owner_directive": {
-    "path": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
-    "blob_sha": "eeb9945e4c1d01a32e13bf6cb74db0c0c49d2767"
+    "path": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md"
   },
   "execution_control": {
     "free_only": true,
@@ -31,38 +31,45 @@
       "tools/clay_profile_pipeline_runtime.py"
     ],
     "contract_updated": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json",
-    "whole_donor_branch_imported": false,
-    "parallel_main_change_adjudication": "Main advanced twice during the run. The final refresh moved neutral MiniUnifiedDB boot before profile read and aligned the parity contract order. Those deltas were fused; no parallel main change touched the reference runtime."
+    "whole_donor_branch_imported": false
   },
-  "unusual_experiment": {
-    "local_count": 1,
-    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
-    "id": "REFERENCE_RUNTIME_MINIMAL_TRANSPLANT_ABLATION",
-    "class": "BOUNDED_SOURCE_COMPOSITION_DISCRIMINATOR",
-    "question": "Does transplanting only the already-bounded PR728 reference-runtime blob onto exact current main close the #901 stale effect-surface prerequisite without importing the donor's other files or prematurely opening native-v2 admission?",
-    "intervention": "Final refreshed main tree plus one runtime blob replacement only; no donor tests, workflow, preset, state-box file or import helper transplanted.",
-    "observations": {
-      "required_effect_surface_present": true,
-      "required_effect_order_matches_current_contract": true,
-      "legacy_profile_load_authorized": false,
-      "legacy_provider_chat_json_authorized": false,
-      "db_profile_read_hash_check_present": true,
-      "full_payload_leak_scan_present": true,
-      "fresh_db_boot_order_compatible": true,
-      "native_v2_top_level_admission_remains_fail_closed": true,
-      "reference_effect_surface_contract_status": "PARITY"
-    },
-    "result": "SOURCE_LEVEL_PREREQUISITE_CLOSED",
-    "counterhypothesis": "The surface repair would require importing the broad stale donor branch or weakening the native-v2 guard.",
-    "counterhypothesis_result": "NOT_SUPPORTED_AT_SOURCE_LEVEL; one runtime blob plus bounded contract state is sufficient for the named prerequisite, while full native-v2 admission remains fail-closed."
+  "global_unusual_experiment": {
+    "macrocycle_count": 1,
+    "id": "RFC6901_RESPONSE_POINTER_REAL_PROFILE_FALSIFIER",
+    "source_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_REFERENCE_V2_POINTER_FALSIFIER_GPT56SOL.json",
+    "ownership": "PARALLEL_MACROCYCLE_RECEIPT_ALREADY_CONSUMED_SLOT"
+  },
+  "bounded_fusion_review": {
+    "local_unusual_experiment_count": 0,
+    "minimal_transplant_check_classification": "DETERMINISTIC_SOURCE_FUSION_REVIEW_NOT_UNUSUAL_EXPERIMENT",
+    "effect_surface": "SUPPORTED_AT_SOURCE_LEVEL",
+    "legacy_effects_deauthorized": true,
+    "db_profile_hash_check_present": true,
+    "rfc6901_response_pointer_support_present": true,
+    "native_v2_top_level_admission_remains_fail_closed": true,
+    "persisted_string_scan_semantics": {
+      "status": "FAIL_CLOSED_DRIFT",
+      "current_main": "recursive persisted string leaves only; JSON object keys are policy-neutral",
+      "candidate_pr956": "str(payload) whole-object scan, which also makes keys policy-relevant",
+      "security_bypass": false,
+      "reason_blocking_fusion": "The candidate changes gate semantics outside the named effect-surface repair. Preserve the current leaf-only persisted-value scan while retaining RFC-6901 pointer support and the new effect responsibilities."
+    }
+  },
+  "execution_evidence": {
+    "github_actions_run_id": 32574351633,
+    "job_id": 97034376536,
+    "visible_steps": 0,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT",
+    "exact_isolated_runtime": "UNOBSERVED",
+    "semantic_test_failure_claimed": false
   },
   "evidence_boundary": {
-    "source_composition": "SUPPORTED",
-    "reference_effect_surface_prerequisite": "CLOSED_SOURCE_LEVEL",
+    "source_composition": "RETAINED_WITH_REQUIRED_REPAIR",
+    "reference_effect_surface_prerequisite": "CANDIDATE_NOT_MERGE_READY",
     "exact_isolated_runtime": "UNOBSERVED",
     "native_profile_v2_full_parity": "NOT_ACCEPTED",
     "approx1b_training": "NOT_STARTED",
     "whole_product": "IN_PROGRESS"
   },
-  "next_exact_step": "Run exact PR-head isolated structured/native parity regressions. If runner steps do not start, classify as execution-admission failure rather than semantic test failure. If they start, require exact-head results before merge/runtime credit; then continue the remaining native profile-v2 semantic parity matrix."
+  "next_exact_step": "Patch PR #956 so _pipeline_gate scans only recursive persisted string leaves as current main does, while retaining the donor's pipeline_profile_read/inference_generate and RFC-6901 response-pointer semantics. Then rebase onto fresh main and run exact PR-head structured/native parity regressions on an actually-started authorized isolated runner; zero-step runner failure remains admission failure, not semantic test failure."
 }

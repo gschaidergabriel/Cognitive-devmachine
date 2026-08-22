@@ -17,11 +17,17 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Exact source identity
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
-          echo "sha=$GITHUB_SHA"
-          git rev-parse HEAD
+          actual="$(git rev-parse HEAD)"
+          echo "expected=$EXPECTED_SHA"
+          echo "actual=$actual"
+          test "$actual" = "$EXPECTED_SHA"
       - name: Canonical SFT v2 regeneration and split gates
         run: |
           set -euo pipefail

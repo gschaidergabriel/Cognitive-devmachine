@@ -1,0 +1,53 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "base_main_sha": "ff9e86b02fce611f19a36934b46887ada8ba6590",
+  "branch": "go-08b-canonical-v2-preflight-validator-20260822",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "product_scope": "application-neutral Mini Entity pipeline plus replaceable ~1B ClayCode cognition attachment",
+  "finding": {
+    "status": "SOURCE_DEFECT_CONFIRMED",
+    "path": "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py",
+    "mechanism": "local_checks referenced validate_sft_v2.py twice with a --against interface, but that path does not exist at the exact base main; the canonical v2 corpus gate is validate_corpus_v2.py and accepts train.jsonl validation.jsonl in one invocation",
+    "impact": "the direct Qwen3.5-0.8B preflight lane would fail before any Together provider request could be admitted"
+  },
+  "unusual_experiment": {
+    "name": "LAUNCHER_PRECHECK_TARGET_EXISTENCE_FALSIFIER",
+    "count_for_this_macrocycle": 1,
+    "scope": "source-bound static falsifier only; not runtime credit",
+    "counterhypothesis": "all local subprocess targets referenced by the direct 0.8B launcher exist on exact base main and match their canonical CLI contract",
+    "observation": "GitHub exact-ref fetch of mini_cognition/validate_sft_v2.py returned 404; mini_cognition/validate_corpus_v2.py exists and its CLI is validate_corpus_v2.py train.jsonl validation.jsonl",
+    "result": "COUNTERHYPOTHESIS_REJECTED"
+  },
+  "delta": {
+    "launcher": "bind local_checks to V2_VALIDATOR=validate_corpus_v2.py and invoke it once with TRAIN and VALID",
+    "regression": "test_local_checks_use_canonical_v2_validator asserts generator path, validator path, exact argument ordering and check=True",
+    "no_second_runtime_path": true
+  },
+  "provider_refresh": {
+    "public_docs_index_observed": "Together current docs index exposes fine-tuning supported-models and pricing pages",
+    "public_pricing_observed": "Together public pricing/support material remains token/training-type based and provider-estimated before billed create",
+    "exact_qwen35_08b_live_admission": "UNVERIFIED_THIS_GO",
+    "exact_price_for_this_fingerprint": "UNVERIFIED_THIS_GO",
+    "required_gate": "authenticated model_limits plus server-side dataset validation and estimate_price before any billed create"
+  },
+  "execution": {
+    "vercel_executable_sandbox_surface": "NOT_EXPOSED_BY_AVAILABLE_CONNECTOR",
+    "github_exact_branch_runtime": "PENDING_PR_RUNNER_ADMISSION",
+    "runtime_credit": "ZERO_UNTIL_ACTUAL_STEPS_EXECUTE"
+  },
+  "together": {
+    "secret_used": false,
+    "provider_call": false,
+    "upload": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "acceptance": "SOURCE_REPAIR_CANDIDATE; EXACT_RUNTIME_UNVERIFIED; WHOLE_PRODUCT_IN_PROGRESS",
+  "next_gate": "open exact-head PR, inspect runner admission; if actual steps execute, require the focused 0.8B launcher regression plus canonical corpus generation/validation before authenticated provider preflight"
+}

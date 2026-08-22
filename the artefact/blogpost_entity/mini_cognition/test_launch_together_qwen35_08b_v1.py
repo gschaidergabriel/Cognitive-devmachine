@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import importlib.util,json,os,stat,tempfile,types,unittest
 from pathlib import Path
+from unittest import mock
 HERE=Path(__file__).resolve().parent
 spec=importlib.util.spec_from_file_location("launch08",HERE/"launch_together_qwen35_08b_v1.py");m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 class FT:
@@ -24,6 +25,15 @@ class Tests(unittest.TestCase):
         else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
     def test_model_and_direct_campaign(self):
         self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
+    def test_local_checks_use_canonical_v2_validator(self):
+        with mock.patch.object(m.subprocess,"run") as run:
+            m.local_checks()
+        self.assertEqual(run.call_count,2)
+        generate=run.call_args_list[0].args[0];validate=run.call_args_list[1].args[0]
+        self.assertEqual(Path(generate[1]).name,"generate_sft_v2.py")
+        self.assertEqual(Path(validate[1]).name,"validate_corpus_v2.py")
+        self.assertEqual(validate[2:],[str(m.TRAIN),str(m.VALID)])
+        self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertTrue(run.call_args_list[1].kwargs["check"])
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

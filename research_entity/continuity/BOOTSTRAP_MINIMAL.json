@@ -1,36 +1,52 @@
 {
-  "schema_version": "6.4",
+  "schema_version": "6.5",
   "entity_display_name": "Clay",
   "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "active_stage": "MINI_ENTITY_PIPELINE_CLAY",
   "sole_owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "owner_directive_addendum": "research_entity/global/MINI_ENTITY_CLAYCOG_1B_TRAINING_DIRECTIVE.md",
   "local_inference_requirement": "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
-  "portable_release_shape": ["application-neutral/inference-neutral .clay executable", "SQLite MiniUnifiedDB preconfigurable with zero_blog", "optional replaceable local model attachment when local inference is selected"],
-  "mission": "Finish and empirically prove one persistent portable multi-use mini entity: executable contains only the generic processing pipeline; Zero blog/personality and inference backend are fully editable runtime configuration.",
+  "portable_release_shape": [
+    "application-neutral/inference-neutral .clay executable",
+    "SQLite MiniUnifiedDB preconfigurable for arbitrary applications",
+    "generic Qwen3.5-0.8B ClayCode-only cognition module, runtime-configured for identity/job/personality and promoted as text-only Q4_K_M only after <1 GiB peak-RSS acceptance"
+  ],
+  "mission": "Finish and empirically prove one persistent portable multi-use entity pipeline plus a reusable generic 0.8B ClayCode-only cognition module. Entity name, job, role, goal, personality and application remain runtime configuration and are never fixed cognition-weight identity.",
   "hard_split": {
     "binary": "evidence -> generic preprocessor -> canonical envelope -> configured inference backend -> generic gates -> exactly-once/CAS -> atomic SQLite persistence",
-    "database": "profile/personality/system prompt/application blob/API and local-inference settings plus default zero_blog preset",
-    "regression": "never hard-code replaceable Zero/blog/personality/provider/model semantics into executable identity"
+    "database": "entity/application/profile/personality/system prompt/API and local-inference settings; shipped presets remain replaceable data",
+    "cognition_weights": "ClayCode-only cognition + GRF + Hyperposition + epistemics + computed self-state + runtime configuration binding; no fixed name/job/persona/application",
+    "regression": "never hard-code replaceable identity/application/personality/provider semantics into executable or cognition-weight identity"
   },
-  "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; model narrative is never canonical state authority",
+  "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; model output is never canonical state authority merely because the model emitted it",
   "inference_law": {
     "remote_api": "runtime-configurable remote text generation",
     "local_server": "localhost/OpenAI-compatible text generation without token when configured",
     "local_model": "direct replaceable local model attachment through local_exec runner; no API token required",
-    "reference_local_format": "GGUF via llama.cpp-compatible or other configured runner",
-    "identity": "switching inference backend or model must not reset MiniUnifiedDB state/history"
+    "generic_claycog_base": "Qwen/Qwen3.5-0.8B",
+    "generic_claycog_quant": "text-only GGUF Q4_K_M",
+    "generic_claycog_ram_gate": "peak process RSS <1 GiB at 2048-token context; file size alone is insufficient",
+    "identity": "switching inference backend/model or runtime entity/application configuration must not reset canonical state/history"
+  },
+  "cognition_training": {
+    "status": "CORPUS_VALIDATED_LAUNCH_READY_PENDING_TOGETHER_SECRET",
+    "corpus": "1200 examples / 1080 train / 120 validation / 0 structural invalid / 0 forbidden fixed-identity assistant-binding hits",
+    "launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_v0.py",
+    "quant_rss_gate": "the artefact/blogpost_entity/mini_cognition/quantize_rss_gate_v0.sh",
+    "budget": "owner-authorized EUR20 campaign ceiling; launcher default estimate gate USD18",
+    "training_type": "full SFT first, LoRA comparison/repair baseline"
   },
   "sandbox_local_backend": {
-    "version": "mini-entity/0.6.0",
-    "status": "CONTRACT_TESTED",
+    "historical_version": "mini-entity/0.6.0",
+    "status": "CONTRACT_TESTED_HISTORICAL",
     "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json",
     "real_model_quality": "NOT_YET_CREDITED_FIXTURE_ONLY"
   },
-  "default_application": "the artefact/blogpost_entity/presets/zero_blog.json",
-  "go": "Maximal swarm cycle on this one neutral pipeline + configurable DB only: refresh, fan-out, hypotheses, counterhypotheses, implement, sandbox-test, falsify, fuse/hypofuse, fix, retest, persist.",
+  "default_application": "the artefact/blogpost_entity/presets/zero_blog.json (runtime preset only; excluded from generic cognition-weight identity)",
+  "go": "Maximal cycle on the one neutral pipeline plus generic cognition lane: refresh -> identity/job neutrality -> corpus/spec/eval -> ClayCode lowering compatibility -> Together readiness/job/checkpoint -> Q4_K_M -> <1GiB RSS -> integration, while continuing native pipeline falsification/fusion and persisting evidence.",
   "swarm_product_rule": "swarm is research/build orchestration only; product runtime is exactly one entity",
-  "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances this mini entity.",
-  "together_api": "FORBIDDEN"
+  "legacy_scope": "Previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances this current mini-entity + generic-cognition target.",
+  "together_api": "OWNER_AUTHORIZED_BOUNDED_FOR_GENERIC_CLAYCOG_TRAINING_ONLY"
 }

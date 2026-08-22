@@ -1,0 +1,86 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "base_main_sha": "827b40021a5cfa9044c741ded1eb838897ba140a",
+  "owner_directive": {
+    "path": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "blob_sha": "51041da4ac0ffb570b91213e88bc2e97ae6f9989",
+    "primary_paid_training_base": "Qwen/Qwen3.5-0.8B"
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "id": "REFERENCE_EFFECT_SURFACE_PARITY_AMPUTATION",
+    "class": "BOUNDED_SOURCE_LEVEL_DISCRIMINATOR",
+    "question": "Can the canonical structured reference runtime actually execute the effect responsibility names required by the current BLOGPOST_ENTITY.clay pipeline, or is native-v2 parity being compared against a stale reference effect surface?",
+    "observation": {
+      "canonical_pipeline_requires": [
+        "pipeline_profile_read",
+        "pipeline_init",
+        "pipeline_state_read",
+        "pipeline_collect",
+        "pipeline_compile",
+        "pipeline_build_prompt",
+        "inference_generate",
+        "pipeline_gate",
+        "pipeline_commit"
+      ],
+      "reference_runtime_missing": [
+        "pipeline_profile_read",
+        "inference_generate"
+      ],
+      "reference_runtime_stale_authorized_effects": [
+        "profile_load",
+        "provider_chat_json"
+      ],
+      "result": "COUNTEREXAMPLE_CONFIRMED_SOURCE_LEVEL"
+    },
+    "counterhypothesis": "The mismatch is harmless because another canonical v2 reference runtime interposes the current effect names.",
+    "counterhypothesis_result": "NOT_SUPPORTED_AT_CANONICAL_DOCUMENTED_PATH; tools/clay_profile_pipeline_runtime_v2.py is absent and the v2 parity contract itself names tools/clay_profile_pipeline_runtime.py as the canonical reference runtime.",
+    "interpretation": "The existing #874 parity contract correctly fail-closes native v2, but its test surface did not prevent a stale structured reference effect API from being treated as the semantic oracle. Reference effect-surface parity is therefore a prerequisite to reference-equivalent native promotion."
+  },
+  "source_delta": {
+    "branch": "gpt56sol/go-v2-reference-effect-surface-20260822-1838",
+    "contract_commit": "a316a797836fd3fbf4ac05ebd80ff600131d3dde",
+    "test_commit": "4e6d60d13ba0411aca10cfa6c2f5332faf8f3e4b",
+    "files": [
+      "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json",
+      "the artefact/blogpost_entity/native/test_native_v2_parity_contract.py"
+    ],
+    "effect": "Binds current pipeline effect names, explicitly records the two missing and two stale legacy reference effects, and keeps native-v2 admission fail-closed until the reference surface itself converges."
+  },
+  "execution": {
+    "exact_runtime_test": "UNOBSERVED_EXECUTION_ADMISSION",
+    "reason": "No executable Vercel Sandbox start/exec action was exposed in the current connector surface; direct local GitHub clone attempt was DNS-blocked. No GitHub zero-step runner outcome is reclassified as a test result.",
+    "runtime_pass_claimed": false,
+    "test_fail_claimed": false
+  },
+  "approx1b_lane_refresh": {
+    "provider": "Together AI",
+    "public_docs_checked": "2026-08-22",
+    "full_fine_tuning_model_admission_publicly_listed": "Qwen/Qwen3.5-0.8B",
+    "published_full_sft_context": 131072,
+    "published_max_batch_sft": 8,
+    "public_standard_full_sft_rate_usd_per_million_tokens_up_to_16b": 0.54,
+    "public_minimum_job_charge_usd": 4.0,
+    "exact_campaign_estimate": "NOT_OBTAINED_REQUIRES_SERVER_VALIDATED_DATASET_AND_AUTHENTICATED_ESTIMATE",
+    "authenticated_preflight": false,
+    "provider_secret_used": false,
+    "dataset_uploaded": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "evidence_boundary": {
+    "source_mechanism": "SUPPORTED",
+    "native_v2_parity": "NOT_IMPLEMENTED",
+    "exact_runtime": "UNOBSERVED",
+    "training": "NOT_STARTED",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_exact_step": "Fresh-main extraction of the narrow structured-runtime effect-surface convergence (DB-resident pipeline_profile_read plus generic inference_generate) while preserving the current recursive persisted-string leak gate; then exact isolated structured regression. Only after the reference oracle is current should native-v2 implementation be compared against it."
+}

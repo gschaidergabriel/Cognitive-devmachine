@@ -1,0 +1,81 @@
+{
+  "schema": "mini-entity-native-0.7-verified-empty-quiet-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "canonical_main_observed_before_candidate": "c7219e8fa7929d5e5a4fcd756aa07e815a32db75",
+  "canonical_main_observed_after_parallel_repro_workflow": "e261757fa21538ea24a6ff174b7b55d9929fcb94",
+  "candidate_pr": 750,
+  "candidate_head_before_receipt": "bbed887f959da8841b7296578580d527e6f99ad5",
+  "defect": {
+    "classification": "VERIFIED_EMPTY_RUN_INCORRECTLY_REENTERED_INFERENCE_AND_COMMIT_PATH",
+    "path": "the artefact/blogpost_entity/native/mini_entity_part04.inc",
+    "pre_fix_blob": "9f653931f63f5cf44e27e4b7f3ce32330307616a",
+    "observation": "cmd_run checked packet.sensor_ok but had no packet.n==0 short-circuit before packet serialization, model_output and commit_run.",
+    "owner_gate_violated": "events are consumed exactly once and verified-empty subsequent runs remain quiet",
+    "counterhypothesis": "An empty verified packet may intentionally represent a new inference turn even without new evidence.",
+    "counterhypothesis_rejected_by_owner_contract": true
+  },
+  "candidate_repair": {
+    "mechanism": "after sensor_ok verification and before packet_json/model_output, packet.n==0 returns bounded quiet status and closes resources",
+    "quiet_status": {
+      "ok": true,
+      "quiet": true,
+      "generation": "UNCHANGED_OBSERVED_GENERATION",
+      "source_count": 0,
+      "sensor_health": "VERIFIED"
+    },
+    "inference_invoked_on_quiet": false,
+    "generation_mutated_on_quiet": false,
+    "output_written_on_quiet": false,
+    "study_row_written_on_quiet": false,
+    "broken_source_behavior_preserved": "SOURCE_SENSOR_UNKNOWN"
+  },
+  "ordinary_regression_contract": {
+    "workflow": ".github/workflows/mini-entity-0-7-quiet-regression.yml",
+    "first_event_expected": "one local_exec call; generation/output/study advance to 1; event consumed",
+    "verified_empty_second_run_expected": "quiet=true; zero added inference calls; generation/output/study remain 1",
+    "broken_source_expected": "nonzero SOURCE_SENSOR_UNKNOWN; never quiet; no inference/state change",
+    "sqlite_integrity_expected": "ok",
+    "fixture_model_quality_credit": false
+  },
+  "execution_attempts": {
+    "quiet_workflow": {
+      "run_id": 32556751437,
+      "job_id": 96992060138,
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_STEPS_NOT_TEST_FAILURE",
+      "runtime_credit": 0
+    },
+    "canonical_native_0_7_repro_workflow": {
+      "run_id": 32556751456,
+      "job_id": 96992060171,
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_STEPS_NOT_TEST_FAILURE",
+      "runtime_credit": 0
+    }
+  },
+  "unusual_experiment": {
+    "executed_here": false,
+    "reason": "the canonical go receipt already consumed the one unusual-experiment slot with the included-source identity collision falsifier"
+  },
+  "fusion": {
+    "superseded_duplicate_pr_closed": 742,
+    "canonical_source_closure_fix_already_on_main": true,
+    "source_closure_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_MINI_ENTITY_0_7_TRANSITIVE_SOURCE_CLOSURE_GPT56SOL.json",
+    "new_delta_is_distinct": "native verified-empty quiet semantics"
+  },
+  "classification": "SOURCE_MECHANISM_CANDIDATE_WITH_EXECUTION_ADMISSION_BLOCKER",
+  "not_claimed": [
+    "exact 0.7 quiet runtime PASS",
+    "exact 0.7 repeat-build PASS on this candidate head",
+    "real local model quality PASS",
+    "real remote provider PASS",
+    "whole Mini Entity final acceptance"
+  ],
+  "next_gate": "On the first admitted exact-checkout Linux runner, execute the canonical native 0.7 repro workflow plus the quiet regression: first event must commit once, verified-empty second run must invoke no inference and mutate no durable state, broken source must remain SOURCE_SENSOR_UNKNOWN, then bind exact ELF/source/toolchain identities.",
+  "together_api": "FORBIDDEN_NOT_USED"
+}

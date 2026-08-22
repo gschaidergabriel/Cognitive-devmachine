@@ -1,0 +1,46 @@
+{
+  "schema": "blogpost-entity-sandbox-receipt/v1",
+  "date": "2026-08-22",
+  "program": "BLOGPOST_ENTITY_ALL_IN_ONE",
+  "artifact": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+  "artifact_sha256_tested": "d746f8b9050d8d91101923a9c9f28babf439e517e0e79ef103a9dae617b8480e",
+  "artifact_commit": "a5c9f9c4844c14111ec91cf9e5c4af5f9d9a055b",
+  "sandbox_runtime_tested": {
+    "kind": "standalone structured ClayCode effect runtime equivalent used for isolated execution",
+    "sha256": "3642b644dc15e9ef2ac621ddf4212b643d28f863c7df91a9939d26cf6ffb41b7",
+    "note": "The canonical repository runtime is tools/clay_effect_runtime.py at commit 1471586f812f8bc3fafe958a4672661172f04357 and reuses tools/claycode_structured_backend.py. The standalone test runtime copied the same structured grammar/execution semantics so the Clay source itself was executed, but this receipt does not claim exact-byte execution of the repository wrapper."
+  },
+  "tests": {
+    "command": "pytest -q",
+    "result": "PASS",
+    "passed": 9,
+    "failed": 0,
+    "duration_seconds": 0.73,
+    "test_file_sha256": "346e9d736512e02f226a3661652f0a70db8b8620eb75e1c01944aef40c0518f4",
+    "covered": [
+      "Clay source parses as entityos.blogpost_entity",
+      "fixture end-to-end post commits",
+      "source events are consumed exactly once",
+      "second run is quiet only with healthy sensors",
+      "UNKNOWN continuity pressure cannot be narrated as Bare-Metal desire",
+      "missing bug sensor stays UNKNOWN and cannot mint quiet:verified",
+      "missing Mistral secret is reported rather than faked",
+      "stale generation loses atomically by CAS with no post or consumption",
+      "public internal identifier leak is rejected",
+      "canonical-state hash mismatch is rejected before commit"
+    ]
+  },
+  "mistral": {
+    "configured_key_names": ["MISTRAL_API_KEY", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY"],
+    "current_chat_sandbox_secret_mounted": false,
+    "real_network_call_executed_for_new_clay_module": false,
+    "classification": "BLOCKED_BY_SECRET_NOT_MOUNTED_IN_THIS_SANDBOX",
+    "historical_donor_evidence": "Existing Agent Zero Python blog path has previously exercised real Mistral, but that does not count as live acceptance of this new Clay module."
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_discriminators": [
+    "run the exact repository tools/clay_effect_runtime.py + canonical structured backend in an isolated sandbox",
+    "mount an authorized free Mistral secret and persist one real Mistral-generated gated post",
+    "expand canonical-state projection and adversarial/fuzz coverage without weakening UNKNOWN semantics"
+  ]
+}

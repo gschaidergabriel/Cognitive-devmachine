@@ -12,7 +12,8 @@
     "native_reference": {
       "platform": "linux-x86_64",
       "form": "ELF executable named blogpost_entity.clay + SQLite DB",
-      "binary_sha256": "14303a49183580319472a75341a59f0b06129ed9ea0a88d5f66bf7765f73257f",
+      "binary_sha256": "18bb19fe3aa6028afa04a1f76a3eb1fb559bda83458511cc7c31335de72cd2ff",
+      "fresh_db_sha256": "db9d633ea96518d24e379bce12a7720b53fbd089a1b7e40919b93ba064777b22",
       "tested_behaviors": [
         "fresh DB initialization",
         "evidence ingest",
@@ -24,7 +25,7 @@
         "system prompt is runtime replaceable",
         "secret values are redacted from status/config output"
       ],
-      "mock_limit": "sandbox loopback/network listener unavailable, therefore provider success path was exercised with an in-process mock provider; real HTTP transport remains uncredited"
+      "mock_limit": "sandbox loopback/network listener was unavailable; provider success path was therefore exercised with an in-process mock provider; real HTTP transport remains uncredited"
     },
     "real_provider_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_API_SECRET_MOUNTED"
   },

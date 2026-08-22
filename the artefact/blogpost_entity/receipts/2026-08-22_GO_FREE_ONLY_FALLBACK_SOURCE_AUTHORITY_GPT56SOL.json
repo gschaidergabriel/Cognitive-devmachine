@@ -20,20 +20,37 @@
     "declared_source_in_repository": "NOT RESOLVED BY REPOSITORY CODE SEARCH",
     "implication": "hand-labeling the derived export would create a second provider-policy truth and would not establish reproducible fallback admission"
   },
+  "historical_donor": {
+    "pr": 232,
+    "status": "OPEN_NONCANONICAL_LEGACY_DONOR",
+    "policy_path": "research_entity/global/FREE_API_EXECUTION_POLICY.json",
+    "runtime_path": "research_entity/runtime/free_api_provider_runtime.py",
+    "useful_contract": [
+      "default monetary budget zero",
+      "Together hard-denied",
+      "configured key is capability evidence, not billing/quota proof",
+      "NVIDIA donor carries dated zero-cost endpoint evidence with sources/scope/counterhypothesis",
+      "other providers require documented free endpoint evidence or explicit zero-cost attestation before routing",
+      "credential and endpoint identity are bound before authenticated network"
+    ],
+    "not_current_authority_reason": "PR remains open and is framed for legacy Frank v0.1; current provider registry must revalidate freshness/scope and fuse the evidence schema, not copy the old policy wholesale"
+  },
   "counterhypothesis": {
-    "claim": "existing display labels, provider names, quota metadata, or historical HTTP 200 evidence are sufficient to infer FREE",
+    "claim": "existing display labels, provider names, quota metadata, historical HTTP 200 evidence, or API-key presence are sufficient to infer FREE",
     "verdict": "REJECTED AS AUTHORITY",
-    "reason": "none is an explicit machine-readable cost class with provenance/validity; current FREE_ONLY law requires UNKNOWN to fail closed"
+    "reason": "none is current explicit machine-readable cost classification with provenance/validity; PR232 independently supports the rule that key presence is capability, not billing proof"
   },
   "architecture_delta": {
     "path": "the artefact/blogpost_entity/mini_cognition/FREE_ONLY_PROVIDER_ROUTER_SOURCE_CONTRACT.md",
     "status": "SOURCE/ARCHITECTURE CANDIDATE",
     "required_field": "cost_class = FREE | PAID | SUBSCRIPTION | UNKNOWN",
+    "recommended_evidence_envelope": ["checked_at", "claim", "sources", "scope", "counterhypothesis", "valid_until_or_recheck_policy"],
     "missing_or_unproven": "UNKNOWN",
     "free_only_admission": "exact FREE only",
     "gate_position": "before every credential/key lookup and before every network I/O, in both selector and execution path",
     "source_identity": "generated export must bind canonical provider registry source identity",
-    "positive_free_evidence": "must have explicit provenance/validity; stale or ambiguous collapses to UNKNOWN"
+    "positive_free_evidence": "must have explicit provenance/validity; stale or ambiguous collapses to UNKNOWN",
+    "reuse_rule": "reuse PR232 evidence-schema semantics only after current freshness/scope validation"
   },
   "deterministic_next_regression": {
     "chain": ["PAID", "SUBSCRIPTION", "UNKNOWN", "FREE"],
@@ -62,6 +79,6 @@
     "runtime_test_credit": 0,
     "classification": "SOURCE/AUTHORITY BLOCKER, NOT TEST FAIL"
   },
-  "acceptance": "ARCHITECTURE DELTA ACHIEVED; FALLBACK COST-CLASS SOURCE AUTHORITY BLOCKED; WHOLE PRODUCT IN_PROGRESS",
-  "next_gate": "repository-bind the declared provider registry/generator or explicitly replace it with one canonical source; add evidence-backed cost_class there; deterministically regenerate export/router; then run the pre-secret/pre-network fallback tripwire in actually-started authorized isolated execution"
+  "acceptance": "ARCHITECTURE DELTA + DONOR FUSION MAP ACHIEVED; FALLBACK COST-CLASS SOURCE AUTHORITY BLOCKED; WHOLE PRODUCT IN_PROGRESS",
+  "next_gate": "repository-bind the declared provider registry/generator or explicitly replace it with one canonical source; fuse/revalidate the PR232 cost-evidence schema there; emit current evidence-backed cost_class; deterministically regenerate export/router; then run the pre-secret/pre-network fallback tripwire in actually-started authorized isolated execution"
 }

@@ -47,17 +47,36 @@ deterministically distinct and adds a hard diversity/leakage validator:
 The separate 200-case OOD promotion suite remains distinct from this held-in validation split. Exact uniqueness alone is
 not a claim of semantic generalization; OOD and matched base-model evaluation remain mandatory.
 
-## Safe Together path
+## Together path — catalog blocked until a Qwen2-compatible base exists
+
+Together BYOM can train a Hugging Face checkpoint that is not itself in Together's catalog, but the BYOM contract still
+requires `model` to name a **Together fine-tuning catalog base whose architecture matches** `from_hf_model`; size should
+be as close as the catalog permits.
+
+The owner-required target remains `Qwen/Qwen2.5-0.5B`, whose upstream config is `Qwen2ForCausalLM` /
+`model_type=qwen2`. On the refreshed 2026-08-22 Together **Full fine-tuning** table there is no Qwen2/Qwen2.5 entry.
+The smallest listed Qwen full-FT entry is `Qwen/Qwen3.5-0.8B`, but its upstream config is
+`Qwen3_5ForConditionalGeneration` / `model_type=qwen3_5` with a different text/vision architecture. It is therefore
+**not** a valid silent substitute. The historical `Qwen/Qwen2.5-7B-Instruct-Turbo` candidate is also absent from the
+current full-FT table; inference availability does not imply fine-tuning-template admission.
+
+**Current classification:** the Together route for the required Qwen2.5-0.5B checkpoint is provider/catalog blocked,
+not corpus blocked. The launcher deliberately has **no default Together template** and stops with
+`NO_COMPATIBLE_TOGETHER_TEMPLATE_CONFIGURED` before upload or price estimation when no verified compatible base is
+configured.
+
+When Together exposes an architecture-compatible Qwen2/Qwen2.5 full-FT base, refresh the catalog first and then run:
 
 ```bash
-pip install -U together
+pip install -U 'together>=2'
 export TOGETHER_API_KEY=...
+export CLAYCOG_TOGETHER_TEMPLATE='<verified Qwen2-compatible Together full-FT base>'
 bash train_together_v1.sh
 ```
 
-The historical launcher filename is retained, but it now regenerates and validates **SFT v2 only**. The shell stops
-after **preflight**. It checks the Together training template, validates/uploads files only after that gate, prints the
-server price estimate, and prints a deterministic `campaign_fingerprint`. It does not create a billed job.
+The historical launcher filename is retained, but it regenerates and validates **SFT v2 only**. With an explicit
+admitted template, preflight uses the current SDK-v2 model-limit surface, validates/uploads files, obtains the server
+price estimate and prints a deterministic `campaign_fingerprint`. It does not create a billed job.
 
 The fingerprint binds the exact v2 training/validation file digests plus `from_hf_model`, template, epochs, evaluations,
 training method/type, learning rate, warmup ratio and checkpoint count. A create must be authorized against exactly
@@ -65,34 +84,50 @@ that preflight identity:
 
 ```bash
 export CLAYCOG_CREATE_FINGERPRINT=<exact campaign_fingerprint from the same preflight>
-python3 launch_together_v1.py --create
+python3 launch_together_v1.py --template "$CLAYCOG_TOGETHER_TEMPLATE" --create
 ```
 
 A missing or stale fingerprint fails closed. Before remote file allocation on create, the launcher scans the account
 for an existing job carrying the deterministic campaign suffix. It repeats the duplicate check immediately before
-the billed create to narrow the check/use race. If the create transport outcome is ambiguous, **never blind-retry
-`--create`**: list/retrieve existing fine-tuning jobs first.
+the billed create, atomically persists a local `CREATE_ARMED` intent, and constructs the billed client with zero SDK
+retries. If the create transport outcome is ambiguous, the ledger advances to `UNKNOWN_REMOTE_CREATE` and future create
+attempts fail closed until the exact provider state is reconciled. **Never blind-retry `--create`.**
 
-### Together 0.5B caveat — refreshed 2026-08-22
+### Current SDK-v2 boundary
 
-Together's current documented **Full fine-tuning** table lists Qwen3.5 27B/9B/4B/2B/0.8B and Qwen3.6 27B, but no
-Qwen2/Qwen2.5 Full-FT template. Together BYOM separately requires a Together base/training template whose architecture
-matches the Hugging Face checkpoint.
+The launcher follows the current Together Python SDK surface observed upstream:
+- `client.fine_tuning.get_model_limits(model=...)`;
+- full-FT capability iff `limits.full_training` is present;
+- current file completion via `FileResponse.processed` with legacy status read fallback only;
+- `estimate_price(..., training_method="sft", training_type="full")`;
+- billed BYOM create via `model=...`, `from_hf_model=...`, `lora=False`.
 
-The owner-required weights remain `Qwen/Qwen2.5-0.5B`. The default
-`Qwen/Qwen2.5-7B-Instruct-Turbo` value is therefore only a **live API probe**, not an assumed compatible training
-template. `model_limits` is checked before file upload; if it does not report Full-FT support, the campaign stops.
-`model_limits` and price estimation still do not prove `from_hf_model` compatibility: that remains OPEN until Together's
-create path accepts the exact checkpoint/template pair and the job actually reaches training.
+A no-bill preflight establishes dataset processing, live template limits and price/budget admission only. It **does not**
+prove the target checkpoint/template pair will be accepted. BYOM compatibility remains open until Together accepts the
+exact create and the job actually enters training.
 
-Do not silently fall back to Qwen3.5-0.8B: that changes the owner-defined research question. If Together has no admitted
-Qwen2-compatible Full-FT template, use the same 0.5B full-SFT corpus on another owner-admitted full-FT runner.
+Current standard SFT Full Fine-Tuning pricing for models up to 16B is `$0.54 / 1M processed tokens`; Together also
+documents a current `$4.00` minimum charge per standard job, with some exemptions. V2 is roughly 2.51 MB train +
+0.285 MB validation; character/4 arithmetic at 3 train epochs + 2 validation evaluations is about 2.24M processed
+tokens before true tokenizer accounting, so the standard minimum would likely dominate. The live Together estimate is
+authoritative and the launcher hard-aborts above the owner campaign's `$18` single-job gate.
 
-Together's current standard SFT Full Fine-Tuning rate for models up to 16B is `$0.54 / 1M processed tokens`, with a
-current `$4.00` minimum charge per standard job. V2 is roughly 2.51 MB train + 0.285 MB validation; character/4 arithmetic
-at 3 train epochs + 2 validation evaluations is about 2.24M processed tokens before true tokenizer accounting, so the
-standard `$4` minimum would dominate if the job were admitted. The Together server estimate remains authoritative and
-the launcher hard-aborts above the owner campaign's `$18` single-job gate.
+If Together continues to lack a Qwen2-compatible base, the same SFT v2 corpus may be taken to another **owner-admitted**
+full-FT runner. Do not silently change model family, checkpoint size, provider or paid budget merely to get a green run.
+
+## Provider regression gates
+
+Before any provider preflight run:
+
+```bash
+python3 test_launch_together_safety_v1.py
+python3 test_together_provider_contract_v2.py
+```
+
+The first suite protects exact fingerprinting, account duplicate detection, local crash ambiguity, file permissions and
+zero-retry billed create. The second protects the current provider boundary: no guessed template, SDK-v2 model limits,
+current `processed` handling, string price-estimation contract and zero implicit billed create from preflight helpers.
+These are deterministic no-network regressions, not provider compatibility evidence.
 
 ## 0.5B RAM gate
 
@@ -116,8 +151,10 @@ A successful training job is only a candidate. Promotion requires:
 
 ## `go`
 
-Until promotion, every `go` advances this same lane:
+Until promotion or falsification, every `go` advances this same lane:
 
-`refresh -> corpus/spec -> OOD/falsifiers -> ClayCode lowering -> Together/full-FT runner admission -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> integrate -> evidence`
+`refresh -> corpus/spec -> OOD/falsifiers -> ClayCode lowering -> provider/full-FT runner admission -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> integrate -> evidence`
 
-No `go` may claim mathematical correctness, consciousness or superiority from training intent alone.
+Current SFT v2 is ready as a **source candidate** for paid training; the Together-specific execution branch is correctly
+classified as **catalog blocked** until an architecture-compatible base appears. No `go` may claim mathematical
+correctness, consciousness or superiority from training intent alone.

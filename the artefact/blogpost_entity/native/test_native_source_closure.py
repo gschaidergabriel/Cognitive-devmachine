@@ -77,3 +77,40 @@ def test_symlinked_local_source_fails_closed(tmp_path: Path):
 
     with pytest.raises(RuntimeError, match="LOCAL_SOURCE_SYMLINK_FORBIDDEN"):
         build_native_bound.source_closure(entry)
+
+
+def test_version_label_is_read_from_transitive_source(tmp_path: Path):
+    entry = tmp_path / "mini_entity.c"
+    part = tmp_path / "version.inc"
+    entry.write_text('#include "version.inc"\n', encoding="utf-8")
+    part.write_text('#define MINI_VERSION "mini-entity/test-line"\n', encoding="utf-8")
+
+    assert build_native_bound.source_version_label(entry) == "mini-entity/test-line"
+
+
+def test_ambiguous_version_definitions_fail_closed(tmp_path: Path):
+    entry = tmp_path / "mini_entity.c"
+    a = tmp_path / "a.inc"
+    b = tmp_path / "b.inc"
+    entry.write_text('#include "a.inc"\n#include "b.inc"\n', encoding="utf-8")
+    a.write_text('#define MINI_VERSION "mini-entity/a"\n', encoding="utf-8")
+    b.write_text('#define MINI_VERSION "mini-entity/b"\n', encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="AMBIGUOUS_MINI_VERSION"):
+        build_native_bound.source_version_label(entry)
+
+
+def test_current_repository_native_line_is_07_and_all_split_parts_are_bound():
+    entry = HERE / "mini_entity.c"
+    closure = build_native_bound.source_closure(entry)
+    paths = [item["path"] for item in closure["files"]]
+
+    assert build_native_bound.source_version_label(entry) == "mini-entity/0.7.0-dev1"
+    assert paths == [
+        "mini_entity.c",
+        "mini_entity_part00.inc",
+        "mini_entity_part01.inc",
+        "mini_entity_part02.inc",
+        "mini_entity_part03.inc",
+        "mini_entity_part04.inc",
+    ]

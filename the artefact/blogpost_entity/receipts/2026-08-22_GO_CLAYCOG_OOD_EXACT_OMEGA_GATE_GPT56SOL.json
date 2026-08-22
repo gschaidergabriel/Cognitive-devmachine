@@ -1,0 +1,71 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "scope": "ClayCode 0.5B cognition OOD promotion gate",
+  "base_main": "263c14f9858d820dec54a8d4da1454cf08e5be40",
+  "branch": "gpt56sol/ood-exact-vector-current-20260822",
+  "problem": {
+    "classification": "PROMOTION_GATE_GOODHART_BYPASS",
+    "original_generator_blob": "ae50c5a9135d1ca8e07dec27f3546ba03721b778",
+    "original_evaluator_blob": "3206df35f66f314b8ad573c11f646612b0456f74",
+    "original_validator_blob_at_unusual_experiment": "2d4a45591d5431cbf79d82240e3f03b77165a4b7",
+    "mechanism": "Valid omega OOD cases required only the operation name, validator-call substrings and commit. Exact argument names/values/types and schema identity were not scored; duplicate output ids overwrote silently and unknown ids were ignored."
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "classification": "GOODHART_PROMOTION_GATE_ATTACK",
+    "execution": "authorized isolated local Linux execution",
+    "cases": 200,
+    "valid_omega_cases": 80,
+    "attack": "For every valid omega case emit the correct operation plus generic authority/generation, all five validator calls and commit while omitting every requested omega_arg and omega_schema. Other families satisfy only their existing substring gate.",
+    "observed_old_gate": {
+      "exit_code": 0,
+      "strict_claycode_rate": 1.0,
+      "semantic_gate_rate": 1.0,
+      "omega_valid_semantic_rate": 1.0
+    },
+    "interpretation": "The old semantic promotion gate was empirically falsified. This is the single unusual experiment for the user-triggered go; subsequent executions are regression-only."
+  },
+  "repair": {
+    "generator_blob": "68b1842bcf98e4a6ab9d1147dfc4b44a297a487d",
+    "evaluator_blob": "3554e8ba5f9fd2e02f7b22066ac8209920ec679a",
+    "regression_blob": "c7e2dbf6e2079ac899e76ab66efa5f3325600b12",
+    "current_main_validator_blob_used_for_final_regression": "c7659d023e86587bb9eb6bd5f330bc9a9e3e5ed2",
+    "delta": [
+      "Bind each valid OOD omega case to exact operation, typed argument names/values/types, schema id, authority expression, generation expression, exact validator set and exactly one commit.",
+      "Reject missing, extra or duplicated omega vector fields.",
+      "Reject duplicate spec ids, duplicate output ids and unexpected output ids.",
+      "Keep structural ClayCode validation independent from exact semantic vector validation."
+    ]
+  },
+  "fixed_regression": {
+    "execution": "authorized isolated local Linux execution reconstructed from exact Git blobs",
+    "py_compile": "PASS",
+    "attack": {
+      "exit_code": 1,
+      "strict_claycode_rate": 1.0,
+      "semantic_gate_rate": 0.6,
+      "omega_valid_semantic_rate": 0.0
+    },
+    "oracle": {
+      "exit_code": 0,
+      "strict_claycode_rate": 1.0,
+      "semantic_gate_rate": 1.0
+    },
+    "duplicate_output_id": "REJECTED",
+    "unexpected_output_id": "REJECTED",
+    "note": "Regression was repeated with the newer main runtime-neutrality validator blob c7659d023e86587bb9eb6bd5f330bc9a9e3e5ed2 after PR #774; result remained PASS."
+  },
+  "evidence_class": "MECHANISM_SUPPORTED_BOUNDED_EXACT_BLOB_EXECUTION",
+  "training_job_started": false,
+  "together_api_used": false,
+  "money_spent_usd": 0,
+  "promotion": "NOT_GRANTED",
+  "remaining_gates": [
+    "Merge/adjudicate this OOD gate onto current main without overwriting newer parallel work.",
+    "Run real untuned/tuned model completions against the hardened OOD gate after an admitted training checkpoint exists.",
+    "Preserve separate Together BYOM compatibility, checkpoint evaluation, quantization and measured RSS gates."
+  ]
+}

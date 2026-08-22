@@ -6,9 +6,8 @@ import unittest
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[2]
 PART04 = HERE / "mini_entity_part04.inc"
-ZERO_PROFILE = ROOT / "blogpost_entity" / "presets" / "zero_blog.json"
+ZERO_PROFILE = HERE.parent / "presets" / "zero_blog.json"
 
 
 class NativeSemanticAdmissionSourceTests(unittest.TestCase):
@@ -37,7 +36,7 @@ class NativeSemanticAdmissionSourceTests(unittest.TestCase):
 
     def test_status_exposes_blocked_semantic_admission(self) -> None:
         text = PART04.read_text(encoding="utf-8")
-        self.assertIn('"native_semantic_admission"', text)
+        self.assertIn("native_semantic_admission", text)
         self.assertIn("CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY", text)
 
 

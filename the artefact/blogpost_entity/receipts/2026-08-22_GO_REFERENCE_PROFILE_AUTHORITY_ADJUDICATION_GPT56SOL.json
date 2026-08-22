@@ -8,37 +8,37 @@
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
   "canonical_main_observed_before_branch": "df8c25d526206ea6ac5722dbe3e3a9b11981dd3c",
-  "latest_main_observed_after_gate_execution_attempt": "f577e826ed9532a323fa89af459de1d3de90e8c4",
+  "latest_main_observed_after_gate_refinement": "2971facc836ce99bdf6918c51e15c67df7c4cf36",
   "execution_policy": "FREE_ONLY",
   "scope": "adjudicate overlapping structured-reference convergence candidates without creating another runtime implementation",
   "observed_authority": {
     "native_tables": ["entity_state", "profiles"],
     "native_profile_selector": "entity_state.active_profile -> profiles.profile_id",
-    "native_profile_integrity": "sha256 over stored profile_json bytes compared with profiles.profile_sha256"
+    "native_profile_integrity": "sha256 over exact stored profile_json bytes compared with profiles.profile_sha256"
   },
-  "parallel_candidates_reviewed": [727, 728, 949, 954, 955],
+  "parallel_candidates_reviewed": [727, 728, 949, 954, 955, 956, 966],
   "findings": [
     {
       "kind": "BLOCKING_STATE_AUTHORITY_FORK",
-      "candidates": [949, 955],
-      "detail": "Both candidates introduce eos_pipeline_profiles/eos_pipeline_profile_components rather than reusing native entity_state.active_profile + profiles. This would create a second active-profile authority inside one MiniUnifiedDB contract."
+      "candidates": [949, 955, 966],
+      "detail": "These candidates introduced eos_pipeline_profile(s) rather than reusing native entity_state.active_profile + profiles. That creates a second independently writable active-profile authority inside one MiniUnifiedDB contract."
     },
     {
       "kind": "BLOCKING_SECRET_BOUNDARY_REGRESSION",
       "candidates": [949, 955],
-      "detail": "Their local_exec subprocess.run has no explicit env mapping, so a local model runner inherits the full parent process environment, potentially including provider secrets."
+      "detail": "Their local_exec subprocess.run lacked an explicit child environment. A separate current-main invariant already owns this obligation, so this receipt does not duplicate that gate."
     },
     {
       "kind": "SUPPORTED_DONOR_DELTA",
-      "candidates": [949, 955],
-      "detail": "Their inference pointer parser supports RFC6901-style /choices/0/message/content, consistent with the shipped v2 profile and the macrocycle's canonical unusual-experiment result."
+      "candidates": [949, 955, 966],
+      "detail": "The narrow current-effect/RFC6901 pieces remain reusable when fused onto the one existing profile authority without weakening the recursive persisted-string-leaf gate."
     }
   ],
   "durable_gate_added": "the artefact/blogpost_entity/native/test_reference_profile_authority_convergence.py",
   "gate_semantics": [
-    "reference runtime must use the native entity_state/active_profile/profiles/profile_sha256 authority",
-    "reference runtime must not introduce eos_pipeline_profile or eos_pipeline_profiles",
-    "any subprocess.run added to the canonical reference runtime must use an explicit child env mapping"
+    "the guard is dormant while current main still lacks _pipeline_profile_read, so an explicitly open fail-closed gap does not make baseline regressions red",
+    "once _pipeline_profile_read appears, that method must bind entity_state/active_profile/profiles/profile_sha256",
+    "the converged reference runtime must not introduce eos_pipeline_profile or eos_pipeline_profiles anywhere"
   ],
   "unusual_experiment": {
     "this_organ_local_count": 0,
@@ -49,26 +49,7 @@
   },
   "runtime_execution": {
     "vercel_sandbox_start_exec_surface": "NOT_EXPOSED_BY_CURRENT_CONNECTOR",
-    "github_actions_gate_head": [
-      {
-        "run_id": 32574594742,
-        "workflow": "Research Entity Identity Guard",
-        "job_id": 97034952380,
-        "status": "completed",
-        "conclusion": "failure",
-        "steps": null,
-        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
-      },
-      {
-        "run_id": 32574594849,
-        "workflow": "Mini Entity native 0.7 exact repro",
-        "job_id": 97034952680,
-        "status": "completed",
-        "conclusion": "failure",
-        "steps": null,
-        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
-      }
-    ],
+    "previous_github_actions_observation": "Jobs associated with the earlier gate head completed with steps=null; that is execution-admission failure before visible steps and gives zero test/runtime credit.",
     "rerun_started": false,
     "rerun_reason": "No new execution discriminator; blind repeat of zero-step admission failures would not add evidence.",
     "exact_runtime_credit": 0,
@@ -82,14 +63,14 @@
     "spend": 0
   },
   "next_canonical_repair": [
-    "fuse pipeline_profile_read onto native entity_state.active_profile -> profiles",
-    "verify profile_sha256 with the same stored-byte identity contract as native",
-    "retain canonical inference_generate and RFC6901 response-pointer support",
-    "retain explicit allowlisted local_exec child environment",
+    "repair PR #966 in place rather than create another runtime implementation",
+    "bind import_profile and pipeline_profile_read to native entity_state.active_profile -> profiles",
+    "verify profiles.profile_sha256 over the same exact stored profile_json byte identity used by native",
+    "retain current inference_generate/RFC6901 pieces, recursive persisted-string-leaf gate and current CAS/commit mechanisms",
     "deauthorize legacy profile_load/provider_chat_json",
-    "run structured convergence plus native-authority gate on exact fresh head in authorized isolated execution"
+    "run focused structured/native/profile-authority regressions on an actually-started authorized exact-head isolated runner"
   ],
-  "acceptance": "RED_GATE_BOUND_PROFILE_AUTHORITY_FUSION_REQUIRED",
+  "acceptance": "CONDITIONAL_PROFILE_AUTHORITY_GATE_READY_FOR_MAIN",
   "non_claims": [
     "No reference-runtime PASS is claimed.",
     "No exact isolated runtime execution PASS is claimed.",

@@ -4,7 +4,7 @@ import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
-TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"
+TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"; V2_VALIDATOR=HERE/"validate_corpus_v2.py"
 EXPECTED_MODEL="Qwen/Qwen3.5-0.8B"; MODEL=os.environ.get("CLAYCOG_08B_MODEL",EXPECTED_MODEL)
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=float(os.environ.get("CLAYCOG_LEARNING_RATE","1e-5")); WARMUP_RATIO=float(os.environ.get("CLAYCOG_WARMUP_RATIO","0.03"))
@@ -20,8 +20,7 @@ def validate_static_contract():
 
 def local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
-    subprocess.run([sys.executable,str(HERE/"validate_sft_v2.py"),str(TRAIN),"--against",str(VALID)],check=True)
-    subprocess.run([sys.executable,str(HERE/"validate_sft_v2.py"),str(VALID),"--against",str(TRAIN)],check=True)
+    subprocess.run([sys.executable,str(V2_VALIDATOR),str(TRAIN),str(VALID)],check=True)
 
 def sha256_file(p):
     h=hashlib.sha256()

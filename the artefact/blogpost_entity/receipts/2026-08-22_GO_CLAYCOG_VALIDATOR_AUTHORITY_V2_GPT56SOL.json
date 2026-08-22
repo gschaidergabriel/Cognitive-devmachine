@@ -1,0 +1,38 @@
+{
+  "schema":"clay-go-source-receipt/v1",
+  "date":"2026-08-22",
+  "organ":"GPT-5.6 Sol",
+  "trigger":"go",
+  "base_main_sha":"263c14f9858d820dec54a8d4da1454cf08e5be40",
+  "branch":"gpt56sol/claycog-validator-authority-fusion-v2-20260822",
+  "program":"MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage":"MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "finding":{
+    "id":"DIVERGENT_CLAYCODE_VALIDATOR_AUTHORITIES",
+    "severity":"PRE_TRAINING_BLOCKER",
+    "observed":"The new paid-training SFT v2 generator still emits the extended cognition intrinsic set, while validate_corpus_v2.py duplicated a weaker structural validator with no closed intrinsic vocabulary/arity gate. OOD evaluation uses validate_sft_v1.validate_code, creating two structural admission authorities.",
+    "risk":"Paid-training data can receive validity credit under semantics different from OOD/promotion/runtime-facing validation."
+  },
+  "delta":[
+    "add one machine-readable intrinsics_v1.py vocabulary and arity map",
+    "harden validate_sft_v1.py with exact top-level runtime bindings, comment/string fencing, top-level omega gates, unknown-intrinsic and wrong-arity rejection",
+    "make validate_corpus_v2.py import the canonical validate_sft_v1.validate_code instead of owning a competing ClayCode grammar",
+    "extend the PR regression to preserve existing runtime-neutral binding falsifiers and add statement-smuggling, intrinsic closure, arity, literal punctuation and all 1650 SFT v2 generated target checks",
+    "update cognition spec with one-validator-authority invariant"
+  ],
+  "parallel_work_fused_or_preserved":[
+    "main #774 runtime-neutral binding hardening",
+    "main #778 exact PR runner definition",
+    "main #780 ambiguous Together create fail-closed behavior",
+    "main #787 leakage-free SFT v2 paid-training path"
+  ],
+  "unusual_experiment":{
+    "count":1,
+    "id":"INTRINSIC_VOCABULARY_CLOSURE_PARSER_FALSIFIER",
+    "result":"Initial string masking erased literal arguments and falsely made cfg(string) arity zero; repaired by preserving a passive literal token. No second unusual experiment was performed."
+  },
+  "execution_evidence":"NOT_YET_EXACT_BRANCH_EXECUTED at receipt write; prior GitHub PR runner attempts observed job failure before any steps, which is execution-admission failure rather than test failure.",
+  "together":{"secret_available_to_organ":false,"preflight":false,"create":false,"job_started":false},
+  "not_claimed":["SFT v2 closure PASS on this exact branch","Together BYOM compatibility","training quality","OOD promotion","Q4_K_M RSS acceptance","native 0.7 whole-product acceptance"],
+  "next_gate":"Open fresh PR, let current claycog-validator-pr execute test_validate_sft_v1.py on the exact head; if runner again fails before steps, keep execution blocked. If it executes, require all fused tests and all 1650 v2 targets green before Together preflight."
+}

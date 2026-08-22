@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""Together BYOM launcher for the 0.5B ClayCode cognition campaign.
+"""Canonical Together BYOM launcher for the 0.5B ClayCode cognition campaign.
 
-Default mode is preflight: regenerate/validate corpus, upload/validate files, check the
-Together template, and print a server price estimate. A billed training job is created
-only with --create after all gates pass and the operator binds create authorization to
-the exact deterministic campaign fingerprint.
+Campaign v2 keeps the owner-required Qwen/Qwen2.5-0.5B research target but replaces the
+duplicate-heavy v1 SFT corpus with the diversity-gated compositional v2 corpus and OOD v2.
+A billed job is created only after local gates, current Together template admission, budget
+admission, exact campaign-fingerprint confirmation, and account-side duplicate checks.
 
-Together's regular catalog has no native 0.5B Qwen entry. We therefore use BYOM with
-Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family catalog-template candidate.
-Template model_limits and price estimation do NOT prove BYOM compatibility because they
-do not validate from_hf_model. BYOM compatibility remains open until Together accepts
-(and subsequently starts) the requested HF checkpoint under the selected template.
+Together's current fine-tuning catalog has no native Qwen2.5 training entry. BYOM requires
+a compatible Together training template, while model_limits/price estimation do not prove
+from_hf_model compatibility. Therefore no template is guessed by default. Qwen3.x is never
+silently substituted for the Qwen2.5-0.5B experiment. BYOM compatibility remains OPEN until
+Together accepts the exact checkpoint/template create and the job reaches a training state.
 """
 import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
-TRAIN=HERE/"train_v1.jsonl"
-VALID=HERE/"validation_v1.jsonl"
+TRAIN=HERE/"train_v2.jsonl"
+VALID=HERE/"validation_v2.jsonl"
 HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL","Qwen/Qwen2.5-0.5B")
-TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-7B-Instruct-Turbo")
+TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","")
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
 EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00"))
@@ -27,9 +27,24 @@ CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"
 ACTIVE_OR_SPENT_STATUSES={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
 def run_local_checks():
-    subprocess.run([sys.executable,str(HERE/"generate_sft_v1.py")],check=True)
+    subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_sft_v1.py"),str(TRAIN)],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_sft_v1.py"),str(VALID)],check=True)
+    subprocess.run([sys.executable,str(HERE/"corpus_diversity_gate_v2.py"),str(TRAIN),str(VALID)],check=True)
+    subprocess.run([sys.executable,str(HERE/"generate_eval_ood_v2.py")],check=True)
+
+def validate_template(hf_model,template):
+    if not template:
+        raise SystemExit(
+            "NO_COMPATIBLE_TEMPLATE_CONFIGURED: current Together docs expose no native Qwen2.5 fine-tuning template. "
+            "Set --template/CLAYCOG_TOGETHER_TEMPLATE only after Together exposes or confirms a full-FT Qwen2.x template "
+            "compatible with Qwen/Qwen2.5-0.5B."
+        )
+    h=hf_model.lower(); t=template.lower()
+    if "qwen2.5" in h and "qwen3" in t:
+        raise SystemExit(f"ARCHITECTURE_FAIL_CLOSED: refusing Qwen2.5 BYOM weights with Qwen3.x template {template}")
+    if "qwen2.5" in h and "qwen2" not in t:
+        raise SystemExit(f"ARCHITECTURE_FAIL_CLOSED: template does not identify a Qwen2.x family: {template}")
 
 def wait_file(client,file_id):
     while True:
@@ -55,7 +70,9 @@ def sha256_file(path):
 
 def campaign_descriptor(hf_model):
     return {
-        "schema":"claycog-05b-together-campaign/v1",
+        "schema":"claycog-05b-together-campaign/v2",
+        "corpus_schema":"claycog-sft/v2",
+        "ood_schema":"claycog-ood/v2-240",
         "from_hf_model":hf_model,
         "template_model":TEMPLATE,
         "training_sha256":sha256_file(TRAIN),
@@ -75,8 +92,6 @@ def campaign_fingerprint(hf_model):
     return hashlib.sha256(raw).hexdigest()
 
 def campaign_suffix(fingerprint):
-    # 96 bits of the campaign digest are enough for collision-resistant account lookup,
-    # while the full 256-bit digest remains the operator confirmation value.
     return "claycog05b-"+fingerprint[:24]
 
 def _items(x):
@@ -90,12 +105,6 @@ def _field(x,name,default=None):
     return getattr(x,name,default)
 
 def matching_campaign_jobs(client,hf_model,template,suffix):
-    """Return account jobs that appear to carry this deterministic campaign suffix.
-
-    The suffix is derived from exact local dataset digests + training configuration.
-    Where Together exposes model/from_hf_model, those fields must also match. Missing
-    optional fields are tolerated so the guard remains useful across response versions.
-    """
     matches=[]
     for job in _items(client.fine_tuning.list()):
         status=str(_field(job,"status","")).lower()
@@ -127,28 +136,31 @@ def require_create_confirmation(fingerprint):
         )
 
 def main():
+    global TEMPLATE
     ap=argparse.ArgumentParser()
     ap.add_argument("--create",action="store_true",help="create billed fine-tuning job after exact-fingerprint preflight")
     ap.add_argument("--instruct-ablation",action="store_true",help="use Qwen/Qwen2.5-0.5B-Instruct BYOM checkpoint")
+    ap.add_argument("--template",default=TEMPLATE,help="explicit Together full-FT Qwen2.x template confirmed for this BYOM checkpoint")
     args=ap.parse_args()
     if not os.environ.get("TOGETHER_API_KEY"):
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     hf_model="Qwen/Qwen2.5-0.5B-Instruct" if args.instruct_ablation else HF_MODEL
+    TEMPLATE=args.template
+    validate_template(hf_model,TEMPLATE)
 
     run_local_checks()
     fingerprint=campaign_fingerprint(hf_model)
     suffix=campaign_suffix(fingerprint)
 
-    # Keep Together import behind the credential/local-validation boundary so pure safety
-    # tests can execute without the SDK and no network-capable object exists before checks.
     from together import Together
     client=Together()
-    limits=client.fine_tuning.model_limits(model_name=TEMPLATE)
+    try:
+        limits=client.fine_tuning.model_limits(model_name=TEMPLATE)
+    except Exception as exc:
+        raise SystemExit(f"TEMPLATE_MODEL_LIMITS_REJECTED: {TEMPLATE}: {exc}") from exc
     if not getattr(limits,"supports_full_training",False):
-        raise SystemExit(f"Template is not full-FT capable: {TEMPLATE}")
+        raise SystemExit(f"TEMPLATE_NOT_FULL_FT: {TEMPLATE}")
 
-    # On create, bind human/operator intent to exact deterministic bytes before remote
-    # uploads, then check the account ledger before allocating new remote file objects.
     if args.create:
         require_create_confirmation(fingerprint)
         assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
@@ -171,6 +183,8 @@ def main():
         "mode":"preflight" if not args.create else "create",
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
+        "corpus_schema":"claycog-sft/v2",
+        "ood_cases":240,
         "from_hf_model":hf_model,
         "template_model":TEMPLATE,
         "epochs":EPOCHS,
@@ -190,8 +204,6 @@ def main():
         print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fingerprint} for the exact create")
         return
 
-    # Close the check/use window: another process may have created this exact campaign
-    # while files were being validated or price estimation was running.
     assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
 
     job=client.fine_tuning.create(
@@ -212,6 +224,7 @@ def main():
         "job_id":job.id,
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
+        "corpus_schema":"claycog-sft/v2",
         "from_hf_model":hf_model,
         "template_model":TEMPLATE,
         "full_fine_tune":True,

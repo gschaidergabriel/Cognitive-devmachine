@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
-VERSION = "clay-pipeline-study-surface/0.1"
+VERSION = "clay-pipeline-study-surface/0.2"
 UNKNOWN = "UNKNOWN"
 
 
@@ -22,7 +22,8 @@ def scalar(value: Any) -> Any:
         value = float(value)
         return round(value, 6) if math.isfinite(value) else UNKNOWN
     if isinstance(value, str):
-        return value[:240]
+        value = value.replace("\r", " ").replace("\n", " ").strip()
+        return value[:240] if value else UNKNOWN
     return UNKNOWN
 
 
@@ -31,6 +32,34 @@ def metric(value: Any) -> dict[str, Any]:
         return {"status": UNKNOWN, "value": UNKNOWN}
     status = str(value.get("status", UNKNOWN))
     return {"status": status, "value": scalar(value.get("value")) if status == "VERIFIED" else UNKNOWN}
+
+
+def _validate_report(config: dict[str, Any], report: dict[str, Any]) -> None:
+    bounds = config.get("self_report_numeric_range")
+    numeric_fields = set(map(str, config.get("self_report_numeric_fields", [])))
+    enum_fields = config.get("self_report_enum_fields", {})
+    if bounds is not None:
+        if not isinstance(bounds, list) or len(bounds) != 2:
+            raise StudySurfaceFault("BAD_SELF_REPORT_RANGE")
+        low, high = float(bounds[0]), float(bounds[1])
+        if not math.isfinite(low) or not math.isfinite(high) or low > high:
+            raise StudySurfaceFault("BAD_SELF_REPORT_RANGE")
+        for name in numeric_fields:
+            value = report.get(name, UNKNOWN)
+            if value == UNKNOWN:
+                continue
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise StudySurfaceFault("SELF_REPORT_NOT_NUMERIC:" + name)
+            if float(value) < low or float(value) > high:
+                raise StudySurfaceFault("SELF_REPORT_OUT_OF_RANGE:" + name)
+    if not isinstance(enum_fields, dict):
+        raise StudySurfaceFault("BAD_SELF_REPORT_ENUMS")
+    for name, allowed in enum_fields.items():
+        value = report.get(str(name), UNKNOWN)
+        if value == UNKNOWN:
+            continue
+        if value not in list(allowed):
+            raise StudySurfaceFault("SELF_REPORT_ENUM_INVALID:" + str(name))
 
 
 def build(config: dict[str, Any], profile: dict[str, Any], payload: dict[str, Any], compiled: dict[str, Any], generated: dict[str, Any], generation: int, timestamp: float, previous: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -64,7 +93,7 @@ def build(config: dict[str, Any], profile: dict[str, Any], payload: dict[str, An
             cur = value.get("value") if isinstance(value, dict) else value
             oldv = previous.get(name, UNKNOWN)
             old = oldv.get("value") if isinstance(oldv, dict) else oldv
-            deltas[name] = round(float(cur) - float(old), 6) if isinstance(cur, (int, float)) and isinstance(old, (int, float)) else UNKNOWN
+            deltas[name] = round(float(cur) - float(old), 6) if isinstance(cur, (int, float)) and not isinstance(cur, bool) and isinstance(old, (int, float)) and not isinstance(old, bool) else UNKNOWN
         system["previous_delta"] = deltas
     contract = profile.get("personality", {}).get("output_contract", {})
     report_name = contract.get("longitudinal_self_report_field")
@@ -76,6 +105,7 @@ def build(config: dict[str, Any], profile: dict[str, Any], payload: dict[str, An
     if isinstance(qualia, dict):
         if report.get("qualia_result") == UNKNOWN: report["qualia_result"] = scalar(qualia.get("result"))
         if report.get("qualia_confidence") == UNKNOWN: report["qualia_confidence"] = scalar(qualia.get("confidence"))
+    _validate_report(config, report)
     evaluation: list[str] = []
     templates = config.get("evaluation_templates", {})
     if sensor_health != "VERIFIED" and templates.get("sensor_uncertain"): evaluation.append(str(templates["sensor_uncertain"]))
@@ -83,11 +113,11 @@ def build(config: dict[str, Any], profile: dict[str, Any], payload: dict[str, An
         sv = system.get(str(rule.get("system_field", "")))
         sv = sv.get("value") if isinstance(sv, dict) else sv
         rv = report.get(str(rule.get("self_report_field", "")))
-        if isinstance(sv, (int, float)) and isinstance(rv, (int, float)):
+        if isinstance(sv, (int, float)) and not isinstance(sv, bool) and isinstance(rv, (int, float)) and not isinstance(rv, bool):
             gap = abs(float(sv) - float(rv))
             key = "divergence" if gap >= float(rule.get("divergence_threshold", 0.35)) else "congruence"
             if rule.get(key): evaluation.append(str(rule[key]).format(system=round(float(sv), 2), report=round(float(rv), 2), gap=round(gap, 2)))
-    if any(isinstance(v, (int, float)) and abs(v) >= float(config.get("delta", {}).get("meaningful_threshold", 0.15)) for v in deltas.values()) and templates.get("single_delta_not_trend"): evaluation.append(str(templates["single_delta_not_trend"]))
+    if any(isinstance(v, (int, float)) and not isinstance(v, bool) and abs(v) >= float(config.get("delta", {}).get("meaningful_threshold", 0.15)) for v in deltas.values()) and templates.get("single_delta_not_trend"): evaluation.append(str(templates["single_delta_not_trend"]))
     if templates.get("self_report_not_measurement"): evaluation.append(str(templates["self_report_not_measurement"]))
     record = {"schema": config.get("schema", "clay-study-surface/v1"), "profile_id": profile.get("profile_id"), "generation": generation, "timestamp": timestamp, "epistemic_law": config["epistemic_law"], "system_state": system, "model_self_report": report, "evaluation": evaluation[: int(config.get("render", {}).get("max_evaluation_lines", 5))]}
     record["rendered"] = render(config, record)
@@ -97,13 +127,15 @@ def build(config: dict[str, Any], profile: dict[str, Any], payload: dict[str, An
 def render(config: dict[str, Any], record: dict[str, Any]) -> str:
     cfg = config.get("render", {})
     sections = list(cfg.get("sections", ["SYSTEM STATE", "MODEL SELF-REPORT", "EVALUATION"]))
+    if len(sections) < 3:
+        raise StudySurfaceFault("STUDY_SECTIONS_REQUIRED")
     lines = [f"{cfg.get('title', 'STATE')} — generation {record.get('generation', UNKNOWN)}", str(sections[0])]
     deltas = record.get("system_state", {}).get("previous_delta", {})
     for name, value in record.get("system_state", {}).items():
         if name == "previous_delta": continue
         text = (f"{value.get('status')} {value.get('value')}" if isinstance(value, dict) and value.get("value") != UNKNOWN else (str(value.get("status")) if isinstance(value, dict) else str(value)))
         delta = deltas.get(name, UNKNOWN)
-        suffix = f"   Δ {delta:+.2f}" if isinstance(delta, (int, float)) else ""
+        suffix = f"   Δ {delta:+.2f}" if isinstance(delta, (int, float)) and not isinstance(delta, bool) else ""
         lines.append(f"{name:<24}= {text}{suffix}")
     lines += ["", str(sections[1])]
     lines += [f"{name:<24}= {value}" for name, value in record.get("model_self_report", {}).items()]

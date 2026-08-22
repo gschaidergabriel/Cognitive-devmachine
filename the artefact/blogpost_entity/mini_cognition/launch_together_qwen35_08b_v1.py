@@ -11,6 +11,11 @@ RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=flo
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00")); FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
+SOURCE_IDENTITY_PATHS={
+    "launcher":Path(__file__).resolve(),
+    "generator":HERE/"generate_sft_v2.py",
+    "validator":HERE/"validate_sft_v2.py",
+}
 
 def validate_static_contract():
     if MODEL!=EXPECTED_MODEL: raise SystemExit(f"MODEL_OVERRIDE_REJECTED expected {EXPECTED_MODEL!r}, got {MODEL!r}")
@@ -28,11 +33,24 @@ def sha256_file(p):
     with open(p,"rb") as f:
         for chunk in iter(lambda:f.read(1024*1024),b""): h.update(chunk)
     return h.hexdigest()
+def exact_repo_head():
+    try:
+        head=subprocess.run(["git","-C",str(HERE),"rev-parse","--verify","HEAD"],check=True,capture_output=True,text=True).stdout.strip().lower()
+    except Exception as e:
+        raise SystemExit(f"REPO_IDENTITY_UNAVAILABLE {type(e).__name__}") from e
+    if len(head)!=40 or any(c not in "0123456789abcdef" for c in head): raise SystemExit("REPO_IDENTITY_INVALID")
+    return head
+def source_identity():
+    try:
+        files={name:sha256_file(path) for name,path in SOURCE_IDENTITY_PATHS.items()}
+    except Exception as e:
+        raise SystemExit(f"SOURCE_IDENTITY_UNAVAILABLE {type(e).__name__}") from e
+    return {"repo_head":exact_repo_head(),"files_sha256":files}
 def training_method(): return {"method":"sft","train_on_inputs":"auto"}
 def training_type(): return {"type":"Full"}
-def campaign_descriptor(): return {"schema":"claycog-08b-together-direct-campaign/v2","model":MODEL,"training_sha256":sha256_file(TRAIN),"validation_sha256":sha256_file(VALID),"epochs":EPOCHS,"evals":EVALS,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_method":training_method(),"training_type":training_type(),"n_checkpoints":1}
+def campaign_descriptor(): return {"schema":"claycog-08b-together-direct-campaign/v3","source_identity":source_identity(),"model":MODEL,"training_sha256":sha256_file(TRAIN),"validation_sha256":sha256_file(VALID),"epochs":EPOCHS,"evals":EVALS,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_method":training_method(),"training_type":training_type(),"n_checkpoints":1}
 def campaign_fingerprint(): return hashlib.sha256(json.dumps(campaign_descriptor(),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode()).hexdigest()
-def campaign_suffix(fp): return "claycog08b-v2-"+fp[:24]
+def campaign_suffix(fp): return "claycog08b-v3-"+fp[:24]
 def objdict(x): return x.model_dump() if hasattr(x,"model_dump") else x.dict() if hasattr(x,"dict") else x if isinstance(x,dict) else str(x)
 def _field(x,n,d=None): return x.get(n,d) if isinstance(x,dict) else getattr(x,n,d)
 
@@ -121,7 +139,7 @@ def main():
     if args.create:require_create_confirmation(fp);assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix)
     tf=client.files.upload(file=str(TRAIN),purpose="fine-tune",check=True);vf=client.files.upload(file=str(VALID),purpose="fine-tune",check=True);wait_file(client,tf.id);wait_file(client,vf.id)
     est=estimate_price(client,tf.id,vf.id);price=float(est.estimated_total_price)
-    print(json.dumps({"schema":"CLAYCOG_08B_TOGETHER_DIRECT_PREFLIGHT/v2","mode":"create" if args.create else "preflight","campaign_fingerprint":fp,"campaign_suffix":suffix,"model":MODEL,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_type":training_type(),"estimated_usd":price,"allowed_to_proceed":bool(est.allowed_to_proceed),"price_detail":objdict(est),"model_limits_full_ft":True,"byom_fields":"ABSENT_BY_DESIGN"},indent=2,default=str))
+    print(json.dumps({"schema":"CLAYCOG_08B_TOGETHER_DIRECT_PREFLIGHT/v3","mode":"create" if args.create else "preflight","campaign_fingerprint":fp,"campaign_suffix":suffix,"source_identity":source_identity(),"model":MODEL,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_type":training_type(),"estimated_usd":price,"allowed_to_proceed":bool(est.allowed_to_proceed),"price_detail":objdict(est),"model_limits_full_ft":True,"byom_fields":"ABSENT_BY_DESIGN"},indent=2,default=str))
     if not est.allowed_to_proceed:raise SystemExit("Together price/admission endpoint does not allow this job")
     if price>MAX_USD:raise SystemExit(f"BUDGET_ABORT estimated ${price:.2f} > ${MAX_USD:.2f}")
     if not args.create:print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fp} for this exact create");return
@@ -134,5 +152,5 @@ def main():
     except Exception as e:raise SystemExit(f"JOB_CREATED_IDENTITY_VERIFY_UNAVAILABLE job_id={job.id}; inspect this exact job, do not create another: {type(e).__name__}") from e
     mismatches=created_job_identity_mismatches(meta,expected)
     if mismatches:raise SystemExit("JOB_CREATED_IDENTITY_MISMATCH job_id="+str(job.id)+" "+json.dumps(mismatches,sort_keys=True,default=str))
-    print(json.dumps({"job_id":job.id,"campaign_fingerprint":fp,"model":MODEL,"estimated_usd":price,"local_create_intent":str(intent),"created_job_identity":"VERIFIED"},indent=2))
+    print(json.dumps({"job_id":job.id,"campaign_fingerprint":fp,"source_identity":source_identity(),"model":MODEL,"estimated_usd":price,"local_create_intent":str(intent),"created_job_identity":"VERIFIED"},indent=2))
 if __name__=="__main__":main()

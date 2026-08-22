@@ -1,0 +1,114 @@
+{
+  "schema": "mini-entity-native-0.7-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "canonical_base_sha": "456e3e4d6853ff5b3a85300bdbe2367818e15052",
+  "candidate_branch": "gpt56sol/go-mini-native-env-isolation-20260822-1310",
+  "candidate_code_head_before_receipt": "18223dcf787a4aa0808f7771bdb1d26c81098f38",
+  "native_source_git_blobs": {
+    "mini_entity.c": "553c7858b6937c2528983789e9f30c04103dc557",
+    "mini_entity_child_env.inc": "181c0de78724936fa900458ea4c1990ca955ed3f",
+    "mini_entity_part00.inc": "d0ab1506745845e9cfe739c6a46bf65d89137454",
+    "mini_entity_part01.inc": "856af5c0126a3a86ed51872ffe9078a4c1fab8e1",
+    "mini_entity_part02.inc": "39124dcdaf460e1bb2bad6867a2633e246dbff02",
+    "mini_entity_part03.inc": "44260895edce1609d63725c6366d72319c972fe5",
+    "mini_entity_part04.inc": "9f653931f63f5cf44e27e4b7f3ce32330307616a"
+  },
+  "source_reconstruction": {
+    "all_declared_git_blob_ids_recomputed_exactly": true,
+    "runtime": "isolated OpenAI Linux container",
+    "network_provider_calls": 0,
+    "together_api_used": false,
+    "vps_used": false
+  },
+  "finding_source_provenance": {
+    "previous_builder_blob": "bf9b296a5d8a639889855a18b7774b2a005c46eb",
+    "defect": "previous build provenance hashed only mini_entity.c even though the effective C program is split across quoted .inc files; mutating an included file left the declared entry source hash unchanged",
+    "classification": "PROVENANCE_IDENTITY_DEFECT",
+    "repair_builder_blob": "a98620c816fe4aa856039c06f13d08670a5b37fd",
+    "repair_test_blob": "d8feb1461ecd53b8f2938f97c848d7b528b1402c",
+    "repair": "transitively bind every quoted local include under the source root; fail closed on source-root escape/cycle/invalid local source; use full closure digest as deterministic build seed and receipt identity",
+    "exact_regression": "3 passed in 0.03s",
+    "source_closure_sha256": "f441e76be98421165143b1b17c4052d81395369f198785a3aea0c5755e518298",
+    "source_closure_files": [
+      "mini_entity.c",
+      "mini_entity_child_env.inc",
+      "mini_entity_part00.inc",
+      "mini_entity_part01.inc",
+      "mini_entity_part02.inc",
+      "mini_entity_part03.inc",
+      "mini_entity_part04.inc"
+    ]
+  },
+  "repeat_build": {
+    "builder_schema": "mini-entity-native-build-provenance/v2",
+    "compiler": "gcc (Debian 14.2.0-19) 14.2.0",
+    "pkg_config_versions": {
+      "sqlite3": "3.46.1",
+      "libcurl": "8.10.1",
+      "json-c": "0.18"
+    },
+    "source_date_epoch": 1787378400,
+    "repeat": 2,
+    "repeat_byte_identity": true,
+    "repeat_hashes": [
+      "b9c97427ccc66015aa62a1866b13633ab5b1c0981d21e424746177ec3fe07283",
+      "b9c97427ccc66015aa62a1866b13633ab5b1c0981d21e424746177ec3fe07283"
+    ],
+    "binary_sha256": "b9c97427ccc66015aa62a1866b13633ab5b1c0981d21e424746177ec3fe07283",
+    "reported_version": "mini-entity/0.7.0-dev1"
+  },
+  "local_exec_success_run": {
+    "inference": "fixture local_exec; no real model quality credit",
+    "ambient_secret_canaries_set": [
+      "CLAY_AMBIENT_SECRET_CANARY",
+      "MISTRAL_API_KEY",
+      "AWS_SECRET_ACCESS_KEY",
+      "OPENAI_API_KEY",
+      "GITHUB_TOKEN"
+    ],
+    "child_environment_keys": ["LANG", "LC_ALL", "PATH", "TZ"],
+    "all_secret_canaries_absent_in_child": true,
+    "prompt_contains_secret_canary": false,
+    "generation_after": 1,
+    "outputs": 1,
+    "study_rows": 1,
+    "source_consumed_generation": 1,
+    "sqlite_integrity_check": "ok",
+    "packet_hash": "b63a6dd806a5bb5b9f6a3dafe5b9c4eb0420e4a44467f153ee558963b3cd2fce",
+    "canonical_state_hash": "5e95eecd52d580cc6e0a715da0a4d63a27d5ca2e047480192f82e506149a6371"
+  },
+  "negative_inference_rollback": {
+    "runner_exit_code": 7,
+    "mini_entity_exit_code": 2,
+    "error": "INFERENCE_FAILED_NO_COMMIT",
+    "generation_after": 0,
+    "outputs": 0,
+    "study_rows": 0,
+    "source_consumed_generation": null,
+    "sqlite_integrity_check": "ok",
+    "ambient_secret_canaries_absent_in_child": true
+  },
+  "unusual_experiment_accounting": {
+    "count_for_this_go": 1,
+    "name": "Ambient Secret Canary",
+    "already_recorded_in": "2026-08-22_GO_NATIVE_0_7_LOCAL_EXEC_ENV_ISOLATION_GPT56SOL.json",
+    "additional_tests_in_this_receipt": "ordinary deterministic regression/provenance/negative-path validation only"
+  },
+  "evidence_class": "EXACT_COMMITTED_SOURCE_CLOSURE_RECONSTRUCTED_REPEAT_BUILD_PASS_FIXTURE_LOCAL_EXEC_PASS_NEGATIVE_ROLLBACK_PASS",
+  "not_claimed": [
+    "cross-environment reproducibility",
+    "real local model quality",
+    "real remote provider acceptance",
+    "final product acceptance"
+  ],
+  "remaining_security_frontier": [
+    "profile-controlled secret_names can currently select arbitrary ambient environment variable names for remote API mode; define an immutable operator-owned secret-reference maximum before real provider acceptance",
+    "prove the same full source closure independently in the preferred admitted sandbox surface when available",
+    "run an actual supported local model and an authorized real remote provider without transferring fixture quality credit"
+  ],
+  "acceptance": "IN_PROGRESS"
+}

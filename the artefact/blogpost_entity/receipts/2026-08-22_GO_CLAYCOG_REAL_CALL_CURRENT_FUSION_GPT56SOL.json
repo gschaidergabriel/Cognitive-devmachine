@@ -1,0 +1,71 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "mini-entity-pipeline-all-in-one",
+  "base_main": "40cf97b1e1e001ef8555edd5a2700bc6ac890dbb",
+  "branch": "gpt56sol/go-real-call-fusion-current-20260822-1511",
+  "scope": "0.5B ClayCode cognition OOD promotion semantics; no training/provider call",
+  "finding": {
+    "status": "CURRENT_MAIN_BYPASS_CONFIRMED",
+    "mechanism": "function-like must/must-not markers and omega structure were partially recognized as raw substrings, allowing marker text inside quoted state to receive semantic credit",
+    "impact": "promotion/evaluation Goodhart path; quoted marker text can masquerade as a real ClayCode call"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "ESCAPED_QUOTE_MARKER_SHADOW",
+    "intervention": "place hyper_alt(hp, only inside a quoted state_note payload containing an escaped quote while keeping the other hyperposition markers real",
+    "current_raw_substring_marker_pass": true,
+    "real_hyper_alt_call_count": 0,
+    "hardened_marker_pass": false,
+    "result": "FALSIFIES_RAW_SUBSTRING_SEMANTICS"
+  },
+  "delta": [
+    "add non-executing string-aware ClayCode call extractor",
+    "require real calls for function-like OOD semantic markers",
+    "count exact omega vector operations structurally instead of inside quoted text",
+    "make canonical omega admission ignore quoted fake commit/reject/gate text",
+    "add simple quoted, reject-marker, quoted-commit and escaped-quote regressions",
+    "wire the regression into the existing exact omega CI step without replacing newer main gates"
+  ],
+  "exact_blob_binding": {
+    "claycode_calls_v2.py": "057369c3f4d7d6cd5a1e44038a3bd50db1f64931",
+    "validate_sft_v1.py": "6ad280d5292ea9a423e85cc9380ad49314dc0206",
+    "eval_outputs_v1.py": "f8477c5697e8c5456b08c5cc66edadce2c86ec69",
+    "generate_eval_ood_v1.py": "68b1842bcf98e4a6ab9d1147dfc4b44a297a487d",
+    "test_eval_call_semantics_v2.py": "bfa7586999adebfe0c8ee5c0454cde83ab1b9613",
+    "isolated_git_blob_match": "5/5 PASS"
+  },
+  "isolated_execution": {
+    "environment": "isolated OpenAI Linux container",
+    "py_compile": "PASS",
+    "test_eval_call_semantics_v2": "PASS",
+    "observations": {
+      "legacy_hyper_marker_attack_would_pass": true,
+      "hardened_hyper_marker_attack_rejected": true,
+      "legacy_reject_marker_attack_would_pass": true,
+      "hardened_reject_marker_attack_rejected": true,
+      "quoted_commit_not_structural_commit": true,
+      "escaped_quote_marker_shadow_rejected": true
+    }
+  },
+  "training": {
+    "together_network_call": false,
+    "billed_create": false,
+    "job_started": false,
+    "money_spent_usd": 0
+  },
+  "nonclaims": [
+    "no trained checkpoint quality claim",
+    "no Together qwen2-compatible Full-FT admission claim",
+    "no Q4_K_M or RSS claim",
+    "no native Mini Entity 0.7 promotion claim",
+    "no whole-product acceptance claim"
+  ],
+  "remaining_frontier": [
+    "execute exact PR-head CI if GitHub runner admission starts",
+    "provider-side qwen2-compatible full-FT template/runner admission remains external",
+    "native 0.7 still requires fusion and rerun of presentation-neutrality, local_exec secret isolation and profile-v2 semantic admission repairs"
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "schema": "claycog-go-leakage-repair/v1",
+  "date": "2026-08-22",
+  "executor": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "canonical_main_at_join": "62b292a8097c5b53731ef6804704cf9938872616",
+  "branch": "gpt56sol/go-claycog-v2-leakage-20260822-1409",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "one_unusual_experiment": {
+    "name": "validation-collision counterfactual",
+    "question": "Does corpus v1 validation actually hold out distinct generated scenarios, or can a random split look strong by repeating the same tiny deterministic scenario pool?",
+    "method": "Replayed the exact generator choice process from source with seed 20260822 and fingerprinted family/prompt/latent generation choices that deterministically map to assistant output.",
+    "result": {
+      "v1_rows": 1650,
+      "distinct_generation_signatures": 70,
+      "validation_rows": 165,
+      "validation_signatures_unseen_in_train": 0,
+      "validation_rows_whose_generation_signature_exists_in_train": 165
+    },
+    "classification": "SOURCE_LEVEL_FALSIFIER_OF_RANDOM_SPLIT_GENERALIZATION; not a trained-model result",
+    "decision": "Do not spend the owner training budget on corpus v1 as the canonical training candidate. Repair split/diversity first."
+  },
+  "repair": {
+    "generator": "the artefact/blogpost_entity/mini_cognition/generate_sft_v2.py",
+    "generator_git_blob": "d9886bb69916bdea51d85d17d645973360007c1a",
+    "generator_sha256": "2fa22ca0f132ea52ee74283db58bea731eb1c179b15709a939135fbe7f7d262f",
+    "corpus_schema": "claycog-sft/v2",
+    "examples": 1800,
+    "train": 1620,
+    "validation": 180,
+    "families": 9,
+    "per_family": 200,
+    "validation_per_family": 20,
+    "split": "family_stratified_heldout_value_domains",
+    "train_sha256": "ad132881aee5b794a1a81a56bc51af99d09d04c2fdff769f48cf192afa0d2a21",
+    "validation_sha256": "fad0e7a2613e54c3027ca5de8d8917ff3408a8a8a644439be764152648396e6f"
+  },
+  "isolated_execution": {
+    "environment": "ChatGPT isolated Linux container; outbound DNS unavailable, so repository bytes were bound through GitHub connector blob identity rather than git clone",
+    "exact_generator_blob_executed": true,
+    "generator_result": {
+      "train_unique_rows": 1620,
+      "validation_unique_rows": 180,
+      "exact_train_validation_overlap": 0
+    },
+    "structural_validation": {
+      "train_bad": 0,
+      "validation_bad": 0,
+      "scope": "equivalent copy of current validate_sft_v1.py logic; exact repo validator blob was not executed in this container"
+    },
+    "exact_split_gate": {
+      "path": "the artefact/blogpost_entity/mini_cognition/corpus_split_gate_v2.py",
+      "git_blob": "228e20ed1c31ca38c804e0649cd0365bbd4df51b",
+      "executed": true,
+      "result": {
+        "train_rows": 1620,
+        "validation_rows": 180,
+        "train_unique_rows": 1620,
+        "validation_unique_rows": 180,
+        "exact_row_overlap": 0,
+        "exact_user_overlap": 0,
+        "train_duplicate_rows": 0,
+        "validation_duplicate_rows": 0,
+        "ok": true
+      }
+    },
+    "launcher": {
+      "path": "the artefact/blogpost_entity/mini_cognition/launch_together_v2.py",
+      "git_blob": "cbb81e306ec4abbc05bdc403fda09c952f426066",
+      "syntax_compile": "PASS",
+      "create_guard_regression": "PASS_WITH_FAKE_CLIENT",
+      "guard_behavior": "An existing CREATE_ATTEMPTED_UNKNOWN guard aborts before Together client construction; no blind duplicate create."
+    }
+  },
+  "together_current_external_evidence": {
+    "checked_on": "2026-08-22",
+    "byom_requirements": [
+      "CausalLM text generation",
+      "under 100B parameters",
+      "safetensors",
+      "no trust_remote_code custom code",
+      "public Hugging Face repo or read token",
+      "compatible Together base template with matching architecture"
+    ],
+    "supported_model_table_observation": "Current public fine-tuning table contains Qwen3.5 entries down to 0.8B; no Qwen2.5 entry was found.",
+    "qwen25_template_status": "OPEN_API_GATE; Qwen/Qwen2.5-7B-Instruct-Turbo remains a probe candidate only, not credited compatibility",
+    "pricing": {
+      "full_sft_up_to_16b_usd_per_million_processed_tokens": 0.54,
+      "documented_general_minimum_job_charge_usd": 4.0,
+      "owner_single_job_gate_usd": 18.0,
+      "owner_campaign_ceiling_eur": 20.0
+    }
+  },
+  "training": {
+    "together_api_secret_present_in_this_execution": false,
+    "server_preflight_executed": false,
+    "paid_job_started": false,
+    "blocker": "Live Together API credential is not mounted; moreover public docs currently do not expose a documented Qwen2.5 fine-tuning template, so live BYOM/template admission remains the next discriminator."
+  },
+  "scientific_boundary": {
+    "consciousness": "NOT_INFERRED",
+    "mathematical_correctness": "NOT_INFERRED",
+    "micro_agent_superiority": "UNCLAIMED",
+    "under_1gib_rss": "UNCLAIMED_UNTIL_TUNED_Q4_K_M_MEASURED"
+  },
+  "next": [
+    "Run launch_together_v2.py preflight with an environment-only Together credential.",
+    "If the Qwen2.5 template/BYOM pair is rejected, do not switch architecture silently; preserve the 0.5B target and move training to another authorized full-FT runner or obtain a matching Together template.",
+    "If accepted and server estimate is <= USD18, create exactly once through the v2 guard.",
+    "Evaluate tuned checkpoint on the 200-case OOD set versus untuned 0.5B and at least one larger general model.",
+    "Quantize Q4_K_M and measure actual peak RSS at context 2048 before promotion."
+  ]
+}

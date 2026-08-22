@@ -39,7 +39,9 @@ Local structural validation on this source revision:
 
 A separate OOD generator emits **200** promotion probes and is not a random split of the same examples.
 
-## Fast path
+## Safe Together path
+
+Install the SDK and mount the Together secret only in the execution environment:
 
 ```bash
 pip install -U together
@@ -50,38 +52,51 @@ bash train_together_v1.sh
 The shell script stops after **preflight**. It regenerates and validates the corpus, asks Together to validate the
 files/template, and prints the server price estimate. It does not create a billed job.
 
-Only after preflight:
+**Important:** the estimate endpoint prices the uploaded data against the selected Together template. It does not
+bind `from_hf_model` or `hf_model_revision`, so a successful price estimate is **not** evidence that the 0.5B BYOM
+checkpoint is compatible with the template.
+
+Before a billed create, resolve and pin the exact Hugging Face commit of the checkpoint:
 
 ```bash
+export CLAYCOG_HF_REVISION=<exact-40-hex-Hugging-Face-commit>
 python3 launch_together_v1.py --create
 ```
 
+For the instruct ablation use `CLAYCOG_HF_INSTRUCT_REVISION` instead.
+
+The launcher refuses billed creation without an exact commit pin. It hashes the exact train/validation bytes,
+HF model+revision, Together template and training hyperparameters into `claycog-together-campaign/v2`, then derives
+a deterministic Together `suffix` from that fingerprint. Before `create`, it lists the Together job ledger and
+fails closed if the same campaign suffix already exists.
+
+A same-campaign job in `pending`, `queued`, `running`, `compressing`, `uploading`, `cancel_requested` or `completed`
+can never be blindly duplicated by this launcher. A prior `error`/`cancelled` job also blocks by default; one retry
+requires the operator to inspect it and supply its exact id with `--retry-job-id <ft-...>`.
+
 ### Together 0.5B caveat
 
-As of 2026-08-22, Together's regular supported-model table lists Qwen3.5 **0.8B** as the smallest Qwen fine-tune,
-not a native 0.5B entry. Together's BYOM path supports external Hugging Face CausalLM checkpoints under 100B when
-a compatible Together training template exists. This script therefore pairs:
+As of 2026-08-22, Together's regular supported-model table does not expose a native Qwen2.5 0.5B fine-tune entry.
+The current lane therefore uses BYOM. Together documents that the training template architecture must match the
+checkpoint; size should be as close as the catalog allows, and if every template is larger the smallest available
+one should be selected. The current default candidate remains:
 
 - BYOM weights: `Qwen/Qwen2.5-0.5B`;
-- default same-family template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
+- template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
 
-That pairing is **not assumed fine-tune compatible** merely because it is served in Together's catalog. The launcher first
-asks `model_limits` whether the template is currently full-FT capable, and BYOM checkpoint acceptance is a separate gate.
-There is deliberately no automatic fallback to Qwen3.5 because Together requires matching architecture. If Together rejects
-the Qwen2.5 template/checkpoint path, keep the 0.5B checkpoint requirement and use a Together-provided Qwen2-compatible
-template or the same corpus on another full-FT runner rather than silently changing the research question.
+That pairing is **not assumed compatible** merely from the name or size. `model_limits` must admit full training,
+and actual BYOM checkpoint validation remains an empirical Together job gate. There is deliberately no automatic
+fallback to a different architecture such as Qwen3.5.
 
-Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
-corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.
-At 3 train epochs + 2 validation evaluations the raw token arithmetic is roughly **1.85M processed tokens / ~$1.00**,
-but Together currently documents a **$4.00 minimum charge per fine-tuning job**. The Together server estimate/admission
-response is authoritative, and the campaign still hard-aborts above the configured `$18` single-job ceiling.
+Together's published price surface has a per-job minimum charge. The server estimate is authoritative and this
+campaign hard-aborts above the configured `$18` single-job ceiling. Training failures do not become research PASS;
+Together currently documents failed jobs as refunded, but any retry still requires the explicit replay gate above.
 
 ## 0.5B RAM gate
 
 The official Qwen2.5-0.5B-Instruct Q4_K_M GGUF is around 491 MB; this proves only file size, not runtime RSS.
 `quantize_rss_gate_v1.sh` converts the tuned checkpoint, quantizes to Q4_K_M, and requires actual measured
-peak process RSS `< 1 GiB` at 2048 context.
+peak process RSS `< 1 GiB` at context 2048.
 
 ## Promotion, not belief
 
@@ -103,4 +118,4 @@ Until promotion, every `go` advances this same lane:
 
 `refresh -> corpus/spec -> OOD/falsifiers -> ClayCode lowering -> Together BYOM compatibility -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> integrate -> evidence`
 
-No `go` may claim mathematical correctness or superiority from training intent alone.
+No `go` may claim mathematical correctness, consciousness, compatibility or superiority from training intent alone.

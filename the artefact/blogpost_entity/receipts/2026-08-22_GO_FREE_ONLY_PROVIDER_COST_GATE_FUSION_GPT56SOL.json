@@ -1,0 +1,56 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main_sha": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "scope": "free-only provider cost-class admission for direct Qwen3.5-0.8B Together launcher",
+  "coordination": {
+    "donor_pr": 886,
+    "reason_for_fresh_fusion": "donor branch diverged from current main and must not regress the merged #882 validate_corpus_v2 preflight repair",
+    "duplicate_path_created": false
+  },
+  "external_evidence": {
+    "provider": "Together AI",
+    "public_pricing_checked_2026_08_22": true,
+    "standard_sft_full_up_to_16b_usd_per_1m_tokens": 0.54,
+    "standard_job_minimum_usd": 4.0,
+    "classification": "PAID",
+    "note": "public pricing evidence only; no authenticated provider call was made"
+  },
+  "delta": {
+    "default_provider_mode": "FREE_ONLY",
+    "together_cost_class": "PAID",
+    "paid_subscription_unknown_fail_closed_under_free_only": true,
+    "unknown_fails_closed_under_all_modes": true,
+    "paid_path_requires_explicit_mode": "PAID_ALLOWED",
+    "provider_gate_precedes_local_checks_secret_lookup_import_and_network_path": true,
+    "preserves_current_v2_validator": "validate_corpus_v2.py"
+  },
+  "tests_added": [
+    "provider cost-class admission is fail-closed",
+    "FREE_ONLY blocks the PAID Together lane before local_checks",
+    "existing canonical validate_corpus_v2 local-check regression remains"
+  ],
+  "execution": {
+    "authorized_sandbox_execution": "NOT_AVAILABLE_IN_CURRENT_TOOL_SURFACE",
+    "tests_executed_by_this_organ": false,
+    "runtime_credit": "ZERO_UNTIL_ACTUALLY_STARTED_AUTHORIZED_RUNNER_STEPS"
+  },
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "reason": "parallel go organs already claimed the global unusual-experiment slot; this fusion is source/adversarial-regression work only"
+  },
+  "together": {
+    "secret_used": false,
+    "network_api_call_made": false,
+    "upload": false,
+    "paid_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "acceptance": "SOURCE_CANDIDATE; EXACT_RUNTIME_UNVERIFIED; WHOLE_MINI_ENTITY_IN_PROGRESS",
+  "next_gate": "actually-started exact PR/current-main GitHub-hosted runner executes the focused launcher regression while preserving #882 validator behavior"
+}

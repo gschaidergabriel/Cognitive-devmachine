@@ -13,8 +13,11 @@ on:
       - 'the artefact/blogpost_entity/test_runtime_schema_migration.py'
       - 'the artefact/blogpost_entity/test_runtime_truth_boundary.py'
       - 'the artefact/blogpost_entity/test_reference_local_exec_env_isolation.py'
+      - 'the artefact/blogpost_entity/test_structured_contract_sync.py'
       - 'the artefact/blogpost_entity/state_box_reference.py'
       - 'the artefact/blogpost_entity/check_structured_contract_sync.py'
+      - 'the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json'
+      - 'the artefact/blogpost_entity/native/test_native_v2_parity_contract.py'
       - 'tools/clay_profile_pipeline_runtime.py'
       - 'tools/claycode_structured_backend.py'
       - 'tools/mini_entity_profile_import.py'
@@ -44,8 +47,10 @@ jobs:
           tools/mini_entity_profile_import.py
           'the artefact/blogpost_entity/state_box_reference.py'
           'the artefact/blogpost_entity/check_structured_contract_sync.py'
+          'the artefact/blogpost_entity/test_structured_contract_sync.py'
           'the artefact/blogpost_entity/test_runtime_truth_boundary.py'
           'the artefact/blogpost_entity/test_reference_local_exec_env_isolation.py'
+          'the artefact/blogpost_entity/native/test_native_v2_parity_contract.py'
       - name: Enforce Clay reference-contract convergence
         run: python 'the artefact/blogpost_entity/check_structured_contract_sync.py'
       - name: Run structured Mini Entity convergence tests
@@ -57,4 +62,6 @@ jobs:
           'the artefact/blogpost_entity/test_runtime_schema_migration.py'
           'the artefact/blogpost_entity/test_runtime_truth_boundary.py'
           'the artefact/blogpost_entity/test_reference_local_exec_env_isolation.py'
+          'the artefact/blogpost_entity/test_structured_contract_sync.py'
+          'the artefact/blogpost_entity/native/test_native_v2_parity_contract.py'
           -q

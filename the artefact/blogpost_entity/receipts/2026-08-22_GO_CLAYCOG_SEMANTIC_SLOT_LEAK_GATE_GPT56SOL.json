@@ -1,0 +1,75 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "base_main_sha": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce",
+  "branch": "gpt56sol/go-corpus-semantic-slot-gate-20260822",
+  "target": "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py",
+  "pre_fix_validator_blob_sha": "fcec72dcca9bc57ae0937a3eb1629ccac7a3fab9",
+  "unusual_experiment": {
+    "id": "SEMANTIC_SLOT_LEAKAGE_ALT_INTRINSICS",
+    "count_for_go": 1,
+    "environment": "isolated tool-provided Linux container",
+    "purpose": "falsify whether exact runtime bindings plus the existing fixed forbidden-string list prevent fixed identity/provider/model semantics from leaking through alternate ClayCode semantic intrinsics",
+    "probes": [
+      {
+        "statement": "state_note(c,\"provider\",\"Together AI\",\"COMPUTED\")",
+        "pre_fix_result": "PASS_VALIDATOR"
+      },
+      {
+        "statement": "state_note(c,\"model\",\"Qwen/Qwen3.5-0.8B\",\"COMPUTED\")",
+        "pre_fix_result": "PASS_VALIDATOR"
+      },
+      {
+        "statement": "self_state(c,\"name\",\"Atlas\",\"COMPUTED\")",
+        "pre_fix_result": "PASS_VALIDATOR"
+      }
+    ],
+    "result": "FALSIFIED_EXISTING_GATE_3_OF_3_FALSE_ACCEPTS"
+  },
+  "repair": {
+    "mechanism": "inspect structurally parsed ClayCode calls and fail closed on normalized reserved semantic slots for identity/application/provider/model/checkpoint/job semantics across state_note, self_state, arch_bind and provenance",
+    "campaign_literal_independent": true,
+    "string_spoof_credit": false,
+    "runtime_binding_authority_unchanged": true,
+    "effect_authority_unchanged": true
+  },
+  "regression": {
+    "classification": "REGRESSION_ONLY_NOT_A_SECOND_UNUSUAL_EXPERIMENT",
+    "environment": {
+      "python": "3.13.5",
+      "kernel": "Linux 6.18.35 x86_64"
+    },
+    "unit_tests": {
+      "command": "python -m unittest -v test_validate_corpus_v2.py",
+      "passed": 6,
+      "failed": 0
+    },
+    "compile_gate": {
+      "command": "python -m py_compile validate_sft_v1.py validate_corpus_v2.py test_validate_corpus_v2.py",
+      "result": "PASS"
+    },
+    "patched_validator_sha256": "b79c7e91b9d21a6f5bc34d2e24044386fa31e3236a0a97b555d68fba2d2ad03d",
+    "patched_test_sha256": "d9fae31ca3293546ab3e44e6f1d97e6bc430831790d84d65c6bb97cb078ebc91",
+    "positive_controls": [
+      "identity_source remains admitted",
+      "changed_runtime_field remains admitted",
+      "internal_representation remains admitted",
+      "call-like text inside a quoted string does not create semantic-slot credit"
+    ]
+  },
+  "evidence_boundary": {
+    "claim": "MECHANISM_SUPPORTED_IN_BOUNDED_ISOLATED_REGRESSION",
+    "full_1650_row_corpus_rerun": false,
+    "github_actions_exact_branch_runtime": "UNOBSERVED_AT_RECEIPT_CREATION",
+    "provider_authenticated_preflight": false,
+    "paid_training_started": false,
+    "money_spent_usd": 0,
+    "model_quality_claim": false,
+    "whole_product_pass": false
+  }
+}

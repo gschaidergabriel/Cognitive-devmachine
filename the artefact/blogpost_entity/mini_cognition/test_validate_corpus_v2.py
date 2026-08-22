@@ -50,6 +50,27 @@ class CorpusV2CoreGateFusionTests(unittest.TestCase):
         self.assertIn('binding_call_count:self_bind:0',errors)
         self.assertIn('binding_not_exact_runtime_cfg:self_bind:0',errors)
 
+    def test_v2_rejects_reserved_semantic_identity_provider_model_slots(self):
+        cases=(
+            ('  self_state(c,"name","Atlas","COMPUTED")\n','reserved_semantic_slot:self_state:name'),
+            ('  state_note(c,"provider","Together AI","COMPUTED")\n','reserved_semantic_slot:state_note:provider'),
+            ('  state_note(c,"model","Qwen/Qwen3.5-0.8B","COMPUTED")\n','reserved_semantic_slot:state_note:model'),
+            ('  arch_bind(c,"provider.name","Together AI")\n','reserved_semantic_slot:arch_bind:provider_name'),
+            ('  state_note(c,"provider\\u005fname","Together AI","COMPUTED")\n','reserved_semantic_slot:state_note:provider_name'),
+        )
+        for extra,expected in cases:
+            with self.subTest(expected=expected):
+                self.assertIn(expected,V.validate_code(valid_code(extra)))
+
+    def test_v2_allows_nonreserved_metadata_and_ignores_call_text_in_strings(self):
+        extra=(
+            '  state_note(c,"identity_source","runtime_cfg","VERIFIED")\n'
+            '  state_note(c,"changed_runtime_field","inference.backend","MEASURED")\n'
+            '  arch_bind(c,"internal_representation","ClayCode Cognition v1")\n'
+            '  state_note(c,"note","state_note(c,\\"provider\\",\\"Together AI\\",\\"COMPUTED\\")","REPORTED")\n'
+        )
+        self.assertEqual(V.validate_code(valid_code(extra)),[])
+
 
 if __name__=='__main__':
     unittest.main()

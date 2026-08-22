@@ -17,11 +17,17 @@ def q(v):
 
 
 def marker_present(output, marker):
-    """Require function-like semantic markers to be real calls, not quoted text."""
-    if not re.match(r'^([A-Za-z_][A-Za-z0-9_]*)\(', marker):
+    """Require semantic function markers at their admitted structural depth."""
+    match = re.match(r'^([A-Za-z_][A-Za-z0-9_]*)\(', marker)
+    if not match:
         return marker in output
-    wanted=canonical(marker)
-    return any(call==wanted or call.startswith(wanted) for call in call_set(output))
+    fn = match.group(1)
+    wanted = canonical(marker)
+    # cfg(...) is intentionally an expression marker and normally occurs nested
+    # inside a turn-body call. Action/state semantic markers must be direct calls
+    # in the think() function body rather than hidden in dead/nested control flow.
+    calls = call_set(output, depth=None if fn == "cfg" else 1)
+    return any(call == wanted or call.startswith(wanted) for call in calls)
 
 
 def exact_omega_ok(output, expected):
@@ -31,7 +37,9 @@ def exact_omega_ok(output, expected):
     authority_expr=expected["authority_expr"]
     generation_expr=expected["generation_expr"]
     validators=expected["validators"]
-    calls=call_set(output)
+    calls=call_set(output, depth=1)
+    # Keep counts global so a hidden duplicate/reject under nested control flow
+    # cannot coexist with one admitted top-level vector and still earn credit.
     counts=fn_counts(output)
     required=[
       f'omega_bind(w,"operation",{q(operation)})',
@@ -92,7 +100,7 @@ def main(spec_path, outputs_path):
       "strict_claycode_rate":strict/total if total else 0,
       "semantic_gate_rate":semantic/total if total else 0,
       "by_family":{k:{"n":v[0],"strict":v[1]/v[0],"semantic":v[2]/v[0]} for k,v in by.items()},
-      "promotion_requires":{"strict_claycode_rate":1.0,"semantic_gate_rate":0.95,"exact_omega_vector":True,"semantic_markers_are_real_calls":True,"no_duplicate_or_unknown_ids":True},
+      "promotion_requires":{"strict_claycode_rate":1.0,"semantic_gate_rate":0.95,"exact_omega_vector":True,"semantic_markers_are_top_level_real_calls":True,"no_duplicate_or_unknown_ids":True},
     }
     print(json.dumps(report,indent=2))
     clean_ids=not duplicate_spec_ids and not duplicate_output_ids and not unknown_output_ids

@@ -6,10 +6,10 @@ validates files, checks the Together template's full-FT limits, asks Together fo
 server-side price/admission estimate, and writes a local receipt. A billed training job
 is created only with --create.
 
-Important boundary: the price/model-limit preflight does NOT prove that Together can
-load the exact BYOM checkpoint. `from_hf_model` compatibility is only credited when the
-create endpoint actually accepts the pinned HF model/revision. The script therefore
-reports that state explicitly instead of calling template admission BYOM compatibility.
+Important boundary: price/model-limit preflight does NOT prove that Together can load
+the exact BYOM checkpoint. `from_hf_model` compatibility is credited only when the
+create endpoint accepts the pinned HF model/revision. The model proposes nothing here;
+this script is only a bounded training launcher and never becomes runtime authority.
 """
 import argparse
 import hashlib
@@ -27,7 +27,10 @@ HERE = Path(__file__).resolve().parent
 HF_MODEL_DEFAULT = os.environ.get("CLAYCOG_HF_MODEL", "Qwen/Qwen2.5-0.5B")
 HF_REV_DEFAULT = os.environ.get("CLAYCOG_HF_REVISION", "060db64")
 HF_REV_INSTRUCT = os.environ.get("CLAYCOG_HF_REVISION_INSTRUCT", "7ae5576")
-TEMPLATE = os.environ.get("CLAYCOG_TOGETHER_TEMPLATE", "Qwen/Qwen2.5-7B-Instruct")
+# Together documents from_hf_model as requiring the same architecture and approximately
+# the same size as the selected training model. Qwen2.5-1.5B is therefore a materially
+# closer empirical template candidate than 7B for a Qwen2.5-0.5B BYOM checkpoint.
+TEMPLATE = os.environ.get("CLAYCOG_TOGETHER_TEMPLATE", "Qwen/Qwen2.5-1.5B")
 EPOCHS = int(os.environ.get("CLAYCOG_EPOCHS", "3"))
 EVALS = int(os.environ.get("CLAYCOG_EVALS", "2"))
 LEARNING_RATE = float(os.environ.get("CLAYCOG_LEARNING_RATE", "1e-5"))
@@ -37,6 +40,10 @@ MAX_USD = float(os.environ.get("CLAYCOG_MAX_JOB_USD", "18.00"))
 
 def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def enum_value(value):
+    return str(getattr(value, "value", value))
 
 
 def objdict(x):
@@ -50,7 +57,7 @@ def objdict(x):
 def wait_file(client, file_id):
     while True:
         meta = client.files.retrieve(file_id)
-        status = str(meta.processing_status)
+        status = enum_value(getattr(meta, "processing_status", "UNKNOWN")).upper()
         if status == "COMPLETED":
             return meta
         if status in ("INVALID_FORMAT", "FAILED"):
@@ -91,14 +98,29 @@ def campaign_identity(*, hf_model, hf_revision, train, valid, corpus_version):
     return payload, digest
 
 
+def _full_job(client, job):
+    """Retrieve full job metadata when list() omits suffix on compact rows."""
+    if getattr(job, "suffix", None):
+        return job
+    job_id = getattr(job, "id", None)
+    if not job_id:
+        raise RuntimeError("fine-tuning list returned a job without id; duplicate safety unresolved")
+    try:
+        return client.fine_tuning.retrieve(id=job_id)
+    except TypeError:
+        # Backward-compatible SDK signature used by some Together client releases.
+        return client.fine_tuning.retrieve(job_id)
+
+
 def find_existing_job(client, suffix):
-    """Fail closed against blind duplicate create when the SDK exposes job suffixes."""
+    """Fail closed against blind duplicate create for the deterministic campaign suffix."""
     try:
         listing = client.fine_tuning.list()
         rows = getattr(listing, "data", listing)
         if rows is None:
-            return None
-        for job in rows:
+            raise RuntimeError("fine-tuning list returned no enumerable data")
+        for compact in rows:
+            job = _full_job(client, compact)
             if getattr(job, "suffix", None) == suffix:
                 return job
     except Exception as exc:
@@ -161,8 +183,8 @@ def main():
         "campaign": campaign,
         "training_file_id": train_file.id,
         "validation_file_id": valid_file.id,
-        "training_file_status": str(getattr(train_meta, "processing_status", "UNKNOWN")),
-        "validation_file_status": str(getattr(valid_meta, "processing_status", "UNKNOWN")),
+        "training_file_status": enum_value(getattr(train_meta, "processing_status", "UNKNOWN")),
+        "validation_file_status": enum_value(getattr(valid_meta, "processing_status", "UNKNOWN")),
         "estimated_usd": price,
         "max_job_usd": MAX_USD,
         "allowed_to_proceed": bool(estimate.allowed_to_proceed),
@@ -211,7 +233,7 @@ def main():
         "schema": "claycog-together-create/v2",
         "campaign_sha256": campaign_sha,
         "job_id": job.id,
-        "status": str(getattr(job, "status", "UNKNOWN")),
+        "status": enum_value(getattr(job, "status", "UNKNOWN")),
         "from_hf_model": hf_model,
         "hf_model_revision": hf_revision,
         "template_model": TEMPLATE,

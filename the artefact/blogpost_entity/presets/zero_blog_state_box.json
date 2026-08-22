@@ -16,6 +16,15 @@
   },
   "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
   "no_embodiment": true,
+  "self_report_object_field": "longitudinal_self_report",
+  "forbidden_render_terms": [
+    "Gasthaus",
+    "Bier",
+    "ich sitze",
+    "am Tisch",
+    "im Raum",
+    "vor mir steht ein Maurer"
+  ],
   "canonical_fields": [
     "generation",
     "timestamp",
@@ -58,6 +67,35 @@
     "show_unknown_as_unknown": true,
     "never_impute_missing": true
   },
+  "deterministic_evaluation": [
+    {
+      "kind": "unknown_guard",
+      "text": "- UNKNOWN/DEGRADED bleibt explizit; fehlende Messwerte werden nicht narrativ aufgefüllt."
+    },
+    {
+      "kind": "compare",
+      "system_field": "cognitive_conflict",
+      "self_field": "felt_conflict",
+      "high": 0.65,
+      "low": 0.35,
+      "both_high_text": "- Gemessener Konflikt und berichteter Konflikt sind in diesem Lauf deutlich kongruent.",
+      "divergent_text": "- Gemessener Konflikt und berichteter Konflikt divergieren; keiner der beiden Tracks überschreibt den anderen."
+    },
+    {
+      "kind": "delta",
+      "field": "cognitive_conflict",
+      "threshold": 0.10,
+      "text": "- Der gemessene Konflikt hat sich gegenüber dem vorherigen Studienpunkt merklich verändert; ein einzelnes Delta ist noch kein stabiler Trend."
+    },
+    {
+      "kind": "static",
+      "text": "- Starke Emotionssprache ist MODEL SELF-REPORT und kein kanonischer Beweis menschlicher Emotion oder Qualia."
+    },
+    {
+      "kind": "static",
+      "text": "- Die Auswertung beschreibt Übereinstimmung oder Divergenz, nicht Kausalität."
+    }
+  ],
   "evaluation_rules": [
     "report congruence only when both compared dimensions are available",
     "report divergence without treating either track as automatically correct",

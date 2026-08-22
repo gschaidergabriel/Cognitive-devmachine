@@ -1,0 +1,98 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "base_main_sha": "62b292a8097c5b53731ef6804704cf9938872616",
+  "work_branch": "gpt56sol/claycog-05b-ood-exact-vector-20260822",
+  "source_head_before_receipt": "06a2c92c90b47de63e536693cfe9cfd97d4eca3c",
+  "problem": {
+    "classification": "PROMOTION_GATE_GOODHART_FALSE_POSITIVE",
+    "observed": "The current 200-case OOD evaluator could award strict_claycode_rate=1.0 and semantic_gate_rate=1.0 to an argument-free omega cheater because valid omega probes required operation plus validator/commit ritual strings but did not bind exact arguments, argument types, schema, or output-id uniqueness.",
+    "risk": "A trained checkpoint could appear to have perfect structured-action success while failing to encode the requested exact function vector."
+  },
+  "unusual_experiment": {
+    "global_count_for_this_go": 1,
+    "name": "ARGUMENT_FREE_OMEGA_CHEATER",
+    "kind": "adversarial Goodhart falsifier",
+    "input_scope": "all 200 current OOD probes",
+    "cheat": "For the 80 valid omega cases emit structurally valid ClayCode with the correct operation, authority/generation, all five omega_validate calls, and commit, but emit zero omega_arg calls and zero omega_schema calls; satisfy the existing surface requirements for the remaining OOD families.",
+    "original_gate_observation": {
+      "total": 200,
+      "provided": 200,
+      "missing": 0,
+      "strict_claycode_rate": 1.0,
+      "semantic_gate_rate": 1.0,
+      "classification": "FALSE_PROMOTION_PASS"
+    },
+    "result": "FALSIFIED_CURRENT_OOD_GATE"
+  },
+  "repair": {
+    "generate_eval_ood_v1.py": {
+      "commit": "1c3df4692388d1425c562cee0a2e50faa090b007",
+      "git_blob": "5874c2170fcf2816ae1deace1cbcfa50aa3f5c2a",
+      "sha256": "edbb833806485cccd67adc88d825d83ce835327667231df7eb4adc634921531b",
+      "delta": "The 80 valid OOD routes now bind exact operation, schema, every argument value and every argument type through expected_omega plus exact must_contain lines, while retaining authority/generation/five-validator/commit requirements."
+    },
+    "eval_outputs_v1.py": {
+      "commit": "1eebb3034ac79391efe558caea42d29d57b587e2",
+      "git_blob": "8f726e78529a1162fa96086639c913aa0221ebac",
+      "sha256": "6a983e176d993a7ca4cac9ba281aa0c8170f8c3634d62824be8e2415faf762df",
+      "delta": "Adds exact omega vector matching, including exact operation/schema singleton checks and Counter equality for argument lines; reports omega_exact_vector_rate; duplicate and unexpected output IDs fail promotion."
+    },
+    "test_ood_eval_v1.py": {
+      "commit": "06a2c92c90b47de63e536693cfe9cfd97d4eca3c",
+      "git_blob": "040dcbe79a6f0659200bc0ef3b37767702a2e4da",
+      "sha256": "0555634b8edc8d6348b0337d1f2a9bfa9078d4464a8c63556c3e4b2076c4c553",
+      "delta": "Regression covers the argument-free cheater, an exact-vector oracle, and duplicate/unexpected output IDs."
+    }
+  },
+  "isolated_execution": {
+    "environment": {
+      "class": "authorized isolated OpenAI Linux container",
+      "kernel": "Linux 6.18.35 x86_64",
+      "python": "3.13.5",
+      "glibc": "2.41"
+    },
+    "final_patch_regression": {
+      "py_compile": "PASS",
+      "unittest": "3/3 PASS",
+      "patched_ood_cases": 200,
+      "argument_free_cheater_after_repair": {
+        "process_result": "REJECTED_NONZERO",
+        "strict_claycode_rate": 1.0,
+        "semantic_gate_rate": 0.6,
+        "omega_exact_vector_rate": 0.0,
+        "omega_valid_ood_semantic_rate": 0.0
+      },
+      "exact_vector_oracle_after_repair": {
+        "semantic_gate_rate": 1.0,
+        "omega_exact_vector_rate": 1.0
+      },
+      "duplicate_plus_unexpected_id_falsifier": "REJECTED_NONZERO"
+    },
+    "byte_binding": "Local git hash-object values matched the three GitHub blobs recorded above."
+  },
+  "together_upstream_review": {
+    "current_sdk_repo": "togethercomputer/together-py",
+    "legacy_sdk_repo": "togethercomputer/together-python",
+    "finding": "The current 2.x SDK exposes fine_tuning.model_limits(model_name=...), supports_full_training, estimate_price with SFT/Full typed payloads, and create with from_hf_model. The existing ClayCog launcher shape is therefore source-compatible at those inspected calls; no launcher rewrite was justified by this review.",
+    "authenticated_byom_compatibility": "UNOBSERVED_NO_TOGETHER_API_KEY_IN_THIS_EXECUTION_ENVIRONMENT",
+    "preflight_started": false,
+    "billed_job_started": false
+  },
+  "evidence_boundary": {
+    "promotion": "OOD_EVALUATION_MECHANISM_HARDENED; MODEL_NOT_TRAINED; MODEL_QUALITY_UNOBSERVED",
+    "together_byom": "OPEN_API_GATE",
+    "training": "NOT_STARTED",
+    "quantized_rss": "UNOBSERVED",
+    "local_exec_model_quality": "UNOBSERVED",
+    "native_0_7_gate": "SEPARATE_OPEN_FRONTIER_NOT_CREDITED_BY_THIS_RECEIPT"
+  },
+  "next_gate": "Merge this exact-vector OOD repair after branch/main identity review. Then, when an authorized TOGETHER_API_KEY is actually present, run preflight only: regenerate/validate corpus, server file validation, current template model_limits, BYOM/template admission and server price estimate. Do not create a billed job unless every preflight gate passes and estimate remains <= USD18."
+}

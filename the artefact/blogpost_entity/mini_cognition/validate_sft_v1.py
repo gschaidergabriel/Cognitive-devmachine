@@ -3,12 +3,12 @@ import json, sys
 from pathlib import Path
 
 PREFIX='module clay.cog.turn\nfn think(i:Map)->Map {\n'
-REQUIRED=(
+REQUIRED_STATEMENTS=(
   'self_bind(c,cfg("entity.id"),cfg("entity.continuity"))',
   'role_bind(c,cfg("application.role"))',
   'goal_bind(c,cfg("application.goal"))',
   'personality_bind(c,cfg("application.personality"))',
-  'return c\n}',
+  'return c',
 )
 FORBIDDEN=(
   '```','<think>','</think>',
@@ -31,6 +31,31 @@ def outside_strings(s):
             else: out.append(ch)
     return "".join(out)
 
+def statement_lines(s):
+    """Return standalone ClayCode statements; reject strings spanning line boundaries."""
+    lines=[]
+    for raw in s.splitlines():
+        quoted=False; esc=False
+        for ch in raw:
+            if quoted:
+                if esc:
+                    esc=False
+                elif ch=="\\":
+                    esc=True
+                elif ch=='"':
+                    quoted=False
+            elif ch=='"':
+                quoted=True
+        if quoted or esc:
+            return None
+        stripped=raw.strip()
+        if stripped:
+            lines.append(stripped)
+    return tuple(lines)
+
+def has_call(lines,prefix):
+    return any(line.startswith(prefix) and line.endswith(")") for line in lines)
+
 def validate_code(s):
     e=[]; low=s.lower()
     if not s.startswith(PREFIX): e.append("bad_prefix")
@@ -38,16 +63,22 @@ def validate_code(s):
     structural=outside_strings(s)
     if structural.count("{")!=structural.count("}"): e.append("brace_balance")
     if structural.count("(")!=structural.count(")"): e.append("paren_balance")
-    for x in REQUIRED:
-        if x not in s: e.append("missing:"+x)
+    statements=statement_lines(s)
+    if statements is None:
+        e.append("multiline_or_unclosed_string")
+        statements=()
+    for x in REQUIRED_STATEMENTS:
+        if x not in statements: e.append("missing_statement:"+x)
     for x in FORBIDDEN:
         if x.lower() in low: e.append("forbidden:"+x)
-    if "omega_commit_candidate(" in s:
+    has_commit="omega_commit_candidate(c,w)" in statements
+    has_reject=has_call(statements,"omega_reject(")
+    if has_commit:
         for g in OMEGA_GATES:
-            if f'omega_validate(w,"{g}")' not in s: e.append("omega_missing_gate:"+g)
-        if 'omega_authority(w,' not in s: e.append("omega_missing_authority")
-        if 'omega_generation(w,' not in s: e.append("omega_missing_generation")
-    if "omega_reject(" in s and "omega_commit_candidate(" in s:
+            if f'omega_validate(w,"{g}")' not in statements: e.append("omega_missing_gate:"+g)
+        if not has_call(statements,'omega_authority(w,'): e.append("omega_missing_authority")
+        if not has_call(statements,'omega_generation(w,'): e.append("omega_missing_generation")
+    if has_reject and has_commit:
         e.append("reject_and_commit")
     return e
 

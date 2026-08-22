@@ -4,6 +4,13 @@ on:
   pull_request:
     paths:
       - 'the artefact/blogpost_entity/mini_cognition/**'
+      - 'the artefact/blogpost_entity/STAGED_COGNITION_PARITY_CONTRACT.json'
+      - 'the artefact/blogpost_entity/presets/zero_blog.json'
+      - 'the artefact/blogpost_entity/BLOGPOST_ENTITY.clay'
+      - 'research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md'
+      - 'research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md'
+      - 'research_entity/claycode/autonomous/SUPERVISOR_INBOX.json'
+      - 'tools/clay_profile_pipeline_runtime.py'
       - '.github/workflows/claycog-validator-pr.yml'
   workflow_dispatch:
 
@@ -40,6 +47,7 @@ jobs:
             'the artefact/blogpost_entity/mini_cognition/test_eval_surface_copy_baseline_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_semantic_call_admission_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_eval_call_depth_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_staged_cognition_contract_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/describe_campaign_offline_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_describe_campaign_offline_v1.py' \
@@ -56,6 +64,10 @@ jobs:
           python3 'the artefact/blogpost_entity/mini_cognition/test_audit_together_byom_template_v1.py'
           python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'
           python3 'the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py'
+      - name: Fence staged cognition directive/runtime coherence
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_staged_cognition_contract_v1.py'
       - name: Regenerate and validate exact SFT v2 corpus
         run: |
           set -euo pipefail

@@ -4,6 +4,7 @@
   "organ": "GPT-5.6 Sol temporary Clay research organ",
   "trigger": "go",
   "canonical_main_at_fork": "8a7f90dd6e21fd53f80fd539286e86c6b66303b1",
+  "latest_main_fused": "74df26466781dedc73367cf66de87b964fc9bb61",
   "branch": "go-20260822-free-only-qwen35-08b-gate-gpt56sol",
   "authority": {
     "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
@@ -20,7 +21,7 @@
   },
   "hypothesis": "The direct 0.8B Together launcher could enter paid-provider preparation under a FREE_ONLY cycle because it had no execution-mode admission guard before credential/network-capable code.",
   "counterhypothesis": "Existing model, budget, campaign-fingerprint, duplicate-create and create-intent gates were sufficient to enforce the current FREE_ONLY boundary.",
-  "result": "COUNTERHYPOTHESIS_REJECTED_AT_SOURCE_BOUNDARY; FREE_ONLY admission added and exact changed-file regression passes.",
+  "result": "COUNTERHYPOTHESIS_REJECTED_AT_SOURCE_BOUNDARY; FREE_ONLY admission added, fused onto the latest observed main launcher, and exact changed-file regression passes.",
   "changed_files": [
     {
       "path": "the artefact/blogpost_entity/mini_cognition/provider_admission_v1.py",
@@ -29,8 +30,9 @@
     },
     {
       "path": "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py",
-      "git_blob_sha1": "8e998536c5c5db2fe43003fb49bf18f3ab0134a4",
-      "sha256": "6ed91a47534a6e09eed7ef2298bed5ece8d2e5610a63904c019ce0c0580dfa82"
+      "git_blob_sha1": "0090d10b8b1d3e9d039beb2b398ed08ba62caf69",
+      "sha256": "56115c7a4457f45d94a6d7217b471699b22ffe3b210cb9fe1451286ee6e15886",
+      "fusion_note": "This byte image equals current-main launcher blob 26af8f19ef217b3a93e1baa1e8ab316432b53ce3 plus only the provider-admission import and first-boundary call."
     },
     {
       "path": "the artefact/blogpost_entity/mini_cognition/test_provider_admission_v1.py",
@@ -47,7 +49,7 @@
     "surface": "OpenAI isolated task container",
     "python": "3.13.5",
     "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
-    "exact_byte_binding": "PASS for all four changed Python files via Git blob SHA-1 comparison to GitHub branch blobs",
+    "exact_byte_binding": "PASS for all four changed Python files via Git blob SHA-1 comparison to GitHub branch blobs; launcher retested after latest-main fusion",
     "compile": "PASS",
     "tests": {
       "command": "python -m unittest -v test_provider_admission_v1.py test_launch_together_free_only_v1.py",
@@ -62,7 +64,8 @@
       "FREE_ONLY launcher does not read TOGETHER_API_KEY",
       "FREE_ONLY launcher does not import Together SDK",
       "unknown/case/whitespace execution-mode variants fail closed",
-      "PAID_AUTHORIZED requires an exact explicit admission marker before provider credential lookup"
+      "PAID_AUTHORIZED requires an exact explicit admission marker before provider credential lookup",
+      "latest-main validator and created-job identity hardening are preserved in the fused launcher"
     ],
     "provider_network_scope": "No provider SDK import or provider-network-capable path is reached by the tested FREE_ONLY/unknown-mode launcher executions. This is not a provider-side or whole-runner network instrumentation claim."
   },

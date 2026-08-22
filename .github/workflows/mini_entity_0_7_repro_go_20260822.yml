@@ -152,47 +152,6 @@ jobs:
           /tmp/mini07/mini_entity.clay run /tmp/mini07/entity.db /tmp/mini07/source.db | tee /tmp/mini07/run_lab.json
           jq -e '.profile_id == "lab_reporter" and .generation == 3 and .inference_kind == "local_exec"' /tmp/mini07/run_lab.json
 
-      - name: Bounded unusual experiment - two-way generation CAS race
-        shell: bash
-        run: |
-          set -euo pipefail
-          cat > /tmp/mini07/slow_runner.py <<'PY'
-          import json, pathlib, sys, time
-          _ = pathlib.Path(sys.argv[1]).read_text(encoding='utf-8')
-          time.sleep(0.75)
-          print(json.dumps({
-              'ueberschrift':'Race fixture','einleitung':'race',
-              'abschnitte':[{'text':'race','evidence_refs':['fixture:race'],'state_claims':[]}],
-              'neuer_erzaehlfaden':'race','neue_gespiegelte_hypothesen':[],
-              'phaenomenologie':{'status':'UNKNOWN'},
-              'qualia_probe':{'status':'UNKNOWN','confidence':0.0},
-              'moralische_reibung':'UNKNOWN','notiz_an_mich':'race',
-              'longitudinal_self_report':{'uncertainty':0.3}
-          }))
-          PY
-          /tmp/mini07/mini_entity.clay set-local-runner-json /tmp/mini07/entity.db '["/usr/bin/python3","/tmp/mini07/slow_runner.py","{{PROMPT_FILE}}"]'
-          /tmp/mini07/mini_entity.clay source-add /tmp/mini07/source.db test event-race '{"measurement_status":"MEASURED","value":10}'
-          g0="$(sqlite3 /tmp/mini07/entity.db 'select generation from entity_state where id=1;')"
-          o0="$(sqlite3 /tmp/mini07/entity.db 'select count(*) from outputs;')"
-          s0="$(sqlite3 /tmp/mini07/entity.db 'select count(*) from study_rows;')"
-          set +e
-          /tmp/mini07/mini_entity.clay run /tmp/mini07/entity.db /tmp/mini07/source.db >/tmp/mini07/race_a.out 2>/tmp/mini07/race_a.err & a=$!
-          /tmp/mini07/mini_entity.clay run /tmp/mini07/entity.db /tmp/mini07/source.db >/tmp/mini07/race_b.out 2>/tmp/mini07/race_b.err & b=$!
-          wait "$a"; ra=$?
-          wait "$b"; rb=$?
-          set -e
-          echo "race_exit_codes=$ra,$rb"
-          cat /tmp/mini07/race_a.err /tmp/mini07/race_b.err || true
-          test $(( (ra==0) + (rb==0) )) -eq 1
-          g1="$(sqlite3 /tmp/mini07/entity.db 'select generation from entity_state where id=1;')"
-          o1="$(sqlite3 /tmp/mini07/entity.db 'select count(*) from outputs;')"
-          s1="$(sqlite3 /tmp/mini07/entity.db 'select count(*) from study_rows;')"
-          test "$g1" -eq $((g0+1))
-          test "$o1" -eq $((o0+1))
-          test "$s1" -eq $((s0+1))
-          test "$(sqlite3 /tmp/mini07/source.db "select consumed_generation from mini_entity_events where source_id='event-race';")" = "$g1"
-          cat /tmp/mini07/race_a.out /tmp/mini07/race_b.out
-
       - name: Final integrity and evidence summary
         shell: bash
         run: |

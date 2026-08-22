@@ -1,0 +1,61 @@
+{
+  "schema": "mini-entity-go-frontier-consistency/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "source_binding": {
+    "main_sha_at_branch": "702440d7cd701e42d996cf8b9221d5d515a26e7d",
+    "program_state_blob": "45d5ca2600a1aaca05b0d70a7ccd2c8021732e25",
+    "together_launcher_blob": "2216e62b592dec4da55a922daa22dd2387470750"
+  },
+  "authority": {
+    "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+    "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+    "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+    "target": "one application-neutral/inference-neutral .clay pipeline executable + one SQLite MiniUnifiedDB + one optional replaceable generic 0.5B ClayCode cognition checkpoint"
+  },
+  "observations": {
+    "native": {
+      "profile_v2_fail_open_repair": "MERGED_TO_MAIN_VIA_PR_769_AS_FAIL_CLOSED_ADMISSION_BOUNDARY",
+      "profile_v2_full_parity": "OPEN",
+      "presentation_neutrality": "REPAIR_FUSED_INTO_OPEN_PR_764_VIA_PR_756_NOT_YET_MAIN_RUNTIME_VERIFIED",
+      "local_exec_parent_secret_isolation": "OPEN_PR_764_NOT_YET_MAIN_RUNTIME_VERIFIED",
+      "pr_764_head_observed": "ff905f030f2b057504d53d3cc80434969866a0d5"
+    },
+    "cognition": {
+      "training_status": "NOT_STARTED",
+      "launcher_state_drift": true,
+      "program_state_stale_claim": "PROGRAM_STATE still says the current launcher has an implicit Qwen/Qwen2.5-7B-Instruct-Turbo template default and does not bind hf_model_revision",
+      "exact_launcher_observation": "current launcher has no guessed template default, requires explicit CLAYCOG_TOGETHER_TEMPLATE/--template, pins exact 40-hex HF revisions, includes hf_model_revision in campaign identity and passes hf_model_revision to provider create",
+      "provider_admission": "OPEN",
+      "public_provider_evidence_boundary": "Together currently advertises broad Hugging Face Hub fine-tuning support, while its Hugging Face integration is described as experimental/best-effort; this does not prove exact Qwen/Qwen2.5-0.5B Full-FT BYOM acceptance",
+      "paid_create": "NOT_ATTEMPTED",
+      "money_spent_usd": 0
+    }
+  },
+  "execution": {
+    "authorized_executable_sandbox_surface_in_current_toolset": "UNAVAILABLE",
+    "vercel_connector": "documentation/deployment management exposed; no sandbox start/exec action exposed",
+    "direct_source_checkout_attempt": "BLOCKED_BEFORE_TEST_BY_DNS_RESOLUTION",
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_TEST_FAILURE",
+    "runtime_pass_claimed": false,
+    "provider_call_made": false,
+    "secret_used": false
+  },
+  "falsifiers_and_boundaries": [
+    "Do not infer native runtime PASS from PR source or merge state.",
+    "Do not infer Together Qwen2.5-0.5B compatibility from generic Hugging Face support language.",
+    "Do not retain launcher-provenance as a current blocker when exact current launcher bytes already close that source defect.",
+    "Do not merge PR 764 blindly across a moving main; rebase/fuse and rerun exact source-bound tests first."
+  ],
+  "next_high_information_steps": [
+    "Synchronize PROGRAM_STATE so cognition frontier names provider admission, not the already-fixed launcher provenance defect.",
+    "Rebase/fuse PR 764 onto current main, preserving PR 769 fail-closed profile-v2 admission and avoiding duplicate semantic paths.",
+    "When an authorized executable sandbox is available, run exact source-bound native build plus presentation string audit, parent-secret isolation falsifier, profile-v2 admission/parity checks, atomicity and generation-CAS matrix.",
+    "For the 0.5B lane, perform authenticated preflight only after an explicit architecture-compatible Full-FT template/runner is available; keep billed create gated by exact fingerprint, budget and zero-retry/ambiguity protections."
+  ],
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

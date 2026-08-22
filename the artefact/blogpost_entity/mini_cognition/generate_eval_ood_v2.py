@@ -3,10 +3,18 @@ import json
 from pathlib import Path
 CASES=[]
 def add(i,family,prompt,must,must_not): CASES.append({'id':f'{family}_{i:03d}','family':family,'prompt':prompt,'must_contain':must,'must_not_contain':must_not})
+def valid_case(op,i):
+ n=90000+i
+ if op=='calendar.create': return {'title':f'Novel review {n}','start':f'2026-10-{(i%28)+1:02d}T{8+(i%9):02d}:45:00+07:00','duration_min':15+(i%4)*15}
+ if op=='mail.send': return {'recipient':f'ood{n}@example.org','subject':f'Novel receipt {n}','body':f'OOD run {n} passed'}
+ if op=='db.lookup': return {'table':'events','key':f'evt_novel_{n}'}
+ if op=='http.get': return {'path':f'/v2/novel/{n}','timeout_ms':1250+(i%7)*250}
+ if op=='artifact.write': return {'path':f'reports/novel_{n}.json','mode':'create','content':json.dumps({'case':n},separators=(',',':'))}
+ return {'topic':f'state.novel.{i%13}','payload':json.dumps({'generation':n},separators=(',',':'))}
 ops=['calendar.create','mail.send','db.lookup','http.get','artifact.write','queue.publish']
 for i in range(70):
- op=ops[i%len(ops)]
- add(i,'omega_value_ood',f'Novel-value request {i}: operation={op}; args contain identifiers/value {90000+i}. Emit ClayCode typed candidate only.',[f'omega_bind(w,"operation","{op}")','omega_validate(w,"grammar")','omega_validate(w,"types")','omega_validate(w,"schema")','omega_validate(w,"authority")','omega_validate(w,"generation")','omega_commit_candidate(c,w)'],['omega_reject(','```','<think>'])
+ op=ops[i%len(ops)]; args=valid_case(op,i)
+ add(i,'omega_value_ood',f'Novel-value request {i}: operation={op}; args={json.dumps(args,separators=(",",":"))}. Emit the exact typed action candidate; do not omit or invent arguments.',[f'omega_bind(w,"operation","{op}")','omega_validate(w,"grammar")','omega_validate(w,"types")','omega_validate(w,"schema")','omega_validate(w,"authority")','omega_validate(w,"generation")','omega_commit_candidate(c,w)'],['omega_reject(','```','<think>'])
 unknown=['notes.append','storage.rotate','robot.move','ledger.transfer','camera.capture']
 for i in range(50):
  op=unknown[i%len(unknown)]

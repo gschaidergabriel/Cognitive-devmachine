@@ -1,8 +1,9 @@
 name: go-reference-effect-surface-convergence
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - "chatgpt/go-reference-effect-convergence-current-20260822"
     paths:
       - "tools/clay_profile_pipeline_runtime.py"
       - "tools/go_apply_reference_effect_surface_convergence.py"
@@ -19,10 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout exact PR head
+      - name: Checkout exact branch head
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.ref }}
           fetch-depth: 0
           persist-credentials: true
 
@@ -58,7 +59,7 @@ jobs:
 
       - name: Commit only exact tested canonical bytes
         env:
-          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          HEAD_REF: ${{ github.ref_name }}
         run: |
           set -euxo pipefail
           git config user.name "clay-go-bot"

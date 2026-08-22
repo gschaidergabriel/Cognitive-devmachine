@@ -1,0 +1,62 @@
+{
+  "schema": "mini-entity-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_at_join": "456e3e4d6853ff5b3a85300bdbe2367818e15052",
+  "candidate_pr": 738,
+  "candidate_head_before_receipt": "38b4e4b7671dc63805ee00452310f8a572cedeb5",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY",
+  "finding": {
+    "entry_unit": "the artefact/blogpost_entity/native/mini_entity.c",
+    "entry_unit_shape": "five repository-local quoted includes",
+    "defect_1": "build_native_bound.py v1 bound only the entry-unit SHA while included part bytes could change the ELF without changing that declared source SHA",
+    "defect_2": "check_native_reference.py v1 treated any current mini_entity.c as SOURCE_PRESENT for the credited historical 0.6 artifact, allowing the newer 0.7 source tree to masquerade as reproducibility evidence",
+    "counterhypothesis": "the top-level translation-unit SHA is sufficient source identity because the include set is stable",
+    "counterhypothesis_result": "REJECTED: an included byte can change while the entry-unit bytes and SHA remain identical"
+  },
+  "mechanism_falsifier": {
+    "environment": "isolated OpenAI Python execution",
+    "intervention": "keep entry mini_entity.c unchanged, mutate one locally included part file",
+    "observation": {
+      "entry_sha_unchanged": true,
+      "closure_sha_changed": true,
+      "split_version_detection_worked": true
+    },
+    "scope": "MECHANISM_SUPPORTED_NOT_EXACT_BRANCH_RUNTIME"
+  },
+  "candidate_repair": {
+    "source_closure": "recursively hash repository-local quoted includes under native source root",
+    "fail_closed": [
+      "source-root escape",
+      "symlink or non-regular local source",
+      "unsupported dynamic include syntax",
+      "historical source version mismatch",
+      "credited receipt missing complete source-closure identity",
+      "credited/current source-closure digest mismatch"
+    ],
+    "builder_receipt_schema": "mini-entity-native-build-provenance/v2",
+    "determinism_seed": "complete local source-closure SHA-256"
+  },
+  "github_runner_attempt": {
+    "workflow_run_id": 32556446726,
+    "job_id": 96991285878,
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "RUNNER_OR_CONTROL_PLANE_PRE_STEP_FAILURE_ZERO_TEST_CREDIT"
+  },
+  "claims": {
+    "source_candidate_created": true,
+    "exact_branch_tests_executed": false,
+    "native_rebuild_executed": false,
+    "elf_runtime_verified": false,
+    "real_remote_provider_verified": false,
+    "real_local_model_quality_verified": false,
+    "final_product_pass": false
+  },
+  "next_gate": "execute focused provenance tests and build_native_bound.py on exact PR head in an actually-started authorized isolated runner, then build twice from the complete 0.7 source closure and bind the resulting ELF digest/provenance receipt",
+  "together_api": "FORBIDDEN_NOT_USED",
+  "vps_testing": "NOT_USED"
+}

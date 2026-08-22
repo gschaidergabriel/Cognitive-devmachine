@@ -48,6 +48,42 @@ class NativeSourceClosureTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "LOCAL_INCLUDE_ESCAPES_SOURCE_ROOT"):
                 describe_source_closure(entry)
 
+    def test_symlinked_local_include_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_text:
+            root = Path(tmp_text)
+            entry = root / "mini_entity.c"
+            real = root / "real.inc"
+            alias = root / "part.inc"
+            real.write_text('#define MINI_VERSION "mini-entity/test"\n', encoding="utf-8")
+            try:
+                alias.symlink_to(real.name)
+            except OSError:
+                self.skipTest("symlink creation unavailable")
+            entry.write_text('#include "part.inc"\n', encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "LOCAL_INCLUDE_SYMLINK_FORBIDDEN"):
+                describe_source_closure(entry)
+
+    def test_symlinked_entry_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_text:
+            root = Path(tmp_text)
+            real = root / "real.c"
+            entry = root / "mini_entity.c"
+            real.write_text('#define MINI_VERSION "mini-entity/test"\n', encoding="utf-8")
+            try:
+                entry.symlink_to(real.name)
+            except OSError:
+                self.skipTest("symlink creation unavailable")
+            with self.assertRaisesRegex(ValueError, "SOURCE_SYMLINK_FORBIDDEN"):
+                describe_source_closure(entry)
+
+    def test_dynamic_include_syntax_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_text:
+            root = Path(tmp_text)
+            entry = root / "mini_entity.c"
+            entry.write_text('#define PART "part.inc"\n#include PART\n', encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "UNSUPPORTED_INCLUDE_SYNTAX"):
+                describe_source_closure(entry)
+
     def test_declared_version_can_live_in_split_source(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_text:
             root = Path(tmp_text)

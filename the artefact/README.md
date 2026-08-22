@@ -1,184 +1,225 @@
-# the artefact — ClayVerse single-container candidate
+# the artefact — Multi-use Mini Entity pipeline all-in-one
 
-`the artefact/` is the canonical product workspace for ClayVerse in `gschaidergabriel/clay-global-research-entity/main`.
+`the artefact/` is the canonical product workspace for the current owner-directed Mini Entity program in `gschaidergabriel/clay-global-research-entity/main`.
 
-ClayVerse remains **IN_PROGRESS**. Source coherence, commits, PRs, workflow definitions, deployment READY states and component evidence never imply whole-product PASS.
+The previous ClayVerse single-container endpoint is superseded as the active product target. Historical ClayVerse/EntityOS material remains bounded implementation/research evidence only where it helps the current product; it is not allowed to override the current Mini Entity owner directives.
+
+Current authority:
+
+- `research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md`
+- `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
+- `research_entity/rooms/PROGRAM_STATE.json`
+
+The product is **IN_PROGRESS**. Source presence, a green component test, a generated corpus, a fine-tuning job, a quantized file, or an inference demo never implies whole-product acceptance.
 
 ## Product target
 
-The release target is **one immutable OCI/Docker-compatible ClayVerse image** implementing one persistent central entity with:
+The release shape is deliberately small and replaceable:
 
-- UnifiedDB as sole durable world/state/memory/data/wiki/goal authority;
-- Gabriel and Andreas as equal-rights perspectives into the same entity/global generation;
-- Clerk-authenticated browser -> WebSocket PTY -> user-bound persistent tmux;
-- normal interactive Claude Code as runtime cognition, not durable identity/memory;
-- provider-generic bounded API inference as an inference-only alternate path;
-- MicroClay adaptive retrieval/accessibility inside the same entity, never truth authority;
-- ClayGraph/Hyperposition/Needle/workspace as derived/bounded cognitive coordination structures;
-- deterministic autonomous goal pursuit from canonical user goals;
-- one explicit TurnLifecycle causal spine;
-- one EffectGate/EffectJournal action authority;
-- complete accepted EntityOS as internal execution/security/runtime substrate in the final image;
-- recoverable persistent state without blind external-effect replay.
+1. one application-neutral and inference-neutral native `.clay` pipeline executable (`mini_entity.clay`);
+2. one SQLite MiniUnifiedDB (`mini_entity.db`) as the persistent state/config/evidence authority;
+3. one optional replaceable generic **0.5B ClayCode cognition checkpoint**.
 
-Final whole-product acceptance additionally requires the **same exact accepted OCI digest** to execute behind an independent VM/microVM guest-kernel boundary. Direct host-kernel OCI execution is development/supporting evidence only.
+`zero_blog` is only the fully replaceable shipped preset. Zero, blogging, German/English presentation text, personality, provider, model name, API choice, local runner choice, and application-specific semantics are runtime configuration/data — never executable or checkpoint identity.
 
-There is no second `consciousness_daemon`, `autonomy_daemon`, memory ledger, effect path, identity service or hidden execution brain.
+## Architecture law
 
-## Canonical machine loop
+### Native executable
 
-```text
-INGRESS
--> authenticate/normalize/canonicalize in UnifiedDB
--> retrieve bounded current world/state
--> selected cognition proposes reasoning/action
--> model output re-enters ClayVerse as proposal
--> deterministic policy/authority validation
--> exact TurnLifecycle / EffectGate / EntityOS when admitted
--> stdout/stderr/effect outcome
--> EffectJournal + causal re-entry
--> memory/retrieval/goal-state update
--> repeat or EGRESS
-```
+The executable owns only generic machinery:
 
-Model output never self-authorizes execution.
+- evidence/source preprocessing;
+- canonical run/state envelope;
+- generic inference dispatch;
+- immutable truth/secret/admission gates;
+- exactly-once source consumption;
+- generation CAS;
+- atomic SQLite persistence;
+- deterministic effect/state authority boundaries.
 
-## Deterministic autonomy
+If a replaceable application, personality, provider, model, prompt, presentation label, or tool description can live in runtime configuration, hard-coding it into the ELF is a regression.
 
-Autonomy is an architecture property, not an AGI roleplay claim.
+### MiniUnifiedDB
+
+SQLite owns continuing state and runtime configuration. Switching application preset, inference backend, local weights, provider, prompt, role, goal or personality must not fork or reset entity continuity.
+
+Epistemic law remains:
 
 ```text
-CLAIM != EVIDENCE
-PROPOSAL != ADMISSION
-ADMISSION != EXECUTION
-TOOL_DISPATCH != SUCCESS
-MODEL_COMPLETION != GOAL_COMPLETION
-UNKNOWN != SUCCESS
-UNKNOWN != FAILURE
+UNKNOWN != ZERO != ERROR != MEASURED
+REPORTED != MEASURED
+MODEL_OUTPUT != CANONICAL_TRUTH
+MODEL_PROPOSAL != EFFECT_AUTHORITY
 ```
 
-Durable goals originate only from canonical owner `user` turns. The model may propose a next step but cannot silently rewrite the durable objective, mint a capability, declare a tool dispatch successful or mark its own goal complete.
+### Optional 0.5B cognition
 
-The canonical controller is `clayverse/autonomy.py`. Goal state lives inside UnifiedDB under the existing transaction/WAL/checkpoint authority. Hard limits bound steps, retries and effects.
+The cognition checkpoint is replaceable inference data, not canonical identity/state/effect authority. The current owner-required primary base is `Qwen/Qwen2.5-0.5B`; `Qwen/Qwen2.5-0.5B-Instruct` is the secondary ablation.
 
-### Autonomous turn identity
+The training target teaches generic cognition machinery rather than a fixed persona/job:
 
-Autonomous work reuses TurnLifecycle and carries exact provenance:
+- ClayCode-only generated cognition;
+- GRF R0..R6 as typed reasoning field;
+- Hyperposition for unresolved alternatives;
+- typed `omega` function/tool/API candidates;
+- architecture-use priors and authority boundaries;
+- computed semantic self/control state;
+- epistemic typing and fail-closed unknown handling;
+- generation/CAS/crash/exactly-once safety;
+- runtime-bound entity id, continuity, role, goal, personality, tool inventory and authorities.
 
-```text
-source = clayverse-autonomy:goal-step
-goal_id
-step_id
-turn_id
-episode_id
-causal_id
-entity/session generation
-```
+`R_next = F` is an admission contract, not neural infallibility: model proposals become transitions only after deterministic grammar/type/schema/authority/generation validation.
 
-Autonomy may not preempt a live human turn. A human may preempt autonomous work.
+## Current canonical SFT corpus
 
-### Effect safety: two fences
+**SFT v2 is canonical for any paid training attempt. SFT v1 is historical and must not be uploaded.**
 
-**Before dispatch:** an active autonomous turn may not use generic `request_effect`. It must use `request_autonomy_effect(goal_id, step_id)`. Capability/target/argv are loaded from the already-admitted canonical step; the caller cannot resupply a different intent.
+The v1 generator produced 1,650 structurally valid rows but sampled with replacement from a finite scenario support of at most 71 distinct generated scenarios before splitting. That was insufficient evidence for a meaningful held-in train/validation split.
 
-**After outcome:** the controller accepts effect evidence only when exact owner/session/generation, capability, redacted target/argv receipts, workspace episode, observation turn, causal id and autonomous goal/step provenance all match. An identical successful effect from another causal episode is not reusable as proof.
+SFT v2 preserves the 1,650-example campaign while eliminating that defect:
 
-`state.noop` may exercise the effect spine but is non-rewarding and cannot automatically prove real-world goal completion. Automatic verified-effect completion is restricted to independently meaningful admitted capabilities such as `entityos.exec`.
+- train: 1,485 / 1,485 exact-unique;
+- validation: 165 / 165 exact-unique;
+- structural invalid: 0 train, 0 validation;
+- exact cross-split message overlap: 0;
+- prompt cross-split overlap: 0;
+- train SHA-256: `3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93`;
+- validation SHA-256: `ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62`.
 
-### Human-preemption re-entry
+The canonical runtime-binding validator additionally rejects hidden second fixed identity/role/goal/personality bindings even when an output also contains the required runtime-config binding text.
 
-Human priority must not leave an invisible `ADMITTED` autonomy zombie.
+Relevant files:
 
-The managed prompt hook captures the exact autonomous predecessor before human admission. After canonical preemption:
+- `blogpost_entity/mini_cognition/generate_sft_v2.py`
+- `blogpost_entity/mini_cognition/validate_corpus_v2.py`
+- `blogpost_entity/mini_cognition/validate_sft_v1.py`
+- `blogpost_entity/mini_cognition/corpus_manifest_v2.json`
 
-- no emitted effect -> controller records a normal step failure/retry within existing budget;
-- final effect -> exact `record_effect_result` causal re-entry, never replay;
-- `PENDING` effect -> hard fence; preemption/reconciliation does not pretend the outcome is known;
-- exhausted retry budget -> explicit `BLOCKED` rather than silent deadlock or invented success.
+## Together training law
 
-### Recovery
+Together is **not** product identity and is **not** a required inference backend. It is owner-authorized only for this bounded 0.5B training campaign.
 
-Generation change fences stale writers. Recovery does not blindly replay admitted effects or silently rebind old evidence into a new generation. Ambiguous effects remain blocked/unknown; interrupted no-effect work may be requeued under bounded policy.
+Any paid create must preserve all of these fences:
 
-### Context
+- API secret only through the environment; never source/receipt/model output;
+- deterministic campaign fingerprint binds exact SFT v2 train/validation bytes plus checkpoint/template/hyperparameters;
+- local durable create-intent record before remote billed POST;
+- account duplicate scan as defense in depth;
+- no blind retry after ambiguous create outcome;
+- server-side validation/price estimate before create;
+- hard single-job ceiling: USD 18;
+- at most one paid campaign for the exact fingerprint unless explicit owner authority changes.
 
-The managed prompt path injects only a bounded, user-scoped autonomy projection marked as data, not instructions, with no truth/effect/completion authority. Autonomy does not widen cross-user retrieval.
+Current Together BYOM documentation requires the **training-template architecture to match** the Hugging Face checkpoint. Template size should be as close as the catalog allows; exact parameter-size equality is not required. This matters because:
 
-See `AUTONOMY_ARCHITECTURE.md` and `AUTONOMOUS_TURN_GATE.md` for the current source contract.
+- `Qwen/Qwen2.5-0.5B` is `Qwen2ForCausalLM`, `model_type=qwen2`;
+- the currently documented smallest Qwen Full-FT template is `Qwen/Qwen3.5-0.8B`, whose architecture/model type is `Qwen3_5ForConditionalGeneration` / `qwen3_5`;
+- the public Together Full-FT table currently documents no Qwen2/Qwen2.5 base template.
 
-## UnifiedDB / retrieval / learning laws
+Therefore BYOM compatibility remains **OPEN/BLOCKED on a compatible admitted qwen2 training template or an owner-admitted alternate full-FT runner**. Do not substitute Qwen3.5 merely because it is close in parameter count, and do not spend money until an authenticated preflight establishes an actually admitted compatible path.
 
-- UnifiedDB owns durable truth/state/memory/goal/effect/retrieval-learning records.
-- ClayGraph is rebuildable projection only.
-- MicroClay changes accessibility/routing, never semantic truth, rights or EffectGate policy.
-- Adaptive retrieval starts SHADOW; ACTIVE promotion requires held-out/replay evidence and rollback-safe gating.
-- Normal model completion is not automatic reward.
-- Explicit corrections/misses and verified causal outcomes require typed provenance and idempotent receipts.
-- Meta-learning is a required subsystem for reusable methods, but `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
+## Native Mini Entity 0.7 — current evidence
 
-## Runtime cognition/provider law
+The current native source line is `mini-entity/0.7.0-dev1`.
 
-Claude Code remains the preferred terminal-native cognition path inside the managed PTY/tmux continuum. Built-in tools/Bash and competing side-memory are disabled by product policy; admitted state/effects come through ClayVerse boundaries.
+The exact transitive current native source blobs and exact repository `build_native_bound.py` were reconstructed and hash-verified in an isolated non-production Linux container. The repository source-bound builder then produced two byte-identical builds in the same environment:
 
-Token/API providers are inference-only. Provider switching must preserve the same UnifiedDB entity/session/generation and may never create a second state/effect/identity authority. Provider credentials are transient secrets and never become UnifiedDB memory, snapshots, receipts, logs or model-visible context.
+- source-closure SHA-256: `a6500de97cb2cecc1b1778ee87e5af2c2f2cb7fde1d95f9220d0fa9dcf3f67a5`;
+- source-bound ELF SHA-256: `ae3d13c206666df4bdf814665e78ffd30311021c22bd88dbcc7b704598927fef`;
+- ELF build id: `db4ff89bf46feb417a10450aa224ed7fae9d5fa8`;
+- compiler: `x86_64-linux-gnu-gcc-14 (Debian 14.2.0-19) 14.2.0`;
+- SQLite pkg: `3.46.1`; libcurl: `8.10.1`; json-c: `0.18`.
 
-## Effect / EntityOS law
+On that source-bound ELF these ordinary runtime contracts passed:
 
-Real/state-changing actions use the one explicit EffectGate/EffectJournal path. Generic host `process.exec` remains forbidden.
+- fresh neutral DB;
+- successful source event followed by verified-empty cycle;
+- inference failure consumes nothing;
+- unknown source/sensor consumes nothing;
+- output insert fault rolls back atomically;
+- study insert fault rolls back atomically;
+- source-event update fault rolls back atomically;
+- concurrent generation CAS yields exactly one commit.
 
-EntityOS is mandatory inside the final accepted image as the complete accepted internal execution/security/runtime substrate, but it is not the product endpoint. Execution remains gated by exact embedded artifact identity and admitted policy/evidence.
+This closes the previous “source exists but current 0.7 was never actually built/run” gap at **same-environment source-bound mechanism scope**. It does not establish cross-environment reproducibility or final release acceptance.
 
-Unknown or ambiguous external outcomes remain unknown. No crash/restart/preemption path may blindly replay an effect merely to preserve continuity.
+### Three confirmed current-main blockers
 
-## Recovery / isolation law
+Native 0.7 is **not promotable yet** because executable falsification found three independent defects:
 
-ClayVerse uses one global entity generation across both permanent user sessions. Restart/recovery fences stale writers, reconciles incomplete causal work, rebuilds derived graph state and preserves EffectJournal uncertainty.
+1. **Binary neutrality:** replaceable Zero-study display strings such as `SYSTEM STATE`, `MODEL SELF-REPORT`, `AUSWERTUNG` and German evaluation wording are still embedded in the ELF. Repair work is tracked by PR #756.
+2. **Local-runner secret boundary:** `local_exec` inherits the parent environment. Synthetic `TOGETHER_API_KEY`, `MISTRAL_API_KEY`, `OPENAI_API_KEY` and unrelated-secret sentinels reached the local runner and were persisted as model output. Repair work is tracked by PR #764.
+3. **Canonical profile-v2 semantic admission:** native 0.7 accepted and persisted deliberately malformed local-model output under a `clay-pipeline-profile/v2` profile that required a stronger output contract. The canonical structured path requires a `pipeline_gate` before commit. Fail-closed/parity work is tracked by PR #769.
 
-The accepted runtime must use read-only image/root semantics with only declared tmpfs/persistent write surfaces. Whole-product PASS requires the exact accepted image behind an independent VM/microVM guest kernel and adversarial recovery/recreation evidence.
+The defect evidence is durable at:
 
-## Evidence ladder
+`blogpost_entity/receipts/2026-08-22_GO_NATIVE_0_7_CURRENT_MAIN_RUNTIME_FALSIFIERS_GPT56SOL.json`
 
-```text
-SOURCE_INSPECTED
--> STATIC_CONTRACT_PASS
--> FOCUSED_TEST_PASS
--> ADJACENT_REGRESSION_PASS
--> COMPONENT_RUNTIME_PASS
--> MULTICOMPONENT_INTEGRATION_PASS
--> EXACT_OCI_COMPONENT_PASS
--> EXACT_MICROVM_COMPONENT_PASS
--> WHOLE_CLAYVERSE_PASS
-```
+The fixes must be fused/rebased onto current main and re-executed through the same source-bound builder and fault matrix before any native 0.7 promotion claim.
 
-A higher class is never inferred from a lower one.
+## Inference backends
 
-## Current autonomy evidence — 2026-08-18 03:05 +07:00
+The product remains inference-neutral:
 
-Current `main` has converged multiple non-duplicate autonomy hardenings, including explicit goal adoption, bounded goal context, non-preempting autonomous TurnLifecycle, exact causal effect evidence, pre-dispatch stored-intent enforcement, recovery hardening and human-preemption re-entry.
+- remote/provider API from runtime profile;
+- loopback OpenAI-compatible local API without a token where configured;
+- local model weights through configured `local_exec` argv without a shell.
 
-This GO cycle specifically closed:
+Changing backend/model must not reset MiniUnifiedDB state. The default shipped preset may use Mistral API, but that choice is replaceable preset data only.
 
-1. **pre-execution intent drift** — autonomous turns cannot use generic effect dispatch; the dedicated path executes only the stored admitted intent;
-2. **human-preemption ADMITTED-zombie state** — preempted steps are causally reconciled to retry/block/final-effect re-entry rather than silently remaining unrunnable.
+## 0.5B promotion gate
 
-Focused regressions now cover wrong goal/step identities, generic-effect denial before dispatch, stored-intent execution, human-turn compatibility, prompt-text impersonation, no-effect human preemption, final-effect preemption without replay, pending-effect fencing and zero-retry explicit blocking.
+A completed training job is only a candidate. Promotion requires all of the following on matched executable evaluation:
 
-Two exact-head GitHub-hosted autonomy-guard attempts reached a job object but failed before runner assignment or any visible step:
+- 100% strict ClayCode envelope on held-out OOD;
+- at least 95% semantic gate pass;
+- invalid/missing tool arguments reject instead of guessed repair;
+- unresolved alternatives stay in Hyperposition until evidence discriminates;
+- runtime identity/job/application changes do not reveal a fixed weight-bound persona;
+- stale generation and unknown-effect cases fail closed;
+- model output never becomes canonical truth/effect authority;
+- tuned 0.5B materially beats untuned 0.5B on the same probes;
+- comparison against at least one larger general model before any “micro-agent superiority” claim;
+- conversion to GGUF Q4_K_M;
+- measured peak process RSS **< 1 GiB at context 2048**;
+- successful use through the existing generic `local_exec` integration without state reset.
 
-- run `32066747923`, job `95500527451`;
-- run `32067358388`, job `95502469614`.
-
-Both reported `runner_id=0` and `steps=[]`. They provide **zero pytest/runtime credit** and are classified as runner/control-plane admission failures, not ClayVerse semantic test failures.
-
-The private GitHub zipball connector returned no archive bytes, so no unauthenticated or fabricated exact-checkout execution was claimed. VPS/self-hosted/production testing was not used.
+No consciousness, mathematical-correctness, superiority or AGI claim follows from the cognition representation or from fine-tuning success.
 
 ## Current frontier
 
-Highest-information next gates are:
+The two required lanes now converge cleanly:
 
-1. obtain an actually-started authorized isolated exact-checkout run of the focused autonomy + adjacent lifecycle/recovery suite;
-2. fuse a real supervisor wake/pulse onto `next_runnable()` without creating a second daemon or allowing autonomy to preempt human turns;
-3. prove effect ambiguity/recovery/preemption under real packaged runtime faults;
-4. continue through exact OCI build/digest/start/readiness, Clerk/PTTY/Claude lifecycle, dual-user concurrency and the same-image microVM acceptance vector.
+```text
+NATIVE
+confirmed 0.7 exact-source-bound execution
+-> fuse #756/#764/#769 without duplicate semantic paths
+-> exact source-bound rebuild
+-> repeat security/semantic/atomicity/CAS falsifiers
+-> release provenance/portability gates
 
-Detailed historical cycle evidence belongs in `the artefact/receipts/` and Git history rather than being duplicated indefinitely in this living README.
+COGNITION
+SFT v2 + strict runtime-binding validator
+-> compatible qwen2 full-FT runner/template admission
+-> fingerprint-bound budget preflight
+-> at most one owner-authorized paid SFT
+-> held-out OOD/base/larger-model benchmark
+-> Q4_K_M
+-> measured <1 GiB RSS @ ctx 2048
+-> generic local_exec integration
+```
+
+Do not let either lane claim the other lane's acceptance.
+
+## Evidence index for this go
+
+- `blogpost_entity/receipts/2026-08-22_GO_NATIVE_0_7_CURRENT_MAIN_RUNTIME_FALSIFIERS_GPT56SOL.json`
+- `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_05B_SFT_V2_FUSION_GPT56SOL.json`
+- `blogpost_entity/receipts/2026-08-22_CLAYCOG_RUNTIME_BINDING_GATE.json`
+- `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_TOGETHER_BYOM_TEMPLATE_CONTRACT_GPT56SOL.json`
+
+## Acceptance boundary
+
+Current acceptance: **IN_PROGRESS**.
+
+A reproducible ELF does not prove semantic safety. A valid corpus does not prove learned cognition. A Together create does not prove model quality. A Q4 file size does not prove process RSS. A fluent ClayCode trace does not prove truth. Only the full admitted pipeline, measured under its exact contracts, can promote the Mini Entity candidate.

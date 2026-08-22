@@ -1,0 +1,31 @@
+{
+  "schema":"claycog-05b-v2-byom-ood-go/v1",
+  "date":"2026-08-22",
+  "organ":"GPT-5.6 Sol",
+  "trigger":"go extra lang",
+  "canonical_parent":"263c14f9858d820dec54a8d4da1454cf08e5be40",
+  "program":"MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage":"MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_checkpoint":"Qwen/Qwen2.5-0.5B",
+  "canonical_training_corpus":"claycog-sft/v2",
+  "findings":[
+    "Together documents from_hf_model should match selected base architecture and size; the prior 7B same-family default is not an admitted 0.5B template.",
+    "The prior 200-case OOD suite reused all six SFT operation names, so tool-inventory neutrality was not structurally held out.",
+    "A global 95 percent semantic threshold alone can hide systematic failure in a 40-case unseen-tool family."
+  ],
+  "delta":[
+    "remove 7B template default and require explicit qwen2/0.5B template metadata before Together object/upload",
+    "bind template metadata into exact paid-campaign fingerprint while preserving create-intent ledger and zero-retry CREATE",
+    "extend OOD to 240 with 40 unseen operation/schema/typed-argument cases",
+    "require 40/40 semantic success in the unseen-tool family",
+    "extend existing claycog-validator-pr runner instead of creating a second CI authority"
+  ],
+  "unusual_experiment":{"count":1,"name":"tool_vocabulary_amputation","cases":40,"novel_operations":["contacts.resolve","storage.read","metrics.sample","task.enqueue"],"sft_operation_overlap":0},
+  "historical_unusual_tests":{"ambiguous_create_fault_injection":"regression-only; does not consume a new experiment slot"},
+  "execution_status":"PENDING_EXACT_PR_RUNNER_AT_RECEIPT_CREATION",
+  "together_api_called":false,
+  "paid_job_created":false,
+  "byom_compatibility":"OPEN",
+  "training_started":false,
+  "claims_not_made":["real-model quality","superiority","Q4_K_M RSS pass","consciousness"]
+}

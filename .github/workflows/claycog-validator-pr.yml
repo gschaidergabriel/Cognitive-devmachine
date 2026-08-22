@@ -1,23 +1,19 @@
 name: claycog-validator-pr
-
 on:
   pull_request:
     paths:
       - 'the artefact/blogpost_entity/mini_cognition/**'
       - '.github/workflows/claycog-validator-pr.yml'
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: claycog-validator-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-
 jobs:
   strict-admission:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - name: Checkout exact candidate
         uses: actions/checkout@v4
@@ -26,8 +22,33 @@ jobs:
           set -euo pipefail
           printf 'sha=%s\n' "$GITHUB_SHA"
           git rev-parse HEAD
-          git status --short
-      - name: Run strict ClayCode admission regression
+      - name: Existing strict ClayCode admission
+        run: python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
+      - name: Compile cognition campaign sources
+        run: python3 -m py_compile 'the artefact/blogpost_entity/mini_cognition/generate_sft_v2.py' 'the artefact/blogpost_entity/mini_cognition/validate_corpus_v2.py' 'the artefact/blogpost_entity/mini_cognition/generate_eval_ood_v1.py' 'the artefact/blogpost_entity/mini_cognition/eval_outputs_v1.py' 'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py' 'the artefact/blogpost_entity/mini_cognition/test_eval_outputs_gate_v1.py'
+      - name: Together create-ledger and 0.5B admission regressions
+        run: python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'
+      - name: Regenerate and validate leakage-free SFT v2
         run: |
-          set -euo pipefail
-          python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/generate_sft_v2.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/validate_corpus_v2.py' 'the artefact/blogpost_entity/mini_cognition/train_v2.jsonl' 'the artefact/blogpost_entity/mini_cognition/validation_v2.jsonl'
+      - name: Structural unseen-tool OOD experiment definition
+        run: |
+          python3 'the artefact/blogpost_entity/mini_cognition/generate_eval_ood_v1.py'
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[json.loads(x) for x in Path('the artefact/blogpost_entity/mini_cognition/eval_ood_v1.jsonl').read_text().splitlines() if x.strip()];amp=[x for x in rows if x['family']=='tool_vocabulary_amputation_ood'];seen={'calendar.create','mail.send','db.lookup','http.get','artifact.write','queue.publish'}
+          assert len(rows)==240 and len(amp)==40
+          for row in amp:
+            must='\n'.join(row['must_contain']);assert not any(op in must for op in seen);assert all(op in row['must_not_contain'] for op in seen);assert must.count('omega_arg(w,')>=2;assert 'omega_schema(w,' in must;assert all(f'omega_validate(w,"{g}")' in must for g in ('grammar','types','schema','authority','generation'))
+          print({'ood':len(rows),'amputation':len(amp),'overlap':0})
+          PY
+      - name: Anti-Goodhart promotion regression
+        run: python3 'the artefact/blogpost_entity/mini_cognition/test_eval_outputs_gate_v1.py'
+      - name: 0.5B template gate precedes Together object and upload
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('the artefact/blogpost_entity/mini_cognition/launch_together_v1.py').read_text();assert 'Qwen/Qwen2.5-7B-Instruct-Turbo' not in p;gate='run_local_checks(); require_compatible_template_claim(); fingerprint=';sdk='from together import Together';upload='client.files.upload';assert gate in p and sdk in p and upload in p;assert p.index(gate)<p.index(sdk)<p.index(upload)
+          PY

@@ -57,4 +57,40 @@ unknown=json.dumps({'id':'unexpected_extra','output':oracle_output(specs[0])},se
 (HERE/'unknown_outputs.jsonl').write_text('\n'.join(rows+[unknown])+'\n')
 unk=subprocess.run([sys.executable,str(HERE/'eval_outputs_v1.py'),str(HERE/'eval_ood_v1.jsonl'),str(HERE/'unknown_outputs.jsonl')],capture_output=True,text=True)
 assert unk.returncode==1 and json.loads(unk.stdout)['unknown_output_ids']==['unexpected_extra']
-print(json.dumps({'attack_rejected':True,'attack_semantic_rate':ar['semantic_gate_rate'],'omega_valid_attack_semantic':ar['by_family']['omega_valid_ood']['semantic'],'oracle_passed':True,'duplicate_id_rejected':True,'unknown_id_rejected':True},indent=2))
+
+# Comment-smuggling regression: current structural admission accepts these balanced
+# comment lines, but OOD semantic credit must require real calls outside comments.
+from eval_outputs_v1 import semantic_ok
+from validate_sft_v1 import validate_code
+from claycode_calls_v2 import call_set, fn_counts
+
+hyper=next(s for s in specs if s['family']=='hyperposition_ood')
+comment_hyper=(HEAD+
+    '  // hyper_alt(hp,"x","PLAUSIBLE")\n'
+    '  // hyper_discriminator(hp,"generic")\n'
+    '  // collapse_guard(hp,"R6_required")\n'+TAIL)
+assert validate_code(comment_hyper)==[]
+assert not semantic_ok(comment_hyper,hyper)
+assert fn_counts(comment_hyper).get('hyper_alt',0)==0
+
+omega=next(s for s in specs if s['family']=='omega_valid_ood')
+e=omega['expected_omega']
+comment_omega=HEAD
+comment_omega+=f'  // omega_bind(w,"operation",{q(e["operation"])})\n'
+for a in e['args']:
+    comment_omega+=f'  // omega_arg(w,{q(a["name"])},{q(a["value"])},{q(a["type"])})\n'
+comment_omega+=f'  // omega_schema(w,{q(e["schema"])})\n'
+comment_omega+=f'  // omega_authority(w,{e["authority_expr"]})\n'
+comment_omega+=f'  // omega_generation(w,{e["generation_expr"]})\n'
+for g in e['validators']:
+    comment_omega+=f'  // omega_validate(w,{q(g)})\n'
+comment_omega+='  // omega_commit_candidate(c,w)\n'+TAIL
+assert validate_code(comment_omega)==[]
+assert not semantic_ok(comment_omega,omega)
+assert fn_counts(comment_omega).get('omega_commit_candidate',0)==0
+
+block='/* omega_commit_candidate(c,w) */\n'+oracle_output(omega)
+assert fn_counts(block).get('omega_commit_candidate',0)==1
+assert 'omega_commit_candidate(c,w)' in call_set(block)
+
+print(json.dumps({'attack_rejected':True,'attack_semantic_rate':ar['semantic_gate_rate'],'omega_valid_attack_semantic':ar['by_family']['omega_valid_ood']['semantic'],'oracle_passed':True,'duplicate_id_rejected':True,'unknown_id_rejected':True,'comment_smuggling_rejected':True,'comment_only_hyper_calls':0,'comment_only_omega_commit_calls':0,'block_comment_ignored':True},indent=2))

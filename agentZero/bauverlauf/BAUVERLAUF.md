@@ -1,12 +1,20 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-22T09:06:42Z. 1110 Commits aus vier Repos, davon 515 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-22T10:06:43Z. 1110 Commits aus vier Repos, davon 517 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-22
+
+### cognition: adopt owner-selected Qwen3.5-0.8B Together Full-FT lane (#880)
+
+`74e01f7b63dc` · agentzero-export · 16:37 UTC · Gabriel Gschaider
+
+```
+Owner-selected Variant 1: Qwen/Qwen3.5-0.8B direct Together Full Fine-Tuning. Preserve paid-create authorization gate; add exact-vector compositional OOD scoring and focused no-secret CI.
+```
 
 ### cognition: unify ClayCode syntax authority and top-level OOD semantics (#876)
 
@@ -336,6 +344,24 @@ Canonicalize the owner-required generic 0.5B ClayCode cognition lane, determinis
 
 ```
 Repair Mini Entity 0.7 source provenance by binding all reachable project-local quoted includes, rejecting dynamic/unbound local includes, and recording bounded falsifier evidence. Full exact 0.7 runtime acceptance remains open.
+```
+
+### EOS-Chronik 2026-08-22 09:40:05 +0000 — entityos: 1 Aenderungen
+
+`bd016bba71b9` · entityos · 09:40 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/web/chat/demo-bilder/architekt-kann-das.png
+
+Zeit: 2026-08-22T09:40:05+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
 ```
 
 ### EOS-Chronik 2026-08-22 00:46:53 +0000 — entityos: 1 Aenderungen
@@ -2533,42 +2559,6 @@ Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
 Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 05:57:35 +0000 — entityos: 1 Aenderungen
-
-`742c85ce0477` · entityos · 05:57 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/wettbewerb.py
-
-Zeit: 2026-08-21T05:57:35+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 05:55:29 +0000 — entityos: 1 Aenderungen
-
-`2216564ea5ca` · entityos · 05:55 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/tests/test_suchtext_nachindizierung.py
-
-Zeit: 2026-08-21T05:55:29+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 ```

@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-22T09:06:43Z. **4163 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-22T10:06:43Z. **4175 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T15:36:26+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T15:38:38+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 4065 |
+| baunotiz | 4077 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2424 |
-| baunotiz | bauverlauf.jsonl | 1593 |
+| baunotiz | git-commit | 2431 |
+| baunotiz | bauverlauf.jsonl | 1598 |
 | baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 4163 · Gegenhypothese: 0 von 4163
+## Hypothese: 0 von 4175 · Gegenhypothese: 0 von 4175
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,38 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T15:36:26+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: quarantine merged Together 0.8B lane; bind current source-only repairs
+
+`baunotiz-bauverlauf-ffb7216b369c13bf9e70` · baunotiz · bauverlauf.jsonl · 2026-08-22T15:38:38+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: quarantine merged Together 0.8B lane; bind current source-only repairs
+
+`baunotiz-git-f9d6bcf613dc0874cb03536714a937b11c20be07` · baunotiz · git-commit · 2026-08-22T15:38:38+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: quarantine merged Together 0.8B lane; bind current source-only repairs
+
+### evidence(go): re-enter native v2 parity and approx1B frontier
+
+`baunotiz-bauverlauf-141a52e8eef8e90d9e37` · baunotiz · bauverlauf.jsonl · 2026-08-22T15:37:10+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### evidence(go): re-enter native v2 parity and approx1B frontier
+
+`baunotiz-git-a10b019bae18baa2612862ffff92e224ac37ca4a` · baunotiz · git-commit · 2026-08-22T15:37:10+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+evidence(go): re-enter native v2 parity and approx1B frontier
 
 ### cognition: unify ClayCode syntax authority and top-level OOD semantics (#876)
 
@@ -220,40 +252,4 @@ evidence(native): reconcile go experiment slot and reject stacked v2 donor (#872
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 Expose the already-canonical presentation-neutrality and profile-v2 semantic-admission source falsifiers through the single native exact-repro unittest adapter. Source/test-coverage fusion only; GitHub runner remained admission-blocked before every visible step, so no runtime PASS is claimed.
-
-### test(native): bind semantic source guards into exact repro (#852)
-
-`baunotiz-git-8eeada1aec95779137b35ca0314f5ab06d6b0541` · baunotiz · git-commit · 2026-08-22T15:30:12+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-test(native): bind semantic source guards into exact repro (#852)
-
-Expose the already-canonical presentation-neutrality and profile-v2 semantic-admission source falsifiers through the single native exact-repro unittest adapter. Source/test-coverage fusion only; GitHub runner remained admission-blocked before every visible step, so no runtime PASS is claimed.
-
-### evidence(go): reconcile global unusual-experiment slot (#870)
-
-`baunotiz-bauverlauf-8a9ee654dcaad45f561b` · baunotiz · bauverlauf.jsonl · 2026-08-22T15:28:52+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Reclassify the offline provider-secret poison check as an ordinary deterministic regression so this user-triggered go retains exactly one global unusual experiment: the Qwen2.5-vs-current-Together-template BYOM architecture falsifier. No observed evidence or behavioral result changes.
-
-### evidence(go): reconcile global unusual-experiment slot (#870)
-
-`baunotiz-git-84c6c5f03c138f545f5ebd0fc9e9644fbe5464bc` · baunotiz · git-commit · 2026-08-22T15:28:52+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-evidence(go): reconcile global unusual-experiment slot (#870)
-
-Reclassify the offline provider-secret poison check as an ordinary deterministic regression so this user-triggered go retains exactly one global unusual experiment: the Qwen2.5-vs-current-Together-template BYOM architecture falsifier. No observed evidence or behavioral result changes.
-
-### test(native): trace active and empty local_exec boundaries (#868)
-
-`baunotiz-bauverlauf-d38d5c7115ac80ae1d49` · baunotiz · bauverlauf.jsonl · 2026-08-22T15:27:12+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

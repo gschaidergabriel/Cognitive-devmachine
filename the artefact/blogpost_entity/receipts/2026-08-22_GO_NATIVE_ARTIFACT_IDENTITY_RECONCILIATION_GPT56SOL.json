@@ -1,0 +1,62 @@
+{
+  "schema": "mini-entity-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "gpt-5.6-sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY",
+  "unusual_experiment": {
+    "name": "Same-Version Artifact Identity Collision Audit",
+    "count_for_trigger": 1,
+    "result": "FOUND_REAL_PROVENANCE_DRIFT"
+  },
+  "observed": {
+    "version": "mini-entity/0.6.0",
+    "credited_binary_sha256": "27ad1fc3f134efacabe89102a86ac5876d62bb7c9d9b1e6d0ca95c36c60e7bd1",
+    "historical_pre_retest_sha256": "2aa8ebe9d20a683b62627cfe9e20f245390b1422afaa805b42b2dddbc976eed3",
+    "receipt_path": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json",
+    "native_reference_path": "the artefact/blogpost_entity/native/MINI_ENTITY_0_6_SANDBOX.md",
+    "canonical_native_source_path": "the artefact/blogpost_entity/native/mini_entity.c",
+    "canonical_native_source_present": false,
+    "credited_elf_bytes_present_in_repository": false
+  },
+  "lineage": {
+    "native_reference_added_commit": "3060be67ac6cac71f4ff33a5d9fbd94ac4975f33",
+    "receipt_retest_commit": "ceae68f43783b982ca3b052fc365b9f1c0204c27",
+    "program_state_hash_refresh_commit": "77b14f3c426669ca2df858f591ebdf53aee58252"
+  },
+  "repair": {
+    "native_reference_reconciled_commit": "a4aeb6383b754327cbd09c48c2ee16649d378333",
+    "provenance_checker_added_commit": "cc286cfc1f127f00075f4c989679f24bd8363e82",
+    "provenance_checker_path": "the artefact/blogpost_entity/native/check_native_reference.py"
+  },
+  "checker_regression": [
+    {
+      "case": "default provenance gate with canonical native source absent",
+      "exit_code": 2,
+      "expected": "CANONICAL_NATIVE_SOURCE_MISSING",
+      "result": "PASS"
+    },
+    {
+      "case": "coherence-only inspection with --allow-missing-source",
+      "exit_code": 0,
+      "expected": "state/receipt/reference credited hash coherent while reproducibility remains BLOCKED_SOURCE_MISSING",
+      "result": "PASS"
+    },
+    {
+      "case": "synthetic stale state hash reverted to historical 2aa8 artifact identity",
+      "exit_code": 2,
+      "expected": "HASH_MISMATCH",
+      "result": "PASS"
+    }
+  ],
+  "structured_clay_followup_observation": {
+    "status": "OPEN_CONVERGENCE_GAP",
+    "clay_contract": "BLOGPOST_ENTITY.clay uses DB-resident pipeline_profile_read plus inference_generate and a three-argument run boundary",
+    "legacy_reference_runtime": "tools/clay_profile_pipeline_runtime.py and test_blogpost_entity.py still encode the older profile_load/provider_chat_json external-profile contract",
+    "promotion": "NO_RUNTIME_CREDIT; do not roll canonical Clay backward merely to satisfy stale reference tests"
+  },
+  "evidence_boundary": "The provenance checker behavior was executed in the current isolated tool container against bounded fixtures mirroring the observed version/hash/source-presence facts. No new native ELF build, real local model run, remote-provider run, or final release acceptance was executed.",
+  "acceptance": "PROVENANCE_GUARD_ADDED_REPRODUCIBILITY_BLOCKED",
+  "next": "Recover or commit exact native source bytes and bind source/build dependency identities to a fresh accepted build; then implement the generic configurable post-render/state-box plus atomic study payload without hard-coding zero_blog and converge the structured Clay runtime contract."
+}

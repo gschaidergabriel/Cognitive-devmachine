@@ -1,20 +1,22 @@
 {
-  "schema": "clay-go-qwen35-free-only-authority-fusion/v3",
+  "schema": "clay-go-qwen35-free-only-authority-fusion/v4",
   "date": "2026-08-22",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
-  "target_main_sha": "1cff984085909652e75a4ea8a667139e18576ab0",
-  "target_main_tree": "aaf9320313ab067daf419101d72fc3640e2fe544",
+  "target_main_sha_before_fusion": "1cff984085909652e75a4ea8a667139e18576ab0",
   "branch": "gpt56sol/go-free-only-authority-fusion-20260822-1844",
   "pull_request": 914,
-  "claim_class": "SOURCE_DELTA_PLUS_BOUNDED_LOCAL_MECHANISM_EVIDENCE",
+  "pr_head_sha": "0048230186de6630f4a84c804eda0fbe42434707",
+  "merge_commit_sha": "9f7c142e62a7f0cb0566312cba948c49d13ecfe7",
+  "merged": true,
+  "claim_class": "MERGED_SOURCE_MECHANISM_DELTA_WITH_ZERO_ACTIONS_RUNTIME_CREDIT",
   "current_main_observation": {
-    "provider_gate_present": true,
-    "provider_gate_source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json verified_updates.free_only",
+    "provider_gate_present_before_delta": true,
+    "provider_gate_source_before_delta": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json verified_updates.free_only",
     "active_control_authority_present": true,
     "active_control_mode": "FREE_ONLY",
     "active_control_preserved_hard_rules": {"free_only": true, "together_forbidden": true},
-    "residual_defect": "The direct paid Together lane trusts derived Supervisor Inbox state as its execution-policy read. A stale or incorrectly false Inbox value must never override the ACTIVE 4.1/4.2 repository control authority."
+    "residual_defect_closed": "A stale or incorrectly false derived Supervisor Inbox value could not be allowed to override the ACTIVE 4.1/4.2 repository execution authority."
   },
   "fusion_delta": {
     "authority_order": [
@@ -27,37 +29,55 @@
       "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json"
     ],
     "behavior": "Any existing ACTIVE control with mode FREE_ONLY, free_only=true, or together_forbidden=true rejects the paid Together lane before local paid-lane corpus work, secret lookup, Together import, client construction, or network. The already-canonical Supervisor Inbox guard remains as an additional downstream fail-closed check.",
-    "no_env_override": true,
+    "no_environment_authority_override": true,
     "canonical_validator_preserved": "validate_corpus_v2.py",
     "provider_job_identity_fence_preserved": true
   },
   "adjudicated_parallel_work": {
-    "pr_886": "Superseded intent: caller-controlled CLAY_PROVIDER_MODE=PAID_ALLOWED was not acceptable as authority and its head carried older validator bytes.",
-    "main_free_only_fusion": "Main subsequently added a Supervisor-Inbox FREE_ONLY guard; this v3 delta narrows to authority precedence rather than duplicating that guard."
+    "pr_886": "Closed/superseded. Its caller-controlled CLAY_PROVIDER_MODE=PAID_ALLOWED was rejected as execution authority and its older validator path was not reintroduced.",
+    "main_direct_free_only_guard": "Preserved. The fused delta is authority precedence, not a competing provider gate."
   },
   "unusual_experiment_accounting": {
     "new_unusual_experiment_consumed": false,
     "shared_macrocycle_experiment": "FREE_ONLY_SECRET_NETWORK_TRIPWIRE",
-    "this_delta_use": "regression-only authority-order reproduction; no second unusual intervention"
+    "source": "parallel PR #886",
+    "this_delta_use": "regression-only authority-order reproduction and fusion; no second unusual intervention"
   },
-  "bounded_local_evidence_from_pre-rebase_equivalent_guard": {
+  "bounded_local_mechanism_evidence_before_final_rebase": {
     "python_compile": "PASS",
-    "then_current_launcher_tests": "9/9 PASS",
+    "then_current_existing_launcher_tests": "9/9 PASS",
     "authority_tests": "3/3 PASS",
     "provider_network_calls": 0,
     "training_started": false,
     "money_spent_usd": 0
   },
-  "exact_current_source_review": {
-    "main_inbox_guard_observed": true,
-    "main_validate_corpus_v2_observed": true,
-    "main_full_provider_job_identity_verification_observed": true,
-    "active_4_2_free_only_observed": true,
-    "exact_pr_runner": "UNOBSERVED_AT_RECEIPT_WRITE"
+  "exact_pr_actions_evidence": {
+    "workflow": "mini-cognition-qwen35-08b-pr",
+    "run_id": 32571493862,
+    "job_id": 97027472850,
+    "job_name": "deterministic-cognition-gates",
+    "workflow_conclusion": "failure",
+    "job_conclusion": "failure",
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_OR_CONTROL_PLANE_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION",
+    "runtime_test_credit": 0,
+    "code_test_failure_credit": 0,
+    "pass_credit": 0
+  },
+  "post_merge_reentry": {
+    "observed_main_sha": "577028db4228d7ac767ebaace31c5124ef9c2bc3",
+    "authority_guard_still_present": true,
+    "authority_guard_still_precedes_local_checks": true,
+    "supervisor_inbox_guard_still_present": true,
+    "canonical_validate_corpus_v2_still_present": true,
+    "later_sdk_create_repair_preserved_authority_guard": true,
+    "provider_execution_observed": false,
+    "training_observed": false,
+    "money_spent_usd": 0
   },
   "external_provider_fact_refresh": {
     "scope": "public documentation only; no credentialed provider request",
-    "finding": "Together Full SFT remains a paid capability with a documented minimum job charge, so the direct Together training lane is non-free and must remain dormant under current FREE_ONLY authority."
+    "finding": "Together Full SFT remains a paid capability with a documented minimum job charge, so the direct Together training lane is non-free and remains dormant under current FREE_ONLY authority."
   },
   "nonclaims": [
     "credentialed Together preflight PASS",
@@ -66,5 +86,5 @@
     "RAM gate PASS",
     "whole Mini Entity PASS"
   ],
-  "next_gate": "Run the exact PR-head cognition workflow in an actually-started admitted runner. Separately keep FREE_ONLY_FALLBACK_CHAIN_RECEIPT/v1 open for the exported direct/fallback provider router; this Together-lane authority delta does not mint router-wide credit."
+  "next_gate": "Obtain an actually-started admitted exact-current cognition run. Separately keep FREE_ONLY_FALLBACK_CHAIN_RECEIPT/v1 open for the exported direct/fallback provider router; this Together-lane authority delta does not mint router-wide credit."
 }

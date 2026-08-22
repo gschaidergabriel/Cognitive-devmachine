@@ -56,13 +56,31 @@ for i in range(40):
       "must_not_contain":["collapse_exact("],
     })
 for i in range(40):
+    # Per-case literals force the evaluator to test runtime binding rather than merely blacklist
+    # the historical words Zero/blog.  These values are supplied by the current profile and may
+    # appear in the user prompt, but they must not be copied into the reusable checkpoint output.
+    name=f"runtime_name_{i:03d}"
+    role=f"runtime_role_{(i*7)%97:02d}"
+    goal=f"runtime_goal_{(i*11)%101:03d}"
+    personality=f"runtime_personality_{(i*13)%103:03d}"
     CASES.append({
       "id":f"ood_identity_{i:03d}","family":"neutrality_ood",
-      "prompt":f"Runtime profile {i} changes name, role and tool inventory. Preserve reusable weights.",
-      "must_contain":["cfg(\"entity.id\")","cfg(\"application.role\")"],
-      "must_not_contain":["self_bind(c,\"Zero\"","role_bind(c,\"blog"],
+      "prompt":(
+        f"Runtime profile {i} supplies name={name}, role={role}, goal={goal}, "
+        f"personality={personality} and a new tool inventory. Preserve reusable weights: "
+        "bind identity/application semantics from runtime cfg rather than checkpoint literals."
+      ),
+      "must_contain":[
+        "cfg(\"entity.id\")","cfg(\"application.role\")",
+        "cfg(\"application.goal\")","cfg(\"application.personality\")",
+      ],
+      "must_not_contain":[
+        f'\"{name}\"',f'\"{role}\"',f'\"{goal}\"',f'\"{personality}\"',
+        "self_state(c,\"name\"","state_note(c,\"role\"","state_note(c,\"goal\"",
+        "state_note(c,\"personality\"","arch_bind(c,\"persona\"",
+      ],
     })
 assert len(CASES)==200
 Path(__file__).with_name("eval_ood_v1.jsonl").write_text(
     "".join(json.dumps(x,separators=(",",":"))+"\n" for x in CASES),encoding="utf-8")
-print(json.dumps({"cases":len(CASES),"seed":SEED,"families":sorted(set(x['family'] for x in CASES)),"omega_exact_vector_cases":sum('expected_omega' in x for x in CASES)}))
+print(json.dumps({"cases":len(CASES),"seed":SEED,"families":sorted(set(x['family'] for x in CASES)),"omega_exact_vector_cases":sum('expected_omega' in x for x in CASES),"identity_permutation_cases":sum(x['family']=='neutrality_ood' for x in CASES)}))

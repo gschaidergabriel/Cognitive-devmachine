@@ -1,0 +1,39 @@
+{
+  "schema":"clay-go-source-receipt/v1",
+  "date":"2026-08-22",
+  "organ":"GPT-5.6 Sol",
+  "trigger":"go",
+  "program":"MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage":"MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "base_main_sha":"afbca677205ad54e5080afe0443e3092773615e2",
+  "branch":"gpt56sol/claycog-intrinsic-closure-current-20260822",
+  "finding":{
+    "id":"CLAYCOG_CANONICAL_VALIDATOR_HAS_NO_CLOSED_INTRINSIC_LANGUAGE",
+    "severity":"PRE_TRAINING_BLOCKER",
+    "current_state":"Main already converged SFT v2 onto validate_sft_v1.validate_code via #796, but that single canonical validator still has no explicit cognition intrinsic vocabulary or arity checks while the SFT v2 generator emits an extended intrinsic set.",
+    "risk":"A structurally plausible training/eval target can call an undefined cognition operation or use the wrong call shape and still receive structural validity credit, creating a weight/runtime semantic split."
+  },
+  "delta":[
+    "add intrinsics_v1.py as the closed structural ClayCode Cognition v1 vocabulary + arity map",
+    "extend the existing canonical validate_sft_v1.validate_code without replacing #774/#796/#802 semantics",
+    "mask string payload punctuation while preserving one passive string-argument token for arity analysis",
+    "reject unknown intrinsic names and wrong arity fail-closed",
+    "extend the existing PR regression with unknown-intrinsic, wrong-arity, literal-punctuation and all 1485+165 SFT v2 generated-target checks"
+  ],
+  "parallel_main_preserved":[
+    "#774 runtime-neutral binding hardening",
+    "#780 ambiguous Together create fail-closed ledger",
+    "#787 leakage-free SFT v2 paid-training corpus",
+    "#796 SFT v2 -> one canonical validator authority",
+    "#802 exact-omega OOD promotion bypass closure"
+  ],
+  "unusual_experiment":{
+    "count":1,
+    "id":"INTRINSIC_VOCABULARY_CLOSURE_PARSER_FALSIFIER",
+    "result":"The first call lexer erased string arguments and falsely made cfg(string) arity zero. It was repaired by preserving one passive literal token while masking literal punctuation. No second unusual experiment was performed in this user-triggered GO."
+  },
+  "execution_credit":"PENDING_EXACT_PR_RUNNER",
+  "together":{"secret_available_to_this_organ":false,"preflight_called":false,"paid_create_called":false,"job_started":false},
+  "not_claimed":["exact branch test PASS","SFT v2 intrinsic closure PASS","Together BYOM compatibility","training quality","OOD promotion","Q4_K_M RSS acceptance","whole Mini Entity PASS"],
+  "next_gate":"Open a fresh PR on current main and require claycog-validator-pr to actually start and execute test_validate_sft_v1.py on the exact head. Only an executed green result may promote the intrinsic-closure mechanism; then Together preflight remains separate and key-gated."
+}

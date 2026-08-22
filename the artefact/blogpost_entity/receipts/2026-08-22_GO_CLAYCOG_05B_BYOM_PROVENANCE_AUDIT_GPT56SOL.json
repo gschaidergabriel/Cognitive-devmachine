@@ -1,0 +1,90 @@
+{
+  "schema": "CLAYCOG_05B_BYOM_PROVENANCE_AUDIT/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "62b292a8097c5b53731ef6804704cf9938872616",
+  "branch": "gpt56sol/go-claycog-05b-byom-provenance-20260822-1410",
+  "scope": "generic 0.5B ClayCode cognition Together BYOM provenance and compatibility gate",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "observed_before_delta": {
+    "primary_model": "Qwen/Qwen2.5-0.5B",
+    "secondary_ablation": "Qwen/Qwen2.5-0.5B-Instruct",
+    "launcher_from_hf_model_revision_bound": false,
+    "together_template_candidate": "Qwen/Qwen2.5-7B-Instruct-Turbo",
+    "together_api_secret_available_in_current_chat": false,
+    "training_job_started": false
+  },
+  "current_external_evidence": {
+    "together_byom_contract": {
+      "source": "https://docs.together.ai/docs/fine-tuning-byom",
+      "observed": "BYOM requires a compatible Together base training template; architecture must match the custom checkpoint; size should be as close as possible; hf_model_revision can bind a Hugging Face revision."
+    },
+    "together_supported_finetune_models": {
+      "source": "https://docs.together.ai/docs/fine-tuning-models",
+      "observed": "Current table does not list Qwen2.5; Qwen3.5-0.8B is the smallest listed Qwen Full Fine-Tune template."
+    },
+    "primary_hf_identity": {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+      "architecture": "Qwen2ForCausalLM",
+      "model_type": "qwen2"
+    },
+    "instruct_hf_identity": {
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775"
+    },
+    "qwen35_smallest_current_template_candidate": {
+      "model": "Qwen/Qwen3.5-0.8B",
+      "architecture": "Qwen3_5ForConditionalGeneration",
+      "model_type": "qwen3_5"
+    }
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "hypothesis": "The smallest currently listed Qwen full-fine-tune template, Qwen3.5-0.8B, could be used as an automatic fallback for owner-required Qwen2.5-0.5B BYOM.",
+    "counterhypothesis": "The apparent family similarity hides an architecture-family mismatch, so automatic fallback would change the experiment and violate Together BYOM matching guidance.",
+    "intervention": "Compare current public model configs for Qwen2.5-0.5B and Qwen3.5-0.8B against Together's current BYOM architecture-matching rule.",
+    "observation": "Qwen2.5-0.5B identifies Qwen2ForCausalLM/qwen2; Qwen3.5-0.8B identifies Qwen3_5ForConditionalGeneration/qwen3_5.",
+    "outcome": "REJECT_AUTOMATIC_QWEN35_FALLBACK",
+    "effect_or_cost": "NONE"
+  },
+  "implemented_delta": {
+    "launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py",
+    "primary_revision_pin": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "instruct_revision_pin": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "create_call_requires_hf_model_revision": true,
+    "custom_model_requires_explicit_40_hex_revision": true,
+    "automatic_qwen35_fallback": false,
+    "source_gate": "the artefact/blogpost_entity/mini_cognition/test_launch_together_provenance_v1.py",
+    "documentation": "the artefact/blogpost_entity/mini_cognition/README.md"
+  },
+  "bounded_isolated_validation": {
+    "environment": "current isolated ChatGPT container staging; no provider secret; no network call",
+    "commands": [
+      "python3 -m py_compile launch_together_v1.py test_launch_together_provenance_v1.py",
+      "python3 test_launch_together_provenance_v1.py"
+    ],
+    "source_gate_result": "PASS",
+    "source_gate_stdout": "CLAYCOG_05B_BYOM_PROVENANCE_SOURCE_GATE PASS",
+    "staged_launcher_sha256": "dfa3267a474351cb65553c917972d6567588e08a2cd71aebd6c6dd3cae7fb917",
+    "staged_test_sha256": "7a8c56fae7afde7d6ea5815a9efe91e02be18dcc2bfc3fa28f44eba0bd590800",
+    "credit_scope": "SOURCE_MECHANISM_ONLY; not Together API, training, checkpoint quality, quantization, RSS or Mini Entity runtime acceptance"
+  },
+  "current_gate_after_delta": {
+    "hf_source_identity": "PINNED_SOURCE_CANDIDATE",
+    "together_qwen25_template_compatibility": "OPEN_API_GATE_NO_SECRET",
+    "next_discriminator": "With an authorized TOGETHER_API_KEY in an isolated execution environment, call model_limits for the configured Qwen2.5 template candidate, then run the existing preflight upload/validation/price path. Do not create a billed job until those gates pass; do not retry create blindly.",
+    "training_job_started": false,
+    "cost_incurred_by_this_go": 0
+  },
+  "claims_not_made": [
+    "Together accepts Qwen2.5-0.5B BYOM",
+    "fine-tuning has started or completed",
+    "trained checkpoint passes OOD promotion",
+    "0.5B is conscious or mathematically correct",
+    "Q4_K_M runtime RSS is below 1 GiB",
+    "micro-agent superiority",
+    "native Mini Entity 0.7 runtime acceptance"
+  ]
+}

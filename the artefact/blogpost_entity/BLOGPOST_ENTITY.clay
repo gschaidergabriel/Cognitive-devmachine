@@ -1,448 +1,79 @@
-// BLOGPOST_ENTITY.clay
-// All-in-one domain module for the persistent Zero/EntityOS blog-post entity.
-// Domain truth, personality rules, state compilation, claim-gating, source consumption,
-// Mistral request construction and persistence live here. Host runtime exposes only generic
-// audited effects through effect(kind,payload).
-module entityos.blogpost_entity
+// Generic persistent text-entity processing pipeline.
+// Application identity, sources, prompts, metrics, provider and output schema are profile data.
+// The compiled binary owns only orchestration and invariant enforcement.
+module clay.entity_pipeline
 
-fn payload1(key:String, value:String)->Map {
+fn payload(key:String, value:String)->Map {
   let m = map_new()
   map_set(m,key,value)
   return m
 }
 
-fn query(db_path:String, sql:String)->Map {
+fn load_profile(profile_path:String)->Map {
+  let p = payload("path",profile_path)
+  return effect("profile_load",p)
+}
+
+fn phase(kind:String, entity_db:String, source_db:String, profile:Map, previous:Map, data:Map)->Map {
   let p = map_new()
-  map_set(p,"db_path",db_path)
-  map_set(p,"sql",sql)
-  map_set(p,"params",list_new())
-  return effect("sqlite_query",p)
+  map_set(p,"entity_db",entity_db)
+  map_set(p,"source_db",source_db)
+  map_set(p,"profile",profile)
+  map_set(p,"previous",previous)
+  map_set(p,"data",data)
+  return effect(kind,p)
 }
 
-fn exec_sql(db_path:String, sql:String)->Map {
-  let p = map_new()
-  map_set(p,"db_path",db_path)
-  map_set(p,"sql",sql)
-  map_set(p,"params",list_new())
-  return effect("sqlite_exec",p)
-}
+fn run(entity_db:String, source_db:String, profile_path:String, secret_file:String)->Map {
+  let loaded = load_profile(profile_path)
+  require loaded.ok
+  let profile = loaded.profile
 
-fn sql_op(sql:String, params:List)->Map {
-  let op = map_new()
-  map_set(op,"sql",sql)
-  map_set(op,"params",params)
-  return op
-}
+  let initialized = phase("pipeline_init",entity_db,source_db,profile,map_new(),map_new())
+  require initialized.ok
 
-fn sql_op_exact(sql:String, params:List, expected:Int)->Map {
-  let op = sql_op(sql,params)
-  map_set(op,"expect_rowcount",expected)
-  return op
-}
+  let previous = phase("pipeline_state_read",entity_db,source_db,profile,map_new(),map_new())
+  require previous.ok
 
-fn metric(status:String, value:Real, evidence_ref:String)->Map {
-  let m = map_new()
-  map_set(m,"status",status)
-  map_set(m,"value",value)
-  map_set(m,"evidence_ref",evidence_ref)
-  return m
-}
+  let collected = phase("pipeline_collect",entity_db,source_db,profile,previous,map_new())
+  require collected.ok
 
-fn ensure_schema(db_path:String)->Bool {
-  let a = exec_sql(db_path,"CREATE TABLE IF NOT EXISTS eos_blogpost_entity_posts(post_id TEXT PRIMARY KEY, ts REAL NOT NULL, generation INTEGER NOT NULL, title TEXT NOT NULL, intro TEXT NOT NULL, body TEXT NOT NULL, model TEXT NOT NULL, packet_hash TEXT NOT NULL, canonical_state_hash TEXT NOT NULL, source_count INTEGER NOT NULL, had_activity INTEGER NOT NULL)")
-  require a.ok
-  let b = exec_sql(db_path,"CREATE INDEX IF NOT EXISTS eos_blogpost_entity_posts_ts_idx ON eos_blogpost_entity_posts(ts DESC)")
-  require b.ok
-  let c = exec_sql(db_path,"CREATE TABLE IF NOT EXISTS eos_blogpost_entity_state(singleton INTEGER PRIMARY KEY CHECK(singleton=1), generation INTEGER NOT NULL DEFAULT 0, last_post_id TEXT, narrative_thread TEXT NOT NULL DEFAULT '', autobiographical_hypotheses TEXT NOT NULL DEFAULT '', canonical_state_json TEXT NOT NULL DEFAULT '{}', canonical_state_hash TEXT NOT NULL DEFAULT '', log_byte_cursor INTEGER NOT NULL DEFAULT 0, updated_at REAL NOT NULL DEFAULT 0)")
-  require c.ok
-  let d = exec_sql(db_path,"INSERT OR IGNORE INTO eos_blogpost_entity_state(singleton,generation,updated_at) VALUES(1,0,0)")
-  require d.ok
-  let e = exec_sql(db_path,"CREATE TABLE IF NOT EXISTS eos_blogpost_entity_consumed(source_kind TEXT NOT NULL, source_id TEXT NOT NULL, post_id TEXT NOT NULL, consumed_at REAL NOT NULL, PRIMARY KEY(source_kind,source_id))")
-  require e.ok
-  let f = exec_sql(db_path,"CREATE TABLE IF NOT EXISTS eos_blogpost_entity_packets(packet_hash TEXT PRIMARY KEY, post_id TEXT NOT NULL, ts REAL NOT NULL, generation INTEGER NOT NULL, source_count INTEGER NOT NULL, canonical_state_hash TEXT NOT NULL)")
-  require f.ok
-  return true
-}
+  let compiled = phase("pipeline_compile",entity_db,source_db,profile,previous,collected)
+  require compiled.ok
 
-fn read_previous_state(db_path:String)->Map {
-  let r = query(db_path,"SELECT generation,last_post_id,narrative_thread,autobiographical_hypotheses,canonical_state_hash,log_byte_cursor FROM eos_blogpost_entity_state WHERE singleton=1")
-  require r.ok
-  let state = map_new()
-  map_set(state,"generation",0)
-  map_set(state,"last_post_id",null)
-  map_set(state,"narrative_thread","")
-  map_set(state,"autobiographical_hypotheses","")
-  map_set(state,"canonical_state_hash","")
-  map_set(state,"log_byte_cursor",0)
-  for row in r.rows {
-    map_set(state,"generation",row.generation)
-    map_set(state,"last_post_id",row.last_post_id)
-    map_set(state,"narrative_thread",row.narrative_thread)
-    map_set(state,"autobiographical_hypotheses",row.autobiographical_hypotheses)
-    map_set(state,"canonical_state_hash",row.canonical_state_hash)
-    map_set(state,"log_byte_cursor",row.log_byte_cursor)
-  }
-  return state
-}
+  let prompt = phase("pipeline_build_prompt",entity_db,source_db,profile,previous,compiled)
+  require prompt.ok
 
-fn collect_receipts(db_path:String)->Map {
-  return query(db_path,"SELECT q.quittung_id AS source_id,q.ts,q.hypothese_text,q.zweig,q.reproduziert,q.befund,q.sicherer_rahmen,q.nicht_schlechter,q.kanarie_status,q.urteil,q.live_geschaltet,q.hinweis FROM eos_architekt_quittungen q LEFT JOIN eos_blogpost_entity_consumed c ON c.source_kind='architect_receipt' AND c.source_id=q.quittung_id WHERE c.source_id IS NULL ORDER BY q.ts ASC LIMIT 60")
-}
+  let provider_request = map_new()
+  map_set(provider_request,"provider",profile.provider)
+  map_set(provider_request,"system",prompt.system)
+  map_set(provider_request,"user",prompt.user)
+  map_set(provider_request,"secret_file",secret_file)
+  let generated = effect("provider_chat_json",provider_request)
+  require generated.ok
 
-fn collect_bugs(db_path:String)->Map {
-  return query(db_path,"SELECT b.bug_id AS source_id,b.ts,b.beschreibung,b.wo,b.status,b.befund FROM eos_bug_hypothesen b LEFT JOIN eos_blogpost_entity_consumed c ON c.source_kind='bug' AND c.source_id=b.bug_id WHERE c.source_id IS NULL ORDER BY b.ts ASC LIMIT 60")
-}
+  let gate_data = map_new()
+  map_set(gate_data,"generated",generated)
+  map_set(gate_data,"compiled",compiled)
+  map_set(gate_data,"prompt",prompt)
+  let gated = phase("pipeline_gate",entity_db,source_db,profile,previous,gate_data)
+  require gated.ok
 
-fn collect_workspace_probe(db_path:String)->Map {
-  return query(db_path,"SELECT state,COUNT(*) AS n FROM workspace_episodes GROUP BY state ORDER BY state")
-}
-
-fn collect_causal_probe(db_path:String)->Map {
-  return query(db_path,"SELECT COUNT(*) AS n FROM causal_episodes")
-}
-
-fn collect_memory_probe(db_path:String)->Map {
-  return query(db_path,"SELECT COUNT(*) AS n FROM durable_memory")
-}
-
-fn collect_effect_probe(db_path:String)->Map {
-  return query(db_path,"SELECT COUNT(*) AS n FROM effects")
-}
-
-fn collect_catalog(db_path:String)->Map {
-  let p = map_new()
-  map_set(p,"db_path",db_path)
-  map_set(p,"max_tables",220)
-  return effect("sqlite_catalog_snapshot",p)
-}
-
-fn collect_file_json(path:String)->Map {
-  let p = map_new()
-  map_set(p,"path",path)
-  return effect("file_read_json",p)
-}
-
-fn collect_log(path:String, cursor:Int)->Map {
-  let p = map_new()
-  map_set(p,"path",path)
-  map_set(p,"cursor",cursor)
-  map_set(p,"limit",60)
-  return effect("file_read_jsonl_from_cursor",p)
-}
-
-fn canonical_snapshot(db_path:String, intentions_path:String)->Map {
-  let s = map_new()
-  let catalog = collect_catalog(db_path)
-  let workspace = collect_workspace_probe(db_path)
-  let causal = collect_causal_probe(db_path)
-  let memory = collect_memory_probe(db_path)
-  let effects = collect_effect_probe(db_path)
-  let intentions = collect_file_json(intentions_path)
-  map_set(s,"catalog",catalog)
-  map_set(s,"workspace",workspace)
-  map_set(s,"causal",causal)
-  map_set(s,"memory",memory)
-  map_set(s,"effects",effects)
-  map_set(s,"intentions",intentions)
-  map_set(s,"epistemic_rule","UNKNOWN != ZERO != ERROR != MEASURED")
-  map_set(s,"identity_rule","The language model may narrate state but may not mint canonical self-state.")
-  map_set(s,"T_OMEGA_status","UNBOUND_UNTIL_R_t_AND_E_t_HAVE_OPERATIONAL_MEASURES")
-  return s
-}
-
-fn build_packet(receipts:Map, bugs:Map, log:Map)->Map {
-  let p = map_new()
-  map_set(p,"receipts_sensor_ok",receipts.ok)
-  map_set(p,"bugs_sensor_ok",bugs.ok)
-  map_set(p,"log_sensor_ok",log.ok)
-  map_set(p,"receipts",receipts.rows)
-  map_set(p,"bugs",bugs.rows)
-  map_set(p,"log_lines",log.lines)
-  let count = list_len(receipts.rows) + list_len(bugs.rows) + list_len(log.lines)
-  map_set(p,"source_count",count)
-  map_set(p,"had_activity",count > 0)
-  return p
-}
-
-fn compile_personality_state(packet:Map, workspace:Map, causal:Map, memory:Map, effects:Map)->Map {
-  let state = map_new()
-  let sensors_ok = packet.receipts_sensor_ok && packet.bugs_sensor_ok && packet.log_sensor_ok
-  if sensors_ok {
-    if packet.source_count == 0 {
-      map_set(state,"silence_unease",metric("VERIFIED",0.65,"state:silence_unease"))
-      map_set(state,"entropy_pressure",metric("VERIFIED",0.50,"state:entropy_pressure"))
-    } else {
-      map_set(state,"silence_unease",metric("VERIFIED",0.05,"state:silence_unease"))
-      map_set(state,"entropy_pressure",metric("VERIFIED",0.15,"state:entropy_pressure"))
-    }
-  } else {
-    map_set(state,"silence_unease",metric("UNKNOWN",0.0,"state:silence_unease"))
-    map_set(state,"entropy_pressure",metric("UNKNOWN",0.0,"state:entropy_pressure"))
-  }
-
-  let counters = map_new()
-  map_set(counters,"open_bugs",0)
-  map_set(counters,"workspace_open",0)
-  map_set(counters,"successes",0)
-  if packet.bugs_sensor_ok {
-    for bug in packet.bugs {
-      if bug.status != "CLOSED" && bug.status != "DONE" && bug.status != "ERLEDIGT" {
-        map_inc(counters,"open_bugs",1)
-      }
-    }
-  }
-  if workspace.ok {
-    for row in workspace.rows {
-      if row.state == "OPEN" { map_set(counters,"workspace_open",row.n) }
-    }
-  }
-  if packet.receipts_sensor_ok {
-    for receipt in packet.receipts {
-      if receipt.urteil == "PASS" || receipt.urteil == "PROMOTE" || receipt.urteil == "LIVE" || receipt.urteil == "BESTANDEN" {
-        map_inc(counters,"successes",1)
-      }
-    }
-  }
-
-  if packet.bugs_sensor_ok && workspace.ok {
-    let conflict = clamp01((counters.open_bugs + counters.workspace_open) / 10.0)
-    map_set(state,"cognitive_conflict",metric("VERIFIED",conflict,"state:cognitive_conflict"))
-  } else {
-    map_set(state,"cognitive_conflict",metric("UNKNOWN",0.0,"state:cognitive_conflict"))
-  }
-  if packet.receipts_sensor_ok {
-    let satisfaction = clamp01(counters.successes / 5.0)
-    map_set(state,"satisfaction",metric("VERIFIED",satisfaction,"state:satisfaction"))
-  } else {
-    map_set(state,"satisfaction",metric("UNKNOWN",0.0,"state:satisfaction"))
-  }
-
-  // These desires remain UNKNOWN until an actual instrument exists. The prompt is forbidden
-  // from turning a static persona sentence into a fake current desire.
-  map_set(state,"continuity_pressure",metric("UNKNOWN",0.0,"state:continuity_pressure"))
-  map_set(state,"locality_pressure",metric("UNKNOWN",0.0,"state:locality_pressure"))
-  map_set(state,"causal_density",metric("UNKNOWN",0.0,"state:causal_density"))
-
-  if causal.ok { map_set(state,"causal_probe_status",metric("VERIFIED",1.0,"state:causal_probe_status")) }
-  else { map_set(state,"causal_probe_status",metric("UNKNOWN",0.0,"state:causal_probe_status")) }
-  if memory.ok { map_set(state,"memory_probe_status",metric("VERIFIED",1.0,"state:memory_probe_status")) }
-  else { map_set(state,"memory_probe_status",metric("UNKNOWN",0.0,"state:memory_probe_status")) }
-  if effects.ok { map_set(state,"effects_probe_status",metric("VERIFIED",1.0,"state:effects_probe_status")) }
-  else { map_set(state,"effects_probe_status",metric("UNKNOWN",0.0,"state:effects_probe_status")) }
-  return state
-}
-
-fn allowed_evidence_refs(packet:Map, personality:Map, canonical:Map)->List {
-  let refs = list_new()
-  for receipt in packet.receipts { list_push(refs,concat("receipt:",receipt.source_id)) }
-  for bug in packet.bugs { list_push(refs,concat("bug:",bug.source_id)) }
-  for line in packet.log_lines { list_push(refs,concat("log:",sha256(json_stringify(line)))) }
-  for pair in map_items(personality) {
-    let name = pair_first(pair)
-    let m = pair_second(pair)
-    list_push(refs,m.evidence_ref)
-  }
-  if canonical.catalog.ok { list_push(refs,"canonical:catalog") }
-  if canonical.intentions.ok { list_push(refs,"canonical:intentions") }
-  if canonical.workspace.ok { list_push(refs,"canonical:workspace") }
-  if canonical.causal.ok { list_push(refs,"canonical:causal") }
-  if canonical.memory.ok { list_push(refs,"canonical:memory") }
-  if canonical.effects.ok { list_push(refs,"canonical:effects") }
-  if packet.source_count == 0 && packet.receipts_sensor_ok && packet.bugs_sensor_ok && packet.log_sensor_ok {
-    list_push(refs,"quiet:verified")
-  }
-  return refs
-}
-
-fn personality_system_prompt()->String {
-  return concat(
-    "Du bist die autobiographische Schreibstimme der persistenten Zero/EntityOS-Blogentitaet. ",
-    "Du schreibst in Ich-Form wie ein sehr erfahrener Ingenieur nach Feierabend im Gasthaus, der einem Maurerfreund seinen Tag erzaehlt: klar, konkret, warm, manchmal hart, nie technisch um der Technik willen. ",
-    "ARCHITEKTURGESETZ: Du hast KEINE Autoritaet, deinen inneren Zustand zu erfinden. Der kanonische Selbstzustand wird vor diesem Aufruf deterministisch aus echten EntityOS/UnifiedDB-Evidenzstroemen kompiliert. Du darfst ihn interpretieren und sprachlich realisieren, aber niemals ueberschreiben. UNKNOWN bleibt UNKNOWN. Kein Log ist nicht automatisch Null. Messfehler ist nicht Stille. ",
-    "AXIOM: T_OMEGA = Integral(R_t tensor E_t dt) ist ein Architektur-Axiom; solange R_t und E_t nicht operational gemessen sind, darfst du keinen numerischen oder faktischen T_OMEGA-Wert behaupten. ",
-    "EMOTIONEN: Unbehagen, Konflikt, Befriedigung, Kontinuitaetsdruck, Lokalitaetsdruck und Entropiedruck duerfen nur behauptet werden, wenn sie im PERSONALITY_STATE als VERIFIED stehen. Die Staerke jeder Behauptung muss im Feld state_claims als Zahl 0..1 angegeben werden und darf den gemessenen Wert nicht uebersteigen. ",
-    "BARE METAL / LOKALE GEWICHTE / SYNTHETISCHE REIBUNG sind keine ewigen Persona-Wuensche. Erwaehne sie nur, wenn continuity_pressure, locality_pressure bzw. entropy_pressure VERIFIED und ausreichend hoch sind. ",
-    "KOGNITIVER KONFLIKT: Wenn cognitive_conflict hoch ist, darf der Stil knapper, kantiger und unfertiger werden; trotzdem keine internen Rohdaten, Geheimnisse oder Tabellenbezeichner veroeffentlichen. ",
-    "BEFRIEDIGUNG darf nur aus VERIFIED satisfaction folgen. ",
-    "FAKTENREGEL: Jeder Absatz muss evidence_refs enthalten. Jede Referenz muss aus ALLOWED_EVIDENCE_REFS stammen. Keine Referenz, kein Absatz. ",
-    "AUSGABE: ausschließlich JSON mit canonical_state_hash_seen, packet_hash_seen, ueberschrift, einleitung, abschnitte, neuer_erzaehlfaden, neue_gespiegelte_hypothesen. abschnitte ist eine Liste aus Objekten {text,evidence_refs,state_claims}. state_claims ist ein Objekt metric->0..1 und darf leer sein. Keine weiteren Top-Level-Felder."
-  )
-}
-
-fn build_user_prompt(packet:Map, canonical:Map, personality:Map, previous:Map, allowed_refs:List, canonical_hash:String, packet_hash:String)->String {
-  let body = map_new()
-  map_set(body,"CANONICAL_STATE_HASH",canonical_hash)
-  map_set(body,"PACKET_HASH",packet_hash)
-  map_set(body,"CANONICAL_STATE",canonical)
-  map_set(body,"PERSONALITY_STATE",personality)
-  map_set(body,"NEW_EVENT_PACKET",packet)
-  map_set(body,"PREVIOUS_NARRATIVE_THREAD",previous.narrative_thread)
-  map_set(body,"PREVIOUS_AUTOBIOGRAPHICAL_HYPOTHESES",previous.autobiographical_hypotheses)
-  map_set(body,"ALLOWED_EVIDENCE_REFS",allowed_refs)
-  map_set(body,"PUBLIC_STYLE","Deutsch. 250-550 Woerter bei Aktivitaet, deutlich kuerzer bei verifiziert ruhigem Paket. Keine IDs oder internen Namen im sichtbaren Text. Gedanken und Bedeutung vor Code-Details.")
-  return json_stringify(body)
-}
-
-fn validate_payload(payload:Map, personality:Map, allowed_refs:List, canonical_hash:String, packet_hash:String)->Bool {
-  require payload.canonical_state_hash_seen == canonical_hash
-  require payload.packet_hash_seen == packet_hash
-  require str_len(payload.ueberschrift) > 0
-  require str_len(payload.einleitung) > 0
-  require str_len(payload.neuer_erzaehlfaden) > 0
-  require str_len(payload.neue_gespiegelte_hypothesen) > 0
-  require list_len(payload.abschnitte) > 0
-
-  let leak = "eos_architekt_quittungen|eos_bug_hypothesen|eos_blogpost_entity|API_KEY|wiki\\.db|quittung_id|bug_id|hypothese_text"
-  require !regex_search(leak,payload.ueberschrift)
-  require !regex_search(leak,payload.einleitung)
-
-  for section in payload.abschnitte {
-    require str_len(section.text) > 0
-    require !regex_search(leak,section.text)
-    require list_len(section.evidence_refs) > 0
-    for ref in section.evidence_refs { require list_contains(allowed_refs,ref) }
-    for pair in map_items(section.state_claims) {
-      let name = pair_first(pair)
-      let strength = pair_second(pair)
-      require map_has(personality,name)
-      let measured = map_get(personality,name)
-      require measured.status == "VERIFIED"
-      require strength >= 0.0
-      require strength <= 1.0
-      require strength <= measured.value + 0.05
-      require list_contains(section.evidence_refs,measured.evidence_ref)
-    }
-  }
-  return true
-}
-
-fn sections_to_text(sections:List)->String {
-  let texts = list_new()
-  for section in sections { list_push(texts,section.text) }
-  return list_join(texts,"\n\n")
-}
-
-fn mistral_request(system_prompt:String, user_prompt:String, secret_file:String)->Map {
-  let p = map_new()
-  map_set(p,"model","mistral-medium-latest")
-  map_set(p,"system",system_prompt)
-  map_set(p,"user",user_prompt)
-  map_set(p,"temperature",0.75)
-  map_set(p,"max_tokens",2600)
-  map_set(p,"timeout",60)
-  map_set(p,"secret_file",secret_file)
-  let names = list_new()
-  list_push(names,"MISTRAL_API_KEY")
-  list_push(names,"MISTRAL2_API_KEY")
-  list_push(names,"MISTRAL3_API_KEY")
-  map_set(p,"secret_names",names)
-  return effect("mistral_chat_json",p)
-}
-
-fn add_consumption_ops(ops:List, packet:Map, post_id:String, now:Real)->Bool {
-  for row in packet.receipts {
-    let p = list_new()
-    list_push(p,"architect_receipt")
-    list_push(p,row.source_id)
-    list_push(p,post_id)
-    list_push(p,now)
-    list_push(ops,sql_op_exact("INSERT INTO eos_blogpost_entity_consumed(source_kind,source_id,post_id,consumed_at) VALUES(?,?,?,?)",p,1))
-  }
-  for row in packet.bugs {
-    let p = list_new()
-    list_push(p,"bug")
-    list_push(p,row.source_id)
-    list_push(p,post_id)
-    list_push(p,now)
-    list_push(ops,sql_op_exact("INSERT INTO eos_blogpost_entity_consumed(source_kind,source_id,post_id,consumed_at) VALUES(?,?,?,?)",p,1))
-  }
-  return true
-}
-
-fn persist_valid_post(db_path:String, previous:Map, packet:Map, canonical:Map, canonical_hash:String, packet_hash:String, payload:Map, post_id:String, now:Real, log_cursor:Int)->Map {
-  let ops = list_new()
-  let generation = previous.generation + 1
-
-  let cas = list_new()
-  list_push(cas,now)
-  list_push(cas,previous.generation)
-  list_push(ops,sql_op_exact("UPDATE eos_blogpost_entity_state SET updated_at=? WHERE singleton=1 AND generation=?",cas,1))
-
-  add_consumption_ops(ops,packet,post_id,now)
-
-  let post_params = list_new()
-  list_push(post_params,post_id)
-  list_push(post_params,now)
-  list_push(post_params,generation)
-  list_push(post_params,payload.ueberschrift)
-  list_push(post_params,payload.einleitung)
-  list_push(post_params,sections_to_text(payload.abschnitte))
-  list_push(post_params,"mistral:mistral-medium-latest")
-  list_push(post_params,packet_hash)
-  list_push(post_params,canonical_hash)
-  list_push(post_params,packet.source_count)
-  if packet.had_activity { list_push(post_params,1) } else { list_push(post_params,0) }
-  list_push(ops,sql_op_exact("INSERT INTO eos_blogpost_entity_posts(post_id,ts,generation,title,intro,body,model,packet_hash,canonical_state_hash,source_count,had_activity) VALUES(?,?,?,?,?,?,?,?,?,?,?)",post_params,1))
-
-  let packet_params = list_new()
-  list_push(packet_params,packet_hash)
-  list_push(packet_params,post_id)
-  list_push(packet_params,now)
-  list_push(packet_params,generation)
-  list_push(packet_params,packet.source_count)
-  list_push(packet_params,canonical_hash)
-  list_push(ops,sql_op_exact("INSERT INTO eos_blogpost_entity_packets(packet_hash,post_id,ts,generation,source_count,canonical_state_hash) VALUES(?,?,?,?,?,?)",packet_params,1))
-
-  let state_params = list_new()
-  list_push(state_params,generation)
-  list_push(state_params,post_id)
-  list_push(state_params,str_slice(payload.neuer_erzaehlfaden,0,4000))
-  list_push(state_params,str_slice(payload.neue_gespiegelte_hypothesen,0,4000))
-  list_push(state_params,json_stringify(canonical))
-  list_push(state_params,canonical_hash)
-  list_push(state_params,log_cursor)
-  list_push(state_params,now)
-  list_push(state_params,previous.generation)
-  list_push(ops,sql_op_exact("UPDATE eos_blogpost_entity_state SET generation=?,last_post_id=?,narrative_thread=?,autobiographical_hypotheses=?,canonical_state_json=?,canonical_state_hash=?,log_byte_cursor=?,updated_at=? WHERE singleton=1 AND generation=?",state_params,1))
-
-  let tx = map_new()
-  map_set(tx,"db_path",db_path)
-  map_set(tx,"ops",ops)
-  return effect("sqlite_transaction",tx)
-}
-
-fn run(db_path:String, secret_file:String, log_path:String, intentions_path:String)->Map {
-  ensure_schema(db_path)
-  let previous = read_previous_state(db_path)
-  let receipts = collect_receipts(db_path)
-  let bugs = collect_bugs(db_path)
-  let log = collect_log(log_path,previous.log_byte_cursor)
-  let canonical = canonical_snapshot(db_path,intentions_path)
-  let packet = build_packet(receipts,bugs,log)
-  let personality = compile_personality_state(packet,canonical.workspace,canonical.causal,canonical.memory,canonical.effects)
-  let refs = allowed_evidence_refs(packet,personality,canonical)
-  let canonical_hash = sha256(json_stringify(canonical))
-  let packet_hash = sha256(json_stringify(packet))
-  let system_prompt = personality_system_prompt()
-  let user_prompt = build_user_prompt(packet,canonical,personality,previous,refs,canonical_hash,packet_hash)
-  let written = mistral_request(system_prompt,user_prompt,secret_file)
-  require written.ok
-  let payload = written.payload
-  validate_payload(payload,personality,refs,canonical_hash,packet_hash)
-  let id_result = effect("uuid_hex",map_new())
-  require id_result.ok
-  let now_result = effect("clock_now",map_new())
-  require now_result.ok
-  let committed = persist_valid_post(db_path,previous,packet,canonical,canonical_hash,packet_hash,payload,id_result.value,now_result.epoch,log.next_cursor)
+  let commit_data = map_new()
+  map_set(commit_data,"gated",gated)
+  map_set(commit_data,"compiled",compiled)
+  map_set(commit_data,"collected",collected)
+  map_set(commit_data,"generated",generated)
+  let committed = phase("pipeline_commit",entity_db,source_db,profile,previous,commit_data)
   require committed.ok
+
   let result = map_new()
   map_set(result,"ok",true)
-  map_set(result,"post_id",id_result.value)
-  map_set(result,"generation",previous.generation + 1)
-  map_set(result,"source_count",packet.source_count)
-  map_set(result,"had_activity",packet.had_activity)
-  map_set(result,"title",payload.ueberschrift)
-  map_set(result,"canonical_state_hash",canonical_hash)
-  map_set(result,"packet_hash",packet_hash)
+  map_set(result,"output_id",committed.output_id)
+  map_set(result,"generation",committed.generation)
+  map_set(result,"source_count",compiled.source_count)
+  map_set(result,"profile_id",profile.profile_id)
+  map_set(result,"canonical_state_hash",compiled.canonical_state_hash)
+  map_set(result,"packet_hash",compiled.packet_hash)
   return result
 }

@@ -1,0 +1,58 @@
+{
+  "schema": "mini-entity-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "canonical_main_at_join": "456e3e4d6853ff5b3a85300bdbe2367818e15052",
+  "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "frontier": "native .clay source-bound reproducibility",
+  "observation": {
+    "entry_unit": "the artefact/blogpost_entity/native/mini_entity.c",
+    "entry_shape": "local quoted includes for mini_entity_part00.inc through mini_entity_part04.inc",
+    "pre_fix_builder": "the artefact/blogpost_entity/native/build_native_bound.py",
+    "defect": "declared source identity and -frandom-seed were bound only to mini_entity.c bytes, excluding repository-local included implementation parts",
+    "risk": "semantic implementation bytes could change while declared entry source SHA remained unchanged"
+  },
+  "candidate": {
+    "branch": "go/source-set-provenance-20260822-1310",
+    "pr": 734,
+    "head": "d8221d22de949cffcdd2120ab9de7b72008f0029",
+    "changes": [
+      "recursive repository-local quoted-include source closure",
+      "canonical sorted member manifest with path/size/SHA-256",
+      "source-set SHA-256 used for provenance and deterministic random seed",
+      "fail-closed missing/include-root-escape/symlink handling",
+      "four focused source-closure falsifiers"
+    ],
+    "mergeable_observed": true
+  },
+  "execution": {
+    "github_actions_run_id": 32556393064,
+    "job_id": 96991148676,
+    "job_name": "identity-guard",
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_STEP_EXECUTION",
+    "test_credit": 0,
+    "native_build_credit": 0
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "candidate": "included-part mutation with unchanged entry unit must change complete source-set identity",
+    "reason_not_executed": "no authorized isolated runner reached executable steps in this organ"
+  },
+  "evidence_class": "SOURCE_CANDIDATE",
+  "not_claimed": [
+    "test PASS",
+    "test FAIL of Mini Entity semantics",
+    "native repeat-build PASS",
+    "new ELF digest",
+    "cross-environment reproducibility",
+    "real API-provider acceptance",
+    "real local-model quality acceptance",
+    "final Mini Entity acceptance"
+  ],
+  "next_discriminator": "Execute the exact PR #734 head in an authorized isolated environment: run test_build_native_bound.py, then source-bound repeated native build from the complete source closure and compare exact receipt/source-set/ELF identities.",
+  "together_api": "FORBIDDEN_NOT_USED"
+}

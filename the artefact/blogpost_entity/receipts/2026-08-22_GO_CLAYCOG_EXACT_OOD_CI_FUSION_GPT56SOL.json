@@ -1,0 +1,59 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "base_main_sha": "57cbf37c2939813644b0e2c0993db568e62387a5",
+  "branch": "gpt56sol/claycog-05b-exact-ood-ci-final-20260822",
+  "coordination": {
+    "duplicate_candidate_discarded": true,
+    "reason": "PR #802 merged a semantically overlapping and stricter exact-omega OOD repair while this organ was preparing an independent implementation. The branch was force-rebound to current main and all duplicate OOD code was discarded.",
+    "preserved_main_mechanisms": [
+      "#774 canonical runtime-neutral binding validator hardening",
+      "#780 fail-closed ambiguous Together create ledger",
+      "#787 leakage-free canonical SFT v2 corpus",
+      "#796 one canonical ClayCode validator for v1 structural + v2 corpus admission",
+      "#802 exact typed omega OOD gate + duplicate/unknown output-id rejection + attack/oracle regression"
+    ]
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "name": "ARGUMENT_FREE_OMEGA_CHEATER",
+    "independent_observation_before_802_merge": "The then-canonical OOD gate returned strict_claycode_rate=1.0 and semantic_gate_rate=1.0 across all 200 OOD cases even though every one of the 80 valid omega outputs omitted all omega_arg and omega_schema information.",
+    "result": "FALSIFIED_OLD_PROMOTION_GATE",
+    "note": "No second unusual experiment was performed after this one. Later work was regression, source review and fusion only."
+  },
+  "adjudication_of_802": {
+    "result": "RETAIN_AND_USE_CANONICAL_MAIN_IMPLEMENTATION",
+    "why": "#802 binds exact operation, typed args, schema, authority, generation, validators and commit multiplicity; rejects omega_reject on valid candidates; rejects duplicate spec/output IDs and unknown output IDs; and preserves the 200-case attack/oracle/ID regression in test_eval_exact_vector_v1.py.",
+    "remaining_gap_found": "The canonical PR admission workflow did not execute test_eval_exact_vector_v1.py, so the exact OOD promotion invariant was not automatically guarded on subsequent mini_cognition PRs."
+  },
+  "delta": {
+    "path": ".github/workflows/claycog-validator-pr.yml",
+    "commit": "2de94026afb1d5efdde34774bd3022c5b52fe8ff",
+    "git_blob": "5ec9f3192ba89db73d47313c583f23a534933ea8",
+    "changes": [
+      "preserve #796/#797 canonical runtime-binding validator regressions",
+      "preserve canonical SFT v2 regeneration and corpus validation",
+      "add corpus_manifest_v2.json reproducibility diff gate",
+      "execute current canonical test_eval_exact_vector_v1.py as an explicit PR admission step"
+    ]
+  },
+  "evidence": {
+    "independent_local_mechanism_replication": "The same argument-free attack was independently reproduced and falsified before #802 merged; a full exact-vector oracle passed and duplicate/unknown ID attacks were rejected in isolated Python regression work.",
+    "current_802_source_review": "Source confirms exact operation/args/schema/authority/generation/validator/commit multiplicity checks plus duplicate/unknown ID rejection and the attack/oracle test corpus.",
+    "workflow_yaml_parse": "PASS in isolated Python environment",
+    "github_actions_runtime_for_this_final_delta": "UNOBSERVED_UNTIL_PR_RUN"
+  },
+  "together": {
+    "authenticated_preflight": "NOT_EXECUTED",
+    "billed_job": "NOT_CREATED",
+    "byom_compatibility": "OPEN_API_GATE",
+    "reason": "No TOGETHER_API_KEY is available in this execution environment; current main also records the Qwen2.5-0.5B/template architecture admission question as open."
+  },
+  "claim_boundary": "This receipt claims a source-level CI admission fusion plus independent isolated mechanism support only. It does not claim GitHub Actions runtime PASS, Together BYOM compatibility, a trained checkpoint, model quality, Q4_K_M RSS under 1 GiB, native 0.7 acceptance, consciousness, mathematical correctness, or whole Mini Entity PASS.",
+  "next": "Open the exact current-main PR. If GitHub Actions executes steps, bind the exact run result. If jobs again fail with zero steps, classify as runner/admission failure and do not downgrade the source mechanism to a code-test failure."
+}

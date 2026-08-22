@@ -38,3 +38,8 @@ jobs:
           cd 'the artefact/blogpost_entity/mini_cognition'
           python3 generate_sft_v2.py
           python3 validate_corpus_v2.py train_v2.jsonl validation_v2.jsonl
+          git diff --exit-code -- corpus_manifest_v2.json
+      - name: Run exact omega OOD promotion regression
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_exact_vector_v1.py'

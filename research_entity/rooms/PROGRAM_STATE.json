@@ -1,5 +1,5 @@
 {
-  "schema_version": "7.3",
+  "schema_version": "7.4",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
@@ -9,19 +9,68 @@
   "portable_release_shape": [
     "mini_entity.clay application-neutral/inference-neutral ELF",
     "mini_entity.db SQLite MiniUnifiedDB preconfigurable as zero_blog",
-    "optional replaceable quantized 0.5B ClayCode cognition attachment"
-  ],
-  "optional_inference_inputs": [
-    "remote/API token and provider config",
-    "loopback OpenAI-compatible local server without token",
-    "local model weights plus configured local_exec runner"
+    "optional replaceable GGUF Q4_K_M 0.5B ClayCode cognition attachment"
   ],
   "acceptance": "IN_PROGRESS",
   "architecture_split": {
-    "binary": "generic evidence preprocessing, canonical run/state envelope, inference dispatch, immutable truth/secret gate engine, exactly-once consumption, generation CAS and atomic persistence",
-    "database": "all application/personality/inference configuration; shipped default preset is zero_blog",
-    "cognition_weights": "replaceable generic cognition machinery only; no fixed entity name/job/persona/application; ClayCode/GRF/Hyperposition/omega behavior target",
-    "regression_rule": "if application/personality/inference choice can live in runtime configuration, binding it to executable or checkpoint identity is a regression"
+    "binary": "generic evidence preprocessing, canonical run/state envelope, inference dispatch, immutable truth/secret/admission gates, exactly-once consumption, generation CAS and atomic persistence",
+    "database": "all application/personality/prompt/inference/presentation configuration plus continuing canonical state; zero_blog is only the replaceable shipped preset",
+    "cognition_weights": "replaceable generic cognition machinery only; no fixed entity name/job/persona/application; ClayCode/GRF/Hyperposition/omega target",
+    "regression_rule": "if application/personality/inference/presentation choice can live in runtime configuration, binding it to executable or checkpoint identity is a regression"
+  },
+  "native_0_7": {
+    "version": "mini-entity/0.7.0-dev1",
+    "source_line_commit": "e18cb8fa763fe675af9c5223e2bfcfd90dd007ce",
+    "source_layout": "mini_entity.c plus mini_entity_part00.inc through mini_entity_part04.inc",
+    "source_bound_builder": "the artefact/blogpost_entity/native/build_native_bound.py",
+    "builder_schema": "mini-entity-native-build-provenance/v2",
+    "exact_transitive_source_blobs_hash_verified": true,
+    "exact_builder_blob_hash_verified": true,
+    "same_environment_repeat_build": {
+      "status": "PASS",
+      "source_closure_sha256": "a6500de97cb2cecc1b1778ee87e5af2c2f2cb7fde1d95f9220d0fa9dcf3f67a5",
+      "repeat_builds": 2,
+      "repeat_byte_identity": true,
+      "elf_sha256": "ae3d13c206666df4bdf814665e78ffd30311021c22bd88dbcc7b704598927fef",
+      "elf_build_id": "db4ff89bf46feb417a10450aa224ed7fae9d5fa8",
+      "compiler": "x86_64-linux-gnu-gcc-14 (Debian 14.2.0-19) 14.2.0",
+      "sqlite3_pkg": "3.46.1",
+      "libcurl_pkg": "8.10.1",
+      "json_c_pkg": "0.18",
+      "scope": "same-environment repeat build plus transitive source provenance; not cross-environment release reproducibility"
+    },
+    "runtime_regressions": {
+      "fresh_neutral_db": "PASS",
+      "success_then_verified_empty_cycle": "PASS",
+      "inference_failure_consumes_nothing": "PASS",
+      "unknown_source_consumes_nothing": "PASS",
+      "output_insert_fault_atomic_rollback": "PASS",
+      "study_insert_fault_atomic_rollback": "PASS",
+      "source_event_update_fault_atomic_rollback": "PASS",
+      "concurrent_generation_cas_exactly_one_commit": "PASS"
+    },
+    "confirmed_current_main_blockers": [
+      {
+        "id": "BINARY_PRESENTATION_NEUTRALITY",
+        "status": "FAIL",
+        "evidence": "Zero-study headings and German evaluation/UNKNOWN prose are embedded in source-bound ELF strings",
+        "repair_pr": 756
+      },
+      {
+        "id": "LOCAL_EXEC_PARENT_ENV_SECRET_ISOLATION",
+        "status": "FAIL",
+        "evidence": "synthetic TOGETHER_API_KEY/MISTRAL_API_KEY/OPENAI_API_KEY/unrelated secret values reached local runner and persisted model_output",
+        "repair_pr": 764
+      },
+      {
+        "id": "CANONICAL_PROFILE_V2_SEMANTIC_ADMISSION",
+        "status": "FAIL_OPEN",
+        "evidence": "malformed local output missing required v2 fields was persisted as generation 1 despite stronger profile contract",
+        "repair_pr": 769
+      }
+    ],
+    "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_NATIVE_0_7_CURRENT_MAIN_RUNTIME_FALSIFIERS_GPT56SOL.json",
+    "promotion": "BLOCKED_UNTIL_FIX_FUSION_AND_EXACT_RERUN"
   },
   "cognition_module_campaign": {
     "status": "CORPUS_V2_READY_TRAINING_NOT_STARTED",
@@ -35,6 +84,10 @@
     "alternative_representation": "Hyperposition",
     "structured_action_representation": "typed omega function vector",
     "transition_law": "R_next=F means deterministic runtime admission after grammar/type/schema/authority/generation validation; not neural infallibility",
+    "sft_v1": {
+      "status": "HISTORICAL_SUPERSEDED_FOR_PAID_TRAINING",
+      "reason": "1650 structurally valid rows were sampled with replacement from finite generated scenario support upper-bound 71 before split"
+    },
     "corpus": {
       "schema": "claycog-sft/v2",
       "examples": 1650,
@@ -49,147 +102,75 @@
       "validation_invalid": 0,
       "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
       "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
-      "v1_status": "SUPERSEDED_FOR_TRAINING_AFTER_DUPLICATE_TEMPLATE_POOL_LEAKAGE_FALSIFIER",
-      "evidence_scope": "bounded isolated corpus mechanism PASS; exact uniqueness is not semantic generalization"
+      "evidence_scope": "bounded isolated corpus mechanism PASS; exact uniqueness is not semantic generalization",
+      "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_05B_SFT_V2_FUSION_GPT56SOL.json"
+    },
+    "runtime_binding_validator": {
+      "status": "MECHANISM_SUPPORTED_ISOLATED",
+      "adversarial_unit_tests": "7/7 PASS",
+      "law": "runtime cfg binding text cannot be spoofed from inside strings or coexist with an additional fixed identity/role/goal/personality binding",
+      "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_CLAYCOG_RUNTIME_BINDING_GATE.json"
     },
     "ood": {
-      "cases": 200,
+      "canonical_current_cases": 200,
       "promotion_strict_claycode_rate": 1.0,
-      "promotion_semantic_gate_rate": 0.95
+      "promotion_semantic_gate_rate": 0.95,
+      "structural_tool_vocabulary_amputation_candidate": "PR_771_OPEN_NOT_CANONICAL"
     },
     "together": {
-      "training_use": "OWNER_AUTHORIZED_BOUNDED_CAMPAIGN",
-      "native_0_5b_catalog_entry": false,
+      "training_use": "OWNER_AUTHORIZED_BUDGET_GATED",
       "path": "BYOM",
-      "template_candidate": "Qwen/Qwen2.5-7B-Instruct-Turbo",
-      "compatibility": "OPEN_API_GATE",
-      "template_public_documentation": "no documented Qwen2/Qwen2.5 Full-FT template in currently checked table; candidate remains live API probe only",
+      "byom_contract": "training template architecture must match custom checkpoint; size should be closest catalog option rather than exact equality; context must be compatible; authenticated service admission remains final gate",
+      "checkpoint_architecture": "qwen2",
+      "current_smallest_documented_qwen_full_ft": "Qwen/Qwen3.5-0.8B",
+      "current_smallest_documented_qwen_full_ft_architecture": "qwen3_5",
+      "documented_qwen2_or_qwen2_5_full_ft_template": false,
+      "compatibility": "OPEN_BLOCKED_ON_ADMITTED_QWEN2_TEMPLATE_OR_OWNER_ADMITTED_ALTERNATE_RUNNER",
       "single_job_budget_usd": 18.0,
       "campaign_ceiling_eur": 20.0,
-      "create_safety": "deterministic full campaign fingerprint + account duplicate guard + atomic local create-intent ledger + zero-retry billed create; ambiguous outcome remains UNKNOWN and blocks blind retry",
+      "create_safety": "deterministic campaign fingerprint + account duplicate guard + atomic local create-intent ledger + zero-retry billed create; ambiguous outcome remains UNKNOWN and blocks blind retry",
       "secret_mounted_in_this_chat": false,
-      "job_started": false
+      "job_started": false,
+      "money_spent_this_go_usd": 0,
+      "contract_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_TOGETHER_BYOM_TEMPLATE_CONTRACT_GPT56SOL.json"
     },
     "quantization_target": "GGUF Q4_K_M",
     "ram_promotion_gate": "actual peak process RSS < 1 GiB at context 2048",
-    "superiority_claim_gate": "matched executable benchmark vs untuned 0.5B and at least one larger general model"
+    "superiority_claim_gate": "matched executable benchmark vs untuned 0.5B and at least one larger general model",
+    "promotion": "TRAINING_NOT_STARTED"
   },
   "inference_backends": {
     "api": {
       "status": "IMPLEMENTED_SANDBOX",
-      "config": ["endpoint", "model", "api_token", "auth_header", "auth_prefix", "request_template", "response_pointer", "temperature", "max_tokens"],
-      "loopback_noauth": true
+      "loopback_noauth": true,
+      "authority": "inference_only"
     },
     "local_exec": {
-      "status": "IMPLEMENTED_AND_CONTRACT_TESTED_SANDBOX",
-      "config": ["local_model_path", "local_argv_json", "local_prompt_template", "temperature", "max_tokens"],
+      "status": "IMPLEMENTED_BUT_CURRENT_MAIN_SECRET_ENV_BOUNDARY_FAIL",
       "shell": false,
-      "execution": "direct execvp-style runner invocation",
-      "api_token_required": false
+      "api_token_required": false,
+      "authority": "inference_only",
+      "repair_pr": 764
     }
-  },
-  "sandbox_evidence": {
-    "date": "2026-08-22",
-    "native_pipeline": {
-      "historical_credited_version": "mini-entity/0.6.0",
-      "historical_platform": "linux-x86_64",
-      "historical_form": "application-neutral and inference-neutral ELF executable",
-      "historical_binary_sha256": "27ad1fc3f134efacabe89102a86ac5876d62bb7c9d9b1e6d0ca95c36c60e7bd1",
-      "same_version_historical_sha256": [
-        "939784dd29514ead0721882e83fc78b6d21373e8281774c683cebc6cd92ae7a7",
-        "2aa8ebe9d20a683b62627cfe9e20f245390b1422afaa805b42b2dddbc976eed3"
-      ],
-      "version_identity_warning": "VERSION_STRING_NOT_ARTIFACT_IDENTITY; at least three ELF digests were recorded under mini-entity/0.6.0",
-      "fresh_db_mode": "neutral",
-      "current_source_version": "mini-entity/0.7.0-dev1",
-      "current_source_line_commit": "e18cb8fa763fe675af9c5223e2bfcfd90dd007ce",
-      "current_source_present": true,
-      "current_source_layout": "mini_entity.c entry unit plus mini_entity_part00.inc through mini_entity_part04.inc",
-      "repository_reproducibility": "SOURCE_PRESENT; EXACT_CURRENT_0_7_REPEAT_BUILD_AND_RUNTIME_RECEIPT_OPEN",
-      "provenance_gate": "the artefact/blogpost_entity/native/check_native_reference.py",
-      "source_bound_builder": "the artefact/blogpost_entity/native/build_native_bound.py",
-      "source_bound_builder_schema": "mini-entity-native-build-provenance/v2",
-      "source_closure_fix_merge": "915723c0961a495be72f8a8075b4577a036f47f2",
-      "source_closure_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_MINI_ENTITY_0_7_TRANSITIVE_SOURCE_CLOSURE_GPT56SOL.json",
-      "source_closure_status": "MECHANISM_SUPPORTED_BOUNDED_SANDBOX; exact full 0.7 executable gate remains open"
-    },
-    "local_llm_fixture_run": {
-      "preset_schema": "clay-pipeline-profile/v2",
-      "profile": "zero_blog",
-      "inference_mode": "local_exec",
-      "model_path": "configured readable fixture path",
-      "api_token": "MISSING",
-      "output_persisted": true,
-      "generation": 1,
-      "pending_events_after_run": 0,
-      "outputs": 1,
-      "sqlite_integrity_check": "ok",
-      "classification": "LOCAL_BACKEND_CONTRACT_PASS_MODEL_QUALITY_UNCREDITED",
-      "credit_scope": "historical 0.6 contract evidence only; not inherited by 0.7 without exact execution"
-    },
-    "tested_behaviors": [
-      "fresh database is application-neutral",
-      "Zero/blog/personality is replaceable preset data",
-      "preset import loads profile identity and personality without rebuild",
-      "preset can choose API or local_exec inference",
-      "local model path can replace API token",
-      "local runner argv is configured as JSON and executed without shell",
-      "local inference output uses normal gate/exactly-once/CAS/atomic persistence path",
-      "same continuing DB supports materially different application/personality",
-      "API provider config remains runtime replaceable",
-      "loopback local API can run without token",
-      "missing authenticated API token consumes nothing",
-      "secret values remain redacted",
-      "SQLite integrity_check PASS"
-    ],
-    "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json",
-    "provenance_reconciliation_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_NATIVE_ARTIFACT_IDENTITY_RECONCILIATION_GPT56SOL.json",
-    "state_box_reference_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_STATE_BOX_REFERENCE_GPT56SOL.json",
-    "real_remote_provider_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_AUTHORIZED_API_SECRET_MOUNTED",
-    "real_local_llm_quality_run": "NOT_YET_CREDITED_FIXTURE_ONLY"
   },
   "default_application": {
     "preset": "zero_blog",
     "path": "the artefact/blogpost_entity/presets/zero_blog.json",
-    "status": "fully replaceable runtime configuration, not executable identity",
-    "default_inference": "Mistral API profile, replaceable by any admitted API or local model backend",
-    "embodiment": "NO_IMPOSED_EMBODIMENT; no body/location/Gasthaus/beer/sitting is asserted as Zero world-state",
-    "latent_style_frame": "Gasthaus engineer -> smart Maurer storytelling scenario; hidden writing heuristic only, never narrated as factual setting",
-    "style_frame_protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STYLE_FRAME.md",
-    "longitudinal_protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_LONGITUDINAL_PROTOCOL.md",
-    "public_state_box_protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STATE_BOX_PROTOCOL.md",
+    "status": "fully replaceable runtime configuration, not executable/checkpoint identity",
+    "default_inference": "Mistral API profile only; replaceable by admitted API or local model backend",
+    "embodiment": "NO_IMPOSED_EMBODIMENT",
     "public_state_box_profile": "the artefact/blogpost_entity/presets/zero_blog_state_box.json"
   },
-  "zero_blog_study_surface": {
-    "required_after_every_post": true,
-    "render": "plain fenced text box appended by pipeline after validated prose",
-    "sections": ["SYSTEM STATE", "MODEL SELF-REPORT", "AUSWERTUNG"],
-    "system_state_owner": "pipeline",
-    "self_report_owner": "model output validated and stored separately",
-    "evaluation_owner": "deterministic configurable interpretation rules",
-    "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
-    "show_previous_post_delta": true,
-    "no_factual_embodiment": true,
-    "latent_style_frame_is_nonfactual": true,
-    "machine_executable_config": "the artefact/blogpost_entity/presets/zero_blog_state_box.json",
-    "reference_algorithm": "the artefact/blogpost_entity/state_box_reference.py",
-    "reference_falsifiers": "the artefact/blogpost_entity/test_state_box_reference.py",
-    "reference_mechanism_evidence": "SUPPORTED_IN_BOUNDED_ISOLATED_FIXTURE_REGRESSION",
-    "runtime_status": "NATIVE_0_7_SOURCE_MECHANISM_PRESENT; EXACT_0_7_APPEND_AND_ATOMIC_STUDY_RUNTIME_CREDIT_OPEN"
-  },
   "canonical_clay_state": {
-    "source_present": true,
     "profile_runtime": "DB-resident active profile; external JSON is import/config only",
-    "inference_contract": "generic inference_generate dispatch rather than provider-specific call",
-    "native_source_reproducibility": "SOURCE PRESENT: canonical Mini Entity 0.7 source is version-controlled. The source-bound builder now binds the transitive local include closure. BLOCKED FOR PROMOTION until an admitted exact-checkout repeat build produces a bound ELF digest and executes the 0.7 fixture/local_exec + atomic study/CAS fault matrix.",
-    "native_release_identity_law": "exact transitive source closure + compiler/dependency/build provenance + exact ELF digest, never version label or entry-unit hash alone",
-    "structured_runtime_convergence": "OPEN: BLOGPOST_ENTITY.clay already names pipeline_profile_read + inference_generate with DB-resident profile semantics, while overlapping Python-reference convergence PRs remain under adjudication; do not create a second structured runtime.",
-    "state_box_convergence": "SOURCE MECHANISM PRESENT IN NATIVE 0.7; exact native executable append + same-transaction study persistence remains uncredited until source-bound runtime execution.",
-    "current_gap": "Execute the exact canonical Mini Entity 0.7 source closure on an admitted Linux runner: repeat build, capture ELF/compiler/pkg/runtime identities, run fixture/local_exec with zero key/network use, inject output/study/event/generation CAS rollback faults, and rebuild identically. In parallel, advance the owner-required generic 0.5B ClayCode cognition campaign through BYOM compatibility, full-SFT, held-out evaluation, Q4_K_M quantization, measured <1GiB RSS, and the existing local_exec adapter. Neither lane may claim the other's acceptance."
+    "inference_contract": "generic inference dispatch; model output is proposal only",
+    "native_release_identity_law": "exact transitive source closure + compiler/dependency/build provenance + exact ELF digest, never version label alone",
+    "current_native_gap": "fuse #756/#764/#769 without duplicate semantic paths, exact source-bound rebuild, rerun confirmed falsifiers plus atomicity/CAS matrix, then close cross-environment release provenance",
+    "current_cognition_gap": "obtain an actually admitted qwen2-compatible full-FT runner/template without changing the 0.5B research question, then fingerprint-bound preflight/create, held-out evaluation, Q4_K_M and measured RSS gate"
   },
-  "current_frontier": "TWO CONVERGENT REQUIRED GATES: (A) MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT/v1 exact transitive-source-bound 0.7 repeat build/runtime/fault matrix; (B) CLAYCOG_05B_TRAINING/v2 live full-FT/BYOM admission -> <=USD18 budget gate -> one full SFT -> OOD/base/larger-model benchmark -> Q4_K_M -> measured <1GiB RSS -> generic local_exec integration.",
-  "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist on this same neutral pipeline + configurable DB, and must advance the 0.5B ClayCode cognition lane until it is promoted or falsified.",
-  "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
+  "current_frontier": "TWO CONVERGENT REQUIRED GATES: (A) repair three confirmed source-bound native 0.7 current-main defects (#756 presentation neutrality, #764 local_exec environment secret isolation, #769 profile-v2 semantic fail-open) and rerun exact build/fault matrix; (B) use canonical leakage-free SFT v2 and strict runtime-binding validator, resolve an admitted qwen2-compatible 0.5B full-FT path, then budget-gated SFT -> OOD/base/larger-model benchmark -> Q4_K_M -> measured <1 GiB RSS -> generic local_exec integration.",
+  "go_contract": "Every go refreshes current main/owner authority, chooses the highest-information nonduplicate frontier, falsifies before promotion, persists bounded evidence/delta, and advances this same neutral Mini Entity + optional 0.5B cognition product until promoted or falsified.",
+  "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one entity",
   "together_api": {
     "product_identity": "FORBIDDEN",
     "inference_requirement": "NONE",

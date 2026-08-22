@@ -1,0 +1,116 @@
+{
+  "schema": "clay-go-fusion-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / project session 09:54 +07",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY",
+  "joined_main_before_write": "6264fba3d9abb89fedf378e645e7cf7e799e1001",
+  "authority": {
+    "current_owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+    "old_2026_08_17_clayverse_bootstrap": "cache_only_superseded_for_current_product_goal"
+  },
+  "observed_current_frontier": [
+    "structured BLOGPOST_ENTITY.clay uses 3-argument run plus pipeline_profile_read and inference_generate",
+    "retained main structured Python runtime/tests were still on the older external-profile/provider-specific contract when inspected",
+    "zero_blog public state-box specification exists but integrated atomic runtime persistence is not yet credited",
+    "native 0.6 behavior has bounded sandbox receipts but current main explicitly records reproducibility limits around exact source/artifact identity"
+  ],
+  "parallel_candidate_adjudication": {
+    "pr_727": {
+      "status": "RETAIN_LEADING_STRUCTURED_RUNTIME_CANDIDATE",
+      "strengths": [
+        "DB-resident replaceable profile",
+        "generic inference_generate boundary",
+        "API/loopback/local_exec dispatch in one runtime path",
+        "profile replacement without state reset",
+        "focused contract tests and CI workflow"
+      ],
+      "blockers_found_in_review": [
+        "UNKNOWN metrics may still carry numeric 0.0 internally; typed absence is required",
+        "state-box and machine-readable study row are not yet inside the canonical atomic commit",
+        "canonical Clay source should converge on pipeline_init before pipeline_profile_read",
+        "workflow run 32547822177 job 96969405151 had zero steps, therefore execution-admission failure only"
+      ]
+    },
+    "pr_726": {
+      "status": "RETAIN_AS_STATE_BOX_MECHANISM_DONOR",
+      "strengths": [
+        "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT separation",
+        "UNKNOWN-preserving metric projection",
+        "allowlisted bounded self-report",
+        "measured-only deltas",
+        "backend/model longitudinal confound flags",
+        "deterministic public appendix renderer"
+      ],
+      "integration_law": "must not become a second runtime/state authority; build, render, machine-readable row, output, event consumption, state update and generation CAS belong to one canonical transaction"
+    },
+    "adapter_branch": {
+      "status": "REJECT_AS_CANONICAL_PATH",
+      "reason": "adds a second compatibility runtime and maps current inference only onto the retained provider engine, increasing duplicate-path risk"
+    },
+    "structured_clay_ordering_branch": {
+      "status": "RETAIN_SMALL_DELTA",
+      "reason": "initializes neutral MiniUnifiedDB schema before active profile read so a fresh DB fails closed as NO_ACTIVE_PROFILE without hidden external profile dependency"
+    }
+  },
+  "hypotheses": [
+    {
+      "id": "H1",
+      "claim": "The strongest convergence path is fusion of PR 727 runtime semantics plus PR 726 study mechanism into the existing canonical commit path, not a new adapter/runtime.",
+      "counterhypothesis": "Keeping state-box generation post-commit or in an independent helper transaction is simpler and sufficiently reliable.",
+      "falsifier": "fault injection between publication/event consumption/generation update and study persistence leaves any partial canonical generation.",
+      "status": "MECHANISM_SUPPORTED"
+    },
+    {
+      "id": "H2",
+      "claim": "UNKNOWN must be represented as typed absence, not status UNKNOWN with numeric zero payload.",
+      "counterhypothesis": "Status tagging alone is enough because downstream gates ignore the numeric value.",
+      "falsifier": "any downstream/export/study consumer can observe or aggregate the numeric zero despite UNKNOWN status.",
+      "status": "RETAIN_STRONG"
+    }
+  ],
+  "bounded_fault_analysis": {
+    "purpose": "compare one-transaction versus split-transaction longitudinal persistence",
+    "environment": "current isolated Python/SQLite analysis tool; not the Clay product runtime and not product acceptance evidence",
+    "atomic_design": {
+      "injected_fault_points": 4,
+      "partial_commits_observed": 0,
+      "result": "all injected faults rolled output, consumption, generation and study state back together"
+    },
+    "split_design": {
+      "injected_fault_points": 4,
+      "partial_commits_observed": 1,
+      "bad_state": "generation advanced + output committed + event consumed + study row absent"
+    },
+    "conclusion": "longitudinal study persistence belongs inside the same CAS-guarded transaction as publication and consumption",
+    "evidence_class": "MECHANISM_ONLY_NOT_PRODUCT_RUNTIME_PASS"
+  },
+  "unusual_experiment_coordination": {
+    "credited_global_slot": "PR 727 Preset-Amputation",
+    "race": "this organ began the SQLite fault analysis before PR 727's reservation became visible",
+    "credit_for_this_organ": "NOT_CREDITED_AS_SECOND_UNUSUAL_EXPERIMENT",
+    "negative_result": "parallel organs currently lack an atomic shared reservation for the one-unusual-experiment-per-go law"
+  },
+  "durable_actions": [
+    "GitHub review 4998760406 on PR 727 records epistemic, atomicity, source-order and execution-evidence blockers",
+    "GitHub review 4998760646 on PR 726 records fusion and atomic integration requirements"
+  ],
+  "next_discriminators": [
+    "change UNKNOWN metrics to typed absence and regress all consumers",
+    "fuse the generic study builder into pipeline_commit without a second persistence authority",
+    "persist exactly one machine-readable study row keyed to output/generation inside the same SQLite transaction",
+    "append exactly one public fenced state box from that same committed record",
+    "converge Clay source and tests on fresh-DB init -> DB profile read -> generic inference_generate",
+    "obtain an actually-started exact-head isolated run for focused regressions including Preset-Amputation and crash/rollback cases",
+    "after structured convergence, repeat real remote-provider and real local-model quality gates separately"
+  ],
+  "non_claims": [
+    "no exact current product-runtime PASS",
+    "no real provider quality PASS",
+    "no real local model quality PASS",
+    "no native artifact reproducibility PASS from this receipt",
+    "no whole Mini Entity acceptance PASS",
+    "Together API not used"
+  ]
+}

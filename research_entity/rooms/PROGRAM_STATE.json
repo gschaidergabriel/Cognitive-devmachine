@@ -1,27 +1,39 @@
 {
-  "schema_version": "6.0",
+  "schema_version": "6.1",
   "program_id": "blogpost-entity-all-in-one",
   "status": "ACTIVE",
   "stage": "BLOGPOST_ENTITY_CLAY",
   "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
   "sole_target": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+  "portable_release_shape": ["BLOGPOST_ENTITY.clay executable", "blogpost_entity.db SQLite MiniUnifiedDB"],
   "acceptance": "IN_PROGRESS",
   "sandbox_evidence": {
     "date": "2026-08-22",
-    "local_test_count": 6,
-    "local_test_pass": 6,
-    "covered": [
-      "parse",
-      "end_to_end_fixture_post",
-      "exactly_once_consumption",
-      "verified_quiet_second_run",
-      "unknown_emotion_claim_rejected_without_consumption",
-      "missing_sensor_not_quiet",
-      "secret_absence_reported_not_faked"
-    ],
-    "real_mistral_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_MISTRAL_SECRET_MOUNTED"
+    "native_reference": {
+      "platform": "linux-x86_64",
+      "form": "ELF executable named blogpost_entity.clay + SQLite DB",
+      "binary_sha256": "14303a49183580319472a75341a59f0b06129ed9ea0a88d5f66bf7765f73257f",
+      "tested_behaviors": [
+        "fresh DB initialization",
+        "evidence ingest",
+        "missing-token failure leaves events unconsumed",
+        "successful provider-mock run atomically consumes events",
+        "verified-empty second run produces quiet output",
+        "generation continuity increments only on success",
+        "provider endpoint/model/token are runtime configuration",
+        "system prompt is runtime replaceable",
+        "secret values are redacted from status/config output"
+      ],
+      "mock_limit": "sandbox loopback/network listener unavailable, therefore provider success path was exercised with an in-process mock provider; real HTTP transport remains uncredited"
+    },
+    "real_provider_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_API_SECRET_MOUNTED"
   },
-  "current_frontier": "Commit the tested Clay module and generic effect runtime; then exercise the existing free Mistral secret path in an authorized sandbox with a real key and add full-state projection/claim-gate adversarial coverage until all acceptance gates pass.",
-  "go_contract": "Every go uses swarm fan-out plus fusion/hypofusion and must advance this module or record a precise executable blocker.",
+  "canonical_clay_state": {
+    "source_present": true,
+    "current_gap": "canonical Clay source still has Mistral-specific request naming/model and hard-coded personality_system_prompt; must be generalized to runtime provider config + editable prompt while keeping immutable architecture guard"
+  },
+  "current_frontier": "Fuse the tested provider-agnostic native reference semantics into canonical BLOGPOST_ENTITY.clay and generic effect runtime, then run structured ClayCode tests and a real authorized text-provider call when a secret is mounted.",
+  "go_contract": "Every go uses swarm fan-out plus fusion/hypofusion and must advance this single mini entity or record a precise executable blocker.",
+  "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
   "together_api": "FORBIDDEN"
 }

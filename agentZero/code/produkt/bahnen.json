@@ -195,6 +195,22 @@
    "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
   },
   {
+   "zugang": "nvidia_nemotron",
+   "anzeige": "NVIDIA Nemotron Nano 9B v2",
+   "modell": "nvidia/nvidia-nemotron-nano-9b-v2",
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "NVIDIA_NIM_API_KEY,NVIDIA2_API_KEY,NVIDIA3_API_KEY",
+   "konten_anzahl": 3,
+   "zustand_gemessen": "HTTP 200 in 1828 ms, echter chat/completions-Aufruf, gemessen 2026-08-22"
+  },
+  {
    "zugang": "mistral_small",
    "anzeige": "Mistral small (frei)",
    "modell": "mistral-small-latest",
@@ -553,10 +569,30 @@
   {
    "prozess": "vorstufe_notweg",
    "bahnen": [
+    "glm_45_air",
+    "glm_47",
     "nvidia_nim",
     "groq_gptoss_120b",
-    "glm_52",
     "groq_gptoss_20b"
+   ],
+   "hoechstanteil": 0.15,
+   "max_je_lauf": 50,
+   "schema_pflicht": 1
+  },
+  {
+   "prozess": "hauptgehirn_glm",
+   "bahnen": [
+    "glm_45_air",
+    "glm_47"
+   ],
+   "hoechstanteil": 0.15,
+   "max_je_lauf": 50,
+   "schema_pflicht": 1
+  },
+  {
+   "prozess": "hauptgehirn_nemotron",
+   "bahnen": [
+    "nvidia_nemotron"
    ],
    "hoechstanteil": 0.15,
    "max_je_lauf": 50,
@@ -567,7 +603,6 @@
    "bahnen": [
     "nvidia_nim",
     "groq_gptoss_120b",
-    "glm_52",
     "groq_gptoss_20b"
    ],
    "hoechstanteil": 0.15,

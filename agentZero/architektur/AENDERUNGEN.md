@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-22T00:06:41Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-22T00:36:41Z aus drei Repos. 481 Eintraege.
 
 ## architektur (18)
 
@@ -118,6 +118,8 @@ Automatisch erzeugt 2026-08-22T00:06:41Z aus drei Repos. 481 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-22T00:24 | entityos | `48a40342ccbf` | EOS-Chronik 2026-08-22 00:24:20 +0000 — entityos: 3 Aenderungen |
+| 2026-08-22T00:16 | entityos | `b70cbe899485` | Hauptgehirn-Kaskade: GLM vor Mistral, tote Mistral-Schluessel raus |
 | 2026-08-22T00:04 | entityos | `6809e26ef810` | EOS-Chronik 2026-08-22 00:04:18 +0000 — entityos: 11 Aenderungen |
 | 2026-08-21T22:32 | entityos | `4ee9e3465d66` | Motor-Kaskade: EIN Notweg-Router ueber den ganzen Schluesselpool |
 | 2026-08-21T22:31 | entityos | `7746504161fa` | EOS-Chronik 2026-08-21 22:31:17 +0000 — entityos: 1 Aenderungen |
@@ -176,6 +178,4 @@ Automatisch erzeugt 2026-08-22T00:06:41Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T12:42 | entityos | `e3260c0eceec` | EOS-Chronik 2026-08-21 12:42:18 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T12:40 | entityos | `ec0a802e83f8` | EOS-Chronik 2026-08-21 12:40:18 +0000 — entityos: 4 Aenderungen |
 | 2026-08-21T12:36 | entityos | `bbfa4fbb4dc3` | EOS-Chronik 2026-08-21 12:36:50 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T12:32 | entityos | `790a294bab91` | EOS-Chronik 2026-08-21 12:32:49 +0000 — entityos: 5 Aenderungen |
-| 2026-08-21T12:14 | entityos | `c07c21aa65ad` | EOS-Chronik 2026-08-21 12:14:08 +0000 — entityos: 1 Aenderungen |
 

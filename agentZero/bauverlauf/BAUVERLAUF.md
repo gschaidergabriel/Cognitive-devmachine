@@ -1,12 +1,58 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-22T00:06:41Z. 1110 Commits aus vier Repos, davon 482 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-22T00:36:41Z. 1110 Commits aus vier Repos, davon 484 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-22
+
+### EOS-Chronik 2026-08-22 00:24:20 +0000 — entityos: 3 Aenderungen
+
+`48a40342ccbf` · entityos · 00:24 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/bahnen.json
+  the artefact/clayverse/mistral_prestage/motor_kaskade.py
+  the artefact/tests/test_motor_kaskade.py
+
+Zeit: 2026-08-22T00:24:20+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### Hauptgehirn-Kaskade: GLM vor Mistral, tote Mistral-Schluessel raus
+
+`b70cbe899485` · entityos · 00:16 UTC · BACK agent
+
+```
+Owner-Entscheidung 2026-08-22: Zeros Hauptgehirn-Notweg wird
+Claude -> GLM (Prozess hauptgehirn_glm, nur glm_52) -> Mistral (alle
+lebenden Schluessel) -> Bahnrouter-Pool-Rest (hauptgehirn_notweg ohne
+glm_52, keine Dopplung). vorstufe_notweg bekommt dieselbe Praeferenz
+innerhalb seiner Pool-Stufe (glm_52 zuerst).
+
+secrets.py: MISTRAL_API_KEY per Sonde gemessen tot (HTTP 402, kein Abo)
+-- aus _MISTRAL_KEY_NAMES entfernt, deckt sich mit dem bereits an
+anderer Stelle dokumentierten Befund (omnimind_anreicherung.py). Nur
+MISTRAL2_API_KEY/MISTRAL3_API_KEY (beide 200 OK, gemessen) bleiben der
+rotierende Mistral-Fallback-Pool.
+
+Tests fuer die neue Reihenfolge ergaenzt (GLM zuerst, GLM-Fehlschlag
+faellt zu Mistral durch); bestehende Pool-Tests auf die neue
+Prozess-Aufteilung angepasst, alle mit router_factory injiziert (kein
+Test darf auf den echten Bahnrouter/Live-Netzwerk fallen). 1486
+bestehen, 1 uebersprungen.
+
+Co-Authored-By: Claude Opus 4.8 <<adresse>>
+```
 
 ### EOS-Chronik 2026-08-22 00:04:18 +0000 — entityos: 11 Aenderungen
 
@@ -2962,43 +3008,6 @@ Anlass: Wache: Aenderung beobachtet
   the artefact/tests/test_warmpool.py
 
 Zeit: 2026-08-20T17:28:03+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 17:21:42 +0000 — entityos: 1 Aenderungen
-
-`28bd6611775b` · entityos · 17:21 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-
-Zeit: 2026-08-20T17:21:42+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 16:58:22 +0000 — entityos: 2 Aenderungen
-
-`16a996260e3d` · entityos · 16:58 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/tests/test_kuerze.py
-
-Zeit: 2026-08-20T16:58:22+00:00
 Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)

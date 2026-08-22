@@ -10,13 +10,22 @@ ZWEI Rollen, ZWEI Kaskaden, GEGENLAEUFIGE Primaermotoren:
   VORSTUFE     Mistral (transport.mistral_chat_json_rotating, primaer)
                -> stehender warmer Claude-Notweg (warm_claude_prestage.py)
                -> Bahnrouter-Pool (clayverse/bahnen.py, Prozess
-               "vorstufe_notweg": nvidia_nim/groq_gptoss_120b/glm_52/
-               groq_gptoss_20b).
+               "vorstufe_notweg": glm_52/nvidia_nim/groq_gptoss_120b/
+               groq_gptoss_20b -- glm_52 zuerst, Owner-Entscheidung
+               2026-08-22).
   HAUPTGEHIRN  Claude (der Aufrufer reicht seinen eigenen Aufruf ein, z.B.
                headless_zero.run_headless -- NICHT hier neu gebaut) -> bei
                HARTEM Ausfall (ist_hart_erschoepft(), Kredit/Kontingent,
-               NICHT ein Ratenlimit) Mistral-Direktantwort -> Bahnrouter-Pool
-               (Prozess "hauptgehirn_notweg", dieselben vier Bahnen).
+               NICHT ein Ratenlimit) GLM-Direktantwort (Prozess
+               "hauptgehirn_glm": glm_45_air/glm_47, klein statt
+               Flaggschiff) -> Mistral-Direktantwort (alle lebenden
+               Schluessel aus secrets.mistral_keys()) -> Nemotron-
+               Direktantwort (Prozess "hauptgehirn_nemotron":
+               NVIDIA nvidia-nemotron-nano-9b-v2) -> Bahnrouter-Pool-Rest
+               (Prozess "hauptgehirn_notweg": nvidia_nim/groq_gptoss_120b/
+               groq_gptoss_20b, glm_52 NICHT dabei -- schon Stufe 1).
+               Reihenfolge Claude->GLM->Mistral->Nemotron->Pool-Rest ist
+               Owner-Entscheidung 2026-08-22 (vorher Claude->Mistral->Pool).
 
 Die LETZTE Stufe (Bahnrouter-Pool) traegt selbst schon eine Kaskade UEBER
 mehrere Anbieter -- inklusive taggenauem Erschoepfungsgedaechtnis
@@ -216,18 +225,50 @@ def hauptgehirn_kaskade(
     ist UND ist_hart_erschoepft(str(claude_fehler)) wahr ist -- diese
     Funktion selbst prueft das NICHT nochmal (der Aufrufer hat schon
     entschieden, dass es sich um einen harten Ausfall handelt, nicht ein
-    Ratenlimit). Kaskadiert: Mistral-Direktantwort -> Bahnrouter-Pool.
+    Ratenlimit). Kaskadiert: GLM -> Mistral -> Nemotron -> Bahnrouter-Pool
+    (Rest).
+
+    ⚠️ REIHENFOLGE (Owner-Entscheidung 2026-08-22): Claude (primaer, beim
+    Aufrufer) -> GLM (1. Notweg, Prozess "hauptgehirn_glm":
+    glm_45_air/glm_47 -- bewusst KLEINER als das glm_52-Flaggschiff) ->
+    Mistral (2. Notweg, alle lebenden Schluessel aus secrets.mistral_keys())
+    -> Nemotron (3. Notweg, Prozess "hauptgehirn_nemotron": NVIDIA
+    nvidia-nemotron-nano-9b-v2, live gemessen) -> Bahnrouter-Pool-Rest
+    (Prozess "hauptgehirn_notweg": generisches NVIDIA/Groq, glm_52 bleibt
+    dort bewusst DRAUSSEN -- schon in Stufe 1 versucht, keine Dopplung).
+    Jeder Fehlschlag (429/Kontingent, bei GLM haeufig gemessen) ist KEIN
+    Sonderfall -- dieselbe skip-on-failure-Kaskade wie jede Stufe faengt
+    ihn stumm ab und faellt zur naechsten durch; die per-Bahn-
+    Erschoepfungserinnerung (bahn_livestreak, LEBEND_SCHWELLE/-ABKUEHLUNG
+    in bahnen.py) sorgt dafuer, dass eine frisch tote Bahn nicht bei jedem
+    Zug erneut angefragt wird.
 
     ⚠️ EHRLICHE GRENZE: liefert IMMER dieselbe Form wie headless_zero.
     run_headless() (fuer Uebersetzung/DB-Schreibung), aber IMMER mit
-    werkzeuge=[] -- weder Mistral noch der Bahnrouter-Pool koennen Zeros
-    native Werkzeuge (Bash/Read/Write/Edit/MCP) ausfuehren. Dieser eine Zug
-    beantwortet den Auftrag als reine Textantwort; sobald Claude wieder
-    Kontingent hat, laeuft der NAECHSTE Zug wieder normal mit vollen
-    Werkzeugen (kein Zustand ueberdauert diesen einen Zug)."""
+    werkzeuge=[] -- KEINE der vier Notweg-Stufen (GLM/Mistral/Nemotron/
+    Pool) kann Zeros native Werkzeuge (Bash/Read/Write/Edit/MCP)
+    ausfuehren. Dieser eine Zug beantwortet den Auftrag als reine
+    Textantwort; sobald Claude wieder Kontingent hat, laeuft der NAECHSTE
+    Zug wieder normal mit vollen Werkzeugen (kein Zustand ueberdauert
+    diesen einen Zug). Werkzeugfaehiger Notweg (z.B. ueber ein
+    NVIDIA-Modell mit echter Funktionsaufruf-/Ausfuehrungsbruecke) ist eine
+    EIGENE, groessere Erweiterung -- Sicherheitsbruecke zu Bash/Read/Write
+    fehlt hier komplett und wird NICHT stillschweigend in diesem Zug
+    nachgezogen."""
     versuche: list[tuple[str, str]] = [("claude", str(claude_fehler))]
 
-    # 1. Mistral-Direktantwort.
+    # 1. GLM-Direktantwort (eigener Bahnrouter-Prozess, glm_45_air/glm_47).
+    try:
+        faktorie = router_factory or _echter_router_factory
+        ergebnis = _pool_direktantwort(
+            prozess="hauptgehirn_glm", auftrag=caveman_prompt, max_tokens=900,
+            router_factory=faktorie)
+        return _envelope_zu_zero_form(
+            ergebnis["payload"], engine=ergebnis["receipt"]["motor"], receipt=ergebnis["receipt"])
+    except Exception as exc:
+        versuche.append(("glm", str(exc)))
+
+    # 2. Mistral-Direktantwort.
     try:
         keys = secrets.mistral_keys()
         if not keys:
@@ -242,7 +283,18 @@ def hauptgehirn_kaskade(
     except Exception as exc:
         versuche.append(("mistral", str(exc)))
 
-    # 2. Bahnrouter-Pool.
+    # 3. Nemotron-Direktantwort (eigener Bahnrouter-Prozess, NVIDIA).
+    try:
+        faktorie = router_factory or _echter_router_factory
+        ergebnis = _pool_direktantwort(
+            prozess="hauptgehirn_nemotron", auftrag=caveman_prompt, max_tokens=900,
+            router_factory=faktorie)
+        return _envelope_zu_zero_form(
+            ergebnis["payload"], engine=ergebnis["receipt"]["motor"], receipt=ergebnis["receipt"])
+    except Exception as exc:
+        versuche.append(("nemotron", str(exc)))
+
+    # 4. Bahnrouter-Pool (Rest: NVIDIA/Groq -- glm_52 schon in Stufe 1 dran).
     try:
         faktorie = router_factory or _echter_router_factory
         ergebnis = _pool_direktantwort(

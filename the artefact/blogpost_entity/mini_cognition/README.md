@@ -44,45 +44,61 @@ A separate OOD generator emits **200** promotion probes and is not a random spli
 ```bash
 pip install -U together
 export TOGETHER_API_KEY=...
+# Required: set only after current Together verification identifies a Qwen2-compatible
+# full-fine-tuning template. There is intentionally no implicit template default.
+export CLAYCOG_TOGETHER_TEMPLATE=...
 bash train_together_v1.sh
 ```
 
 The shell script stops after **preflight**. It regenerates and validates the corpus, asks Together to validate the
-files/template, prints the server price estimate, and prints a deterministic `campaign_fingerprint`. It does not
-create a billed job.
+explicit template and files, prints the server price estimate, and prints a deterministic `campaign_fingerprint`.
+It does not create a billed job.
 
-The fingerprint binds the exact training/validation file digests plus `from_hf_model`, template, epochs, evaluations,
-training method/type, learning rate, warmup ratio and checkpoint count. A create must be authorized against exactly
-that preflight identity:
+The fingerprint binds the exact training/validation file digests plus `from_hf_model`, exact Hugging Face model
+revision, explicit Together template, epochs, evaluations, training method/type, learning rate, warmup ratio and
+checkpoint count. A create must be authorized against exactly that preflight identity:
 
 ```bash
 export CLAYCOG_CREATE_FINGERPRINT=<exact campaign_fingerprint from the same preflight>
 python3 launch_together_v1.py --create
 ```
 
-A missing or stale fingerprint fails closed. Before remote file allocation on create, the launcher scans the account
-for an existing job carrying the deterministic campaign suffix. It repeats the duplicate check immediately before
-the billed create to narrow the check/use race. If the create transport outcome is ambiguous (for example, the server
-may have accepted the job but the client timed out), **never blind-retry `--create`**: list/retrieve the existing
-fine-tuning jobs first. The deterministic suffix exists specifically so such an account-side job can be recognized.
+A missing or stale fingerprint fails closed. Before remote file allocation on create, the launcher checks both the
+local create-intent ledger and the Together account for an existing exact campaign. Immediately before the billed
+POST it atomically creates a mode-`0600` local `CREATE_ARMED` record containing the exact campaign descriptor but no
+API key, then uses a dedicated Together client with SDK retries disabled. A known accepted job advances the record to
+`JOB_KNOWN`; an exception after arming advances it to `UNKNOWN_REMOTE_CREATE`. Any existing local intent blocks a new
+create until the exact provider state is reconciled, even if the provider account listing is stale.
 
-### Together 0.5B caveat
+### Together 0.5B caveat — current template blocker
 
-As of 2026-08-22, Together's regular supported-model table lists Qwen3.5 **0.8B** as the smallest Qwen fine-tune,
-not a native 0.5B entry. Together's BYOM path supports external Hugging Face CausalLM checkpoints under 100B when
-a compatible Together training template exists. This script therefore pairs:
+As checked on **2026-08-22**, Together's public fine-tuning supported-model table contains **no Qwen2/Qwen2.5 base**.
+For Qwen full fine-tuning it currently lists Qwen3.5 models down to **0.8B**, but Qwen3.5 is a different architecture
+from Qwen2.5 and is not silently admitted as a template merely because vendor family and parameter size are close.
+Together's BYOM guide requires an external CausalLM/safetensors checkpoint under 100B without `trust_remote_code` and
+a Together base/template whose architecture matches and whose size/context are suitable.
 
-- BYOM weights: `Qwen/Qwen2.5-0.5B`;
-- default same-family template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
+`Qwen/Qwen2.5-7B-Instruct-Turbo` is visible as an inference model, but visibility in the inference catalog is not
+fine-tuning admission evidence. It is therefore **not an implicit launcher default anymore**. Supply
+`CLAYCOG_TOGETHER_TEMPLATE` or `--template` only after current Together verification identifies a Qwen2-compatible
+full-FT template. `model_limits` remains the first authenticated template gate. A Qwen3-family template is rejected
+locally instead of silently changing the experiment to Qwen3.5-0.8B.
 
-That pairing is **not assumed fine-tune compatible** merely because the template is served in Together's catalog.
-`model_limits` can establish that the selected template currently supports full fine-tuning, and `estimate_price`
-can establish pricing/admission for the uploaded corpus under that template; neither call validates the
-`from_hf_model` pair. BYOM compatibility therefore remains **OPEN** until Together's create path accepts the exact
-Qwen2.5-0.5B checkpoint/template pair and the resulting job actually reaches a training state. There is deliberately
-no automatic fallback to Qwen3.5 because the BYOM architecture/size relationship is part of the empirical gate.
-If Together rejects this Qwen2.5 path, keep the 0.5B checkpoint requirement and use a Together-provided compatible
-Qwen2 template or the same corpus on another admitted full-FT runner rather than silently changing the experiment.
+This is currently a **documentation/source blocker, not an authenticated Together runtime observation**. A credentialed
+`model_limits` call may still reveal an admitted Qwen2-compatible template not shown in public documentation. If it
+does not, retain the Qwen2.5-0.5B research target and use a Together-provided compatible template or another
+owner-admitted full-FT runner; do not relabel a different model generation as the 0.5B campaign.
+
+The primary Hugging Face checkpoint is pinned to revision
+`285c998059f3e217fe1f05e241d55b5c5eef5bd3`; the instruct ablation is pinned to
+`7ae557604adf67be50417f59c2c2f167def9a775`. The exact revision is included in the campaign fingerprint, persisted in
+the local create-intent ledger, and passed as Together `hf_model_revision`; mutable Hugging Face `main` is not accepted
+for an unknown replacement checkpoint.
+
+Together's current `estimate-price` request does **not** expose `from_hf_model` or `hf_model_revision`. Therefore a
+successful price estimate proves only dataset/template/budget admission. It does not prove that Together has accepted
+the external Qwen2.5-0.5B checkpoint. Actual BYOM compatibility remains **OPEN** until create accepts the exact
+checkpoint/template pair and the job reaches a training state.
 
 Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
 corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.

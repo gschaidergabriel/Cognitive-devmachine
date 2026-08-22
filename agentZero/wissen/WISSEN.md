@@ -1,6 +1,6 @@
 # Wissensartikel
 
-Automatisch erzeugt 2026-08-22T18:36:45Z. 12 Artikel -- Betriebswissen (wie deployt wird, Domains, Testpflicht) und Personenwissen (Rollen, wer entscheidet, wo Geheimnisse liegen) aus der gitignorierten Eigner-CLAUDE.md, geheimnisfrei uebertragen durch `clayverse/wissen.py`.
+Automatisch erzeugt 2026-08-22T19:06:45Z. 12 Artikel -- Betriebswissen (wie deployt wird, Domains, Testpflicht) und Personenwissen (Rollen, wer entscheidet, wo Geheimnisse liegen) aus der gitignorierten Eigner-CLAUDE.md, geheimnisfrei uebertragen durch `clayverse/wissen.py`.
 
 > ⚠️ 8 Zeile(n) ohne `geheimnisfrei=true` -- zurueckgehalten, nicht exportiert.
 

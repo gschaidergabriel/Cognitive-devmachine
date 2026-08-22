@@ -10,7 +10,7 @@ Together's regular catalog has no native 0.5B Qwen entry. We therefore use BYOM 
 Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family catalog-template candidate.
 Template model_limits and price estimation do NOT prove BYOM compatibility because they
 do not validate from_hf_model. BYOM compatibility remains open until Together accepts
-(and subsequently starts) the requested HF checkpoint under the selected template.
+(and subsequently starts) the requested revision-pinned HF checkpoint under the selected template.
 
 Billed-create safety is deliberately stricter than ordinary API use. The CREATE call is
 made through a zero-retry SDK client and is preceded by an atomic local campaign intent
@@ -25,10 +25,17 @@ from pathlib import Path
 HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v2.jsonl"
 VALID=HERE/"validation_v2.jsonl"
-HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL","Qwen/Qwen2.5-0.5B")
+PRIMARY_MODEL="Qwen/Qwen2.5-0.5B"
+PRIMARY_REVISION="060db6499f32faf8b98477b0a26969ef7d8b9987"
+INSTRUCT_MODEL="Qwen/Qwen2.5-0.5B-Instruct"
+INSTRUCT_REVISION="7ae557604adf67be50417f59c2c2f167def9a775"
+HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL",PRIMARY_MODEL)
 TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-7B-Instruct-Turbo")
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
 EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
+LEARNING_RATE=float(os.environ.get("CLAYCOG_LEARNING_RATE","1e-5"))
+WARMUP_RATIO=float(os.environ.get("CLAYCOG_WARMUP_RATIO","0.03"))
+RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","20260822"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"
 CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
@@ -37,6 +44,7 @@ ACTIVE_OR_SPENT_STATUSES={"pending","queued","running","compressing","uploading"
 def run_local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_corpus_v2.py"),str(TRAIN),str(VALID)],check=True)
+    subprocess.run([sys.executable,str(HERE/"generate_eval_ood_v1.py")],check=True)
 
 def wait_file(client,file_id):
     while True:
@@ -60,10 +68,35 @@ def sha256_file(path):
             h.update(chunk)
     return h.hexdigest()
 
-def campaign_descriptor(hf_model):
+def _field(x,name,default=None):
+    if isinstance(x,dict): return x.get(name,default)
+    return getattr(x,name,default)
+
+def _validate_revision(revision):
+    if not revision or len(revision)!=40 or any(c not in "0123456789abcdefABCDEF" for c in revision):
+        raise SystemExit("HF model revision must be an exact 40-hex commit SHA")
+    return revision.lower()
+
+def revision_for_model(hf_model):
+    if hf_model==PRIMARY_MODEL:
+        return _validate_revision(os.environ.get("CLAYCOG_HF_REVISION",PRIMARY_REVISION))
+    if hf_model==INSTRUCT_MODEL:
+        return _validate_revision(os.environ.get("CLAYCOG_HF_INSTRUCT_REVISION",INSTRUCT_REVISION))
+    revision=os.environ.get("CLAYCOG_HF_REVISION")
+    if not revision:
+        raise SystemExit("Custom CLAYCOG_HF_MODEL requires explicit CLAYCOG_HF_REVISION")
+    return _validate_revision(revision)
+
+def resolve_hf_checkpoint(instruct_ablation=False):
+    model=INSTRUCT_MODEL if instruct_ablation else HF_MODEL
+    return model,revision_for_model(model)
+
+def campaign_descriptor(hf_model,hf_revision=None):
+    revision=revision_for_model(hf_model) if hf_revision is None else _validate_revision(hf_revision)
     return {
-        "schema":"claycog-05b-together-campaign/v1",
+        "schema":"claycog-05b-together-campaign/v2",
         "from_hf_model":hf_model,
+        "hf_model_revision":revision,
         "template_model":TEMPLATE,
         "training_sha256":sha256_file(TRAIN),
         "validation_sha256":sha256_file(VALID),
@@ -72,13 +105,14 @@ def campaign_descriptor(hf_model):
         "training_method":"sft",
         "training_type":"Full",
         "train_on_inputs":"auto",
-        "learning_rate":1e-5,
-        "warmup_ratio":0.03,
+        "learning_rate":LEARNING_RATE,
+        "warmup_ratio":WARMUP_RATIO,
+        "random_seed":RANDOM_SEED,
         "n_checkpoints":1,
     }
 
-def campaign_fingerprint(hf_model):
-    raw=json.dumps(campaign_descriptor(hf_model),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode("utf-8")
+def campaign_fingerprint(hf_model,hf_revision=None):
+    raw=json.dumps(campaign_descriptor(hf_model,hf_revision),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()
 
 def campaign_suffix(fingerprint):
@@ -92,16 +126,12 @@ def _items(x):
     if isinstance(x,dict): return list(x.get("data") or [])
     return list(x) if isinstance(x,(list,tuple)) else []
 
-def _field(x,name,default=None):
-    if isinstance(x,dict): return x.get(name,default)
-    return getattr(x,name,default)
-
 def matching_campaign_jobs(client,hf_model,template,suffix):
     """Return account jobs that appear to carry this deterministic campaign suffix.
 
-    The suffix is derived from exact local dataset digests + training configuration.
-    Where Together exposes model/from_hf_model, those fields must also match. Missing
-    optional fields are tolerated so the guard remains useful across response versions.
+    The suffix is derived from exact local dataset digests + checkpoint revision + training
+    configuration. Where Together exposes model/from_hf_model, those fields must also match.
+    Missing optional fields are tolerated so the guard remains useful across response versions.
     """
     matches=[]
     for job in _items(client.fine_tuning.list()):
@@ -166,7 +196,7 @@ def _fsync_dir(path):
     try: os.fsync(fd)
     finally: os.close(fd)
 
-def arm_create_intent(fingerprint,hf_model,suffix):
+def arm_create_intent(fingerprint,hf_model,suffix,hf_revision=None):
     """Atomically reserve this exact paid campaign locally before the remote POST.
 
     O_EXCL makes concurrent local launchers mutually exclusive. The record intentionally
@@ -179,11 +209,11 @@ def arm_create_intent(fingerprint,hf_model,suffix):
     except OSError: pass
     path=create_ledger_path(fingerprint)
     payload={
-        "schema":"claycog-together-create-intent/v1",
+        "schema":"claycog-together-create-intent/v2",
         "fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "status":"CREATE_ARMED",
-        "campaign":campaign_descriptor(hf_model),
+        "campaign":campaign_descriptor(hf_model,hf_revision),
         "created_unix":int(time.time()),
     }
     data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode("utf-8")
@@ -225,6 +255,15 @@ def new_zero_retry_create_client(together_cls):
     """A billed non-idempotent CREATE must not inherit SDK automatic retries."""
     return together_cls(max_retries=0)
 
+def created_job_identity_mismatches(meta,expected):
+    """Compare provider-visible job identity against the exact authorized campaign."""
+    mismatches={}
+    for key,want in expected.items():
+        got=_field(meta,key,None)
+        if got!=want:
+            mismatches[key]={"expected":want,"observed":got}
+    return mismatches
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--create",action="store_true",help="create billed fine-tuning job after exact-fingerprint preflight")
@@ -232,10 +271,10 @@ def main():
     args=ap.parse_args()
     if not os.environ.get("TOGETHER_API_KEY"):
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
-    hf_model="Qwen/Qwen2.5-0.5B-Instruct" if args.instruct_ablation else HF_MODEL
+    hf_model,hf_revision=resolve_hf_checkpoint(args.instruct_ablation)
 
     run_local_checks()
-    fingerprint=campaign_fingerprint(hf_model)
+    fingerprint=campaign_fingerprint(hf_model,hf_revision)
     suffix=campaign_suffix(fingerprint)
 
     # Keep Together import behind the credential/local-validation boundary so pure safety
@@ -272,9 +311,13 @@ def main():
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "epochs":EPOCHS,
         "evals":EVALS,
+        "learning_rate":LEARNING_RATE,
+        "warmup_ratio":WARMUP_RATIO,
+        "random_seed":RANDOM_SEED,
         "estimated_usd":price,
         "allowed_to_proceed":bool(estimate.allowed_to_proceed),
         "price_detail":objdict(estimate),
@@ -294,7 +337,7 @@ def main():
     # before the non-idempotent remote POST. Any crash/timeout after arming stays unknown.
     assert_no_local_create_intent(fingerprint)
     assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
-    intent_path=arm_create_intent(fingerprint,hf_model,suffix)
+    intent_path=arm_create_intent(fingerprint,hf_model,suffix,hf_revision)
     create_client=new_zero_retry_create_client(Together)
     try:
         job=create_client.fine_tuning.create(
@@ -302,11 +345,13 @@ def main():
             validation_file=valid_file.id,
             model=TEMPLATE,
             from_hf_model=hf_model,
+            hf_model_revision=hf_revision,
             n_epochs=EPOCHS,
             n_evals=EVALS,
             n_checkpoints=1,
-            learning_rate=1e-5,
-            warmup_ratio=0.03,
+            learning_rate=LEARNING_RATE,
+            warmup_ratio=WARMUP_RATIO,
+            random_seed=RANDOM_SEED,
             train_on_inputs="auto",
             lora=False,
             suffix=suffix,
@@ -317,18 +362,44 @@ def main():
             "CREATE_OUTCOME_UNKNOWN local intent retained; do not retry create until exact provider reconciliation: "
             +type(exc).__name__
         ) from exc
+
+    # A returned job id makes the remote create identity known even if later verification
+    # transport fails. Persist it before any follow-up read so a later retry is still blocked.
     update_create_intent(intent_path,"JOB_KNOWN",job_id=job.id)
+    expected_job={
+        "training_file":train_file.id,
+        "validation_file":valid_file.id,
+        "model":TEMPLATE,
+        "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
+        "n_epochs":EPOCHS,
+        "n_evals":EVALS,
+        "random_seed":RANDOM_SEED,
+    }
+    try:
+        meta=client.fine_tuning.retrieve(id=job.id)
+    except Exception as exc:
+        raise SystemExit(
+            f"JOB_CREATED_IDENTITY_VERIFY_UNAVAILABLE job_id={job.id}; inspect this exact job, do not create another: {type(exc).__name__}"
+        ) from exc
+    mismatches=created_job_identity_mismatches(meta,expected_job)
+
     print(json.dumps({
         "job_id":job.id,
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "full_fine_tune":True,
+        "random_seed":RANDOM_SEED,
         "estimated_usd":price,
         "local_create_intent":str(intent_path),
+        "created_job_identity_mismatches":mismatches,
         "byom_compatibility_status":"CREATE_ACCEPTED_TRAINING_START_STILL_REQUIRED_FOR_PROMOTION",
         "next":"retrieve this exact job; never blind-retry create after an ambiguous transport outcome",
     },indent=2))
+    if mismatches:
+        raise SystemExit(f"CREATED_JOB_IDENTITY_MISMATCH job_id={job.id}; inspect this exact job, do not create a replacement blindly")
 
 if __name__=="__main__": main()

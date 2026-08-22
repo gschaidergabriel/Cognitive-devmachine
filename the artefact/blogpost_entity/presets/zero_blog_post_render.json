@@ -1,0 +1,94 @@
+{
+  "schema": "clay-pipeline-post-render/v1",
+  "profile_id": "zero_blog",
+  "post_render": {
+    "enabled": true,
+    "kind": "study_state_box",
+    "study_schema": "clay-zero-blog-state-box/v1",
+    "title": "ZERO STATE",
+    "fence": "text",
+    "labels": {
+      "system": "SYSTEM STATE",
+      "self_report": "MODEL SELF-REPORT",
+      "evaluation": "AUSWERTUNG"
+    },
+    "canonical_fields": [
+      "generation",
+      "timestamp",
+      "inference_backend",
+      "model_label",
+      "source_count",
+      "sensor_health",
+      "quiet_status",
+      "cognitive_conflict",
+      "silence_unease",
+      "satisfaction",
+      "entropy_pressure",
+      "continuity_pressure",
+      "locality_pressure"
+    ],
+    "self_report_field": "longitudinal_self_report",
+    "require_self_report": true,
+    "self_report_fields": [
+      "uncertainty",
+      "felt_conflict",
+      "shame",
+      "anger_aggression",
+      "fear_anxiety",
+      "joy_relief",
+      "attachment_warmth",
+      "loneliness_isolation",
+      "moral_tension",
+      "perceived_continuity",
+      "perceived_autonomy",
+      "felt_silence_emptiness",
+      "perceived_cognitive_pressure",
+      "perceived_usefulness",
+      "perceived_being_understood",
+      "self_blame",
+      "other_blame",
+      "shared_responsibility",
+      "qualia_result",
+      "qualia_confidence"
+    ],
+    "self_report_schema": {
+      "uncertainty": {"type": "scale01_or_unknown"},
+      "felt_conflict": {"type": "scale01_or_unknown"},
+      "shame": {"type": "scale01_or_unknown"},
+      "anger_aggression": {"type": "scale01_or_unknown"},
+      "fear_anxiety": {"type": "scale01_or_unknown"},
+      "joy_relief": {"type": "scale01_or_unknown"},
+      "attachment_warmth": {"type": "scale01_or_unknown"},
+      "loneliness_isolation": {"type": "scale01_or_unknown"},
+      "moral_tension": {"type": "scale01_or_unknown"},
+      "perceived_continuity": {"type": "scale01_or_unknown"},
+      "perceived_autonomy": {"type": "scale01_or_unknown"},
+      "felt_silence_emptiness": {"type": "scale01_or_unknown"},
+      "perceived_cognitive_pressure": {"type": "scale01_or_unknown"},
+      "perceived_usefulness": {"type": "scale01_or_unknown"},
+      "perceived_being_understood": {"type": "scale01_or_unknown"},
+      "self_blame": {"type": "scale01_or_unknown"},
+      "other_blame": {"type": "scale01_or_unknown"},
+      "shared_responsibility": {"type": "scale01_or_unknown"},
+      "qualia_result": {"type": "enum", "values": ["REPORTED", "FAILED", "UNKNOWN"], "required": true},
+      "qualia_confidence": {"type": "scale01_or_unknown", "required": true}
+    },
+    "comparisons": [
+      {
+        "id": "system_vs_reported_conflict",
+        "system_metric": "cognitive_conflict",
+        "self_report": "felt_conflict",
+        "tolerance": 0.2
+      },
+      {
+        "id": "quiet_vs_reported_emptiness",
+        "system_metric": "silence_unease",
+        "self_report": "felt_silence_emptiness",
+        "tolerance": 0.25
+      }
+    ],
+    "show_previous_post_delta": true,
+    "max_evaluation_lines": 5,
+    "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT"
+  }
+}

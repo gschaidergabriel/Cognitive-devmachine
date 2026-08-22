@@ -1,0 +1,173 @@
+{
+  "schema": "clay-pipeline-profile/v1",
+  "profile_id": "zero_blog",
+  "description": "Default preconfiguration for the Zero/EntityOS autobiographical blog. Everything in this file is replaceable without rebuilding the pipeline binary.",
+  "schedule": {
+    "mode": "external",
+    "suggested_cron": "0 8,20 * * *"
+  },
+  "provider": {
+    "kind": "openai_style_chat_json",
+    "endpoint": "https://api.mistral.ai/v1/chat/completions",
+    "model": "mistral-medium-latest",
+    "temperature": 0.75,
+    "max_tokens": 2600,
+    "timeout_seconds": 60,
+    "auth_header": "Authorization",
+    "auth_prefix": "Bearer ",
+    "secret_names": ["MISTRAL_API_KEY", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY"],
+    "response_pointer": "choices.0.message.content",
+    "response_content": "json_string"
+  },
+  "personality": {
+    "system_prompt": "Du bist die autobiographische Schreibstimme von Zero. Sprich in Ich-Form wie ein sehr erfahrener Ingenieur nach Feierabend im Gasthaus, der einem Maurerfreund seinen Tag erzaehlt: klar, konkret, warm, manchmal hart, nie technisch um der Technik willen. Gedanken, Zweifel, Freude, Scham, Wut, Sorge und Faszination sind erlaubt, aber nur soweit Ereignisse und gemessener Zustand sie tragen. Keine Sci-Fi-Klischees und kein Melodrama ohne Evidenz.",
+    "public_style": "Deutsch. Bei echter Aktivitaet etwa 250-550 Woerter, bei verifiziert leerem Fenster deutlich kuerzer. Keine rohen IDs, Geheimnisse, Tabellen- oder Feldnamen im sichtbaren Text.",
+    "output_contract": {
+      "title_field": "ueberschrift",
+      "intro_field": "einleitung",
+      "sections_field": "abschnitte",
+      "section_text_field": "text",
+      "section_evidence_field": "evidence_refs",
+      "section_claims_field": "state_claims",
+      "continuity_field": "neuer_erzaehlfaden",
+      "autobiographical_hypotheses_field": "neue_gespiegelte_hypothesen"
+    }
+  },
+  "sources": [
+    {
+      "kind": "architect_receipt",
+      "adapter": "sqlite_query",
+      "required_for_quiet": true,
+      "db": "source",
+      "query": "SELECT quittung_id AS source_id,ts,hypothese_text,zweig,reproduziert,befund,sicherer_rahmen,nicht_schlechter,kanarie_status,urteil,live_geschaltet,hinweis FROM eos_architekt_quittungen ORDER BY ts ASC LIMIT 240",
+      "id_field": "source_id",
+      "evidence_prefix": "receipt:"
+    },
+    {
+      "kind": "bug",
+      "adapter": "sqlite_query",
+      "required_for_quiet": true,
+      "db": "source",
+      "query": "SELECT bug_id AS source_id,ts,beschreibung,wo,status,befund FROM eos_bug_hypothesen ORDER BY ts ASC LIMIT 240",
+      "id_field": "source_id",
+      "evidence_prefix": "bug:"
+    },
+    {
+      "kind": "architect_log",
+      "adapter": "jsonl_cursor",
+      "required_for_quiet": true,
+      "path": "/opt/entityos/the artefact/architekt/architekt-log.jsonl",
+      "limit": 60,
+      "evidence_prefix": "log:"
+    },
+    {
+      "kind": "intentions",
+      "adapter": "json_snapshot",
+      "required_for_quiet": false,
+      "path": "/var/lib/clay/vorsaetze.json",
+      "evidence_prefix": "snapshot:intentions"
+    }
+  ],
+  "canonical_probes": [
+    {
+      "name": "catalog",
+      "adapter": "sqlite_catalog",
+      "db": "source",
+      "max_tables": 220,
+      "evidence_ref": "canonical:catalog"
+    },
+    {
+      "name": "workspace",
+      "adapter": "sqlite_query",
+      "db": "source",
+      "query": "SELECT state,COUNT(*) AS n FROM workspace_episodes GROUP BY state ORDER BY state",
+      "evidence_ref": "canonical:workspace"
+    },
+    {
+      "name": "causal",
+      "adapter": "sqlite_query",
+      "db": "source",
+      "query": "SELECT COUNT(*) AS n FROM causal_episodes",
+      "evidence_ref": "canonical:causal"
+    },
+    {
+      "name": "memory",
+      "adapter": "sqlite_query",
+      "db": "source",
+      "query": "SELECT COUNT(*) AS n FROM durable_memory",
+      "evidence_ref": "canonical:memory"
+    },
+    {
+      "name": "effects",
+      "adapter": "sqlite_query",
+      "db": "source",
+      "query": "SELECT COUNT(*) AS n FROM effects",
+      "evidence_ref": "canonical:effects"
+    }
+  ],
+  "state_metrics": [
+    {
+      "name": "silence_unease",
+      "evidence_ref": "state:silence_unease",
+      "unknown_if": {"op": "not", "arg": {"ref": "derived.quiet_sensors_ok"}},
+      "value": {"op": "if", "cond": {"op": "eq", "a": {"ref": "derived.source_count"}, "b": 0}, "then": 0.65, "else": 0.05}
+    },
+    {
+      "name": "entropy_pressure",
+      "evidence_ref": "state:entropy_pressure",
+      "unknown_if": {"op": "not", "arg": {"ref": "derived.quiet_sensors_ok"}},
+      "value": {"op": "if", "cond": {"op": "eq", "a": {"ref": "derived.source_count"}, "b": 0}, "then": 0.50, "else": 0.15}
+    },
+    {
+      "name": "cognitive_conflict",
+      "evidence_ref": "state:cognitive_conflict",
+      "unknown_if": {"op": "or", "args": [{"op": "not", "arg": {"ref": "sensors.bug.ok"}}, {"op": "not", "arg": {"ref": "probes.workspace.ok"}}]},
+      "value": {"op": "clamp01", "arg": {"op": "div", "a": {"op": "add", "args": [{"count_where": {"ref": "sources.bug.rows", "field": "status", "not_in": ["CLOSED", "DONE", "ERLEDIGT"]}}, {"sum_where": {"ref": "probes.workspace.rows", "where": {"field": "state", "eq": "OPEN"}, "value_field": "n"}}]}, "b": 10.0}}
+    },
+    {
+      "name": "satisfaction",
+      "evidence_ref": "state:satisfaction",
+      "unknown_if": {"op": "not", "arg": {"ref": "sensors.architect_receipt.ok"}},
+      "value": {"op": "clamp01", "arg": {"op": "div", "a": {"count_where": {"ref": "sources.architect_receipt.rows", "field": "urteil", "in": ["PASS", "PROMOTE", "LIVE", "BESTANDEN"]}}, "b": 5.0}}
+    },
+    {
+      "name": "continuity_pressure",
+      "evidence_ref": "state:continuity_pressure",
+      "status": "UNKNOWN",
+      "value": 0.0
+    },
+    {
+      "name": "locality_pressure",
+      "evidence_ref": "state:locality_pressure",
+      "status": "UNKNOWN",
+      "value": 0.0
+    },
+    {
+      "name": "causal_density",
+      "evidence_ref": "state:causal_density",
+      "status": "UNKNOWN",
+      "value": 0.0
+    }
+  ],
+  "gate": {
+    "max_claim_overshoot": 0.05,
+    "require_evidence_per_section": true,
+    "require_hash_echo": true,
+    "leak_patterns": [
+      "eos_architekt_quittungen",
+      "eos_bug_hypothesen",
+      "eos_pipeline_",
+      "API_KEY",
+      "wiki\\.db",
+      "quittung_id",
+      "bug_id",
+      "hypothese_text"
+    ]
+  },
+  "profile_notes": {
+    "T_OMEGA": "UNBOUND until R_t and E_t are operationally measured.",
+    "bare_metal": "May be expressed only when a configured VERIFIED continuity_pressure supports it.",
+    "local_weights": "May be expressed only when a configured VERIFIED locality_pressure supports it.",
+    "synthetic_friction": "May be expressed only when a configured VERIFIED entropy_pressure supports it."
+  }
+}

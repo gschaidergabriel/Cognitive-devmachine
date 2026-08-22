@@ -1,0 +1,88 @@
+{
+  "schema": "mini-entity-native-profile-v2-parity-contract/v1",
+  "canonical_profile_schema": "clay-pipeline-profile/v2",
+  "canonical_pipeline": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+  "canonical_reference_runtime": "tools/clay_profile_pipeline_runtime.py",
+  "canonical_shipped_profile": "the artefact/blogpost_entity/presets/zero_blog.json",
+  "required_pipeline_phases": [
+    "pipeline_profile_read",
+    "pipeline_init",
+    "pipeline_state_read",
+    "pipeline_collect",
+    "pipeline_compile",
+    "pipeline_build_prompt",
+    "inference_generate",
+    "pipeline_gate",
+    "pipeline_commit"
+  ],
+  "required_source_adapters_from_shipped_v2": [
+    "json_snapshot",
+    "jsonl_cursor",
+    "sqlite_query"
+  ],
+  "required_probe_adapters_from_shipped_v2": [
+    "sqlite_catalog",
+    "sqlite_query"
+  ],
+  "required_expression_ops_from_shipped_v2": [
+    "add",
+    "clamp01",
+    "div",
+    "eq",
+    "if",
+    "not",
+    "or"
+  ],
+  "required_expression_aggregates_from_shipped_v2": [
+    "count_where",
+    "sum_where"
+  ],
+  "required_expression_ref_namespaces_from_shipped_v2": [
+    "derived",
+    "probes",
+    "sensors",
+    "sources"
+  ],
+  "required_gate_contract": [
+    "dynamic_output_contract",
+    "hash_echo",
+    "evidence_per_section",
+    "allowed_evidence_refs_only",
+    "known_state_claim_only",
+    "verified_state_claim_only",
+    "claim_overshoot_limit",
+    "metric_evidence_required",
+    "leak_pattern_rejection",
+    "active_secret_rejection",
+    "gate_before_commit"
+  ],
+  "required_compile_contract": [
+    "profile_driven_collection",
+    "profile_driven_canonical_probes",
+    "profile_driven_state_metrics",
+    "canonical_state_hash",
+    "packet_hash",
+    "allowed_evidence_refs",
+    "verified_quiet_only_when_required_sources_healthy",
+    "previous_continuity_in_prompt"
+  ],
+  "admission": {
+    "status": "FAIL_CLOSED_UNTIL_EXACT_PARITY",
+    "blocker": "CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY",
+    "runtime_receipt": null,
+    "promotion_requires": [
+      "all_required_contracts_implemented_on_one_native_path",
+      "exact_source_bound_build_of_candidate",
+      "shipped_v2_profile_executes_with_reference-equivalent_compile_and_gate_semantics",
+      "adversarial_hash_evidence_claim_leak_secret_and_atomicity_matrix_passes",
+      "count_where_sum_where_and_sources_sensors_probes_refs_are_executed_not_degraded_to_unknown",
+      "profile_source_and_probe_adapters_are_executed_not_replaced_by_mini_entity_events_only",
+      "guard_removed_only_in_same_exact_candidate_that_has_parity_evidence"
+    ]
+  },
+  "known_rejected_partial_candidate": {
+    "pull_request": 851,
+    "reason": "Candidate removed the v2 blocker while its expression evaluator explicitly left count_where/sum_where and general sources/sensors/probes references unsupported and its collector/probe topology did not match the canonical profile-driven reference.",
+    "reuse_policy": "Gate/leak mechanisms may be extracted narrowly; whole-branch v2 admission must not be revived."
+  }
+}

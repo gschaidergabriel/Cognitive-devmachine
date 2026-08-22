@@ -6,7 +6,10 @@
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
   "base_main_sha": "ff9e86b02fce611f19a36934b46887ada8ba6590",
+  "main_after_pr_open": "8a7f90dd6e21fd53f80fd539286e86c6b66303b1",
+  "main_advance_scope": "one later agentZero export commit; compare ff9e86b..8a7f90d touches agentZero/* only and does not modify this candidate's three changed paths",
   "branch": "go-08b-canonical-v2-preflight-validator-20260822",
+  "pr": 882,
   "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
   "product_scope": "application-neutral Mini Entity pipeline plus replaceable ~1B ClayCode cognition attachment",
   "finding": {
@@ -37,8 +40,13 @@
   },
   "execution": {
     "vercel_executable_sandbox_surface": "NOT_EXPOSED_BY_AVAILABLE_CONNECTOR",
-    "github_exact_branch_runtime": "PENDING_PR_RUNNER_ADMISSION",
-    "runtime_credit": "ZERO_UNTIL_ACTUAL_STEPS_EXECUTE"
+    "github_exact_branch_runtime": "ADMISSION_FAILED_BEFORE_VISIBLE_STEPS",
+    "workflow_observations": [
+      {"run_id": 32570952856, "workflow": "mini-cognition-qwen35-08b-pr", "job_id": 97026222034, "job": "deterministic-cognition-gates", "conclusion": "failure", "steps": null},
+      {"run_id": 32570952854, "workflow": "claycog-08b-direct-admission", "job_id": 97026221839, "job": "direct-lane-admission", "conclusion": "failure", "steps": null}
+    ],
+    "classification": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE",
+    "runtime_credit": "ZERO"
   },
   "together": {
     "secret_used": false,
@@ -49,5 +57,5 @@
     "spend_usd": 0
   },
   "acceptance": "SOURCE_REPAIR_CANDIDATE; EXACT_RUNTIME_UNVERIFIED; WHOLE_PRODUCT_IN_PROGRESS",
-  "next_gate": "open exact-head PR, inspect runner admission; if actual steps execute, require the focused 0.8B launcher regression plus canonical corpus generation/validation before authenticated provider preflight"
+  "next_gate": "obtain an actually-started exact runner for PR 882 and require focused 0.8B launcher regression plus canonical v2 generation/validation before authenticated provider preflight"
 }

@@ -153,6 +153,9 @@ def created_job_identity_mismatches(meta,expected):
         got=_identity_observed(_field(meta,key,None),want)
         if got!=want:out[key]={"expected":want,"observed":got}
     return out
+def assert_created_job_seed(job):
+    got=_field(job,"random_seed",None)
+    if got!=RANDOM_SEED:raise SystemExit(f"JOB_CREATED_SEED_MISMATCH expected={RANDOM_SEED} observed={got!r}; job is known, do not create another")
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
@@ -171,7 +174,8 @@ def main():
     try:job=cc.fine_tuning.create(**create_payload(tf.id,vf.id,suffix))
     except Exception as e:update_create_intent(intent,"UNKNOWN_REMOTE_CREATE",error_class=type(e).__name__);raise SystemExit("CREATE_OUTCOME_UNKNOWN; do not retry until exact provider reconciliation") from e
     update_create_intent(intent,"JOB_KNOWN",job_id=job.id)
-    expected={"training_file":tf.id,"validation_file":vf.id,"model":MODEL,"suffix":suffix,"n_epochs":EPOCHS,"n_evals":EVALS,"n_checkpoints":1,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_method":training_method(),"training_type":training_type()}
+    assert_created_job_seed(job)
+    expected={"training_file":tf.id,"validation_file":vf.id,"model":MODEL,"suffix":suffix,"n_epochs":EPOCHS,"n_evals":EVALS,"n_checkpoints":1,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_method":training_method(),"training_type":training_type()}
     try:meta=client.fine_tuning.retrieve(id=job.id)
     except Exception as e:raise SystemExit(f"JOB_CREATED_IDENTITY_VERIFY_UNAVAILABLE job_id={job.id}; inspect this exact job, do not create another: {type(e).__name__}") from e
     mismatches=created_job_identity_mismatches(meta,expected)

@@ -12,6 +12,7 @@ on:
       - 'the artefact/blogpost_entity/test_runtime_stream_integrity.py'
       - 'the artefact/blogpost_entity/test_runtime_schema_migration.py'
       - 'the artefact/blogpost_entity/test_runtime_truth_boundary.py'
+      - 'the artefact/blogpost_entity/test_reference_local_exec_env_isolation.py'
       - 'the artefact/blogpost_entity/state_box_reference.py'
       - 'the artefact/blogpost_entity/check_structured_contract_sync.py'
       - 'tools/clay_profile_pipeline_runtime.py'
@@ -28,6 +29,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -42,6 +45,7 @@ jobs:
           'the artefact/blogpost_entity/state_box_reference.py'
           'the artefact/blogpost_entity/check_structured_contract_sync.py'
           'the artefact/blogpost_entity/test_runtime_truth_boundary.py'
+          'the artefact/blogpost_entity/test_reference_local_exec_env_isolation.py'
       - name: Enforce Clay reference-contract convergence
         run: python 'the artefact/blogpost_entity/check_structured_contract_sync.py'
       - name: Run structured Mini Entity convergence tests
@@ -52,4 +56,5 @@ jobs:
           'the artefact/blogpost_entity/test_runtime_stream_integrity.py'
           'the artefact/blogpost_entity/test_runtime_schema_migration.py'
           'the artefact/blogpost_entity/test_runtime_truth_boundary.py'
+          'the artefact/blogpost_entity/test_reference_local_exec_env_isolation.py'
           -q

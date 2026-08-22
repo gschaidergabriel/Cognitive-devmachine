@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "base_main_sha": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "target_model": "Qwen/Qwen3.5-0.8B",
+  "source_state": {
+    "preflight_validator_defect_repaired_on_main": true,
+    "repair_merge_sha": "f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d",
+    "repair_evidence_sha": "827b40021a5cfa9044c741ded1eb838897ba140a",
+    "exact_runtime_credit": 0,
+    "reason": "GitHub jobs were observed failing admission before visible test steps; no admitted executable Vercel/Daytona surface was exposed in this organ's connector set"
+  },
+  "unusual_experiment": {
+    "name": "LAUNCHER_PRECHECK_TARGET_EXISTENCE_FALSIFIER",
+    "global_cycle_state": "ALREADY_CONSUMED_AND_MERGED_BY_PARALLEL_ORGAN",
+    "duplicate_experiment_started_by_this_followup": false
+  },
+  "provider_fact_refresh": {
+    "observed_date": "2026-08-22",
+    "supported_models_source": "https://docs.together.ai/docs/fine-tuning/supported-models",
+    "pricing_source": "https://www.together.ai/pricing",
+    "full_fine_tuning_supported": true,
+    "full_fine_tuning_row": {
+      "model": "Qwen3.5 0.8B",
+      "api_id": "Qwen/Qwen3.5-0.8B",
+      "context_sft": 131072,
+      "context_dpo": 131072,
+      "max_batch_sft": 8,
+      "max_batch_dpo": 8,
+      "min_batch": 8
+    },
+    "standard_sft_pricing": {
+      "size_band": "up to 16B",
+      "lora_usd_per_1m_processed_tokens": 0.48,
+      "full_usd_per_1m_processed_tokens": 0.54,
+      "minimum_job_charge_usd": 4.0,
+      "provider_formula_note": "price is based on processed training tokens across epochs plus optional evaluation tokens across evaluations, subject to the published minimum charge"
+    }
+  },
+  "implication": {
+    "native_full_ft_base_still_supported": true,
+    "usd18_campaign_gate_not_falsified_by_public_pricing": true,
+    "sub_4_usd_formula_estimate_is_not_sufficient_billed_price_evidence": true,
+    "required_paid_preflight_behavior": "bind live provider model limits, server-side dataset validation, exact provider price estimate and the published minimum-charge constraint into the fingerprint before any billed create"
+  },
+  "execution": {
+    "provider_secret_used": false,
+    "credentialed_provider_preflight_run": false,
+    "dataset_uploaded": false,
+    "billed_create_run": false,
+    "training_started": false,
+    "spend_usd": 0,
+    "exact_isolated_runtime_run": false
+  },
+  "acceptance": "PROVIDER_FACTS_REFRESHED; SOURCE_REPAIR_ALREADY_MERGED; EXACT_RUNTIME_UNVERIFIED; PAID_CREATE_NOT_AUTHORIZED_BY_THIS_RECEIPT",
+  "next_gate": "obtain an admitted actually-started exact-current-main isolated runner and execute the focused Qwen3.5-0.8B launcher regression plus canonical v2 corpus generation/validation; only then proceed to credentialed provider preflight when current control policy admits it, and never perform billed CREATE without an explicit fingerprint-bound owner confirmation"
+}

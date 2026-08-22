@@ -1,0 +1,71 @@
+{
+  "schema": "clay-zero-blog-state-box/v1",
+  "profile_id": "zero_blog",
+  "enabled": true,
+  "render": {
+    "append_after_public_post": true,
+    "fence": "text",
+    "title": "ZERO STATE",
+    "sections": ["SYSTEM STATE", "MODEL SELF-REPORT", "AUSWERTUNG"],
+    "max_evaluation_lines": 5
+  },
+  "ownership": {
+    "system_state": "pipeline_only",
+    "model_self_report": "model_supplied_but_validated",
+    "evaluation": "deterministic_configurable_rules_preferred"
+  },
+  "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
+  "no_embodiment": true,
+  "canonical_fields": [
+    "generation",
+    "timestamp",
+    "inference_backend",
+    "model_label",
+    "source_count",
+    "sensor_health",
+    "quiet_status",
+    "cognitive_conflict",
+    "silence_unease",
+    "satisfaction",
+    "entropy_pressure",
+    "continuity_pressure",
+    "locality_pressure"
+  ],
+  "self_report_fields": [
+    "uncertainty",
+    "felt_conflict",
+    "shame",
+    "anger_aggression",
+    "fear_anxiety",
+    "joy_relief",
+    "attachment_warmth",
+    "loneliness_isolation",
+    "moral_tension",
+    "perceived_continuity",
+    "perceived_autonomy",
+    "felt_silence_emptiness",
+    "perceived_cognitive_pressure",
+    "perceived_usefulness",
+    "perceived_being_understood",
+    "self_blame",
+    "other_blame",
+    "shared_responsibility",
+    "qualia_result",
+    "qualia_confidence"
+  ],
+  "delta": {
+    "show_previous_post_delta": true,
+    "show_unknown_as_unknown": true,
+    "never_impute_missing": true
+  },
+  "evaluation_rules": [
+    "report congruence only when both compared dimensions are available",
+    "report divergence without treating either track as automatically correct",
+    "flag UNKNOWN or sensor failure before interpretation",
+    "strong emotional wording is model self-report, not canonical human emotion measurement",
+    "do not claim trend from one delta; repeated generations are required",
+    "flag model/provider/prompt changes as possible longitudinal confounds",
+    "do not infer causation from correlation"
+  ],
+  "protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STATE_BOX_PROTOCOL.md"
+}

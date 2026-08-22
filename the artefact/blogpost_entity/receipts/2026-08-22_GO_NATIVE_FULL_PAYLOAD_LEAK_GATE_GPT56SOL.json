@@ -1,0 +1,42 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "branch": "gpt56sol/go-native-fusion-current-20260822-1512",
+  "scope": "native profile-v2 persistence leak gate hardening inside existing fusion PR #851",
+  "source_falsifier": {
+    "issue": 857,
+    "finding": "the native profile-v2 gate scanned configured leak patterns and active secrets only in title, intro and section text although the complete model-output JSON is persisted; continuity, hypotheses, self-report and future nested string fields could bypass that policy",
+    "evidence_class": "SOURCE_SUPPORTED_FAIL_OPEN"
+  },
+  "repair": {
+    "gate_commit": "0bcd42536126a0d188ae7db1a59730b55e04062f",
+    "gate_blob_sha": "4ebd5d0c9f9262c25c808631c9fd9f32eec903eb",
+    "mechanism": "recursive scan of every JSON string leaf in the complete parsed output; field names are not scanned; configured leak regex and active secret are both fail-closed",
+    "runtime_falsifier_commit": "24204854203b40db2520a2bea75fcba7bab35535",
+    "runtime_falsifier": "the artefact/blogpost_entity/native/test_native_persisted_output_leaks.py",
+    "cases": [
+      "continuity leak sentinel",
+      "nested autobiographical hypothesis leak sentinel",
+      "nested longitudinal self-report leak sentinel",
+      "arbitrary future nested persisted-output string leak sentinel"
+    ],
+    "ci_commit": "b11f3fb6f53f30b526e575f522ff83778355fda8",
+    "ci_path": ".github/workflows/mini-entity-native-semantic-gate.yml",
+    "ci_reason": "the prior exact-repro workflow did not execute profile-v2 semantic-gate regressions"
+  },
+  "evidence_boundary": {
+    "source_candidate": true,
+    "mechanism_supported": true,
+    "exact_native_runtime_verified": false,
+    "exact_ci_run": "NOT_OBSERVED_AT_RECEIPT_WRITE",
+    "whole_mini_entity_pass": false
+  },
+  "unusual_experiment_accounting": "NO_ADDITIONAL_EXPERIMENT_AFTER_PARALLEL_SLOT_COLLISION_WAS_VISIBLE",
+  "coordination_note": "parallel organs recorded conflicting ownership of the single unusual-experiment slot during the same user-triggered go; this organ stopped adding experiments after the collision was visible rather than inventing clean accounting",
+  "money_spent_usd": 0,
+  "provider_training_started": false,
+  "next_gate": "actually-started authorized isolated execution of the exact PR #851 head must compile the source-bound ELF and pass semantic, full-payload leak, metric-UNKNOWN, local_exec secret-isolation, atomicity and generation-CAS regressions before merge/promotion"
+}

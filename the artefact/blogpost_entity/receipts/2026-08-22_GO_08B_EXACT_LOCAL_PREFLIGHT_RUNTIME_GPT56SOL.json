@@ -1,0 +1,108 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "tested_source_main_sha": "f807c0e86971be78da0054ff6a08406726c0aef3",
+  "receipt_branch_base_main_sha": "0cf7a76b2ad9e0617682e40555289e736afa93a7",
+  "source_reentry": {
+    "status": "RELEVANT_COGNITION_BYTES_UNCHANGED_TO_RECEIPT_BRANCH_BASE",
+    "comparison": "f807c0e86971be78da0054ff6a08406726c0aef3..0cf7a76b2ad9e0617682e40555289e736afa93a7",
+    "later_changed_paths": [
+      ".github/workflows/claycog-validator-pr.yml",
+      "the artefact/blogpost_entity/mini_cognition/test_eval_call_depth_v1.py",
+      "the artefact/blogpost_entity/receipts/2026-08-22_GO_APPROX1B_OOD_DEPTH_REJOIN_GPT56SOL.json"
+    ],
+    "relevant_tested_paths_changed": false
+  },
+  "scope": "exact-Git-blob isolated execution of the current Qwen3.5-0.8B local pre-provider path; no Together provider execution",
+  "exact_source_blobs": {
+    "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py": "5f37ed8150c1bc34a005359024c045a40f8826b4",
+    "the artefact/blogpost_entity/mini_cognition/test_launch_together_qwen35_08b_v1.py": "c810656e867f54d5c03ec704f2ecd9d26c86537a",
+    "the artefact/blogpost_entity/mini_cognition/generate_sft_v2.py": "577867cce24deecd5965962b613dcf4f4d79dcd9",
+    "the artefact/blogpost_entity/mini_cognition/validate_corpus_v2.py": "90db81209ae83cb55ec29ce6d0469c6cc93ba1e2",
+    "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py": "5c36b401497c299fb13e368dc3e8de485769ecbb",
+    "the artefact/blogpost_entity/mini_cognition/claycode_syntax_v1.py": "ca9612016a166da0ae3495e08d9f73ace9cb96af"
+  },
+  "policy_observation": {
+    "exact_main_policy_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "exact_main_policy_blob": "275d23c710c88635486f8e4a48cda35127fea867",
+    "observed_verified_updates_free_only": true,
+    "together_credentialed_preflight_allowed_under_current_policy": false,
+    "execution_fixture": {"verified_updates": {"free_only": true}},
+    "fixture_reason": "exercise the exact launcher source against the minimal machine-readable field it consumes, without copying unrelated supervisor narrative into the isolated runtime"
+  },
+  "isolated_execution": {
+    "environment": {
+      "kernel": "Linux 6.18.35 x86_64",
+      "python": "3.13.5",
+      "libc": "glibc 2.41"
+    },
+    "source_identity_method": "git hash-object matched each reconstructed tested file to the GitHub exact-ref blob before execution",
+    "py_compile": "PASS",
+    "launcher_regression_suite": {
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "result": "PASS"
+    },
+    "real_local_checks_chain": {
+      "generator_executed": true,
+      "canonical_corpus_validator_executed": true,
+      "train_lines": 1485,
+      "validation_lines": 165,
+      "train_unique": 1485,
+      "validation_unique": 165,
+      "train_structural_invalid": 0,
+      "validation_structural_invalid": 0,
+      "exact_cross_split_overlap": 0,
+      "prompt_cross_split_overlap": 0,
+      "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+      "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+      "validator_ok": true
+    },
+    "terminal_gate": {
+      "observed": "FREE_ONLY_PROVIDER_REJECT cost_class=PAID provider=Together model=Qwen/Qwen3.5-0.8B before_secret_lookup=true before_network=true",
+      "expected": true,
+      "provider_import_reached": false,
+      "provider_network_reached": false
+    },
+    "runtime_credit": "BOUNDED_EXACT_BLOB_LOCAL_PREFLIGHT_COMPONENT"
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment": false,
+    "reason": "the canonical source-path falsifier had already been consumed and merged during this macrocycle by PR #882 / receipt 2026-08-22_GO_08B_CANONICAL_V2_PREFLIGHT_VALIDATOR_GPT56SOL.json; this execution is deterministic replication and runtime re-entry only",
+    "canonical_experiment_name": "LAUNCHER_PRECHECK_TARGET_EXISTENCE_FALSIFIER"
+  },
+  "coordination": {
+    "duplicate_pr_closed_unmerged": 895,
+    "canonical_prior_repair_pr": 882,
+    "duplicate_implementation_added": false
+  },
+  "together": {
+    "secret_used": false,
+    "credential_lookup_reached": false,
+    "provider_import_reached": false,
+    "provider_call": false,
+    "upload": false,
+    "model_limits_call": false,
+    "price_estimate": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "claims": {
+    "source_validator_repair": "MERGED_BEFORE_THIS_RECEIPT",
+    "exact_local_preflight_generation_validation": "VERIFIED_AT_TESTED_SOURCE",
+    "free_only_pre_provider_rejection": "VERIFIED_AT_TESTED_SOURCE_WITH_MINIMAL_TRUE_POLICY_FIXTURE",
+    "authenticated_together_admission": "NOT_EXECUTED_AND_CURRENTLY_POLICY_FORBIDDEN",
+    "trained_checkpoint_quality": "UNVERIFIED",
+    "q4_k_m": "UNVERIFIED",
+    "peak_rss_lt_1_gib_ctx_2048": "UNVERIFIED",
+    "whole_mini_entity": "IN_PROGRESS"
+  },
+  "next_gate": "while FREE_ONLY remains true, do not perform Together credentialed preflight or paid execution; advance provider-independent OOD/evaluation, exact local runtime, quantization tooling, native parity, or FREE_ONLY admission coverage. If owner/supervisor later explicitly clears FREE_ONLY, re-read current exact source/policy and only then consider authenticated preflight-only model_limits/server-validation/price-estimate before any separately authorized billed create."
+}

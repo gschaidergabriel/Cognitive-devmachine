@@ -1,0 +1,32 @@
+{
+  "schema": "claycog-sft/v0",
+  "seed": 42,
+  "examples": 1200,
+  "train": 1080,
+  "validation": 120,
+  "identity_job_policy": "runtime_config_only",
+  "base_model": "Qwen/Qwen3.5-0.8B",
+  "families": [
+    "architecture",
+    "configuration",
+    "effects",
+    "epistemic",
+    "format_resistance",
+    "general",
+    "hyperposition",
+    "self_state"
+  ],
+  "local_generation_receipt": {
+    "environment_scope": "isolated OpenAI task container",
+    "train_lines": 1080,
+    "validation_lines": 120,
+    "train_validator_bad": 0,
+    "validation_validator_bad": 0,
+    "forbidden_fixed_identity_target_scan_hits": 0,
+    "train_bytes": 1507807,
+    "validation_bytes": 164651,
+    "train_sha256": "4c85ba75c4202eee3c2d770a2b67c31e85a503b3998884699b462680482cc291",
+    "validation_sha256": "f23582809b711e0618b9d86d777575f54398f45c0c30c8e7da4b29e50252950c",
+    "evidence_class": "CORPUS_GENERATION_AND_STATIC_VALIDATION_ONLY; no Together training or model-quality credit"
+  }
+}

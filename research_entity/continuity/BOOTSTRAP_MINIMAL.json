@@ -1,30 +1,28 @@
 {
-  "schema_version": "6.2",
+  "schema_version": "6.3",
   "entity_display_name": "Clay",
   "active_program": "BLOGPOST_ENTITY_ALL_IN_ONE",
   "active_stage": "BLOGPOST_ENTITY_CLAY",
   "sole_owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "local_inference_requirement": "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
-  "portable_release_shape": ["application-neutral .clay executable", "SQLite MiniUnifiedDB preconfigured with zero_blog"],
-  "mission": "Finish and empirically prove one persistent portable multi-use mini entity: executable contains only the generic processing pipeline; Zero blog is fully editable SQLite application configuration.",
+  "portable_release_shape": ["application-neutral .clay executable", "SQLite MiniUnifiedDB preconfigured with zero_blog", "optional replaceable local model attachment when local inference is selected"],
+  "mission": "Finish and empirically prove one persistent portable multi-use mini entity: executable contains only the generic processing pipeline; Zero blog is fully editable SQLite application configuration; inference can be remote API, local server, or direct local model.",
   "hard_split": {
-    "binary": "evidence -> generic preprocessor -> canonical envelope -> configured API -> generic gates -> exactly-once/CAS -> atomic SQLite persistence",
-    "database": "profile/personality/system prompt/application blob/provider settings and default zero_blog preset",
+    "binary": "evidence -> generic preprocessor -> canonical envelope -> configured inference backend -> generic gates -> exactly-once/CAS -> atomic SQLite persistence",
+    "database": "profile/personality/system prompt/application blob/provider and local-inference settings plus default zero_blog preset",
     "regression": "never hard-code replaceable Zero/blog/personality semantics into the executable"
   },
   "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; model narrative is never canonical state authority",
-  "provider_law": {
-    "default": "Mistral chat-completions",
-    "identity": "provider is replaceable inference only",
-    "runtime_config": ["endpoint", "model", "api_token", "auth_header", "auth_prefix", "request_template", "response_pointer"],
-    "system_prompt": "runtime-editable",
-    "application_profile": "fully runtime-editable",
-    "architecture_guard": "immutable generic pipeline law above editable application",
-    "secret_rule": "never expose, print or commit token values"
+  "inference_law": {
+    "remote_api": "configurable remote text generation",
+    "local_server": "localhost compatible text generation with optional authentication",
+    "local_model": "direct replaceable local model attachment; first reference target GGUF via llama.cpp-compatible runtime",
+    "identity": "switching inference backend or model must not reset MiniUnifiedDB state/history"
   },
   "default_application": "the artefact/blogpost_entity/presets/zero_blog.json",
-  "go": "Maximal swarm cycle on this one neutral pipeline + configurable DB only: refresh, fan-out, hypotheses, counterhypotheses, implement, sandbox-test, falsify, fuse/hypofuse, fix, retest, persist.",
+  "go": "Maximal swarm cycle on this one neutral pipeline + configurable DB only: refresh, fan-out, hypotheses, counterhypotheses, implement, sandbox-test, falsify, fuse/hypofuse, fix, retest, persist. Direct local-model support remains a required frontier until sandbox-proven.",
   "swarm_product_rule": "swarm is research/build orchestration only; product runtime is exactly one entity",
   "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances this mini entity.",
   "together_api": "FORBIDDEN"

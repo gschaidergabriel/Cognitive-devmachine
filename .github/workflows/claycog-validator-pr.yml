@@ -43,3 +43,10 @@ jobs:
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_eval_exact_vector_v1.py'
+      - name: Run training-disjoint novel-schema OOD regression
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_eval_novel_schema_v1.py
+          python3 validate_eval_novel_schema_v1.py eval_novel_schema_v1.jsonl
+          python3 test_eval_novel_schema_v1.py

@@ -1,5 +1,5 @@
 {
-  "schema_version": "6.8",
+  "schema_version": "6.9",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY",
@@ -41,7 +41,9 @@
       "platform": "linux-x86_64",
       "form": "application-neutral and inference-neutral ELF executable",
       "binary_sha256": "27ad1fc3f134efacabe89102a86ac5876d62bb7c9d9b1e6d0ca95c36c60e7bd1",
-      "fresh_db_mode": "neutral"
+      "fresh_db_mode": "neutral",
+      "repository_reproducibility": "BLOCKED_NATIVE_SOURCE_AND_CREDITED_ELF_BYTES_ABSENT_FROM_CANONICAL_MAIN",
+      "provenance_gate": "the artefact/blogpost_entity/native/check_native_reference.py"
     },
     "local_llm_fixture_run": {
       "preset_schema": "clay-pipeline-profile/v2",
@@ -72,6 +74,7 @@
       "SQLite integrity_check PASS"
     ],
     "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json",
+    "provenance_reconciliation_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_NATIVE_ARTIFACT_IDENTITY_RECONCILIATION_GPT56SOL.json",
     "real_remote_provider_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_AUTHORIZED_API_SECRET_MOUNTED",
     "real_local_llm_quality_run": "NOT_YET_CREDITED_FIXTURE_ONLY"
   },
@@ -104,9 +107,11 @@
     "source_present": true,
     "profile_runtime": "DB-resident active profile; external JSON is import/config only",
     "inference_contract": "generic inference_generate dispatch rather than provider-specific call",
-    "current_gap": "native sandbox path proves local_exec backend contract; structured Clay runtime/effect implementation must converge on the same DB-resident profile + inference_generate contract. zero_blog additionally requires pipeline-generated public state box and atomic study-row persistence. Style-frame configuration must remain application data and must never leak into canonical embodiment/world-state. Real remote and real local model quality acceptance runs remain."
+    "native_source_reproducibility": "BLOCKED: canonical native/mini_entity.c and credited ELF bytes are absent from current main, so the credited 0.6 sandbox artifact cannot yet be independently rebuilt or byte-verified from repository bytes",
+    "structured_runtime_convergence": "OPEN: BLOGPOST_ENTITY.clay already names pipeline_profile_read + inference_generate with DB-resident profile semantics, while the Python reference runtime/tests still encode the older external-profile provider_chat_json contract",
+    "current_gap": "Close native artifact reproducibility by binding exact native source bytes/source digest and build environment to the credited or freshly rebuilt ELF. Then implement zero_blog's pipeline-generated public state box and atomic study-row persistence through generic configurable machinery, converge the structured Clay runtime/effect implementation on DB-resident profile + inference_generate, preserve the style/world split, and run real remote/local model quality acceptance."
   },
-  "current_frontier": "Implement the zero_blog public state box and DB-resident study record while preserving the new style/world split: strong hidden Gasthaus-engineer-to-Maurer storytelling frame for prose quality, zero imposed factual embodiment in public narrative or canonical state; then converge structured Clay and run real-provider/model acceptance.",
+  "current_frontier": "First close native artifact reproducibility: recover or commit the exact native mini_entity.c source (or perform a fresh source-bound rebuild), bind compiler/dependency identities and ELF SHA-256, and retain the provenance gate. Then implement the generic configurable post-render/state-box + atomic study payload for zero_blog without putting Zero/blog semantics into executable identity; converge structured Clay and run real-provider/model acceptance.",
   "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist on this same neutral pipeline + configurable DB only.",
   "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
   "together_api": "FORBIDDEN"

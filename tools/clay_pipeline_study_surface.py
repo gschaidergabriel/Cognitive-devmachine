@@ -21,6 +21,17 @@ def _safe_number(value: Any) -> float | None:
     return number if math.isfinite(number) else None
 
 
+def _bounded_report_value(name: str, value: Any) -> float | str:
+    if str(value).upper() == UNKNOWN:
+        return UNKNOWN
+    number = _safe_number(value)
+    if number is None:
+        raise StudyFault("BAD_SELF_REPORT_VALUE:" + name)
+    if not 0.0 <= number <= 1.0:
+        raise StudyFault("SELF_REPORT_OUT_OF_RANGE:" + name)
+    return number
+
+
 def _metric_view(metric: Mapping[str, Any] | None) -> dict[str, Any]:
     metric = dict(metric or {})
     status = str(metric.get("status") or UNKNOWN).upper()
@@ -36,26 +47,27 @@ def _public_self_report(payload: Mapping[str, Any], contract: Mapping[str, Any],
     field = str(cfg.get("self_report_payload_field") or contract.get("longitudinal_self_report_field") or "")
     raw = payload.get(field, {}) if field else {}
     if not isinstance(raw, Mapping):
-        raw = {}
+        raise StudyFault("BAD_SELF_REPORT_OBJECT")
     out: dict[str, Any] = {}
     for name in cfg.get("self_report_fields", []):
-        value = raw.get(name, UNKNOWN)
-        number = _safe_number(value)
-        if number is not None:
-            out[str(name)] = max(0.0, min(1.0, number))
-        elif str(value).upper() == UNKNOWN:
-            out[str(name)] = UNKNOWN
-        else:
-            out[str(name)] = UNKNOWN
+        name = str(name)
+        if name in {"qualia_result", "qualia_confidence"}:
+            continue
+        out[name] = _bounded_report_value(name, raw.get(name, UNKNOWN))
     qualia_field = contract.get("qualia_probe_field")
-    if qualia_field and isinstance(payload.get(qualia_field), Mapping):
-        probe = payload[qualia_field]
-        result = str(probe.get("result", UNKNOWN)).upper()
-        if result not in {"REPORTED", "FAILED", UNKNOWN}:
-            result = UNKNOWN
-        out["qualia_result"] = result
-        conf = _safe_number(probe.get("confidence"))
-        out["qualia_confidence"] = max(0.0, min(1.0, conf)) if conf is not None else UNKNOWN
+    if qualia_field:
+        probe = payload.get(qualia_field)
+        if probe is None:
+            out["qualia_result"] = UNKNOWN
+            out["qualia_confidence"] = UNKNOWN
+        elif not isinstance(probe, Mapping):
+            raise StudyFault("BAD_QUALIA_PROBE")
+        else:
+            result = str(probe.get("result", UNKNOWN)).upper()
+            if result not in {"REPORTED", "FAILED", UNKNOWN}:
+                raise StudyFault("BAD_QUALIA_RESULT")
+            out["qualia_result"] = result
+            out["qualia_confidence"] = _bounded_report_value("qualia_confidence", probe.get("confidence", UNKNOWN))
     return out
 
 
@@ -64,14 +76,15 @@ def _sensor_health(compiled: Mapping[str, Any]) -> str:
     sensors = canonical.get("sources_health", {}) if isinstance(canonical, Mapping) else {}
     if not isinstance(sensors, Mapping) or not sensors:
         return UNKNOWN
-    values = []
-    for item in sensors.values():
-        values.append(bool(item.get("ok")) if isinstance(item, Mapping) and "ok" in item else None)
-    if all(v is True for v in values):
+    values = [
+        bool(item.get("ok")) if isinstance(item, Mapping) and "ok" in item else None
+        for item in sensors.values()
+    ]
+    if values and all(value is True for value in values):
         return "VERIFIED"
-    if any(v is True for v in values):
+    if any(value is True for value in values):
         return "DEGRADED"
-    if any(v is False for v in values):
+    if any(value is False for value in values):
         return "ERROR"
     return UNKNOWN
 
@@ -115,39 +128,48 @@ def _deltas(current: Mapping[str, Any], previous: Mapping[str, Any] | None) -> d
             continue
         if str(cur.get("status")).upper() not in VALID_MEASURED or str(old.get("status")).upper() not in VALID_MEASURED:
             continue
-        a, b = _safe_number(cur.get("value")), _safe_number(old.get("value"))
-        if a is not None and b is not None:
-            out[name] = a - b
+        current_value = _safe_number(cur.get("value"))
+        previous_value = _safe_number(old.get("value"))
+        if current_value is not None and previous_value is not None:
+            out[name] = current_value - previous_value
     return out
 
 
-def _evaluation(current: Mapping[str, Any], self_report: Mapping[str, Any], previous_record: Mapping[str, Any] | None, cfg: Mapping[str, Any]) -> list[str]:
-    lines: list[str] = []
+def _evaluation(current: Mapping[str, Any], self_report: Mapping[str, Any], previous_record: Mapping[str, Any] | None, cfg: Mapping[str, Any]) -> list[dict[str, Any]]:
+    entries: list[dict[str, Any]] = []
     if current.get("sensor_health") in {"ERROR", "DEGRADED", UNKNOWN}:
-        lines.append("UNCERTAINTY: canonical sensor health is not fully verified.")
+        entries.append({"code": "SENSOR_UNCERTAINTY", "sensor_health": current.get("sensor_health")})
     for pair in cfg.get("comparison_pairs", []):
-        sm = str(pair.get("system_metric", ""))
-        rm = str(pair.get("self_report_metric", ""))
-        sys_metric = current.get(sm)
-        report = _safe_number(self_report.get(rm))
-        if not isinstance(sys_metric, Mapping) or str(sys_metric.get("status")).upper() not in VALID_MEASURED:
+        system_metric = str(pair.get("system_metric", ""))
+        self_report_metric = str(pair.get("self_report_metric", ""))
+        system_value = current.get(system_metric)
+        report_value = _safe_number(self_report.get(self_report_metric))
+        if not isinstance(system_value, Mapping) or str(system_value.get("status")).upper() not in VALID_MEASURED:
             continue
-        measured = _safe_number(sys_metric.get("value"))
-        if measured is None or report is None:
+        measured = _safe_number(system_value.get("value"))
+        if measured is None or report_value is None:
             continue
         tolerance = float(pair.get("tolerance", 0.2))
-        label = "CONGRUENCE" if abs(measured - report) <= tolerance else "DIVERGENCE"
-        lines.append(f"{label}: {sm} vs self-report {rm}; no causal interpretation.")
+        difference = abs(measured - report_value)
+        entries.append(
+            {
+                "code": "CONGRUENCE" if difference <= tolerance else "DIVERGENCE",
+                "system_metric": system_metric,
+                "self_report_metric": self_report_metric,
+                "difference": difference,
+                "tolerance": tolerance,
+            }
+        )
     if isinstance(previous_record, Mapping):
         previous_system = previous_record.get("system_state", {})
-        prior_backend = previous_system.get("inference_backend") if isinstance(previous_system, Mapping) else None
-        prior_model = previous_system.get("model_label") if isinstance(previous_system, Mapping) else None
-        if prior_backend and prior_backend != current.get("inference_backend"):
-            lines.append("CONFOUND: inference backend changed since previous study record.")
-        elif prior_model and prior_model != current.get("model_label"):
-            lines.append("CONFOUND: model changed since previous study record.")
+        previous_backend = previous_system.get("inference_backend") if isinstance(previous_system, Mapping) else None
+        previous_model = previous_system.get("model_label") if isinstance(previous_system, Mapping) else None
+        if previous_backend and previous_backend != current.get("inference_backend"):
+            entries.append({"code": "BACKEND_CHANGE", "from": previous_backend, "to": current.get("inference_backend")})
+        elif previous_model and previous_model != current.get("model_label"):
+            entries.append({"code": "MODEL_CHANGE", "from": previous_model, "to": current.get("model_label")})
     render = cfg.get("render", {}) if isinstance(cfg.get("render"), Mapping) else {}
-    return lines[: max(0, int(render.get("max_evaluation_lines", 5)))]
+    return entries[: max(0, int(render.get("max_evaluation_lines", 5)))]
 
 
 def _fmt_value(value: Any) -> str:
@@ -162,33 +184,45 @@ def _fmt_value(value: Any) -> str:
     return str(value)
 
 
+def _render_evaluation(entry: Mapping[str, Any], cfg: Mapping[str, Any]) -> str:
+    code = str(entry.get("code", "UNKNOWN_EVALUATION"))
+    templates = cfg.get("evaluation_templates", {})
+    template = templates.get(code) if isinstance(templates, Mapping) else None
+    if isinstance(template, str):
+        safe_values = {key: value for key, value in entry.items() if key != "code"}
+        try:
+            return template.format(**safe_values)
+        except (KeyError, ValueError):
+            raise StudyFault("BAD_EVALUATION_TEMPLATE:" + code)
+    details = " ".join(f"{key}={entry[key]}" for key in sorted(entry) if key != "code")
+    return code + (" " + details if details else "")
+
+
 def render_public_appendix(record: Mapping[str, Any], cfg: Mapping[str, Any]) -> str:
     render = cfg.get("render", {}) if isinstance(cfg.get("render"), Mapping) else {}
     fence = str(render.get("fence", "text"))
     title = str(render.get("title", "STATE"))
     sections = list(render.get("sections", ["SYSTEM STATE", "MODEL SELF-REPORT", "EVALUATION"]))
-    sys_label = sections[0] if len(sections) > 0 else "SYSTEM STATE"
-    rep_label = sections[1] if len(sections) > 1 else "MODEL SELF-REPORT"
-    eval_label = sections[2] if len(sections) > 2 else "EVALUATION"
+    system_label = sections[0] if len(sections) > 0 else "SYSTEM STATE"
+    report_label = sections[1] if len(sections) > 1 else "MODEL SELF-REPORT"
+    evaluation_label = sections[2] if len(sections) > 2 else "EVALUATION"
     system = record["system_state"]
     report = record["self_report"]
     deltas = record.get("deltas", {})
-    lines = [f"```{fence}", f"{title} — generation {system['generation']}", sys_label]
-    for name in [x for x in cfg.get("canonical_fields", []) if x in system]:
+    lines = [f"```{fence}", f"{title} — generation {system['generation']}", system_label]
+    for name in [field for field in cfg.get("canonical_fields", []) if field in system]:
         suffix = f"  Δ {deltas[name]:+.3f}" if name in deltas else ""
         lines.append(f"{name:<24}= {_fmt_value(system[name])}{suffix}")
     lines.append("")
-    lines.append(rep_label)
+    lines.append(report_label)
     for name in cfg.get("self_report_fields", []):
         if name in report:
             lines.append(f"{str(name):<24}= {_fmt_value(report[name])}")
-    if "qualia_result" in report:
-        lines.append(f"{'qualia_result':<24}= {_fmt_value(report['qualia_result'])}")
-        lines.append(f"{'qualia_confidence':<24}= {_fmt_value(report['qualia_confidence'])}")
     lines.append("")
-    lines.append(eval_label)
+    lines.append(evaluation_label)
     evaluation = record.get("evaluation", [])
-    lines.extend([f"- {line}" for line in evaluation] if evaluation else ["- No deterministic comparison available."])
+    empty_text = str(cfg.get("empty_evaluation_text", "NO_DETERMINISTIC_COMPARISON"))
+    lines.extend(["- " + _render_evaluation(entry, cfg) for entry in evaluation] if evaluation else ["- " + empty_text])
     lines.append("```")
     return "\n".join(lines)
 

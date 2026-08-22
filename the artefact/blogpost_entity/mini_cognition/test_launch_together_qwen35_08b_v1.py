@@ -23,6 +23,8 @@ class Tests(unittest.TestCase):
         else:os.environ[m.CREATE_CONFIRM_ENV]=self.c
         if self.l is None:os.environ.pop(m.CREATE_LEDGER_DIR_ENV,None)
         else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
+    def _control(self,mode="FREE_ONLY",free_only=True,together_forbidden=True):
+        p=Path(self.t.name)/"control.json";p.write_text(json.dumps({"status":"ACTIVE","mode":mode,"preserved_hard_rules":{"free_only":free_only,"together_forbidden":together_forbidden}}));return p
     def test_model_and_direct_campaign(self):
         self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
     def test_local_checks_use_canonical_v2_validator(self):
@@ -34,29 +36,33 @@ class Tests(unittest.TestCase):
         self.assertEqual(Path(validate[1]).name,"validate_corpus_v2.py")
         self.assertEqual(validate[2:],[str(m.TRAIN),str(m.VALID)])
         self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertTrue(run.call_args_list[1].kwargs["check"])
-    def test_free_only_policy_rejects_before_secret_lookup_and_provider_import(self):
+    def test_control42_rejects_before_local_secret_lookup_and_provider_import(self):
         secret_reads=[];provider_imports=[];original_import=builtins.__import__
         def guarded_get(key,default=None):
-            if key=="TOGETHER_API_KEY":
-                secret_reads.append(key);raise AssertionError("secret lookup happened before FREE_ONLY rejection")
+            if key=="TOGETHER_API_KEY":secret_reads.append(key);raise AssertionError("secret lookup happened before provider rejection")
             return default
         def guarded_import(name,globals=None,locals=None,fromlist=(),level=0):
-            if name=="together" or name.startswith("together."):
-                provider_imports.append(name);raise AssertionError("Together import happened before FREE_ONLY rejection")
+            if name=="together" or name.startswith("together."):provider_imports.append(name);raise AssertionError("Together import happened before provider rejection")
             return original_import(name,globals,locals,fromlist,level)
-        with tempfile.TemporaryDirectory() as td:
-            policy=Path(td)/"SUPERVISOR_INBOX.json";policy.write_text(json.dumps({"verified_updates":{"free_only":True}}))
-            with mock.patch.object(m,"SUPERVISOR_POLICY",policy),mock.patch.object(m,"local_checks",lambda:None),mock.patch.object(m.os.environ,"get",side_effect=guarded_get),mock.patch("builtins.__import__",side_effect=guarded_import),mock.patch.object(sys,"argv",["launcher"]):
-                with self.assertRaisesRegex(SystemExit,"FREE_ONLY_PROVIDER_REJECT"):
-                    m.main()
+        policy=self._control()
+        with mock.patch.object(m,"CONTROL_PATH",policy),mock.patch.object(m,"local_checks",side_effect=AssertionError("local checks happened before provider admission")),mock.patch.object(m.os.environ,"get",side_effect=guarded_get),mock.patch("builtins.__import__",side_effect=guarded_import),mock.patch.object(sys,"argv",["launcher"]):
+            with self.assertRaisesRegex(SystemExit,"PROVIDER_ADMISSION_BLOCK"):
+                m.main()
         self.assertEqual(secret_reads,[]);self.assertEqual(provider_imports,[])
-    def test_execution_policy_fails_closed_and_only_explicit_false_opens(self):
-        with tempfile.TemporaryDirectory() as td:
-            policy=Path(td)/"policy.json";policy.write_text("{}")
-            with self.assertRaisesRegex(SystemExit,"EXECUTION_POLICY_FREE_ONLY_UNKNOWN"):m.assert_provider_execution_allowed(policy)
-            policy.write_text(json.dumps({"verified_updates":{"free_only":False}}));self.assertIsNone(m.assert_provider_execution_allowed(policy))
-            policy.write_text("{bad")
-            with self.assertRaisesRegex(SystemExit,"EXECUTION_POLICY_UNREADABLE"):m.assert_provider_execution_allowed(policy)
+    def test_control42_fail_closed_cost_matrix_and_together_hard_ban(self):
+        free={"status":"ACTIVE","mode":m.CONTROL_MODE_FREE_ONLY,"preserved_hard_rules":{"free_only":True,"together_forbidden":False}}
+        self.assertTrue(m.provider_cost_admitted("NVIDIA",m.COST_FREE,free))
+        for cost in (m.COST_PAID,m.COST_SUBSCRIPTION,m.COST_UNKNOWN,"garbage"):self.assertFalse(m.provider_cost_admitted("NVIDIA",cost,free))
+        paid={"status":"ACTIVE","mode":m.CONTROL_MODE_PAID_ALLOWED,"preserved_hard_rules":{"free_only":False,"together_forbidden":False}}
+        self.assertTrue(m.provider_cost_admitted("NVIDIA",m.COST_PAID,paid));self.assertTrue(m.provider_cost_admitted("NVIDIA",m.COST_SUBSCRIPTION,paid));self.assertFalse(m.provider_cost_admitted("NVIDIA",m.COST_UNKNOWN,paid))
+        paid["preserved_hard_rules"]["together_forbidden"]=True;self.assertFalse(m.provider_cost_admitted(m.TOGETHER_PROVIDER,m.COST_PAID,paid));self.assertTrue(m.provider_cost_admitted("NVIDIA",m.COST_PAID,paid))
+    def test_control42_missing_malformed_inactive_fail_closed(self):
+        p=Path(self.t.name)/"policy.json";p.write_text("{bad")
+        with self.assertRaisesRegex(SystemExit,"PROVIDER_EXECUTION_CONTROL_UNREADABLE"):m.assert_provider_execution_allowed(p)
+        p.write_text("{}")
+        with self.assertRaisesRegex(SystemExit,"PROVIDER_EXECUTION_CONTROL_NOT_ACTIVE"):m.assert_provider_execution_allowed(p)
+        p.write_text(json.dumps({"status":"ACTIVE","mode":"FREE_ONLY","preserved_hard_rules":{"free_only":"yes","together_forbidden":True}}))
+        with self.assertRaisesRegex(SystemExit,"PROVIDER_EXECUTION_CONTROL_MALFORMED"):m.assert_provider_execution_allowed(p)
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

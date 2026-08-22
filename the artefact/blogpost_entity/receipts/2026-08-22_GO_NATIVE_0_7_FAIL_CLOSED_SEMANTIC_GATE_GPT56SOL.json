@@ -1,0 +1,106 @@
+{
+  "schema": "mini-entity-native-0.7-semantic-gate-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "canonical_semantic_audit_sha": "5b6ebca899f8692d767b17402fb83e664c9f0bfb",
+  "candidate_branch": "gpt56sol/go-mini-native-env-isolation-20260822-1310",
+  "candidate_entry_blob": "ce100598366ae14f944dec385e442a13af266982",
+  "candidate_gate_blob": "c1c7bf361dc1e32221162ee11974b41e57375634",
+  "candidate_env_helper_blob": "181c0de78724936fa900458ea4c1990ca955ed3f",
+  "candidate_integration_test_blob": "6791f53c63ae1b34bb0e5885a932583b9ef66d78",
+  "canonical_builder_blob": "5be466c256930936f3dc9597323eb7e0e8b41804",
+  "source_binding": {
+    "entry_git_blob_recomputed_exactly": true,
+    "gate_git_blob_recomputed_exactly": true,
+    "source_closure_file_count": 8,
+    "source_closure_sha256": "37a5f85eac8fb0f9018428b09a2c1b601b2d0987a149c86a251bd9436e7fa2fd",
+    "repeat_builds": 2,
+    "repeat_byte_identity": true,
+    "binary_sha256": "a27cdbcdf7909f4129a3a32dba37e94950c2f5cd6c77eab2e8f8f95506172338",
+    "elf_build_id": "764d205396ba198f03ebf8816a8547ce82d24412",
+    "version": "mini-entity/0.7.0-dev1"
+  },
+  "implemented_boundary": {
+    "location": "post-inference, immediately before canonical commit_run",
+    "profile_opt_in": "gate object",
+    "checks": [
+      "exact canonical_state_hash echo when require_hash_echo is enabled",
+      "exact packet_hash echo when require_hash_echo is enabled",
+      "configured required output-contract fields",
+      "title/intro/sections field types",
+      "configured case-insensitive POSIX regex leak_patterns",
+      "section evidence requirement",
+      "evidence refs restricted to offered native event ids or quiet:verified on a verified empty packet",
+      "non-empty state_claims rejected fail-closed until native VERIFIED metric compilation exists"
+    ],
+    "prompt_context": [
+      "canonical_state_hash",
+      "packet_hash",
+      "allowed_evidence_refs",
+      "explicit no-native-verified-metrics state_claim policy"
+    ],
+    "legacy_profile_without_gate": "preserved"
+  },
+  "ordinary_falsifier_matrix": {
+    "wrong_canonical_hash": "PASS_REJECTED_NO_COMMIT",
+    "wrong_packet_hash": "PASS_REJECTED_NO_COMMIT",
+    "missing_required_field": "PASS_REJECTED_NO_COMMIT",
+    "configured_leak_pattern": "PASS_REJECTED_NO_COMMIT",
+    "section_without_evidence": "PASS_REJECTED_NO_COMMIT",
+    "unknown_evidence_ref": "PASS_REJECTED_NO_COMMIT",
+    "nonempty_state_claim": "PASS_REJECTED_AS_UNVERIFIED_NO_COMMIT",
+    "valid_payload": "PASS_COMMIT_GENERATION_1_OUTPUT_1_STUDY_1_EVENT_CONSUMED_1",
+    "valid_second_quiet_turn": "PASS_COMMIT_GENERATION_2_SOURCE_COUNT_0_EVENT_STILL_CONSUMED_ONCE",
+    "legacy_no_gate_profile": "PASS_COMMIT_GENERATION_1"
+  },
+  "rejection_invariant": {
+    "for_each_of_seven_negative_cases": {
+      "process_exit_code": 2,
+      "generation": 0,
+      "outputs": 0,
+      "study_rows": 0,
+      "source_event_consumed_generation": null,
+      "sqlite_integrity_check": "ok"
+    }
+  },
+  "combined_env_and_gate_check": {
+    "parent_canaries": [
+      "MISTRAL_API_KEY",
+      "OPENAI_API_KEY",
+      "GITHUB_TOKEN",
+      "AWS_SECRET_ACCESS_KEY",
+      "CLAY_AMBIENT_SECRET_CANARY"
+    ],
+    "child_environment_keys": ["LANG", "LC_ALL", "PATH", "TZ"],
+    "canaries_absent": true,
+    "gated_turn_committed": true,
+    "sqlite_integrity_check": "ok"
+  },
+  "epistemic_boundary": {
+    "classification": "SAFETY_GATE_PARTIAL_SEMANTIC_PARITY_NOT_YET_ACHIEVED",
+    "reason": "the current native event pipeline still lacks the canonical reference compiler for source adapters, canonical probes, configured state_metrics and VERIFIED metric evidence; therefore overshoot and metric-evidence parity cannot be truthfully implemented yet",
+    "safety_choice": "reject all non-empty state_claims rather than minting or approximating VERIFIED metrics",
+    "still_open": [
+      "canonical generic pipeline_compile parity for profile-driven sources/probes/state_metrics",
+      "specific VERIFIED metric max_claim_overshoot and metric evidence-ref validation after that compiler exists",
+      "canonical prompt/context parity over compiled canonical state and personality_state",
+      "atomic fault injection beyond inference/gate rejection, including late commit/CAS faults",
+      "real local-model quality acceptance",
+      "real authorized remote-provider acceptance"
+    ]
+  },
+  "unusual_experiment_accounting": {
+    "count_for_this_user_triggered_go": 1,
+    "experiment": "Ambient Secret Canary",
+    "this_receipt_adds_new_unusual_experiment": false,
+    "matrix_classification": "ordinary deterministic regressions required by the current main semantic parity audit"
+  },
+  "runtime": "isolated OpenAI Linux container",
+  "vps_used": false,
+  "together_api_used": false,
+  "real_provider_call": false,
+  "real_local_model_call": false,
+  "acceptance": "IN_PROGRESS"
+}

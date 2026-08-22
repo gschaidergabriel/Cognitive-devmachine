@@ -6,6 +6,7 @@ on:
       - 'the artefact/blogpost_entity/BLOGPOST_ENTITY.clay'
       - 'the artefact/blogpost_entity/test_blogpost_entity.py'
       - 'the artefact/blogpost_entity/test_zero_blog_preset.py'
+      - 'the artefact/blogpost_entity/test_epistemic_unknown_not_zero.py'
       - 'tools/clay_profile_pipeline_runtime.py'
       - 'tools/claycode_structured_backend.py'
       - '.github/workflows/mini-entity-structured-sandbox.yml'
@@ -35,3 +36,4 @@ jobs:
           python -m pytest -q -k 'not preset_amputation'
           'the artefact/blogpost_entity/test_blogpost_entity.py'
           'the artefact/blogpost_entity/test_zero_blog_preset.py'
+          'the artefact/blogpost_entity/test_epistemic_unknown_not_zero.py'

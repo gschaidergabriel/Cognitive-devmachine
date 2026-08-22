@@ -56,6 +56,8 @@ def attest_config_bytes(model: str, revision: str, raw: bytes) -> dict[str, Any]
     value = json.loads(raw.decode("utf-8"))
     if not isinstance(value, dict):
         raise ValueError("Hugging Face config must be a JSON object")
+    # Validate the semantic fields at attestation time so malformed remote bytes never
+    # acquire provenance merely because they parsed as JSON.
     _one_arch(value, "attested")
     _model_type(value, "attested")
     value = dict(value)

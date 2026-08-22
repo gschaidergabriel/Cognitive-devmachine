@@ -1,0 +1,57 @@
+{
+  "schema": "clay-go-persisted-string-gate-repair/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "issue": 857,
+  "base_main_sha": "985a845be95d57fb6cedb28f70bf9548bccd1085",
+  "scope": "structured canonical runtime leak/secret gate repair over every string value in the complete output payload that may be persisted",
+  "observed_defect": {
+    "vulnerable_runtime_blob": "69e88bb4a86093d9f11e4fa95114f454c741bfb1",
+    "behavior": "title, intro and section text were scanned, while continuity, autobiographical hypotheses and arbitrary additional payload fields could be persisted without the same leak-pattern/active-secret scan",
+    "persistence_boundary": "eos_pipeline_outputs stores the complete payload; eos_pipeline_state separately stores continuity and autobiographical hypotheses"
+  },
+  "repair": {
+    "runtime_blob": "fa3031ac7bf4cea6a12c57f781c29c9c3650ebef",
+    "test_blob": "089432a7e7175ea53167f44bf2288f43f54d8e96",
+    "workflow_blob": "f34bb60d688c089dc80ce122df369c7c290659b6",
+    "law": "recursively inspect all JSON string values in the complete payload before semantic/evidence admission; do not treat object keys as leak-bearing values; keep schema/evidence/state-claim validation separate"
+  },
+  "bounded_mechanism_falsifier": {
+    "status": "PASS",
+    "cases": [
+      "leak pattern in continuity rejected",
+      "leak pattern in autobiographical hypotheses rejected",
+      "leak pattern in deeply nested additional field rejected",
+      "active secret in continuity rejected",
+      "active secret in autobiographical hypotheses rejected",
+      "active secret in deeply nested additional field rejected",
+      "sentinel only in object key remains admitted by value-scan policy"
+    ],
+    "scope": "algorithm/mechanism execution in isolated Python scratch; exact repository integration runtime requires the PR workflow to actually start"
+  },
+  "exact_pr_gate": {
+    "workflow": ".github/workflows/pipeline-persisted-string-scan-pr.yml",
+    "required": [
+      "checkout exact PR head",
+      "print and bind GITHUB_SHA/git HEAD",
+      "record runtime/test Git blob identities",
+      "py_compile focused files",
+      "run tools/test_clay_profile_pipeline_persisted_string_scan.py with PYTHONPATH=tools"
+    ],
+    "runtime_result": "PENDING_PR_RUN"
+  },
+  "unusual_experiment_accounting": {
+    "new_experiment_consumed": false,
+    "already_consumed_on_main": "bfd318c6f35a0b8b32b60c7cbaa404801f22c997",
+    "note": "this repair and regression are follow-up falsifier closure, not a second unusual macro-cycle experiment"
+  },
+  "provider_actions": {
+    "network": false,
+    "secrets_used": false,
+    "together_called": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "claim_boundary": "SOURCE_PLUS_BOUNDED_MECHANISM_SUPPORTED_PENDING_EXACT_PR_RUNTIME; no native whole acceptance, structured whole-pipeline acceptance, provider admission, training or whole Mini Entity PASS"
+}

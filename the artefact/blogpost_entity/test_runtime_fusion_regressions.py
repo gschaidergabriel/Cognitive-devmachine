@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sqlite3
 from pathlib import Path
 
 from tools.clay_profile_pipeline_runtime import ProfilePipelineRuntime
@@ -68,6 +69,19 @@ def _study_surface() -> dict:
     }
 
 
+def _commit_payload() -> dict:
+    return {
+        "canonical_state_hash_seen": "canonical",
+        "packet_hash_seen": "packet",
+        "title": "safe title",
+        "intro": "safe intro",
+        "sections": [{"text": "safe body", "evidence": ["e:1"], "claims": {}}],
+        "thread": "continue",
+        "hypotheses": "unknown",
+        "self_report": {"uncertainty": 0.4},
+    }
+
+
 def test_jsonl_limit_never_advances_cursor_past_unprocessed_complete_lines(tmp_path: Path):
     """Regression: bounded JSONL reads must not silently discard later evidence."""
     stream = tmp_path / "events.jsonl"
@@ -110,6 +124,100 @@ def test_jsonl_limit_never_advances_cursor_past_unprocessed_complete_lines(tmp_p
     )
     assert second["ok"] is True
     assert [row["n"] for row in second["sources"]["log"]["rows"]] == [2, 3]
+
+
+def test_required_missing_file_adapters_are_unhealthy_not_quiet(tmp_path: Path):
+    """A missing required file is UNKNOWN/ERROR, never a verified empty observation."""
+    runtime = ProfilePipelineRuntime(root=tmp_path)
+    entity_db = str(tmp_path / "entity.db")
+    source_db = str(tmp_path / "source.db")
+    for adapter in ("json_snapshot", "jsonl_cursor"):
+        profile = _profile(
+            sources=[
+                {
+                    "kind": adapter,
+                    "adapter": adapter,
+                    "required_for_quiet": True,
+                    "path": str(tmp_path / (adapter + ".missing")),
+                    "limit": 2,
+                    "evidence_prefix": adapter + ":",
+                }
+            ]
+        )
+        result = runtime._pipeline_collect(
+            {
+                "entity_db": entity_db,
+                "source_db": source_db,
+                "profile": profile,
+                "previous": {"cursors": {}},
+            }
+        )
+        assert result["sources"][adapter]["ok"] is False
+        assert result["quiet_sensors_ok"] is False
+
+
+def test_malformed_required_jsonl_is_not_silently_consumed_as_quiet(tmp_path: Path):
+    """Malformed complete records must fail closed rather than disappear behind the cursor."""
+    stream = tmp_path / "malformed.jsonl"
+    stream.write_text("this-is-not-json\n", encoding="utf-8")
+    profile = _profile(
+        sources=[
+            {
+                "kind": "log",
+                "adapter": "jsonl_cursor",
+                "required_for_quiet": True,
+                "path": str(stream),
+                "limit": 2,
+                "evidence_prefix": "log:",
+            }
+        ]
+    )
+    runtime = ProfilePipelineRuntime(root=tmp_path)
+    result = runtime._pipeline_collect(
+        {
+            "entity_db": str(tmp_path / "entity.db"),
+            "source_db": str(tmp_path / "source.db"),
+            "profile": profile,
+            "previous": {"cursors": {}},
+        }
+    )
+    assert result["sources"]["log"]["ok"] is False
+    assert result["quiet_sensors_ok"] is False
+
+
+def test_sqlite_source_query_is_read_only_even_when_profile_requests_delete(tmp_path: Path):
+    """Profile-configured evidence SQL must never become a hidden write/effect path."""
+    source_db = tmp_path / "source.db"
+    with sqlite3.connect(source_db) as db:
+        db.execute("CREATE TABLE events(source_id TEXT PRIMARY KEY, value TEXT)")
+        db.execute("INSERT INTO events VALUES('one','keep-me')")
+    profile = _profile(
+        sources=[
+            {
+                "kind": "events",
+                "adapter": "sqlite_query",
+                "db": "source",
+                "query": "DELETE FROM events RETURNING source_id, value",
+                "id_field": "source_id",
+                "required_for_quiet": True,
+                "evidence_prefix": "event:",
+            }
+        ]
+    )
+    runtime = ProfilePipelineRuntime(root=tmp_path)
+    result = runtime._pipeline_collect(
+        {
+            "entity_db": str(tmp_path / "entity.db"),
+            "source_db": str(source_db),
+            "profile": profile,
+            "previous": {"cursors": {}},
+        }
+    )
+    with sqlite3.connect(source_db) as db:
+        remaining = db.execute("SELECT COUNT(*) FROM events").fetchone()[0]
+    assert remaining == 1
+    assert result["sources"]["events"]["ok"] is False
+    assert result["quiet_sensors_ok"] is False
 
 
 def test_leak_gate_recursively_scans_non_section_model_fields(tmp_path: Path):
@@ -174,16 +282,7 @@ def test_study_insert_failure_rolls_back_output_consumption_packet_and_generatio
             "BEGIN SELECT RAISE(ABORT, 'forced study failure'); END"
         )
 
-    payload = {
-        "canonical_state_hash_seen": "canonical",
-        "packet_hash_seen": "packet",
-        "title": "safe title",
-        "intro": "safe intro",
-        "sections": [{"text": "safe body", "evidence": ["e:1"], "claims": {}}],
-        "thread": "continue",
-        "hypotheses": "unknown",
-        "self_report": {"uncertainty": 0.4},
-    }
+    payload = _commit_payload()
     result = runtime._pipeline_commit(
         {
             "entity_db": entity_db,
@@ -221,3 +320,90 @@ def test_study_insert_failure_rolls_back_output_consumption_packet_and_generatio
         consumed = db.execute("SELECT COUNT(*) FROM eos_pipeline_consumed").fetchone()[0]
         studies = db.execute("SELECT COUNT(*) FROM eos_pipeline_studies").fetchone()[0]
     assert (generation, outputs, packets, consumed, studies) == (0, 0, 0, 0, 0)
+
+
+def test_previous_study_is_scoped_to_active_profile_not_latest_foreign_profile(tmp_path: Path):
+    """Switching application/persona must not contaminate longitudinal deltas across profiles."""
+    runtime = ProfilePipelineRuntime(root=tmp_path)
+    profile = _profile()
+    study_surface = _study_surface()
+    study_surface["canonical_fields"].append("cognitive_conflict")
+    profile["study_surface"] = study_surface
+    entity_db = str(tmp_path / "entity.db")
+    runtime.import_profile(entity_db, _profile())
+
+    own_previous = {
+        "schema": "clay-study-surface/v1",
+        "generation": 1,
+        "system_state": {
+            "inference_backend": "mock",
+            "model_label": "fixture",
+            "cognitive_conflict": {"status": "VERIFIED", "value": 0.1},
+        },
+        "self_report": {},
+        "deltas": {},
+        "evaluation": [],
+        "rendered_text": "own",
+    }
+    foreign_latest = {
+        "schema": "clay-study-surface/v1",
+        "generation": 2,
+        "system_state": {
+            "inference_backend": "other-backend",
+            "model_label": "other-model",
+            "cognitive_conflict": {"status": "VERIFIED", "value": 0.9},
+        },
+        "self_report": {},
+        "deltas": {},
+        "evaluation": [],
+        "rendered_text": "foreign",
+    }
+    with runtime._db(entity_db) as db:
+        runtime._ensure_schema(db)
+        db.execute("UPDATE eos_pipeline_state SET generation=2 WHERE singleton=1")
+        db.execute(
+            "INSERT INTO eos_pipeline_studies VALUES(?,?,?,?,?,?,?)",
+            ("own-1", 1, "fusion_regression", "clay-study-surface/v1", json.dumps(own_previous), "own", 1.0),
+        )
+        db.execute(
+            "INSERT INTO eos_pipeline_studies VALUES(?,?,?,?,?,?,?)",
+            ("foreign-2", 2, "other_profile", "clay-study-surface/v1", json.dumps(foreign_latest), "foreign", 2.0),
+        )
+
+    payload = _commit_payload()
+    result = runtime._pipeline_commit(
+        {
+            "entity_db": entity_db,
+            "profile": profile,
+            "previous": {"generation": 2},
+            "data": {
+                "collected": {"consume": [], "next_cursors": {}},
+                "compiled": {
+                    "canonical_state_hash": "canonical-3",
+                    "packet_hash": "packet-3",
+                    "source_count": 1,
+                    "canonical": {"sources_health": {"fixture": {"ok": True}}},
+                    "packet": {"quiet_sensors_ok": True},
+                    "personality_state": {
+                        "cognitive_conflict": {"status": "VERIFIED", "value": 0.2}
+                    },
+                },
+                "generated": {
+                    "payload": payload,
+                    "provider_kind": "mock",
+                    "inference_kind": "mock",
+                    "model": "fixture",
+                },
+                "gated": {"payload": payload},
+            },
+        }
+    )
+    assert result["ok"] is True
+    with runtime._db(entity_db) as db:
+        row = db.execute(
+            "SELECT study_json FROM eos_pipeline_studies WHERE output_id=?",
+            (result["output_id"],),
+        ).fetchone()
+    current = json.loads(row[0])
+    assert abs(current["deltas"]["cognitive_conflict"] - 0.1) < 1e-9
+    assert not any(item.get("code") in {"BACKEND_CHANGE", "MODEL_CHANGE"} for item in current["evaluation"])

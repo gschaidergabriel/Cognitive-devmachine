@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import sqlite3
 from pathlib import Path
 
 from tools.clay_profile_pipeline_runtime import ProfilePipelineRuntime
@@ -17,6 +16,7 @@ def _contract() -> dict:
         "section_claims_field": "claims",
         "continuity_field": "thread",
         "autobiographical_hypotheses_field": "hypotheses",
+        "longitudinal_self_report_field": "self_report",
     }
 
 
@@ -38,6 +38,32 @@ def _profile(*, sources: list[dict] | None = None) -> dict:
             "require_evidence_per_section": True,
             "max_claim_overshoot": 0.0,
             "leak_patterns": ["PRIVATE_LEAK"],
+        },
+    }
+
+
+def _study_surface() -> dict:
+    return {
+        "schema": "clay-study-surface/v1",
+        "profile_id": "fusion_regression",
+        "enabled": True,
+        "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
+        "self_report_payload_field": "self_report",
+        "canonical_fields": [
+            "generation",
+            "timestamp",
+            "inference_backend",
+            "model_label",
+            "source_count",
+            "sensor_health",
+            "quiet_status",
+        ],
+        "self_report_fields": ["uncertainty"],
+        "render": {
+            "fence": "text",
+            "title": "TEST STATE",
+            "sections": ["SYSTEM STATE", "MODEL SELF-REPORT", "EVALUATION"],
+            "max_evaluation_lines": 3,
         },
     }
 
@@ -117,8 +143,8 @@ def test_leak_gate_recursively_scans_non_section_model_fields(tmp_path: Path):
     assert "LEAK" in str(result.get("error", "")).upper()
 
 
-def test_runtime_schema_exposes_atomic_study_commit_surface(tmp_path: Path):
-    """State-box rows and rendered public text must live on the one canonical DB path."""
+def test_runtime_schema_has_one_canonical_study_table(tmp_path: Path):
+    """The study surface is persisted inside the same MiniUnifiedDB, not a side authority."""
     runtime = ProfilePipelineRuntime(root=tmp_path)
     db_path = str(tmp_path / "entity.db")
     with runtime._db(db_path) as db:
@@ -127,35 +153,71 @@ def test_runtime_schema_exposes_atomic_study_commit_surface(tmp_path: Path):
             row[0]
             for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
         }
-        output_columns = {
-            row[1]
-            for row in db.execute("PRAGMA table_info(eos_pipeline_outputs)").fetchall()
-        }
-    assert "eos_pipeline_study_records" in tables
-    assert {"public_text", "profile_hash"}.issubset(output_columns)
+    assert "eos_pipeline_studies" in tables
+    assert "eos_pipeline_outputs" in tables
+    assert "eos_pipeline_consumed" in tables
+    assert "eos_pipeline_state" in tables
 
 
-def test_study_insert_failure_can_roll_back_output_consumption_and_generation(tmp_path: Path):
-    """Ordinary fault-injection gate for the required single SQLite commit boundary."""
+def test_study_insert_failure_rolls_back_output_consumption_packet_and_generation(tmp_path: Path):
+    """Ordinary fault injection for the required single SQLite transaction boundary."""
     runtime = ProfilePipelineRuntime(root=tmp_path)
     profile = _profile()
+    profile["study_surface"] = _study_surface()
     entity_db = str(tmp_path / "entity.db")
-    runtime.import_profile(entity_db, profile)
+    runtime.import_profile(entity_db, _profile())
 
     with runtime._db(entity_db) as db:
         runtime._ensure_schema(db)
         db.execute(
-            "CREATE TRIGGER fail_study_insert BEFORE INSERT ON eos_pipeline_study_records "
+            "CREATE TRIGGER fail_study_insert BEFORE INSERT ON eos_pipeline_studies "
             "BEGIN SELECT RAISE(ABORT, 'forced study failure'); END"
         )
 
-    # The integrated implementation must route the study row through _pipeline_commit.
-    # This test deliberately asserts the post-failure invariant at the database boundary;
-    # the full-path fixture will be enabled once the state-box component is wired into
-    # the active DB profile on this fusion branch.
+    payload = {
+        "canonical_state_hash_seen": "canonical",
+        "packet_hash_seen": "packet",
+        "title": "safe title",
+        "intro": "safe intro",
+        "sections": [{"text": "safe body", "evidence": ["e:1"], "claims": {}}],
+        "thread": "continue",
+        "hypotheses": "unknown",
+        "self_report": {"uncertainty": 0.4},
+    }
+    result = runtime._pipeline_commit(
+        {
+            "entity_db": entity_db,
+            "profile": profile,
+            "previous": {"generation": 0},
+            "data": {
+                "collected": {
+                    "consume": [{"kind": "fixture", "id": "event-1"}],
+                    "next_cursors": {},
+                },
+                "compiled": {
+                    "canonical_state_hash": "canonical",
+                    "packet_hash": "packet",
+                    "source_count": 1,
+                    "canonical": {"sources_health": {"fixture": {"ok": True}}},
+                    "packet": {"quiet_sensors_ok": True},
+                    "personality_state": {},
+                },
+                "generated": {
+                    "payload": payload,
+                    "provider_kind": "mock",
+                    "inference_kind": "mock",
+                    "model": "fixture",
+                },
+                "gated": {"payload": payload},
+            },
+        }
+    )
+    assert result["ok"] is False
+
     with runtime._db(entity_db) as db:
         generation = db.execute("SELECT generation FROM eos_pipeline_state WHERE singleton=1").fetchone()[0]
         outputs = db.execute("SELECT COUNT(*) FROM eos_pipeline_outputs").fetchone()[0]
+        packets = db.execute("SELECT COUNT(*) FROM eos_pipeline_packets").fetchone()[0]
         consumed = db.execute("SELECT COUNT(*) FROM eos_pipeline_consumed").fetchone()[0]
-        studies = db.execute("SELECT COUNT(*) FROM eos_pipeline_study_records").fetchone()[0]
-    assert (generation, outputs, consumed, studies) == (0, 0, 0, 0)
+        studies = db.execute("SELECT COUNT(*) FROM eos_pipeline_studies").fetchone()[0]
+    assert (generation, outputs, packets, consumed, studies) == (0, 0, 0, 0, 0)

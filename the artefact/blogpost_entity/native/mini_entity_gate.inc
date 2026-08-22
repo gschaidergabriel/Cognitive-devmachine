@@ -55,7 +55,7 @@ static int native_eval_expr(json_object *expr,const packet_t *p,double *out){
         *out=acc;return 1;
     }
     if(!strcmp(op,"div")){
-        double a=0,b=0;if(!native_eval_expr(jget(expr,"a"),p,&a)||!native_eval_expr(jget(expr,"b"),p,&b))return 0;*out=(b==0.0)?0.0:a/b;return 1;
+        double a=0,b=0;if(!native_eval_expr(jget(expr,"a"),p,&a)||!native_eval_expr(jget(expr,"b"),p,&b))return 0;if(b==0.0)return 0;*out=a/b;return 1;
     }
     if(!strcmp(op,"clamp01")){
         double a=0;if(!native_eval_expr(jget(expr,"arg"),p,&a))return 0;if(a<0)a=0;if(a>1)a=1;*out=a;return 1;
@@ -102,7 +102,7 @@ static json_object *native_compile_metrics(json_object *profile,const packet_t *
     int n=json_object_array_length(specs);
     for(int i=0;i<n;i++){
         json_object *spec=json_object_array_get_idx(specs,i);
-        if(!spec||json_object_get_type(spec)!=json_type_object)continue;
+        if(!spec||json_object_get_type(specs)!=json_type_array)continue;
         const char *name=jstr(spec,"name",NULL);if(!name||!*name)continue;
         char default_ref[512];snprintf(default_ref,sizeof default_ref,"state:%s",name);
         const char *evidence_ref=jstr(spec,"evidence_ref",default_ref);

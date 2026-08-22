@@ -5,6 +5,11 @@ This tool does not make a build globally reproducible by declaration. It fails c
 unless repeated builds inside the same admitted environment produce identical ELF bytes,
 and it records the source/compiler/dependency/artifact identities needed to replicate or
 compare the build elsewhere.
+
+For split native sources, artifact identity is bound to the full transitive closure of
+quoted local #include files, not merely to the tiny entry translation unit. System/header
+identity outside that local source closure remains part of the bounded build environment,
+so this receipt still claims same-environment repeatability rather than global reproducibility.
 """
 from __future__ import annotations
 
@@ -23,6 +28,7 @@ from typing import Any
 
 
 DEFAULT_PACKAGES = ("sqlite3", "libcurl", "json-c")
+LOCAL_INCLUDE_RE = re.compile(r'^\s*#\s*include\s*"([^"]+)"')
 
 
 def sha256_file(path: Path) -> str:
@@ -31,6 +37,75 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: fh.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def source_closure(source: Path) -> dict[str, Any]:
+    """Return a deterministic identity for the entry file plus all quoted local includes.
+
+    Only files underneath the entry file's directory are admitted. Missing files, symlinks,
+    path escapes and non-UTF-8 local source fail closed. Angle-bracket/system headers are not
+    treated as repository source; their environment identity is bounded separately.
+    """
+    source = source.resolve()
+    root = source.parent.resolve()
+    if not source.is_file():
+        raise RuntimeError("SOURCE_MISSING:" + str(source))
+
+    pending = [source]
+    seen: set[Path] = set()
+    files: list[dict[str, Any]] = []
+
+    while pending:
+        current = pending.pop()
+        if current in seen:
+            continue
+        try:
+            relative = current.relative_to(root)
+        except ValueError as exc:
+            raise RuntimeError("LOCAL_INCLUDE_ESCAPES_ROOT:" + str(current)) from exc
+        if current.is_symlink():
+            raise RuntimeError("LOCAL_SOURCE_SYMLINK_FORBIDDEN:" + relative.as_posix())
+        if not current.is_file():
+            raise RuntimeError("LOCAL_INCLUDE_MISSING:" + relative.as_posix())
+
+        raw = current.read_bytes()
+        try:
+            text = raw.decode("utf-8")
+        except UnicodeDecodeError as exc:
+            raise RuntimeError("LOCAL_SOURCE_NOT_UTF8:" + relative.as_posix()) from exc
+
+        seen.add(current)
+        files.append(
+            {
+                "path": relative.as_posix(),
+                "size": len(raw),
+                "sha256": hashlib.sha256(raw).hexdigest(),
+            }
+        )
+
+        includes: list[Path] = []
+        for line in text.splitlines():
+            match = LOCAL_INCLUDE_RE.match(line)
+            if not match:
+                continue
+            include = (current.parent / match.group(1)).resolve()
+            try:
+                include.relative_to(root)
+            except ValueError as exc:
+                raise RuntimeError("LOCAL_INCLUDE_ESCAPES_ROOT:" + match.group(1)) from exc
+            if not include.is_file():
+                raise RuntimeError("LOCAL_INCLUDE_MISSING:" + match.group(1))
+            includes.append(include)
+        pending.extend(sorted(includes, key=lambda item: item.as_posix(), reverse=True))
+
+    files.sort(key=lambda item: item["path"])
+    canonical = json.dumps(files, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    closure_sha256 = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return {
+        "root": source.name,
+        "sha256": closure_sha256,
+        "files": files,
+    }
 
 
 def run(argv: list[str], *, env: dict[str, str] | None = None) -> str:
@@ -107,7 +182,7 @@ def compile_once(
     *,
     compiler_path: str,
     source: Path,
-    source_sha: str,
+    source_identity_sha: str,
     flags: list[str],
     env: dict[str, str],
     workdir: Path,
@@ -121,7 +196,7 @@ def compile_once(
         "-Wextra",
         "-Werror",
         "-Wno-deprecated-declarations",
-        f"-frandom-seed={source_sha}",
+        f"-frandom-seed={source_identity_sha}",
         f"-ffile-prefix-map={root}=/clay/native",
         f"-fdebug-prefix-map={root}=/clay/native",
         "-Wl,--build-id=sha1",
@@ -153,7 +228,9 @@ def main() -> int:
     if args.repeat < 2:
         raise SystemExit("REPEAT_MUST_BE_AT_LEAST_2")
 
-    source_sha = sha256_file(source)
+    entry_sha = sha256_file(source)
+    closure = source_closure(source)
+    source_identity_sha = str(closure["sha256"])
     compiler = compiler_identity(args.compiler)
     flags, package_versions = pkg_config(DEFAULT_PACKAGES)
     env = dict(os.environ)
@@ -176,7 +253,7 @@ def main() -> int:
             binary = compile_once(
                 compiler_path=compiler["path"],
                 source=source,
-                source_sha=source_sha,
+                source_identity_sha=source_identity_sha,
                 flags=flags,
                 env=env,
                 workdir=workdir,
@@ -200,7 +277,7 @@ def main() -> int:
         raise SystemExit("PUBLISHED_BINARY_HASH_MISMATCH")
 
     provenance = {
-        "schema": "mini-entity-native-build-provenance/v1",
+        "schema": "mini-entity-native-build-provenance/v2",
         "version_label": args.version_label,
         "subject": {
             "path": str(output),
@@ -208,7 +285,12 @@ def main() -> int:
             "elf_build_id": build_id(output),
         },
         "build_definition": {
-            "source": {"path": str(source), "sha256": source_sha},
+            "source": {
+                "path": str(source),
+                "entry_sha256": entry_sha,
+                "identity_sha256": source_identity_sha,
+                "closure": closure,
+            },
             "compiler": compiler,
             "pkg_config_packages": package_versions,
             "pkg_config_flags": flags,
@@ -218,7 +300,7 @@ def main() -> int:
             "repeat_byte_identity": len(set(hashes)) == 1,
             "fixed_environment": {"LC_ALL": "C", "LANG": "C", "TZ": "UTC"},
             "determinism_flags": [
-                f"-frandom-seed={source_sha}",
+                f"-frandom-seed={source_identity_sha}",
                 f"-ffile-prefix-map={source.parent.resolve()}=/clay/native",
                 f"-fdebug-prefix-map={source.parent.resolve()}=/clay/native",
                 "-Wl,--build-id=sha1",
@@ -226,12 +308,13 @@ def main() -> int:
         },
         "resolved_runtime_dependencies": linked_libraries(output),
         "generated_at_unix": time.time(),
-        "acceptance_scope": "SAME_ENV_REPEAT_BUILD_AND_PROVENANCE_BINDING_ONLY",
+        "acceptance_scope": "SAME_ENV_REPEAT_BUILD_AND_FULL_LOCAL_SOURCE_CLOSURE_BINDING_ONLY",
         "not_claimed": [
             "cross-environment reproducibility until independently rebuilt from the same recorded inputs",
+            "system-header byte identity beyond the recorded build environment",
             "model quality",
             "application acceptance",
-            "whole Mini Entity final acceptance"
+            "whole Mini Entity final acceptance",
         ],
     }
     receipt = args.receipt.resolve()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Fail-closed direct Together Full-FT launcher for ~1B ClayCode cognition."""
-import argparse, hashlib, json, os, subprocess, sys, time
+import argparse, hashlib, inspect, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
@@ -122,6 +122,13 @@ def create_payload(train_id,valid_id,suffix):
     # lora=False; estimate_price() intentionally keeps the nested estimate schema.
     return {"training_file":train_id,"validation_file":valid_id,"model":MODEL,"n_epochs":EPOCHS,"n_evals":EVALS,"n_checkpoints":1,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"suffix":suffix,"lora":False,"train_on_inputs":"auto","training_method":"sft"}
 
+def validate_create_payload_signature(create_callable,payload):
+    try:
+        inspect.signature(create_callable).bind(**payload)
+    except (TypeError,ValueError) as e:
+        raise SystemExit(f"CREATE_PAYLOAD_SDK_SIGNATURE_REJECT {type(e).__name__}: {e}") from e
+    return payload
+
 def _items(x):
     if x is None:return []
     if hasattr(x,"data"):return list(x.data or [])
@@ -149,7 +156,7 @@ def read_create_ledger(fp):
     except Exception as e:raise SystemExit(f"CREATE_LEDGER_UNREADABLE {p}: {e}") from e
 def assert_no_local_create_intent(fp):
     e=read_create_ledger(fp)
-    if e is not None: raise SystemExit(f"LOCAL_CREATE_INTENT_ABORT fingerprint={fp} status={e.get('status','UNKNOWN')}; reconcile provider state first")
+    if e is not None: raise SystemExit(f"LOCAL_CREATE_INTENT_ABORT fingerprint={fp} status={e.get('status','UNKNOWN')}; reconcile provider state first") from None
 def _fsync_dir(p):
     fd=os.open(str(p),os.O_RDONLY)
     try:os.fsync(fd)
@@ -163,6 +170,9 @@ def arm_create_intent(fp,suffix):
     except FileExistsError:assert_no_local_create_intent(fp);raise
     with os.fdopen(fd,"wb",closefd=True) as f:f.write(data);f.flush();os.fsync(f.fileno())
     _fsync_dir(d);return p
+def arm_create_intent_after_signature_check(create_callable,fp,suffix,train_id,valid_id):
+    payload=validate_create_payload_signature(create_callable,create_payload(train_id,valid_id,suffix))
+    return arm_create_intent(fp,suffix),payload
 def update_create_intent(p,status,job_id=None,error_class=None):
     payload=json.loads(Path(p).read_text());payload["status"]=status;payload["updated_unix"]=int(time.time())
     if job_id is not None:payload["job_id"]=str(job_id)
@@ -202,8 +212,9 @@ def main():
     if not est.allowed_to_proceed:raise SystemExit("Together price/admission endpoint does not allow this job")
     if price>MAX_USD:raise SystemExit(f"BUDGET_ABORT estimated ${price:.2f} > ${MAX_USD:.2f}")
     if not args.create:print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fp} for this exact create");return
-    assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix);intent=arm_create_intent(fp,suffix);cc=new_zero_retry_create_client(Together)
-    try:job=cc.fine_tuning.create(**create_payload(tf.id,vf.id,suffix))
+    assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix);cc=new_zero_retry_create_client(Together)
+    assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix);intent,payload=arm_create_intent_after_signature_check(cc.fine_tuning.create,fp,suffix,tf.id,vf.id)
+    try:job=cc.fine_tuning.create(**payload)
     except Exception as e:update_create_intent(intent,"UNKNOWN_REMOTE_CREATE",error_class=type(e).__name__);raise SystemExit("CREATE_OUTCOME_UNKNOWN; do not retry until exact provider reconciliation") from e
     update_create_intent(intent,"JOB_KNOWN",job_id=job.id)
     assert_created_job_seed(job)

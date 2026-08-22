@@ -1,0 +1,46 @@
+name: mini-entity-reference-convergence
+
+on:
+  pull_request:
+    paths:
+      - 'tools/clay_profile_pipeline_runtime.py'
+      - 'the artefact/blogpost_entity/BLOGPOST_ENTITY.clay'
+      - 'the artefact/blogpost_entity/check_structured_contract_sync.py'
+      - 'the artefact/blogpost_entity/test_blogpost_entity.py'
+      - 'the artefact/blogpost_entity/test_structured_contract_sync.py'
+      - 'the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json'
+      - 'the artefact/blogpost_entity/native/test_native_v2_parity_contract.py'
+      - '.github/workflows/mini-entity-reference-convergence.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  reference-convergence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install bounded test dependencies
+        run: python -m pip install --disable-pip-version-check pytest lark
+      - name: Compile reference surfaces
+        run: >-
+          python -m py_compile
+          tools/clay_profile_pipeline_runtime.py
+          'the artefact/blogpost_entity/check_structured_contract_sync.py'
+          'the artefact/blogpost_entity/test_blogpost_entity.py'
+          'the artefact/blogpost_entity/test_structured_contract_sync.py'
+          'the artefact/blogpost_entity/native/test_native_v2_parity_contract.py'
+      - name: Enforce canonical effect/arity convergence
+        run: python 'the artefact/blogpost_entity/check_structured_contract_sync.py'
+      - name: Run structured reference regressions
+        run: >-
+          python -m pytest
+          'the artefact/blogpost_entity/test_structured_contract_sync.py'
+          'the artefact/blogpost_entity/test_blogpost_entity.py'
+          -q
+      - name: Keep native v2 admission fail-closed while checking reference parity
+        run: python 'the artefact/blogpost_entity/native/test_native_v2_parity_contract.py'

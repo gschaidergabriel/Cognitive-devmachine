@@ -16,15 +16,30 @@ class TogetherCtor:
     def __init__(self,**kw):type(self).last=kw
 class Tests(unittest.TestCase):
     def setUp(self):
-        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
+        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.pm=os.environ.pop(m.PROVIDER_MODE_ENV,None);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
     def tearDown(self):
         m.TRAIN,m.VALID=self.ot,self.ov;self.t.cleanup()
         if self.c is None:os.environ.pop(m.CREATE_CONFIRM_ENV,None)
         else:os.environ[m.CREATE_CONFIRM_ENV]=self.c
         if self.l is None:os.environ.pop(m.CREATE_LEDGER_DIR_ENV,None)
         else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
+        if self.pm is None:os.environ.pop(m.PROVIDER_MODE_ENV,None)
+        else:os.environ[m.PROVIDER_MODE_ENV]=self.pm
     def test_model_and_direct_campaign(self):
         self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
+    def test_provider_cost_admission_is_fail_closed(self):
+        self.assertEqual(m.normalized_provider_mode(),m.PROVIDER_MODE_FREE_ONLY)
+        self.assertTrue(m.provider_cost_admitted(m.COST_FREE,m.PROVIDER_MODE_FREE_ONLY))
+        for cost in (m.COST_PAID,m.COST_SUBSCRIPTION,m.COST_UNKNOWN):self.assertFalse(m.provider_cost_admitted(cost,m.PROVIDER_MODE_FREE_ONLY))
+        self.assertTrue(m.provider_cost_admitted(m.COST_PAID,m.PROVIDER_MODE_PAID_ALLOWED))
+        self.assertTrue(m.provider_cost_admitted(m.COST_SUBSCRIPTION,m.PROVIDER_MODE_PAID_ALLOWED))
+        self.assertFalse(m.provider_cost_admitted(m.COST_UNKNOWN,m.PROVIDER_MODE_PAID_ALLOWED))
+        self.assertFalse(m.provider_cost_admitted(m.COST_FREE,"UNRECOGNIZED_MODE"))
+    def test_free_only_blocks_together_before_local_checks(self):
+        os.environ[m.PROVIDER_MODE_ENV]=m.PROVIDER_MODE_FREE_ONLY
+        with mock.patch.object(m,"local_checks") as local, mock.patch.object(m.sys,"argv",["launch_together_qwen35_08b_v1.py"]):
+            with self.assertRaises(SystemExit) as cm:m.main()
+        self.assertEqual(str(cm.exception),"PROVIDER_ADMISSION_BLOCK mode=FREE_ONLY cost_class=PAID");local.assert_not_called()
     def test_local_checks_use_canonical_v2_validator(self):
         with mock.patch.object(m.subprocess,"run") as run:
             m.local_checks()

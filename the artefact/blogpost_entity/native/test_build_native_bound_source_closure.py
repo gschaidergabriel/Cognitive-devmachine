@@ -81,6 +81,23 @@ class SourceClosureTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "LOCAL_SOURCE_SYMLINK_FORBIDDEN"):
                 subject.source_closure(alias)
 
+    def test_current_native_closure_binds_gate_engine(self) -> None:
+        here = Path(__file__).resolve().parent
+        closure = subject.source_closure(here / "mini_entity.c")
+        self.assertEqual(
+            [item["path"] for item in closure["files"]],
+            [
+                "mini_entity.c",
+                "mini_entity_gate.inc",
+                "mini_entity_part00.inc",
+                "mini_entity_part01.inc",
+                "mini_entity_part02.inc",
+                "mini_entity_part03.inc",
+                "mini_entity_part04.inc",
+            ],
+        )
+        self.assertEqual(len(closure["files"]), 7)
+
 
 if __name__ == "__main__":
     unittest.main()

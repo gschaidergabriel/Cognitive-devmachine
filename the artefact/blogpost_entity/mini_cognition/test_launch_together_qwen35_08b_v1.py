@@ -39,11 +39,20 @@ class Tests(unittest.TestCase):
         s="claycog08b-v2-dead";c=Client([{"id":"j","status":"running","model":m.MODEL,"model_output_name":"x"+s}])
         with self.assertRaises(SystemExit):m.assert_no_duplicate_campaign(c,s)
     def test_confirmation_and_private_intent(self):
-        fp="a"*64
-        with self.assertRaises(SystemExit):m.require_create_confirmation(fp)
-        os.environ[m.CREATE_CONFIRM_ENV]=fp;m.require_create_confirmation(fp)
+        fp="a"*64;price=4.0;auth=m.create_authorization_token(fp,price)
+        with self.assertRaises(SystemExit):m.require_create_confirmation(fp,price)
+        os.environ[m.CREATE_CONFIRM_ENV]=auth;self.assertEqual(m.require_create_confirmation(fp,price),auth)
         with tempfile.TemporaryDirectory() as td:
-            os.environ[m.CREATE_LEDGER_DIR_ENV]=td;fp=m.campaign_fingerprint();p=m.arm_create_intent(fp,m.campaign_suffix(fp));self.assertEqual(stat.S_IMODE(p.stat().st_mode),0o600);self.assertEqual(m.read_create_ledger(fp)["campaign"]["training_type"],{"type":"Full"})
+            os.environ[m.CREATE_LEDGER_DIR_ENV]=td;fp=m.campaign_fingerprint();auth=m.create_authorization_token(fp,price);p=m.arm_create_intent(fp,m.campaign_suffix(fp),price,auth);self.assertEqual(stat.S_IMODE(p.stat().st_mode),0o600);e=m.read_create_ledger(fp);self.assertEqual(e["campaign"]["training_type"],{"type":"Full"});self.assertEqual(e["authorized_estimated_usd"],"4");self.assertEqual(e["create_authorization"],auth)
+    def test_price_drift_requires_fresh_authorization(self):
+        fp="b"*64;low=m.create_authorization_token(fp,4.0);high=m.create_authorization_token(fp,17.99);self.assertNotEqual(low,high)
+        os.environ[m.CREATE_CONFIRM_ENV]=low;m.require_create_confirmation(fp,4.0)
+        with self.assertRaises(SystemExit):m.require_create_confirmation(fp,17.99)
+        os.environ[m.CREATE_CONFIRM_ENV]=high;self.assertEqual(m.require_create_confirmation(fp,17.99),high)
+    def test_price_authorization_rejects_nonfinite(self):
+        fp="c"*64
+        for bad in ("nan","inf","-1"):
+            with self.assertRaises(SystemExit):m.create_authorization_token(fp,bad)
     def test_created_job_identity_mismatch_detection(self):
         expected={"training_file":"t","validation_file":"v","model":m.MODEL,"n_epochs":3,"n_evals":2,"random_seed":3407}
         good=types.SimpleNamespace(**expected);self.assertEqual(m.created_job_identity_mismatches(good,expected),{})

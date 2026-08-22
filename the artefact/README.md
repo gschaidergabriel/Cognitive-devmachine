@@ -182,3 +182,33 @@ Highest-information next gates are:
 4. continue through exact OCI build/digest/start/readiness, Clerk/PTTY/Claude lifecycle, dual-user concurrency and the same-image microVM acceptance vector.
 
 Detailed historical cycle evidence belongs in `the artefact/receipts/` and Git history rather than being duplicated indefinitely in this living README.
+
+## GO delta — 2026-08-21 21:29 +07:00
+
+Current canonical `main` was refreshed at `2b7360bb2682131dfb0121c25c1c03e808033df0` before this bounded repair lane was created.
+
+Adversarial source review found a provenance/authority gap in the autonomous terminal one-shot transport: `consume_dispatch_prompt()` returned `None` not only for ordinary human text but also for malformed, wrong, expired, missing or already-consumed values inside the reserved `__CLAY_AUTONOMY_DISPATCH__:` namespace. The managed `UserPromptSubmit` hook interprets `None` as normal human input. A synthetic autonomy marker could therefore be canonically admitted with human-hook provenance and contaminate the later human-roundtrip attestation used to permit detached autonomy.
+
+The bounded candidate now treats that prefix as a reserved transport namespace:
+
+- ordinary non-prefixed text still follows the normal human path;
+- malformed reserved prompts fail closed;
+- missing/replayed dispatch leases fail closed;
+- wrong nonce fails closed without consuming the valid lease;
+- expired leases fail closed;
+- existing generation, goal/step and one-shot deletion fences are retained.
+
+Candidate source blobs:
+
+- `clayverse/autonomy_dispatch.py`: `935ed3bec81a634e923fdcbae02667a0adbae9c8`;
+- `tests/test_autonomy_dispatch.py`: `f02eb02a726ee42613971cd38998b8a01e187705`.
+
+Evidence class is **SOURCE_CANDIDATE** until exact isolated execution runs the focused dispatch tests plus terminal-hook/autonomy-pulse adjacency. No OCI/microVM/runtime PASS is inferred.
+
+The exact `go` unusual-experiment slot remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`: the available trigger identity is minute-precision only and has no immutable shared request/turn id, so zero unusual experiments were executed.
+
+### Updated frontier
+
+1. execute the exact candidate dispatch suite in an authorized isolated full checkout;
+2. prove an expired/replayed/malformed synthetic terminal marker cannot create a canonical human turn and cannot satisfy `AutonomyPulse._has_human_roundtrip_after`;
+3. after that bounded authority repair is accepted, continue the still-open exact OCI/private-source credential gate and same-digest Firecracker/microVM whole-product vector.

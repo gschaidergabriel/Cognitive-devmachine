@@ -14,6 +14,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
+from .autonomy_dispatch import DISPATCH_PREFIX
 from .identity import CANONICAL_TERMINAL_NAMES
 from .terminal_activity import TerminalActivityRegistry
 
@@ -322,12 +323,17 @@ class TerminalSessionManager:
         return binding, pane_id
 
     def dispatch_autonomy_prompt(self, user_id: str, prompt: str) -> None:
-        """Inject only a bounded one-shot dispatch token into an exclusively reserved idle pane."""
+        """Inject only an exact one-shot dispatch token into an exclusively reserved idle pane."""
+        nonce = (
+            prompt[len(DISPATCH_PREFIX) :]
+            if isinstance(prompt, str) and prompt.startswith(DISPATCH_PREFIX)
+            else ""
+        )
         if (
             not isinstance(prompt, str)
-            or not prompt
             or len(prompt) > self.AUTONOMY_PROMPT_MAX_CHARS
-            or any(ord(char) < 0x20 or ord(char) > 0x7E for char in prompt)
+            or len(nonce) != 32
+            or any(char not in "0123456789abcdef" for char in nonce)
         ):
             raise ValueError("invalid autonomy terminal prompt")
         binding, pane_id = self.assert_detached_idle_claude(user_id)

@@ -139,12 +139,12 @@ def consume_dispatch_prompt(
     session_id: str,
     prompt: str,
 ) -> AutonomyDispatch | None:
-    """Atomically consume a matching one-shot dispatch; unmatched text stays user input."""
+    """Consume one live reserved dispatch; reserved-prefix failures never become human input."""
     if not isinstance(prompt, str) or not prompt.startswith(DISPATCH_PREFIX):
         return None
     nonce = prompt[len(DISPATCH_PREFIX) :]
     if not _NONCE.fullmatch(nonce):
-        return None
+        raise AutonomyDispatchError("reserved dispatch prompt malformed")
     if user_id not in {"gabriel", "andreas"} or session_id != f"session:{user_id}":
         raise PermissionError("dispatch identity mismatch")
 
@@ -155,8 +155,12 @@ def consume_dispatch_prompt(
             "SELECT holder,generation,expires_at,nonce FROM leases WHERE resource=?",
             (resource,),
         ).fetchone()
-        if row is None or row["nonce"] != nonce or float(row["expires_at"]) <= now:
-            return None
+        if row is None:
+            raise AutonomyDispatchError("reserved dispatch lease missing")
+        if row["nonce"] != nonce:
+            raise AutonomyDispatchError("reserved dispatch nonce mismatch")
+        if float(row["expires_at"]) <= now:
+            raise AutonomyDispatchError("reserved dispatch lease expired")
         payload = _payload(row["holder"])
         live = db.entity_generation()
         if (

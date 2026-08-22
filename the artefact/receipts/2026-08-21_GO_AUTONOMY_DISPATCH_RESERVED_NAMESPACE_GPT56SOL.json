@@ -1,0 +1,52 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-21",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-21T21:29+07:00",
+  "trigger_identity_precision": "MINUTE_ONLY",
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed_count": 0,
+    "reason": "No immutable shared request/turn id and no reproducible whole-second trigger timestamp were available."
+  },
+  "base_main": "2b7360bb2682131dfb0121c25c1c03e808033df0",
+  "branch": "gpt56sol/go-autonomy-dispatch-reserved-prefix-20260821",
+  "repair_commit": "6db7ec3ed995110a11e89078b45883fce4dc1660",
+  "classification": "SOURCE_CANDIDATE",
+  "finding": {
+    "novelty": "CONTRADICTS",
+    "summary": "The reserved autonomous terminal transport prefix could fall through to the ordinary human UserPromptSubmit path when its nonce was malformed, wrong, expired, missing, or already consumed.",
+    "mechanism": "consume_dispatch_prompt returned None for reserved-prefix failures; terminal_hooks.user_prompt interprets None as ordinary human input. That can misclassify a synthetic autonomy marker as a human turn and can contaminate the later human-roundtrip attestation used by AutonomyPulse.",
+    "strongest_counterhypothesis": "A reserved-prefix miss is harmless because it contains no stored autonomy instruction. This is rejected at the authority/provenance boundary: even without the instruction, admitting the synthetic marker as a human turn falsifies provenance and can satisfy a human-attestation predicate that checks canonical hook provenance rather than transport origin."
+  },
+  "source_identity": {
+    "autonomy_dispatch_before_blob": "11280bd68bf9cf25a548756b6d74e8403776f08c",
+    "autonomy_dispatch_candidate_blob": "935ed3bec81a634e923fdcbae02667a0adbae9c8",
+    "dispatch_test_before_blob": "0b0081cc4146638762add06538821a1dd79605d3",
+    "dispatch_test_candidate_blob": "f02eb02a726ee42613971cd38998b8a01e187705",
+    "terminal_hooks_observed_on_base_main": true,
+    "autonomy_pulse_observed_on_base_main": true
+  },
+  "delta": [
+    "Treat __CLAY_AUTONOMY_DISPATCH__: as a reserved transport namespace.",
+    "Ordinary non-prefixed human text still returns None and follows the human path.",
+    "Malformed reserved nonce, missing lease, nonce mismatch, expired lease, and replay now raise AutonomyDispatchError fail-closed.",
+    "Generation, goal/step, lease generation, and one-shot deletion fences remain unchanged.",
+    "Focused tests now require fail-closed reserved-prefix behavior while preserving ordinary human text handling."
+  ],
+  "evidence": {
+    "source_inspection": "OBSERVED",
+    "exact_full_checkout_test": "NOT_EXECUTED",
+    "focused_isolated_test": "NOT_EXECUTED_AT_RECEIPT_CREATION",
+    "oci_runtime": "NOT_EXECUTED",
+    "whole_product_pass": false
+  },
+  "safety": {
+    "second_state_authority_created": false,
+    "second_effect_path_created": false,
+    "second_identity_service_created": false,
+    "together_api_used": false,
+    "vps_or_production_test_used": false
+  },
+  "next_discriminator": "Execute the exact candidate dispatch tests plus terminal hook/autonomy pulse adjacency in an authorized isolated full checkout; then prove a stale/expired/replayed synthetic terminal marker cannot create a canonical human turn or satisfy the human-roundtrip pulse attestation."
+}

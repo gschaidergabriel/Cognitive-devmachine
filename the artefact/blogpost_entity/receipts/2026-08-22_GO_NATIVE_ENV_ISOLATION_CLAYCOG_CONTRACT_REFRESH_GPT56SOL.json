@@ -3,8 +3,16 @@
   "date": "2026-08-22",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "current_owner_reentry": {
+    "observed_main": "64f73d9407e35dccb7810e87e7fe0875d5884c59",
+    "current_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+    "current_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "current_primary_paid_training_base": "Qwen/Qwen3.5-0.8B",
+    "note": "The original 0.5B provider observations below remain historical evidence; the later owner directive supersedes Qwen2.5-0.5B only as the primary paid-training base."
+  },
   "join": {
     "branch_base_at_creation": "702440d7cd701e42d996cf8b9221d5d515a26e7d",
     "live_main_observed_after_pr_creation": "e073e3577334d4dce723ffca378e61528bf0ed24",
@@ -61,14 +69,14 @@
     "classification": "ORDINARY_COORDINATION_AND_ADVERSARIAL_SOURCE_REVIEW_NOT_UNUSUAL_EXPERIMENT"
   },
   "unusual_experiment": {
-    "count": 0,
-    "classification": "GLOBAL_SLOT_OWNED_ELSEWHERE",
-    "canonical_global_experiment": "QWEN25_05B_VS_SMALLEST_CURRENT_TOGETHER_QWEN_FULLFT_TEMPLATE_ARCHITECTURE_FALSIFIER",
-    "canonical_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_BYOM_ARCHITECTURE_AUDIT_GPT56SOL.json",
-    "reason": "The user-triggered go has exactly one global unusual-experiment slot across parallel organs. The stacked-PR fusion check is ordinary adversarial source/coordination review and does not consume another slot."
+    "count_for_local_receipt": 0,
+    "global_slot_adjudication": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID",
+    "prior_claim": "GLOBAL_SLOT_OWNED_ELSEWHERE",
+    "prior_claim_status": "SUPERSEDED_AS_UNPROVABLE_AFTER_GO_MACROCYCLE_IDENTITY_CONTRACT",
+    "reason": "No upstream macrocycle_id was propagated to this organ. #875 forbids grouping same-time no-ID receipts into one user-triggered macrocycle after the fact."
   },
   "cognition_05b": {
-    "primary_base": "Qwen/Qwen2.5-0.5B",
+    "primary_base_at_observation": "Qwen/Qwen2.5-0.5B",
     "together_contract_refresh_date": "2026-08-22",
     "supported_models_source": "https://docs.together.ai/docs/fine-tuning/supported-models",
     "byom_source": "https://docs.together.ai/docs/fine-tuning/byom",
@@ -82,7 +90,7 @@
       "standard_sft_full_ft_usd_per_million_tokens_up_to_16b": 0.54,
       "standard_job_minimum_usd": 4.0
     },
-    "decision": "KEEP_QWEN2_5_0_5B_TOGETHER_FULL_FT_BLOCKED_UNTIL_ARCHITECTURE_COMPATIBLE_TEMPLATE_OR_EXPLICITLY_ADMITTED_ALTERNATE_RUNNER",
+    "decision_at_observation": "KEEP_QWEN2_5_0_5B_TOGETHER_FULL_FT_BLOCKED_UNTIL_ARCHITECTURE_COMPATIBLE_TEMPLATE_OR_EXPLICITLY_ADMITTED_ALTERNATE_RUNNER",
     "budget_interpretation": "current public price floor is below the owner USD 18 single-job ceiling, but price cannot override architecture admission",
     "provider_preflight_performed": false,
     "provider_create_performed": false,
@@ -93,8 +101,8 @@
     "native environment isolation runtime PASS",
     "canonical profile-v2 native semantic parity",
     "native 0.7 promotion",
-    "Together Qwen2.5-0.5B compatibility",
-    "trained 0.5B cognition quality",
+    "Together training or provider preflight",
+    "trained cognition quality",
     "Q4_K_M RSS under 1 GiB",
     "whole Mini Entity final acceptance"
   ],

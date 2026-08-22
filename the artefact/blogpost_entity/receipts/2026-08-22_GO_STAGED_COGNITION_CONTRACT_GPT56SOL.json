@@ -11,7 +11,7 @@
   },
   "authority_refresh": {
     "initial_branch_base": "f6efe39a68dac15c907f63d3f3a64beac078b6ca",
-    "latest_main_observed_after_delta": "11d0726d823b3eb45a1984b52cd6192c74fe28bb",
+    "latest_main_observed_after_fusion": "0111dd0ee1de9156e8e907f52968e28eb6905c7f",
     "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
     "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
     "base_product_directive_blob": "eeb9945e4c1d01a32e13bf6cb74db0c0c49d2767",
@@ -29,19 +29,19 @@
     "staged_runtime_credit": "ZERO"
   },
   "delta": {
-    "contract": "the artefact/blogpost_entity/STAGED_COGNITION_PARITY_CONTRACT.json",
+    "fused_contract": "the artefact/blogpost_entity/STAGED_COGNITION_ACCEPTANCE.json",
+    "contract_donor_pr": 960,
+    "fusion_pr": 964,
+    "duplicate_contract_path_removed": "the artefact/blogpost_entity/STAGED_COGNITION_PARITY_CONTRACT.json",
     "static_guard": "the artefact/blogpost_entity/mini_cognition/test_staged_cognition_contract_v1.py",
     "workflow": ".github/workflows/claycog-validator-pr.yml",
-    "contract_commit": "c0904c5d99f7240fb9314f54824ddece19c94c97",
-    "guard_commit": "c657b2a2cf40790fa81442cff20f2a9c36e96935",
-    "workflow_commit": "9f9cf1f8dfd04bf6358d6252eaf248934e3a2794",
-    "effect": "bind the new staged-cognition owner architecture as a fail-closed machine-readable promotion boundary without adding a second runtime, state authority, provider path, or hardcoded stage identity to cognition weights"
+    "effect": "one staged-cognition contract authority plus executable source-coherence guard; no second runtime/state/effect/CI authority and no hardcoded stage identity in cognition weights"
   },
   "approx1b_cognition_convergence": {
     "base": "Qwen/Qwen3.5-0.8B",
     "training_started": false,
     "checkpoint_role_rule": "generic replaceable ClayCode cognition; stage role is runtime configuration only",
-    "new_future_ood_obligations": [
+    "future_ood_obligations": [
       "same checkpoint under curator analyst writer runtime role bindings",
       "cross-stage prompt/history isolation",
       "snapshot generation/hash binding",
@@ -52,17 +52,20 @@
   },
   "validation": {
     "static_guard_syntax": "PASS_BY_LOCAL_COMPILE_EQUIVALENT",
-    "exact_branch_source_execution": "PENDING_PR_RUNNER",
+    "observed_pr_head": "b991b16b18b3bb6a113c3f0bb24847b0b4be336b",
+    "claycog_validator_run_id": 32574527837,
+    "claycog_validator_job_id": 97034790949,
+    "job_conclusion": "failure",
+    "job_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_TEST_FAILURE",
     "runtime_acceptance": "UNOBSERVED",
-    "note": "Static/source coherence is not staged cognition runtime evidence."
+    "note": "The branch subsequently changed only for contract-path fusion/coordination; exact final-head execution remains required."
   },
   "parallel_work_adjudication": {
-    "main_advanced_to": "11d0726d823b3eb45a1984b52cd6192c74fe28bb",
-    "merged_pr_959": "non-overlapping structured-effect executable-binding checker hardening; reference effect implementation still open",
-    "duplicate_work_avoided": [
-      "fresh DB init before pipeline_profile_read already merged as ed58970b66fb37243d1d5aff8a8de11b30b38714",
-      "structured reference effect checker hardening already merged as PR #959"
-    ]
+    "fresh_db_init": "already merged as ed58970b66fb37243d1d5aff8a8de11b30b38714; not duplicated",
+    "structured_effect_checker": "PR #959 merged executable-binding hardening; not duplicated",
+    "staged_contract_pr_960": "selected as contract donor and fused into PR #964; donor PR to be closed superseded rather than retained as a second permanent contract path",
+    "latest_reference_security_semantics_main": "main advanced through #957 and responsibility-level reference parity guards; these are prerequisites and non-overlapping with staged contract/guard"
   },
   "unusual_experiment": {
     "count_for_this_macrocycle_local": 0,
@@ -78,8 +81,8 @@
     "training": false,
     "money_spent_usd": 0
   },
-  "next_gate": "On fresh current main, implement one neutral machine-readable cognition_pipeline profile and generic stage dispatcher plus frozen ZeroStateSnapshot, typed/provenanced Blog-Zero memory and Writer factual-claim trace gate; preserve exactly-once/CAS and FREE_ONLY admission; then obtain actually-started exact-source isolated execution before any staged runtime PASS.",
-  "acceptance": "SOURCE_CONTRACT_BOUND_RUNTIME_IMPLEMENTATION_OPEN",
+  "next_gate": "On fresh current main, first complete the narrow reference pipeline_profile_read/inference_generate convergence under the merged executable/semantic/security guards and native profile-v2 parity; then implement one neutral machine-readable cognition_pipeline plus frozen ZeroStateSnapshot, typed/provenanced Blog-Zero memory and Writer factual-claim trace gate, preserving exactly-once/CAS and FREE_ONLY; obtain actually-started exact-source isolated execution before staged runtime PASS.",
+  "acceptance": "SOURCE_CONTRACT_FUSED_RUNTIME_IMPLEMENTATION_OPEN",
   "non_claims": [
     "No staged cognition runtime PASS.",
     "No profile-v2 whole parity PASS.",

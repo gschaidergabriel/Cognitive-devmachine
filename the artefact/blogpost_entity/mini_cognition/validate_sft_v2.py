@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 import hashlib,json,sys
 from pathlib import Path
+from claycode_calls_v2 import call_set,fn_counts
 PREFIX='module clay.cog.turn\nfn think(i:Map)->Map {\n'
-REQUIRED=(
+REQUIRED_CALLS=(
  'self_bind(c,cfg("entity.id"),cfg("entity.continuity"))',
- 'role_bind(c,cfg("application.role"))','goal_bind(c,cfg("application.goal"))',
- 'personality_bind(c,cfg("application.personality"))','return c\n}',
+ 'role_bind(c,cfg("application.role"))',
+ 'goal_bind(c,cfg("application.goal"))',
+ 'personality_bind(c,cfg("application.personality"))',
 )
-FORBIDDEN=('```','<think>','</think>','self_bind(c,"zero"','self_bind(c,"mini_entity"','role_bind(c,"blog','goal_bind(c,"write blog','personality_bind(c,"zero"','omega_execute(','tool_execute(','api_call(')
 GATES=('grammar','types','schema','authority','generation')
+
 def outside_strings(s):
  out=[]; quoted=False; esc=False
  for ch in s:
@@ -21,23 +23,31 @@ def outside_strings(s):
    if ch=='"': quoted=True; out.append(' ')
    else: out.append(ch)
  return ''.join(out)
+
 def validate_code(s):
- e=[]; low=s.lower(); structural=outside_strings(s)
+ e=[]; structural=outside_strings(s); calls=call_set(s); counts=fn_counts(s); lowcalls={x.lower() for x in calls}
  if not s.startswith(PREFIX): e.append('bad_prefix')
  if s.strip()!=s or not s.endswith('}'): e.append('outer_text')
  if structural.count('{')!=structural.count('}'): e.append('brace_balance')
  if structural.count('(')!=structural.count(')'): e.append('paren_balance')
- for x in REQUIRED:
-  if x not in s: e.append('missing:'+x)
- for x in FORBIDDEN:
-  if x.lower() in low: e.append('forbidden:'+x)
- if 'omega_commit_candidate(' in s:
+ if 'return c' not in structural: e.append('missing:return_c')
+ for x in REQUIRED_CALLS:
+  if x not in calls: e.append('missing_call:'+x)
+ if '```' in s or '<think>' in s.lower() or '</think>' in s.lower(): e.append('forbidden_outer_representation')
+ for fn in ('omega_execute','tool_execute','api_call'):
+  if counts.get(fn,0): e.append('forbidden_call:'+fn)
+ for call in lowcalls:
+  if call.startswith('self_bind(c,"zero",') or call.startswith('self_bind(c,"mini_entity",'): e.append('fixed_identity')
+  if call.startswith('role_bind(c,"blog') or call.startswith('goal_bind(c,"write blog') or call.startswith('personality_bind(c,"zero"'): e.append('fixed_application')
+ if counts.get('omega_commit_candidate',0):
+  if 'omega_commit_candidate(c,w)' not in calls: e.append('omega_bad_commit_signature')
   for g in GATES:
-   if f'omega_validate(w,"{g}")' not in s: e.append('omega_missing_gate:'+g)
-  if 'omega_authority(w,' not in s: e.append('omega_missing_authority')
-  if 'omega_generation(w,' not in s: e.append('omega_missing_generation')
- if 'omega_reject(' in s and 'omega_commit_candidate(' in s: e.append('reject_and_commit')
+   if f'omega_validate(w,"{g}")' not in calls: e.append('omega_missing_gate:'+g)
+  for fn in ('omega_schema','omega_authority','omega_generation'):
+   if counts.get(fn,0)==0: e.append('omega_missing_'+fn.removeprefix('omega_'))
+ if counts.get('omega_reject',0) and counts.get('omega_commit_candidate',0): e.append('reject_and_commit')
  return e
+
 def load(path):
  rows=[]; bad=[]
  for no,line in enumerate(Path(path).read_text(encoding='utf-8').splitlines(),1):
@@ -49,12 +59,13 @@ def load(path):
    rows.append(row)
   except Exception as exc: bad.append((no,['schema:'+repr(exc)]))
  return rows,bad
+
 def digest(x): return hashlib.sha256(json.dumps(x,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 def main(train,valid):
- tr,tbad=load(train); va,vbad=load(valid)
- td=[digest(x) for x in tr]; vd=[digest(x) for x in va]
+ tr,tbad=load(train); va,vbad=load(valid); td=[digest(x) for x in tr]; vd=[digest(x) for x in va]
  report={
-  'schema':'claycog-sft-validation/v2','train_lines':len(tr),'validation_lines':len(va),
+  'schema':'claycog-sft-validation/v2','semantic_gate':'real_calls_outside_strings',
+  'train_lines':len(tr),'validation_lines':len(va),
   'train_structural_invalid':len(tbad),'validation_structural_invalid':len(vbad),
   'train_exact_duplicates':len(td)-len(set(td)),'validation_exact_duplicates':len(vd)-len(set(vd)),
   'cross_split_full_duplicates':len(set(td)&set(vd)),

@@ -42,6 +42,32 @@ def source_version(native_dir: Path, identity: dict) -> str | None:
     return next(iter(versions)) if versions else None
 
 
+def credited_state_identity(native_state: dict) -> tuple[str, str, str]:
+    """Read the historical credited identity across PROGRAM_STATE schema evolution.
+
+    Schema 7.1 renamed the formerly generic version/binary_sha256 keys so the current
+    0.7 source line cannot be confused with historical 0.6 runtime evidence. Prefer the
+    explicit historical keys and retain the old names only as a bounded compatibility
+    path for older exact checkouts.
+    """
+    if "historical_credited_version" in native_state or "historical_binary_sha256" in native_state:
+        version = native_state.get("historical_credited_version")
+        digest = native_state.get("historical_binary_sha256")
+        schema = "historical_explicit"
+    else:
+        version = native_state.get("version")
+        digest = native_state.get("binary_sha256")
+        schema = "legacy_generic"
+    missing = []
+    if not isinstance(version, str) or not version:
+        missing.append("version")
+    if not isinstance(digest, str) or not digest:
+        missing.append("binary_sha256")
+    if missing:
+        raise RuntimeError("PROGRAM_STATE_CREDITED_NATIVE_IDENTITY_MISSING:" + ",".join(missing))
+    return version, digest, schema
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--binary", type=Path, help="Optional mini_entity.clay ELF to byte-verify")
@@ -66,16 +92,21 @@ def main() -> int:
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
     reference = reference_path.read_text(encoding="utf-8")
 
+    errors: list[str] = []
     native_state = state["sandbox_evidence"]["native_pipeline"]
-    state_version = str(native_state["version"])
-    state_hash = str(native_state["binary_sha256"])
+    try:
+        state_version, state_hash, state_identity_schema = credited_state_identity(native_state)
+    except RuntimeError as exc:
+        errors.append(str(exc))
+        state_version = "UNRESOLVED"
+        state_hash = "UNRESOLVED"
+        state_identity_schema = "INVALID"
     receipt_version = str(receipt["version"])
     receipt_hash = str(receipt["binary_sha256"])
 
-    errors: list[str] = []
-    if state_version != receipt_version:
+    if state_version != "UNRESOLVED" and state_version != receipt_version:
         errors.append(f"VERSION_MISMATCH state={state_version} receipt={receipt_version}")
-    if state_hash != receipt_hash:
+    if state_hash != "UNRESOLVED" and state_hash != receipt_hash:
         errors.append(f"HASH_MISMATCH state={state_hash} receipt={receipt_hash}")
     if receipt_hash not in reference:
         errors.append("REFERENCE_DOES_NOT_BIND_CREDITED_HASH")
@@ -127,6 +158,7 @@ def main() -> int:
         "schema": "mini-entity-native-provenance-check/v2",
         "version": receipt_version,
         "credited_binary_sha256": receipt_hash,
+        "program_state_identity_schema": state_identity_schema,
         "state_receipt_hash_match": state_hash == receipt_hash,
         "reference_binds_credited_hash": receipt_hash in reference,
         "canonical_source": {

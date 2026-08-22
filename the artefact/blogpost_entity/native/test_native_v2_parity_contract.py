@@ -76,6 +76,25 @@ class NativeProfileV2ParityContractTests(unittest.TestCase):
             positions.append(pos)
         self.assertEqual(positions, sorted(positions), msg="canonical pipeline phase order changed")
 
+    def test_reference_runtime_effect_surface_is_fail_closed_until_current_names_match(self) -> None:
+        required = self.contract["required_reference_effect_surface"]
+        self.assertEqual(required, self.contract["required_pipeline_phases"])
+        missing = [name for name in required if f'"{name}"' not in self.reference_runtime]
+        legacy = self.contract["legacy_reference_effects_to_deauthorize"]
+        stale = [name for name in legacy if f'"{name}"' in self.reference_runtime]
+        gap = self.contract["reference_runtime_effect_surface"]
+
+        if missing or stale:
+            self.assertEqual(gap["status"], "FAIL_CLOSED_MISMATCH")
+            self.assertEqual(missing, gap["missing_current_effects"])
+            self.assertEqual(stale, gap["stale_current_effects"])
+            self.assertEqual(self.contract["admission"]["status"], "FAIL_CLOSED_UNTIL_EXACT_PARITY")
+            self.assertIsNone(self.contract["admission"]["runtime_receipt"])
+        else:
+            self.assertEqual(gap["status"], "PARITY")
+            self.assertEqual(gap["missing_current_effects"], [])
+            self.assertEqual(gap["stale_current_effects"], [])
+
     def test_reference_runtime_still_contains_required_compile_and_gate_mechanisms(self) -> None:
         required_tokens = (
             "def _pipeline_collect",

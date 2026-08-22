@@ -17,7 +17,7 @@ concurrency:
 jobs:
   strict-admission:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - name: Checkout exact candidate
         uses: actions/checkout@v4
@@ -38,3 +38,8 @@ jobs:
           cd 'the artefact/blogpost_entity/mini_cognition'
           python3 generate_sft_v2.py
           python3 validate_corpus_v2.py train_v2.jsonl validation_v2.jsonl
+      - name: Run exact-omega and unseen-tool OOD regressions
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_exact_vector_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_tool_amputation_v1.py'

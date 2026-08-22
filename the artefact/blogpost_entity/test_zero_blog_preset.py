@@ -11,18 +11,24 @@ def _profile() -> dict:
     return json.loads(PRESET.read_text(encoding="utf-8"))
 
 
-def test_zero_blog_does_not_prompt_a_fake_physical_scene():
+def test_zero_blog_uses_latent_style_frame_without_factual_embodiment():
     p = _profile()
     prompt = p["personality"]["system_prompt"].lower()
-    identity = json.dumps(p["identity"], ensure_ascii=False).lower()
+    identity = p["identity"]
+    frame = p["personality"]["style_framework"]
+    embodiment = p["personality"]["embodiment_policy"]
 
-    # The preset may mention these words only in explicit negation/policy text,
-    # never as its voice or narrative setting.
-    assert p["identity"]["voice"] == "unembodied reflective systems voice"
-    assert "gasthaus engineer" not in identity
-    assert "no_imposed_embodiment" == p["personality"]["embodiment_policy"]["mode"]
-    assert "kein gasthaus" in prompt
-    assert "kein bier" in prompt
+    # The Gasthaus/Maurer scenario is deliberately present as writing direction.
+    # The regression boundary is that it must remain non-factual and non-embodied.
+    assert identity["voice"] == "latent Gasthaus-engineer-to-Maurer storytelling frame without factual embodiment"
+    assert frame["mode"] == "latent_nonfactual_scenario"
+    assert frame["world_state"].startswith("NONE;")
+    assert "backstage direction only" in frame["visibility"]
+    assert embodiment["mode"] == "no_imposed_embodiment"
+    assert embodiment["latent_style_frame_is_not_embodiment"] is True
+    assert "stilrahmen, nicht realitaet" in prompt
+    assert "unsichtbare schreibheuristik" in prompt
+    assert "er ist kein ort" in prompt
     assert "keinen aufenthaltsort" in prompt
 
 

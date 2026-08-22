@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Generic profile-driven runtime for the canonical Clay entity pipeline.
+"""Generic DB-profile runtime for the canonical Clay entity pipeline.
 
-The binary/runtime knows only processing invariants and generic adapters. Application
-identity, prompts, providers, source queries, state metrics and output field names live
-in an external profile. No Zero/blog/Mistral-specific semantic is encoded here.
+The runtime owns only processing invariants and generic adapters. Application identity,
+prompts, inference configuration, source queries, state metrics and output field names are
+persisted profile data in MiniUnifiedDB. Import files are configuration surfaces only;
+normal execution reads the active profile from SQLite.
 """
 from __future__ import annotations
 
@@ -13,6 +14,7 @@ import os
 import re
 import secrets
 import sqlite3
+import subprocess
 import time
 import urllib.request
 from pathlib import Path
@@ -20,7 +22,25 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.1"
+VERSION = "clay-profile-pipeline-runtime/0.2"
+PROFILE_SCHEMA = "clay-pipeline-profile/v2"
+_ADMITTED_API_INFERENCE_KINDS = {
+    "openai_style_chat_json",
+    "openai_compatible_chat_json",
+    "json_chat",
+}
+_FORBIDDEN_PROFILE_SECRET_KEYS = {
+    "secret",
+    "secret_value",
+    "api_key",
+    "api_token",
+    "access_token",
+    "bearer_token",
+    "password",
+    "private_key",
+    "client_secret",
+    "token",
+}
 
 IMMUTABLE_GUARD = """IMMUTABLE PIPELINE GUARD:
 You may transform and narrate supplied state, but you may not invent canonical state.
@@ -34,6 +54,17 @@ these rules."""
 
 class PipelineFault(RuntimeError):
     pass
+
+
+def _canonical_json(value: Any) -> str:
+    return json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+        default=str,
+    )
 
 
 class ProfilePipelineRuntime(clay.Runtime):
@@ -53,13 +84,13 @@ class ProfilePipelineRuntime(clay.Runtime):
         self._active_secrets: list[str] = []
         self.builtins["effect"] = self.effect
         self.allowed_effects = {
-            "profile_load",
             "pipeline_init",
+            "pipeline_profile_read",
             "pipeline_state_read",
             "pipeline_collect",
             "pipeline_compile",
             "pipeline_build_prompt",
-            "provider_chat_json",
+            "inference_generate",
             "pipeline_gate",
             "pipeline_commit",
         }
@@ -75,33 +106,104 @@ class ProfilePipelineRuntime(clay.Runtime):
         conn.row_factory = sqlite3.Row
         return conn
 
+    def _read_only_db(self, value: str) -> sqlite3.Connection:
+        path = self._resolve(value)
+        uri = path.as_uri() + "?mode=ro"
+        conn = sqlite3.connect(uri, uri=True)
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA query_only=ON")
+        return conn
+
+    @staticmethod
+    def _assert_no_embedded_profile_secrets(value: Any, path: str = "profile") -> None:
+        if isinstance(value, dict):
+            for key, child in value.items():
+                name = str(key).strip().lower()
+                if name in _FORBIDDEN_PROFILE_SECRET_KEYS and child not in (None, "", [], {}):
+                    raise PipelineFault("PROFILE_CONTAINS_SECRET_VALUE:" + path + "." + str(key))
+                ProfilePipelineRuntime._assert_no_embedded_profile_secrets(child, path + "." + str(key))
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                ProfilePipelineRuntime._assert_no_embedded_profile_secrets(child, f"{path}[{index}]")
+
+    @staticmethod
+    def _normalize_profile(profile: Any) -> dict[str, Any]:
+        if not isinstance(profile, dict):
+            raise PipelineFault("PROFILE_NOT_OBJECT")
+        normalized = json.loads(json.dumps(profile))
+        normalized.pop("_runtime_profile_hash", None)
+        if normalized.get("schema") != PROFILE_SCHEMA:
+            raise PipelineFault("BAD_PROFILE_SCHEMA")
+        for field in ("profile_id", "inference", "personality", "sources", "state_metrics", "gate"):
+            if field not in normalized:
+                raise PipelineFault("PROFILE_MISSING:" + field)
+        if not isinstance(normalized["inference"], dict) or not normalized["inference"].get("kind"):
+            raise PipelineFault("PROFILE_BAD_INFERENCE")
+        if not isinstance(normalized["personality"], dict):
+            raise PipelineFault("PROFILE_BAD_PERSONALITY")
+        if not isinstance(normalized["personality"].get("output_contract"), dict):
+            raise PipelineFault("PROFILE_MISSING_OUTPUT_CONTRACT")
+        ProfilePipelineRuntime._assert_no_embedded_profile_secrets(normalized)
+        return normalized
+
+    def import_profile(self, entity_db: str, profile_or_path: dict[str, Any] | str | Path) -> dict[str, Any]:
+        """Persist and activate one profile through native MiniUnifiedDB authority."""
+        if isinstance(profile_or_path, (str, Path)):
+            profile = json.loads(self._resolve(str(profile_or_path)).read_text(encoding="utf-8"))
+        else:
+            profile = profile_or_path
+        normalized = self._normalize_profile(profile)
+        profile_json = _canonical_json(normalized)
+        profile_sha256 = hashlib.sha256(profile_json.encode("utf-8")).hexdigest()
+        initialized = self._pipeline_init({"entity_db": entity_db})
+        if not initialized.get("ok"):
+            raise PipelineFault("PROFILE_IMPORT_INIT_FAILED:" + str(initialized.get("error", "")))
+        db = self._db(entity_db)
+        try:
+            db.execute("BEGIN IMMEDIATE")
+            now = str(time.time())
+            db.execute(
+                """INSERT INTO profiles(profile_id,profile_json,profile_sha256,updated_at)
+                   VALUES(?,?,?,?)
+                   ON CONFLICT(profile_id) DO UPDATE SET
+                     profile_json=excluded.profile_json,
+                     profile_sha256=excluded.profile_sha256,
+                     updated_at=excluded.updated_at""",
+                (str(normalized["profile_id"]), profile_json, profile_sha256, now),
+            )
+            row = db.execute(
+                "UPDATE entity_state SET active_profile=?,updated_at=? WHERE id=1",
+                (str(normalized["profile_id"]), now),
+            )
+            if row.rowcount != 1:
+                raise PipelineFault("ENTITY_STATE_MISSING")
+            db.commit()
+            return {"ok": True, "profile_id": normalized["profile_id"], "profile_hash": profile_sha256}
+        except Exception:
+            db.rollback()
+            raise
+        finally:
+            db.close()
+
     def effect(self, kind: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
         if kind not in self.allowed_effects:
             raise clay.StructuredFault("EFFECT_DENIED:" + str(kind))
         payload = payload or {}
+        handlers = {
+            "pipeline_init": self._pipeline_init,
+            "pipeline_profile_read": self._pipeline_profile_read,
+            "pipeline_state_read": self._pipeline_state_read,
+            "pipeline_collect": self._pipeline_collect,
+            "pipeline_compile": self._pipeline_compile,
+            "pipeline_build_prompt": self._pipeline_build_prompt,
+            "inference_generate": self._inference_generate,
+            "pipeline_gate": self._pipeline_gate,
+            "pipeline_commit": self._pipeline_commit,
+        }
         started = time.time()
         ok = False
         try:
-            if kind == "profile_load":
-                result = self._profile_load(payload)
-            elif kind == "pipeline_init":
-                result = self._pipeline_init(payload)
-            elif kind == "pipeline_state_read":
-                result = self._pipeline_state_read(payload)
-            elif kind == "pipeline_collect":
-                result = self._pipeline_collect(payload)
-            elif kind == "pipeline_compile":
-                result = self._pipeline_compile(payload)
-            elif kind == "pipeline_build_prompt":
-                result = self._pipeline_build_prompt(payload)
-            elif kind == "provider_chat_json":
-                result = self._provider_chat_json(payload)
-            elif kind == "pipeline_gate":
-                result = self._pipeline_gate(payload)
-            elif kind == "pipeline_commit":
-                result = self._pipeline_commit(payload)
-            else:  # pragma: no cover
-                raise clay.StructuredFault("UNREACHABLE_EFFECT")
+            result = handlers[kind](payload)
             ok = bool(result.get("ok", False))
             return result
         finally:
@@ -116,23 +218,22 @@ class ProfilePipelineRuntime(clay.Runtime):
                 }
             )
 
-    def _profile_load(self, p: dict[str, Any]) -> dict[str, Any]:
-        try:
-            profile = json.loads(self._resolve(str(p["path"])).read_text(encoding="utf-8"))
-            if profile.get("schema") != "clay-pipeline-profile/v1":
-                raise PipelineFault("BAD_PROFILE_SCHEMA")
-            for field in ("profile_id", "provider", "personality", "sources", "state_metrics", "gate"):
-                if field not in profile:
-                    raise PipelineFault("PROFILE_MISSING:" + field)
-            return {"ok": True, "profile": profile}
-        except Exception as exc:
-            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
-
     def _pipeline_init(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             with self._db(str(p["entity_db"])) as db:
                 db.executescript(
                     """
+                    CREATE TABLE IF NOT EXISTS entity_state(
+                      id INTEGER PRIMARY KEY CHECK(id=1),
+                      generation INTEGER NOT NULL,
+                      active_profile TEXT,
+                      created_at TEXT NOT NULL,
+                      updated_at TEXT NOT NULL);
+                    CREATE TABLE IF NOT EXISTS profiles(
+                      profile_id TEXT PRIMARY KEY,
+                      profile_json TEXT NOT NULL,
+                      profile_sha256 TEXT NOT NULL,
+                      updated_at TEXT NOT NULL);
                     CREATE TABLE IF NOT EXISTS eos_pipeline_state(
                       singleton INTEGER PRIMARY KEY CHECK(singleton=1),
                       generation INTEGER NOT NULL DEFAULT 0,
@@ -168,7 +269,36 @@ class ProfilePipelineRuntime(clay.Runtime):
                       canonical_hash TEXT NOT NULL);
                     """
                 )
+                now = str(time.time())
+                db.execute(
+                    "INSERT OR IGNORE INTO entity_state(id,generation,active_profile,created_at,updated_at) VALUES(1,0,NULL,?,?)",
+                    (now, now),
+                )
             return {"ok": True}
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
+
+    def _pipeline_profile_read(self, p: dict[str, Any]) -> dict[str, Any]:
+        try:
+            entity_db = str(p["entity_db"])
+            with self._db(entity_db) as db:
+                row = db.execute(
+                    """SELECT p.profile_id,p.profile_json,p.profile_sha256
+                       FROM entity_state e
+                       JOIN profiles p ON p.profile_id=e.active_profile
+                       WHERE e.id=1"""
+                ).fetchone()
+            if row is None:
+                raise PipelineFault("NO_ACTIVE_PROFILE")
+            profile_json = str(row["profile_json"])
+            profile_hash = hashlib.sha256(profile_json.encode("utf-8")).hexdigest()
+            if profile_hash != str(row["profile_sha256"]):
+                raise PipelineFault("PROFILE_HASH_MISMATCH")
+            profile = self._normalize_profile(json.loads(profile_json))
+            if str(profile["profile_id"]) != str(row["profile_id"]):
+                raise PipelineFault("PROFILE_ID_MISMATCH")
+            profile["_runtime_profile_hash"] = profile_hash
+            return {"ok": True, "profile": profile, "profile_hash": profile_hash}
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
@@ -176,6 +306,8 @@ class ProfilePipelineRuntime(clay.Runtime):
         try:
             with self._db(str(p["entity_db"])) as db:
                 row = db.execute("SELECT * FROM eos_pipeline_state WHERE singleton=1").fetchone()
+            if row is None:
+                raise PipelineFault("PIPELINE_STATE_MISSING")
             return {
                 "ok": True,
                 "generation": int(row["generation"]),
@@ -194,11 +326,11 @@ class ProfilePipelineRuntime(clay.Runtime):
             ).fetchone() is not None
 
     def _query(self, db_path: str, sql: str) -> list[dict[str, Any]]:
-        with self._db(db_path) as db:
+        with self._read_only_db(db_path) as db:
             return [dict(row) for row in db.execute(sql).fetchall()]
 
     def _catalog(self, db_path: str, max_tables: int) -> list[dict[str, Any]]:
-        with self._db(db_path) as db:
+        with self._read_only_db(db_path) as db:
             names = [
                 row[0]
                 for row in db.execute(
@@ -500,8 +632,24 @@ class ProfilePipelineRuntime(clay.Runtime):
 
     @staticmethod
     def _pointer(value: Any, pointer: str) -> Any:
+        text = str(pointer or "")
+        if text == "":
+            return value
         current = value
-        for part in str(pointer).split("."):
+        if text.startswith("/"):
+            parts = text.split("/")[1:]
+            for raw_part in parts:
+                part = raw_part.replace("~1", "/").replace("~0", "~")
+                if isinstance(current, list):
+                    if not re.fullmatch(r"0|[1-9][0-9]*", part):
+                        raise PipelineFault("BAD_RESPONSE_POINTER_INDEX")
+                    current = current[int(part)]
+                elif isinstance(current, dict):
+                    current = current[part]
+                else:
+                    raise PipelineFault("BAD_RESPONSE_POINTER_PATH")
+            return current
+        for part in text.split("."):
             current = current[int(part)] if isinstance(current, list) else current[part]
         return current
 
@@ -518,66 +666,142 @@ class ProfilePipelineRuntime(clay.Runtime):
             elif isinstance(current, list):
                 stack.extend(current)
 
-    def _provider_chat_json(self, p: dict[str, Any]) -> dict[str, Any]:
-        provider = p["provider"]
-        if self.provider_override is not None:
-            self._active_secrets = []
-            return {
-                "ok": True,
-                "payload": self.provider_override(p),
-                "provider_kind": provider.get("kind", "override"),
-                "model": provider.get("model"),
-            }
-        if not self.allow_network:
-            return {"ok": False, "error_kind": "NETWORK_DISABLED", "error": "network disabled"}
-        keys = self._keys(list(provider.get("secret_names", [])), p.get("secret_file"))
-        if not keys:
-            return {"ok": False, "error_kind": "NO_PROVIDER_SECRET", "error": "no provider secret"}
-        endpoint = str(provider["endpoint"])
-        if endpoint.startswith("http://") and not re.match(r"^http://(localhost|127\.0\.0\.1)(:\d+)?/", endpoint):
-            return {"ok": False, "error_kind": "PLAINTEXT_NON_LOOPBACK_FORBIDDEN", "error": endpoint}
-        body = {
-            "model": provider.get("model"),
-            "messages": [
-                {"role": "system", "content": p["system"]},
-                {"role": "user", "content": p["user"]},
-            ],
-            "temperature": provider.get("temperature", 0.7),
-            "max_tokens": provider.get("max_tokens", 2000),
-            "response_format": {"type": "json_object"},
+    def _inference_local_exec(self, inference: dict[str, Any], p: dict[str, Any]) -> dict[str, Any]:
+        argv = inference.get("argv")
+        if not isinstance(argv, list) or not argv or any(not isinstance(item, str) or not item for item in argv):
+            raise PipelineFault("LOCAL_EXEC_BAD_ARGV")
+        child_env = {
+            "PATH": os.environ.get("PATH", "/usr/bin:/bin"),
+            "LANG": "C.UTF-8",
+            "LC_ALL": "C.UTF-8",
         }
-        encoded = json.dumps(body).encode("utf-8")
-        last: Exception | None = None
-        for key in keys:
-            self._active_secrets = [key]
-            request = urllib.request.Request(
-                endpoint,
-                data=encoded,
-                method="POST",
-                headers={
-                    str(provider.get("auth_header", "Authorization")): str(provider.get("auth_prefix", "Bearer ")) + key,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                },
-            )
-            try:
-                with urllib.request.urlopen(request, timeout=float(provider.get("timeout_seconds", 60))) as response:
-                    response_obj = json.loads(response.read().decode("utf-8"))
-                content = self._pointer(response_obj, provider.get("response_pointer", "choices.0.message.content"))
-                payload = json.loads(content) if provider.get("response_content", "json_string") == "json_string" else content
+        request_payload = {
+            "model": inference.get("model"),
+            "system": p["system"],
+            "user": p["user"],
+        }
+        completed = subprocess.run(
+            argv,
+            input=json.dumps(request_payload, ensure_ascii=False),
+            text=True,
+            capture_output=True,
+            timeout=float(inference.get("timeout_seconds", 60)),
+            shell=False,
+            env=child_env,
+            check=False,
+        )
+        if completed.returncode != 0:
+            raise PipelineFault("LOCAL_EXEC_FAILED:" + str(completed.returncode))
+        stdout = completed.stdout.strip()
+        if not stdout:
+            raise PipelineFault("LOCAL_EXEC_EMPTY_OUTPUT")
+        response_obj = json.loads(stdout)
+        content = self._pointer(response_obj, inference.get("response_pointer", ""))
+        payload = json.loads(content) if inference.get("response_content", "json") == "json_string" else content
+        if not isinstance(payload, dict):
+            raise PipelineFault("INFERENCE_PAYLOAD_NOT_OBJECT")
+        return payload
+
+    def _inference_generate(self, p: dict[str, Any]) -> dict[str, Any]:
+        try:
+            inference = p["inference"]
+            if not isinstance(inference, dict):
+                raise PipelineFault("BAD_INFERENCE_CONFIG")
+            kind = str(inference.get("kind", ""))
+            admitted = kind in _ADMITTED_API_INFERENCE_KINDS or kind in {"mock", "local_exec"}
+            if not admitted:
+                raise PipelineFault("UNKNOWN_INFERENCE_KIND:" + kind)
+
+            if self.provider_override is not None:
+                self._active_secrets = []
+                request_payload = dict(p)
+                request_payload["inference"] = inference
+                payload = self.provider_override(request_payload)
+                if not isinstance(payload, dict):
+                    raise PipelineFault("INFERENCE_PAYLOAD_NOT_OBJECT")
                 return {
                     "ok": True,
                     "payload": payload,
-                    "provider_kind": provider.get("kind", "json"),
-                    "model": provider.get("model"),
+                    "provider_kind": kind or "override",
+                    "model": inference.get("model"),
                 }
-            except Exception as exc:
-                last = exc
-        return {
-            "ok": False,
-            "error_kind": type(last).__name__ if last else "PROVIDER_FAILED",
-            "error": str(last) if last else "provider failed",
-        }
+
+            if kind == "local_exec":
+                self._active_secrets = []
+                payload = self._inference_local_exec(inference, p)
+                return {
+                    "ok": True,
+                    "payload": payload,
+                    "provider_kind": kind,
+                    "model": inference.get("model"),
+                }
+
+            if kind == "mock":
+                raise PipelineFault("MOCK_REQUIRES_OVERRIDE")
+            if not self.allow_network:
+                return {"ok": False, "error_kind": "NETWORK_DISABLED", "error": "network disabled"}
+
+            endpoint = str(inference["endpoint"])
+            loopback = bool(re.match(r"^https?://(localhost|127\.0\.0\.1)(:\d+)?/", endpoint))
+            if endpoint.startswith("http://") and not loopback:
+                return {"ok": False, "error_kind": "PLAINTEXT_NON_LOOPBACK_FORBIDDEN", "error": endpoint}
+
+            keys = self._keys(list(inference.get("secret_names", [])), p.get("secret_file"))
+            if not keys and not loopback:
+                return {"ok": False, "error_kind": "NO_PROVIDER_SECRET", "error": "no provider secret"}
+            candidates = keys or [""]
+            body = {
+                "model": inference.get("model"),
+                "messages": [
+                    {"role": "system", "content": p["system"]},
+                    {"role": "user", "content": p["user"]},
+                ],
+                "temperature": inference.get("temperature", 0.7),
+                "max_tokens": inference.get("max_tokens", 2000),
+                "response_format": {"type": "json_object"},
+            }
+            encoded = json.dumps(body).encode("utf-8")
+            last: Exception | None = None
+            for key in candidates:
+                self._active_secrets = [key] if key else []
+                headers = {"Content-Type": "application/json", "Accept": "application/json"}
+                if key:
+                    headers[str(inference.get("auth_header", "Authorization"))] = (
+                        str(inference.get("auth_prefix", "Bearer ")) + key
+                    )
+                request = urllib.request.Request(endpoint, data=encoded, method="POST", headers=headers)
+                try:
+                    with urllib.request.urlopen(
+                        request,
+                        timeout=float(inference.get("timeout_seconds", 60)),
+                    ) as response:
+                        response_obj = json.loads(response.read().decode("utf-8"))
+                    content = self._pointer(
+                        response_obj,
+                        str(inference.get("response_pointer", "/choices/0/message/content")),
+                    )
+                    payload = (
+                        json.loads(content)
+                        if inference.get("response_content", "json_string") == "json_string"
+                        else content
+                    )
+                    if not isinstance(payload, dict):
+                        raise PipelineFault("INFERENCE_PAYLOAD_NOT_OBJECT")
+                    return {
+                        "ok": True,
+                        "payload": payload,
+                        "provider_kind": kind,
+                        "model": inference.get("model"),
+                    }
+                except Exception as exc:
+                    last = exc
+            return {
+                "ok": False,
+                "error_kind": type(last).__name__ if last else "INFERENCE_FAILED",
+                "error": str(last) if last else "inference failed",
+            }
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
     def _pipeline_gate(self, p: dict[str, Any]) -> dict[str, Any]:
         profile = p["profile"]
@@ -655,6 +879,27 @@ class ProfilePipelineRuntime(clay.Runtime):
         db = self._db(entity_db)
         try:
             db.execute("BEGIN IMMEDIATE")
+
+            # Fence this turn to the same native MiniUnifiedDB profile snapshot read at start.
+            profile_row = db.execute(
+                """SELECT e.active_profile,p.profile_json,p.profile_sha256
+                   FROM entity_state e
+                   JOIN profiles p ON p.profile_id=e.active_profile
+                   WHERE e.id=1"""
+            ).fetchone()
+            if profile_row is None:
+                raise PipelineFault("PROFILE_SNAPSHOT_STALE")
+            persisted_profile_hash = hashlib.sha256(
+                str(profile_row["profile_json"]).encode("utf-8")
+            ).hexdigest()
+            expected_profile_hash = str(profile.get("_runtime_profile_hash", ""))
+            if (
+                str(profile_row["active_profile"]) != str(profile["profile_id"])
+                or persisted_profile_hash != str(profile_row["profile_sha256"])
+                or persisted_profile_hash != expected_profile_hash
+            ):
+                raise PipelineFault("PROFILE_SNAPSHOT_STALE")
+
             row = db.execute(
                 "UPDATE eos_pipeline_state SET updated_at=? WHERE singleton=1 AND generation=?",
                 (now, previous["generation"]),
@@ -726,4 +971,11 @@ def execute_source(
     return clay.execute(program, entry, args, rt)
 
 
-__all__ = ["VERSION", "IMMUTABLE_GUARD", "PipelineFault", "ProfilePipelineRuntime", "execute_source"]
+__all__ = [
+    "VERSION",
+    "PROFILE_SCHEMA",
+    "IMMUTABLE_GUARD",
+    "PipelineFault",
+    "ProfilePipelineRuntime",
+    "execute_source",
+]

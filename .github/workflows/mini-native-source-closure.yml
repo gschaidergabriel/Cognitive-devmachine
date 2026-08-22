@@ -19,28 +19,83 @@ permissions:
 jobs:
   source-closure:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       - name: Compile provenance wrappers
         run: >-
           python -m py_compile
           'the artefact/blogpost_entity/native/build_native_bound.py'
           'the artefact/blogpost_entity/native/check_native_reference.py'
+
       - name: Run source-closure falsifiers
         run: python -m pytest 'the artefact/blogpost_entity/native/test_native_source_closure.py' -q
+
       - name: Bind current native source closure
         run: >-
-          python -c "import importlib.util,pathlib,json; p=pathlib.Path('the artefact/blogpost_entity/native/build_native_bound.py'); s=importlib.util.spec_from_file_location('b',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); c=m.source_closure(p.with_name('mini_entity.c')); assert len(c['files'])==6; print(json.dumps(c,sort_keys=True))"
+          python -c "import importlib.util,pathlib,json; p=pathlib.Path('the artefact/blogpost_entity/native/build_native_bound.py'); s=importlib.util.spec_from_file_location('b',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); c=m.source_closure(p.with_name('mini_entity.c')); assert len(c['files'])==6; assert m.source_version_label(p.with_name('mini_entity.c'))=='mini-entity/0.7.0-dev1'; print(json.dumps(c,sort_keys=True))"
+
       - name: Historical 0.6 credit must reject current 0.7 source lineage
         shell: bash
         run: |
           set +e
-          output="$(python 'the artefact/blogpost_entity/native/check_native_reference.py' --allow-missing-source)"
+          output="$(python 'the artefact/blogpost_entity/native/check_native_reference.py')"
           rc=$?
           set -e
           test "$rc" -eq 2
           printf '%s\n' "$output" | python -c "import json,sys; d=json.load(sys.stdin); assert d['canonical_source']['version']=='mini-entity/0.7.0-dev1'; assert d['canonical_source']['lineage_matches_credited_version'] is False; assert d['reproducibility']=='BLOCKED_HISTORICAL_SOURCE_LINEAGE_MISMATCH'; assert any('CREDITED_BINARY_SOURCE_VERSION_MISMATCH' in e for e in d['errors'])"
+
+      - name: Builder must reject a false 0.6 label before compilation
+        shell: bash
+        run: |
+          set +e
+          output="$(python 'the artefact/blogpost_entity/native/build_native_bound.py' --version-label mini-entity/0.6.0 --source-date-epoch 1787356800 2>&1)"
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          printf '%s\n' "$output" | grep -F 'VERSION_LABEL_SOURCE_MISMATCH:requested=mini-entity/0.6.0 source=mini-entity/0.7.0-dev1'
+
+      - name: Install native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gcc binutils pkg-config libsqlite3-dev libcurl4-openssl-dev libjson-c-dev
+
+      - name: Repeat-build exact Mini Entity 0.7 source closure
+        run: |
+          mkdir -p native-build
+          python 'the artefact/blogpost_entity/native/build_native_bound.py' \
+            --version-label mini-entity/0.7.0-dev1 \
+            --source-date-epoch 1787356800 \
+            --repeat 2 \
+            --output native-build/mini_entity.clay \
+            --receipt native-build/native_build_provenance.json \
+            > native-build/native_build_stdout.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('native-build/native_build_provenance.json').read_text())
+          assert p['schema'] == 'mini-entity-native-build-provenance/v2'
+          assert p['version_label'] == 'mini-entity/0.7.0-dev1'
+          assert p['source_version_label'] == 'mini-entity/0.7.0-dev1'
+          assert p['build_definition']['repeat_byte_identity'] is True
+          assert len(set(p['build_definition']['repeat_hashes'])) == 1
+          assert len(p['build_definition']['source']['closure']['files']) == 6
+          print(p['subject']['sha256'])
+          PY
+          file native-build/mini_entity.clay
+          ldd native-build/mini_entity.clay
+
+      - name: Upload exact ELF and provenance receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: mini-entity-07-source-bound-${{ github.sha }}
+          path: |
+            native-build/mini_entity.clay
+            native-build/native_build_provenance.json
+            native-build/native_build_stdout.json
+          if-no-files-found: error
+          retention-days: 7

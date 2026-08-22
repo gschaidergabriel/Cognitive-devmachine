@@ -1,48 +1,35 @@
 #!/usr/bin/env python3
-"""Fail-closed provenance gate for the credited native Mini Entity sandbox artifact.
+"""Fail-closed provenance gate for the credited native Mini Entity 0.6 sandbox artifact.
 
 This checker intentionally does not establish runtime correctness. It binds the
 historically credited version/hash across canonical state, the sandbox receipt and the
 human-readable native reference, then keeps that historical credit separate from any
-newly recreated source line. Source presence alone is never treated as proof that the
-source produced the credited ELF.
+newly recreated source line. Source presence or a matching version label alone is never
+proof that those bytes produced the credited ELF.
 """
 from __future__ import annotations
 
 import argparse
 import json
-import re
 from pathlib import Path
 
-from build_native_bound import sha256_file, source_closure
+from build_native_bound import sha256_file, source_closure, source_version_label
 
 
 RECEIPT_NAME = "2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json"
 REFERENCE_NAME = "MINI_ENTITY_0_6_SANDBOX.md"
 SOURCE_NAME = "mini_entity.c"
-VERSION_RE = re.compile(r'^\s*#\s*define\s+MINI_VERSION\s+"([^"]+)"', re.MULTILINE)
-
-
-def detect_source_version(native_dir: Path, closure: dict) -> str:
-    versions: set[str] = set()
-    for item in closure.get("files", []):
-        path = native_dir / str(item["path"])
-        text = path.read_text(encoding="utf-8")
-        versions.update(VERSION_RE.findall(text))
-    if not versions:
-        raise RuntimeError("SOURCE_VERSION_MISSING")
-    if len(versions) != 1:
-        raise RuntimeError("SOURCE_VERSION_AMBIGUOUS:" + ",".join(sorted(versions)))
-    return next(iter(versions))
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--binary", type=Path, help="Optional mini_entity.clay ELF to byte-verify")
+    parser.add_argument("--binary", type=Path, help="Optional historical mini_entity.clay ELF to byte-verify")
     parser.add_argument(
         "--allow-missing-source",
+        "--allow-unbound-source",
+        dest="allow_unbound_source",
         action="store_true",
-        help="Report missing canonical native source without failing the process",
+        help="Report missing/unbound historical source provenance without failing on that condition alone",
     )
     args = parser.parse_args()
 
@@ -84,17 +71,54 @@ def main() -> int:
     if source_path.is_file():
         try:
             closure = source_closure(source_path)
-            source_version = detect_source_version(native_dir, closure)
+            source_version = source_version_label(source_path)
         except Exception as exc:
             source_error = f"{type(exc).__name__}:{exc}"
             errors.append("CANONICAL_SOURCE_INVALID:" + source_error)
 
+    source_identity_hash = str(closure["sha256"]) if isinstance(closure, dict) else None
     source_lineage_match = source_version == receipt_version if source_version is not None else False
-    if source_version is not None and not source_lineage_match:
-        errors.append(
+
+    credited_source_identity = receipt.get("source_identity_sha256")
+    if credited_source_identity is None:
+        source_provenance = receipt.get("source_provenance")
+        if isinstance(source_provenance, dict):
+            credited_source_identity = source_provenance.get("source_identity_sha256")
+    if credited_source_identity is not None:
+        credited_source_identity = str(credited_source_identity)
+
+    source_identity_match = (
+        credited_source_identity is not None
+        and source_identity_hash is not None
+        and credited_source_identity == source_identity_hash
+    )
+
+    provenance_error = None
+    if not source_path.is_file():
+        reproducibility = "BLOCKED_SOURCE_MISSING"
+        provenance_error = "CANONICAL_NATIVE_SOURCE_MISSING"
+    elif source_error is not None:
+        reproducibility = "BLOCKED_SOURCE_INVALID"
+    elif not source_lineage_match:
+        reproducibility = "BLOCKED_HISTORICAL_SOURCE_LINEAGE_MISMATCH"
+        provenance_error = (
             "CREDITED_BINARY_SOURCE_VERSION_MISMATCH "
             f"credited={receipt_version} canonical_source={source_version}"
         )
+    elif credited_source_identity is None:
+        reproducibility = "BLOCKED_CREDITED_SOURCE_IDENTITY_MISSING"
+        provenance_error = "CREDITED_0_6_SOURCE_IDENTITY_MISSING"
+    elif not source_identity_match:
+        reproducibility = "BLOCKED_CREDITED_SOURCE_IDENTITY_MISMATCH"
+        provenance_error = (
+            f"CREDITED_SOURCE_IDENTITY_MISMATCH expected={credited_source_identity} "
+            f"observed={source_identity_hash}"
+        )
+    else:
+        reproducibility = "CREDITED_SOURCE_IDENTITY_BOUND"
+
+    if provenance_error is not None and not args.allow_unbound_source:
+        errors.append(provenance_error)
 
     binary_status = "NOT_PROVIDED"
     binary_hash = None
@@ -109,31 +133,21 @@ def main() -> int:
             if binary_hash != receipt_hash:
                 errors.append(f"BINARY_HASH_MISMATCH expected={receipt_hash} observed={binary_hash}")
 
-    if not source_path.is_file():
-        reproducibility = "BLOCKED_SOURCE_MISSING"
-        if not args.allow_missing_source:
-            errors.append("CANONICAL_NATIVE_SOURCE_MISSING")
-    elif source_error is not None:
-        reproducibility = "BLOCKED_SOURCE_INVALID"
-    elif not source_lineage_match:
-        reproducibility = "BLOCKED_HISTORICAL_SOURCE_LINEAGE_MISMATCH"
-    elif binary_status == "MATCH":
-        reproducibility = "SOURCE_LINEAGE_AND_CREDITED_BINARY_MATCH"
-    else:
-        reproducibility = "SOURCE_LINEAGE_MATCH_BUILD_NOT_BYTE_VERIFIED"
-
     report = {
-        "schema": "mini-entity-native-provenance-check/v2",
+        "schema": "mini-entity-native-provenance-check/v3",
         "credited_version": receipt_version,
         "credited_binary_sha256": receipt_hash,
+        "credited_source_identity_sha256": credited_source_identity,
         "state_receipt_hash_match": state_hash == receipt_hash,
         "reference_binds_credited_hash": receipt_hash in reference,
         "canonical_source": {
             "path": str(source_path.relative_to(root)),
             "status": source_status,
             "entry_sha256": source_entry_hash,
+            "identity_sha256": source_identity_hash,
             "version": source_version,
             "lineage_matches_credited_version": source_lineage_match,
+            "identity_matches_credited_source": source_identity_match,
             "closure": closure,
             "error": source_error,
         },

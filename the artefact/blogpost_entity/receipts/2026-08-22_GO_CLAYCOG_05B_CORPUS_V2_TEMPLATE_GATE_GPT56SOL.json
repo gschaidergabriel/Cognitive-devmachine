@@ -1,0 +1,100 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "canonical_main_observed_before_work": "62b292a8097c5b53731ef6804704cf9938872616",
+  "work_branch": "gpt56sol/go-claycog-05b-corpus-v2-20260822",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "problem": {
+    "v1_reported_rows": 1650,
+    "v1_structural_validation": "previously 0 invalid",
+    "new_finding": "The v1 generator samples with replacement from small literal/template pools and shuffles before train/validation split. Row count therefore substantially overstates scenario diversity and does not protect validation from exact duplicate contamination.",
+    "source_derived_distinct_scenario_upper_bound": 71,
+    "upper_bound_breakdown": {
+      "omega_valid": 6,
+      "omega_reject": 6,
+      "epistemic": 9,
+      "hyperposition": 6,
+      "architecture": 1,
+      "configuration": 6,
+      "self_state": 25,
+      "recovery": 5,
+      "adversarial": 7
+    },
+    "classification": "PRE_PAID_TRAINING_DATA_VALIDITY_BLOCKER"
+  },
+  "counterhypothesis": {
+    "claim": "1650 structurally valid rows provide a meaningful 1485/165 held-in generalization split",
+    "discriminator": "derive the generator's finite scenario support and require exact uniqueness plus zero cross-split overlap",
+    "result": "REJECTED_FOR_V1"
+  },
+  "unusual_experiment": {
+    "name": "SFT_V1_COMBINATORIAL_DUPLICATE_BOUND",
+    "count_for_this_go": 1,
+    "result": "The finite generator support is at most 71 distinct generated scenarios before random repetition; v1 held-in validation is therefore not accepted as an independent validation set."
+  },
+  "delta": {
+    "generator": "the artefact/blogpost_entity/mini_cognition/generate_sft_v2.py",
+    "validator": "the artefact/blogpost_entity/mini_cognition/validate_corpus_v2.py",
+    "manifest": "the artefact/blogpost_entity/mini_cognition/corpus_manifest_v2.json",
+    "launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py now consumes v2 and gates template Full-FT support before file upload",
+    "shell": "the artefact/blogpost_entity/mini_cognition/train_together_v1.sh now regenerates/validates v2 only",
+    "readme": "v1 explicitly historical/not-for-training; v2 canonical training input"
+  },
+  "bounded_sandbox_evidence": {
+    "generator_execution": "OBSERVED",
+    "train_lines": 1485,
+    "validation_lines": 165,
+    "train_structural_invalid": 0,
+    "validation_structural_invalid": 0,
+    "train_unique": 1485,
+    "validation_unique": 165,
+    "exact_cross_split_overlap": 0,
+    "prompt_cross_split_overlap": 0,
+    "train_sha256": "8a9df9c81c1e7f199bab6cfe65acfec080a87a29eaff02e345b3eb0923d518d6",
+    "validation_sha256": "7bc3d28041b7fd51992e8b62f2a69981016910404b5fc6b7ce2d4444050d21f5",
+    "credit_scope": "corpus-generation and deterministic structural/diversity mechanism only; not model-quality or Together compatibility evidence"
+  },
+  "external_primary_evidence": {
+    "together_supported_models": {
+      "url": "https://docs.together.ai/docs/fine-tuning/supported-models",
+      "observed_2026_08_22": "Documented Full Fine-Tuning Qwen entries include Qwen3.5 27B/9B/4B/2B/0.8B and Qwen3.6 27B; no Qwen2/Qwen2.5 Full-FT template is documented."
+    },
+    "together_byom": {
+      "url": "https://docs.together.ai/docs/fine-tuning/byom",
+      "observed_2026_08_22": "BYOM requires a Together base/training template whose architecture matches the custom Hugging Face checkpoint; checkpoint must be CausalLM under 100B with supported framework/weights constraints."
+    },
+    "together_pricing": {
+      "url": "https://www.together.ai/pricing",
+      "observed_2026_08_22": "Standard SFT Full Fine-Tuning up to 16B is $0.54 per 1M processed tokens and each standard job is subject to a $4.00 minimum charge."
+    }
+  },
+  "together_status": {
+    "api_secret_mounted_in_this_execution": false,
+    "server_model_limits_call_executed": false,
+    "dataset_uploaded": false,
+    "price_estimate_obtained": false,
+    "job_started": false,
+    "money_spent_by_this_go": 0,
+    "compatibility": "BLOCKED_UNPROVEN",
+    "blocker": "No currently documented Qwen2/Qwen2.5 Full-FT Together template is available for the owner-required Qwen2.5-0.5B BYOM checkpoint. API model_limits remains the final live admission check when a secret is mounted."
+  },
+  "promotion_status": {
+    "checkpoint_trained": false,
+    "ood_evaluated": false,
+    "quantized_q4_k_m": false,
+    "peak_rss_under_1gib_measured": false,
+    "local_exec_integrated": false,
+    "superiority_claim": false
+  },
+  "native_0_7_lane": {
+    "status": "UNCHANGED_THIS_MACRO_CYCLE",
+    "reason": "Multiple overlapping native semantic/provenance draft PRs already exist. This go prioritized the newly discovered pre-paid cognition data validity blocker and avoided creating another native implementation path."
+  },
+  "next_high_information_step": "With an environment-only Together key, execute preflight only. If model_limits rejects the Qwen2.5 template as expected from current docs, do not upload/create; identify an owner-admitted Qwen2-compatible Full-FT runner and train the same v2 corpus there. If Together exposes a compatible template, obtain server validation + estimate under USD18 before exactly one create.",
+  "acceptance": "IN_PROGRESS",
+  "evidence_boundary": "No paid training, Together BYOM compatibility, trained-checkpoint quality, consciousness, mathematical correctness, micro-agent superiority, quantized RSS or whole Mini Entity acceptance is claimed."
+}

@@ -147,8 +147,7 @@ def assert_created_job_seed(job):
     if got!=RANDOM_SEED:raise SystemExit(f"JOB_CREATED_SEED_MISMATCH expected={RANDOM_SEED} observed={got!r}; job is known, do not create another")
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
-    assert_provider_execution_allowed()
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();assert_provider_execution_allowed();local_checks()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)

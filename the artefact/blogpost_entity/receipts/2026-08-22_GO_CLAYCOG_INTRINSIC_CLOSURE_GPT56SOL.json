@@ -1,0 +1,58 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "fused_base_main_sha": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+  "branch": "gpt56sol/claycog-intrinsic-closure-fused-20260822",
+  "parallel_main_fusion": {
+    "together_idempotency": "PRESERVED_FROM_MAIN_f231b2d93893eccf8a91850ba0512908456995f9",
+    "status_footer": "PRESERVED_FROM_MAIN_6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+    "superseded_first_branch": "gpt56sol/claycog-intrinsic-closure-go-20260822"
+  },
+  "finding": {
+    "id": "CLAYCOG_INTRINSIC_VOCABULARY_UNCLOSED",
+    "severity": "PRE_TRAINING_BLOCKER",
+    "mechanism": "The SFT generator emits cognition calls that were not defined in one closed ClayCode Cognition v1 intrinsic vocabulary, while the spec states unknown intrinsic and bad arity fail closed. The original structural validator did not check call vocabulary/arity and OOD scoring reused it.",
+    "risk": "Training or OOD promotion could credit targets that look structurally ClayCode-like yet are undefined under the claimed deterministic admission contract."
+  },
+  "delta": [
+    "intrinsics_v1.py defines one machine-readable cognition intrinsic vocabulary and arity map",
+    "validate_sft_v1.py rejects unknown calls and wrong arity in addition to existing envelope/omega gates",
+    "string payload masking preserves one passive argument token so literal arguments retain arity without allowing literal punctuation to alter syntax",
+    "CLAYCODE_COGNITION_V1.md now explicitly binds the same closed-vocabulary law",
+    "audit_intrinsic_closure_v1.py deterministically audits all generated SFT targets without executing actions"
+  ],
+  "automatic_training_gate": "The existing Together launcher on fused main already invokes validate_sft_v1.py for train and validation before upload; once this validator delta is merged, undefined/wrong-arity intrinsics fail before remote upload while main's fingerprint/idempotency create protections remain unchanged.",
+  "unusual_experiment": {
+    "count": 1,
+    "id": "INTRINSIC_VOCABULARY_CLOSURE_PARSER_FALSIFIER",
+    "result": "First lexer revision was falsified because complete string masking made cfg(string) appear arity zero. Repair preserves a passive literal placeholder. Representative valid calls then matched arity; injected unknown and wrong-arity calls were rejected.",
+    "credit": "BOUNDED_SYNTHETIC_MECHANISM_ONLY_NOT_EXACT_BRANCH_RUNTIME"
+  },
+  "external_current_checks": {
+    "together_sdk": "Current together-py source exposes model_limits, estimate_price and create(from_hf_model=...). The SDK states from_hf_model should be as close as possible to the selected base model in architecture and size.",
+    "qwen_base": "Qwen/Qwen2.5-0.5B is a 0.49B CausalLM; visible Hugging Face main history points to 060db64 at audit time.",
+    "byom_compatibility": "OPEN until server accepts the actual 0.5B from_hf_model with the selected Together template and training starts."
+  },
+  "training": {
+    "together_secret_available_to_this_organ": false,
+    "preflight_called": false,
+    "paid_create_called": false,
+    "job_started": false
+  },
+  "evidence_class": "SOURCE_CANDIDATE_PLUS_BOUNDED_SYNTHETIC_MECHANISM_FALSIFIER",
+  "not_claimed": [
+    "exact fused-branch corpus closure PASS",
+    "Together BYOM compatibility",
+    "fine-tune quality or completion",
+    "OOD promotion",
+    "Q4_K_M RSS acceptance",
+    "native Mini Entity 0.7 runtime acceptance",
+    "whole product acceptance"
+  ],
+  "next_exact_gate": "Execute exact fused branch in an authorized isolated Linux executor: generate SFT, validate train and validation, run intrinsic closure audit. Then, with an environment-only Together key, run preflight without --create; billed create remains gated by main's deterministic campaign fingerprint, duplicate-account check and USD18 limit."
+}

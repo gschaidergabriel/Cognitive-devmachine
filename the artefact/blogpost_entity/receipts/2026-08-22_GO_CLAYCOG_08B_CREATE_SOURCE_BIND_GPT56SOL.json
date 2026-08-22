@@ -1,0 +1,73 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main": "f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "primary_paid_training_base": "Qwen/Qwen3.5-0.8B",
+  "parallel_fusion": {
+    "main_delta_observed": "f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d",
+    "finding": "current main restored canonical SFT-v2 preflight validation through validate_corpus_v2.py",
+    "action": "source-identity repair was rebuilt on top of that stronger main rather than overwriting it"
+  },
+  "external_primary_evidence": {
+    "together_supported_models_checked": "2026-08-22",
+    "finding": "Together current fine-tuning supported-model documentation lists Qwen/Qwen3.5-0.8B in both LoRA and Full fine-tuning tables; Full SFT context 131072 and packed batch 8.",
+    "scope": "public provider documentation only; not authenticated model_limits/preflight credit"
+  },
+  "finding": {
+    "id": "PAID_CREATE_CONFIRMATION_SOURCE_IDENTITY_GAP",
+    "severity": "HIGH",
+    "observed": "direct 0.8B campaign fingerprint v2 bound model, corpus hashes and training hyperparameters but not exact repo/source identity",
+    "risk": "a previously surfaced CLAYCOG_CREATE_FINGERPRINT could remain valid after launcher/generator/canonical-validator or checkout identity drift while corpus/model/hyperparameters remained unchanged",
+    "violated_contract": "owner paid-create sequence requires exact current repo/corpus identity before billed create"
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "name": "CREATE_CONFIRMATION_SOURCE_DRIFT_COUNTERBLOCKER",
+    "intervention": "hold model/corpus/hyperparameters constant while changing source identity",
+    "legacy_prediction": "campaign fingerprint remains unchanged because source identity is absent",
+    "hardened_prediction": "campaign fingerprint changes and prior create confirmation is rejected",
+    "evidence_class": "SOURCE_LEVEL_COUNTEREXAMPLE_PENDING_EXACT_RUNNER_REGRESSION"
+  },
+  "repair": {
+    "campaign_schema": "claycog-08b-together-direct-campaign/v3",
+    "fingerprint_now_binds": [
+      "exact 40-hex git HEAD",
+      "SHA-256 launcher bytes",
+      "SHA-256 SFT-v2 generator bytes",
+      "SHA-256 canonical validate_corpus_v2.py bytes",
+      "existing corpus/model/hyperparameter/training-method/training-type identity"
+    ],
+    "campaign_suffix": "claycog08b-v3-<fingerprint-prefix>",
+    "preflight_output": "includes source_identity",
+    "create_intent": "persists source-bound campaign descriptor",
+    "preserved_main_gate": "local_checks still runs generate_sft_v2.py followed by canonical validate_corpus_v2.py TRAIN VALID"
+  },
+  "tests_added": [
+    "fingerprint changes when source identity changes with dataset/model/hyperparameters held constant",
+    "source identity hashes real launcher/generator/canonical-validator bytes",
+    "create intent persists source identity",
+    "existing canonical v2 preflight-target regression retained"
+  ],
+  "execution": {
+    "status": "UNOBSERVED_AT_RECEIPT_WRITE",
+    "reason": "no Vercel executable sandbox surface exposed; exact PR Actions runner to be inspected after PR creation",
+    "provider_network_called": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "claims_not_made": [
+    "authenticated Together model_limits PASS",
+    "provider dataset validation PASS",
+    "price preflight PASS",
+    "billed create",
+    "training quality",
+    "Q4_K_M",
+    "peak RSS <1 GiB",
+    "whole Mini Entity PASS"
+  ]
+}

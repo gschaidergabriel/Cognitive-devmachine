@@ -34,6 +34,8 @@ jobs:
             'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/describe_campaign_offline_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_describe_campaign_offline_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/audit_together_byom_template_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_audit_together_byom_template_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py'
       - name: Run strict ClayCode and paid-create safety regressions
@@ -42,6 +44,7 @@ jobs:
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_corpus_v2.py'
           python3 'the artefact/blogpost_entity/mini_cognition/test_describe_campaign_offline_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_audit_together_byom_template_v1.py'
           python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'
           python3 'the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py'
       - name: Regenerate and validate exact SFT v2 corpus

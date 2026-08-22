@@ -34,6 +34,18 @@ class Tests(unittest.TestCase):
         self.assertEqual(Path(validate[1]).name,"validate_corpus_v2.py")
         self.assertEqual(validate[2:],[str(m.TRAIN),str(m.VALID)])
         self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertTrue(run.call_args_list[1].kwargs["check"])
+    def test_free_only_tripwire_blocks_before_secret_lookup(self):
+        policy=Path(self.t.name)/"provider-policy.json";policy.write_text(json.dumps({"mode":"FREE_ONLY"}))
+        with mock.patch.object(m,"provider_policy_path",return_value=policy), mock.patch.object(m,"read_together_api_key",side_effect=AssertionError("SECRET_LOOKUP_TRIPPED")) as secret:
+            with self.assertRaises(SystemExit) as ctx:m.new_together_client()
+        secret.assert_not_called();message=str(ctx.exception);self.assertIn("BLOCKED_BEFORE_LAUNCH",message);self.assertIn("secret_lookup=0",message);self.assertIn("network_attempts=0",message)
+    def test_provider_admission_is_explicit_and_unknown_fails_closed(self):
+        policy=Path(self.t.name)/"provider-policy.json"
+        with mock.patch.object(m,"provider_policy_path",return_value=policy):
+            for mode in ("PAID","SUBSCRIPTION","UNKNOWN",""):
+                policy.write_text(json.dumps({"mode":mode}))
+                with self.assertRaises(SystemExit):m.assert_together_provider_admitted()
+            policy.write_text(json.dumps({"mode":"PAID_ALLOWED"}));self.assertEqual(m.assert_together_provider_admitted()["mode"],"PAID_ALLOWED")
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

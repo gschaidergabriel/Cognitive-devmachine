@@ -1,0 +1,65 @@
+{
+  "schema": "claycog-runtime-binding-gate/v1",
+  "observed_at": "2026-08-22T07:16:24Z",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay research organ",
+  "canonical_main_at_final_rebase": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+  "work_branch": "gpt56sol/go-claycog-binding-gate-20260822",
+  "branch_source_head_before_receipt": "ab73e4737df878807c1e5b5fe069f8d03cc6cce5",
+  "main_refresh": {
+    "initial_join": "62b292a8097c5b53731ef6804704cf9938872616",
+    "new_commits_observed_during_go": [
+      "f231b2d93893eccf8a91850ba0512908456995f9 cognition: make 0.5B Together create idempotent (#772)",
+      "6a831bc975bd9c126c1ac891b649f2c27d87bc8f docs(status): align footer with 0.5B owner law (#773)"
+    ],
+    "overlap_adjudication": "The new main changed Together launcher/safety tests/README/footer, not validate_sft_v1.py or the new binding test path. The branch was force-reset to current main and the exact tested binding delta was re-applied."
+  },
+  "scope": "Harden the existing ClayCode SFT structural admission gate against hidden second fixed identity/role/goal/personality bindings without changing corpus bytes.",
+  "hypothesis": "Requiring the canonical runtime cfg binding text somewhere in an output is insufficient: a target may also contain a second hard-coded binding and still pass the previous validator.",
+  "counterhypothesis": "The existing literal forbiddens are sufficient because known fixed names/jobs are already rejected.",
+  "falsifier": "Construct outputs that retain every required cfg binding but append a different hard-coded binding; also attempt to smuggle required binding text inside a ClayCode string while omitting the structural call.",
+  "source_identity": {
+    "validator_git_blob": "c7659d023e86587bb9eb6bd5f330bc9a9e3e5ed2",
+    "test_git_blob": "0560b3a2f8e5d39763958654ac21cebf4dad681b",
+    "canonical_generator_git_blob": "451119b24adb1fd63274e50e92f336eb354ae5e8"
+  },
+  "isolated_runtime": {
+    "surface": "OpenAI isolated non-production container",
+    "kernel": "Linux 6.18.35 x86_64",
+    "python": "3.13.5"
+  },
+  "tests": {
+    "adversarial_unit_tests": {
+      "command": "python3 -m unittest -v test_validate_sft_v1.py",
+      "result": "PASS",
+      "passed": 7,
+      "failed": 0
+    },
+    "canonical_corpus_regression": {
+      "generator_command": "python3 generate_sft_v1.py",
+      "train_validator_command": "python3 validate_sft_v1.py train_v1.jsonl",
+      "validation_validator_command": "python3 validate_sft_v1.py validation_v1.jsonl",
+      "train": {"lines": 1485, "bad": 0, "ok": true},
+      "validation": {"lines": 165, "bad": 0, "ok": true},
+      "train_sha256": "bc1753771ed0f818865a3118f754ac5b10d67bc3ae885f668201f66566028eb2",
+      "validation_sha256": "81a6bb9fc0a210affffa84590c27ad2fc76c93fa24c4112e6573552227e512ce",
+      "byte_identity_matches_canonical_manifest": true
+    }
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "intervention": "Place the exact required self_bind cfg text inside a quoted state_note string while omitting the real structural self_bind call.",
+    "prediction_if_gate_is_weak": "Raw substring checks accept the spoof.",
+    "prediction_if_hardened_gate_works": "Structural call count is zero and exact binding-line count is zero, so admission rejects.",
+    "observed": ["binding_call_count:self_bind:0", "binding_not_exact_runtime_cfg:self_bind:0"],
+    "result": "REJECTED_AS_REQUIRED"
+  },
+  "result": "MECHANISM_SUPPORTED_IN_EXACT_ISOLATED_SOURCE_BOUND_TEST",
+  "product_claim_boundary": "This does not prove tuned-model quality, Together BYOM compatibility, native Mini Entity 0.7 runtime acceptance, quantized RSS, or whole Mini Entity acceptance.",
+  "next": [
+    "Use the newly merged idempotent Together create guard on main for any future credentialed preflight/create path.",
+    "Keep Qwen/Qwen2.5-0.5B to the current Together Qwen2.5 training template pairing OPEN until actual API admission accepts it.",
+    "Evaluate any tuned checkpoint with this hardened validator and the held-out 200-case OOD suite before promotion.",
+    "Independently close MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT/v1 on an admitted Linux runner."
+  ]
+}

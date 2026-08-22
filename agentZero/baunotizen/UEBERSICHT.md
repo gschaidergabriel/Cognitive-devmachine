@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-22T12:36:44Z. **4375 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-22T13:36:44Z. **4459 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T19:03:29+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T20:06:35+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 4277 |
+| baunotiz | 4361 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2531 |
-| baunotiz | bauverlauf.jsonl | 1698 |
+| baunotiz | git-commit | 2573 |
+| baunotiz | bauverlauf.jsonl | 1740 |
 | baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 4375 · Gegenhypothese: 0 von 4375
+## Hypothese: 0 von 4459 · Gegenhypothese: 0 von 4459
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -35,211 +35,215 @@ Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im L
 
 ## Die 25 juengsten (gepruefte) Baunotizen
 
-### Merge PR #946: bind FREE_ONLY fallback cost classes to canonical source
+### Merge PR #969: bind single profile authority gate
 
-`baunotiz-bauverlauf-206fb932504fb8c792ba` · baunotiz · bauverlauf.jsonl · 2026-08-22T19:03:29+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Architecture/source-authority delta only. Preserve UNKNOWN fail-closed semantics, reuse legacy PR #232 only as a bounded evidence-schema donor, and do not hand-label derived bahnen.json without repository-bound canonical provider source. No runtime/provider PASS implied.
-
-### Merge PR #946: bind FREE_ONLY fallback cost classes to canonical source
-
-`baunotiz-git-ed0d28a22cffbf80e72f697acb77586d060f579b` · baunotiz · git-commit · 2026-08-22T19:03:29+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-8d105a506914f4097d17` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:06:35+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-Merge PR #946: bind FREE_ONLY fallback cost classes to canonical source
+Fuse the native MiniUnifiedDB profile-authority convergence guard and joined macrocycle receipt. Source/architecture guard only; no runtime PASS, no additional unusual experiment.
 
-Architecture/source-authority delta only. Preserve UNKNOWN fail-closed semantics, reuse legacy PR #232 only as a bounded evidence-schema donor, and do not hand-label derived bahnen.json without repository-bound canonical provider source. No runtime/provider PASS implied.
+### Merge PR #969: bind single profile authority gate
 
-### evidence: record historical zero-cost policy donor
-
-`baunotiz-bauverlauf-3c54d513e2ad2963eec7` · baunotiz · bauverlauf.jsonl · 2026-08-22T19:02:39+07:00 · Gabriel Gschaider
+`baunotiz-git-06799ff2cd6ebffdd56521fc6a7fd0f6b6d67ef0` · baunotiz · git-commit · 2026-08-22T20:06:35+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+Merge PR #969: bind single profile authority gate
 
-### evidence: record historical zero-cost policy donor
+Fuse the native MiniUnifiedDB profile-authority convergence guard and joined macrocycle receipt. Source/architecture guard only; no runtime PASS, no additional unusual experiment.
 
-`baunotiz-git-c79924ddd970624f114d7c6a855e7364b31c11cd` · baunotiz · git-commit · 2026-08-22T19:02:39+07:00 · Gabriel Gschaider
+### contract(reference): bind native profile authority convergence gate
 
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-evidence: record historical zero-cost policy donor
-
-### architecture: fuse historical zero-cost policy donor into fallback contract
-
-`baunotiz-bauverlauf-8048fef2d802ac7fa25c` · baunotiz · bauverlauf.jsonl · 2026-08-22T19:02:08+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-d03fbad6d7cf34234492` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:06:12+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+Fail closed on a second active-profile authority and on local_exec subprocesses without an explicit child environment. Source contract only; no runtime PASS implied.
 
-### architecture: fuse historical zero-cost policy donor into fallback contract
+### contract(reference): bind native profile authority convergence gate
 
-`baunotiz-git-710183c3024e094781e1f917b9de387b19520c5b` · baunotiz · git-commit · 2026-08-22T19:02:08+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-architecture: fuse historical zero-cost policy donor into fallback contract
-
-### research: bind Gen276 FREE_ONLY fallback source bypass
-
-`baunotiz-bauverlauf-13c02efb9411f430c454` · baunotiz · bauverlauf.jsonl · 2026-08-22T19:01:49+07:00 · Gabriel Gschaider
+`baunotiz-git-18db1397eb724ac7de10ce2d5b68b4f95a51b686` · baunotiz · git-commit · 2026-08-22T20:06:12+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-Bind exact Gen276 source-mechanism evidence and the canonical FREE_ONLY fallback admission/falsification contract. Research/evidence only; no exported product code or provider execution.
+contract(reference): bind native profile authority convergence gate
 
-### research: bind Gen276 FREE_ONLY fallback source bypass
+Fail closed on a second active-profile authority and on local_exec subprocesses without an explicit child environment. Source contract only; no runtime PASS implied.
 
-`baunotiz-git-4db0ca016943a57d9629e052899f027b181a20d7` · baunotiz · git-commit · 2026-08-22T19:01:49+07:00 · Gabriel Gschaider
+### contract(reference): bind single profile authority gate
 
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind Gen276 FREE_ONLY fallback source bypass
-
-Bind exact Gen276 source-mechanism evidence and the canonical FREE_ONLY fallback admission/falsification contract. Research/evidence only; no exported product code or provider execution.
-
-### research: prove Gen276 FREE_ONLY fallback pre-secret source gap
-
-`baunotiz-bauverlauf-9b502fe11a596ed221b4` · baunotiz · bauverlauf.jsonl · 2026-08-22T19:00:53+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-6efd23ab024778f20576` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:05:56+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+Fuse the deterministic native-profile-authority guard and joined macrocycle receipt onto fresh main. No runtime PASS; no additional unusual experiment.
 
-### research: prove Gen276 FREE_ONLY fallback pre-secret source gap
+### contract(reference): bind single profile authority gate
 
-`baunotiz-git-41f9936a448c173f6c862eb09e359dabccec48b1` · baunotiz · git-commit · 2026-08-22T19:00:53+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: prove Gen276 FREE_ONLY fallback pre-secret source gap
-
-### evidence: bind fallback cost-class source-authority blocker
-
-`baunotiz-bauverlauf-ffb81be91062663539b8` · baunotiz · bauverlauf.jsonl · 2026-08-22T19:00:38+07:00 · Gabriel Gschaider
+`baunotiz-git-9f825c9f5c09be484ea59fe87fba46e0a2f443c9` · baunotiz · git-commit · 2026-08-22T20:05:56+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+contract(reference): bind single profile authority gate
 
-### evidence: bind fallback cost-class source-authority blocker
+Fuse the deterministic native-profile-authority guard and joined macrocycle receipt onto fresh main. No runtime PASS; no additional unusual experiment.
 
-`baunotiz-git-a89116e23239d1650993f069fb3cc9009b117b97` · baunotiz · git-commit · 2026-08-22T19:00:38+07:00 · Gabriel Gschaider
+### contract(native): bind donor extraction preservation matrix
 
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-evidence: bind fallback cost-class source-authority blocker
-
-### architecture: bind fallback cost classes to canonical source
-
-`baunotiz-bauverlauf-0489ba095083cf428ec5` · baunotiz · bauverlauf.jsonl · 2026-08-22T19:00:14+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-0c04e66f1e60b5b1ff28` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:05:03+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+Fuse the non-duplicate fresh-main donor-only preservation matrix on top of #957/#959 and reference responsibility semantics. Keep native v2 fail closed; no runtime PASS or provider execution claimed.
 
-### architecture: bind fallback cost classes to canonical source
+### contract(native): bind donor extraction preservation matrix
 
-`baunotiz-git-8f95ccedac5094896f65dd673f8ddb3104eeb873` · baunotiz · git-commit · 2026-08-22T19:00:14+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-architecture: bind fallback cost classes to canonical source
-
-### fix(cognition): bind 0.8B SDK contract into create identity
-
-`baunotiz-bauverlauf-ca8883343e8c8346fe90` · baunotiz · bauverlauf.jsonl · 2026-08-22T18:58:55+07:00 · Gabriel Gschaider
+`baunotiz-git-7feca575be3a7ba7be1f9fb70a04a2117b0f2cc2` · baunotiz · git-commit · 2026-08-22T20:05:03+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-Source-contract fusion only. Binds the canonical SDK-v2 Full-FT CREATE transport into campaign/confirmation v3 and fails closed on installed create-signature drift before uploads. Preserves FREE_ONLY authority and all current seed/job-identity fences. Exact PR Actions failed before visible step execution (steps=null), so no runtime PASS or code-failure credit is claimed.
+contract(native): bind donor extraction preservation matrix
 
-### fix(cognition): bind 0.8B SDK contract into create identity
+Fuse the non-duplicate fresh-main donor-only preservation matrix on top of #957/#959 and reference responsibility semantics. Keep native v2 fail closed; no runtime PASS or provider execution claimed.
 
-`baunotiz-git-dc96c985ceccf44d93de09246181e866dfc687ed` · baunotiz · git-commit · 2026-08-22T18:58:55+07:00 · Gabriel Gschaider
+### Merge PR #964: bind staged cognition single authority path
+
+`baunotiz-bauverlauf-3d6c6ddf31542ae2b5a1` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:04:37+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-fix(cognition): bind 0.8B SDK contract into create identity
+Fuse the staged-cognition donor contract into one canonical acceptance path, add executable source-coherence/ClayCog role-neutrality guards, and preserve FREE_ONLY plus runtime-evidence boundaries. Source contract only; no staged runtime PASS.
 
-Source-contract fusion only. Binds the canonical SDK-v2 Full-FT CREATE transport into campaign/confirmation v3 and fails closed on installed create-signature drift before uploads. Preserves FREE_ONLY authority and all current seed/job-identity fences. Exact PR Actions failed before visible step execution (steps=null), so no runtime PASS or code-failure credit is claimed.
+### Merge PR #964: bind staged cognition single authority path
 
-### evidence: record #939 surface-invariance merge and zero-step CI
+`baunotiz-git-9cb37a3c1e9e9423531375811f47919d253398f2` · baunotiz · git-commit · 2026-08-22T20:04:37+07:00 · Gabriel Gschaider
 
-`baunotiz-bauverlauf-c27c63df89d46ea444bc` · baunotiz · bauverlauf.jsonl · 2026-08-22T18:58:03+07:00 · Gabriel Gschaider
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Merge PR #964: bind staged cognition single authority path
+
+Fuse the staged-cognition donor contract into one canonical acceptance path, add executable source-coherence/ClayCog role-neutrality guards, and preserve FREE_ONLY plus runtime-evidence boundaries. Source contract only; no staged runtime PASS.
+
+### cognition: enforce campaign-neutral reusable SFT v2
+
+`baunotiz-bauverlauf-578bf455d5f8c90ac57a` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:04:07+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Fuse the narrow campaign-literal corpus gate on current semantic-slot validation. Reuse donor regressions only; exact GitHub runner had steps=null, so no test PASS or training claim.
+
+### cognition: enforce campaign-neutral reusable SFT v2
+
+`baunotiz-git-2971facc836ce99bdf6918c51e15c67df7c4cf36` · baunotiz · git-commit · 2026-08-22T20:04:07+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+cognition: enforce campaign-neutral reusable SFT v2
+
+Fuse the narrow campaign-literal corpus gate on current semantic-slot validation. Reuse donor regressions only; exact GitHub runner had steps=null, so no test PASS or training claim.
+
+### evidence: bind staged contract fusion and zero-step admission
+
+`baunotiz-bauverlauf-471885f1f4a59e1380df` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:03:17+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### evidence: record #939 surface-invariance merge and zero-step CI
+### evidence: bind staged contract fusion and zero-step admission
 
-`baunotiz-git-44873d6c3c315ca803dfe4205ae3fd3a13ec968f` · baunotiz · git-commit · 2026-08-22T18:58:03+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-evidence: record #939 surface-invariance merge and zero-step CI
-
-### test(cognition): bind SDK fence into v3 confirmation identity
-
-`baunotiz-bauverlauf-58fc2bb7ebe5460cd4d4` · baunotiz · bauverlauf.jsonl · 2026-08-22T18:57:34+07:00 · Gabriel Gschaider
+`baunotiz-git-5cd0848829b5d4e2c47a14a937cf93d310adbef1` · baunotiz · git-commit · 2026-08-22T20:03:17+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+evidence: bind staged contract fusion and zero-step admission
 
-### test(cognition): bind SDK fence into v3 confirmation identity
+### fusion: remove duplicate staged contract path
 
-`baunotiz-git-0b8a5257ea513cc1284b7c9597218b6bc1f523f6` · baunotiz · git-commit · 2026-08-22T18:57:34+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-test(cognition): bind SDK fence into v3 confirmation identity
-
-### fix(cognition): fence SDK shape and stale create confirmation
-
-`baunotiz-bauverlauf-8493f68e011171ada2a2` · baunotiz · bauverlauf.jsonl · 2026-08-22T18:57:06+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-ad24b20ea12168341098` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:02:41+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### fix(cognition): fence SDK shape and stale create confirmation
+### fusion: remove duplicate staged contract path
 
-`baunotiz-git-78910d9e9a80343991a2eae0a8a753895732dfa1` · baunotiz · git-commit · 2026-08-22T18:57:06+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-fix(cognition): fence SDK shape and stale create confirmation
-
-### Merge PR #939: gate exact-vector OOD against slot-copy shortcuts
-
-`baunotiz-bauverlauf-cee7cc7ec9122f25f4f7` · baunotiz · bauverlauf.jsonl · 2026-08-22T18:57:03+07:00 · Gabriel Gschaider
+`baunotiz-git-ad57d750c54403e7c8254239faab1ba2a8b27235` · baunotiz · git-commit · 2026-08-22T20:02:41+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-Evaluation-only promotion hardening. Preserve existing 320 compositional OOD cases, add 80 surface-invariant exact-vector cases and a literal slot-copy negative baseline. Source-exact GitHub Actions remained execution-admission blocked before steps; merge is source/mechanism fusion only, not runtime or model-quality PASS.
+fusion: remove duplicate staged contract path
 
-### Merge PR #939: gate exact-vector OOD against slot-copy shortcuts
+### ci: point staged gate at fused acceptance contract
 
-`baunotiz-git-ddefaa3671c61c26ab2bd701a648d8ac576cf25a` · baunotiz · git-commit · 2026-08-22T18:57:03+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Merge PR #939: gate exact-vector OOD against slot-copy shortcuts
-
-Evaluation-only promotion hardening. Preserve existing 320 compositional OOD cases, add 80 surface-invariant exact-vector cases and a literal slot-copy negative baseline. Source-exact GitHub Actions remained execution-admission blocked before steps; merge is source/mechanism fusion only, not runtime or model-quality PASS.
-
-### state: credit exact SFT-v2 regeneration and advance native frontier
-
-`baunotiz-bauverlauf-978ca742f083ca3d030d` · baunotiz · bauverlauf.jsonl · 2026-08-22T18:56:41+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-703a1c1a4aea95da91bb` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:02:26+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
+
+### ci: point staged gate at fused acceptance contract
+
+`baunotiz-git-ab9f10531f98f87c5c0ff078dfe46fa7133b4a14` · baunotiz · git-commit · 2026-08-22T20:02:26+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+ci: point staged gate at fused acceptance contract
+
+### evidence: bind exact zero-step run and reference donor blockers
+
+`baunotiz-bauverlauf-ec3aa0e0d685559b2894` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:02:15+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### evidence: bind exact zero-step run and reference donor blockers
+
+`baunotiz-git-0111dd0ee1de9156e8e907f52968e28eb6905c7f` · baunotiz · git-commit · 2026-08-22T20:02:15+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+evidence: bind exact zero-step run and reference donor blockers
+
+### test: point staged guard at fused authority contract
+
+`baunotiz-bauverlauf-ee9ea91eb0ea3ef0ae57` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:02:01+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### test: point staged guard at fused authority contract
+
+`baunotiz-git-cf68a832154d442fdb47f07699807d0ab5e48b9d` · baunotiz · git-commit · 2026-08-22T20:02:01+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+test: point staged guard at fused authority contract
+
+### fusion: adopt staged cognition authority contract
+
+`baunotiz-bauverlauf-180c7812bea0a0653673` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:01:43+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### fusion: adopt staged cognition authority contract
+
+`baunotiz-git-a607a7e15bfdba1b1f08b821a4f1e048a971b11b` · baunotiz · git-commit · 2026-08-22T20:01:43+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+fusion: adopt staged cognition authority contract
+
+### contract(native): require reference effect semantics, not names
+
+`baunotiz-bauverlauf-d13204898e5a9676ab79` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:01:04+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Fuse the responsibility-level parity guard on top of the AST executable-binding guard. Keep native profile-v2 fail closed; no runtime PASS implied.
 

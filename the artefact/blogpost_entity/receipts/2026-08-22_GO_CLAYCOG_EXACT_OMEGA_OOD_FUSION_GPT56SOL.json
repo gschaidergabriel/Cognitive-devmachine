@@ -1,0 +1,82 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repo": "gschaidergabriel/clay-global-research-entity",
+  "fresh_main_base": "7bb03d7186e2c664e26ca29ae696db330b3c7a5c",
+  "branch": "gpt56sol/fuse-claycog-exact-omega-ood-current-20260822-1426",
+  "candidate_head_before_receipt": "3371b1bdc8a6b984ac556f71653d0ee565d9b3f1",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "problem": "The current OOD semantic scorer can credit an omega route that has the expected operation plus validator/commit boilerplate while omitting the actual typed arguments and schema.",
+  "single_unusual_experiment": {
+    "name": "current-main omega boilerplate promotion spoof",
+    "count": 1,
+    "observed_on_main": {
+      "structural_validator_admitted": true,
+      "old_ood_semantic_check_admitted": true,
+      "omega_arg_present": false,
+      "omega_schema_present": false
+    },
+    "result": "MECHANISM_SPOOF_REPRODUCED"
+  },
+  "parallel_fusion": {
+    "main_updates_preserved": [
+      "leakage-free SFT v2 from #787",
+      "runtime-neutral binding hardening from #774",
+      "idempotent and ambiguous-create Together safety from #772/#780",
+      "existing ClayCog PR admission runner from #778"
+    ],
+    "donor_preserved": "Draft #785 tool-vocabulary-amputation OOD cases are fused as pre-existing donor work only; no launcher/template code from that stale draft is imported.",
+    "other_current_lane": "Open #795 owns current Together-template/HF-revision fail-closed work; this candidate deliberately does not fork that responsibility.",
+    "stale_candidate_closed": "#794 was closed unmerged after main advanced; its broad stale-base fusion is not proposed for merge."
+  },
+  "delta": {
+    "ood_cases": 240,
+    "exact_omega_cases": 120,
+    "standard_valid_exact": 80,
+    "unseen_tool_exact": 40,
+    "hard_semantic_families": {
+      "tool_vocabulary_amputation_ood": 1.0,
+      "omega_reject_ood": 1.0
+    },
+    "promotion_requirements": {
+      "strict_claycode_rate": 1.0,
+      "semantic_gate_rate": 0.95,
+      "exact_omega_rate": 1.0,
+      "complete_unique_output_set": true
+    },
+    "exact_vector_fields": [
+      "operation",
+      "all typed arguments with values",
+      "schema",
+      "authority expression",
+      "generation expression",
+      "five validators",
+      "single commit"
+    ],
+    "anti_smuggling": "Exact omega statements must occur exactly once as two-space depth-1 function-body lines; nested/string occurrences do not satisfy the semantic vector gate; extra action-vector fields also fail."
+  },
+  "tests_added": [
+    "240 total / 120 exact-omega cardinality",
+    "standard exact vector accepts",
+    "unseen-tool exact vector accepts",
+    "old no-arg/no-schema boilerplate structurally green but semantically rejected",
+    "missing argument rejected",
+    "wrong argument value rejected",
+    "extra argument rejected",
+    "wrong schema rejected",
+    "nested/string-smuggled expected line rejected",
+    "duplicate commit rejected by exact-vector gate",
+    "duplicate and unknown output IDs block promotion"
+  ],
+  "ci": "Existing .github/workflows/claycog-validator-pr.yml extended with py_compile, OOD regeneration and test_ood_exact_omega_v1.py. Runtime credit requires a job that actually reaches visible workflow steps.",
+  "training": {
+    "together_preflight_executed": false,
+    "paid_create_executed": false,
+    "training_started": false,
+    "spend_from_this_go_usd": 0
+  },
+  "claim_boundary": "SOURCE FUSION CANDIDATE plus reproduced promotion-metric defect. No exact PR-runner PASS is claimed until steps execute. No trained checkpoint quality, Together BYOM compatibility, quantized RSS, local_exec real-model quality, consciousness, mathematical correctness, superiority or whole Mini Entity PASS is claimed."
+}

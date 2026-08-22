@@ -14,6 +14,11 @@ class Client:
 class TogetherCtor:
     last=None
     def __init__(self,**kw):type(self).last=kw
+class SecretTripwire(dict):
+    def __init__(self,*a,**kw):super().__init__(*a,**kw);self.secret_lookups=0
+    def get(self,key,default=None):
+        if key=="TOGETHER_API_KEY":self.secret_lookups+=1;raise AssertionError("TOGETHER_API_KEY lookup crossed FREE_ONLY fence")
+        return super().get(key,default)
 class Tests(unittest.TestCase):
     def setUp(self):
         self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
@@ -26,14 +31,9 @@ class Tests(unittest.TestCase):
     def test_model_and_direct_campaign(self):
         self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
     def test_local_checks_use_canonical_v2_validator(self):
-        with mock.patch.object(m.subprocess,"run") as run:
-            m.local_checks()
-        self.assertEqual(run.call_count,2)
-        generate=run.call_args_list[0].args[0];validate=run.call_args_list[1].args[0]
-        self.assertEqual(Path(generate[1]).name,"generate_sft_v2.py")
-        self.assertEqual(Path(validate[1]).name,"validate_corpus_v2.py")
-        self.assertEqual(validate[2:],[str(m.TRAIN),str(m.VALID)])
-        self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertTrue(run.call_args_list[1].kwargs["check"])
+        with mock.patch.object(m.subprocess,"run") as run:m.local_checks()
+        self.assertEqual(run.call_count,2);generate=run.call_args_list[0].args[0];validate=run.call_args_list[1].args[0]
+        self.assertEqual(Path(generate[1]).name,"generate_sft_v2.py");self.assertEqual(Path(validate[1]).name,"validate_corpus_v2.py");self.assertEqual(validate[2:],[str(m.TRAIN),str(m.VALID)]);self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertTrue(run.call_args_list[1].kwargs["check"])
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))
@@ -60,4 +60,12 @@ class Tests(unittest.TestCase):
         bad=types.SimpleNamespace(**{**expected,"random_seed":9});mm=m.created_job_identity_mismatches(bad,expected);self.assertEqual(mm["random_seed"],{"expected":3407,"observed":9})
     def test_zero_retry(self):
         TogetherCtor.last=None;m.new_zero_retry_create_client(TogetherCtor);self.assertEqual(TogetherCtor.last,{"max_retries":0})
+    def test_free_only_rejects_before_together_secret_lookup(self):
+        control=Path(self.t.name)/"control.json";control.write_text(json.dumps({"status":"ACTIVE","mode":"FREE_ONLY","preserved_hard_rules":{"free_only":True,"together_forbidden":True}}))
+        old_control,old_env,old_checks,old_argv=m.CONTROL_PATH,m.os.environ,m.local_checks,m.sys.argv;trip=SecretTripwire(dict(old_env))
+        try:
+            m.CONTROL_PATH=control;m.os.environ=trip;m.local_checks=lambda:None;m.sys.argv=["launch_together_qwen35_08b_v1.py"]
+            with self.assertRaises(SystemExit) as cm:m.main()
+            self.assertIn("FREE_ONLY_PROVIDER_REJECT",str(cm.exception));self.assertEqual(trip.secret_lookups,0)
+        finally:m.CONTROL_PATH=old_control;m.os.environ=old_env;m.local_checks=old_checks;m.sys.argv=old_argv
 if __name__=="__main__":unittest.main()

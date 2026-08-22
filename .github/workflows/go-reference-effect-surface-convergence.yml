@@ -1,0 +1,74 @@
+name: go-reference-effect-surface-convergence
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "tools/clay_profile_pipeline_runtime.py"
+      - "tools/go_apply_reference_effect_surface_convergence.py"
+      - "the artefact/blogpost_entity/test_reference_effect_surface_convergence.py"
+      - "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json"
+      - "the artefact/blogpost_entity/native/test_native_v2_parity_contract.py"
+      - ".github/workflows/go-reference-effect-surface-convergence.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  converge-reference-effect-surface:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Bind Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Record exact source identity before delta
+        run: |
+          set -euxo pipefail
+          git rev-parse HEAD
+          git status --porcelain=v1
+          python --version
+          uname -a
+
+      - name: Apply idempotent canonical convergence
+        run: |
+          set -euxo pipefail
+          python tools/go_apply_reference_effect_surface_convergence.py
+          git diff --check
+          python -m py_compile tools/clay_profile_pipeline_runtime.py
+
+      - name: Focused effect and profile falsifiers
+        run: |
+          set -euxo pipefail
+          python "the artefact/blogpost_entity/test_reference_effect_surface_convergence.py"
+
+      - name: Existing native-v2 parity contract regression
+        run: |
+          set -euxo pipefail
+          python "the artefact/blogpost_entity/native/test_native_v2_parity_contract.py"
+
+      - name: Commit only exact tested canonical bytes
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euxo pipefail
+          git config user.name "clay-go-bot"
+          git config user.email "clay-go-bot@users.noreply.github.com"
+          git add -- \
+            tools/clay_profile_pipeline_runtime.py \
+            "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json"
+          if git diff --cached --quiet; then
+            echo "No canonical delta remained after the tested idempotent convergence."
+          else
+            git commit -m "runtime: converge canonical reference effect surface"
+            git push origin "HEAD:${HEAD_REF}"
+          fi

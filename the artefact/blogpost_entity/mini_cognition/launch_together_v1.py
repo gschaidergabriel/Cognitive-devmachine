@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 """Together BYOM launcher for the 0.5B ClayCode cognition campaign.
 
-Default mode is preflight: regenerate/validate the corpus, validate/upload files,
-check current full-training limits, and obtain a server price estimate. A billed
-fine-tuning job is created only with --create after all preflight gates pass.
+Default mode is preflight and never creates a billed job. The launcher follows the
+Together Python SDK v2 surface and fails closed unless a *currently verified*
+Together fine-tuning base template is supplied explicitly.
 
-The launcher targets the Together Python SDK v2 surface used by current Together
-documentation. The default training template is the exact Hugging Face checkpoint
-itself. If Together does not expose limits for that model, preflight fails closed.
-A different template may be supplied explicitly, but it is never guessed from a
-larger model: Together documents that --from-hf-model should be as close as possible
-to the base model in architecture and size.
+Why no default template?
+Together BYOM requires `model` to be a base model from Together's fine-tuning
+catalog whose architecture matches the Hugging Face checkpoint. The target
+`Qwen/Qwen2.5-0.5B` is `Qwen2ForCausalLM`. At the 2026-08-22 catalog snapshot,
+no Qwen2/Qwen2.5 model is listed for full fine-tuning. The smallest listed Qwen
+full-FT model is Qwen3.5-0.8B, whose architecture is Qwen3_5ForConditionalGeneration,
+so silently selecting it would violate the BYOM architecture-match contract.
+
+A future compatible template can be passed with --template or
+CLAYCOG_TOGETHER_TEMPLATE after the catalog is refreshed. The live Together
+model-limits endpoint is still checked before any upload/estimate/create.
 """
 import argparse
 import importlib.metadata
@@ -62,9 +67,18 @@ def resolve_models(instruct_ablation=False, template_override=None, hf_override=
     hf_model = hf_override or (
         DEFAULT_HF_INSTRUCT if instruct_ablation else os.environ.get("CLAYCOG_HF_MODEL", DEFAULT_HF_MODEL)
     )
-    explicit_template = template_override or os.environ.get("CLAYCOG_TOGETHER_TEMPLATE")
-    template = explicit_template or hf_model
-    return hf_model, template, bool(explicit_template)
+    template = template_override or os.environ.get("CLAYCOG_TOGETHER_TEMPLATE") or None
+    return hf_model, template
+
+
+def require_explicit_template(template):
+    if not template:
+        raise SystemExit(
+            "NO_COMPATIBLE_TOGETHER_TEMPLATE_CONFIGURED: current 2026-08-22 full-FT catalog "
+            "has no verified Qwen2/Qwen2.5 base for Qwen2ForCausalLM. Refresh the catalog; "
+            "set --template only after an architecture-compatible base appears."
+        )
+    return template
 
 
 def get_full_training_limits(client, template):
@@ -83,8 +97,6 @@ def wait_file(client, file_id, timeout_seconds=FILE_WAIT_SECONDS):
         processed = getattr(meta, "processed", None)
         if processed is True:
             return meta
-
-        # Compatibility with older response objects. Current SDK v2 uses `processed`.
         status = str(getattr(meta, "processing_status", "") or "").upper()
         if status == "COMPLETED":
             return meta
@@ -107,7 +119,7 @@ def objdict(x):
 
 
 def estimate_full_sft_price(client, train_file_id, valid_file_id, template):
-    """Current SDK v2 estimate-price contract: string training_type/method values."""
+    """Current Together SDK v2 client contract uses string training type/method."""
     return client.fine_tuning.estimate_price(
         training_file=train_file_id,
         validation_file=valid_file_id,
@@ -120,7 +132,7 @@ def estimate_full_sft_price(client, train_file_id, valid_file_id, template):
 
 
 def create_full_sft_job(client, train_file_id, valid_file_id, template, hf_model):
-    """Single billed transition. Caller must have passed preflight and budget gates."""
+    """Single billed transition. Caller must have passed every preflight/budget gate."""
     return client.fine_tuning.create(
         training_file=train_file_id,
         validation_file=valid_file_id,
@@ -142,23 +154,24 @@ def main():
     ap.add_argument("--create", action="store_true", help="create one billed fine-tuning job after preflight")
     ap.add_argument("--instruct-ablation", action="store_true", help="use Qwen/Qwen2.5-0.5B-Instruct BYOM checkpoint")
     ap.add_argument("--hf-model", help="explicit Hugging Face model override")
-    ap.add_argument("--template", help="explicit Together base/template override; must remain architecture/size compatible")
+    ap.add_argument(
+        "--template",
+        help="explicit current Together fine-tuning base; must match checkpoint architecture",
+    )
     args = ap.parse_args()
 
     if not os.environ.get("TOGETHER_API_KEY"):
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
 
     sdk_version = require_sdk_v2()
-    hf_model, template, explicit_template = resolve_models(
+    hf_model, template = resolve_models(
         instruct_ablation=args.instruct_ablation,
         template_override=args.template,
         hf_override=args.hf_model,
     )
-
+    require_explicit_template(template)
     run_local_checks()
 
-    # Import only after version/key checks so local contract tests can import this module
-    # without requiring the network SDK.
     from together import Together
 
     client = Together()
@@ -179,7 +192,7 @@ def main():
         "sdk_version": sdk_version,
         "from_hf_model": hf_model,
         "template_model": template,
-        "template_source": "explicit_override" if explicit_template else "exact_hf_model_default",
+        "template_source": "explicit_verified_candidate",
         "template_full_training": getattr(limits, "full_training", None) is not None,
         "epochs": EPOCHS,
         "evals": EVALS,
@@ -188,8 +201,8 @@ def main():
         "price_detail": objdict(estimate),
         "compatibility_status": "UNPROVEN_UNTIL_TOGETHER_ACCEPTS_BYOM_JOB",
         "compatibility_note": (
-            "preflight proves dataset processing, template limits and budget only; "
-            "Together BYOM checkpoint acceptance occurs at job creation"
+            "preflight proves dataset processing, current template limits and budget only; "
+            "checkpoint/template compatibility is finally established by Together job acceptance"
         ),
     }
     print(json.dumps(report, indent=2, default=str))

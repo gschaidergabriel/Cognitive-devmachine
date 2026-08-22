@@ -1,0 +1,60 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "8a7f90dd6e21fd53f80fd539286e86c6b66303b1",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "paid_training_base": "Qwen/Qwen3.5-0.8B",
+  "finding": {
+    "class": "CREATE_AUTHORIZATION_COST_DRIFT_GAP",
+    "legacy_launcher_blob": "42f98aff1c08a2fa6f444763e66783898526be25",
+    "mechanism": "The billed-create confirmation bound only the deterministic campaign fingerprint. The live provider price estimate was not part of the confirmation value, so a later create preflight with the same corpus/model/hyperparameters but a changed price could reuse the old owner confirmation as long as the new estimate remained below the USD 18 hard cap.",
+    "owner_contract_impact": "Fresh explicit cost/run authorization was not cryptographically bound to the exact live preflight cost."
+  },
+  "unusual_experiment": {
+    "name": "PRICE_DRIFT_AFTER_PREFLIGHT",
+    "count_for_this_go": 1,
+    "intervention": "Authorize the same campaign fingerprint at USD 4.00, then change only the live estimated price to USD 17.99.",
+    "legacy_observation": "PASS_CONFIRMATION",
+    "legacy_result": "FALSIFIED_COST_BINDING",
+    "notes": "The legacy require_create_confirmation(fp) accepted the old fingerprint because price was not an input. This is a source/mechanism falsifier, not a real provider billing event."
+  },
+  "repair": {
+    "launcher_blob": "9c72ad486b0a17c957033800a6bd39712ae0fbdf",
+    "test_blob": "e00bde82a35db8ba717c906f640f03780febe1d9",
+    "changes": [
+      "replace CLAYCOG_CREATE_FINGERPRINT with CLAYCOG_CREATE_AUTHORIZATION",
+      "derive a SHA-256 authorization token from campaign_fingerprint plus canonical live estimated_usd",
+      "require the exact authorization only after the current live estimate and budget gate",
+      "persist authorized_estimated_usd and create_authorization in create-intent schema v3",
+      "fail closed on NaN, infinity, and negative price estimates",
+      "force fresh authorization whenever the live price changes"
+    ]
+  },
+  "isolated_exact_blob_evidence": {
+    "environment": "ChatGPT isolated Linux container",
+    "legacy_blob_identity_verified": true,
+    "legacy_launcher_git_blob": "42f98aff1c08a2fa6f444763e66783898526be25",
+    "legacy_test_git_blob": "d8ebba68ff59fb8aee820a958ae26b397c8b5761",
+    "legacy_regression": "9/9 PASS",
+    "legacy_price_drift_falsifier": "PASS_CONFIRMATION_AT_4_TO_17_99_DRIFT",
+    "candidate_launcher_git_blob": "9c72ad486b0a17c957033800a6bd39712ae0fbdf",
+    "candidate_test_git_blob": "e00bde82a35db8ba717c906f640f03780febe1d9",
+    "py_compile": "PASS",
+    "candidate_regression": "11/11 PASS",
+    "provider_network_called": false,
+    "together_secret_used": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "current_public_provider_refresh": {
+    "pricing": "Together public pricing currently lists standard Full SFT up to 16B at USD 0.54 per 1M processed tokens and a USD 4 standard minimum job charge.",
+    "create_api": "Current Together create-job docs expose suffix, model_output_name, training_type, random_seed, learning_rate and warmup_ratio on the fine-tuning contract.",
+    "authority": "Authenticated model_limits + server-side file validation + live estimate remain authoritative before any billed create."
+  },
+  "evidence_boundary": "MECHANISM_SUPPORTED_EXACT_BLOBS. This receipt does not claim authenticated Together admission, provider preflight, billed training, tuned-model quality, Q4_K_M, RSS <1 GiB, generic local_exec integration, exact-current whole repository CI, or whole Mini Entity acceptance.",
+  "next": "Run exact PR CI if an executor actually starts. With an authorized environment-only Together secret, run preflight-only model_limits/file-validation/price estimation. Do not create a billed job without a fresh owner authorization for the exact live price-bound authorization token."
+}

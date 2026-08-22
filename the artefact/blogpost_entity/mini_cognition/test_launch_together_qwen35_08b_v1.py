@@ -13,6 +13,11 @@ class Client:
 class TogetherCtor:
     last=None
     def __init__(self,**kw):type(self).last=kw
+class SecretTripwire(dict):
+    def __init__(self,*a,**kw):super().__init__(*a,**kw);self.secret_lookups=0
+    def get(self,key,default=None):
+        if key=="TOGETHER_API_KEY":self.secret_lookups+=1;raise AssertionError("TOGETHER_API_KEY lookup crossed FREE_ONLY fence")
+        return super().get(key,default)
 class Tests(unittest.TestCase):
     def setUp(self):
         self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
@@ -50,4 +55,12 @@ class Tests(unittest.TestCase):
         bad=types.SimpleNamespace(**{**expected,"random_seed":9});mm=m.created_job_identity_mismatches(bad,expected);self.assertEqual(mm["random_seed"],{"expected":3407,"observed":9})
     def test_zero_retry(self):
         TogetherCtor.last=None;m.new_zero_retry_create_client(TogetherCtor);self.assertEqual(TogetherCtor.last,{"max_retries":0})
+    def test_free_only_rejects_before_together_secret_lookup(self):
+        control=Path(self.t.name)/"control.json";control.write_text(json.dumps({"status":"ACTIVE","mode":"FREE_ONLY","preserved_hard_rules":{"free_only":True,"together_forbidden":True}}))
+        old_control,old_env,old_checks,old_argv=m.CONTROL_PATH,m.os.environ,m.local_checks,m.sys.argv;trip=SecretTripwire(dict(old_env))
+        try:
+            m.CONTROL_PATH=control;m.os.environ=trip;m.local_checks=lambda:None;m.sys.argv=["launch_together_qwen35_08b_v1.py"]
+            with self.assertRaises(SystemExit) as cm:m.main()
+            self.assertIn("FREE_ONLY_PROVIDER_REJECT",str(cm.exception));self.assertEqual(trip.secret_lookups,0)
+        finally:m.CONTROL_PATH=old_control;m.os.environ=old_env;m.local_checks=old_checks;m.sys.argv=old_argv
 if __name__=="__main__":unittest.main()

@@ -1,12 +1,172 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-22T11:36:43Z. 1110 Commits aus vier Repos, davon 517 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-22T12:06:43Z. 1110 Commits aus vier Repos, davon 537 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-22
+
+### Merge PR #946: bind FREE_ONLY fallback cost classes to canonical source
+
+`ed0d28a22cff` · agentzero-export · 19:03 UTC · Gabriel Gschaider
+
+```
+Architecture/source-authority delta only. Preserve UNKNOWN fail-closed semantics, reuse legacy PR #232 only as a bounded evidence-schema donor, and do not hand-label derived bahnen.json without repository-bound canonical provider source. No runtime/provider PASS implied.
+```
+
+### research: bind Gen276 FREE_ONLY fallback source bypass
+
+`4db0ca016943` · agentzero-export · 19:01 UTC · Gabriel Gschaider
+
+```
+Bind exact Gen276 source-mechanism evidence and the canonical FREE_ONLY fallback admission/falsification contract. Research/evidence only; no exported product code or provider execution.
+```
+
+### fix(cognition): bind 0.8B SDK contract into create identity
+
+`dc96c985cecc` · agentzero-export · 18:58 UTC · Gabriel Gschaider
+
+```
+Source-contract fusion only. Binds the canonical SDK-v2 Full-FT CREATE transport into campaign/confirmation v3 and fails closed on installed create-signature drift before uploads. Preserves FREE_ONLY authority and all current seed/job-identity fences. Exact PR Actions failed before visible step execution (steps=null), so no runtime PASS or code-failure credit is claimed.
+```
+
+### Merge PR #939: gate exact-vector OOD against slot-copy shortcuts
+
+`ddefaa3671c6` · agentzero-export · 18:57 UTC · Gabriel Gschaider
+
+```
+Evaluation-only promotion hardening. Preserve existing 320 compositional OOD cases, add 80 surface-invariant exact-vector cases and a literal slot-copy negative baseline. Source-exact GitHub Actions remained execution-admission blocked before steps; merge is source/mechanism fusion only, not runtime or model-quality PASS.
+```
+
+### docs: re-enter artefact README on ~1B + FREE_ONLY authority
+
+`f9a7c8ee3495` · agentzero-export · 18:56 UTC · Gabriel Gschaider
+
+```
+Replace stale 0.5B/Qwen2.5/BYOM status with current approximately-1B Qwen3.5-0.8B owner target, model-neutral SFT-v2 curriculum, exact local pre-provider evidence, and stricter current FREE_ONLY execution boundary.
+```
+
+### evidence: bind model-neutral SFT-v2 exact-blob regeneration
+
+`2c1a62e39990` · agentzero-export · 18:54 UTC · Gabriel Gschaider
+
+```
+Durable bounded exact-blob evidence for merged #929. Full 1,650-row generator+canonical validator PASS at executed blobs; hosted Actions still steps=null with zero hosted-runner credit; FREE_ONLY respected and no provider/training execution.
+```
+
+### fix(ci): canonical v2 validator in 0.8B admission
+
+`80cc3d6da1e8` · agentzero-export · 18:54 UTC · Gabriel Gschaider
+
+```
+Source-only admission workflow repair: replace nonexistent validate_sft_v2.py calls with the canonical validate_corpus_v2.py train/validation gate. Existing hosted Actions attempts still fail before visible steps; zero runtime credit. No provider execution or spend.
+```
+
+### contract(native): fence stale reference effect surface before v2 parity (#901)
+
+`bcf72b58714b` · agentzero-export · 18:53 UTC · Gabriel Gschaider
+
+```
+Fuse the non-duplicate fail-closed parity contract onto current main. The canonical structured reference runtime is explicitly barred from reference-equivalent native-v2 promotion until its effect surface converges from legacy profile_load/provider_chat_json to current pipeline_profile_read/inference_generate. No new unusual experiment or runtime PASS is claimed by this merge.
+```
+
+### Merge PR #914: make active FREE_ONLY control authoritative over inbox
+
+`9f7c142e62a7` · agentzero-export · 18:53 UTC · Gabriel Gschaider
+
+```
+Source/mechanism fusion only. Exact PR cognition job 97027472850 failed before visible steps (steps=null), so it receives zero runtime test credit. Preserve current validator and provider-job identity fences; ACTIVE repository controls now dominate derived Supervisor Inbox state for paid Together admission.
+```
+
+### evidence: bind exact 0.8B local preflight runtime under FREE_ONLY
+
+`ff2eb063284c` · agentzero-export · 18:51 UTC · Gabriel Gschaider
+
+```
+Exact current cognition blobs executed in isolated Linux: py_compile PASS, launcher suite 13/13 PASS, real SFT-v2 generation+canonical validation PASS, then FREE_ONLY rejection before secret/network. Receipt only; no Together/provider/training execution.
+```
+
+### fix(cognition): verify 0.8B seed at create boundary
+
+`a6b923ae666d` · agentzero-export · 18:51 UTC · Gabriel Gschaider
+
+```
+Preserve the stronger current post-create training-config identity checks, but verify random_seed at the immediate CREATE response boundary because Together's current retrieve schema does not document random_seed. JOB_KNOWN remains durable before verification; no provider call or billed create occurred. Exact PR Actions remained execution-admission blocked before visible steps; bounded local mechanism regression passed.
+```
+
+### cognition: keep SFT v2 corpus identity model-provider neutral
+
+`3303585bf782` · agentzero-export · 18:50 UTC · Gabriel Gschaider
+
+```
+Merge source/provenance repair from exact head 35a6b6745a1114ed19b15b89ea6b532f8f2afe35. Removes stale model binding from SFT-v2 corpus manifest, adds byte-identity/model-neutrality regression, and binds 0.8B admission checkout to exact PR head. Exact Actions execution remains blocked before visible steps (steps=null); zero runtime/training credit.
+```
+
+### cognition: fence OOD semantic credit by canonical call depth
+
+`dd1fd761f77d` · agentzero-export · 18:48 UTC · Gabriel Gschaider
+
+```
+cognition: fence OOD semantic credit by canonical call depth
+```
+
+### cognition: fail closed on reserved semantic identity slots
+
+`f807c0e86971` · agentzero-export · 18:48 UTC · Gabriel Gschaider
+
+```
+Falsified 3/3 alternate semantic-slot leakage probes, added a structural campaign-independent reserved-slot gate, and bound 6/6 isolated regression evidence. Hosted Actions remained execution-admission blocked before visible steps; no hosted-runner credit claimed.
+```
+
+### Merge PR #904: fence direct 0.8B Together lane under FREE_ONLY
+
+`f3e9455f7082` · agentzero-export · 18:48 UTC · Gabriel Gschaider
+
+```
+Source/mechanism repair plus bounded FREE_ONLY secret/import poison evidence. Exact GitHub Actions remained execution-admission blocked before visible steps; zero exact runtime/provider/training credit.
+```
+
+### Merge PR #889: bind active profile digest on current native line
+
+`b55152e49df6` · agentzero-export · 18:46 UTC · Gabriel Gschaider
+
+```
+Source/mechanism fusion only. Exact runtime remains unverified because the canonical PR jobs failed before visible steps (steps=null); zero runtime credit.
+```
+
+### evidence(cognition): refresh Qwen3.5-0.8B provider gates (#900)
+
+`43308213ebc5` · agentzero-export · 18:46 UTC · Gabriel Gschaider
+
+```
+Bind public Together support/pricing facts and preserve zero runtime/provider credit. No secrets, upload, create, training, or spend.
+```
+
+### cognition: fence full 0.8B provider job identity (#891)
+
+`04209767aba1` · agentzero-export · 18:45 UTC · Gabriel Gschaider
+
+```
+Merge fail-closed post-CREATE identity verification for the owner-directed Qwen3.5-0.8B Full-FT lane. Source/mechanism supported only; exact Actions jobs failed before steps and provide zero runtime credit.
+```
+
+### continuity: re-enter current approx1B cognition directive
+
+`f1516ba564f4` · agentzero-export · 18:44 UTC · Gabriel Gschaider
+
+```
+continuity: re-enter current approx1B cognition directive
+```
+
+### fix(cognition): restore canonical v2 validation in 0.8B preflight
+
+`f4b1a8c1f7da` · agentzero-export · 18:41 UTC · Gabriel Gschaider
+
+```
+fix(cognition): restore canonical v2 validation in 0.8B preflight
+```
 
 ### cognition: adopt owner-selected Qwen3.5-0.8B Together Full-FT lane (#880)
 
@@ -2169,392 +2329,6 @@ Anlass: Wache: Aenderung beobachtet
   the artefact/compose.yaml
 
 Zeit: 2026-08-21T08:27:32+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:16:45 +0000 — entityos: 1 Aenderungen
-
-`5c0ea8dcd01a` · entityos · 08:16 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/compose.yaml
-
-Zeit: 2026-08-21T08:16:45+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:09:54 +0000 — entityos: 5 Aenderungen
-
-`3b4cbc5c21c0` · entityos · 08:09 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mcp_server.py
-  the artefact/clayverse/mistral_prestage/headless_zero.py
-  the artefact/clayverse/service.py
-  the artefact/policy/managed-settings.json
-  the artefact/tests/test_sicht.py
-
-Zeit: 2026-08-21T08:09:54+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 5
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:07:02 +0000 — entityos: 2 Aenderungen
-
-`6705c3c0ef10` · entityos · 08:07 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/sicht.py
-  the artefact/tests/test_sicht.py
-
-Zeit: 2026-08-21T08:07:02+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:03:40 +0000 — entityos: 1 Aenderungen
-
-`702e8de639d0` · entityos · 08:03 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/sicht.py
-
-Zeit: 2026-08-21T08:03:40+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 07:58:03 +0000 — entityos: 1 Aenderungen
-
-`2dd77fa7dfc9` · entityos · 07:58 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/sicht.py
-
-Zeit: 2026-08-21T07:58:03+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 07:56:02 +0000 — entityos: 1 Aenderungen
-
-`f6af2f8650ed` · entityos · 07:56 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/sicht.py
-
-Zeit: 2026-08-21T07:56:02+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 07:53:38 +0000 — entityos: 1 Aenderungen
-
-`bf3ebea672ee` · entityos · 07:53 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/sicht.py
-
-Zeit: 2026-08-21T07:53:38+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 07:50:38 +0000 — entityos: 1 Aenderungen
-
-`7d88fb7b528c` · entityos · 07:50 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/sicht.py
-
-Zeit: 2026-08-21T07:50:38+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 07:43:28 +0000 — entityos: 2 Aenderungen
-
-`abdf357f66b6` · entityos · 07:43 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/tests/test_verlauf.py
-
-Zeit: 2026-08-21T07:43:28+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 07:05:54 +0000 — entityos: 1 Aenderungen
-
-`f702cc24f95e` · entityos · 07:05 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/web/chat/demo-bilder/next-build-gabriel.png
-
-Zeit: 2026-08-21T07:05:54+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 06:55:18 +0000 — entityos: 3 Aenderungen
-
-`51c3991bd1f4` · entityos · 06:55 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/transport.py
-  the artefact/tests/test_429.py
-  the artefact/web/avatare/vorschau-nachdenken.html
-
-Zeit: 2026-08-21T06:55:18+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 3
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 06:46:40 +0000 — entityos: 1 Aenderungen
-
-`79c6e620d355` · entityos · 06:46 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/tests/test_container_control_plane_permissions.py
-
-Zeit: 2026-08-21T06:46:40+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 06:44:12 +0000 — entityos: 1 Aenderungen
-
-`e10f2fe13dfc` · entityos · 06:44 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/runtime_CLAUDE.md
-
-Zeit: 2026-08-21T06:44:12+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 06:42:11 +0000 — entityos: 5 Aenderungen
-
-`d8dadf7f2d7e` · entityos · 06:42 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/terminal_gateway.py
-  the artefact/web/avatare/zero-avatar.js
-  the artefact/web/avatare/zero-wettbewerb.css
-  the artefact/web/avatare/zero-wettbewerb.js
-  the artefact/web/chat/index.html
-
-Zeit: 2026-08-21T06:42:11+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 5
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 06:36:16 +0000 — entityos: 2 Aenderungen
-
-`85f14d57e97f` · entityos · 06:36 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/Dockerfile
-  the artefact/compose.yaml
-
-Zeit: 2026-08-21T06:36:16+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 06:32:31 +0000 — entityos: 1 Aenderungen
-
-`7fcb55ca8296` · entityos · 06:32 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-
-Zeit: 2026-08-21T06:32:31+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 06:30:24 +0000 — entityos: 8 Aenderungen
-
-`33104cad7a05` · entityos · 06:30 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/dateien.py
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/clayverse/terminal_gateway.py
-  the artefact/compose.yaml
-  the artefact/tests/test_avatar_api.py
-  the artefact/tests/test_dateien.py
-  the artefact/tests/test_gruss.py
-  the artefact/web/chat/index.html
-
-Zeit: 2026-08-21T06:30:24+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 8
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 06:24:18 +0000 — entityos: 5 Aenderungen
-
-`86e6940bd241` · entityos · 06:24 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  avatare-eingang/andreas.jpg
-  avatare-eingang/gabriel.jpg
-  betrieb/eos_theta.py
-  the artefact/avatare-privat/andreas.jpg
-  the artefact/avatare-privat/gabriel.jpg
-
-Zeit: 2026-08-21T06:24:18+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 5
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 06:11:24 +0000 — entityos: 2 Aenderungen
-
-`483cfbbf027f` · entityos · 06:11 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/absicht.py
-  the artefact/tests/test_absicht_lesen.py
-
-Zeit: 2026-08-21T06:11:24+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 05:59:48 +0000 — entityos: 2 Aenderungen
-
-`88936c115b74` · entityos · 05:59 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/wettbewerb.py
-  the artefact/tests/test_hoeflichkeit.py
-
-Zeit: 2026-08-21T05:59:48+00:00
 Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)

@@ -27,6 +27,14 @@ jobs:
           printf 'sha=%s\n' "$GITHUB_SHA"
           git rev-parse HEAD
           git status --short
+      - name: Compile ClayCog admission boundary
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/generate_sft_v2.py' \
+            'the artefact/blogpost_entity/mini_cognition/validate_corpus_v2.py'
       - name: Run strict ClayCode admission regressions
         run: |
           set -euo pipefail
@@ -38,3 +46,7 @@ jobs:
           cd 'the artefact/blogpost_entity/mini_cognition'
           python3 generate_sft_v2.py
           python3 validate_corpus_v2.py train_v2.jsonl validation_v2.jsonl
+      - name: Run Together launcher safety regressions
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'

@@ -1245,10 +1245,24 @@ window.addEventListener('load', async () => {{
                     # zur Wirt/Behaelter-Grenze. Alles andere (der eigentliche
                     # 20-Zuege-Lauf) laeuft Wirt-seitig ueber testbatterie.wache,
                     # ausgeloest durch die hier geschriebene DB-Zeile.
-                    from testbatterie.integration import (
-                        ist_testbatterie1_ausloeser, melde_ausloesung,
-                    )
-                    if ist_testbatterie1_ausloeser(control["text"]):
+                    #
+                    # ⚠️ 2026-08-22: Testbatterie ist ON HOLD, das Paket wird
+                    # NICHT ins Image kopiert (nur clayverse/ + web/, siehe
+                    # Dockerfile). Ein ungeschuetzter Import hier bricht
+                    # JEDEN Chat-Zug mit "No module named 'testbatterie'" --
+                    # normale Nachrichten muessen auch OHNE das Paket
+                    # funktionieren. Deshalb lazy + guarded: fehlt/bricht das
+                    # Paket, faellt der Zug einfach auf den normalen
+                    # Chat-Pfad zurueck, ohne den Trigger zu pruefen.
+                    ist_testbatterie1_ausloeser = None
+                    melde_ausloesung = None
+                    try:
+                        from testbatterie.integration import (
+                            ist_testbatterie1_ausloeser, melde_ausloesung,
+                        )
+                    except Exception:
+                        pass
+                    if ist_testbatterie1_ausloeser is not None and ist_testbatterie1_ausloeser(control["text"]):
                         result = await asyncio.to_thread(
                             melde_ausloesung, db.db, user_id=user_id, session_id=session_id)
                     else:

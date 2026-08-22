@@ -1,12 +1,30 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-22T00:36:41Z. 1110 Commits aus vier Repos, davon 484 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-22T01:06:41Z. 1110 Commits aus vier Repos, davon 484 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-22
+
+### EOS-Chronik 2026-08-22 00:46:53 +0000 — entityos: 1 Aenderungen
+
+`9f19db5505f1` · entityos · 00:46 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/terminal_gateway.py
+
+Zeit: 2026-08-22T00:46:53+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-22 00:24:20 +0000 — entityos: 3 Aenderungen
 
@@ -2989,25 +3007,6 @@ Anlass: Wache: Aenderung beobachtet
   the artefact/tests/test_warmpool.py
 
 Zeit: 2026-08-20T17:35:44+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 17:28:03 +0000 — entityos: 2 Aenderungen
-
-`3ca313a39d6e` · entityos · 17:28 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/warm_zero.py
-  the artefact/tests/test_warmpool.py
-
-Zeit: 2026-08-20T17:28:03+00:00
 Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)

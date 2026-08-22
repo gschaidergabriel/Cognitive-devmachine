@@ -1,48 +1,48 @@
 {
-  "erzeugt": "2026-08-22T00:36:42Z",
+  "erzeugt": "2026-08-22T01:06:42Z",
   "lage": {
     "oberes_zehntel_haelt": 0.14,
     "raenge": {
-      "autobahn": 241,
+      "autobahn": 238,
       "langsame strasse": 73,
       "schnellstrasse": 48,
-      "tunnel": 4
+      "tunnel": 7
     },
     "urteil": "GLEICHVERTEILT -- es bildet sich keine Hierarchie, der Mechanismus tut nichts",
     "wege": [
       {
         "art": "geschwister_datei",
-        "getragen": 764,
-        "guete": 0.983,
+        "getragen": 766,
+        "guete": 0.987,
         "nach": "C-AUDIT-003",
-        "nutzung": 764,
-        "rang": "autobahn",
+        "nutzung": 766,
+        "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_datei",
-        "getragen": 622,
-        "guete": 0.983,
+        "getragen": 624,
+        "guete": 0.987,
         "nach": "C-AUDIT-004",
-        "nutzung": 622,
-        "rang": "autobahn",
+        "nutzung": 624,
+        "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_datei",
-        "getragen": 823,
-        "guete": 0.983,
+        "getragen": 825,
+        "guete": 0.987,
         "nach": "C-AUDIT-002",
-        "nutzung": 823,
-        "rang": "autobahn",
+        "nutzung": 825,
+        "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_datei",
-        "getragen": 486,
-        "guete": 0.967,
+        "getragen": 487,
+        "guete": 0.971,
         "nach": "C-AUDIT-005",
-        "nutzung": 486,
+        "nutzung": 487,
         "rang": "autobahn",
         "von": "C-AUDIT-001"
       },
@@ -122,21 +122,21 @@
   },
   "pruefung": {
     "bedingung3_echt": {
-      "hinweis": "Erst 2 verschiedene echte Sitzung(en) je im gesamten Graphen gesehen -- ein Tunnel braucht mindestens 3 auf DERSELBEN Kante. Rechnerisch kann noch kein einziger echter Tunnel entstanden sein; 0 ist hier Datenmangel, kein Negativbefund.",
-      "stand": "NOCH_ZU_WENIG_DATEN",
-      "tunnel_bereinigt": 0,
-      "tunnel_roh_gespeichert": 4,
-      "verschiedene_echte_sitzungen_insgesamt": 2,
+      "hinweis": "3 Kante(n) erfuellen Bedingung 3 mit echten Sitzungen.",
+      "stand": "TUNNEL_BILDEN_SICH_ECHT",
+      "tunnel_bereinigt": 3,
+      "tunnel_roh_gespeichert": 7,
+      "verschiedene_echte_sitzungen_insgesamt": 3,
       "wege_mit_mind_einer_echten_sitzung": 6
     },
     "bei_gleichverteilung": 0.098,
     "hinweis": "Das obere Zehntel der Wege haelt diesen Anteil der Gesamtguete. Bei Gleichverteilung waeren es genau 10 %. Deutlich mehr heisst: wenige Autobahnen, viele langsame Strassen -- die erwartete Form.",
     "oberes_zehntel_haelt": 0.14,
     "raenge": {
-      "autobahn": 241,
+      "autobahn": 238,
       "langsame strasse": 73,
       "schnellstrasse": 48,
-      "tunnel": 4
+      "tunnel": 7
     },
     "urteil": "GLEICHVERTEILT -- es bildet sich keine Hierarchie, der Mechanismus tut nichts",
     "wege": 366

@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-22T00:36:42Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-22T01:06:42Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -14,8 +14,8 @@ Wege gesamt: **366**
 
 | Rang | Anzahl |
 |---|---|
-| autobahn | 241 |
-| tunnel | 4 |
+| tunnel | 7 |
+| autobahn | 238 |
 | langsame strasse | 73 |
 | schnellstrasse | 48 |
 
@@ -25,10 +25,10 @@ Oberes Zehntel haelt 0.14 der Gesamtguete (bei Gleichverteilung waeren es 0.098)
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | autobahn | 0.983 | 764 | 764 |
-| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | autobahn | 0.983 | 622 | 622 |
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | autobahn | 0.983 | 823 | 823 |
-| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | autobahn | 0.967 | 486 | 486 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 0.987 | 766 | 766 |
+| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 0.987 | 624 | 624 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 0.987 | 825 | 825 |
+| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | autobahn | 0.971 | 487 | 487 |
 | C-AUDIT-001 | C-CLAYCODE-003 | geschwister_datei | tunnel | 0.938 | 138 | 138 |
 | C-AUDIT-001 | C-CLAYCODE-005 | geschwister_datei | autobahn | 0.909 | 58 | 58 |
 | gabriel-claude-BOOT.md | gabriel-claude-4 | geschwister_verzeichnis | tunnel | 0.902 | 25 | 25 |

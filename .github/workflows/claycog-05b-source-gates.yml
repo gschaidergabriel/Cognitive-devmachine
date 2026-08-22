@@ -24,7 +24,7 @@ jobs:
           python3 'the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py' 'the artefact/blogpost_entity/mini_cognition/validation_v1.jsonl'
       - name: Generate structural OOD
         run: python3 'the artefact/blogpost_entity/mini_cognition/generate_eval_ood_v1.py'
-      - name: Verify OOD amputation and Together fail-closed source contract
+      - name: Verify OOD amputation, promotion gate and Together fail-closed contract
         run: |
           python3 - <<'PY'
           import json
@@ -42,6 +42,10 @@ jobs:
               assert 'omega_schema(w,' in joined
               assert joined.count('omega_arg(w,') >= 2
               assert 'typed_args=' in row['prompt']
+          evaluator=(root/'eval_outputs_v1.py').read_text()
+          assert 'AMPUTATION_FAMILY="tool_vocabulary_amputation_ood"' in evaluator
+          assert 'AMPUTATION_SEMANTIC_MIN=1.0' in evaluator
+          assert 'and report["promotion_gate"]["amputation_pass"]' in evaluator
           launcher=(root/'launch_together_v1.py').read_text()
           assert 'TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","").strip()' in launcher
           assert 'Qwen/Qwen2.5-7B-Instruct-Turbo' not in launcher
@@ -50,7 +54,7 @@ jobs:
           assert call_marker in launcher
           assert upload_marker in launcher
           assert launcher.index(call_marker) < launcher.index(upload_marker)
-          print(json.dumps({'ood_cases':len(rows),'amputation_cases':len(amp),'sft_seen_overlap':0,'typed_arg_gate':True,'forbidden_7b_default':False,'guard_call_precedes_upload':True}))
+          print(json.dumps({'ood_cases':len(rows),'amputation_cases':len(amp),'sft_seen_overlap':0,'typed_arg_gate':True,'amputation_semantic_min':1.0,'forbidden_7b_default':False,'guard_call_precedes_upload':True}))
           PY
       - name: Compile Python sources
         run: |

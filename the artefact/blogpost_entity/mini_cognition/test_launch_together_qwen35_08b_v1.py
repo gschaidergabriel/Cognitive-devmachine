@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import importlib.util,json,os,stat,tempfile,types,unittest
+import builtins,importlib.util,json,os,socket,stat,tempfile,types,unittest
 from pathlib import Path
 from unittest import mock
 HERE=Path(__file__).resolve().parent
@@ -14,15 +14,26 @@ class Client:
 class TogetherCtor:
     last=None
     def __init__(self,**kw):type(self).last=kw
+class SecretTripwireEnv(dict):
+    def get(self,key,default=None):
+        if key=="TOGETHER_API_KEY":raise AssertionError("SECRET_LOOKUP_TRIPWIRE")
+        return super().get(key,default)
+    def __getitem__(self,key):
+        if key=="TOGETHER_API_KEY":raise AssertionError("SECRET_LOOKUP_TRIPWIRE")
+        return super().__getitem__(key)
 class Tests(unittest.TestCase):
     def setUp(self):
-        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
+        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.pm=os.environ.get("CLAY_PROVIDER_MODE");self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
     def tearDown(self):
         m.TRAIN,m.VALID=self.ot,self.ov;self.t.cleanup()
         if self.c is None:os.environ.pop(m.CREATE_CONFIRM_ENV,None)
         else:os.environ[m.CREATE_CONFIRM_ENV]=self.c
         if self.l is None:os.environ.pop(m.CREATE_LEDGER_DIR_ENV,None)
         else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
+        if self.pm is None:os.environ.pop("CLAY_PROVIDER_MODE",None)
+        else:os.environ["CLAY_PROVIDER_MODE"]=self.pm
+    def _control(self,mode="FREE_ONLY",free_only=True,together_forbidden=True):
+        p=Path(self.t.name)/"control.json";p.write_text(json.dumps({"status":"ACTIVE","mode":mode,"preserved_hard_rules":{"free_only":free_only,"together_forbidden":together_forbidden}}));return p
     def test_model_and_direct_campaign(self):
         self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
     def test_local_checks_use_canonical_v2_validator(self):
@@ -34,6 +45,29 @@ class Tests(unittest.TestCase):
         self.assertEqual(Path(validate[1]).name,"validate_corpus_v2.py")
         self.assertEqual(validate[2:],[str(m.TRAIN),str(m.VALID)])
         self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertTrue(run.call_args_list[1].kwargs["check"])
+    def test_repository_control_currently_blocks_together_paid(self):
+        control=m.load_provider_execution_control();self.assertEqual(control["mode"],m.CONTROL_MODE_FREE_ONLY);self.assertTrue(control["preserved_hard_rules"]["free_only"]);self.assertTrue(control["preserved_hard_rules"]["together_forbidden"]);self.assertFalse(m.provider_cost_admitted(m.TOGETHER_COST_CLASS,control))
+    def test_cost_class_admission_is_control_bound(self):
+        free={"status":"ACTIVE","mode":m.CONTROL_MODE_FREE_ONLY,"preserved_hard_rules":{"free_only":True,"together_forbidden":False}}
+        self.assertTrue(m.provider_cost_admitted(m.COST_FREE,free))
+        for cost in (m.COST_PAID,m.COST_SUBSCRIPTION,m.COST_UNKNOWN):self.assertFalse(m.provider_cost_admitted(cost,free))
+        paid={"status":"ACTIVE","mode":m.CONTROL_MODE_PAID_ALLOWED,"preserved_hard_rules":{"free_only":False,"together_forbidden":False}}
+        self.assertTrue(m.provider_cost_admitted(m.COST_PAID,paid));self.assertTrue(m.provider_cost_admitted(m.COST_SUBSCRIPTION,paid));self.assertFalse(m.provider_cost_admitted(m.COST_UNKNOWN,paid))
+        paid["preserved_hard_rules"]["together_forbidden"]=True;self.assertFalse(m.provider_cost_admitted(m.COST_PAID,paid))
+    def test_env_paid_allowed_cannot_override_free_only_control_before_any_tripwire(self):
+        control=self._control();old_control,old_env,old_argv,old_local=m.CONTROL_PATH,m.os.environ,m.sys.argv,m.local_checks;old_import=builtins.__import__;old_socket=socket.socket
+        trip=SecretTripwireEnv(dict(old_env));trip["CLAY_PROVIDER_MODE"]="PAID_ALLOWED";trip["TOGETHER_API_KEY"]="CANARY_MUST_NOT_BE_READ"
+        def import_tripwire(name,*args,**kwargs):
+            if name=="together" or name.startswith("together."):raise AssertionError("TOGETHER_IMPORT_TRIPWIRE")
+            return old_import(name,*args,**kwargs)
+        def socket_tripwire(*args,**kwargs):raise AssertionError("NETWORK_TRIPWIRE")
+        def local_tripwire():raise AssertionError("LOCAL_CHECKS_TRIPWIRE")
+        try:
+            m.CONTROL_PATH=control;m.os.environ=trip;m.sys.argv=["launch_together_qwen35_08b_v1.py"];m.local_checks=local_tripwire;builtins.__import__=import_tripwire;socket.socket=socket_tripwire
+            with self.assertRaises(SystemExit) as cm:m.main()
+            self.assertIn("PROVIDER_ADMISSION_BLOCK",str(cm.exception));self.assertIn("cost_class=PAID",str(cm.exception))
+        finally:
+            socket.socket=old_socket;builtins.__import__=old_import;m.local_checks=old_local;m.sys.argv=old_argv;m.os.environ=old_env;m.CONTROL_PATH=old_control
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

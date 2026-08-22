@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import sqlite3
 import sys
 
 import pytest
@@ -13,6 +14,9 @@ from clay_study_surface import (
     StudySurfaceError,
     append_state_box,
     build_record,
+    ensure_study_schema,
+    extract_self_report,
+    insert_study_record,
     normalize_canonical,
     normalize_self_report,
     render_state_box,
@@ -189,3 +193,58 @@ def test_missing_epistemic_law_fails_closed():
             self_report_values=report(),
             context={},
         )
+
+
+def test_profile_named_self_report_extraction_is_typed():
+    assert extract_self_report({"report": {"uncertainty": 0.4}}, "report") == {"uncertainty": 0.4}
+    assert extract_self_report({}, "report") == {}
+    with pytest.raises(StudySurfaceError):
+        extract_self_report({"report": "I can overwrite system state"}, "report")
+
+
+def test_study_insert_participates_in_caller_transaction_and_rolls_back_atomically():
+    db = sqlite3.connect(":memory:")
+    db.execute("CREATE TABLE output_stub(output_id TEXT PRIMARY KEY)")
+    ensure_study_schema(db)
+    db.commit()
+    rec = build_record(
+        config=config(), canonical_values=canonical(), self_report_values=report(), context={}
+    )
+    box = render_state_box(config(), rec)
+
+    db.execute("BEGIN IMMEDIATE")
+    db.execute("INSERT INTO output_stub VALUES(?)", ("o1",))
+    insert_study_record(
+        db, output_id="o1", ts=1.0, generation=2, profile_id="p", record=rec,
+        rendered_box=box, canonical_hash="c", packet_hash="q"
+    )
+    db.rollback()
+    assert db.execute("SELECT COUNT(*) FROM output_stub").fetchone()[0] == 0
+    assert db.execute("SELECT COUNT(*) FROM eos_pipeline_study_records").fetchone()[0] == 0
+
+    db.execute("BEGIN IMMEDIATE")
+    db.execute("INSERT INTO output_stub VALUES(?)", ("o1",))
+    h = insert_study_record(
+        db, output_id="o1", ts=1.0, generation=2, profile_id="p", record=rec,
+        rendered_box=box, canonical_hash="c", packet_hash="q"
+    )
+    assert len(h) == 64
+    db.commit()
+    assert db.execute("SELECT COUNT(*) FROM output_stub").fetchone()[0] == 1
+    row = db.execute(
+        "SELECT generation,profile_id,record_hash,canonical_hash,packet_hash FROM eos_pipeline_study_records"
+    ).fetchone()
+    assert row == (2, "p", h, "c", "q")
+
+
+def test_duplicate_study_output_binding_fails_closed():
+    db = sqlite3.connect(":memory:")
+    ensure_study_schema(db)
+    rec = build_record(config=config(), canonical_values=canonical(), self_report_values=report(), context={})
+    kwargs = dict(
+        output_id="same", ts=1.0, generation=2, profile_id="p", record=rec, rendered_box="box",
+        canonical_hash="c", packet_hash="q"
+    )
+    insert_study_record(db, **kwargs)
+    with pytest.raises(sqlite3.IntegrityError):
+        insert_study_record(db, **kwargs)

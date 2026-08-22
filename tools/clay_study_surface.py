@@ -8,8 +8,10 @@ self-reports stay structurally separate and are never promoted across that bound
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
 import json
 import math
+import sqlite3
 from typing import Any, Mapping, Sequence
 
 VERSION = "clay-study-surface/0.1"
@@ -253,6 +255,78 @@ def build_record(
     }
 
 
+def extract_self_report(payload: Mapping[str, Any], field_name: str | None) -> dict[str, Any]:
+    """Read a profile-named self-report object without granting it canonical status."""
+    if not field_name:
+        return {}
+    value = payload.get(str(field_name))
+    if value is None:
+        return {}
+    if not isinstance(value, Mapping):
+        raise StudySurfaceError("SELF_REPORT_NOT_OBJECT")
+    return dict(value)
+
+
+def ensure_study_schema(db: sqlite3.Connection) -> None:
+    """Install the generic study-record table; never commits the caller transaction."""
+    db.execute(
+        """
+        CREATE TABLE IF NOT EXISTS eos_pipeline_study_records(
+          output_id TEXT PRIMARY KEY,
+          ts REAL NOT NULL,
+          generation INTEGER NOT NULL,
+          profile_id TEXT NOT NULL,
+          record_json TEXT NOT NULL,
+          record_hash TEXT NOT NULL,
+          rendered_box TEXT NOT NULL,
+          canonical_hash TEXT NOT NULL,
+          packet_hash TEXT NOT NULL
+        )
+        """
+    )
+
+
+def insert_study_record(
+    db: sqlite3.Connection,
+    *,
+    output_id: str,
+    ts: float,
+    generation: int,
+    profile_id: str,
+    record: Mapping[str, Any],
+    rendered_box: str,
+    canonical_hash: str,
+    packet_hash: str,
+) -> str:
+    """Insert one output-bound study record into the caller's existing transaction.
+
+    This function intentionally never calls commit/rollback. Atomicity belongs to the
+    canonical pipeline commit that also owns output persistence, source consumption and
+    generation CAS.
+    """
+    if not output_id or not profile_id or not canonical_hash or not packet_hash:
+        raise StudySurfaceError("STUDY_BINDING_MISSING")
+    if not record.get("enabled"):
+        raise StudySurfaceError("STUDY_RECORD_DISABLED")
+    record_json = stable_record_json(record)
+    record_hash = hashlib.sha256(record_json.encode("utf-8")).hexdigest()
+    db.execute(
+        "INSERT INTO eos_pipeline_study_records VALUES(?,?,?,?,?,?,?,?,?)",
+        (
+            output_id,
+            float(ts),
+            int(generation),
+            profile_id,
+            record_json,
+            record_hash,
+            rendered_box,
+            canonical_hash,
+            packet_hash,
+        ),
+    )
+    return record_hash
+
+
 def _render_value(value: Any, delta: float | None = None) -> str:
     if isinstance(value, Mapping) and "status" in value:
         status = str(value.get("status", "UNKNOWN"))
@@ -323,4 +397,7 @@ __all__ = [
     "render_state_box",
     "append_state_box",
     "stable_record_json",
+    "extract_self_report",
+    "ensure_study_schema",
+    "insert_study_record",
 ]

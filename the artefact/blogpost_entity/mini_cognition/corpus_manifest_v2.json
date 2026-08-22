@@ -1,0 +1,21 @@
+{
+  "schema": "claycog-sft/v2",
+  "seed": 20260822,
+  "examples": 1800,
+  "train": 1620,
+  "validation": 180,
+  "families": ["omega_valid","omega_reject","epistemic","hyperposition","architecture","configuration","self_state","recovery","adversarial"],
+  "per_family": 200,
+  "validation_per_family": 20,
+  "split": "family_stratified_heldout_value_domains",
+  "exact_train_validation_overlap": 0,
+  "train_unique_rows": 1620,
+  "validation_unique_rows": 180,
+  "base_primary": "Qwen/Qwen2.5-0.5B",
+  "base_ablation": "Qwen/Qwen2.5-0.5B-Instruct",
+  "identity_job_policy": "runtime_config_only",
+  "assistant_target_representation": "ClayCode_only",
+  "train_sha256": "ad132881aee5b794a1a81a56bc51af99d09d04c2fdff769f48cf192afa0d2a21",
+  "validation_sha256": "fad0e7a2613e54c3027ca5de8d8917ff3408a8a8a644439be764152648396e6f",
+  "evidence_scope": "hashes reproduced in prior isolated exact-generator execution of the same deterministic v2 semantics; final branch CI/runtime admission remains separately required"
+}

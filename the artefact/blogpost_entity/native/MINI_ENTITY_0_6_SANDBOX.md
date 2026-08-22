@@ -9,7 +9,9 @@ Version: `mini-entity/0.6.0`
 
 Sandbox SHA-256:
 
-`2aa8ebe9d20a683b62627cfe9e20f245390b1422afaa805b42b2dddbc976eed3`
+`27ad1fc3f134efacabe89102a86ac5876d62bb7c9d9b1e6d0ca95c36c60e7bd1`
+
+This identity is the current retested v0.6 sandbox binary bound by `../receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json`. Earlier v0.6 fixture builds used different binary hashes and are historical evidence only.
 
 Build dependencies used in the sandbox reference:
 

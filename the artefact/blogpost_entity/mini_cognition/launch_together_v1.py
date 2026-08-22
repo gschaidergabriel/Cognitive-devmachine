@@ -10,7 +10,8 @@ Together's regular catalog has no native 0.5B Qwen entry. We therefore use BYOM 
 Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family catalog-template candidate.
 Template model_limits and price estimation do NOT prove BYOM compatibility because they
 do not validate from_hf_model. BYOM compatibility remains open until Together accepts
-(and subsequently starts) the requested HF checkpoint under the selected template.
+(and subsequently starts) the requested exact HF checkpoint revision under the selected
+template.
 
 Billed-create safety is deliberately stricter than ordinary API use. The CREATE call is
 made through a zero-retry SDK client and is preceded by an atomic local campaign intent
@@ -19,19 +20,24 @@ UNKNOWN_REMOTE_CREATE and subsequent --create attempts fail closed until an oper
 reconciles the exact campaign against the provider account. Account-list duplicate
 checks remain defense in depth; they are not treated as an exactly-once authority.
 """
-import argparse, hashlib, json, os, subprocess, sys, time
+import argparse, hashlib, json, os, re, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v1.jsonl"
 VALID=HERE/"validation_v1.jsonl"
 HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL","Qwen/Qwen2.5-0.5B")
+HF_REVISIONS={
+    "Qwen/Qwen2.5-0.5B":os.environ.get("CLAYCOG_HF_REVISION","060db6499f32faf8b98477b0a26969ef7d8b9987"),
+    "Qwen/Qwen2.5-0.5B-Instruct":os.environ.get("CLAYCOG_HF_INSTRUCT_REVISION","7ae557604adf67be50417f59c2c2f167def9a775"),
+}
 TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-7B-Instruct-Turbo")
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
 EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"
 CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
+HEX40=re.compile(r"^[0-9a-f]{40}$")
 ACTIVE_OR_SPENT_STATUSES={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
 def run_local_checks():
@@ -61,10 +67,21 @@ def sha256_file(path):
             h.update(chunk)
     return h.hexdigest()
 
-def campaign_descriptor(hf_model):
+def hf_revision_for(hf_model):
+    revision=str(HF_REVISIONS.get(hf_model,os.environ.get("CLAYCOG_HF_REVISION",""))).strip().lower()
+    if not HEX40.fullmatch(revision):
+        raise SystemExit(
+            f"HF_REVISION_ABORT exact 40-hex revision required for {hf_model}; "
+            "set CLAYCOG_HF_REVISION or CLAYCOG_HF_INSTRUCT_REVISION"
+        )
+    return revision
+
+def campaign_descriptor(hf_model,hf_revision=None):
+    if hf_revision is None: hf_revision=hf_revision_for(hf_model)
     return {
-        "schema":"claycog-05b-together-campaign/v1",
+        "schema":"claycog-05b-together-campaign/v2",
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "training_sha256":sha256_file(TRAIN),
         "validation_sha256":sha256_file(VALID),
@@ -78,8 +95,8 @@ def campaign_descriptor(hf_model):
         "n_checkpoints":1,
     }
 
-def campaign_fingerprint(hf_model):
-    raw=json.dumps(campaign_descriptor(hf_model),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode("utf-8")
+def campaign_fingerprint(hf_model,hf_revision=None):
+    raw=json.dumps(campaign_descriptor(hf_model,hf_revision),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()
 
 def campaign_suffix(fingerprint):
@@ -97,32 +114,36 @@ def _field(x,name,default=None):
     if isinstance(x,dict): return x.get(name,default)
     return getattr(x,name,default)
 
-def matching_campaign_jobs(client,hf_model,template,suffix):
+def matching_campaign_jobs(client,hf_model,hf_revision,template,suffix):
     """Return account jobs that appear to carry this deterministic campaign suffix.
 
-    The suffix is derived from exact local dataset digests + training configuration.
-    Where Together exposes model/from_hf_model, those fields must also match. Missing
-    optional fields are tolerated so the guard remains useful across response versions.
+    The suffix is derived from exact local dataset digests + exact HF revision + training
+    configuration. Where Together exposes model/from_hf_model/revision, those fields
+    must also match. Missing optional fields are tolerated across response versions.
     """
     matches=[]
     for job in _items(client.fine_tuning.list()):
         status=str(_field(job,"status","")).lower()
         if status and status not in ACTIVE_OR_SPENT_STATUSES:
             continue
+        direct_suffix=str(_field(job,"suffix","") or "")
         output_name=str(_field(job,"model_output_name","") or "")
-        if suffix not in output_name:
+        if direct_suffix!=suffix and suffix not in output_name:
             continue
         model=_field(job,"model",None)
         from_hf=_field(job,"from_hf_model",None)
+        revision=_field(job,"hf_model_revision",None)
         if model not in (None,"",template):
             continue
         if from_hf not in (None,"",hf_model):
             continue
+        if revision not in (None,"",hf_revision):
+            continue
         matches.append(job)
     return matches
 
-def assert_no_duplicate_campaign(client,hf_model,template,suffix):
-    matches=matching_campaign_jobs(client,hf_model,template,suffix)
+def assert_no_duplicate_campaign(client,hf_model,hf_revision,template,suffix):
+    matches=matching_campaign_jobs(client,hf_model,hf_revision,template,suffix)
     if matches:
         ids=[str(_field(x,"id","UNKNOWN")) for x in matches]
         raise SystemExit("DUPLICATE_CREATE_ABORT existing campaign job(s): "+",".join(ids))
@@ -167,7 +188,7 @@ def _fsync_dir(path):
     try: os.fsync(fd)
     finally: os.close(fd)
 
-def arm_create_intent(fingerprint,hf_model,suffix):
+def arm_create_intent(fingerprint,hf_model,hf_revision,suffix):
     """Atomically reserve this exact paid campaign locally before the remote POST.
 
     O_EXCL makes concurrent local launchers mutually exclusive. The record intentionally
@@ -180,11 +201,11 @@ def arm_create_intent(fingerprint,hf_model,suffix):
     except OSError: pass
     path=create_ledger_path(fingerprint)
     payload={
-        "schema":"claycog-together-create-intent/v1",
+        "schema":"claycog-together-create-intent/v2",
         "fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "status":"CREATE_ARMED",
-        "campaign":campaign_descriptor(hf_model),
+        "campaign":campaign_descriptor(hf_model,hf_revision),
         "created_unix":int(time.time()),
     }
     data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode("utf-8")
@@ -234,9 +255,10 @@ def main():
     if not os.environ.get("TOGETHER_API_KEY"):
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     hf_model="Qwen/Qwen2.5-0.5B-Instruct" if args.instruct_ablation else HF_MODEL
+    hf_revision=hf_revision_for(hf_model)
 
     run_local_checks()
-    fingerprint=campaign_fingerprint(hf_model)
+    fingerprint=campaign_fingerprint(hf_model,hf_revision)
     suffix=campaign_suffix(fingerprint)
 
     # Keep Together import behind the credential/local-validation boundary so pure safety
@@ -252,7 +274,7 @@ def main():
     if args.create:
         require_create_confirmation(fingerprint)
         assert_no_local_create_intent(fingerprint)
-        assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
+        assert_no_duplicate_campaign(client,hf_model,hf_revision,TEMPLATE,suffix)
 
     train_file=client.files.upload(file=str(TRAIN),purpose="fine-tune",check=True)
     valid_file=client.files.upload(file=str(VALID),purpose="fine-tune",check=True)
@@ -273,6 +295,7 @@ def main():
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "epochs":EPOCHS,
         "evals":EVALS,
@@ -280,7 +303,7 @@ def main():
         "allowed_to_proceed":bool(estimate.allowed_to_proceed),
         "price_detail":objdict(estimate),
         "template_admission_status":"MODEL_LIMITS_FULL_FT_ACCEPTED",
-        "byom_compatibility_status":"UNPROVEN_UNTIL_CREATE_ACCEPTS_FROM_HF_MODEL_AND_TRAINING_STARTS",
+        "byom_compatibility_status":"UNPROVEN_UNTIL_CREATE_ACCEPTS_EXACT_HF_REVISION_AND_TRAINING_STARTS",
     }
     print(json.dumps(report,indent=2,default=str))
     if not estimate.allowed_to_proceed:
@@ -294,8 +317,8 @@ def main():
     # Close the check/use window, then reserve the exact paid campaign locally immediately
     # before the non-idempotent remote POST. Any crash/timeout after arming stays unknown.
     assert_no_local_create_intent(fingerprint)
-    assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
-    intent_path=arm_create_intent(fingerprint,hf_model,suffix)
+    assert_no_duplicate_campaign(client,hf_model,hf_revision,TEMPLATE,suffix)
+    intent_path=arm_create_intent(fingerprint,hf_model,hf_revision,suffix)
     create_client=new_zero_retry_create_client(Together)
     try:
         job=create_client.fine_tuning.create(
@@ -303,6 +326,7 @@ def main():
             validation_file=valid_file.id,
             model=TEMPLATE,
             from_hf_model=hf_model,
+            hf_model_revision=hf_revision,
             n_epochs=EPOCHS,
             n_evals=EVALS,
             n_checkpoints=1,
@@ -324,6 +348,7 @@ def main():
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "full_fine_tune":True,
         "estimated_usd":price,

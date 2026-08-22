@@ -24,7 +24,7 @@ class Tests(unittest.TestCase):
         if self.l is None:os.environ.pop(m.CREATE_LEDGER_DIR_ENV,None)
         else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
     def test_model_and_direct_campaign(self):
-        self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
+        self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["schema"],"claycog-08b-together-direct-campaign/v3");self.assertEqual(d["training_method"],"sft");self.assertEqual(d["train_on_inputs"],"auto");self.assertIs(d["lora"],False);self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
     def test_local_checks_use_canonical_v2_validator(self):
         with mock.patch.object(m.subprocess,"run") as run:
             m.local_checks()
@@ -40,20 +40,20 @@ class Tests(unittest.TestCase):
     def test_estimate_schema_subset(self):
         c=Client();m.estimate_price(c,"t","v");q=c.fine_tuning.estimate_kwargs;self.assertEqual(q["training_type"],{"type":"Full"});self.assertEqual(q["training_method"],{"method":"sft","train_on_inputs":"auto"})
         for x in ("random_seed","learning_rate","warmup_ratio","from_hf_model"):self.assertNotIn(x,q)
-    def test_create_explicit_full_and_seed(self):
-        p=m.create_payload("t","v","s");self.assertEqual(p["training_type"],{"type":"Full"});self.assertEqual(p["random_seed"],3407);self.assertEqual(p["learning_rate"],1e-5);self.assertEqual(p["warmup_ratio"],.03)
-        for x in ("lora","from_hf_model","hf_model_revision","train_on_inputs"):self.assertNotIn(x,p)
+    def test_create_payload_matches_current_sdk_v2_shape(self):
+        p=m.create_payload("t","v","s");self.assertNotIn("training_type",p);self.assertEqual(p["training_method"],"sft");self.assertEqual(p["train_on_inputs"],"auto");self.assertIs(p["lora"],False);self.assertEqual(p["random_seed"],3407);self.assertEqual(p["learning_rate"],1e-5);self.assertEqual(p["warmup_ratio"],.03)
+        for x in ("from_hf_model","hf_model_revision"):self.assertNotIn(x,p)
     def test_fingerprint_binds_dataset(self):
         a=m.campaign_fingerprint();m.TRAIN.write_text('{"messages":[1]}\n');self.assertNotEqual(a,m.campaign_fingerprint())
     def test_duplicate_guard(self):
-        s="claycog08b-v2-dead";c=Client([{"id":"j","status":"running","model":m.MODEL,"model_output_name":"x"+s}])
+        s="claycog08b-v3-dead";c=Client([{"id":"j","status":"running","model":m.MODEL,"model_output_name":"x"+s}])
         with self.assertRaises(SystemExit):m.assert_no_duplicate_campaign(c,s)
     def test_confirmation_and_private_intent(self):
         fp="a"*64
         with self.assertRaises(SystemExit):m.require_create_confirmation(fp)
         os.environ[m.CREATE_CONFIRM_ENV]=fp;m.require_create_confirmation(fp)
         with tempfile.TemporaryDirectory() as td:
-            os.environ[m.CREATE_LEDGER_DIR_ENV]=td;fp=m.campaign_fingerprint();p=m.arm_create_intent(fp,m.campaign_suffix(fp));self.assertEqual(stat.S_IMODE(p.stat().st_mode),0o600);self.assertEqual(m.read_create_ledger(fp)["campaign"]["training_type"],{"type":"Full"})
+            os.environ[m.CREATE_LEDGER_DIR_ENV]=td;fp=m.campaign_fingerprint();p=m.arm_create_intent(fp,m.campaign_suffix(fp));self.assertEqual(stat.S_IMODE(p.stat().st_mode),0o600);entry=m.read_create_ledger(fp);self.assertEqual(entry["schema"],"claycog-together-create-intent/v3");self.assertIs(entry["campaign"]["lora"],False);self.assertEqual(entry["campaign"]["training_method"],"sft")
     def test_created_job_identity_mismatch_detection(self):
         expected={"training_file":"t","validation_file":"v","model":m.MODEL,"n_epochs":3,"n_evals":2,"random_seed":3407}
         good=types.SimpleNamespace(**expected);self.assertEqual(m.created_job_identity_mismatches(good,expected),{})

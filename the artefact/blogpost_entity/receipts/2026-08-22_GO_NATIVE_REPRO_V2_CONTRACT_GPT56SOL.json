@@ -1,0 +1,47 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "base_main": "0664cf2af8fbb6d0e04d41f560a1603b9b2108ba",
+  "branch": "gpt56sol/go-native-repro-v2-contract-20260822-1522",
+  "delta": {
+    "problem": "After #769, the canonical native exact-repro workflow still applied shipped zero_blog profile-v2 to its successful local_exec fixture and to every atomic rollback case. Because current native v2 admission intentionally fails closed before inference/commit, an actually-started runner would either fail the backend fixture for the wrong reason or let rollback cases appear safe without reaching their intended commit faults.",
+    "repair": [
+      "Create one admitted simple profile-v1 fixture for local_exec/backend/secret/no-network checks.",
+      "Use the same simple profile for atomic fault injection so generation/output/study/event triggers are actually reached.",
+      "Add an independent canonical profile-v2 regression that requires CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY, nonzero run exit, generation 0, zero outputs/studies, and one pending event.",
+      "Extend the machine receipt so simple-runtime evidence and v2 fail-closed evidence are separate claim classes.",
+      "Keep the canonical test_build_native_bound.py entry, which now includes the #849 local environment-isolation regression."
+    ],
+    "evidence_class": "SOURCE_CANDIDATE_UNTIL_EXACT_RUNNER_STEPS_EXECUTE"
+  },
+  "coordination": {
+    "parallel_duplicate_observed": "#849 merged immediately after #850 with the same local_exec environment mechanism and the stronger canonical test adapter.",
+    "cleanup": "Removed the redundant test_native_local_exec_env_isolation.py introduced by #850; retained #849 test_native_local_env_isolation.py through test_build_native_bound.py as the single canonical regression path.",
+    "no_second_runtime_path": true
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "already_consumed": "DONOR_BODY_VS_HEAD_VERIFIED_EMPTY_CONTRACT_FALSIFIER",
+    "this_delta": "REGRESSION_ONLY_NO_NEW_UNUSUAL_EXPERIMENT"
+  },
+  "execution": {
+    "workflow_execution_on_this_branch_at_receipt_write": "NOT_YET_OBSERVED",
+    "known_recent_runner_state": "GitHub-hosted native/cognition jobs repeatedly complete before visible steps with steps=null; classify as execution-admission failure, not code-test failure."
+  },
+  "cognition_reentry": {
+    "current_direction": "0.5B owner-locked Qwen2.5 lane remains fail-closed on architecture-compatible Full-FT provider admission; current main has continued adding provider-free campaign identity, architecture discriminator, comment-safe OOD semantics, and seed/job-identity fences.",
+    "paid_create": false,
+    "money_spent_usd": 0
+  },
+  "non_claims": [
+    "No exact execution PASS for the workflow candidate.",
+    "No canonical native profile-v2 parity claim.",
+    "No real local-model quality claim.",
+    "No Together provider/training claim.",
+    "No whole Mini Entity PASS."
+  ]
+}

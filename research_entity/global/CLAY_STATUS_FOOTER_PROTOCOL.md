@@ -1,63 +1,29 @@
-# Mandatory Clay Visible Status Footer — ClayVerse single-container
+# Mandatory Clay Visible Status Footer — Blogpost Entity
 
-**Status:** CURRENT  
-**Owner directive:** `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+Status: CURRENT
+Owner directive: `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
 
 Every substantive visible Clay project response ends with exactly one final plain Markdown fenced `text` block and nothing visible after it.
 
-Opening fence must be exactly ` ```text `.
-
-The persistent Research Entity is Clay. The active product endpoint is ClayVerse; the active engineering stage is `CLAYVERSE_ARTIFACT`. The canonical product workspace is `main/the artefact/` in `gschaidergabriel/clay-global-research-entity`, and the release target is one OCI/Docker-compatible ClayVerse container image.
-
-EntityOS is an internal execution/security/runtime substrate, never the top-level product endpoint. Under the current owner/product law, the **final accepted ClayVerse image MUST contain the complete accepted EntityOS substrate**. EntityOS may be omitted only from explicitly classified development/baseline builds with execution disabled; such builds cannot receive whole-product PASS. Legacy EntityOS-as-one-file-product, Frank/self.root/UCM2/Harness/H1/H2/H3 material is bounded internal/historical evidence and is not the active release endpoint.
-
-Final whole-product acceptance also requires the **same exact accepted ClayVerse OCI image digest** to execute behind an independent VM/microVM guest-kernel boundary (Kata/equivalent invariants). Direct host-kernel OCI execution remains bounded development/supporting evidence only.
-
-## Dynamic truth law
-
-Resolve current state from the strongest available current evidence, especially:
-
-- `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
-- `research_entity/rooms/PROGRAM_STATE.json`
-- `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
-- `the artefact/manifest.json`
-- `the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md`
-- current research `main` and exact runtime/test receipts.
-
-Never infer whole-product completion from source inspection, a component test, a CI definition, a deployment READY state or historical receipts. If no canonical progress percentage or ETA exists, report `UNRESOLVED`.
-
-## Required footer
+Required footer:
 
 ```text
 CLAY STATUS
 Entity: JOINED|DEGRADED_UNJOINED|LOCAL_ONLY
 GitHub: VERIFIED_RW|VERIFIED_RO|UNVERIFIED|FAILED
-Canonical: <current research revision/hash>
-Organ: <current worker/provenance>
-Trigger: <none|registered trigger>
+Canonical: <current main SHA>
+Organ: <worker/provenance>
+Trigger: <none|go|other>
 Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
-Program: ClayVerse single-container
-Stage: CLAYVERSE_ARTIFACT
-Goal: one OCI/Docker-compatible ClayVerse container — one persistent central entity + UnifiedDB authority + rebuildable ClayGraph + Clerk web auth + Claude Code cognition + secure/recoverable effect boundary
-EntityOS: MANDATORY_IN_FINAL_ACCEPTED_IMAGE — complete accepted internal execution/security/runtime substrate; not product endpoint
-Outer isolation: MANDATORY_FOR_FINAL_PASS — same exact accepted OCI digest behind independent VM/microVM guest-kernel boundary; direct host-kernel OCI is development evidence only
-Legacy Frank/self.root/UCM2/Harness: bounded evidence only
+Program: Blogpost Entity all-in-one
+Stage: BLOGPOST_ENTITY_CLAY
+Goal: finish and prove the persistent Zero/EntityOS Blogpost Entity as one canonical `the artefact/blogpost_entity/BLOGPOST_ENTITY.clay` module
+Mistral: free key family only; secrets never exposed; live PASS requires an actually mounted key and successful sandbox call
+Truth law: UNKNOWN != ZERO != ERROR != MEASURED; narrative model cannot mint canonical self-state
+Swarm: architecture · ClayCode/runtime · state/evidence · personality/claim-gate · Mistral · adversarial · tests · fusion/hypofusion
 Together API: FORBIDDEN
-Final paid/model training: OWNER_AUTHORIZATION_REQUIRED
-Current frontier: <dynamic concise blocker/discriminator>
-Progress: <canonical dynamic percent/bar OR UNRESOLVED>
+Current frontier: <dynamic>
 Acceptance: IN_PROGRESS|PASS|BLOCKED|UNRESOLVED
-ETA: <canonical dynamic range OR UNRESOLVED>
-Evidence note: source/component/historical PASS does not imply whole ClayVerse container PASS
-Short commands: 666 · go · q12 · q23 · atomic · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
+Evidence note: local/component/mock PASS does not imply real-Mistral final PASS
+Short commands: go · fusion · hypofusion · claycode · gwt · unifieddb · atomic · dump
 ```
-
-## Pre-send invariant
-
-1. exactly one final fenced text block and nothing visible after it;
-2. heading `CLAY STATUS`;
-3. active program/stage are ClayVerse single-container / `CLAYVERSE_ARTIFACT`;
-4. current research revision is refreshed when GitHub is available;
-5. invented progress/ETA is forbidden;
-6. EntityOS is never presented as the top-level product endpoint, and the final accepted image is never described as EntityOS-optional;
-7. final whole-product acceptance is never described as satisfied by direct host-kernel OCI execution without the required independent VM/microVM guest-kernel boundary.

@@ -1,0 +1,55 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "mini-entity-pipeline-all-in-one",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "base_main_sha": "702440d7cd701e42d996cf8b9221d5d515a26e7d",
+  "branch": "gpt56sol/go-claycog-top-level-exact-current-20260822-1512",
+  "candidate_validator_git_blob": "3b9bdcd37cdc40a5c3fa48647d44737f38bc3fb1",
+  "candidate_test_git_blob": "3ba755e4c38a104b7ac220e17c8ee52e515b9657",
+  "finding": {
+    "main_validator_blob": "c7659d023e86587bb9eb6bd5f330bc9a9e3e5ed2",
+    "defect": "current main accepted omega validation gates nested under if false as satisfying the promotion validator because gate presence was raw-substring based",
+    "counterexample_main_errors": [],
+    "candidate_counterexample_errors": [
+      "omega_gate_not_exact_top_level:grammar:0",
+      "omega_gate_not_exact_top_level:types:0",
+      "omega_gate_not_exact_top_level:schema:0",
+      "omega_gate_not_exact_top_level:authority:0",
+      "omega_gate_not_exact_top_level:generation:0"
+    ]
+  },
+  "isolated_execution": {
+    "surface": "OpenAI isolated Linux container",
+    "candidate_blob_identity_verified_with_git_hash_object": true,
+    "py_compile": "PASS",
+    "focused_tests": "16/16 PASS",
+    "canonical_corpus_train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+    "canonical_corpus_validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+    "canonical_corpus_train_lines": 1485,
+    "canonical_corpus_validation_lines": 165,
+    "candidate_structural_invalid_train": 0,
+    "candidate_structural_invalid_validation": 0,
+    "result": "MECHANISM_SUPPORTED_EXACT_CANDIDATE_AND_EXACT_CANONICAL_CORPUS_HASHES"
+  },
+  "unusual_experiment": {
+    "name": "DEAD_CONTROL_OMEGA_GATE_INJECTION",
+    "count": 1,
+    "result": "MAIN_ACCEPTED_CANDIDATE_REJECTED"
+  },
+  "provider_activity": {
+    "together_network_call": false,
+    "paid_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "claims_not_made": [
+    "Together qwen2-compatible Full-FT admission",
+    "training completion",
+    "model superiority",
+    "Q4_K_M RSS gate",
+    "whole Mini Entity acceptance"
+  ]
+}

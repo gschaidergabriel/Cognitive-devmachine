@@ -1,5 +1,5 @@
 {
-  "erzeugt": "2026-08-22T01:38:24Z",
+  "erzeugt": "2026-08-22T02:08:22Z",
   "erfuellt": 88,
   "offen": 19,
   "zurueckgestellt": 5,
@@ -73,7 +73,7 @@
       "faehigkeit": "Jeder Zug wird aufgezeichnet",
       "soll": "Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette",
       "quelle": "Architektur",
-      "ist": "120 Züge, 633 Kausalepisoden, 60 Arbeitsraum-Episoden",
+      "ist": "122 Züge, 634 Kausalepisoden, 61 Arbeitsraum-Episoden",
       "erfuellt": true
     },
     {
@@ -161,7 +161,7 @@
       "faehigkeit": "Eintrittspunkte werden gelernt",
       "soll": "der Abruf verbessert seinen Eintrittspunkt selbst; SHADOW→ACTIVE mechanisch bei genug Lernsignal",
       "quelle": "Eigner 18./19.08.",
-      "ist": "27 gelernte Eintrittspunkte, Modus SHADOW, 60 Episoden; Beförderung via befoerderung_takt (15-min-Timer). Erst-Lernsignal per Bootstrap gesetzt (signal_class 'bootstrap:*'), verfeinert sich mit echter Nutzung",
+      "ist": "27 gelernte Eintrittspunkte, Modus SHADOW, 61 Episoden; Beförderung via befoerderung_takt (15-min-Timer). Erst-Lernsignal per Bootstrap gesetzt (signal_class 'bootstrap:*'), verfeinert sich mit echter Nutzung",
       "erfuellt": false
     },
     {
@@ -177,7 +177,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "441 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "443 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -273,7 +273,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 51 minutes (healthy)",
+      "ist": "Up About an hour (healthy)",
       "erfuellt": true
     },
     {
@@ -321,7 +321,7 @@
       "faehigkeit": "Wissen ist nach Menschen zugeordnet",
       "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
       "quelle": "Eigner 18.08.",
-      "ist": "18917 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "ist": "18921 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
       "erfuellt": true
     },
     {
@@ -337,7 +337,7 @@
       "faehigkeit": "Chat-Historie überlebt den Neuladen",
       "soll": "Verlauf pro Terminal-Sitzung, dauerhaft, nicht im Browser",
       "quelle": "Eigner 18.08.",
-      "ist": "120 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
+      "ist": "122 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
       "erfuellt": true
     },
     {
@@ -433,7 +433,7 @@
       "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
       "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Bilanz nennt drei Zahlen: df 158.4 GB, gezählt 128.2 GB, Lücke 30.2 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 30.2 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
+      "ist": "Bilanz nennt drei Zahlen: df 158.3 GB, gezählt 128.1 GB, Lücke 30.2 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 30.2 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
       "erfuellt": false
     },
     {
@@ -489,7 +489,7 @@
       "faehigkeit": "Zero verstummt nicht wortlos",
       "soll": "wenn er nicht antworten kann, muss man ERFAHREN warum",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Anmeldung GUT, noch 2.2 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
+      "ist": "Anmeldung GUT, noch 1.7 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
       "erfuellt": true
     },
     {
@@ -561,7 +561,7 @@
       "faehigkeit": "Zero und die Vorstufe lesen DASSELBE Gedächtnis",
       "soll": "ein Werkzeug, das den falschen Speicher liest, widerspricht der Vorstufe systematisch",
       "quelle": "Befund 20.08.",
-      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 1275 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
+      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 1277 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
       "erfuellt": true
     },
     {
@@ -849,7 +849,7 @@
       "faehigkeit": "Architekten-Pipeline durch den Tor-Rahmen mit echten Laeufen erprobt",
       "soll": "architekt.ein_takt end-zu-ende: Hypothese -> Engine-Wahl (GLM zuerst, Sonnet als Notbehelf) -> Patch-Hand -> Tests -> Tor-Pruefung -> Kanarie -> (nur mit Freigabe) live -- mit echten Hypothesen erprobt, nicht nur als isolierte Python-Probe",
       "quelle": "Eigner 22.08.",
-      "ist": "10 Quittungen in eos_architekt_quittungen (9 mit echter Hypothese statt „keine offene Hypothese“), 0 davon live geschaltet. Engine-Umschaltung GLM<->Sonnet belegt (3x glm, 3x sonnet in architekt_engine_log -- ein Takt griff live auf GLM zu, ein anderer fiel auf Sonnet zurueck). Pipeline-Tests (patch/lauf_gate/engine/tor/kanarie/rollback/quittungen): '98 passed in 1.64s'. Der Tor-Rahmen hielt in allen 3 bisherigen Faellen mit echter Hypothese fail-closed (sicherer_rahmen=0 -- ausserhalb des Rahmens, also NIE autonom live). ⚠️ Kanarie hat bisher in 2/10 Quittungen tatsaechlich einen Container gebaut -- 0, weil noch keine Hypothese innerhalb des sicheren Rahmens lag. Swarm/Kanarie/Rollback bleiben deshalb LAUFZEIT-UNBESTAETIGT; nur die Kette Hypothese->Engine->Patch-Hand->Tests->Tor ist mit echten Laeufen belegt. config/architekt.conf: ENABLED='0', AUTO_LIVE_NACH_KANARIE='0' -- beide weiterhin bewusst auf 0, die Automatik bleibt menschlich gegatet",
+      "ist": "10 Quittungen in eos_architekt_quittungen (9 mit echter Hypothese statt „keine offene Hypothese“), 0 davon live geschaltet. Engine-Umschaltung GLM<->Sonnet belegt (3x glm, 3x sonnet in architekt_engine_log -- ein Takt griff live auf GLM zu, ein anderer fiel auf Sonnet zurueck). Pipeline-Tests (patch/lauf_gate/engine/tor/kanarie/rollback/quittungen): '98 passed in 1.44s'. Der Tor-Rahmen hielt in allen 3 bisherigen Faellen mit echter Hypothese fail-closed (sicherer_rahmen=0 -- ausserhalb des Rahmens, also NIE autonom live). ⚠️ Kanarie hat bisher in 2/10 Quittungen tatsaechlich einen Container gebaut -- 0, weil noch keine Hypothese innerhalb des sicheren Rahmens lag. Swarm/Kanarie/Rollback bleiben deshalb LAUFZEIT-UNBESTAETIGT; nur die Kette Hypothese->Engine->Patch-Hand->Tests->Tor ist mit echten Laeufen belegt. config/architekt.conf: ENABLED='0', AUTO_LIVE_NACH_KANARIE='0' -- beide weiterhin bewusst auf 0, die Automatik bleibt menschlich gegatet",
       "erfuellt": null
     },
     {

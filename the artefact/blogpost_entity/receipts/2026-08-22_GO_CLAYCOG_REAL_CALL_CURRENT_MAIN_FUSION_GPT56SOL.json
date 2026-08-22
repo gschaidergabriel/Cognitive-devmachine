@@ -1,0 +1,81 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "mini-entity-pipeline-all-in-one",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "base_main_sha": "702440d7cd701e42d996cf8b9221d5d515a26e7d",
+  "fusion_pr": 844,
+  "donor_pr": 823,
+  "tested_source_head_before_receipt_only_commit": "9cbe4fc48225db26a9c8d6a8c5cd586e71c45ff1",
+  "claim_class": "MECHANISM_SUPPORTED_EXACT_BLOBS_ISOLATED_MIRROR__GITHUB_ACTIONS_EXECUTION_ADMISSION_BLOCKED",
+  "finding": "Canonical OOD semantic and omega admission checks on main still accepted function-like markers by raw text occurrence, allowing quoted marker spoofing inside strings without the corresponding ClayCode call.",
+  "repair": [
+    "one non-executing string-safe ClayCode call extractor",
+    "function-like OOD markers require real calls outside strings",
+    "exact omega validation counts real calls rather than raw substrings",
+    "SFT omega commit/reject admission shares the structural call view",
+    "existing quoted-call spoof regression fused into the newer canonical PR workflow"
+  ],
+  "exact_blob_execution": {
+    "environment": {
+      "surface": "OpenAI isolated container",
+      "kernel": "Linux 6.18.35 x86_64",
+      "glibc": "2.41",
+      "python": "3.13.5",
+      "python_executable": "/opt/pyvenv/bin/python3"
+    },
+    "git_blob_identity_verified_before_execution": true,
+    "blobs": {
+      "claycode_calls_v2.py": "057369c3f4d7d6cd5a1e44038a3bd50db1f64931",
+      "eval_outputs_v1.py": "f8477c5697e8c5456b08c5cc66edadce2c86ec69",
+      "validate_sft_v1.py": "6ad280d5292ea9a423e85cc9380ad49314dc0206",
+      "generate_eval_ood_v1.py": "68b1842bcf98e4a6ab9d1147dfc4b44a297a487d",
+      "test_eval_call_semantics_v2.py": "84d1b40ad7c8aab8b86f60ad296b3c2a8464fbfa"
+    },
+    "py_compile": "PASS",
+    "regression": {
+      "exit": 0,
+      "legacy_hyper_marker_attack_would_pass": true,
+      "hardened_hyper_marker_attack_rejected": true,
+      "legacy_reject_marker_attack_would_pass": true,
+      "hardened_reject_marker_attack_rejected": true,
+      "quoted_commit_not_structural_commit": true
+    },
+    "scope": "Exact five-file mechanism mirror only; not whole repository, tuned-model quality, provider admission, or product acceptance."
+  },
+  "github_actions": {
+    "workflow_run_id": 32561903907,
+    "workflow_name": "claycog-validator-pr",
+    "conclusion": "failure",
+    "job_id": 97004670014,
+    "job_name": "strict-admission",
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS__NOT_TEST_FAILURE"
+  },
+  "together": {
+    "provider_call": false,
+    "secret_used": false,
+    "upload": false,
+    "price_preflight": false,
+    "paid_create": false,
+    "job_started": false,
+    "money_spent_usd": 0,
+    "current_blocker": "Public Full-FT catalog/provider contract exposes no admitted Qwen2/Qwen2.5 architecture-compatible Together base for the owner-locked Qwen/Qwen2.5-0.5B checkpoint; current launcher itself is already fail-closed and exact-HF-revision-bound."
+  },
+  "unusual_experiment": {
+    "consumed_here": false,
+    "reason": "PR #824 already declared COMPOSITIONAL_HOLDOUT_V3 as the single unusual experiment for this user-triggered go; this fusion only reruns an existing #823 regression."
+  },
+  "nonclaims": [
+    "no GitHub Actions test PASS",
+    "no Together BYOM acceptance",
+    "no training",
+    "no tuned checkpoint quality",
+    "no Q4_K_M or RSS result",
+    "no superiority claim",
+    "no consciousness or mathematical-correctness claim",
+    "no whole Mini Entity PASS"
+  ]
+}

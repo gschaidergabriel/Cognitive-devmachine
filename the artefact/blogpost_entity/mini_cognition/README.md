@@ -56,20 +56,38 @@ Only after preflight:
 python3 launch_together_v1.py --create
 ```
 
+### Exact BYOM source identity
+
+The BYOM model is not allowed to float on a moving Hugging Face `main`. The launcher pins the exact observed source
+revision and passes it to Together as `hf_model_revision` on a billed create:
+
+- `Qwen/Qwen2.5-0.5B` -> `060db6499f32faf8b98477b0a26969ef7d8b9987`;
+- `Qwen/Qwen2.5-0.5B-Instruct` -> `7ae557604adf67be50417f59c2c2f167def9a775`.
+
+A custom `CLAYCOG_HF_MODEL` must therefore provide `CLAYCOG_HF_REVISION`; a custom
+`CLAYCOG_INSTRUCT_HF_MODEL` must provide `CLAYCOG_INSTRUCT_HF_REVISION`. Revisions must be exact 40-hex commit SHAs.
+This binds the training request to one Hugging Face source identity while Together's own acceptance remains an API gate.
+
 ### Together 0.5B caveat
 
-As of 2026-08-22, Together's regular supported-model table lists Qwen3.5 **0.8B** as the smallest Qwen fine-tune,
-not a native 0.5B entry. Together's BYOM path supports external Hugging Face CausalLM checkpoints under 100B when
-a compatible Together training template exists. This script therefore pairs:
+As of 2026-08-22, Together's current fine-tuning supported-model table does **not** list Qwen2.5; the smallest listed
+Qwen Full Fine-Tune template is Qwen3.5 **0.8B**. Together's BYOM path supports external Hugging Face CausalLM
+checkpoints under 100B when a compatible Together training template exists.
 
-- BYOM weights: `Qwen/Qwen2.5-0.5B`;
-- default same-family template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
+`Qwen/Qwen2.5-7B-Instruct-Turbo` remains a Together inference/serverless model ID, but that does not prove it is an
+admitted fine-tuning template. The launcher therefore treats it only as the configurable Qwen2.5-family template
+candidate and asks `model_limits` whether it is currently full-FT capable before uploading/creating anything.
+BYOM checkpoint acceptance is a separate gate.
 
-That pairing is **not assumed fine-tune compatible** merely because it is served in Together's catalog. The launcher first
-asks `model_limits` whether the template is currently full-FT capable, and BYOM checkpoint acceptance is a separate gate.
-There is deliberately no automatic fallback to Qwen3.5 because Together requires matching architecture. If Together rejects
-the Qwen2.5 template/checkpoint path, keep the 0.5B checkpoint requirement and use a Together-provided Qwen2-compatible
-template or the same corpus on another full-FT runner rather than silently changing the research question.
+There is deliberately no automatic fallback to Qwen3.5. The current Qwen2.5 0.5B config identifies the model as
+`Qwen2ForCausalLM` / `qwen2`, while the current Qwen3.5 0.8B config identifies a different
+`Qwen3_5ForConditionalGeneration` / `qwen3_5` architecture family. Together's BYOM guidance requires architecture
+matching, so silently substituting Qwen3.5 would change the experiment rather than solve compatibility.
+
+If Together rejects the Qwen2.5 template/checkpoint path, keep the owner-required 0.5B checkpoint question explicit:
+use a Together-provided compatible Qwen2 template if one is admitted, or run the same corpus on another accepted full-FT
+runner rather than silently changing the model family. Until an authorized API key reaches `model_limits`/BYOM validation,
+compatibility remains `OPEN_API_GATE`.
 
 Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
 corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.

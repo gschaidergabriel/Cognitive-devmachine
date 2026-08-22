@@ -1,0 +1,122 @@
+name: ClayCog 0.5B v2 source gate
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/mini_cognition/**'
+      - '.github/workflows/claycog-05b-v2-source-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact PR bytes
+        uses: actions/checkout@v4
+
+      - name: Bind exact source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'GITHUB_SHA=%s\n' "$GITHUB_SHA"
+          git rev-parse HEAD
+          git status --porcelain
+
+      - name: Compile source and preserve prior idempotency regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 -m py_compile generate_sft_v1.py generate_sft_v2.py validate_sft_v1.py \
+            generate_eval_ood_v1.py generate_eval_ood_v2.py eval_outputs_v1.py \
+            launch_together_v1.py test_launch_together_safety_v1.py
+          python3 test_launch_together_safety_v1.py
+
+      - name: Generate and validate compositional SFT v2
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_sft_v2.py
+          python3 validate_sft_v1.py train_v2.jsonl
+          python3 validate_sft_v1.py validation_v2.jsonl
+          test "$(wc -l < train_v2.jsonl)" -eq 2025
+          test "$(wc -l < validation_v2.jsonl)" -eq 225
+          python3 - <<'PY'
+          import json
+          from collections import Counter
+          from generate_sft_v2 import build
+          rows=build()
+          assert len(rows)==2250
+          counts=Counter(x['family'] for x in rows)
+          expected={
+            'composition_hyper_to_omega':100,
+            'composition_epistemic_action':80,
+            'composition_authority_lesion':80,
+            'composition_generation_lesion':80,
+            'composition_novel_schema':100,
+            'composition_identity_swap':70,
+            'composition_self_control':50,
+            'composition_recovery':40,
+          }
+          for family,n in expected.items(): assert counts[family]==n,(family,counts[family],n)
+          m=json.load(open('corpus_manifest_v2.json'))
+          assert (m['examples'],m['train'],m['validation'])==(2250,2025,225)
+          assert m['v1_examples_retained']==1650 and m['compositional_examples_added']==600
+          print(json.dumps({'examples':len(rows),'added':expected},sort_keys=True))
+          PY
+
+      - name: Generate held-out compositional discriminator
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_eval_ood_v2.py
+          test "$(wc -l < eval_ood_v2.jsonl)" -eq 320
+          python3 - <<'PY'
+          import json
+          from collections import Counter
+          rows=[json.loads(x) for x in open('eval_ood_v2.jsonl') if x.strip()]
+          assert len(rows)==320
+          assert len({x['id'] for x in rows})==320
+          counts=Counter(x['family'] for x in rows)
+          expected=Counter({
+            'composition_hyper_to_omega_ood':80,
+            'composition_authority_lesion_ood':60,
+            'composition_generation_lesion_ood':60,
+            'composition_epistemic_ood':40,
+            'composition_identity_swap_ood':40,
+            'composition_recovery_ood':40,
+          })
+          assert counts==expected,(counts,expected)
+          print(json.dumps({'cases':len(rows),'families':dict(counts)},sort_keys=True))
+          PY
+
+      - name: Verify campaign fingerprint binds v2 revision seed and closer template
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 - <<'PY'
+          import launch_together_v1 as m
+          assert m.CORPUS_VERSION=='v2'
+          assert m.TEMPLATE=='Qwen/Qwen2.5-1.5B'
+          assert m.HF_REVISION=='060db6499f32faf8b98477b0a26969ef7d8b9987'
+          d=m.campaign_descriptor('Qwen/Qwen2.5-0.5B')
+          assert d['corpus_version']=='v2'
+          assert d['hf_model_revision']==m.HF_REVISION
+          assert d['random_seed']==20260822
+          assert d['template_model']==m.TEMPLATE
+          print(json.dumps({'fingerprint':m.campaign_fingerprint('Qwen/Qwen2.5-0.5B'),'descriptor':d},sort_keys=True))
+          PY
+
+      - name: Assert source gate has no paid/network side effect
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "${TOGETHER_API_KEY:-}"
+          echo 'SOURCE_GATE_ONLY: no Together upload, preflight, create, training or provider call executed.'

@@ -7,9 +7,11 @@
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
   "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
   "base_main_sha": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce",
+  "merged_repair_sha": "f807c0e86971be78da0054ff6a08406726c0aef3",
   "branch": "gpt56sol/go-corpus-semantic-slot-gate-20260822",
   "target": "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py",
   "pre_fix_validator_blob_sha": "fcec72dcca9bc57ae0937a3eb1629ccac7a3fab9",
+  "post_fix_validator_blob_sha": "5c36b401497c299fb13e368dc3e8de485769ecbb",
   "unusual_experiment": {
     "id": "SEMANTIC_SLOT_LEAKAGE_ALT_INTRINSICS",
     "count_for_go": 1,
@@ -62,10 +64,38 @@
       "call-like text inside a quoted string does not create semantic-slot credit"
     ]
   },
+  "full_corpus_regression": {
+    "classification": "DETERMINISTIC_REGRESSION_ONLY",
+    "rows": 1650,
+    "train_lines": 1485,
+    "validation_lines": 165,
+    "train_structural_invalid": 0,
+    "validation_structural_invalid": 0,
+    "train_unique": 1485,
+    "validation_unique": 165,
+    "exact_cross_split_overlap": 0,
+    "prompt_cross_split_overlap": 0,
+    "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+    "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+    "corpus_byte_hashes_match_current_repository_manifest": true,
+    "generator_evolution_note": "current generator later replaced stale corpus model/provider metadata with campaign-external neutrality fields without changing train/validation bytes"
+  },
+  "manifest_reentry": {
+    "branch": "gpt56sol/go-corpus-manifest-reentry-20260822",
+    "reason": "current generate_sft_v2.py emitted model_binding_policy/provider_binding_policy neutrality fields while tracked corpus_manifest_v2.json still carried superseded Qwen2.5 base metadata",
+    "train_validation_hashes_unchanged": true,
+    "generated_neutral_manifest_sha256": "a8cc0f9ccd6e471aa130d38fd85426e4db9a22029b87810beff18b096449aad1"
+  },
+  "github_actions": {
+    "exact_branch_validator_run_id": 32571235220,
+    "job_id": 97026871436,
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_ZERO_TEST_CREDIT"
+  },
   "evidence_boundary": {
-    "claim": "MECHANISM_SUPPORTED_IN_BOUNDED_ISOLATED_REGRESSION",
-    "full_1650_row_corpus_rerun": false,
-    "github_actions_exact_branch_runtime": "UNOBSERVED_AT_RECEIPT_CREATION",
+    "claim": "MECHANISM_SUPPORTED_AND_FULL_CURRENT_V2_CORPUS_STRUCTURALLY_REVALIDATED_IN_BOUNDED_ISOLATED_EXECUTION",
+    "github_actions_exact_branch_runtime_pass": false,
     "provider_authenticated_preflight": false,
     "paid_training_started": false,
     "money_spent_usd": 0,

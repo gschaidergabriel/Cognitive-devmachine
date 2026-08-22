@@ -55,7 +55,7 @@ static int native_eval_expr(json_object *expr,const packet_t *p,double *out){
         *out=acc;return 1;
     }
     if(!strcmp(op,"div")){
-        double a=0,b=0;if(!native_eval_expr(jget(expr,"a"),p,&a)||!native_eval_expr(jget(expr,"b"),p,&b))return 0;*out=(b==0.0)?0.0:a/b;return 1;
+        double a=0,b=0;if(!native_eval_expr(jget(expr,"a"),p,&a)||!native_eval_expr(jget(expr,"b"),p,&b))return 0;if(b==0.0)return 0;*out=a/b;return 1;
     }
     if(!strcmp(op,"clamp01")){
         double a=0;if(!native_eval_expr(jget(expr,"arg"),p,&a))return 0;if(a<0)a=0;if(a>1)a=1;*out=a;return 1;

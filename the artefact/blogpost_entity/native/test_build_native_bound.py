@@ -3,6 +3,7 @@
 Source-closure semantics remain owned by test_build_native_bound_source_closure.py.
 Runtime guard semantics remain owned by test_native_runtime_guards.py.
 Canonical post-inference gate semantics remain owned by test_native_semantic_gate.py.
+Division-by-zero epistemic handling remains owned by test_native_metric_div0_unknown.py.
 This adapter only exposes those suites to the existing canonical exact-repro workflow.
 """
 from __future__ import annotations
@@ -23,7 +24,9 @@ def _load(filename: str, module_name: str):
 _closure = _load("test_build_native_bound_source_closure.py", "mini_entity_source_closure_tests")
 _runtime = _load("test_native_runtime_guards.py", "mini_entity_runtime_guard_tests")
 _semantic = _load("test_native_semantic_gate.py", "mini_entity_semantic_gate_tests")
+_div0 = _load("test_native_metric_div0_unknown.py", "mini_entity_metric_div0_unknown_tests")
 
 SourceClosureTests = _closure.SourceClosureTests
 NativeRuntimeGuardTests = _runtime.NativeRuntimeGuardTests
 NativeSemanticGateTests = _semantic.NativeSemanticGateTests
+NativeMetricDivZeroUnknownTests = _div0.NativeMetricDivZeroUnknownTests

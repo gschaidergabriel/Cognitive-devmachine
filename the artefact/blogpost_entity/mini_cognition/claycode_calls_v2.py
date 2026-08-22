@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Non-executing ClayCode call extractor for validation/evaluation.
 
-Only identifier(...) forms outside string literals are returned. Nested calls are
-retained so semantic markers such as cfg("entity.id") remain observable when they
-occur inside a real outer call, but quoted lookalikes never count as executable
-ClayCode semantics.
+Only identifier(...) forms outside string literals and comments are returned.
+Nested calls are retained so semantic markers such as cfg("entity.id") remain
+observable when they occur inside a real outer call, while quoted/commented
+lookalikes never count as executable ClayCode semantics.
 """
 import re
 
@@ -33,7 +33,52 @@ def canonical(text):
     return "".join(out)
 
 
+def without_comments(text):
+    out = list(text)
+    quoted = False
+    escaped = False
+    i = 0
+    n = len(text)
+    while i < n:
+        ch = text[i]
+        if quoted:
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                quoted = False
+            i += 1
+            continue
+        if ch == '"':
+            quoted = True
+            i += 1
+            continue
+        if ch == "/" and i + 1 < n and text[i + 1] == "/":
+            out[i] = out[i + 1] = " "
+            i += 2
+            while i < n and text[i] != "\n":
+                out[i] = " "
+                i += 1
+            continue
+        if ch == "/" and i + 1 < n and text[i + 1] == "*":
+            out[i] = out[i + 1] = " "
+            i += 2
+            while i < n:
+                if text[i] == "*" and i + 1 < n and text[i + 1] == "/":
+                    out[i] = out[i + 1] = " "
+                    i += 2
+                    break
+                if text[i] != "\n":
+                    out[i] = " "
+                i += 1
+            continue
+        i += 1
+    return "".join(out)
+
+
 def extract_calls(code):
+    code = without_comments(code)
     calls = []
     n = len(code)
     i = 0

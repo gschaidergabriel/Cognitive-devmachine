@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import os
 import sqlite3
 import sys
 from pathlib import Path
@@ -48,10 +47,19 @@ def test_current_effect_surface_deauthorizes_legacy_names(tmp_path: Path) -> Non
             runtime.effect(legacy, {})
 
 
-def test_db_profile_is_neutral_until_installed_and_hash_guarded(tmp_path: Path) -> None:
+def test_db_profile_reuses_native_authority_and_hashes_persisted_bytes(tmp_path: Path) -> None:
     runtime = ProfilePipelineRuntime(root=tmp_path)
     entity_db = tmp_path / "entity.db"
     assert runtime.effect("pipeline_init", {"entity_db": str(entity_db)})["ok"] is True
+
+    with sqlite3.connect(entity_db) as db:
+        tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        assert "entity_state" in tables
+        assert "profiles" in tables
+        assert "eos_pipeline_profile" not in tables
+        assert "eos_pipeline_profiles" not in tables
+        assert db.execute("SELECT active_profile FROM entity_state WHERE id=1").fetchone()[0] is None
+
     missing = runtime.effect("pipeline_profile_read", {"entity_db": str(entity_db)})
     assert missing["ok"] is False
     assert missing["error"] == "NO_ACTIVE_PROFILE"
@@ -62,11 +70,16 @@ def test_db_profile_is_neutral_until_installed_and_hash_guarded(tmp_path: Path) 
     assert loaded["profile_hash"] == digest
 
     with sqlite3.connect(entity_db) as db:
-        raw = json.loads(db.execute("SELECT profile_json FROM eos_pipeline_profiles").fetchone()[0])
-        raw["identity"] = {"entity_name": "tampered"}
+        assert db.execute("SELECT active_profile FROM entity_state WHERE id=1").fetchone()[0] == "neutral-test"
+        raw, stored_hash = db.execute(
+            "SELECT profile_json,profile_sha256 FROM profiles WHERE profile_id='neutral-test'"
+        ).fetchone()
+        assert stored_hash == digest
+        tampered = json.loads(raw)
+        tampered["identity"] = {"entity_name": "tampered"}
         db.execute(
-            "UPDATE eos_pipeline_profiles SET profile_json=? WHERE profile_id='neutral-test'",
-            (json.dumps(raw, sort_keys=True, separators=(",", ":")),),
+            "UPDATE profiles SET profile_json=? WHERE profile_id='neutral-test'",
+            (json.dumps(tampered, sort_keys=True, separators=(",", ":")),),
         )
     tampered = runtime.effect("pipeline_profile_read", {"entity_db": str(entity_db)})
     assert tampered["ok"] is False

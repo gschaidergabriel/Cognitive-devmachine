@@ -19,8 +19,10 @@
     "newer_main_gate": "recursive persisted JSON string values only; object keys policy-neutral"
   },
   "delta": {
-    "commit": "f728df857ee6498fe06bb38fbe2df802c0732795",
+    "guard_commit": "f728df857ee6498fe06bb38fbe2df802c0732795",
+    "receipt_update_commit_parent": "c24881eb9589a84ccc7499b7f02292648fde422d",
     "file": "the artefact/blogpost_entity/test_reference_convergence_invariants.py",
+    "pull_request": 957,
     "guards": [
       "future reference convergence retains all derived.* expression inputs actually referenced by shipped zero_blog profile",
       "future reference convergence retains recursive value-only persisted-string leak/secret gate",
@@ -35,6 +37,13 @@
   "execution_evidence": {
     "vercel_sandbox_start_exec_surface_available_in_current_connector": false,
     "authorized_started_runtime": false,
+    "github_workflow_run": 32574372305,
+    "github_workflow_name": "Research Entity Identity Guard",
+    "github_workflow_conclusion": "failure",
+    "github_job": 97034425882,
+    "github_job_steps_observed": 0,
+    "classification": "CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION",
+    "semantic_test_failure": false,
     "runtime_test_credit": "ZERO",
     "source_guard_status": "SOURCE_CANDIDATE_UNTIL_AUTHORIZED_EXECUTION"
   },

@@ -1,0 +1,63 @@
+name: claycog-08b-direct-admission
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/mini_cognition/**'
+      - 'research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md'
+      - '.github/workflows/claycog-08b-direct-admission-pr.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claycog-08b-direct-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  direct-lane-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+
+      - name: Record source identity
+        run: |
+          set -euo pipefail
+          printf 'sha=%s\n' "$GITHUB_SHA"
+          git rev-parse HEAD
+          git status --short
+
+      - name: Reproduce canonical leakage-free corpus
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_sft_v2.py
+          python3 validate_sft_v2.py train_v2.jsonl --against validation_v2.jsonl
+          python3 validate_sft_v2.py validation_v2.jsonl --against train_v2.jsonl
+
+      - name: Run fused direct-lane deterministic regressions
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 -m py_compile launch_together_qwen35_08b_v1.py test_launch_together_qwen35_08b_v1.py
+          python3 test_launch_together_qwen35_08b_v1.py
+
+      - name: Regression of selected go lesion - paid base substitution
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          set +e
+          CLAYCOG_08B_MODEL='Qwen/Qwen3.5-2B' python3 launch_together_qwen35_08b_v1.py > /tmp/substitution.out 2>&1
+          rc=$?
+          set -e
+          cat /tmp/substitution.out
+          test "$rc" -ne 0
+          grep -F 'MODEL_OVERRIDE_REJECTED' /tmp/substitution.out
+          if grep -E 'TOGETHER_API_KEY|PREFLIGHT_ONLY|campaign_fingerprint|estimated_usd' /tmp/substitution.out; then
+            echo 'FAIL substitution advanced beyond static paid-base binding' >&2
+            exit 1
+          fi
+          echo 'PASS regression: paid-base substitution rejected before provider preflight'

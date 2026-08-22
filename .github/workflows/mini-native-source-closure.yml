@@ -7,6 +7,7 @@ on:
   pull_request:
     paths:
       - 'the artefact/blogpost_entity/native/build_native_bound.py'
+      - 'the artefact/blogpost_entity/native/check_native_reference.py'
       - 'the artefact/blogpost_entity/native/test_native_source_closure.py'
       - 'the artefact/blogpost_entity/native/mini_entity.c'
       - 'the artefact/blogpost_entity/native/mini_entity_part*.inc'
@@ -24,10 +25,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Compile provenance wrapper
-        run: python -m py_compile 'the artefact/blogpost_entity/native/build_native_bound.py'
+      - name: Compile provenance wrappers
+        run: >-
+          python -m py_compile
+          'the artefact/blogpost_entity/native/build_native_bound.py'
+          'the artefact/blogpost_entity/native/check_native_reference.py'
       - name: Run source-closure falsifiers
         run: python -m pytest 'the artefact/blogpost_entity/native/test_native_source_closure.py' -q
       - name: Bind current native source closure
         run: >-
-          python -c "import importlib.util,pathlib,json; p=pathlib.Path('the artefact/blogpost_entity/native/build_native_bound.py'); s=importlib.util.spec_from_file_location('b',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); print(json.dumps(m.source_closure(p.with_name('mini_entity.c')),sort_keys=True))"
+          python -c "import importlib.util,pathlib,json; p=pathlib.Path('the artefact/blogpost_entity/native/build_native_bound.py'); s=importlib.util.spec_from_file_location('b',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); c=m.source_closure(p.with_name('mini_entity.c')); assert len(c['files'])==6; print(json.dumps(c,sort_keys=True))"
+      - name: Historical 0.6 credit must reject current 0.7 source lineage
+        shell: bash
+        run: |
+          set +e
+          output="$(python 'the artefact/blogpost_entity/native/check_native_reference.py' --allow-missing-source)"
+          rc=$?
+          set -e
+          test "$rc" -eq 2
+          printf '%s\n' "$output" | python -c "import json,sys; d=json.load(sys.stdin); assert d['canonical_source']['version']=='mini-entity/0.7.0-dev1'; assert d['canonical_source']['lineage_matches_credited_version'] is False; assert d['reproducibility']=='BLOCKED_HISTORICAL_SOURCE_LINEAGE_MISMATCH'; assert any('CREDITED_BINARY_SOURCE_VERSION_MISMATCH' in e for e in d['errors'])"

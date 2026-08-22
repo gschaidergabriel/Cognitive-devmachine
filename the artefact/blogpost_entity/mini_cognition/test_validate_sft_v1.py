@@ -49,6 +49,26 @@ class RuntimeBindingGateTests(unittest.TestCase):
         errors=V.validate_code(valid_code('  personality_bind(c,"named persona")\n'))
         self.assertTrue(any(x.startswith('binding_call_count:personality_bind:2') for x in errors),errors)
 
+    def test_reserved_name_literal_via_self_state_is_rejected(self):
+        errors=V.validate_code(valid_code('  self_state(c,"name","Zero","COMPUTED")\n'))
+        self.assertIn('literal_reserved_runtime_key:name',errors)
+
+    def test_reserved_role_literal_via_state_note_is_rejected(self):
+        errors=V.validate_code(valid_code('  state_note(c,"role","blogger","REPORTED")\n'))
+        self.assertIn('literal_reserved_runtime_key:role',errors)
+
+    def test_escaped_reserved_key_decodes_before_gate(self):
+        errors=V.validate_code(valid_code('  self_state(c,"na\\u006de","Zero","COMPUTED")\n'))
+        self.assertIn('literal_reserved_runtime_key:name',errors)
+
+    def test_nonidentity_computed_control_state_still_passes(self):
+        self.assertEqual(V.validate_code(valid_code('  self_state(c,"control_label","uncertainty","COMPUTED")\n')),[])
+
+    def test_reserved_intrinsic_text_inside_nonreserved_string_is_not_a_false_positive(self):
+        code=valid_code('  state_note(c,"diagnostic","self_state(c,\\"name\\",\\"Zero\\",\\"COMPUTED\\")","REPORTED")\n')
+        errors=V.validate_code(code)
+        self.assertNotIn('literal_reserved_runtime_key:name',errors)
+
     def test_required_binding_text_inside_string_cannot_spoof_structure(self):
         code=(
             'module clay.cog.turn\n'

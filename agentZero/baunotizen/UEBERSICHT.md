@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-22T07:36:43Z. **4053 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-22T08:06:43Z. **4097 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T13:58:53+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T14:34:29+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3955 |
+| baunotiz | 3999 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2369 |
-| baunotiz | bauverlauf.jsonl | 1538 |
+| baunotiz | git-commit | 2391 |
+| baunotiz | bauverlauf.jsonl | 1560 |
 | baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 4053 · Gegenhypothese: 0 von 4053
+## Hypothese: 0 von 4097 · Gegenhypothese: 0 von 4097
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -35,219 +35,223 @@ Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im L
 
 ## Die 25 juengsten (gepruefte) Baunotizen
 
-### evidence(cognition): record 0.5B owner pivot and training readiness
+### cognition: add eval-only compositional OOD lesion (#814)
 
-`baunotiz-bauverlauf-e5ec99f21a39c61f168f` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:58:53+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-a4032a3fddd7448d7eef` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:34:29+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Preserve canonical leakage-free SFT v2 and exact-omega OOD scoring while adding an evaluation-only 320-case compositional operation-vocabulary lesion, paid-create safety CI coverage, and a bounded go receipt. No Together/model/runtime acceptance claim.
+
+### cognition: add eval-only compositional OOD lesion (#814)
+
+`baunotiz-git-292edfd547d49cb512de7a4bed2c290c71e05674` · baunotiz · git-commit · 2026-08-22T14:34:29+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+cognition: add eval-only compositional OOD lesion (#814)
+
+Preserve canonical leakage-free SFT v2 and exact-omega OOD scoring while adding an evaluation-only 320-case compositional operation-vocabulary lesion, paid-create safety CI coverage, and a bounded go receipt. No Together/model/runtime acceptance claim.
+
+### fix(cognition): fuse exact HF revision with Together catalog fence (#818)
+
+`baunotiz-bauverlauf-2d27d542b4403149fa08` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:33:27+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Preserve SFT-v2, exact HF revision binding, fingerprint/ledger ambiguity handling and zero-retry billed create while removing the invalid guessed Together template path. Require an explicit architecture-compatible full-FT base and use the current Together SDK-v2 limit/file/price contract. Bounded no-network regressions: 17/17 pass; no provider call or billed training.
+
+### fix(cognition): fuse exact HF revision with Together catalog fence (#818)
+
+`baunotiz-git-734f234eaf65f2d8cbfb8453e8db8c7176264afb` · baunotiz · git-commit · 2026-08-22T14:33:27+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+fix(cognition): fuse exact HF revision with Together catalog fence (#818)
+
+Preserve SFT-v2, exact HF revision binding, fingerprint/ledger ambiguity handling and zero-retry billed create while removing the invalid guessed Together template path. Require an explicit architecture-compatible full-FT base and use the current Together SDK-v2 limit/file/price contract. Bounded no-network regressions: 17/17 pass; no provider call or billed training.
+
+### state: bind exact omega gate and remaining 0.5B paid-launch blockers (#815)
+
+`baunotiz-bauverlauf-d81b4114d4d34578177c` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:32:30+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+* state: bind exact omega gate and remaining paid-launch blockers
+
+* evidence: record extra-long cognition convergence cycle
+
+### state: bind exact omega gate and remaining 0.5B paid-launch blockers (#815)
+
+`baunotiz-git-4b052109729329e5b81040b406cf7c07d4c38f93` · baunotiz · git-commit · 2026-08-22T14:32:30+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+state: bind exact omega gate and remaining 0.5B paid-launch blockers (#815)
+
+* state: bind exact omega gate and remaining paid-launch blockers
+
+* evidence: record extra-long cognition convergence cycle
+
+### ci(cognition): admit exact omega OOD regression (#812)
+
+`baunotiz-bauverlauf-fd20a1928f7e79054eda` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:31:43+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Wire the canonical #802 exact-omega attack/oracle/ID regression into the existing ClayCog PR admission workflow while preserving v1/v2 validator and corpus gates. Also bind corpus_manifest_v2 reproducibility. GitHub-hosted jobs still fail before any step executes, so this merge claims source/test-coverage improvement only, not Actions runtime PASS.
+
+### ci(cognition): admit exact omega OOD regression (#812)
+
+`baunotiz-git-fc9f4ec86c137491ffc244596e49a9701ef0bdc0` · baunotiz · git-commit · 2026-08-22T14:31:43+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+ci(cognition): admit exact omega OOD regression (#812)
+
+Wire the canonical #802 exact-omega attack/oracle/ID regression into the existing ClayCog PR admission workflow while preserving v1/v2 validator and corpus gates. Also bind corpus_manifest_v2 reproducibility. GitHub-hosted jobs still fail before any step executes, so this merge claims source/test-coverage improvement only, not Actions runtime PASS.
+
+### state(program): bind current native falsifiers + BYOM contract
+
+`baunotiz-bauverlauf-9695cb0caa704950509a` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:30:17+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### evidence(cognition): record 0.5B owner pivot and training readiness
+### state(program): bind current native falsifiers + BYOM contract
 
-`baunotiz-git-a9df408196496f05123460fad68d4a4fd6a829d2` · baunotiz · git-commit · 2026-08-22T13:58:53+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-evidence(cognition): record 0.5B owner pivot and training readiness
-
-### docs(cognition): record Together $4 minimum fine-tune charge
-
-`baunotiz-bauverlauf-eb5895ff35461afedf4a` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:58:38+07:00 · Gabriel Gschaider
+`baunotiz-git-717b772035c51c916d15b75aa0d859cd566a2c3e` · baunotiz · git-commit · 2026-08-22T14:30:17+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+state(program): bind current native falsifiers + BYOM contract
 
-### docs(cognition): record Together $4 minimum fine-tune charge
+### cognition: bind SFT v2 paid campaign to exact HF revision (#800)
 
-`baunotiz-git-27eff25b4bcbbb3cc048162b802cce9401d23c5c` · baunotiz · git-commit · 2026-08-22T13:58:38+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-docs(cognition): record Together $4 minimum fine-tune charge
-
-### feat(cognition): pivot generic ClayCode core to 0.5B BYOM
-
-`baunotiz-bauverlauf-42f420e61dd7f5f6e6e0` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:57:33+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-bfb77b2f04cd44b4787f` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:29:39+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-Canonicalize the owner-required generic 0.5B ClayCode cognition lane, deterministic omega admission model, corpus/OOD gates, Together BYOM preflight/budget gate, quantization/RSS promotion path, and go/bootstrap integration. No Together job is started by this merge.
+Fuse exact Qwen2.5 source revision into the canonical SFT-v2 fingerprint, local CREATE intent ledger, Together create request and safety regressions while preserving #780 ambiguity handling. Together runtime admission remains open.
 
-### feat(cognition): pivot generic ClayCode core to 0.5B BYOM
+### cognition: bind SFT v2 paid campaign to exact HF revision (#800)
 
-`baunotiz-git-77ae9f09d1278d1ef4be8e46702b58204aa22a13` · baunotiz · git-commit · 2026-08-22T13:57:33+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-feat(cognition): pivot generic ClayCode core to 0.5B BYOM
-
-Canonicalize the owner-required generic 0.5B ClayCode cognition lane, deterministic omega admission model, corpus/OOD gates, Together BYOM preflight/budget gate, quantization/RSS promotion path, and go/bootstrap integration. No Together job is started by this merge.
-
-### claycode supervisor: gate Mini Entity 0.7 semantic parity and Gen276 free-only regression
-
-`baunotiz-bauverlauf-e03d20298344517f1c7c` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:48:54+07:00 · Gabriel Gschaider
+`baunotiz-git-cc8449642a76ff74467e02da78ecd38853d6dd76` · baunotiz · git-commit · 2026-08-22T14:29:39+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+cognition: bind SFT v2 paid campaign to exact HF revision (#800)
 
-### claycode supervisor: gate Mini Entity 0.7 semantic parity and Gen276 free-only regression
+Fuse exact Qwen2.5 source revision into the canonical SFT-v2 fingerprint, local CREATE intent ledger, Together create request and safety regressions while preserving #780 ambiguity handling. Together runtime admission remains open.
 
-`baunotiz-git-7650158e13da6ded12d84cb5f760732b7c3a389c` · baunotiz · git-commit · 2026-08-22T13:48:54+07:00 · Gabriel Gschaider
+### state: sync canonical cognition state to corpus v2
 
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: gate Mini Entity 0.7 semantic parity and Gen276 free-only regression
-
-### evidence(native): bind 0.7 semantic parity blocker
-
-`baunotiz-bauverlauf-f6934384a5af71430c38` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:26:13+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-1a1e87fc5c2d76e85ac8` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:29:21+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+Align BOOTSTRAP_MINIMAL and PROGRAM_STATE with merged leakage-free SFT v2, exact hashes/uniqueness evidence, current BYOM architecture gate, and existing fail-closed create safety. No runtime implementation change.
 
-### evidence(native): bind 0.7 semantic parity blocker
+### state: sync canonical cognition state to corpus v2
 
-`baunotiz-git-5b6ebca899f8692d767b17402fb83e664c9f0bfb` · baunotiz · git-commit · 2026-08-22T13:26:13+07:00 · Gabriel Gschaider
+`baunotiz-git-57cbf37c2939813644b0e2c0993db568e62387a5` · baunotiz · git-commit · 2026-08-22T14:29:21+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-evidence(native): bind 0.7 semantic parity blocker
+state: sync canonical cognition state to corpus v2
 
-### test(native): adapt exact repro gate to canonical closure tests
+Align BOOTSTRAP_MINIMAL and PROGRAM_STATE with merged leakage-free SFT v2, exact hashes/uniqueness evidence, current BYOM architecture gate, and existing fail-closed create safety. No runtime implementation change.
 
-`baunotiz-bauverlauf-6e7ecec9bd0df6d45b07` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:24:58+07:00 · Gabriel Gschaider
+### test(cognition): bind PR admission to canonical corpus v2 (#797)
+
+`baunotiz-bauverlauf-5863b3681692e339c190` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:29:14+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Extend the existing exact-checkout ClayCog admission entry point so it regenerates and validates canonical SFT v2, including exact bound digests and zero train/validation prompt/message leakage. Preserve the existing runtime-binding adversarial tests. GitHub runner admission still fails before visible steps, so this is a source/test-coverage improvement only; no runtime PASS is claimed.
+
+### test(cognition): bind PR admission to canonical corpus v2 (#797)
+
+`baunotiz-git-6512e0d8a6cead21022711f87898b7400b7e50d6` · baunotiz · git-commit · 2026-08-22T14:29:14+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+test(cognition): bind PR admission to canonical corpus v2 (#797)
+
+Extend the existing exact-checkout ClayCog admission entry point so it regenerates and validates canonical SFT v2, including exact bound digests and zero train/validation prompt/message leakage. Preserve the existing runtime-binding adversarial tests. GitHub runner admission still fails before visible steps, so this is a source/test-coverage improvement only; no runtime PASS is claimed.
+
+### docs(artefact): align root workspace with Mini Entity + 0.5B target
+
+`baunotiz-bauverlauf-59237fb932a8a1a2ced0` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:29:03+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### test(native): adapt exact repro gate to canonical closure tests
+### docs(artefact): align root workspace with Mini Entity + 0.5B target
 
-`baunotiz-git-0ff81daf97f473661ff95bd0c88296d261a02791` · baunotiz · git-commit · 2026-08-22T13:24:58+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-test(native): adapt exact repro gate to canonical closure tests
-
-### ops(actions): add bounded Mini Entity 0.7 dispatch bridge
-
-`baunotiz-bauverlauf-6b20f79b35eb24270180` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:23:32+07:00 · Gabriel Gschaider
+`baunotiz-git-d1f1947ee8d6570fa7fd702b9e51e22ef1e8924e` · baunotiz · git-commit · 2026-08-22T14:29:03+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+docs(artefact): align root workspace with Mini Entity + 0.5B target
 
-### ops(actions): add bounded Mini Entity 0.7 dispatch bridge
+### cognition: close exact-omega OOD promotion bypass (#802)
 
-`baunotiz-git-8a2d9c1badb174303ec72457e1533e52a78c160e` · baunotiz · git-commit · 2026-08-22T13:23:32+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-ops(actions): add bounded Mini Entity 0.7 dispatch bridge
-
-### fix(native): keep historical provenance checker fail-closed
-
-`baunotiz-bauverlauf-7335b85b2aad0adbe09d` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:22:14+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-03c30d61120361027026` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:27:57+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-* fix(native): separate source presence from credited rebuild
+Bind valid OOD omega cases to exact typed action vectors, reject duplicate/unknown evaluation IDs, and preserve the empirically falsified Goodhart attack as a regression. Exact isolated regression passes; GitHub PR runner failed before any visible step, so no runner code-failure claim is made.
 
-* test(native): keep historical checker fail-closed on 0.7 source
+### cognition: close exact-omega OOD promotion bypass (#802)
 
-* fix(native): support explicit historical PROGRAM_STATE identity
-
-* test(native): cover PROGRAM_STATE 7.1 historical identity
-
-### fix(native): keep historical provenance checker fail-closed
-
-`baunotiz-git-18b6f99eed7714d0ba5040e4a8f32f58107b5b3f` · baunotiz · git-commit · 2026-08-22T13:22:14+07:00 · Gabriel Gschaider
+`baunotiz-git-afbca677205ad54e5080afe0443e3092773615e2` · baunotiz · git-commit · 2026-08-22T14:27:57+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-fix(native): keep historical provenance checker fail-closed
+cognition: close exact-omega OOD promotion bypass (#802)
 
-* fix(native): separate source presence from credited rebuild
+Bind valid OOD omega cases to exact typed action vectors, reject duplicate/unknown evaluation IDs, and preserve the empirically falsified Goodhart attack as a regression. Exact isolated regression passes; GitHub PR runner failed before any visible step, so no runner code-failure claim is made.
 
-* test(native): keep historical checker fail-closed on 0.7 source
+### evidence(cognition): correct Together BYOM template contract
 
-* fix(native): support explicit historical PROGRAM_STATE identity
-
-* test(native): cover PROGRAM_STATE 7.1 historical identity
-
-### test(mini-entity): add canonical exact 0.7 repro gate
-
-`baunotiz-bauverlauf-00684f5feb9d911314fa` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:20:59+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-d649da7392dd036f00c1` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:26:48+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### test(mini-entity): add canonical exact 0.7 repro gate
+### evidence(cognition): correct Together BYOM template contract
 
-`baunotiz-git-e261757fa21538ea24a6ff174b7b55d9929fcb94` · baunotiz · git-commit · 2026-08-22T13:20:59+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-test(mini-entity): add canonical exact 0.7 repro gate
-
-### state: advance frontier to exact Mini Entity 0.7 reproduction
-
-`baunotiz-bauverlauf-f5502e25d78f4fde9109` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:16:17+07:00 · Gabriel Gschaider
+`baunotiz-git-6a0eb97661133cc688ba321b2e4d23003c5eada7` · baunotiz · git-commit · 2026-08-22T14:26:48+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+evidence(cognition): correct Together BYOM template contract
 
-### state: advance frontier to exact Mini Entity 0.7 reproduction
+### cognition: fuse SFT v2 with canonical runtime-binding validator (#796)
 
-`baunotiz-git-c7219e8fa7929d5e5a4fcd756aa07e815a32db75` · baunotiz · git-commit · 2026-08-22T13:16:17+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-state: advance frontier to exact Mini Entity 0.7 reproduction
-
-### build(mini-entity): bind transitive native source closure
-
-`baunotiz-bauverlauf-92cd1605940a0e502e64` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:15:36+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-8cda06dd5e314cc13345` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:26:12+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-Repair Mini Entity 0.7 source provenance by binding all reachable project-local quoted includes, rejecting dynamic/unbound local includes, and recording bounded falsifier evidence. Full exact 0.7 runtime acceptance remains open.
+Converge leakage-free ClayCog SFT v2 onto the single canonical ClayCode/runtime-binding validator and preserve exact uniqueness/cross-split leakage checks. Includes focused isolated v2 regression evidence; no Together training claim.
 
-### build(mini-entity): bind transitive native source closure
+### cognition: fuse SFT v2 with canonical runtime-binding validator (#796)
 
-`baunotiz-git-915723c0961a495be72f8a8075b4577a036f47f2` · baunotiz · git-commit · 2026-08-22T13:15:36+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-build(mini-entity): bind transitive native source closure
-
-Repair Mini Entity 0.7 source provenance by binding all reachable project-local quoted includes, rejecting dynamic/unbound local includes, and recording bounded falsifier evidence. Full exact 0.7 runtime acceptance remains open.
-
-### claycode supervisor: bind Gen276 same-source PTY nondeterminism
-
-`baunotiz-bauverlauf-2c0bf21c31360db1ebe4` · baunotiz · bauverlauf.jsonl · 2026-08-22T11:45:06+07:00 · Gabriel Gschaider
+`baunotiz-git-3edb31e824404eb7c42f8cb721af27cc83c98794` · baunotiz · git-commit · 2026-08-22T14:26:12+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+cognition: fuse SFT v2 with canonical runtime-binding validator (#796)
 
-### claycode supervisor: bind Gen276 same-source PTY nondeterminism
+Converge leakage-free ClayCog SFT v2 onto the single canonical ClayCode/runtime-binding validator and preserve exact uniqueness/cross-split leakage checks. Includes focused isolated v2 regression evidence; no Together training claim.
 
-`baunotiz-git-aab1c69d45622076ee07c3bae40b4dcebe4ea07e` · baunotiz · git-commit · 2026-08-22T11:45:06+07:00 · Gabriel Gschaider
+### evidence(native): add source-bound 0.7 wrapper execution
 
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen276 same-source PTY nondeterminism
-
-### claycode supervisor: gate Mini Entity 0.7 on source-bound executable reproduction
-
-`baunotiz-bauverlauf-dbfc2c41c61e491a03ef` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:56:48+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-030cf0b11417f4a9e39e` · baunotiz · bauverlauf.jsonl · 2026-08-22T14:22:50+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

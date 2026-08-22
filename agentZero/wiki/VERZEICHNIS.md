@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-22T07:36:42Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T08:06:42Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 663 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2584 Artikel, 1447 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **umfeld** (2583 Artikel, 1447 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -110,8 +110,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-bauverlauf-0253c9f92ad90d8df989` · baunotiz
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-git-f307559b870f48a5793f4a3a3301d00` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-bauverlauf-d9064836cab1d919abbf` · baunotiz
-- **agentZero: ehrliche GWT-GRF-Messung 2026-08-22 (hilft GRF/ClayCode beim Architektur-Entwurf; ClayCod** — `baunotiz-bauverlauf-682281b138e325e53ffa` · baunotiz
 - **claycode control: sync EntityOS work selection to supervisor 8.9** — `baunotiz-git-68de25fddabe6502a39627d79921d8c` · baunotiz
+- **agentZero: ehrliche GWT-GRF-Messung 2026-08-22 (hilft GRF/ClayCode beim Architektur-Entwurf; ClayCod** — `baunotiz-bauverlauf-682281b138e325e53ffa` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-git-a896a05284b897f0f87fad5fd609888` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `bau-entityos-a896a05284b8` · bau
 - **agentZero: ehrliche GWT-GRF-Messung 2026-08-22 (hilft GRF/ClayCode beim Architektur-Entwurf; ClayCod** — `baunotiz-git-4287d32fe86f645e2b26b1da3d05e81` · baunotiz
@@ -299,8 +299,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **push: unifieddb** — `baunotiz-github-128b4e97e1e16f3b1c85` · baunotiz
 - **push: unifieddb** — `baunotiz-github-57baced3eece1a3857a7` · baunotiz
 - **push: unifieddb** — `baunotiz-github-ded662e514414b6621c7` · baunotiz
-- **Groq 8B proxy rejects zero-shot compact ClayCode as a trusted small-model interface** — `KMP-GROQ8B-CLAYCODE-ZEROSHOT` · begriff
 - **UNIFIEDDB_V10_STATE_CONTINUITY_FENCING_CANDIDATE.sql** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
+- **Groq 8B proxy rejects zero-shot compact ClayCode as a trusted small-model interface** — `KMP-GROQ8B-CLAYCODE-ZEROSHOT` · begriff
 - **UnifiedDB + ClayGraph hotpath iteration — 2026-08-10 07:11 +07:00** — `20260810T0711p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
 - **UnifiedDB + ClayGraph deep fusion — 2026-08-10 07:50 +07:00** — `20260810T0750p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
 - **RAE_UNIFIEDDB_V13_CYCLE_PINNED_FLAT_ACCESS.sql** — `runtime-RAE_UNIFIEDDB_V13_CYCLE_PINNED_FLAT_` · bereich_runtime

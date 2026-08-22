@@ -1,6 +1,6 @@
 # Verdichtungen
 
-Automatisch erzeugt 2026-08-22T07:36:43Z. **82 Verdichtungen** fassen Baunotizen-Gruppen zu Kurzartikeln zusammen (`clayverse/wikiverdichtung.py`). Jede Zeile traegt ihre eigene Kompressionszahl -- eine gemessene, keine geschaetzte.
+Automatisch erzeugt 2026-08-22T08:06:43Z. **82 Verdichtungen** fassen Baunotizen-Gruppen zu Kurzartikeln zusammen (`clayverse/wikiverdichtung.py`). Jede Zeile traegt ihre eigene Kompressionszahl -- eine gemessene, keine geschaetzte.
 
 ## Kompression, gesamt
 

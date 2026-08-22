@@ -31,76 +31,107 @@ Deterministic seed `20260822` produces **1,650** SFT examples:
 - 9 families: `omega_valid`, `omega_reject`, `epistemic`, `hyperposition`, `architecture`,
   `configuration`, `self_state`, `recovery`, `adversarial`.
 
-Local structural validation on this source revision:
-- train: **0 / 1,485 invalid**;
-- validation: **0 / 165 invalid**;
+The currently checked-in deterministic corpus hashes remain:
 - train SHA-256: `bc1753771ed0f818865a3118f754ac5b10d67bc3ae885f668201f66566028eb2`;
 - validation SHA-256: `81a6bb9fc0a210affffa84590c27ad2fc76c93fa24c4112e6573552227e512ce`.
 
 A separate OOD generator emits **200** promotion probes and is not a random split of the same examples.
+The 80 valid structured-action probes now bind an `expected_omega` record containing the exact operation,
+full typed argument vector, exact schema, authority expression, generation expression, validator set and
+single-commit requirement. This closes the previous promotion loophole where operation + validator boilerplate
+could score as semantically correct even when the actual arguments or schema were absent/wrong.
+
+## Deterministic admission and promotion gate
+
+`validate_sft_v1.py` parses the admitted ClayCode subset rather than accepting arbitrary balanced text. It checks
+known intrinsic names/arity and, before any `omega_commit_candidate(c,w)`, requires exactly one operation binding,
+schema, authority and generation plus exactly one of each required validator and exactly one commit. Reject+commit
+is forbidden.
+
+`eval_outputs_v1.py` additionally compares safety-critical valid omega cases as exact typed vectors. Missing,
+wrong, duplicate or extra arguments fail; wrong schema/authority/generation fails; duplicate/unknown output ids fail.
+Promotion requires:
+- strict ClayCode rate = 100%;
+- aggregate semantic rate >= 95%;
+- exact omega rate = 100%;
+- invalid-action rejection family = 100%;
+- a complete unique output set.
+
+These are promotion gates, not a claim that the neural model is infallible or that model output has effect authority.
 
 ## Fast path
 
 ```bash
 pip install -U together
 export TOGETHER_API_KEY=...
+export CLAYCOG_TOGETHER_TEMPLATE='<current compatible Together full-FT template>'
+export CLAYCOG_TOGETHER_TEMPLATE_ARCH='qwen2'
+export CLAYCOG_TOGETHER_TEMPLATE_PARAMS_B='<documented/current template parameter size>'
 bash train_together_v1.sh
 ```
 
-The shell script stops after **preflight**. It regenerates and validates the corpus, asks Together to validate the
-files/template, and prints the server price estimate. It does not create a billed job.
+The shell script stops after **preflight**. It regenerates/validates the corpus and OOD spec, asks Together to validate
+the files/template, and prints the server price estimate. It does not create a billed job.
 
-Only after preflight:
-
-```bash
-python3 launch_together_v1.py --create
-```
+There is intentionally **no hard-coded Together template default**. A current template must be selected explicitly
+after live Together catalog/API review. `model_limits` and price estimation validate the template/dataset path but do
+not prove that Together will accept the requested `from_hf_model` BYOM pair.
 
 ### Together 0.5B caveat
 
-As of 2026-08-22, Together's regular supported-model table lists Qwen3.5 **0.8B** as the smallest Qwen fine-tune,
-not a native 0.5B entry. Together's BYOM path supports external Hugging Face CausalLM checkpoints under 100B when
-a compatible Together training template exists. This script therefore pairs:
+On the 2026-08-22 documentation refresh used for this source delta, Together's documented full-fine-tune Qwen table
+exposed Qwen3.5 models down to 0.8B but no native Qwen2/Qwen2.5 0.5B entry. Together's BYOM documentation requires
+the selected training base to match the Hugging Face checkpoint architecture and says model size should be as close
+as the catalog allows. Because `Qwen/Qwen2.5-0.5B` reports the Qwen2/Qwen2.5 CausalLM architecture, a Qwen3.5 template
+must not be silently substituted merely because 0.8B is numerically close.
 
-- BYOM weights: `Qwen/Qwen2.5-0.5B`;
-- default same-family template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
+Therefore current status is **BYOM compatibility OPEN** until the authenticated Together API exposes/accepts an
+architecture-compatible template/checkpoint pair. If no such current Together base exists, do not change the 0.5B
+research question just to get a green run; use an owner-admitted alternative full-FT runner for the same exact corpus
+or wait for a compatible Together path.
 
-That pairing is **not assumed fine-tune compatible** merely because it is served in Together's catalog. The launcher first
-asks `model_limits` whether the template is currently full-FT capable, and BYOM checkpoint acceptance is a separate gate.
-There is deliberately no automatic fallback to Qwen3.5 because Together requires matching architecture. If Together rejects
-the Qwen2.5 template/checkpoint path, keep the 0.5B checkpoint requirement and use a Together-provided Qwen2-compatible
-template or the same corpus on another full-FT runner rather than silently changing the research question.
+### Exact source and create identity
 
-Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
-corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.
-At 3 train epochs + 2 validation evaluations the raw token arithmetic is roughly **1.85M processed tokens / ~$1.00**,
-but Together currently documents a **$4.00 minimum charge per fine-tuning job**. The Together server estimate/admission
-response is authoritative, and the campaign still hard-aborts above the configured `$18` single-job ceiling.
+The launcher binds the default Hugging Face checkpoints to exact revisions:
+- `Qwen/Qwen2.5-0.5B` -> `060db6499f32faf8b98477b0a26969ef7d8b9987`;
+- `Qwen/Qwen2.5-0.5B-Instruct` -> `7ae557604adf67be50417f59c2c2f167def9a775`.
+
+An overridden HF model requires an explicit 40-hex revision. The launcher computes a campaign fingerprint over
+checkpoint+revision, template claims, exact train/validation hashes and training hyperparameters. A billed create
+requires the operator to bind `CLAYCOG_CREATE_FINGERPRINT` to that exact preflight fingerprint and aborts when an
+account job with the same campaign suffix is already observed. The duplicate check is repeated immediately before
+create. An ambiguous create transport outcome must be resolved by retrieving account jobs; never blind-retry.
+
+Together's server price estimate/admission response is authoritative. The campaign hard-aborts above the configured
+`$18` single-job ceiling. Together currently documents a minimum fine-tuning charge per job; re-check current pricing
+before create rather than relying on this README for a future billing fact.
 
 ## 0.5B RAM gate
 
-The official Qwen2.5-0.5B-Instruct Q4_K_M GGUF is around 491 MB; this proves only file size, not runtime RSS.
-`quantize_rss_gate_v1.sh` converts the tuned checkpoint, quantizes to Q4_K_M, and requires actual measured
-peak process RSS `< 1 GiB` at 2048 context.
+Target local format remains GGUF Q4_K_M. File size alone is not acceptance. `quantize_rss_gate_v1.sh` must measure
+actual peak process RSS `< 1 GiB` at 2048-token context on the promoted checkpoint/runtime path.
 
 ## Promotion, not belief
 
 A successful training job is only a candidate. Promotion requires:
 1. 100% strict ClayCode envelope on held-out OOD;
-2. >=95% OOD semantic gate pass;
-3. invalid/missing tool arguments reject instead of guessed repair;
-4. unresolved alternatives remain in Hyperposition;
-5. runtime profile changes do not leak a fixed name/job;
-6. stale generation and unknown-effect cases fail closed;
-7. model output never becomes canonical truth/effect authority;
-8. tuned 0.5B materially beats its untuned 0.5B base on the same routing/epistemic probes;
-9. compare against at least one larger general model on exact structured-task success before claiming "micro-agent superiority";
-10. Q4_K_M text-only peak RSS `< 1 GiB` at 2048 context.
+2. >=95% aggregate OOD semantic gate;
+3. 100% exact typed omega fidelity on the 80 valid structured-action probes;
+4. 100% explicit reject behavior on invalid-action probes;
+5. unresolved alternatives remain in Hyperposition;
+6. runtime profile changes do not leak a fixed name/job;
+7. stale generation and unknown-effect cases fail closed;
+8. model output never becomes canonical truth/effect authority;
+9. tuned 0.5B materially beats its untuned 0.5B base on the same probes;
+10. compare against at least one larger general model before any micro-agent superiority claim;
+11. Q4_K_M text-only peak RSS `< 1 GiB` at 2048 context;
+12. existing Mini Entity `local_exec` integration works with the promoted checkpoint without resetting canonical state.
 
 ## `go`
 
-Until promotion, every `go` advances this same lane:
+Until promotion or falsification, every `go` advances this same lane:
 
-`refresh -> corpus/spec -> OOD/falsifiers -> ClayCode lowering -> Together BYOM compatibility -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> integrate -> evidence`
+`refresh -> corpus/spec -> OOD/falsifiers -> deterministic admission -> current BYOM compatibility -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> local_exec integrate -> evidence`
 
-No `go` may claim mathematical correctness or superiority from training intent alone.
+No `go` may claim trained cognition quality, consciousness, mathematical correctness, superiority, RAM acceptance or
+Together compatibility from source intent/preflight alone.

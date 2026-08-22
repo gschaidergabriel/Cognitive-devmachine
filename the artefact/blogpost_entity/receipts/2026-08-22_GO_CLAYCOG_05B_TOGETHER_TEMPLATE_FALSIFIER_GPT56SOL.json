@@ -1,0 +1,66 @@
+{
+  "schema": "claycog-05b-together-template-falsifier/v1",
+  "observed_date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main_sha": "62b292a8097c5b53731ef6804704cf9938872616",
+  "branch": "gpt56sol/go-05b-together-template-gate-20260822",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "target": {
+    "primary_hf_model": "Qwen/Qwen2.5-0.5B",
+    "primary_hf_revision": "285c998059f3e217fe1f05e241d55b5c5eef5bd3",
+    "ablation_hf_model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "ablation_hf_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "architecture": "Qwen2ForCausalLM",
+    "model_type": "qwen2",
+    "required_training": "full SFT through an admitted Qwen2-compatible template/runner"
+  },
+  "together_current_source_evidence": {
+    "supported_models": "https://docs.together.ai/docs/fine-tuning/supported-models",
+    "byom": "https://docs.together.ai/docs/fine-tuning/byom",
+    "pricing": "https://docs.together.ai/docs/fine-tuning/pricing",
+    "estimate_price_api": "https://docs.together.ai/reference/finetuneestimateprice",
+    "python_sdk_source": "https://github.com/togethercomputer/together-py/blob/main/src/together/resources/fine_tuning.py"
+  },
+  "findings": [
+    "The public Together fine-tuning supported-model table checked on 2026-08-22 lists no Qwen2/Qwen2.5 base model.",
+    "The previous launcher default Qwen/Qwen2.5-7B-Instruct-Turbo is visible as an inference model but is not documented in the current supported fine-tuning table; inference visibility is not training-template admission evidence.",
+    "Together BYOM requires the external Hugging Face checkpoint to match the Together base architecture, with a suitably close size/context envelope.",
+    "The current estimate-price endpoint does not accept from_hf_model or hf_model_revision, so a successful price estimate cannot establish BYOM checkpoint compatibility.",
+    "The actual create API and current Together Python SDK support from_hf_model plus hf_model_revision; actual checkpoint acceptance is therefore a later authenticated create/admission gate.",
+    "Together currently documents a USD 4 minimum fine-tune charge; the campaign remains protected by the repository USD 18 single-job ceiling."
+  ],
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "name": "template_mirage_qwen35_08b_substitution",
+    "counter_reality": "Use the currently documented smallest Qwen full-fine-tune base, Qwen3.5-0.8B, as the Together BYOM template for Qwen2.5-0.5B merely because vendor family and parameter size are close.",
+    "target_architecture": "Qwen2ForCausalLM / qwen2",
+    "candidate_architecture": "Qwen3_5ForConditionalGeneration / qwen3_5",
+    "candidate_structural_difference": "multimodal conditional-generation wrapper with a Qwen3.5 text stack and materially different vocabulary/attention configuration",
+    "result": "REJECT",
+    "reason": "BYOM architecture matching is a hard contract; parameter-count proximity does not override architecture mismatch. Silent Qwen3.5 substitution would change the research question rather than unblock the 0.5B campaign."
+  },
+  "source_delta": {
+    "launcher_commit": "23db7bfc31a16feb699186647aeca04f836f88f0",
+    "readme_commit": "01996530e860f58d1a465931bfaa61b450951fa2",
+    "launcher_changes": [
+      "remove implicit Together template default",
+      "require explicit currently verified Qwen2-compatible template",
+      "reject qwen3 template substitution",
+      "pin primary and ablation Hugging Face revisions",
+      "pass hf_model_revision to Together create",
+      "classify estimate-price as budget/data/template evidence only"
+    ]
+  },
+  "execution": {
+    "authenticated_together_api_called": false,
+    "together_secret_available_to_this_organ": false,
+    "paid_job_created": false,
+    "estimated_spend_usd_in_this_go": 0.0,
+    "runtime_acceptance_claim": false,
+    "classification": "CURRENT_PRIMARY_SOURCE_AND_SDK_FALSIFIER; AUTHENTICATED_TOGETHER_API_UNEXECUTED"
+  },
+  "current_blocker": "No currently documented Qwen2/Qwen2.5 Together full-fine-tuning template is available. Compatibility remains blocked until an authenticated model_limits/create admission proves a Qwen2-compatible Together template, or the same 0.5B campaign is moved to another owner-admitted full-FT runner without changing the target model.",
+  "next_discriminator": "With an execution-environment Together secret and a currently verified Qwen2-compatible template name, run the non-billed launcher preflight first. Do not create or retry a billed job blindly. If no Qwen2-compatible Together template exists, retain Qwen2.5-0.5B and change only the training runner, not the research target.",
+  "epistemic_status": "SOURCE_MECHANISM_SUPPORTED_NOT_RUNTIME_VERIFIED"
+}

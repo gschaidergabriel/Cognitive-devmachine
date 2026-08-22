@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
-"""Fail-closed provenance gate for the credited native Mini Entity sandbox artifact.
+"""Fail-closed consistency gate for the credited native Mini Entity 0.6 artifact.
 
-This checker intentionally does not establish runtime correctness. It only binds the
-currently credited version/hash across canonical state, the sandbox receipt and the
-human-readable native reference, and refuses reproducibility credit while the native
-source bytes are absent from the canonical repository.
+This checker does not establish runtime correctness or prove that a supplied binary was
+built from the current canonical source. It binds the credited historical version/hash
+across canonical records and reports whether current canonical source is even a compatible
+rebuild candidate. Source presence alone is never reproducibility credit.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
+
+from build_native_bound import source_closure
 
 
 RECEIPT_NAME = "2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json"
 REFERENCE_NAME = "MINI_ENTITY_0_6_SANDBOX.md"
 SOURCE_NAME = "mini_entity.c"
+MINI_VERSION_RE = re.compile(r'^\s*#\s*define\s+MINI_VERSION\s+"([^"]+)"', re.MULTILINE)
 
 
 def sha256_file(path: Path) -> str:
@@ -27,13 +31,50 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def source_version(native_dir: Path, identity: dict) -> str | None:
+    versions: set[str] = set()
+    for entry in identity.get("files", []):
+        path = (native_dir / str(entry["path"])).resolve()
+        text = path.read_text(encoding="utf-8")
+        versions.update(MINI_VERSION_RE.findall(text))
+    if len(versions) > 1:
+        raise RuntimeError("MULTIPLE_MINI_VERSION_LABELS:" + ",".join(sorted(versions)))
+    return next(iter(versions)) if versions else None
+
+
+def credited_state_identity(native_state: dict) -> tuple[str, str, str]:
+    """Read the historical credited identity across PROGRAM_STATE schema evolution.
+
+    Schema 7.1 renamed the formerly generic version/binary_sha256 keys so the current
+    0.7 source line cannot be confused with historical 0.6 runtime evidence. Prefer the
+    explicit historical keys and retain the old names only as a bounded compatibility
+    path for older exact checkouts.
+    """
+    if "historical_credited_version" in native_state or "historical_binary_sha256" in native_state:
+        version = native_state.get("historical_credited_version")
+        digest = native_state.get("historical_binary_sha256")
+        schema = "historical_explicit"
+    else:
+        version = native_state.get("version")
+        digest = native_state.get("binary_sha256")
+        schema = "legacy_generic"
+    missing = []
+    if not isinstance(version, str) or not version:
+        missing.append("version")
+    if not isinstance(digest, str) or not digest:
+        missing.append("binary_sha256")
+    if missing:
+        raise RuntimeError("PROGRAM_STATE_CREDITED_NATIVE_IDENTITY_MISSING:" + ",".join(missing))
+    return version, digest, schema
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--binary", type=Path, help="Optional mini_entity.clay ELF to byte-verify")
     parser.add_argument(
         "--allow-missing-source",
         action="store_true",
-        help="Report missing canonical native source without failing the process",
+        help="Report missing canonical native source without failing the historical consistency check",
     )
     args = parser.parse_args()
 
@@ -51,16 +92,21 @@ def main() -> int:
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
     reference = reference_path.read_text(encoding="utf-8")
 
+    errors: list[str] = []
     native_state = state["sandbox_evidence"]["native_pipeline"]
-    state_version = str(native_state["version"])
-    state_hash = str(native_state["binary_sha256"])
+    try:
+        state_version, state_hash, state_identity_schema = credited_state_identity(native_state)
+    except RuntimeError as exc:
+        errors.append(str(exc))
+        state_version = "UNRESOLVED"
+        state_hash = "UNRESOLVED"
+        state_identity_schema = "INVALID"
     receipt_version = str(receipt["version"])
     receipt_hash = str(receipt["binary_sha256"])
 
-    errors: list[str] = []
-    if state_version != receipt_version:
+    if state_version != "UNRESOLVED" and state_version != receipt_version:
         errors.append(f"VERSION_MISMATCH state={state_version} receipt={receipt_version}")
-    if state_hash != receipt_hash:
+    if state_hash != "UNRESOLVED" and state_hash != receipt_hash:
         errors.append(f"HASH_MISMATCH state={state_hash} receipt={receipt_hash}")
     if receipt_hash not in reference:
         errors.append("REFERENCE_DOES_NOT_BIND_CREDITED_HASH")
@@ -68,7 +114,23 @@ def main() -> int:
         errors.append("REFERENCE_DOES_NOT_BIND_CREDITED_VERSION")
 
     source_status = "PRESENT" if source_path.is_file() else "MISSING"
-    source_hash = sha256_file(source_path) if source_path.is_file() else None
+    source_identity = None
+    source_label = None
+    if source_path.is_file():
+        try:
+            source_identity = source_closure(source_path)
+            source_label = source_version(native_dir, source_identity)
+        except (RuntimeError, UnicodeDecodeError, OSError) as exc:
+            errors.append("CANONICAL_SOURCE_CLOSURE_INVALID:" + str(exc))
+        if source_label is None:
+            errors.append("CANONICAL_SOURCE_VERSION_UNBOUND")
+        elif source_label != receipt_version:
+            errors.append(
+                f"CANONICAL_SOURCE_VERSION_DIFFERS_FROM_CREDITED_ARTIFACT "
+                f"source={source_label} credited={receipt_version}"
+            )
+    elif not args.allow_missing_source:
+        errors.append("CANONICAL_NATIVE_SOURCE_MISSING")
 
     binary_status = "NOT_PROVIDED"
     binary_hash = None
@@ -83,25 +145,35 @@ def main() -> int:
             if binary_hash != receipt_hash:
                 errors.append(f"BINARY_HASH_MISMATCH expected={receipt_hash} observed={binary_hash}")
 
-    reproducibility = "SOURCE_PRESENT" if source_path.is_file() else "BLOCKED_SOURCE_MISSING"
-    if not source_path.is_file() and not args.allow_missing_source:
-        errors.append("CANONICAL_NATIVE_SOURCE_MISSING")
+    if not source_path.is_file():
+        reproducibility = "BLOCKED_SOURCE_MISSING"
+    elif source_identity is None:
+        reproducibility = "BLOCKED_SOURCE_CLOSURE_INVALID"
+    elif source_label != receipt_version:
+        reproducibility = "CURRENT_SOURCE_IS_DIFFERENT_VERSION_NOT_CREDITED_REBUILD"
+    else:
+        reproducibility = "SOURCE_CLOSURE_PRESENT_REBUILD_NOT_YET_CREDITED"
 
     report = {
-        "schema": "mini-entity-native-provenance-check/v1",
+        "schema": "mini-entity-native-provenance-check/v2",
         "version": receipt_version,
         "credited_binary_sha256": receipt_hash,
+        "program_state_identity_schema": state_identity_schema,
         "state_receipt_hash_match": state_hash == receipt_hash,
         "reference_binds_credited_hash": receipt_hash in reference,
         "canonical_source": {
             "path": str(source_path.relative_to(root)),
             "status": source_status,
-            "sha256": source_hash,
+            "version_label": source_label,
+            "entry_sha256": sha256_file(source_path) if source_path.is_file() else None,
+            "closure_sha256": source_identity.get("sha256") if source_identity else None,
+            "closure_files": source_identity.get("files", []) if source_identity else [],
         },
         "binary": {
             "status": binary_status,
             "sha256": binary_hash,
         },
+        "source_build_binding": "NOT_PROVEN_BY_THIS_CHECKER",
         "reproducibility": reproducibility,
         "errors": errors,
         "pass": not errors,

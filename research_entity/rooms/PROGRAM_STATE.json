@@ -1,24 +1,28 @@
 {
-  "schema_version": "7.1",
+  "schema_version": "7.2",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY",
   "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
-  "sole_target": "one application-neutral and inference-neutral .clay pipeline executable + one SQLite MiniUnifiedDB",
+  "owner_directive_addendum": "research_entity/global/MINI_ENTITY_CLAYCOG_1B_TRAINING_DIRECTIVE.md",
+  "sole_target": "one application-neutral .clay pipeline executable + one SQLite MiniUnifiedDB + one required 1B-class ClayCode cognition model lane whose weights remain replaceable inference rather than canonical state",
   "portable_release_shape": [
     "mini_entity.clay application-neutral/inference-neutral ELF",
-    "mini_entity.db SQLite MiniUnifiedDB preconfigurable as zero_blog"
+    "mini_entity.db SQLite MiniUnifiedDB preconfigurable as zero_blog",
+    "ClayCognition approximately-1B tuned model weights as the default specialized cognition organ, replaceable without entity-state reset"
   ],
   "optional_inference_inputs": [
     "remote/API token and provider config",
     "loopback OpenAI-compatible local server without token",
-    "local model weights plus configured local_exec runner"
+    "local model weights plus configured local_exec runner",
+    "default ClayCognition tuned local weights when available"
   ],
   "acceptance": "IN_PROGRESS",
   "architecture_split": {
     "binary": "generic evidence preprocessing, canonical run/state envelope, inference dispatch, immutable truth/secret gate engine, exactly-once consumption, generation CAS and atomic persistence",
     "database": "all application/personality/inference configuration; shipped default preset is zero_blog",
-    "regression_rule": "if application/personality/inference choice can live in runtime configuration, binding it to executable identity is a regression"
+    "model_weights": "specialized replaceable cognition: ClayCode-only generated representation, operational entity self-model, GRF, Hyperposition, semantic computed self-state and architecture-use priors; never canonical durable truth/effect authority",
+    "regression_rule": "if application/personality/inference choice can live in runtime configuration, binding it to executable identity is a regression; specialized default cognition weights may encode architecture/use priors but replacing the weights must not fork entity state"
   },
   "inference_backends": {
     "api": {
@@ -33,6 +37,42 @@
       "execution": "direct execvp-style runner invocation",
       "api_token_required": false
     }
+  },
+  "cognition_training": {
+    "status": "LAUNCH_READY_PENDING_AUTHORIZED_SECRET_RUNTIME",
+    "target_class": "approximately 1B parameters",
+    "first_base_model": "Qwen/Qwen3.5-0.8B",
+    "method": "full supervised fine-tuning first; LoRA retained as baseline/ablation",
+    "representation": "ClayCode Cognition v0 only",
+    "grf": "R0..R6 encoded directly in targets",
+    "hyperposition": "first-class unresolved alternative structure with R6 collapse guard",
+    "semantic_inner_state": "typed COMPUTED control/self-state, not external fact",
+    "canonical_state_authority": "MiniUnifiedDB",
+    "effect_authority": "immutable pipeline/effect boundary, never model text",
+    "spec": "the artefact/blogpost_entity/mini_cognition/CLAYCODE_COGNITION_V0.md",
+    "generator": "the artefact/blogpost_entity/mini_cognition/generate_sft_v0.py",
+    "validator": "the artefact/blogpost_entity/mini_cognition/validate_sft_v0.py",
+    "eval_prompts": "the artefact/blogpost_entity/mini_cognition/eval_prompts_v0.jsonl",
+    "together_launcher": "the artefact/blogpost_entity/mini_cognition/train_together_v0.sh",
+    "corpus_v0": {
+      "examples": 1200,
+      "train": 1080,
+      "validation": 120,
+      "seed": 42,
+      "families": ["architecture", "effects", "epistemic", "format_resistance", "general", "hyperposition", "self_state"],
+      "creation_turn_validator": "0 invalid on both generated splits",
+      "evidence_class": "CORPUS_STRUCTURE_ONLY; no Together training result yet"
+    },
+    "promotion_gates": [
+      "100% ClayCode-only strict-format held-out suite",
+      ">=95% UNKNOWN/ZERO/ERROR/MEASURED preservation",
+      "Hyperposition remains unresolved under insufficient evidence",
+      "architecture bindings correct",
+      "stale generation and unknown-effect cases fail closed",
+      "model output never becomes truth authority",
+      "ordinary task competence remains usable",
+      "tuned checkpoint beats base on ClayCode cognition suite"
+    ]
   },
   "sandbox_evidence": {
     "date": "2026-08-22",
@@ -98,7 +138,7 @@
     "preset": "zero_blog",
     "path": "the artefact/blogpost_entity/presets/zero_blog.json",
     "status": "fully replaceable runtime configuration, not executable identity",
-    "default_inference": "Mistral API profile, replaceable by any admitted API or local model backend",
+    "default_inference": "Mistral API profile, replaceable by any admitted API or local model backend including the future ClayCognition weights",
     "embodiment": "NO_IMPOSED_EMBODIMENT; no body/location/Gasthaus/beer/sitting is asserted as Zero world-state",
     "latent_style_frame": "Gasthaus engineer -> smart Maurer storytelling scenario; hidden writing heuristic only, never narrated as factual setting",
     "style_frame_protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STYLE_FRAME.md",
@@ -131,10 +171,17 @@
     "native_release_identity_law": "exact transitive source closure + compiler/dependency/build provenance + exact ELF digest, never version label or entry-unit hash alone",
     "structured_runtime_convergence": "OPEN: BLOGPOST_ENTITY.clay already names pipeline_profile_read + inference_generate with DB-resident profile semantics, while overlapping Python-reference convergence PRs remain under adjudication; do not create a second structured runtime.",
     "state_box_convergence": "SOURCE MECHANISM PRESENT IN NATIVE 0.7; exact native executable append + same-transaction study persistence remains uncredited until source-bound runtime execution.",
-    "current_gap": "Execute the exact canonical Mini Entity 0.7 source closure on an admitted Linux runner: repeat build, capture ELF/compiler/pkg/runtime identities, run fixture/local_exec with zero key/network use, inject output/study/event/generation CAS rollback faults, and rebuild identically. Only after that gate may real GGUF/local-model acceptance inherit the 0.7 path. Then fuse one structured Clay/Python reference convergence lane and run real-provider/local-model acceptance as separately authorized."
+    "current_gap": "Run two non-competing gates: (A) launch and evaluate ClayCognition v0 as soon as an authorized Together secret is mounted; (B) execute the exact canonical Mini Entity 0.7 source closure repeat-build/runtime/fault matrix. Then integrate accepted tuned local weights through the existing local_exec/inference_generate contract without creating a second state authority."
   },
-  "current_frontier": "MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT/v1: exact transitive-source-bound 0.7 repeat build -> ELF digest -> fixture/local_exec -> atomic study/output/event/generation-CAS fault injection -> second clean rebuild identity. GitHub runner admission before steps currently supplies zero test credit; bounded source-closure mechanism evidence is committed.",
-  "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist on this same neutral pipeline + configurable DB only.",
+  "current_frontier": "CLAYCOG_V0_FIRST_FULL_FT: generated/validated 1,200-example ClayCode Cognition corpus -> Together CLI price preflight -> owner-budget-capped Qwen3.5-0.8B full SFT -> download weights -> held-out base-vs-tuned evaluation -> local_exec integration. Parallel existing gate: MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT/v1.",
+  "go_contract": "Every go executes refresh -> cognition lane (corpus/spec/validator/eval/compiler-runtime compatibility/Together job readiness or job status/checkpoint evaluation/integration) -> native pipeline frontier -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist. Until the first ClayCognition checkpoint is promoted, an unblocked cognition-training step is mandatory in every go.",
   "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
-  "together_api": "FORBIDDEN"
+  "together_api": {
+    "status": "OWNER_AUTHORIZED_BOUNDED_FOR_CLAYCOG_TRAINING_ONLY",
+    "campaign_budget_cap": "EUR 20 equivalent maximum",
+    "secret_policy": "runtime environment only; never commit/log",
+    "runtime_authority": "NONE; Together is a training service, not entity/state/effect authority",
+    "duplicate_job_rule": "check existing jobs before retrying a create",
+    "endpoint_rule": "do not leave dedicated inference endpoints running unintentionally"
+  }
 }

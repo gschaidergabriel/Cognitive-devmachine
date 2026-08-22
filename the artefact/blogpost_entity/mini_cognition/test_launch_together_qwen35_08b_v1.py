@@ -35,7 +35,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(validate[2:],[str(m.TRAIN),str(m.VALID)])
         self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertTrue(run.call_args_list[1].kwargs["check"])
     def test_free_only_policy_rejects_before_secret_lookup_and_provider_import(self):
-        secret_reads=[];provider_imports=[];original_import=builtins.__import__
+        secret_reads=[];provider_imports=[];local_check_calls=[];original_import=builtins.__import__
         def guarded_get(key,default=None):
             if key=="TOGETHER_API_KEY":
                 secret_reads.append(key);raise AssertionError("secret lookup happened before FREE_ONLY rejection")
@@ -46,10 +46,10 @@ class Tests(unittest.TestCase):
             return original_import(name,globals,locals,fromlist,level)
         with tempfile.TemporaryDirectory() as td:
             policy=Path(td)/"SUPERVISOR_INBOX.json";policy.write_text(json.dumps({"verified_updates":{"free_only":True}}))
-            with mock.patch.object(m,"SUPERVISOR_POLICY",policy),mock.patch.object(m,"local_checks",lambda:None),mock.patch.object(m.os.environ,"get",side_effect=guarded_get),mock.patch("builtins.__import__",side_effect=guarded_import),mock.patch.object(sys,"argv",["launcher"]):
+            with mock.patch.object(m,"SUPERVISOR_POLICY",policy),mock.patch.object(m,"local_checks",lambda:local_check_calls.append(True)),mock.patch.object(m.os.environ,"get",side_effect=guarded_get),mock.patch("builtins.__import__",side_effect=guarded_import),mock.patch.object(sys,"argv",["launcher"]):
                 with self.assertRaisesRegex(SystemExit,"FREE_ONLY_PROVIDER_REJECT"):
                     m.main()
-        self.assertEqual(secret_reads,[]);self.assertEqual(provider_imports,[])
+        self.assertEqual(local_check_calls,[]);self.assertEqual(secret_reads,[]);self.assertEqual(provider_imports,[])
     def test_execution_policy_fails_closed_and_only_explicit_false_opens(self):
         with tempfile.TemporaryDirectory() as td:
             policy=Path(td)/"policy.json";policy.write_text("{}")

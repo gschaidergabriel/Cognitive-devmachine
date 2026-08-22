@@ -62,16 +62,19 @@ no proposed omega is executed by the evaluator.
 Current intended BYOM pair:
 - actual weights: `Qwen/Qwen2.5-0.5B`;
 - pinned HF revision for the primary candidate: configurable, default currently `060db64`;
-- template candidate: `Qwen/Qwen2.5-7B-Instruct` (same Qwen2.5/Qwen2 architecture family);
+- template candidate: `Qwen/Qwen2.5-1.5B`;
 - training type: full SFT;
 - default corpus: v2;
 - default epochs: 3;
 - deterministic training seed: `20260822`.
 
 Together documents `from_hf_model` as a Hugging Face starting checkpoint and says it should match the selected base
-model's architecture and approximate size. Therefore the template is infrastructure/configuration; the 0.5B HF checkpoint
-is still the weights being trained. Template admission is **not** proof that Together can load the specific 0.5B BYOM
-checkpoint.
+model's architecture and approximate size. Qwen2.5-1.5B is therefore a materially closer empirical template candidate
+for Qwen2.5-0.5B than the earlier 7B candidate. Together's changelog explicitly lists Qwen2.5-1.5B full-SFT support,
+but the live `model_limits` response remains authoritative at execution time.
+
+The template is training infrastructure/configuration; the 0.5B HF checkpoint remains the weights being trained.
+Template admission is **not** proof that Together can load the specific 0.5B BYOM checkpoint.
 
 ### Safe preflight
 
@@ -97,17 +100,17 @@ Create exactly once only after the preflight is acceptable:
 python3 launch_together_v1.py --corpus v2 --create
 ```
 
-Before create, the script lists existing jobs and fails closed if the same deterministic campaign suffix already exists.
-This is a duplicate-create guard, not a distributed transaction; the resulting Together job id remains the durable handle
-that must be retrieved rather than blindly re-created.
+Before create, the script lists existing jobs, retrieves full metadata when necessary, and fails closed if the same
+deterministic campaign suffix already exists. This is a duplicate-create guard, not a distributed transaction; the
+resulting Together job id remains the durable handle that must be retrieved rather than blindly re-created.
 
 ### Pricing boundary
 
 Together's current standard pricing page lists **full supervised fine-tuning up to 16B at $0.54 per 1M processed tokens**.
 Processed tokens are training tokens multiplied by epochs plus validation tokens multiplied by evaluation passes.
-The current standard rate table does **not** establish a universal `$4 minimum` for this campaign; specialized large-model
-rows may have separate minimums. Therefore the launcher's live Together `estimate_price` response is the budget authority,
-and the owner gate still aborts above **$18 for a single job** / **EUR 20 campaign ceiling**.
+The same current page states that **each fine-tuning job has a $4.00 minimum charge**. Therefore tiny token estimates must
+still budget at least $4 for a standard job. The launcher's live Together `estimate_price`/admission response remains the
+concrete execution-time authority, and the owner gate aborts above **$18 for a single job** / **EUR 20 campaign ceiling**.
 
 No cost should be inferred from JSONL byte size alone; tokenizer + server estimate wins.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, sys
+import json, re, sys
 from pathlib import Path
 
 PREFIX='module clay.cog.turn\nfn think(i:Map)->Map {\n'
@@ -20,6 +20,22 @@ FORBIDDEN=(
 )
 OMEGA_GATES=("grammar","types","schema","authority","generation")
 
+# These semantic fields are runtime configuration, not checkpoint literals. The direct
+# *_bind calls above already require cfg(...), but generic state/architecture intrinsics can
+# otherwise smuggle a second fixed persona while still satisfying those canonical bindings.
+RESERVED_RUNTIME_KEYS=frozenset({
+  'name','display_name','display.name',
+  'entity_id','entity.id','identity','continuity','entity.continuity',
+  'role','application.role','job','job_title',
+  'goal','application.goal',
+  'personality','application.personality','persona',
+  'audience','application',
+})
+_JSON_STRING=r'"(?:[^"\\]|\\.)*"'
+LITERAL_STATE_INTRINSIC_RE=re.compile(
+  rf'^(?:self_state|state_note|arch_bind)\(\s*c\s*,\s*({_JSON_STRING})\s*,\s*({_JSON_STRING})'
+)
+
 def outside_strings(s):
     out=[]; quoted=False; esc=False
     for ch in s:
@@ -32,6 +48,21 @@ def outside_strings(s):
             if ch=='"': quoted=True; out.append(" ")
             else: out.append(ch)
     return "".join(out), quoted
+
+def reserved_literal_errors(lines):
+    errors=[]
+    for line in lines:
+        m=LITERAL_STATE_INTRINSIC_RE.match(line)
+        if not m: continue
+        try:
+            key=json.loads(m.group(1))
+            json.loads(m.group(2))
+        except (json.JSONDecodeError, TypeError):
+            errors.append('malformed_literal_state_intrinsic')
+            continue
+        if isinstance(key,str) and key.lower() in RESERVED_RUNTIME_KEYS:
+            errors.append('literal_reserved_runtime_key:'+key.lower())
+    return errors
 
 def validate_code(s):
     e=[]; low=s.lower()
@@ -48,6 +79,7 @@ def validate_code(s):
         canonical_count=lines.count(canonical)
         if call_count != 1: e.append(f"binding_call_count:{name}:{call_count}")
         if canonical_count != 1: e.append(f"binding_not_exact_runtime_cfg:{name}:{canonical_count}")
+    e.extend(reserved_literal_errors(lines))
     for x in REQUIRED:
         if x not in s: e.append("missing:"+x)
     for x in FORBIDDEN:

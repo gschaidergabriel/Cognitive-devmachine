@@ -16,3 +16,5 @@ Required evidence scope:
 - bounded machine receipt artifact.
 
 The source-closure mutation falsifier is regression-only in this run. The single unusual experiment for the parent `go` was already consumed and recorded on current main; no new unusual experiment is authorized here.
+
+Admission retrigger: PR synchronize event requested after the workflow was confirmed present on default-branch `main`. This line is not executable evidence.

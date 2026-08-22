@@ -25,6 +25,13 @@ class ClayCogValidatorFenceTests(unittest.TestCase):
         errors = validate_code(code)
         self.assertTrue(any(x.startswith("missing_statement:self_bind") for x in errors), errors)
 
+    def test_required_binding_inside_comment_fails_closed(self):
+        spoof = '  /* self_bind(c,cfg("entity.id"),cfg("entity.continuity")) */\n'
+        code = program(spoof, bindings=BINDINGS[1:])
+        errors = validate_code(code)
+        self.assertIn("comment_syntax_forbidden", errors)
+        self.assertTrue(any(x.startswith("missing_statement:self_bind") for x in errors), errors)
+
     def test_required_binding_nested_under_control_flow_does_not_count(self):
         nested = (
             '  if false {\n'
@@ -67,6 +74,20 @@ class ClayCogValidatorFenceTests(unittest.TestCase):
         )
         errors = validate_code(program(omega))
         self.assertIn("omega_missing_gate:grammar", errors)
+
+    def test_omega_gate_inside_comment_fails_closed(self):
+        omega = (
+            '  let w = omega_new(c,"w0")\n'
+            '  omega_authority(w,cfg("architecture.effect_authority"))\n'
+            '  omega_generation(w,cfg("state.generation"))\n'
+            '  /* omega_validate(w,"grammar") */\n'
+            '  omega_validate(w,"types")\n'
+            '  omega_validate(w,"schema")\n'
+            '  omega_validate(w,"authority")\n'
+            '  omega_validate(w,"generation")\n'
+            '  omega_commit_candidate(c,w)\n'
+        )
+        self.assertIn("comment_syntax_forbidden", validate_code(program(omega)))
 
     def test_omega_gate_nested_under_control_flow_does_not_count(self):
         omega = (

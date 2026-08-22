@@ -6,30 +6,52 @@
   "program": "mini-entity-pipeline-all-in-one",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
   "canonical_main_at_join": "62b292a8097c5b53731ef6804704cf9938872616",
-  "canonical_main_after_pr_open": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+  "canonical_main_at_rejoin": "cb46a34dff51d309e25fb909758a129f379c7497",
   "branch": "go/claycog-validator-statement-fence-20260822",
   "pull_request": 776,
-  "source_candidate_head_before_receipt": "85a4aaf010e208a2c2534d77e76a1b98c0a49b81",
+  "rejoined_branch_head_before_truth_correction": "ac7854660e45dbec3ea804c391f297e39d28e37c",
   "changed_blobs": {
     "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py": "e46f3a640b69e71409e2dcc6c88fd3ee030aa00b",
-    "the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py": "370f503ea3adb4d639b100c472ca63b8e7cd965f"
+    "the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py": "60d5132b220abfef3800b98517a114be6837d6df"
   },
   "finding": {
     "class": "PROMOTION_METRIC_GOODHART_GAP",
-    "observed_source_behavior": "The previous strict ClayCode validator accepted mandatory bindings and omega validation gates by raw substring occurrence. Required text could therefore be placed inside string literals, and the validator did not establish that required calls were top-level executable statements.",
-    "risk": "A completion could receive structural/OOD credit without expressing the required runtime binding or deterministic omega admission sequence as actual ClayCode statements.",
+    "observed_source_behavior": "The pre-fix strict ClayCode validator credited mandatory bindings and omega commit/validation gates by raw substring occurrence anywhere in the completion. Therefore contract text in comments and required calls nested below control-flow depth were indistinguishable from the canonical top-level turn path for promotion scoring.",
+    "reproduced_bypass_classes": [
+      "required binding text can be present only in a comment while satisfying the raw substring check",
+      "omega validation text can be present only in a comment while satisfying the raw substring check",
+      "required binding or omega validation calls can be nested under non-canonical control flow such as if false while satisfying the raw substring check"
+    ],
+    "correction": "An earlier draft receipt/PR description named string-literal smuggling as a reproduced pre-fix bypass. That was too broad: quoted cfg/gate literals must be escaped inside a string and therefore do not preserve the exact raw substring. String-literal rejection remains a conservative defense test, but it is not claimed as the reproduced old exploit.",
+    "risk": "A completion could receive strict structural/OOD credit without expressing the required runtime binding or deterministic omega admission sequence on the canonical top-level path.",
     "repair": "Count mandatory bindings, return, omega commit, omega gates, authority and generation only as standalone brace-depth-1 statements. Reject multiline/unclosed strings and comment syntax at this strict promotion boundary.",
     "regressions_added": [
       "minimal real bindings accepted",
-      "required binding inside string rejected",
-      "required binding nested under control flow rejected",
-      "comment-wrapped contract rejected",
+      "required binding inside string does not count as a statement",
+      "required binding inside comment fails closed",
+      "required binding nested under control flow does not count",
+      "comment-wrapped contract fails closed",
       "valid omega top-level gate sequence accepted",
-      "omega gate inside string rejected",
-      "omega gate nested under control flow rejected",
+      "omega gate inside string does not count as a statement",
+      "omega gate inside comment fails closed",
+      "omega gate nested under control flow does not count",
       "multiline/unclosed string rejected",
       "reject plus commit remains rejected"
     ]
+  },
+  "bounded_isolated_execution": {
+    "environment": "isolated OpenAI Linux container",
+    "network_source_fetch": "BLOCKED_DNS",
+    "method": "execute locally reconstructed files only after git hash-object matched the exact GitHub blob ids",
+    "validator_blob_match": true,
+    "test_blob_match": true,
+    "py_compile": "PASS",
+    "focused_tests": {
+      "passed": 11,
+      "failed": 0,
+      "result": "PASS"
+    },
+    "classification": "EXACT_TWO_BLOB_FOCUSED_REGRESSION_PASS_NOT_FULL_CHECKOUT_PASS"
   },
   "together_dependency_observation": {
     "checked": "2026-08-22",
@@ -38,7 +60,7 @@
     "byom_rule": "template architecture must match custom checkpoint architecture",
     "qwen2_5_config": "Qwen2ForCausalLM / model_type=qwen2",
     "qwen3_5_0_8b_config": "Qwen3_5ForConditionalGeneration / model_type=qwen3_5",
-    "conclusion": "Qwen3.5-0.8B is not a valid silent BYOM template substitution for the owner-locked Qwen2.5-0.5B checkpoint. The configured Qwen2.5 template candidate remains an external compatibility/admission blocker until Together exposes/accepts an architecture-matching path.",
+    "conclusion": "Qwen3.5-0.8B is not a valid silent BYOM template substitution for the owner-locked Qwen2.5-0.5B checkpoint. The configured Qwen2.5 template candidate remains an external compatibility/admission blocker until Together exposes or accepts an architecture-matching path.",
     "sources": [
       "https://docs.together.ai/docs/fine-tuning/supported-models",
       "https://docs.together.ai/docs/fine-tuning/byom",
@@ -53,29 +75,29 @@
     "result": "REJECT",
     "reason": "Primary configs expose different model architectures/model_type families, while Together BYOM requires architecture match."
   },
-  "execution_evidence": {
-    "exact_branch_test_execution": "NOT_OBSERVED",
-    "github_actions": {
+  "github_actions": [
+    {
       "run_id": 32559198530,
       "workflow": "Research Entity Identity Guard",
       "job_id": 96998065652,
-      "job": "identity-guard",
       "conclusion": "failure",
       "steps": null,
       "classification": "EXECUTION_ADMISSION_FAILURE_ZERO_TEST_CREDIT_NOT_VALIDATOR_TEST_FAILURE"
     },
+    {
+      "run_id": 32559328568,
+      "workflow": "claycog-validator-pr",
+      "job_id": 96998383531,
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_ZERO_TEST_CREDIT_NOT_VALIDATOR_TEST_FAILURE"
+    }
+  ],
+  "training": {
     "together_api_call": "NOT_EXECUTED_NO_SECRET_MOUNTED",
-    "training_job_started": false,
-    "billed_action": false,
-    "classification": "SOURCE_CANDIDATE_PLUS_PRIMARY_DEPENDENCY_EVIDENCE"
+    "job_started": false,
+    "billed_action": false
   },
-  "coordination": {
-    "main_advanced_after_join": true,
-    "observed_new_main_head": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
-    "changed_path_overlap_with_pr": false,
-    "pr_mergeable_at_observation": true,
-    "promotion_rule": "Keep draft and rejoin current main before promotion if main advances materially; do not infer runtime credit from mergeability."
-  },
-  "promotion_boundary": "Do not credit the validator repair as executable PASS until the exact branch runs the generated 1650-example corpus validator plus focused spoof regressions in an admitted isolated executor. Do not claim Together Qwen2.5 0.5B compatibility until the provider accepts an architecture-matching BYOM path.",
-  "next_exact_gate": "Execute generate_sft_v1.py, validate train/validation, and test_validate_sft_v1.py against this exact branch in an admitted isolated Linux runner. Separately probe Together model_limits for an architecture-matching Qwen2.5 full-FT template before any upload or billed create."
+  "promotion_boundary": "Focused exact-two-blob PASS does not imply full-checkout/corpus PASS. Do not credit the validator repair as full campaign PASS until the exact branch runs corpus generation plus train/validation validation in an admitted executor. Do not claim Together Qwen2.5 0.5B compatibility until the provider accepts an architecture-matching BYOM path.",
+  "next_exact_gate": "Execute generate_sft_v1.py, validate train_v1.jsonl and validation_v1.jsonl on the exact branch. With the owner-authorized environment-only Together secret, probe only an architecture-matching Qwen2.5 full-FT template before any dataset upload or billed create."
 }

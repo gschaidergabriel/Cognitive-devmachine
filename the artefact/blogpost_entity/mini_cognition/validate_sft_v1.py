@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json, sys
 from pathlib import Path
+from intrinsics_v1 import INTRINSIC_ARITY
 
 PREFIX='module clay.cog.turn\nfn think(i:Map)->Map {\n'
 REQUIRED=(
@@ -19,6 +20,7 @@ FORBIDDEN=(
 OMEGA_GATES=("grammar","types","schema","authority","generation")
 
 def outside_strings(s):
+    """Mask string payload while preserving one structural token per literal."""
     out=[]; quoted=False; esc=False
     for ch in s:
         if quoted:
@@ -27,9 +29,38 @@ def outside_strings(s):
             elif ch=='"': quoted=False
             out.append(" ")
         else:
-            if ch=='"': quoted=True; out.append(" ")
+            if ch=='"': quoted=True; out.append("_")
             else: out.append(ch)
     return "".join(out)
+
+def _call_arity(structural, open_pos):
+    depth=1; commas=0; saw_token=False; i=open_pos+1
+    while i < len(structural):
+        ch=structural[i]
+        if ch=='(':
+            depth+=1
+            if depth==2: saw_token=True
+        elif ch==')':
+            depth-=1
+            if depth==0: return 0 if not saw_token else commas+1
+        elif depth==1:
+            if ch==',': commas+=1
+            elif not ch.isspace(): saw_token=True
+        i+=1
+    return None
+
+def iter_calls(structural):
+    i=0; n=len(structural)
+    while i<n:
+        ch=structural[i]
+        if ch.isalpha() or ch=='_':
+            start=i; i+=1
+            while i<n and (structural[i].isalnum() or structural[i]=='_'): i+=1
+            name=structural[start:i]; j=i
+            while j<n and structural[j].isspace(): j+=1
+            if j<n and structural[j]=='(' and name!='think': yield name,_call_arity(structural,j)
+            continue
+        i+=1
 
 def validate_code(s):
     e=[]; low=s.lower()
@@ -42,13 +73,17 @@ def validate_code(s):
         if x not in s: e.append("missing:"+x)
     for x in FORBIDDEN:
         if x.lower() in low: e.append("forbidden:"+x)
+    for name,arity in iter_calls(structural):
+        expected=INTRINSIC_ARITY.get(name)
+        if expected is None: e.append("unknown_intrinsic:"+name)
+        elif arity is None: e.append("unterminated_call:"+name)
+        elif arity != expected: e.append(f"arity:{name}:{arity}!={expected}")
     if "omega_commit_candidate(" in s:
         for g in OMEGA_GATES:
             if f'omega_validate(w,"{g}")' not in s: e.append("omega_missing_gate:"+g)
         if 'omega_authority(w,' not in s: e.append("omega_missing_authority")
         if 'omega_generation(w,' not in s: e.append("omega_missing_generation")
-    if "omega_reject(" in s and "omega_commit_candidate(" in s:
-        e.append("reject_and_commit")
+    if "omega_reject(" in s and "omega_commit_candidate(" in s: e.append("reject_and_commit")
     return e
 
 def main(path):

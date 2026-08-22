@@ -1,6 +1,6 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-22T06:06:42Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T06:36:42Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 663 KB): der Systemname steht im Titel. Volltext.
 - **umfeld** (2584 Artikel, 1446 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
@@ -109,8 +109,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **Verfassung praezisiert: ClayCode-Denken/-Programmieren gilt dem ARCHITEKTEN (Zero in Bau-Rolle), nic** — `baunotiz-git-aad377a3dab74f112f850abefc3ed3e` · baunotiz
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-bauverlauf-0253c9f92ad90d8df989` · baunotiz
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-git-f307559b870f48a5793f4a3a3301d00` · baunotiz
-- **agentZero: ehrliche GWT-GRF-Messung 2026-08-22 (hilft GRF/ClayCode beim Architektur-Entwurf; ClayCod** — `baunotiz-bauverlauf-682281b138e325e53ffa` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-bauverlauf-d9064836cab1d919abbf` · baunotiz
+- **agentZero: ehrliche GWT-GRF-Messung 2026-08-22 (hilft GRF/ClayCode beim Architektur-Entwurf; ClayCod** — `baunotiz-bauverlauf-682281b138e325e53ffa` · baunotiz
 - **claycode control: sync EntityOS work selection to supervisor 8.9** — `baunotiz-git-68de25fddabe6502a39627d79921d8c` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-git-a896a05284b897f0f87fad5fd609888` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `bau-entityos-a896a05284b8` · bau

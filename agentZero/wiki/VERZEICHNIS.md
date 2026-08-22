@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-22T07:06:42Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T07:36:42Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 663 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2584 Artikel, 1446 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **umfeld** (2584 Artikel, 1447 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -63,8 +63,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **fix(clayverse): re-ingest inference before EffectGate** — `baunotiz-git-4e9290696bba67733b2cb2d6d7dd0eb` · baunotiz
 - **test(clayverse): pin reconciliation and EffectGate replay fallback** — `baunotiz-git-93924c248d4a60114e9066a518ccfea` · baunotiz
 - **test(clayverse): prove inference re-ingest precedes EffectGate** — `baunotiz-git-397d1340b013fd4a45d0fe62fcb9b98` · baunotiz
-- **claycode supervisor: bind Gen238 browser EffectGate boundary** — `baunotiz-bauverlauf-37efa5538440f30921e4` · baunotiz
 - **fix(clayverse): re-ingest inference before EffectGate** — `bau-entityos-4e9290696bba` · bau
+- **claycode supervisor: bind Gen238 browser EffectGate boundary** — `baunotiz-bauverlauf-37efa5538440f30921e4` · baunotiz
 - **test(clayverse): pin reconciliation and EffectGate replay fallback** — `bau-entityos-93924c248d4a` · bau
 - **test(clayverse): prove inference re-ingest precedes EffectGate** — `bau-entityos-397d1340b013` · bau
 - **claycode supervisor: bind Gen238 browser EffectGate boundary** — `baunotiz-git-6b90ba0836cb13095e6878e37876c31` · baunotiz

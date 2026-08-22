@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-22T07:06:42Z. **4041 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-22T07:36:43Z. **4053 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T13:26:13+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T13:58:53+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3943 |
+| baunotiz | 3955 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2363 |
-| baunotiz | bauverlauf.jsonl | 1532 |
+| baunotiz | git-commit | 2369 |
+| baunotiz | bauverlauf.jsonl | 1538 |
 | baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 4041 · Gegenhypothese: 0 von 4041
+## Hypothese: 0 von 4053 · Gegenhypothese: 0 von 4053
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,72 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T13:26:13+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### evidence(cognition): record 0.5B owner pivot and training readiness
+
+`baunotiz-bauverlauf-e5ec99f21a39c61f168f` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:58:53+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### evidence(cognition): record 0.5B owner pivot and training readiness
+
+`baunotiz-git-a9df408196496f05123460fad68d4a4fd6a829d2` · baunotiz · git-commit · 2026-08-22T13:58:53+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+evidence(cognition): record 0.5B owner pivot and training readiness
+
+### docs(cognition): record Together $4 minimum fine-tune charge
+
+`baunotiz-bauverlauf-eb5895ff35461afedf4a` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:58:38+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### docs(cognition): record Together $4 minimum fine-tune charge
+
+`baunotiz-git-27eff25b4bcbbb3cc048162b802cce9401d23c5c` · baunotiz · git-commit · 2026-08-22T13:58:38+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+docs(cognition): record Together $4 minimum fine-tune charge
+
+### feat(cognition): pivot generic ClayCode core to 0.5B BYOM
+
+`baunotiz-bauverlauf-42f420e61dd7f5f6e6e0` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:57:33+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Canonicalize the owner-required generic 0.5B ClayCode cognition lane, deterministic omega admission model, corpus/OOD gates, Together BYOM preflight/budget gate, quantization/RSS promotion path, and go/bootstrap integration. No Together job is started by this merge.
+
+### feat(cognition): pivot generic ClayCode core to 0.5B BYOM
+
+`baunotiz-git-77ae9f09d1278d1ef4be8e46702b58204aa22a13` · baunotiz · git-commit · 2026-08-22T13:57:33+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+feat(cognition): pivot generic ClayCode core to 0.5B BYOM
+
+Canonicalize the owner-required generic 0.5B ClayCode cognition lane, deterministic omega admission model, corpus/OOD gates, Together BYOM preflight/budget gate, quantization/RSS promotion path, and go/bootstrap integration. No Together job is started by this merge.
+
+### claycode supervisor: gate Mini Entity 0.7 semantic parity and Gen276 free-only regression
+
+`baunotiz-bauverlauf-e03d20298344517f1c7c` · baunotiz · bauverlauf.jsonl · 2026-08-22T13:48:54+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: gate Mini Entity 0.7 semantic parity and Gen276 free-only regression
+
+`baunotiz-git-7650158e13da6ded12d84cb5f760732b7c3a389c` · baunotiz · git-commit · 2026-08-22T13:48:54+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: gate Mini Entity 0.7 semantic parity and Gen276 free-only regression
 
 ### evidence(native): bind 0.7 semantic parity blocker
 
@@ -182,70 +248,6 @@ claycode supervisor: bind Gen276 same-source PTY nondeterminism
 ### claycode supervisor: gate Mini Entity 0.7 on source-bound executable reproduction
 
 `baunotiz-bauverlauf-dbfc2c41c61e491a03ef` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:56:48+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: gate Mini Entity 0.7 on source-bound executable reproduction
-
-`baunotiz-git-8b42c02d2714cf3401030f58712c0f83bf4efbac` · baunotiz · git-commit · 2026-08-22T10:56:48+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: gate Mini Entity 0.7 on source-bound executable reproduction
-
-### native: fix Mini Entity source split boundary
-
-`baunotiz-bauverlauf-9cf2399c1578b649ccfe` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:19:20+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### native: fix Mini Entity source split boundary
-
-`baunotiz-git-e18cb8fa763fe675af9c5223e2bfcfd90dd007ce` · baunotiz · git-commit · 2026-08-22T10:19:20+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-native: fix Mini Entity source split boundary
-
-### native: add Mini Entity configuration and CLI surface
-
-`baunotiz-bauverlauf-f9fd03b9a2872855450c` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:18:04+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### native: add Mini Entity configuration and CLI surface
-
-`baunotiz-git-fd5e110aa72ba1e08ef0d4556a28c794a04dbd8f` · baunotiz · git-commit · 2026-08-22T10:18:04+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-native: add Mini Entity configuration and CLI surface
-
-### native: add atomic study and source-CAS commit layer
-
-`baunotiz-bauverlauf-ffb6927142f8c0616fb2` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:17:42+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### native: add atomic study and source-CAS commit layer
-
-`baunotiz-git-cebde0eacda97329b233e4ff8ba3f3830f560d3f` · baunotiz · git-commit · 2026-08-22T10:17:42+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-native: add atomic study and source-CAS commit layer
-
-### native: add Mini Entity inference boundary
-
-`baunotiz-bauverlauf-1f5ee2f27007f4a667ec` · baunotiz · bauverlauf.jsonl · 2026-08-22T10:17:12+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

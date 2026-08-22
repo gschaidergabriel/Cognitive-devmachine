@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Fail-closed direct Together Full-FT launcher for ~1B ClayCode cognition."""
 import argparse, hashlib, json, os, subprocess, sys, time
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
@@ -9,7 +10,7 @@ EXPECTED_MODEL="Qwen/Qwen3.5-0.8B"; MODEL=os.environ.get("CLAYCOG_08B_MODEL",EXP
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=float(os.environ.get("CLAYCOG_LEARNING_RATE","1e-5")); WARMUP_RATIO=float(os.environ.get("CLAYCOG_WARMUP_RATIO","0.03"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00")); FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
-CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
+CREATE_CONFIRM_ENV="CLAYCOG_CREATE_AUTHORIZATION"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
 def validate_static_contract():
@@ -69,8 +70,19 @@ def matching_campaign_jobs(client,suffix):
 def assert_no_duplicate_campaign(client,suffix):
     m=matching_campaign_jobs(client,suffix)
     if m: raise SystemExit("DUPLICATE_CREATE_ABORT existing campaign job(s): "+",".join(str(_field(x,"id","UNKNOWN")) for x in m))
-def require_create_confirmation(fp):
-    if os.environ.get(CREATE_CONFIRM_ENV,"")!=fp: raise SystemExit(f"CREATE_CONFIRMATION_REQUIRED set {CREATE_CONFIRM_ENV} to exact preflight fingerprint {fp}")
+def canonical_estimated_usd(value):
+    try:d=Decimal(str(value))
+    except (InvalidOperation,ValueError) as e:raise SystemExit(f"PRICE_ESTIMATE_INVALID {value!r}") from e
+    if not d.is_finite() or d<0:raise SystemExit(f"PRICE_ESTIMATE_INVALID {value!r}")
+    return format(d.normalize(),"f")
+def create_authorization_descriptor(fp,price_usd):
+    return {"schema":"claycog-08b-create-authorization/v1","campaign_fingerprint":fp,"estimated_usd":canonical_estimated_usd(price_usd)}
+def create_authorization_token(fp,price_usd):
+    return hashlib.sha256(json.dumps(create_authorization_descriptor(fp,price_usd),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode()).hexdigest()
+def require_create_confirmation(fp,price_usd):
+    expected=create_authorization_token(fp,price_usd)
+    if os.environ.get(CREATE_CONFIRM_ENV,"")!=expected: raise SystemExit(f"CREATE_CONFIRMATION_REQUIRED set {CREATE_CONFIRM_ENV} to exact live preflight authorization {expected}")
+    return expected
 def create_ledger_dir(): return Path(os.environ[CREATE_LEDGER_DIR_ENV]).expanduser() if os.environ.get(CREATE_LEDGER_DIR_ENV) else Path.home()/".local"/"state"/"claycog"/"training"
 def create_ledger_path(fp): return create_ledger_dir()/(fp+".json")
 def read_create_ledger(fp):
@@ -85,11 +97,11 @@ def _fsync_dir(p):
     fd=os.open(str(p),os.O_RDONLY)
     try:os.fsync(fd)
     finally:os.close(fd)
-def arm_create_intent(fp,suffix):
+def arm_create_intent(fp,suffix,price_usd,authorization):
     d=create_ledger_dir(); d.mkdir(parents=True,exist_ok=True,mode=0o700)
     try:os.chmod(d,0o700)
     except OSError:pass
-    p=create_ledger_path(fp); payload={"schema":"claycog-together-create-intent/v2","fingerprint":fp,"campaign_suffix":suffix,"status":"CREATE_ARMED","campaign":campaign_descriptor(),"created_unix":int(time.time())}; data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode()
+    p=create_ledger_path(fp); payload={"schema":"claycog-together-create-intent/v3","fingerprint":fp,"campaign_suffix":suffix,"status":"CREATE_ARMED","campaign":campaign_descriptor(),"authorized_estimated_usd":canonical_estimated_usd(price_usd),"create_authorization":authorization,"created_unix":int(time.time())}; data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode()
     try:fd=os.open(str(p),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
     except FileExistsError:assert_no_local_create_intent(fp);raise
     with os.fdopen(fd,"wb",closefd=True) as f:f.write(data);f.flush();os.fsync(f.fileno())
@@ -118,14 +130,15 @@ def main():
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)
-    if args.create:require_create_confirmation(fp);assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix)
+    if args.create:assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix)
     tf=client.files.upload(file=str(TRAIN),purpose="fine-tune",check=True);vf=client.files.upload(file=str(VALID),purpose="fine-tune",check=True);wait_file(client,tf.id);wait_file(client,vf.id)
-    est=estimate_price(client,tf.id,vf.id);price=float(est.estimated_total_price)
-    print(json.dumps({"schema":"CLAYCOG_08B_TOGETHER_DIRECT_PREFLIGHT/v2","mode":"create" if args.create else "preflight","campaign_fingerprint":fp,"campaign_suffix":suffix,"model":MODEL,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_type":training_type(),"estimated_usd":price,"allowed_to_proceed":bool(est.allowed_to_proceed),"price_detail":objdict(est),"model_limits_full_ft":True,"byom_fields":"ABSENT_BY_DESIGN"},indent=2,default=str))
+    est=estimate_price(client,tf.id,vf.id);price=float(est.estimated_total_price);authorization=create_authorization_token(fp,price)
+    print(json.dumps({"schema":"CLAYCOG_08B_TOGETHER_DIRECT_PREFLIGHT/v3","mode":"create" if args.create else "preflight","campaign_fingerprint":fp,"campaign_suffix":suffix,"create_authorization":authorization,"model":MODEL,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"training_type":training_type(),"estimated_usd":price,"allowed_to_proceed":bool(est.allowed_to_proceed),"price_detail":objdict(est),"model_limits_full_ft":True,"byom_fields":"ABSENT_BY_DESIGN"},indent=2,default=str))
     if not est.allowed_to_proceed:raise SystemExit("Together price/admission endpoint does not allow this job")
     if price>MAX_USD:raise SystemExit(f"BUDGET_ABORT estimated ${price:.2f} > ${MAX_USD:.2f}")
-    if not args.create:print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fp} for this exact create");return
-    assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix);intent=arm_create_intent(fp,suffix);cc=new_zero_retry_create_client(Together)
+    if not args.create:print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={authorization} for this exact fingerprint+price create");return
+    authorization=require_create_confirmation(fp,price)
+    assert_no_local_create_intent(fp);assert_no_duplicate_campaign(client,suffix);intent=arm_create_intent(fp,suffix,price,authorization);cc=new_zero_retry_create_client(Together)
     try:job=cc.fine_tuning.create(**create_payload(tf.id,vf.id,suffix))
     except Exception as e:update_create_intent(intent,"UNKNOWN_REMOTE_CREATE",error_class=type(e).__name__);raise SystemExit("CREATE_OUTCOME_UNKNOWN; do not retry until exact provider reconciliation") from e
     update_create_intent(intent,"JOB_KNOWN",job_id=job.id)

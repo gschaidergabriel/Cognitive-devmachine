@@ -120,7 +120,7 @@ Therefore BYOM compatibility remains **OPEN/BLOCKED on a compatible admitted qwe
 
 Public pricing refreshed on 2026-08-22 lists standard Full SFT up to 16B at **USD 0.54 / 1M processed tokens** with a **USD 4 minimum job charge**. Those numbers remain provider facts, not a quote for this exact custom checkpoint. Under the owner USD 18 single-job gate, price is therefore not the current blocker; **architecture-compatible provider admission is**.
 
-The current exact PR admission workflow also compiles the canonical launcher/create-safety/provider-contract boundary and runs both no-network create-safety and SDK-v2 provider-contract regressions. The first exact candidate run for this fused gate, plus one explicit rerun, both failed before any visible GitHub Actions step (`steps=null`). This is replicated **runner admission failure with zero test credit**, not a ClayCog test failure and not PASS.
+The current exact PR admission workflow also compiles the canonical launcher/create-safety/provider-contract boundary and runs both no-network create-safety and SDK-v2 provider-contract regressions. Exact GitHub-hosted runner attempts remain admission-blocked before any visible step (`steps=null`). This is runner admission failure with zero test credit, not a ClayCog test failure and not PASS.
 
 ## Native Mini Entity 0.7 — current evidence
 
@@ -149,21 +149,26 @@ This closes the previous “source exists but current 0.7 was never actually bui
 
 ### Current native blocker fusion status
 
-Native 0.7 is **not promotable yet**. The three previously confirmed current-main defects now have different states:
+Native 0.7 is **not promotable yet**. The three previously confirmed current-main defects are now source-fused as follows:
 
-1. **Binary neutrality — SOURCE FIX FUSED:** the state-box presentation repair was fused on current main via PR #830 / merge `b2d49a8e0e88b01927e9673a38dab9fbeb175b97`. Replaceable headings and interpretation prose now come from runtime configuration rather than executable presentation identity. Exact source-bound rebuild/runtime falsification of the fused head is still required before runtime credit.
-2. **Local-runner secret boundary — CONFIRMED FAIL / OPEN:** `local_exec` inherited the parent environment; synthetic `TOGETHER_API_KEY`, `MISTRAL_API_KEY`, `OPENAI_API_KEY` and unrelated-secret sentinels reached the local runner and persisted in model output. PR #764 is the active repair line. It must be fused from fresh main without overwriting the newer admission/neutrality work, then rerun against the exact source-bound secret falsifier.
-3. **Canonical profile-v2 semantic admission — FAIL-CLOSED GUARD FUSED:** PR #769 / merge `659cc2471b73bcefebb6a57694e6737cc2107cc5` now rejects canonical v2 profiles before inference/commit until native v2 parity exists. This closes the prior fail-open persistence path at source level; it does **not** implement the required full profile-driven compile envelope and post-inference `pipeline_gate`. The guard must remain until coherent parity is implemented and exactly executed.
+1. **Binary neutrality — SOURCE FIX FUSED:** the state-box presentation repair was fused via PR #830 / merge `b2d49a8e0e88b01927e9673a38dab9fbeb175b97`. Replaceable headings and interpretation prose now come from runtime configuration rather than executable presentation identity. Exact source-bound rebuild/runtime falsification of the fused head is still required before runtime credit.
+2. **Local-runner secret boundary — SOURCE FIX FUSED:** PR #850 / merge `51c25c950eb4e2c68d834374d4bfc9f390a6d154` now launches configured local runners through a clean `/usr/bin/env -i` environment and admits only bounded non-secret runtime variables (`PATH`, `HOME`, `TMPDIR`, `LANG`, `TZ`). A focused source-bound runtime regression was added, but the exact GitHub job again failed before any visible runner step, so this has source/mechanism credit only and still requires exact execution.
+3. **Canonical profile-v2 semantic admission — FAIL-CLOSED GUARD FUSED:** PR #769 / merge `659cc2471b73bcefebb6a57694e6737cc2107cc5` rejects canonical v2 profiles before inference/commit until native v2 parity exists. This closes the prior fail-open persistence path at source level; it does **not** implement the required full profile-driven compile envelope and post-inference `pipeline_gate`. The guard must remain until coherent parity is implemented and exactly executed.
+
+A donor review during the same `go` also falsified the older #764 branch/body claim that its verified-empty pre-inference shortcut had already been removed: the exact donor head still contained that shortcut. The donor was repaired for evidence continuity, but main advanced through #769/#830, so the broad donor was intentionally not merged. Only its still-orthogonal secret-isolation mechanism was extracted onto fresh main as #850.
+
+The existing native exact-repro workflow now has a source-level expectation mismatch: it applies the shipped `zero_blog` profile-v2 and expects successful `local_exec`, while #769 intentionally blocks profile-v2 until full parity exists. This workflow must be reconciled without weakening #769: use an admitted simple profile for backend/secret regression and separately assert canonical v2 fail-closed behavior until full parity is implemented.
 
 The original defect evidence is durable at:
 
 `blogpost_entity/receipts/2026-08-22_GO_NATIVE_0_7_CURRENT_MAIN_RUNTIME_FALSIFIERS_GPT56SOL.json`
 
-The current fusion/re-entry evidence is durable at:
+Current fusion/re-entry evidence is durable at:
 
-`blogpost_entity/receipts/2026-08-22_GO_MAIN_REENTRY_NATIVE_COGNITION_GPT56SOL.json`
+- `blogpost_entity/receipts/2026-08-22_GO_MAIN_REENTRY_NATIVE_COGNITION_GPT56SOL.json`
+- `blogpost_entity/receipts/2026-08-22_GO_LOCAL_EXEC_ENV_FRESH_MAIN_GPT56SOL.json`
 
-The next native promotion attempt must use the exact current fused source, source-bound rebuild it, rerun the secret/semantic/atomicity/CAS matrix, and then separately close full native profile-v2 compile+`pipeline_gate` parity. Do not remove the fail-closed v2 guard merely to obtain a green runtime path.
+The next native promotion attempt must use the exact current fused source, reconcile the exact-repro workflow with the #769 fail-closed contract, source-bound rebuild it, rerun the secret/semantic/atomicity/CAS matrix, and then separately close full native profile-v2 compile+`pipeline_gate` parity. Do not remove the fail-closed v2 guard merely to obtain a green runtime path.
 
 ## Inference backends
 
@@ -171,7 +176,7 @@ The product remains inference-neutral:
 
 - remote/provider API from runtime profile;
 - loopback OpenAI-compatible local API without a token where configured;
-- local model weights through configured `local_exec` argv without a shell.
+- local model weights through configured `local_exec` argv without a shell and, after #850, without inheriting arbitrary parent secrets.
 
 Changing backend/model must not reset MiniUnifiedDB state. The default shipped preset may use Mistral API, but that choice is replaceable preset data only.
 
@@ -200,8 +205,8 @@ The two required lanes now converge cleanly:
 
 ```text
 NATIVE
-#769 fail-closed v2 admission guard + #830 presentation-neutrality source repair fused
--> fresh-main nonduplicate fusion of #764 local_exec parent-secret isolation
+#769 fail-closed v2 admission + #830 presentation neutrality + #850 local_exec parent-secret isolation fused
+-> reconcile canonical exact-repro workflow with #769 without weakening fail-closed semantics
 -> exact source-bound rebuild
 -> repeat secret/semantic/atomicity/CAS falsifiers
 -> implement coherent canonical profile-v2 compile envelope + post-inference pipeline_gate parity
@@ -209,8 +214,8 @@ NATIVE
 -> release provenance/portability gates
 
 COGNITION
-SFT v2 + strict runtime-binding/omega/OOD gates + #829 provider-contract CI convergence
--> exact GitHub runner admission remains blocked after two pre-step attempts; zero test credit
+SFT v2 + strict runtime-binding/omega/OOD gates + exact provider-contract/campaign-identity/architecture-discriminator CI coverage
+-> GitHub runner admission remains blocked before steps; zero exact-runner test credit
 -> compatible qwen2 Full-FT runner/template admission
 -> fingerprint-bound budget preflight
 -> at most one owner-authorized paid SFT
@@ -229,6 +234,7 @@ Do not let either lane claim the other lane's acceptance.
 - `blogpost_entity/receipts/2026-08-22_CLAYCOG_RUNTIME_BINDING_GATE.json`
 - `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_TOGETHER_BYOM_TEMPLATE_CONTRACT_GPT56SOL.json`
 - `blogpost_entity/receipts/2026-08-22_GO_MAIN_REENTRY_NATIVE_COGNITION_GPT56SOL.json`
+- `blogpost_entity/receipts/2026-08-22_GO_LOCAL_EXEC_ENV_FRESH_MAIN_GPT56SOL.json`
 
 ## Acceptance boundary
 

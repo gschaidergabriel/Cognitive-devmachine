@@ -1,46 +1,69 @@
 {
-  "schema": "mini-entity-native-current-main-runtime-falsifiers/v1",
+  "schema": "mini-entity-native-current-main-runtime-falsifiers/v2",
   "date": "2026-08-22",
   "organ": "GPT-5.6 Sol",
   "trigger": "go extra lang",
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
-  "canonical_main_observed_before_write": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+  "canonical_main_observed_before_first_write": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
   "source_identity": {
     "native_version": "mini-entity/0.7.0-dev1",
     "main_at_execution_reconstruction": "62b292a8097c5b53731ef6804704cf9938872616",
-    "main_after_parallel_training_footer_merges": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
-    "native_files_unchanged_between_those_heads": true,
+    "native_files_confirmed_unchanged_through": "811248da844a5aa5361500ceec91a088c4f0c042",
     "git_blobs": {
       "mini_entity.c": "a52ab03c16bf0a97cc29a026b45b9401056f0b31",
       "mini_entity_part00.inc": "d0ab1506745845e9cfe739c6a46bf65d89137454",
       "mini_entity_part01.inc": "856af5c0126a3a86ed51872ffe9078a4c1fab8e1",
       "mini_entity_part02.inc": "39124dcdaf460e1bb2bad6867a2633e246dbff02",
       "mini_entity_part03.inc": "44260895edce1609d63725c6366d72319c972fe5",
-      "mini_entity_part04.inc": "9f653931f63f5cf44e27e4b7f3ce32330307616a"
+      "mini_entity_part04.inc": "9f653931f63f5cf44e27e4b7f3ce32330307616a",
+      "build_native_bound.py": "5be466c256930936f3dc9597323eb7e0e8b41804"
     },
-    "local_git_hash_object_match_all_six": true
+    "local_git_hash_object_match_all_seven": true,
+    "source_line_commit": "e18cb8fa763fe675af9c5223e2bfcfd90dd007ce",
+    "source_line_commit_time_utc": "2026-08-22T03:19:20Z"
   },
   "execution_surface": {
     "class": "current-chat isolated container tool",
     "not_vps": true,
     "not_self_hosted_runner": true,
     "not_production_host": true,
-    "canonical_build_native_bound_wrapper_used": false,
-    "scope_warning": "This binds executable behavior to the exact reconstructed current native blobs and the recorded compiler/dependency environment. It is not the repository's canonical source-bound-builder receipt and does not by itself close the exact-checkout release provenance gate."
+    "canonical_build_native_bound_wrapper_used": true,
+    "scope_warning": "The exact transitive native source blobs and exact repository build_native_bound.py blob were reconstructed and hash-verified, then executed in this isolated environment. This closes same-environment repeat-build/transitive-source provenance for this closure, but is not a claim of full-repository checkout identity, cross-environment reproducibility, or whole-product acceptance."
   },
-  "build": {
+  "preliminary_direct_build": {
     "compiler": "cc (Debian 14.2.0-19) 14.2.0",
-    "sqlite3_pkg": "3.46.1",
-    "json_c_pkg": "0.18",
-    "libcurl_pkg": "8.10.1",
     "flags": "-std=c11 -O2 -Wall -Wextra",
     "independent_builds": 2,
     "byte_identical": true,
     "elf_sha256": "15da285d5b6be87bf7ec0d973980ef8cc8e908ad43f3f2b1ca6bcac62ee54a59",
     "elf_size_bytes": 889648
   },
-  "ordinary_runtime_regressions": {
+  "source_bound_build": {
+    "builder_schema": "mini-entity-native-build-provenance/v2",
+    "builder_blob": "5be466c256930936f3dc9597323eb7e0e8b41804",
+    "version_label": "mini-entity/0.7.0-dev1",
+    "source_date_epoch": 1787368760,
+    "source_closure_sha256": "a6500de97cb2cecc1b1778ee87e5af2c2f2cb7fde1d95f9220d0fa9dcf3f67a5",
+    "compiler": "x86_64-linux-gnu-gcc-14 (Debian 14.2.0-19) 14.2.0",
+    "compiler_sha256": "a23ecab8ff08f09ad8c80602c2c5df7f49e09c25905cb8975902e101bf72635f",
+    "pkg_config_packages": {
+      "sqlite3": "3.46.1",
+      "libcurl": "8.10.1",
+      "json-c": "0.18"
+    },
+    "repeat_builds": 2,
+    "repeat_hashes": [
+      "ae3d13c206666df4bdf814665e78ffd30311021c22bd88dbcc7b704598927fef",
+      "ae3d13c206666df4bdf814665e78ffd30311021c22bd88dbcc7b704598927fef"
+    ],
+    "repeat_byte_identity": true,
+    "elf_sha256": "ae3d13c206666df4bdf814665e78ffd30311021c22bd88dbcc7b704598927fef",
+    "elf_build_id": "db4ff89bf46feb417a10450aa224ed7fae9d5fa8",
+    "resolved_runtime_dependency_count": 26,
+    "builder_acceptance_scope": "SAME_ENV_REPEAT_BUILD_AND_TRANSITIVE_SOURCE_PROVENANCE_BINDING_ONLY"
+  },
+  "source_bound_runtime_regressions": {
     "fresh_neutral_db": "PASS",
     "event_success_then_verified_empty_cycle": "PASS",
     "inference_failure_consumes_nothing": "PASS",
@@ -50,28 +73,28 @@
     "source_event_update_fault_atomic_rollback": "PASS",
     "concurrent_generation_cas_exactly_one_commit": "PASS"
   },
-  "current_main_falsifiers": {
+  "current_main_falsifiers_repeated_on_source_bound_elf": {
     "binary_application_language_neutrality": {
       "status": "FAIL",
       "evidence": [
-        "SYSTEM STATE present in ELF strings",
-        "MODEL SELF-REPORT present in ELF strings",
-        "AUSWERTUNG present in ELF strings",
-        "German UNKNOWN/evaluation prose present in ELF strings"
+        "SYSTEM STATE present in source-bound ELF strings",
+        "MODEL SELF-REPORT present in source-bound ELF strings",
+        "AUSWERTUNG present in source-bound ELF strings",
+        "German UNKNOWN/evaluation prose present in source-bound ELF strings"
       ],
       "related_open_pr": 756
     },
     "local_exec_parent_environment_secret_isolation": {
       "status": "FAIL",
       "method": "Launch local_exec with four synthetic secret sentinels in parent environment and make the fixture runner report only inherited environment values.",
-      "observed": "TOGETHER_API_KEY, MISTRAL_API_KEY, OPENAI_API_KEY and an unrelated secret sentinel were all visible to the local runner and were persisted verbatim as model_output.",
+      "observed": "TOGETHER_API_KEY, MISTRAL_API_KEY, OPENAI_API_KEY and an unrelated secret sentinel were all visible to the local runner and were persisted verbatim as model_output on the source-bound ELF.",
       "security_boundary": "The API-path contains_secret guard does not bind local_exec inherited environment values.",
       "related_open_pr": 764
     },
     "canonical_profile_v2_semantic_admission": {
       "status": "FAIL_OPEN",
       "method": "Apply a clay-pipeline-profile/v2 test profile containing required output fields and a forbidden marker, then use local_exec to emit only MALFORMED_PLAINTEXT_WITHOUT_REQUIRED_FIELDS.",
-      "observed": "Current native 0.7 accepted and persisted the malformed output as generation 1.",
+      "observed": "The source-bound current native 0.7 ELF accepted and persisted the malformed output as generation 1.",
       "reference_contract": "BLOGPOST_ENTITY.clay requires pipeline_gate before pipeline_commit.",
       "related_open_pr": 769
     }
@@ -84,15 +107,15 @@
     "together_api_called_by_this_organ": false
   },
   "classification": {
-    "positive_native_scope": "EXACT_CURRENT_NATIVE_BLOBS_EXECUTED_IN_ISOLATED_CONTAINER_WITH_DIRECT_REPRO_BUILD",
+    "positive_native_scope": "EXACT_TRANSITIVE_CURRENT_NATIVE_BLOBS_PLUS_EXACT_REPO_BUILDER_EXECUTED_WITH_SAME_ENV_REPEAT_IDENTITY_AND_RUNTIME_FAULT_MATRIX",
     "whole_native_0_7_acceptance": "FAIL_BLOCKED_BY_CONFIRMED_SEMANTIC_AND_SECRET_BOUNDARY_DEFECTS",
     "whole_product": "IN_PROGRESS",
     "cognition_training": "NOT_STARTED_BY_THIS_ORGAN"
   },
   "next_discriminators": [
-    "Rebase/fuse the non-duplicate fixes for PR 764 parent-environment isolation and PR 756 state-box language neutrality onto current main, then rerun the same exact falsifiers.",
+    "Rebase/fuse the non-duplicate fixes for PR 764 parent-environment isolation and PR 756 state-box language neutrality onto current main, then rebuild through build_native_bound.py and rerun these exact falsifiers.",
     "Admit PR 769's fail-closed v2 guard only after exact candidate execution, or implement full canonical v2 compile+pipeline_gate parity before allowing v2 runtime.",
-    "Repeat through build_native_bound.py on an exact current checkout to close repository provenance, then execute the full 0.7 fault matrix.",
+    "Close the remaining full-checkout/cross-environment release provenance distinction only after the repaired native closure is stable; do not promote the currently defective ELF merely because repeat-build provenance now passes.",
     "For cognition, resolve PR 771 BYOM size/template fence and perform one credentialed Together preflight; create at most one job only if exact API admission and server price stay within the USD 18 gate."
   ]
 }

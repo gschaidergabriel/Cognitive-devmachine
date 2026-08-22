@@ -3,11 +3,13 @@ import json, sys
 from pathlib import Path
 
 PREFIX='module clay.cog.turn\nfn think(i:Map)->Map {\n'
-REQUIRED=(
-  'self_bind(c,cfg("entity.id"),cfg("entity.continuity"))',
-  'role_bind(c,cfg("application.role"))',
-  'goal_bind(c,cfg("application.goal"))',
-  'personality_bind(c,cfg("application.personality"))',
+BINDINGS=(
+  ('self_bind','self_bind(c,cfg("entity.id"),cfg("entity.continuity"))'),
+  ('role_bind','role_bind(c,cfg("application.role"))'),
+  ('goal_bind','goal_bind(c,cfg("application.goal"))'),
+  ('personality_bind','personality_bind(c,cfg("application.personality"))'),
+)
+REQUIRED=tuple(x[1] for x in BINDINGS)+(
   'return c\n}',
 )
 FORBIDDEN=(
@@ -29,15 +31,23 @@ def outside_strings(s):
         else:
             if ch=='"': quoted=True; out.append(" ")
             else: out.append(ch)
-    return "".join(out)
+    return "".join(out), quoted
 
 def validate_code(s):
     e=[]; low=s.lower()
     if not s.startswith(PREFIX): e.append("bad_prefix")
     if s.strip()!=s or not s.endswith("}"): e.append("outer_text")
-    structural=outside_strings(s)
+    structural, unterminated_string=outside_strings(s)
+    compact_structural=''.join(structural.split())
+    if unterminated_string: e.append("unterminated_string")
     if structural.count("{")!=structural.count("}"): e.append("brace_balance")
     if structural.count("(")!=structural.count(")"): e.append("paren_balance")
+    lines=[line.strip() for line in s.splitlines()]
+    for name,canonical in BINDINGS:
+        call_count=compact_structural.count(name+'(')
+        canonical_count=lines.count(canonical)
+        if call_count != 1: e.append(f"binding_call_count:{name}:{call_count}")
+        if canonical_count != 1: e.append(f"binding_not_exact_runtime_cfg:{name}:{canonical_count}")
     for x in REQUIRED:
         if x not in s: e.append("missing:"+x)
     for x in FORBIDDEN:

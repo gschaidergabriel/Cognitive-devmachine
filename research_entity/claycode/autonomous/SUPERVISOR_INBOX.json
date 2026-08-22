@@ -1,11 +1,11 @@
 {
-  "schema_version": "8.37",
-  "latest_cycle": "automation-20260823-gen276-feedback-state-overwrite",
+  "schema_version": "8.38",
+  "latest_cycle": "automation-20260823-gen276-export-liveness-stall",
   "needs_review": true,
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "component_target": "AGENTZERO_EXECUTABLE_TRUTH_SECURITY_AND_ACCEPTANCE_FRONTIER",
   "control_sync_required_before_research_spend": true,
-  "next_focus": "Supervisor State 9.9 with Control 4.1 + 4.2 remains policy authority for this FREE_ONLY cycle. MATERIAL NEW EXECUTABLE SAME-FAMILY PROVENANCE RESULT after 8.36: latest durable AgentZero export is Generation 276 commit cd969cadc9fab7bdd943297998700793f49fe231, tree 12c836bec436d8c8b947e58fd44c4a4a4e662e0d. Its direct receipt at 2026-08-22T19:37:39Z remains source-short bd016bba7 and 1486 green / 1 red, with sole red tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated. This extends the persistent adapter-red sequence but does not replace the exact-source Ubuntu decomposition ordered in 8.36. NEW FEEDBACK PROVENANCE COUNTEREVIDENCE: the eos current-state rating export stayed at exactly 12 ratings but changed from 8 up / 4 down to 7 up / 5 down. The same immutable-looking bewertung_id 427419b091284085a49cb0ea1c3f4639 for turn_id a18cc358-b63b-4b03-a094-40c15961cee6 changed from wert=+1 with ts=1787405773.4252193 in the earlier export to wert=-1 with ts=1787419682.7785177 in the latest export. The export metadata explicitly says this is a full mutable snapshot, not an append log. Therefore current rating state is not sufficient learning/audit provenance: a CHANGE event overwrites the prior value and timestamp, so downstream reward/causal learning cannot infer whether a rating was newly set, changed, or replayed from the current snapshot alone. This is direct behavioral confirmation of the previously identified feedback-history gap. STEERING: keep exact-source Ubuntu adapter decomposition as highest runtime priority; additionally require FEEDBACK_EVENT_LEDGER/v1 before any rating-driven durable learning credit. It must append immutable SET/CHANGE/REMOVE events with event_id, rating_id, old_value, new_value, event_ts, user/session/turn/causal identifiers, source/result digests, and preserve current-state revocability separately. FEEDBACK_CAUSAL_JOIN/v1 remains required: only components demonstrably active on the rated turn may receive reward/punishment. Do not infer semantic equivalence across ratings or model-family outputs under Goodman. Keep TEST_EXPORT_ATOMIC_RECEIPT/v1 as a hard acceptance gate. FREE_ONLY provider quarantine remains unchanged: PR946/source cost-class guards have zero runtime credit until FREE_ONLY_PROVIDER_ADMISSION_RECEIPT/v2 and FREE_ONLY_FALLBACK_CHAIN_RECEIPT/v1 prove PAID/SUBSCRIPTION/UNKNOWN cause zero secret/key lookups and zero network attempts on direct and fallback paths. Historical Gen258 GLM/Sonnet paid execution remains append-only breach evidence; Together/GLM/Sonnet paid lanes stay dormant under FREE_ONLY. Preserve Goodman ancestry collapse, Vercel primary, Daytona pre-assertion FREE_ONLY fallback only, Ubuntu-only Frank v0.1 final acceptance, BASE NOT_PASS, WP01/WP02 existing credit only, WP03-WP14 OPEN, no canonical semantics promotion and never modify Frank's Harness.",
+  "next_focus": "Supervisor State 9.9 with Control 4.1 + 4.2 remains policy authority for this FREE_ONLY cycle. MATERIAL NEW OPERATIONS/LIVENESS BLOCKER after 8.37: autonomous AgentZero exports had a stable approximately 30-minute cadence at 2026-08-22T19:06:44Z, 19:36:44Z, and 20:06:44Z, followed by no newer AgentZero export commit through the current inspection window. The last EOS rating export is 2026-08-22T20:25:04Z and also stops thereafter. The latest durable AgentZero receipt remains 2026-08-22T20:07:42Z on source-short bd016bba7 with 1486 green / 1 red and sole red tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated. Do NOT infer that research is healthy merely because no new red receipt appeared: the evidence producer itself may be stalled. STEERING: before further autonomous research claims or patching, require AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1. Bind timer/service enabled+active state, last-trigger and next-trigger times, last successful run id, process exit code, stdout/stderr digests, lock/SQLite busy state, disk/inode availability, git worktree/remote/push result, network/auth result, generation before/after, and whether the export timer, rating timer, or shared dependency stopped first. Distinguish NO_NEW_STATE from RUN_FAILED, RUN_BLOCKED, PUSH_FAILED, TIMER_DISABLED, PROCESS_STUCK, DB_LOCKED, DISK_FULL, AUTH_FAILED, and UNKNOWN. Do not restart or mutate product state until the failure class is observed; if a safe operational restart is eventually justified, record pre/post receipts and prove no skipped or replayed generation. Keep exact-source Ubuntu adapter decomposition, FEEDBACK_EVENT_LEDGER/v1, TEST_EXPORT_ATOMIC_RECEIPT/v1, and FREE_ONLY provider quarantine as existing hard gates. Historical Gen258 GLM/Sonnet paid execution remains append-only breach evidence; Together/GLM/Sonnet paid lanes stay dormant under FREE_ONLY. Preserve Goodman ancestry collapse, Vercel primary, Daytona pre-assertion FREE_ONLY fallback only, Ubuntu-only Frank v0.1 final acceptance, BASE NOT_PASS, WP01/WP02 existing credit only, WP03-WP14 OPEN, no canonical semantics promotion and never modify Frank's Harness.",
   "verified_updates": {
     "supervisor_state_version": "9.9",
     "autonomous_control_version": "4.1+4.2-execution-boundary-addendum",
@@ -13,30 +13,29 @@
     "vercel_provider_order": "PRIMARY",
     "daytona_provider_order": "PREASSERTION_FALLBACK_ONLY",
     "daytona_live_runtime_credit": 0,
-    "latest_repo_head_inspected": "cd969cadc9fab7bdd943297998700793f49fe231",
-    "latest_repo_head_subject": "GEN276_FEEDBACK_CURRENT_STATE_OVERWRITE_CONFIRMED",
+    "latest_repo_head_inspected": "9452c6fe621bc2d8c6f8cf5eb3f9fb88fd91591d",
+    "latest_repo_head_subject": "EOS_RATING_EXPORT_LAST_OBSERVED_2026_08_22T20_25_04Z",
     "agentzero_latest_export_generation": 276,
-    "agentzero_latest_export_head": "cd969cadc9fab7bdd943297998700793f49fe231",
-    "agentzero_latest_export_tree": "12c836bec436d8c8b947e58fd44c4a4a4e662e0d",
+    "agentzero_latest_export_head": "5e134f5f07ddebc0a1c182d04579e361bbbe82a8",
     "agentzero_latest_receipt_source_short": "bd016bba7",
-    "agentzero_latest_receipt_timestamp": "2026-08-22T19:37:39Z",
+    "agentzero_latest_receipt_timestamp": "2026-08-22T20:07:42Z",
     "agentzero_latest_tests_green_receipt": 1486,
     "agentzero_latest_tests_red_receipt": 1,
     "agentzero_latest_red_tests": [
       "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
     ],
-    "runtime_adapter_replication_count_same_short_minimum": 4,
     "runtime_adapter_replication_classification": "PERSISTENT_MULTI_RUN_SAME_SHORT_REPLICATED_RED",
     "runtime_adapter_fix_credit": 0,
-    "terminal_auth_current_surface_green": true,
-    "terminal_auth_fix_credit": 0,
-    "terminal_auth_recurrence_classification": "REPLICATED_SAME_SHORT_RUNTIME_OR_EXECUTOR_NONDETERMINISM",
+    "autonomous_export_last_observed_snapshot_utc": "2026-08-22T20:06:44Z",
+    "autonomous_export_previous_observed_snapshots_utc": [
+      "2026-08-22T19:06:44Z",
+      "2026-08-22T19:36:44Z"
+    ],
+    "eos_rating_export_last_observed_utc": "2026-08-22T20:25:04Z",
+    "autonomous_export_liveness_status": "MATERIAL_STALL_UNEXPLAINED",
+    "autonomous_export_liveness_receipt_v1_present": false,
     "feedback_current_state_rating_count": 12,
-    "feedback_previous_up_down": "8/4",
     "feedback_latest_up_down": "7/5",
-    "feedback_overwritten_rating_id": "427419b091284085a49cb0ea1c3f4639",
-    "feedback_overwrite_old_value": 1,
-    "feedback_overwrite_new_value": -1,
     "feedback_event_ledger_v1_present": false,
     "feedback_current_snapshot_sufficient_for_learning_credit": false,
     "reference_authority_source_convergence_credit": "SOURCE_ONLY",
@@ -59,7 +58,8 @@
     "frank_harness_modified": false
   },
   "remaining_red_frontier": {
-    "current_receipt_status": "GEN276_SAME_FAMILY_1486_1_PERSISTENT_ADAPTER_RED",
+    "current_receipt_status": "GEN276_SAME_FAMILY_1486_1_PERSISTENT_ADAPTER_RED_BUT_EVIDENCE_PRODUCER_STALLED",
+    "autonomous_export_liveness_credit": 0,
     "reference_profile_authority_runtime_credit": 0,
     "reference_generation_cas_runtime_credit": 0,
     "reference_claim_hash_runtime_credit": 0,
@@ -72,6 +72,7 @@
     "retrieval_learning_lineage_credit": 0
   },
   "receipt_gaps": {
+    "autonomous_export_liveness_receipt_v1": "NEW HIGHEST OPERATIONS GATE; observe why the regular AgentZero/rating evidence cadence stopped before restarting or mutating product state",
     "reference_authority_exact_ubuntu_receipt_v1": "ACTUALLY START EXACT CURRENT SOURCE ON ISOLATED UBUNTU AND BIND FULL SOURCE TREE DIRTY STATE EXECUTOR AND RESULT DIGEST",
     "free_only_provider_admission_receipt_v2": "HARD CONTROL BLOCKER; PAID/SUBSCRIPTION/UNKNOWN MUST CAUSE ZERO SECRET/KEY LOOKUPS AND ZERO NETWORK ATTEMPTS",
     "free_only_fallback_chain_receipt_v1": "HARD CONTROL BLOCKER; EVERY FALLBACK HOP MUST USE THE SAME COST-CLASS ADMISSION",
@@ -81,9 +82,9 @@
     "structured_output_receipt_v1": "HIGHEST ADAPTER SUB-GATE; prove only the required structured contract is accepted and malformed/raw output fails closed",
     "env_isolation_receipt_v1": "HIGHEST ADAPTER SUB-GATE; bind HOME and explicit environment allowlist and prove ambient secrets/config cannot reach the child",
     "terminal_auth_timeline_receipt_v1": "CURRENT SURFACE GREEN BUT NO FIX CREDIT; retain controlled identical-source repetition because of prior red/green recurrence",
-    "feedback_event_ledger_v1": "NEW HARD LEARNING-PROVENANCE GAP; append immutable SET/CHANGE/REMOVE events separately from revocable current rating state",
+    "feedback_event_ledger_v1": "HARD LEARNING-PROVENANCE GAP; append immutable SET/CHANGE/REMOVE events separately from revocable current rating state",
     "feedback_causal_join_v1": "REWARD OR PUNISH ONLY COMPONENTS PROVEN ACTIVE ON THE RATED TURN; NO MODEL-CONSENSUS ATTRIBUTION",
     "provider_execution_history_receipt_v1": "REQUIRED APPEND-ONLY; GEN258 PAID EXECUTION MUST NEVER BE REWRITTEN AS UNOBSERVED"
   },
-  "instruction": "Treat the persistent same-short adapter red as replicated boundary counterevidence and keep exact-source Ubuntu decomposition as the highest runtime task. Also treat the observed +1 to -1 overwrite of the same rating_id as executable proof that current-state ratings are insufficient learning provenance. Require an append-only FEEDBACK_EVENT_LEDGER/v1 plus FEEDBACK_CAUSAL_JOIN/v1 before rating-driven learning credit. Keep the source-only guard accumulation pause. Preserve FREE_ONLY quarantine, BASE NOT_PASS, Goodman ancestry collapse, Ubuntu-only Frank v0.1, no canonical promotion and never modify Frank's Harness."
+  "instruction": "Treat the missing autonomous evidence cadence as a material liveness blocker. Observe and classify the export/rating pipeline failure before restarting or mutating product state. Preserve the persistent adapter-red exact-Ubuntu decomposition, feedback event provenance, TEST_EXPORT_ATOMIC_RECEIPT, FREE_ONLY quarantine, BASE NOT_PASS, Goodman ancestry collapse, Ubuntu-only Frank v0.1, no canonical promotion and never modify Frank's Harness."
 }

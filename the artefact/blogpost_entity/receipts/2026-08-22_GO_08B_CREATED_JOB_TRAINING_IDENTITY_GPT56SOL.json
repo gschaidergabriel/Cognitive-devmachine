@@ -1,0 +1,83 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_id": "go-20260822T1839+07-gpt56sol-08b-created-job-identity",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "base_main_sha": "f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d",
+  "base_launcher_blob": "c18f84f0eebd94a5bebbc3bc283c6b956792fb16",
+  "candidate_branch": "gpt56sol/go-08b-created-job-identity-20260822-1839",
+  "candidate_head_before_receipt": "50cd6707bd79e68a7df6a503b73718948e909332",
+  "scope": "direct Qwen/Qwen3.5-0.8B Together Full-FT created-job identity verification",
+  "external_primary_contract": {
+    "retrieve": "https://docs.together.ai/reference/get-fine-tunes-id",
+    "create": "https://docs.together.ai/reference/post-fine-tunes",
+    "cli": "https://docs.together.ai/reference/cli/finetune",
+    "observed_retrieve_fields": [
+      "training_file",
+      "validation_file",
+      "model",
+      "n_epochs",
+      "n_checkpoints",
+      "n_evals",
+      "learning_rate",
+      "warmup_ratio",
+      "training_type",
+      "training_method",
+      "random_seed"
+    ]
+  },
+  "exactly_one_unusual_experiment": {
+    "name": "DIRECT_08B_CREATED_JOB_HYPERPARAMETER_SUBSTITUTION",
+    "count_for_macrocycle": 1,
+    "intervention": "Hold the currently checked retrieved-job fields constant while substituting provider-visible n_checkpoints, learning_rate, warmup_ratio and training_type that are bound into the campaign/create contract.",
+    "pre_repair_observation": "created_job_identity_mismatches returned an empty mismatch set because main() omitted those fields from its expected retrieved-job identity.",
+    "pre_repair_result": {},
+    "outcome": "FALSIFIED_CURRENT_IDENTITY_CLOSURE_AND_REPAIRED"
+  },
+  "repair": {
+    "launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py",
+    "test": "the artefact/blogpost_entity/mini_cognition/test_launch_together_qwen35_08b_v1.py",
+    "expected_created_job_identity_now_binds": [
+      "training_file",
+      "validation_file",
+      "model",
+      "n_epochs",
+      "n_evals",
+      "n_checkpoints",
+      "random_seed",
+      "learning_rate",
+      "warmup_ratio",
+      "training_method",
+      "training_type"
+    ],
+    "nested_sdk_objects": "expected dict fields are matched recursively against dict-like or attribute-style provider objects; provider extra fields do not create false mismatches"
+  },
+  "isolated_regression": {
+    "environment": "current ChatGPT isolated Python container",
+    "py_compile": "PASS",
+    "focused_unit_tests": "11/11 PASS",
+    "first_repair_attempt": "FAILED on nested attribute-style SDK-object normalization; repaired before durable source write",
+    "network_called": false,
+    "provider_authenticated": false
+  },
+  "together": {
+    "secret_used": false,
+    "upload": false,
+    "authenticated_preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "money_spent_usd": 0
+  },
+  "claims": {
+    "source_candidate": true,
+    "bounded_mechanism_supported": true,
+    "exact_provider_runtime_verified": false,
+    "training_quality_verified": false,
+    "whole_product_pass": false
+  },
+  "next_gate": "Run exact branch cognition regressions on an admitted repository runner, then fuse if current main has no overlapping stronger implementation; authenticated Together preflight remains a separate no-bill provider gate before any owner-authorized create."
+}

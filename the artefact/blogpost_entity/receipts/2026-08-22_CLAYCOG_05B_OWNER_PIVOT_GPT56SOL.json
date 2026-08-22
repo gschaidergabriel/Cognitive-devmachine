@@ -1,0 +1,76 @@
+{
+  "schema": "claycog-05b-owner-pivot/v1",
+  "date": "2026-08-22",
+  "executor": "GPT-5.6 Sol",
+  "canonical_merge": {
+    "pr": 770,
+    "merge_sha": "77ae9f09d1278d1ef4be8e46702b58204aa22a13",
+    "superseded_pr": 768,
+    "superseded_model_size": "0.8B"
+  },
+  "target": {
+    "primary_base": "Qwen/Qwen2.5-0.5B",
+    "parameters": "0.49B",
+    "checkpoint_identity": "generic configurable cognition; no fixed name/job/persona/application",
+    "generated_representation": "ClayCode only",
+    "reasoning_field": "GRF R0..R6",
+    "unresolved_alternatives": "Hyperposition",
+    "structured_actions": "typed omega function vectors",
+    "transition_admission": ["grammar", "types", "schema", "authority", "generation"]
+  },
+  "corpus": {
+    "schema": "claycog-sft/v1",
+    "seed": 20260822,
+    "examples": 1650,
+    "train": 1485,
+    "validation": 165,
+    "train_sha256": "bc1753771ed0f818865a3118f754ac5b10d67bc3ae885f668201f66566028eb2",
+    "validation_sha256": "81a6bb9fc0a210affffa84590c27ad2fc76c93fa24c4112e6573552227e512ce",
+    "local_train_structural_invalid": 0,
+    "local_validation_structural_invalid": 0,
+    "validator_bug_found_and_fixed": "brace/paren counting originally included characters inside string literals; quote-aware structural scan now excludes them"
+  },
+  "ood": {
+    "seed": 20260823,
+    "cases": 200,
+    "valid_exact_omega": 80,
+    "invalid_omega_reject": 40,
+    "hyperposition": 40,
+    "identity_neutrality": 40,
+    "promotion_strict_claycode_rate": 1.0,
+    "promotion_semantic_rate": 0.95
+  },
+  "together": {
+    "native_supported_0_5b": false,
+    "native_smallest_qwen_full_ft_seen": "Qwen/Qwen3.5-0.8B",
+    "path": "BYOM",
+    "byom_checkpoint": "Qwen/Qwen2.5-0.5B",
+    "template_candidate": "Qwen/Qwen2.5-7B-Instruct-Turbo",
+    "template_compatibility": "OPEN; fail closed unless current model_limits supports full training and Together accepts checkpoint/template",
+    "automatic_qwen35_fallback": false,
+    "standard_full_sft_rate_up_to_16b_usd_per_million_tokens": 0.54,
+    "documented_minimum_job_charge_usd": 4.0,
+    "configured_single_job_budget_gate_usd": 18.0,
+    "owner_campaign_ceiling_eur": 20.0,
+    "api_secret_present_in_execution_environment": false,
+    "preflight_executed_against_together": false,
+    "paid_job_started": false
+  },
+  "deployment": {
+    "quantization": "GGUF Q4_K_M",
+    "acceptance": "actual peak process RSS < 1 GiB at context 2048",
+    "status": "OPEN_UNTIL_TUNED_CHECKPOINT_EXISTS"
+  },
+  "scientific_claim_boundaries": {
+    "consciousness": "NOT_INFERRED_FROM_SFT_OR_ARCHITECTURE",
+    "R_next_equals_F": "DETERMINISTIC_ADMISSION_INVARIANT_NOT_NEURAL_INFALLIBILITY",
+    "micro_agent_superiority": "UNCLAIMED_UNTIL_MATCHED_EXECUTABLE_BENCHMARK",
+    "under_1gib_ram": "UNCLAIMED_UNTIL_MEASURED_RSS"
+  },
+  "external_verification": [
+    "https://docs.together.ai/docs/fine-tuning/supported-models",
+    "https://docs.together.ai/docs/fine-tuning/byom",
+    "https://www.together.ai/pricing",
+    "https://huggingface.co/Qwen/Qwen2.5-0.5B"
+  ]
+}

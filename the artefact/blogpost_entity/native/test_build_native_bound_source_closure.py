@@ -59,6 +59,28 @@ class SourceClosureTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "LOCAL_INCLUDE_OUTSIDE_SOURCE_ROOT"):
                 subject.source_closure(entry)
 
+    def test_local_include_symlink_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_text:
+            root = Path(tmp_text)
+            entry = root / "mini_entity.c"
+            target = root / "real.inc"
+            alias = root / "alias.inc"
+            target.write_text("static int real = 1;\n", encoding="utf-8")
+            alias.symlink_to(target.name)
+            entry.write_text('#include "alias.inc"\n', encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "LOCAL_SOURCE_SYMLINK_FORBIDDEN"):
+                subject.source_closure(entry)
+
+    def test_entry_symlink_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_text:
+            root = Path(tmp_text)
+            target = root / "real.c"
+            alias = root / "mini_entity.c"
+            target.write_text("int main(void) { return 0; }\n", encoding="utf-8")
+            alias.symlink_to(target.name)
+            with self.assertRaisesRegex(RuntimeError, "LOCAL_SOURCE_SYMLINK_FORBIDDEN"):
+                subject.source_closure(alias)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -19,25 +19,43 @@ UNKNOWN_REMOTE_CREATE and subsequent --create attempts fail closed until an oper
 reconciles the exact campaign against the provider account. Account-list duplicate
 checks remain defense in depth; they are not treated as an exactly-once authority.
 """
-import argparse, hashlib, json, os, subprocess, sys, time
+import argparse, hashlib, json, os, re, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v1.jsonl"
 VALID=HERE/"validation_v1.jsonl"
-HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL","Qwen/Qwen2.5-0.5B")
-TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-7B-Instruct-Turbo")
+PRIMARY_HF_MODEL="Qwen/Qwen2.5-0.5B"
+PRIMARY_HF_REVISION="060db6499f32faf8b98477b0a26969ef7d8b9987"
+INSTRUCT_HF_MODEL="Qwen/Qwen2.5-0.5B-Instruct"
+HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL",PRIMARY_HF_MODEL)
+HF_REVISION=os.environ.get("CLAYCOG_HF_REVISION",PRIMARY_HF_REVISION)
+INSTRUCT_HF_REVISION=os.environ.get("CLAYCOG_HF_REVISION_INSTRUCT","")
+TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-1.5B")
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
 EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"
 CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT_STATUSES={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
+COMMIT_RE=re.compile(r"^[0-9a-f]{40}$")
+
+def hf_revision_for(hf_model):
+    if hf_model==INSTRUCT_HF_MODEL:
+        return INSTRUCT_HF_REVISION
+    if hf_model==HF_MODEL or hf_model==PRIMARY_HF_MODEL:
+        return HF_REVISION
+    return os.environ.get("CLAYCOG_HF_REVISION","")
 
 def run_local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v1.py")],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_sft_v1.py"),str(TRAIN)],check=True)
     subprocess.run([sys.executable,str(HERE/"validate_sft_v1.py"),str(VALID)],check=True)
+    subprocess.run([sys.executable,str(HERE/"generate_eval_ood_v1.py")],check=True)
+    if (HERE/"generate_eval_ood_v2.py").exists():
+        subprocess.run([sys.executable,str(HERE/"generate_eval_ood_v2.py")],check=True)
+    if (HERE/"test_eval_outputs_v1_adversarial.py").exists():
+        subprocess.run([sys.executable,str(HERE/"test_eval_outputs_v1_adversarial.py")],check=True)
 
 def wait_file(client,file_id):
     while True:
@@ -63,8 +81,9 @@ def sha256_file(path):
 
 def campaign_descriptor(hf_model):
     return {
-        "schema":"claycog-05b-together-campaign/v1",
+        "schema":"claycog-05b-together-campaign/v2",
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision_for(hf_model) or None,
         "template_model":TEMPLATE,
         "training_sha256":sha256_file(TRAIN),
         "validation_sha256":sha256_file(VALID),
@@ -83,8 +102,6 @@ def campaign_fingerprint(hf_model):
     return hashlib.sha256(raw).hexdigest()
 
 def campaign_suffix(fingerprint):
-    # 96 bits of the campaign digest are enough for collision-resistant account lookup,
-    # while the full 256-bit digest remains the operator confirmation value.
     return "claycog05b-"+fingerprint[:24]
 
 def _items(x):
@@ -98,12 +115,6 @@ def _field(x,name,default=None):
     return getattr(x,name,default)
 
 def matching_campaign_jobs(client,hf_model,template,suffix):
-    """Return account jobs that appear to carry this deterministic campaign suffix.
-
-    The suffix is derived from exact local dataset digests + training configuration.
-    Where Together exposes model/from_hf_model, those fields must also match. Missing
-    optional fields are tolerated so the guard remains useful across response versions.
-    """
     matches=[]
     for job in _items(client.fine_tuning.list()):
         status=str(_field(job,"status","")).lower()
@@ -114,9 +125,13 @@ def matching_campaign_jobs(client,hf_model,template,suffix):
             continue
         model=_field(job,"model",None)
         from_hf=_field(job,"from_hf_model",None)
+        revision=_field(job,"hf_model_revision",None)
         if model not in (None,"",template):
             continue
         if from_hf not in (None,"",hf_model):
+            continue
+        expected_revision=hf_revision_for(hf_model)
+        if revision not in (None,"",expected_revision):
             continue
         matches.append(job)
     return matches
@@ -168,12 +183,6 @@ def _fsync_dir(path):
     finally: os.close(fd)
 
 def arm_create_intent(fingerprint,hf_model,suffix):
-    """Atomically reserve this exact paid campaign locally before the remote POST.
-
-    O_EXCL makes concurrent local launchers mutually exclusive. The record intentionally
-    contains no API key/token. A process crash after this point therefore fails closed:
-    the next invocation sees CREATE_ARMED rather than guessing that no remote effect ran.
-    """
     directory=create_ledger_dir()
     directory.mkdir(parents=True,exist_ok=True,mode=0o700)
     try: os.chmod(directory,0o700)
@@ -204,7 +213,6 @@ def arm_create_intent(fingerprint,hf_model,suffix):
     return path
 
 def update_create_intent(path,status,job_id=None,error_class=None):
-    """Durably advance the local intent without ever erasing ambiguity."""
     payload=json.loads(Path(path).read_text(encoding="utf-8"))
     payload["status"]=status
     payload["updated_unix"]=int(time.time())
@@ -223,7 +231,6 @@ def update_create_intent(path,status,job_id=None,error_class=None):
         except OSError: pass
 
 def new_zero_retry_create_client(together_cls):
-    """A billed non-idempotent CREATE must not inherit SDK automatic retries."""
     return together_cls(max_retries=0)
 
 def main():
@@ -233,22 +240,21 @@ def main():
     args=ap.parse_args()
     if not os.environ.get("TOGETHER_API_KEY"):
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
-    hf_model="Qwen/Qwen2.5-0.5B-Instruct" if args.instruct_ablation else HF_MODEL
+    hf_model=INSTRUCT_HF_MODEL if args.instruct_ablation else HF_MODEL
+    hf_revision=hf_revision_for(hf_model)
+    if args.create and not COMMIT_RE.fullmatch(hf_revision):
+        raise SystemExit("BILLED_CREATE_REQUIRES_IMMUTABLE_HF_REVISION: set a full 40-hex commit SHA")
 
     run_local_checks()
     fingerprint=campaign_fingerprint(hf_model)
     suffix=campaign_suffix(fingerprint)
 
-    # Keep Together import behind the credential/local-validation boundary so pure safety
-    # tests can execute without the SDK and no network-capable object exists before checks.
     from together import Together
     client=Together()
     limits=client.fine_tuning.model_limits(model_name=TEMPLATE)
     if not getattr(limits,"supports_full_training",False):
         raise SystemExit(f"Template is not full-FT capable: {TEMPLATE}")
 
-    # On create, bind human/operator intent to exact deterministic bytes before remote
-    # uploads, then check both local and account ledgers before allocating remote files.
     if args.create:
         require_create_confirmation(fingerprint)
         assert_no_local_create_intent(fingerprint)
@@ -273,6 +279,7 @@ def main():
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision or None,
         "template_model":TEMPLATE,
         "epochs":EPOCHS,
         "evals":EVALS,
@@ -291,8 +298,6 @@ def main():
         print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fingerprint} for the exact create")
         return
 
-    # Close the check/use window, then reserve the exact paid campaign locally immediately
-    # before the non-idempotent remote POST. Any crash/timeout after arming stays unknown.
     assert_no_local_create_intent(fingerprint)
     assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
     intent_path=arm_create_intent(fingerprint,hf_model,suffix)
@@ -303,6 +308,7 @@ def main():
             validation_file=valid_file.id,
             model=TEMPLATE,
             from_hf_model=hf_model,
+            hf_model_revision=hf_revision,
             n_epochs=EPOCHS,
             n_evals=EVALS,
             n_checkpoints=1,
@@ -324,6 +330,7 @@ def main():
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "full_fine_tune":True,
         "estimated_usd":price,

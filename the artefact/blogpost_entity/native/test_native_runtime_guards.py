@@ -55,7 +55,7 @@ class NativeRuntimeGuardTests(unittest.TestCase):
             env=env,
         )
 
-    def test_local_runner_gets_no_parent_secrets_and_empty_followup_is_quiet(self) -> None:
+    def test_local_runner_gets_no_parent_secrets_across_active_and_verified_empty_cycles(self) -> None:
         entity = self.tmp / "guard-entity.db"
         source = self.tmp / "guard-source.db"
         profile = self.tmp / "guard-profile.json"
@@ -113,26 +113,24 @@ class NativeRuntimeGuardTests(unittest.TestCase):
 
         first = json.loads(self.command("run", str(entity), str(source), env=parent_env).stdout)
         self.assertTrue(first["ok"])
-        self.assertFalse(first["quiet"])
         self.assertEqual(first["generation"], 1)
         self.assertEqual(first["source_count"], 1)
         self.assertEqual(first["inference_kind"], "local_exec")
 
-        quiet = json.loads(self.command("run", str(entity), str(source), env=parent_env).stdout)
-        self.assertTrue(quiet["ok"])
-        self.assertTrue(quiet["quiet"])
-        self.assertEqual(quiet["generation"], 1)
-        self.assertEqual(quiet["source_count"], 0)
-        self.assertNotIn("output_id", quiet)
-        self.assertEqual(marker.read_text(encoding="utf-8").splitlines(), ["run"])
+        quiet_cycle = json.loads(self.command("run", str(entity), str(source), env=parent_env).stdout)
+        self.assertTrue(quiet_cycle["ok"])
+        self.assertEqual(quiet_cycle["generation"], 2)
+        self.assertEqual(quiet_cycle["source_count"], 0)
+        self.assertEqual(quiet_cycle["inference_kind"], "local_exec")
+        self.assertEqual(marker.read_text(encoding="utf-8").splitlines(), ["run", "run"])
 
         with sqlite3.connect(entity) as db:
-            self.assertEqual(db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()[0], 1)
-            self.assertEqual(db.execute("SELECT COUNT(*) FROM outputs").fetchone()[0], 1)
-            self.assertEqual(db.execute("SELECT COUNT(*) FROM study_rows").fetchone()[0], 1)
-            stored = db.execute("SELECT model_output FROM outputs").fetchone()[0]
-            for value in sentinels.values():
-                self.assertNotIn(value, stored)
+            self.assertEqual(db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()[0], 2)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM outputs").fetchone()[0], 2)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM study_rows").fetchone()[0], 2)
+            for (stored,) in db.execute("SELECT model_output FROM outputs ORDER BY generation"):
+                for value in sentinels.values():
+                    self.assertNotIn(value, stored)
             self.assertEqual(db.execute("PRAGMA integrity_check").fetchone()[0], "ok")
         with sqlite3.connect(source) as db:
             self.assertEqual(

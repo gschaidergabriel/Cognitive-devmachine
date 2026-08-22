@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import importlib.util,json,os,stat,tempfile,types,unittest
+import builtins,importlib.util,json,os,socket,stat,tempfile,types,unittest
 from pathlib import Path
 from unittest import mock
 HERE=Path(__file__).resolve().parent
@@ -14,15 +14,24 @@ class Client:
 class TogetherCtor:
     last=None
     def __init__(self,**kw):type(self).last=kw
+class SecretTripwireEnv(dict):
+    def get(self,key,default=None):
+        if key=="TOGETHER_API_KEY":raise AssertionError("SECRET_LOOKUP_TRIPWIRE")
+        return super().get(key,default)
+    def __getitem__(self,key):
+        if key=="TOGETHER_API_KEY":raise AssertionError("SECRET_LOOKUP_TRIPWIRE")
+        return super().__getitem__(key)
 class Tests(unittest.TestCase):
     def setUp(self):
-        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
+        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.pm=os.environ.get(m.PROVIDER_MODE_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
     def tearDown(self):
         m.TRAIN,m.VALID=self.ot,self.ov;self.t.cleanup()
         if self.c is None:os.environ.pop(m.CREATE_CONFIRM_ENV,None)
         else:os.environ[m.CREATE_CONFIRM_ENV]=self.c
         if self.l is None:os.environ.pop(m.CREATE_LEDGER_DIR_ENV,None)
         else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
+        if self.pm is None:os.environ.pop(m.PROVIDER_MODE_ENV,None)
+        else:os.environ[m.PROVIDER_MODE_ENV]=self.pm
     def test_model_and_direct_campaign(self):
         self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
     def test_local_checks_use_canonical_v2_validator(self):
@@ -34,6 +43,27 @@ class Tests(unittest.TestCase):
         self.assertEqual(Path(validate[1]).name,"validate_corpus_v2.py")
         self.assertEqual(validate[2:],[str(m.TRAIN),str(m.VALID)])
         self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertTrue(run.call_args_list[1].kwargs["check"])
+    def test_free_only_cost_class_admission(self):
+        self.assertTrue(m.provider_cost_admitted(m.COST_FREE,m.PROVIDER_MODE_FREE_ONLY))
+        for cost in (m.COST_PAID,m.COST_SUBSCRIPTION,m.COST_UNKNOWN):self.assertFalse(m.provider_cost_admitted(cost,m.PROVIDER_MODE_FREE_ONLY))
+        self.assertTrue(m.provider_cost_admitted(m.COST_PAID,m.PROVIDER_MODE_PAID_ALLOWED));self.assertTrue(m.provider_cost_admitted(m.COST_SUBSCRIPTION,m.PROVIDER_MODE_PAID_ALLOWED));self.assertFalse(m.provider_cost_admitted(m.COST_UNKNOWN,m.PROVIDER_MODE_PAID_ALLOWED))
+        self.assertFalse(m.provider_cost_admitted(m.COST_FREE,"UNRECOGNIZED_MODE"))
+    def test_free_only_fallback_chain_admits_only_machine_classified_free(self):
+        chain=[m.COST_PAID,m.COST_SUBSCRIPTION,m.COST_UNKNOWN,m.COST_FREE]
+        admitted=[c for c in chain if m.provider_cost_admitted(c,m.PROVIDER_MODE_FREE_ONLY)]
+        self.assertEqual(admitted,[m.COST_FREE])
+    def test_free_only_secret_network_tripwire(self):
+        old_env=m.os.environ;old_argv=m.sys.argv;old_local=m.local_checks;old_import=builtins.__import__;old_socket=socket.socket
+        def import_tripwire(name,*args,**kwargs):
+            if name=="together" or name.startswith("together."):raise AssertionError("TOGETHER_IMPORT_TRIPWIRE")
+            return old_import(name,*args,**kwargs)
+        def socket_tripwire(*args,**kwargs):raise AssertionError("NETWORK_TRIPWIRE")
+        try:
+            m.os.environ=SecretTripwireEnv({m.PROVIDER_MODE_ENV:m.PROVIDER_MODE_FREE_ONLY,"TOGETHER_API_KEY":"CANARY_MUST_NOT_BE_READ"});m.sys.argv=["launch_together_qwen35_08b_v1.py"];m.local_checks=lambda:None;builtins.__import__=import_tripwire;socket.socket=socket_tripwire
+            with self.assertRaises(SystemExit) as cm:m.main()
+            self.assertIn("PROVIDER_ADMISSION_BLOCK",str(cm.exception));self.assertIn("cost_class=PAID",str(cm.exception))
+        finally:
+            socket.socket=old_socket;builtins.__import__=old_import;m.local_checks=old_local;m.sys.argv=old_argv;m.os.environ=old_env
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

@@ -77,7 +77,11 @@ def wait_file(client,file_id,timeout_seconds=FILE_WAIT_SECONDS):
         if time.monotonic()>=deadline: raise TimeoutError(f"Timed out waiting for Together file processing: {file_id}")
         time.sleep(5)
 def estimate_price(client,train_id,valid_id): return client.fine_tuning.estimate_price(training_file=train_id,validation_file=valid_id,model=MODEL,n_epochs=EPOCHS,n_evals=EVALS,training_method=training_method(),training_type=training_type())
-def create_payload(train_id,valid_id,suffix): return {"training_file":train_id,"validation_file":valid_id,"model":MODEL,"n_epochs":EPOCHS,"n_evals":EVALS,"n_checkpoints":1,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"suffix":suffix,"training_method":training_method(),"training_type":training_type()}
+def create_payload(train_id,valid_id,suffix):
+    # Together SDK v2 exposes a high-level create() contract. Full training is
+    # selected with lora=False; the SDK translates that to nested REST training_type.
+    # estimate_price() intentionally keeps the nested estimate schema above.
+    return {"training_file":train_id,"validation_file":valid_id,"model":MODEL,"n_epochs":EPOCHS,"n_evals":EVALS,"n_checkpoints":1,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"suffix":suffix,"lora":False,"train_on_inputs":"auto","training_method":"sft"}
 
 def _items(x):
     if x is None:return []

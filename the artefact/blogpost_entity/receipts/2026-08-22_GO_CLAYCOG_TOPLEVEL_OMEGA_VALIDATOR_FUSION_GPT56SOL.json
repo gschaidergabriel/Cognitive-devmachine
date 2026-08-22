@@ -1,0 +1,63 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "mini-entity-pipeline-all-in-one",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "canonical_main_at_fusion_join": "afbca677205ad54e5080afe0443e3092773615e2",
+  "branch": "go/claycog-top-level-omega-fusion-20260822",
+  "supersedes_local_pr": 776,
+  "changed_blobs": {
+    "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py": "3b9bdcd37cdc40a5c3fa48647d44737f38bc3fb1",
+    "the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py": "e0a417279302405aa7634173bd06738ba48fc6b9"
+  },
+  "parallel_fusion": {
+    "observed_main_progress": [
+      "main independently hardened runtime binding multiplicity/exact runtime cfg semantics",
+      "main independently made validate_corpus_v2 delegate to validate_sft_v1 as the canonical ClayCode validator",
+      "main independently hardened exact OOD omega-vector scoring"
+    ],
+    "retained_gap": "canonical validate_sft_v1 still credited omega commit/gates/authority/generation by raw substring and counted canonical binding lines without requiring brace-depth-1 placement",
+    "decision": "do not merge stale PR 776 wholesale; preserve main's stronger binding and v2 delegation work, then add only top-level statement and exact omega admission semantics to the canonical validator"
+  },
+  "repair": {
+    "bindings": "preserve one-and-only-one structural binding call and additionally require the canonical runtime cfg binding exactly once at brace depth 1",
+    "return": "require exactly one top-level return c",
+    "comments": "fail closed on comment syntax outside strings at the strict generated-ClayCode promotion boundary",
+    "omega_commit": "if any omega commit call exists, require exactly one exact top-level omega_commit_candidate(c,w)",
+    "omega_validators": "require exactly five omega_validate calls and exactly one top-level canonical call for grammar, types, schema, authority and generation",
+    "omega_authority_generation": "require exactly one structural and one exact top-level runtime-config authority/generation binding",
+    "duplicates": "duplicate omega gates or commits are rejected",
+    "reject_commit": "reject plus commit remains invalid"
+  },
+  "bounded_isolated_execution": {
+    "environment": "isolated OpenAI Linux container",
+    "network_source_fetch": "BLOCKED_DNS",
+    "method": "execute locally reconstructed files only after git hash-object matched GitHub blob ids",
+    "validator_blob": "3b9bdcd37cdc40a5c3fa48647d44737f38bc3fb1",
+    "test_blob": "e0a417279302405aa7634173bd06738ba48fc6b9",
+    "current_main_v2_validator_blob": "90db81209ae83cb55ec29ce6d0469c6cc93ba1e2",
+    "blob_matches": true,
+    "py_compile": "PASS",
+    "focused_tests": {"passed": 16, "failed": 0, "result": "PASS"},
+    "current_main_v2_delegation_check": "PASS: exact current-main validate_corpus_v2 loaded the candidate validate_sft_v1 and canonical minimal ClayCode returned zero validation errors",
+    "classification": "EXACT_BLOB_FOCUSED_FUSION_PASS_NOT_FULL_CORPUS_PASS"
+  },
+  "one_unusual_experiment_for_entire_go": {
+    "count": 1,
+    "name": "architecture_substitution_falsifier",
+    "result": "REJECT_QWEN35_08B_AS_QWEN25_05B_BYOM_TEMPLATE",
+    "note": "all later validator executions are regression/fusion checks, not additional unusual experiments"
+  },
+  "together": {
+    "owner_checkpoint": "Qwen/Qwen2.5-0.5B",
+    "architecture_matching_template": "UNRESOLVED_PROVIDER_GATE",
+    "api_secret_mounted": false,
+    "dataset_uploaded": false,
+    "training_job_started": false,
+    "billed_action": false
+  },
+  "evidence_boundary": "16/16 exact focused blob tests and exact current-main v2 delegation compatibility do not establish full generated-v2-corpus acceptance, Together BYOM compatibility, trained checkpoint quality, Q4_K_M RSS, local_exec integration or whole Mini Entity acceptance.",
+  "next_exact_gate": "Rejoin latest main, run the current v2 corpus generator plus canonical v2 corpus validator against this exact fused validator in an admitted isolated executor, then only after architecture-matching Together preflight consider server validation/upload and billed training."
+}

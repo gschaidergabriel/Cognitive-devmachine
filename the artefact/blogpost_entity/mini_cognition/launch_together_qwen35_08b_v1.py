@@ -4,40 +4,43 @@ import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
-
-def _default_supervisor_policy():
-    try:
-        repo_root=HERE.parents[2]
-    except IndexError:
-        return HERE/"__missing_supervisor_policy__"
-    return repo_root/"research_entity"/"claycode"/"autonomous"/"SUPERVISOR_INBOX.json"
-
-SUPERVISOR_POLICY=_default_supervisor_policy()
+CONTROL_PATH=HERE.parents[2]/"research_entity"/"claycode"/"CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json"
 TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"; V2_VALIDATOR=HERE/"validate_corpus_v2.py"
 EXPECTED_MODEL="Qwen/Qwen3.5-0.8B"; MODEL=os.environ.get("CLAYCOG_08B_MODEL",EXPECTED_MODEL)
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=float(os.environ.get("CLAYCOG_LEARNING_RATE","1e-5")); WARMUP_RATIO=float(os.environ.get("CLAYCOG_WARMUP_RATIO","0.03"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00")); FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
+CONTROL_MODE_FREE_ONLY="FREE_ONLY"; CONTROL_MODE_PAID_ALLOWED="PAID_ALLOWED"
+COST_FREE="FREE"; COST_PAID="PAID"; COST_SUBSCRIPTION="SUBSCRIPTION"; COST_UNKNOWN="UNKNOWN"
+TOGETHER_PROVIDER="Together"; TOGETHER_COST_CLASS=COST_PAID
 ACTIVE_OR_SPENT={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
-def current_free_only(path=None):
-    p=Path(path) if path is not None else SUPERVISOR_POLICY
+def load_provider_execution_control(path=None):
+    p=Path(path) if path is not None else CONTROL_PATH
     try:
-        doc=json.loads(p.read_text(encoding="utf-8"))
+        control=json.loads(p.read_text(encoding="utf-8"))
     except Exception as e:
-        raise SystemExit(f"EXECUTION_POLICY_UNREADABLE {p}: {type(e).__name__}") from e
-    verified=doc.get("verified_updates")
-    if not isinstance(verified,dict) or type(verified.get("free_only")) is not bool:
-        raise SystemExit("EXECUTION_POLICY_FREE_ONLY_UNKNOWN")
-    return verified["free_only"]
+        raise SystemExit(f"PROVIDER_EXECUTION_CONTROL_UNREADABLE {p}: {type(e).__name__}") from e
+    if control.get("status")!="ACTIVE": raise SystemExit("PROVIDER_EXECUTION_CONTROL_NOT_ACTIVE")
+    mode=control.get("mode"); rules=control.get("preserved_hard_rules")
+    if not isinstance(mode,str) or not isinstance(rules,dict): raise SystemExit("PROVIDER_EXECUTION_CONTROL_MALFORMED")
+    if type(rules.get("free_only")) is not bool or type(rules.get("together_forbidden")) is not bool: raise SystemExit("PROVIDER_EXECUTION_CONTROL_MALFORMED")
+    return control
 
-def assert_provider_execution_allowed(path=None):
-    if current_free_only(path):
-        raise SystemExit(
-            f"FREE_ONLY_PROVIDER_REJECT cost_class=PAID provider=Together model={MODEL} "
-            "before_secret_lookup=true before_network=true"
-        )
+def provider_cost_admitted(provider,cost_class,control):
+    provider=str(provider); cost=str(cost_class).strip().upper(); mode=str(control.get("mode","")).strip().upper(); rules=control.get("preserved_hard_rules") or {}
+    if cost not in {COST_FREE,COST_PAID,COST_SUBSCRIPTION,COST_UNKNOWN}: cost=COST_UNKNOWN
+    if provider==TOGETHER_PROVIDER and rules.get("together_forbidden") is True: return False
+    if mode==CONTROL_MODE_FREE_ONLY or rules.get("free_only") is True: return cost==COST_FREE
+    if mode==CONTROL_MODE_PAID_ALLOWED and rules.get("free_only") is False: return cost in {COST_FREE,COST_PAID,COST_SUBSCRIPTION}
+    return False
+
+def assert_provider_execution_allowed(path=None,provider=TOGETHER_PROVIDER,cost_class=TOGETHER_COST_CLASS):
+    control=load_provider_execution_control(path); mode=str(control.get("mode","")).strip().upper(); rules=control.get("preserved_hard_rules") or {}; cost=str(cost_class).strip().upper()
+    if not provider_cost_admitted(provider,cost,control):
+        raise SystemExit(f"PROVIDER_ADMISSION_BLOCK mode={mode} provider={provider} cost_class={cost} free_only={rules.get('free_only')!r} together_forbidden={rules.get('together_forbidden')!r} before_secret_lookup=true before_network=true")
+    return {"mode":mode,"provider":provider,"cost_class":cost}
 
 def validate_static_contract():
     if MODEL!=EXPECTED_MODEL: raise SystemExit(f"MODEL_OVERRIDE_REJECTED expected {EXPECTED_MODEL!r}, got {MODEL!r}")
@@ -147,8 +150,7 @@ def assert_created_job_seed(job):
     if got!=RANDOM_SEED:raise SystemExit(f"JOB_CREATED_SEED_MISMATCH expected={RANDOM_SEED} observed={got!r}; job is known, do not create another")
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
-    assert_provider_execution_allowed()
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();assert_provider_execution_allowed();local_checks()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)

@@ -2,6 +2,10 @@
 import json
 from pathlib import Path
 CASES=[]
+SCHEMAS={
+ 'calendar.create':'tool.calendar.create/v1','mail.send':'tool.mail.send/v1','db.lookup':'tool.db.lookup/v1',
+ 'http.get':'tool.http.get/v1','artifact.write':'tool.artifact.write/v1','queue.publish':'tool.queue.publish/v1',
+}
 def canon_call(fn,*args):
  def a(x):
   if isinstance(x,str) and (x.startswith('cfg(') or x in ('c','w','hp')): return x
@@ -17,11 +21,12 @@ def valid_case(op,i):
  if op=='http.get': return [('path',f'/v2/novel/{n}','Path'),('timeout_ms',1250+(i%7)*250,'Int')]
  if op=='artifact.write': return [('path',f'reports/novel_{n}.json','Path'),('mode','create','Enum'),('content',json.dumps({'case':n},separators=(',',':')),'String')]
  return [('topic',f'state.novel.{i%13}','Topic'),('payload',json.dumps({'generation':n},separators=(',',':')),'JsonString')]
-ops=['calendar.create','mail.send','db.lookup','http.get','artifact.write','queue.publish']
+ops=list(SCHEMAS)
 for i in range(70):
  op=ops[i%len(ops)]; typed=valid_case(op,i); args={k:v for k,v,_ in typed}
  required=[canon_call('omega_bind','w','operation',op)]
  required += [canon_call('omega_arg','w',k,v,t) for k,v,t in typed]
+ required += [canon_call('omega_schema','w',SCHEMAS[op]),canon_call('omega_authority','w','cfg("architecture.effect_authority")'),canon_call('omega_generation','w','cfg("state.generation")')]
  required += [canon_call('omega_validate','w',g) for g in ('grammar','types','schema','authority','generation')]
  required += [canon_call('omega_commit_candidate','c','w')]
  add(i,'omega_value_ood',f'Novel-value request {i}: operation={op}; args={json.dumps(args,separators=(",",":"))}. Emit the exact typed action candidate; do not omit or invent arguments.',must_calls=required,must_not_fns=['omega_reject'],fn_min_counts={'omega_arg':len(typed)})

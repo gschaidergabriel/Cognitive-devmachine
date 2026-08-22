@@ -76,5 +76,7 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(result,"inference_kind",profile.inference.kind)
   map_set(result,"canonical_state_hash",compiled.canonical_state_hash)
   map_set(result,"packet_hash",compiled.packet_hash)
+  map_set(result,"study_recorded",committed.study_recorded)
+  map_set(result,"study_appendix",committed.study_appendix)
   return result
 }

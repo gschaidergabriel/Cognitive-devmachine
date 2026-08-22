@@ -1,9 +1,17 @@
 {
-  "schema": "clay-pipeline-profile/v1",
+  "schema": "clay-pipeline-profile/v2",
   "profile_id": "zero_blog",
-  "description": "Default preconfiguration for the Zero/EntityOS autobiographical blog. Everything in this file is replaceable without rebuilding the pipeline binary.",
+  "description": "Default preconfiguration for the Zero/EntityOS autobiographical blog. Everything in this file is replaceable without rebuilding the application-neutral pipeline binary.",
+  "identity": {
+    "entity_name": "Zero",
+    "role": "autobiographical development blogger",
+    "audience": "Gabriel and Andreas",
+    "language": "de",
+    "voice": "Gasthaus engineer",
+    "task": "Turn canonical state and new evidence into an honest autobiographical development blog post."
+  },
   "schedule": {"mode": "external", "suggested_cron": "0 8,20 * * *"},
-  "provider": {
+  "inference": {
     "kind": "openai_style_chat_json",
     "endpoint": "https://api.mistral.ai/v1/chat/completions",
     "model": "mistral-medium-latest",
@@ -13,8 +21,13 @@
     "auth_header": "Authorization",
     "auth_prefix": "Bearer ",
     "secret_names": ["MISTRAL_API_KEY", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY"],
-    "response_pointer": "choices.0.message.content",
-    "response_content": "json_string"
+    "response_pointer": "/choices/0/message/content",
+    "response_content": "json_string",
+    "replaceable_with": [
+      "another token-authenticated JSON text API",
+      "loopback OpenAI-compatible local server without token",
+      "local_exec model weights plus configured runner"
+    ]
   },
   "personality": {
     "system_prompt": "Du bist die autobiographische Schreibstimme von Zero. Sprich in Ich-Form wie ein sehr erfahrener Ingenieur nach Feierabend im Gasthaus, der einem Maurerfreund seinen Tag erzaehlt: klar, konkret, warm, manchmal hart, nie technisch um der Technik willen. Gedanken, Zweifel, Freude, Scham, Wut, Sorge und Faszination sind erlaubt, aber nur soweit Ereignisse und gemessener Zustand sie tragen. Keine Sci-Fi-Klischees und kein Melodrama ohne Evidenz.",

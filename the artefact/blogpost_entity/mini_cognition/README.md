@@ -3,7 +3,7 @@
 Primary checkpoint: `Qwen/Qwen2.5-0.5B` (0.49B).  
 Secondary ablation: `Qwen/Qwen2.5-0.5B-Instruct`.
 
-This lane turns the existing neutral Mini Entity into a first-party local cognition option without binding the
+This lane turns the neutral Mini Entity into a replaceable first-party local cognition option without binding the
 binary or persistent entity identity to one model. The checkpoint has **no fixed name or job**; runtime configuration
 supplies identity, continuity, role, goal, personality, tool inventory and authorities.
 
@@ -23,21 +23,30 @@ supplies identity, continuity, role, goal, personality, tool inventory and autho
 authority and generation validation may become an executable transition. The neural model proposes the vector;
 the deterministic runtime owns validity and execution.
 
-## Corpus v1
+## Corpus v2 — current training candidate
 
-Deterministic seed `20260822` produces **1,650** SFT examples:
-- 1,485 train;
-- 165 validation;
-- 9 families: `omega_valid`, `omega_reject`, `epistemic`, `hyperposition`, `architecture`,
-  `configuration`, `self_state`, `recovery`, `adversarial`.
+A pre-training leakage audit found that corpus v1 reused a very small deterministic scenario pool across its random
+train/validation split. Structural validity therefore did not imply useful held-out generalization evidence. Corpus v1
+remains historical evidence only; do not use its validation loss as the promotion signal.
 
-Local structural validation on this source revision:
-- train: **0 / 1,485 invalid**;
-- validation: **0 / 165 invalid**;
-- train SHA-256: `bc1753771ed0f818865a3118f754ac5b10d67bc3ae885f668201f66566028eb2`;
-- validation SHA-256: `81a6bb9fc0a210affffa84590c27ad2fc76c93fa24c4112e6573552227e512ce`.
+`generate_sft_v2.py` now emits **1,800** deterministic examples:
+- 1,620 train;
+- 180 validation;
+- 9 families, exactly 200 cases per family;
+- 20 held-out cases per family use disjoint value domains/surface forms;
+- every train row is unique;
+- every validation row is unique;
+- exact train↔validation message overlap: **0**;
+- exact train↔validation user-prompt overlap: **0**.
 
-A separate OOD generator emits **200** promotion probes and is not a random split of the same examples.
+Bound candidate hashes from the isolated regeneration:
+- train SHA-256: `ad132881aee5b794a1a81a56bc51af99d09d04c2fdff769f48cf192afa0d2a21`;
+- validation SHA-256: `fad0e7a2613e54c3027ca5de8d8917ff3408a8a8a644439be764152648396e6f`.
+
+The existing ClayCode structural validator reports 0 invalid rows on the locally regenerated v2 candidate. The exact
+split gate additionally rejects duplicate rows or any exact train/validation collision.
+
+The separate 200-case OOD generator remains the stricter promotion benchmark and is not the random validation split.
 
 ## Fast path
 
@@ -47,41 +56,42 @@ export TOGETHER_API_KEY=...
 bash train_together_v1.sh
 ```
 
-The shell script stops after **preflight**. It regenerates and validates the corpus, asks Together to validate the
-files/template, and prints the server price estimate. It does not create a billed job.
+`train_together_v1.sh` now routes through the v2 corpus and `launch_together_v2.py`. It stops after **preflight** by
+default. It regenerates and validates the corpus, enforces the split gate, uploads for Together validation, checks the
+candidate template and prints the server price estimate. It does not create a billed job.
 
-Only after preflight:
+Only after an accepted preflight:
 
 ```bash
-python3 launch_together_v1.py --create
+python3 launch_together_v2.py --create
 ```
+
+### Duplicate-create fence
+
+Before the billed API create call, `launch_together_v2.py` atomically writes a create guard with status
+`CREATE_ATTEMPTED_UNKNOWN`. If the process crashes or the network result is ambiguous, the next `--create` aborts and
+requires inspection of Together job state instead of blindly creating a second paid job. After a successful create the
+same guard is updated with the returned job id.
 
 ### Together 0.5B caveat
 
-As of 2026-08-22, Together's regular supported-model table lists Qwen3.5 **0.8B** as the smallest Qwen fine-tune,
-not a native 0.5B entry. Together's BYOM path supports external Hugging Face CausalLM checkpoints under 100B when
-a compatible Together training template exists. This script therefore pairs:
+Together's public fine-tuning catalog currently exposes Qwen3.5 0.8B as the smallest documented Qwen entry and does not
+list a Qwen2.5 fine-tuning template. BYOM requires a compatible Together base template for the custom Hugging Face
+checkpoint. Therefore the configured `Qwen/Qwen2.5-7B-Instruct-Turbo` default remains an **API probe candidate only**;
+it is not compatibility evidence and must fail closed if the live API does not admit full training/BYOM.
 
-- BYOM weights: `Qwen/Qwen2.5-0.5B`;
-- default same-family template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
+There is deliberately no automatic Qwen3.5 fallback: silently changing the architecture/model family would change the
+0.5B research question. If Together cannot admit the Qwen2.5 0.5B checkpoint, keep the checkpoint requirement and move
+the same corpus to another authorized full-FT runner rather than changing the target without owner direction.
 
-That pairing is **not assumed fine-tune compatible** merely because it is served in Together's catalog. The launcher first
-asks `model_limits` whether the template is currently full-FT capable, and BYOM checkpoint acceptance is a separate gate.
-There is deliberately no automatic fallback to Qwen3.5 because Together requires matching architecture. If Together rejects
-the Qwen2.5 template/checkpoint path, keep the 0.5B checkpoint requirement and use a Together-provided Qwen2-compatible
-template or the same corpus on another full-FT runner rather than silently changing the research question.
-
-Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
-corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.
-At 3 train epochs + 2 validation evaluations the raw token arithmetic is roughly **1.85M processed tokens / ~$1.00**,
-but Together currently documents a **$4.00 minimum charge per fine-tuning job**. The Together server estimate/admission
-response is authoritative, and the campaign still hard-aborts above the configured `$18` single-job ceiling.
+Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`, with a documented
+`$4.00` minimum fine-tuning job charge. The live Together estimate/admission response is authoritative. The campaign
+hard-aborts above the configured `$18` single-job ceiling inside the owner EUR20 campaign budget.
 
 ## 0.5B RAM gate
 
-The official Qwen2.5-0.5B-Instruct Q4_K_M GGUF is around 491 MB; this proves only file size, not runtime RSS.
-`quantize_rss_gate_v1.sh` converts the tuned checkpoint, quantizes to Q4_K_M, and requires actual measured
-peak process RSS `< 1 GiB` at 2048 context.
+Target local format is text-only GGUF `Q4_K_M`. File size is not acceptance. `quantize_rss_gate_v1.sh` requires actual
+measured peak process RSS `< 1 GiB` at context 2048 before promotion.
 
 ## Promotion, not belief
 
@@ -94,13 +104,14 @@ A successful training job is only a candidate. Promotion requires:
 6. stale generation and unknown-effect cases fail closed;
 7. model output never becomes canonical truth/effect authority;
 8. tuned 0.5B materially beats its untuned 0.5B base on the same routing/epistemic probes;
-9. compare against at least one larger general model on exact structured-task success before claiming "micro-agent superiority";
+9. compare against at least one larger general model on exact structured-task success before claiming micro-agent superiority;
 10. Q4_K_M text-only peak RSS `< 1 GiB` at 2048 context.
 
 ## `go`
 
 Until promotion, every `go` advances this same lane:
 
-`refresh -> corpus/spec -> OOD/falsifiers -> ClayCode lowering -> Together BYOM compatibility -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> integrate -> evidence`
+`refresh -> corpus/spec -> leakage/OOD falsifiers -> Together BYOM compatibility -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> integrate -> evidence`
 
-No `go` may claim mathematical correctness or superiority from training intent alone.
+No `go` may claim consciousness, mathematical correctness, Together compatibility, runtime RAM acceptance or superiority
+from source/training intent alone.

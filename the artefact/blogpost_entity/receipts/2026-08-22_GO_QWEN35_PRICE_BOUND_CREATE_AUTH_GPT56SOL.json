@@ -1,0 +1,61 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "74df26466781dedc73367cf66de87b964fc9bb61",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "paid_training_base": "Qwen/Qwen3.5-0.8B",
+  "finding": {
+    "class": "CREATE_AUTHORIZATION_COST_DRIFT_GAP",
+    "current_base_launcher_blob": "26af8f19ef217b3a93e1baa1e8ab316432b53ce3",
+    "mechanism": "The billed-create confirmation binds only the deterministic campaign fingerprint. The live provider price estimate is not part of the confirmation value, so the same owner confirmation can survive a later live price change as long as the estimate remains below the USD 18 hard cap.",
+    "owner_contract_impact": "Fresh explicit cost/run authorization is not bound to the exact live preflight cost."
+  },
+  "unusual_experiment": {
+    "name": "PRICE_DRIFT_AFTER_PREFLIGHT",
+    "count_for_this_go": 1,
+    "intervention": "Authorize one unchanged campaign fingerprint at USD 4.00, then change only the live estimate to USD 17.99.",
+    "legacy_observation": "The pre-repair confirmation predicate still accepts the same fingerprint because price is not an input.",
+    "result": "FALSIFIED_COST_BINDING",
+    "scope": "source/mechanism falsifier only; no provider billing event"
+  },
+  "repair": {
+    "launcher_blob": "2627b72fadb3572d8a2e757ebeec95959263cb39",
+    "test_blob": "790f579f9e3a1cc9da9be4bc44719515f2555241",
+    "preserved_parallel_repairs": [
+      "canonical validate_corpus_v2.py local corpus gate",
+      "full provider-created training identity verification including suffix, checkpoints, learning rate, warmup, training method and Full training type"
+    ],
+    "changes": [
+      "replace CLAYCOG_CREATE_FINGERPRINT with CLAYCOG_CREATE_AUTHORIZATION",
+      "derive SHA-256 create authorization from campaign_fingerprint plus canonical live estimated_usd",
+      "require exact authorization only after the current live estimate and budget gate",
+      "emit preflight schema v3 including create_authorization",
+      "persist authorized_estimated_usd and create_authorization in create-intent schema v3",
+      "fail closed on NaN, infinity and negative price estimates",
+      "force fresh authorization whenever live price changes"
+    ]
+  },
+  "isolated_exact_blob_evidence": {
+    "environment": "authorized isolated ChatGPT Linux container",
+    "candidate_launcher_git_blob": "2627b72fadb3572d8a2e757ebeec95959263cb39",
+    "candidate_test_git_blob": "790f579f9e3a1cc9da9be4bc44719515f2555241",
+    "git_blob_identity_matched_written_branch": true,
+    "py_compile": "PASS",
+    "candidate_regression": "13/13 PASS",
+    "provider_network_called": false,
+    "together_secret_used": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "execution_admission_context": {
+    "github_runner": "Recent exact 0.8B workflow attempts were independently recorded as zero-step admission failures; no test-failure credit is inferred.",
+    "vercel_sandbox_exec_surface": "not exposed through the currently available connector",
+    "exact_whole_repository_runtime_credit": "UNOBSERVED"
+  },
+  "evidence_boundary": "MECHANISM_SUPPORTED_EXACT_BLOBS. This receipt does not claim authenticated Together admission, provider preflight, billed training, tuned-model quality, Q4_K_M, RSS <1 GiB, generic local_exec integration, exact-current whole repository CI, or whole Mini Entity acceptance.",
+  "next": "Run exact PR CI if an executor actually starts. With an authorized environment-only Together secret, run preflight-only model_limits, server-side file validation and live price estimation. Never create a billed job without a fresh owner authorization for the exact live price-bound authorization token."
+}

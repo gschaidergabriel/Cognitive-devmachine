@@ -18,7 +18,6 @@ unproven until Together accepts the create request/checkpoint.
 """
 import argparse, json, os, subprocess, sys, time
 from pathlib import Path
-from together import Together
 
 HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v1.jsonl"
@@ -101,6 +100,9 @@ def main():
     template=resolve_template(args.template)
 
     run_local_checks()
+    # Keep the pure admission helpers importable/testable without installing Together.
+    # Network SDK admission begins only after local deterministic gates have passed.
+    from together import Together
     client=Together()
     limits=client.fine_tuning.model_limits(model_name=template)
     if not getattr(limits,"supports_full_training",False):

@@ -1,0 +1,61 @@
+{
+  "schema": "mini-entity-native-go-fusion/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main_sha": "bfd318c6f35a0b8b32b60c7cbaa404801f22c997",
+  "base_main_tree": "e4368b07f6d82a38b603aefe7f4b2f644d90a18c",
+  "fusion_commit": "960fb80152bc89b97d870fdfb3f2c642d890e394",
+  "fusion_branch": "gpt56sol/go-native-07-fresh-main-fusion-20260822-1511",
+  "donor": {
+    "pr": 764,
+    "head_sha": "bb214299d89ad4d75a5cebd51e3969a5f54fb501",
+    "note": "stale/diverged donor was not merged; exact donor blobs were overlaid only where current-main comparison showed the intended unresolved native gates. Presentation-neutral part03 and its regression were already byte-identical on main and were not duplicated."
+  },
+  "source_delta": {
+    "mini_entity.c": "0bbe2dca752c2699632e39a11c3ea1f92b6424f7",
+    "mini_entity_gate.inc": "25eef63b800ae4ada265c13cb0fd341258421716",
+    "mini_entity_part02.inc": "2e69fdb285a42ff29ba29d224855cdd455b6b36a",
+    "mini_entity_part04.inc": "4171002536609fb08254d64815bcef45f78ee2eb",
+    "test_build_native_bound.py": "f810b7e2d2f78904fb7a5fd17bbbf221d151b499",
+    "test_native_metric_div0_unknown.py": "38fad1815ef52252badd96fee926249547d66355",
+    "test_native_runtime_guards.py": "05a4a6bc4c2d13d9f3b142054819598705323e66",
+    "test_native_semantic_gate.py": "3a72d70f6cf22b90b0ed8260667578cb99e9a0b9",
+    "removed_obsolete_test": "the artefact/blogpost_entity/native/test_native_semantic_admission_source.py"
+  },
+  "native_convergence": {
+    "binary_presentation_neutrality": "ALREADY_ON_BASE_MAIN_BYTE_IDENTICAL_TO_DONOR",
+    "local_exec_parent_environment_secret_isolation": "FRESH_MAIN_SOURCE_CANDIDATE",
+    "canonical_profile_v2_pipeline_gate": "FRESH_MAIN_SOURCE_CANDIDATE_REPLACES_TEMPORARY_TOTAL_BLOCK",
+    "atomicity_and_generation_cas": "MUST_BE_RERUN_ON_FUSION_BYTES"
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "id": "DIV_ZERO_METRIC_UNKNOWN_FALSIFIER",
+    "hypothesis": "the candidate native expression evaluator incorrectly collapses division by zero to an admitted numeric zero, violating UNKNOWN != ZERO",
+    "candidate_observation": "candidate ok=1 value=0.0",
+    "counterfactual_repair_observation": "repaired ok=0 value=-1.0",
+    "result": "FALSIFIED_CANDIDATE_BEHAVIOR_AND_REPAIRED_SOURCE",
+    "repair": "native_eval_expr returns failure when denominator is zero, causing the metric to remain UNKNOWN",
+    "regression": "test_native_metric_div0_unknown.py requires UNVERIFIED_STATE_CLAIM_NO_COMMIT and no generation/output/study/event-consumption mutation"
+  },
+  "execution_evidence": {
+    "bounded_mechanism_probe": "PASS",
+    "exact_fusion_checkout_build": "BLOCKED_IN_AVAILABLE_ISOLATED_CONTAINER_DNS_GITHUB_UNREACHABLE",
+    "exact_fusion_source_bound_runtime_matrix": "NOT_EXECUTED",
+    "github_actions_runtime_credit": "NONE_AT_RECEIPT_CREATION",
+    "promotion_scope": "SOURCE_CANDIDATE_PLUS_BOUNDED_FALSIFIER_ONLY"
+  },
+  "cognition_lane_refresh": {
+    "current_main_commit": "bfd318c6f35a0b8b32b60c7cbaa404801f22c997",
+    "main_delta": "current main now includes a fail-closed Qwen2.5-0.5B versus Qwen3.5-0.8B BYOM architecture discriminator",
+    "together_public_catalog_observation": "Qwen/Qwen3.5-0.8B is directly listed for LoRA and Full Fine-tuning; no 1B Qwen entry was found in the current supported fine-tuning table",
+    "owner_target": "Qwen/Qwen2.5-0.5B remains canonical until an explicit owner directive changes it",
+    "paid_provider_call_this_go": false,
+    "training_job_started_this_go": false,
+    "spend_usd_this_go": 0
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "run the source-bound builder and secret/semantic/div-zero/neutrality plus rollback/CAS matrix on the exact fresh-main fusion branch; only then consider replacing the three historical blockers with executable PASS evidence"
+}

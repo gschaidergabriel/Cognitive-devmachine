@@ -43,3 +43,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_eval_exact_vector_v1.py'
+      - name: Run real-call OOD semantic falsifier
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_call_semantics_v2.py'

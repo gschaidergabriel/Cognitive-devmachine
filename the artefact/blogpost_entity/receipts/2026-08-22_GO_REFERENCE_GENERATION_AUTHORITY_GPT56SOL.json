@@ -1,0 +1,58 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "macrocycle_id": "go-20260822T1949+07-gpt56sol-mini-reference",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "authority": {
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md"
+  },
+  "main_join": {
+    "source_sha": "c56b4f8a5358391dad1897b29d8f5beed929fc0c",
+    "source_tree": "fb2cbd103d9c2dced82f6eafa65aacfa7950e6b0"
+  },
+  "observation": {
+    "native_generation_authority": "entity_state.generation",
+    "native_cas": "UPDATE entity_state SET generation=?,updated_at=? WHERE id=1 AND generation=?",
+    "legacy_reference_generation_authority": "eos_pipeline_state.generation",
+    "legacy_reference_state_read": "SELECT * FROM eos_pipeline_state WHERE singleton=1",
+    "risk": "A converged reference implementation could preserve a second independently advancing generation/CAS authority unless fresh-main fusion explicitly binds generation to native entity_state."
+  },
+  "delta": {
+    "test": "the artefact/blogpost_entity/test_reference_generation_authority_invariant.py",
+    "activation": "AUTO_ONCE__pipeline_profile_read_APPEARS_OR_PARITY_METADATA_TURNS_GREEN",
+    "policy": "Native entity_state.generation is the sole live generation/CAS authority. A reference continuity/cursor projection may exist but may not own a second generation counter.",
+    "status": "FAIL_CLOSED_AUTO_ACTIVATING_SOURCE_GATE"
+  },
+  "cognition_lane_implication": "API/local_exec/~0.8B checkpoint switching remains cognition-only and may not reset, fork or independently advance persistent entity generation.",
+  "coordination": {
+    "profile_authority_guard": "PR #973 merged before this fresh-main rebind",
+    "runtime_candidate": "PR #966 remains draft/blocked until it reuses existing profile and generation authorities",
+    "additional_runtime_path_created": false
+  },
+  "unusual_experiment": {
+    "additional_count": 0,
+    "global_slot": "RFC6901_RESPONSE_POINTER_REAL_PROFILE_FALSIFIER",
+    "note": "This delta is deterministic source/architecture adjudication only."
+  },
+  "execution": {
+    "exact_product_runtime": "UNOBSERVED",
+    "authorized_isolated_runtime_credit": 0,
+    "github_runner_observation": "available failed job reported steps=null; admission/control-plane failure is not semantic test failure",
+    "provider_network_call": false,
+    "together_training_started": false,
+    "spend_usd": 0
+  },
+  "evidence_boundary": {
+    "authority_fork_risk": "SOURCE_CONFIRMED",
+    "guard": "SOURCE_CANDIDATE",
+    "reference_runtime_repair": "OPEN",
+    "native_profile_v2": "FAIL_CLOSED",
+    "approximately_1b_cognition_promotion": "OPEN",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_step": "Repair the narrow reference path on fresh main so profile authority and live generation/CAS both reuse native MiniUnifiedDB entity_state/profiles; preserve v4 donor guards, RFC6901, value-only recursive leak scan and explicit local_exec child environment; then obtain actually-started exact-source isolated execution before parity or local-model promotion."
+}

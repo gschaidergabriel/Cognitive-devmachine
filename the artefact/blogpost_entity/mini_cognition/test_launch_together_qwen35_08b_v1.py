@@ -15,15 +15,28 @@ class TogetherCtor:
     def __init__(self,**kw):type(self).last=kw
 class Tests(unittest.TestCase):
     def setUp(self):
-        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
+        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov,self.oc=m.TRAIN,m.VALID,m.CONTROL_PATH;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.CONTROL_PATH=r/"control.json";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
     def tearDown(self):
-        m.TRAIN,m.VALID=self.ot,self.ov;self.t.cleanup()
+        m.TRAIN,m.VALID,m.CONTROL_PATH=self.ot,self.ov,self.oc;self.t.cleanup()
         if self.c is None:os.environ.pop(m.CREATE_CONFIRM_ENV,None)
         else:os.environ[m.CREATE_CONFIRM_ENV]=self.c
         if self.l is None:os.environ.pop(m.CREATE_LEDGER_DIR_ENV,None)
         else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
     def test_model_and_direct_campaign(self):
         self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
+    def test_free_only_rejects_from_canonical_control(self):
+        m.CONTROL_PATH.write_text(json.dumps({"mode":"FREE_ONLY"}))
+        self.assertEqual(m.active_research_mode(),"FREE_ONLY")
+        with self.assertRaisesRegex(SystemExit,"FREE_ONLY_PROVIDER_REJECTED_BEFORE_SECRET_OR_NETWORK"):m.assert_provider_execution_admitted()
+    def test_free_only_guard_precedes_secret_lookup_in_main(self):
+        source=(HERE/"launch_together_qwen35_08b_v1.py").read_text(encoding="utf-8").split("def main():",1)[1]
+        self.assertLess(source.index("assert_provider_execution_admitted()"),source.index('os.environ.get("TOGETHER_API_KEY")'))
+    def test_missing_or_malformed_control_fails_closed(self):
+        with self.assertRaisesRegex(SystemExit,"PROVIDER_CONTROL_UNRESOLVED"):m.assert_provider_execution_admitted()
+        m.CONTROL_PATH.write_text("not-json")
+        with self.assertRaisesRegex(SystemExit,"PROVIDER_CONTROL_UNRESOLVED"):m.assert_provider_execution_admitted()
+        m.CONTROL_PATH.write_text("{}")
+        with self.assertRaisesRegex(SystemExit,"PROVIDER_CONTROL_MODE_MISSING"):m.assert_provider_execution_admitted()
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

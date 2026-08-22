@@ -145,22 +145,26 @@ class ProfilePipelineRuntime(clay.Runtime):
             raise PipelineFault("PIPELINE_INIT_FAILED:" + str(init.get("error", "unknown")))
         raw = _canonical_json(profile)
         digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
-        now = time.time()
+        now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         db = self._db(entity_db)
         try:
             db.execute("BEGIN IMMEDIATE")
-            if activate:
-                db.execute("UPDATE eos_pipeline_profiles SET active=0 WHERE active=1")
             db.execute(
-                """INSERT INTO eos_pipeline_profiles(profile_id,profile_json,profile_hash,active,updated_at)
-                   VALUES(?,?,?,?,?)
+                """INSERT INTO profiles(profile_id,profile_json,profile_sha256,updated_at)
+                   VALUES(?,?,?,?)
                    ON CONFLICT(profile_id) DO UPDATE SET
                      profile_json=excluded.profile_json,
-                     profile_hash=excluded.profile_hash,
-                     active=excluded.active,
+                     profile_sha256=excluded.profile_sha256,
                      updated_at=excluded.updated_at""",
-                (str(profile["profile_id"]), raw, digest, 1 if activate else 0, now),
+                (str(profile["profile_id"]), raw, digest, now),
             )
+            if activate:
+                row = db.execute(
+                    "UPDATE entity_state SET active_profile=?,updated_at=? WHERE id=1",
+                    (str(profile["profile_id"]), now),
+                )
+                if row.rowcount != 1:
+                    raise PipelineFault("ENTITY_STATE_MISSING")
             db.commit()
             return digest
         except Exception:
@@ -224,14 +228,17 @@ class ProfilePipelineRuntime(clay.Runtime):
                       cursors_json TEXT NOT NULL DEFAULT '{}',
                       updated_at REAL NOT NULL DEFAULT 0);
                     INSERT OR IGNORE INTO eos_pipeline_state(singleton) VALUES(1);
-                    CREATE TABLE IF NOT EXISTS eos_pipeline_profiles(
+                    CREATE TABLE IF NOT EXISTS entity_state(
+                      id INTEGER PRIMARY KEY CHECK(id=1),
+                      generation INTEGER NOT NULL,
+                      active_profile TEXT,
+                      created_at TEXT NOT NULL,
+                      updated_at TEXT NOT NULL);
+                    CREATE TABLE IF NOT EXISTS profiles(
                       profile_id TEXT PRIMARY KEY,
                       profile_json TEXT NOT NULL,
-                      profile_hash TEXT NOT NULL,
-                      active INTEGER NOT NULL DEFAULT 0 CHECK(active IN (0,1)),
-                      updated_at REAL NOT NULL);
-                    CREATE UNIQUE INDEX IF NOT EXISTS eos_pipeline_one_active_profile
-                      ON eos_pipeline_profiles(active) WHERE active=1;
+                      profile_sha256 TEXT NOT NULL,
+                      updated_at TEXT NOT NULL);
                     CREATE TABLE IF NOT EXISTS eos_pipeline_consumed(
                       source_kind TEXT NOT NULL,
                       source_id TEXT NOT NULL,
@@ -258,6 +265,11 @@ class ProfilePipelineRuntime(clay.Runtime):
                       canonical_hash TEXT NOT NULL);
                     """
                 )
+                now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                db.execute(
+                    "INSERT OR IGNORE INTO entity_state(id,generation,active_profile,created_at,updated_at) VALUES(1,0,NULL,?,?)",
+                    (now, now),
+                )
             return {"ok": True}
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
@@ -266,15 +278,19 @@ class ProfilePipelineRuntime(clay.Runtime):
         try:
             with self._db(str(p["entity_db"])) as db:
                 rows = db.execute(
-                    "SELECT profile_id,profile_json,profile_hash FROM eos_pipeline_profiles WHERE active=1"
+                    "SELECT p.profile_id,p.profile_json,p.profile_sha256 "
+                    "FROM entity_state e JOIN profiles p ON p.profile_id=e.active_profile WHERE e.id=1"
                 ).fetchall()
             if len(rows) != 1:
                 raise PipelineFault("NO_ACTIVE_PROFILE" if not rows else "MULTIPLE_ACTIVE_PROFILES")
             row = rows[0]
-            profile = self._validate_profile(json.loads(row["profile_json"]))
-            observed = _profile_digest(profile)
-            if observed != str(row["profile_hash"]):
+            raw = str(row["profile_json"])
+            observed = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+            if observed != str(row["profile_sha256"]):
                 raise PipelineFault("PROFILE_HASH_MISMATCH")
+            profile = self._validate_profile(json.loads(raw))
+            if str(profile.get("profile_id")) != str(row["profile_id"]):
+                raise PipelineFault("PROFILE_ID_MISMATCH")
             return {"ok": True, "profile": profile, "profile_hash": observed}
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}

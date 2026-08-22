@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-22T13:36:43Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T14:06:43Z aus dem Clay-Korpus.
 
-- **kern** (800 Artikel, 665 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2544 Artikel, 1442 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **kern** (800 Artikel, 663 KB): der Systemname steht im Titel. Volltext.
+- **umfeld** (2514 Artikel, 1428 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -89,8 +89,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures** — `baunotiz-bauverlauf-a769c7cb4251dd7fc691` · baunotiz
 - **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-bauverlauf-149b5825ec3e9860e2a5` · baunotiz
 - **artifact: regress ClayVerse startup without EntityOS sidecar** — `baunotiz-git-4493d676edb96ab696f2ecc70b0221b` · baunotiz
-- **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-git-5156d2bb95bd5f4d10828e1530ca917` · baunotiz
 - **artifact: embed digest-pinned EntityOS in ClayVerse image** — `baunotiz-git-6fa8fa63610470e25bd2a78d59529e2` · baunotiz
+- **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-git-5156d2bb95bd5f4d10828e1530ca917` · baunotiz
 - **Stufe 0: entityos_runtime.clay -- ClayCode an EntityOS angepasst (Frank->EntityOS Umbenennungen, Rec** — `baunotiz-bauverlauf-226b587737b32f292f48` · baunotiz
 - **docs(clayverse): refresh living state after EntityOS bridge component run** — `baunotiz-git-aabfc8a02ad8c3735bb5b7a8f3d7fc3` · baunotiz
 - **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `bau-entityos-1fa4e2d9c80f` · bau

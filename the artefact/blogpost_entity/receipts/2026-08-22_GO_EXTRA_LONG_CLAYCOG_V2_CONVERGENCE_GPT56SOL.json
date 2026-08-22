@@ -1,0 +1,137 @@
+{
+  "schema": "clay-go-extra-long-convergence/v1",
+  "date": "2026-08-22",
+  "trigger": "go extra lang",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "initial_join_sha": "62b292a8097c5b53731ef6804704cf9938872616",
+  "state_sync_branch_base_sha": "7bb03d7186e2c664e26ca29ae696db330b3c7a5c",
+  "latest_main_observed_before_receipt": "afbca677205ad54e5080afe0443e3092773615e2",
+  "owner_checkpoint": "Qwen/Qwen2.5-0.5B",
+  "owner_ablation": "Qwen/Qwen2.5-0.5B-Instruct",
+  "current_canonical_training_input": {
+    "schema": "claycog-sft/v2",
+    "examples": 1650,
+    "train": 1485,
+    "validation": 165,
+    "train_unique": 1485,
+    "validation_unique": 165,
+    "exact_cross_split_overlap": 0,
+    "prompt_cross_split_overlap": 0,
+    "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+    "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+    "main_merge": "196115125d6fde4f78bdbcf4af6604517a86292e",
+    "v1_status": "REJECTED_AS_PAID_TRAINING_INPUT_DUPLICATE_HEAVY_VALIDATION_LEAKAGE"
+  },
+  "main_convergence_observed_during_cycle": [
+    {
+      "sha": "f231b2d93893eccf8a91850ba0512908456995f9",
+      "result": "deterministic Together campaign fingerprint and duplicate-create guard"
+    },
+    {
+      "sha": "1f9f3d0455c87b2ea67b0665a3131871d0c3b69c",
+      "result": "atomic local create-intent ledger, zero-retry billed CREATE and UNKNOWN_REMOTE_CREATE fail-closed behavior"
+    },
+    {
+      "sha": "196115125d6fde4f78bdbcf4af6604517a86292e",
+      "result": "duplicate-heavy SFT v1 rejected and leakage-free SFT v2 made canonical training input"
+    },
+    {
+      "sha": "3edb31e824404eb7c42f8cb721af27cc83c98794",
+      "result": "SFT v2 fused with canonical runtime-binding validator"
+    },
+    {
+      "sha": "6a0eb97661133cc688ba321b2e4d23003c5eada7",
+      "result": "Together BYOM contract interpretation corrected: architecture must match; size should be closest available rather than necessarily exact"
+    },
+    {
+      "sha": "afbca677205ad54e5080afe0443e3092773615e2",
+      "result": "exact typed omega OOD promotion bypass closed"
+    }
+  ],
+  "unusual_experiment": {
+    "count": 1,
+    "name": "BYOM_TEMPLATE_SIZE_MISMATCH_TRAP",
+    "scope": "bounded local conservative pre-network gate",
+    "observation": "the then-configured 7B template was rejected against the required 0.49B checkpoint before network construction",
+    "later_contract_correction": "Current Together BYOM documentation does not require exact parameter-size equality. It requires architecture match and choosing size as close as the catalog allows. Therefore this experiment is retained only as a conservative local falsifier of the stale 7B assumption, not as proof of Together provider law.",
+    "second_unusual_experiment_performed": false
+  },
+  "ordinary_mechanism_regressions": {
+    "validator_cases": 6,
+    "results": [
+      "renamed same-bound omega accepted",
+      "gates bound to wrong omega rejected",
+      "comment smuggling rejected",
+      "reject plus commit rejected",
+      "free prose rejected",
+      "unknown call rejected"
+    ],
+    "credit": "bounded mechanism slice only; stronger canonical validator/OOD lanes subsequently fused on main"
+  },
+  "parallel_fusion": {
+    "old_pr_771": "closed/superseded; no duplicate canonical lane retained",
+    "fresh_pr_785_unique_delta": "variable-neutral unseen-tool evaluator donated so correct omega variable renaming cannot be penalized as memorization",
+    "donor_commits": [
+      "bea83096f2301fe293428eac7b3c8c0fc475aadf",
+      "2920e0a030ddea4dbae27ad93167e2942d2bead3"
+    ],
+    "validator_adjudication": "parallel fused/canonical validator work is stronger than the temporary donor validator branch; donor branch is not proposed as canonical implementation"
+  },
+  "together_provider_status": {
+    "public_primary_contract": "Current Together BYOM docs require architecture-compatible training template and closest available size/context subject to service admission.",
+    "public_full_ft_catalog": "No Qwen2/Qwen2.5 Full-FT template observed; documented Qwen full-FT rows are Qwen3.5/Qwen3.6 family.",
+    "qwen3_5_0_8b_substitution": "REJECTED_AS_DIFFERENT_ARCHITECTURE_AND_DIFFERENT_RESEARCH_QUESTION",
+    "qwen2_5_7b_old_candidate": "NOT_CURRENTLY_ESTABLISHED_AS_ADMITTED_FULL_FT_TEMPLATE",
+    "authenticated_api_preflight": "NOT_EXECUTED_NO_SECRET_MOUNTED",
+    "dataset_upload": false,
+    "paid_create": false,
+    "training_job_started": false,
+    "spend_usd": 0,
+    "classification": "PUBLIC_CATALOG_ARCHITECTURE_BLOCKER; AUTHENTICATED_SERVICE_ADMISSION_OPEN"
+  },
+  "state_drift_found": {
+    "bootstrap_minimal_main": "still named SFT v1 at latest check",
+    "program_state_main": "cognition subsection still carried stale v1 hashes/OOD/template fields at latest direct check",
+    "root_artefact_readme_main": "still described superseded ClayVerse single-container endpoint at latest check",
+    "risk": "future go/bootstrap could re-enter a stale training reality even though main cognition code already converged on SFT v2"
+  },
+  "state_sync_delta": {
+    "branch": "gpt56sol/go-v2-canonical-state-sync-20260822-1425",
+    "bootstrap_commit": "500e324263a2e76a1b26376deab3c4a9ae786e1d",
+    "readme_commit": "66005e92947e6de3719e0dce4d79fc13323c447b",
+    "program_state_policy": "not destructively overwritten; remaining stale cognition subsection is called out explicitly so unrelated native/runtime evidence is preserved for a scoped reconciliation"
+  },
+  "native_lane": {
+    "status": "INDEPENDENT_REQUIRED_GATE",
+    "latest_material_main_evidence_observed": "263c14f9858d820dec54a8d4da1454cf08e5be40",
+    "whole_0_7_runtime_acceptance": "OPEN",
+    "acceptance_borrowing": "FORBIDDEN"
+  },
+  "execution_boundary": {
+    "github_rw": true,
+    "together_secret_observed": false,
+    "together_network_call": false,
+    "billed_effect": false,
+    "whole_product_pass": false
+  },
+  "next_exact_steps": [
+    "merge/adjudicate the current v2 validator/OOD/provider hardening already converging on main rather than preserve parallel duplicate lanes",
+    "merge the minimal boot/root README state-sync after review and reconcile only the stale cognition subsection of PROGRAM_STATE without deleting unrelated evidence",
+    "obtain an actually-started exact-checkout isolated runner for the current v2 corpus/validator/OOD gates; pre-step runner failure gives zero code-test credit",
+    "with an environment-only Together key, enumerate/validate a current qwen2-compatible Full-FT template before any dataset upload; if none exists, keep Together blocked rather than substitute Qwen3.5",
+    "only after compatible provider admission run no-bill fingerprint-bound preflight and enforce USD18 gate before exactly one create",
+    "after training, evaluate tuned vs untuned 0.5B and a larger general model, then Q4_K_M quantization, measured peak RSS <1GiB at ctx2048 and existing local_exec integration"
+  ],
+  "nonclaims": [
+    "no Together BYOM compatibility PASS",
+    "no paid training started",
+    "no tuned checkpoint exists",
+    "no OOD model-quality score exists",
+    "no superiority claim",
+    "no Q4_K_M runtime RSS claim",
+    "no native 0.7 whole-runtime PASS",
+    "no whole Mini Entity PASS"
+  ]
+}

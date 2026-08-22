@@ -8,16 +8,22 @@
   "current_main_observed": "6264fba3d9abb89fedf378e645e7cf7e799e1001",
   "donor_branch": "clay-go-20260822-statebox-mechanism",
   "branch_base": "cc286cfc1f127f00075f4c989679f24bd8363e82",
-  "branch_head_before_this_receipt": "efb9242651011cd5c60ae749bcf273601e7f87aa",
+  "branch_head_before_initial_receipt": "efb9242651011cd5c60ae749bcf273601e7f87aa",
   "pull_request": 726,
+  "coordination": {
+    "registered_go_unusual_experiment": "ALREADY_CONSUMED_ON_CANONICAL_MAIN_BY_SAME_VERSION_ARTIFACT_IDENTITY_COLLISION_AUDIT",
+    "this_branch_consumed_additional_unusual_experiment": false,
+    "parallel_fusion_prs": [727, 729]
+  },
   "findings": {
     "canonical_goal_refresh": "Current owner authority supersedes the older ClayVerse container endpoint. The active product is the application-neutral/inference-neutral Mini Entity .clay pipeline plus SQLite MiniUnifiedDB; zero_blog is replaceable preset data.",
-    "native_provenance": "Parallel main work reconciled the two observed 0.6.0 hashes and added fail-closed provenance checks. Current main still explicitly treats missing canonical mini_entity.c and absent credited ELF bytes as a reproducibility blocker, not a runtime-test failure.",
+    "native_provenance": "Parallel main work reconciled observed 0.6.0 artifact identities and added fail-closed provenance checks. Current main explicitly treats missing canonical mini_entity.c and absent credited ELF bytes as a reproducibility blocker, not a runtime-test failure.",
     "structured_source_runtime_divergence": {
       "clay_source_effects": ["pipeline_profile_read", "inference_generate"],
-      "python_reference_runtime_effects": ["profile_load", "provider_chat_json"],
-      "test_call_shape": "legacy tests still pass an external profile path as a fourth run argument while current BLOGPOST_ENTITY.clay run() has three arguments and expects DB-resident profile state",
-      "classification": "SOURCE_COHERENCE_BLOCKER_REQUIRES_CONVERGENCE"
+      "python_reference_runtime_effects_on_initial_main": ["profile_load", "provider_chat_json"],
+      "initial_test_call_shape": "legacy tests passed an external profile path as a fourth run argument while current BLOGPOST_ENTITY.clay run() has three arguments and expects DB-resident profile state",
+      "classification": "SOURCE_COHERENCE_BLOCKER_REQUIRES_CONVERGENCE",
+      "parallel_repair_candidate": "PR 727 converges the existing runtime in-place; PR 729 demonstrates an atomic publication/study candidate but currently duplicates the runtime path"
     },
     "state_box_frontier": "Protocol/config are committed on main but pipeline append and atomic study-record persistence remain uncredited in the canonical runtime path."
   },
@@ -36,14 +42,16 @@
       "out-of-range or malformed self-report values are rejected rather than clamped",
       "qualia result accepts only REPORTED, FAILED or UNKNOWN",
       "previous-post deltas require measured numeric values on both sides",
+      "previous-study lookup is profile-scoped",
       "backend/model changes are represented as structured confounds",
       "visible evaluation language is preset configuration rather than executable identity",
       "study records bind output_id, generation, profile_id, canonical_hash and packet_hash",
       "study-store insertion deliberately does not commit or rollback; caller owns atomic transaction"
     ]
   },
-  "bounded_unusual_experiment": {
+  "ordinary_adversarial_probe": {
     "name": "poisoned-self-report authority inversion",
+    "classification": "ORDINARY_FALSIFIER_NOT_REGISTERED_UNUSUAL_EXPERIMENT",
     "input": "Self-report attempted cognitive_conflict=1.0 plus secret text and body_location=Gasthaus while canonical cognitive_conflict was VERIFIED 0.72 and continuity/locality were UNKNOWN.",
     "observed_mechanism_result": "Canonical conflict remained 0.72; UNKNOWN metrics remained UNKNOWN; unallowlisted secret/body fields did not enter rendered state box; self-report conflict remained separately represented.",
     "scope": "authoring-sandbox mechanism probe only, not exact integrated branch/runtime acceptance"
@@ -51,8 +59,8 @@
   "execution": {
     "local_repository_clone": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
     "vercel_connector": "NO_SANDBOX_START_OR_EXEC_ACTION_EXPOSED",
-    "github_actions_latest_observed_branch_run": {
-      "commit": "efb9242651011cd5c60ae749bcf273601e7f87aa",
+    "github_actions_observation": {
+      "representative_branch_commit": "efb9242651011cd5c60ae749bcf273601e7f87aa",
       "verify_run": 32547948033,
       "conclusion": "failure",
       "job_steps": 0,
@@ -63,12 +71,18 @@
       "UNKNOWN and failed sensor semantics PASS",
       "longitudinal delta/backend confound mechanism PASS",
       "bad epistemic law rejection PASS",
+      "out-of-range self-report rejection PASS",
       "SQLite caller-owned rollback/previous-record/uniqueness probe PASS"
     ]
   },
+  "adjudication": {
+    "pr_727": "preferred canonical base because it converges the existing runtime in-place onto DB-resident v2 profile plus inference_generate",
+    "pr_729": "retain atomic publication/study mechanics as donor; do not keep duplicate runtime_v2 path; fix profile-scoped prior study, fail-closed epistemic law, preset-owned visible evaluation wording, and direct canonical/packet study bindings",
+    "fusion_target": "PR 727 in-place runtime + PR 726 study invariants/store + PR 729 atomic publication mechanics, followed by retirement of duplicate semantic runtime paths"
+  },
   "non_claims": [
     "No exact branch-byte CI PASS is claimed.",
-    "No canonical pipeline_commit integration is claimed.",
+    "No canonical pipeline_commit integration is claimed on PR 726.",
     "No atomic output+consumption+state+study full-path PASS is claimed.",
     "No real remote-provider acceptance is claimed.",
     "No real local-model quality acceptance is claimed.",
@@ -76,10 +90,11 @@
     "No whole Mini Entity acceptance PASS is claimed."
   ],
   "next_discriminators": [
-    "Converge structured Clay source and Python/reference runtime on DB-resident profile plus inference_generate without restoring external profile authority.",
-    "Wire study builder/store into the single existing pipeline_commit transaction; add rollback fault injection after output insert, after study insert and before final generation CAS.",
-    "Execute exact branch tests in an actually-started authorized runner and bind steps/logs/source identity.",
-    "After current source/runtime coherence is restored, run real local supported LLM and authorized real remote provider acceptance separately."
+    "Fuse PR 726 study invariants into PR 727's single in-place runtime rather than creating a second authority.",
+    "Harvest PR 729 publication transaction mechanics while removing its duplicate runtime path and cross-profile previous-study bug.",
+    "Add rollback fault injection after output insert, after study insert and before final generation CAS.",
+    "Execute exact fused-head tests in an actually-started authorized runner and bind steps/logs/source identity.",
+    "After source/runtime coherence is restored, run real local supported LLM and authorized real remote provider acceptance separately."
   ],
   "acceptance": "MECHANISM_SUPPORTED_INTEGRATION_UNOBSERVED"
 }

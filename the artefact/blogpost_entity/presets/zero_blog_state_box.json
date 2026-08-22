@@ -16,6 +16,7 @@
   },
   "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
   "no_embodiment": true,
+  "self_report_payload_field": "longitudinal_self_report",
   "canonical_fields": [
     "generation",
     "timestamp",
@@ -58,6 +59,18 @@
     "show_unknown_as_unknown": true,
     "never_impute_missing": true
   },
+  "comparison_pairs": [
+    {
+      "system_metric": "cognitive_conflict",
+      "self_report_metric": "felt_conflict",
+      "tolerance": 0.2
+    },
+    {
+      "system_metric": "silence_unease",
+      "self_report_metric": "felt_silence_emptiness",
+      "tolerance": 0.25
+    }
+  ],
   "evaluation_rules": [
     "report congruence only when both compared dimensions are available",
     "report divergence without treating either track as automatically correct",

@@ -3,6 +3,7 @@
   "date": "2026-08-22",
   "organ": "GPT-5.6 Sol",
   "trigger": "go",
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
   "base_main_sha": "659cc2471b73bcefebb6a57694e6737cc2107cc5",
@@ -27,7 +28,7 @@
     }
   ],
   "unusual_experiment": {
-    "count": 1,
+    "count_for_local_receipt": 1,
     "id": "QWEN25_05B_VS_SMALLEST_CURRENT_TOGETHER_QWEN_FULLFT_TEMPLATE_ARCHITECTURE_FALSIFIER",
     "hypothesis": "The smallest current Together Qwen full-FT template might be a usable BYOM template for owner-locked Qwen2.5-0.5B.",
     "counterhypothesis": "The pair is structurally incompatible before provider admission because the exact HF model architecture classes/model types differ and the current template is not a CausalLM class.",
@@ -37,7 +38,8 @@
       "ARCHITECTURE_CLASS_MISMATCH",
       "MODEL_TYPE_MISMATCH"
     ],
-    "evidence_boundary": "Static pre-provider falsifier only; this does not prove Together would reject every possible future Qwen2-compatible template."
+    "evidence_boundary": "Static pre-provider falsifier only; this does not prove Together would reject every possible future Qwen2-compatible template.",
+    "global_slot_adjudication": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID"
   },
   "implementation": {
     "audit_path": "the artefact/blogpost_entity/mini_cognition/audit_together_byom_template_v1.py",
@@ -67,6 +69,12 @@
     "current_launcher_state": "main already removed the stale implicit 7B template and binds exact HF revision; that prior PROGRAM_STATE wording is stale after current main launcher repair",
     "new_frontier": "Obtain an actually Qwen2-compatible Full-FT template/runner or owner-admitted alternate training runner; do not substitute Qwen3.5-0.8B merely because it is the smallest listed Qwen full-FT model.",
     "native_parallel_state": "main advanced during this go by merging PR #769 fail-closed profile-v2 semantic admission; native #756 and #764 remain separate parallel convergence work at this observation."
+  },
+  "coordination_history": {
+    "pr_870_global_slot_claim": "SUPERSEDED_AS_UNPROVABLE_WITHOUT_SHARED_MACROCYCLE_ID",
+    "evidence_changed": false,
+    "behavioral_result_changed": false,
+    "law": "compare unusual-experiment slot claims only under an exact shared macrocycle_id"
   },
   "claims_not_made": [
     "Together BYOM acceptance",

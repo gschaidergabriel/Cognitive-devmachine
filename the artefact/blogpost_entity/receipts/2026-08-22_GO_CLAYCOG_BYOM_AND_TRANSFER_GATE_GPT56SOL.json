@@ -1,0 +1,108 @@
+{
+  "schema": "claycog-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_join_sha": "62b292a8097c5b53731ef6804704cf9938872616",
+  "branch": "gpt56sol/go-claycog-preflight-gate-v2-20260822-1410",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "scope": "0.5B ClayCode cognition Together preflight safety and anti-memorization promotion gates",
+  "observed_current_state": {
+    "primary_base": "Qwen/Qwen2.5-0.5B",
+    "training_status": "SOURCE_AND_CORPUS_READY_TRAINING_NOT_STARTED",
+    "together_secret_observed": false,
+    "together_job_started_by_this_cycle": false,
+    "existing_corpus_examples": 1650,
+    "existing_ood_cases": 200
+  },
+  "finding": {
+    "severity": "MATERIAL_PRE_BILLING_COMPATIBILITY_DEFECT",
+    "old_default_template": "Qwen/Qwen2.5-7B-Instruct-Turbo",
+    "required_byom": "Qwen/Qwen2.5-0.5B",
+    "primary_external_contract": "Together BYOM --from-hf-model should match the base model architecture and size",
+    "old_pair_size_ratio_using_required_0_49B": 14.285714285714286,
+    "conclusion": "same-family 7B is not a safe default training template for the required 0.5B BYOM campaign"
+  },
+  "source_delta": {
+    "launcher": {
+      "path": "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py",
+      "default_template": "exact configured 0.5B HF model id",
+      "new_pre_network_gates": [
+        "Qwen2/Qwen2.5 architecture match",
+        "authoritative/parsable template size",
+        "template/base size ratio <= 1.30",
+        "no automatic 7B or Qwen3.5 surrogate"
+      ],
+      "api_compatibility": "OPEN_UNTIL_TOGETHER_MODEL_LIMITS_AND_BYOM_ACCEPTANCE"
+    },
+    "validator": {
+      "path": "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py",
+      "new_guards": [
+        "known executable ClayCode statement/call surface",
+        "comment/prose smuggling rejection",
+        "omega commit validators bound to the same omega variable",
+        "same-variable authority and generation binding",
+        "same-variable reject plus commit rejection"
+      ],
+      "old_corpus_zero_invalid_credit": "DOES_NOT_AUTOMATICALLY_TRANSFER_AFTER_HARDENING"
+    },
+    "structural_transfer": {
+      "generator": "the artefact/blogpost_entity/mini_cognition/generate_eval_transfer_v2.py",
+      "evaluator": "the artefact/blogpost_entity/mini_cognition/eval_transfer_v2.py",
+      "cases": 160,
+      "valid_unseen_operations": 80,
+      "invalid_unseen_operations": 40,
+      "hyperposition": 20,
+      "configuration_neutrality": 20,
+      "generator_invariant": "all eight transfer operation names must be absent from generate_sft_v1.py",
+      "promotion_candidate_gate": "100% structural ClayCode and >=95% structural transfer"
+    }
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "BYOM_TEMPLATE_SIZE_MISMATCH_TRAP",
+    "execution_class": "BOUNDED_ISOLATED_MECHANISM_SLICE",
+    "network": false,
+    "together_client_constructor_allowed": false,
+    "observations": {
+      "Qwen2.5_0.5B_plus_Qwen2.5_7B_template": "REJECTED_BEFORE_NETWORK",
+      "rejection": "BYOM_SIZE_ABORT template=7B vs required=0.49B ratio=14.29 exceeds 1.30",
+      "Qwen2.5_0.5B_plus_exact_0.5B_template": "STATIC_PAIR_ADMITTED_API_COMPATIBILITY_STILL_OPEN",
+      "wrong_architecture_template": "REJECTED_BEFORE_NETWORK",
+      "network_constructed": false
+    }
+  },
+  "ordinary_regressions": {
+    "execution_class": "BOUNDED_ISOLATED_MECHANISM_SLICE",
+    "validator_cases": 6,
+    "results": {
+      "renamed_omega_same_binding": "PASS",
+      "gates_bound_to_wrong_omega": "REJECTED_AS_EXPECTED",
+      "comment_smuggling": "REJECTED_AS_EXPECTED",
+      "reject_then_commit": "REJECTED_AS_EXPECTED",
+      "free_prose_statement": "REJECTED_AS_EXPECTED",
+      "unknown_call": "REJECTED_AS_EXPECTED"
+    }
+  },
+  "nonclaims": [
+    "no Together API preflight was executed",
+    "no file was uploaded to Together",
+    "no paid job was created",
+    "no 0.5B checkpoint was trained",
+    "no hardened-validator full 1650-example corpus rerun is credited yet",
+    "no transfer benchmark model outputs exist yet",
+    "no tuned-vs-base superiority is claimed",
+    "no Q4_K_M runtime RSS result is claimed",
+    "no Mini Entity whole-product PASS is claimed"
+  ],
+  "next_exact_gates": [
+    "run generate_sft_v1.py and both train/validation files through hardened validate_sft_v1.py on an admitted exact checkout",
+    "with environment-only Together secret, call model_limits for an architecture-and-size-compatible ~0.5B Qwen2/Qwen2.5 template before upload",
+    "if compatible, server-validate files and obtain authoritative price estimate; hard abort above USD18",
+    "create at most one full-SFT job only after successful preflight",
+    "score tuned/base/larger baselines on OOD v1 plus structural-transfer v2",
+    "quantize selected candidate to Q4_K_M and measure peak RSS <1GiB at context 2048",
+    "integrate only through existing generic local_exec path"
+  ]
+}

@@ -33,8 +33,7 @@ jobs:
           set -euo pipefail
           cd 'the artefact/blogpost_entity/mini_cognition'
           python3 generate_sft_v2.py
-          python3 validate_sft_v2.py train_v2.jsonl --against validation_v2.jsonl
-          python3 validate_sft_v2.py validation_v2.jsonl --against train_v2.jsonl
+          python3 validate_corpus_v2.py train_v2.jsonl validation_v2.jsonl
           python3 test_corpus_model_neutrality_v2.py
       - name: Direct 0.8B launcher deterministic regressions
         run: |

@@ -1,0 +1,66 @@
+{
+  "schema": "clay-go-evidence/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main_sha": "67af94be952c3352533662036b0325e9fe54df9b",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "scope": "0.5B ClayCode cognition Together BYOM provider-admission frontier",
+  "coordination": {
+    "native_local_exec_secret_repair_now_merged": 849,
+    "cognition_seed_job_identity_now_merged": 859,
+    "avoided_duplicate_native_repairs": [756, 764, 769],
+    "avoided_duplicate_launcher_repair": [800, 818, 820, 831, 839, 859],
+    "related_current_evidence_pr": 848,
+    "note": "This receipt changes no launcher/native path and treats stale PROGRAM_STATE launcher wording as coordination debt rather than current source truth."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Together AI current CLI fine-tuning reference",
+      "url": "https://docs.together.ai/reference/cli/finetune",
+      "observed_contract": "--from-hf-model accepts a Hugging Face repository and should match the selected base model architecture and size; --hf-model-revision is supported."
+    },
+    {
+      "source": "Together AI changelog, 2025-09-10 fine-tuning upgrade",
+      "url": "https://docs.together.ai/docs/changelog",
+      "observed_contract": "The upgrade states that any <100B parameter CausalLM from Hugging Face Hub can be fine-tuned and records SFT support for Qwen2.5-1.5B. This is historical platform evidence, not proof that the exact model/template remains admitted by the current authenticated account limits endpoint."
+    },
+    {
+      "source": "Hugging Face Qwen/Qwen2.5-0.5B exact owner-locked revision config",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-0.5B/blob/060db6499f32faf8b98477b0a26969ef7d8b9987/config.json",
+      "observed": {"architectures": ["Qwen2ForCausalLM"], "model_type": "qwen2", "max_position_embeddings": 32768, "hidden_size": 896, "num_hidden_layers": 24}
+    },
+    {
+      "source": "Hugging Face Qwen/Qwen2.5-1.5B config",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-1.5B/tree/main",
+      "observed": {"architectures": ["Qwen2ForCausalLM"], "model_type": "qwen2", "max_position_embeddings": 32768, "hidden_size": 1536, "num_hidden_layers": 28},
+      "revision_note": "Resolve and bind an immutable 40-hex revision before any paid campaign identity uses this candidate."
+    }
+  ],
+  "exactly_one_unusual_experiment": {
+    "name": "QWEN25_05B_VS_QWEN25_15B_BYOM_TEMPLATE_COUNTERBLOCKER",
+    "question": "Does Qwen2.5-1.5B provide a materially stronger architecture-compatible Together base-template candidate for owner-locked Qwen2.5-0.5B than the already-rejected Qwen3.5-0.8B substitution?",
+    "intervention": "Compare 0.5B and 1.5B Qwen2.5 configs against Together's BYOM architecture/size contract without provider create.",
+    "prediction_if_candidate_valid": "Same CausalLM architecture/model_type/context; authenticated current provider admission becomes decisive.",
+    "prediction_if_candidate_invalid": "Architecture/model_type/context mismatch rejects it statically.",
+    "observed": "Both are Qwen2ForCausalLM, model_type=qwen2, max_position_embeddings=32768.",
+    "outcome": "RETAIN_AS_PROVIDER_PROBE_CANDIDATE",
+    "evidence_class": "BOUNDED_STATIC_EXTERNAL_CONTRACT_EVIDENCE"
+  },
+  "frontier_delta": {
+    "before": "Provider admission was summarized as no available qwen2-compatible template; Qwen3.5-0.8B was correctly rejected as an architecture mismatch.",
+    "after": "Qwen2.5-1.5B is a concrete same-architecture, same-context candidate requiring an authenticated current Together limits/supported probe before concluding the Together path is blocked.",
+    "strongest_counterhypothesis": "Together may no longer admit Qwen2.5-1.5B for Full-FT or may reject a 0.5B checkpoint against a 1.5B template despite same architecture family.",
+    "next_exact_step": "With environment-only TOGETHER_API_KEY, query current fine-tune supported/model-limits for Qwen/Qwen2.5-1.5B and perform a no-bill exact-pair preflight for Qwen/Qwen2.5-0.5B@060db6499f32faf8b98477b0a26969ef7d8b9987. Preserve rejection if any; if admitted and budget gate passes, use existing exactly-once create safeguards."
+  },
+  "nonclaims": [
+    "No Together credential used.",
+    "No authenticated provider admission observed.",
+    "No upload, price estimate, billed create or training occurred.",
+    "No checkpoint quality, quantization, RSS, superiority, consciousness or whole-product PASS claimed.",
+    "Historical Together support is not current provider admission."
+  ],
+  "money_spent_usd": 0,
+  "runtime_execution_credit": "NONE_NO_AUTHORIZED_EXEC_SURFACE",
+  "classification": "ARCHITECTURE_CANDIDATE_NARROWED_PROVIDER_ADMISSION_STILL_OPEN"
+}

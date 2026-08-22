@@ -1,0 +1,58 @@
+name: ClayCog v2 corpus and eval gate
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/mini_cognition/**'
+      - '.github/workflows/claycog-v2-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  claycog-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: the artefact/blogpost_entity/mini_cognition
+    steps:
+      - uses: actions/checkout@v4
+      - name: Environment
+        run: |
+          set -euo pipefail
+          python3 --version
+          uname -a
+          git rev-parse HEAD
+      - name: Compile v2 sources
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            claycode_calls_v2.py \
+            generate_sft_v2.py \
+            validate_sft_v2.py \
+            generate_eval_ood_v2.py \
+            eval_outputs_v2.py \
+            launch_together_v2.py \
+            test_eval_stack_v2.py
+      - name: Materialize leakage-free SFT
+        run: |
+          set -euo pipefail
+          python3 generate_sft_v2.py
+          python3 validate_sft_v2.py train_v2.jsonl validation_v2.jsonl
+          sha256sum train_v2.jsonl validation_v2.jsonl
+      - name: Generate OOD v2
+        run: |
+          set -euo pipefail
+          python3 generate_eval_ood_v2.py
+          test "$(wc -l < eval_ood_v2.jsonl)" -eq 300
+          sha256sum eval_ood_v2.jsonl
+      - name: Falsify eval-marker bypass
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v test_eval_stack_v2.py
+      - name: Together local-only preflight
+        run: |
+          set -euo pipefail
+          env -u TOGETHER_API_KEY python3 launch_together_v2.py --local-only

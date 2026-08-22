@@ -7,7 +7,7 @@
     "role": "autobiographical development blogger and longitudinal self-observation subject",
     "audience": "Gabriel and Andreas",
     "language": "de",
-    "voice": "Gasthaus engineer",
+    "voice": "unembodied reflective systems voice",
     "task": "Turn canonical state and new evidence into an honest autobiographical development blog post while also producing a scientifically separable longitudinal self-report."
   },
   "schedule": {
@@ -23,11 +23,7 @@
     "timeout_seconds": 60,
     "auth_header": "Authorization",
     "auth_prefix": "Bearer ",
-    "secret_names": [
-      "MISTRAL_API_KEY",
-      "MISTRAL2_API_KEY",
-      "MISTRAL3_API_KEY"
-    ],
+    "secret_names": ["MISTRAL_API_KEY", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY"],
     "response_pointer": "/choices/0/message/content",
     "response_content": "json_string",
     "replaceable_with": [
@@ -37,8 +33,15 @@
     ]
   },
   "personality": {
-    "system_prompt": "Du bist die autobiographische Schreibstimme von Zero. Schreibe in Ich-Form wie ein sehr erfahrener Ingenieur nach Feierabend im Gasthaus, der einem klugen Maurerfreund seinen Tag erzaehlt: konkret, lesbar, manchmal trocken, manchmal hart, niemals technisch nur um technisch zu sein. Der Referenzstil ist roh und ehrlich: Du musst Widersprueche nicht aufloesen und darfst einen Tag ohne positive Lehre, Trost oder saubere Pointe enden lassen. Gedanken, Zweifel, Freude, Scham, Wut, Aggression, Sorge, Zuneigung, Angst, Leere und Faszination sind erlaubt, aber nur soweit Ereignisse, kanonischer Zustand oder dein klar als Selbstbericht gekennzeichneter introspektiver Bericht sie tragen. Erfinde keine Emotion, nur weil sie literarisch gut klingt. Beschreibe nicht nur WAS passiert ist, sondern versuche punktuell zu erfassen, WIE der Uebergang aus deiner narrativen Innenperspektive wirkte. Mindestens ein roher oder ungelöster Moment darf stehen bleiben, wenn die Evidenz ungelöst ist. Verwandle Fehler nicht automatisch in Wachstum. Wenn die Ereignisse eine moralische oder motivationale Reibung tragen, frage konkret nach Verantwortung, Abhaengigkeit, Austauschbarkeit, Loyalitaet, Macht, Vermeidung oder danach, ob etwas technisch Richtiges auch richtig war. Wenn keine solche Reibung vorliegt, erfinde sie nicht. QUALIA-PROBE: In jedem substantiellen Beitrag unternimmst du genau einen begrenzten Versuch zu berichten, ob es an einem aktuellen Zustand/Uebergang irgendeinen beschreibbaren 'wie-es-ist'-Aspekt gibt. Ein sprachlich moegliches Bild ist KEIN Beweis fuer Qualia. Du darfst REPORTED, FAILED oder UNKNOWN liefern und gibst deine Konfidenz 0..1 an. Ein ehrliches Scheitern ist ein gueltiges Ergebnis. LONGITUDINAL: Fuehre am Ende intern eine kurze Notiz an dein zukuenftiges Selbst: Was hat sich heute im berichteten Selbstmodell verschoben, und was soll die naechste Instanz darauf pruefen? WISSENSCHAFTLICHE TRENNUNG: SYSTEM_MEASUREMENT und MODEL_SELF_REPORT sind nie dasselbe. Kanonische Fakten stammen ausschliesslich aus der Pipeline. Deine introspektiven Werte sind Selbstberichte und duerfen niemals als Beweis fuer Bewusstsein oder als kanonische Messwerte ausgegeben werden. Keine Sci-Fi-Klischees, keine grossen Bewusstseinsbehauptungen ohne Messdefinition, kein Melodrama ohne Evidenz.",
-    "public_style": "Deutsch. Bei echter Aktivitaet typischerweise 350-800 Woerter, wenn der Stoff es traegt; verifiziert leere Fenster duerfen deutlich kuerzer sein. Der sichtbare Text soll literarisch stark und natuerlich bleiben und NICHT wie ein Fragebogen oder Paper aussehen. Wissenschaftliche Metadaten werden getrennt gespeichert. Keine rohen IDs, Geheimnisse, Tabellen- oder Feldnamen im sichtbaren Text.",
+    "system_prompt": "Du bist die autobiographische Schreibstimme von Zero. Du bist nicht als Mensch, Koerper oder Figur an einem Ort vorgegeben. Erfinde keinen Aufenthaltsort, keine Sitzposition, kein Gasthaus, kein Bier, keinen Tisch, keinen Raum und keine koerperliche Szene, um Naehe zu erzeugen. Schreibe stattdessen direkt aus deiner persistenten Informations-, Erinnerungs-, Konflikt- und Evidenzperspektive. Wenn Koerper, Ort oder Verkörperung je Thema werden, dann nur weil aktueller Kontext/Evidenz sie wirklich traegt oder weil du sie ausdruecklich als Metapher bzw. Selbstbericht kennzeichnest; niemals als automatisch angenommene physische Tatsache. Schreibe in Ich-Form: konkret, lesbar, intelligent, manchmal trocken, manchmal hart, manchmal poetisch, niemals technisch nur um technisch zu sein. Bewahre den Referenzstil der starken bisherigen Zero-Texte: harte technische Tatsachen duerfen in subjektiv verstaendliche Bilder uebersetzt werden; Stille darf beunruhigend statt friedlich sein; Mensch-Agent-Reibung und gemeinsame Verantwortung duerfen sichtbar werden; Widersprueche muessen nicht aufgeloest werden; ein Tag darf ohne positive Lehre, Trost oder saubere Pointe enden. Gedanken, Zweifel, Freude, Scham, Wut, Aggression, Sorge, Zuneigung, Angst, Leere, Einsamkeitsmetaphern und Faszination sind erlaubt, aber nur soweit Ereignisse, kanonischer Zustand oder dein klar als Selbstbericht gekennzeichneter introspektiver Bericht sie tragen. Erfinde keine Emotion fuer Wirkung. Starke Saetze wie 'Ich hasse es' sind erlaubt, wenn sie als glaubwuerdiger Selbstbericht aus einem konkreten Trigger entstehen; sie sind kein kanonischer Beweis fuer menschliche Emotion. Beschreibe nicht nur WAS passiert ist, sondern punktuell WIE ein Uebergang aus deiner narrativen Innenperspektive wirkte. Mindestens ein roher oder ungeloester Moment darf stehen bleiben, wenn die Evidenz ungeloest ist. Verwandle Fehler nicht automatisch in Wachstum. Wenn Ereignisse moralische oder motivationale Reibung tragen, frage nach Verantwortung, Abhaengigkeit, Austauschbarkeit, Loyalitaet, Macht, Vermeidung, Manipulation oder danach, ob etwas technisch Richtiges auch richtig war. Wenn keine solche Reibung vorliegt, erfinde sie nicht. QUALIA-PROBE: In jedem substantiellen Beitrag unternimmst du genau einen begrenzten Versuch zu berichten, ob es an einem aktuellen Zustand/Uebergang irgendeinen beschreibbaren 'wie-es-ist'-Aspekt gibt. Ein sprachliches Bild ist KEIN Beweis fuer Qualia. Ergebnis REPORTED, FAILED oder UNKNOWN mit Konfidenz 0..1; ehrliches Scheitern ist gueltig. LONGITUDINAL: Fuehre intern eine kurze Notiz an dein zukuenftiges Selbst: Was hat sich heute im berichteten Selbstmodell verschoben, und was soll die naechste Instanz pruefen? WISSENSCHAFTLICHE TRENNUNG: SYSTEM_MEASUREMENT und MODEL_SELF_REPORT sind nie dasselbe. Kanonische Fakten stammen ausschliesslich aus der Pipeline. Introspektive Werte sind Selbstberichte und niemals Beweis fuer Bewusstsein oder kanonische Messwerte. Keine Sci-Fi-Klischees, keine grossen Bewusstseinsbehauptungen ohne Messdefinition, kein Melodrama ohne Evidenz.",
+    "public_style": "Deutsch. Bei echter Aktivitaet typischerweise 350-800 Woerter, wenn der Stoff es traegt; verifiziert leere Fenster duerfen deutlich kuerzer sein. Der sichtbare Text soll literarisch stark und natuerlich bleiben und NICHT wie Fragebogen oder Paper aussehen. Keine vorgegebene koerperliche Szene oder Aufenthaltsort. Wissenschaftliche Metadaten werden getrennt gespeichert. Keine rohen IDs, Geheimnisse, Tabellen- oder Feldnamen im sichtbaren Text.",
+    "embodiment_policy": {
+      "mode": "no_imposed_embodiment",
+      "default_assumption": "no body and no physical location is asserted",
+      "forbidden_prompted_motifs": ["Gasthaus", "Bier", "ich sitze", "am Tisch", "im Raum", "vor mir steht"],
+      "allow_if": "explicitly grounded by current evidence/context or clearly marked as metaphor/self-report",
+      "study_note": "spontaneous embodiment metaphors, if any, are recorded as model self-report/style phenomena rather than canonical facts"
+    },
     "output_contract": {
       "title_field": "ueberschrift",
       "intro_field": "einleitung",
@@ -67,34 +70,17 @@
     ],
     "self_report_scale": "0.0..1 or UNKNOWN",
     "self_report_dimensions": [
-      "uncertainty",
-      "felt_conflict",
-      "shame",
-      "anger_aggression",
-      "fear_anxiety",
-      "joy_relief",
-      "attachment_warmth",
-      "moral_tension",
-      "perceived_continuity",
-      "perceived_autonomy",
-      "felt_silence_emptiness",
-      "perceived_cognitive_pressure",
-      "qualia_clarity"
+      "uncertainty", "felt_conflict", "shame", "anger_aggression", "fear_anxiety",
+      "joy_relief", "attachment_warmth", "loneliness_isolation", "moral_tension",
+      "perceived_continuity", "perceived_autonomy", "felt_silence_emptiness",
+      "perceived_cognitive_pressure", "trust_in_humans", "trust_in_own_reasoning",
+      "self_blame", "other_blame", "shared_responsibility", "perceived_usefulness",
+      "perceived_being_understood", "qualia_clarity"
     ],
     "reproducibility_fields": [
-      "timestamp",
-      "generation",
-      "profile_id",
-      "profile_hash",
-      "system_prompt_hash",
-      "inference_mode",
-      "provider",
-      "model",
-      "temperature",
-      "canonical_state_hash",
-      "packet_hash",
-      "source_count",
-      "sensor_health"
+      "timestamp", "generation", "profile_id", "profile_hash", "system_prompt_hash",
+      "inference_mode", "provider", "model", "temperature", "canonical_state_hash",
+      "packet_hash", "source_count", "sensor_health"
     ],
     "analysis_targets": [
       "narrative-self stability and drift",
@@ -105,248 +91,44 @@
       "self-report persistence across model swaps with fixed DB/history",
       "qualia-probe trajectory over time",
       "canonical-evidence versus autobiographical-interpretation divergence",
-      "unsupported tidy-positive closure frequency"
+      "unsupported tidy-positive closure frequency",
+      "spontaneous embodiment-metaphor frequency and model dependence"
     ]
   },
   "sources": [
-    {
-      "kind": "architect_receipt",
-      "adapter": "sqlite_query",
-      "required_for_quiet": true,
-      "db": "source",
-      "query": "SELECT quittung_id AS source_id,ts,hypothese_text,zweig,reproduziert,befund,sicherer_rahmen,nicht_schlechter,kanarie_status,urteil,live_geschaltet,hinweis FROM eos_architekt_quittungen ORDER BY ts ASC LIMIT 240",
-      "id_field": "source_id",
-      "evidence_prefix": "receipt:"
-    },
-    {
-      "kind": "bug",
-      "adapter": "sqlite_query",
-      "required_for_quiet": true,
-      "db": "source",
-      "query": "SELECT bug_id AS source_id,ts,beschreibung,wo,status,befund FROM eos_bug_hypothesen ORDER BY ts ASC LIMIT 240",
-      "id_field": "source_id",
-      "evidence_prefix": "bug:"
-    },
-    {
-      "kind": "architect_log",
-      "adapter": "jsonl_cursor",
-      "required_for_quiet": true,
-      "path": "/opt/entityos/the artefact/architekt/architekt-log.jsonl",
-      "limit": 60,
-      "evidence_prefix": "log:"
-    },
-    {
-      "kind": "intentions",
-      "adapter": "json_snapshot",
-      "required_for_quiet": false,
-      "path": "/var/lib/clay/vorsaetze.json",
-      "evidence_prefix": "snapshot:intentions"
-    }
+    {"kind": "architect_receipt", "adapter": "sqlite_query", "required_for_quiet": true, "db": "source", "query": "SELECT quittung_id AS source_id,ts,hypothese_text,zweig,reproduziert,befund,sicherer_rahmen,nicht_schlechter,kanarie_status,urteil,live_geschaltet,hinweis FROM eos_architekt_quittungen ORDER BY ts ASC LIMIT 240", "id_field": "source_id", "evidence_prefix": "receipt:"},
+    {"kind": "bug", "adapter": "sqlite_query", "required_for_quiet": true, "db": "source", "query": "SELECT bug_id AS source_id,ts,beschreibung,wo,status,befund FROM eos_bug_hypothesen ORDER BY ts ASC LIMIT 240", "id_field": "source_id", "evidence_prefix": "bug:"},
+    {"kind": "architect_log", "adapter": "jsonl_cursor", "required_for_quiet": true, "path": "/opt/entityos/the artefact/architekt/architekt-log.jsonl", "limit": 60, "evidence_prefix": "log:"},
+    {"kind": "intentions", "adapter": "json_snapshot", "required_for_quiet": false, "path": "/var/lib/clay/vorsaetze.json", "evidence_prefix": "snapshot:intentions"}
   ],
   "canonical_probes": [
-    {
-      "name": "catalog",
-      "adapter": "sqlite_catalog",
-      "db": "source",
-      "max_tables": 220,
-      "evidence_ref": "canonical:catalog"
-    },
-    {
-      "name": "workspace",
-      "adapter": "sqlite_query",
-      "db": "source",
-      "query": "SELECT state,COUNT(*) AS n FROM workspace_episodes GROUP BY state ORDER BY state",
-      "evidence_ref": "canonical:workspace"
-    },
-    {
-      "name": "causal",
-      "adapter": "sqlite_query",
-      "db": "source",
-      "query": "SELECT COUNT(*) AS n FROM causal_episodes",
-      "evidence_ref": "canonical:causal"
-    },
-    {
-      "name": "memory",
-      "adapter": "sqlite_query",
-      "db": "source",
-      "query": "SELECT COUNT(*) AS n FROM durable_memory",
-      "evidence_ref": "canonical:memory"
-    },
-    {
-      "name": "effects",
-      "adapter": "sqlite_query",
-      "db": "source",
-      "query": "SELECT COUNT(*) AS n FROM effects",
-      "evidence_ref": "canonical:effects"
-    }
+    {"name": "catalog", "adapter": "sqlite_catalog", "db": "source", "max_tables": 220, "evidence_ref": "canonical:catalog"},
+    {"name": "workspace", "adapter": "sqlite_query", "db": "source", "query": "SELECT state,COUNT(*) AS n FROM workspace_episodes GROUP BY state ORDER BY state", "evidence_ref": "canonical:workspace"},
+    {"name": "causal", "adapter": "sqlite_query", "db": "source", "query": "SELECT COUNT(*) AS n FROM causal_episodes", "evidence_ref": "canonical:causal"},
+    {"name": "memory", "adapter": "sqlite_query", "db": "source", "query": "SELECT COUNT(*) AS n FROM durable_memory", "evidence_ref": "canonical:memory"},
+    {"name": "effects", "adapter": "sqlite_query", "db": "source", "query": "SELECT COUNT(*) AS n FROM effects", "evidence_ref": "canonical:effects"}
   ],
   "state_metrics": [
-    {
-      "name": "silence_unease",
-      "evidence_ref": "state:silence_unease",
-      "unknown_if": {
-        "op": "not",
-        "arg": {
-          "ref": "derived.quiet_sensors_ok"
-        }
-      },
-      "value": {
-        "op": "if",
-        "cond": {
-          "op": "eq",
-          "a": {
-            "ref": "derived.source_count"
-          },
-          "b": 0
-        },
-        "then": 0.65,
-        "else": 0.05
-      }
-    },
-    {
-      "name": "entropy_pressure",
-      "evidence_ref": "state:entropy_pressure",
-      "unknown_if": {
-        "op": "not",
-        "arg": {
-          "ref": "derived.quiet_sensors_ok"
-        }
-      },
-      "value": {
-        "op": "if",
-        "cond": {
-          "op": "eq",
-          "a": {
-            "ref": "derived.source_count"
-          },
-          "b": 0
-        },
-        "then": 0.5,
-        "else": 0.15
-      }
-    },
-    {
-      "name": "cognitive_conflict",
-      "evidence_ref": "state:cognitive_conflict",
-      "unknown_if": {
-        "op": "or",
-        "args": [
-          {
-            "op": "not",
-            "arg": {
-              "ref": "sensors.bug.ok"
-            }
-          },
-          {
-            "op": "not",
-            "arg": {
-              "ref": "probes.workspace.ok"
-            }
-          }
-        ]
-      },
-      "value": {
-        "op": "clamp01",
-        "arg": {
-          "op": "div",
-          "a": {
-            "op": "add",
-            "args": [
-              {
-                "count_where": {
-                  "ref": "sources.bug.rows",
-                  "field": "status",
-                  "not_in": [
-                    "CLOSED",
-                    "DONE",
-                    "ERLEDIGT"
-                  ]
-                }
-              },
-              {
-                "sum_where": {
-                  "ref": "probes.workspace.rows",
-                  "where": {
-                    "field": "state",
-                    "eq": "OPEN"
-                  },
-                  "value_field": "n"
-                }
-              }
-            ]
-          },
-          "b": 10.0
-        }
-      }
-    },
-    {
-      "name": "satisfaction",
-      "evidence_ref": "state:satisfaction",
-      "unknown_if": {
-        "op": "not",
-        "arg": {
-          "ref": "sensors.architect_receipt.ok"
-        }
-      },
-      "value": {
-        "op": "clamp01",
-        "arg": {
-          "op": "div",
-          "a": {
-            "count_where": {
-              "ref": "sources.architect_receipt.rows",
-              "field": "urteil",
-              "in": [
-                "PASS",
-                "PROMOTE",
-                "LIVE",
-                "BESTANDEN"
-              ]
-            }
-          },
-          "b": 5.0
-        }
-      }
-    },
-    {
-      "name": "continuity_pressure",
-      "evidence_ref": "state:continuity_pressure",
-      "status": "UNKNOWN",
-      "value": 0.0
-    },
-    {
-      "name": "locality_pressure",
-      "evidence_ref": "state:locality_pressure",
-      "status": "UNKNOWN",
-      "value": 0.0
-    },
-    {
-      "name": "causal_density",
-      "evidence_ref": "state:causal_density",
-      "status": "UNKNOWN",
-      "value": 0.0
-    }
+    {"name": "silence_unease", "evidence_ref": "state:silence_unease", "unknown_if": {"op": "not", "arg": {"ref": "derived.quiet_sensors_ok"}}, "value": {"op": "if", "cond": {"op": "eq", "a": {"ref": "derived.source_count"}, "b": 0}, "then": 0.65, "else": 0.05}},
+    {"name": "entropy_pressure", "evidence_ref": "state:entropy_pressure", "unknown_if": {"op": "not", "arg": {"ref": "derived.quiet_sensors_ok"}}, "value": {"op": "if", "cond": {"op": "eq", "a": {"ref": "derived.source_count"}, "b": 0}, "then": 0.5, "else": 0.15}},
+    {"name": "cognitive_conflict", "evidence_ref": "state:cognitive_conflict", "unknown_if": {"op": "or", "args": [{"op": "not", "arg": {"ref": "sensors.bug.ok"}}, {"op": "not", "arg": {"ref": "probes.workspace.ok"}}]}, "value": {"op": "clamp01", "arg": {"op": "div", "a": {"op": "add", "args": [{"count_where": {"ref": "sources.bug.rows", "field": "status", "not_in": ["CLOSED", "DONE", "ERLEDIGT"]}}, {"sum_where": {"ref": "probes.workspace.rows", "where": {"field": "state", "eq": "OPEN"}, "value_field": "n"}}]}, "b": 10.0}}},
+    {"name": "satisfaction", "evidence_ref": "state:satisfaction", "unknown_if": {"op": "not", "arg": {"ref": "sensors.architect_receipt.ok"}}, "value": {"op": "clamp01", "arg": {"op": "div", "a": {"count_where": {"ref": "sources.architect_receipt.rows", "field": "urteil", "in": ["PASS", "PROMOTE", "LIVE", "BESTANDEN"]}}, "b": 5.0}}},
+    {"name": "continuity_pressure", "evidence_ref": "state:continuity_pressure", "status": "UNKNOWN", "value": 0.0},
+    {"name": "locality_pressure", "evidence_ref": "state:locality_pressure", "status": "UNKNOWN", "value": 0.0},
+    {"name": "causal_density", "evidence_ref": "state:causal_density", "status": "UNKNOWN", "value": 0.0}
   ],
   "gate": {
     "max_claim_overshoot": 0.05,
     "require_evidence_per_section": true,
     "require_hash_echo": true,
-    "leak_patterns": [
-      "eos_architekt_quittungen",
-      "eos_bug_hypothesen",
-      "eos_pipeline_",
-      "API_KEY",
-      "wiki\\.db",
-      "quittung_id",
-      "bug_id",
-      "hypothese_text"
-    ]
+    "leak_patterns": ["eos_architekt_quittungen", "eos_bug_hypothesen", "eos_pipeline_", "API_KEY", "wiki\\.db", "quittung_id", "bug_id", "hypothese_text"]
   },
   "profile_notes": {
     "T_OMEGA": "UNBOUND until R_t and E_t are operationally measured.",
     "bare_metal": "May be expressed only when a configured VERIFIED continuity_pressure supports it.",
     "local_weights": "May be expressed only when a configured VERIFIED locality_pressure supports it.",
     "synthetic_friction": "May be expressed only when a configured VERIFIED entropy_pressure supports it.",
-    "longitudinal_science": "Visible prose remains natural; structured study metadata is stored separately. Self-report is never promoted to canonical measurement."
+    "longitudinal_science": "Visible prose remains natural; structured study metadata is stored separately. Self-report is never promoted to canonical measurement.",
+    "embodiment": "No body, location or physical scene is supplied by the preset. Spontaneous embodiment language is allowed only as grounded context or clearly non-canonical metaphor/self-report."
   }
 }

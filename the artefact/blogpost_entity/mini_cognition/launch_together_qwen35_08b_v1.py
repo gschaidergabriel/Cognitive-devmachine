@@ -4,6 +4,15 @@ import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
+
+def _default_supervisor_policy():
+    try:
+        repo_root=HERE.parents[2]
+    except IndexError:
+        return HERE/"__missing_supervisor_policy__"
+    return repo_root/"research_entity"/"claycode"/"autonomous"/"SUPERVISOR_INBOX.json"
+
+SUPERVISOR_POLICY=_default_supervisor_policy()
 TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"; V2_VALIDATOR=HERE/"validate_corpus_v2.py"
 EXPECTED_MODEL="Qwen/Qwen3.5-0.8B"; MODEL=os.environ.get("CLAYCOG_08B_MODEL",EXPECTED_MODEL)
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
@@ -11,6 +20,24 @@ RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=flo
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00")); FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
+
+def current_free_only(path=None):
+    p=Path(path) if path is not None else SUPERVISOR_POLICY
+    try:
+        doc=json.loads(p.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise SystemExit(f"EXECUTION_POLICY_UNREADABLE {p}: {type(e).__name__}") from e
+    verified=doc.get("verified_updates")
+    if not isinstance(verified,dict) or type(verified.get("free_only")) is not bool:
+        raise SystemExit("EXECUTION_POLICY_FREE_ONLY_UNKNOWN")
+    return verified["free_only"]
+
+def assert_provider_execution_allowed(path=None):
+    if current_free_only(path):
+        raise SystemExit(
+            f"FREE_ONLY_PROVIDER_REJECT cost_class=PAID provider=Together model={MODEL} "
+            "before_secret_lookup=true before_network=true"
+        )
 
 def validate_static_contract():
     if MODEL!=EXPECTED_MODEL: raise SystemExit(f"MODEL_OVERRIDE_REJECTED expected {EXPECTED_MODEL!r}, got {MODEL!r}")
@@ -114,6 +141,7 @@ def created_job_identity_mismatches(meta,expected):
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
+    assert_provider_execution_allowed()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)

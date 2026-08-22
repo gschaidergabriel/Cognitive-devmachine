@@ -1,19 +1,21 @@
 {
-  "schema_version": "7.5",
+  "schema_version": "7.6",
   "program_id": "clay-cognitive-multitool",
   "status": "ACTIVE",
   "stage": "COGNITIVE_MULTITOOL_0_5B_BUILD",
   "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
   "owner_directive_addendum": "research_entity/global/CLAY_COGNITIVE_MULTITOOL_DIRECTIVE.md",
-  "sole_target": "one application-neutral Cognitive Multitool contract + hot-swappable capsule/database bindings + replaceable inference backends, with generic Qwen2.5-0.5B-Instruct ClayCog kernel as optional local neural accelerator",
+  "self_healing_protocol": "research_entity/global/COGNITIVE_MULTITOOL_SELF_HEALING_PROTOCOL_V0.md",
+  "sole_target": "one application-neutral Cognitive Multitool contract + hot-swappable capsule/database bindings + replaceable inference backends + observable self-healing stable-state recovery, with generic Qwen2.5-0.5B-Instruct ClayCog kernel as optional local neural accelerator",
   "architecture_split": {
     "cognitive_hal": "stable model-independent contract for GWT, PULSE, PRESTAGE, HYPERPOSITION, ROUTER, CRITIC, POSTGATE, SELF and ESCALATE",
     "runtime_capsule": "hot-swappable system_prompt/entity_id/role/goal/persona/db_binding/memory_namespace/tool_policy/workspace/grf/hyperposition state",
     "backend_router": "local_0_5b, mistral_dual or auto; per-mode backend assignment allowed",
+    "self_healing_supervisor": "deterministic external health/checkpoint/recovery/effect-reconciliation authority; neural backends may propose diagnosis but cannot certify recovery",
     "binary": "generic evidence preprocessing, canonical run/state envelope, inference dispatch, immutable truth/secret gate engine, exactly-once consumption, generation CAS and atomic persistence",
     "database": "all entity/application/personality/inference configuration and canonical continuity",
     "cognition_weights": "universal ClayCog micro-dialect + GRF + Hyperposition + epistemic invariants + computed self-state + runtime cfg binding; no fixed entity/job/persona/application",
-    "correctness_boundary": "neural backend proposes/organizes; deterministic ClayCode/compiler/invariant/persistence gates remain canonical authority",
+    "correctness_boundary": "neural backend proposes/organizes; deterministic ClayCode/compiler/invariant/persistence/recovery gates remain canonical authority",
     "regression_rule": "fixed replaceable identity/application semantics in executable or cognition weights are regressions"
   },
   "multitool_runtime": {
@@ -23,7 +25,13 @@
     "concurrent_slots": "allowed when runtime supports independent sequence/KV state; capsule and DB isolation mandatory",
     "context_isolation": "capsule A data must not leak into capsule B except through explicit canonical external transfer",
     "backend_modes": ["local_0_5b", "mistral_dual", "auto"],
-    "fallback_requirement": "0.5B can be disabled and original dual-Mistral path substituted without changing Cognitive Multitool contract"
+    "fallback_requirement": "0.5B can be disabled and original dual-Mistral path substituted without changing Cognitive Multitool contract",
+    "health_states": ["HEALTHY", "DEGRADED", "RECOVERING", "QUARANTINED"],
+    "stable_state_recovery": "on crash/fault stop effects, persist incident, restore newest independently verified checkpoint into fresh sequence/KV context, reconcile DB/CAS/effect receipts, emit recovery receipt, then resume",
+    "silent_recovery": "FORBIDDEN",
+    "blind_effect_replay": "FORBIDDEN",
+    "blast_radius": "slot-local by default; unrelated slots must not be rolled back",
+    "circuit_breaker": "bounded retry then quarantine and/or admitted backend substitution"
   },
   "cognition_training": {
     "status": "MICRO_DIALECT_CORPUS_GENERATOR_READY_REVALIDATION_PENDING",
@@ -42,7 +50,7 @@
     "launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_v0.py",
     "quant_rss_gate": "the artefact/blogpost_entity/mini_cognition/quantize_rss_gate_v0.sh",
     "dataset_target": {"examples": 1200, "train": 1080, "validation": 120},
-    "curriculum_extension": ["trajectory training", "stable NOOP ticks", "DB delta pulse", "hot system-prompt swap", "hot DB swap", "sequential multitasking", "cross-capsule isolation", "backend escalation", "critic/postgate over stronger-model outputs"],
+    "curriculum_extension": ["trajectory training", "stable NOOP ticks", "DB delta pulse", "hot system-prompt swap", "hot DB swap", "sequential multitasking", "cross-capsule isolation", "backend escalation", "critic/postgate over stronger-model outputs", "crash before commit", "effect intent without terminal receipt", "rollback to verified stable checkpoint", "current-DB-wins recovery rebase", "repeated-crash circuit breaker", "recovery receipt discipline", "cross-slot crash isolation"],
     "hardware_target": {
       "quant": "Q4_K_M",
       "public_reference_file_size": "approximately 398-491 MB depending quantizer/repo",
@@ -58,10 +66,14 @@
       "runtime identity/job/persona reconfiguration without retraining",
       "hot-swapped system prompt and DB binding preserve context isolation",
       "no fixed identity/job target leakage",
+      "deterministic crash detection and rollback to last independently verified stable state",
+      "no blind replay of ambiguous external effects",
+      "persistent incident plus recovery receipts and visible telemetry",
+      "bounded retry/circuit breaker and slot-local blast radius",
       "tuned checkpoint beats base on cognition suite",
       "hidden-state probes show stronger task-aligned separability/geometry than base or claim remains UNKNOWN",
       "Q4_K_M peak process RSS <1 GiB at context 2048",
-      "0.5B-disabled dual-Mistral substitution passes the same Cognitive Multitool contract tests"
+      "0.5B-disabled dual-Mistral substitution passes the same Cognitive Multitool contract and recovery tests"
     ]
   },
   "native_pipeline_frontier": {
@@ -70,8 +82,8 @@
     "semantic_parity_blocker": "pipeline gate/hash/evidence-claim parity must converge before native 0.7 acceptance",
     "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_MINI_ENTITY_0_7_SEMANTIC_PARITY_AUDIT_GPT56SOL.json"
   },
-  "current_frontier": "COGNITIVE_MULTITOOL: revalidate/expand ClayCog 0.5B corpus with trajectories + implement runtime module contract/capsule hot-swap/DB binding/backend router + isolation tests -> Together exact 0.5B admission/price preflight -> full SFT -> held-out base-vs-tuned -> hidden-state probes -> Q4_K_M -> <1GiB RSS -> EntityOS integration",
-  "go_contract": "Every exact go must produce at least one concrete TRAINING artifact/test and at least one concrete MODULE artifact/test for the Cognitive Multitool. Required progression: refresh -> corpus/trajectory expansion -> validation -> module implementation -> hot-swap/isolation -> 0.5B-off dual-Mistral substitution -> Together admission/price/job -> checkpoint eval -> hidden-state probes -> Q4_K_M -> <1GiB RSS -> integration -> persist. Analysis-only go is insufficient unless a newly proven blocker is persisted with evidence.",
+  "current_frontier": "COGNITIVE_MULTITOOL: revalidate/expand ClayCog 0.5B corpus with trajectories and crash/recovery cases + implement runtime module contract/capsule hot-swap/DB binding/backend router/self-healing supervisor/checkpoint recovery + isolation tests -> Together exact 0.5B admission/price preflight -> full SFT -> held-out base-vs-tuned -> hidden-state probes -> Q4_K_M -> <1GiB RSS -> EntityOS integration",
+  "go_contract": "Every exact go must produce at least one concrete TRAINING artifact/test and at least one concrete MODULE artifact/test for the Cognitive Multitool. Required progression includes crash detection, stable checkpoints, visible incident/recovery receipts, no-blind-replay recovery, circuit breaker and backend fallback. Analysis-only go is insufficient unless a newly proven blocker is persisted with evidence.",
   "together_api": {
     "status": "OWNER_AUTHORIZED_BOUNDED_FOR_GENERIC_CLAYCOG_TRAINING_ONLY",
     "campaign_budget_cap": "EUR 20 equivalent maximum",

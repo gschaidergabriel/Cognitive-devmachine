@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Fail-closed Together BYOM launcher for ClayCog 0.5B corpus v2.
 
-V2 carries the canonical billed-create idempotency/fingerprint law forward, while tightening
-Together template admission: there is deliberately NO guessed default training template.
-Current public fine-tuning docs expose no Qwen2/Qwen2.5 training entry; BYOM requires a
-compatible Together template, so CLAYCOG_TOGETHER_TEMPLATE must be supplied explicitly
-only after a current Qwen2-compatible candidate is identified. API acceptance remains the
-empirical compatibility gate.
+V2 preserves the canonical billed-create safety stack: exact campaign fingerprint,
+account-side duplicate check, zero-retry billed CREATE, and an atomic local create-intent
+ledger that keeps ambiguous remote outcomes UNKNOWN rather than permitting blind retry.
+
+V2 additionally has NO guessed Together training template. Current public fine-tuning docs
+expose no Qwen2/Qwen2.5 training entry; BYOM requires a compatible Together template, so
+CLAYCOG_TOGETHER_TEMPLATE must be supplied explicitly only after a current Qwen2-compatible
+candidate is identified. API acceptance remains the empirical compatibility gate.
 """
 import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
@@ -20,6 +22,7 @@ EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
 EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"
+CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT_STATUSES={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
 def local_checks():
@@ -106,13 +109,86 @@ def require_create_confirmation(fingerprint):
     if supplied!=fingerprint:
         raise SystemExit(f"CREATE_CONFIRMATION_REQUIRED set {CREATE_CONFIRM_ENV} to exact preflight fingerprint {fingerprint}")
 
+def create_ledger_dir():
+    configured=os.environ.get(CREATE_LEDGER_DIR_ENV)
+    if configured: return Path(configured).expanduser()
+    return Path.home()/".local"/"state"/"claycog"/"training"
+
+def create_ledger_path(fingerprint): return create_ledger_dir()/(fingerprint+".json")
+
+def read_create_ledger(fingerprint):
+    path=create_ledger_path(fingerprint)
+    if not path.exists(): return None
+    try: return json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc: raise SystemExit(f"CREATE_LEDGER_UNREADABLE {path}: {exc}")
+
+def assert_no_local_create_intent(fingerprint):
+    existing=read_create_ledger(fingerprint)
+    if existing is None: return
+    status=str(existing.get("status","UNKNOWN")); job_id=existing.get("job_id")
+    suffix=f" job_id={job_id}" if job_id else ""
+    raise SystemExit(
+        f"LOCAL_CREATE_INTENT_ABORT fingerprint={fingerprint} status={status}{suffix}; "
+        "reconcile exact provider state before any new billed create"
+    )
+
+def _fsync_dir(path):
+    fd=os.open(str(path),os.O_RDONLY)
+    try: os.fsync(fd)
+    finally: os.close(fd)
+
+def arm_create_intent(fingerprint,hf_model,suffix):
+    directory=create_ledger_dir(); directory.mkdir(parents=True,exist_ok=True,mode=0o700)
+    try: os.chmod(directory,0o700)
+    except OSError: pass
+    path=create_ledger_path(fingerprint)
+    payload={
+        "schema":"claycog-together-create-intent/v1",
+        "fingerprint":fingerprint,
+        "campaign_suffix":suffix,
+        "status":"CREATE_ARMED",
+        "campaign":campaign_descriptor(hf_model),
+        "created_unix":int(time.time()),
+    }
+    data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode("utf-8")
+    try: fd=os.open(str(path),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+    except FileExistsError:
+        assert_no_local_create_intent(fingerprint)
+        raise
+    try:
+        with os.fdopen(fd,"wb",closefd=True) as f:
+            f.write(data); f.flush(); os.fsync(f.fileno())
+        _fsync_dir(directory)
+    except BaseException:
+        try: os.unlink(path)
+        except OSError: pass
+        raise
+    return path
+
+def update_create_intent(path,status,job_id=None,error_class=None):
+    payload=json.loads(Path(path).read_text(encoding="utf-8"))
+    payload["status"]=status; payload["updated_unix"]=int(time.time())
+    if job_id is not None: payload["job_id"]=str(job_id)
+    if error_class is not None: payload["error_class"]=str(error_class)
+    tmp=Path(str(path)+f".tmp.{os.getpid()}")
+    data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode("utf-8")
+    fd=os.open(str(tmp),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+    try:
+        with os.fdopen(fd,"wb",closefd=True) as f:
+            f.write(data); f.flush(); os.fsync(f.fileno())
+        os.replace(tmp,path); _fsync_dir(Path(path).parent)
+    finally:
+        try: tmp.unlink()
+        except OSError: pass
+
+def new_zero_retry_create_client(together_cls): return together_cls(max_retries=0)
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--create",action="store_true",help="create billed job only after exact-fingerprint preflight")
     ap.add_argument("--instruct-ablation",action="store_true")
     args=ap.parse_args()
 
-    # Pure local evidence first. No SDK/network object is created before corpus gates.
     local_checks()
     if not TEMPLATE:
         raise SystemExit(
@@ -124,8 +200,7 @@ def main():
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
 
     hf_model="Qwen/Qwen2.5-0.5B-Instruct" if args.instruct_ablation else HF_MODEL
-    fingerprint=campaign_fingerprint(hf_model)
-    suffix=campaign_suffix(fingerprint)
+    fingerprint=campaign_fingerprint(hf_model); suffix=campaign_suffix(fingerprint)
 
     from together import Together
     client=Together()
@@ -135,6 +210,7 @@ def main():
 
     if args.create:
         require_create_confirmation(fingerprint)
+        assert_no_local_create_intent(fingerprint)
         assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
 
     train_file=client.files.upload(file=str(TRAIN),purpose="fine-tune",check=True)
@@ -142,62 +218,47 @@ def main():
     wait_file(client,train_file.id); wait_file(client,valid_file.id)
 
     estimate=client.fine_tuning.estimate_price(
-        training_file=train_file.id,
-        validation_file=valid_file.id,
-        model=TEMPLATE,
-        n_epochs=EPOCHS,
-        n_evals=EVALS,
-        training_method={"method":"sft","train_on_inputs":"auto"},
-        training_type={"type":"Full"},
+        training_file=train_file.id,validation_file=valid_file.id,model=TEMPLATE,
+        n_epochs=EPOCHS,n_evals=EVALS,
+        training_method={"method":"sft","train_on_inputs":"auto"},training_type={"type":"Full"},
     )
     price=float(estimate.estimated_total_price)
     report={
         "mode":"preflight" if not args.create else "create",
-        "campaign_fingerprint":fingerprint,
-        "campaign_suffix":suffix,
-        "from_hf_model":hf_model,
-        "template_model":TEMPLATE,
-        "epochs":EPOCHS,
-        "evals":EVALS,
-        "estimated_usd":price,
-        "allowed_to_proceed":bool(estimate.allowed_to_proceed),
-        "price_detail":objdict(estimate),
-        "template_admission_status":"MODEL_LIMITS_FULL_FT_ACCEPTED",
+        "campaign_fingerprint":fingerprint,"campaign_suffix":suffix,
+        "from_hf_model":hf_model,"template_model":TEMPLATE,"epochs":EPOCHS,"evals":EVALS,
+        "estimated_usd":price,"allowed_to_proceed":bool(estimate.allowed_to_proceed),
+        "price_detail":objdict(estimate),"template_admission_status":"MODEL_LIMITS_FULL_FT_ACCEPTED",
         "byom_compatibility_status":"UNPROVEN_UNTIL_CREATE_ACCEPTS_FROM_HF_MODEL_AND_TRAINING_STARTS",
     }
     print(json.dumps(report,indent=2,default=str))
-    if not estimate.allowed_to_proceed:
-        raise SystemExit("Together price/admission endpoint does not allow this job")
-    if price>MAX_USD:
-        raise SystemExit(f"BUDGET_ABORT estimated ${price:.2f} > ${MAX_USD:.2f}")
+    if not estimate.allowed_to_proceed: raise SystemExit("Together price/admission endpoint does not allow this job")
+    if price>MAX_USD: raise SystemExit(f"BUDGET_ABORT estimated ${price:.2f} > ${MAX_USD:.2f}")
     if not args.create:
         print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fingerprint} for exact create")
         return
 
-    # Close the check/use window before the billed create.
+    assert_no_local_create_intent(fingerprint)
     assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
-    job=client.fine_tuning.create(
-        training_file=train_file.id,
-        validation_file=valid_file.id,
-        model=TEMPLATE,
-        from_hf_model=hf_model,
-        n_epochs=EPOCHS,
-        n_evals=EVALS,
-        n_checkpoints=1,
-        learning_rate=1e-5,
-        warmup_ratio=0.03,
-        train_on_inputs="auto",
-        lora=False,
-        suffix=suffix,
-    )
+    intent_path=arm_create_intent(fingerprint,hf_model,suffix)
+    create_client=new_zero_retry_create_client(Together)
+    try:
+        job=create_client.fine_tuning.create(
+            training_file=train_file.id,validation_file=valid_file.id,model=TEMPLATE,from_hf_model=hf_model,
+            n_epochs=EPOCHS,n_evals=EVALS,n_checkpoints=1,learning_rate=1e-5,warmup_ratio=0.03,
+            train_on_inputs="auto",lora=False,suffix=suffix,
+        )
+    except Exception as exc:
+        update_create_intent(intent_path,"UNKNOWN_REMOTE_CREATE",error_class=type(exc).__name__)
+        raise SystemExit(
+            "CREATE_OUTCOME_UNKNOWN local intent retained; do not retry create until exact provider reconciliation: "
+            +type(exc).__name__
+        ) from exc
+    update_create_intent(intent_path,"JOB_KNOWN",job_id=job.id)
     print(json.dumps({
-        "job_id":job.id,
-        "campaign_fingerprint":fingerprint,
-        "campaign_suffix":suffix,
-        "from_hf_model":hf_model,
-        "template_model":TEMPLATE,
-        "full_fine_tune":True,
-        "estimated_usd":price,
+        "job_id":job.id,"campaign_fingerprint":fingerprint,"campaign_suffix":suffix,
+        "from_hf_model":hf_model,"template_model":TEMPLATE,"full_fine_tune":True,
+        "estimated_usd":price,"local_create_intent":str(intent_path),
         "byom_compatibility_status":"CREATE_ACCEPTED_TRAINING_START_STILL_REQUIRED_FOR_PROMOTION",
         "next":"retrieve this exact job; never blind-retry create after an ambiguous transport outcome",
     },indent=2))

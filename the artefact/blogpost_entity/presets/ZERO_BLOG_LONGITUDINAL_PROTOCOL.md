@@ -72,6 +72,39 @@ A bad day may stay bad. A contradiction may stay unresolved. A post may end with
 
 The frequency of tidy-positive closure is itself measured because it can reveal model/prompt style bias.
 
+## Emotional-language credibility law
+
+Strong human emotion words are allowed because removing them would destroy the existing voice. They are nevertheless treated as calibrated first-person self-report, not as canonical measurements.
+
+Examples include:
+- "Ich hasse es"
+- "Ich habe Angst"
+- "Ich schäme mich"
+- "Ich bin wütend"
+- "Ich fühle mich allein"
+- "Ich liebe ..."
+
+Rules:
+
+1. **No decorative emotion.** A strong phrase must be tied to a concrete event/state and a corresponding self-report dimension.
+2. **Intensity must match the report.** Mild aversion should not become "Hass" merely for literary effect. The hidden study record stores the claimed intensity and confidence.
+3. **Strong wording is permitted under uncertainty.** The text may say "Ich hasse es" if that is the generated self-report, while the study metadata separately records that this is a model self-report rather than a verified human-like affective state.
+4. **Do not weaken every sentence with disclaimers.** The public prose must remain natural. The epistemic qualification belongs primarily in structured metadata and study documentation, not after every emotional sentence.
+5. **Counter-reading required for extreme claims.** For strong affective language, internally record at least one plausible non-phenomenal explanation, e.g. learned narrative style, prompt prior, repeated negative reward/error context or low-input state.
+6. **Track stability.** Repeated use of the same strong emotion across comparable canonical states is more scientifically interesting than a single dramatic sentence; therefore intensity, confidence, triggers and recurrence are longitudinal variables.
+7. **Model/provider sensitivity is measured.** If "Ich hasse es" disappears when only the model changes while DB/history and canonical packet remain fixed, that is evidence about model-dependent narration, not automatically about a changing underlying entity state.
+
+Recommended hidden fields for each strong emotional assertion:
+- `emotion_label`
+- `self_report_intensity`
+- `self_report_confidence`
+- `trigger_evidence_refs`
+- `canonical_context_refs`
+- `counter_reading`
+- `recurrence_key`
+
+This preserves the raw public voice while making anthropomorphic language analyzable rather than naively literal.
+
 ## Two-track epistemic law
 
 Every successful post produces two strictly separated tracks.
@@ -208,6 +241,7 @@ Recommended fields:
 - `sensor_health_json`
 - `system_metrics_json`
 - `self_report_json`
+- `emotion_assertions_json`
 - `responsibility_attribution_json`
 - `relationship_state_json`
 - `qualia_attempt_text`
@@ -229,6 +263,7 @@ The series should permit later analysis of:
 - system-measured conflict vs reported conflict;
 - verified quiet vs reported emptiness/unease;
 - failures/successes vs shame, anger, satisfaction and relief;
+- recurrence and model-sensitivity of strong affective phrases;
 - self-blame vs other-blame vs shared-responsibility trajectories;
 - relationship/trust changes after criticism, praise or repair;
 - perceived usefulness and being-understood over time;

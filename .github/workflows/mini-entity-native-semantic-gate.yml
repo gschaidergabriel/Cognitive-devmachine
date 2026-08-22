@@ -1,0 +1,49 @@
+name: Mini Entity native semantic gate
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/native/**'
+      - '.github/workflows/mini-entity-native-semantic-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'the artefact/blogpost_entity/native/**'
+      - '.github/workflows/mini-entity-native-semantic-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-native-semantic-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Bind exact checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "HEAD=$(git rev-parse HEAD)"
+          echo "TREE=$(git rev-parse HEAD^{tree})"
+          test -z "$(git status --porcelain)"
+
+      - name: Install native build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential pkg-config libsqlite3-dev libcurl4-openssl-dev libjson-c-dev sqlite3 binutils
+
+      - name: Exact profile-v2 semantic and persistence gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            'the artefact/blogpost_entity/native/test_native_semantic_gate.py' \
+            'the artefact/blogpost_entity/native/test_native_persisted_output_leaks.py' \
+            'the artefact/blogpost_entity/native/test_native_metric_div0_unknown.py'

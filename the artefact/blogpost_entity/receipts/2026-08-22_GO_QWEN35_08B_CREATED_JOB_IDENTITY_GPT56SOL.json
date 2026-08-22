@@ -1,0 +1,80 @@
+{
+  "schema": "clay-go-cognition-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "current_paid_training_base": "Qwen/Qwen3.5-0.8B",
+  "branch": "gpt56sol/go-08b-created-job-identity-20260822-1838",
+  "base_main_sha": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce",
+  "finding": {
+    "kind": "POST_CREATE_TRAINING_IDENTITY_UNDERVERIFIED",
+    "vulnerable_launcher_blob_sha": "c18f84f0eebd94a5bebbc3bc283c6b956792fb16",
+    "vulnerable_test_blob_sha": "17962a7a648809c9ec0b46ca170d253212f02b02",
+    "observed_source_behavior": "The billed create payload and campaign fingerprint bind Full training, SFT method, n_checkpoints, random_seed, learning_rate and warmup_ratio, but the post-create retrieve verifier only compared files, model, epochs/evals and random_seed.",
+    "risk": "A provider-returned job whose create-relevant training mode or hyperparameters differ could be labeled created_job_identity=VERIFIED by the local verifier.",
+    "provider_contract_basis": "Current Together fine-tuning job retrieve/create documentation exposes training_type, training_method, n_checkpoints, learning_rate and warmup_ratio as job metadata, so these values are available for fail-closed post-create verification."
+  },
+  "unusual_experiment": {
+    "count_for_local_receipt": 1,
+    "id": "POST_CREATE_FULLFT_IDENTITY_SUBSTITUTION",
+    "hypothesis": "The current verifier rejects a provider-returned job if create-relevant Full-FT identity fields are substituted after billed create.",
+    "counterhypothesis": "Because those fields are absent from expected, a substituted LoRA/training hyperparameter metadata object is accepted as identity-equivalent.",
+    "intervention": "Against the exact vulnerable verifier semantics, preserve all compared fields while substituting training_type=LoRA, learning_rate=9e-4, warmup_ratio=0.4, n_checkpoints=0 and an unrelated output name.",
+    "observed": {
+      "baseline_mismatches": {},
+      "mutated_mismatches": {}
+    },
+    "result": "COUNTERHYPOTHESIS_RETAINED_VULNERABILITY_CONFIRMED_AT_SOURCE_MECHANISM_SCOPE",
+    "global_slot_adjudication": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID",
+    "note": "This is one bundled identity-substitution intervention, not multiple unusual experiments. Subsequent per-field tests are deterministic regressions."
+  },
+  "repair": {
+    "launcher_blob_sha": "95fa71c5ae39cb4add7af08c45f162e1b6094afb",
+    "test_blob_sha": "81a4dca1a0e0bc3cca7c45dc35217052896a760e",
+    "launcher_commit": "378d6b8e47537600b57fc11cb2474ebff6365cf6",
+    "test_commit": "e5644fe2db710c4731dbeed07d347249d8e1d1ed",
+    "mechanism": "Use one expected_created_job_identity contract and recursively normalize provider SDK model/dict values before exact comparison. Post-create verification now includes n_checkpoints, learning_rate, warmup_ratio, training_method and training_type in addition to the prior files/model/epochs/evals/seed fields.",
+    "fail_closed": "Missing or substituted create-relevant provider metadata becomes JOB_CREATED_IDENTITY_MISMATCH; the already-created job remains JOB_KNOWN and must be reconciled rather than replaced blindly."
+  },
+  "isolated_exact_blob_regression": {
+    "environment": "ChatGPT isolated Python execution surface; no network/provider access",
+    "blob_identity_method": "git blob SHA-1 reconstructed locally and matched to GitHub content_sha for both changed files before execution",
+    "launcher_blob_match": true,
+    "test_blob_match": true,
+    "tests_run": 10,
+    "tests_passed": 10,
+    "exit_code": 0,
+    "coverage_note": "Includes canonical v2 validator wiring regression, direct Full create contract, duplicate/create-intent fences, SDK-object normalization and fail-closed substitution/missing-field checks.",
+    "scope": "EXACT_CHANGED_BLOBS_UNIT_EVIDENCE_ONLY_NOT_FULL_CHECKOUT_OR_PROVIDER_RUNTIME"
+  },
+  "coordination": {
+    "latest_main_reentry_preserved": "Branch was reset onto current main f1516ba564f4e8a2fe2c83d6535e54de9bea14ce before the retained writes, preserving the approx1B continuity update and canonical v2 preflight validator repair.",
+    "duplicate_search": "No overlapping PR was found for post-create training_type/learning_rate/warmup identity verification at search time."
+  },
+  "provider_actions": {
+    "together_api_key_used": false,
+    "authenticated_provider_call": false,
+    "file_upload": false,
+    "price_estimate_call": false,
+    "billed_create": false,
+    "training_started": false,
+    "money_spent_usd": 0
+  },
+  "claims_not_made": [
+    "authenticated Together preflight",
+    "provider-side dataset acceptance",
+    "provider-side job identity behavior",
+    "billed training create",
+    "training success",
+    "tuned model quality or superiority",
+    "Q4_K_M quantization",
+    "measured peak RSS below 1 GiB",
+    "real generic local_exec tuned-model integration",
+    "whole Mini Entity acceptance"
+  ],
+  "next_exact_gate": "Open exact branch PR, attempt repository admission workflow, classify steps-null as execution-admission failure rather than test failure, and retain authenticated Together preflight plus explicit fingerprint-bound paid create as owner-gated future work."
+}

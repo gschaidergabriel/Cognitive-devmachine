@@ -1,0 +1,153 @@
+name: mini-native-07-acceptance
+
+on:
+  push:
+    branches:
+      - gpt56sol/go-native-07-repeat-build-20260822-1320
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/native/mini_entity.c'
+      - 'the artefact/blogpost_entity/native/mini_entity_part*.inc'
+      - 'the artefact/blogpost_entity/native/build_native_bound.py'
+      - 'the artefact/blogpost_entity/native/run_native_07_acceptance.py'
+      - 'the artefact/blogpost_entity/presets/zero_blog.json'
+      - 'the artefact/blogpost_entity/presets/zero_blog_state_box.json'
+      - '.github/workflows/mini-native-07-acceptance.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-native-07:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gcc binutils pkg-config sqlite3 libsqlite3-dev libcurl4-openssl-dev libjson-c-dev
+
+      - name: Syntax-check bound builder and runtime harness
+        run: >-
+          python -m py_compile
+          'the artefact/blogpost_entity/native/build_native_bound.py'
+          'the artefact/blogpost_entity/native/run_native_07_acceptance.py'
+
+      - name: Build A from exact transitive source closure
+        run: |
+          mkdir -p native-07/build-a native-07/build-b native-07/runtime
+          python 'the artefact/blogpost_entity/native/build_native_bound.py' \
+            --version-label mini-entity/0.7.0-dev1 \
+            --source-date-epoch 1787356800 \
+            --repeat 2 \
+            --output native-07/build-a/mini_entity.clay \
+            --receipt native-07/build-a/provenance.json \
+            > native-07/build-a/stdout.json
+          test "$(native-07/build-a/mini_entity.clay --version)" = 'mini-entity/0.7.0-dev1'
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('native-07/build-a/provenance.json').read_text())
+          assert p['schema']=='mini-entity-native-build-provenance/v2'
+          assert p['version_label']=='mini-entity/0.7.0-dev1'
+          assert p['build_definition']['repeat_byte_identity'] is True
+          assert len(set(p['build_definition']['repeat_hashes']))==1
+          closure=p['build_definition']['source_closure']
+          assert [x['path'] for x in closure['files']]==[
+            'mini_entity.c','mini_entity_part00.inc','mini_entity_part01.inc',
+            'mini_entity_part02.inc','mini_entity_part03.inc','mini_entity_part04.inc'
+          ]
+          print('SOURCE_CLOSURE_SHA256='+closure['sha256'])
+          print('ELF_A_SHA256='+p['subject']['sha256'])
+          PY
+          file native-07/build-a/mini_entity.clay
+          ldd native-07/build-a/mini_entity.clay
+
+      - name: Execute fixture local_exec and atomic rollback matrix on exact ELF A
+        run: |
+          python 'the artefact/blogpost_entity/native/run_native_07_acceptance.py' \
+            --binary native-07/build-a/mini_entity.clay \
+            --receipt native-07/runtime/runtime_acceptance.json \
+            > native-07/runtime/stdout.json
+          cat native-07/runtime/runtime_acceptance.json
+
+      - name: Clean Build B after runtime fault matrix
+        run: |
+          python 'the artefact/blogpost_entity/native/build_native_bound.py' \
+            --version-label mini-entity/0.7.0-dev1 \
+            --source-date-epoch 1787356800 \
+            --repeat 2 \
+            --output native-07/build-b/mini_entity.clay \
+            --receipt native-07/build-b/provenance.json \
+            > native-07/build-b/stdout.json
+          cmp native-07/build-a/mini_entity.clay native-07/build-b/mini_entity.clay
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('native-07/build-a/provenance.json').read_text())
+          b=json.loads(Path('native-07/build-b/provenance.json').read_text())
+          assert a['subject']['sha256']==b['subject']['sha256']
+          assert a['build_definition']['source_identity_sha256']==b['build_definition']['source_identity_sha256']
+          assert a['build_definition']['source_closure']==b['build_definition']['source_closure']
+          assert a['build_definition']['compiler']==b['build_definition']['compiler']
+          assert a['build_definition']['pkg_config_packages']==b['build_definition']['pkg_config_packages']
+          assert a['build_definition']['pkg_config_flags']==b['build_definition']['pkg_config_flags']
+          print('ELF_B_SHA256='+b['subject']['sha256'])
+          PY
+
+      - name: Emit exact acceptance bundle
+        env:
+          EXACT_GITHUB_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          a=json.loads(Path('native-07/build-a/provenance.json').read_text())
+          b=json.loads(Path('native-07/build-b/provenance.json').read_text())
+          r=json.loads(Path('native-07/runtime/runtime_acceptance.json').read_text())
+          bundle={
+            'schema':'mini-entity-native-0.7-exact-acceptance-bundle/v1',
+            'github_sha':os.environ['EXACT_GITHUB_SHA'],
+            'version':'mini-entity/0.7.0-dev1',
+            'source_identity_sha256':a['build_definition']['source_identity_sha256'],
+            'source_closure':a['build_definition']['source_closure'],
+            'elf_sha256':a['subject']['sha256'],
+            'elf_build_id':a['subject']['elf_build_id'],
+            'compiler':a['build_definition']['compiler'],
+            'pkg_config_packages':a['build_definition']['pkg_config_packages'],
+            'pkg_config_flags':a['build_definition']['pkg_config_flags'],
+            'resolved_runtime_dependencies':a['resolved_runtime_dependencies'],
+            'build_a_repeat_hashes':a['build_definition']['repeat_hashes'],
+            'build_b_repeat_hashes':b['build_definition']['repeat_hashes'],
+            'clean_build_a_b_byte_identical':a['subject']['sha256']==b['subject']['sha256'],
+            'runtime_acceptance':r,
+            'network_provider_call':False,
+            'provider_secret_used':False,
+            'model_quality_claimed':False,
+            'acceptance_scope':'EXACT_SHA_SOURCE_BOUND_REPEAT_ELF_PLUS_FIXTURE_LOCAL_EXEC_ATOMIC_ROLLBACK_MATRIX',
+            'pass':bool(r.get('pass')) and a['subject']['sha256']==b['subject']['sha256'],
+          }
+          Path('native-07/acceptance_bundle.json').write_text(json.dumps(bundle,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(bundle,indent=2,sort_keys=True))
+          assert bundle['pass'] is True
+          PY
+
+      - name: Upload exact ELF and receipts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mini-native-07-${{ github.sha }}
+          path: |
+            native-07/build-a/mini_entity.clay
+            native-07/build-a/provenance.json
+            native-07/build-b/mini_entity.clay
+            native-07/build-b/provenance.json
+            native-07/runtime/runtime_acceptance.json
+            native-07/acceptance_bundle.json
+          if-no-files-found: error
+          retention-days: 7

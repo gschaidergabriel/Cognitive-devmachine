@@ -33,3 +33,13 @@ class NativeRecursiveLeakGateTests(unittest.TestCase):
         payload = NativeSemanticGateTests.valid_payload()
         payload["hypotheses"] = [{"candidate": {"note": "FORBIDDEN_TOKEN"}}]
         self.reject(payload, "LEAK_PATTERN_NO_COMMIT")
+
+    def test_leak_pattern_rejected_in_nested_self_report_leaf(self) -> None:
+        payload = NativeSemanticGateTests.valid_payload()
+        payload["self_report"] = {"layers": [{"note": "FORBIDDEN_TOKEN"}]}
+        self.reject(payload, "LEAK_PATTERN_NO_COMMIT")
+
+    def test_leak_pattern_rejected_in_future_nested_persisted_leaf(self) -> None:
+        payload = NativeSemanticGateTests.valid_payload()
+        payload["future_contract_extension"] = {"nested": ["safe", {"value": "private_table"}]}
+        self.reject(payload, "LEAK_PATTERN_NO_COMMIT")

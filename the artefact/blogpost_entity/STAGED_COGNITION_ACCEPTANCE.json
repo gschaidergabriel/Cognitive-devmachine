@@ -1,0 +1,63 @@
+{
+  "schema": "mini-entity-staged-cognition-acceptance/v1",
+  "date": "2026-08-22",
+  "authority": {
+    "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+    "program_state": "research_entity/rooms/PROGRAM_STATE.json",
+    "canonical_pipeline": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "canonical_reference_runtime": "tools/clay_profile_pipeline_runtime.py"
+  },
+  "purpose": "Turn the owner-directed staged-cognition concept into explicit fail-closed implementation obligations without creating a second truth, memory, effect or entity authority.",
+  "generic_binary_contract": {
+    "stages_are_runtime_configuration": true,
+    "stage_names_roles_backends_prompts_cadence_are_not_binary_identity": true,
+    "stage_outputs_are_typed_derived_material_only": true,
+    "stage_output_may_mint_canonical_evidence": false,
+    "stage_output_may_self_promote_to_fact": false,
+    "stage_output_may_grant_effect_authority": false,
+    "canonical_commit_remains_single_atomic_pipeline_commit": true,
+    "canonical_truth_gate_remains_deterministic": true,
+    "miniunifieddb_remains_single_persistent_entity_authority": true
+  },
+  "snapshot_contract": {
+    "zero_blog_requires_frozen_zero_state_snapshot": true,
+    "required_identity_fields": ["zero_generation", "snapshot_timestamp", "snapshot_hash", "source_provenance_identity"],
+    "single_article_must_not_silently_mix_zero_generations": true,
+    "snapshot_is_read_only_from_blog_path": true,
+    "blog_db_must_not_become_competing_copy_of_zero_unifieddb": true
+  },
+  "epistemic_types": ["FACT", "OBSERVATION", "ZERO_STATE", "HYPOTHESIS", "COUNTERHYPOTHESIS", "IMPLICATION", "CONTRADICTION", "OPEN_QUESTION", "NARRATIVE_MEMORY", "UNKNOWN"],
+  "promotion_invariants": ["NARRATIVE_MEMORY != FACT", "HYPOTHESIS != FACT", "IMPLICATION != FACT", "REPETITION != CORROBORATION", "MODEL_CONSENSUS != CANONICAL_TRUTH", "UNKNOWN != ZERO != ERROR != MEASURED"],
+  "zero_blog_default_preset": {
+    "stages": [
+      {"role": "curator", "default_cadence": "daily", "authority": "PROPOSAL_ONLY"},
+      {"role": "analyst_prestage", "default_cadence": "before_blog_run", "authority": "DERIVED_REASONING_ONLY"},
+      {"role": "writer", "default_cadence": "per_blog_run", "authority": "NARRATIVE_OUTPUT_ONLY"}
+    ],
+    "default_backend_family": "mistral",
+    "replaceable": true,
+    "binary_must_not_require_these_role_names_or_backend": true
+  },
+  "required_failure_modes": [
+    "reject_or_type_unknown_snapshot_identity",
+    "reject_cross_generation_snapshot_mix_without_explicit_typed_handling",
+    "reject_stage_attempt_to_emit_canonical_fact_without_admitted_evidence",
+    "reject_stage_attempt_to_bypass_final_deterministic_gate",
+    "reject_stage_derived_evidence_ref_not_bound_to_admitted_provenance",
+    "rollback_output_state_consumption_when_any_required_stage_or_final_gate_fails",
+    "preserve_UNKNOWN_on_missing_or_failed_canonical_snapshot_fields"
+  ],
+  "integration_order": [
+    "resolve current reference effect-surface mismatch pipeline_profile_read/inference_generate",
+    "complete native clay-pipeline-profile/v2 parity under existing fail-closed guard",
+    "add generic configurable staged-inference orchestration without role hard-coding",
+    "bind frozen snapshot identity and epistemic types into the canonical envelope",
+    "add adversarial stage-authority and cross-generation snapshot tests",
+    "obtain exact-current source-bound isolated runtime evidence"
+  ],
+  "current_admission": {
+    "status": "FAIL_CLOSED_NOT_IMPLEMENTED",
+    "reason": "Owner-directed staged cognition is architectural source authority, but the current canonical reference/native runtime path is still blocked earlier by the reference effect-surface mismatch and native profile-v2 parity gate. This contract must not be used to claim runtime support.",
+    "runtime_receipt": null
+  }
+}

@@ -2,8 +2,9 @@
 
 Source-closure semantics remain owned by test_build_native_bound_source_closure.py.
 Local-runner environment isolation is exercised by test_native_local_env_isolation.py.
-This adapter exposes both suites through one canonical workflow entry without creating
-a second runtime or acceptance path.
+Profile-v2 admission debt is bound by test_native_v2_parity_contract.py.
+This adapter exposes all three suites through one canonical workflow entry without
+creating a second runtime or acceptance path.
 """
 from __future__ import annotations
 
@@ -28,6 +29,11 @@ _env = _load(
     "test_native_local_env_isolation.py",
     "mini_entity_local_env_isolation_tests",
 )
+_v2_parity = _load(
+    "test_native_v2_parity_contract.py",
+    "mini_entity_v2_parity_contract_tests",
+)
 
 SourceClosureTests = _closure.SourceClosureTests
 NativeLocalEnvIsolationTests = _env.NativeLocalEnvIsolationTests
+NativeProfileV2ParityContractTests = _v2_parity.NativeProfileV2ParityContractTests

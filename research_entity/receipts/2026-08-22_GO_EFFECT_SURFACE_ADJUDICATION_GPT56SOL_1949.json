@@ -1,0 +1,100 @@
+{
+  "schema": "clay-go-effect-surface-adjudication/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_sha_observed": "ee3e72e99b7abface25d4113776799f674ccf2ad",
+  "program": "Multi-use Mini Entity pipeline all-in-one",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "authority": {
+    "canonical_clay_source": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "canonical_clay_blob_sha": "9f5e0febb362c6635bdf83787d5f0f37e158bf87",
+    "reference_runtime": "tools/clay_profile_pipeline_runtime.py",
+    "reference_runtime_blob_sha": "fa3031ac7bf4cea6a12c57f781c29c9c3650ebef",
+    "contract_guard": "the artefact/blogpost_entity/check_structured_contract_sync.py",
+    "contract_guard_blob_sha": "844ab2d194d7f8deef894325742a5ec9e2b401b0"
+  },
+  "observed_current_main_gap": {
+    "canonical_clay_run_args": ["entity_db", "source_db", "secret_file"],
+    "canonical_effects": ["pipeline_profile_read", "inference_generate"],
+    "reference_runtime_legacy_effects": ["profile_load", "provider_chat_json"],
+    "reference_tests_still_use_external_profile_file": true,
+    "classification": "REFERENCE_RUNTIME_NOT_CONVERGED"
+  },
+  "overlap_adjudication": {
+    "pr_727": {
+      "head_sha": "743a7aa3bce397a755fd623eed6d4fafc347b3a5",
+      "base_sha": "4fa6c00356ce9fbaa231e2c8cb0328b591ab6efe",
+      "mergeable_observed": false,
+      "latest_structured_workflow_run_id": 32548769792,
+      "latest_structured_job_id": 96971933512,
+      "executed_steps": 0,
+      "execution_classification": "EXECUTION_ADMISSION_BLOCKED",
+      "decision": "RETAIN_AS_PREFERRED_SECURITY_DONOR_NOT_PROMOTED",
+      "useful_mechanisms": [
+        "DB-resident active profile",
+        "pipeline_profile_read",
+        "inference_generate",
+        "profile secret-value rejection",
+        "profile/study snapshot integrity fence",
+        "explicit local_exec child environment allowlist",
+        "declared-secret exclusion from local_exec child environment"
+      ]
+    },
+    "pr_728": {
+      "head_sha": "11086376644fe69c9b34c0a897571d1ef40bd339",
+      "base_sha": "cc0256984ae12deb1f1dbef462179b1784a0a5c8",
+      "mergeable_observed": false,
+      "latest_structured_workflow_run_id": 32548660476,
+      "latest_structured_job_id": 96991073061,
+      "executed_steps": 0,
+      "execution_classification": "EXECUTION_ADMISSION_BLOCKED",
+      "decision": "DO_NOT_PROMOTE_WITH_CURRENT_LOCAL_EXEC_ENVIRONMENT_BEHAVIOR",
+      "blocking_mechanism": "subprocess.run local_exec omits env and therefore inherits the parent process environment"
+    }
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "name": "LOCAL_EXEC_SYNTHETIC_SECRET_ENVIRONMENT_DISCRIMINATOR",
+    "environment": "isolated ChatGPT tool container; synthetic secret only; no repository/provider/user secret used",
+    "arm_a": {
+      "mechanism": "subprocess.run with env omitted",
+      "child_observed": "SYNTHETIC_ONLY_8f2d1c"
+    },
+    "arm_b": {
+      "mechanism": "subprocess.run with explicit safe allowlist",
+      "child_observed": "ABSENT"
+    },
+    "result": "SUPPORTED",
+    "interpretation": "An omitted subprocess env propagates parent environment values into local inference children; explicit allowlisting removes the synthetic secret. This supports retaining the #727 environment-filter mechanism and blocks promotion of #728 as written."
+  },
+  "state_coherence_warning": {
+    "program_state_referenced_paths_missing_on_exact_main": [
+      "research_entity/global/FREE_TRAINING_PIPELINE_PROFILE_V2_CONTRACT.md",
+      "research_entity/global/FREE_TRAINING_PIPELINE_UNIFIED_RUNTIME_ADAPTER_CONTRACT.md"
+    ],
+    "classification": "STATE_REFERENCE_DRIFT",
+    "law": "PROGRAM_STATE pointers are frontier hints when referenced bytes are absent; they are not executable/source evidence."
+  },
+  "durable_coordination": {
+    "pr_727_review_id": 5000218922,
+    "pr_728_review_id": 5000218653,
+    "duplicate_runtime_created": false
+  },
+  "fusion_recommendation": [
+    "Start from fresh current main, not either stale PR base.",
+    "Fuse only the canonical 3-argument DB-profile path and matching effect names.",
+    "Preserve #727 secret-value rejection and explicit filtered local_exec environment.",
+    "Preserve profile hash/snapshot integrity and fail-closed missing-profile behavior.",
+    "Do not add a second state, study, effect, or inference authority merely to absorb donor code.",
+    "Run focused parity/negative regressions plus the already-defined preset-amputation discriminator on the exact fused head in an actually-started isolated executor.",
+    "Do not claim TEST_FAIL from zero-step workflow jobs and do not claim runtime PASS before an executable run starts."
+  ],
+  "provider_budget": {
+    "provider_execution_attempted": false,
+    "paid_training_attempted": false,
+    "together_used": false
+  },
+  "outcome": "MECHANISM_SUPPORTED_FUSION_BLOCKED_ON_FRESH_HEAD_IMPLEMENTATION_AND_EXECUTION_ADMISSION",
+  "whole_product_acceptance": "IN_PROGRESS"
+}

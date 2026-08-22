@@ -3,7 +3,7 @@ name: mini-entity-structured-convergence
 on:
   push:
     branches:
-      - gpt56sol/go-structured-mini-convergence-20260822
+      - go-reference-runtime-fusion-20260822
   pull_request:
     paths:
       - 'the artefact/blogpost_entity/BLOGPOST_ENTITY.clay'
@@ -11,6 +11,7 @@ on:
       - 'the artefact/blogpost_entity/test_state_box_atomic.py'
       - 'the artefact/blogpost_entity/test_runtime_stream_integrity.py'
       - 'the artefact/blogpost_entity/test_runtime_schema_migration.py'
+      - 'the artefact/blogpost_entity/test_runtime_truth_boundary.py'
       - 'the artefact/blogpost_entity/state_box_reference.py'
       - 'the artefact/blogpost_entity/check_structured_contract_sync.py'
       - 'tools/clay_profile_pipeline_runtime.py'
@@ -40,6 +41,7 @@ jobs:
           tools/mini_entity_profile_import.py
           'the artefact/blogpost_entity/state_box_reference.py'
           'the artefact/blogpost_entity/check_structured_contract_sync.py'
+          'the artefact/blogpost_entity/test_runtime_truth_boundary.py'
       - name: Enforce Clay reference-contract convergence
         run: python 'the artefact/blogpost_entity/check_structured_contract_sync.py'
       - name: Run structured Mini Entity convergence tests
@@ -49,4 +51,5 @@ jobs:
           'the artefact/blogpost_entity/test_state_box_atomic.py'
           'the artefact/blogpost_entity/test_runtime_stream_integrity.py'
           'the artefact/blogpost_entity/test_runtime_schema_migration.py'
+          'the artefact/blogpost_entity/test_runtime_truth_boundary.py'
           -q

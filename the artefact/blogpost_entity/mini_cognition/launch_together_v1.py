@@ -11,14 +11,21 @@ Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family catalog-template candidate.
 Template model_limits and price estimation do NOT prove BYOM compatibility because they
 do not validate from_hf_model. BYOM compatibility remains open until Together accepts
 (and subsequently starts) the requested HF checkpoint under the selected template.
+
+The BYOM source revision is part of the campaign identity. The default primary and
+instruct-ablation checkpoints are pinned to exact Hugging Face commits; any custom model
+override must provide an explicit exact 40-hex revision before preflight/create can proceed.
 """
-import argparse, hashlib, json, os, subprocess, sys, time
+import argparse, hashlib, json, os, re, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v1.jsonl"
 VALID=HERE/"validation_v1.jsonl"
-HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL","Qwen/Qwen2.5-0.5B")
+PRIMARY_HF_MODEL="Qwen/Qwen2.5-0.5B"
+PRIMARY_HF_REVISION="060db6499f32faf8b98477b0a26969ef7d8b9987"
+INSTRUCT_HF_MODEL="Qwen/Qwen2.5-0.5B-Instruct"
+INSTRUCT_HF_REVISION="7ae557604adf67be50417f59c2c2f167def9a775"
 TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-7B-Instruct-Turbo")
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
 EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
@@ -46,6 +53,25 @@ def objdict(x):
     if isinstance(x,dict): return x
     return str(x)
 
+def exact_revision(model, revision_env, default_model, default_revision):
+    revision=os.environ.get(revision_env,"").strip()
+    if not revision:
+        if model!=default_model:
+            raise SystemExit(f"{revision_env} is required when overriding {default_model} with {model}")
+        revision=default_revision
+    if not re.fullmatch(r"[0-9a-fA-F]{40}",revision):
+        raise SystemExit(f"{revision_env} must be an exact 40-hex Hugging Face commit SHA")
+    return revision.lower()
+
+def resolve_hf_source(instruct_ablation):
+    if instruct_ablation:
+        model=os.environ.get("CLAYCOG_INSTRUCT_HF_MODEL",INSTRUCT_HF_MODEL)
+        revision=exact_revision(model,"CLAYCOG_INSTRUCT_HF_REVISION",INSTRUCT_HF_MODEL,INSTRUCT_HF_REVISION)
+    else:
+        model=os.environ.get("CLAYCOG_HF_MODEL",PRIMARY_HF_MODEL)
+        revision=exact_revision(model,"CLAYCOG_HF_REVISION",PRIMARY_HF_MODEL,PRIMARY_HF_REVISION)
+    return model,revision
+
 def sha256_file(path):
     h=hashlib.sha256()
     with open(path,"rb") as f:
@@ -53,10 +79,11 @@ def sha256_file(path):
             h.update(chunk)
     return h.hexdigest()
 
-def campaign_descriptor(hf_model):
+def campaign_descriptor(hf_model,hf_revision):
     return {
         "schema":"claycog-05b-together-campaign/v1",
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "training_sha256":sha256_file(TRAIN),
         "validation_sha256":sha256_file(VALID),
@@ -70,8 +97,8 @@ def campaign_descriptor(hf_model):
         "n_checkpoints":1,
     }
 
-def campaign_fingerprint(hf_model):
-    raw=json.dumps(campaign_descriptor(hf_model),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode("utf-8")
+def campaign_fingerprint(hf_model,hf_revision):
+    raw=json.dumps(campaign_descriptor(hf_model,hf_revision),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()
 
 def campaign_suffix(fingerprint):
@@ -92,9 +119,10 @@ def _field(x,name,default=None):
 def matching_campaign_jobs(client,hf_model,template,suffix):
     """Return account jobs that appear to carry this deterministic campaign suffix.
 
-    The suffix is derived from exact local dataset digests + training configuration.
-    Where Together exposes model/from_hf_model, those fields must also match. Missing
-    optional fields are tolerated so the guard remains useful across response versions.
+    The suffix is derived from exact local dataset digests + HF source revision + training
+    configuration. Where Together exposes model/from_hf_model, those fields must also
+    match. Missing optional fields are tolerated so the guard remains useful across
+    response versions.
     """
     matches=[]
     for job in _items(client.fine_tuning.list()):
@@ -133,10 +161,10 @@ def main():
     args=ap.parse_args()
     if not os.environ.get("TOGETHER_API_KEY"):
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
-    hf_model="Qwen/Qwen2.5-0.5B-Instruct" if args.instruct_ablation else HF_MODEL
+    hf_model,hf_revision=resolve_hf_source(args.instruct_ablation)
 
     run_local_checks()
-    fingerprint=campaign_fingerprint(hf_model)
+    fingerprint=campaign_fingerprint(hf_model,hf_revision)
     suffix=campaign_suffix(fingerprint)
 
     # Keep Together import behind the credential/local-validation boundary so pure safety
@@ -172,6 +200,7 @@ def main():
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "epochs":EPOCHS,
         "evals":EVALS,
@@ -199,6 +228,7 @@ def main():
         validation_file=valid_file.id,
         model=TEMPLATE,
         from_hf_model=hf_model,
+        hf_model_revision=hf_revision,
         n_epochs=EPOCHS,
         n_evals=EVALS,
         n_checkpoints=1,
@@ -213,6 +243,7 @@ def main():
         "campaign_fingerprint":fingerprint,
         "campaign_suffix":suffix,
         "from_hf_model":hf_model,
+        "hf_model_revision":hf_revision,
         "template_model":TEMPLATE,
         "full_fine_tune":True,
         "estimated_usd":price,

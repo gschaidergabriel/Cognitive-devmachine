@@ -1,0 +1,57 @@
+name: Mini Entity native bundle provenance
+
+on:
+  push:
+    branches:
+      - 'gpt56sol/go-native-bundle-provenance-*'
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/native/build_native_bound.py'
+      - 'the artefact/blogpost_entity/native/test_build_native_bound.py'
+      - 'the artefact/blogpost_entity/native/mini_entity.c'
+      - 'the artefact/blogpost_entity/native/mini_entity_part*.inc'
+      - '.github/workflows/mini-entity-native-bundle-provenance.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  provenance-falsifiers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run source-bundle identity falsifiers
+        run: >-
+          python -m pytest -q
+          'the artefact/blogpost_entity/native/test_build_native_bound.py'
+      - name: Inspect canonical 0.7 local source closure
+        run: |
+          python - <<'PY'
+          import importlib.util
+          import json
+          from pathlib import Path
+
+          p = Path('the artefact/blogpost_entity/native/build_native_bound.py')
+          spec = importlib.util.spec_from_file_location('build_native_bound', p)
+          m = importlib.util.module_from_spec(spec)
+          assert spec and spec.loader
+          spec.loader.exec_module(m)
+          source = p.with_name('mini_entity.c')
+          digest, members = m.source_bundle_identity(source)
+          expected = {
+              'mini_entity.c',
+              'mini_entity_part00.inc',
+              'mini_entity_part01.inc',
+              'mini_entity_part02.inc',
+              'mini_entity_part03.inc',
+              'mini_entity_part04.inc',
+          }
+          observed = {x['path'] for x in members}
+          if observed != expected:
+              raise SystemExit(f'SOURCE_BUNDLE_MEMBER_MISMATCH expected={sorted(expected)} observed={sorted(observed)}')
+          print(json.dumps({'source_bundle_sha256': digest, 'members': members}, sort_keys=True))
+          PY

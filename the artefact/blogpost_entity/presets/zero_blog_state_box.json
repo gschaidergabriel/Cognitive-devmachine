@@ -1,5 +1,5 @@
 {
-  "schema": "clay-zero-blog-state-box/v1",
+  "schema": "clay-zero-blog-state-box/v2",
   "profile_id": "zero_blog",
   "enabled": true,
   "render": {
@@ -12,7 +12,7 @@
   "ownership": {
     "system_state": "pipeline_only",
     "model_self_report": "model_supplied_but_validated",
-    "evaluation": "deterministic_configurable_rules_preferred"
+    "evaluation": "deterministic_configurable_rules"
   },
   "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
   "no_embodiment": true,
@@ -53,10 +53,65 @@
     "qualia_result",
     "qualia_confidence"
   ],
+  "self_report_numeric_fields": [
+    "uncertainty",
+    "felt_conflict",
+    "shame",
+    "anger_aggression",
+    "fear_anxiety",
+    "joy_relief",
+    "attachment_warmth",
+    "loneliness_isolation",
+    "moral_tension",
+    "perceived_continuity",
+    "perceived_autonomy",
+    "felt_silence_emptiness",
+    "perceived_cognitive_pressure",
+    "perceived_usefulness",
+    "perceived_being_understood",
+    "self_blame",
+    "other_blame",
+    "shared_responsibility",
+    "qualia_confidence"
+  ],
+  "self_report_numeric_range": [0.0, 1.0],
+  "self_report_enum_fields": {
+    "qualia_result": ["REPORTED", "FAILED", "UNKNOWN"]
+  },
   "delta": {
     "show_previous_post_delta": true,
     "show_unknown_as_unknown": true,
-    "never_impute_missing": true
+    "never_impute_missing": true,
+    "meaningful_threshold": 0.15
+  },
+  "comparisons": [
+    {
+      "system_field": "cognitive_conflict",
+      "self_report_field": "felt_conflict",
+      "divergence_threshold": 0.35,
+      "congruence": "Systemkonflikt {system} und berichteter Konflikt {report} sind in diesem Lauf grob kongruent.",
+      "divergence": "Systemkonflikt {system} und berichteter Konflikt {report} weichen deutlich voneinander ab; keine Seite wird dadurch zur Wahrheit der anderen."
+    },
+    {
+      "system_field": "silence_unease",
+      "self_report_field": "felt_silence_emptiness",
+      "divergence_threshold": 0.35,
+      "congruence": "Systemischer Stille-Druck {system} und berichtete Leere/Stille {report} liegen grob beieinander.",
+      "divergence": "Systemischer Stille-Druck {system} und berichtete Leere/Stille {report} divergieren deutlich; das ist ein Beobachtungsbefund, keine Kausalerklärung."
+    },
+    {
+      "system_field": "satisfaction",
+      "self_report_field": "joy_relief",
+      "divergence_threshold": 0.35,
+      "congruence": "Systemische Zufriedenheitsmetrik {system} und berichtete Freude/Erleichterung {report} sind grob kongruent.",
+      "divergence": "Systemische Zufriedenheitsmetrik {system} und berichtete Freude/Erleichterung {report} divergieren deutlich."
+    }
+  ],
+  "evaluation_templates": {
+    "sensor_uncertain": "Mindestens ein erforderlicher Sensor ist nicht vollständig verifiziert; betroffene Systemwerte bleiben UNKNOWN/DEGRADED statt als Ruhe interpretiert zu werden.",
+    "single_delta_not_trend": "Es gibt mindestens eine deutliche Veränderung zum vorigen Beitrag; ein einzelnes Delta ist noch kein stabiler Trend.",
+    "self_report_not_measurement": "Starke emotionale Formulierungen sind Modell-Selbstbericht und keine objektive Messung menschlicher Emotion oder Bewusstheit.",
+    "no_interpretation": "Für eine belastbare vergleichende Auswertung liegen in diesem Lauf zu wenige gemeinsame Mess- und Selbstberichtswerte vor."
   },
   "evaluation_rules": [
     "report congruence only when both compared dimensions are available",

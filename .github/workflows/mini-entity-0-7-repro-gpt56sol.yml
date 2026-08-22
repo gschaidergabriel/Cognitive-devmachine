@@ -1,0 +1,213 @@
+name: Mini Entity 0.7 source-bound repro gate
+
+on:
+  push:
+    branches:
+      - go/mini-entity-0-7-repro-20260822-1311-gpt56sol
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  repro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bind exact native source blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          check_blob() {
+            local path="$1" expected="$2" actual
+            actual="$(git hash-object "$path")"
+            test "$actual" = "$expected" || { echo "BLOB_MISMATCH $path $actual != $expected"; exit 41; }
+          }
+          check_blob 'the artefact/blogpost_entity/native/mini_entity.c' a52ab03c16bf0a97cc29a026b45b9401056f0b31
+          check_blob 'the artefact/blogpost_entity/native/mini_entity_part00.inc' d0ab1506745845e9cfe739c6a46bf65d89137454
+          check_blob 'the artefact/blogpost_entity/native/mini_entity_part01.inc' 856af5c0126a3a86ed51872ffe9078a4c1fab8e1
+          check_blob 'the artefact/blogpost_entity/native/mini_entity_part02.inc' 39124dcdaf460e1bb2bad6867a2633e246dbff02
+          check_blob 'the artefact/blogpost_entity/native/mini_entity_part03.inc' 44260895edce1609d63725c6366d72319c972fe5
+          check_blob 'the artefact/blogpost_entity/native/mini_entity_part04.inc' 9f653931f63f5cf44e27e4b7f3ce32330307616a
+          check_blob 'the artefact/blogpost_entity/native/build_native_bound.py' 63c8109223cd6844f9a0bd69031c1fe339a1497c
+
+      - name: Source-closure falsifiers
+        run: python3 -m unittest 'the artefact/blogpost_entity/native/test_build_native_bound_source_closure.py'
+
+      - name: Install native build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gcc pkg-config libsqlite3-dev libcurl4-openssl-dev libjson-c-dev sqlite3 strace
+
+      - name: Repeat source-bound build twice
+        shell: bash
+        run: |
+          set -euo pipefail
+          NATIVE='the artefact/blogpost_entity/native'
+          mkdir -p "$RUNNER_TEMP/build-a" "$RUNNER_TEMP/build-b"
+          python3 "$NATIVE/build_native_bound.py" \
+            --source "$NATIVE/mini_entity.c" \
+            --output "$RUNNER_TEMP/build-a/mini_entity.clay" \
+            --receipt "$RUNNER_TEMP/build-a/provenance.json" \
+            --version-label mini-entity/0.7.0-dev1 \
+            --source-date-epoch 1787368760 \
+            --repeat 3 > "$RUNNER_TEMP/build-a/stdout.json"
+          python3 "$NATIVE/build_native_bound.py" \
+            --source "$NATIVE/mini_entity.c" \
+            --output "$RUNNER_TEMP/build-b/mini_entity.clay" \
+            --receipt "$RUNNER_TEMP/build-b/provenance.json" \
+            --version-label mini-entity/0.7.0-dev1 \
+            --source-date-epoch 1787368760 \
+            --repeat 3 > "$RUNNER_TEMP/build-b/stdout.json"
+          A="$(sha256sum "$RUNNER_TEMP/build-a/mini_entity.clay" | cut -d' ' -f1)"
+          B="$(sha256sum "$RUNNER_TEMP/build-b/mini_entity.clay" | cut -d' ' -f1)"
+          test "$A" = "$B"
+          test "$("$RUNNER_TEMP/build-a/mini_entity.clay" --version)" = 'mini-entity/0.7.0-dev1'
+          python3 - "$RUNNER_TEMP/build-a/provenance.json" <<'PY'
+          import json, sys
+          p=json.load(open(sys.argv[1], encoding='utf-8'))
+          assert p['schema']=='mini-entity-native-build-provenance/v2'
+          files=[x['path'] for x in p['build_definition']['source_closure']]
+          assert files == ['mini_entity.c','mini_entity_part00.inc','mini_entity_part01.inc','mini_entity_part02.inc','mini_entity_part03.inc','mini_entity_part04.inc'], files
+          assert p['build_definition']['repeat_byte_identity'] is True
+          assert len(set(p['build_definition']['repeat_hashes'])) == 1
+          PY
+          printf 'ELF_SHA256=%s\n' "$A" | tee "$RUNNER_TEMP/elf_identity.txt"
+
+      - name: Tokenless local_exec atomic run and rollback gate
+        shell: bash
+        env:
+          MISTRAL_API_KEY: TRAP_SECRET_MUST_NOT_ENTER_LOCAL_EXEC
+          MISTRAL2_API_KEY: TRAP_SECRET_MUST_NOT_ENTER_LOCAL_EXEC_2
+          MISTRAL3_API_KEY: TRAP_SECRET_MUST_NOT_ENTER_LOCAL_EXEC_3
+        run: |
+          set -euo pipefail
+          BIN="$RUNNER_TEMP/build-a/mini_entity.clay"
+          DB="$RUNNER_TEMP/entity.db"
+          SRC="$RUNNER_TEMP/source.db"
+          MODEL="$RUNNER_TEMP/fixture-model.gguf"
+          RUNNER="$RUNNER_TEMP/fixture_runner.py"
+          PRESET='the artefact/blogpost_entity/presets/zero_blog.json'
+          STATEBOX='the artefact/blogpost_entity/presets/zero_blog_state_box.json'
+
+          printf 'fixture weights: not model-quality evidence\n' > "$MODEL"
+          cat > "$RUNNER" <<'PY'
+          import json, sys, time
+          time.sleep(0.20)
+          prompt=open(sys.argv[1], encoding='utf-8').read()
+          assert 'TRAP_SECRET_MUST_NOT_ENTER_LOCAL_EXEC' not in prompt
+          print(json.dumps({
+              'ueberschrift':'fixture',
+              'einleitung':'fixture',
+              'abschnitte':[],
+              'longitudinal_self_report':{
+                  'uncertainty':0.4,
+                  'felt_conflict':'UNKNOWN',
+                  'qualia_result':'UNKNOWN',
+                  'qualia_confidence':0.0
+              }
+          }))
+          PY
+          RUNNER_JSON="$(python3 - "$RUNNER" <<'PY'
+          import json, sys
+          print(json.dumps(['/usr/bin/python3', sys.argv[1], '{{PROMPT_FILE}}']))
+          PY
+          )"
+
+          "$BIN" init "$DB"
+          "$BIN" source-init "$SRC"
+          "$BIN" preset-apply "$DB" "$PRESET"
+          "$BIN" state-box-apply "$DB" "$STATEBOX"
+          "$BIN" set-local-model "$DB" "$MODEL"
+          "$BIN" set-local-runner-json "$DB" "$RUNNER_JSON"
+          "$BIN" source-add "$SRC" observation ev-1 '{"measured":"fixture","value":1}'
+
+          strace -f -qq -e trace=network -o "$RUNNER_TEMP/network.trace" "$BIN" run "$DB" "$SRC" > "$RUNNER_TEMP/run1.json"
+          if grep -Eq 'socket\(|connect\(|sendto\(|sendmsg\(|recvfrom\(|recvmsg\(' "$RUNNER_TEMP/network.trace"; then
+            echo 'NETWORK_ATTEMPT_OBSERVED_ON_LOCAL_EXEC'
+            cat "$RUNNER_TEMP/network.trace"
+            exit 51
+          fi
+          test "$(sqlite3 "$DB" 'select generation from entity_state where id=1;')" = 1
+          test "$(sqlite3 "$DB" 'select count(*) from outputs;')" = 1
+          test "$(sqlite3 "$DB" 'select count(*) from study_rows;')" = 1
+          test "$(sqlite3 "$SRC" 'select count(*) from mini_entity_events where consumed_generation=1;')" = 1
+          test "$(sqlite3 "$DB" 'pragma integrity_check;')" = ok
+          ! grep -R -F 'TRAP_SECRET_MUST_NOT_ENTER_LOCAL_EXEC' "$RUNNER_TEMP/run1.json" "$DB" "$SRC"
+
+          "$BIN" source-add "$SRC" observation ev-2 '{"measured":"fixture","value":2}'
+          "$BIN" set-local-runner-json "$DB" '["/bin/false"]'
+          set +e
+          "$BIN" run "$DB" "$SRC" > "$RUNNER_TEMP/failed.out" 2> "$RUNNER_TEMP/failed.err"
+          FAIL_RC=$?
+          set -e
+          test "$FAIL_RC" -ne 0
+          grep -q 'INFERENCE_FAILED_NO_COMMIT' "$RUNNER_TEMP/failed.err"
+          test "$(sqlite3 "$DB" 'select generation from entity_state where id=1;')" = 1
+          test "$(sqlite3 "$DB" 'select count(*) from outputs;')" = 1
+          test "$(sqlite3 "$DB" 'select count(*) from study_rows;')" = 1
+          test "$(sqlite3 "$SRC" "select count(*) from mini_entity_events where source_id='ev-2' and consumed_generation is null;")" = 1
+
+          "$BIN" set-local-runner-json "$DB" "$RUNNER_JSON"
+          "$BIN" run "$DB" "$SRC" > "$RUNNER_TEMP/run2.json"
+          test "$(sqlite3 "$DB" 'select generation from entity_state where id=1;')" = 2
+          test "$(sqlite3 "$DB" 'select count(*) from outputs;')" = 2
+          test "$(sqlite3 "$DB" 'select count(*) from study_rows;')" = 2
+          test "$(sqlite3 "$SRC" "select count(*) from mini_entity_events where source_id='ev-2' and consumed_generation=2;")" = 1
+          test "$(sqlite3 "$DB" 'pragma integrity_check;')" = ok
+
+      - name: Concurrent generation and event CAS discriminator
+        shell: bash
+        run: |
+          set -euo pipefail
+          BIN="$RUNNER_TEMP/build-a/mini_entity.clay"
+          DB="$RUNNER_TEMP/entity.db"
+          SRC="$RUNNER_TEMP/source.db"
+          "$BIN" source-add "$SRC" observation ev-3 '{"measured":"fixture","value":3}'
+          set +e
+          "$BIN" run "$DB" "$SRC" > "$RUNNER_TEMP/cas-a.out" 2> "$RUNNER_TEMP/cas-a.err" & A=$!
+          "$BIN" run "$DB" "$SRC" > "$RUNNER_TEMP/cas-b.out" 2> "$RUNNER_TEMP/cas-b.err" & B=$!
+          wait "$A"; RA=$?
+          wait "$B"; RB=$?
+          set -e
+          SUCC=0
+          test "$RA" -eq 0 && SUCC=$((SUCC+1)) || true
+          test "$RB" -eq 0 && SUCC=$((SUCC+1)) || true
+          test "$SUCC" -eq 1
+          cat "$RUNNER_TEMP/cas-a.err" "$RUNNER_TEMP/cas-b.err" | grep -q 'STALE_GENERATION_OR_EVENT_CAS_NO_COMMIT'
+          test "$(sqlite3 "$DB" 'select generation from entity_state where id=1;')" = 3
+          test "$(sqlite3 "$DB" 'select count(*) from outputs;')" = 3
+          test "$(sqlite3 "$DB" 'select count(*) from study_rows;')" = 3
+          test "$(sqlite3 "$SRC" "select count(*) from mini_entity_events where source_id='ev-3' and consumed_generation=3;")" = 1
+          test "$(sqlite3 "$SRC" 'select count(*) from mini_entity_events where consumed_generation is null;')" = 0
+          test "$(sqlite3 "$DB" 'pragma integrity_check;')" = ok
+
+      - name: Emit bounded gate summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          ELF="$(cut -d= -f2 "$RUNNER_TEMP/elf_identity.txt")"
+          cat <<EOF
+          MINI_ENTITY_NATIVE_0_7_REPRO_GATE=PASS
+          SOURCE_HEAD=$(git rev-parse HEAD)
+          SOURCE_TREE=$(git rev-parse HEAD^{tree})
+          ELF_SHA256=$ELF
+          BUILD_SCHEMA=mini-entity-native-build-provenance/v2
+          SOURCE_CLOSURE_BOUND=true
+          SAME_ENV_SECOND_BUILD_IDENTICAL=true
+          LOCAL_EXEC_NETWORK_ATTEMPT_COUNT=0
+          FAILURE_ROLLBACK=PASS
+          CONCURRENT_CAS=PASS
+          FINAL_GENERATION=3
+          OUTPUTS=3
+          STUDY_ROWS=3
+          PENDING_EVENTS=0
+          SQLITE_INTEGRITY=ok
+          REAL_MODEL_QUALITY=NOT_CREDITED_FIXTURE_ONLY
+          EXTERNAL_PROVIDER_EXECUTION=NOT_ATTEMPTED
+          TOGETHER=FORBIDDEN_NOT_USED
+          EOF

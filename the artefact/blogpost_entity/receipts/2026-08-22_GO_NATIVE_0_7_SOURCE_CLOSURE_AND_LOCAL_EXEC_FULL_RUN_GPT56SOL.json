@@ -1,13 +1,13 @@
 {
-  "schema": "mini-entity-native-0.7-go-receipt/v1",
+  "schema": "mini-entity-native-0.7-go-receipt/v2",
   "date": "2026-08-22",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
-  "canonical_base_sha": "456e3e4d6853ff5b3a85300bdbe2367818e15052",
+  "original_base_sha": "456e3e4d6853ff5b3a85300bdbe2367818e15052",
+  "parallel_main_observed_sha": "18b6f99eed7714d0ba5040e4a8f32f58107b5b3f",
   "candidate_branch": "gpt56sol/go-mini-native-env-isolation-20260822-1310",
-  "candidate_code_head_before_receipt": "18223dcf787a4aa0808f7771bdb1d26c81098f38",
   "native_source_git_blobs": {
     "mini_entity.c": "553c7858b6937c2528983789e9f30c04103dc557",
     "mini_entity_child_env.inc": "181c0de78724936fa900458ea4c1990ca955ed3f",
@@ -24,16 +24,18 @@
     "together_api_used": false,
     "vps_used": false
   },
-  "finding_source_provenance": {
-    "previous_builder_blob": "bf9b296a5d8a639889855a18b7774b2a005c46eb",
-    "defect": "previous build provenance hashed only mini_entity.c even though the effective C program is split across quoted .inc files; mutating an included file left the declared entry source hash unchanged",
-    "classification": "PROVENANCE_IDENTITY_DEFECT",
-    "repair_builder_blob": "a98620c816fe4aa856039c06f13d08670a5b37fd",
-    "repair_test_blob": "d8feb1461ecd53b8f2938f97c848d7b528b1402c",
-    "repair": "transitively bind every quoted local include under the source root; fail closed on source-root escape/cycle/invalid local source; use full closure digest as deterministic build seed and receipt identity",
-    "exact_regression": "3 passed in 0.03s",
-    "source_closure_sha256": "f441e76be98421165143b1b17c4052d81395369f198785a3aea0c5755e518298",
-    "source_closure_files": [
+  "parallel_provenance_fusion": {
+    "finding": "the pre-existing builder revision initially observed hashed only mini_entity.c, so an included .inc mutation left that entry hash unchanged",
+    "independent_candidate_builder_blob": "a98620c816fe4aa856039c06f13d08670a5b37fd",
+    "independent_candidate_test_blob": "d8feb1461ecd53b8f2938f97c848d7b528b1402c",
+    "independent_candidate_regression": "3 passed in 0.03s",
+    "parallel_main_result": "main independently repaired the same source-closure defect before fusion and exposed canonical source_closure() with stricter rejection of dynamic/unbound includes and local source symlinks",
+    "canonical_main_builder_blob": "5be466c256930936f3dc9597323eb7e0e8b41804",
+    "canonical_main_builder_git_blob_recomputed_exactly": true,
+    "canonical_main_builder_selected_for_fusion": true,
+    "duplicate_candidate_builder_selected_for_fusion": false,
+    "canonical_candidate_source_identity_sha256": "ab5981d06dcb120043b4d054280e27b56fa74928de3f7f7f9083f928cbf882ed",
+    "canonical_source_closure_files": [
       "mini_entity.c",
       "mini_entity_child_env.inc",
       "mini_entity_part00.inc",
@@ -43,8 +45,9 @@
       "mini_entity_part04.inc"
     ]
   },
-  "repeat_build": {
+  "canonical_main_builder_repeat_build": {
     "builder_schema": "mini-entity-native-build-provenance/v2",
+    "builder_blob": "5be466c256930936f3dc9597323eb7e0e8b41804",
     "compiler": "gcc (Debian 14.2.0-19) 14.2.0",
     "pkg_config_versions": {
       "sqlite3": "3.46.1",
@@ -98,7 +101,7 @@
     "already_recorded_in": "2026-08-22_GO_NATIVE_0_7_LOCAL_EXEC_ENV_ISOLATION_GPT56SOL.json",
     "additional_tests_in_this_receipt": "ordinary deterministic regression/provenance/negative-path validation only"
   },
-  "evidence_class": "EXACT_COMMITTED_SOURCE_CLOSURE_RECONSTRUCTED_REPEAT_BUILD_PASS_FIXTURE_LOCAL_EXEC_PASS_NEGATIVE_ROLLBACK_PASS",
+  "evidence_class": "EXACT_COMMITTED_ENV_CANDIDATE_SOURCE_RECONSTRUCTED_CANONICAL_MAIN_BUILDER_REPEAT_PASS_FIXTURE_LOCAL_EXEC_PASS_NEGATIVE_ROLLBACK_PASS",
   "not_claimed": [
     "cross-environment reproducibility",
     "real local model quality",
@@ -107,7 +110,7 @@
   ],
   "remaining_security_frontier": [
     "profile-controlled secret_names can currently select arbitrary ambient environment variable names for remote API mode; define an immutable operator-owned secret-reference maximum before real provider acceptance",
-    "prove the same full source closure independently in the preferred admitted sandbox surface when available",
+    "prove the fused current-head candidate independently in the preferred admitted sandbox surface when available",
     "run an actual supported local model and an authorized real remote provider without transferring fixture quality credit"
   ],
   "acceptance": "IN_PROGRESS"

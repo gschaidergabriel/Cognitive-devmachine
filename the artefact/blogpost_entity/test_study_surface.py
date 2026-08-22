@@ -65,10 +65,12 @@ def test_self_report_cannot_overwrite_canonical_or_leak_unselected_fields():
     assert record["system_state"]["cognitive_conflict"] == {"status": "VERIFIED", "value": 0.72}
     assert record["system_state"]["continuity_pressure"] == {"status": "UNKNOWN", "value": None}
     assert record["self_report"]["felt_conflict"] == 0.81
+    assert any(item["code"] == "CONGRUENCE" for item in record["evaluation"])
     visible = record["rendered_text"]
     assert "SHOULD_NOT_RENDER" not in visible
     assert "Gasthaus" not in visible
     assert "cognitive_conflict      = VERIFIED 1." not in visible
+    assert "Kausalaussage" in visible
     assert visible.count("```text") == 1
     assert visible.count("```") == 2
 
@@ -80,7 +82,7 @@ def test_unknown_and_failed_sensor_semantics_fail_closed():
     assert record["system_state"]["continuity_pressure"]["status"] == "UNKNOWN"
     assert record["system_state"]["continuity_pressure"]["value"] is None
     assert "VERIFIED_QUIET" not in record["rendered_text"]
-    assert any(line.startswith("UNCERTAINTY:") for line in record["evaluation"])
+    assert any(item["code"] == "SENSOR_UNCERTAINTY" for item in record["evaluation"])
 
 
 def test_delta_and_backend_confound_are_longitudinal_not_causal():
@@ -97,8 +99,8 @@ def test_delta_and_backend_confound_are_longitudinal_not_causal():
     assert record["deltas"]["cognitive_conflict"] == pytest.approx(0.32)
     assert record["deltas"]["silence_unease"] == pytest.approx(-0.12)
     assert "continuity_pressure" not in record["deltas"]
-    assert any("CONFOUND: inference backend changed" in line for line in record["evaluation"])
-    assert all("caus" not in line.lower() or "no causal interpretation" in line.lower() for line in record["evaluation"])
+    assert any(item["code"] == "BACKEND_CHANGE" for item in record["evaluation"])
+    assert "konfundiert" in record["rendered_text"]
 
 
 def test_bad_epistemic_law_is_rejected():
@@ -115,3 +117,15 @@ def test_bad_epistemic_law_is_rejected():
             generation=1,
             ts=1.0,
         )
+
+
+def test_out_of_range_or_invalid_qualia_self_report_is_rejected_not_clamped():
+    bad_value = poisoned_payload()
+    bad_value["longitudinal_self_report"]["felt_conflict"] = 1.7
+    with pytest.raises(StudyFault, match="SELF_REPORT_OUT_OF_RANGE:felt_conflict"):
+        build(payload=bad_value)
+
+    bad_qualia = poisoned_payload()
+    bad_qualia["qualia_probe"] = {"result": "CERTAINLY_CONSCIOUS", "confidence": 1.0}
+    with pytest.raises(StudyFault, match="BAD_QUALIA_RESULT"):
+        build(payload=bad_qualia)

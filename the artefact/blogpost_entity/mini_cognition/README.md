@@ -39,73 +39,90 @@ Local structural validation on this source revision:
 
 A separate OOD generator emits **200** promotion probes and is not a random split of the same examples.
 
-## Fast path
+## Together path — current blocker, 2026-08-22
+
+Together BYOM does support Hugging Face checkpoints that are not themselves in the catalog, but it does **not** let
+us choose an arbitrary unrelated `model` value. Current Together BYOM documentation requires:
+
+1. `from_hf_model` = the custom Hugging Face checkpoint;
+2. `model` = a base template from Together's fine-tuning catalog;
+3. the base template architecture must match the custom checkpoint;
+4. size should be as close as the catalog allows;
+5. the model remains subject to the live fine-tuning limits endpoint.
+
+The target checkpoint is `Qwen2ForCausalLM` / `model_type=qwen2` with 0.49B parameters. The current Together **full
+fine-tuning** catalog does not list a Qwen2/Qwen2.5 base. The smallest listed Qwen full-FT base is
+`Qwen/Qwen3.5-0.8B`, but its Hugging Face config is `Qwen3_5ForConditionalGeneration` / `model_type=qwen3_5` with a
+materially different text/vision architecture. It is therefore not a valid automatic substitute under the BYOM
+architecture-match rule.
+
+The previous candidate `Qwen/Qwen2.5-7B-Instruct-Turbo` is also not in the current Together full-fine-tuning table.
+It must not be kept as an implicit template merely because it is available for inference.
+
+**Current conclusion:** Together BYOM for the required `Qwen/Qwen2.5-0.5B` is **blocked on a compatible Together
+Qwen2/Qwen2.5 fine-tuning template**. This is a provider/catalog admission blocker, not a corpus failure and not a
+reason to silently change the checkpoint to 0.8B.
+
+### Safe fast path when the catalog changes
+
+Install the current SDK and keep the secret only in the execution environment:
 
 ```bash
 pip install -U 'together>=2'
 export TOGETHER_API_KEY=...
+export CLAYCOG_TOGETHER_TEMPLATE='<verified Qwen2-compatible Together fine-tuning base>'
 bash train_together_v1.sh
 ```
 
-The shell script stops after **preflight**. It regenerates and validates the corpus, validates/uploads the files,
-checks current full-training limits for the requested base/template, and prints the server price estimate. It does
-not create a billed job.
+Without a verified template, the launcher deliberately exits with
+`NO_COMPATIBLE_TOGETHER_TEMPLATE_CONFIGURED` before provider operations. There is **no guessed default**.
+
+The shell script stops after **preflight**. With a verified explicit template it regenerates and validates the corpus,
+validates/uploads the files, checks live full-training limits, and prints the server price estimate. It does not create
+a billed job.
 
 Only after a clean preflight:
 
 ```bash
-python3 launch_together_v1.py --create
+python3 launch_together_v1.py --template '<same verified template>' --create
 ```
 
 `--create` is intentionally a separate, exactly-once transition. Persist the returned job id and retrieve that job;
 do not blindly repeat creation after a timeout or ambiguous client failure.
 
-### Together 0.5B BYOM gate — corrected SDK-v2 path
+### SDK-v2 boundary
 
-Together's current SDK and fine-tuning documentation expose a BYOM path through `from_hf_model`. The SDK documents
-that the Together `model` argument used as the training base/template should be as close as possible to the
-Hugging Face checkpoint in **architecture and size**. Therefore the launcher no longer guesses a 7B Qwen2.5 model
-for a 0.5B checkpoint.
-
-Default pairing is now exact and fail-closed:
-
-- BYOM checkpoint: `Qwen/Qwen2.5-0.5B`;
-- Together base/template candidate: `Qwen/Qwen2.5-0.5B` itself;
-- instruct ablation: exact `Qwen/Qwen2.5-0.5B-Instruct` / same-model pairing.
-
-If Together's live `fine-tunes/models/limits` endpoint does not admit that exact model for full training, preflight
-stops. A different candidate may be supplied explicitly through `--template` or `CLAYCOG_TOGETHER_TEMPLATE`, but
-there is no automatic larger-model fallback. An explicit override remains a hypothesis until Together accepts it.
-
-The launcher is locked to the current Together Python SDK v2 contract:
+The launcher is locked to the current Together Python SDK v2 client surface observed in the upstream SDK source:
 - `client.fine_tuning.get_model_limits(model=...)`;
 - full training iff `limits.full_training` is present;
 - file readiness through current `FileResponse.processed` (legacy status is fallback only);
-- `estimate_price(..., training_type="full", training_method="sft")`;
+- `estimate_price(..., training_type="full", training_method="sft")` on the current Python client;
 - BYOM creation through `model=...` + `from_hf_model=...`, `lora=False`.
 
-**Important evidence boundary:** preflight can prove local corpus validity, Together file processing, current template
-limits and price/budget admission. It cannot prove that Together will accept the particular BYOM checkpoint. That
-compatibility gate is only crossed when the single billed `create` request is accepted. A rejected create is a
-useful falsification and must not trigger an automatic retry or a silent model-size change.
+**Evidence boundary:** a no-bill preflight proves local corpus validity, Together file processing, current template
+limits and price/budget admission. Final checkpoint/template compatibility is established only when Together accepts
+the BYOM job. A rejected create is a useful falsification; Together documents that failed fine-tuning jobs are
+refunded, but that is not permission to retry blindly.
 
-Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`, with a documented
-**$4.00 minimum charge per fine-tuning job**. The current corpus is ~2.30 MB train + 0.25 MB validation; a rough
-character/4 estimate is ~0.64M tokens before epochs. At 3 train epochs + 2 validation evaluations, raw token
-arithmetic is roughly **1.85M processed tokens / ~$1.00**, so the minimum charge is likely to dominate. The Together
-server estimate remains authoritative, and the launcher hard-aborts above the configured `$18` single-job ceiling.
+Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`, and current docs state
+a **$4.00 minimum charge per fine-tuning job** (with some model exemptions). The corpus remains small enough that the
+minimum is likely to dominate the rough token arithmetic; the live server estimate is authoritative and the launcher
+hard-aborts above the configured `$18` single-job ceiling.
 
 ## No-network launcher regression
 
-Run before any paid preflight:
+Run before any provider preflight:
 
 ```bash
 python3 test_launch_together_v2_contract.py
 ```
 
-This uses a v2-only fake client and no secret/network. It rejects regressions to the old `model_limits`,
-`supports_full_training`, dict estimate arguments or `processing_status`-only surface. Its bounded API-surface
-collision falsifier also proves the preflight helpers never call `create` implicitly.
+This uses a v2-only fake client and no secret/network. It proves that:
+- the 0.5B target checkpoint is preserved;
+- no Together template is guessed when the compatible catalog slot is absent;
+- a missing template fails closed;
+- current v2 model-limit/file/price helpers are used;
+- preflight helpers never call billed `create` implicitly.
 
 ## 0.5B RAM gate
 
@@ -129,8 +146,9 @@ A successful training job is only a candidate. Promotion requires:
 
 ## `go`
 
-Until promotion, every `go` advances this same lane:
+Until promotion or falsification, every `go` advances this same lane:
 
-`refresh -> corpus/spec -> OOD/falsifiers -> ClayCode lowering -> Together BYOM compatibility -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> integrate -> evidence`
+`refresh -> corpus/spec -> OOD/falsifiers -> ClayCode lowering -> provider compatibility -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> integrate -> evidence`
 
-No `go` may claim mathematical correctness or superiority from training intent alone.
+The Together-specific branch is now correctly classified as **catalog-blocked**, not training-ready. No `go` may claim
+mathematical correctness, consciousness or superiority from training intent alone.

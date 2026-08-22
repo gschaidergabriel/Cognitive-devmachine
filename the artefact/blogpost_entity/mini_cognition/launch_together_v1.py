@@ -25,6 +25,7 @@ INSTRUCT_HF_MODEL="Qwen/Qwen2.5-0.5B-Instruct"
 INSTRUCT_HF_REVISION="7ae557604adf67be50417f59c2c2f167def9a775"
 TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE") or None
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
+LEARNING_RATE=float(os.environ.get("CLAYCOG_LEARNING_RATE","1e-5")); WARMUP_RATIO=float(os.environ.get("CLAYCOG_WARMUP_RATIO","0.03")); RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","20260822"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00"))
 FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
@@ -105,7 +106,7 @@ def sha256_file(path):
     return h.hexdigest()
 
 def campaign_descriptor(hf_model,hf_revision):
-    return {"schema":"claycog-05b-together-campaign/v1","from_hf_model":hf_model,"hf_model_revision":hf_revision,"template_model":TEMPLATE,"training_sha256":sha256_file(TRAIN),"validation_sha256":sha256_file(VALID),"epochs":EPOCHS,"evals":EVALS,"training_method":"sft","training_type":"Full","train_on_inputs":"auto","learning_rate":1e-5,"warmup_ratio":0.03,"n_checkpoints":1}
+    return {"schema":"claycog-05b-together-campaign/v2","from_hf_model":hf_model,"hf_model_revision":hf_revision,"template_model":TEMPLATE,"training_sha256":sha256_file(TRAIN),"validation_sha256":sha256_file(VALID),"epochs":EPOCHS,"evals":EVALS,"training_method":"sft","training_type":"Full","train_on_inputs":"auto","learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"random_seed":RANDOM_SEED,"n_checkpoints":1}
 
 def campaign_fingerprint(hf_model,hf_revision):
     raw=json.dumps(campaign_descriptor(hf_model,hf_revision),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode("utf-8")
@@ -153,7 +154,7 @@ def arm_create_intent(fingerprint,hf_model,hf_revision,suffix):
     directory=create_ledger_dir(); directory.mkdir(parents=True,exist_ok=True,mode=0o700)
     try:os.chmod(directory,0o700)
     except OSError:pass
-    path=create_ledger_path(fingerprint); payload={"schema":"claycog-together-create-intent/v1","fingerprint":fingerprint,"campaign_suffix":suffix,"status":"CREATE_ARMED","campaign":campaign_descriptor(hf_model,hf_revision),"created_unix":int(time.time())}; data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode()
+    path=create_ledger_path(fingerprint); payload={"schema":"claycog-together-create-intent/v2","fingerprint":fingerprint,"campaign_suffix":suffix,"status":"CREATE_ARMED","campaign":campaign_descriptor(hf_model,hf_revision),"created_unix":int(time.time())}; data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode()
     try:fd=os.open(str(path),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
     except FileExistsError: assert_no_local_create_intent(fingerprint); raise
     try:
@@ -164,10 +165,11 @@ def arm_create_intent(fingerprint,hf_model,hf_revision,suffix):
         except OSError:pass
         raise
     return path
-def update_create_intent(path,status,job_id=None,error_class=None):
+def update_create_intent(path,status,job_id=None,error_class=None,verification=None):
     payload=json.loads(Path(path).read_text()); payload["status"]=status; payload["updated_unix"]=int(time.time())
     if job_id is not None:payload["job_id"]=str(job_id)
     if error_class is not None:payload["error_class"]=str(error_class)
+    if verification is not None:payload["verification"]=verification
     tmp=Path(str(path)+f".tmp.{os.getpid()}"); fd=os.open(str(tmp),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
     try:
         with os.fdopen(fd,"wb",closefd=True) as f:f.write((json.dumps(payload,sort_keys=True,indent=2)+"\n").encode());f.flush();os.fsync(f.fileno())
@@ -176,6 +178,17 @@ def update_create_intent(path,status,job_id=None,error_class=None):
         try:tmp.unlink()
         except OSError:pass
 def new_zero_retry_create_client(together_cls): return together_cls(max_retries=0)
+
+def expected_job_identity(training_file,validation_file,hf_model,hf_revision,template):
+    return {"training_file":training_file,"validation_file":validation_file,"model":template,"from_hf_model":hf_model,"hf_model_revision":hf_revision,"n_epochs":EPOCHS,"n_checkpoints":1,"n_evals":EVALS,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"random_seed":RANDOM_SEED,"train_on_inputs":"auto"}
+
+def job_identity_mismatches(meta,expected,allow_missing=()):
+    allowed=set(allow_missing); mismatches={}
+    for key,want in expected.items():
+        got=_field(meta,key,None)
+        if got is None and key in allowed: continue
+        if got!=want: mismatches[key]={"expected":want,"observed":got}
+    return mismatches
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");ap.add_argument("--instruct-ablation",action="store_true");ap.add_argument("--template",help="explicit current Together full-FT base; must match checkpoint architecture");args=ap.parse_args()
@@ -189,12 +202,27 @@ def main():
     if args.create:require_create_confirmation(fingerprint);assert_no_local_create_intent(fingerprint);assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
     train_file=client.files.upload(file=str(TRAIN),purpose="fine-tune",check=True);valid_file=client.files.upload(file=str(VALID),purpose="fine-tune",check=True);wait_file(client,train_file.id);wait_file(client,valid_file.id)
     estimate=estimate_full_sft_price(client,train_file.id,valid_file.id,TEMPLATE);price=float(estimate.estimated_total_price)
-    report={"schema":"CLAYCOG_05B_TOGETHER_PREFLIGHT/v2","mode":"preflight" if not args.create else "create","campaign_fingerprint":fingerprint,"campaign_suffix":suffix,"from_hf_model":hf_model,"hf_model_revision":hf_revision,"template_model":TEMPLATE,"epochs":EPOCHS,"evals":EVALS,"estimated_usd":price,"allowed_to_proceed":bool(estimate.allowed_to_proceed),"price_detail":objdict(estimate),"template_admission_status":"MODEL_LIMITS_FULL_FT_ACCEPTED","provider_catalog_boundary":"EXPLICIT_ARCHITECTURE_COMPATIBLE_TEMPLATE_REQUIRED","byom_compatibility_status":"UNPROVEN_UNTIL_CREATE_ACCEPTS_FROM_HF_MODEL_AND_TRAINING_STARTS"};print(json.dumps(report,indent=2,default=str))
+    report={"schema":"CLAYCOG_05B_TOGETHER_PREFLIGHT/v3","mode":"preflight" if not args.create else "create","campaign_fingerprint":fingerprint,"campaign_suffix":suffix,"from_hf_model":hf_model,"hf_model_revision":hf_revision,"template_model":TEMPLATE,"epochs":EPOCHS,"evals":EVALS,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"random_seed":RANDOM_SEED,"estimated_usd":price,"allowed_to_proceed":bool(estimate.allowed_to_proceed),"price_detail":objdict(estimate),"template_admission_status":"MODEL_LIMITS_FULL_FT_ACCEPTED","provider_catalog_boundary":"EXPLICIT_ARCHITECTURE_COMPATIBLE_TEMPLATE_REQUIRED","byom_compatibility_status":"UNPROVEN_UNTIL_CREATE_ACCEPTS_FROM_HF_MODEL_AND_TRAINING_STARTS"};print(json.dumps(report,indent=2,default=str))
     if not estimate.allowed_to_proceed:raise SystemExit("Together price/admission endpoint does not allow this job")
     if price>MAX_USD:raise SystemExit(f"BUDGET_ABORT estimated ${price:.2f} > ${MAX_USD:.2f}")
     if not args.create:print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fingerprint} for the exact create");return
     assert_no_local_create_intent(fingerprint);assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix);intent_path=arm_create_intent(fingerprint,hf_model,hf_revision,suffix);create_client=new_zero_retry_create_client(Together)
-    try:job=create_client.fine_tuning.create(training_file=train_file.id,validation_file=valid_file.id,model=TEMPLATE,from_hf_model=hf_model,hf_model_revision=hf_revision,n_epochs=EPOCHS,n_evals=EVALS,n_checkpoints=1,learning_rate=1e-5,warmup_ratio=0.03,train_on_inputs="auto",lora=False,suffix=suffix)
+    try:job=create_client.fine_tuning.create(training_file=train_file.id,validation_file=valid_file.id,model=TEMPLATE,from_hf_model=hf_model,hf_model_revision=hf_revision,n_epochs=EPOCHS,n_evals=EVALS,n_checkpoints=1,learning_rate=LEARNING_RATE,warmup_ratio=WARMUP_RATIO,random_seed=RANDOM_SEED,train_on_inputs="auto",lora=False,suffix=suffix)
     except Exception as exc:update_create_intent(intent_path,"UNKNOWN_REMOTE_CREATE",error_class=type(exc).__name__);raise SystemExit("CREATE_OUTCOME_UNKNOWN local intent retained; do not retry create until exact provider reconciliation: "+type(exc).__name__) from exc
-    update_create_intent(intent_path,"JOB_KNOWN",job_id=job.id);print(json.dumps({"job_id":job.id,"campaign_fingerprint":fingerprint,"campaign_suffix":suffix,"from_hf_model":hf_model,"hf_model_revision":hf_revision,"template_model":TEMPLATE,"full_fine_tune":True,"estimated_usd":price,"local_create_intent":str(intent_path),"byom_compatibility_status":"CREATE_ACCEPTED_TRAINING_START_STILL_REQUIRED_FOR_PROMOTION","next":"retrieve this exact job; never blind-retry create after an ambiguous transport outcome"},indent=2))
+    update_create_intent(intent_path,"JOB_KNOWN",job_id=job.id)
+    expected=expected_job_identity(train_file.id,valid_file.id,hf_model,hf_revision,TEMPLATE)
+    create_mismatches=job_identity_mismatches(job,expected)
+    if create_mismatches:
+        update_create_intent(intent_path,"JOB_KNOWN_IDENTITY_MISMATCH",job_id=job.id,verification={"phase":"create_response","mismatches":create_mismatches})
+        raise SystemExit(f"CREATED_JOB_IDENTITY_MISMATCH job_id={job.id}; inspect this exact job, do not create a replacement blindly")
+    try:meta=client.fine_tuning.retrieve(id=job.id)
+    except Exception as exc:
+        update_create_intent(intent_path,"JOB_KNOWN_VERIFY_UNAVAILABLE",job_id=job.id,verification={"phase":"retrieve","status":"UNAVAILABLE","error_class":type(exc).__name__})
+        raise SystemExit(f"JOB_CREATED_IDENTITY_VERIFY_UNAVAILABLE job_id={job.id}; inspect this exact job, do not create another: {type(exc).__name__}") from exc
+    retrieve_mismatches=job_identity_mismatches(meta,expected,allow_missing=("random_seed",))
+    if retrieve_mismatches:
+        update_create_intent(intent_path,"JOB_KNOWN_IDENTITY_MISMATCH",job_id=job.id,verification={"phase":"retrieve","mismatches":retrieve_mismatches})
+        raise SystemExit(f"CREATED_JOB_IDENTITY_MISMATCH job_id={job.id}; inspect this exact job, do not create a replacement blindly")
+    update_create_intent(intent_path,"JOB_KNOWN_VERIFIED",job_id=job.id,verification={"phase":"retrieve","status":"VERIFIED","random_seed_create_response":RANDOM_SEED})
+    print(json.dumps({"job_id":job.id,"campaign_fingerprint":fingerprint,"campaign_suffix":suffix,"from_hf_model":hf_model,"hf_model_revision":hf_revision,"template_model":TEMPLATE,"full_fine_tune":True,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"random_seed":RANDOM_SEED,"estimated_usd":price,"local_create_intent":str(intent_path),"created_job_identity_verified":True,"byom_compatibility_status":"CREATE_ACCEPTED_TRAINING_START_STILL_REQUIRED_FOR_PROMOTION","next":"retrieve this exact job; never blind-retry create after an ambiguous transport outcome"},indent=2))
 if __name__=="__main__":main()

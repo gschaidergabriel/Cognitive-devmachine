@@ -24,8 +24,14 @@ class SafetyTests(unittest.TestCase):
         mod.TRAIN,mod.VALID=self.old; self.tmp.cleanup()
         for name in (mod.CREATE_CONFIRM_ENV,mod.CREATE_LEDGER_DIR_ENV,"CLAYCOG_HF_MODEL","CLAYCOG_HF_REVISION","CLAYCOG_INSTRUCT_HF_MODEL","CLAYCOG_INSTRUCT_HF_REVISION"): os.environ.pop(name,None)
         ConstructorFake.calls.clear()
-    def test_fingerprint_binds_dataset_training_config_and_hf_revision(self):
+    def test_fingerprint_binds_dataset_training_config_hf_revision_and_seed(self):
         a=mod.campaign_fingerprint(self.hf,self.rev); self.assertEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.VALID.write_text('{"messages":[2]}\n'); self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.VALID.write_text('{"messages":[1]}\n'); self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,"1"*40))
+        old_seed,old_lr,old_warm=mod.RANDOM_SEED,mod.LEARNING_RATE,mod.WARMUP_RATIO
+        try:
+            mod.RANDOM_SEED=old_seed+1; self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.RANDOM_SEED=old_seed
+            mod.LEARNING_RATE=old_lr*2; self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.LEARNING_RATE=old_lr
+            mod.WARMUP_RATIO=old_warm+0.01; self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,self.rev))
+        finally: mod.RANDOM_SEED,mod.LEARNING_RATE,mod.WARMUP_RATIO=old_seed,old_lr,old_warm
     def test_exact_revision_defaults_and_custom_override_fail_closed(self):
         self.assertEqual((mod.PRIMARY_HF_MODEL,mod.PRIMARY_HF_REVISION),mod.resolve_hf_source(False)); self.assertEqual((mod.INSTRUCT_HF_MODEL,mod.INSTRUCT_HF_REVISION),mod.resolve_hf_source(True)); os.environ["CLAYCOG_HF_MODEL"]="example/custom-qwen2"
         with self.assertRaises(SystemExit): mod.resolve_hf_source(False)
@@ -46,14 +52,24 @@ class SafetyTests(unittest.TestCase):
         c=ClientFake(); fp=mod.campaign_fingerprint(self.hf,self.rev); suffix=mod.campaign_suffix(fp); path=mod.arm_create_intent(fp,self.hf,self.rev,suffix); mod.update_create_intent(path,"UNKNOWN_REMOTE_CREATE",error_class="TimeoutError"); self.assertEqual([],mod.matching_campaign_jobs(c,self.hf,mod.TEMPLATE,suffix))
         with self.assertRaises(SystemExit) as ctx: mod.assert_no_local_create_intent(fp)
         self.assertIn("UNKNOWN_REMOTE_CREATE",str(ctx.exception))
-    def test_create_intent_is_atomic_exclusive_secret_free_and_revision_bound(self):
+    def test_create_intent_is_atomic_exclusive_secret_free_revision_and_seed_bound(self):
         fp=mod.campaign_fingerprint(self.hf,self.rev); suffix=mod.campaign_suffix(fp); os.environ["TOGETHER_API_KEY"]="SHOULD_NOT_ENTER_LEDGER"
         try:
-            path=mod.arm_create_intent(fp,self.hf,self.rev,suffix); data=path.read_text(); payload=json.loads(data); self.assertEqual("CREATE_ARMED",payload["status"]); self.assertEqual(self.rev,payload["campaign"]["hf_model_revision"]); self.assertNotIn("SHOULD_NOT_ENTER_LEDGER",data); self.assertEqual(0o600,path.stat().st_mode & 0o777)
+            path=mod.arm_create_intent(fp,self.hf,self.rev,suffix); data=path.read_text(); payload=json.loads(data); self.assertEqual("CREATE_ARMED",payload["status"]); self.assertEqual("claycog-together-create-intent/v2",payload["schema"]); self.assertEqual(self.rev,payload["campaign"]["hf_model_revision"]); self.assertEqual(mod.RANDOM_SEED,payload["campaign"]["random_seed"]); self.assertEqual(mod.LEARNING_RATE,payload["campaign"]["learning_rate"]); self.assertEqual(mod.WARMUP_RATIO,payload["campaign"]["warmup_ratio"]); self.assertNotIn("SHOULD_NOT_ENTER_LEDGER",data); self.assertEqual(0o600,path.stat().st_mode & 0o777)
             with self.assertRaises(SystemExit): mod.arm_create_intent(fp,self.hf,self.rev,suffix)
         finally: os.environ.pop("TOGETHER_API_KEY",None)
     def test_billed_create_client_disables_sdk_retries(self): mod.new_zero_retry_create_client(ConstructorFake); self.assertEqual([{"max_retries":0}],ConstructorFake.calls)
     def test_known_job_is_durably_bound_to_exact_fingerprint(self):
-        fp=mod.campaign_fingerprint(self.hf,self.rev); suffix=mod.campaign_suffix(fp); path=mod.arm_create_intent(fp,self.hf,self.rev,suffix); mod.update_create_intent(path,"JOB_KNOWN",job_id="ft-known"); payload=mod.read_create_ledger(fp); self.assertEqual("ft-known",payload["job_id"]); self.assertEqual(fp,payload["fingerprint"])
+        fp=mod.campaign_fingerprint(self.hf,self.rev); suffix=mod.campaign_suffix(fp); path=mod.arm_create_intent(fp,self.hf,self.rev,suffix); mod.update_create_intent(path,"JOB_KNOWN",job_id="ft-known"); mod.update_create_intent(path,"JOB_KNOWN_VERIFIED",job_id="ft-known",verification={"phase":"retrieve","status":"VERIFIED"}); payload=mod.read_create_ledger(fp); self.assertEqual("ft-known",payload["job_id"]); self.assertEqual(fp,payload["fingerprint"]); self.assertEqual("JOB_KNOWN_VERIFIED",payload["status"]); self.assertEqual("VERIFIED",payload["verification"]["status"])
+    def test_unusual_provider_create_identity_substitution_is_rejected(self):
+        template="provider/qwen2-compatible"; expected=mod.expected_job_identity("train-file","valid-file",self.hf,self.rev,template)
+        good=types.SimpleNamespace(id="ft-created",**expected); self.assertEqual({},mod.job_identity_mismatches(good,expected))
+        substituted=dict(expected); substituted["hf_model_revision"]="f"*40; substituted["random_seed"]=mod.RANDOM_SEED+1
+        mismatches=mod.job_identity_mismatches(types.SimpleNamespace(id="ft-created",**substituted),expected)
+        self.assertEqual({"hf_model_revision","random_seed"},set(mismatches))
+    def test_retrieve_may_omit_seed_but_not_other_identity(self):
+        template="provider/qwen2-compatible"; expected=mod.expected_job_identity("train-file","valid-file",self.hf,self.rev,template); values=dict(expected); values.pop("random_seed")
+        self.assertEqual({},mod.job_identity_mismatches(types.SimpleNamespace(**values),expected,allow_missing=("random_seed",)))
+        values.pop("hf_model_revision"); mismatches=mod.job_identity_mismatches(types.SimpleNamespace(**values),expected,allow_missing=("random_seed",)); self.assertIn("hf_model_revision",mismatches)
 
 if __name__=="__main__": unittest.main(verbosity=2)

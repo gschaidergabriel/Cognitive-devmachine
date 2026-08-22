@@ -14,6 +14,10 @@ class Client:
 class TogetherCtor:
     last=None
     def __init__(self,**kw):type(self).last=kw
+
+def sdk_v2_create_signature(*,training_file,model=None,n_epochs=1,validation_file="",n_evals=0,n_checkpoints=1,learning_rate=0.00001,warmup_ratio=0.0,lora=None,suffix=None,random_seed=None,train_on_inputs=None,training_method="sft"):
+    return {"training_file":training_file,"model":model,"lora":lora,"training_method":training_method,"train_on_inputs":train_on_inputs}
+
 class Tests(unittest.TestCase):
     def setUp(self):
         self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
@@ -64,8 +68,12 @@ class Tests(unittest.TestCase):
         c=Client();m.estimate_price(c,"t","v");q=c.fine_tuning.estimate_kwargs;self.assertEqual(q["training_type"],{"type":"Full"});self.assertEqual(q["training_method"],{"method":"sft","train_on_inputs":"auto"})
         for x in ("random_seed","learning_rate","warmup_ratio","from_hf_model"):self.assertNotIn(x,q)
     def test_create_explicit_full_and_seed(self):
-        p=m.create_payload("t","v","s");self.assertEqual(p["training_type"],{"type":"Full"});self.assertEqual(p["random_seed"],3407);self.assertEqual(p["learning_rate"],1e-5);self.assertEqual(p["warmup_ratio"],.03)
-        for x in ("lora","from_hf_model","hf_model_revision","train_on_inputs"):self.assertNotIn(x,p)
+        p=m.create_payload("t","v","s");self.assertIs(p["lora"],False);self.assertEqual(p["training_method"],"sft");self.assertEqual(p["train_on_inputs"],"auto");self.assertEqual(p["random_seed"],3407);self.assertEqual(p["learning_rate"],1e-5);self.assertEqual(p["warmup_ratio"],.03)
+        for x in ("training_type","from_hf_model","hf_model_revision"):self.assertNotIn(x,p)
+    def test_create_payload_binds_sdk_v2_high_level_signature(self):
+        p=m.create_payload("t","v","s");bound=sdk_v2_create_signature(**p);self.assertEqual(bound["lora"],False);self.assertEqual(bound["training_method"],"sft");self.assertEqual(bound["train_on_inputs"],"auto")
+        legacy={**p,"training_type":{"type":"Full"}}
+        with self.assertRaises(TypeError):sdk_v2_create_signature(**legacy)
     def test_fingerprint_binds_dataset(self):
         a=m.campaign_fingerprint();m.TRAIN.write_text('{"messages":[1]}\n');self.assertNotEqual(a,m.campaign_fingerprint())
     def test_duplicate_guard(self):

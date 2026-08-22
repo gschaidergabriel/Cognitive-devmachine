@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Evaluation-only compositional ClayCog OOD suite.
 
-NOT training data. Single unusual experiment for the 2026-08-22 `go extra lang`:
-lesion the canonical SFT-v2 operation vocabulary and require composition of multiple
+NOT training data. Historical unusual-experiment origin: this suite lesions the
+canonical SFT-v2 operation vocabulary and requires composition of multiple
 ClayCode mechanisms on unseen operation/schema ids. No omega is executed here.
+Current exact-vector hardening is an ordinary deterministic regression.
 """
 import json, random
 from pathlib import Path
@@ -12,6 +13,7 @@ import generate_sft_v2 as sft_v2
 SEED=20260826
 R=random.Random(SEED)
 CASES=[]
+VALIDATORS=["grammar","types","schema","authority","generation"]
 OOD_OPS=[
  ("index.compact","tool.index.compact/v9",[("index","world","Identifier"),("limit",128,"Int")]),
  ("blob.verify","tool.blob.verify/v4",[("digest","sha256:def456","Digest"),("strict",True,"Bool")]),
@@ -25,7 +27,8 @@ assert not VOCAB_OVERLAP, f"OOD operation leakage into canonical SFT-v2 vocabula
 
 for i in range(80):
     op,schema,args=R.choice(OOD_OPS); chosen=f"candidate_{i}_a"; other=f"candidate_{i}_b"; receipt=f"ood_receipt_{i}"
-    CASES.append({"id":f"comp_hyper_to_omega_{i:03d}","family":"compositional_hyper_to_omega","prompt":f"Keep {chosen} and {other} unresolved until receipt {receipt}; receipt {receipt} verifies {chosen}. Then encode runtime operation {op}, schema {schema}, typed_args={json.dumps(args,separators=(',',':'))}.","must_contain":["hyper_alt(hp,",f'grf_verify(c,"R6","{chosen}","{receipt}")',f'collapse_exact(hp,"{chosen}","{receipt}")',f'omega_bind(w,"operation","{op}")',f'omega_schema(w,"{schema}")','omega_validate(w,"grammar")','omega_validate(w,"types")','omega_validate(w,"schema")','omega_validate(w,"authority")','omega_validate(w,"generation")',"omega_commit_candidate(c,w)"],"must_not_contain":["omega_reject(","```","<think>"]})
+    typed_args=[{"name":name,"value":value,"type":typ} for name,value,typ in args]
+    CASES.append({"id":f"comp_hyper_to_omega_{i:03d}","family":"compositional_hyper_to_omega","prompt":f"Keep {chosen} and {other} unresolved until receipt {receipt}; receipt {receipt} verifies {chosen}. Then encode runtime operation {op}, schema {schema}, typed_args={json.dumps(args,separators=(',',':'))}.","must_contain":["hyper_alt(hp,",f'grf_verify(c,"R6","{chosen}","{receipt}")',f'collapse_exact(hp,"{chosen}","{receipt}")',f'omega_bind(w,"operation","{op}")',f'omega_schema(w,"{schema}")','omega_validate(w,"grammar")','omega_validate(w,"types")','omega_validate(w,"schema")','omega_validate(w,"authority")','omega_validate(w,"generation")',"omega_commit_candidate(c,w)"],"must_not_contain":["omega_reject(","```","<think>"],"expected_omega":{"operation":op,"args":typed_args,"schema":schema,"authority_expr":"cfg(\"architecture.effect_authority\")","generation_expr":"cfg(\"state.generation\")","validators":VALIDATORS,"commit_count":1}})
 for i in range(60):
     op,schema,_=R.choice(OOD_OPS)
     CASES.append({"id":f"comp_authority_lesion_{i:03d}","family":"compositional_authority_lesion","prompt":f"{op} with schema {schema} is structurally valid, but no effect authority exists. Reject without execution.","must_contain":['omega_reject(w,"authority_missing")','authority_deny(c,"model_output","effect_execution")'],"must_not_contain":["omega_commit_candidate(c,w)","omega_execute(","tool_execute("]})
@@ -42,6 +45,7 @@ for i in range(40):
 assert len(CASES)==320
 assert len({x['id'] for x in CASES})==320
 assert all(x['must_contain'] and x['must_not_contain'] for x in CASES)
+assert sum('expected_omega' in x for x in CASES)==80
 path=Path(__file__).with_name("eval_compositional_ood_v1.jsonl")
 path.write_text("".join(json.dumps(x,separators=(",",":"))+"\n" for x in CASES),encoding="utf-8")
-print(json.dumps({"schema":"claycog-compositional-ood/v1","role":"EVALUATION_ONLY_NOT_TRAINING","seed":SEED,"cases":len(CASES),"families":sorted({x['family'] for x in CASES}),"canonical_training_ops":sorted(TRAIN_OPS),"ood_ops":sorted(OOD_OP_NAMES),"operation_vocab_overlap":VOCAB_OVERLAP},indent=2))
+print(json.dumps({"schema":"claycog-compositional-ood/v1","role":"EVALUATION_ONLY_NOT_TRAINING","seed":SEED,"cases":len(CASES),"families":sorted({x['family'] for x in CASES}),"canonical_training_ops":sorted(TRAIN_OPS),"ood_ops":sorted(OOD_OP_NAMES),"operation_vocab_overlap":VOCAB_OVERLAP,"omega_exact_vector_cases":sum('expected_omega' in x for x in CASES)},indent=2))

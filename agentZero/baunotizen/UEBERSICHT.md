@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-22T11:06:43Z. **4201 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-22T11:36:44Z. **4207 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T16:52:41+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T17:47:42+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 4103 |
+| baunotiz | 4109 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2444 |
-| baunotiz | bauverlauf.jsonl | 1611 |
+| baunotiz | git-commit | 2447 |
+| baunotiz | bauverlauf.jsonl | 1614 |
 | baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 4201 · Gegenhypothese: 0 von 4201
+## Hypothese: 0 von 4207 · Gegenhypothese: 0 von 4207
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T16:52:41+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### research: classify same-source terminal auth cluster recovery
+
+`baunotiz-bauverlauf-964d59db73655c1ea608` · baunotiz · bauverlauf.jsonl · 2026-08-22T17:47:42+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: classify same-source terminal auth cluster recovery
+
+`baunotiz-git-9d3f3f734f600966310f0cb29f6b2577d9d0d575` · baunotiz · git-commit · 2026-08-22T17:47:42+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: classify same-source terminal auth cluster recovery
 
 ### claycode supervisor: fence PR880 paid cognition lane under FREE_ONLY
 
@@ -220,22 +236,4 @@ evidence(go): re-enter native v2 parity and approx1B frontier
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 Converge admission and evaluation on one depth-aware ClayCode syntax authority, repair stale comment-smuggling regression semantics, and require turn-body OOD calls. Bounded exact-core isolated evidence covers 16/16 focused tests and all 1,650 canonical SFT-v2 targets at exact corpus hashes. GitHub Actions remained execution-admission blocked before visible steps; no provider/model acceptance claim.
-
-### cognition: unify ClayCode syntax authority and top-level OOD semantics (#876)
-
-`baunotiz-git-f15c05edf7353a24030a1fd8d1fee91dc7ed4646` · baunotiz · git-commit · 2026-08-22T15:36:26+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-cognition: unify ClayCode syntax authority and top-level OOD semantics (#876)
-
-Converge admission and evaluation on one depth-aware ClayCode syntax authority, repair stale comment-smuggling regression semantics, and require turn-body OOD calls. Bounded exact-core isolated evidence covers 16/16 focused tests and all 1,650 canonical SFT-v2 targets at exact corpus hashes. GitHub Actions remained execution-admission blocked before visible steps; no provider/model acceptance claim.
-
-### state: re-enter current native cognition and structured-gate reality (#878)
-
-`baunotiz-bauverlauf-adb304d712314236a27c` · baunotiz · bauverlauf.jsonl · 2026-08-22T15:36:23+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

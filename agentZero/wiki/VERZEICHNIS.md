@@ -1,6 +1,6 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-22T11:06:43Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T11:36:43Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 663 KB): der Systemname steht im Titel. Volltext.
 - **umfeld** (2544 Artikel, 1434 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
@@ -79,9 +79,9 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-git-372397141f5d2058aa7a42e076fbb63` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-bauverlauf-53da5ecc5a3716ab4c18` · baunotiz
 - **agentZero research: index EntityOS completion assessment** — `baunotiz-bauverlauf-621fea6c736f0e907d7d` · baunotiz
-- **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-bauverlauf-c9d3054b18ad2b737c61` · baunotiz
 - **claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures** — `baunotiz-bauverlauf-a769c7cb4251dd7fc691` · baunotiz
 - **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-bauverlauf-149b5825ec3e9860e2a5` · baunotiz
+- **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-bauverlauf-c9d3054b18ad2b737c61` · baunotiz
 - **Verfassung: Zero denkt+programmiert in ClayCode; alles nach ClayCode -- elegant/iterativ/interkonnek** — `baunotiz-git-94e993e61e98052cbcb2c12e78a8ead` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-git-3488f45d776e9c5b00c954b8e7cc7af` · baunotiz
 - **agentZero research: index EntityOS completion assessment** — `baunotiz-git-e12a81473a25f14b8772431dc17960e` · baunotiz
@@ -192,6 +192,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **F80 Trennung: GLM autonom, Claude Code ist der Menschenkanal - beide teilen die UnifiedDB, sonst zwe** — `baunotiz-bauverlauf-4809ae08ae285f67c844` · baunotiz
 - **2026-08-17: infra(clayverse) -- Einführung eines unabhängigen, zerstörbaren VPS-KVM-Labors für ClayV** — `verdichtung-2026-08-17-infra-clayverse` · verdichtung
 - **ClayVerse-Dokumente sammeln: dokumente/clayverse/ + README-Tagesstand 2026-08-15** — `baunotiz-bauverlauf-152ee73de12b068d21d3` · baunotiz
+- **2026-08-17: feat(clayverse) -- Integration von Autonomie-Features in Clayverse über mehrere Commits ** — `verdichtung-2026-08-17-feat-clayverse` · verdichtung
 - **agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc16f4dacafb77548697` · baunotiz
 - **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-b3caf4337fcee8c154f39bec1e0b770` · baunotiz
 - **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-75fc27e9a5adde4689b9` · baunotiz
@@ -203,7 +204,6 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero-Export 2026-08-18T17:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-94c09645610ea18ae79d` · baunotiz
 - **agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-dd57045d635dc17839b3c8fa35cc0c5` · baunotiz
 - **agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc66dba04c3fa8515045` · baunotiz
-- **agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-ed2da57901096a55a716400a51cef24` · baunotiz
 
 ## Kern / frank_v0_1 (6)
 

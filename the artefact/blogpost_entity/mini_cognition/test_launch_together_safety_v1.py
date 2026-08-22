@@ -19,6 +19,17 @@ class ConstructorFake:
         type(self).calls.append(dict(kwargs))
         self.fine_tuning=FineTuningFake()
 
+class LimitsCurrent:
+    def get_model_limits(self,model):
+        return types.SimpleNamespace(full_training={"ok":True},model=model)
+
+class LimitsLegacy:
+    def model_limits(self,model_name):
+        return types.SimpleNamespace(supports_full_training=True,model=model_name)
+
+class LimitClient:
+    def __init__(self,ft): self.fine_tuning=ft
+
 class SafetyTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory(); p=Path(self.tmp.name)
@@ -39,6 +50,25 @@ class SafetyTests(unittest.TestCase):
         self.assertEqual(a,mod.campaign_fingerprint(self.hf))
         mod.VALID.write_text('{"messages":[2]}\n',encoding="utf-8")
         self.assertNotEqual(a,mod.campaign_fingerprint(self.hf))
+
+    def test_fingerprint_binds_revision_template_and_corpus_generation(self):
+        a=mod.campaign_fingerprint(self.hf,hf_revision="rev-a",template=self.hf,corpus_version="v2")
+        self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,hf_revision="rev-b",template=self.hf,corpus_version="v2"))
+        self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,hf_revision="rev-a",template="other/model",corpus_version="v2"))
+        self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,hf_revision="rev-a",template=self.hf,corpus_version="v1"))
+
+    def test_exact_05b_template_default_and_near_template_create_block(self):
+        self.assertEqual(mod.HF_MODEL,mod.TEMPLATE)
+        mod.assert_create_template_safe(self.hf,self.hf)
+        for candidate in ("Qwen/Qwen2.5-1.5B","Qwen/Qwen2.5-7B-Instruct-Turbo"):
+            with self.assertRaises(SystemExit) as ctx:
+                mod.assert_create_template_safe(self.hf,candidate)
+            self.assertIn("TEMPLATE_COMPATIBILITY_ABORT",str(ctx.exception))
+
+    def test_immutable_hf_revision_gate(self):
+        for bad in ("","main","master","latest","HEAD"):
+            with self.assertRaises(SystemExit): mod.assert_immutable_revision(bad)
+        self.assertEqual(mod.HF_REVISION,mod.assert_immutable_revision(mod.HF_REVISION))
 
     def test_create_confirmation_requires_full_exact_fingerprint(self):
         fp=mod.campaign_fingerprint(self.hf)
@@ -109,5 +139,13 @@ class SafetyTests(unittest.TestCase):
         self.assertEqual("ft-known",payload["job_id"])
         self.assertEqual(fp,payload["fingerprint"])
         with self.assertRaises(SystemExit): mod.assert_no_local_create_intent(fp)
+
+    def test_model_limits_current_legacy_and_missing_surfaces(self):
+        _,surface=mod.get_full_training_limits(LimitClient(LimitsCurrent()),self.hf)
+        self.assertEqual("get_model_limits",surface)
+        _,surface=mod.get_full_training_limits(LimitClient(LimitsLegacy()),self.hf)
+        self.assertEqual("model_limits",surface)
+        class Missing: pass
+        with self.assertRaises(SystemExit): mod.get_full_training_limits(LimitClient(Missing()),self.hf)
 
 if __name__=="__main__": unittest.main(verbosity=2)

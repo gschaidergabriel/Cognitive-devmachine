@@ -66,6 +66,17 @@ class SourceClosureTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "LOCAL_INCLUDE_ESCAPES_SOURCE_ROOT"):
                 MODULE.discover_source_closure(entry)
 
+    def test_macro_include_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_text:
+            root = Path(tmp_text)
+            entry = root / "mini_entity.c"
+            part = root / "dynamic.inc"
+            part.write_text("static int dynamic = 1;\n", encoding="utf-8")
+            entry.write_text('#define LOCAL_PART "dynamic.inc"\n#include LOCAL_PART\n', encoding="utf-8")
+
+            with self.assertRaisesRegex(RuntimeError, "DYNAMIC_INCLUDE_FORBIDDEN"):
+                MODULE.discover_source_closure(entry)
+
     def test_local_source_symlink_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_text:
             root = Path(tmp_text)

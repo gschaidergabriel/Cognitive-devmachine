@@ -14,8 +14,9 @@
     "durable_authority": "MiniUnifiedDB, not model weights"
   },
   "coordination": {
-    "parallel_pr_superseded": 842,
-    "reason": "parallel lane was divergent and its billed create still used deprecated/ambiguous lora=False/top-level train_on_inputs semantics; fresh-main fusion preserves its unique direction while binding current API contracts",
+    "canonical_candidate_pr": 869,
+    "parallel_pr_closed_as_superseded": 842,
+    "reason": "PR 842 was divergent and its create path used older lora=False/top-level train_on_inputs semantics; PR 869 preserves its owner direction and single unusual experiment while binding current API contracts",
     "older_self_branch": "gpt56sol/go-claycog-08b-direct-together-20260822",
     "older_self_branch_status": "SUPERSEDED; used non-current get_model_limits API"
   },
@@ -35,7 +36,10 @@
     "private_fsynced_create_intent": true,
     "zero_retry_billed_create": true,
     "ambiguous_create": "UNKNOWN_REMOTE_CREATE; no blind retry",
+    "created_job_identity_retrieve_and_compare": true,
+    "created_job_identity_fields": ["training_file", "validation_file", "model", "n_epochs", "n_evals", "random_seed"],
     "deprecated_lora_field": false,
+    "deprecated_top_level_train_on_inputs": false,
     "byom_fields": false
   },
   "unusual_experiment": {
@@ -45,8 +49,12 @@
     "fusion_branch_use": "regression-only reproduction of same intervention; no second unusual experiment"
   },
   "execution": {
-    "exact_pr_workflow_defined": true,
-    "workflow_runtime_credit": "PENDING actual visible runner steps",
+    "pr_head_after_identity_fusion": "f9df6fd4e9a8dfdb91d425a5b3cb3165fe8c23ba",
+    "exact_pr_workflow_run": 32562428999,
+    "workflow_job": 97005979792,
+    "workflow_status": "completed/failure",
+    "workflow_steps": null,
+    "workflow_interpretation": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS; zero test credit; not a cognition test failure",
     "authenticated_together_preflight": false,
     "upload": false,
     "billed_create": false,
@@ -58,6 +66,6 @@
     "delta": "NO_CHANGE",
     "reason": "the artefact/README.md changed concurrently on main during this go; avoiding stale whole-file overwrite. Directive, lane and this receipt carry the bounded owner-direction delta."
   },
-  "next_gate": "exact PR runner -> environment-only Together secret -> model_limits + server file validation + exact price preflight <= USD18 -> fingerprint-confirmed single zero-retry create -> training/evaluation/quantization/RSS/local_exec",
-  "claim_boundary": "SOURCE/MECHANISM CANDIDATE. No provider preflight, paid training, checkpoint quality, <1GiB RSS, consciousness, AGI, or whole-product PASS is claimed."
+  "next_gate": "exact runner remains admission-blocked; next executable provider discriminator is environment-only Together preflight: model_limits + server file validation + exact price <= USD18, then fingerprint-confirmed single zero-retry create",
+  "claim_boundary": "SOURCE/MECHANISM CANDIDATE. No exact runner steps, provider preflight, paid training, checkpoint quality, <1GiB RSS, consciousness, AGI, or whole-product PASS is claimed."
 }

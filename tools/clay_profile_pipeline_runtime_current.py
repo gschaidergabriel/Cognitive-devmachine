@@ -16,7 +16,7 @@ from typing import Any
 import clay_pipeline_study_surface as study_surface
 from clay_profile_pipeline_runtime import PipelineFault, ProfilePipelineRuntime
 
-VERSION = "clay-profile-pipeline-runtime-current/0.3"
+VERSION = "clay-profile-pipeline-runtime-current/0.4"
 PROFILE_SCHEMA = "clay-pipeline-profile/v2"
 
 
@@ -61,14 +61,24 @@ class CurrentProfilePipelineRuntime(ProfilePipelineRuntime):
             if str(key).lower() in forbidden and value not in (None, "", False):
                 raise PipelineFault("PROFILE_CONTAINS_SECRET_VALUE")
 
+    @staticmethod
+    def _validate_study_config(config: dict[str, Any]) -> None:
+        if not isinstance(config, dict):
+            raise PipelineFault("BAD_STUDY_CONFIG")
+        if not str(config.get("profile_id", "")).strip():
+            raise PipelineFault("STUDY_CONFIG_PROFILE_REQUIRED")
+        if config.get("epistemic_law") != "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT":
+            raise PipelineFault("BAD_STUDY_EPISTEMIC_LAW")
+
     def _materialize_profile(self, profile: dict[str, Any]) -> dict[str, Any]:
         out = json.loads(json.dumps(profile))
         surface = out.get("study_surface")
         if isinstance(surface, dict) and surface.get("config_file"):
             path = self._resolve(str(surface["config_file"]))
             config = json.loads(path.read_text(encoding="utf-8"))
-            if not isinstance(config, dict):
-                raise PipelineFault("BAD_STUDY_CONFIG")
+            self._validate_study_config(config)
+            if str(config["profile_id"]) != str(out.get("profile_id")):
+                raise PipelineFault("STUDY_PROFILE_MISMATCH")
             raw = json.dumps(config, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
             out["study_surface"] = {
                 "config": config,
@@ -77,6 +87,28 @@ class CurrentProfilePipelineRuntime(ProfilePipelineRuntime):
             }
         return out
 
+    @staticmethod
+    def _profile_tables(db) -> None:
+        db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS eos_pipeline_profile(
+              singleton INTEGER PRIMARY KEY CHECK(singleton=1),
+              profile_id TEXT NOT NULL,
+              profile_json TEXT NOT NULL,
+              profile_hash TEXT NOT NULL,
+              updated_at REAL NOT NULL)
+            """
+        )
+        db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS eos_pipeline_study_config(
+              profile_id TEXT PRIMARY KEY,
+              config_json TEXT NOT NULL,
+              config_hash TEXT NOT NULL,
+              updated_at REAL NOT NULL)
+            """
+        )
+
     def install_profile(self, entity_db: str, profile: dict[str, Any]) -> str:
         """Install/replace active runtime configuration without resetting entity history."""
         profile = self._materialize_profile(profile)
@@ -84,16 +116,7 @@ class CurrentProfilePipelineRuntime(ProfilePipelineRuntime):
         raw = json.dumps(profile, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
         with self._db(entity_db) as db:
-            db.execute(
-                """
-                CREATE TABLE IF NOT EXISTS eos_pipeline_profile(
-                  singleton INTEGER PRIMARY KEY CHECK(singleton=1),
-                  profile_id TEXT NOT NULL,
-                  profile_json TEXT NOT NULL,
-                  profile_hash TEXT NOT NULL,
-                  updated_at REAL NOT NULL)
-                """
-            )
+            self._profile_tables(db)
             db.execute(
                 """
                 INSERT INTO eos_pipeline_profile(singleton,profile_id,profile_json,profile_hash,updated_at)
@@ -108,20 +131,63 @@ class CurrentProfilePipelineRuntime(ProfilePipelineRuntime):
             )
         return digest
 
+    def install_study_config(self, entity_db: str, config: dict[str, Any]) -> str:
+        """Install a profile-bound study config as DB-resident application data."""
+        self._validate_study_config(config)
+        raw = json.dumps(config, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+        with self._db(entity_db) as db:
+            self._profile_tables(db)
+            db.execute(
+                """
+                INSERT INTO eos_pipeline_study_config(profile_id,config_json,config_hash,updated_at)
+                VALUES(?,?,?,?)
+                ON CONFLICT(profile_id) DO UPDATE SET
+                  config_json=excluded.config_json,
+                  config_hash=excluded.config_hash,
+                  updated_at=excluded.updated_at
+                """,
+                (str(config["profile_id"]), raw, digest, time.time()),
+            )
+        return digest
+
+    def install_study_config_file(self, entity_db: str, path: str) -> str:
+        config = json.loads(self._resolve(path).read_text(encoding="utf-8"))
+        return self.install_study_config(entity_db, config)
+
     def _pipeline_profile_read(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             with self._db(str(p["entity_db"])) as db:
                 row = db.execute(
                     "SELECT profile_json,profile_hash FROM eos_pipeline_profile WHERE singleton=1"
                 ).fetchone()
-            if row is None:
-                raise PipelineFault("NO_ACTIVE_PROFILE")
-            profile = json.loads(row["profile_json"])
-            self._validate_profile(profile)
-            raw = json.dumps(profile, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-            digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
-            if digest != row["profile_hash"]:
-                raise PipelineFault("PROFILE_HASH_MISMATCH")
+                if row is None:
+                    raise PipelineFault("NO_ACTIVE_PROFILE")
+                profile = json.loads(row["profile_json"])
+                self._validate_profile(profile)
+                raw = json.dumps(profile, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+                digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+                if digest != row["profile_hash"]:
+                    raise PipelineFault("PROFILE_HASH_MISMATCH")
+                table_exists = db.execute(
+                    "SELECT 1 FROM sqlite_master WHERE type='table' AND name='eos_pipeline_study_config'"
+                ).fetchone()
+                config_row = None
+                if table_exists:
+                    config_row = db.execute(
+                        "SELECT config_json,config_hash FROM eos_pipeline_study_config WHERE profile_id=?",
+                        (str(profile["profile_id"]),),
+                    ).fetchone()
+            if config_row is not None:
+                if isinstance(profile.get("study_surface"), dict):
+                    raise PipelineFault("MULTIPLE_STUDY_CONFIG_AUTHORITIES")
+                config = json.loads(config_row["config_json"])
+                self._validate_study_config(config)
+                config_raw = json.dumps(config, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+                config_hash = hashlib.sha256(config_raw.encode("utf-8")).hexdigest()
+                if config_hash != config_row["config_hash"]:
+                    raise PipelineFault("STUDY_CONFIG_HASH_MISMATCH")
+                profile["study_surface"] = {"config": config, "config_hash": config_hash}
             return {"ok": True, "profile": profile, "profile_hash": digest}
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}

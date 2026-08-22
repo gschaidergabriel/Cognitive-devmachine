@@ -56,3 +56,17 @@ def test_source_closure_rejects_symlinked_local_source(tmp_path: Path) -> None:
 
     with pytest.raises(RuntimeError, match="SOURCE_SYMLINK_FORBIDDEN"):
         build_native_bound.source_closure(entry)
+
+
+def test_source_closure_rejects_symlinked_directory_escape(tmp_path: Path) -> None:
+    root = tmp_path / "native"
+    root.mkdir()
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (outside / "part.inc").write_text("static int x;\n", encoding="utf-8")
+    (root / "linked").symlink_to(outside, target_is_directory=True)
+    entry = root / "mini_entity.c"
+    entry.write_text('#include "linked/part.inc"\n', encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="SOURCE_SYMLINK_FORBIDDEN"):
+        build_native_bound.source_closure(entry)

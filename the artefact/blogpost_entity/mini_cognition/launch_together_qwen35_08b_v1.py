@@ -34,6 +34,7 @@ def campaign_fingerprint(): return hashlib.sha256(json.dumps(campaign_descriptor
 def campaign_suffix(fp): return "claycog08b-v2-"+fp[:24]
 def objdict(x): return x.model_dump() if hasattr(x,"model_dump") else x.dict() if hasattr(x,"dict") else x if isinstance(x,dict) else str(x)
 def _field(x,n,d=None): return x.get(n,d) if isinstance(x,dict) else getattr(x,n,d)
+def _plain(x): return x.model_dump() if hasattr(x,"model_dump") else x.dict() if hasattr(x,"dict") else x
 
 def get_full_training_limits(client):
     limits=client.fine_tuning.model_limits(model_name=MODEL)
@@ -105,12 +106,21 @@ def update_create_intent(p,status,job_id=None,error_class=None):
         try:tmp.unlink()
         except OSError:pass
 def new_zero_retry_create_client(cls): return cls(max_retries=0)
+def _identity_equal(got,want):
+    got=_plain(got);want=_plain(want)
+    if isinstance(want,dict):return isinstance(got,dict) and all(k in got and _identity_equal(got[k],v) for k,v in want.items())
+    return got==want
 def created_job_identity_mismatches(meta,expected):
     out={}
     for key,want in expected.items():
         got=_field(meta,key,None)
-        if got!=want:out[key]={"expected":want,"observed":got}
+        if not _identity_equal(got,want):out[key]={"expected":want,"observed":_plain(got)}
     return out
+def created_job_retrieve_expected(train_id,valid_id):
+    return {"training_file":train_id,"validation_file":valid_id,"model":MODEL,"n_epochs":EPOCHS,"n_evals":EVALS,"n_checkpoints":1,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"train_on_inputs":"auto","training_method":training_method(),"training_type":training_type()}
+def assert_created_job_seed(job):
+    got=_field(job,"random_seed",None)
+    if got!=RANDOM_SEED:raise SystemExit(f"JOB_CREATED_SEED_MISMATCH expected={RANDOM_SEED} observed={got!r}; job is known, do not create another")
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
@@ -128,7 +138,8 @@ def main():
     try:job=cc.fine_tuning.create(**create_payload(tf.id,vf.id,suffix))
     except Exception as e:update_create_intent(intent,"UNKNOWN_REMOTE_CREATE",error_class=type(e).__name__);raise SystemExit("CREATE_OUTCOME_UNKNOWN; do not retry until exact provider reconciliation") from e
     update_create_intent(intent,"JOB_KNOWN",job_id=job.id)
-    expected={"training_file":tf.id,"validation_file":vf.id,"model":MODEL,"n_epochs":EPOCHS,"n_evals":EVALS,"random_seed":RANDOM_SEED}
+    assert_created_job_seed(job)
+    expected=created_job_retrieve_expected(tf.id,vf.id)
     try:meta=client.fine_tuning.retrieve(id=job.id)
     except Exception as e:raise SystemExit(f"JOB_CREATED_IDENTITY_VERIFY_UNAVAILABLE job_id={job.id}; inspect this exact job, do not create another: {type(e).__name__}") from e
     mismatches=created_job_identity_mismatches(meta,expected)

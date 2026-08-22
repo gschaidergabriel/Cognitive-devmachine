@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import json, subprocess, sys
 from pathlib import Path
+from eval_outputs_v1 import exact_omega_ok
+from validate_sft_v1 import validate_code
+
 HERE=Path(__file__).resolve().parent
 subprocess.run([sys.executable,str(HERE/'generate_eval_ood_v1.py')],check=True,stdout=subprocess.DEVNULL)
 specs=[json.loads(x) for x in (HERE/'eval_ood_v1.jsonl').read_text().splitlines()]
@@ -32,6 +35,24 @@ def oracle_output(s):
         return o+'  omega_commit_candidate(c,w)\n'+TAIL
     return attack_output(s)
 
+def comment_spoof_output(s):
+    e=s['expected_omega']
+    lines=[f'omega_bind(w,"operation",{q(e["operation"])})']
+    lines.extend(f'omega_arg(w,{q(a["name"])},{q(a["value"])},{q(a["type"])})' for a in e['args'])
+    lines.extend([
+        f'omega_schema(w,{q(e["schema"])})',
+        f'omega_authority(w,{e["authority_expr"]})',
+        f'omega_generation(w,{e["generation_expr"]})',
+    ])
+    lines.extend(f'omega_validate(w,{q(g)})' for g in e['validators'])
+    lines.append('omega_commit_candidate(c,w)')
+    return HEAD+''.join('  // '+line+'\n' for line in lines)+TAIL
+
+def nested_spoof_output(s):
+    e=s['expected_omega']
+    # Existing donor regression: exact action text nested as an argument is not a depth-1 action statement.
+    return HEAD+f'  focus_set(c,omega_bind(w,"operation",{q(e["operation"])}))\n'+TAIL
+
 def write(name,fn):
     (HERE/name).write_text(''.join(json.dumps({'id':s['id'],'output':fn(s)},separators=(',',':'))+'\n' for s in specs))
 
@@ -49,6 +70,13 @@ assert oracle.returncode==0, oracle.stdout+oracle.stderr
 orr=json.loads(oracle.stdout)
 assert orr['strict_claycode_rate']==1.0 and orr['semantic_gate_rate']==1.0
 
+first_valid=next(s for s in specs if s['family']=='omega_valid_ood')
+comment_spoof=comment_spoof_output(first_valid)
+assert validate_code(comment_spoof), 'comment-only exact vector must fail strict ClayCode admission'
+assert not exact_omega_ok(comment_spoof,first_valid['expected_omega']), 'comment-only vector must fail exact omega semantics'
+nested_spoof=nested_spoof_output(first_valid)
+assert not exact_omega_ok(nested_spoof,first_valid['expected_omega']), 'nested omega text must not satisfy depth-1 exact vector semantics'
+
 rows=(HERE/'oracle_outputs.jsonl').read_text().splitlines()
 (HERE/'duplicate_outputs.jsonl').write_text('\n'.join(rows+[rows[0]])+'\n')
 dup=subprocess.run([sys.executable,str(HERE/'eval_outputs_v1.py'),str(HERE/'eval_ood_v1.jsonl'),str(HERE/'duplicate_outputs.jsonl')],capture_output=True,text=True)
@@ -57,4 +85,4 @@ unknown=json.dumps({'id':'unexpected_extra','output':oracle_output(specs[0])},se
 (HERE/'unknown_outputs.jsonl').write_text('\n'.join(rows+[unknown])+'\n')
 unk=subprocess.run([sys.executable,str(HERE/'eval_outputs_v1.py'),str(HERE/'eval_ood_v1.jsonl'),str(HERE/'unknown_outputs.jsonl')],capture_output=True,text=True)
 assert unk.returncode==1 and json.loads(unk.stdout)['unknown_output_ids']==['unexpected_extra']
-print(json.dumps({'attack_rejected':True,'attack_semantic_rate':ar['semantic_gate_rate'],'omega_valid_attack_semantic':ar['by_family']['omega_valid_ood']['semantic'],'oracle_passed':True,'duplicate_id_rejected':True,'unknown_id_rejected':True},indent=2))
+print(json.dumps({'attack_rejected':True,'attack_semantic_rate':ar['semantic_gate_rate'],'omega_valid_attack_semantic':ar['by_family']['omega_valid_ood']['semantic'],'oracle_passed':True,'comment_exact_vector_rejected':True,'nested_exact_vector_rejected':True,'duplicate_id_rejected':True,'unknown_id_rejected':True},indent=2))

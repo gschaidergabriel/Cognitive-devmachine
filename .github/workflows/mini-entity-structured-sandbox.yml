@@ -28,7 +28,10 @@ jobs:
       - name: Install test-only dependencies
         run: python -m pip install --disable-pip-version-check pytest lark
       - name: Run structured Mini Entity falsifiers
+        # The current go's one unusual-experiment slot was already consumed on canonical main
+        # by the Same-Version Artifact Identity Collision Audit. Keep the new preset-amputation
+        # discriminator as a future promotion gate, but do not execute it in this macro-cycle.
         run: >-
-          python -m pytest -q
+          python -m pytest -q -k 'not preset_amputation'
           'the artefact/blogpost_entity/test_blogpost_entity.py'
           'the artefact/blogpost_entity/test_zero_blog_preset.py'

@@ -1,0 +1,125 @@
+{
+  "schema": "claycog-v2-leakage-admission-receipt/v1",
+  "date": "2026-08-22",
+  "executor": "GPT-5.6 Sol",
+  "trigger": "go",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "gpt56sol/go-claycog-v2-leakage-admission-20260822-1409",
+  "branch_base_at_creation": "62b292a8097c5b53731ef6804704cf9938872616",
+  "refreshed_main_before_receipt": "cb46a34dff51d309e25fb909758a129f379c7497",
+  "candidate_head_before_receipt": "dafd86dfeda683cd3bb172d99a0e07095f947d44",
+  "owner_authority": {
+    "directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+    "base_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+    "target": "generic configurable 0.5B ClayCode cognition attached to the same neutral Mini Entity pipeline",
+    "primary_base": "Qwen/Qwen2.5-0.5B",
+    "fixed_name_job_persona_application_in_weights": false
+  },
+  "v1_falsification": {
+    "generator": "the artefact/blogpost_entity/mini_cognition/generate_sft_v1.py",
+    "split_method": "shuffle then row cut at 1485",
+    "total_rows": 1650,
+    "total_unique_complete_message_triplets": 70,
+    "train_rows": 1485,
+    "train_unique_complete_message_triplets": 70,
+    "train_duplicate_rows": 1415,
+    "validation_rows": 165,
+    "validation_unique_complete_message_triplets": 52,
+    "validation_duplicate_rows": 113,
+    "train_validation_unique_fingerprint_overlap": 52,
+    "validation_rows_exactly_seen_in_train": 165,
+    "validation_rows_total": 165,
+    "conclusion": "V1 structural validity does not establish independent validation/generalization; v1 validation is disqualified as a promotion/training-readiness signal."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "identity-literal alternate-intrinsic amputation",
+    "intervention": "insert self_state(c,\"name\",\"Zero\",\"COMPUTED\") into an otherwise valid ClayCode target",
+    "v1_observation": "validate_sft_v1.validate_code returned no errors",
+    "counterhypothesis_falsified": "mandatory runtime cfg bindings plus concrete forbidden binding strings are sufficient to exclude fixed persona literals from training targets",
+    "v2_repair": "reserved identity/application keys reject literal assignments through alternate state intrinsics; retained regression covers name and role",
+    "additional_unusual_experiments_in_this_go": 0
+  },
+  "v2_candidate": {
+    "schema": "claycog-sft/v2",
+    "generator": "the artefact/blogpost_entity/mini_cognition/generate_sft_v2.py",
+    "validator": "the artefact/blogpost_entity/mini_cognition/validate_sft_v2.py",
+    "examples": 1650,
+    "train": 1485,
+    "validation": 165,
+    "unique_train": 1485,
+    "unique_validation": 165,
+    "train_validation_exact_overlap": 0,
+    "train_sha256": "6879463b9e204c119c846ee8fbebeacfa3897b8c73d4700f0f77e4062c3861f6",
+    "validation_sha256": "a53acf17d5b0d7910c820952ea6abdfa97319b96b5e8302a5be345b09648e2ba",
+    "bounded_isolated_generation": "PASS",
+    "bounded_isolated_train_validation_structural_bad": 0,
+    "bounded_isolated_validation_train_structural_bad": 0,
+    "bounded_isolated_cross_overlap": 0,
+    "exact_repository_runner_reproduction": "OPEN_UNTIL_PR_WORKFLOW_EXECUTES"
+  },
+  "ood_v2": {
+    "generator": "the artefact/blogpost_entity/mini_cognition/generate_eval_ood_v2.py",
+    "cases": 320,
+    "families": [
+      "omega_valid_ood",
+      "omega_reject_ood",
+      "hyperposition_ood",
+      "neutrality_ood",
+      "epistemic_ood",
+      "recovery_ood",
+      "adversarial_ood"
+    ],
+    "promotion_strict_claycode_rate": 1.0,
+    "promotion_semantic_gate_rate": 0.95,
+    "model_outputs_evaluated": false
+  },
+  "together_public_admission_review": {
+    "public_supported_models_observation": "Qwen3.5-0.8B is the smallest visible Qwen fine-tuning entry; no visible Qwen2/Qwen2.5 entry found in the current public supported-model page",
+    "byom_contract": "custom Hugging Face checkpoint requires a compatible Together base/template architecture",
+    "qwen25_05b_architecture": "Qwen2ForCausalLM / qwen2",
+    "visible_qwen35_08b_architecture": "Qwen3_5ForConditionalGeneration / qwen3_5",
+    "conclusion": "No public-catalog Qwen2-compatible template is currently established. Compatibility is not declared impossible; it remains an empirical API/provider gate.",
+    "v2_launcher_change": "remove guessed default template and require explicit CLAYCOG_TOGETHER_TEMPLATE after current compatible candidate is confirmed",
+    "source_urls": [
+      "https://docs.together.ai/docs/fine-tuning/supported-models",
+      "https://docs.together.ai/docs/fine-tuning/byom",
+      "https://www.together.ai/pricing",
+      "https://huggingface.co/Qwen/Qwen2.5-0.5B/blob/main/config.json",
+      "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json"
+    ]
+  },
+  "main_fusion": {
+    "new_main_commit_idempotent_create": "f231b2d93893eccf8a91850ba0512908456995f9",
+    "new_main_commit_pr_admission_runner": "cb46a34dff51d309e25fb909758a129f379c7497",
+    "v2_preserves_idempotent_create": true,
+    "v2_campaign_fingerprint": "exact train/validation SHA + from_hf_model + explicit template + epochs/evals/training config",
+    "duplicate_account_job_check": "before remote file allocation on create and immediately before billed create",
+    "ambiguous_create_policy": "never blind retry; inspect account job ledger"
+  },
+  "documentation_delta": {
+    "the_artefact_readme_old_endpoint": "ClayVerse single-container candidate",
+    "current_owner_endpoint": "Multi-use Mini Entity pipeline + optional replaceable generic 0.5B cognition",
+    "branch_readme_reentered_current_owner_authority": true
+  },
+  "execution_boundary": {
+    "together_api_key_present": false,
+    "together_preflight_executed": false,
+    "billed_job_created": false,
+    "paid_training_started": false,
+    "tuned_checkpoint_exists": false,
+    "q4_k_m_quantization_executed": false,
+    "rss_under_1gib_measured": false,
+    "real_local_model_quality_integration": false,
+    "whole_mini_entity_pass": false
+  },
+  "next_discriminators": [
+    "execute the exact PR-head claycog-v2-admission workflow on an actually-started GitHub-hosted runner",
+    "if a current Qwen2-compatible Together template becomes available, run preflight only and capture model_limits/file-validation/price without billed create",
+    "only after exact fingerprint authorization and compatibility/admission evidence, create one billed full-SFT job",
+    "evaluate tuned checkpoint against untuned 0.5B and at least one larger general model on the exact OOD suite",
+    "quantize accepted checkpoint to Q4_K_M and measure real peak process RSS at context 2048",
+    "integrate through existing generic local_exec path without resetting MiniUnifiedDB state"
+  ],
+  "claim_class": "SOURCE_MECHANISM_SUPPORTED_V2_EXACT_PR_RUNTIME_OPEN_TRAINING_NOT_STARTED"
+}

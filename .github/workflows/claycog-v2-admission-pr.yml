@@ -1,0 +1,58 @@
+name: claycog-v2-admission
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/mini_cognition/**'
+      - 'the artefact/README.md'
+      - '.github/workflows/claycog-v2-admission-pr.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claycog-v2-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  v2-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+      - name: Record source identity
+        run: |
+          set -euo pipefail
+          printf 'sha=%s\n' "$GITHUB_SHA"
+          git rev-parse HEAD
+          git status --short
+      - name: Reproduce v2 corpus and disjointness gates
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_sft_v2.py
+          python3 validate_sft_v2.py train_v2.jsonl --against validation_v2.jsonl
+          python3 validate_sft_v2.py validation_v2.jsonl --against train_v2.jsonl
+          python3 test_validate_sft_v2.py
+          python3 generate_eval_ood_v2.py
+          python3 -m py_compile generate_sft_v2.py validate_sft_v2.py generate_eval_ood_v2.py eval_outputs_v2.py launch_together_v2.py audit_corpus_v1_leakage.py test_validate_sft_v2.py
+      - name: Require v1 leakage audit to falsify independence
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          set +e
+          python3 audit_corpus_v1_leakage.py > /tmp/v1-leakage.json
+          rc=$?
+          set -e
+          cat /tmp/v1-leakage.json
+          test "$rc" -eq 2
+          python3 - <<'PY'
+          import json
+          x=json.load(open('/tmp/v1-leakage.json'))
+          assert x['validation_rows_exactly_seen_in_train']==165, x
+          assert x['total_unique_messages']==70, x
+          assert x['validation_independent'] is False, x
+          print('PASS expected v1 leakage reproduced')
+          PY

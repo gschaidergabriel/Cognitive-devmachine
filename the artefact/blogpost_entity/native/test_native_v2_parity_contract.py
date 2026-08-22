@@ -40,6 +40,15 @@ def ref_namespace(ref: str) -> str:
     return ref.split(".", 1)[0]
 
 
+def method_body(source: str, method: str) -> str | None:
+    marker = f"    def {method}("
+    start = source.find(marker)
+    if start == -1:
+        return None
+    end = source.find("\n    def ", start + len(marker))
+    return source[start:] if end == -1 else source[start:end]
+
+
 class NativeProfileV2ParityContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -76,24 +85,50 @@ class NativeProfileV2ParityContractTests(unittest.TestCase):
             positions.append(pos)
         self.assertEqual(positions, sorted(positions), msg="canonical pipeline phase order changed")
 
-    def test_reference_runtime_effect_surface_is_fail_closed_until_current_names_match(self) -> None:
+    def test_reference_runtime_effect_surface_is_fail_closed_until_names_and_semantics_match(self) -> None:
         required = self.contract["required_reference_effect_surface"]
         self.assertEqual(required, self.contract["required_pipeline_phases"])
         missing = [name for name in required if f'"{name}"' not in self.reference_runtime]
+
         legacy = self.contract["legacy_reference_effects_to_deauthorize"]
         stale = [name for name in legacy if f'"{name}"' in self.reference_runtime]
-        gap = self.contract["reference_runtime_effect_surface"]
 
-        if missing or stale:
+        missing_semantics: dict[str, list[str]] = {}
+        for effect_name, spec in self.contract["required_reference_effect_semantics"].items():
+            method = str(spec["method"])
+            body = method_body(self.reference_runtime, method)
+            gaps: list[str] = []
+            if body is None:
+                gaps.append(f"missing_method:{method}")
+            else:
+                for token in spec["required_method_body_tokens"]:
+                    if token not in body:
+                        gaps.append(f"missing_token:{token}")
+            if gaps:
+                missing_semantics[effect_name] = gaps
+
+        stale_methods = [
+            method
+            for method in self.contract["legacy_reference_methods_to_deauthorize"]
+            if method_body(self.reference_runtime, method) is not None
+        ]
+
+        gap = self.contract["reference_runtime_effect_surface"]
+        has_gap = bool(missing or stale or missing_semantics or stale_methods)
+        if has_gap:
             self.assertEqual(gap["status"], "FAIL_CLOSED_MISMATCH")
             self.assertEqual(missing, gap["missing_current_effects"])
             self.assertEqual(stale, gap["stale_current_effects"])
+            self.assertEqual(missing_semantics, gap["missing_semantic_requirements"])
+            self.assertEqual(stale_methods, gap["stale_legacy_methods"])
             self.assertEqual(self.contract["admission"]["status"], "FAIL_CLOSED_UNTIL_EXACT_PARITY")
             self.assertIsNone(self.contract["admission"]["runtime_receipt"])
         else:
             self.assertEqual(gap["status"], "PARITY")
             self.assertEqual(gap["missing_current_effects"], [])
             self.assertEqual(gap["stale_current_effects"], [])
+            self.assertEqual(gap["missing_semantic_requirements"], {})
+            self.assertEqual(gap["stale_legacy_methods"], [])
 
     def test_reference_runtime_still_contains_required_compile_and_gate_mechanisms(self) -> None:
         required_tokens = (

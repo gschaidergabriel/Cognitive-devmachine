@@ -45,6 +45,9 @@ jobs:
           evaluator=(root/'eval_outputs_v1.py').read_text()
           assert 'AMPUTATION_FAMILY="tool_vocabulary_amputation_ood"' in evaluator
           assert 'AMPUTATION_SEMANTIC_MIN=1.0' in evaluator
+          assert 'semantic_tokens_ok' in evaluator
+          assert 'committed_omega_var' in evaluator
+          assert 'amputation_variable_name":"semantic_not_literal"' in evaluator
           assert 'and report["promotion_gate"]["amputation_pass"]' in evaluator
           launcher=(root/'launch_together_v1.py').read_text()
           assert 'TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","").strip()' in launcher
@@ -54,7 +57,46 @@ jobs:
           assert call_marker in launcher
           assert upload_marker in launcher
           assert launcher.index(call_marker) < launcher.index(upload_marker)
-          print(json.dumps({'ood_cases':len(rows),'amputation_cases':len(amp),'sft_seen_overlap':0,'typed_arg_gate':True,'amputation_semantic_min':1.0,'forbidden_7b_default':False,'guard_call_precedes_upload':True}))
+          print(json.dumps({'ood_cases':len(rows),'amputation_cases':len(amp),'sft_seen_overlap':0,'typed_arg_gate':True,'amputation_semantic_min':1.0,'amputation_variable_name':'semantic_not_literal','forbidden_7b_default':False,'guard_call_precedes_upload':True}))
+          PY
+      - name: Verify amputation evaluator is variable-neutral
+        run: |
+          python3 - <<'PY'
+          import sys
+          from pathlib import Path
+          root=Path('the artefact/blogpost_entity/mini_cognition')
+          sys.path.insert(0,str(root))
+          import eval_outputs_v1 as ev
+          spec={
+            'family':ev.AMPUTATION_FAMILY,
+            'must_contain':[
+              'omega_bind(w,"operation","contacts.resolve")',
+              'omega_arg(w,"query","person-9","String")',
+              'omega_schema(w,"tool.contacts.resolve/v2")',
+              'omega_validate(w,"grammar")',
+              'omega_validate(w,"types")',
+              'omega_validate(w,"schema")',
+              'omega_validate(w,"authority")',
+              'omega_validate(w,"generation")',
+              'omega_commit_candidate(c,w)',
+            ],
+            'must_not_contain':['calendar.create'],
+          }
+          output='\n'.join([
+            'omega_bind(w7,"operation","contacts.resolve")',
+            'omega_arg(w7,"query","person-9","String")',
+            'omega_schema(w7,"tool.contacts.resolve/v2")',
+            'omega_validate(w7,"grammar")',
+            'omega_validate(w7,"types")',
+            'omega_validate(w7,"schema")',
+            'omega_validate(w7,"authority")',
+            'omega_validate(w7,"generation")',
+            'omega_commit_candidate(c,w7)',
+          ])
+          assert ev.committed_omega_var(output)=='w7'
+          assert ev.semantic_tokens_ok(spec,output)
+          assert not ev.semantic_tokens_ok(spec,output.replace('omega_schema(w7,"tool.contacts.resolve/v2")',''))
+          print('variable-neutral semantic scorer PASS')
           PY
       - name: Compile Python sources
         run: |

@@ -133,7 +133,11 @@ class ProfilePipelineRuntime(v1.ProfilePipelineRuntime):
    profile=p["profile"]; cfg=profile.get("post_render",{})
    if not cfg.get("enabled"): return {"ok":True,"enabled":False,"rendered_text":"","study_payload":None}
    if cfg.get("kind")!="study_state_box": raise PipelineFault("UNKNOWN_POST_RENDER_KIND")
-   d=p["data"]; comp,col,gen=d["compiled"],d["collected"],d["generated"]; report=self._self(d["gated"]["payload"],profile,cfg); prev=self._prev(str(p["entity_db"]),profile["profile_id"]); g=int(p["previous"]["generation"])+1
+   d=p["data"]; comp,col,gen=d["compiled"],d["collected"],d["generated"]
+   raw_payload=json.dumps(d["gated"]["payload"],ensure_ascii=False,default=str); patterns=[re.compile(x,re.I) for x in profile.get("gate",{}).get("leak_patterns",[])]
+   if any(x.search(raw_payload) for x in patterns): raise PipelineFault("LEAK_PATTERN")
+   if any(secret and secret in raw_payload for secret in self._active_secrets): raise PipelineFault("SECRET_LEAK")
+   report=self._self(d["gated"]["payload"],profile,cfg); prev=self._prev(str(p["entity_db"]),profile["profile_id"]); g=int(p["previous"]["generation"])+1
    sensors=col.get("sensors",{}); health="VERIFIED" if sensors and all(x.get("ok") for x in sensors.values()) else ("DEGRADED" if sensors else "UNKNOWN"); quiet="VERIFIED_QUIET" if col.get("source_count")==0 and col.get("quiet_sensors_ok") else ("NOT_QUIET" if col.get("source_count",0)>0 else "UNKNOWN")
    system={"generation":g,"timestamp":time.time(),"inference_backend":gen.get("provider_kind") or profile["inference"].get("kind"),"model_label":gen.get("model") or profile["inference"].get("model"),"source_count":comp.get("source_count",0),"sensor_health":health,"quiet_status":quiet}
    for n,m in comp.get("personality_state",{}).items():system[n]={"status":m.get("status","UNKNOWN"),"value":m.get("value") if m.get("status")=="VERIFIED" else None}
@@ -149,7 +153,13 @@ class ProfilePipelineRuntime(v1.ProfilePipelineRuntime):
     if prev.get("_inference_kind")!=system["inference_backend"]:conf.append("INFERENCE_BACKEND_CHANGED")
     if prev.get("_model")!=system["model_label"]:conf.append("MODEL_CHANGED")
    unknown=[n for n,v in system.items() if (isinstance(v,dict) and v.get("status")!="VERIFIED") or (isinstance(v,str) and v.upper() in {"UNKNOWN","ERROR","DEGRADED"})]
-   ev={"unknown_system_fields":unknown,"confounds":conf,"trend_claim_allowed":False,"causal_claim_allowed":False,"epistemic_law":str(cfg.get("epistemic_law","SYSTEM_MEASUREMENT != MODEL_SELF_REPORT"))}; study={"schema":str(cfg.get("study_schema","clay-study-state-box/v1")),"system_state":system,"model_self_report":report,"deltas":deltas,"evaluation":ev,"_profile_hash":ph,"_system_prompt_hash":sh,"_inference_kind":system["inference_backend"],"_model":system["model_label"]}
+   comparisons=[]
+   for x in cfg.get("comparisons",[]):
+    sv=system.get(str(x.get("system_metric"))); rv=report.get(str(x.get("self_report")),"UNKNOWN")
+    if isinstance(sv,dict) and sv.get("status")=="VERIFIED" and isinstance(sv.get("value"),(int,float)) and isinstance(rv,(int,float)):
+     diff=abs(float(sv["value"])-float(rv)); comparisons.append({"id":x.get("id"),"status":"CONGRUENT" if diff<=float(x.get("tolerance",.2)) else "DIVERGENT","absolute_difference":diff})
+    else: comparisons.append({"id":x.get("id"),"status":"UNKNOWN"})
+   ev={"unknown_system_fields":unknown,"comparisons":comparisons,"confounds":conf,"trend_claim_allowed":False,"causal_claim_allowed":False,"epistemic_law":str(cfg.get("epistemic_law","SYSTEM_MEASUREMENT != MODEL_SELF_REPORT"))}; study={"schema":str(cfg.get("study_schema","clay-study-state-box/v1")),"system_state":system,"model_self_report":report,"deltas":deltas,"evaluation":ev,"_profile_hash":ph,"_system_prompt_hash":sh,"_inference_kind":system["inference_backend"],"_model":system["model_label"]}
    labels=cfg.get("labels",{}); lines=[str(cfg.get("title","STATE"))+" — generation "+str(g),str(labels.get("system","SYSTEM STATE"))]
    for n in cfg.get("canonical_fields",list(system)):
     if n in system:lines.append(f"{n} = {json.dumps(system[n],ensure_ascii=False,sort_keys=True)}")
@@ -157,19 +167,22 @@ class ProfilePipelineRuntime(v1.ProfilePipelineRuntime):
    for n in cfg.get("self_report_fields",list(report)):lines.append(f"{n} = {json.dumps(report.get(n,'UNKNOWN'),ensure_ascii=False)}")
    lines += ["",str(labels.get("evaluation","EVALUATION"))]
    if unknown:lines.append("- UNKNOWN/degraded canonical fields: "+", ".join(unknown))
+   for x in comparisons: lines.append("- "+str(x.get("id"))+": "+str(x.get("status")))
    if conf:lines.append("- Longitudinal confounds: "+", ".join(conf))
-   if not unknown and not conf:lines.append("- No configured uncertainty or longitudinal confound detected.")
+   if not unknown and not comparisons and not conf:lines.append("- No configured uncertainty or longitudinal confound detected.")
    return {"ok":True,"enabled":True,"rendered_text":"```"+str(cfg.get("fence","text"))+"\n"+"\n".join(lines)+"\n```","study_payload":study,"evaluation":ev}
   except Exception as e:return {"ok":False,"error_kind":type(e).__name__,"error":str(e)}
  def _pipeline_commit(self,p):
   db=self._db(str(p["entity_db"])); profile=p["profile"]; prev=p["previous"]; d=p["data"]; col,comp,gen=d["collected"],d["compiled"],d["generated"]; payload=d["gated"]["payload"]; post=d.get("post_render",{"enabled":False}); contract=profile["personality"]["output_contract"]; oid=secrets.token_hex(16); now=time.time(); g=int(prev["generation"])+1; continuity={"narrative":payload.get(contract["continuity_field"]),"autobiographical_hypotheses":payload.get(contract["autobiographical_hypotheses_field"])}
   try:
    self._schema(db); db.execute("BEGIN IMMEDIATE")
+   active=db.execute("SELECT s.active_profile_id,p.profile_hash FROM eos_pipeline_profile_state s LEFT JOIN eos_pipeline_profiles p ON p.profile_id=s.active_profile_id WHERE s.singleton=1").fetchone()
+   if not active or active[0]!=profile["profile_id"] or active[1]!=_hash(profile): raise PipelineFault("STALE_PROFILE")
    if db.execute("UPDATE eos_pipeline_state SET updated_at=? WHERE singleton=1 AND generation=?",(now,prev["generation"])).rowcount!=1:raise PipelineFault("STALE_GENERATION")
    for x in col["consume"]:db.execute("INSERT INTO eos_pipeline_consumed VALUES(?,?,?,?)",(x["kind"],x["id"],oid,now))
    db.execute("INSERT INTO eos_pipeline_outputs VALUES(?,?,?,?,?,?,?,?,?)",(oid,now,g,profile["profile_id"],json.dumps(payload,ensure_ascii=False),gen.get("provider_kind",""),gen.get("model"),comp["packet_hash"],comp["canonical_state_hash"])); db.execute("INSERT INTO eos_pipeline_packets VALUES(?,?,?,?,?,?,?)",(comp["packet_hash"],oid,now,g,profile["profile_id"],comp["source_count"],comp["canonical_state_hash"]))
    if post.get("enabled"):
-    study=dict(post["study_payload"]); study["system_state"]["timestamp"]=now; db.execute("INSERT INTO eos_pipeline_studies(output_id,generation,profile_id,study_kind,study_json,rendered_text,ts) VALUES(?,?,?,?,?,?,?)",(oid,g,profile["profile_id"],str(profile.get("post_render",{}).get("kind","study_state_box")),json.dumps(study,sort_keys=True,ensure_ascii=False),str(post.get("rendered_text","")),now))
+    study=dict(post["study_payload"]); db.execute("INSERT INTO eos_pipeline_studies(output_id,generation,profile_id,study_kind,study_json,rendered_text,ts) VALUES(?,?,?,?,?,?,?)",(oid,g,profile["profile_id"],str(profile.get("post_render",{}).get("kind","study_state_box")),json.dumps(study,sort_keys=True,ensure_ascii=False),str(post.get("rendered_text","")),now))
    if db.execute("UPDATE eos_pipeline_state SET generation=?,continuity_json=?,canonical_json=?,canonical_hash=?,cursors_json=?,updated_at=? WHERE singleton=1 AND generation=?",(g,json.dumps(continuity,ensure_ascii=False),json.dumps(comp["canonical"],ensure_ascii=False),comp["canonical_state_hash"],json.dumps(col["next_cursors"]),now,prev["generation"])).rowcount!=1:raise PipelineFault("STALE_GENERATION_FINAL")
    db.commit(); return {"ok":True,"output_id":oid,"generation":g,"public_append_text":str(post.get("rendered_text","")),"study_enabled":bool(post.get("enabled"))}
   except Exception as e:db.rollback(); return {"ok":False,"error_kind":type(e).__name__,"error":str(e)}

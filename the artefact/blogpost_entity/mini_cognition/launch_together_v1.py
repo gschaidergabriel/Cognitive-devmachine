@@ -44,12 +44,13 @@ def require_explicit_template(template):
     return template
 
 def get_full_training_limits(client,template):
+    """Use the current together-py SDK contract generated from Together's OpenAPI spec."""
     fine_tuning=client.fine_tuning
-    get_limits=getattr(fine_tuning,"get_model_limits",None)
+    get_limits=getattr(fine_tuning,"model_limits",None)
     if get_limits is None:
-        raise SystemExit("TOGETHER_SDK_V2_REQUIRED: fine_tuning.get_model_limits(model=...) unavailable")
-    limits=get_limits(model=template)
-    if getattr(limits,"full_training",None) is None:
+        raise SystemExit("TOGETHER_SDK_CONTRACT_REQUIRED: fine_tuning.model_limits(model_name=...) unavailable")
+    limits=get_limits(model_name=template)
+    if not bool(getattr(limits,"supports_full_training",False)) or getattr(limits,"full_training",None) is None:
         raise SystemExit(f"Template is not full-FT capable: {template}")
     return limits
 
@@ -57,11 +58,13 @@ def wait_file(client,file_id,timeout_seconds=FILE_WAIT_SECONDS):
     deadline=time.monotonic()+timeout_seconds
     while True:
         meta=client.files.retrieve(file_id)
-        if getattr(meta,"processed",None) is True: return meta
         status=str(getattr(meta,"processing_status","") or "").upper()
         if status=="COMPLETED": return meta
         if status in ("INVALID_FORMAT","FAILED","ERROR"):
             raise RuntimeError(f"Together rejected {file_id}: {status} {getattr(meta,'validation_report',None)}")
+        # `processed` remains in the current SDK but is explicitly deprecated. Keep it
+        # only as a compatibility fallback when the validation lifecycle status is absent.
+        if not status and getattr(meta,"processed",None) is True: return meta
         if time.monotonic()>=deadline:
             raise TimeoutError(f"Timed out waiting for Together file processing: {file_id}")
         time.sleep(5)
@@ -73,8 +76,8 @@ def estimate_full_sft_price(client,train_file_id,valid_file_id,template):
         model=template,
         n_epochs=EPOCHS,
         n_evals=EVALS,
-        training_method="sft",
-        training_type="full",
+        training_method={"method":"sft","train_on_inputs":"auto"},
+        training_type={"type":"Full"},
     )
 
 def objdict(x):

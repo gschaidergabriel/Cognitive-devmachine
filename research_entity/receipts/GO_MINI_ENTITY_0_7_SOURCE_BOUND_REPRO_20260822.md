@@ -2,7 +2,7 @@
 
 Status: `PENDING_EXECUTION`
 
-This receipt is intentionally non-evidentiary until replaced with observed GitHub Actions execution data.
+This receipt is intentionally non-evidentiary until replaced with observed authorized isolated execution data.
 
 ## Bound scope
 
@@ -14,10 +14,12 @@ This receipt is intentionally non-evidentiary until replaced with observed GitHu
 - historical 0.6 executable credit is explicitly NOT transferred to 0.7
 - fixture inference can establish pipeline/transaction mechanics only; it cannot establish model quality
 
-## Planned evidence
+## Planned ordinary evidence
 
 The workflow is required to bind checkout/source identity, perform three source-bound repeat builds, capture the produced `.clay` digest, check application-neutral binary strings, exercise fresh neutral DB state, exercise direct `local_exec` fixture inference and atomic persistence, prove failed inference consumes nothing, replace the DB-resident application profile without resetting continuing state, and finish with SQLite integrity checks.
 
-Exactly one bounded unusual experiment belongs to this user-triggered `go`: a forced-overlap two-process generation-CAS race. Its discriminator is exactly one committed generation/output/study/event-consumption transition.
+## Global unusual-experiment coordination
+
+This branch no longer owns or schedules a bounded unusual experiment for the current user-triggered `go`. Parallel PR #740 reports that the globally allowed unusual-experiment slot was actually consumed by the Ambient Secret Canary. The previously planned forced-overlap two-process generation-CAS race is therefore removed from this workflow and deferred to a later user-triggered macro-cycle if still useful.
 
 Do not interpret this PENDING file as a PASS, a test run, or a product acceptance claim.

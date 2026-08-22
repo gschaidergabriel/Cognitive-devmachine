@@ -42,8 +42,13 @@ def source_closure(source: Path) -> dict[str, Any]:
     Angle-bracket includes are dependency/toolchain inputs and remain covered separately by
     pkg-config/compiler/runtime dependency identity. Macro/dynamic includes are rejected:
     a source-bound receipt may not silently omit bytes selected by preprocessor indirection.
+    Local source symlinks are rejected before resolution so provenance cannot silently bind
+    the target bytes while recording a different repository path.
     """
-    source = source.resolve()
+    source_input = source.absolute()
+    if source_input.is_symlink():
+        raise RuntimeError("LOCAL_SOURCE_SYMLINK_FORBIDDEN:" + str(source_input))
+    source = source_input.resolve()
     root = source.parent.resolve()
     pending = [source]
     seen: dict[str, dict[str, Any]] = {}
@@ -56,6 +61,8 @@ def source_closure(source: Path) -> dict[str, Any]:
             raise RuntimeError("LOCAL_INCLUDE_OUTSIDE_SOURCE_ROOT:" + str(current)) from exc
         if relative in seen:
             continue
+        if current.is_symlink():
+            raise RuntimeError("LOCAL_SOURCE_SYMLINK_FORBIDDEN:" + str(current))
         if not current.is_file():
             raise RuntimeError("LOCAL_INCLUDE_MISSING:" + str(current))
 
@@ -73,7 +80,10 @@ def source_closure(source: Path) -> dict[str, Any]:
                     include_name = quoted.group(1).decode("utf-8", "strict")
                 except UnicodeDecodeError as exc:
                     raise RuntimeError("LOCAL_INCLUDE_PATH_NOT_UTF8:" + relative) from exc
-                include_path = (current.parent / include_name).resolve()
+                include_candidate = current.parent / include_name
+                if include_candidate.is_symlink():
+                    raise RuntimeError("LOCAL_SOURCE_SYMLINK_FORBIDDEN:" + include_name)
+                include_path = include_candidate.resolve()
                 try:
                     include_path.relative_to(root)
                 except ValueError as exc:
@@ -209,14 +219,17 @@ def main() -> int:
     parser.add_argument("--repeat", type=int, default=2)
     args = parser.parse_args()
 
-    source = args.source.resolve()
+    source_input = args.source.absolute()
+    if source_input.is_symlink():
+        raise SystemExit("SOURCE_SYMLINK_FORBIDDEN:" + str(source_input))
+    source = source_input.resolve()
     if not source.is_file():
         raise SystemExit("SOURCE_MISSING:" + str(source))
     if args.repeat < 2:
         raise SystemExit("REPEAT_MUST_BE_AT_LEAST_2")
 
     entry_source_sha = sha256_file(source)
-    closure = source_closure(source)
+    closure = source_closure(source_input)
     source_identity_sha = str(closure["sha256"])
     compiler = compiler_identity(args.compiler)
     flags, package_versions = pkg_config(DEFAULT_PACKAGES)

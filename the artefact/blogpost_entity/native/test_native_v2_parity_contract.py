@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import unittest
 from pathlib import Path
 from typing import Any
@@ -38,6 +39,57 @@ def walk_expression(node: Any, ops: set[str], aggregates: set[str], refs: set[st
 
 def ref_namespace(ref: str) -> str:
     return ref.split(".", 1)[0]
+
+
+def method_body(source: str, name: str) -> str | None:
+    pattern = rf"(?ms)^    def {re.escape(name)}\(.*?(?=^    def |^__all__|\Z)"
+    match = re.search(pattern, source)
+    return match.group(0) if match else None
+
+
+def effect_name_gap(source: str, required: list[str], legacy: list[str]) -> tuple[list[str], list[str]]:
+    missing = [name for name in required if f'"{name}"' not in source]
+    stale = [name for name in legacy if f'"{name}"' in source]
+    return missing, stale
+
+
+def reference_authority_violations(source: str) -> list[str]:
+    violations: list[str] = []
+
+    profile_body = method_body(source, "_pipeline_profile_read")
+    if profile_body is None:
+        violations.append("MISSING_DB_PROFILE_HANDLER")
+        violations.append("MISSING_DB_PROFILE_ENTITY_AUTHORITY")
+    else:
+        entity_db_read = (
+            (('p["entity_db"]' in profile_body) or ("p['entity_db']" in profile_body))
+            and "_db(" in profile_body
+            and "profile" in profile_body.lower()
+        )
+        if not entity_db_read:
+            violations.append("MISSING_DB_PROFILE_ENTITY_AUTHORITY")
+
+    if method_body(source, "_profile_load") is not None:
+        violations.append("LEGACY_EXTERNAL_PROFILE_HANDLER_PRESENT")
+
+    inference_body = method_body(source, "_inference_generate")
+    if inference_body is None:
+        violations.append("MISSING_GENERIC_INFERENCE_HANDLER")
+        violations.append("MISSING_GENERIC_INFERENCE_CONFIG_AUTHORITY")
+    else:
+        inference_read = (
+            ('p["inference"]' in inference_body)
+            or ("p['inference']" in inference_body)
+            or ('p.get("inference")' in inference_body)
+            or ("p.get('inference')" in inference_body)
+        )
+        if not inference_read:
+            violations.append("MISSING_GENERIC_INFERENCE_CONFIG_AUTHORITY")
+
+    if method_body(source, "_provider_chat_json") is not None:
+        violations.append("LEGACY_PROVIDER_CHAT_HANDLER_PRESENT")
+
+    return violations
 
 
 class NativeProfileV2ParityContractTests(unittest.TestCase):
@@ -79,9 +131,8 @@ class NativeProfileV2ParityContractTests(unittest.TestCase):
     def test_reference_runtime_effect_surface_is_fail_closed_until_current_names_match(self) -> None:
         required = self.contract["required_reference_effect_surface"]
         self.assertEqual(required, self.contract["required_pipeline_phases"])
-        missing = [name for name in required if f'"{name}"' not in self.reference_runtime]
         legacy = self.contract["legacy_reference_effects_to_deauthorize"]
-        stale = [name for name in legacy if f'"{name}"' in self.reference_runtime]
+        missing, stale = effect_name_gap(self.reference_runtime, required, legacy)
         gap = self.contract["reference_runtime_effect_surface"]
 
         if missing or stale:
@@ -94,6 +145,37 @@ class NativeProfileV2ParityContractTests(unittest.TestCase):
             self.assertEqual(gap["status"], "PARITY")
             self.assertEqual(gap["missing_current_effects"], [])
             self.assertEqual(gap["stale_current_effects"], [])
+
+    def test_reference_runtime_authority_semantics_are_bound_not_just_names(self) -> None:
+        actual = reference_authority_violations(self.reference_runtime)
+        gap = self.contract["reference_runtime_authority_semantics"]
+        if actual:
+            self.assertEqual(gap["status"], "FAIL_CLOSED_MISMATCH")
+            self.assertEqual(actual, gap["violations"])
+            self.assertEqual(self.contract["admission"]["status"], "FAIL_CLOSED_UNTIL_EXACT_PARITY")
+            self.assertIsNone(self.contract["admission"]["runtime_receipt"])
+        else:
+            self.assertEqual(gap["status"], "PARITY")
+            self.assertEqual(gap["violations"], [])
+
+    def test_effect_name_only_rename_cannot_fake_reference_authority_parity(self) -> None:
+        # Exactly one unusual go discriminator: preserve the old handlers and semantics,
+        # but rename only the quoted effect labels. The former name-only gate would pass.
+        renamed = self.reference_runtime.replace(
+            '"profile_load"', '"pipeline_profile_read"'
+        ).replace('"provider_chat_json"', '"inference_generate"')
+        required = self.contract["required_reference_effect_surface"]
+        legacy = self.contract["legacy_reference_effects_to_deauthorize"]
+        missing, stale = effect_name_gap(renamed, required, legacy)
+        self.assertEqual(missing, [], msg="discriminator must defeat the name-only missing check")
+        self.assertEqual(stale, [], msg="discriminator must defeat the name-only stale check")
+
+        violations = reference_authority_violations(renamed)
+        self.assertIn("MISSING_DB_PROFILE_HANDLER", violations)
+        self.assertIn("LEGACY_EXTERNAL_PROFILE_HANDLER_PRESENT", violations)
+        self.assertIn("MISSING_GENERIC_INFERENCE_HANDLER", violations)
+        self.assertIn("LEGACY_PROVIDER_CHAT_HANDLER_PRESENT", violations)
+        self.assertTrue(violations, msg="semantic authority gate must reject a string-only rename")
 
     def test_reference_runtime_still_contains_required_compile_and_gate_mechanisms(self) -> None:
         required_tokens = (

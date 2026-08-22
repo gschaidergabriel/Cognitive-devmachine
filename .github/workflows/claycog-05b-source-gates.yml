@@ -1,0 +1,58 @@
+name: ClayCog 0.5B source gates
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/mini_cognition/**'
+      - '.github/workflows/claycog-05b-source-gates.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-source-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerate SFT corpus
+        run: python3 'the artefact/blogpost_entity/mini_cognition/generate_sft_v1.py'
+      - name: Validate SFT corpus
+        run: |
+          python3 'the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py' 'the artefact/blogpost_entity/mini_cognition/train_v1.jsonl'
+          python3 'the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py' 'the artefact/blogpost_entity/mini_cognition/validation_v1.jsonl'
+      - name: Generate structural OOD
+        run: python3 'the artefact/blogpost_entity/mini_cognition/generate_eval_ood_v1.py'
+      - name: Verify OOD amputation and Together fail-closed source contract
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('the artefact/blogpost_entity/mini_cognition')
+          rows=[json.loads(x) for x in (root/'eval_ood_v1.jsonl').read_text().splitlines() if x.strip()]
+          assert len(rows)==240, len(rows)
+          amp=[x for x in rows if x['family']=='tool_vocabulary_amputation_ood']
+          assert len(amp)==40, len(amp)
+          seen={'calendar.create','mail.send','db.lookup','http.get','artifact.write','queue.publish'}
+          for row in amp:
+              joined='\n'.join(row['must_contain'])
+              assert not any(f'operation\\\",\\\"{op}' in joined for op in seen)
+              assert all(op in row['must_not_contain'] for op in seen)
+              assert 'omega_schema(w,' in joined
+          launcher=(root/'launch_together_v1.py').read_text()
+          assert 'TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","").strip()' in launcher
+          assert 'Qwen/Qwen2.5-7B-Instruct-Turbo' not in launcher
+          assert 'require_compatible_template_claim()' in launcher
+          assert 'client.files.upload' in launcher
+          assert launcher.index('require_compatible_template_claim()') < launcher.index('client.files.upload')
+          print(json.dumps({'ood_cases':len(rows),'amputation_cases':len(amp),'sft_seen_overlap':0,'forbidden_7b_default':False}))
+          PY
+      - name: Compile Python sources
+        run: |
+          python3 -m py_compile \
+            'the artefact/blogpost_entity/mini_cognition/generate_sft_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/generate_eval_ood_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/eval_outputs_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py'

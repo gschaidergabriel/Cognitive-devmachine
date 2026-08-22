@@ -1,0 +1,88 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "base_main_sha": "74df26466781dedc73367cf66de87b964fc9bb61",
+  "branch": "gpt56sol/go-08b-seed-visibility-20260822",
+  "branch_code_head_before_receipt": "2e75e60704ca775b7af4270a147ced93e603cf60",
+  "pull_request": 925,
+  "scope": "Qwen/Qwen3.5-0.8B Together direct Full-FT post-create identity fence",
+  "observed_main_before_parallel_reentry": {
+    "launcher_blob": "c18f84f0eebd94a5bebbc3bc283c6b956792fb16",
+    "test_blob": "17962a7a648809c9ec0b46ca170d253212f02b02",
+    "issue": "post-create identity comparator checked files/model/epochs/evals/random_seed but did not check n_checkpoints, learning_rate, warmup_ratio, training_method or training_type"
+  },
+  "unusual_experiment": {
+    "global_count_for_this_go": 1,
+    "name": "POST_CREATE_PROVIDER_CONFIG_SUBSTITUTION_AND_FIELD_VISIBILITY_FALSIFIER",
+    "intervention": "reproduce the then-current-main identity helper with all checked fields matching while provider-visible warmup_ratio is substituted from 0.03 to 0.30",
+    "observed_result": "{}",
+    "interpretation": "the then-current comparator failed open for that substituted training parameter",
+    "execution": "isolated no-network local mechanism reproduction",
+    "note": "No second unusual experiment was consumed after newer main independently repaired the broader training-config identity surface."
+  },
+  "parallel_reentry": {
+    "newer_main_sha_observed": "74df26466781dedc73367cf66de87b964fc9bb61",
+    "launcher_blob": "26af8f19ef217b3a93e1baa1e8ab316432b53ce3",
+    "test_blob": "a317d3f61bee4ed55a1e819b824f415bc5b35e46",
+    "result": "newer main independently added suffix, n_checkpoints, learning_rate, warmup_ratio, training_method and training_type identity checks; stale PR 906 was closed rather than rebased",
+    "remaining_gap": "newer main still required random_seed from retrieve metadata"
+  },
+  "provider_contract_evidence": {
+    "create_job_url": "https://docs.together.ai/reference/post-fine-tunes",
+    "retrieve_job_url": "https://docs.together.ai/reference/get-fine-tunes-id",
+    "observed_2026_08_22": [
+      "Create-job response schema documents random_seed.",
+      "Retrieve-job schema documents n_checkpoints, learning_rate, warmup_ratio, train_on_inputs, training_method and training_type.",
+      "Retrieve-job schema search did not document random_seed."
+    ],
+    "evidence_class": "current upstream documentation; not a live authenticated provider response"
+  },
+  "repair": {
+    "launcher_blob": "d965f1fbb56e69dc4626bb145c0eb6d3a52919e8",
+    "test_blob": "ac798d0abbce184cf3ed02a41dd5378d158575ec",
+    "changes": [
+      "persist JOB_KNOWN immediately after successful CREATE as before",
+      "verify random_seed from immediate CREATE response",
+      "remove random_seed from retrieve-only expected fields",
+      "preserve stronger retrieve checks for files, model, suffix, epochs/evals/checkpoints, learning_rate, warmup_ratio, training_method and training_type",
+      "missing or mismatched create-response seed fails closed after durable JOB_KNOWN and instructs operator not to create another job"
+    ]
+  },
+  "execution_evidence": {
+    "github_pr_head": "2e75e60704ca775b7af4270a147ced93e603cf60",
+    "workflow_runs": [
+      {"id": 32571293052, "name": "claycog-validator-pr", "job_id": 97027005224, "job": "strict-admission", "conclusion": "failure", "steps": null},
+      {"id": 32571293057, "name": "mini-cognition-qwen35-08b-pr", "job_id": 97027005119, "job": "deterministic-cognition-gates", "conclusion": "failure", "steps": null},
+      {"id": 32571293069, "name": "Research Entity Identity Guard", "job_id": 97027005146, "job": "identity-guard", "conclusion": "failure", "steps": null},
+      {"id": 32571293076, "name": "claycog-08b-direct-admission", "job_id": 97027005304, "job": "direct-lane-admission", "conclusion": "failure", "steps": null}
+    ],
+    "github_runner_interpretation": "execution-admission/control-plane failure before visible step execution; zero code-test credit and not a code-test failure",
+    "bounded_local_regression": {
+      "result": "PASS",
+      "checks": [
+        "retrieve identity succeeds without random_seed when all documented retrieve identity fields match",
+        "matching create-response random_seed is admitted",
+        "wrong or missing create-response random_seed fails closed",
+        "existing warmup_ratio substitution remains rejected"
+      ],
+      "scope": "isolated no-network mechanism regression of changed identity functions only; not exact full PR-head test-suite credit"
+    }
+  },
+  "paid_provider_activity": {
+    "api_secret_mounted": false,
+    "provider_request": false,
+    "file_upload": false,
+    "preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0,
+    "authorization_note": "A billed create still requires fresh explicit owner authorization plus exact fingerprint/preflight/budget gates."
+  },
+  "promotion": "SOURCE_AND_BOUNDED_MECHANISM_ONLY",
+  "acceptance": "IN_PROGRESS",
+  "next": "Obtain an actually-started exact PR-head no-network runner; then, only with fresh explicit owner authorization, run authenticated direct-provider preflight before any billed create."
+}

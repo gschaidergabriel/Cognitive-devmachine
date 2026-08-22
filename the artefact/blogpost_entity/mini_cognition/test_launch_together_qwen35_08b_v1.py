@@ -78,13 +78,17 @@ class Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             os.environ[m.CREATE_LEDGER_DIR_ENV]=td;fp=m.campaign_fingerprint();p=m.arm_create_intent(fp,m.campaign_suffix(fp));self.assertEqual(stat.S_IMODE(p.stat().st_mode),0o600);self.assertEqual(m.read_create_ledger(fp)["campaign"]["training_type"],{"type":"Full"})
     def _full_expected(self):
-        return {"training_file":"t","validation_file":"v","model":m.MODEL,"suffix":"claycog08b-v2-dead","n_epochs":3,"n_evals":2,"n_checkpoints":1,"random_seed":3407,"learning_rate":1e-5,"warmup_ratio":.03,"training_method":{"method":"sft","train_on_inputs":"auto"},"training_type":{"type":"Full"}}
+        return {"training_file":"t","validation_file":"v","model":m.MODEL,"suffix":"claycog08b-v2-dead","n_epochs":3,"n_evals":2,"n_checkpoints":1,"learning_rate":1e-5,"warmup_ratio":.03,"training_method":{"method":"sft","train_on_inputs":"auto"},"training_type":{"type":"Full"}}
     def test_created_job_identity_mismatch_detection(self):
         expected=self._full_expected();good=types.SimpleNamespace(**{**expected,"training_method":types.SimpleNamespace(**expected["training_method"]),"training_type":types.SimpleNamespace(**expected["training_type"])});self.assertEqual(m.created_job_identity_mismatches(good,expected),{})
-        bad=types.SimpleNamespace(**{**expected,"random_seed":9,"training_method":types.SimpleNamespace(**expected["training_method"]),"training_type":types.SimpleNamespace(**expected["training_type"])});mm=m.created_job_identity_mismatches(bad,expected);self.assertEqual(mm["random_seed"],{"expected":3407,"observed":9})
+        bad=types.SimpleNamespace(**{**expected,"suffix":"wrong","training_method":types.SimpleNamespace(**expected["training_method"]),"training_type":types.SimpleNamespace(**expected["training_type"])});mm=m.created_job_identity_mismatches(bad,expected);self.assertEqual(mm["suffix"],{"expected":"claycog08b-v2-dead","observed":"wrong"})
     def test_provider_training_identity_substitution_fails_closed(self):
         expected=self._full_expected();substituted=types.SimpleNamespace(**{**expected,"learning_rate":9e-4,"warmup_ratio":.5,"training_method":types.SimpleNamespace(**expected["training_method"]),"training_type":types.SimpleNamespace(type="Lora",lora_r=16)})
         mm=m.created_job_identity_mismatches(substituted,expected);self.assertEqual(mm["learning_rate"],{"expected":1e-5,"observed":9e-4});self.assertEqual(mm["warmup_ratio"],{"expected":.03,"observed":.5});self.assertEqual(mm["training_type"],{"expected":{"type":"Full"},"observed":{"type":"Lora"}})
+    def test_seed_identity_uses_create_response_not_retrieve_schema(self):
+        self.assertNotIn("random_seed",self._full_expected());m.assert_created_job_seed(types.SimpleNamespace(random_seed=3407))
+        for job in (types.SimpleNamespace(random_seed=9),types.SimpleNamespace()):
+            with self.assertRaises(SystemExit):m.assert_created_job_seed(job)
     def test_zero_retry(self):
         TogetherCtor.last=None;m.new_zero_retry_create_client(TogetherCtor);self.assertEqual(TogetherCtor.last,{"max_retries":0})
 if __name__=="__main__":unittest.main()

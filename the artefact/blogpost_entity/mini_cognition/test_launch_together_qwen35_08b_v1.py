@@ -49,8 +49,8 @@ class TogetherCtor:
         type(self).last = kwargs
 
 
-# Deliberately mirrors the currently documented high-level together-py create call shape
-# only for the fields ClayCog supplies. A nested REST training_type dict must not bind here.
+# Mirrors the currently documented high-level together-py create call shape only for
+# the fields ClayCog supplies. A nested REST training_type dict must not bind here.
 def current_sdk_create_shape(
     *,
     training_file,
@@ -138,8 +138,24 @@ class Tests(unittest.TestCase):
             self.assertNotIn(forbidden, payload)
         m.assert_sdk_create_signature(current_sdk_create_shape, payload)
 
+    def test_pinned_together_sdk_create_signature_if_installed(self):
+        try:
+            from together import Together
+        except ImportError:
+            self.skipTest("together SDK not installed in this execution surface")
+        client = Together(api_key="test-only-not-a-real-secret")
+        payload = m.create_payload("t", "v", "s")
+        m.assert_sdk_create_signature(client.fine_tuning.create, payload)
+        legacy_rest_payload = dict(payload)
+        legacy_rest_payload.pop("lora")
+        legacy_rest_payload.pop("train_on_inputs")
+        legacy_rest_payload["training_method"] = {"method": "sft", "train_on_inputs": "auto"}
+        legacy_rest_payload["training_type"] = {"type": "Full"}
+        with self.assertRaises(SystemExit):
+            m.assert_sdk_create_signature(client.fine_tuning.create, legacy_rest_payload)
+
     def test_rest_create_shape_falsifier_is_rejected_before_intent(self):
-        # This reproduces the pre-repair bug: estimate/REST dictionaries were passed to
+        # Reproduces the pre-repair bug: estimate/REST dictionaries were passed to
         # FineTuningResource.create(), whose Python signature does not accept training_type
         # and expects training_method as a string rather than an object.
         old_payload = {

@@ -1,0 +1,77 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date_utc": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program_lane": "Mini Entity ClayCode cognition",
+  "claim_class": "SOURCE_CANDIDATE_EXECUTION_NOT_YET_OBSERVED",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main_observed_at_branch_creation": "659cc2471b73bcefebb6a57694e6737cc2107cc5",
+  "current_main_observed_before_receipt": "702440d7cd701e42d996cf8b9221d5d515a26e7d",
+  "branch": "gpt56sol/go-claycog-08b-direct-together-20260822-1511",
+  "pre_receipt_branch_head": "f6725946a9a276049199c6450406989b20612bd5",
+  "pull_request": 842,
+  "provider": "Together AI",
+  "paid_job_created": false,
+  "provider_preflight_observed": false,
+  "provider_secret_used": false,
+  "selected_native_model": "Qwen/Qwen3.5-0.8B",
+  "training_type": "Full",
+  "training_method": "SFT",
+  "corpus": {
+    "schema": "claycog-sft/v2",
+    "examples": 1650,
+    "train": 1485,
+    "validation": 165,
+    "exact_cross_split_overlap": 0,
+    "prompt_cross_split_overlap": 0,
+    "manifest_train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+    "manifest_validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62"
+  },
+  "upstream_evidence_refreshed_2026_08_22": [
+    "https://docs.together.ai/docs/fine-tuning/supported-models",
+    "https://docs.together.ai/docs/fine-tuning/supervised",
+    "https://docs.together.ai/docs/fine-tuning/lora-vs-full",
+    "https://docs.together.ai/docs/fine-tuning/pricing"
+  ],
+  "source_delta": [
+    "launch_together_qwen35_08b_v1.py",
+    "test_launch_together_qwen35_08b_v1.py",
+    "QWEN35_08B_TOGETHER_DIRECT_LANE.md",
+    ".github/workflows/claycog-08b-direct-admission-pr.yml"
+  ],
+  "safety_contract": [
+    "fixed exact native model id",
+    "canonical v2 regenerate and cross-split validation",
+    "model_limits supports_full_training gate",
+    "server-side file validation",
+    "provider price estimate before create",
+    "USD 18 hard job cap",
+    "exact fingerprint create confirmation",
+    "provider-history duplicate fence",
+    "exclusive private local create-intent ledger",
+    "max_retries=0 billed create client",
+    "UNKNOWN_REMOTE_CREATE on ambiguous create outcome"
+  ],
+  "unusual_experiment": {
+    "name": "PAID_BASE_SUBSTITUTION_LESION",
+    "intervention": "CLAYCOG_08B_MODEL=Qwen/Qwen3.5-2B",
+    "expected": "MODEL_OVERRIDE_REJECTED before provider preflight",
+    "status": "PENDING_EXECUTION",
+    "reason": "No exact PR workflow run was visible before this receipt commit; workflow definition is not execution evidence."
+  },
+  "blockers": [
+    "exact PR workflow execution not yet observed",
+    "Together API secret not exposed through available connected tools",
+    "provider preflight not executed",
+    "paid training not started"
+  ],
+  "not_claimed": [
+    "tuned-model quality",
+    "training completion",
+    "quantized artifact",
+    "sub-1-GiB measured RSS",
+    "local inference integration quality",
+    "whole Mini Entity PASS"
+  ]
+}

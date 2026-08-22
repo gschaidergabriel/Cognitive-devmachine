@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Generic profile-driven runtime for the canonical Clay entity pipeline.
+"""Generic DB-profile-driven runtime for the canonical Clay entity pipeline.
 
-The binary/runtime knows only processing invariants and generic adapters. Application
-identity, prompts, providers, source queries, state metrics and output field names live
-in an external profile. No Zero/blog/Mistral-specific semantic is encoded here.
+The runtime owns processing invariants and generic adapters only. Application identity,
+prompts, sources, metrics, inference choice and output field names are active profile data
+stored inside the MiniUnifiedDB. External preset JSON is import/configuration input only;
+it is never a mandatory third runtime file.
 """
 from __future__ import annotations
 
@@ -13,6 +14,8 @@ import os
 import re
 import secrets
 import sqlite3
+import subprocess
+import tempfile
 import time
 import urllib.request
 from pathlib import Path
@@ -20,7 +23,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.1"
+VERSION = "clay-profile-pipeline-runtime/0.2"
 
 IMMUTABLE_GUARD = """IMMUTABLE PIPELINE GUARD:
 You may transform and narrate supplied state, but you may not invent canonical state.
@@ -37,6 +40,8 @@ class PipelineFault(RuntimeError):
 
 
 class ProfilePipelineRuntime(clay.Runtime):
+    """Runtime for one persistent entity DB with one active replaceable profile."""
+
     def __init__(
         self,
         *,
@@ -53,13 +58,13 @@ class ProfilePipelineRuntime(clay.Runtime):
         self._active_secrets: list[str] = []
         self.builtins["effect"] = self.effect
         self.allowed_effects = {
-            "profile_load",
+            "pipeline_profile_read",
             "pipeline_init",
             "pipeline_state_read",
             "pipeline_collect",
             "pipeline_compile",
             "pipeline_build_prompt",
-            "provider_chat_json",
+            "inference_generate",
             "pipeline_gate",
             "pipeline_commit",
         }
@@ -75,6 +80,123 @@ class ProfilePipelineRuntime(clay.Runtime):
         conn.row_factory = sqlite3.Row
         return conn
 
+    @staticmethod
+    def _canonical_json(value: Any) -> str:
+        return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str)
+
+    @classmethod
+    def _hash_json(cls, value: Any) -> str:
+        return hashlib.sha256(cls._canonical_json(value).encode("utf-8")).hexdigest()
+
+    def _ensure_schema(self, db: sqlite3.Connection) -> None:
+        db.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS eos_pipeline_profile(
+              singleton INTEGER PRIMARY KEY CHECK(singleton=1),
+              profile_id TEXT NOT NULL,
+              profile_hash TEXT NOT NULL,
+              profile_json TEXT NOT NULL,
+              updated_at REAL NOT NULL);
+            CREATE TABLE IF NOT EXISTS eos_pipeline_state(
+              singleton INTEGER PRIMARY KEY CHECK(singleton=1),
+              generation INTEGER NOT NULL DEFAULT 0,
+              continuity_json TEXT NOT NULL DEFAULT '{}',
+              canonical_json TEXT NOT NULL DEFAULT '{}',
+              canonical_hash TEXT NOT NULL DEFAULT '',
+              cursors_json TEXT NOT NULL DEFAULT '{}',
+              updated_at REAL NOT NULL DEFAULT 0);
+            INSERT OR IGNORE INTO eos_pipeline_state(singleton) VALUES(1);
+            CREATE TABLE IF NOT EXISTS eos_pipeline_consumed(
+              source_kind TEXT NOT NULL,
+              source_id TEXT NOT NULL,
+              output_id TEXT NOT NULL,
+              consumed_at REAL NOT NULL,
+              PRIMARY KEY(source_kind,source_id));
+            CREATE TABLE IF NOT EXISTS eos_pipeline_outputs(
+              output_id TEXT PRIMARY KEY,
+              ts REAL NOT NULL,
+              generation INTEGER NOT NULL,
+              profile_id TEXT NOT NULL,
+              output_json TEXT NOT NULL,
+              provider_kind TEXT NOT NULL,
+              model TEXT,
+              packet_hash TEXT NOT NULL,
+              canonical_hash TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS eos_pipeline_packets(
+              packet_hash TEXT PRIMARY KEY,
+              output_id TEXT NOT NULL,
+              ts REAL NOT NULL,
+              generation INTEGER NOT NULL,
+              profile_id TEXT NOT NULL,
+              source_count INTEGER NOT NULL,
+              canonical_hash TEXT NOT NULL);
+            """
+        )
+
+    @staticmethod
+    def _forbid_embedded_secrets(value: Any, path: str = "") -> None:
+        if isinstance(value, dict):
+            for key, item in value.items():
+                child = f"{path}.{key}" if path else str(key)
+                if str(key).lower() in {"api_token", "api_key", "access_token", "secret_value", "password"}:
+                    if item not in (None, "", [], {}):
+                        raise PipelineFault("PROFILE_CONTAINS_SECRET_VALUE:" + child)
+                ProfilePipelineRuntime._forbid_embedded_secrets(item, child)
+        elif isinstance(value, list):
+            for index, item in enumerate(value):
+                ProfilePipelineRuntime._forbid_embedded_secrets(item, f"{path}[{index}]")
+
+    @classmethod
+    def _normalize_profile(cls, profile: dict[str, Any]) -> dict[str, Any]:
+        if not isinstance(profile, dict):
+            raise PipelineFault("PROFILE_NOT_OBJECT")
+        schema = profile.get("schema")
+        if schema not in {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}:
+            raise PipelineFault("BAD_PROFILE_SCHEMA")
+        out = json.loads(json.dumps(profile))
+        if "inference" not in out and "provider" in out:
+            out["inference"] = out.pop("provider")
+        for field in ("profile_id", "inference", "personality", "sources", "state_metrics", "gate"):
+            if field not in out:
+                raise PipelineFault("PROFILE_MISSING:" + field)
+        if not isinstance(out["inference"], dict) or not out["inference"].get("kind"):
+            raise PipelineFault("PROFILE_BAD_INFERENCE")
+        cls._forbid_embedded_secrets(out)
+        out["schema"] = "clay-pipeline-profile/v2"
+        return out
+
+    def import_profile(self, entity_db: str, profile_or_path: dict[str, Any] | str | Path) -> dict[str, Any]:
+        """Import/activate profile data without resetting generation/history."""
+        if isinstance(profile_or_path, (str, Path)):
+            profile = json.loads(self._resolve(str(profile_or_path)).read_text(encoding="utf-8"))
+        else:
+            profile = profile_or_path
+        normalized = self._normalize_profile(profile)
+        raw = self._canonical_json(normalized)
+        digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+        now = time.time()
+        db = self._db(entity_db)
+        try:
+            db.execute("BEGIN IMMEDIATE")
+            self._ensure_schema(db)
+            db.execute(
+                """INSERT INTO eos_pipeline_profile(singleton,profile_id,profile_hash,profile_json,updated_at)
+                   VALUES(1,?,?,?,?)
+                   ON CONFLICT(singleton) DO UPDATE SET
+                     profile_id=excluded.profile_id,
+                     profile_hash=excluded.profile_hash,
+                     profile_json=excluded.profile_json,
+                     updated_at=excluded.updated_at""",
+                (normalized["profile_id"], digest, raw, now),
+            )
+            db.commit()
+            return {"ok": True, "profile_id": normalized["profile_id"], "profile_hash": digest}
+        except Exception:
+            db.rollback()
+            raise
+        finally:
+            db.close()
+
     def effect(self, kind: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
         if kind not in self.allowed_effects:
             raise clay.StructuredFault("EFFECT_DENIED:" + str(kind))
@@ -82,8 +204,8 @@ class ProfilePipelineRuntime(clay.Runtime):
         started = time.time()
         ok = False
         try:
-            if kind == "profile_load":
-                result = self._profile_load(payload)
+            if kind == "pipeline_profile_read":
+                result = self._pipeline_profile_read(payload)
             elif kind == "pipeline_init":
                 result = self._pipeline_init(payload)
             elif kind == "pipeline_state_read":
@@ -94,8 +216,8 @@ class ProfilePipelineRuntime(clay.Runtime):
                 result = self._pipeline_compile(payload)
             elif kind == "pipeline_build_prompt":
                 result = self._pipeline_build_prompt(payload)
-            elif kind == "provider_chat_json":
-                result = self._provider_chat_json(payload)
+            elif kind == "inference_generate":
+                result = self._inference_generate(payload)
             elif kind == "pipeline_gate":
                 result = self._pipeline_gate(payload)
             elif kind == "pipeline_commit":
@@ -116,58 +238,29 @@ class ProfilePipelineRuntime(clay.Runtime):
                 }
             )
 
-    def _profile_load(self, p: dict[str, Any]) -> dict[str, Any]:
+    def _pipeline_profile_read(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
-            profile = json.loads(self._resolve(str(p["path"])).read_text(encoding="utf-8"))
-            if profile.get("schema") != "clay-pipeline-profile/v1":
-                raise PipelineFault("BAD_PROFILE_SCHEMA")
-            for field in ("profile_id", "provider", "personality", "sources", "state_metrics", "gate"):
-                if field not in profile:
-                    raise PipelineFault("PROFILE_MISSING:" + field)
-            return {"ok": True, "profile": profile}
+            db = self._db(str(p["entity_db"]))
+            try:
+                self._ensure_schema(db)
+                db.commit()
+                row = db.execute("SELECT profile_id,profile_hash,profile_json FROM eos_pipeline_profile WHERE singleton=1").fetchone()
+            finally:
+                db.close()
+            if row is None:
+                raise PipelineFault("NO_ACTIVE_PROFILE")
+            profile = self._normalize_profile(json.loads(row["profile_json"]))
+            digest = self._hash_json(profile)
+            if digest != row["profile_hash"] or profile["profile_id"] != row["profile_id"]:
+                raise PipelineFault("PROFILE_INTEGRITY_MISMATCH")
+            return {"ok": True, "profile": profile, "profile_hash": digest}
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
     def _pipeline_init(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             with self._db(str(p["entity_db"])) as db:
-                db.executescript(
-                    """
-                    CREATE TABLE IF NOT EXISTS eos_pipeline_state(
-                      singleton INTEGER PRIMARY KEY CHECK(singleton=1),
-                      generation INTEGER NOT NULL DEFAULT 0,
-                      continuity_json TEXT NOT NULL DEFAULT '{}',
-                      canonical_json TEXT NOT NULL DEFAULT '{}',
-                      canonical_hash TEXT NOT NULL DEFAULT '',
-                      cursors_json TEXT NOT NULL DEFAULT '{}',
-                      updated_at REAL NOT NULL DEFAULT 0);
-                    INSERT OR IGNORE INTO eos_pipeline_state(singleton) VALUES(1);
-                    CREATE TABLE IF NOT EXISTS eos_pipeline_consumed(
-                      source_kind TEXT NOT NULL,
-                      source_id TEXT NOT NULL,
-                      output_id TEXT NOT NULL,
-                      consumed_at REAL NOT NULL,
-                      PRIMARY KEY(source_kind,source_id));
-                    CREATE TABLE IF NOT EXISTS eos_pipeline_outputs(
-                      output_id TEXT PRIMARY KEY,
-                      ts REAL NOT NULL,
-                      generation INTEGER NOT NULL,
-                      profile_id TEXT NOT NULL,
-                      output_json TEXT NOT NULL,
-                      provider_kind TEXT NOT NULL,
-                      model TEXT,
-                      packet_hash TEXT NOT NULL,
-                      canonical_hash TEXT NOT NULL);
-                    CREATE TABLE IF NOT EXISTS eos_pipeline_packets(
-                      packet_hash TEXT PRIMARY KEY,
-                      output_id TEXT NOT NULL,
-                      ts REAL NOT NULL,
-                      generation INTEGER NOT NULL,
-                      profile_id TEXT NOT NULL,
-                      source_count INTEGER NOT NULL,
-                      canonical_hash TEXT NOT NULL);
-                    """
-                )
+                self._ensure_schema(db)
             return {"ok": True}
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
@@ -175,6 +268,7 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _pipeline_state_read(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             with self._db(str(p["entity_db"])) as db:
+                self._ensure_schema(db)
                 row = db.execute("SELECT * FROM eos_pipeline_state WHERE singleton=1").fetchone()
             return {
                 "ok": True,
@@ -188,6 +282,7 @@ class ProfilePipelineRuntime(clay.Runtime):
 
     def _already_consumed(self, entity_db: str, kind: str, source_id: Any) -> bool:
         with self._db(entity_db) as db:
+            self._ensure_schema(db)
             return db.execute(
                 "SELECT 1 FROM eos_pipeline_consumed WHERE source_kind=? AND source_id=?",
                 (kind, str(source_id)),
@@ -313,11 +408,8 @@ class ProfilePipelineRuntime(clay.Runtime):
                     "evidence_ref": spec.get("evidence_ref", "canonical:" + name),
                 }
 
-        quiet_sensors_ok = all(
-            sensors[kind]["ok"]
-            for kind in sensors
-            if sources[kind].get("required_for_quiet")
-        )
+        required = [kind for kind in sensors if sources[kind].get("required_for_quiet")]
+        quiet_sensors_ok = bool(required) and all(sensors[kind]["ok"] for kind in required)
         return {
             "ok": True,
             "sources": sources,
@@ -418,8 +510,8 @@ class ProfilePipelineRuntime(clay.Runtime):
             "source_count": collected["source_count"],
             "quiet_sensors_ok": collected["quiet_sensors_ok"],
         }
-        canonical_raw = json.dumps(canonical, sort_keys=True, separators=(",", ":"), default=str)
-        packet_raw = json.dumps(packet, sort_keys=True, separators=(",", ":"), default=str)
+        canonical_raw = self._canonical_json(canonical)
+        packet_raw = self._canonical_json(packet)
 
         refs: list[str] = []
         for source in collected["sources"].values():
@@ -501,70 +593,183 @@ class ProfilePipelineRuntime(clay.Runtime):
     @staticmethod
     def _pointer(value: Any, pointer: str) -> Any:
         current = value
-        for part in str(pointer).split("."):
+        text = str(pointer or "")
+        if text.startswith("/"):
+            parts = [part.replace("~1", "/").replace("~0", "~") for part in text.split("/")[1:]]
+        else:
+            parts = [part for part in text.split(".") if part]
+        for part in parts:
             current = current[int(part)] if isinstance(current, list) else current[part]
         return current
 
-    def _provider_chat_json(self, p: dict[str, Any]) -> dict[str, Any]:
-        provider = p["provider"]
-        if self.provider_override is not None:
-            self._active_secrets = []
-            return {
-                "ok": True,
-                "payload": self.provider_override(p),
-                "provider_kind": provider.get("kind", "override"),
-                "model": provider.get("model"),
-            }
+    @staticmethod
+    def _request_template(value: Any, replacements: dict[str, Any]) -> Any:
+        if isinstance(value, dict):
+            return {k: ProfilePipelineRuntime._request_template(v, replacements) for k, v in value.items()}
+        if isinstance(value, list):
+            return [ProfilePipelineRuntime._request_template(v, replacements) for v in value]
+        if isinstance(value, str):
+            if value in replacements:
+                return replacements[value]
+            out = value
+            for key, replacement in replacements.items():
+                out = out.replace(key, str(replacement))
+            return out
+        return value
+
+    @staticmethod
+    def _is_loopback(endpoint: str) -> bool:
+        return bool(re.match(r"^https?://(localhost|127\.0\.0\.1)(:\d+)?(?:/|$)", endpoint))
+
+    def _api_generate(self, inference: dict[str, Any], p: dict[str, Any]) -> dict[str, Any]:
         if not self.allow_network:
             return {"ok": False, "error_kind": "NETWORK_DISABLED", "error": "network disabled"}
-        keys = self._keys(list(provider.get("secret_names", [])), p.get("secret_file"))
-        if not keys:
-            return {"ok": False, "error_kind": "NO_PROVIDER_SECRET", "error": "no provider secret"}
-        endpoint = str(provider["endpoint"])
-        if endpoint.startswith("http://") and not re.match(r"^http://(localhost|127\.0\.0\.1)(:\d+)?/", endpoint):
+        endpoint = str(inference.get("endpoint", ""))
+        if not endpoint:
+            return {"ok": False, "error_kind": "MISSING_ENDPOINT", "error": "missing endpoint"}
+        loopback = self._is_loopback(endpoint)
+        if endpoint.startswith("http://") and not loopback:
             return {"ok": False, "error_kind": "PLAINTEXT_NON_LOOPBACK_FORBIDDEN", "error": endpoint}
-        body = {
-            "model": provider.get("model"),
-            "messages": [
-                {"role": "system", "content": p["system"]},
-                {"role": "user", "content": p["user"]},
-            ],
-            "temperature": provider.get("temperature", 0.7),
-            "max_tokens": provider.get("max_tokens", 2000),
-            "response_format": {"type": "json_object"},
+        keys = self._keys(list(inference.get("secret_names", [])), p.get("secret_file"))
+        if not keys and not loopback:
+            return {"ok": False, "error_kind": "NO_PROVIDER_SECRET", "error": "no provider secret"}
+        attempts = keys or [""]
+        replacements = {
+            "{{MODEL}}": inference.get("model"),
+            "{{SYSTEM}}": p["system"],
+            "{{USER}}": p["user"],
+            "{{TEMPERATURE}}": inference.get("temperature", 0.7),
+            "{{MAX_TOKENS}}": inference.get("max_tokens", 2000),
         }
+        template = inference.get("request_template")
+        if template is None:
+            body: Any = {
+                "model": inference.get("model"),
+                "messages": [
+                    {"role": "system", "content": p["system"]},
+                    {"role": "user", "content": p["user"]},
+                ],
+                "temperature": inference.get("temperature", 0.7),
+                "max_tokens": inference.get("max_tokens", 2000),
+                "response_format": {"type": "json_object"},
+            }
+        else:
+            if isinstance(template, str):
+                template = json.loads(template)
+            body = self._request_template(template, replacements)
         encoded = json.dumps(body).encode("utf-8")
         last: Exception | None = None
-        for key in keys:
-            self._active_secrets = [key]
-            request = urllib.request.Request(
-                endpoint,
-                data=encoded,
-                method="POST",
-                headers={
-                    str(provider.get("auth_header", "Authorization")): str(provider.get("auth_prefix", "Bearer ")) + key,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                },
-            )
+        for key in attempts:
+            self._active_secrets = [key] if key else []
+            headers = {"Content-Type": "application/json", "Accept": "application/json"}
+            if key:
+                headers[str(inference.get("auth_header", "Authorization"))] = str(inference.get("auth_prefix", "Bearer ")) + key
+            request = urllib.request.Request(endpoint, data=encoded, method="POST", headers=headers)
             try:
-                with urllib.request.urlopen(request, timeout=float(provider.get("timeout_seconds", 60))) as response:
+                with urllib.request.urlopen(request, timeout=float(inference.get("timeout_seconds", 60))) as response:
                     response_obj = json.loads(response.read().decode("utf-8"))
-                content = self._pointer(response_obj, provider.get("response_pointer", "choices.0.message.content"))
-                payload = json.loads(content) if provider.get("response_content", "json_string") == "json_string" else content
+                content = self._pointer(response_obj, inference.get("response_pointer", "/choices/0/message/content"))
+                payload = json.loads(content) if inference.get("response_content", "json_string") == "json_string" else content
+                if not isinstance(payload, dict):
+                    raise PipelineFault("INFERENCE_OUTPUT_NOT_OBJECT")
                 return {
                     "ok": True,
                     "payload": payload,
-                    "provider_kind": provider.get("kind", "json"),
-                    "model": provider.get("model"),
+                    "inference_kind": inference.get("kind", "json"),
+                    "provider_kind": inference.get("kind", "json"),
+                    "model": inference.get("model"),
                 }
             except Exception as exc:
                 last = exc
         return {
             "ok": False,
-            "error_kind": type(last).__name__ if last else "PROVIDER_FAILED",
-            "error": str(last) if last else "provider failed",
+            "error_kind": type(last).__name__ if last else "INFERENCE_FAILED",
+            "error": str(last) if last else "inference failed",
         }
+
+    def _local_exec_generate(self, inference: dict[str, Any], p: dict[str, Any]) -> dict[str, Any]:
+        try:
+            model_path = self._resolve(str(inference.get("local_model_path") or inference.get("model_path") or ""))
+            if not model_path.is_file():
+                raise PipelineFault("LOCAL_MODEL_NOT_READABLE")
+            argv_spec = inference.get("local_argv_json", inference.get("argv"))
+            if isinstance(argv_spec, str):
+                argv_spec = json.loads(argv_spec)
+            if not isinstance(argv_spec, list) or not argv_spec or not all(isinstance(x, str) for x in argv_spec):
+                raise PipelineFault("LOCAL_ARGV_INVALID")
+            prompt_template = str(inference.get("local_prompt_template", "{{SYSTEM}}\n\n{{USER}}\n"))
+            prompt = prompt_template.replace("{{SYSTEM}}", p["system"]).replace("{{USER}}", p["user"])
+            with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False, dir=self.root, prefix="clay_prompt_", suffix=".txt") as handle:
+                handle.write(prompt)
+                prompt_path = Path(handle.name)
+            try:
+                replacements = {
+                    "{{MODEL_PATH}}": str(model_path),
+                    "{{PROMPT_FILE}}": str(prompt_path),
+                    "{{MAX_TOKENS}}": str(inference.get("max_tokens", 2000)),
+                    "{{TEMPERATURE}}": str(inference.get("temperature", 0.7)),
+                }
+                argv = []
+                for item in argv_spec:
+                    rendered = item
+                    for key, value in replacements.items():
+                        rendered = rendered.replace(key, value)
+                    argv.append(rendered)
+                completed = subprocess.run(
+                    argv,
+                    cwd=self.root,
+                    shell=False,
+                    check=False,
+                    capture_output=True,
+                    text=True,
+                    timeout=float(inference.get("timeout_seconds", 60)),
+                    env=os.environ.copy(),
+                )
+            finally:
+                try:
+                    prompt_path.unlink()
+                except OSError:
+                    pass
+            if completed.returncode != 0:
+                raise PipelineFault("LOCAL_EXEC_FAILED:" + str(completed.returncode))
+            payload = json.loads(completed.stdout)
+            if not isinstance(payload, dict):
+                raise PipelineFault("LOCAL_OUTPUT_NOT_OBJECT")
+            self._active_secrets = []
+            return {
+                "ok": True,
+                "payload": payload,
+                "inference_kind": "local_exec",
+                "provider_kind": "local_exec",
+                "model": inference.get("model") or model_path.name,
+            }
+        except Exception as exc:
+            self._active_secrets = []
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
+
+    def _inference_generate(self, p: dict[str, Any]) -> dict[str, Any]:
+        inference = dict(p.get("inference") or {})
+        try:
+            if self.provider_override is not None:
+                self._active_secrets = []
+                request = dict(p)
+                request["provider"] = inference  # compatibility for deterministic test providers only
+                payload = self.provider_override(request)
+                if not isinstance(payload, dict):
+                    raise PipelineFault("OVERRIDE_OUTPUT_NOT_OBJECT")
+                return {
+                    "ok": True,
+                    "payload": payload,
+                    "inference_kind": inference.get("kind", "override"),
+                    "provider_kind": inference.get("kind", "override"),
+                    "model": inference.get("model"),
+                }
+            kind = str(inference.get("kind", ""))
+            if kind == "local_exec":
+                return self._local_exec_generate(inference, p)
+            return self._api_generate(inference, p)
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
     def _pipeline_gate(self, p: dict[str, Any]) -> dict[str, Any]:
         profile = p["profile"]
@@ -647,6 +852,7 @@ class ProfilePipelineRuntime(clay.Runtime):
         db = self._db(entity_db)
         try:
             db.execute("BEGIN IMMEDIATE")
+            self._ensure_schema(db)
             row = db.execute(
                 "UPDATE eos_pipeline_state SET updated_at=? WHERE singleton=1 AND generation=?",
                 (now, previous["generation"]),
@@ -666,7 +872,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                     generation,
                     profile["profile_id"],
                     json.dumps(payload, ensure_ascii=False),
-                    generated.get("provider_kind", ""),
+                    generated.get("inference_kind", generated.get("provider_kind", "")),
                     generated.get("model"),
                     compiled["packet_hash"],
                     compiled["canonical_state_hash"],

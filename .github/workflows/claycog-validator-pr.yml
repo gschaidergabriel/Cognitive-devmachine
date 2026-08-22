@@ -27,11 +27,12 @@ jobs:
           printf 'sha=%s\n' "$GITHUB_SHA"
           git rev-parse HEAD
           git status --short
-      - name: Run strict ClayCode admission regressions
+      - name: Run strict ClayCode and paid-create safety regressions
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_corpus_v2.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'
       - name: Regenerate and validate exact SFT v2 corpus
         run: |
           set -euo pipefail
@@ -43,3 +44,18 @@ jobs:
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_eval_exact_vector_v1.py'
+      - name: Materialize evaluation-only compositional OOD lesion
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_eval_compositional_ood_v1.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[json.loads(line) for line in Path('eval_compositional_ood_v1.jsonl').read_text().splitlines() if line.strip()]
+          assert len(rows)==320, len(rows)
+          assert len({x['id'] for x in rows})==320
+          families={x['family'] for x in rows}
+          assert len(families)==6, families
+          print({'cases':len(rows),'unique_ids':320,'families':sorted(families),'role':'evaluation_only'})
+          PY

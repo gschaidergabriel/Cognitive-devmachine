@@ -1,0 +1,68 @@
+{
+  "schema": "claycog-05b-explicit-template-admission/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "base_main_sha": "cc8449642a76ff74467e02da78ecd38853d6dd76",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_checkpoint": "Qwen/Qwen2.5-0.5B",
+  "preserved_current_main": {
+    "canonical_sft": "claycog-sft/v2",
+    "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+    "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+    "primary_hf_revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "instruct_hf_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "paid_create_fences": [
+      "exact campaign fingerprint",
+      "account duplicate lookup",
+      "zero-retry billed create client",
+      "atomic local CREATE_ARMED intent",
+      "UNKNOWN_REMOTE_CREATE fail-closed reconciliation"
+    ]
+  },
+  "primary_contract": {
+    "together_supported_models": "https://docs.together.ai/docs/fine-tuning/supported-models",
+    "together_byom": "https://docs.together.ai/docs/fine-tuning/byom",
+    "together_price_estimate": "https://docs.together.ai/reference/finetuneestimateprice",
+    "qwen25_current_commits": "https://huggingface.co/Qwen/Qwen2.5-0.5B/commits/main",
+    "finding": "Current public Together Full-FT documentation lists no Qwen2/Qwen2.5 training base. Qwen/Qwen2.5-7B-Instruct-Turbo is publicly documented for inference, which is not evidence of fine-tuning admission."
+  },
+  "single_unusual_experiment": {
+    "count_for_this_user_triggered_go": 1,
+    "name": "template_mirage_qwen35_08b_substitution",
+    "counter_reality": "Use Together's documented Qwen3.5-0.8B Full-FT entry as the base template for Qwen2.5-0.5B because the vendor name and parameter size are close.",
+    "result": "REJECT",
+    "target": "Qwen2ForCausalLM / qwen2",
+    "counterfactual": "Qwen3_5ForConditionalGeneration / qwen3_5",
+    "reason": "Together BYOM requires architecture compatibility; the substitution changes architecture family and the owner-defined experiment."
+  },
+  "delta": {
+    "launcher_commit": "de3ad3ea689feba56c3a3532bf7fa30680d06b86",
+    "safety_test_commit": "5bbb3c46807aad16a9b51bc65b47e5a8c3abd3e6",
+    "workflow_commit": "e0d318714af4f82098584612fdea86728048dde7",
+    "readme_commit": "c80373980f94f9dc2efa013ad9aed702042a5182",
+    "mechanisms": [
+      "remove implicit Together training-template default",
+      "require operator-supplied currently verified template",
+      "reject Qwen3-family substitution before network use",
+      "retain template string in the exact campaign fingerprint and create-intent ledger",
+      "add deterministic template and template-fingerprint regression",
+      "run launcher safety regression in the exact-checkout PR workflow beside canonical SFT v2 validation"
+    ]
+  },
+  "execution_boundary": {
+    "together_api_secret_mounted": false,
+    "authenticated_model_limits_executed": false,
+    "dataset_uploaded": false,
+    "server_price_estimate_executed": false,
+    "billed_create_executed": false,
+    "training_job_started": false,
+    "money_spent_usd": 0,
+    "branch_ci_status": "PENDING_PR",
+    "classification": "CURRENT_PRIMARY_CONTRACT_SUPPORTED_SOURCE_REPAIR; TOGETHER_RUNTIME_ADMISSION_OPEN"
+  },
+  "current_blocker": "No publicly documented Qwen2/Qwen2.5 Together Full-FT template is currently available, and no Together secret is mounted to perform authenticated model_limits enumeration/admission.",
+  "next_exact_step": "Run the exact-checkout PR corpus + launcher-safety regression. Then, only in an authorized environment with TOGETHER_API_KEY and a currently verified Qwen2-compatible template, run non-billed preflight first. If no Qwen2-compatible Together template exists, keep Qwen2.5-0.5B and move the same SFT v2 campaign to another owner-admitted full-FT runner rather than changing model generation.",
+  "acceptance": "IN_PROGRESS"
+}

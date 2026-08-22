@@ -55,7 +55,7 @@ class NativeRuntimeGuardTests(unittest.TestCase):
             env=env,
         )
 
-    def test_local_runner_gets_no_parent_secrets_across_active_and_verified_empty_cycles(self) -> None:
+    def test_local_runner_gets_no_parent_secrets_and_verified_empty_cycle_is_quiet(self) -> None:
         entity = self.tmp / "guard-entity.db"
         source = self.tmp / "guard-source.db"
         profile = self.tmp / "guard-profile.json"
@@ -66,18 +66,36 @@ class NativeRuntimeGuardTests(unittest.TestCase):
         profile.write_text(
             json.dumps(
                 {
+                    "schema": "clay-pipeline-profile/v2",
                     "profile_id": "ci-runtime-guard",
                     "identity": {"task": "process bounded fixture evidence", "language": "en"},
                     "personality": {
                         "system_prompt": "Return fixture output only.",
                         "public_style": "plain",
-                        "output_contract": {},
+                        "output_contract": {
+                            "title_field": "title",
+                            "intro_field": "intro",
+                            "sections_field": "sections",
+                            "section_text_field": "text",
+                            "section_evidence_field": "evidence_refs",
+                            "section_claims_field": "state_claims",
+                            "continuity_field": "continuity",
+                            "autobiographical_hypotheses_field": "hypotheses",
+                            "longitudinal_self_report_field": "self_report",
+                        },
                     },
                     "inference": {
                         "kind": "local_exec",
-                        "max_tokens": 32,
+                        "max_tokens": 64,
                         "temperature": 0.0,
                         "secret_names": ["CLAY_TEST_SECRET", "OPENAI_API_KEY", "MISTRAL_API_KEY"],
+                    },
+                    "sources": [{"kind": "evidence", "evidence_prefix": "evidence:"}],
+                    "gate": {
+                        "require_hash_echo": True,
+                        "require_evidence_per_section": True,
+                        "max_claim_overshoot": 0.0,
+                        "leak_patterns": [],
                     },
                 },
                 sort_keys=True,
@@ -85,12 +103,15 @@ class NativeRuntimeGuardTests(unittest.TestCase):
             encoding="utf-8",
         )
         runner.write_text(
-            "import json, os, pathlib, sys\n"
+            "import json, os, pathlib, re, sys\n"
             "for name in ('CLAY_TEST_SECRET','OPENAI_API_KEY','MISTRAL_API_KEY'):\n"
             "    if os.environ.get(name): raise SystemExit(41)\n"
-            "pathlib.Path(sys.argv[1]).read_text(encoding='utf-8')\n"
+            "prompt=pathlib.Path(sys.argv[1]).read_text(encoding='utf-8')\n"
+            "cm=re.search(r'\\\"CANONICAL_STATE_HASH\\\"\\s*:\\s*\\\"([0-9a-f]{64})\\\"',prompt)\n"
+            "pm=re.search(r'\\\"PACKET_HASH\\\"\\s*:\\s*\\\"([0-9a-f]{64})\\\"',prompt)\n"
+            "if not cm or not pm: raise SystemExit(42)\n"
             "with pathlib.Path(sys.argv[2]).open('a', encoding='utf-8') as fh: fh.write('run\\n')\n"
-            "print(json.dumps({'fixture':'runtime-guard','longitudinal_self_report':{}}, sort_keys=True))\n",
+            "print(json.dumps({'canonical_state_hash_seen':cm.group(1),'packet_hash_seen':pm.group(1),'title':'fixture','intro':'fixture','sections':[{'text':'bounded evidence','evidence_refs':['evidence:event-1'],'state_claims':{}}],'continuity':'fixture','hypotheses':[],'self_report':{}}, sort_keys=True))\n",
             encoding="utf-8",
         )
         model.write_bytes(b"fixture-model-bytes\n")
@@ -113,21 +134,22 @@ class NativeRuntimeGuardTests(unittest.TestCase):
 
         first = json.loads(self.command("run", str(entity), str(source), env=parent_env).stdout)
         self.assertTrue(first["ok"])
+        self.assertFalse(first["quiet"])
         self.assertEqual(first["generation"], 1)
         self.assertEqual(first["source_count"], 1)
         self.assertEqual(first["inference_kind"], "local_exec")
 
         quiet_cycle = json.loads(self.command("run", str(entity), str(source), env=parent_env).stdout)
         self.assertTrue(quiet_cycle["ok"])
-        self.assertEqual(quiet_cycle["generation"], 2)
+        self.assertTrue(quiet_cycle["quiet"])
+        self.assertEqual(quiet_cycle["generation"], 1)
         self.assertEqual(quiet_cycle["source_count"], 0)
-        self.assertEqual(quiet_cycle["inference_kind"], "local_exec")
-        self.assertEqual(marker.read_text(encoding="utf-8").splitlines(), ["run", "run"])
+        self.assertEqual(marker.read_text(encoding="utf-8").splitlines(), ["run"])
 
         with sqlite3.connect(entity) as db:
-            self.assertEqual(db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()[0], 2)
-            self.assertEqual(db.execute("SELECT COUNT(*) FROM outputs").fetchone()[0], 2)
-            self.assertEqual(db.execute("SELECT COUNT(*) FROM study_rows").fetchone()[0], 2)
+            self.assertEqual(db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()[0], 1)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM outputs").fetchone()[0], 1)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM study_rows").fetchone()[0], 1)
             for (stored,) in db.execute("SELECT model_output FROM outputs ORDER BY generation"):
                 for value in sentinels.values():
                     self.assertNotIn(value, stored)

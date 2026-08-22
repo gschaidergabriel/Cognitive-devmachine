@@ -64,7 +64,7 @@ class Direct08Tests(unittest.TestCase):
         with self.assertRaises(SystemExit):
             launch08.get_full_training_limits(FakeClient(full=False))
 
-    def test_price_request_is_direct_full_sft(self):
+    def test_price_request_matches_current_estimate_schema(self):
         c = FakeClient(full=True)
         out = launch08.estimate_price(c, "file-train", "file-valid")
         self.assertTrue(out.allowed_to_proceed)
@@ -73,11 +73,16 @@ class Direct08Tests(unittest.TestCase):
         self.assertEqual(q["training_method"], {"method": "sft", "train_on_inputs": "auto"})
         self.assertEqual(q["training_type"], {"type": "Full"})
         self.assertNotIn("from_hf_model", q)
+        self.assertNotIn("random_seed", q)
+        self.assertNotIn("learning_rate", q)
+        self.assertNotIn("warmup_ratio", q)
 
     def test_create_payload_is_single_model_identity_and_seed_bound(self):
         p = launch08.create_payload("t", "v", "suffix")
         self.assertEqual(p["model"], "Qwen/Qwen3.5-0.8B")
         self.assertEqual(p["random_seed"], 3407)
+        self.assertEqual(p["learning_rate"], 1e-5)
+        self.assertEqual(p["warmup_ratio"], 0.03)
         self.assertNotIn("from_hf_model", p)
         self.assertNotIn("hf_model_revision", p)
         self.assertNotIn("lora", p)

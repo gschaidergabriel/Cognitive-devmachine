@@ -1,0 +1,49 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "base_main": "702440d7cd701e42d996cf8b9221d5d515a26e7d",
+  "branch": "gpt56sol/go-native-localexec-env-isolation-20260822-1512",
+  "delta": {
+    "problem": "Current main local_exec uses execvp() and inherits the complete parent environment, so unrelated API tokens/secrets can reach a configured local model runner.",
+    "repair": "Execute the configured runner through /usr/bin/env -i and admit only PATH, HOME=/tmp, TMPDIR=/tmp, LANG=C.UTF-8 and TZ=UTC while preserving shell-free argv substitution and the existing inference/commit path.",
+    "focused_test": "test_native_local_exec_env_isolation.py builds the exact branch source through build_native_bound.py, injects four parent secret sentinels, requires the child runner to see none, then verifies generation/output persistence and SQLite integrity.",
+    "nonduplicate_scope": "Fresh-main extraction of only the still-missing #764 environment-isolation delta. Current main already contains #769 v2 fail-closed semantic admission and #830 state-box language neutrality, so the old broad #764 donor is not merged."
+  },
+  "adversarial_review": {
+    "finding": "The existing native exact-repro workflow still applies zero_blog (profile v2) and expects a successful local_exec run, while merged #769 now correctly blocks profile v2 before inference until canonical parity exists. If runner admission resumes, that old workflow expectation must be reconciled; source contradiction is not runtime evidence.",
+    "classification": "REGRESSION_REVIEW_NOT_A_SECOND_UNUSUAL_EXPERIMENT"
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "name": "DONOR_BODY_VS_HEAD_VERIFIED_EMPTY_CONTRACT_FALSIFIER",
+    "result": "Earlier in the same go, exact PR #764 head was shown to still contain the verified-empty pre-inference shortcut despite its body claiming removal; donor branch was repaired, but current main advanced and made that broad donor non-mergeable. No second unusual experiment was run."
+  },
+  "cognition_refresh": {
+    "main_launcher_blob": "2216e62b592dec4da55a922daa22dd2387470750",
+    "main_state": "#818 already removed the guessed Together template default and bound exact Hugging Face revision identity; #702440 wires provider-contract regression into exact PR admission.",
+    "provider_docs": {
+      "supported_models": "https://docs.together.ai/docs/fine-tuning/supported-models",
+      "byom": "https://docs.together.ai/docs/fine-tuning/byom",
+      "pricing": "https://www.together.ai/pricing"
+    },
+    "current_public_full_ft_qwen": ["Qwen3.5-0.8B", "Qwen3.5-2B", "Qwen3.5-4B", "Qwen3.5-9B", "Qwen3.5-27B", "Qwen3.6-27B"],
+    "qwen2_or_qwen2_5_full_ft_template_observed": false,
+    "byom_architecture_rule": "Together requires a base template whose architecture matches the custom checkpoint; closest size is secondary to architecture compatibility.",
+    "standard_sft_full_price_up_to_16b_usd_per_million_processed_tokens": 0.54,
+    "preflight_executed": false,
+    "billed_create_executed": false,
+    "money_spent_usd": 0,
+    "blocker": "Owner-locked Qwen2.5-0.5B remains blocked on an actually admitted Qwen2/Qwen2.5-compatible Full-FT template/path or owner-admitted alternate runner."
+  },
+  "execution_credit": "SOURCE_CANDIDATE_ONLY_UNTIL_AUTHORIZED_RUNNER_ACTUALLY_EXECUTES_UPDATED_HEAD",
+  "non_claims": [
+    "No exact runtime PASS for the fresh branch.",
+    "No Together BYOM compatibility or paid training claim.",
+    "No tuned-model quality, Q4_K_M or measured <1 GiB RSS claim.",
+    "No whole Mini Entity PASS."
+  ]
+}

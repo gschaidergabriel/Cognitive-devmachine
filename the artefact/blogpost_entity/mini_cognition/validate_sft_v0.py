@@ -2,22 +2,24 @@
 import json, sys
 from pathlib import Path
 
-PREFIX="module clay.cog.turn\nfn think(i:Map)->Map {\n"
+PREFIX="module c\nfn t(i:M)->M{\n"
+SYSTEM_PREFIX="T0{R'=F(R,I,C);CC=1;GRF=1;HP=1;U!=Z!=E!=M;AUTH=EXT;ID=CFG}"
 REQUIRED=(
-    'self_bind(c,cfg("entity.id"),cfg("entity.continuity"))',
-    'role_bind(c,cfg("application.role"))',
-    'goal_bind(c,cfg("application.goal"))',
-    'personality_bind(c,cfg("application.personality"))',
+    'id(c,cf("e.id"),cf("e.cont"))',
+    'rl(c,cf("a.role"))',
+    'gl(c,cf("a.goal"))',
+    'ps(c,cf("a.persona"))',
+    'nx(c,"R","F")',
     'return c\n}',
 )
 FORBIDDEN_MARKUP=("```","<think>","</think>")
 FORBIDDEN_FIXED_IDENTITY=(
-    'self_bind(c,"mini_entity"',
-    'self_bind(c,"zero"',
-    'role_bind(c,"blog',
-    'role_bind(c,"blogger',
-    'goal_bind(c,"write blog',
-    'personality_bind(c,"zero',
+    'id(c,"zero"',
+    'id(c,"mini_entity"',
+    'rl(c,"blog',
+    'rl(c,"blogger',
+    'rl(c,"analyst',
+    'ps(c,"zero',
 )
 
 
@@ -45,6 +47,8 @@ def main(path):
             row=json.loads(line); messages=row["messages"]
             if [m["role"] for m in messages] != ["system","user","assistant"]:
                 raise ValueError("roles must be system,user,assistant")
+            if messages[0]["content"] != SYSTEM_PREFIX:
+                raise ValueError("noncanonical compact system state")
             errors=validate_code(messages[-1]["content"])
             if errors:
                 bad+=1; print(line_no,errors)

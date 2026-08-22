@@ -95,9 +95,22 @@ jobs:
         run: |
           set -euo pipefail
           cat > /tmp/mini07/fixture_runner.py <<'PY'
-          import json, pathlib, sys
-          pathlib.Path(sys.argv[1]).read_text(encoding='utf-8')
-          print(json.dumps({'fixture':'local_exec','longitudinal_self_report':{}}, sort_keys=True))
+          import json, pathlib, re, sys
+          prompt=pathlib.Path(sys.argv[1]).read_text(encoding='utf-8')
+          def take(name):
+              m=re.search(r'^'+re.escape(name)+r'=([0-9a-f]{64})$',prompt,re.M)
+              assert m, name
+              return m.group(1)
+          print(json.dumps({
+              'ueberschrift':'Fixture',
+              'einleitung':'Fixture',
+              'abschnitte':[{'text':'Fixture','evidence_refs':['fixture:evidence'],'state_claims':{}}],
+              'neuer_erzaehlfaden':'fixture',
+              'neue_gespiegelte_hypothesen':[],
+              'longitudinal_self_report':{},
+              'packet_hash_seen':take('packet_hash_expected'),
+              'canonical_state_hash_seen':take('canonical_state_hash_expected')
+          }, sort_keys=True))
           PY
           printf 'fixture-model-bytes\n' > /tmp/mini07/model.gguf
           printf 'MUST_NOT_BE_READ\n' > /tmp/mini07/should-not-be-opened.secret
@@ -123,6 +136,68 @@ jobs:
           test "$KEY_LOOKUP_COUNT" = '0'
           test "$NETWORK_ATTEMPT_COUNT" = '0'
           printf '{"key_file_lookup_count":%s,"network_attempt_count":%s}\n' "$KEY_LOOKUP_COUNT" "$NETWORK_ATTEMPT_COUNT" > /tmp/mini07/local_exec_io_counts.json
+
+      - name: Native profile and output contract rejection matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/mini07/invalid_runner.py <<'PY'
+          print('THIS_IS_NOT_JSON')
+          PY
+          /tmp/mini07/mini_entity.clay init /tmp/mini07/gate-entity.db >/dev/null
+          /tmp/mini07/mini_entity.clay source-init /tmp/mini07/gate-source.db >/dev/null
+          /tmp/mini07/mini_entity.clay source-add /tmp/mini07/gate-source.db evidence gate-event-1 '{"measurement_status":"MEASURED"}' >/dev/null
+          /tmp/mini07/mini_entity.clay preset-apply /tmp/mini07/gate-entity.db 'the artefact/blogpost_entity/presets/zero_blog.json' >/dev/null
+          /tmp/mini07/mini_entity.clay set-local-model /tmp/mini07/gate-entity.db /tmp/mini07/model.gguf >/dev/null
+          /tmp/mini07/mini_entity.clay set-local-runner-json /tmp/mini07/gate-entity.db '["python3","/tmp/mini07/invalid_runner.py","{{PROMPT_FILE}}"]' >/dev/null
+          set +e
+          /tmp/mini07/mini_entity.clay run /tmp/mini07/gate-entity.db /tmp/mini07/gate-source.db >/tmp/mini07/gate-invalid.out 2>/tmp/mini07/gate-invalid.err
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          grep -q 'OUTPUT_CONTRACT_GATE_REJECTED_NO_COMMIT' /tmp/mini07/gate-invalid.err
+          test "$(sqlite3 /tmp/mini07/gate-entity.db 'select generation from entity_state where id=1;')" = '0'
+          test "$(sqlite3 /tmp/mini07/gate-entity.db 'select count(*) from outputs;')" = '0'
+          test "$(sqlite3 /tmp/mini07/gate-source.db 'select count(*) from mini_entity_events where consumed_generation is null;')" = '1'
+
+          python3 - <<'PY'
+          import json
+          p=json.load(open('the artefact/blogpost_entity/presets/zero_blog.json'))
+          p['inference']['api_token']='DO_NOT_STORE_THIS'
+          json.dump(p,open('/tmp/mini07/secret-profile.json','w'))
+          PY
+          /tmp/mini07/mini_entity.clay init /tmp/mini07/secret-profile.db >/dev/null
+          set +e
+          /tmp/mini07/mini_entity.clay preset-apply /tmp/mini07/secret-profile.db /tmp/mini07/secret-profile.json >/tmp/mini07/secret-profile.out 2>/tmp/mini07/secret-profile.err
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          grep -q 'PROFILE_CONTRACT_REJECTED' /tmp/mini07/secret-profile.err
+          test "$(sqlite3 /tmp/mini07/secret-profile.db 'select count(*) from profiles;')" = '0'
+
+          /tmp/mini07/mini_entity.clay set-local-runner-json /tmp/mini07/gate-entity.db '["python3","/tmp/mini07/fixture_runner.py","{{PROMPT_FILE}}"]' >/dev/null
+          /tmp/mini07/mini_entity.clay run /tmp/mini07/gate-entity.db /tmp/mini07/gate-source.db >/tmp/mini07/gate-valid.json
+          /tmp/mini07/mini_entity.clay source-add /tmp/mini07/gate-source.db evidence gate-event-2 '{"measurement_status":"MEASURED"}' >/dev/null
+          python3 - <<'PY'
+          import sqlite3
+          db=sqlite3.connect('/tmp/mini07/gate-entity.db')
+          raw,stored=db.execute("select profile_json,profile_sha256 from profiles where profile_id='zero_blog'").fetchone()
+          tampered=raw.replace('Default preconfiguration','TAMPERED preconfiguration',1)
+          assert tampered != raw
+          db.execute("update profiles set profile_json=? where profile_id='zero_blog'",(tampered,)); db.commit()
+          print(stored)
+          PY
+          set +e
+          /tmp/mini07/mini_entity.clay run /tmp/mini07/gate-entity.db /tmp/mini07/gate-source.db >/tmp/mini07/gate-tamper.out 2>/tmp/mini07/gate-tamper.err
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          grep -q 'PROFILE_HASH_MISMATCH' /tmp/mini07/gate-tamper.err
+          test "$(sqlite3 /tmp/mini07/gate-entity.db 'select generation from entity_state where id=1;')" = '1'
+          test "$(sqlite3 /tmp/mini07/gate-entity.db 'select count(*) from outputs;')" = '1'
+          test "$(sqlite3 /tmp/mini07/gate-source.db 'select count(*) from mini_entity_events where consumed_generation is null;')" = '1'
+          test "$(sqlite3 /tmp/mini07/gate-entity.db 'pragma integrity_check;')" = 'ok'
+          test "$(sqlite3 /tmp/mini07/gate-source.db 'pragma integrity_check;')" = 'ok'
 
       - name: Deterministic atomic rollback fault matrix
         shell: bash
@@ -230,9 +305,14 @@ jobs:
                   'pending_events':int(q('/tmp/mini07/source.db','select count(*) from mini_entity_events where consumed_generation is null;')),
                   'model_quality_credit':False,
               },
+              'contract_gate_matrix':{
+                  'malformed_output_no_commit':True,
+                  'secret_profile_rejected':True,
+                  'profile_hash_tamper_no_commit':True,
+              },
               'fault_matrix':faults,
               'unusual_experiment':'NONE_NEW; source-closure unit falsifier is regression-only; the go-cycle unusual experiment is already recorded on main',
-              'acceptance_scope':'EXACT_CHECKOUT_SOURCE_CLOSURE_BOUND_REPEAT_BUILD_PLUS_FIXTURE_LOCAL_EXEC_IO_AND_ATOMIC_ROLLBACK_MATRIX_ON_GITHUB_UBUNTU',
+              'acceptance_scope':'EXACT_CHECKOUT_SOURCE_CLOSURE_BOUND_REPEAT_BUILD_PLUS_FIXTURE_LOCAL_EXEC_IO_CONTRACT_GATES_AND_ATOMIC_ROLLBACK_MATRIX_ON_GITHUB_UBUNTU',
               'not_claimed':['real local model quality','real remote provider acceptance','cross-environment reproducibility','whole Mini Entity final acceptance'],
           }
           assert receipt['clean_rebuild_same_sha256'] is True
@@ -251,6 +331,9 @@ jobs:
             /tmp/mini07/local_exec_result.json
             /tmp/mini07/local_exec.trace
             /tmp/mini07/local_exec_io_counts.json
+            /tmp/mini07/gate-invalid.err
+            /tmp/mini07/gate-tamper.err
+            /tmp/mini07/secret-profile.err
             /tmp/mini07/generation.err
             /tmp/mini07/output.err
             /tmp/mini07/study.err

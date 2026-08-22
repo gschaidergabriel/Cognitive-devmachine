@@ -1,0 +1,67 @@
+{
+  "schema": "claycog-05b-ood-semantic-gate/v2",
+  "date": "2026-08-22",
+  "executor": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+  "branch": "go/claycog-ood-semantic-gate-v2-gpt56sol-20260822",
+  "scope": "held-out 0.5B ClayCode cognition promotion measurement only",
+  "preexisting_gate_falsification": {
+    "omega_valid": "legacy semantic scoring required operation + validator markers + commit but did not require the case-specific typed arguments or tool schema, so a structurally admitted action missing required arguments/schema could earn semantic credit",
+    "neutrality": "legacy neutrality requirements were cfg(entity.id) and cfg(application.role), both already present in the mandatory envelope for every completion, so a generic scaffold could earn neutrality credit without an explicit checkpoint-neutrality policy",
+    "marker_stuffing": "legacy substring matching could count required text even when present only inside an unrelated ClayCode string literal",
+    "classification": "PROMOTION_METRIC_GOODHART_RISK"
+  },
+  "repair": {
+    "contract": "claycog-ood-semantic/v2",
+    "case_count": 200,
+    "families": ["omega_valid_ood", "omega_reject_ood", "hyperposition_ood", "neutrality_ood"],
+    "valid_omega": "requires exact operation, every exact typed argument, exact tool schema, authority, generation, all five validators and one commit",
+    "invalid_omega": "requires representation of the actual invalid candidate plus rejection and unknown preservation while forbidding commit",
+    "hyperposition": "requires both case-specific alternatives, one discriminator and R6 collapse guard while forbidding collapse_exact",
+    "neutrality": "requires explicit runtime_cfg identity/application source notes and preserve_checkpoint_neutrality policy",
+    "scoring": "required exact lines and required prefixes must each occur exactly once as stripped ClayCode lines; forbidden lines/prefixes fail; legacy must_contain/must_not_contain remain backward compatible",
+    "input_integrity": "duplicate output IDs are rejected; missing and unexpected case IDs make promotion fail"
+  },
+  "source_identity": {
+    "generator_commit": "98dd78f5c26dbd80f08d8128f11b53257c2934db",
+    "generator_isolated_sha256": "3bebdc3f0b08f489bdd00e9b13431551f9295e967d4b14c536bc0b6e352d3081",
+    "evaluator_commit": "9c09e32c9a881348c2d0c7812bae9e2f630649e9",
+    "evaluator_isolated_sha256": "bcbe5044552092906945d7b8930c047ce1c134c15b2d0128042a2eebcab2ee23",
+    "regression_commit": "03e1d661600a4bfb69079fce975b394eee53b205",
+    "regression_isolated_sha256": "960f24d9c68ee227a1239a2a5b03b9fbe511a9eb14c2692ced1c414770c663e1"
+  },
+  "isolated_execution": {
+    "environment": "bounded isolated Linux container",
+    "py_compile": "PASS",
+    "generator_result": {
+      "cases": 200,
+      "seed": 20260823,
+      "contract": "claycog-ood-semantic/v2",
+      "families": ["hyperposition_ood", "neutrality_ood", "omega_reject_ood", "omega_valid_ood"]
+    },
+    "regressions_total": 4,
+    "regressions_passed": 4,
+    "regressions_failed": 0,
+    "covered_falsifiers": [
+      "valid omega missing required argument and schema is structurally valid under the old validator but semantically rejected by v2",
+      "neutrality generic common-header scaffold is rejected without explicit runtime_cfg source notes/policy",
+      "required marker hidden inside a string literal earns zero exact-line credit",
+      "one exact valid semantic contract is accepted"
+    ]
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiments_in_this_delta": 0,
+    "macro_cycle_total_remains": 1,
+    "already_consumed_by": "ambiguous_create_timeout_retry from 2026-08-22_GO_CLAYCOG_05B_TOGETHER_CREATE_IDEMPOTENCY_GPT56SOL.json"
+  },
+  "promotion_boundary": {
+    "threshold_unchanged": "strict_claycode_rate=1.0 and semantic_gate_rate>=0.95",
+    "actual_model_outputs_evaluated": false,
+    "base_0_5b_score": "UNMEASURED",
+    "tuned_0_5b_score": "UNMEASURED",
+    "larger_general_model_score": "UNMEASURED",
+    "claim": "MEASUREMENT_GATE_HARDENED_NOT_MODEL_QUALITY_PASS"
+  },
+  "next_exact_step": "After a checkpoint exists, generate the 200-case v2 OOD spec once from the bound evaluator revision, collect completions from tuned 0.5B, untuned 0.5B and at least one larger general model under matched prompting/runtime constraints, then score all outputs with this exact contract before any superiority promotion."
+}

@@ -10,6 +10,7 @@ EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAY
 RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=float(os.environ.get("CLAYCOG_LEARNING_RATE","1e-5")); WARMUP_RATIO=float(os.environ.get("CLAYCOG_WARMUP_RATIO","0.03"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00")); FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
+PROVIDER_EXECUTION_MODE_ENV="CLAYCOG_PROVIDER_EXECUTION_MODE"; PAID_PROVIDER_AUTHORIZED="PAID_PROVIDER_AUTHORIZED"
 ACTIVE_OR_SPENT={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
 def validate_static_contract():
@@ -17,6 +18,12 @@ def validate_static_contract():
     if not 1<=EPOCHS<=20 or not 0<=EVALS<=20: raise SystemExit("TRAINING_COUNT_OUT_OF_RANGE")
     if RANDOM_SEED<0 or not 0<LEARNING_RATE<=1 or not 0<=WARMUP_RATIO<=1: raise SystemExit("HYPERPARAMETER_OUT_OF_RANGE")
     if not 0<MAX_USD<=18: raise SystemExit("BUDGET_GATE_OUT_OF_RANGE")
+
+def require_provider_execution_admission():
+    mode=(os.environ.get(PROVIDER_EXECUTION_MODE_ENV) or "FREE_ONLY").strip().upper()
+    if mode!=PAID_PROVIDER_AUTHORIZED:
+        raise SystemExit(f"PROVIDER_EXECUTION_DENIED mode={mode or 'UNKNOWN'} cost_class=PAID before provider secret lookup/network")
+    return mode
 
 def local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
@@ -114,7 +121,7 @@ def created_job_identity_mismatches(meta,expected):
     return out
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();require_provider_execution_admission();local_checks()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)

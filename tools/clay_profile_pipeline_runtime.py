@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Generic DB-profile-driven runtime for the canonical Clay entity pipeline.
 
-The runtime owns processing invariants and generic adapters only. Application identity,
-prompts, sources, metrics, inference choice and optional study-surface configuration are
-MiniUnifiedDB data. External preset files are import/configuration inputs only and are
-never mandatory runtime files.
+Application identity, prompts, sources, metrics, inference choice and optional study
+configuration are MiniUnifiedDB data. The runtime owns generic orchestration, epistemic
+invariants, exactly-once consumption, inference adapters and one atomic commit boundary.
 """
 from __future__ import annotations
 
@@ -22,9 +21,9 @@ from pathlib import Path
 from typing import Any, Callable, Mapping
 
 import claycode_structured_backend as clay
-from clay_pipeline_study_surface import StudyFault, build_study_record
+from clay_pipeline_study_surface import build_study_record
 
-VERSION = "clay-profile-pipeline-runtime/0.3"
+VERSION = "clay-profile-pipeline-runtime/0.4"
 
 IMMUTABLE_GUARD = """IMMUTABLE PIPELINE GUARD:
 You may transform and narrate supplied state, but you may not invent canonical state.
@@ -97,6 +96,13 @@ class ProfilePipelineRuntime(clay.Runtime):
         return hashlib.sha256(cls._canonical_json(value).encode("utf-8")).hexdigest()
 
     @staticmethod
+    def _object_type(db: sqlite3.Connection, name: str) -> str | None:
+        row = db.execute(
+            "SELECT type FROM sqlite_master WHERE name=? AND type IN ('table','view')", (name,)
+        ).fetchone()
+        return str(row[0]) if row else None
+
+    @staticmethod
     def _create_packet_table(db: sqlite3.Connection) -> None:
         db.execute(
             """CREATE TABLE IF NOT EXISTS eos_pipeline_packets(
@@ -108,7 +114,10 @@ class ProfilePipelineRuntime(clay.Runtime):
                  source_count INTEGER NOT NULL,
                  canonical_hash TEXT NOT NULL)"""
         )
-        db.execute("CREATE INDEX IF NOT EXISTS eos_pipeline_packets_hash_idx ON eos_pipeline_packets(packet_hash)")
+        db.execute(
+            "CREATE INDEX IF NOT EXISTS eos_pipeline_packets_hash_idx "
+            "ON eos_pipeline_packets(packet_hash)"
+        )
 
     def _migrate_packet_table(self, db: sqlite3.Connection) -> None:
         info = db.execute("PRAGMA table_info(eos_pipeline_packets)").fetchall()
@@ -116,8 +125,7 @@ class ProfilePipelineRuntime(clay.Runtime):
         if primary != ["packet_hash"]:
             return
         legacy = "eos_pipeline_packets_legacy_v1"
-        exists = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (legacy,)).fetchone()
-        if exists:
+        if self._object_type(db, legacy):
             raise PipelineFault("PACKET_MIGRATION_LEGACY_TABLE_PRESENT")
         db.execute(f"ALTER TABLE eos_pipeline_packets RENAME TO {legacy}")
         self._create_packet_table(db)
@@ -130,7 +138,7 @@ class ProfilePipelineRuntime(clay.Runtime):
         db.execute(f"DROP TABLE {legacy}")
 
     def _ensure_schema(self, db: sqlite3.Connection) -> None:
-        # Deliberately avoid executescript: callers may already hold a write transaction.
+        # Avoid executescript: it may implicitly terminate a caller's write transaction.
         db.execute(
             """CREATE TABLE IF NOT EXISTS eos_pipeline_profile(
                  singleton INTEGER PRIMARY KEY CHECK(singleton=1),
@@ -190,7 +198,10 @@ class ProfilePipelineRuntime(clay.Runtime):
                  rendered_text TEXT NOT NULL,
                  created_at REAL NOT NULL)"""
         )
-        db.execute("CREATE INDEX IF NOT EXISTS eos_pipeline_studies_generation_idx ON eos_pipeline_studies(generation)")
+        db.execute(
+            "CREATE INDEX IF NOT EXISTS eos_pipeline_studies_generation_idx "
+            "ON eos_pipeline_studies(generation)"
+        )
 
     @staticmethod
     def _forbid_embedded_secrets(value: Any, path: str = "") -> None:
@@ -216,10 +227,12 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _normalize_profile(cls, profile: dict[str, Any]) -> dict[str, Any]:
         if not isinstance(profile, dict):
             raise PipelineFault("PROFILE_NOT_OBJECT")
-        schema = profile.get("schema")
-        if schema not in {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}:
+        if profile.get("schema") not in {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}:
             raise PipelineFault("BAD_PROFILE_SCHEMA")
         out = json.loads(json.dumps(profile))
+        # study_surface is runtime-injected from a separately persisted config; never hash it
+        # as if it belonged to the application profile.
+        out.pop("study_surface", None)
         if "inference" not in out and "provider" in out:
             out["inference"] = out.pop("provider")
         for field in ("profile_id", "inference", "personality", "sources", "state_metrics", "gate"):
@@ -237,14 +250,16 @@ class ProfilePipelineRuntime(clay.Runtime):
             raise PipelineFault("STUDY_CONFIG_NOT_OBJECT")
         out = json.loads(json.dumps(dict(config)))
         cls._forbid_embedded_secrets(out)
-        if bool(out.get("enabled", False)) and out.get("epistemic_law") != "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT":
-            raise PipelineFault("BAD_STUDY_EPISTEMIC_LAW")
-        if bool(out.get("enabled", False)) and not isinstance(out.get("render", {}), dict):
-            raise PipelineFault("BAD_STUDY_RENDER_CONFIG")
+        if bool(out.get("enabled", False)):
+            if out.get("epistemic_law") != "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT":
+                raise PipelineFault("BAD_STUDY_EPISTEMIC_LAW")
+            if not isinstance(out.get("render", {}), dict):
+                raise PipelineFault("BAD_STUDY_RENDER_CONFIG")
         return out
 
-    def import_profile(self, entity_db: str, profile_or_path: dict[str, Any] | str | Path) -> dict[str, Any]:
-        """Import/activate profile data without resetting generation/history."""
+    def import_profile(
+        self, entity_db: str, profile_or_path: dict[str, Any] | str | Path
+    ) -> dict[str, Any]:
         profile = (
             json.loads(self._resolve(str(profile_or_path)).read_text(encoding="utf-8"))
             if isinstance(profile_or_path, (str, Path))
@@ -259,7 +274,8 @@ class ProfilePipelineRuntime(clay.Runtime):
             db.commit()
             db.execute("BEGIN IMMEDIATE")
             db.execute(
-                """INSERT INTO eos_pipeline_profile(singleton,profile_id,profile_hash,profile_json,updated_at)
+                """INSERT INTO eos_pipeline_profile(
+                       singleton,profile_id,profile_hash,profile_json,updated_at)
                    VALUES(1,?,?,?,?)
                    ON CONFLICT(singleton) DO UPDATE SET
                      profile_id=excluded.profile_id,
@@ -276,8 +292,9 @@ class ProfilePipelineRuntime(clay.Runtime):
         finally:
             db.close()
 
-    def import_study_surface(self, entity_db: str, config_or_path: Mapping[str, Any] | str | Path) -> dict[str, Any]:
-        """Import optional application study/render configuration into the same MiniUnifiedDB."""
+    def import_study_surface(
+        self, entity_db: str, config_or_path: Mapping[str, Any] | str | Path
+    ) -> dict[str, Any]:
         config = (
             json.loads(self._resolve(str(config_or_path)).read_text(encoding="utf-8"))
             if isinstance(config_or_path, (str, Path))
@@ -293,7 +310,8 @@ class ProfilePipelineRuntime(clay.Runtime):
             db.commit()
             db.execute("BEGIN IMMEDIATE")
             db.execute(
-                """INSERT INTO eos_pipeline_study_config(singleton,config_id,config_hash,config_json,updated_at)
+                """INSERT INTO eos_pipeline_study_config(
+                       singleton,config_id,config_hash,config_json,updated_at)
                    VALUES(1,?,?,?,?)
                    ON CONFLICT(singleton) DO UPDATE SET
                      config_id=excluded.config_id,
@@ -311,13 +329,9 @@ class ProfilePipelineRuntime(clay.Runtime):
             db.close()
 
     def clear_study_surface(self, entity_db: str) -> None:
-        db = self._db(entity_db)
-        try:
+        with self._db(entity_db) as db:
             self._ensure_schema(db)
             db.execute("DELETE FROM eos_pipeline_study_config WHERE singleton=1")
-            db.commit()
-        finally:
-            db.close()
 
     def effect(self, kind: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
         if kind not in self.allowed_effects:
@@ -359,10 +373,12 @@ class ProfilePipelineRuntime(clay.Runtime):
                 self._ensure_schema(db)
                 db.commit()
                 row = db.execute(
-                    "SELECT profile_id,profile_hash,profile_json FROM eos_pipeline_profile WHERE singleton=1"
+                    "SELECT profile_id,profile_hash,profile_json "
+                    "FROM eos_pipeline_profile WHERE singleton=1"
                 ).fetchone()
                 study_row = db.execute(
-                    "SELECT config_id,config_hash,config_json FROM eos_pipeline_study_config WHERE singleton=1"
+                    "SELECT config_id,config_hash,config_json "
+                    "FROM eos_pipeline_study_config WHERE singleton=1"
                 ).fetchone()
             finally:
                 db.close()
@@ -403,7 +419,10 @@ class ProfilePipelineRuntime(clay.Runtime):
         try:
             with self._db(str(p["entity_db"])) as db:
                 self._ensure_schema(db)
-                row = db.execute("SELECT * FROM eos_pipeline_state WHERE singleton=1").fetchone()
+                row = db.execute(
+                    "SELECT generation,continuity_json,canonical_hash,cursors_json "
+                    "FROM eos_pipeline_state WHERE singleton=1"
+                ).fetchone()
             return {
                 "ok": True,
                 "generation": int(row["generation"]),
@@ -417,10 +436,14 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _already_consumed(self, entity_db: str, kind: str, source_id: Any) -> bool:
         with self._db(entity_db) as db:
             self._ensure_schema(db)
-            return db.execute(
-                "SELECT 1 FROM eos_pipeline_consumed WHERE source_kind=? AND source_id=?",
-                (kind, str(source_id)),
-            ).fetchone() is not None
+            return (
+                db.execute(
+                    "SELECT 1 FROM eos_pipeline_consumed "
+                    "WHERE source_kind=? AND source_id=?",
+                    (kind, str(source_id)),
+                ).fetchone()
+                is not None
+            )
 
     def _query(self, db_path: str, sql: str) -> list[dict[str, Any]]:
         with self._db(db_path) as db:
@@ -437,23 +460,45 @@ class ProfilePipelineRuntime(clay.Runtime):
         query = str(spec["query"])
         terminal_limit = re.search(r"\s+LIMIT\s+(\d+)\s*;?\s*$", query, re.I)
         configured_limit = spec.get("limit")
-        limit = int(configured_limit) if configured_limit is not None else (
-            int(terminal_limit.group(1)) if terminal_limit else 0
+        limit = (
+            int(configured_limit)
+            if configured_limit is not None
+            else (int(terminal_limit.group(1)) if terminal_limit else 0)
         )
-        # A terminal numeric LIMIT is a delivery budget, not a permanent head window.
-        # Remove it before the already-consumed filter so later rows cannot starve forever.
+        # A terminal numeric LIMIT is a delivery budget. Applying it before the consumed
+        # filter would permanently starve later rows after the first window was consumed.
         fetch_query = query[: terminal_limit.start()].rstrip() if terminal_limit else query
         raw = self._query(db_path, fetch_query)
         id_field = str(spec.get("id_field", "source_id"))
         rows: list[dict[str, Any]] = []
         for row in raw:
             source_id = row.get(id_field)
-            if source_id is None or self._already_consumed(entity_db, kind, source_id):
+            if source_id is None:
+                continue
+            if self._already_consumed(entity_db, kind, source_id):
                 continue
             rows.append(row)
             if limit > 0 and len(rows) >= limit:
                 break
         return rows
+
+    def _catalog(self, db_path: str, max_tables: int) -> list[dict[str, Any]]:
+        with self._db(db_path) as db:
+            names = [
+                row[0]
+                for row in db.execute(
+                    "SELECT name FROM sqlite_master WHERE type='table' "
+                    "AND name NOT LIKE 'sqlite_%' ORDER BY name"
+                ).fetchall()
+            ]
+            out = []
+            for name in names[:max_tables]:
+                if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name):
+                    continue
+                count = db.execute(f'SELECT COUNT(*) FROM "{name}"').fetchone()[0]
+                columns = [row[1] for row in db.execute(f'PRAGMA table_info("{name}")')]
+                out.append({"table": name, "rows": count, "columns": columns[:40]})
+            return out
 
     def _pipeline_collect(self, p: dict[str, Any]) -> dict[str, Any]:
         entity_db = str(p["entity_db"])
@@ -475,10 +520,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                 if adapter == "sqlite_query":
                     db_path = source_db if spec.get("db") == "source" else entity_db
                     rows = self._unconsumed_query_rows(
-                        entity_db=entity_db,
-                        db_path=db_path,
-                        kind=kind,
-                        spec=spec,
+                        entity_db=entity_db, db_path=db_path, kind=kind, spec=spec
                     )
                     id_field = str(spec.get("id_field", "source_id"))
                     for row in rows:
@@ -486,7 +528,11 @@ class ProfilePipelineRuntime(clay.Runtime):
                     source_count += len(rows)
                 elif adapter == "json_snapshot":
                     path = self._resolve(str(spec["path"]))
-                    value = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+                    value = (
+                        json.loads(path.read_text(encoding="utf-8"))
+                        if path.is_file()
+                        else None
+                    )
                 elif adapter == "jsonl_cursor":
                     path = self._resolve(str(spec["path"]))
                     cursor = int(cursors.get(kind, 0))
@@ -506,8 +552,12 @@ class ProfilePipelineRuntime(clay.Runtime):
                             try:
                                 item = json.loads(line.decode("utf-8"))
                             except Exception:
+                                # Malformed complete lines are deterministically skipped and the
+                                # cursor advances past them; they are not silently reinterpreted.
                                 continue
-                            rows.append(item if isinstance(item, dict) else {"text": str(item)})
+                            rows.append(
+                                item if isinstance(item, dict) else {"text": str(item)}
+                            )
                         cursors[kind] = cursor + consumed_bytes
                     source_count += len(rows)
                 else:
@@ -542,7 +592,9 @@ class ProfilePipelineRuntime(clay.Runtime):
                 elif spec["adapter"] == "sqlite_catalog":
                     rows = self._catalog(db_path, int(spec.get("max_tables", 220)))
                 else:
-                    raise PipelineFault("UNKNOWN_PROBE_ADAPTER:" + str(spec["adapter"]))
+                    raise PipelineFault(
+                        "UNKNOWN_PROBE_ADAPTER:" + str(spec["adapter"])
+                    )
                 probes[name] = {
                     "ok": True,
                     "rows": rows,
@@ -557,8 +609,12 @@ class ProfilePipelineRuntime(clay.Runtime):
                     "evidence_ref": spec.get("evidence_ref", "canonical:" + name),
                 }
 
-        required = [kind for kind in sensors if sources[kind].get("required_for_quiet")]
-        quiet_sensors_ok = bool(required) and all(sensors[kind]["ok"] for kind in required)
+        required = [
+            kind for kind in sensors if sources[kind].get("required_for_quiet")
+        ]
+        quiet_sensors_ok = bool(required) and all(
+            sensors[kind]["ok"] for kind in required
+        )
         return {
             "ok": True,
             "sources": sources,
@@ -569,23 +625,6 @@ class ProfilePipelineRuntime(clay.Runtime):
             "source_count": source_count,
             "quiet_sensors_ok": quiet_sensors_ok,
         }
-
-    def _catalog(self, db_path: str, max_tables: int) -> list[dict[str, Any]]:
-        with self._db(db_path) as db:
-            names = [
-                row[0]
-                for row in db.execute(
-                    "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name"
-                ).fetchall()
-            ]
-            out = []
-            for name in names[:max_tables]:
-                if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name):
-                    continue
-                count = db.execute(f'SELECT COUNT(*) FROM "{name}"').fetchone()[0]
-                columns = [row[1] for row in db.execute(f'PRAGMA table_info("{name}")')]
-                out.append({"table": name, "rows": count, "columns": columns[:40]})
-            return out
 
     @staticmethod
     def _ref(context: dict[str, Any], path: str) -> Any:
@@ -629,14 +668,26 @@ class ProfilePipelineRuntime(clay.Runtime):
         if op == "eq":
             return self._expr(expr["a"], context) == self._expr(expr["b"], context)
         if op == "add":
-            return sum(float(self._expr(item, context) or 0) for item in expr.get("args", []))
+            return sum(
+                float(self._expr(item, context) or 0) for item in expr.get("args", [])
+            )
         if op == "div":
-            divisor = float(self._expr(expr["b"], context))
-            return 0.0 if divisor == 0 else float(self._expr(expr["a"], context) or 0) / divisor
+            divisor = float(self._expr(expr["b"], context) or 0)
+            return (
+                0.0
+                if divisor == 0
+                else float(self._expr(expr["a"], context) or 0) / divisor
+            )
         if op == "clamp01":
-            return max(0.0, min(1.0, float(self._expr(expr["arg"], context) or 0)))
+            return max(
+                0.0, min(1.0, float(self._expr(expr["arg"], context) or 0))
+            )
         if op == "if":
-            branch = expr["then"] if self._expr(expr["cond"], context) else expr["else"]
+            branch = (
+                expr["then"]
+                if self._expr(expr["cond"], context)
+                else expr["else"]
+            )
             return self._expr(branch, context)
         raise PipelineFault("UNKNOWN_EXPR:" + json.dumps(expr, sort_keys=True))
 
@@ -657,8 +708,19 @@ class ProfilePipelineRuntime(clay.Runtime):
             name = str(spec["name"])
             status = spec.get("status")
             if status is None:
-                status = "UNKNOWN" if bool(self._expr(spec.get("unknown_if", False), context)) else "VERIFIED"
-            value = float(self._expr(spec.get("value", 0.0), context) or 0.0)
+                status = (
+                    "UNKNOWN"
+                    if bool(self._expr(spec.get("unknown_if", False), context))
+                    else "VERIFIED"
+                )
+            status = str(status).upper()
+            # Epistemic invariant: an UNKNOWN/ERROR metric has no numeric value. Keeping
+            # a computed 0.0 beside UNKNOWN would turn typed absence into a zero surrogate.
+            value = (
+                float(self._expr(spec.get("value", 0.0), context) or 0.0)
+                if status in {"VERIFIED", "MEASURED"}
+                else None
+            )
             metrics[name] = {
                 "status": status,
                 "value": value,
@@ -704,8 +766,10 @@ class ProfilePipelineRuntime(clay.Runtime):
             "packet": packet,
             "allowed_evidence_refs": sorted(set(refs)),
             "source_count": collected["source_count"],
-            "canonical_state_hash": hashlib.sha256(canonical_raw.encode()).hexdigest(),
-            "packet_hash": hashlib.sha256(packet_raw.encode()).hexdigest(),
+            "canonical_state_hash": hashlib.sha256(
+                canonical_raw.encode("utf-8")
+            ).hexdigest(),
+            "packet_hash": hashlib.sha256(packet_raw.encode("utf-8")).hexdigest(),
         }
 
     def _pipeline_build_prompt(self, p: dict[str, Any]) -> dict[str, Any]:
@@ -751,7 +815,9 @@ class ProfilePipelineRuntime(clay.Runtime):
         file_values: dict[str, str] = {}
         if secret_file:
             try:
-                for line in self._resolve(str(secret_file)).read_text(encoding="utf-8").splitlines():
+                for line in self._resolve(str(secret_file)).read_text(
+                    encoding="utf-8"
+                ).splitlines():
                     line = line.strip()
                     if line and not line.startswith("#") and "=" in line:
                         key, value = line.split("=", 1)
@@ -771,7 +837,10 @@ class ProfilePipelineRuntime(clay.Runtime):
         current = value
         text = str(pointer or "")
         parts = (
-            [part.replace("~1", "/").replace("~0", "~") for part in text.split("/")[1:]]
+            [
+                part.replace("~1", "/").replace("~0", "~")
+                for part in text.split("/")[1:]
+            ]
             if text.startswith("/")
             else [part for part in text.split(".") if part]
         )
@@ -782,9 +851,15 @@ class ProfilePipelineRuntime(clay.Runtime):
     @staticmethod
     def _request_template(value: Any, replacements: dict[str, Any]) -> Any:
         if isinstance(value, dict):
-            return {k: ProfilePipelineRuntime._request_template(v, replacements) for k, v in value.items()}
+            return {
+                k: ProfilePipelineRuntime._request_template(v, replacements)
+                for k, v in value.items()
+            }
         if isinstance(value, list):
-            return [ProfilePipelineRuntime._request_template(v, replacements) for v in value]
+            return [
+                ProfilePipelineRuntime._request_template(v, replacements)
+                for v in value
+            ]
         if isinstance(value, str):
             if value in replacements:
                 return replacements[value]
@@ -796,23 +871,45 @@ class ProfilePipelineRuntime(clay.Runtime):
 
     @staticmethod
     def _is_loopback(endpoint: str) -> bool:
-        return bool(re.match(r"^https?://(localhost|127\.0\.0\.1)(:\d+)?(?:/|$)", endpoint))
+        return bool(
+            re.match(
+                r"^https?://(localhost|127\.0\.0\.1)(:\d+)?(?:/|$)", endpoint
+            )
+        )
 
     def _api_generate(self, inference: dict[str, Any], p: dict[str, Any]) -> dict[str, Any]:
         if not self.allow_network:
-            return {"ok": False, "error_kind": "NETWORK_DISABLED", "error": "network disabled"}
+            return {
+                "ok": False,
+                "error_kind": "NETWORK_DISABLED",
+                "error": "network disabled",
+            }
         endpoint = str(inference.get("endpoint", ""))
         if not endpoint:
-            return {"ok": False, "error_kind": "MISSING_ENDPOINT", "error": "missing endpoint"}
+            return {
+                "ok": False,
+                "error_kind": "MISSING_ENDPOINT",
+                "error": "missing endpoint",
+            }
         loopback = self._is_loopback(endpoint)
         if endpoint.startswith("http://") and not loopback:
-            return {"ok": False, "error_kind": "PLAINTEXT_NON_LOOPBACK_FORBIDDEN", "error": endpoint}
+            return {
+                "ok": False,
+                "error_kind": "PLAINTEXT_NON_LOOPBACK_FORBIDDEN",
+                "error": endpoint,
+            }
         keys = self._keys(list(inference.get("secret_names", [])), p.get("secret_file"))
         allow_noauth_loopback = loopback and bool(
-            inference.get("allow_noauth_loopback", not bool(inference.get("secret_names", [])))
+            inference.get(
+                "allow_noauth_loopback", not bool(inference.get("secret_names", []))
+            )
         )
         if not keys and not allow_noauth_loopback:
-            return {"ok": False, "error_kind": "NO_PROVIDER_SECRET", "error": "no provider secret"}
+            return {
+                "ok": False,
+                "error_kind": "NO_PROVIDER_SECRET",
+                "error": "no provider secret",
+            }
         attempts = keys or [""]
         replacements = {
             "{{MODEL}}": inference.get("model"),
@@ -846,20 +943,24 @@ class ProfilePipelineRuntime(clay.Runtime):
                 headers[str(inference.get("auth_header", "Authorization"))] = str(
                     inference.get("auth_prefix", "Bearer ")
                 ) + key
-            request = urllib.request.Request(endpoint, data=encoded, method="POST", headers=headers)
+            request = urllib.request.Request(
+                endpoint, data=encoded, method="POST", headers=headers
+            )
             try:
                 with urllib.request.urlopen(
-                    request,
-                    timeout=float(inference.get("timeout_seconds", 60)),
+                    request, timeout=float(inference.get("timeout_seconds", 60))
                 ) as response:
                     response_obj = json.loads(response.read().decode("utf-8"))
                 content = self._pointer(
                     response_obj,
-                    inference.get("response_pointer", "/choices/0/message/content"),
+                    inference.get(
+                        "response_pointer", "/choices/0/message/content"
+                    ),
                 )
                 payload = (
                     json.loads(content)
-                    if inference.get("response_content", "json_string") == "json_string"
+                    if inference.get("response_content", "json_string")
+                    == "json_string"
                     else content
                 )
                 if not isinstance(payload, dict):
@@ -879,10 +980,16 @@ class ProfilePipelineRuntime(clay.Runtime):
             "error": str(last) if last else "inference failed",
         }
 
-    def _local_exec_generate(self, inference: dict[str, Any], p: dict[str, Any]) -> dict[str, Any]:
+    def _local_exec_generate(
+        self, inference: dict[str, Any], p: dict[str, Any]
+    ) -> dict[str, Any]:
         prompt_path: Path | None = None
         try:
-            model_value = str(inference.get("local_model_path") or inference.get("model_path") or "")
+            model_value = str(
+                inference.get("local_model_path")
+                or inference.get("model_path")
+                or ""
+            )
             if not model_value:
                 raise PipelineFault("LOCAL_MODEL_PATH_MISSING")
             model_path = self._resolve(model_value)
@@ -891,12 +998,20 @@ class ProfilePipelineRuntime(clay.Runtime):
             argv_spec = inference.get("local_argv_json", inference.get("argv"))
             if isinstance(argv_spec, str):
                 argv_spec = json.loads(argv_spec)
-            if not isinstance(argv_spec, list) or not argv_spec or not all(isinstance(x, str) for x in argv_spec):
+            if (
+                not isinstance(argv_spec, list)
+                or not argv_spec
+                or not all(isinstance(x, str) for x in argv_spec)
+            ):
                 raise PipelineFault("LOCAL_ARGV_INVALID")
             prompt_template = str(
-                inference.get("local_prompt_template", "{{SYSTEM}}\n\n{{USER}}\n")
+                inference.get(
+                    "local_prompt_template", "{{SYSTEM}}\n\n{{USER}}\n"
+                )
             )
-            prompt = prompt_template.replace("{{SYSTEM}}", p["system"]).replace("{{USER}}", p["user"])
+            prompt = prompt_template.replace("{{SYSTEM}}", p["system"]).replace(
+                "{{USER}}", p["user"]
+            )
             with tempfile.NamedTemporaryFile(
                 "w",
                 encoding="utf-8",
@@ -919,11 +1034,22 @@ class ProfilePipelineRuntime(clay.Runtime):
                 for key, value in replacements.items():
                     rendered = rendered.replace(key, value)
                 argv.append(rendered)
-            default_env = ["PATH", "HOME", "TMPDIR", "LANG", "LC_ALL", "CUDA_VISIBLE_DEVICES"]
+            default_env = [
+                "PATH",
+                "HOME",
+                "TMPDIR",
+                "LANG",
+                "LC_ALL",
+                "CUDA_VISIBLE_DEVICES",
+            ]
             env_names = inference.get("local_env_allowlist", default_env)
-            if not isinstance(env_names, list) or not all(isinstance(x, str) for x in env_names):
+            if not isinstance(env_names, list) or not all(
+                isinstance(x, str) for x in env_names
+            ):
                 raise PipelineFault("LOCAL_ENV_ALLOWLIST_INVALID")
-            child_env = {name: os.environ[name] for name in env_names if name in os.environ}
+            child_env = {
+                name: os.environ[name] for name in env_names if name in os.environ
+            }
             completed = subprocess.run(
                 argv,
                 cwd=self.root,
@@ -935,7 +1061,9 @@ class ProfilePipelineRuntime(clay.Runtime):
                 env=child_env,
             )
             if completed.returncode != 0:
-                raise PipelineFault("LOCAL_EXEC_FAILED:" + str(completed.returncode))
+                raise PipelineFault(
+                    "LOCAL_EXEC_FAILED:" + str(completed.returncode)
+                )
             payload = json.loads(completed.stdout)
             if not isinstance(payload, dict):
                 raise PipelineFault("LOCAL_OUTPUT_NOT_OBJECT")
@@ -949,7 +1077,11 @@ class ProfilePipelineRuntime(clay.Runtime):
             }
         except Exception as exc:
             self._active_secrets = []
-            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
+            return {
+                "ok": False,
+                "error_kind": type(exc).__name__,
+                "error": str(exc),
+            }
         finally:
             if prompt_path is not None:
                 try:
@@ -963,7 +1095,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             if self.provider_override is not None:
                 self._active_secrets = []
                 request = dict(p)
-                request["provider"] = inference  # legacy deterministic-test alias only
+                request["provider"] = inference  # deterministic legacy test alias
                 payload = self.provider_override(request)
                 if not isinstance(payload, dict):
                     raise PipelineFault("OVERRIDE_OUTPUT_NOT_OBJECT")
@@ -978,7 +1110,11 @@ class ProfilePipelineRuntime(clay.Runtime):
                 return self._local_exec_generate(inference, p)
             return self._api_generate(inference, p)
         except Exception as exc:
-            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
+            return {
+                "ok": False,
+                "error_kind": type(exc).__name__,
+                "error": str(exc),
+            }
 
     def _pipeline_gate(self, p: dict[str, Any]) -> dict[str, Any]:
         profile = p["profile"]
@@ -988,10 +1124,14 @@ class ProfilePipelineRuntime(clay.Runtime):
         payload = generated["payload"]
         contract = profile["personality"]["output_contract"]
         gate = profile.get("gate", {})
-
         try:
+            if not isinstance(payload, dict):
+                raise PipelineFault("OUTPUT_NOT_OBJECT")
             if gate.get("require_hash_echo", True):
-                if payload.get("canonical_state_hash_seen") != compiled["canonical_state_hash"]:
+                if (
+                    payload.get("canonical_state_hash_seen")
+                    != compiled["canonical_state_hash"]
+                ):
                     raise PipelineFault("CANONICAL_HASH_MISMATCH")
                 if payload.get("packet_hash_seen") != compiled["packet_hash"]:
                     raise PipelineFault("PACKET_HASH_MISMATCH")
@@ -1006,7 +1146,9 @@ class ProfilePipelineRuntime(clay.Runtime):
                 if field not in payload:
                     raise PipelineFault("MISSING_OUTPUT_FIELD:" + str(field))
 
-            patterns = [re.compile(pattern, re.I) for pattern in gate.get("leak_patterns", [])]
+            patterns = [
+                re.compile(pattern, re.I) for pattern in gate.get("leak_patterns", [])
+            ]
             secrets_now = [value for value in self._active_secrets if value]
 
             def scan(value: Any) -> None:
@@ -1034,6 +1176,8 @@ class ProfilePipelineRuntime(clay.Runtime):
                 if not isinstance(section, dict):
                     raise PipelineFault("SECTION_NOT_OBJECT")
                 refs = section.get(contract["section_evidence_field"], [])
+                if not isinstance(refs, list):
+                    raise PipelineFault("EVIDENCE_REFS_NOT_LIST")
                 if gate.get("require_evidence_per_section", True) and not refs:
                     raise PipelineFault("SECTION_WITHOUT_EVIDENCE")
                 if any(ref not in allowed for ref in refs):
@@ -1047,13 +1191,24 @@ class ProfilePipelineRuntime(clay.Runtime):
                     metric = metrics[name]
                     if metric["status"] != "VERIFIED":
                         raise PipelineFault("UNVERIFIED_STATE_CLAIM")
-                    if float(strength) > float(metric["value"]) + float(gate.get("max_claim_overshoot", 0.0)):
+                    measured = metric.get("value")
+                    if measured is None:
+                        raise PipelineFault("STATE_CLAIM_WITHOUT_VALUE")
+                    if float(strength) > float(measured) + float(
+                        gate.get("max_claim_overshoot", 0.0)
+                    ):
                         raise PipelineFault("STATE_CLAIM_OVERSHOOT")
                     if metric["evidence_ref"] not in refs:
-                        raise PipelineFault("STATE_CLAIM_WITHOUT_METRIC_EVIDENCE")
+                        raise PipelineFault(
+                            "STATE_CLAIM_WITHOUT_METRIC_EVIDENCE"
+                        )
             return {"ok": True, "payload": payload}
         except Exception as exc:
-            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
+            return {
+                "ok": False,
+                "error_kind": type(exc).__name__,
+                "error": str(exc),
+            }
 
     def _pipeline_commit(self, p: dict[str, Any]) -> dict[str, Any]:
         entity_db = str(p["entity_db"])
@@ -1070,7 +1225,9 @@ class ProfilePipelineRuntime(clay.Runtime):
         generation = int(previous["generation"]) + 1
         continuity = {
             "narrative": payload.get(contract["continuity_field"]),
-            "autobiographical_hypotheses": payload.get(contract["autobiographical_hypotheses_field"]),
+            "autobiographical_hypotheses": payload.get(
+                contract["autobiographical_hypotheses_field"]
+            ),
         }
         db = self._db(entity_db)
         try:
@@ -1078,14 +1235,16 @@ class ProfilePipelineRuntime(clay.Runtime):
             db.commit()
             db.execute("BEGIN IMMEDIATE")
             row = db.execute(
-                "UPDATE eos_pipeline_state SET updated_at=? WHERE singleton=1 AND generation=?",
+                "UPDATE eos_pipeline_state SET updated_at=? "
+                "WHERE singleton=1 AND generation=?",
                 (now, previous["generation"]),
             )
             if row.rowcount != 1:
                 raise PipelineFault("STALE_GENERATION")
 
             previous_study_row = db.execute(
-                "SELECT study_json FROM eos_pipeline_studies ORDER BY generation DESC LIMIT 1"
+                "SELECT study_json FROM eos_pipeline_studies "
+                "ORDER BY generation DESC LIMIT 1"
             ).fetchone()
             previous_study = (
                 json.loads(previous_study_row["study_json"])
@@ -1103,14 +1262,16 @@ class ProfilePipelineRuntime(clay.Runtime):
                 ts=now,
             )
 
-            for item in collected["consume"]:
+            for item in collected.get("consume", []):
                 db.execute(
-                    "INSERT INTO eos_pipeline_consumed(source_kind,source_id,output_id,consumed_at) VALUES(?,?,?,?)",
+                    "INSERT INTO eos_pipeline_consumed("
+                    "source_kind,source_id,output_id,consumed_at) VALUES(?,?,?,?)",
                     (item["kind"], item["id"], output_id, now),
                 )
             db.execute(
                 """INSERT INTO eos_pipeline_outputs(
-                       output_id,ts,generation,profile_id,output_json,provider_kind,model,packet_hash,canonical_hash)
+                       output_id,ts,generation,profile_id,output_json,
+                       provider_kind,model,packet_hash,canonical_hash)
                    VALUES(?,?,?,?,?,?,?,?,?)""",
                 (
                     output_id,
@@ -1118,7 +1279,9 @@ class ProfilePipelineRuntime(clay.Runtime):
                     generation,
                     profile["profile_id"],
                     json.dumps(payload, ensure_ascii=False, allow_nan=False),
-                    generated.get("inference_kind", generated.get("provider_kind", "")),
+                    generated.get(
+                        "inference_kind", generated.get("provider_kind", "")
+                    ),
                     generated.get("model"),
                     compiled["packet_hash"],
                     compiled["canonical_state_hash"],
@@ -1126,7 +1289,8 @@ class ProfilePipelineRuntime(clay.Runtime):
             )
             db.execute(
                 """INSERT INTO eos_pipeline_packets(
-                       output_id,packet_hash,ts,generation,profile_id,source_count,canonical_hash)
+                       output_id,packet_hash,ts,generation,profile_id,
+                       source_count,canonical_hash)
                    VALUES(?,?,?,?,?,?,?)""",
                 (
                     output_id,
@@ -1141,28 +1305,40 @@ class ProfilePipelineRuntime(clay.Runtime):
             if study_record is not None:
                 db.execute(
                     """INSERT INTO eos_pipeline_studies(
-                           output_id,generation,profile_id,study_schema,study_json,rendered_text,created_at)
+                           output_id,generation,profile_id,study_schema,
+                           study_json,rendered_text,created_at)
                        VALUES(?,?,?,?,?,?,?)""",
                     (
                         output_id,
                         generation,
                         profile["profile_id"],
                         str(study_record.get("schema", "")),
-                        json.dumps(study_record, ensure_ascii=False, allow_nan=False),
+                        json.dumps(
+                            study_record, ensure_ascii=False, allow_nan=False
+                        ),
                         str(study_record["rendered_text"]),
                         now,
                     ),
                 )
             row = db.execute(
                 """UPDATE eos_pipeline_state
-                   SET generation=?,continuity_json=?,canonical_json=?,canonical_hash=?,cursors_json=?,updated_at=?
+                   SET generation=?,continuity_json=?,canonical_json=?,
+                       canonical_hash=?,cursors_json=?,updated_at=?
                    WHERE singleton=1 AND generation=?""",
                 (
                     generation,
-                    json.dumps(continuity, ensure_ascii=False, allow_nan=False),
-                    json.dumps(compiled["canonical"], ensure_ascii=False, allow_nan=False),
+                    json.dumps(
+                        continuity, ensure_ascii=False, allow_nan=False
+                    ),
+                    json.dumps(
+                        compiled["canonical"],
+                        ensure_ascii=False,
+                        allow_nan=False,
+                    ),
                     compiled["canonical_state_hash"],
-                    json.dumps(collected["next_cursors"], allow_nan=False),
+                    json.dumps(
+                        collected.get("next_cursors", {}), allow_nan=False
+                    ),
                     now,
                     previous["generation"],
                 ),
@@ -1175,11 +1351,19 @@ class ProfilePipelineRuntime(clay.Runtime):
                 "output_id": output_id,
                 "generation": generation,
                 "study_recorded": study_record is not None,
-                "study_appendix": str(study_record["rendered_text"]) if study_record is not None else "",
+                "study_appendix": (
+                    str(study_record["rendered_text"])
+                    if study_record is not None
+                    else ""
+                ),
             }
         except Exception as exc:
             db.rollback()
-            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
+            return {
+                "ok": False,
+                "error_kind": type(exc).__name__,
+                "error": str(exc),
+            }
         finally:
             db.close()
 

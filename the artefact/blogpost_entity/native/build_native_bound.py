@@ -26,6 +26,7 @@ DEFAULT_PACKAGES = ("sqlite3", "libcurl", "json-c")
 INCLUDE_DIRECTIVE_RE = re.compile(rb"^\s*#\s*include\s+([^\r\n]+)$", re.MULTILINE)
 QUOTED_INCLUDE_RE = re.compile(rb'^"([^"\r\n]+)"(?:\s*(?://.*|/\*.*\*/\s*)?)?$')
 ANGLE_INCLUDE_RE = re.compile(rb"^<[^>\r\n]+>(?:\s*(?://.*|/\*.*\*/\s*)?)?$")
+MINI_VERSION_RE = re.compile(rb'^\s*#\s*define\s+MINI_VERSION\s+"([^"\r\n]+)"\s*$', re.MULTILINE)
 
 
 def sha256_file(path: Path) -> str:
@@ -103,6 +104,27 @@ def source_closure(source: Path) -> dict[str, Any]:
         "sha256": hashlib.sha256(canonical).hexdigest(),
         "files": files,
     }
+
+
+def source_version_label(source: Path, closure: dict[str, Any] | None = None) -> str:
+    """Read exactly one MINI_VERSION from the already-bound local source closure."""
+    source_input = source.absolute()
+    source = source_input.resolve()
+    root = source.parent.resolve()
+    closure = closure or source_closure(source_input)
+    versions: set[str] = set()
+    for item in closure["files"]:
+        data = (root / str(item["path"])).read_bytes()
+        for match in MINI_VERSION_RE.finditer(data):
+            try:
+                versions.add(match.group(1).decode("utf-8", "strict"))
+            except UnicodeDecodeError as exc:
+                raise RuntimeError("SOURCE_VERSION_NOT_UTF8:" + str(item["path"])) from exc
+    if not versions:
+        raise RuntimeError("SOURCE_VERSION_MISSING")
+    if len(versions) != 1:
+        raise RuntimeError("SOURCE_VERSION_AMBIGUOUS:" + ",".join(sorted(versions)))
+    return next(iter(versions))
 
 
 def run(argv: list[str], *, env: dict[str, str] | None = None) -> str:
@@ -231,6 +253,14 @@ def main() -> int:
     entry_source_sha = sha256_file(source)
     closure = source_closure(source_input)
     source_identity_sha = str(closure["sha256"])
+    source_version = source_version_label(source_input, closure)
+    if source_version != args.version_label:
+        raise SystemExit(
+            "VERSION_LABEL_SOURCE_MISMATCH:requested={} source={}".format(
+                args.version_label, source_version
+            )
+        )
+
     compiler = compiler_identity(args.compiler)
     flags, package_versions = pkg_config(DEFAULT_PACKAGES)
     env = dict(os.environ)
@@ -279,6 +309,7 @@ def main() -> int:
     provenance = {
         "schema": "mini-entity-native-build-provenance/v2",
         "version_label": args.version_label,
+        "source_version_label": source_version,
         "subject": {
             "path": str(output),
             "sha256": final_hash,

@@ -1,0 +1,101 @@
+{
+  "schema": "FREE_ONLY_PROVIDER_ADMISSION_RECEIPT/v2",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "scope": "direct owner-selected Qwen3.5-0.8B Together Full-FT launcher only; fallback-chain product gate remains separate",
+  "source_identity": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "base_main": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce",
+    "candidate_head_before_receipt": "b36eb4d3b98b25db1c2e3dce19d6e1acd58cc26f",
+    "branch": "gpt56sol/go-free-only-qwen35-admission-20260822-1845",
+    "pull_request": 904,
+    "launcher_blob": "a062e820a6e31bcc291cf062b27a0c427b7d5c19",
+    "test_blob": "0d1561bce1331a0864f1fefc40050069d9906421",
+    "supervisor_policy_blob": "275d23c710c88635486f8e4a48cda35127fea867"
+  },
+  "policy_boundary": {
+    "supervisor_state": "9.9",
+    "control": "4.1+4.2-execution-boundary-addendum",
+    "free_only": true,
+    "provider": "Together",
+    "model": "Qwen/Qwen3.5-0.8B",
+    "cost_class": "PAID",
+    "provider_secret_lookup_allowed": false,
+    "provider_network_allowed": false,
+    "credentialed_preflight": "NOT_EXECUTED",
+    "upload": "NOT_EXECUTED",
+    "price_request": "NOT_EXECUTED",
+    "paid_create": "NOT_EXECUTED",
+    "training": "NOT_EXECUTED",
+    "spend_usd": 0
+  },
+  "source_defect": {
+    "observed_on_current_main": true,
+    "description": "The direct Qwen3.5-0.8B launcher did not consult the active FREE_ONLY supervisor before reading TOGETHER_API_KEY and importing Together, so source structure did not prove rejection before provider secret/key lookup and provider I/O.",
+    "pre_fix_launcher_blob": "c18f84f0eebd94a5bebbc3bc283c6b956792fb16"
+  },
+  "repair": {
+    "policy_authority_reused": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "new_parallel_policy_authority": false,
+    "free_only_field": "verified_updates.free_only",
+    "free_only_type_requirement": "exact boolean",
+    "missing_or_malformed_policy": "FAIL_CLOSED",
+    "free_only_true": "FREE_ONLY_PROVIDER_REJECT before TOGETHER_API_KEY lookup and before Together import",
+    "free_only_false": "existing provider path remains available subject to its existing paid-create gates"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "FREE_ONLY_QWEN35_SECRET_LOOKUP_POISON",
+    "counterhypothesis": "The direct paid launcher can touch provider credentials or provider import state before applying the active FREE_ONLY control.",
+    "intervention": "Invoke the launcher's main path under free_only=true while booby-trapping TOGETHER_API_KEY lookup and together import to raise if either is touched.",
+    "bounded_mechanism_result": "PASS",
+    "observed": {
+      "terminal_verdict": "FREE_ONLY_PROVIDER_REJECT",
+      "provider_secret_lookup_count": 0,
+      "provider_import_count": 0,
+      "provider_network_attempt_count": 0
+    },
+    "environment": "Linux 6.18.35 x86_64, glibc 2.41, Python 3.13.5",
+    "companion_regression": "missing/malformed free_only policy fails closed; only explicit boolean false opens the provider execution gate",
+    "evidence_limit": "bounded isolated source-mechanism execution; not an exact private-repository checkout/runtime PASS"
+  },
+  "exact_pr_execution": {
+    "head": "b36eb4d3b98b25db1c2e3dce19d6e1acd58cc26f",
+    "runs": [
+      {
+        "workflow": "claycog-08b-direct-admission",
+        "run_id": 32571183811,
+        "job_id": 97026750178,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+      },
+      {
+        "workflow": "claycog-validator-pr",
+        "run_id": 32571183826,
+        "job_id": 97026750198,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+      },
+      {
+        "workflow": "mini-cognition-qwen35-08b-pr",
+        "run_id": 32571183842,
+        "job_id": 97026750043,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+      }
+    ],
+    "semantic_test_failure_observed": false,
+    "exact_branch_runtime_credit": 0
+  },
+  "evidence_class": "SOURCE_PLUS_BOUNDED_MECHANISM_SUPPORTED_EXACT_PR_EXECUTION_ADMISSION_BLOCKED",
+  "promotion": "NO_PROVIDER_OR_TRAINING_PROMOTION",
+  "remaining_blockers": [
+    "Exact repository checkout must execute the repaired direct-lane tests with visible steps before exact runtime credit.",
+    "FREE_ONLY_FALLBACK_CHAIN_RECEIPT/v1 remains open for all direct/fallback paid/subscription/unknown provider hops.",
+    "Current exported GLM paid lane still requires the same machine-readable rejection-before-key/network invariant at product routing scope."
+  ]
+}

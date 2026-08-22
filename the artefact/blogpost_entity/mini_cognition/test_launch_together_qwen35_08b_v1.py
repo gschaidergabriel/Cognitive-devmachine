@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import importlib.util,json,os,stat,tempfile,types,unittest
+import builtins,importlib.util,json,os,stat,sys,tempfile,types,unittest
 from pathlib import Path
 from unittest import mock
 HERE=Path(__file__).resolve().parent
@@ -34,6 +34,29 @@ class Tests(unittest.TestCase):
         self.assertEqual(Path(validate[1]).name,"validate_corpus_v2.py")
         self.assertEqual(validate[2:],[str(m.TRAIN),str(m.VALID)])
         self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertTrue(run.call_args_list[1].kwargs["check"])
+    def test_free_only_policy_rejects_before_secret_lookup_and_provider_import(self):
+        secret_reads=[];provider_imports=[];original_import=builtins.__import__
+        def guarded_get(key,default=None):
+            if key=="TOGETHER_API_KEY":
+                secret_reads.append(key);raise AssertionError("secret lookup happened before FREE_ONLY rejection")
+            return default
+        def guarded_import(name,globals=None,locals=None,fromlist=(),level=0):
+            if name=="together" or name.startswith("together."):
+                provider_imports.append(name);raise AssertionError("Together import happened before FREE_ONLY rejection")
+            return original_import(name,globals,locals,fromlist,level)
+        with tempfile.TemporaryDirectory() as td:
+            policy=Path(td)/"SUPERVISOR_INBOX.json";policy.write_text(json.dumps({"verified_updates":{"free_only":True}}))
+            with mock.patch.object(m,"SUPERVISOR_POLICY",policy),mock.patch.object(m,"local_checks",lambda:None),mock.patch.object(m.os.environ,"get",side_effect=guarded_get),mock.patch("builtins.__import__",side_effect=guarded_import),mock.patch.object(sys,"argv",["launcher"]):
+                with self.assertRaisesRegex(SystemExit,"FREE_ONLY_PROVIDER_REJECT"):
+                    m.main()
+        self.assertEqual(secret_reads,[]);self.assertEqual(provider_imports,[])
+    def test_execution_policy_fails_closed_and_only_explicit_false_opens(self):
+        with tempfile.TemporaryDirectory() as td:
+            policy=Path(td)/"policy.json";policy.write_text("{}")
+            with self.assertRaisesRegex(SystemExit,"EXECUTION_POLICY_FREE_ONLY_UNKNOWN"):m.assert_provider_execution_allowed(policy)
+            policy.write_text(json.dumps({"verified_updates":{"free_only":False}}));self.assertIsNone(m.assert_provider_execution_allowed(policy))
+            policy.write_text("{bad")
+            with self.assertRaisesRegex(SystemExit,"EXECUTION_POLICY_UNREADABLE"):m.assert_provider_execution_allowed(policy)
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

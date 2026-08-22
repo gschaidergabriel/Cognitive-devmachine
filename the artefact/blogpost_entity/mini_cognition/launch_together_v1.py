@@ -182,11 +182,9 @@ def main():
     if not os.environ.get("TOGETHER_API_KEY"):
         raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
 
-    # Keep Together import behind the credential boundary. Status mode is read-only and
-    # deliberately bypasses corpus regeneration/upload to avoid creating remote objects.
-    from together import Together
-    client=Together()
     if args.status:
+        from together import Together
+        client=Together()
         print(json.dumps(status_report(client,args.status),indent=2,default=str))
         return
 
@@ -195,6 +193,10 @@ def main():
     fingerprint=campaign_fingerprint(hf_model,hf_revision)
     suffix=campaign_suffix(fingerprint)
 
+    # Keep Together import behind local validation so no network-capable object exists
+    # before deterministic corpus/eval readiness checks pass.
+    from together import Together
+    client=Together()
     limits=client.fine_tuning.model_limits(model_name=TEMPLATE)
     if not getattr(limits,"supports_full_training",False):
         raise SystemExit(f"Template is not full-FT capable: {TEMPLATE}")

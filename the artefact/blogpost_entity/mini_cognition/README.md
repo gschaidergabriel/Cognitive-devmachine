@@ -44,11 +44,14 @@ A separate OOD generator emits **200** promotion probes and is not a random spli
 ```bash
 pip install -U together
 export TOGETHER_API_KEY=...
+# Set this only after current Together verification identifies a Qwen2-compatible
+# full-fine-tuning template:
+export CLAYCOG_TOGETHER_TEMPLATE=...
 bash train_together_v1.sh
 ```
 
 The shell script stops after **preflight**. It regenerates and validates the corpus, asks Together to validate the
-files/template, and prints the server price estimate. It does not create a billed job.
+explicit template and files, and prints the server price estimate. It does not create a billed job.
 
 Only after preflight:
 
@@ -56,20 +59,33 @@ Only after preflight:
 python3 launch_together_v1.py --create
 ```
 
-### Together 0.5B caveat
+### Together 0.5B caveat — current blocker
 
-As of 2026-08-22, Together's regular supported-model table lists Qwen3.5 **0.8B** as the smallest Qwen fine-tune,
-not a native 0.5B entry. Together's BYOM path supports external Hugging Face CausalLM checkpoints under 100B when
-a compatible Together training template exists. This script therefore pairs:
+As checked on **2026-08-22**, Together's current fine-tuning supported-model table contains **no Qwen2/Qwen2.5 base**.
+For Qwen full fine-tuning it currently lists Qwen3.5 models down to **0.8B**, but those are a different model generation
+and are not silently admitted as templates for the Qwen2.5 checkpoint. Together's BYOM guide requires the Hugging Face
+checkpoint to be CausalLM, safetensors, under 100B, without `trust_remote_code`, and paired with a Together base whose
+architecture matches and whose size/context are suitable.
 
-- BYOM weights: `Qwen/Qwen2.5-0.5B`;
-- default same-family template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
+`Qwen/Qwen2.5-7B-Instruct-Turbo` remains visible as an inference model, but visibility in the inference catalog is not
+evidence that it is currently accepted by the fine-tuning API. It is therefore no longer an implicit launcher default.
+The launcher now requires `--template` or `CLAYCOG_TOGETHER_TEMPLATE`, then asks Together `model_limits` and fails closed
+unless the supplied template supports full fine-tuning. A Qwen3-family template is rejected rather than silently changing
+the experiment from Qwen2.5-0.5B.
 
-That pairing is **not assumed fine-tune compatible** merely because it is served in Together's catalog. The launcher first
-asks `model_limits` whether the template is currently full-FT capable, and BYOM checkpoint acceptance is a separate gate.
-There is deliberately no automatic fallback to Qwen3.5 because Together requires matching architecture. If Together rejects
-the Qwen2.5 template/checkpoint path, keep the 0.5B checkpoint requirement and use a Together-provided Qwen2-compatible
-template or the same corpus on another full-FT runner rather than silently changing the research question.
+This is a **source/documentation blocker, not an API-runtime observation**. A Together-authenticated `model_limits` call may
+still reveal an admitted Qwen2-compatible template not shown in the public table. If it does not, keep the 0.5B checkpoint
+requirement and either obtain a Together-provided Qwen2-compatible template or run the same corpus on another admitted
+full-FT runner. Do not relabel a Qwen3.5-0.8B run as the 0.5B campaign.
+
+The primary Hugging Face checkpoint is now pinned to revision
+`285c998059f3e217fe1f05e241d55b5c5eef5bd3`; the instruct ablation is pinned to
+`7ae557604adf67be50417f59c2c2f167def9a775`. Together supports `hf_model_revision`, so mutable HF `main` is no longer
+accepted by the launcher.
+
+Together's current `estimate-price` API does **not** expose `from_hf_model`. Therefore a successful price estimate proves
+only dataset/template/budget admission. It does not prove that Together has accepted the external Qwen2.5-0.5B checkpoint.
+The first actual BYOM checkpoint-acceptance gate is the create request, which remains owner-authorized and budget-gated.
 
 Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
 corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.

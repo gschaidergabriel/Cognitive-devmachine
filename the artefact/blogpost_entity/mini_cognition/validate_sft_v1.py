@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import json, sys
+import json, re, sys
 from pathlib import Path
-from claycode_syntax_v1 import outside_strings, statement_lines, top_level_statements, fn_counts
+from claycode_syntax_v1 import outside_strings, statement_lines, top_level_statements, fn_counts, extract_calls
 
 PREFIX='module clay.cog.turn\nfn think(i:Map)->Map {\n'
 BINDINGS=(
@@ -16,10 +16,28 @@ FORBIDDEN=(
   'role_bind(c,"blog','goal_bind(c,"write blog','personality_bind(c,"zero"',
   'omega_execute(','tool_execute(','api_call(',
 )
+SEMANTIC_SLOT_CALLS=('state_note','self_state','arch_bind','provenance')
+RESERVED_SEMANTIC_SLOTS=frozenset({
+  'name','identity','entity_name','entity_id','role','goal','personality','persona',
+  'application','application_role','application_goal','application_personality','audience','domain',
+  'provider','provider_name','provider_id','model','model_name','model_id',
+  'checkpoint','checkpoint_name','checkpoint_id','job','job_name','job_id',
+})
+SEMANTIC_SLOT_RE=re.compile(r'^('+'|'.join(SEMANTIC_SLOT_CALLS)+r')\(c,("(?:\\.|[^"\\])*"),')
 OMEGA_GATES=("grammar","types","schema","authority","generation")
 OMEGA_AUTHORITY='omega_authority(w,cfg("architecture.effect_authority"))'
 OMEGA_GENERATION='omega_generation(w,cfg("state.generation"))'
 OMEGA_COMMIT='omega_commit_candidate(c,w)'
+
+
+def _slot_key(raw):
+    try:
+        value=json.loads(raw)
+    except (TypeError,ValueError,json.JSONDecodeError):
+        return None
+    if not isinstance(value,str):
+        return None
+    return re.sub(r'[^a-z0-9]+','_',value.strip().lower()).strip('_')
 
 
 def validate_code(s):
@@ -37,17 +55,26 @@ def validate_code(s):
     else:
         top=top_level_statements(item_lines)
 
+    calls=extract_calls(s)
     counts=fn_counts(s)
     for name,canonical in BINDINGS:
-        calls=counts.get(name,0)
+        n=counts.get(name,0)
         exact=top.count(canonical)
-        if calls != 1: e.append(f"binding_call_count:{name}:{calls}")
+        if n != 1: e.append(f"binding_call_count:{name}:{n}")
         if exact != 1: e.append(f"binding_not_exact_runtime_cfg:{name}:{exact}")
     return_count=top.count('return c')
     if return_count != 1: e.append(f"return_not_exact_top_level:{return_count}")
 
     for x in FORBIDDEN:
         if x.lower() in low: e.append("forbidden:"+x)
+
+    for item in calls:
+        m=SEMANTIC_SLOT_RE.match(item['call'])
+        if not m:
+            continue
+        slot=_slot_key(m.group(2))
+        if slot in RESERVED_SEMANTIC_SLOTS:
+            e.append(f"reserved_semantic_slot:{m.group(1)}:{slot}")
 
     commit_calls=counts.get('omega_commit_candidate',0)
     reject_calls=counts.get('omega_reject',0)

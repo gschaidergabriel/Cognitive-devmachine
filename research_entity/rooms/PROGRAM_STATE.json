@@ -1,47 +1,58 @@
 {
-  "schema_version": "6.2",
+  "schema_version": "6.3",
   "program_id": "blogpost-entity-all-in-one",
   "status": "ACTIVE",
   "stage": "BLOGPOST_ENTITY_CLAY",
   "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
-  "sole_target": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
-  "portable_release_shape": ["BLOGPOST_ENTITY.clay executable", "blogpost_entity.db SQLite MiniUnifiedDB"],
+  "sole_target": "one application-neutral .clay pipeline executable + one SQLite MiniUnifiedDB",
+  "portable_release_shape": ["application-neutral blogpost_entity.clay ELF", "blogpost_entity.db SQLite MiniUnifiedDB preconfigured as zero_blog"],
   "acceptance": "IN_PROGRESS",
+  "architecture_split": {
+    "binary": "generic evidence preprocessing, canonical run/state envelope, configurable API transport, immutable generic truth/secret gate engine, exactly-once consumption, generation CAS and atomic persistence",
+    "database": "all application/personality/provider configuration; shipped default preset is zero_blog",
+    "regression_rule": "if an application/personality fact can live in SQLite configuration, hard-coding it into the executable is a regression"
+  },
   "sandbox_evidence": {
     "date": "2026-08-22",
-    "native_reference": {
-      "version": "mini-entity/0.2.0",
+    "native_pipeline": {
+      "version": "mini-entity/0.4.0",
       "platform": "linux-x86_64",
-      "form": "ELF executable named blogpost_entity.clay + SQLite MiniUnifiedDB",
-      "binary_sha256": "18bb19fe3aa6028afa04a1f76a3eb1fb559bda83458511cc7c31335de72cd2ff",
-      "fresh_db_sha256": "db9d633ea96518d24e379bce12a7720b53fbd089a1b7e40919b93ba064777b22",
-      "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_2_SANDBOX.json",
-      "tested_behaviors": [
-        "fresh DB initialization",
-        "evidence ingest and persistent generation continuity",
-        "runtime-editable system/personality prompt beneath immutable architecture guard",
-        "provider endpoint/model/token/request-template/response-pointer runtime configuration",
-        "two distinct provider contracts without identity/state reset",
-        "API token stdin entry and config/status redaction",
-        "provider failure preserves unconsumed events and generation",
-        "successful output atomically persists state and consumes events exactly once",
-        "verified-empty second run is quiet without invented activity",
-        "secret output leak rejected without consumption",
-        "unsupported self-claim rejected while relevant state is UNKNOWN",
-        "non-loopback plaintext HTTP rejected before bearer-token transmission",
-        "concurrent same-generation runs fenced by generation/event CAS with exactly one success",
-        "SQLite integrity_check PASS"
-      ],
-      "loopback_http_transport": "PASS"
+      "form": "ELF executable named blogpost_entity.clay",
+      "binary_sha256": "b14844811f64e9bc81115eb7a9aac15f4cc5019acc81283854b85f2bbf85d32b",
+      "application_string_audit": "PASS: no zero_blog, Gasthaus, Bare Metal, local-model or T_Omega application strings in ELF",
+      "fresh_db_mode": "neutral"
     },
+    "shipped_default_db": {
+      "sha256": "64c3089d7c1c99d682df00c29803ecad62f15665ec114e5e7d1fb6a9394e28f2",
+      "integrity_check": "ok",
+      "preset": "zero_blog",
+      "api_token": "MISSING_BY_DESIGN"
+    },
+    "tested_behaviors": [
+      "Zero/Gasthaus application replaced at runtime by Mara English dry lab-report profile using same ELF",
+      "generation/history continued without DB reset",
+      "runtime-editable arbitrary profile.* fields",
+      "runtime-editable full application/personality blob",
+      "runtime-editable system prompt",
+      "provider endpoint/model/token/request-template/response-pointer runtime configuration",
+      "exactly-once event consumption",
+      "verified-empty second run",
+      "SQLite integrity_check PASS"
+    ],
+    "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_PIPELINE_0_4_CONFIG_SEPARATION.json",
     "real_provider_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_API_SECRET_MOUNTED"
+  },
+  "default_application": {
+    "preset": "zero_blog",
+    "source": "the artefact/blogpost_entity/presets/zero_blog.json",
+    "status": "fully replaceable runtime configuration, not executable identity"
   },
   "canonical_clay_state": {
     "source_present": true,
-    "current_gap": "canonical structured Clay source still has Mistral-specific request naming/model and hard-coded personality_system_prompt; next go must fuse provider-neutral native reference semantics into the canonical Clay source/effect runtime without weakening the claim gate"
+    "current_gap": "structured Clay source/spec still carries more Zero/EntityOS-specific semantics than the proven native 0.4 pipeline; next go must converge it toward the same application-neutral split"
   },
-  "current_frontier": "Converge canonical BLOGPOST_ENTITY.clay with the tested provider-agnostic native 0.2 semantics, then exercise one real authorized external text provider when a secret is actually mounted; no other product frontier is active.",
-  "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> isolated sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist, on this single mini entity only.",
+  "current_frontier": "Converge structured Clay source/spec and generic effect runtime on the proven native 0.4 application-neutral split, add richer configurable state/claim rules, then exercise one real authorized external text provider when a secret is mounted.",
+  "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist on this same neutral pipeline + configurable DB only.",
   "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
   "together_api": "FORBIDDEN"
 }

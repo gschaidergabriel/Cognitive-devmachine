@@ -1,0 +1,74 @@
+{
+  "schema": "mini-entity-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_identity": "UNAVAILABLE_AT_ORCHESTRATION_BOUNDARY",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable macrocycle_id was supplied; this delta is deterministic regression of an already-known call-depth mechanism."
+  },
+  "exact_join": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "initial_main_sha": "ff9e86b02fce611f19a36934b46887ada8ba6590",
+    "rejoined_main_sha": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce",
+    "branch": "chatgpt/go-ood-depth-rejoin-20260822-1845",
+    "pre_receipt_head": "ea42d13c98d57c0f86d458387ec291039a84a2ab",
+    "concurrent_main_change": "BOOTSTRAP_MINIMAL approx1B re-entry landed on main; duplicate bootstrap delta was discarded rather than overwritten."
+  },
+  "authority": {
+    "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+    "current_owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "primary_paid_training_base": "Qwen/Qwen3.5-0.8B",
+    "paid_create_authorized": false
+  },
+  "coordination": {
+    "program_state": "Current main PROGRAM_STATE remains stale at 0.5B; existing PR #879 carries the non-duplicate approx1B state re-entry.",
+    "stale_parallel_pr": "PR #866 would reintroduce a second parser implementation even though current main already centralizes brace-depth semantics in claycode_syntax_v1.",
+    "canonical_parser": "the artefact/blogpost_entity/mini_cognition/claycode_syntax_v1.py"
+  },
+  "delta": {
+    "test": "the artefact/blogpost_entity/mini_cognition/test_eval_call_depth_v1.py",
+    "workflow": ".github/workflows/claycog-validator-pr.yml",
+    "law": "Non-cfg semantic and exact-omega promotion credit requires canonical turn-body depth; nested/dead control-flow and quoted lookalikes receive no semantic credit; cfg expressions remain observable inside admitted outer calls.",
+    "second_parser_created": false
+  },
+  "bounded_isolated_evidence": {
+    "environment": "isolated OpenAI Linux/Python execution surface",
+    "exact_git_blob_matches": {
+      "claycode_syntax_v1.py": "ca9612016a166da0ae3495e08d9f73ace9cb96af",
+      "validate_sft_v1.py": "fcec72dcca9bc57ae0937a3eb1629ccac7a3fab9",
+      "eval_outputs_v1.py": "9a81882c211fcad62c366a084c53606317ddb3cd",
+      "test_eval_call_depth_v1.py": "27f9c3417d52e9846698c6c6a6aa484b1721aba2"
+    },
+    "blob_identity": "4/4 MATCH",
+    "command": "python3 test_eval_call_depth_v1.py",
+    "exit_code": 0,
+    "stdout": "{'cases': 9, 'ok': True, 'syntax_authority': 'claycode_syntax_v1', 'role': 'regression_only'}",
+    "claim_scope": "BOUNDED_EXACT_BLOB_MECHANISM_PASS_NOT_FULL_BRANCH_RUNTIME"
+  },
+  "provider_refresh": {
+    "public_full_ft_catalog": "Together current fine-tuning documentation lists Qwen/Qwen3.5-0.8B for Full fine-tuning.",
+    "public_pricing": "Together current pricing documentation lists Full SFT up to 16B at USD 0.54 per 1M processed tokens with a USD 4 minimum charge.",
+    "authenticated_preflight": "NOT_RUN_NO_AUTHORIZED_SECRET_IN_THIS_ORGAN",
+    "provider_call": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_exposed_by_connected_surface": false,
+    "github_exact_pr_runner": "NOT_YET_OBSERVED_FOR_REJOIN_BRANCH",
+    "classification": "NO_FULL_BRANCH_RUNTIME_CREDIT"
+  },
+  "claims_not_made": [
+    "Together authenticated preflight",
+    "billed create or fine-tuning success",
+    "trained checkpoint quality or superiority",
+    "Q4_K_M quantization",
+    "measured peak RSS below 1 GiB at context 2048",
+    "real generic local_exec tuned-model integration",
+    "current-head native full profile-v2 parity",
+    "whole Mini Entity PASS"
+  ]
+}

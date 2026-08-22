@@ -1,6 +1,6 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-22T10:36:43Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T11:06:43Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 663 KB): der Systemname steht im Titel. Volltext.
 - **umfeld** (2544 Artikel, 1434 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.

@@ -3,7 +3,7 @@ import json, os, subprocess, time
 from pathlib import Path
 from together import Together
 
-BASE_MODEL = "Qwen/Qwen3.5-0.8B"
+TARGET_MODEL = "Qwen/Qwen2.5-0.5B-Instruct"
 EPOCHS = 3
 EVALS = 2
 MAX_USD = float(os.environ.get("CLAYCOG_MAX_JOB_USD", "18.00"))
@@ -31,36 +31,47 @@ def wait_file(client, file_id):
 def main():
     if not os.environ.get("TOGETHER_API_KEY"):
         raise SystemExit("TOGETHER_API_KEY is required in the runtime environment; never commit it")
+
     run_local_checks()
     client = Together()
-    limits = client.fine_tuning.model_limits(model_name=BASE_MODEL)
-    if not limits.supports_full_training:
-        raise SystemExit(f"Current Together limits say {BASE_MODEL} is not full-FT capable")
 
     train_file = client.files.upload(file=str(TRAIN), purpose="fine-tune", check=True)
     valid_file = client.files.upload(file=str(VALID), purpose="fine-tune", check=True)
-    wait_file(client, train_file.id); wait_file(client, valid_file.id)
+    wait_file(client, train_file.id)
+    wait_file(client, valid_file.id)
 
+    # Price estimation is deliberately first. If Together does not currently
+    # accept this exact 0.5B target for fine-tuning, this step must fail before
+    # any billed fine-tune create call.
     estimate = client.fine_tuning.estimate_price(
         training_file=train_file.id,
         validation_file=valid_file.id,
-        model=BASE_MODEL,
+        model=TARGET_MODEL,
         n_epochs=EPOCHS,
         n_evals=EVALS,
         training_method={"method": "sft", "train_on_inputs": "auto"},
         training_type={"type": "Full"},
     )
     price = float(estimate.estimated_total_price)
-    print(json.dumps({"estimated_total_price": price, "allowed_to_proceed": estimate.allowed_to_proceed}, indent=2))
+    print(json.dumps({
+        "target_hf_model": TARGET_MODEL,
+        "estimated_total_price": price,
+        "allowed_to_proceed": estimate.allowed_to_proceed,
+    }, indent=2))
     if not estimate.allowed_to_proceed:
-        raise SystemExit("Together price endpoint says this account/job is not allowed to proceed")
+        raise SystemExit("Together price endpoint did not authorize this exact 0.5B Full-SFT configuration")
     if price > MAX_USD:
         raise SystemExit(f"ABORT budget gate: estimated ${price:.2f} > configured ${MAX_USD:.2f}")
 
+    # Together documents `from_hf_model` for starting from a Hugging Face Hub
+    # repository. Supplying the exact 0.5B repo keeps the target unambiguous.
+    # If the service rejects architecture/model admission, the call fails and
+    # no successful training job is claimed.
     job = client.fine_tuning.create(
         training_file=train_file.id,
         validation_file=valid_file.id,
-        model=BASE_MODEL,
+        model=TARGET_MODEL,
+        from_hf_model=TARGET_MODEL,
         n_epochs=EPOCHS,
         n_evals=EVALS,
         n_checkpoints=1,
@@ -68,8 +79,17 @@ def main():
         warmup_ratio=0.03,
         train_on_inputs="auto",
         lora=False,
-        suffix="claycog_generic_v0",
+        suffix="claycog_generic_05b_v0",
     )
-    print(json.dumps({"job_id": job.id, "base_model": BASE_MODEL, "full_fine_tune": True, "training_file_id": train_file.id, "validation_file_id": valid_file.id, "estimated_usd": price}, indent=2))
+    print(json.dumps({
+        "job_id": job.id,
+        "target_hf_model": TARGET_MODEL,
+        "parameter_class": "0.49B",
+        "full_fine_tune": True,
+        "training_file_id": train_file.id,
+        "validation_file_id": valid_file.id,
+        "estimated_usd": price,
+    }, indent=2))
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()

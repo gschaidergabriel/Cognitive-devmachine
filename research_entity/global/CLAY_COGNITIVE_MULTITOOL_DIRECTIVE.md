@@ -53,6 +53,31 @@ Neural backends propose and organize cognition; they do not become canonical aut
 
 `UNKNOWN != ZERO != ERROR != MEASURED` remains mandatory.
 
+## Observable self-healing and stable-state recovery
+The Cognitive Multitool MUST be self-healing but MUST NEVER fail or recover silently.
+
+A deterministic supervisor outside the neural backend owns health, checkpoints, rollback and effect reconciliation. Neural backends may diagnose/propose recovery cognition but cannot certify their own recovery.
+
+Every slot/backend uses explicit health states such as `HEALTHY`, `DEGRADED`, `RECOVERING`, and `QUARANTINED`.
+
+On crash, timeout, malformed cognition, invariant failure, stale generation/CAS conflict, DB-binding mismatch or repeated backend failure, the affected slot MUST:
+- stop new external effects;
+- persist an incident/failure event with reproducible diagnostic hashes/metadata and redacted secrets;
+- restore only from the newest independently verified stable checkpoint;
+- recreate fresh sequence/KV state rather than treating crashed hidden state as continuity authority;
+- reconcile canonical DB generation before resuming;
+- never blindly replay an effect whose terminal receipt is absent or ambiguous;
+- preserve `UNKNOWN` for unresolved effect outcomes;
+- produce a durable recovery receipt before returning to `HEALTHY`;
+- expose the incident and recovery in operational telemetry/UI;
+- trip a bounded retry/circuit breaker and quarantine or route to an admitted alternate backend such as `mistral_dual` if the same fault repeats.
+
+Recovery MUST be slot-local unless a shared canonical database proves a transaction-level recovery requirement. One crashing cognitive task must not roll back unrelated tasks.
+
+Stable checkpoints bind generation/episode, capsule and system-prompt hashes, DB binding/generation, backend/model/config digest, canonical cognitive-state hash, evidence/provenance refs, committed effect receipts and invariant/schema version.
+
+Full recovery contract: `research_entity/global/COGNITIVE_MULTITOOL_SELF_HEALING_PROTOCOL_V0.md`.
+
 ## Training direction
 Training data SHALL optimize the 0.5B model as a reusable cognitive accelerator for this HAL, not as a named Mini Entity.
 
@@ -69,6 +94,12 @@ Priority curriculum:
 - sequential multitasking with identical weights;
 - concurrent-slot isolation where supported;
 - external truth/effect authority;
+- crash after cognition before commit;
+- crash after effect intent without terminal receipt;
+- rollback to last verified stable state;
+- current-DB-wins rebase instead of destructive rollback;
+- repeated-crash circuit breaker/backend escalation;
+- recovery telemetry and recovery-receipt discipline;
 - recovery, receipts, CAS and no blind replay;
 - adversarial fixed identity/persona/job requests.
 
@@ -77,12 +108,12 @@ Every exact `go` MUST produce measurable implementation progress on this Cogniti
 
 Each `go` MUST do at least one concrete artifact change or empirical test in BOTH categories:
 1. TRAINING: generate/expand/validate/evaluate training data or fine-tune readiness/checkpoint behavior;
-2. MODULE: implement/test the Cognitive Multitool runtime contract, capsule hot-swap, DB binding, backend router, scheduler/slots, deterministic gates or integration.
+2. MODULE: implement/test the Cognitive Multitool runtime contract, capsule hot-swap, DB binding, backend router, scheduler/slots, deterministic gates, self-healing recovery or integration.
 
 A `go` that only writes analysis or plans is insufficient unless blocked by a newly proven external constraint; that blocker must be persisted with evidence.
 
 The preferred progression is:
-`refresh -> training corpus/trajectory expansion -> strict validation -> multitool module implementation -> hot-swap/isolation tests -> backend substitution tests (0.5B off => dual Mistral) -> Together admission/price/job -> base-vs-tuned eval -> hidden-state probes -> Q4_K_M -> <1GiB RSS -> EntityOS integration -> evidence persistence`.
+`refresh -> training corpus/trajectory expansion -> strict validation -> multitool module implementation -> hot-swap/isolation tests -> crash/recovery/checkpoint tests -> backend substitution tests (0.5B off => dual Mistral) -> Together admission/price/job -> base-vs-tuned eval -> hidden-state probes -> Q4_K_M -> <1GiB RSS -> EntityOS integration -> evidence persistence`.
 
 ## Budget
 Together use remains bounded to the owner-authorized ClayCog 0.5B training campaign, maximum EUR 20 equivalent. No billed create before exact admission and price preflight.

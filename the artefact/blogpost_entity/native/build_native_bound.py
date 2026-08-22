@@ -21,6 +21,8 @@ import time
 from pathlib import Path
 from typing import Any
 
+from native_source_closure import describe_source_closure, source_closure_sha256
+
 
 DEFAULT_PACKAGES = ("sqlite3", "libcurl", "json-c")
 
@@ -107,7 +109,7 @@ def compile_once(
     *,
     compiler_path: str,
     source: Path,
-    source_sha: str,
+    source_closure_sha: str,
     flags: list[str],
     env: dict[str, str],
     workdir: Path,
@@ -121,7 +123,7 @@ def compile_once(
         "-Wextra",
         "-Werror",
         "-Wno-deprecated-declarations",
-        f"-frandom-seed={source_sha}",
+        f"-frandom-seed={source_closure_sha}",
         f"-ffile-prefix-map={root}=/clay/native",
         f"-fdebug-prefix-map={root}=/clay/native",
         "-Wl,--build-id=sha1",
@@ -153,7 +155,13 @@ def main() -> int:
     if args.repeat < 2:
         raise SystemExit("REPEAT_MUST_BE_AT_LEAST_2")
 
-    source_sha = sha256_file(source)
+    entry_source_sha = sha256_file(source)
+    try:
+        source_closure = describe_source_closure(source)
+        closure_sha = source_closure_sha256(source_closure)
+    except ValueError as exc:
+        raise SystemExit("SOURCE_CLOSURE_INVALID:" + str(exc)) from exc
+
     compiler = compiler_identity(args.compiler)
     flags, package_versions = pkg_config(DEFAULT_PACKAGES)
     env = dict(os.environ)
@@ -176,7 +184,7 @@ def main() -> int:
             binary = compile_once(
                 compiler_path=compiler["path"],
                 source=source,
-                source_sha=source_sha,
+                source_closure_sha=closure_sha,
                 flags=flags,
                 env=env,
                 workdir=workdir,
@@ -200,7 +208,7 @@ def main() -> int:
         raise SystemExit("PUBLISHED_BINARY_HASH_MISMATCH")
 
     provenance = {
-        "schema": "mini-entity-native-build-provenance/v1",
+        "schema": "mini-entity-native-build-provenance/v2",
         "version_label": args.version_label,
         "subject": {
             "path": str(output),
@@ -208,7 +216,11 @@ def main() -> int:
             "elf_build_id": build_id(output),
         },
         "build_definition": {
-            "source": {"path": str(source), "sha256": source_sha},
+            "source": {"path": str(source), "sha256": entry_source_sha},
+            "source_closure": {
+                "sha256": closure_sha,
+                "files": source_closure,
+            },
             "compiler": compiler,
             "pkg_config_packages": package_versions,
             "pkg_config_flags": flags,
@@ -218,7 +230,7 @@ def main() -> int:
             "repeat_byte_identity": len(set(hashes)) == 1,
             "fixed_environment": {"LC_ALL": "C", "LANG": "C", "TZ": "UTC"},
             "determinism_flags": [
-                f"-frandom-seed={source_sha}",
+                f"-frandom-seed={closure_sha}",
                 f"-ffile-prefix-map={source.parent.resolve()}=/clay/native",
                 f"-fdebug-prefix-map={source.parent.resolve()}=/clay/native",
                 "-Wl,--build-id=sha1",
@@ -226,9 +238,10 @@ def main() -> int:
         },
         "resolved_runtime_dependencies": linked_libraries(output),
         "generated_at_unix": time.time(),
-        "acceptance_scope": "SAME_ENV_REPEAT_BUILD_AND_PROVENANCE_BINDING_ONLY",
+        "acceptance_scope": "SAME_ENV_REPEAT_BUILD_AND_COMPLETE_LOCAL_SOURCE_PROVENANCE_BINDING_ONLY",
         "not_claimed": [
             "cross-environment reproducibility until independently rebuilt from the same recorded inputs",
+            "system-header byte identity beyond recorded compiler/package/runtime dependency identities",
             "model quality",
             "application acceptance",
             "whole Mini Entity final acceptance"

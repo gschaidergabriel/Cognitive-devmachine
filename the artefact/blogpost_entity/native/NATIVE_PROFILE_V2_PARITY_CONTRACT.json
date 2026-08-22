@@ -31,16 +31,10 @@
     "provider_chat_json"
   ],
   "reference_runtime_effect_surface": {
-    "status": "FAIL_CLOSED_MISMATCH",
-    "missing_current_effects": [
-      "pipeline_profile_read",
-      "inference_generate"
-    ],
-    "stale_current_effects": [
-      "profile_load",
-      "provider_chat_json"
-    ],
-    "promotion_requires": "The canonical reference runtime must expose exactly the current pipeline effect responsibility surface before it can serve as the semantic parity oracle for native-v2 promotion. Missing current effects or retained legacy alternate effects keep admission fail-closed."
+    "status": "PARITY",
+    "missing_current_effects": [],
+    "stale_current_effects": [],
+    "promotion_requires": "Source-level effect-surface parity is satisfied only when the canonical reference runtime authorizes and dispatches the current pipeline responsibility names and deauthorizes the legacy names. This source parity is necessary but not sufficient for native-v2 or whole-product promotion; exact isolated runtime evidence remains required."
   },
   "required_source_adapters_from_shipped_v2": [
     "json_snapshot",

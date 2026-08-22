@@ -42,9 +42,15 @@
     "vercel_executable_sandbox_surface": "NOT_EXPOSED_BY_AVAILABLE_CONNECTOR",
     "github_exact_pr_runtime": "ADMISSION_FAILED_BEFORE_VISIBLE_STEPS",
     "workflow_observations": [
-      {"run_id": 32570952856, "workflow": "mini-cognition-qwen35-08b-pr", "job_id": 97026222034, "job": "deterministic-cognition-gates", "conclusion": "failure", "steps": null},
-      {"run_id": 32570952854, "workflow": "claycog-08b-direct-admission", "job_id": 97026221839, "job": "direct-lane-admission", "conclusion": "failure", "steps": null}
+      {"run_id": 32570952856, "workflow": "mini-cognition-qwen35-08b-pr", "attempt": 1, "job_id": 97026222034, "job": "deterministic-cognition-gates", "conclusion": "failure", "steps": null, "job_log": "BLOB_NOT_FOUND"},
+      {"run_id": 32570952854, "workflow": "claycog-08b-direct-admission", "job_id": 97026221839, "job": "direct-lane-admission", "conclusion": "failure", "steps": null},
+      {"run_id": 32570952856, "workflow": "mini-cognition-qwen35-08b-pr", "attempt": 2, "job_id": 97026694762, "job": "deterministic-cognition-gates", "conclusion": "failure", "steps": null}
     ],
+    "admission_replication": {
+      "kind": "REGRESSION_RERUN_OF_EXISTING_JOB_NOT_NEW_UNUSUAL_EXPERIMENT",
+      "result": "PERSISTENT_ZERO_STEP_ADMISSION_FAILURE_REPRODUCED",
+      "interpretation": "a one-off transient runner failure is weakened; no test step executed in either attempt"
+    },
     "classification": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE",
     "runtime_credit": "ZERO"
   },
@@ -56,6 +62,6 @@
     "training_started": false,
     "spend_usd": 0
   },
-  "acceptance": "SOURCE_REPAIR_MERGED; EXACT_RUNTIME_UNVERIFIED; WHOLE_PRODUCT_IN_PROGRESS",
+  "acceptance": "SOURCE_REPAIR_MERGED; EXECUTION_ADMISSION_FAILURE_REPLICATED; EXACT_RUNTIME_UNVERIFIED; WHOLE_PRODUCT_IN_PROGRESS",
   "next_gate": "obtain an actually-started exact current-main runner and require focused 0.8B launcher regression plus canonical v2 generation/validation before authenticated provider preflight"
 }

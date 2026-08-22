@@ -2,6 +2,7 @@
 """Fail-closed direct Together Full-FT launcher for ~1B ClayCode cognition."""
 import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
+from provider_admission_v1 import require_together_paid_provider_admission
 
 HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"
@@ -114,7 +115,7 @@ def created_job_identity_mismatches(meta,expected):
     return out
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();require_together_paid_provider_admission();validate_static_contract();local_checks()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)

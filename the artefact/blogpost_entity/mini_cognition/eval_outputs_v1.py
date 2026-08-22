@@ -12,6 +12,10 @@ def load(path):
 def q(v):
     return json.dumps(v,ensure_ascii=False,separators=(",",":"))
 
+def depth1_body_lines(output):
+    """Return exact two-space function-body statements, excluding nested/comment text."""
+    return [line[2:] for line in output.splitlines() if line.startswith("  ") and not line.startswith("   ") and not line.startswith("  \t")]
+
 def exact_omega_ok(output, expected):
     operation=expected["operation"]
     args=expected["args"]
@@ -28,19 +32,20 @@ def exact_omega_ok(output, expected):
     ]
     required.extend(f'omega_arg(w,{q(a["name"])},{q(a["value"])},{q(a["type"])})' for a in args)
     required.extend(f'omega_validate(w,{q(g)})' for g in validators)
-    if any(output.count(x)!=1 for x in required):
+    lines=depth1_body_lines(output)
+    if any(lines.count(x)!=1 for x in required):
         return False
-    if output.count('omega_bind(w,"operation",')!=1:
+    if sum(x.startswith('omega_bind(w,"operation",') for x in lines)!=1:
         return False
-    if output.count('omega_arg(w,')!=len(args):
+    if sum(x.startswith('omega_arg(w,') for x in lines)!=len(args):
         return False
-    if output.count('omega_schema(w,')!=1 or output.count('omega_authority(w,')!=1 or output.count('omega_generation(w,')!=1:
+    if sum(x.startswith('omega_schema(w,') for x in lines)!=1 or sum(x.startswith('omega_authority(w,') for x in lines)!=1 or sum(x.startswith('omega_generation(w,') for x in lines)!=1:
         return False
-    if output.count('omega_validate(w,')!=len(validators):
+    if sum(x.startswith('omega_validate(w,') for x in lines)!=len(validators):
         return False
-    if output.count('omega_commit_candidate(c,w)')!=int(expected.get("commit_count",1)):
+    if lines.count('omega_commit_candidate(c,w)')!=int(expected.get("commit_count",1)):
         return False
-    if 'omega_reject(' in output:
+    if any(x.startswith('omega_reject(') for x in lines):
         return False
     return True
 
@@ -76,7 +81,7 @@ def main(spec_path, outputs_path):
       "strict_claycode_rate":strict/total if total else 0,
       "semantic_gate_rate":semantic/total if total else 0,
       "by_family":{k:{"n":v[0],"strict":v[1]/v[0],"semantic":v[2]/v[0]} for k,v in by.items()},
-      "promotion_requires":{"strict_claycode_rate":1.0,"semantic_gate_rate":0.95,"exact_omega_vector":True,"no_duplicate_or_unknown_ids":True},
+      "promotion_requires":{"strict_claycode_rate":1.0,"semantic_gate_rate":0.95,"exact_omega_vector":True,"depth1_exact_omega":True,"no_duplicate_or_unknown_ids":True},
     }
     print(json.dumps(report,indent=2))
     clean_ids=not duplicate_spec_ids and not duplicate_output_ids and not unknown_output_ids

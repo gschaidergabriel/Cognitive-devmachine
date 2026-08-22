@@ -1,53 +1,223 @@
 #!/usr/bin/env python3
-import importlib.util,json,os,stat,tempfile,types,unittest
+
+import importlib.util
+import json
+import os
+import stat
+import tempfile
+import types
+import unittest
 from pathlib import Path
-HERE=Path(__file__).resolve().parent
-spec=importlib.util.spec_from_file_location("launch08",HERE/"launch_together_qwen35_08b_v1.py");m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+
+HERE = Path(__file__).resolve().parent
+spec = importlib.util.spec_from_file_location("launch08", HERE / "launch_together_qwen35_08b_v1.py")
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+
+
 class FT:
-    def __init__(self,jobs=None,full=True):self.jobs=list(jobs or []);self.full=full;self.limits_kwargs=None;self.estimate_kwargs=None
-    def list(self):return types.SimpleNamespace(data=self.jobs)
-    def model_limits(self,**kw):self.limits_kwargs=kw;return types.SimpleNamespace(supports_full_training=self.full,full_training=types.SimpleNamespace() if self.full else None)
-    def estimate_price(self,**kw):self.estimate_kwargs=kw;return types.SimpleNamespace(estimated_total_price=4.0,allowed_to_proceed=True)
+    def __init__(self, jobs=None, full=True):
+        self.jobs = list(jobs or [])
+        self.full = full
+        self.limits_kwargs = None
+        self.estimate_kwargs = None
+
+    def list(self):
+        return types.SimpleNamespace(data=self.jobs)
+
+    def model_limits(self, **kwargs):
+        self.limits_kwargs = kwargs
+        return types.SimpleNamespace(
+            supports_full_training=self.full,
+            full_training=types.SimpleNamespace() if self.full else None,
+        )
+
+    def estimate_price(self, **kwargs):
+        self.estimate_kwargs = kwargs
+        return types.SimpleNamespace(estimated_total_price=4.0, allowed_to_proceed=True)
+
+
 class Client:
-    def __init__(self,jobs=None,full=True):self.fine_tuning=FT(jobs,full)
+    def __init__(self, jobs=None, full=True):
+        self.fine_tuning = FT(jobs, full)
+
+
 class TogetherCtor:
-    last=None
-    def __init__(self,**kw):type(self).last=kw
+    last = None
+
+    def __init__(self, **kwargs):
+        type(self).last = kwargs
+
+
+# Deliberately mirrors the currently documented high-level together-py create call shape
+# only for the fields ClayCog supplies. A nested REST training_type dict must not bind here.
+def current_sdk_create_shape(
+    *,
+    training_file,
+    model=None,
+    n_epochs=1,
+    validation_file="",
+    n_evals=0,
+    n_checkpoints=1,
+    learning_rate=0.00001,
+    warmup_ratio=0.0,
+    lora=None,
+    suffix=None,
+    random_seed=None,
+    model_limits=None,
+    train_on_inputs=None,
+    training_method="sft",
+):
+    return None
+
+
 class Tests(unittest.TestCase):
     def setUp(self):
-        self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
+        self.confirmation = os.environ.pop(m.CREATE_CONFIRM_ENV, None)
+        self.ledger_dir = os.environ.get(m.CREATE_LEDGER_DIR_ENV)
+        self.temp = tempfile.TemporaryDirectory()
+        root = Path(self.temp.name)
+        self.old_train, self.old_valid = m.TRAIN, m.VALID
+        m.TRAIN = root / "t.jsonl"
+        m.VALID = root / "v.jsonl"
+        m.TRAIN.write_text('{"messages":[]}\n')
+        m.VALID.write_text('{"messages":[]}\n')
+
     def tearDown(self):
-        m.TRAIN,m.VALID=self.ot,self.ov;self.t.cleanup()
-        if self.c is None:os.environ.pop(m.CREATE_CONFIRM_ENV,None)
-        else:os.environ[m.CREATE_CONFIRM_ENV]=self.c
-        if self.l is None:os.environ.pop(m.CREATE_LEDGER_DIR_ENV,None)
-        else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
+        m.TRAIN, m.VALID = self.old_train, self.old_valid
+        self.temp.cleanup()
+        if self.confirmation is None:
+            os.environ.pop(m.CREATE_CONFIRM_ENV, None)
+        else:
+            os.environ[m.CREATE_CONFIRM_ENV] = self.confirmation
+        if self.ledger_dir is None:
+            os.environ.pop(m.CREATE_LEDGER_DIR_ENV, None)
+        else:
+            os.environ[m.CREATE_LEDGER_DIR_ENV] = self.ledger_dir
+
     def test_model_and_direct_campaign(self):
-        self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
+        self.assertEqual(m.MODEL, "Qwen/Qwen3.5-0.8B")
+        m.validate_static_contract()
+        descriptor = m.campaign_descriptor()
+        self.assertEqual(descriptor["schema"], "claycog-08b-together-direct-campaign/v3")
+        self.assertEqual(descriptor["training_type"], {"type": "Full"})
+        self.assertEqual(descriptor["random_seed"], 3407)
+        self.assertEqual(len(descriptor["launcher_sha256"]), 64)
+        self.assertEqual(descriptor["launcher_sha256"], m.sha256_file(m.LAUNCHER))
+        raw = json.dumps(descriptor)
+        self.assertNotIn("from_hf_model", raw)
+        self.assertNotIn("template_model", raw)
+
     def test_sdk_v2_model_limits(self):
-        c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
-        with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))
+        client = Client()
+        m.get_full_training_limits(client)
+        self.assertEqual(client.fine_tuning.limits_kwargs, {"model_name": m.EXPECTED_MODEL})
+        with self.assertRaises(SystemExit):
+            m.get_full_training_limits(Client(full=False))
+
     def test_estimate_schema_subset(self):
-        c=Client();m.estimate_price(c,"t","v");q=c.fine_tuning.estimate_kwargs;self.assertEqual(q["training_type"],{"type":"Full"});self.assertEqual(q["training_method"],{"method":"sft","train_on_inputs":"auto"})
-        for x in ("random_seed","learning_rate","warmup_ratio","from_hf_model"):self.assertNotIn(x,q)
-    def test_create_explicit_full_and_seed(self):
-        p=m.create_payload("t","v","s");self.assertEqual(p["training_type"],{"type":"Full"});self.assertEqual(p["random_seed"],3407);self.assertEqual(p["learning_rate"],1e-5);self.assertEqual(p["warmup_ratio"],.03)
-        for x in ("lora","from_hf_model","hf_model_revision","train_on_inputs"):self.assertNotIn(x,p)
-    def test_fingerprint_binds_dataset(self):
-        a=m.campaign_fingerprint();m.TRAIN.write_text('{"messages":[1]}\n');self.assertNotEqual(a,m.campaign_fingerprint())
+        client = Client()
+        m.estimate_price(client, "t", "v")
+        query = client.fine_tuning.estimate_kwargs
+        self.assertEqual(query["training_type"], {"type": "Full"})
+        self.assertEqual(query["training_method"], {"method": "sft", "train_on_inputs": "auto"})
+        for forbidden in ("random_seed", "learning_rate", "warmup_ratio", "from_hf_model"):
+            self.assertNotIn(forbidden, query)
+
+    def test_create_uses_high_level_sdk_shape_for_full_sft(self):
+        limits = object()
+        payload = m.create_payload("t", "v", "s", model_limits=limits)
+        self.assertIs(payload["model_limits"], limits)
+        self.assertIs(payload["lora"], False)
+        self.assertEqual(payload["training_method"], "sft")
+        self.assertEqual(payload["train_on_inputs"], "auto")
+        self.assertEqual(payload["random_seed"], 3407)
+        self.assertEqual(payload["learning_rate"], 1e-5)
+        self.assertEqual(payload["warmup_ratio"], 0.03)
+        for forbidden in ("training_type", "from_hf_model", "hf_model_revision"):
+            self.assertNotIn(forbidden, payload)
+        m.assert_sdk_create_signature(current_sdk_create_shape, payload)
+
+    def test_rest_create_shape_falsifier_is_rejected_before_intent(self):
+        # This reproduces the pre-repair bug: estimate/REST dictionaries were passed to
+        # FineTuningResource.create(), whose Python signature does not accept training_type
+        # and expects training_method as a string rather than an object.
+        old_payload = {
+            "training_file": "t",
+            "validation_file": "v",
+            "model": m.MODEL,
+            "n_epochs": 3,
+            "n_evals": 2,
+            "n_checkpoints": 1,
+            "random_seed": 3407,
+            "learning_rate": 1e-5,
+            "warmup_ratio": 0.03,
+            "suffix": "s",
+            "training_method": {"method": "sft", "train_on_inputs": "auto"},
+            "training_type": {"type": "Full"},
+        }
+        with self.assertRaises(SystemExit) as ctx:
+            m.assert_sdk_create_signature(current_sdk_create_shape, old_payload)
+        self.assertIn("SDK_CREATE_SIGNATURE_REJECT", str(ctx.exception))
+
+    def test_fingerprint_binds_dataset_and_launcher(self):
+        first = m.campaign_fingerprint()
+        m.TRAIN.write_text('{"messages":[1]}\n')
+        self.assertNotEqual(first, m.campaign_fingerprint())
+        descriptor = m.campaign_descriptor()
+        self.assertEqual(descriptor["launcher_sha256"], m.sha256_file(m.LAUNCHER))
+
     def test_duplicate_guard(self):
-        s="claycog08b-v2-dead";c=Client([{"id":"j","status":"running","model":m.MODEL,"model_output_name":"x"+s}])
-        with self.assertRaises(SystemExit):m.assert_no_duplicate_campaign(c,s)
+        suffix = "claycog08b-v3-dead"
+        client = Client(
+            [
+                {
+                    "id": "j",
+                    "status": "running",
+                    "model": m.MODEL,
+                    "model_output_name": "x" + suffix,
+                }
+            ]
+        )
+        with self.assertRaises(SystemExit):
+            m.assert_no_duplicate_campaign(client, suffix)
+
     def test_confirmation_and_private_intent(self):
-        fp="a"*64
-        with self.assertRaises(SystemExit):m.require_create_confirmation(fp)
-        os.environ[m.CREATE_CONFIRM_ENV]=fp;m.require_create_confirmation(fp)
-        with tempfile.TemporaryDirectory() as td:
-            os.environ[m.CREATE_LEDGER_DIR_ENV]=td;fp=m.campaign_fingerprint();p=m.arm_create_intent(fp,m.campaign_suffix(fp));self.assertEqual(stat.S_IMODE(p.stat().st_mode),0o600);self.assertEqual(m.read_create_ledger(fp)["campaign"]["training_type"],{"type":"Full"})
+        fingerprint = "a" * 64
+        with self.assertRaises(SystemExit):
+            m.require_create_confirmation(fingerprint)
+        os.environ[m.CREATE_CONFIRM_ENV] = fingerprint
+        m.require_create_confirmation(fingerprint)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            os.environ[m.CREATE_LEDGER_DIR_ENV] = temp_dir
+            fingerprint = m.campaign_fingerprint()
+            path = m.arm_create_intent(fingerprint, m.campaign_suffix(fingerprint))
+            self.assertEqual(stat.S_IMODE(path.stat().st_mode), 0o600)
+            entry = m.read_create_ledger(fingerprint)
+            self.assertEqual(entry["schema"], "claycog-together-create-intent/v3")
+            self.assertEqual(entry["campaign"]["training_type"], {"type": "Full"})
+            self.assertEqual(entry["campaign"]["launcher_sha256"], m.sha256_file(m.LAUNCHER))
+
     def test_created_job_identity_mismatch_detection(self):
-        expected={"training_file":"t","validation_file":"v","model":m.MODEL,"n_epochs":3,"n_evals":2,"random_seed":3407}
-        good=types.SimpleNamespace(**expected);self.assertEqual(m.created_job_identity_mismatches(good,expected),{})
-        bad=types.SimpleNamespace(**{**expected,"random_seed":9});mm=m.created_job_identity_mismatches(bad,expected);self.assertEqual(mm["random_seed"],{"expected":3407,"observed":9})
+        expected = {
+            "training_file": "t",
+            "validation_file": "v",
+            "model": m.MODEL,
+            "n_epochs": 3,
+            "n_evals": 2,
+            "random_seed": 3407,
+        }
+        good = types.SimpleNamespace(**expected)
+        self.assertEqual(m.created_job_identity_mismatches(good, expected), {})
+        bad = types.SimpleNamespace(**{**expected, "random_seed": 9})
+        mismatches = m.created_job_identity_mismatches(bad, expected)
+        self.assertEqual(mismatches["random_seed"], {"expected": 3407, "observed": 9})
+
     def test_zero_retry(self):
-        TogetherCtor.last=None;m.new_zero_retry_create_client(TogetherCtor);self.assertEqual(TogetherCtor.last,{"max_retries":0})
-if __name__=="__main__":unittest.main()
+        TogetherCtor.last = None
+        m.new_zero_retry_create_client(TogetherCtor)
+        self.assertEqual(TogetherCtor.last, {"max_retries": 0})
+
+
+if __name__ == "__main__":
+    unittest.main()

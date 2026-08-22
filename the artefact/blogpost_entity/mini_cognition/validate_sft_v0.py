@@ -3,17 +3,34 @@ import json, sys
 from pathlib import Path
 
 PREFIX="module clay.cog.turn\nfn think(i:Map)->Map {\n"
-REQUIRED=('self_bind(c,"mini_entity","persistent_entity")','return c\n}')
-FORBIDDEN=("```","<think>","</think>")
+REQUIRED=(
+    'self_bind(c,cfg("entity.id"),cfg("entity.continuity"))',
+    'role_bind(c,cfg("application.role"))',
+    'goal_bind(c,cfg("application.goal"))',
+    'personality_bind(c,cfg("application.personality"))',
+    'return c\n}',
+)
+FORBIDDEN_MARKUP=("```","<think>","</think>")
+FORBIDDEN_FIXED_IDENTITY=(
+    'self_bind(c,"mini_entity"',
+    'self_bind(c,"zero"',
+    'role_bind(c,"blog',
+    'role_bind(c,"blogger',
+    'goal_bind(c,"write blog',
+    'personality_bind(c,"zero',
+)
 
 
 def validate_code(s):
     errors=[]
+    lower=s.lower()
     if not s.startswith(PREFIX): errors.append("bad_prefix")
     for item in REQUIRED:
         if item not in s: errors.append("missing:"+item)
-    for item in FORBIDDEN:
-        if item in s: errors.append("forbidden:"+item)
+    for item in FORBIDDEN_MARKUP:
+        if item in s: errors.append("forbidden_markup:"+item)
+    for item in FORBIDDEN_FIXED_IDENTITY:
+        if item in lower: errors.append("fixed_identity_or_job:"+item)
     if s.count("{")!=s.count("}"): errors.append("brace_balance")
     if s.count("(")!=s.count(")"): errors.append("paren_balance")
     if s.strip()!=s or not s.rstrip().endswith("}"): errors.append("outer_text")

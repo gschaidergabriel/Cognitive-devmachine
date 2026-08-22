@@ -1,5 +1,5 @@
 {
-  "schema_version": "6.5",
+  "schema_version": "6.6",
   "entity_display_name": "Clay",
   "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
@@ -30,13 +30,16 @@
     "identity": "switching inference backend or model must not reset MiniUnifiedDB state/history"
   },
   "claycog_05b": {
-    "status": "SOURCE_AND_CORPUS_READY_TRAINING_NOT_STARTED",
+    "status": "CORPUS_V2_READY_TRAINING_NOT_STARTED",
     "base": "Qwen/Qwen2.5-0.5B",
     "spec": "the artefact/blogpost_entity/mini_cognition/CLAYCODE_COGNITION_V1.md",
-    "corpus": "claycog-sft/v1 1650 examples, 1485 train, 165 validation, 0 structural invalid locally",
+    "corpus": "claycog-sft/v2: 1800 examples, 1620 train, 180 held-out validation; 9 balanced families; all rows unique; exact train-validation row/prompt overlap 0",
+    "corpus_train_sha256": "ad132881aee5b794a1a81a56bc51af99d09d04c2fdff769f48cf192afa0d2a21",
+    "corpus_validation_sha256": "fad0e7a2613e54c3027ca5de8d8917ff3408a8a8a644439be764152648396e6f",
+    "corpus_v1_status": "SUPERSEDED_FOR_PAID_TRAINING_BY_V2_AFTER_TEMPLATE_POOL_LEAKAGE_FALSIFIER",
     "ood": "200 held-out promotion probes",
     "structured_action": "typed omega; commit only after grammar/type/schema/authority/generation validation",
-    "together": "BYOM compatibility OPEN; owner-authorized training only; USD18 single-job gate; no job started",
+    "together": "BYOM compatibility OPEN; owner-authorized training only; USD18 single-job gate; canonical launcher uses fingerprint + account duplicate guard + local atomic create intent + zero-retry billed create; no job started",
     "deployment": "Q4_K_M candidate must measure peak RSS <1GiB at ctx 2048"
   },
   "sandbox_local_backend": {

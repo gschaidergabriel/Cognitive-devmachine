@@ -3,8 +3,9 @@
 
 Only identifier(...) forms outside string literals and comments are returned.
 Nested calls are retained so semantic markers such as cfg("entity.id") remain
-observable when they occur inside a real outer call, while quoted/commented
-lookalikes never count as executable ClayCode semantics.
+observable when they occur inside a real outer call. Every call also records its
+brace depth so canonical turn-body calls can be distinguished from nested/dead
+control flow without creating a second parser authority.
 """
 import re
 
@@ -84,6 +85,7 @@ def extract_calls(code):
     i = 0
     quoted = False
     escaped = False
+    brace_depth = 0
     while i < n:
         ch = code[i]
         if quoted:
@@ -97,6 +99,14 @@ def extract_calls(code):
             continue
         if ch == '"':
             quoted = True
+            i += 1
+            continue
+        if ch == "{":
+            brace_depth += 1
+            i += 1
+            continue
+        if ch == "}":
+            brace_depth -= 1
             i += 1
             continue
         match = IDENT.match(code, i)
@@ -131,19 +141,21 @@ def extract_calls(code):
                 elif current == ")":
                     depth -= 1
                     if depth == 0:
-                        calls.append({"fn": name, "call": canonical(code[i : k + 1])})
+                        calls.append({"fn": name, "call": canonical(code[i : k + 1]), "depth": brace_depth})
                         break
             k += 1
         i = match.end()
     return calls
 
 
-def call_set(code):
-    return {item["call"] for item in extract_calls(code)}
+def call_set(code, depth=None):
+    return {item["call"] for item in extract_calls(code) if depth is None or item["depth"] == depth}
 
 
-def fn_counts(code):
+def fn_counts(code, depth=None):
     counts = {}
     for item in extract_calls(code):
+        if depth is not None and item["depth"] != depth:
+            continue
         counts[item["fn"]] = counts.get(item["fn"], 0) + 1
     return counts

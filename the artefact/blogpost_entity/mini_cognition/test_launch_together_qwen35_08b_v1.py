@@ -14,6 +14,11 @@ class Client:
 class TogetherCtor:
     last=None
     def __init__(self,**kw):type(self).last=kw
+class EnvProbe(dict):
+    def __init__(self,source):super().__init__(source);self.accesses=[]
+    def get(self,key,default=None):self.accesses.append(("get",key));return super().get(key,default)
+    def __getitem__(self,key):self.accesses.append(("getitem",key));return super().__getitem__(key)
+    def __contains__(self,key):self.accesses.append(("contains",key));return super().__contains__(key)
 class Tests(unittest.TestCase):
     def setUp(self):
         self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
@@ -25,6 +30,26 @@ class Tests(unittest.TestCase):
         else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
     def test_model_and_direct_campaign(self):
         self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
+    def test_provider_execution_mode_is_fail_closed(self):
+        p=Path(self.t.name)/"provider-policy.json"
+        p.write_text('{"mode":"FREE_ONLY"}\n',encoding="utf-8")
+        self.assertEqual(m.provider_execution_mode(p),"FREE_ONLY")
+        with self.assertRaisesRegex(SystemExit,"FREE_ONLY_PROVIDER_REJECTED"):
+            m.require_paid_provider_admission(p)
+        p.write_text('{"mode":"PAID_ALLOWED"}\n',encoding="utf-8")
+        self.assertEqual(m.require_paid_provider_admission(p),"PAID_ALLOWED")
+        p.write_text('{"mode":"UNKNOWN"}\n',encoding="utf-8")
+        with self.assertRaisesRegex(SystemExit,"PROVIDER_EXECUTION_MODE_UNRECOGNIZED"):
+            m.require_paid_provider_admission(p)
+        p.write_text('{"mode":7}\n',encoding="utf-8")
+        with self.assertRaisesRegex(SystemExit,"PROVIDER_EXECUTION_MODE_UNRESOLVED"):
+            m.require_paid_provider_admission(p)
+    def test_free_only_rejects_before_subprocess_secret_and_provider_client(self):
+        p=Path(self.t.name)/"provider-policy.json";p.write_text('{"mode":"FREE_ONLY"}\n',encoding="utf-8");probe=EnvProbe(os.environ);TogetherCtor.last=None
+        with mock.patch.object(m,"PROVIDER_EXECUTION_POLICY",p),mock.patch.object(m,"local_checks") as local_checks,mock.patch.object(m.os,"environ",probe),mock.patch.object(m.sys,"argv",["launcher"]),mock.patch.dict(m.sys.modules,{"together":types.SimpleNamespace(Together=TogetherCtor)}):
+            with self.assertRaisesRegex(SystemExit,"FREE_ONLY_PROVIDER_REJECTED"):
+                m.main()
+        local_checks.assert_not_called();self.assertNotIn("TOGETHER_API_KEY",[key for _,key in probe.accesses]);self.assertIsNone(TogetherCtor.last)
     def test_local_checks_use_canonical_v2_validator(self):
         with mock.patch.object(m.subprocess,"run") as run:
             m.local_checks()

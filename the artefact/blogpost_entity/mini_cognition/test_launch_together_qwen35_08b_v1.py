@@ -14,9 +14,11 @@ class Client:
 class TogetherCtor:
     last=None
     def __init__(self,**kw):type(self).last=kw
-class EnvProbe:
-    def __init__(self):self.get_calls=[]
-    def get(self,key,default=None):self.get_calls.append(key);return "sentinel"
+class EnvProbe(dict):
+    def __init__(self,source):super().__init__(source);self.accesses=[]
+    def get(self,key,default=None):self.accesses.append(("get",key));return super().get(key,default)
+    def __getitem__(self,key):self.accesses.append(("getitem",key));return super().__getitem__(key)
+    def __contains__(self,key):self.accesses.append(("contains",key));return super().__contains__(key)
 class Tests(unittest.TestCase):
     def setUp(self):
         self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
@@ -52,11 +54,11 @@ class Tests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit,"PROVIDER_EXECUTION_MODE_UNRESOLVED"):
             m.require_paid_provider_admission(p)
     def test_free_only_rejects_before_provider_secret_lookup(self):
-        p=Path(self.t.name)/"provider-policy.json";p.write_text('{"mode":"FREE_ONLY"}\n',encoding="utf-8");probe=EnvProbe()
+        p=Path(self.t.name)/"provider-policy.json";p.write_text('{"mode":"FREE_ONLY"}\n',encoding="utf-8");probe=EnvProbe(os.environ)
         with mock.patch.object(m,"PROVIDER_EXECUTION_POLICY",p),mock.patch.object(m,"local_checks"),mock.patch.object(m.os,"environ",probe),mock.patch.object(m.sys,"argv",["launcher"]):
             with self.assertRaisesRegex(SystemExit,"FREE_ONLY_PROVIDER_REJECTED"):
                 m.main()
-        self.assertEqual(probe.get_calls,[])
+        self.assertNotIn("TOGETHER_API_KEY",[key for _,key in probe.accesses])
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

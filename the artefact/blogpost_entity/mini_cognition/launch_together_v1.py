@@ -6,8 +6,9 @@ Together template, and print a server price estimate. A billed training job is c
 only with --create after all gates pass.
 
 Together's current regular catalog has no native 0.5B Qwen entry. We therefore use BYOM
-with Qwen/Qwen2.5-0.5B and a configurable Qwen-family catalog template. Compatibility is
-an empirical API gate; a template/checkpoint mismatch must fail closed before promotion.
+with Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family catalog-template candidate. Compatibility is
+an empirical API gate; a template/checkpoint mismatch must fail closed before promotion. We do not silently
+fall back to a Qwen3.5 template because BYOM requires matching architecture.
 """
 import argparse, json, os, subprocess, sys, time
 from pathlib import Path
@@ -17,7 +18,7 @@ HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v1.jsonl"
 VALID=HERE/"validation_v1.jsonl"
 HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL","Qwen/Qwen2.5-0.5B")
-TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen3.5-0.8B")
+TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-7B-Instruct-Turbo")
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
 EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00"))

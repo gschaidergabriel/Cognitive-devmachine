@@ -15,17 +15,18 @@ Canonical: <current main SHA>
 Organ: <worker/provenance>
 Trigger: <none|go|other>
 Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
-Program: Multi-use Mini Entity all-in-one
-Stage: BLOGPOST_ENTITY_CLAY
-Goal: one application-neutral `.clay` pipeline executable + one SQLite MiniUnifiedDB; shipped DB preconfigured as fully replaceable zero_blog application
-Binary law: no replaceable Zero/blog/personality semantics in executable; application/personality belongs to SQLite configuration
-Provider: Mistral default profile only; provider/model/token/request/response adapter replaceable without forking or resetting state; secrets never exposed
+Program: Multi-use Mini Entity pipeline all-in-one
+Stage: MINI_ENTITY_PIPELINE_CLAY
+Goal: one application-neutral/inference-neutral `.clay` pipeline executable + one SQLite MiniUnifiedDB; zero_blog is only the fully replaceable shipped preset
+Binary law: no replaceable Zero/blog/personality/provider/model semantics in executable identity
+Inference: runtime-selectable remote API · loopback local API · local model weights via configured local_exec runner; switching backend/model never resets state
+Default inference: Mistral API profile only; API token optional when using local inference; secrets never exposed
 Prompt law: full application/personality/system prompt runtime-editable below immutable generic architecture truth/secret gate
-Truth law: UNKNOWN != ZERO != ERROR != MEASURED; narrative model cannot mint canonical evidence/state
-Swarm: research/build orchestration only — generic pipeline · runtime · MiniUnifiedDB · application config · provider · gates · adversarial · tests · fusion/hypofusion
+Truth law: UNKNOWN != ZERO != ERROR != MEASURED; model output cannot mint canonical evidence/state
+Swarm: research/build orchestration only — generic pipeline · runtime · MiniUnifiedDB · application config · API inference · local inference · gates · adversarial · tests · fusion/hypofusion
 Together API: FORBIDDEN
 Current frontier: <dynamic>
 Acceptance: IN_PROGRESS|PASS|BLOCKED|UNRESOLVED
-Evidence note: local/component/mock PASS does not imply real-provider final PASS
+Evidence note: fixture/backend-contract PASS does not imply real remote-provider or real local-model quality PASS
 Short commands: go · fusion · hypofusion · claycode · unifieddb · atomic · dump
 ```

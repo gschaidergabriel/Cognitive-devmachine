@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -37,6 +38,22 @@ def _inside(root: Path, path: Path) -> bool:
         return False
 
 
+def _lexical_absolute(path: Path) -> Path:
+    """Normalize dot segments without following symlinks."""
+    return Path(os.path.abspath(path))
+
+
+def _reject_symlink_chain(root: Path, path: Path) -> None:
+    lexical = _lexical_absolute(path)
+    if not _inside(root, lexical):
+        raise ValueError(f"LOCAL_INCLUDE_ESCAPES_SOURCE_ROOT:{path}")
+    current = root
+    for part in lexical.relative_to(root).parts:
+        current = current / part
+        if current.is_symlink():
+            raise ValueError(f"LOCAL_INCLUDE_SYMLINK_FORBIDDEN:{current}")
+
+
 def source_files(entry: Path) -> list[Path]:
     """Return every repository-local quoted include reachable from *entry*.
 
@@ -44,9 +61,12 @@ def source_files(entry: Path) -> list[Path]:
     intentionally excluded. Macro/dynamic include syntax fails closed because silently
     omitting such a dependency would make the provenance digest incomplete.
     """
-    entry = entry.resolve()
+    requested_entry = Path(entry)
+    if requested_entry.is_symlink():
+        raise ValueError(f"SOURCE_SYMLINK_FORBIDDEN:{requested_entry}")
+    entry = requested_entry.resolve()
     root = entry.parent.resolve()
-    if not entry.is_file() or entry.is_symlink():
+    if not entry.is_file():
         raise ValueError(f"SOURCE_NOT_REGULAR:{entry}")
 
     pending = [entry]
@@ -54,16 +74,17 @@ def source_files(entry: Path) -> list[Path]:
     ordered: list[Path] = []
     while pending:
         path = pending.pop()
-        path = path.resolve()
-        if path in seen:
+        _reject_symlink_chain(root, path)
+        resolved = path.resolve()
+        if resolved in seen:
             continue
-        if not _inside(root, path):
-            raise ValueError(f"LOCAL_INCLUDE_ESCAPES_SOURCE_ROOT:{path}")
-        if not path.is_file() or path.is_symlink():
-            raise ValueError(f"LOCAL_INCLUDE_NOT_REGULAR:{path}")
-        seen.add(path)
-        ordered.append(path)
-        data = path.read_bytes()
+        if not _inside(root, resolved):
+            raise ValueError(f"LOCAL_INCLUDE_ESCAPES_SOURCE_ROOT:{resolved}")
+        if not resolved.is_file():
+            raise ValueError(f"LOCAL_INCLUDE_NOT_REGULAR:{resolved}")
+        seen.add(resolved)
+        ordered.append(resolved)
+        data = resolved.read_bytes()
         for raw in _INCLUDE_RE.findall(data):
             token = raw.strip()
             if token.startswith(b"<") and token.endswith(b">"):
@@ -72,23 +93,26 @@ def source_files(entry: Path) -> list[Path]:
             if not match:
                 raise ValueError(
                     "UNSUPPORTED_INCLUDE_SYNTAX:{}:{}".format(
-                        path.relative_to(root).as_posix(),
+                        resolved.relative_to(root).as_posix(),
                         token.decode("utf-8", "backslashreplace"),
                     )
                 )
             include_text = match.group(1).decode("utf-8", "strict")
-            child = (path.parent / include_text).resolve()
-            if not _inside(root, child):
+            child = resolved.parent / include_text
+            _reject_symlink_chain(root, child)
+            child_resolved = child.resolve()
+            if not _inside(root, child_resolved):
                 raise ValueError(f"LOCAL_INCLUDE_ESCAPES_SOURCE_ROOT:{include_text}")
             pending.append(child)
     return sorted(ordered, key=lambda item: item.relative_to(root).as_posix())
 
 
 def describe_source_closure(entry: Path) -> list[dict[str, Any]]:
-    entry = entry.resolve()
+    requested_entry = Path(entry)
+    entry = requested_entry.resolve()
     root = entry.parent.resolve()
     out: list[dict[str, Any]] = []
-    for path in source_files(entry):
+    for path in source_files(requested_entry):
         data = path.read_bytes()
         out.append(
             {

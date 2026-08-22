@@ -1,0 +1,71 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_at_join": "ff9e86b02fce611f19a36934b46887ada8ba6590",
+  "branch": "gpt56sol/go-08b-sdk-create-schema-repair-20260822-1838",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "primary_model": "Qwen/Qwen3.5-0.8B",
+  "problem": {
+    "status": "MECHANISM_FALSIFIED_SOURCE_REPAIR_CANDIDATE",
+    "summary": "The merged direct-0.8B launcher reused nested REST estimate/create representations as kwargs to the high-level together-py FineTuningResource.create() method. Current together-py exposes a different Python wrapper contract: Full training is selected with lora=False, SFT with training_method='sft', and train_on_inputs is a top-level SDK argument; training_type is not a create() kwarg.",
+    "risk": "The pre-repair billed-create call can fail locally with a Python call-shape TypeError. Because the launcher broadly classified create exceptions as UNKNOWN_REMOTE_CREATE after arming its durable intent, a local schema defect could create a false ambiguous-remote lockout even though no fine-tune POST was issued."
+  },
+  "one_unusual_experiment": {
+    "name": "SDK_CREATE_SCHEMA_SPLIT_FALSIFIER",
+    "count": 1,
+    "hypothesis": "The nested REST training_type/training_method payload used for Together price estimation can also be passed unchanged to the high-level together-py fine_tuning.create() method.",
+    "counterhypothesis": "The high-level SDK has a distinct wrapper call schema and converts lora/training_method/train_on_inputs into the nested REST request internally.",
+    "intervention": "Compare the exact pre-repair ClayCog create kwargs with the current Together Python FineTuningResource.create signature and implementation, independently of any provider credential or billed request.",
+    "result": "FALSIFIED_HYPOTHESIS_RETAIN_COUNTERHYPOTHESIS",
+    "observation": "Current create() accepts lora, train_on_inputs and training_method as a string, but no training_type kwarg. Its implementation constructs the nested request and calls estimate_price before POSTing /fine-tunes.",
+    "network_provider_call": false,
+    "secret_used": false,
+    "spend_usd": 0
+  },
+  "primary_external_evidence": [
+    {
+      "source": "Together Python SDK current main",
+      "url": "https://github.com/togethercomputer/together-py/blob/main/src/together/resources/fine_tuning.py",
+      "observed_contract": "FineTuningResource.create: lora, model_limits, train_on_inputs, training_method string; no training_type kwarg. The wrapper constructs the request, estimates price, then POSTs /fine-tunes."
+    },
+    {
+      "source": "PyPI together",
+      "url": "https://pypi.org/project/together/",
+      "observed_contract": "Current published distribution observed as together 2.28.0 (2026-07-24)."
+    }
+  ],
+  "delta": {
+    "launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py",
+    "tests": "the artefact/blogpost_entity/mini_cognition/test_launch_together_qwen35_08b_v1.py",
+    "workflow": ".github/workflows/claycog-08b-direct-admission-pr.yml",
+    "changes": [
+      "Keep nested training_type/training_method only for REST estimate semantics.",
+      "Use high-level together-py create kwargs lora=False, training_method='sft', train_on_inputs='auto'.",
+      "Pass already-observed model_limits into create so the wrapper uses the same admitted model-limit object.",
+      "Bind inspect.signature(create).bind(**payload) before durable create-intent arming.",
+      "Distinguish a deeper local TypeError as LOCAL_SDK_CREATE_REJECTED rather than claiming ambiguous remote CREATE.",
+      "Upgrade campaign/create-intent/preflight schema to v3 and bind launcher_sha256 into the campaign fingerprint so an old create confirmation cannot authorize changed launcher bytes.",
+      "Pin together==2.28.0 in the PR admission workflow and exercise the installed SDK signature without credentials or provider requests."
+    ]
+  },
+  "execution": {
+    "exact_branch_runtime": "UNOBSERVED_PENDING_ACTUALLY_STARTED_PR_RUNNER",
+    "chat_isolated_container": "DEPENDENCY_INSTALL_ADMISSION_FAILED_NO_NETWORK",
+    "chat_container_detail": "Attempted pip install together==2.28.0; DNS/network access was unavailable, so no installed-SDK execution credit is claimed from the chat container.",
+    "github_actions": "TO_BE_OBSERVED_AFTER_PR_OPEN",
+    "classification": "Source/API-contract mechanism evidence only until exact branch workflow visibly starts and passes."
+  },
+  "claims_not_made": [
+    "No Together credential was used.",
+    "No dataset was uploaded to Together.",
+    "No authenticated model_limits or price preflight was run.",
+    "No billed fine-tuning create was attempted.",
+    "No training was started.",
+    "No model-quality, quantization, RSS, local_exec integration or whole Mini Entity PASS is claimed."
+  ],
+  "next_exact_gate": "An actually-started exact PR workflow must install together==2.28.0, regenerate/validate SFT v2, bind the repaired payload to the real SDK create signature and pass deterministic regressions. Only after that, an environment-secret authenticated preflight may establish current provider/model/price admission before any separately fingerprint-confirmed billed CREATE."
+}

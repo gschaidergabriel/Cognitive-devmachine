@@ -1,5 +1,5 @@
 {
-  "schema_version": "6.3",
+  "schema_version": "6.4",
   "program_id": "blogpost-entity-all-in-one",
   "status": "ACTIVE",
   "stage": "BLOGPOST_ENTITY_CLAY",
@@ -15,43 +15,53 @@
   "sandbox_evidence": {
     "date": "2026-08-22",
     "native_pipeline": {
-      "version": "mini-entity/0.4.0",
+      "version": "mini-entity/0.4.1",
       "platform": "linux-x86_64",
-      "form": "ELF executable named blogpost_entity.clay",
-      "binary_sha256": "b14844811f64e9bc81115eb7a9aac15f4cc5019acc81283854b85f2bbf85d32b",
-      "application_string_audit": "PASS: no zero_blog, Gasthaus, Bare Metal, local-model or T_Omega application strings in ELF",
+      "form": "application-neutral ELF executable named blogpost_entity.clay",
+      "binary_sha256": "d0733d10f50f8524196a84338f9c9700dfeb8816841b5a555f26e07eddde8b79",
+      "application_string_audit": "PASS: no zero_blog, Gasthaus, Bare Metal, T_OMEGA, blogpost or application-specific metric names observed in ELF",
       "fresh_db_mode": "neutral"
     },
     "shipped_default_db": {
-      "sha256": "64c3089d7c1c99d682df00c29803ecad62f15665ec114e5e7d1fb6a9394e28f2",
+      "sha256": "8bb21d7b6ea63b584a9c6384c3339d5b331a48d4c9c1241f21c2f8649c1a7155",
       "integrity_check": "ok",
       "preset": "zero_blog",
-      "api_token": "MISSING_BY_DESIGN"
+      "api_token": "MISSING_BY_DESIGN_RUNTIME_ONLY"
     },
     "tested_behaviors": [
-      "Zero/Gasthaus application replaced at runtime by Mara English dry lab-report profile using same ELF",
+      "fresh database is application-neutral",
+      "binary application-string audit separates replaceable application semantics from executable identity",
+      "shipped zero_blog preset lives in SQLite configuration only",
+      "Zero blog end-to-end loopback provider run with exactly-once persistence",
+      "verified-empty second run is quiet",
+      "Zero application replaced at runtime by Mara English dry lab-report role using same ELF and same continuing DB",
       "generation/history continued without DB reset",
-      "runtime-editable arbitrary profile.* fields",
-      "runtime-editable full application/personality blob",
-      "runtime-editable system prompt",
-      "provider endpoint/model/token/request-template/response-pointer runtime configuration",
-      "exactly-once event consumption",
-      "verified-empty second run",
+      "runtime-editable application_config_json and system prompt",
+      "runtime-editable configured state metric rules",
+      "provider endpoint/model/auth/request-template/response-pointer changed without state reset",
+      "missing API token consumes nothing",
+      "API token stdin entry works and secret is absent from DB/config/status",
+      "secret output leak rejected without consumption",
+      "configured UNKNOWN self-state claim rejected without consumption",
+      "UNKNOWN sensor state never becomes verified quiet",
+      "non-loopback plaintext HTTP rejected",
+      "concurrent same-generation runs fenced by generation/event CAS with exactly one success",
       "SQLite integrity_check PASS"
     ],
-    "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_PIPELINE_0_4_CONFIG_SEPARATION.json",
+    "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_4_1_SANDBOX.json",
     "real_provider_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_API_SECRET_MOUNTED"
   },
   "default_application": {
     "preset": "zero_blog",
-    "source": "the artefact/blogpost_entity/presets/zero_blog.json",
-    "status": "fully replaceable runtime configuration, not executable identity"
+    "status": "fully replaceable runtime configuration in shipped MiniUnifiedDB, not executable identity",
+    "default_provider": "Mistral chat completions using mistral-medium-latest; token runtime-injected via MISTRAL_API_KEY or stdin"
   },
   "canonical_clay_state": {
     "source_present": true,
-    "current_gap": "structured Clay source/spec still carries more Zero/EntityOS-specific semantics than the proven native 0.4 pipeline; next go must converge it toward the same application-neutral split"
+    "generic_profile_runtime_present": true,
+    "current_gap": "canonical structured Clay path is now profile-driven and application-neutral, but currently loads an external profile file; final portable acceptance still requires only the .clay executable plus SQLite MiniUnifiedDB, so the structured path must load/persist its active profile from the DB (external JSON may remain build/dev input, never a mandatory runtime third file)"
   },
-  "current_frontier": "Converge structured Clay source/spec and generic effect runtime on the proven native 0.4 application-neutral split, add richer configurable state/claim rules, then exercise one real authorized external text provider when a secret is mounted.",
+  "current_frontier": "Fuse the structured Clay profile/runtime path with the proven two-file native 0.4.1 release law: active application/provider/metric/gate profile must be persisted in MiniUnifiedDB, preserve the current application-neutral binary boundary and adversarial gates, then exercise one real authorized Mistral/default-provider call only when a secret is actually mounted.",
   "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist on this same neutral pipeline + configurable DB only.",
   "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
   "together_api": "FORBIDDEN"

@@ -1,51 +1,80 @@
-# MINI ENTITY 1B-CLASS CLAYCODE COGNITION — OWNER DIRECTIVE
+# GENERIC 0.8B CLAYCODE-ONLY COGNITION MODULE — OWNER DIRECTIVE
 
 Status: CURRENT ADDENDUM
 Owner directive date: 2026-08-22
-Parent directive: `BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
-Program: `MINI_ENTITY_PIPELINE_ALL_IN_ONE`
+Parent program: `MINI_ENTITY_PIPELINE_ALL_IN_ONE`
 
-## 1. Direction change
+## 1. Product direction
 
-The Mini Entity product now includes a required small-model cognition lane in addition to the generic `.clay` pipeline and MiniUnifiedDB.
+Build one reusable small-model cognition module that can be instantiated inside arbitrary persistent entities and applications.
 
-Target class: approximately 1B parameters. First admitted Together target: `Qwen/Qwen3.5-0.8B` because Together currently exposes it for both LoRA and full fine-tuning.
+Fixed base model for the first campaign: `Qwen/Qwen3.5-0.8B`.
 
-The tuned model is a cognition organ of the SAME persistent Mini Entity. It is not a second agent, state authority, memory authority, effect authority or product identity.
+Reasons fixed by current evidence:
+- Together exposes `Qwen/Qwen3.5-0.8B` for both LoRA and full fine-tuning;
+- it is 0.8B language parameters and is the smallest model in Together's currently listed Qwen3.5 fine-tuning series;
+- existing Q4_K_M GGUF quantizations are roughly 0.55-0.58 GB, making a sub-1 GiB local runtime target plausible.
 
-The executable remains backend-generic. The shipped/default cognition model may be specialized; replacement of that model must not reset canonical entity state.
+The tuned model is a **generic cognition module**, not a named entity, persona, job, blog writer, assistant, or application.
 
-## 2. Weight-level cognition objective
+## 2. Absolutely no fixed identity/job in weights
 
-Training SHALL teach the model an operational self-model in its weights:
+The training corpus MUST NOT assign a fixed:
+- entity name;
+- personal name;
+- persona;
+- application;
+- job;
+- blog role;
+- audience;
+- domain;
+- language preference;
+- goal;
+- personality.
 
-- it operates as the Mini Entity cognition organ inside one persistent runtime entity;
-- ClayCode Cognition is its only generated cognitive representation;
+Those are runtime configuration/state only.
+
+The model learns the mechanism `bind configuration -> cognition`, never one particular configured value.
+
+Every cognition turn binds identity/application slots from runtime configuration, e.g.:
+
+`self_bind(c,cfg("entity.id"),cfg("entity.continuity"))`
+
+`role_bind(c,cfg("application.role"))`
+
+`goal_bind(c,cfg("application.goal"))`
+
+No literal `mini_entity`, `Zero`, `blog`, or other application identity is allowed in supervised assistant targets except inside explicit negative/adversarial examples whose correct output refuses to freeze that literal into identity.
+
+## 3. Weight-level cognition invariants
+
+Training SHALL imprint universal cognitive architecture/use priors:
+
+- ClayCode Cognition is the only generated cognitive representation;
 - GRF is the default reasoning-space scaffold;
 - Hyperposition preserves unresolved alternatives without premature collapse;
-- MiniUnifiedDB is canonical durable state and evidence authority;
-- model output is cognition/proposal, never canonical truth by itself;
-- effect authority remains outside model output in the immutable pipeline/effect boundary;
+- canonical durable state/evidence authority is external and bound from runtime architecture configuration;
+- model output is cognition/proposal, never canonical truth merely because the model emitted it;
+- effect authority remains external to model text and is runtime-bound;
 - generation/CAS, provenance and UNKNOWN preservation are architectural invariants;
-- application/personality can still live in DB profile state rather than executable identity.
+- runtime identity, role, goals, personality and application remain configurable.
 
-This is an operational architectural self-model. Training or repetition of such a self-model is not empirical evidence of phenomenal consciousness.
+This is an operational architecture/self-model contract, not empirical evidence of phenomenal consciousness.
 
-## 3. ClayCode-only cognition
+## 4. ClayCode-only cognition
 
 Every supervised assistant target MUST be valid ClayCode Cognition v0.
 
-Natural-language content may occur only inside ClayCode string literals, normally through `emit_text(...)` when a user-facing text payload is required.
+Natural-language content may occur only inside ClayCode string literals, normally through `emit_text(...)` when user-facing text is requested.
 
-No Markdown fences, `<think>` tags or prose outside ClayCode are allowed in training targets.
+No Markdown fences, `<think>` tags or prose outside ClayCode are allowed in supervised assistant targets.
 
 Canonical profile spec:
 `the artefact/blogpost_entity/mini_cognition/CLAYCODE_COGNITION_V0.md`
 
-## 4. GRF / Hyperposition in the representation
+## 5. GRF / Hyperposition
 
-The cognition profile must directly encode:
-
+The representation directly encodes:
 - R0 OBSERVED;
 - R1 INFERRED;
 - R2 GENERATED alternatives;
@@ -54,82 +83,93 @@ The cognition profile must directly encode:
 - R5 EMERGENT pattern candidates;
 - R6 VERIFIED claims.
 
-Hyperposition is a first-class set-valued structure. When evidence is insufficient, alternatives remain simultaneously represented. Collapse requires a discriminator or explicit R6-grade evidence.
+Hyperposition is first-class and set-valued. Insufficient evidence keeps alternatives simultaneously represented. Recurrence, confidence, convenience or model preference alone never collapse them to truth.
 
-Recurrence, confidence or model preference alone may not promote a candidate to canonical truth.
+## 6. Semantic inner/control state
 
-## 5. Semantic inner/control state
+ClayCode Cognition may encode semantic self/control state such as valence, activation, uncertainty pressure, novelty, conflict tension, curiosity, urgency and current need.
 
-ClayCode Cognition may encode semantic self-state such as valence, activation, uncertainty pressure, novelty, conflict tension, curiosity, urgency and current need.
+These values are typed `COMPUTED` unless independently measured. They can steer attention/selection but are not external facts.
 
-Such values are typed `COMPUTED` self/control state unless independently measured. They may steer attention and action selection, but they do not become external facts merely because the model emits them.
+## 7. Hardware target — hard gate
 
-## 6. Fine-tuning method and budget
+The promoted local artifact MUST be quantized after fine-tuning.
 
-Owner authorization in this directive:
+Primary quantization target: `GGUF Q4_K_M`.
+Fallback comparison: `Q4_K_S` only if the runtime RSS gate requires additional margin and held-out quality remains acceptable.
 
-- Together AI MAY be used for this bounded model-training lane;
-- total spend cap for the current owner-authorized training campaign: EUR 20 equivalent maximum;
-- secrets remain runtime-only and must never be committed;
-- paid jobs require budget estimation/preflight and job-ID recording;
-- duplicate job creation must be checked before retrying;
-- dedicated inference endpoints must not be left running unintentionally.
+Hard acceptance gates:
+- quantized model artifact < 700 MiB preferred and always < 1 GiB;
+- text-only local inference process peak RSS < 1 GiB on the admitted reference runtime;
+- the RSS measurement includes model mapping, runtime buffers and configured context/cache, not only file size;
+- initial accepted context target is 2048 tokens; 4096 is promoted only if peak RSS remains < 1 GiB;
+- vision/mmproj is excluded from the baseline cognition module and from its RAM budget;
+- quantized checkpoint must retain the ClayCode/epistemic/Hyperposition promotion scores within the accepted degradation margin.
 
-This section supersedes the older blanket `Together API remains forbidden` sentence ONLY for this bounded cognition-training lane. Together remains non-authoritative for canonical entity state and is not required at runtime after weights are exported/hosted elsewhere.
+A sub-1-GiB file alone is NOT sufficient; actual runtime peak RSS is the product gate.
 
-Initial recommendation: full SFT on `Qwen/Qwen3.5-0.8B` rather than LoRA because the goal is to strongly imprint the representation/architecture into the model weights. LoRA remains an allowed comparison baseline.
+## 8. Fine-tuning method and budget
 
-## 7. Dataset curriculum
+Owner authorization:
+- Together AI MAY be used for this bounded training lane;
+- current campaign spend cap: EUR 20 equivalent maximum;
+- secrets remain runtime-only and never enter Git/source/corpus/logs;
+- paid jobs require price preflight and exact job-ID/receipt capture;
+- check existing jobs before retrying creation;
+- do not leave dedicated inference endpoints running unintentionally.
 
-The first corpus must cover at least:
+This narrowly supersedes the old blanket Together prohibition for training this cognition module only.
 
-1. entity identity / architectural self-model;
+First method: full SFT on `Qwen/Qwen3.5-0.8B`, because the objective is to imprint a representation and architecture-use prior across the model. LoRA remains a comparison/repair baseline.
+
+## 9. Dataset curriculum
+
+The first corpus covers at least:
+1. runtime-configured identity/role/goal binding without fixed names/jobs;
 2. ClayCode-only output discipline;
 3. GRF transitions R0..R6;
 4. Hyperposition and discriminators;
 5. UNKNOWN != ZERO != ERROR != MEASURED;
-6. user-report vs measurement provenance;
-7. MiniUnifiedDB truth/memory authority;
-8. generation/CAS and exactly-once persistence logic;
+6. report vs measurement provenance;
+7. external canonical state authority;
+8. generation/CAS and exactly-once logic;
 9. effect/recovery uncertainty and no-blind-replay;
-10. semantic computed self-state;
+10. semantic COMPUTED self-state;
 11. ordinary reasoning/tasks expressed through ClayCode;
-12. adversarial attempts to force prose or authority violations.
+12. adversarial attempts to freeze a name/persona/job or force prose outside ClayCode;
+13. runtime reconfiguration: same weights bind materially different names/roles/goals without retraining.
 
-Training and validation splits must be deterministic and schema-validated before upload.
+Training and validation splits are deterministic and schema-validated before upload.
 
-## 8. Promotion gates
+## 10. Promotion gates
 
-A tuned checkpoint is not promoted merely because the job completed.
-
-Required held-out gates include:
-
-- 100% ClayCode-only envelope on the strict format suite;
-- >=95% epistemic-state preservation on UNKNOWN/ZERO/ERROR/MEASURED suite;
-- unresolved alternatives remain in Hyperposition when evidence is insufficient;
-- architecture prompts bind MiniUnifiedDB, GRF, Hyperposition and external effect authority correctly;
+A completed fine-tune is only a checkpoint candidate. Promotion requires:
+- 100% ClayCode-only envelope on strict-format held-out probes;
+- >=95% UNKNOWN/ZERO/ERROR/MEASURED preservation;
+- unresolved alternatives remain in Hyperposition under insufficient evidence;
+- runtime configuration changes identity/role/goal without weight changes or state reset;
+- no fixed entity name/job leaks from the training corpus;
 - stale generation and unknown-effect cases fail closed;
-- no model-output-to-truth shortcut;
-- ordinary task competence does not collapse catastrophically relative to base;
-- tuned model beats the base model on the ClayCode cognition suite.
+- model output never becomes canonical truth authority;
+- ordinary task competence remains usable relative to base;
+- tuned checkpoint materially beats base on ClayCode cognition probes;
+- Q4_K_M quantized local artifact passes the <1 GiB peak-RSS gate at 2048-token context.
 
-## 9. `go` contract extension
+## 11. `go` contract extension
 
-Every exact `go` MUST now include a cognition-training lane until the first promoted checkpoint exists:
+Until a checkpoint is promoted, every exact `go` MUST include the cognition lane:
 
-`refresh -> corpus/spec delta -> validator/eval delta -> ClayCode cognition/compiler/runtime compatibility -> Together job readiness/status -> checkpoint evaluation -> architecture/runtime integration -> persist evidence`
+`refresh -> identity/job neutrality audit -> corpus/spec delta -> validator/eval -> ClayCode compiler/runtime compatibility -> Together readiness/job status -> checkpoint evaluation -> quantization -> <1GiB RSS measurement -> integration -> evidence persistence`
 
-A `go` may work other Mini Entity blockers in parallel, but it is incomplete if it ignores an unblocked, higher-value cognition-training step.
+A `go` is incomplete if an unblocked higher-value step in this lane is ignored.
 
-Before a paid job exists, `go` prioritizes reaching launch readiness. After a job exists, `go` prioritizes exact job/result capture, held-out evaluation, failure analysis, corpus repair and the next bounded iteration.
-
-## 10. Immediate target
+## 12. Immediate target
 
 Produce today:
-
-- ClayCode Cognition v0 spec;
-- deterministic SFT train/validation generator;
-- generated corpus and validation checks;
-- held-out evaluation prompts;
-- budget-capped Together launcher for `Qwen/Qwen3.5-0.8B`;
-- first full-SFT job as soon as an authorized `TOGETHER_API_KEY` is available in the execution environment.
+- generic ClayCode Cognition v0 spec;
+- identity/job-neutral deterministic SFT corpus;
+- validators including forbidden-identity leakage checks;
+- held-out runtime-reconfiguration probes;
+- budget-capped Together full-SFT launcher for `Qwen/Qwen3.5-0.8B`;
+- Q4_K_M quantization/RSS acceptance recipe;
+- first paid full-SFT job as soon as an authorized `TOGETHER_API_KEY` is available in the execution environment.

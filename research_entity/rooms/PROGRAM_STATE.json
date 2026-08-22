@@ -1,5 +1,5 @@
 {
-  "schema_version": "6.9",
+  "schema_version": "7.0",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY",
@@ -41,9 +41,15 @@
       "platform": "linux-x86_64",
       "form": "application-neutral and inference-neutral ELF executable",
       "binary_sha256": "27ad1fc3f134efacabe89102a86ac5876d62bb7c9d9b1e6d0ca95c36c60e7bd1",
+      "same_version_historical_sha256": [
+        "939784dd29514ead0721882e83fc78b6d21373e8281774c683cebc6cd92ae7a7",
+        "2aa8ebe9d20a683b62627cfe9e20f245390b1422afaa805b42b2dddbc976eed3"
+      ],
+      "version_identity_warning": "VERSION_STRING_NOT_ARTIFACT_IDENTITY; at least three ELF digests were recorded under mini-entity/0.6.0",
       "fresh_db_mode": "neutral",
       "repository_reproducibility": "BLOCKED_NATIVE_SOURCE_AND_CREDITED_ELF_BYTES_ABSENT_FROM_CANONICAL_MAIN",
-      "provenance_gate": "the artefact/blogpost_entity/native/check_native_reference.py"
+      "provenance_gate": "the artefact/blogpost_entity/native/check_native_reference.py",
+      "source_bound_builder": "the artefact/blogpost_entity/native/build_native_bound.py"
     },
     "local_llm_fixture_run": {
       "preset_schema": "clay-pipeline-profile/v2",
@@ -75,6 +81,7 @@
     ],
     "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json",
     "provenance_reconciliation_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_NATIVE_ARTIFACT_IDENTITY_RECONCILIATION_GPT56SOL.json",
+    "state_box_reference_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_STATE_BOX_REFERENCE_GPT56SOL.json",
     "real_remote_provider_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_AUTHORIZED_API_SECRET_MOUNTED",
     "real_local_llm_quality_run": "NOT_YET_CREDITED_FIXTURE_ONLY"
   },
@@ -96,22 +103,28 @@
     "sections": ["SYSTEM STATE", "MODEL SELF-REPORT", "AUSWERTUNG"],
     "system_state_owner": "pipeline",
     "self_report_owner": "model output validated and stored separately",
-    "evaluation_owner": "deterministic configurable interpretation preferred",
+    "evaluation_owner": "deterministic configurable interpretation rules",
     "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
     "show_previous_post_delta": true,
     "no_factual_embodiment": true,
     "latent_style_frame_is_nonfactual": true,
-    "runtime_status": "SPEC_COMMITTED_RUNTIME_APPEND_AND_ATOMIC_PERSISTENCE_NOT_YET_CREDITED"
+    "machine_executable_config": "the artefact/blogpost_entity/presets/zero_blog_state_box.json",
+    "reference_algorithm": "the artefact/blogpost_entity/state_box_reference.py",
+    "reference_falsifiers": "the artefact/blogpost_entity/test_state_box_reference.py",
+    "reference_mechanism_evidence": "SUPPORTED_IN_BOUNDED_ISOLATED_FIXTURE_REGRESSION",
+    "runtime_status": "REFERENCE_MECHANISM_COMMITTED; NATIVE_APPEND_AND_ATOMIC_STUDY_PERSISTENCE_NOT_YET_CREDITED"
   },
   "canonical_clay_state": {
     "source_present": true,
     "profile_runtime": "DB-resident active profile; external JSON is import/config only",
     "inference_contract": "generic inference_generate dispatch rather than provider-specific call",
     "native_source_reproducibility": "BLOCKED: canonical native/mini_entity.c and credited ELF bytes are absent from current main, so the credited 0.6 sandbox artifact cannot yet be independently rebuilt or byte-verified from repository bytes",
-    "structured_runtime_convergence": "OPEN: BLOGPOST_ENTITY.clay already names pipeline_profile_read + inference_generate with DB-resident profile semantics, while the Python reference runtime/tests still encode the older external-profile provider_chat_json contract",
-    "current_gap": "Close native artifact reproducibility by binding exact native source bytes/source digest and build environment to the credited or freshly rebuilt ELF. Then implement zero_blog's pipeline-generated public state box and atomic study-row persistence through generic configurable machinery, converge the structured Clay runtime/effect implementation on DB-resident profile + inference_generate, preserve the style/world split, and run real remote/local model quality acceptance."
+    "native_release_identity_law": "exact source/build provenance + exact ELF digest, never version label alone",
+    "structured_runtime_convergence": "OPEN: BLOGPOST_ENTITY.clay already names pipeline_profile_read + inference_generate with DB-resident profile semantics, while the Python reference runtime/tests still encode the older external-profile provider_chat_json contract; check_structured_contract_sync.py now makes this fail-closed and machine-readable",
+    "state_box_convergence": "REFERENCE SUPPORTED: deterministic generic render/study algorithm plus falsifiers exist; OPEN: port into native DB-resident pipeline and persist atomically with output/event consumption/continuity/generation CAS",
+    "current_gap": "Close native artifact reproducibility by binding exact native source bytes/source digest and build environment to a freshly accepted ELF. Port the tested generic state-box reference into that native source with DB-resident configurable rules and same-transaction study persistence. Then converge the structured Clay Python reference runtime/tests on pipeline_profile_read + inference_generate and run exact real remote/local model acceptance."
   },
-  "current_frontier": "First close native artifact reproducibility: recover or commit the exact native mini_entity.c source (or perform a fresh source-bound rebuild), bind compiler/dependency identities and ELF SHA-256, and retain the provenance gate. Then implement the generic configurable post-render/state-box + atomic study payload for zero_blog without putting Zero/blog semantics into executable identity; converge structured Clay and run real-provider/model acceptance.",
+  "current_frontier": "Recover or recreate the native Mini Entity source under canonical version control and perform a source-bound repeat build with exact provenance. On that same native path, port the now-tested generic state-box reference and atomically persist its study payload with post/event/CAS state. Afterward close structured Clay/Python reference drift and run real-provider + real-local-model acceptance.",
   "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist on this same neutral pipeline + configurable DB only.",
   "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
   "together_api": "FORBIDDEN"

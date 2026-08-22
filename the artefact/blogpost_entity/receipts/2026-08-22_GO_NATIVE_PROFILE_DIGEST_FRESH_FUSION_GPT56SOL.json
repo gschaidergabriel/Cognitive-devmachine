@@ -12,15 +12,18 @@
   "current_main_before_pr": "827b40021a5cfa9044c741ded1eb838897ba140a",
   "source_candidate_head_before_receipt": "8113c221d99001825e90922573df8a97c4843b17",
   "pull_request": 889,
+  "pull_request_status": "MERGED_SOURCE_ONLY_RUNTIME_UNVERIFIED",
+  "merge_commit": "b55152e49df699c017f1a39e8197413ad14c4e7d",
   "superseded_donor_pr": 747,
   "finding": {
     "classification": "ACTIVE_PROFILE_DIGEST_NOT_ENFORCED_ON_READ",
+    "status": "SOURCE_REPAIRED_ON_MAIN_RUNTIME_UNVERIFIED",
     "observed_main_part01_blob": "856af5c0126a3a86ed51872ffe9078a4c1fab8e1",
     "mechanism": "preset-apply stores profile_json plus profile_sha256, while active_profile_json read only profile_id and profile_json; active profile bytes could drift from their recorded digest before status/run consumed them",
     "security_scope": "integrity consistency only; the digest is unkeyed and stored beside the profile, so this mechanism is not authentication against coherent profile+digest rewriting"
   },
   "delta": {
-    "candidate_part01_blob": "519c2dee8152eecd6206499c103277f20536fd4e",
+    "merged_part01_blob": "519c2dee8152eecd6206499c103277f20536fd4e",
     "behavior": [
       "load profile_sha256 with active profile bytes",
       "reject missing or malformed digest metadata",
@@ -81,9 +84,11 @@
     "stale_donor_closed": true,
     "donor_pr": 747,
     "fresh_pr": 889,
+    "fresh_pr_merged": true,
+    "merge_commit": "b55152e49df699c017f1a39e8197413ad14c4e7d",
     "main_intervening_file_overlap": false,
     "intervening_scope": "Qwen3.5-0.8B launcher/test/receipt only"
   },
-  "acceptance": "SOURCE_REPAIR_CANDIDATE; EXACT_RUNTIME_UNVERIFIED; WHOLE_MINI_ENTITY_IN_PROGRESS",
+  "acceptance": "SOURCE_REPAIR_MERGED; EXACT_RUNTIME_UNVERIFIED; WHOLE_MINI_ENTITY_IN_PROGRESS",
   "next_gate": "obtain an actually-started exact current-head native repro job; execute the bound profile-integrity regressions and single coherent-rewrite boundary experiment before runtime promotion"
 }

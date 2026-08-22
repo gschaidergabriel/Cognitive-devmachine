@@ -13,10 +13,10 @@
     "repository": "gschaidergabriel/clay-global-research-entity",
     "initial_main_sha": "ff9e86b02fce611f19a36934b46887ada8ba6590",
     "rejoined_main_sha": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce",
-    "latest_observed_main_after_pr": "74df26466781dedc73367cf66de87b964fc9bb61",
+    "pre_merge_observed_main": "74df26466781dedc73367cf66de87b964fc9bb61",
+    "merged_main_sha": "dd1fd761f77d5385dd78ff6c774129d7a5e58039",
     "branch": "chatgpt/go-ood-depth-rejoin-20260822-1845",
-    "pre_receipt_head": "ea42d13c98d57c0f86d458387ec291039a84a2ab",
-    "concurrent_main_change": "BOOTSTRAP_MINIMAL approx1B re-entry landed on main; duplicate bootstrap delta was discarded rather than overwritten. Later main movement touched non-overlapping native evidence."
+    "concurrent_main_change": "BOOTSTRAP_MINIMAL and then PROGRAM_STATE approx1B re-entry landed concurrently; duplicate state/bootstrap work was discarded rather than overwritten."
   },
   "authority": {
     "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
@@ -25,11 +25,13 @@
     "paid_create_authorized": false
   },
   "coordination": {
-    "program_state": "Current main PROGRAM_STATE remains stale at 0.5B; existing PR #879 carries the non-duplicate approx1B state re-entry.",
-    "stale_parallel_pr": "PR #866 would reintroduce a second parser implementation even though current main already centralizes brace-depth semantics in claycode_syntax_v1.",
+    "program_state": "RESOLVED_ON_MAIN: schema 7.8 names the approx1B/Qwen3.5-0.8B owner lane and current native/cognition frontier.",
+    "program_state_observed_blob": "7674fb969585fa85c5892e053506259070194d49",
     "canonical_parser": "the artefact/blogpost_entity/mini_cognition/claycode_syntax_v1.py",
-    "rejoined_pr": 908,
-    "superseded_stale_pr": 893
+    "merged_pr": 908,
+    "merged_pr_sha": "dd1fd761f77d5385dd78ff6c774129d7a5e58039",
+    "superseded_closed_prs": [866, 879, 893],
+    "parser_duplication": "CLOSED: #866 not merged; useful dead-branch obligation retained as regression against the shared syntax authority."
   },
   "delta": {
     "test": "the artefact/blogpost_entity/mini_cognition/test_eval_call_depth_v1.py",
@@ -61,7 +63,7 @@
   },
   "execution_admission": {
     "vercel_sandbox_start_exec_exposed_by_connected_surface": false,
-    "github_pr_head": "3b66467faab64743d893e5b676a4871154b96a6a",
+    "github_pr_head_for_observed_runs": "3b66467faab64743d893e5b676a4871154b96a6a",
     "claycog_validator": {
       "run_id": 32571200786,
       "job_id": 97026790244,

@@ -2,4 +2,5 @@
 #include "mini_entity_part01.inc"
 #include "mini_entity_part02.inc"
 #include "mini_entity_part03.inc"
+#include "mini_entity_contract_gate.inc"
 #include "mini_entity_part04.inc"

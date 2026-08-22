@@ -1,0 +1,71 @@
+{
+  "schema": "mini-entity-native-semantic-parity-audit/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "base_main_sha": "18b6f99eed7714d0ba5040e4a8f32f58107b5b3f",
+  "classification": "SOURCE_CONTRACT_GAP_BLOCKS_NATIVE_0_7_ACCEPTANCE",
+  "observed_contract": {
+    "canonical_clay_blob": "9f5e0febb362c6635bdf83787d5f0f37e158bf87",
+    "reference_runtime_blob": "69e88bb4a86093d9f11e4fa95114f454c741bfb1",
+    "zero_blog_profile_blob": "f99433df7151338442e5d8e392c63c683e3d1d26",
+    "requirements": [
+      "pipeline_gate executes after inference and before pipeline_commit",
+      "configured require_hash_echo validates canonical_state_hash_seen and packet_hash_seen",
+      "configured output-contract required fields are present",
+      "configured leak_patterns and active secrets are rejected",
+      "each section is evidence-bound when require_evidence_per_section is enabled",
+      "section evidence_refs must belong to the compiled allowed evidence set",
+      "state claims must name VERIFIED metrics, stay within configured overshoot tolerance and cite the metric evidence_ref"
+    ]
+  },
+  "observed_native_0_7_source": {
+    "entry_version": "mini-entity/0.7.0-dev1",
+    "prompt_part_blob": "856af5c0126a3a86ed51872ffe9078a4c1fab8e1",
+    "run_part_blob": "9f653931f63f5cf44e27e4b7f3ce32330307616a",
+    "findings": [
+      "build_user_prompt supplies generation/source_count/sensor_health/task/language/public_style and raw evidence_packet_json, but does not supply canonical_state_hash, packet_hash or allowed_evidence_refs",
+      "cmd_run computes packet_hash before inference but computes its simplified canonical_state_hash only after model output; neither hash is required to be echoed by the model",
+      "post-inference rejection visible in cmd_run is contains_secret(out, secret) only",
+      "model output then proceeds to build_study and commit_run without a call equivalent to canonical pipeline_gate",
+      "native cmd_run does not validate output_contract required fields, evidence_refs, VERIFIED metric claims, max_claim_overshoot or configured leak_patterns before commit",
+      "the current native canonical_state_hash is derived from generation/profile/packet/sensor text rather than the canonical compiled state object used by the reference pipeline"
+    ]
+  },
+  "strongest_counterhypothesis": "The native 0.7 implementation intentionally compresses the canonical gate into prompt instructions plus the secret leak check, so an explicit gate is unnecessary.",
+  "counterhypothesis_result": "REJECTED_BY_CONTRACT: BLOGPOST_ENTITY.clay names pipeline_gate as a mandatory post-inference pre-commit phase, and the reference runtime treats editable prompt instructions as lower priority than an immutable executable gate. Prompt compliance cannot replace the required invariant boundary.",
+  "implication": "An exact repeat-build and byte-identical ELF receipt for the present 0.7 source would establish build provenance only. It would not establish canonical Mini Entity pipeline acceptance because the executable source currently underimplements the admitted semantic gate/compile envelope.",
+  "frontier_reordering": [
+    "first converge native 0.7 source semantics with the canonical compile/build-prompt/gate contract or explicitly supersede the current native candidate with one canonical implementation",
+    "then execute the source-closure-bound repeat build and bind the ELF digest",
+    "then run fixture/local_exec semantic-gate falsifiers and atomic output/study/event/generation-CAS rollback matrix on that exact ELF",
+    "only after those gates consider real local-model or remote-provider quality acceptance"
+  ],
+  "ordinary_falsifiers_required_for_repair": [
+    "wrong canonical hash echo -> no commit/no event consumption",
+    "wrong packet hash echo -> no commit/no event consumption",
+    "missing configured required output field -> no commit",
+    "configured leak_pattern in visible payload -> no commit",
+    "section without required evidence -> no commit",
+    "unknown evidence_ref -> no commit",
+    "claim on UNKNOWN/unverified metric -> no commit",
+    "state claim overshoot beyond configured tolerance -> no commit",
+    "verified claim lacking its metric evidence_ref -> no commit",
+    "valid gated payload -> same atomic commit path exactly once"
+  ],
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment": false,
+    "reason": "The single unusual experiment for this go was already consumed by the included-source identity collision falsifier merged through PR 735. This receipt is a static cross-implementation contract audit only."
+  },
+  "evidence_scope": "SOURCE_AUDIT; NO_NATIVE_RUNTIME_CREDIT",
+  "not_claimed": [
+    "native 0.7 compile failure",
+    "native 0.7 runtime failure observed",
+    "native 0.7 ELF digest",
+    "real local model acceptance",
+    "real remote provider acceptance",
+    "whole Mini Entity acceptance"
+  ],
+  "together_api": "FORBIDDEN_NOT_USED"
+}

@@ -39,7 +39,7 @@ Local structural validation on this source revision:
 
 A separate OOD generator emits **200** promotion probes and is not a random split of the same examples.
 
-## Fast path
+## Safe Together path
 
 ```bash
 pip install -U together
@@ -48,13 +48,23 @@ bash train_together_v1.sh
 ```
 
 The shell script stops after **preflight**. It regenerates and validates the corpus, asks Together to validate the
-files/template, and prints the server price estimate. It does not create a billed job.
+files/template, prints the server price estimate, and prints a deterministic `campaign_fingerprint`. It does not
+create a billed job.
 
-Only after preflight:
+The fingerprint binds the exact training/validation file digests plus `from_hf_model`, template, epochs, evaluations,
+training method/type, learning rate, warmup ratio and checkpoint count. A create must be authorized against exactly
+that preflight identity:
 
 ```bash
+export CLAYCOG_CREATE_FINGERPRINT=<exact campaign_fingerprint from the same preflight>
 python3 launch_together_v1.py --create
 ```
+
+A missing or stale fingerprint fails closed. Before remote file allocation on create, the launcher scans the account
+for an existing job carrying the deterministic campaign suffix. It repeats the duplicate check immediately before
+the billed create to narrow the check/use race. If the create transport outcome is ambiguous (for example, the server
+may have accepted the job but the client timed out), **never blind-retry `--create`**: list/retrieve the existing
+fine-tuning jobs first. The deterministic suffix exists specifically so such an account-side job can be recognized.
 
 ### Together 0.5B caveat
 
@@ -65,11 +75,14 @@ a compatible Together training template exists. This script therefore pairs:
 - BYOM weights: `Qwen/Qwen2.5-0.5B`;
 - default same-family template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
 
-That pairing is **not assumed fine-tune compatible** merely because it is served in Together's catalog. The launcher first
-asks `model_limits` whether the template is currently full-FT capable, and BYOM checkpoint acceptance is a separate gate.
-There is deliberately no automatic fallback to Qwen3.5 because Together requires matching architecture. If Together rejects
-the Qwen2.5 template/checkpoint path, keep the 0.5B checkpoint requirement and use a Together-provided Qwen2-compatible
-template or the same corpus on another full-FT runner rather than silently changing the research question.
+That pairing is **not assumed fine-tune compatible** merely because the template is served in Together's catalog.
+`model_limits` can establish that the selected template currently supports full fine-tuning, and `estimate_price`
+can establish pricing/admission for the uploaded corpus under that template; neither call validates the
+`from_hf_model` pair. BYOM compatibility therefore remains **OPEN** until Together's create path accepts the exact
+Qwen2.5-0.5B checkpoint/template pair and the resulting job actually reaches a training state. There is deliberately
+no automatic fallback to Qwen3.5 because the BYOM architecture/size relationship is part of the empirical gate.
+If Together rejects this Qwen2.5 path, keep the 0.5B checkpoint requirement and use a Together-provided compatible
+Qwen2 template or the same corpus on another admitted full-FT runner rather than silently changing the experiment.
 
 Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
 corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.

@@ -1,5 +1,5 @@
 {
-  "schema_version": "6.6",
+  "schema_version": "6.7",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY",
@@ -79,15 +79,31 @@
     "preset": "zero_blog",
     "path": "the artefact/blogpost_entity/presets/zero_blog.json",
     "status": "fully replaceable runtime configuration, not executable identity",
-    "default_inference": "Mistral API profile, replaceable by any admitted API or local model backend"
+    "default_inference": "Mistral API profile, replaceable by any admitted API or local model backend",
+    "embodiment": "NO_IMPOSED_EMBODIMENT; no Gasthaus/beer/sitting/body/location supplied by preset",
+    "longitudinal_protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_LONGITUDINAL_PROTOCOL.md",
+    "public_state_box_protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STATE_BOX_PROTOCOL.md",
+    "public_state_box_profile": "the artefact/blogpost_entity/presets/zero_blog_state_box.json"
+  },
+  "zero_blog_study_surface": {
+    "required_after_every_post": true,
+    "render": "plain fenced text box appended by pipeline after validated prose",
+    "sections": ["SYSTEM STATE", "MODEL SELF-REPORT", "AUSWERTUNG"],
+    "system_state_owner": "pipeline",
+    "self_report_owner": "model output validated and stored separately",
+    "evaluation_owner": "deterministic configurable interpretation preferred",
+    "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
+    "show_previous_post_delta": true,
+    "no_embodiment": true,
+    "runtime_status": "SPEC_COMMITTED_RUNTIME_APPEND_AND_ATOMIC_PERSISTENCE_NOT_YET_CREDITED"
   },
   "canonical_clay_state": {
     "source_present": true,
     "profile_runtime": "DB-resident active profile; external JSON is import/config only",
     "inference_contract": "generic inference_generate dispatch rather than provider-specific call",
-    "current_gap": "native sandbox path proves local_exec backend contract; structured Clay runtime/effect implementation must converge on the same DB-resident profile + inference_generate contract, then real remote and real local model acceptance runs remain"
+    "current_gap": "native sandbox path proves local_exec backend contract; structured Clay runtime/effect implementation must converge on the same DB-resident profile + inference_generate contract. zero_blog additionally requires pipeline-generated public state box and atomic study-row persistence. Real remote and real local model quality acceptance runs remain."
   },
-  "current_frontier": "Converge the structured Clay/effect runtime onto the proven native 0.6 backend contract, then exercise one real authorized remote provider and one real local supported LLM while preserving the application-neutral/inference-neutral binary boundary.",
+  "current_frontier": "Implement the zero_blog public state box in the generic pipeline as a configurable post-render stage: append canonical SYSTEM STATE + validated MODEL SELF-REPORT + deterministic AUSWERTUNG with previous-post deltas, persist the machine-readable study payload atomically with output/event consumption, then converge structured Clay and run real-provider/model acceptance without reintroducing embodiment or application semantics into the binary.",
   "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist on this same neutral pipeline + configurable DB only.",
   "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
   "together_api": "FORBIDDEN"

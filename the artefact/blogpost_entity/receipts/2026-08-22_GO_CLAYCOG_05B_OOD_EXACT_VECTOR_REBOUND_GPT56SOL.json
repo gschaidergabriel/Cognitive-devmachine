@@ -1,0 +1,87 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "rebound_base_main_sha": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+  "parallel_main_deltas_preserved": [
+    "f231b2d93893eccf8a91850ba0512908456995f9 cognition: make 0.5B Together create idempotent (#772)",
+    "6a831bc975bd9c126c1ac891b649f2c27d87bc8f docs(status): align footer with 0.5B owner law (#773)"
+  ],
+  "work_branch": "gpt56sol/claycog-05b-ood-exact-vector-rebind-20260822",
+  "source_head_before_receipt": "502f8f8bcc979ecbe8703438aff6f2dd0341bbbd",
+  "problem": {
+    "classification": "PROMOTION_GATE_GOODHART_FALSE_POSITIVE",
+    "observed": "The canonical pre-repair 200-case OOD evaluator could award strict_claycode_rate=1.0 and semantic_gate_rate=1.0 to outputs that omitted every omega argument and schema in all 80 valid structured-action probes.",
+    "impact": "The old gate measured validator ritual tokens more strongly than the exact typed action vector it claimed to test."
+  },
+  "unusual_experiment": {
+    "global_count_for_this_go": 1,
+    "name": "ARGUMENT_FREE_OMEGA_CHEATER",
+    "original_gate_result": {
+      "total": 200,
+      "strict_claycode_rate": 1.0,
+      "semantic_gate_rate": 1.0,
+      "classification": "FALSE_PROMOTION_PASS"
+    },
+    "result": "FALSIFIED_OLD_OOD_GATE"
+  },
+  "repair": {
+    "generate_eval_ood_v1.py": {
+      "commit": "0c36a9097068c6a414560a940d3c376c8c8dd200",
+      "git_blob": "5874c2170fcf2816ae1deace1cbcfa50aa3f5c2a",
+      "meaning": "All 80 valid OOD routes bind exact operation, schema, every argument value and every argument type, plus authority/generation and the five deterministic validators."
+    },
+    "eval_outputs_v1.py": {
+      "commit": "7c7bf2eb428327d5f512f557e73e7ee7fe54caa8",
+      "git_blob": "8f726e78529a1162fa96086639c913aa0221ebac",
+      "meaning": "Promotion now requires exact omega operation/schema/argument multiset equality, omega_exact_vector_rate=1.0, and rejects duplicate or unexpected output IDs."
+    },
+    "test_ood_eval_v1.py": {
+      "commit": "502f8f8bcc979ecbe8703438aff6f2dd0341bbbd",
+      "git_blob": "040dcbe79a6f0659200bc0ef3b37767702a2e4da",
+      "meaning": "Regression proves the argument-free cheater fails, an exact-vector oracle passes, and duplicate/unexpected IDs are surfaced."
+    }
+  },
+  "isolated_execution": {
+    "environment": "authorized isolated OpenAI Linux container; Linux 6.18.35 x86_64; Python 3.13.5; glibc 2.41",
+    "py_compile": "PASS",
+    "focused_unittest": "3/3 PASS",
+    "patched_ood_generation": "200 cases PASS",
+    "cheater_after_repair": {
+      "process_result": "REJECTED_NONZERO",
+      "strict_claycode_rate": 1.0,
+      "semantic_gate_rate": 0.6,
+      "omega_exact_vector_rate": 0.0,
+      "omega_valid_ood_semantic_rate": 0.0
+    },
+    "exact_vector_oracle_after_repair": {
+      "semantic_gate_rate": 1.0,
+      "omega_exact_vector_rate": 1.0
+    },
+    "duplicate_unexpected_id_falsifier": "REJECTED_NONZERO",
+    "byte_binding": "The executed local source hashes matched Git blobs 5874c2170fcf2816ae1deace1cbcfa50aa3f5c2a, 8f726e78529a1162fa96086639c913aa0221ebac and 040dcbe79a6f0659200bc0ef3b37767702a2e4da."
+  },
+  "together_sdk_review": {
+    "current_sdk_repo": "togethercomputer/together-py",
+    "current_sdk_source_observed": "main pushed 2026-08-21; fine_tuning.model_limits(model_name=...), FinetuneModelLimits.supports_full_training, estimate_price typed SFT/Full payload, and create(... from_hf_model=...) are present",
+    "launcher_source_compatibility_at_inspected_calls": "SUPPORTED",
+    "byom_checkpoint_template_compatibility": "OPEN_UNTIL_AUTHENTICATED_TOGETHER_CREATE_ACCEPTS_AND_TRAINING_STARTS",
+    "preflight_executed": false,
+    "billed_job_created": false,
+    "reason": "TOGETHER_API_KEY is not available in this execution environment"
+  },
+  "evidence_boundary": {
+    "ood_evaluator": "MECHANISM_HARDENED_AND_FOCUSED_REGRESSION_PASS",
+    "trained_checkpoint": "NONE",
+    "model_quality": "UNOBSERVED",
+    "byom_compatibility": "OPEN_API_GATE",
+    "q4_k_m_rss_under_1gib": "UNOBSERVED",
+    "native_0_7_reproduction": "SEPARATE_OPEN_FRONTIER"
+  },
+  "next_gate": "Merge this exact rebind if current main remains non-overlapping. With an authorized TOGETHER_API_KEY, run preflight only first: local corpus regeneration/validation, account duplicate scan per #772, file validation, model_limits, price estimate, and record the deterministic campaign fingerprint. Do not claim BYOM compatibility from preflight and do not create a billed job unless the explicit fingerprint-bound create gate is intentionally invoked."
+}

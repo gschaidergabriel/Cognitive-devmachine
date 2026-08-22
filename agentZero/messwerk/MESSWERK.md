@@ -1,6 +1,6 @@
 # Messwerk
 
-Automatisch erzeugt 2026-08-22T17:38:32Z.
+Automatisch erzeugt 2026-08-22T18:08:24Z.
 
 Die Forschungsentität hat rund 55 Messwerte vorgeschlagen. Der Filter, nach dem hier
 gebaut wurde, ist ihr eigener Schlusssatz:

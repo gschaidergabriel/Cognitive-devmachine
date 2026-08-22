@@ -39,7 +39,7 @@ jobs:
       - name: Regenerate and validate SFT v2
         run: |
           python generate_sft_v2.py
-          python validate_corpus_v2.py
+          python validate_corpus_v2.py train_v2.jsonl validation_v2.jsonl
           python test_validate_corpus_v2.py
       - name: Exact omega evaluation gates
         run: |

@@ -212,11 +212,37 @@ static int native_scan_pattern(json_object *patterns,const char *text){
     return 0;
 }
 
+/* Scan every persisted JSON string leaf, never field names. Return 1=pattern, 2=invalid regex, 3=active secret. */
+static int native_scan_json_string_leaves(json_object *patterns,json_object *node,const char *active_secret){
+    if(!node)return 0;
+    enum json_type t=json_object_get_type(node);
+    if(t==json_type_string){
+        const char *s=json_object_get_string(node);
+        int scan=native_scan_pattern(patterns,s);if(scan)return scan;
+        if(active_secret&&*active_secret&&s&&strstr(s,active_secret))return 3;
+        return 0;
+    }
+    if(t==json_type_array){
+        int n=json_object_array_length(node);
+        for(int i=0;i<n;i++){int scan=native_scan_json_string_leaves(patterns,json_object_array_get_idx(node,i),active_secret);if(scan)return scan;}
+        return 0;
+    }
+    if(t==json_type_object){
+        json_object_object_foreach(node,key,value){(void)key;int scan=native_scan_json_string_leaves(patterns,value,active_secret);if(scan)return scan;}
+    }
+    return 0;
+}
+
 static const char *native_gate(json_object *profile,const char *output,const native_compiled_t *c,const char *active_secret){
     json_object *root=parse_json(output);if(!root)return "OUTPUT_NOT_JSON_NO_COMMIT";
     if(json_object_get_type(root)!=json_type_object){json_object_put(root);return "OUTPUT_NOT_OBJECT_NO_COMMIT";}
     json_object *personality=jget(profile,"personality"),*contract=jget(personality,"output_contract"),*gate=jget(profile,"gate");
     if(!contract||json_object_get_type(contract)!=json_type_object){json_object_put(root);return "OUTPUT_CONTRACT_INVALID_NO_COMMIT";}
+    json_object *patterns=jget(gate,"leak_patterns");
+    int full_scan=native_scan_json_string_leaves(patterns,root,active_secret);
+    if(full_scan==2){json_object_put(root);return "INVALID_LEAK_PATTERN_NO_COMMIT";}
+    if(full_scan==1){json_object_put(root);return "LEAK_PATTERN_NO_COMMIT";}
+    if(full_scan==3){json_object_put(root);return "SECRET_LEAK_REJECTED_NO_COMMIT";}
     if(native_jbool(gate,"require_hash_echo",1)){
         const char *ch=jstr(root,"canonical_state_hash_seen",NULL),*ph=jstr(root,"packet_hash_seen",NULL);
         if(!ch||strcmp(ch,c->canonical_hash)){json_object_put(root);return "CANONICAL_HASH_MISMATCH_NO_COMMIT";}
@@ -229,7 +255,6 @@ static const char *native_gate(json_object *profile,const char *output,const nat
     for(int i=0;i<5;i++)if(!jget(root,required[i])){json_object_put(root);return "MISSING_OUTPUT_FIELD_NO_COMMIT";}
     json_object *title=jget(root,title_f),*intro=jget(root,intro_f),*sections=jget(root,sections_f);
     if(!title||json_object_get_type(title)!=json_type_string||!intro||json_object_get_type(intro)!=json_type_string||!sections||json_object_get_type(sections)!=json_type_array){json_object_put(root);return "OUTPUT_CONTRACT_TYPE_NO_COMMIT";}
-    json_object *patterns=jget(gate,"leak_patterns");
     int scan=native_scan_pattern(patterns,json_object_get_string(title));if(scan==2){json_object_put(root);return "INVALID_LEAK_PATTERN_NO_COMMIT";}if(scan==1){json_object_put(root);return "LEAK_PATTERN_NO_COMMIT";}
     scan=native_scan_pattern(patterns,json_object_get_string(intro));if(scan==2){json_object_put(root);return "INVALID_LEAK_PATTERN_NO_COMMIT";}if(scan==1){json_object_put(root);return "LEAK_PATTERN_NO_COMMIT";}
     if(active_secret&&*active_secret&&(strstr(json_object_get_string(title),active_secret)||strstr(json_object_get_string(intro),active_secret))){json_object_put(root);return "SECRET_LEAK_REJECTED_NO_COMMIT";}

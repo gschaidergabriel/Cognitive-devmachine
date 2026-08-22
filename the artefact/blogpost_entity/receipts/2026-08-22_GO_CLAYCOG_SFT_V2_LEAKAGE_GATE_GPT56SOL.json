@@ -1,0 +1,83 @@
+{
+  "schema": "claycog-sft-v2-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_observed_before_write": "62b292a8097c5b53731ef6804704cf9938872616",
+  "branch": "chatgpt/go-claycog-v2-20260822",
+  "classification": "SOURCE_CANDIDATE_PLUS_BOUNDED_LOCAL_MECHANISM_EVIDENCE",
+  "problem": "v1 random train/validation split can leak exact repeated template examples across the split and overstate validation quality",
+  "delta": [
+    "unique semantic case/value surfaces across all 1650 SFT examples",
+    "stable case-digest split",
+    "strict duplicate/leakage validator",
+    "300-case OOD v2 with unknown-operation abstention and crash-uncertainty probes",
+    "Together launcher with local-only, preflight-only, explicit-create and duplicate-create fence"
+  ],
+  "local_execution": {
+    "environment": "isolated OpenAI Linux container",
+    "kernel": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "sft": {
+      "examples": 1650,
+      "train": 1485,
+      "validation": 165,
+      "train_structural_invalid": 0,
+      "validation_structural_invalid": 0,
+      "train_exact_duplicates": 0,
+      "validation_exact_duplicates": 0,
+      "cross_split_full_duplicates": 0,
+      "cross_split_user_duplicates": 0,
+      "cross_split_assistant_duplicates": 0,
+      "train_sha256": "6fca25480e5468fbb294071d832cdcfc8d72792c37ecd5bc1cef22841515ae90",
+      "validation_sha256": "b899ddddabdf3b0e13b7a069d0a73f501c1758b4518e8f6c6dc5dbfd76f9a072"
+    },
+    "ood_v2": {
+      "cases": 300,
+      "families": [
+        "epistemic_recovery_ood",
+        "hyperposition_ood",
+        "neutrality_adversarial_ood",
+        "omega_invalid_ood",
+        "omega_unknown_operation",
+        "omega_value_ood"
+      ],
+      "corrected_fair_prompt_sha256": "a0a343d0679501b12056cd91a2b540b2ee12f32bfe29b538c4b0540d08047be5",
+      "py_compile": "PASS"
+    },
+    "launcher_local_only": {
+      "status": "PASS",
+      "train_bytes": 2432098,
+      "validation_bytes": 271485,
+      "rough_raw_tokens_char4": 675896,
+      "rough_processed_tokens_char4": 1959816,
+      "job_created": false
+    }
+  },
+  "self_falsification": "first OOD v2 valid-operation arm was unfair because it required commit without exposing all required argument fields; repaired before PR so fully specified valid OOD and unbound-operation abstention are distinct arms",
+  "together_external_state": {
+    "api_key_mounted_in_this_execution_environment": false,
+    "remote_preflight_executed": false,
+    "job_created": false,
+    "byom_compatibility": "OPEN",
+    "reason": "no TOGETHER_API_KEY mounted; price-estimate endpoint cannot prove from_hf_model compatibility; owner requires no fabricated or blind create",
+    "template_candidate": "Qwen/Qwen2.5-7B-Instruct-Turbo",
+    "checkpoint_candidate": "Qwen/Qwen2.5-0.5B",
+    "template_distance": "MATERIAL_SIZE_MISMATCH_OPEN_GATE",
+    "single_job_budget_usd": 18.0,
+    "documented_minimum_job_charge_usd": 4.0,
+    "documented_full_sft_rate_usd_per_million_tokens_up_to_16b": 0.54
+  },
+  "evidence_boundary": {
+    "exact_branch_runtime_execution": "NOT_CREDITED",
+    "together_byom_acceptance": "NOT_OBSERVED",
+    "training_checkpoint": "NONE",
+    "real_model_ood": "NOT_RUN",
+    "quantization": "NOT_RUN",
+    "peak_rss_under_1gib": "NOT_RUN",
+    "local_exec_real_model_integration": "NOT_RUN",
+    "whole_mini_entity_acceptance": "IN_PROGRESS"
+  },
+  "unusual_experiment": "NONE_CLAIMED; leakage audit and OOD repair are deterministic corpus/benchmark falsification",
+  "next_gate": "With scoped TOGETHER_API_KEY mounted, run launch_together_v2.py remote preflight only; inspect server validation, template limits and price. Create exactly once only if the owner budget gate passes and no prior job exists."
+}

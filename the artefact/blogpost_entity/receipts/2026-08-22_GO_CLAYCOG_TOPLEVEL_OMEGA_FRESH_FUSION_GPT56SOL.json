@@ -1,0 +1,65 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "mini-entity-pipeline-all-in-one",
+  "branch_base": "51c25c950eb4e2c68d834374d4bfc9f390a6d154",
+  "latest_main_checked": "0664cf2af8fbb6d0e04d41f560a1603b9b2108ba",
+  "branch": "gpt56sol/go-top-level-omega-fresh-51c25c-20260822",
+  "coordination": {
+    "donor_pr": 841,
+    "donor_head": "9b3fe82a14dc8db0ee53555b2768722f820a24f0",
+    "donor_base": "702440d7cd701e42d996cf8b9221d5d515a26e7d",
+    "fresh_fusion_reason": "donor is behind moving main; exact validator/test blobs are non-overlapping with newer native/provider/OOD commits",
+    "current_diff_files": [
+      "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py",
+      "the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py"
+    ]
+  },
+  "finding": {
+    "status": "CURRENT_CANONICAL_ADMISSION_GAP",
+    "evidence": "current validate_sft_v1.py still uses raw substring presence for omega commit, five validation gates, authority and generation",
+    "risk": "nested/dead-control or comment-smuggled omega structure can receive corpus/training admission credit"
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "id": "ESCAPED_QUOTE_MARKER_SHADOW",
+    "note": "already consumed earlier in this go against the OOD semantic path; all validator checks here are deterministic regression/replication, not additional unusual experiments"
+  },
+  "fusion": {
+    "validator_git_blob": "3b9bdcd37cdc40a5c3fa48647d44737f38bc3fb1",
+    "test_git_blob": "3ba755e4c38a104b7ac220e17c8ee52e515b9657",
+    "laws": [
+      "runtime bindings exactly once at turn-body depth 1",
+      "exactly one top-level return c",
+      "comment syntax outside strings fails closed at generated cognition admission boundary",
+      "omega commit exactly once and top-level",
+      "all five omega validators exactly once and top-level",
+      "omega authority and generation exactly once, top-level and runtime-config bound",
+      "duplicate gate/commit and reject+commit fail closed"
+    ]
+  },
+  "isolated_replication": {
+    "environment": "isolated OpenAI Linux container",
+    "validator_git_blob_reconstructed": "3b9bdcd37cdc40a5c3fa48647d44737f38bc3fb1 MATCH",
+    "py_compile": "PASS",
+    "valid_omega": "PASS",
+    "dead_control_grammar_gate": "REJECT omega_gate_not_exact_top_level:grammar:0",
+    "comment_smuggling": "REJECT comment_syntax_forbidden",
+    "donor_exact_evidence": "focused RuntimeBindingGateTests + OmegaAdmissionGateTests 16/16 PASS; regenerated canonical SFT v2 1485+165 rows with expected hashes and 0 structural invalid under same exact validator blob"
+  },
+  "training": {
+    "provider_request": false,
+    "billed_create": false,
+    "job_started": false,
+    "money_spent_usd": 0
+  },
+  "native_state": {
+    "presentation_neutrality_source_fix": "MERGED",
+    "profile_v2_fail_closed_source_fix": "MERGED",
+    "local_exec_secret_isolation_source_fix": "MERGED",
+    "exact_source_bound_runtime_rerun": "STILL_REQUIRED"
+  },
+  "acceptance": "IN_PROGRESS"
+}

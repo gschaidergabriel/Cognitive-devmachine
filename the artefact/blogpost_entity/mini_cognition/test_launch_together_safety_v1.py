@@ -40,6 +40,15 @@ class SafetyTests(unittest.TestCase):
         mod.VALID.write_text('{"messages":[2]}\n',encoding="utf-8")
         self.assertNotEqual(a,mod.campaign_fingerprint(self.hf))
 
+    def test_fingerprint_binds_exact_hf_revision(self):
+        a=mod.campaign_fingerprint(self.hf)
+        old=mod.HF_REVISION
+        mod.HF_REVISION="f"*40
+        try:
+            self.assertNotEqual(a,mod.campaign_fingerprint(self.hf))
+        finally:
+            mod.HF_REVISION=old
+
     def test_create_confirmation_requires_full_exact_fingerprint(self):
         fp=mod.campaign_fingerprint(self.hf)
         with self.assertRaises(SystemExit): mod.require_create_confirmation(fp)
@@ -89,6 +98,7 @@ class SafetyTests(unittest.TestCase):
             data=path.read_text(encoding="utf-8")
             payload=json.loads(data)
             self.assertEqual("CREATE_ARMED",payload["status"])
+            self.assertEqual(mod.HF_REVISION,payload["campaign"]["hf_model_revision"])
             self.assertNotIn("SHOULD_NOT_ENTER_LEDGER",data)
             self.assertEqual(0o600,path.stat().st_mode & 0o777)
             with self.assertRaises(SystemExit):

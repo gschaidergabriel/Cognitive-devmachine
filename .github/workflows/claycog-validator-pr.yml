@@ -31,3 +31,12 @@ jobs:
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
+      - name: Run exact omega OOD promotion regression
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            'the artefact/blogpost_entity/mini_cognition/generate_eval_ood_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/eval_outputs_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_ood_exact_omega_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/generate_eval_ood_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_ood_exact_omega_v1.py'

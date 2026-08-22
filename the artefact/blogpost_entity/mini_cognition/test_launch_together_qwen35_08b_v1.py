@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import importlib.util,json,os,stat,tempfile,types,unittest
+import importlib.util,json,os,stat,sys,tempfile,types,unittest
 from pathlib import Path
+from unittest.mock import patch
 HERE=Path(__file__).resolve().parent
 spec=importlib.util.spec_from_file_location("launch08",HERE/"launch_together_qwen35_08b_v1.py");m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 class FT:
@@ -13,6 +14,10 @@ class Client:
 class TogetherCtor:
     last=None
     def __init__(self,**kw):type(self).last=kw
+class GuardedEnv(dict):
+    def get(self,key,default=None):
+        if key=="TOGETHER_API_KEY":raise AssertionError("provider secret lookup under FREE_ONLY")
+        return super().get(key,default)
 class Tests(unittest.TestCase):
     def setUp(self):
         self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
@@ -24,6 +29,18 @@ class Tests(unittest.TestCase):
         else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
     def test_model_and_direct_campaign(self):
         self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
+    def test_free_only_denies_before_secret_lookup_and_local_checks(self):
+        env=GuardedEnv({m.PROVIDER_EXECUTION_MODE_ENV:"FREE_ONLY"})
+        with patch.object(m.os,"environ",env),patch.object(m,"local_checks",side_effect=AssertionError("local checks ran before provider admission")),patch.object(sys,"argv",["launch_together_qwen35_08b_v1.py"]):
+            with self.assertRaisesRegex(SystemExit,"PROVIDER_EXECUTION_DENIED"):
+                m.main()
+    def test_unknown_provider_mode_fails_closed(self):
+        with patch.object(m.os,"environ",GuardedEnv({})):
+            with self.assertRaisesRegex(SystemExit,"PROVIDER_EXECUTION_DENIED mode=FREE_ONLY"):
+                m.require_provider_execution_admission()
+    def test_paid_provider_requires_explicit_mode(self):
+        with patch.dict(os.environ,{m.PROVIDER_EXECUTION_MODE_ENV:m.PAID_PROVIDER_AUTHORIZED}):
+            self.assertEqual(m.require_provider_execution_admission(),m.PAID_PROVIDER_AUTHORIZED)
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

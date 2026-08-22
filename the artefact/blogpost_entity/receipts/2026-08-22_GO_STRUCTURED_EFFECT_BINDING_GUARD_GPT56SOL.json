@@ -3,10 +3,17 @@
   "date": "2026-08-22",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
-  "macrocycle_id": null,
-  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "macrocycle_id": "go-20260822T1949+07-gpt56sol-mini-reference",
+  "macrocycle_identity_status": "JOINED_POST_FUSION",
   "base_main_sha": "5b8b120433cc1ab79b3383fc945823c4ed9c41cf",
-  "latest_main_observed_after_write": "555dc01dc67ec63f8f80ba766d76557a57c7d066",
+  "latest_main_observed_after_write": "11d0726d823b3eb45a1984b52cd6192c74fe28bb",
+  "experiment_accounting_correction": {
+    "reason": "A parallel durable receipt for the same 19:49 go macrocycle became visible on main during final re-entry and already consumed the globally permitted unusual-experiment slot.",
+    "canonical_unusual_experiment_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_REFERENCE_V2_POINTER_FALSIFIER_GPT56SOL.json",
+    "canonical_unusual_experiment_id": "RFC6901_RESPONSE_POINTER_REAL_PROFILE_FALSIFIER",
+    "local_comment_poison_reclassified_as": "DETERMINISTIC_GUARD_REGRESSION",
+    "global_unusual_experiment_count_claimed_by_this_receipt": 0
+  },
   "authority_refresh": {
     "program": "mini-entity-pipeline-all-in-one",
     "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
@@ -27,20 +34,21 @@
       "profile_load",
       "provider_chat_json"
     ],
+    "additional_current_repair_contract": "Shipped profile v2 response_pointer uses RFC-6901-style /choices/0/message/content; rename-only effect convergence is insufficient.",
     "status": "REFERENCE_EFFECT_SURFACE_NOT_IMPLEMENTED"
   },
   "unusual_experiment": {
-    "local_count": 1,
-    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
-    "id": "COMMENT_ONLY_EFFECT_SURFACE_POISON",
-    "class": "BOUNDED_SOURCE_LEVEL_DISCRIMINATOR",
-    "question": "Can a raw-string based structured-contract checker falsely credit pipeline_profile_read/inference_generate when those names exist only in comments, docstrings, dead strings, or unbound handlers?",
-    "counterhypothesis": "Raw string presence is an adequate proxy for executable effect support because any named handler would necessarily be admitted and dispatched.",
-    "observation": "The poisoned runtime can contain both required effect names and both handler method names while neither effect is in allowed_effects nor effect() dispatch. Therefore passive text is not executable effect-surface evidence.",
-    "result": "COUNTEREXAMPLE_CONFIRMED_SOURCE_LEVEL",
-    "repair": "Parse Python syntax with ast and require each current effect to be present in allowed_effects, mapped by effect() dispatch to the expected concrete handler, and backed by that handler method; legacy effect admission/dispatch keeps convergence false."
+    "local_count": 0,
+    "global_macrocycle_count": 1,
+    "id": "RFC6901_RESPONSE_POINTER_REAL_PROFILE_FALSIFIER",
+    "source_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_REFERENCE_V2_POINTER_FALSIFIER_GPT56SOL.json",
+    "ownership": "PARALLEL_MACROCYCLE_RECEIPT_ALREADY_CONSUMED_SLOT"
   },
   "bounded_regression": {
+    "id": "COMMENT_ONLY_EFFECT_SURFACE_POISON",
+    "classification": "DETERMINISTIC_GUARD_REGRESSION_NOT_UNUSUAL_EXPERIMENT",
+    "question": "Can passive raw-string mentions of pipeline_profile_read/inference_generate masquerade as executable support?",
+    "repair": "Parse Python syntax with ast and require each current effect in allowed_effects, effect() dispatch, and the expected concrete handler; legacy effect admission/dispatch keeps convergence false.",
     "environment": "current isolated ChatGPT container",
     "python": "3.13.5",
     "tests": 3,
@@ -57,6 +65,7 @@
   "source_delta": {
     "branch": "gpt56sol/go-structured-effect-binding-guard-20260822",
     "pr": 959,
+    "merge_commit": "11d0726d823b3eb45a1984b52cd6192c74fe28bb",
     "checker_commit": "28860098ba13ebc060922c65312641c3a2e9a7b9",
     "test_commit": "0cd28c55131d2fdd8afe14f57ce1b06eeccf1d71",
     "readme_commit": "5f7963f7ed7f1d4ed59aba17c0016b254e323e0f",
@@ -69,7 +78,7 @@
   "execution": {
     "vercel_sandbox_start_exec_surface": "NOT_EXPOSED_BY_CURRENT_CONNECTOR",
     "container_github_network": "DNS_BLOCKED",
-    "github_actions": {
+    "github_actions_previous_pr_head": {
       "run_id": 32574399496,
       "workflow": "Research Entity Identity Guard",
       "job_id": 97034487079,
@@ -78,7 +87,7 @@
       "steps": null,
       "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
     },
-    "github_hosted_exact_product_runtime": "UNOBSERVED_ZERO_STEP_ADMISSION_FAILURE",
+    "github_hosted_exact_product_runtime": "UNOBSERVED",
     "exact_runtime": "UNOBSERVED",
     "runtime_pass_claimed": false,
     "test_fail_claimed": false,
@@ -102,5 +111,5 @@
     "exact_current_runtime": "UNOBSERVED",
     "whole_product": "IN_PROGRESS"
   },
-  "next_exact_step": "On fresh current main, implement the narrow DB-resident pipeline_profile_read plus generic inference_generate structured reference path while preserving the recursive persisted-string leak gate, fresh-DB initialization ordering, and newest staged-cognition/provenance contracts; then run the structured regressions and profile-v2 parity discriminator on an actually-started authorized isolated runner."
+  "next_exact_step": "On fresh current main, implement the narrow DB-resident pipeline_profile_read plus generic inference_generate structured reference path while preserving recursive persisted-string leak protection, fresh-DB initialization ordering, shipped RFC-6901 response-pointer semantics, and newest staged-cognition/provenance contracts; then run the structured regressions and profile-v2 parity discriminator on an actually-started authorized isolated runner."
 }

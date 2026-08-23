@@ -154,35 +154,37 @@ The current HCU direction is script-first and selective:
 
 External providers are not admitted as required internal cognition. Exact local checkpoint/tokenizer/runtime identity is an acceptance gate, not an inferred fact. Until a positive local engine capability record exists, absence from an external-provider denylist is insufficient to prove internal engine admission.
 
-**Pre-load hashing is not loader attestation.** A positive `EngineAdmission` constructed from checkpoint/tokenizer/runtime/build hashes receives zero HCU runtime credit unless the actual model loader is bound to the same consumed bytes. The admitted path must therefore use a generation-fenced physical engine lease or an enforced read-only/content-addressed artifact boundary and must echo the loader-consumed artifact identity into the downstream inference receipt. Wrong-path loads, post-admission mutation, stale lease reuse or unknown consumed bytes fail closed.
+**Pre-load hashing is not loader attestation.** A positive `EngineAdmission` constructed from checkpoint/tokenizer/runtime/build hashes receives zero HCU runtime credit unless the actual model loader is bound to the same consumed bytes. The admitted path must use a generation-fenced physical engine lease or an enforced read-only/content-addressed artifact boundary and echo the loader-consumed artifact identity into the downstream inference receipt.
+
+A newly recorded source-level security gap must be resolved before verified-engine-load promotion: `verify_loader_consumption` accepts an `admitted_loader_consumptions` mapping, but the core API type alone does not prove that this mapping came from a separate canonical authority. A positive integration path must obtain the admission independently from a trusted generation/provenance-fenced lookup or receipt; deriving the accepted registry entry directly from the same `LoaderConsumption` being verified risks self-authorization. Serialization/hash helpers provide identity, not authority.
 
 ## Execution policy
 
 Current autonomous supervisor `8.62` is **FREE_ONLY**. Build/test/experiment/runtime credit comes only from authorized isolated execution surfaces; VPS/self-hosted/production-host testing is forbidden. Together general inference, Together training/preflight/key lookup/job creation, paid fallback and unknown-cost provider execution are forbidden in this mode.
 
-Vercel Hobby Sandbox is now admitted only as a **bounded included-tier FREE surface** for fixed, source-hash-bound, short capsules. Remaining monthly Sandbox quota is not assumed. If quota exhaustion, billing, an upgrade requirement, plan mismatch or any monetary charge path appears, execution must fail closed before proceeding. No generic caller-supplied shell/command surface receives evidence credit.
+Vercel Hobby Sandbox is admitted only as a **bounded included-tier FREE surface** for fixed, source-hash-bound, short capsules. Remaining monthly Sandbox quota is not assumed. If quota exhaustion, billing, an upgrade requirement, plan mismatch or any monetary charge path appears, execution must fail closed before proceeding. No generic caller-supplied shell/command surface receives evidence credit.
 
 Observed bounded runtime evidence on 2026-08-24:
 
 - exact-current J-Space dataset-family-split component: **6/6 PASS twice** in isolated execution; same-family rerun is reproducibility, not independent replication;
-- RFC8785/JCS Entry canonicalization component: **7/7 PASS**, exit 0, secret fence PASS, cleanup PASS on Vercel Hobby Sandbox;
-- the Entry capsule executed source/test Git blobs that were byte-identical at the then-current retained PR1263 head, but its route still emitted an older `source_commit` metadata label;
-- therefore component runtime credit exists for those exact bytes only; whole EntityOS/HCU, local-model, model-specific J-Space, training and whole-product credit remain zero.
+- RFC8785/JCS Entry canonicalization v1: **7/7 PASS**, but its first deployed capsule exposed a stale `source_commit` metadata label despite byte-identical source/test blobs;
+- `HCU_ENTRY_CANONICALIZATION_CAPSULE/v2` then repaired that seam and executed **7/7 PASS** with an exact source manifest, source main commit, retained PR1263 commit, Git blob/SHA-256 identities, result-log digest, secret fence PASS and cleanup PASS;
+- current exact-manifest Entry component runtime credit is therefore real and bounded; whole EntityOS/HCU, verified engine-load, local-model, model-specific J-Space, training and whole-product credit remain zero.
 
 Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 
 ## Current frontier
 
-1. repair the fixed HCU capsule manifest metadata so `source_commit`/source closure binds the exact immutable retained PR1263 identity used for the run; do not rely on byte equality plus a stale commit label for exact-head acceptance;
-2. extend the same **single fixed hash-verified executor/capsule authority** toward the combined Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure;
-3. wire `EngineAdmission` to the real deterministic EntityOS/HCU control-plane producer and bind it through a generation-fenced physical engine lease to the bytes actually consumed by the local checkpoint/tokenizer/runtime loader;
-4. preserve replay-stable event identity vs concrete admission identity and wire Entry capability claims to the canonical deterministic capability authority;
-5. bind the downstream inference receipt producer to serializer/event/Entry-admission/route/engine/class/artifact plus physical loader-lease/consumed-byte identity;
-6. rebase/fuse the retained HCU/J-Space donor onto exact current FREE_ONLY main without restoring stale authority or creating a second Entry/router/inference/J-Space/data/effect path;
+1. **stop iterating on Entry/JCS component identity**: the v2 exact-manifest capsule closed that gate at component scope;
+2. resolve the **loader-consumption admission authority boundary** on the single retained HCU path so a forged observation cannot self-authorize by supplying its own matching admitted mapping; bind admission to a trusted canonical generation/provenance-fenced lookup/receipt;
+3. extend the same single fixed hash-verified PR810 executor authority to the minimum combined `Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset` regression closure;
+4. bind `EngineAdmission` to the real deterministic EntityOS/HCU control-plane producer and the physical loader-consumed checkpoint/tokenizer/runtime/build bytes;
+5. preserve replay-stable event identity vs concrete admission identity and wire Entry capability claims to the canonical deterministic capability authority;
+6. bind downstream inference receipts to serializer/event/Entry-admission/route/engine/class/artifact plus physical loader-lease/consumed-byte identity;
 7. only after exact executable and real-trace gates, continue zero-cost local ~0.8B J-Space/GWT specialization; do not preflight or launch Together under supervisor 8.62.
 
 ## Latest `go` README re-entry — 2026-08-24
 
-`README=UPDATED_SUPERVISOR_8_62_COMPONENT_RUNTIME_FRONTIER`.
+`README=UPDATED_SUPERVISOR_8_62_MANIFEST_BOUND_ENTRY_PASS_AND_LOADER_AUTHORITY_FRONTIER`.
 
-This re-entry replaces the stale 8.61/two-track/callability-only description with current `main` authority and observed evidence. The earlier protected-preview bridge breakthrough remains valid infrastructure history, but the frontier has advanced: fixed hash-bound family-split and Entry/JCS components have now actually executed under bounded FREE conditions. Their success is deliberately scoped to exact component bytes, and the stale Entry capsule `source_commit` label is retained as a falsifier/repair obligation rather than silently treated as exact-head manifest identity.
+This re-entry replaces the stale 8.61/two-track/callability-only description and also advances past the earlier stale-capsule-metadata blocker. Exact-manifest Entry capsule v2 has now passed at component scope. The highest-value nonduplicate source blocker is the loader-consumption authority boundary plus the still-unexecuted combined HCU spine. No whole-HCU/model/J-Space/training/EntityOS promotion follows from the component passes.

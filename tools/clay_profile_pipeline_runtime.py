@@ -24,8 +24,9 @@ from pathlib import Path
 from typing import Any, Callable
 
 import claycode_structured_backend as clay
+import profile_runtime_cognitive_fabric_binding_v1 as cognitive_fabric_binding
 
-VERSION = "clay-profile-pipeline-runtime/0.6.3"
+VERSION = "clay-profile-pipeline-runtime/0.6.4"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -130,6 +131,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             "pipeline_collect",
             "pipeline_compile",
             "pipeline_build_prompt",
+            "pipeline_cognitive_fabric_admit",
             "inference_generate",
             "pipeline_gate",
             "pipeline_commit",
@@ -268,6 +270,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             "pipeline_collect": self._pipeline_collect,
             "pipeline_compile": self._pipeline_compile,
             "pipeline_build_prompt": self._pipeline_build_prompt,
+            "pipeline_cognitive_fabric_admit": self._pipeline_cognitive_fabric_admit,
             "inference_generate": self._inference_generate,
             "pipeline_gate": self._pipeline_gate,
             "pipeline_commit": self._pipeline_commit,
@@ -852,6 +855,13 @@ class ProfilePipelineRuntime(clay.Runtime):
         )
         return {"ok": True, "system": system, "user": user}
 
+    def _pipeline_cognitive_fabric_admit(self, p: dict[str, Any]) -> dict[str, Any]:
+        """Delegate pre-inference admission to the one canonical read-only UCF bridge."""
+        try:
+            return cognitive_fabric_binding.admit_profile_runtime_payload(self, p)
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
+
     def _keys(self, names: list[str], secret_file: str | None) -> list[str]:
         file_values: dict[str, str] = {}
         if secret_file:
@@ -1103,6 +1113,14 @@ class ProfilePipelineRuntime(clay.Runtime):
 
     def _inference_generate(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
+            inference_packet_digest = str(p["inference_packet_digest"])
+            cognitive_fabric_admission_receipt_digest = str(
+                p["cognitive_fabric_admission_receipt_digest"]
+            )
+            if not re.fullmatch(r"[0-9a-f]{64}", inference_packet_digest):
+                raise PipelineFault("INFERENCE_PACKET_DIGEST_INVALID")
+            if not re.fullmatch(r"[0-9a-f]{64}", cognitive_fabric_admission_receipt_digest):
+                raise PipelineFault("COGNITIVE_FABRIC_ADMISSION_RECEIPT_DIGEST_INVALID")
             inference = dict(p["inference"])
             kind = str(inference.get("kind", ""))
             if self.provider_override is not None and kind == "mock":
@@ -1117,12 +1135,20 @@ class ProfilePipelineRuntime(clay.Runtime):
                     "payload": payload,
                     "provider_kind": "mock",
                     "model": inference.get("model"),
+                    "inference_packet_digest": inference_packet_digest,
+                    "cognitive_fabric_admission_receipt_digest": cognitive_fabric_admission_receipt_digest,
                 }
             if kind == "local_exec":
-                return self._inference_local_exec(inference, p)
-            if kind in _ADMITTED_API_INFERENCE_KINDS:
-                return self._inference_api(inference, p)
-            raise PipelineFault("UNKNOWN_INFERENCE_KIND:" + kind)
+                result = self._inference_local_exec(inference, p)
+            elif kind in _ADMITTED_API_INFERENCE_KINDS:
+                result = self._inference_api(inference, p)
+            else:
+                raise PipelineFault("UNKNOWN_INFERENCE_KIND:" + kind)
+            result["inference_packet_digest"] = inference_packet_digest
+            result["cognitive_fabric_admission_receipt_digest"] = (
+                cognitive_fabric_admission_receipt_digest
+            )
+            return result
         except Exception as exc:
             self._active_secrets = []
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}

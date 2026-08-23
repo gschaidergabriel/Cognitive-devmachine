@@ -67,7 +67,7 @@ def valid_receipt():
             "engine_class": "local_08b",
             "executed": True,
             "jspace_mode": "LOCAL_OBSERVE_ONLY",
-            "local_activation_access": False,
+            "local_activation_access": True,
             "external_hidden_state_claimed": False,
             "jspace_intervention": {
                 "executed": False,
@@ -247,18 +247,25 @@ class ReceiptV1Tests(unittest.TestCase):
         with self.assertRaisesRegex(ucf.ReceiptError, "LOCAL_JSPACE_REQUIRES_LENS_PROFILE"):
             ucf.validate(r)
 
+    def test_local_observe_only_requires_activation_access(self):
+        r = valid_receipt()
+        r["inference"]["local_activation_access"] = False
+        redigest(r)
+        with self.assertRaisesRegex(ucf.ReceiptError, "LOCAL_JSPACE_REQUIRES_ACTIVATION_ACCESS"):
+            ucf.validate(r)
+
     def test_full_local_latent_requires_activation_access(self):
         r = valid_receipt()
-        r["inference"]["jspace_mode"] = "FULL_LOCAL_LATENT"
+        r["inference"].update(jspace_mode="FULL_LOCAL_LATENT", local_activation_access=False)
         redigest(r)
-        with self.assertRaisesRegex(ucf.ReceiptError, "FULL_LOCAL_LATENT_REQUIRES_ACTIVATION_ACCESS"):
+        with self.assertRaisesRegex(ucf.ReceiptError, "LOCAL_JSPACE_REQUIRES_ACTIVATION_ACCESS"):
             ucf.validate(r)
 
     def test_jspace_intervention_requires_execution_latent_access_and_calibration(self):
         r = valid_receipt()
         r["inference"].update(
             jspace_mode="LOCAL_OBSERVE_ONLY",
-            local_activation_access=False,
+            local_activation_access=True,
         )
         r["inference"]["jspace_intervention"]["executed"] = True
         redigest(r)

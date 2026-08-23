@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Fail-closed static guard for canonical Clay <-> Python reference contract drift.
 
-The canonical Clay source has already moved to a DB-resident profile plus generic
-`inference_generate` boundary. The Python reference runtime/tests may lag, but that lag
-must be explicit and must never cause the canonical Clay contract to be rolled backward.
+The canonical Clay source owns the forward orchestration contract. The Python reference
+runtime/tests may lag, but that lag must remain explicit and must never cause the canonical
+contract to be rolled backward or a Cognitive Fabric sidecar to be mistaken for causal use.
 
 Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
 unwired handler names do not count as runtime support.
@@ -19,6 +19,7 @@ from typing import Any
 
 REQUIRED_EFFECTS = {
     "pipeline_profile_read": "_pipeline_profile_read",
+    "pipeline_cognitive_fabric_admit": "_pipeline_cognitive_fabric_admit",
     "inference_generate": "_inference_generate",
 }
 LEGACY_EFFECTS = {"profile_load", "provider_chat_json"}
@@ -149,12 +150,90 @@ def runtime_effect_contract(runtime: str) -> dict[str, Any]:
     }
 
 
+def _strip_clay_line_comments(source: str) -> str:
+    return "\n".join(line.split("//", 1)[0] for line in source.splitlines())
+
+
+def clay_cognitive_contract(clay: str) -> dict[str, Any]:
+    """Verify that Cognitive Fabric admission is causal, not merely named.
+
+    This is deliberately narrow: it proves source-level wiring/order and that the inference
+    envelope is sourced from the admitted Fabric result. It does not prove runtime execution,
+    J-Space causality, GWT quality, or model behavior.
+    """
+    code = _strip_clay_line_comments(clay)
+    prompt_token = 'phase("pipeline_build_prompt"'
+    fabric_token = 'phase("pipeline_cognitive_fabric_admit"'
+    infer_token = 'effect("inference_generate"'
+
+    counts = {
+        "prompt": code.count(prompt_token),
+        "fabric": code.count(fabric_token),
+        "inference": code.count(infer_token),
+    }
+    unique = all(value == 1 for value in counts.values())
+    prompt_i = code.find(prompt_token)
+    fabric_i = code.find(fabric_token)
+    infer_i = code.find(infer_token)
+    ordered = unique and prompt_i < fabric_i < infer_i
+
+    infer_start = code.find("let infer = map_new()")
+    generated_start = code.find("let generated =", infer_start + 1) if infer_start >= 0 else -1
+    infer_block = code[infer_start:generated_start] if infer_start >= 0 and generated_start > infer_start else ""
+    admitted_fields = {
+        "inference": 'map_set(infer,"inference",admitted.inference)' in infer_block,
+        "system": 'map_set(infer,"system",admitted.system)' in infer_block,
+        "user": 'map_set(infer,"user",admitted.user)' in infer_block,
+        "inference_packet_digest": 'map_set(infer,"inference_packet_digest",admitted.inference_packet_digest)' in infer_block,
+        "cognitive_fabric_receipt_digest": 'map_set(infer,"cognitive_fabric_receipt_digest",admitted.cognitive_fabric_receipt_digest)' in infer_block,
+    }
+    raw_bypass_absent = not any(
+        token in infer_block
+        for token in (
+            'map_set(infer,"inference",profile.inference)',
+            'map_set(infer,"system",prompt.system)',
+            'map_set(infer,"user",prompt.user)',
+        )
+    )
+    fabric_inputs_bound = all(
+        token in code
+        for token in (
+            'map_set(cognition_data,"compiled",compiled)',
+            'map_set(cognition_data,"prompt",prompt)',
+        )
+    )
+    downstream_bound = all(
+        token in code
+        for token in (
+            'map_set(gate_data,"cognitive_fabric",admitted)',
+            'map_set(commit_data,"cognitive_fabric",admitted)',
+        )
+    )
+    causal = (
+        ordered
+        and all(admitted_fields.values())
+        and raw_bypass_absent
+        and fabric_inputs_bound
+        and downstream_bound
+    )
+    return {
+        "effect_counts": counts,
+        "unique_effects": unique,
+        "ordered_prompt_fabric_inference": ordered,
+        "admitted_inference_fields": admitted_fields,
+        "raw_prompt_profile_inference_bypass_absent": raw_bypass_absent,
+        "fabric_inputs_bound": fabric_inputs_bound,
+        "fabric_downstream_bound": downstream_bound,
+        "causal_source_wiring": causal,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--allow-gap",
         action="store_true",
-        help="Report the current convergence gap without returning failure",
+        help="Report the current reference-runtime convergence gap without returning failure",
     )
     args = parser.parse_args()
 
@@ -173,13 +252,16 @@ def main() -> int:
     if signature:
         run_args = [item.strip().split(":", 1)[0].strip() for item in signature.group(1).split(",") if item.strip()]
 
+    cognitive = clay_cognitive_contract(clay)
     clay_contract = {
         "run_args": run_args,
         "three_argument_runtime_boundary": run_args == ["entity_db", "source_db", "secret_file"],
         "db_resident_profile_effect": 'effect("pipeline_profile_read"' in clay,
+        "cognitive_fabric_effect": 'phase("pipeline_cognitive_fabric_admit"' in clay,
         "generic_inference_effect": 'effect("inference_generate"' in clay,
         "old_profile_load_absent": 'effect("profile_load"' not in clay,
         "old_provider_chat_absent": 'effect("provider_chat_json"' not in clay,
+        "cognitive_fabric_causal_source_wiring": cognitive["causal_source_wiring"],
     }
 
     runtime_contract = runtime_effect_contract(runtime)
@@ -192,9 +274,11 @@ def main() -> int:
         [
             clay_contract["three_argument_runtime_boundary"],
             clay_contract["db_resident_profile_effect"],
+            clay_contract["cognitive_fabric_effect"],
             clay_contract["generic_inference_effect"],
             clay_contract["old_profile_load_absent"],
             clay_contract["old_provider_chat_absent"],
+            clay_contract["cognitive_fabric_causal_source_wiring"],
         ]
     )
     reference_converged = (
@@ -210,13 +294,14 @@ def main() -> int:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v2",
+        "schema": "clay-structured-contract-sync/v3",
         "canonical_clay": clay_contract,
+        "canonical_cognitive_fabric": cognitive,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay DB-resident profile + inference_generate semantics are forward authority; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
+        "policy": "Canonical Clay DB-resident profile + one causal Cognitive Fabric admission + inference_generate semantics are forward authority; runtime support requires executable allowed-effect + dispatch + handler binding. A named sidecar stage is not causal-use credit.",
         "errors": errors,
         "pass": not errors,
     }

@@ -45,12 +45,26 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   let prompt = phase("pipeline_build_prompt",entity_db,source_db,profile,previous,compiled)
   require prompt.ok
 
-  // One inference contract for remote APIs, loopback local servers or local model runners.
-  // Inference is replaceable cognition, never entity identity/state authority.
+  // Canonical cognition admission is on the causal path, not a sidecar receipt.
+  // The effect implementation must reuse the single admitted InferencePacket ->
+  // Unified Cognitive Fabric authority chain and return only an admitted candidate
+  // inference envelope. It cannot mint truth, durable state, identity or effects.
+  let cognition_data = map_new()
+  map_set(cognition_data,"compiled",compiled)
+  map_set(cognition_data,"prompt",prompt)
+  let admitted = phase("pipeline_cognitive_fabric_admit",entity_db,source_db,profile,previous,cognition_data)
+  require admitted.ok
+
+  // One inference contract for Claude Code, bundled local cognition, adaptive APIs,
+  // loopback local servers or local model runners. Engine + context come from the
+  // admitted Cognitive Fabric envelope so raw prompt/profile data cannot bypass
+  // workspace/packet/generation admission.
   let infer = map_new()
-  map_set(infer,"inference",profile.inference)
-  map_set(infer,"system",prompt.system)
-  map_set(infer,"user",prompt.user)
+  map_set(infer,"inference",admitted.inference)
+  map_set(infer,"system",admitted.system)
+  map_set(infer,"user",admitted.user)
+  map_set(infer,"inference_packet_digest",admitted.inference_packet_digest)
+  map_set(infer,"cognitive_fabric_receipt_digest",admitted.cognitive_fabric_receipt_digest)
   map_set(infer,"secret_file",secret_file)
   let generated = effect("inference_generate",infer)
   require generated.ok
@@ -59,6 +73,7 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(gate_data,"generated",generated)
   map_set(gate_data,"compiled",compiled)
   map_set(gate_data,"prompt",prompt)
+  map_set(gate_data,"cognitive_fabric",admitted)
   let gated = phase("pipeline_gate",entity_db,source_db,profile,previous,gate_data)
   require gated.ok
 
@@ -67,6 +82,7 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(commit_data,"compiled",compiled)
   map_set(commit_data,"collected",collected)
   map_set(commit_data,"generated",generated)
+  map_set(commit_data,"cognitive_fabric",admitted)
   let committed = phase("pipeline_commit",entity_db,source_db,profile,previous,commit_data)
   require committed.ok
 
@@ -76,8 +92,10 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(result,"generation",committed.generation)
   map_set(result,"source_count",compiled.source_count)
   map_set(result,"profile_id",profile.profile_id)
-  map_set(result,"inference_kind",profile.inference.kind)
+  map_set(result,"inference_kind",admitted.inference.kind)
   map_set(result,"canonical_state_hash",compiled.canonical_state_hash)
   map_set(result,"packet_hash",compiled.packet_hash)
+  map_set(result,"inference_packet_digest",admitted.inference_packet_digest)
+  map_set(result,"cognitive_fabric_receipt_digest",admitted.cognitive_fabric_receipt_digest)
   return result
 }

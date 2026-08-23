@@ -1,6 +1,9 @@
 import copy
+import hashlib
+import json
 import unittest
 
+from engine_admission_v1 import EngineArtifactLock, derive_engine_artifact_sha256
 from inference_receipt_v1 import (
     InferenceReceiptError,
     make_inference_receipt,
@@ -10,8 +13,76 @@ from xeno_entry_fabric_v1 import admit_entry, to_hcu_reactive_event
 
 
 CAPABILITY_BINDING_SHA256 = "b" * 64
-ENGINE_SHA256 = "a" * 64
+CHECKPOINT_SHA256 = "1" * 64
+TOKENIZER_SHA256 = "2" * 64
+RUNTIME_SHA256 = "3" * 64
+BUILD_SHA256 = "4" * 64
 OUTPUT_SHA256 = "d" * 64
+
+
+def _canonical(value):
+    return json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+        allow_nan=False,
+    ).encode("utf-8")
+
+
+def _engine_artifact_sha256():
+    lock = EngineArtifactLock(
+        schema="HCU_ENGINE_ARTIFACT_LOCK/v1",
+        provider_alias="hcu",
+        engine_identity="hcu_local_08b",
+        engine_class="LOCAL_SHARED_WEIGHT_08B",
+        checkpoint_sha256=CHECKPOINT_SHA256,
+        tokenizer_sha256=TOKENIZER_SHA256,
+        runtime_sha256=RUNTIME_SHA256,
+        build_sha256=BUILD_SHA256,
+        engine_artifact_sha256="a" * 64,
+    )
+    return derive_engine_artifact_sha256(lock)
+
+
+ENGINE_SHA256 = _engine_artifact_sha256()
+
+
+def engine_admission_receipt(*, generation=7):
+    material = {
+        "schema": "HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v1",
+        "entity_generation": generation,
+        "provider_alias": "hcu",
+        "engine_identity": "hcu_local_08b",
+        "engine_class": "LOCAL_SHARED_WEIGHT_08B",
+        "checkpoint": {
+            "kind": "FILE_SHA256",
+            "sha256": CHECKPOINT_SHA256,
+            "file_count": 1,
+            "byte_count": 10,
+        },
+        "tokenizer": {
+            "kind": "FILE_SHA256",
+            "sha256": TOKENIZER_SHA256,
+            "file_count": 1,
+            "byte_count": 11,
+        },
+        "runtime": {
+            "kind": "FILE_SHA256",
+            "sha256": RUNTIME_SHA256,
+            "file_count": 1,
+            "byte_count": 12,
+        },
+        "build": {
+            "kind": "FILE_SHA256",
+            "sha256": BUILD_SHA256,
+            "file_count": 1,
+            "byte_count": 13,
+        },
+        "engine_artifact_sha256": ENGINE_SHA256,
+    }
+    receipt_sha256 = hashlib.sha256(_canonical(material)).hexdigest()
+    return {**material, "receipt_sha256": receipt_sha256}
 
 
 def base_entry():
@@ -72,14 +143,20 @@ def model_route():
     return packet, decision, entry_bindings, engine_artifacts
 
 
-def receipt_kwargs():
+def receipt_kwargs(*, engine_receipt=None):
     packet, decision, entry_bindings, engine_artifacts = model_route()
+    engine_receipt = engine_receipt or engine_admission_receipt()
+    engine_receipt_sha256 = engine_receipt["receipt_sha256"]
     kwargs = {
         "current_generation": 7,
         "admitted_route_generations": {decision.decision_sha256: 7},
         "entry_admission_sha256": packet.admission_sha256,
         "admitted_entry_bindings": entry_bindings,
         "admitted_engine_artifacts": engine_artifacts,
+        "engine_admission_receipt_sha256": engine_receipt_sha256,
+        "admitted_engine_admission_receipts": {
+            engine_receipt_sha256: engine_receipt,
+        },
         "model_call_id": "model-call:receipt:1",
         "output_ref": "unifieddb:candidate-output:receipt:1",
         "output_sha256": OUTPUT_SHA256,
@@ -100,6 +177,10 @@ class InferenceReceiptTests(unittest.TestCase):
         self.assertEqual(a.event_sha256, packet.event_sha256)
         self.assertEqual(a.decision_sha256, decision.decision_sha256)
         self.assertEqual(a.resolved_engine_artifact_sha256, ENGINE_SHA256)
+        self.assertEqual(
+            a.engine_admission_receipt_sha256,
+            kwargs["engine_admission_receipt_sha256"],
+        )
         self.assertEqual(len(a.receipt_sha256), 64)
 
     def test_stale_bound_route_generation_fails_closed(self):
@@ -138,6 +219,31 @@ class InferenceReceiptTests(unittest.TestCase):
         with self.assertRaisesRegex(InferenceReceiptError, "ENGINE_ARTIFACT_ADMISSION_MISMATCH"):
             make_inference_receipt(decision, **kwargs)
 
+    def test_receiptless_structural_engine_admission_cannot_mint_inference_receipt(self):
+        _packet, decision, kwargs = receipt_kwargs()
+        kwargs["admitted_engine_admission_receipts"] = {}
+        with self.assertRaisesRegex(InferenceReceiptError, "ENGINE_ADMISSION_RECEIPT_NOT_ADMITTED"):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_engine_admission_receipt_generation_is_bound(self):
+        stale_receipt = engine_admission_receipt(generation=6)
+        _packet, decision, kwargs = receipt_kwargs(engine_receipt=stale_receipt)
+        with self.assertRaisesRegex(InferenceReceiptError, "STALE_ENGINE_ADMISSION_RECEIPT_GENERATION"):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_engine_admission_receipt_bundle_tamper_fails_closed(self):
+        receipt = engine_admission_receipt()
+        receipt["runtime"]["sha256"] = "9" * 64
+        _packet, decision, kwargs = receipt_kwargs()
+        kwargs["admitted_engine_admission_receipts"] = {
+            kwargs["engine_admission_receipt_sha256"]: receipt,
+        }
+        with self.assertRaisesRegex(
+            InferenceReceiptError,
+            "ENGINE_ADMISSION_RECEIPT_BUNDLE_DIGEST_MISMATCH|ENGINE_ADMISSION_RECEIPT_DIGEST_MISMATCH",
+        ):
+            make_inference_receipt(decision, **kwargs)
+
     def test_output_digest_and_size_are_typed(self):
         _packet, decision, kwargs = receipt_kwargs()
         kwargs["output_sha256"] = "not-a-digest"
@@ -158,6 +264,7 @@ class InferenceReceiptTests(unittest.TestCase):
             current_generation=7,
             admitted_entry_bindings=entry_bindings,
         )
+        engine_receipt = engine_admission_receipt()
         with self.assertRaisesRegex(InferenceReceiptError, "MODEL_ACTIVATION_ROUTE_REQUIRED"):
             make_inference_receipt(
                 decision,
@@ -166,6 +273,10 @@ class InferenceReceiptTests(unittest.TestCase):
                 entry_admission_sha256=packet.admission_sha256,
                 admitted_entry_bindings=entry_bindings,
                 admitted_engine_artifacts={"hcu_local_08b": ENGINE_SHA256},
+                engine_admission_receipt_sha256=engine_receipt["receipt_sha256"],
+                admitted_engine_admission_receipts={
+                    engine_receipt["receipt_sha256"]: engine_receipt,
+                },
                 model_call_id="model-call:should-not-exist",
                 output_ref="unifieddb:candidate-output:should-not-exist",
                 output_sha256=OUTPUT_SHA256,

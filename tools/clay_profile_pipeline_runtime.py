@@ -500,11 +500,15 @@ class ProfilePipelineRuntime(clay.Runtime):
                         raise FileNotFoundError(str(path))
                     cursor = int(cursors.get(kind, 0))
                     raw = path.read_bytes()[cursor:]
-                    parts = raw.split(b"\n")
-                    tail = parts.pop() if raw and not raw.endswith(b"\n") else b""
-                    consumed_bytes = len(raw) - len(tail)
-                    for line in parts[: int(spec.get("limit", 60))]:
-                        line = line.strip()
+                    limit = max(0, int(spec.get("limit", 60)))
+                    consumed_bytes = 0
+                    for chunk in raw.splitlines(keepends=True):
+                        if len(rows) >= limit:
+                            break
+                        if not chunk.endswith(b"\n"):
+                            break
+                        consumed_bytes += len(chunk)
+                        line = chunk.strip()
                         if not line:
                             continue
                         try:

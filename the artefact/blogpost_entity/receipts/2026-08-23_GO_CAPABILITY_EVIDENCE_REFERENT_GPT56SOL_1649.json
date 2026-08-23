@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "cycle": "go-2026-08-23-1649-gpt56sol-capability-evidence-referent",
+  "classification": "BOUNDED_SOURCE_AND_COMPONENT_EVIDENCE_ONLY",
+  "base_main": "06b2195ce72d4546a30d23cedaeeb6dc66a56417",
+  "branch": "gpt56sol/go-runtime-ucf-admission-20260823-1649",
+  "branch_head_before_receipt": "08d627d2d8beb9d027771e46a3b784dca340b2a6",
+  "problem": "A profile-carried capability_receipt_digest was previously validated only as a non-placeholder SHA-256 and therefore did not prove that local-latent/BUNDLED_LOCAL_08B capability evidence resolved to current-generation MiniUnifiedDB cognition ancestry.",
+  "delta": {
+    "resolver": "tools/mini_capability_evidence_resolver_v1.py",
+    "resolver_git_blob": "0dc28e27e3aeef973fc9fe1a4a0187f61fb3c3cb",
+    "resolver_sha256": "fb7f2631e18afcbb9bc4034295b8f8f4aecffbb4f6732b5354bf09d70e4c95f1",
+    "tests": "tests/test_mini_capability_evidence_resolver_v1.py",
+    "tests_git_blob": "f3ff0e1e10d01546542b5e47af87b22c60be2d01",
+    "tests_sha256": "7e05d503d3405b5fa4bfcbcd51f6b7cf74ce7639947b7ea37ddce60216aa824f",
+    "authority": "READ_ONLY_ROUTING_EVIDENCE_NO_TRUTH_STATE_EFFECT_AUTHORITY",
+    "runtime_wiring_changed": false
+  },
+  "mechanism": {
+    "local_modes": ["FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"],
+    "bundled_manifest_rule": "capability receipt must equal the exact admission_receipt_digest for the single unambiguous BUNDLED_MANIFEST version admitted in the live entity generation, and that manifest must be the one bound by the exact current cognition boot binding",
+    "runtime_probe_rule": "blocked until a typed runtime-probe receipt contract exists",
+    "external_mode_rule": "no local activation capability is authorized or claimed",
+    "fail_closed": true
+  },
+  "component_execution": {
+    "surface": "isolated ChatGPT Python component environment",
+    "command_semantics": "python -m unittest -v test_mini_capability_evidence_resolver_v1.py over byte-identical resolver/test contents",
+    "result": "PASS_8_OF_8",
+    "elapsed_seconds_observed": 0.004,
+    "adversarial_cases": [
+      "random valid SHA-256 cannot authorize bundled manifest",
+      "stale generation rejected",
+      "boot/prepare manifest drift rejected",
+      "same-digest multi-version admission rejected as ambiguous",
+      "untyped RUNTIME_PROBE rejected",
+      "manifest payload mutation rejected"
+    ],
+    "environment_note": "An unrelated artifact-tool warmup warning occurred during Python startup; unittest exit code was 0 and all eight named tests passed."
+  },
+  "credit": {
+    "source_mechanism": "SUPPORTED_BOUNDED",
+    "integrated_reference_runtime": 0,
+    "bundled_08b_runtime": 0,
+    "jspace_gwt_runtime": 0,
+    "whole_mini_entity": 0,
+    "hcu_runtime": 0
+  },
+  "coordination": {
+    "hcu": "NO_CHANGE_NON_DUPLICATE_ACTIVE_PARALLEL_LANES_EXIST",
+    "unusual_experiment_accounting": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID; adversarial regression added but no global unusual-slot claim minted"
+  },
+  "next_gate": "Fuse this resolver into the single retained pipeline_cognitive_fabric_admit runtime path together with atomic cognition bootstrap and downstream inference identity consumption; then implement post-terminal UCF finalization and obtain actually-started authorized isolated exact-source execution.",
+  "policy": {
+    "free_only": true,
+    "together_used": false,
+    "paid_execution": false,
+    "model_training": false,
+    "vps_testing": false,
+    "secret_lookup": false
+  }
+}

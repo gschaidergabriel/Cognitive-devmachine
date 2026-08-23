@@ -262,10 +262,15 @@ class ProfilePipelineRuntime(clay.Runtime):
                 entity_table_exists = db.execute(
                     "SELECT 1 FROM sqlite_master WHERE type='table' AND name='entity_state'"
                 ).fetchone() is not None
+                canonical_row_exists = False
+                if entity_table_exists:
+                    canonical_row_exists = db.execute(
+                        "SELECT 1 FROM entity_state WHERE id=1"
+                    ).fetchone() is not None
                 legacy_table_exists = db.execute(
                     "SELECT 1 FROM sqlite_master WHERE type='table' AND name='eos_pipeline_state'"
                 ).fetchone() is not None
-                if not entity_table_exists and legacy_table_exists:
+                if not canonical_row_exists and legacy_table_exists:
                     legacy_columns = {
                         str(row[1]) for row in db.execute("PRAGMA table_info(eos_pipeline_state)")
                     }

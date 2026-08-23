@@ -1,0 +1,47 @@
+{
+  "schema": "mini-entity-hcu-grid-manifest/v1",
+  "grid_id": "mini-entity-hcu-kvm4-v1",
+  "entity_count": 1,
+  "state_authority": "MiniUnifiedDB",
+  "effect_authority": "ENTITYOS_MINI_ENTITY_EFFECT_GATE",
+  "module_class": "~0.8B_GENERIC_CLAYCOG",
+  "lane_semantics": "LOGICAL_HYPERPOSITION_COGNITION_LANES",
+  "weight_topology": "SHARED_IMMUTABLE_CHECKPOINT_PREFERRED",
+  "host_profile": {
+    "cpu_cores": 4,
+    "ram_bytes": 17179869184,
+    "disk_bytes": 214748364800,
+    "bandwidth_bytes": 17592186044416,
+    "evidence": "OWNER_SPEC_DEPLOYMENT_TARGET_ONLY"
+  },
+  "capacity": {
+    "policy": "MAX_SAFE_MEASURED",
+    "measurement_bound": false,
+    "reserved_ram_bytes": "UNRESOLVED_UNTIL_MEASURED",
+    "logical_lanes": "UNRESOLVED_UNTIL_MEASURED",
+    "resident_replicas": "UNRESOLVED_UNTIL_MEASURED",
+    "active_inference_lanes": "UNRESOLVED_UNTIL_MEASURED",
+    "measured_shared_weight_rss_bytes": "UNRESOLVED_UNTIL_MEASURED",
+    "measured_incremental_lane_rss_bytes": "UNRESOLVED_UNTIL_MEASURED",
+    "measured_cpu_parallel_ceiling": "UNRESOLVED_UNTIL_MEASURED"
+  },
+  "scheduler": {
+    "packet_type": "InferencePacket",
+    "parallel_candidates_non_authoritative": true,
+    "single_gwt_commit_winner": true,
+    "generation_fence_required": true,
+    "hyperposition_branch_isolation": true
+  },
+  "feed_policy": {
+    "free_llm_token_pool_role": "CANDIDATE_RESEARCH_INPUT_ONLY",
+    "model_output_canonical_truth": false,
+    "model_output_direct_effect": false,
+    "together_forbidden": true
+  },
+  "provenance": {
+    "owner_direction": "2026-08-23 HCU grid extension",
+    "hardware_source": "owner-provided KVM4 target spec",
+    "runtime_credit": 0,
+    "note": "VPS is deployment target only; current runtime validation remains authorized-isolated-sandbox-only."
+  }
+}

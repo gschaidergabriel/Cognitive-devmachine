@@ -1,0 +1,101 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_BINDER_V2_EXACT_GRID10_PLAN_CELL_RUNTIME/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_immediately_before_write": "e7e597cf749ba1c890be2329efaa756869d0ceb4",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "coordination": {
+    "canonical_atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed_by_this_organ": false,
+    "classification": "ORDINARY_DETERMINISTIC_EXACT_SNAPSHOT_RUNTIME_REGRESSION",
+    "unusual_experiment_count_added": 0
+  },
+  "vercel": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_7Le8masacNa2Ga9FdKSPjAUXoRy9",
+    "deployment_commit": "d595a19ea323f14ca09d8d717f5b5cf770508db7",
+    "deployment_state_before_request": "READY",
+    "request": "GET /api/hcu-jspace-binding-v2-capsule",
+    "http_status": 200,
+    "cache": "MISS",
+    "sandbox_id": "green-pleasant-finch-ce5uc1",
+    "sandbox_cleaned_up": true,
+    "cleanup_error": null
+  },
+  "capsule": {
+    "id": "HCU_JSPACE_INFERENCE_BINDING_V2_EXACT_GRID10_PLAN_CELL_CAPSULE/v3",
+    "source_repository": "gschaidergabriel/clay-global-research-entity",
+    "source_main_context_observed": "d19f581151e634a60096724e1caee06914212bc0",
+    "source_pr": 1263,
+    "source_pr_head_observed": "9c7a3c8bb23b27aee6e71275af836f0bc3b13bfb",
+    "source_manifest_sha256": "dfe0397fbbdd9779939be43c9b0d6922c4165a9bc95550704a6dbb8712f67f61",
+    "source_pr_membership_reverified_after_runtime": {
+      "jspace_inference_binding_v1.py": "9830a6833922b05d84e2863bfbdfb8dfff2c06cf",
+      "grid10_scheduler_v1.py": "22d7407dd87b38f9ae53c2ef8bdff3383110875c"
+    },
+    "files": {
+      "entry_canonicalization_v1.py": {
+        "git_blob_sha": "00d1d79cbb66a1956a278de4755cd8395e854199",
+        "sha256": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f"
+      },
+      "grid10_scheduler_v1.py": {
+        "git_blob_sha": "22d7407dd87b38f9ae53c2ef8bdff3383110875c",
+        "sha256": "c05f1108e70db18e92fd0d7c808ffec09517bddbdd54b1dbbd0a17a2a07e9af7"
+      },
+      "jspace_inference_binding_v1.py": {
+        "git_blob_sha": "9830a6833922b05d84e2863bfbdfb8dfff2c06cf",
+        "sha256": "f4b1e329ef3aa14635cb0b08e18799ec49693eaede0370a793881e4516476e07"
+      },
+      "test_binding_v2_deterministic.py": {
+        "git_blob_sha": "2a9cba2c9d25ecc40acc7f891c4b44de9b529456",
+        "sha256": "fcf03661b226a6a3c75244014f1e55b439636dc957e1b1336f64aaff5a031584"
+      }
+    },
+    "dependency_scope": "EXACT_RFC8785_JCS+EXACT_GRID10_PLAN_CELL_TYPES+EXACT_BINDER_V2;UPSTREAM_PRODUCERS_STUBBED"
+  },
+  "measured_result": {
+    "status": "JSPACE_BINDING_V2_EXACT_GRID10_PLAN_CELL_COMPONENT_CLOSURE_PASS",
+    "exit_code": 0,
+    "secret_fence": "PASS",
+    "exact_grid10_plan_cell_types": "PASS",
+    "binder_v2_baseline": "PASS",
+    "model_call_cross_grid_cell_fail_closed": "PASS",
+    "multilane_fail_closed": "PASS",
+    "receipt_digest_fail_closed": "PASS",
+    "grid_digest_fail_closed": "PASS",
+    "role_lane_fail_closed": "PASS",
+    "deterministic_regressions": "6_OF_6_PASS",
+    "stderr": "",
+    "result_log_sha256": "7cccd9ec75e470aebcc2c28f95ab939fab15dfe472d39fb31bd46545c7cfc6c5"
+  },
+  "causal_interpretation": {
+    "prior_recorded_defect": "MODEL_CALL_ID_NOT_SEMANTICALLY_BOUND_TO_GRID_PLAN_CELL_ROLE",
+    "prior_observed_alias": "TRACE_CELL=cell-02 while relabeled model_call_id named cell-09 and was accepted at an older bound snapshot",
+    "current_bound_snapshot_result": "The repaired binder rejects the same recorded cross-cell model-call identity class while an exact model-call/grid-plan/cell/role identity binds successfully.",
+    "supported": "The fixed snapshot containing exact RFC8785/JCS, exact GRID10 plan/cell source types, repaired binder-v2 bytes and deterministic regression executed in an admitted disposable FREE Sandbox and closed the recorded model-call cross-cell alias class at component scope.",
+    "not_supported": "This does not establish the full current HCU dependency graph, real upstream Entry/router/inference producers, verified physical engine load/model execution, hidden-state J-Space causality, training benefit, or whole EntityOS acceptance.",
+    "snapshot_freshness": "PR1263 continued changing after the bound 9c7a3c8 snapshot, including later scheduler-owned grid-plan validation work; therefore this is exact-at-bound-snapshot component runtime evidence, not exact-current-donor-head whole-path evidence."
+  },
+  "credit": {
+    "execution_credit": "JSPACE_BINDER_V2_EXACT_GRID10_PLAN_CELL_COMPONENT_CLOSURE_ONLY",
+    "full_hcu_dependency_graph_credit": false,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Rebind the retained PR810 executor to the latest PR1263 scheduler-owned validate_grid_plan_identity source snapshot, then replace bounded upstream producer doubles with the canonical Typed Entry -> route -> verified engine admission/load -> HCU_INFERENCE_RECEIPT/v3 path and execute the same exact GRID10/model-call/J-Space binding closure. Preserve FREE_ONLY and zero new unusual experiments unless a valid atomic lease exists."
+}

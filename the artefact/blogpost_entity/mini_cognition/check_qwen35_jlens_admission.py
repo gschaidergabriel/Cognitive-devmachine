@@ -18,6 +18,7 @@ Network access is OFF unless ``--allow-network`` is supplied explicitly.
 from __future__ import annotations
 
 import argparse
+import functools
 import hashlib
 import importlib.metadata
 import json
@@ -32,6 +33,20 @@ from typing import Any
 EXPECTED_MODEL_TYPE = "qwen3_5_text"
 EXPECTED_LAYERS = 24
 EXPECTED_D_MODEL = 1024
+
+_DTYPE_ALIASES = {
+    "float16": "float16",
+    "fp16": "float16",
+    "half": "float16",
+    "bfloat16": "bfloat16",
+    "bf16": "bfloat16",
+    "float32": "float32",
+    "fp32": "float32",
+    "float": "float32",
+    "float64": "float64",
+    "fp64": "float64",
+    "double": "float64",
+}
 
 
 def _version(dist: str) -> str:
@@ -83,6 +98,114 @@ def _write_result(result: dict[str, Any], output: str | None) -> None:
         os.replace(tmp, out)
 
 
+def _dtype_name(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip().lower()
+    if text.startswith("torch."):
+        text = text[6:]
+    return text or None
+
+
+def _normalize_requested_dtype(value: Any) -> str | None:
+    text = _dtype_name(value)
+    if text in (None, "auto"):
+        return None
+    normalized = _DTYPE_ALIASES.get(text)
+    if normalized is None:
+        raise ValueError(
+            "unsupported concrete --dtype for exact admission: "
+            f"{value!r}; use auto, float16/fp16, bfloat16/bf16, float32/fp32, or float64/fp64"
+        )
+    return normalized
+
+
+def _resolve_attr_path(obj: Any, dotted_path: str) -> Any:
+    return functools.reduce(getattr, dotted_path.split("."), obj)
+
+
+def _module_weight_dtype(module: Any) -> str | None:
+    weight = getattr(module, "weight", None)
+    if weight is not None and getattr(weight, "dtype", None) is not None:
+        return _dtype_name(weight.dtype)
+    parameters = getattr(module, "parameters", None)
+    if callable(parameters):
+        try:
+            param = next(iter(parameters()))
+        except StopIteration:
+            return None
+        if getattr(param, "dtype", None) is not None:
+            return _dtype_name(param.dtype)
+    return None
+
+
+def _observe_and_validate_weighted_dtype(args: argparse.Namespace, model: Any) -> dict[str, Any]:
+    """Bind requested precision to actual weighted modules before J-Space credit.
+
+    Qwen3.5 composite checkpoints historically exposed an AutoModelForCausalLM
+    dtype propagation bug.  Version strings alone are insufficient evidence;
+    this samples the exact loaded text path that jlens will consume.
+    """
+
+    expected = _normalize_requested_dtype(args.dtype)
+    samples: dict[str, str] = {}
+
+    get_input = getattr(model, "get_input_embeddings", None)
+    if callable(get_input):
+        dtype = _module_weight_dtype(get_input())
+        if dtype is not None:
+            samples["input_embeddings"] = dtype
+
+    get_output = getattr(model, "get_output_embeddings", None)
+    if callable(get_output):
+        output = get_output()
+        if output is not None:
+            dtype = _module_weight_dtype(output)
+            if dtype is not None:
+                samples["output_embeddings"] = dtype
+
+    for path in ("model.layers", "model.language_model.layers", "language_model.layers"):
+        try:
+            layers = _resolve_attr_path(model, path)
+            first_layer = layers[0]
+        except (AttributeError, IndexError, TypeError):
+            continue
+        dtype = _module_weight_dtype(first_layer)
+        if dtype is not None:
+            samples["first_decoder_block"] = dtype
+            break
+
+    if not samples:
+        raise AssertionError("weighted dtype observation found no model weight samples")
+
+    text_config = (
+        model.config.get_text_config()
+        if hasattr(model.config, "get_text_config")
+        else model.config
+    )
+    config_dtype = _dtype_name(getattr(model.config, "dtype", None))
+    text_config_dtype = _dtype_name(getattr(text_config, "dtype", None))
+
+    mismatches = (
+        {name: observed for name, observed in samples.items() if observed != expected}
+        if expected is not None
+        else {}
+    )
+    if mismatches:
+        raise AssertionError(
+            f"requested dtype={expected} but loaded weighted modules disagree: {mismatches}"
+        )
+
+    return {
+        "requested": str(args.dtype),
+        "expected_concrete": expected,
+        "sampled_weight_dtypes": dict(sorted(samples.items())),
+        "model_config_dtype": config_dtype,
+        "text_config_dtype": text_config_dtype,
+        "concrete_request_match": None if expected is None else True,
+    }
+
+
 def _base_receipt(args: argparse.Namespace) -> dict[str, Any]:
     return {
         "schema": "mini-entity/qwen35-jlens-admission/v1",
@@ -94,6 +217,7 @@ def _base_receipt(args: argparse.Namespace) -> dict[str, Any]:
             "layers": args.expected_layers,
             "d_model": args.expected_d_model,
             "preferred_text_only_jlens_layout": "model",
+            "requested_dtype": args.dtype,
         },
         "runtime": {
             "python": sys.version.split()[0],
@@ -216,6 +340,7 @@ def _weighted_lens(args: argparse.Namespace):
     from jlens import from_hf
 
     torch, tokenizer, model = _load_weighted(args)
+    dtype_observation = _observe_and_validate_weighted_dtype(args, model)
     if args.compile and args.device_map == "auto":
         raise ValueError("jlens compile=True must not be combined with device_map='auto'")
     lens_model = from_hf(
@@ -232,13 +357,13 @@ def _weighted_lens(args: argparse.Namespace):
         raise AssertionError(
             f"weighted dimensions mismatch: layers={lens_model.n_layers}, d={lens_model.d_model}"
         )
-    return torch, tokenizer, model, lens_model
+    return torch, tokenizer, model, lens_model, dtype_observation
 
 
 def _forward_phase(args: argparse.Namespace, result: dict[str, Any]) -> None:
     from jlens import ActivationRecorder
 
-    torch, tokenizer, model, lens_model = _weighted_lens(args)
+    torch, tokenizer, model, lens_model, dtype_observation = _weighted_lens(args)
     ids = lens_model.encode(args.prompt, max_length=args.max_seq_len)
     with ActivationRecorder(lens_model.layers, at=list(range(lens_model.n_layers))) as rec:
         with torch.no_grad():
@@ -262,6 +387,7 @@ def _forward_phase(args: argparse.Namespace, result: dict[str, Any]) -> None:
         "activation_shapes": shapes,
         "layer_type_counts": dict(sorted(Counter(str(x) for x in layer_types).items())),
         "input_device": str(lens_model.input_device),
+        "dtype_admission": dtype_observation,
     }
     result["status"] = "PASS_WEIGHTED_FORWARD_HOOKS"
     result["next_gate"] = "BOUNDED_JACOBIAN_ONE_SOURCE_LAYER"
@@ -270,7 +396,7 @@ def _forward_phase(args: argparse.Namespace, result: dict[str, Any]) -> None:
 def _jacobian_phase(args: argparse.Namespace, result: dict[str, Any]) -> None:
     from jlens import jacobian_for_prompt
 
-    torch, tokenizer, model, lens_model = _weighted_lens(args)
+    torch, tokenizer, model, lens_model, dtype_observation = _weighted_lens(args)
     source_layers = [args.source_layer]
     jacobians, seq_len, n_valid = jacobian_for_prompt(
         lens_model,
@@ -303,6 +429,7 @@ def _jacobian_phase(args: argparse.Namespace, result: dict[str, Any]) -> None:
         "jacobian_abs_mean": float(j.abs().mean()),
         "jacobian_abs_max": float(j.abs().max()),
         "jacobian_finite": True,
+        "dtype_admission": dtype_observation,
     }
     result["status"] = "PASS_BOUNDED_JACOBIAN"
     result["next_gate"] = "VERSIONED_MULTI_PROMPT_LENS_FIT_AND_EMPIRICAL_GWT_CALIBRATION"

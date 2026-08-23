@@ -1,6 +1,6 @@
 import unittest
 
-from xeno_entry_fabric_v1 import admit_entry
+from xeno_entry_fabric_v1 import EntryFabricError, admit_entry
 from grid10_scheduler_v1 import (
     ExecutionClass,
     GridScheduleError,
@@ -14,9 +14,14 @@ from grid10_scheduler_v1 import (
 
 CAPABILITY_BINDING_SHA256 = "2" * 64
 ADMITTED_CAPABILITIES = ("hcu.route",)
+ADMITTED_BUDGET = {
+    "max_model_calls": 4,
+    "max_tokens": 4096,
+    "max_wall_ms": 10_000,
+}
 
 
-def packet(*, max_model_calls=2, max_tokens=2048):
+def packet(*, max_model_calls=2, max_tokens=2048, max_wall_ms=5000, admitted_budget=ADMITTED_BUDGET):
     entry = {
         "schema": "XENO_ENTRY_PACKET/v1",
         "ingress_id": "ingress:test:grid",
@@ -36,7 +41,7 @@ def packet(*, max_model_calls=2, max_tokens=2048):
         "budget": {
             "max_model_calls": max_model_calls,
             "max_tokens": max_tokens,
-            "max_wall_ms": 5000,
+            "max_wall_ms": max_wall_ms,
         },
         "payload_ref": "unifieddb:payload:test:grid",
         "payload_sha256": "3" * 64,
@@ -46,11 +51,7 @@ def packet(*, max_model_calls=2, max_tokens=2048):
         current_generation=7,
         expected_capability_binding_sha256=CAPABILITY_BINDING_SHA256,
         admitted_capabilities=ADMITTED_CAPABILITIES,
-        admitted_budget={
-            "max_model_calls": max_model_calls,
-            "max_tokens": max_tokens,
-            "max_wall_ms": 5000,
-        },
+        admitted_budget=admitted_budget,
     )
 
 
@@ -86,6 +87,20 @@ class Grid10SchedulerTests(unittest.TestCase):
         c = compile_plan(p, mode=HCUMode.GRID10, capacity=capacity(receipt="5" * 64))
         self.assertEqual(a.plan_sha256, b.plan_sha256)
         self.assertNotEqual(a.plan_sha256, c.plan_sha256)
+
+    def test_entry_compute_budget_must_be_externally_admitted_before_grid(self):
+        with self.assertRaisesRegex(EntryFabricError, "BUDGET_NOT_ADMITTED:max_model_calls"):
+            packet(max_model_calls=ADMITTED_BUDGET["max_model_calls"] + 1)
+
+    def test_entry_may_narrow_external_compute_budget_before_grid(self):
+        p = packet(max_model_calls=2, max_tokens=1024, max_wall_ms=2000)
+        self.assertEqual(dict(p.budget), {
+            "max_model_calls": 2,
+            "max_tokens": 1024,
+            "max_wall_ms": 2000,
+        })
+        plan = compile_plan(p, mode=HCUMode.GRID10, capacity=capacity())
+        self.assertEqual(plan.max_wall_ms, 2000)
 
     def test_logical_capacity_fails_closed(self):
         with self.assertRaisesRegex(GridScheduleError, "LOGICAL_CELL_CAPACITY_EXCEEDED"):

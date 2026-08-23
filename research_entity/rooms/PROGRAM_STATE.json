@@ -1,5 +1,5 @@
 {
-  "schema_version": "8.2",
+  "schema_version": "8.3",
   "program_id": "clayverse-single-container",
   "status": "ACTIVE",
   "stage": "CLAYVERSE_ARTIFACT",
@@ -9,7 +9,7 @@
   "dynamic_targets": {
     "primary": "WHOLE_CLAYVERSE_OCI_PRODUCT",
     "runtime_evidence": "AUTHORIZED_ISOLATED_EXACT_SOURCE_ONLY",
-    "next": "authority-consistent source -> exact OCI build/runtime -> full product path acceptance"
+    "next": "owner-started one-shot Vercel Sandbox source admission -> exact current full regressions -> exact OCI build/runtime -> full product path acceptance"
   },
   "progress_semantics": {
     "bar_cells": 20,
@@ -17,7 +17,7 @@
   },
   "stage_gates": {
     "CLAYVERSE_ARTIFACT": {"status": "IN_PROGRESS"},
-    "CLAYVERSE_EXACT_OCI_ACCEPTANCE": {"status": "BLOCKED_ON_EXECUTION_SURFACE"},
+    "CLAYVERSE_EXACT_OCI_ACCEPTANCE": {"status": "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"},
     "CLAYVERSE_DEPLOYMENT_READINESS": {"status": "NOT_YET_ADMITTED"}
   },
   "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
@@ -50,7 +50,10 @@
     "vps_testing_forbidden": true,
     "together_forbidden": true,
     "secrets_in_source_or_receipts": false,
-    "final_paid_or_model_training_requires_owner_authorization": true
+    "final_paid_or_model_training_requires_owner_authorization": true,
+    "vercel_sandbox_bridge": "SANDBOX_ADMISSION_PROVEN_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED",
+    "execution_frontier_binding": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
+    "current_chat_connector_start_exec": "NOT_EXPOSED"
   },
   "whole_product_gates": [
     "exact_current_source_identity",
@@ -71,7 +74,7 @@
   ],
   "runtime_credit": {
     "whole_clayverse": 0,
-    "note": "Authority reconciliation is source-level only until exact authorized isolated runtime evidence is observed."
+    "note": "Vercel Sandbox creation/admission is historically observed and runtime one-shot GitHub-token ingress is implemented, but no current owner-started exact-source one-shot run has supplied the scoped read token through that ingress; source/full-suite/OCI/product runtime credit therefore remains zero."
   },
   "superseded_program_snapshot": {
     "git_blob_sha": "d2a7b849e7a8f7b38b28aca3ae1704bf447a367d",
@@ -81,7 +84,7 @@
     "note": "The exact detailed Mini Entity/J-Space/training/native/parity campaign state remains preserved in Git history and its original receipts; this active state intentionally does not duplicate it as current product authority."
   },
   "compatibility_note": "Legacy Frank/Mini-Entity-specific progress and campaign readers may return UNKNOWN for retired active-state fields. Historical evidence remains addressable by the superseded snapshot blob and original receipts rather than silently becoming current ClayVerse truth.",
-  "current_frontier": "complete authority reconciliation and run exact-current ClayVerse authority/full-suite/OCI gates on an actually-started authorized isolated executor",
+  "current_frontier": "execute the owner-started runtime POST one-shot through the retained Vercel Sandbox bridge with a scoped read-only GITHUB_READ_TOKEN, verify exact private Research/EntityOS source identity and credential absence after fetch, then run exact-current full regressions and build/bind the ClayVerse OCI image",
   "go_contract": "Every go refreshes current main/newest owner authority and execution policy, selects the highest-information nonduplicate whole-ClayVerse blocker, falsifies before promotion, preserves one shared unusual-experiment lease law, persists bounded evidence, and advances the same one-container ClayVerse product until promoted, falsified, or execution-blocked.",
   "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one persistent central ClayVerse entity",
   "together_api": {

@@ -1,5 +1,5 @@
 {
-  "schema_version": "8.6",
+  "schema_version": "8.61",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
   "identity": {
@@ -10,7 +10,7 @@
   "active_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
   "product_endpoint": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
   "compatibility_names": {
     "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
     "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY",
@@ -27,12 +27,13 @@
     "real/state-changing effects remain behind deterministic EffectGate/EffectJournal authority",
     "logical module count is distinct from resident model count and physical decode concurrency",
     "unknown external effect outcome remains unknown and is never blindly replayed",
-    "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+    "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
+    "current autonomous supervisor is FREE_ONLY: paid, subscription and unknown provider lanes fail closed before credential lookup or network I/O"
   ],
   "go_required_tracks": [
     "ENTITYOS_EXECUTABLE_CONVERGENCE",
     "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT_OR_HCU_NO_CHANGE_WITH_REASON",
-    "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_ONE_SHOT_08B_TRAINING_READINESS_OR_NO_CHANGE_WITH_REASON"
+    "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS_OR_NO_CHANGE_WITH_REASON"
   ],
   "hcu_computerization": {
     "entry_io": "TYPED_ENTRY_FABRIC",
@@ -62,12 +63,14 @@
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
-  "execution_surface": "AUTHORIZED_ISOLATED_SANDBOX_ONLY",
-  "together_api": "GENERAL_INFERENCE_AND_FALLBACK_FORBIDDEN; EXACTLY_ONE_OWNER_AUTHORIZED_APPROX_08B_JSPACE_GWT_FINETUNE_ALLOWED_UNTIL_CONSUMED",
-  "together_training_authority": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
+  "execution_surface": "AUTHORIZED_ISOLATED_FREE_SANDBOX_ONLY_IN_CURRENT_AUTONOMOUS_SUPERVISOR_MODE",
+  "free_only": true,
+  "paid_fallback": "FORBIDDEN",
+  "together_api": "FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE; GENERAL_INFERENCE_FORBIDDEN; OWNER_PAID_ONE_SHOT_DIRECTIVE_QUARANTINED_WITH_ZERO_EXECUTION_CREDIT",
+  "together_training_authority_provenance": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
   "together_one_shot_training_consumed": false,
-  "paid_fallback": "FORBIDDEN_EXCEPT_COST_INHERENT_TO_THE_ONE_OWNER_AUTHORIZED_TRAINING_JOB",
-  "final_paid_model_training": "ONE_SHOT_APPROX_08B_JSPACE_GWT_TRAINING_AUTHORIZED; SECOND_JOB_REQUIRES_NEW_OWNER_AUTHORIZATION",
+  "current_supervisor_together_training": "FORBIDDEN_BEFORE_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION",
+  "future_paid_training": "REQUIRES_A_FUTURE_AUTHORITY_MODE_THAT_EXPLICITLY_ADMITS_PAID_EXECUTION; CURRENT_FREE_ONLY_ORGAN_MUST_NOT_SPEND",
   "go_macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
   "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
   "go": "ENTITYOS_HCU_MAXIMUM_PRODUCT_CONVERGENCE_MACROCYCLE",
@@ -75,25 +78,26 @@
   "go_transition_questions": [
     "Does this improve executable EntityOS now or strengthen the strongest current implementation toward it?",
     "Does this advance HCU or the typed Entry Fabric, or record an exact no-change reason?",
-    "Does this advance the functional Global J-Space/GWT prototype, trace instrumentation, vector-control ABI, dataset quality, or one-shot training readiness?",
+    "Does this advance the functional Global J-Space/GWT prototype, trace instrumentation, vector-control ABI, dataset quality, or zero-cost local ~0.8B readiness without entering a paid lane?",
     "Can the primitive serve multiple HCU modes rather than one special case?",
     "Does this preserve exact state/provenance/generation/effect boundaries?",
     "Can the claim be falsified with executable evidence?"
   ],
   "current_frontier": [
-    "synchronize all control-plane entry points to EntityOS + HCU authority",
-    "positive fail-closed local/internal cognition-engine admission",
+    "synchronize all control-plane entry points to EntityOS + HCU + current FREE_ONLY supervisor authority",
+    "obtain an actually-started exact-source authorized FREE isolated EntityOS/HCU regression run",
     "bind causal event identity plus resolved engine identity into one HCU route decision identity",
     "typed Entry Fabric for all new data",
     "10-cell shared-worker HCU baseline",
     "build and instrument Global J-Space/GWT with JSPACE_VECTOR_CONTROL_ABI/v1",
-    "derive leak-resistant training/validation/holdout data from exact prototype traces and deterministic hard negatives",
-    "launch exactly one Together full fine-tune on the exact intended ~0.8B base only after prototype/data/base/preflight gates are ready",
+    "derive leak-resistant training/validation/holdout data from exact prototype traces and deterministic hard negatives for zero-cost local experimentation",
+    "bind an actual local ~0.8B checkpoint/tokenizer/runtime/build to loader-consumption evidence before model-runtime credit",
     "request-scoped cognition simulation and bounded test world-model mode",
     "model-specific empirical J-Space coupling",
     "Hyperposition with evidence-based candidate reduction",
     "measured scale-out without conflating logical cells with simultaneous decodes",
-    "strict EffectGate non-bypass and recovery/generation fencing"
+    "strict EffectGate non-bypass and recovery/generation fencing",
+    "do not preflight or launch the paid Together lane in current FREE_ONLY supervisor mode"
   ],
   "legacy_scope": "Xeno/XCU remain compatibility or research aliases only. Mini Entity/MicroEntity/ClayVerse/Frank remain historical implementation or donor provenance unless explicitly re-admitted."
 }

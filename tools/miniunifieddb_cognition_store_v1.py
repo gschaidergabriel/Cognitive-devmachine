@@ -97,6 +97,17 @@ def _refs(value: Any, name: str) -> list[str]:
     return refs
 
 
+def _stored_refs(raw: Any, name: str) -> list[str]:
+    _need(type(raw) is str, f"{name}:JSON_TEXT_REQUIRED")
+    try:
+        parsed = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise CognitionStoreError(f"{name}:INVALID_JSON") from exc
+    refs = _refs(parsed, name)
+    _need(canonical_json(refs) == raw, f"{name}:NONCANONICAL_JSON")
+    return refs
+
+
 def _utc_now() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
@@ -489,7 +500,7 @@ def resolve_prepare_binding(
     _need(type(task_text) is str, "TASK_TEXT_REQUIRED")
 
     turn = db.execute(
-        """SELECT binding_digest,boot_binding_digest,task_sha256,workspace_digest,
+        """SELECT binding_digest,schema,boot_binding_digest,task_sha256,workspace_digest,
                   selected_workspace_slots_json,contradiction_state,provenance_refs_json,
                   required_zero_mode
              FROM mini_cognition_turn_bindings
@@ -497,45 +508,85 @@ def resolve_prepare_binding(
         (entity_generation, causal_turn_id),
     ).fetchone()
     _need(turn is not None, "TURN_BINDING_UNAVAILABLE")
+
+    turn_binding_digest = _digest(turn[0], "turn_binding_digest")
+    _need(turn[1] == TURN_BINDING_SCHEMA, "TURN_BINDING_SCHEMA_MISMATCH")
+    boot_binding_digest = _digest(turn[2], "boot_binding_digest")
+    task_sha256 = _digest(turn[3], "task_sha256")
+    workspace_digest = _digest(turn[4], "workspace_digest")
+    slots = _stored_refs(turn[5], "selected_workspace_slots")
+    contradiction_state = _text(turn[6], "contradiction_state")
+    turn_refs = _stored_refs(turn[7], "turn_provenance_refs")
+    required_zero_mode = _text(turn[8], "required_zero_mode")
+
+    turn_material = {
+        "schema": TURN_BINDING_SCHEMA,
+        "entity_generation": entity_generation,
+        "causal_turn_id": causal_turn_id,
+        "boot_binding_digest": boot_binding_digest,
+        "task_sha256": task_sha256,
+        "workspace_digest": workspace_digest,
+        "selected_workspace_slots": slots,
+        "contradiction_state": contradiction_state,
+        "provenance_refs": turn_refs,
+        "required_zero_mode": required_zero_mode,
+    }
+    _need(sha256_obj(turn_material) == turn_binding_digest, "TURN_BINDING_DIGEST_MISMATCH")
+
     expected_task = hashlib.sha256(task_text.encode("utf-8")).hexdigest()
-    _need(turn[2] == expected_task, "TURN_TASK_BINDING_MISMATCH")
+    _need(task_sha256 == expected_task, "TURN_TASK_BINDING_MISMATCH")
 
     boot = db.execute(
-        """SELECT binding_digest,zero_identity_digest,grf_digest,hyperposition_digest,
-                  bundled_manifest_digest,local_model_digest,tokenizer_digest,jspace_profile_digest,
-                  jacobian_lens_digest,workspace_calibration_digest,boot_source_lock_digest,
-                  policy_authority_digest,provenance_refs_json
+        """SELECT binding_digest,schema,entity_generation,zero_identity_digest,grf_digest,
+                  hyperposition_digest,bundled_manifest_digest,local_model_digest,tokenizer_digest,
+                  jspace_profile_digest,jacobian_lens_digest,workspace_calibration_digest,
+                  boot_source_lock_digest,policy_authority_digest,provenance_refs_json
              FROM mini_cognition_boot_bindings
             WHERE binding_digest=? AND entity_generation=?""",
-        (turn[1], entity_generation),
+        (boot_binding_digest, entity_generation),
     ).fetchone()
     _need(boot is not None, "BOOT_BINDING_UNAVAILABLE")
+
+    persisted_boot_digest = _digest(boot[0], "boot_binding_digest")
+    _need(boot[1] == BOOT_BINDING_SCHEMA, "BOOT_BINDING_SCHEMA_MISMATCH")
+    _need(type(boot[2]) is int and boot[2] == entity_generation, "BOOT_BINDING_STALE_GENERATION")
+    boot_fields = {
+        "zero_identity_digest": _digest(boot[3], "zero_identity_digest"),
+        "grf_digest": _digest(boot[4], "grf_digest"),
+        "hyperposition_digest": _digest(boot[5], "hyperposition_digest"),
+        "bundled_manifest_digest": _digest(boot[6], "bundled_manifest_digest"),
+        "local_model_digest": _digest(boot[7], "local_model_digest"),
+        "tokenizer_digest": _digest(boot[8], "tokenizer_digest"),
+        "jspace_profile_digest": _digest(boot[9], "jspace_profile_digest"),
+        "jacobian_lens_digest": _digest(boot[10], "jacobian_lens_digest"),
+        "workspace_calibration_digest": _digest(boot[11], "workspace_calibration_digest"),
+        "boot_source_lock_digest": _digest(boot[12], "boot_source_lock_digest"),
+        "policy_authority_digest": _digest(boot[13], "policy_authority_digest"),
+    }
+    boot_refs = _stored_refs(boot[14], "boot_provenance_refs")
+    boot_material = {
+        "schema": BOOT_BINDING_SCHEMA,
+        "entity_generation": entity_generation,
+        **boot_fields,
+        "provenance_refs": boot_refs,
+    }
+    _need(sha256_obj(boot_material) == persisted_boot_digest, "BOOT_BINDING_DIGEST_MISMATCH")
 
     return {
         "ok": True,
         "schema": SCHEMA,
         "entity_generation": entity_generation,
         "causal_turn_id": causal_turn_id,
-        "turn_binding_digest": turn[0],
-        "boot_binding_digest": boot[0],
-        "task_sha256": turn[2],
-        "workspace_digest": turn[3],
-        "selected_workspace_slots": json.loads(turn[4]),
-        "contradiction_state": turn[5],
-        "turn_provenance_refs": json.loads(turn[6]),
-        "required_zero_mode": turn[7],
-        "zero_identity_digest": boot[1],
-        "grf_digest": boot[2],
-        "hyperposition_digest": boot[3],
-        "bundled_manifest_digest": boot[4],
-        "local_model_digest": boot[5],
-        "tokenizer_digest": boot[6],
-        "jspace_profile_digest": boot[7],
-        "jacobian_lens_digest": boot[8],
-        "workspace_calibration_digest": boot[9],
-        "boot_source_lock_digest": boot[10],
-        "policy_authority_digest": boot[11],
-        "boot_provenance_refs": json.loads(boot[12]),
+        "turn_binding_digest": turn_binding_digest,
+        "boot_binding_digest": persisted_boot_digest,
+        "task_sha256": task_sha256,
+        "workspace_digest": workspace_digest,
+        "selected_workspace_slots": slots,
+        "contradiction_state": contradiction_state,
+        "turn_provenance_refs": turn_refs,
+        "required_zero_mode": required_zero_mode,
+        **boot_fields,
+        "boot_provenance_refs": boot_refs,
         "authority": {
             "durable_state": "MiniUnifiedDB",
             "candidate_only": True,

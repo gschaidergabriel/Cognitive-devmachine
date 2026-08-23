@@ -1,0 +1,73 @@
+{
+  "schema": "ENTITYOS_HCU_GO_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "scope": "JSPACE_VECTOR_CONTROL_ABI/v1 scale-rational admission",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "SELF_CONSISTENT_EXTREME_SCALE_PACKET",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "hypothesis": "A packet with a recomputed valid digest can supply a semantically impossible but syntactically valid rational q8 scale and pass the current validator, causing decode overflow.",
+    "counterhypothesis": "Existing schema, q8 anchor and packet digest checks already imply safe finite-binary64 decode range.",
+    "discriminator": "Start from a valid packet for vector [1.0,-0.5], replace scale_numerator with 1e309 while retaining denominator 127, recompute the packet digest with the selected canonicalizer, then validate and decode.",
+    "observed_before_repair": "validator accepted the self-consistent packet; decode raised OverflowError: integer division result too large for a float",
+    "result": "HYPOTHESIS_SUPPORTED"
+  },
+  "repair": {
+    "canonical_file": "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+    "canonical_blob_sha": "48e87a9917958c773e8e33cf37bbfb9fb5c41a55",
+    "laws_added": [
+      "bound scale decimal text before arbitrary big-integer work",
+      "preserve packet digest identity fence before semantic scale interpretation",
+      "require canonical reduced rational representation",
+      "require 127*scale to decode to a positive finite binary64 anchor"
+    ],
+    "compatibility": "jspace_vector_control_abi_v1.py remains a fail-closed compatibility wrapper onto the single canonical implementation"
+  },
+  "bounded_component_execution": {
+    "surface": "isolated ChatGPT Linux tool container",
+    "runtime_acceptance_credit": false,
+    "executed_vector_blob_sha": "48e87a9917958c773e8e33cf37bbfb9fb5c41a55",
+    "blob_identity_match": true,
+    "python_compile": "PASS",
+    "regression_harness": "equivalent local harness over current ABI behaviors",
+    "tests_run": 9,
+    "tests_passed": 9,
+    "tests_failed": 0,
+    "covered": [
+      "deterministic q8 roundtrip",
+      "null vector",
+      "generation/basis/role/control fail-closed",
+      "sign-flip/permutation controls",
+      "ordinary digest tamper",
+      "self-consistent extreme-scale packet",
+      "binary64 minimum-subnormal and maximum-finite scale endpoints",
+      "non-reduced rational alias",
+      "nonfinite/inexact-number rejection"
+    ]
+  },
+  "execution_surface_discovery": {
+    "github": "RW callable",
+    "vercel_connector": "team/project/deployment/build-log/runtime-log/protected-fetch callable; no direct Sandbox.create/runCommand or arbitrary POST action exposed",
+    "retained_controller": "Dr.-Unterweger PR810 /api/go-cycle-v2 source uses Vercel Sandbox.create and detached exact-current batch",
+    "credential_boundary": "controller needs explicit owner-held scoped GitHub read token in transient POST; no such token was available to this worker and none was fabricated"
+  },
+  "vercel_batch": {
+    "direct_vector_abi_test_present": true,
+    "runtime_execution_in_this_go": "BLOCKED_NO_CALLABLE_CREDENTIAL_BEARING_POST",
+    "whole_runtime_credit": false
+  },
+  "training": {
+    "one_shot_together_authorized": true,
+    "job_created": false,
+    "authorization_consumed": false,
+    "reason_not_launched": "Exact Vercel prototype/trace regression and frozen base-model/preflight gates are not yet established on this worker surface; no transient Together secret ingress was used."
+  },
+  "evidence_boundary": "Source/component evidence is not EntityOS/HCU runtime PASS, model-loader PASS, J-Space causal-use proof, Together training PASS, or whole-product PASS.",
+  "next_exact_gate": "Owner-credential-bearing POST to the current READY retained PR810 controller; require exact current Research main + PR1263 binding, token nonpersistence, direct vector ABI + Global J-Space/GWT + Entry/route/load/inference/GRID10 regressions, then use those traces for dataset/pretrain-baseline readiness."
+}

@@ -6,6 +6,11 @@
   "program": "ENTITYOS_HCU",
   "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
   "scope": "JSPACE_VECTOR_CONTROL_ABI/v1 scale-rational admission",
+  "authority_refresh": {
+    "supervisor_schema": "8.61",
+    "mode": "FREE_ONLY",
+    "paid_or_unknown_provider_boundary": "FAIL_CLOSED_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION"
+  },
   "macrocycle_id": null,
   "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
   "unusual_experiment": {
@@ -59,15 +64,20 @@
   },
   "vercel_batch": {
     "direct_vector_abi_test_present": true,
+    "latest_observed_controller_mode": "FREE_ONLY_8.61",
     "runtime_execution_in_this_go": "BLOCKED_NO_CALLABLE_CREDENTIAL_BEARING_POST",
     "whole_runtime_credit": false
   },
   "training": {
-    "one_shot_together_authorized": true,
+    "target": "SPECIALIZED_LOCAL_APPROX_08B_HCU_MODEL",
+    "current_method": "ZERO_COST_LOCAL_EXPERIMENTATION_ONLY",
+    "owner_paid_one_shot_directive_present_as_provenance": true,
+    "owner_paid_one_shot_directive_status": "QUARANTINED_FOR_CURRENT_FREE_ONLY_SUPERVISOR",
+    "together_preflight_or_job_creation_allowed_now": false,
     "job_created": false,
-    "authorization_consumed": false,
-    "reason_not_launched": "Exact Vercel prototype/trace regression and frozen base-model/preflight gates are not yet established on this worker surface; no transient Together secret ingress was used."
+    "owner_paid_one_shot_job_consumed": false,
+    "reason_not_launched": "Supervisor 8.61 is FREE_ONLY and forbids paid/unknown provider credential lookup, preflight, network I/O and job creation."
   },
-  "evidence_boundary": "Source/component evidence is not EntityOS/HCU runtime PASS, model-loader PASS, J-Space causal-use proof, Together training PASS, or whole-product PASS.",
-  "next_exact_gate": "Owner-credential-bearing POST to the current READY retained PR810 controller; require exact current Research main + PR1263 binding, token nonpersistence, direct vector ABI + Global J-Space/GWT + Entry/route/load/inference/GRID10 regressions, then use those traces for dataset/pretrain-baseline readiness."
+  "evidence_boundary": "Source/component evidence is not EntityOS/HCU runtime PASS, model-loader PASS, J-Space causal-use proof, training PASS, or whole-product PASS.",
+  "next_exact_gate": "Start an exact-source authorized FREE isolated run through the current retained PR810 controller when the explicit transient owner GitHub-read credential can be supplied; require current Research main + PR1263 binding, token nonpersistence, direct vector ABI + Global J-Space/GWT + Entry/route/load/inference/GRID10 regressions, then bind a real local ~0.8B loader and use exact traces for zero-cost local dataset/baseline readiness. Do not preflight or launch Together in current FREE_ONLY mode."
 }

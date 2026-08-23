@@ -88,6 +88,8 @@ def validate(packet: dict[str, Any], capsule: dict[str, Any] | None = None) -> d
     _need(mode in {"WORKSPACE_BOUND", "ABSTAINED"}, "CAPSULE_MODE_INVALID")
     target = packet.get("target_engine_class"); jspace_mode = packet.get("jspace_mode")
     _need(target in TARGETS, "TARGET_ENGINE_UNSUPPORTED"); _need(jspace_mode in JSPACE_MODES, "JSPACE_MODE_UNSUPPORTED")
+    required_zero_mode = packet.get("required_zero_mode")
+    _need(type(required_zero_mode) is str and bool(required_zero_mode.strip()), "REQUIRED_ZERO_MODE_REQUIRED")
     authority = packet.get("authority")
     _need(authority == {"structural_authority":"NONE","candidate_only":True,"direct_state_authority":False,"direct_effect_authority":False}, "AUTHORITY_CONTRACT_MISMATCH")
     if mode == "WORKSPACE_BOUND":
@@ -97,7 +99,27 @@ def validate(packet: dict[str, Any], capsule: dict[str, Any] | None = None) -> d
         if target == "BUNDLED_LOCAL_08B": _need(jspace_mode in {"FULL_LOCAL_LATENT","LOCAL_OBSERVE_ONLY"}, "LOCAL_08B_JSPACE_MODE_INVALID")
     else:
         _need(target == "NO_MODEL_REQUIRED", "ABSTENTION_REQUIRES_NO_MODEL"); _need(jspace_mode == "PLAIN_COMPATIBILITY", "ABSTENTION_JSPACE_MODE_INVALID")
+        _need(required_zero_mode == "ABSTAIN", "ABSTENTION_ZERO_MODE_INVALID")
         _need(packet.get("workspace_digest") is None, "ABSTENTION_WORKSPACE_DIGEST_MUST_BE_NULL")
+        for name in ("zero_identity_digest", "grf_digest"):
+            value = packet.get(name)
+            if value is not None:
+                _digest(value, name)
+    identity_binding = {
+        "entity_generation": generation,
+        "causal_turn_id": packet.get("causal_turn_id"),
+        "workspace_capsule_digest": packet.get("workspace_capsule_digest"),
+        "task_sha256": packet.get("task_sha256"),
+        "zero_identity_digest": packet.get("zero_identity_digest"),
+        "grf_digest": packet.get("grf_digest"),
+        "workspace_digest": packet.get("workspace_digest"),
+        "capsule_mode": mode,
+        "required_zero_mode": required_zero_mode,
+        "target_engine_class": target,
+        "jspace_mode": jspace_mode,
+    }
+    expected_packet_id = hashlib.sha256(b"ZERO_PACKET_ID/v1\0" + canonical_json(identity_binding)).hexdigest()
+    _need(packet.get("packet_id") == expected_packet_id, "PACKET_ID_BINDING_MISMATCH")
     unsigned = dict(packet); observed = unsigned.pop("packet_digest", None); _digest(observed, "packet_digest")
     _need(observed == sha256_obj(unsigned), "PACKET_DIGEST_MISMATCH")
     if capsule is not None:

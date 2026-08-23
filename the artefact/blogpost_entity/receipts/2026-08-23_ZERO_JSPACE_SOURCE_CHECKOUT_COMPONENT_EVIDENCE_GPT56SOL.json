@@ -1,0 +1,72 @@
+{
+  "schema": "ZERO_JSPACE_SOURCE_CHECKOUT_COMPONENT_EVIDENCE/v1",
+  "trigger": "zero",
+  "organ": "GPT-5.6 Sol",
+  "date": "2026-08-23",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "zero-20260823-gpt56sol-jspace-source-checkout-binding",
+  "source_candidate_head_before_addendum": "806d2f43539856fed32f79c114ada73aa55c4373",
+  "exact_changed_blobs": {
+    "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_runtime_admission_v1.py": "b5c5e90593311c700856b23a94b0690eb7aa841b",
+    "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_runtime_admission_v1.py": "8ca24c0b62b72bccf8ca30d7a654310dae00ee7b"
+  },
+  "isolated_component_probe": {
+    "environment": {
+      "class": "ChatGPT isolated component container",
+      "python": "3.13.5",
+      "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+      "git": "2.47.3"
+    },
+    "git_hash_object_exact_match": true,
+    "py_compile": "PASS",
+    "focused_regressions": {
+      "result": "PASS",
+      "passed": 6,
+      "failed": 0,
+      "cases": [
+        "exact clean checkout accepted",
+        "forged valid-format HEAD rejected",
+        "forged valid-format tree rejected",
+        "dirty checkout rejected",
+        "dirty receipt rejected for runtime admission",
+        "subdirectory/source-root masquerade rejected"
+      ]
+    },
+    "dependency_mode": "EXACT_CHANGED_BLOBS_WITH_MINIMAL_LOCAL_STUBS_FOR_UNCHANGED_CANONICAL_BOOT_VALIDATOR_AND_TEST_HELPERS",
+    "credit": "BOUNDED_COMPONENT_MECHANISM_ONLY"
+  },
+  "github_pr_execution": {
+    "pr": 1145,
+    "workflow_run_id": 32616034331,
+    "workflow": "Research Entity Identity Guard",
+    "job_id": 97136811394,
+    "job": "identity-guard",
+    "status": "completed",
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT",
+    "semantic_test_failure_claimed": false
+  },
+  "evidence_boundary": {
+    "exact_full_branch_execution": "UNOBSERVED",
+    "intentional_exact_ubuntu_product_start": "UNOBSERVED",
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "whole_product": "IN_PROGRESS"
+  },
+  "authority": {
+    "miniunifieddb_remains_authority": true,
+    "new_state_authority_created": false,
+    "new_jspace_semantic_validator_created": false,
+    "new_effect_path_created": false,
+    "free_only_preserved": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "training_started": false,
+    "together_used": false
+  },
+  "next_gate": "Run the exact full PR checkout with canonical dependencies on an actually-started authorized isolated runner. If admitted, require the composed JSPACE_GWT_RUNTIME_ADMISSION/v1 at the next intentional exact Ubuntu product start before source-bound J-Space/GWT runtime credit."
+}

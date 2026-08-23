@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 RECEIPT_VERSION = "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1"
+BOOT_BINDING_RECEIPT_VERSION = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 ENGINE_CLASSES = {"BUNDLED_08B", "CLAUDE_CODE", "ADAPTIVE_BACKEND", "NONE"}
@@ -95,6 +96,11 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
     _nonempty_string(receipt, "runtime.entityos_version", errors)
     _nonempty_string(receipt, "runtime.mini_entity_version", errors)
     _nonnegative_int(receipt, "runtime.entity_generation", errors)
+
+    boot_binding_version = _get(receipt, "provenance.boot_binding_receipt_version", errors)
+    if boot_binding_version is not None and boot_binding_version != BOOT_BINDING_RECEIPT_VERSION:
+        errors.append("BOOT_BINDING_RECEIPT_VERSION_INVALID")
+    _digest(receipt, "provenance.boot_binding_receipt_digest", errors)
 
     for path in (
         "identity.zero_digest",

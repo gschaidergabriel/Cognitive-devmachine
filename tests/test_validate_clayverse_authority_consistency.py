@@ -62,8 +62,70 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "release_form": mod.EXPECTED_RELEASE,
                 "canonical_workspace": "the artefact/",
             },
-            mod.CONTROL44: {
+            mod.CONTROL41: {
+                "schema_version": "4.1",
                 "status": "ACTIVE",
+                "mode": "FREE_ONLY",
+                "cycle_policy": {
+                    "paid_fallback": False,
+                    "automatic_subscription_upgrade": False,
+                    "vps_testing": "FORBIDDEN",
+                },
+                "authority_rules": [
+                    "model_output_is_candidate_not_truth",
+                    "autonomous_cycle_may_not_modify_FRANK_harness",
+                ],
+            },
+            mod.CONTROL42: {
+                "schema_version": "4.2-execution-boundary-addendum",
+                "status": "ACTIVE",
+                "mode": "FREE_ONLY",
+                "base_control_path": mod.CONTROL41,
+                "base_control_blob_sha": "pending",
+                "execution_routing": {
+                    "direct_vps_host_candidate_execution": "FORBIDDEN",
+                    "persistent_self_hosted_candidate_execution": "FORBIDDEN",
+                    "production_host_testing": "FORBIDDEN",
+                },
+                "preserved_hard_rules": {
+                    "free_only": True,
+                    "paid_fallback": False,
+                    "together_forbidden": True,
+                    "frank_harness_modification": "FORBIDDEN",
+                },
+            },
+            mod.CONTROL43: {
+                "schema_version": "4.3-program-authority-addendum",
+                "status": "ACTIVE",
+                "mode": "FREE_ONLY",
+                "base_control_path": mod.CONTROL41,
+                "base_control_blob_sha": "pending",
+                "execution_boundary_addendum_path": mod.CONTROL42,
+                "execution_boundary_addendum_blob_sha": "pending",
+                "preserved_hard_rules": {
+                    "free_only": True,
+                    "paid_fallback": False,
+                    "together_forbidden_under_current_control": True,
+                    "model_output_is_candidate_not_truth": True,
+                    "runtime_credit_requires_exact_admitted_execution": True,
+                    "frank_harness_modification": "FORBIDDEN",
+                },
+            },
+            mod.CONTROL44: {
+                "schema_version": "4.4-clayverse-product-authority-addendum",
+                "status": "ACTIVE",
+                "mode": "FREE_ONLY",
+                "base_control_path": mod.CONTROL41,
+                "execution_boundary_addendum_path": mod.CONTROL42,
+                "prior_program_authority_addendum_path": mod.CONTROL43,
+                "prior_program_authority_addendum_blob_sha": "pending",
+                "composition_order": [
+                    "4.1",
+                    "4.2-execution-boundary-addendum",
+                    "4.3-program-authority-addendum",
+                    "4.4-clayverse-product-authority-addendum",
+                ],
+                "effective_control_version": mod.EXPECTED_EFFECTIVE_CONTROL,
                 "program_identity_override": {
                     "active_program": mod.EXPECTED_PROGRAM,
                     "target_stage": mod.EXPECTED_STAGE,
@@ -76,12 +138,15 @@ class AuthorityConsistencyTests(unittest.TestCase):
                     "together_forbidden": True,
                     "vps_testing": False,
                     "runtime_credit_requires_exact_admitted_isolated_execution": True,
+                    "model_output_is_candidate_not_truth": True,
+                    "frank_harness_modification": "FORBIDDEN",
+                    "legacy_mini_entity_swarm_controller": "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION",
                 },
             },
             mod.STEERING844: {
                 "program": mod.EXPECTED_PROGRAM,
                 "stage": mod.EXPECTED_STAGE,
-                "effective_control": "4.1+4.2+4.3+4.4-clayverse-product-authority-addendum",
+                "effective_control": mod.EXPECTED_EFFECTIVE_CONTROL,
                 "adjudication": {"free_only": True, "together_forbidden": True, "vps_testing": False},
             },
         }
@@ -101,11 +166,27 @@ class AuthorityConsistencyTests(unittest.TestCase):
         for rel, data in files.items():
             path = root / rel
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(json.dumps(data), encoding="utf-8")
+            path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
         for rel, data in text.items():
             path = root / rel
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(data, encoding="utf-8")
+
+        control42_path = root / mod.CONTROL42
+        control42 = json.loads(control42_path.read_text(encoding="utf-8"))
+        control42["base_control_blob_sha"] = mod.git_blob_sha(root / mod.CONTROL41)
+        control42_path.write_text(json.dumps(control42, sort_keys=True), encoding="utf-8")
+
+        control43_path = root / mod.CONTROL43
+        control43 = json.loads(control43_path.read_text(encoding="utf-8"))
+        control43["base_control_blob_sha"] = mod.git_blob_sha(root / mod.CONTROL41)
+        control43["execution_boundary_addendum_blob_sha"] = mod.git_blob_sha(control42_path)
+        control43_path.write_text(json.dumps(control43, sort_keys=True), encoding="utf-8")
+
+        control44_path = root / mod.CONTROL44
+        control44 = json.loads(control44_path.read_text(encoding="utf-8"))
+        control44["prior_program_authority_addendum_blob_sha"] = mod.git_blob_sha(control43_path)
+        control44_path.write_text(json.dumps(control44, sort_keys=True), encoding="utf-8")
         return td, root
 
     def test_coherent_clayverse_authority_passes(self):
@@ -130,6 +211,38 @@ class AuthorityConsistencyTests(unittest.TestCase):
         data["identity"] = {}
         path.write_text(json.dumps(data), encoding="utf-8")
         self.assertIn("BOOTSTRAP_IDENTITY_GUARD_POINTER_MISSING", mod.validate(root)["errors"])
+
+    def test_control41_paid_fallback_weakening_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL41
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["cycle_policy"]["paid_fallback"] = True
+        path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
+        errors = mod.validate(root)["errors"]
+        self.assertIn("CONTROL41_PAID_FALLBACK_WEAKENED", errors)
+        self.assertIn("CONTROL42_BASE_BLOB_MISMATCH", errors)
+        self.assertIn("CONTROL43_BASE_BLOB_MISMATCH", errors)
+
+    def test_control42_together_weakening_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL42
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["preserved_hard_rules"]["together_forbidden"] = False
+        path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
+        errors = mod.validate(root)["errors"]
+        self.assertIn("CONTROL42_TOGETHER_FENCE_WEAKENED", errors)
+        self.assertIn("CONTROL43_EXEC_BLOB_MISMATCH", errors)
+
+    def test_control43_mutation_breaks_control44_ancestry(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL43
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["credit"] = {"tampered": True}
+        path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
+        self.assertIn("CONTROL44_PRIOR_BLOB_MISMATCH", mod.validate(root)["errors"])
 
     def test_control44_mini_entity_regression_fails_closed(self):
         td, root = self.make_tree()

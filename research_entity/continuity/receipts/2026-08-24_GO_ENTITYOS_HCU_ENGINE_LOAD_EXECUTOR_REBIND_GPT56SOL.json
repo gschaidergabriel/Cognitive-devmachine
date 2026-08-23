@@ -1,0 +1,81 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_EXECUTOR_REBIND_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "recorded_at_local": "2026-08-24T00:19:00+07:00",
+  "entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority": {
+    "research_main_observed_before_receipt": "de1b582647be41bb1c26dbc8dccfb7414c7054c7",
+    "program_state_schema": "8.7",
+    "general_together_inference_and_fallback": "FORBIDDEN",
+    "one_shot_08b_jspace_gwt_together_finetune": "OWNER_AUTHORIZED_NOT_CONSUMED",
+    "training_authority_file": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
+    "training_order_gate": "prototype -> real traces -> causal/lesion controls -> JSPACE_VECTOR_CONTROL_ABI/v1 -> dataset/baseline -> one Together job"
+  },
+  "retained_hcu_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "head_observed": "87d2a03a1dd11cef2e7268d63724ec1b6e0ed579",
+    "canonicalization": "RFC8785_JCS_IJSON/v1",
+    "entry_binding": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2",
+    "engine_load_module": "the artefact/MicroEntity/hcu/engine_load_lease_v1.py",
+    "engine_load_source_blob_observed": "8809f54f8f132c18b5580c434253324254cf8fe8",
+    "engine_load_test_blob_observed": "cb7bcb3f4d31bc3d9ce71497ac58d2af3a4703ea",
+    "inference_schema": "HCU_INFERENCE_RECEIPT/v3",
+    "inference_source_blob_observed": "1e2ed83adf9c8c9d294828d62c5a9216ac944c75",
+    "runtime_credit": false
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "identity_correction": "PR #810 in the Research repository is not the retained Vercel executor; the retained executor is Dr.-Unterweger PR #810.",
+    "worker_delta_commit": "ac38d279a729f1c06096141af4670a174341615c",
+    "worker_delta": "Added explicit engine-load/physical-load regression coverage and canonicalization/schema fences to the existing detached Sandbox batch; no second executor path was created.",
+    "parallel_fused_head_observed": "bbf8f621841e79c2b8f8ecaafe6d95f2f0f12806",
+    "parallel_fusion": "Rebound the batch from the superseded physical_engine_lease filename/API to the retained engine_load_lease_v1 actual-loader-consumption spine and current PROGRAM_STATE fields.",
+    "batch_blob_observed": "1f8b7ade0b51b384243c540bbf440b5ebac51ccc",
+    "deployment": {
+      "id": "dpl_5CZgjkswgb8fSrKJZkkJbrxbA3Pe",
+      "commit": "bbf8f621841e79c2b8f8ecaafe6d95f2f0f12806",
+      "state_observed": "READY",
+      "build_guard": "EntityOSHCUCurrentExecutorGuard/v1:CURRENT_MAIN_PLUS_RETAINED_HCU_PR_ATOMIC_SNAPSHOT_EXECUTOR",
+      "build_completed": true,
+      "sandbox_started": false,
+      "runtime_credit": false
+    }
+  },
+  "evidence": {
+    "source_and_build": "SUPPORTED",
+    "actual_vercel_sandbox_batch": "NOT_STARTED",
+    "model_runtime": "UNVERIFIED",
+    "jspace_gwt_causality": "UNVERIFIED",
+    "whole_product": "IN_PROGRESS",
+    "credential_boundary": "No GitHub or Together secret was accessed, stored, logged, or written by this organ."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: retained current-head Vercel executor batch now explicitly gates the verified engine-load spine and deployed READY.",
+    "track_b_hcu_typed_entry": "ADVANCED: inference/engine-load/JCS/Typed-Entry source topology was reconciled to the current retained donor; stale duplicate/superseded lease identity was not retained.",
+    "track_c_global_jspace_gwt_training_readiness": "NO_CHANGE_WITH_REASON: newest owner directive requires a functional instrumented prototype, real traces and causal/lesion evidence before freezing JSPACE_VECTOR_CONTROL_ABI/v1 or launching training. The exact HCU execution path is still waiting for an owner-credential-bearing POST, so fabricating training traces or starting the one-shot job would violate the required order."
+  },
+  "unusual_experiment": {
+    "added_by_this_delta": 0,
+    "reason": "The macrocycle's exactly-one unusual experiment was already consumed in the retained HCU lane; this work is source repair, fusion and execution-admission hardening only."
+  },
+  "blocker": {
+    "exact": "The READY retained controller requires an explicit owner/user POST to /api/go-cycle-v2 carrying a scoped read-only GITHUB_READ_TOKEN. Available connected tools expose neither that secret nor an arbitrary credential-bearing POST action, so Sandbox.create and the detached exact-source batch remain unstarted.",
+    "unsafe_substitutes_forbidden": [
+      "VPS testing",
+      "self-hosted test runner",
+      "production-host testing",
+      "invented/retrieved secret",
+      "general Together inference fallback"
+    ],
+    "next_executable_step": "Owner-authorized transient POST -> observe Sandbox.create -> exact Research main + PR1263 SHA/tree binding -> token nonpersistence -> combined JCS Typed Entry -> route -> engine admission -> actual-loader-consumption/VerifiedEngineLoad -> inference v3 -> GRID10 v2 batch."
+  },
+  "acceptance_boundary": "READY deployment and source/component evidence do not imply EntityOS/HCU runtime acceptance, J-Space/GWT causal evidence, training readiness, or whole-product PASS."
+}

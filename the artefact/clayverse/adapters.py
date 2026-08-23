@@ -32,15 +32,14 @@ def urlopen(request, timeout):
 
 
 class ClaudeCodeInference:
-    """Tool-less Claude Code cognition boundary for ClayVerse.
+    """Tool-less Claude Code targeted-inference boundary for EntityOS / Mini Entity.
 
     Cognition runs with all built-in tools disabled, MCP configuration fail-closed,
-    no Claude session persistence, and an explicit environment allowlist. HOME is
-    retained so Claude subscription/OAuth credentials remain usable. Safe mode
-    suppresses user/project customizations and auto-memory without disabling auth.
-    UnifiedDB / WorldAssembler remains the sole durable ClayVerse state authority.
-    Claude may return a schema-validated effect intent, but only EffectGate can
-    execute it.
+    no Claude session persistence, no Claude-side durable memory inputs, and an
+    explicit environment allowlist. HOME is retained so Claude subscription/OAuth
+    credentials remain usable. MiniUnifiedDB plus deterministic authority/effect
+    gates remain canonical. Claude Code returns candidate inference only and never
+    owns Zero identity, durable truth, durable memory, or effects.
     """
 
     ENV_ALLOWLIST = (
@@ -62,11 +61,23 @@ class ClaudeCodeInference:
         env.setdefault("PATH", "/usr/local/bin:/usr/bin:/bin")
         env["DISABLE_AUTOUPDATER"] = "1"
         env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] = "1"
-        # Defense in depth with --safe-mode: auto-memory must never become a
-        # competing durable state authority even if upstream safe-mode behavior
-        # changes independently of the pinned CLI contract.
         env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
+        env["CLAUDE_CODE_DISABLE_CLAUDE_MDS"] = "1"
         return env
+
+    @staticmethod
+    def _system_prompt() -> str:
+        return (
+            "You are Claude Code acting as a targeted candidate-inference engine for EntityOS / Mini Entity. "
+            "You are not Zero and you do not own entity identity, canonical truth, durable memory, or direct effects. "
+            "MiniUnifiedDB plus deterministic grammar/type/schema/truth/authority/generation/effect gates are authoritative. "
+            "The supplied WORLD is bounded admitted context for this call; do not invent persistent context outside it. "
+            "You have no tool authority in this cognition call. Produce the schema-constrained response. "
+            "For a normal reply set effect to null. Only when the user's intent and required arguments are sufficiently explicit "
+            "may you request entityos.exec or state.noop. Never request process.exec, a shell, or any other capability. If required "
+            "action parameters are missing, ask for them in text and set effect to null. An effect is only an intent; EntityOS "
+            "independently validates/reconciles it and EffectGate alone decides whether execution is admitted."
+        )
 
     def available(self) -> bool:
         executable = shutil.which(self.binary)
@@ -85,15 +96,7 @@ class ClaudeCodeInference:
         world_json = json.dumps(world, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         if len(world_json) > 600_000:
             raise RuntimeError("assembled world exceeds Claude Code boundary")
-        system = (
-            "You are the cognition engine inside ClayVerse, one persistent central entity shared by authenticated users. "
-            "UnifiedDB is authoritative state and the supplied WORLD is the only persisted context for this turn. ClayGraph "
-            "is a derived projection. You have no tool authority in this cognition call. Produce the schema-constrained response. "
-            "For a normal reply set effect to null. Only when the user's intent and required arguments are sufficiently explicit "
-            "may you request entityos.exec or state.noop. Never request process.exec, a shell, or any other capability. If required "
-            "action parameters are missing, ask for them in text and set effect to null. An effect is only an intent; ClayVerse "
-            "independently validates and executes it through EffectGate."
-        )
+        system = self._system_prompt()
         prompt = f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"
         schema = json.dumps(CLAUDE_DECISION_SCHEMA, sort_keys=True, separators=(",", ":"))
         args = [

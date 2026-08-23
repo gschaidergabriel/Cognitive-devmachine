@@ -1,10 +1,10 @@
 {
-  "schema_version": "8.6",
+  "schema_version": "8.7",
   "program_id": "entityos-hcu",
   "status": "ACTIVE",
   "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
   "current_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
-  "current_stage_goal": "Converge the strongest existing implementation into EntityOS while co-developing one integrated HCU cognition/compute architecture and typed Entry Fabric without a competing product identity.",
+  "current_stage_goal": "Converge the strongest existing implementation into EntityOS while co-developing one integrated HCU cognition/compute architecture, typed Entry Fabric, and an instrumented Global J-Space/GWT prototype capable of producing training traces for the owner-authorized one-shot ~0.8B specialization run.",
   "stage_order": [
     "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
     "ENTITYOS_HCU_MULTIMODE_COMPUTE_INTEGRATION",
@@ -37,20 +37,25 @@
     "second_truth_effect_or_recovery_authority": "FORBIDDEN"
   },
   "execution_policy": {
-    "free_only": true,
+    "free_only_default": true,
     "isolated_sandbox_only": true,
     "vps_testing_forbidden": true,
     "self_hosted_vps_test_runners_forbidden": true,
     "production_host_testing_forbidden": true,
-    "together_forbidden": true,
-    "paid_fallback": false,
-    "secrets_in_source_or_receipts": false,
-    "final_paid_or_model_training_requires_owner_authorization": true
+    "together_general_inference_and_fallback_forbidden": true,
+    "together_one_shot_08b_jspace_gwt_finetune_authorized": true,
+    "together_one_shot_08b_jspace_gwt_finetune_consumed": false,
+    "together_training_authority_file": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
+    "second_together_training_requires_new_owner_authorization": true,
+    "other_paid_fallback": false,
+    "secrets_in_source_or_receipts": false
   },
   "go_required_tracks": {
     "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
     "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
-    "track_b_no_change": "HCU_NO_CHANGE_WITH_REASON_REQUIRED_IF_NO_SAFE_USEFUL_DELTA"
+    "track_c": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_ONE_SHOT_08B_TRAINING_READINESS",
+    "track_b_no_change": "HCU_NO_CHANGE_WITH_REASON_REQUIRED_IF_NO_SAFE_USEFUL_DELTA",
+    "track_c_no_change": "TRAINING_READINESS_NO_CHANGE_WITH_REASON_REQUIRED_IF_NO_SAFE_USEFUL_DELTA"
   },
   "computer_decomposition": {
     "ram_like": "XRAM_STATE_FABRIC_COMPATIBILITY_TERM",
@@ -73,6 +78,18 @@
     "physical_decode_concurrency": "MUST_BE_MEASURED_SEPARATELY",
     "gates": [10, 32, 64, 128, 256, 600]
   },
+  "training_program": {
+    "target": "SPECIALIZED_LOCAL_APPROX_08B_HCU_MODEL",
+    "purpose": "GLOBAL_JSPACE_GWT_XENO_VECTOR_CONTROL_AND_HCU_PROTOCOL_SPECIALIZATION",
+    "required_precondition": "FUNCTIONAL_INSTRUMENTED_GLOBAL_JSPACE_GWT_PROTOTYPE_WITH_REAL_TRACES",
+    "vector_control_abi": "JSPACE_VECTOR_CONTROL_ABI/v1_REQUIRED_BEFORE_DATASET_FREEZE",
+    "preferred_first_method": "FULL_SFT_IF_EXACT_BASE_AND_TOGETHER_SUPPORT_AND_PRICE_PREFLIGHT_PASS",
+    "dataset_source": "REAL_PROTOTYPE_TRACES_PLUS_DETERMINISTIC_HARD_NEGATIVES_AND_BOUNDED_TRANSFORMS",
+    "one_shot_job_authorized": true,
+    "one_shot_job_consumed": false,
+    "promotion_requires": "MUST_GAIN_JSPACE_GWT_HCU; MUST_RETAIN_PROTOCOL_LANGUAGE_LOGIC_SAFETY; CAUSAL_LESION_RESCUE_AND_FAIL_CLOSED_TESTS_PASS",
+    "completed_training_alone_is_pass": false
+  },
   "transition_laws": [
     "EntityOS is the only current product/system identity.",
     "HCU is the only current integrated cognition/compute architecture.",
@@ -82,12 +99,14 @@
     "HCU cells are request-scoped logical function slots rather than persistent mini-agents.",
     "Permanent duplicate reality is not required; WM_TEST and selective NESTED_SIM remain bounded experimental modes.",
     "Global J-Space remains an empirically instrumented coupling hypothesis; model-specific causal evidence is required.",
+    "The Global J-Space/GWT prototype must produce exact observable training traces before the one-shot fine-tune is launched.",
+    "The ~0.8B training target is deliberate specialization; unrelated capabilities may degrade but required protocol/language/logic/safety floors remain mandatory.",
     "Hyperposition preserves unresolved alternatives; majority vote cannot mint truth.",
     "Logical module count cannot be reported as simultaneous model/decode count.",
     "Real effects remain deterministic, journaled and gated."
   ],
-  "current_frontier": "Effective control-plane authority output drift is source-closed. Next converge one canonical Typed Entry causal identity -> HCU route -> downstream inference-receipt path, retain positive fail-closed local engine/artifact admission and GRID10 as one HCU control path, and obtain exact authorized isolated execution before any runtime promotion.",
-  "go_contract": "Every go refreshes current main/newest owner authority, advances the highest-information nonduplicate EntityOS blocker and HCU/Entry co-development, uses hypotheses/counterhypotheses/discriminators for material changes, preserves canonical-state/provenance/generation/effect fences, and records bounded evidence without inflating source evidence into runtime PASS.",
+  "current_frontier": "Converge one canonical Typed Entry causal identity -> HCU route -> loader-bound inference receipt path; obtain exact authorized isolated execution; build and instrument the first functional Global J-Space/GWT prototype and JSPACE_VECTOR_CONTROL_ABI/v1 so real traces can be compiled into the owner-authorized one-shot ~0.8B Together full-fine-tuning dataset.",
+  "go_contract": "Every go refreshes current main/newest owner authority, advances the highest-information nonduplicate EntityOS blocker, HCU/Entry co-development, and Global-J-Space/GWT training readiness; executes when an authorized sandbox surface exists; preserves canonical-state/provenance/generation/effect fences; and records bounded evidence without inflating source evidence or a completed training job into runtime PASS.",
   "runtime_credit": {
     "entityos_hcu_whole_runtime_credit": 0,
     "whole_product_pass": false

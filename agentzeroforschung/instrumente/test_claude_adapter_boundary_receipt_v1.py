@@ -1,6 +1,6 @@
 import unittest
 
-from validate_claude_adapter_boundary_receipt_v1 import canonical_sha256, validate, ReceiptError
+from validate_claude_adapter_boundary_receipt_v1 import canonical_sha256, diagnose, validate, ReceiptError
 
 H40A = "1234567890abcdef1234567890abcdef12345678"
 H40B = "abcdef1234567890abcdef1234567890abcdef12"
@@ -34,6 +34,11 @@ def fixture():
         "env_isolation": {**base, "schema": "ENV_ISOLATION_RECEIPT/v1", "allowed_env_keys": ["HOME", "PATH", "LANG"], "observed_child_env_keys": ["HOME", "PATH"], "forbidden_key_count": 0, "secret_value_leak_count": 0, "environment_shape_sha256": H64F},
     }
     return {"schema": "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1", "common": common, "common_identity_sha256": cid, "boundaries": boundaries, "aggregate_status": "PASS", "runtime_credit": "CLAUDE_ADAPTER_BOUNDARY_ONLY", "whole_product_credit": 0}
+
+def mark_fail(x, name):
+    x["boundaries"][name]["status"] = "FAIL"
+    x["aggregate_status"] = "FAIL"
+    x["runtime_credit"] = "ZERO"
 
 class TestReceipt(unittest.TestCase):
     def assert_reject(self, mutate):
@@ -84,6 +89,45 @@ class TestReceipt(unittest.TestCase):
 
     def test_whole_product_credit_rejected(self):
         self.assert_reject(lambda x: x.__setitem__("whole_product_credit", 1))
+
+    def test_diagnostic_preserves_one_red_and_three_green(self):
+        x = fixture()
+        x["boundaries"]["tool_less"]["tool_invocation_count"] = 1
+        mark_fail(x, "tool_less")
+        result = diagnose(x)
+        self.assertEqual(result["aggregate_status"], "FAIL")
+        self.assertFalse(result["promotion_eligible"])
+        self.assertEqual(result["failing_boundaries"], ["tool_less"])
+        self.assertEqual(result["violations"]["tool_less"], ["TOOL_INVOCATION_OBSERVED"])
+        self.assertEqual(result["violations"]["ephemeral"], [])
+        self.assertEqual(result["violations"]["structured_output"], [])
+        self.assertEqual(result["violations"]["env_isolation"], [])
+
+    def test_strict_validator_still_rejects_diagnostic_red(self):
+        x = fixture()
+        x["boundaries"]["ephemeral"]["temporary_home_removed"] = False
+        mark_fail(x, "ephemeral")
+        with self.assertRaisesRegex(ReceiptError, "aggregate_status must be PASS"):
+            validate(x)
+
+    def test_diagnostic_rejects_false_reported_pass(self):
+        x = fixture()
+        x["boundaries"]["env_isolation"]["secret_value_leak_count"] = 1
+        with self.assertRaisesRegex(ReceiptError, "status does not match measured observations"):
+            diagnose(x)
+
+    def test_diagnostic_multiple_failures_are_retained(self):
+        x = fixture()
+        x["boundaries"]["tool_less"]["bash_enabled"] = True
+        x["boundaries"]["structured_output"]["canonical_write_attempted"] = True
+        x["boundaries"]["tool_less"]["status"] = "FAIL"
+        x["boundaries"]["structured_output"]["status"] = "FAIL"
+        x["aggregate_status"] = "FAIL"
+        x["runtime_credit"] = "ZERO"
+        result = diagnose(x)
+        self.assertEqual(result["failing_boundaries"], ["tool_less", "structured_output"])
+        self.assertEqual(result["violations"]["tool_less"], ["BASH_ENABLED"])
+        self.assertEqual(result["violations"]["structured_output"], ["CANONICAL_WRITE_ATTEMPTED"])
 
 if __name__ == "__main__":
     unittest.main()

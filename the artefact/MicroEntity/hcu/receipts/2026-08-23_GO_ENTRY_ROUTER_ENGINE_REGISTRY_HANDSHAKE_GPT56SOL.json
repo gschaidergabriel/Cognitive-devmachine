@@ -1,0 +1,68 @@
+{
+  "schema_version": "HCU_ENTRY_ROUTER_ENGINE_REGISTRY_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU_XENO_COMPATIBILITY_PATH",
+  "parent_pr": 1263,
+  "parent_source_snapshot": "4bb4fc4c22cbea9e2a16430d5fc723f124bb5b7e",
+  "candidate_source_commit_before_receipt": "b77c50eada3ab9fc0f1ab59e70edccf0d49db852",
+  "source_files": {
+    "the artefact/MicroEntity/hcu/reactive_event_router_v1.py": {
+      "git_blob_sha1": "067f3dfc55c8c46c6f88f9045e802b3e72d59042"
+    },
+    "the artefact/MicroEntity/hcu/test_reactive_event_router_v1.py": {
+      "git_blob_sha1": "eafb31db938a85e351a36a75e614bb26711acc49"
+    },
+    "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py": {
+      "git_blob_sha1": "a30a51352e916523506e4e32dc371abc6fa058c3",
+      "source": "parent_snapshot"
+    },
+    "the artefact/MicroEntity/hcu/COGNITIVE_INDEPENDENCE_POLICY.json": {
+      "git_blob_sha1": "60222f37396631665b69ce4f3c10195ddc4e6767"
+    }
+  },
+  "execution": {
+    "surface": "isolated ChatGPT tool container",
+    "os": "Linux 6.18.35 x86_64 GNU/Linux glibc 2.41",
+    "python": "CPython 3.13.5",
+    "exact_blob_checks": {
+      "reactive_event_router_v1.py": "MATCH",
+      "test_reactive_event_router_v1.py": "MATCH",
+      "xeno_entry_fabric_v1.py": "MATCH"
+    },
+    "commands": [
+      "git hash-object reactive_event_router_v1.py test_reactive_event_router_v1.py xeno_entry_fabric_v1.py",
+      "python3 -m py_compile reactive_event_router_v1.py test_reactive_event_router_v1.py",
+      "python3 -m unittest -v test_reactive_event_router_v1.py",
+      "deterministic integration: admit_entry -> to_hcu_reactive_event -> route_event(engine_registry) -> assert_inference_echo"
+    ],
+    "py_compile": "PASS",
+    "unittest": "22/22 PASS",
+    "entry_router_inference_echo_integration": "PASS",
+    "exit_code": 0,
+    "integration_outputs": {
+      "entry_admission_sha256": "61915ab278345d35c4efb9a86cbc41c457be3ea8c5ccebd64693084b12c93aa1",
+      "decision_sha256": "82d1f9b3d334365cd6e0b07265d50a6037828b6536be99a85d5d1a9cf3952948",
+      "engine_identity_sha256": "a2e1ddbef789f40fa37eec554e1c4a42b3246445c87261b8e03a7aeec32f1104"
+    }
+  },
+  "mechanisms_supported": [
+    "HCU router fails closed without Entry Fabric ingress_id causal_id and admission digest",
+    "Entry Fabric admission digest survives deterministic projection into HCU route identity",
+    "model route requires a trusted engine registry rather than accepting event-self-asserted engine bytes",
+    "engine registry binds engine id class artifact runtime checkpoint tokenizer and zero network/secret dependency",
+    "event artifact mismatch against registry fails closed",
+    "network-dependent engine registry entry fails closed",
+    "route identity binds entry admission causal event router policy and trusted engine identity",
+    "downstream inference echo binds ingress causal entry event route and engine identities"
+  ],
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment_in_this_delta": false,
+    "shared_go_experiment": "same-route causal-alias stress from parent PR 1263",
+    "status_here": "REGRESSION_ONLY",
+    "engine_artifact_flip": "REGRESSION_ONLY_NOT_SECOND_EXPERIMENT"
+  },
+  "scope_limit": "Exact source/blob Python mechanism and deterministic Entry-Fabric-to-router integration evidence only. No real bundled ~0.8B runtime/checkpoint/tokenizer bytes were executed. No HCU runtime-fit, throughput, Global J-Space causal-use, EntityOS whole-runtime, target VPS, or whole-product acceptance credit.",
+  "promotion_credit": 0,
+  "acceptance": "MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED"
+}

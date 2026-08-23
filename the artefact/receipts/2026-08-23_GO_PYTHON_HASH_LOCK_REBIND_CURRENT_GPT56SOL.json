@@ -1,0 +1,97 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "recorded_at": "2026-08-23T17:15:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "retained_lane": {
+    "pr": 622,
+    "branch": "go/python-lock-py313-generator-20260817-1742-sol",
+    "historical_donor_head": "b458cde01bf37d35470e7baf060680e5b826edc4",
+    "rebind_base_observed": "14744411b7c7f4bdeaac647168a7d5e9c1fd4569",
+    "latest_main_observed_before_receipt": "5c061e30a389e291bad7a1f44611448c791bfbcb",
+    "mechanism_head_before_receipt": "ada43dc72116b446204d53e0b4bb8f112e46f883",
+    "duplicate_lane_created": false
+  },
+  "source_delta": {
+    "workflow": {
+      "path": ".github/workflows/clayverse-python-lock-generator.yml",
+      "git_blob": "efce045bd7ac13163b2ee08915fbca663e5266c6",
+      "commit": "ddbb25fe2ca43df4a093b70e887f8558d521fc1e",
+      "mechanism": "exact PR-head checkout; Dockerfile/SOURCE_LOCK base-image cross-bind; hash-closed binary-only bootstrap; offline generator install; stable-path double pip-compile; final product wheelhouse --require-hashes verification"
+    },
+    "source_lock": {
+      "path": "the artefact/SOURCE_LOCK.json",
+      "git_blob": "5f68dbd63cf5a134ed7fd90fb88d213e33515804",
+      "commit": "6249e8fe6c11ec852bab65f9816164437d92fd7a",
+      "mechanism": "pip-tools 7.5.3 plus declared Linux/Python-3.13 bootstrap wheels bound by exact filenames and SHA-256"
+    },
+    "source_regression": {
+      "path": "the artefact/tests/test_python_lock_generator_source_binding.py",
+      "git_blob": "f523c6d417bd8c8ff9750757754e4cbd9d7cb9dd",
+      "commit": "ada43dc72116b446204d53e0b4bb8f112e46f883",
+      "mechanism": "static fail-closed source binding for exact head, base-image ancestry, bootstrap closure, offline installation, stable-path reproducibility and selected wheel provenance"
+    }
+  },
+  "execution_observation": {
+    "exact_head": "ada43dc72116b446204d53e0b4bb8f112e46f883",
+    "pull_request_reopened": true,
+    "workflow_runs": [
+      {
+        "run_id": 32633154659,
+        "name": "clayverse-python-lock-generator",
+        "conclusion": "failure",
+        "job_id": 97178878117,
+        "job_steps_observed": 0,
+        "job_log_blob_available": false,
+        "classification": "EXECUTION_ADMISSION_OR_CONTROL_PLANE_FAILURE_BEFORE_VISIBLE_STEPS_NOT_GENERATOR_TEST_FAILURE"
+      },
+      {
+        "run_id": 32633154644,
+        "name": "Research Entity Identity Guard",
+        "conclusion": "failure",
+        "job_id": 97178877992,
+        "job_steps_observed": 0,
+        "classification": "EXECUTION_ADMISSION_OR_CONTROL_PLANE_FAILURE_BEFORE_VISIBLE_STEPS_NOT_IDENTITY_TEST_FAILURE"
+      }
+    ],
+    "generator_test_executed": false,
+    "runtime_credit": 0,
+    "oci_credit": 0,
+    "whole_product_credit": 0
+  },
+  "promotion_state": {
+    "requirements_lock_materialized": false,
+    "docker_require_hashes_enabled": false,
+    "reason": "No actually-started exact-source generator step evidence exists. Fabricating lock bytes or switching Docker now would violate the evidence contract."
+  },
+  "current_product_execution_frontier": {
+    "status": "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS",
+    "path": "retained Vercel Sandbox one-shot with scoped read-only GitHub source admission -> exact-current full regression -> exact OCI build/startup -> whole product acceptance",
+    "note": "The GitHub Actions generator lane is bounded supply-chain evidence only and does not replace the current authorized Vercel Sandbox whole-product execution lane."
+  },
+  "counterhypotheses_retained": [
+    "the declared pip-tools bootstrap set may still be incomplete or incompatible in the exact digest-pinned Python image",
+    "a selected product dependency may lack an admitted binary wheel for the exact target platform/Python version",
+    "double pip-compile output may differ under the exact generator environment",
+    "a successful generator would still not close apt, Clerk, OCI runtime or whole-product gates"
+  ],
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID",
+    "note": "No unusual-experiment credit is claimed; source rebinding and runner-admission diagnosis are deterministic coordination/falsification work."
+  },
+  "safety": {
+    "authorized_isolated_sandbox_only": true,
+    "vps_testing_used": false,
+    "self_hosted_runner_used": false,
+    "production_host_testing_used": false,
+    "together_api_used": false,
+    "secret_accessed_or_committed": false,
+    "paid_execution_started": false,
+    "model_training_started": false
+  },
+  "next_gate": "When the owner-started retained Vercel Sandbox one-shot admits exact private source, run current ClayVerse regressions and OCI build/startup there. For the Python lock subgate, require an actually-started exact-head generator execution with visible bootstrap/wheelhouse evidence before materializing requirements.lock.txt and switching Docker to --require-hashes."
+}

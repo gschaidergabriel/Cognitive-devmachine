@@ -3,10 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Mapping
 
-ADMISSION_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1"
+ADMISSION_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2"
 PROTOTYPE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3"
 TRANSITION_SCHEMA = "JSPACE_GWT_TRANSITION_TRACE/v1"
 TRAINING_SCHEMA = "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1"
+GRID_PLAN_SCHEMA = "ENTITYOS_HCU_GRID_PLAN/v2"
 VECTOR_ABI = "JSPACE_VECTOR_CONTROL_ABI/v1"
 CREDIT_LABELS = frozenset({"UNKNOWN", "POSITIVE", "NEGATIVE", "NEUTRAL"})
 
@@ -92,6 +93,45 @@ def _same(values: Mapping[str, Any], field: str) -> Any:
     return unique[0] if unique else None
 
 
+def _verify_grid_plan_binding(
+    admitted_grid_plans: Any,
+    *,
+    grid_plan_sha256: str,
+    generation: int,
+    causal: Mapping[str, str],
+) -> None:
+    """Require GRID10 identity to come from external admitted plan evidence.
+
+    Matching hashes in two traces are not enough: both traces could carry the same
+    transplanted, never-admitted GRID plan hash. The registry is deterministic external
+    authority and must bind the selected GRID_PLAN/v2 identity to this generation and
+    Entry -> route causal spine. It is evidence only and grants no compute/effect authority.
+    """
+    registry = _mapping(admitted_grid_plans, "admitted_grid_plans")
+    plan = registry.get(grid_plan_sha256)
+    if not isinstance(plan, Mapping):
+        raise JSpaceDatasetAdmissionError("GRID_PLAN_NOT_ADMITTED")
+    required = {
+        "schema",
+        "plan_sha256",
+        "entity_generation",
+        "entry_event_sha256",
+        "entry_admission_sha256",
+        "route_decision_sha256",
+    }
+    if set(plan) != required:
+        raise JSpaceDatasetAdmissionError("GRID_PLAN_RECEIPT_SCHEMA_MISMATCH")
+    if plan.get("schema") != GRID_PLAN_SCHEMA:
+        raise JSpaceDatasetAdmissionError("GRID_PLAN_SCHEMA_UNSUPPORTED")
+    if _sha256(plan.get("plan_sha256"), "admitted_grid_plan.plan_sha256") != grid_plan_sha256:
+        raise JSpaceDatasetAdmissionError("GRID_PLAN_IDENTITY_MISMATCH")
+    if _generation(plan.get("entity_generation"), "admitted_grid_plan.entity_generation") != generation:
+        raise JSpaceDatasetAdmissionError("GRID_PLAN_GENERATION_MISMATCH")
+    for field in ("entry_event_sha256", "entry_admission_sha256", "route_decision_sha256"):
+        if _sha256(plan.get(field), f"admitted_grid_plan.{field}") != causal[field]:
+            raise JSpaceDatasetAdmissionError(f"GRID_PLAN_CAUSAL_BINDING_MISMATCH:{field}")
+
+
 def _verify_outcome_binding(
     receipt: Any,
     *,
@@ -103,13 +143,7 @@ def _verify_outcome_binding(
     role: str,
     credit: str,
 ) -> None:
-    """Require an admitted credited outcome to bind the exact causal training family.
-
-    Registry membership alone is not enough: an outcome from another Entry/route/GRID10
-    episode must never be transplantable into this row as reward. This gate validates the
-    minimum causal binding only; it does not mint outcome truth or replace the upstream
-    authority that admitted the receipt.
-    """
+    """Require an admitted credited outcome to bind the exact causal training family."""
     receipt = _mapping(receipt, "admitted_outcome_receipt")
     if _text(receipt.get("status"), "admitted_outcome_receipt.status").upper() != "VERIFIED":
         raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_VERIFIED")
@@ -142,15 +176,15 @@ def admit_for_training_dataset(
     admitted_training_traces: Mapping[str, Mapping[str, Any]],
     admitted_transition_traces: Mapping[str, Mapping[str, Any]],
     admitted_prototype_traces: Mapping[str, Mapping[str, Any]],
+    admitted_grid_plans: Mapping[str, Mapping[str, Any]],
     admitted_outcome_receipts: Mapping[str, Any] | None = None,
 ) -> DatasetAdmission:
     """Fail-closed admission for one-shot-training dataset material.
 
-    This gate does not mint truth. It only proves that an already-admitted training trace,
-    an already-admitted live causal transition trace, and an already-admitted prototype
-    trace refer to the same generation/cell/role/basis, exact Vector Control packet/control
-    condition, and Entry->Route->GRID10 identities. A raw standalone prototype or merely
-    self-consistent training row is insufficient.
+    This gate does not mint truth. It only proves that admitted training, live-transition,
+    prototype and GRID10 evidence refer to the same generation/cell/role/basis, exact Vector
+    Control packet/control condition, and Entry->Route->GRID10 identities. A raw standalone
+    prototype, self-consistent row, or shared but unadmitted GRID hash is insufficient.
     """
     training_trace = _mapping(training_trace, "training_trace")
     transition_trace = _mapping(transition_trace, "transition_trace")
@@ -229,7 +263,7 @@ def admit_for_training_dataset(
         "VECTOR_CONTROL_CONDITION_BINDING",
     )
 
-    causal = {}
+    causal: dict[str, str] = {}
     for field in (
         "entry_event_sha256",
         "entry_admission_sha256",
@@ -243,6 +277,13 @@ def admit_for_training_dataset(
             },
             f"CAUSAL_BINDING:{field}",
         )
+
+    _verify_grid_plan_binding(
+        admitted_grid_plans,
+        grid_plan_sha256=causal["grid_plan_sha256"],
+        generation=generation,
+        causal=causal,
+    )
 
     if _text(training_trace.get("jspace_input_codec_version"), "training_trace.jspace_input_codec_version") != VECTOR_ABI:
         raise JSpaceDatasetAdmissionError("TRAINING_VECTOR_ABI_UNSUPPORTED")

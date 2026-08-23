@@ -69,6 +69,9 @@ def valid_receipt():
         "inference": {
             "first_engine_choice": "BUNDLED_LOCAL_08B",
             "origin_attribution": "boot-probe",
+            "first_actions": [
+                {"action_id": "boot-1", "origin": "ZERO", "effect_requested": False}
+            ],
         },
         "authority": {
             "miniunifieddb_is_truth_authority": True,
@@ -125,6 +128,50 @@ class BootBindingValidatorTests(unittest.TestCase):
         cp = run_validator(receipt)
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("BOOT_RECEIPT_CANNOT_GRANT_WHOLE_GWT_CREDIT", cp.stdout)
+
+    def test_dirty_source_requires_diff_digest(self):
+        receipt = valid_receipt()
+        receipt["source"]["dirty"] = True
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("dirty_diff_sha256", cp.stdout)
+
+    def test_dirty_source_with_diff_digest_passes(self):
+        receipt = valid_receipt()
+        receipt["source"]["dirty"] = True
+        receipt["source"]["dirty_diff_sha256"] = H64
+        cp = run_validator(receipt)
+        self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
+
+    def test_unknown_first_action_origin_fails_closed(self):
+        receipt = valid_receipt()
+        receipt["inference"]["first_actions"][0]["origin"] = "MODEL_GUESSED"
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("INVALID_FIRST_ACTION_ORIGIN", cp.stdout)
+
+    def test_duplicate_first_action_id_fails_closed(self):
+        receipt = valid_receipt()
+        receipt["inference"]["first_actions"].append(
+            {"action_id": "boot-1", "origin": "CLAUDE_CODE", "effect_requested": False}
+        )
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("DUPLICATE_FIRST_ACTION_ID", cp.stdout)
+
+    def test_other_first_action_origin_requires_detail(self):
+        receipt = valid_receipt()
+        receipt["inference"]["first_actions"][0]["origin"] = "OTHER"
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("origin_detail", cp.stdout)
+
+    def test_first_action_effect_flag_must_be_boolean(self):
+        receipt = valid_receipt()
+        receipt["inference"]["first_actions"][0]["effect_requested"] = 1
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("effect_requested", cp.stdout)
 
 
 if __name__ == "__main__":

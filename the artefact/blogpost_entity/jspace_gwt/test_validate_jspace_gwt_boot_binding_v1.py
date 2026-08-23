@@ -10,8 +10,11 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 VALIDATOR = HERE / "validate_jspace_gwt_boot_binding_v1.py"
 MINI_COGNITION = HERE.parent / "mini_cognition"
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))
 if str(MINI_COGNITION) not in sys.path:
     sys.path.insert(0, str(MINI_COGNITION))
+import validate_jspace_gwt_boot_binding_v1 as boot_binding
 from bundled_cognition_manifest_v1 import validate_manifest
 
 H40 = "a" * 40
@@ -127,18 +130,35 @@ def valid_receipt(manifest, raw):
 
 
 def run_validator(receipt=None, manifest=None, source_lock=None):
+    """Exercise semantic validators directly; CLI alone owns lock-source authority."""
     manifest = valid_manifest() if manifest is None else manifest
     raw = manifest_bytes(manifest)
     receipt = valid_receipt(manifest, raw) if receipt is None else receipt
     source_lock = source_lock_for(manifest, raw) if source_lock is None else source_lock
     with tempfile.TemporaryDirectory() as td:
+        manifest_path = Path(td) / "manifest.json"
+        manifest_path.write_bytes(raw)
+        try:
+            boot_binding.validate(receipt)
+            boot_binding.validate_manifest_binding(receipt, manifest_path, source_lock)
+        except boot_binding.ValidationError as exc:
+            return subprocess.CompletedProcess([], 1, stdout=f"FAIL {exc}\n", stderr="")
+        return subprocess.CompletedProcess([], 0, stdout="PASS JSPACE_GWT_BOOT_BINDING_RECEIPT/v1\n", stderr="")
+
+
+def run_cli_with_caller_lock_override():
+    m = valid_manifest()
+    raw = manifest_bytes(m)
+    r = valid_receipt(m, raw)
+    lock = source_lock_for(m, raw)
+    with tempfile.TemporaryDirectory() as td:
         td = Path(td)
         receipt_path = td / "receipt.json"
         manifest_path = td / "manifest.json"
-        lock_path = td / "lock.json"
-        receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+        lock_path = td / "caller-authored-lock.json"
+        receipt_path.write_text(json.dumps(r), encoding="utf-8")
         manifest_path.write_bytes(raw)
-        lock_path.write_text(json.dumps(source_lock), encoding="utf-8")
+        lock_path.write_text(json.dumps(lock), encoding="utf-8")
         return subprocess.run(
             [sys.executable, str(VALIDATOR), str(receipt_path), str(manifest_path), str(lock_path)],
             text=True,
@@ -148,9 +168,19 @@ def run_validator(receipt=None, manifest=None, source_lock=None):
 
 
 class BootBindingValidatorTests(unittest.TestCase):
-    def test_valid_bound_receipt_passes(self):
+    def test_valid_bound_semantic_pair_passes(self):
         cp = run_validator()
         self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
+
+    def test_cli_rejects_caller_supplied_source_lock_override(self):
+        cp = run_cli_with_caller_lock_override()
+        self.assertEqual(cp.returncode, 2)
+        self.assertIn("usage:", cp.stderr)
+        self.assertNotIn("PASS JSPACE_GWT_BOOT_BINDING_RECEIPT/v1", cp.stdout)
+
+    def test_canonical_source_lock_path_is_repository_owned(self):
+        expected = MINI_COGNITION / "bundled_cognition_source_lock_v1.json"
+        self.assertEqual(boot_binding.CANONICAL_SOURCE_LOCK_PATH, expected)
 
     def test_source_lock_must_be_bound(self):
         m = valid_manifest(); raw = manifest_bytes(m); lock = source_lock_for(m, raw); lock["status"] = "UNBOUND"

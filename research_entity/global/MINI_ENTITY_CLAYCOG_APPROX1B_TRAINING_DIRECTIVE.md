@@ -4,8 +4,9 @@ Status: CURRENT
 Owner direction date: 2026-08-23
 Base product directive: `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
 Prior supporting directive: `research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md`
+All-worker protocol: `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
 
-This directive implements the owner's request for an approximately-1B reusable ClayCode-only cognition model trained through Together within a EUR 20 campaign ceiling, together with the 2026-08-23 owner clarification that every explicit `go` is a maximum-depth Mini Entity research/build macrocycle.
+This directive implements the owner's request for an approximately-1B reusable ClayCode-only cognition model trained through Together within a EUR 20 campaign ceiling, together with the 2026-08-23 owner clarifications that every explicit `go` is a maximum-depth Mini Entity research/build macrocycle and that every participating worker must receive the GRF/ClayCode protocol prominently in its prompt.
 
 It supersedes the prior 0.5B directive only where that directive selected Qwen2.5-0.5B as the primary paid-training base. Its architecture, correctness, safety, evaluation, truth-authority and effect-authority laws remain binding.
 
@@ -75,11 +76,26 @@ Secrets exist only in the execution environment and are never committed. Full fi
 
 Every explicit user `go` means: work as long, deeply, thoroughly and at as high a quality as the current turn, available tools and binding safety/execution policy permit on the **same Mini Entity product**. A `go` is not a short status check and must not stop at the first plausible answer, first source delta, first green component test, first PR, or first interesting hypothesis while another safe high-information step remains available in the current turn.
 
+### Mandatory prominent GRF/ClayCode injection
+
+Before any task-specific instructions are sent to any worker/subworker participating in that `go`, the orchestration layer MUST prepend the operative `[MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]` block defined in `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md` directly into the prompt.
+
+This is a hard orchestration requirement:
+- injection is at the TOP of the worker prompt, before role/task-specific content;
+- the operative semantics must be present in the prompt itself; a file path/link/reference alone is insufficient;
+- every worker that delegates to a child during the same `go` propagates the same block transitively;
+- the block establishes GRF R0..R6, Hyperposition, omega, ClayCode-first worker communication/program representation, epistemic laws, falsification loop and the short German end-summary;
+- workers should therefore read/write/think-operationally in explicit GRF/ClayCode representations for nearly all substantive project work, while required tool schemas, external evidence, host-language adapters/tests and exact interoperability formats remain in their required native form and are translated back into ClayCode semantic results;
+- if a surface cannot accept literal prompt injection, record `GRF_CLAYCODE_PROMPT_INJECTION_UNAVAILABLE_ON_SURFACE`; do not pretend injection occurred;
+- measured evidence from a nonconforming worker is not erased, but its protocol compliance is `NONCONFORMING_WORKER_PROMPT` until normalized/reviewed under the injected contract.
+
 For every `go`:
 - join and refresh exact current `main`, owner authority, execution policy, active parallel branches/PRs/receipts and current frontier before consequential work;
+- inject the GRF/ClayCode worker protocol prominently into every participating worker prompt before delegation;
 - use all actually available research/build organs and parallel capabilities when useful, while preventing duplicate canonical implementations and stale-head writes;
 - maximize information gain and product convergence rather than activity count;
 - perform multi-pass GRF work: observed anchors -> multiple hypotheses -> strongest counterhypotheses -> falsifiers -> cheapest discriminators -> execution/measurement -> repair/build -> regression -> second-order review -> fusion/re-entry;
+- express substantive worker-to-worker hypotheses, counterhypotheses, architectures, algorithms, test plans, receipts and fusion ClayCode-first wherever representable;
 - investigate the whole Mini Entity path, not only the currently fascinating subsystem: neutral `.clay` pipeline, MiniUnifiedDB authority, profile-v2/reference/native convergence, inference boundaries, exactly-once/CAS/atomic persistence, truth/secret/effect gates, local inference, ClayCode cognition, GRF, Hyperposition, omega, OOD/generalization, quantization/RSS and recovery/provenance;
 - use current primary/upstream web research whenever external facts are material, unstable, niche or uncertain, and distinguish external evidence from repository/runtime evidence;
 - prefer exact authorized isolated execution and strong falsifiers over source-only confidence whenever an execution surface is available;
@@ -87,6 +103,7 @@ For every `go`:
 - build or repair canonical code/tests/contracts when evidence supports a delta; otherwise persist a precise research/evidence delta or explicit blocker;
 - continue recursively after each useful result: refresh changed reality, reprioritize, and take the next safe non-duplicate high-information step while current-turn capacity remains useful;
 - produce a substantive final synthesis proportional to the work done, including what changed, what was measured, strongest surviving counterhypothesis, evidence class, remaining blocker and exact next executable gate;
+- end human-readable worker outputs with a short German summary rather than repeating the entire ClayCode body in prose;
 - never reduce depth merely because an earlier `go` already explored the same broad area; re-enter from current evidence and seek a new discriminator or stronger convergence step;
 - never claim runtime/model/product PASS from source structure, model agreement, a mergeable PR, a runner that failed before steps, or historical evidence on different bytes;
 - respect the shared `GO_MACROCYCLE_IDENTITY_CONTRACT.md`: exactly one bounded unusual experiment per explicit user-triggered macrocycle across participating organs; all other work is ordinary research, regression, replication, fusion or implementation;

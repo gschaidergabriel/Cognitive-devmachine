@@ -2,7 +2,9 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
+import engine_admission_v1 as engine_admission
 from engine_admission_v1 import (
     EngineAdmissionError,
     EngineArtifactLock,
@@ -112,6 +114,29 @@ class EngineAdmissionProducerTests(unittest.TestCase):
             old.rename(paths.checkpoint / "renamed.safetensors")
             with self.assertRaisesRegex(EngineAdmissionError, "checkpoint_sha256:LOADED_BYTES_MISMATCH"):
                 verify_and_construct_engine_admission(lock, paths, entity_generation=7, current_generation=7)
+
+    def test_directory_member_added_during_hash_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            checkpoint = Path(tmp) / "checkpoint"
+            checkpoint.mkdir()
+            (checkpoint / "model.safetensors").write_bytes(b"weights")
+            original = engine_admission._hash_regular_file
+            injected = False
+
+            def inject_member(path: Path):
+                nonlocal injected
+                if not injected:
+                    injected = True
+                    (checkpoint / "late-added.safetensors").write_bytes(b"late")
+                return original(path)
+
+            with patch.object(engine_admission, "_hash_regular_file", side_effect=inject_member):
+                with self.assertRaisesRegex(
+                    EngineAdmissionError,
+                    "ARTIFACT_TREE_MEMBERSHIP_CHANGED_DURING_HASH",
+                ):
+                    digest_artifact_path(checkpoint)
+            self.assertTrue(injected)
 
     def test_runtime_mutation_after_lock_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -62,6 +62,19 @@ def base_entry(binding, *, capabilities=("memory.read", "hcu.route")):
 ADMITTED_BUDGET = {"max_model_calls": 2, "max_tokens": 1024, "max_wall_ms": 2500}
 
 
+def admit_with_fixture(entry, db, gate):
+    return admit_entry_with_control_plane(
+        entry,
+        canonical_db=db,
+        effect_gate=gate,
+        user_id="user:a",
+        session_id="session:a",
+        trusted_source_kind="HUMAN_PROMPT",
+        trusted_source_id="user:a",
+        admitted_budget=ADMITTED_BUDGET,
+    )
+
+
 class ControlPlaneCapabilityBindingTests(unittest.TestCase):
     def setUp(self):
         self.db = CanonicalDBFixture()
@@ -82,14 +95,7 @@ class ControlPlaneCapabilityBindingTests(unittest.TestCase):
         view = snapshot_capability_authority(
             self.db, self.gate, user_id="user:a", session_id="session:a"
         )
-        packet = admit_entry_with_control_plane(
-            base_entry(view.binding_sha256),
-            canonical_db=self.db,
-            effect_gate=self.gate,
-            user_id="user:a",
-            session_id="session:a",
-            admitted_budget=ADMITTED_BUDGET,
-        )
+        packet = admit_with_fixture(base_entry(view.binding_sha256), self.db, self.gate)
         self.assertEqual(packet.capability_binding_sha256, view.binding_sha256)
         self.assertEqual(packet.capabilities, ("hcu.route", "memory.read"))
 
@@ -98,14 +104,25 @@ class ControlPlaneCapabilityBindingTests(unittest.TestCase):
             self.db, self.gate, user_id="user:b", session_id="session:b"
         )
         with self.assertRaisesRegex(EntryFabricError, "CAPABILITY_BINDING_MISMATCH"):
-            admit_entry_with_control_plane(
-                base_entry(b.binding_sha256),
-                canonical_db=self.db,
-                effect_gate=self.gate,
-                user_id="user:a",
-                session_id="session:a",
-                admitted_budget=ADMITTED_BUDGET,
-            )
+            admit_with_fixture(base_entry(b.binding_sha256), self.db, self.gate)
+
+    def test_trusted_ingress_source_kind_cannot_be_relabelled(self):
+        view = snapshot_capability_authority(
+            self.db, self.gate, user_id="user:a", session_id="session:a"
+        )
+        entry = base_entry(view.binding_sha256)
+        entry["source_kind"] = "EXTERNAL_EVENT"
+        with self.assertRaisesRegex(CapabilityBindingError, "TRUSTED_SOURCE_KIND_MISMATCH"):
+            admit_with_fixture(entry, self.db, self.gate)
+
+    def test_trusted_ingress_source_id_cannot_be_relabelled(self):
+        view = snapshot_capability_authority(
+            self.db, self.gate, user_id="user:a", session_id="session:a"
+        )
+        entry = base_entry(view.binding_sha256)
+        entry["source_id"] = "user:b"
+        with self.assertRaisesRegex(CapabilityBindingError, "TRUSTED_SOURCE_ID_MISMATCH"):
+            admit_with_fixture(entry, self.db, self.gate)
 
     def test_entry_cannot_self_grant_effect_capability(self):
         view = snapshot_capability_authority(
@@ -116,14 +133,7 @@ class ControlPlaneCapabilityBindingTests(unittest.TestCase):
             capabilities=("memory.read", "hcu.route", "entityos.exec"),
         )
         with self.assertRaisesRegex(EntryFabricError, "CAPABILITY_NOT_ADMITTED:entityos.exec"):
-            admit_entry_with_control_plane(
-                entry,
-                canonical_db=self.db,
-                effect_gate=self.gate,
-                user_id="user:a",
-                session_id="session:a",
-                admitted_budget=ADMITTED_BUDGET,
-            )
+            admit_with_fixture(entry, self.db, self.gate)
 
     def test_effect_gate_change_rebinds_context_but_never_grants_entry_effect_right(self):
         before = snapshot_capability_authority(

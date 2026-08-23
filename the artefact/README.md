@@ -63,6 +63,8 @@ Whole ClayVerse acceptance remains **IN_PROGRESS**. Required current gates inclu
 - dual-session collision/privacy/stale-generation controls;
 - supply-chain closure and exact deployment-runtime evidence.
 
+The authorized Vercel execution bridge is not generically absent: historical bound runs have created disposable Vercel Sandboxes, and the retained controller implements runtime one-shot GitHub read-token ingress. The precise next execution blocker is an owner-started one-shot POST carrying a scoped read-only `GITHUB_READ_TOKEN`; until that exact run fetches and verifies current private Research/EntityOS bytes, clears the credential, executes current regressions, and builds/runs the exact OCI image, source/OCI/product runtime credit remains zero.
+
 ## Execution policy
 
 Current build/test/experiment/runtime validation is isolated-sandbox-only. VPS/self-hosted/production-host testing is forbidden unless a newer explicit owner directive changes it.
@@ -73,6 +75,14 @@ Together API/service is forbidden. Secrets never enter source or receipts. Final
 
 Observed `main` carried a split-brain authority state: `the artefact/manifest.json` and `ARCHITECTURE.md` named ClayVerse/one OCI image as the product, while `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, this README, the ClayVerse fast-bootstrap shim, and the visible status footer still declared Mini Entity/Blogpost current and ClayVerse superseded.
 
-This cycle reconciles those control-plane files to the current ClayVerse owner directive and adds `tools/validate_clayverse_authority_consistency.py` plus deterministic regressions so a future split cannot silently pass source admission.
+That cycle reconciled those control-plane files to the current ClayVerse owner directive and added `tools/validate_clayverse_authority_consistency.py` plus deterministic regressions so a future split cannot silently pass source admission.
 
-Runtime credit remains **ZERO** for this delta because no exact authorized whole-product sandbox start/exec surface was available through the connected Vercel tool. Local deterministic validator tests are source/mechanism evidence only.
+Runtime credit remained **ZERO** for that delta because the connected ChatGPT Vercel tool exposed no direct Sandbox start/exec action.
+
+## 2026-08-23 `go` delta — execution-frontier reconciliation
+
+A second, narrower control-plane split remained after product-authority repair: active `PROGRAM_STATE.json` still classified exact OCI acceptance as `BLOCKED_ON_EXECUTION_SURFACE`, while `research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md` already records that `Sandbox.create` is not the blocker and that runtime one-shot token ingress is implemented.
+
+This cycle changes the active gate to `BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS`, binds `PROGRAM_STATE` explicitly to the current Vercel execution-path record, and extends the authority-consistency validator with a fail-closed execution-frontier cross-check.
+
+Exactly one bounded unusual source-level falsifier is consumed: `EXECUTION_FRONTIER_SPLIT_BRAIN_POISON`. The regression poisons the otherwise-current program state back to the generic `BLOCKED_ON_EXECUTION_SURFACE` value while retaining the proven bridge record; the new validator must reject that combination. This falsifies only the stale work-selection premise that no authorized Sandbox bridge exists. It does **not** establish exact-source execution, OCI build, product runtime, or whole-product PASS.

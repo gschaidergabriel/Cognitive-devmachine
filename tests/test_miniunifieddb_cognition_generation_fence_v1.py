@@ -64,6 +64,68 @@ class CognitionGenerationFenceTests(unittest.TestCase):
                 **values,
             )
 
+    def test_mixed_generation_boot_ancestry_poison_fails_closed(self):
+        """One stale identity cannot hide among otherwise current-generation ancestry."""
+        db = sqlite3.connect(":memory:")
+        db.execute("PRAGMA foreign_keys=ON")
+        db.execute(
+            "CREATE TABLE entity_state(id INTEGER PRIMARY KEY, generation INTEGER NOT NULL)"
+        )
+        db.execute("INSERT INTO entity_state(id,generation) VALUES(1,3)")
+        store.install_schema(db)
+
+        values: dict[str, str] = {}
+        for field_name, object_kind in store.BOOT_FIELD_KINDS.items():
+            digest = self.digest("mixed:" + field_name)
+            values[field_name] = digest
+            store.register_object(
+                db,
+                object_kind=object_kind,
+                object_version="v1",
+                object_digest=digest,
+                digest_basis="EXTERNAL_BYTES",
+                payload={"identity": field_name, "classification": "TEST_FIXTURE_ONLY"},
+                provenance_refs=["test:mixed:" + field_name],
+            )
+            store.admit_object(
+                db,
+                object_kind=object_kind,
+                object_version="v1",
+                object_digest=digest,
+                entity_generation=3,
+                admission_receipt_digest=self.digest("receipt:mixed:g3:" + field_name),
+            )
+
+        db.execute("UPDATE entity_state SET generation=4 WHERE id=1")
+        for field_name, object_kind in store.BOOT_FIELD_KINDS.items():
+            if object_kind == "ZERO_IDENTITY":
+                continue
+            store.admit_object(
+                db,
+                object_kind=object_kind,
+                object_version="v1",
+                object_digest=values[field_name],
+                entity_generation=4,
+                admission_receipt_digest=self.digest("receipt:mixed:g4:" + field_name),
+            )
+
+        with self.assertRaisesRegex(
+            store.CognitionStoreError,
+            "COGNITION_OBJECT_NOT_ADMITTED:ZERO_IDENTITY",
+        ):
+            store.admit_boot_binding(
+                db,
+                entity_generation=4,
+                provenance_refs=["test:boot:mixed:g4"],
+                **values,
+            )
+
+        self.assertIsNone(
+            db.execute(
+                "SELECT binding_digest FROM mini_cognition_boot_bindings WHERE entity_generation=4"
+            ).fetchone()
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

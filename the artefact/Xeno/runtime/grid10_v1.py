@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""Deterministic 10-cell Xeno scheduler/interconnect baseline.
+"""Deterministic GRID10 control/interconnect baseline for Xeno.
 
-GRID10 is a logical scheduling profile, not a claim of ten simultaneous model decoders.
-The scheduler consumes only an already-admitted EntryPacket, emits typed work packets,
-and has no canonical-state or real-effect authority.
+GRID10 schedules logical function cells over shared physical compute. It never claims
+that logical cells are resident model copies or simultaneous decode streams.
 """
 from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass
-from typing import Any, Iterable
+from dataclasses import dataclass
+from typing import Iterable
 
 from entry_fabric_v1 import EntryPacket
 
@@ -18,6 +17,7 @@ SCHEDULE_SCHEMA = "XENO_GRID10_SCHEDULE/v1"
 WORK_PACKET_SCHEMA = "XENO_WORK_PACKET/v1"
 SCHEDULER_POLICY = "XENO_GRID10_POLICY/v1"
 GRID_SIZE = 10
+
 MODES = frozenset({"XENO_GRID10", "XENO_COGSIM10", "XENO_WM_TEST"})
 FUNCTIONS = frozenset({
     "retrieve",
@@ -31,18 +31,9 @@ FUNCTIONS = frozenset({
     "summarize",
     "world_project",
 })
-MODEL_FUNCTIONS = frozenset({
-    "hypothesis",
-    "counterhypothesis",
-    "critic",
-    "simulate",
-    "jspace_probe",
-    "summarize",
-    "world_project",
-})
 
 
-class Grid10Error(ValueError):
+class Grid10SchedulingError(ValueError):
     pass
 
 
@@ -50,16 +41,17 @@ class Grid10Error(ValueError):
 class LogicalCell:
     slot: int
     function: str
+    model_required: bool
 
 
 @dataclass(frozen=True)
 class WorkPacket:
     schema: str
     work_packet_id: str
-    schedule_id: str
     entry_packet_id: str
-    entity_generation: int
     causal_id: str
+    entity_generation: int
+    schedule_id: str
     slot: int
     function: str
 
@@ -71,103 +63,108 @@ class Grid10Schedule:
     schedule_id: str
     mode: str
     entry_packet_id: str
-    entity_generation: int
     causal_id: str
+    entity_generation: int
     logical_capacity: int
     active_cells: tuple[LogicalCell, ...]
-    work_packets: tuple[WorkPacket, ...]
-    model_call_budget: int
     physical_decode_concurrency_claimed: int | None
+    work_packets: tuple[WorkPacket, ...]
 
 
-def _canonical(value: Any) -> bytes:
+def _canonical(value: object) -> bytes:
     return json.dumps(
-        value,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-        allow_nan=False,
+        value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False
     ).encode("utf-8")
 
 
-def _nonnegative_int(value: Any, field: str) -> int:
-    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
-        raise Grid10Error(f"{field}:NONNEGATIVE_INTEGER_REQUIRED")
-    return value
+def _model_required(function: str) -> bool:
+    return function in {
+        "hypothesis",
+        "counterhypothesis",
+        "critic",
+        "simulate",
+        "jspace_probe",
+        "world_project",
+        "summarize",
+    }
 
 
-def _functions(functions: Iterable[str]) -> tuple[str, ...]:
+def _normalize_functions(functions: Iterable[str]) -> tuple[str, ...]:
     if isinstance(functions, (str, bytes)):
-        raise Grid10Error("functions:ITERABLE_REQUIRED")
-    result: list[str] = []
+        raise Grid10SchedulingError("FUNCTIONS_ITERABLE_REQUIRED")
+    normalized: list[str] = []
     for function in functions:
         if not isinstance(function, str) or function not in FUNCTIONS:
-            raise Grid10Error("functions:UNSUPPORTED_FUNCTION")
-        if function in result:
-            raise Grid10Error("functions:DUPLICATE_FUNCTION")
-        result.append(function)
-    if not result:
-        raise Grid10Error("functions:AT_LEAST_ONE_REQUIRED")
-    return tuple(result)
+            raise Grid10SchedulingError("FUNCTION_UNSUPPORTED")
+        if function not in normalized:
+            normalized.append(function)
+    return tuple(normalized)
 
 
-def build_grid10_schedule(
+def schedule_grid10(
     entry: EntryPacket,
     *,
+    mode: str,
+    requested_functions: Iterable[str],
     current_generation: int,
-    mode: str = "XENO_GRID10",
-    functions: Iterable[str] = ("retrieve", "provenance", "hypothesis", "counterhypothesis", "critic"),
 ) -> Grid10Schedule:
     if not isinstance(entry, EntryPacket):
-        raise Grid10Error("ENTRY_PACKET_REQUIRED")
-    current_generation = _nonnegative_int(current_generation, "current_generation")
+        raise Grid10SchedulingError("ENTRY_PACKET_REQUIRED")
+    if isinstance(current_generation, bool) or not isinstance(current_generation, int) or current_generation < 0:
+        raise Grid10SchedulingError("CURRENT_GENERATION_INVALID")
     if entry.entity_generation != current_generation:
-        raise Grid10Error("STALE_ENTITY_GENERATION")
+        raise Grid10SchedulingError("STALE_ENTITY_GENERATION")
     if mode not in MODES:
-        raise Grid10Error("MODE_UNSUPPORTED")
+        raise Grid10SchedulingError("MODE_UNSUPPORTED")
 
-    selected = _functions(functions)
-    if len(selected) > GRID_SIZE or len(selected) > entry.budget.max_cells:
-        raise Grid10Error("CELL_BUDGET_EXCEEDED")
+    functions = _normalize_functions(requested_functions)
+    allowed_cells = min(GRID_SIZE, entry.budget.max_cells)
+    if len(functions) > allowed_cells:
+        raise Grid10SchedulingError("CELL_BUDGET_EXCEEDED")
 
-    required_model_calls = sum(function in MODEL_FUNCTIONS for function in selected)
-    if required_model_calls > entry.budget.max_model_calls:
-        raise Grid10Error("MODEL_CALL_BUDGET_EXCEEDED")
+    cells = tuple(
+        LogicalCell(slot=slot, function=function, model_required=_model_required(function))
+        for slot, function in enumerate(functions)
+    )
+    model_calls = sum(1 for cell in cells if cell.model_required)
+    if model_calls > entry.budget.max_model_calls:
+        raise Grid10SchedulingError("MODEL_CALL_BUDGET_EXCEEDED")
 
-    cells = tuple(LogicalCell(slot=slot, function=function) for slot, function in enumerate(selected))
     schedule_identity = {
         "schema": SCHEDULE_SCHEMA,
         "policy_version": SCHEDULER_POLICY,
         "mode": mode,
         "entry_packet_id": entry.packet_id,
-        "entity_generation": entry.entity_generation,
         "causal_id": entry.causal_id,
+        "entity_generation": entry.entity_generation,
         "logical_capacity": GRID_SIZE,
-        "active_cells": [asdict(cell) for cell in cells],
-        "model_call_budget": entry.budget.max_model_calls,
+        "active_cells": [
+            {"slot": cell.slot, "function": cell.function, "model_required": cell.model_required}
+            for cell in cells
+        ],
+        "physical_decode_concurrency_claimed": None,
     }
     schedule_id = hashlib.sha256(_canonical(schedule_identity)).hexdigest()
 
-    work_packets: list[WorkPacket] = []
+    work_packets = []
     for cell in cells:
-        work_identity = {
+        identity = {
             "schema": WORK_PACKET_SCHEMA,
-            "schedule_id": schedule_id,
             "entry_packet_id": entry.packet_id,
-            "entity_generation": entry.entity_generation,
             "causal_id": entry.causal_id,
+            "entity_generation": entry.entity_generation,
+            "schedule_id": schedule_id,
             "slot": cell.slot,
             "function": cell.function,
         }
-        work_packet_id = hashlib.sha256(_canonical(work_identity)).hexdigest()
         work_packets.append(
             WorkPacket(
                 schema=WORK_PACKET_SCHEMA,
-                work_packet_id=work_packet_id,
-                schedule_id=schedule_id,
+                work_packet_id=hashlib.sha256(_canonical(identity)).hexdigest(),
                 entry_packet_id=entry.packet_id,
-                entity_generation=entry.entity_generation,
                 causal_id=entry.causal_id,
+                entity_generation=entry.entity_generation,
+                schedule_id=schedule_id,
                 slot=cell.slot,
                 function=cell.function,
             )
@@ -179,11 +176,10 @@ def build_grid10_schedule(
         schedule_id=schedule_id,
         mode=mode,
         entry_packet_id=entry.packet_id,
-        entity_generation=entry.entity_generation,
         causal_id=entry.causal_id,
+        entity_generation=entry.entity_generation,
         logical_capacity=GRID_SIZE,
         active_cells=cells,
-        work_packets=tuple(work_packets),
-        model_call_budget=entry.budget.max_model_calls,
         physical_decode_concurrency_claimed=None,
+        work_packets=tuple(work_packets),
     )

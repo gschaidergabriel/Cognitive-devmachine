@@ -10,6 +10,7 @@ import math
 from typing import Any, Mapping
 
 CANONICALIZATION_SCHEMA = "RFC8785_JCS_IJSON/v1"
+MAX_CANONICAL_NESTING_DEPTH = 256
 
 
 class CanonicalizationError(ValueError):
@@ -137,8 +138,9 @@ def _number(value: int | float) -> bytes:
     return rendered.encode("ascii")
 
 
-def canonicalize(value: Any) -> bytes:
-    """Return RFC 8785/JCS UTF-8 bytes for an admitted I-JSON-compatible value."""
+def _canonicalize(value: Any, depth: int) -> bytes:
+    if depth > MAX_CANONICAL_NESTING_DEPTH:
+        raise CanonicalizationError("MAX_NESTING_DEPTH_EXCEEDED")
     if value is None:
         return b"null"
     if value is True:
@@ -150,7 +152,7 @@ def canonicalize(value: Any) -> bytes:
     if isinstance(value, str):
         return _string(value)
     if isinstance(value, (list, tuple)):
-        return b"[" + b",".join(canonicalize(item) for item in value) + b"]"
+        return b"[" + b",".join(_canonicalize(item, depth + 1) for item in value) + b"]"
     if isinstance(value, Mapping):
         rows: list[tuple[bytes, str, Any]] = []
         for key, item in value.items():
@@ -163,7 +165,16 @@ def canonicalize(value: Any) -> bytes:
             rows.append((sort_key, key, item))
         rows.sort(key=lambda row: row[0])
         return b"{" + b",".join(
-            _string(key) + b":" + canonicalize(item)
+            _string(key) + b":" + _canonicalize(item, depth + 1)
             for _, key, item in rows
         ) + b"}"
     raise CanonicalizationError(f"UNSUPPORTED_TYPE:{type(value).__name__}")
+
+
+def canonicalize(value: Any) -> bytes:
+    """Return RFC 8785/JCS UTF-8 bytes for an admitted I-JSON-compatible value.
+
+    The input is depth-bounded so untrusted Typed Entry payloads fail through the
+    canonical typed error channel instead of leaking Python recursion behavior.
+    """
+    return _canonicalize(value, 0)

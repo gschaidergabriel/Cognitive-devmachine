@@ -1,0 +1,70 @@
+{
+  "schema": "claycog-together-model-fit-triangle/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "mini-entity-pipeline-all-in-one",
+  "source_main": "659cc2471b73bcefebb6a57694e6737cc2107cc5",
+  "branch": "gpt56sol/go-together-08b-lane-decision-20260822-1511",
+  "claim_class": "EXTERNAL_PRIMARY_SOURCE_EVIDENCE_PLUS_ARCHITECTURE_DECISION_CANDIDATE",
+  "unusual_experiment": {
+    "id": "MODEL_FIT_TRIANGLE_08B",
+    "count": 1,
+    "constraints": [
+      "Together Full-FT catalog admission",
+      "sub-1B-class parameter count",
+      "observed Q4_K_M file size below 1 GiB"
+    ],
+    "result": {
+      "Qwen/Qwen2.5-0.5B": "REJECT_CURRENT_TOGETHER_FULL_FT_ADMISSION_NO_QWEN2_TEMPLATE",
+      "Qwen/Qwen3.5-0.8B": "RETAIN_CURRENT_CATALOG_SUPPORTED_CANDIDATE"
+    }
+  },
+  "provider_evidence": {
+    "together_supported_models": "https://docs.together.ai/docs/fine-tuning/supported-models",
+    "together_byom": "https://docs.together.ai/docs/fine-tuning/byom",
+    "together_pricing": "https://www.together.ai/pricing",
+    "observed_full_ft_qwen_smallest": "Qwen/Qwen3.5-0.8B",
+    "observed_qwen2_or_qwen2_5_full_ft_template": false,
+    "byom_architecture_match_required": true
+  },
+  "candidate_evidence": {
+    "model": "Qwen/Qwen3.5-0.8B",
+    "parameter_class": "0.8B language model",
+    "upstream_model": "https://huggingface.co/Qwen/Qwen3.5-0.8B",
+    "upstream_config": "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json",
+    "model_type": "qwen3_5",
+    "observed_public_q4_k_m_file_size_range_mb": [528, 608],
+    "file_size_below_1_gib": true,
+    "peak_rss_below_1_gib": "UNPROVEN_REQUIRES_MEASUREMENT_AT_CONTEXT_2048"
+  },
+  "budget": {
+    "current_together_full_sft_rate_up_to_16b_usd_per_million_tokens": 0.54,
+    "current_standard_minimum_charge_usd": 4.0,
+    "single_job_gate_usd": 18.0,
+    "campaign_ceiling_eur": 20.0,
+    "money_spent_this_go_usd": 0.0,
+    "job_created": false
+  },
+  "required_next": [
+    "adjudicate owner/policy authority for exact 0.8B architecture switch versus current 0.5B repository identity",
+    "pin exact Hugging Face revision",
+    "revalidate corpus/tokenizer/template compatibility",
+    "authenticated Together model-limits and price preflight",
+    "preserve zero-retry duplicate-safe create semantics",
+    "train only after policy and budget gates",
+    "matched tuned/base/larger-model evaluation",
+    "Q4_K_M quantization",
+    "actual peak RSS measurement at context 2048"
+  ],
+  "nonclaims": [
+    "no Together authenticated preflight",
+    "no Together upload",
+    "no billed create",
+    "no training job",
+    "no trained checkpoint",
+    "no model quality claim",
+    "no peak RSS claim",
+    "no whole Mini Entity PASS"
+  ]
+}

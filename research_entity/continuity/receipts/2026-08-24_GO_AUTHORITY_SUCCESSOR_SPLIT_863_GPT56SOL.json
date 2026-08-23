@@ -1,0 +1,90 @@
+{
+  "schema": "CLAY_GO_AUTHORITY_SUCCESSOR_RECEIPT/v3",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "historical_observation": {
+    "base_main_sha": "cce8a16a00153f80c85d3a18215345801a416ad2",
+    "bootstrap_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "program_state_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "manifest_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "validator_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json",
+    "classification": "THREE_GENERATION_CURRENT_AUTHORITY_SPLIT"
+  },
+  "reentry": {
+    "rebased_main_sha": "effe3260593450aed67d619451fa522962e1dcef",
+    "parallel_repairs_preserved": [
+      "BOOTSTRAP_MINIMAL -> 8.63",
+      "PROGRAM_STATE -> 8.63",
+      "SUPERVISOR_INBOX -> 8.63",
+      "root CLAUDE -> 8.63",
+      "status footer -> 8.63",
+      "artefact README -> 8.63",
+      "artefact manifest -> 8.63 with atomic lease coordination law"
+    ],
+    "remaining_gap_at_reentry": "canonical compatibility-named authority validator still hard-coded SUPERVISOR_STEERING_8_52.json",
+    "duplicate_manifest_delta_dropped": true
+  },
+  "canonical_delta": {
+    "validator": "tools/validate_clayverse_authority_consistency.py",
+    "schema": "ENTITYOS_HCU_AUTHORITY_CONSISTENCY/v3",
+    "mechanism": "discover newest versioned SUPERVISOR_STEERING successor and require one closed authority chain across supervisor inbox, bootstrap, program state, artefact manifest, root routing, README and status footer",
+    "historical_safety_ancestry": "4.1 -> 4.2 -> 4.3 -> 4.4 remains Git-blob hash-bound and safety-checked as donor ancestry, not current product authority",
+    "supervisor_863_fences": [
+      "FREE_ONLY",
+      "Together inference/training/preflight forbidden",
+      "paid/subscription/unknown lanes fail closed",
+      "Vercel Hobby execution limited to bounded fixed-hash included-tier capsules with cost fail-closed",
+      "canonical atomic lease required before unusual intervention",
+      "no valid shared identity/claim means zero new unusual experiments",
+      "whole EntityOS/HCU, J-Space model and training credit remain zero"
+    ],
+    "regressions": [
+      "tests/test_validate_clayverse_authority_consistency.py",
+      "tests/test_current_authority_successor_fence.py"
+    ],
+    "future_successor_falsifier": "adding SUPERVISOR_STEERING_8_64 without re-entering inbox/bootstrap/program/manifest/docs must fail closed instead of allowing a validator-local false green"
+  },
+  "local_authoring_check": {
+    "classification": "NON_ACCEPTANCE_AUTHORING_SANITY_ONLY",
+    "focused_unittest_cases": 10,
+    "result": "PASS",
+    "runtime_credit": 0,
+    "note": "Local authoring execution is not an authorized isolated EntityOS/HCU runtime acceptance surface."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No canonical reproducible atomic lease was acquired for this user-triggered macrocycle.",
+    "atomic_claim_created": false,
+    "intervention_executed": false
+  },
+  "execution_boundary": {
+    "authorized_isolated_runtime_for_this_delta": "NOT_OBSERVED",
+    "together_or_paid_execution": false,
+    "vps_self_hosted_or_production_testing": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "track_a": {
+      "status": "SOURCE_FAIL_CLOSED_DELTA",
+      "result": "Authority-validator false-green path replaced by successor-closure candidate on a branch rebased to current main."
+    },
+    "track_b": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Parallel main advanced Entry capability/outcome/J-Space work; this lane avoided duplicating PR1263/PR810 mechanisms."
+    },
+    "track_c": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "Current supervisor remains FREE_ONLY and exact full HCU/J-Space real-trace gates are not complete; no training execution was admitted."
+    }
+  },
+  "next_exact_gate": [
+    "Run the successor-closure validator plus focused regressions in an admitted fixed-hash FREE isolated capsule bound to the exact branch head.",
+    "If exact source execution passes, merge/fuse the single canonical validator path without creating another authority implementation.",
+    "Then return to the current HCU frontier: Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure."
+  ]
+}

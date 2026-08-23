@@ -1,6 +1,7 @@
 # Current MicroEntity product contract
 
-MicroEntity is the user-facing self-hosted configuration and cognition-inspection surface of EntityOS/Mini Entity.
+MicroEntity is the user-facing self-hosted configuration and cognition-inspection
+surface of EntityOS/Mini Entity.
 
 Fixed product components:
 1. bundled generic approximately-0.8B local cognition core;
@@ -10,8 +11,17 @@ Fixed product components:
 5. adaptive capability-driven integration for other models/APIs;
 6. model-specific J-Space profiles only where real hookable latent access exists;
 7. MiniUnifiedDB/deterministic gates remain truth/state/effect authority;
-8. self-hosted dashboard with explicit first activation, autostart and stable local URL where the host permits it, plus deterministic loopback fallback.
+8. self-hosted dashboard with explicit first activation, autostart and stable local URL
+   where the host permits it, plus deterministic loopback fallback;
+9. Hyperposition Computational Unit (HCU): a sparse modular compute fabric of
+   approximately-0.8B cognition cells, with logical/resident/active-cell separation,
+   designed for the owner's separate KVM4 VPS profile.
 
-Closed APIs are `COMPILED_EXTERNAL` and never represented as hidden-state-integrated. Local hookable models may be `FULL_LOCAL_LATENT` after exact model/profile calibration.
+The HCU may run long-lived causal world-model, goal proposal, long simulation, Zero-modeling
+and hypothesis-generation functions. HCU/model/free-provider output remains candidate-only;
+MiniUnifiedDB remains canonical durable authority.
+
+Closed APIs are COMPILED_EXTERNAL and never represented as hidden-state-integrated.
+Local hookable models may be FULL_LOCAL_LATENT after exact model/profile calibration.
 
 Package snapshot: `MICROENTITY_CURRENT.zip`.

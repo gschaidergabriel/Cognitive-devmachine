@@ -4,12 +4,15 @@
 This module invokes no model and grants no truth/effect authority. It consumes a canonical
 HCU RouteDecision and fails closed unless the concrete Typed-Entry admission is bound to
 the same JCS causal event, the route is bound to the live generation, a verified JCS engine
-admission binds the exact engine bundle, and a VerifiedEngineLoad binds actual-loader
-consumption evidence to that same admission and generation.
+admission binds the exact engine bundle, a VerifiedEngineLoad binds actual-loader
+consumption evidence to that same admission and generation, an exact scheduler-owned
+GridPlan binds the route to one execution topology, and an externally admitted
+VerifiedModelExecution binds actual executor I/O to that plan and load.
 
-The verified load is evidence consumed here, not runtime truth minted here. Until an
-admitted real loader produces LoaderConsumption from the bytes actually consumed, this
-path has zero HCU runtime credit.
+The verified load and model execution are evidence consumed here, not runtime truth minted
+here. Caller-supplied output provenance is not accepted by the v4 producer. Until an
+admitted real loader and model executor produce the consumed observations from bytes they
+actually consumed/emitted, this path has zero HCU model-runtime credit.
 """
 from __future__ import annotations
 
@@ -26,6 +29,13 @@ try:
         VERIFIED_LOAD_SCHEMA,
         VerifiedEngineLoad,
     )
+    from .grid10_scheduler_v1 import ExecutionClass, GridPlan, GridScheduleError, validate_grid_plan_identity
+    from .model_execution_receipt_v1 import (
+        VERIFIED_EXECUTION_SCHEMA,
+        ModelExecutionReceiptError,
+        VerifiedModelExecution,
+        validate_verified_model_execution,
+    )
     from .reactive_event_router_v1 import (
         ENTRY_BINDING_SCHEMA,
         HASH_SERIALIZATION_SCHEMA,
@@ -38,6 +48,13 @@ except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from engine_admission_v1 import ENGINE_ADMISSION_RECEIPT_SCHEMA, VerifiedEngineAdmission
     from engine_load_lease_v1 import ACTUAL_LOADER_EVIDENCE_SOURCE, VERIFIED_LOAD_SCHEMA, VerifiedEngineLoad
+    from grid10_scheduler_v1 import ExecutionClass, GridPlan, GridScheduleError, validate_grid_plan_identity
+    from model_execution_receipt_v1 import (
+        VERIFIED_EXECUTION_SCHEMA,
+        ModelExecutionReceiptError,
+        VerifiedModelExecution,
+        validate_verified_model_execution,
+    )
     from reactive_event_router_v1 import (
         ENTRY_BINDING_SCHEMA,
         HASH_SERIALIZATION_SCHEMA,
@@ -47,7 +64,7 @@ except ImportError:
         resolve_admitted_entry_binding,
     )
 
-SCHEMA = "HCU_INFERENCE_RECEIPT/v3"
+SCHEMA = "HCU_INFERENCE_RECEIPT/v4"
 STATUS = "CANDIDATE_ONLY"
 
 
@@ -76,6 +93,17 @@ class InferenceReceipt:
     engine_load_lease_sha256: str
     engine_load_consumption_receipt_sha256: str
     engine_load_loader_id: str
+    model_execution_schema: str
+    model_execution_canonicalization_schema: str
+    model_execution_receipt_sha256: str
+    model_execution_observation_sha256: str
+    model_execution_executor_id: str
+    model_execution_invocation_id: str
+    grid_plan_sha256: str
+    output_producing_cell_id: str
+    model_execution_role: str
+    input_sha256: str
+    input_size: int
     model_call_id: str
     output_ref: str
     output_sha256: str
@@ -260,6 +288,104 @@ def _verify_engine_load(
     return verified_load.inference_echo()
 
 
+def _verify_grid_plan(
+    grid_plan: GridPlan,
+    decision: RouteDecision,
+    *,
+    generation: int,
+    entry_admission_sha256: str,
+) -> str:
+    try:
+        plan_sha256 = validate_grid_plan_identity(grid_plan)
+    except GridScheduleError as exc:
+        raise InferenceReceiptError(f"GRID10_PLAN_REJECTED:{exc}") from exc
+    if grid_plan.entity_generation != generation:
+        raise InferenceReceiptError("GRID10_INFERENCE_GENERATION_MISMATCH")
+    if grid_plan.entry_admission_sha256 != entry_admission_sha256:
+        raise InferenceReceiptError("GRID10_INFERENCE_ENTRY_ADMISSION_MISMATCH")
+    if grid_plan.entry_event_sha256 != decision.event_sha256 or grid_plan.route_event_sha256 != decision.event_sha256:
+        raise InferenceReceiptError("GRID10_INFERENCE_EVENT_MISMATCH")
+    if grid_plan.route_decision_sha256 != decision.decision_sha256:
+        raise InferenceReceiptError("GRID10_INFERENCE_ROUTE_DECISION_MISMATCH")
+    if grid_plan.router_policy_sha256 != decision.router_policy_sha256:
+        raise InferenceReceiptError("GRID10_INFERENCE_ROUTER_POLICY_MISMATCH")
+    if grid_plan.engine_identity_sha256 != decision.engine_identity_sha256:
+        raise InferenceReceiptError("GRID10_INFERENCE_ENGINE_IDENTITY_MISMATCH")
+    if grid_plan.resolved_engine_identity != decision.resolved_engine_identity:
+        raise InferenceReceiptError("GRID10_INFERENCE_ENGINE_NAME_MISMATCH")
+    if grid_plan.resolved_engine_class != decision.resolved_engine_class:
+        raise InferenceReceiptError("GRID10_INFERENCE_ENGINE_CLASS_MISMATCH")
+    if grid_plan.resolved_engine_artifact_sha256 != decision.resolved_engine_artifact_sha256:
+        raise InferenceReceiptError("GRID10_INFERENCE_ENGINE_ARTIFACT_MISMATCH")
+
+    plan_lanes = tuple(sorted(
+        cell.function[len("MODEL:"):]
+        for cell in grid_plan.cells
+        if cell.execution_class is ExecutionClass.MODEL and cell.function.startswith("MODEL:")
+    ))
+    if plan_lanes != tuple(sorted(decision.model_lanes)):
+        raise InferenceReceiptError("GRID10_INFERENCE_MODEL_LANES_MISMATCH")
+    return plan_sha256
+
+
+def _verify_model_execution(
+    verified_execution: VerifiedModelExecution,
+    *,
+    admitted_verified_model_executions: Mapping[str, Any],
+    grid_plan: GridPlan,
+    generation: int,
+    load_echo: Mapping[str, Any],
+    expected_engine_identity: str,
+    expected_engine_class: str,
+    expected_engine_artifact_sha256: str,
+    decision: RouteDecision,
+) -> dict[str, Any]:
+    if not isinstance(verified_execution, VerifiedModelExecution):
+        raise InferenceReceiptError("VERIFIED_MODEL_EXECUTION_REQUIRED")
+    try:
+        validate_verified_model_execution(verified_execution)
+    except ModelExecutionReceiptError as exc:
+        raise InferenceReceiptError(f"VERIFIED_MODEL_EXECUTION_REJECTED:{exc}") from exc
+    if verified_execution.schema != VERIFIED_EXECUTION_SCHEMA:
+        raise InferenceReceiptError("VERIFIED_MODEL_EXECUTION_SCHEMA_UNSUPPORTED")
+    if verified_execution.canonicalization_schema != CANONICALIZATION_SCHEMA:
+        raise InferenceReceiptError("VERIFIED_MODEL_EXECUTION_CANONICALIZATION_SCHEMA_UNSUPPORTED")
+    if verified_execution.entity_generation != generation:
+        raise InferenceReceiptError("STALE_VERIFIED_MODEL_EXECUTION_GENERATION")
+    if verified_execution.engine_load_consumption_receipt_sha256 != load_echo.get("engine_load_consumption_receipt_sha256"):
+        raise InferenceReceiptError("MODEL_EXECUTION_ENGINE_LOAD_RECEIPT_MISMATCH")
+    if verified_execution.engine_identity != expected_engine_identity:
+        raise InferenceReceiptError("MODEL_EXECUTION_ENGINE_IDENTITY_MISMATCH")
+    if verified_execution.engine_class != expected_engine_class:
+        raise InferenceReceiptError("MODEL_EXECUTION_ENGINE_CLASS_MISMATCH")
+    if verified_execution.engine_artifact_sha256 != expected_engine_artifact_sha256:
+        raise InferenceReceiptError("MODEL_EXECUTION_ENGINE_ARTIFACT_MISMATCH")
+    if verified_execution.grid_plan_sha256 != grid_plan.plan_sha256:
+        raise InferenceReceiptError("MODEL_EXECUTION_GRID10_PLAN_MISMATCH")
+    if verified_execution.role not in decision.model_lanes:
+        raise InferenceReceiptError("MODEL_EXECUTION_ROLE_NOT_ADMITTED_BY_ROUTE")
+
+    matching_cells = [cell for cell in grid_plan.cells if cell.cell_id == verified_execution.output_producing_cell_id]
+    if len(matching_cells) != 1:
+        raise InferenceReceiptError("MODEL_EXECUTION_OUTPUT_CELL_NOT_UNIQUE_IN_GRID10_PLAN")
+    cell = matching_cells[0]
+    if cell.execution_class is not ExecutionClass.MODEL:
+        raise InferenceReceiptError("MODEL_EXECUTION_OUTPUT_CELL_NOT_MODEL")
+    if cell.function != f"MODEL:{verified_execution.role}":
+        raise InferenceReceiptError("MODEL_EXECUTION_OUTPUT_CELL_ROLE_MISMATCH")
+
+    receipt = asdict(verified_execution)
+    receipt_sha256 = _sha256(receipt.get("receipt_sha256"), "verified_model_execution.receipt_sha256")
+    if not isinstance(admitted_verified_model_executions, Mapping):
+        raise InferenceReceiptError("ADMITTED_VERIFIED_MODEL_EXECUTION_REGISTRY_REQUIRED")
+    admitted = admitted_verified_model_executions.get(receipt_sha256)
+    if not isinstance(admitted, Mapping):
+        raise InferenceReceiptError("VERIFIED_MODEL_EXECUTION_NOT_ADMITTED")
+    if dict(admitted) != receipt:
+        raise InferenceReceiptError("VERIFIED_MODEL_EXECUTION_REGISTRY_MISMATCH")
+    return verified_execution.inference_echo()
+
+
 def make_inference_receipt(
     decision: RouteDecision,
     *,
@@ -272,12 +398,11 @@ def make_inference_receipt(
     admitted_engine_admission_receipts: Mapping[str, Any],
     verified_engine_load: VerifiedEngineLoad,
     admitted_verified_engine_loads: Mapping[str, Any],
-    model_call_id: str,
-    output_ref: str,
-    output_sha256: str,
-    output_size: int,
+    grid_plan: GridPlan,
+    verified_model_execution: VerifiedModelExecution,
+    admitted_verified_model_executions: Mapping[str, Any],
 ) -> InferenceReceipt:
-    """Produce a candidate-only receipt from independently admitted route/load evidence."""
+    """Produce a candidate-only receipt from admitted route/load/plan/executor evidence."""
     if not isinstance(decision, RouteDecision):
         raise InferenceReceiptError("ROUTE_DECISION_REQUIRED")
     if decision.status != "SELECTIVE_MODEL_ACTIVATION":
@@ -334,6 +459,27 @@ def make_inference_receipt(
     if load_echo.get("engine_load_canonicalization_schema") != CANONICALIZATION_SCHEMA:
         raise InferenceReceiptError("ENGINE_LOAD_ECHO_CANONICALIZATION_SCHEMA_UNSUPPORTED")
 
+    grid_plan_sha256 = _verify_grid_plan(
+        grid_plan,
+        decision,
+        generation=generation,
+        entry_admission_sha256=admission_sha256,
+    )
+    execution_echo = _verify_model_execution(
+        verified_model_execution,
+        admitted_verified_model_executions=admitted_verified_model_executions,
+        grid_plan=grid_plan,
+        generation=generation,
+        load_echo=load_echo,
+        expected_engine_identity=engine_id,
+        expected_engine_class=engine_class,
+        expected_engine_artifact_sha256=engine_artifact_sha256,
+        decision=decision,
+    )
+    if execution_echo.get("grid_plan_sha256") != grid_plan_sha256:
+        raise InferenceReceiptError("MODEL_EXECUTION_GRID10_PLAN_MISMATCH")
+
+    invocation_id = _text(execution_echo.get("model_execution_invocation_id"), "model_execution_invocation_id")
     payload = {
         "schema": SCHEMA,
         "status": STATUS,
@@ -354,10 +500,36 @@ def make_inference_receipt(
         "engine_load_lease_sha256": load_echo["engine_load_lease_sha256"],
         "engine_load_consumption_receipt_sha256": load_echo["engine_load_consumption_receipt_sha256"],
         "engine_load_loader_id": load_echo["engine_load_loader_id"],
-        "model_call_id": _text(model_call_id, "model_call_id"),
-        "output_ref": _text(output_ref, "output_ref"),
-        "output_sha256": _sha256(output_sha256, "output_sha256"),
-        "output_size": _nonnegative_int(output_size, "output_size"),
+        "model_execution_schema": VERIFIED_EXECUTION_SCHEMA,
+        "model_execution_canonicalization_schema": _text(
+            execution_echo.get("model_execution_canonicalization_schema"),
+            "model_execution_canonicalization_schema",
+        ),
+        "model_execution_receipt_sha256": _sha256(
+            execution_echo.get("model_execution_receipt_sha256"),
+            "model_execution_receipt_sha256",
+        ),
+        "model_execution_observation_sha256": _sha256(
+            execution_echo.get("model_execution_observation_sha256"),
+            "model_execution_observation_sha256",
+        ),
+        "model_execution_executor_id": _text(
+            execution_echo.get("model_execution_executor_id"),
+            "model_execution_executor_id",
+        ),
+        "model_execution_invocation_id": invocation_id,
+        "grid_plan_sha256": _sha256(grid_plan_sha256, "grid_plan_sha256"),
+        "output_producing_cell_id": _text(
+            execution_echo.get("output_producing_cell_id"),
+            "output_producing_cell_id",
+        ),
+        "model_execution_role": _text(execution_echo.get("model_execution_role"), "model_execution_role"),
+        "input_sha256": _sha256(execution_echo.get("input_sha256"), "input_sha256"),
+        "input_size": _nonnegative_int(execution_echo.get("input_size"), "input_size"),
+        "model_call_id": invocation_id,
+        "output_ref": _text(execution_echo.get("output_ref"), "output_ref"),
+        "output_sha256": _sha256(execution_echo.get("output_sha256"), "output_sha256"),
+        "output_size": _nonnegative_int(execution_echo.get("output_size"), "output_size"),
         "model_lanes": tuple(decision.model_lanes),
     }
     receipt_sha256 = hashlib.sha256(_canonical(payload)).hexdigest()

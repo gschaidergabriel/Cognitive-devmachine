@@ -8,6 +8,10 @@ the same SQLite MiniUnifiedDB used by the Mini Entity pipeline.
 It intentionally does not fabricate missing model/J-Space/boot identities. If an exact
 admitted object or current-generation binding is unavailable, callers must fail closed or
 typed-abstain before model inference.
+
+Read-time integrity is part of the authority boundary: persisted boot/turn rows are
+reconstructed canonically and their binding digests are revalidated before any material is
+returned to a pre-inference caller.
 """
 from __future__ import annotations
 
@@ -94,6 +98,17 @@ def _refs(value: Any, name: str) -> list[str]:
     _need(type(value) is list, f"{name}:LIST_REQUIRED")
     refs = [_text(item, name) for item in value]
     _need(len(refs) == len(set(refs)), f"{name}:DUPLICATE")
+    return refs
+
+
+def _canonical_refs_json(raw: Any, name: str) -> list[str]:
+    _need(type(raw) is str, f"{name}:JSON_TEXT_REQUIRED")
+    try:
+        decoded = json.loads(raw)
+    except (TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise CognitionStoreError(f"{name}:MALFORMED_JSON") from exc
+    refs = _refs(decoded, name)
+    _need(raw == canonical_json(refs), f"{name}:NONCANONICAL_JSON")
     return refs
 
 
@@ -336,12 +351,25 @@ def admit_boot_binding(
     refs = _refs(provenance_refs, "provenance_refs")
     _need(bool(refs), "PROVENANCE_REQUIRED")
 
+    supplied = {
+        "zero_identity_digest": zero_identity_digest,
+        "grf_digest": grf_digest,
+        "hyperposition_digest": hyperposition_digest,
+        "bundled_manifest_digest": bundled_manifest_digest,
+        "local_model_digest": local_model_digest,
+        "tokenizer_digest": tokenizer_digest,
+        "jspace_profile_digest": jspace_profile_digest,
+        "jacobian_lens_digest": jacobian_lens_digest,
+        "workspace_calibration_digest": workspace_calibration_digest,
+        "boot_source_lock_digest": boot_source_lock_digest,
+        "policy_authority_digest": policy_authority_digest,
+    }
     fields: dict[str, str] = {}
-    for field_name in BOOT_FIELD_KINDS:
-        fields[field_name] = _digest(locals()[field_name], field_name)
+    for field_name, object_kind in BOOT_FIELD_KINDS.items():
+        fields[field_name] = _digest(supplied[field_name], field_name)
         _require_admitted_digest(
             db,
-            object_kind=BOOT_FIELD_KINDS[field_name],
+            object_kind=object_kind,
             object_digest=fields[field_name],
             entity_generation=entity_generation,
         )
@@ -355,8 +383,7 @@ def admit_boot_binding(
     binding_digest = sha256_obj(material)
 
     existing = db.execute(
-        """SELECT binding_digest FROM mini_cognition_boot_bindings
-            WHERE entity_generation=?""",
+        "SELECT binding_digest FROM mini_cognition_boot_bindings WHERE entity_generation=?",
         (entity_generation,),
     ).fetchone()
     if existing is not None:
@@ -420,8 +447,7 @@ def bind_turn(
     required_zero_mode = _text(required_zero_mode, "required_zero_mode")
 
     boot = db.execute(
-        """SELECT entity_generation FROM mini_cognition_boot_bindings
-            WHERE binding_digest=?""",
+        "SELECT entity_generation FROM mini_cognition_boot_bindings WHERE binding_digest=?",
         (boot_binding_digest,),
     ).fetchone()
     _need(boot is not None, "BOOT_BINDING_UNAVAILABLE")
@@ -481,7 +507,12 @@ def resolve_prepare_binding(
     causal_turn_id: str,
     task_text: str,
 ) -> dict[str, Any]:
-    """Resolve exact pre-inference binding material or fail closed."""
+    """Resolve exact pre-inference binding material or fail closed.
+
+    The persisted turn and boot bindings are re-hashed from their exact stored fields before
+    return. This prevents a row mutation from laundering new cognition/workspace material
+    through an old binding digest.
+    """
     live_generation = _current_generation(db)
     _need(type(entity_generation) is int and entity_generation >= 0, "GENERATION_INVALID")
     _need(entity_generation == live_generation, "STALE_GENERATION")
@@ -489,53 +520,109 @@ def resolve_prepare_binding(
     _need(type(task_text) is str, "TASK_TEXT_REQUIRED")
 
     turn = db.execute(
-        """SELECT binding_digest,boot_binding_digest,task_sha256,workspace_digest,
-                  selected_workspace_slots_json,contradiction_state,provenance_refs_json,
-                  required_zero_mode
+        """SELECT binding_digest,schema,entity_generation,causal_turn_id,boot_binding_digest,
+                  task_sha256,workspace_digest,selected_workspace_slots_json,
+                  contradiction_state,provenance_refs_json,required_zero_mode
              FROM mini_cognition_turn_bindings
             WHERE entity_generation=? AND causal_turn_id=?""",
         (entity_generation, causal_turn_id),
     ).fetchone()
     _need(turn is not None, "TURN_BINDING_UNAVAILABLE")
+
+    turn_binding_digest = _digest(turn[0], "turn_binding_digest")
+    _need(turn[1] == TURN_BINDING_SCHEMA, "TURN_BINDING_SCHEMA_MISMATCH")
+    _need(type(turn[2]) is int and turn[2] == entity_generation, "TURN_BINDING_GENERATION_MISMATCH")
+    stored_turn_id = _text(turn[3], "stored_causal_turn_id")
+    _need(stored_turn_id == causal_turn_id, "TURN_CAUSAL_ID_MISMATCH")
+    boot_binding_digest = _digest(turn[4], "boot_binding_digest")
+    task_sha256 = _digest(turn[5], "task_sha256")
     expected_task = hashlib.sha256(task_text.encode("utf-8")).hexdigest()
-    _need(turn[2] == expected_task, "TURN_TASK_BINDING_MISMATCH")
+    _need(task_sha256 == expected_task, "TURN_TASK_BINDING_MISMATCH")
+    workspace_digest = _digest(turn[6], "workspace_digest")
+    selected_workspace_slots = _canonical_refs_json(turn[7], "selected_workspace_slots")
+    contradiction_state = _text(turn[8], "contradiction_state")
+    turn_provenance_refs = _canonical_refs_json(turn[9], "turn_provenance_refs")
+    _need(bool(turn_provenance_refs), "PROVENANCE_REQUIRED")
+    required_zero_mode = _text(turn[10], "required_zero_mode")
+
+    turn_material = {
+        "schema": TURN_BINDING_SCHEMA,
+        "entity_generation": entity_generation,
+        "causal_turn_id": causal_turn_id,
+        "boot_binding_digest": boot_binding_digest,
+        "task_sha256": task_sha256,
+        "workspace_digest": workspace_digest,
+        "selected_workspace_slots": selected_workspace_slots,
+        "contradiction_state": contradiction_state,
+        "provenance_refs": turn_provenance_refs,
+        "required_zero_mode": required_zero_mode,
+    }
+    _need(sha256_obj(turn_material) == turn_binding_digest, "TURN_BINDING_DIGEST_MISMATCH")
 
     boot = db.execute(
-        """SELECT binding_digest,zero_identity_digest,grf_digest,hyperposition_digest,
-                  bundled_manifest_digest,local_model_digest,tokenizer_digest,jspace_profile_digest,
-                  jacobian_lens_digest,workspace_calibration_digest,boot_source_lock_digest,
+        """SELECT binding_digest,schema,entity_generation,zero_identity_digest,grf_digest,
+                  hyperposition_digest,bundled_manifest_digest,local_model_digest,
+                  tokenizer_digest,jspace_profile_digest,jacobian_lens_digest,
+                  workspace_calibration_digest,boot_source_lock_digest,
                   policy_authority_digest,provenance_refs_json
              FROM mini_cognition_boot_bindings
             WHERE binding_digest=? AND entity_generation=?""",
-        (turn[1], entity_generation),
+        (boot_binding_digest, entity_generation),
     ).fetchone()
     _need(boot is not None, "BOOT_BINDING_UNAVAILABLE")
+
+    stored_boot_digest = _digest(boot[0], "boot_binding_digest")
+    _need(stored_boot_digest == boot_binding_digest, "BOOT_BINDING_REFERENCE_MISMATCH")
+    _need(boot[1] == BOOT_BINDING_SCHEMA, "BOOT_BINDING_SCHEMA_MISMATCH")
+    _need(type(boot[2]) is int and boot[2] == entity_generation, "BOOT_BINDING_GENERATION_MISMATCH")
+
+    boot_values = {
+        "zero_identity_digest": _digest(boot[3], "zero_identity_digest"),
+        "grf_digest": _digest(boot[4], "grf_digest"),
+        "hyperposition_digest": _digest(boot[5], "hyperposition_digest"),
+        "bundled_manifest_digest": _digest(boot[6], "bundled_manifest_digest"),
+        "local_model_digest": _digest(boot[7], "local_model_digest"),
+        "tokenizer_digest": _digest(boot[8], "tokenizer_digest"),
+        "jspace_profile_digest": _digest(boot[9], "jspace_profile_digest"),
+        "jacobian_lens_digest": _digest(boot[10], "jacobian_lens_digest"),
+        "workspace_calibration_digest": _digest(boot[11], "workspace_calibration_digest"),
+        "boot_source_lock_digest": _digest(boot[12], "boot_source_lock_digest"),
+        "policy_authority_digest": _digest(boot[13], "policy_authority_digest"),
+    }
+    boot_provenance_refs = _canonical_refs_json(boot[14], "boot_provenance_refs")
+    _need(bool(boot_provenance_refs), "PROVENANCE_REQUIRED")
+
+    for field_name, object_kind in BOOT_FIELD_KINDS.items():
+        _require_admitted_digest(
+            db,
+            object_kind=object_kind,
+            object_digest=boot_values[field_name],
+            entity_generation=entity_generation,
+        )
+
+    boot_material = {
+        "schema": BOOT_BINDING_SCHEMA,
+        "entity_generation": entity_generation,
+        **boot_values,
+        "provenance_refs": boot_provenance_refs,
+    }
+    _need(sha256_obj(boot_material) == stored_boot_digest, "BOOT_BINDING_DIGEST_MISMATCH")
 
     return {
         "ok": True,
         "schema": SCHEMA,
         "entity_generation": entity_generation,
         "causal_turn_id": causal_turn_id,
-        "turn_binding_digest": turn[0],
-        "boot_binding_digest": boot[0],
-        "task_sha256": turn[2],
-        "workspace_digest": turn[3],
-        "selected_workspace_slots": json.loads(turn[4]),
-        "contradiction_state": turn[5],
-        "turn_provenance_refs": json.loads(turn[6]),
-        "required_zero_mode": turn[7],
-        "zero_identity_digest": boot[1],
-        "grf_digest": boot[2],
-        "hyperposition_digest": boot[3],
-        "bundled_manifest_digest": boot[4],
-        "local_model_digest": boot[5],
-        "tokenizer_digest": boot[6],
-        "jspace_profile_digest": boot[7],
-        "jacobian_lens_digest": boot[8],
-        "workspace_calibration_digest": boot[9],
-        "boot_source_lock_digest": boot[10],
-        "policy_authority_digest": boot[11],
-        "boot_provenance_refs": json.loads(boot[12]),
+        "turn_binding_digest": turn_binding_digest,
+        "boot_binding_digest": stored_boot_digest,
+        "task_sha256": task_sha256,
+        "workspace_digest": workspace_digest,
+        "selected_workspace_slots": selected_workspace_slots,
+        "contradiction_state": contradiction_state,
+        "turn_provenance_refs": turn_provenance_refs,
+        "required_zero_mode": required_zero_mode,
+        **boot_values,
+        "boot_provenance_refs": boot_provenance_refs,
         "authority": {
             "durable_state": "MiniUnifiedDB",
             "candidate_only": True,

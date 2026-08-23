@@ -1,0 +1,80 @@
+{
+  "schema_version": "XENO_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_at_join": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "working_branch": "gpt56sol/go-xeno-entry-grid10-20260823",
+  "program": "ENTITYOS_HCU_XENO",
+  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "track_a": {
+    "name": "XENO_EXECUTABLE_CONVERGENCE",
+    "delta": "first current-facing executable stdin JSON Xeno path from typed ingress to deterministic route result",
+    "entrypoint": "the artefact/Xeno/runtime/xeno_cli_v1.py"
+  },
+  "track_b": {
+    "name": "XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "delta": "typed Xeno Entry Fabric plus reusable deterministic GRID10 logical-cell scheduler with logical cell count separated from physical worker budget",
+    "cross_mode_reuse": [
+      "DIRECT",
+      "XENO_GRID10",
+      "XENO_COGSIM10",
+      "XENO_WM_TEST",
+      "XENO_NESTED_SIM"
+    ]
+  },
+  "hypothesis": "Binding immutable causal event identity before cognition and hashing that event identity into route decisions prevents materially different events from aliasing merely because they choose the same routing result, while preserving deterministic replay of the same event.",
+  "counterhypothesis": "A simpler payload-only or routing-output-only identity is sufficient and full typed event binding adds complexity without improving causal replay/audit reliability.",
+  "cheapest_discriminator": "route two distinct provenance events with identical payload/routing output and compare weak payload-only identity against the proposed immutable event identity; separately replay the same event with a later transport receipt time.",
+  "unusual_experiment": {
+    "count": 1,
+    "id": "PROVENANCE_COLLISION_LESION",
+    "result": "WEAK_PAYLOAD_ONLY_IDENTITY_ALIASED_DISTINCT_SOURCES_WHILE_XENO_EVENT_IDENTITY_DIVERGED",
+    "classification": "MECHANISM_SUPPORTED_EXACT_COMPONENT_BYTES"
+  },
+  "exact_tested_git_blobs": {
+    "the artefact/Xeno/runtime/__init__.py": "855efaf78dafd313945d7612d68a054f7aed0b5b",
+    "the artefact/Xeno/runtime/entry_fabric_v1.py": "4ef980ea287c342ccd656dd4f89c3b52731cf4f0",
+    "the artefact/Xeno/runtime/grid10_runtime_v1.py": "c442513f5406bb808dd95627db99eed89f7e4f59",
+    "the artefact/Xeno/runtime/xeno_cli_v1.py": "a6deceb11754abe1a82360f5855137692a56a41e",
+    "the artefact/Xeno/tests/test_xeno_entry_grid10_v1.py": "1a3be621286842a1c7d40bff70ba22c2f5ce3333"
+  },
+  "isolated_execution": {
+    "surface": "ChatGPT isolated container",
+    "vercel_sandbox_exec_available_in_connected_surface": false,
+    "command": "python -m pytest -q tests/test_xeno_entry_grid10_v1.py",
+    "result": "10 passed in 1.29s",
+    "cli_smoke": "PASS",
+    "cli_smoke_mode": "XENO_GRID10",
+    "cli_smoke_logical_cells": 10,
+    "cli_smoke_physical_worker_budget": 2
+  },
+  "verified_invariants": [
+    "stale generation fails before routing",
+    "same causal event replay with changed received_at preserves event_sha256 and route_decision_sha256 while ingress_id changes",
+    "materially different events selecting the same cells produce different route decision digests",
+    "provenance participates in event identity",
+    "effect_request without explicit capability scope fails closed",
+    "logical GRID10 cell count is reported separately from physical worker budget",
+    "runtime output declares NONE_CANDIDATE_ONLY effect authority"
+  ],
+  "evidence_boundary": "EXACT_COMPONENT_BRANCH_BYTES_EXECUTED_IN_ISOLATED_CONTAINER; NOT_VERCEL_SANDBOX_EVIDENCE; NOT_08B_XCU_INFERENCE; NOT_UNIFIEDDB_INTEGRATION; NOT_EFFECTGATE_EXECUTION; NOT_ENTITYOS_RUNTIME_ACCEPTANCE",
+  "no_runtime_credit_for": [
+    "0.8B model worker execution",
+    "Global J-Space causal use",
+    "world-model accuracy",
+    "nested simulation",
+    "scale-out",
+    "UnifiedDB/MiniUnifiedDB persistence",
+    "EffectGate real effects",
+    "whole EntityOS"
+  ],
+  "next_discriminator": "wire XenoIngressPacket/event_sha256 into the retained HCU reactive router route-decision identity and then into the canonical state admission path; execute exact integration regressions before merging any provider-independence/causal-route claim from PR 1263.",
+  "safety": {
+    "vps_or_self_hosted_testing": false,
+    "production_host_testing": false,
+    "together_api": false,
+    "paid_execution_or_training": false,
+    "secrets_accessed_or_persisted": false
+  }
+}

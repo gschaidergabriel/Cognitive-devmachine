@@ -302,6 +302,74 @@ def _admit_dispatch_turn(
     return result
 
 
+def _reconcile_consumed_autonomy_dispatch_failure(
+    db: UnifiedDB,
+    lifecycle: TurnLifecycle,
+    dispatch: AutonomyDispatch,
+) -> dict[str, Any]:
+    """Return a consumed-but-failed dispatch to the one canonical retry state machine.
+
+    The one-shot transport token is already gone when this runs. A failed admission must
+    therefore never leave the exact controller step ADMITTED for a free redispatch loop.
+    An exact active autonomous turn is aborted first. Unrelated human/other turns are never
+    preempted here. No effect is replayed or reclassified by this compensation path.
+    """
+    active = lifecycle.active()
+    if active is not None:
+        provenance = _active_turn_provenance(db, dispatch.session_id) or {}
+        matches_dispatch = (
+            provenance.get("source") == AUTONOMY_TURN_SOURCE
+            and provenance.get("goal_id") == dispatch.goal_id
+            and provenance.get("autonomy_step_id") == dispatch.step_id
+        )
+        if matches_dispatch:
+            if int(active["generation"]) != int(dispatch.generation):
+                raise TerminalHookError("failed dispatch active turn generation drift")
+            if active["effect_id"] is not None:
+                raise TerminalHookError("failed dispatch admission unexpectedly contains an effect")
+            lifecycle.abort_autonomous(
+                "autonomy_dispatch_admission_failure",
+                dispatch.goal_id,
+                dispatch.step_id,
+            )
+
+    controller = AutonomyController(db)
+    snapshot = controller.snapshot(user_id=dispatch.user_id)
+    goal = next((item for item in snapshot["goals"] if item["goal_id"] == dispatch.goal_id), None)
+    if goal is None:
+        raise TerminalHookError("failed dispatch goal disappeared")
+    if goal.get("session_id") != dispatch.session_id:
+        raise TerminalHookError("failed dispatch goal session drift")
+    if int(goal["generation"]) != int(dispatch.generation):
+        raise TerminalHookError("failed dispatch goal generation drift")
+    step = goal.get("current_step")
+    if not isinstance(step, dict) or step.get("step_id") != dispatch.step_id:
+        raise TerminalHookError("failed dispatch step identity drift")
+    if step.get("status") != "ADMITTED":
+        return {
+            "reconciled": False,
+            "reason": "step_already_terminalized",
+            "goal_id": dispatch.goal_id,
+            "step_id": dispatch.step_id,
+            "status": step.get("status"),
+        }
+
+    result = controller.record_step_failure(
+        dispatch.goal_id,
+        dispatch.step_id,
+        "autonomy_dispatch_admission_failure",
+        expected_generation=dispatch.generation,
+    )
+    return {
+        "reconciled": True,
+        "mode": "canonical_retry_reentry",
+        "goal_id": dispatch.goal_id,
+        "step_id": dispatch.step_id,
+        "status": result["status"],
+        "reason": result["reason"],
+    }
+
+
 def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     if payload.get("hook_event_name") != "UserPromptSubmit":
         raise TerminalHookError("unexpected hook event")
@@ -325,19 +393,7 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
                 result = _admit_dispatch_turn(db, lifecycle, dispatch, claude_session_id)
                 additional_context = _bounded_hook_context(result)
             except Exception:
-                active = lifecycle.active()
-                if active is not None:
-                    provenance = _active_turn_provenance(db, session_id) or {}
-                    if (
-                        provenance.get("source") == AUTONOMY_TURN_SOURCE
-                        and provenance.get("goal_id") == dispatch.goal_id
-                        and provenance.get("autonomy_step_id") == dispatch.step_id
-                    ):
-                        lifecycle.abort_autonomous(
-                            "autonomy_dispatch_post_admission_failure",
-                            dispatch.goal_id,
-                            dispatch.step_id,
-                        )
+                _reconcile_consumed_autonomy_dispatch_failure(db, lifecycle, dispatch)
                 raise
             return {
                 "hookSpecificOutput": {

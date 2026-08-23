@@ -103,12 +103,12 @@ def _verify_outcome_binding(
     role: str,
     credit: str,
 ) -> None:
-    """Require an admitted credited outcome to bind the exact causal training family.
+    """Require an admitted outcome to bind the exact causal training family.
 
     Registry membership alone is not enough: an outcome from another Entry/route/GRID10
-    episode must never be transplantable into this row as reward. This gate validates the
-    minimum causal binding only; it does not mint outcome truth or replace the upstream
-    authority that admitted the receipt.
+    episode must never be transplantable into this row, including UNKNOWN-credit rows.
+    This gate validates the minimum causal binding only; it does not mint outcome truth or
+    replace the upstream authority that admitted the receipt.
     """
     receipt = _mapping(receipt, "admitted_outcome_receipt")
     if _text(receipt.get("status"), "admitted_outcome_receipt.status").upper() != "VERIFIED":
@@ -265,17 +265,16 @@ def admit_for_training_dataset(
         receipt = outcome_registry.get(outcome)
         if receipt is None:
             raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_ADMITTED")
-        if credit != "UNKNOWN":
-            _verify_outcome_binding(
-                receipt,
-                training_sha=training_sha,
-                transition_sha=transition_sha,
-                generation=generation,
-                causal=causal,
-                cell_id=cell_id,
-                role=role,
-                credit=credit,
-            )
+        _verify_outcome_binding(
+            receipt,
+            training_sha=training_sha,
+            transition_sha=transition_sha,
+            generation=generation,
+            causal=causal,
+            cell_id=cell_id,
+            role=role,
+            credit=credit,
+        )
     elif credit != "UNKNOWN":
         raise JSpaceDatasetAdmissionError("NONUNKNOWN_CREDIT_REQUIRES_ADMITTED_OUTCOME_RECEIPT")
 

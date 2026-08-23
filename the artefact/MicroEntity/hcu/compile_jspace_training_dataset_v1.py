@@ -19,6 +19,7 @@ try:
         CanonicalizationError,
         canonicalize,
     )
+    from .jspace_dataset_family_split_v1 import SPLIT_SCHEMA as FAMILY_SPLIT_SCHEMA, split_for_family
     from .jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
     from .jspace_vector_control_v1 import (
         ABI_SCHEMA,
@@ -31,6 +32,7 @@ except ImportError:
         CanonicalizationError,
         canonicalize,
     )
+    from jspace_dataset_family_split_v1 import SPLIT_SCHEMA as FAMILY_SPLIT_SCHEMA, split_for_family
     from jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
     from jspace_vector_control_v1 import (
         ABI_SCHEMA,
@@ -98,17 +100,6 @@ def _poison_sha(value: str) -> str:
     return poisoned
 
 
-def _family_split(trace_family_id: str) -> str:
-    family = _text(trace_family_id, "trace_family_id", max_len=256)
-    digest = _canonical_sha256({"trace_family_id": family}, "TRACE_FAMILY_SPLIT")
-    bucket = int(digest[:2], 16)
-    if bucket < 205:
-        return "train"
-    if bucket < 230:
-        return "validation"
-    return "holdout"
-
-
 def _row(
     kind: str,
     user: dict[str, Any],
@@ -127,6 +118,7 @@ def _row(
             "dataset_schema": DATASET_SCHEMA,
             "trace_schema": TRAINING_TRACE_SCHEMA,
             "trace_canonicalization_schema": CANONICALIZATION_SCHEMA,
+            "family_split_schema": FAMILY_SPLIT_SCHEMA,
             "trace_sha256": trace_sha256,
             "trace_family_id": trace_family_id,
             "family": kind,
@@ -393,7 +385,7 @@ def compile_traces(traces: Iterable[dict[str, Any]]) -> dict[str, list[dict[str,
         if trace_sha in seen_trace_sha:
             continue
         seen_trace_sha.add(trace_sha)
-        out[_family_split(family)].extend(derive_training_examples(trace))
+        out[split_for_family(family)].extend(derive_training_examples(trace))
     if not seen_trace_sha:
         raise TrainingDatasetError("NO_TRAINING_TRACES")
     return out
@@ -419,7 +411,7 @@ def compile_jsonl(input_path: Path, output_dir: Path) -> dict[str, Any]:
         "trace_schema": TRAINING_TRACE_SCHEMA,
         "trace_canonicalization_schema": CANONICALIZATION_SCHEMA,
         "input_trace_count": len(traces),
-        "split_policy": "TRACE_FAMILY_ID_80_10_10",
+        "split_policy": FAMILY_SPLIT_SCHEMA,
         "splits": {},
     }
     for split, rows in compiled.items():

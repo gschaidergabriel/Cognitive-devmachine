@@ -228,6 +228,7 @@ def _verify_admitted_entry(
             current_generation=packet.entity_generation,
             expected_capability_binding_sha256=packet.capability_binding_sha256,
             admitted_capabilities=packet.capabilities,
+            admitted_budget=dict(packet.budget),
         )
     except (EntryFabricError, TypeError, ValueError) as exc:
         raise GridScheduleError("ENTRY_PACKET_SELF_VERIFICATION_FAILED") from exc

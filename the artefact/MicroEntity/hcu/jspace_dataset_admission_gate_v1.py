@@ -30,6 +30,8 @@ class DatasetAdmission:
     role: str
     jspace_basis_id: str
     jspace_basis_sha256: str
+    vector_control_packet_sha256: str
+    vector_control_condition: str
     credit_label: str
     outcome_receipt_sha256: str | None
 
@@ -53,6 +55,14 @@ def _sha256(value: Any, field: str) -> str:
     if value in {"0" * 64, "f" * 64}:
         raise JSpaceDatasetAdmissionError(f"{field}:PLACEHOLDER_SHA256_FORBIDDEN")
     return value
+
+
+def _sha256_ref(value: Any, field: str) -> str:
+    value = _text(value, field)
+    prefix = "sha256:"
+    if not value.startswith(prefix):
+        raise JSpaceDatasetAdmissionError(f"{field}:SHA256_REF_REQUIRED")
+    return _sha256(value[len(prefix):], field)
 
 
 def _generation(value: Any, field: str) -> int:
@@ -138,8 +148,9 @@ def admit_for_training_dataset(
 
     This gate does not mint truth. It only proves that an already-admitted training trace,
     an already-admitted live causal transition trace, and an already-admitted prototype
-    trace refer to the same generation/cell/role/basis and Entry->Route->GRID10 identities.
-    A raw standalone prototype or self-consistent training row is insufficient.
+    trace refer to the same generation/cell/role/basis, exact Vector Control packet/control
+    condition, and Entry->Route->GRID10 identities. A raw standalone prototype or merely
+    self-consistent training row is insufficient.
     """
     training_trace = _mapping(training_trace, "training_trace")
     transition_trace = _mapping(transition_trace, "transition_trace")
@@ -201,6 +212,22 @@ def admit_for_training_dataset(
         },
         "BASIS_SHA256_BINDING",
     )
+    vector_control_packet_sha = _same(
+        {
+            "transition": _sha256_ref(transition_trace.get("jspace_input_vector_ref"), "transition_trace.jspace_input_vector_ref"),
+            "prototype": _sha256(prototype_trace.get("control_packet_identity_sha256"), "prototype_trace.control_packet_identity_sha256"),
+            "training": _sha256(training_trace.get("vector_control_packet_sha256"), "training_trace.vector_control_packet_sha256"),
+        },
+        "VECTOR_CONTROL_PACKET_BINDING",
+    )
+    vector_control_condition = _same(
+        {
+            "transition": _text(transition_trace.get("falsifier_lesion_condition"), "transition_trace.falsifier_lesion_condition"),
+            "prototype": _text(prototype_trace.get("control_condition"), "prototype_trace.control_condition"),
+            "training": _text(training_trace.get("vector_control_condition"), "training_trace.vector_control_condition"),
+        },
+        "VECTOR_CONTROL_CONDITION_BINDING",
+    )
 
     causal = {}
     for field in (
@@ -222,7 +249,13 @@ def admit_for_training_dataset(
     if _text(transition_trace.get("jspace_vector_control_abi"), "transition_trace.jspace_vector_control_abi") != VECTOR_ABI:
         raise JSpaceDatasetAdmissionError("TRANSITION_VECTOR_ABI_UNSUPPORTED")
 
-    credit = _text(training_trace.get("credit_label"), "training_trace.credit_label").upper()
+    credit = _same(
+        {
+            "transition": _text(transition_trace.get("credit_label"), "transition_trace.credit_label").upper(),
+            "training": _text(training_trace.get("credit_label"), "training_trace.credit_label").upper(),
+        },
+        "CREDIT_LABEL_BINDING",
+    )
     if credit not in CREDIT_LABELS:
         raise JSpaceDatasetAdmissionError("CREDIT_LABEL_UNSUPPORTED")
     outcome = training_trace.get("outcome_receipt_sha256")
@@ -260,6 +293,8 @@ def admit_for_training_dataset(
         role=role,
         jspace_basis_id=basis_id,
         jspace_basis_sha256=basis_sha,
+        vector_control_packet_sha256=vector_control_packet_sha,
+        vector_control_condition=vector_control_condition,
         credit_label=credit,
         outcome_receipt_sha256=outcome,
     )

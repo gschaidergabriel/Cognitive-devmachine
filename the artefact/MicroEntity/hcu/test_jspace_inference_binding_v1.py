@@ -12,6 +12,7 @@ from inference_receipt_v1 import (
 from jspace_inference_binding_v1 import (
     JSpaceInferenceBindingError,
     bind_training_trace_to_inference,
+    grid10_model_call_id,
     validate_binding,
 )
 from jspace_training_trace_v1 import build_training_trace
@@ -26,12 +27,7 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
             CellContribution("world.0", "world", (0.8, 0.1, -0.2), 0.8, 0.1, 0.2, 0.2, 0.1),
             CellContribution("critic.0", "critic", (-0.3, 0.9, 0.4), 0.2, 0.95, 0.7, 0.1, 0.1),
         ]
-        return step(
-            cells,
-            generation=7,
-            basis_id="basis:7",
-            basis_sha256=BASIS_SHA256,
-        )
+        return step(cells, generation=7, basis_id="basis:7", basis_sha256=BASIS_SHA256)
 
     def training_trace(self):
         proto = self.prototype()
@@ -79,7 +75,11 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
             "engine_load_lease_sha256": "b" * 64,
             "engine_load_consumption_receipt_sha256": "c" * 64,
             "engine_load_loader_id": "loader:1",
-            "model_call_id": "call:1",
+            "model_call_id": grid10_model_call_id(
+                grid_plan_sha256=trace.grid_plan_sha256,
+                cell_id=trace.cell_id,
+                role=trace.role,
+            ),
             "output_ref": "unifieddb:model-output:1",
             "output_sha256": "d" * 64,
             "output_size": 123,
@@ -98,6 +98,7 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
         self.assertEqual(binding.engine_load_consumption_receipt_sha256, "c" * 64)
         self.assertEqual(binding.output_sha256, "d" * 64)
         self.assertEqual(binding.role, trace.role)
+        self.assertEqual(binding.model_call_id, receipt.model_call_id)
 
     def test_crossbound_generation_entry_and_route_fail_closed(self):
         trace = self.training_trace()
@@ -119,6 +120,24 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(
             JSpaceInferenceBindingError,
             "INFERENCE_MODEL_LANE_DOES_NOT_BIND_TRACE_ROLE",
+        ):
+            bind_training_trace_to_inference(trace, receipt)
+
+    def test_grid10_cell_call_relabel_poison_fails_closed(self):
+        trace = self.training_trace()
+        wrong_cell_call = grid10_model_call_id(
+            grid_plan_sha256=trace.grid_plan_sha256,
+            cell_id="cell-relabeled",
+            role=trace.role,
+        )
+        receipt = self.inference_receipt(
+            trace,
+            model_lanes=(trace.role, "world"),
+            model_call_id=wrong_cell_call,
+        )
+        with self.assertRaisesRegex(
+            JSpaceInferenceBindingError,
+            "INFERENCE_GRID10_MODEL_CALL_BINDING_MISMATCH",
         ):
             bind_training_trace_to_inference(trace, receipt)
 

@@ -186,37 +186,46 @@ def bind_existing_turn(
     provenance_refs: list[str],
     required_zero_mode: str,
 ) -> dict[str, Any]:
-    """Retry an already allocated event without allocating a second causal identity."""
+    """Retry an already allocated event atomically without allocating a second identity."""
     live = _live_generation(db)
+    _need(type(entity_generation) is int and not isinstance(entity_generation, bool)
+          and entity_generation >= 0, "GENERATION_INVALID")
     _need(entity_generation == live, "STALE_GENERATION")
-    install_schema(db)
-    row = _allocated_row(
-        db, entity_generation=entity_generation, causal_turn_id=causal_turn_id
-    )
-    _need(row is not None, "CAUSAL_TURN_NOT_ALLOCATED")
-    _need(row[1] == SCHEMA and row[2] == entity_generation and row[3] == causal_turn_id,
-          "CAUSAL_TURN_ALLOCATION_CORRUPT")
-    bound = cognition_store.bind_turn(
-        db,
-        entity_generation=entity_generation,
-        causal_turn_id=causal_turn_id,
-        boot_binding_digest=boot_binding_digest,
-        task_text=task_text,
-        workspace_digest=workspace_digest,
-        selected_workspace_slots=selected_workspace_slots,
-        contradiction_state=contradiction_state,
-        provenance_refs=provenance_refs,
-        required_zero_mode=required_zero_mode,
-    )
-    return {
-        **bound,
-        "causal_turn_id": causal_turn_id,
-        "allocation_id": int(row[0]),
-        "allocation_schema": SCHEMA,
-        "new_causal_event": False,
-        "authority": "MINIUNIFIEDDB_IDENTITY_ONLY",
-        "runtime_credit": "ZERO",
-    }
+
+    caller_owns_transaction = _begin_atomic(db)
+    try:
+        install_schema(db)
+        row = _allocated_row(
+            db, entity_generation=entity_generation, causal_turn_id=causal_turn_id
+        )
+        _need(row is not None, "CAUSAL_TURN_NOT_ALLOCATED")
+        _need(row[1] == SCHEMA and row[2] == entity_generation and row[3] == causal_turn_id,
+              "CAUSAL_TURN_ALLOCATION_CORRUPT")
+        bound = cognition_store.bind_turn(
+            db,
+            entity_generation=entity_generation,
+            causal_turn_id=causal_turn_id,
+            boot_binding_digest=boot_binding_digest,
+            task_text=task_text,
+            workspace_digest=workspace_digest,
+            selected_workspace_slots=selected_workspace_slots,
+            contradiction_state=contradiction_state,
+            provenance_refs=provenance_refs,
+            required_zero_mode=required_zero_mode,
+        )
+        _finish_atomic(db, caller_owns_transaction)
+        return {
+            **bound,
+            "causal_turn_id": causal_turn_id,
+            "allocation_id": int(row[0]),
+            "allocation_schema": SCHEMA,
+            "new_causal_event": False,
+            "authority": "MINIUNIFIEDDB_IDENTITY_ONLY",
+            "runtime_credit": "ZERO",
+        }
+    except Exception:
+        _abort_atomic(db, caller_owns_transaction)
+        raise
 
 
 __all__ = [

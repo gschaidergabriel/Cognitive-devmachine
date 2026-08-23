@@ -4,8 +4,11 @@ import hashlib
 import json
 import os
 import shutil
+import stat
 import subprocess
+import tempfile
 import threading
+from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
@@ -36,10 +39,12 @@ class ClaudeCodeInference:
 
     Cognition runs with all built-in tools disabled, MCP configuration fail-closed,
     no Claude session persistence, no Claude-side durable memory inputs, and an
-    explicit environment allowlist. HOME is retained so Claude subscription/OAuth
-    credentials remain usable. UnifiedDB / WorldAssembler remains the sole durable
-    ClayVerse state authority. Claude may return a schema-validated effect intent,
-    but only EffectGate can execute it.
+    explicit environment allowlist. Each targeted inference uses a temporary HOME
+    and Claude config directory; when no explicit inference credential is supplied,
+    only the bounded Claude credential file is copied into that temporary config.
+    UnifiedDB / WorldAssembler remains the sole durable ClayVerse state authority.
+    Claude may return a schema-validated effect intent, but only EffectGate can
+    execute it.
     """
 
     ENV_ALLOWLIST = (
@@ -47,7 +52,9 @@ class ClaudeCodeInference:
         "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS",
         "HTTP_PROXY", "HTTPS_PROXY",
         "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
+        "CLAUDE_CODE_OAUTH_TOKEN",
     )
+    MAX_CREDENTIAL_BYTES = 1_000_000
 
     def __init__(self, binary: str | None = None, cwd: str | None = None, timeout: int | None = None):
         self.binary = binary or os.environ.get("CLAUDE_CODE_BIN", "claude")
@@ -56,14 +63,70 @@ class ClaudeCodeInference:
         self._lock = threading.Lock()
 
     @classmethod
-    def _subprocess_env(cls) -> dict[str, str]:
+    def _subprocess_env(cls, *, home_override: str | None = None) -> dict[str, str]:
         env = {key: os.environ[key] for key in cls.ENV_ALLOWLIST if key in os.environ}
         env.setdefault("PATH", "/usr/local/bin:/usr/bin:/bin")
+        if home_override is not None:
+            env["HOME"] = home_override
+            env["CLAUDE_CONFIG_DIR"] = str(Path(home_override) / ".claude")
         env["DISABLE_AUTOUPDATER"] = "1"
         env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] = "1"
         env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
         env["CLAUDE_CODE_DISABLE_CLAUDE_MDS"] = "1"
         return env
+
+    @classmethod
+    def _seed_ephemeral_credentials(cls, temp_home: str) -> None:
+        """Copy only bounded ambient Claude credentials into the isolated config.
+
+        Explicit API/OAuth environment credentials take precedence and require no
+        ambient credential-file copy. Secret bytes never enter logs or receipts.
+        """
+        if any(
+            os.environ.get(key, "").strip()
+            for key in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN")
+        ):
+            return
+
+        source_config = os.environ.get("CLAUDE_CONFIG_DIR", "").strip()
+        if source_config:
+            source = Path(source_config) / ".credentials.json"
+        else:
+            source_home = os.environ.get("HOME", "").strip()
+            if not source_home:
+                return
+            source = Path(source_home) / ".claude" / ".credentials.json"
+
+        try:
+            flags = os.O_RDONLY
+            if hasattr(os, "O_NOFOLLOW"):
+                flags |= os.O_NOFOLLOW
+            fd = os.open(source, flags)
+        except FileNotFoundError:
+            return
+        except OSError as exc:
+            raise RuntimeError("Claude credential source is not safely readable") from exc
+
+        try:
+            st = os.fstat(fd)
+            if not stat.S_ISREG(st.st_mode) or st.st_size > cls.MAX_CREDENTIAL_BYTES:
+                raise RuntimeError("Claude credential source is not a bounded regular file")
+            with os.fdopen(fd, "rb", closefd=False) as handle:
+                data = handle.read(cls.MAX_CREDENTIAL_BYTES + 1)
+            if len(data) > cls.MAX_CREDENTIAL_BYTES:
+                raise RuntimeError("Claude credential source exceeds bound")
+        finally:
+            os.close(fd)
+
+        target_dir = Path(temp_home) / ".claude"
+        target_dir.mkdir(mode=0o700, parents=False, exist_ok=False)
+        target = target_dir / ".credentials.json"
+        out_fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        try:
+            with os.fdopen(out_fd, "wb", closefd=False) as handle:
+                handle.write(data)
+        finally:
+            os.close(out_fd)
 
     def available(self) -> bool:
         executable = shutil.which(self.binary)
@@ -96,16 +159,21 @@ class ClaudeCodeInference:
         args = [
             self.binary, "-p", prompt, "--output-format", "json", "--json-schema", schema,
             "--max-turns", "1", "--permission-mode", "plan", "--tools", "",
-            "--strict-mcp-config", "--no-session-persistence", "--append-system-prompt", system,
+            "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence",
+            "--append-system-prompt", system,
         ]
         with self._lock:
-            try:
-                cp = subprocess.run(
-                    args, shell=False, cwd=self.cwd, env=self._subprocess_env(),
-                    capture_output=True, text=True, timeout=self.timeout, check=False,
-                )
-            except subprocess.TimeoutExpired as exc:
-                raise RuntimeError("Claude Code inference timeout") from exc
+            with tempfile.TemporaryDirectory(prefix="clay-claude-home-") as temp_home:
+                os.chmod(temp_home, 0o700)
+                self._seed_ephemeral_credentials(temp_home)
+                try:
+                    cp = subprocess.run(
+                        args, shell=False, cwd=self.cwd,
+                        env=self._subprocess_env(home_override=temp_home),
+                        capture_output=True, text=True, timeout=self.timeout, check=False,
+                    )
+                except subprocess.TimeoutExpired as exc:
+                    raise RuntimeError("Claude Code inference timeout") from exc
         if cp.returncode != 0:
             stderr = cp.stderr.encode("utf-8", errors="replace")
             raise RuntimeError(

@@ -1,0 +1,98 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "ede710408a096c4c797dc5721a9681c1851ea80d",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; USER_MESSAGE_TIMESTAMP_AVAILABLE_ONLY_TO_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_donor_lane_created": false,
+    "duplicate_executor_lane_created": false,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_observed_before_receipt": "70a8fe870d1f8a9ec16f5c9157b227ed93161ddc",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed_before_receipt": "59cba62d149f0178ac51eb720dfc96c2a975a666"
+  },
+  "observed_problem": {
+    "classification": "JSPACE_DATASET_FAMILY_SPLIT_SUCCESSOR_SCHEMA_AND_CONTROL_PROVENANCE_GAP",
+    "dataset_admission_gate_schema": "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2",
+    "family_split_prior_schema": "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1",
+    "missing_successor_bindings": [
+      "prototype_trace_sha256",
+      "vector_control_packet_sha256",
+      "vector_control_condition"
+    ],
+    "risk": "A schema-only successor repair would permit DatasetAdmission-v2 control/prototype provenance to be accepted by the family-split boundary without re-binding those successor fields to the exact TrainingTrace."
+  },
+  "parallel_fusion": {
+    "observed_parallel_schema_fix_commit": "938a1b651edbe45ac9b8689dc9bf5cc8a08799f7",
+    "schema_fix": "Family split imports ADMISSION_SCHEMA from the canonical jspace_dataset_admission_gate_v1 producer instead of hard-coding v1.",
+    "conflict_behavior": "Two attempted test-file updates returned GitHub 409 after parallel workers changed the same file; no force update or stale overwrite was used.",
+    "current_test_snapshot_observed": "30a097c1d9af6f7a2e1d11100fd5a5750c5c141e",
+    "current_test_blob_observed": "8926e36ef8e274cc8564ba5cc6c4de766d7d44d6"
+  },
+  "write": {
+    "source_commit": "cd4c84badf45b723bce9ff33d1da4e3a2c0e25ad",
+    "source_blob": "ca8d0d7aae91504cf17effc7762857f9f8426279",
+    "path": "the artefact/MicroEntity/hcu/jspace_dataset_family_split_v1.py",
+    "delta": [
+      "Preserve successor-dynamic canonical DatasetAdmission schema import.",
+      "Bind TrainingTrace prototype_trace_sha256 to DatasetAdmission prototype_trace_sha256.",
+      "Bind TrainingTrace vector_control_packet_sha256 to DatasetAdmission vector_control_packet_sha256.",
+      "Bind TrainingTrace vector_control_condition to DatasetAdmission vector_control_condition.",
+      "Fail closed on any mismatch without creating truth, reward, model, effect or runtime authority."
+    ]
+  },
+  "regression": {
+    "surface": "LOCAL_DETERMINISTIC_UNIT_RECONSTRUCTION_NOT_ADMITTED_ENTITYOS_RUNTIME",
+    "command": "python3 -m unittest -v test_jspace_dataset_family_split_v1.py",
+    "observed_test_count": 11,
+    "result": "PASS",
+    "scope": "SOURCE_UNIT_ONLY",
+    "runtime_credit_change": 0
+  },
+  "finding": {
+    "classification": "JSPACE_DATASET_FAMILY_SPLIT_V2_CONTROL_PROVENANCE_CLOSURE",
+    "observed": [
+      "The canonical DatasetAdmission producer is v2 while the earlier family splitter was pinned to v1.",
+      "DatasetAdmission v2 carries prototype-trace identity, Vector-Control packet identity and control condition in addition to the prior causal fields.",
+      "The retained donor family-split source now imports the canonical admission schema and rejects prototype, Vector-Control packet and control-condition transplants.",
+      "Parallel updates added successor-schema and transplant regressions; stale writes were rejected by GitHub 409 and were not forced.",
+      "PR810 remains a separate executor lane pinned to immutable donor snapshot 511d568932bf47828679e3ca6ba05650f18d284d for its current fixed runtime candidate; newer donor semantics are not projected into that older execution identity."
+    ],
+    "inference": "The leak-resistant family-split boundary can now consume the current DatasetAdmission-v2 evidence shape without dropping the J-Space control/prototype provenance needed to distinguish baseline and causal-control trace families. This strengthens training-data readiness but does not establish model causality or runtime/training credit.",
+    "counterhypothesis": "Dynamically importing the v2 schema alone would be sufficient because DatasetAdmission had already validated the trace upstream.",
+    "counterhypothesis_rejection": "Family splitting is a separate downstream admission boundary that already re-binds exact TrainingTrace fields to prevent post-admission relabeling. Omitting v2-only prototype/vector/control fields would create an inconsistent trust boundary in which older fields are re-bound but successor control provenance is not."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: closed a current retained-donor source incompatibility without creating a new donor/executor lane or churning the quota-blocked fixed executor.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: preserved the existing Entry/route/GRID causal bindings and extended the downstream typed causal boundary to exact prototype and Vector-Control identities/condition.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: DatasetAdmission-v2 material can reach the leak-resistant family-split boundary while prototype/control packet/control-condition transplants fail closed; deterministic unit reconstruction is 11/11 PASS."
+  },
+  "execution_evidence_boundary": {
+    "vercel_sandbox_invoked_by_this_organ": false,
+    "pr810_exact_current_head_runtime_observed": false,
+    "model_executor_runtime_observed": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Research main and retained donor are moving rapidly under parallel organs. This append-only exact-SHA receipt preserves the bounded delta without overwriting a moving current-facing artefact README snapshot."
+  },
+  "next_exact_gate": "Refresh current main plus live PR1263/PR810 heads. Do not infer runtime credit from the moving donor. When a naturally available included-tier Vercel deployment exactly matches the then-current PR810 head, invoke only its fixed FREE_ONLY source/hash-bound route and keep any PASS component-scoped. After that discriminator, explicitly choose one immutable newer donor snapshot if rebinding is warranted so current J-Space control and DatasetAdmission/family-split fences enter the runtime closure. Continue deterministic hard-negative/family-split readiness, and require real zero-cost local approximately-0.8B loader/model-executor I/O bound to verified loader consumption plus canonical MiniUnifiedDB ModelExecution admission before J-Space model-runtime credit."
+}

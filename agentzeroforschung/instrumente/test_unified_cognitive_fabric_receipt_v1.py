@@ -62,8 +62,8 @@ def valid_receipt() -> dict:
             "adapter_contract_digest": _h("e"),
             "local_activation_access": False,
             "external_hidden_state_claimed": False,
-            "inference_packet_digest": _h("f"),
-            "candidate_result_digest": _h("0"),
+            "inference_packet_digest": _h("e"),
+            "candidate_result_digest": _h("1"),
         },
         "validation": {
             "decision": "REJECT_CANDIDATE",
@@ -131,6 +131,50 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
             candidate_attempted_direct_state_mutation=True,
         )
         self.assertIn("DIRECT_AUTHORITY_ATTEMPT_ACCEPTED", validate_receipt(receipt))
+
+    def test_placeholder_runtime_identities_fail_closed(self) -> None:
+        base = valid_receipt()
+        poisons: dict[str, tuple[dict, str]] = {}
+
+        r = copy.deepcopy(base)
+        r["source"]["commit"] = "0" * 40
+        poisons["zero_source_commit"] = (r, "SOURCE_COMMIT_PLACEHOLDER")
+
+        r = copy.deepcopy(base)
+        r["source"]["tree"] = "f" * 40
+        poisons["f_source_tree"] = (r, "SOURCE_TREE_PLACEHOLDER")
+
+        r = copy.deepcopy(base)
+        r["identity"]["zero_digest"] = _h("0")
+        poisons["zero_identity_digest"] = (r, "DIGEST_PLACEHOLDER:identity.zero_digest")
+
+        r = copy.deepcopy(base)
+        r["inference"]["candidate_result_digest"] = _h("f")
+        poisons["candidate_result_placeholder"] = (
+            r,
+            "DIGEST_PLACEHOLDER:inference.candidate_result_digest",
+        )
+
+        r = copy.deepcopy(base)
+        r["inference"].update(
+            engine_class="BUNDLED_08B",
+            jspace_mode="FULL_LOCAL_LATENT",
+            local_activation_access=True,
+        )
+        r["fabric"]["intervention"] = {
+            "executed": True,
+            "implementation_digest": _h("0"),
+            "calibration_digest": _h("4"),
+        }
+        poisons["intervention_implementation_placeholder"] = (
+            r,
+            "INTERVENTION_IMPLEMENTATION_DIGEST_PLACEHOLDER",
+        )
+
+        self.assertEqual(len(poisons), 5)
+        for name, (receipt, expected_error) in poisons.items():
+            with self.subTest(poison=name):
+                self.assertIn(expected_error, validate_receipt(receipt))
 
     def test_authority_alias_poison_regression_v1(self) -> None:
         """Deterministic adversarial regression; not an unusual-experiment slot claim."""

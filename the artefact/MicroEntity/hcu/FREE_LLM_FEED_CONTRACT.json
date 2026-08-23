@@ -1,7 +1,21 @@
 {
-  "schema_version": "HCU_FREE_LLM_FEED/v1",
-  "status": "SOURCE_CONTRACT",
-  "purpose": "Continuously provide provenance-bound candidate information and hypotheses to the Mini Entity HCU from the existing FREE_ONLY provider/token pool.",
+  "schema_version": "HCU_FREE_LLM_FEED/v2",
+  "status": "OWNER_DIRECTED_SOURCE_CONTRACT",
+  "purpose": "Optional FREE_ONLY external worker/candidate feed for unresolved questions; external providers are never required internal HCU cognition.",
+  "cognitive_independence": {
+    "required_for_hcu_boot": false,
+    "required_for_world_model_continuity": false,
+    "required_for_semantic_retrieval": false,
+    "required_for_zero_projection": false,
+    "provider_embedding_dependency": false,
+    "provider_role": "WORKER_OR_TARGETED_FALLBACK_CANDIDATE_ONLY"
+  },
+  "provider_examples": {
+    "nvidia": "WORKER_OR_OPTIONAL_CANDIDATE_ONLY",
+    "mistral": "WORKER_OR_OPTIONAL_CANDIDATE_ONLY",
+    "groq": "WORKER_OR_OPTIONAL_CANDIDATE_ONLY",
+    "claude_code": "PREFERRED_TARGETED_HIGH_CAPABILITY_CANDIDATE_INFERENCE"
+  },
   "input_packet": {
     "required": [
       "feed_request_id",
@@ -18,7 +32,8 @@
       "plaintext_api_token",
       "secret_value",
       "unbounded_host_command",
-      "direct_effect_capability"
+      "direct_effect_capability",
+      "canonical_truth_claim"
     ]
   },
   "admission_pipeline": [
@@ -30,13 +45,13 @@
     "correlated_source_warning",
     "conflict_and_counterevidence_linking",
     "MiniUnifiedDB_candidate_write",
-    "HCU_scheduler_notification"
+    "reactive_HCU_scheduler_notification"
   ],
   "truth_law": {
     "provider_output_is_truth": false,
     "provider_consensus_is_truth": false,
     "repetition_is_independent_evidence": false,
-    "canonical_promotion_requires": "normal Mini Entity evidence/admission rules"
+    "canonical_promotion_requires": "normal Mini Entity evidence/falsification/admission rules"
   },
   "budget_policy": {
     "mode": "FREE_ONLY",

@@ -148,19 +148,15 @@ class TerminalSessionManager:
 
     def _mcp_env(self, binding: TerminalBinding) -> dict[str, str]:
         enable_entityos = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
-        env = {
+        return {
             "PYTHONPATH": "/opt/clayverse",
             "CLAYVERSE_STATE_ROOT": str(self.state_root),
             "CLAYVERSE_USER_ID": binding.user_id,
             "CLAYVERSE_SESSION_ID": binding.session_id,
+            # Runtime may choose only whether the image-owned EntityOS substrate is
+            # enabled. Path/digest authority never crosses the terminal/MCP env.
             "CLAYVERSE_ENABLE_ENTITYOS_EXEC": "1" if enable_entityos else "0",
         }
-        if enable_entityos:
-            for key in ("CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256"):
-                value = os.environ.get(key, "").strip()
-                if value:
-                    env[key] = value
-        return env
 
     def _write_mcp_config(self, binding: TerminalBinding) -> None:
         """Diagnostic-only mirror; never a product MCP authority.
@@ -239,11 +235,7 @@ class TerminalSessionManager:
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]
         mcp_env = self._mcp_env(binding)
-        effect_env = [
-            f"{key}={mcp_env[key]}"
-            for key in ("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256")
-            if key in mcp_env
-        ]
+        effect_env = [f"CLAYVERSE_ENABLE_ENTITYOS_EXEC={mcp_env['CLAYVERSE_ENABLE_ENTITYOS_EXEC']}"]
         env_argv = [
             "env",
             "-i",

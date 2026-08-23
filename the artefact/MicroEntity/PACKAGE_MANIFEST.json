@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "package": "MicroEntity",
   "root": "the artefact/MicroEntity",
   "snapshot": "MICROENTITY_CURRENT.zip",
@@ -17,11 +17,23 @@
     "authority": "MiniUnifiedDB",
     "effect_authority": "EffectGate"
   },
+  "snapshot_rebuilder": {
+    "tool": "rebuild_snapshot.py",
+    "tests": "test_rebuild_snapshot.py",
+    "receipt": "receipts/2026-08-23_GO_MICROENTITY_SNAPSHOT_REBUILDER_GPT56SOL.json",
+    "determinism": "fixed ZIP timestamp + manifest order + deflate level 9",
+    "verification": "exact member set/order + CRC + archive SHA-256 + Git blob SHA + member SHA-256",
+    "write_mode": "atomic replace",
+    "authority": "ARTIFACT_TOOL_ONLY_NOT_RUNTIME_OR_TRUTH_AUTHORITY"
+  },
   "archive_members_required": [
     "CURRENT_PRODUCT_CONSOLIDATED.md",
     "PACKAGE_MANIFEST.json",
     "README.md",
     "ZERO_LINK.md",
+    "rebuild_snapshot.py",
+    "test_rebuild_snapshot.py",
+    "receipts/2026-08-23_GO_MICROENTITY_SNAPSHOT_REBUILDER_GPT56SOL.json",
     "hcu/README.md",
     "hcu/HCU_ARCHITECTURE.md",
     "hcu/topology.kvm4.json",
@@ -33,7 +45,8 @@
   ],
   "generated_hcu_data_policy": "include non-secret release artefacts/receipts and privacy-filtered exports; operational state remains canonical in MiniUnifiedDB",
   "capacity_claim_policy": "planning targets remain non-runtime; numeric runtime capacity requires exact authorized-isolated measurement receipt",
+  "snapshot_promotion_policy": "snapshot remains quarantined until rebuilt from this exact manifest and all 15 members, CRC-verified, and bound by PACKAGE_ARTIFACT_RECEIPT/v1 to source head/tree plus archive SHA-256 and Git blob SHA",
   "secrets_in_archive": false,
-  "source_base_head": "77582d2f78b4907f8f1249621ad2fe4725014ba7",
-  "claim_class": "SOURCE_PACKAGE_PLUS_CAPACITY_GUARD_COMPONENT_EVIDENCE_NOT_RUNTIME_FIT"
+  "source_base_head": "10c372e4cbf089756aee53bda56628743c068968",
+  "claim_class": "SOURCE_PACKAGE_PLUS_HCU_CAPACITY_GUARD_PLUS_DETERMINISTIC_REBUILDER_COMPONENT_EVIDENCE_NOT_RUNTIME_FIT"
 }

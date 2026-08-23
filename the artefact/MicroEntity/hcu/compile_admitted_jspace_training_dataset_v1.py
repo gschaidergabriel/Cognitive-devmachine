@@ -10,8 +10,10 @@ admission registry.
 
 A self-consistent JSpaceInferenceBinding is therefore necessary but not sufficient. This
 module rejects "binding-only" evidence laundering where a caller re-hashes a plausible
-binding around invented inference provenance. It mints no truth, model authority, effect
-authority, runtime credit, or paid-training permission.
+binding around invented inference provenance. Serious train/validation/holdout ownership is
+also derived from admitted upstream causal ancestry, never from the caller-controlled
+``trace_family_id`` label alone. It mints no truth, model authority, effect authority,
+runtime credit, or paid-training permission.
 """
 from __future__ import annotations
 
@@ -33,6 +35,7 @@ try:
         JSpaceDatasetAdmissionError,
         admit_for_training_dataset,
     )
+    from .jspace_dataset_family_split_v1 import split_for_family
     from .jspace_inference_binding_v1 import (
         SCHEMA as INFERENCE_BINDING_SCHEMA,
         JSpaceInferenceBinding,
@@ -54,6 +57,7 @@ except ImportError:
         JSpaceDatasetAdmissionError,
         admit_for_training_dataset,
     )
+    from jspace_dataset_family_split_v1 import split_for_family
     from jspace_inference_binding_v1 import (
         SCHEMA as INFERENCE_BINDING_SCHEMA,
         JSpaceInferenceBinding,
@@ -63,6 +67,7 @@ except ImportError:
     from jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
 
 PIPELINE_SCHEMA = "ENTITYOS_HCU_ADMITTED_JSPACE_TRAINING_PIPELINE/v1"
+CAUSAL_FAMILY_SCHEMA = "ENTITYOS_HCU_JSPACE_CAUSAL_FAMILY/v1"
 
 
 class AdmittedTrainingDatasetError(ValueError):
@@ -86,6 +91,8 @@ class PipelineEvidence:
     grid_plan_sha256: str
     cell_id: str
     role: str
+    declared_trace_family_id: str
+    causal_family_sha256: str
     credit_label: str
     outcome_receipt_sha256: str | None
 
@@ -138,6 +145,27 @@ def _canonical_sha256(value: Any, field: str) -> str:
         return hashlib.sha256(canonicalize(value)).hexdigest()
     except CanonicalizationError as exc:
         raise AdmittedTrainingDatasetError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
+
+
+def _derive_causal_family_sha256(*, generation: int, causal: Mapping[str, str]) -> str:
+    """Derive dataset-family authority only from admitted pre-control causal ancestry.
+
+    Cell/role/basis/vector/outcome fields are deliberately excluded: baseline, lesion,
+    shuffle, role-swap, rescue, and other counterfactual descendants of the same admitted
+    Entry -> route -> GRID plan must remain in one dataset split even when those downstream
+    properties differ. The digest is partition plumbing only, never canonical EntityOS state.
+    """
+    return _canonical_sha256(
+        {
+            "schema": CAUSAL_FAMILY_SCHEMA,
+            "generation": generation,
+            "entry_event_sha256": causal["entry_event_sha256"],
+            "entry_admission_sha256": causal["entry_admission_sha256"],
+            "route_decision_sha256": causal["route_decision_sha256"],
+            "grid_plan_sha256": causal["grid_plan_sha256"],
+        },
+        "JSPACE_CAUSAL_FAMILY",
+    )
 
 
 def _normalize_admitted_inference_receipt(value: Any) -> dict[str, Any]:
@@ -324,6 +352,16 @@ def validate_pipeline_evidence(
         "VECTOR_CONTROL_PACKET_BINDING",
     )
 
+    declared_trace_family_id = _text(
+        training_trace.get("trace_family_id"),
+        "training_trace.trace_family_id",
+        max_len=256,
+    )
+    causal_family_sha256 = _derive_causal_family_sha256(
+        generation=generation,
+        causal=causal,
+    )
+
     credit_label = _same(
         {
             "trace": _text(training_trace.get("credit_label"), "training_trace.credit_label", max_len=32).upper(),
@@ -359,6 +397,8 @@ def validate_pipeline_evidence(
         grid_plan_sha256=causal["grid_plan_sha256"],
         cell_id=cell_id,
         role=role,
+        declared_trace_family_id=declared_trace_family_id,
+        causal_family_sha256=causal_family_sha256,
         credit_label=credit_label,
         outcome_receipt_sha256=trace_outcome,
     )
@@ -368,7 +408,9 @@ def _annotate_rows(
     compiled: Mapping[str, list[dict[str, Any]]],
     evidence: PipelineEvidence,
 ) -> dict[str, list[dict[str, Any]]]:
+    """Annotate and repartition lower-level rows using admitted causal-family authority."""
     out = {"train": [], "validation": [], "holdout": []}
+    causal_split = split_for_family(evidence.causal_family_sha256)
     evidence_metadata = {
         "pipeline_schema": evidence.schema,
         "dataset_admission_transition_trace_sha256": evidence.transition_trace_sha256,
@@ -377,25 +419,42 @@ def _annotate_rows(
         "inference_receipt_sha256": evidence.inference_receipt_sha256,
         "engine_load_consumption_receipt_sha256": evidence.engine_load_consumption_receipt_sha256,
         "model_output_sha256": evidence.output_sha256,
+        "declared_trace_family_id": evidence.declared_trace_family_id,
+        "causal_family_schema": CAUSAL_FAMILY_SCHEMA,
+        "causal_family_sha256": evidence.causal_family_sha256,
+        "causal_family_split": causal_split,
     }
-    for split in out:
-        rows = compiled.get(split)
+    for declared_split in out:
+        rows = compiled.get(declared_split)
         if not isinstance(rows, list):
-            raise AdmittedTrainingDatasetError(f"LOWER_LEVEL_COMPILER_SPLIT_INVALID:{split}")
+            raise AdmittedTrainingDatasetError(f"LOWER_LEVEL_COMPILER_SPLIT_INVALID:{declared_split}")
         for row in rows:
             if not isinstance(row, dict) or not isinstance(row.get("metadata"), dict):
                 raise AdmittedTrainingDatasetError("LOWER_LEVEL_COMPILER_ROW_INVALID")
+            metadata = dict(row["metadata"])
+            row_family = metadata.get("trace_family_id")
+            if row_family is not None and _text(
+                row_family,
+                "lower_level.metadata.trace_family_id",
+                max_len=256,
+            ) != evidence.declared_trace_family_id:
+                raise AdmittedTrainingDatasetError("LOWER_LEVEL_COMPILER_TRACE_FAMILY_MISMATCH")
             copied = dict(row)
-            copied["metadata"] = {**dict(row["metadata"]), **evidence_metadata}
-            out[split].append(copied)
+            copied["metadata"] = {
+                **metadata,
+                **evidence_metadata,
+                "declared_family_split": declared_split,
+            }
+            out[causal_split].append(copied)
     return out
 
 
-def _evidence_identity(evidence: PipelineEvidence) -> tuple[str, str, str]:
+def _evidence_identity(evidence: PipelineEvidence) -> tuple[str, str, str, str]:
     return (
         evidence.transition_trace_sha256,
         evidence.inference_binding_sha256,
         evidence.inference_receipt_sha256,
+        evidence.causal_family_sha256,
     )
 
 
@@ -413,7 +472,7 @@ def compile_admitted_records(
 ) -> dict[str, list[dict[str, Any]]]:
     """Compile only traces with external basis, trace, GRID, binding, and receipt admission."""
     out = {"train": [], "validation": [], "holdout": []}
-    seen: dict[str, tuple[str, str, str]] = {}
+    seen: dict[str, tuple[str, str, str, str]] = {}
     admitted_grid_plans = _mapping(admitted_grid_plans, "admitted_grid_plans")
     admitted_inference_bindings = _mapping(admitted_inference_bindings, "admitted_inference_bindings")
     admitted_inference_receipts = _mapping(admitted_inference_receipts, "admitted_inference_receipts")

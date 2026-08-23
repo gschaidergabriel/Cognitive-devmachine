@@ -105,8 +105,12 @@ spec:
               value: /workspace
             - name: CLAYVERSE_REQUIRE_CLAUDE
               value: "1"
+            # EntityOS execution is an optional, separately admitted capability.
+            # Keep the reference final-deployment profile fail-closed. A target
+            # deployment may enable it only after binding exact accepted embedded
+            # EntityOS evidence and the explicit capability admission contract.
             - name: CLAYVERSE_ENABLE_ENTITYOS_EXEC
-              value: "1"
+              value: "0"
             - name: CLAYVERSE_ENTITYOS_PATH
               value: /opt/entityos/EntityOS
             # EntityOS artifact identity is image-authoritative. The image bakes

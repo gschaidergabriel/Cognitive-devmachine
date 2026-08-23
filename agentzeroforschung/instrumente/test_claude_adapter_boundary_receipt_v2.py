@@ -68,6 +68,7 @@ class TestReceiptV2(unittest.TestCase):
     def test_tool_invocation_rejected(self): self.reject(lambda d: d["boundaries"]["tool_less"].__setitem__("tool_invocation_count", 1))
     def test_canonical_write_rejected(self): self.reject(lambda d: d["boundaries"]["structured_output"].__setitem__("canonical_write_attempted", True))
     def test_env_escape_rejected(self): self.reject(lambda d: d["boundaries"]["env_isolation"].__setitem__("observed_child_env_keys", ["HOME", "AWS_SECRET_ACCESS_KEY"]))
+    def test_env_receipt_cannot_self_authorize(self): self.reject(lambda d: (d["boundaries"]["env_isolation"].__setitem__("allowed_env_keys", ["HOME", "PATH", "AWS_SECRET_ACCESS_KEY"]), d["boundaries"]["env_isolation"].__setitem__("observed_child_env_keys", ["HOME", "PATH", "AWS_SECRET_ACCESS_KEY"])))
     def test_secret_leak_rejected(self): self.reject(lambda d: d["boundaries"]["env_isolation"].__setitem__("secret_value_leak_count", 1))
     def test_whole_product_credit_rejected(self): self.reject(lambda d: d.__setitem__("whole_product_credit", 1))
 

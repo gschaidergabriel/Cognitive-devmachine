@@ -1,0 +1,118 @@
+{
+  "schema": "GO_CLAUDE_SIDE_MEMORY_AUTHORITY_REPAIR/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "status": "SOURCE_REPAIR_PLUS_EXACT_BLOB_COMPONENT_EVIDENCE_RUNTIME_UNVERIFIED",
+  "authority": {
+    "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+    "branch_base": "9145289c461e7d0bff0cf3da6dd570037f374fe7",
+    "main_rechecked_after_parallel_work": "8413a4a7c07dcad3515c0b2a145e6056911e0cc3",
+    "main_adapter_blob_rechecked": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507",
+    "branch_touched_same_adapter_ancestor_bytes": true,
+    "independent_mismatch_receipt_on_main": "3b225a1b2d56b8bd489f0ed8310c0e6626df23bb"
+  },
+  "observed_problem": [
+    "Current ClaudeCodeInference intentionally retained HOME for subscription/OAuth authentication.",
+    "Current CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 simultaneously required temporary_home_created=true and temporary_home_removed=true for EPHEMERAL PASS.",
+    "Current Claude Code documentation states auto memory is enabled by default and can be disabled with CLAUDE_CODE_DISABLE_AUTO_MEMORY=1.",
+    "Current Claude Code documentation states CLAUDE.md and auto memory carry persistent context across sessions and load at session start.",
+    "The pre-repair adapter did not force CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 and did not pass an empty --setting-sources value, so retained HOME could admit Claude-side durable context beside MiniUnifiedDB.",
+    "Anthropic issue #49565 documented a version-specific regression where --no-session-persistence still wrote a session JSONL artifact, so flag presence alone is insufficient acceptance evidence."
+  ],
+  "product_delta": {
+    "adapter_path": "the artefact/clayverse/adapters.py",
+    "adapter_blob_before": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507",
+    "adapter_blob_after": "705da339713788e337afc5482559c9186c057f50",
+    "changes": [
+      "force CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 after environment allowlisting",
+      "retain CLAUDE_CODE_SKIP_PROMPT_HISTORY=1",
+      "pass --setting-sources with an empty value to exclude user/project/local setting sources",
+      "retain HOME intentionally for authentication",
+      "leave tool-less, strict MCP and no-session-persistence controls intact"
+    ],
+    "new_test_path": "the artefact/tests/test_claude_code_memory_authority.py",
+    "new_test_blob": "d481654a176b6413f963cd9e466a1841eb98accf"
+  },
+  "measurement_contract_delta": {
+    "v1": "agentzeroforschung/instrumente/CLAUDE_ADAPTER_BOUNDARY_RECEIPT_v1.md",
+    "v2": "agentzeroforschung/instrumente/CLAUDE_ADAPTER_BOUNDARY_RECEIPT_v2.md",
+    "validator_v2": "agentzeroforschung/instrumente/validate_claude_adapter_boundary_receipt_v2.py",
+    "validator_v2_blob": "53c413a0d58d1649e67726619eab825df4d21ef3",
+    "validator_test_v2": "agentzeroforschung/instrumente/test_claude_adapter_boundary_receipt_v2.py",
+    "validator_test_v2_blob": "266f2d3120e933c56fef3a42c975806d960b49d6",
+    "v2_ephemeral_law": [
+      "retained auth HOME is explicit rather than misreported as temporary",
+      "user/project/local setting_sources must be empty",
+      "auto-memory disable must be measured",
+      "prompt-history/session-persistence suppression must be measured",
+      "transcript, prompt-history and auto-memory persistence surface must be measured before/after",
+      "all three write counts must be zero",
+      "before/after persistence digests must match"
+    ]
+  },
+  "exact_blob_component_evidence": {
+    "adapter_blob_local_reconstruction_matches_github": true,
+    "adapter_blob_observed": "705da339713788e337afc5482559c9186c057f50",
+    "memory_authority_test_blob_local_reconstruction_matches_github": true,
+    "memory_authority_test_blob_observed": "d481654a176b6413f963cd9e466a1841eb98accf",
+    "adapter_and_memory_test_py_compile": "PASS",
+    "memory_authority_tests": "2/2 PASS",
+    "dependency_scope": "exact adapter/test bytes with minimal local stubs for unrelated imported modules; mechanism evidence only",
+    "validator_blob_local_reconstruction_matches_github": true,
+    "validator_test_blob_local_reconstruction_matches_github": true,
+    "validator_and_test_py_compile": "PASS",
+    "validator_regressions": "20/20 PASS"
+  },
+  "execution_boundary": {
+    "private_exact_branch_clone_attempt": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "vercel_executable_sandbox_surface": "UNAVAILABLE_IN_CURRENT_CONNECTOR",
+    "live_claude_invocation": false,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "exact_branch_runtime_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "external_primary_evidence": [
+    {
+      "source": "https://code.claude.com/docs/en/memory",
+      "observed": "auto memory is on by default; CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 disables it; CLAUDE.md and auto memory are cross-session context mechanisms"
+    },
+    {
+      "source": "https://code.claude.com/docs/en/cli-reference",
+      "observed": "--setting-sources controls user/project/local setting sources; --no-session-persistence is the print-mode persistence control"
+    },
+    {
+      "source": "https://code.claude.com/docs/en/sessions",
+      "observed": "transcripts are stored under the Claude project persistence tree; prompt/session persistence controls are documented"
+    },
+    {
+      "source": "https://github.com/anthropics/claude-code/issues/49565",
+      "observed": "2.1.112 regression report: --no-session-persistence still wrote a JSONL artifact; closed not-planned after later lifecycle, therefore measure effects rather than trust the flag"
+    }
+  ],
+  "coordination": {
+    "duplicate_runner_prs_closed": [1090, 1105],
+    "canonical_prior_split_pr": 1092,
+    "canonical_prior_crossbind_pr": 1099,
+    "parallel_independent_mismatch_receipt_fused": "3b225a1b2d56b8bd489f0ed8310c0e6626df23bb",
+    "macrocycle_id": null,
+    "unusual_experiment_count_claimed": 0,
+    "unusual_experiment_reason": "no upstream macrocycle id / atomic shared experiment lease was available; all local work was deterministic source/component regression"
+  },
+  "next_gate": [
+    "Merge only if current main still carries the same pre-repair adapter bytes or the delta is explicitly reconciled with newer adapter changes.",
+    "On one intentional exact Ubuntu run, bind exact source/tree + Claude binary/version + command/input + retained HOME identity digest.",
+    "Measure the actual transcript/prompt-history/auto-memory persistence surface before and after one targeted inference call.",
+    "Validate CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v2 and preserve any write as an exact EPHEMERAL failure.",
+    "Rerun the complete suite before changing whole Mini Entity acceptance."
+  ],
+  "acceptance": "IN_PROGRESS"
+}

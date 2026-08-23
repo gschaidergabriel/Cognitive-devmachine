@@ -1,0 +1,56 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "macrocycle_id": "go-20260823T0251Z-gpt56sol-duplicate-kind-source-identity",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_main_observed": "d8ff57c2edc4c9eecde99ce1f9b089702d71b1cf",
+  "retained_repair_lane": "go-20260823-gpt56sol-reference-convergence-fresh",
+  "retained_lane_pre_delta_head": "9af1933f48863e817f05b460818082cec25913ce",
+  "test_contract_commit": "18b0b5898857178f5fa88900890c82082bc358a9",
+  "execution_control": {
+    "free_only": true,
+    "provider_execution": false,
+    "secrets_accessed": false,
+    "network_provider_calls": 0,
+    "money_spent_usd": 0
+  },
+  "unusual_experiment": {
+    "id": "SAME_KIND_DUAL_NAMESPACE_SOURCE_OVERWRITE",
+    "count_in_macrocycle": 1,
+    "status": "CONSUMED",
+    "hypothesis": "Distinct logical sources with the same source kind remain separately represented after collection once source_namespace is introduced.",
+    "counterhypothesis": "The collector still keys sources/sensors by kind, so the later logical source overwrites the earlier one even while source_count and exactly-once namespaces count both.",
+    "intervention": "Model two source specs with kind=events, source_namespace feed:A/feed:B, one admitted row each, using the retained branch collector's kind-key assignment semantics.",
+    "observed": {
+      "reported_source_count": 2,
+      "materialized_source_keys": ["events"],
+      "materialized_source_instances": 1,
+      "surviving_namespace": "feed:B"
+    },
+    "result": "COUNTERHYPOTHESIS_SUPPORTED",
+    "evidence_class": "LOCAL_ISOLATED_MECHANISM_REPRODUCTION_PLUS_EXACT_SOURCE_INSPECTION_NOT_EXACT_RUNTIME"
+  },
+  "source_anchor": {
+    "file": "tools/clay_profile_pipeline_runtime.py",
+    "branch_blob_sha": "1fd3a1abd0adefdcf5a90fbb132150b4458e3af2",
+    "observed_semantics": [
+      "source_namespace is computed per source",
+      "exactly-once consume identity carries namespace",
+      "sources and sensors remain assigned by sources[kind] / sensors[kind]",
+      "JSONL cursors on this retained head remain keyed by kind"
+    ]
+  },
+  "delta": {
+    "file": "the artefact/blogpost_entity/test_reference_duplicate_kind_source_identity.py",
+    "contract": "Either reject same-kind multi-source configuration fail-closed as unaddressable, or preserve every distinct logical source instance. Silent overwrite is forbidden.",
+    "implementation_authority": "Retained runtime lane #997 only; no second runtime implementation created."
+  },
+  "runner": {
+    "exact_branch_workflow_runs_observed_after_commit": 0,
+    "exact_runtime_credit": 0,
+    "note": "No GitHub workflow run was visible for the test-contract commit at observation time. The new regression is therefore source-contract evidence only until an authorized runner actually executes exact branch bytes."
+  },
+  "claycode_grf": "grf_receipt(id=\"SAME_KIND_DUAL_NAMESPACE_SOURCE_OVERWRITE\",R0=[src(blob=\"1fd3a1abd0\"),fact(consume_identity=namespace_kind_id),fact(materialization_key=kind)],R1=[infer(alias_risk=same_kind_distinct_namespace)],R2=[candidate(fail_closed_duplicate_kind),candidate(namespace_addressed_sources)],R3=[counter(source_count_true_but_source_instance_lost)],R4=[discriminate(two_namespaces_same_kind_one_row_each)],R5=[invariant(logical_source_identity_must_cover_collection_representation)],R6=[verify(mechanism_repro=true,exact_runtime=false)]); hyperposition(source_addressing=[fail_closed_duplicate_kind,namespace_addressed_sources]); omega_candidate(kind=\"repair_retained_lane_997\",authority=\"NOT_GRANTED_BY_MODEL\")",
+  "promotion": "NOT_PROMOTED",
+  "next_gate": "Implement the source-addressing repair on retained #997, then execute this regression together with consumed-namespace, cursor-identity, evidence-ref and nonfinite-truth guards on exact refreshed bytes."
+}

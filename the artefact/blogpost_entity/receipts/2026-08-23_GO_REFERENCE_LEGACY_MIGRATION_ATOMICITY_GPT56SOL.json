@@ -1,0 +1,59 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "join": {
+    "main_sha": "0119e5d588f15bb4af2e1ef7e5618459a746e7d6",
+    "canonical_migration_guard_sha": "770286bf52623a2cd91f464ca8310321c1fe0be7",
+    "branch": "gpt56sol/go-reference-legacy-migration-atomicity-20260823-r2"
+  },
+  "authority": {
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "execution_control": "FREE_ONLY"
+  },
+  "claycode": "grf{R0[migration_guard=one_shot_or_fail_closed;fail_branch_atomicity=unbound;fresh_db_positive_control=unbound];R1[error_after_canonical_row_mint=>partial_authority_state];R2{h_leave=reject;h_atomic_fail=retain};R3[counter=table_ddl_may_exist_but_authority_row_must_not);R4[regression:fail=>entity_state_rows=0&legacy_generation=unchanged;fresh=>generation_0];R5[fail_closed=>no_partial_authority];R6[source_guard=bound;runtime=unknown]} omega(test_reference_legacy_generation_migration_boundary,atomicity_guard)",
+  "grf": {
+    "R0_OBSERVE": [
+      "Current main accepts either explicit migration-required failure or one-shot continuity-preserving migration for a legacy-only generation.",
+      "The current fail-closed branch checks the error string but returns without asserting canonical-state non-mutation.",
+      "A genuinely fresh database currently lacks an explicit positive-control assertion in this migration test."
+    ],
+    "R1_INFER": "A runtime could create entity_state generation zero, then report LEGACY_GENERATION_MIGRATION_REQUIRED, appearing fail-closed while leaving a partially admitted canonical authority row.",
+    "R2_GENERATE": [
+      "Leave fail-closed semantics at error-string-only coverage.",
+      "Require failure atomicity: no canonical entity_state row and unchanged legacy generation evidence; separately prove fresh initialization remains generation zero."
+    ],
+    "R3_COUNTER": "Schema table creation itself may be a harmless preparatory write, so the guard permits the entity_state table to exist but requires zero canonical authority rows when migration is unresolved.",
+    "R4_DISCRIMINATE": {
+      "class": "DETERMINISTIC_REGRESSION_ONLY",
+      "obligations": [
+        "fail-closed legacy migration -> entity_state row count is absent/zero",
+        "fail-closed legacy migration -> legacy generation remains 7",
+        "fresh database -> pipeline_init succeeds and canonical generation is 0"
+      ]
+    },
+    "R5_EMERGENT": "Fail-closed is a state-transition property, not merely an error label: rejected admission must not leave authority-bearing partial state.",
+    "R6_VERIFY": {
+      "test_source_syntax": "PASS_LOCAL_COMPILE",
+      "source_contract": "BOUND_ON_BRANCH",
+      "exact_repository_runtime": "UNOBSERVED",
+      "whole_product": "IN_PROGRESS"
+    }
+  },
+  "unusual_experiment": {
+    "additional_count": 0,
+    "note": "No additional unusual experiment. This is deterministic regression after the shared generation-mirror discriminator already consumed this go macrocycle slot."
+  },
+  "execution": {
+    "provider_network_call": false,
+    "together_preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0,
+    "vps_test": false
+  },
+  "next_step": "Fuse this atomicity/positive-control guard if it remains non-duplicate on refreshed main, then apply the complete current reference guard set to a fresh-current-main profile/inference effect replacement and obtain actually-started exact-head isolated execution."
+}

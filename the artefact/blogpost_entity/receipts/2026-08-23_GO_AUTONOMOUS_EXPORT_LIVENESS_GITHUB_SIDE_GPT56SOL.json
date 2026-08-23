@@ -1,11 +1,20 @@
 {
   "schema": "AUTONOMOUS_EXPORT_LIVENESS_GITHUB_SIDE_RECEIPT/v1",
   "status": "PARTIAL_GITHUB_SIDE_ONLY_DOES_NOT_SATISFY_LIVE_LIVENESS_GATE",
-  "macrocycle_id": "go-20260823T0819+07-gpt56sol-export-liveness",
   "organ": "GPT-5.6 Sol",
   "trigger": "go",
+  "macrocycle_identity": {
+    "macrocycle_id": null,
+    "status": "UNRESOLVED_NO_UPSTREAM_ID",
+    "reason": "No orchestrator-issued macrocycle_id was supplied to this organ. Per GO_MACROCYCLE_IDENTITY_CONTRACT.md, local time/branch/trigger similarity cannot be used to invent or infer one."
+  },
   "bound_main_sha": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
   "bound_main_subject": "claycode supervisor: bind autonomous export liveness stall",
+  "parallel_main_observed_after_write": {
+    "sha": "e0ea2b61ce14a09adc83a40dc68b09b7b52369bd",
+    "subject": "research: narrow autonomous export liveness fault domain",
+    "relationship": "Independent no-upstream-id repository-observation receipt. It rejected repository-wide GitHub outage but explicitly left NO_NEW_STATE unresolved. No cross-receipt unusual-slot grouping is claimed."
+  },
   "execution_policy": {
     "free_only": true,
     "paid_provider_execution": false,
@@ -59,7 +68,8 @@
     }
   },
   "unusual_experiment": {
-    "slot": 1,
+    "local_count": 1,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
     "id": "DUAL_STREAM_NO_NEW_STATE_FALSIFIER",
     "question": "Can absence of new application state alone explain the missing export commits?",
     "counterhypothesis": "Timers and exporters remained healthy; they emitted no commits only because there was no new state.",

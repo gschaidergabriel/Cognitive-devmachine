@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.1",
+  "record_type": "ENTITYOS_HCU_GO_JCS_ERRATUM_REPAIR_RECEIPT",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "retained_parent_pr": 1263,
+  "retained_parent_head_at_rebase": "4b7a20644d5ebe403fcf75adffc58ec36251509f",
+  "work_branch": "gpt56sol/hcu-jcs-negative-zero-erratum-20260823",
+  "authority_scope": {
+    "selected_canonicalizer": "RFC8785_JCS_IJSON/v1",
+    "second_canonicalizer_authority_created": false,
+    "historical_hashes_rewritten": false,
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "primary_external_evidence": {
+    "source": "RFC 8785 verified erratum EID 7920",
+    "finding": "because -0 is valid JSON but JCS serializes it as 0, a parser following the specification SHOULD error and stop processing on -0 to thwart attacks on not-yet-parsed data",
+    "appendix_b_context": "RFC 8785 Appendix B documents both IEEE-754 +0 and -0 serializing to JSON 0"
+  },
+  "experiment_accounting": {
+    "current_macrocycle_unusual_experiment": "AUTHORITY_CONSTANT_TRANSPLANT",
+    "signed_zero_check_classification": "DETERMINISTIC_CONFORMANCE_REGRESSION_NOT_AN_ADDITIONAL_UNUSUAL_EXPERIMENT",
+    "correction": "an earlier local description called the signed-zero check unusual; current retained-lane coordination shows the 23:57 go slot was already consumed, so this receipt gives the signed-zero check no additional unusual-experiment count or credit",
+    "additional_unusual_experiment_count": 0
+  },
+  "signed_zero_regression_observation": {
+    "historical_alternative_target": "ENTITYOS_HCU_TYPED_CANONICAL/v1 exact blob fe75658b68134303e51b723280d42104575eacd7",
+    "observation": "+0.0 and -0.0 have distinct IEEE-754 bit patterns but collapsed to identical canonical bytes under that historical alternative; this remains bounded counterexample evidence only",
+    "selected_jcs_source_inspection": "the selected pre-repair JCS source returned b\"0\" for value == 0.0, so Python -0.0 and +0.0 were likewise not distinguished before hashing"
+  },
+  "selected_jcs_repair": {
+    "pre_repair_source_blob": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+    "pre_repair_test_blob": "6e2127b6b35b1f151acded1a6db2565b4734b27d",
+    "counterhypothesis": "serializer-level signed-zero collapse is acceptable because RFC 8785 Appendix B maps both zeros to 0",
+    "counterhypothesis_result": "REJECTED_FOR_ADMISSION_PATH_BY_VERIFIED_ERRATUM_7920",
+    "repair": "reject negative-zero binary64 input with NEGATIVE_ZERO_FORBIDDEN before the ordinary positive-zero serialization path",
+    "post_repair_source_blob": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "post_repair_test_blob": "bc9262473f91dbd04ddaf647e667920664495f54"
+  },
+  "isolated_component_evidence": {
+    "environment": "isolated ChatGPT Linux/Python tool container",
+    "exact_pre_repair_blob_reconstruction": true,
+    "pre_repair_tests": "6/6 PASS",
+    "post_repair_tests": "7/7 PASS",
+    "new_regression": "negative zero raises NEGATIVE_ZERO_FORBIDDEN while positive zero still serializes to 0",
+    "classification": "SOURCE_COMPONENT_REGRESSION_ONLY",
+    "entityos_hcu_runtime_verified": false
+  },
+  "migration_law": {
+    "schema_name_changed": false,
+    "reason": "repair implements the verified erratum for the already selected RFC8785/JCS v1 contract before complete end-to-end identity promotion; historical receipts stay bound to original source blobs",
+    "new_identities_only_use_repaired_bytes_after_explicit_wiring": true,
+    "mixed_unknown_or_downgrade_schema_replay": "REJECT_REMAINS_REQUIRED"
+  },
+  "parallel_rebase": {
+    "stale_parent_head_abandoned": "3f9bf89389e3b0623812b628ea14ba0c99010517",
+    "rebased_parent_head": "4b7a20644d5ebe403fcf75adffc58ec36251509f",
+    "canonicalizer_parent_blob_unchanged": true,
+    "test_parent_blob_unchanged": true,
+    "reason": "retained PR1263 advanced concurrently with Entry v2 and loader-lease work; repair was replayed only after exact parent canonicalizer/test blobs were rechecked unchanged"
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false,
+    "new_state_truth_effect_or_recovery_authority_created": false
+  },
+  "next_exact_gate": [
+    "fuse this two-file repair into the single retained PR1263 JCS path",
+    "continue current Entry v2 migration by moving router policy, EngineAdmission, route and inference receipt identity to repaired RFC8785_JCS_IJSON/v1 with explicit versions",
+    "reject mixed, unknown and downgrade canonicalization versions without rewriting historical hashes",
+    "run exact-current combined Entry+route+engine-load-lease+inference+canonicalizer+GRID10 regressions in an actually-started authorized isolated executor",
+    "only then bind exact local checkpoint/tokenizer/runtime/build bytes and measured capacity to physical execution for runtime promotion"
+  ]
+}

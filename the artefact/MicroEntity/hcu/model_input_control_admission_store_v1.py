@@ -6,11 +6,11 @@ but its executor/invocation labels are parameters. This store closes that trust 
 requiring the same invocation to have already been admitted by
 ``HCU_MODEL_EXECUTION_ADMISSION_STORE/v1`` in the caller-supplied canonical MiniUnifiedDB.
 
-The transaction revalidates the exact consumed input bytes, reads back the canonical
-ModelExecutionObservation, cross-binds generation/GRID cell/role/input identity, and then
-persists one immutable control binding per executor invocation. Divergent replay rolls back.
-No new database, truth authority, effect path, model execution, or runtime/training credit is
-created here.
+The transaction revalidates the exact consumed input bytes, reads back and semantically
+revalidates the canonical ModelExecutionObservation, cross-binds generation/GRID
+cell/role/input identity, and then persists one immutable control binding per executor
+invocation. Divergent replay rolls back. No new database, truth authority, effect path,
+model execution, or runtime/training credit is created here.
 """
 from __future__ import annotations
 
@@ -22,6 +22,11 @@ from typing import Any
 
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
+    from .model_execution_receipt_v1 import (
+        ModelExecutionObservation,
+        ModelExecutionReceiptError,
+        model_execution_observation_record,
+    )
     from .model_input_control_binding_v1 import (
         BINDING_SCHEMA,
         ModelInputControlBinding,
@@ -30,6 +35,11 @@ try:
     )
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
+    from model_execution_receipt_v1 import (
+        ModelExecutionObservation,
+        ModelExecutionReceiptError,
+        model_execution_observation_record,
+    )
     from model_input_control_binding_v1 import (
         BINDING_SCHEMA,
         ModelInputControlBinding,
@@ -105,7 +115,9 @@ def _install_schema(db: sqlite3.Connection) -> None:
           invocation_id TEXT NOT NULL,
           input_sha256 TEXT NOT NULL,
           input_size INTEGER NOT NULL,
-          model_execution_observation_sha256 TEXT NOT NULL
+          model_execution_observation_sha256 TEXT NOT NULL,
+          FOREIGN KEY(model_execution_observation_sha256)
+            REFERENCES hcu_model_execution_observations(observation_sha256)
         )"""
     )
     db.execute(
@@ -116,6 +128,8 @@ def _install_schema(db: sqlite3.Connection) -> None:
           entity_generation INTEGER NOT NULL,
           model_execution_observation_sha256 TEXT NOT NULL,
           binding_sha256 TEXT NOT NULL,
+          FOREIGN KEY(model_execution_observation_sha256)
+            REFERENCES hcu_model_execution_observations(observation_sha256),
           FOREIGN KEY(binding_sha256)
             REFERENCES hcu_model_input_control_bindings(binding_sha256)
         )"""
@@ -138,7 +152,7 @@ def _read_model_execution_parent(
     executor_id: str,
     invocation_id: str,
 ) -> tuple[str, dict[str, Any], str]:
-    """Read one already-admitted model invocation and its exact canonical observation."""
+    """Read and revalidate one already-admitted model invocation and observation."""
     try:
         rows = db.execute(
             "SELECT invocation_binding_key,entity_generation,observation_sha256 "
@@ -165,11 +179,15 @@ def _read_model_execution_parent(
     _need(isinstance(record, dict), "MODEL_EXECUTION_OBSERVATION_STORED_OBJECT_REQUIRED")
     _need(canonicalize(record) == raw, "MODEL_EXECUTION_OBSERVATION_STORED_JCS_MISMATCH")
     _need(hashlib.sha256(raw).hexdigest() == observation_sha256, "MODEL_EXECUTION_OBSERVATION_DIGEST_MISMATCH")
-    _need(
-        (generation, row[1], executor_id, row[2], invocation_id, row[3])
-        == (row[1], row[1], row[2], row[2], row[3], row[3]),
-        "MODEL_EXECUTION_INVOCATION_PARENT_IDENTITY_MISMATCH",
-    )
+
+    try:
+        normalized = model_execution_observation_record(ModelExecutionObservation(**record))
+    except (TypeError, ModelExecutionReceiptError) as exc:
+        raise ModelInputControlAdmissionStoreError("MODEL_EXECUTION_OBSERVATION_SEMANTIC_REVALIDATION_FAILED") from exc
+    _need(normalized == record, "MODEL_EXECUTION_OBSERVATION_NORMALIZATION_MISMATCH")
+    _need(generation == row[1] == record["entity_generation"], "MODEL_EXECUTION_PARENT_GENERATION_MISMATCH")
+    _need(executor_id == row[2] == record["executor_id"], "MODEL_EXECUTION_PARENT_EXECUTOR_MISMATCH")
+    _need(invocation_id == row[3] == record["invocation_id"], "MODEL_EXECUTION_PARENT_INVOCATION_MISMATCH")
     return str(invocation_key), record, observation_sha256
 
 
@@ -288,7 +306,12 @@ def admit_model_input_control_binding(
         admission_sha256 = hashlib.sha256(canonicalize(material)).hexdigest()
         db.commit()
         return ModelInputControlAdmission(**material, admission_sha256=admission_sha256)
-    except (ModelInputControlAdmissionStoreError, ModelInputControlBindingError, sqlite3.Error):
+    except (
+        ModelInputControlAdmissionStoreError,
+        ModelInputControlBindingError,
+        ModelExecutionReceiptError,
+        sqlite3.Error,
+    ):
         if db.in_transaction:
             db.rollback()
         raise

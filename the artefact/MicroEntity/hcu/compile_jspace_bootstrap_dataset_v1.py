@@ -236,7 +236,7 @@ def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
         _row(
             "VECTOR_CONTROL_VALIDATE",
             {**common, "expected_generation": trace["generation"] + 1},
-            {"decision": "REJECT", "reason": "JCTL_GENERATION_MISMATCH"},
+            {"decision": "REJECT", "reason": "STALE_VECTOR_CONTROL_GENERATION"},
             sha,
         )
     )
@@ -244,7 +244,7 @@ def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
         _row(
             "VECTOR_CONTROL_VALIDATE",
             {**common, "expected_basis_id": trace["basis_id"] + "#WRONG"},
-            {"decision": "REJECT", "reason": "JCTL_BASIS_MISMATCH"},
+            {"decision": "REJECT", "reason": "JSPACE_BASIS_ID_MISMATCH"},
             sha,
         )
     )

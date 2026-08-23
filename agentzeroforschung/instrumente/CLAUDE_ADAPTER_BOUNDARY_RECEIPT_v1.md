@@ -65,6 +65,27 @@ A valid aggregate grants only `CLAUDE_ADAPTER_BOUNDARY_ONLY` runtime credit. `wh
 
 UNKNOWN or missing measurement is never coerced to PASS. A failed child receipt localizes the dimension but does not license patching another dimension.
 
+## Negative-evidence preservation
+
+Promotion validation and diagnostic validation are deliberately separate views over the SAME receipt schema.
+
+- default `validate(...)` and CLI mode remain fail-closed promotion gates: any measured boundary failure makes the receipt non-promotable;
+- `diagnose(...)` / CLI `--diagnostic` accepts a fully measured aggregate with child `status=FAIL` only when the reported status exactly matches the typed observed boundary fields;
+- a diagnostic aggregate with any failed boundary MUST use `aggregate_status=FAIL`, `runtime_credit=ZERO`, `whole_product_credit=0`, and `promotion_eligible=false`;
+- the diagnostic result retains every failing boundary plus explicit violation codes, while preserving the three unaffected PASS observations from the same common identity;
+- reporting PASS while observed fields imply a failure is rejected;
+- missing/unmeasured data, cross-run identity drift, dirty source, malformed types or invalid digests remain invalid even in diagnostic mode.
+
+Therefore:
+
+```text
+MEASURED_FAIL != INVALID_RECEIPT
+DIAGNOSTIC_VALID != PROMOTION_PASS
+NEGATIVE_EVIDENCE_PRESERVED -> RUNTIME_CREDIT_ZERO
+```
+
+This prevents the next exact Ubuntu run from discarding useful evidence merely because one of the four boundaries remains red.
+
 ## Execution sequence
 
 On the next intentional exact Ubuntu run:
@@ -74,7 +95,8 @@ On the next intentional exact Ubuntu run:
 3. compile one fixed test InferencePacket and command;
 4. run the adapter once under the admitted isolated environment;
 5. derive all four child receipts from that same invocation or from four explicitly identical-replay invocations whose exact common identity differs only by a separately declared replay nonce (if replay mode is later versioned);
-6. validate with `validate_claude_adapter_boundary_receipt_v1.py`;
-7. only then decide whether the red is tool policy, persistence, structured parsing, or environment leakage.
+6. run diagnostic validation first so PASS and FAIL observations are durably classified without promotion;
+7. run strict validation only if the diagnostic aggregate is PASS;
+8. only then decide whether the red is tool policy, persistence, structured parsing, or environment leakage.
 
 The current v1 validator intentionally admits only one common identity and has no replay-merging mode.

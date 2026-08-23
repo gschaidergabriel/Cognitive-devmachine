@@ -1,0 +1,98 @@
+{
+  "schema": "ENTITYOS_HCU_ENGINE_POST_LOAD_BINDING_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "coordination": {
+    "retained_parent_lane": "PR_1263",
+    "parent_head_bound_at_branch_creation": "3b2a41703136db7f4c679601ac9bdbae226ff2f4",
+    "dependent_branch": "gpt56sol/hcu-engine-postload-binding-20260823",
+    "no_second_router_state_effect_or_recovery_authority": true
+  },
+  "finding": {
+    "mechanism": "PRE_LOAD_HASH_DOES_NOT_PROVE_LATER_LOADER_CONSUMED_THE_SAME_PATH_BYTES",
+    "why_material": "EngineAdmission could remain valid after the verified runtime path was atomically replaced before a later loader opened it, allowing route identity to bind bytes that the loader did not consume.",
+    "source_scope_note": "The retained donor module already stated this loader-binding limitation; this cycle turned it into a discriminating executable falsifier and bounded repair."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "POST_ADMISSION_ATOMIC_PATH_SUBSTITUTION",
+    "scope": "ISOLATED_COMPONENT_MECHANISM",
+    "environment": "isolated ChatGPT Linux/Python container",
+    "python": "3.13.5",
+    "intervention": "hash admitted runtime bytes with the retained before/after stat discipline, preserve the resulting admission receipt, atomically replace the same path with different bytes/inode, then simulate the later loader opening that path",
+    "observed": {
+      "admitted_sha256": "8dd12ec6ddaf685304428fcd2ca04b8968cae40edcb838f908a1af64cfe6d1ba",
+      "admission_receipt_sha256": "ece9bd49af2c5b10733fcbcf11f22545dd89087740e826e1a04444e4ea34e21e",
+      "later_loader_sha256": "49c3d67e6d34bc43884398e0b67ef649216ca8e226dadb215b36b54db0bf2d73",
+      "inode_changed": true,
+      "sha_changed": true,
+      "loader_reads_admitted_bytes": false,
+      "old_admission_receipt_unchanged": true
+    },
+    "result": "MECHANISM_FALSIFIED_PRELOAD_ONLY_BINDING",
+    "runtime_credit": 0
+  },
+  "repair": {
+    "engine_source_blob_sha": "d5b30720a5eb63ac62a9c56cde532eeabfc8f671",
+    "test_blob_sha": "3175ba9775dd76a9ef77d9b3e3114f40147c29ba",
+    "post_load_schema": "HCU_ENGINE_POST_LOAD_BINDING/v1",
+    "laws": [
+      "pre-load VerifiedEngineAdmission no longer exposes route artifact-registry material by itself",
+      "route registry requires a PostLoadArtifactBinding tied to exact generation, engine identity, artifact bundle, pre-load admission receipt and all four artifact digests",
+      "checkpoint, tokenizer, runtime and build paths are re-digested after loader return before route registry exposure",
+      "stale generation or any post-load byte mismatch fails closed"
+    ],
+    "known_limit": "Pre/post path hashing closes straightforward hash-then-load substitution but cannot prove against a malicious swap-and-restore entirely inside the loader window. Whole runtime acceptance still requires a loader-attested consumed-byte identity or an immutable/read-only artifact boundary bound to the loader."
+  },
+  "focused_regression": {
+    "environment": "isolated ChatGPT Linux/Python component container",
+    "python": "3.13.5",
+    "source_blob_exact_to_github": true,
+    "test_blob_exact_to_github": true,
+    "router_dependency": "MINIMAL_API_STUB_FOR_ENGINEADMISSION_AND_ROUTE_EVENT_ONLY",
+    "py_compile": "PASS",
+    "tests_run": 16,
+    "tests_passed": 16,
+    "tests_failed": 0,
+    "new_cases": [
+      "route registry rejects missing post-load binding",
+      "atomic runtime path substitution after pre-load admission fails post-load revalidation",
+      "stale generation at post-load binding fails closed"
+    ],
+    "credit": "EXACT_SOURCE_AND_TEST_BLOB_COMPONENT_REGRESSION_ONLY_NOT_INTEGRATED_HCU_RUNTIME"
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE",
+    "reason": "Current README already names real checkpoint/tokenizer/runtime/build positive engine admission as a frontier. This dependent donor hardening does not change top-level EntityOS/HCU authority or acceptance."
+  },
+  "negative_results_and_blocks": [
+    "no actually-started full EntityOS/HCU isolated executor was exposed to this organ",
+    "no real local ~0.8B checkpoint/tokenizer/runtime/build bytes were loaded",
+    "no real loader attested the bytes it actually consumed",
+    "no exact integrated Typed Entry -> EngineAdmission -> real loader -> HCU route -> inference receipt chain was executed",
+    "RFC8785 end-to-end causal identity wiring remains a separate current PR1263 gate"
+  ],
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false,
+    "new_state_authority_added": false,
+    "new_effect_path_added": false
+  },
+  "credit": {
+    "research_delta": "COMMITTED_DEPENDENT_DONOR_BRANCH",
+    "entityos_runtime_credit_change": 0,
+    "hcu_runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse the smallest post-load binding into the retained PR1263 lane after its current RFC8785 identity work settles; then bind a real admitted local checkpoint/tokenizer/runtime/build plus immutable or loader-attested consumed-byte identity and execute the exact Typed Entry -> EngineAdmission -> load -> post-load binding -> HCU route -> inference receipt chain in an actually-started authorized isolated executor."
+}

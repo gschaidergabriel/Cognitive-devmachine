@@ -1,7 +1,9 @@
+import json
 import math
 import struct
 import unittest
 
+from entry_canonicalization_v1 import canonicalize
 from jspace_vector_control_abi_v1 import (
     JSpaceVectorControlError,
     PACKET_PREFIX,
@@ -30,6 +32,13 @@ class VectorControlABITests(unittest.TestCase):
         params.update(kwargs)
         raw = packet.packet_bytes if hasattr(packet, "packet_bytes") else packet
         return decode_vector_control(raw, **params)
+
+    def alias_packet(self, field):
+        packet = self.make()
+        body = packet.packet_bytes[len(PACKET_PREFIX):-len(PACKET_SUFFIX)]
+        material = json.loads(body.decode("utf-8"))
+        material[field] = f" {material[field]} "
+        return PACKET_PREFIX + canonicalize(material) + PACKET_SUFFIX
 
     def test_deterministic_order_normalization(self):
         a = self.make(workspace_refs=["w:b", "w:a"], lesion_indices=[3, 1])
@@ -85,6 +94,12 @@ class VectorControlABITests(unittest.TestCase):
                 expected_role="critic",
                 expected_packet_sha256="0" * 64,
             )
+
+    def test_packet_text_aliases_fail_closed(self):
+        for field in ("basis_id", "role", "scale_f64_be_hex", "q8_b64url"):
+            with self.subTest(field=field):
+                with self.assertRaisesRegex(JSpaceVectorControlError, "NONCANONICAL_TEXT"):
+                    self.decode(self.alias_packet(field))
 
     def test_nonfinite_input_rejected(self):
         with self.assertRaisesRegex(JSpaceVectorControlError, "FINITE_BINARY64_REQUIRED"):

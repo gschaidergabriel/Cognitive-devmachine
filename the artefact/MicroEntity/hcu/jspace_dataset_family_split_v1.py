@@ -15,6 +15,7 @@ an independent schema authority.
 """
 
 import hashlib
+import unicodedata
 from typing import Any, Iterable, Mapping
 
 try:
@@ -68,8 +69,16 @@ def split_for_family(trace_family_id: str) -> str:
 
     Domain-separated UTF-8 hashing is only partition plumbing. It is deliberately not reused
     as EntityOS causal/state identity and therefore creates no competing canonicalizer.
+
+    JCS preserves Unicode strings as-is, so this boundary must not silently normalize a
+    family identifier after the training trace has already been hashed/admitted. Non-NFC
+    family identifiers therefore fail closed before partition hashing. This prevents two
+    canonically equivalent spellings from becoming distinct split keys without rewriting
+    any existing trace identity.
     """
     family = _text(trace_family_id, "trace_family_id")
+    if unicodedata.normalize("NFC", family) != family:
+        raise JSpaceDatasetFamilySplitError("trace_family_id:NFC_REQUIRED")
     digest = hashlib.sha256((SPLIT_SCHEMA + "\0" + family).encode("utf-8", "strict")).digest()
     bucket = digest[0]
     if bucket < 205:

@@ -8,12 +8,15 @@ from pathlib import Path
 
 SCHEMA = "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1"
 BOUNDARIES = ("tool_less", "ephemeral", "structured_output", "env_isolation")
+# This must mirror the product-side ClaudeCodeInference child-environment policy.
+# Route/endpoint/trust controls are authority-bearing and are intentionally absent:
+# ambient HTTP(S)_PROXY, ANTHROPIC_BASE_URL and CA overrides cannot be self-authorized
+# by a receipt after the product adapter fences them.
 CANONICAL_ENV_ALLOWLIST = frozenset({
-    "PATH", "HOME", "LANG", "LC_ALL", "TMPDIR",
-    "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS",
-    "HTTP_PROXY", "HTTPS_PROXY",
-    "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
+    "PATH", "HOME", "LANG", "LC_ALL", "TMPDIR", "CLAUDE_CONFIG_DIR",
+    "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN",
     "DISABLE_AUTOUPDATER", "CLAUDE_CODE_SKIP_PROMPT_HISTORY",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY", "CLAUDE_CODE_DISABLE_CLAUDE_MDS",
 })
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SHA40 = re.compile(r"^[0-9a-f]{40}$")

@@ -187,6 +187,11 @@ def build_training_trace(
     Non-UNKNOWN credit is impossible without an independent downstream outcome receipt.
     This prevents ordinary model completion or internally selected GWT winners from becoming
     reward simply because the system produced them.
+
+    The supplied Vector Control packet must be the exact packet produced by the supplied
+    prototype step. Counterfactual controls therefore use a separately constructed prototype
+    step (for example a lesion/control-condition step) rather than transplanting an unrelated
+    packet into another trace family.
     """
     if not isinstance(prototype_step, JSpaceStep):
         raise JSpaceTrainingTraceError("JSPACE_STEP_REQUIRED")
@@ -213,6 +218,12 @@ def build_training_trace(
         raise JSpaceTrainingTraceError("VECTOR_CONTROL_BASIS_SHA256_MISMATCH")
     if vector_control_packet.role != prototype_step.winner_role:
         raise JSpaceTrainingTraceError("VECTOR_CONTROL_ROLE_MISMATCH")
+    if vector_control_packet.control_condition != prototype_step.control_condition:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_CONDITION_MISMATCH")
+    if vector_control_packet.packet_sha256 != prototype_step.control_packet.packet_sha256:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_PACKET_TRANSPLANT")
+    if packet_wire != prototype_step.control_packet_text:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_PACKET_WIRE_MISMATCH")
 
     credit = _text(credit_label, "credit_label", 32).upper()
     if credit not in CREDIT_LABELS:

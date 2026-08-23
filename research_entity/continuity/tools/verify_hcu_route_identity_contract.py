@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -21,7 +22,12 @@ def _load_router(path: Path):
     if spec is None or spec.loader is None:
         raise RuntimeError("ROUTER_IMPORT_SPEC_UNAVAILABLE")
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    sys.modules[spec.name] = module
+    try:
+        spec.loader.exec_module(module)
+    except Exception:
+        sys.modules.pop(spec.name, None)
+        raise
     if not callable(getattr(module, "route_event", None)):
         raise RuntimeError("ROUTE_EVENT_CALLABLE_REQUIRED")
     return module

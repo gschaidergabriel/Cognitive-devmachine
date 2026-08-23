@@ -10,6 +10,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 MINI_COGNITION = HERE.parent / "mini_cognition"
+CANONICAL_SOURCE_LOCK_PATH = MINI_COGNITION / "bundled_cognition_source_lock_v1.json"
 if str(MINI_COGNITION) not in sys.path:
     sys.path.insert(0, str(MINI_COGNITION))
 
@@ -302,18 +303,17 @@ def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict
 
 
 def main() -> int:
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3:
         print(
-            "usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json BUNDLED_MANIFEST.json SOURCE_LOCK.json",
+            "usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json BUNDLED_MANIFEST.json",
             file=sys.stderr,
         )
         return 2
     try:
         receipt_path = Path(sys.argv[1])
         manifest_path = Path(sys.argv[2])
-        source_lock_path = Path(sys.argv[3])
         data = json.loads(receipt_path.read_text(encoding="utf-8"))
-        source_lock = json.loads(source_lock_path.read_text(encoding="utf-8"))
+        source_lock = json.loads(CANONICAL_SOURCE_LOCK_PATH.read_text(encoding="utf-8"))
         if not isinstance(data, dict):
             fail("TOP_LEVEL_NOT_OBJECT")
         if not isinstance(source_lock, dict):

@@ -13,6 +13,7 @@ from engine_admission_v1 import (
     derive_engine_artifact_sha256,
     digest_artifact_path,
     verify_and_construct_engine_admission,
+    verify_post_load_artifact_binding,
 )
 from reactive_event_router_v1 import route_event
 
@@ -58,10 +59,14 @@ class EngineAdmissionProducerTests(unittest.TestCase):
             verified = verify_and_construct_engine_admission(
                 lock, paths, entity_generation=7, current_generation=7
             )
+            post_load = verify_post_load_artifact_binding(
+                verified, paths, current_generation=7
+            )
+            admitted_engine_artifacts = verified.admitted_engine_artifacts(post_load)
             self.assertEqual(verified.admission.engine_identity, "hcu_local_08b")
             self.assertEqual(verified.admission.engine_artifact_sha256, lock.engine_artifact_sha256)
             self.assertEqual(
-                verified.admitted_engine_artifacts(),
+                admitted_engine_artifacts,
                 {"hcu_local_08b": lock.engine_artifact_sha256},
             )
             event = {
@@ -80,10 +85,40 @@ class EngineAdmissionProducerTests(unittest.TestCase):
                 event,
                 current_generation=7,
                 engine_admission=verified.admission,
-                admitted_engine_artifacts=verified.admitted_engine_artifacts(),
+                admitted_engine_artifacts=admitted_engine_artifacts,
             )
             self.assertEqual(decision.status, "SELECTIVE_MODEL_ACTIVATION")
             self.assertEqual(decision.resolved_engine_artifact_sha256, lock.engine_artifact_sha256)
+
+    def test_route_registry_requires_post_load_binding(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths, lock = self.fixture(Path(tmp))
+            verified = verify_and_construct_engine_admission(
+                lock, paths, entity_generation=7, current_generation=7
+            )
+            with self.assertRaisesRegex(EngineAdmissionError, "POST_LOAD_ARTIFACT_BINDING_REQUIRED"):
+                verified.admitted_engine_artifacts()
+
+    def test_post_load_atomic_runtime_substitution_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths, lock = self.fixture(Path(tmp))
+            verified = verify_and_construct_engine_admission(
+                lock, paths, entity_generation=7, current_generation=7
+            )
+            replacement = Path(tmp) / "runtime.poison"
+            replacement.write_bytes(b"poison-runtime-v2")
+            os.replace(replacement, paths.runtime)
+            with self.assertRaisesRegex(EngineAdmissionError, "RUNTIME:POST_LOAD_BYTES_MISMATCH"):
+                verify_post_load_artifact_binding(verified, paths, current_generation=7)
+
+    def test_post_load_stale_generation_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths, lock = self.fixture(Path(tmp))
+            verified = verify_and_construct_engine_admission(
+                lock, paths, entity_generation=7, current_generation=7
+            )
+            with self.assertRaisesRegex(EngineAdmissionError, "STALE_POST_LOAD_ENTITY_GENERATION"):
+                verify_post_load_artifact_binding(verified, paths, current_generation=8)
 
     def test_same_bytes_produce_deterministic_receipt(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -92,6 +127,9 @@ class EngineAdmissionProducerTests(unittest.TestCase):
             b = verify_and_construct_engine_admission(lock, paths, entity_generation=7, current_generation=7)
             self.assertEqual(a, b)
             self.assertEqual(a.receipt(), b.receipt())
+            a_post = verify_post_load_artifact_binding(a, paths, current_generation=7)
+            b_post = verify_post_load_artifact_binding(b, paths, current_generation=7)
+            self.assertEqual(a_post, b_post)
 
     def test_checkpoint_mutation_after_lock_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:

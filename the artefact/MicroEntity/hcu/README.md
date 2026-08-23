@@ -1,43 +1,63 @@
-# Hyperposition Computational Unit (HCU)
+# EntityOS HCU compatibility subtree
 
-Status: **OWNER-DIRECTED MINI ENTITY WORKSTREAM — SOURCE CONTRACT v1**
+Status: **CURRENT ENTITYOS/HCU INTEGRATION SURFACE — COMPATIBILITY PATH**
 
-This directory is the package-facing home of the Mini Entity **Hyperposition Computational Unit**.
+This directory is retained at `the artefact/MicroEntity/hcu/` for exact historical path, receipt, package and donor provenance. The path name **MicroEntity is not a current product identity**.
 
-The HCU is a CPU-first modular cognition fabric for a separate resource-bounded VPS. It coordinates many logical ~0.8B cognition modules as one scheduled compute fabric while preserving the existing Mini Entity authority boundary.
+Current authority:
 
-Reference host supplied by the owner on 2026-08-23: KVM 4; 4 CPU cores; 16 GB RAM; 200 GB disk; 16 TB bandwidth.
+- **EntityOS** is the sole current product/system identity.
+- **HCU** is the sole current integrated cognition/compute architecture.
+- Clay is the persistent research entity; temporary workers and HCU logical cells are organs/functions, not new entities.
+- UnifiedDB, or the current compatibility MiniUnifiedDB substrate while exact migration remains incomplete, is the canonical durable state/evidence authority.
+- EffectGate + EffectJournal are the only admitted real/state-changing effect authority.
+- HCU, J-Space, world-model, workspace and model outputs are candidate/projection/measurement only and cannot mint canonical truth.
 
-The HCU is developed in parallel on exact `go` cycles. It does **not** create a second entity, second durable world truth, second effect path, or hidden autonomous authority.
+The current integration contract is `ENTITYOS_HCU_INTEGRATION_CONTRACT.json`. It supersedes historical Mini Entity product/workstream wording in older receipts and Git history without rewriting those historical identities.
 
-## Directory law
+## Current HCU path
 
-All HCU source contracts, topology profiles, package data indices, deterministic receipts and non-secret generated release artefacts belong under `the artefact/MicroEntity/hcu/` and are included in `the artefact/MicroEntity/MICROENTITY_CURRENT.zip`.
+```text
+new data/event/prompt
+-> Typed Entry Fabric
+-> immutable causal event identity + concrete admission identity
+-> canonical state/evidence
+-> deterministic control plane
+-> independently admitted EngineAdmission / capacity / capability bindings
+-> HCU GRID10 / COGSIM10 / WM_TEST / NESTED_SIM / SCALEOUT computation
+-> typed causal packet / Hyperposition / workspace
+-> candidate decision or typed effect request
+-> EffectGate + EffectJournal
+```
 
-Operational truth/state remains canonical in MiniUnifiedDB. Release archives may include privacy-filtered exports and receipts, but never API tokens, secret values or opaque credential material.
+Required invariants:
+
+- replay-stable `event_sha256` is distinct from concrete admission identity;
+- Entry capability or resource claims may narrow independently admitted authority but may never self-grant or broaden it;
+- engine/provider/class/artifact authority comes from deterministic control-plane admission, never from an untrusted causal event;
+- downstream inference receipts must echo the admitted event/admission/route/engine/artifact identities required by the current contract;
+- one versioned canonical identity path must be selected before heterogeneous/cross-language hash identity is promoted;
+- no second router, Entry authority, canonicalizer authority, state authority, identity service, recovery ledger or effect path is created to bypass a blocker.
+
+## Retained donor lane
+
+Draft PR #1263 is the retained HCU donor/integration lane for the richer Typed Entry + EngineAdmission + router + inference-receipt + GRID10 mechanisms. It is donor evidence, not a second product head, and must be rebased/fused into current EntityOS/HCU authority rather than duplicated.
 
 ## Files
 
-- `HCU_ARCHITECTURE.md` — architecture and authority contract.
-- `topology.kvm4.json` — resource-adaptive KVM4 **planning** topology; numeric targets are not runtime evidence.
-- `FREE_LLM_FEED_CONTRACT.json` — FREE_ONLY external candidate-feed contract.
-- `HCU_DATA_INDEX.json` — release/package data policy and generated-artifact index.
-- `capacity_guard_v1.py` — fail-closed bridge from source topology to exact measured capacity; without an admitted measurement it returns capacity as unresolved.
-- `test_capacity_guard_v1.py` — deterministic authority/capacity poison regressions.
-- `receipts/` — non-secret bounded evidence receipts.
+- `ENTITYOS_HCU_INTEGRATION_CONTRACT.json` — current authority/integration fence for this compatibility subtree.
+- `HCU_ARCHITECTURE.md` — current EntityOS/HCU architecture contract.
+- `topology.kvm4.json` — historical/planning capacity profile only; numeric values are not runtime facts.
+- `FREE_LLM_FEED_CONTRACT.json` — bounded FREE_ONLY candidate-feed contract where still compatible with current authority.
+- `HCU_DATA_INDEX.json` — current compatibility-subtree data/package index.
+- `capacity_guard_v1.py` — fail-closed capacity-admission donor primitive.
+- `test_capacity_guard_v1.py` — deterministic capacity poison regressions.
+- `receipts/` — bounded non-secret evidence receipts.
 
-## Core idea
+## Execution and evidence law
 
-The efficient implementation is **not** to keep dozens of independent full model copies in RAM. Instead keep a small resident ~0.8B worker pool, share/checkpoint-map immutable weights where supported, multiplex many logical roles/contexts over those workers, keep canonical state in MiniUnifiedDB, preserve alternatives in Hyperposition, and let deterministic gates admit durable state/effects.
+Current build/test/experiment/runtime credit comes only from `AUTHORIZED_ISOLATED_SANDBOX_ONLY`. VPS, self-hosted and production-host testing are forbidden under current control. A KVM/VPS profile is a deployment/planning target only until separately authorized; it cannot provide current acceptance credit.
 
-This makes the grid GPU-like only in the scheduling sense: many logical lanes feeding a bounded execution fabric. It is not represented as literal GPU hardware.
+Together API and paid fallback are forbidden. Final paid/model training requires explicit owner authorization. Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 
-## Capacity evidence law
-
-`target_slots=16`, `adaptive_ceiling=24`, `target_resident_inference_workers=2` and similar topology values are source planning targets only.
-
-Numeric runtime capacity may be admitted only through `HCU_CAPACITY_MEASUREMENT/v1` bound to exact source/model/tokenizer/runtime/measurement identities from `AUTHORIZED_ISOLATED_SANDBOX`. Target-VPS execution does not satisfy current test admission law.
-
-## Evidence boundary
-
-The HCU architecture is a **SOURCE/ARCHITECTURE CONTRACT**. The capacity guard has exact deterministic component-mechanism evidence. Neither establishes measured throughput, model fit, resident-module count, J-Space/GWT causality, target-VPS behavior, or whole Mini Entity runtime acceptance.
+Current runtime credit remains zero until the exact current EntityOS/HCU path is actually executed and bound to exact source, model/checkpoint/tokenizer/runtime, capacity, causal/admission and effect identities.

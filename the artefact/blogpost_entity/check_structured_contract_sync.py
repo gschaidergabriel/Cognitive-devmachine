@@ -2,9 +2,9 @@
 """Fail-closed static guard for canonical Clay <-> Python reference contract drift.
 
 The canonical Clay source owns the forward contract: DB-resident profile, one explicit
-Cognitive Fabric admission before generic inference, and no legacy provider effect path.
-The Python reference runtime/tests may lag, but that lag must stay explicit and must
-never cause the canonical Clay contract to be rolled backward.
+pre-inference Cognitive Fabric admission, generic inference, deterministic gate/CAS commit,
+and one post-turn UCF runtime-receipt finalization. The Python reference runtime/tests may
+lag, but that lag must stay explicit and must never roll the canonical Clay contract back.
 
 Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
 unwired handler names do not count as runtime support.
@@ -22,6 +22,7 @@ REQUIRED_EFFECTS = {
     "pipeline_profile_read": "_pipeline_profile_read",
     "pipeline_cognitive_fabric_admit": "_pipeline_cognitive_fabric_admit",
     "inference_generate": "_inference_generate",
+    "pipeline_cognitive_fabric_finalize": "_pipeline_cognitive_fabric_finalize",
 }
 LEGACY_EFFECTS = {"profile_load", "provider_chat_json"}
 
@@ -188,6 +189,7 @@ def main() -> int:
         "inference_generate",
         "pipeline_gate",
         "pipeline_commit",
+        "pipeline_cognitive_fabric_finalize",
     ]
     order_ok = all(name in call_sequence for name in required_order)
     if order_ok:
@@ -199,16 +201,30 @@ def main() -> int:
         "three_argument_runtime_boundary": run_args == ["entity_db", "source_db", "secret_file"],
         "db_resident_profile_effect": 'effect("pipeline_profile_read"' in clay,
         "cognitive_fabric_admission_effect": 'phase("pipeline_cognitive_fabric_admit"' in clay,
-        "cognitive_fabric_before_inference": order_ok,
+        "cognitive_fabric_finalization_effect": 'phase("pipeline_cognitive_fabric_finalize"' in clay,
+        "cognitive_fabric_temporal_order": order_ok,
         "generic_inference_effect": 'effect("inference_generate"' in clay,
         "inference_consumes_admitted_engine": 'map_set(infer,"inference",admitted.inference)' in clay,
         "inference_consumes_admitted_context": (
             'map_set(infer,"system",admitted.system)' in clay
             and 'map_set(infer,"user",admitted.user)' in clay
         ),
-        "inference_binds_packet_receipts": (
+        "inference_binds_pre_admission_only": (
             'map_set(infer,"inference_packet_digest",admitted.inference_packet_digest)' in clay
-            and 'map_set(infer,"cognitive_fabric_receipt_digest",admitted.cognitive_fabric_receipt_digest)' in clay
+            and 'map_set(infer,"cognitive_fabric_admission_receipt_digest",admitted.cognitive_fabric_receipt_digest)' in clay
+            and 'map_set(infer,"ucf_runtime_receipt_digest"' not in clay
+            and 'map_set(infer,"cognitive_fabric_receipt_digest"' not in clay
+        ),
+        "gate_commit_bind_same_admission": (
+            'map_set(gate_data,"cognitive_fabric_admission",admitted)' in clay
+            and 'map_set(commit_data,"cognitive_fabric_admission",admitted)' in clay
+        ),
+        "finalizer_binds_terminal_turn": (
+            'map_set(finalize_data,"admitted",admitted)' in clay
+            and 'map_set(finalize_data,"generated",generated)' in clay
+            and 'map_set(finalize_data,"gated",gated)' in clay
+            and 'map_set(finalize_data,"committed",committed)' in clay
+            and 'map_set(result,"ucf_runtime_receipt_digest",finalized.ucf_runtime_receipt_digest)' in clay
         ),
         "raw_profile_prompt_inference_bypass_absent": (
             'map_set(infer,"inference",profile.inference)' not in clay
@@ -231,11 +247,14 @@ def main() -> int:
             clay_contract["three_argument_runtime_boundary"],
             clay_contract["db_resident_profile_effect"],
             clay_contract["cognitive_fabric_admission_effect"],
-            clay_contract["cognitive_fabric_before_inference"],
+            clay_contract["cognitive_fabric_finalization_effect"],
+            clay_contract["cognitive_fabric_temporal_order"],
             clay_contract["generic_inference_effect"],
             clay_contract["inference_consumes_admitted_engine"],
             clay_contract["inference_consumes_admitted_context"],
-            clay_contract["inference_binds_packet_receipts"],
+            clay_contract["inference_binds_pre_admission_only"],
+            clay_contract["gate_commit_bind_same_admission"],
+            clay_contract["finalizer_binds_terminal_turn"],
             clay_contract["raw_profile_prompt_inference_bypass_absent"],
             clay_contract["old_profile_load_absent"],
             clay_contract["old_provider_chat_absent"],
@@ -254,13 +273,13 @@ def main() -> int:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v3",
+        "schema": "clay-structured-contract-sync/v4",
         "canonical_clay": clay_contract,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay DB-resident profile -> Cognitive Fabric admission -> inference_generate semantics are forward authority; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
+        "policy": "Canonical Clay authority is DB-resident profile -> pre-inference Cognitive Fabric admission -> inference_generate -> deterministic gate/MiniUnifiedDB CAS commit -> post-turn UCF runtime-receipt finalization; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
         "errors": errors,
         "pass": not errors,
     }

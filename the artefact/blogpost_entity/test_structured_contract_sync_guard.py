@@ -14,18 +14,16 @@ class StructuredContractSyncGuardTests(unittest.TestCase):
     def test_comment_only_effect_names_do_not_count_as_support(self):
         poisoned = '''
 class ProfilePipelineRuntime:
-    """pipeline_profile_read pipeline_cognitive_fabric_admit inference_generate"""
+    """pipeline_profile_read pipeline_cognitive_fabric_admit inference_generate pipeline_cognitive_fabric_finalize"""
     def __init__(self):
         self.allowed_effects = {"legacy_only"}
     def effect(self, kind, payload=None):
         # Required effect names below are intentionally dead text.
         return {"ok": False}
-    def _pipeline_profile_read(self, payload):
-        return {"ok": True}
-    def _pipeline_cognitive_fabric_admit(self, payload):
-        return {"ok": True}
-    def _inference_generate(self, payload):
-        return {"ok": True}
+    def _pipeline_profile_read(self, payload): return {"ok": True}
+    def _pipeline_cognitive_fabric_admit(self, payload): return {"ok": True}
+    def _inference_generate(self, payload): return {"ok": True}
+    def _pipeline_cognitive_fabric_finalize(self, payload): return {"ok": True}
 '''
         report = guard.runtime_effect_contract(poisoned)
         self.assertFalse(report["converged"])
@@ -35,6 +33,7 @@ class ProfilePipelineRuntime:
                 "pipeline_profile_read": False,
                 "pipeline_cognitive_fabric_admit": False,
                 "inference_generate": False,
+                "pipeline_cognitive_fabric_finalize": False,
             },
         )
 
@@ -46,6 +45,56 @@ class ProfilePipelineRuntime:
             "pipeline_profile_read",
             "pipeline_cognitive_fabric_admit",
             "inference_generate",
+            "pipeline_cognitive_fabric_finalize",
+        }
+    def effect(self, kind, payload=None):
+        dispatch = {
+            "pipeline_profile_read": self._pipeline_profile_read,
+            "pipeline_cognitive_fabric_admit": self._pipeline_cognitive_fabric_admit,
+            "inference_generate": self._inference_generate,
+            "pipeline_cognitive_fabric_finalize": self._pipeline_cognitive_fabric_finalize,
+        }
+        return dispatch[kind](payload or {})
+    def _pipeline_profile_read(self, payload): return {"ok": True}
+    def _pipeline_cognitive_fabric_admit(self, payload): return {"ok": True}
+    def _inference_generate(self, payload): return {"ok": True}
+    def _pipeline_cognitive_fabric_finalize(self, payload): return {"ok": True}
+'''
+        report = guard.runtime_effect_contract(bound)
+        self.assertTrue(report["converged"])
+
+    def test_missing_pre_admission_handler_keeps_gate_closed(self):
+        bypass = '''
+class ProfilePipelineRuntime:
+    def __init__(self):
+        self.allowed_effects = {
+            "pipeline_profile_read",
+            "inference_generate",
+            "pipeline_cognitive_fabric_finalize",
+        }
+    def effect(self, kind, payload=None):
+        dispatch = {
+            "pipeline_profile_read": self._pipeline_profile_read,
+            "inference_generate": self._inference_generate,
+            "pipeline_cognitive_fabric_finalize": self._pipeline_cognitive_fabric_finalize,
+        }
+        return dispatch[kind](payload or {})
+    def _pipeline_profile_read(self, payload): return {"ok": True}
+    def _inference_generate(self, payload): return {"ok": True}
+    def _pipeline_cognitive_fabric_finalize(self, payload): return {"ok": True}
+'''
+        report = guard.runtime_effect_contract(bypass)
+        self.assertFalse(report["required_effect_bindings"]["pipeline_cognitive_fabric_admit"])
+        self.assertFalse(report["converged"])
+
+    def test_missing_post_turn_finalizer_keeps_gate_closed(self):
+        premature = '''
+class ProfilePipelineRuntime:
+    def __init__(self):
+        self.allowed_effects = {
+            "pipeline_profile_read",
+            "pipeline_cognitive_fabric_admit",
+            "inference_generate",
         }
     def effect(self, kind, payload=None):
         dispatch = {
@@ -54,32 +103,12 @@ class ProfilePipelineRuntime:
             "inference_generate": self._inference_generate,
         }
         return dispatch[kind](payload or {})
-    def _pipeline_profile_read(self, payload):
-        return {"ok": True}
-    def _pipeline_cognitive_fabric_admit(self, payload):
-        return {"ok": True}
-    def _inference_generate(self, payload):
-        return {"ok": True}
-'''
-        report = guard.runtime_effect_contract(bound)
-        self.assertTrue(report["converged"])
-
-    def test_missing_cognitive_fabric_handler_keeps_gate_closed(self):
-        bypass = '''
-class ProfilePipelineRuntime:
-    def __init__(self):
-        self.allowed_effects = {"pipeline_profile_read", "inference_generate"}
-    def effect(self, kind, payload=None):
-        dispatch = {
-            "pipeline_profile_read": self._pipeline_profile_read,
-            "inference_generate": self._inference_generate,
-        }
-        return dispatch[kind](payload or {})
     def _pipeline_profile_read(self, payload): return {"ok": True}
+    def _pipeline_cognitive_fabric_admit(self, payload): return {"ok": True}
     def _inference_generate(self, payload): return {"ok": True}
 '''
-        report = guard.runtime_effect_contract(bypass)
-        self.assertFalse(report["required_effect_bindings"]["pipeline_cognitive_fabric_admit"])
+        report = guard.runtime_effect_contract(premature)
+        self.assertFalse(report["required_effect_bindings"]["pipeline_cognitive_fabric_finalize"])
         self.assertFalse(report["converged"])
 
     def test_legacy_effect_in_dispatch_keeps_gate_closed(self):
@@ -90,6 +119,7 @@ class ProfilePipelineRuntime:
             "pipeline_profile_read",
             "pipeline_cognitive_fabric_admit",
             "inference_generate",
+            "pipeline_cognitive_fabric_finalize",
             "profile_load",
         }
     def effect(self, kind, payload=None):
@@ -97,12 +127,14 @@ class ProfilePipelineRuntime:
             "pipeline_profile_read": self._pipeline_profile_read,
             "pipeline_cognitive_fabric_admit": self._pipeline_cognitive_fabric_admit,
             "inference_generate": self._inference_generate,
+            "pipeline_cognitive_fabric_finalize": self._pipeline_cognitive_fabric_finalize,
             "profile_load": self._profile_load,
         }
         return dispatch[kind](payload or {})
     def _pipeline_profile_read(self, payload): return {"ok": True}
     def _pipeline_cognitive_fabric_admit(self, payload): return {"ok": True}
     def _inference_generate(self, payload): return {"ok": True}
+    def _pipeline_cognitive_fabric_finalize(self, payload): return {"ok": True}
     def _profile_load(self, payload): return {"ok": True}
 '''
         report = guard.runtime_effect_contract(mixed)

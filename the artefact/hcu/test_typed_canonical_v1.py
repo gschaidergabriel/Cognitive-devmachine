@@ -1,5 +1,6 @@
 import sys
 import unittest
+from collections import UserDict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -47,6 +48,17 @@ class TypedCanonicalTests(unittest.TestCase):
         decomposed = {"value": "e\u0301"}
         self.assertNotEqual(canonical_bytes(composed), canonical_bytes(decomposed))
         self.assertNotEqual(canonical_sha256(composed), canonical_sha256(decomposed))
+
+    def test_string_escape_contract_is_explicit(self):
+        value = {"s": "\b\t\n\f\r\x0f\"\\€"}
+        self.assertEqual(
+            canonical_bytes(value).decode("utf-8"),
+            '{"s":"\\b\\t\\n\\f\\r\\u000f\\"\\\\€"}',
+        )
+
+    def test_custom_mapping_type_is_not_admitted(self):
+        with self.assertRaisesRegex(TypedCanonicalizationError, "TYPE_NOT_ADMITTED"):
+            canonical_sha256(UserDict({"a": 1}))
 
     def test_boolean_is_not_integer_alias(self):
         self.assertNotEqual(canonical_sha256({"v": True}), canonical_sha256({"v": 1}))

@@ -25,6 +25,7 @@ r3.counter(
   prompt_copy_confound,
   stale_or_substituted_manifest,
   cross_bundle_calibration_alias,
+  runtime_byte_substitution_under_stable_runtime_name,
   runtime_receipt_self_authorizes_manifest,
   dirty_source_without_byte_identity,
   unattributed_or_duplicate_first_action,
@@ -52,6 +53,7 @@ r4.discriminate(
   require(boot_manifest_sha256 == source_lock.manifest_file_sha256),
   require(boot_checkpoint_sha256 == bundled_manifest.checkpoint_digest),
   require(boot_tokenizer_sha256 == bundled_manifest.tokenizer_digest),
+  require(boot_runtime_sha256 == bundled_manifest.runtime_digest),
   require(boot_jspace_profile_sha256 == bundled_manifest.jspace_profile_digest),
   require(boot_lens_profile_sha256 == bundled_manifest.lens_profile_digest),
   require(boot_workspace_calibration_sha256 == bundled_manifest.workspace_calibration_digest),
@@ -72,7 +74,7 @@ The boot receipt is not allowed to self-authorize a plausible collection of dige
 2. `BUNDLED_COGNITION_SOURCE_LOCK/v1` as the explicit source-side admission lock;
 3. the observed `JSPACE_GWT_BOOT_BINDING_RECEIPT/v1`.
 
-The source lock binds both the raw manifest file digest and the manifest validator's complete and semantic integration identities. The boot receipt must then match the admitted manifest for engine/model/checkpoint/tokenizer, optional quantization/runtime identity, J-Space profile, lens profile, optional steering calibration and workspace calibration.
+The source lock binds both the raw manifest file digest and the manifest validator's complete and semantic integration identities. The boot receipt must then match the admitted manifest for engine/model/checkpoint/tokenizer, exact runtime bytes, optional quantization/runtime identity, J-Space profile, lens profile, optional steering calibration and workspace calibration. `runtime_digest` is identity-bearing in the bundled manifest when present and is mandatory for boot admission; a stable runtime name cannot authorize different executable bytes.
 
 The repository ships the source-lock file intentionally as `UNBOUND`. This is a fail-closed state, not a missing-data convenience: it must remain unable to admit cognition until exact bundled checkpoint/tokenizer/runtime/J-Space/lens/workspace artifacts have been measured and the corresponding manifest has been explicitly admitted.
 

@@ -80,6 +80,56 @@ def test_future_db_profile_reference_must_bind_native_authority_and_preservation
     assert "_read_only_db" in query_body or "query_only" in query_body or "mode=ro" in query_body
 
 
+def test_future_reference_read_effects_do_not_reenter_schema_or_migration_writes() -> None:
+    """After pipeline_init, read/collect helpers must stay observational.
+
+    A converged reference runtime may centralize DDL/migration in `_ensure_schema`, but
+    calling that helper from `pipeline_profile_read`, `pipeline_state_read`, or the
+    exactly-once lookup path turns a nominal read into a canonical write surface. That
+    breaks phase/effect responsibility and can mutate generation/profile state before the
+    explicit commit gate. Current legacy main remains allowed until DB-profile convergence
+    activates this guard.
+    """
+    source = RUNTIME_PATH.read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    profile_read = _function(tree, "_pipeline_profile_read")
+    if profile_read is None:
+        return
+
+    init = _function(tree, "_pipeline_init")
+    state_read = _function(tree, "_pipeline_state_read")
+    consumed_read = _function(tree, "_already_consumed")
+    assert init is not None
+    assert state_read is not None
+    assert consumed_read is not None
+
+    init_body = _body(source, init)
+    assert "_ensure_schema" in init_body or "CREATE TABLE" in init_body, (
+        "pipeline_init must own schema/bootstrap responsibility before read phases"
+    )
+
+    forbidden_write_tokens = (
+        "_ensure_schema(",
+        "CREATE TABLE",
+        "ALTER TABLE",
+        "DROP TABLE",
+        "INSERT ",
+        "UPDATE ",
+        "DELETE ",
+    )
+    for name, node in (
+        ("_pipeline_profile_read", profile_read),
+        ("_pipeline_state_read", state_read),
+        ("_already_consumed", consumed_read),
+    ):
+        body = _body(source, node)
+        for token in forbidden_write_tokens:
+            assert token not in body, (
+                f"{name} re-enters schema/migration/write responsibility via {token!r}; "
+                "read phases must be observational after pipeline_init"
+            )
+
+
 def test_parity_metadata_may_not_turn_green_while_profile_authority_is_parallel() -> None:
     """Prevent Goodhart: contract PARITY cannot coexist with a second profile table."""
     source = RUNTIME_PATH.read_text(encoding="utf-8")

@@ -24,13 +24,32 @@ class WorldAssembler:
 
     def _active_identity(self, session_id):
         row = self.db.db.execute(
-            "SELECT a.turn_id,a.episode_id,a.causal_id,a.generation,t.content "
-            "FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id "
+            "SELECT a.turn_id,a.episode_id,a.causal_id,a.generation,t.content,"
+            "a.user_id AS active_user_id,s.user_id AS session_user_id,"
+            "t.session_id AS turn_session_id,t.user_id AS turn_user_id,"
+            "w.session_id AS episode_session_id,w.observation_turn_id AS episode_turn_id "
+            "FROM active_turns a "
+            "JOIN sessions s ON s.session_id=a.session_id "
+            "JOIN turns t ON t.turn_id=a.turn_id "
+            "JOIN workspace_episodes w ON w.episode_id=a.episode_id "
             "WHERE a.session_id=?",
             (session_id,),
         ).fetchone()
         if not row:
+            active = self.db.db.execute(
+                "SELECT 1 FROM active_turns WHERE session_id=?", (session_id,)
+            ).fetchone()
+            if active:
+                raise RuntimeError("active causal identity join incomplete")
             return None
+        if (
+            row["active_user_id"] != row["session_user_id"]
+            or row["turn_session_id"] != session_id
+            or row["turn_user_id"] != row["active_user_id"]
+            or row["episode_session_id"] != session_id
+            or row["episode_turn_id"] != row["turn_id"]
+        ):
+            raise RuntimeError("active causal identity mismatch")
         return {
             "query": row["content"],
             "turn_id": row["turn_id"],

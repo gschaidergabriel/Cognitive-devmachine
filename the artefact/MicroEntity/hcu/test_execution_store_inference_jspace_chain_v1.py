@@ -107,7 +107,7 @@ def training_trace_for(packet, decision, kwargs, execution):
         local_workspace_state_ref="unifieddb:workspace:execution-store-chain:v1",
         global_jspace_slice_ref="unifieddb:jspace-slice:execution-store-chain:v1",
         hyperposition_branch_ids=("branch:execution-store:a", "branch:execution-store:b"),
-        provenance_evidence_class="EXACT_SOURCE_INTEGRATION_TRACE",
+        provenance_evidence_class="EXACT_PROTOTYPE_TRACE",
         resource_budget={"max_model_calls": 1, "max_tokens": 1024, "max_wall_ms": 2500},
         requested_action_class="CANDIDATE_INFERENCE",
         expected_structured_model_output="schema://hcu/candidate-output/v1",

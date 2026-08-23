@@ -51,6 +51,14 @@ PASS requires parse success into an explicit result schema, candidate-only class
 ### `ENV_ISOLATION_RECEIPT/v1`
 PASS requires an explicit environment allowlist, observed child keys contained by that allowlist, zero forbidden keys, zero secret-value leaks, and a digest of the observed environment shape. Secret values never enter the receipt.
 
+The receipt-declared allowlist is measurement data, not policy authority. It MAY be a subset of the canonical Claude child-process environment policy, but MUST NOT contain any key outside that policy. A receipt therefore cannot turn an ambient or forbidden key into an allowed key merely by listing it in both `allowed_env_keys` and `observed_child_env_keys`. Widening the child environment requires an explicit versioned source/contract policy change; it cannot be authorized by the receipt being validated.
+
+```text
+RECEIPT_DECLARED_ALLOWLIST <= CANONICAL_CHILD_ENV_POLICY
+RECEIPT_SELF_AUTHORIZATION = FORBIDDEN
+OBSERVED_KEY_OUTSIDE_CANONICAL_POLICY = FAIL_CLOSED
+```
+
 ## Aggregate law
 
 ```text

@@ -54,31 +54,15 @@
     }
   },
   "reference_runtime_effect_surface": {
-    "status": "FAIL_CLOSED_MISMATCH",
-    "missing_current_effects": [
-      "pipeline_profile_read",
-      "inference_generate"
-    ],
-    "stale_current_effects": [
-      "profile_load",
-      "provider_chat_json"
-    ],
-    "missing_semantic_requirements": {
-      "pipeline_profile_read": [
-        "missing_method:_pipeline_profile_read"
-      ],
-      "inference_generate": [
-        "missing_method:_inference_generate"
-      ]
-    },
-    "stale_legacy_methods": [
-      "_profile_load",
-      "_provider_chat_json"
-    ],
+    "status": "PARITY",
+    "missing_current_effects": [],
+    "stale_current_effects": [],
+    "missing_semantic_requirements": {},
+    "stale_legacy_methods": [],
     "promotion_requires": "The canonical reference runtime must expose the current effect names and implement their current state/payload responsibilities. Name-only aliases or shims do not establish parity. Missing current effects, missing required method-body semantics, retained legacy alternate methods, or stale legacy effects keep admission fail-closed."
   },
   "reference_runtime_fresh_main_fusion": {
-    "status": "NARROW_FRESH_MAIN_EXTRACTION_REQUIRED",
+    "status": "SOURCE_CONVERGED_RUNTIME_EVIDENCE_REQUIRED",
     "donor_policy": "Mechanisms may be extracted only onto freshly rebound current main. No stale donor branch is a whole-runtime promotion candidate.",
     "donors": [
       {
@@ -122,6 +106,10 @@
         "bound_source": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json#required_reference_effect_semantics"
       },
       {
+        "invariant": "native_profile_authority_singleton",
+        "bound_source": "the artefact/blogpost_entity/native/test_reference_profile_authority_convergence.py"
+      },
+      {
         "invariant": "rfc6901_response_pointer_semantics",
         "bound_source": "the artefact/blogpost_entity/presets/zero_blog.json#inference.response_pointer"
       },
@@ -157,7 +145,7 @@
       "generic_host_shell_effect_path",
       "study_or_presentation_side_path_required_for_reference_convergence"
     ],
-    "promotion_requires": "Implement only the missing current responsibilities on freshly rebound current main, preserve every bound invariant, align the structured regression adapter to the three-argument DB-resident profile boundary, and obtain exact-source authorized isolated execution before reference/native parity promotion."
+    "promotion_requires": "Source convergence does not imply runtime acceptance: align the structured regression adapter to the three-argument DB-resident profile boundary and obtain exact-source authorized isolated execution before reference/native parity promotion."
   },
   "required_source_adapters_from_shipped_v2": [
     "json_snapshot",

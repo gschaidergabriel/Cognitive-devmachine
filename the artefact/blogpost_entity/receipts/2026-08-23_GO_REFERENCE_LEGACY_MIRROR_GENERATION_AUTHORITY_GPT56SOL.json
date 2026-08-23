@@ -1,0 +1,67 @@
+{
+  "schema": "MINI_ENTITY_GO_RECEIPT/v1",
+  "trigger": "go",
+  "macrocycle_id": "b2c3d234-3cfc-4f13-8cbd-47edbab683b9",
+  "organ": "GPT-5.6-Sol",
+  "base_main_sha": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+  "execution_policy": "FREE_ONLY",
+  "provider_execution": false,
+  "money_spent_usd": 0,
+  "grf": {
+    "R0_observe": [
+      "Current main PROGRAM_STATE names native/reference convergence as the highest product-convergent gate.",
+      "Current main tools/clay_profile_pipeline_runtime.py still exposes legacy profile_load/provider_chat_json.",
+      "Open PR #966 is the existing non-duplicate source candidate converging to pipeline_profile_read/inference_generate and one MiniUnifiedDB profile authority.",
+      "PR #966 _ensure_schema states entity_state.generation is the CAS authority but computes migrated_generation=max(native_generation, mirror_generation) and writes that result back into entity_state."
+    ],
+    "R1_infer": "If legacy eos_pipeline_state.generation is higher than entity_state.generation, the supposedly reference-only mirror can advance the canonical generation and therefore remains a second generation authority.",
+    "R2_generate": [
+      "H1: max(native,mirror) is harmless migration compatibility because mirror cannot independently diverge.",
+      "H2: mirror divergence can deterministically raise canonical generation, violating single-authority semantics.",
+      "H3: only native->mirror one-way repair should be admitted after native authority exists; legacy->native migration needs a one-time explicit provenance-bound migration state rather than recurrent max reconciliation."
+    ],
+    "R3_counter": "Strongest counterhypothesis: eos_pipeline_state is historical trusted state and taking max prevents rollback after older reference runs, so upward reconciliation is intentional and safe.",
+    "R4_discriminate": {
+      "id": "LEGACY_MIRROR_GENERATION_ESCALATION",
+      "bounded_unusual_experiment": true,
+      "setup": "SQLite reproduction of the exact PR #966 generation reconciliation fragment with entity_state.generation=2 and eos_pipeline_state.generation=999.",
+      "prediction_H1": "entity_state remains 2 or reconciliation fails closed because mirror is non-authoritative.",
+      "prediction_H2": "entity_state becomes 999 solely from mirror state.",
+      "observed": {
+        "before": {"entity_state_generation": 2, "eos_pipeline_state_generation": 999},
+        "after": {"entity_state_generation": 999, "eos_pipeline_state_generation": 999}
+      },
+      "result": "H2_SUPPORTED_H1_FALSIFIED_AT_DETERMINISTIC_FRAGMENT_SCOPE"
+    },
+    "R5_emergent": [
+      "A compatibility mirror becomes an authority whenever it can raise canonical state during normal schema admission.",
+      "Single-profile authority and current effect-name parity are insufficient if generation authority remains bidirectional.",
+      "The safest convergence direction is canonical entity_state -> reference mirror during steady state; any historical mirror import must be explicit, one-shot, provenance-bound and separately accepted."
+    ],
+    "R6_verify": {
+      "evidence_class": "SOURCE_BOUND_DETERMINISTIC_FRAGMENT_REPRODUCTION",
+      "whole_runtime_credit": "ZERO",
+      "whole_product_credit": "ZERO",
+      "promotion_effect": "PR_966_MUST_NOT_BE_PROMOTED_WITH_CURRENT_MAX_RECONCILIATION",
+      "required_repair": [
+        "Remove recurrent mirror->native max authority from _ensure_schema once entity_state exists as canonical authority.",
+        "Add regression where mirror generation is greater than canonical generation and require fail-closed or canonical-preserving behavior.",
+        "If legacy migration is needed, make it an explicit one-time migration with provenance/receipt rather than implicit every-open reconciliation.",
+        "Retain atomic same-transaction native CAS plus mirror update after successful canonical generation transition."
+      ]
+    }
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "LEGACY_MIRROR_GENERATION_ESCALATION"
+  },
+  "parallel_execution": {
+    "pr_966_existing_job_rerun_requested": true,
+    "workflow_run_id": 32574927964,
+    "rerun_job_id": 97124891426,
+    "state_at_receipt_write": "QUEUED",
+    "runtime_credit": "ZERO_UNTIL_VISIBLE_STEPS_EXECUTE"
+  },
+  "next_gate": "Repair PR #966 generation reconciliation without creating a second canonical path; then execute the exact repaired head in an actually-started authorized runner and preserve CAS/fault/profile-integrity regressions.",
+  "german_summary": "Der vorhandene Referenz-Konvergenzkandidat #966 hat trotz richtiger Effekt-Namen noch eine versteckte zweite Generations-Autorität: ein höherer Legacy-Mirror-Wert kann die kanonische entity_state.generation hochsetzen. Das wurde deterministisch am exakten Reconcile-Fragment reproduziert (2 -> 999). Vor Promotion muss die Synchronisation auf kanonisch->Mirror begrenzt oder als explizite einmalige Migration abgesichert und danach exakt ausgeführt werden."
+}

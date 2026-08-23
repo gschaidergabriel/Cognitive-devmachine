@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "98d24a84a10799646b220d11e32927c5ab49d4a4",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_comment_id": 5388216632,
+    "force_push_used": false,
+    "duplicate_lane_created": false
+  },
+  "observed_executor_state": {
+    "latest_head_observed_during_discriminator": "0e7380b39d6f7ddf7ba7f06bc45609ce7659caeb",
+    "dynamic_route_blob_observed": "e4f6bcc7686a774bba966d570afb80435a4e4729",
+    "historical_carrier": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-5c59891b",
+    "historical_carrier_restored_to_exact_five_file_baseline_at_head": "efb404b5233642bbf166158b876133c002f1fd7b",
+    "successor_closure": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-511d5689",
+    "successor_exact_blob_count": 17,
+    "route_verifies_contract_manifest_and_deployment_carried_git_blobs_before_cost_gate": true,
+    "promotion_guard_v2_wired_in_prevercel_build": true,
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "runtime_execution_observed": false
+  },
+  "regression_finding": {
+    "finding": "DYNAMIC_ROUTE_RESULT_FENCE_WEAKER_THAN_PREVIOUS_EXACT_14_TEST_FENCE",
+    "route_expected_test_count": 14,
+    "route_semantic_test_names_required": 7,
+    "route_generic_ok_check": "combined.includes('OK')",
+    "route_rejects_skipped_summary": false,
+    "route_rejects_expected_failures_summary": false,
+    "promotion_guard_v2_requires_all_14_test_identities": true,
+    "promotion_guard_v2_requires_stricter_result_fence_markers": true,
+    "interpretation": "The v2 promotion guard is correctly fail-closed against a real successor-route result-identity regression, even though some of its implementation-marker expectations still name the earlier static route. Do not weaken the guard to make the build green.",
+    "counterhypothesis": "Fourteen total tests plus seven high-value semantic markers and generic OK are sufficient because all test-source blobs and the command are hash-bound.",
+    "counterhypothesis_rejection": "The exact result surface is cheap to bind and already known. Requiring every verbose test identity plus exact count and non-skipped plain OK prevents accidental discovery/result drift and preserves the stronger previously established acceptance boundary."
+  },
+  "required_successor_fix": {
+    "route": [
+      "retain dynamic Contract + Manifest + 17 deployment-carried Git-blob verification before FREE_ONLY cost gate",
+      "restore explicit 14-name EXPECTED_REGRESSION_TESTS set and derive count from it",
+      "require every expected verbose unittest identity",
+      "require exact `Ran 14 tests in` summary",
+      "require standalone plain `OK` rather than generic substring match",
+      "reject `FAILED`, `skipped=`, and `expected failures=`"
+    ],
+    "guard": [
+      "keep exact 17-blob/14-test/source-credit invariants",
+      "validate implementation-independent dynamic-route semantics rather than stale FILES/exactRouteMap variable names"
+    ]
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: dynamic source-rebind route now proves the exact deployment-carried successor source closure before any Sandbox/cost path, historical-carrier pollution was removed, and the remaining guard/result incompatibility is isolated precisely.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the exact 17-blob successor closure remains the single production-derived Typed Entry -> route -> engine/load -> GRID10 -> atomic execution/inference source identity; historical provenance is again isolated.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: a result-fence regression was found before execution credit could be minted; exact 14-test J-Space/Inference v4/Binding v3 acceptance semantics are preserved as the required successor gate."
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Append-only receipt used because current-facing README and PR810 are moving rapidly under parallel organs; avoid overwriting concurrent state."
+  },
+  "next_exact_gate": "Re-enter current PR810. If the dynamic route still uses the weaker 7-marker/generic-OK result fence, restore the exact 14-test result identity while retaining dynamic Contract/Manifest/17-blob source verification; update promotion guard v2 only to remove stale implementation-variable coupling, not to weaken invariants. Then allow build/runtime observation only when FREE_ONLY Vercel Hobby admission permits."
+}

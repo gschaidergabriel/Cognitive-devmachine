@@ -1,5 +1,5 @@
 {
-  "schema_version": "HCU_DATA_INDEX/v6",
+  "schema_version": "HCU_DATA_INDEX/v7",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "compatibility_subtree": "MicroEntity",
@@ -15,15 +15,25 @@
     "admission": "hcu/engine_admission_v1.py",
     "loader_consumption": "hcu/engine_load_lease_v1.py",
     "verified_load_schema": "HCU_VERIFIED_ENGINE_LOAD/v1",
-    "inference_receipt": "hcu/inference_receipt_v2.py",
-    "inference_receipt_schema": "HCU_INFERENCE_RECEIPT/v2",
+    "inference_receipt": "hcu/inference_receipt_v1.py",
+    "inference_receipt_schema": "HCU_INFERENCE_RECEIPT/v3",
+    "runtime_credit": 0
+  },
+  "current_grid_path": {
+    "scheduler": "hcu/grid10_scheduler_v1.py",
+    "plan_schema": "ENTITYOS_HCU_GRID_PLAN/v2",
+    "canonicalization_schema": "RFC8785_JCS_IJSON/v1",
+    "entry_binding_schema": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2",
     "runtime_credit": 0
   },
   "historical_or_noncurrent_source": {
-    "hcu/inference_receipt_v1.py": "HISTORICAL_PRE_V2_INFERENCE_IDENTITY_NOT_CURRENT_PRODUCT_PATH",
-    "hcu/physical_engine_lease_v1.py": "NONCURRENT_OVERLAPPING_LEASE_CANDIDATE_NOT_SELECTED_FOR_V2_PATH",
+    "hcu/physical_engine_lease_v1.py": "NONCURRENT_OVERLAPPING_LEASE_CANDIDATE_NOT_SELECTED_FOR_CURRENT_VERIFIED_ENGINE_LOAD_PATH",
     "hcu/typed_entry_canonical_v1.py": "RESEARCH_PROVENANCE_ONLY_NOT_CURRENT_CANONICALIZER",
     "hcu/hcu_causal_canonical_v1.py": "RESEARCH_PROVENANCE_ONLY_NOT_CURRENT_CANONICALIZER"
+  },
+  "removed_or_superseded_source": {
+    "hcu/inference_receipt_v2.py": "REMOVED_AFTER_CONVERGENCE_TO_SINGLE_CURRENT_INFERENCE_PRODUCER",
+    "hcu/test_inference_receipt_v2.py": "REMOVED_WITH_SUPERSEDED_PARALLEL_INFERENCE_PRODUCER"
   },
   "generated_release_artifacts": [
     "hcu/README.md",
@@ -43,8 +53,8 @@
     "hcu/test_engine_admission_v1.py",
     "hcu/engine_load_lease_v1.py",
     "hcu/test_engine_load_lease_v1.py",
-    "hcu/inference_receipt_v2.py",
-    "hcu/test_inference_receipt_v2.py",
+    "hcu/inference_receipt_v1.py",
+    "hcu/test_inference_receipt_v1.py",
     "hcu/grid10_scheduler_v1.py",
     "hcu/test_grid10_scheduler_v1.py",
     "hcu/topology.kvm4.json",
@@ -59,9 +69,10 @@
     "effect_authority": "EffectGate/EffectJournal",
     "hcu_outputs": "CANDIDATE_OR_MEASUREMENT_ONLY",
     "entry_data_may_mint_engine_authority": false,
-    "loader_claims_may_mint_runtime_credit_without_actual_loader_evidence": false
+    "loader_claims_may_mint_runtime_credit_without_actual_loader_evidence": false,
+    "parallel_current_inference_receipt_producers_allowed": false
   },
-  "loader_evidence_law": "PRELOAD_HASH_IS_NOT_LOADER_ATTESTATION; CURRENT_V2_PATH_REQUIRES_A_GENERATION_FENCED_ENGINE_LOAD_LEASE_PLUS_ACTUAL_LOADER_READ_PATH_CONSUMPTION_EVIDENCE_REBOUND_AS_HCU_VERIFIED_ENGINE_LOAD_V1",
+  "loader_evidence_law": "PRELOAD_HASH_IS_NOT_LOADER_ATTESTATION; CURRENT_PATH_REQUIRES_A_GENERATION_FENCED_ENGINE_LOAD_LEASE_PLUS_ACTUAL_LOADER_READ_PATH_CONSUMPTION_EVIDENCE_REBOUND_AS_HCU_VERIFIED_ENGINE_LOAD_V1_BEFORE_INFERENCE_RECEIPT_V3",
   "grid10_policy": "TEN_LOGICAL_CELLS_ARE_NOT_TEN_MODEL_CALLS_OR_TEN_PHYSICAL_DECODERS; ENTRY_BUDGET_PLUS_SEPARATELY_ADMITTED_CAPACITY_RECEIPT_BOUND",
   "internal_cognition_dependency_policy": "NO_REQUIRED_EXTERNAL_PROVIDER_OR_EXTERNAL_EMBEDDING_SERVICE",
   "capacity_claim_policy": "NUMERIC_RUNTIME_CAPACITY_REQUIRES_EXACT_AUTHORIZED_ISOLATED_MEASUREMENT_RECEIPT",

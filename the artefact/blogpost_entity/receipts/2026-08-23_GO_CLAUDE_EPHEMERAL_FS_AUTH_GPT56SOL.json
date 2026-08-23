@@ -1,0 +1,74 @@
+{
+  "schema": "GO_CLAUDE_EPHEMERAL_FS_AUTH/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "status": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_RUNTIME_UNVERIFIED",
+  "scope": "Claude Code targeted candidate-inference filesystem/auth boundary only",
+  "lineage": {
+    "reapplied_base": "f2a55ccdc3a6d25842ee87b6bfa3a2b84fe3e033",
+    "pr_number": 1136,
+    "branch_head_before_receipt": "25200275255447a9c90abc4cc0b9ecb80f076c4f",
+    "adapter_blob": "41c96d51ac558ba787befbd8571e9d7ce2612473",
+    "runtime_test_blob": "d9cc4d11b3f3852b1af0ccc78dd70fa73a9aa624"
+  },
+  "observed_problem": [
+    "Merged side-memory controls disabled prompt history, auto-memory and CLAUDE.md loading but still inherited caller HOME/TMPDIR.",
+    "The canonical EPHEMERAL receipt requires measured temporary-home creation/removal.",
+    "A merged fake-child falsifier showed writable inherited HOME can persist child output."
+  ],
+  "candidate_delta": [
+    "Do not inherit host HOME or TMPDIR into targeted Claude inference.",
+    "Admit CLAUDE_CODE_OAUTH_TOKEN as explicit script/CI authentication transport alongside existing Anthropic environment authentication.",
+    "Create one 0700 TemporaryDirectory per availability/reason subprocess and bind HOME, CLAUDE_CONFIG_DIR and TMPDIR beneath it.",
+    "Keep no-session, prompt-history, auto-memory, CLAUDE.md, tool-less and strict-MCP fences.",
+    "Pass empty --setting-sources so user/project/local filesystem settings are not an intended context source.",
+    "Delete the runtime roots automatically on normal return and timeout/exception unwinding."
+  ],
+  "primary_external_evidence": [
+    "Claude Code authentication docs: CLAUDE_CODE_OAUTH_TOKEN is a long-lived inference token intended for CI/scripts without browser login and takes precedence over cached login credentials.",
+    "Claude Code feature/settings docs: CLAUDE_CONFIG_DIR relocates Claude global config and empty setting sources are the isolation form; auto-memory requires a separate disable control.",
+    "Claude Code CLI docs: --no-session-persistence and --setting-sources are supported print/session controls."
+  ],
+  "bounded_mechanism_probe": {
+    "environment": "isolated ChatGPT Linux container",
+    "live_claude_binary_present": false,
+    "method": "standalone process-boundary reproduction of the authored TemporaryDirectory/env mechanism with a fake executable that writes into HOME, CLAUDE_CONFIG_DIR and TMPDIR",
+    "results": {
+      "focused_ephemeral_mechanism": "PASS",
+      "runtime_roots_removed": "3/3",
+      "host_home_untouched": "PASS",
+      "explicit_oauth_forwarded": "PASS",
+      "ambient_secret_blocked": "PASS"
+    },
+    "evidence_class": "MECHANISM_ONLY_NOT_EXACT_FULL_BRANCH_RUNTIME"
+  },
+  "github_actions": {
+    "run_id": 32615863657,
+    "job_id": 97136360809,
+    "conclusion": "failure",
+    "steps": null,
+    "interpretation": "CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+  },
+  "strongest_counterhypothesis": "The currently admitted Claude binary may reject the empty CLI setting-sources form, require login-file credentials despite explicit env auth, or write durable state outside the redirected roots. Any such observation rejects promotion and must be retained as diagnostic FAIL.",
+  "next_exact_gate": [
+    "Run the exact PR head in an admitted clean Ubuntu runtime containing the exact Claude binary/version/digest.",
+    "Verify explicit API-key or CLAUDE_CODE_OAUTH_TOKEN authentication without inherited login HOME.",
+    "Run all four canonical Claude boundary nodes and the cross-bound receipt validator under one common identity.",
+    "Instrument before/after filesystem state and derive temporary-home/config cleanup from observations rather than constants.",
+    "Only then run adjacent/full regressions and consider promotion."
+  ],
+  "execution": {
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "training": false,
+    "together_used": false,
+    "unusual_experiment_claimed": false,
+    "claude_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_credit": 0,
+    "whole_product_credit": 0
+  },
+  "acceptance": "IN_PROGRESS"
+}

@@ -1,0 +1,94 @@
+{
+  "schema": "CLAY_ENTITYOS_HCU_GO_MODEL_OUTPUT_EXECUTION_PROVENANCE_ADJUDICATION/v1",
+  "date_local": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_before_write": "f7c68bb038671388e9b6ed2a583658c6c6c89858",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_available": false,
+    "canonical_atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed": false,
+    "unusual_experiment_count_added": 0,
+    "classification": "SOURCE_ARCHITECTURE_ADJUDICATION_ONLY"
+  },
+  "exact_source_review": {
+    "retained_hcu_pr": 1263,
+    "observed_pr_head": "8ba9f52451c73f2c81281eca5c4c5dc251aef00c",
+    "inference_receipt_path": "the artefact/MicroEntity/hcu/inference_receipt_v1.py",
+    "inference_receipt_blob": "1e2ed83adf9c8c9d294828d62c5a9216ac944c75",
+    "jspace_binder_path": "the artefact/MicroEntity/hcu/jspace_inference_binding_v1.py",
+    "jspace_binder_blob": "a312758b62679ade0e3da78251494f1b65276cf5",
+    "model_call_boundary_test_path": "the artefact/MicroEntity/hcu/test_jspace_inference_model_call_identity_v2.py",
+    "model_call_boundary_test_blob": "09f9c9535ceb57a2bf7b9c464db591d648b13749"
+  },
+  "observed_mechanism": {
+    "inference_receipt_v3": "make_inference_receipt does not invoke a model. It accepts model_call_id, output_ref, output_sha256 and output_size from its caller after validating Entry/route/engine admission and verified engine-load evidence.",
+    "current_binder_v2": "The latest retained donor correctly treats model_call_id as opaque correlation metadata and derives the admissible logical cell only from the exact GRID10 plan plus the single-lane/single-model-cell fence.",
+    "current_test_contract": "Cross-cell- or cross-plan-shaped model_call_id values are retained only as opaque metadata and cannot move the independently bound GRID10 plan/cell fields.",
+    "critical_residual": "Exact GRID10 plan identity plus a single admitted model lane identifies the only eligible logical model cell, but does not independently prove that the caller-supplied output bytes were actually produced by that cell or by any real model invocation."
+  },
+  "adjudication": {
+    "prior_model_call_grid_cell_repair_receipt": "12b6fde034146383b4d0dd48d02d42eb35aad167",
+    "prior_repaired_component_ab_receipt": "2be809ed5f3d070131b9e94c5b8de5449332019c",
+    "prior_repair_status": "PRESERVED_AS_BOUND_SNAPSHOT_EVIDENCE_ONLY",
+    "current_head_semantics": "MODEL_CALL_ID_IS_NONAUTHORITATIVE_CORRELATION_METADATA",
+    "decision": "DO_NOT_MINT_OUTPUT_PROVENANCE_BY_PARSING_OR_CONSTRAINING_CALLER_CONTROLLED_MODEL_CALL_ID",
+    "reason": "A caller-controlled label cannot be independent evidence that a real model execution produced the referenced bytes. Syntactic agreement with grid10:<plan>:<cell>:<role> can be self-certified by the same caller.",
+    "safe_claim_now": "The v3 path can establish candidate bookkeeping consistency around one eligible logical model cell. It cannot establish real output-producing-cell provenance or model runtime credit."
+  },
+  "required_architecture_delta": {
+    "selected_direction": "EXTEND_THE_SINGLE_CANONICAL_INFERENCE_PATH_WITH_INDEPENDENT_MODEL_EXECUTION_EVIDENCE",
+    "proposed_evidence_contract": "HCU_MODEL_EXECUTION_RECEIPT/v1 or equivalent in-place verified execution object",
+    "producer_boundary": "MUST be minted by the admitted real model executor/loader boundary from bytes actually consumed and emitted, not reconstructed from caller labels downstream",
+    "minimum_bound_fields": [
+      "entity_generation",
+      "entry_admission_sha256",
+      "route_decision_sha256",
+      "engine_load_consumption_receipt_sha256",
+      "grid_plan_sha256",
+      "output_producing_cell_id",
+      "role_or_lane",
+      "executor_minted_invocation_id",
+      "input_or_request_sha256",
+      "output_ref",
+      "output_sha256",
+      "output_size",
+      "canonical_receipt_sha256"
+    ],
+    "downstream_rule": "InferenceReceipt must consume verified execution evidence for output fields rather than accepting those fields as independent caller assertions before any real model/runtime credit is possible.",
+    "binder_rule": "J-Space binding should bind to the verified execution evidence and exact GRID10 identity; model_call_id remains correlation metadata unless the executor itself cryptographically/causally mints it inside that evidence.",
+    "authority_law": "This evidence object is not a second truth/effect/state authority; it is bounded causal evidence feeding the existing candidate-only inference receipt path."
+  },
+  "falsifiers_and_acceptance": {
+    "must_reject": [
+      "caller swaps output_sha256 while retaining execution receipt identity",
+      "caller swaps output-producing cell or role",
+      "execution receipt is rebound to another GRID10 plan or generation",
+      "execution receipt references a different verified engine-load consumption receipt",
+      "replayed invocation id carries different output bytes",
+      "multi-lane execution lacks an executor-minted exact output-producing cell identity"
+    ],
+    "positive_gate": "One FREE_ONLY exact-source isolated run in which the admitted real model executor mints the execution evidence from actual model input/output bytes, then the canonical inference receipt and J-Space binder consume it without caller-supplied output provenance.",
+    "current_execution_performed": false
+  },
+  "credit": {
+    "source_architecture_delta": "SUPPORTED",
+    "runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse the independent model-execution/output evidence contract into the single retained PR1263 inference path without creating a second inference authority; add deterministic provenance/replay/rebind regressions; rebind the single PR810 fixed executor to those exact current bytes; then execute one authorized FREE_ONLY exact-source real local-model path. Until then, keep HCU model/J-Space/training/whole-product runtime credit at zero."
+}

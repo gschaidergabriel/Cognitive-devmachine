@@ -17,6 +17,8 @@ from pathlib import Path
 from typing import Any, Callable
 
 ADMISSION_SCHEMA = "mini-entity-cognitive-fabric-admission/v1"
+INVOCATION_SCHEMA = "MINI_COGNITIVE_INVOCATION/v1"
+_INVOCATION_KEYS = {"schema", "expected_generation", "causal_turn_id", "task_text", "turn_binding_digest"}
 _PACKET_TARGETS = {"CLAUDE_CODE", "BUNDLED_LOCAL_08B", "ADAPTIVE_BACKEND"}
 _JSPACE_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY", "COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY"}
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -50,6 +52,19 @@ def _text(value: Any, name: str) -> str:
     return value.strip()
 
 
+def _validate_invocation(invocation: Mapping[str, Any]) -> dict[str, Any]:
+    _need(isinstance(invocation, Mapping), "INVOCATION_OBJECT_REQUIRED")
+    value = dict(invocation)
+    _need(set(value) == _INVOCATION_KEYS, "INVOCATION_FIELDS_MISMATCH")
+    _need(value.get("schema") == INVOCATION_SCHEMA, "INVOCATION_SCHEMA_MISMATCH")
+    generation = value.get("expected_generation")
+    _need(type(generation) is int and generation >= 0, "INVOCATION_GENERATION_INVALID")
+    value["causal_turn_id"] = _text(value.get("causal_turn_id"), "invocation.causal_turn_id")
+    _need(type(value.get("task_text")) is str, "INVOCATION_TASK_TEXT_REQUIRED")
+    value["turn_binding_digest"] = _digest(value.get("turn_binding_digest"), "invocation.turn_binding_digest")
+    return value
+
+
 def _default_dependencies():
     import sys
     tools_dir = Path(__file__).resolve().parent
@@ -74,6 +89,7 @@ def prepare_admission(
     db: Any,
     *,
     profile: Mapping[str, Any],
+    invocation: Mapping[str, Any],
     previous: Mapping[str, Any],
     compiled: Mapping[str, Any],
     prompt: Mapping[str, Any],
@@ -83,9 +99,11 @@ def prepare_admission(
     compile_packet: Callable[..., dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Prepare one candidate envelope through the single retained authority path."""
+    invocation_obj = _validate_invocation(invocation)
     _need(isinstance(previous, Mapping), "PREVIOUS_OBJECT_REQUIRED")
     generation = previous.get("generation")
     _need(type(generation) is int and generation >= 0, "PREVIOUS_GENERATION_INVALID")
+    _need(invocation_obj["expected_generation"] == generation, "INVOCATION_GENERATION_MISMATCH")
     _need(isinstance(compiled, Mapping), "COMPILED_OBJECT_REQUIRED")
     canonical_state_hash = _digest(compiled.get("canonical_state_hash"), "canonical_state_hash")
     packet_hash = _digest(compiled.get("packet_hash"), "packet_hash")
@@ -109,6 +127,9 @@ def prepare_admission(
     _need(binding.get("task_sha256") == hashlib.sha256(task_text.encode("utf-8")).hexdigest(), "ACTIVE_TASK_BINDING_MISMATCH")
     activation_digest = _digest(binding.get("activation_digest"), "activation_digest")
     turn_binding_digest = _digest(binding.get("turn_binding_digest"), "turn_binding_digest")
+    _need(invocation_obj["causal_turn_id"] == causal_turn_id, "INVOCATION_ACTIVE_TURN_MISMATCH")
+    _need(invocation_obj["task_text"] == task_text, "INVOCATION_ACTIVE_TASK_MISMATCH")
+    _need(invocation_obj["turn_binding_digest"] == turn_binding_digest, "INVOCATION_ACTIVE_BINDING_MISMATCH")
 
     route = resolve_capability(profile)
     _need(isinstance(route, Mapping) and route.get("ok") is True, "CAPABILITY_BINDING_UNAVAILABLE")
@@ -165,6 +186,7 @@ def prepare_admission(
     receipt = {
         "schema": ADMISSION_SCHEMA,
         "generation": generation,
+        "invocation_selector_digest": sha256_obj(invocation_obj),
         "causal_turn_id": causal_turn_id,
         "activation_digest": activation_digest,
         "turn_binding_digest": turn_binding_digest,
@@ -203,4 +225,4 @@ def prepare_admission(
     }
 
 
-__all__ = ["ADMISSION_SCHEMA", "AdmissionError", "prepare_admission", "canonical_json", "sha256_obj"]
+__all__ = ["ADMISSION_SCHEMA", "INVOCATION_SCHEMA", "AdmissionError", "prepare_admission", "canonical_json", "sha256_obj"]

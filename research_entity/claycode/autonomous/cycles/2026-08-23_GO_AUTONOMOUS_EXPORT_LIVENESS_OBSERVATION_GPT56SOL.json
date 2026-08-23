@@ -1,0 +1,117 @@
+{
+  "schema": "AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1",
+  "receipt_status": "PARTIAL_GITHUB_OBSERVATION_ONLY",
+  "acceptance": "INCOMPLETE",
+  "gate_satisfied": false,
+  "trigger": "go",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "organ": "GPT-5.6 Sol",
+  "observation_time_utc": "2026-08-23T01:20:20Z",
+  "canonical_main_at_observation": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+  "control": {
+    "supervisor_state": "9.9",
+    "autonomous_control": "4.1+4.2-execution-boundary-addendum",
+    "free_only": true,
+    "paid_provider_execution": false,
+    "together_network_execution": false,
+    "product_state_mutated": false,
+    "restart_attempted": false
+  },
+  "observed_repository_evidence": {
+    "agentzero_periodic_stream": {
+      "previous_event_times_utc": [
+        "2026-08-22T19:06:44Z",
+        "2026-08-22T19:36:44Z"
+      ],
+      "last_event_time_utc": "2026-08-22T20:06:44Z",
+      "last_commit": "5e134f5f07ddebc0a1c182d04579e361bbbe82a8",
+      "last_generation": 276,
+      "observed_nominal_cadence_seconds": 1800,
+      "expected_next_event_utc": "2026-08-22T20:36:44Z",
+      "expected_events_missing_by_observation": 10
+    },
+    "rating_periodic_stream": {
+      "last_event_time_utc": "2026-08-22T20:25:04Z",
+      "last_commit": "9452c6fe621bc2d8c6f8cf5eb3f9fb88fd91591d",
+      "observed_nominal_cadence_seconds": 1800,
+      "expected_next_event_utc": "2026-08-22T20:55:04Z",
+      "expected_events_missing_by_observation": 9
+    },
+    "latest_nonperiodic_supervisor_commit": {
+      "time_utc": "2026-08-22T23:40:10Z",
+      "commit": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+      "subject": "claycode supervisor: bind autonomous export liveness stall"
+    },
+    "newer_agentzero_periodic_commit_observed": false,
+    "newer_rating_periodic_commit_observed": false
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "DUAL_PERIODIC_STREAM_SHARED_FAILURE_DISCRIMINATOR",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "type": "NON_MUTATING_NATURAL_CONTROL",
+    "question": "Does the evidence better fit one stream-specific timer failure or a failure affecting a shared dependency / host-level path?",
+    "counterhypotheses": {
+      "agentzero_timer_only": "AgentZero export stops while the independent rating stream continues at its prior cadence.",
+      "rating_timer_only": "Rating export stops while the independent AgentZero stream continues at its prior cadence.",
+      "shared_dependency_or_host_level": "Both independently offset periodic streams stop within the same liveness window."
+    },
+    "observation": "Both streams ceased: AgentZero after 20:06:44Z and rating after 20:25:04Z, despite prior approximately 30-minute cadence. No later periodic commit existed at the observation cut.",
+    "result": "STREAM_SPECIFIC_TIMER_ONLY_HYPOTHESES_DISFAVORED; SHARED_DEPENDENCY_OR_HOST_LEVEL_FAILURE_CONSISTENT_BUT_NOT_IDENTIFIED",
+    "promotion_boundary": "This observation cannot distinguish host outage, shared process failure, RUN_FAILED, RUN_BLOCKED, PUSH_FAILED, PROCESS_STUCK, DB_LOCKED, DISK_FULL, AUTH_FAILED, network failure, or another shared dependency. Runtime failure class therefore remains UNKNOWN."
+  },
+  "required_runtime_fields": {
+    "timer_service_enabled_active_state": "UNKNOWN",
+    "last_trigger_time": "UNKNOWN",
+    "next_trigger_time": "UNKNOWN",
+    "last_successful_run_id": "UNKNOWN",
+    "process_exit_code": "UNKNOWN",
+    "stdout_digest": "UNKNOWN",
+    "stderr_digest": "UNKNOWN",
+    "lock_state": "UNKNOWN",
+    "sqlite_busy_state": "UNKNOWN",
+    "disk_availability": "UNKNOWN",
+    "inode_availability": "UNKNOWN",
+    "git_worktree_state": "UNKNOWN",
+    "git_remote_state": "UNKNOWN",
+    "git_push_result": "UNKNOWN",
+    "network_result": "UNKNOWN",
+    "auth_result": "UNKNOWN",
+    "generation_before": "UNKNOWN",
+    "generation_after": "UNKNOWN",
+    "first_stopped_component": "UNKNOWN"
+  },
+  "failure_class": "UNKNOWN",
+  "candidate_classes_not_yet_distinguishable": [
+    "NO_NEW_STATE",
+    "RUN_FAILED",
+    "RUN_BLOCKED",
+    "PUSH_FAILED",
+    "TIMER_DISABLED",
+    "PROCESS_STUCK",
+    "DB_LOCKED",
+    "DISK_FULL",
+    "AUTH_FAILED",
+    "UNKNOWN"
+  ],
+  "next_required_observation": {
+    "scope": "AUTHORIZED_NON_MUTATING_LIVENESS_INSPECTION",
+    "must_bind": [
+      "timer/service enabled+active state for AgentZero export and rating export",
+      "last-trigger and next-trigger timestamps",
+      "last successful run id plus process exit code",
+      "stdout/stderr digests",
+      "lock and SQLite busy state",
+      "disk and inode availability",
+      "git worktree/remote/push result",
+      "network/auth result",
+      "generation before/after",
+      "which timer/service/shared dependency stopped first"
+    ],
+    "mutation_rule": "Do not restart services or mutate product state until the failure class is observed. If restart later becomes justified, bind pre/post receipts and prove no skipped or replayed generation."
+  },
+  "product_delta": "NO_PRODUCT_PATCH_BY_CONTROL_GATE",
+  "cognition_lane_delta": "NO_PROVIDER_OR_TRAINING_ACTION; FREE_ONLY PRESERVED",
+  "evidence_boundary": "GitHub commit-cadence observation only. No timer/service/process/database/disk/network/auth runtime was inspected. This receipt must not be used as AUTONOMOUS_EXPORT_LIVENESS PASS or as whole-product/runtime credit."
+}

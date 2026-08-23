@@ -109,8 +109,8 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         }
         self.assertEqual(validate_receipt(receipt), [])
 
-    def test_authority_alias_poison_v1(self) -> None:
-        """The one bounded unusual-experiment family for the creating GO."""
+    def test_authority_alias_poison_regression_v1(self) -> None:
+        """Deterministic adversarial regression; not an unusual-experiment slot claim."""
         base = valid_receipt()
         poisons: dict[str, tuple[dict, str]] = {}
 

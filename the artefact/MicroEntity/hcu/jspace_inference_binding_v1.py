@@ -4,8 +4,13 @@
 This is a deterministic research-evidence binding only. It does not mint truth, reward,
 capability, model authority, runtime acceptance, or effects. Its job is to prevent a
 training trace from claiming a real model outcome unless the same generation, Typed Entry
-event/admission, route decision, admitted engine/load chain, model lane, and output bytes
-are bound by the canonical HCU_INFERENCE_RECEIPT/v3 producer.
+event/admission, route decision, exact GRID10 plan/cell, admitted engine/load chain,
+model lane, and output bytes are bound by the canonical HCU_INFERENCE_RECEIPT/v3 producer.
+
+InferenceReceipt/v3 identifies the route-level model-lane set, not one output-producing
+lane. Therefore v3 can prove an output-to-cell relation only for the causally unambiguous
+single-model-lane GRID10 case. Multi-lane v3 evidence fails closed until the canonical
+single inference producer grows an explicit output-producing lane/cell identity.
 """
 from __future__ import annotations
 
@@ -15,6 +20,7 @@ from typing import Any
 
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from .grid10_scheduler_v1 import ExecutionClass, GridPlan, PLAN_SCHEMA
     from .inference_receipt_v1 import (
         InferenceReceipt,
         SCHEMA as INFERENCE_RECEIPT_SCHEMA,
@@ -28,6 +34,7 @@ try:
     from .reactive_event_router_v1 import ENTRY_BINDING_SCHEMA
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from grid10_scheduler_v1 import ExecutionClass, GridPlan, PLAN_SCHEMA
     from inference_receipt_v1 import (
         InferenceReceipt,
         SCHEMA as INFERENCE_RECEIPT_SCHEMA,
@@ -40,7 +47,7 @@ except ImportError:
     )
     from reactive_event_router_v1 import ENTRY_BINDING_SCHEMA
 
-SCHEMA = "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v1"
+SCHEMA = "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v2"
 
 
 class JSpaceInferenceBindingError(ValueError):
@@ -137,11 +144,72 @@ def _validate_inference_receipt(receipt: InferenceReceipt) -> None:
         raise JSpaceInferenceBindingError("HCU_INFERENCE_RECEIPT_DIGEST_MISMATCH")
 
 
+def _grid_plan_material(plan: GridPlan) -> dict[str, Any]:
+    return {
+        "schema": plan.schema,
+        "canonicalization_schema": plan.canonicalization_schema,
+        "entry_binding_schema": plan.entry_binding_schema,
+        "ingress_id": plan.ingress_id,
+        "causal_id": plan.causal_id,
+        "entity_generation": plan.entity_generation,
+        "entry_event_sha256": plan.entry_event_sha256,
+        "entry_admission_sha256": plan.entry_admission_sha256,
+        "route_event_sha256": plan.route_event_sha256,
+        "route_decision_sha256": plan.route_decision_sha256,
+        "router_policy_sha256": plan.router_policy_sha256,
+        "engine_identity_sha256": plan.engine_identity_sha256,
+        "resolved_engine_identity": plan.resolved_engine_identity,
+        "resolved_engine_class": plan.resolved_engine_class,
+        "resolved_engine_artifact_sha256": plan.resolved_engine_artifact_sha256,
+        "capacity_receipt_sha256": plan.capacity_receipt_sha256,
+        "runtime_profile_id": plan.runtime_profile_id,
+        "mode": plan.mode.value,
+        "logical_cell_count": plan.logical_cell_count,
+        "model_call_count": plan.model_call_count,
+        "physical_decoder_limit": plan.physical_decoder_limit,
+        "max_wall_ms": plan.max_wall_ms,
+        "cells": [
+            {
+                "cell_id": cell.cell_id,
+                "function": cell.function,
+                "execution_class": cell.execution_class.value,
+                "model_token_budget": cell.model_token_budget,
+                "physical_decoder_lane": cell.physical_decoder_lane,
+            }
+            for cell in plan.cells
+        ],
+    }
+
+
+def _validate_grid_plan(plan: GridPlan) -> None:
+    if not isinstance(plan, GridPlan):
+        raise JSpaceInferenceBindingError("GRID10_PLAN_REQUIRED")
+    if plan.schema != PLAN_SCHEMA:
+        raise JSpaceInferenceBindingError("GRID10_PLAN_SCHEMA_UNSUPPORTED")
+    if plan.canonicalization_schema != CANONICALIZATION_SCHEMA:
+        raise JSpaceInferenceBindingError("GRID10_PLAN_CANONICALIZATION_MISMATCH")
+    if plan.entry_binding_schema != ENTRY_BINDING_SCHEMA:
+        raise JSpaceInferenceBindingError("GRID10_PLAN_ENTRY_BINDING_SCHEMA_MISMATCH")
+    observed = _sha256(plan.plan_sha256, "grid_plan.plan_sha256")
+    expected = _canonical_sha256(_grid_plan_material(plan), "GRID10_PLAN")
+    if observed != expected:
+        raise JSpaceInferenceBindingError("GRID10_PLAN_DIGEST_MISMATCH")
+    if plan.logical_cell_count != len(plan.cells):
+        raise JSpaceInferenceBindingError("GRID10_LOGICAL_CELL_COUNT_MISMATCH")
+    cell_ids = [cell.cell_id for cell in plan.cells]
+    if len(cell_ids) != len(set(cell_ids)):
+        raise JSpaceInferenceBindingError("GRID10_CELL_ID_DUPLICATE")
+    model_cells = [cell for cell in plan.cells if cell.execution_class is ExecutionClass.MODEL]
+    if plan.model_call_count != len(model_cells):
+        raise JSpaceInferenceBindingError("GRID10_MODEL_CALL_COUNT_MISMATCH")
+
+
 def bind_training_trace_to_inference(
     training_trace: TrainingTrace,
     inference_receipt: InferenceReceipt,
+    grid_plan: GridPlan,
 ) -> JSpaceInferenceBinding:
-    """Create a fail-closed binding from one training trace to one real inference receipt."""
+    """Create a fail-closed binding from one trace to one causally unambiguous model cell."""
     if not isinstance(training_trace, TrainingTrace):
         raise JSpaceInferenceBindingError("JSPACE_TRAINING_TRACE_REQUIRED")
     try:
@@ -149,21 +217,56 @@ def bind_training_trace_to_inference(
     except Exception as exc:
         raise JSpaceInferenceBindingError(f"JSPACE_TRAINING_TRACE_REJECTED:{exc}") from exc
     _validate_inference_receipt(inference_receipt)
+    _validate_grid_plan(grid_plan)
 
     generation = _safe_generation(training_trace.generation, "training_trace.generation")
     if inference_receipt.entity_generation != generation:
         raise JSpaceInferenceBindingError("INFERENCE_GENERATION_MISMATCH")
+    if grid_plan.entity_generation != generation:
+        raise JSpaceInferenceBindingError("GRID10_GENERATION_MISMATCH")
     if inference_receipt.event_sha256 != training_trace.entry_event_sha256:
         raise JSpaceInferenceBindingError("INFERENCE_ENTRY_EVENT_MISMATCH")
     if inference_receipt.entry_admission_sha256 != training_trace.entry_admission_sha256:
         raise JSpaceInferenceBindingError("INFERENCE_ENTRY_ADMISSION_MISMATCH")
     if inference_receipt.decision_sha256 != training_trace.route_decision_sha256:
         raise JSpaceInferenceBindingError("INFERENCE_ROUTE_DECISION_MISMATCH")
+    if grid_plan.entry_event_sha256 != training_trace.entry_event_sha256:
+        raise JSpaceInferenceBindingError("GRID10_ENTRY_EVENT_MISMATCH")
+    if grid_plan.entry_admission_sha256 != training_trace.entry_admission_sha256:
+        raise JSpaceInferenceBindingError("GRID10_ENTRY_ADMISSION_MISMATCH")
+    if grid_plan.route_decision_sha256 != training_trace.route_decision_sha256:
+        raise JSpaceInferenceBindingError("GRID10_ROUTE_DECISION_MISMATCH")
+    if grid_plan.plan_sha256 != training_trace.grid_plan_sha256:
+        raise JSpaceInferenceBindingError("GRID10_TRAINING_TRACE_PLAN_MISMATCH")
+
+    if grid_plan.router_policy_sha256 != inference_receipt.router_policy_sha256:
+        raise JSpaceInferenceBindingError("GRID10_INFERENCE_ROUTER_POLICY_MISMATCH")
+    if grid_plan.engine_identity_sha256 != inference_receipt.engine_identity_sha256:
+        raise JSpaceInferenceBindingError("GRID10_INFERENCE_ENGINE_IDENTITY_MISMATCH")
+    if grid_plan.resolved_engine_identity != inference_receipt.resolved_engine_identity:
+        raise JSpaceInferenceBindingError("GRID10_INFERENCE_ENGINE_NAME_MISMATCH")
+    if grid_plan.resolved_engine_class != inference_receipt.resolved_engine_class:
+        raise JSpaceInferenceBindingError("GRID10_INFERENCE_ENGINE_CLASS_MISMATCH")
+    if grid_plan.resolved_engine_artifact_sha256 != inference_receipt.resolved_engine_artifact_sha256:
+        raise JSpaceInferenceBindingError("GRID10_INFERENCE_ENGINE_ARTIFACT_MISMATCH")
 
     role = _text(training_trace.role, "training_trace.role", 256)
     lanes = tuple(inference_receipt.model_lanes)
-    if not lanes or role not in lanes:
+    if len(lanes) != 1:
+        raise JSpaceInferenceBindingError("MULTI_LANE_INFERENCE_V3_OUTPUT_CELL_UNBOUND")
+    model_lane = _text(lanes[0], "inference_receipt.model_lane", 256)
+    if model_lane != role:
         raise JSpaceInferenceBindingError("INFERENCE_MODEL_LANE_DOES_NOT_BIND_TRACE_ROLE")
+
+    model_cells = [cell for cell in grid_plan.cells if cell.execution_class is ExecutionClass.MODEL]
+    if grid_plan.model_call_count != 1 or len(model_cells) != 1:
+        raise JSpaceInferenceBindingError("MULTI_LANE_GRID10_OUTPUT_CELL_UNBOUND")
+    model_cell = model_cells[0]
+    cell_id = _text(training_trace.cell_id, "training_trace.cell_id", 256)
+    if model_cell.cell_id != cell_id:
+        raise JSpaceInferenceBindingError("GRID10_MODEL_CELL_DOES_NOT_BIND_TRACE_CELL")
+    if model_cell.function != f"MODEL:{role}":
+        raise JSpaceInferenceBindingError("GRID10_MODEL_CELL_DOES_NOT_BIND_TRACE_ROLE")
 
     material = {
         "schema": SCHEMA,
@@ -175,8 +278,8 @@ def bind_training_trace_to_inference(
         "entry_event_sha256": _sha256(training_trace.entry_event_sha256, "training_trace.entry_event_sha256"),
         "entry_admission_sha256": _sha256(training_trace.entry_admission_sha256, "training_trace.entry_admission_sha256"),
         "route_decision_sha256": _sha256(training_trace.route_decision_sha256, "training_trace.route_decision_sha256"),
-        "grid_plan_sha256": _sha256(training_trace.grid_plan_sha256, "training_trace.grid_plan_sha256"),
-        "cell_id": _text(training_trace.cell_id, "training_trace.cell_id", 256),
+        "grid_plan_sha256": _sha256(grid_plan.plan_sha256, "grid_plan.plan_sha256"),
+        "cell_id": cell_id,
         "role": role,
         "vector_control_packet_sha256": _sha256(training_trace.vector_control_packet_sha256, "training_trace.vector_control_packet_sha256"),
         "inference_receipt_schema": INFERENCE_RECEIPT_SCHEMA,

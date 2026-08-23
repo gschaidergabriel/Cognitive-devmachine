@@ -63,6 +63,20 @@ class CognitionStoreV1Tests(unittest.TestCase):
         )
         return values, result["binding_digest"]
 
+    def bind_default_turn(self, db: sqlite3.Connection, boot_digest: str, turn_id: str = "turn-default"):
+        return store.bind_turn(
+            db,
+            entity_generation=3,
+            causal_turn_id=turn_id,
+            boot_binding_digest=boot_digest,
+            task_text="run bounded reasoning",
+            workspace_digest=self.digest("workspace-current"),
+            selected_workspace_slots=["slot-1", "slot-2"],
+            contradiction_state="UNRESOLVED",
+            provenance_refs=["test:turn"],
+            required_zero_mode="ACTIVE",
+        )
+
     def test_canonical_json_object_digest_must_match_payload(self):
         db = self.make_db()
         with self.assertRaisesRegex(store.CognitionStoreError, "OBJECT_DIGEST_PAYLOAD_MISMATCH"):
@@ -162,18 +176,7 @@ class CognitionStoreV1Tests(unittest.TestCase):
     def test_resolve_prepare_binding_cross_binds_task_boot_and_workspace(self):
         db = self.make_db()
         values, boot_digest = self.admit_boot(db)
-        turn = store.bind_turn(
-            db,
-            entity_generation=3,
-            causal_turn_id="turn-2",
-            boot_binding_digest=boot_digest,
-            task_text="run bounded reasoning",
-            workspace_digest=self.digest("workspace-current"),
-            selected_workspace_slots=["slot-1", "slot-2"],
-            contradiction_state="UNRESOLVED",
-            provenance_refs=["test:turn"],
-            required_zero_mode="ACTIVE",
-        )
+        turn = self.bind_default_turn(db, boot_digest, "turn-2")
         resolved = store.resolve_prepare_binding(
             db,
             entity_generation=3,
@@ -193,6 +196,54 @@ class CognitionStoreV1Tests(unittest.TestCase):
                 entity_generation=3,
                 causal_turn_id="turn-2",
                 task_text="different task",
+            )
+
+    def test_resolver_rejects_tampered_turn_workspace_digest(self):
+        db = self.make_db()
+        _, boot_digest = self.admit_boot(db)
+        self.bind_default_turn(db, boot_digest, "turn-tamper-workspace")
+        db.execute(
+            "UPDATE mini_cognition_turn_bindings SET workspace_digest=? WHERE causal_turn_id=?",
+            (self.digest("tampered-workspace"), "turn-tamper-workspace"),
+        )
+        with self.assertRaisesRegex(store.CognitionStoreError, "TURN_BINDING_DIGEST_MISMATCH"):
+            store.resolve_prepare_binding(
+                db,
+                entity_generation=3,
+                causal_turn_id="turn-tamper-workspace",
+                task_text="run bounded reasoning",
+            )
+
+    def test_resolver_rejects_tampered_boot_zero_identity_digest(self):
+        db = self.make_db()
+        _, boot_digest = self.admit_boot(db)
+        self.bind_default_turn(db, boot_digest, "turn-tamper-boot")
+        db.execute(
+            "UPDATE mini_cognition_boot_bindings SET zero_identity_digest=? WHERE binding_digest=?",
+            (self.digest("tampered-zero"), boot_digest),
+        )
+        with self.assertRaisesRegex(store.CognitionStoreError, "BOOT_BINDING_DIGEST_MISMATCH"):
+            store.resolve_prepare_binding(
+                db,
+                entity_generation=3,
+                causal_turn_id="turn-tamper-boot",
+                task_text="run bounded reasoning",
+            )
+
+    def test_resolver_rejects_noncanonical_persisted_list_json(self):
+        db = self.make_db()
+        _, boot_digest = self.admit_boot(db)
+        self.bind_default_turn(db, boot_digest, "turn-tamper-json")
+        db.execute(
+            "UPDATE mini_cognition_turn_bindings SET selected_workspace_slots_json=? WHERE causal_turn_id=?",
+            ('[ "slot-1", "slot-2" ]', "turn-tamper-json"),
+        )
+        with self.assertRaisesRegex(store.CognitionStoreError, "selected_workspace_slots:NONCANONICAL_JSON"):
+            store.resolve_prepare_binding(
+                db,
+                entity_generation=3,
+                causal_turn_id="turn-tamper-json",
+                task_text="run bounded reasoning",
             )
 
 

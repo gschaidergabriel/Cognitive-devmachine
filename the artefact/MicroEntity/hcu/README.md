@@ -19,6 +19,7 @@ Operational truth/state remains canonical in MiniUnifiedDB. Release archives may
 ## Files
 
 - `HCU_ARCHITECTURE.md` — architecture and authority contract.
+- `HYPERPOSITION_REALITY_FIELD.md` — mandatory multi-view reality-estimation contract: live measurement + last measured state + learned expectation + hypothesis + counterhypothesis + calibrated forward simulation, reduced without granting truth/effect authority.
 - `topology.kvm4.json` — resource-adaptive KVM4 **planning** topology; numeric targets are not runtime evidence.
 - `FREE_LLM_FEED_CONTRACT.json` — FREE_ONLY external candidate-feed contract.
 - `HCU_DATA_INDEX.json` — release/package data policy and generated-artifact index.
@@ -30,7 +31,21 @@ Operational truth/state remains canonical in MiniUnifiedDB. Release archives may
 
 The efficient implementation is **not** to keep dozens of independent full model copies in RAM. Instead keep a small resident ~0.8B worker pool, share/checkpoint-map immutable weights where supported, multiplex many logical roles/contexts over those workers, keep canonical state in MiniUnifiedDB, preserve alternatives in Hyperposition, and let deterministic gates admit durable state/effects.
 
+The HCU's world-model core does not form a present-state estimate from one source. It maintains a **weighted Hyperposition Reality Field** containing multiple simultaneous views: current live measurements, prior measured state, historically learned expected-present state, explicit hypotheses, active counterhypotheses/falsification views, and horizon-decayed forward/counterfactual simulations. A reducer may distill a sharper calibrated working estimate, but disagreement stays inspectable and the result remains Candidate / Measurement / Proposal.
+
+This is deliberately different from a naive single-source belief update. The intended performance gain must be measured through calibration and held-out prediction; the quantum/superposition analogy is architectural only and does not itself prove statistical superiority.
+
 This makes the grid GPU-like only in the scheduling sense: many logical lanes feeding a bounded execution fabric. It is not represented as literal GPU hardware.
+
+## Authority boundary for the reality field
+
+`HCU_REALITY_FIELD != CANONICAL_TRUTH`
+
+`HCU_REALITY_FIELD != MINIUNIFIEDDB_WRITE_AUTHORITY`
+
+`HCU_REALITY_FIELD != EFFECT_AUTHORITY`
+
+The reality field remains inside HCU, is always revisable by stronger admitted evidence/live measurements, may inform normal Mini Entity admission, and can reach real action only through EffectGate.
 
 ## Capacity evidence law
 
@@ -40,4 +55,4 @@ Numeric runtime capacity may be admitted only through `HCU_CAPACITY_MEASUREMENT/
 
 ## Evidence boundary
 
-The HCU architecture is a **SOURCE/ARCHITECTURE CONTRACT**. The capacity guard has exact deterministic component-mechanism evidence. Neither establishes measured throughput, model fit, resident-module count, J-Space/GWT causality, target-VPS behavior, or whole Mini Entity runtime acceptance.
+The HCU architecture and Hyperposition Reality Field are **SOURCE/ARCHITECTURE CONTRACTS**. The capacity guard has exact deterministic component-mechanism evidence. Neither establishes measured throughput, model fit, resident-module count, improved forecasting/calibration, J-Space/GWT causality, target-VPS behavior, or whole Mini Entity runtime acceptance.

@@ -1,5 +1,5 @@
 {
-  "schema": "GO_ENTITYOS_HCU_AUTHORITY_ENTRYPOINT/v2",
+  "schema": "GO_ENTITYOS_HCU_AUTHORITY_ENTRYPOINT/v3",
   "date": "2026-08-23",
   "trigger": "go",
   "persistent_research_entity": "Clay",
@@ -10,6 +10,7 @@
   "repository": "gschaidergabriel/clay-global-research-entity",
   "branch": "gpt56sol/go-entityos-authority-entrypoint-20260823-2343",
   "branch_base_main": "2b9775e3f5b1b645ba643c816d30fe942e9d554f",
+  "observed_current_main_after_branch_base": "52a22435a796ecd04e5375900fb365531984897b",
   "observed_current_main": {
     "authority_guard_schema": "ENTITYOS_HCU_AUTHORITY_CONSISTENCY/v1",
     "manifest_blob": "8f075a0bf26aae68da00850d03ae62c2727a5b6b",
@@ -17,7 +18,9 @@
     "manifest_product": "EntityOS",
     "manifest_compute_architecture": "HCU",
     "legacy_clayverse_manifest_blob": "fe6a601efdbe350a7b34816c4ffceb182df5cab8",
-    "legacy_clayverse_scope": "HISTORICAL_DONOR_PROVENANCE_ONLY"
+    "legacy_clayverse_scope": "HISTORICAL_DONOR_PROVENANCE_ONLY",
+    "effective_assertion_blob": "6beb416fac953cd0b2305006bcddd232b32f8ed1",
+    "effective_assertion_status": "STALE_CLAYVERSE_OUTPUT"
   },
   "finding": "EFFECTIVE_AUTHORITY_ENTRYPOINT_STALE_PRODUCT_OUTPUT",
   "mechanism": "After the current guard and manifest migrated to EntityOS/HCU, tools/assert_effective_program_authority.py still emitted CLAYVERSE_SINGLE_CONTAINER / CLAYVERSE_ARTIFACT / CLAYVERSE_AUTHORITY_CONSISTENCY/v2 in both PASS and FAIL payloads. Downstream automation could therefore receive stale work-selection identity even though the underlying guard was current.",
@@ -30,7 +33,7 @@
     "behavior": "PASS and FAIL both report current EntityOS/HCU identity; historical ClayVerse validator filename is explicitly compatibility-only; legacy 4.1->4.4 chain remains only inherited safety/provenance ancestry plus SUPERVISOR_STEERING_8_52 current authority."
   },
   "execution": {
-    "surface": "isolated ChatGPT Linux component container",
+    "surface": "isolated ChatGPT Linux component container plus GitHub workflow admission observation",
     "exact_git_blob_reconstruction": {
       "assertion": "MATCHED_a42175135f017d7d96af7678102aaa2f1b42593e",
       "test": "MATCHED_4a257d90cb2cd48f17e460e98196e85b2860e192"
@@ -42,10 +45,28 @@
       "passed": 2,
       "result": "PASS"
     },
-    "full_repo_guard_execution": "NOT_CLAIMED",
+    "github_workflow_runs": [
+      {
+        "id": 32652823776,
+        "name": "Research Entity Identity Guard",
+        "job_id": 97226951359,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "RUNNER_OR_EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION_NOT_TEST_FAIL"
+      },
+      {
+        "id": 32652823812,
+        "name": "Research Entity Verify",
+        "job_id": 97226951533,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "RUNNER_OR_EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION_NOT_TEST_FAIL"
+      }
+    ],
+    "full_repo_guard_execution": "UNOBSERVED_DUE_PRESTEP_RUNNER_FAILURE",
     "entityos_hcu_runtime_execution": "NOT_CLAIMED"
   },
-  "go_track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE: current authority guard + manifest are now EntityOS/HCU on main; this delta removes the remaining stale ClayVerse identity from the effective assertion output without weakening inherited safety ancestry.",
+  "go_track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE: current authority guard + manifest are EntityOS/HCU on main; this delta removes the remaining stale ClayVerse identity from the effective assertion output without weakening inherited safety ancestry.",
   "go_track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT: the same macrocycle falsified old HCU route-identity aliasing, coordinated repair into the retained HCU lane, and evaluated a simpler versioned typed-binary cross-language event-identity mechanism without retaining a second router or authority path.",
   "unusual_experiment": {
     "local_count": 1,
@@ -73,5 +94,5 @@
   },
   "runtime_credit": 0,
   "whole_product_pass": false,
-  "next_gate": "Run the migrated full EntityOS/HCU authority guard plus this effective assertion on the exact current source tree in an actually-started authorized isolated executor; then continue the current Entry engine-admission/downstream inference receipt/runtime execution frontier."
+  "next_gate": "Obtain actually-started authorized isolated exact-current source execution of the migrated full EntityOS/HCU authority guard plus this effective assertion; then continue current Entry engine-admission/downstream inference receipt/runtime execution work."
 }

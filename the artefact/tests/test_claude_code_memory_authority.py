@@ -1,3 +1,6 @@
+import json
+import stat
+
 from clayverse.adapters import ClaudeCodeInference
 
 
@@ -24,3 +27,27 @@ def test_targeted_claude_inference_retains_auth_home_but_forces_no_durable_memor
 
     # Unrelated product/auth secrets remain outside the cognition boundary.
     assert "CLERK_SECRET_KEY" not in env
+
+
+def test_targeted_claude_inference_excludes_user_project_local_setting_sources(monkeypatch, tmp_path):
+    log = tmp_path / "args.json"
+    fake = tmp_path / "claude"
+    fake.write_text(
+        "#!/usr/bin/env python3\n"
+        "import json,sys\n"
+        f"open({str(log)!r},'w').write(json.dumps(sys.argv[1:]))\n"
+        "print(json.dumps({'structured_output':{'text':'ok','effect':None}}))\n"
+    )
+    fake.chmod(fake.stat().st_mode | stat.S_IXUSR)
+
+    home = tmp_path / "auth-home"
+    home.mkdir()
+    monkeypatch.setenv("HOME", str(home))
+
+    result = ClaudeCodeInference(binary=str(fake), cwd=str(tmp_path), timeout=5).reason({}, "probe")
+    args = json.loads(log.read_text())
+
+    assert result == {"text": "ok", "selection": "respond", "effect": None}
+    assert args[args.index("--setting-sources") + 1] == ""
+    assert "--no-session-persistence" in args
+    assert args[args.index("--tools") + 1] == ""

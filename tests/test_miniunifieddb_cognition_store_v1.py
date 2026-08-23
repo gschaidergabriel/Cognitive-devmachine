@@ -18,6 +18,7 @@ import miniunifieddb_cognition_store_v1 as store
 class CognitionStoreV1Tests(unittest.TestCase):
     def make_db(self, generation: int = 3) -> sqlite3.Connection:
         db = sqlite3.connect(":memory:")
+        db.execute("PRAGMA foreign_keys=ON")
         db.execute(
             "CREATE TABLE entity_state(id INTEGER PRIMARY KEY, generation INTEGER NOT NULL)"
         )

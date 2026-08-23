@@ -1,0 +1,59 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "owner_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "canonical_main_observed_before_delta": "592b7826f5d474b59188d68dab3c74bbe862403c",
+  "branch": "go/ucf-boot-generation-fence-v1",
+  "finding": {
+    "status": "SOURCE_FALSE_GREEN_CONFIRMED",
+    "mechanism": "The canonical UCF cycle carried runtime.generation while generation freshness was represented only by the same receipt's freshness.stale_generation boolean. The merged UCF boot-ancestry composition cross-bound source, Zero/GRF, bundled artifacts, J-Space/GWT and Claude capability but did not cross-bind cycle runtime generation to independent boot evidence.",
+    "risk": "A stale writer could present a structurally valid UCF cycle with a changed generation and self-report stale_generation=false; the bare UCF validator could not independently authenticate that freshness claim.",
+    "counterhypothesis": "Existing boot ancestry already independently authenticated runtime.generation.",
+    "counterhypothesis_result": "REFUTED_AT_SOURCE"
+  },
+  "delta": {
+    "authority_path": "existing tools/validate_ucf_boot_ancestry_chain_v1.py composition gate; no second UCF receipt authority created",
+    "chain_blob_sha": "2584e5bd7151a86e8f5770b22b93ef8e6e0fa5e3",
+    "test_blob_sha": "82f4e614bb87eed76cfd58f498133895be6befa9",
+    "claycode_blob_sha": "1f89ffe44c30acb404ec557a2ead041a7059c1f4",
+    "law": "runtime_generation_must_cross_bind_boot_observation",
+    "boot_observation_field": "runtime.entity_generation",
+    "fail_closed_codes": [
+      "BOOT_ENTITY_GENERATION_MISSING",
+      "BOOT_ENTITY_GENERATION_INVALID",
+      "BOOT_ENTITY_GENERATION_MISMATCH"
+    ]
+  },
+  "bounded_isolated_mechanism_evidence": {
+    "environment": "isolated ChatGPT Linux container",
+    "provider_execution": false,
+    "secret_lookup": false,
+    "network_provider_calls": 0,
+    "money_spent_usd": 0,
+    "chain_blob_git_hash_object_verified": "2584e5bd7151a86e8f5770b22b93ef8e6e0fa5e3",
+    "py_compile": "PASS",
+    "cases": {
+      "cycle_276_boot_276": "PASS",
+      "cycle_277_boot_276": "BOOT_ENTITY_GENERATION_MISMATCH",
+      "boot_generation_missing": "BOOT_ENTITY_GENERATION_MISSING",
+      "boot_generation_boolean": "BOOT_ENTITY_GENERATION_INVALID"
+    },
+    "evidence_class": "EXACT_CHANGED_BLOB_COMPONENT_MECHANISM_EVIDENCE",
+    "exact_product_runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No immutable shared macrocycle/request identifier was exposed to this organ; no unusual-experiment lease was invented. The generation cases are deterministic fail-closed regressions/falsifiers only."
+  },
+  "claims": {
+    "bundled_08b_exact_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_production_credit": 0,
+    "claude_code_adapter_runtime_credit": 0,
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_gate": "Execute the composed canonical UCF + boot ancestry path on an actually-started exact-source admitted Ubuntu runtime whose boot evidence records the observed entity generation; retain unknown/stale generation as fail-closed rather than trusting self-report."
+}

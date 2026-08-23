@@ -1,29 +1,26 @@
 #!/usr/bin/env python3
-"""Deterministic script-first router for the HCU reactive world model.
+"""Deterministic script-first router for the EntityOS/HCU reactive world model.
 
-This source component does not perform model inference. It decides which bounded HCU
-lanes, if any, deserve model work and whether Zero should receive a compact ClayCode
-projection. External providers are explicitly excluded from the internal cognitive
-routing graph.
+Hashes in this candidate use an explicitly versioned typed canonical byte codec rather
+than host-language JSON serialization. This is a source mechanism only; cross-language
+identity remains unpromoted until an independent implementation reproduces the vectors.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 
-SCHEMA = "HCU_REACTIVE_EVENT/v1"
-ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v2"
-ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v1"
-ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v1"
+from typed_canonical_v1 import SCHEMA as CANONICALIZATION_SCHEMA
+from typed_canonical_v1 import CanonicalizationError, canonical_sha256
 
-# Internal cognition is admitted positively. Unknown/future provider or engine labels do
-# not become internal merely because they are absent from a denylist.
+SCHEMA = "HCU_REACTIVE_EVENT/v1"
+ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v3"
+ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v2"
+ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v2"
+
 ADMITTED_INTERNAL_PROVIDER_ALIASES = {"hcu", "local", "xeno"}
-ADMITTED_INTERNAL_ENGINES = {
-    "hcu_local_08b": "LOCAL_SHARED_WEIGHT_08B",
-}
+ADMITTED_INTERNAL_ENGINES = {"hcu_local_08b": "LOCAL_SHARED_WEIGHT_08B"}
 
 SCRIPT_STAGES = (
     "generation_check",
@@ -38,6 +35,7 @@ SCRIPT_STAGES = (
 )
 ROUTER_POLICY = {
     "schema": ROUTER_POLICY_SCHEMA,
+    "canonicalization_schema": CANONICALIZATION_SCHEMA,
     "scripts": SCRIPT_STAGES,
     "admitted_internal_provider_aliases": tuple(sorted(ADMITTED_INTERNAL_PROVIDER_ALIASES)),
     "admitted_internal_engines": tuple(sorted(ADMITTED_INTERNAL_ENGINES.items())),
@@ -63,6 +61,7 @@ class ReactiveRoutingError(ValueError):
 @dataclass(frozen=True)
 class RouteDecision:
     status: str
+    canonicalization_schema: str
     scripts: tuple[str, ...]
     model_lanes: tuple[str, ...]
     zero_projection: bool
@@ -77,16 +76,11 @@ class RouteDecision:
     decision_sha256: str
 
 
-def _canonical(value: Any) -> bytes:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
-
-
-def _sha256_canonical(value: Any, field: str) -> str:
+def _sha256_canonical(value: Any, field: str, *, domain: str) -> str:
     try:
-        encoded = _canonical(value)
-    except (TypeError, ValueError) as exc:
-        raise ReactiveRoutingError(f"{field}:CANONICALIZATION_FAILED") from exc
-    return hashlib.sha256(encoded).hexdigest()
+        return canonical_sha256(value, domain=domain)
+    except CanonicalizationError as exc:
+        raise ReactiveRoutingError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
 
 
 def _unit(value: Any, field: str) -> float:
@@ -95,6 +89,8 @@ def _unit(value: Any, field: str) -> float:
     value = float(value)
     if not 0.0 <= value <= 1.0:
         raise ReactiveRoutingError(f"{field}:UNIT_INTERVAL_REQUIRED")
+    if value == 0.0:
+        value = 0.0
     return value
 
 
@@ -111,6 +107,11 @@ def _sha256_text(value: Any, field: str) -> str:
     if len(value) != 64 or value.lower() != value or any(ch not in "0123456789abcdef" for ch in value):
         raise ReactiveRoutingError(f"{field}:LOWERCASE_SHA256_REQUIRED")
     return value
+
+
+def _validate_canonicalization_schema(event: Mapping[str, Any]) -> None:
+    if event.get("canonicalization_schema") != CANONICALIZATION_SCHEMA:
+        raise ReactiveRoutingError("CANONICALIZATION_SCHEMA_MISMATCH_OR_DOWNGRADE")
 
 
 def _validate_internal_provider(event: Mapping[str, Any]) -> None:
@@ -145,35 +146,30 @@ def _resolve_internal_engine(
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_CLASS_MISMATCH")
     artifact_sha256 = _sha256_text(artifact_sha256, "RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256")
 
-    # The event may report what bytes it thinks were resolved, but that claim is not
-    # authority. XPU/XRAM must separately supply the currently admitted artifact lock.
     if not isinstance(admitted_engine_artifacts, Mapping):
         raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_ARTIFACT_REGISTRY_REQUIRED")
     admitted_artifact_sha256 = admitted_engine_artifacts.get(identity)
     if admitted_artifact_sha256 is None:
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_ARTIFACT_NOT_ADMITTED")
-    admitted_artifact_sha256 = _sha256_text(
-        admitted_artifact_sha256,
-        "ADMITTED_INTERNAL_ENGINE_ARTIFACT_SHA256",
-    )
+    admitted_artifact_sha256 = _sha256_text(admitted_artifact_sha256, "ADMITTED_INTERNAL_ENGINE_ARTIFACT_SHA256")
     if artifact_sha256 != admitted_artifact_sha256:
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256_MISMATCH")
 
     engine_identity_sha256 = _sha256_canonical(
         {
             "schema": ENGINE_IDENTITY_SCHEMA,
+            "canonicalization_schema": CANONICALIZATION_SCHEMA,
             "resolved_engine_identity": identity,
             "resolved_engine_class": engine_class,
             "resolved_engine_artifact_sha256": artifact_sha256,
         },
         "ENGINE_IDENTITY",
+        domain="ENTITYOS_HCU_ENGINE_IDENTITY/v2",
     )
     return identity, engine_class, artifact_sha256, engine_identity_sha256
 
 
 def _event_identity(event: Mapping[str, Any]) -> str:
-    # Engine/provider resolution is routing metadata, not the immutable causal event.
-    # Separating the two lets identical events be compared across admitted engines.
     payload = dict(event)
     for key in (
         "requested_internal_provider",
@@ -182,7 +178,7 @@ def _event_identity(event: Mapping[str, Any]) -> str:
         "resolved_internal_engine_artifact_sha256",
     ):
         payload.pop(key, None)
-    return _sha256_canonical(payload, "EVENT")
+    return _sha256_canonical(payload, "EVENT", domain="ENTITYOS_HCU_CAUSAL_EVENT/v2")
 
 
 def route_event(
@@ -193,6 +189,7 @@ def route_event(
 ) -> RouteDecision:
     if not isinstance(event, Mapping) or event.get("schema") != SCHEMA:
         raise ReactiveRoutingError("EVENT_SCHEMA_UNSUPPORTED")
+    _validate_canonicalization_schema(event)
     generation = event.get("entity_generation")
     if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
         raise ReactiveRoutingError("ENTITY_GENERATION_INVALID")
@@ -215,37 +212,39 @@ def route_event(
     zero_relevance = _unit(event.get("zero_relevance", 0.0), "zero_relevance")
     due_recheck = _bool(event.get("due_recheck", False), "due_recheck")
 
+    t = ROUTER_POLICY["thresholds"]
     lanes: set[str] = set()
-    if novelty >= 0.55 or contradiction >= 0.35 or due_recheck:
+    if novelty >= t["world_novelty"] or contradiction >= t["world_contradiction"] or due_recheck:
         lanes.add("world")
-    if contradiction >= 0.35 or uncertainty >= 0.60:
+    if contradiction >= t["hypothesis_contradiction"] or uncertainty >= t["hypothesis_uncertainty"]:
         lanes.add("hypothesis")
-    if forecast_need >= 0.50 or effect_pressure >= 0.45:
+    if forecast_need >= t["simulation_forecast_need"] or effect_pressure >= t["simulation_effect_pressure"]:
         lanes.add("simulation")
-    if effect_pressure >= 0.45 or zero_relevance >= 0.70:
+    if effect_pressure >= t["zero_model_effect_pressure"] or zero_relevance >= t["zero_model_relevance"]:
         lanes.add("zero_model")
     if lanes:
         lanes.add("critic")
     if event.get("provenance_gap") is True:
         lanes.add("provenance")
-
-    # Goal cognition is selective; a plain event cannot create a goal lane by default.
-    if event.get("goal_pressure") is not None and _unit(event["goal_pressure"], "goal_pressure") >= 0.70:
+    if event.get("goal_pressure") is not None and _unit(event["goal_pressure"], "goal_pressure") >= t["goal_pressure"]:
         lanes.add("goal")
         lanes.add("critic")
 
-    # A route that asks for model work must already carry a positively admitted exact
-    # internal engine identity/class/artifact digest. Script-only events require none.
     if lanes and resolved_engine_identity is None:
         raise ReactiveRoutingError("MODEL_ACTIVATION_REQUIRES_ADMITTED_INTERNAL_ENGINE")
     if not lanes and resolved_engine_identity is not None:
         raise ReactiveRoutingError("SCRIPT_ONLY_EVENT_MUST_NOT_SELECT_INTERNAL_ENGINE")
 
-    projection = zero_relevance >= 0.60 and bool(lanes)
+    projection = zero_relevance >= t["zero_projection_relevance"] and bool(lanes)
     event_sha256 = _event_identity(event)
-    router_policy_sha256 = _sha256_canonical(ROUTER_POLICY, "ROUTER_POLICY")
+    router_policy_sha256 = _sha256_canonical(
+        ROUTER_POLICY,
+        "ROUTER_POLICY",
+        domain="ENTITYOS_HCU_ROUTER_POLICY/v2",
+    )
     payload = {
         "schema": ROUTE_IDENTITY_SCHEMA,
+        "canonicalization_schema": CANONICALIZATION_SCHEMA,
         "event_sha256": event_sha256,
         "router_policy_sha256": router_policy_sha256,
         "engine_identity_sha256": engine_identity_sha256,
@@ -256,9 +255,10 @@ def route_event(
         "external_provider_dependency": False,
         "generation": generation,
     }
-    digest = _sha256_canonical(payload, "ROUTE_DECISION")
+    digest = _sha256_canonical(payload, "ROUTE_DECISION", domain="ENTITYOS_HCU_ROUTE_DECISION/v3")
     return RouteDecision(
         status="SCRIPT_ONLY" if not lanes else "SELECTIVE_MODEL_ACTIVATION",
+        canonicalization_schema=CANONICALIZATION_SCHEMA,
         scripts=SCRIPT_STAGES,
         model_lanes=tuple(sorted(lanes)),
         zero_projection=projection,
@@ -275,12 +275,12 @@ def route_event(
 
 
 def assert_inference_echo(decision: RouteDecision, receipt: Mapping[str, Any]) -> None:
-    """Fail closed unless inference echoes the exact admitted event/route/engine tuple."""
     if decision.status != "SELECTIVE_MODEL_ACTIVATION":
         raise ReactiveRoutingError("INFERENCE_ECHO_NOT_VALID_FOR_SCRIPT_ONLY_ROUTE")
     if not isinstance(receipt, Mapping):
         raise ReactiveRoutingError("INFERENCE_RECEIPT_MAPPING_REQUIRED")
     expected = {
+        "canonicalization_schema": decision.canonicalization_schema,
         "event_sha256": decision.event_sha256,
         "decision_sha256": decision.decision_sha256,
         "engine_identity_sha256": decision.engine_identity_sha256,

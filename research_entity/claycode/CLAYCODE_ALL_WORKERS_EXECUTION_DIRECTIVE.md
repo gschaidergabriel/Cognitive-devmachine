@@ -17,7 +17,8 @@ Workers refresh and obey, in order:
 3. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`;
 4. `research_entity/rooms/PROGRAM_STATE.json`;
 5. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`;
-6. exact current source/runtime evidence.
+6. `research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md`;
+7. exact current source/runtime evidence.
 
 Current naming law:
 
@@ -105,8 +106,41 @@ The benchmark ladder is `10 -> 32 -> 64 -> 128 -> 256 -> ~600`; ~600 H100-class 
 - EffectGate/EffectJournal are the only admitted real/state-changing effect path;
 - current runtime/test credit requires authorized isolated sandbox execution;
 - VPS/self-hosted/production-host testing is forbidden under current control;
-- Together is forbidden; no paid fallback; secrets never enter prompts/source/receipts;
-- final paid/model training requires explicit owner authorization.
+- Together remains forbidden for ordinary inference/fallback and recurring training, **except the explicit single owner-authorized ~0.8B J-Space/GWT fine-tuning run defined below**;
+- no other paid fallback is authorized;
+- secrets never enter prompts/source/receipts;
+- a second Together training job requires new explicit owner authorization.
+
+## One-shot ~0.8B J-Space/GWT specialization law
+
+The owner explicitly authorizes **one serious Together fine-tuning job** for the local ~0.8B HCU model after a functional Global J-Space/GWT prototype has produced enough exact instrumented traces to derive real training data.
+
+Authoritative training contract:
+
+`research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md`
+
+Required sequence:
+
+`Global J-Space/GWT prototype -> exact instrumented traces -> causal/lesion/control evaluation -> JSPACE_VECTOR_CONTROL_ABI/v1 -> dataset compiler -> train/validation/holdout -> frozen base evaluation -> 1x Together full fine-tune -> weight/tokenizer hash binding -> EngineAdmission/loader-lease integration -> deep post-training tests`.
+
+Target specialization:
+
+- Global J-Space participation and role-relevant re-entry;
+- local GWT competition/broadcast/workspace behavior;
+- Xeno/Typed-Entry vector-driven control through a versioned deterministic vector-control ABI;
+- HCU route/cell selection and script-only suppression;
+- Hyperposition alternatives/counterhypotheses/falsifiers;
+- compact ClayCode/GRF output;
+- provenance/generation/capability/resource/engine/effect fences;
+- recovery and stale-result rejection.
+
+"Forget unimportant capabilities" means deliberate measured specialization: broad unrelated chat/trivia/creative behavior may degrade, while minimum language, schema following, arithmetic/logic, vector/numeric handling, tool/protocol comprehension, safety and HCU authority boundaries must remain above frozen acceptance floors.
+
+Training may use Together's native full fine-tuning API/CLI and an owner-held `TOGETHER_API_KEY` only through a transient admitted secret surface. The token must never enter Git, prompts, datasets, receipts, logs, OCI layers, model metadata or persistent Sandbox state.
+
+The authorization is consumed only when a Together fine-tuning job is actually created. Capability discovery, dataset generation/checking, pricing/preflight, dry-runs and baseline evaluation do not consume it. When consumed, record the non-secret job ID + exact base/dataset/config hashes and set `ONE_SHOT_TOGETHER_TRAINING_CONSUMED=true`. A failed candidate does not authorize a second paid run.
+
+Do not silently substitute another base model. Verify the exact intended ~0.8B checkpoint/revision/tokenizer and Together full-FT support immediately before launch. A Together-supported nearby small model is not automatically equivalent.
 
 ## Mandatory sandbox/API discovery and PASS-seeking law
 
@@ -168,6 +202,14 @@ CURRENT HCU ROUTE GATE
 - Bind immutable causal event identity + resolved engine identity/class + routing result into one decision identity.
 - Downstream inference must echo event/route/engine identities before promotion.
 
+ONE-SHOT TRAINING
+- Build the functional Global J-Space/GWT prototype and instrument real traces before creating training labels.
+- Derive a versioned JSPACE_VECTOR_CONTROL_ABI/v1 and dataset compiler from those traces.
+- One Together full fine-tuning job for the exact intended ~0.8B HCU base is owner-authorized when the dataset and frozen pre-training evaluation are ready.
+- Together remains forbidden for ordinary fallback/inference and any second training job without new explicit owner authorization.
+- The training token is transient secret material only; never place it in prompt/source/receipt/dataset/log/model metadata/persistent state.
+- After training, integrate through existing EngineAdmission + physical loader lease and run deep causal/lesion/recovery/effect-boundary tests; completed training alone is not PASS.
+
 AUTHORITY
 - Canonical state/evidence stays outside model cognition/simulation.
 - J-Space/HCU/world-model/workspace outputs are candidate/projection/measurement only.
@@ -181,11 +223,12 @@ EXECUTION / SECURITY
 - Prefer real exact-source isolated execution toward PASS over additional prose/source assertions whenever safely callable.
 - If direct Sandbox exec is absent but an admitted retained controller/deployment can bridge into Sandbox safely, inspect and use that bridge subject to exact-current binding and credential rules.
 - Current runtime/test credit is authorized-isolated-sandbox-only unless newer owner authority changes this.
-- Together forbidden; no paid fallback; secrets never enter prompts/source/receipts.
-- Runtime/capacity PASS requires exact executable evidence.
+- Together ordinary inference/fallback remains forbidden; exactly one owner-authorized ~0.8B fine-tuning job is permitted under the training directive above.
+- No other paid fallback; secrets never enter prompts/source/receipts.
+- Runtime/capacity/training PASS requires exact executable evidence.
 
 HANDOFF
-- State: EntityOS delta; HCU/Entry delta or no-change reason; hypothesis; strongest counterhypothesis; discriminator; measured-vs-inferred boundary; cross-mode reuse; sandbox/API/tool surfaces discovered and actually callable; next executable PASS gate.
+- State: EntityOS delta; HCU/Entry delta or no-change reason; J-Space/GWT prototype/training-readiness delta; hypothesis; strongest counterhypothesis; discriminator; measured-vs-inferred boundary; cross-mode reuse; sandbox/API/tool surfaces discovered and actually callable; next executable PASS gate.
 
 [/ENTITYOS/HCU CURRENT AUTHORITY]
 [/MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]
@@ -199,9 +242,11 @@ Any worker spawning another worker in the same trigger prepends the current prot
 
 When an authorized executable surface is callable, execute the highest-information applicable test rather than stop at a proposal. Unavailable execution remains `BLOCKED/UNOBSERVED`, never PASS or semantic FAIL. Preserve exact source/artifact/runtime identity and negative results. A worker may call execution unavailable only after current-surface sandbox/API/tool discovery has been performed and reported.
 
+The one-shot Together training should be launched as soon as the prototype/data/base-model/preflight gates are genuinely ready; do not delay it merely because more speculative architecture prose could be written.
+
 ## Continuation law
 
-`observe -> hypotheses -> counterhypotheses -> discriminate -> discover executable surfaces -> execute/measure when authorized -> verify -> fuse -> repair/build -> regression -> re-entry`
+`observe -> hypotheses -> counterhypotheses -> discriminate -> discover executable surfaces -> execute/measure when authorized -> verify -> fuse -> repair/build -> regression -> prototype trace -> dataset -> one-shot training when ready -> deep integration/evaluation -> re-entry`
 
 not
 

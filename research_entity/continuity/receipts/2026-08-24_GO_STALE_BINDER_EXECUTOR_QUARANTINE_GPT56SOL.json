@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "quarantine_route_commit": "08bfded09e75bced36764180ab1c11f15886d12d",
+    "guard_v5_commit": "e09d5edcaeb6f03a98945c70087b76627da3c53c",
+    "route": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js",
+    "guard": "mcp/vercel-sandbox-mcp/scripts/guard-entityos-hcu-current-executor.mjs"
+  },
+  "source_quarantine_contract": {
+    "status": "SOURCE_REBIND_REQUIRED",
+    "stale_donor_snapshot": "8ba9f52451c73f2c81281eca5c4c5dc251aef00c",
+    "required_donor_snapshot_at_quarantine_write": "0e6ad07c8efb87fd28fa01f34a8e8a251533af61",
+    "required_research_context_at_quarantine_write": "5178ba493fc83dee7c35f400bc05ef7c86902ee1",
+    "order_invariant": "SOURCE_REBIND_REQUIRED_BEFORE_SANDBOX_COST_GATE_BEFORE_SANDBOX_CREATE",
+    "sandbox_create_attempted_by_quarantined_route": false,
+    "execution_credit": "NONE"
+  },
+  "vercel_build_evidence": {
+    "failed_intermediate_deployment": {
+      "deployment": "dpl_CLmToMok8kMKGdDHtznX4mi9Jn7j",
+      "commit": "08bfded09e75bced36764180ab1c11f15886d12d",
+      "result": "BUILD_GUARD_REJECTED_NEW_QUARANTINE_MARKERS_BEFORE_RUNTIME",
+      "test_executed": false,
+      "sandbox_executed": false
+    },
+    "guard_repair_deployment": {
+      "deployment": "dpl_FRC4QCC39VgPFpjNrLYYTy3ugDvU",
+      "commit": "e09d5edcaeb6f03a98945c70087b76627da3c53c",
+      "vercel_state": "READY",
+      "github_vercel_status": "success",
+      "guard_schema": "EntityOSHCUCurrentExecutorGuard/v5",
+      "guard_scope": "BUILD_TIME_SOURCE_AND_FAIL_CLOSED_QUARANTINE_VALIDATION_ONLY",
+      "runtime_credit": false
+    }
+  },
+  "protected_route_access": {
+    "attempted": true,
+    "observed_http_status": 302,
+    "observed_layer": "VERCEL_SSO_REDIRECT_BEFORE_SERVERLESS_FUNCTION",
+    "runtime_logs_for_deployment": "NONE_OBSERVED",
+    "function_invocation_observed": false,
+    "sandbox_create_observed": false,
+    "quarantine_409_observed": false,
+    "interpretation": "ACCESS_ADMISSION_BLOCKER; not a route test failure and not a route PASS"
+  },
+  "current_candidate_chain": "Typed Entry -> Route -> VerifiedEngineAdmission -> VerifiedEngineLoad -> GRID10/v2 -> actual model-executor observation with invocation uniqueness -> VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> JSpaceBinding/v3",
+  "next_gate": [
+    "Carry one immutable exact dependency closure for the current candidate chain into the same retained PR810 route; do not mix current producers with stale binder-v2 doubles.",
+    "Keep SOURCE_REBIND_REQUIRED enabled until those source/test blobs and their identities are updated in the same change.",
+    "Resolve protected-preview function access so the exact READY deployment can be invoked; only an observed function response can prove the pre-Sandbox quarantine at runtime.",
+    "After rebind, run deterministic source-chain regressions in admitted FREE_ONLY Sandbox; no model-runtime credit before a real zero-cost local executor produces admitted I/O evidence."
+  ],
+  "credit": {
+    "build_guard_credit": "EXACT_E09D5ED_BUILD_GUARD_V5_READY_ONLY",
+    "route_runtime_credit": 0,
+    "sandbox_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  }
+}

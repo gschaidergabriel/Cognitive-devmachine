@@ -8,7 +8,11 @@ finalization. The Python reference runtime/tests may lag, but that lag must stay
 and must never roll the canonical Clay contract back.
 
 Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
-unwired handler names do not count as runtime support.
+unwired handler names do not count as runtime support. Runtime convergence additionally
+requires a bounded downstream identity floor: inference must actually consume the admitted
+InferencePacket + pre-inference admission identities, and finalization must consume the
+same admitted/candidate/gate/commit terminal ancestry and expose a distinct final UCF digest.
+This is source/mechanism evidence only, never runtime proof.
 """
 from __future__ import annotations
 
@@ -26,6 +30,13 @@ REQUIRED_EFFECTS = {
     "pipeline_cognitive_fabric_finalize": "_pipeline_cognitive_fabric_finalize",
 }
 LEGACY_EFFECTS = {"profile_load", "provider_chat_json"}
+INFERENCE_REQUIRED_KEYS = {
+    "inference_packet_digest",
+    "cognitive_fabric_admission_receipt_digest",
+}
+FINALIZER_REQUIRED_INPUT_KEYS = {"admitted", "generated", "gated", "committed"}
+FINALIZER_REQUIRED_OUTPUT_KEYS = {"ucf_runtime_receipt_digest"}
+FINALIZER_FORBIDDEN_SELF_CALLS = {"_db", "_pipeline_commit", "_inference_generate", "effect"}
 
 
 def _class_node(tree: ast.AST, name: str) -> ast.ClassDef | None:
@@ -51,6 +62,104 @@ def _attribute_name(node: ast.AST) -> str | None:
     return None
 
 
+def _self_calls(method: ast.AST) -> set[str]:
+    out: set[str] = set()
+    for node in ast.walk(method):
+        if isinstance(node, ast.Call):
+            name = _attribute_name(node.func)
+            if name:
+                out.add(name)
+    return out
+
+
+def _reachable_method_nodes(methods: dict[str, ast.AST], start: str) -> dict[str, ast.AST]:
+    """Follow executable self.method(...) calls so helper decomposition still counts."""
+    reachable: dict[str, ast.AST] = {}
+    pending = [start]
+    while pending:
+        name = pending.pop()
+        if name in reachable or name not in methods:
+            continue
+        method = methods[name]
+        reachable[name] = method
+        pending.extend(sorted(_self_calls(method) & set(methods)))
+    return reachable
+
+
+def _accessed_mapping_keys(nodes: list[ast.AST]) -> set[str]:
+    """Collect literal mapping keys that executable code reads via [] or .get(...)."""
+    out: set[str] = set()
+    for root in nodes:
+        for node in ast.walk(root):
+            if isinstance(node, ast.Subscript):
+                value = node.slice
+                if isinstance(value, ast.Constant) and isinstance(value.value, str):
+                    out.add(value.value)
+            elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+                if node.func.attr == "get" and node.args:
+                    first = node.args[0]
+                    if isinstance(first, ast.Constant) and isinstance(first.value, str):
+                        out.add(first.value)
+    return out
+
+
+def _dict_literal_keys(nodes: list[ast.AST]) -> set[str]:
+    out: set[str] = set()
+    for root in nodes:
+        for node in ast.walk(root):
+            if isinstance(node, ast.Dict):
+                for key in node.keys:
+                    if isinstance(key, ast.Constant) and isinstance(key.value, str):
+                        out.add(key.value)
+    return out
+
+
+def downstream_identity_contract(methods: dict[str, ast.AST]) -> dict[str, Any]:
+    """Bounded source floor for preserving UCF ancestry after pre-inference admission.
+
+    This intentionally does not prove semantic correctness. It prevents a future runtime
+    from receiving convergence credit when handler names are wired but inference drops the
+    admitted packet/receipt identities, or finalization ignores terminal ancestry / mints a
+    final digest without structurally consuming the same turn outcome.
+    """
+    inference = _reachable_method_nodes(methods, "_inference_generate")
+    finalizer = _reachable_method_nodes(methods, "_pipeline_cognitive_fabric_finalize")
+    inference_nodes = list(inference.values())
+    finalizer_nodes = list(finalizer.values())
+
+    inference_reads = _accessed_mapping_keys(inference_nodes)
+    finalizer_reads = _accessed_mapping_keys(finalizer_nodes)
+    finalizer_outputs = _dict_literal_keys(finalizer_nodes)
+    finalizer_self_calls = (
+        set().union(*(_self_calls(node) for node in finalizer_nodes)) if finalizer_nodes else set()
+    )
+    forbidden = sorted(finalizer_self_calls & FINALIZER_FORBIDDEN_SELF_CALLS)
+
+    inference_identity_bound = INFERENCE_REQUIRED_KEYS.issubset(inference_reads)
+    finalizer_terminal_ancestry_bound = FINALIZER_REQUIRED_INPUT_KEYS.issubset(finalizer_reads)
+    finalizer_exposes_distinct_digest = FINALIZER_REQUIRED_OUTPUT_KEYS.issubset(finalizer_outputs)
+    semantic_floor = all(
+        [
+            inference_identity_bound,
+            finalizer_terminal_ancestry_bound,
+            finalizer_exposes_distinct_digest,
+            not forbidden,
+        ]
+    )
+    return {
+        "inference_reachable_methods": sorted(inference),
+        "inference_accessed_keys": sorted(INFERENCE_REQUIRED_KEYS & inference_reads),
+        "inference_identity_bound": inference_identity_bound,
+        "finalizer_reachable_methods": sorted(finalizer),
+        "finalizer_accessed_inputs": sorted(FINALIZER_REQUIRED_INPUT_KEYS & finalizer_reads),
+        "finalizer_output_keys": sorted(FINALIZER_REQUIRED_OUTPUT_KEYS & finalizer_outputs),
+        "finalizer_terminal_ancestry_bound": finalizer_terminal_ancestry_bound,
+        "finalizer_exposes_distinct_digest": finalizer_exposes_distinct_digest,
+        "finalizer_forbidden_self_calls": forbidden,
+        "semantic_floor": semantic_floor,
+    }
+
+
 def runtime_effect_contract(runtime: str) -> dict[str, Any]:
     """Extract effect admission from executable Python syntax, never raw substrings."""
     try:
@@ -63,6 +172,7 @@ def runtime_effect_contract(runtime: str) -> dict[str, Any]:
             "dispatch": {},
             "handlers": [],
             "required_effect_bindings": {name: False for name in REQUIRED_EFFECTS},
+            "downstream_identity": downstream_identity_contract({}),
             "legacy_effects_absent": False,
             "converged": False,
         }
@@ -76,6 +186,7 @@ def runtime_effect_contract(runtime: str) -> dict[str, Any]:
             "dispatch": {},
             "handlers": [],
             "required_effect_bindings": {name: False for name in REQUIRED_EFFECTS},
+            "downstream_identity": downstream_identity_contract({}),
             "legacy_effects_absent": False,
             "converged": False,
         }
@@ -139,8 +250,9 @@ def runtime_effect_contract(runtime: str) -> dict[str, Any]:
         )
         for effect_name, handler_name in REQUIRED_EFFECTS.items()
     }
+    downstream = downstream_identity_contract(methods)
     legacy_absent = not ((allowed | set(dispatch)) & LEGACY_EFFECTS)
-    converged = all(bindings.values()) and legacy_absent
+    converged = all(bindings.values()) and downstream["semantic_floor"] and legacy_absent
     return {
         "syntax_ok": True,
         "class_found": True,
@@ -148,6 +260,7 @@ def runtime_effect_contract(runtime: str) -> dict[str, Any]:
         "dispatch": dict(sorted(dispatch.items())),
         "handlers": sorted(handlers),
         "required_effect_bindings": bindings,
+        "downstream_identity": downstream,
         "legacy_effects_absent": legacy_absent,
         "converged": converged,
     }
@@ -300,7 +413,7 @@ def main() -> int:
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay authority is bounded MINI_COGNITIVE_INVOCATION/v1 selector -> DB-resident profile/state -> pre-inference Cognitive Fabric admission resolving only already-bound MiniUnifiedDB material -> inference_generate -> deterministic gate/MiniUnifiedDB CAS commit -> post-turn UCF runtime-receipt finalization; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
+        "policy": "Canonical Clay authority is bounded MINI_COGNITIVE_INVOCATION/v1 selector -> DB-resident profile/state -> pre-inference Cognitive Fabric admission resolving only already-bound MiniUnifiedDB material -> exact admission identity consumed by inference -> deterministic gate/MiniUnifiedDB CAS commit -> post-turn UCF runtime-receipt finalization over the same terminal ancestry; runtime support requires executable effect binding plus the bounded downstream identity floor, never names/comments/dead strings alone.",
         "errors": errors,
         "pass": not errors,
     }

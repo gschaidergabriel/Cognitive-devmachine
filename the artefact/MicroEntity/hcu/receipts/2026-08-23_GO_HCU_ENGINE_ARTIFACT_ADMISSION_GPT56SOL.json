@@ -1,0 +1,69 @@
+{
+  "schema_version": "HCU_ENGINE_ARTIFACT_ADMISSION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_entity": "Clay",
+  "current_product_authority": "EntityOS",
+  "current_cognition_compute_architecture": "HCU",
+  "legacy_path_note": "MicroEntity/Xeno/XCU path names are compatibility/provenance surfaces only under current authority",
+  "pr": 1263,
+  "source_head_observed_before_receipt": "07186dc9386d03fa17ec05ce1dccacbb30599db8",
+  "source_blobs": {
+    "reactive_event_router_v1.py": "1c7ff4d3e0439d4cc5a44c70d1c3d15e40f743ae",
+    "test_reactive_event_router_v1.py": "5947b740419a485f058e5bd3ac16957852323163"
+  },
+  "finding": "EVENT_SELF_ASSERTED_ENGINE_ARTIFACT_IDENTITY_FAIL_OPEN",
+  "mechanism": {
+    "before": "a route event could supply any syntactically valid lowercase 64-hex resolved_internal_engine_artifact_sha256 and have that value incorporated into engine_identity_sha256 without comparison to an independently admitted runtime artifact lock",
+    "risk": "untrusted or stale event metadata could self-authorize a different checkpoint/runtime byte identity while still satisfying symbolic engine-name/class admission",
+    "repair": "route_event now accepts an independently supplied admitted_engine_artifacts registry from the deterministic XPU/XRAM control boundary; model activation fails closed unless the event-reported digest exactly equals the independently admitted digest",
+    "additional_fusion": "the current implementation-scoped HASH_SERIALIZATION_SCHEMA is preserved and bound into event, engine, policy, route and downstream inference receipt identities",
+    "downstream_echo": "inference receipts must echo serialization schema, event digest, route digest, engine identity, engine class and exact engine artifact digest"
+  },
+  "hypothesis": "separating event-reported engine bytes from independently admitted artifact authority prevents self-asserted checkpoint substitution without creating a second state or effect authority",
+  "counterhypothesis": "symbolic engine identity/class plus a syntactically valid artifact SHA is sufficient because any SHA is already an exact identity",
+  "counterhypothesis_result": "REJECTED_AT_SOURCE_MECHANISM_SCOPE: exact identity is not admission authority when the claimant supplies the identity being checked",
+  "regression_evidence": {
+    "execution_scope": "isolated local tool container reconstruction of the fused component bytes",
+    "py_compile": "PASS",
+    "focused_router_tests": "18/18 PASS",
+    "includes": [
+      "event-claimed artifact mismatch fails closed",
+      "missing independent artifact registry fails closed",
+      "unknown engine/provider and class mismatch remain fail closed",
+      "same event replay remains deterministic",
+      "distinct events sharing one route do not alias",
+      "explicit admitted artifact rotation changes engine/route identity while event identity remains stable",
+      "downstream inference echo binds exact artifact and serializer identity"
+    ],
+    "credit": "COMPONENT_MECHANISM_ONLY_NOT_ENTITYOS_HCU_RUNTIME_ACCEPTANCE"
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment_in_this_delta": false,
+    "reason": "the shared user-triggered GO unusual experiment was already consumed and durably recorded by 2026-08-23_GO_CAUSAL_ROUTE_ALIAS_STRESS_GPT56SOL.json; all artifact-lock checks here are regression/falsifier follow-ups"
+  },
+  "authority_invariants": [
+    "one current EntityOS product identity",
+    "HCU remains the sole integrated cognition/compute architecture",
+    "canonical state/evidence authority remains outside model cognition",
+    "EffectGate/EffectJournal remain the only real-effect authority",
+    "event metadata cannot mint artifact admission authority",
+    "unknown or mismatched engine artifact identity fails closed"
+  ],
+  "execution_boundary": {
+    "authorized_exact_source_full_runtime_started": false,
+    "vercel_sandbox_create_start_exec_exposed_to_this_organ": false,
+    "vps_self_hosted_production_test_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false
+  },
+  "remaining_gates": [
+    "wire admitted_engine_artifacts to the real trusted local checkpoint/tokenizer/runtime lock owned by deterministic control rather than test fixtures",
+    "execute exact-current Entry-Fabric/router/inference-echo regressions in an authorized exact-source isolated sandbox",
+    "bind the real downstream inference receipt producer to the exact event/route/engine/artifact/serializer tuple",
+    "rebuild and digest-bind the compatibility package only after settled route semantics",
+    "measure provider-free HCU runtime and selective-inference behavior before promotion"
+  ],
+  "promotion_credit": 0,
+  "whole_product_pass": false
+}

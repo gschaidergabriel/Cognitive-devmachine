@@ -1,0 +1,77 @@
+{
+  "schema_version": "HCU_GO_RESEARCH_RECEIPT/v2",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_entity": "Clay",
+  "active_program": "ENTITYOS_HCU_XENO",
+  "scope": "reactive HCU route identity / Xeno XCU entry-control fabric",
+  "canonical_main_observed": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "source_observations": {
+    "legacy_pr_head_inspected": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "legacy_finding": "route decision identity depended on derived routing output plus generation and could alias materially different causal events; internal provider admission also relied on a finite denylist",
+    "fused_route_v2_head_inspected": "beb62d9668f016050ddab2ca0597c8af34e5d7d6",
+    "fused_finding": "draft source now separates causal event identity from engine-selection metadata, positively admits provider/engine identities, requires exact lowercase engine artifact SHA-256 for model activation, binds router-policy and engine-identity digests into route identity v2, and requires downstream inference echo of the admitted event/route/engine tuple",
+    "stale_write_guard": "PASS: attempted overwrite from an older blob SHA was rejected by GitHub with HTTP 409; no stale branch overwrite occurred"
+  },
+  "hypothesis": "A causal route identity that commits to immutable event identity, exact cognition-engine identity and router policy prevents replay/audit aliasing that is invisible when identity commits only to selected lanes/projection.",
+  "counterhypothesis": "Binding event/engine/policy identity adds no useful discrimination because materially different events or engine artifacts selecting the same route are operationally equivalent.",
+  "unusual_experiment": {
+    "name": "same-route causal-alias stress",
+    "execution_scope": "isolated local tool sandbox; mechanism evidence only; not exact Xeno/HCU runtime acceptance",
+    "events": 256,
+    "constraint": "all events intentionally selected one identical lane set while novelty varied",
+    "legacy_unique_decision_digests": 1,
+    "legacy_aliases": 255,
+    "event_engine_bound_unique_decision_digests": 256,
+    "event_engine_bound_aliases": 0,
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_MECHANISM_SCOPE"
+  },
+  "source_candidate_mechanisms": [
+    "positive fail-closed internal provider alias registry",
+    "positive fail-closed internal engine identity/class registry",
+    "exact lowercase resolved engine artifact sha256 required for model activation",
+    "event_sha256 excludes engine-selection metadata so identical causal events can be compared across admitted engine artifacts",
+    "engine_identity_sha256 binds engine identity + class + artifact digest",
+    "router_policy_sha256 binds routing thresholds and admission policy",
+    "decision_sha256 v2 binds event + router policy + engine identity + routing result",
+    "script-only routes reject selected internal engines",
+    "assert_inference_echo fails closed unless downstream receipt echoes event route and engine identities"
+  ],
+  "local_candidate_regression": {
+    "historical_component_check": "PASS_AT_MECHANISM_SCOPE_ONLY",
+    "credit": "NO_EXACT_CURRENT_RUNTIME_CREDIT"
+  },
+  "github_actions_observation": {
+    "commit": "beb62d9668f016050ddab2ca0597c8af34e5d7d6",
+    "workflow": "Research Entity Identity Guard",
+    "run_id": 32651812246,
+    "job_id": 97224496681,
+    "status": "completed",
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT",
+    "semantic_test_fail": false
+  },
+  "package_state": {
+    "MICROENTITY_CURRENT.zip": "STALE_AFTER_ROUTE_POLICY_RECEIPT_CHANGES",
+    "required_action": "REBUILD_ONLY_AFTER_ROUTE_SEMANTICS_SETTLE_AND_VERIFY_REQUIRED_MEMBERS"
+  },
+  "remaining_gaps": [
+    "bind the real admitted local checkpoint/tokenizer/runtime bytes rather than accepting an unverified caller-supplied artifact digest",
+    "bind the downstream inference receipt producer to the v2 echo contract",
+    "run focused route/inference-echo tests on an authorized exact-source isolated executor",
+    "rebuild and verify the Xeno/MicroEntity compatibility package snapshot",
+    "then measure GRID10/COGSIM10 cost utility before widening WM_TEST/NESTED_SIM"
+  ],
+  "authority_invariants": [
+    "canonical state/evidence remains outside model cognition",
+    "EffectGate/EffectJournal remain the only real-effect authority",
+    "world-model and HCU/XCU/J-Space outputs remain candidate/projection/measurement only",
+    "unknown external effect outcomes remain UNKNOWN",
+    "logical HCU cells are not physical concurrent decode claims",
+    "VPS testing remains forbidden under current authority",
+    "Together remains forbidden"
+  ],
+  "promotion_credit": 0,
+  "whole_product_pass": false
+}

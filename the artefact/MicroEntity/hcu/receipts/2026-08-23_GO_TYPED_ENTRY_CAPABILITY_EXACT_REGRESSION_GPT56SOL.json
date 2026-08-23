@@ -1,0 +1,47 @@
+{
+  "schema_version": "HCU_TYPED_ENTRY_EXACT_SOURCE_REGRESSION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "candidate_pr": 1263,
+  "exact_source_commit": "cdee5210205683d5d6b0a1f7c7ee928c1782f25b",
+  "classification": "REGRESSION_ONLY_NOT_A_SECOND_UNUSUAL_EXPERIMENT",
+  "source_identity": {
+    "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py": {
+      "bytes": 10641,
+      "git_blob_sha1": "89cda2894f4a90440964a2ffdb01ef274c3279ad"
+    },
+    "the artefact/MicroEntity/hcu/test_xeno_entry_fabric_v1.py": {
+      "bytes": 5486,
+      "git_blob_sha1": "a5c5666c52b3def5b15d1e5b3d96836822b3fc6f"
+    },
+    "identity_check": "PASS: locally reconstructed bytes produced exact Git blob identities returned by GitHub fetch_file"
+  },
+  "execution": {
+    "surface": "isolated ChatGPT container",
+    "commands": [
+      "python3 -m py_compile xeno_entry_fabric_v1.py test_xeno_entry_fabric_v1.py",
+      "python3 -m unittest -v test_xeno_entry_fabric_v1.py"
+    ],
+    "py_compile": "PASS",
+    "unittest": "12/12 PASS",
+    "exit_code": 0
+  },
+  "verified_mechanisms": [
+    "entry capability binding must equal an externally supplied authority binding digest",
+    "entry capabilities must be a subset of externally supplied admitted capabilities",
+    "effect.request self-grant poison is rejected",
+    "entry may narrow but not broaden authority capabilities",
+    "duplicate capability claims fail closed",
+    "unknown effect/truth smuggling fields fail closed",
+    "stale entity generation fails closed",
+    "provenance and payload SHA-256 fields are mandatory and typed",
+    "HCU projection preserves ingress, causal, admission and generation identity"
+  ],
+  "scope_limit": "Exact source-level Python Entry-Fabric mechanism regression only. The trusted capability arguments are not yet proven to be wired to the canonical EntityOS capability authority in a live admitted runtime. Cross-language JCS identity is separately unadmitted. No real bundled 0.8B runtime, package, EntityOS runtime or whole-product acceptance credit.",
+  "promotion_credit": 0,
+  "hcu_runtime_credit": 0,
+  "entityos_runtime_credit": 0,
+  "whole_product_pass": false,
+  "next_gate": "Bind expected_capability_binding_sha256 and admitted_capabilities to the canonical EntityOS authority/resolver in the real Entry producer path, then execute that end-to-end path in an authorized exact-source isolated runtime."
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "HCU_JCS_CROSS_IMPLEMENTATION_CONFORMANCE/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "candidate_pr": 1378,
+  "candidate_source_head_before_receipts": "5342e732a8fc27a1f591a29e3ca27216628ab057",
+  "python_source_blob": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+  "python_test_blob": "6e2127b6b35b1f151acded1a6db2565b4734b27d",
+  "independent_implementation": {
+    "runtime": "Node.js v22.16.0 / V8",
+    "number_serialization": "JSON.stringify(Number) ECMAScript implementation",
+    "object_canonicalization": "independent recursive implementation using UTF-16 JavaScript key ordering plus JSON.stringify for strings/numbers/primitives",
+    "repository_product_code": false
+  },
+  "comparison": {
+    "rfc8785_appendix_b_finite_number_vectors": {
+      "count": 24,
+      "byte_equal": 24,
+      "mismatch": 0
+    },
+    "mixed_typed_corpus": {
+      "count": 4,
+      "byte_equal": 4,
+      "sha256_equal": 4,
+      "mismatch": 0,
+      "features": [
+        "nested object and array",
+        "UTF-16 property ordering vector",
+        "Unicode and JSON string escapes",
+        "negative zero",
+        "1e21 1e-6 1e-7 number-format boundaries",
+        "null and booleans"
+      ]
+    },
+    "node_exit_code": 0
+  },
+  "result": "CROSS_IMPLEMENTATION_CONFORMANCE_SUPPORTED_FOR_TESTED_CORPUS",
+  "scope_limit": "This does not prove conformance for every possible I-JSON/JCS value, does not admit a production Node dependency, and does not create EntityOS/HCU runtime or whole-product acceptance credit.",
+  "credit": {
+    "exact_python_candidate_identity": "PASS",
+    "independent_second_implementation_equality_on_tested_corpus": "PASS",
+    "general_cross_language_identity": "BOUNDED_SUPPORTED_NOT_UNIVERSAL",
+    "entityos_hcu_whole_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "fusion_recommendation": "Fuse the binary64-consistent integer semantics into the single retained canonicalization authority in PR1263, retain RFC vector and independent V8 equality regressions, and retire parallel canonicalization candidates once equivalent bytes are proven.",
+  "next_gate": "Run the fused current PR1263 Entry->canonical event->route->inference receipt path on an exact authorized isolated executor and rebuild/digest-bind the compatibility package only after canonicalization semantics settle."
+}

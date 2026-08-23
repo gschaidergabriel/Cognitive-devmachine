@@ -1,0 +1,75 @@
+{
+  "schema": "ENTITYOS_HCU_GO_CANONICAL_AUTHORITY_REENTRY/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "c87e5565cbb2766230b6a369be085a85b66e4aa8",
+  "main_authority_adjudication_commit": "5d99c6c37fc9dbecaa557f6091de06f703e9a412",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_before_write": "b41afec49bd6384680d001395177c3f274b9be5e",
+  "finding": {
+    "class": "CANONICALIZATION_AUTHORITY_DRIFT",
+    "main_selected": "RFC8785_JCS_IJSON/v1",
+    "donor_selected_before_reentry": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
+    "risk": "The retained donor lane could appear to reverse current main work-selection authority and create split canonical identity semantics before fusion."
+  },
+  "hypothesis": "A retained donor may carry alternative canonicalization implementations as bounded research evidence, but its active selection must re-enter the current main-selected RFC8785 path before further Entry/HCU fusion.",
+  "counterhypothesis": "The donor branch is newer in wall-clock time and may therefore supersede the main canonicalization choice independently.",
+  "discriminator": {
+    "id": "DONOR_CANONICALIZER_AUTHORITY_ROLLBACK_POISON",
+    "kind": "BOUNDED_DETERMINISTIC_COORDINATION_COMPONENT",
+    "old_donor_result": "CANONICALIZATION_AUTHORITY_DRIFT",
+    "patched_donor_result": "PASS_SELECTION_MATCH",
+    "interpretation": "Counterhypothesis rejected by repository authority law: donor recency does not override canonical main owner/work-selection authority."
+  },
+  "delta": {
+    "contract_path": "the artefact/MicroEntity/hcu/ENTRY_CANONICALIZATION_CONTRACT.json",
+    "contract_schema_after": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v3",
+    "selected_after": "RFC8785_JCS_IJSON/v1",
+    "main_authority_bound": true,
+    "alternative_custom_typed_binary": "RESEARCH_PROVENANCE_ONLY_NOT_SELECTED_BY_CURRENT_MAIN",
+    "alternative_cbor": "LEGACY_CURRENT_SOURCE_DEPENDENCY_PENDING_MIGRATION",
+    "silent_historical_rehash": false,
+    "new_state_authority_added": false,
+    "new_effect_path_added": false
+  },
+  "unusual_experiment": {
+    "count_for_this_organ": 1,
+    "id": "DONOR_CANONICALIZER_AUTHORITY_ROLLBACK_POISON",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID"
+  },
+  "execution": {
+    "authorized_product_runtime_started": false,
+    "component_discriminator_only": true,
+    "vercel_connector_sandbox_create_start_exec_exposed_to_this_organ": false,
+    "github_actions_runtime_credit": 0,
+    "entityos_hcu_runtime_credit_change": 0
+  },
+  "remaining_frontier": [
+    "wire RFC8785_JCS_IJSON/v1 end to end across Entry event/admission, router policy/engine/route and inference receipt under new versioned identities",
+    "wire HCU_REACTIVE_EVENT/v1 into GRID10 mode selection/plan compilation without weakening externally admitted Entry budget or runtime capacity authority",
+    "run exact-current combined Entry+route+inference+canonicalization+GRID10 regressions in an actually-started authorized isolated executor",
+    "rebase/fuse the settled retained donor mechanisms onto current main without duplicate authority",
+    "bind real admitted local checkpoint/tokenizer/runtime/build bytes, capability record and measured capacity receipt before physical model promotion"
+  ],
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_fallback_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "credit": {
+    "research_delta": "COMMITTED_TO_RETAINED_DONOR",
+    "source_authority_convergence": true,
+    "runtime_pass": false,
+    "whole_product_pass": false
+  }
+}

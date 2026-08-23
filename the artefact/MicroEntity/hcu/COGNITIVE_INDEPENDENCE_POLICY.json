@@ -1,0 +1,77 @@
+{
+  "schema_version": "HCU_COGNITIVE_INDEPENDENCE/v3",
+  "status": "OWNER_DIRECTED_SOURCE_POLICY",
+  "authority_scope": "ENTITYOS_HCU_SOURCE_CONTRACT_RUNTIME_UNVERIFIED",
+  "internal_cognition": {
+    "required_external_provider": false,
+    "required_external_embedding_service": false,
+    "candidate_semantic_substrate": "HCU_LOCAL_08B_PLUS_GLOBAL_JSPACE_WORLD_FIELD",
+    "canonical_state_authority": "UNIFIEDDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB_CANONICAL_STATE_EVIDENCE_SUBSTRATE",
+    "effect_authority": "EffectGate+EffectJournal",
+    "script_first": true,
+    "reactive_selective_model_activation": true
+  },
+  "typed_entry_control_admission": {
+    "authority": "SEPARATE_ENTITYOS_HCU_DETERMINISTIC_CONTROL_PLANE_NOT_UNTRUSTED_ENTRY_PAYLOAD",
+    "capability_claim_law": "ENTRY_MAY_ONLY_NARROW_EXTERNALLY_ADMITTED_CAPABILITIES",
+    "capability_binding": "ENTRY_CAPABILITY_BINDING_SHA256_MUST_MATCH_EXTERNAL_AUTHORITY_BINDING",
+    "compute_budget_fields": ["max_model_calls", "max_tokens", "max_wall_ms"],
+    "compute_budget_law": "ENTRY_REQUESTED_BUDGET_MUST_BE_COMPONENTWISE_LESS_THAN_OR_EQUAL_TO_EXTERNALLY_ADMITTED_BUDGET",
+    "compute_budget_self_grant": "REJECT",
+    "compute_budget_narrowing": "ALLOW",
+    "scheduler_law": "GRID10_COGSIM10_WM_TEST_NESTED_SIM_MAY_CONSUME_ONLY_AN_ALREADY_ADMITTED_ENTRY_BUDGET",
+    "runtime_authority_evidence": "UNPROVEN_UNTIL_ADMITTED_CAPABILITIES_AND_ADMITTED_BUDGET_ARE_CONSTRUCTED_FROM_THE_CANONICAL_ENTITYOS_CONTROL_AUTHORITY_IN_AUTHORIZED_ISOLATED_EXECUTION"
+  },
+  "internal_engine_admission": {
+    "mode": "SEPARATE_CONTROL_PLANE_ADMISSION_PLUS_POSITIVE_ARTIFACT_REGISTRY",
+    "provider_aliases": ["hcu", "local", "xeno"],
+    "engines": {
+      "hcu_local_08b": {
+        "class": "LOCAL_SHARED_WEIGHT_08B",
+        "role": "SELECTIVE_HCU_MODEL_LANES",
+        "runtime_checkpoint_identity": "LOWERCASE_SHA256_REQUIRED_FOR_MODEL_ACTIVATION"
+      }
+    },
+    "engine_admission_authority": "SEPARATE_ENTITYOS_HCU_CONTROL_PLANE_NOT_CAUSAL_EVENT_PAYLOAD",
+    "event_engine_authority_fields": "FORBIDDEN_AND_FAIL_CLOSED",
+    "requested_internal_provider": "OPTIONAL_REQUEST_HINT_ONLY_MUST_MATCH_SEPARATE_ENGINE_ADMISSION_IF_PRESENT",
+    "unknown_provider_or_engine": "REJECT",
+    "model_activation_without_engine_admission": "REJECT",
+    "script_only_engine_admission": "REJECT",
+    "artifact_admission_authority": "INDEPENDENT_CONTROL_PLANE_ARTIFACT_REGISTRY_NOT_EVENT_PAYLOAD",
+    "engine_admission_artifact_digest": "MUST_EQUAL_CURRENT_INDEPENDENT_ADMITTED_ARTIFACT_DIGEST",
+    "missing_or_mismatched_artifact_registry": "REJECT",
+    "engine_identity_binding": "provider_alias + engine_identity + engine_class + independently_admitted_engine_artifact_sha256 + hash_serialization_schema",
+    "route_identity_binding": "entry_or_legacy_event_sha256 + router_policy_sha256 + engine_identity_sha256 + deterministic_routing_result",
+    "typed_entry_identity_binding": "entry_admission_sha256 MUST be independently rebound to replay-stable entry_event_sha256 before routing",
+    "downstream_inference_receipt": "MUST_ECHO_HASH_SERIALIZATION_EVENT_ENTRY_ADMISSION_ROUTE_ENGINE_CLASS_AND_EXACT_ARTIFACT_IDENTITIES",
+    "runtime_authority_evidence": "UNPROVEN_UNTIL_ENGINE_ADMISSION_IS_CONSTRUCTED_FROM_VERIFIED_LOADED_RUNTIME_CHECKPOINT_IDENTITY_IN_AUTHORIZED_ISOLATED_EXECUTION"
+  },
+  "providers": {
+    "nvidia": {
+      "internal_cognitive_dependency": false,
+      "embedding_dependency": false,
+      "allowed_roles": ["RESEARCH_WORKER", "OPTIONAL_CANDIDATE_FEED", "DIRECT_TARGETED_FALLBACK"]
+    },
+    "mistral": {
+      "internal_cognitive_dependency": false,
+      "allowed_roles": ["RESEARCH_WORKER", "OPTIONAL_CANDIDATE_FEED", "DIRECT_TARGETED_FALLBACK"]
+    },
+    "groq": {
+      "internal_cognitive_dependency": false,
+      "allowed_roles": ["RESEARCH_WORKER", "OPTIONAL_CANDIDATE_FEED", "DIRECT_TARGETED_FALLBACK"]
+    },
+    "claude_code": {
+      "internal_cognitive_dependency": false,
+      "role": "PREFERRED_HIGH_CAPABILITY_TARGETED_CANDIDATE_INFERENCE",
+      "direct_private_latent_access": "UNOBSERVED",
+      "jspace_mode": "COMPILED_EXTERNAL_UNTIL_MEASURED_OTHERWISE"
+    }
+  },
+  "boot_without_external_providers": "REQUIRED",
+  "world_model_continuity_without_external_providers": "REQUIRED",
+  "semantic_retrieval_without_external_providers": "REQUIRED",
+  "zero_context_projection_without_external_providers": "REQUIRED",
+  "external_output_truth_authority": false,
+  "external_output_effect_authority": false
+}

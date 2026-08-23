@@ -1,0 +1,47 @@
+{
+  "schema_version": "HCU_ENTRY_CANONICALIZATION_CONFORMANCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "classification": "STANDARD_CONFORMANCE_REGRESSION_NOT_A_SECOND_UNUSUAL_EXPERIMENT",
+  "candidate_context": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "entry_canonicalization_contract": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v1",
+    "current_serializer_contract": "PYTHON_JSON_SORT_KEYS_COMPACT_UTF8/v1",
+    "target_candidate": "RFC8785_JCS_IJSON/v1"
+  },
+  "primary_spec": {
+    "rfc": 8785,
+    "source": "RFC Editor",
+    "sections": ["3.1", "3.2.2.3", "3.2.3", "Appendix B"]
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Python tool container",
+    "python": "CPython 3.13.5",
+    "method": "construct IEEE-754 binary64 values from selected official Appendix B hexadecimal bit patterns and serialize with Python json.dumps using the current compact/allow_nan-false style",
+    "result": "CURRENT_PYTHON_JSON_SERIALIZER_IS_NOT_RFC8785_JCS_CONFORMANT",
+    "selected_observations": [
+      {"ieee754_hex": "0000000000000000", "rfc8785": "0", "python_json": "0.0", "match": false},
+      {"ieee754_hex": "8000000000000000", "rfc8785": "0", "python_json": "-0.0", "match": false},
+      {"ieee754_hex": "0000000000000001", "rfc8785": "5e-324", "python_json": "5e-324", "match": true},
+      {"ieee754_hex": "7fefffffffffffff", "rfc8785": "1.7976931348623157e+308", "python_json": "1.7976931348623157e+308", "match": true},
+      {"ieee754_hex": "4430000000000000", "rfc8785": "295147905179352830000", "python_json": "2.9514790517935283e+20", "match": false},
+      {"ieee754_hex": "44b52d02c7e14af6", "rfc8785": "1e+23", "python_json": "1e+23", "match": true},
+      {"ieee754_hex": "444b1ae4d6e2ef50", "rfc8785": "1e+21", "python_json": "1e+21", "match": true}
+    ]
+  },
+  "fusion": {
+    "hypothesis": "Current Python compact sorted JSON is sufficient as RFC8785-compatible cross-language causal canonicalization.",
+    "counterevidence": "Official RFC8785 number vectors produce byte-different serializations for zero, negative zero, and approximately 2^68 under Python json.dumps.",
+    "decision": "REJECT_CROSS_LANGUAGE_JCS_EQUIVALENCE_CLAIM; RETAIN_CURRENT_HASHES_ONLY_AS_VERSIONED_PYTHON_LOCAL_LEGACY_SCOPE",
+    "next_gate": "Implement or vendor an explicitly locked JCS canonicalizer, bind canonicalization schema/version into Entry/event/route/inference identities, and pass official vectors plus independent second-language equivalence before promotion."
+  },
+  "authority": {
+    "canonical_truth_changed": false,
+    "effect_authority_changed": false,
+    "promotion_credit": 0,
+    "runtime_credit": 0,
+    "whole_entityos_pass": false
+  }
+}

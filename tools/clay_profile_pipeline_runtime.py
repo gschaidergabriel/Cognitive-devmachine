@@ -862,32 +862,11 @@ class ProfilePipelineRuntime(clay.Runtime):
         return {"ok": True, "system": system, "user": user}
 
     def _pipeline_cognitive_fabric_admit(self, p: dict[str, Any]) -> dict[str, Any]:
-        """Resolve one already-bound cognition turn and compile the canonical UCF admission."""
+        """Delegate the retained runtime admission to the single canonical read-only bridge."""
         try:
-            previous = p["previous"]
-            profile = p["profile"]
-            data = p["data"]
-            generation = previous.get("generation")
-            if type(generation) is not int or generation < 0:
-                raise PipelineFault("COGNITIVE_FABRIC_GENERATION_INVALID")
-            compiled = data["compiled"]
-            prompt = data["prompt"]
-            invocation = data["invocation"]
-            import pipeline_cognitive_fabric_admission_v1 as cognitive_fabric
+            import profile_runtime_cognitive_fabric_binding_v1 as cognitive_fabric_binding
 
-            with self._read_only_db(str(p["entity_db"])) as db:
-                admitted = cognitive_fabric.build_pre_inference_admission(
-                    db,
-                    entity_generation=generation,
-                    invocation=invocation,
-                    compiled=compiled,
-                    prompt=prompt,
-                    profile=profile,
-                    origin="ProfilePipelineRuntime/" + VERSION,
-                )
-            if admitted.get("ok") is not True:
-                raise PipelineFault("COGNITIVE_FABRIC_ADMISSION_FAILED")
-            return admitted
+            return cognitive_fabric_binding.admit_profile_runtime_payload(self, p)
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 

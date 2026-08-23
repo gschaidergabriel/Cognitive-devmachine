@@ -1,0 +1,108 @@
+{
+  "schema": "GO_JSPACE_QWEN35_STRUCTURAL_FALSIFIER/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main_sha": "e3c3754ea2724454c63c0a7d8ef2de3c9838d232",
+  "base_main_tree": "50a2a632eb471287cc288868edbdd2a1d86041bb",
+  "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_architecture": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "together_preflight": false,
+    "training": false,
+    "spend_usd": 0
+  },
+  "upstream": {
+    "jacobian_lens_repository": "anthropics/jacobian-lens",
+    "jacobian_lens_commit": "581d398613e5602a5af361e1c34d3a92ea82ba8e",
+    "observed_adapter_contract": [
+      "HFLensModel accepts *ForCausalLM or *ForConditionalGeneration",
+      "auto-layout search includes model.language_model",
+      "ActivationRecorder normalizes tuple-return HF block outputs through output[0]"
+    ],
+    "target_model_family": "Qwen/Qwen3.5-0.8B",
+    "target_model_runtime_status": "NOT_LOADED_IN_THIS_RUN"
+  },
+  "grf": {
+    "R0_observed": [
+      "current owner architecture makes the bundled approximately-0.8B core plus Unified J-Space/GWT first-class but grants zero runtime credit before exact calibration",
+      "upstream Jacobian Lens structurally supports ForConditionalGeneration wrappers and model.language_model layouts",
+      "Qwen3.5-0.8B is a hybrid architecture, so wrapper/layout support alone does not prove a usable Jacobian path"
+    ],
+    "R2_hypotheses": [
+      "H1: upstream layout and hook semantics are sufficient for the Qwen3.5 wrapper shape",
+      "H2: tuple-return or hybrid residual blocks break activation capture or gradient flow despite layout detection",
+      "H3: structural capture works but exact Qwen3.5 requires a custom LensModel adapter or model-specific calibration"
+    ],
+    "R3_counterhypothesis": "The apparent Qwen-family support is misleading for Qwen3.5 because its wrapper and heterogeneous block outputs prevent a usable source-to-target residual Jacobian.",
+    "R4_intervention": "QWEN35_HYBRID_JLENS_STRUCTURAL_FALSIFIER",
+    "R6_result": "H2 rejected at synthetic mechanism scope only; H1 retained as an exact-runtime candidate; H3 remains live until the real checkpoint/runtime is executed."
+  },
+  "unusual_experiment": {
+    "id": "QWEN35_HYBRID_JLENS_STRUCTURAL_FALSIFIER",
+    "count_for_this_go": 1,
+    "additional_unusual_experiments": 0,
+    "script": "the artefact/blogpost_entity/mini_cognition/jspace_qwen35_structural_falsifier.py",
+    "script_sha256": "189faf8ff0c062ec96215d817122caa67a2dc67e67c53984bba5303813dda033",
+    "environment": {
+      "python": "3.13.5",
+      "torch": "2.10.0+cpu",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+    },
+    "shape": {
+      "wrapper": "FakeQwen35ForConditionalGeneration",
+      "layout": "model.language_model",
+      "layers": 4,
+      "hidden_size": 8,
+      "mixed_block_returns": ["tuple", "tensor", "tuple", "tensor"],
+      "pseudo_layer_kinds": ["linear_attention", "linear_attention", "linear_attention", "full_attention"]
+    },
+    "observed": {
+      "layout": "model.language_model",
+      "source_tuple_block_captured_as_tensor": true,
+      "target_captured_as_tensor": true,
+      "grad_shape": [1, 5, 8],
+      "grad_finite": true,
+      "grad_l1": 5.445471286773682,
+      "result": "MECHANISM_SUPPORTED_NOT_QWEN35_RUNTIME_PROOF"
+    }
+  },
+  "negative_evidence": {
+    "exact_transformers_qwen35_attempt": "BLOCKED_BY_EXECUTION_ENVIRONMENT_DNS",
+    "attempted_install": "pip install transformers>=5.5,<5.6",
+    "classification": "execution-environment dependency/network admission blocker; not a Qwen3.5 or Jacobian-Lens semantic failure"
+  },
+  "promotion_boundary": {
+    "structural_mechanism_support": true,
+    "exact_qwen35_runtime_compatibility": false,
+    "lens_fit_credit": false,
+    "jspace_calibration_credit": false,
+    "whole_gwt_runtime_credit": false,
+    "model_quality_credit": false,
+    "whole_mini_entity_acceptance": false
+  },
+  "next_exact_gate": {
+    "name": "QWEN35_08B_JLENS_EXACT_SMOKE/v1",
+    "requirements": [
+      "bind exact Mini Entity source commit/tree and clean/dirty state",
+      "bind exact Qwen3.5-0.8B checkpoint revision/digest and tokenizer digest",
+      "bind Jacobian Lens commit 581d398613e5602a5af361e1c34d3a92ea82ba8e and exact transformers/torch runtime",
+      "load the real hookable checkpoint on an authorized executable surface",
+      "construct jlens.from_hf without a guessed custom layout unless auto-layout actually fails",
+      "run a tiny matched forward/Jacobian smoke across at least one early-to-late source/target pair",
+      "require finite nonzero Jacobian/readout and capture memory/time",
+      "if that passes, fit only a small baseline lens before spending on the approximately-100-prompt calibration regime",
+      "bind all measurements into JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 and then UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1",
+      "do not promote layer bands, GWT slots, steering coefficients or truth claims from this structural receipt"
+    ]
+  },
+  "evidence_class": "BOUNDED_SYNTHETIC_MECHANISM_SUPPORTED; EXACT_QWEN35_RUNTIME_UNOBSERVED",
+  "notes": [
+    "This receipt is intentionally narrower than the owner architecture source claim.",
+    "It removes one cheap structural counterhypothesis but does not prove real Qwen3.5 autograd behavior, lens quality, J-Space selectivity, GWT behavior, consciousness, AGI, or product acceptance.",
+    "No second runtime/state/effect authority was created. MiniUnifiedDB and deterministic gates remain authoritative."
+  ]
+}

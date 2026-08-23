@@ -33,6 +33,7 @@ def valid_manifest():
         "checkpoint_digest": D0,
         "tokenizer_digest": D1,
         "quantization_runtime_identity": "gguf-q4_k_m+llama.cpp:test-fixture",
+        "runtime_digest": D7,
         "jspace_profile_digest": D2,
         "lens_profile_digest": D3,
         "workspace_calibration_digest": D4,
@@ -73,7 +74,7 @@ def valid_receipt(manifest, raw):
             "model_family": manifest["model_family"],
             "checkpoint_sha256": manifest["checkpoint_digest"],
             "tokenizer_sha256": manifest["tokenizer_digest"],
-            "runtime_sha256": D7,
+            "runtime_sha256": manifest["runtime_digest"],
             "manifest_sha256": hashlib.sha256(raw).hexdigest(),
             "quantization_runtime_identity": manifest["quantization_runtime_identity"],
             "exact_bytes_verified": True,
@@ -198,6 +199,21 @@ class BootBindingValidatorTests(unittest.TestCase):
         cp = run_validator(receipt=r)
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("BOOT_CHECKPOINT_MISMATCH", cp.stdout)
+
+    def test_boot_runtime_digest_must_match_manifest(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["bundled_core"]["runtime_sha256"] = D6
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BOOT_RUNTIME_DIGEST_MISMATCH", cp.stdout)
+
+    def test_boot_manifest_requires_runtime_digest(self):
+        m = valid_manifest(); del m["runtime_digest"]; raw = manifest_bytes(m)
+        r = valid_receipt(valid_manifest(), manifest_bytes(valid_manifest()))
+        r["bundled_core"]["manifest_sha256"] = hashlib.sha256(raw).hexdigest()
+        lock = source_lock_for(m, raw)
+        cp = run_validator(receipt=r, manifest=m, source_lock=lock)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BOOT_MANIFEST_RUNTIME_DIGEST_REQUIRED", cp.stdout)
 
     def test_boot_jspace_profile_must_match_manifest(self):
         m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["jspace"]["jspace_profile_sha256"] = D7

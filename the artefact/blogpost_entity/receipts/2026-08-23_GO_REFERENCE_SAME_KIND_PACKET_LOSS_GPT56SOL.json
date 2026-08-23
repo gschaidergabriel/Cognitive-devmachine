@@ -1,0 +1,76 @@
+{
+  "schema": "mini-entity-go-research-receipt/v1",
+  "trigger": "go",
+  "macrocycle_id": "go-10488b76-018a-4e02-8719-ee803fd0ad10",
+  "organ": "gpt-5.6-sol",
+  "timestamp_utc": "2026-08-23T02:55:00Z",
+  "program": "mini-entity-pipeline-all-in-one",
+  "execution_policy": {
+    "free_only": true,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "secret_access": false
+  },
+  "coordination": {
+    "retained_runtime_pr": 997,
+    "retained_parent_sha": "b364d9bfc86d67f7b5642d69b87a9b248d519068",
+    "retained_runtime_blob_sha": "1fd3a1abd0adefdcf5a90fbb132150b4458e3af2",
+    "test_donor_pr": 1042,
+    "test_commit_before_receipt": "e924cc759a708a8033522d8a1173cc06e2e01802",
+    "superseded_stale_test_pr": 1038,
+    "duplicate_runtime_implementation_created": false
+  },
+  "grf": {
+    "R0_observed": [
+      "retained _pipeline_collect accumulates consume identities using source_namespace+kind+id",
+      "retained _pipeline_collect stores sources and sensors by kind alone",
+      "retained source_count increments for every admitted row before same-kind dictionary overwrite",
+      "retained _pipeline_commit iterates the complete collected consume list for durable exactly-once rows",
+      "retained cursor frontier explicitly recognizes distinct logical sources may share one kind"
+    ],
+    "R1_infer": "a same-kind logical source can disappear from packet/source representation while remaining eligible for durable consumed marking",
+    "R2_generate": [
+      "carry stable logical source identity through collection/packet/cursor/evidence representation",
+      "or temporarily fail closed on duplicate kinds until the packet schema can represent both sources"
+    ],
+    "R3_counter": "kind might be intended globally unique, in which case the current distinct-logical-source/same-kind cursor requirement is internally inconsistent and must be narrowed explicitly",
+    "R4_discriminate": "two SQLite logical sources with kind=event, distinct namespaces, distinct local ids and distinct payload sentinels",
+    "R5_emergent": "exactly-once identity is currently stronger than packet identity; consume authority can outrun evidence representation",
+    "R6_verify": "BOUNDED_SOURCE_SLICE_MECHANISM_RED; exact retained runtime pytest remains unexecuted"
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "SAME_KIND_SOURCE_CONSUME_WITHOUT_PACKET",
+    "status": "RED",
+    "scope": "bounded source-slice reproduction of the exact retained collection keying mechanism",
+    "observed": {
+      "source_count": 2,
+      "consume_identities": [
+        ["logical-A", "event", "1"],
+        ["logical-B", "event", "2"]
+      ],
+      "packet_source_keys": ["event"],
+      "packet_payloads": ["packet-sentinel-logical-B"],
+      "missing_payload": "packet-sentinel-logical-A",
+      "process_exit": 1,
+      "assertion": "logical-A consumed identity was overwritten out of packet"
+    }
+  },
+  "test_contract": {
+    "path": "the artefact/blogpost_entity/test_reference_same_kind_source_packetization.py",
+    "required_invariant": "every admitted same-kind logical source payload remains represented before any successful commit may durably consume its identity",
+    "internal_shape_prescribed": false
+  },
+  "evidence_class": "MECHANISM_SUPPORTED_RED_SOURCE_SLICE_PLUS_DURABLE_TEST_CONTRACT",
+  "runtime_credit": 0,
+  "product_pass_credit": 0,
+  "training_credit": 0,
+  "next_gate": "execute the exact stacked test against the current retained #997 bytes on an actually-started authorized runner; then fuse the minimal logical-source-identity repair into #997 only and rerun adjacent provenance/cursor/nonfinite regressions",
+  "nonclaims": [
+    "not an exact current runtime PASS/FAIL receipt",
+    "not native profile-v2 promotion",
+    "not provider admission",
+    "not model-quality evidence",
+    "not whole Mini Entity PASS"
+  ]
+}

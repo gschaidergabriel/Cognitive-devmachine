@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "4a7059867be9ee35a2e7cf12e55556a84672b7f1",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_lane_created": false,
+    "force_push_used": false,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_pr_comment_id": 5388152366
+  },
+  "observed_exact_state": {
+    "retained_donor_head": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor_head": "5f8350be01d7fd2fb9bd71f324b04172c4627e27",
+    "producer_derived_composite_regression_git_blob": "cd0abb3fe22d0fa015befe35c896f56fa006f08c",
+    "executor_rebind_contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+    "executor_rebind_status": "SOURCE_REBIND_REQUIRED",
+    "required_exact_blob_count": 17,
+    "successor_closure_directory": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-511d5689",
+    "successor_closure_completion_commit_observed": "505af36d4a719bf357c4eb0379fd4031253eda71",
+    "executor_head_changes_after_closure_do_not_modify_route": true
+  },
+  "source_closure": {
+    "status": "FULL_17_BLOB_SUCCESSOR_SOURCE_CLOSURE_OBSERVED",
+    "required_fixed_command": "python3 -m unittest -v test_model_execution_admission_store_v1.py test_execution_store_inference_jspace_chain_v1.py test_jspace_inference_binding_revalidation_v3.py",
+    "upstream_trust_construction": "PRODUCTION_DERIVED_TYPED_ENTRY_ROUTE_ENGINE_ADMISSION_LOADER_CONSUMPTION_GRID10",
+    "transitive_fixture_policy": "test_model_execution_receipt_v1.py remains required; test_inference_receipt_v1.py is not required by the current producer-derived composite regression",
+    "runtime_credit_change": 0
+  },
+  "route_rebind_finding": {
+    "classification": "FULL_SOURCE_CLOSURE_PRESENT_BUT_EXECUTOR_ROUTE_STILL_HISTORICAL",
+    "observed": "At executor commit 505af36d4a719bf357c4eb0379fd4031253eda71, hcu-jspace-grid10-binding-capsule.js still carries the historical four-file binder-v2 FILES list and fixed command python3 test_binding_v2_exact_grid10.py. The subsequent commits through observed head 5f8350be01d7fd2fb9bd71f324b04172c4627e27 do not modify that route.",
+    "counterhypothesis": "Because all 17 successor files now exist in the deployment repository, removing SOURCE_REBIND_REQUIRED is sufficient to execute the current v4/v3 chain.",
+    "falsifier": "The route explicitly writes only its FILES entries into the Sandbox and invokes its own fixed command. File presence elsewhere in the deployment cannot cause the old four-file route to execute the 17-file producer-derived chain. Removing quarantine before atomically replacing FILES/manifest/fixed command/result assertions would therefore permit stale binder-v2 execution under a current-looking deployment.",
+    "required_action": "Atomically rebind the single existing route to the contract exact_donor_git_blobs set, successor closure directory, current three-test fixed command and current result assertions, update the non-quarantine branch of guard-entityos-hcu-current-executor.mjs to those same semantics, and only then remove SOURCE_REBIND_REQUIRED."
+  },
+  "parallel_write_handling": {
+    "candidate_exact_tree": "505c7011afbba64bf234ad2e241ecdf962a8ee07",
+    "candidate_commit": "c1e6b096cd787360064630e4e279eeadf3a66ffa",
+    "candidate_status": "UNFUSED_COORDINATION_ARTIFACT_ONLY",
+    "reason_not_fused": "Two non-force fast-forward attempts were rejected because the retained executor branch advanced concurrently. No force update was attempted. A parallel worker subsequently landed the full successor closure independently, so the candidate is no longer needed for source closure."
+  },
+  "execution_evidence": {
+    "latest_executor_head_vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "build_rate_target_indicates_upgrade_to_pro": true,
+    "paid_upgrade_or_fallback_attempted": false,
+    "current_exact_source_sandbox_execution_observed": false,
+    "current_fixed_regressions_observed_executing": false,
+    "current_function_invocation_credit": false,
+    "prior_preview_access_observation": "Protected preview returned HTTP 302 SSO redirect; this is access evidence only and not a product regression.",
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the single retained executor now physically carries the complete 17-blob successor source closure; the exact remaining execution blocker is narrowed to atomic route/guard rebind rather than missing source.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: current acceptance binds production-derived Typed Entry -> route -> verified engine admission -> verified loader consumption -> scheduler-owned GRID10 rather than preassembled upstream test fixtures.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: current closure binds atomic model-execution admission -> InferenceReceipt/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 with semantic revalidation and concurrent divergent same-invocation one-winner coverage; runtime/model/training credit remains zero."
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Active parallel workers are rapidly modifying the retained executor and canonical research state. Current-facing README state had already been updated in this macrocycle family; this new result is preserved append-only in a uniquely named receipt to avoid overwriting newer concurrent deltas."
+  },
+  "next_exact_gate": "Re-enter current Research main, PR1263 and repository-qualified executor gschaidergabriel/Dr.-Unterweger#810; if the route remains historical, atomically replace its FILES/source manifest/fixed command/result assertions with the 17-blob 511d contract closure and update the executor guard non-quarantine expectations in the same coherent change. Keep SOURCE_REBIND_REQUIRED until that source-level route closure is exact. Execute only when FREE_ONLY Vercel Hobby build/function admission permits, recording exact source/result digests, Sandbox identity, exit code, secret fence and cleanup."
+}

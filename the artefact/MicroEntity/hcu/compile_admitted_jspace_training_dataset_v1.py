@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """Fail-closed orchestration for serious EntityOS/HCU J-Space training data.
 
-The lower-level ``compile_jspace_training_dataset_v1`` module can validate and render a
-TrainingTrace into deterministic JSONL rows. That alone is deliberately insufficient for
+The selected lower-level ``compile_jspace_bootstrap_dataset_v1`` module validates and
+renders a TrainingTrace into deterministic family-split JSONL rows while requiring an
+external admitted J-Space basis registry. That alone is deliberately insufficient for
 serious training admission: a self-consistent trace must also survive the cross-trace
 DatasetAdmission gate and be bound to the canonical HCU_INFERENCE_RECEIPT/v3 loader/output
 chain.
 
-This module is the orchestration boundary that requires both before rows are emitted. It
-mints no truth, model authority, effect authority, runtime credit, or paid-training
-permission. Current FREE_ONLY supervisor policy can still forbid provider execution after
-this source gate passes.
+This module is the orchestration boundary that requires all three before rows are emitted:
+external basis admission, exact training/transition/prototype admission, and exact inference
+loader/output binding. It mints no truth, model authority, effect authority, runtime credit,
+or paid-training permission. Current FREE_ONLY supervisor policy can still forbid provider
+execution after this source gate passes.
 """
 from __future__ import annotations
 
@@ -18,7 +20,7 @@ from dataclasses import dataclass
 from typing import Any, Iterable, Mapping
 
 try:
-    from .compile_jspace_training_dataset_v1 import compile_traces as compile_training_traces
+    from .compile_jspace_bootstrap_dataset_v1 import compile_traces as compile_training_traces
     from .jspace_dataset_admission_gate_v1 import (
         ADMISSION_SCHEMA,
         DatasetAdmission,
@@ -33,7 +35,7 @@ try:
     )
     from .jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
 except ImportError:
-    from compile_jspace_training_dataset_v1 import compile_traces as compile_training_traces
+    from compile_jspace_bootstrap_dataset_v1 import compile_traces as compile_training_traces
     from jspace_dataset_admission_gate_v1 import (
         ADMISSION_SCHEMA,
         DatasetAdmission,
@@ -304,15 +306,16 @@ def compile_admitted_records(
     admitted_transition_traces: Mapping[str, Mapping[str, Any]],
     admitted_prototype_traces: Mapping[str, Mapping[str, Any]],
     admitted_inference_bindings: Mapping[str, JSpaceInferenceBinding],
+    admitted_bases: Mapping[str, str],
     admitted_outcome_receipts: Mapping[str, Any] | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Compile only traces that pass both cross-trace admission and inference binding.
+    """Compile only traces that pass basis, cross-trace, and inference admission.
 
     ``records`` contains ``(training_trace, transition_trace)`` pairs. The admission gate
     uses caller-owned registries rather than rebuilding trust from each row. The matching
-    inference binding is looked up by training-trace SHA and must validate cryptographically
-    under the selected RFC8785/JCS identity rules before the lower-level row compiler is
-    called.
+    inference binding is looked up by training-trace SHA and must validate under the
+    selected RFC8785/JCS identity rules. The selected lower-level compiler then separately
+    enforces the external basis id+digest registry before rendering any dataset rows.
     """
     out = {"train": [], "validation": [], "holdout": []}
     seen: set[str] = set()
@@ -320,6 +323,7 @@ def compile_admitted_records(
         admitted_inference_bindings,
         "admitted_inference_bindings",
     )
+    admitted_bases = _mapping(admitted_bases, "admitted_bases")
 
     for record in records:
         if not isinstance(record, tuple) or len(record) != 2:
@@ -346,7 +350,10 @@ def compile_admitted_records(
         if not isinstance(inference_binding, JSpaceInferenceBinding):
             raise AdmittedTrainingDatasetError("INFERENCE_BINDING_NOT_ADMITTED_FOR_TRAINING_TRACE")
         evidence = validate_pipeline_evidence(training_trace, admission, inference_binding)
-        compiled = compile_training_traces([dict(training_trace)])
+        compiled = compile_training_traces(
+            [dict(training_trace)],
+            admitted_bases=admitted_bases,
+        )
         annotated = _annotate_rows(compiled, evidence)
         for split in out:
             out[split].extend(annotated[split])

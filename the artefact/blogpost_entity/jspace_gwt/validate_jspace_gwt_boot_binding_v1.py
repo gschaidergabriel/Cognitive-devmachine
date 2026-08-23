@@ -308,6 +308,12 @@ def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict
     if req_sha(jspace, "lens_profile_sha256") != manifest["lens_profile_digest"]:
         fail("BOOT_LENS_PROFILE_MISMATCH")
 
+    expected_fit_corpus_digest = manifest.get("fit_corpus_digest")
+    if expected_fit_corpus_digest is None:
+        fail("BOOT_MANIFEST_FIT_CORPUS_DIGEST_REQUIRED")
+    if req_sha(jspace, "fit_corpus_sha256") != expected_fit_corpus_digest:
+        fail("BOOT_FIT_CORPUS_MISMATCH")
+
     expected_steering = manifest.get("steering_calibration_digest")
     observed_steering = jspace.get("steering_calibration_sha256")
     if expected_steering is None:

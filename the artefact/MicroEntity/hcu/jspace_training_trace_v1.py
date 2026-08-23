@@ -172,11 +172,11 @@ def _material(trace: TrainingTrace) -> dict[str, Any]:
 
 
 def _validate_inference_receipt(receipt: InferenceReceipt) -> None:
-    """Validate the immutable v3 receipt itself before it can carry training credit.
+    """Validate immutable v3 receipt integrity before it can carry training credit.
 
-    This is intentionally only receipt-integrity validation. The receipt producer remains
-    the sole place that admits route/engine/load evidence; this consumer does not create a
-    second engine or effect authority.
+    The inference producer remains the sole path that admits route/engine/load evidence.
+    This consumer validates an already-produced receipt and its external admission only; it
+    does not create a second engine, effect, truth, or receipt authority.
     """
     if not isinstance(receipt, InferenceReceipt):
         raise JSpaceTrainingTraceError("VERIFIED_INFERENCE_RECEIPT_REQUIRED")
@@ -225,9 +225,32 @@ def _validate_inference_receipt(receipt: InferenceReceipt) -> None:
         raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_DIGEST_MISMATCH")
 
 
+def _registry_receipt(
+    receipt_sha256: str,
+    admitted_inference_receipts: Mapping[str, Any],
+) -> InferenceReceipt:
+    if not isinstance(admitted_inference_receipts, Mapping):
+        raise JSpaceTrainingTraceError("ADMITTED_INFERENCE_RECEIPT_REGISTRY_REQUIRED")
+    admitted = admitted_inference_receipts.get(receipt_sha256)
+    if isinstance(admitted, InferenceReceipt):
+        receipt = admitted
+    elif isinstance(admitted, Mapping):
+        try:
+            receipt = InferenceReceipt(**dict(admitted))
+        except (TypeError, ValueError) as exc:
+            raise JSpaceTrainingTraceError("ADMITTED_INFERENCE_RECEIPT_INVALID") from exc
+    else:
+        raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_NOT_ADMITTED")
+    _validate_inference_receipt(receipt)
+    if receipt.receipt_sha256 != receipt_sha256:
+        raise JSpaceTrainingTraceError("ADMITTED_INFERENCE_RECEIPT_KEY_MISMATCH")
+    return receipt
+
+
 def _bind_outcome_receipt(
     receipt: InferenceReceipt,
     *,
+    admitted_inference_receipts: Mapping[str, Any],
     generation: int,
     entry_event_sha256: str,
     entry_admission_sha256: str,
@@ -235,6 +258,9 @@ def _bind_outcome_receipt(
     role: str,
 ) -> str:
     _validate_inference_receipt(receipt)
+    admitted = _registry_receipt(receipt.receipt_sha256, admitted_inference_receipts)
+    if asdict(admitted) != asdict(receipt):
+        raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_ADMISSION_MISMATCH")
     if receipt.entity_generation != generation:
         raise JSpaceTrainingTraceError("OUTCOME_RECEIPT_GENERATION_MISMATCH")
     if receipt.event_sha256 != entry_event_sha256:
@@ -271,13 +297,15 @@ def build_training_trace(
     credit_label: str = "UNKNOWN",
     outcome_receipt_sha256: str | None = None,
     outcome_receipt: InferenceReceipt | None = None,
+    admitted_inference_receipts: Mapping[str, Any] | None = None,
 ) -> TrainingTrace:
     """Bind one observable prototype transition to causal and training interfaces.
 
-    Non-UNKNOWN credit requires a digest-valid HCU_INFERENCE_RECEIPT/v3 bound to the same
-    generation, Entry event/admission and route decision. A bare SHA-256 is never sufficient
-    to create reward. This keeps verified engine-load/inference evidence on the existing
-    inference-receipt path rather than creating a second training authority.
+    Non-UNKNOWN credit requires an externally admitted, digest-valid
+    HCU_INFERENCE_RECEIPT/v3 bound to the same generation, Entry event/admission and route
+    decision. A bare SHA-256, or a locally constructible receipt object without admission,
+    can never create reward. This keeps verified engine-load/inference evidence on the
+    existing inference-receipt path rather than creating a second training authority.
 
     The supplied Vector Control packet must be the exact packet produced by the supplied
     prototype step. Counterfactual controls therefore use a separately constructed prototype
@@ -333,6 +361,7 @@ def build_training_trace(
     if outcome_receipt is not None:
         outcome_sha = _bind_outcome_receipt(
             outcome_receipt,
+            admitted_inference_receipts=admitted_inference_receipts,
             generation=generation,
             entry_event_sha256=event_sha256,
             entry_admission_sha256=admission_sha256,
@@ -343,14 +372,14 @@ def build_training_trace(
         supplied_outcome_sha = _sha256(outcome_receipt_sha256, "outcome_receipt_sha256")
         if outcome_sha is None:
             if credit != "UNKNOWN":
-                raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_INFERENCE_RECEIPT")
+                raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_ADMITTED_INFERENCE_RECEIPT")
             outcome_sha = supplied_outcome_sha
         elif supplied_outcome_sha != outcome_sha:
             raise JSpaceTrainingTraceError("OUTCOME_RECEIPT_SHA256_MISMATCH")
 
     if credit != "UNKNOWN":
         if outcome_receipt is None or outcome_sha is None:
-            raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_INFERENCE_RECEIPT")
+            raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_ADMITTED_INFERENCE_RECEIPT")
         if provenance != "EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME":
             raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_OUTCOME_PROVENANCE")
 
@@ -402,7 +431,11 @@ def build_training_trace(
     return TrainingTrace(**material, trace_sha256=trace_sha256)
 
 
-def validate_training_trace(trace: TrainingTrace) -> None:
+def validate_training_trace(
+    trace: TrainingTrace,
+    *,
+    admitted_inference_receipts: Mapping[str, Any] | None = None,
+) -> None:
     if not isinstance(trace, TrainingTrace):
         raise JSpaceTrainingTraceError("TRAINING_TRACE_REQUIRED")
     if trace.schema_version != TRACE_SCHEMA or trace.canonicalization_schema != CANONICALIZATION_SCHEMA:
@@ -411,12 +444,32 @@ def validate_training_trace(trace: TrainingTrace) -> None:
     expected = _canonical_sha256(_material(trace), "JSPACE_TRAINING_TRACE")
     if observed != expected:
         raise JSpaceTrainingTraceError("TRAINING_TRACE_DIGEST_MISMATCH")
-    if trace.credit_label != "UNKNOWN" and trace.outcome_receipt_sha256 is None:
-        raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_OUTCOME_RECEIPT")
+    if trace.credit_label != "UNKNOWN":
+        if trace.outcome_receipt_sha256 is None:
+            raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_OUTCOME_RECEIPT")
+        receipt_sha256 = _sha256(trace.outcome_receipt_sha256, "outcome_receipt_sha256")
+        receipt = _registry_receipt(receipt_sha256, admitted_inference_receipts)
+        rebound = _bind_outcome_receipt(
+            receipt,
+            admitted_inference_receipts=admitted_inference_receipts,
+            generation=trace.generation,
+            entry_event_sha256=trace.entry_event_sha256,
+            entry_admission_sha256=trace.entry_admission_sha256,
+            route_decision_sha256=trace.route_decision_sha256,
+            role=trace.role,
+        )
+        if rebound != receipt_sha256:
+            raise JSpaceTrainingTraceError("OUTCOME_RECEIPT_REBIND_MISMATCH")
+        if trace.provenance_evidence_class != "EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME":
+            raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_OUTCOME_PROVENANCE")
 
 
-def trace_dict(trace: TrainingTrace) -> dict[str, Any]:
-    validate_training_trace(trace)
+def trace_dict(
+    trace: TrainingTrace,
+    *,
+    admitted_inference_receipts: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    validate_training_trace(trace, admitted_inference_receipts=admitted_inference_receipts)
     data = _material(trace)
     data["trace_sha256"] = trace.trace_sha256
     return data

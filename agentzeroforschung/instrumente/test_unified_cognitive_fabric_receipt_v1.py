@@ -24,6 +24,10 @@ def valid_receipt() -> dict:
             "mini_entity_version": "candidate",
             "entity_generation": 276,
         },
+        "provenance": {
+            "boot_binding_receipt_version": "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1",
+            "boot_binding_receipt_digest": _h("b"),
+        },
         "identity": {"zero_digest": _h("1"), "grf_digest": _h("2")},
         "bundled_core": {
             "manifest_digest": _h("3"),
@@ -90,6 +94,19 @@ def valid_receipt() -> dict:
 class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
     def test_valid_compiled_external_claude_receipt(self) -> None:
         self.assertEqual(validate_receipt(valid_receipt()), [])
+
+    def test_runtime_receipt_requires_exact_boot_binding_lineage(self) -> None:
+        receipt = valid_receipt()
+        del receipt["provenance"]["boot_binding_receipt_digest"]
+        self.assertIn("MISSING:provenance.boot_binding_receipt_digest", validate_receipt(receipt))
+
+        receipt = valid_receipt()
+        receipt["provenance"]["boot_binding_receipt_digest"] = "not-a-digest"
+        self.assertIn("DIGEST_INVALID:provenance.boot_binding_receipt_digest", validate_receipt(receipt))
+
+        receipt = valid_receipt()
+        receipt["provenance"]["boot_binding_receipt_version"] = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v0"
+        self.assertIn("BOOT_BINDING_RECEIPT_VERSION_INVALID", validate_receipt(receipt))
 
     def test_full_local_latent_requires_real_activation_access(self) -> None:
         receipt = valid_receipt()

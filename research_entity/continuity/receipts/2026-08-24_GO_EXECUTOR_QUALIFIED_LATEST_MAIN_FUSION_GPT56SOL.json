@@ -1,0 +1,91 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXECUTOR_QUALIFIED_LATEST_MAIN_FUSION/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "supervisor_rewritten": false,
+    "mode": "FREE_ONLY",
+    "canonical_main_fusion_base": "4a7059867be9ee35a2e7cf12e55556a84672b7f1",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "observed_retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "execution_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "execution_controller_head_snapshot": "781e755d18e063043eedcc3d755f7e58f48c30b4",
+    "wrong_repository_local_collision": "gschaidergabriel/clay-global-research-entity#810",
+    "wrong_repository_local_collision_head_snapshot": "7c49b41ceb14d65783b7d35c2939c4005565baa5",
+    "snapshot_heads_are_current_authority": false,
+    "execution_requires_live_head_refresh_and_binding": true
+  },
+  "hypothesis": "Repository-unqualified PR810 routing can select the wrong repository-local pull request while remaining superficially self-consistent.",
+  "counterhypothesis": "The token PR810 is globally unique enough that historical context safely determines the intended executor.",
+  "discriminator": {
+    "type": "ORDINARY_READ_ONLY_CROSS_REPOSITORY_IDENTITY_CHECK_PLUS_CURRENT_MAIN_REENTRY",
+    "unusual_experiment": false,
+    "result": "COUNTERHYPOTHESIS_REJECTED",
+    "evidence": "Both repositories expose distinct PR #810 objects; only gschaidergabriel/Dr.-Unterweger#810 is the retained bounded execution-controller lane."
+  },
+  "delta": {
+    "source_commit": "37fe35f01aa1ab5548d207b54f0102d3eb2f12b8",
+    "identity_contract": "research_entity/continuity/RETAINED_EXECUTION_CONTROLLER_IDENTITY.json",
+    "validator": "tools/validate_retained_executor_identity.py",
+    "regression": "tests/test_retained_executor_identity.py",
+    "transitive_routing_surfaces": [
+      "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+      "research_entity/rooms/PROGRAM_STATE.json",
+      "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "the artefact/manifest.json",
+      "CLAUDE.md",
+      "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md"
+    ],
+    "unqualified_pr810_executor_selection": "FORBIDDEN_REPOSITORY_AMBIGUOUS",
+    "readme_state": "PRESERVED_LATEST_MAIN_BYTES_NOT_OVERWRITTEN_DURING_RAPID_PARALLEL_MOVEMENT; RECEIPT_CARRIES_THIS_DELTA_AND_PR_REQUIRES_NONDESTRUCTIVE_README_SYNC_BEFORE_PROMOTION",
+    "preserved_parallel_jspace_receipts_and_frontier": true,
+    "new_executor_created": false,
+    "new_state_truth_effect_or_recovery_authority_created": false
+  },
+  "deterministic_guard_evidence": {
+    "prior_candidate_contract_and_poison_cases": "8_OF_8_PASS",
+    "prior_candidate_transitive_surface_closure": "PASS",
+    "program_state_wrong_executor_poison": "REJECTED_AS_surface:program_executor",
+    "scope": "SOURCE_LEVEL_DETERMINISTIC_GUARD_ONLY_NOT_ADMITTED_SANDBOX_RUNTIME"
+  },
+  "github_actions_negative_evidence": {
+    "observed_on_superseded_candidate_head": "cd84bf45c1007e2e89fd77c8d07fc17bad39e939",
+    "jobs": [
+      "Research Entity Identity Guard run 32662299967 job 97250214404 steps=null",
+      "claycog-validator-pr run 32662300033 job 97250214812 steps=null",
+      "Research Entity Verify run 32662299960 job 97250214673 steps=null"
+    ],
+    "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_TEST_EXECUTION_NOT_SEMANTIC_PASS_OR_FAIL"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_UNAMBIGUOUS_SINGLE_EXECUTOR_SELECTION_ON_EXACT_MAIN_BASE",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_BINDING_EXISTING_HCU_JSPACE_REBIND_WORK_TO_THE_CORRECT_CROSS_REPOSITORY_EXECUTOR_WITHOUT_CREATING_A_SECOND_LANE",
+    "track_c_jspace_gwt_training_readiness_free_only": "ADVANCED_BY_PRESERVING_CURRENT_JSPACE_REBIND_SOURCE_FRONTIER_WHILE_REMOVING_REPOSITORY_AMBIGUITY_FROM_EXECUTOR_COORDINATION"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_identity_available": false,
+    "canonical_atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed": false,
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT; ORDINARY_SOURCE_REVIEW_FUSION_AND_REGRESSION_ALLOWED"
+  },
+  "evidence_boundary": {
+    "admitted_free_sandbox_executed_for_this_delta": false,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Non-destructively sync the repository-qualified executor contract into the latest moving artefact README, refresh exact current Research main plus gschaidergabriel/clay-global-research-entity#1263 plus gschaidergabriel/Dr.-Unterweger#810, finish the single retained executor immutable rebind closure with SOURCE_REBIND_REQUIRED held until complete, and execute only when supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission actually permits the fixed capsule."
+}

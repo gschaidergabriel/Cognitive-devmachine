@@ -3,13 +3,13 @@ from __future__ import annotations
 """Leak-resistant family splitter for admitted EntityOS/HCU J-Space training traces.
 
 This module is dataset plumbing only. It mints no truth, reward, model authority, effect
-capability, or runtime credit. Its sole job is to keep correlated traces from the same
-explicit ``trace_family_id`` together when forming train/validation/holdout partitions.
+capability, or runtime credit. Split ownership is derived from replay-stable causal Event
+identity, not from caller-controlled ``trace_family_id`` labels. The explicit trace-family
+label remains provenance/audit metadata only.
 
 Inputs are expected to have already passed ``jspace_dataset_admission_gate_v1``. The exact
 training-trace object is nevertheless re-bound to the admitted-training-trace registry here
-so a caller cannot relabel ``trace_family_id`` after admission and silently move a correlated
-trace into another split.
+so a caller cannot mutate provenance labels or causal ancestry after admission.
 """
 
 import hashlib
@@ -20,7 +20,8 @@ try:
 except ImportError:
     from jspace_dataset_admission_gate_v1 import ADMISSION_SCHEMA as DATASET_ADMISSION_SCHEMA
 
-SPLIT_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_FAMILY_SPLIT/v1"
+SPLIT_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_FAMILY_SPLIT/v2"
+CAUSAL_FAMILY_SCHEMA = "ENTITYOS_HCU_CAUSAL_TRAINING_FAMILY/v1"
 TRAINING_TRACE_SCHEMA = "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1"
 SPLIT_NAMES = ("train", "validation", "holdout")
 
@@ -61,13 +62,25 @@ def _generation(value: Any, field: str) -> int:
     return value
 
 
-def split_for_family(trace_family_id: str) -> str:
-    """Return a deterministic ~80/10/10 split from one explicit family identity.
+def causal_family_id_from_event(entry_event_sha256: str) -> str:
+    """Return the dataset-only family key for one replay-stable causal Event identity.
+
+    Concrete admission, route, GRID, cell, control-condition and human family-label identity
+    are intentionally excluded: re-observation/re-admission and baseline/lesion/shuffle/rescue
+    descendants of the same Event must not cross dataset partitions merely by changing those
+    downstream identities. This key is partition plumbing, not canonical state.
+    """
+    event_sha = _sha256(entry_event_sha256, "entry_event_sha256")
+    return f"{CAUSAL_FAMILY_SCHEMA}:{event_sha}"
+
+
+def split_for_family(family_id: str) -> str:
+    """Return a deterministic ~80/10/10 split from one admitted family identity.
 
     Domain-separated UTF-8 hashing is only partition plumbing. It is deliberately not reused
     as EntityOS causal/state identity and therefore creates no competing canonicalizer.
     """
-    family = _text(trace_family_id, "trace_family_id")
+    family = _text(family_id, "family_id")
     digest = hashlib.sha256((SPLIT_SCHEMA + "\0" + family).encode("utf-8", "strict")).digest()
     bucket = digest[0]
     if bucket < 205:
@@ -91,7 +104,10 @@ def _exact_registry_trace(
     return trace_sha
 
 
-def _bind_admission(training_trace: Mapping[str, Any], admission: Mapping[str, Any]) -> tuple[str, str, str]:
+def _bind_admission(
+    training_trace: Mapping[str, Any],
+    admission: Mapping[str, Any],
+) -> tuple[str, str, str, str]:
     if training_trace.get("schema_version") != TRAINING_TRACE_SCHEMA:
         raise JSpaceDatasetFamilySplitError("TRAINING_TRACE_SCHEMA_UNSUPPORTED")
     if admission.get("schema") != DATASET_ADMISSION_SCHEMA:
@@ -159,8 +175,9 @@ def _bind_admission(training_trace: Mapping[str, Any], admission: Mapping[str, A
             raise JSpaceDatasetFamilySplitError("TRAINING_TRACE_ADMISSION_BINDING_MISMATCH:outcome_receipt_sha256")
 
     trace_id = _text(training_trace.get("trace_id"), "training_trace.trace_id")
-    family_id = _text(training_trace.get("trace_family_id"), "training_trace.trace_family_id")
-    return trace_sha, trace_id, family_id
+    supplied_family_id = _text(training_trace.get("trace_family_id"), "training_trace.trace_family_id")
+    causal_family_id = causal_family_id_from_event(training_trace.get("entry_event_sha256"))
+    return trace_sha, trace_id, supplied_family_id, causal_family_id
 
 
 def partition_admitted_training_traces(
@@ -168,13 +185,15 @@ def partition_admitted_training_traces(
     *,
     admitted_training_traces: Mapping[str, Mapping[str, Any]],
 ) -> dict[str, Any]:
-    """Partition exact admitted traces without allowing family leakage across splits.
+    """Partition exact admitted traces by replay-stable causal Event family.
 
     Each record is ``(training_trace, dataset_admission)``. Duplicate identical traces are
-    idempotent. Reusing a ``trace_id`` for different trace identities fails closed.
+    idempotent. Reusing a ``trace_id`` for different trace identities fails closed. Human
+    ``trace_family_id`` aliases remain observable but cannot select the split.
     """
     partitions: dict[str, list[dict[str, Any]]] = {name: [] for name in SPLIT_NAMES}
     families: dict[str, str] = {}
+    aliases: dict[str, set[str]] = {}
     seen_sha: set[str] = set()
     trace_ids: dict[str, str] = {}
 
@@ -185,7 +204,10 @@ def partition_admitted_training_traces(
         admission = _mapping(pair[1], f"records[{ordinal}].admission")
 
         registry_sha = _exact_registry_trace(training_trace, admitted_training_traces)
-        trace_sha, trace_id, family_id = _bind_admission(training_trace, admission)
+        trace_sha, trace_id, supplied_family_id, causal_family_id = _bind_admission(
+            training_trace,
+            admission,
+        )
         if registry_sha != trace_sha:
             raise JSpaceDatasetFamilySplitError("INTERNAL_TRACE_SHA_BINDING_MISMATCH")
 
@@ -197,26 +219,39 @@ def partition_admitted_training_traces(
             continue
         seen_sha.add(trace_sha)
 
-        split = split_for_family(family_id)
-        prior_split = families.get(family_id)
+        split = split_for_family(causal_family_id)
+        prior_split = families.get(causal_family_id)
         if prior_split is not None and prior_split != split:
-            raise JSpaceDatasetFamilySplitError("FAMILY_SPLIT_DIVERGENCE")
-        families[family_id] = split
+            raise JSpaceDatasetFamilySplitError("CAUSAL_FAMILY_SPLIT_DIVERGENCE")
+        families[causal_family_id] = split
+        aliases.setdefault(causal_family_id, set()).add(supplied_family_id)
         partitions[split].append(dict(training_trace))
 
     if not seen_sha:
         raise JSpaceDatasetFamilySplitError("NO_ADMITTED_TRAINING_TRACES")
 
     for rows in partitions.values():
-        rows.sort(key=lambda row: (row["trace_family_id"], row["trace_id"], row["trace_sha256"]))
+        rows.sort(
+            key=lambda row: (
+                row["entry_event_sha256"],
+                row["trace_family_id"],
+                row["trace_id"],
+                row["trace_sha256"],
+            )
+        )
 
     family_counts = {name: sum(1 for value in families.values() if value == name) for name in SPLIT_NAMES}
     return {
         "schema": SPLIT_SCHEMA,
+        "causal_family_schema": CAUSAL_FAMILY_SCHEMA,
+        "split_unit": "replay_stable_entry_event_identity",
         "trace_count": len(seen_sha),
         "family_count": len(families),
         "family_counts": family_counts,
         "family_assignments": dict(sorted(families.items())),
+        "supplied_family_aliases": {
+            family_id: sorted(values) for family_id, values in sorted(aliases.items())
+        },
         "splits": partitions,
         "authority": "DATASET_PARTITION_ONLY_NOT_TRUTH_REWARD_EFFECT_OR_RUNTIME_AUTHORITY",
     }

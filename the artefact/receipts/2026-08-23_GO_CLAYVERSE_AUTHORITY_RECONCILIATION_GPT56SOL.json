@@ -1,5 +1,5 @@
 {
-  "schema": "CLAYVERSE_GO_AUTHORITY_RECONCILIATION/v3",
+  "schema": "CLAYVERSE_GO_AUTHORITY_RECONCILIATION/v4",
   "date": "2026-08-23",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
@@ -23,9 +23,14 @@
     "parallel_drift": [
       "PR #1155 merged a Mini Entity authority cross-bind derived from the stale pre-reconciliation bootstrap",
       "PR #1158 merged Control 4.3 selecting Mini Entity from the same stale authority chain",
-      "PR #1166 merged a fail-closed 4.1+4.2+4.3 Mini Entity assertion, creating a new direct conflict with the later owner ClayVerse authority"
+      "PR #1166 merged a fail-closed 4.1+4.2+4.3 Mini Entity assertion, creating a direct conflict with the later owner ClayVerse authority"
     ],
-    "causal_risk": "workers and validators can select different product endpoints depending on which authority generation they read"
+    "swarm_drift": [
+      "GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT named tools/run_go_zero_swarm.py but code search found no implementation",
+      "legacy tools/run_free_go_swarm.py hard-codes MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md as owner context",
+      "legacy tools/run_free_go_swarm.py injects Mini Entity worker role/task language"
+    ],
+    "causal_risk": "workers, validators or spawned provider children can select different product endpoints depending on which authority generation they read"
   },
   "delta": {
     "authority_reconciled_to": "CLAYVERSE_SINGLE_CONTAINER",
@@ -35,6 +40,9 @@
     "supervisor_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json",
     "validator": "tools/validate_clayverse_authority_consistency.py",
     "compatibility_assertion": "tools/assert_effective_program_authority.py delegates to the single ClayVerse v2 validator instead of leaving a competing Mini Entity assertion",
+    "swarm_contract": "research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md now fails closed until a ClayVerse controller is admitted",
+    "swarm_admission_assertion": "tools/assert_clayverse_swarm_admission.py",
+    "legacy_swarm_controller": "QUARANTINED_BY_CONTROL_4_4",
     "regression": "tests/test_validate_clayverse_authority_consistency.py",
     "superseded_bootstrap_blob_preserved": "48fa25625dd02d4af4bbfaa64a8e6e4d371922e5",
     "superseded_program_state_blob_preserved": "d2a7b849e7a8f7b38b28aca3ae1704bf447a367d",
@@ -45,13 +53,14 @@
       "Together forbidden",
       "VPS testing forbidden",
       "exact authorized isolated execution required for runtime credit",
-      "Frank harness modification forbidden in inherited control"
+      "Frank harness modification forbidden in inherited control",
+      "no provider secret lookup or network fallback through the stale Mini Entity swarm controller"
     ]
   },
   "bounded_local_mechanism_evidence": {
     "environment": "isolated ChatGPT Linux component container",
-    "py_compile": "PASS",
-    "focused_regressions": "6/6 PASS",
+    "py_compile": "PASS for the earlier authority validator revision",
+    "focused_regressions": "6/6 PASS for the earlier authority-validator mechanism revision",
     "cases": [
       "coherent ClayVerse authority passes",
       "Mini Entity bootstrap regression fails closed",
@@ -60,8 +69,16 @@
       "Control 4.4 FREE_ONLY weakening fails closed",
       "superseded owner directive fails closed"
     ],
+    "current_exact_branch_execution": "UNOBSERVED",
     "exact_git_blob_runtime_credit": 0,
     "whole_product_runtime_credit": 0
+  },
+  "github_actions": {
+    "head_checked": "cfbfb6515413cc6562bf663d427ed263ce15b6e9",
+    "research_entity_verify": "FAILURE_WITH_JOB_STEPS_NULL",
+    "identity_guard": "FAILURE_WITH_JOB_STEPS_NULL",
+    "classification": "RUNNER_OR_EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_TEST_FAILURE",
+    "runtime_credit": 0
   },
   "execution_surface": {
     "vercel_sandbox_start_exec_exposed": false,
@@ -72,5 +89,5 @@
     "paid_training_used": false,
     "unusual_experiment": "NOT_CONSUMED_NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE"
   },
-  "next_gate": "Open the rebased authority PR, verify mergeability against fresh main, then run the v2 authority assertion plus full exact-current ClayVerse suite and OCI build/startup on an actually-started authorized isolated sandbox; bind source SHA, image digest and runtime evidence before any runtime promotion."
+  "next_gate": "Fuse PR #1167 only after fresh-main mergeability review. Then obtain an actually-started authorized isolated executor and run the current authority assertion, swarm-admission assertion, full exact-current ClayVerse regression and exact OCI build/startup; bind source SHA, image digest and runtime evidence before any runtime promotion."
 }

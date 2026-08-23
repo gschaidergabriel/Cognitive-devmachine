@@ -12,12 +12,22 @@ DOCKERFILE = ROOT / "Dockerfile"
 COMPOSE = ROOT / "compose.yaml"
 
 
-def _entityos_exec_value(text: str) -> str:
+def _deployment_entityos_exec_value(text: str) -> str:
     match = re.search(
         r'- name: CLAYVERSE_ENABLE_ENTITYOS_EXEC\s+value: ["\']?([01])["\']?',
         text,
     )
-    assert match is not None, "CLAYVERSE_ENABLE_ENTITYOS_EXEC missing"
+    assert match is not None, "deployment CLAYVERSE_ENABLE_ENTITYOS_EXEC missing"
+    return match.group(1)
+
+
+def _compose_entityos_exec_value(text: str) -> str:
+    match = re.search(
+        r'^\s*CLAYVERSE_ENABLE_ENTITYOS_EXEC:\s*["\']?([01])["\']?\s*$',
+        text,
+        re.MULTILINE,
+    )
+    assert match is not None, "compose CLAYVERSE_ENABLE_ENTITYOS_EXEC missing"
     return match.group(1)
 
 
@@ -30,8 +40,8 @@ def test_all_baseline_surfaces_keep_entityos_execution_fail_closed():
     compose = COMPOSE.read_text(encoding="utf-8")
     dockerfile = DOCKERFILE.read_text(encoding="utf-8")
 
-    assert _entityos_exec_value(deployment) == "0"
-    assert _entityos_exec_value(compose) == "0"
+    assert _deployment_entityos_exec_value(deployment) == "0"
+    assert _compose_entityos_exec_value(compose) == "0"
     assert "CLAYVERSE_ENABLE_ENTITYOS_EXEC=0" in dockerfile
 
 

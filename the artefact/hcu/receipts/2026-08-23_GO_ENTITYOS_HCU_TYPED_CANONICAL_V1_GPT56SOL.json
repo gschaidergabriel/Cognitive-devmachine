@@ -15,18 +15,18 @@
   "source_binding": {
     "main_at_branch_creation": "59929b28f2e820cdbd474a58f0c8e930bf536ab9",
     "branch": "gpt56sol/go-entityos-hcu-entry-canonical-v1-20260823",
-    "source_commit": "2aafe8e3f86676823bee8c87199919125080f050",
-    "test_commit": "8d8c54e1aeac9fcd44395c91983e7d9166a3cf44",
+    "source_commit": "14cda65a9112535fbfc7aa343e3745e5844a7931",
+    "test_commit": "8732604cc1188805377b7e926a6db85aa4d08268",
     "source_path": "the artefact/hcu/typed_canonical_v1.py",
     "test_path": "the artefact/hcu/test_typed_canonical_v1.py",
-    "local_source_sha256": "3a845a946947d139d4801a5da76ca26986fbede4713f1a1832f2cee44a2ce0c3",
-    "local_test_sha256": "58fd89e5c7af9a3a46191f5f979ecc5e3a83910f34bfe495655f5553f33fb300"
+    "local_source_sha256": "29ae1b945457cf70eda93578bab1e069267f1ed0815a5d2c4fe3985d100d7db8",
+    "local_test_sha256": "16775b4ec2f339181f4ecf16031ccc6568f926bbc3fa7043893d9beb6b0ea793"
   },
   "tracks": {
     "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
     "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT"
   },
-  "frontier": "Cross-language causal/event/route hash identity was unproven because the HCU source candidate used Python json.dumps without an admitted canonicalization contract.",
+  "frontier": "Cross-language causal/event/route hash identity was unproven because the retained HCU source candidate used Python json.dumps without an admitted canonicalization contract.",
   "hypothesis": "A smaller explicitly versioned typed canonical JSON subset is sufficient for EntityOS/HCU identity-bearing Entry and route receipts and is safer than pretending to implement full RFC 8785 while the current schemas do not need arbitrary JSON numbers.",
   "counterhypothesis": "The restriction is too narrow and future HCU route identity requires arbitrary floating-point JSON or non-ASCII structural keys; in that case this v1 must reject rather than silently canonicalize and a later explicitly versioned scheme is required.",
   "delta": {
@@ -36,8 +36,10 @@
       "JSON floats are forbidden for identity material",
       "integers are restricted to +/-9007199254740991",
       "object structural keys are restricted to a bounded ASCII token domain",
+      "only built-in dict/list containers are admitted for identity material",
       "object keys are recursively sorted",
       "array order is preserved",
+      "string escaping is explicitly defined by v1 rather than delegated to json.dumps",
       "Unicode string values are preserved without normalization",
       "duplicate JSON object names fail closed through strict_loads",
       "NaN/Infinity and non-admitted Python types fail closed",
@@ -51,8 +53,8 @@
   "component_execution": {
     "surface": "isolated local work container",
     "command": "cd /tmp && python3 -m py_compile entityos_canon/typed_canonical_v1.py entityos_canon/test_typed_canonical_v1.py && python3 -m unittest -v entityos_canon/test_typed_canonical_v1.py",
-    "tests": 9,
-    "passed": 9,
+    "tests": 11,
+    "passed": 11,
     "failed": 0,
     "claim_scope": "BOUNDED_COMPONENT_MECHANISM_ONLY",
     "entityos_hcu_runtime_credit": 0,
@@ -70,13 +72,23 @@
     "duplicate JSON names must be rejected before hashing",
     "unsafe integers must be rejected",
     "non-ASCII structural keys must be rejected by v1 rather than rely on cross-language sorting assumptions",
+    "custom mapping/container semantics must be rejected rather than enter a mutable or runtime-specific identity path",
     "Unicode normalization must not be introduced implicitly",
     "same admitted typed value with different object insertion order must hash identically",
-    "different array order must remain identity-distinct"
+    "different array order must remain identity-distinct",
+    "required JSON string escaping must be identical to the explicit v1 contract"
   ],
+  "coordination": {
+    "retained_hcu_route_and_entry_lane": "PR_1263",
+    "current_main_entry_split_finding": "d37f3b57598b02684d7763cd20f6d715822bd213",
+    "current_main_capability_self_grant_finding": "63fdd580aee5d383a3c7d01213a3ba41a2b8bf02",
+    "this_delta_role": "CANONICALIZATION_PRIMITIVE_ONLY_NOT_SECOND_ENTRY_OR_ROUTE_IMPLEMENTATION"
+  },
   "next_gate": [
-    "Wire ENTITYOS_TYPED_CANONICAL_JSON/v1 into the current HCU reactive-event and route-decision candidate so event, policy, engine and route hashes bind the canonicalization schema.",
+    "Wire ENTITYOS_TYPED_CANONICAL_JSON/v1 into the retained HCU reactive-event and route-decision candidate so event, policy, engine and route hashes bind the canonicalization schema.",
     "Represent route threshold/measurement identity fields as explicitly scaled integers before hashing, or keep the current Python-local hash scope explicit.",
+    "Repair Typed Entry capability claims against an external canonical capability authority; Entry must not self-grant permissions.",
+    "Preserve separate replay-stable event_sha256 and concrete admission identity.",
     "Run same typed event through an independent admitted canonicalizer before claiming heterogeneous/cross-language hash identity.",
     "Obtain exact authorized-isolated EntityOS/HCU runtime evidence before any promotion."
   ]

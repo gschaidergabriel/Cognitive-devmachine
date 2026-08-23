@@ -13,12 +13,14 @@ EXPECTED_STAGE = "CLAYVERSE_ARTIFACT"
 EXPECTED_RELEASE = "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE"
 EXPECTED_DYNAMIC_PRIMARY = "WHOLE_CLAYVERSE_OCI_PRODUCT"
 EXPECTED_EFFECTIVE_CONTROL = "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum"
+CURRENT_REENTRY_ENTITY_VERSION = "RAE-8.8"
 IDENTITY_GUARD = "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
 CONTROL41 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json"
 CONTROL42 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json"
 CONTROL43 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_PROGRAM_AUTHORITY.json"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
+STEERING848 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_48.json"
 ROOT_CLAUDE = "CLAUDE.md"
 LEGACY_BLOGPOST = "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md"
 LEGACY_LOCAL_INFERENCE = "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md"
@@ -39,6 +41,99 @@ def git_blob_sha(path: Path) -> str:
 def require(errors: list[str], condition: bool, code: str) -> None:
     if not condition:
         errors.append(code)
+
+
+def validate_current_reentry_steering(
+    errors: list[str], bootstrap: dict, steering848: dict | None
+) -> None:
+    """Bind the 16:49 owner re-entry steering for the current RAE-8.8 lineage.
+
+    Steering 8.44 remains part of the inherited Control-4.4 safety ancestry. 8.48 is a
+    later owner re-entry selector with a different schema, so validating only 8.44 can
+    leave the current work-selection surface outside the authority consistency fence.
+    Older synthetic/historical entity versions remain readable without pretending that
+    they carried a steering file which did not yet exist.
+    """
+    if bootstrap.get("expected_entity_version") != CURRENT_REENTRY_ENTITY_VERSION:
+        return
+
+    require(errors, isinstance(steering848, dict), "STEERING848_MISSING")
+    if not isinstance(steering848, dict):
+        return
+
+    require(errors, steering848.get("schema_version") == "8.48", "STEERING848_SCHEMA_MISMATCH")
+    require(
+        errors,
+        steering848.get("status") == "CURRENT_OWNER_REENTRY_STEERING",
+        "STEERING848_STATUS_MISMATCH",
+    )
+    require(
+        errors,
+        steering848.get("program") == EXPECTED_PROGRAM
+        and steering848.get("stage") == EXPECTED_STAGE,
+        "STEERING848_PROGRAM_STAGE_MISMATCH",
+    )
+    require(
+        errors,
+        steering848.get("product_endpoint") == "ClayVerse"
+        and steering848.get("release_form") == EXPECTED_RELEASE,
+        "STEERING848_ENDPOINT_RELEASE_MISMATCH",
+    )
+    require(
+        errors,
+        steering848.get("owner_directive") == OWNER_DIRECTIVE,
+        "STEERING848_OWNER_DIRECTIVE_MISMATCH",
+    )
+
+    authority = steering848.get("authority_adjudication") or {}
+    require(
+        errors,
+        authority.get("mini_entity_4_5")
+        == "SUPERSEDED_FOR_PROGRAM_PRODUCT_TRIGGER_AND_WORK_SELECTION_BY_NEWER_OWNER_REENTRY",
+        "STEERING848_MINI_ENTITY_NOT_SUPERSEDED",
+    )
+    require(
+        errors,
+        authority.get("durable_authority") == "UnifiedDB",
+        "STEERING848_DURABLE_AUTHORITY_MISMATCH",
+    )
+    require(
+        errors,
+        authority.get("external_effect_authority") == "EffectGate+EffectJournal",
+        "STEERING848_EFFECT_AUTHORITY_MISMATCH",
+    )
+    require(
+        errors,
+        authority.get("second_identity_or_state_or_effect_authority") == "FORBIDDEN",
+        "STEERING848_SECOND_AUTHORITY_NOT_FORBIDDEN",
+    )
+
+    execution = steering848.get("execution") or {}
+    require(
+        errors,
+        execution.get("free_only") is True
+        and execution.get("authorized_isolated_sandbox_only") is True
+        and execution.get("vps_testing") is False
+        and execution.get("self_hosted_vps_test_runners") is False
+        and execution.get("production_host_testing") is False
+        and execution.get("together_allowed") is False,
+        "STEERING848_SAFETY_WEAKENED",
+    )
+    require(errors, execution.get("runtime_credit") == 0, "STEERING848_RUNTIME_CREDIT_NONZERO")
+
+    steering_rules = set(steering848.get("steering") or [])
+    require(
+        errors,
+        "RUN_THE_EXISTING_CLAYVERSE_AUTHORITY_CONSISTENCY_GUARD_BEFORE_PROMOTING_ANY_FUTURE_PRODUCT_ROUTING_CHANGE"
+        in steering_rules,
+        "STEERING848_GUARD_REENTRY_MISSING",
+    )
+    require(
+        errors,
+        "FAIL_CLOSED_IF_BOOTSTRAP_PROGRAM_ROOT_WORKER_SWARM_CONTROL_OR_OWNER_DIRECTIVE_SELECTS_MINI_ENTITY_OR_BLOGPOST_AS_CURRENT_PRODUCT"
+        in steering_rules,
+        "STEERING848_FAIL_CLOSED_ROUTING_MISSING",
+    )
 
 
 def validate(root: Path) -> dict:
@@ -83,6 +178,18 @@ def validate(root: Path) -> dict:
             "pass": False,
             "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
         }
+
+    checked_paths = dict(paths)
+    steering848 = None
+    if bootstrap.get("expected_entity_version") == CURRENT_REENTRY_ENTITY_VERSION:
+        steering848_path = root / STEERING848
+        checked_paths["steering848"] = steering848_path
+        if steering848_path.is_file():
+            try:
+                steering848 = load_json(steering848_path)
+            except (OSError, json.JSONDecodeError) as exc:
+                errors.append(f"STEERING848_JSON_LOAD_ERROR:{type(exc).__name__}:{exc}")
+        validate_current_reentry_steering(errors, bootstrap, steering848)
 
     directive = paths["directive"].read_text(encoding="utf-8")
     fast_boot = paths["fast_boot"].read_text(encoding="utf-8")
@@ -242,7 +349,7 @@ def validate(root: Path) -> dict:
         "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
         "pass": not errors,
         "errors": errors,
-        "checked": {name: path.relative_to(root).as_posix() for name, path in paths.items()},
+        "checked": {name: path.relative_to(root).as_posix() for name, path in checked_paths.items()},
     }
 
 

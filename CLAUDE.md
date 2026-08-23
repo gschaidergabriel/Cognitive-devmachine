@@ -12,17 +12,18 @@ This root file is a repository-organ routing shim, not canonical durable product
 
 1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json`
+3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json`
 4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
 5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
 6. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
 7. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
-8. `the artefact/README.md`
-9. task-relevant current or compatibility implementation files.
+8. `the artefact/manifest.json`
+9. `the artefact/README.md`
+10. task-relevant current or compatibility implementation files.
 
-`SUPERVISOR_STEERING_8_61.json` is the active autonomous work/execution authority in verified current `main`. The repository also retains the owner one-shot ~0.8B Together directive as provenance, but 8.61 quarantines that paid lane for the current FREE_ONLY supervisor. Owner paid provenance is not executable permission for this organ.
+`SUPERVISOR_STEERING_8_62.json` supersedes 8.61 for current autonomous work/execution authority. If current files disagree, fail closed and reconcile one canonical path before credential lookup, provider network I/O, execution, spend or runtime promotion.
 
-If current files disagree, fail closed and reconcile one canonical path before credential lookup, provider network I/O, metered execution, spend or runtime promotion.
+The repository owner one-shot ~0.8B Together directive remains provenance only. Current mode is **FREE_ONLY**; Together general inference/training, paid fallback, credit purchase and plan upgrade are forbidden.
 
 ## Current naming law
 
@@ -31,7 +32,7 @@ If current files disagree, fail closed and reconcile one canonical path before c
 - `Xeno` = transitional implementation compatibility codename only.
 - `XCU` = transitional/research alias for HCU only.
 - `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*` = historical implementation/provenance surfaces where exact migration has not occurred.
-- ClayVerse and Frank = historical donor/provenance only.
+- ClayVerse and Frank = historical donor/provenance only unless explicitly re-admitted.
 
 Do not bulk-rename hashes, receipts, ABI/API names, schemas, paths or stateful compatibility surfaces when that would break reproducibility.
 
@@ -49,21 +50,13 @@ For material work use:
 
 `OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
 
-Prefer reusable HCU machine primitives across:
-
-- `GRID10` — cheap 10 logical-cell baseline;
-- `COGSIM10` — request-scoped cognition simulation;
-- `WM_TEST` — bounded noncanonical world-model experiment;
-- `NESTED_SIM` — selective world-model -> virtual computer -> simulated AI -> candidate-action experiment;
-- `SCALEOUT` — measured logical-context scaling over shared physical workers.
-
-Useful legacy XRAM/XPU/XCU/Entry concepts are implementation roles inside EntityOS/HCU, not competing systems. New current-facing compute-architecture language names HCU.
+Prefer reusable HCU machine primitives across `GRID10`, `COGSIM10`, bounded `WM_TEST`, selective `NESTED_SIM`, and measured `SCALEOUT`.
 
 Scale semantics remain strict:
 
 `logical_module_count != resident_model_count != physical_decode_concurrency`.
 
-The baseline is 10 logical cells. `10 -> 32 -> 64 -> 128 -> 256 -> ~600` is a benchmark ladder; ~600 on H100-class hardware remains hypothesis only until exact model/quantization/KV/HBM/throughput/latency/recovery evidence exists.
+The baseline is 10 logical cells. `10 -> 32 -> 64 -> 128 -> 256 -> ~600` is a benchmark ladder; ~600 on H100-class hardware remains hypothesis only until exact empirical evidence exists.
 
 ## `zero`
 
@@ -81,19 +74,25 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 - EffectGate + EffectJournal remain the only admitted real/state-changing effect authority;
 - no second persistent identity, truth store, effect path or recovery ledger.
 
-## Execution and safety
+## Execution and safety — supervisor 8.62
 
 - current autonomous supervisor mode is **FREE_ONLY** with no paid fallback;
 - current build/test/experiment/runtime credit comes only from authorized isolated FREE execution surfaces;
-- a protected Vercel Preview bridge has demonstrated worker-callable `Sandbox.create` + `runCommand`; that establishes infrastructure callability only;
-- Vercel Sandbox is metered/usage-based under the current evidence, and explicit zero-monetary-cost or included-budget admission for another run has not been established; therefore **no new Vercel Sandbox run is currently admitted by this FREE_ONLY organ**;
-- metered, paid, subscription and unknown-cost execution lanes fail closed before new execution unless explicit zero-cost/included-budget admission or newer authority permits them;
-- VPS/self-hosted/production-host testing is forbidden under current control;
-- Together general inference and training are forbidden in this supervisor mode;
-- the owner one-shot approximately 0.8B J-Space/GWT Together directive remains repository provenance only; do not perform Together preflight, credential/key lookup, network I/O, job creation, spend, provider credit or training credit;
-- zero-cost local approximately 0.8B J-Space/GWT prototype/trace/ABI/dataset-readiness work may continue only after the required exact FREE executable-evidence gates;
-- never expose or commit secrets;
+- Vercel Hobby Sandbox is admitted only as `BOUNDED_INCLUDED_TIER_FREE_ADMITTED` for fixed source-hash-bound deterministic capsules;
+- remaining Hobby quota is **not directly observed** and must never be assumed;
+- every admitted Sandbox execution must be short, isolated, promptly cleaned up, and bind exact source/capsule identity, result digest, secret fence and cleanup;
+- quota exhaustion, billing, credit purchase, upgrade prompt, plan mismatch or any monetary charge path fails closed **before execution**;
+- arbitrary caller-supplied code paths do not earn credit-bearing execution authority;
+- VPS/self-hosted/production-host testing remains forbidden;
+- Together general inference/training remains forbidden; do not preflight or consume Together credentials;
 - source/component/historical PASS never implies broader EntityOS/HCU runtime acceptance;
-- preserve exact provenance, stale-generation, replay, privacy and effect boundaries.
+- the exact-current J-Space family-split 6/6 x2 evidence is bounded component credit only, not HCU/model/training/whole-product credit;
+- preserve exact provenance, generation, replay, privacy and effect boundaries.
 
-Current immediate frontier: first establish an execution surface that is explicitly zero-monetary-cost/included under supervisor 8.61 FREE_ONLY (or receive newer authority that explicitly admits the metered Vercel call). Then feed the verified protected-preview bridge fixed SHA-bound current Research main + retained/fused HCU source capsules without runtime GitHub credentials; execute exact Entry -> HCU route -> verified engine admission/load -> inference -> GRID10 -> Global J-Space/GWT -> causal training/dataset regressions; bind source/tree/executor/result digests; then continue zero-cost local ~0.8B loader/J-Space/GWT work without entering a paid provider lane.
+## Current immediate frontier
+
+Keep PR #1263 as the single retained HCU donor lane and fuse/rebase only nonduplicate mechanisms onto exact current FREE_ONLY `main`. Then run one fixed exact-source repaired HCU capsule on the admitted bounded Hobby Sandbox surface and bind current Research main SHA/tree, PR1263 SHA/tree, capsule/source digests, executor identity, result digest, secret fence and cleanup. Extend only after PASS toward:
+
+`Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> admitted causal dataset closure`.
+
+Only after those executable gates should a real zero-cost local ~0.8B checkpoint/tokenizer/runtime/build receive loader-consumption testing. No HCU/J-Space/model/training result mints canonical truth or EffectGate authority.

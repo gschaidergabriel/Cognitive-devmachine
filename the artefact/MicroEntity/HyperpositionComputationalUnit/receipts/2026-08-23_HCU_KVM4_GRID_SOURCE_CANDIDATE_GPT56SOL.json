@@ -1,0 +1,69 @@
+{
+  "schema": "HCU_SOURCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "SOURCE_CANDIDATE_MECHANISM_SUPPORT_ONLY",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "source_base_main": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "working_branch": "chatgpt/mini-entity-hcu-kvm4-grid-20260823",
+  "owner_target": {
+    "name": "Hyperposition Computational Unit",
+    "host": "KVM4",
+    "cpu_cores": 4,
+    "memory_gib": 16,
+    "disk_gb": 200,
+    "bandwidth_tb": 16,
+    "module_class": "approximately-0.8B",
+    "feed": "existing FREE_ONLY LLM/token fundus"
+  },
+  "mechanism": {
+    "logical_resident_active_separation": true,
+    "sparse_routing": true,
+    "shared_base_weights_preferred": true,
+    "candidate_profiles": {
+      "conservative": {"resident_cells": 6, "active_decode_slots": 1, "logical_cells": 24},
+      "balanced": {"resident_cells": 8, "active_decode_slots": 2, "logical_cells": 48},
+      "dense": {"resident_cells": 12, "active_decode_slots": 2, "logical_cells": 64}
+    }
+  },
+  "local_isolated_checks": {
+    "python_py_compile_plan_capacity": "PASS",
+    "python_py_compile_snapshot_builder": "PASS",
+    "capacity_planner": "PASS",
+    "planner_memory_bound_resident_cells_under_assumption": 14,
+    "planner_assumption_q4_cell_rss_gib": 0.85,
+    "planner_assumption_is_measurement": false,
+    "snapshot_builder_recursive_policy": "PASS",
+    "snapshot_determinism_repeated_local_build": "PASS"
+  },
+  "authority": {
+    "MiniUnifiedDB": "CANONICAL_DURABLE_AUTHORITY",
+    "HCU_output": "CANDIDATE_ONLY",
+    "free_provider_output": "CANDIDATE_ONLY",
+    "second_persistent_entity_created": false,
+    "second_effect_path_created": false
+  },
+  "execution_credit": {
+    "vps_runtime": 0,
+    "model_runtime": 0,
+    "throughput_benchmark": 0,
+    "resident_cell_capacity_measurement": 0,
+    "whole_product": 0
+  },
+  "controls": {
+    "FREE_ONLY": true,
+    "Together": "FORBIDDEN",
+    "paid_training": "OWNER_AUTHORIZATION_REQUIRED",
+    "vps_acceptance_testing": "FORBIDDEN_UNTIL_EXPLICIT_OWNER_AUTHORIZATION",
+    "secrets_in_archive": false
+  },
+  "next_falsifiers": [
+    "measure exact one-cell RSS at several context sizes",
+    "compare 1/2/4 active decoder throughput after VPS execution authorization",
+    "compare independent process copies against shared base plus adapter/state cells",
+    "measure resident-cell knee before swap/thrashing",
+    "ablate specialist classes and permute routing",
+    "inject contradictory free-teacher packets and require explicit Hyperposition alternatives"
+  ],
+  "evidence_boundary": "All current HCU counts are planning candidates. Local source/planner/package checks do not establish target-VPS capacity, speed, causal-world-model quality, or Mini Entity runtime acceptance."
+}

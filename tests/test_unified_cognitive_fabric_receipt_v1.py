@@ -16,7 +16,7 @@ E = "b" * 64
 F = "c" * 64
 G = "d" * 64
 H = "e" * 64
-I = "f" * 64
+I = "5" * 64
 J = "1" * 64
 K = "2" * 64
 L = "3" * 64
@@ -147,6 +147,50 @@ class ReceiptV1Tests(unittest.TestCase):
         r["source"]["tree"] = "b" * 64
         redigest(r)
         self.assertTrue(ucf.validate(r)["ok"])
+
+    def test_placeholder_source_and_digest_identities_fail_closed(self):
+        poisons = []
+
+        r = valid_receipt()
+        r["source"]["commit"] = "0" * 40
+        redigest(r)
+        poisons.append((r, "commit:IDENTITY_PLACEHOLDER"))
+
+        r = valid_receipt()
+        r["source"]["tree"] = "f" * 40
+        redigest(r)
+        poisons.append((r, "tree:IDENTITY_PLACEHOLDER"))
+
+        r = valid_receipt()
+        r["identity"]["zero_identity_digest"] = "0" * 64
+        redigest(r)
+        poisons.append((r, "zero_identity_digest:IDENTITY_PLACEHOLDER"))
+
+        r = valid_receipt()
+        r["bundled_core"]["checkpoint_digest"] = "f" * 64
+        redigest(r)
+        poisons.append((r, "checkpoint_digest:IDENTITY_PLACEHOLDER"))
+
+        r = valid_receipt()
+        r["inference"]["candidate_result_digest"] = "0" * 64
+        redigest(r)
+        poisons.append((r, "candidate_result_digest:IDENTITY_PLACEHOLDER"))
+
+        r = valid_receipt()
+        r["inference"].update(jspace_mode="FULL_LOCAL_LATENT", local_activation_access=True)
+        r["inference"]["jspace_intervention"].update(
+            executed=True,
+            implementation_digest="0" * 64,
+            calibration_digest=E,
+        )
+        redigest(r)
+        poisons.append((r, "implementation_digest:IDENTITY_PLACEHOLDER"))
+
+        self.assertEqual(len(poisons), 6)
+        for receipt, error in poisons:
+            with self.subTest(error=error):
+                with self.assertRaisesRegex(ucf.ReceiptError, error):
+                    ucf.validate(receipt)
 
     def test_candidate_authority_smuggle_is_rejected(self):
         r = valid_receipt()

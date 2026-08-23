@@ -10,11 +10,13 @@ A ModelExecutionObservation becomes admissible only when:
 - it is bound to the current generation, exact verified engine-load consumption receipt,
   exact scheduler-owned GRID plan and exact MODEL cell/role;
 - the exact normalized observation already exists in an externally admitted observation
-  registry.
+  registry;
+- the exact executor/invocation identity is externally bound to that same observation
+  digest, preventing one invocation identity from being admitted with different bytes.
 
-The externally admitted registry is the trust split: a caller cannot obtain model-execution
-credit merely by setting ``evidence_source=ACTUAL_MODEL_EXECUTOR_IO_PATH`` or by inventing
-an invocation label.
+The external registries are the trust split: a caller cannot obtain model-execution credit
+merely by setting ``evidence_source=ACTUAL_MODEL_EXECUTOR_IO_PATH``, inventing an invocation
+label, or admitting two different observations under the same executor invocation.
 """
 from __future__ import annotations
 
@@ -38,6 +40,7 @@ except ImportError:
 
 OBSERVATION_SCHEMA = "HCU_MODEL_EXECUTION_OBSERVATION/v1"
 VERIFIED_EXECUTION_SCHEMA = "HCU_VERIFIED_MODEL_EXECUTION/v1"
+INVOCATION_BINDING_SCHEMA = "HCU_MODEL_EXECUTION_INVOCATION_BINDING/v1"
 ACTUAL_MODEL_EXECUTOR_EVIDENCE_SOURCE = "ACTUAL_MODEL_EXECUTOR_IO_PATH"
 
 
@@ -183,12 +186,29 @@ def model_execution_observation_sha256(observation: ModelExecutionObservation) -
     )
 
 
+def _invocation_binding_key(record: Mapping[str, Any]) -> str:
+    return _canonical_sha256(
+        {
+            "schema": INVOCATION_BINDING_SCHEMA,
+            "executor_id": _text(record.get("executor_id"), "record.executor_id"),
+            "invocation_id": _text(record.get("invocation_id"), "record.invocation_id"),
+        },
+        "MODEL_EXECUTION_INVOCATION_BINDING",
+    )
+
+
+def model_execution_invocation_binding_key(observation: ModelExecutionObservation) -> str:
+    """Stable external-registry key for one executor-scoped invocation identity."""
+    return _invocation_binding_key(model_execution_observation_record(observation))
+
+
 def verify_model_execution(
     grid_plan: GridPlan,
     verified_engine_load: VerifiedEngineLoad,
     observation: ModelExecutionObservation,
     *,
     admitted_model_execution_observations: Mapping[str, Any],
+    admitted_model_execution_invocations: Mapping[str, Any],
     current_generation: int,
 ) -> VerifiedModelExecution:
     """Bind externally admitted actual executor I/O evidence to GRID10 and the loaded engine."""
@@ -251,6 +271,18 @@ def verify_model_execution(
         raise ModelExecutionReceiptError("MODEL_EXECUTION_OBSERVATION_NOT_ADMITTED")
     if dict(admitted) != record:
         raise ModelExecutionReceiptError("MODEL_EXECUTION_OBSERVATION_REGISTRY_MISMATCH")
+
+    if not isinstance(admitted_model_execution_invocations, Mapping):
+        raise ModelExecutionReceiptError("ADMITTED_MODEL_EXECUTION_INVOCATION_REGISTRY_REQUIRED")
+    invocation_key = _invocation_binding_key(record)
+    admitted_observation_sha256 = admitted_model_execution_invocations.get(invocation_key)
+    if admitted_observation_sha256 is None:
+        raise ModelExecutionReceiptError("MODEL_EXECUTION_INVOCATION_NOT_ADMITTED")
+    if _sha256(
+        admitted_observation_sha256,
+        "admitted_model_execution_invocations.observation_sha256",
+    ) != observation_sha256:
+        raise ModelExecutionReceiptError("MODEL_EXECUTION_INVOCATION_OBSERVATION_MISMATCH")
 
     material = {
         "schema": VERIFIED_EXECUTION_SCHEMA,

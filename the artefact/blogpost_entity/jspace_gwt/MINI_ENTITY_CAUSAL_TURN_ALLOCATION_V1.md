@@ -63,13 +63,23 @@ The runtime handler MUST NOT allocate a new turn merely to satisfy PREPARE, and 
 
 ## Selector / active-pointer fusion
 
-`COGNITIVE_FABRIC_INVOCATION_SELECTOR/v1` is admitted only as an upstream activation request for an already **allocated and bound** turn. It is not a second runtime lookup authority.
+Current canonical `BLOGPOST_ENTITY.clay` passes `MINI_COGNITIVE_INVOCATION/v1` into `pipeline_cognitive_fabric_admit`. That pass-through is compatible with one-authority semantics only when the selector is a **read-only cross-check**, not a second lookup or allocation authority.
 
-After activation, `pipeline_cognitive_fabric_admit` resolves the generation-bound Active Cognition Turn from MiniUnifiedDB. Direct selector-to-inference bypass is non-canonical.
+The upstream scheduler uses the selector identity to activate an already **allocated and bound** turn before the Clay run. At PREPARE, the handler MUST:
+
+1. resolve the generation-bound Active Cognition Turn from MiniUnifiedDB using the read-only active-turn resolver;
+2. require selector `expected_generation` equals the live generation;
+3. require selector `causal_turn_id`, exact `task_text` and `turn_binding_digest` equal the resolved active turn;
+4. reject missing/mismatched selector or missing active pointer before inference;
+5. never allocate, bind or activate a turn inside PREPARE.
+
+Direct selector -> cognition-store resolution that bypasses the active pointer is non-canonical because it would leave two competing runtime selection paths. Direct selector-to-inference bypass is also non-canonical.
 
 Thus there is one runtime selection path:
 
-`allocated turn -> bound turn -> active pointer -> PREPARE resolver`.
+`allocated turn -> bound turn -> active pointer -> PREPARE resolver`,
+
+with the Clay-supplied selector serving only as an integrity assertion over that already-active identity.
 
 ## Authority
 

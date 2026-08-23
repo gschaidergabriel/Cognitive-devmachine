@@ -9,6 +9,8 @@ from engine_load_lease_v1 import (
     LoaderConsumedArtifact,
     LoaderConsumption,
     issue_engine_load_lease,
+    loader_consumption_record,
+    loader_consumption_record_sha256,
     verify_loader_consumption,
 )
 from reactive_event_router_v1 import EngineAdmission
@@ -53,6 +55,10 @@ def consumed(v, *, loader="loader:test", binding=LOADER_BINDING, source=ACTUAL_L
     )
 
 
+def admitted(c):
+    return {loader_consumption_record_sha256(c): loader_consumption_record(c)}
+
+
 class EngineLoadLeaseTests(unittest.TestCase):
     def issue(self, v):
         return issue_engine_load_lease(
@@ -60,6 +66,15 @@ class EngineLoadLeaseTests(unittest.TestCase):
             loader_id="loader:test",
             loader_binding_sha256=LOADER_BINDING,
             current_generation=7,
+        )
+
+    def verify(self, lease, v, c, *, registry=None, generation=7):
+        return verify_loader_consumption(
+            lease,
+            v,
+            c,
+            admitted_loader_consumptions=admitted(c) if registry is None else registry,
+            current_generation=generation,
         )
 
     def test_issue_is_deterministic_and_selected_jcs_bound(self):
@@ -79,16 +94,37 @@ class EngineLoadLeaseTests(unittest.TestCase):
                 current_generation=8,
             )
 
-    def test_exact_actual_loader_consumption_verifies(self):
+    def test_exact_actual_loader_consumption_verifies_only_after_external_admission(self):
         v = verified()
         lease = self.issue(v)
-        out = verify_loader_consumption(lease, v, consumed(v), current_generation=7)
+        c = consumed(v)
+        out = self.verify(lease, v, c)
         self.assertEqual(out.engine_load_lease_sha256, lease.lease_sha256)
         self.assertEqual(out.loader_binding_sha256, LOADER_BINDING)
         self.assertEqual(
             out.inference_echo()["engine_load_consumption_receipt_sha256"],
             out.consumption_receipt_sha256,
         )
+
+    def test_counterfeit_actual_loader_label_without_external_admission_fails_closed(self):
+        """Unusual falsifier: exact bytes + ACTUAL_LOADER_READ_PATH cannot self-admit."""
+        v = verified()
+        lease = self.issue(v)
+        forged = consumed(v)
+        with self.assertRaisesRegex(EngineLoadLeaseError, "LOADER_CONSUMPTION_NOT_ADMITTED"):
+            self.verify(lease, v, forged, registry={})
+
+    def test_external_registry_substitution_fails_closed(self):
+        v = verified()
+        lease = self.issue(v)
+        c = consumed(v)
+        registry = admitted(c)
+        identity = loader_consumption_record_sha256(c)
+        poisoned = dict(registry[identity])
+        poisoned["loader_id"] = "loader:other"
+        registry[identity] = poisoned
+        with self.assertRaisesRegex(EngineLoadLeaseError, "LOADER_CONSUMPTION_REGISTRY_MISMATCH"):
+            self.verify(lease, v, c, registry=registry)
 
     def test_post_admission_checkpoint_mutation_fails_closed(self):
         v = verified()
@@ -112,22 +148,24 @@ class EngineLoadLeaseTests(unittest.TestCase):
             c.build,
         )
         with self.assertRaisesRegex(EngineLoadLeaseError, "checkpoint:CONSUMED_BYTES_MISMATCH"):
-            verify_loader_consumption(lease, v, poisoned, current_generation=7)
+            self.verify(lease, v, poisoned)
 
     def test_posthoc_or_synthetic_digest_is_not_loader_attestation(self):
         v = verified()
         lease = self.issue(v)
         c = consumed(v, source="POSTHOC_FILESYSTEM_REHASH")
         with self.assertRaisesRegex(EngineLoadLeaseError, "ACTUAL_LOADER_READ_EVIDENCE_REQUIRED"):
-            verify_loader_consumption(lease, v, c, current_generation=7)
+            self.verify(lease, v, c)
 
     def test_wrong_loader_binding_and_stale_consumption_fail_closed(self):
         v = verified()
         lease = self.issue(v)
+        other_loader = consumed(v, loader="loader:other")
         with self.assertRaisesRegex(EngineLoadLeaseError, "LOADER_ID_MISMATCH"):
-            verify_loader_consumption(lease, v, consumed(v, loader="loader:other"), current_generation=7)
+            self.verify(lease, v, other_loader)
+        other_binding = consumed(v, binding="8" * 64)
         with self.assertRaisesRegex(EngineLoadLeaseError, "LOADER_BINDING_MISMATCH"):
-            verify_loader_consumption(lease, v, consumed(v, binding="8" * 64), current_generation=7)
+            self.verify(lease, v, other_binding)
         c = consumed(v)
         stale = LoaderConsumption(
             c.schema,
@@ -142,14 +180,15 @@ class EngineLoadLeaseTests(unittest.TestCase):
             c.build,
         )
         with self.assertRaisesRegex(EngineLoadLeaseError, "STALE_LOADER_CONSUMPTION"):
-            verify_loader_consumption(lease, v, stale, current_generation=7)
+            self.verify(lease, v, stale)
 
     def test_lease_cannot_be_reused_for_different_admission(self):
         a = verified(suffix="a")
         b = verified(suffix="b")
         lease = self.issue(a)
+        c = consumed(b)
         with self.assertRaisesRegex(EngineLoadLeaseError, "ENGINE_ADMISSION_RECEIPT_MISMATCH"):
-            verify_loader_consumption(lease, b, consumed(b), current_generation=7)
+            self.verify(lease, b, c)
 
     def test_consumed_size_or_membership_mismatch_fails_closed(self):
         v = verified()
@@ -173,7 +212,7 @@ class EngineLoadLeaseTests(unittest.TestCase):
             c.build,
         )
         with self.assertRaisesRegex(EngineLoadLeaseError, "tokenizer:CONSUMED_BYTES_MISMATCH"):
-            verify_loader_consumption(lease, v, poisoned, current_generation=7)
+            self.verify(lease, v, poisoned)
 
 
 if __name__ == "__main__":

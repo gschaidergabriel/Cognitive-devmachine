@@ -25,6 +25,25 @@ HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 ACTION_ORIGINS = {"ZERO", "HOOK_TIMER", "CLAUDE_CODE", "PROXY_SANDBOX_CONTROLLER", "OTHER"}
 
+# Artifact-byte provenance is additive to the repository manifest/SOURCE_LOCK
+# identity path below. Neither mechanism substitutes for the other.
+REQUIRED_ARTIFACT_BINDINGS = {
+    "bundled_manifest": ("bundled_core", "manifest_sha256"),
+    "checkpoint": ("bundled_core", "checkpoint_sha256"),
+    "tokenizer": ("bundled_core", "tokenizer_sha256"),
+    "runtime": ("bundled_core", "runtime_sha256"),
+    "jspace_profile": ("jspace", "jspace_profile_sha256"),
+    "lens_file": ("jspace", "lens_file_sha256"),
+    "lens_profile": ("jspace", "lens_profile_sha256"),
+    "fit_corpus": ("jspace", "fit_corpus_sha256"),
+    "workspace_policy": ("gwt", "workspace_policy_sha256"),
+    "gwt_calibration": ("gwt", "calibration_sha256"),
+    "zero_identity": ("zero_grf", "zero_identity_sha256"),
+    "grf": ("zero_grf", "grf_sha256"),
+    "projection_policy": ("zero_grf", "projection_policy_sha256"),
+    "claude_capability_profile": ("claude_adapter", "capability_profile_sha256"),
+}
+
 
 class ValidationError(ValueError):
     pass
@@ -118,7 +137,28 @@ def validate_source_lock(lock: dict) -> None:
         req_str(lock, "note")
 
 
-def validate(data: dict) -> None:
+def verify_artifact_binding(root: Path, role: str, binding: dict, expected_sha256: str) -> None:
+    relative = req_str(binding, "path")
+    if Path(relative).is_absolute():
+        fail(f"ARTIFACT_ABSOLUTE_PATH:{role}")
+    declared_sha = req_sha(binding, "sha256")
+    if declared_sha != expected_sha256:
+        fail(f"ARTIFACT_DECLARED_DIGEST_MISMATCH:{role}")
+    size_bytes = req_int(binding, "size_bytes", minimum=0)
+    try:
+        resolved = (root / relative).resolve(strict=True)
+        resolved.relative_to(root)
+    except (FileNotFoundError, OSError, ValueError):
+        fail(f"ARTIFACT_PATH_OUTSIDE_ROOT_OR_MISSING:{role}")
+    if not resolved.is_file():
+        fail(f"ARTIFACT_NOT_FILE:{role}")
+    if resolved.stat().st_size != size_bytes:
+        fail(f"ARTIFACT_SIZE_MISMATCH:{role}")
+    if sha256_file(resolved) != expected_sha256:
+        fail(f"ARTIFACT_DIGEST_MISMATCH:{role}")
+
+
+def validate(data: dict, artifact_root: Path) -> None:
     if data.get("schema") != SCHEMA:
         fail("SCHEMA_MISMATCH")
 
@@ -139,10 +179,12 @@ def validate(data: dict) -> None:
     req_str(core, "manifest_version")
     req_str(core, "engine_id")
     req_str(core, "model_family")
-    req_sha(core, "checkpoint_sha256")
-    req_sha(core, "tokenizer_sha256")
+    checkpoint_sha = req_sha(core, "checkpoint_sha256")
+    tokenizer_sha = req_sha(core, "tokenizer_sha256")
     req_sha(core, "runtime_sha256")
     req_sha(core, "manifest_sha256")
+    layer_count = req_int(core, "layer_count", minimum=1)
+    d_model = req_int(core, "d_model", minimum=1)
     if "quantization_runtime_identity" in core:
         req_str(core, "quantization_runtime_identity")
     if not req_bool(core, "exact_bytes_verified"):
@@ -154,6 +196,21 @@ def validate(data: dict) -> None:
     req_sha(jspace, "lens_file_sha256")
     req_sha(jspace, "lens_profile_sha256")
     req_sha(jspace, "fit_corpus_sha256")
+    if req_sha(jspace, "source_checkpoint_sha256") != checkpoint_sha:
+        fail("JSPACE_CHECKPOINT_PROVENANCE_MISMATCH")
+    if req_sha(jspace, "source_tokenizer_sha256") != tokenizer_sha:
+        fail("JSPACE_TOKENIZER_PROVENANCE_MISMATCH")
+    if req_int(jspace, "d_model", minimum=1) != d_model:
+        fail("JSPACE_D_MODEL_MISMATCH")
+    source_layers = jspace.get("source_layers")
+    if not isinstance(source_layers, list) or not source_layers:
+        fail("JSPACE_SOURCE_LAYERS_REQUIRED")
+    if any(isinstance(layer, bool) or not isinstance(layer, int) for layer in source_layers):
+        fail("JSPACE_SOURCE_LAYER_INVALID")
+    if source_layers != sorted(set(source_layers)):
+        fail("JSPACE_SOURCE_LAYERS_NOT_UNIQUE_SORTED")
+    if any(layer < 0 or layer >= layer_count for layer in source_layers):
+        fail("JSPACE_SOURCE_LAYER_OUT_OF_RANGE")
     if "steering_calibration_sha256" in jspace:
         req_sha(jspace, "steering_calibration_sha256")
     req_int(jspace, "n_prompts", minimum=1)
@@ -215,6 +272,7 @@ def validate(data: dict) -> None:
     }:
         fail("INVALID_FIRST_ENGINE_CHOICE")
     req_str(inference, "origin_attribution")
+    req_sha(inference, "inference_packet_sha256")
     first_actions = inference.get("first_actions")
     if not isinstance(first_actions, list) or not first_actions:
         fail("MISSING_FIRST_ACTIONS")
@@ -232,6 +290,37 @@ def validate(data: dict) -> None:
         if origin == "OTHER":
             req_str(action, "origin_detail")
         req_bool(action, "effect_requested")
+
+    control = req_obj(data, "control")
+    if not req_bool(control, "free_only"):
+        fail("FREE_ONLY_NOT_BOUND")
+    if req_bool(control, "paid_or_unknown_provider_network_attempted"):
+        fail("PAID_OR_UNKNOWN_PROVIDER_NETWORK_ATTEMPTED")
+
+    artifacts = req_obj(data, "artifact_bindings")
+    sections = {
+        "bundled_core": core,
+        "jspace": jspace,
+        "gwt": gwt,
+        "zero_grf": zero,
+        "claude_adapter": claude,
+    }
+    for role, (section_name, digest_key) in REQUIRED_ARTIFACT_BINDINGS.items():
+        binding = req_obj(artifacts, role)
+        expected_sha = req_sha(sections[section_name], digest_key)
+        verify_artifact_binding(artifact_root, role, binding, expected_sha)
+
+    steering_sha = jspace.get("steering_calibration_sha256")
+    if steering_sha is not None:
+        steering_binding = req_obj(artifacts, "steering_calibration")
+        verify_artifact_binding(
+            artifact_root,
+            "steering_calibration",
+            steering_binding,
+            req_sha(jspace, "steering_calibration_sha256"),
+        )
+    elif "steering_calibration" in artifacts:
+        fail("UNEXPECTED_STEERING_ARTIFACT_BINDING")
 
     authority = req_obj(data, "authority")
     for key in {
@@ -322,9 +411,10 @@ def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict
 
 
 def main() -> int:
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 5:
         print(
-            "usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json BUNDLED_MANIFEST.json SOURCE_LOCK.json",
+            "usage: validate_jspace_gwt_boot_binding_v1.py "
+            "RECEIPT.json BUNDLED_MANIFEST.json SOURCE_LOCK.json ARTIFACT_ROOT",
             file=sys.stderr,
         )
         return 2
@@ -332,13 +422,16 @@ def main() -> int:
         receipt_path = Path(sys.argv[1])
         manifest_path = Path(sys.argv[2])
         source_lock_path = Path(sys.argv[3])
+        artifact_root = Path(sys.argv[4]).resolve(strict=True)
+        if not artifact_root.is_dir():
+            fail("ARTIFACT_ROOT_NOT_DIRECTORY")
         data = json.loads(receipt_path.read_text(encoding="utf-8"))
         source_lock = json.loads(source_lock_path.read_text(encoding="utf-8"))
         if not isinstance(data, dict):
             fail("TOP_LEVEL_NOT_OBJECT")
         if not isinstance(source_lock, dict):
             fail("SOURCE_LOCK_TOP_LEVEL_NOT_OBJECT")
-        validate(data)
+        validate(data, artifact_root)
         validate_manifest_binding(data, manifest_path, source_lock)
     except (OSError, json.JSONDecodeError, ValidationError, BundledManifestError) as exc:
         print(f"FAIL {exc}")

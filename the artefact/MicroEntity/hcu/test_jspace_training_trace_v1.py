@@ -93,6 +93,33 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
             with self.assertRaisesRegex(JSpaceTrainingTraceError, code):
                 self.build(proto=proto, packet=packet)
 
+    def test_control_packet_transplant_with_same_metadata_fails_closed(self):
+        proto = self.prototype()
+        transplanted = encode_vector(
+            tuple(reversed(proto.global_vector)),
+            basis_id=proto.basis_id,
+            basis_sha256=proto.basis_sha256,
+            generation=proto.generation,
+            role=proto.winner_role,
+            control_condition=proto.control_condition,
+        )
+        self.assertNotEqual(transplanted.packet_sha256, proto.control_packet.packet_sha256)
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "VECTOR_CONTROL_PACKET_TRANSPLANT"):
+            self.build(proto=proto, packet=transplanted)
+
+    def test_control_condition_must_match_prototype(self):
+        proto = self.prototype()
+        wrong_condition = encode_vector(
+            proto.global_vector,
+            basis_id=proto.basis_id,
+            basis_sha256=proto.basis_sha256,
+            generation=proto.generation,
+            role=proto.winner_role,
+            control_condition="SIGN_FLIP",
+        )
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "VECTOR_CONTROL_CONDITION_MISMATCH"):
+            self.build(proto=proto, packet=wrong_condition)
+
     def test_nonunknown_credit_requires_external_outcome_receipt_and_provenance(self):
         with self.assertRaisesRegex(JSpaceTrainingTraceError, "NONUNKNOWN_CREDIT_REQUIRES_OUTCOME_RECEIPT"):
             self.build(credit_label="POSITIVE")

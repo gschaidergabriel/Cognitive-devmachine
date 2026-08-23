@@ -12,6 +12,7 @@
       "Current main PROGRAM_STATE names native/reference convergence as the highest product-convergent gate.",
       "Current main tools/clay_profile_pipeline_runtime.py still exposes legacy profile_load/provider_chat_json.",
       "Open PR #966 is the existing non-duplicate source candidate converging to pipeline_profile_read/inference_generate and one MiniUnifiedDB profile authority.",
+      "PR #966 was refreshed during this macrocycle onto current main base e964ed34c0590a3ba75e26e6f60be7b0d32195b6 with head 3ba1ddc79e7ed9365505418c0b6683f5eb7faabf.",
       "PR #966 _ensure_schema states entity_state.generation is the CAS authority but computes migrated_generation=max(native_generation, mirror_generation) and writes that result back into entity_state."
     ],
     "R1_infer": "If legacy eos_pipeline_state.generation is higher than entity_state.generation, the supposedly reference-only mirror can advance the canonical generation and therefore remains a second generation authority.",
@@ -55,13 +56,32 @@
     "count_for_this_macrocycle": 1,
     "id": "LEGACY_MIRROR_GENERATION_ESCALATION"
   },
-  "parallel_execution": {
-    "pr_966_existing_job_rerun_requested": true,
-    "workflow_run_id": 32574927964,
-    "rerun_job_id": 97124891426,
-    "state_at_receipt_write": "QUEUED",
-    "runtime_credit": "ZERO_UNTIL_VISIBLE_STEPS_EXECUTE"
+  "execution_attempts": [
+    {
+      "kind": "rerun_existing_narrow_reference_job",
+      "workflow_run_id": 32574927964,
+      "job_id": 97124891426,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+    },
+    {
+      "kind": "fresh_pr_head_native_repro",
+      "pr_head_sha": "3ba1ddc79e7ed9365505418c0b6683f5eb7faabf",
+      "workflow_run_id": 32611435377,
+      "job_id": 97125062962,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+    }
+  ],
+  "coordination": {
+    "pr_966_comment_id": 5383667177,
+    "request_changes_review_attempt": "REJECTED_BY_GITHUB_SELF_REVIEW_RULE",
+    "durable_review_fallback": "TOP_LEVEL_PR_COMMENT"
   },
   "next_gate": "Repair PR #966 generation reconciliation without creating a second canonical path; then execute the exact repaired head in an actually-started authorized runner and preserve CAS/fault/profile-integrity regressions.",
-  "german_summary": "Der vorhandene Referenz-Konvergenzkandidat #966 hat trotz richtiger Effekt-Namen noch eine versteckte zweite Generations-Autorität: ein höherer Legacy-Mirror-Wert kann die kanonische entity_state.generation hochsetzen. Das wurde deterministisch am exakten Reconcile-Fragment reproduziert (2 -> 999). Vor Promotion muss die Synchronisation auf kanonisch->Mirror begrenzt oder als explizite einmalige Migration abgesichert und danach exakt ausgeführt werden."
+  "german_summary": "Der frisch auf current main gebundene Referenz-Konvergenzkandidat #966 hat trotz richtiger Effekt-Namen noch eine versteckte zweite Generations-Autorität: ein höherer Legacy-Mirror-Wert kann die kanonische entity_state.generation hochsetzen. Das wurde deterministisch am Reconcile-Fragment reproduziert (2 -> 999). Zwei Runner-Versuche fielen erneut vor sichtbaren Steps aus und geben null Runtime-Credit. Vor Promotion muss die Synchronisation kanonisch->Mirror bzw. als explizite einmalige Migration abgesichert und danach exakt ausgeführt werden."
 }

@@ -1,5 +1,5 @@
 {
-  "schema": "ENTITYOS_HCU_ARTIFACT_MANIFEST/v1",
+  "schema": "ENTITYOS_HCU_ARTIFACT_MANIFEST/v2",
   "artifact": "EntityOS",
   "product_endpoint": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
@@ -23,13 +23,7 @@
     "capability_claims": "UNTRUSTED_INPUT_MAY_NARROW_BUT_NEVER_SELF_GRANT_OR_BROADEN_CANONICAL_AUTHORITY",
     "event_vs_admission_identity": "REPLAY_STABLE_CAUSAL_EVENT_IDENTITY_MUST_REMAIN_DISTINCT_FROM_TRANSPORT_ADMISSION_IDENTITY"
   },
-  "hcu_modes": [
-    "GRID10",
-    "COGSIM10",
-    "WM_TEST",
-    "NESTED_SIM",
-    "SCALEOUT"
-  ],
+  "hcu_modes": ["GRID10", "COGSIM10", "WM_TEST", "NESTED_SIM", "SCALEOUT"],
   "computer_decomposition": {
     "state": "XRAM_STATE_FABRIC_COMPATIBILITY_TERM",
     "control": "XPU_DETERMINISTIC_CONTROL_PLANE_COMPATIBILITY_TERM",
@@ -49,14 +43,17 @@
   "hyperposition_policy": "PRESERVE_UNRESOLVED_ALTERNATIVES; RECURRENCE_OR_MAJORITY_CANNOT_MINT_TRUTH",
   "epistemic_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
   "execution_policy": {
-    "free_only": true,
+    "free_only_default": true,
     "isolated_sandbox_only": true,
     "vps_testing_forbidden": true,
     "self_hosted_vps_test_runners_forbidden": true,
     "production_host_testing_forbidden": true,
-    "together_forbidden": true,
-    "paid_fallback": false,
-    "final_paid_or_model_training_requires_owner_authorization": true
+    "together_general_inference_and_fallback_forbidden": true,
+    "together_one_shot_08b_jspace_gwt_finetune_authorized": true,
+    "together_one_shot_08b_jspace_gwt_finetune_consumed": false,
+    "together_training_authority": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
+    "other_paid_fallback": false,
+    "second_paid_training_requires_owner_authorization": true
   },
   "runtime_credit": {
     "entityos_hcu_whole_runtime_credit": 0,
@@ -79,8 +76,11 @@
     "finish replay-stable causal event identity versus transport/admission identity split in the Typed Entry Fabric",
     "wire Entry capability admission to the canonical deterministic capability authority",
     "bind real local HCU checkpoint tokenizer runtime and build bytes to positive engine admission",
-    "bind the actual downstream inference receipt producer to event route engine and serializer identity",
+    "bind the actual downstream inference receipt producer to event route engine serializer and loader-lease identity",
+    "build and instrument the functional Global J-Space/GWT prototype with JSPACE_VECTOR_CONTROL_ABI/v1",
+    "derive leak-resistant Together training data from exact J-Space/GWT traces plus deterministic hard negatives",
+    "launch exactly one owner-authorized full fine-tuning job for the exact intended ~0.8B HCU base after data/base/price/preflight gates",
     "rebase and fuse the strongest HCU donor candidate onto current main",
-    "obtain exact authorized-isolated combined Entry HCU route inference GRID10 evidence before runtime promotion"
+    "obtain exact authorized-isolated combined Entry HCU route inference GRID10 J-Space evidence before runtime promotion"
   ]
 }

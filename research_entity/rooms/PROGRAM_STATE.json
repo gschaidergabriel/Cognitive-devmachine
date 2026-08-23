@@ -1,231 +1,79 @@
 {
-  "schema_version": "7.11",
-  "program_id": "mini-entity-pipeline-all-in-one",
+  "schema_version": "8.1",
+  "program_id": "clayverse-single-container",
   "status": "ACTIVE",
-  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
-  "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
-  "supporting_unified_architecture": "research_entity/global/ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md",
-  "supporting_training_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
-  "supporting_prior_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
-  "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
-  "sole_target": "one application-neutral and inference-neutral .clay pipeline executable + one SQLite MiniUnifiedDB authority + one mandatory bundled first-class generic approximately-0.8B ClayCode cognition core + one fixed versioned Unified J-Space/GWT Cognitive Fabric + one first-class Claude Code targeted-inference adapter + adaptive profiled local/API inference engines + one self-hosted MicroEntity control/inspection surface",
-  "portable_release_shape": [
-    "mini_entity.clay application-neutral/inference-neutral native executable",
-    "mini_entity.db SQLite MiniUnifiedDB preconfigurable as zero_blog and remaining canonical state/config/evidence authority",
-    "bundled first-class generic approximately-0.8B ClayCode cognition core available without external API",
-    "fixed versioned bundled-core J-Space/GWT integration contract with exact model/tokenizer/lens/calibration identity",
-    "first-class Claude Code targeted-inference adapter that returns candidate inference only",
-    "adaptive capability-profile layer for other local/API inference engines",
-    "self-hosted MicroEntity control/inspection surface"
-  ],
+  "stage": "CLAYVERSE_ARTIFACT",
+  "current_stage": "CLAYVERSE_ARTIFACT",
+  "current_stage_goal": "Converge and empirically validate the complete one-container ClayVerse product without creating a second durable authority.",
+  "stage_order": ["CLAYVERSE_ARTIFACT", "CLAYVERSE_EXACT_OCI_ACCEPTANCE", "CLAYVERSE_DEPLOYMENT_READINESS"],
+  "dynamic_targets": {
+    "primary": "WHOLE_CLAYVERSE_OCI_PRODUCT",
+    "runtime_evidence": "AUTHORIZED_ISOLATED_EXACT_SOURCE_ONLY",
+    "next": "authority-consistent source -> exact OCI build/runtime -> full product path acceptance"
+  },
+  "progress_semantics": {
+    "bar_cells": 20,
+    "progress_percent": "UNRESOLVED_UNLESS_DERIVED_FROM_CURRENT_CLAYVERSE_ACCEPTANCE_VECTOR"
+  },
+  "stage_gates": {
+    "CLAYVERSE_ARTIFACT": {"status": "IN_PROGRESS"},
+    "CLAYVERSE_EXACT_OCI_ACCEPTANCE": {"status": "BLOCKED_ON_EXECUTION_SURFACE"},
+    "CLAYVERSE_DEPLOYMENT_READINESS": {"status": "NOT_YET_ADMITTED"}
+  },
+  "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "canonical_workspace": "the artefact/",
+  "product_endpoint": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
   "acceptance": "IN_PROGRESS",
-  "architecture_split": {
-    "binary": "generic evidence preprocessing, canonical run/state envelope, cognition/inference scheduling, immutable truth/secret/admission gates, exactly-once consumption, generation CAS and atomic persistence",
-    "database": "all application/personality/prompt/inference/presentation configuration plus continuing canonical state; zero_blog is only the replaceable shipped preset",
-    "cognition_weights": "bundled first-class approximately-0.8B generic cognition machinery; no fixed entity name/job/persona/application; ClayCode/GRF/Hyperposition/omega target; exact model bytes are versioned and upgradeable without MiniUnifiedDB reset",
-    "cognitive_fabric": "J-Space measurement and GWT workspace control form one integrated product fabric; exact layers/bands/slots/thresholds/lens vectors/steering values remain noncanonical until measured on matching checkpoint/tokenizer/runtime bytes",
-    "claude_code": "first-class targeted high-capability inference adapter; candidate inference only; never Zero, MiniUnifiedDB, durable-memory authority or direct effect authority",
-    "regression_rule": "if application/personality/external-inference/presentation choice can live in runtime configuration, binding it to executable or cognition identity is a regression; closed APIs must never be represented as having hidden-state/J-Space access without measured support"
+  "authority": {
+    "durable_state": "UnifiedDB",
+    "derived_graph": "ClayGraph",
+    "runtime_cognition": "Claude Code",
+    "adaptive_retrieval": "MicroClay",
+    "external_effects": "EffectGate+EffectJournal",
+    "internal_execution_substrate": "EntityOS"
+  },
+  "identity": {
+    "persistent_research_entity": "Clay",
+    "legacy_canonical_research_entity_id": "frank-project-global-research-entity",
+    "central_product_entity_count": 1,
+    "canonical_users": ["gabriel", "andreas"],
+    "rights": "equal",
+    "global_generation": "single shared live generation fenced across both canonical sessions"
   },
   "execution_policy": {
-    "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
-    "observed_supervisor_state": "9.9",
-    "observed_control": "4.1+4.2-execution-boundary-addendum",
+    "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
     "free_only": true,
-    "control_sync_required_before_research_spend": true,
-    "together_credentialed_preflight_allowed_under_free_only": false,
-    "together_training_network_execution_allowed_under_free_only": false,
-    "provider_execution_rule": "while FREE_ONLY=true, reject non-free provider lanes before secret/key lookup and before network I/O; repository owner-selected/budget wording does not itself authorize execution"
+    "isolated_sandbox_only": true,
+    "vps_testing_forbidden": true,
+    "together_forbidden": true,
+    "secrets_in_source_or_receipts": false,
+    "final_paid_or_model_training_requires_owner_authorization": true
   },
-  "owner_architecture_2026_08_23": {
-    "status": "CURRENT_OWNER_ARCHITECTURE_SOURCE_AUTHORITY_ONLY",
-    "architecture_commit": "5f3c2a7cc9aeab8f851d38450fa50a3e1451d767",
-    "architecture_tree": "8865edd1b1bc0195e5c140a77ff9f4611290c2ee",
-    "bundled_08b_required": true,
-    "unified_jspace_gwt_required": true,
-    "claude_code_first_class_adapter_required": true,
-    "bundled_08b_exact_runtime_credit": 0,
-    "jspace_runtime_credit": 0,
-    "whole_gwt_production_credit": 0,
-    "claude_code_adapter_runtime_credit": 0,
-    "host_state": "INTENTIONALLY_OFFLINE",
-    "frozen_runtime_generation": 276,
-    "frozen_test_baseline": "1486 green / 1 red",
-    "frozen_single_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
-    "acceptance_guard": "owner architecture establishes required product shape only; no exact executable/model-quality/J-Space/GWT/Claude-adapter/whole-product credit exists without exact-source runtime evidence"
+  "whole_product_gates": [
+    "exact_current_source_identity",
+    "authorized_isolated_full_regression",
+    "exact_oci_build_and_digest",
+    "startup_and_readiness",
+    "real_clerk_browser_websocket_pty",
+    "persistent_tmux_for_both_users",
+    "normal_interactive_claude_code",
+    "managed_turn_hooks",
+    "unifieddb_persistence_and_recovery",
+    "microclay_retrieval_and_promotion_fences",
+    "claygraph_hyperposition_workspace",
+    "effectgate_and_entityos_round_trip_when_admitted",
+    "restart_recovery_no_blind_effect_replay",
+    "dual_session_concurrency_and_stale_generation_fencing",
+    "supply_chain_acceptance"
+  ],
+  "runtime_credit": {
+    "whole_clayverse": 0,
+    "note": "Authority reconciliation is source-level only until exact authorized isolated runtime evidence is observed."
   },
-  "jspace_gwt_source_gates": {
-    "portable_architecture_law": "PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY",
-    "closed_engine_law": "COMPILED_EXTERNAL != FULL_LOCAL_LATENT",
-    "bundled_manifest": {
-      "status": "MERGED_SOURCE_CONTRACT_RUNTIME_UNVERIFIED",
-      "merge_commit": "76b3a2a50f5c533cc42403563a16148b039015b5",
-      "validator": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py",
-      "contract": "checkpoint/tokenizer/J-Space/lens/workspace and optional steering calibration identities plus ClayCode/GRF/Hyperposition/EntityOS compatibility are fail-closed identity-bearing fields",
-      "bounded_regression": "exact transplanted validator blob py_compile PASS and unittest 8/8 PASS in isolated local component evidence; no model/Ubuntu runtime credit"
-    },
-    "boot_binding_receipt": {
-      "status": "MERGED_SOURCE_CONTRACT_RUNTIME_UNVERIFIED",
-      "merge_commit": "883c7e43efc4cfa32765059fe8b89276d987721b",
-      "contract": "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1",
-      "binds": "exact source/tree/dirty state, Ubuntu executor identity, bundled manifest/checkpoint/tokenizer/runtime bytes, jlens/lens/profile/fit corpus, GWT workspace calibration, Zero/GRF projection, Claude adapter capabilities and first-engine/action origin",
-      "fail_closed_guards": [
-        "exact bundled bytes verified",
-        "pre-save and post-load lens values finite",
-        "readout positions restricted to fitted positions",
-        "prompt-copy confound guard enabled",
-        "boot receipt cannot grant Whole-GWT or whole-product PASS"
-      ],
-      "bounded_regression": "exact Git blobs py_compile PASS and 5/5 isolated deterministic regressions; hosted workflow failed before visible steps and gives zero runtime credit"
-    },
-    "next_exact_runtime_gate": "On the next intentional exact Ubuntu start: PRESTART_FROZEN_BASELINE + POSTSTART_OBSERVATION_RECEIPT/v1 + JSPACE_GWT_BOOT_BINDING_RECEIPT/v1, then exact Qwen3.5-0.8B hook/Jacobian probe and empirical calibration before any J-Space/GWT runtime promotion"
-  },
-  "native_0_7": {
-    "version": "mini-entity/0.7.0-dev1",
-    "historical_source_bound_evidence": {
-      "status": "BOUNDED_HISTORICAL_PRE_FIX_HEAD_ONLY",
-      "same_environment_repeat_build": "PASS",
-      "source_closure_sha256": "a6500de97cb2cecc1b1778ee87e5af2c2f2cb7fde1d95f9220d0fa9dcf3f67a5",
-      "elf_sha256": "ae3d13c206666df4bdf814665e78ffd30311021c22bd88dbcc7b704598927fef",
-      "runtime_matrix": "fresh DB, active+empty cycle, inference/unknown-source no-consume, fault rollback and generation-CAS passed at that older exact source",
-      "current_head_runtime_credit": "ZERO"
-    },
-    "current_source_fusions": {
-      "presentation_neutrality": "MERGED_SOURCE_MECHANISM via #830",
-      "local_exec_parent_environment_isolation": "MERGED_SOURCE_MECHANISM via #850/#849",
-      "canonical_profile_v2_fail_open": "CLOSED_BY_FAIL_CLOSED_GUARD via #769",
-      "exact_repro_workflow_alignment": "MERGED via #861/#868/#852",
-      "persisted_output_recursive_string_scan_structured": "MERGED_SOURCE_MECHANISM via #871",
-      "full_profile_v2_parity_contract": "BOUND_FAIL_CLOSED via #874",
-      "active_profile_digest_integrity": "MERGED_SOURCE_MECHANISM via #889 / b55152e49df699c017f1a39e8197413ad14c4e7d; exact runtime credit ZERO",
-      "reference_effect_surface_fence": "MERGED via #901 / bcf72b58714b72ac83769ea83137a5f2d2265cc2; reference runtime remains fail-closed until legacy profile_load/provider_chat_json responsibility names converge to pipeline_profile_read/inference_generate; runtime credit ZERO"
-    },
-    "profile_v2": {
-      "contract": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json",
-      "status": "FAIL_CLOSED_UNTIL_EXACT_PARITY",
-      "blocker": "CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY",
-      "required_scope": "first make the canonical reference runtime effect surface current; then one native path must implement shipped v2 source/probe adapters, expression ops/aggregates/ref namespaces, canonical compile envelope, dynamic gate semantics and gate-before-commit",
-      "known_rejected_partial_candidate": "PR #851 is not promotable as a whole branch",
-      "exact_current_runtime": "UNOBSERVED_EXECUTION_ADMISSION_BLOCKED"
-    },
-    "promotion": "BLOCKED_ON_REFERENCE_EFFECT_SURFACE_PLUS_FULL_V2_PARITY_PLUS_EXACT_CURRENT_SOURCE_BOUND_EXECUTION"
-  },
-  "structured_reference": {
-    "runtime": "tools/clay_profile_pipeline_runtime.py",
-    "persisted_output_all_string_leak_gate": "MERGED_SOURCE_MECHANISM via #871 / 225a15bd0ab2e74e633d7275832e11838caee3f8",
-    "effect_surface_contract": "FAIL_CLOSED_MISMATCH via #901: current required pipeline_profile_read/inference_generate; legacy profile_load/provider_chat_json must be deauthorized/converged before reference-equivalent native-v2 claims",
-    "exact_pr_runtime": "UNOBSERVED_RUNNER_FAILED_BEFORE_STEPS"
-  },
-  "cognition_module_campaign": {
-    "status": "BUNDLED_08B_OWNER_PRODUCT_REQUIREMENT_SOURCE_BOUND_TRAINING_NOT_STARTED_FREE_ONLY_DORMANT",
-    "directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
-    "primary_paid_training_base": "Qwen/Qwen3.5-0.8B",
-    "prior_05b_research_base": "Qwen/Qwen2.5-0.5B",
-    "prior_05b_status": "SUPPORTING_FALLBACK_RESEARCH_NOT_PRIMARY_PAID_LANE",
-    "weight_identity": "generic_configurable_cognition_no_fixed_name_or_job",
-    "bundle_law": "bundled approximately-0.8B cognition is mandatory first-class product architecture; fixed integration does not mean immutable checkpoint bytes forever",
-    "generated_representation": "ClayCode only",
-    "reasoning_field": "GRF R0..R6",
-    "alternative_representation": "Hyperposition",
-    "structured_action_representation": "typed omega function vector",
-    "transition_law": "R_next=F means deterministic runtime admission after grammar/type/schema/authority/generation validation; not neural infallibility",
-    "jspace_gwt": "FIRST_CLASS_FIXED_VERSIONED_CONTRACT_RUNTIME_UNVERIFIED",
-    "claude_code": "FIRST_CLASS_TARGETED_ADAPTER_RUNTIME_UNVERIFIED",
-    "corpus": {
-      "canonical": "SFT v2",
-      "examples": 1650,
-      "train": 1485,
-      "validation": 165,
-      "train_unique": 1485,
-      "validation_unique": 165,
-      "exact_cross_split_overlap": 0,
-      "prompt_cross_split_overlap": 0,
-      "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
-      "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
-      "model_provider_binding": "CAMPAIGN_EXTERNAL_NOT_CORPUS_IDENTITY",
-      "neutral_manifest_commit": "e81b56aaf7da8bf40b2b36c241d1933807075952",
-      "neutral_manifest_git_blob": "7e816168c6dc926d566d3780c7585122e761d10b",
-      "neutral_manifest_sha256": "a8cc0f9ccd6e471aa130d38fd85426e4db9a22029b87810beff18b096449aad1",
-      "full_exact_current_regeneration_after_latest_semantic_slot_gate": "PASS_BOUNDED_EXACT_GIT_BLOB_LOCAL_COMPONENT; 1650 rows; train/validation structural invalid 0/0; exact/prompt cross-split overlap 0/0; train/validation hashes unchanged; durable receipt the artefact/blogpost_entity/receipts/2026-08-22_GO_CORPUS_MODEL_NEUTRALITY_GPT56SOL.json; hosted runner credit ZERO"
-    },
-    "admission_and_eval": {
-      "exact_top_level_omega_validator": "MERGED via #862 / 2f9fda0a70d5fc483b73782733d3680a093ef470",
-      "comment_string_safe_ood_call_extraction": "MERGED via #838 / e073e3577334d4dce723ffca378e61528bf0ed24",
-      "canonical_call_depth_credit": "MERGED via #908 / dd1fd761f77d5385dd78ff6c774129d7a5e58039; 9/9 bounded exact-blob assertions PASS; full current-runner credit ZERO",
-      "reserved_semantic_identity_slots": "MERGED via #917 / f807c0e86971be78da0054ff6a08406726c0aef3; pre-fix falsifier 3/3 false accepts; bounded post-fix unittest 6/6 PASS; full 1650-row exact-current generator+canonical-validator regression now PASS at bounded exact Git blobs; hosted runner credit ZERO",
-      "seed_and_created_job_identity_prior_lane": "MERGED via #859 / 67af94be952c3352533662036b0325e9fe54df9b",
-      "exact_byom_attestation_prior_lane": "MERGED via #865 / d696e40f02148555f15f51dd8cb9d01cfbccb230"
-    },
-    "together_direct_08b": {
-      "launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py",
-      "source_lane": "MERGED via #869",
-      "canonical_v2_preflight_validation": "MERGED at f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d; repeated GitHub jobs failed before visible steps and give ZERO exact runtime credit",
-      "full_created_job_identity_fence": "MERGED via #891 / 04209767aba1806c9566bac34274b5430879586a; verifies files, model, suffix, epochs/evals/checkpoints, seed, learning rate, warmup, SFT method and Full type; exact runtime credit ZERO",
-      "free_only_pre_secret_pre_network_fence": "MERGED via #904 / f3e9455f7082cb131096647499ff306ce554a151; bounded source-mechanism discriminator supports zero secret lookup/provider import under FREE_ONLY; exact current hosted-runner credit ZERO",
-      "free_only_authority_precedence": "MERGED via #914 / 9f7c142e62a7f0cb0566312cba948c49d13ecfe7; ACTIVE control FREE_ONLY/together_forbidden rejects before secret lookup, Together import/client construction or network; hosted Actions steps=null gives zero runtime credit",
-      "public_provider_refresh": "MERGED evidence via #900 / 43308213ebc5aa1e5cd86da898293604cff2dccc",
-      "training_type": "Full",
-      "public_catalog_full_ft": "CONFIRMED_2026-08-22",
-      "public_model_limits": "SFT context 131072; max batch 8; min batch 8",
-      "public_standard_pricing": "USD 0.54 per 1M processed tokens for Full SFT up to 16B; standard minimum charge USD 4",
-      "provider_preflight": "BLOCKED_BY_CURRENT_FREE_ONLY_POLICY",
-      "provider_call": false,
-      "billed_create": false,
-      "job_started": false,
-      "money_spent_usd": 0,
-      "single_job_budget_usd": 18.0,
-      "campaign_ceiling_eur": 20.0
-    },
-    "promotion": "BUNDLED_CORE_PRODUCT_REQUIREMENT_ACTIVE; TRAINED_ARTIFACT_PROMOTION_NOT_STARTED",
-    "promotion_requires": "exact bundled manifest + exact admitted checkpoint/runtime + matched tuned/base/larger OOD evaluation + exact J-Space/lens/profile calibration + Q4_K_M or other admitted deployment format + measured resource envelope + generic local integration without MiniUnifiedDB reset; any provider-based checkpoint-production path remains blocked while FREE_ONLY is active"
-  },
-  "unified_cognitive_fabric": {
-    "status": "OWNER_ARCHITECTURE_BOUND_SOURCE_ONLY_RUNTIME_UNVERIFIED",
-    "law": "JSPACE_GWT = ONE_COGNITIVE_FABRIC",
-    "components": [
-      "J-Space",
-      "GWT",
-      "Thalamus",
-      "EPQ",
-      "GRF",
-      "Hyperposition",
-      "ClayCode",
-      "omega"
-    ],
-    "adaptive_jspace_modes": [
-      "FULL_LOCAL_LATENT",
-      "LOCAL_OBSERVE_ONLY",
-      "COMPILED_EXTERNAL",
-      "PLAIN_COMPATIBILITY"
-    ],
-    "calibration_law": "No alpha, layer/workspace band, GWT slot count, threshold, lens or steering direction is canonical unless measured on the exact bundled checkpoint/tokenizer/runtime and bound by digest/provenance."
-  },
-  "inference_backends": {
-    "bundled_reference": "mandatory approximately-0.8B local cognition core with exact manifest and fixed versioned J-Space/GWT integration contract",
-    "claude_code": "preferred targeted high-capability candidate-inference adapter; runtime credit currently zero",
-    "api": "runtime-selectable remote or loopback local API; closed external engines use COMPILED_EXTERNAL and never imply hidden-state access",
-    "local_exec": "source-isolated from arbitrary parent environment, no shell; exact current runtime still requires admitted execution",
-    "state_rule": "switching external backend/model or upgrading the bundled checkpoint never resets MiniUnifiedDB continuity"
-  },
-  "default_application": {
-    "preset": "zero_blog",
-    "status": "fully replaceable runtime configuration, not executable/checkpoint identity",
-    "default_inference": "bundled local reference cognition is part of product architecture; external inference engines are adaptive runtime profiles"
-  },
-  "coordination": {
-    "go_macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
-    "cross_organ_unusual_experiment_rule": "do not claim an unusual-experiment slot without the exact upstream macrocycle lease/identity required by current coordination law; deterministic regressions/source comparisons may continue without such a claim",
-    "merge": "#875 / 64f73d9407e35dccb7810e87e7fe0875d5884c59"
-  },
-  "current_frontier": "CURRENT EXECUTION POLICY IS FREE_ONLY and the Ubuntu/AgentZero host is intentionally offline. The mandatory bundled approximately-0.8B + Unified J-Space/GWT + first-class Claude Code owner architecture is source-authoritative. The fail-closed BundledCognitionManifest identity contract and JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 validator are merged at source level, but exact bundled-core/J-Space/Whole-GWT/Claude-adapter runtime credit remains ZERO. Next exact runtime gate on intentional host start is PRESTART_FROZEN_BASELINE + POSTSTART_OBSERVATION_RECEIPT/v1 + JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 followed by an exact Qwen3.5-0.8B hook/Jacobian probe and empirical calibration. Preserve the frozen Gen276 1486-green/1-red baseline and do not erase the Claude adapter red. Native/reference profile-v2/effect-surface convergence (#901/#874) remains open in parallel. Provider/training path stays dormant until FREE_ONLY changes and fresh owner authorization is bound. Whole product remains IN_PROGRESS.",
-  "go_contract": "Every go refreshes current main/newest owner authority and execution policy, chooses the highest-information nonduplicate frontier, falsifies before promotion, claims no unusual experiment without the required upstream macrocycle lease, persists bounded evidence/delta, and advances this same Mini Entity/EntityOS + bundled 0.8B Unified J-Space/GWT + Claude-adapter product until promoted or falsified.",
-  "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one Mini Entity with Zero as runtime identity/configuration",
-  "together_api": {
-    "product_identity": "FORBIDDEN",
-    "inference_requirement": "NONE",
-    "training_campaign_approx1b": "OWNER_SELECTED_CHECKPOINT_PRODUCTION_SOURCE_LANE_BUT_EXECUTION_CURRENTLY_FREE_ONLY_BLOCKED",
-    "secret_policy": "ENVIRONMENT_ONLY_NEVER_COMMIT",
-    "credentialed_preflight_allowed_now": false,
-    "job_started": false
-  }
+  "compatibility_note": "Legacy Frank/Mini-Entity-specific progress and campaign structures are no longer current product authority. Historical tools may return UNKNOWN for retired fields rather than silently steering current ClayVerse work.",
+  "current_frontier": "complete authority reconciliation and run exact-current ClayVerse authority/full-suite/OCI gates on an actually-started authorized isolated executor",
+  "legacy_scope": "Prior Mini Entity/Blogpost/Frank/EntityOS-top-level paths remain historical bounded evidence only."
 }

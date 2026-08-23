@@ -1,0 +1,72 @@
+{
+  "schema": "CLAYVERSE_GO_AUTHORITY_RECONCILIATION/v2",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "dbb73ac784fab32d625297ff9272989b861ae909",
+  "latest_main_observed_during_cycle": "8b2ba6d422370d5df1e174dc08372513b93a0274",
+  "observation": {
+    "split_brain": true,
+    "clayverse_sources": [
+      "owner-directed 2026-08-23 ClayVerse bootstrap supplied to this session",
+      "the artefact/manifest.json",
+      "the artefact/ARCHITECTURE.md"
+    ],
+    "stale_conflicting_sources_at_cycle_start": [
+      "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+      "research_entity/rooms/PROGRAM_STATE.json",
+      "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+      "research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md",
+      "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md",
+      "the artefact/README.md"
+    ],
+    "parallel_drift": [
+      "PR #1155 merged a Mini Entity authority cross-bind derived from the stale pre-reconciliation bootstrap",
+      "PR #1158 merged Control 4.3 selecting Mini Entity from the same stale authority chain"
+    ],
+    "causal_risk": "workers can select different product endpoints depending on which authority file/control generation they read"
+  },
+  "delta": {
+    "authority_reconciled_to": "CLAYVERSE_SINGLE_CONTAINER",
+    "stage": "CLAYVERSE_ARTIFACT",
+    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+    "control_override": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json",
+    "supervisor_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json",
+    "validator": "tools/validate_clayverse_authority_consistency.py",
+    "regression": "tests/test_validate_clayverse_authority_consistency.py",
+    "inherited_safety_preserved": [
+      "canonical entity/version/revision/state-hash join binding",
+      "every-turn identity guard pointer and invariant",
+      "FREE_ONLY",
+      "Together forbidden",
+      "VPS testing forbidden",
+      "exact authorized isolated execution required for runtime credit",
+      "Frank harness modification forbidden in inherited control"
+    ]
+  },
+  "bounded_local_mechanism_evidence": {
+    "environment": "isolated ChatGPT Linux component container",
+    "py_compile": "PASS",
+    "focused_regressions": "6/6 PASS",
+    "cases": [
+      "coherent ClayVerse authority passes",
+      "Mini Entity bootstrap regression fails closed",
+      "identity-guard removal fails closed",
+      "Control 4.4 Mini Entity regression fails closed",
+      "Control 4.4 FREE_ONLY weakening fails closed",
+      "superseded owner directive fails closed"
+    ],
+    "exact_git_blob_runtime_credit": 0,
+    "whole_product_runtime_credit": 0
+  },
+  "execution_surface": {
+    "vercel_sandbox_start_exec_exposed": false,
+    "github_hosted_exact_runtime": "NOT_OBSERVED_IN_THIS_BRANCH",
+    "vps_test_used": false,
+    "provider_swarm_started": false,
+    "together_used": false,
+    "paid_training_used": false,
+    "unusual_experiment": "NOT_CONSUMED_NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE"
+  },
+  "next_gate": "Re-adjudicate against fresh main, merge/fuse only if authority and safety changes remain non-regressive, then run the v2 authority validator plus full exact-current ClayVerse suite and OCI build/startup on an actually-started authorized isolated sandbox; bind source SHA, image digest and runtime evidence before any runtime promotion."
+}

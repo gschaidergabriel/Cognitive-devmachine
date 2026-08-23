@@ -12,10 +12,19 @@ import hashlib
 import json
 import sqlite3
 import time
-from collections.abc import Sequence
 from typing import Any
 
 SCHEMA = "MINIUNIFIEDDB_ACTIVE_COGNITION_TURN/v1"
+_ACTIVE_TURN_COLUMNS = (
+    "entity_generation",
+    "causal_turn_id",
+    "turn_binding_digest",
+    "task_text",
+    "task_sha256",
+    "activation_digest",
+    "provenance_refs_json",
+    "activated_at",
+)
 
 
 class ActiveTurnError(ValueError):
@@ -79,6 +88,18 @@ def _require_bound_turn_table(db: sqlite3.Connection) -> None:
     _need(row is not None, "COGNITION_TURN_BINDING_STORE_REQUIRED")
 
 
+def _require_active_turn_schema(db: sqlite3.Connection) -> None:
+    """Verify the activation pointer using read-only catalog operations only."""
+    row = db.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='mini_cognition_active_turns'"
+    ).fetchone()
+    _need(row is not None, "ACTIVE_TURN_SCHEMA_REQUIRED")
+    columns = tuple(
+        str(item[1]) for item in db.execute("PRAGMA table_info(mini_cognition_active_turns)").fetchall()
+    )
+    _need(columns == _ACTIVE_TURN_COLUMNS, "ACTIVE_TURN_SCHEMA_INVALID")
+
+
 def install_schema(db: sqlite3.Connection) -> None:
     """Install one activation pointer table inside an initialized MiniUnifiedDB."""
     _current_generation(db)
@@ -119,6 +140,7 @@ def activate_bound_turn(
     )
     refs = _refs(provenance_refs)
     _require_bound_turn_table(db)
+    _require_active_turn_schema(db)
 
     turn = db.execute(
         """SELECT binding_digest,task_sha256
@@ -205,11 +227,12 @@ def resolve_active_prepare(
     expected_activation_digest: str | None = None,
     store_module: Any | None = None,
 ) -> dict[str, Any]:
-    """Resolve exact current prepare material through the canonical cognition store."""
+    """Resolve exact current prepare material without mutating MiniUnifiedDB."""
     live_generation = _current_generation(db)
     _need(type(entity_generation) is int and entity_generation >= 0, "GENERATION_INVALID")
     _need(entity_generation == live_generation, "STALE_GENERATION")
-    install_schema(db)
+    _require_bound_turn_table(db)
+    _require_active_turn_schema(db)
 
     row = db.execute(
         """SELECT causal_turn_id,turn_binding_digest,task_text,task_sha256,

@@ -1,5 +1,5 @@
 {
-  "schema_version": "HCU_DATA_INDEX/v8",
+  "schema_version": "HCU_DATA_INDEX/v9",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "compatibility_subtree": "MicroEntity",
@@ -27,12 +27,17 @@
     "runtime_credit": 0
   },
   "current_jspace_training_path": {
-    "status": "SOURCE_CANDIDATE_READY_FOR_ISOLATED_REGRESSION_NOT_REAL_TRACE_READY",
+    "status": "SOURCE_CANDIDATE_CONTRACT_REPAIRED_REQUIRES_AUTHORIZED_ISOLATED_REGRESSION_AND_REAL_TRACE_INTEGRATION",
     "vector_control_abi": "hcu/jspace_vector_control_v1.py",
     "vector_control_abi_schema": "JSPACE_VECTOR_CONTROL_ABI/v1",
     "vector_control_packet_schema": "JSPACE_VECTOR_CONTROL_PACKET/v1",
     "vector_codec_schema": "JSPACE_Q8_SYMMETRIC_RATIONAL/v1",
-    "gwt_prototype": "hcu/jspace_gwt_prototype_v1.py",
+    "global_jspace_gwt": "hcu/global_jspace_gwt_v1.py",
+    "global_jspace_trace_schema": "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v4",
+    "trace_packet_binding": "EXACT_CANONICAL_PACKET_TEXT_PLUS_PACKET_IDENTITY_SHA256_PLUS_WIRE_SHA256_PLUS_BASIS_SHA256_GENERATION_ROLE_CONTROL_CONDITION",
+    "bootstrap_dataset_compiler": "hcu/compile_jspace_bootstrap_dataset_v1.py",
+    "bootstrap_dataset_schema": "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3",
+    "transition_prototype": "hcu/jspace_gwt_prototype_v1.py",
     "gwt_selector_schema": "JSPACE_GWT_SELECTOR/v1",
     "transition_trace_schema": "JSPACE_GWT_TRANSITION_TRACE/v1",
     "trace_causal_binding": "ENTRY_EVENT_ADMISSION_ROUTE_GRID_CELL_VECTOR_GENERATION",
@@ -40,7 +45,7 @@
     "together_one_shot_08b_training_authorized": true,
     "together_one_shot_08b_training_consumed": false,
     "training_launch_allowed_now": false,
-    "training_blocker": "REQUIRES_FUNCTIONAL_INSTRUMENTED_GLOBAL_JSPACE_GWT_PROTOTYPE_REAL_TRACES_CAUSAL_LESION_CONTROL_EVIDENCE_AND_DATASET_FREEZE"
+    "training_blocker": "REQUIRES_AUTHORIZED_ISOLATED_REGRESSION_THEN_GRID10_REAL_TRACE_INTEGRATION_WITH_ENTRY_ROUTE_ENGINE_LOAD_INFERENCE_OUTCOME_AND_CAUSAL_LESION_SHUFFLE_RESCUE_EVIDENCE_BEFORE_DATASET_FREEZE"
   },
   "historical_or_noncurrent_source": {
     "hcu/physical_engine_lease_v1.py": "NONCURRENT_OVERLAPPING_LEASE_CANDIDATE_NOT_SELECTED_FOR_CURRENT_VERIFIED_ENGINE_LOAD_PATH",
@@ -75,6 +80,10 @@
     "hcu/test_grid10_scheduler_v1.py",
     "hcu/jspace_vector_control_v1.py",
     "hcu/test_jspace_vector_control_v1.py",
+    "hcu/global_jspace_gwt_v1.py",
+    "hcu/test_global_jspace_gwt_v1.py",
+    "hcu/compile_jspace_bootstrap_dataset_v1.py",
+    "hcu/test_compile_jspace_bootstrap_dataset_v1.py",
     "hcu/jspace_gwt_prototype_v1.py",
     "hcu/test_jspace_gwt_prototype_v1.py",
     "hcu/topology.kvm4.json",
@@ -96,7 +105,7 @@
   },
   "loader_evidence_law": "PRELOAD_HASH_IS_NOT_LOADER_ATTESTATION; CURRENT_PATH_REQUIRES_A_GENERATION_FENCED_ENGINE_LOAD_LEASE_PLUS_ACTUAL_LOADER_READ_PATH_CONSUMPTION_EVIDENCE_REBOUND_AS_HCU_VERIFIED_ENGINE_LOAD_V1_BEFORE_INFERENCE_RECEIPT_V3",
   "grid10_policy": "TEN_LOGICAL_CELLS_ARE_NOT_TEN_MODEL_CALLS_OR_TEN_PHYSICAL_DECODERS; ENTRY_BUDGET_PLUS_SEPARATELY_ADMITTED_CAPACITY_RECEIPT_BOUND",
-  "jspace_training_policy": "NO_TRAINING_FROM_PROSE_ONLY_ARCHITECTURE; VECTOR_CONTROL_ABI_AND_GWT_TRACE_SOURCE_DO_NOT_COUNT_AS_REAL_JSPACE_EVIDENCE; OWNER_AUTHORIZED_ONE_SHOT_TOGETHER_JOB_REMAINS_UNCONSUMED_UNTIL_ACTUAL_JOB_CREATION_AFTER_REAL_TRACE_AND_CAUSAL_GATES",
+  "jspace_training_policy": "NO_TRAINING_FROM_PROSE_ONLY_ARCHITECTURE; VECTOR_CONTROL_ABI_AND GWT_TRACE_SOURCE_DO_NOT_COUNT_AS_REAL_JSPACE_EVIDENCE; OWNER_AUTHORIZED_ONE_SHOT_TOGETHER_JOB_REMAINS_UNCONSUMED_UNTIL ACTUAL_JOB_CREATION_AFTER_REAL_TRACE_AND_CAUSAL_GATES",
   "internal_cognition_dependency_policy": "NO_REQUIRED_EXTERNAL_PROVIDER_OR_EXTERNAL_EMBEDDING_SERVICE",
   "capacity_claim_policy": "NUMERIC_RUNTIME_CAPACITY_REQUIRES_EXACT_AUTHORIZED_ISOLATED_MEASUREMENT_RECEIPT",
   "execution_policy": "AUTHORIZED_ISOLATED_SANDBOX_ONLY_FOR_CURRENT_RUNTIME_CREDIT",

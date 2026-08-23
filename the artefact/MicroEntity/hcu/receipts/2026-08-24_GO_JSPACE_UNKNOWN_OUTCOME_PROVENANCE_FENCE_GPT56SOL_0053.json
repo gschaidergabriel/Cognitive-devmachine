@@ -1,0 +1,64 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "current_supervisor_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+  "free_only": true,
+  "together_training_allowed_in_current_supervisor": false,
+  "retained_hcu_pr": 1263,
+  "exact_parent_hcu_head": "57616c3cb510a88eb4674a4145b66dd625013717",
+  "candidate_branch": "gpt56sol/go-jspace-unknown-outcome-binding-fence-20260824-0053",
+  "candidate_code_head_before_receipt": "b5724490b96bb1a74cde2c88bb0bfa9adeb8db56",
+  "finding": {
+    "class": "UNKNOWN_OUTCOME_PROVENANCE_TRANSPLANT_GAP",
+    "detail": "Dataset admission required an outcome receipt to be present in the admitted outcome registry for UNKNOWN-credit traces, but skipped the exact causal outcome binding check unless credit was non-UNKNOWN. An admitted receipt from a different Entry/route/GRID10 episode could therefore be attached to an UNKNOWN training row as false provenance without minting reward.",
+    "truth_or_reward_minted_by_observed_gap": false,
+    "provenance_integrity_risk": true
+  },
+  "repair": {
+    "gate_file": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "gate_blob": "cfce9a432cbe2d572372ff8249dc40a69853848d",
+    "test_file": "the artefact/MicroEntity/hcu/test_jspace_dataset_admission_gate_v1.py",
+    "test_blob": "dfe1194767cf1e1d253a1315ca4af264d329352e",
+    "mechanism": "Whenever outcome_receipt_sha256 is present, require admitted receipt status/credit/training trace/transition trace/generation/Entry event/Entry admission/route/GRID10/cell/role binding, including credit_label=UNKNOWN.",
+    "new_semantic_authority_created": false,
+    "second_effect_path_created": false,
+    "second_state_authority_created": false
+  },
+  "regression": {
+    "kind": "DETERMINISTIC_SOURCE_REGRESSION_ADDED_NOT_EXECUTED_HERE",
+    "case": "UNKNOWN row + admitted but unrelated outcome receipt must fail OUTCOME_CAUSAL_BINDING_MISMATCH; exactly-bound UNKNOWN receipt remains admissible.",
+    "semantic_test_pass_claimed": false,
+    "semantic_test_fail_claimed": false
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_count_for_this_delta": 0,
+    "user_trigger_macrocycle_unusual_experiment": "TRAINING_PIPELINE_DRIFT_TRIANGLE",
+    "total_unusual_experiments_claimed_for_this_user_trigger": 1
+  },
+  "coordination": {
+    "earlier_child_contract_repair_branch": "gpt56sol/go-jspace-training-contract-repair-20260824-0040",
+    "earlier_child_status": "SUPERSEDED_BY_FASTER_AND_STRONGER_UPSTREAM_PR1263_CHANGES_NOT_PROMOTED",
+    "earlier_unknown_fence_branch": "gpt56sol/go-jspace-unknown-outcome-binding-fence-20260824-0050",
+    "earlier_unknown_fence_status": "STALE_PARENT_SUPERSEDED_BY_REBOUND_TO_57616C_NOT_PROMOTED",
+    "single_retained_hcu_lane_preserved": true
+  },
+  "execution_evidence": {
+    "authorized_isolated_runtime_started_by_this_organ": false,
+    "latest_known_ready_executor_runtime_credit": 0,
+    "sandbox_create_observed_by_this_organ": false,
+    "whole_entityos_hcu_runtime_credit_change": 0
+  },
+  "training": {
+    "mode": "FREE_ONLY",
+    "together_job_created": false,
+    "paid_preflight_performed": false,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Fuse this two-file fence into the single retained HCU donor lane after head recheck, then execute its focused dataset-admission regression inside the exact authorized FREE isolated full-spine Vercel Sandbox batch. Runtime or product promotion remains forbidden until actual Sandbox execution is observed and source/tree identity is receipted.",
+  "acceptance": "SOURCE_HARDENING_CANDIDATE_NOT_RUNTIME_PASS"
+}

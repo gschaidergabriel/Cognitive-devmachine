@@ -1,0 +1,99 @@
+{
+  "schema": "ENTITYOS_HCU_GO_CONCURRENT_VECTOR_PACKET_FUSION_AND_EXECUTOR_ROLLBACK_ADJUDICATION/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.63",
+  "execution_mode": "FREE_ONLY",
+  "observed_canonical_main_before_write": "8e5d37f3177dc8af105d8afdd2a3a3237cef8d56",
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "source_write_race_handling": "TWO_STALE_SOURCE_UPDATE_ATTEMPTS_RECEIVED_GITHUB_409_AND_WERE_NOT_FORCED_OR_OVERWRITTEN"
+  },
+  "observations": {
+    "initial_source_gap": {
+      "classification": "SOURCE_DIRECT",
+      "description": "DatasetAdmission cross-bound one Vector-Control packet digest across transition/prototype/training but did not independently require the digest to resolve to a canonical JSPACE_VECTOR_CONTROL_ABI/v1 packet preimage validated by validate_packet.",
+      "prior_main_gap_receipt": "4ad0791f5422aadf236f5647062986771642c121"
+    },
+    "concurrent_donor_convergence": {
+      "observed_pr": 1263,
+      "observed_live_head": "8fcb285896171eff9b5e78629dd4a1c03dba06f5",
+      "status": "SOURCE_LEVEL_CONVERGED_MOVING_DONOR",
+      "evidence": [
+        "jspace_dataset_admission_gate_v1.py now requires admitted_vector_control_packets, resolves an exact VectorControlPacket preimage, validates it through the sole JSPACE_VECTOR_CONTROL_ABI/v1 validator, and cross-binds generation, basis id/digest, role, and control condition.",
+        "compile_admitted_jspace_training_dataset_v1.py propagates admitted_vector_control_packets through the serious training-data admission path.",
+        "test_jspace_dataset_admission_gate_v1.py uses real encode_vector packet fixtures and fail-closed packet mutation/transplant cases.",
+        "commit bd9d9a22bc4d69ebfb88f2271161d35fe9ed723a adds explicit compiler propagation regression coverage.",
+        "PR-wide source search observed only the gate definition, compiler callsite, and dedicated direct gate-test callsite for admit_for_training_dataset; the observed integration surfaces are covered by the registry contract."
+      ],
+      "credit_scope": "SOURCE_AND_REGRESSION_CONVERGENCE_ONLY"
+    },
+    "additional_training_readiness_convergence": {
+      "evidence": [
+        "family-split ownership was hardened away from caller-controlled trace_family_id toward admitted causal Event ancestry in later donor source.",
+        "model_input_control_admission_store_v1.py was added in donor lineage to atomically bind exact model-input control evidence to an already admitted model-execution invocation inside the existing canonical MiniUnifiedDB rather than creating a second authority."
+      ],
+      "credit_scope": "SOURCE_ONLY_NO_MODEL_OR_TRAINING_CREDIT"
+    },
+    "executor_runtime_discriminator": {
+      "observed_pr": 810,
+      "observed_live_head": "8822b9ff8c9c4156bac3a904e49352a839ef6cd0",
+      "current_pinned_donor": "511d568932bf47828679e3ca6ba05650f18d284d",
+      "fixed_closure": "17_BLOBS_14_RESULTS",
+      "source_status": "SOURCE_REBOUND_READY_SOURCE_ONLY",
+      "latest_observed_rebind_failures": [
+        {
+          "deployment_id": "dpl_AUu1yY3ADYiCtecE7Q8rvhzZhqDh",
+          "git_sha": "926c22dd57ef82447787e24c7412548c3ed2b890",
+          "state": "ERROR",
+          "failure": "JSPACE_V4_V3_CURRENT_SOURCE_CLOSURE_INVALID: global_jspace_gwt_v1.py BLOB_MISMATCH",
+          "sandbox_invocation_credit": 0
+        },
+        {
+          "deployment_id": "dpl_26pNV41EYrvFuWKRBFCHUPjQN2Xk",
+          "git_sha": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+          "state": "ERROR",
+          "failure": "JSPACE_V4_V3_CURRENT_SUCCESSOR_DONOR_DRIFT: manifest=d371ccaca994f234a4cd127d48c3867cfe10ab56;contract=511d568932bf47828679e3ca6ba05650f18d284d",
+          "sandbox_invocation_credit": 0
+        }
+      ],
+      "adjudication": "PRESERVE_PINNED_511D_RUNTIME_DISCRIMINATOR_AFTER_FAILED_PARTIAL_D371_REBIND;DO_NOT_PROJECT_NEWER_DONOR_SOURCE_INTO_RUNTIME_PASS"
+    }
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
+      "status": "ADVANCED_BY_CONVERGENCE_ADJUDICATION",
+      "delta": "Preserved one coherent fixed executor/runtime discriminator after exact build-time evidence showed the partial moving-donor rebind was internally inconsistent; no stale donor mix was allowed to reach Sandbox execution."
+    },
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
+      "status": "ADVANCED_SOURCE_LEVEL",
+      "delta": "Closed the JSPACE_VECTOR_CONTROL_ABI/v1 digest-only admission gap in the retained donor through independently admitted canonical packet preimages and compiler propagation; concurrent workers completed the source fusion before this organ could safely write it."
+    },
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": {
+      "status": "ADVANCED_SOURCE_LEVEL",
+      "delta": "Training admission now has stronger Vector-Control provenance, causal-family split hardening, and model-input-control parent-admission source machinery while preserving zero model/training credit."
+    }
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "execution_actions": {
+    "paid_provider_calls": 0,
+    "together_preflight_or_credentials": 0,
+    "vps_or_self_hosted_tests": 0,
+    "sandbox_invocations_by_this_organ": 0
+  },
+  "next_exact_gate": "Require a naturally available included-tier Vercel deployment whose immutable Git SHA exactly equals the then-current PR810 head and whose fixed 511d 17-blob/14-result closure passes build guards; only then invoke the admitted FREE_ONLY route. After that discriminator, select one immutable newer PR1263 donor snapshot for a coherent all-blob/all-test executor rebind rather than mixing moving donor identities.",
+  "evidence_boundary": "Source convergence, build-guard rejection, deployment metadata, and deterministic source regressions do not imply admitted EntityOS/HCU runtime, model-runtime, training, or whole-product PASS."
+}

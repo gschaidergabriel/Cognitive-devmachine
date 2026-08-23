@@ -1,0 +1,88 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_COMPONENT_EXECUTION/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "current_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "paid_provider_execution": "FORBIDDEN",
+    "together_preflight_or_job": false,
+    "runtime_credit_change": 0
+  },
+  "source_binding": {
+    "research_main_joined_before_execution": "bc15d1699dd20d1203641fb03896a0ffa164e52d",
+    "retained_hcu_pr": 1263,
+    "tested_pr1263_head": "9e0108de7bc8a22f5f4893cff99e154c78146894",
+    "exact_git_blobs": {
+      "entry_canonicalization_v1.py": "00d1d79cbb66a1956a278de4755cd8395e854199",
+      "jspace_vector_control_v1.py": "068c0671587fe209eb88f6b23197fcaa1f61b636",
+      "jspace_vector_control_abi_v1.py": "34c94801491f126ef6b46782d2e014c032f57839",
+      "global_jspace_gwt_v1.py": "8e1245f1ea668e1b71d268ba3125ebb384d6f660",
+      "test_global_jspace_gwt_v1.py": "602de9d98c857b60eee69d4d63a46249188db935",
+      "test_jspace_vector_control_abi_v1.py": "590c23bd90c7c68f85d5b317950fd77a907a0fa2"
+    },
+    "all_materialized_git_blob_identities_verified": true
+  },
+  "execution": {
+    "surface": "isolated ChatGPT tool container",
+    "network_used_during_test_execution": false,
+    "source_materialization": "authenticated GitHub connector content copied locally then Git blob identity recomputed",
+    "whole_entityos_runtime_started": false,
+    "vercel_sandbox_started": false,
+    "component_only": true
+  },
+  "canonical_regression": {
+    "command_class": "python -S unittest over exact materialized component/test blobs",
+    "tests": 12,
+    "passed": 12,
+    "failed": 0,
+    "exit_code": 0,
+    "log_sha256": "bbe15aaecf992c105e4b7ddde5799e3121c58be0f176c08b3ed2f37e8d48aaa0",
+    "covered": [
+      "Global J-Space/GWT deterministic packet roundtrip",
+      "candidate-only authority marker",
+      "Hyperposition near-gate alternatives",
+      "dimension and duplicate-cell fail-closed",
+      "basis/role/generation fences",
+      "winner lesion changes causal trace and packet",
+      "same basis label with different basis bytes does not alias",
+      "single canonical JSPACE_VECTOR_CONTROL_ABI/v1 re-export identity",
+      "canonical packet byte equality through compatibility import",
+      "retired second-wire constructor and decoder fail closed"
+    ]
+  },
+  "causal_control_regression": {
+    "classification": "REGRESSION_CONTROL_COMPOSITION_NOT_NEW_AUTHORITY",
+    "family": "LESION_SHUFFLE_RESCUE_CAUSAL_FAMILY",
+    "checks": 11,
+    "passed": 11,
+    "baseline_winner": "cell-a",
+    "lesion_winner": "cell-b",
+    "shuffle_preserved_baseline_identity": true,
+    "lesion_changed_trace_and_packet_identity": true,
+    "rescue_restored_exact_baseline_identity": true,
+    "baseline_trace_sha256": "19e77af7ca1901235f31874e633fa6bfff1de22a8b1b2cc751212f9432d28ae6",
+    "lesion_trace_sha256": "60a45ee33d830caf00ecaa65c793e5ab5a4b6688a58480fa9d38601349483cd7",
+    "receipt_sha256": "3d0d12da43e3fc2732ecd211ee824f49edf3c3bd8d7052a1a5a03ee6d7ba154f"
+  },
+  "evidence_boundary": {
+    "source_bytes": "EXACT_FOR_LISTED_BLOBS",
+    "component_execution": "PASS_FOR_LISTED_TESTS_AND_BLOBS",
+    "model_specific_jspace_causality": "UNVERIFIED",
+    "loader_bound_model_runtime": "UNVERIFIED",
+    "entityos_hcu_whole_runtime_credit": 0,
+    "whole_product_pass": false,
+    "training_credit": 0
+  },
+  "negative_evidence": {
+    "direct_git_checkout_attempt": "FAILED_BEFORE_FETCH_DUE_DNS; NOT_A_TEST_FAILURE",
+    "vercel_credential_bearing_post": "NOT_CALLABLE_BY_THIS_ORGAN; NOT_ATTEMPTED",
+    "vps_or_self_hosted_fallback": false
+  },
+  "next_exact_gate": "Run the exact current Research main plus current retained PR1263 combined EntityOS/HCU path on an actually-started authorized FREE isolated Sandbox and bind executor/tree/result/credential-nonpersistence evidence; until then keep runtime credit at zero."
+}

@@ -75,6 +75,12 @@ def admit_profile_runtime_payload(
     bridge cannot itself mutate canonical state. The active profile is re-read from the same
     database. The carried profile body must equal the stored profile exactly, and its ephemeral
     runtime snapshot must bind the same active profile id + persisted-byte hash.
+
+    After those checks, the bridge reconstructs the ephemeral runtime snapshot from the
+    verified DB identity before calling the canonical compositor. This is required because
+    capability routing deliberately refuses profiles that are not bound to an exact active
+    MiniUnifiedDB profile snapshot; caller-supplied snapshot bytes are never forwarded as
+    authority.
     """
     _need(isinstance(payload, Mapping), "PAYLOAD_OBJECT_REQUIRED")
     entity_db = payload.get("entity_db")
@@ -129,6 +135,12 @@ def admit_profile_runtime_payload(
             "RUNTIME_PROFILE_NOT_ACTIVE_MINIUNIFIEDDB_PROFILE",
         )
 
+        verified_profile = dict(stored_profile)
+        verified_profile[_RUNTIME_PROFILE_SNAPSHOT] = {
+            "profile_id": active_profile,
+            "profile_hash": profile_sha256,
+        }
+
         compositor = compositor_module or canonical_admission
         result = compositor.build_pre_inference_admission(
             db,
@@ -136,7 +148,7 @@ def admit_profile_runtime_payload(
             invocation=invocation,
             compiled=compiled,
             prompt=prompt,
-            profile=stored_profile,
+            profile=verified_profile,
             origin=BINDING_VERSION,
         )
         _need(type(result) is dict and result.get("ok") is True, "CANONICAL_ADMISSION_FAILED")

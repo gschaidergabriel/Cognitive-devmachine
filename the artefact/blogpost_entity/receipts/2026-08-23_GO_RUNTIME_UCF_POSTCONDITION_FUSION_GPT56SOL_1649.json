@@ -1,0 +1,69 @@
+{
+  "schema": "CLAY_GO_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated component organ",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main": "5edb2a59400657359fc2297e9b81f04dc22e025e",
+  "branch": "agent/go-fuse-runtime-ucf-postconditions-20260823",
+  "classification": "EXACT_BLOB_SOURCE_COMPONENT_MECHANISM_RUNTIME_UNVERIFIED",
+  "finding": "Open PR #1297 duplicated the just-merged ProfilePipelineRuntime-to-UCF bridge, but contained useful return-side fail-closed postconditions. Those postconditions were fused into the single canonical profile_runtime_cognitive_fabric_binding_v1 path rather than admitting a second bridge.",
+  "fusion": {
+    "canonical_bridge": "tools/profile_runtime_cognitive_fabric_binding_v1.py",
+    "donor_pr": 1297,
+    "second_bridge_retained": false,
+    "new_fences": [
+      "exact admission schema",
+      "MiniUnifiedDB generation equality",
+      "compiled canonical_state_hash equality",
+      "compiled packet_hash equality",
+      "non-placeholder InferencePacket and admission receipt digests",
+      "candidate-only admission authority",
+      "pre-inference real_effect_executed must be false",
+      "pre-inference final UCF runtime receipt forbidden"
+    ]
+  },
+  "exact_bytes": {
+    "module": "tools/profile_runtime_cognitive_fabric_binding_v1.py",
+    "module_git_blob": "8b380875401f5f95a22d7502d83a10c74c1275ca",
+    "module_sha256": "16ddd93211f6a151309ed9fe3d259450dca9cd73f853d54811e78cf003c49a60",
+    "test": "tests/test_profile_runtime_cognitive_fabric_binding_v1.py",
+    "test_git_blob": "13c64674916a9e6bfea139f5a0925b883d129da6",
+    "test_sha256": "355284a71db401b6f4b54d0f0e3244e40e90e56c195c8a96508371e4230d0ae5"
+  },
+  "isolated_component_evidence": {
+    "surface": "ChatGPT isolated Linux/Python/SQLite component environment",
+    "repo_shaped_tools_tests_layout": true,
+    "canonical_compositor_import_stub_only_for_unused_injected_dependency": true,
+    "focused_regressions_run": 9,
+    "focused_regressions_passed": 9,
+    "exit_code": 0,
+    "note": "The injected recording compositor is used only to test the bridge boundary; this does not establish full canonical compositor or retained runtime execution."
+  },
+  "unusual_experiment": {
+    "new_experiment_started": false,
+    "reason": "READ_ONLY_PREINFERENCE_WRITE_POISON was already the single unusual intervention consumed by this go. These are deterministic fusion regressions."
+  },
+  "hcu_parallel": {
+    "decision": "NO_CHANGE_NON_DUPLICATE",
+    "reason": "Open HCU lanes #1263/#1295/#1289 already own reactive world-model, Hyperposition Reality Field and shared-field design work.",
+    "runtime_credit": 0
+  },
+  "credit": {
+    "reference_runtime_integrated": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu": 0,
+    "whole_product": 0
+  },
+  "next_gate": "Keep exactly one bridge. Wire it behind ProfilePipelineRuntime._pipeline_cognitive_fabric_admit using the existing read-only MiniUnifiedDB boundary, then implement the post-commit evidence-only pipeline_cognitive_fabric_finalize handler and obtain actually-started authorized exact-source integrated execution.",
+  "forbidden_preserved": [
+    "Together API",
+    "VPS/self-hosted/production acceptance testing",
+    "paid/final model training without owner authorization",
+    "second durable state/truth/effect/Cognitive-Fabric authority"
+  ]
+}

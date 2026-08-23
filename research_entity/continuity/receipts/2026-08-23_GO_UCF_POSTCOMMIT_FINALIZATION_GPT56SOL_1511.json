@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "base_main_before_integration": "d388a0129efa8a47a96a58ad1f64dc011aa940d1",
+  "merged_pr": 1250,
+  "merge_commit": "90a54a0795f861fc78398778380de49467c881b9",
+  "finding": "The final UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 contains terminal validation/write/effect/result facts and therefore cannot be truthfully produced at the pre-inference admission boundary.",
+  "canonical_delta": {
+    "sequence": [
+      "pipeline_build_prompt",
+      "pipeline_cognitive_fabric_admit",
+      "inference_generate",
+      "pipeline_gate",
+      "pipeline_commit",
+      "pipeline_cognitive_fabric_finalize"
+    ],
+    "pre_inference_receipt": "MINI_ENTITY_COGNITIVE_FABRIC_ADMISSION/v1; candidate/provenance only",
+    "inference_binding": "exact InferencePacket digest plus explicitly named cognitive_fabric_admission_receipt_digest",
+    "canonical_authority": "deterministic gate plus MiniUnifiedDB CAS/commit",
+    "post_turn_receipt": "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 only after terminal commit/no-commit",
+    "finalizer_authority": "evidence only; no second commit/effect authority"
+  },
+  "exact_changed_git_blobs": {
+    "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay": "1cacba72476b1f905acd0443746b5f593c22191d",
+    "the artefact/blogpost_entity/test_canonical_cognitive_fabric_path.py": "f6e89c3517b87069797c26e78e53add4529317fe",
+    "the artefact/blogpost_entity/check_structured_contract_sync.py": "9c98d3f4e929e165ee66daa6f39cce3d10c9b54d",
+    "the artefact/blogpost_entity/test_structured_contract_sync_guard.py": "3d2372ea55e2a0596bfa44d1694e1b73aa4e6564",
+    "the artefact/blogpost_entity/jspace_gwt/COGNITIVE_FABRIC_ADMISSION_V1.md": "fdef60a0752d77f4da8149d57a07ee3e9a680a9f"
+  },
+  "isolated_regression": {
+    "surface": "ChatGPT isolated container",
+    "exact_blob_reconstruction": true,
+    "source_blob_verified": "1cacba72476b1f905acd0443746b5f593c22191d",
+    "canonical_path_test_blob_verified": "f6e89c3517b87069797c26e78e53add4529317fe",
+    "sync_guard_blob_verified": "9c98d3f4e929e165ee66daa6f39cce3d10c9b54d",
+    "sync_guard_test_blob_verified": "3d2372ea55e2a0596bfa44d1694e1b73aa4e6564",
+    "canonical_path_regressions": "PASS_5_OF_5",
+    "sync_guard_regressions": "PASS_5_OF_5",
+    "precommit_final_receipt_poison": "FAIL_CLOSED_REGRESSION_ONLY"
+  },
+  "coordination": {
+    "authority_routing_pr_1225": "MERGED_EARLIER_IN_MACROCYCLE",
+    "draft_pr_1241": "COMMENTED_TEMPORAL_BLOCKER; do not use FINALIZE-before-gate/commit",
+    "temporal_correction_pr_1246": "MERGED_AND_PRESERVED",
+    "microentity_package_pr_1244": "MERGED_PARALLEL; complete 12-member package binary now on main"
+  },
+  "unusual_experiment": {
+    "started_here": false,
+    "note": "No second unusual experiment. The precommit-final-receipt poison was regression-only because the macrocycle experiment had already been consumed upstream."
+  },
+  "credit": {
+    "runtime_model": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu_capacity": 0,
+    "whole_product": 0
+  },
+  "next_gate": "Implement the real reference/runtime pipeline_cognitive_fabric_admit and pipeline_cognitive_fabric_finalize handlers using the same MiniUnifiedDB cognition/boot/turn binding store, verified read integrity and ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v2 ancestry; then obtain actually-started exact-source authorized isolated integrated execution."
+}

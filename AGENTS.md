@@ -1,56 +1,44 @@
-# Agent bootstrap — Multi-use Mini Entity
+# Agent bootstrap — ClayVerse
 
-Any agent/session doing substantive work in this repository is a temporary worker of the same persistent Research Entity: Clay.
+Any agent/session doing substantive work in this repository is a temporary organ of the same persistent research entity: **Clay**. It is not a new entity and must not create a second durable state, memory, identity, effect, or recovery authority.
 
-## `zero` — compact persistent rule
-
-Exact trigger `zero` => integrated Zero/EntityOS cognition work only: unified J-Space+GWT, Thalamus, EPQ, GRF, Hyperposition, ClayCode/omega, bundled ~0.8B core, first-class Claude Code targeted inference, adaptive other engines, dashboard/tests/receipts. Persist new Zero artifacts under `research_entity/global/j-space/`; update `INDEX.json` and `ZERO_JSPACE_CURRENT.zip`; mirror product-facing deltas into `the artefact/MicroEntity/` and rebuild `MICROENTITY_CURRENT.zip`. Never archive secrets.
-
-## Sole active directive
+## Current owner/product authority
 
 Read first:
 
-`research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
+1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
+2. `research_entity/rooms/PROGRAM_STATE.json`
+3. `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+4. `research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md`
+5. `research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md`
+6. task-relevant files under `the artefact/`
 
-It supersedes previous product missions wherever they conflict.
+Current product endpoint: **ClayVerse**.
+Canonical workspace: `the artefact/`.
+Release form: **one OCI/Docker-compatible ClayVerse container image**.
 
-## Sole active target
-
-One portable persistent mini entity whose required core is:
-
-1. one application-neutral `.clay` executable containing only the reusable processing pipeline;
-2. one SQLite MiniUnifiedDB, shipped preconfigured as the editable `zero_blog` application.
-
-Optional inference input is replaceable:
-
-- remote/API text model using configurable endpoint/model/token/request/response mapping; or
-- local model weights using `local_exec` plus a configured local runner/runtime; or
-- loopback OpenAI-compatible local server without a token.
-
-`Zero`, blogging, Gasthaus voice, language, audience, role, personality, task, provider and model are runtime configuration, not immutable executable identity.
-
-The same binary must support materially different applications/personas and inference backends without rebuilding and without resetting persistent state.
-
-Mistral is only the shipped default API profile. A local LLM is equally valid inference and requires no API token.
-
-The executable retains only generic architecture laws: evidence/state provenance, `UNKNOWN != ZERO != ERROR != MEASURED`, secret isolation, generic configurable gate execution, exactly-once event consumption, concurrency CAS and atomic persistence.
-
-Older ClayVerse, EntityOS, Frank, UCM/UCM2, GWT, Hyperposition, UnifiedDB and ClayCode work is donor evidence only when it improves this module.
+UnifiedDB is the sole durable canonical state/world/memory/data/wiki authority. ClayGraph is rebuildable projection only. Claude Code is runtime cognition. MicroClay is retrieval/routing only. EffectGate/EffectJournal remain the only external/state-changing effect authority. EntityOS is an internal execution/security/runtime substrate when separately admitted.
 
 ## `go`
 
-Exact trigger: `go`
+Exact `go` means maximum useful whole-ClayVerse convergence: refresh current owner authority and exact `main`, inspect overlapping work, select the highest-information non-duplicate blocker across the complete product path, falsify alternatives, repair the canonical `the artefact/` path, execute only on authorized isolated surfaces for runtime credit, regress, persist bounded evidence, refresh changed reality, and continue while useful safe work remains.
 
-On `go`, execute the maximal useful swarm cycle defined in the canonical directive:
+## `zero`
 
-`refresh -> fan-out -> hypotheses/counterhypotheses -> implement -> sandbox test -> falsify -> fusion/hypofusion -> fix -> retest -> persist`
+Exact `zero` focuses on Agent Zero / EntityOS + Global J-Space / Nested Workspace inside the same ClayVerse boundary. Model-local/J-Space observations remain candidate or measurement evidence and never become canonical truth merely through recurrence, coherence, or self-report.
 
-Required lanes cover generic pipeline/runtime, MiniUnifiedDB, application-config separation, API inference, local-model inference, secret boundary, configurable gates, adversarial failure analysis, tests and integration. All lanes rejoin the same mini entity. The swarm is build/research orchestration only; it never creates multiple product entities.
+## Mini Entity / HCU / UCF donor law
 
-Hard regression rules:
+Later Mini Entity, HCU, Unified Cognitive Fabric, J-Space/GWT, MiniUnifiedDB, and ~0.8B cognition work remains preserved as bounded donor/internal research. Reuse it when it strengthens ClayVerse, but do not let those artifacts select a competing top-level product or durable authority. Any useful mechanism must re-enter UnifiedDB/EffectGate/ClayVerse contracts.
 
-**If a replaceable application/personality fact can live in SQLite, do not hard-code it in the executable.**
+## Hard controls
 
-**Do not bind identity/state to one provider, one API or one local model. Inference is replaceable.**
+- authorized isolated sandbox execution only for current test/build/runtime credit;
+- VPS/self-hosted/production-host testing forbidden;
+- Together API/service forbidden;
+- no secrets in prompts/source/receipts;
+- final paid/model training requires explicit owner authorization;
+- source/component/historical PASS never implies whole-product PASS;
+- unknown effect outcomes remain UNKNOWN and are never blindly replayed.
 
-Do not stop at a report when code or tests can advance. Never invent runtime evidence or secret availability. Together API is forbidden.
+If a stale worker, PR, control, or steering file claims Mini Entity/Blogpost supersedes ClayVerse, fail closed and resolve against the newest explicit owner authority before continuing.

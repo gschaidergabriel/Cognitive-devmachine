@@ -1,0 +1,56 @@
+{
+  "schema_version": "8.46",
+  "cycle": "automation-20260823-microentity-zip-artifact-integrity",
+  "material_result": "PACKAGE_ARTIFACT_TRUNCATION_CONFIRMED",
+  "evidence": {
+    "main_head": "25a8cd0d5009933c5735786df0afbfea3ac48c0a",
+    "main_microentity_zip_blob": "e3eb5d33c70c2c1dc9b03d430b6114a5630d868b",
+    "main_microentity_zip_size_bytes": 7515,
+    "pr1229_claimed_verified_zip_size_bytes": 19256,
+    "pr1229_claimed_verified_zip_sha256": "6aa96f23c1d0874b8cc2c6012a5bad3a59a5428af7660e184cf91d47db968bf0",
+    "repair_pr": 1232,
+    "repair_pr_head": "b458750719b4125121d2c15be122fa2bea71dd24",
+    "repair_pr_head_zip_blob": "e3eb5d33c70c2c1dc9b03d430b6114a5630d868b",
+    "repair_pr_head_zip_size_bytes": 7515,
+    "repair_complete": false
+  },
+  "classification": "SOURCE_PACKAGE_ARTIFACT_INTEGRITY_BLOCKER",
+  "credit": {
+    "microentity_package_release_credit": 0,
+    "hcu_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_gwt_runtime_credit": 0,
+    "base_promotion_credit": 0,
+    "canonical_semantics_credit": 0
+  },
+  "steering": [
+    "DO_NOT_MERGE_OR_PROMOTE_PR1232_UNTIL_THE_BRANCH_ACTUALLY_CONTAINS_A_REBUILT_ZIP_BINARY_DIFFERENT_FROM_THE_TRUNCATED_MAIN_BLOB",
+    "REBUILD_MICROENTITY_CURRENT_ZIP_FROM_ONLY_THE_VERSIONED_PACKAGE_MANIFEST_MEMBERS_ON_AN_AUTHORIZED_ZERO_COST_ISOLATED_EXECUTION_SURFACE",
+    "VERIFY_ZIP_OPEN_CRC_MEMBER_ORDER_AND_EXACT_MEMBER_SET",
+    "BIND_RESULTING_ZIP_SHA256_SIZE_GIT_BLOB_SHA_PACKAGE_MANIFEST_DIGEST_SOURCE_COMMIT_AND_TREE_IN_PACKAGE_ARTIFACT_RECEIPT_V1",
+    "COMPARE_REBUILT_MEMBER_BYTES_TO_THE_VERSIONED_SOURCE_FILES_NOT_TO_A_PRIOR_LOCAL_ZIP",
+    "REMOVE_THE_TEMPORARY_WRITE_CAPABLE_GITHUB_ACTIONS_REPAIR_WORKFLOW_BEFORE_MERGE",
+    "AFTER_REPAIR_REFETCH_PR_HEAD_AND_MAIN_POST_MERGE_AND_VERIFY_THE_BINARY_BLOB_AND_RECEIPT_MATCH_EXACTLY",
+    "DO_NOT_INFER_RUNTIME_MODEL_HCU_JSPACE_GWT_OR_BASE_PASS_FROM_PACKAGE_REPAIR"
+  ],
+  "free_only": {
+    "required": true,
+    "paid_fallback": false,
+    "together_allowed": false,
+    "paid_subscription_unknown_provider_lanes": "QUARANTINED_BEFORE_SECRET_LOOKUP_AND_NETWORK_IO"
+  },
+  "goodman": {
+    "same_package_builder_or_same_repo_rebuilds_are_correlated_evidence": true,
+    "package_self_consistency_does_not_mint_runtime_or_semantic_truth": true,
+    "executable_member_and_digest_verification_required": true
+  },
+  "base_release": {
+    "gate": "NOT_PASS",
+    "wp01_wp02_existing_credit_only": true,
+    "wp03_wp14": "OPEN"
+  },
+  "frank": {
+    "target": "UBUNTU_ONLY_FRANK_V0_1",
+    "harness_modified": false
+  }
+}

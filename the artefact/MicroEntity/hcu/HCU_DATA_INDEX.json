@@ -1,0 +1,26 @@
+{
+  "schema_version": "HCU_DATA_INDEX/v1",
+  "package": "MicroEntity",
+  "hcu_root": "hcu/",
+  "generated_release_artifacts": [
+    "hcu/README.md",
+    "hcu/HCU_ARCHITECTURE.md",
+    "hcu/topology.kvm4.json",
+    "hcu/FREE_LLM_FEED_CONTRACT.json",
+    "hcu/HCU_DATA_INDEX.json",
+    "hcu/capacity_guard_v1.py",
+    "hcu/test_capacity_guard_v1.py",
+    "hcu/receipts/2026-08-23_GO_HCU_CAPACITY_GUARD_GPT56SOL.json"
+  ],
+  "runtime_data_authority": "MiniUnifiedDB",
+  "capacity_claim_policy": "NUMERIC_RUNTIME_CAPACITY_REQUIRES_EXACT_AUTHORIZED_ISOLATED_MEASUREMENT_RECEIPT",
+  "archive_policy": {
+    "include_non_secret_generated_hcu_files": true,
+    "include_non_secret_receipts": true,
+    "include_privacy_filtered_data_exports_when_generated": true,
+    "include_plaintext_secrets": false,
+    "include_credential_bearing_files": false
+  },
+  "source_base_head": "77582d2f78b4907f8f1249621ad2fe4725014ba7",
+  "claim_class": "SOURCE_PACKAGE_PLUS_CAPACITY_GUARD_COMPONENT_EVIDENCE_NOT_RUNTIME_FIT"
+}

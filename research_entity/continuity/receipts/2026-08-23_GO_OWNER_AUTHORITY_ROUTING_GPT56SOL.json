@@ -1,0 +1,45 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "25a8cd0d5009933c5735786df0afbfea3ac48c0a",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "parallel_fusion": {
+    "merged_prs_observed": [1224, 1229],
+    "hcu_duplicate_work_dropped": true,
+    "reason": "PR 1224 already fused HCU worker admission and PR 1229 already fused fail-closed HCU runtime-capacity admission plus package ZIP coherence."
+  },
+  "finding": {
+    "remaining_root_authority_split": [
+      "AGENTS.md still selected research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md as the sole active directive",
+      "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md was explicitly superseded yet still redirected to CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md / ClayVerse 4.4"
+    ]
+  },
+  "delta": [
+    "route root AGENTS.md directly to MINI_ENTITY_GO_OWNER_DIRECTIVE + Control 4.5 + current PROGRAM_STATE/bootstrap order",
+    "bind root bootstrap explicitly to MINI_ENTITY_PIPELINE_ALL_IN_ONE and MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+    "redirect historical BLOGPOST compatibility path to current Mini Entity 4.5 owner/control authority instead of ClayVerse 4.4",
+    "add deterministic authority-routing regression test"
+  ],
+  "execution": {
+    "class": "LOCAL_ISOLATED_SOURCE_REGRESSION",
+    "commands": [
+      "/usr/bin/python3 -m py_compile research_entity/continuity/tests/test_current_owner_authority_routing.py",
+      "/usr/bin/python3 -m unittest -q research_entity.continuity.tests.test_current_owner_authority_routing"
+    ],
+    "first_result": "FAIL_1_OF_3: proposed AGENTS fix lacked explicit active program identifier",
+    "repair": "added explicit active program and stage binding to AGENTS.md",
+    "final_result": "PASS_3_OF_3",
+    "whole_product_credit": 0,
+    "runtime_model_credit": 0,
+    "vps_test_credit": 0
+  },
+  "unusual_experiment": {
+    "consumed_here": false,
+    "global_macrocycle_status": "ALREADY_CONSUMED_BY_MERGED_PR_1229_HCU_FALSE_CAPACITY_POISON",
+    "additional_experiment_started": false
+  },
+  "next_gate": "merge/admit the root authority-routing repair, then return to the current Mini Entity runtime frontier: exact authorized-isolated bundled ~0.8B/J-Space/GWT/HCU measurement and end-to-end .clay -> cognitive fabric -> candidate inference path."
+}

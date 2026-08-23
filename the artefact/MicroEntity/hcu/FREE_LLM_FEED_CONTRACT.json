@@ -1,0 +1,68 @@
+{
+  "schema_version": "HCU_FREE_LLM_FEED/v1",
+  "status": "SOURCE_CONTRACT",
+  "purpose": "Continuously provide provenance-bound candidate information and hypotheses to the Mini Entity HCU from the existing FREE_ONLY provider/token pool.",
+  "input_packet": {
+    "required": [
+      "feed_request_id",
+      "provider_profile_id",
+      "model_id",
+      "requested_at",
+      "query_class",
+      "causal_anchor",
+      "response_text_or_structured_payload",
+      "usage_receipt",
+      "provenance"
+    ],
+    "forbidden": [
+      "plaintext_api_token",
+      "secret_value",
+      "unbounded_host_command",
+      "direct_effect_capability"
+    ]
+  },
+  "admission_pipeline": [
+    "secret_scan_and_redaction_fail_closed",
+    "request_identity_dedupe",
+    "provider_and_model_provenance_binding",
+    "schema_validation",
+    "candidate_classification",
+    "correlated_source_warning",
+    "conflict_and_counterevidence_linking",
+    "MiniUnifiedDB_candidate_write",
+    "HCU_scheduler_notification"
+  ],
+  "truth_law": {
+    "provider_output_is_truth": false,
+    "provider_consensus_is_truth": false,
+    "repetition_is_independent_evidence": false,
+    "canonical_promotion_requires": "normal Mini Entity evidence/admission rules"
+  },
+  "budget_policy": {
+    "mode": "FREE_ONLY",
+    "paid_fallback": false,
+    "together_execution": "FORBIDDEN_CURRENT_OWNER_CONTROL",
+    "http_402": "HARD_STOP",
+    "http_429": "PROVIDER_WIDE_BACKOFF",
+    "quota_evasion_key_rotation": false
+  },
+  "scheduling": {
+    "prefer": [
+      "unresolved_high_value_questions",
+      "source_diversity",
+      "counterhypotheses",
+      "falsifiers",
+      "causal_gap_filling"
+    ],
+    "deprioritize": [
+      "duplicate_consensus",
+      "low_provenance_repetition",
+      "already_resolved_questions"
+    ]
+  },
+  "authority": {
+    "canonical_state": "MiniUnifiedDB",
+    "real_effects": "EffectGate",
+    "external_model_role": "CANDIDATE_INFERENCE_ONLY"
+  }
+}

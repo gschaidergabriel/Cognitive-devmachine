@@ -1,0 +1,52 @@
+{
+  "schema_version": "8.61",
+  "status": "CURRENT_AUTONOMOUS_SUPERVISOR_STEERING",
+  "date": "2026-08-24",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supersedes_for_this_free_only_supervisor": [
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+    "owner one-shot Together training directives while this supervisor is explicitly FREE_ONLY"
+  ],
+  "material_finding": "Current main and retained PR1263 now contain owner prose authorizing exactly one paid Together ~0.8B J-Space/GWT fine-tune, but the active autonomous supervisor contract remains FREE_ONLY with no paid fallback. No Together job has been created, no training spend has occurred, and the latest exact J-Space executor preflight reports runtime_credit=0, jspace_model_runtime_credit=0, training_credit=0 and execution blocked before the credential-bearing Vercel POST. Therefore the paid authorization is quarantined for this supervisor and creates zero execution, provider, model, or acceptance credit.",
+  "evidence": {
+    "latest_main_observed": "296e71172b9e6ee658a0b20771259c9f9cd51bb1",
+    "latest_preflight_receipt": "the artefact/MicroEntity/hcu/receipts/2026-08-24_GO_0042_JSPACE_EXECUTOR_PREFLIGHT_GPT56SOL.json",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_state": "OPEN_DRAFT_NOT_MERGED",
+    "sandbox_run_observed": false,
+    "together_job_created": false,
+    "runtime_credit_change": 0,
+    "provider_capability_change": false
+  },
+  "free_only": {
+    "enabled": true,
+    "no_paid_fallback": true,
+    "together_training": "FORBIDDEN_IN_THIS_SUPERVISOR_MODE",
+    "together_general_inference": "FORBIDDEN",
+    "paid_subscription_unknown_provider_execution": "FAIL_CLOSED",
+    "rule": "PAID, SUBSCRIPTION and UNKNOWN lanes must be rejected before credential/key lookup and before network I/O. Repository owner prose authorizing a paid run does not override the active FREE_ONLY supervisor contract."
+  },
+  "execution_priority": [
+    "Do not create or preflight a paid Together job and do not consume Together credentials.",
+    "Use only authorized isolated FREE execution surfaces for executable evidence.",
+    "Obtain an actually-started exact-source isolated EntityOS/HCU regression run before any runtime promotion.",
+    "Bind full Research main SHA/tree plus retained PR1263 SHA/tree, executor identity, result digest and credential nonpersistence in one immutable receipt.",
+    "Keep PR1263 as the single draft HCU donor lane; no canonical/product promotion from source consensus or local component tests.",
+    "After exact FREE executable evidence, continue local ~0.8B loader/J-Space/GWT work using zero-cost local execution only."
+  ],
+  "goodman": {
+    "ancestry_collapse": true,
+    "same_family_model_consensus_not_replication": true,
+    "executable_counterevidence_over_consensus": true,
+    "no_canonical_semantics_promotion_without_executable_counterevidence_and_review": true
+  },
+  "promotion_state": {
+    "entityos_whole_runtime_pass": false,
+    "hcu_runtime_credit_change": false,
+    "base_or_legacy_release_pass_from_this_cycle": false,
+    "canonical_semantics_promotion": false,
+    "training_credit": 0
+  }
+}

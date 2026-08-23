@@ -1,8 +1,9 @@
 import math
 import unittest
 
-from hcu_causal_canonical_v1 import CANONICALIZATION_SCHEMA as SELECTED_SCHEMA, canonical_bytes
+from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA as SELECTED_SCHEMA, canonicalize
 from typed_entry_canonical_v1 import (
+    ADAPTER_SCHEMA,
     CANONICALIZATION_SCHEMA,
     LEGACY_CANONICALIZATION_SCHEMA,
     CanonicalEncodingError,
@@ -11,9 +12,10 @@ from typed_entry_canonical_v1 import (
 
 
 class TypedEntrySelectedCanonicalAdapterTests(unittest.TestCase):
-    def test_adapter_exposes_exact_selected_schema(self):
-        self.assertEqual(CANONICALIZATION_SCHEMA, "ENTITYOS_HCU_TYPED_CANONICAL/v1")
+    def test_adapter_exposes_exact_main_selected_schema(self):
+        self.assertEqual(CANONICALIZATION_SCHEMA, "RFC8785_JCS_IJSON/v1")
         self.assertEqual(CANONICALIZATION_SCHEMA, SELECTED_SCHEMA)
+        self.assertEqual(ADAPTER_SCHEMA, "ENTITYOS_HCU_ENTRY_CANONICAL_ADAPTER/v2")
         self.assertNotEqual(CANONICALIZATION_SCHEMA, LEGACY_CANONICALIZATION_SCHEMA)
 
     def test_entry_shaped_values_are_byte_exact_with_selected_encoder(self):
@@ -47,7 +49,7 @@ class TypedEntrySelectedCanonicalAdapterTests(unittest.TestCase):
             {"nested": [None, True, False, -24, 0, 24, 0.5, -0.0, "é", "😀"]},
         ]
         for value in values:
-            self.assertEqual(encode_canonical(value), canonical_bytes(value))
+            self.assertEqual(encode_canonical(value), canonicalize(value))
 
     def test_mapping_input_order_does_not_change_bytes(self):
         left = {"z": 1, "aa": 2, "a": 3}
@@ -55,13 +57,13 @@ class TypedEntrySelectedCanonicalAdapterTests(unittest.TestCase):
         self.assertEqual(encode_canonical(left), encode_canonical(right))
 
     def test_selected_number_domain_is_preserved(self):
-        self.assertEqual(encode_canonical(7), canonical_bytes(7.0))
-        self.assertEqual(encode_canonical(-0.0), canonical_bytes(0.0))
+        self.assertEqual(encode_canonical(7), canonicalize(7.0))
+        self.assertEqual(encode_canonical(-0.0), b"0")
         for value in (math.inf, -math.inf, math.nan):
             with self.assertRaises(CanonicalEncodingError):
                 encode_canonical(value)
         with self.assertRaises(CanonicalEncodingError):
-            encode_canonical(9_007_199_254_740_992)
+            encode_canonical(9_007_199_254_740_993)
 
     def test_adapter_does_not_keep_hidden_legacy_byte_domain(self):
         with self.assertRaises(CanonicalEncodingError):

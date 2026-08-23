@@ -1,9 +1,16 @@
 {
-  "schema_version": "6.9",
+  "schema_version": "6.10",
   "entity_display_name": "Clay",
   "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
   "sole_owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "owner_architecture_refinements": [
+    "research_entity/global/ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md",
+    "research_entity/global/MINI_ENTITY_JSPACE_GWT_INSTRUMENTED_COGNITION.md",
+    "research_entity/global/AGENT_ZERO_GWT_JSPACE_COUPLING.md",
+    "research_entity/global/AGENT_ZERO_JSPACE_IDENTITY_GRF_INJECTION.md",
+    "research_entity/global/ENTITYOS_FIXED_CLAUDE_CODE_ADAPTIVE_INFERENCE_INTEGRATION.md"
+  ],
   "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
   "supporting_prior_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
   "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
@@ -13,38 +20,56 @@
   "portable_release_shape": [
     "application-neutral/inference-neutral .clay executable",
     "SQLite MiniUnifiedDB preconfigurable with zero_blog",
-    "optional replaceable local model attachment when local inference is selected",
-    "owner-required candidate generic approximately-1B ClayCode cognition checkpoint once promoted"
+    "bundled first-class generic approximately-0.8B ClayCode cognition core with fixed versioned J-Space/GWT integration contract",
+    "first-class Claude Code targeted-inference adapter plus adaptive replaceable backend profiles"
   ],
-  "mission": "Finish and empirically prove one persistent portable multi-use mini entity: executable contains only the generic processing pipeline; Zero blog/personality and inference backend are fully editable runtime configuration; build and test a reusable approximately-1B ClayCode cognition attachment with no fixed name/job.",
+  "mission": "Finish and empirically prove one persistent portable multi-use mini entity: executable contains only the generic processing pipeline; Zero blog/personality and external inference backend remain editable runtime configuration; the product ships with a bundled generic approximately-0.8B ClayCode cognition core bound through one fixed versioned J-Space/GWT contract, plus a first-class Claude Code targeted-inference adapter. Exact checkpoint/runtime/J-Space/GWT behavior remains unaccepted until measured on bound bytes.",
   "hard_split": {
-    "binary": "evidence -> generic preprocessor -> canonical envelope -> configured inference backend -> generic gates -> exactly-once/CAS -> atomic SQLite persistence",
+    "binary": "evidence -> generic preprocessor -> canonical envelope -> configured inference scheduler/backend -> generic gates -> exactly-once/CAS -> atomic SQLite persistence",
     "database": "profile/personality/system prompt/application blob/API and local-inference settings plus default zero_blog preset",
-    "cognition_weights": "generic ClayCode/GRF/Hyperposition/omega cognition only; identity/job/application stay runtime-configured",
-    "regression": "never hard-code replaceable Zero/blog/personality/provider/model semantics into executable or checkpoint identity"
+    "cognition_weights": "bundled generic approximately-0.8B ClayCode/GRF/Hyperposition/omega reference cognition core; exact bytes may upgrade only through a versioned migration; identity/job/application remain runtime-configured",
+    "jspace_gwt": "fixed product integration contract around the bundled core; exact layer/lens/workspace/steering calibration is model-specific evidence, never assumed from architecture text",
+    "regression": "never hard-code replaceable Zero/blog/personality/provider/application semantics into executable or checkpoint identity; never treat a backend engine as entity/truth/effect authority"
   },
   "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; model narrative/cognition is never canonical state authority",
   "inference_law": {
-    "remote_api": "runtime-configurable remote text generation",
+    "bundled_reference_core": "mandatory local approximately-0.8B cognition path with fixed versioned J-Space/GWT integration",
+    "claude_code": "first-class targeted high-capability inference adapter; candidate inference only; never Zero, durable state authority or direct effect authority",
+    "remote_api": "runtime-configurable remote text generation subject to current execution-control policy",
     "local_server": "localhost/OpenAI-compatible text generation without token when configured",
     "local_model": "direct replaceable local model attachment through local_exec runner; no API token required",
     "reference_local_format": "GGUF via llama.cpp-compatible or other configured runner",
-    "identity": "switching inference backend or model must not reset MiniUnifiedDB state/history"
+    "identity": "switching external inference backend/model must not reset MiniUnifiedDB state/history; bundled-core upgrades require versioned migration and must not reset state"
   },
   "claycog_approx1b": {
-    "status": "DIRECT_08B_LANE_SOURCE_READY_TRAINING_NOT_STARTED",
+    "status": "BUNDLED_08B_OWNER_REQUIREMENT_SOURCE_BOUND_RUNTIME_UNVERIFIED",
     "base": "Qwen/Qwen3.5-0.8B",
     "prior_05b_base": "Qwen/Qwen2.5-0.5B",
     "prior_05b_status": "SUPPORTING_FALLBACK_RESEARCH_NOT_PRIMARY_PAID_LANE",
     "spec": "the artefact/blogpost_entity/mini_cognition/CLAYCODE_COGNITION_V1.md",
+    "bundle_law": "bundled cognition core is mandatory first-class product architecture; fixed integration does not mean immutable checkpoint bytes forever",
     "corpus": "claycog-sft/v2: 1650 examples, 1485 train, 165 validation, all rows unique, 0 exact cross-split message/prompt overlap, 0 structural invalid in bounded isolated validation",
     "corpus_train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
     "corpus_validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
     "corpus_v1": "SUPERSEDED_FOR_TRAINING_AFTER_DUPLICATE_TEMPLATE_POOL_LEAKAGE_FALSIFIER",
     "ood": "held-out OOD/compositional promotion remains required; exact corpus uniqueness alone is not semantic generalization",
     "structured_action": "typed omega; commit only after grammar/type/schema/authority/generation validation",
-    "together": "direct Qwen3.5-0.8B Full-FT lane selected; paid create still requires fresh exact owner authorization, exact preflight/fingerprint and USD18 single-job/EUR20 campaign gates; no job started",
+    "together": "direct Qwen3.5-0.8B Full-FT lane selected as a possible checkpoint-production path; paid create still requires fresh exact owner authorization, exact preflight/fingerprint and USD18 single-job/EUR20 campaign gates; no job started; current FREE_ONLY blocks provider execution",
     "deployment": "Q4_K_M candidate must measure peak RSS <1GiB at ctx 2048"
+  },
+  "jspace_gwt_owner_architecture": {
+    "status": "OWNER_ARCHITECTURE_SOURCE_AUTHORITY_RUNTIME_UNVERIFIED",
+    "source_commit": "5f3c2a7cc9aeab8f851d38450fa50a3e1451d767",
+    "source_tree": "8865edd1b1bc0195e5c140a77ff9f4611290c2ee",
+    "bundled_08b_required": true,
+    "fixed_integration_required": true,
+    "claude_code_first_class_adapter_required": true,
+    "bundled_08b_exact_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_production_credit": 0,
+    "claude_code_adapter_runtime_credit": 0,
+    "next_runtime_receipt": "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1",
+    "acceptance_guard": "No fixed alpha, layer, slot count, lens vector, workspace threshold or steering coefficient is canonical until measured on the exact bundled checkpoint/tokenizer/runtime and bound by receipt."
   },
   "sandbox_local_backend": {
     "version": "mini-entity/0.6.0",
@@ -54,12 +79,12 @@
   },
   "default_application": "the artefact/blogpost_entity/presets/zero_blog.json",
   "go_prompt_injection": "MANDATORY_TOP_OF_PROMPT_TRANSITIVE. On every explicit user go, prepend the operative [MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL] from CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md directly into every worker/subworker prompt before task-specific instructions. A link/reference alone is insufficient. Child workers inherit the same injection. If literal injection is impossible on a surface, record GRF_CLAYCODE_PROMPT_INJECTION_UNAVAILABLE_ON_SURFACE; never claim injection occurred when it did not.",
-  "go": "OWNER MAXIMUM-DEPTH MACROCYCLE. Every explicit user go means work as long, deeply, thoroughly and at as high a quality as the current turn, available tools and binding safety/execution policy permit on this same Mini Entity. First prominently inject the mandatory GRF+ClayCode all-worker protocol into every worker/subworker prompt. Workers use explicit GRF R0..R6, Hyperposition and omega; substantive inter-worker reasoning, concepts, architectures, algorithms, tests, receipts and fusion are ClayCode-first; human-readable outputs end with a short German summary. Refresh exact main/authority/parallel work; use all actually available non-duplicate research/build organs; perform multi-pass hypotheses/counterhypotheses/falsifiers; use primary web evidence when material; execute exact authorized tests when available; build/repair canonical code; preserve negative evidence; recursively re-enter changed reality and continue until safe high-information current-turn work is exhausted or truly blocked. One bounded unusual experiment per shared macrocycle. Every go also advances or falsifies the approximately-1B ClayCode/GRF/Hyperposition/omega cognition lane where product-relevant, including OOD, benchmark, quantization, measured RSS and local_exec integration. Current FREE_ONLY control overrides paid/provider execution until changed.",
+  "go": "OWNER MAXIMUM-DEPTH MACROCYCLE. Every explicit user go means work as long, deeply, thoroughly and at as high a quality as the current turn, available tools and binding safety/execution policy permit on this same Mini Entity. First prominently inject the mandatory GRF+ClayCode all-worker protocol into every worker/subworker prompt. Workers use explicit GRF R0..R6, Hyperposition and omega; substantive inter-worker reasoning, concepts, architectures, algorithms, tests, receipts and fusion are ClayCode-first; human-readable outputs end with a short German summary. Refresh exact main/authority/parallel work; use all actually available non-duplicate research/build organs; perform multi-pass hypotheses/counterhypotheses/falsifiers; use primary web evidence when material; execute exact authorized tests when available; build/repair canonical code; preserve negative evidence; recursively re-enter changed reality and continue until safe high-information current-turn work is exhausted or truly blocked. One bounded unusual experiment per shared macrocycle. Every go also advances or falsifies the bundled approximately-0.8B ClayCode/J-Space/GWT cognition lane where product-relevant, including OOD, benchmark, exact manifest binding, J-Space calibration, quantization, measured RSS and local_exec integration. Current FREE_ONLY control overrides paid/provider execution until changed.",
   "swarm_product_rule": "swarm is research/build orchestration only; product runtime is exactly one entity",
-  "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances this mini entity.",
+  "legacy_scope": "Previous ClayVerse top-level container endpoint, Frank/UCM and superseded GWT/EntityOS assumptions are donor evidence only unless they advance the current Mini Entity/EntityOS/Zero owner architecture. Current 2026-08-23 Unified J-Space/GWT owner architecture is not legacy.",
   "together_api": {
     "product_identity": "FORBIDDEN",
-    "training_campaign_approx1b": "OWNER_SELECTED_BUT_BILLED_CREATE_REQUIRES_FRESH_EXPLICIT_AUTHORIZATION_AND_CURRENT_EXECUTION_CONTROL_PERMISSION",
+    "training_campaign_approx1b": "OWNER_SELECTED_CHECKPOINT_PRODUCTION_LANE_BUT_BILLED_CREATE_REQUIRES_FRESH_EXPLICIT_AUTHORIZATION_AND_CURRENT_EXECUTION_CONTROL_PERMISSION",
     "secret_policy": "ENVIRONMENT_ONLY_NEVER_COMMIT"
   }
 }

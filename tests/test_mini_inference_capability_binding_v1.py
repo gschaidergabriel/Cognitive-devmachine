@@ -48,6 +48,39 @@ def profile(b):
     }
 
 
+def prepare(generation: int = 9):
+    out = {
+        "ok": True,
+        "entity_generation": generation,
+        "causal_turn_id": f"turn-{generation}-a",
+        "task_text": "measure first",
+        "turn_binding_digest": h("turn-binding"),
+        "boot_binding_digest": h("boot-binding"),
+        "workspace_digest": h("workspace"),
+    }
+    for field in cap.PREPARE_DIGEST_FIELDS:
+        out[field] = h(field)
+    return out
+
+
+def local_evidence(p, b):
+    return {
+        "ok": True,
+        "schema": cap.CAPABILITY_EVIDENCE_SCHEMA,
+        "entity_generation": p["entity_generation"],
+        "causal_turn_id": p["causal_turn_id"],
+        "turn_binding_digest": p["turn_binding_digest"],
+        "boot_binding_digest": p["boot_binding_digest"],
+        "capability_binding_digest": b["binding_digest"],
+        "capability_receipt_digest": b["capability_receipt_digest"],
+        "capability_evidence_kind": b["capability_evidence_kind"],
+        "cognition": {field: p[field] for field in cap.PREPARE_DIGEST_FIELDS},
+        "evidence_binding_digest": h("resolved-capability-evidence"),
+        "direct_truth_authority": False,
+        "direct_effect_authority": False,
+    }
+
+
 class CapabilityBindingTests(unittest.TestCase):
     def test_closed_api_compiled_external_resolves(self):
         out = cap.resolve_from_profile(profile(binding()))
@@ -88,7 +121,7 @@ class CapabilityBindingTests(unittest.TestCase):
             cap.resolve_from_profile(p)
 
     def test_unusual_provider_name_poison_cannot_upgrade_capability(self):
-        # Unusual experiment: provider/model/kind strings scream "local/hookable", but the
+        # Historical regression: provider/model/kind strings scream "local/hookable", but the
         # explicit hash-bound capability says external. Resolution must remain external.
         p = profile(binding())
         p["inference"].update({
@@ -105,17 +138,8 @@ class CapabilityBindingTests(unittest.TestCase):
 
     def test_bound_route_uses_canonical_prepare_ancestry_without_profile_duplication(self):
         p = profile(binding())
-        prepare = {
-            "ok": True,
-            "entity_generation": 9,
-            "causal_turn_id": "turn-9-a",
-            "turn_binding_digest": h("turn-binding"),
-            "boot_binding_digest": h("boot-binding"),
-            "workspace_digest": h("workspace"),
-        }
-        for field in cap.PREPARE_DIGEST_FIELDS:
-            prepare[field] = h(field)
-        out = cap.resolve_bound_route(p, prepare, expected_generation=9)
+        prep = prepare()
+        out = cap.resolve_bound_route(p, prep, expected_generation=9)
         self.assertEqual(out["target_engine_class"], "ADAPTIVE_BACKEND")
         self.assertEqual(out["cognition"]["jspace_profile_digest"], h("jspace_profile_digest"))
         self.assertEqual(len(out["route_digest"]), 64)
@@ -123,34 +147,68 @@ class CapabilityBindingTests(unittest.TestCase):
 
     def test_bound_route_rejects_stale_prepare_generation(self):
         p = profile(binding())
-        prepare = {
-            "ok": True,
-            "entity_generation": 8,
-            "causal_turn_id": "turn-8-a",
-            "turn_binding_digest": h("turn-binding"),
-            "boot_binding_digest": h("boot-binding"),
-            "workspace_digest": h("workspace"),
-        }
-        for field in cap.PREPARE_DIGEST_FIELDS:
-            prepare[field] = h(field)
+        prep = prepare(8)
         with self.assertRaisesRegex(cap.CapabilityBindingError, "STALE_GENERATION"):
-            cap.resolve_bound_route(p, prepare, expected_generation=9)
+            cap.resolve_bound_route(p, prep, expected_generation=9)
 
     def test_bound_route_rejects_missing_prepare_cognition_digest(self):
         p = profile(binding())
-        prepare = {
-            "ok": True,
-            "entity_generation": 9,
-            "causal_turn_id": "turn-9-a",
-            "turn_binding_digest": h("turn-binding"),
-            "boot_binding_digest": h("boot-binding"),
-            "workspace_digest": h("workspace"),
-        }
-        for field in cap.PREPARE_DIGEST_FIELDS:
-            prepare[field] = h(field)
-        del prepare["policy_authority_digest"]
+        prep = prepare()
+        del prep["policy_authority_digest"]
         with self.assertRaisesRegex(cap.CapabilityBindingError, "prepare.policy_authority_digest:SHA256_REQUIRED"):
-            cap.resolve_bound_route(p, prepare, expected_generation=9)
+            cap.resolve_bound_route(p, prep, expected_generation=9)
+
+    def test_local_route_rejects_opaque_receipt_without_resolved_evidence(self):
+        local = binding(
+            binding_id="bundled-08b",
+            engine_class="BUNDLED_LOCAL_08B",
+            jspace_mode="FULL_LOCAL_LATENT",
+            local_activation_access=True,
+            capability_evidence_kind="BUNDLED_MANIFEST",
+            capability_receipt_digest=h("manifest-admission"),
+        )
+        with self.assertRaisesRegex(cap.CapabilityBindingError, "LOCAL_CAPABILITY_EVIDENCE_REQUIRED"):
+            cap.resolve_bound_route(profile(local), prepare(), expected_generation=9)
+
+    def test_local_route_accepts_only_crossbound_resolved_evidence(self):
+        local = binding(
+            binding_id="bundled-08b",
+            engine_class="BUNDLED_LOCAL_08B",
+            jspace_mode="LOCAL_OBSERVE_ONLY",
+            local_activation_access=True,
+            capability_evidence_kind="BUNDLED_MANIFEST",
+            capability_receipt_digest=h("manifest-admission"),
+        )
+        prep = prepare()
+        evidence = local_evidence(prep, local)
+        out = cap.resolve_bound_route(
+            profile(local),
+            prep,
+            expected_generation=9,
+            capability_evidence=evidence,
+        )
+        self.assertEqual(out["capability_evidence_binding_digest"], h("resolved-capability-evidence"))
+        self.assertEqual(out["jspace_mode"], "LOCAL_OBSERVE_ONLY")
+
+    def test_local_route_rejects_evidence_from_other_boot(self):
+        local = binding(
+            binding_id="bundled-08b",
+            engine_class="BUNDLED_LOCAL_08B",
+            jspace_mode="LOCAL_OBSERVE_ONLY",
+            local_activation_access=True,
+            capability_evidence_kind="BUNDLED_MANIFEST",
+            capability_receipt_digest=h("manifest-admission"),
+        )
+        prep = prepare()
+        evidence = local_evidence(prep, local)
+        evidence["boot_binding_digest"] = h("other-boot")
+        with self.assertRaisesRegex(cap.CapabilityBindingError, "CAPABILITY_EVIDENCE_BOOT_BINDING_DRIFT"):
+            cap.resolve_bound_route(
+                profile(local),
+                prep,
+                expected_generation=9,
+                capability_evidence=evidence,
+            )
 
 
 if __name__ == "__main__":

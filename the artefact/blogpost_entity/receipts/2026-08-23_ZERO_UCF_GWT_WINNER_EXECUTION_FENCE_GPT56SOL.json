@@ -8,10 +8,10 @@
   "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
   "source": {
     "branch_base_main_sha": "23c0f4c32fe0570a79aa81f94ff75948448d06c8",
-    "latest_main_observed_before_pr_validation": "3a4fbfe83d90dff6829aeaaf3615cd24dd7565d0",
+    "latest_main_observed": "681723f8aa517b3e44dfe75d6b9b2db7e0c8318e",
     "branch": "zero/gwt-winner-execution-fence-20260823",
     "pr": 1141,
-    "candidate_head_before_receipt": "6cb983b14d0b59009e200f2663d7c5de45145853",
+    "candidate_head_before_receipt_update": "77d85107a532b2015b7b8cacfe0a32ead76591e9",
     "changed_blobs": {
       "tools/validate_unified_cognitive_fabric_receipt_v1.py": "3b9541c919c37fd5db48cf9a1c8b81d94f0c3c9c",
       "research_entity/claycode/contracts/UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1.clay": "a71f38a4cbbe39540442591cd626e29350f125a4",
@@ -31,6 +31,24 @@
     "regression": "Adds one fail-closed executed/no-winner case and one permitted nonexecuted blocked/no-winner case."
   },
   "execution_evidence": {
+    "isolated_component": {
+      "environment": "ChatGPT isolated Linux/Python sandbox",
+      "validator_git_blob_expected": "3b9541c919c37fd5db48cf9a1c8b81d94f0c3c9c",
+      "validator_git_blob_observed": "3b9541c919c37fd5db48cf9a1c8b81d94f0c3c9c",
+      "validator_sha256": "72d3ed4bad6acab6faf9517f4bb12e14005c00bbffd3aefb53753d34999d3fe0",
+      "py_compile": "PASS",
+      "focused_probe": {
+        "result": "5/5 PASS",
+        "cases": [
+          "baseline valid receipt remains accepted",
+          "executed inference without GWT winner fails closed",
+          "blocked nonexecuted inference without GWT winner remains representable",
+          "winner not in candidate set remains rejected",
+          "multiple winners remain rejected"
+        ]
+      },
+      "scope": "EXACT_CHANGED_VALIDATOR_BLOB_COMPONENT_MECHANISM_EVIDENCE_ONLY"
+    },
     "github_actions": [
       {
         "run_id": 32615964280,
@@ -45,14 +63,33 @@
         "conclusion": "failure",
         "visible_steps": 0,
         "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_TEST_STEPS"
+      },
+      {
+        "run_id": 32616029647,
+        "workflow": "Research Entity Verify",
+        "conclusion": "failure",
+        "visible_steps": 0,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_TEST_STEPS"
+      },
+      {
+        "run_id": 32616029604,
+        "workflow": "Research Entity Identity Guard",
+        "conclusion": "failure",
+        "visible_steps": 0,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_TEST_STEPS"
       }
     ],
-    "focused_test_executed": false,
+    "exact_mini_entity_runtime_executed": false,
     "runtime_credit": "ZERO",
     "jspace_runtime_credit": "ZERO",
     "whole_gwt_credit": "ZERO",
     "claude_adapter_runtime_credit": "ZERO",
     "whole_product_credit": "ZERO"
+  },
+  "coordination": {
+    "current_main_delta_since_pr_base": "README plus Claude adapter adjudication receipt only; no overlap with canonical UCF validator/contract/test paths",
+    "open_overlapping_pr": "NONE_FOUND_FOR_GWT_WINNER_EXECUTION_FENCE",
+    "separate_generation_ancestry_work": "PR #1133 remains distinct and was not duplicated"
   },
   "policy": {
     "free_only": true,
@@ -64,6 +101,6 @@
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "reason": "No immutable shared macrocycle/request identifier was exposed on this surface, so the atomic experiment lease was not invented."
   },
-  "evidence_class": "SOURCE_MECHANISM_CANDIDATE_WITH_RUNNER_ADMISSION_BLOCKER",
-  "next_gate": "Execute the focused UCF regression suite on an actually-started admitted isolated executor, then bind an exact-source emitted runtime receipt through current boot ancestry before any runtime promotion."
+  "evidence_class": "EXACT_CHANGED_BLOB_COMPONENT_MECHANISM_SUPPORTED_RUNTIME_UNVERIFIED",
+  "next_gate": "Execute exact-source Mini Entity/UCF runtime on an admitted intentional Ubuntu start and bind the emitted UCF receipt through current JSPACE_GWT_BOOT_BINDING ancestry before any runtime promotion."
 }

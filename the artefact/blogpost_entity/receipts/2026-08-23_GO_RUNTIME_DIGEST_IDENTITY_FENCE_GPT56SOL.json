@@ -9,7 +9,7 @@
     "macrocycle_id": null,
     "unusual_experiment_count": 0,
     "classification": "DETERMINISTIC_SOURCE_FUSION_ONLY",
-    "note": "The shared go cycle already consumed its unusual J-Space transfer discriminator. This delta adds no second unusual experiment."
+    "note": "No new unusual experiment was consumed by this verification pass; it is an independent deterministic regression rerun of the existing source delta."
   },
   "problem": "Merged PR #1080 atomically source-locks the bundled cognition manifest and boot receipt, but exact runtime bytes remained only in bundled_core.runtime_sha256. The canonical manifest integration identity bound a runtime name/identity but not a runtime byte digest, so runtime-byte substitution under a stable runtime identity was not source-locked into the same cognition bundle identity.",
   "delta": {
@@ -44,12 +44,26 @@
     }
   },
   "evidence": {
-    "manifest_exact_blob_local_py_compile": "PASS",
-    "manifest_exact_blob_local_unittest": "PASS_10_OF_10",
-    "manifest_exact_blob_identity": "f7e30922c90dd316c4bf77f6b3a8085ae724e724 + 8e5befbcacd6ce81066d224dc62441180aa1a0e6",
-    "boot_exact_branch_suite": "NOT_EXECUTED",
-    "boot_execution_blocker": "No executable Vercel Sandbox action is exposed by the connected Vercel surface; direct Git clone from the isolated ChatGPT container is network/DNS blocked. Source write and exact Git blob identity are observed, but exact branch boot regression execution is not.",
-    "evidence_class": "SOURCE_DELTA_WITH_PARTIAL_EXACT_COMPONENT_REGRESSION"
+    "tested_pr_head_before_receipt_only_update": "b2581bc85e98c56fc4c60b110af0bcfb01e830c9",
+    "environment": {
+      "class": "isolated ChatGPT container",
+      "os": "Linux",
+      "kernel": "6.18.35",
+      "machine": "x86_64",
+      "python": "3.13.5"
+    },
+    "exact_blob_identity_check": {
+      "manifest_validator": "PASS:f7e30922c90dd316c4bf77f6b3a8085ae724e724",
+      "manifest_tests": "PASS:8e5befbcacd6ce81066d224dc62441180aa1a0e6",
+      "boot_validator": "PASS:67d4c129c387a8499f379560a35cb419f34e2ac6",
+      "boot_tests": "PASS:35fc34f7814277b3c925b88456173a71b6824c3a"
+    },
+    "py_compile": "PASS_ALL_FOUR_EXACT_BLOBS",
+    "manifest_exact_blob_unittest": "PASS_10_OF_10",
+    "boot_exact_blob_unittest": "PASS_17_OF_17",
+    "combined": "PASS_27_OF_27",
+    "github_actions_note": "PR-head GitHub Actions still show runner admission failures with no visible steps; those are kept distinct from the independently executed exact-blob component regression evidence.",
+    "evidence_class": "EXACT_GIT_BLOB_COMPONENT_REGRESSION_VERIFIED"
   },
   "preserved": [
     "PR #1080 repository-owned source lock",
@@ -74,5 +88,5 @@
     "claude_adapter": 0,
     "whole_product": 0
   },
-  "next_gate": "Execute the exact branch boot + manifest regression suites in an authorized isolated runtime. If green, merge this minimal runtime-byte identity fence. Then the next intentional Ubuntu boot can bind checkpoint/tokenizer/runtime/J-Space/lens/workspace bytes into the admitted source lock before any runtime credit."
+  "next_gate": "Merge the verified runtime-byte identity fence, then bind the next intentional exact bundled checkpoint/tokenizer/runtime/J-Space/lens/workspace artifacts into the repository source lock before any runtime credit."
 }

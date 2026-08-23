@@ -1,0 +1,66 @@
+{
+  "schema_version": "4.6-hcu-grid-addendum",
+  "status": "ACTIVE",
+  "mode": "FREE_ONLY",
+  "process_id": "claycode-autonomous-research-cycles",
+  "parent_control_path": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_5_MINI_ENTITY_GO_AUTHORITY.json",
+  "owner_addendum_path": "research_entity/global/MINI_ENTITY_HCU_GRID_OWNER_ADDENDUM.md",
+  "composition_order": [
+    "4.1",
+    "4.2-execution-boundary-addendum",
+    "4.3-program-authority-addendum",
+    "4.4-clayverse-product-authority-addendum",
+    "4.5-mini-entity-go-authority-addendum",
+    "4.6-hcu-grid-addendum"
+  ],
+  "effective_control_version": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum+4.5-mini-entity-go-authority-addendum+4.6-hcu-grid-addendum",
+  "composition_rule": "4.6 EXTENDS 4.5 WITH A MANDATORY HCU CO-DEVELOPMENT PASS; IT DOES NOT CREATE A SECOND ENTITY, STATE AUTHORITY, EFFECT PATH OR TESTING EXCEPTION",
+  "hcu_product_lane": {
+    "name": "Hyperposition Computational Unit",
+    "package_root": "the artefact/MicroEntity/hcu/",
+    "target_host": {
+      "plan": "KVM 4",
+      "vcpu": 4,
+      "memory_gb": 16,
+      "disk_gb": 200,
+      "bandwidth_tb": 16
+    },
+    "model_grid": "MAXIMUM_USEFUL_MULTIPLICITY_OF_APPROX_0_8B_LOGICAL_CELLS",
+    "physical_strategy": "SHARED_OR_MEMORY_MAPPED_WEIGHTS_PLUS_SPARSE_LOGICAL_LANES; PHYSICAL_CONCURRENCY_MEASURED_NOT_ASSUMED",
+    "world_model": "PERSISTENT_STRATEGIC_CAUSAL_SIMULATION_ORGAN",
+    "zero_feedback": "PRIORITIZED_GOAL_HYPOTHESIS_PLAN_AND_IMPROVEMENT_CANDIDATES",
+    "canonical_authority": "MiniUnifiedDB",
+    "direct_effect_authority": false
+  },
+  "go_extension": [
+    "REFRESH_HCU_PACKAGE_AND_CONTROL_STATE",
+    "CHECK_OVERLAP_WITH_CURRENT_HCU_WORKERS_AND_PRS",
+    "ADVANCE_ONE_HIGHEST_INFORMATION_NON_DUPLICATE_HCU_ITEM_WHEN_UNBLOCKED",
+    "PRESERVE_MINIUNIFIEDDB_AS_ONLY_CANONICAL_DURABLE_AUTHORITY",
+    "PRESERVE_HYPERPOSITION_UNTIL_ADMITTED_EVIDENCE_OR_EXPLICIT_DECISION_RULE",
+    "INGEST_FREE_LLM_FUNDUS_OUTPUT_AS_PROVENANCE_BOUND_CANDIDATE_ONLY",
+    "STORE_ALL_PACKAGE_SAFE_HCU_GENERATED_FILES_AND_DATA_UNDER_MICROENTITY_HCU_ROOT",
+    "MARK_MICROENTITY_CURRENT_ZIP_STALE_ON_HCU_CHANGE_UNTIL_REBUILT"
+  ],
+  "free_fundus": {
+    "mode": "FREE_ONLY",
+    "paid_fallback": false,
+    "together_forbidden": true,
+    "http_402": "HARD_STOP",
+    "http_429": "PROVIDER_WIDE_BACKOFF",
+    "quota_evasion_key_rotation": false,
+    "secrets_in_source_or_package": false
+  },
+  "preserved_execution_boundary": {
+    "authorized_isolated_sandbox_only": true,
+    "vps_testing": false,
+    "self_hosted_vps_test_runners": false,
+    "production_host_testing": false,
+    "target_vps_is_deployment_resource_profile_not_acceptance_test_surface": true
+  },
+  "credit": {
+    "hcu_runtime": 0,
+    "hcu_capacity": "UNRESOLVED_UNTIL_MEASURED",
+    "whole_mini_entity": 0
+  }
+}

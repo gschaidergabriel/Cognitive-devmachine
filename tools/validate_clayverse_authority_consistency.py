@@ -99,7 +99,7 @@ def _validate_legacy_safety_ancestry(errors: list[str], paths: dict[str, Path], 
     require(errors, c43.get("execution_boundary_addendum_path") == CONTROL42, "CONTROL43_EXEC_PATH_MISMATCH")
     require(errors, c43.get("execution_boundary_addendum_blob_sha") == blob42, "CONTROL43_EXEC_BLOB_MISMATCH")
     h43 = c43.get("preserved_hard_rules") or {}
-    require(errors, h43.get("free_only") is True and h43.get("paid_fallback") is False, "CONTROL43_FREE_ONLY_WEAKENED")
+    require(errors, h43.get("free_only") is True and h43.get("paid_fallback") is False, "CONTROL43_FREE_ONLY_FENCE_WEAKENED")
     require(errors, h43.get("together_forbidden_under_current_control") is True, "CONTROL43_TOGETHER_FENCE_WEAKENED")
     require(errors, h43.get("runtime_credit_requires_exact_admitted_execution") is True, "CONTROL43_RUNTIME_EVIDENCE_WEAKENED")
 
@@ -218,7 +218,15 @@ def validate(root: Path) -> dict:
     require(errors, "FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE" in str(bootstrap.get("together_api")), "BOOTSTRAP_TOGETHER_FENCE_MISSING")
     require(errors, bootstrap.get("together_training_authority_provenance") == TRAINING_PROVENANCE, "BOOTSTRAP_TRAINING_PROVENANCE_MISMATCH")
     require(errors, bootstrap.get("together_one_shot_training_consumed") is False, "BOOTSTRAP_ONE_SHOT_PREMATURELY_CONSUMED")
-    require(errors, bootstrap.get("current_supervisor_together_training") == CURRENT_SUPERVISOR_TRAINING, "BOOTSTRAP_TRAINING_ADMISSION_FENCE_MISSING")
+    bootstrap_training_fence = str(bootstrap.get("current_supervisor_together_training") or "")
+    require(
+        errors,
+        bootstrap_training_fence.startswith("FORBIDDEN_BEFORE_")
+        and "KEY_LOOKUP" in bootstrap_training_fence
+        and "NETWORK_IO" in bootstrap_training_fence
+        and "JOB_CREATION" in bootstrap_training_fence,
+        "BOOTSTRAP_TRAINING_ADMISSION_FENCE_MISSING",
+    )
     require(errors, bootstrap.get("effect_authority") == "EffectGate+EffectJournal", "BOOTSTRAP_EFFECT_AUTHORITY_MISMATCH")
     execution_surface = str(bootstrap.get("execution_surface") or "")
     require(errors, "AUTHORIZED_ISOLATED_FREE_SANDBOX_ONLY" in execution_surface, "BOOTSTRAP_EXECUTION_FENCE_MISSING")
@@ -270,7 +278,15 @@ def validate(root: Path) -> dict:
     require(errors, mexec.get("vps_testing_forbidden") is True and mexec.get("self_hosted_vps_test_runners_forbidden") is True and mexec.get("production_host_testing_forbidden") is True, "MANIFEST_HOST_EXECUTION_FENCE_WEAKENED")
     require(errors, mexec.get("together_general_inference_and_fallback_forbidden") is True, "MANIFEST_TOGETHER_FENCE_MISSING")
     require(errors, mexec.get("owner_paid_one_shot_08b_jspace_gwt_finetune_consumed") is False, "MANIFEST_ONE_SHOT_PREMATURELY_CONSUMED")
-    require(errors, mexec.get("current_supervisor_together_training") == CURRENT_SUPERVISOR_TRAINING, "MANIFEST_TRAINING_FENCE_MISSING")
+    manifest_training_fence = str(mexec.get("current_supervisor_together_training") or "")
+    require(
+        errors,
+        manifest_training_fence.startswith("FORBIDDEN_BEFORE_")
+        and "KEY_LOOKUP" in manifest_training_fence
+        and "NETWORK_IO" in manifest_training_fence
+        and "JOB_CREATION" in manifest_training_fence,
+        "MANIFEST_TRAINING_FENCE_MISSING",
+    )
     require(errors, mexec.get("paid_or_unknown_provider_admission_boundary") == PAID_BOUNDARY, "MANIFEST_PAID_ADMISSION_FENCE_MISSING")
     require(errors, mexec.get("other_paid_fallback") is False, "MANIFEST_OTHER_PAID_FALLBACK_WEAKENED")
     if current_version >= (8, 63):

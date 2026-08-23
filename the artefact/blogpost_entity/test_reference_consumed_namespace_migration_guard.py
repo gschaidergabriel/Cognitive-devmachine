@@ -41,7 +41,7 @@ def test_nonempty_legacy_consumed_ledger_requires_explicit_namespace_migration(t
     result = runtime.effect("pipeline_init", {"entity_db": str(entity_db)})
 
     assert result["ok"] is False
-    assert "CONSUMED_SOURCE_NAMESPACE_MIGRATION_REQUIRED" in str(result.get("error", ""))
+    assert result.get("error") == "LEGACY_CONSUMED_NAMESPACE_MIGRATION_REQUIRED"
 
     with sqlite3.connect(entity_db) as db:
         columns = [str(row[1]) for row in db.execute("PRAGMA table_info(eos_pipeline_consumed)")]

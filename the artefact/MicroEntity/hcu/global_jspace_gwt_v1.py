@@ -150,6 +150,76 @@ class JSpaceStep:
     trace_sha256: str
     trace: dict
 
+    def __post_init__(self) -> None:
+        """Fail closed if top-level fields split from the digest-bound observable trace.
+
+        `JSpaceStep` is frozen, but its trace payload is a dict. Downstream training code must
+        never be able to relabel a valid trace by constructing/replacing top-level fields while
+        retaining the old trace digest. The producer remains the sole J-Space authority; this
+        constructor only binds its two representations to the same evidence identity.
+        """
+        _generation(self.generation)
+        _text(self.basis_id, "basis_id")
+        _sha256(self.basis_sha256, "basis_sha256")
+        _text(self.winner_cell_id, "winner_cell_id")
+        _text(self.winner_role, "winner_role")
+        _text(self.control_condition, "control_condition")
+        observed_trace_sha = _sha256(self.trace_sha256, "trace_sha256")
+        if not isinstance(self.trace, dict):
+            raise JSpaceError("TRACE_MAPPING_REQUIRED")
+        if self.trace.get("schema") != TRACE_SCHEMA:
+            raise JSpaceError("TRACE_SCHEMA_MISMATCH")
+        if self.trace.get("canonicalization_schema") != TRACE_CANONICALIZATION_SCHEMA:
+            raise JSpaceError("TRACE_CANONICALIZATION_SCHEMA_MISMATCH")
+
+        expected_trace_fields = {
+            "generation": self.generation,
+            "basis_id": self.basis_id,
+            "basis_sha256": self.basis_sha256,
+            "dimension": len(self.global_vector),
+            "winner_cell_id": self.winner_cell_id,
+            "winner_role": self.winner_role,
+            "winner_gate_q": self.winner_gate_q,
+            "hyperposition_cells": list(self.hyperposition_cells),
+            "broadcast_contributor_cells": list(self.hyperposition_cells),
+            "global_vector_q127": [_q_signed(v) for v in self.global_vector],
+            "control_condition": self.control_condition,
+            "control_packet_schema": ABI_SCHEMA,
+        }
+        for field, expected in expected_trace_fields.items():
+            if self.trace.get(field) != expected:
+                raise JSpaceError(f"TRACE_STEP_BINDING_MISMATCH:{field}")
+        if self.winner_cell_id not in self.hyperposition_cells:
+            raise JSpaceError("TRACE_WINNER_NOT_IN_BROADCAST_COALITION")
+
+        if not isinstance(self.control_packet, VectorControlPacket):
+            raise JSpaceError("CONTROL_PACKET_REQUIRED")
+        decode_vector(
+            self.control_packet,
+            current_generation=self.generation,
+            expected_basis_id=self.basis_id,
+            expected_basis_sha256=self.basis_sha256,
+            expected_role=self.winner_role,
+            expected_control_condition=self.control_condition,
+        )
+        packet_wire = packet_bytes(self.control_packet)
+        packet_text = packet_wire.decode("utf-8", "strict")
+        packet_wire_sha = hashlib.sha256(packet_wire).hexdigest()
+        if self.control_packet_text != packet_text:
+            raise JSpaceError("CONTROL_PACKET_TEXT_MISMATCH")
+        if self.control_packet_sha256 != packet_wire_sha:
+            raise JSpaceError("CONTROL_PACKET_WIRE_SHA256_MISMATCH")
+        if self.trace.get("control_packet_text") != packet_text:
+            raise JSpaceError("TRACE_STEP_BINDING_MISMATCH:control_packet_text")
+        if self.trace.get("control_packet_identity_sha256") != self.control_packet.packet_sha256:
+            raise JSpaceError("TRACE_STEP_BINDING_MISMATCH:control_packet_identity_sha256")
+        for field in ("control_packet_sha256", "control_packet_wire_sha256"):
+            if self.trace.get(field) != packet_wire_sha:
+                raise JSpaceError(f"TRACE_STEP_BINDING_MISMATCH:{field}")
+
+        if hashlib.sha256(_trace_bytes(self.trace)).hexdigest() != observed_trace_sha:
+            raise JSpaceError("TRACE_DIGEST_MISMATCH")
+
 
 def _trace_bytes(value: dict) -> bytes:
     # Prototype evidence identity only, never canonical durable-state authority.

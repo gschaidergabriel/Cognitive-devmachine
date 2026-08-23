@@ -181,6 +181,8 @@ def validate(receipt: dict[str, Any]) -> dict[str, Any]:
     if engine_class not in ENGINE_CLASSES:
         raise ReceiptError("ENGINE_CLASS_UNSUPPORTED")
     executed = _bool(inference, "executed")
+    if executed and not winners:
+        raise ReceiptError("EXECUTED_INFERENCE_REQUIRES_GWT_WINNER")
     jspace_mode = _text(inference, "jspace_mode")
     if jspace_mode not in JSPACE_MODES:
         raise ReceiptError("JSPACE_MODE_UNSUPPORTED")

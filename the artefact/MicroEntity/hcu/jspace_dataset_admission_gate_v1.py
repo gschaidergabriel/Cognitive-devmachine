@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
 from typing import Any, Mapping
+
+from entry_canonicalization_v1 import CanonicalizationError, canonicalize
 
 ADMISSION_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2"
 PROTOTYPE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3"
@@ -81,6 +84,21 @@ def _registry_exact(registry: Any, sha: str, observed: Mapping[str, Any], field:
         raise JSpaceDatasetAdmissionError(f"{field}:TRACE_NOT_ADMITTED")
     if dict(admitted) != dict(observed):
         raise JSpaceDatasetAdmissionError(f"{field}:TRACE_REGISTRY_MISMATCH")
+
+
+def _canonical_receipt_sha256(receipt: Any) -> str:
+    """Bind an outcome receipt key to the exact admitted RFC8785/JCS receipt bytes."""
+    receipt = _mapping(receipt, "admitted_outcome_receipt")
+    try:
+        canonical = canonicalize(dict(receipt))
+    except (CanonicalizationError, TypeError, ValueError) as exc:
+        raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_CANONICALIZATION_FAILED") from exc
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def _verify_outcome_receipt_identity(receipt: Any, claimed_sha256: str) -> None:
+    if _canonical_receipt_sha256(receipt) != claimed_sha256:
+        raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_IDENTITY_MISMATCH")
 
 
 def _same(values: Mapping[str, Any], field: str) -> Any:
@@ -304,6 +322,7 @@ def admit_for_training_dataset(
         receipt = outcome_registry.get(outcome)
         if receipt is None:
             raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_ADMITTED")
+        _verify_outcome_receipt_identity(receipt, outcome)
         _verify_outcome_binding(
             receipt,
             training_sha=training_sha,

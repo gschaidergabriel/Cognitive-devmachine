@@ -195,6 +195,31 @@ class CognitionStoreV1Tests(unittest.TestCase):
                 task_text="different task",
             )
 
+    def test_resolve_rejects_prior_generation_after_live_generation_advances(self):
+        # Regression-only replay of the already-consumed STALE_GENERATION_POISON intervention.
+        db = self.make_db(generation=3)
+        _, boot_digest = self.admit_boot(db, generation=3)
+        store.bind_turn(
+            db,
+            entity_generation=3,
+            causal_turn_id="turn-before-restart",
+            boot_binding_digest=boot_digest,
+            task_text="preserve generation fence",
+            workspace_digest=self.digest("workspace-before-restart"),
+            selected_workspace_slots=["slot-stale"],
+            contradiction_state="NONE",
+            provenance_refs=["test:restart"],
+            required_zero_mode="ACTIVE",
+        )
+        db.execute("UPDATE entity_state SET generation=4 WHERE id=1")
+        with self.assertRaisesRegex(store.CognitionStoreError, "STALE_GENERATION"):
+            store.resolve_prepare_binding(
+                db,
+                entity_generation=3,
+                causal_turn_id="turn-before-restart",
+                task_text="preserve generation fence",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,5 +1,5 @@
 {
-  "schema_version": "HCU_COGNITIVE_INDEPENDENCE/v2",
+  "schema_version": "HCU_COGNITIVE_INDEPENDENCE/v3",
   "status": "OWNER_DIRECTED_SOURCE_POLICY",
   "authority_scope": "ENTITYOS_HCU_SOURCE_CONTRACT_RUNTIME_UNVERIFIED",
   "internal_cognition": {
@@ -10,6 +10,17 @@
     "effect_authority": "EffectGate+EffectJournal",
     "script_first": true,
     "reactive_selective_model_activation": true
+  },
+  "typed_entry_control_admission": {
+    "authority": "SEPARATE_ENTITYOS_HCU_DETERMINISTIC_CONTROL_PLANE_NOT_UNTRUSTED_ENTRY_PAYLOAD",
+    "capability_claim_law": "ENTRY_MAY_ONLY_NARROW_EXTERNALLY_ADMITTED_CAPABILITIES",
+    "capability_binding": "ENTRY_CAPABILITY_BINDING_SHA256_MUST_MATCH_EXTERNAL_AUTHORITY_BINDING",
+    "compute_budget_fields": ["max_model_calls", "max_tokens", "max_wall_ms"],
+    "compute_budget_law": "ENTRY_REQUESTED_BUDGET_MUST_BE_COMPONENTWISE_LESS_THAN_OR_EQUAL_TO_EXTERNALLY_ADMITTED_BUDGET",
+    "compute_budget_self_grant": "REJECT",
+    "compute_budget_narrowing": "ALLOW",
+    "scheduler_law": "GRID10_COGSIM10_WM_TEST_NESTED_SIM_MAY_CONSUME_ONLY_AN_ALREADY_ADMITTED_ENTRY_BUDGET",
+    "runtime_authority_evidence": "UNPROVEN_UNTIL_ADMITTED_CAPABILITIES_AND_ADMITTED_BUDGET_ARE_CONSTRUCTED_FROM_THE_CANONICAL_ENTITYOS_CONTROL_AUTHORITY_IN_AUTHORIZED_ISOLATED_EXECUTION"
   },
   "internal_engine_admission": {
     "mode": "SEPARATE_CONTROL_PLANE_ADMISSION_PLUS_POSITIVE_ARTIFACT_REGISTRY",

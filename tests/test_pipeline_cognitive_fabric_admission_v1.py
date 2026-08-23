@@ -54,6 +54,63 @@ class Active:
         return out
 
 
+SEMANTIC_FIELD_DIGESTS = {
+    "zero_identity_digest": h("zero"),
+    "grf_digest": h("grf"),
+    "hyperposition_digest": h("hyperposition"),
+    "bundled_manifest_digest": h("manifest"),
+    "local_model_digest": h("model"),
+    "tokenizer_digest": h("tokenizer"),
+    "jspace_profile_digest": h("jspace"),
+    "jacobian_lens_digest": h("lens"),
+    "workspace_calibration_digest": h("calibration"),
+    "boot_source_lock_digest": h("source-lock"),
+    "policy_authority_digest": h("policy"),
+}
+
+
+class Semantic:
+    @staticmethod
+    def resolve_prepare_bundle(
+        db,
+        *,
+        entity_generation,
+        causal_turn_id,
+        task_text,
+        expected_turn_binding_digest=None,
+    ):
+        objects = {
+            name: {
+                "object_kind": name.upper(),
+                "object_version": "v1",
+                "object_digest": digest,
+                "payload_digest": h("payload:" + name),
+                "provenance_refs": ["semantic:" + name],
+                "admission_receipt_digest": h("admission:" + name),
+                "admitted_generation": entity_generation,
+            }
+            for name, digest in SEMANTIC_FIELD_DIGESTS.items()
+        }
+        return {
+            "ok": True,
+            "schema": "MINIUNIFIEDDB_COGNITION_SEMANTIC_RESOLUTION/v1",
+            "entity_generation": entity_generation,
+            "causal_turn_id": causal_turn_id,
+            "turn_binding_digest": expected_turn_binding_digest,
+            "boot_binding_digest": h("boot-binding"),
+            "task_sha256": h(task_text),
+            "workspace_digest": h("workspace"),
+            "objects": objects,
+            "authority": {
+                "durable_state": "MiniUnifiedDB",
+                "routing_only": True,
+                "candidate_configuration_only": True,
+                "direct_truth_authority": False,
+                "direct_effect_authority": False,
+            },
+        }
+
+
 class Capsule:
     @staticmethod
     def compile_workspace_capsule(**kw):
@@ -175,6 +232,7 @@ class AdmissionTests(unittest.TestCase):
             expected_activation_digest=h("activation"),
             origin="go",
             active_turn_module=Active,
+            semantic_module=Semantic,
             capsule_module=Capsule,
             packet_module=Packet,
             capability_module=Capability,
@@ -197,6 +255,10 @@ class AdmissionTests(unittest.TestCase):
         self.assertEqual(
             out["cognition_invocation_digest"],
             sut._sha256_obj({"schema": sut.INVOCATION_SCHEMA, **self.invocation()}),
+        )
+        self.assertEqual(
+            out["admission_receipt"]["cognition_semantic_binding_digest"],
+            out["cognition_semantic_binding_digest"],
         )
 
     def test_downstream_context_changes_packet_and_admission_identity(self):

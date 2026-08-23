@@ -55,19 +55,26 @@ class Active:
 
 class Capability:
     @staticmethod
-    def resolve_from_profile(profile):
+    def resolve_bound_route(profile, prepare, *, expected_generation):
         snapshot = profile["_runtime_profile_snapshot"]
         binding = profile["inference"].get("capability_binding")
         if not binding:
             raise ValueError("INFERENCE_CAPABILITY_BINDING_REQUIRED")
+        if expected_generation != prepare["entity_generation"]:
+            raise ValueError("STALE_GENERATION")
         return {
             "ok": True,
-            "binding_digest": d("capability"),
+            "capability_binding_digest": d("capability"),
+            "route_digest": d("route"),
             "target_engine_class": "CLAUDE_CODE",
             "ucf_engine_class": "claude_code",
             "jspace_mode": "COMPILED_EXTERNAL",
             "profile_id": snapshot["profile_id"],
             "profile_hash": snapshot["profile_hash"],
+            "causal_turn_id": prepare["causal_turn_id"],
+            "turn_binding_digest": prepare["turn_binding_digest"],
+            "boot_binding_digest": prepare["boot_binding_digest"],
+            "workspace_digest": prepare["workspace_digest"],
         }
 
 
@@ -139,6 +146,7 @@ class PrepareV2Tests(unittest.TestCase):
         self.assertEqual(out["causal_turn_id"], "ct1:g7:a3")
         receipt = out["audit"]["admission_receipt"]
         self.assertEqual(receipt["capability_binding_digest"], d("capability"))
+        self.assertEqual(receipt["capability_route_digest"], d("route"))
         self.assertEqual(receipt["target_engine_class"], "CLAUDE_CODE")
         self.assertEqual(receipt["jspace_mode"], "COMPILED_EXTERNAL")
         self.assertEqual(receipt["authority"]["semantic_authority"], "CANDIDATE_INFERENCE_ONLY")

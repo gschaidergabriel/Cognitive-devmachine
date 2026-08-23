@@ -1,0 +1,135 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "organ": "GPT-5.6 Sol",
+  "coordination": {
+    "atomic_lease_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+    "available_user_trigger_timestamp_precision": "minute",
+    "required_lease_status": "COORDINATION_BLOCKED",
+    "unusual_experiment_credit": 0,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "violation": {
+      "status": "NONCONFORMING_UNLEASED_EXPERIMENT_EXECUTED_BEFORE_PROTOCOL_RECHECK",
+      "experiment_name": "PYTORCH_SAVE_SEMANTIC_ALIAS_FALSIFIER",
+      "local_intervention_count": 1,
+      "canonical_macrocycle_credit": 0,
+      "preservation_rule": "retain raw observation and negative coordination evidence; do not retroactively mint a lease",
+      "no_further_unusual_experiment": true
+    }
+  },
+  "join": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "base_main_sha": "a4834e3e8271d7ecefdc70dfc7154e5c37ce8acb",
+    "branch": "gpt56sol/go-jspace-boot-binding-v1-20260823",
+    "tested_branch_source_commit": "e122e16c5b9185fe3f657ac903f79bf5d89a920a",
+    "tested_branch_source_tree": "f056794bdac94316283e543dc3c62dba670de7a1",
+    "execution_policy_free_only": true
+  },
+  "grf": {
+    "R0_OBSERVE": [
+      "Current owner architecture requires a bundled approximately-0.8B cognition core with fixed versioned J-Space/GWT integration and zero runtime credit until exact identities are bound.",
+      "Anthropic's 2026 J-space definition uses an overcomplete frame and requires an allowable sparsity k; k is therefore part of operational J-space identity rather than a universal hidden constant.",
+      "The public JacobianLens save shape stores J matrices plus n_prompts/source_layers/d_model in a PyTorch checkpoint.",
+      "Current host is intentionally offline; exposed Vercel connector is documentation-only and cannot start/exec a Sandbox in this session."
+    ],
+    "R1_INFER": [
+      "A boot receipt that binds only the lens file hash does not separately identify loaded tensor semantics.",
+      "A boot receipt that omits J-space sparsity k is incomplete for the paper's operational J-space definition.",
+      "The gate must retain exact persisted-byte provenance and canonical semantic matrix identity rather than choosing one."
+    ],
+    "R2_GENERATE": [
+      "BYTE_HASH_ONLY",
+      "SEMANTIC_HASH_ONLY",
+      "DUAL_IDENTITY_BYTE_PLUS_SEMANTIC_HASH"
+    ],
+    "R3_COUNTER": "Semantic normalization could hide meaningful persisted-byte differences; therefore semantic identity must supplement, never replace, exact artifact identity.",
+    "R4_DISCRIMINATE": "Implement fail-closed receipt validation, canonical finite J-matrix digest, explicit jspace_sparsity_k/GWT slot binding, FREE_ONLY fences, and deterministic regressions.",
+    "R5_EMERGENT": [
+      "ARTIFACT_IDENTITY != SEMANTIC_IDENTITY",
+      "DUAL_LENS_IDENTITY = artifact_sha256 + semantic_content_sha256",
+      "JSPACE_DEFINITION_REQUIRES_SPARSITY_K",
+      "PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY"
+    ],
+    "R6_VERIFY": {
+      "source_contract_created": true,
+      "validator_created": true,
+      "tests_passed": 10,
+      "tests_failed": 0,
+      "runtime_credit_added": 0,
+      "model_quality_credit_added": 0,
+      "whole_gwt_credit_added": 0
+    }
+  },
+  "nonconforming_unleased_raw_observation": {
+    "evidence_class": "RAW_LOCAL_OBSERVATION_NO_CANONICAL_UNUSUAL_EXPERIMENT_CREDIT",
+    "environment": {
+      "python": "3.13.5",
+      "torch": "2.10.0+cpu",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+    },
+    "semantic_object": {
+      "n_prompts": 1,
+      "source_layers": [0],
+      "d_model": 2,
+      "J_0": [[1.0, 2.0], [3.0, 4.0]]
+    },
+    "save_a": {
+      "bytes": 1471,
+      "artifact_sha256": "747f293e664176b9ec060330f2da05b6c4fbb2e7e83fefd05614fc7191cf559a"
+    },
+    "save_b": {
+      "bytes": 1471,
+      "artifact_sha256": "55d42567a24dee2da3d6fa9ec1070f078324fa4d8ca128630e84bdd55e2af9bd"
+    },
+    "loaded_semantics_equal": true,
+    "ordered_fp32_finite_v1_semantic_sha256_a": "3a5b4656bc23b2ea32678e92643f50cf39efacadf26f0492c9e7dc89b895cab0",
+    "ordered_fp32_finite_v1_semantic_sha256_b": "3a5b4656bc23b2ea32678e92643f50cf39efacadf26f0492c9e7dc89b895cab0"
+  },
+  "ordinary_regression": {
+    "command": "python -m py_compile jspace_boot_binding_v1.py test_jspace_boot_binding_v1.py && python -m unittest -v test_jspace_boot_binding_v1.py",
+    "result": "PASS_10_OF_10",
+    "validator_sha256": "4763f84f0b2548c20f14ee89389aa6052dc007fab11463153ce7294e1ba41f45",
+    "test_sha256": "6ab96284bb69a29af9be2eaf044caa9606acecd3cec4b053226f054cf29d3e1e",
+    "contract_sha256": "8112783a7703a6ee1912e10ca4044b5ae550b8096dc6127da6538b254ac4f446",
+    "coverage": [
+      "complete structural receipt acceptance",
+      "semantic digest required",
+      "nonfinite receipt rejection",
+      "noncanonical layer rejection",
+      "positive J-space sparsity k required",
+      "FREE_ONLY secret/network boundary",
+      "clean source required",
+      "nonfinite persisted tensor rejection",
+      "equivalent-save semantic identity regression",
+      "raw artifact plus semantic digest verification"
+    ]
+  },
+  "source_delta": {
+    "contract": "research_entity/global/JSPACE_GWT_BOOT_BINDING_CONTRACT_V1.md",
+    "validator": "the artefact/blogpost_entity/mini_cognition/jspace_boot_binding_v1.py",
+    "tests": "the artefact/blogpost_entity/mini_cognition/test_jspace_boot_binding_v1.py"
+  },
+  "external_primary_evidence": [
+    {
+      "url": "https://transformer-circuits.pub/2026/workspace/index.html",
+      "role": "J-space overcomplete-frame and sparsity-k definition"
+    },
+    {
+      "url": "https://github.com/anthropics/jacobian-lens/blob/main/jlens/lens.py",
+      "role": "public JacobianLens save/load checkpoint shape"
+    }
+  ],
+  "execution_boundary": {
+    "vps_or_owner_host_started": false,
+    "vercel_sandbox_exec_available_to_this_organ": false,
+    "together_secret_lookup": false,
+    "together_network_call": false,
+    "provider_call": false,
+    "money_spent_usd": 0
+  },
+  "strongest_remaining_counterhypothesis": "A structurally correct dual-identity boot receipt can still bind a useless or miscalibrated lens; only exact Qwen3.5-0.8B runtime fitting/readout/ablation and held-out calibration can establish functional J-Space/GWT credit.",
+  "next_executable_gate": "On the next authorized exact Ubuntu start, bind clean source/tree + exact bundled checkpoint/tokenizer/runtime + lens byte/semantic digests + workspace k/GWT policy + Zero/GRF/Claude adapter identities, then run the official jlens hook/jacobian path and model-specific calibration before any J-Space/GWT runtime promotion.",
+  "result": "SOURCE_GATE_BUILT_TESTED_COORDINATION_VIOLATION_PRESERVED_RUNTIME_UNVERIFIED"
+}

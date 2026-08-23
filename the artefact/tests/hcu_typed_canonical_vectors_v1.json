@@ -1,0 +1,36 @@
+{
+  "schema": "ENTITYOS_HCU_TYPED_CANONICAL_TEST_VECTORS/v1",
+  "canonical_schema": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
+  "vectors": [
+    {
+      "name": "route",
+      "value": {"schema": "HCU_ROUTE/v3", "generation": 17, "lanes": ["world", "critic"], "enabled": true},
+      "canonical_hex": "7b22656e61626c6564223a747275652c2267656e65726174696f6e223a31372c226c616e6573223a5b22776f726c64222c22637269746963225d2c22736368656d61223a224843555f524f5554452f7633227d",
+      "identity_sha256": "1996580e117ce8c21e458e7f7604c927bef83e9d23f637609b3af22372012606"
+    },
+    {
+      "name": "nested",
+      "value": {"z": 1, "a": 2, "nested": {"b": true, "a": null}},
+      "canonical_hex": "7b2261223a322c226e6573746564223a7b2261223a6e756c6c2c2262223a747275657d2c227a223a317d",
+      "identity_sha256": "fe7d642f89115ee32ecd3e09d5591330a7bc88fae39d94a5e5229ae7fe302f13"
+    },
+    {
+      "name": "unicode_preserve",
+      "value": {"composed": "é", "decomposed": "é"},
+      "canonical_hex": "7b22636f6d706f736564223a22c3a9222c226465636f6d706f736564223a2265cc81227d",
+      "identity_sha256": "c0dc062da7cad9abd5c0e4558f19f696208c7f182cac0af856dedf385f12b265"
+    },
+    {
+      "name": "control",
+      "value": {"value": "\b\t\n\f\r\u0001\\\""},
+      "canonical_hex": "7b2276616c7565223a225c625c745c6e5c665c725c75303030315c5c5c22227d",
+      "identity_sha256": "38d11c4c2575123425a53d89f79506c5df3474a713b63862f0b0c93757ddd3cd"
+    },
+    {
+      "name": "integer_edges",
+      "value": {"min": -9007199254740991, "max": 9007199254740991, "zero": 0},
+      "canonical_hex": "7b226d6178223a393030373139393235343734303939312c226d696e223a2d393030373139393235343734303939312c227a65726f223a307d",
+      "identity_sha256": "f525cb0144ea8aab91ff575d5a52f254bbe5d9623d653bfe1005841a5e31a200"
+    }
+  ]
+}

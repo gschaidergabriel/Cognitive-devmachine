@@ -25,7 +25,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.6.1"
+VERSION = "clay-profile-pipeline-runtime/0.6.2"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -793,8 +793,11 @@ class ProfilePipelineRuntime(clay.Runtime):
             prefix = str(source.get("evidence_prefix", ""))
             if not source.get("ok") or not prefix:
                 continue
+            if "~" in prefix:
+                raise PipelineFault("EVIDENCE_PREFIX_RESERVED_SEPARATOR")
             namespace = str(source.get("source_namespace", "")).strip()
-            identity_prefix = prefix + (namespace + "::" if namespace else "")
+            source_tuple = _canonical_json([prefix, namespace]).encode("utf-8").hex()
+            identity_prefix = prefix + "~" + source_tuple + "~"
             for row in source.get("rows", []):
                 source_id = row.get("source_id")
                 if source_id is not None:

@@ -1,0 +1,92 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-23",
+  "recorded_at": "2026-08-23T03:06:33Z",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "branch": "chatgpt/go-jspace-boot-hardening-20260823-1001",
+  "base_main_sha": "a492051e5e22c051cde97c82ae3b7db7194456ed",
+  "tested_source_commit": "adc022c8c786f21dabf4c2a68365f99266ba9748",
+  "coordination": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "immutable_user_message_timestamp_available": "2026-08-23T09:51+07:00",
+    "timestamp_precision": "MINUTE_ONLY",
+    "atomic_claim_created": false,
+    "unusual_experiment_count": 0,
+    "reason": "Current GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires an immutable shared request id or at least whole-second immutable message timestamp; no canonical lease key may be invented from minute-only metadata.",
+    "parallel_pr_1057_adjudicated": true,
+    "parallel_duplicate_verifier_pr_created": false,
+    "abandoned_duplicate_branch": "chatgpt/go-jspace-boot-binding-20260823-0951",
+    "fusion_decision": "Extend the already-merged canonical PR #1057 validator only with non-duplicate guards."
+  },
+  "exact_git_blobs": {
+    "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py": "49246944ef2a6ec7e14252952238fb17cb6def24",
+    "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py": "ded117e733c4bcff0d7d214a93d5abe0f8b70bbd",
+    "the artefact/blogpost_entity/jspace_gwt/JSPACE_GWT_BOOT_BINDING_V1.md": "db0518c91f3fcf0b06669d0ed6dd931a360d14b5"
+  },
+  "exact_local_component_execution": {
+    "source_identity_method": "Local files were tested first; git hash-object values were then required to match GitHub create_blob return SHAs exactly before commit.",
+    "validator_git_blob_match": true,
+    "test_git_blob_match": true,
+    "document_git_blob_match": true,
+    "validator_sha256": "5af878f592edd35d814cf5a09f544d7038d152f75fdad27db57c42a9fcb85118",
+    "test_sha256": "c03c647d7f1e5ac6cf78214a6cf7fb997f9990cfcb36c96ae2b70fd64a510a73",
+    "py_compile": "PASS",
+    "unittest_total": 11,
+    "unittest_pass": 11,
+    "unittest_fail": 0,
+    "evidence_class": "BOUNDED_EXACT_GIT_BLOB_SOURCE_CONTRACT_COMPONENT"
+  },
+  "delta": {
+    "canonical_path_extended": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
+    "new_guards": [
+      "independent artifact-root path/size/SHA-256 verification instead of trusting exact_bytes_verified boolean",
+      "path and symlink escape rejection outside explicit artifact root",
+      "J-Space source checkpoint digest must equal bundled checkpoint digest",
+      "J-Space source tokenizer digest must equal bundled tokenizer digest",
+      "J-Space d_model must equal bundled-core d_model",
+      "J-Space source layers must be unique/sorted and inside bundled-core layer_count",
+      "first inference packet digest attribution",
+      "FREE_ONLY must be bound and paid/unknown provider network attempt must be false"
+    ],
+    "retained_pr_1057_guards": [
+      "pre/post serialization numeric finiteness",
+      "fitted readout-position boundary",
+      "prompt-copy confound guard",
+      "Whole-GWT and whole-product non-promotion authority fences"
+    ]
+  },
+  "grf": {
+    "R0": "PR #1057 already landed the canonical boot-binding validator while this go was active.",
+    "R1": "Its exact_bytes_verified field was asserted but actual named artifact bytes were not independently hashed by the validator; lens/core compatibility was also not cross-bound.",
+    "R2": "Strengthen the existing canonical validator rather than create a second validator authority.",
+    "R3": "Counter-reality: all digest fields can be syntactically valid and exact_bytes_verified can be true while checkpoint bytes are substituted, or a valid lens from another checkpoint is transplanted.",
+    "R4": "11 deterministic regressions including artifact substitution, path escape, foreign-checkpoint lens provenance, geometry mismatch, FREE_ONLY network violation, plus all retained #1057 poisons.",
+    "R5": "Compatibility-before-cognition-credit is strengthened without pretending compatibility proves semantic usefulness.",
+    "R6": "Exact Git-blob component mechanism PASS only; Ubuntu/model/J-Space/Whole-GWT runtime credit remains zero."
+  },
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "provider_preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "money_spent_usd": 0
+  },
+  "claims": {
+    "boot_binding_validator_component": "BOUNDED_EXACT_GIT_BLOB_COMPONENT_PASS",
+    "ubuntu_boot_receipt": "NOT_EXECUTED_HOST_INTENTIONALLY_OFFLINE",
+    "bundled_08b_exact_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "model_quality_credit": 0,
+    "semantic_truth_credit": 0,
+    "whole_mini_entity": "IN_PROGRESS"
+  },
+  "next_gate": "At the next intentional exact Ubuntu start, produce PRESTART_FROZEN_BASELINE + POSTSTART_OBSERVATION_RECEIPT/v1 + JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 using the explicit artifact root and exact checkpoint/tokenizer/runtime/lens/workspace/Zero-GRF/Claude-profile bytes; then separately measure J-Space/GWT calibration and Claude adapter behavior."
+}

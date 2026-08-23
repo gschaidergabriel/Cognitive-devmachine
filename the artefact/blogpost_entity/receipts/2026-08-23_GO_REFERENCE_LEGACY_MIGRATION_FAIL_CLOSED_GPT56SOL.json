@@ -1,0 +1,44 @@
+{
+  "schema": "clay-go-source-receipt/v2",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "fresh_main": "770286bf52623a2cd91f464ca8310321c1fe0be7",
+  "execution_control": "FREE_ONLY",
+  "decision": "NORMAL_PIPELINE_INIT_FAILS_CLOSED_ON_UNRESOLVED_LEGACY_ONLY_GENERATION",
+  "grf": {
+    "R0": [
+      "entity_state.generation is the sole live generation/CAS authority",
+      "legacy eos_pipeline_state.generation has been falsified as a safe recurrent authority",
+      "main@770286b contains a permissive guard allowing either fail-closed or implicit one-shot import",
+      "silent generation-zero initialization on a legacy-only nonzero DB would destroy continuity"
+    ],
+    "R1": "bootstrap admission and historical migration authority are distinct responsibilities",
+    "R2": ["silent_reset_zero", "implicit_pipeline_init_import", "explicit_fail_closed_then_separate_migration"],
+    "R3": "implicit pipeline_init import promotes an untrusted compatibility counter into canonical state without a separately named provenance-bound migration decision",
+    "R4": "legacy-only nonzero -> LEGACY_GENERATION_MIGRATION_REQUIRED and no canonical row; truly fresh DB -> generation 0",
+    "R5": "a later backward-compatibility migration may be explicit, one-shot and provenance-bound without giving the mirror live authority",
+    "R6": "SOURCE_GUARD_CANDIDATE; exact repository runtime unobserved"
+  },
+  "delta": {
+    "test": "the artefact/blogpost_entity/test_reference_legacy_generation_migration_boundary.py",
+    "effect": "narrows the already-landed permissive migration guard so ordinary pipeline_init must choose fail-closed admission for unresolved legacy-only continuity",
+    "fresh_db_contract": "generation 0 remains allowed only for genuinely fresh DBs"
+  },
+  "unusual_experiment": {
+    "additional_count": 0,
+    "note": "Deterministic policy/source adjudication only; no new unusual experiment."
+  },
+  "execution": {
+    "exact_repo_runtime": false,
+    "provider_network_call": false,
+    "together_preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0,
+    "vps_test": false
+  },
+  "promotion_boundary": "merge/source guard is not runtime/native-v2/whole-product PASS; repaired exact-current runtime must execute on an actually-started authorized isolated runner"
+}

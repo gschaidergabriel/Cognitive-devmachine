@@ -1,0 +1,47 @@
+{
+  "schema": "mini-entity-source-correction-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "bf368d5fd89fc54d18679bf22df90824d507d874",
+  "delta": {
+    "source": "the artefact/blogpost_entity/mini_cognition/check_qwen35_jlens_admission.py",
+    "test": "the artefact/blogpost_entity/mini_cognition/test_qwen35_jlens_admission_model_type.py",
+    "old_default_expected_model_type": "qwen3_5",
+    "new_default_expected_model_type": "qwen3_5_text"
+  },
+  "r0_observed": [
+    "The current admission gate calls config.get_text_config() before comparing text_config.model_type to --expected-model-type.",
+    "The official Qwen/Qwen3.5-0.8B config has outer model_type qwen3_5 and nested text_config.model_type qwen3_5_text, with hidden_size 1024 and 24 layers.",
+    "Current Hugging Face Transformers tests require AutoModelForCausalLM to unwrap composite Qwen3_5Config into Qwen3_5ForCausalLM with Qwen3_5TextConfig.",
+    "Therefore the old default qwen3_5 deterministically mismatches the exact object that the gate validates after unwrap."
+  ],
+  "r1_infer": "The layout gate would reject the intended official text-only surface before jlens.from_hf despite correct Transformers unwrapping.",
+  "r3_counter": "If get_text_config returned the outer composite config, qwen3_5 would be correct; current official Qwen3.5 config and Transformers tests falsify that path for this text-only gate.",
+  "repair": "Bind the default to qwen3_5_text and retain an explicit override flag for future exact-runtime variants.",
+  "regression": {
+    "kind": "ordinary deterministic mechanism regression; no additional unusual experiment claimed",
+    "checks": [
+      "default constant equals qwen3_5_text",
+      "fixture composite config unwrap with qwen3_5_text passes model-type/layer/d_model gate",
+      "old qwen3_5 expectation is rejected with model_type mismatch"
+    ],
+    "local_mechanism_result": "PASS",
+    "scope": "stdlib fixture reproducing the exact comparison path; not Transformers/JLens/model runtime evidence"
+  },
+  "primary_sources": [
+    "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json",
+    "https://github.com/huggingface/transformers/blob/main/tests/models/qwen3_5/test_modeling_qwen3_5.py",
+    "https://github.com/huggingface/transformers/blob/main/src/transformers/models/qwen3_5/modular_qwen3_5.py"
+  ],
+  "authority": {
+    "runtime_credit_added": 0,
+    "jspace_credit_added": 0,
+    "whole_gwt_credit_added": 0,
+    "model_quality_credit_added": 0,
+    "whole_product_credit_added": 0,
+    "free_only_preserved": true,
+    "provider_execution": false
+  },
+  "next_gate": "Run the corrected offline layout phase against exact locally cached Qwen/Qwen3.5-0.8B plus pinned Transformers and jlens. Only a real observed layout pass may advance to weighted forward hooks and bounded Jacobian."
+}

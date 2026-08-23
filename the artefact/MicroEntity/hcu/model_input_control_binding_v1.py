@@ -228,6 +228,8 @@ def validate_model_input_control_binding(
     generation = _generation(binding.generation)
 
     observed_binding_sha = _sha256(binding.binding_sha256, "binding_sha256")
+    if binding.binding_sha256 != observed_binding_sha:
+        raise ModelInputControlBindingError("binding_sha256:NONCANONICAL_SHA256")
     expected_binding_sha = _canonical_sha256(_material(binding), "MODEL_INPUT_CONTROL_BINDING")
     if observed_binding_sha != expected_binding_sha:
         raise ModelInputControlBindingError("MODEL_INPUT_CONTROL_BINDING_DIGEST_MISMATCH")
@@ -241,7 +243,8 @@ def validate_model_input_control_binding(
         (binding.vector_control_packet_sha256, "vector_control_packet_sha256"),
         (binding.input_sha256, "input_sha256"),
     ):
-        _sha256(value, field)
+        if value != _sha256(value, field):
+            raise ModelInputControlBindingError(f"{field}:NONCANONICAL_SHA256")
     for value, field, max_len in (
         (binding.cell_id, "cell_id", 256),
         (binding.role, "role", 256),
@@ -250,13 +253,21 @@ def validate_model_input_control_binding(
         (binding.executor_id, "executor_id", 256),
         (binding.invocation_id, "invocation_id", 256),
     ):
-        _text(value, field, max_len)
+        if value != _text(value, field, max_len):
+            raise ModelInputControlBindingError(f"{field}:NONCANONICAL_TEXT")
     if binding.vector_control_abi != ABI_SCHEMA:
         raise ModelInputControlBindingError("VECTOR_CONTROL_ABI_MISMATCH")
 
     declared_input_size = _declared_input_size(binding.input_size)
+    packet_text_value = _text(
+        binding.vector_control_packet_jcs_utf8,
+        "vector_control_packet_jcs_utf8",
+        262144,
+    )
+    if binding.vector_control_packet_jcs_utf8 != packet_text_value:
+        raise ModelInputControlBindingError("vector_control_packet_jcs_utf8:NONCANONICAL_TEXT")
     try:
-        packet = parse_packet_text(_text(binding.vector_control_packet_jcs_utf8, "vector_control_packet_jcs_utf8", 262144))
+        packet = parse_packet_text(packet_text_value)
     except Exception as exc:
         raise ModelInputControlBindingError(f"VECTOR_CONTROL_PACKET_REVALIDATION_FAILED:{exc}") from exc
     if packet.packet_sha256 != binding.vector_control_packet_sha256:

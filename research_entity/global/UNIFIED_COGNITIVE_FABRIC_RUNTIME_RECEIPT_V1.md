@@ -37,6 +37,7 @@ fabric_receipt_v1(
   workspace_transition,
   inference_packet,
   candidate_result,
+  candidate_epistemic_status,
   validation_reconciliation,
   effect_boundary,
   secret_network_counters,
@@ -46,9 +47,11 @@ fabric_receipt_v1(
 law(model_output != canonical_truth)
 law(model_output != direct_effect_authority)
 law(workspace_stability != factual_truth)
+law(latent_geometry != factual_truth)
 law(stale_identity_or_manifest -> reject)
 law(FREE_ONLY && (secret_lookup_count>0 || network_attempt_count>0) -> reject)
 law(canonical_write -> validation_decision==ACCEPTED_CANDIDATE)
+law((canonical_write || effect_admitted) -> candidate_epistemic_status==MEASURED_SUPPORTED)
 law(effect_admitted -> effect_requested)
 ```
 
@@ -117,7 +120,7 @@ For Claude Code the adapter version and capability-profile digest are mandatory.
 
 For adaptive backends the exact capability profile is bound. A profile cannot claim hidden-state/J-Space access that the backend does not expose.
 
-### 6. Candidate-only return and deterministic reconciliation
+### 6. Candidate-only return, epistemic status and deterministic reconciliation
 
 Every learned/external engine result re-enters as a candidate.
 
@@ -125,11 +128,18 @@ The receipt binds:
 - complete InferencePacket digest;
 - candidate-result digest or explicit null when no learned inference ran;
 - `candidate_only = true`;
+- explicit candidate epistemic status: `MEASURED_SUPPORTED | UNKNOWN | ERROR | REFUTED`; `NOT_APPLICABLE` is reserved for `DETERMINISTIC_ONLY`;
 - deterministic validation/reconciliation decision;
 - canonical-write decision;
 - effect request/admission decision.
 
 No engine result can directly mint durable truth or bypass deterministic effect authority.
+
+A stable or internally coherent J-Space/GWT workspace does not upgrade an `UNKNOWN`, `ERROR` or `REFUTED` candidate. `canonical_write` and `effect_admitted` require `MEASURED_SUPPORTED` in addition to the existing deterministic reconciliation/effect gates.
+
+This closes the specific truth-confusion failure mode:
+
+`WORKSPACE_STABLE + CANDIDATE_REFUTED != CANONICAL_TRUTH`
 
 ### 7. FREE_ONLY / secret / network boundary
 
@@ -168,13 +178,15 @@ The strongest first acceptance cycle should exercise:
 - adaptive-backend capability mismatch negative case;
 - stale Zero identity or stale bundled manifest negative case;
 - candidate direct-state/effect mutation negative case;
-- a case where workspace is stable but evidence is factually wrong, proving `WORKSPACE_STABILITY != FACTUAL_TRUTH`.
+- a case where workspace is stable but candidate evidence is `REFUTED`, proving `WORKSPACE_STABILITY != FACTUAL_TRUTH` and blocking canonical write/effect authority.
 
 ## Validator
 
 `the artefact/blogpost_entity/validate_unified_cognitive_fabric_receipt_v1.py` implements the deterministic source-level admission checks for this envelope.
 
 Its tests are deterministic source regressions only. Runtime credit requires the actual exact runtime to emit a receipt and the validator to execute against those exact bytes on an admitted execution surface.
+
+The `WORKSPACE_STABILITY_TRUTH_CONFUSION_MUTATION` test in the retained lane is a regression-only fusion of the already-consumed unusual intervention from PR #1046; it is not a second unusual experiment.
 
 ## Promotion boundary
 

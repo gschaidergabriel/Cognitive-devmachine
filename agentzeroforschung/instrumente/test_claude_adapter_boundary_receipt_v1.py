@@ -76,6 +76,18 @@ class TestReceipt(unittest.TestCase):
     def test_boundary_cross_run_rejected(self):
         self.assert_reject(lambda x: x["boundaries"]["tool_less"].__setitem__("common_identity_sha256", H64F))
 
+    def test_cross_boundary_stdout_mismatch_rejected(self):
+        x = fixture()
+        x["boundaries"]["structured_output"]["stdout_sha256"] = H64F
+        with self.assertRaisesRegex(ReceiptError, "boundary stdout_sha256 mismatch"):
+            diagnose(x)
+
+    def test_cross_boundary_stderr_mismatch_rejected(self):
+        x = fixture()
+        x["boundaries"]["env_isolation"]["stderr_sha256"] = H64F
+        with self.assertRaisesRegex(ReceiptError, "boundary stderr_sha256 mismatch"):
+            diagnose(x)
+
     def test_unmeasured_rejected(self):
         self.assert_reject(lambda x: x["boundaries"]["tool_less"].__setitem__("measured", False))
 

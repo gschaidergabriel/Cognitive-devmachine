@@ -22,13 +22,17 @@ The active target is one persistent portable multi-use Mini Entity executed by E
 - one first-class Claude Code targeted-inference adapter returning candidate inference only;
 - adaptive profiled integration for other admitted local/API inference engines;
 - self-hosted MicroEntity control/inspection dashboard;
-- deterministic truth/schema/authority/generation/effect gates around all model output and state changes.
+- deterministic truth/schema/authority/generation/effect gates around all model output and state changes;
+- one co-developed **Hyperposition Computational Unit (HCU)**: a persistent sparse grid of logical approximately-0.8B cognition modules for causal world-model simulation, dynamic goal candidates, long planning, Zero modeling and improvement-hypothesis feedback, while MiniUnifiedDB remains the sole canonical durable authority.
 
 Primary architecture source remains:
 `research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md`
 
 Supporting architecture:
 `research_entity/global/ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md`
+
+Current HCU owner addendum:
+`research_entity/global/MINI_ENTITY_HCU_GRID_OWNER_ADDENDUM.md`
 
 ## Exact `go` law
 
@@ -43,9 +47,10 @@ Every exact user `go` means:
 7. preserve MiniUnifiedDB as canonical authority, model/J-Space/GWT output as candidate/measurement only, and exact generation/provenance/effect fences;
 8. execute the strongest authorized isolated evidence available;
 9. fuse durable source/evidence delta and re-enter changed reality;
-10. continue useful current-turn work until truly blocked.
+10. run the mandatory HCU co-development pass from the current HCU owner addendum: refresh HCU state, advance one non-duplicate HCU item when unblocked, keep all package-safe HCU artifacts/data under `the artefact/MicroEntity/hcu/`, and treat `MICROENTITY_CURRENT.zip` as stale until rebuilt after HCU package changes;
+11. continue useful current-turn work until truly blocked.
 
-`go` must not silently switch back to ClayVerse work selection.
+`go` must not silently switch back to ClayVerse work selection and must not silently drop the HCU co-development lane.
 
 ## Current cognitive product law
 
@@ -58,6 +63,12 @@ Every exact user `go` means:
 `CLAUDE_CODE_INTEGRATION = FIRST_CLASS_FIXED_CONTRACT`
 
 `OTHER_INFERENCE_ENGINES = ADAPTIVE_PROFILED_CONTRACT`
+
+`HCU_GRID = MANDATORY_CO_DEVELOPED_PERSISTENT_COMPUTE_ORGAN`
+
+`HCU_TARGET = MAXIMUM_USEFUL_APPROX_0_8B_LOGICAL_MODULE_MULTIPLICITY`
+
+`HCU_WORLD_MODEL = STRATEGIC_CAUSAL_SIMULATION_NOT_SECOND_TRUTH_AUTHORITY`
 
 `MINIUNIFIEDDB = CANONICAL_DURABLE_AUTHORITY`
 
@@ -81,9 +92,20 @@ This owner correction does **not** weaken current safety/execution controls:
 - HTTP 429 causes provider-wide backoff, never quota-evasion key rotation;
 - current build/test/runtime-validation remains authorized-isolated-sandbox-only;
 - VPS/self-hosted/production-host test evidence remains forbidden;
-- exact runtime/model/J-Space/GWT/Claude-adapter/whole-product credit requires exact admitted execution;
+- the owner-nominated HCU KVM4 VPS (4 vCPU, 16 GB RAM, 200 GB disk, 16 TB bandwidth) is currently a deployment/resource target only and is not an acceptance-test exception;
+- exact runtime/model/J-Space/GWT/Claude-adapter/HCU/whole-product credit requires exact admitted execution;
 - final paid/model training requires explicit owner authorization;
 - Frank Harness modification remains forbidden.
+
+## HCU package/data law
+
+All generated package-safe HCU source, configuration, schemas, non-secret receipts, package-safe datasets and derived HCU data are stored under:
+
+`the artefact/MicroEntity/hcu/`
+
+The MicroEntity package snapshot must recursively include that directory when rebuilt. Any HCU package change makes `the artefact/MicroEntity/MICROENTITY_CURRENT.zip` stale until rebuilt. Secrets/API tokens are never packaged. Externally sourced model blobs may remain digest-locked references unless the package explicitly vendors them.
+
+Free-LLM/token-fundus output enters HCU only as provenance-bound candidate evidence. Provider/model consensus never becomes truth by vote.
 
 ## ClayVerse scope after this override
 

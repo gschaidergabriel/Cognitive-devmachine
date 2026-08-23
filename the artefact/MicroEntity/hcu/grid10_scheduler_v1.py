@@ -16,12 +16,14 @@ from typing import Any, Mapping
 
 try:
     from .reactive_event_router_v1 import RouteDecision
-    from .typed_entry_canonical_v1 import CanonicalEncodingError, encode_canonical
+    from .typed_entry_canonical_v1 import CANONICALIZATION_SCHEMA, CanonicalEncodingError, encode_canonical
     from .xeno_entry_fabric_v1 import EntryFabricError, EntryPacket, admit_entry
 except ImportError:
     from reactive_event_router_v1 import RouteDecision
-    from typed_entry_canonical_v1 import CanonicalEncodingError, encode_canonical
+    from typed_entry_canonical_v1 import CANONICALIZATION_SCHEMA, CanonicalEncodingError, encode_canonical
     from xeno_entry_fabric_v1 import EntryFabricError, EntryPacket, admit_entry
+
+GRID_PLAN_SCHEMA = "ENTITYOS_HCU_GRID_PLAN/v2"
 
 
 class GridScheduleError(ValueError):
@@ -70,6 +72,7 @@ class CellLease:
 @dataclass(frozen=True)
 class GridPlan:
     schema: str
+    canonicalization_schema: str
     plan_sha256: str
     ingress_id: str
     causal_id: str
@@ -306,7 +309,8 @@ def compile_plan(
         raise GridScheduleError("GRID10_INTERNAL_CELL_COUNT_MISMATCH")
 
     canonical: dict[str, Any] = {
-        "schema": "ENTITYOS_HCU_GRID_PLAN/v1",
+        "schema": GRID_PLAN_SCHEMA,
+        "canonicalization_schema": CANONICALIZATION_SCHEMA,
         "ingress_id": packet.ingress_id,
         "causal_id": packet.causal_id,
         "entity_generation": packet.entity_generation,
@@ -344,6 +348,7 @@ def compile_plan(
 
     return GridPlan(
         schema=canonical["schema"],
+        canonicalization_schema=CANONICALIZATION_SCHEMA,
         plan_sha256=plan_sha256,
         ingress_id=packet.ingress_id,
         causal_id=packet.causal_id,

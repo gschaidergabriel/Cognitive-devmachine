@@ -37,6 +37,7 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "release_form": mod.EXPECTED_RELEASE,
                 "together_api": "FORBIDDEN",
                 "vps_testing": "FORBIDDEN",
+                "all_worker_protocol": mod.WORKER_DIRECTIVE,
             },
             "research_entity/rooms/PROGRAM_STATE.json": {
                 "program_id": "clayverse-single-container",
@@ -161,6 +162,14 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
                 "`STAGE=CLAYVERSE_ARTIFACT`\n"
                 "Read research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md first.\n"
+            ),
+            mod.WORKER_DIRECTIVE: (
+                "# ClayCode All-Workers Execution Directive — ClayVerse\n"
+                "Current product authority: research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n"
+                "Active product: **ClayVerse**\n"
+                "[CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]\n"
+                "Persistent research entity: Clay.\n"
+                "[/CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]\n"
             ),
         }
         for rel, data in files.items():
@@ -317,6 +326,31 @@ class AuthorityConsistencyTests(unittest.TestCase):
             encoding="utf-8",
         )
         self.assertIn("ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE", mod.validate(root)["errors"])
+
+    def test_legacy_mini_entity_worker_prompt_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.WORKER_DIRECTIVE
+        path.write_text(
+            "Current product authority: research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n"
+            "Active product: **ClayVerse**\n"
+            "[MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]\n"
+            "All Mini Entity workers operate ClayCode-first.\n",
+            encoding="utf-8",
+        )
+        errors = mod.validate(root)["errors"]
+        self.assertIn("WORKER_DIRECTIVE_CLAYVERSE_PROMPT_MARKER_MISSING", errors)
+        self.assertIn("WORKER_DIRECTIVE_LEGACY_MINI_ENTITY_PROMPT_MARKER", errors)
+        self.assertIn("WORKER_DIRECTIVE_LEGACY_ACTIVE_ROLE", errors)
+
+    def test_missing_worker_directive_pointer_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["all_worker_protocol"] = "research_entity/claycode/legacy.md"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("BOOTSTRAP_WORKER_DIRECTIVE_POINTER_MISMATCH", mod.validate(root)["errors"])
 
 
 if __name__ == "__main__":

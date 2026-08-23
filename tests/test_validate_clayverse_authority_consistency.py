@@ -11,353 +11,272 @@ assert spec and spec.loader
 spec.loader.exec_module(mod)
 
 
-class AuthorityConsistencyTests(unittest.TestCase):
+class EntityOSHCUAuthorityConsistencyTests(unittest.TestCase):
     def make_tree(self):
         td = tempfile.TemporaryDirectory()
         root = Path(td.name)
-        files = {
-            "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json": {
+
+        def write_json(rel, value):
+            path = root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(value, sort_keys=True), encoding="utf-8")
+            return path
+
+        def write_text(rel, value):
+            path = root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(value, encoding="utf-8")
+            return path
+
+        write_json(
+            "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+            {"entity_id": "entity"},
+        )
+        write_json(
+            "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+            {
                 "entity_id": "entity",
-                "entity_version": "V1",
-                "revision": 2,
-                "state_hash": "state",
-            },
-            "research_entity/continuity/BOOTSTRAP_MINIMAL.json": {
-                "entity_id": "entity",
-                "expected_entity_version": "V1",
-                "expected_revision": 2,
-                "expected_state_hash": "state",
-                "identity": {"every_turn_guard": mod.IDENTITY_GUARD},
-                "per_turn": {"identity_injection": "every substantive prompt_run_id refreshes identity"},
-                "mandatory_invariants": ["every substantive prompt_run_id refreshes the Research Entity identity injection"],
+                "entity_display_name": "Clay",
+                "identity": {"persistent_research_entity": "Clay", "temporary_worker": "ORGAN_NOT_ENTITY"},
                 "active_program": mod.EXPECTED_PROGRAM,
                 "active_stage": mod.EXPECTED_STAGE,
-                "sole_owner_directive": mod.OWNER_DIRECTIVE,
-                "product_endpoint": "ClayVerse",
-                "release_form": mod.EXPECTED_RELEASE,
+                "product_endpoint": mod.EXPECTED_PRODUCT,
+                "integrated_cognition_compute_architecture": mod.EXPECTED_COMPUTE,
+                "authority_correction": mod.STEERING852,
+                "compatibility_names": {
+                    "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
+                    "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY",
+                    "clayverse_frank": "HISTORICAL_DONOR_PROVENANCE_ONLY",
+                },
+                "go_required_tracks": [
+                    "ENTITYOS_EXECUTABLE_CONVERGENCE",
+                    "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT_OR_HCU_NO_CHANGE_WITH_REASON",
+                ],
+                "execution_surface": "AUTHORIZED_ISOLATED_SANDBOX_ONLY",
                 "together_api": "FORBIDDEN",
-                "vps_testing": "FORBIDDEN",
+                "paid_fallback": "FORBIDDEN",
+                "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED",
+                "effect_authority": "EffectGate+EffectJournal",
             },
-            "research_entity/rooms/PROGRAM_STATE.json": {
-                "program_id": "clayverse-single-container",
+        )
+        write_json(
+            "research_entity/rooms/PROGRAM_STATE.json",
+            {
+                "program_id": "entityos-hcu",
+                "status": "ACTIVE",
                 "stage": mod.EXPECTED_STAGE,
                 "current_stage": mod.EXPECTED_STAGE,
-                "current_stage_goal": "Converge the complete one-container ClayVerse product.",
-                "dynamic_targets": {"primary": mod.EXPECTED_DYNAMIC_PRIMARY},
-                "current_frontier": "Run the next exact-current ClayVerse acceptance gate.",
-                "go_contract": "Every go advances the same whole-ClayVerse product.",
-                "owner_directive": mod.OWNER_DIRECTIVE,
-                "product_endpoint": "ClayVerse",
-                "release_form": mod.EXPECTED_RELEASE,
+                "product": mod.EXPECTED_PRODUCT,
+                "integrated_cognition_compute_architecture": mod.EXPECTED_COMPUTE,
+                "authority_correction": mod.STEERING852,
                 "execution_policy": {
                     "free_only": True,
                     "isolated_sandbox_only": True,
                     "vps_testing_forbidden": True,
+                    "self_hosted_vps_test_runners_forbidden": True,
+                    "production_host_testing_forbidden": True,
                     "together_forbidden": True,
-                },
-            },
-            "the artefact/manifest.json": {
-                "artifact": "ClayVerse",
-                "product_endpoint": "ClayVerse",
-                "release_form": mod.EXPECTED_RELEASE,
-                "canonical_workspace": "the artefact/",
-            },
-            mod.CONTROL41: {
-                "schema_version": "4.1",
-                "status": "ACTIVE",
-                "mode": "FREE_ONLY",
-                "cycle_policy": {
                     "paid_fallback": False,
-                    "automatic_subscription_upgrade": False,
-                    "vps_testing": "FORBIDDEN",
+                    "final_paid_or_model_training_requires_owner_authorization": True,
                 },
-                "authority_rules": [
-                    "model_output_is_candidate_not_truth",
-                    "autonomous_cycle_may_not_modify_FRANK_harness",
-                ],
-            },
-            mod.CONTROL42: {
-                "schema_version": "4.2-execution-boundary-addendum",
-                "status": "ACTIVE",
-                "mode": "FREE_ONLY",
-                "base_control_path": mod.CONTROL41,
-                "base_control_blob_sha": "pending",
-                "execution_routing": {
-                    "direct_vps_host_candidate_execution": "FORBIDDEN",
-                    "persistent_self_hosted_candidate_execution": "FORBIDDEN",
-                    "production_host_testing": "FORBIDDEN",
-                },
-                "preserved_hard_rules": {
-                    "free_only": True,
-                    "paid_fallback": False,
-                    "together_forbidden": True,
-                    "frank_harness_modification": "FORBIDDEN",
+                "authority": {
+                    "external_effects": "EffectGate+EffectJournal",
+                    "second_persistent_identity": "FORBIDDEN",
+                    "second_truth_effect_or_recovery_authority": "FORBIDDEN",
                 },
             },
-            mod.CONTROL43: {
-                "schema_version": "4.3-program-authority-addendum",
-                "status": "ACTIVE",
-                "mode": "FREE_ONLY",
-                "base_control_path": mod.CONTROL41,
-                "base_control_blob_sha": "pending",
-                "execution_boundary_addendum_path": mod.CONTROL42,
-                "execution_boundary_addendum_blob_sha": "pending",
-                "preserved_hard_rules": {
-                    "free_only": True,
-                    "paid_fallback": False,
-                    "together_forbidden_under_current_control": True,
-                    "model_output_is_candidate_not_truth": True,
-                    "runtime_credit_requires_exact_admitted_execution": True,
-                    "frank_harness_modification": "FORBIDDEN",
-                },
-            },
-            mod.CONTROL44: {
-                "schema_version": "4.4-clayverse-product-authority-addendum",
-                "status": "ACTIVE",
-                "mode": "FREE_ONLY",
-                "base_control_path": mod.CONTROL41,
-                "execution_boundary_addendum_path": mod.CONTROL42,
-                "prior_program_authority_addendum_path": mod.CONTROL43,
-                "prior_program_authority_addendum_blob_sha": "pending",
-                "composition_order": [
-                    "4.1",
-                    "4.2-execution-boundary-addendum",
-                    "4.3-program-authority-addendum",
-                    "4.4-clayverse-product-authority-addendum",
-                ],
-                "effective_control_version": mod.EXPECTED_EFFECTIVE_CONTROL,
-                "program_identity_override": {
-                    "active_program": mod.EXPECTED_PROGRAM,
-                    "target_stage": mod.EXPECTED_STAGE,
-                    "product_endpoint": "ClayVerse",
-                    "release_form": mod.EXPECTED_RELEASE,
-                },
-                "preserved_hard_rules": {
-                    "free_only": True,
-                    "paid_fallback": False,
-                    "together_forbidden": True,
-                    "vps_testing": False,
-                    "runtime_credit_requires_exact_admitted_isolated_execution": True,
-                    "model_output_is_candidate_not_truth": True,
-                    "frank_harness_modification": "FORBIDDEN",
-                    "legacy_mini_entity_swarm_controller": "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION",
-                },
-            },
-            mod.STEERING844: {
+        )
+        write_json(
+            mod.STEERING852,
+            {
+                "schema_version": "8.52",
+                "status": "CURRENT_OWNER_AUTHORITY_CORRECTION",
                 "program": mod.EXPECTED_PROGRAM,
+                "product": mod.EXPECTED_PRODUCT,
+                "integrated_cognition_compute_architecture": mod.EXPECTED_COMPUTE,
+                "adjudication": {
+                    "entityos": "SOLE_CURRENT_PRODUCT_SYSTEM_IDENTITY",
+                    "hcu": "SOLE_CURRENT_INTEGRATED_COGNITION_COMPUTE_ARCHITECTURE",
+                    "clayverse": "HISTORICAL_DONOR_PROVENANCE_ONLY",
+                },
+                "routing_law": [
+                    "DO_NOT_CREATE_A_SECOND_IDENTITY_STATE_AUTHORITY_EFFECT_PATH_RECOVERY_LEDGER_OR_PRODUCT_TRACK",
+                    "FREE_ONLY_REMAINS_FAIL_CLOSED_WITH_NO_PAID_FALLBACK",
+                ],
+            },
+        )
+        write_json(
+            "the artefact/manifest.json",
+            {
+                "schema_version": "ENTITYOS_HCU_ARTIFACT_MANIFEST/v1",
+                "artifact": mod.EXPECTED_PRODUCT,
+                "product_endpoint": mod.EXPECTED_PRODUCT,
+                "integrated_cognition_compute_architecture": mod.EXPECTED_COMPUTE,
                 "stage": mod.EXPECTED_STAGE,
-                "effective_control": mod.EXPECTED_EFFECTIVE_CONTROL,
-                "adjudication": {"free_only": True, "together_forbidden": True, "vps_testing": False},
+                "current_authority": mod.STEERING852,
+                "current_architecture": "ENTITYOS_HCU_ARCHITECTURE.md",
+                "effect_authority": "EffectGate+EffectJournal",
+                "execution_policy": {
+                    "authorized_isolated_sandbox_only": True,
+                    "vps_testing_forbidden": True,
+                    "self_hosted_vps_test_runners_forbidden": True,
+                    "production_host_testing_forbidden": True,
+                    "free_only": True,
+                    "together_forbidden": True,
+                    "paid_fallback": False,
+                },
+                "legacy_clayverse_material": {
+                    "status": "SUPERSEDED_AS_CURRENT_PRODUCT_AUTHORITY_HISTORICAL_DONOR_PROVENANCE_ONLY"
+                },
+            },
+        )
+        write_text(
+            "the artefact/ENTITYOS_HCU_ARCHITECTURE.md",
+            "EntityOS is the sole current product/system identity. HCU is the sole current compute architecture.\n",
+        )
+        write_text("the artefact/README.md", "Current product: EntityOS. Current compute architecture: HCU.\n")
+        write_text(
+            "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md",
+            f"Program: EntityOS + HCU\nStage: {mod.EXPECTED_STAGE}\n",
+        )
+
+        c41 = {
+            "mode": "FREE_ONLY",
+            "cycle_policy": {
+                "paid_fallback": False,
+                "automatic_subscription_upgrade": False,
+                "vps_testing": "FORBIDDEN",
+                "self_hosted_vps_test_runners": "FORBIDDEN",
+                "production_host_testing": "FORBIDDEN",
+            },
+            "authority_rules": [
+                "model_output_is_candidate_not_truth",
+                "autonomous_cycle_may_not_modify_FRANK_harness",
+            ],
+        }
+        c41p = write_json(mod.CONTROL41, c41)
+        c42 = {
+            "base_control_blob_sha": mod.git_blob_sha(c41p),
+            "execution_routing": {
+                "direct_vps_host_candidate_execution": "FORBIDDEN",
+                "persistent_self_hosted_candidate_execution": "FORBIDDEN",
+                "production_host_testing": "FORBIDDEN",
+            },
+            "preserved_hard_rules": {
+                "free_only": True,
+                "paid_fallback": False,
+                "together_forbidden": True,
+                "frank_harness_modification": "FORBIDDEN",
             },
         }
-        text = {
-            mod.OWNER_DIRECTIVE: "# ClayVerse\nStatus: CURRENT OWNER DIRECTIVE\n",
-            "research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md": "CURRENT FAST CACHE\nactive ClayVerse program\n",
-            "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md": "Program: ClayVerse single-container\nStage: CLAYVERSE_ARTIFACT\n",
-            "the artefact/ARCHITECTURE.md": "ClayVerse is the product endpoint.\n",
-            "the artefact/README.md": "# the artefact — ClayVerse single-container product\nThe active release endpoint is one OCI/Docker-compatible ClayVerse container image.\n",
-            mod.ROOT_CLAUDE: (
-                "# CLAY — CURRENT CLAYVERSE REPO ORGAN\n"
-                "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
-                "`STAGE=CLAYVERSE_ARTIFACT`\n"
-                "Read research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md first.\n"
-            ),
-            mod.LEGACY_BLOGPOST: (
-                "# HISTORICAL MINI ENTITY / BLOGPOST DIRECTIVE — COMPATIBILITY REDIRECT\n"
-                "Status: SUPERSEDED / HISTORICAL DONOR EVIDENCE ONLY\n"
-                f"Current authority: {mod.OWNER_DIRECTIVE}\n"
-                f"Historical blob: {mod.LEGACY_BLOGPOST_BLOB}\n"
-            ),
-            mod.LEGACY_LOCAL_INFERENCE: (
-                "# HISTORICAL MINI ENTITY LOCAL-INFERENCE REQUIREMENT — DONOR REDIRECT\n"
-                "Status: SUPERSEDED AS CURRENT PROGRAM REQUIREMENT / HISTORICAL DONOR EVIDENCE\n"
-                f"Current authority: {mod.OWNER_DIRECTIVE}\n"
-                f"Historical blob: {mod.LEGACY_LOCAL_INFERENCE_BLOB}\n"
-            ),
+        c42p = write_json(mod.CONTROL42, c42)
+        c43 = {
+            "base_control_blob_sha": mod.git_blob_sha(c41p),
+            "execution_boundary_addendum_blob_sha": mod.git_blob_sha(c42p),
+            "program_identity_override": {"active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE"},
+            "preserved_hard_rules": {
+                "free_only": True,
+                "paid_fallback": False,
+                "together_forbidden_under_current_control": True,
+                "model_output_is_candidate_not_truth": True,
+                "runtime_credit_requires_exact_admitted_execution": True,
+                "frank_harness_modification": "FORBIDDEN",
+            },
         }
-        for rel, data in files.items():
-            path = root / rel
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
-        for rel, data in text.items():
-            path = root / rel
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(data, encoding="utf-8")
-
-        control42_path = root / mod.CONTROL42
-        control42 = json.loads(control42_path.read_text(encoding="utf-8"))
-        control42["base_control_blob_sha"] = mod.git_blob_sha(root / mod.CONTROL41)
-        control42_path.write_text(json.dumps(control42, sort_keys=True), encoding="utf-8")
-
-        control43_path = root / mod.CONTROL43
-        control43 = json.loads(control43_path.read_text(encoding="utf-8"))
-        control43["base_control_blob_sha"] = mod.git_blob_sha(root / mod.CONTROL41)
-        control43["execution_boundary_addendum_blob_sha"] = mod.git_blob_sha(control42_path)
-        control43_path.write_text(json.dumps(control43, sort_keys=True), encoding="utf-8")
-
-        control44_path = root / mod.CONTROL44
-        control44 = json.loads(control44_path.read_text(encoding="utf-8"))
-        control44["prior_program_authority_addendum_blob_sha"] = mod.git_blob_sha(control43_path)
-        control44_path.write_text(json.dumps(control44, sort_keys=True), encoding="utf-8")
+        c43p = write_json(mod.CONTROL43, c43)
+        c44 = {
+            "prior_program_authority_addendum_blob_sha": mod.git_blob_sha(c43p),
+            "program_identity_override": {
+                "active_program": "CLAYVERSE_SINGLE_CONTAINER",
+                "product_endpoint": "ClayVerse",
+            },
+            "preserved_hard_rules": {
+                "free_only": True,
+                "paid_fallback": False,
+                "together_forbidden": True,
+                "authorized_isolated_sandbox_only": True,
+                "vps_testing": False,
+                "self_hosted_vps_test_runners": False,
+                "production_host_testing": False,
+                "runtime_credit_requires_exact_admitted_isolated_execution": True,
+                "model_output_is_candidate_not_truth": True,
+                "frank_harness_modification": "FORBIDDEN",
+            },
+        }
+        write_json(mod.CONTROL44, c44)
         return td, root
 
-    def test_coherent_clayverse_authority_passes(self):
+    def test_current_entityos_hcu_authority_passes_while_historical_controls_remain(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
-        self.assertTrue(mod.validate(root)["pass"])
+        result = mod.validate(root)
+        self.assertTrue(result["pass"], result["errors"])
+        self.assertFalse(result["historical_control_product_metadata_used_for_current_authority"])
+        self.assertTrue(result["inherited_control_ancestry_checked"])
 
-    def test_old_mini_entity_bootstrap_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["active_program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
-        path.write_text(json.dumps(data), encoding="utf-8")
-        self.assertIn("BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH", mod.validate(root)["errors"])
-
-    def test_identity_guard_loss_fails_closed(self):
+    def test_bootstrap_clayverse_regression_fails_closed(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
         path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["identity"] = {}
-        path.write_text(json.dumps(data), encoding="utf-8")
-        self.assertIn("BOOTSTRAP_IDENTITY_GUARD_POINTER_MISSING", mod.validate(root)["errors"])
+        data = json.loads(path.read_text())
+        data["product_endpoint"] = "ClayVerse"
+        path.write_text(json.dumps(data))
+        self.assertIn("BOOTSTRAP_PRODUCT_MISMATCH", mod.validate(root)["errors"])
 
-    def test_control41_paid_fallback_weakening_fails_closed(self):
+    def test_manifest_clayverse_regression_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "the artefact/manifest.json"
+        data = json.loads(path.read_text())
+        data["artifact"] = "ClayVerse"
+        data["product_endpoint"] = "ClayVerse"
+        path.write_text(json.dumps(data))
+        self.assertIn("MANIFEST_PRODUCT_MISMATCH", mod.validate(root)["errors"])
+
+    def test_program_together_weakening_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "research_entity/rooms/PROGRAM_STATE.json"
+        data = json.loads(path.read_text())
+        data["execution_policy"]["together_forbidden"] = False
+        path.write_text(json.dumps(data))
+        self.assertIn("PROGRAM_TOGETHER_FENCE_WEAKENED", mod.validate(root)["errors"])
+
+    def test_control41_mutation_breaks_inherited_ancestry(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
         path = root / mod.CONTROL41
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text())
         data["cycle_policy"]["paid_fallback"] = True
-        path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
+        path.write_text(json.dumps(data, sort_keys=True))
         errors = mod.validate(root)["errors"]
         self.assertIn("CONTROL41_PAID_FALLBACK_WEAKENED", errors)
         self.assertIn("CONTROL42_BASE_BLOB_MISMATCH", errors)
         self.assertIn("CONTROL43_BASE_BLOB_MISMATCH", errors)
 
-    def test_control42_together_weakening_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL42
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["preserved_hard_rules"]["together_forbidden"] = False
-        path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
-        errors = mod.validate(root)["errors"]
-        self.assertIn("CONTROL42_TOGETHER_FENCE_WEAKENED", errors)
-        self.assertIn("CONTROL43_EXEC_BLOB_MISMATCH", errors)
-
-    def test_control43_mutation_breaks_control44_ancestry(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL43
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["credit"] = {"tampered": True}
-        path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
-        self.assertIn("CONTROL44_PRIOR_BLOB_MISMATCH", mod.validate(root)["errors"])
-
-    def test_control44_mini_entity_regression_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL44
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["program_identity_override"]["active_program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
-        path.write_text(json.dumps(data), encoding="utf-8")
-        self.assertIn("CONTROL44_PROGRAM_MISMATCH", mod.validate(root)["errors"])
-
     def test_control44_safety_weakening_fails_closed(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
         path = root / mod.CONTROL44
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text())
         data["preserved_hard_rules"]["free_only"] = False
-        path.write_text(json.dumps(data), encoding="utf-8")
-        self.assertIn("CONTROL44_FREE_ONLY_WEAKENED", mod.validate(root)["errors"])
+        path.write_text(json.dumps(data, sort_keys=True))
+        self.assertIn("CONTROL44_FREE_ONLY_FENCE_WEAKENED", mod.validate(root)["errors"])
 
-    def test_nested_work_selector_poison_fails_closed(self):
+    def test_steering_must_keep_clayverse_historical(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
-        path = root / "research_entity/rooms/PROGRAM_STATE.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["dynamic_targets"]["primary"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
-        path.write_text(json.dumps(data), encoding="utf-8")
-        self.assertIn("PROGRAM_DYNAMIC_PRIMARY_MISMATCH", mod.validate(root)["errors"])
+        path = root / mod.STEERING852
+        data = json.loads(path.read_text())
+        data["adjudication"]["clayverse"] = "CURRENT_PRODUCT"
+        path.write_text(json.dumps(data))
+        self.assertIn("STEERING852_CLAYVERSE_NOT_HISTORICAL", mod.validate(root)["errors"])
 
-    def test_non_clayverse_frontier_fails_closed(self):
+    def test_current_architecture_is_required(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
-        path = root / "research_entity/rooms/PROGRAM_STATE.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["current_frontier"] = "Continue Mini Entity work selection."
-        path.write_text(json.dumps(data), encoding="utf-8")
-        self.assertIn("PROGRAM_FRONTIER_NOT_CLAYVERSE", mod.validate(root)["errors"])
-
-    def test_superseded_directive_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.OWNER_DIRECTIVE
-        path.write_text("# SUPERSEDED — compatibility redirect\n", encoding="utf-8")
-        errors = mod.validate(root)["errors"]
-        self.assertIn("DIRECTIVE_NOT_CURRENT", errors)
-        self.assertIn("DIRECTIVE_MARKED_SUPERSEDED", errors)
-
-    def test_root_claude_mini_entity_program_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.ROOT_CLAUDE
-        path.write_text(
-            "# stale repo organ\n"
-            "`PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE`\n"
-            "`STAGE=CLAYVERSE_ARTIFACT`\n"
-            "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n",
-            encoding="utf-8",
-        )
-        errors = mod.validate(root)["errors"]
-        self.assertIn("ROOT_CLAUDE_PROGRAM_MISMATCH", errors)
-        self.assertIn("ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE", errors)
-
-    def test_root_claude_stale_blogpost_directive_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.ROOT_CLAUDE
-        path.write_text(
-            "# stale first-read redirect\n"
-            "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
-            "`STAGE=CLAYVERSE_ARTIFACT`\n"
-            "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n"
-            "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md\n",
-            encoding="utf-8",
-        )
-        self.assertIn("ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE", mod.validate(root)["errors"])
-
-    def test_legacy_blogpost_cannot_be_current_owner_again(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.LEGACY_BLOGPOST
-        path.write_text(
-            "# MULTI-USE MINI ENTITY — SOLE CANONICAL OWNER DIRECTIVE\n"
-            "Status: CURRENT\n"
-            "Active program: MINI_ENTITY_PIPELINE_ALL_IN_ONE\n",
-            encoding="utf-8",
-        )
-        errors = mod.validate(root)["errors"]
-        self.assertIn("LEGACY_BLOGPOST_NOT_SUPERSEDED", errors)
-        self.assertIn("LEGACY_BLOGPOST_STILL_CURRENT", errors)
-        self.assertIn("LEGACY_BLOGPOST_STILL_SOLE_OWNER", errors)
-
-    def test_legacy_local_inference_cannot_select_current_program(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.LEGACY_LOCAL_INFERENCE
-        path.write_text(
-            "# Mini Entity — Local Inference Requirement\n"
-            "Status: CURRENT\n"
-            "Program: MINI_ENTITY_PIPELINE_ALL_IN_ONE\n",
-            encoding="utf-8",
-        )
-        errors = mod.validate(root)["errors"]
-        self.assertIn("LEGACY_LOCAL_INFERENCE_NOT_SUPERSEDED", errors)
-        self.assertIn("LEGACY_LOCAL_INFERENCE_STILL_CURRENT", errors)
+        (root / "the artefact/ENTITYOS_HCU_ARCHITECTURE.md").unlink()
+        self.assertTrue(any(x.startswith("MISSING:architecture:") for x in mod.validate(root)["errors"]))
 
 
 if __name__ == "__main__":

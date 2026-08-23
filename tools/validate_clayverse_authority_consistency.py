@@ -20,6 +20,9 @@ CONTROL43 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_P
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
 ROOT_CLAUDE = "CLAUDE.md"
+WORKER_DIRECTIVE = "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
+CLAYVERSE_WORKER_MARKER = "[CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]"
+LEGACY_WORKER_MARKER = "[MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]"
 LEGACY_BLOGPOST = "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md"
 LEGACY_LOCAL_INFERENCE = "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md"
 LEGACY_BLOGPOST_BLOB = "eeb9945e4c1d01a32e13bf6cb74db0c0c49d2767"
@@ -39,6 +42,30 @@ def git_blob_sha(path: Path) -> str:
 def require(errors: list[str], condition: bool, code: str) -> None:
     if not condition:
         errors.append(code)
+
+
+def validate_worker_authority(root: Path, bootstrap: dict, errors: list[str]) -> None:
+    """Bind the current transitive worker prompt to ClayVerse without creating authority."""
+    worker_required = bootstrap.get("schema_version") == "8.2" or bootstrap.get("all_worker_protocol") is not None
+    if not worker_required:
+        return
+    worker_path = root / WORKER_DIRECTIVE
+    require(errors, bootstrap.get("all_worker_protocol") == WORKER_DIRECTIVE, "BOOTSTRAP_WORKER_DIRECTIVE_POINTER_MISMATCH")
+    require(errors, worker_path.is_file(), f"MISSING:worker_directive:{worker_path.as_posix()}")
+    if not worker_path.is_file():
+        return
+
+    worker_head = worker_path.read_text(encoding="utf-8")[:9000]
+    worker_head_upper = worker_head.upper()
+    require(errors, "CURRENT PROJECT OWNER WORKER DIRECTIVE" in worker_head_upper, "WORKER_DIRECTIVE_NOT_CURRENT")
+    require(errors, OWNER_DIRECTIVE.upper() in worker_head_upper, "WORKER_OWNER_DIRECTIVE_MISSING")
+    require(errors, "ACTIVE PRODUCT: **CLAYVERSE**" in worker_head_upper, "WORKER_ACTIVE_PRODUCT_MISMATCH")
+    require(errors, CLAYVERSE_WORKER_MARKER in worker_head, "WORKER_CLAYVERSE_MARKER_MISSING")
+    require(errors, LEGACY_WORKER_MARKER not in worker_head, "WORKER_LEGACY_MINI_ENTITY_MARKER_ACTIVE")
+    require(errors, "MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in worker_head_upper, "WORKER_MINI_ENTITY_PROGRAM_ACTIVE")
+    require(errors, "ISOLATED-SANDBOX-ONLY" in worker_head_upper, "WORKER_SANDBOX_ONLY_FENCE_MISSING")
+    require(errors, "VPS/SELF-HOSTED/PRODUCTION-HOST TEST EVIDENCE IS FORBIDDEN" in worker_head_upper, "WORKER_VPS_FENCE_MISSING")
+    require(errors, "TOGETHER API/SERVICE IS FORBIDDEN" in worker_head_upper, "WORKER_TOGETHER_FENCE_MISSING")
 
 
 def validate(root: Path) -> dict:
@@ -110,6 +137,10 @@ def validate(root: Path) -> dict:
     require(errors, bootstrap.get("release_form") == EXPECTED_RELEASE, "BOOTSTRAP_RELEASE_FORM_MISMATCH")
     require(errors, bootstrap.get("together_api") == "FORBIDDEN", "BOOTSTRAP_TOGETHER_FENCE_MISSING")
     require(errors, bootstrap.get("vps_testing") == "FORBIDDEN", "BOOTSTRAP_VPS_TEST_FENCE_MISSING")
+
+    # The all-worker directive is a transitive work-selection surface. Current bootstrap v8.2
+    # makes it mandatory; older synthetic fixtures without that schema remain compatible.
+    validate_worker_authority(root, bootstrap, errors)
 
     require(errors, program.get("program_id") == "clayverse-single-container", "PROGRAM_ID_MISMATCH")
     require(errors, program.get("stage") == EXPECTED_STAGE and program.get("current_stage") == EXPECTED_STAGE, "PROGRAM_STAGE_MISMATCH")

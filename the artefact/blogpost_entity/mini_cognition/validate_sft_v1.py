@@ -95,6 +95,16 @@ def validate_code(s):
         generation_exact=top.count(OMEGA_GENERATION)
         if generation_calls != 1: e.append(f"omega_generation_call_count:{generation_calls}")
         if generation_exact != 1: e.append(f"omega_generation_not_exact_top_level:{generation_exact}")
+
+        # Admission is ordered: grammar -> types -> schema -> authority -> generation
+        # must all happen at the canonical top level before the one commit candidate.
+        transition_sequence=[
+            item['call'] for item in calls
+            if item['depth']==1 and item['fn'] in {'omega_validate','omega_commit_candidate'}
+        ]
+        expected_sequence=[f'omega_validate(w,"{gate}")' for gate in OMEGA_GATES]+[OMEGA_COMMIT]
+        if transition_sequence != expected_sequence:
+            e.append("omega_validation_sequence_before_commit")
     if reject_calls and commit_calls:
         e.append("reject_and_commit")
     return e

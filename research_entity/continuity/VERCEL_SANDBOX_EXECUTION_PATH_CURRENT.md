@@ -1,7 +1,7 @@
 # Vercel Sandbox execution path — CURRENT
 
-Status: **ENTITYOS/HCU BRIDGE READY / SANDBOX ADMISSION PROVEN HISTORICALLY / CURRENT EXACT BATCH NOT STARTED / FREE_ONLY EXECUTION START STILL BLOCKED**  
-Current autonomous supervisor authority: `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json` + `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`, resolved below newest owner/product authority.  
+Status: **ENTITYOS/HCU BOUNDED FREE SANDBOX EXECUTION OBSERVED / COMPONENT CREDIT ONLY / FULL HCU SPINE NOT YET EXECUTED**  
+Current autonomous supervisor authority: `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json` + `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`, resolved below newest owner/product authority.  
 Canonical workspace: `gschaidergabriel/clay-global-research-entity/main/the artefact/`.
 
 ## Current authority boundary
@@ -18,9 +18,9 @@ Current law for this autonomous supervisor:
 - real/state-changing effects remain behind deterministic `EffectGate + EffectJournal` authority;
 - tests/builds/runtime validation remain authorized-isolated-sandbox-only; VPS/self-hosted/production-host substitutes are forbidden;
 - this supervisor is **FREE_ONLY** with no paid fallback;
-- Together general inference is forbidden;
-- the repository contains an owner authorization for one paid ~0.8B J-Space/GWT fine-tune, but `SUPERVISOR_STEERING_8_61.json` quarantines that paid lane for this FREE_ONLY supervisor: no Together key lookup, preflight, network I/O, job creation, spend, provider credit or training credit is allowed from this organ;
-- no paid/unknown provider lane may be entered before the FREE_ONLY admission boundary.
+- Together general inference and Together training/preflight/key lookup/job creation are forbidden;
+- paid/subscription/unknown provider lanes fail closed before credential lookup/network I/O;
+- Vercel Hobby Sandbox is admitted only to the bounded included-tier extent established by supervisor 8.62: fixed hash-bound short capsules, no generic caller-supplied execution path, no assumed remaining quota, prompt cleanup, and fail-closed behavior on quota exhaustion, billing, upgrade requirement, plan mismatch or any monetary charge path.
 
 The previous ClayVerse whole-container/Clerk/PTY/Claude acceptance sequence and earlier paid-training readiness sequence in older revisions of this file are historical/superseded execution-frontier text, not current supervisor authority.
 
@@ -32,92 +32,103 @@ There is one retained Vercel Sandbox orchestration lane:
 - controller branch: `clay/fusion-vcr-native-20260817`;
 - Vercel project: `dr-unterweger`;
 - Vercel project id: `prj_ifIgM9X7jqIQS8mNIGllImziePPG`;
-- runtime start endpoint: `POST /api/go-cycle-v2`;
+- bounded protected-preview fixed-capsule routes are the current credit-bearing direction;
 - retained HCU donor: Research PR **#1263**, branch `gpt56sol/hcu-reactive-worldmodel-substrate-20260823`.
 
-The controller is infrastructure only. It is not a second product, state authority, effect authority, truth authority, recovery authority or HCU implementation.
+The controller is infrastructure only. It is not a second product, state authority, effect authority, truth authority, recovery authority or HCU implementation. The historical credential-bearing `POST /api/go-cycle-v2` path remains provenance/infrastructure but is not required for the already-observed tokenless fixed-capsule component evidence.
 
-## Current controller contract
+## Current fixed-capsule contract
 
-The deployed controller resolves identities at POST time rather than hard-coding a rapidly stale Research snapshot:
+A credit-bearing bounded capsule must:
 
-`owner/user scoped read-only GitHub token`
-`-> POST /api/go-cycle-v2`
-`-> resolve current Research refs/heads/main SHA + tree`
-`-> resolve current retained HCU PR #1263 head SHA + tree`
-`-> Sandbox.create(persistent=false)`
-`-> fetch those exact two private commit archives inside the disposable Sandbox`
-`-> verify commit/tree identities`
-`-> re-resolve both snapshots and fail closed if either moved during fetch`
-`-> clear token reference`
-`-> prove GITHUB_READ_TOKEN absent in a fresh Sandbox command`
-`-> launch detached exact-source EntityOS/HCU regression batch`.
+1. bind declared Research source lineage and exact source/test blob or stronger content digests;
+2. carry only the bounded regression closure needed for the declared test set;
+3. expose no generic caller-supplied shell, command or URL-to-code surface;
+4. verify capsule bytes before import/execution inside the disposable Sandbox;
+5. use an allowlisted fixed regression command;
+6. fail if prohibited credentials such as `GITHUB_READ_TOKEN` or `TOGETHER_API_KEY` appear inside the Sandbox;
+7. return source/capsule identity, Sandbox identity, exit/result evidence and bounded credit class;
+8. delete/stop the Sandbox and make cleanup part of PASS;
+9. preserve FREE_ONLY, canonical-state, generation and EffectGate boundaries;
+10. fail closed before execution on quota/billing/upgrade/plan mismatch or any monetary charge path.
 
-The GitHub token is never a Vercel Environment Variable and must never be committed, printed, persisted in canonical state, receipts, model context, generated datasets, build metadata or images. Exact secret text is not evidence and must not be recorded.
+A later Research/PR head does not inherit exact-current credit merely because old capsule bytes still exist. Exact-head claims require a manifest/source identity bound to the exact admitted source state.
 
-This controller design remains valid infrastructure, but this autonomous organ cannot perform the credential-bearing POST because its connected Vercel surface exposes inspection/deployment/log operations rather than arbitrary POST/Sandbox start, and it has no owner-held source credential. Do not create a second ingress merely to bypass that boundary.
+## Current observed execution truth — 2026-08-24
 
-## Current batch gate
+### J-Space dataset family split
 
-The retained detached batch currently checks the computational-bootstrap spine against dynamically frozen current Research main + current PR #1263 donor bytes:
+An exact-current fixed family-split capsule executed in isolated runtime and passed **6/6 tests twice** with source identity checks and no external provider credentials. The second same-family run is reproducibility, not independent replication. Credit is scoped to the family-split component only.
 
-1. current EntityOS/HCU owner/bootstrap/manifest authority;
-2. selected `RFC8785_JCS_IJSON/v1` canonicalization;
-3. Typed Entry admission;
-4. reactive HCU routing;
-5. engine admission;
-6. generation-fenced verified engine-load lease;
-7. `HCU_INFERENCE_RECEIPT/v3`;
-8. `ENTITYOS_HCU_GRID_PLAN/v2`;
-9. active canonicalizer/loader-chain downgrade fences;
-10. functional Global J-Space/GWT prototype;
-11. bootstrap J-Space dataset compiler.
+### RFC8785/JCS Entry canonicalization
 
-A component batch PASS is only exact-source/component evidence. It does **not** establish actual local ~0.8B model-loader credit, model-specific J-Space causal coupling, target-hardware capacity, training credit or EntityOS whole-runtime acceptance.
+The fixed `HCU_ENTRY_CANONICALIZATION_CAPSULE/v1` executed on Vercel Hobby Sandbox:
+- deployment: `dpl_6izDrxzUwrMncperKNZ3mSf6iEFr`;
+- controller head: `d63873b1637d9e8d8496a59691e02249ef43dad1`;
+- Sandbox id: `azure-comfortable-asp-Z8uEJk`;
+- exit code: `0`;
+- tests: **7/7 PASS**;
+- secret fence: PASS;
+- cleanup: PASS;
+- source blob `entry_canonicalization_v1.py`: `00d1d79cbb66a1956a278de4755cd8395e854199`;
+- test blob `test_entry_canonicalization_v1.py`: `bc9262473f91dbd04ddaf647e667920664495f54`.
 
-## Current observed Vercel truth — 2026-08-24
+Those two executed blobs were byte-identical at the then-current retained PR1263 head. However the deployed route still emitted an older hard-coded `source_commit` label. Therefore the correct classification is:
 
-Observed during the current `go` cycle:
-- retained-controller deployment `dpl_5L1PZpoG8oxHTiMp8XPuGEueAKSr` was **READY**;
-- deployed PR810 commit was `a85d75fed192d9dd8cfbec49dedff9bfa6e0e520`;
-- the deployed batch includes Global J-Space/GWT prototype + dataset-compiler regressions;
-- live runtime-log inspection found no credential-bearing `POST /api/go-cycle-v2` in the inspected two-hour window; only GET probes were observed with expected POST-only 405 behavior;
-- therefore the exact current detached batch was not observed starting and earns zero current runtime credit;
-- no exact-head GitHub Actions run was available as a substitute for the refreshed retained HCU donor head.
+`CURRENT_PR_COMPONENT_BYTES_VERIFIED_WITH_STALE_CAPSULE_SOURCE_COMMIT_LABEL`.
 
-## Coordination finding from the same cycle
+This is real bounded component runtime evidence, but **not exact-head manifest identity** for the whole donor state and not a whole-HCU/EntityOS PASS.
 
-At retained donor head `d195755c16f704996c0b84eb7fa0d5ff2a5913ef`, `global_jspace_gwt_v1.py` required `basis_sha256`, while `test_global_jspace_gwt_v1.py` still exercised the previous pre-digest API and obsolete vector-control decode surface.
+## This organ's admission observation
 
-A direct repair attempt from a stale snapshot was correctly rejected by GitHub with 409 rather than overwriting parallel work. After refresh, retained donor head `bbad88fecdf82c750d9a260f0954467bb7bc04a4` contained the reconciled test contract and a bounded same-basis-id/different-basis-bytes discriminator. No duplicate HCU/J-Space path was created.
+A direct protected-preview fetch attempt from the connected Vercel surface reached only the Preview SSO/protection handshake (HTTP 302) and did not establish that the target Function or Sandbox started. That attempt receives **zero test/runtime credit** and is classified as execution-admission/protection behavior, not a test failure. A concurrent exact fixed-capsule run subsequently supplied the component evidence above, so duplicating it was not justified.
 
-Treat these hashes as bounded observation receipts only. The controller intentionally resolves current identities again at POST time.
+## Current full-spine gate
+
+The next high-information executable target is one fixed, exact-identity closure spanning as much of the current computational bootstrap as can safely be bound without inventing a second execution authority:
+
+`Typed Entry`
+`-> reactive HCU route`
+`-> deterministic engine admission`
+`-> generation-fenced verified engine load`
+`-> HCU inference receipt`
+`-> GRID10`
+`-> Global J-Space/GWT + JSPACE_VECTOR_CONTROL_ABI/v1`
+`-> admitted causal dataset closure`.
+
+Before that extension receives exact-head credit, repair the fixed capsule metadata so the declared source commit/tree and included blob closure are mutually consistent at one immutable retained PR1263 identity. Byte equality at a moving later head is useful evidence but cannot substitute for an exact bound manifest.
+
+Actual local ~0.8B checkpoint/tokenizer/runtime loader consumption, model-specific J-Space causal coupling, target-hardware capacity and training remain separate later gates. No component PASS grants them.
 
 ## Exact next execution sequence
 
-The next accepted high-information discriminator remains an **actually-started exact-source FREE isolated run**. Under the current connected surfaces this organ cannot trigger it without crossing the current credential/callability boundary.
-
-When a callable authorized FREE start path exists, require:
-
-`freeze current Research main SHA/tree + current PR1263 SHA/tree`
+`refresh current Research main + retained PR1263`
+`-> choose one immutable exact donor/source identity`
+`-> generate/freeze fixed capsule manifest + source/test digests`
+`-> deploy only the fixed protected-preview executor`
+`-> fail closed on non-FREE account/quota/billing state`
 `-> actually start disposable isolated execution`
-`-> bind executor identity`
-`-> fetch/verify exact source without persistent credentials`
-`-> prove credential nonpersistence if a transient credential is admitted by authority`
-`-> execute JCS -> Typed Entry -> route -> engine admission/load -> inference v3 -> GRID10 v2 -> Global J-Space/GWT -> dataset-compiler regressions`
-`-> bind result digest and exact failure/PASS class in one immutable receipt`.
+`-> verify capsule identity inside Sandbox`
+`-> prove prohibited credentials absent`
+`-> run bounded full-spine regression`
+`-> bind exit/result/log digest + Sandbox identity + cleanup`
+`-> persist one immutable receipt`
+`-> only then extend toward zero-cost local ~0.8B loader/J-Space/GWT work`.
 
-Only after exact FREE executable evidence may this supervisor continue zero-cost local ~0.8B loader/J-Space/GWT work. It must **not** preflight or launch the paid Together lane.
+Do **not** preflight or launch the paid Together lane under supervisor 8.62.
 
 ## Evidence law
 
 - READY deployment != Sandbox run.
 - Sandbox creation != semantic PASS.
+- Component PASS != whole HCU/EntityOS PASS.
+- Same-family rerun != independent replication.
+- Byte equality at a moving head != exact-head manifest binding.
 - Source/component PASS != actual model-loader/J-Space causality.
 - J-Space trace coherence != truth or hidden-state proof.
 - Dataset generation != runtime/training acceptance.
 - Owner-paid authorization prose != permission for this FREE_ONLY supervisor to consume credentials or spend.
-- Retrieval/workspace recurrence != canonical truth.
+- HTTP/Preview-protection failure before Function/Sandbox start != test failure.
 - Unknown external effect outcomes remain UNKNOWN and are never blindly replayed.
 - `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
 - No second controller, identity, state, effect, truth, recovery or HCU authority may be introduced to bypass a blocker.

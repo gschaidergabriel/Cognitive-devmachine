@@ -21,6 +21,7 @@ def fixture():
         "claude_version": "2.1.0-test",
         "command_sha256": H64B,
         "input_sha256": H64C,
+        "invocation_id": "claude-adapter-run-0001",
         "executor": {"os": "ubuntu", "arch": "x86_64", "runtime": "python3.13"},
         "started_at": "2026-08-23T03:16:00Z",
         "finished_at": "2026-08-23T03:16:01Z",
@@ -57,6 +58,9 @@ class TestReceipt(unittest.TestCase):
     def test_common_tamper_rejected(self):
         self.assert_reject(lambda x: x["common"].__setitem__("claude_version", "tampered"))
 
+    def test_missing_invocation_id_rejected(self):
+        self.assert_reject(lambda x: x["common"].pop("invocation_id"))
+
     def test_invalid_timestamp_rejected(self):
         self.assert_reject(lambda x: x["common"].__setitem__("started_at", "not-a-timestamp"))
 
@@ -75,6 +79,9 @@ class TestReceipt(unittest.TestCase):
 
     def test_boundary_cross_run_rejected(self):
         self.assert_reject(lambda x: x["boundaries"]["tool_less"].__setitem__("common_identity_sha256", H64F))
+
+    def test_cross_bound_output_digest_mismatch_rejected(self):
+        self.assert_reject(lambda x: x["boundaries"]["ephemeral"].__setitem__("stdout_sha256", H64F))
 
     def test_unmeasured_rejected(self):
         self.assert_reject(lambda x: x["boundaries"]["tool_less"].__setitem__("measured", False))

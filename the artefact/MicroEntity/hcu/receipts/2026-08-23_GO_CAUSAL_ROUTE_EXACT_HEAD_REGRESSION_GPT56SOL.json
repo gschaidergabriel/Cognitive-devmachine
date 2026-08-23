@@ -1,12 +1,13 @@
 {
-  "schema_version": "HCU_EXACT_SOURCE_REGRESSION_RECEIPT/v2",
+  "schema_version": "HCU_EXACT_SOURCE_REGRESSION_RECEIPT/v3",
   "date": "2026-08-23",
   "trigger": "go",
   "program": "ENTITYOS_HCU",
   "candidate_pr": 1263,
   "exact_source_heads": {
     "route_regression": "beb62d9668f016050ddab2ca0597c8af34e5d7d6",
-    "typed_entry_capability_regression": "b98daf7997fe8ba95a89b336787a3a3d823c4dbb"
+    "typed_entry_capability_regression": "b98daf7997fe8ba95a89b336787a3a3d823c4dbb",
+    "typed_entry_generation_regression": "07186dc9386d03fa17ec05ce1dccacbb30599db8"
   },
   "source_files": {
     "the artefact/MicroEntity/hcu/reactive_event_router_v1.py": {
@@ -18,12 +19,12 @@
       "bytes": 8633
     },
     "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py": {
-      "git_blob_sha1": "89cda2894f4a90440964a2ffdb01ef274c3279ad",
-      "bytes": 10641
+      "git_blob_sha1": "abd01546136ddfaf12c2121ed7d663156a8922f2",
+      "bytes": 10837
     },
     "the artefact/MicroEntity/hcu/test_xeno_entry_fabric_v1.py": {
-      "git_blob_sha1": "a5c5666c52b3def5b15d1e5b3d96836822b3fc6f",
-      "bytes": 5486
+      "git_blob_sha1": "bba978b8b4b97b9bb3385e238ff98d0a819c21d3",
+      "bytes": 6157
     }
   },
   "execution": {
@@ -39,8 +40,8 @@
       "python3 -m py_compile xeno_entry_fabric_v1.py test_xeno_entry_fabric_v1.py",
       "python3 -m unittest -v test_xeno_entry_fabric_v1.py"
     ],
-    "typed_entry_result": "py_compile PASS; 12/12 PASS; exit_code=0",
-    "blob_identity_check": "PASS: locally executed Typed Entry source/test Git blob hashes exactly matched GitHub blobs 89cda289... and a5c5666c... before execution",
+    "typed_entry_result": "py_compile PASS; 13/13 PASS; exit_code=0",
+    "blob_identity_check": "PASS: locally executed current Typed Entry source/test Git blob hashes exactly matched GitHub blobs abd01546... and bba978b8... before execution",
     "execution_mode": "REGRESSION_ONLY; shared GO unusual experiment remains the single same-route causal-alias stress already recorded elsewhere"
   },
   "verified_mechanisms": [
@@ -55,10 +56,11 @@
     "Typed Entry capability-binding digest must equal the deterministic control-plane supplied binding",
     "Typed Entry capabilities may narrow but cannot exceed the externally admitted capability set",
     "unknown Entry fields cannot smuggle effect or truth authority",
+    "current_generation authority rejects bool/non-integer/negative aliases before equality comparison",
     "Entry admission preserves ingress/causal/generation/payload/provenance/budget identity into the HCU event projection"
   ],
   "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE advanced through the single retained HCU route/entry implementation; no competing identity/state/effect path introduced.",
-  "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT advanced with exact-source capability authority fencing and causal Entry->HCU projection regressions.",
+  "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT advanced with exact-source capability authority fencing, generation-authority fencing and causal Entry->HCU projection regressions.",
   "external_primary_evidence": {
     "rfc8785": "Primary RFC review confirms JCS requires I-JSON constraints, ECMAScript-compatible IEEE-754 number serialization and recursive UTF-16 property ordering; current Python json.dumps hash identity therefore remains Python-scoped until an independently verified versioned canonicalizer is admitted."
   },

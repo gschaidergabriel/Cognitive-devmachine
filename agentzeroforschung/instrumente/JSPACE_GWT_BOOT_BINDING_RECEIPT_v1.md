@@ -97,13 +97,15 @@ The first admitted action binds:
 
 This prevents a post-start action from being retroactively attributed to Zero/Claude/J-Space merely because it happened after boot.
 
-## One unusual experiment for macrocycle `224d2054-d027-4783-aabe-62e2bd9ee9ff`
+## Deterministic negative regressions
 
-`CROSS_CHECKPOINT_LENS_TRANSPLANT_POISON`
+The focused test suite includes a cross-checkpoint lens-provenance mismatch: every test artifact may exist and hash correctly, while the lens declares a different checkpoint digest. Required result: `LENS_SOURCE_CHECKPOINT_MISMATCH` and no credit.
 
-Construct a receipt in which every artifact exists and hashes correctly, but the lens declares a different valid checkpoint digest. Expected: `LENS_SOURCE_CHECKPOINT_MISMATCH` and no credit.
+This is an ordinary deterministic negative regression. It is **not** an unusual-experiment lease claim.
 
-This is a source/mechanism falsifier only. It does not emulate the Ubuntu runtime or the actual 0.8B model.
+For the user-triggered `go` that created this instrument, the available immutable user-message timestamp was only minute precision (`2026-08-23T09:51+07:00`). Under `GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`, no canonical timestamp-fallback lease key may be invented from that metadata. Macrocycle classification is therefore:
+
+`COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`
 
 ## Verifier
 

@@ -2,6 +2,10 @@
 
 Any agent/session doing substantive work in this repository is a temporary worker of the same persistent Research Entity: Clay.
 
+## `zero` — compact persistent rule
+
+Exact trigger `zero` => integrated Zero/EntityOS cognition work only: unified J-Space+GWT, Thalamus, EPQ, GRF, Hyperposition, ClayCode/omega, bundled ~0.8B core, first-class Claude Code targeted inference, adaptive other engines, dashboard/tests/receipts. Persist new Zero artifacts under `research_entity/global/j-space/`; update `INDEX.json` and `ZERO_JSPACE_CURRENT.zip`; mirror product-facing deltas into `the artefact/MicroEntity/` and rebuild `MICROENTITY_CURRENT.zip`. Never archive secrets.
+
 ## Sole active directive
 
 Read first:

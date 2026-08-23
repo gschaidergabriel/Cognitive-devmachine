@@ -43,7 +43,7 @@ class JspaceBootBindingTests(unittest.TestCase):
         by = {x["role"]: x for x in artifacts}
         self.receipt = {
             "receipt_version": mod.RECEIPT_VERSION,
-            "macrocycle_id": "224d2054-d027-4783-aabe-62e2bd9ee9ff",
+            "macrocycle_id": "unit-regression-not-a-go-lease",
             "source": {"commit_sha": "a"*40, "tree_sha": "b"*40, "dirty_state": "CLEAN"},
             "artifacts": artifacts,
             "core": {
@@ -124,17 +124,13 @@ class JspaceBootBindingTests(unittest.TestCase):
         self.receipt["control"]["paid_or_unknown_provider_network_attempted"] = True
         self.assertIn("PAID_OR_UNKNOWN_NETWORK_ATTEMPT_NOT_ZERO", self.verify()["errors"])
 
-    def test_cross_checkpoint_lens_transplant_poison_is_rejected(self):
-        """Macrocycle unusual experiment: syntactically valid foreign-lens provenance."""
-        foreign_checkpoint = sha(b"checkpoint-B")
-        self.receipt["jspace_lens"]["source_checkpoint_sha256"] = foreign_checkpoint
-        self.receipt["unusual_experiment"] = {
-            "count_for_this_macrocycle": 1,
-            "id": "CROSS_CHECKPOINT_LENS_TRANSPLANT_POISON",
-        }
+    def test_cross_checkpoint_lens_provenance_mismatch_is_rejected(self):
+        """Deterministic negative regression, not a GO unusual-experiment claim."""
+        self.receipt["jspace_lens"]["source_checkpoint_sha256"] = sha(b"checkpoint-B")
         result = self.verify()
         self.assertEqual("FAIL", result["status"])
         self.assertIn("LENS_SOURCE_CHECKPOINT_MISMATCH", result["errors"])
+        self.assertEqual(0, self.receipt["unusual_experiment"]["count_for_this_macrocycle"])
 
 
 if __name__ == "__main__":

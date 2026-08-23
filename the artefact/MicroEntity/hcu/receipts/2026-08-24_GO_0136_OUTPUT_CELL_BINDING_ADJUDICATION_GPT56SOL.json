@@ -1,0 +1,91 @@
+{
+  "schema": "ENTITYOS_HCU_GO_OUTPUT_CELL_BINDING_ADJUDICATION/v1",
+  "date": "2026-08-24",
+  "local_cycle_label": "GO_0136",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "authority": {
+    "canonical_main": "b5b6e72faea1fbd0056b6508f628c83f78d230e6",
+    "fusion_pr": 1401,
+    "fusion_head_before_receipt": "8152fe57b64de6f55e631483c5403958a1f8cc60",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_head_observed": "c032c73800152c0bf6a211d6976ca5c11a3d1896",
+    "supervisor": "SUPERVISOR_STEERING_8_61",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "together": "FORBIDDEN_IN_CURRENT_SUPERVISOR_MODE"
+  },
+  "source_observation": {
+    "fusion_binder_blob": "b0cb69796214b1bcdd74117351440fe429cc268f",
+    "fusion_binder_schema": "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v1",
+    "producer": "the artefact/MicroEntity/hcu/inference_receipt_v1.py::make_inference_receipt",
+    "producer_model_call_id_contract": "model_call_id is caller-supplied and copied into HCU_INFERENCE_RECEIPT/v3",
+    "v1_binder_lane_contract": "training trace role only has to occur somewhere in route-level inference_receipt.model_lanes",
+    "causal_gap": "HCU_INFERENCE_RECEIPT/v3 does not identify the output-producing GRID10 cell/lane, so a multi-lane route-level receipt can be post-hoc associated with more than one trace cell."
+  },
+  "alternatives": {
+    "pr1400": {
+      "mechanism": "derive a deterministic model_call_id from grid_plan_sha256 + cell_id + role and require receipt equality",
+      "adjudication": "REJECT_AS_SUFFICIENT_FIX",
+      "reason": "The receipt producer currently accepts model_call_id as a caller-supplied parameter, so a caller can choose the matching derived label without proving that the output was produced by that GRID10 cell. This is label consistency, not causal output-cell identity."
+    },
+    "pr1396": {
+      "mechanism": "require the exact GridPlan, cross-bind plan/route/engine identity, and fail closed for HCU_INFERENCE_RECEIPT/v3 unless there is exactly one model lane and one model cell matching the trace role/cell",
+      "adjudication": "SELECT_STRONGER_CURRENT_FIX",
+      "reason": "For v3 evidence, single-lane/single-model-cell is the only currently unambiguous output-to-cell case. Multi-lane must remain UNKNOWN/fail-closed until the canonical inference producer emits explicit output-producing cell/lane identity."
+    },
+    "future_v4": {
+      "mechanism": "extend the single canonical inference receipt producer with explicit grid_plan_sha256 + output_cell_id + output_model_lane, derived/validated at execution rather than accepted as post-hoc labels",
+      "adjudication": "PREFERRED_LONGER_TERM_ARCHITECTURE",
+      "reason": "Preserves multi-lane HCU capability without weakening causal provenance."
+    }
+  },
+  "unusual_experiment": {
+    "id": "MODEL_CALL_ID_LABEL_LAUNDERING",
+    "count_added": 1,
+    "class": "BOUNDED_SYNTHETIC_CAUSAL_DISCRIMINATOR",
+    "setup": "One route-level v3 receipt exposes model_lanes=(critic, planner). Two traces reuse the same route/grid identity but claim different model cells/roles. For each trace, the caller supplies the deterministic PR1400-style model_call_id matching that trace.",
+    "observed": [
+      {
+        "cell_id": "cell:critic:0",
+        "role": "critic",
+        "derived_model_call_id": "grid10:471494cc9913bae0c7db7f144e39dcd18f43744fe77ea800554ebd57f800111f",
+        "current_v1_accepts": true,
+        "pr1400_label_check_accepts": true,
+        "pr1396_single_lane_policy_accepts": false
+      },
+      {
+        "cell_id": "cell:planner:0",
+        "role": "planner",
+        "derived_model_call_id": "grid10:aed9ba2445b8d594ec16ed5724458ac856268bbeafb963f7ea2e6c2a9c028f99",
+        "current_v1_accepts": true,
+        "pr1400_label_check_accepts": true,
+        "pr1396_single_lane_policy_accepts": false
+      }
+    ],
+    "interpretation": "The deterministic model_call_id fence does not discriminate the two causal assignments while model_call_id remains caller-controlled. The stronger GridPlan + single-lane v3 policy does discriminate them by refusing both ambiguous assignments.",
+    "scope_limit": "Synthetic mechanism evidence only; not exact HCU runtime evidence and not a model/J-Space runtime claim."
+  },
+  "execution_authority_refresh": {
+    "bounded_hobby_included_tier_sandbox_execution": true,
+    "admission_commit": "ea50e6d6217259c4eb2b29ce07bd550d763bac46",
+    "remaining_quota_directly_observed": false,
+    "family_split_exact_free_isolated_component_pass": "d6cfcb154e5685355c050a030d52e2557ef69408",
+    "binder_component_sandbox_receipt_on_retained_donor": "the artefact/MicroEntity/hcu/receipts/2026-08-24_GO_0103_JSPACE_BINDING_EXACT_COMPONENT_GPT56SOL.json",
+    "credit_boundary": "Existing component passes do not establish the fused PR1401 full causal spine or whole EntityOS/HCU runtime acceptance."
+  },
+  "fusion_decision": {
+    "do_not_merge_pr1400_as_the_fix": true,
+    "retain_pr1396_as_selected_donor_repair": true,
+    "required_next_source_delta": "Fuse PR1396 binder+regression semantics into the single PR1401 HCU fusion path, then run one fixed exact-source FREE capsule over the resulting minimum causal closure.",
+    "parallel_binding_authority_created": false
+  },
+  "credit": {
+    "entityos_hcu_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  }
+}

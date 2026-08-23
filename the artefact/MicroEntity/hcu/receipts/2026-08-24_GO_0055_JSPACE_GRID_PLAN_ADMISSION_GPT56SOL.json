@@ -1,0 +1,67 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "EntityOS + HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_scope": "FREE_ONLY",
+  "canonical_main_observed_before_delta": "0be7a202267484e28d0ddbe0d9a7406d2298181a",
+  "canonical_main_observed_after_coordination_refresh": "ef8c5314480bf20e75cf9cd2d21042ad2be41216",
+  "retained_pr": 1263,
+  "retained_pr_head_observed_before_receipt": "49f4d50b885d00d4e2a6004023ff9fe2739f95ba",
+  "finding": {
+    "name": "CAUSAL_HASH_TRANSPLANT",
+    "class": "INDEPENDENT_REPLICATION_OF_SAME_GLOBAL_UNUSUAL_EXPERIMENT_FAMILY",
+    "global_second_distinct_unusual_experiment_added": false,
+    "canonical_parallel_receipt": "the artefact/MicroEntity/hcu/receipts/2026-08-24_GO_CAUSAL_BINDING_TRANSPLANT_GPT56SOL.json",
+    "canonical_parallel_receipt_commit": "ef8c5314480bf20e75cf9cd2d21042ad2be41216",
+    "evidence_scope": "SOURCE_DERIVED_SYNTHETIC_DISCRIMINATOR",
+    "observation": "Training/transition layers could agree on a syntactically valid but never-admitted grid_plan_sha256; matching trace hashes alone did not prove that GRID10 plan identity belonged to the same admitted Entry->route causal spine.",
+    "result": "MECHANISM_SUPPORTED_AND_INDEPENDENTLY_REPLICATED",
+    "runtime_credit": 0
+  },
+  "coordination": {
+    "parallel_jspace_inference_binding_found": true,
+    "duplicate_execution_binding_module_created": false,
+    "stale_write_409_observed": true,
+    "stale_write_overwrote_newer_worker": false,
+    "parallel_same_intervention_discovered_after_execution": true,
+    "experiment_accounting_correction": "same intervention family is counted once globally; this worker's run is replication/adjudication rather than a second distinct unusual experiment",
+    "fusion_strategy": "strengthen_existing_dataset_admission_gate_only"
+  },
+  "delta": {
+    "gate_commit": "79dc654198823e93b08f0ece5fb9272f2abc9410",
+    "test_commit": "2d7b36a209ba3bfbb870a6d9b6b3edb6f75b4714",
+    "gate_path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "test_path": "the artefact/MicroEntity/hcu/test_jspace_dataset_admission_gate_v1.py",
+    "admission_schema": "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2",
+    "contract": "serious dataset admission now requires externally admitted ENTITYOS_HCU_GRID_PLAN/v2 evidence and cross-binds plan identity, generation, Entry event, Entry admission, and route decision before training eligibility",
+    "gate_git_blob_sha1": "afa50f9e4936811e247d9f8edb1cffe03217ac8c",
+    "gate_sha256": "4b7464ecac38c7a888771cb28733b481fda1c012c4abdd6538dddfb01db49bdb",
+    "test_git_blob_sha1": "6916648a7a1f1771dd04505d4e9502b7f6427503",
+    "test_sha256": "dea2c7cc8ae281734524792e0f6a8975f7e6dc96120862dc408b3eab2b78cb6b"
+  },
+  "component_execution": {
+    "environment": "isolated ChatGPT Linux tool container",
+    "python": "3.13.5",
+    "source_identity_check": "local git blob SHA1 matched GitHub content blob SHA1 for both executed files",
+    "command": "python -m unittest -v test_jspace_dataset_admission_gate_v1.py",
+    "tests_run": 11,
+    "tests_passed": 11,
+    "tests_failed": 0,
+    "result": "PASS_COMPONENT_ONLY",
+    "entityos_hcu_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0
+  },
+  "negative_boundaries": {
+    "whole_entityos_pass_claimed": false,
+    "grid10_end_to_end_runtime_pass_claimed": false,
+    "vercel_sandbox_run_claimed": false,
+    "together_preflight_or_job_created": false,
+    "paid_provider_used": false,
+    "vps_or_self_hosted_test_credit_used": false
+  },
+  "next_exact_gate": "Rebase/fuse retained PR1263 onto current FREE_ONLY main, synchronize the retained Vercel executor to that exact fused source identity, then obtain an actually-started authorized FREE isolated full-spine run covering Typed Entry -> route -> verified engine admission/load -> inference -> GRID10 -> J-Space/GWT -> training trace -> dataset admission."
+}

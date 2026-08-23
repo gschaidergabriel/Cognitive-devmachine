@@ -1,0 +1,67 @@
+{
+  "schema_version": "HCU_INFERENCE_VERIFIED_LOAD_FUSION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "retained_pr": 1263,
+  "retained_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+  "observed_head_after_source_and_test_writes": "2bb38b0011c11a68738acd6d57e8be4689e5753f",
+  "source_commit": "d7eb40013d6e3c3d376998a0504553c8115b0919",
+  "test_commit": "2bb38b0011c11a68738acd6d57e8be4689e5753f",
+  "source_path": "the artefact/MicroEntity/hcu/inference_receipt_v1.py",
+  "source_blob_sha": "1e2ed83adf9c8c9d294828d62c5a9216ac944c75",
+  "test_path": "the artefact/MicroEntity/hcu/test_inference_receipt_v1.py",
+  "test_blob_sha": "d46641af94ed64f00fcddc6645d0ea4af413167e",
+  "problem": "The retained inference seam had already migrated to RFC8785/JCS and typed Entry bindings but still consumed a parallel physical_engine_lease mapping instead of the stronger current engine_load_lease VerifiedEngineLoad chain. That left two loader-evidence representations in the active donor lane and allowed downstream receipt semantics to diverge from the actual-loader consumption contract.",
+  "delta": [
+    "HCU_INFERENCE_RECEIPT identity advanced to v3; historical receipt identities are not reinterpreted",
+    "inference hashing remains RFC8785_JCS_IJSON/v1 and reuses the router's typed ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2 resolver",
+    "downstream inference now consumes VerifiedEngineAdmission directly and independently requires its admitted exact receipt",
+    "downstream inference now consumes HCU_VERIFIED_ENGINE_LOAD/v1 from engine_load_lease_v1 instead of minting or re-verifying a parallel physical lease schema",
+    "verified load must echo the same engine admission receipt, engine identity/class/artifact, generation and JCS canonicalization",
+    "all checkpoint/tokenizer/runtime/build consumption members must retain ACTUAL_LOADER_READ_PATH evidence_source",
+    "verified load consumption receipt is independently recomputed and must be present in a separate admitted registry",
+    "inference receipt echoes loader binding, load lease, consumption receipt and loader id so the actual-loader evidence stays causally bound downstream"
+  ],
+  "authority_law": {
+    "canonical_state_or_truth_change": false,
+    "effect_authority_change": false,
+    "engine_admission_authority_change": false,
+    "loader_claims_mint_runtime_truth": false,
+    "source_only_runtime_credit": 0
+  },
+  "regression_replication": {
+    "classification": "DETERMINISTIC_COMPONENT_CONTRACT_REGRESSION_NOT_UNUSUAL_EXPERIMENT",
+    "environment": "isolated ChatGPT tool container with exact authored inference source bytes and narrow interface stubs matching the current selected contracts",
+    "observed": "6/6 PASS",
+    "cases": [
+      "deterministic v3 receipt over admitted VerifiedEngineLoad",
+      "legacy bare Entry admission binding rejected",
+      "stale VerifiedEngineLoad generation rejected",
+      "POST_HOC loader evidence source rejected",
+      "unadmitted VerifiedEngineLoad rejected",
+      "unadmitted VerifiedEngineAdmission receipt rejected"
+    ],
+    "source_blob_binding": "local git blob SHA-1 exactly matched GitHub contents blob 1e2ed83adf9c8c9d294828d62c5a9216ac944c75",
+    "limits": [
+      "the six-case run used contract stubs for adjacent modules and is component-mechanism evidence only",
+      "the exact combined retained PR head was not executed end-to-end in a product-authorized runtime",
+      "a real model loader did not produce LoaderConsumption in this run",
+      "no HCU or EntityOS runtime promotion follows"
+    ]
+  },
+  "unusual_experiment": {
+    "new_experiment_consumed": false,
+    "reason": "the parent 23:57 go macrocycle already consumed its single unusual experiment; this work is repair/regression only"
+  },
+  "execution_admission": {
+    "authorized_isolated_product_executor_started": false,
+    "current_combined_semantic_execution": "UNOBSERVED",
+    "runtime_credit": 0
+  },
+  "next_exact_gate": "On an actually-started authorized isolated executor, run the exact-current Entry -> route -> VerifiedEngineAdmission -> EngineLoadLease -> actual-loader LoaderConsumption -> VerifiedEngineLoad -> inference v3 -> GRID10 chain, including stale-generation, post-hoc-consumption, replay and registry-revocation falsifiers. Only then consider source promotion or runtime credit.",
+  "whole_entityos_pass": false
+}

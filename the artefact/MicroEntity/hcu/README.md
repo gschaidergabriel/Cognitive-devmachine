@@ -1,63 +1,69 @@
-# EntityOS HCU compatibility subtree
+# Hyperposition Computational Unit (HCU)
 
-Status: **CURRENT ENTITYOS/HCU INTEGRATION SURFACE — COMPATIBILITY PATH**
+Status: **ENTITYOS/HCU RETAINED DONOR LANE — SOURCE / TRAINING-READINESS CANDIDATE, ZERO RUNTIME CREDIT**
 
-This directory is retained at `the artefact/MicroEntity/hcu/` for exact historical path, receipt, package and donor provenance. The path name **MicroEntity is not a current product identity**.
+HCU is the sole current integrated cognition/compute architecture being co-developed inside EntityOS. The `MicroEntity` directory name is compatibility/provenance only; it is not a second product or persistent entity.
 
-Current authority:
+## Current path
 
-- **EntityOS** is the sole current product/system identity.
-- **HCU** is the sole current integrated cognition/compute architecture.
-- Clay is the persistent research entity; temporary workers and HCU logical cells are organs/functions, not new entities.
-- UnifiedDB, or the current compatibility MiniUnifiedDB substrate while exact migration remains incomplete, is the canonical durable state/evidence authority.
-- EffectGate + EffectJournal are the only admitted real/state-changing effect authority.
-- HCU, J-Space, world-model, workspace and model outputs are candidate/projection/measurement only and cannot mint canonical truth.
+The current source candidate is deliberately split into deterministic authority/evidence stages:
 
-The current integration contract is `ENTITYOS_HCU_INTEGRATION_CONTRACT.json`. It supersedes historical Mini Entity product/workstream wording in older receipts and Git history without rewriting those historical identities.
+`Typed Entry -> typed Entry binding -> HCU route -> verified EngineAdmission -> engine-load lease -> actual loader-read consumption -> VerifiedEngineLoad -> inference receipt v3 -> GRID10 plan`
 
-## Current HCU path
+All current causal identities target `RFC8785_JCS_IJSON/v1`. Historical CBOR, custom typed-canonical, host-Python JSON and older inference identities retain only their original bounded scope and must not be silently relabelled as current JCS identities.
 
-```text
-new data/event/prompt
--> Typed Entry Fabric
--> immutable causal event identity + concrete admission identity
--> canonical state/evidence
--> deterministic control plane
--> independently admitted EngineAdmission / capacity / capability bindings
--> HCU GRID10 / COGSIM10 / WM_TEST / NESTED_SIM / SCALEOUT computation
--> typed causal packet / Hyperposition / workspace
--> candidate decision or typed effect request
--> EffectGate + EffectJournal
-```
+Pre-load hashing is necessary but is **not** loader attestation. The current inference path consumes `HCU_VERIFIED_ENGINE_LOAD/v1`, which binds a generation-fenced engine-load lease to evidence reported from the actual loader read path. Matching caller-supplied hashes alone grant zero runtime credit.
 
-Required invariants:
+## Current source files
 
-- replay-stable `event_sha256` is distinct from concrete admission identity;
-- Entry capability or resource claims may narrow independently admitted authority but may never self-grant or broaden it;
-- engine/provider/class/artifact authority comes from deterministic control-plane admission, never from an untrusted causal event;
-- downstream inference receipts must echo the admitted event/admission/route/engine/artifact identities required by the current contract;
-- one versioned canonical identity path must be selected before heterogeneous/cross-language hash identity is promoted;
-- no second router, Entry authority, canonicalizer authority, state authority, identity service, recovery ledger or effect path is created to bypass a blocker.
-
-## Retained donor lane
-
-Draft PR #1263 is the retained HCU donor/integration lane for the richer Typed Entry + EngineAdmission + router + inference-receipt + GRID10 mechanisms. It is donor evidence, not a second product head, and must be rebased/fused into current EntityOS/HCU authority rather than duplicated.
-
-## Files
-
-- `ENTITYOS_HCU_INTEGRATION_CONTRACT.json` — current authority/integration fence for this compatibility subtree.
-- `HCU_ARCHITECTURE.md` — current EntityOS/HCU architecture contract.
-- `topology.kvm4.json` — historical/planning capacity profile only; numeric values are not runtime facts.
-- `FREE_LLM_FEED_CONTRACT.json` — bounded FREE_ONLY candidate-feed contract where still compatible with current authority.
-- `HCU_DATA_INDEX.json` — current compatibility-subtree data/package index.
-- `capacity_guard_v1.py` — fail-closed capacity-admission donor primitive.
-- `test_capacity_guard_v1.py` — deterministic capacity poison regressions.
+- `entry_canonicalization_v1.py` — selected RFC8785/JCS implementation.
+- `xeno_entry_fabric_v1.py` — compatibility-named Typed Entry Fabric; current event/admission identity is v2.
+- `reactive_event_router_v1.py` — deterministic script-first HCU router using typed Entry-binding v2.
+- `engine_admission_v1.py` — exact local engine artifact verification and versioned EngineAdmission receipt.
+- `engine_load_lease_v1.py` — generation-fenced load intent plus actual-loader consumption verification.
+- `inference_receipt_v1.py` — **single current inference producer**, emitting `HCU_INFERENCE_RECEIPT/v3` and consuming `VerifiedEngineLoad`.
+- `grid10_scheduler_v1.py` — `ENTITYOS_HCU_GRID_PLAN/v2`; JCS-bound logical GRID10 planning with typed Entry binding. Logical cells are not physical decoders or model calls.
+- `jspace_vector_control_v1.py` — source candidate for `JSPACE_VECTOR_CONTROL_ABI/v1`, a deterministic JCS/hash-bound symmetric-q8 control packet with exact rational scale representation and generation/basis/role/control-condition fences.
+- `jspace_gwt_prototype_v1.py` — source candidate for deterministic bounded GWT competition and immutable `JSPACE_GWT_TRANSITION_TRACE/v1` production bound to Entry -> Route -> GRID10 -> model-cell -> vector-control identities.
+- matching `test_*.py` files — deterministic regression obligations only until executed on an admitted isolated executor.
+- `HCU_DATA_INDEX.json` — current package/path selection.
 - `receipts/` — bounded non-secret evidence receipts.
 
-## Execution and evidence law
+`inference_receipt_v2.py` and its test were removed after convergence to the single current inference producer. `physical_engine_lease_v1.py`, custom typed-canonical source and other earlier overlapping paths are historical/noncurrent evidence unless current authority explicitly re-admits them. They must not become a second active inference, canonicalization or loader-authority lane.
 
-Current build/test/experiment/runtime credit comes only from `AUTHORIZED_ISOLATED_SANDBOX_ONLY`. VPS, self-hosted and production-host testing are forbidden under current control. A KVM/VPS profile is a deployment/planning target only until separately authorized; it cannot provide current acceptance credit.
+## Global J-Space / GWT training-readiness track
 
-Together API and paid fallback are forbidden. Final paid/model training requires explicit owner authorization. Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
+Current owner authority permits exactly one first serious Together fine-tuning run for the selected ~0.8B HCU model, but **only after** a functional instrumented Global J-Space/GWT prototype produces real traces, causal/lesion/control evidence is obtained, `JSPACE_VECTOR_CONTROL_ABI/v1` is frozen, and train/validation/holdout data are compiled and baseline-evaluated.
 
-Current runtime credit remains zero until the exact current EntityOS/HCU path is actually executed and bound to exact source, model/checkpoint/tokenizer/runtime, capacity, causal/admission and effect identities.
+The current source candidate advances only the pre-training interface:
+
+`measured/controlled vector -> JSPACE_VECTOR_CONTROL_ABI/v1 -> bounded GWT competition -> Entry/Route/GRID10-bound transition trace`
+
+Important boundaries:
+
+- the q8 packet is a deterministic token/byte control interface that Together SFT and the local runtime can both reproduce; it is **not** proof of arbitrary hidden-state or residual-stream injection;
+- GWT competition is deterministic and bounded; candidate count/majority does not mint truth;
+- transition traces are research telemetry/training evidence only, never canonical EntityOS truth/state or effect authority;
+- baseline/null/sign-flip/permutation/role-swap/lesion conditions are explicit controls;
+- the current real instrumented model trace count is **0**;
+- the one-shot Together authorization remains **unconsumed** until an actual Together fine-tuning job is created and its non-secret job ID is durably recorded;
+- training launch is currently **not admitted**.
+
+## Authority
+
+Canonical durable state/evidence remains deterministic EntityOS authority. HCU vectors, world-model fields, simulations, J-Space/workspace outputs and model outputs remain candidate/projection/measurement evidence. EffectGate/EffectJournal remain the only real-effect authority. Entry data may request routing but may not mint engine identity, capabilities, truth or effects.
+
+## Evidence boundary
+
+Current work is **source/mechanism and training-readiness convergence only**. No exact-current combined Entry -> route -> real loader -> VerifiedEngineLoad -> inference-v3 -> GRID10 execution has been observed on an actually-started authorized isolated executor. The new Vector-Control/GWT files have not yet produced a real model/J-Lens trace. No real local ~0.8B model runtime, target-hardware capacity, J-Space causality, VPS, OCI or whole EntityOS/HCU PASS is claimed.
+
+A READY Vercel controller exists for atomic current-main + retained-HCU snapshot execution, but this worker's exposed Vercel connector currently has no arbitrary authenticated POST/Sandbox-run action. An authenticated GET to `/api/go-cycle-v2` returns `405 Method Not Allowed` with `Allow: POST`; therefore READY deployment state receives no semantic runtime credit.
+
+## Next exact gates
+
+1. Execute the exact current Entry -> Route -> EngineAdmission -> actual-loader VerifiedEngineLoad -> inference-v3 -> GRID10 regressions in an admitted isolated executor.
+2. Execute `test_jspace_vector_control_v1.py` and `test_jspace_gwt_prototype_v1.py` on the same exact-source snapshot; preserve exact source/artifact identity and negative results.
+3. Attach a real admitted ~0.8B model/J-Lens observer to produce the first `MEASURED_INTERPRETABILITY` vector plus matched baseline/lesion/control traces through `JSPACE_GWT_TRANSITION_TRACE/v1`.
+4. Measure reconstruction error, basis/role/generation rejection, GWT selector behavior and matched-budget causal sensitivity; do not treat model self-report as J-Space measurement.
+5. Only after real trace quality and causal gates survive, freeze `JSPACE_VECTOR_CONTROL_ABI/v1`, compile episode-separated train/validation/holdout data, freeze the exact base-model baseline, and perform Together capability/price preflight.
+6. Create the owner-authorized one-shot Together job only if all preconditions are satisfied; job creation, not preflight, consumes the authorization.

@@ -1,0 +1,58 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "timestamp_local": "2026-08-24T00:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "scope": "JSPACE_TRAINING_DATASET_FAMILY_SPLIT_AUTHORITY",
+  "product_identity": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "retained_lane": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+  "observed_pr_head_before_receipt": "c34169bcc0cdf89e8ba6b48d01a52fa64404bfda",
+  "observations": {
+    "serious_training_compiler": {
+      "path": "the artefact/MicroEntity/hcu/compile_jspace_training_dataset_v1.py",
+      "blob_sha256_git": "95fc943d703357c6465185115023805076bd2c02",
+      "split_mechanism": "RFC8785/JCS canonicalize({trace_family_id}) -> sha256 -> first-byte 80/10/10"
+    },
+    "admitted_family_splitter": {
+      "path": "the artefact/MicroEntity/hcu/jspace_dataset_family_split_v1.py",
+      "blob_sha256_git": "c0fb3369150a6ee5d7ec2a3d384266d559c630f4",
+      "split_mechanism": "sha256(SPLIT_SCHEMA + NUL + UTF8(trace_family_id)) -> first-byte 80/10/10"
+    },
+    "exact_discriminator": {
+      "trace_family_id": "episode:1",
+      "serious_training_compiler_split": "holdout",
+      "admitted_family_splitter_split": "train",
+      "result": "DIVERGENCE_OBSERVED"
+    }
+  },
+  "classification": "SOURCE_SEMANTIC_AUTHORITY_CONFLICT",
+  "impact": [
+    "The same admitted causal trace family can receive different split labels depending on which current dataset path is used.",
+    "This does not by itself leak a family inside either individual splitter, but it prevents a single frozen dataset-split authority and can invalidate cross-stage dataset receipts/evaluation comparability.",
+    "The owner one-shot training directive requires leak-resistant split-by-causal-episode/trace-family before dataset freeze; therefore the one-shot Together job must remain NOT_CONSUMED / NOT_STARTED while this conflict is unresolved."
+  ],
+  "required_fusion": {
+    "law": "ONE_CANONICAL_FAMILY_SPLIT_SEMANTICS",
+    "preferred_shape": "compile_jspace_training_dataset_v1 must consume the same split_for_family authority used by admitted dataset partitioning, or both must be collapsed to one shared primitive with an exact parity regression.",
+    "regression": "Include episode:1 plus a broad deterministic family corpus and assert compiler split == admitted family splitter split for every family.",
+    "anti_duplication": "Do not create a third splitter or second serious compiler."
+  },
+  "execution_evidence": {
+    "local_isolated_component_check": "A candidate shared family-split primitive was exercised locally: 5/5 deterministic component tests PASS; this is component evidence only and was not committed because parallel workers created the canonical family-split and serious compiler paths during this go cycle.",
+    "runtime_credit": 0,
+    "whole_product_pass": false,
+    "vercel_sandbox_started": false
+  },
+  "coordination": {
+    "stale_write_protection_observed": "A prior stale test-file update in this go cycle was rejected by GitHub 409 rather than overwriting a parallel worker delta.",
+    "duplicate_write_avoided": true,
+    "unusual_experiment_consumed_here": false
+  },
+  "together": {
+    "general_inference": "FORBIDDEN",
+    "one_shot_approx_0_8b_jspace_gwt_training": "OWNER_AUTHORIZED_BUT_NOT_CONSUMED",
+    "job_created": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

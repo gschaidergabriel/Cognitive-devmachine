@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_GO_SOURCE_MECHANISM_RECEIPT",
+  "recorded_at_local": "2026-08-23T23:57:00+07:00",
+  "persistent_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed": "b1839054ec6e48fa57d2e7b5bc514991014b2794",
+  "retained_donor_pr": 1263,
+  "retained_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+  "retained_branch_head_observed_before_receipt_write": "cd4264799d40487756b86559cd89db88f4edb377",
+  "finding": {
+    "class": "SOURCE_TRUST_BOUNDARY_GAP",
+    "statement": "The prior downstream inference-receipt path accepted a RouteDecision produced from a caller-constructed bare EngineAdmission plus an admitted engine-artifact mapping, without requiring the byte-verifying HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v1 to be admitted and rebound downstream.",
+    "source_falsifier": "The prior test_inference_receipt_v1.py constructed EngineAdmission directly and then produced a candidate inference receipt; this demonstrated that producer provenance was not part of downstream receipt admission at source-contract scope.",
+    "runtime_claim": false
+  },
+  "bounded_delta": {
+    "initial_inference_receipt_commit": "4167e155a01efee9f23afca5a84a1b89033940ea",
+    "initial_inference_receipt_blob": "b65e80f2664757bb726de58d6a150b97601f3df0",
+    "test_commit": "3f9bf89389e3b0623812b628ea14ba0c99010517",
+    "test_blob": "cc0ef050b76a7a1f22e79ef51dfdd11944b93ee3",
+    "mechanism": [
+      "require engine_admission_receipt_sha256 for downstream inference receipt production",
+      "require admission of the referenced HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v1",
+      "recompute and verify receipt digest",
+      "bind entity generation, engine identity, engine class and engine artifact bundle",
+      "recompute checkpoint/tokenizer/runtime/build bundle digest",
+      "commit verified engine-admission receipt identity into downstream inference receipt identity"
+    ],
+    "second_route_or_state_authority_created": false
+  },
+  "parallel_fusion": {
+    "current_branch_inference_receipt_blob_after_parallel_work": "fc43e3e09723533957eb4f65937088c81bc988aa",
+    "current_branch_test_blob_after_parallel_work": "cc0ef050b76a7a1f22e79ef51dfdd11944b93ee3",
+    "status": "FUSED_STRONGER_ON_SAME_RETAINED_DONOR_LANE",
+    "note": "Parallel work on the same retained PR1263 lane subsequently strengthened inference receipt production further with a generation-fenced physical engine-load lease and loader-consumed-byte binding requirement. The test blob from this delta remains present. No competing route/Entry/engine authority was created.",
+    "runtime_credit": 0
+  },
+  "bounded_execution_evidence": {
+    "pr1381_effective_authority_component_replication": "3_OF_3_PASS_WITH_INTERFACE_COMPATIBLE_VALIDATOR_STUB_COMPONENT_SCOPE_ONLY",
+    "engine_admission_receipt_verifier_component_probe": "4_OF_4_PASS_IN_ISOLATED_COMPONENT_PROBE_WITH_STUBBED_SURROUNDING_TYPES",
+    "test_source_syntax": "PASS_IN_ISOLATED_COMPONENT_CONTEXT",
+    "exact_pr1263_full_checkout_suite": "NOT_OBSERVED",
+    "entityos_hcu_runtime": "NOT_OBSERVED",
+    "actual_model_loader_consumed_bytes": "NOT_OBSERVED",
+    "vercel_sandbox_start_exec": "UNAVAILABLE_TO_THIS_ORGAN_AND_CURRENT_CONTROL_STATE_BLOCKED_BEFORE_SANDBOX_CREATE",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "experiment_accounting": {
+    "additional_unusual_experiment_credit_claimed_by_this_receipt": false,
+    "reason": "Current retained PR1263 coordination state records that the 23:57 go macrocycle unusual-experiment allowance was already consumed by AUTHORITY_CONSTANT_TRANSPLANT. The trust-boundary check and subsequent probes here are recorded only as source falsification/regression/component verification and do not consume or claim a second unusual experiment."
+  },
+  "current_authority_reentry": {
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "canonicalization_status": "WIRING_PENDING_MIXED_SCHEMA_ZERO_RUNTIME_CREDIT",
+    "stronger_loader_gate": "GENERATION_FENCED_PHYSICAL_ENGINE_LEASE_OR_ENFORCED_CONTENT_ADDRESSED_READ_ONLY_LOAD_BOUNDARY_PLUS_LOADER_CONSUMED_BYTE_IDENTITY_ECHO",
+    "required_future_receipt": "HCU_ENGINE_ADMISSION_CAUSAL_BINDING_RECEIPT/v1"
+  },
+  "evidence_boundary": {
+    "source_mechanism_improved": true,
+    "exact_current_full_integration_executed": false,
+    "real_local_model_verified": false,
+    "loader_attestation_verified": false,
+    "jspace_causality_verified": false,
+    "entityos_hcu_runtime_verified": false,
+    "whole_product_pass": false,
+    "vps_testing_used": false,
+    "self_hosted_or_production_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "next_discriminator": "On an actually-started authorized isolated executor, bind exact current EntityOS/HCU source + RFC8785 versioned Entry/route/GridPlan identities + verified engine admission + generation-fenced physical loader lease + actual loader-consumed artifact identity + downstream inference echo in one HCU_ENGINE_ADMISSION_CAUSAL_BINDING_RECEIPT/v1; reject mixed/downgraded canonicalization, stale lease generation, mismatched loader bytes and receiptless engine admission.",
+  "migration_reuse_score": "EASIER_CROSS_MODE"
+}

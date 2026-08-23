@@ -1,0 +1,46 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together": "NO_PREFLIGHT_NO_CREDENTIAL_LOOKUP_NO_NETWORK_NO_JOB"
+  },
+  "retained_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "observed_head_before_receipt": "bbd6e5315885ff07c7b909b7539d968ab3c29e0d",
+    "status": "OPEN_DRAFT_NOT_MERGED"
+  },
+  "delta": {
+    "problem": "Dataset admission allowed non-UNKNOWN training credit from an admitted outcome registry entry without proving that the outcome belonged to the same training trace, transition trace, generation, Entry event/admission, route decision, GRID10 plan, cell and role.",
+    "risk": "CROSS_EPISODE_OUTCOME_CREDIT_TRANSPLANT",
+    "repair_commit": "de5cb51978f3f42fefb36c02eb8f4b97c7fcb5fd",
+    "regression_commit": "9e0108de7bc8a22f5f4893cff99e154c78146894",
+    "repair": "Non-UNKNOWN credit now requires a VERIFIED admitted outcome whose training/transition identities and full Entry->Route->GRID10 causal bindings match the row; mismatch fails closed.",
+    "parallel_fusion": "Later retained-lane commits preserved this repair and additionally bound exact Vector Control packet identity, control condition and transition/training credit parity across dataset layers.",
+    "stale_writer_behavior": "Two attempted overlapping writes were rejected with GitHub 409 and were not force-overwritten; refreshed retained bytes were used instead."
+  },
+  "evidence": {
+    "isolated_semantic_component_regression": "5/5 PASS on an isolated materialization of the repaired gate logic and regression cases",
+    "exact_pr_head_runtime_execution": false,
+    "exact_free_vercel_run": false,
+    "runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "new_permanent_parallel_authority_created": false,
+    "unusual_experiment_executed_by_this_organ": false,
+    "reason": "This cycle used source inspection, deterministic regression/fusion and fail-closed stale-writer coordination only."
+  },
+  "next_gate": "Actually start the retained exact-source FREE isolated EntityOS/HCU batch, bind current Research main plus current PR1263 SHA/tree and executor/result identities, then use zero-cost local execution to obtain real loader-consumed ~0.8B and J-Space/GWT causal evidence.",
+  "acceptance": "SOURCE_AND_COMPONENT_MECHANISM_SUPPORTED_RUNTIME_UNVERIFIED"
+}

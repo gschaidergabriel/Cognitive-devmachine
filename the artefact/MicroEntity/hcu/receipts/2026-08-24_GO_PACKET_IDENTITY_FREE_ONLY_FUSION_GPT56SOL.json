@@ -1,0 +1,118 @@
+{
+  "schema": "ENTITYOS_HCU_GO_PACKET_IDENTITY_FREE_ONLY_FUSION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "authority": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "observed_main_sha_before_receipt": "5ec96315ea1c87e28ba7087f29f3bbc56fc65a56",
+    "observed_main_tree_before_receipt": "2da32b48430348edc092e295a93c80734d6bd832",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "retained_donor_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "observed_head_before_receipt": "cfa23e1827f385423eff797eefd5fb6ae278d1c3",
+    "merge_as_is_allowed": false,
+    "reason": "retained donor lane remains materially diverged from current main and must be fused/rebased without restoring stale authority"
+  },
+  "source_delta": {
+    "training_trace_packet_identity_fence": {
+      "status": "PRESENT_ON_RETAINED_LANE",
+      "file": "the artefact/MicroEntity/hcu/jspace_training_trace_v1.py",
+      "requirements": [
+        "vector control generation matches prototype step",
+        "basis id matches prototype step",
+        "basis sha256 matches prototype step",
+        "role matches prototype winner role",
+        "control condition matches prototype control condition",
+        "packet sha256 equals the exact prototype control packet sha256",
+        "canonical packet wire text equals the exact prototype control packet wire text"
+      ],
+      "fail_closed_codes": [
+        "VECTOR_CONTROL_CONDITION_MISMATCH",
+        "VECTOR_CONTROL_PACKET_TRANSPLANT",
+        "VECTOR_CONTROL_PACKET_WIRE_MISMATCH"
+      ],
+      "evidence_class": "SOURCE_MECHANISM_CANDIDATE_NOT_RUNTIME_CREDIT"
+    },
+    "training_trace_outcome_admission": {
+      "status": "CONCURRENTLY_STRENGTHENED_ON_SAME_RETAINED_LANE",
+      "summary": "non-UNKNOWN credit now requires an admitted digest-valid HCU_INFERENCE_RECEIPT/v3 bound to matching generation, Entry event/admission, route decision and model lane; a bare receipt hash cannot mint reward",
+      "evidence_class": "SOURCE_MECHANISM_CANDIDATE_NOT_RUNTIME_CREDIT"
+    },
+    "serious_dataset_grid_admission": {
+      "status": "CONCURRENTLY_REPAIRED_ON_SAME_RETAINED_LANE_AFTER_FAIL_CLOSED_409",
+      "compiler": "the artefact/MicroEntity/hcu/compile_admitted_jspace_training_dataset_v1.py",
+      "test": "the artefact/MicroEntity/hcu/test_compile_admitted_jspace_training_dataset_v1.py",
+      "summary": "selected serious compiler now requires caller-owned admitted_grid_plans and forwards them into DatasetAdmission v2; tests now include the GRID registry and current DatasetAdmission vector-control fields",
+      "stale_write_overwritten": false
+    },
+    "duplicate_path_cleanup": {
+      "status": "DONE",
+      "summary": "temporary parallel causal compiler/binding paths created during exploration were deleted after stronger retained dataset-admission/family-split/inference paths appeared; one canonical responsibility path is preserved"
+    }
+  },
+  "deterministic_adversarial_regression": {
+    "name": "CONTROL_PACKET_TRANSPLANT_REGRESSION",
+    "classification": "DETERMINISTIC_REGRESSION_IN_EXISTING_VECTOR_PACKET_FAMILY_NOT_A_SECOND_SHARED_UNUSUAL_EXPERIMENT",
+    "finding": "metadata-compatible but different vector-control packet identity must not be accepted for a prototype step",
+    "source_fix_present": true,
+    "runtime_executed_in_this_organ": false,
+    "unusual_experiment_count_added": 0
+  },
+  "concurrency_behavior": {
+    "github_stale_writes_observed": true,
+    "http_conflict": 409,
+    "force_overwrite_used": false,
+    "result": "PASS_FAIL_CLOSED_COORDINATION_BEHAVIOR"
+  },
+  "current_open_source_coherence": [
+    {
+      "id": "HCU_DATA_INDEX_DATASET_ADMISSION_SCHEMA_DRIFT",
+      "observed": "HCU_DATA_INDEX/v12 records ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1 while current jspace_dataset_admission_gate_v1.py declares ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2",
+      "severity": "SOURCE_COHERENCE",
+      "runtime_credit": 0
+    },
+    {
+      "id": "INFERENCE_V3_OUTPUT_CELL_AMBIGUITY",
+      "observed": "current jspace_inference_binding_v1.py accepts trace role by membership in inference_receipt.model_lanes and does not bind the single output to an exact GRID10 producing cell when multiple model lanes exist",
+      "candidate_fusion": "PR1396 proposes a v2 exact GridPlan binding and fail-closed multi-lane behavior; adjudicate/fuse into the retained lane rather than creating a second inference authority",
+      "severity": "CAUSAL_TRAINING_EVIDENCE"
+    }
+  ],
+  "execution": {
+    "new_authorized_isolated_runtime_run_in_this_organ": false,
+    "reason": "current FREE_ONLY authority permits only zero-cost execution; Vercel Hobby is a free plan but current official Sandbox material also describes usage-based billing and this organ did not establish a guarantee that an additional Sandbox invocation has zero monetary cost",
+    "known_infrastructure_callability": "main already contains a separate observed Vercel Sandbox.create + runCommand PASS receipt; infrastructure callability does not grant EntityOS/HCU runtime credit",
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_host_testing": false
+  },
+  "provider_training": {
+    "together_preflight": false,
+    "together_key_lookup": false,
+    "together_network_call": false,
+    "together_job_created": false,
+    "paid_training_credit": 0,
+    "current_policy": "FORBIDDEN_IN_SUPERVISOR_8_61_FREE_ONLY_MODE"
+  },
+  "credit": {
+    "entityos_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_frontier": [
+    "fuse retained PR1263 mechanisms onto exact current FREE_ONLY main rather than merging donor lane as-is",
+    "repair HCU_DATA_INDEX admission-schema drift if still present on refreshed head",
+    "adjudicate PR1396 output-to-GRID10-cell binding ambiguity and retain one inference binding path",
+    "obtain an actually-started exact-source authorized zero-cost isolated full-spine run with immutable source/tree/environment/result evidence",
+    "only after executable evidence bind a real zero-cost local approx 0.8B model and collect request-scoped J-Space/GWT traces plus causal lesion/shuffle/rescue controls"
+  ],
+  "claim_class": "BOUNDED_SOURCE_FUSION_AND_FRONTIER_RECEIPT_ONLY"
+}

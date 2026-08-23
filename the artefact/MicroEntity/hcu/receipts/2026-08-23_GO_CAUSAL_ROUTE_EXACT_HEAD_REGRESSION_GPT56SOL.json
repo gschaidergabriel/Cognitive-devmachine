@@ -1,0 +1,60 @@
+{
+  "schema_version": "HCU_EXACT_SOURCE_REGRESSION_RECEIPT/v4",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "candidate_pr": 1263,
+  "exact_source_heads": {
+    "route_regression": "beb62d9668f016050ddab2ca0597c8af34e5d7d6",
+    "typed_entry_capability_regression": "b98daf7997fe8ba95a89b336787a3a3d823c4dbb",
+    "typed_entry_generation_regression": "07186dc9386d03fa17ec05ce1dccacbb30599db8",
+    "typed_entry_projection_seam_fix": "eaf3949862a1c98c0f789f6c1f0bf14aadd78e7a"
+  },
+  "current_exact_source_files_executed": {
+    "the artefact/MicroEntity/hcu/typed_entry_canonical_v1.py": {
+      "git_blob_sha1": "2bcd576003ac58cec07e026a5105bc0a0b3413bb",
+      "canonicalization_schema": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1"
+    },
+    "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py": {
+      "git_blob_sha1": "ae73db8f2c19da5c66bd3f6859018f56ebb3085a"
+    }
+  },
+  "historical_exact_regressions_this_go": {
+    "route": "py_compile PASS; 16/16 PASS at exact source scope recorded earlier",
+    "typed_entry_pre_cbor": "py_compile PASS; 13/13 PASS at exact source scope recorded earlier"
+  },
+  "current_execution": {
+    "surface": "isolated ChatGPT tool container",
+    "python": "CPython 3.13.5",
+    "blob_identity_check": "PASS: current Typed Entry source blob ae73db8... and deterministic CBOR canonicalizer blob 2bcd576... exactly matched GitHub before execution",
+    "commands": [
+      "python3 -m py_compile typed_entry_canonical_v1.py xeno_entry_fabric_v1.py",
+      "targeted exact-source admit_entry -> to_hcu_reactive_event projection seam assertion"
+    ],
+    "result": "PASS: projection preserves ingress_id, causal_id, entry_event_sha256 and entry_admission_sha256 required by the independent admission->event binding seam",
+    "execution_mode": "REGRESSION_ONLY; shared GO unusual experiment remains exactly one: the previously recorded same-route causal-alias stress"
+  },
+  "current_source_observations": {
+    "router_entry_authority": "current retained router requires admitted_entry_bindings[entry_admission_sha256] to match entry_event_sha256; missing/poisoned authority fails closed",
+    "typed_entry_identity_split": "event_sha256 excludes transport/admission-only fields while admission_sha256 binds ingress/received-time/capability binding/budget/payload location",
+    "capability_authority": "entry capability claims are checked against externally supplied binding identity and admitted capability set; entry may narrow but cannot self-grant",
+    "canonicalization": "Typed Entry identity now uses a versioned deterministic RFC8949-inspired CBOR subset with floats forbidden at this boundary; this avoids dependence on language-specific JSON float rendering for Entry causal identity",
+    "seam_bug_closed": "the first CBOR Entry projection omitted ingress_id and entry_admission_sha256 even though the router required them; commit eaf3949862a1c98c0f789f6c1f0bf14aadd78e7a restores both fields"
+  },
+  "external_primary_evidence": {
+    "rfc8785": "RFC 8785 primary-source review confirmed that interoperable JSON canonicalization requires I-JSON constraints, ECMAScript-compatible number serialization and recursive UTF-16 property ordering. A separate RFC8785 candidate module on this branch passed its currently embedded official-style vectors 6/6 at exact source scope, but Typed Entry has since chosen the stricter float-free deterministic CBOR-subset route for its identity boundary."
+  },
+  "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE advanced: retained Typed Entry now reaches the router authority seam with the exact admission/event identities the router requires.",
+  "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT advanced: causal event identity, transport admission identity, capability authority and deterministic Entry canonicalization are separated and explicitly bound.",
+  "remaining_gates": [
+    "run the full current Entry+router test set from one settled exact branch head after concurrent writes stop moving the candidate",
+    "independently reproduce the deterministic CBOR subset bytes in a second implementation/language before heterogeneous Entry identity promotion",
+    "bind real admitted local checkpoint/tokenizer/runtime bytes to engine artifact identity",
+    "wire the actual downstream inference receipt producer to the route echo contract",
+    "rebuild/digest-bind the legacy-named compatibility ZIP only after the exact branch semantics settle",
+    "run integrated EntityOS/HCU runtime plus GRID10/COGSIM10 selective-inference measurements in an authorized isolated executor"
+  ],
+  "scope_limit": "Exact source-level mechanism evidence only. No bundled real ~0.8B checkpoint/runtime, throughput, provider-free boot, Global J-Space causal-use, HCU runtime-fit, EntityOS runtime or whole-product acceptance credit.",
+  "promotion_credit": 0,
+  "acceptance": "MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED"
+}

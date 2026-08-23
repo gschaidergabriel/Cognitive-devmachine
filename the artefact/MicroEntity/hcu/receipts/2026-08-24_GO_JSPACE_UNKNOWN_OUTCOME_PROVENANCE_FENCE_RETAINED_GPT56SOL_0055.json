@@ -1,0 +1,65 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+  "mode": "FREE_ONLY",
+  "retained_hcu_pr": 1263,
+  "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+  "pre_delta_head_observed": "0037cbe6466f11c171d5123d163800e5efa11df5",
+  "gate_commit": "85d318a6d930b978cae80e8495f5cf2e8814bcc6",
+  "test_commit": "5fcb7a219a805a1b5e726913b1932733452dabf2",
+  "finding": {
+    "class": "UNKNOWN_OUTCOME_PROVENANCE_TRANSPLANT_GAP",
+    "detail": "The current dataset admission gate fully bound admitted outcome receipts only when credit_label was non-UNKNOWN. For UNKNOWN-credit rows, registry membership alone allowed an admitted receipt from another causal episode to be attached as false provenance.",
+    "reward_minting_observed": false,
+    "provenance_integrity_gap": true
+  },
+  "repair": {
+    "gate_file": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "gate_blob": "69ba2bb966866fbc67646a210559894b107b7a65",
+    "test_file": "the artefact/MicroEntity/hcu/test_jspace_dataset_admission_gate_v1.py",
+    "test_blob": "c6fed64ce3d07cc974d96467b64f7549c23591b1",
+    "mechanism": "If outcome_receipt_sha256 is present, verify exact admitted receipt binding to training trace, transition trace, generation, Entry event/admission, route decision, GRID10 plan, cell, role and credit label regardless of whether credit is UNKNOWN or non-UNKNOWN.",
+    "unknown_semantics": "UNKNOWN remains UNKNOWN; the change binds provenance and does not convert unknown outcome into reward or truth."
+  },
+  "regression": {
+    "added": "test_unknown_credit_outcome_requires_exact_causal_binding",
+    "negative_case": "UNKNOWN row plus admitted receipt from another Entry event must fail OUTCOME_CAUSAL_BINDING_MISMATCH:entry_event_sha256",
+    "positive_case": "UNKNOWN row plus exactly bound VERIFIED UNKNOWN receipt remains admissible",
+    "executed_in_authorized_isolated_runtime": false,
+    "github_workflow_runs_observed_for_test_commit": 0
+  },
+  "experiment_accounting": {
+    "user_trigger_macrocycle_unusual_experiment": "TRAINING_PIPELINE_DRIFT_TRIANGLE",
+    "total_unusual_experiments_for_this_user_trigger": 1,
+    "this_repair_is_deterministic_regression_fusion_not_a_new_unusual_experiment": true
+  },
+  "coordination": {
+    "direct_fusion_into_single_retained_hcu_lane": true,
+    "stale_child_branches_not_promoted": true,
+    "second_hcu_authority_created": false,
+    "second_state_authority_created": false,
+    "second_effect_path_created": false
+  },
+  "execution_boundary": {
+    "runtime_credit_change": 0,
+    "whole_product_pass": false,
+    "vercel_sandbox_create_observed": false,
+    "credential_bearing_post_observed": false,
+    "next_executor_already_covers_dataset_admission_test_module": true
+  },
+  "training": {
+    "free_only": true,
+    "together_in_current_supervisor": "FORBIDDEN",
+    "paid_preflight_performed": false,
+    "paid_job_created": false,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Run the retained FREE isolated full-spine Vercel Sandbox executor against exact current main plus exact current PR1263 head and observe this dataset-admission regression executing. Bind source/tree identity, Sandbox execution result and credential nonpersistence before any runtime promotion.",
+  "acceptance": "COMMITTED_SOURCE_HARDENING_NOT_RUNTIME_PASS"
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": "HCU_ENGINE_ADMISSION_CAUSAL_BINDING_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "cognition_compute_architecture": "HCU",
+  "retained_pr": 1263,
+  "superseded_donor_pr": 1368,
+  "source_head_observed_before_receipt": "15d60b7a37f174019a7a16cce465fbf01682bc0b",
+  "observed_source_blobs": {
+    "reactive_event_router_v1.py": "b890b6cf0210f7af42bf7e95d6b0652297087c91",
+    "test_reactive_event_router_v1.py": "d1ea85a14e331c377ce738ff62b7a04c4bdeecb1",
+    "COGNITIVE_INDEPENDENCE_POLICY.json": "cfa581e0718478a5243f6d32ea9ab1567a717feb"
+  },
+  "finding": "CAUSAL_EVENT_MUST_NOT_MINT_ENGINE_SELECTION_AUTHORITY",
+  "mechanism": {
+    "event_authority_boundary": "resolved_internal_engine, resolved_internal_engine_class, resolved_internal_engine_artifact_sha256 and engine_identity_sha256 are reserved and rejected when supplied by causal Entry data",
+    "engine_selection_authority": "separate EngineAdmission supplied by deterministic EntityOS/HCU control plane",
+    "provider_request": "event may carry only an optional admitted provider request hint; it must match the separate EngineAdmission when present and cannot self-grant authority",
+    "artifact_authority": "EngineAdmission artifact digest must independently match admitted_engine_artifacts for the selected engine identity",
+    "typed_entry_identity": "entry_admission_sha256 is independently rebound to replay-stable entry_event_sha256 before routing",
+    "route_identity": "HCU_CAUSAL_ROUTE_IDENTITY/v3 binds event, router policy, exact admitted engine identity and deterministic routing result under the explicit hash serialization profile",
+    "downstream_echo": "inference receipt must echo serializer, event, concrete Entry admission, route, engine identity/class and exact artifact digest"
+  },
+  "source_falsifiers_present": [
+    "event self-mints any reserved engine authority field -> REJECT",
+    "unknown/external requested provider -> REJECT",
+    "requested provider disagrees with separate EngineAdmission -> REJECT",
+    "model lane without EngineAdmission -> REJECT",
+    "script-only route with EngineAdmission -> REJECT",
+    "EngineAdmission artifact differs from independent artifact registry -> REJECT",
+    "Typed Entry event identity differs from independent admission binding -> REJECT",
+    "same causal event with rotated admitted artifact -> stable event identity but distinct engine/route identity",
+    "downstream receipt with altered Entry admission, event, artifact or serializer identity -> REJECT"
+  ],
+  "local_component_check": {
+    "classification": "SEMANTIC_RECONSTRUCTION_OF_FUSED_ROUTER_LOGIC_NOT_EXACT_AUTHORIZED_RUNTIME",
+    "py_compile": "PASS",
+    "focused_tests": "22/22 PASS",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "coordination": {
+    "duplicate_router_created": false,
+    "donor_pr_1368_closed_after_mechanism_was_observed_in_retained_pr_1263": true,
+    "unusual_experiment_consumed_here": false,
+    "unusual_experiment_note": "shared GO unusual experiment was already consumed by the causal-route alias stress receipt; all checks in this trust split are regression/falsifier follow-ups"
+  },
+  "execution_boundary": {
+    "authorized_exact_source_isolated_runtime_started": false,
+    "vercel_sandbox_create_start_exec_available_to_this_organ": false,
+    "vps_or_self_hosted_or_production_test_used": false,
+    "together_used": false,
+    "paid_fallback_used": false
+  },
+  "remaining_exact_gates": [
+    "wire EngineAdmission construction to the real deterministic EntityOS/HCU control-plane authority that observes loaded checkpoint/tokenizer/runtime identity",
+    "bind admitted_engine_artifacts to the exact loaded local checkpoint/tokenizer/runtime bytes rather than test fixtures",
+    "bind the real inference receipt producer to event/entry-admission/route/engine/artifact/serializer identities",
+    "run combined Typed Entry + HCU route + inference-echo regressions on an actually-started authorized exact-source isolated executor",
+    "close current main manifest/legacy authority-validator split-brain without weakening inherited guards",
+    "rebuild and digest-bind stale compatibility package only after route/Entry semantics settle"
+  ],
+  "promotion_credit": 0,
+  "entityos_hcu_whole_runtime_credit": 0,
+  "whole_product_pass": false
+}

@@ -1,0 +1,62 @@
+{
+  "schema": "GO_ENTITYOS_HCU_RAW_JSON_PREMAPPING_GUARD/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "retained_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "head_after_delta": "7fdb2da0c716b61063e7b6ec5fe041704e2a6341",
+    "source_commit": "ecf42abae8aa0c93de1268ae5f332e7f62a56002",
+    "test_commit": "7fdb2da0c716b61063e7b6ec5fe041704e2a6341"
+  },
+  "source_identity": {
+    "entry_module": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+    "entry_module_blob": "59ec72edb5572b9593b7f7ee95c84d0c40ee2ea8",
+    "entry_test": "the artefact/MicroEntity/hcu/test_xeno_entry_fabric_v1.py",
+    "entry_test_blob": "c92753eccf1df0cf699a73060e0669eceb2b8620",
+    "canonicalizer_dependency": "the artefact/MicroEntity/hcu/typed_entry_canonical_v1.py",
+    "canonicalizer_preserved": true
+  },
+  "observed_gap": "ENTRY_CANONICALIZATION_CONTRACT requires duplicate JSON member rejection before ordinary Mapping construction can erase duplicate names, but the retained Typed Entry module exposed only Mapping-based admit_entry(). Therefore a raw JSON object containing duplicate authority-relevant fields could be collapsed by an upstream permissive parser before typed admission observed the original structure.",
+  "hypothesis": "A fail-closed raw-ingress parser using duplicate-preserving object-pair parsing is required before typed EntityOS/HCU Entry admission if raw JSON is accepted at any external boundary.",
+  "strongest_counterhypothesis": "Every real caller may already receive a trusted duplicate-rejecting Mapping from an upstream parser, making a second raw parser unnecessary.",
+  "counterhypothesis_status": "UNPROVEN: no exact admitted upstream parser/runtime boundary was executable or evidenced in this organ; therefore the source contract cannot assume duplicate rejection occurred before Mapping construction.",
+  "primary_external_evidence": {
+    "reference": "RFC 8785 JSON Canonicalization Scheme",
+    "relevance": "JCS requires I-JSON-compatible input and invariant canonical representation for cryptographic hashing; duplicate object property names are not admitted. This supports rejecting duplicate members before causal hash identity is minted, but does not by itself prove current runtime wiring."
+  },
+  "delta": [
+    "Added parse_entry_json(raw) using object_pairs_hook to reject duplicate member names recursively before Mapping collapse.",
+    "Rejected Python JSON NaN/Infinity extensions through parse_constant before typed admission.",
+    "Rejected lone Unicode surrogate code points before causal/admission identity creation.",
+    "Added admit_entry_json(raw, authority...) as the loss-preserving raw-ingress convenience boundary.",
+    "Preserved the existing independently versioned typed_entry_canonical_v1 identity encoder and event-versus-admission identity split.",
+    "Extended the retained test file with raw roundtrip, top-level duplicate, nested duplicate, non-finite and lone-surrogate regressions."
+  ],
+  "unusual_experiment": {
+    "performed_by_this_organ": false,
+    "reason": "The active user-triggered go/PR lane already recorded consumption of the single unusual experiment. These additions are regression/falsifier obligations only and do not consume another unusual experiment."
+  },
+  "execution": {
+    "authorized_isolated_test_executed": false,
+    "vercel_sandbox_start_exec_surface_exposed_to_this_organ": false,
+    "vps_or_self_hosted_testing_used": false,
+    "together_used": false,
+    "paid_execution_used": false,
+    "runtime_credit": 0
+  },
+  "credit": {
+    "source_gap": "SUPPORTED",
+    "source_delta": "COMMITTED_TO_RETAINED_DRAFT_PR",
+    "tests": "ADDED_NOT_EXECUTED",
+    "cross_language_jcs_conformance": "NOT_CLAIMED",
+    "entityos_hcu_runtime_pass": false,
+    "whole_product_pass": false
+  },
+  "second_order_check": "The new raw parser is not proof that every real ingress path uses it. Promotion requires either wiring each raw JSON boundary through admit_entry_json() or exact evidence that its upstream parser already rejects duplicate names, non-finite constants and lone surrogates before Mapping construction.",
+  "next_gate": "On the next authorized exact-source isolated execution, run the focused Entry/route suite at this exact head and exercise the real ingress call path. Reject promotion if a raw JSON path can still reach admit_entry() through a permissive pre-parser. Then continue independent canonicalizer conformance and local-engine/downstream inference receipt gates."
+}

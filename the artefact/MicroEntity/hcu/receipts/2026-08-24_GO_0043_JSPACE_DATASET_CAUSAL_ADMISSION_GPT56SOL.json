@@ -1,0 +1,73 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "current_supervisor": "SUPERVISOR_STEERING_8_61",
+    "free_only": true,
+    "paid_provider_execution": "FORBIDDEN",
+    "together_execution": "FORBIDDEN_IN_CURRENT_SUPERVISOR_MODE"
+  },
+  "frontier": "J-Space/GWT training material could carry syntactically valid but causally transplanted Entry/Route/GRID10 identities unless dataset admission re-binds admitted prototype, transition and training traces.",
+  "unusual_experiment": {
+    "name": "JSPACE_CAUSAL_ID_TRANSPLANT_DATASET_FALSIFIER",
+    "count_for_this_organ_cycle": 1,
+    "intervention": "Substitute a different syntactically valid entry_event_sha256 into a training trace while preserving registry admission for that altered trace.",
+    "pre_repair_prediction": "A format-only/self-consistent training-trace path can accept the transplanted causal label because it does not reconstruct the Entry->Route->GRID10 causal path.",
+    "post_repair_required_result": "Dataset admission rejects the trace because transition and training causal identities disagree.",
+    "second_unusual_experiment": false
+  },
+  "source_findings": [
+    "jspace_gwt_prototype_v1.py already binds Entry, RouteDecision, GridPlan, generation, cell, role and vector-control identities fail-closed.",
+    "jspace_training_trace_v1.py accepts caller-supplied causal SHA fields and validates their format but does not itself reconstruct Entry/Route/GRID10 objects.",
+    "the existing training-trace unit fixture used arbitrary valid 64-hex causal identifiers, demonstrating the source-level provenance seam.",
+    "compile_jspace_bootstrap_dataset_v1.py is a bootstrap/self-consistency compiler and is not by itself sufficient one-shot-training admission authority."
+  ],
+  "delta": {
+    "dataset_admission_gate": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "dataset_admission_tests": "the artefact/MicroEntity/hcu/test_jspace_dataset_admission_gate_v1.py",
+    "initial_gate_commit": "4b76eb5b37871847d5eeb7e2c4cfa58a780a2c3b",
+    "initial_test_commit": "f2c274afbbf4bb38cb50a2152f4211db9c58a773",
+    "current_retained_lane": "PR1263",
+    "effect": "Require exact registry admission and cross-binding of prototype, transition and training traces across generation, cell, role, basis bytes and Entry/Route/GRID10 identities; credited outcomes require admitted causal binding."
+  },
+  "component_execution": {
+    "surface": "isolated ChatGPT Linux/Python component execution",
+    "result": "PASS",
+    "tests": 5,
+    "failures": 0,
+    "covered": [
+      "exact admitted binding",
+      "unadmitted synthetic training trace rejection",
+      "causal-id transplant rejection",
+      "basis-byte transplant rejection",
+      "non-UNKNOWN credit requires admitted outcome"
+    ],
+    "scope": "INITIAL_GATE_COMPONENT_ONLY",
+    "runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "fusion_observation": {
+    "retained_controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "retained_controller_pr": 810,
+    "latest_observed_controller_commit": "d39b8fa014acc74d9ceb4f7ba067aa45a4bfc0c7",
+    "latest_observed_deployment": "dpl_5Fi316gpdrp3uvAtWgFD429i6zJD",
+    "deployment_state": "READY",
+    "batch_contains_dataset_admission_regression": true,
+    "credential_bearing_post_observed": false,
+    "sandbox_batch_observed_started": false
+  },
+  "evidence_boundary": {
+    "source_or_component_pass_is_runtime_pass": false,
+    "ready_deployment_is_sandbox_pass": false,
+    "whole_entityos_hcu_pass": false,
+    "next_exact_gate": "Actually start the exact-source FREE isolated retained controller run, bind current Research main SHA/tree plus PR1263 SHA/tree, prove credential nonpersistence, and observe the combined regression result.",
+    "paid_training_next": false,
+    "free_only_next": "After exact FREE executable evidence, continue zero-cost local ~0.8B loader/J-Space/GWT work only."
+  }
+}

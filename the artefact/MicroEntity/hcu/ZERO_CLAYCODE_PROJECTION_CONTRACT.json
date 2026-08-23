@@ -1,0 +1,45 @@
+{
+  "schema_version": "HCU_ZERO_CLAYCODE_PROJECTION/v1",
+  "status": "OWNER_DIRECTED_SOURCE_CONTRACT",
+  "purpose": "Minimize Zero cognitive load by projecting only decision-relevant HCU world-model state as bounded high-specificity ClayCode.",
+  "default_projection": {
+    "format": "ClayCode",
+    "bulk_world_dump": false,
+    "raw_provider_payload": false,
+    "raw_simulation_trace": false,
+    "include": [
+      "causal_anchor",
+      "decision_relevant_observations",
+      "decision_relevant_measurements",
+      "material_unresolved_alternatives",
+      "discriminating_falsifiers",
+      "forecast_envelope_when_relevant",
+      "recommended_action_classes",
+      "confidence_or_calibration_class",
+      "explicit_unknowns",
+      "provenance_receipt_handles"
+    ],
+    "expand_by_handle": true
+  },
+  "selection": {
+    "script_first": true,
+    "changed_region_only": true,
+    "zero_relevance_required": true,
+    "minimum_sufficient_context_goal": true,
+    "provider_consensus_not_relevance": true
+  },
+  "authority": {
+    "projection_is_truth_authority": false,
+    "projection_is_effect_authority": false,
+    "canonical_source": "MiniUnifiedDB_PLUS_REBUILDABLE_HCU_FIELD",
+    "real_effects": "EffectGate"
+  },
+  "receipt_binding": [
+    "source_semantics_digest",
+    "emitted_projection_digest",
+    "entity_generation",
+    "causal_id",
+    "topology_basis_digest",
+    "projection_policy_version"
+  ]
+}

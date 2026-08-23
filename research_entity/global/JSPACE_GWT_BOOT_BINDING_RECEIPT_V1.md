@@ -50,13 +50,15 @@ receipt JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 {
 5. First actions must be attributed to `ZERO`, `HOOK_TIMER`, `CLAUDE_CODE`, `PROXY_SANDBOX_CONTROLLER`, or typed `OTHER` with detail. Unknown/unattributed origin is rejection.
 6. This receipt is deliberately incapable of granting J-Space/GWT/model/Claude/semantic runtime PASS. It establishes only that the observed boot is identity-bound enough for later behavioral receipts to be meaningful.
 
-## One bounded unusual discriminator for this `go`
+## Deterministic adversarial regression
 
 `DIGEST_ALIAS_POISON`
 
 Counter-reality: two runtime configurations share the same apparent engine/checkpoint identity while the tokenizer digest differs. A weak boot gate keyed by model id/checkpoint label would alias them and could incorrectly reuse a J-Space/lens/workspace calibration.
 
 Required result: `BINDING_MISMATCH:tokenizer_digest` and no runtime/semantic credit.
+
+This regression does **not** claim the shared `go` unusual-experiment slot. Current BOOTSTRAP_MINIMAL requires an atomically bound shared request/lease before such a slot may be claimed; that coordination identity was unavailable on this surface. The observed discriminator is retained as ordinary deterministic adversarial evidence only.
 
 The deterministic validator is `tools/validate_jspace_gwt_boot_binding.py`; focused regressions are `tests/test_validate_jspace_gwt_boot_binding.py`.
 

@@ -108,6 +108,8 @@ def _bind_admission(training_trace: Mapping[str, Any], admission: Mapping[str, A
         "route_decision_sha256",
         "grid_plan_sha256",
         "jspace_basis_sha256",
+        "prototype_trace_sha256",
+        "vector_control_packet_sha256",
     ):
         left = _sha256(training_trace.get(field), f"training_trace.{field}")
         right = _sha256(admission.get(field), f"admission.{field}")
@@ -123,6 +125,21 @@ def _bind_admission(training_trace: Mapping[str, Any], admission: Mapping[str, A
         right = _text(admission.get(field), f"admission.{field}")
         if left != right:
             raise JSpaceDatasetFamilySplitError(f"TRAINING_TRACE_ADMISSION_BINDING_MISMATCH:{field}")
+
+    control_condition = _text(
+        training_trace.get("vector_control_condition"),
+        "training_trace.vector_control_condition",
+        max_len=64,
+    )
+    admitted_control_condition = _text(
+        admission.get("vector_control_condition"),
+        "admission.vector_control_condition",
+        max_len=64,
+    )
+    if control_condition != admitted_control_condition:
+        raise JSpaceDatasetFamilySplitError(
+            "TRAINING_TRACE_ADMISSION_BINDING_MISMATCH:vector_control_condition"
+        )
 
     credit = _text(training_trace.get("credit_label"), "training_trace.credit_label", max_len=32).upper()
     admitted_credit = _text(admission.get("credit_label"), "admission.credit_label", max_len=32).upper()

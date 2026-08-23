@@ -1,7 +1,9 @@
 import unittest
 from copy import deepcopy
 
+from jspace_dataset_admission_gate_v1 import ADMISSION_SCHEMA as CANONICAL_DATASET_ADMISSION_SCHEMA
 from jspace_dataset_family_split_v1 import (
+    DATASET_ADMISSION_SCHEMA,
     JSpaceDatasetFamilySplitError,
     partition_admitted_training_traces,
     split_for_family,
@@ -34,7 +36,7 @@ def training(trace_id: str, family_id: str, n: int) -> dict:
 
 def admission(trace: dict) -> dict:
     return {
-        "schema": "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1",
+        "schema": DATASET_ADMISSION_SCHEMA,
         "training_trace_sha256": trace["trace_sha256"],
         "transition_trace_sha256": h(6),
         "prototype_trace_sha256": h(7),
@@ -57,6 +59,21 @@ class FamilySplitTests(unittest.TestCase):
         registry = {trace["trace_sha256"]: deepcopy(trace) for trace in traces}
         records = [(trace, admission(trace)) for trace in traces]
         return partition_admitted_training_traces(records, admitted_training_traces=registry)
+
+    def test_dataset_admission_schema_tracks_canonical_gate(self):
+        self.assertEqual(DATASET_ADMISSION_SCHEMA, CANONICAL_DATASET_ADMISSION_SCHEMA)
+        self.assertEqual(DATASET_ADMISSION_SCHEMA, "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2")
+
+    def test_stale_dataset_admission_v1_is_rejected(self):
+        trace = training("trace:a", "episode:A", 1)
+        registry = {trace["trace_sha256"]: deepcopy(trace)}
+        stale = admission(trace)
+        stale["schema"] = "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1"
+        with self.assertRaisesRegex(JSpaceDatasetFamilySplitError, "DATASET_ADMISSION_SCHEMA_UNSUPPORTED"):
+            partition_admitted_training_traces(
+                [(trace, stale)],
+                admitted_training_traces=registry,
+            )
 
     def test_correlated_family_never_crosses_train_validation_holdout(self):
         traces = []

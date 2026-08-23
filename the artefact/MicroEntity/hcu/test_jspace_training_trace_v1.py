@@ -82,11 +82,12 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
     def test_same_inputs_are_deterministic(self):
         self.assertEqual(self.build(), self.build())
 
-    def test_vector_generation_basis_and_role_must_match_prototype(self):
+    def test_vector_generation_basis_hash_and_role_must_match_prototype(self):
         proto = self.prototype()
         for packet, code in [
             (self.packet(proto, generation=8), "VECTOR_CONTROL_GENERATION_MISMATCH"),
             (self.packet(proto, basis_id="basis:other"), "VECTOR_CONTROL_BASIS_MISMATCH"),
+            (self.packet(proto, basis_sha256="7" * 64), "VECTOR_CONTROL_BASIS_SHA256_MISMATCH"),
             (self.packet(proto, role="simulation"), "VECTOR_CONTROL_ROLE_MISMATCH"),
         ]:
             with self.assertRaisesRegex(JSpaceTrainingTraceError, code):

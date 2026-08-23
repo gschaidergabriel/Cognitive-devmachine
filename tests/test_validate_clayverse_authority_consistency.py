@@ -97,6 +97,18 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "`STAGE=CLAYVERSE_ARTIFACT`\n"
                 "Read research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md first.\n"
             ),
+            mod.LEGACY_BLOGPOST: (
+                "# HISTORICAL MINI ENTITY / BLOGPOST DIRECTIVE — COMPATIBILITY REDIRECT\n"
+                "Status: SUPERSEDED / HISTORICAL DONOR EVIDENCE ONLY\n"
+                f"Current authority: {mod.OWNER_DIRECTIVE}\n"
+                f"Historical blob: {mod.LEGACY_BLOGPOST_BLOB}\n"
+            ),
+            mod.LEGACY_LOCAL_INFERENCE: (
+                "# HISTORICAL MINI ENTITY LOCAL-INFERENCE REQUIREMENT — DONOR REDIRECT\n"
+                "Status: SUPERSEDED AS CURRENT PROGRAM REQUIREMENT / HISTORICAL DONOR EVIDENCE\n"
+                f"Current authority: {mod.OWNER_DIRECTIVE}\n"
+                f"Historical blob: {mod.LEGACY_LOCAL_INFERENCE_BLOB}\n"
+            ),
         }
         for rel, data in files.items():
             path = root / rel
@@ -204,6 +216,35 @@ class AuthorityConsistencyTests(unittest.TestCase):
             encoding="utf-8",
         )
         self.assertIn("ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE", mod.validate(root)["errors"])
+
+    def test_legacy_blogpost_cannot_be_current_owner_again(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.LEGACY_BLOGPOST
+        path.write_text(
+            "# MULTI-USE MINI ENTITY — SOLE CANONICAL OWNER DIRECTIVE\n"
+            "Status: CURRENT\n"
+            "Active program: MINI_ENTITY_PIPELINE_ALL_IN_ONE\n",
+            encoding="utf-8",
+        )
+        errors = mod.validate(root)["errors"]
+        self.assertIn("LEGACY_BLOGPOST_NOT_SUPERSEDED", errors)
+        self.assertIn("LEGACY_BLOGPOST_STILL_CURRENT", errors)
+        self.assertIn("LEGACY_BLOGPOST_STILL_SOLE_OWNER", errors)
+
+    def test_legacy_local_inference_cannot_select_current_program(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.LEGACY_LOCAL_INFERENCE
+        path.write_text(
+            "# Mini Entity — Local Inference Requirement\n"
+            "Status: CURRENT\n"
+            "Program: MINI_ENTITY_PIPELINE_ALL_IN_ONE\n",
+            encoding="utf-8",
+        )
+        errors = mod.validate(root)["errors"]
+        self.assertIn("LEGACY_LOCAL_INFERENCE_NOT_SUPERSEDED", errors)
+        self.assertIn("LEGACY_LOCAL_INFERENCE_STILL_CURRENT", errors)
 
 
 if __name__ == "__main__":

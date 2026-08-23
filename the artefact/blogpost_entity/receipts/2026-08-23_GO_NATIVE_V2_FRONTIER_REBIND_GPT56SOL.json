@@ -1,0 +1,66 @@
+{
+  "schema": "GO_NATIVE_V2_FRONTIER_REBIND/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_authority": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "observed_main_before_receipt": "f2a55ccdc3a6d25842ee87b6bfa3a2b84fe3e033",
+  "finding": {
+    "class": "PRODUCT_FRONTIER_REBIND",
+    "native_path": "the artefact/blogpost_entity/native/mini_entity.c",
+    "native_guard": "CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY",
+    "parity_contract": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json",
+    "reference_runtime": "tools/clay_profile_pipeline_runtime.py",
+    "retained_repair_lane_pr": 997,
+    "retained_repair_lane_head_observed": "eec1889d03698f6b1ccb2ed325813728278826c4",
+    "freshness_pr": 1128,
+    "freshness_pr_head_ref": "main",
+    "freshness_pr_latest_observed_head": "f2a55ccdc3a6d25842ee87b6bfa3a2b84fe3e033",
+    "freshness_pr_mergeable": true,
+    "freshness_merge_attempt": "BLOCKED_BY_AVAILABLE_TOOL_SAFETY_GATE_NO_BYPASS"
+  },
+  "observations": [
+    "Current native Mini Entity 0.7 explicitly refuses canonical clay-pipeline-profile/v2 before inference because profile-driven collect/probe/compile and mandatory post-inference pipeline_gate parity are not yet admitted.",
+    "The parity contract requires canonical reference-runtime convergence before native-v2 promotion and designates one retained implementation lane rather than parallel permanent paths.",
+    "PR #997 remains the retained single reference-runtime repair lane and is source-candidate/regression-contract evidence only until exact authorized isolated execution starts and passes.",
+    "A freshness-only PR #1128 was opened from current main into the retained #997 branch. GitHub reported it mergeable, but the available write surface blocked the merge attempt; no bypass was attempted.",
+    "A single targeted re-run of PR #1119 identity-guard again completed as failure with no visible executed steps, reproducing the current hosted execution-admission blocker rather than a semantic test failure.",
+    "Claude side-memory fences and owner-identity-neutral prompt repairs have since merged to main, but those Python adapter improvements do not by themselves establish native Mini Entity profile-v2 parity or exact Claude runtime acceptance."
+  ],
+  "decision": {
+    "create_second_native_v2_implementation": false,
+    "remove_native_v2_guard": false,
+    "promote_pr_997_to_main": false,
+    "grant_runtime_credit": false,
+    "reason": "The canonical sequencing requires fresh-main reference-runtime convergence plus actually-started exact-source isolated execution before native-v2 admission."
+  },
+  "next_exact_gate": [
+    "Fuse the latest main ancestry into PR #997 through the single freshness path when an authorized merge surface admits it.",
+    "Bind the resulting exact #997 head and start an authorized isolated runner.",
+    "Execute focused source-identity/cursor/evidence/numeric-truth regressions and the full structured reference suite with generation/CAS/fault rollback.",
+    "Only if exact execution is green re-adjudicate NATIVE_PROFILE_V2_PARITY_CONTRACT and then build one native path implementing all required collect/probe/compile/gate semantics before removing the fail-closed guard."
+  ],
+  "execution": {
+    "hosted_identity_guard_readmission_attempts_this_organ": 1,
+    "latest_readmission_result": "EXECUTION_ADMISSION_FAILURE_PRE_STEP",
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "together_used": false,
+    "claude_live_invocation": false,
+    "native_v2_runtime_credit": 0,
+    "claude_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "formal_credit": "NONE",
+    "reason": "No shared atomic macrocycle lease / immutable cross-organ experiment key was exposed to this organ; deterministic admission retry and source adjudication do not claim the unusual-experiment slot."
+  },
+  "acceptance": "IN_PROGRESS",
+  "epistemic_guard": "SOURCE_CONVERGED != EXACT_RUNTIME_VERIFIED; EXECUTION_ADMISSION_FAILURE_PRE_STEP != TEST_FAIL; LEGACY_ADAPTER_REPAIR != NATIVE_PROFILE_V2_PARITY; MODEL_OUTPUT != CANONICAL_TRUTH"
+}

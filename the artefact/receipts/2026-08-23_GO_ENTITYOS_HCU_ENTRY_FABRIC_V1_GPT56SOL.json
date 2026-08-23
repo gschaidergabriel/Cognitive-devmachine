@@ -1,0 +1,111 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "base_main_sha": "9fa4d391050979d83dd27aab8b20ce3d5d7c75ae",
+  "branch": "gpt56sol/go-entityos-hcu-entry-fabric-v1-20260823-2330",
+  "authority_refresh": {
+    "supervisor_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json",
+    "bootstrap_minimal_schema": "8.5",
+    "program_state_schema": "8.6",
+    "product_system": "EntityOS",
+    "integrated_cognition_compute_architecture": "HCU",
+    "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
+    "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY"
+  },
+  "authority_reentry": {
+    "superseded_donor_branch": "gpt56sol/go-xeno-entry-fabric-v1-20260823-2324",
+    "superseded_donor_promoted": false,
+    "superseded_donor_pr_created": false,
+    "reason": "main advanced during this go with an explicit owner-authority correction making EntityOS the sole current system and HCU the sole integrated cognition/compute architecture; reusable Entry-Fabric mechanics were re-entered on fresh main rather than promoting Xeno as a competing current system"
+  },
+  "coordination": {
+    "active_hcu_donor_pr": 1263,
+    "hcu_donor_head_observed": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "hcu_donor_mutated": false,
+    "reason": "PR 1263 source is coupled to a deterministic MICROENTITY_CURRENT.zip snapshot. A text-only router edit would create package identity drift. Route integration is deferred until Entry Fabric source evidence is executable and package bytes can be rebuilt coherently."
+  },
+  "track_a_entityos_executable_convergence": {
+    "status": "SOURCE_CANDIDATE",
+    "deltas": [
+      "corrected canonical the artefact/README.md from stale Xeno/XCU top-level language to current EntityOS/HCU authority",
+      "added a current EntityOS/HCU ingress implementation candidate instead of creating a second current Xeno system path"
+    ],
+    "runtime_credit": 0
+  },
+  "track_b_hcu_entry_fabric": {
+    "status": "SOURCE_CANDIDATE",
+    "implementation": "the artefact/entityos_hcu_entry_fabric_v1.py",
+    "implementation_git_blob": "f59c8f54c4263f53ebf98d3ea9d2d08433e437a9",
+    "test_source": "the artefact/test_entityos_hcu_entry_fabric_v1.py",
+    "test_git_blob": "e0eae79bf9f89c29a36935ba4787b05f8d2b8588",
+    "entry_contract": "ENTITYOS_ENTRY_EVENT/v1 -> ENTITYOS_HCU_INGRESS_PACKET/v1",
+    "mechanisms": [
+      "typed deterministic ingress before HCU cognition",
+      "exact live entity-generation fence",
+      "positive source admission",
+      "positive modality admission",
+      "provenance digest binding",
+      "payload content digest/reference binding",
+      "immutable observed-event identity event_sha256",
+      "admission-specific ingress_id",
+      "permissions and capability scopes are carried claims only and do not grant authority",
+      "exact GRID10 resource-budget binding",
+      "unknown semantic input fields fail closed"
+    ],
+    "cross_mode_reuse": [
+      "GRID10",
+      "COGSIM10",
+      "WM_TEST",
+      "NESTED_SIM"
+    ],
+    "scaleout_note": "v1 deliberately fences max_logical_cells at 10. SCALEOUT requires a later explicitly versioned and measured budget policy rather than silently widening this admission contract."
+  },
+  "hypothesis": "Separating immutable semantic event identity from admission identity prevents causal aliasing when materially different observations later choose the same HCU route, while preserving auditability when the same observation is re-admitted under a different budget or permission envelope.",
+  "counterhypothesis": "One digest over the complete admitted packet is simpler and already sufficient for replay, routing and audit; a second event-level identity adds complexity without causal benefit.",
+  "cheapest_discriminators": [
+    "same exact event and same admission envelope -> identical event_sha256 and ingress_id",
+    "same observed event with only resource budget changed -> identical event_sha256 but different ingress_id",
+    "different observed payloads that can select the same downstream route class -> different event_sha256 and ingress_id"
+  ],
+  "tests": {
+    "focused_case_count": 9,
+    "execution_status": "NOT_EXECUTED_NO_AUTHORIZED_ISOLATED_EXECUTOR_EXPOSED",
+    "runtime_credit": 0,
+    "vercel_surface_refresh": "connected Vercel connector exposes documentation/deployment management but no Sandbox create/start/exec action to this organ"
+  },
+  "unusual_experiment": {
+    "name": "SEMANTIC_ALIAS_CAUSAL_COLLISION",
+    "status": "SPECIFIED_NOT_EXECUTED",
+    "executed_count_for_this_organ": 0,
+    "design": "Hold causal id, generation, source, provenance, timestamps and admission envelope constant; change only semantically material payload magnitude while preserving the likely downstream route class. Falsifier: equal event_sha256 or ingress_id.",
+    "reason_not_executed": "No actually-started authorized isolated sandbox execution action is exposed. A source test specification does not count as executed experimental evidence."
+  },
+  "authority_invariants": [
+    "EntityOS is the sole current product/system identity",
+    "HCU is the sole current integrated cognition/compute architecture",
+    "Entry Fabric does not decide truth",
+    "Entry Fabric does not grant permissions or capabilities",
+    "Entry Fabric does not authorize effects",
+    "EffectGate+EffectJournal remain the real-effect authority",
+    "canonical durable state/evidence remains outside model cognition",
+    "stale generation fails closed",
+    "unknown semantic input fields fail closed",
+    "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+  ],
+  "evidence_boundary": "SOURCE_CANDIDATE_UNEXECUTED. No test PASS, HCU runtime, J-Space causal-use, EntityOS runtime, scale performance or whole-product acceptance claim is made.",
+  "next_exact_gate": "On an actually-started authorized isolated executor, run the 9 focused Entry Fabric regressions against these exact bytes. If green, fuse event_sha256 into the retained HCU reactive route path together with positive fail-closed local/internal cognition-engine resolution so route identity becomes one causal formula H(event_sha256 + resolved_engine_identity + routing_result), rebuild the coupled deterministic package snapshot coherently, then run adjacent generation/replay/provenance/engine-identity regressions before any promotion.",
+  "forbidden_or_owner_gated": {
+    "vps_testing": "NOT_USED_FORBIDDEN",
+    "self_hosted_or_production_testing": "NOT_USED_FORBIDDEN",
+    "together_api": "NOT_USED_FORBIDDEN",
+    "paid_fallback": "NOT_USED_FORBIDDEN",
+    "final_paid_or_model_training": "NOT_USED_OWNER_AUTHORIZATION_REQUIRED",
+    "secrets": "NONE_ACCESSED_OR_PERSISTED"
+  }
+}

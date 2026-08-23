@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import re
 import secrets
@@ -91,6 +92,16 @@ def _utc_now() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
+def _finite_float(value: Any, label: str) -> float:
+    try:
+        number = float(value)
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise PipelineFault(f"BAD_NUMERIC_{label}") from exc
+    if not math.isfinite(number):
+        raise PipelineFault(f"NONFINITE_{label}")
+    return number
+
+
 class ProfilePipelineRuntime(clay.Runtime):
     def __init__(
         self,
@@ -98,12 +109,14 @@ class ProfilePipelineRuntime(clay.Runtime):
         root: str | Path = ".",
         allow_network: bool = False,
         provider_override: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+        local_exec_runner: str | Path | None = None,
     ):
         super().__init__()
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.allow_network = allow_network
         self.provider_override = provider_override
+        self.local_exec_runner = local_exec_runner
         self.effect_trace: list[dict[str, Any]] = []
         self._active_secrets: list[str] = []
         self.builtins["effect"] = self.effect
@@ -657,7 +670,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             status = spec.get("status")
             if status is None:
                 status = "UNKNOWN" if bool(self._expr(spec.get("unknown_if", False), context)) else "VERIFIED"
-            value = float(self._expr(spec.get("value", 0.0), context) or 0.0)
+            value = _finite_float(self._expr(spec.get("value", 0.0), context), "STATE_METRIC")
             metrics[name] = {
                 "status": status,
                 "value": value,
@@ -676,8 +689,8 @@ class ProfilePipelineRuntime(clay.Runtime):
             "source_count": collected["source_count"],
             "quiet_sensors_ok": collected["quiet_sensors_ok"],
         }
-        canonical_raw = json.dumps(canonical, sort_keys=True, separators=(",", ":"), default=str)
-        packet_raw = json.dumps(packet, sort_keys=True, separators=(",", ":"), default=str)
+        canonical_raw = _canonical_json(canonical)
+        packet_raw = _canonical_json(packet)
 
         refs: list[str] = []
         for source in collected["sources"].values():
@@ -733,6 +746,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             },
             ensure_ascii=False,
             sort_keys=True,
+            allow_nan=False,
             default=str,
         )
         return {"ok": True, "system": system, "user": user}
@@ -888,6 +902,15 @@ class ProfilePipelineRuntime(clay.Runtime):
     ) -> dict[str, Any]:
         prompt_path: Path | None = None
         try:
+            if not self.local_exec_runner:
+                raise PipelineFault("LOCAL_EXEC_NOT_ADMITTED")
+            runner = str(self.local_exec_runner)
+            runner_path = Path(runner)
+            if not runner_path.is_absolute():
+                runner_path = self._resolve(runner)
+            if not runner_path.is_file():
+                raise PipelineFault("LOCAL_EXEC_RUNNER_NOT_READABLE")
+
             model_value = str(
                 inference.get("local_model_path") or inference.get("model_path") or ""
             )
@@ -897,15 +920,13 @@ class ProfilePipelineRuntime(clay.Runtime):
             if not model_path.is_file():
                 raise PipelineFault("LOCAL_MODEL_NOT_READABLE")
 
-            argv_spec = inference.get("local_argv_json", inference.get("argv"))
-            if isinstance(argv_spec, str):
-                argv_spec = json.loads(argv_spec)
-            if (
-                not isinstance(argv_spec, list)
-                or not argv_spec
-                or not all(isinstance(item, str) for item in argv_spec)
-            ):
-                raise PipelineFault("LOCAL_ARGV_INVALID")
+            args_spec = inference.get("local_args_json", inference.get("args", []))
+            if isinstance(args_spec, str):
+                args_spec = json.loads(args_spec)
+            if not isinstance(args_spec, list) or not all(isinstance(item, str) for item in args_spec):
+                raise PipelineFault("LOCAL_ARGS_INVALID")
+            if not any("{{MODEL_PATH}}" in item for item in args_spec):
+                raise PipelineFault("LOCAL_MODEL_BINDING_REQUIRED")
 
             prompt_template = str(
                 inference.get("local_prompt_template", "{{SYSTEM}}\n\n{{USER}}\n")
@@ -930,12 +951,13 @@ class ProfilePipelineRuntime(clay.Runtime):
                 "{{MAX_TOKENS}}": str(inference.get("max_tokens", 2000)),
                 "{{TEMPERATURE}}": str(inference.get("temperature", 0.7)),
             }
-            argv: list[str] = []
-            for item in argv_spec:
+            rendered_args: list[str] = []
+            for item in args_spec:
                 rendered = item
                 for key, value in replacements.items():
                     rendered = rendered.replace(key, value)
-                argv.append(rendered)
+                rendered_args.append(rendered)
+            argv = [str(runner_path)] + rendered_args
 
             requested_env = inference.get("local_env_allowlist", sorted(_SAFE_ENV_NAMES))
             if not isinstance(requested_env, list) or not all(
@@ -1031,6 +1053,7 @@ class ProfilePipelineRuntime(clay.Runtime):
 
             patterns = [re.compile(pattern, re.I) for pattern in gate.get("leak_patterns", [])]
             secrets_now = [value for value in self._active_secrets if value]
+            tolerance = _finite_float(gate.get("max_claim_overshoot", 0.0), "CLAIM_TOLERANCE")
             for text in self._iter_persisted_string_leaves(payload):
                 if any(pattern.search(text) for pattern in patterns):
                     raise PipelineFault("LEAK_PATTERN")
@@ -1051,7 +1074,9 @@ class ProfilePipelineRuntime(clay.Runtime):
                     metric = metrics[name]
                     if metric["status"] != "VERIFIED":
                         raise PipelineFault("UNVERIFIED_STATE_CLAIM")
-                    if float(strength) > float(metric["value"]) + float(gate.get("max_claim_overshoot", 0.0)):
+                    claim_strength = _finite_float(strength, "STATE_CLAIM")
+                    metric_value = _finite_float(metric["value"], "STATE_METRIC")
+                    if claim_strength > metric_value + tolerance:
                         raise PipelineFault("STATE_CLAIM_OVERSHOOT")
                     if metric["evidence_ref"] not in refs:
                         raise PipelineFault("STATE_CLAIM_WITHOUT_METRIC_EVIDENCE")
@@ -1125,7 +1150,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                     now,
                     generation,
                     profile["profile_id"],
-                    json.dumps(payload, ensure_ascii=False),
+                    _canonical_json(payload),
                     generated.get("provider_kind", ""),
                     generated.get("model"),
                     compiled["packet_hash"],
@@ -1161,10 +1186,10 @@ class ProfilePipelineRuntime(clay.Runtime):
                    SET continuity_json=?,canonical_json=?,canonical_hash=?,cursors_json=?,updated_at=?
                    WHERE singleton=1""",
                 (
-                    json.dumps(continuity, ensure_ascii=False),
-                    json.dumps(compiled["canonical"], ensure_ascii=False),
+                    _canonical_json(continuity),
+                    _canonical_json(compiled["canonical"]),
                     compiled["canonical_state_hash"],
-                    json.dumps(collected["next_cursors"]),
+                    _canonical_json(collected["next_cursors"]),
                     now,
                 ),
             )

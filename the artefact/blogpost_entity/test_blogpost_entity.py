@@ -181,6 +181,20 @@ def execute(tmp_path: Path, profile: dict):
     return result, runtime, entity_db
 
 
+def _minimal_commit_data() -> dict:
+    return {
+        "collected": {"consume": [], "next_cursors": {}},
+        "compiled": {
+            "packet_hash": "p",
+            "canonical_state_hash": "c",
+            "source_count": 0,
+            "canonical": {},
+        },
+        "generated": {"provider_kind": "mock", "model": "m"},
+        "gated": {"payload": {"thread": "t", "hypotheses": "h"}},
+    }
+
+
 def test_canonical_clay_is_application_neutral_and_parses():
     program = clay.parse(SRC)
     assert program.module == "clay.entity_pipeline"
@@ -213,6 +227,48 @@ def test_fresh_db_is_neutral_and_fails_closed_without_active_profile(tmp_path):
     db = sqlite3.connect(entity_db)
     assert db.execute("SELECT generation,active_profile FROM entity_state WHERE id=1").fetchone() == (0, None)
     assert db.execute("SELECT COUNT(*) FROM profiles").fetchone()[0] == 0
+    eos_columns = {row[1] for row in db.execute("PRAGMA table_info(eos_pipeline_state)")}
+    assert "generation" not in eos_columns
+    db.close()
+
+
+def test_legacy_only_generation_requires_explicit_migration(tmp_path):
+    entity_db = tmp_path / "entity.db"
+    db = sqlite3.connect(entity_db)
+    db.execute(
+        """CREATE TABLE eos_pipeline_state(
+             singleton INTEGER PRIMARY KEY CHECK(singleton=1),
+             generation INTEGER NOT NULL DEFAULT 0,
+             continuity_json TEXT NOT NULL DEFAULT '{}',
+             canonical_json TEXT NOT NULL DEFAULT '{}',
+             canonical_hash TEXT NOT NULL DEFAULT '',
+             cursors_json TEXT NOT NULL DEFAULT '{}',
+             updated_at REAL NOT NULL DEFAULT 0)"""
+    )
+    db.execute("INSERT INTO eos_pipeline_state(singleton,generation) VALUES(1,7)")
+    db.commit()
+    db.close()
+
+    runtime = ProfilePipelineRuntime(root=tmp_path)
+    result = runtime.effect("pipeline_init", {"entity_db": str(entity_db)})
+    assert result["ok"] is False
+    assert "LEGACY_GENERATION_MIGRATION_REQUIRED" in result["error"]
+
+    db = sqlite3.connect(entity_db)
+    names = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    assert "entity_state" not in names
+    assert db.execute("SELECT generation FROM eos_pipeline_state WHERE singleton=1").fetchone()[0] == 7
+    db.close()
+
+
+def test_read_paths_do_not_self_heal_schema(tmp_path):
+    entity_db = tmp_path / "entity.db"
+    sqlite3.connect(entity_db).close()
+    runtime = ProfilePipelineRuntime(root=tmp_path)
+    result = runtime.effect("pipeline_profile_read", {"entity_db": str(entity_db)})
+    assert result["ok"] is False
+    db = sqlite3.connect(entity_db)
+    assert db.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table'").fetchone()[0] == 0
     db.close()
 
 
@@ -251,7 +307,7 @@ def test_same_pipeline_runs_two_materially_different_profiles_without_state_rese
 
     db = sqlite3.connect(entity_db)
     assert db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()[0] == 2
-    assert db.execute("SELECT generation FROM eos_pipeline_state").fetchone()[0] == 2
+    assert "generation" not in {row[1] for row in db.execute("PRAGMA table_info(eos_pipeline_state)")}
     assert db.execute("SELECT active_profile FROM entity_state WHERE id=1").fetchone()[0] == "profile_b"
     assert db.execute("SELECT COUNT(*) FROM eos_pipeline_outputs").fetchone()[0] == 2
     assert {row[0] for row in db.execute("SELECT profile_id FROM eos_pipeline_outputs")} == {"profile_a", "profile_b"}
@@ -325,12 +381,7 @@ def test_profile_snapshot_change_aborts_commit_without_consuming(tmp_path):
             "entity_db": entity_db,
             "profile": loaded["profile"],
             "previous": {"generation": 0},
-            "data": {
-                "collected": {"consume": [], "next_cursors": {}},
-                "compiled": {"packet_hash": "p", "canonical_state_hash": "c", "source_count": 0, "canonical": {}},
-                "generated": {"provider_kind": "mock", "model": "m"},
-                "gated": {"payload": {"thread": "t", "hypotheses": "h"}},
-            },
+            "data": _minimal_commit_data(),
         },
     )
     assert result["ok"] is False
@@ -339,6 +390,66 @@ def test_profile_snapshot_change_aborts_commit_without_consuming(tmp_path):
     assert db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()[0] == 0
     assert db.execute("SELECT COUNT(*) FROM eos_pipeline_outputs").fetchone()[0] == 0
     db.close()
+
+
+def test_profile_json_only_tamper_aborts_commit_without_durable_delta(tmp_path):
+    make_source_db(tmp_path / "source.db")
+    runtime = ProfilePipelineRuntime(root=tmp_path, provider_override=provider)
+    entity_db = str(tmp_path / "entity.db")
+    runtime.import_profile(entity_db, profile_a())
+    loaded = runtime.effect("pipeline_profile_read", {"entity_db": entity_db})
+    assert loaded["ok"] is True
+
+    db = sqlite3.connect(entity_db)
+    db.execute(
+        "UPDATE profiles SET profile_json=? WHERE profile_id='profile_a'",
+        (json.dumps({"tampered": True}, sort_keys=True),),
+    )
+    db.commit()
+    db.close()
+
+    result = runtime.effect(
+        "pipeline_commit",
+        {
+            "entity_db": entity_db,
+            "profile": loaded["profile"],
+            "previous": {"generation": 0},
+            "data": _minimal_commit_data(),
+        },
+    )
+    assert result["ok"] is False
+    assert "PROFILE_HASH_MISMATCH" in result["error"]
+
+    db = sqlite3.connect(entity_db)
+    assert db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()[0] == 0
+    assert db.execute("SELECT COUNT(*) FROM eos_pipeline_outputs").fetchone()[0] == 0
+    assert db.execute("SELECT COUNT(*) FROM eos_pipeline_consumed").fetchone()[0] == 0
+    db.close()
+
+
+def test_claim_authorizing_metrics_change_canonical_state_hash():
+    runtime = ProfilePipelineRuntime()
+    collected = {
+        "source_count": 0,
+        "quiet_sensors_ok": False,
+        "sources": {},
+        "sensors": {},
+        "probes": {},
+    }
+    p1 = profile_b()
+    p2 = profile_b()
+    p1["state_metrics"] = [
+        {"name": "confidence", "evidence_ref": "state:confidence", "status": "VERIFIED", "value": 0.2}
+    ]
+    p2["state_metrics"] = [
+        {"name": "confidence", "evidence_ref": "state:confidence", "status": "VERIFIED", "value": 0.8}
+    ]
+    c1 = runtime.effect("pipeline_compile", {"profile": p1, "data": collected})
+    c2 = runtime.effect("pipeline_compile", {"profile": p2, "data": collected})
+    assert c1["ok"] is True and c2["ok"] is True
+    assert c1["personality_state"] != c2["personality_state"]
+    assert c1["canonical_state_hash"] != c2["canonical_state_hash"]
+    assert c1["canonical"]["personality_state"] == c1["personality_state"]
 
 
 def test_editable_personality_cannot_override_immutable_claim_gate(tmp_path):

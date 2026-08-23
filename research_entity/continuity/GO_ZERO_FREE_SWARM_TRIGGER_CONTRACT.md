@@ -1,83 +1,80 @@
-# GO/ZERO FREE_ONLY swarm trigger contract
+# GO/ZERO FREE_ONLY swarm trigger contract — ClayVerse
 
-Status: CURRENT OWNER TRIGGER/ORCHESTRATION CONTRACT
+Status: **CURRENT / FAIL-CLOSED UNTIL CLAYVERSE CONTROLLER ADMISSION**
 Date: 2026-08-23
-Implementation: `tools/run_go_zero_swarm.py`
-Base provider controller: `tools/run_free_go_swarm.py`
-GRF/ClayCode worker protocol: `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
+Current product authority: `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+Current control: `4.1 + 4.2 + historical 4.3 + 4.4-clayverse-product-authority-addendum`
 Macrocycle identity: `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
+
+## Current admission state
+
+Provider swarm execution for `go` / `zero` is **BLOCKED** until a controller is source-admitted that binds the current ClayVerse product/program authority before secret lookup or network I/O.
+
+The historical base controller `tools/run_free_go_swarm.py` is **LEGACY_MINI_ENTITY_CONTROLLER_NOT_ADMITTED** because its source currently:
+
+- hard-codes the Mini Entity approximately-1B training directive as `OWNER_DIRECTIVE_PATH`;
+- injects Mini Entity role/task language;
+- expects the Mini Entity worker-protocol marker;
+- therefore can recreate product-authority drift even when Bootstrap/PROGRAM_STATE/Control 4.4 select ClayVerse.
+
+The previously named implementation `tools/run_go_zero_swarm.py` is not admitted by this contract unless the exact file exists and passes the current ClayVerse authority guard. A missing implementation is BLOCKED, never silently substituted with the legacy Mini Entity controller.
+
+## Required ClayVerse controller contract
+
+Before any provider key lookup or provider network call, the admitted controller MUST fail closed unless all of the following agree:
+
+- `BOOTSTRAP_MINIMAL.active_program == CLAYVERSE_SINGLE_CONTAINER`;
+- `BOOTSTRAP_MINIMAL.active_stage == CLAYVERSE_ARTIFACT`;
+- `PROGRAM_STATE.program_id == clayverse-single-container`;
+- current owner directive is `CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`;
+- effective control includes `4.4-clayverse-product-authority-addendum`;
+- FREE_ONLY is active;
+- Together is forbidden;
+- VPS/self-hosted/production-host testing remains forbidden;
+- exact runtime credit still requires admitted isolated execution;
+- worker prompts preserve Clay as the persistent research entity and workers as temporary organs;
+- worker prompts describe ClayVerse, not Mini Entity/Blogpost, as the current product;
+- one shared `macrocycle_id` and one unusual-experiment lease law are preserved across children.
 
 ## Trigger law
 
-Every explicit user `go` or `zero` is eligible to start the maximum useful FREE_ONLY research/build swarm during that work cycle whenever an execution surface carrying admitted free provider credentials is actually available.
+Every explicit user `go` or `zero` remains eligible for maximum useful FREE_ONLY research/build concurrency **only when an admitted controller and admitted free credentials are actually available**.
 
-`go` and `zero` are parent triggers. Every API/model child spawned by the swarm receives a child `go` task plus the mandatory GRF/ClayCode protocol at the top of its prompt.
+If either is unavailable, record the blocker and continue all non-provider work possible in the current turn. Do not fabricate a running swarm and do not fall back to a stale product controller.
 
-A child `go` is NOT a new user-triggered macrocycle. The parent orchestration boundary mints or receives one `macrocycle_id` and propagates the exact same value to every child. Child workers do not invent another macrocycle id and do not independently consume the one-unusual-experiment slot.
+`go` and `zero` are parent triggers. Any future admitted API/model child receives child `go`, the current ClayVerse owner/product context, and the mandatory GRF/ClayCode worker protocol at the top of its prompt. A child never creates a new persistent Clay identity or a second user-triggered macrocycle.
 
-## Maximum-use law
+## Provider safety law
 
-Within current FREE_ONLY authority, use as much admitted free provider capacity as possible while preserving provider rules and coordination:
+When a ClayVerse controller is later admitted:
 
-- use all admitted Groq, Mistral and NVIDIA/Nemotron keys actually exposed to the runtime;
-- start up to the configured concurrency cap per provider and adapt from live outcomes;
-- successful calls may keep/ramp concurrency high;
-- HTTP 429 causes provider-wide cooldown/backoff and reduced concurrency; do not rotate keys to evade an organization/provider rate limit;
-- HTTP 402 is a hard stop for that key/provider path for the current run;
-- auth/entitlement failure is not runtime evidence and disables the affected key/path;
-- never create paid capacity, paid fallback, quota purchases or subscription upgrades under FREE_ONLY;
-- secrets remain environment/vault-only and never enter receipts, peer state, prompts or source control.
+- FREE_ONLY must be verified before secret/key lookup and before network I/O;
+- no paid fallback, quota purchase, subscription upgrade, or automatic billing escalation;
+- HTTP 402 is hard stop;
+- HTTP 429 is provider-wide cooldown/backoff, never key rotation to evade a shared limit;
+- credentials remain environment/vault-only and never enter prompts, receipts, peer state, or source;
+- absent quota metadata is UNKNOWN, not unlimited entitlement.
 
-## Token and request observation
+## Coordination law
 
-Before every spawn attempt the coordinator observes the shared rolling provider telemetry from completed calls:
+Any admitted swarm uses one cross-process coordination state and atomically leases non-overlapping research lanes. Each lease binds at least macrocycle id, parent trigger, child trigger, provider/model/key fingerprint, lane/task, worker serial, expiry/heartbeat, and reserved output-token demand.
 
-- total tokens and request count over the previous 60 seconds;
-- total tokens and request count over the previous 24 hours;
-- provider response rate-limit headers when returned;
-- provider-wide cooldown state;
-- active reserved output-token demand.
+Before each call the child receives bounded peer state plus current repository/program/control/owner context. Model agreement remains candidate evidence only and never becomes canonical truth.
 
-Optional explicit caps may be supplied by environment variables:
+## Product boundary
 
-- `CLAY_GROQ_TPM_BUDGET`, `CLAY_GROQ_TPD_BUDGET`, `CLAY_GROQ_RPM_BUDGET`, `CLAY_GROQ_RPD_BUDGET`;
-- equivalent `CLAY_MISTRAL_*` and `CLAY_NVIDIA_*` variables.
+Swarm is research/build orchestration only. Product runtime remains **one persistent central ClayVerse entity**. A swarm may not create a second durable identity, UnifiedDB alternative, truth authority, EffectGate bypass, recovery ledger, or consciousness daemon.
 
-An absent configured cap is UNKNOWN, not unlimited entitlement. In that case live provider responses remain authoritative and 429 must cool down rather than trigger quota-evasion behavior.
+## Re-admission gate
 
-## Worker collision avoidance
+Unblock provider swarm execution only after a ClayVerse controller exists and a deterministic source gate demonstrates at minimum:
 
-Workers share one cross-process coordination state. Before a model call the controller atomically leases one research lane. A lane cannot be owned by two live workers at once.
+1. current ClayVerse authority accepted;
+2. Mini Entity product authority rejected;
+3. Control 4.4 required;
+4. FREE_ONLY weakening rejected before key lookup;
+5. stale/missing macrocycle identity rejected;
+6. worker prompt begins with current ClayVerse/GRF/ClayCode context;
+7. no secret value appears in generated prompt/receipt state.
 
-Each lease contains at least:
-
-- `macrocycle_id`;
-- parent trigger (`go` or `zero`);
-- child trigger (`go`);
-- provider/model/key fingerprint;
-- lane and task;
-- worker serial;
-- start/expiry/heartbeat;
-- reserved output-token count.
-
-Leases use a host file lock and atomic state replacement. Heartbeats extend live leases; expired leases are pruned.
-
-Before every call, the child prompt receives:
-
-- current active peer leases;
-- a bounded window of recent completed worker results;
-- rolling token/request observations;
-- current repository/program/supervisor/owner context;
-- its own lane lease and shared macrocycle identity.
-
-Workers MUST inspect peer work and avoid duplicating it. If another worker already covers a hypothesis, the child should attack it, discriminate it, independently replicate it, or work a non-overlapping subproblem inside its leased lane.
-
-## Evidence law
-
-Peer/model output is candidate evidence only. Agreement among many workers does not become canonical truth. Measured/runtime claims still require admissible receipts and exact identity.
-
-The swarm is research/build orchestration only. It does not create multiple durable Mini Entities and cannot bypass MiniUnifiedDB, truth, secret, effect, generation, budget or execution authority.
-
-## Runtime availability law
-
-The trigger contract does not claim that every chat/runtime exposes the provider vault. If the current execution surface lacks admitted FREE_ONLY credentials, record the exact blocker and continue the local/non-provider part of the `go`/`zero` work. Do not fabricate a running swarm.
+Passing this source gate still gives **ZERO provider/model/whole-product runtime credit** until actual admitted execution occurs.

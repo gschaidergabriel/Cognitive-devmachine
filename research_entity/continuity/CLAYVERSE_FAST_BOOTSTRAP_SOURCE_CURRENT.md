@@ -1,93 +1,42 @@
-# CLAY FAST BOOTSTRAP COMPATIBILITY SHIM — CURRENT AUTHORITY REDIRECT
+# CLAY / CLAYVERSE FAST BOOTSTRAP — CURRENT AUTHORITY INDEX
 
-Status: **SUPERSEDED CACHE / COMPATIBILITY PATH ONLY**
+Status: **CURRENT FAST CACHE / OPERATING INDEX**
+Date: 2026-08-23
 
-This historical file name is retained because older ChatGPT/project bootstraps still reference it.
-Its former 2026-08-17 ClayVerse single-container content is **not current owner authority** and MUST NOT be used to choose the active product/program.
+This path again points at the active ClayVerse program. It is a fast cache, not executable truth. Before substantive work, refresh `main`, the owner directive, program state, artifact manifest/architecture/README, task-relevant code/tests/receipts, open PRs, and actual isolated execution availability.
 
-## Identity law that remains valid
+## Current authority
 
-- Persistent research entity: **Clay**.
-- A temporary model/session/worker is an organ of Clay, not a new Clay entity.
-- Legacy Frank/ClayVerse material may be donor evidence only when the current owner architecture admits it.
+- persistent research entity: **Clay**;
+- active product endpoint: **ClayVerse**;
+- canonical workspace: `gschaidergabriel/clay-global-research-entity/main/the artefact/`;
+- release: one OCI/Docker-compatible ClayVerse image;
+- owner directive: `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`;
+- UnifiedDB: sole durable canonical state/world/memory/data/wiki authority;
+- ClayGraph: rebuildable projection only;
+- Claude Code: runtime cognition only;
+- MicroClay: adaptive retrieval/entry-point organ only;
+- EffectGate/EffectJournal: sole external-effect path;
+- EntityOS: internal hardened execution/security/runtime substrate, never the top-level product endpoint;
+- exactly two canonical equal-rights perspectives: `gabriel`, `andreas`;
+- no second durable identity/memory/effect/recovery authority.
 
-## Mandatory current join sequence
+## Evidence boundary
 
-Before any substantive `go`, current-product claim, build, test, write, or research-spend decision, resolve current authority from `main` in this order:
+Only exact authorized isolated execution establishes executable behavior at that exact source/artifact/environment scope. Source, docs, PRs, CI definitions, historical receipts, deployment READY, or component PASS do not imply whole ClayVerse PASS.
 
-1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
-2. the `sole_owner_directive` named by that file
-3. `research_entity/rooms/PROGRAM_STATE.json`
-4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-5. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
-6. task-relevant code/tests/receipts and active overlapping branches/PRs
+Current testing remains isolated-sandbox-only; VPS/self-hosted/production-host testing is forbidden. Together remains forbidden. Final paid/model training remains owner-gated.
 
-Never let this compatibility file override those sources.
+## `go`
 
-## Current owner architecture at the time this shim was authored
+Refresh authority and exact `main`; inspect overlapping work; select the highest-information non-duplicate whole-product blocker; test/falsify; repair `the artefact/`; regress; persist bounded evidence; refresh changed reality; continue while a safe useful step remains.
 
-The current `BOOTSTRAP_MINIMAL.json` on `main` resolves the active program to:
+## `zero`
 
-- program: `MINI_ENTITY_PIPELINE_ALL_IN_ONE`
-- stage: `MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT`
-- sole owner directive: `research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md`
-- supporting unified architecture: `research_entity/global/ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md`
-- supporting training directive: `research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md`
+Focus on Agent Zero / EntityOS + Global J-Space / Nested Workspace causal coupling inside the same ClayVerse product. Never infer hidden-state causality from prompts/self-report/coherence alone, and never introduce a second identity or durable authority.
 
-The active target is the **Multi-use Mini Entity / EntityOS integrated cognitive architecture**, not the superseded ClayVerse OCI-container endpoint.
+## Mandatory epistemic invariant
 
-Current product shape includes:
+`FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`
 
-- one application-neutral/inference-neutral `.clay` pipeline executable;
-- one SQLite MiniUnifiedDB authority;
-- one mandatory bundled first-class generic approximately-0.8B ClayCode cognition core;
-- one fixed versioned Unified J-Space/GWT Cognitive Fabric;
-- one first-class Claude Code targeted-inference adapter that returns candidate inference only;
-- adaptive profiled local/API inference engines;
-- one self-hosted MicroEntity control/inspection surface.
-
-These bullets are a convenience snapshot only. If they conflict with current `main`, current owner authority wins.
-
-## Runtime/evidence boundary
-
-Current owner-architecture wording is source authority, not executable acceptance.
-
-Do not infer runtime/model/J-Space/GWT/Claude-adapter/whole-product credit from this file, architecture text, source presence, a component regression, a PR/merge, a provider contract, or historical ClayVerse/EntityOS/Frank evidence.
-
-Executable credit requires the exact current admitted source/runtime evidence required by current supervisor/program policy.
-
-At the time this shim was authored, the durable supervisor state explicitly preserved an intentionally-offline Ubuntu runtime baseline and zero current runtime credit for the bundled ~0.8B core, J-Space, Whole-GWT, and the Claude adapter. Refresh before repeating that state.
-
-## FREE_ONLY / secrets / provider law
-
-Resolve the current execution control before any provider action.
-While current `FREE_ONLY=true` remains active:
-
-- paid/subscription/unknown provider lanes are rejected before secret/key lookup and before network I/O;
-- Together provider execution/training remains forbidden;
-- secrets never enter prompts, receipts, durable state, or source;
-- source wording or owner-selected future campaign intent does not authorize execution.
-
-## `go` law
-
-Exact user trigger `go` means follow the **current** `go` contract from `BOOTSTRAP_MINIMAL.json`, not the historical ClayVerse macrocycle in this file's old contents.
-
-In particular: refresh exact `main` and owner authority first; inspect parallel branches/PRs before overlapping work; preserve GRF + ClayCode worker protocol where supported; respect one shared unusual-experiment slot only when the current macrocycle identity/lease protocol can bind it; prefer exact executable falsification over further source-only guard accumulation when runtime is available; preserve negative evidence and UNKNOWN/ERROR/MEASURED distinctions; do not claim runtime credit without exact execution.
-
-## Anti-regression rule
-
-Any bootstrap/session that reads this file and concludes any of the following without refreshing current authority is stale and must fail closed:
-
-- `ACTIVE_PRODUCT = CLAYVERSE_SINGLE_CONTAINER`
-- `RELEASE_FORM = ONE OCI CLAYVERSE CONTAINER`
-- `CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md = CANONICAL CURRENT PROGRAM AUTHORITY`
-
-Required result instead:
-
-`HISTORICAL_FAST_CACHE -> REFRESH_BOOTSTRAP_MINIMAL -> RESOLVE_SOLE_OWNER_DIRECTIVE -> JOIN_CURRENT_PROGRAM`
-
-## Why the historical file name remains
-
-Deleting or renaming the path would strand older prompts, receipts, and project sessions that still try to load it. Keeping the path as a short authority redirect makes those old references self-correcting without preserving a competing product directive.
-
-The previous full 2026-08-17 ClayVerse text remains recoverable from Git history as historical donor evidence.
+Historical Mini Entity/Blogpost wording that calls ClayVerse superseded is stale relative to the current owner directive and must fail closed until reconciled.

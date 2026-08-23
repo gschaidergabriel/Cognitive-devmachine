@@ -23,7 +23,7 @@ Compatibility names: Xeno = transitional implementation codename only; XCU = tra
 Goal: converge executable EntityOS with one integrated HCU cognition/compute architecture, Typed Entry Fabric, and an instrumented Global J-Space/GWT prototype that can produce exact causal training traces without a competing product/state/effect authority
 GO Track A: ENTITYOS_EXECUTABLE_CONVERGENCE
 GO Track B: HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT|HCU_NO_CHANGE_WITH_REASON
-GO Track C: GLOBAL_JSPACE_GWT_PROTOTYPE_AND_ONE_SHOT_08B_TRAINING_READINESS|TRAINING_READINESS_NO_CHANGE_WITH_REASON
+GO Track C: GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY|TRAINING_READINESS_NO_CHANGE_WITH_REASON
 Modes: GRID10 · COGSIM10 · WM_TEST · NESTED_SIM · SCALEOUT
 Computer path: canonical state · deterministic control · HCU shared-weight/vector/inference/J-Space plane · typed causal interconnect · Entry I/O · Effect translation
 Scale: 10-cell baseline; 10→32→64→128→256→~600 is a benchmark ladder; ~600 on H100-class hardware is HYPOTHESIS_ONLY until exact benchmark evidence
@@ -31,9 +31,9 @@ Authority: canonical durable state/evidence remains deterministic; HCU/world-mod
 Global J-Space: empirical causal coordination/interface hypothesis; local J-Space claims require model-specific evidence
 World simulation: NOT_REQUIRED_PERMANENTLY; bounded WM_TEST and selective NESTED_SIM are noncanonical research modes
 Execution: AUTHORIZED_ISOLATED_SANDBOX_ONLY for current build/test/experiment/runtime credit; VPS/self-hosted/production-host testing forbidden under current control
-Together API: GENERAL_INFERENCE_AND_FALLBACK_FORBIDDEN; EXACTLY_ONE_OWNER_AUTHORIZED_08B_JSPACE_GWT_FINETUNE_ALLOWED_AFTER_REQUIRED_GATES; NOT_CONSUMED_UNTIL_JOB_CREATION_RECEIPTED
-Paid fallback: FORBIDDEN; only the inherently required spend for the explicitly authorized one-shot Together fine-tune is excepted
-Model training: ONE_SHOT_08B_JSPACE_GWT_OWNER_AUTHORIZED_AFTER_PROTOTYPE_TRACE_ABI_DATASET_BASELINE_GATES; SECOND_PAID_TRAINING_REQUIRES_NEW_OWNER_AUTHORIZATION
+Together API: FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE; GENERAL_INFERENCE_FORBIDDEN; PAID ONE_SHOT OWNER DIRECTIVE QUARANTINED; DO_NOT_PREFLIGHT_OR_CONSUME_CREDENTIALS
+Paid fallback: FORBIDDEN; NO PAID TRAINING/PROVIDER EXECUTION IN CURRENT FREE_ONLY SUPERVISOR MODE
+Model training: ZERO_COST_LOCAL_APPROX_08B_JSPACE_GWT_WORK_ONLY_AFTER_EXECUTABLE_EVIDENCE; PAID ONE_SHOT HAS ZERO EXECUTION CREDIT AND REQUIRES A FUTURE AUTHORITY MODE CHANGE
 Current frontier: <dynamic EntityOS blocker/delta + HCU/Typed Entry co-development + Global J-Space/GWT training-readiness discriminator>
 Migration/reuse score: EASIER_CROSS_MODE|EASIER|NEUTRAL|HARDER_WITH_EVIDENCE
 Progress: <canonical dynamic percent/bar OR UNRESOLVED>
@@ -43,4 +43,4 @@ Evidence note: source/component/historical PASS does not imply EntityOS/HCU runt
 Short commands: 666 · go · zero · q12 · q23 · atomic · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifiedb · harness · spawn
 ```
 
-Training authority note: the bounded exception is defined by `research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md`. It does not authorize general Together inference, automatic retraining, a second paid run, secret persistence, or bypass of EntityOS authority/evidence gates.
+Training authority note: `research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md` remains repository provenance for an owner-authorized bounded paid run, but `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json` supersedes it for the current explicitly FREE_ONLY autonomous supervisor. In this mode no Together preflight, credential lookup, network call, job creation, spend, provider credit, training credit or acceptance credit is allowed. Only zero-cost local ~0.8B J-Space/GWT work may continue after the required executable-evidence gates.

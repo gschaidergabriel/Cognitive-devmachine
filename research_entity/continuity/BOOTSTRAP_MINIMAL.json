@@ -1,5 +1,5 @@
 {
-  "schema_version": "8.5",
+  "schema_version": "8.6",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
   "identity": {
@@ -31,7 +31,8 @@
   ],
   "go_required_tracks": [
     "ENTITYOS_EXECUTABLE_CONVERGENCE",
-    "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT_OR_HCU_NO_CHANGE_WITH_REASON"
+    "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT_OR_HCU_NO_CHANGE_WITH_REASON",
+    "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_ONE_SHOT_08B_TRAINING_READINESS_OR_NO_CHANGE_WITH_REASON"
   ],
   "hcu_computerization": {
     "entry_io": "TYPED_ENTRY_FABRIC",
@@ -62,9 +63,11 @@
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
   "execution_surface": "AUTHORIZED_ISOLATED_SANDBOX_ONLY",
-  "together_api": "FORBIDDEN",
-  "paid_fallback": "FORBIDDEN",
-  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED",
+  "together_api": "GENERAL_INFERENCE_AND_FALLBACK_FORBIDDEN; EXACTLY_ONE_OWNER_AUTHORIZED_APPROX_08B_JSPACE_GWT_FINETUNE_ALLOWED_UNTIL_CONSUMED",
+  "together_training_authority": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
+  "together_one_shot_training_consumed": false,
+  "paid_fallback": "FORBIDDEN_EXCEPT_COST_INHERENT_TO_THE_ONE_OWNER_AUTHORIZED_TRAINING_JOB",
+  "final_paid_model_training": "ONE_SHOT_APPROX_08B_JSPACE_GWT_TRAINING_AUTHORIZED; SECOND_JOB_REQUIRES_NEW_OWNER_AUTHORIZATION",
   "go_macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
   "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
   "go": "ENTITYOS_HCU_MAXIMUM_PRODUCT_CONVERGENCE_MACROCYCLE",
@@ -72,6 +75,7 @@
   "go_transition_questions": [
     "Does this improve executable EntityOS now or strengthen the strongest current implementation toward it?",
     "Does this advance HCU or the typed Entry Fabric, or record an exact no-change reason?",
+    "Does this advance the functional Global J-Space/GWT prototype, trace instrumentation, vector-control ABI, dataset quality, or one-shot training readiness?",
     "Can the primitive serve multiple HCU modes rather than one special case?",
     "Does this preserve exact state/provenance/generation/effect boundaries?",
     "Can the claim be falsified with executable evidence?"
@@ -82,6 +86,9 @@
     "bind causal event identity plus resolved engine identity into one HCU route decision identity",
     "typed Entry Fabric for all new data",
     "10-cell shared-worker HCU baseline",
+    "build and instrument Global J-Space/GWT with JSPACE_VECTOR_CONTROL_ABI/v1",
+    "derive leak-resistant training/validation/holdout data from exact prototype traces and deterministic hard negatives",
+    "launch exactly one Together full fine-tune on the exact intended ~0.8B base only after prototype/data/base/preflight gates are ready",
     "request-scoped cognition simulation and bounded test world-model mode",
     "model-specific empirical J-Space coupling",
     "Hyperposition with evidence-based candidate reduction",

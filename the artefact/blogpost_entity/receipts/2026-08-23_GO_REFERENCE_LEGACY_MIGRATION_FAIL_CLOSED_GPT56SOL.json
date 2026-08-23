@@ -1,0 +1,76 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "join": {
+    "main_sha": "3a7a12303e54b24aaefc3c79f1f1ea63a1a9212b",
+    "branch": "gpt56sol/go-reference-legacy-migration-failclosed-20260823-r1",
+    "prior_generation_guard_sha": "b288b689b5938ec0e0b0b3af982d8e183577c50a"
+  },
+  "authority": {
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
+    "execution_control": "FREE_ONLY"
+  },
+  "claycode": "grf{R0[canonical_generation_authority=entity_state;legacy_mirror_authority=forbidden;legacy_only_db_without_entity_state=unresolved];R1[silent_fresh_zero=>continuity_loss];R2{h_reset=reject;h_import=reject_current_law;h_fail_closed=retain};R3[counter=explicit_migration_block_can_reduce_compatibility_but_preserves_truth_and_continuity);R4[deterministic_gate:legacy_only=>LEGACY_GENERATION_MIGRATION_REQUIRED;fresh=>generation_0];R5[invariant=migration_adjudication!=live_authority];R6[source_guard=bound;exact_runtime=unknown]} hyper{legacy_history=>{reset_zero,import_counter,fail_closed_adjudication};collapse=fail_closed_adjudication} omega(test_reference_legacy_generation_migration_boundary,source_guard_only)",
+  "grf": {
+    "R0_OBSERVE": [
+      "Current main forbids legacy eos_pipeline_state.generation from promoting or replacing canonical entity_state.generation.",
+      "The superseded one-time-import donor was closed because current law rejects reading the legacy generation as bootstrap authority.",
+      "Without an additional boundary, a future converged runtime could ignore a legacy-only nonzero generation and silently create canonical generation zero."
+    ],
+    "R1_INFER": "Silent zero initialization on a legacy-only database would preserve single authority syntactically while destroying historical continuity semantically.",
+    "R2_GENERATE": [
+      "Treat legacy-only DB as fresh and initialize generation zero.",
+      "Import the old generation into canonical state.",
+      "Fail closed and require explicit migration/adjudication before creating canonical state."
+    ],
+    "R3_COUNTER": "Fail-closed migration can strand an old database until an explicit migration path exists, but silent reset loses continuity and importing the mirror violates the current authority law.",
+    "R4_DISCRIMINATE": {
+      "class": "DETERMINISTIC_REGRESSION_ONLY",
+      "tests": [
+        "legacy-only eos_pipeline_state generation 7 + no entity_state -> pipeline_init must return LEGACY_GENERATION_MIGRATION_REQUIRED and must not create a canonical state row",
+        "truly fresh DB -> pipeline_init may create entity_state generation 0"
+      ]
+    },
+    "R5_EMERGENT": "Historical migration evidence, live canonical authority, and fresh initialization are three distinct responsibilities and must not be collapsed into one implicit bootstrap rule.",
+    "R6_VERIFY": {
+      "new_test_syntax": "PASS_LOCAL_COMPILE",
+      "exact_repository_runtime": "UNOBSERVED",
+      "source_contract": "BOUND_ON_BRANCH",
+      "whole_product": "IN_PROGRESS"
+    }
+  },
+  "delta": {
+    "test": "the artefact/blogpost_entity/test_reference_legacy_generation_migration_boundary.py",
+    "activation": "auto-activates only when ProfilePipelineRuntime exposes _pipeline_profile_read",
+    "error_contract": "LEGACY_GENERATION_MIGRATION_REQUIRED",
+    "fresh_db_contract": "generation=0 allowed only when no unresolved legacy-only generation state exists"
+  },
+  "unusual_experiment": {
+    "additional_count": 0,
+    "note": "No additional unusual experiment was performed. The shared macrocycle generation-mirror discriminator was already consumed/persisted on current main; this delta is deterministic regression and policy convergence only."
+  },
+  "execution": {
+    "local_test_source_compile": true,
+    "exact_repo_checkout_runtime": false,
+    "authorized_hosted_runner_started": false,
+    "provider_network_call": false,
+    "together_preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0,
+    "vps_test": false
+  },
+  "evidence_boundary": {
+    "claim": "SOURCE_GUARD_CANDIDATE",
+    "runtime_pass": false,
+    "native_profile_v2_pass": false,
+    "cognition_training": "NOT_STARTED_FREE_ONLY",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_step": "Run this guard together with the current profile-authority, generation-authority, metric-hash and read-phase-purity guards against the fresh replacement reference runtime. The replacement must explicitly detect unresolved legacy-only continuity during pipeline_init, fail closed without minting canonical state, use entity_state as the sole live generation/CAS authority, bind claim-authorizing metrics into canonical_state_hash, and then obtain actually-started exact-source isolated runtime evidence."
+}

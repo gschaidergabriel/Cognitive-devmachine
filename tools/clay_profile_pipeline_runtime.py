@@ -24,7 +24,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.4-candidate"
+VERSION = "clay-profile-pipeline-runtime/0.5-candidate"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -98,12 +98,14 @@ class ProfilePipelineRuntime(clay.Runtime):
         root: str | Path = ".",
         allow_network: bool = False,
         provider_override: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+        local_exec_runner: list[str] | tuple[str, ...] | None = None,
     ):
         super().__init__()
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.allow_network = allow_network
         self.provider_override = provider_override
+        self.local_exec_runner = local_exec_runner
         self.effect_trace: list[dict[str, Any]] = []
         self._active_secrets: list[str] = []
         self.builtins["effect"] = self.effect
@@ -259,6 +261,23 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _pipeline_init(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             with self._db(str(p["entity_db"])) as db:
+                existing_tables = {
+                    str(row[0])
+                    for row in db.execute(
+                        "SELECT name FROM sqlite_master WHERE type='table'"
+                    ).fetchall()
+                }
+                if "entity_state" not in existing_tables and "eos_pipeline_state" in existing_tables:
+                    legacy_columns = {
+                        str(row[1]) for row in db.execute("PRAGMA table_info(eos_pipeline_state)")
+                    }
+                    if "generation" in legacy_columns:
+                        legacy_generation = db.execute(
+                            "SELECT generation FROM eos_pipeline_state WHERE singleton=1"
+                        ).fetchone()
+                        if legacy_generation is not None:
+                            raise PipelineFault("LEGACY_GENERATION_MIGRATION_REQUIRED")
+
                 now = _utc_now()
                 db.execute(
                     """CREATE TABLE IF NOT EXISTS entity_state(
@@ -355,20 +374,21 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _pipeline_state_read(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             with self._read_only_db(str(p["entity_db"])) as db:
-                row = db.execute(
-                    """SELECT e.generation,s.continuity_json,s.canonical_hash,s.cursors_json
-                       FROM entity_state e
-                       JOIN eos_pipeline_state s ON s.singleton=1
-                       WHERE e.id=1"""
+                generation_row = db.execute(
+                    "SELECT generation FROM entity_state WHERE id=1"
                 ).fetchone()
-            if row is None:
+                state_row = db.execute(
+                    """SELECT continuity_json,canonical_hash,cursors_json
+                       FROM eos_pipeline_state WHERE singleton=1"""
+                ).fetchone()
+            if generation_row is None or state_row is None:
                 raise PipelineFault("PIPELINE_STATE_MISSING")
             return {
                 "ok": True,
-                "generation": int(row["generation"]),
-                "continuity": json.loads(row["continuity_json"]),
-                "canonical_hash": str(row["canonical_hash"]),
-                "cursors": json.loads(row["cursors_json"]),
+                "generation": int(generation_row["generation"]),
+                "continuity": json.loads(state_row["continuity_json"]),
+                "canonical_hash": str(state_row["canonical_hash"]),
+                "cursors": json.loads(state_row["cursors_json"]),
             }
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
@@ -503,11 +523,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                     "evidence_ref": spec.get("evidence_ref", "canonical:" + name),
                 }
 
-        required_kinds = [
-            kind
-            for kind, source in sources.items()
-            if source.get("required_for_quiet")
-        ]
+        required_kinds = [kind for kind, source in sources.items() if source.get("required_for_quiet")]
         quiet_sensors_ok = bool(required_kinds) and all(
             bool(sensors[kind].get("ok")) for kind in required_kinds
         )
@@ -820,36 +836,30 @@ class ProfilePipelineRuntime(clay.Runtime):
         upper = name.upper()
         return upper in _SAFE_ENV_NAMES and upper not in secret_names
 
-    def _inference_local_exec(
-        self, inference: dict[str, Any], p: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _inference_local_exec(self, inference: dict[str, Any], p: dict[str, Any]) -> dict[str, Any]:
         prompt_path: Path | None = None
         try:
-            model_value = str(
-                inference.get("local_model_path") or inference.get("model_path") or ""
-            )
+            if not self.local_exec_runner:
+                raise PipelineFault("LOCAL_EXEC_NOT_ADMITTED")
+            runner_argv = [str(item) for item in self.local_exec_runner]
+            if not runner_argv or not runner_argv[0]:
+                raise PipelineFault("LOCAL_EXEC_NOT_ADMITTED")
+
+            model_value = str(inference.get("local_model_path") or inference.get("model_path") or "")
             if not model_value:
                 raise PipelineFault("LOCAL_MODEL_PATH_MISSING")
             model_path = self._resolve(model_value)
             if not model_path.is_file():
                 raise PipelineFault("LOCAL_MODEL_NOT_READABLE")
 
-            argv_spec = inference.get("local_argv_json", inference.get("argv"))
-            if isinstance(argv_spec, str):
-                argv_spec = json.loads(argv_spec)
-            if (
-                not isinstance(argv_spec, list)
-                or not argv_spec
-                or not all(isinstance(item, str) for item in argv_spec)
-            ):
-                raise PipelineFault("LOCAL_ARGV_INVALID")
+            args_spec = inference.get("local_args_json", inference.get("args", []))
+            if isinstance(args_spec, str):
+                args_spec = json.loads(args_spec)
+            if not isinstance(args_spec, list) or not all(isinstance(item, str) for item in args_spec):
+                raise PipelineFault("LOCAL_ARGS_INVALID")
 
-            prompt_template = str(
-                inference.get("local_prompt_template", "{{SYSTEM}}\n\n{{USER}}\n")
-            )
-            prompt = prompt_template.replace("{{SYSTEM}}", p["system"]).replace(
-                "{{USER}}", p["user"]
-            )
+            prompt_template = str(inference.get("local_prompt_template", "{{SYSTEM}}\n\n{{USER}}\n"))
+            prompt = prompt_template.replace("{{SYSTEM}}", p["system"]).replace("{{USER}}", p["user"])
             with tempfile.NamedTemporaryFile(
                 "w",
                 encoding="utf-8",
@@ -867,17 +877,15 @@ class ProfilePipelineRuntime(clay.Runtime):
                 "{{MAX_TOKENS}}": str(inference.get("max_tokens", 2000)),
                 "{{TEMPERATURE}}": str(inference.get("temperature", 0.7)),
             }
-            argv: list[str] = []
-            for item in argv_spec:
+            argv = list(runner_argv)
+            for item in args_spec:
                 rendered = item
                 for key, value in replacements.items():
                     rendered = rendered.replace(key, value)
                 argv.append(rendered)
 
             requested_env = inference.get("local_env_allowlist", sorted(_SAFE_ENV_NAMES))
-            if not isinstance(requested_env, list) or not all(
-                isinstance(item, str) for item in requested_env
-            ):
+            if not isinstance(requested_env, list) or not all(isinstance(item, str) for item in requested_env):
                 raise PipelineFault("LOCAL_ENV_ALLOWLIST_INVALID")
             secret_names = {str(name).upper() for name in inference.get("secret_names", [])}
             child_env = {
@@ -1021,15 +1029,18 @@ class ProfilePipelineRuntime(clay.Runtime):
         try:
             db.execute("BEGIN IMMEDIATE")
             profile_row = db.execute(
-                """SELECT e.active_profile,p.profile_sha256
+                """SELECT e.active_profile,p.profile_json,p.profile_sha256
                    FROM entity_state e
                    JOIN profiles p ON p.profile_id=e.active_profile
                    WHERE e.id=1"""
             ).fetchone()
+            current_profile_raw = "" if profile_row is None else str(profile_row["profile_json"])
+            current_profile_hash = _sha256_text(current_profile_raw) if profile_row is not None else ""
             if (
                 profile_row is None
                 or str(profile_row["active_profile"]) != str(snapshot.get("profile_id"))
-                or str(profile_row["profile_sha256"]) != str(snapshot.get("profile_hash"))
+                or current_profile_hash != str(profile_row["profile_sha256"])
+                or current_profile_hash != str(snapshot.get("profile_hash"))
             ):
                 raise PipelineFault("PROFILE_SNAPSHOT_STALE")
 

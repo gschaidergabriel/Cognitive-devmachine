@@ -54,37 +54,21 @@
     }
   },
   "reference_runtime_effect_surface": {
-    "status": "FAIL_CLOSED_MISMATCH",
-    "missing_current_effects": [
-      "pipeline_profile_read",
-      "inference_generate"
-    ],
-    "stale_current_effects": [
-      "profile_load",
-      "provider_chat_json"
-    ],
-    "missing_semantic_requirements": {
-      "pipeline_profile_read": [
-        "missing_method:_pipeline_profile_read"
-      ],
-      "inference_generate": [
-        "missing_method:_inference_generate"
-      ]
-    },
-    "stale_legacy_methods": [
-      "_profile_load",
-      "_provider_chat_json"
-    ],
-    "promotion_requires": "The canonical reference runtime must expose the current effect names and implement their current state/payload responsibilities. Name-only aliases or shims do not establish parity. Missing current effects, missing required method-body semantics, retained legacy alternate methods, or stale legacy effects keep admission fail-closed."
+    "status": "PARITY",
+    "missing_current_effects": [],
+    "stale_current_effects": [],
+    "missing_semantic_requirements": {},
+    "stale_legacy_methods": [],
+    "promotion_requires": "Source effect-name/responsibility parity is not runtime acceptance. Current generation, profile, hash, read-phase, leak, inference and atomicity invariants must all remain satisfied and exact-source authorized isolated execution is still required."
   },
   "reference_runtime_fresh_main_fusion": {
-    "status": "NARROW_FRESH_MAIN_EXTRACTION_REQUIRED",
-    "donor_policy": "Mechanisms may be extracted only onto freshly rebound current main. No stale donor branch is a whole-runtime promotion candidate.",
+    "status": "SOURCE_CONVERGED_RUNTIME_EVIDENCE_REQUIRED",
+    "donor_policy": "Mechanisms were extracted onto current-main ancestry only. No stale donor branch is a whole-runtime promotion candidate.",
     "donors": [
       {
-        "pull_request": 727,
-        "role": "PREFERRED_MECHANISM_DONOR_ONLY",
-        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED",
+        "pull_request": 966,
+        "role": "REJECTED_WHOLE_DONOR_RETAIN_NARROW_MECHANISMS",
+        "whole_branch_merge": "FORBIDDEN_SUPERSEDED",
         "reusable_mechanisms": [
           "db_resident_profile_read_with_integrity_check",
           "generic_inference_generate",
@@ -92,20 +76,23 @@
           "embedded_profile_secret_rejection",
           "read_only_evidence_queries",
           "local_exec_parent_environment_isolation"
+        ],
+        "rejected_mechanisms": [
+          "legacy_generation_mirror_to_native_max_reconciliation",
+          "legacy_generation_mirror_cas_authority",
+          "claim_authorizing_metrics_outside_canonical_state_hash",
+          "read_effects_reentering_schema_bootstrap_writes"
         ]
       },
       {
+        "pull_request": 727,
+        "role": "OLDER_MECHANISM_DONOR_ONLY",
+        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED"
+      },
+      {
         "pull_request": 728,
-        "role": "SECONDARY_MECHANISM_DONOR_ONLY",
-        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED",
-        "reusable_mechanisms": [
-          "db_resident_profile_shape",
-          "generic_inference_dispatch_shape"
-        ],
-        "do_not_copy_verbatim": [
-          "local_exec subprocess without an explicit child env",
-          "any response-pointer decoder that does not satisfy shipped /choices/0/message/content semantics"
-        ]
+        "role": "OLDER_SECONDARY_MECHANISM_DONOR_ONLY",
+        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED"
       }
     ],
     "preservation_matrix": [
@@ -116,6 +103,22 @@
       {
         "invariant": "syntax_bound_effect_surface_admission",
         "bound_source": "the artefact/blogpost_entity/check_structured_contract_sync.py"
+      },
+      {
+        "invariant": "single_native_profile_authority",
+        "bound_source": "the artefact/blogpost_entity/test_reference_profile_authority_invariant.py"
+      },
+      {
+        "invariant": "single_native_generation_cas_authority",
+        "bound_source": "the artefact/blogpost_entity/test_reference_generation_authority_invariant.py"
+      },
+      {
+        "invariant": "read_phases_do_not_reenter_schema_or_migration_writes",
+        "bound_source": "the artefact/blogpost_entity/test_reference_profile_authority_invariant.py"
+      },
+      {
+        "invariant": "claim_authorizing_metrics_bound_into_canonical_hash",
+        "bound_source": "the artefact/blogpost_entity/test_reference_metric_hash_boundary.py"
       },
       {
         "invariant": "effect_responsibility_semantics",
@@ -135,10 +138,10 @@
       },
       {
         "invariant": "profile_integrity_and_active_secret_rejection",
-        "bound_source": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json#required_reference_effect_semantics"
+        "bound_source": "the artefact/blogpost_entity/test_blogpost_entity.py"
       },
       {
-        "invariant": "exactly_once_generation_cas_atomic_commit",
+        "invariant": "exactly_once_native_generation_cas_atomic_commit",
         "bound_source": "tools/clay_profile_pipeline_runtime.py"
       },
       {
@@ -152,12 +155,14 @@
     ],
     "must_not_introduce": [
       "second_profile_state_authority",
+      "second_generation_or_cas_authority",
       "external_profile_file_as_mandatory_runtime_state",
+      "claim_authorizing_state_outside_canonical_hash",
+      "read_effect_schema_or_migration_writes",
       "provider_or_application_identity_in_executable",
-      "generic_host_shell_effect_path",
-      "study_or_presentation_side_path_required_for_reference_convergence"
+      "generic_host_shell_effect_path"
     ],
-    "promotion_requires": "Implement only the missing current responsibilities on freshly rebound current main, preserve every bound invariant, align the structured regression adapter to the three-argument DB-resident profile boundary, and obtain exact-source authorized isolated execution before reference/native parity promotion."
+    "promotion_requires": "Run current source guards and focused structured regressions, then obtain an actually-started exact-source authorized isolated execution receipt. Source convergence alone gives zero whole-runtime and zero whole-product acceptance credit."
   },
   "required_source_adapters_from_shipped_v2": [
     "json_snapshot",
@@ -215,15 +220,15 @@
     "blocker": "CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY",
     "runtime_receipt": null,
     "promotion_requires": [
-      "canonical_reference_runtime_effect_names_and_semantics_match_current_pipeline_before_reference-equivalent claims",
-      "fresh-main reference convergence preserves the reference_runtime_fresh_main_fusion preservation_matrix",
-      "all_required_contracts_implemented_on_one_native_path",
-      "exact_source_bound_build_of_candidate",
-      "shipped_v2_profile_executes_with_reference-equivalent_compile_and_gate_semantics",
-      "adversarial_hash_evidence_claim_leak_secret_and_atomicity_matrix_passes",
-      "count_where_sum_where_and_sources_sensors_probes_refs_are_executed_not_degraded_to_unknown",
-      "profile_source_and_probe_adapters_are_executed_not_replaced_by_mini_entity_events_only",
-      "guard_removed_only_in_same_exact_candidate_that_has_parity_evidence"
+      "canonical_reference_runtime_effect_names_and_semantics_match_current_pipeline before reference-equivalent claims",
+      "fresh-main reference convergence preserves the current preservation matrix",
+      "all required contracts implemented on one native path",
+      "exact source-bound execution of candidate",
+      "shipped v2 profile executes with reference-equivalent compile and gate semantics",
+      "adversarial hash evidence claim leak secret and atomicity matrix passes",
+      "count_where sum_where and sources sensors probes refs execute rather than degrade to unknown",
+      "profile source and probe adapters execute rather than being replaced by events-only behavior",
+      "native-v2 guard removed only in the same exact candidate carrying accepted runtime evidence"
     ]
   },
   "known_rejected_partial_candidate": {

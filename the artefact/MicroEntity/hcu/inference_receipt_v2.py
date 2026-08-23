@@ -19,7 +19,13 @@ from engine_load_lease_v1 import (
     VerifiedEngineLoad,
 )
 from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
-from reactive_event_router_v1 import HASH_SERIALIZATION_SCHEMA, RouteDecision, assert_inference_echo
+from reactive_event_router_v1 import (
+    HASH_SERIALIZATION_SCHEMA,
+    ReactiveRoutingError,
+    RouteDecision,
+    assert_inference_echo,
+    resolve_admitted_entry_binding,
+)
 
 SCHEMA = "HCU_INFERENCE_RECEIPT/v2"
 STATUS = "CANDIDATE_ONLY"
@@ -103,6 +109,22 @@ def _artifact_material(value: LoaderConsumedArtifact, field: str) -> dict[str, A
         "byte_count": byte_count,
         "evidence_source": ACTUAL_LOADER_EVIDENCE_SOURCE,
     }
+
+
+def _verify_entry_binding(
+    admitted_entry_bindings: Mapping[str, Any],
+    admission_sha256: str,
+    expected_event_sha256: str,
+) -> str:
+    """Reuse the router's sole typed Entry-binding law at the inference boundary."""
+    try:
+        return resolve_admitted_entry_binding(
+            admitted_entry_bindings,
+            admission_sha256,
+            expected_event_sha256=expected_event_sha256,
+        )
+    except ReactiveRoutingError as exc:
+        raise InferenceReceiptV2Error(f"ENTRY_BINDING_REJECTED:{exc}") from exc
 
 
 def _verify_load(
@@ -191,10 +213,11 @@ def make_inference_receipt_v2(
     admission_sha256 = _sha256(entry_admission_sha256, "entry_admission_sha256")
     if decision.entry_admission_sha256 != admission_sha256:
         raise InferenceReceiptV2Error("ROUTE_ENTRY_ADMISSION_IDENTITY_MISMATCH")
-    if not isinstance(admitted_entry_bindings, Mapping):
-        raise InferenceReceiptV2Error("ADMITTED_ENTRY_BINDING_REGISTRY_REQUIRED")
-    if _sha256(admitted_entry_bindings.get(admission_sha256), "admitted_entry_event_sha256") != decision.event_sha256:
-        raise InferenceReceiptV2Error("ENTRY_EVENT_ROUTE_IDENTITY_MISMATCH")
+    _verify_entry_binding(
+        admitted_entry_bindings,
+        admission_sha256,
+        decision.event_sha256,
+    )
 
     load = _verify_load(
         verified_engine_load_receipt_sha256,

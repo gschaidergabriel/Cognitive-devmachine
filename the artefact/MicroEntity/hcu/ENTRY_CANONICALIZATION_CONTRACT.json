@@ -1,9 +1,9 @@
 {
   "schema_version": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v1",
-  "status": "SOURCE_CONTRACT_CROSS_LANGUAGE_IDENTITY_NOT_YET_ADMITTED",
+  "status": "RFC8785_SOURCE_IMPLEMENTATION_CANDIDATE_NOT_YET_WIRED_OR_ADMITTED",
   "date": "2026-08-23",
-  "program": "ENTITYOS_HCU_XENO",
-  "scope": "Xeno Entry Fabric causal event identity for HCU/XCU routing and downstream inference receipts",
+  "program": "ENTITYOS_HCU",
+  "scope": "Typed Entry Fabric causal event identity for HCU routing and downstream inference receipts",
   "authority": {
     "canonical_state_evidence": "DETERMINISTIC_EXTERNAL_TO_MODEL_COGNITION",
     "effect_authority": "EffectGate/EffectJournal",
@@ -12,28 +12,40 @@
   },
   "current_implementation_scope": {
     "router": "reactive_event_router_v1.py",
-    "serializer": "PYTHON_JSON_SORT_KEYS_COMPACT_UTF8/v1",
+    "serializer": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
     "cross_language_identity_claim": false,
-    "law": "Current Python-local deterministic hashes MUST NOT be represented as proof of heterogeneous Entry-Fabric hash identity. Existing receipts keep their original schema/identity and are never silently reinterpreted under a later canonicalizer."
+    "law": "Current Python-local deterministic hashes remain legacy implementation-scoped until a newly versioned RFC8785 identity is wired and admitted. Existing receipts retain their original identity schema and are never silently reinterpreted."
   },
   "target_candidate": {
     "canonicalization": "RFC8785_JCS_IJSON/v1",
     "reference": "RFC 8785 JSON Canonicalization Scheme",
-    "admission_status": "CANDIDATE_REQUIRES_IMPLEMENTATION_AND_INDEPENDENT_CONFORMANCE_EVIDENCE",
+    "implementation": "entry_canonicalization_v1.py",
+    "tests": "test_entry_canonicalization_v1.py",
+    "admission_status": "SOURCE_IMPLEMENTATION_CANDIDATE_WITH_BOUNDED_CONFORMANCE_EVIDENCE_NOT_YET_IN_ROUTE_PATH",
+    "bounded_conformance": {
+      "official_selected_number_utf16_reorder_failure_vectors": "PASS_IN_ISOLATED_PROTOTYPE_6_OF_6_TESTS",
+      "independent_python_node_composite_vectors": "BYTE_IDENTICAL_3_OF_3",
+      "exact_branch_head_runtime_credit": 0
+    },
     "required_input_constraints": [
       "duplicate object property names rejected at raw ingress before ordinary Mapping construction can erase them",
       "all strings are valid Unicode and lone surrogates fail closed",
       "string contents are preserved as-is with no Unicode normalization performed by the canonicalization layer",
       "JSON numbers are finite and representable as IEEE-754 binary64; NaN and Infinity fail closed",
-      "higher-precision numeric application values are represented by an explicitly typed string/integer contract rather than silently rounded"
+      "higher-precision integer application values do not silently exceed the I-JSON-safe identity domain"
     ],
     "required_serialization": [
       "no inter-token whitespace",
-      "JSON primitive serialization follows the RFC 8785 ECMAScript-compatible rules",
+      "JSON primitive serialization follows RFC 8785 ECMAScript-compatible rules",
       "object properties sort recursively by raw property-name UTF-16 code units",
       "array element order is preserved while objects inside arrays are recursively canonicalized",
       "canonical output bytes are UTF-8"
     ]
+  },
+  "alternative_candidate_adjudication": {
+    "hcu_causal_canonical_v1.py": "RETAIN_RESEARCH_PROVENANCE_ONLY_NOT_ADMITTED; custom typed binary identity would require a separate bespoke interoperability contract and is not selected over the already-specified RFC8785 path",
+    "typed_entry_canonical_v1.py": "RETAIN_RESEARCH_PROVENANCE_ONLY_NOT_ADMITTED; deterministic CBOR subset rejects float-valued reactive signals and is not selected as the single end-to-end event-route canonicalizer",
+    "package_or_runtime_authority_for_alternatives": false
   },
   "causal_identity_boundary": {
     "causal_event_excludes_routing_resolution_metadata": [
@@ -73,19 +85,16 @@
     "mixed_canonicalizer_replay_without_schema_binding": "REJECT",
     "canonicalizer_downgrade_or_unknown_version": "REJECT"
   },
-  "required_discriminators_before_cross_language_promotion": [
-    "official RFC 8785 number serialization vectors",
-    "official RFC 8785 UTF-16 property ordering vector",
-    "same admitted typed event canonicalized independently by at least two implementations/languages yields byte-identical canonical output and identical event digest",
-    "same event with reordered JSON properties yields identical canonical bytes/digest",
-    "duplicate-property raw JSON is rejected before event identity is minted",
-    "NaN Infinity lone-surrogate and untyped-extension cases fail closed",
-    "numeric edge cases including negative zero exponent formatting and IEEE-754 rounding match the admitted canonicalization contract",
-    "causal event digest remains stable across engine resolution while route digest changes when exact engine artifact identity changes",
-    "downstream inference receipt with wrong or missing canonicalization version fails closed"
+  "remaining_gates_before_cross_language_promotion": [
+    "wire the selected RFC8785 implementation into Entry event, router policy, engine and route identity under new versioned schemas",
+    "bind canonicalization schema/version into downstream inference receipts",
+    "reject duplicate-property raw JSON before Mapping construction",
+    "run exact-source isolated branch regressions after wiring",
+    "independently compare the exact admitted event through at least two implementations/languages",
+    "rebuild the package snapshot only after canonicalization semantics settle"
   ],
   "promotion_credit": 0,
   "runtime_credit": 0,
   "whole_entityos_pass": false,
-  "note": "This contract advances the Xeno Entry Fabric/XPU/XCU identity seam without adding a second state, routing, or effect authority. RFC 8785 is a candidate interoperability mechanism; source documentation alone does not establish conformance."
+  "note": "This selects one interoperability candidate without creating a second state, routing, truth, recovery, or effect authority. Source/prototype conformance does not establish exact EntityOS/HCU runtime acceptance."
 }

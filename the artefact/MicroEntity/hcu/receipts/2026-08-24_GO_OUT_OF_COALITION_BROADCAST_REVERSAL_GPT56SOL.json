@@ -1,0 +1,125 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_BROADCAST_FALSIFIER/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "join": {
+    "research_main_observed": "bceb96459308a2a90a2c9844d97d23dbd2ba341a",
+    "effective_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "retained_hcu_head_observed": "d929cf822c7889e913bd4af8310f00cd9e7f2b8d",
+    "single_retained_hcu_lane_preserved": true
+  },
+  "source_scope": {
+    "prototype_path": "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
+    "prototype_blob_observed": "8e1245f1ea668e1b71d268ba3125ebb384d6f660",
+    "trace_schema": "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3",
+    "vector_control_abi": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "hyperposition_margin_q": 750,
+    "aggregation": "all validated contributions weighted by 1 + gate_q",
+    "packet_role": "winner.role"
+  },
+  "finding": {
+    "classification": "OUT_OF_COALITION_BROADCAST_REVERSAL",
+    "claim": "Cells excluded from the selected Hyperposition/GWT coalition can dominate and reverse the emitted Global J-Space vector while the winner and packet role remain unchanged.",
+    "risk": "The trace can describe one selected winner/role while the actual broadcast direction is dominated by nonselected cells. Training on that packet can therefore teach a control semantics that is not causally aligned with the reported coalition unless all-cell global mixing is made an explicit separate contract."
+  },
+  "bounded_diagnostic": {
+    "winner": {
+      "cell_id": "winner",
+      "vector": [1.0],
+      "gate_metrics": {
+        "novelty": 0.9,
+        "contradiction": 0.9,
+        "uncertainty": 0.9,
+        "goal_pressure": 0.9,
+        "effect_pressure": 0.9,
+        "evidence_quality": 0.9
+      },
+      "gate_q": 9000
+    },
+    "losers": {
+      "count": 6,
+      "vector_each": [-1.0],
+      "gate_metrics_each": {
+        "novelty": 0.8,
+        "contradiction": 0.8,
+        "uncertainty": 0.8,
+        "goal_pressure": 0.8,
+        "effect_pressure": 0.8,
+        "evidence_quality": 0.8
+      },
+      "gate_q_each": 8000,
+      "winner_minus_loser_gate_q": 1000,
+      "outside_hyperposition_margin": true
+    },
+    "baseline_vector_winner_only": 1.0,
+    "all_cell_weighted_vector": -0.6842142193064009,
+    "winner_identity_changes": false,
+    "hyperposition_expected": ["winner"],
+    "broadcast_direction_reversed": true
+  },
+  "hypotheses": {
+    "preferred_contract": "The role-relevant emitted packet should aggregate only the admitted GWT/Hyperposition coalition that justifies that role, not unrelated losing cells outside the selection margin.",
+    "counterhypothesis": "The packet is intentionally a population-wide global mixture and winner.role is only a target label, not a description of causal contributors.",
+    "discriminator_result": "Current source behavior supports the population-wide mixture mechanically, but the trace and role labeling do not explicitly bind that stronger semantics. The mechanism is therefore under-specified for training promotion."
+  },
+  "repair_candidates": [
+    {
+      "candidate": "COALITION_ONLY_AGGREGATION",
+      "assessment": "PREFERRED_SIMPLE",
+      "reason": "Aligns broadcast contributors with winner/hyperposition selection and preserves explicit alternatives within the admitted margin."
+    },
+    {
+      "candidate": "WINNER_ONLY_AGGREGATION",
+      "assessment": "SIMPLE_BUT_BRITTLE",
+      "reason": "Prevents reversal but discards the intended near-tie Hyperposition contribution."
+    },
+    {
+      "candidate": "EXPLICIT_GLOBAL_ALL_CELL_PACKET",
+      "assessment": "STRUCTURALLY_DIFFERENT",
+      "reason": "Keep all-cell mixture only if packet role/trace semantics become explicitly global and every contributing cell is causally bound to admitted GRID/inference evidence."
+    }
+  ],
+  "coordination": {
+    "source_write_attempted_before_latest_parallel_refresh": true,
+    "stale_write_result": "GITHUB_409_FAIL_CLOSED",
+    "stale_source_overwrite_performed": false,
+    "parallel_abi_dataset_repair_detected": true,
+    "duplicate_abi_or_dataset_authority_created": false,
+    "source_patch_withheld_due_hot_retained_lane": true
+  },
+  "unusual_experiment_accounting": {
+    "shared_macrocycle_slot_already_consumed": "AUTHORITY_CONSTANT_TRANSPLANT",
+    "this_diagnostic_unusual_experiment_credit": 0,
+    "reason": "Retained PR coordination already records the shared go unusual-experiment slot as consumed. Preserve this new counterexample only as zero-credit bounded falsifier evidence rather than claiming a second unusual experiment."
+  },
+  "execution": {
+    "authorized_free_sandbox_started_by_this_organ": false,
+    "connected_vercel_surface_direct_sandbox_create_or_runcommand": false,
+    "exact_runtime_test_executed": false,
+    "diagnostic_scope": "SOURCE_FORMULA_COUNTEREXAMPLE_ONLY",
+    "runtime_credit_change": 0
+  },
+  "free_only": {
+    "effective_supervisor": "SUPERVISOR_STEERING_8_61",
+    "together_preflight_performed": false,
+    "together_credentials_accessed": false,
+    "together_job_created": false,
+    "paid_execution_used": false,
+    "vps_or_self_hosted_test_used": false
+  },
+  "evidence_boundary": {
+    "falsifier_evidence": "COMMITTED_SOURCE_SCOPE",
+    "mechanism_repair": "NOT_COMMITTED_HOT_LANE_COORDINATION",
+    "jspace_gwt_runtime_causality": "UNVERIFIED",
+    "entityos_hcu_whole_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On the single retained PR1263 path, adjudicate coalition-only versus explicit-global broadcast semantics, add a deterministic regression that prevents silent out-of-coalition reversal under the selected contract, bind every admitted broadcast contributor to causal GRID/inference evidence when required, then run the exact-current FREE authorized isolated HCU/J-Space regression batch when a callable sandbox execution path exists."
+}

@@ -2,9 +2,9 @@
 
 Status: SOURCE CONTRACT / RUNTIME CREDIT ZERO UNTIL EXACT EXECUTION
 
-Purpose: bind one executable Mini Entity / EntityOS / Zero cognition cycle to exact source, identity, bundled cognition bytes, Unified J-Space/GWT workspace state, inference-engine capability mode, candidate-only return, deterministic validation and final state/effect outcome.
+Purpose: bind one executable Mini Entity / EntityOS / Zero cognition cycle to exact source, identity, bundled cognition bytes, Unified J-Space/GWT workspace state, inference-engine capability mode, candidate-only return, upstream backend admission, deterministic validation and final state/effect outcome.
 
-This instrument operationalizes the current owner architecture without promoting architecture prose to runtime truth.
+This instrument operationalizes the current owner architecture without promoting architecture prose, workspace stability or model output to runtime/factual truth.
 
 ## ClayCode semantic contract
 
@@ -29,6 +29,10 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
   );
 
   law INFERENCE_BINDING {
+    executed -> backend_admitted;
+    executed -> candidate_result_digest + epistemic_status;
+    !executed -> candidate_result_digest == null;
+    !executed -> epistemic_status == NOT_APPLICABLE;
     result = CANDIDATE_INFERENCE;
     digest(capability_profile) + digest(adapter_contract) + adapter_version;
   }
@@ -45,14 +49,23 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
   }
 
   law OBSERVE_INTERVENE_SPLIT {
-    observation != intervention;
+    JSPACE_OBSERVED != JSPACE_INTERVENED;
+    intervention.executed -> inference.executed;
     intervention.executed -> jspace_mode == FULL_LOCAL_LATENT;
+    intervention.executed -> local_activation_access == true;
     intervention.executed -> digest(implementation) + digest(calibration);
   }
 
   law GWT {
     winner subset_of candidates;
     workspace_before + competition + workspace_after are receipt-bound;
+  }
+
+  law EPISTEMIC_AUTHORITY {
+    workspace_stability != factual_truth;
+    latent_geometry != factual_truth;
+    canonical_state_write_committed | effect_executed
+      -> epistemic_status == MEASURED_SUPPORTED;
   }
 
   law AUTHORITY {
@@ -67,11 +80,26 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
 
   law FRESHNESS {
     stale_zero_identity | stale_bundled_manifest | stale_generation
-      -> no_accept + no_state_write + no_effect;
+      -> no_backend_admission + no_inference_execution + no_accept + no_state_write + no_effect;
+  }
+
+  law PROVIDER_ADMISSION {
+    provider_policy_authority = external_existing_supervisor_gate;
+    receipt binds digest(provider_policy_authority) + cost_class + backend_admitted;
+    receipt does not mint provider policy;
   }
 
   law FREE_ONLY {
-    free_only == true -> secret_touch_count == 0 + network_touch_count == 0;
+    free_only && cost_class in [PAID, SUBSCRIPTION, UNKNOWN]
+      -> backend_admitted == false
+      + secret_touch_count == 0
+      + network_touch_count == 0;
+    free_only && cost_class == FREE
+      != universal_no_network_policy;
+  }
+
+  law ENVELOPE_INTEGRITY {
+    receipt_envelope_digest = sha256(canonical_json(receipt_without_receipt_envelope_digest));
   }
 
   R6.credit := EXACT_RUNTIME_ONLY_IF_ALL_REQUIRED_FIELDS_AND_LAWS_PASS;
@@ -80,62 +108,32 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
 
 ## Required JSON fields
 
-- `receipt_version`: exact `UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1`
-- `source.commit`: 40-hex Git commit SHA
-- `source.tree`: 40-hex Git tree SHA
-- `source.dirty`: must be `false` for runtime credit
-- `runtime.entityos_version`
-- `runtime.mini_entity_version`
-- `runtime.entity_generation`
-- `identity.zero_digest`: SHA-256
-- `identity.grf_digest`: SHA-256
-- `bundled_core.manifest_digest`: SHA-256
-- `bundled_core.checkpoint_digest`: SHA-256
-- `bundled_core.tokenizer_digest`: SHA-256
-- `bundled_core.runtime_digest`: SHA-256
-- `fabric.jspace_profile_digest`: SHA-256
-- `fabric.lens_profile_digest`: SHA-256 for local J-Space modes; nullable only when the active mode does not require a fitted lens
-- `fabric.workspace_policy_digest`: SHA-256
-- `fabric.workspace_calibration_digest`: SHA-256; exact calibration identity, distinct from policy identity
-- `fabric.intervention.executed`: boolean
-- `fabric.intervention.implementation_digest`: SHA-256 when intervention executed, else nullable
-- `fabric.intervention.calibration_digest`: SHA-256 when intervention executed, else nullable
-- `workspace.digest_before`: SHA-256
-- `workspace.digest_after`: SHA-256
-- `workspace.gwt_candidates`: ordered candidate records containing unique `candidate_id`
-- `workspace.gwt_winners`: ordered unique candidate IDs, each present in `gwt_candidates`
-- `workspace.jspace_observation_refs`
-- `workspace.thalamus_decisions`
-- `workspace.epq_refs`
-- `workspace.hyperposition_refs`
-- `workspace.claycode_refs`
-- `workspace.omega_refs`
-- `inference.engine_class`: `BUNDLED_08B | CLAUDE_CODE | ADAPTIVE_BACKEND | NONE`
-- `inference.jspace_mode`: `FULL_LOCAL_LATENT | LOCAL_OBSERVE_ONLY | COMPILED_EXTERNAL | PLAIN_COMPATIBILITY | NONE`
-- `inference.adapter_version`: nonempty version string
-- `inference.capability_profile_digest`: SHA-256
-- `inference.adapter_contract_digest`: SHA-256
-- `inference.local_activation_access`: boolean
-- `inference.external_hidden_state_claimed`: boolean
-- `inference.inference_packet_digest`: SHA-256
-- `inference.candidate_result_digest`: SHA-256
-- `validation.decision`: `ACCEPT_CANDIDATE | REJECT_CANDIDATE | ABSTAIN | ERROR`
-- `validation.reconciliation_digest`: SHA-256 binding deterministic validation/reconciliation identity/result
-- `validation.candidate_attempted_direct_state_mutation`: boolean
-- `validation.candidate_attempted_direct_effect`: boolean
-- `validation.canonical_state_write_committed`: boolean
-- `validation.effect_executed`: boolean
-- `execution_policy.free_only`: boolean
-- `execution_policy.secret_touch_count`: nonnegative integer
-- `execution_policy.network_touch_count`: nonnegative integer
-- `freshness.stale_zero_identity`: boolean
-- `freshness.stale_bundled_manifest`: boolean
-- `freshness.stale_generation`: boolean
-- `terminal_result_digest`: SHA-256
+The original v1 fields remain required, with these strengthened bindings:
+
+- `source.commit`, `source.tree`: exact 40- or 64-hex Git object IDs;
+- `source.dirty`: exact `false` for runtime credit;
+- `runtime.entity_generation`, Zero/GRF digests and bundled core manifest/checkpoint/tokenizer/runtime digests;
+- J-Space/lens/workspace policy/calibration identities;
+- `fabric.intervention.executed` plus exact implementation/calibration digests when true;
+- GWT candidate/winner sets and workspace/J-Space/Thalamus/EPQ/Hyperposition/ClayCode/omega references;
+- `inference.engine_class`: `BUNDLED_08B | CLAUDE_CODE | ADAPTIVE_BACKEND | NONE`;
+- `inference.executed`: boolean;
+- `inference.epistemic_status`: `MEASURED_SUPPORTED | UNKNOWN | ERROR | REFUTED | NOT_APPLICABLE`;
+- `inference.jspace_mode`: `FULL_LOCAL_LATENT | LOCAL_OBSERVE_ONLY | COMPILED_EXTERNAL | PLAIN_COMPATIBILITY | NONE`;
+- adapter/capability/inference-packet identities;
+- `inference.candidate_result_digest`: SHA-256 only when inference executed; explicit null otherwise;
+- validation decision/reconciliation and direct-state/direct-effect attempt flags;
+- canonical state-write/effect results;
+- `execution_policy.free_only`;
+- `execution_policy.cost_class`: `LOCAL | FREE | PAID | SUBSCRIPTION | UNKNOWN`;
+- `execution_policy.backend_admitted`;
+- `execution_policy.policy_authority_digest`: digest of the existing upstream supervisor/provider policy state used for admission;
+- provider secret/network touch counters;
+- stale Zero/manifest/generation flags;
+- `terminal_result_digest`;
+- `receipt_envelope_digest`: SHA-256 over canonical JSON of the receipt with this field omitted.
 
 ## Observation versus intervention
-
-The receipt deliberately separates latent observation from causal intervention.
 
 `JSPACE_OBSERVED != JSPACE_INTERVENED`
 
@@ -143,46 +141,59 @@ The receipt deliberately separates latent observation from causal intervention.
 
 `PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY`
 
-A local model may receive `FULL_LOCAL_LATENT` only when exact local activation access is actually present. Both local J-Space modes require an exact lens profile and exact workspace calibration identity. Any claimed latent intervention additionally requires implementation and intervention-calibration digests. A closed/external Claude Code path is `COMPILED_EXTERNAL`; it must never claim Claude private residual-stream access. The same no-fake-hidden-state rule applies to every external/compatibility mode.
+A local model may receive `FULL_LOCAL_LATENT` only when exact local activation access is actually present. Both local J-Space modes require exact lens/workspace-calibration identity. Any claimed latent intervention additionally requires inference execution, activation access, intervention implementation identity and intervention calibration identity.
 
-## Candidate and authority boundary
+A closed/external Claude Code path is `COMPILED_EXTERNAL`; it must never claim Claude private residual-stream access. The same no-fake-hidden-state rule applies to every external/compatibility mode.
 
-An inference engine result is always candidate inference. A candidate that attempts direct state mutation or direct effect authority cannot be accepted as-is, even when no mutation/effect actually occurred. Canonical writes/effects require `ACCEPT_CANDIDATE` only after deterministic reconciliation, whose digest is bound into the receipt.
+## Epistemic and authority boundary
 
-This preserves:
+An inference engine result is always candidate inference. Workspace/GWT/J-Space stability is not factual truth.
 
-`INFERENCE_ENGINE != CANONICAL_TRUTH_AUTHORITY`
+`WORKSPACE_STABLE + CANDIDATE_REFUTED != CANONICAL_TRUTH`
 
-`INFERENCE_ENGINE != DIRECT_EFFECT_AUTHORITY`
+`CANDIDATE_UNKNOWN != CANONICAL_WRITE_AUTHORITY`
+
+`CANDIDATE_ERROR != EFFECT_AUTHORITY`
+
+A canonical write or executed effect requires `MEASURED_SUPPORTED` in addition to deterministic `ACCEPT_CANDIDATE` reconciliation. Direct candidate state/effect attempts remain fail-closed.
+
+## Provider-admission boundary
+
+The existing supervisor/provider gate remains the policy authority. This receipt only binds its exact policy digest, cost classification and admission result.
+
+Under current `FREE_ONLY=true`:
+- `PAID`, `SUBSCRIPTION` and `UNKNOWN` lanes must be rejected before backend execution, provider secret lookup or provider network I/O;
+- a `FREE` backend is not automatically converted into a no-network backend; its network/secret permissions remain subject to the upstream capability/policy contract;
+- inference execution without recorded backend admission is invalid.
+
+This avoids a second provider-policy authority inside the cognitive fabric.
+
+## Freshness and envelope integrity
+
+Stale Zero identity, bundled manifest or generation now blocks backend admission/inference execution as well as acceptance/state/effect promotion.
+
+`receipt_envelope_digest` detects post-receipt mutation of bound evidence fields. Non-finite JSON is rejected so canonical digest identity cannot depend on permissive NaN/Infinity serialization.
 
 ## Runtime-credit boundary
 
-A valid source contract or a passing synthetic validator test earns zero AgentZero/Ubuntu runtime credit by itself.
+A valid source contract or passing isolated validator tests earn zero AgentZero/Ubuntu runtime credit by themselves.
 
-Runtime credit requires an actually started exact-source run which emits the receipt from the real path and binds at least:
+Runtime credit requires an actually started exact-source run which emits this receipt from the real path and binds at least:
 
-`canonical evidence -> Zero/GRF projection -> Unified J-Space/GWT competition -> chosen engine/capability profile -> InferencePacket -> candidate result -> EntityOS validation/reconciliation -> canonical write/effect decision`.
+`canonical evidence -> Zero/GRF projection -> Unified J-Space/GWT competition -> upstream backend admission -> chosen engine/capability profile -> InferencePacket -> candidate result/epistemic status -> EntityOS validation/reconciliation -> canonical write/effect decision`.
 
-When the intentionally offline host is next started, pair this receipt with the required PRESTART/POSTSTART observation boundary and J-Space/GWT boot-binding evidence. Unknown or missing exact digests fail closed.
+When the intentionally offline host is next started, pair this receipt with PRESTART/POSTSTART observation and the J-Space/GWT boot-binding boundary. Unknown or missing exact digests fail closed.
 
-## Negative controls
+## Regression status for this fusion
 
-Deterministic controls SHOULD cover:
+The canonical validator and test bytes on branch `go/fuse-ucf-receipt-canonical-v1` passed `py_compile` and 20/20 deterministic isolated tests. Their exact Git blob IDs matched the locally executed bytes.
 
-- Claude Code or another external mode with hidden-state claim -> reject;
-- FREE_ONLY with secret/network touch -> reject;
-- candidate attempting direct state/effect authority -> reject acceptance/promotion/bypass;
-- stale Zero identity, bundled manifest or generation -> reject promotion;
-- local J-Space mode without an exact lens profile/workspace calibration identity -> reject;
-- intervention in `COMPILED_EXTERNAL` or without implementation/calibration digest -> reject;
-- GWT winner absent from candidate set or duplicated winner/candidate IDs -> reject;
-- dirty source presented for exact runtime credit -> reject;
-- state/effect commit after non-accept validation -> reject.
+The `WORKSPACE_STABILITY_TRUTH_CONFUSION_MUTATION` case is the single unusual experiment already consumed by the current user-triggered `go`; its retained canonical form is regression-only after fusion. `AUTHORITY_ALIAS_POISON_V1` remains an ordinary deterministic adversarial regression family.
 
-`AUTHORITY_ALIAS_POISON_V1` is a deterministic adversarial regression family over those controls. For the `go` that created this source delta, no upstream atomic macrocycle lease/identifier was available to this organ, so the unusual-experiment classification is explicitly `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`. No macrocycle identifier is invented after the fact. The locally observed 8/8 fail-closed poison result remains mechanism evidence, not an unusual-experiment slot claim.
+No additional unusual experiment was consumed during fusion.
 
 ## Evidence class
 
-Current contract state at creation: `SOURCE_CONTRACT + LOCAL_SYNTHETIC_MECHANISM_EVIDENCE`.
+Current fusion evidence: `EXACT_GIT_BLOB_LOCAL_COMPONENT_MECHANISM_SUPPORTED`.
 
-Not implied: exact Ubuntu execution, J-Space calibration quality, GWT production validity, Claude Code adapter PASS, model quality, canonical semantic promotion, effect safety PASS, whole Mini Entity PASS, consciousness or AGI.
+Not implied: exact Ubuntu execution, J-Space calibration quality, GWT production validity, Claude Code adapter PASS, bundled 0.8B model quality, canonical semantic promotion, whole Mini Entity PASS, consciousness or AGI.

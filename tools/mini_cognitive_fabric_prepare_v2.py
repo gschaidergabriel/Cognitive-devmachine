@@ -181,10 +181,17 @@ def materialize_admission(
 
     if capability_module is None:
         import mini_inference_capability_binding_v1 as capability_module  # type: ignore[no-redef]
-    route = capability_module.resolve_from_profile(profile)
+    route = capability_module.resolve_bound_route(
+        profile, prepare, expected_generation=previous_generation
+    )
     _need(type(route) is dict and route.get("ok") is True, "CAPABILITY_BINDING_RESOLVE_FAILED")
     _need(route.get("profile_id") == profile_id and route.get("profile_hash") == profile_hash, "CAPABILITY_PROFILE_BINDING_MISMATCH")
-    capability_binding_digest = _digest(route.get("binding_digest"), "capability_binding_digest")
+    _need(route.get("causal_turn_id") == causal_turn_id, "CAPABILITY_ROUTE_TURN_MISMATCH")
+    _need(route.get("turn_binding_digest") == turn_binding_digest, "CAPABILITY_ROUTE_BINDING_MISMATCH")
+    _need(route.get("boot_binding_digest") == boot_binding_digest, "CAPABILITY_ROUTE_BOOT_MISMATCH")
+    _need(route.get("workspace_digest") == prepare.get("workspace_digest"), "CAPABILITY_ROUTE_WORKSPACE_MISMATCH")
+    capability_binding_digest = _digest(route.get("capability_binding_digest"), "capability_binding_digest")
+    capability_route_digest = _digest(route.get("route_digest"), "capability_route_digest")
     target_engine_class = _text(route.get("target_engine_class"), "target_engine_class")
     ucf_engine_class = _text(route.get("ucf_engine_class"), "ucf_engine_class")
     jspace_mode = _text(route.get("jspace_mode"), "jspace_mode")
@@ -251,6 +258,7 @@ def materialize_admission(
         "inference_packet_digest": inference_packet_digest,
         "admitted_context_digest": admitted_context_digest,
         "capability_binding_digest": capability_binding_digest,
+        "capability_route_digest": capability_route_digest,
         "target_engine_class": target_engine_class,
         "ucf_engine_class": ucf_engine_class,
         "jspace_mode": jspace_mode,

@@ -20,6 +20,9 @@ CONTROL43 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_P
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
 ROOT_CLAUDE = "CLAUDE.md"
+WORKER_DIRECTIVE = "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
+CLAYVERSE_WORKER_MARKER = "[CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]"
+LEGACY_WORKER_MARKER = "[MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]"
 
 
 def load_json(path: Path):
@@ -55,11 +58,12 @@ def validate(root: Path) -> dict:
         "control43": root / CONTROL43,
         "control44": root / CONTROL44,
         "steering844": root / STEERING844,
+        "worker_directive": root / WORKER_DIRECTIVE,
     }
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
     if errors:
-        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2", "pass": False, "errors": errors}
+        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3", "pass": False, "errors": errors}
 
     try:
         canonical = load_json(paths["canonical"])
@@ -73,7 +77,7 @@ def validate(root: Path) -> dict:
         steering = load_json(paths["steering844"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
-            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
             "pass": False,
             "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
         }
@@ -84,6 +88,7 @@ def validate(root: Path) -> dict:
     architecture = paths["architecture"].read_text(encoding="utf-8")
     readme = paths["readme"].read_text(encoding="utf-8")
     repo_claude = paths["repo_claude"].read_text(encoding="utf-8")
+    worker_directive = paths["worker_directive"].read_text(encoding="utf-8")
 
     # Preserve the canonical research-entity join/identity fences while changing product authority.
     require(errors, bootstrap.get("entity_id") == canonical.get("entity_id"), "BOOTSTRAP_CANONICAL_ENTITY_MISMATCH")
@@ -102,6 +107,7 @@ def validate(root: Path) -> dict:
     require(errors, bootstrap.get("release_form") == EXPECTED_RELEASE, "BOOTSTRAP_RELEASE_FORM_MISMATCH")
     require(errors, bootstrap.get("together_api") == "FORBIDDEN", "BOOTSTRAP_TOGETHER_FENCE_MISSING")
     require(errors, bootstrap.get("vps_testing") == "FORBIDDEN", "BOOTSTRAP_VPS_TEST_FENCE_MISSING")
+    require(errors, bootstrap.get("all_worker_protocol") == WORKER_DIRECTIVE, "BOOTSTRAP_WORKER_DIRECTIVE_POINTER_MISMATCH")
 
     require(errors, program.get("program_id") == "clayverse-single-container", "PROGRAM_ID_MISMATCH")
     require(errors, program.get("stage") == EXPECTED_STAGE and program.get("current_stage") == EXPECTED_STAGE, "PROGRAM_STAGE_MISMATCH")
@@ -215,8 +221,18 @@ def validate(root: Path) -> dict:
     require(errors, "MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in repo_claude_head, "ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE")
     require(errors, "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.MD" not in repo_claude_head, "ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE")
 
+    # BOOTSTRAP_MINIMAL actively points delegated workers at this file. Treat it as a
+    # transitive product-authority surface and reject stale Mini Entity prompt steering.
+    worker_upper = worker_directive.upper()
+    require(errors, "ACTIVE PRODUCT: **CLAYVERSE**" in worker_upper, "WORKER_DIRECTIVE_CLAYVERSE_PRODUCT_MISSING")
+    require(errors, OWNER_DIRECTIVE.upper() in worker_upper, "WORKER_DIRECTIVE_OWNER_POINTER_MISSING")
+    require(errors, CLAYVERSE_WORKER_MARKER.upper() in worker_upper, "WORKER_DIRECTIVE_CLAYVERSE_PROMPT_MARKER_MISSING")
+    require(errors, LEGACY_WORKER_MARKER.upper() not in worker_upper, "WORKER_DIRECTIVE_LEGACY_MINI_ENTITY_PROMPT_MARKER")
+    require(errors, "ALL MINI ENTITY WORKERS OPERATE" not in worker_upper, "WORKER_DIRECTIVE_LEGACY_ACTIVE_ROLE")
+    require(errors, "CURRENT MINI ENTITY ACCEPTANCE CONTRACTS REMAIN AUTHORITATIVE" not in worker_upper, "WORKER_DIRECTIVE_LEGACY_ACCEPTANCE_AUTHORITY")
+
     return {
-        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
         "pass": not errors,
         "errors": errors,
         "checked": {name: path.relative_to(root).as_posix() for name, path in paths.items()},

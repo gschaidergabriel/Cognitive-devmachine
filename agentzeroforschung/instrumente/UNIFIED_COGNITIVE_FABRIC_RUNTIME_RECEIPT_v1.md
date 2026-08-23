@@ -22,7 +22,9 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
   invariant RECEIPT_LINEAGE {
     runtime_receipt -> exact_boot_binding_receipt;
     prose_pairing != cryptographic_pairing;
+    parent_hash_match + cross_identity_match -> lineage_candidate;
     missing_or_wrong_parent_receipt -> no_runtime_credit;
+    parent_hash_match + identity_mismatch -> no_runtime_credit;
   }
 
   invariant PORTABILITY {
@@ -149,16 +151,37 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
 
 The live cognition receipt is downstream evidence. It must not merely state that a compatible boot receipt exists somewhere else.
 
-For every runtime cycle submitted for credit, the producer supplies the exact `JSPACE_GWT_BOOT_BINDING_RECEIPT/v1` bytes that were active for that boot, computes SHA-256 over those exact serialized bytes, and writes that digest into `provenance.boot_binding_receipt_digest`. The validator requires both the expected boot-receipt contract version and a syntactically valid SHA-256 digest. Acceptance tooling that has both artifacts MUST independently hash the actual presented boot receipt and compare it to this field before granting any runtime credit.
+For every runtime cycle submitted for credit, the producer supplies the exact `JSPACE_GWT_BOOT_BINDING_RECEIPT/v1` bytes that were active for that boot, computes SHA-256 over those exact serialized bytes, and writes that digest into `provenance.boot_binding_receipt_digest`.
 
-This closes the receipt-splice class:
+Chain validation is deliberately split into two non-competing responsibilities:
+
+1. the canonical `validate_jspace_gwt_boot_binding_v1.py` remains the sole validator of the boot receipt's own full schema/laws;
+2. `validate_unified_cognitive_fabric_receipt_v1.py --boot-binding-receipt BOOT.json RUNTIME.json` proves downstream lineage by hashing the exact presented parent bytes and cross-checking identity-bearing fields.
+
+The runtime chain validator compares at least:
+
+- source commit/tree;
+- bundled manifest/checkpoint/tokenizer/runtime digests;
+- Zero/GRF digests;
+- GWT workspace policy/calibration digests;
+- lens-profile digest when the runtime receipt carries one;
+- Claude adapter version/capability digest when `engine_class == CLAUDE_CODE`.
+
+A parent digest can therefore be perfectly self-consistent and still fail if its identity-bearing state disagrees with the runtime receipt.
+
+This closes two distinct splice classes:
 
 ```text
 VALID_BOOT_RECEIPT_A + VALID_RUNTIME_RECEIPT_B != VALID_CHAIN
 unless SHA256(BOOT_RECEIPT_A_BYTES) == RUNTIME_RECEIPT_B.provenance.boot_binding_receipt_digest
+
+HASH_MATCHING_BOOT_A + RUNTIME_B != VALID_CHAIN
+unless cross_identity(BOOT_A, RUNTIME_B) == MATCH
 ```
 
-The runtime receipt does not gain authority from the digest. The digest only identifies its immediate upstream provenance object.
+The runtime receipt does not gain authority from the digest. The digest only identifies its immediate upstream provenance object, and cross-identity checks prevent a hash-consistent but semantically unrelated parent from being paired with the downstream cycle.
+
+Structural validation without `--boot-binding-receipt` may still report `ok=true`, but reports `chain_verified=false` and **must never be used as runtime-credit evidence**.
 
 ## Observation versus intervention
 
@@ -190,7 +213,7 @@ Runtime credit requires an actually started exact-source run which emits the rec
 
 `canonical evidence -> exact boot-binding receipt -> Zero/GRF projection -> Unified J-Space/GWT competition -> chosen engine/capability profile -> InferencePacket -> candidate result -> EntityOS validation/reconciliation -> canonical write/effect decision`.
 
-When the intentionally offline host is next started, pair this receipt with the required PRESTART/POSTSTART observation boundary and J-Space/GWT boot-binding evidence. The pairing is fail-closed: the actual boot-binding receipt presented to acceptance tooling must hash to `provenance.boot_binding_receipt_digest`. Unknown, missing or mismatched exact digests give zero runtime credit.
+When the intentionally offline host is next started, pair this receipt with the required PRESTART/POSTSTART observation boundary and J-Space/GWT boot-binding evidence. The pairing is fail-closed: the actual boot-binding receipt presented to acceptance tooling must hash to `provenance.boot_binding_receipt_digest`, pass its own canonical validator, and cross-match the runtime receipt's identity-bearing fields. Unknown, missing or mismatched exact digests/identities give zero runtime credit.
 
 ## Negative controls
 
@@ -198,6 +221,7 @@ Deterministic controls SHOULD cover:
 
 - missing, malformed or wrong-version upstream boot-binding receipt identity -> reject;
 - actual paired boot-receipt SHA-256 not equal to `provenance.boot_binding_receipt_digest` -> reject at chain acceptance;
+- hash-matching boot receipt whose checkpoint/tokenizer/runtime/Zero/GRF/GWT/lens/Claude identities disagree with the runtime receipt -> reject;
 - Claude Code or another external mode with hidden-state claim -> reject;
 - FREE_ONLY with secret/network touch -> reject;
 - candidate attempting direct state/effect authority -> reject acceptance/promotion/bypass;

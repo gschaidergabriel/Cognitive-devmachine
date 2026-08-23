@@ -7,16 +7,15 @@ truth, permissions, compute budget or effects.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from typing import Any, Mapping, Sequence
 
 try:
-    from .typed_entry_canonical_v1 import CANONICALIZATION_SCHEMA, CanonicalEncodingError, encode_canonical
+    from .hcu_causal_canonical_v1 import CANONICALIZATION_SCHEMA, HCUCanonicalizationError, canonical_sha256
 except ImportError:
-    from typed_entry_canonical_v1 import CANONICALIZATION_SCHEMA, CanonicalEncodingError, encode_canonical
+    from hcu_causal_canonical_v1 import CANONICALIZATION_SCHEMA, HCUCanonicalizationError, canonical_sha256
 
 ENTRY_SCHEMA = "XENO_ENTRY_PACKET/v1"  # compatibility wire name; product authority is EntityOS/HCU
 ENTRY_EVENT_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v1"
@@ -67,10 +66,9 @@ class EntryPacket:
 
 def _identity_sha256(value: Any, field: str) -> str:
     try:
-        encoded = encode_canonical(value)
-    except CanonicalEncodingError as exc:
+        return canonical_sha256(value)
+    except HCUCanonicalizationError as exc:
         raise EntryFabricError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
-    return hashlib.sha256(encoded).hexdigest()
 
 
 def _text(value: Any, field: str, *, optional: bool = False) -> str | None:
@@ -196,8 +194,8 @@ def parse_entry_json(raw: str | bytes | bytearray) -> Mapping[str, Any]:
     """Parse untrusted raw JSON before typed admission or causal identity creation.
 
     This closes the pre-Mapping prerequisite in ENTRY_CANONICALIZATION_CONTRACT.json.
-    It does not itself establish RFC 8785/JCS conformance; canonical identity remains the
-    responsibility of the separately versioned typed_entry_canonical_v1 profile.
+    Canonical identity is produced only by the separately versioned selected
+    ENTITYOS_HCU_TYPED_CANONICAL/v1 profile after typed admission.
     """
     if not isinstance(raw, (str, bytes, bytearray)):
         raise EntryFabricError("RAW_JSON_TEXT_OR_BYTES_REQUIRED")

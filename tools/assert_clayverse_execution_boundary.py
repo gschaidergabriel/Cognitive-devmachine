@@ -14,8 +14,14 @@ CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_C
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
 VERCEL_EXECUTION_PATH = "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md"
 EXPECTED_SURFACE = "AUTHORIZED_ISOLATED_SANDBOX_ONLY"
-EXPECTED_EXECUTION_GATE = "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
+EXPECTED_EXECUTION_GATE = "BLOCKED_ON_EXACT_CONTROLLER_REBIND_AND_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
 EXPECTED_VERCEL_BRIDGE = "SANDBOX_ADMISSION_PROVEN_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED"
+CURRENT_OWNER_DIRECTIVE = "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md"
+BRIDGE_PROVIDER_POLICY = "NO_SPECIFIC_API_PROVIDER_MANDATORY_UNLESS_EXPLICITLY_ADMITTED"
+BRIDGE_ENTITYOS_POLICY = "ENTITYOS_EXECUTION_CONDITIONAL_ON_EXPLICIT_ADMISSION"
+BRIDGE_REBIND_POLICY = "PR810_SEMANTIC_REBIND_REQUIRED_BEFORE_CURRENT_RUNTIME_CREDIT"
+BRIDGE_READY_POLICY = "PR810_READY_PREVIEW_REQUIRED_BEFORE_OWNER_ONE_SHOT"
+STALE_MANDATORY_PROVIDER_TEXT = "mistral is mandatory for this final test"
 
 
 def load_json(path: Path):
@@ -29,22 +35,24 @@ def require(errors: list[str], condition: bool, code: str) -> None:
 
 
 def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]:
-    """Cross-bind retained Vercel continuity and current work-selection in both directions.
+    """Cross-bind Vercel evidence, exact work selection, and current product semantics.
 
-    Positive bridge evidence constrains PROGRAM_STATE. Conversely, if PROGRAM_STATE claims
-    this bridge/frontier, loss or degradation of required continuity evidence must fail closed.
-    This never grants source, OCI, or product runtime credit.
+    Historical bridge admission never grants current runtime credit. Before an owner token
+    one-shot, retained PR #810 must be semantically rebound as one exact controller closure
+    and that exact closure must reach READY. Provider/EntityOS semantics remain subordinate
+    to the current ClayVerse owner directive/manifest.
     """
     errors: list[str] = []
     lower = vercel_execution.lower()
     bridge_proven = (
         "sandbox.create is not the blocker" in lower
-        and "runtime one-shot ingress" in lower
+        and "runtime one-shot" in lower
         and "github_read_token" in lower
     )
     stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
     execution = program.get("execution_policy") or {}
     frontier = str(program.get("current_frontier", ""))
+    frontier_lower = frontier.lower()
     credit = program.get("runtime_credit") or {}
     program_claims_bridge = (
         stage_gate == EXPECTED_EXECUTION_GATE
@@ -59,10 +67,26 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
     if not bridge_proven:
         return errors
 
-    require(errors, stage_gate == EXPECTED_EXECUTION_GATE, "PROGRAM_EXECUTION_FRONTIER_STALE_GENERIC_SURFACE_BLOCK")
+    require(errors, CURRENT_OWNER_DIRECTIVE.lower() in lower, "VERCEL_BRIDGE_CURRENT_OWNER_DIRECTIVE_MISSING")
+    require(errors, BRIDGE_PROVIDER_POLICY.lower() in lower, "VERCEL_BRIDGE_PROVIDER_NEUTRALITY_MISSING")
+    require(errors, BRIDGE_ENTITYOS_POLICY.lower() in lower, "VERCEL_BRIDGE_ENTITYOS_CONDITIONALITY_MISSING")
+    require(errors, BRIDGE_REBIND_POLICY.lower() in lower, "VERCEL_BRIDGE_PR810_SEMANTIC_REBIND_FENCE_MISSING")
+    require(errors, BRIDGE_READY_POLICY.lower() in lower, "VERCEL_BRIDGE_PR810_READY_FENCE_MISSING")
+    require(errors, STALE_MANDATORY_PROVIDER_TEXT not in lower, "VERCEL_BRIDGE_STALE_MANDATORY_PROVIDER")
+
+    require(errors, stage_gate == EXPECTED_EXECUTION_GATE, "PROGRAM_EXECUTION_FRONTIER_STALE_OR_INCOMPLETE")
     require(errors, execution.get("vercel_sandbox_bridge") == EXPECTED_VERCEL_BRIDGE, "PROGRAM_VERCEL_BRIDGE_STATE_MISSING")
     require(errors, execution.get("execution_frontier_binding") == VERCEL_EXECUTION_PATH, "PROGRAM_VERCEL_FRONTIER_BINDING_MISSING")
-    require(errors, "owner-start" in frontier.lower() and "github_read_token" in frontier.lower(), "PROGRAM_CURRENT_FRONTIER_TOKEN_INGRESS_MISSING")
+
+    rebind_i = frontier_lower.find("rebind")
+    ready_i = frontier_lower.find("ready")
+    owner_i = frontier_lower.find("owner-start")
+    token_i = frontier_lower.find("github_read_token")
+    require(
+        errors,
+        rebind_i >= 0 and ready_i > rebind_i and owner_i > ready_i and token_i >= owner_i,
+        "PROGRAM_CURRENT_FRONTIER_REBIND_READY_TOKEN_ORDER_INVALID",
+    )
     require(errors, credit.get("whole_clayverse") == 0, "PROGRAM_VERCEL_BRIDGE_FALSE_RUNTIME_CREDIT")
     return errors
 
@@ -80,7 +104,7 @@ def validate(root: Path) -> dict:
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
     if errors:
-        return {"schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2", "pass": False, "errors": errors}
+        return {"schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v3", "pass": False, "errors": errors}
 
     try:
         bootstrap = load_json(paths["bootstrap"])
@@ -89,7 +113,7 @@ def validate(root: Path) -> dict:
         steering = load_json(paths["steering844"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
-            "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2",
+            "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v3",
             "pass": False,
             "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
         }
@@ -97,14 +121,12 @@ def validate(root: Path) -> dict:
     sandbox_text = paths["sandbox_directive"].read_text(encoding="utf-8").lower()
     guest_text = paths["vps_guest_directive"].read_text(encoding="utf-8").lower()
 
-    # Newest owner authority: current executable work is isolated-sandbox-only.
     require(errors, "2026-08-23" in sandbox_text, "SANDBOX_DIRECTIVE_CURRENT_OWNER_DATE_MISSING")
     require(errors, "vps testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_VPS_BAN_MISSING")
     require(errors, "vps-hosted disposable kvm/vm/microvm/tcg guest testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_VPS_GUEST_BAN_MISSING")
     require(errors, "self-hosted vps test runners are **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_SELF_HOSTED_BAN_MISSING")
     require(errors, "production/deployment-host testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_PRODUCTION_BAN_MISSING")
 
-    # The older 2026-08-18 guest directive must stay historical and non-operative.
     require(errors, "**status:** **superseded**" in guest_text, "VPS_GUEST_DIRECTIVE_NOT_SUPERSEDED")
     require(errors, "superseded by the newer owner-directed clayverse bootstrap dated **2026-08-23**" in guest_text, "VPS_GUEST_DIRECTIVE_NEWER_AUTHORITY_MISSING")
     require(errors, "vps-hosted disposable kvm/vm/microvm/tcg guest testing is forbidden" in guest_text, "VPS_GUEST_DIRECTIVE_CURRENT_GUEST_BAN_MISSING")
@@ -124,9 +146,6 @@ def validate(root: Path) -> dict:
     require(errors, execution.get("production_host_testing_forbidden") is True, "PROGRAM_PRODUCTION_BAN_MISSING")
     require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(execution, sort_keys=True), "PROGRAM_STALE_VPS_DIRECTIVE_POINTER")
 
-    # The retained Vercel bridge is itself an authorized isolated sandbox path. If its
-    # continuity record is present, positive evidence must agree with PROGRAM_STATE; if
-    # PROGRAM_STATE selects it, the continuity record must exist and remain positive.
     vercel_path = root / VERCEL_EXECUTION_PATH
     stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
     program_claims_vercel = (
@@ -157,7 +176,7 @@ def validate(root: Path) -> dict:
     require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(steering, sort_keys=True), "STEERING844_STALE_VPS_DIRECTIVE_POINTER")
 
     return {
-        "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2",
+        "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v3",
         "pass": not errors,
         "errors": errors,
         "credit": "SOURCE_POLICY_ASSERTION_ONLY_ZERO_RUNTIME_CREDIT",

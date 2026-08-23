@@ -14,8 +14,9 @@ CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_C
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
 VERCEL_EXECUTION_PATH = "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md"
 EXPECTED_SURFACE = "AUTHORIZED_ISOLATED_SANDBOX_ONLY"
-EXPECTED_EXECUTION_GATE = "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
+EXPECTED_EXECUTION_GATE = "BLOCKED_ON_CURRENT_RUNTIME_FREEZE_REBIND_AND_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
 EXPECTED_VERCEL_BRIDGE = "SANDBOX_ADMISSION_PROVEN_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED"
+EXPECTED_RUNTIME_FREEZE_STATUS = "CURRENT_RUNTIME_FREEZE_REBIND_REQUIRED"
 
 
 def load_json(path: Path):
@@ -33,7 +34,9 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
 
     Positive bridge evidence constrains PROGRAM_STATE. Conversely, if PROGRAM_STATE claims
     this bridge/frontier, loss or degradation of required continuity evidence must fail closed.
-    This never grants source, OCI, or product runtime credit.
+    The current continuity record also requires a fresh immutable runtime freeze + #810 rebind
+    before the owner token-bearing one-shot may begin. This never grants source, OCI, or product
+    runtime credit.
     """
     errors: list[str] = []
     lower = vercel_execution.lower()
@@ -41,6 +44,10 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
         "sandbox.create is not the blocker" in lower
         and "runtime one-shot ingress" in lower
         and "github_read_token" in lower
+    )
+    current_rebind_required = (
+        "refresh exact current research main + retained admitted lanes once" in lower
+        and "rebind retained #810 controller once" in lower
     )
     stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
     execution = program.get("execution_policy") or {}
@@ -59,10 +66,17 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
     if not bridge_proven:
         return errors
 
-    require(errors, stage_gate == EXPECTED_EXECUTION_GATE, "PROGRAM_EXECUTION_FRONTIER_STALE_GENERIC_SURFACE_BLOCK")
+    require(errors, current_rebind_required, "VERCEL_CURRENT_RUNTIME_FREEZE_REBIND_EVIDENCE_MISSING")
+    require(errors, stage_gate == EXPECTED_EXECUTION_GATE, "PROGRAM_EXECUTION_FRONTIER_STALE_OR_INCOMPLETE")
     require(errors, execution.get("vercel_sandbox_bridge") == EXPECTED_VERCEL_BRIDGE, "PROGRAM_VERCEL_BRIDGE_STATE_MISSING")
     require(errors, execution.get("execution_frontier_binding") == VERCEL_EXECUTION_PATH, "PROGRAM_VERCEL_FRONTIER_BINDING_MISSING")
-    require(errors, "owner-start" in frontier.lower() and "github_read_token" in frontier.lower(), "PROGRAM_CURRENT_FRONTIER_TOKEN_INGRESS_MISSING")
+    require(errors, execution.get("runtime_freeze_status") == EXPECTED_RUNTIME_FREEZE_STATUS, "PROGRAM_RUNTIME_FREEZE_STATUS_MISSING")
+    require(errors, execution.get("controller_rebind_required_before_token_run") is True, "PROGRAM_CONTROLLER_REBIND_FENCE_MISSING")
+    require(
+        errors,
+        "rebind" in frontier.lower() and "#810" in frontier.lower() and "github_read_token" in frontier.lower(),
+        "PROGRAM_CURRENT_FRONTIER_FREEZE_REBIND_OR_TOKEN_INGRESS_MISSING",
+    )
     require(errors, credit.get("whole_clayverse") == 0, "PROGRAM_VERCEL_BRIDGE_FALSE_RUNTIME_CREDIT")
     return errors
 

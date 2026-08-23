@@ -11,9 +11,19 @@ This instrument operationalizes the current owner architecture without promoting
 ```claycode
 receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
   R0.source := exact(commit, tree, dirty=false);
+  R0.provenance := exact(
+    boot_binding_receipt_version = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1",
+    boot_binding_receipt_digest = sha256(actual_paired_boot_binding_receipt_bytes)
+  );
   R0.identity := digest(Zero) + digest(GRF) + entity_generation;
   R0.core := digest(manifest, checkpoint, tokenizer, runtime);
   R0.fabric := digest(jspace_profile, lens_profile?, workspace_policy, workspace_calibration);
+
+  invariant RECEIPT_LINEAGE {
+    runtime_receipt -> exact_boot_binding_receipt;
+    prose_pairing != cryptographic_pairing;
+    missing_or_wrong_parent_receipt -> no_runtime_credit;
+  }
 
   invariant PORTABILITY {
     PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY;
@@ -87,6 +97,8 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
 - `runtime.entityos_version`
 - `runtime.mini_entity_version`
 - `runtime.entity_generation`
+- `provenance.boot_binding_receipt_version`: exact `JSPACE_GWT_BOOT_BINDING_RECEIPT/v1`
+- `provenance.boot_binding_receipt_digest`: SHA-256 of the exact serialized bytes of the actual paired boot-binding receipt presented for this runtime cycle
 - `identity.zero_digest`: SHA-256
 - `identity.grf_digest`: SHA-256
 - `bundled_core.manifest_digest`: SHA-256
@@ -133,6 +145,21 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
 - `freshness.stale_generation`: boolean
 - `terminal_result_digest`: SHA-256
 
+## Receipt lineage
+
+The live cognition receipt is downstream evidence. It must not merely state that a compatible boot receipt exists somewhere else.
+
+For every runtime cycle submitted for credit, the producer supplies the exact `JSPACE_GWT_BOOT_BINDING_RECEIPT/v1` bytes that were active for that boot, computes SHA-256 over those exact serialized bytes, and writes that digest into `provenance.boot_binding_receipt_digest`. The validator requires both the expected boot-receipt contract version and a syntactically valid SHA-256 digest. Acceptance tooling that has both artifacts MUST independently hash the actual presented boot receipt and compare it to this field before granting any runtime credit.
+
+This closes the receipt-splice class:
+
+```text
+VALID_BOOT_RECEIPT_A + VALID_RUNTIME_RECEIPT_B != VALID_CHAIN
+unless SHA256(BOOT_RECEIPT_A_BYTES) == RUNTIME_RECEIPT_B.provenance.boot_binding_receipt_digest
+```
+
+The runtime receipt does not gain authority from the digest. The digest only identifies its immediate upstream provenance object.
+
 ## Observation versus intervention
 
 The receipt deliberately separates latent observation from causal intervention.
@@ -161,14 +188,16 @@ A valid source contract or a passing synthetic validator test earns zero AgentZe
 
 Runtime credit requires an actually started exact-source run which emits the receipt from the real path and binds at least:
 
-`canonical evidence -> Zero/GRF projection -> Unified J-Space/GWT competition -> chosen engine/capability profile -> InferencePacket -> candidate result -> EntityOS validation/reconciliation -> canonical write/effect decision`.
+`canonical evidence -> exact boot-binding receipt -> Zero/GRF projection -> Unified J-Space/GWT competition -> chosen engine/capability profile -> InferencePacket -> candidate result -> EntityOS validation/reconciliation -> canonical write/effect decision`.
 
-When the intentionally offline host is next started, pair this receipt with the required PRESTART/POSTSTART observation boundary and J-Space/GWT boot-binding evidence. Unknown or missing exact digests fail closed.
+When the intentionally offline host is next started, pair this receipt with the required PRESTART/POSTSTART observation boundary and J-Space/GWT boot-binding evidence. The pairing is fail-closed: the actual boot-binding receipt presented to acceptance tooling must hash to `provenance.boot_binding_receipt_digest`. Unknown, missing or mismatched exact digests give zero runtime credit.
 
 ## Negative controls
 
 Deterministic controls SHOULD cover:
 
+- missing, malformed or wrong-version upstream boot-binding receipt identity -> reject;
+- actual paired boot-receipt SHA-256 not equal to `provenance.boot_binding_receipt_digest` -> reject at chain acceptance;
 - Claude Code or another external mode with hidden-state claim -> reject;
 - FREE_ONLY with secret/network touch -> reject;
 - candidate attempting direct state/effect authority -> reject acceptance/promotion/bypass;
@@ -180,6 +209,8 @@ Deterministic controls SHOULD cover:
 - state/effect commit after non-accept validation -> reject.
 
 `AUTHORITY_ALIAS_POISON_V1` is a deterministic adversarial regression family over those controls. For the `go` that created this source delta, no upstream atomic macrocycle lease/identifier was available to this organ, so the unusual-experiment classification is explicitly `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`. No macrocycle identifier is invented after the fact. The locally observed 8/8 fail-closed poison result remains mechanism evidence, not an unusual-experiment slot claim.
+
+The boot-lineage checks added later are ordinary deterministic provenance regressions and consume no unusual-experiment slot.
 
 ## Evidence class
 

@@ -35,6 +35,8 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "sole_owner_directive": mod.OWNER_DIRECTIVE,
                 "product_endpoint": "ClayVerse",
                 "release_form": mod.EXPECTED_RELEASE,
+                "entityos_role": "INTERNAL_EXECUTION_SECURITY_RUNTIME_SUBSTRATE",
+                "entityos_required_for_whole_product_pass": False,
                 "together_api": "FORBIDDEN",
                 "vps_testing": "FORBIDDEN",
             },
@@ -49,6 +51,7 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "owner_directive": mod.OWNER_DIRECTIVE,
                 "product_endpoint": "ClayVerse",
                 "release_form": mod.EXPECTED_RELEASE,
+                "whole_product_gates": ["effectgate_and_entityos_round_trip_when_admitted"],
                 "execution_policy": {
                     "free_only": True,
                     "isolated_sandbox_only": True,
@@ -61,6 +64,9 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "product_endpoint": "ClayVerse",
                 "release_form": mod.EXPECTED_RELEASE,
                 "canonical_workspace": "the artefact/",
+                "entityos_role": mod.EXPECTED_ENTITYOS_ROLE,
+                "entityos_required_for_whole_product_pass": False,
+                "entityos_admission": "optional: if staged, exact bytes are required; if omitted with execution disabled, whole-product acceptance may proceed",
             },
             mod.CONTROL44: {
                 "status": "ACTIVE",
@@ -86,11 +92,18 @@ class AuthorityConsistencyTests(unittest.TestCase):
             },
         }
         text = {
-            mod.OWNER_DIRECTIVE: "# ClayVerse\nStatus: CURRENT OWNER DIRECTIVE\n",
+            mod.OWNER_DIRECTIVE: (
+                "# ClayVerse\nStatus: CURRENT OWNER DIRECTIVE\n"
+                "Omission with EntityOS execution disabled does not by itself block whole-product PASS.\n"
+            ),
             "research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md": "CURRENT FAST CACHE\nactive ClayVerse program\n",
             "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md": "Program: ClayVerse single-container\nStage: CLAYVERSE_ARTIFACT\n",
             "the artefact/ARCHITECTURE.md": "ClayVerse is the product endpoint.\n",
-            "the artefact/README.md": "# the artefact — ClayVerse single-container product\nThe active release endpoint is one OCI/Docker-compatible ClayVerse container image.\n",
+            "the artefact/README.md": (
+                "# the artefact — ClayVerse single-container product\n"
+                "The active release endpoint is one OCI/Docker-compatible ClayVerse container image.\n"
+                "EntityOS is optional internal substrate.\n"
+            ),
             mod.ROOT_CLAUDE: (
                 "# CLAY — CURRENT CLAYVERSE REPO ORGAN\n"
                 "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
@@ -204,6 +217,27 @@ class AuthorityConsistencyTests(unittest.TestCase):
             encoding="utf-8",
         )
         self.assertIn("ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE", mod.validate(root)["errors"])
+
+    def test_bootstrap_mandatory_entityos_regression_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["entityos_required_for_whole_product_pass"] = True
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("BOOTSTRAP_ENTITYOS_MANDATORY_REGRESSION", mod.validate(root)["errors"])
+
+    def test_manifest_mandatory_entityos_regression_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "the artefact/manifest.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["entityos_role"] = "MANDATORY_IN_FINAL_ACCEPTED_IMAGE"
+        data["entityos_required_for_whole_product_pass"] = True
+        path.write_text(json.dumps(data), encoding="utf-8")
+        errors = mod.validate(root)["errors"]
+        self.assertIn("MANIFEST_ENTITYOS_ROLE_MISMATCH", errors)
+        self.assertIn("MANIFEST_ENTITYOS_MANDATORY_REGRESSION", errors)
 
 
 if __name__ == "__main__":

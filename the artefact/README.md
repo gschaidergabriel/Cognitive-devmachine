@@ -76,3 +76,9 @@ Observed `main` carried a split-brain authority state: `the artefact/manifest.js
 This cycle reconciles those control-plane files to the current ClayVerse owner directive and adds `tools/validate_clayverse_authority_consistency.py` plus deterministic regressions so a future split cannot silently pass source admission.
 
 Runtime credit remains **ZERO** for this delta because no exact authorized whole-product sandbox start/exec surface was available through the connected Vercel tool. Local deterministic validator tests are source/mechanism evidence only.
+
+## 2026-08-23 `go` delta — inherited control fence
+
+Adversarial review found a narrower fail-open after the authority reconciliation: validator v2 checked the new Control 4.4 preservation claims but did not directly read the inherited 4.1, 4.2 and 4.3 control files. A weakened inherited FREE_ONLY, VPS/self-hosted or exact-runtime-evidence rule could therefore be hidden behind unchanged 4.4 self-attestation.
+
+Validator v3 now checks the effective 4.1 -> 4.2 -> 4.3 -> 4.4 chain directly and adds poison regressions for paid fallback, direct VPS execution and loss of exact admitted runtime evidence. Bounded reconstructed component evidence is Python compile PASS and 9/9 focused regressions PASS; exact-current branch/OCI/whole-product runtime credit remains zero until an actually-started authorized isolated executor is available.

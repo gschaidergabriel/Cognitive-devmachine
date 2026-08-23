@@ -1,45 +1,40 @@
 # Hyperposition Computational Unit (HCU)
 
-Status: **OWNER-DIRECTED MINI ENTITY WORKSTREAM — SOURCE CONTRACT v2**
+Status: **ENTITYOS/HCU RETAINED DONOR LANE — SOURCE CANDIDATE, ZERO RUNTIME CREDIT**
 
-The HCU is the Mini Entity's CPU-first reactive world-model and hyperpositional compute substrate for a separate resource-bounded VPS.
+HCU is the sole current integrated cognition/compute architecture being co-developed inside EntityOS. The `MicroEntity` directory name is compatibility/provenance only; it is not a second product or persistent entity.
 
-Reference host: KVM 4; 4 CPU cores; 16 GB RAM; 200 GB disk; 16 TB bandwidth.
+## Current path
 
-## Current owner direction
+The current source candidate is deliberately split into deterministic authority/evidence stages:
 
-The HCU carries as much background cognition as possible so Zero stays thin. Deterministic incremental scripts run first; ~0.8B modules activate selectively for novelty, contradiction, uncertainty, simulation or strategic pressure. Zero normally receives only a compact, high-specificity ClayCode projection.
+`Typed Entry -> typed Entry binding -> HCU route -> verified EngineAdmission -> engine-load lease -> actual loader-read consumption -> VerifiedEngineLoad -> inference receipt v2 -> GRID10 plan`
 
-Canonical internal cognition must not depend on NVIDIA embeddings, Mistral or another external provider. External models are workers/optional candidate feeds/targeted fallbacks only. Claude Code remains the preferred high-capability targeted candidate-inference fallback, not a truth/state/effect authority.
+All current causal identities target `RFC8785_JCS_IJSON/v1`. Historical CBOR, custom typed-canonical, host-Python JSON and v1 inference identities retain only their original bounded scope and must not be silently relabelled as current JCS identities.
 
-The world model keeps an explicit overlay of history/knowledge, measurements, hypotheses, counterhypotheses, forecasts, falsifiers and UNKNOWN regions. The grid uses typed higher-order coupling and Global J-Space to create measurable hyperpositional computation while preserving strict falsification and deterministic authority gates.
+Pre-load hashing is necessary but is **not** loader attestation. The current v2 inference path consumes `HCU_VERIFIED_ENGINE_LOAD/v1`, which binds a generation-fenced engine-load lease to evidence reported from the actual loader read path. Matching caller-supplied hashes alone grant zero runtime credit.
 
-## Files
+## Current source files
 
-- `HCU_ARCHITECTURE.md` — complete v2 HCU architecture.
-- `REACTIVE_WORLD_MODEL_CONTRACT.md` — script-first/reactive world-model and thin-Zero contract.
-- `HYPERPOSITIONAL_SEMANTIC_FIELD_MATH.md` — mathematical synthesis and experimental falsifiers.
-- `COGNITIVE_INDEPENDENCE_POLICY.json` — machine-readable no-provider-dependency law.
-- `ZERO_CLAYCODE_PROJECTION_CONTRACT.json` — bounded Zero projection contract.
-- `reactive_event_router_v1.py` — deterministic selective lane router.
-- `test_reactive_event_router_v1.py` — router regressions.
-- `topology.kvm4.json` — source planning topology; not runtime evidence.
-- `FREE_LLM_FEED_CONTRACT.json` — optional FREE_ONLY external worker/candidate feed.
-- `HCU_DATA_INDEX.json` — package/generated-data index.
-- `capacity_guard_v1.py` / `test_capacity_guard_v1.py` — source-capacity false-claim guard.
+- `entry_canonicalization_v1.py` — selected RFC8785/JCS implementation.
+- `xeno_entry_fabric_v1.py` — compatibility-named Typed Entry Fabric; current event/admission identity is v2.
+- `reactive_event_router_v1.py` — deterministic script-first HCU router using typed Entry-binding v2.
+- `engine_admission_v1.py` — exact local engine artifact verification and versioned EngineAdmission receipt.
+- `engine_load_lease_v1.py` — generation-fenced load intent plus actual-loader consumption verification.
+- `inference_receipt_v2.py` — current JCS downstream inference receipt candidate consuming `VerifiedEngineLoad`.
+- `grid10_scheduler_v1.py` — logical GRID10 planning; logical cells are not physical decoders or model calls.
+- matching `test_*.py` files — deterministic regression obligations only until executed on an admitted isolated executor.
+- `HCU_DATA_INDEX.json` — current package/path selection.
 - `receipts/` — bounded non-secret evidence receipts.
+
+`inference_receipt_v1.py`, `physical_engine_lease_v1.py`, custom typed-canonical source and other earlier paths are retained only as historical/noncurrent evidence unless current authority explicitly re-admits them. They must not become a second active inference, canonicalization or loader-authority lane.
 
 ## Authority
 
-`MiniUnifiedDB = canonical state/evidence/configuration`  
-`EffectGate = only real-effect authority`  
-`HCU vectors/fields/module outputs = candidate/measurement/rebuildable projections`  
-`Zero = operational runtime perspective, not a second entity`
-
-## Packaging
-
-All non-secret HCU source/config/contracts/tests/receipts and admitted privacy-filtered release exports belong under this directory and in `../MICROENTITY_CURRENT.zip` whenever the package changes.
+Canonical durable state/evidence remains deterministic EntityOS authority. HCU vectors, world-model fields, simulations, J-Space/workspace outputs and model outputs remain candidate/projection/measurement evidence. EffectGate/EffectJournal remain the only real-effect authority. Entry data may request routing but may not mint engine identity, capabilities, truth or effects.
 
 ## Evidence boundary
 
-The reactive router has deterministic local component tests, but HCU runtime fit, controllable emergence, direct Claude hidden-state coupling, exact J-Space causality and KVM4 performance remain unverified until the accepted isolated experiments are executed.
+Current work is **source/mechanism convergence only**. No exact-current combined Entry -> route -> real loader -> VerifiedEngineLoad -> inference-v2 -> GRID10 execution has been observed on an actually-started authorized isolated executor. No real local ~0.8B model runtime, target-hardware capacity, J-Space causality, VPS, OCI or whole EntityOS/HCU PASS is claimed.
+
+The next executable gate is to bind the real admitted checkpoint/tokenizer/runtime/build bytes to the actual loader-read path, run the combined current chain on the single authorized exact-source isolated executor, and preserve source SHA, environment, commands, exits, logs and resulting receipt identities.

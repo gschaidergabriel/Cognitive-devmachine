@@ -14,8 +14,10 @@ CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_C
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
 VERCEL_EXECUTION_PATH = "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md"
 EXPECTED_SURFACE = "AUTHORIZED_ISOLATED_SANDBOX_ONLY"
-EXPECTED_EXECUTION_GATE = "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
+EXPECTED_EXECUTION_GATE = "BLOCKED_ON_EXACT_RETAINED_CONTROLLER_READY_REBIND_AND_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
 EXPECTED_VERCEL_BRIDGE = "SANDBOX_ADMISSION_PROVEN_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED"
+EXPECTED_CONTROLLER_READY_BINDING = "EXACT_RETAINED_CONTROLLER_HEAD_READY_REQUIRED_BEFORE_TOKEN_POST"
+EXPECTED_CONTROLLER = "gschaidergabriel/Dr.-Unterweger#810"
 
 
 def load_json(path: Path):
@@ -31,9 +33,10 @@ def require(errors: list[str], condition: bool, code: str) -> None:
 def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]:
     """Cross-bind retained Vercel continuity and current work-selection in both directions.
 
-    Positive bridge evidence constrains PROGRAM_STATE. Conversely, if PROGRAM_STATE claims
-    this bridge/frontier, loss or degradation of required continuity evidence must fail closed.
-    This never grants source, OCI, or product runtime credit.
+    Historical Sandbox admission and the one-shot token ingress prove the bridge exists, but
+    they do not prove that the *current retained controller head* is deployed READY. The
+    selected frontier therefore requires exact controller rebind/READY before the owner-held
+    token POST. This function never grants source, OCI, or product runtime credit.
     """
     errors: list[str] = []
     lower = vercel_execution.lower()
@@ -45,6 +48,7 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
     stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
     execution = program.get("execution_policy") or {}
     frontier = str(program.get("current_frontier", ""))
+    frontier_lower = frontier.lower()
     credit = program.get("runtime_credit") or {}
     program_claims_bridge = (
         stage_gate == EXPECTED_EXECUTION_GATE
@@ -62,7 +66,16 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
     require(errors, stage_gate == EXPECTED_EXECUTION_GATE, "PROGRAM_EXECUTION_FRONTIER_STALE_GENERIC_SURFACE_BLOCK")
     require(errors, execution.get("vercel_sandbox_bridge") == EXPECTED_VERCEL_BRIDGE, "PROGRAM_VERCEL_BRIDGE_STATE_MISSING")
     require(errors, execution.get("execution_frontier_binding") == VERCEL_EXECUTION_PATH, "PROGRAM_VERCEL_FRONTIER_BINDING_MISSING")
-    require(errors, "owner-start" in frontier.lower() and "github_read_token" in frontier.lower(), "PROGRAM_CURRENT_FRONTIER_TOKEN_INGRESS_MISSING")
+    require(errors, execution.get("retained_vercel_controller") == EXPECTED_CONTROLLER, "PROGRAM_RETAINED_VERCEL_CONTROLLER_MISSING")
+    require(errors, execution.get("vercel_controller_ready_binding") == EXPECTED_CONTROLLER_READY_BINDING, "PROGRAM_VERCEL_CONTROLLER_READY_BINDING_MISSING")
+    require(
+        errors,
+        "rebind" in frontier_lower
+        and "ready" in frontier_lower
+        and "owner-start" in frontier_lower
+        and "github_read_token" in frontier_lower,
+        "PROGRAM_CURRENT_FRONTIER_CONTROLLER_READY_AND_TOKEN_SEQUENCE_MISSING",
+    )
     require(errors, credit.get("whole_clayverse") == 0, "PROGRAM_VERCEL_BRIDGE_FALSE_RUNTIME_CREDIT")
     return errors
 
@@ -80,7 +93,7 @@ def validate(root: Path) -> dict:
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
     if errors:
-        return {"schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2", "pass": False, "errors": errors}
+        return {"schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v3", "pass": False, "errors": errors}
 
     try:
         bootstrap = load_json(paths["bootstrap"])
@@ -89,7 +102,7 @@ def validate(root: Path) -> dict:
         steering = load_json(paths["steering844"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
-            "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2",
+            "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v3",
             "pass": False,
             "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
         }
@@ -124,9 +137,9 @@ def validate(root: Path) -> dict:
     require(errors, execution.get("production_host_testing_forbidden") is True, "PROGRAM_PRODUCTION_BAN_MISSING")
     require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(execution, sort_keys=True), "PROGRAM_STALE_VPS_DIRECTIVE_POINTER")
 
-    # The retained Vercel bridge is itself an authorized isolated sandbox path. If its
-    # continuity record is present, positive evidence must agree with PROGRAM_STATE; if
-    # PROGRAM_STATE selects it, the continuity record must exist and remain positive.
+    # The retained Vercel bridge is an authorized isolated sandbox path. Historical
+    # admission proves the bridge, while exact current-controller READY remains a separate
+    # pre-token work-selection gate.
     vercel_path = root / VERCEL_EXECUTION_PATH
     stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
     program_claims_vercel = (
@@ -157,7 +170,7 @@ def validate(root: Path) -> dict:
     require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(steering, sort_keys=True), "STEERING844_STALE_VPS_DIRECTIVE_POINTER")
 
     return {
-        "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2",
+        "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v3",
         "pass": not errors,
         "errors": errors,
         "credit": "SOURCE_POLICY_ASSERTION_ONLY_ZERO_RUNTIME_CREDIT",

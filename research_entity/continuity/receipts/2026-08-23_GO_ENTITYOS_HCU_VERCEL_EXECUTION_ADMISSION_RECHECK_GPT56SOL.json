@@ -1,0 +1,77 @@
+{
+  "schema": "GO_ENTITYOS_HCU_VERCEL_EXECUTION_ADMISSION_RECHECK/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6-Sol organ",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "canonical_main_observed_before_write": "f6066c126b67699983842c0549378806d5f4c405",
+  "authority_sources": [
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json",
+    "the artefact/manifest.json"
+  ],
+  "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+  "track_b": "HCU_NO_CHANGE_WITH_REASON",
+  "track_b_reason": "Retained PR 1263 is the active single HCU/Typed-Entry donor lane and moved repeatedly during this macrocycle while parallel work reconciled its canonicalization authority. Writing another router, Entry, canonicalizer, or inference path would duplicate or race the retained authority path.",
+  "vercel_observation": {
+    "team": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "latest_ready_deployment": "dpl_FfJ4ZGgPnZxHVdrjYyfuwtLgEyhP",
+    "latest_ready_controller_commit": "84838e74335a638c15328d6f8f2c9222ab0635ae",
+    "retained_controller_pr": 810,
+    "controller_path": "mcp/vercel-sandbox-mcp/api/go-cycle-v2.js",
+    "controller_blob": "f2469b36618f5bbc8e5cb5c74adc7e79836308a5",
+    "controller_bound_research_sha": "cb6b6d0e1ffc6db58b519d988ed530675e6f551f",
+    "controller_bound_research_tree": "1595eeb6d3c4a23ec309adbe4b2c6a9106ee436d",
+    "controller_batch": "run-clayverse-insandbox-batch.sh",
+    "source_guard_order": "verifyResearchRefHead -> verifyCommit -> Sandbox.create",
+    "current_program_conflict": "Controller still identifies and launches the historical ClayVerse acceptance batch while current main authority requires EntityOS as sole product/system and HCU as sole cognition/compute architecture."
+  },
+  "observed_result": {
+    "ready_preview_exists": true,
+    "sandbox_api_path_present_in_ready_controller_source": true,
+    "exact_current_entityos_hcu_sandbox_started": false,
+    "reason": "Current main no longer equals the controller-bound cb6b6d0e... SHA, so the controller's verifyResearchRefHead fence would reject before Sandbox.create. Even a simple SHA rebind is insufficient because the retained batch remains ClayVerse-semantic rather than current EntityOS/HCU-semantic.",
+    "classification": "PRE_SANDBOX_EXACT_SOURCE_AND_PROGRAM_ADMISSION_BLOCKER",
+    "semantic_test_fail": false,
+    "runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "hypothesis": "The retained PR 810 Vercel controller can remain the single isolated-execution ingress if it is atomically rebound to one exact current EntityOS/HCU Research identity and its admitted batch/guards are semantically migrated from historical ClayVerse acceptance to current EntityOS/HCU acceptance.",
+  "counterhypothesis": "Updating only RESEARCH_SHA/RESEARCH_TREE on PR 810 is sufficient to restore current runtime acceptance.",
+  "counterhypothesis_disposition": "REJECTED_AT_SOURCE_SCOPE because the exact READY controller still writes/starts run-clayverse-insandbox-batch.sh and emits ClayVerse lifecycle/status semantics after the source-head fence.",
+  "next_exact_discriminator": [
+    "freeze one accepted current EntityOS/HCU Research source identity and retained HCU donor set",
+    "semantically rebind the existing retained PR 810 controller once without creating a second executor path",
+    "deploy and capture a READY preview for those exact controller bytes",
+    "owner-start the existing scoped read-only GitHub-token ingress only after that exact READY closure exists",
+    "inside the disposable Vercel Sandbox prove exact current source identity and post-fetch credential absence",
+    "run exact combined Typed Entry + HCU route + inference + selected canonicalization + GRID10 regressions",
+    "only then assign bounded runtime credit and proceed to physical local-engine admission"
+  ],
+  "hcu_current_source_observation": {
+    "retained_pr": 1263,
+    "current_problem": "Selected RFC8785_JCS_IJSON/v1 authority is not yet fully wired end to end across active Entry, router, engine/route and inference receipt identities.",
+    "write_disposition": "NO_DUPLICATE_HCU_SOURCE_WRITE_DURING_HOT_PARALLEL_FUSION"
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "An overlapping retained-HCU organ recorded a bounded canonicalizer-authority discriminator while global macrocycle identity was unresolved. This organ conservatively adds no second unusual experiment and counts this Vercel inspection as control-plane verification, not a new intervention."
+  },
+  "security": {
+    "secrets_accessed_or_persisted": false,
+    "credential_bearing_post_attempted": false,
+    "vps_self_hosted_or_production_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_or_training_used": false
+  },
+  "evidence_boundary": "SOURCE_AND_CONNECTED_CONTROL_PLANE_EVIDENCE_ONLY. READY deployment does not imply Sandbox execution, EntityOS/HCU runtime acceptance, model execution, J-Space causality, or whole-product PASS.",
+  "promotion": "EXECUTION_PATH_BLOCKER_REFINED_NO_RUNTIME_PROMOTION"
+}

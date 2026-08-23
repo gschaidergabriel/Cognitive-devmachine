@@ -76,3 +76,11 @@ Observed `main` carried a split-brain authority state: `the artefact/manifest.js
 This cycle reconciles those control-plane files to the current ClayVerse owner directive and adds `tools/validate_clayverse_authority_consistency.py` plus deterministic regressions so a future split cannot silently pass source admission.
 
 Runtime credit remains **ZERO** for this delta because no exact authorized whole-product sandbox start/exec surface was available through the connected Vercel tool. Local deterministic validator tests are source/mechanism evidence only.
+
+### Root Claude worker steering fence
+
+A second-pass source discriminator found that repo-root `CLAUDE.md` still selected `MINI_ENTITY_PIPELINE_ALL_IN_ONE` and instructed Claude workers to read the superseded Blogpost/Mini Entity directive. That path could silently reintroduce the old program even after the control-plane reconciliation.
+
+The root worker contract is now rewritten for `CLAYVERSE_SINGLE_CONTAINER` / `CLAYVERSE_ARTIFACT`, explicitly scoped as repository-worker instruction rather than product-runtime memory authority, and preserves UnifiedDB/EffectGate/EntityOS/Together/VPS evidence boundaries. `validate_clayverse_authority_consistency.py` is extended to fail closed if root Claude steering regresses to Mini Entity, loses the current owner directive/product endpoint, or attempts to become runtime memory authority.
+
+This is source-control hardening only until exact admitted execution observes the changed head; no whole-product or Claude runtime credit is claimed.

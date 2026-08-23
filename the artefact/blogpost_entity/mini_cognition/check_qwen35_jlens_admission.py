@@ -13,6 +13,8 @@ This gate deliberately separates three claims:
 Passing an earlier phase never promotes a later phase.  This script is not a
 lens fit, a GWT calibration, a truth test, or whole Mini Entity acceptance.
 Network access is OFF unless ``--allow-network`` is supplied explicitly.
+Weighted phases require a hashed local model tree so their receipts bind exact
+checkpoint/tokenizer/config bytes rather than only a mutable model reference.
 """
 
 from __future__ import annotations
@@ -104,6 +106,7 @@ def _base_receipt(args: argparse.Namespace) -> dict[str, Any]:
         },
         "authority": {
             "runtime_credit_scope": "ONLY_EXACT_PHASE_OBSERVED",
+            "exact_model_bytes_bound": bool(args.hash_local_tree),
             "jspace_measurement_is_truth": False,
             "model_output_is_canonical_truth": False,
             "whole_gwt_pass": False,
@@ -339,6 +342,9 @@ def main() -> int:
     args = parse_args()
     result = _base_receipt(args)
     try:
+        if args.phase in {"forward", "jacobian"} and not args.hash_local_tree:
+            raise ValueError("EXACT_WEIGHTED_PHASE_REQUIRES_HASHED_LOCAL_MODEL_TREE")
+
         if args.hash_local_tree:
             root = Path(args.model).expanduser().resolve()
             digest, rows = _tree_manifest_digest(root)

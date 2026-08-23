@@ -1,0 +1,59 @@
+{
+  "schema": "ZERO_JSPACE_SOURCE_CHECKOUT_BINDING/v1",
+  "trigger": "zero",
+  "organ": "GPT-5.6 Sol",
+  "date": "2026-08-23",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main_sha": "2c80d7cadf8ebc4d5f9471040f1ab6075a17170c",
+  "branch": "zero-20260823-gpt56sol-jspace-source-checkout-binding",
+  "finding": {
+    "class": "PROVENANCE_FALSE_GREEN_SOURCE_CLAIM_NOT_MEASURED",
+    "observed": [
+      "validate_jspace_gwt_boot_binding_v1.py validates source.main_sha and source.tree_sha as non-placeholder 40-hex values but does not measure the checkout",
+      "validate_ucf_boot_ancestry_chain_v1.py cross-binds cycle source to the same boot-receipt values but does not independently measure the checkout",
+      "SUPERVISOR_INBOX requires exact source/tree/dirty binding for the next intentional Ubuntu runtime gate"
+    ],
+    "counterhypothesis": "internal agreement between boot and UCF source fields is sufficient provenance",
+    "counterhypothesis_result": "REJECTED_AT_SOURCE_CONTRACT_LEVEL because both values can share the same unmeasured assertion",
+    "scope": "source provenance only; no J-Space semantic/runtime failure claimed"
+  },
+  "delta": {
+    "runtime_admission_wrapper": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_runtime_admission_v1.py",
+    "focused_regressions": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_runtime_admission_v1.py",
+    "contract_addendum": "the artefact/blogpost_entity/jspace_gwt/JSPACE_GWT_RUNTIME_SOURCE_ADMISSION_V1.md",
+    "composition_law": "reuse canonical boot validator, then measure the clean Git checkout containing the validator and repository-side admission inputs",
+    "fail_closed": [
+      "receipt source marked dirty",
+      "actual checkout dirty",
+      "receipt HEAD mismatch",
+      "receipt tree mismatch",
+      "non-top-level source root",
+      "manifest/source-lock path escape outside the checkout",
+      "Git unavailable or command failure"
+    ]
+  },
+  "evidence": {
+    "source_inspection": "SUPPORTED",
+    "focused_test_contract_authored": true,
+    "exact_branch_test_execution": "UNOBSERVED_AT_RECEIPT_WRITE",
+    "exact_ubuntu_runtime": "UNOBSERVED",
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "whole_product": "IN_PROGRESS"
+  },
+  "experiment_accounting": {
+    "unusual_experiment_consumed": false,
+    "reason": "No shared immutable cross-organ macrocycle lease identity was established on this surface; this delta is deterministic provenance hardening and regression codification."
+  },
+  "execution_control": {
+    "free_only_preserved": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "training_started": false,
+    "together_used": false
+  },
+  "next_gate": "Execute py_compile plus focused runtime-source admission regressions on the exact branch bytes in an actually-started authorized isolated runner; then rebase onto current main if it advanced. On the next intentional exact Ubuntu product start, require JSPACE_GWT_RUNTIME_ADMISSION/v1 before granting source-bound J-Space/GWT boot credit."
+}

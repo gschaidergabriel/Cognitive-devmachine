@@ -82,3 +82,11 @@ Runtime credit remains **ZERO** for this delta because no exact authorized whole
 After the authority reconciliation merged, adversarial source review found a narrower false-green: top-level ClayVerse authority could remain valid while nested `PROGRAM_STATE.json` work-selection fields were changed back toward a retired program. The authority validator now also binds the current stage goal, primary dynamic target, current frontier and `go` contract to ClayVerse, with poison regressions for stale nested work selection.
 
 The post-merge frontier is now re-entered explicitly as exact-current ClayVerse authority/full-suite/OCI build-startup on an actually-started authorized isolated executor, followed by the Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/EntityOS/recovery path. This is source/control hardening only; whole-product runtime credit remains **ZERO** until that exact execution exists.
+
+## 2026-08-23 `go` re-entry — transitive worker steering closed
+
+Adversarial review found that the actively referenced all-worker directive still injected `[MINI ENTITY :: ...]` into child `go` prompts even after top-level ClayVerse authority had been restored. The canonical `main` worker directive is now retargeted to ClayVerse at Git blob `f3b47f0e1fe03c7ea1d202afeaa947655572f943`, preserving Clay identity, UnifiedDB/ClayGraph/effect boundaries, sandbox-only execution, Together prohibition and owner-gated paid/model training.
+
+A rebased cumulative source-gate candidate that also binds this worker pointer/marker into the existing authority validator was reconstructed exactly in an isolated Linux container: validator blob `44c4984198260e024a37c72d5ce5d26a4f7b737c`, test blob `d25b04fad74c32e74d6adac9e12caab2d39c2899`, `py_compile` PASS, **15/15** focused fail-closed tests PASS. Because `main` continued to receive parallel validator changes during this cycle, that validator extension is not being force-merged over newer work. The actual stale worker steering is closed on `main`; automatic regression binding remains a coordination/fusion item against the latest validator.
+
+Whole ClayVerse runtime/OCI credit remains **ZERO**. The empirical frontier remains an actually-started authorized isolated exact-current regression plus exact OCI build/startup with bound source SHA, image digest and runtime identity.

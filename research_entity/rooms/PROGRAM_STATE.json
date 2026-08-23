@@ -1,102 +1,78 @@
 {
-  "schema_version": "8.3",
-  "program_id": "clayverse-single-container",
+  "schema_version": "8.4",
+  "program_id": "entityos-hcu",
   "status": "ACTIVE",
-  "stage": "CLAYVERSE_ARTIFACT",
-  "current_stage": "CLAYVERSE_ARTIFACT",
-  "current_stage_goal": "Converge and empirically validate the complete one-container ClayVerse product without creating a second durable authority.",
-  "stage_order": ["CLAYVERSE_ARTIFACT", "CLAYVERSE_EXACT_OCI_ACCEPTANCE", "CLAYVERSE_DEPLOYMENT_READINESS"],
+  "stage": "MINI_ENTITY_BOOTSTRAP_TO_ENTITYOS_HCU",
+  "current_stage": "MINI_ENTITY_BOOTSTRAP_TO_ENTITYOS_HCU",
+  "current_stage_goal": "Use the strongest current Mini Entity implementation as the executable bootstrap while making every new delta converge toward minimal EntityOS plus request-scoped HCU Function Fabric.",
+  "stage_order": [
+    "MINI_ENTITY_BOOTSTRAP_TO_ENTITYOS_HCU",
+    "ENTITYOS_HCU_INTEGRATION",
+    "ENTITYOS_HCU_EXACT_RUNTIME_ACCEPTANCE"
+  ],
   "dynamic_targets": {
-    "primary": "WHOLE_CLAYVERSE_OCI_PRODUCT",
-    "runtime_evidence": "AUTHORIZED_ISOLATED_EXACT_SOURCE_ONLY",
-    "next": "rebind the single retained Vercel controller PR #810 to exact current Research/admitted source identity and obtain a READY deployment -> owner-start its one-shot with scoped read-only GitHub source admission -> exact-current ClayVerse regressions -> exact OCI build/runtime -> full product path acceptance"
+    "operational_start": "CURRENT_MINI_ENTITY_IMPLEMENTATION",
+    "primary": "ENTITYOS_PLUS_HCU",
+    "cognitive_end_state": "ZERO_TO_ENTITY_FROM_FUNCTION_REQUEST_SCOPED",
+    "runtime_evidence": "AUTHORIZED_ISOLATED_EXACT_SOURCE_ONLY"
   },
-  "progress_semantics": {
-    "bar_cells": 20,
-    "progress_percent": "UNRESOLVED_UNLESS_DERIVED_FROM_CURRENT_CLAYVERSE_ACCEPTANCE_VECTOR"
-  },
-  "stage_gates": {
-    "CLAYVERSE_ARTIFACT": {"status": "IN_PROGRESS"},
-    "CLAYVERSE_EXACT_OCI_ACCEPTANCE": {"status": "BLOCKED_ON_EXACT_RETAINED_CONTROLLER_READY_REBIND_AND_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"},
-    "CLAYVERSE_DEPLOYMENT_READINESS": {"status": "NOT_YET_ADMITTED"}
-  },
-  "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
-  "product_endpoint": "ClayVerse",
-  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "product_endpoint": "EntityOS",
+  "integrated_cognition_architecture": "HCU",
   "acceptance": "IN_PROGRESS",
   "authority": {
-    "durable_state": "UnifiedDB",
-    "derived_graph": "ClayGraph",
-    "runtime_cognition": "Claude Code",
-    "adaptive_retrieval": "MicroClay",
+    "durable_state": "UnifiedDB_or_current_MiniUnifiedDB_canonical_state_evidence_substrate",
+    "derived_graph": "ClayGraph_or_equivalent_rebuildable_projection_only",
+    "cognition": "HCU_candidate_measurement_only",
     "external_effects": "EffectGate+EffectJournal",
-    "internal_execution_substrate": "EntityOS"
+    "second_persistent_identity": "FORBIDDEN",
+    "second_truth_or_effect_authority": "FORBIDDEN"
   },
   "identity": {
     "persistent_research_entity": "Clay",
-    "legacy_canonical_research_entity_id": "frank-project-global-research-entity",
-    "central_product_entity_count": 1,
-    "canonical_users": ["gabriel", "andreas"],
-    "rights": "equal",
-    "global_generation": "single shared live generation fenced across both canonical sessions"
+    "temporary_workers": "ORGANS_NOT_ENTITIES"
   },
   "execution_policy": {
-    "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
     "free_only": true,
     "isolated_sandbox_only": true,
     "vps_testing_forbidden": true,
-    "vps_disposable_independent_kernel_guest_testing_admitted": false,
     "self_hosted_vps_test_runners_forbidden": true,
     "production_host_testing_forbidden": true,
     "together_forbidden": true,
     "secrets_in_source_or_receipts": false,
-    "final_paid_or_model_training_requires_owner_authorization": true,
-    "vercel_sandbox_bridge": "SANDBOX_ADMISSION_PROVEN_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED",
-    "execution_frontier_binding": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
-    "retained_vercel_controller": "gschaidergabriel/Dr.-Unterweger#810",
-    "vercel_controller_ready_binding": "EXACT_RETAINED_CONTROLLER_HEAD_READY_REQUIRED_BEFORE_TOKEN_POST"
+    "final_paid_or_model_training_requires_owner_authorization": true
   },
-  "whole_product_gates": [
-    "exact_current_source_identity",
-    "authorized_isolated_full_regression",
-    "exact_oci_build_and_digest",
-    "startup_and_readiness",
-    "real_clerk_browser_websocket_pty",
-    "persistent_tmux_for_both_users",
-    "normal_interactive_claude_code",
-    "managed_turn_hooks",
-    "unifieddb_persistence_and_recovery",
-    "microclay_retrieval_and_promotion_fences",
-    "claygraph_hyperposition_workspace",
-    "effectgate_and_entityos_round_trip_when_admitted",
-    "restart_recovery_no_blind_effect_replay",
-    "dual_session_concurrency_and_stale_generation_fencing",
-    "supply_chain_acceptance"
+  "transition_laws": [
+    "Mini Entity remains the operational go starting point and must not be discarded in favor of a parallel rewrite.",
+    "Mini Entity is not the final product identity; EntityOS plus HCU is the architectural destination.",
+    "Zero trends toward universal cognitive ingress/admission rather than persistent persona.",
+    "Entity trends toward causal/state/authority coherence rather than anthropomorphic identity.",
+    "HCU cells trend toward request-scoped logical function slots rather than persistent mini-agents.",
+    "No permanent standing world simulation is the target; task-local consequence estimation and counterfactual reasoning remain allowed.",
+    "Global J-Space remains an empirically instrumented coupling hypothesis; local J-Space claims require model-specific causal evidence.",
+    "Hyperposition preserves unresolved alternatives; majority vote cannot mint truth.",
+    "Real effects remain deterministic, journaled and gated."
   ],
+  "current_frontier": "Improve and stabilize the current Mini Entity while preferentially selecting deltas that reduce migration cost toward Zero -> Entity <- Function: ingress/persona separation, function-cell semantics, request-scoped topology, J-Space instrumentation, Hyperposition/calibration, and effect non-bypass.",
+  "go_contract": "Every go refreshes current main and newest owner authority, starts from the strongest current Mini Entity implementation, selects the highest-information nonduplicate Mini Entity blocker or capability delta, applies GRF hypotheses/counterhypotheses/falsifiers, preserves exact evidence and safety boundaries, and prefers changes that make eventual EntityOS + request-scoped HCU migration easier. It must not create a permanent world simulation, second identity, second durable truth store or second effect path.",
+  "go_migration_score": {
+    "preferred": "EASIER",
+    "allowed": "NEUTRAL_WHEN_REQUIRED_FOR_MEASURED_RELIABILITY_OR_SAFETY",
+    "exception": "HARDER_REQUIRES_EXPLICIT_EXECUTABLE_JUSTIFICATION"
+  },
   "runtime_credit": {
-    "whole_clayverse": 0,
-    "note": "The retained Vercel Sandbox bridge has bounded historical Sandbox admission and runtime one-shot GitHub-token ingress source evidence, but the current retained controller head has no observed exact-head READY deployment and no owner-started token-bearing exact-source/full-suite/OCI run has been recorded; whole-product runtime credit remains zero."
+    "mini_entity": "ONLY_WHERE_EXACTLY_OBSERVED",
+    "entityos_hcu": 0,
+    "whole_product_pass": false
   },
-  "superseded_program_snapshot": {
-    "git_blob_sha": "d2a7b849e7a8f7b38b28aca3ae1704bf447a367d",
-    "schema_version": "7.11",
-    "program_id": "mini-entity-pipeline-all-in-one",
-    "classification": "HISTORICAL_DONOR_EVIDENCE_NOT_CURRENT_WORK_SELECTION_AUTHORITY",
-    "note": "The exact detailed Mini Entity/J-Space/training/native/parity campaign state remains preserved in Git history and its original receipts; this active state intentionally does not duplicate it as current product authority."
-  },
-  "compatibility_note": "Legacy Frank/Mini-Entity-specific progress and campaign readers may return UNKNOWN for retired active-state fields. Historical evidence remains addressable by the superseded snapshot blob and original receipts rather than silently becoming current ClayVerse truth.",
-  "current_frontier": "rebind the single retained Vercel controller PR #810 to exact current Research/admitted source identity and obtain a READY deployment; only then owner-start its runtime POST with a scoped read-only GITHUB_READ_TOKEN, verify exact private Research/EntityOS source identity and credential absence after fetch, run exact-current ClayVerse regressions, and build/bind/start the ClayVerse OCI image before resuming Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/optional-EntityOS/recovery acceptance",
-  "go_contract": "Every go refreshes current main/newest owner authority and execution policy, selects the highest-information nonduplicate whole-ClayVerse blocker, falsifies before promotion, preserves one shared unusual-experiment lease law, persists bounded evidence, and advances the same one-container ClayVerse product until promoted, falsified, or execution-blocked.",
-  "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one persistent central ClayVerse entity",
   "together_api": {
     "product_identity": "FORBIDDEN",
-    "inference_requirement": "NONE",
     "training_execution": "FORBIDDEN_UNDER_CURRENT_CONTROL",
-    "secret_policy": "NEVER_LOOK_UP_FOR_CURRENT_CONTROL; NEVER_COMMIT",
+    "secret_policy": "NEVER_COMMIT",
     "job_started": false
   },
-  "legacy_scope": "Prior Mini Entity/Blogpost/Frank/EntityOS-top-level paths remain historical bounded evidence only."
+  "legacy_scope": "Frank and ClayVerse are historical/donor evidence. Mini Entity is current go bootstrap material, not the final standalone product."
 }

@@ -21,7 +21,7 @@ Authority boundaries:
 - **Claude Code** is runtime cognition; it cannot own durable identity, canonical truth, memory, or effects.
 - **MicroClay** learns retrieval/entry-point accessibility only; it cannot mint truth or permissions.
 - **EffectGate + EffectJournal** own the admitted external/state-changing effect path.
-- **EntityOS** is an internal hardened execution/security/runtime substrate; it is not the product endpoint and never becomes a second authority.
+- **EntityOS** is an optional, separately admitted internal hardened execution/security/runtime substrate. It is not the product endpoint and never becomes a second authority. If EntityOS execution is disabled, its execution round trip is not an unconditional whole-product PASS requirement.
 - No hidden second transcript, database, identity service, effect path, recovery ledger, or consciousness daemon is allowed.
 
 ## Container boundary
@@ -58,14 +58,16 @@ Whole ClayVerse acceptance remains **IN_PROGRESS**. Required current gates inclu
 - UnifiedDB persistence/restart/recovery and one global generation;
 - MicroClay retrieval falsifiers and SHADOW-vs-baseline benchmark;
 - ClayGraph/Hyperposition/workspace fail-closed behavior;
-- effect-only MCP/EffectGate and admitted EntityOS round trip;
+- effect-only MCP/EffectGate and EntityOS round trip only when EntityOS execution is explicitly admitted;
 - crash/restart with no unsafe external replay;
 - dual-session collision/privacy/stale-generation controls;
 - supply-chain closure and exact deployment-runtime evidence.
 
 ## Execution policy
 
-Current build/test/experiment/runtime validation is isolated-sandbox-only. VPS/self-hosted/production-host testing is forbidden unless a newer explicit owner directive changes it.
+Current build/test/experiment/runtime validation is **authorized-isolated-sandbox-only** under the newer 2026-08-23 owner bootstrap.
+
+VPS testing is forbidden. This includes the previously admitted 2026-08-18 VPS-hosted disposable KVM/VM/microVM/TCG guest lane. Self-hosted VPS test runners and production/deployment-host testing are also forbidden. A VPS may later be a deployment target only after explicit owner authorization.
 
 Together API/service is forbidden. Secrets never enter source or receipts. Final paid/model training requires explicit owner authorization.
 
@@ -90,3 +92,11 @@ Adversarial review found that the actively referenced all-worker directive still
 A rebased cumulative source-gate candidate that also binds this worker pointer/marker into the existing authority validator was reconstructed exactly in an isolated Linux container: validator blob `44c4984198260e024a37c72d5ce5d26a4f7b737c`, test blob `d25b04fad74c32e74d6adac9e12caab2d39c2899`, `py_compile` PASS, **15/15** focused fail-closed tests PASS. Because `main` continued to receive parallel validator changes during this cycle, that validator extension is not being force-merged over newer work. The actual stale worker steering is closed on `main`; automatic regression binding remains a coordination/fusion item against the latest validator.
 
 Whole ClayVerse runtime/OCI credit remains **ZERO**. The empirical frontier remains an actually-started authorized isolated exact-current regression plus exact OCI build/startup with bound source SHA, image digest and runtime identity.
+
+## 2026-08-23 `go` re-entry — stale VPS guest authority removed
+
+A later merge reactivated `VPS_DISPOSABLE_GUEST_TEST_EXECUTION_DIRECTIVE.md`, an owner instruction dated 2026-08-18, and narrowed `vps_testing=FORBIDDEN` to direct-host-only while admitting VPS-hosted disposable guests. That conflicts with the newer 2026-08-23 owner bootstrap, which explicitly restores current build/test/experiment/runtime validation to authorized isolated sandboxes only and forbids VPS/self-hosted/production-host testing.
+
+The current repair demotes the 2026-08-18 VPS guest directive to historical evidence, restores `SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md`, `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, Control 4.4 and supervisor steering to the newer strict law, and flips `assert_clayverse_execution_boundary.py` from protecting the stale guest exception to fail-closing any re-admission of VPS guest, self-hosted VPS or production-host execution.
+
+No executable tests are claimed for this repair because an actually-started authorized isolated sandbox start/exec surface is not exposed in the current tool session. Runtime credit remains **ZERO**. The single unusual experiment for the shared `go` was already consumed elsewhere by PR #1195; this repair does not consume or duplicate it.

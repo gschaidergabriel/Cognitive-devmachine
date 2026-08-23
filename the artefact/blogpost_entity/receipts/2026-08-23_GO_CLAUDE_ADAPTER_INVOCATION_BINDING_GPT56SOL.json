@@ -1,0 +1,65 @@
+{
+  "schema": "GO_SOURCE_MECHANISM_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "fresh_base_main": "f0cf19f38cd352745c23e5c0eb49079cdd6b1444",
+  "branch": "go/claude-adapter-invocation-binding-v1-r4",
+  "finding": {
+    "classification": "CROSS_RUN_COMPOSITION_FALSE_GREEN_GAP",
+    "claim_under_test": "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 binds all four boundary observations to one exact adapter invocation.",
+    "pre_fix_gap": "The common object bound source/tree, Claude binary/version, command/input, executor and timestamps but had no explicit invocation id, while each child could carry a different stdout/stderr digest without aggregate rejection.",
+    "risk": "Different adapter invocations could be composed under copied common metadata and receive CLAUDE_ADAPTER_BOUNDARY_ONLY aggregate credit despite violating the one-run premise."
+  },
+  "parallel_fusion": {
+    "preserved_temporal_gate": "PR #1123 / main requires timezone-aware UTC timestamps and finished_at >= started_at.",
+    "preserved_env_policy_gate": "PR #1124 / main constrains receipt-declared env keys to the canonical Claude child-process allowlist.",
+    "new_nonduplicate_gate": "Require explicit invocation_id plus identical stdout_sha256/stderr_sha256 across all four boundaries.",
+    "contract_composition": "Atomic-run identity now jointly requires common identity, invocation id, coherent UTC interval, canonical env-policy compatibility and one shared process-output pair."
+  },
+  "exact_git_blobs": {
+    "validator": "8d38b4c39d4d6133c2aa9bad36b1908771b5d38c",
+    "tests": "0e6cf6ada2ba74ba7a52efcc03b68821bf6513b1",
+    "contract": "543553bf05d8ade92c950737500429af8ada30df"
+  },
+  "bounded_isolated_component_evidence": {
+    "executor": {
+      "surface": "isolated ChatGPT container",
+      "python": "3.13.5",
+      "kernel": "Linux 6.18.35 x86_64"
+    },
+    "blob_identity_check": "PASS: local git hash-object matched GitHub branch validator 8d38b4c... and tests 0e6cf6ad... exactly.",
+    "py_compile": "PASS",
+    "unittest": "PASS 24/24",
+    "coverage_note": "Includes prior negative-evidence, temporal coherence and env-policy regressions plus missing invocation_id and cross-bound output-digest mismatch poisons.",
+    "runtime_scope": "SOURCE_MECHANISM_ONLY"
+  },
+  "runtime_credit": {
+    "claude_adapter": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "whole_product": 0
+  },
+  "execution_constraints": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "training": false,
+    "vercel_sandbox_start_exec_surface_exposed": false,
+    "host_state": "INTENTIONALLY_OFFLINE_PER_CURRENT_SUPERVISOR"
+  },
+  "swarm": {
+    "status": "GRF_CLAYCODE_PROMPT_INJECTION_UNAVAILABLE_ON_SURFACE",
+    "reason": "No admitted FREE_ONLY child-model/provider execution surface with exposed credentials was available; no child-go worker was falsely claimed."
+  },
+  "unusual_experiment": {
+    "consumed": false,
+    "reason": "No immutable shared macrocycle/request lease identity was exposed. The new mismatched-output case is a deterministic falsifier/regression, not a claimed leased unusual experiment."
+  },
+  "next_exact_gate": "At the next intentional authorized Ubuntu start, mint one invocation_id before the Claude child starts; bind exact source/tree/Claude binary+version/command/input/executor; record coherent UTC start/finish; derive all four measured boundaries from that one invocation with identical stdout/stderr digests; run diagnostic validation first, strict validation only on aggregate PASS, then run the full exact-source suite.",
+  "acceptance": "IN_PROGRESS"
+}

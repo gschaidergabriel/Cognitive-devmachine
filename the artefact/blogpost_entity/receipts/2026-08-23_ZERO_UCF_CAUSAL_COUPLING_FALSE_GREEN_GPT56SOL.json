@@ -1,0 +1,105 @@
+{
+  "schema": "ZERO_UCF_CAUSAL_COUPLING_FALSE_GREEN/v1",
+  "date": "2026-08-23",
+  "trigger": "zero",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": {
+    "base_main_sha": "cc3de1686ed6f60b6e4b23836372ad32ebef1dfc",
+    "base_tree_sha": "3db7375e567a1d4d438e54590e8bfe520da96433",
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_execution": false
+  },
+  "observed_false_green": {
+    "canonical_validator_path": "tools/validate_unified_cognitive_fabric_receipt_v1.py",
+    "validator_git_blob_before": "6c65001c6fde21b1d286410128bd7e13134c4571",
+    "validator_sha256_before": "9df89a4fbacba8d0966778ae96287d04c22ba1df1c6488d35c79df7280613546",
+    "exact_blob_reconstructed_and_hash_matched": true,
+    "fixture_engine_class": "claude_code",
+    "fixture_jspace_mode": "COMPILED_EXTERNAL",
+    "fixture_executed": true,
+    "cases": [
+      {
+        "case": "baseline",
+        "result": "ACCEPTED"
+      },
+      {
+        "case": "empty_jspace_observation_refs",
+        "result": "ACCEPTED_FALSE_GREEN"
+      },
+      {
+        "case": "no_gwt_winner",
+        "result": "ACCEPTED_FALSE_GREEN"
+      },
+      {
+        "case": "empty_jspace_observation_refs_and_no_gwt_winner",
+        "result": "ACCEPTED_FALSE_GREEN"
+      }
+    ],
+    "mechanism": "The canonical UCF v1 validator accepted an executed non-plain cognitive cycle while the receipt carried neither a J-Space observation reference nor a selected GWT winner. That permits a receipt-level causal-use claim without the minimum evidence that the proposed J-Space/GWT fabric participated in the cycle.",
+    "classification": "SOURCE_MECHANISM_FALSE_GREEN"
+  },
+  "repair": {
+    "branch": "zero-20260823-gpt56sol-ucf-causal-coupling",
+    "validator_git_blob_after": "b568554f624ca031af6514d6ecb998fa9af8de67",
+    "validator_sha256_after": "5145e7763a1adb9d22cedad902b9a03f2d8ace92c79c41064aae36d7eb3ccac7",
+    "claycode_contract_git_blob_after": "0d71f9ea2e20947cb6e340f611dc87007d96dd36",
+    "focused_test_git_blob": "00a15c874510f96c5e6a4e6fe48433d4b07f656b",
+    "rules": [
+      "executed cognitive cycle requires exactly one GWT winner",
+      "executed non-PLAIN_COMPATIBILITY cycle requires at least one J-Space observation reference",
+      "J-Space observation references must be non-empty strings and unique",
+      "blocked/nonexecuted receipts may omit causal-use evidence",
+      "PLAIN_COMPATIBILITY may omit J-Space observations but an executed UCF cognitive cycle still requires one GWT winner"
+    ],
+    "authority_boundary": "No new state, truth, identity, memory, provider-policy or effect authority is introduced. The patch tightens the existing single canonical UCF receipt validator and its ClayCode law."
+  },
+  "bounded_execution_evidence": {
+    "environment": {
+      "python": "3.13.5",
+      "pytest": "9.0.2",
+      "kernel": "Linux 6.18.35 x86_64 GNU/Linux"
+    },
+    "pre_fix_discriminator": "Exact pre-fix validator blob accepted all three poisoned causal-evidence omissions.",
+    "post_fix_focused_regression": "5 passed in 0.03s",
+    "post_fix_exact_branch_blob_identity": true,
+    "full_current_source_suite": "NOT_RUN",
+    "exact_ubuntu_product_runtime": "UNOBSERVED",
+    "bundled_08b_model_execution": "UNOBSERVED",
+    "live_claude_code_execution": "UNOBSERVED"
+  },
+  "grf": {
+    "R0_OBSERVED": "UCF v1 had fields for J-Space observation references and GWT winners, but executed inference did not require either to be evidenced.",
+    "R1_INFERRED": "An executed receipt could therefore overstate causal participation of the Unified Cognitive Fabric.",
+    "R2_GENERATED": [
+      "require evidence only for executed non-plain cycles",
+      "require evidence for every receipt including blocked cycles",
+      "introduce a second causal-receipt schema"
+    ],
+    "R3_COUNTER_REALITY": "Some legitimate compatibility or blocked cycles have no J-Space observation; a blanket nonempty rule would falsely reject them.",
+    "R4_INTERVENTION": "Poison the canonical valid fixture by removing J-Space observation refs and/or the GWT winner, then compare pre-fix and patched validators.",
+    "R5_EMERGENT": "Causal coupling should be evidenced at the cycle boundary, not inferred from architecture configuration or merely from carrying a J-Space/GWT schema.",
+    "R6_VERIFIED": "SOURCE_MECHANISM_SUPPORTED: the false-green exists on exact pre-fix bytes and the bounded patch closes it on exact branch bytes. Runtime causality remains unverified."
+  },
+  "coordination": {
+    "parallel_overlap_search": "No open PR was found for jspace_observation_refs/GWT-winner causal coupling at selection time.",
+    "child_go_swarm": "GRF_CLAYCODE_PROMPT_INJECTION_UNAVAILABLE_ON_SURFACE",
+    "reason": "No admitted credentialed FREE_ONLY model-execution child surface was exposed to this organ.",
+    "unusual_experiment": "NOT_CLAIMED_NO_SHARED_MACROCYCLE_LEASE_IDENTITY",
+    "tests_classification": "DETERMINISTIC_FALSIFIER_AND_REGRESSION"
+  },
+  "credit": {
+    "source_mechanism": "SUPPORTED",
+    "mini_entity_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "claude_code_adapter_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "next_exact_gate": "On an actually-started authorized exact-source Ubuntu runtime, emit a canonical UCF receipt from a real cycle and prove that executed non-plain cycles carry real J-Space observation references plus one GWT winner, while absent evidence fails closed. Then run the adjacent/full exact-source regression suite before runtime promotion."
+}

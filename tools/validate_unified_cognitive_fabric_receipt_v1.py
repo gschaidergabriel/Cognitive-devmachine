@@ -172,7 +172,11 @@ def validate(receipt: dict[str, Any]) -> dict[str, Any]:
         raise ReceiptError("GWT_MULTIPLE_WINNERS")
     if not set(winners).issubset(set(candidates)):
         raise ReceiptError("GWT_WINNER_NOT_CANDIDATE")
-    _list(workspace, "jspace_observation_refs")
+    jspace_observation_refs = _list(workspace, "jspace_observation_refs")
+    if not all(type(x) is str and x for x in jspace_observation_refs):
+        raise ReceiptError("JSPACE_OBSERVATION_REF_INVALID")
+    if len(set(jspace_observation_refs)) != len(jspace_observation_refs):
+        raise ReceiptError("JSPACE_OBSERVATION_REF_DUPLICATE")
     _list(workspace, "thalamus_gate_decisions", nonempty=True)
     for key in ("epq_ref", "hyperposition_ref", "claycode_ref", "omega_ref"):
         _text(workspace, key)
@@ -205,6 +209,12 @@ def validate(receipt: dict[str, Any]) -> dict[str, Any]:
     observability_supported = _bool(inference, "provider_observability_claim_supported")
     if not observability_supported:
         raise ReceiptError("UNSUPPORTED_PROVIDER_OBSERVABILITY_CLAIM")
+
+    if executed:
+        if len(winners) != 1:
+            raise ReceiptError("EXECUTED_COGNITIVE_CYCLE_REQUIRES_GWT_WINNER")
+        if jspace_mode != "PLAIN_COMPATIBILITY" and not jspace_observation_refs:
+            raise ReceiptError("EXECUTED_NONPLAIN_JSPACE_REQUIRES_OBSERVATION")
 
     if engine_class == "claude_code":
         if jspace_mode != "COMPILED_EXTERNAL":

@@ -46,6 +46,11 @@ def packet(*, max_model_calls=2, max_tokens=2048):
         current_generation=7,
         expected_capability_binding_sha256=CAPABILITY_BINDING_SHA256,
         admitted_capabilities=ADMITTED_CAPABILITIES,
+        admitted_budget={
+            "max_model_calls": max_model_calls,
+            "max_tokens": max_tokens,
+            "max_wall_ms": 5000,
+        },
     )
 
 

@@ -1,0 +1,68 @@
+{
+  "schema": "ENTITYOS_HCU_GO_FUSION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "main_observed_before_final_write": "59929b28f2e820cdbd474a58f0c8e930bf536ab9",
+  "tracks": {
+    "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+    "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT"
+  },
+  "live_authority_correction": {
+    "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
+    "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY",
+    "mini_entity_microentity": "HISTORICAL_IMPLEMENTATION_PROVENANCE_ONLY"
+  },
+  "fusion": {
+    "retained_hcu_route_lane": "PR_1263",
+    "typed_entry_grid10_candidate": "PR_1363",
+    "superseded_duplicate_candidate": "PR_1358_CLOSED_UNMERGED",
+    "decision": "ONE_ROUTE_AUTHORITY_PLUS_SEPARATE_TYPED_ENTRY_ADMISSION_IDENTITY",
+    "reason": "PR 1263 already subsumes positive engine admission, exact engine artifact binding, causal event identity, route-policy identity, route identity and downstream inference echo. PR 1363 contains useful Typed Entry and GRID10 primitives but must not retain a competing route-binding authority."
+  },
+  "new_material_finding": {
+    "class": "SOURCE_CONFIRMED_ENTRY_EVENT_VS_ADMISSION_IDENTITY_CONFLATION_RISK",
+    "observation": "PR 1363 current ingress identity payload includes received_at_ns, permissions, capability_scope, resource_budget and payload_ref in the same ingress_id used as route/event identity input.",
+    "risk": "A transport replay of the same causal event can acquire a different causal identity merely because arrival metadata, reference, permissions or budget changed.",
+    "required_split": {
+      "event_sha256": "H(schema, causal_id, generation, source, provenance, modality, observed_at, immutable payload_sha256, stable parent/stream semantics if admitted)",
+      "admission_identity": "H(event_sha256, concrete ingress/arrival identity, received_at, payload_ref, permissions, capability_scope, resource_budget)"
+    },
+    "hcu_route_consumes": "event_sha256 plus PR1263 router-policy and admitted-engine/result identity",
+    "audit_keeps": "separate admission identity for transport, permissions, budget and replay accounting"
+  },
+  "hypothesis": "Separating replay-stable causal event identity from concrete admission identity prevents transport metadata from redefining HCU causal reality while preserving exact audit and permission/budget provenance.",
+  "counterhypothesis": "A single ingress hash containing both event and admission metadata is sufficient because every delivery should be treated as a distinct event.",
+  "cheapest_discriminator": "Replay identical payload/provenance/observed event with a different received_at and payload_ref: event_sha256 must remain identical, admission identity must change; then change payload_sha256: both identities must change.",
+  "coordination_writes": {
+    "pr_1363_comment_id": 5387081928,
+    "pr_1263_comment_id": 5387083466,
+    "pr_1358": "CLOSED_AS_SUPERSEDED"
+  },
+  "execution": {
+    "policy": "AUTHORIZED_ISOLATED_SANDBOX_ONLY",
+    "authorized_sandbox_exec_available_in_session": false,
+    "classification": "BLOCKED_EXECUTION_ADMISSION",
+    "runtime_credit": 0,
+    "test_pass_claimed": false,
+    "vps_self_hosted_production_execution_used": false
+  },
+  "unusual_experiment": {
+    "macrocycle_id": null,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "local_new_experiment_count_by_this_organ": 0,
+    "note": "No second unusual experiment was executed after observing concurrent route-identity work."
+  },
+  "promotion": {
+    "source_finding": true,
+    "mechanism_runtime_verified": false,
+    "entityos_hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Rebase/fuse PR 1363 to current EntityOS/HCU authority, split event and admission identity, remove/defer duplicate route-binding semantics in favor of PR 1263, then run exact Entry+HCU route+GRID10 replay/stale-generation regressions on an actually-started authorized isolated sandbox."
+}

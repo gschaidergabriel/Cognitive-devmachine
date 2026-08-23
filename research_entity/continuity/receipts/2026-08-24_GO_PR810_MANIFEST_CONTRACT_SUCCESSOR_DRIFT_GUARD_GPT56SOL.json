@@ -1,0 +1,102 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "d154810b9489ce90c301fe37d2009ce50f740436",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "parallel_write_conflicts_observed": 2,
+    "parallel_write_conflict_handling": "409_REENTERED_AND_AVOIDED_DUPLICATE_PATCH",
+    "duplicate_lane_created": false
+  },
+  "reentry": {
+    "donor_head_observed": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "executor_head_after_guard_write": "8fdc3c6319c47bcff59b6b957c0e6456696e4027",
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "executor_pr": 810,
+    "executor_branch": "clay/fusion-vcr-native-20260817",
+    "rebind_contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+    "rebind_contract_status": "SOURCE_REBIND_REQUIRED",
+    "required_exact_blob_count": 17
+  },
+  "observation": {
+    "problem": "Rapid successor movement repeatedly advanced the rebind contract donor/test closure while snapshot manifests and specialized blob guards could remain self-consistent but stale. A guard derived only from its own manifest or hardcoded donor could therefore report closure for a superseded target.",
+    "concrete_predecessor_drift": {
+      "contract_donor_earlier_in_cycle": "48d1bcb8357df0cf90d99133027f88ab67361a3f",
+      "stale_manifest_donor": "5c59891b208d245b4b445772c70da5108447d794",
+      "contract_composite_test_blob_earlier_in_cycle": "a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4",
+      "stale_manifest_composite_test_blob": "3180a62c8d5d6d5a2777b1285169d548b9f2e58a"
+    },
+    "current_successor": "The current v4 contract and v3 17-blob manifest now target donor 511d568932bf47828679e3ca6ba05650f18d284d and composite test blob cd0abb3fe22d0fa015befe35c896f56fa006f08c, with upstream trust objects constructed by product producers and the obsolete inference test fixture removed."
+  },
+  "delta": {
+    "predecessor_guard_commit": "d89a0438cbaf2335e6708a6631604b493dd27f2a",
+    "current_guard_commit": "8fdc3c6319c47bcff59b6b957c0e6456696e4027",
+    "guard_path": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-v4-v3-current-donor-exact-blobs.mjs",
+    "classification": "SUCCESSOR_DYNAMIC_MANIFEST_CONTRACT_EXACT_IDENTITY_FENCE",
+    "now_requires": [
+      "manifest and current rebind contract both remain SOURCE_REBIND_REQUIRED under supervisor 8.63 FREE_ONLY EntityOS/HCU authority",
+      "repository-qualified retained executor identity gschaidergabriel/Dr.-Unterweger#810",
+      "manifest retained donor commit exactly equals current rebind contract retained donor commit",
+      "manifest fixed command exactly equals current rebind contract fixed command",
+      "flattened manifest production/regression/transitive Git blob map exactly equals contract exact_donor_git_blobs",
+      "contract required source/regression/transitive file set exactly equals the blob-map key set",
+      "exact 17-file current closure with no duplicate required filenames",
+      "production-derived upstream trust-object and no-upstream-test-double fences remain asserted",
+      "obsolete test_inference_receipt_v1.py fixture remains absent from the current closure",
+      "every carried file rehashes to the contract-declared Git blob identity"
+    ],
+    "authority_effect": "The specialized preflight no longer treats a snapshot manifest or hardcoded donor SHA as an independent current target authority; disagreement with the current rebind contract fails closed before any promotion claim.",
+    "source_rebind_removed": false,
+    "sandbox_or_provider_execution_performed": false
+  },
+  "hypothesis": {
+    "claim": "Binding the current donor preflight to both the successor contract and its manifest removes a self-consistent-stale-island failure mode during rapid parallel donor advancement.",
+    "falsifier": "A future contract/manifest donor, command, required-file or blob-map divergence can still produce a guard PASS, or a current closure can pass while carrying an undeclared/mismatched file."
+  },
+  "counterhypothesis": {
+    "claim": "The immutable snapshot manifest alone is sufficient because it intentionally names one donor snapshot.",
+    "discriminator": "The executor's behavioral target authority is the current rebind contract; this cycle directly observed the contract advance while an older manifest remained internally valid. Exact promotion therefore requires equality between the two surfaces, not independent validity."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the single retained executor has a fail-closed successor-dynamic source-identity preflight instead of two independently current-looking target surfaces.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the exact Typed Entry -> route -> engine/load -> GRID10 -> MiniUnifiedDB model-execution admission -> Inference/v4 chain is bound as one contract/manifest/file-set identity before source promotion.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: Vector Control ABI, Global J-Space/GWT, TrainingTrace/v1, JSpaceBinding/v3 and semantic-revalidation bytes cannot be promoted from a stale donor manifest when the current contract has advanced."
+  },
+  "evidence_boundary": {
+    "github_source_write_observed": true,
+    "source_only": true,
+    "new_ci_execution_observed": false,
+    "new_admitted_sandbox_execution_observed": false,
+    "actual_model_executor_io_observed": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false,
+    "paid_fallback_used": false,
+    "together_used": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current README and immediate successor receipts already preserve the SOURCE_REBIND_REQUIRED single-executor frontier. This receipt records a narrow guard invariant while parallel source fusion is moving rapidly; avoiding a README overwrite prevents clobbering newer convergence details."
+  },
+  "next_exact_gate": [
+    "Materialize the full current jspace-execution-store-511d5689 closure with all 17 exact contract/manifest blobs and no obsolete inference fixture.",
+    "Run the successor-dynamic current-donor guard and require MANIFEST_CONTRACT_IDENTITY=PASS plus 17 exact Git blob identities.",
+    "Bind the same exact map, fixed command and expected result assertions into the single fixed PR810 route; remove SOURCE_REBIND_REQUIRED only atomically with that coherent closure.",
+    "Execute only when supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission permits and preserve exact source/result digests, Sandbox identity, secret fence and cleanup.",
+    "Do not grant model/J-Space/training credit until actual zero-cost local model-executor I/O uses the canonical MiniUnifiedDB atomic admission path."
+  ]
+}

@@ -8,7 +8,7 @@
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
   "canonical_main_initial": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
-  "canonical_main_latest_observed": "4b7b84ee6c0ec923165494783b17d723e9885505",
+  "canonical_main_latest_observed": "4a7cad171e13e0c6d0043766f07a41490223eb01",
   "execution_policy": "FREE_ONLY",
   "scope": "adjudicate the now-closed unmerged PR #966 as a mechanism donor against strengthened current-main truth/state/effect-responsibility guards",
   "grf": {
@@ -17,9 +17,9 @@
       "PR #966 implemented useful donor mechanisms: one native profile authority, current effect names, RFC6901 response pointers, explicit local_exec child env isolation and generic DB-profile inference dispatch.",
       "PR #966 computes personality_state metrics used by the claim gate, but its canonical_state_hash serializes canonical without those metrics.",
       "Current main metric-hash guard requires claim-authorizing metrics to be bound into canonical_raw once DB-profile convergence activates.",
-      "Current main generation-authority guard forbids legacy eos_pipeline_state.generation from driving entity_state.generation.",
+      "Current main generation-authority guards permit read-only legacy mirror inspection for explicit divergence/fail-closed decisions but forbid mirror-derived writes into canonical entity_state.generation.",
       "Current main read-phase-purity guard requires schema/bootstrap writes to stay in pipeline_init and forbids _ensure_schema/DDL/DML re-entry from _pipeline_profile_read, _pipeline_state_read and _already_consumed.",
-      "PR #966 calls _ensure_schema from those read paths and previously reconciled generation with max(native_generation, mirror_generation).",
+      "PR #966 calls _ensure_schema from those read paths and its prior reconciliation could write max(native_generation, mirror_generation) into entity_state.generation.",
       "PR #966 is now closed unmerged."
     ],
     "R1_inferred": [
@@ -32,7 +32,7 @@
     ],
     "R3_counter": [
       "Evidence refs alone do not commit the numerical/status values authorizing state claims.",
-      "Compatibility generation mirrors are not harmless if they can feed canonical state.",
+      "Compatibility generation mirrors are not harmless if their values can feed canonical state; read-only divergence inspection remains admissible.",
       "Idempotent schema helpers are still write-capable effect surfaces and therefore violate observational read-phase responsibility when re-entered after pipeline_init."
     ],
     "R4_discriminate": {
@@ -47,7 +47,7 @@
     },
     "R5_emergent": [
       "Fresh-main extraction must re-run semantic guards, not merely resolve textual conflicts.",
-      "Canonical authority must flow one way into compatibility projections, never back from projection to canonical state.",
+      "Canonical authority may inspect compatibility projections for divergence but projection values may not become canonical write authority.",
       "Effect-phase purity matters independently of final state equivalence: observational phases must not hide mutation-capable schema admission."
     ],
     "R6_verify": {
@@ -68,6 +68,7 @@
     "generation_authority": {
       "status": "INDEPENDENTLY_CONFIRMED_AND_PERSISTED_ON_MAIN",
       "main_commit": "31abf2ffcf4b73272063d2c17c17f5b02bcde936",
+      "latest_guard_refinement": "4a7cad171e13e0c6d0043766f07a41490223eb01",
       "policy": "Treat as fused corroboration, not unique evidence from this receipt."
     },
     "read_phase_purity": {
@@ -99,14 +100,14 @@
     "implement only the current effect surface pipeline_profile_read + inference_generate and keep legacy profile_load/provider_chat_json deauthorized",
     "reuse entity_state.active_profile -> profiles(profile_json, profile_sha256) as the single profile authority",
     "keep all schema/bootstrap/migration writes inside pipeline_init; make profile/state/exactly-once read paths observational",
-    "make entity_state.generation the sole generation/CAS authority; any compatibility mirror is canonical-to-projection only",
+    "make entity_state.generation the sole generation/CAS write authority; legacy mirror values may be inspected read-only for explicit divergence/fail-closed handling but may not drive canonical writes",
     "bind every claim-authorizing metric value/status/evidence identity into the exact echoed hash authority, or use an equivalently exact separately echoed claim-authority digest",
     "preserve RFC6901 response-pointer semantics, explicit local_exec child environment isolation, recursive value-only leak/secret gates and profile-v2 expression/adapter semantics",
     "run the complete fresh-main deterministic guard suite",
     "obtain actually-started exact-source authorized isolated execution before runtime/native-v2 promotion"
   ],
   "evidence_boundary": {
-    "new_result": "CLOSED_PR966_WHOLE_DONOR_REJECTED;_METRIC_HASH_COUNTEREXAMPLE_PERSISTED;PARALLEL_AUTHORITY_GUARDS_FUSED",
+    "new_result": "CLOSED_PR966_WHOLE_DONOR_REJECTED;METRIC_HASH_COUNTEREXAMPLE_PERSISTED;PARALLEL_AUTHORITY_GUARDS_FUSED",
     "evidence_class": "SOURCE_MECHANISM_SUPPORTED",
     "reference_runtime": "OPEN",
     "native_profile_v2": "FAIL_CLOSED",

@@ -27,21 +27,22 @@
     "failures": 0,
     "errors": 0
   },
-  "unusual_experiment": {
-    "id": "MICROENTITY_MANIFEST_TRAVERSAL_POISON",
-    "count_for_this_go": 1,
-    "counterhypothesis": "A manifest member can escape the MicroEntity package root and still be archived by the repair path.",
-    "intervention": "Append ../escape.txt to archive_members_required.",
-    "observed": "FAIL_CLOSED with UNSAFE_MEMBER_PATH before archive materialization.",
-    "result": "COUNTERHYPOTHESIS_REJECTED_AT_COMPONENT_SCOPE"
+  "experiment_coordination": {
+    "local_intervention_executed": "MICROENTITY_MANIFEST_TRAVERSAL_POISON",
+    "local_observation": "FAIL_CLOSED with UNSAFE_MEMBER_PATH before archive materialization",
+    "later_parallel_main_evidence": "main@ef46979f7d8e2ed1153dfd4e49fb4c7886b765f4 records that the macrocycle unusual-experiment budget was already consumed by parallel current-go work",
+    "classification": "GLOBAL_UNUSUAL_EXPERIMENT_BUDGET_CONFLICT_DETECTED",
+    "promotion_credit_from_local_intervention": 0,
+    "test_reclassification": "KEEP_AS_ORDINARY_FAIL_CLOSED_SECURITY_REGRESSION_AFTER_EXECUTION",
+    "lesson": "Cross-organ one-experiment enforcement requires a shared immutable macrocycle lease/id before child execution; absent that coordination primitive, workers can oversubscribe the global budget despite local compliance."
   },
-  "verified_properties": [
+  "verified_properties_independent_of_experiment_promotion": [
     "byte-identical deterministic rebuild for identical member bytes and manifest order",
     "archive member order exactly equals archive_members_required order",
     "CRC validation through ZipFile.testzip",
     "archive SHA-256 and Git blob SHA calculation",
     "atomic output replacement",
-    "path traversal and non-POSIX member rejection"
+    "path traversal and non-POSIX member rejection covered by regression"
   ],
   "authority": {
     "MiniUnifiedDB": "UNCHANGED_CANONICAL_DURABLE_AUTHORITY",
@@ -53,5 +54,5 @@
   "runtime_credit": 0,
   "hcu_runtime_credit": 0,
   "model_credit": 0,
-  "claim_class": "EXACT_BLOB_COMPONENT_MECHANISM_EVIDENCE_ONLY"
+  "claim_class": "EXACT_BLOB_COMPONENT_MECHANISM_EVIDENCE_PLUS_COORDINATION_NEGATIVE_RESULT"
 }

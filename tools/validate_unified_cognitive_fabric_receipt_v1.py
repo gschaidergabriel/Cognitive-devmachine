@@ -16,6 +16,7 @@ import sys
 from typing import Any
 
 SCHEMA = "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1"
+VALIDATION_EVIDENCE_SCHEMA = "CANDIDATE_VALIDATION_EVIDENCE/v1"
 GIT_OID = re.compile(r"^(?:[0-9a-f]{40}|[0-9a-f]{64})$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 ENGINE_CLASSES = {"local_08b", "claude_code", "adaptive_backend"}
@@ -23,6 +24,7 @@ JSPACE_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY", "COMPILED_EXTERNAL", 
 COST_CLASSES = {"LOCAL", "FREE", "PAID", "SUBSCRIPTION", "UNKNOWN"}
 EPISTEMIC_STATUSES = {"MEASURED_SUPPORTED", "UNKNOWN", "ERROR", "REFUTED", "NOT_APPLICABLE"}
 VALIDATION_DECISIONS = {"ACCEPT", "REJECT", "BLOCKED"}
+VALIDATOR_CLASSES = {"DETERMINISTIC_GATE", "EXTERNAL_MEASUREMENT", "VERIFIED_EFFECT_OUTCOME"}
 
 
 class ReceiptError(ValueError):
@@ -115,6 +117,44 @@ def canonical_digest(receipt: dict[str, Any]) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def _validate_candidate_validation_evidence(
+    authority: dict[str, Any],
+    *,
+    candidate_result_digest: str | None,
+    inference_packet_digest: str,
+    adapter_contract_digest: str,
+) -> dict[str, Any] | None:
+    evidence = authority.get("validation_evidence")
+    if evidence is None:
+        return None
+    if type(evidence) is not dict:
+        raise ReceiptError("validation_evidence:OBJECT_REQUIRED")
+    if evidence.get("schema") != VALIDATION_EVIDENCE_SCHEMA:
+        raise ReceiptError("VALIDATION_EVIDENCE_SCHEMA_MISMATCH")
+    subject_digest = _hex(evidence, "candidate_result_digest", HEX64)
+    if candidate_result_digest is None or subject_digest != candidate_result_digest:
+        raise ReceiptError("VALIDATION_EVIDENCE_SUBJECT_MISMATCH")
+    validator_class = _text(evidence, "validator_class")
+    if validator_class not in VALIDATOR_CLASSES:
+        raise ReceiptError("VALIDATION_EVIDENCE_VALIDATOR_CLASS_UNSUPPORTED")
+    validator_identity_digest = _hex(evidence, "validator_identity_digest", HEX64)
+    evidence_receipt_digest = _hex(evidence, "evidence_receipt_digest", HEX64)
+    if evidence.get("decision") != "ACCEPT":
+        raise ReceiptError("VALIDATION_EVIDENCE_NOT_ACCEPTED")
+    forbidden_self_identities = {
+        candidate_result_digest,
+        inference_packet_digest,
+        adapter_contract_digest,
+    }
+    if validator_identity_digest in forbidden_self_identities:
+        raise ReceiptError("VALIDATION_EVIDENCE_VALIDATOR_IDENTITY_NOT_SEPARATE")
+    if evidence_receipt_digest in forbidden_self_identities:
+        raise ReceiptError("VALIDATION_EVIDENCE_RECEIPT_IDENTITY_NOT_SEPARATE")
+    if evidence_receipt_digest == validator_identity_digest:
+        raise ReceiptError("VALIDATION_EVIDENCE_RECEIPT_EQUALS_VALIDATOR_IDENTITY")
+    return evidence
+
+
 def validate(receipt: dict[str, Any]) -> dict[str, Any]:
     if type(receipt) is not dict:
         raise ReceiptError("ROOT_OBJECT_REQUIRED")
@@ -192,8 +232,8 @@ def validate(receipt: dict[str, Any]) -> dict[str, Any]:
     external_hidden_state_claimed = _bool(inference, "external_hidden_state_claimed")
     _text(inference, "adapter_version")
     _hex(inference, "capability_profile_digest", HEX64)
-    _hex(inference, "adapter_contract_digest", HEX64)
-    _hex(inference, "inference_packet_digest", HEX64)
+    adapter_contract_digest = _hex(inference, "adapter_contract_digest", HEX64)
+    inference_packet_digest = _hex(inference, "inference_packet_digest", HEX64)
     candidate_result_digest = _hex(inference, "candidate_result_digest", HEX64, nullable=True)
     epistemic_status = _text(inference, "epistemic_status")
     if epistemic_status not in EPISTEMIC_STATUSES:
@@ -264,10 +304,18 @@ def validate(receipt: dict[str, Any]) -> dict[str, Any]:
         raise ReceiptError("VALIDATION_DECISION_INVALID")
     canonical_write = _bool(authority, "canonical_write_committed")
     effect_committed = _bool(authority, "effect_committed")
+    validation_evidence = _validate_candidate_validation_evidence(
+        authority,
+        candidate_result_digest=candidate_result_digest,
+        inference_packet_digest=inference_packet_digest,
+        adapter_contract_digest=adapter_contract_digest,
+    )
     if direct_state or direct_effect:
         raise ReceiptError("CANDIDATE_AUTHORITY_SMUGGLE")
     if decision == "ACCEPT" and not executed:
         raise ReceiptError("ACCEPT_WITHOUT_EXECUTED_INFERENCE")
+    if engine_class == "claude_code" and decision == "ACCEPT" and validation_evidence is None:
+        raise ReceiptError("CLAUDE_ACCEPT_REQUIRES_SEPARATE_VALIDATION_EVIDENCE_BINDING")
     if decision != "ACCEPT" and (canonical_write or effect_committed):
         raise ReceiptError("REJECTED_CANDIDATE_COMMITTED")
     if (canonical_write or effect_committed) and epistemic_status != "MEASURED_SUPPORTED":

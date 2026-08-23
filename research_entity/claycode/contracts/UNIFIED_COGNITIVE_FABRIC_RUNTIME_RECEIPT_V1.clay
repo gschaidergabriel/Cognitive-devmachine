@@ -13,6 +13,8 @@ law executed_cognitive_cycle_requires_gwt_winner = true
 law executed_nonplain_jspace_requires_observation = true
 law canonical_write_requires_measured_supported = true
 law effect_commit_requires_measured_supported = true
+law claude_accept_requires_separate_validation_evidence_binding = true
+law validation_evidence_must_bind_candidate_and_separate_validator_receipt_identity = true
 law inference_execution_requires_backend_admission = true
 law stale_identity_blocks_admission_and_execution = true
 law provider_policy_authority_is_external_existing_supervisor_gate = true
@@ -25,10 +27,10 @@ fn validate(receipt:Map)->Map {
   // The effect implementation MUST enforce the v1 invariants documented by the
   // canonical validator: exact source/runtime/boot bindings, one Zero/GRF/workspace
   // identity, J-Space/GWT as cognition-only, observation/intervention separation,
-  // causal J-Space observation + one GWT winner for executed non-plain cycles,
-  // candidate-only inference, explicit epistemic status, fail-closed stale/capability
-  // bindings, upstream backend admission, FREE_ONLY cost-class admission, envelope
-  // integrity, and no direct candidate state/effect authority.
+  // candidate-only inference, explicit epistemic status, Claude ACCEPT bound to a
+  // separate typed validation-evidence identity, fail-closed stale/capability bindings,
+  // upstream backend admission, FREE_ONLY cost-class admission, envelope integrity,
+  // and no direct candidate state/effect authority.
   let checked = effect("unified_cognitive_fabric_receipt_validate_v1", receipt)
   require checked.ok
   return checked

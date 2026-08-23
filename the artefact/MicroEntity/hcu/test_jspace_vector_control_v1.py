@@ -187,6 +187,35 @@ class JSpaceVectorControlTests(unittest.TestCase):
                 expected_role=ROLE,
             )
 
+    def test_self_consistent_non_encoder_native_scale_fails_closed(self):
+        packet = encode_vector(
+            (1.0, -0.5),
+            basis_id=BASIS_ID,
+            basis_sha256=BASIS_SHA256,
+            generation=GENERATION,
+            role=ROLE,
+        )
+        forged = replace(
+            packet,
+            scale_numerator="1",
+            scale_denominator="3",
+            packet_sha256="0" * 64,
+        )
+        forged = replace(
+            forged,
+            packet_sha256=_canonical_sha256(_packet_material(forged), "VECTOR_CONTROL_PACKET"),
+        )
+        with self.assertRaisesRegex(JSpaceVectorControlError, "SCALE_RATIONAL_BINARY64_ANCHOR_EXACT_REQUIRED"):
+            validate_packet(forged)
+        with self.assertRaisesRegex(JSpaceVectorControlError, "SCALE_RATIONAL_BINARY64_ANCHOR_EXACT_REQUIRED"):
+            decode_vector(
+                forged,
+                current_generation=GENERATION,
+                expected_basis_id=BASIS_ID,
+                expected_basis_sha256=BASIS_SHA256,
+                expected_role=ROLE,
+            )
+
     def test_binary64_scale_endpoints_remain_admitted(self):
         for value in (
             float.fromhex("0x0.0000000000001p-1022"),

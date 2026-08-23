@@ -117,7 +117,6 @@ All new data paths converge toward one typed ingress binding before cognition:
 - payload reference/digest.
 
 Capability claims in an untrusted Entry packet are **not authority**. Entry admission compares them against existing deterministic permission/capability authority; the packet may narrow but may never self-grant or broaden it.
-
 HCU route events and downstream inference receipts must re-enter through this fabric so event identity, generation, engine identity and causal provenance remain bound instead of becoming a side ledger.
 
 ## HCU reactive cognition
@@ -237,7 +236,6 @@ Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_ATOMIC_LEASE
 `README=UPDATED_CONCURRENT_INVOCATION_SINGLE_DOWNSTREAM_JSPACE_WINNER`.
 
 This macrocycle tightened a cross-layer race invariant that was previously split between two tests. The canonical MiniUnifiedDB admission-store regression already required exactly one winner for concurrent divergent observations of the same executor invocation, while the integrated execution-store -> Inference/v4 -> J-Space/v3 regression only checked the downstream replay fence sequentially. That left an untested counterhypothesis: DB-level uniqueness could be correct while two concurrent callers still both escaped into downstream inference/J-Space construction outside the transaction boundary.
-
 PR1263 commit `48d1bcb8357df0cf90d99133027f88ab67361a3f` closes that source-level gap. `test_execution_store_inference_jspace_chain_v1.py` now starts two divergent observations concurrently against one invocation key and permits InferenceReceipt/v4 plus a semantically validated JSpaceBinding/v3 only after `admit_and_verify_model_execution` returns. The regression requires exactly one downstream winner, one `MODEL_EXECUTION_INVOCATION_REPLAY_DIVERGENCE` rejection, and exactly one persisted invocation/observation pair. New test blob: `a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4`.
 
 The single retained PR810 executor contract was then re-entered rather than force-written across parallel movement. An initial update correctly failed with HTTP 409 on a stale blob; after refresh, executor commit `f4c720c1f547d4415b2d95652c602a22b4124a6d` kept `SOURCE_REBIND_REQUIRED` active while rebinding the target to donor `48d1bcb8357df0cf90d99133027f88ab67361a3f`, the new test blob, and the stronger assertion that only the concurrent atomic winner may reach InferenceReceipt/v4 plus validated JSpaceBinding/v3.
@@ -277,3 +275,19 @@ The current Vercel status for the guard commit is failure due the Hobby build-ra
 Next exact gate: keep PR810 quarantined until one fixed route carries every exact donor-`511d5689` production/regression/transitive blob and route-manifest equality is proven, then execute the fixed command only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission actually permits it. Require actual zero-cost local model-executor I/O through canonical MiniUnifiedDB atomic admission before any J-Space model-runtime or training promotion.
 
 Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_PR810_REBIND_SCHEMA_DRIFT_GUARD_GPT56SOL.json`.
+
+## Current `go` delta — live-head qualified executor + J-Space model-input control causality
+
+`README=UPDATED_LIVE_HEAD_QUALIFICATION_AND_MODEL_INPUT_CONTROL_CAUSALITY`.
+
+Re-entry during this macrocycle observed canonical Research `main` advance to `fd719615d32ae342f732a09feb799c8a8c7e9e86`. The single retained execution controller is repository-qualified as `gschaidergabriel/Dr.-Unterweger#810`, current observed head `b6fcb5e26b66f30951a308caf6f23df8192d4040`; the single retained HCU donor is `gschaidergabriel/clay-global-research-entity#1263`, whose live branch head was observed at `f01b79a55a6e8015e10ad83cec2c50d9689903ac` even though its PR body still names `511d568932bf47828679e3ca6ba05650f18d284d` as an exact donor snapshot. PR-body/stored SHAs are therefore evidence snapshots only and must never replace live-head refresh at fusion/execution time.
+
+Fresh Vercel Hobby inspection found no deployment newer than the observed predecessor deployment and therefore no exact-head deployment for executor `b6fcb5e2...`. No stale READY deployment was invoked. This preserves the source/runtime boundary: source convergence and deployment history do not create whole EntityOS/HCU, full-HCU, J-Space model-runtime or training credit; all remain `0`.
+
+The same re-entry discovered a stronger current Track-C guard already fused to canonical `main`: `research_entity/claycode/HCU_JSPACE_MODEL_INPUT_CONTROL_CAUSALITY_GATE_V1.md`. It separates two hypotheses that the current v3 J-Space binding cannot distinguish: actual consumption of the exact `JSPACE_VECTOR_CONTROL_ABI/v1` packet by the model executor versus post-hoc association of an independently generated control packet with the same inference metadata. Therefore `JSpaceBinding/v3` can support association/causal-metadata component credit at its exact scope, but not Vector-Control-consumption, model-internal J-Space causality, J-Space model-runtime credit or training promotion.
+
+The next non-competing primitive is `HCU_MODEL_INPUT_CONTROL_BINDING/v1`: bind exact Vector-Control packet identity and canonical bytes (or one explicitly versioned deterministic transform) to the executor-observed input bytes before or at invocation admission, then require `VerifiedModelExecution/v1`, `HCU_INFERENCE_RECEIPT/v4` and the J-Space binding to echo that control-binding identity. This establishes executor-input dataflow evidence only; hidden-state causal use still requires separately admitted intervention/lesion/rescue evidence.
+
+No new unusual experiment was executed because no shared reproducible macrocycle/request identity and create-only lease were available. No Together/paid/VPS/self-hosted/production execution or upgrade path was used.
+
+Next exact gate: fuse the repository-qualified executor identity onto the latest moving `main`/README without opening a duplicate executor lane; reconcile the live `#1263` donor closure against its stale PR-body snapshot; require a naturally available exact-head FREE_ONLY Vercel READY deployment before invoking the current fixed capsule; and extend the same retained donor/executor chain with `HCU_MODEL_INPUT_CONTROL_BINDING/v1` before any J-Space model-runtime or training promotion.

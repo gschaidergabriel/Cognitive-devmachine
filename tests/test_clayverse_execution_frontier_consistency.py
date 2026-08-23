@@ -12,7 +12,7 @@ VERCEL_CURRENT = """
 Status: BRIDGE CONFIRMED / SANDBOX ADMISSION PROVEN / RUNTIME GITHUB TOKEN INGRESS IMPLEMENTED
 Sandbox.create is not the blocker.
 Runtime one-shot ingress accepts GITHUB_READ_TOKEN through the owner-started POST path.
-rebind retained #810 controller once
+rebind retained #810 controller to that exact source identity
 """
 
 
@@ -59,6 +59,6 @@ def test_claimed_bridge_fails_closed_when_continuity_evidence_degrades():
 
 
 def test_claimed_bridge_fails_closed_when_rebind_obligation_disappears():
-    degraded = VERCEL_CURRENT.replace("rebind retained #810 controller once\n", "")
+    degraded = VERCEL_CURRENT.replace("rebind retained #810 controller to that exact source identity\n", "")
     errors = execution_frontier_errors(current_program(), degraded)
     assert "VERCEL_EXECUTION_BRIDGE_EVIDENCE_MISSING_OR_DEGRADED" in errors

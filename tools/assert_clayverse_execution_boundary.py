@@ -16,6 +16,11 @@ VERCEL_EXECUTION_PATH = "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PAT
 EXPECTED_SURFACE = "AUTHORIZED_ISOLATED_SANDBOX_ONLY"
 EXPECTED_EXECUTION_GATE = "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
 EXPECTED_VERCEL_BRIDGE = "SANDBOX_ADMISSION_PROVEN_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED"
+CURRENT_OWNER_DIRECTIVE = "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md"
+BRIDGE_PROVIDER_POLICY = "NO_SPECIFIC_API_PROVIDER_MANDATORY_UNLESS_EXPLICITLY_ADMITTED"
+BRIDGE_ENTITYOS_POLICY = "ENTITYOS_EXECUTION_CONDITIONAL_ON_EXPLICIT_ADMISSION"
+BRIDGE_REBIND_POLICY = "PR810_SEMANTIC_REBIND_REQUIRED_BEFORE_CURRENT_RUNTIME_CREDIT"
+STALE_MANDATORY_PROVIDER_TEXT = "mistral is mandatory for this final test"
 
 
 def load_json(path: Path):
@@ -29,10 +34,13 @@ def require(errors: list[str], condition: bool, code: str) -> None:
 
 
 def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]:
-    """Cross-bind retained Vercel continuity and current work-selection in both directions.
+    """Cross-bind retained Vercel continuity, current work selection, and product semantics.
 
     Positive bridge evidence constrains PROGRAM_STATE. Conversely, if PROGRAM_STATE claims
     this bridge/frontier, loss or degradation of required continuity evidence must fail closed.
+    The continuity record must also remain aligned to the current ClayVerse owner semantics:
+    no specific API provider is mandatory unless admitted, EntityOS execution is conditional,
+    and retained PR #810 must be semantically rebound before current runtime credit.
     This never grants source, OCI, or product runtime credit.
     """
     errors: list[str] = []
@@ -58,6 +66,12 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
         return errors
     if not bridge_proven:
         return errors
+
+    require(errors, CURRENT_OWNER_DIRECTIVE.lower() in lower, "VERCEL_BRIDGE_CURRENT_OWNER_DIRECTIVE_MISSING")
+    require(errors, BRIDGE_PROVIDER_POLICY.lower() in lower, "VERCEL_BRIDGE_PROVIDER_NEUTRALITY_MISSING")
+    require(errors, BRIDGE_ENTITYOS_POLICY.lower() in lower, "VERCEL_BRIDGE_ENTITYOS_CONDITIONALITY_MISSING")
+    require(errors, BRIDGE_REBIND_POLICY.lower() in lower, "VERCEL_BRIDGE_PR810_SEMANTIC_REBIND_FENCE_MISSING")
+    require(errors, STALE_MANDATORY_PROVIDER_TEXT not in lower, "VERCEL_BRIDGE_STALE_MANDATORY_PROVIDER")
 
     require(errors, stage_gate == EXPECTED_EXECUTION_GATE, "PROGRAM_EXECUTION_FRONTIER_STALE_GENERIC_SURFACE_BLOCK")
     require(errors, execution.get("vercel_sandbox_bridge") == EXPECTED_VERCEL_BRIDGE, "PROGRAM_VERCEL_BRIDGE_STATE_MISSING")

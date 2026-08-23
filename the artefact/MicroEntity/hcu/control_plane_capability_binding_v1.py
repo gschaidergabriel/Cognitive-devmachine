@@ -14,10 +14,8 @@ from typing import Any, Mapping, Sequence
 
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
-    from .xeno_entry_fabric_v1 import EntryPacket, admit_entry
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
-    from xeno_entry_fabric_v1 import EntryPacket, admit_entry
 
 SCHEMA = "ENTITYOS_HCU_CONTROL_PLANE_CAPABILITY_BINDING/v1"
 POLICY_SCHEMA = "ENTITYOS_HCU_CONTROL_PLANE_CAPABILITY_POLICY/v1"
@@ -176,8 +174,13 @@ def admit_entry_with_control_plane(
     user_id: str,
     session_id: str,
     admitted_budget: Mapping[str, Any],
-) -> EntryPacket:
+) -> Any:
     """Admit one Entry against a freshly derived canonical capability snapshot."""
+    try:
+        from .xeno_entry_fabric_v1 import admit_entry
+    except ImportError:
+        from xeno_entry_fabric_v1 import admit_entry
+
     view = snapshot_capability_authority(
         canonical_db,
         effect_gate,

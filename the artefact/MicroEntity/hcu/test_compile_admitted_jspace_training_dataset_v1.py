@@ -190,6 +190,41 @@ class AdmittedJSpaceTrainingDatasetTests(unittest.TestCase):
                 )
         compiler.assert_not_called()
 
+    def test_duplicate_training_trace_with_conflicting_ancestry_fails_closed(self):
+        trace = _training_trace()
+        binding = _binding(trace)
+        first = _admission(trace)
+        second = _admission(trace, transition_trace_sha256="de" * 32)
+        lower = {
+            "train": [{"messages": [], "metadata": {"trace_sha256": TRACE_SHA}}],
+            "validation": [],
+            "holdout": [],
+        }
+        with patch(
+            "compile_admitted_jspace_training_dataset_v1.admit_for_training_dataset",
+            side_effect=[first, second],
+        ) as gate, patch(
+            "compile_admitted_jspace_training_dataset_v1.compile_training_traces",
+            return_value=lower,
+        ) as compiler:
+            with self.assertRaisesRegex(
+                AdmittedTrainingDatasetError,
+                "TRAINING_TRACE_ANCESTRY_CONFLICT",
+            ):
+                compile_admitted_records(
+                    [
+                        (trace, {"schema_version": "JSPACE_GWT_TRANSITION_TRACE/v1", "trace_sha256": TRANSITION_SHA}),
+                        (trace, {"schema_version": "JSPACE_GWT_TRANSITION_TRACE/v1", "trace_sha256": "de" * 32}),
+                    ],
+                    admitted_training_traces={TRACE_SHA: trace},
+                    admitted_transition_traces={TRANSITION_SHA: {}, "de" * 32: {}},
+                    admitted_prototype_traces={PROTOTYPE_SHA: {}},
+                    admitted_inference_bindings={TRACE_SHA: binding},
+                    admitted_bases=ADMITTED_BASES,
+                )
+        self.assertEqual(gate.call_count, 2)
+        compiler.assert_called_once_with([dict(trace)], admitted_bases=ADMITTED_BASES)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,81 @@
+{
+  "schema": "CLAY_GO_SOURCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated component organ",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main_sha": "a2184b9322d314e26896988b3201ffe43e15ed8d",
+  "branch": "gpt56sol/go-cognition-store-atomic-bootstrap-20260823-1511",
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "effects": "EffectGate only",
+    "cognition_binding": "identity/provenance admission only",
+    "model_jspace_gwt": "candidate_or_measurement_only"
+  },
+  "observed_blocker": {
+    "path": "tools/miniunifieddb_cognition_store_v1.py",
+    "original_git_blob": "0edbe664259cc5aa788577834e1b0ea5a9050e4d",
+    "mechanism": "install_schema used sqlite3.Connection.executescript while the retained runtime bootstrap already owns BEGIN IMMEDIATE",
+    "negative_observation": {
+      "before_install_in_transaction": true,
+      "after_install_in_transaction": false,
+      "rollback_removed_cognition_tables": false,
+      "tables_remaining_after_rollback": [
+        "mini_cognition_boot_bindings",
+        "mini_cognition_object_admissions",
+        "mini_cognition_objects",
+        "mini_cognition_turn_bindings"
+      ]
+    },
+    "risk": "fusing the store directly into the retained runtime bootstrap would create a hidden partial-commit boundary and make later bootstrap rollback non-atomic"
+  },
+  "selected_delta": {
+    "mechanism": "replace executescript with four transaction-respecting db.execute DDL statements; the caller remains the sole commit/rollback owner",
+    "store_git_blob": "e9864586ac688952cca977f38d25cb61f4335dff",
+    "store_sha256": "c5297325e158258c60ca6f50ae698b7fae9cd1f0587e7a886e69db432bc40c6e",
+    "atomicity_test_git_blob": "1d113b4f19829b315ab9019980bf1254f7cb6faf",
+    "atomicity_test_sha256": "f7b0e8d695a139e82d4e583149040971b4b38e9fb9befb041d0bd69850c6d2c2",
+    "files": [
+      "tools/miniunifieddb_cognition_store_v1.py",
+      "tests/test_miniunifieddb_cognition_store_atomicity.py"
+    ]
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Linux/Python component container",
+    "source_identity_check": "git hash-object reproduced the exact branch store/test blobs",
+    "python_compile": "PASS",
+    "focused_atomicity_regression": "1/1 PASS",
+    "adjacent_store_regression": "5 existing contracts plus the atomicity case passed in the locally reconstructed exact-store test layout",
+    "classification": "EXACT_SOURCE_COMPONENT_ATOMICITY_REPAIR_ONLY"
+  },
+  "fences": [
+    "no second database or generation authority",
+    "no change to cognition schemas or semantic admission rules",
+    "no direct truth or effect authority",
+    "outer runtime transaction remains the commit/rollback owner",
+    "final UCF runtime receipt remains post inference + deterministic gate + commit-or-explicit-no-commit"
+  ],
+  "unusual_experiment": {
+    "claim": "NO_NEW_GLOBAL_UNUSUAL_EXPERIMENT_CREDIT",
+    "reason": "no upstream macrocycle_id was supplied and current same-period receipts contain conflicting/shared experiment-slot labels; the transaction-boundary falsifier is retained as ordinary regression evidence only"
+  },
+  "credit": {
+    "source_component_atomicity": "SUPPORTED",
+    "runtime": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu_runtime": 0,
+    "whole_product": 0
+  },
+  "safety": {
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "vps_or_production_testing": false
+  },
+  "next_exact_gate": "Fuse transaction-safe install_schema(db) into the retained ProfilePipelineRuntime._pipeline_init transaction, then implement the one real pipeline_cognitive_fabric_admit/prepare handler from exact live MiniUnifiedDB generation + causal-turn/task/workspace binding through ZERO_WORKSPACE_CAPSULE/v1 and ZERO_INFERENCE_PACKET/v2 into the existing UCF context-binding chain. Missing, stale or unbound cognition material must block or typed-abstain before inference; final UCF-v1 receipt stays post gate/commit. Then run exact integrated bytes on an actually-started authorized isolated executor before granting runtime credit."
+}

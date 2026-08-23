@@ -129,7 +129,10 @@ def _validate_internal_provider(event: Mapping[str, Any]) -> None:
         raise ReactiveRoutingError("UNKNOWN_OR_EXTERNAL_PROVIDER_FORBIDDEN_AS_INTERNAL_COGNITIVE_DEPENDENCY")
 
 
-def _resolve_internal_engine(event: Mapping[str, Any]) -> tuple[str | None, str | None, str | None, str | None]:
+def _resolve_internal_engine(
+    event: Mapping[str, Any],
+    admitted_engine_artifacts: Mapping[str, Any] | None,
+) -> tuple[str | None, str | None, str | None, str | None]:
     identity = event.get("resolved_internal_engine")
     engine_class = event.get("resolved_internal_engine_class")
     artifact_sha256 = event.get("resolved_internal_engine_artifact_sha256")
@@ -147,6 +150,21 @@ def _resolve_internal_engine(event: Mapping[str, Any]) -> tuple[str | None, str 
     if engine_class != admitted_class:
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_CLASS_MISMATCH")
     artifact_sha256 = _sha256_text(artifact_sha256, "RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256")
+
+    # The event may report what bytes it thinks were resolved, but that claim is not
+    # authority. XPU/XRAM must separately supply the currently admitted artifact lock.
+    if not isinstance(admitted_engine_artifacts, Mapping):
+        raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_ARTIFACT_REGISTRY_REQUIRED")
+    admitted_artifact_sha256 = admitted_engine_artifacts.get(identity)
+    if admitted_artifact_sha256 is None:
+        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_ARTIFACT_NOT_ADMITTED")
+    admitted_artifact_sha256 = _sha256_text(
+        admitted_artifact_sha256,
+        "ADMITTED_INTERNAL_ENGINE_ARTIFACT_SHA256",
+    )
+    if artifact_sha256 != admitted_artifact_sha256:
+        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256_MISMATCH")
+
     engine_identity_sha256 = _sha256_canonical(
         {
             "schema": ENGINE_IDENTITY_SCHEMA,
@@ -180,7 +198,12 @@ def _event_identity(event: Mapping[str, Any]) -> str:
     )
 
 
-def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDecision:
+def route_event(
+    event: Mapping[str, Any],
+    *,
+    current_generation: int,
+    admitted_engine_artifacts: Mapping[str, Any] | None = None,
+) -> RouteDecision:
     if not isinstance(event, Mapping) or event.get("schema") != SCHEMA:
         raise ReactiveRoutingError("EVENT_SCHEMA_UNSUPPORTED")
     generation = event.get("entity_generation")
@@ -195,7 +218,7 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         resolved_engine_class,
         resolved_engine_artifact_sha256,
         engine_identity_sha256,
-    ) = _resolve_internal_engine(event)
+    ) = _resolve_internal_engine(event, admitted_engine_artifacts)
 
     novelty = _unit(event.get("novelty", 0.0), "novelty")
     contradiction = _unit(event.get("contradiction", 0.0), "contradiction")
@@ -278,6 +301,8 @@ def assert_inference_echo(decision: RouteDecision, receipt: Mapping[str, Any]) -
         "decision_sha256": decision.decision_sha256,
         "engine_identity_sha256": decision.engine_identity_sha256,
         "resolved_engine_identity": decision.resolved_engine_identity,
+        "resolved_engine_class": decision.resolved_engine_class,
+        "resolved_engine_artifact_sha256": decision.resolved_engine_artifact_sha256,
     }
     for field, value in expected.items():
         if receipt.get(field) != value:

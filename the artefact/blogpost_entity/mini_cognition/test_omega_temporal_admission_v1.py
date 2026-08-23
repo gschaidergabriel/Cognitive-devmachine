@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression for ordered R_next=F omega admission semantics."""
+"""Regression for temporal R_next=F omega admission semantics."""
 from __future__ import annotations
 
 from eval_outputs_v1 import exact_omega_ok
@@ -61,16 +61,16 @@ SWAPPED_GATES = HEAD + '''  omega_validate(w,"types")
 ''' + TAIL
 
 
-def test_good_order_is_admitted_by_training_and_eval() -> None:
+def test_canonical_order_is_admitted_by_training_and_eval() -> None:
     assert validate_code(GOOD) == []
     assert exact_omega_ok(GOOD, EXPECTED)
 
 
 def test_commit_before_last_gate_is_rejected_by_training_and_eval() -> None:
-    assert "omega_validation_sequence_before_commit" in validate_code(COMMIT_BEFORE_GENERATION)
+    assert "omega_validation_before_commit" in validate_code(COMMIT_BEFORE_GENERATION)
     assert not exact_omega_ok(COMMIT_BEFORE_GENERATION, EXPECTED)
 
 
-def test_gate_permutation_is_rejected_by_training_and_eval() -> None:
-    assert "omega_validation_sequence_before_commit" in validate_code(SWAPPED_GATES)
-    assert not exact_omega_ok(SWAPPED_GATES, EXPECTED)
+def test_gate_permutation_before_commit_remains_admitted() -> None:
+    assert validate_code(SWAPPED_GATES) == []
+    assert exact_omega_ok(SWAPPED_GATES, EXPECTED)

@@ -1,0 +1,68 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "trigger": "go",
+  "macrocycle_id": "go-15100269-f2fb-4d69-bcd1-4e81196200a3",
+  "organ": "GPT-5.6 Sol",
+  "date": "2026-08-23",
+  "authority": {
+    "current_owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
+    "execution_control": "FREE_ONLY",
+    "provider_network_execution": false,
+    "provider_secret_lookup": false
+  },
+  "source_binding": {
+    "main_observed_initial": "d8ff57c2edc4c9eecde99ce1f9b089702d71b1cf",
+    "main_write_base": "86dcc1fec8add7888773aea0425be3931b5a78f9",
+    "branch": "go/jspace-bundle-fingerprint-20260823",
+    "owner_architecture_source": "5f3c2a7cc9aeab8f851d38450fa50a3e1451d767"
+  },
+  "grf": {
+    "R0_observed": "Owner architecture requires exact checkpoint/tokenizer/J-Space/lens/workspace identities and a JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 before runtime credit, but current product code had no executable atomic bundled-cognition integration fingerprint gate.",
+    "R1_inferred": "Checking component digests independently is insufficient to prove they belong to one calibrated bundle.",
+    "R2_generated": [
+      "keep individual component digest checks only",
+      "bind all cognition/J-Space calibration identities into one canonical integration fingerprint",
+      "bind only checkpoint+tokenizer and treat calibration as advisory"
+    ],
+    "R3_counter": "If each component digest is valid, component-level checks might be sufficient even when parts come from different calibration bundles.",
+    "R4_discriminator": "CROSS_BUNDLE_CALIBRATION_MIX_AND_MATCH: swap only jspace_profile_digest with another valid 64-hex digest while keeping all other individually valid identities and a stale composite authorization.",
+    "R5_emergent": "Calibration identity is relational: checkpoint, tokenizer, J-Space profile, lens and workspace calibration must be admitted as one versioned bundle identity, not merely as independent valid-looking components.",
+    "R6_verified": "Bounded local isolated component test reproduced legacy individual-only false acceptance and showed the new atomic fingerprint rejects both stale manifest identity and stale boot receipt. This is mechanism support only, not Ubuntu/product/model runtime credit."
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "CROSS_BUNDLE_CALIBRATION_MIX_AND_MATCH",
+    "pre_gate_observation": "legacy_individual_only_accepts(mixed_bundle) == true",
+    "post_gate_observation": "validate_manifest(mixed_bundle) rejects integration_fingerprint:MISMATCH; recomputed mixed fingerprint still fails against stale boot receipt"
+  },
+  "delta": {
+    "validator": "the artefact/blogpost_entity/mini_cognition/validate_bundled_cognition_manifest_v1.py",
+    "validator_sha256_local": "a658e52108ec7de451a80a2c2ccaf415f4b7f98eee9ce13b0a1e68f0a4eeb09e",
+    "test": "the artefact/blogpost_entity/mini_cognition/test_validate_bundled_cognition_manifest_v1.py",
+    "test_sha256_local": "9af5c82fa16a63b3e58e533a6c3b2530ec0e179045ed17164327cb9334804aec",
+    "contract": "bundled-cognition-manifest/v1 + bundled-cognition-integration/v1 + jspace-gwt-boot-binding-receipt/v1"
+  },
+  "execution": {
+    "surface": "OpenAI isolated Python sandbox",
+    "command": "python -m unittest -v test_validate_bundled_cognition_manifest_v1.py",
+    "exit_code": 0,
+    "tests_run": 4,
+    "tests_passed": 4,
+    "tests_failed": 0,
+    "non_test_stderr": "environment spreadsheet artifact runtime warmup timeout emitted before unittest output; unittest process still exited 0",
+    "exact_product_ubuntu_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "model_quality_credit": 0
+  },
+  "evidence_class": "BOUNDED_LOCAL_ISOLATED_COMPONENT_MECHANISM_SUPPORTED_SOURCE_CANDIDATE",
+  "strongest_remaining_counterpoint": "The gate is not yet wired into the actual Mini Entity/EntityOS boot path and has not executed on the intentionally offline exact Ubuntu/AgentZero source; therefore it cannot establish J-Space/GWT runtime admission.",
+  "next_executable_gate": "Wire validate_boot_binding into the canonical startup observation boundary and require the atomic bundled cognition integration fingerprint in JSPACE_GWT_BOOT_BINDING_RECEIPT/v1; then execute on exact bundled checkpoint/tokenizer/J-Space/lens/workspace bytes at the next authorized host start.",
+  "safety": {
+    "together_used": false,
+    "paid_provider_used": false,
+    "network_provider_call": false,
+    "secrets_accessed": false,
+    "frank_harness_modified": false
+  }
+}

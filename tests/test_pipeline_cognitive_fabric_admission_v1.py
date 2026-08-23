@@ -54,6 +54,61 @@ class Active:
         return out
 
 
+class Semantic:
+    @staticmethod
+    def resolve_prepare_bundle(
+        db,
+        *,
+        entity_generation,
+        causal_turn_id,
+        task_text,
+        expected_turn_binding_digest=None,
+    ):
+        prepare = Active.resolve_active_prepare(db, entity_generation=entity_generation)
+        if causal_turn_id != prepare["causal_turn_id"]:
+            raise ValueError("CAUSAL_TURN_ID_MISMATCH")
+        if task_text != prepare["task_text"]:
+            raise ValueError("TASK_TEXT_MISMATCH")
+        if expected_turn_binding_digest != prepare["turn_binding_digest"]:
+            raise ValueError("TURN_BINDING_DIGEST_MISMATCH")
+        objects = {}
+        for field in sut._SEMANTIC_OBJECT_FIELDS:
+            objects[field] = {
+                "object_kind": field.upper(),
+                "object_version": "v1",
+                "object_digest": prepare[field],
+                "digest_basis": "EXTERNAL_BYTES",
+                "payload": {"field": field},
+                "payload_digest": h("payload:" + field),
+                "provenance_refs": ["object:" + field],
+                "admission_receipt_digest": h("admit:" + field),
+                "admitted_generation": entity_generation,
+            }
+        return {
+            "ok": True,
+            "schema": "MINIUNIFIEDDB_COGNITION_SEMANTIC_RESOLUTION/v1",
+            "entity_generation": entity_generation,
+            "causal_turn_id": prepare["causal_turn_id"],
+            "turn_binding_digest": prepare["turn_binding_digest"],
+            "boot_binding_digest": prepare["boot_binding_digest"],
+            "task_sha256": prepare["task_sha256"],
+            "workspace_digest": prepare["workspace_digest"],
+            "selected_workspace_slots": prepare["selected_workspace_slots"],
+            "contradiction_state": prepare["contradiction_state"],
+            "turn_provenance_refs": prepare["turn_provenance_refs"],
+            "required_zero_mode": prepare["required_zero_mode"],
+            "boot_provenance_refs": prepare["boot_provenance_refs"],
+            "objects": objects,
+            "authority": {
+                "durable_state": "MiniUnifiedDB",
+                "routing_only": True,
+                "candidate_configuration_only": True,
+                "direct_truth_authority": False,
+                "direct_effect_authority": False,
+            },
+        }
+
+
 class Capsule:
     @staticmethod
     def compile_workspace_capsule(**kw):
@@ -90,6 +145,11 @@ class Capability:
             raise ValueError("INFERENCE_CAPABILITY_BINDING_REQUIRED")
         if prepare.get("entity_generation") != expected_generation:
             raise ValueError("STALE_GENERATION")
+        ucf_engine = {
+            "CLAUDE_CODE": "claude_code",
+            "BUNDLED_LOCAL_08B": "local_08b",
+            "ADAPTIVE_BACKEND": "adaptive_backend",
+        }[binding["engine_class"]]
         return {
             "ok": True,
             "schema": "MINI_INFERENCE_BOUND_ROUTE/v1",
@@ -105,7 +165,7 @@ class Capability:
             "capability_evidence_kind": binding["capability_evidence_kind"],
             "adapter_version": binding["adapter_version"],
             "target_engine_class": binding["engine_class"],
-            "ucf_engine_class": "claude_code",
+            "ucf_engine_class": ucf_engine,
             "jspace_mode": binding["jspace_mode"],
             "route_digest": cls.route_digest,
             "authority": cls.authority,
@@ -148,6 +208,20 @@ class AdmissionTests(unittest.TestCase):
             "inference": inference,
         }
 
+    @classmethod
+    def local_profile(cls, capability_receipt_digest):
+        profile = cls.profile()
+        profile["inference"]["capability_binding"].update(
+            {
+                "capability_receipt_digest": capability_receipt_digest,
+                "capability_evidence_kind": "BUNDLED_MANIFEST",
+                "adapter_version": "local-08b/v1",
+                "engine_class": "BUNDLED_LOCAL_08B",
+                "jspace_mode": "FULL_LOCAL_LATENT",
+            }
+        )
+        return profile
+
     @staticmethod
     def prompt(*, state_hash=None, packet_hash=None, payload="USR"):
         state_hash = state_hash or h("state")
@@ -175,12 +249,25 @@ class AdmissionTests(unittest.TestCase):
             expected_activation_digest=h("activation"),
             origin="go",
             active_turn_module=Active,
+            cognition_resolver_module=Semantic,
             capsule_module=Capsule,
             packet_module=Packet,
             capability_module=Capability,
         )
         args.update(overrides)
         return sut.build_pre_inference_admission(**args)
+
+    @staticmethod
+    def current_capability_ancestry_digest():
+        prepare = Active.resolve_active_prepare(object(), entity_generation=7)
+        semantic_bundle = Semantic.resolve_prepare_bundle(
+            object(),
+            entity_generation=7,
+            causal_turn_id=prepare["causal_turn_id"],
+            task_text=prepare["task_text"],
+            expected_turn_binding_digest=prepare["turn_binding_digest"],
+        )
+        return sut._bind_semantic_bundle(semantic_bundle, prepare)["capability_ancestry_digest"]
 
     def test_success_is_bound_route_candidate_only(self):
         out = self.call()
@@ -195,9 +282,58 @@ class AdmissionTests(unittest.TestCase):
         self.assertEqual(out["capability_route_digest"], h("bound-route"))
         self.assertEqual(out["capability_binding_digest"], h("capability-binding"))
         self.assertEqual(
+            out["capability_evidence_resolution"],
+            "LOCAL_CAPABILITY_EVIDENCE_NOT_REQUIRED_FOR_EXTERNAL_MODE",
+        )
+        self.assertEqual(
             out["cognition_invocation_digest"],
             sut._sha256_obj({"schema": sut.INVOCATION_SCHEMA, **self.invocation()}),
         )
+        self.assertIn("cognition_semantic_bundle_digest", out)
+        self.assertIn("capability_evidence_ancestry_digest", out)
+
+    def test_local_latent_requires_exact_current_miniunifieddb_ancestry_digest(self):
+        receipt = self.current_capability_ancestry_digest()
+        out = self.call(profile=self.local_profile(receipt))
+        self.assertEqual(out["target_engine_class"], "BUNDLED_LOCAL_08B")
+        self.assertEqual(out["jspace_mode"], "FULL_LOCAL_LATENT")
+        self.assertEqual(
+            out["capability_evidence_resolution"],
+            "BUNDLED_MANIFEST_CURRENT_ANCESTRY_BOUND",
+        )
+        self.assertEqual(out["capability_receipt_digest"], receipt)
+        self.assertEqual(out["capability_evidence_ancestry_digest"], receipt)
+
+    def test_random_valid_sha_cannot_authorize_local_latent(self):
+        profile = self.local_profile(h("random-valid-but-unbound-capability-receipt"))
+        with self.assertRaisesRegex(
+            sut.CognitiveFabricAdmissionError,
+            "CAPABILITY_RECEIPT_NOT_BOUND_TO_CURRENT_MINIUNIFIEDDB_ANCESTRY",
+        ):
+            self.call(profile=profile)
+
+    def test_runtime_probe_local_latent_fails_until_typed_probe_is_resolved(self):
+        profile = self.local_profile(h("probe-receipt"))
+        profile["inference"]["capability_binding"]["capability_evidence_kind"] = "RUNTIME_PROBE"
+        with self.assertRaisesRegex(
+            sut.CognitiveFabricAdmissionError,
+            "RUNTIME_PROBE_CAPABILITY_EVIDENCE_UNRESOLVED",
+        ):
+            self.call(profile=profile)
+
+    def test_semantic_object_digest_drift_fails_before_route(self):
+        class BadSemantic(Semantic):
+            @staticmethod
+            def resolve_prepare_bundle(*args, **kwargs):
+                out = Semantic.resolve_prepare_bundle(*args, **kwargs)
+                out["objects"]["jspace_profile_digest"]["object_digest"] = h("other-jspace")
+                return out
+
+        with self.assertRaisesRegex(
+            sut.CognitiveFabricAdmissionError,
+            "COGNITION_SEMANTIC_OBJECT_DIGEST_DRIFT:jspace_profile_digest",
+        ):
+            self.call(cognition_resolver_module=BadSemantic)
 
     def test_downstream_context_changes_packet_and_admission_identity(self):
         a = self.call(prompt=self.prompt(payload="USR-A"))

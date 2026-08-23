@@ -299,6 +299,15 @@ def _annotate_rows(
     return out
 
 
+def _evidence_identity(evidence: PipelineEvidence) -> tuple[str, str, str]:
+    """Identity of the exact ancestry accepted for one training-trace digest."""
+    return (
+        evidence.transition_trace_sha256,
+        evidence.inference_binding_sha256,
+        evidence.inference_receipt_sha256,
+    )
+
+
 def compile_admitted_records(
     records: Iterable[tuple[Mapping[str, Any], Mapping[str, Any]]],
     *,
@@ -316,9 +325,13 @@ def compile_admitted_records(
     inference binding is looked up by training-trace SHA and must validate under the
     selected RFC8785/JCS identity rules. The selected lower-level compiler then separately
     enforces the external basis id+digest registry before rendering any dataset rows.
+
+    Exact duplicate records are idempotent only after their full admitted ancestry has been
+    revalidated. Reusing one training-trace digest with a different transition/inference
+    ancestry fails closed; record ordering can therefore never hide contradictory evidence.
     """
     out = {"train": [], "validation": [], "holdout": []}
-    seen: set[str] = set()
+    seen: dict[str, tuple[str, str, str]] = {}
     admitted_inference_bindings = _mapping(
         admitted_inference_bindings,
         "admitted_inference_bindings",
@@ -331,8 +344,6 @@ def compile_admitted_records(
         training_trace = _mapping(record[0], "training_trace")
         transition_trace = _mapping(record[1], "transition_trace")
         training_sha = _sha256(training_trace.get("trace_sha256"), "training_trace.trace_sha256")
-        if training_sha in seen:
-            continue
 
         try:
             admission = admit_for_training_dataset(
@@ -350,6 +361,13 @@ def compile_admitted_records(
         if not isinstance(inference_binding, JSpaceInferenceBinding):
             raise AdmittedTrainingDatasetError("INFERENCE_BINDING_NOT_ADMITTED_FOR_TRAINING_TRACE")
         evidence = validate_pipeline_evidence(training_trace, admission, inference_binding)
+        evidence_identity = _evidence_identity(evidence)
+        previous_identity = seen.get(training_sha)
+        if previous_identity is not None:
+            if previous_identity != evidence_identity:
+                raise AdmittedTrainingDatasetError("TRAINING_TRACE_ANCESTRY_CONFLICT")
+            continue
+
         compiled = compile_training_traces(
             [dict(training_trace)],
             admitted_bases=admitted_bases,
@@ -357,7 +375,7 @@ def compile_admitted_records(
         annotated = _annotate_rows(compiled, evidence)
         for split in out:
             out[split].extend(annotated[split])
-        seen.add(training_sha)
+        seen[training_sha] = evidence_identity
 
     if not seen:
         raise AdmittedTrainingDatasetError("NO_ADMITTED_TRAINING_TRACES")

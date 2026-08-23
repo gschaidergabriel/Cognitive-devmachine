@@ -5,7 +5,10 @@ import json
 import os
 import shutil
 import subprocess
+import tempfile
 import threading
+from contextlib import contextmanager
+from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
@@ -36,17 +39,20 @@ class ClaudeCodeInference:
 
     Cognition runs with all built-in tools disabled, MCP configuration fail-closed,
     no Claude session persistence, no Claude-side durable memory inputs, and an
-    explicit environment allowlist. HOME is retained so Claude subscription/OAuth
-    credentials remain usable. MiniUnifiedDB plus deterministic authority/effect
-    gates remain canonical. Claude Code returns candidate inference only and never
-    owns Zero identity, durable truth, durable memory, or effects.
+    explicit environment allowlist. Targeted inference gets an invocation-local
+    HOME/config/tmp root; durable authentication crosses explicitly by environment
+    credential rather than by inheriting a writable login HOME. MiniUnifiedDB plus
+    deterministic authority/effect gates remain canonical. Claude Code returns
+    candidate inference only and never owns Zero identity, durable truth, durable
+    memory, or effects.
     """
 
     ENV_ALLOWLIST = (
-        "PATH", "HOME", "LANG", "LC_ALL", "TMPDIR",
+        "PATH", "LANG", "LC_ALL",
         "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS",
         "HTTP_PROXY", "HTTPS_PROXY",
         "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
+        "CLAUDE_CODE_OAUTH_TOKEN",
     )
 
     def __init__(self, binary: str | None = None, cwd: str | None = None, timeout: int | None = None):
@@ -64,6 +70,23 @@ class ClaudeCodeInference:
         env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
         env["CLAUDE_CODE_DISABLE_CLAUDE_MDS"] = "1"
         return env
+
+    @classmethod
+    @contextmanager
+    def _ephemeral_process_env(cls):
+        """Yield a child environment whose Claude filesystem roots die with the call."""
+        with tempfile.TemporaryDirectory(prefix="entityos-claude-") as runtime_root:
+            root = Path(runtime_root)
+            home = root / "home"
+            config = root / "config"
+            tmp = root / "tmp"
+            for path in (home, config, tmp):
+                path.mkdir(mode=0o700)
+            env = cls._subprocess_env()
+            env["HOME"] = str(home)
+            env["CLAUDE_CONFIG_DIR"] = str(config)
+            env["TMPDIR"] = str(tmp)
+            yield env
 
     @staticmethod
     def _system_prompt() -> str:
@@ -84,10 +107,11 @@ class ClaudeCodeInference:
         if executable is None:
             return False
         try:
-            cp = subprocess.run(
-                [executable, "--version"], shell=False, capture_output=True,
-                timeout=5, env=self._subprocess_env(),
-            )
+            with self._ephemeral_process_env() as env:
+                cp = subprocess.run(
+                    [executable, "--version"], shell=False, capture_output=True,
+                    timeout=5, env=env,
+                )
             return cp.returncode == 0
         except Exception:
             return False
@@ -102,14 +126,16 @@ class ClaudeCodeInference:
         args = [
             self.binary, "-p", prompt, "--output-format", "json", "--json-schema", schema,
             "--max-turns", "1", "--permission-mode", "plan", "--tools", "",
-            "--strict-mcp-config", "--no-session-persistence", "--append-system-prompt", system,
+            "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence",
+            "--append-system-prompt", system,
         ]
         with self._lock:
             try:
-                cp = subprocess.run(
-                    args, shell=False, cwd=self.cwd, env=self._subprocess_env(),
-                    capture_output=True, text=True, timeout=self.timeout, check=False,
-                )
+                with self._ephemeral_process_env() as env:
+                    cp = subprocess.run(
+                        args, shell=False, cwd=self.cwd, env=env,
+                        capture_output=True, text=True, timeout=self.timeout, check=False,
+                    )
             except subprocess.TimeoutExpired as exc:
                 raise RuntimeError("Claude Code inference timeout") from exc
         if cp.returncode != 0:

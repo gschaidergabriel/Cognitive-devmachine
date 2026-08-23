@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "97b3da4b4e79d2195142154dd71c333a59208e10",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "force_push_used": false,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_after_delta": "4ad9dce0b6a9340124f8a93db6d82b4ab810b667",
+    "coordination_comment_id": 5388184117
+  },
+  "observed_before_delta": {
+    "route_capsule": "HCU_EXECUTION_STORE_INFERENCE_V4_JSPACE_V3_PRODUCER_CLOSURE/v1",
+    "route_exact_blob_count": 17,
+    "route_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "route_fixed_command": "python3 -m unittest -v test_model_execution_admission_store_v1.py test_execution_store_inference_jspace_chain_v1.py test_jspace_inference_binding_revalidation_v3.py",
+    "route_source_rebind_required": true,
+    "route_result_fence": "GENERIC_EXIT_ZERO_PLUS_SECRET_FENCE_PLUS_UNITTEST_OK",
+    "global_executor_guard_non_quarantine_semantics": "HISTORICAL_BINDER_V2",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "current_exact_source_sandbox_execution_observed": false
+  },
+  "delta": {
+    "promotion_guard_path": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-v4-v3-promotion-contract.mjs",
+    "promotion_guard_create_commit": "46ba9fe95cbe964ec4f2dd0f043a4b34859acd97",
+    "promotion_guard_v2_commit": "4ad9dce0b6a9340124f8a93db6d82b4ab810b667",
+    "package_lifecycle_commit": "8859068b57ce9de3ea59606b3e89964972ece70d",
+    "package_prevercel_build": "node scripts/guard-hcu-jspace-v4-v3-current-donor-exact-blobs.mjs && node scripts/guard-hcu-jspace-v4-v3-promotion-contract.mjs",
+    "purpose": "Separate exact donor-byte admission from successor promotion semantics without creating a second executor or removing the existing route quarantine.",
+    "quarantined_behavior": "Require current v4 contract, exact 17-file map, donor 511d, route/contract fixed-command agreement, route quarantine before cost gate and Sandbox.create, zero runtime/model/training credits; allow build progression only as a quarantined source state.",
+    "future_unquarantine_behavior": "Fail closed unless contract is explicitly promoted to SOURCE_REBOUND_READY, sandbox permission is coherently promoted, the route drops its generic unittest-only fence and requires exact verbose identity for all 14 bound tests plus `Ran 14 tests in` and SECRET_FENCE=PASS, and the existing global executor guard itself is updated from historical binder-v2 semantics to the same current capsule/command/test identity.",
+    "source_rebind_required_removed": false,
+    "sandbox_create_enabled_by_delta": false
+  },
+  "exact_result_identity": {
+    "test_count": 14,
+    "families": {
+      "atomic_model_execution_admission_store": 5,
+      "producer_derived_execution_inference_jspace_chain": 4,
+      "jspace_binding_semantic_revalidation": 5
+    },
+    "critical_falsifiers": [
+      "test_concurrent_divergent_same_invocation_has_exactly_one_winner",
+      "test_upstream_trust_objects_are_canonical_producer_outputs",
+      "test_divergent_same_invocation_is_rejected_before_second_inference_or_jspace_binding",
+      "test_concurrent_divergent_invocation_yields_one_downstream_jspace_binding",
+      "test_digest_valid_stale_inference_schema_fails_closed"
+    ],
+    "all_14_verbose_test_names_required_after_promotion": true,
+    "global_executor_guard_same_semantics_required_after_promotion": true
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: PR810 now has a build-lifecycle successor-promotion guard that prevents the staged 17-blob route from being unquarantined under stale binder-v2 or generic unittest semantics.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: promotion admission mechanically preserves one exact Typed Entry -> route -> verified engine admission -> verified loader consumption -> GRID10 -> atomic model-execution chain under donor 511d.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: future promotion is mechanically conditioned on the exact 14-test identity spanning InferenceReceipt/v4, Global J-Space/GWT TrainingTrace/v1, JSpaceBinding/v3, semantic revalidation and concurrent one-winner behavior; model/training credit remains zero."
+  },
+  "evidence_boundary": {
+    "source_write_committed": true,
+    "promotion_guard_observed_executing_in_vercel": false,
+    "vercel_build_status_after_package_commit": "FAILURE_BUILD_RATE_LIMIT",
+    "infrastructure_failure_is_product_regression": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "together_used": false,
+    "vps_self_hosted_or_production_testing_used": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The artefact README and current-facing executor state are being updated by parallel organs in the same macrocycle. This guard delta is preserved append-only here to avoid clobbering concurrent current-facing writes; it changes promotion enforcement, not runtime evidence or product acceptance."
+  },
+  "next_exact_gate": "Re-enter current main/PR1263/Dr.-Unterweger#810. Keep SOURCE_REBIND_REQUIRED true. Update the existing route result fence and the existing global executor guard non-quarantine branch to the same complete 14-test successor identity, then coherently promote contract+route only if all static guards are source-coherent. Attempt admitted FREE_ONLY Vercel Sandbox execution only when included-tier build/function admission permits; capture exact source/result digests, Sandbox identity, exit code, secret fence and cleanup before any component runtime promotion."
+}

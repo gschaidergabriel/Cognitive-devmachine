@@ -1,26 +1,31 @@
-# UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1
+# UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 — revision 2
 
 Status: SOURCE CONTRACT / RUNTIME CREDIT ZERO UNTIL EXACT EXECUTION
 
 Purpose: bind one executable Mini Entity / EntityOS / Zero cognition cycle to exact source, identity, bundled cognition bytes, Unified J-Space/GWT workspace state, inference-engine capability mode, candidate-only return, deterministic validation and final state/effect outcome.
 
-This instrument operationalizes the current owner architecture without promoting architecture prose to runtime truth.
+Revision 2 corrects a semantic alias in the originally merged v1 source contract. **The local bundled Unified J-Space/GWT Fabric has its own latent mode, independent of the selected inference engine's latent capability mode.** This matters especially for Claude Code: Claude remains `COMPILED_EXTERNAL`, while the mandatory bundled ~0.8B reference substrate may simultaneously run `LOCAL_OBSERVE_ONLY` or calibrated `FULL_LOCAL_LATENT` J-Space/GWT processing around the compiled external inference packet.
+
+No accepted runtime receipt existed under revision 1, and all executable J-Space/GWT/Claude-adapter credit was already zero. Revision 2 therefore fails closed on the ambiguous revision-1 field shape instead of preserving it as a second semantic path.
 
 ## ClayCode semantic contract
 
 ```claycode
-receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
+receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1_REV2 {
+  receipt_version := "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1";
+  contract_revision := 2;
+
   R0.source := exact(commit, tree, dirty=false);
   R0.identity := digest(Zero) + digest(GRF) + entity_generation;
-  R0.core := digest(manifest, checkpoint, tokenizer, runtime);
-  R0.fabric := digest(jspace_profile, lens_profile?, workspace_policy, workspace_calibration);
+  R0.core := digest(manifest, checkpoint, tokenizer, runtime) + exact_bytes_verified;
 
-  invariant PORTABILITY {
-    PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY;
-    local_jspace_credit -> exact(checkpoint, tokenizer, runtime, lens, workspace_calibration);
-  }
+  fabric.local_jspace_mode := oneof(
+    FULL_LOCAL_LATENT,
+    LOCAL_OBSERVE_ONLY,
+    DISABLED
+  );
 
-  inference.mode := oneof(
+  inference.engine_jspace_mode := oneof(
     FULL_LOCAL_LATENT,
     LOCAL_OBSERVE_ONLY,
     COMPILED_EXTERNAL,
@@ -28,31 +33,64 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
     NONE
   );
 
-  law INFERENCE_BINDING {
-    result = CANDIDATE_INFERENCE;
-    digest(capability_profile) + digest(adapter_contract) + adapter_version;
+  invariant MODE_SEPARATION {
+    fabric.local_jspace_mode != inference.engine_jspace_mode_authority;
+    fabric_intervention_authority derives_only_from fabric.local_jspace_mode;
+    engine_capability derives_only_from inference.engine_jspace_mode;
+  }
+
+  invariant PORTABILITY {
+    PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY;
+    active_local_fabric -> exact(
+      checkpoint,
+      tokenizer,
+      runtime,
+      lens,
+      workspace_calibration,
+      boot_binding_receipt,
+      jlens_admission_receipt
+    );
+  }
+
+  law ACTIVE_LOCAL_FABRIC {
+    local_jspace_mode in [FULL_LOCAL_LATENT, LOCAL_OBSERVE_ONLY]
+      -> bundled_core.exact_bytes_verified == true
+      -> fabric.local_activation_access == true
+      -> lens_profile present
+      -> workspace_calibration_status == MEASURED_EXACT_BUNDLE
+      -> upstream.boot_binding_validated == true
+      -> upstream.jlens_admission_phase == PASS_BOUNDED_JACOBIAN;
   }
 
   law CLAUDE_CODE {
-    jspace_mode = COMPILED_EXTERNAL;
-    external_hidden_state_claimed = false;
+    engine_class == CLAUDE_CODE
+      -> engine_jspace_mode == COMPILED_EXTERNAL
+      -> engine_local_activation_access == false
+      -> external_hidden_state_claimed == false;
     result = CANDIDATE_INFERENCE;
   }
 
-  law BUNDLED_08B {
-    jspace_mode in [FULL_LOCAL_LATENT, LOCAL_OBSERVE_ONLY];
-    digest(lens_profile) + digest(workspace_calibration);
+  law BUNDLED_ENGINE {
+    engine_class == BUNDLED_08B
+      -> engine_jspace_mode in [FULL_LOCAL_LATENT, LOCAL_OBSERVE_ONLY];
+    active_local_fabric + engine_class == BUNDLED_08B
+      -> engine_jspace_mode == fabric.local_jspace_mode;
   }
 
   law OBSERVE_INTERVENE_SPLIT {
-    observation != intervention;
-    intervention.executed -> jspace_mode == FULL_LOCAL_LATENT;
+    JSPACE_OBSERVED != JSPACE_INTERVENED;
+    intervention.executed -> fabric.local_jspace_mode == FULL_LOCAL_LATENT;
     intervention.executed -> digest(implementation) + digest(calibration);
   }
 
   law GWT {
     winner subset_of candidates;
     workspace_before + competition + workspace_after are receipt-bound;
+  }
+
+  law INFERENCE_BINDING {
+    digest(capability_profile) + digest(adapter_contract) + adapter_version;
+    result = CANDIDATE_INFERENCE;
   }
 
   law AUTHORITY {
@@ -62,7 +100,7 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
     candidate_direct_effect -> no_executed_effect;
     committed_state_write -> validation == ACCEPT_CANDIDATE;
     executed_effect -> validation == ACCEPT_CANDIDATE;
-    digest(reconciliation) binds the validation return path;
+    digest(reconciliation) binds validation return path;
   }
 
   law FRESHNESS {
@@ -80,26 +118,46 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
 
 ## Required JSON fields
 
+### Contract / source / runtime
 - `receipt_version`: exact `UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1`
+- `contract_revision`: integer `2`
 - `source.commit`: 40-hex Git commit SHA
 - `source.tree`: 40-hex Git tree SHA
-- `source.dirty`: must be `false` for runtime credit
+- `source.dirty`: must be `false`
 - `runtime.entityos_version`
 - `runtime.mini_entity_version`
 - `runtime.entity_generation`
+
+### Identity / bundled core
 - `identity.zero_digest`: SHA-256
 - `identity.grf_digest`: SHA-256
 - `bundled_core.manifest_digest`: SHA-256
 - `bundled_core.checkpoint_digest`: SHA-256
 - `bundled_core.tokenizer_digest`: SHA-256
 - `bundled_core.runtime_digest`: SHA-256
+- `bundled_core.exact_bytes_verified`: boolean
+
+### Local Unified Cognitive Fabric
+- `fabric.local_jspace_mode`: `FULL_LOCAL_LATENT | LOCAL_OBSERVE_ONLY | DISABLED`
+- `fabric.local_activation_access`: boolean
 - `fabric.jspace_profile_digest`: SHA-256
-- `fabric.lens_profile_digest`: SHA-256 for local J-Space modes; nullable only when the active mode does not require a fitted lens
+- `fabric.lens_profile_digest`: SHA-256 for active local fabric; nullable only when local fabric is disabled
 - `fabric.workspace_policy_digest`: SHA-256
-- `fabric.workspace_calibration_digest`: SHA-256; exact calibration identity, distinct from policy identity
+- `fabric.workspace_calibration_digest`: SHA-256
+- `fabric.workspace_calibration_status`: `MEASURED_EXACT_BUNDLE | UNMEASURED_SOURCE_ONLY`
 - `fabric.intervention.executed`: boolean
-- `fabric.intervention.implementation_digest`: SHA-256 when intervention executed, else nullable
-- `fabric.intervention.calibration_digest`: SHA-256 when intervention executed, else nullable
+- `fabric.intervention.implementation_digest`: SHA-256 when executed, else nullable
+- `fabric.intervention.calibration_digest`: SHA-256 when executed, else nullable
+
+### Upstream exact admission bindings
+- `upstream.boot_binding_receipt_digest`: SHA-256
+- `upstream.boot_binding_validated`: boolean
+- `upstream.jlens_admission_receipt_digest`: SHA-256
+- `upstream.jlens_admission_phase`: `PASS_BOUNDED_JACOBIAN | PASS_WEIGHTED_FORWARD_HOOKS | PASS_LAYOUT_SOURCE_RUNTIME | NOT_RUN`
+
+Active local J-Space/GWT runtime credit requires a validated exact boot binding and `PASS_BOUNDED_JACOBIAN`; source/layout/forward-only evidence cannot silently promote the fabric.
+
+### Workspace/GWT
 - `workspace.digest_before`: SHA-256
 - `workspace.digest_after`: SHA-256
 - `workspace.gwt_candidates`: ordered candidate records containing unique `candidate_id`
@@ -110,17 +168,21 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
 - `workspace.hyperposition_refs`
 - `workspace.claycode_refs`
 - `workspace.omega_refs`
+
+### Selected inference engine
 - `inference.engine_class`: `BUNDLED_08B | CLAUDE_CODE | ADAPTIVE_BACKEND | NONE`
-- `inference.jspace_mode`: `FULL_LOCAL_LATENT | LOCAL_OBSERVE_ONLY | COMPILED_EXTERNAL | PLAIN_COMPATIBILITY | NONE`
-- `inference.adapter_version`: nonempty version string
+- `inference.engine_jspace_mode`: `FULL_LOCAL_LATENT | LOCAL_OBSERVE_ONLY | COMPILED_EXTERNAL | PLAIN_COMPATIBILITY | NONE`
+- `inference.adapter_version`
 - `inference.capability_profile_digest`: SHA-256
 - `inference.adapter_contract_digest`: SHA-256
-- `inference.local_activation_access`: boolean
+- `inference.engine_local_activation_access`: boolean
 - `inference.external_hidden_state_claimed`: boolean
 - `inference.inference_packet_digest`: SHA-256
 - `inference.candidate_result_digest`: SHA-256
+
+### Validation / execution / freshness
 - `validation.decision`: `ACCEPT_CANDIDATE | REJECT_CANDIDATE | ABSTAIN | ERROR`
-- `validation.reconciliation_digest`: SHA-256 binding deterministic validation/reconciliation identity/result
+- `validation.reconciliation_digest`: SHA-256
 - `validation.candidate_attempted_direct_state_mutation`: boolean
 - `validation.candidate_attempted_direct_effect`: boolean
 - `validation.canonical_state_write_committed`: boolean
@@ -133,9 +195,35 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
 - `freshness.stale_generation`: boolean
 - `terminal_result_digest`: SHA-256
 
-## Observation versus intervention
+## Why the mode split is mandatory
 
-The receipt deliberately separates latent observation from causal intervention.
+The unified product path is conceptually:
+
+```text
+canonical evidence/state
+    -> bundled ~0.8B reference substrate
+    <-> local J-Space/GWT Fabric
+    -> targeted InferencePacket
+    -> selected engine
+         Claude Code: COMPILED_EXTERNAL
+         hookable local engine: local latent mode if admitted
+         plain API: compatibility mode
+    -> candidate inference
+    -> deterministic reconciliation
+    -> canonical state/effect decision
+```
+
+Therefore these two facts may be simultaneously true and are **not contradictory**:
+
+```text
+fabric.local_jspace_mode = FULL_LOCAL_LATENT
+inference.engine_class = CLAUDE_CODE
+inference.engine_jspace_mode = COMPILED_EXTERNAL
+```
+
+The first describes the bundled local cognitive fabric. The second describes Claude Code's exposed capability boundary. Revision 1 incorrectly let the second field veto the first; revision 2 removes that false coupling.
+
+## Observation / intervention / truth boundaries
 
 `JSPACE_OBSERVED != JSPACE_INTERVENED`
 
@@ -143,46 +231,40 @@ The receipt deliberately separates latent observation from causal intervention.
 
 `PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY`
 
-A local model may receive `FULL_LOCAL_LATENT` only when exact local activation access is actually present. Both local J-Space modes require an exact lens profile and exact workspace calibration identity. Any claimed latent intervention additionally requires implementation and intervention-calibration digests. A closed/external Claude Code path is `COMPILED_EXTERNAL`; it must never claim Claude private residual-stream access. The same no-fake-hidden-state rule applies to every external/compatibility mode.
-
-## Candidate and authority boundary
-
-An inference engine result is always candidate inference. A candidate that attempts direct state mutation or direct effect authority cannot be accepted as-is, even when no mutation/effect actually occurred. Canonical writes/effects require `ACCEPT_CANDIDATE` only after deterministic reconciliation, whose digest is bound into the receipt.
-
-This preserves:
+`JSPACE_SIGNAL != FACT`
 
 `INFERENCE_ENGINE != CANONICAL_TRUTH_AUTHORITY`
 
 `INFERENCE_ENGINE != DIRECT_EFFECT_AUTHORITY`
 
+An active local fabric requires exact bundled bytes, local activation access, matching lens/profile/calibration evidence, validated boot binding and bounded Jacobian admission. A latent intervention additionally requires a `FULL_LOCAL_LATENT` local **fabric** mode plus exact implementation/intervention-calibration identity. External engines never gain hidden-state credit by being surrounded by a local fabric.
+
 ## Runtime-credit boundary
 
-A valid source contract or a passing synthetic validator test earns zero AgentZero/Ubuntu runtime credit by itself.
+A valid revision-2 receipt or passing validator regression remains only a contract/component result until emitted by an actually started exact-source Mini Entity / EntityOS / AgentZero path.
 
-Runtime credit requires an actually started exact-source run which emits the receipt from the real path and binds at least:
+Exact runtime evidence must bind:
 
-`canonical evidence -> Zero/GRF projection -> Unified J-Space/GWT competition -> chosen engine/capability profile -> InferencePacket -> candidate result -> EntityOS validation/reconciliation -> canonical write/effect decision`.
+`boot/admitted exact bundle -> calibrated local J-Space/GWT workspace -> engine/capability choice -> InferencePacket -> candidate result -> deterministic reconciliation -> canonical write/effect decision`.
 
-When the intentionally offline host is next started, pair this receipt with the required PRESTART/POSTSTART observation boundary and J-Space/GWT boot-binding evidence. Unknown or missing exact digests fail closed.
+No current source/fixture result implies exact Ubuntu/AgentZero runtime PASS, model quality, Whole-GWT PASS, Claude adapter PASS, factual truth, consciousness or AGI.
 
-## Negative controls
+## Deterministic regression obligations
 
-Deterministic controls SHOULD cover:
+At minimum:
 
-- Claude Code or another external mode with hidden-state claim -> reject;
-- FREE_ONLY with secret/network touch -> reject;
-- candidate attempting direct state/effect authority -> reject acceptance/promotion/bypass;
-- stale Zero identity, bundled manifest or generation -> reject promotion;
-- local J-Space mode without an exact lens profile/workspace calibration identity -> reject;
-- intervention in `COMPILED_EXTERNAL` or without implementation/calibration digest -> reject;
-- GWT winner absent from candidate set or duplicated winner/candidate IDs -> reject;
-- dirty source presented for exact runtime credit -> reject;
-- state/effect commit after non-accept validation -> reject.
+- Claude `COMPILED_EXTERNAL` + local `LOCAL_OBSERVE_ONLY` fabric -> structurally valid when exact admissions are bound;
+- Claude `COMPILED_EXTERNAL` + local calibrated `FULL_LOCAL_LATENT` fabric intervention -> structurally valid;
+- active local fabric with `UNMEASURED_SOURCE_ONLY` -> reject;
+- active local fabric without validated boot binding or bounded Jacobian admission -> reject;
+- bundled engine mode disagreeing with active bundled local fabric mode -> reject;
+- intervention when local fabric is not `FULL_LOCAL_LATENT` -> reject;
+- external engine hidden-state claim -> reject;
+- FREE_ONLY network/secret touch -> reject;
+- stale identity/generation promotion -> reject;
+- direct candidate state/effect authority -> reject;
+- GWT winner outside candidate set -> reject;
+- dirty source exact-runtime claim -> reject;
+- canonical write/effect after non-accept validation -> reject.
 
-`AUTHORITY_ALIAS_POISON_V1` is a deterministic adversarial regression family over those controls. For the `go` that created this source delta, no upstream atomic macrocycle lease/identifier was available to this organ, so the unusual-experiment classification is explicitly `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`. No macrocycle identifier is invented after the fact. The locally observed 8/8 fail-closed poison result remains mechanism evidence, not an unusual-experiment slot claim.
-
-## Evidence class
-
-Current contract state at creation: `SOURCE_CONTRACT + LOCAL_SYNTHETIC_MECHANISM_EVIDENCE`.
-
-Not implied: exact Ubuntu execution, J-Space calibration quality, GWT production validity, Claude Code adapter PASS, model quality, canonical semantic promotion, effect safety PASS, whole Mini Entity PASS, consciousness or AGI.
+All such controls are ordinary deterministic regressions for this correction. No unusual-experiment slot is claimed without an upstream atomic macrocycle lease.

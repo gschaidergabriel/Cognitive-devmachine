@@ -5,9 +5,12 @@ This module is deterministic control-plane plumbing, not cognition or authority 
 It verifies checkpoint/tokenizer/runtime/build artifact bytes against an immutable lock and
 only then constructs the separate ``EngineAdmission`` consumed by the retained HCU router.
 
-Scope limit: hashing bytes immediately before routing does not by itself prove that a
-later model loader consumed the same bytes. Runtime acceptance must additionally bind the
-loader/inference receipt (or an immutable read-only artifact boundary) to this receipt.
+A pre-load hash is not a loader-consumption proof. Route-ready artifact registry material
+therefore requires a separate post-load revalidation binding. This closes straightforward
+hash-then-load path substitution. Exact runtime acceptance still requires either a loader
+that attests the bytes it actually consumed or an immutable/read-only artifact boundary;
+a malicious swap-and-restore entirely inside the loader window is not proven impossible by
+pre/post path hashing alone.
 """
 from __future__ import annotations
 
@@ -27,6 +30,7 @@ from reactive_event_router_v1 import (
 
 LOCK_SCHEMA = "HCU_ENGINE_ARTIFACT_LOCK/v1"
 BUNDLE_SCHEMA = "HCU_ENGINE_ARTIFACT_BUNDLE/v1"
+POST_LOAD_BINDING_SCHEMA = "HCU_ENGINE_POST_LOAD_BINDING/v1"
 TREE_SCHEMA = b"HCU_ARTIFACT_TREE_SHA256/v1\x00"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _CHUNK = 1024 * 1024
@@ -66,6 +70,20 @@ class EngineArtifactPaths:
 
 
 @dataclass(frozen=True)
+class PostLoadArtifactBinding:
+    schema: str
+    entity_generation: int
+    engine_identity: str
+    engine_artifact_sha256: str
+    engine_admission_receipt_sha256: str
+    checkpoint: ArtifactDigest
+    tokenizer: ArtifactDigest
+    runtime: ArtifactDigest
+    build: ArtifactDigest
+    receipt_sha256: str
+
+
+@dataclass(frozen=True)
 class VerifiedEngineAdmission:
     entity_generation: int
     admission: EngineAdmission
@@ -76,7 +94,26 @@ class VerifiedEngineAdmission:
     engine_artifact_sha256: str
     receipt_sha256: str
 
-    def admitted_engine_artifacts(self) -> dict[str, str]:
+    def admitted_engine_artifacts(
+        self,
+        post_load_binding: PostLoadArtifactBinding | None = None,
+    ) -> dict[str, str]:
+        """Return route registry material only after post-load byte revalidation."""
+        if not isinstance(post_load_binding, PostLoadArtifactBinding):
+            raise EngineAdmissionError("POST_LOAD_ARTIFACT_BINDING_REQUIRED")
+        if post_load_binding.schema != POST_LOAD_BINDING_SCHEMA:
+            raise EngineAdmissionError("POST_LOAD_ARTIFACT_BINDING_SCHEMA_UNSUPPORTED")
+        if post_load_binding.entity_generation != self.entity_generation:
+            raise EngineAdmissionError("POST_LOAD_ENTITY_GENERATION_MISMATCH")
+        if post_load_binding.engine_identity != self.admission.engine_identity:
+            raise EngineAdmissionError("POST_LOAD_ENGINE_IDENTITY_MISMATCH")
+        if post_load_binding.engine_artifact_sha256 != self.engine_artifact_sha256:
+            raise EngineAdmissionError("POST_LOAD_ENGINE_ARTIFACT_MISMATCH")
+        if post_load_binding.engine_admission_receipt_sha256 != self.receipt_sha256:
+            raise EngineAdmissionError("POST_LOAD_ENGINE_ADMISSION_RECEIPT_MISMATCH")
+        for field in ("checkpoint", "tokenizer", "runtime", "build"):
+            if getattr(post_load_binding, field) != getattr(self, field):
+                raise EngineAdmissionError(f"POST_LOAD_{field.upper()}_DIGEST_MISMATCH")
         return {self.admission.engine_identity: self.engine_artifact_sha256}
 
     def receipt(self) -> dict[str, Any]:
@@ -282,7 +319,11 @@ def verify_and_construct_engine_admission(
     entity_generation: int,
     current_generation: int,
 ) -> VerifiedEngineAdmission:
-    """Verify exact local bytes and construct the router's separate EngineAdmission.
+    """Verify exact local bytes and construct a pre-load EngineAdmission candidate.
+
+    This result is deliberately not sufficient to obtain route registry material. Call
+    ``verify_post_load_artifact_binding`` after the loader returns, then pass that binding
+    to ``VerifiedEngineAdmission.admitted_engine_artifacts``.
 
     No network, secret lookup, model inference, durable state write or real effect occurs.
     """
@@ -341,5 +382,56 @@ def verify_and_construct_engine_admission(
         runtime=runtime,
         build=build,
         engine_artifact_sha256=lock.engine_artifact_sha256,
+        receipt_sha256=receipt_sha256,
+    )
+
+
+def verify_post_load_artifact_binding(
+    verified: VerifiedEngineAdmission,
+    paths: EngineArtifactPaths,
+    *,
+    current_generation: int,
+) -> PostLoadArtifactBinding:
+    """Revalidate all artifact paths after model load before exposing route registry data."""
+    if not isinstance(verified, VerifiedEngineAdmission):
+        raise EngineAdmissionError("VERIFIED_ENGINE_ADMISSION_REQUIRED")
+    current = _generation(current_generation, "current_generation")
+    if verified.entity_generation != current:
+        raise EngineAdmissionError("STALE_POST_LOAD_ENTITY_GENERATION")
+    if not isinstance(paths, EngineArtifactPaths):
+        raise EngineAdmissionError("ENGINE_ARTIFACT_PATHS_TYPE_REQUIRED")
+
+    observed = {
+        "checkpoint": digest_artifact_path(paths.checkpoint),
+        "tokenizer": digest_artifact_path(paths.tokenizer),
+        "runtime": digest_artifact_path(paths.runtime),
+        "build": digest_artifact_path(paths.build),
+    }
+    for field, digest in observed.items():
+        if digest != getattr(verified, field):
+            raise EngineAdmissionError(f"{field.upper()}:POST_LOAD_BYTES_MISMATCH")
+
+    material = {
+        "schema": POST_LOAD_BINDING_SCHEMA,
+        "entity_generation": verified.entity_generation,
+        "engine_identity": verified.admission.engine_identity,
+        "engine_artifact_sha256": verified.engine_artifact_sha256,
+        "engine_admission_receipt_sha256": verified.receipt_sha256,
+        "checkpoint": observed["checkpoint"].__dict__,
+        "tokenizer": observed["tokenizer"].__dict__,
+        "runtime": observed["runtime"].__dict__,
+        "build": observed["build"].__dict__,
+    }
+    receipt_sha256 = hashlib.sha256(_canonical(material)).hexdigest()
+    return PostLoadArtifactBinding(
+        schema=POST_LOAD_BINDING_SCHEMA,
+        entity_generation=verified.entity_generation,
+        engine_identity=verified.admission.engine_identity,
+        engine_artifact_sha256=verified.engine_artifact_sha256,
+        engine_admission_receipt_sha256=verified.receipt_sha256,
+        checkpoint=observed["checkpoint"],
+        tokenizer=observed["tokenizer"],
+        runtime=observed["runtime"],
+        build=observed["build"],
         receipt_sha256=receipt_sha256,
     )

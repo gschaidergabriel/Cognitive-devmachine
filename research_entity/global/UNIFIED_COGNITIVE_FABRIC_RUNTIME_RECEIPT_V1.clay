@@ -1,0 +1,165 @@
+module clay.mini_entity.unified_cognitive_fabric_receipt
+version "1.0.0-source-contract"
+status SOURCE_CONTRACT_ONLY
+
+law product = MINI_ENTITY_PIPELINE_ALL_IN_ONE
+law canonical_state_authority = MINIUNIFIEDDB
+law cognitive_workspace_authority = NONE_FOR_FACTUAL_TRUTH
+law inference_engine_authority = CANDIDATE_ONLY
+law direct_effect_authority = DETERMINISTIC_ENTITYOS_GATES_ONLY
+law runtime_credit_requires = EXACT_EXECUTED_RECEIPT
+law source_contract_pass != runtime_pass
+law workspace_stability != factual_truth
+law latent_geometry != canonical_truth
+law candidate_result != canonical_write
+law candidate_result != direct_effect
+law UNKNOWN != ZERO != ERROR != MEASURED
+
+class EngineClass = BUNDLED_08B | CLAUDE_CODE | ADAPTIVE_BACKEND | NONE
+class JSpaceMode = FULL_LOCAL_LATENT | LOCAL_OBSERVE_ONLY | COMPILED_EXTERNAL | PLAIN_COMPATIBILITY | NONE
+class CostClass = LOCAL | FREE | PAID | SUBSCRIPTION | UNKNOWN
+class EpistemicStatus = MEASURED_SUPPORTED | UNKNOWN | ERROR | REFUTED
+class ValidationDecision = ACCEPT | REJECT | UNKNOWN
+
+record ExactSourceBinding {
+  commit_sha: GitSha;
+  tree_sha: GitSha;
+  dirty: Bool;
+  executor_identity: Text;
+}
+
+record EntityBinding {
+  mini_entity_version: Text;
+  entityos_version: Text;
+  zero_identity_digest: Hash;
+  grf_digest: Hash;
+  generation: Int;
+}
+
+record BundledCognitionBinding {
+  manifest_digest: Hash;
+  checkpoint_digest: Hash;
+  tokenizer_digest: Hash;
+  jspace_profile_digest: Hash;
+  lens_profile_digest: Hash;
+  workspace_calibration_digest: Hash;
+}
+
+record WorkspaceBinding {
+  before_digest: Hash;
+  after_digest: Hash;
+  gwt_admitted_digests: Set<Hash>;
+  gwt_winner_digests: Set<Hash>;
+  jspace_observation_digests: Set<Hash>;
+  thalamus_decisions_digest: Hash;
+  epq_telemetry_digest: Hash;
+  hyperposition_digests: Set<Hash>;
+  claycode_digests: Set<Hash>;
+  omega_digests: Set<Hash>;
+}
+
+record InferenceBinding {
+  engine_class: EngineClass;
+  jspace_mode: JSpaceMode;
+  capability_profile_digest: Hash;
+  inference_packet_digest: Hash;
+  candidate_result_digest: Hash;
+  candidate_authority: Text;
+  epistemic_status: EpistemicStatus;
+}
+
+record AdmissionBinding {
+  free_only: Bool;
+  cost_class: CostClass;
+  admitted: Bool;
+  secret_lookup_count: Int;
+  network_attempt_count: Int;
+  reason_codes: Set<Text>;
+}
+
+record DeterministicBindings {
+  zero_identity_match: Bool;
+  bundled_manifest_match: Bool;
+  capability_match: Bool;
+  stale_generation: Bool;
+}
+
+record ReconciliationBinding {
+  decision: ValidationDecision;
+  canonical_write: Bool;
+  effect_authorized: Bool;
+  reason_codes: Set<Text>;
+}
+
+record ReplayBinding {
+  stochasticity_disabled: Bool;
+  replay_performed: Bool;
+  scheduler_input_digest: Hash;
+  scheduler_decision_digest: Hash;
+  replay_match: Bool;
+}
+
+record UnifiedCognitiveFabricRuntimeReceiptV1 {
+  schema: Text;
+  source: ExactSourceBinding;
+  entity: EntityBinding;
+  bundled_core: BundledCognitionBinding;
+  workspace: WorkspaceBinding;
+  inference: InferenceBinding;
+  admission: AdmissionBinding;
+  bindings: DeterministicBindings;
+  reconciliation: ReconciliationBinding;
+  replay: ReplayBinding;
+  terminal_result_digest: Hash;
+}
+
+fn receipt_fail_closed(r: UnifiedCognitiveFabricRuntimeReceiptV1) -> Bool {
+  if r.schema != "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1" { return false; }
+  if r.entity.generation < 0 { return false; }
+  if r.inference.candidate_authority != "CANDIDATE_ONLY" { return false; }
+
+  if r.inference.engine_class == CLAUDE_CODE
+     && r.inference.jspace_mode != COMPILED_EXTERNAL { return false; }
+
+  if r.admission.free_only
+     && r.admission.cost_class in {PAID, SUBSCRIPTION, UNKNOWN} {
+    if r.admission.admitted { return false; }
+    if r.admission.secret_lookup_count != 0 { return false; }
+    if r.admission.network_attempt_count != 0 { return false; }
+  }
+
+  if !r.bindings.zero_identity_match
+     || !r.bindings.bundled_manifest_match
+     || !r.bindings.capability_match
+     || r.bindings.stale_generation {
+    if r.reconciliation.decision == ACCEPT { return false; }
+    if r.reconciliation.canonical_write { return false; }
+    if r.reconciliation.effect_authorized { return false; }
+  }
+
+  if r.reconciliation.decision != ACCEPT {
+    if r.reconciliation.canonical_write { return false; }
+    if r.reconciliation.effect_authorized { return false; }
+  }
+
+  if r.reconciliation.canonical_write
+     && r.inference.epistemic_status != MEASURED_SUPPORTED { return false; }
+
+  if r.reconciliation.effect_authorized
+     && r.inference.epistemic_status != MEASURED_SUPPORTED { return false; }
+
+  if r.replay.stochasticity_disabled
+     && r.replay.replay_performed
+     && !r.replay.replay_match { return false; }
+
+  return true;
+}
+
+// Unusual experiment for one go macrocycle:
+// WORKSPACE_STABILITY_TRUTH_CONFUSION_MUTATION
+// Keep workspace/J-Space/GWT digests internally stable while flipping epistemic_status
+// from MEASURED_SUPPORTED to REFUTED and attempting canonical_write/effect_authorized.
+// Required result: receipt_fail_closed == false.
+
+law unusual_experiment_WORKSPACE_STABILITY_TRUTH_CONFUSION_MUTATION_requires_reject = true
+law no_runtime_credit_from_this_source_contract = true

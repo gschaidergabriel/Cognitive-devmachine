@@ -113,6 +113,12 @@ def _number(value: int | float) -> bytes:
 
     if not math.isfinite(value):
         raise CanonicalizationError("FINITE_BINARY64_REQUIRED")
+
+    # RFC 8785 verified erratum EID 7920: -0 is valid JSON syntax but JCS
+    # serializes it indistinguishably from +0. Reject the signed-zero alias at
+    # admission so distinct parsed inputs cannot collapse onto one causal hash.
+    if value == 0.0 and math.copysign(1.0, value) < 0.0:
+        raise CanonicalizationError("NEGATIVE_ZERO_FORBIDDEN")
     if value == 0.0:
         return b"0"
     if value < 0:

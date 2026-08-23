@@ -4,6 +4,7 @@ module clay.unified_cognitive_fabric_receipt_v1
 
 law ONE_RUNTIME_RECEIPT_AUTHORITY = true
 law runtime_receipt_must_bind_canonical_boot_binding = true
+law runtime_generation_must_cross_bind_boot_observation = true
 law model_output_is_candidate_only = true
 law workspace_stability_is_not_factual_truth = true
 law latent_geometry_is_not_factual_truth = true
@@ -21,11 +22,13 @@ law receipt_envelope_is_digest_bound = true
 
 fn validate(receipt:Map)->Map {
   // The effect implementation MUST enforce the v1 invariants documented by the
-  // canonical validator: exact source/runtime/boot bindings, one Zero/GRF/workspace
-  // identity, J-Space/GWT as cognition-only, observation/intervention separation,
-  // candidate-only inference, explicit epistemic status, fail-closed stale/capability
-  // bindings, upstream backend admission, FREE_ONLY cost-class admission, envelope
-  // integrity, and no direct candidate state/effect authority.
+  // canonical validator and its admitted boot-ancestry composition gate: exact
+  // source/runtime/boot bindings, boot-observed entity generation cross-binding,
+  // one Zero/GRF/workspace identity, J-Space/GWT as cognition-only,
+  // observation/intervention separation, candidate-only inference, explicit
+  // epistemic status, fail-closed stale/capability bindings, upstream backend
+  // admission, FREE_ONLY cost-class admission, envelope integrity, and no direct
+  // candidate state/effect authority.
   let checked = effect("unified_cognitive_fabric_receipt_validate_v1", receipt)
   require checked.ok
   return checked

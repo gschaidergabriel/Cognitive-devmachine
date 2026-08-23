@@ -298,6 +298,13 @@ def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict
     jspace = req_obj(data, "jspace")
     if req_sha(jspace, "jspace_profile_sha256") != manifest["jspace_profile_digest"]:
         fail("BOOT_JSPACE_PROFILE_MISMATCH")
+
+    expected_lens_artifact_digest = manifest.get("lens_artifact_digest")
+    if expected_lens_artifact_digest is None:
+        fail("BOOT_MANIFEST_LENS_ARTIFACT_DIGEST_REQUIRED")
+    if req_sha(jspace, "lens_file_sha256") != expected_lens_artifact_digest:
+        fail("BOOT_LENS_ARTIFACT_DIGEST_MISMATCH")
+
     if req_sha(jspace, "lens_profile_sha256") != manifest["lens_profile_digest"]:
         fail("BOOT_LENS_PROFILE_MISMATCH")
 

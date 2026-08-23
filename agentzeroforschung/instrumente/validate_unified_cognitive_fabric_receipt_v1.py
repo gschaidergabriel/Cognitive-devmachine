@@ -287,6 +287,7 @@ def validate_receipt_chain(receipt: dict[str, Any], boot_binding_raw: bytes) -> 
         ("bundled_core.runtime_digest", "bundled_core.runtime_sha256"),
         ("identity.zero_digest", "zero_grf.zero_identity_sha256"),
         ("identity.grf_digest", "zero_grf.grf_sha256"),
+        ("fabric.jspace_profile_digest", "jspace.jspace_profile_sha256"),
         ("fabric.workspace_policy_digest", "gwt.workspace_policy_sha256"),
         ("fabric.workspace_calibration_digest", "gwt.calibration_sha256"),
     )

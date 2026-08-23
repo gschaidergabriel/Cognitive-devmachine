@@ -1,0 +1,75 @@
+{
+  "schema": "GO_UCF_DRIFT_GUARD_FUSION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "current_main": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "stack_base": {
+    "pr": 1205,
+    "head": "9be83a2b17e18dd7c3e225cfcc1f5888a2fabba0",
+    "role": "canonical Clay pipeline UCF-admission source lane"
+  },
+  "adjacent_runtime_lane": {
+    "pr": 1210,
+    "observation": "runtime convergence adds pipeline_profile_read and inference_generate but does not yet admit or dispatch pipeline_cognitive_fabric_admit",
+    "classification": "EXPECTED_INCOMPLETE_UNTIL_UCF_HANDLER_FUSION"
+  },
+  "finding": {
+    "class": "CROSS_PR_CONVERGENCE_FALSE_GREEN",
+    "old_guard_problem": "structured contract sync v2 can report reference runtime convergence from pipeline_profile_read + inference_generate while the canonical Clay path from PR 1205 additionally requires pipeline_cognitive_fabric_admit",
+    "risk": "after source/runtime fusion, missing UCF runtime support could be misclassified as converged even though the canonical run must fail at the mandatory cognitive-fabric phase",
+    "repair": "make the single existing drift guard require executable bindings for pipeline_profile_read, pipeline_cognitive_fabric_admit and inference_generate, and require executable Clay order pipeline_build_prompt < pipeline_cognitive_fabric_admit < inference_generate"
+  },
+  "changed_blobs": {
+    "the artefact/blogpost_entity/check_structured_contract_sync.py": "52e3db5ff03da3258236f6f55111d7e8b1281ebf",
+    "the artefact/blogpost_entity/test_structured_contract_sync_guard.py": "138dd0351f24868bad2aa867657435b2989e4333"
+  },
+  "exact_component_evidence": {
+    "git_hash_object_matches_github": true,
+    "py_compile": "PASS",
+    "unittest": {
+      "command": "python -m unittest -q test_structured_contract_sync_guard.py",
+      "tests": 5,
+      "result": "PASS"
+    },
+    "falsifiers": [
+      "UCF effect name present only in Clay comments or quoted strings does not count as causal wiring",
+      "Python handler/effect names present only in comments/docstrings do not count as runtime support",
+      "pipeline_profile_read + inference_generate without pipeline_cognitive_fabric_admit remains non-converged",
+      "all three real allowed-effect/dispatch/handler bindings converge",
+      "legacy profile_load/provider_chat_json keeps convergence closed"
+    ],
+    "scope": "EXACT_CHANGED_COMPONENT_BYTES_ONLY"
+  },
+  "coordination": {
+    "duplicate_product_pr_created": false,
+    "original_parallel_local_branch": "go/20260823-ucf-canonical-wiring-gpt56sol",
+    "original_parallel_branch_disposition": "NOT_PROMOTED_AFTER_PR_1205_DISCOVERY",
+    "fusion_strategy": "stack guard-only delta on PR 1205 rather than duplicate its canonical Clay source change",
+    "parallel_runtime_lane": "PR 1210 remains the retained runtime convergence donor; UCF handler still requires explicit later fusion"
+  },
+  "unusual_experiment": {
+    "count_claimed": 0,
+    "reason": "deterministic regression/fusion hardening only; no immutable shared macrocycle lease identity was exposed, so no unusual-experiment ownership is invented"
+  },
+  "credit": {
+    "source_mechanism": "SUPPORTED",
+    "bundled_08b_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_gwt": 0,
+    "claude_adapter_runtime": 0,
+    "whole_mini_entity": 0
+  },
+  "next_gate": "Fuse one real pipeline_cognitive_fabric_admit handler into the retained reference/native runtime so it binds current MiniUnifiedDB generation + compiled packet + prompt to the existing single UCF/InferencePacket/J-Space-GWT chain, then execute the exact fused source on an authorized isolated runtime surface.",
+  "safety": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "together_used": false,
+    "paid_execution": false,
+    "vps_self_hosted_production_testing": false
+  }
+}

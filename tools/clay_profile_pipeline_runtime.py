@@ -911,6 +911,8 @@ class ProfilePipelineRuntime(clay.Runtime):
                 args_spec = json.loads(args_spec)
             if not isinstance(args_spec, list) or not all(isinstance(item, str) for item in args_spec):
                 raise PipelineFault("LOCAL_ARGS_INVALID")
+            if not any("{{MODEL_PATH}}" in item for item in args_spec):
+                raise PipelineFault("LOCAL_MODEL_BINDING_REQUIRED")
 
             prompt_template = str(
                 inference.get("local_prompt_template", "{{SYSTEM}}\n\n{{USER}}\n")

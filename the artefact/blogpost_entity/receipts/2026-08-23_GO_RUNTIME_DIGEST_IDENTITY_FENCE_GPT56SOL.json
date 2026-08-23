@@ -3,48 +3,59 @@
   "date": "2026-08-23",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
-  "base_main": "8461c83a11cacf03c52a4aa950691e0ecdd7d865",
+  "original_base_main": "8461c83a11cacf03c52a4aa950691e0ecdd7d865",
+  "fusion_source_main": "380446042cf1d7e8ed00b7b51d1f8b129bd081dd",
+  "current_main_observed_before_finalization": "29c3d939590e1103a3cd15fd52d162a95fde9784",
   "branch": "go-20260823-gpt56sol-runtime-digest-identity",
   "coordination": {
     "macrocycle_id": null,
     "unusual_experiment_count": 0,
-    "classification": "DETERMINISTIC_SOURCE_FUSION_ONLY",
-    "note": "No new unusual experiment was consumed by this verification pass; it is an independent deterministic regression rerun of the existing source delta."
+    "classification": "DETERMINISTIC_CURRENT_MAIN_FUSION_AND_EXACT_COMPONENT_REGRESSION",
+    "note": "No new unusual experiment was consumed. The older runtime-digest lane was fused with the newer canonical placeholder-digest and UNKNOWN-GWT-slot guards rather than merged stale."
   },
-  "problem": "Merged PR #1080 atomically source-locks the bundled cognition manifest and boot receipt, but exact runtime bytes remained only in bundled_core.runtime_sha256. The canonical manifest integration identity bound a runtime name/identity but not a runtime byte digest, so runtime-byte substitution under a stable runtime identity was not source-locked into the same cognition bundle identity.",
+  "problem": "The canonical boot receipt already observed bundled_core.runtime_sha256, but the admitted bundled-cognition integration identity did not bind exact runtime bytes. Two executable runtimes could therefore share one quantization/runtime name while differing in bytes. Because J-Space/lens/workspace behavior is runtime-sensitive, exact runtime bytes must be in the same source-locked cognition identity.",
   "delta": {
     "manifest_validator": {
       "path": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py",
-      "git_blob": "f7e30922c90dd316c4bf77f6b3a8085ae724e724",
-      "law": "runtime_digest is an admitted SHA-256 field and participates in integration_identity_sha256 when present"
+      "git_blob": "737798d541db462048a7ac7fad34af6438480905",
+      "laws": [
+        "runtime_digest is an admitted lowercase SHA-256 field",
+        "runtime_digest participates in integration_identity_sha256 when present",
+        "placeholder all-zero/all-f digest rejection remains preserved"
+      ]
     },
     "manifest_tests": {
       "path": "the artefact/blogpost_entity/mini_cognition/test_bundled_cognition_manifest_v1.py",
-      "git_blob": "8e5befbcacd6ce81066d224dc62441180aa1a0e6"
+      "git_blob": "1f58db3185042fcd95e3a4b8a5d14ca64905cc4b"
     },
     "boot_validator": {
       "path": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
-      "git_blob": "67d4c129c387a8499f379560a35cb419f34e2ac6",
+      "git_blob": "c41cdfc5dded65b5bebe5048152dd659cc7196ef",
       "laws": [
         "BOOT_MANIFEST_RUNTIME_DIGEST_REQUIRED",
-        "boot bundled_core.runtime_sha256 must equal admitted manifest.runtime_digest"
+        "boot bundled_core.runtime_sha256 must equal admitted manifest.runtime_digest",
+        "placeholder digest rejection remains preserved",
+        "UNMEASURED_SOURCE_ONLY requires slot_count null",
+        "MEASURED_EXACT_BUNDLE requires integer slot_count >= 1"
       ]
     },
     "boot_tests": {
       "path": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py",
-      "git_blob": "35fc34f7814277b3c925b88456173a71b6824c3a",
-      "added_cases": [
-        "runtime digest mismatch must fail closed",
-        "boot manifest without runtime_digest must fail closed"
+      "git_blob": "7a93c3e3101af8195b5f5eafa224cd05d2600558",
+      "added_or_preserved_cases": [
+        "runtime digest mismatch fails closed",
+        "boot manifest without runtime_digest fails closed",
+        "placeholder runtime digest fails closed",
+        "unmeasured GWT slot count must remain null",
+        "measured exact bundle requires positive slot count"
       ]
     },
     "contract_doc": {
       "path": "the artefact/blogpost_entity/jspace_gwt/JSPACE_GWT_BOOT_BINDING_V1.md",
-      "git_blob": "8f2f449ff637d7487110d2b05b82eec1663d15a1"
+      "git_blob": "126442c71ee360e89ba734baf55b7a0319cc6534"
     }
   },
   "evidence": {
-    "tested_pr_head_before_receipt_only_update": "b2581bc85e98c56fc4c60b110af0bcfb01e830c9",
     "environment": {
       "class": "isolated ChatGPT container",
       "os": "Linux",
@@ -52,24 +63,37 @@
       "machine": "x86_64",
       "python": "3.13.5"
     },
-    "exact_blob_identity_check": {
+    "original_pr_exact_blob_regression": {
       "manifest_validator": "PASS:f7e30922c90dd316c4bf77f6b3a8085ae724e724",
       "manifest_tests": "PASS:8e5befbcacd6ce81066d224dc62441180aa1a0e6",
       "boot_validator": "PASS:67d4c129c387a8499f379560a35cb419f34e2ac6",
-      "boot_tests": "PASS:35fc34f7814277b3c925b88456173a71b6824c3a"
+      "boot_tests": "PASS:35fc34f7814277b3c925b88456173a71b6824c3a",
+      "py_compile": "PASS",
+      "manifest_unittest": "PASS_10_OF_10",
+      "boot_unittest": "PASS_17_OF_17",
+      "combined": "PASS_27_OF_27"
     },
-    "py_compile": "PASS_ALL_FOUR_EXACT_BLOBS",
-    "manifest_exact_blob_unittest": "PASS_10_OF_10",
-    "boot_exact_blob_unittest": "PASS_17_OF_17",
-    "combined": "PASS_27_OF_27",
-    "github_actions_note": "PR-head GitHub Actions still show runner admission failures with no visible steps; those are kept distinct from the independently executed exact-blob component regression evidence.",
-    "evidence_class": "EXACT_GIT_BLOB_COMPONENT_REGRESSION_VERIFIED"
+    "current_main_fused_exact_blob_regression": {
+      "manifest_validator": "PASS:737798d541db462048a7ac7fad34af6438480905",
+      "manifest_tests": "PASS:1f58db3185042fcd95e3a4b8a5d14ca64905cc4b",
+      "boot_validator": "PASS:c41cdfc5dded65b5bebe5048152dd659cc7196ef",
+      "boot_tests": "PASS:7a93c3e3101af8195b5f5eafa224cd05d2600558",
+      "py_compile": "PASS_ALL_FOUR_FUSED_BLOBS",
+      "manifest_unittest": "PASS_11_OF_11",
+      "boot_unittest": "PASS_20_OF_20",
+      "combined": "PASS_31_OF_31"
+    },
+    "github_content_identity": "All four fused code/test update_file content SHAs equal the locally tested Git blob identities.",
+    "github_actions_note": "Earlier PR-head Actions failures had no visible steps and remain execution-admission failures, not semantic test failures. They do not create runtime/model/product credit.",
+    "evidence_class": "EXACT_FUSED_GIT_BLOB_COMPONENT_REGRESSION_VERIFIED"
   },
   "preserved": [
-    "PR #1080 repository-owned source lock",
-    "PR #1071 dirty-diff provenance",
-    "PR #1071 typed first-action provenance",
+    "repository-owned bundled cognition source lock",
+    "dirty-diff provenance",
+    "typed first-action provenance",
     "J-Space numeric/readout/prompt-copy guards",
+    "placeholder digest rejection",
+    "UNKNOWN != MEASURED GWT slot semantics",
     "MiniUnifiedDB truth authority",
     "Unified Cognitive Fabric runtime receipt as downstream evidence envelope"
   ],
@@ -88,5 +112,5 @@
     "claude_adapter": 0,
     "whole_product": 0
   },
-  "next_gate": "Merge the verified runtime-byte identity fence, then bind the next intentional exact bundled checkpoint/tokenizer/runtime/J-Space/lens/workspace artifacts into the repository source lock before any runtime credit."
+  "next_gate": "Land the current-main-compatible runtime-byte identity fence, then on the next intentional admitted Ubuntu execution bind real checkpoint/tokenizer/runtime/J-Space/lens/workspace bytes into the repository source lock and observe the exact boot path before assigning any runtime credit."
 }

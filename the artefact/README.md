@@ -134,6 +134,8 @@ All new data paths should converge on a typed ingress packet binding before cogn
 
 Inputs may originate from humans, tools, external events, sensor/stream data, canonical database changes or intrinsic system events.
 
+Current source candidate under `the artefact/Xeno/` now makes this boundary executable as `XENO_INGRESS_PACKET/v1` and explicitly separates replay-stable causal `event_sha256` from concrete transport/admission `admission_sha256`. A reusable route-binding helper commits route identity to the event, route policy, canonical requested/resolved cognition engine and route result. This directly targets the causal/engine aliasing gap identified against draft HCU PR #1263 while remaining reusable across GRID10, COGSIM10, WM_TEST, NESTED_SIM and SCALEOUT. Source obligations exist; runtime credit remains zero until exact authorized isolated execution.
+
 ## Research fusion
 
 Current design is informed by external evidence on heterogeneous compute/memory/interconnect (NVIDIA DGX/Grace Hopper/Rubin), shared-weight inference scheduling and paged KV (vLLM/SGLang/TensorRT-LLM), dynamic compute allocation (Mixture-of-Depths), self-regulated planning, world-model planning, generated environments and generalist agents (DeepMind Genie/SIMA), conditional multi-agent/test-time scaling, and Global Workspace/J-Space research.
@@ -146,4 +148,4 @@ Current testing remains authorized-isolated-sandbox-only unless a newer owner di
 
 ## Current frontier
 
-Build the **typed Xeno Entry Fabric** and a reusable **GRID10 scheduler/state/interconnect baseline**, then progressively separate XRAM/XPU/XCU responsibilities so COGSIM10, WM_TEST, NESTED_SIM and measured SCALEOUT reuse the same machine primitives rather than requiring architectural rewrites.
+Execute the new **typed Xeno Entry Fabric causal-binding candidate** on an authorized isolated sandbox, then wire its `event_sha256` and route-binding formula into the draft HCU router with positive internal-engine resolution. In parallel, build the reusable GRID10 scheduler/state/interconnect baseline so COGSIM10, WM_TEST, NESTED_SIM and measured SCALEOUT reuse the same machine primitives rather than requiring architectural rewrites.

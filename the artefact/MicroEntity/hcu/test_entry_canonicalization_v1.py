@@ -6,11 +6,12 @@ import unittest
 from entry_canonicalization_v1 import CanonicalizationError, canonicalize
 
 
-# Complete RFC 8785 Appendix B finite-number sample set. NaN/Infinity are
-# separately covered by test_nonfinite_numbers_fail_closed.
+# RFC 8785 Appendix B finite-number sample set, excluding minus zero.
+# Appendix B documents its serializer image as "0", but verified erratum
+# EID 7920 says parsers SHOULD reject -0 to avoid signed-zero alias attacks.
+# NaN/Infinity are separately covered by test_nonfinite_numbers_fail_closed.
 NUMBER_VECTORS = [
     ("0000000000000000", "0"),
-    ("8000000000000000", "0"),
     ("0000000000000001", "5e-324"),
     ("8000000000000001", "-5e-324"),
     ("7fefffffffffffff", "1.7976931348623157e+308"),
@@ -48,6 +49,14 @@ class EntryCanonicalizationTests(unittest.TestCase):
                 expected,
                 (hex_value, repr(f64(hex_value))),
             )
+
+    def test_negative_zero_fails_closed_per_verified_erratum_7920(self):
+        negative_zero = f64("8000000000000000")
+        self.assertEqual(negative_zero, 0.0)
+        self.assertLess(math.copysign(1.0, negative_zero), 0.0)
+        with self.assertRaisesRegex(CanonicalizationError, "NEGATIVE_ZERO_FORBIDDEN"):
+            canonicalize(negative_zero)
+        self.assertEqual(canonicalize(0.0), b"0")
 
     def test_nonfinite_numbers_fail_closed(self):
         for value in (math.nan, math.inf, -math.inf):

@@ -63,6 +63,7 @@ def base_receipt():
             "packet_digest": d("d"),
             "candidate_result_digest": d("e"),
             "candidate_only": True,
+            "epistemic_status": "MEASURED_SUPPORTED",
         },
         "validation": {
             "decision": "ACCEPTED_CANDIDATE",
@@ -104,6 +105,7 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         self.assertTrue(result["ok"])
         self.assertEqual(result["phase"], "BOOT_BINDING")
         self.assertEqual(len(result["source_tree"]), 40)
+        self.assertEqual(result["epistemic_status"], "MEASURED_SUPPORTED")
 
     def test_exact_identity_expectations_reject_stale_manifest(self):
         receipt = base_receipt()
@@ -139,6 +141,13 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         with self.assertRaisesRegex(ReceiptError, "MODEL_RESULT_NOT_CANDIDATE_ONLY"):
             validate_receipt(receipt)
 
+    def test_epistemic_status_required_for_learned_inference(self):
+        receipt = base_receipt()
+        receipt["inference"].pop("epistemic_status")
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "EPISTEMIC_STATUS_REQUIRED"):
+            validate_receipt(receipt)
+
     def test_claude_requires_adapter_and_capability_identity(self):
         receipt = base_receipt()
         receipt["inference"]["engine_class"] = "CLAUDE_CODE"
@@ -170,6 +179,38 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         receipt["validation"]["effect_admitted"] = True
         redigest(receipt)
         with self.assertRaisesRegex(ReceiptError, "EFFECT_ADMITTED_WITHOUT_REQUEST"):
+            validate_receipt(receipt)
+
+    def test_workspace_stability_does_not_upgrade_refuted_candidate(self):
+        # Regression-only fusion of the already-consumed
+        # WORKSPACE_STABILITY_TRUTH_CONFUSION_MUTATION intervention from #1046.
+        baseline = base_receipt()
+        receipt = copy.deepcopy(baseline)
+        receipt["inference"]["epistemic_status"] = "REFUTED"
+        self.assertEqual(receipt["workspace"], baseline["workspace"])
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "UNSUPPORTED_EPISTEMIC_AUTHORITY"):
+            validate_receipt(receipt)
+
+    def test_effect_authority_requires_measured_supported_epistemic_status(self):
+        receipt = base_receipt()
+        receipt["validation"]["effect_requested"] = True
+        receipt["validation"]["effect_admitted"] = True
+        receipt["validation"]["canonical_write"] = False
+        receipt["inference"]["epistemic_status"] = "UNKNOWN"
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "UNSUPPORTED_EPISTEMIC_AUTHORITY"):
+            validate_receipt(receipt)
+
+    def test_deterministic_only_requires_not_applicable_epistemic_status(self):
+        receipt = base_receipt()
+        receipt["inference"]["engine_class"] = "DETERMINISTIC_ONLY"
+        receipt["inference"]["candidate_result_digest"] = None
+        receipt["inference"]["epistemic_status"] = "MEASURED_SUPPORTED"
+        receipt["validation"]["decision"] = "NO_INFERENCE"
+        receipt["validation"]["canonical_write"] = False
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "DETERMINISTIC_ONLY_EPISTEMIC_STATUS_MUST_BE_NOT_APPLICABLE"):
             validate_receipt(receipt)
 
     def test_terminal_digest_detects_post_receipt_mutation(self):

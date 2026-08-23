@@ -251,7 +251,10 @@ def test_same_pipeline_runs_two_materially_different_profiles_without_state_rese
 
     db = sqlite3.connect(entity_db)
     assert db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()[0] == 2
-    assert db.execute("SELECT generation FROM eos_pipeline_state").fetchone()[0] == 2
+    projection_columns = {
+        row[1] for row in db.execute("PRAGMA table_info(eos_pipeline_state)").fetchall()
+    }
+    assert "generation" not in projection_columns
     assert db.execute("SELECT active_profile FROM entity_state WHERE id=1").fetchone()[0] == "profile_b"
     assert db.execute("SELECT COUNT(*) FROM eos_pipeline_outputs").fetchone()[0] == 2
     assert {row[0] for row in db.execute("SELECT profile_id FROM eos_pipeline_outputs")} == {"profile_a", "profile_b"}

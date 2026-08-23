@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Compatibility entry point for the current fail-closed product-authority assertion.
+"""Compatibility entry point for the current fail-closed EntityOS/HCU authority assertion.
 
-The historical 4.1+4.2+4.3 Mini Entity assertion was correct for its then-current
-bootstrap, but the 2026-08-23 owner product directive now selects ClayVerse. Keep one
-assertion authority by delegating to the ClayVerse consistency validator rather than
-leaving a competing Mini Entity gate active.
+The historical filename remains callable by workflows and receipts. Product selection is
+owned by the current consistency validator; this wrapper must report that same resolved
+authority rather than re-emit a historical ClayVerse program label.
 """
 from __future__ import annotations
 
@@ -17,42 +16,41 @@ TOOLS = ROOT / "tools"
 if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
-from validate_clayverse_authority_consistency import validate
+from validate_clayverse_authority_consistency import (
+    CURRENT_COMPUTE_ARCHITECTURE,
+    CURRENT_PRODUCT,
+    CURRENT_PROGRAM,
+    CURRENT_SCHEMA,
+    CURRENT_STAGE,
+    validate,
+)
+
+ASSERTION_SCHEMA = "EFFECTIVE_PROGRAM_AUTHORITY_ASSERTION/v3"
+
+
+def assertion_payload(result: dict) -> dict:
+    passed = result.get("pass") is True
+    return {
+        "schema": ASSERTION_SCHEMA,
+        "status": "PASS" if passed else "FAIL",
+        "program": CURRENT_PROGRAM,
+        "stage": CURRENT_STAGE,
+        "product": CURRENT_PRODUCT,
+        "compute_architecture": CURRENT_COMPUTE_ARCHITECTURE,
+        "authority_validator": CURRENT_SCHEMA,
+        "errors": result.get("errors", []),
+        "credit": (
+            "SOURCE_CONTROL_ASSERTION_ONLY_ZERO_RUNTIME_CREDIT"
+            if passed
+            else "ZERO_RUNTIME_CREDIT"
+        ),
+    }
 
 
 def main() -> int:
     result = validate(ROOT)
-    if not result.get("pass"):
-        print(
-            json.dumps(
-                {
-                    "schema": "EFFECTIVE_PROGRAM_AUTHORITY_ASSERTION/v2",
-                    "status": "FAIL",
-                    "program": "CLAYVERSE_SINGLE_CONTAINER",
-                    "stage": "CLAYVERSE_ARTIFACT",
-                    "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
-                    "errors": result.get("errors", []),
-                    "credit": "ZERO_RUNTIME_CREDIT",
-                },
-                sort_keys=True,
-            )
-        )
-        return 2
-    print(
-        json.dumps(
-            {
-                "schema": "EFFECTIVE_PROGRAM_AUTHORITY_ASSERTION/v2",
-                "status": "PASS",
-                "program": "CLAYVERSE_SINGLE_CONTAINER",
-                "stage": "CLAYVERSE_ARTIFACT",
-                "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
-                "authority_validator": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
-                "credit": "SOURCE_CONTROL_ASSERTION_ONLY_ZERO_RUNTIME_CREDIT",
-            },
-            sort_keys=True,
-        )
-    )
-    return 0
+    print(json.dumps(assertion_payload(result), sort_keys=True))
+    return 0 if result.get("pass") is True else 2
 
 
 if __name__ == "__main__":

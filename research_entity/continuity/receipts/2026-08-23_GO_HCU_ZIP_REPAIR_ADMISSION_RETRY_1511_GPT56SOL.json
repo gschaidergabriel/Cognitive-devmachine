@@ -1,0 +1,49 @@
+{
+  "schema": "CLAY_EXECUTION_ADMISSION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "observed_main_before_write": "beea31cba0b78d26093cb12b567152737c08adb5",
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "real_effects": "EffectGate",
+    "hcu_role": "candidate/simulation/compute organ only",
+    "free_only": true,
+    "together_forbidden": true,
+    "vps_test_credit": 0
+  },
+  "target": {
+    "repair_pr": 1232,
+    "repair_branch": "gpt56sol/hcu-zip-binary-repair-20260823",
+    "repair_head_before_retry": "b458750719b4125121d2c15be122fa2bea71dd24",
+    "workflow": "hcu-zip-binary-repair",
+    "workflow_run_id": 32619882436,
+    "contract": "rebuild MICROENTITY_CURRENT.zip from exactly the 12 ordered PACKAGE_MANIFEST.json members with deterministic ZIP metadata and verify order/CRC/size"
+  },
+  "retry": {
+    "api_action": "rerun_failed_workflow_run_jobs",
+    "request_accepted": true,
+    "new_job_id": 97165662802,
+    "job_name": "rebuild",
+    "status": "completed",
+    "conclusion": "failure",
+    "visible_steps": [],
+    "job_log": "UNAVAILABLE_404_BLOB_NOT_FOUND"
+  },
+  "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION",
+  "falsified_interpretation": "workflow failure implies deterministic ZIP rebuild script executed and failed",
+  "observed_consequence": "the rebuild script did not execute on the retry, so no repaired ZIP bytes, CRC result, ZIP SHA-256, artifact-integrity credit, HCU runtime credit, J-Space/GWT credit, model credit or whole-product credit can be minted",
+  "coordination": {
+    "pr_comment_id": 5385015400,
+    "second_repair_path_created": false,
+    "temporary_write_capable_workflow_must_be_removed_before_merge": true
+  },
+  "unusual_experiment": {
+    "consumed_here": false,
+    "classification": "REGRESSION_ONLY_RETRY_OF_EXISTING_INTERVENTION",
+    "note": "No new unusual experiment was started; macrocycle experiment budget was already consumed by parallel current-go work."
+  },
+  "next_gate": "Materialize the exact manifest-ordered deterministic 12-member ZIP on an actually-started authorized isolated executor, verify exact member order + CRC + size + SHA-256/Git blob/source identity, replace the truncated archive, remove the temporary workflow, then merge the repair-only delta. The wider Mini Entity frontier remains the single pre-inference cognition admission -> inference -> deterministic gate/CAS -> post-turn canonical UCF-v1 receipt path plus exact isolated bundled-0.8B/J-Space/GWT/Claude/HCU evidence."
+}

@@ -17,6 +17,8 @@ from engine_load_lease_v1 import (
     LoaderConsumedArtifact,
     LoaderConsumption,
     issue_engine_load_lease,
+    loader_consumption_record,
+    loader_consumption_record_sha256,
     verify_loader_consumption,
 )
 from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
@@ -135,10 +137,14 @@ def verified_engine_load(verified: VerifiedEngineAdmission, *, generation: int =
         runtime=loader_artifact(verified.runtime),
         build=loader_artifact(verified.build),
     )
+    admitted_loader_consumptions = {
+        loader_consumption_record_sha256(consumption): loader_consumption_record(consumption)
+    }
     return verify_loader_consumption(
         lease,
         verified,
         consumption,
+        admitted_loader_consumptions=admitted_loader_consumptions,
         current_generation=generation,
     )
 

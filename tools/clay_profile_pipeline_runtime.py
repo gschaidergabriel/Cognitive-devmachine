@@ -24,8 +24,9 @@ from pathlib import Path
 from typing import Any, Callable
 
 import claycode_structured_backend as clay
+import profile_runtime_cognitive_fabric_binding_v1 as cognitive_fabric_binding
 
-VERSION = "clay-profile-pipeline-runtime/0.6.3"
+VERSION = "clay-profile-pipeline-runtime/0.6.4"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -130,9 +131,11 @@ class ProfilePipelineRuntime(clay.Runtime):
             "pipeline_collect",
             "pipeline_compile",
             "pipeline_build_prompt",
+            "pipeline_cognitive_fabric_admit",
             "inference_generate",
             "pipeline_gate",
             "pipeline_commit",
+            "pipeline_cognitive_fabric_finalize",
         }
 
     def _resolve(self, value: str) -> Path:
@@ -268,9 +271,11 @@ class ProfilePipelineRuntime(clay.Runtime):
             "pipeline_collect": self._pipeline_collect,
             "pipeline_compile": self._pipeline_compile,
             "pipeline_build_prompt": self._pipeline_build_prompt,
+            "pipeline_cognitive_fabric_admit": self._pipeline_cognitive_fabric_admit,
             "inference_generate": self._inference_generate,
             "pipeline_gate": self._pipeline_gate,
             "pipeline_commit": self._pipeline_commit,
+            "pipeline_cognitive_fabric_finalize": self._pipeline_cognitive_fabric_finalize,
         }
         started = time.time()
         ok = False
@@ -367,7 +372,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                     """CREATE TABLE IF NOT EXISTS eos_pipeline_state(
                          singleton INTEGER PRIMARY KEY CHECK(singleton=1),
                          continuity_json TEXT NOT NULL DEFAULT '{}',
-                         canonical_json TEXT NOT NULL DEFAULT '{}',
+                         canonical_json TEXT NOT NULL DEFAULT '',
                          canonical_hash TEXT NOT NULL DEFAULT '',
                          cursors_json TEXT NOT NULL DEFAULT '{}',
                          updated_at REAL NOT NULL DEFAULT 0)"""
@@ -483,6 +488,16 @@ class ProfilePipelineRuntime(clay.Runtime):
                 "canonical_hash": str(state_row["canonical_hash"]),
                 "cursors": json.loads(state_row["cursors_json"]),
             }
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
+
+    def _pipeline_cognitive_fabric_admit(self, p: dict[str, Any]) -> dict[str, Any]:
+        """Delegate pre-inference admission to the one read-only canonical UCF binding."""
+        try:
+            result = cognitive_fabric_binding.admit_profile_runtime_payload(self, p)
+            if not isinstance(result, dict) or result.get("ok") is not True:
+                raise PipelineFault("COGNITIVE_FABRIC_ADMISSION_FAILED")
+            return result
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
@@ -921,6 +936,42 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _is_loopback(endpoint: str) -> bool:
         return bool(re.match(r"^https?://(localhost|127\.0\.0\.1)(:\d+)?(?:/|$)", endpoint))
 
+    @staticmethod
+    def _required_sha256(value: Any, error: str) -> str:
+        if type(value) is not str or re.fullmatch(r"[0-9a-f]{64}", value) is None:
+            raise PipelineFault(error)
+        if value in {"0" * 64, "f" * 64}:
+            raise PipelineFault(error + ":PLACEHOLDER")
+        return value
+
+    @classmethod
+    def _assert_inference_admission_identity(
+        cls, generated: Any, admitted: Any
+    ) -> tuple[str, str]:
+        if not isinstance(generated, Mapping):
+            raise PipelineFault("GENERATED_OBJECT_REQUIRED")
+        if not isinstance(admitted, Mapping):
+            raise PipelineFault("COGNITIVE_FABRIC_ADMISSION_OBJECT_REQUIRED")
+        generated_packet = cls._required_sha256(
+            generated.get("inference_packet_digest"), "GENERATED_INFERENCE_PACKET_DIGEST_INVALID"
+        )
+        generated_admission = cls._required_sha256(
+            generated.get("cognitive_fabric_admission_receipt_digest"),
+            "GENERATED_COGNITIVE_FABRIC_ADMISSION_DIGEST_INVALID",
+        )
+        admitted_packet = cls._required_sha256(
+            admitted.get("inference_packet_digest"), "ADMITTED_INFERENCE_PACKET_DIGEST_INVALID"
+        )
+        admitted_receipt = cls._required_sha256(
+            admitted.get("cognitive_fabric_receipt_digest"),
+            "ADMITTED_COGNITIVE_FABRIC_RECEIPT_DIGEST_INVALID",
+        )
+        if generated_packet != admitted_packet:
+            raise PipelineFault("INFERENCE_PACKET_ANCESTRY_MISMATCH")
+        if generated_admission != admitted_receipt:
+            raise PipelineFault("COGNITIVE_FABRIC_ADMISSION_ANCESTRY_MISMATCH")
+        return generated_packet, generated_admission
+
     def _inference_api(self, inference: dict[str, Any], p: dict[str, Any]) -> dict[str, Any]:
         if not self.allow_network:
             raise PipelineFault("NETWORK_DISABLED")
@@ -1104,6 +1155,23 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _inference_generate(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             inference = dict(p["inference"])
+            inference_packet_digest = self._required_sha256(
+                p.get("inference_packet_digest"), "INFERENCE_PACKET_DIGEST_INVALID"
+            )
+            cognitive_fabric_admission_receipt_digest = self._required_sha256(
+                p.get("cognitive_fabric_admission_receipt_digest"),
+                "COGNITIVE_FABRIC_ADMISSION_RECEIPT_DIGEST_INVALID",
+            )
+
+            def bind_identity(result: dict[str, Any]) -> dict[str, Any]:
+                out = dict(result)
+                if out.get("ok") is True:
+                    out["inference_packet_digest"] = inference_packet_digest
+                    out["cognitive_fabric_admission_receipt_digest"] = (
+                        cognitive_fabric_admission_receipt_digest
+                    )
+                return out
+
             kind = str(inference.get("kind", ""))
             if self.provider_override is not None and kind == "mock":
                 self._active_secrets = []
@@ -1112,16 +1180,18 @@ class ProfilePipelineRuntime(clay.Runtime):
                 payload = self.provider_override(request)
                 if not isinstance(payload, dict):
                     raise PipelineFault("INFERENCE_OUTPUT_NOT_OBJECT")
-                return {
-                    "ok": True,
-                    "payload": payload,
-                    "provider_kind": "mock",
-                    "model": inference.get("model"),
-                }
+                return bind_identity(
+                    {
+                        "ok": True,
+                        "payload": payload,
+                        "provider_kind": "mock",
+                        "model": inference.get("model"),
+                    }
+                )
             if kind == "local_exec":
-                return self._inference_local_exec(inference, p)
+                return bind_identity(self._inference_local_exec(inference, p))
             if kind in _ADMITTED_API_INFERENCE_KINDS:
-                return self._inference_api(inference, p)
+                return bind_identity(self._inference_api(inference, p))
             raise PipelineFault("UNKNOWN_INFERENCE_KIND:" + kind)
         except Exception as exc:
             self._active_secrets = []
@@ -1132,11 +1202,14 @@ class ProfilePipelineRuntime(clay.Runtime):
         data = p["data"]
         generated = data["generated"]
         compiled = data["compiled"]
-        payload = generated["payload"]
         contract = profile["personality"]["output_contract"]
         gate = profile.get("gate", {})
 
         try:
+            self._assert_inference_admission_identity(
+                generated, data.get("cognitive_fabric_admission")
+            )
+            payload = generated["payload"]
             if gate.get("require_hash_echo", True):
                 if payload.get("canonical_state_hash_seen") != compiled["canonical_state_hash"]:
                     raise PipelineFault("CANONICAL_HASH_MISMATCH")
@@ -1212,6 +1285,12 @@ class ProfilePipelineRuntime(clay.Runtime):
         snapshot = profile.get("_runtime_profile_snapshot")
         if not isinstance(snapshot, Mapping):
             return {"ok": False, "error_kind": "PipelineFault", "error": "PROFILE_SNAPSHOT_MISSING"}
+        try:
+            self._assert_inference_admission_identity(
+                generated, data.get("cognitive_fabric_admission")
+            )
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
         db = self._db(entity_db)
         try:
@@ -1303,6 +1382,35 @@ class ProfilePipelineRuntime(clay.Runtime):
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
         finally:
             db.close()
+
+    def _pipeline_cognitive_fabric_finalize(self, p: dict[str, Any]) -> dict[str, Any]:
+        """Keep post-commit UCF finalization explicit and fail closed until complete.
+
+        This handler intentionally emits no UCF runtime receipt yet. Its purpose is to make
+        the already-committed state distinguishable from missing effect dispatch: the Clay
+        source can return COMMITTED_FINALIZATION_FAILED without pretending the final UCF
+        receipt exists. The static convergence guard must therefore remain red.
+        """
+        try:
+            data = p["data"]
+            admitted = data["admitted"]
+            generated = data["generated"]
+            gated = data["gated"]
+            committed = data["committed"]
+            if not isinstance(gated, Mapping) or gated.get("ok") is not True:
+                raise PipelineFault("FINALIZE_REQUIRES_ACCEPTED_GATE")
+            if not isinstance(committed, Mapping) or committed.get("ok") is not True:
+                raise PipelineFault("FINALIZE_REQUIRES_COMMITTED_TURN")
+            self._assert_inference_admission_identity(generated, admitted)
+            return {
+                "ok": False,
+                "error_kind": "PipelineFault",
+                "error": "UCF_FINAL_RUNTIME_RECEIPT_NOT_IMPLEMENTED",
+                "committed_output_id": committed.get("output_id"),
+                "committed_generation": committed.get("generation"),
+            }
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
 
 def execute_source(

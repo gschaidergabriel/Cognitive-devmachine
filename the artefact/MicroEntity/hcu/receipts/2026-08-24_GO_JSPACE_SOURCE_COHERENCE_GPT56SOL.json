@@ -1,5 +1,5 @@
 {
-  "schema": "ENTITYOS_HCU_GO_SOURCE_COHERENCE_RECEIPT/v2",
+  "schema": "ENTITYOS_HCU_GO_SOURCE_COHERENCE_RECEIPT/v3",
   "date": "2026-08-24",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
@@ -8,31 +8,33 @@
   "current_owner_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
   "product": "EntityOS",
   "compute_architecture": "HCU",
-  "finding": {
+  "initial_finding": {
     "classification": "SOURCE_COHERENCE_BLOCKER_NOT_RUNTIME_TEST_FAIL",
     "owner_steering_claimed_prototype_path": "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
     "main_path_fetch": "NOT_FOUND_AT_BOUND_MAIN",
     "retained_hcu_pr": 1263,
-    "retained_hcu_pr_head_first_observed": "d195755c16f704996c0b84eb7fa0d5ff2a5913ef",
-    "retained_hcu_pr_head_refreshed": "bbad88fecdf82c750d9a260f0954467bb7bc04a4",
-    "retained_pr_prototype_blob_sha": "928c773a08158254335817c7d95d0c0a7011ceb3",
-    "retained_pr_trace_schema_observed": "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3",
-    "interpretation": "Current steering describes a J-Space implementation delta that is not yet present in canonical main. Treat prototype/test evidence as retained-lane component evidence until exact bytes and required dependencies are fused onto current main and executed there."
+    "interpretation": "The J-Space implementation described by steering is retained-lane work, not yet canonical-main bytes."
   },
-  "retained_lane_current_contract_check": {
-    "head": "bbad88fecdf82c750d9a260f0954467bb7bc04a4",
-    "global_jspace_blob": "928c773a08158254335817c7d95d0c0a7011ceb3",
-    "global_jspace_test_blob": "602de9d98c857b60eee69d4d63a46249188db935",
-    "dataset_compiler_blob": "dd83d575daca18bde6abb335c30dcb97e68b49d1",
-    "dataset_compiler_test_blob": "64e94e27550a748e805f569abd1ce6d77714c9ac",
-    "global_jspace_test_status_by_source_contract": "UPDATED_FOR_BASIS_SHA256_AND_CURRENT_VECTOR_CODEC",
-    "dataset_compiler_status_by_source_contract": "STALE_INCOMPATIBLE_WITH_CURRENT_TRACE_AND_VECTOR_CODEC",
-    "compiler_mismatches": [
-      "compiler requires trace.control_packet_text and trace.control_packet_sha256, but current global_jspace trace emits control_packet_identity_sha256 and control_packet_wire_sha256 and omits packet text",
-      "compiler calls VectorControlPacket.decode_text and packet.encode_bytes/gate_q, but current JSPACE_VECTOR_CONTROL_ABI/v1 exposes parse_packet_text/packet_bytes and the packet has no gate_q field",
-      "compiler test still calls global_jspace.step without required basis_sha256"
+  "same_cycle_parallel_resolution": {
+    "retained_hcu_pr_head_observed": "a25c4fa0c02d67912f4e96abb6c59f53f0f75ac6",
+    "global_jspace_blob": "8e1245f1ea668e1b71d268ba3125ebb384d6f660",
+    "dataset_compiler_blob": "99c116e994ef77bf8202efdd4e0bd3cd15f03051",
+    "dataset_compiler_test_blob": "9caaf7e164e780911e7e49561fc3fea4c23e3215",
+    "substantive_trace_codec_mismatch": "REPAIRED_BY_PARALLEL_RETAINED_LANE",
+    "observed_current_contract": [
+      "Global J-Space TRACE v3 carries basis_sha256, exact control_packet_text, packet identity digest and wire digest.",
+      "Bootstrap compiler uses current parse_packet_text and packet_bytes APIs and binds generation, basis id, basis digest, role and control condition.",
+      "Bootstrap compiler carries current basis digest into generated validation/broadcast examples."
     ],
+    "remaining_regression_drift": "test_compile_jspace_bootstrap_dataset_v1.py still expects legacy JCTL_BASIS_MISMATCH while compiler emits JSPACE_BASIS_ID_MISMATCH.",
+    "coordination_action": "PR #1263 was notified; no duplicate compiler/ABI path was created.",
     "evidence_class": "EXACT_CURRENT_SOURCE_CONTRACT_ANALYSIS_NO_EXECUTION_CREDIT"
+  },
+  "stale_write_protection": {
+    "attempted_patch_branch": "gpt56sol/fix-pr1263-jspace-bootstrap-compiler-current-20260824",
+    "first_write_result": "GITHUB_409_SOURCE_MOVED",
+    "partial_code_write": false,
+    "interpretation": "Concurrent retained-lane work moved the target; stale overwrite correctly failed closed."
   },
   "execution_surface_discovery": {
     "vercel_connector_sandbox_create_start_exec_callable": false,
@@ -43,8 +45,8 @@
   "unusual_experiment": {
     "name": "JSPACE_PROTOTYPE_LOCATION_SPLIT",
     "count_for_this_macrocycle": 1,
-    "intervention": "Fetch the exact owner-steering prototype path at canonical main and at the retained HCU PR head.",
-    "prediction_if_main_integrated": "The same path resolves on canonical main.",
+    "intervention": "Fetch the exact owner-steering prototype path at canonical main and retained HCU PR head.",
+    "prediction_if_main_integrated": "Path resolves on canonical main.",
     "prediction_if_lane_only": "Canonical main returns Not Found while retained HCU lane resolves exact source bytes.",
     "observed": "Lane-only prediction observed.",
     "result": "RETAINED_LANE_ONLY"
@@ -53,13 +55,13 @@
     "together_one_shot_authorized": true,
     "job_consumed": false,
     "job_started_by_this_organ": false,
-    "reason_not_started": "Functional J-Space/GWT bytes are not canonically fused on main; the retained-lane dataset compiler is source-incompatible with the refreshed current prototype/vector ABI; real integrated traces, frozen base, retained-capability evaluation and Together support/price preflight are not established."
+    "reason_not_started": "J-Space/HCU bytes are still retained-lane rather than canonical-main integrated runtime evidence; exact authorized isolated execution, real Entry-route-engine-outcome traces, causal lesion/shuffle/rescue evidence, frozen base identity/pretraining evaluation and Together support/price preflight are not established by this run."
   },
   "next_exact_gate": [
-    "Repair the retained PR #1263 dataset compiler against current TRACE v3 and current JSPACE_VECTOR_CONTROL_ABI/v1 rather than creating a duplicate compiler path.",
-    "Add a compiler regression that consumes an actual current global_jspace.step(..., basis_sha256=...) trace and validates packet text/digest/basis/generation/role with the current vector codec.",
-    "After retained-lane coherence, rebase/adjudicate #1263 against current main and isolate the smallest dependency-complete J-Space/GWT + Vector Control ABI + trace/compiler slice.",
-    "Run exact bound source in an authorized isolated executor; source-only or retained-lane component evidence grants zero EntityOS/HCU runtime credit.",
-    "Only after real integrated traces, lesion/shuffle/rescue evidence, frozen ABI, leak-resistant splits, exact base identity and Together price/support preflight may the single authorized training job be created."
+    "Close the residual compiler regression string drift on retained PR #1263 and keep current TRACE v3/vector-ABI contract coherent.",
+    "Rebase/adjudicate the retained dependency-complete J-Space/GWT + Vector Control ABI + causal training-trace/compiler slice onto current main without duplicating Entry/router/canonicalization/inference authority.",
+    "Run exact bound source in an actually-started authorized isolated executor and capture source identity, commands, exits and logs.",
+    "Produce real integrated Entry -> route -> engine/load -> GRID10 -> J-Space/GWT -> downstream-outcome traces with lesion/shuffle/rescue controls.",
+    "Only after frozen leak-resistant train/validation/holdout data, exact ~0.8B base identity, retained-capability baseline and Together support/price preflight may the single authorized training job be created."
   ]
 }

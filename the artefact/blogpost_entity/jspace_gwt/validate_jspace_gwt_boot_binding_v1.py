@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import hashlib
 import json
 import math
 import re
@@ -8,6 +9,21 @@ from pathlib import Path
 SCHEMA = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
+REQUIRED_ARTIFACT_BINDINGS = {
+    "bundled_manifest": ("bundled_core", "manifest_sha256"),
+    "checkpoint": ("bundled_core", "checkpoint_sha256"),
+    "tokenizer": ("bundled_core", "tokenizer_sha256"),
+    "runtime": ("bundled_core", "runtime_sha256"),
+    "lens_file": ("jspace", "lens_file_sha256"),
+    "lens_profile": ("jspace", "lens_profile_sha256"),
+    "fit_corpus": ("jspace", "fit_corpus_sha256"),
+    "workspace_policy": ("gwt", "workspace_policy_sha256"),
+    "gwt_calibration": ("gwt", "calibration_sha256"),
+    "zero_identity": ("zero_grf", "zero_identity_sha256"),
+    "grf": ("zero_grf", "grf_sha256"),
+    "projection_policy": ("zero_grf", "projection_policy_sha256"),
+    "claude_capability_profile": ("claude_adapter", "capability_profile_sha256"),
+}
 
 
 class ValidationError(ValueError):
@@ -66,7 +82,36 @@ def req_sha(parent: dict, key: str, length: int = 64) -> str:
     return value
 
 
-def validate(data: dict) -> None:
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def verify_artifact_binding(root: Path, role: str, binding: dict, expected_sha256: str) -> None:
+    relative = req_str(binding, "path")
+    if Path(relative).is_absolute():
+        fail(f"ARTIFACT_ABSOLUTE_PATH:{role}")
+    declared_sha = req_sha(binding, "sha256")
+    if declared_sha != expected_sha256:
+        fail(f"ARTIFACT_DECLARED_DIGEST_MISMATCH:{role}")
+    size_bytes = req_int(binding, "size_bytes", minimum=0)
+    try:
+        resolved = (root / relative).resolve(strict=True)
+        resolved.relative_to(root)
+    except (FileNotFoundError, OSError, ValueError):
+        fail(f"ARTIFACT_PATH_OUTSIDE_ROOT_OR_MISSING:{role}")
+    if not resolved.is_file():
+        fail(f"ARTIFACT_NOT_FILE:{role}")
+    if resolved.stat().st_size != size_bytes:
+        fail(f"ARTIFACT_SIZE_MISMATCH:{role}")
+    if sha256_file(resolved) != expected_sha256:
+        fail(f"ARTIFACT_DIGEST_MISMATCH:{role}")
+
+
+def validate(data: dict, artifact_root: Path) -> None:
     if data.get("schema") != SCHEMA:
         fail("SCHEMA_MISMATCH")
 
@@ -85,10 +130,12 @@ def validate(data: dict) -> None:
     req_str(core, "manifest_version")
     req_str(core, "engine_id")
     req_str(core, "model_family")
-    req_sha(core, "checkpoint_sha256")
-    req_sha(core, "tokenizer_sha256")
+    checkpoint_sha = req_sha(core, "checkpoint_sha256")
+    tokenizer_sha = req_sha(core, "tokenizer_sha256")
     req_sha(core, "runtime_sha256")
     req_sha(core, "manifest_sha256")
+    layer_count = req_int(core, "layer_count", minimum=1)
+    d_model = req_int(core, "d_model", minimum=1)
     if not req_bool(core, "exact_bytes_verified"):
         fail("BUNDLED_CORE_BYTES_UNVERIFIED")
 
@@ -97,6 +144,21 @@ def validate(data: dict) -> None:
     req_sha(jspace, "lens_file_sha256")
     req_sha(jspace, "lens_profile_sha256")
     req_sha(jspace, "fit_corpus_sha256")
+    if req_sha(jspace, "source_checkpoint_sha256") != checkpoint_sha:
+        fail("JSPACE_CHECKPOINT_PROVENANCE_MISMATCH")
+    if req_sha(jspace, "source_tokenizer_sha256") != tokenizer_sha:
+        fail("JSPACE_TOKENIZER_PROVENANCE_MISMATCH")
+    if req_int(jspace, "d_model", minimum=1) != d_model:
+        fail("JSPACE_D_MODEL_MISMATCH")
+    source_layers = jspace.get("source_layers")
+    if not isinstance(source_layers, list) or not source_layers:
+        fail("JSPACE_SOURCE_LAYERS_REQUIRED")
+    if any(isinstance(layer, bool) or not isinstance(layer, int) for layer in source_layers):
+        fail("JSPACE_SOURCE_LAYER_INVALID")
+    if source_layers != sorted(set(source_layers)):
+        fail("JSPACE_SOURCE_LAYERS_NOT_UNIQUE_SORTED")
+    if any(layer < 0 or layer >= layer_count for layer in source_layers):
+        fail("JSPACE_SOURCE_LAYER_OUT_OF_RANGE")
     req_int(jspace, "n_prompts", minimum=1)
     skip_first = req_int(jspace, "skip_first_positions", minimum=0)
     req_str(jspace, "storage_dtype")
@@ -151,6 +213,26 @@ def validate(data: dict) -> None:
     }:
         fail("INVALID_FIRST_ENGINE_CHOICE")
     req_str(inference, "origin_attribution")
+    req_sha(inference, "inference_packet_sha256")
+
+    control = req_obj(data, "control")
+    if not req_bool(control, "free_only"):
+        fail("FREE_ONLY_NOT_BOUND")
+    if req_bool(control, "paid_or_unknown_provider_network_attempted"):
+        fail("PAID_OR_UNKNOWN_PROVIDER_NETWORK_ATTEMPTED")
+
+    artifacts = req_obj(data, "artifact_bindings")
+    sections = {
+        "bundled_core": core,
+        "jspace": jspace,
+        "gwt": gwt,
+        "zero_grf": zero,
+        "claude_adapter": claude,
+    }
+    for role, (section_name, digest_key) in REQUIRED_ARTIFACT_BINDINGS.items():
+        binding = req_obj(artifacts, role)
+        expected_sha = req_sha(sections[section_name], digest_key)
+        verify_artifact_binding(artifact_root, role, binding, expected_sha)
 
     authority = req_obj(data, "authority")
     required_true = {
@@ -172,14 +254,18 @@ def validate(data: dict) -> None:
 
 
 def main() -> int:
-    if len(sys.argv) != 2:
-        print("usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json", file=sys.stderr)
+    if len(sys.argv) != 3:
+        print("usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json ARTIFACT_ROOT", file=sys.stderr)
         return 2
     try:
-        data = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+        receipt_path = Path(sys.argv[1])
+        artifact_root = Path(sys.argv[2]).resolve(strict=True)
+        if not artifact_root.is_dir():
+            fail("ARTIFACT_ROOT_NOT_DIRECTORY")
+        data = json.loads(receipt_path.read_text(encoding="utf-8"))
         if not isinstance(data, dict):
             fail("TOP_LEVEL_NOT_OBJECT")
-        validate(data)
+        validate(data, artifact_root)
     except (OSError, json.JSONDecodeError, ValidationError) as exc:
         print(f"FAIL {exc}")
         return 1

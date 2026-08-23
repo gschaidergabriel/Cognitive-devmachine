@@ -21,9 +21,22 @@ from bundled_cognition_manifest_v1 import (  # noqa: E402
 
 SCHEMA = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1"
 SOURCE_LOCK_SCHEMA = "BUNDLED_COGNITION_SOURCE_LOCK/v1"
+SOURCE_LOCK_PATH = MINI_COGNITION / "bundled_cognition_source_lock_v1.json"
+BUNDLED_MANIFEST_PATH = MINI_COGNITION / "bundled_cognition_manifest_admitted_v1.json"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 ACTION_ORIGINS = {"ZERO", "HOOK_TIMER", "CLAUDE_CODE", "PROXY_SANDBOX_CONTROLLER", "OTHER"}
+LOCAL_COGNITION_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}
+SOURCE_LOCK_KEYS = {
+    "schema",
+    "status",
+    "authority",
+    "manifest_file_sha256",
+    "manifest_identity_sha256",
+    "integration_identity_sha256",
+    "runtime_sha256",
+    "note",
+}
 
 
 class ValidationError(ValueError):
@@ -90,30 +103,39 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def validate_source_lock(lock: dict) -> None:
+def load_repository_source_lock() -> dict:
+    try:
+        lock = json.loads(SOURCE_LOCK_PATH.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        fail("SOURCE_LOCK_READ_OR_JSON_ERROR")
+    if not isinstance(lock, dict):
+        fail("SOURCE_LOCK_TOP_LEVEL_NOT_OBJECT")
+    if set(lock) != SOURCE_LOCK_KEYS:
+        fail("SOURCE_LOCK_KEYSET_MISMATCH")
     if lock.get("schema") != SOURCE_LOCK_SCHEMA:
         fail("SOURCE_LOCK_SCHEMA_MISMATCH")
-    allowed = {
-        "schema",
-        "status",
-        "authority",
-        "manifest_file_sha256",
-        "manifest_identity_sha256",
-        "integration_identity_sha256",
-        "note",
-    }
-    unknown = sorted(set(lock) - allowed)
-    if unknown:
-        fail("SOURCE_LOCK_UNKNOWN_FIELDS:" + ",".join(unknown))
-    if req_str(lock, "status") != "BOUND":
-        fail("SOURCE_LOCK_NOT_BOUND")
+    status = req_str(lock, "status")
+    if status not in {"UNBOUND", "BOUND"}:
+        fail("SOURCE_LOCK_STATUS_INVALID")
     if req_str(lock, "authority") != "repository_source_tree":
         fail("SOURCE_LOCK_AUTHORITY_INVALID")
+    if status == "UNBOUND":
+        for key in (
+            "manifest_file_sha256",
+            "manifest_identity_sha256",
+            "integration_identity_sha256",
+            "runtime_sha256",
+        ):
+            if lock.get(key) is not None:
+                fail("SOURCE_LOCK_UNBOUND_WITH_IDENTITIES")
+        req_str(lock, "note")
+        fail("SOURCE_LOCK_NOT_BOUND")
     req_sha(lock, "manifest_file_sha256")
     req_sha(lock, "manifest_identity_sha256")
     req_sha(lock, "integration_identity_sha256")
-    if "note" in lock:
-        req_str(lock, "note")
+    req_sha(lock, "runtime_sha256")
+    req_str(lock, "note")
+    return lock
 
 
 def validate(data: dict) -> None:
@@ -137,6 +159,8 @@ def validate(data: dict) -> None:
     req_str(core, "manifest_version")
     req_str(core, "engine_id")
     req_str(core, "model_family")
+    if req_str(core, "cognition_mode") not in LOCAL_COGNITION_MODES:
+        fail("BUNDLED_COGNITION_MODE_NOT_LOCAL")
     req_sha(core, "checkpoint_sha256")
     req_sha(core, "tokenizer_sha256")
     req_sha(core, "runtime_sha256")
@@ -244,14 +268,16 @@ def validate(data: dict) -> None:
         fail("BOOT_RECEIPT_CANNOT_GRANT_WHOLE_PRODUCT_PASS")
 
 
-def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict) -> None:
-    validate_source_lock(source_lock)
+def validate_manifest_binding(data: dict) -> None:
+    source_lock = load_repository_source_lock()
     try:
-        validated = load_bundled_manifest(manifest_path)
+        validated = load_bundled_manifest(BUNDLED_MANIFEST_PATH)
     except BundledManifestError as exc:
         fail(f"BUNDLED_MANIFEST_INVALID:{exc}")
+    except OSError:
+        fail("BUNDLED_MANIFEST_READ_ERROR")
 
-    raw_sha = sha256_file(manifest_path)
+    raw_sha = sha256_file(BUNDLED_MANIFEST_PATH)
     if raw_sha != req_sha(source_lock, "manifest_file_sha256"):
         fail("SOURCE_LOCK_MANIFEST_FILE_MISMATCH")
     if validated.manifest_identity_sha256 != req_sha(source_lock, "manifest_identity_sha256"):
@@ -273,6 +299,8 @@ def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict
         fail("BOOT_CHECKPOINT_MISMATCH")
     if req_sha(core, "tokenizer_sha256") != manifest["tokenizer_digest"]:
         fail("BOOT_TOKENIZER_MISMATCH")
+    if req_sha(core, "runtime_sha256") != req_sha(source_lock, "runtime_sha256"):
+        fail("BOOT_RUNTIME_MISMATCH")
 
     expected_runtime_identity = manifest.get("quantization_runtime_identity")
     observed_runtime_identity = core.get("quantization_runtime_identity")
@@ -302,24 +330,16 @@ def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict
 
 
 def main() -> int:
-    if len(sys.argv) != 4:
-        print(
-            "usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json BUNDLED_MANIFEST.json SOURCE_LOCK.json",
-            file=sys.stderr,
-        )
+    if len(sys.argv) != 2:
+        print("usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json", file=sys.stderr)
         return 2
     try:
         receipt_path = Path(sys.argv[1])
-        manifest_path = Path(sys.argv[2])
-        source_lock_path = Path(sys.argv[3])
         data = json.loads(receipt_path.read_text(encoding="utf-8"))
-        source_lock = json.loads(source_lock_path.read_text(encoding="utf-8"))
         if not isinstance(data, dict):
             fail("TOP_LEVEL_NOT_OBJECT")
-        if not isinstance(source_lock, dict):
-            fail("SOURCE_LOCK_TOP_LEVEL_NOT_OBJECT")
         validate(data)
-        validate_manifest_binding(data, manifest_path, source_lock)
+        validate_manifest_binding(data)
     except (OSError, json.JSONDecodeError, ValidationError, BundledManifestError) as exc:
         print(f"FAIL {exc}")
         return 1

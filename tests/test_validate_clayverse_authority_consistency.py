@@ -143,11 +143,34 @@ class AuthorityConsistencyTests(unittest.TestCase):
                     "legacy_mini_entity_swarm_controller": "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION",
                 },
             },
-            mod.STEERING844: {
+            mod.STEERING848: {
+                "schema_version": "8.48",
+                "status": "CURRENT_OWNER_REENTRY_STEERING",
                 "program": mod.EXPECTED_PROGRAM,
                 "stage": mod.EXPECTED_STAGE,
-                "effective_control": mod.EXPECTED_EFFECTIVE_CONTROL,
-                "adjudication": {"free_only": True, "together_forbidden": True, "vps_testing": False},
+                "product_endpoint": "ClayVerse",
+                "release_form": mod.EXPECTED_RELEASE,
+                "owner_directive": mod.OWNER_DIRECTIVE,
+                "authority_adjudication": {
+                    "mini_entity_4_5": "SUPERSEDED_FOR_PROGRAM_PRODUCT_TRIGGER_AND_WORK_SELECTION_BY_NEWER_OWNER_REENTRY",
+                    "durable_authority": "UnifiedDB",
+                    "derived_projection": "ClayGraph",
+                    "external_effect_authority": "EffectGate+EffectJournal",
+                    "second_identity_or_state_or_effect_authority": "FORBIDDEN",
+                },
+                "execution": {
+                    "free_only": True,
+                    "authorized_isolated_sandbox_only": True,
+                    "vps_testing": False,
+                    "self_hosted_vps_test_runners": False,
+                    "production_host_testing": False,
+                    "together_allowed": False,
+                    "runtime_credit": 0,
+                },
+                "steering": [
+                    "RUN_THE_EXISTING_CLAYVERSE_AUTHORITY_CONSISTENCY_GUARD_BEFORE_PROMOTING_ANY_FUTURE_PRODUCT_ROUTING_CHANGE",
+                    "FAIL_CLOSED_IF_BOOTSTRAP_PROGRAM_ROOT_WORKER_SWARM_CONTROL_OR_OWNER_DIRECTIVE_SELECTS_MINI_ENTITY_OR_BLOGPOST_AS_CURRENT_PRODUCT",
+                ],
             },
         }
         text = {
@@ -273,6 +296,31 @@ class AuthorityConsistencyTests(unittest.TestCase):
         data["preserved_hard_rules"]["free_only"] = False
         path.write_text(json.dumps(data), encoding="utf-8")
         self.assertIn("CONTROL44_FREE_ONLY_WEAKENED", mod.validate(root)["errors"])
+
+    def test_current_steering_mini_entity_regression_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.STEERING848
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("STEERING848_PROGRAM_STAGE_MISMATCH", mod.validate(root)["errors"])
+
+    def test_current_steering_execution_weakening_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.STEERING848
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["execution"]["authorized_isolated_sandbox_only"] = False
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("STEERING848_SAFETY_WEAKENED", mod.validate(root)["errors"])
+
+    def test_current_steering_missing_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        (root / mod.STEERING848).unlink()
+        errors = mod.validate(root)["errors"]
+        self.assertTrue(any(error.startswith("MISSING:steering848:") for error in errors))
 
     def test_nested_work_selector_poison_fails_closed(self):
         td, root = self.make_tree()

@@ -1,0 +1,87 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "retained_lane": {
+    "pull_request": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "policy": "SINGLE_RETAINED_HCU_TYPED_ENTRY_DONOR_LANE_NO_PARALLEL_INFERENCE_AUTHORITY"
+  },
+  "authority_refresh": {
+    "current_free_only_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "free_only": true,
+    "together_training_in_current_supervisor_mode": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "vps_self_hosted_production_testing": "FORBIDDEN",
+    "exact_runtime_credit_before_cycle": 0
+  },
+  "frontier_selected": "Bind J-Space/GWT training evidence to the canonical HCU_INFERENCE_RECEIPT/v3 engine-load/output chain before any trace can count as a real instrumented model trace.",
+  "counterhypothesis": "A TrainingTrace outcome_receipt_sha256 field alone is sufficient causal evidence even when it does not structurally prove that generation, Entry event/admission, route, model lane, verified loader chain and output bytes belong to the same canonical inference receipt.",
+  "counterhypothesis_result": "REJECTED_AT_SOURCE_CONTRACT_SCOPE_ONLY",
+  "unusual_experiment": {
+    "count": 1,
+    "name": "TRAINING_TRACE_BASIS_ALIAS_POISON",
+    "class": "SYNTHETIC_SOURCE_EQUIVALENT_MECHANISM_ONLY",
+    "purpose": "Test whether same basis_id with different basis bytes could enter a training trace before basis-byte identity was fenced.",
+    "observation": "The earlier simplified gate accepted the alias case; adding basis_sha256 equality rejected it. Before this organ could write that repair, a concurrent worker advanced PR1263 and independently added the basis SHA fence plus stronger packet condition/identity/wire transplant fences.",
+    "credit": "MECHANISM_DISCRIMINATOR_ONLY_ZERO_RUNTIME_CREDIT",
+    "additional_unusual_experiments": 0
+  },
+  "coordination": {
+    "stale_write_rejection": "A GitHub 409 rejected this organ's stale jspace_training_trace_v1.py update after PR1263 advanced; no newer worker bytes were overwritten.",
+    "parallel_fusion": "Refreshed source showed the basis-byte and compiler-codec repairs already present; this organ did not duplicate them.",
+    "observed_branch_head_after_initial_binding_writes": "c0ff32e1d4df99817d5181a01a35a00f29245e70",
+    "head_is_snapshot_not_permanent_authority": true
+  },
+  "durable_delta": [
+    {
+      "path": "the artefact/MicroEntity/hcu/jspace_inference_binding_v1.py",
+      "commit": "4ed7b902ffe40a3f0a8b00b9ed40f8bf11b599f9",
+      "schema": "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v1",
+      "role": "Fail-closed research-evidence binder from exact TrainingTrace to canonical HCU_INFERENCE_RECEIPT/v3 identities including generation, Entry event/admission, route, model lane, engine admission, verified loader binding/lease/consumption and output bytes. It grants no truth, effect or runtime authority."
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/test_jspace_inference_binding_v1.py",
+      "commit": "52ea4d9eeb96c4e9c2f897912cae2b17b22ae291",
+      "role": "Deterministic regression source for happy-path binding, generation/Entry/route crossbinding rejection, model-lane mismatch, inference-receipt digest tamper and binding digest tamper."
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/HCU_DATA_INDEX.json",
+      "commit": "e1181a35b103317313d68d116fab42eb2d61a97f",
+      "role": "Indexes the inference-binding candidate while preserving real_instrumented_model_trace_count=0, training_launch_allowed_now=false and runtime_credit=0."
+    }
+  ],
+  "execution_evidence": {
+    "callable_vercel_sandbox_create_or_runcommand_exposed_to_this_organ": false,
+    "github_workflow_runs_observed_for_branch_head_c0ff32e1d4df99817d5181a01a35a00f29245e70": 0,
+    "focused_binding_tests_executed_exact_branch": false,
+    "combined_entry_route_engine_load_inference_grid10_jspace_run_executed": false,
+    "real_instrumented_model_trace_count_change": 0,
+    "runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "classification": "SOURCE_CANDIDATE_AND_REGRESSION_OBLIGATION_ONLY"
+  },
+  "training_boundary": {
+    "together_job_created": false,
+    "together_one_shot_consumed": false,
+    "together_preflight_performed": false,
+    "credentials_accessed": false,
+    "paid_execution": false,
+    "current_supervisor_rule": "FREE_ONLY_SUPERVISOR_8_61_QUARANTINES_PAID_ONE_SHOT"
+  },
+  "next_exact_gate": [
+    "Actually start an authorized FREE isolated executor bound to exact current Research main plus exact retained PR1263 source identity.",
+    "Run test_jspace_inference_binding_v1.py plus adjacent J-Space training/vector/prototype, Typed Entry, route, engine admission/load, inference v3 and GRID10 regressions.",
+    "Wire the binding producer into request-scoped GRID10/J-Space execution so an actual loader-consumed inference can emit the first real trace without a side authority.",
+    "Generate matched-budget lesion/shuffle/rescue controls and preserve counterevidence.",
+    "Only after executable gates, continue zero-cost local ~0.8B J-Space/GWT work permitted by Supervisor 8.61."
+  ],
+  "acceptance": "IN_PROGRESS",
+  "whole_entityos_hcu_runtime_pass": false,
+  "evidence_note": "Source/component evidence does not imply EntityOS/HCU runtime acceptance or model-specific J-Space causality."
+}

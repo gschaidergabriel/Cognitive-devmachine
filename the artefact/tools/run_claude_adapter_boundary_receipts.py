@@ -46,6 +46,18 @@ def git(repo: Path, *args: str) -> str:
     return cp.stdout.strip()
 
 
+def command_version(argv: list[str]) -> dict:
+    cp = subprocess.run(argv, shell=False, capture_output=True, check=False, timeout=10)
+    raw = cp.stdout + b"\x00" + cp.stderr
+    return {
+        "argv": argv,
+        "returncode": int(cp.returncode),
+        "output_sha256": sha256_bytes(raw),
+        "output_bytes": len(raw),
+        "text": raw.decode("utf-8", errors="replace").strip()[:512],
+    }
+
+
 def git_blob(repo: Path, relative: str) -> str:
     return git(repo, "rev-parse", f"HEAD:{relative}")
 
@@ -58,8 +70,12 @@ def atomic_write_json(path: Path, payload: dict) -> None:
     os.replace(tmp, path)
 
 
+def tree_status(repo: Path) -> str:
+    return git(repo, "status", "--porcelain=v1", "--untracked-files=all")
+
+
 def build_source_identity(repo: Path, artefact: Path, runner_path: Path) -> dict:
-    dirty = git(repo, "status", "--porcelain=v1", "--untracked-files=all")
+    dirty = tree_status(repo)
     if dirty:
         raise RuntimeError(
             "DIRTY_TREE_REJECTED:" + sha256_bytes(dirty.encode("utf-8", errors="replace"))
@@ -79,6 +95,7 @@ def build_source_identity(repo: Path, artefact: Path, runner_path: Path) -> dict
         "commit": git(repo, "rev-parse", "HEAD"),
         "tree": git(repo, "rev-parse", "HEAD^{tree}"),
         "dirty_before": False,
+        "dirty_after": None,
         "files": {
             "test": {
                 "path": rel_test,
@@ -158,6 +175,8 @@ def main() -> int:
             "python_version": platform.python_version(),
             "platform": platform.platform(),
             "machine": platform.machine(),
+            "pytest": command_version([sys.executable, "-m", "pytest", "--version"]),
+            "git": command_version(["git", "--version"]),
             "pytest_invocation": "python -m pytest -q <fixed-node-id>",
             "real_claude_cli_exercised": False,
             "note": "The four canonical boundary tests use a fixture Claude binary; provider/network execution is not part of this receipt.",
@@ -170,6 +189,16 @@ def main() -> int:
     try:
         receipt["source"] = build_source_identity(repo, artefact, runner_path)
         receipt["nodes"] = [run_node(artefact, node) for node in NODES]
+
+        dirty_after = tree_status(repo)
+        if dirty_after:
+            receipt["source"]["dirty_after"] = True
+            raise RuntimeError(
+                "POSTRUN_DIRTY_TREE_REJECTED:"
+                + sha256_bytes(dirty_after.encode("utf-8", errors="replace"))
+            )
+        receipt["source"]["dirty_after"] = False
+
         receipt["overall"] = (
             "PASS" if all(item["returncode"] == 0 for item in receipt["nodes"]) else "FAIL"
         )

@@ -150,11 +150,16 @@ def compile_grid_plan(packet: XenoIngressPacket, functions: tuple[FunctionReques
     if not normalized:
         raise ScheduleError("at least one function request is required")
 
+    # Function names are semantic cell identities. Exact duplicates collapse, but
+    # conflicting definitions with the same name fail closed instead of making the
+    # resulting compute/plan semantics depend on caller input order.
     unique: dict[str, FunctionRequest] = {}
     for req in normalized:
         previous = unique.get(req.name)
-        if previous is None or (req.priority, -req.estimated_tokens) > (previous.priority, -previous.estimated_tokens):
+        if previous is None:
             unique[req.name] = req
+        elif previous != req:
+            raise ScheduleError("conflicting duplicate function request")
     ordered = sorted(unique.values(), key=lambda item: (-item.priority, item.name))
     cell_limit = min(cfg.max_logical_cells, packet.resource_budget.max_logical_cells)
     inference_limit = packet.resource_budget.max_inference_calls

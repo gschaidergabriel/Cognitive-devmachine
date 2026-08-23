@@ -1,0 +1,61 @@
+{
+  "schema": "ENTITYOS_HCU_GO_VERCEL_SANDBOX_FREE_ONLY_COST_GATE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "research_main_observed_before_write": "4877fbbf0ae7945d92c42415acebd2e7675fabc2",
+    "main_identity_check": "4877fbbf0ae7945d92c42415acebd2e7675fabc2..main IDENTICAL immediately before this gate",
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "unknown_cost_provider_execution": "FAIL_CLOSED_BEFORE_NEW_EXECUTION"
+  },
+  "observed_execution_capability": {
+    "source_receipt": "the artefact/MicroEntity/hcu/receipts/2026-08-24_GO_SANDBOX_CALLABILITY_GPT56SOL.json",
+    "deployment_id": "dpl_9vST7MFPJzdcHjw8s47MSHs4DbSM",
+    "bridge_commit": "33cdfd2aecf820c9b48e7d47376f126d0e831bfd",
+    "protected_preview_route": "GET /api/sandbox-probe",
+    "sandbox_create_and_runcommand_empirically_verified": true,
+    "connector_can_resolve_protected_deployment": true,
+    "team_plan_observed": "hobby",
+    "capability_credit": "VERCEL_SANDBOX_INFRASTRUCTURE_ONLY"
+  },
+  "pricing_evidence": {
+    "primary_source_sandbox_page": "https://vercel.com/sandbox",
+    "sandbox_page_observation": "Vercel describes Sandbox as usage-based and Active-CPU billed; network egress can also be billable.",
+    "primary_source_microvm_cost_article": "https://vercel.com/i/microvm-vs-container",
+    "published_example_observation": "Vercel states an example five-minute validation on 2 vCPUs costs roughly USD 0.03 and sandbox creations are metered.",
+    "explicit_zero_monetary_cost_for_next_sandbox_run_verified": false,
+    "hobby_plan_name_treated_as_zero_cost_proof": false
+  },
+  "decision": {
+    "new_sandbox_run_started_by_this_organ_after_pricing_check": false,
+    "reason": "Current FREE_ONLY authority forbids paid/subscription/unknown provider execution before network or execution. Sandbox callability is proven, but exact zero-monetary-cost/included-budget admission for another run is not.",
+    "runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "together_preflight_used": false,
+    "together_job_created": false
+  },
+  "race_correction": {
+    "latest_main_receipt_4877_blocker_text": "STALE_AT_WRITE_TIME_WITH_RESPECT_TO_THE_PRIOR_SANDBOX_CALLABILITY_RECEIPT",
+    "why": "main already contained commit 77dc932c5a32a15ba4985312355a3f8afec723d2 proving the protected-preview bridge could invoke Sandbox.create + runCommand before 4877 was committed; 4877 source review had observed an earlier main snapshot and retained the old no-callable-Sandbox blocker wording.",
+    "current_blocker": "COST_ADMISSION_UNDER_FREE_ONLY_PLUS_SHA_BOUND_FULL_SOURCE_CAPSULE_NOT_SANDBOX_CALLABILITY"
+  },
+  "retained_hcu_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "promotion_state": "OPEN_DRAFT_DIVERGED_NOT_SAFE_TO_MERGE_AS_IS",
+    "selected_causal_training_binding": "the artefact/MicroEntity/hcu/jspace_causal_training_binding_v1.py",
+    "duplicate_jspace_bridge_created_then_removed_this_go": true,
+    "duplicate_authority_remaining_from_this_organ": false,
+    "fusion_receipt_commit": "86ab30bd681c8ca7d1ee651346890da6762e7b61"
+  },
+  "next_exact_gate": "First establish an execution surface that is explicitly zero-monetary-cost/included under the active FREE_ONLY authority (or a newer supervisor authority that explicitly admits the metered Vercel Sandbox call). Then feed the verified protected-preview bridge a fixed SHA-bound source capsule for exact current Research main plus the retained/fused HCU source, execute the full Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> causal training/dataset regressions, and bind source/tree/result digests in one receipt. Only after that may zero-cost local ~0.8B loader/J-Space experimentation receive runtime credit.",
+  "claim_class": "EXECUTION_ADMISSION_NEGATIVE_EVIDENCE_AND_POLICY_CORRECTION_ONLY_NOT_ENTITYOS_HCU_RUNTIME_ACCEPTANCE"
+}

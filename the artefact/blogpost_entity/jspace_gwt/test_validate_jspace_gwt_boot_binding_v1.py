@@ -24,6 +24,7 @@ D5 = "5" * 64
 D6 = "6" * 64
 D7 = "7" * 64
 D8 = "8" * 64
+D9 = "9" * 64
 
 
 def valid_manifest():
@@ -35,6 +36,7 @@ def valid_manifest():
         "tokenizer_digest": D1,
         "quantization_runtime_identity": "gguf-q4_k_m+llama.cpp:test-fixture",
         "runtime_digest": D7,
+        "lens_artifact_digest": D9,
         "jspace_profile_digest": D2,
         "lens_profile_digest": D3,
         "workspace_calibration_digest": D4,
@@ -83,7 +85,7 @@ def valid_receipt(manifest, raw):
         "jspace": {
             "jlens_upstream_commit": H40,
             "jspace_profile_sha256": manifest["jspace_profile_digest"],
-            "lens_file_sha256": D6,
+            "lens_file_sha256": manifest["lens_artifact_digest"],
             "lens_profile_sha256": manifest["lens_profile_digest"],
             "steering_calibration_sha256": manifest["steering_calibration_digest"],
             "fit_corpus_sha256": D7,
@@ -221,6 +223,21 @@ class BootBindingValidatorTests(unittest.TestCase):
         cp = run_validator(receipt=r)
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("BOOT_JSPACE_PROFILE_MISMATCH", cp.stdout)
+
+    def test_boot_lens_artifact_digest_must_match_manifest(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["jspace"]["lens_file_sha256"] = D6
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BOOT_LENS_ARTIFACT_DIGEST_MISMATCH", cp.stdout)
+
+    def test_boot_manifest_requires_lens_artifact_digest(self):
+        m = valid_manifest(); del m["lens_artifact_digest"]; raw = manifest_bytes(m)
+        r = valid_receipt(valid_manifest(), manifest_bytes(valid_manifest()))
+        r["bundled_core"]["manifest_sha256"] = hashlib.sha256(raw).hexdigest()
+        lock = source_lock_for(m, raw)
+        cp = run_validator(receipt=r, manifest=m, source_lock=lock)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BOOT_MANIFEST_LENS_ARTIFACT_DIGEST_REQUIRED", cp.stdout)
 
     def test_source_lock_rejects_alternate_manifest_identity(self):
         m = valid_manifest(); raw = manifest_bytes(m); lock = source_lock_for(m, raw)

@@ -1,0 +1,46 @@
+{
+  "current_consequence": {
+    "fail_closed_turn_admission_proven": false,
+    "note": "This is not a claim that an exact ClayVerse runtime test failed. It is an acceptance blocker: current documented upstream timeout semantics permit a fail-open path unless exact pinned-runtime evidence or a different boundary disproves/removes it.",
+    "whole_product_acceptance_allowed": false,
+    "whole_product_runtime_credit": false
+  },
+  "evidence_class": "SOURCE_PLUS_CURRENT_UPSTREAM_SEMANTICS",
+  "observed_main_sha": "36e26e0d4233658cba259fcbeb6dc7cb6db7f6a2",
+  "observed_on": "2026-08-23",
+  "product_path": "Browser -> Clerk -> WebSocket PTY -> tmux -> normal interactive Claude Code -> managed UserPromptSubmit -> UnifiedDB",
+  "promotion_requires": [
+    "Use a mechanism where model processing cannot proceed unless canonical UnifiedDB admission and required bounded context delivery have both succeeded.",
+    "Preserve one UnifiedDB turn authority; do not introduce a second transcript, state, identity, effect, or recovery authority.",
+    "On exact pinned Claude Code bytes in an authorized isolated executor, deliberately stall/fail admission past the relevant boundary and prove that no model turn, response, tool/effect path, or accepted completion occurs.",
+    "Run the matching normal control and Stop/StopFailure/restart regressions on the same exact source/runtime identity."
+  ],
+  "rejected_pseudo_fixes": [
+    "increase_command_hook_timeout_only",
+    "rely_on_hook_exit_code_2_after_timeout",
+    "rely_on_stop_or_stopfailure_to_retroactively_admit_missing_prompt",
+    "treat_claude_doctor_or_settings_file_presence_as_runtime_policy_attestation"
+  ],
+  "runtime_credit": 0,
+  "schema": "ClayVerseClaudeTurnAdmissionGate/v1",
+  "scope": "whole_product_acceptance",
+  "source": {
+    "claude_code_version": "2.1.233",
+    "managed_settings_path": "policy/managed-settings.json",
+    "source_lock_path": "SOURCE_LOCK.json",
+    "timeout_seconds": 10,
+    "user_prompt_command": "/usr/local/bin/python -m clayverse.terminal_hooks user_prompt",
+    "user_prompt_handler_type": "command"
+  },
+  "status": "BLOCKED_UPSTREAM_USERPROMPT_TIMEOUT_FAIL_OPEN",
+  "upstream_evidence": {
+    "accessed_on": "2026-08-23",
+    "primary_docs": "https://code.claude.com/docs/en/hooks",
+    "timeout_semantics": "PROMPT_CONTINUES_ON_TIMEOUT_WITH_HOOK_OUTPUT_DISCARDED",
+    "version_evidence": [
+      "Documentation history states the timeout notice exists as of v2.1.196 while earlier versions still cancel the hook without the notice.",
+      "Agent SDK UserPromptSubmit callback timeout behavior changed by v2.1.208; the pinned ClayVerse Claude Code v2.1.233 is later."
+    ]
+  },
+  "violated_acceptance_invariant": "Every canonical product prompt must be admitted into the UnifiedDB turn lifecycle and receive its bounded canonical context before model processing can proceed."
+}

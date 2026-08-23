@@ -1,5 +1,5 @@
 {
-  "schema_version": "HCU_DATA_INDEX/v2",
+  "schema_version": "HCU_DATA_INDEX/v3",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "compatibility_package_path": "MicroEntity/hcu/",
@@ -13,8 +13,38 @@
     "hcu/HCU_DATA_INDEX.json",
     "hcu/capacity_guard_v1.py",
     "hcu/test_capacity_guard_v1.py",
+    "hcu/jspace_vector_control_v1.py",
+    "hcu/test_jspace_vector_control_v1.py",
+    "hcu/receipts/2026-08-24_GO_JSPACE_VECTOR_CONTROL_ABI_V1_GPT56SOL_0040.json",
     "hcu/receipts/2026-08-23_GO_HCU_ENTITYOS_INTEGRATION_CONTRACT_GPT56SOL.json"
   ],
+  "jspace_vector_control": {
+    "schema": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "encoding": "DETERMINISTIC_Q8_TEXT_BYTE_PACKET",
+    "status": "EXECUTABLE_COMPONENT_CANDIDATE",
+    "authority": "TRANSPORT_AND_CONTROL_PACKET_ONLY_NOT_TRUTH_OR_EFFECT_AUTHORITY",
+    "required_fences": [
+      "basis_id",
+      "role",
+      "generation",
+      "payload_sha256",
+      "packet_sha256"
+    ],
+    "training_role": "REPRODUCIBLE_FIRST_ABI_FOR_TOGETHER_CAUSALLM_SFT_AND_LOCAL_HCU_RUNTIME",
+    "does_not_prove": [
+      "GLOBAL_JSPACE_CAUSALITY",
+      "DIRECT_HIDDEN_STATE_INJECTION",
+      "GWT_RUNTIME_BEHAVIOR",
+      "MODEL_INTEGRATION",
+      "WHOLE_ENTITYOS_HCU_PASS"
+    ]
+  },
+  "training_authority": {
+    "together_general_inference_and_fallback": "FORBIDDEN",
+    "one_shot_08b_jspace_gwt_finetune": "OWNER_AUTHORIZED_AFTER_REQUIRED_GATES",
+    "consumed": false,
+    "second_paid_training": "REQUIRES_NEW_OWNER_AUTHORIZATION"
+  },
   "runtime_data_authority": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB_CANONICAL_STATE_EVIDENCE_SUBSTRATE",
   "effect_authority": "EffectGate+EffectJournal",
   "capacity_claim_policy": "NUMERIC_RUNTIME_CAPACITY_REQUIRES_EXACT_AUTHORIZED_ISOLATED_MEASUREMENT_RECEIPT",
@@ -29,6 +59,6 @@
     "include_plaintext_secrets": false,
     "include_credential_bearing_files": false
   },
-  "source_base_head": "5911c9218bc2566c39d8f2d49ce80cb7e570017a",
-  "claim_class": "ENTITYOS_HCU_SOURCE_INTEGRATION_CONTRACT_ZERO_RUNTIME_CREDIT"
+  "source_base_head": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+  "claim_class": "JSPACE_VECTOR_CONTROL_ABI_COMPONENT_CANDIDATE_WITH_BOUNDED_ISOLATED_EVIDENCE_NOT_MODEL_OR_WHOLE_RUNTIME_PASS"
 }

@@ -13,6 +13,7 @@ EXPECTED_RELEASE = "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE"
 IDENTITY_GUARD = "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
+ROOT_CLAUDE = "CLAUDE.md"
 
 
 def load_json(path: Path):
@@ -37,6 +38,7 @@ def validate(root: Path) -> dict:
         "manifest": root / "the artefact/manifest.json",
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
+        "root_claude": root / ROOT_CLAUDE,
         "control44": root / CONTROL44,
         "steering844": root / STEERING844,
     }
@@ -64,6 +66,7 @@ def validate(root: Path) -> dict:
     footer = paths["footer"].read_text(encoding="utf-8")
     architecture = paths["architecture"].read_text(encoding="utf-8")
     readme = paths["readme"].read_text(encoding="utf-8")
+    root_claude = paths["root_claude"].read_text(encoding="utf-8")
 
     # Preserve the older canonical research-entity join/identity fences while changing product authority.
     require(errors, bootstrap.get("entity_id") == canonical.get("entity_id"), "BOOTSTRAP_CANONICAL_ENTITY_MISMATCH")
@@ -128,6 +131,16 @@ def validate(root: Path) -> dict:
     require(errors, "CLAYVERSE SINGLE-CONTAINER PRODUCT" in readme_head, "README_PRODUCT_MISMATCH")
     require(errors, "CLAYVERSE" in readme_head and "ONE OCI/DOCKER-COMPATIBLE" in readme_head, "README_RELEASE_MISMATCH")
     require(errors, not ("CLAYVERSE SINGLE-CONTAINER ENDPOINT" in readme_head and "SUPERSEDED" in readme_head), "README_CLAYVERSE_SUPERSEDED")
+
+    # Root CLAUDE.md is an active development-worker instruction surface. It must not silently
+    # re-select a superseded Mini Entity program after the canonical authority spine is repaired.
+    claude_upper = root_claude[:6000].upper()
+    require(errors, "PROGRAM=CLAYVERSE_SINGLE_CONTAINER" in claude_upper, "ROOT_CLAUDE_PROGRAM_MISMATCH")
+    require(errors, "STAGE=CLAYVERSE_ARTIFACT" in claude_upper, "ROOT_CLAUDE_STAGE_MISMATCH")
+    require(errors, "ONE OCI/DOCKER-COMPATIBLE CLAYVERSE CONTAINER IMAGE" in claude_upper, "ROOT_CLAUDE_RELEASE_MISMATCH")
+    require(errors, "PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in claude_upper, "ROOT_CLAUDE_STALE_MINI_ENTITY_SELECTOR")
+    require(errors, "THERE IS ONE ACTIVE GOAL ONLY: FINISH AND PROVE ONE PORTABLE PERSISTENT MULTI-USE MINI ENTITY" not in claude_upper, "ROOT_CLAUDE_STALE_MINI_ENTITY_GOAL")
+    require(errors, OWNER_DIRECTIVE.upper() in claude_upper, "ROOT_CLAUDE_OWNER_DIRECTIVE_POINTER_MISSING")
 
     return {
         "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",

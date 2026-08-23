@@ -209,6 +209,8 @@ def build_training_trace(
         raise JSpaceTrainingTraceError("VECTOR_CONTROL_GENERATION_MISMATCH")
     if vector_control_packet.basis_id != prototype_step.basis_id:
         raise JSpaceTrainingTraceError("VECTOR_CONTROL_BASIS_MISMATCH")
+    if vector_control_packet.basis_sha256 != prototype_step.basis_sha256:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_BASIS_SHA256_MISMATCH")
     if vector_control_packet.role != prototype_step.winner_role:
         raise JSpaceTrainingTraceError("VECTOR_CONTROL_ROLE_MISMATCH")
 
@@ -242,7 +244,7 @@ def build_training_trace(
         "cell_id": _text(prototype_step.winner_cell_id, "cell_id", 256),
         "role": _text(prototype_step.winner_role, "role", 256),
         "jspace_basis_id": _text(prototype_step.basis_id, "jspace_basis_id", 256),
-        "jspace_basis_sha256": _sha256(vector_control_packet.basis_sha256, "jspace_basis_sha256"),
+        "jspace_basis_sha256": _sha256(prototype_step.basis_sha256, "jspace_basis_sha256"),
         "jspace_input_vector_ref": _text(jspace_input_vector_ref, "jspace_input_vector_ref"),
         "jspace_input_codec_version": ABI_SCHEMA,
         "vector_control_packet_sha256": _sha256(vector_control_packet.packet_sha256, "vector_control_packet_sha256"),

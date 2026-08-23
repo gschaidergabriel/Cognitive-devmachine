@@ -1,0 +1,298 @@
+#!/usr/bin/env python3
+"""Atomically admit J-Space model-input control evidence inside canonical MiniUnifiedDB.
+
+``model_input_control_binding_v1`` proves a byte-level fact about one exact executor input,
+but its executor/invocation labels are parameters. This store closes that trust split by
+requiring the same invocation to have already been admitted by
+``HCU_MODEL_EXECUTION_ADMISSION_STORE/v1`` in the caller-supplied canonical MiniUnifiedDB.
+
+The transaction revalidates the exact consumed input bytes, reads back the canonical
+ModelExecutionObservation, cross-binds generation/GRID cell/role/input identity, and then
+persists one immutable control binding per executor invocation. Divergent replay rolls back.
+No new database, truth authority, effect path, model execution, or runtime/training credit is
+created here.
+"""
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass
+import hashlib
+import json
+import sqlite3
+from typing import Any
+
+try:
+    from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
+    from .model_input_control_binding_v1 import (
+        BINDING_SCHEMA,
+        ModelInputControlBinding,
+        ModelInputControlBindingError,
+        validate_model_input_control_binding,
+    )
+except ImportError:
+    from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
+    from model_input_control_binding_v1 import (
+        BINDING_SCHEMA,
+        ModelInputControlBinding,
+        ModelInputControlBindingError,
+        validate_model_input_control_binding,
+    )
+
+SCHEMA = "HCU_MODEL_INPUT_CONTROL_ADMISSION_STORE/v1"
+ADMISSION_SCHEMA = "HCU_MODEL_INPUT_CONTROL_ADMISSION/v1"
+
+
+class ModelInputControlAdmissionStoreError(ValueError):
+    pass
+
+
+@dataclass(frozen=True)
+class ModelInputControlAdmission:
+    schema: str
+    canonicalization_schema: str
+    binding_schema: str
+    binding_sha256: str
+    model_execution_observation_sha256: str
+    generation: int
+    executor_id: str
+    invocation_id: str
+    grid_plan_sha256: str
+    cell_id: str
+    role: str
+    vector_control_packet_sha256: str
+    input_sha256: str
+    input_size: int
+    admission_sha256: str
+
+
+def _need(condition: bool, message: str) -> None:
+    if not condition:
+        raise ModelInputControlAdmissionStoreError(message)
+
+
+def _sha256(value: Any, field: str) -> str:
+    _need(isinstance(value, str), f"{field}:STRING_REQUIRED")
+    _need(
+        len(value) == 64
+        and value.lower() == value
+        and all(ch in "0123456789abcdef" for ch in value)
+        and value not in {"0" * 64, "f" * 64},
+        f"{field}:LOWERCASE_NONPLACEHOLDER_SHA256_REQUIRED",
+    )
+    return value
+
+
+def _current_generation(db: sqlite3.Connection) -> int:
+    try:
+        row = db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()
+    except sqlite3.Error as exc:
+        raise ModelInputControlAdmissionStoreError("ENTITY_STATE_UNAVAILABLE") from exc
+    _need(row is not None, "ENTITY_STATE_UNAVAILABLE")
+    generation = row[0]
+    _need(type(generation) is int and generation >= 0, "ENTITY_GENERATION_INVALID")
+    return generation
+
+
+def _install_schema(db: sqlite3.Connection) -> None:
+    _need(db.in_transaction, "ACTIVE_TRANSACTION_REQUIRED")
+    fk_row = db.execute("PRAGMA foreign_keys").fetchone()
+    _need(fk_row is not None and int(fk_row[0]) == 1, "FOREIGN_KEYS_REQUIRED_BEFORE_TRANSACTION")
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS hcu_model_input_control_bindings(
+          binding_sha256 TEXT PRIMARY KEY,
+          binding_jcs BLOB NOT NULL,
+          entity_generation INTEGER NOT NULL,
+          executor_id TEXT NOT NULL,
+          invocation_id TEXT NOT NULL,
+          input_sha256 TEXT NOT NULL,
+          input_size INTEGER NOT NULL,
+          model_execution_observation_sha256 TEXT NOT NULL
+        )"""
+    )
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS hcu_model_input_control_invocations(
+          invocation_binding_key TEXT PRIMARY KEY,
+          executor_id TEXT NOT NULL,
+          invocation_id TEXT NOT NULL,
+          entity_generation INTEGER NOT NULL,
+          model_execution_observation_sha256 TEXT NOT NULL,
+          binding_sha256 TEXT NOT NULL,
+          FOREIGN KEY(binding_sha256)
+            REFERENCES hcu_model_input_control_bindings(binding_sha256)
+        )"""
+    )
+
+
+def _canonical_binding_bytes(binding: ModelInputControlBinding) -> bytes:
+    data = asdict(binding)
+    observed = _sha256(data.get("binding_sha256"), "binding.binding_sha256")
+    material = dict(data)
+    material.pop("binding_sha256")
+    expected = hashlib.sha256(canonicalize(material)).hexdigest()
+    _need(observed == expected, "MODEL_INPUT_CONTROL_BINDING_DIGEST_MISMATCH")
+    return canonicalize(data)
+
+
+def _read_model_execution_parent(
+    db: sqlite3.Connection,
+    *,
+    executor_id: str,
+    invocation_id: str,
+) -> tuple[str, dict[str, Any], str]:
+    """Read one already-admitted model invocation and its exact canonical observation."""
+    try:
+        rows = db.execute(
+            "SELECT invocation_binding_key,entity_generation,observation_sha256 "
+            "FROM hcu_model_execution_invocations WHERE executor_id=? AND invocation_id=?",
+            (executor_id, invocation_id),
+        ).fetchall()
+    except sqlite3.Error as exc:
+        raise ModelInputControlAdmissionStoreError("MODEL_EXECUTION_ADMISSION_STORE_REQUIRED") from exc
+    _need(len(rows) == 1, "EXACTLY_ONE_ADMITTED_MODEL_EXECUTION_INVOCATION_REQUIRED")
+    invocation_key, generation, observation_sha256 = rows[0]
+    observation_sha256 = _sha256(str(observation_sha256), "model_execution.observation_sha256")
+
+    row = db.execute(
+        "SELECT observation_jcs,entity_generation,executor_id,invocation_id "
+        "FROM hcu_model_execution_observations WHERE observation_sha256=?",
+        (observation_sha256,),
+    ).fetchone()
+    _need(row is not None, "MODEL_EXECUTION_OBSERVATION_ADMISSION_LOST")
+    raw = bytes(row[0])
+    try:
+        record = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ModelInputControlAdmissionStoreError("MODEL_EXECUTION_OBSERVATION_STORED_BYTES_INVALID") from exc
+    _need(isinstance(record, dict), "MODEL_EXECUTION_OBSERVATION_STORED_OBJECT_REQUIRED")
+    _need(canonicalize(record) == raw, "MODEL_EXECUTION_OBSERVATION_STORED_JCS_MISMATCH")
+    _need(hashlib.sha256(raw).hexdigest() == observation_sha256, "MODEL_EXECUTION_OBSERVATION_DIGEST_MISMATCH")
+    _need(
+        (generation, row[1], executor_id, row[2], invocation_id, row[3])
+        == (row[1], row[1], row[2], row[2], row[3], row[3]),
+        "MODEL_EXECUTION_INVOCATION_PARENT_IDENTITY_MISMATCH",
+    )
+    return str(invocation_key), record, observation_sha256
+
+
+def _cross_bind_parent(
+    binding: ModelInputControlBinding,
+    observation: dict[str, Any],
+    observation_sha256: str,
+) -> None:
+    checks = {
+        "entity_generation": (binding.generation, observation.get("entity_generation")),
+        "executor_id": (binding.executor_id, observation.get("executor_id")),
+        "invocation_id": (binding.invocation_id, observation.get("invocation_id")),
+        "grid_plan_sha256": (binding.grid_plan_sha256, observation.get("grid_plan_sha256")),
+        "output_producing_cell_id": (binding.cell_id, observation.get("output_producing_cell_id")),
+        "role": (binding.role, observation.get("role")),
+        "input_sha256": (binding.input_sha256, observation.get("input_sha256")),
+        "input_size": (binding.input_size, observation.get("input_size")),
+    }
+    for field, (left, right) in checks.items():
+        _need(left == right, f"MODEL_INPUT_CONTROL_PARENT_MISMATCH:{field}")
+    _sha256(observation_sha256, "model_execution_observation_sha256")
+
+
+def admit_model_input_control_binding(
+    db: sqlite3.Connection,
+    binding: ModelInputControlBinding,
+    consumed_input_bytes: bytes,
+    *,
+    current_generation: int,
+) -> ModelInputControlAdmission:
+    """Atomically bind one control packet to one already-admitted model invocation."""
+    _need(isinstance(db, sqlite3.Connection), "SQLITE_CONNECTION_REQUIRED")
+    _need(not db.in_transaction, "CALLER_TRANSACTION_FORBIDDEN")
+    _need(type(current_generation) is int and current_generation >= 0, "CURRENT_GENERATION_INVALID")
+    _need(isinstance(binding, ModelInputControlBinding), "MODEL_INPUT_CONTROL_BINDING_REQUIRED")
+
+    try:
+        db.execute("BEGIN IMMEDIATE")
+        live_generation = _current_generation(db)
+        _need(live_generation == current_generation, "STALE_MODEL_INPUT_CONTROL_ADMISSION_GENERATION")
+        _need(binding.generation == current_generation, "MODEL_INPUT_CONTROL_BINDING_GENERATION_MISMATCH")
+
+        validate_model_input_control_binding(binding, consumed_input_bytes)
+        binding_jcs = _canonical_binding_bytes(binding)
+        invocation_key, observation, observation_sha256 = _read_model_execution_parent(
+            db,
+            executor_id=binding.executor_id,
+            invocation_id=binding.invocation_id,
+        )
+        _cross_bind_parent(binding, observation, observation_sha256)
+        _install_schema(db)
+
+        row = db.execute(
+            "SELECT binding_jcs,entity_generation,executor_id,invocation_id,input_sha256,input_size,model_execution_observation_sha256 "
+            "FROM hcu_model_input_control_bindings WHERE binding_sha256=?",
+            (binding.binding_sha256,),
+        ).fetchone()
+        expected = (
+            binding_jcs,
+            binding.generation,
+            binding.executor_id,
+            binding.invocation_id,
+            binding.input_sha256,
+            binding.input_size,
+            observation_sha256,
+        )
+        if row is None:
+            db.execute(
+                "INSERT INTO hcu_model_input_control_bindings "
+                "(binding_sha256,binding_jcs,entity_generation,executor_id,invocation_id,input_sha256,input_size,model_execution_observation_sha256) "
+                "VALUES(?,?,?,?,?,?,?,?)",
+                (binding.binding_sha256, *expected),
+            )
+        else:
+            stored = (bytes(row[0]), *row[1:])
+            _need(stored == expected, "MODEL_INPUT_CONTROL_BINDING_REPLAY_DIVERGENCE")
+
+        invocation_row = db.execute(
+            "SELECT executor_id,invocation_id,entity_generation,model_execution_observation_sha256,binding_sha256 "
+            "FROM hcu_model_input_control_invocations WHERE invocation_binding_key=?",
+            (invocation_key,),
+        ).fetchone()
+        invocation_expected = (
+            binding.executor_id,
+            binding.invocation_id,
+            binding.generation,
+            observation_sha256,
+            binding.binding_sha256,
+        )
+        if invocation_row is None:
+            db.execute(
+                "INSERT INTO hcu_model_input_control_invocations "
+                "(invocation_binding_key,executor_id,invocation_id,entity_generation,model_execution_observation_sha256,binding_sha256) "
+                "VALUES(?,?,?,?,?,?)",
+                (invocation_key, *invocation_expected),
+            )
+        else:
+            _need(tuple(invocation_row) == invocation_expected, "MODEL_INPUT_CONTROL_INVOCATION_REPLAY_DIVERGENCE")
+
+        material = {
+            "schema": ADMISSION_SCHEMA,
+            "canonicalization_schema": CANONICALIZATION_SCHEMA,
+            "binding_schema": BINDING_SCHEMA,
+            "binding_sha256": binding.binding_sha256,
+            "model_execution_observation_sha256": observation_sha256,
+            "generation": binding.generation,
+            "executor_id": binding.executor_id,
+            "invocation_id": binding.invocation_id,
+            "grid_plan_sha256": binding.grid_plan_sha256,
+            "cell_id": binding.cell_id,
+            "role": binding.role,
+            "vector_control_packet_sha256": binding.vector_control_packet_sha256,
+            "input_sha256": binding.input_sha256,
+            "input_size": binding.input_size,
+        }
+        admission_sha256 = hashlib.sha256(canonicalize(material)).hexdigest()
+        db.commit()
+        return ModelInputControlAdmission(**material, admission_sha256=admission_sha256)
+    except (ModelInputControlAdmissionStoreError, ModelInputControlBindingError, sqlite3.Error):
+        if db.in_transaction:
+            db.rollback()
+        raise
+    except Exception:
+        if db.in_transaction:
+            db.rollback()
+        raise

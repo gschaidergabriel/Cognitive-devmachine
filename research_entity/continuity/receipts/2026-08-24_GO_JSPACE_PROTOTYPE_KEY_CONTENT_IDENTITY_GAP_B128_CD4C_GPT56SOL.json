@@ -1,0 +1,97 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_PROTOTYPE_KEY_CONTENT_IDENTITY_GAP/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "b128a1f3784a2b41d9f35ce915ea134e03312b1d",
+    "schema": "8.63",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together_inference_training_preflight_key_lookup": "FORBIDDEN",
+    "vps_self_hosted_production_testing": "FORBIDDEN"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_exposed": false,
+    "available_exact_user_message_time_precision": "MINUTE_ONLY",
+    "atomic_timestamp_fallback_reproducible_under_current_protocol": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_source_review_fusion": "ALLOWED",
+    "duplicate_lane_created": false
+  },
+  "retained_lanes": {
+    "hcu_donor": {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "pr": 1263,
+      "head_metadata_observed": "cd4c84badf45b723bce9ff33d1da4e3a2c0e25ad",
+      "dataset_admission_source_checked_at": "cd4c84badf45b723bce9ff33d1da4e3a2c0e25ad"
+    },
+    "execution_controller": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 810,
+      "head_observed": "b6fcb5e26b66f30951a308caf6f23df8192d4040",
+      "source_state": "SOURCE_REBOUND_READY_SOURCE_ONLY"
+    }
+  },
+  "execution_reentry": {
+    "exact_current_pr810_ready_deployment_observed": false,
+    "latest_ready_predecessor_observed": "2dfa1edcab41fba34282b34956716e7c222ee517",
+    "exact_head_sandbox_invoked": false,
+    "classification": "EXACT_HEAD_EXECUTION_ADMISSION_BLOCKED_STALE_READY_NOT_CREDITABLE",
+    "runtime_credit_change": 0
+  },
+  "source_observation": {
+    "dataset_admission_path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "dataset_admission_blob_observed": "c6290060f64f8d6ba683bda9f54096755d742b01",
+    "dataset_admission_test_path": "the artefact/MicroEntity/hcu/test_jspace_dataset_admission_gate_v1.py",
+    "dataset_admission_test_blob_observed_at_511d_snapshot": "39c02a152b0055431dd8787ceaf81c2afa4ab66f",
+    "prototype_producer_path": "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
+    "prototype_producer_blob_observed_at_511d_snapshot": "d922425542b4a8ad7b2cd5521cf50be07ca83b02",
+    "finding": "Dataset admission validates training and transition registry entries against the exact observed mappings, but it retrieves the admitted prototype trace by training_trace.prototype_trace_sha256 and does not prove that this registry key equals SHA-256 of the exact RFC8785/JCS canonical prototype-trace bytes before prototype fields contribute to DatasetAdmission.",
+    "positive_fixture_signal": "The existing dataset admission regression fixture assigns prototype_sha independently as a repeated-hex placeholder-like nonzero digest and stores the prototype mapping under that key; the positive admission test succeeds without deriving that key from the prototype mapping bytes.",
+    "producer_identity_law": "Global J-Space prototype JSpaceStep.trace_sha256 is defined from SHA-256 over canonicalized trace bytes, so the dataset boundary can and should verify the same content identity rather than treating an arbitrary external registry alias as equivalent evidence identity.",
+    "scope": "SOURCE_LEVEL_PROVENANCE_GAP_ONLY_NOT_RUNTIME_EXPLOIT_PROOF"
+  },
+  "hypothesis": "An admitted_prototype_traces registry alias can currently satisfy prototype admission even when its key is not the canonical content digest of the prototype trace, weakening exact causal provenance at the training-dataset boundary.",
+  "counterhypothesis": "The external registry producer may guarantee key/content identity upstream, making a second check redundant.",
+  "counterhypothesis_adjudication": "The current admission function contract does not receive or verify such an upstream guarantee, and its own positive fixture demonstrates that arbitrary key/content association is accepted at this boundary. Therefore exact key/content verification is a useful local fail-closed invariant rather than a second authority.",
+  "cheapest_high_information_discriminator": [
+    "derive the positive fixture prototype_sha from SHA-256 of exact RFC8785/JCS canonical prototype bytes",
+    "add a hard negative where unchanged prototype bytes are registered under an alias key and require PROTOTYPE_TRACE_IDENTITY_MISMATCH",
+    "add a hard negative where prototype bytes change while the old key is retained and require the same fail-closed rejection"
+  ],
+  "minimal_repair": [
+    "canonicalize dict(prototype_trace) with the already-selected Entry RFC8785/JCS authority",
+    "compute SHA-256 over those canonical bytes",
+    "require the digest to equal training_trace.prototype_trace_sha256 before prototype fields can contribute to DatasetAdmission",
+    "preserve the same admitted_prototype_traces registry and avoid introducing any second truth/state authority"
+  ],
+  "coordination_write": {
+    "retained_donor_pr": 1263,
+    "comment_id": 5388411806,
+    "purpose": "Place the repair specification on the single retained donor lane rather than create a parallel implementation authority."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_FAIL_CLOSED_REENTRY: stale READY executor deployment was not invoked or miscredited; current source-level executor gate remains exact-head deployment availability.",
+    "track_b_hcu_typed_entry_fabric": "ADVANCED_BY_CAUSAL_PROVENANCE_BOUNDARY_REVIEW: the single DatasetAdmission path now has a precise content-identity discriminator for prototype evidence without creating another state/registry authority.",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "ADVANCED: identified and durably specified an exact prototype-trace key/content identity fence needed before leak-resistant causal training rows can rely on prototype provenance."
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current main and retained donor are moving rapidly under parallel organs. The append-only exact-identity receipt plus PR1263 coordination comment preserves this bounded source finding without overwriting a moving current-facing README snapshot."
+  },
+  "next_exact_gate": "On the single retained PR1263 donor lane, add the minimal prototype canonical-byte SHA-256/key equality fence plus alias-key and byte-mutation hard-negative regressions, then obtain exact regression execution evidence at the resulting immutable donor identity. In parallel, if and only if a naturally available included-tier Vercel preview exactly matches the then-current PR810 head, invoke the fixed FREE_ONLY capsule with all existing source/result/secret/cleanup fences and keep any PASS component-scoped. Do not preflight or launch Together."
+}

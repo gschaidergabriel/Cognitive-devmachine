@@ -1,0 +1,66 @@
+{
+  "schema": "MINI_ENTITY_GO_REFERENCE_EFFECT_FRESH_MAIN_RECEIPT/v1",
+  "macrocycle_id": "go-20260823T0850+07-gpt56sol-reference-freshmain",
+  "trigger": "go",
+  "observed_main": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+  "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "execution_policy": "FREE_ONLY",
+  "target": "canonical reference runtime effect-surface convergence on fresh current main",
+  "donor": {
+    "pull_request": 966,
+    "head": "3d490ee3179400d889bdc81ea8a769d84212e481",
+    "base": "c3ba0d6acb432f3fa45c33e1ce8c453c3e1f35e5",
+    "changed_paths": [
+      "tools/clay_profile_pipeline_runtime.py",
+      "the artefact/blogpost_entity/test_blogpost_entity.py",
+      "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json"
+    ],
+    "donor_blob_sha": {
+      "tools/clay_profile_pipeline_runtime.py": "e885804f14d106f6bd86dbdd5d5aac8f25442315",
+      "the artefact/blogpost_entity/test_blogpost_entity.py": "91009f62078a095ec4813588df8fb0011b278937",
+      "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json": "f054aba3b5ae7df8e80e377c6e24b552aeff7d1a"
+    }
+  },
+  "fresh_main_nonoverwrite_discriminator": {
+    "comparison": "c3ba0d6acb432f3fa45c33e1ce8c453c3e1f35e5..e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+    "ahead_by": 45,
+    "result": "NONE_OF_THE_THREE_DONOR_PATHS_CHANGED_ON_MAIN_AFTER_DONOR_BASE",
+    "meaning": "exact donor blobs can be transplanted onto current main without overwriting newer edits to those paths"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "HOSTED_RUNNER_ADMISSION_RETRY_PR966_SOURCE_BOUND_NATIVE_REPRO",
+    "run_id": 32575123994,
+    "original_job_id": 97124933122,
+    "rerun_job_id": 97125025315,
+    "rerun_request": "accepted",
+    "observed_result": "COMPLETED_FAILURE_BEFORE_VISIBLE_STEPS",
+    "steps": null,
+    "logs": "UNAVAILABLE_BLOB_404",
+    "runtime_credit": 0,
+    "classification": "EXECUTION_ADMISSION_FAILURE_NOT_CODE_TEST_FAILURE"
+  },
+  "source_result": {
+    "reference_effect_surface_candidate": "pipeline_init,pipeline_profile_read,pipeline_state_read,pipeline_collect,pipeline_compile,pipeline_build_prompt,inference_generate,pipeline_gate,pipeline_commit",
+    "legacy_effects_deauthorized_in_candidate": [
+      "profile_load",
+      "provider_chat_json"
+    ],
+    "single_profile_authority_candidate": "entity_state.active_profile -> profiles(profile_json,profile_sha256)",
+    "native_v2_admission": "FAIL_CLOSED_UNTIL_EXACT_PARITY",
+    "whole_product_acceptance": "IN_PROGRESS"
+  },
+  "coordination_cleanup": {
+    "closed_unmerged_prs": [989, 990],
+    "reason": "current main withdrew unexplained export-liveness fault after owner-confirmed intentional host shutdown"
+  },
+  "claycode_summary": "R0{main=e964ed3;free_only=1;ref_effects=legacy;runner.steps=UNKNOWN/NULL} R1{blocker=reference_effect_surface+runner_admission} R2{candidate=freshmain_exact_blob_transplant(#966)} R3{counter=donor_overwrites_newer_main|runner_failure_is_code_failure} R4{discriminate=compare(base..main)+single_exact_job_retry} R5{emerge=source_convergence_separable_from_execution_admission} R6{verify=nonoverwrite_supported;runtime_unverified;promotion=NO}",
+  "negative_evidence_preserved": [
+    "hosted runner retry again produced no visible steps",
+    "no runtime PASS",
+    "no provider call",
+    "no paid execution",
+    "no native-v2 promotion"
+  ],
+  "next_executable_step": "run focused reference regression plus adjacent invariants on an actually-started authorized isolated runner, then continue full native clay-pipeline-profile/v2 parity"
+}

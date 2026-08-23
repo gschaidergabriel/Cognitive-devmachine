@@ -1,5 +1,5 @@
 {
-  "schema_version": "XENO_GO_ENTRY_FABRIC_CAUSAL_IDENTITY/v1",
+  "schema_version": "XENO_GO_ENTRY_FABRIC_CAUSAL_IDENTITY/v2",
   "date": "2026-08-23",
   "trigger": "go",
   "macrocycle_id": null,
@@ -9,49 +9,65 @@
   "base_main": "2178d9b0a062636231ff0e3c533417c2268a7a96",
   "branch": "gpt56sol/xeno-entry-fabric-v1-20260823",
   "go_tracks": {
-    "track_a": "XENO_EXECUTABLE_CONVERGENCE: executable typed ingress admission added under the current-facing Xeno root",
-    "track_b": "XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT: immutable causal/generation/provenance/payload/budget binding before cognition"
+    "track_a": "XENO_EXECUTABLE_CONVERGENCE: executable typed ingress admission plus causal route identity primitives added under the current-facing Xeno root",
+    "track_b": "XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT: immutable ingress binding, positive engine admission, and H(ingress,engine,router-policy,routing-result) identity"
   },
   "observed_problem": {
     "source_candidate_pr": 1263,
     "source_candidate_head": "cb48a9cacfa942316a5e036388d4a8433d405376",
     "legacy_router_blob": "7c0fee26fd3d8a48b99da7eca7f3bca8fea046ae",
-    "finding": "HCU route decision identity is derived from routing output plus generation and can alias materially distinct causal events selecting the same lanes; current provider admission is also denylist-based. This receipt addresses the event-ingress identity primitive only and does not claim the provider/engine identity gap is closed."
+    "finding": "The HCU draft router derives route identity from routing output plus generation, so materially distinct causal events selecting the same lanes can alias. It also treats provider independence through a finite forbidden-provider denylist rather than positive bound engine admission."
   },
-  "hypothesis": "A deterministic typed ingress identity that binds causal_id, generation, provenance, normalized timestamps, permissions/capability scope, resource budget and immutable payload digest will remove causal event aliasing before XPU/XCU cognition while remaining reusable across GRID10, COGSIM10, WM_TEST, NESTED_SIM and SCALEOUT.",
-  "counterhypothesis": "Typed ingress adds latency and schema rigidity without materially improving causal auditability because downstream routing/effect receipts could bind raw payloads directly.",
+  "hypothesis": "One typed ingress identity plus positive canonical engine resolution and a single route identity H(ingress, resolved engine, router policy, routing result) removes event/engine aliasing before XPU/XCU cognition while remaining reusable across GRID10, COGSIM10, WM_TEST, NESTED_SIM and SCALEOUT.",
+  "counterhypothesis": "Typed ingress and explicit engine/route identity add latency and schema rigidity without materially improving causal auditability because downstream receipts could hash raw inputs ad hoc.",
   "candidate": {
-    "module": "the artefact/Xeno/entry_fabric_v1.py",
-    "module_git_blob": "3bf892d1c969f1a7bf961ce2b9fa18bf19853d5b",
-    "module_sha256": "249fbca06fede9d262eafbe236da6e95ccecfb465995e855b3797caab07183c8",
-    "tests": "the artefact/Xeno/test_entry_fabric_v1.py",
-    "tests_git_blob": "887ac65f94a454873a6a9ac2c21ce07e99d1d293",
-    "tests_sha256": "6dfbba521b8b80001c61eb2ffd4f43704bbe1cb00e6943b4c0ec790dfb797213",
+    "entry_module": "the artefact/Xeno/entry_fabric_v1.py",
+    "entry_module_git_blob": "3bf892d1c969f1a7bf961ce2b9fa18bf19853d5b",
+    "entry_module_sha256": "249fbca06fede9d262eafbe236da6e95ccecfb465995e855b3797caab07183c8",
+    "entry_tests": "the artefact/Xeno/test_entry_fabric_v1.py",
+    "entry_tests_git_blob": "887ac65f94a454873a6a9ac2c21ce07e99d1d293",
+    "entry_tests_sha256": "6dfbba521b8b80001c61eb2ffd4f43704bbe1cb00e6943b4c0ec790dfb797213",
+    "route_module": "the artefact/Xeno/route_identity_v1.py",
+    "route_module_git_blob": "2411f82971aad95d3697eb7f874d8bfb84ea6ae9",
+    "route_module_sha256": "f359880ecf2a9b9622a8b1f2779de7cf6f1d9e23efa4086cfa268315fc6b6dc2",
+    "route_tests": "the artefact/Xeno/test_route_identity_v1.py",
+    "route_tests_git_blob": "57ea786efbed58361817fb47b8605d7bcd8ab5fb",
+    "route_tests_sha256": "a03aa813089dc2469d471eb5605fbbac27a9f4ff75afaa6207eb06ee2f17847c",
     "request_schema": "XENO_INGRESS_REQUEST/v1",
     "packet_schema": "XENO_INGRESS_PACKET/v1",
-    "identity_formula": "sha256(canonical normalized packet fields including payload_sha256)",
+    "engine_policy_schema": "XENO_ENGINE_ADMISSION_POLICY/v1",
+    "route_identity_schema": "XENO_ROUTE_IDENTITY/v1",
+    "ingress_identity_formula": "sha256(canonical normalized ingress packet fields including payload_sha256)",
+    "route_identity_formula": "sha256(canonical ingress_sha256 + causal_id + generation + positively resolved canonical engine identity/class/artifact + engine admission policy digest + router policy digest + routing result digest)",
     "authority_boundary": "admission/binding only; no semantic truth promotion and no effect authority"
   },
   "deterministic_component_evidence": {
-    "environment": "connected isolated ChatGPT container; exact tested local bytes matched the subsequently fetched Git blob identities",
+    "environment": "connected isolated ChatGPT container; exact tested local bytes matched the subsequently fetched Git blob identities for all four source/test files",
     "commands": [
-      "python -m py_compile entry_fabric_v1.py test_entry_fabric_v1.py",
-      "python -m unittest -v test_entry_fabric_v1.py"
+      "python -m py_compile entry_fabric_v1.py test_entry_fabric_v1.py route_identity_v1.py test_route_identity_v1.py",
+      "python -m unittest -v test_entry_fabric_v1.py test_route_identity_v1.py"
     ],
     "result": "PASS",
-    "tests_passed": 10,
+    "tests_passed": 18,
     "tests_failed": 0,
     "coverage_obligations": [
-      "deterministic replay identity",
+      "deterministic ingress replay identity",
       "set-order and timezone normalization",
       "payload digest sensitivity",
       "causal identity sensitivity",
       "stale generation rejection",
-      "unknown unbound field rejection",
+      "unknown unbound ingress field rejection",
       "invalid payload digest rejection",
       "timestamp ordering rejection",
       "boolean-as-integer budget rejection",
-      "deterministic receipt JSON"
+      "positive engine admission with unknown-engine rejection",
+      "explicit aliases converge only after canonical resolution",
+      "distinct canonical engines produce distinct route identities",
+      "distinct ingress produces distinct route identity under identical routing output",
+      "exact route replay is deterministic",
+      "router-policy mutation changes route identity",
+      "routing-result mutation changes route identity",
+      "engine-admission-policy mutation changes route identity"
     ]
   },
   "unusual_experiment": {
@@ -72,17 +88,18 @@
   },
   "fusion": {
     "result": "RETAIN_SOURCE_CANDIDATE",
-    "reason": "The causal alias discriminator supports one reusable ingress identity primitive. It should become the immutable input identity consumed by HCU/XPU route receipts rather than adding parallel router-specific event hashes.",
+    "reason": "Evidence supports a single reusable ingress + route identity spine instead of parallel router-specific event/engine guards. The generic positive engine resolver also replaces denylist-as-authority at the primitive level.",
     "cross_mode_reuse": "EASIER_CROSS_MODE",
     "entityos_migration": "EASIER",
-    "provider_engine_gap": "OPEN_NOT_CLOSED_BY_THIS_DELTA"
+    "pr1263_integration": "OPEN_NOT_YET_WIRED",
+    "downstream_inference_echo": "OPEN_NOT_YET_WIRED"
   },
   "runtime_credit": {
     "xeno_full_runtime": 0,
     "xcu_runtime": 0,
     "entityos": 0,
     "whole_product_pass": false,
-    "reason": "No exact full-repository authorized Vercel Sandbox build/runtime was available through the connected surface; component execution only."
+    "reason": "No exact full-repository authorized Vercel Sandbox build/runtime primitive was exposed through the connected Vercel surface; component execution only."
   },
-  "next_exact_discriminator": "Wire ingress_sha256 into the single retained HCU route identity together with positively resolved local engine identity, then prove: different admitted ingress -> different route digest when routing result is identical; same exact replay -> identical route digest; downstream inference receipt echoes ingress, route and engine identities."
+  "next_exact_discriminator": "Wire the single Xeno ingress/engine/route identity spine into the retained HCU route path and downstream inference receipt. Prove on exact integrated bytes: unknown engine rejected; two distinct admitted ingress packets with identical routing output yield distinct route_sha256; two distinct canonical engines yield distinct route_sha256; explicit aliases resolving to the same canonical engine converge; same exact replay is identical; downstream inference echoes ingress_sha256, route_sha256 and canonical engine identity."
 }

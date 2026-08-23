@@ -38,8 +38,8 @@
   "coordination": {
     "cognition_transaction_repair": "merged on main before this branch",
     "exact_generation_cognition_fence": "merged on main at be65164ea5989940518e3073faec1afcf5c86066",
-    "active_turn_pointer": "merged PR #1262",
-    "legacy_invocation_selector": "now redundant with generation-scoped active-turn resolution for pre-inference prepare; do not create a third selector path",
+    "active_turn_pointer": "merged PR #1262 and read-only resolution merged PR #1271",
+    "cognition_invocation_selector": "merged PR #1272; bounded caller routing/assertion input only. Runtime admission must resolve canonical same-generation MiniUnifiedDB active-turn material and may cross-check the selector, never treat caller fields as cognition authority or create a second lookup ledger.",
     "hcu_parallel": "NO_CHANGE_NON_DUPLICATE; PR #1263 already owns the current reactive HCU source lane"
   },
   "unusual_experiment": {
@@ -69,5 +69,5 @@
     "vps_selfhosted_production_testing": false,
     "training": false
   },
-  "next_exact_gate": "Land this terminal-closure repair, then implement the single retained ProfilePipelineRuntime pre-inference handler by resolving the live generation-scoped MiniUnifiedDB active turn, composing the existing ZERO_WORKSPACE_CAPSULE/v1 + ZERO_INFERENCE_PACKET/v2 + UCF admission chain, and preserving deterministic gate/CAS plus commit-aware post-turn finalization. Exact integrated runtime credit still requires actually-started authorized isolated execution."
+  "next_exact_gate": "Land this terminal-closure repair, then implement the single retained ProfilePipelineRuntime pre-inference handler by resolving the live generation-scoped MiniUnifiedDB active turn, cross-checking any bounded invocation selector, composing the existing ZERO_WORKSPACE_CAPSULE/v1 + ZERO_INFERENCE_PACKET/v2 admission chain, and preserving deterministic gate/CAS plus commit-aware post-turn UCF finalization. Exact integrated runtime credit still requires actually-started authorized isolated execution."
 }

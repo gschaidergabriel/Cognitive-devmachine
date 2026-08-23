@@ -1,0 +1,64 @@
+{
+  "schema": "mini-entity/go-reference-convergence-reentry/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "base_main": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "source_commit": "6e6edef8e482a1610d32bcebf9cf25b61902b0b5",
+  "branch": "gpt56sol/go-mini-reference-convergence-20260823-r3",
+  "macrocycle_identity": {
+    "macrocycle_id": null,
+    "classification": "UNRESOLVED_NO_UPSTREAM_ID",
+    "unusual_experiment_count_local": 0,
+    "note": "No upstream macrocycle_id was supplied; no global unusual-experiment uniqueness is invented. This cycle uses source review/fusion and regression obligations only."
+  },
+  "observed_before": {
+    "canonical_clay_run_boundary": "run(entity_db:String, source_db:String, secret_file:String)",
+    "canonical_required_effects": ["pipeline_profile_read", "inference_generate"],
+    "reference_runtime_stale_effects": ["profile_load", "provider_chat_json"],
+    "reference_test_stale_boundary": "four arguments including external profile_path",
+    "canonical_ucf_path": "pipeline_build_prompt -> inference_generate direct adjacency remains a separate open blocker"
+  },
+  "fusion": {
+    "donor_pr": 997,
+    "donor_class": "BOUNDED_MECHANISM_DONOR_REDERIVED_ON_FRESH_CURRENT_MAIN",
+    "transplanted_blobs": {
+      "tools/clay_profile_pipeline_runtime.py": "8ea8a2db0ac1068ae9221f0ab0426e7d8f7149a7",
+      "the artefact/blogpost_entity/test_blogpost_entity.py": "7b7e6586e6a8056354df3d6313a7da66e1f5cef2",
+      "the artefact/blogpost_entity/presets/zero_blog.json": "2f7f3f4a778a84d033ce742008d85d6384fa265f",
+      "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json": "f054aba3b5ae7df8e80e377c6e24b552aeff7d1a"
+    },
+    "preserved_authority": [
+      "MiniUnifiedDB entity_state.active_profile -> profiles(profile_json,profile_sha256) is the profile authority",
+      "entity_state.generation is the sole live generation/CAS authority",
+      "legacy projection generation cannot recurrently promote canonical generation",
+      "pipeline_profile_read and pipeline_state_read are observational after pipeline_init",
+      "inference_generate is the single generic inference effect name",
+      "unknown inference kinds fail closed",
+      "profile bytes are re-hashed at commit snapshot acceptance",
+      "claim-authorizing personality_state is inside canonical_state_hash serialization",
+      "external inference remains candidate output and has no direct truth/effect authority"
+    ]
+  },
+  "evidence": {
+    "source_compare": "4 files modified, 1 fresh-main commit before this receipt",
+    "authorized_isolated_runtime_started": false,
+    "vercel_connector_execution_surface": "NOT_EXPOSED; documentation-only Sandbox capability was available through this interface",
+    "github_actions_runtime_credit": "NOT_YET_OBSERVED_FOR_THIS_HEAD",
+    "runtime_credit_change": 0,
+    "bundled_08b_credit_change": 0,
+    "jspace_credit_change": 0,
+    "whole_gwt_credit_change": 0,
+    "claude_adapter_credit_change": 0,
+    "whole_product_credit_change": 0
+  },
+  "next_gate": [
+    "Obtain actually-started authorized isolated execution of focused reference regressions plus adjacent authority/security guards on the exact branch head.",
+    "Only after executable reference convergence is evidenced, bind one canonical pipeline_cognitive_fabric_admit/UCF stage between pipeline_build_prompt and inference_generate without creating a second state/effect authority.",
+    "Then bind exact bundled ~0.8B checkpoint/tokenizer/runtime and J-Space/GWT causal receipts to the same InferencePacket/generation lineage."
+  ],
+  "classification": "SOURCE_CONVERGENCE_CANDIDATE_NO_RUNTIME_CREDIT"
+}

@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Fail-closed validator for UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1.
 
-This validates receipt shape and authority invariants only. A PASS does not create
-runtime/model/product credit; provenance still has to show that the receipt came
-from the exact admitted executable path.
+The Fabric-cycle receipt is downstream of JSPACE_GWT_BOOT_BINDING_RECEIPT/v1.
+Runtime credit requires the exact predecessor boot receipt to be supplied, revalidated
+by the canonical boot validator, digest-bound, and identity-consistent with the cycle.
+A PASS still does not create model/product credit by itself.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
+import importlib.util
 import json
 import re
 import sys
@@ -16,6 +19,7 @@ from pathlib import Path
 from typing import Any
 
 RECEIPT_VERSION = "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1"
+BOOT_RECEIPT_SCHEMA = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 ENGINE_CLASSES = {"BUNDLED_08B", "CLAUDE_CODE", "ADAPTIVE_BACKEND", "NONE"}
@@ -76,7 +80,122 @@ def _list(receipt: dict[str, Any], path: str, errors: list[str]) -> Any:
     return value
 
 
-def validate_receipt(receipt: dict[str, Any]) -> list[str]:
+def canonical_json_sha256(value: Any) -> str:
+    payload = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _load_canonical_boot_validator():
+    root = Path(__file__).resolve().parents[2]
+    path = root / "the artefact" / "blogpost_entity" / "jspace_gwt" / "validate_jspace_gwt_boot_binding_v1.py"
+    spec = importlib.util.spec_from_file_location("canonical_jspace_gwt_boot_binding_v1", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("BOOT_VALIDATOR_IMPORT_SPEC_FAILED")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _validate_boot_chain(
+    receipt: dict[str, Any],
+    boot_receipt: dict[str, Any] | None,
+    errors: list[str],
+    *,
+    boot_validator: Any | None = None,
+) -> None:
+    binding = _get(receipt, "boot_binding", errors)
+    if not isinstance(binding, dict):
+        if binding is not None:
+            errors.append("TYPE_OBJECT:boot_binding")
+        return
+
+    if binding.get("schema") != BOOT_RECEIPT_SCHEMA:
+        errors.append("BOOT_BINDING_SCHEMA_MISMATCH")
+    expected_digest = binding.get("receipt_sha256")
+    if not (isinstance(expected_digest, str) and HEX64.fullmatch(expected_digest)):
+        errors.append("BOOT_BINDING_DIGEST_INVALID")
+
+    if boot_receipt is None:
+        errors.append("BOOT_RECEIPT_EVIDENCE_REQUIRED")
+        return
+    if not isinstance(boot_receipt, dict):
+        errors.append("BOOT_RECEIPT_NOT_OBJECT")
+        return
+
+    try:
+        module = boot_validator if boot_validator is not None else _load_canonical_boot_validator()
+        module.validate(boot_receipt)
+    except Exception as exc:
+        errors.append(f"BOOT_RECEIPT_VALIDATION_FAILED:{type(exc).__name__}:{exc}")
+        return
+
+    try:
+        observed_digest = canonical_json_sha256(boot_receipt)
+    except (TypeError, ValueError) as exc:
+        errors.append(f"BOOT_RECEIPT_CANONICALIZATION_FAILED:{type(exc).__name__}")
+        return
+    if expected_digest != observed_digest:
+        errors.append("BOOT_RECEIPT_DIGEST_MISMATCH")
+
+    source = receipt.get("source", {})
+    boot_source = boot_receipt.get("source", {})
+    if boot_source.get("main_sha") != source.get("commit"):
+        errors.append("BOOT_SOURCE_COMMIT_MISMATCH")
+    if boot_source.get("tree_sha") != source.get("tree"):
+        errors.append("BOOT_SOURCE_TREE_MISMATCH")
+    if boot_source.get("dirty") is not False:
+        errors.append("BOOT_SOURCE_DIRTY_FOR_CYCLE")
+
+    core = receipt.get("bundled_core", {})
+    boot_core = boot_receipt.get("bundled_core", {})
+    core_pairs = (
+        ("manifest_digest", "manifest_sha256", "BOOT_CORE_MANIFEST_MISMATCH"),
+        ("checkpoint_digest", "checkpoint_sha256", "BOOT_CORE_CHECKPOINT_MISMATCH"),
+        ("tokenizer_digest", "tokenizer_sha256", "BOOT_CORE_TOKENIZER_MISMATCH"),
+        ("runtime_digest", "runtime_sha256", "BOOT_CORE_RUNTIME_MISMATCH"),
+    )
+    for cycle_key, boot_key, code in core_pairs:
+        if core.get(cycle_key) != boot_core.get(boot_key):
+            errors.append(code)
+
+    identity = receipt.get("identity", {})
+    boot_zero = boot_receipt.get("zero_grf", {})
+    if identity.get("zero_digest") != boot_zero.get("zero_identity_sha256"):
+        errors.append("BOOT_ZERO_IDENTITY_MISMATCH")
+    if identity.get("grf_digest") != boot_zero.get("grf_sha256"):
+        errors.append("BOOT_GRF_IDENTITY_MISMATCH")
+
+    fabric = receipt.get("fabric", {})
+    boot_jspace = boot_receipt.get("jspace", {})
+    boot_gwt = boot_receipt.get("gwt", {})
+    if fabric.get("lens_profile_digest") is not None and fabric.get("lens_profile_digest") != boot_jspace.get("lens_profile_sha256"):
+        errors.append("BOOT_LENS_PROFILE_MISMATCH")
+    if fabric.get("workspace_policy_digest") != boot_gwt.get("workspace_policy_sha256"):
+        errors.append("BOOT_WORKSPACE_POLICY_MISMATCH")
+    if fabric.get("workspace_calibration_digest") != boot_gwt.get("calibration_sha256"):
+        errors.append("BOOT_WORKSPACE_CALIBRATION_MISMATCH")
+
+    inference = receipt.get("inference", {})
+    if inference.get("engine_class") == "CLAUDE_CODE":
+        boot_claude = boot_receipt.get("claude_adapter", {})
+        if inference.get("adapter_version") != boot_claude.get("adapter_version"):
+            errors.append("BOOT_CLAUDE_ADAPTER_VERSION_MISMATCH")
+        if inference.get("capability_profile_digest") != boot_claude.get("capability_profile_sha256"):
+            errors.append("BOOT_CLAUDE_CAPABILITY_PROFILE_MISMATCH")
+
+
+def validate_receipt(
+    receipt: dict[str, Any],
+    boot_receipt: dict[str, Any] | None = None,
+    *,
+    boot_validator: Any | None = None,
+) -> list[str]:
     errors: list[str] = []
 
     if _get(receipt, "receipt_version", errors) != RECEIPT_VERSION:
@@ -233,16 +352,18 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
         if decision == "ACCEPT_CANDIDATE" or state_write is True or effect_executed is True:
             errors.append("STALE_INPUT_ACCEPTED")
 
+    _validate_boot_chain(receipt, boot_receipt, errors, boot_validator=boot_validator)
     return sorted(set(errors))
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("receipt", type=Path)
+    parser.add_argument("--boot-receipt", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
-        raw = args.receipt.read_text(encoding="utf-8")
-        receipt = json.loads(raw)
+        receipt = json.loads(args.receipt.read_text(encoding="utf-8"))
+        boot_receipt = json.loads(args.boot_receipt.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         print(json.dumps({"ok": False, "errors": [f"RECEIPT_READ_ERROR:{exc.__class__.__name__}"]}, sort_keys=True))
         return 2
@@ -250,7 +371,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"ok": False, "errors": ["RECEIPT_ROOT_NOT_OBJECT"]}, sort_keys=True))
         return 2
 
-    errors = validate_receipt(receipt)
+    errors = validate_receipt(receipt, boot_receipt)
     print(json.dumps({"ok": not errors, "errors": errors}, sort_keys=True))
     return 0 if not errors else 2
 

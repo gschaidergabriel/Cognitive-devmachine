@@ -18,11 +18,23 @@ from typing import Any, Mapping, Sequence
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from .global_jspace_gwt_v1 import JSpaceStep, TRACE_CANONICALIZATION_SCHEMA
+    from .inference_receipt_v1 import (
+        SCHEMA as INFERENCE_RECEIPT_SCHEMA,
+        STATUS as INFERENCE_RECEIPT_STATUS,
+        InferenceReceipt,
+    )
     from .jspace_vector_control_v1 import ABI_SCHEMA, VectorControlPacket, packet_bytes, validate_packet
+    from .reactive_event_router_v1 import ENTRY_BINDING_SCHEMA
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from global_jspace_gwt_v1 import JSpaceStep, TRACE_CANONICALIZATION_SCHEMA
+    from inference_receipt_v1 import (
+        SCHEMA as INFERENCE_RECEIPT_SCHEMA,
+        STATUS as INFERENCE_RECEIPT_STATUS,
+        InferenceReceipt,
+    )
     from jspace_vector_control_v1 import ABI_SCHEMA, VectorControlPacket, packet_bytes, validate_packet
+    from reactive_event_router_v1 import ENTRY_BINDING_SCHEMA
 
 TRACE_SCHEMA = "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1"
 CREDIT_LABELS = frozenset({"UNKNOWN", "POSITIVE", "NEGATIVE", "NEUTRAL"})
@@ -159,6 +171,83 @@ def _material(trace: TrainingTrace) -> dict[str, Any]:
     return data
 
 
+def _validate_inference_receipt(receipt: InferenceReceipt) -> None:
+    """Validate the immutable v3 receipt itself before it can carry training credit.
+
+    This is intentionally only receipt-integrity validation. The receipt producer remains
+    the sole place that admits route/engine/load evidence; this consumer does not create a
+    second engine or effect authority.
+    """
+    if not isinstance(receipt, InferenceReceipt):
+        raise JSpaceTrainingTraceError("VERIFIED_INFERENCE_RECEIPT_REQUIRED")
+    if receipt.schema != INFERENCE_RECEIPT_SCHEMA or receipt.status != INFERENCE_RECEIPT_STATUS:
+        raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_SCHEMA_OR_STATUS_UNSUPPORTED")
+    if receipt.hash_serialization_schema != CANONICALIZATION_SCHEMA:
+        raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_CANONICALIZATION_MISMATCH")
+    if receipt.entry_binding_schema != ENTRY_BINDING_SCHEMA:
+        raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_ENTRY_BINDING_SCHEMA_MISMATCH")
+    _generation(receipt.entity_generation, "inference_receipt.entity_generation")
+    for field in (
+        "entry_admission_sha256",
+        "event_sha256",
+        "decision_sha256",
+        "router_policy_sha256",
+        "engine_identity_sha256",
+        "resolved_engine_artifact_sha256",
+        "engine_admission_receipt_sha256",
+        "engine_load_loader_binding_sha256",
+        "engine_load_lease_sha256",
+        "engine_load_consumption_receipt_sha256",
+        "output_sha256",
+        "receipt_sha256",
+    ):
+        _sha256(getattr(receipt, field), f"inference_receipt.{field}")
+    for field in (
+        "resolved_engine_identity",
+        "resolved_engine_class",
+        "engine_load_loader_id",
+        "model_call_id",
+        "output_ref",
+    ):
+        _text(getattr(receipt, field), f"inference_receipt.{field}", 1024)
+    if receipt.engine_load_canonicalization_schema != CANONICALIZATION_SCHEMA:
+        raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_ENGINE_LOAD_CANONICALIZATION_MISMATCH")
+    if isinstance(receipt.output_size, bool) or not isinstance(receipt.output_size, int) or receipt.output_size < 0:
+        raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_OUTPUT_SIZE_INVALID")
+    if not isinstance(receipt.model_lanes, tuple) or not receipt.model_lanes:
+        raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_MODEL_LANES_REQUIRED")
+    lanes = tuple(_text(lane, "inference_receipt.model_lane", 256) for lane in receipt.model_lanes)
+    if len(lanes) != len(set(lanes)):
+        raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_MODEL_LANES_DUPLICATE")
+    material = asdict(receipt)
+    observed = material.pop("receipt_sha256")
+    if _canonical_sha256(material, "INFERENCE_RECEIPT") != observed:
+        raise JSpaceTrainingTraceError("INFERENCE_RECEIPT_DIGEST_MISMATCH")
+
+
+def _bind_outcome_receipt(
+    receipt: InferenceReceipt,
+    *,
+    generation: int,
+    entry_event_sha256: str,
+    entry_admission_sha256: str,
+    route_decision_sha256: str,
+    role: str,
+) -> str:
+    _validate_inference_receipt(receipt)
+    if receipt.entity_generation != generation:
+        raise JSpaceTrainingTraceError("OUTCOME_RECEIPT_GENERATION_MISMATCH")
+    if receipt.event_sha256 != entry_event_sha256:
+        raise JSpaceTrainingTraceError("OUTCOME_RECEIPT_EVENT_MISMATCH")
+    if receipt.entry_admission_sha256 != entry_admission_sha256:
+        raise JSpaceTrainingTraceError("OUTCOME_RECEIPT_ENTRY_ADMISSION_MISMATCH")
+    if receipt.decision_sha256 != route_decision_sha256:
+        raise JSpaceTrainingTraceError("OUTCOME_RECEIPT_ROUTE_DECISION_MISMATCH")
+    if role not in receipt.model_lanes:
+        raise JSpaceTrainingTraceError("OUTCOME_RECEIPT_ROLE_NOT_IN_MODEL_LANES")
+    return receipt.receipt_sha256
+
+
 def build_training_trace(
     prototype_step: JSpaceStep,
     vector_control_packet: VectorControlPacket,
@@ -181,12 +270,14 @@ def build_training_trace(
     falsifier_lesion_condition: str,
     credit_label: str = "UNKNOWN",
     outcome_receipt_sha256: str | None = None,
+    outcome_receipt: InferenceReceipt | None = None,
 ) -> TrainingTrace:
     """Bind one observable prototype transition to causal and training interfaces.
 
-    Non-UNKNOWN credit is impossible without an independent downstream outcome receipt.
-    This prevents ordinary model completion or internally selected GWT winners from becoming
-    reward simply because the system produced them.
+    Non-UNKNOWN credit requires a digest-valid HCU_INFERENCE_RECEIPT/v3 bound to the same
+    generation, Entry event/admission and route decision. A bare SHA-256 is never sufficient
+    to create reward. This keeps verified engine-load/inference evidence on the existing
+    inference-receipt path rather than creating a second training authority.
 
     The supplied Vector Control packet must be the exact packet produced by the supplied
     prototype step. Counterfactual controls therefore use a separately constructed prototype
@@ -225,33 +316,54 @@ def build_training_trace(
     if packet_wire != prototype_step.control_packet_text:
         raise JSpaceTrainingTraceError("VECTOR_CONTROL_PACKET_WIRE_MISMATCH")
 
+    generation = _generation(prototype_step.generation)
+    event_sha256 = _sha256(entry_event_sha256, "entry_event_sha256")
+    admission_sha256 = _sha256(entry_admission_sha256, "entry_admission_sha256")
+    decision_sha256 = _sha256(route_decision_sha256, "route_decision_sha256")
+    grid_sha256 = _sha256(grid_plan_sha256, "grid_plan_sha256")
+
     credit = _text(credit_label, "credit_label", 32).upper()
     if credit not in CREDIT_LABELS:
         raise JSpaceTrainingTraceError("credit_label:UNSUPPORTED")
-    outcome_receipt = outcome_receipt_sha256
-    if credit != "UNKNOWN":
-        if outcome_receipt is None:
-            raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_OUTCOME_RECEIPT")
-        outcome_receipt = _sha256(outcome_receipt, "outcome_receipt_sha256")
-    elif outcome_receipt is not None:
-        outcome_receipt = _sha256(outcome_receipt, "outcome_receipt_sha256")
-
     provenance = _text(provenance_evidence_class, "provenance_evidence_class", 128).upper()
     if provenance not in PROVENANCE_CLASSES:
         raise JSpaceTrainingTraceError("provenance_evidence_class:UNSUPPORTED")
-    if credit != "UNKNOWN" and provenance != "EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME":
-        raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_OUTCOME_PROVENANCE")
+
+    outcome_sha: str | None = None
+    if outcome_receipt is not None:
+        outcome_sha = _bind_outcome_receipt(
+            outcome_receipt,
+            generation=generation,
+            entry_event_sha256=event_sha256,
+            entry_admission_sha256=admission_sha256,
+            route_decision_sha256=decision_sha256,
+            role=prototype_step.winner_role,
+        )
+    if outcome_receipt_sha256 is not None:
+        supplied_outcome_sha = _sha256(outcome_receipt_sha256, "outcome_receipt_sha256")
+        if outcome_sha is None:
+            if credit != "UNKNOWN":
+                raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_INFERENCE_RECEIPT")
+            outcome_sha = supplied_outcome_sha
+        elif supplied_outcome_sha != outcome_sha:
+            raise JSpaceTrainingTraceError("OUTCOME_RECEIPT_SHA256_MISMATCH")
+
+    if credit != "UNKNOWN":
+        if outcome_receipt is None or outcome_sha is None:
+            raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_INFERENCE_RECEIPT")
+        if provenance != "EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME":
+            raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_OUTCOME_PROVENANCE")
 
     material = {
         "schema_version": TRACE_SCHEMA,
         "canonicalization_schema": CANONICALIZATION_SCHEMA,
         "trace_id": _text(trace_id, "trace_id", 256),
         "trace_family_id": _text(trace_family_id, "trace_family_id", 256),
-        "generation": _generation(prototype_step.generation),
-        "entry_event_sha256": _sha256(entry_event_sha256, "entry_event_sha256"),
-        "entry_admission_sha256": _sha256(entry_admission_sha256, "entry_admission_sha256"),
-        "route_decision_sha256": _sha256(route_decision_sha256, "route_decision_sha256"),
-        "grid_plan_sha256": _sha256(grid_plan_sha256, "grid_plan_sha256"),
+        "generation": generation,
+        "entry_event_sha256": event_sha256,
+        "entry_admission_sha256": admission_sha256,
+        "route_decision_sha256": decision_sha256,
+        "grid_plan_sha256": grid_sha256,
         "cell_id": _text(prototype_step.winner_cell_id, "cell_id", 256),
         "role": _text(prototype_step.winner_role, "role", 256),
         "jspace_basis_id": _text(prototype_step.basis_id, "jspace_basis_id", 256),
@@ -277,7 +389,7 @@ def build_training_trace(
             observed_downstream_outcome,
             "observed_downstream_outcome",
         ),
-        "outcome_receipt_sha256": outcome_receipt,
+        "outcome_receipt_sha256": outcome_sha,
         "falsifier_lesion_condition": _text(
             falsifier_lesion_condition,
             "falsifier_lesion_condition",

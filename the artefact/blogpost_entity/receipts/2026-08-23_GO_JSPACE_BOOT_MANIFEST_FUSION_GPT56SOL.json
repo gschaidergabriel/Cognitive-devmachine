@@ -1,0 +1,79 @@
+{
+  "schema": "mini-entity-go-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "a492051e5e22c051cde97c82ae3b7db7194456ed",
+  "branch": "go-20260823-gpt56sol-boot-manifest-fusion",
+  "coordination": {
+    "macrocycle_id": null,
+    "status": "UNRESOLVED_NO_ATOMIC_LEASE",
+    "shared_current_main_experiment_reference": "JSPACE_TRANSFER_ASSUMPTION_FALSIFIER",
+    "new_unusual_experiment_count": 0,
+    "classification": "DETERMINISTIC_FUSION_REGRESSION_ONLY"
+  },
+  "problem": "The landed boot receipt validator and landed bundled-cognition manifest validator were independently useful but not executable-bound to each other. A receipt could carry a source-expected manifest digest while independently reporting different valid-looking checkpoint/tokenizer/J-Space/lens/workspace components unless boot validation loaded the actual manifest and compared every identity-bearing component.",
+  "delta": {
+    "manifest_validator": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py",
+    "boot_validator": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
+    "tests": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py",
+    "laws": [
+      "SOURCE_LOCKED_MANIFEST_HASH_AND_COMPONENTS_MUST_AGREE",
+      "BOOT_MANIFEST_REQUIRES_RUNTIME_DIGEST_AND_RUNTIME_IDENTITY",
+      "DIRTY_SOURCE_REQUIRES_DIRTY_DIFF_DIGEST",
+      "FIRST_ACTION_ORIGIN_IS_TYPED",
+      "BOOT_BINDING_CANNOT_GRANT_RUNTIME_OR_SEMANTIC_CREDIT"
+    ]
+  },
+  "exact_git_blobs": {
+    "manifest_validator": "f7e30922c90dd316c4bf77f6b3a8085ae724e724",
+    "boot_validator": "accd262801b67da6a9bc720df56d5278d0d8033a",
+    "tests": "984dc360d6e64bf012ec91326f4bace976789029"
+  },
+  "sha256": {
+    "manifest_validator": "1d183ad9d90d987cf6e9908e39df3483ac49e28a4ad6980dfbf92833310732f5",
+    "boot_validator": "d9a7c2a7354f7784ca41ef5c1e4f86b1c7f1449d642a4526102d9c100cb25275",
+    "tests": "82aa771c7c5ba1b27045302abf82853fffe85930d2b7118facfd5b513186775a"
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Linux container",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "python": "3.13.5",
+    "py_compile": "PASS",
+    "focused_unittest": "PASS_11_OF_11",
+    "exact_git_blob_identity_matches_branch": true,
+    "whole_repo_checkout_executed": false,
+    "ubuntu_owner_host_started": false,
+    "model_or_jacobian_runtime_executed": false
+  },
+  "regressions": [
+    "post-load nonfinite lens rejected",
+    "unfitted readout position rejected",
+    "prompt-copy confound guard cannot be disabled",
+    "tokenizer/component alias against expected manifest rejected",
+    "self-consistent replacement manifest rejected against source lock",
+    "boot manifest without runtime digest rejected",
+    "dirty source without diff digest rejected",
+    "unknown first-action origin rejected",
+    "boot J-Space runtime-credit promotion rejected",
+    "source commit mismatch rejected"
+  ],
+  "evidence_boundary": "SOURCE_MECHANISM_SUPPORTED_EXACT_GIT_BLOB_LOCAL_COMPONENT_EXECUTION_ONLY",
+  "credits": {
+    "bundled_08b_exact_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_production_credit": 0,
+    "claude_code_adapter_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_product_credit": 0
+  },
+  "execution_policy": {
+    "free_only": true,
+    "secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "training": false,
+    "spend": 0
+  },
+  "next_gate": "Rejoin current main, then on the next intentional exact Ubuntu start load the real source-locked BundledCognitionManifest, hash actual checkpoint/tokenizer/runtime/J-Space/lens/workspace bytes, emit the boot receipt, and pass this fused validator before any behavioral/runtime credit."
+}

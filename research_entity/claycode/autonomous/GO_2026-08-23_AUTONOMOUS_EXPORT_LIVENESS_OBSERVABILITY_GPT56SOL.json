@@ -1,0 +1,77 @@
+{
+  "schema": "AUTONOMOUS_EXPORT_LIVENESS_OBSERVABILITY_BOUNDARY/v1",
+  "macrocycle_id": "go-20260823T0818+07-gpt56sol-export-liveness",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_at": "2026-08-23T08:18:00+07:00",
+  "observed_at_utc": "2026-08-23T01:18:00Z",
+  "canonical_main_sha": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+  "supervisor_schema_version": "8.38",
+  "supervisor_cycle": "automation-20260823-gen276-export-liveness-stall",
+  "execution_policy": {
+    "free_only": true,
+    "paid_provider_execution": "FORBIDDEN_THIS_CYCLE",
+    "product_restart_or_state_mutation_before_failure_class": "NOT_PERFORMED"
+  },
+  "github_observations": {
+    "agentzero_exports": [
+      "2026-08-22T19:06:44Z",
+      "2026-08-22T19:36:44Z",
+      "2026-08-22T20:06:44Z"
+    ],
+    "agentzero_last_commit": "5e134f5f07ddebc0a1c182d04579e361bbbe82a8",
+    "agentzero_last_generation": 276,
+    "agentzero_last_export_gap_seconds_at_observation": 18676,
+    "agentzero_last_export_gap_human": "5h11m16s",
+    "agentzero_last_export_declared_producer": "/opt/agentzero-export/agentzero_export.py",
+    "agentzero_last_export_declared_host": "frank-api",
+    "eos_rating_last_export": "2026-08-22T20:25:04Z",
+    "eos_rating_last_commit": "9452c6fe621bc2d8c6f8cf5eb3f9fb88fd91591d",
+    "eos_rating_last_export_gap_seconds_at_observation": 17576,
+    "eos_rating_last_export_gap_human": "4h52m56s",
+    "eos_rating_declared_source": "UnifiedDB /var/lib/clay/wiki.db, Tabelle eos_bewertungen",
+    "newer_agentzero_or_rating_export_commit_observed": false,
+    "repo_contains_agentzero_export_producer_code_by_exact_name_search": false,
+    "repo_contains_autonomous_export_liveness_receipt_v1_by_exact_name_search": false,
+    "open_pr_with_autonomous_export_liveness_receipt_name_observed": false
+  },
+  "available_execution_surface": {
+    "github": "READ_WRITE_REPOSITORY_EVIDENCE_ONLY_FOR_THIS_GATE",
+    "vercel_connector": "DOCUMENTATION_ONLY_NO_SANDBOX_START_EXEC_SURFACE_EXPOSED",
+    "frank_api_live_host": "NOT_ADDRESSABLE_FROM_CURRENT_TOOL_SURFACE"
+  },
+  "failure_class": "UNKNOWN_OBSERVABILITY_BLOCKED",
+  "not_claimed": [
+    "NO_NEW_STATE",
+    "RUN_FAILED",
+    "RUN_BLOCKED",
+    "PUSH_FAILED",
+    "TIMER_DISABLED",
+    "PROCESS_STUCK",
+    "DB_LOCKED",
+    "DISK_FULL",
+    "AUTH_FAILED"
+  ],
+  "reason": "GitHub proves the cadence stopped but does not expose the producer host timer/service/process/DB/disk/auth/push state. The producer path is declared as host-local on frank-api and is not present in repository search. Therefore any narrower failure classification would be fabricated.",
+  "required_live_receipt_fields_before_restart_or_product_mutation": [
+    "timer/service enabled and active state",
+    "last-trigger and next-trigger timestamps",
+    "last successful run id",
+    "process exit code",
+    "stdout/stderr digests",
+    "lock and SQLite busy state",
+    "disk and inode availability",
+    "git worktree/remote/push result",
+    "network/auth result",
+    "generation before/after",
+    "which of export timer, rating timer, or shared dependency stopped first"
+  ],
+  "next_exact_step": "Obtain a read-only live observation on frank-api that emits AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1 with the required fields before any restart, service mutation, product-state mutation, or new autonomous research credit.",
+  "unusual_experiment": {
+    "consumed": false,
+    "reason": "Current highest gate is observability; no intervention is justified before the failure class is observed."
+  },
+  "product_state_mutation": false,
+  "research_delta": "BOUND_NEGATIVE_EVIDENCE_AND_OBSERVABILITY_BOUNDARY",
+  "acceptance_effect": "NO_RUNTIME_CREDIT_NO_PRODUCT_PASS"
+}

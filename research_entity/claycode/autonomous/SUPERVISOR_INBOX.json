@@ -1,11 +1,11 @@
 {
-  "schema_version": "8.38",
-  "latest_cycle": "automation-20260823-gen276-export-liveness-stall",
+  "schema_version": "8.39",
+  "latest_cycle": "automation-20260823-gen276-intentional-offline-grf-control-sync",
   "needs_review": true,
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "component_target": "AGENTZERO_EXECUTABLE_TRUTH_SECURITY_AND_ACCEPTANCE_FRONTIER",
   "control_sync_required_before_research_spend": true,
-  "next_focus": "Supervisor State 9.9 with Control 4.1 + 4.2 remains policy authority for this FREE_ONLY cycle. MATERIAL NEW OPERATIONS/LIVENESS BLOCKER after 8.37: autonomous AgentZero exports had a stable approximately 30-minute cadence at 2026-08-22T19:06:44Z, 19:36:44Z, and 20:06:44Z, followed by no newer AgentZero export commit through the current inspection window. The last EOS rating export is 2026-08-22T20:25:04Z and also stops thereafter. The latest durable AgentZero receipt remains 2026-08-22T20:07:42Z on source-short bd016bba7 with 1486 green / 1 red and sole red tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated. Do NOT infer that research is healthy merely because no new red receipt appeared: the evidence producer itself may be stalled. STEERING: before further autonomous research claims or patching, require AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1. Bind timer/service enabled+active state, last-trigger and next-trigger times, last successful run id, process exit code, stdout/stderr digests, lock/SQLite busy state, disk/inode availability, git worktree/remote/push result, network/auth result, generation before/after, and whether the export timer, rating timer, or shared dependency stopped first. Distinguish NO_NEW_STATE from RUN_FAILED, RUN_BLOCKED, PUSH_FAILED, TIMER_DISABLED, PROCESS_STUCK, DB_LOCKED, DISK_FULL, AUTH_FAILED, and UNKNOWN. Do not restart or mutate product state until the failure class is observed; if a safe operational restart is eventually justified, record pre/post receipts and prove no skipped or replayed generation. Keep exact-source Ubuntu adapter decomposition, FEEDBACK_EVENT_LEDGER/v1, TEST_EXPORT_ATOMIC_RECEIPT/v1, and FREE_ONLY provider quarantine as existing hard gates. Historical Gen258 GLM/Sonnet paid execution remains append-only breach evidence; Together/GLM/Sonnet paid lanes stay dormant under FREE_ONLY. Preserve Goodman ancestry collapse, Vercel primary, Daytona pre-assertion FREE_ONLY fallback only, Ubuntu-only Frank v0.1 final acceptance, BASE NOT_PASS, WP01/WP02 existing credit only, WP03-WP14 OPEN, no canonical semantics promotion and never modify Frank's Harness.",
+  "next_focus": "Supervisor State 9.9 with Control 4.1 + 4.2 remains policy authority for this FREE_ONLY cycle. CORRECTION TO 8.38: the missing AgentZero/EOS export cadence is now externally explained as an intentional owner-controlled server shutdown, so the prior MATERIAL_STALL_UNEXPLAINED classification is withdrawn. Do not diagnose timer, SQLite, disk, auth, Git push, network, or process failure from the absence of exports while the host is intentionally offline; AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1 is not a current fault gate. Preserve the last durable runtime baseline exactly as frozen: Generation 276, AgentZero export 5e134f5f07ddebc0a1c182d04579e361bbbe82a8, receipt source-short bd016bba7, 1486 green / 1 red, sole red tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated. NEW CONTROL-SOURCE DELTA while runtime is offline: main now binds CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md plus BOOTSTRAP_MINIMAL schema 6.9 requiring prominent transitive GRF/ClayCode protocol injection for every explicit user-triggered go and child delegation. This is representational/orchestration policy only and earns zero runtime/model/product credit. Crucially BOOTSTRAP_MINIMAL still states that current FREE_ONLY control overrides paid/provider execution until changed; therefore the approximately-1B/Together campaign wording does NOT authorize Together, GLM, Sonnet, or any PAID/SUBSCRIPTION/UNKNOWN execution under this supervisor state. Keep FREE_ONLY_PROVIDER_ADMISSION_RECEIPT/v2 and FREE_ONLY_FALLBACK_CHAIN_RECEIPT/v1 as hard pre-secret/pre-network gates. Historical Gen258 GLM/Sonnet paid execution remains append-only breach evidence. On the next intentional host start, treat the first boot as an observation boundary, not fault recovery: capture PRESTART_FROZEN_BASELINE plus POSTSTART_OBSERVATION_RECEIPT/v1 before attributing any autonomous action to Zero. Bind exact product source/tree/dirty state, Ubuntu/executor identity, process/service start order, first generation/checkpoint, first autonomous goal/action/tool request, and whether an effect originated from Zero, a hook/timer, Claude Code, proxy/sandbox controller, or other orchestration. Preserve exact-source Ubuntu adapter decomposition, FEEDBACK_EVENT_LEDGER/v1, TEST_EXPORT_ATOMIC_RECEIPT/v1, Goodman ancestry collapse, BASE NOT_PASS, WP01/WP02 existing credit only, WP03-WP14 OPEN, no canonical semantics promotion, Ubuntu-only Frank v0.1 final acceptance, and never modify Frank's Harness.",
   "verified_updates": {
     "supervisor_state_version": "9.9",
     "autonomous_control_version": "4.1+4.2-execution-boundary-addendum",
@@ -13,8 +13,8 @@
     "vercel_provider_order": "PRIMARY",
     "daytona_provider_order": "PREASSERTION_FALLBACK_ONLY",
     "daytona_live_runtime_credit": 0,
-    "latest_repo_head_inspected": "9452c6fe621bc2d8c6f8cf5eb3f9fb88fd91591d",
-    "latest_repo_head_subject": "EOS_RATING_EXPORT_LAST_OBSERVED_2026_08_22T20_25_04Z",
+    "latest_repo_head_inspected": "1a5b938b45ac74d968a63df4a0e786d2f450925f",
+    "latest_repo_head_subject": "GRF_CLAYCODE_PROMPT_INJECTION_BOUND_IN_BOOTSTRAP",
     "agentzero_latest_export_generation": 276,
     "agentzero_latest_export_head": "5e134f5f07ddebc0a1c182d04579e361bbbe82a8",
     "agentzero_latest_receipt_source_short": "bd016bba7",
@@ -27,13 +27,15 @@
     "runtime_adapter_replication_classification": "PERSISTENT_MULTI_RUN_SAME_SHORT_REPLICATED_RED",
     "runtime_adapter_fix_credit": 0,
     "autonomous_export_last_observed_snapshot_utc": "2026-08-22T20:06:44Z",
-    "autonomous_export_previous_observed_snapshots_utc": [
-      "2026-08-22T19:06:44Z",
-      "2026-08-22T19:36:44Z"
-    ],
     "eos_rating_export_last_observed_utc": "2026-08-22T20:25:04Z",
-    "autonomous_export_liveness_status": "MATERIAL_STALL_UNEXPLAINED",
-    "autonomous_export_liveness_receipt_v1_present": false,
+    "autonomous_export_liveness_status": "INTENTIONAL_HOST_OFFLINE_OWNER_CONFIRMED",
+    "autonomous_export_liveness_fault_credit": 0,
+    "autonomous_export_liveness_receipt_v1_currently_required": false,
+    "poststart_observation_receipt_v1_required": true,
+    "grf_claycode_all_worker_protocol_bound": true,
+    "grf_claycode_prompt_injection_bootstrap_schema": "6.9",
+    "grf_claycode_protocol_runtime_credit": 0,
+    "grf_claycode_protocol_model_credit": 0,
     "feedback_current_state_rating_count": 12,
     "feedback_latest_up_down": "7/5",
     "feedback_event_ledger_v1_present": false,
@@ -58,8 +60,8 @@
     "frank_harness_modified": false
   },
   "remaining_red_frontier": {
-    "current_receipt_status": "GEN276_SAME_FAMILY_1486_1_PERSISTENT_ADAPTER_RED_BUT_EVIDENCE_PRODUCER_STALLED",
-    "autonomous_export_liveness_credit": 0,
+    "current_receipt_status": "GEN276_SAME_FAMILY_1486_1_FROZEN_INTENTIONAL_OFFLINE_BASELINE",
+    "intentional_offline_is_not_runtime_failure": true,
     "reference_profile_authority_runtime_credit": 0,
     "reference_generation_cas_runtime_credit": 0,
     "reference_claim_hash_runtime_credit": 0,
@@ -72,7 +74,7 @@
     "retrieval_learning_lineage_credit": 0
   },
   "receipt_gaps": {
-    "autonomous_export_liveness_receipt_v1": "NEW HIGHEST OPERATIONS GATE; observe why the regular AgentZero/rating evidence cadence stopped before restarting or mutating product state",
+    "poststart_observation_receipt_v1": "NEXT HOST START OBSERVATION GATE; bind frozen prestart baseline to exact poststart source/executor and provenance of first autonomous actions without treating intentional downtime as a fault",
     "reference_authority_exact_ubuntu_receipt_v1": "ACTUALLY START EXACT CURRENT SOURCE ON ISOLATED UBUNTU AND BIND FULL SOURCE TREE DIRTY STATE EXECUTOR AND RESULT DIGEST",
     "free_only_provider_admission_receipt_v2": "HARD CONTROL BLOCKER; PAID/SUBSCRIPTION/UNKNOWN MUST CAUSE ZERO SECRET/KEY LOOKUPS AND ZERO NETWORK ATTEMPTS",
     "free_only_fallback_chain_receipt_v1": "HARD CONTROL BLOCKER; EVERY FALLBACK HOP MUST USE THE SAME COST-CLASS ADMISSION",
@@ -86,5 +88,5 @@
     "feedback_causal_join_v1": "REWARD OR PUNISH ONLY COMPONENTS PROVEN ACTIVE ON THE RATED TURN; NO MODEL-CONSENSUS ATTRIBUTION",
     "provider_execution_history_receipt_v1": "REQUIRED APPEND-ONLY; GEN258 PAID EXECUTION MUST NEVER BE REWRITTEN AS UNOBSERVED"
   },
-  "instruction": "Treat the missing autonomous evidence cadence as a material liveness blocker. Observe and classify the export/rating pipeline failure before restarting or mutating product state. Preserve the persistent adapter-red exact-Ubuntu decomposition, feedback event provenance, TEST_EXPORT_ATOMIC_RECEIPT, FREE_ONLY quarantine, BASE NOT_PASS, Goodman ancestry collapse, Ubuntu-only Frank v0.1, no canonical promotion and never modify Frank's Harness."
+  "instruction": "Treat the missing autonomous evidence cadence as intentional host-offline state, not a liveness failure. Do not attempt fault recovery while offline. At the next intentional Ubuntu start, capture an exact prestart/poststart observation boundary and attribute every first action to Zero versus hooks/timers/Claude Code/sandbox/proxy before granting autonomy credit. Preserve the GRF/ClayCode all-worker prompt-injection directive as source/control policy only; it does not override FREE_ONLY, BASE acceptance, Goodman anti-echo, canonical-semantic gates, or Harness immutability. Keep paid/subscription/unknown provider lanes quarantined before key lookup and network I/O, preserve the persistent adapter-red decomposition, feedback provenance gates, BASE NOT_PASS, and never modify Frank's Harness."
 }

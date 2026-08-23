@@ -29,6 +29,8 @@ r3.counter(
   runtime_receipt_self_authorizes_manifest,
   dirty_source_without_byte_identity,
   unattributed_or_duplicate_first_action,
+  placeholder_digest_alias,
+  unmeasured_gwt_slot_claim,
   gwt_workspace_mistaken_for_truth,
   claude_candidate_mistaken_for_authority
 )
@@ -45,6 +47,9 @@ r4.discriminate(
   require(all(observed_readout_positions >= minimum_readout_position)),
   require(prompt_copy_confound_guard_enabled == true),
   require(exact_bytes_verified == true),
+  require(all_bound_digests != placeholder_zero_or_ff),
+  require(calibration_status == UNMEASURED_SOURCE_ONLY -> slot_count == null),
+  require(calibration_status == MEASURED_EXACT_BUNDLE -> slot_count >= 1),
   require(boot_manifest_sha256 == source_lock.manifest_file_sha256),
   require(boot_checkpoint_sha256 == bundled_manifest.checkpoint_digest),
   require(boot_tokenizer_sha256 == bundled_manifest.tokenizer_digest),
@@ -88,6 +93,17 @@ This composition preserves `PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY`: a valid
 Likewise one free-form `origin_attribution` string is not sufficient to attribute the first post-start actions. The receipt therefore binds a non-empty `first_actions` list with unique `action_id`, a controlled origin class, and an explicit boolean `effect_requested`. `OTHER` remains available but requires typed detail instead of silently collapsing an unknown actor into a known origin.
 
 These are provenance guards only. They do not establish autonomy, causal correctness, effect success, or model quality.
+
+## Identity and calibration hardening
+
+Cross-binding only helps if every bound identity is real. A syntactically valid SHA containing only zeroes or only `f` characters is therefore rejected by both the bundled cognition manifest validator and the boot/source-lock validator. Test fixtures must use non-placeholder digests, so a placeholder cannot acquire authority merely because the same placeholder is repeated consistently across manifest, source lock and receipt.
+
+The GWT slot count follows the owner epistemic law `UNKNOWN != ZERO != MEASURED`:
+
+- `UNMEASURED_SOURCE_ONLY` requires `slot_count: null`. A candidate/default slot count may exist in research configuration but is not an admitted measurement.
+- `MEASURED_EXACT_BUNDLE` requires an integer `slot_count >= 1` on the exact cross-bound bundle.
+
+`null` means no admitted slot-count measurement. It is neither numeric zero nor an implicit default.
 
 ## External measurement hardening
 

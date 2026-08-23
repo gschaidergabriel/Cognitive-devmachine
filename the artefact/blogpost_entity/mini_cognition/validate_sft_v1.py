@@ -95,6 +95,15 @@ def validate_code(s):
         generation_exact=top.count(OMEGA_GENERATION)
         if generation_calls != 1: e.append(f"omega_generation_call_count:{generation_calls}")
         if generation_exact != 1: e.append(f"omega_generation_not_exact_top_level:{generation_exact}")
+
+        # All deterministic validators must be real top-level calls before the
+        # one commit candidate. Their relative order is intentionally not fixed.
+        transition_sequence=[
+            item['call'] for item in calls
+            if item['depth']==1 and item['fn'] in {'omega_validate','omega_commit_candidate'}
+        ]
+        if not transition_sequence or transition_sequence[-1] != OMEGA_COMMIT:
+            e.append("omega_validation_before_commit")
     if reject_calls and commit_calls:
         e.append("reject_and_commit")
     return e

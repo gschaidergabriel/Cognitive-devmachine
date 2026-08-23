@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "aad2c33bacc6492d2ea6f0f102c102ef61e906d9",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; AVAILABLE_CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "paid_upgrade_or_fallback_attempted": false
+  },
+  "finding": {
+    "classification": "RETAINED_LANE_REPOSITORY_IDENTITY_COLLISION",
+    "ambiguous_token": "PR810",
+    "observed_collision": [
+      "gschaidergabriel/clay-global-research-entity#810 resolves to an unrelated historical ClayCog validator PR",
+      "gschaidergabriel/Dr.-Unterweger#810 is the current retained EntityOS/HCU bounded Sandbox executor"
+    ],
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "counterhypothesis": "The bare number PR810 is sufficiently unambiguous because surrounding prose usually calls it the executor.",
+    "falsifier": "A repository-scoped connector lookup of PR810 can return a different, valid and unrelated PR; therefore the bare PR number is not a globally stable authority identity."
+  },
+  "delta": {
+    "coordination_rule": "All retained PR identities in current handoffs, receipts and tool lookups must be repository-qualified; bare PR numbers are descriptive shorthand only and never authority.",
+    "reason": "Prevents an organ from inspecting or mutating the wrong PR when multiple accessible repositories contain the same local PR number.",
+    "runtime_executed": false,
+    "source_or_executor_code_mutated": false,
+    "runtime_credit_change": 0
+  },
+  "current_external_gate": {
+    "executor_head_observed": "3c81d2dc9b9e7f428416d7273a9e60cb8b85c028",
+    "executor_combined_status": "VERCEL_FAILURE_BUILD_RATE_LIMIT_UPGRADE_PATH",
+    "latest_ready_deployment_commit": "2dfa1edcab41fba34282b34956716e7c222ee517",
+    "deployments_newer_than_latest_ready_observed": false,
+    "classification": "EXACT_CURRENT_DEPLOYMENT_UNAVAILABLE_INFRASTRUCTURE_QUOTA_ADMISSION_BLOCK",
+    "exact_current_route_invocation_attempted": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: retained executor authority is now durably repository-qualified, eliminating a concrete wrong-PR resolution hazard while exact-current deployment remains blocked.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the exact 17-blob Typed Entry -> route -> engine/load -> GRID10 -> ModelExecution closure is already staged in the retained executor; changing HCU source while exact-current deployment is unavailable would add churn without a stronger discriminator.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: exact-current Sandbox execution remains unavailable and real zero-cost local model-executor I/O is unobserved, so J-Space model/training credit remains zero."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Append-only coordination receipt avoids overwriting high-churn current-facing README/executor state while preserving the concrete repository-identity hazard."
+  },
+  "next_exact_gate": "Require a Vercel READY preview whose githubCommitSha exactly equals the then-current gschaidergabriel/Dr.-Unterweger#810 head. Only if the existing FREE_ONLY included-tier cost/quota/plan fence admits execution may the exact 17-blob fixed 14-test J-Space/GRID10 capsule be invoked. Do not invoke stale READY deployments, do not upgrade or use paid fallback, and keep model/training credit at zero until real zero-cost local loader/executor I/O is observed through verified loader consumption and canonical MiniUnifiedDB atomic ModelExecution admission."
+}

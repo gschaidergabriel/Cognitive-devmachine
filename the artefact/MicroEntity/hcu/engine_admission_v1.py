@@ -162,22 +162,8 @@ def _hash_regular_file(path: Path) -> tuple[bytes, int]:
     return h.digest(), before.st_size
 
 
-def digest_artifact_path(path: Path) -> ArtifactDigest:
-    """Hash a regular file directly or a directory as a deterministic file-name tree.
-
-    Directory identity commits to every relative UTF-8 path, file size and raw file
-    SHA-256 in lexicographic POSIX-path order. Symlinks and non-regular members fail closed.
-    """
-    if not isinstance(path, Path):
-        raise EngineAdmissionError("ARTIFACT_PATH_TYPE_REQUIRED")
-    if path.is_symlink():
-        raise EngineAdmissionError(f"ARTIFACT_SYMLINK_FORBIDDEN:{path}")
-    if path.is_file():
-        digest, size = _hash_regular_file(path)
-        return ArtifactDigest("FILE_SHA256", digest.hex(), 1, size)
-    if not path.is_dir():
-        raise EngineAdmissionError(f"ARTIFACT_PATH_NOT_FOUND_OR_UNSUPPORTED:{path}")
-
+def _enumerate_regular_tree_members(path: Path) -> list[tuple[str, Path]]:
+    """Enumerate the exact regular-file membership admitted into a tree digest."""
     members: list[tuple[str, Path]] = []
     for root, dirs, files in os.walk(path, followlinks=False):
         root_path = Path(root)
@@ -194,6 +180,28 @@ def digest_artifact_path(path: Path) -> ArtifactDigest:
             rel = candidate.relative_to(path).as_posix()
             members.append((rel, candidate))
     members.sort(key=lambda row: row[0])
+    return members
+
+
+def digest_artifact_path(path: Path) -> ArtifactDigest:
+    """Hash a regular file directly or a directory as a deterministic file-name tree.
+
+    Directory identity commits to every relative UTF-8 path, file size and raw file
+    SHA-256 in lexicographic POSIX-path order. Symlinks and non-regular members fail closed.
+    The member set is enumerated again before return so files added, removed, or renamed
+    while hashing cannot silently produce a digest for an already-changed directory tree.
+    """
+    if not isinstance(path, Path):
+        raise EngineAdmissionError("ARTIFACT_PATH_TYPE_REQUIRED")
+    if path.is_symlink():
+        raise EngineAdmissionError(f"ARTIFACT_SYMLINK_FORBIDDEN:{path}")
+    if path.is_file():
+        digest, size = _hash_regular_file(path)
+        return ArtifactDigest("FILE_SHA256", digest.hex(), 1, size)
+    if not path.is_dir():
+        raise EngineAdmissionError(f"ARTIFACT_PATH_NOT_FOUND_OR_UNSUPPORTED:{path}")
+
+    members = _enumerate_regular_tree_members(path)
     if not members:
         raise EngineAdmissionError(f"ARTIFACT_TREE_EMPTY:{path}")
 
@@ -213,6 +221,11 @@ def digest_artifact_path(path: Path) -> ArtifactDigest:
         tree.update(size.to_bytes(8, "big"))
         tree.update(file_digest)
         total += size
+
+    final_members = _enumerate_regular_tree_members(path)
+    if tuple(rel for rel, _ in final_members) != tuple(rel for rel, _ in members):
+        raise EngineAdmissionError(f"ARTIFACT_TREE_MEMBERSHIP_CHANGED_DURING_HASH:{path}")
+
     return ArtifactDigest("TREE_SHA256_V1", tree.hexdigest(), len(members), total)
 
 

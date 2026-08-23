@@ -23,6 +23,8 @@ r3.counter(
   unfitted_position_readout,
   prompt_copy_confound,
   stale_or_substituted_manifest,
+  placeholder_digest_alias,
+  unmeasured_gwt_slot_claim,
   gwt_workspace_mistaken_for_truth,
   claude_candidate_mistaken_for_authority
 )
@@ -33,7 +35,10 @@ r4.discriminate(
   require(minimum_readout_position >= skip_first_positions),
   require(all(observed_readout_positions >= minimum_readout_position)),
   require(prompt_copy_confound_guard_enabled == true),
-  require(exact_bytes_verified == true)
+  require(exact_bytes_verified == true),
+  require(all_bound_digests != placeholder_zero_or_ff),
+  require(calibration_status == UNMEASURED_SOURCE_ONLY -> slot_count == null),
+  require(calibration_status == MEASURED_EXACT_BUNDLE -> slot_count >= 1)
 )
 
 r6.verify(
@@ -55,6 +60,17 @@ Primary upstream references:
 - https://transformer-circuits.pub/2026/workspace/index.html
 
 These guards do not prove that a lens is well-conditioned or semantically valid. They only block known classes of false measurement credit.
+
+## Identity and calibration hardening
+
+A syntactically valid SHA full of zeroes or `f` characters is not accepted as artifact identity. The boot receipt and bundled cognition manifest reject those placeholder digests so a source fixture cannot masquerade as exact checkpoint, tokenizer, runtime, lens, policy or calibration bytes.
+
+The GWT slot count follows the owner calibration law and the epistemic distinction `UNKNOWN != ZERO != MEASURED`:
+
+- `UNMEASURED_SOURCE_ONLY` requires `slot_count: null`. A source configuration may discuss a candidate slot count, but the boot receipt may not bind it as if calibrated.
+- `MEASURED_EXACT_BUNDLE` requires an integer `slot_count >= 1` on the exact bound bundle.
+
+`null` here means no admitted measurement. It is not numeric zero and it is not a default value.
 
 ## Evidence boundary
 

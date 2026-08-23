@@ -14,6 +14,11 @@ from xeno_entry_fabric_v1 import (
 
 CAPABILITY_BINDING_SHA256 = "b" * 64
 ADMITTED_CAPABILITIES = ("memory.read", "hcu.route")
+ADMITTED_BUDGET = {
+    "max_model_calls": 4,
+    "max_tokens": 4096,
+    "max_wall_ms": 10_000,
+}
 
 
 def base_entry():
@@ -47,21 +52,37 @@ def raw_entry():
     return json.dumps(base_entry(), separators=(",", ":"), ensure_ascii=True)
 
 
-def admit(entry, *, current_generation=7, binding=CAPABILITY_BINDING_SHA256, capabilities=ADMITTED_CAPABILITIES):
+def admit(
+    entry,
+    *,
+    current_generation=7,
+    binding=CAPABILITY_BINDING_SHA256,
+    capabilities=ADMITTED_CAPABILITIES,
+    admitted_budget=ADMITTED_BUDGET,
+):
     return admit_entry(
         entry,
         current_generation=current_generation,
         expected_capability_binding_sha256=binding,
         admitted_capabilities=capabilities,
+        admitted_budget=admitted_budget,
     )
 
 
-def admit_raw(raw, *, current_generation=7, binding=CAPABILITY_BINDING_SHA256, capabilities=ADMITTED_CAPABILITIES):
+def admit_raw(
+    raw,
+    *,
+    current_generation=7,
+    binding=CAPABILITY_BINDING_SHA256,
+    capabilities=ADMITTED_CAPABILITIES,
+    admitted_budget=ADMITTED_BUDGET,
+):
     return admit_entry_json(
         raw,
         current_generation=current_generation,
         expected_capability_binding_sha256=binding,
         admitted_capabilities=capabilities,
+        admitted_budget=admitted_budget,
     )
 
 
@@ -203,6 +224,39 @@ class EntryFabricTests(unittest.TestCase):
         del e["budget"]["max_tokens"]
         with self.assertRaisesRegex(EntryFabricError, "ALL_FIELDS_REQUIRED"):
             admit(e)
+
+    def test_entry_cannot_self_grant_compute_budget(self):
+        for field, value in (
+            ("max_model_calls", ADMITTED_BUDGET["max_model_calls"] + 1),
+            ("max_tokens", ADMITTED_BUDGET["max_tokens"] + 1),
+            ("max_wall_ms", ADMITTED_BUDGET["max_wall_ms"] + 1),
+        ):
+            with self.subTest(field=field):
+                e = base_entry()
+                e["budget"][field] = value
+                with self.assertRaisesRegex(EntryFabricError, f"BUDGET_NOT_ADMITTED:{field}"):
+                    admit(e)
+
+    def test_entry_may_narrow_authorized_compute_budget(self):
+        e = base_entry()
+        e["budget"] = {
+            "max_model_calls": 1,
+            "max_tokens": 512,
+            "max_wall_ms": 1000,
+        }
+        packet = admit(e)
+        self.assertEqual(dict(packet.budget), e["budget"])
+
+    def test_external_budget_authority_view_is_typed_and_complete(self):
+        incomplete = dict(ADMITTED_BUDGET)
+        del incomplete["max_tokens"]
+        with self.assertRaisesRegex(EntryFabricError, "admitted_budget:ALL_FIELDS_REQUIRED"):
+            admit(base_entry(), admitted_budget=incomplete)
+
+        invalid = dict(ADMITTED_BUDGET)
+        invalid["max_wall_ms"] = True
+        with self.assertRaisesRegex(EntryFabricError, "admitted_budget.max_wall_ms:NONNEGATIVE_INTEGER_REQUIRED"):
+            admit(base_entry(), admitted_budget=invalid)
 
     def test_hcu_projection_preserves_causal_and_admission_identity(self):
         packet = admit(base_entry())

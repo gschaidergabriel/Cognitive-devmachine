@@ -1,0 +1,77 @@
+{
+  "schema": "GO_CANONICAL_UCF_PATH_LESION_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch_base_main": "8b2ba6d422370d5df1e174dc08372513b93a0274",
+  "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "execution_policy": "FREE_ONLY",
+  "unusual_experiment": {
+    "status": "CONSUMED",
+    "count": 1,
+    "experiment_id": "CANONICAL_UCF_FULL_LESION_SOURCE_DISCRIMINATOR",
+    "scope": "exact canonical .clay source call graph only",
+    "hypothesis": "The current canonical .clay product path causally traverses the Unified Cognitive Fabric / J-Space / GWT before targeted inference.",
+    "counterhypothesis": "The canonical .clay path still bypasses the Unified Cognitive Fabric and reaches inference directly after prompt construction.",
+    "falsifier": "On the exact canonical source blob, strip line comments and extract executable phase/effect call order. Any admitted UCF/J-Space/GWT call between pipeline_build_prompt and inference_generate supports source-level wiring; zero such calls with direct adjacency falsifies source-level wiring."
+  },
+  "exact_source": {
+    "path": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "git_blob_sha": "66898a4980a51e17ba2717e97352403164b4bdf8",
+    "blob_identity_reproduced_by_local_git_hash_object": true,
+    "measured_main": "8b2ba6d422370d5df1e174dc08372513b93a0274"
+  },
+  "observed_call_sequence": [
+    "pipeline_init",
+    "pipeline_profile_read",
+    "pipeline_state_read",
+    "pipeline_collect",
+    "pipeline_compile",
+    "pipeline_build_prompt",
+    "inference_generate",
+    "pipeline_gate",
+    "pipeline_commit"
+  ],
+  "observation": {
+    "ucf_jspace_gwt_calls": [],
+    "ucf_jspace_gwt_call_count": 0,
+    "pipeline_build_prompt_index": 5,
+    "inference_generate_index": 6,
+    "prompt_to_inference_direct_adjacent": true,
+    "source_level_result": "HYPOTHESIS_FALSIFIED_CANONICAL_PIPELINE_BYPASSES_UCF_BEFORE_INFERENCE"
+  },
+  "interpretation": [
+    "This is a source-level causal-path discriminator, not model/runtime evidence.",
+    "The current canonical .clay orchestration does not name or invoke a Unified Cognitive Fabric, J-Space, or GWT stage between prompt construction and inference_generate.",
+    "Therefore current UCF validators, receipts, boot bindings, workspace capsules, and J-Space contracts are not yet sufficient to establish that the canonical product pipeline actually traverses that fabric.",
+    "The result does not prove that no separate donor/reference path uses UCF; it is scoped only to the exact canonical BLOGPOST_ENTITY.clay orchestration blob.",
+    "No second state, truth, effect, identity, recovery, or cognitive-fabric implementation is introduced by this receipt."
+  ],
+  "coordination": {
+    "existing_lane": "PR #1152 owns ZERO workspace capsule -> InferencePacket -> existing UCF ancestry composition and explicitly lists producer wiring as a next gate.",
+    "non_duplication_decision": "Do not create a competing UCF implementation in this GO. Re-enter the finding into PR #1152/current Mini Entity producer wiring and require the canonical .clay path to participate in the same single fabric.",
+    "legacy_donor": "PR #1150 remains closed and must not be revived as the product path."
+  },
+  "next_exact_gate": {
+    "source": "Wire one explicit canonical Cognitive Fabric/UCF admission stage into the current .clay pipeline between prompt compilation and inference execution, using the existing single UCF/InferencePacket authority chain rather than a second fabric.",
+    "runtime": "Implement the same effect/producer contract in the admitted current Mini Entity runtime and bind generation/turn/workspace/packet identities into the existing UCF receipt chain.",
+    "execution": "Run the exact changed source/runtime on an actually-started authorized isolated executor; source presence alone gives zero bundled-core/J-Space/Whole-GWT/Claude/whole-product runtime credit."
+  },
+  "credit": {
+    "source_mechanism_finding": "SUPPORTED",
+    "bundled_08b_runtime_credit_change": 0,
+    "jspace_runtime_credit_change": 0,
+    "whole_gwt_runtime_credit_change": 0,
+    "claude_adapter_runtime_credit_change": 0,
+    "whole_product_credit_change": 0
+  },
+  "safety": {
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "vps_or_production_testing": false
+  }
+}

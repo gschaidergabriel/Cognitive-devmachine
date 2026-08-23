@@ -275,6 +275,16 @@ One bounded source-level poison regression (`COMMENT_ONLY_EFFECT_SURFACE_POISON`
 
 The next implementation step remains a fresh-current-main convergence of DB-resident `pipeline_profile_read` plus generic `inference_generate`, preserving the recursive persisted-string leak gate and the newest staged-cognition/provenance owner contract, followed by exact authorized isolated execution.
 
+## Claude Code adapter diagnostic frontier — 2026-08-23
+
+PR `#1092` is merged and replaces the former Generation-276 monolithic adapter red with four independently addressable boundary nodes: tool-less behavior, ephemerality, structured output and environment isolation. It also removes two ambient-host dependencies by binding both `HOME` and the shell-injection sentinel to `tmp_path`. No `ClaudeCodeInference` product code or security contract was weakened.
+
+PR `#1099` is also merged and adds the evidence-composition layer that #1092 intentionally did not provide: all four child results must share one exact clean source commit/tree, Claude binary/version, command/input digest and executor identity before aggregate `CLAUDE_ADAPTER_BOUNDARY_ONLY` credit is possible. Exact authored validator/test/contract blobs passed `py_compile` and **15/15** deterministic isolated component regressions. This is measurement-contract mechanism evidence, not a live Claude invocation.
+
+The #1092 PR-head Actions run `32615049819` supplied **zero runtime test credit**: its `identity-guard` job concluded `failure`, but the observed job step list was empty and no job log blob was available. This is execution admission/control-plane failure before visible test execution, not a semantic test failure.
+
+Current exact gate: run the four merged #1092 nodes on one authorized isolated clean runtime, emit #1099 cross-bound receipts, validate their aggregate identity, then rerun the full suite on the same exact source. Until that happens, historical `1486 green / 1 red` remains historical diagnostic evidence and current Claude-adapter runtime credit remains **ZERO**.
+
 ## Evidence law
 
 Always distinguish:

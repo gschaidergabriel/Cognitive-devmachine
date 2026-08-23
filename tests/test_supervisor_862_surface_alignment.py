@@ -83,9 +83,7 @@ def scan(root: Path) -> list[str]:
 
 
 def make_fixture(root: Path) -> None:
-    _write_json(root, "research_entity/continuity/BOOTSTRAP_MINIMAL.json", {
-        "authority_correction": AUTHORITY,
-    })
+    _write_json(root, "research_entity/continuity/BOOTSTRAP_MINIMAL.json", {"authority_correction": AUTHORITY})
     _write_json(root, "research_entity/rooms/PROGRAM_STATE.json", {
         "authority_correction": AUTHORITY,
         "execution_policy": {

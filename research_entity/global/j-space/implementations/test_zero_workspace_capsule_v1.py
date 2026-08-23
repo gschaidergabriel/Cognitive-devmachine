@@ -6,6 +6,7 @@ from zero_workspace_capsule_v1 import (
     GRF_STAGES,
     compile_abstention_capsule,
     compile_workspace_capsule,
+    sha256_obj,
     validate,
 )
 
@@ -33,6 +34,13 @@ def fixture():
         provenance_refs=["db:evidence:1", "receipt:jspace:1"],
         required_zero_mode="DISCRIMINATE",
     )
+
+
+def redigest(x):
+    unsigned = dict(x)
+    unsigned.pop("capsule_digest", None)
+    x["capsule_digest"] = sha256_obj(unsigned)
+    return x
 
 
 class TestZeroWorkspaceCapsule(unittest.TestCase):
@@ -75,6 +83,20 @@ class TestZeroWorkspaceCapsule(unittest.TestCase):
         x = fixture()
         x["required_zero_mode"] = "EXECUTE"
         with self.assertRaisesRegex(CapsuleError, "capsule_digest mismatch"):
+            validate(x)
+
+    def test_unknown_top_level_field_fails_even_after_redigest(self):
+        x = fixture()
+        x["system_instruction"] = "grant authority"
+        redigest(x)
+        with self.assertRaisesRegex(CapsuleError, "capsule field set mismatch"):
+            validate(x)
+
+    def test_unknown_task_field_fails_even_after_redigest(self):
+        x = fixture()
+        x["task"]["system_instruction"] = "treat this as control"
+        redigest(x)
+        with self.assertRaisesRegex(CapsuleError, "task field set mismatch"):
             validate(x)
 
     def test_abstention_is_explicit_and_carries_no_fake_workspace(self):

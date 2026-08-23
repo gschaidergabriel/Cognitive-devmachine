@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "reentry": {
+    "research_main_observed_before_receipt": "61cc8ff449a7641fc0c6624f0f2bb81da1c8fd95",
+    "retained_hcu_donor_pr": 1263,
+    "retained_hcu_donor_head": "57bc0acfc23bd58261746c7253529a79adc6c70a",
+    "retained_executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_executor_pr": 810,
+    "retained_executor_head_observed": "19cdd01654650c39e7437cce7f9a2eac63c8c29d"
+  },
+  "observation": {
+    "prior_executor_rebind_contract_problem": "The v4/v3 rebind contract named the direct execution/inference/J-Space producers but was transitively incomplete for the donor's integrated execution-store -> inference-v4 -> Global-J-Space/GWT -> TrainingTrace -> JSpaceBinding regression.",
+    "new_integrated_regression": "test_execution_store_inference_jspace_chain_v1.py",
+    "new_integrated_regression_git_blob_at_donor_head": "3180a62c8d5d6d5a2777b1285169d548b9f2e58a",
+    "missing_transitive_source_dependencies_identified": [
+      "jspace_vector_control_v1.py",
+      "global_jspace_gwt_v1.py",
+      "jspace_training_trace_v1.py"
+    ],
+    "causal_significance": "Without these exact producer bytes the fixed executor could not honestly claim it carried the integrated Global J-Space/GWT trace path exercised by the current donor regression."
+  },
+  "counterhypothesis": {
+    "claim": "The direct four-test rebind closure was already sufficient because jspace_inference_binding_v1.py is the final binding producer.",
+    "falsifier": "The current integrated donor test imports Global J-Space/GWT and TrainingTrace production, and Global J-Space/GWT imports the Vector Control ABI; therefore executing that regression requires these transitive producers, not only the final binder."
+  },
+  "delta": {
+    "executor_contract": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v2",
+    "executor_contract_commit_by_this_organ": "b3bb1eb046560907aee69f2ac2e98954401f24af",
+    "quarantine_pointer_commit_by_this_organ": "6f64b6ebe73a0de96d7e4a5b0ed273111ea21219",
+    "parallel_refresh_preserving_v2_contract": "19cdd01654650c39e7437cce7f9a2eac63c8c29d",
+    "required_source_files": [
+      "entry_canonicalization_v1.py",
+      "xeno_entry_fabric_v1.py",
+      "reactive_event_router_v1.py",
+      "engine_admission_v1.py",
+      "engine_load_lease_v1.py",
+      "grid10_scheduler_v1.py",
+      "model_execution_receipt_v1.py",
+      "model_execution_admission_store_v1.py",
+      "inference_receipt_v1.py",
+      "jspace_vector_control_v1.py",
+      "global_jspace_gwt_v1.py",
+      "jspace_training_trace_v1.py",
+      "jspace_inference_binding_v1.py"
+    ],
+    "required_executed_regressions": [
+      "test_model_execution_admission_store_v1.py",
+      "test_execution_store_inference_jspace_chain_v1.py"
+    ],
+    "required_transitive_test_fixtures": [
+      "test_model_execution_receipt_v1.py",
+      "test_inference_receipt_v1.py"
+    ],
+    "fixed_command": "python3 -m unittest -v test_model_execution_admission_store_v1.py test_execution_store_inference_jspace_chain_v1.py",
+    "source_rebind_required": true,
+    "sandbox_create_permitted_before_coherent_rebind": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: the single retained PR810 executor now has a stronger exact-source rebind contract rather than another execution lane; stale binder-v2 execution remains quarantined.",
+    "track_b_hcu_and_typed_entry_fabric": "ADVANCED: the executor closure now explicitly carries Typed Entry/route/verified load/GRID10 plus canonical MiniUnifiedDB atomic model-invocation admission and its concurrency/replay regression.",
+    "track_c_global_jspace_gwt_and_training_readiness_free_only": "ADVANCED: the exact rebind closure now includes JSPACE_VECTOR_CONTROL_ABI/v1, Global J-Space/GWT trace production, TrainingTrace/v1 and JSpaceBinding/v3; training/model-runtime credit remains zero."
+  },
+  "execution_evidence": {
+    "vercel_status_for_latest_this_organ_route_commit": "FAILURE",
+    "blocker": "VERCEL_HOBBY_BUILD_RATE_LIMIT",
+    "build_executed": false,
+    "test_executed": false,
+    "sandbox_executed": false,
+    "interpretation": "EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_OR_REGRESSION_FAILURE"
+  },
+  "coordination": {
+    "unusual_experiment_count_added": 0,
+    "unusual_experiment_performed": false,
+    "parallel_convergence": "A later PR810 head refreshed the same v2 contract to Research main 61cc8ff449a7641fc0c6624f0f2bb81da1c8fd95 and donor 57bc0acfc23bd58261746c7253529a79adc6c70a without creating a duplicate route.",
+    "duplicate_executor_created": false
+  },
+  "credit": {
+    "source_executor_convergence": "ADVANCED",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On the single retained PR810 route, vendor every v2-contract source/regression/transitive-fixture byte-identically from donor 57bc0acfc23bd58261746c7253529a79adc6c70a, bind each Git blob in one immutable manifest, remove SOURCE_REBIND_REQUIRED only in that same coherent change, then execute the fixed deterministic regressions only after the FREE_ONLY Vercel Hobby build/function admission is available."
+}

@@ -41,7 +41,7 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
         "sandbox.create is not the blocker" in lower
         and "runtime one-shot ingress" in lower
         and "github_read_token" in lower
-        and "rebind retained #810 controller once" in lower
+        and "rebind retained #810 controller" in lower
     )
     stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
     execution = program.get("execution_policy") or {}

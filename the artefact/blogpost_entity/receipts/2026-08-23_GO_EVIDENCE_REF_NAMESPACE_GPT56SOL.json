@@ -1,0 +1,105 @@
+{
+  "schema": "mini-entity-go-receipt/v1",
+  "trigger": "go",
+  "macrocycle_id": "8b3572ac-ea64-4ec2-8fbe-974d25adf254",
+  "organ": "GPT-5.6 Sol",
+  "date_local": "2026-08-23T09:51:00+07:00",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "source_anchor_before_receipt": {
+    "main_sha": "86dcc1fec8add7888773aea0425be3931b5a78f9",
+    "main_tree": "f630df18c405bbf5567327e02b0eeb66d3f4e737"
+  },
+  "authority_refresh": {
+    "bootstrap_schema": "6.9",
+    "program_state_schema": "7.10",
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "execution_control": "FREE_ONLY",
+    "jspace_gwt_owner_architecture": "SOURCE_ONLY_ZERO_RUNTIME_CREDIT"
+  },
+  "grf_claycode_prompt_injection": {
+    "status": "GRF_CLAYCODE_PROMPT_INJECTION_UNAVAILABLE_ON_SURFACE",
+    "reason": "No worker/subworker delegation surface was used in this macrocycle. The current organ applied the mandatory GRF/ClayCode representation contract directly and did not claim delegated prompt injection."
+  },
+  "r0_observed": [
+    "Current main before this receipt was 86dcc1fec8add7888773aea0425be3931b5a78f9 after merging PR #1037.",
+    "PR #997 remains the single retained reference-runtime repair lane and is draft/non-mergeable.",
+    "PR #1036 is the deterministic current-main-to-#997 sync lane and remained non-mergeable at observation time.",
+    "Current canonical Clay source already requires pipeline_profile_read and inference_generate, while main reference runtime still exposes legacy profile_load/provider_chat_json.",
+    "Current reference compile logic derives row evidence refs from evidence_prefix + source_id and does not bind source_namespace into the ref identity.",
+    "PR #1037 added an activation-gated counterbalanced regression requiring different logical source namespaces not to alias and the same logical source to retain evidence identity across profile swaps."
+  ],
+  "r1_infer": [
+    "Exactly-once consumption identity can be stronger than persisted evidence identity; this permits provenance aliasing even if consumption deduplication is correct.",
+    "The repair must bind evidence identity to stable logical source identity without binding it to application profile identity."
+  ],
+  "r2_generate": [
+    "Namespace the evidence ref using source_namespace plus local source id.",
+    "Reject ambiguous source configurations that cannot provide a stable logical evidence namespace.",
+    "Use another collision-resistant source-identity encoding provided it is stable across profile swaps and does not mint provenance from profile identity."
+  ],
+  "r3_counter": [
+    "Adding source_namespace to refs could create unnecessary churn if the namespace is profile-derived; therefore the counterbalanced same-source/profile-swap invariant is required.",
+    "A cosmetic ref-format change without durable source identity would not fix provenance."
+  ],
+  "r4_discriminate": {
+    "unusual_experiment": {
+      "count_for_this_macrocycle": 1,
+      "id": "EVIDENCE_NAMESPACE_COLLISION_SYMBOLIC",
+      "scope": "bounded source-mechanism discriminator",
+      "inputs": [
+        {"source_namespace": "logical-A", "evidence_prefix": "event:", "source_id": 1},
+        {"source_namespace": "logical-B", "evidence_prefix": "event:", "source_id": 1}
+      ],
+      "current_rule": "ref = evidence_prefix + str(source_id)",
+      "observed": {
+        "ref_a": "event:1",
+        "ref_b": "event:1",
+        "collision": true
+      },
+      "classification": "MECHANISM_FALSIFIED_AT_SOURCE_RULE_SCOPE",
+      "runtime_credit": 0
+    }
+  },
+  "r5_emergent": [
+    "Evidence provenance identity should be at least as strong as exactly-once source identity.",
+    "Stable source identity must survive application/profile replacement, matching the Mini Entity neutrality law."
+  ],
+  "r6_verify": {
+    "durable_delta": [
+      "Merged PR #1037 into main as commit 86dcc1fec8add7888773aea0425be3931b5a78f9.",
+      "The merged test is activation-gated until the DB-profile reference runtime lands; it changes no current runtime semantics."
+    ],
+    "evidence_class": "SOURCE_MECHANISM_SUPPORTED_NO_EXACT_RUNTIME",
+    "exact_runtime_verified": false,
+    "whole_product_pass": false
+  },
+  "hyperposition": {
+    "open_alternatives": [
+      "explicit namespace in evidence ref encoding",
+      "configuration rejection on ambiguous evidence identity",
+      "equivalent stable source-bound identity encoding"
+    ],
+    "collapse_rule": "Only exact current retained-lane source plus executable regression can collapse implementation choice."
+  },
+  "omega": {
+    "candidate": "Repair evidence identity on retained #997 lane after fresh-main synchronization; do not create a second runtime implementation.",
+    "effect_authority": "NOT_GRANTED_BY_MODEL_OUTPUT"
+  },
+  "coordination": {
+    "pr_997": "single retained runtime repair lane",
+    "pr_1036": "freshness fusion into retained lane; non-mergeable at observation",
+    "pr_1037": "merged deterministic evidence-source-identity guard",
+    "duplicate_runtime_path_created": false
+  },
+  "execution": {
+    "paid_provider_used": false,
+    "secret_lookup": false,
+    "network_provider_execution": false,
+    "together_call": false,
+    "training_started": false,
+    "money_spent_usd": 0,
+    "exact_authorized_product_runtime": "UNOBSERVED"
+  },
+  "next_gate": "Freshly synchronize current main into retained #997, implement stable source-bound evidence identity there together with already-required provenance/cursor/nonfinite guards, then obtain actually-started exact-source authorized runtime evidence before any reference/native parity promotion."
+}

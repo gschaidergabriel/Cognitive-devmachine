@@ -149,8 +149,6 @@ Replay-stable causal event identity and concrete transport/admission identity mu
 
 HCU route events and downstream inference receipts must ultimately re-enter through this fabric so event identity, generation, engine identity and causal provenance remain bound instead of becoming a side ledger.
 
-Cross-language causal identity additionally requires one explicit byte contract. Candidate `hcu_typed_canonical_v1.py` defines `ENTITYOS_HCU_TYPED_CANONICAL/v1`: safe integers, no floats, printable ASCII object keys, exact Unicode scalar values, fixed escapes, deterministic ordering and domain-separated SHA-256. It is an intentionally restricted typed equivalent for identity-bearing Entry/HCU envelopes, not a claim of full RFC 8785 JCS. Promotion requires independent second-language byte/digest vectors plus exact authorized-isolated execution.
-
 ## HCU reactive cognition
 
 The current HCU direction is script-first and selective:
@@ -168,7 +166,7 @@ Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 ## Current frontier
 
 1. **close current authority split-brain without weakening inherited guards:** `the artefact/README.md` and current bootstrap/program/footer select EntityOS+HCU, while `the artefact/manifest.json` and the legacy `tools/validate_clayverse_authority_consistency.py` still encode ClayVerse product authority; migrate the guard and manifest coherently, preserving all safety/provenance checks rather than bulk-renaming them;
-2. finish the replay-stable **event identity vs admission identity** split, standardize the versioned cross-language canonical-byte contract, and fuse the useful Typed Entry/GRID10 candidate into the retained HCU route lane without creating a second route authority;
+2. finish the replay-stable **event identity vs admission identity** split and fuse the useful Typed Entry/GRID10 candidate into the retained HCU route lane without creating a second route authority;
 3. wire Typed Entry capability claims to the existing canonical permission/capability authority; exact source-component regression already proves self-grant rejection when a trusted capability snapshot/binding is supplied, but the real authority producer is not yet wired;
 4. bind the real admitted local HCU checkpoint/tokenizer/runtime bytes and capability record instead of trusting event-supplied model identity;
 5. bind the downstream inference receipt **producer** to the already-defined event/route/engine echo contract;

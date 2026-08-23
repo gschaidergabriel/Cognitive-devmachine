@@ -1,0 +1,48 @@
+{
+  "schema": "CLAY_MINI_ENTITY_COGNITION_STORE_FUSION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "fresh_base_main": "41a74acbff00b3ddf4d4db98ebe6f24b3cf695ce",
+  "canonical_authority": "MiniUnifiedDB",
+  "effect_authority": "EffectGate",
+  "fusion": {
+    "read_integrity": "already canonical via merged PR #1247",
+    "generation_fence_donor": "closed PR #1249",
+    "transaction_boundary_finding_donor": "closed PR #1239",
+    "result": "one same-store implementation; no second state/UCF/effect path"
+  },
+  "defects_closed_by_this_delta": [
+    "prior-generation cognition admission could authorize a new generation boot binding",
+    "install_schema executescript could implicitly commit caller-owned bootstrap transaction"
+  ],
+  "fused_store_blob": "1e1f454b84a5960dc52f3958df4b9224feb5a9c4",
+  "regression_blobs": {
+    "canonical_read_integrity": "a0c347eb9f57a776c1ccddec6b10b1bf9e824939",
+    "generation_fence": "723e80befffcd7b04b30dc3e02c1a09100268cd6",
+    "schema_transaction": "bb841e8c9af349c79953564c9b5fd3dae9222730",
+    "canonical_original_store_tests": "a56bc8edbec13777585026380ebd88f152e8a1d0"
+  },
+  "isolated_component_evidence": {
+    "environment": "isolated ChatGPT Linux execution container",
+    "py_compile": "PASS",
+    "focused_fusion_tests": "5/5 PASS",
+    "turn_row_tamper": "FAIL_CLOSED:TURN_BINDING_DIGEST_MISMATCH",
+    "boot_row_tamper": "FAIL_CLOSED:BOOT_BINDING_DIGEST_MISMATCH",
+    "prior_generation_admission": "FAIL_CLOSED:COGNITION_OBJECT_NOT_ADMITTED",
+    "caller_transaction_preserved": true,
+    "happy_path_and_task_fence": "PASS"
+  },
+  "unusual_experiment": "NO_NEW_EXPERIMENT; deterministic falsifiers/regressions only; upstream macrocycle experiment authority was already consumed.",
+  "runtime_credit": 0,
+  "bundled_08b_runtime_credit": 0,
+  "jspace_runtime_credit": 0,
+  "whole_gwt_runtime_credit": 0,
+  "claude_adapter_runtime_credit": 0,
+  "hcu_runtime_capacity_credit": 0,
+  "whole_product_credit": 0,
+  "next_gate": "Use the single canonical same-store resolver in the retained Cognitive Fabric runtime handler path and obtain actually-started authorized isolated exact-source integrated execution through inference, deterministic gate/CAS, post-commit UCF finalization and recovery/generation fences.",
+  "classification": "COMPONENT_MECHANISM_FUSION_SUPPORTED_NOT_RUNTIME_ACCEPTANCE"
+}

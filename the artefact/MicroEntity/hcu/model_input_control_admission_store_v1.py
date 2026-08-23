@@ -2,15 +2,17 @@
 """Atomically admit J-Space model-input control evidence inside canonical MiniUnifiedDB.
 
 ``model_input_control_binding_v1`` proves a byte-level fact about one exact executor input,
-but its executor/invocation labels are parameters. This store closes that trust split by
-requiring the same invocation to have already been admitted by
-``HCU_MODEL_EXECUTION_ADMISSION_STORE/v1`` in the caller-supplied canonical MiniUnifiedDB.
+but its executor/invocation and causal-parent labels are parameters. This store closes that
+trust split by requiring the same invocation to have already been admitted by
+``HCU_MODEL_EXECUTION_ADMISSION_STORE/v1`` in the caller-supplied canonical MiniUnifiedDB
+and by revalidating the exact scheduler-owned GRID plan named by that execution.
 
 The transaction revalidates the exact consumed input bytes, reads back and semantically
 revalidates the canonical ModelExecutionObservation, cross-binds generation/GRID
-cell/role/input identity, and then persists one immutable control binding per executor
-invocation. Divergent replay rolls back. No new database, truth authority, effect path,
-model execution, or runtime/training credit is created here.
+cell/role/input identity plus Entry event/admission and route-decision identities, and then
+persists one immutable control binding per executor invocation. Divergent replay rolls back.
+No new database, truth authority, effect path, model execution, or runtime/training credit is
+created here.
 """
 from __future__ import annotations
 
@@ -22,6 +24,12 @@ from typing import Any
 
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
+    from .grid10_scheduler_v1 import (
+        ExecutionClass,
+        GridPlan,
+        GridScheduleError,
+        validate_grid_plan_identity,
+    )
     from .model_execution_receipt_v1 import (
         ModelExecutionObservation,
         ModelExecutionReceiptError,
@@ -35,6 +43,12 @@ try:
     )
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
+    from grid10_scheduler_v1 import (
+        ExecutionClass,
+        GridPlan,
+        GridScheduleError,
+        validate_grid_plan_identity,
+    )
     from model_execution_receipt_v1 import (
         ModelExecutionObservation,
         ModelExecutionReceiptError,
@@ -211,14 +225,65 @@ def _cross_bind_parent(
     _sha256(observation_sha256, "model_execution_observation_sha256")
 
 
+def _cross_bind_grid_plan(
+    binding: ModelInputControlBinding,
+    grid_plan: GridPlan,
+    observation: dict[str, Any],
+) -> None:
+    """Bind caller-visible causal labels to the exact scheduler-owned plan identity."""
+    _need(isinstance(grid_plan, GridPlan), "GRID_PLAN_REQUIRED")
+    try:
+        observed_plan_sha256 = validate_grid_plan_identity(grid_plan)
+    except GridScheduleError as exc:
+        raise ModelInputControlAdmissionStoreError("GRID_PLAN_SEMANTIC_REVALIDATION_FAILED") from exc
+
+    _need(observed_plan_sha256 == grid_plan.plan_sha256, "GRID_PLAN_IDENTITY_REVALIDATION_MISMATCH")
+    checks = {
+        "grid_plan_sha256": (
+            binding.grid_plan_sha256,
+            grid_plan.plan_sha256,
+            observation.get("grid_plan_sha256"),
+        ),
+        "generation": (
+            binding.generation,
+            grid_plan.entity_generation,
+            observation.get("entity_generation"),
+        ),
+        "entry_event_sha256": (
+            binding.entry_event_sha256,
+            grid_plan.entry_event_sha256,
+            grid_plan.entry_event_sha256,
+        ),
+        "entry_admission_sha256": (
+            binding.entry_admission_sha256,
+            grid_plan.entry_admission_sha256,
+            grid_plan.entry_admission_sha256,
+        ),
+        "route_decision_sha256": (
+            binding.route_decision_sha256,
+            grid_plan.route_decision_sha256,
+            grid_plan.route_decision_sha256,
+        ),
+    }
+    for field, values in checks.items():
+        _need(len(set(values)) == 1, f"MODEL_INPUT_CONTROL_GRID_PARENT_MISMATCH:{field}")
+
+    matching_cells = [cell for cell in grid_plan.cells if cell.cell_id == binding.cell_id]
+    _need(len(matching_cells) == 1, "MODEL_INPUT_CONTROL_GRID_CELL_NOT_UNIQUE")
+    cell = matching_cells[0]
+    _need(cell.execution_class is ExecutionClass.MODEL, "MODEL_INPUT_CONTROL_GRID_CELL_NOT_MODEL")
+    _need(cell.function == f"MODEL:{binding.role}", "MODEL_INPUT_CONTROL_GRID_CELL_ROLE_MISMATCH")
+
+
 def admit_model_input_control_binding(
     db: sqlite3.Connection,
     binding: ModelInputControlBinding,
     consumed_input_bytes: bytes,
+    grid_plan: GridPlan,
     *,
     current_generation: int,
 ) -> ModelInputControlAdmission:
-    """Atomically bind one control packet to one already-admitted model invocation."""
+    """Atomically bind one control packet to one admitted invocation and exact GRID parent."""
     _need(isinstance(db, sqlite3.Connection), "SQLITE_CONNECTION_REQUIRED")
     _need(not db.in_transaction, "CALLER_TRANSACTION_FORBIDDEN")
     _need(type(current_generation) is int and current_generation >= 0, "CURRENT_GENERATION_INVALID")
@@ -238,6 +303,7 @@ def admit_model_input_control_binding(
             invocation_id=binding.invocation_id,
         )
         _cross_bind_parent(binding, observation, observation_sha256)
+        _cross_bind_grid_plan(binding, grid_plan, observation)
         _install_schema(db)
 
         row = db.execute(

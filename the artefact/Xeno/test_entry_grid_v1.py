@@ -217,6 +217,34 @@ class EntryFabricRegressionTests(unittest.TestCase):
                 config=SchedulerConfig(shared_workers="xcu:worker-a"),
             )
 
+    def test_scheduler_duplicate_function_names_are_order_independent_or_rejected(self):
+        packet = admit_ingress(draft(), current_generation=GENERATION)
+        exact = FunctionRequest("critic", 90, inference_required=True, estimated_tokens=100)
+        single = compile_grid_plan(
+            packet,
+            (exact,),
+            mode=XenoMode.XENO_GRID10,
+            current_generation=GENERATION,
+        )
+        duplicate = compile_grid_plan(
+            packet,
+            (exact, exact),
+            mode=XenoMode.XENO_GRID10,
+            current_generation=GENERATION,
+        )
+        self.assertEqual(single.plan_id, duplicate.plan_id)
+
+        conflicting = FunctionRequest("critic", 90, inference_required=False, estimated_tokens=100)
+        for ordered in ((exact, conflicting), (conflicting, exact)):
+            with self.subTest(ordered=ordered):
+                with self.assertRaisesRegex(ScheduleError, "conflicting duplicate function request"):
+                    compile_grid_plan(
+                        packet,
+                        ordered,
+                        mode=XenoMode.XENO_GRID10,
+                        current_generation=GENERATION,
+                    )
+
 
 class GoUnusualExperiment(unittest.TestCase):
     def test_causal_alias_poison_same_routing_different_event_identity(self):

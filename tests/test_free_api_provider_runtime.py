@@ -331,6 +331,32 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         self.assertEqual(serialization_calls, [])
 
+    def test_del_escape_overflow_is_rejected_before_json_materialization(self):
+        serialization_calls = []
+        original_dumps = MOD.json.dumps
+
+        def tracking_dumps(*args, **kwargs):
+            serialization_calls.append("serialize")
+            return original_dumps(*args, **kwargs)
+
+        # CPython's default encoder escapes ASCII DEL as six-byte \\u007f.
+        # Counting it as one byte lets an oversized document reach dumps.
+        escaped_overflow = "\x7f" * (
+            MOD.MAX_PROVIDER_REQUEST_BYTES // 6 + 1
+        )
+        MOD.json.dumps = tracking_dumps
+        try:
+            with self.assertRaisesRegex(ValueError, "provider_request_too_large"):
+                MOD.execute_chat(
+                    [{"role": "user", "content": escaped_overflow}],
+                    model="mock",
+                    environ={},
+                )
+        finally:
+            MOD.json.dumps = original_dumps
+
+        self.assertEqual(serialization_calls, [])
+
     def test_structurally_oversized_request_is_rejected_before_snapshot(self):
         snapshot_calls = []
         original_snapshot = MOD._snapshot_text_chat_request

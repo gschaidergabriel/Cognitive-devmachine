@@ -1,12 +1,14 @@
 import importlib.util
 from pathlib import Path
+import sys
 import unittest
 
 
 MODULE_PATH = Path(__file__).resolve().parents[1] / "capacity_planner.py"
 SPEC = importlib.util.spec_from_file_location("hcu_capacity_planner", MODULE_PATH)
-MOD = importlib.util.module_from_spec(SPEC)
 assert SPEC and SPEC.loader
+MOD = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = MOD
 SPEC.loader.exec_module(MOD)
 
 

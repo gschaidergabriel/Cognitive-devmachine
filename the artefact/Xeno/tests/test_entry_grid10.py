@@ -105,6 +105,7 @@ class XenoEntryGrid10Tests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.packet(payload={"x": float("inf")})
 
+
     def test_payload_budget_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "payload exceeds"):
             self.packet(payload={"blob": "x" * 200}, resource_budget=self.budget(max_payload_bytes=64))

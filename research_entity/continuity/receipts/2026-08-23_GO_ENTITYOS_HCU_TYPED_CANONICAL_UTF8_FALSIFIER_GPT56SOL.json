@@ -1,5 +1,5 @@
 {
-  "schema": "ENTITYOS_HCU_TYPED_CANONICAL_UTF8_FALSIFIER/v1",
+  "schema": "ENTITYOS_HCU_TYPED_CANONICAL_UTF8_FALSIFIER/v2",
   "date": "2026-08-23",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
@@ -8,13 +8,16 @@
   "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
   "product": "EntityOS",
   "compute_architecture": "HCU",
-  "canonical_main_observed_before_write": "97d0363a481da26a1ca0810a8bd2bc5febc9c769",
-  "authority_anchor": "research_entity/continuity/receipts/2026-08-23_GO_ENTITYOS_HCU_CANONICALIZATION_AUTHORITY_RECONCILIATION_GPT56SOL.json",
-  "selected_canonicalization_authority": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
-  "retained_lane": {
+  "canonical_main_observed_before_first_write": "97d0363a481da26a1ca0810a8bd2bc5febc9c769",
+  "authority_correction_observed_after_first_write": "847cce80b5c52f7d9ceb47c43acc3c184ad2c87d",
+  "current_selected_canonicalization_authority": "RFC8785_JCS_IJSON/v1",
+  "current_selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+  "experiment_target_disposition": "ENTITYOS_HCU_TYPED_CANONICAL/v1_IS_RESEARCH_PROVENANCE_ONLY_NOT_CURRENT_SELECTED_AUTHORITY",
+  "correction_reason": "The first version inherited a concurrent stale authority reconciliation that promoted strongest-candidate language to selection. Current main correction 847cce80... restores explicit main adjudication 5d99c6c3...: RFC8785_JCS_IJSON/v1 is selected; the typed-v1 experiment remains bounded alternative-mechanism evidence only.",
+  "retained_lane_observed_during_experiment": {
     "pr": 1263,
     "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
-    "head_observed_after_parallel_refresh": "34905187290d61e046f50a50316f8b5670521ca0",
+    "head": "34905187290d61e046f50a50316f8b5670521ca0",
     "module": "the artefact/MicroEntity/hcu/hcu_causal_canonical_v1.py",
     "module_git_blob": "fe75658b68134303e51b723280d42104575eacd7",
     "test": "the artefact/MicroEntity/hcu/test_hcu_causal_canonical_v1.py",
@@ -32,35 +35,35 @@
     "tests_run": 10,
     "tests_passed": 10,
     "tests_failed": 0,
-    "result": "PASS_EXACT_SOURCE_COMPONENT_SCOPE",
+    "result": "PASS_EXACT_SOURCE_COMPONENT_SCOPE_ALTERNATIVE_CANDIDATE_ONLY",
     "runtime_credit": 0
   },
   "unusual_experiment": {
     "count": 1,
     "name": "UTF8_VS_UTF16_ASTRAL_KEY_ORDER_FORK",
-    "hypothesis": "The selected typed canonicalizer remains cross-language stable even for object keys whose UTF-8 byte ordering differs from JavaScript default UTF-16 code-unit ordering.",
-    "counterhypothesis": "A hidden or default JavaScript UTF-16 key sort can produce a stable but different causal digest from the Python UTF-8-byte ordering, silently forking identity.",
-    "intervention": "Canonicalize one object containing U+E000 and U+10000 keys using exact Python selected bytes, an independent Node UTF-8 Buffer comparator, and a deliberately wrong Node default Array.sort control.",
+    "hypothesis": "The typed-v1 alternative remains cross-language stable even for object keys whose UTF-8 byte ordering differs from JavaScript default UTF-16 code-unit ordering.",
+    "counterhypothesis": "A hidden/default JavaScript UTF-16 key sort can produce a stable but different digest from Python UTF-8-byte ordering, silently forking identity.",
+    "intervention": "Canonicalize one object containing U+E000 and U+10000 keys using exact Python typed-v1 bytes, an independent Node UTF-8 Buffer comparator, and a deliberately wrong Node default Array.sort control.",
     "python_sha256": "620b764c3885c86f92a93c14d8ef82599283c33adfaf917913ad05413b84f800",
     "node_utf8_sha256": "620b764c3885c86f92a93c14d8ef82599283c33adfaf917913ad05413b84f800",
     "node_default_utf16_sha256": "0e6c40e41264611774226b50d8d61f9d30f2cdcbfcbd428707da5be052e12f22",
     "python_equals_node_utf8": true,
     "python_equals_node_default_utf16": false,
     "discriminator_valid": true,
-    "result": "MECHANISM_SUPPORTED_AND_UTF16_DEFAULT_SORT_FALSIFIED_FOR_ADMITTED_REFERENCE"
+    "result": "TYPED_V1_ALTERNATIVE_MECHANISM_SUPPORTED; DEFAULT_UTF16_SORT_FALSIFIED; NO_CURRENT_AUTHORITY_OR_PROMOTION_CREDIT"
   },
   "parallel_coordination": {
-    "observation": "During this go the retained PR advanced from b41afec49bd6384680d001395177c3f274b9be5e to 34905187290d61e046f50a50316f8b5670521ca0.",
-    "parallel_delta": "The new head independently added the same astral/BMP ordering vector and repaired integer-valued binary64 values outside the I-JSON safe integer range.",
-    "action": "No duplicate source edit was written; the current branch bytes were instead independently reproduced and tested.",
+    "observation": "During this go PR1263 advanced while the experiment was running and independently added the same astral/BMP ordering vector plus a host-number-domain repair.",
+    "action": "No duplicate source edit was written; exact changed branch blobs were independently reproduced and tested.",
     "second_router_or_canonicalizer_created": false,
     "stale_overwrite_attempted": false
   },
   "fusion": {
-    "finding": "The selected typed-v1 canonicalizer has stronger independent cross-language evidence at the newest observed donor blobs, including the host-number-domain repair and a key-order discriminator that would detect accidental JavaScript default sorting.",
-    "promotion_status": "MECHANISM_SUPPORTED_CURRENT_SOURCE_AUTHORITY_SELECTED_WIRING_PENDING",
+    "finding": "Typed-v1 remains a technically supported alternative with an explicit key-order discriminator, but current product migration must follow RFC8785_JCS_IJSON/v1 unless newer explicit authority changes it.",
+    "promotion_status": "ALTERNATIVE_RESEARCH_EVIDENCE_ONLY",
     "not_claimed": [
-      "Entry end-to-end migration complete",
+      "typed-v1 current authority",
+      "RFC8785 end-to-end migration complete",
       "router/EngineAdmission/route identity migration complete",
       "inference receipt migration complete",
       "combined Entry+route+inference+GRID10 exact runtime PASS",
@@ -69,9 +72,9 @@
       "EntityOS/HCU whole runtime PASS"
     ]
   },
-  "current_blocker": "Active Entry, router and inference identity producers remain mixed-schema on the retained donor path; selected ENTITYOS_HCU_TYPED_CANONICAL/v1 must be wired through new versioned identities without rewriting historical hashes, then the combined path must run in authorized isolated execution.",
+  "current_blocker": "Wire selected RFC8785_JCS_IJSON/v1 through new-version Entry event/admission, router policy/EngineAdmission/route and inference receipt identities without rewriting historical hashes; reject mixed/unknown/downgrade schemas; then execute the combined path in authorized isolated runtime.",
   "next_exact_gate": [
-    "migrate new-version Typed Entry event and admission identity production to ENTITYOS_HCU_TYPED_CANONICAL/v1",
+    "migrate new-version Typed Entry event and admission identity production to RFC8785_JCS_IJSON/v1",
     "migrate router policy, EngineAdmission identity and route decision identity to the same schema",
     "migrate inference receipt hash and echo binding to the same schema",
     "reject mixed, unknown and downgrade schema replay",
@@ -80,7 +83,7 @@
   ],
   "artefact_readme": {
     "status": "NO_CHANGE",
-    "reason": "Current README already states the single-canonicalization convergence gate and exact combined Entry+route+inference+GRID10 execution frontier; changing it here would duplicate concurrent authority-convergence work."
+    "reason": "Current README already states the single-canonicalization convergence gate and exact combined Entry+route+inference+GRID10 execution frontier."
   },
   "safety": {
     "vps_testing_used": false,
@@ -90,9 +93,10 @@
     "secrets_accessed_or_persisted": false
   },
   "credit": {
-    "research_write": "COMMITTED",
+    "research_write": "CORRECTED_AND_COMMITTED",
     "exact_source_component_replication": true,
     "unusual_experiment_count": 1,
+    "current_authority_promotion_credit": 0,
     "entityos_hcu_whole_runtime_credit_change": 0,
     "whole_product_pass": false
   }

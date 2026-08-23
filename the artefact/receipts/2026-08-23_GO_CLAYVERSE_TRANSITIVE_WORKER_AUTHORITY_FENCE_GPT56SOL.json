@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "gpt-5.6-sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main_sha": "8798f0ff02866d2f253ce223e50aebaa617e4549",
+  "finding": {
+    "classification": "TRANSITIVE_WORKER_AUTHORITY_FALSE_GREEN",
+    "summary": "BOOTSTRAP_MINIMAL actively points all_worker_protocol at the ClayVerse all-workers directive, but the canonical ClayVerse authority consistency validator did not read or validate that transitive worker prompt surface. A future worker-directive regression could therefore restore Mini Entity steering while top-level authority checks remained green."
+  },
+  "delta": {
+    "validator": "tools/validate_clayverse_authority_consistency.py",
+    "validator_git_blob": "7b6e600e7cd4248aa7363d5a8d9070f1b0ca34e7",
+    "validator_sha256": "7be0f523a8a6895b37bf008bd710a2131a1a148949559e7f31094829de5b0595",
+    "test": "tests/test_validate_clayverse_authority_consistency.py",
+    "test_git_blob": "7bfec8727b88dc002387309f920720b09b27e578",
+    "test_sha256": "69084c111adeb35a1f556803665aa2feff1c6490208deb5b83351be2e0d860fa",
+    "new_fences": [
+      "BOOTSTRAP_ALL_WORKER_PROTOCOL_MISMATCH",
+      "WORKER_PROTOCOL_NOT_CURRENT",
+      "WORKER_PROTOCOL_OWNER_DIRECTIVE_MISSING",
+      "WORKER_PROTOCOL_PRODUCT_MISMATCH",
+      "WORKER_PROTOCOL_CLAYVERSE_MARKER_MISSING",
+      "WORKER_PROTOCOL_MINI_ENTITY_MARKER_ACTIVE",
+      "WORKER_PROTOCOL_INJECTED_PRODUCT_MISMATCH",
+      "WORKER_PROTOCOL_VPS_FENCE_MISSING",
+      "WORKER_PROTOCOL_TOGETHER_FENCE_MISSING",
+      "WORKER_PROTOCOL_PAID_TRAINING_FENCE_MISSING"
+    ]
+  },
+  "bounded_component_evidence": {
+    "environment": "isolated ChatGPT Linux component environment",
+    "py_compile": "PASS",
+    "focused_unittest": "18/18 PASS",
+    "scope": "SOURCE_MECHANISM_COMPONENT_ONLY",
+    "whole_clayverse_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "consumed_here": false,
+    "reason": "The shared user-triggered go already consumed AUTHORITY_ROLLBACK_POISON_REPLAY in the merged owner-authority restoration cycle; this delta adds deterministic regression poisons only."
+  },
+  "execution_frontier": {
+    "authorized_policy": "ISOLATED_SANDBOX_ONLY",
+    "vercel_sandbox_admission_proven": true,
+    "runtime_one_shot_github_token_ingress_implemented": true,
+    "current_stage_gate": "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS",
+    "owner_started_token_bearing_exact_source_run_observed": false,
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_vps_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN"
+  },
+  "authority": {
+    "durable_state": "UnifiedDB",
+    "derived_projection": "ClayGraph",
+    "external_effect_path": "EffectGate+EffectJournal",
+    "together_api": "FORBIDDEN",
+    "paid_or_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "next_exact_gate": "Owner-start the retained Vercel Sandbox one-shot using the scoped read-only GitHub source credential only through the admitted runtime ingress, verify exact private Research/EntityOS identities and credential absence after fetch, then execute exact-current ClayVerse regressions and build/bind/start the exact ClayVerse OCI image before resuming the full Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/optional-EntityOS/recovery/concurrency vector."
+}

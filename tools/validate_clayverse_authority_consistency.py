@@ -17,6 +17,8 @@ CURRENT_REENTRY_ENTITY_VERSION = "RAE-8.8"
 AUTHORITY_REENTRY_PR = 1302
 AUTHORITY_REENTRY_MERGE = "d2f04f3bbc2eae314c7a940d010896aef7b33c4a"
 IDENTITY_GUARD = "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
+ALL_WORKER_PROTOCOL = "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
+WORKER_PROMPT_MARKER = "[CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]"
 CONTROL41 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json"
 CONTROL42 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json"
 CONTROL43 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_PROGRAM_AUTHORITY.json"
@@ -246,6 +248,7 @@ def validate(root: Path) -> dict:
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
         "repo_claude": root / ROOT_CLAUDE,
+        "all_worker": root / ALL_WORKER_PROTOCOL,
         "legacy_blogpost": root / LEGACY_BLOGPOST,
         "legacy_local_inference": root / LEGACY_LOCAL_INFERENCE,
         "control41": root / CONTROL41,
@@ -303,6 +306,7 @@ def validate(root: Path) -> dict:
     architecture = paths["architecture"].read_text(encoding="utf-8")
     readme = paths["readme"].read_text(encoding="utf-8")
     repo_claude = paths["repo_claude"].read_text(encoding="utf-8")
+    all_worker = paths["all_worker"].read_text(encoding="utf-8")
     legacy_blogpost = paths["legacy_blogpost"].read_text(encoding="utf-8")
     legacy_local_inference = paths["legacy_local_inference"].read_text(encoding="utf-8")
 
@@ -319,6 +323,7 @@ def validate(root: Path) -> dict:
     require(errors, bootstrap.get("active_program") == EXPECTED_PROGRAM, "BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH")
     require(errors, bootstrap.get("active_stage") == EXPECTED_STAGE, "BOOTSTRAP_STAGE_MISMATCH")
     require(errors, bootstrap.get("sole_owner_directive") == OWNER_DIRECTIVE, "BOOTSTRAP_OWNER_DIRECTIVE_MISMATCH")
+    require(errors, bootstrap.get("all_worker_protocol") == ALL_WORKER_PROTOCOL, "BOOTSTRAP_ALL_WORKER_PROTOCOL_MISMATCH")
     require(errors, bootstrap.get("product_endpoint") == "ClayVerse", "BOOTSTRAP_PRODUCT_ENDPOINT_MISMATCH")
     require(errors, bootstrap.get("release_form") == EXPECTED_RELEASE, "BOOTSTRAP_RELEASE_FORM_MISMATCH")
     require(errors, bootstrap.get("together_api") == "FORBIDDEN", "BOOTSTRAP_TOGETHER_FENCE_MISSING")
@@ -430,11 +435,26 @@ def validate(root: Path) -> dict:
     # Root CLAUDE.md is a high-leverage repository-organ routing surface. It must not
     # silently reactivate a superseded Mini Entity/Blogpost program after convergence.
     repo_claude_head = repo_claude[:7000].upper()
+    require(errors, "CURRENT CLAYVERSE REPO ORGAN" in repo_claude_head, "ROOT_CLAUDE_NOT_CURRENT_CLAYVERSE")
     require(errors, "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`" in repo_claude_head, "ROOT_CLAUDE_PROGRAM_MISMATCH")
     require(errors, "`STAGE=CLAYVERSE_ARTIFACT`" in repo_claude_head, "ROOT_CLAUDE_STAGE_MISMATCH")
     require(errors, "CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.MD" in repo_claude_head, "ROOT_CLAUDE_OWNER_DIRECTIVE_MISSING")
     require(errors, "MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in repo_claude_head, "ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE")
     require(errors, "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.MD" not in repo_claude_head, "ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE")
+
+    # The active bootstrap delegates steering to every spawned worker. Bind that transitive
+    # prompt surface into the same authority gate so top-level ClayVerse files cannot stay
+    # green while children are silently steered back to a retired product.
+    worker_upper = all_worker[:14000].upper()
+    require(errors, "CURRENT PROJECT OWNER WORKER DIRECTIVE" in worker_upper, "WORKER_PROTOCOL_NOT_CURRENT")
+    require(errors, OWNER_DIRECTIVE.upper() in worker_upper, "WORKER_PROTOCOL_OWNER_DIRECTIVE_MISSING")
+    require(errors, "ACTIVE PRODUCT: **CLAYVERSE**" in worker_upper, "WORKER_PROTOCOL_PRODUCT_MISMATCH")
+    require(errors, WORKER_PROMPT_MARKER.upper() in worker_upper, "WORKER_PROTOCOL_CLAYVERSE_MARKER_MISSING")
+    require(errors, "[MINI ENTITY ::" not in worker_upper, "WORKER_PROTOCOL_MINI_ENTITY_MARKER_ACTIVE")
+    require(errors, "ACTIVE PRODUCT: CLAYVERSE SINGLE-CONTAINER." in worker_upper, "WORKER_PROTOCOL_INJECTED_PRODUCT_MISMATCH")
+    require(errors, "VPS/SELF-HOSTED/PRODUCTION-HOST TEST EVIDENCE IS FORBIDDEN." in worker_upper, "WORKER_PROTOCOL_VPS_FENCE_MISSING")
+    require(errors, "TOGETHER API/SERVICE IS FORBIDDEN." in worker_upper, "WORKER_PROTOCOL_TOGETHER_FENCE_MISSING")
+    require(errors, "FINAL PAID/MODEL TRAINING REQUIRES EXPLICIT OWNER AUTHORIZATION." in worker_upper, "WORKER_PROTOCOL_PAID_TRAINING_FENCE_MISSING")
 
     # Known superseded Mini Entity authority paths remain addressable only as historical
     # compatibility redirects. Their old exact bytes stay available through Git blob anchors.

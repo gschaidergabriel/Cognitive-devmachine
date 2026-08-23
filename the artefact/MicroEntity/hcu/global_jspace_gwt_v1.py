@@ -143,6 +143,7 @@ class JSpaceStep:
     global_vector: tuple[float, ...]
     winner_gate_q: int
     hyperposition_cells: tuple[str, ...]
+    control_condition: str
     control_packet: VectorControlPacket
     control_packet_text: str
     control_packet_sha256: str
@@ -177,6 +178,7 @@ def step(
     generation: int,
     basis_id: str,
     basis_sha256: str,
+    control_condition: str = "BASELINE",
 ) -> JSpaceStep:
     generation = _generation(generation)
     basis_id = _text(basis_id, "basis_id")
@@ -202,7 +204,7 @@ def step(
         basis_sha256=basis_sha256,
         generation=generation,
         role=winner.role,
-        control_condition="BASELINE",
+        control_condition=control_condition,
     )
     # Re-validate the packet through the same ABI consumer boundary before trace production.
     decode_vector(
@@ -211,7 +213,7 @@ def step(
         expected_basis_id=basis_id,
         expected_basis_sha256=basis_sha256,
         expected_role=winner.role,
-        expected_control_condition="BASELINE",
+        expected_control_condition=control_condition,
     )
     packet_wire = packet_bytes(packet)
     packet_text = packet_wire.decode("utf-8", "strict")
@@ -229,6 +231,7 @@ def step(
         "winner_gate_q": winner_gate_q,
         "hyperposition_cells": list(hyper),
         "global_vector_q127": [_q_signed(v) for v in global_vector],
+        "control_condition": packet.control_condition,
         "control_packet_schema": ABI_SCHEMA,
         "control_packet_identity_sha256": packet.packet_sha256,
         "control_packet_wire_sha256": packet_sha256,
@@ -259,6 +262,7 @@ def step(
         global_vector=global_vector,
         winner_gate_q=winner_gate_q,
         hyperposition_cells=hyper,
+        control_condition=packet.control_condition,
         control_packet=packet,
         control_packet_text=packet_text,
         control_packet_sha256=packet_sha256,
@@ -285,4 +289,5 @@ def lesion(
         generation=generation,
         basis_id=basis_id,
         basis_sha256=basis_sha256,
+        control_condition="LESION",
     )

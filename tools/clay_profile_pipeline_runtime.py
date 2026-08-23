@@ -413,7 +413,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                 db.execute(
                     """INSERT INTO eos_pipeline_state_v2(
                            singleton,continuity_json,canonical_json,canonical_hash,cursors_json,updated_at)
-                       SELECT singleton,continuity_json,canonical_hash,cursors_json,updated_at
+                       SELECT singleton,continuity_json,canonical_json,canonical_hash,cursors_json,updated_at
                        FROM eos_pipeline_state"""
                 )
                 db.execute("DROP TABLE eos_pipeline_state")

@@ -16,11 +16,11 @@
     "main_at_branch_creation": "59929b28f2e820cdbd474a58f0c8e930bf536ab9",
     "branch": "gpt56sol/go-entityos-hcu-entry-canonical-v1-20260823",
     "source_commit": "2aafe8e3f86676823bee8c87199919125080f050",
-    "test_commit": "cc8eb620c03b9d7898798103c10442875687b913",
+    "test_commit": "8d8c54e1aeac9fcd44395c91983e7d9166a3cf44",
     "source_path": "the artefact/hcu/typed_canonical_v1.py",
     "test_path": "the artefact/hcu/test_typed_canonical_v1.py",
     "local_source_sha256": "3a845a946947d139d4801a5da76ca26986fbede4713f1a1832f2cee44a2ce0c3",
-    "local_test_sha256": "b2c842e7978e13d7db4285933fcbee641eacacc6d447ae5fc10c757a6d8fd32c"
+    "local_test_sha256": "58fd89e5c7af9a3a46191f5f979ecc5e3a83910f34bfe495655f5553f33fb300"
   },
   "tracks": {
     "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
@@ -50,7 +50,7 @@
   },
   "component_execution": {
     "surface": "isolated local work container",
-    "command": "python3 -m py_compile typed_canonical_v1.py test_typed_canonical_v1.py && python3 -m unittest -v test_typed_canonical_v1.py",
+    "command": "cd /tmp && python3 -m py_compile entityos_canon/typed_canonical_v1.py entityos_canon/test_typed_canonical_v1.py && python3 -m unittest -v entityos_canon/test_typed_canonical_v1.py",
     "tests": 9,
     "passed": 9,
     "failed": 0,

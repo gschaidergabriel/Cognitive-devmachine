@@ -1,0 +1,67 @@
+{
+  "schema": "GO_CLAUDE_ADAPTER_NEGATIVE_EVIDENCE/v1",
+  "trigger": "go",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main_sha": "9145289c461e7d0bff0cf3da6dd570037f374fe7",
+  "branch": "go/claude-adapter-negative-evidence-v1",
+  "observed_anchor": {
+    "canonical_binder_merge": "0ceea219ae735c7d5270622417cb46eac6e17ac2",
+    "validator": "agentzeroforschung/instrumente/validate_claude_adapter_boundary_receipt_v1.py",
+    "contract": "agentzeroforschung/instrumente/CLAUDE_ADAPTER_BOUNDARY_RECEIPT_v1.md",
+    "gap": "strict PASS-only validation could reject a measured one-red aggregate without preserving the other three green observations as a valid diagnostic artifact"
+  },
+  "delta": {
+    "same_schema": "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1",
+    "promotion_path": "validate() remains strict and requires aggregate PASS",
+    "diagnostic_path": "diagnose() and CLI --diagnostic accept typed measured FAIL only when status matches observed boundary fields",
+    "negative_evidence_law": "MEASURED_FAIL != INVALID_RECEIPT; DIAGNOSTIC_VALID != PROMOTION_PASS",
+    "fail_credit": "aggregate FAIL requires runtime_credit ZERO and whole_product_credit 0",
+    "preserved_output": "failing_boundaries plus explicit violation codes while retaining unaffected PASS observations under the same common identity"
+  },
+  "exact_blob_component_evidence": {
+    "environment": {
+      "python": "3.13.5",
+      "os": "Linux",
+      "kernel": "6.18.35",
+      "arch": "x86_64",
+      "scope": "isolated local component execution; no Claude/AgentZero product runtime"
+    },
+    "validator_git_blob": "a6f68b7f4e7c9ccce2090c37e0e198d8ffe09fa8",
+    "validator_sha256": "abecd0efc1dc0bd0c03b31cc3ab7aa76325c7c866fd6442c321badeb672e68d6",
+    "tests_git_blob": "3ceb00c9cf6137efc2ca85229a9e46c8a6adb5db",
+    "tests_sha256": "13dfcbe0bd3cb134168e97592aad3c76231106b912c85214d1878a8e421e8037",
+    "py_compile": "PASS",
+    "unit_tests": {
+      "passed": 19,
+      "failed": 0,
+      "new_cases": [
+        "one red plus three green observations retained diagnostically",
+        "strict promotion validator still rejects diagnostic red aggregate",
+        "reported PASS rejected when measured fields imply failure",
+        "multiple measured failures retained with independent violation codes"
+      ]
+    }
+  },
+  "unusual_experiment": {
+    "status": "NOT_EXECUTED",
+    "reason": "deterministic validator falsifier/regression only; no immutable shared macrocycle lease surface was available"
+  },
+  "execution_policy": {
+    "free_only_preserved": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "training": false
+  },
+  "credit": {
+    "negative_evidence_mechanism": "EXACT_BLOB_COMPONENT_SUPPORTED",
+    "claude_adapter_runtime": "ZERO",
+    "bundled_08b_runtime": "ZERO",
+    "jspace_runtime": "ZERO",
+    "whole_gwt": "ZERO",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_gate": "On the next intentional exact clean Ubuntu run, derive all four child receipts from one common identity, run --diagnostic first to preserve any red boundary, then run strict validation only if diagnostic aggregate_status is PASS; rerun full suite before changing historical 1486/1 classification."
+}

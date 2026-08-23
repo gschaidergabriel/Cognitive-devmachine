@@ -4,13 +4,20 @@
   "date": "2026-08-23",
   "organ": "GPT-5.6 Sol",
   "repository": "gschaidergabriel/clay-global-research-entity",
-  "base_main_sha": "d24af2a8edb5412d2a045dd9fcf21bcf479d7f6f",
+  "branch_base_main_sha": "d24af2a8edb5412d2a045dd9fcf21bcf479d7f6f",
+  "parallel_reentry_main_sha": "3c1de71010b15311881d70e9a96bba141775ca9f",
   "branch": "go/claude-adapter-boundary-receipts-v1",
+  "parallel_fusion": {
+    "merged_pr": 1092,
+    "merge_sha": "3c1de71010b15311881d70e9a96bba141775ca9f",
+    "observed_delta": "split the monolithic Claude adapter boundary test into TOOLLESS/EPHEMERAL/STRUCTURED_OUTPUT/ENV_ISOLATION pytest nodes and bind test-local HOME plus shell sentinel",
+    "duplication_decision": "retain only the downstream machine-readable cross-receipt binding validator; do not create a second adapter/test split"
+  },
   "frontier": {
     "historical_generation": 276,
     "frozen_suite_state": "1486 green / 1 red",
     "persistent_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
-    "classification": "REPLICATED_BOUNDARY_RED_RUNTIME_FIX_UNCREDITED"
+    "classification": "HISTORICAL_REPLICATED_BOUNDARY_RED; SOURCE_TEST_SPLIT_MERGED; EXACT_RUNTIME_RECHECK_PENDING"
   },
   "delta": {
     "contract": "the artefact/blogpost_entity/runtime/CLAUDE_ADAPTER_BOUNDARY_RECEIPTS_V1.md",
@@ -22,7 +29,8 @@
       "STRUCTURED_OUTPUT_RECEIPT/v1",
       "ENV_ISOLATION_RECEIPT/v1"
     ],
-    "shared_binding_law": "all four subreceipts must bind identical full source/tree/dirty state, run id, suite, Ubuntu executor, Claude binary/version, adapter source/version, HOME, environment allowlist/digest and tool/MCP config"
+    "shared_binding_law": "all four materialized subreceipts must bind identical full source/tree/dirty state, run id, suite, Ubuntu executor, Claude binary/version, adapter source/version, HOME, environment allowlist/digest and tool/MCP config",
+    "new_information_beyond_pr_1092": "independent pytest nodes are not by themselves proof that four exported observations came from one exact immutable run boundary; validator rejects cross-receipt provenance drift"
   },
   "exact_blob_component_evidence": {
     "environment": {
@@ -66,6 +74,7 @@
   },
   "credit": {
     "receipt_validator_mechanism": "EXACT_BLOB_COMPONENT_SUPPORTED",
+    "claude_adapter_source_test_split": "MERGED_PR_1092_SOURCE_ONLY",
     "claude_adapter_runtime_fix": "ZERO",
     "claude_runtime": "ZERO",
     "bundled_08b_runtime": "ZERO",
@@ -73,5 +82,5 @@
     "whole_gwt": "ZERO",
     "whole_product": "IN_PROGRESS"
   },
-  "next_gate": "On the next intentional exact Ubuntu start, instrument one ClaudeCodeEngineAdapter invocation to emit all four subreceipts under one immutable run binding, validate the bundle, and repair only the failing invariant. Bind full commit+tree+dirty state, Claude binary/version, adapter bytes, HOME, environment projection and tool/MCP config before granting runtime credit."
+  "next_gate": "On the next intentional exact Ubuntu start, instrument the four merged #1092 pytest nodes to emit all four subreceipts under one immutable run binding, validate the bundle, then rerun the full suite. Grant defect credit only to a failing invariant and runtime repair credit only after exact source/tree/dirty/executor/Claude/adapter/environment binding."
 }

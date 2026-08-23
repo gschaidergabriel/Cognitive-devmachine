@@ -9,6 +9,7 @@ SCHEMA = "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1"
 BOUNDARIES = ("tool_less", "ephemeral", "structured_output", "env_isolation")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
+INVOCATION_ID = re.compile(r"^[A-Za-z0-9._:-]{8,128}$")
 
 class ReceiptError(ValueError):
     pass
@@ -38,6 +39,7 @@ def validate_common(common):
     need(isinstance(common.get("claude_version"), str) and common["claude_version"].strip(), "claude_version missing")
     need(is_nonplaceholder_hex(common.get("command_sha256"), SHA256), "command_sha256 invalid/placeholder")
     need(is_nonplaceholder_hex(common.get("input_sha256"), SHA256), "input_sha256 invalid/placeholder")
+    need(isinstance(common.get("invocation_id"), str) and INVOCATION_ID.fullmatch(common["invocation_id"]), "invocation_id invalid")
     need(isinstance(common.get("executor"), dict), "executor missing")
     ex = common["executor"]
     for key in ("os", "arch", "runtime"):
@@ -109,9 +111,17 @@ def diagnose(doc):
     need(set(boundaries) == set(BOUNDARIES), "exact four boundary receipts required")
     details = {}
     failing = []
+    invocation_stdout = None
+    invocation_stderr = None
     for name in BOUNDARIES:
         b = boundaries[name]
         validate_boundary_shape(name, b, common_digest)
+        if invocation_stdout is None:
+            invocation_stdout = b["stdout_sha256"]
+            invocation_stderr = b["stderr_sha256"]
+        else:
+            need(b["stdout_sha256"] == invocation_stdout, "cross-bound stdout digest mismatch")
+            need(b["stderr_sha256"] == invocation_stderr, "cross-bound stderr digest mismatch")
         violations = boundary_violations(name, b)
         derived = "PASS" if not violations else "FAIL"
         need(b.get("status") == derived, f"{name} status does not match measured observations")

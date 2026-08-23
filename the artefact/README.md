@@ -147,3 +147,17 @@ Current testing remains authorized-isolated-sandbox-only unless a newer owner di
 ## Current frontier
 
 Build the **typed Xeno Entry Fabric** and a reusable **GRID10 scheduler/state/interconnect baseline**, then progressively separate XRAM/XPU/XCU responsibilities so COGSIM10, WM_TEST, NESTED_SIM and measured SCALEOUT reuse the same machine primitives rather than requiring architectural rewrites.
+
+## Latest bounded `go` delta — 2026-08-23
+
+Branch `go/xeno-entry-grid10-core-20260823-2324-sol` now carries a source/component candidate for that frontier:
+
+- current-facing `XENO_INGRESS_PACKET/v1` admission with exact generation, producer event, causal/provenance, capability and resource-budget binding;
+- deterministic `source_event_key = H(source, source_event_id)` separated from the full admitted `ingress_id`, so producer replay identity and causal envelope identity are not conflated;
+- a reusable 10-logical-cell planner where `active_decode_limit` is explicitly separate from logical population;
+- `XENO_COMPUTE_PACKET/v1` candidate-only interconnect carrying the same source-event/ingress/causal/generation spine;
+- 19/19 isolated exact-source component regressions plus `py_compile` PASS; runtime/EntityOS/HCU model credit remains 0 because no authorized Vercel Sandbox exec surface is available in this session.
+
+The single unusual discriminator for this user-triggered cycle was `INGRESS_PAYLOAD_ONLY_CAUSAL_ALIAS`: payload-only identity aliased two distinct causal/provenance contexts, while the full ingress identity separated them. This supports keeping producer event identity, admitted causal envelope identity and payload identity as distinct but cross-bound layers.
+
+Next gate: wire the admitted ingress into the canonical Xeno/MiniUnifiedDB state path with replay-conflict detection, then bind GRID10 plans to the retained HCU engine identity and execute exact branch bytes on an authorized Vercel Sandbox when callable execution becomes available.

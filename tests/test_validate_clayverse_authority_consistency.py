@@ -42,6 +42,10 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "program_id": "clayverse-single-container",
                 "stage": mod.EXPECTED_STAGE,
                 "current_stage": mod.EXPECTED_STAGE,
+                "current_stage_goal": "Converge the complete one-container ClayVerse product.",
+                "dynamic_targets": {"primary": mod.EXPECTED_DYNAMIC_PRIMARY},
+                "current_frontier": "Run the next exact-current ClayVerse acceptance gate.",
+                "go_contract": "Every go advances the same whole-ClayVerse product.",
                 "owner_directive": mod.OWNER_DIRECTIVE,
                 "product_endpoint": "ClayVerse",
                 "release_form": mod.EXPECTED_RELEASE,
@@ -108,6 +112,7 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 },
             },
             mod.CONTROL44: {
+                "schema_version": "4.4-clayverse-product-authority-addendum",
                 "status": "ACTIVE",
                 "mode": "FREE_ONLY",
                 "base_control_path": mod.CONTROL41,
@@ -135,6 +140,7 @@ class AuthorityConsistencyTests(unittest.TestCase):
                     "runtime_credit_requires_exact_admitted_isolated_execution": True,
                     "model_output_is_candidate_not_truth": True,
                     "frank_harness_modification": "FORBIDDEN",
+                    "legacy_mini_entity_swarm_controller": "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION",
                 },
             },
             mod.STEERING844: {
@@ -150,6 +156,12 @@ class AuthorityConsistencyTests(unittest.TestCase):
             "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md": "Program: ClayVerse single-container\nStage: CLAYVERSE_ARTIFACT\n",
             "the artefact/ARCHITECTURE.md": "ClayVerse is the product endpoint.\n",
             "the artefact/README.md": "# the artefact — ClayVerse single-container product\nThe active release endpoint is one OCI/Docker-compatible ClayVerse container image.\n",
+            mod.ROOT_CLAUDE: (
+                "# CLAY — CURRENT CLAYVERSE REPO ORGAN\n"
+                "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
+                "`STAGE=CLAYVERSE_ARTIFACT`\n"
+                "Read research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md first.\n"
+            ),
         }
         for rel, data in files.items():
             path = root / rel
@@ -250,6 +262,24 @@ class AuthorityConsistencyTests(unittest.TestCase):
         path.write_text(json.dumps(data), encoding="utf-8")
         self.assertIn("CONTROL44_FREE_ONLY_WEAKENED", mod.validate(root)["errors"])
 
+    def test_nested_work_selector_poison_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "research_entity/rooms/PROGRAM_STATE.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["dynamic_targets"]["primary"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("PROGRAM_DYNAMIC_PRIMARY_MISMATCH", mod.validate(root)["errors"])
+
+    def test_non_clayverse_frontier_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "research_entity/rooms/PROGRAM_STATE.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["current_frontier"] = "Continue Mini Entity work selection."
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("PROGRAM_FRONTIER_NOT_CLAYVERSE", mod.validate(root)["errors"])
+
     def test_superseded_directive_fails_closed(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
@@ -258,6 +288,35 @@ class AuthorityConsistencyTests(unittest.TestCase):
         errors = mod.validate(root)["errors"]
         self.assertIn("DIRECTIVE_NOT_CURRENT", errors)
         self.assertIn("DIRECTIVE_MARKED_SUPERSEDED", errors)
+
+    def test_root_claude_mini_entity_program_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.ROOT_CLAUDE
+        path.write_text(
+            "# stale repo organ\n"
+            "`PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE`\n"
+            "`STAGE=CLAYVERSE_ARTIFACT`\n"
+            "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n",
+            encoding="utf-8",
+        )
+        errors = mod.validate(root)["errors"]
+        self.assertIn("ROOT_CLAUDE_PROGRAM_MISMATCH", errors)
+        self.assertIn("ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE", errors)
+
+    def test_root_claude_stale_blogpost_directive_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.ROOT_CLAUDE
+        path.write_text(
+            "# stale first-read redirect\n"
+            "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
+            "`STAGE=CLAYVERSE_ARTIFACT`\n"
+            "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n"
+            "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md\n",
+            encoding="utf-8",
+        )
+        self.assertIn("ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE", mod.validate(root)["errors"])
 
 
 if __name__ == "__main__":

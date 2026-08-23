@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
+import hashlib
 import json
 import math
 import re
+import struct
 import sys
 from pathlib import Path
 
 SCHEMA = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1"
+SEMANTIC_DIGEST_METHOD = "ordered-fp32-finite-v1"
+SEMANTIC_DIGEST_DOMAIN = b"CLAY/JSPACE_LENS_SEMANTIC/ordered-fp32-finite-v1\x00"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -66,6 +70,85 @@ def req_sha(parent: dict, key: str, length: int = 64) -> str:
     return value
 
 
+def req_source_layers(parent: dict, key: str = "source_layers") -> list[int]:
+    value = parent.get(key)
+    if (
+        not isinstance(value, list)
+        or not value
+        or any(isinstance(layer, bool) or not isinstance(layer, int) or layer < 0 for layer in value)
+    ):
+        fail("INVALID_SOURCE_LAYERS")
+    if value != sorted(set(value)):
+        fail("SOURCE_LAYERS_NOT_CANONICAL")
+    return value
+
+
+def sha256_file(path: str | Path) -> str:
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def semantic_digest_from_lens_checkpoint(path: str | Path) -> dict:
+    """Hash persisted JacobianLens semantics independently of torch-save container bytes."""
+    try:
+        import torch
+    except ImportError as exc:  # pragma: no cover - target environment dependent
+        raise ValidationError("TORCH_REQUIRED_FOR_LENS_SEMANTIC_DIGEST") from exc
+
+    try:
+        checkpoint = torch.load(str(path), map_location="cpu", weights_only=True)
+    except Exception as exc:  # pragma: no cover - typed below for runtime receipt
+        raise ValidationError(f"LENS_LOAD_FAILED:{exc.__class__.__name__}") from exc
+
+    if not isinstance(checkpoint, dict):
+        fail("LENS_CHECKPOINT_NOT_OBJECT")
+    required = {"J", "n_prompts", "source_layers", "d_model"}
+    if not required.issubset(checkpoint):
+        fail("LENS_CHECKPOINT_FIELDS_MISSING")
+
+    n_prompts = checkpoint["n_prompts"]
+    d_model = checkpoint["d_model"]
+    if isinstance(n_prompts, bool) or not isinstance(n_prompts, int) or n_prompts <= 0:
+        fail("BAD_LENS_N_PROMPTS")
+    if isinstance(d_model, bool) or not isinstance(d_model, int) or d_model <= 0:
+        fail("BAD_LENS_D_MODEL")
+
+    layer_holder = {"source_layers": checkpoint["source_layers"]}
+    source_layers = req_source_layers(layer_holder)
+    matrices = checkpoint["J"]
+    if not isinstance(matrices, dict) or set(matrices) != set(source_layers):
+        fail("LENS_MATRIX_LAYER_SET_MISMATCH")
+
+    digest = hashlib.sha256()
+    digest.update(SEMANTIC_DIGEST_DOMAIN)
+    digest.update(struct.pack("<qqq", n_prompts, d_model, len(source_layers)))
+
+    for layer in source_layers:
+        matrix = matrices[layer]
+        if not isinstance(matrix, torch.Tensor):
+            fail("LENS_MATRIX_NOT_TENSOR")
+        matrix = matrix.detach().to(device="cpu", dtype=torch.float32).contiguous()
+        if matrix.ndim != 2 or tuple(matrix.shape) != (d_model, d_model):
+            fail("LENS_MATRIX_SHAPE_MISMATCH")
+        if not bool(torch.isfinite(matrix).all().item()):
+            fail("LENS_POST_LOAD_NONFINITE")
+        digest.update(struct.pack("<qqq", layer, matrix.shape[0], matrix.shape[1]))
+        payload = matrix.numpy().astype("<f4", copy=False).tobytes(order="C")
+        digest.update(payload)
+
+    return {
+        "artifact_sha256": sha256_file(path),
+        "semantic_sha256": digest.hexdigest(),
+        "semantic_digest_method": SEMANTIC_DIGEST_METHOD,
+        "n_prompts": n_prompts,
+        "d_model": d_model,
+        "source_layers": source_layers,
+    }
+
+
 def validate(data: dict) -> None:
     if data.get("schema") != SCHEMA:
         fail("SCHEMA_MISMATCH")
@@ -73,7 +156,8 @@ def validate(data: dict) -> None:
     source = req_obj(data, "source")
     req_sha(source, "main_sha", 40)
     req_sha(source, "tree_sha", 40)
-    req_bool(source, "dirty")
+    if req_bool(source, "dirty"):
+        fail("SOURCE_DIRTY")
 
     executor = req_obj(data, "executor")
     if req_str(executor, "host_class") != "UBUNTU":
@@ -95,9 +179,15 @@ def validate(data: dict) -> None:
     jspace = req_obj(data, "jspace")
     req_sha(jspace, "jlens_upstream_commit", 40)
     req_sha(jspace, "lens_file_sha256")
+    req_sha(jspace, "lens_semantic_sha256")
+    if req_str(jspace, "lens_semantic_digest_method") != SEMANTIC_DIGEST_METHOD:
+        fail("UNSUPPORTED_LENS_SEMANTIC_DIGEST_METHOD")
     req_sha(jspace, "lens_profile_sha256")
     req_sha(jspace, "fit_corpus_sha256")
     req_int(jspace, "n_prompts", minimum=1)
+    req_int(jspace, "d_model", minimum=1)
+    req_source_layers(jspace)
+    req_int(jspace, "sparsity_k", minimum=1)
     skip_first = req_int(jspace, "skip_first_positions", minimum=0)
     req_str(jspace, "storage_dtype")
 
@@ -152,6 +242,13 @@ def validate(data: dict) -> None:
         fail("INVALID_FIRST_ENGINE_CHOICE")
     req_str(inference, "origin_attribution")
 
+    policy = req_obj(data, "policy")
+    free_only = req_bool(policy, "free_only")
+    paid_network = req_int(policy, "paid_or_unknown_network_attempts", minimum=0)
+    secret_lookups = req_int(policy, "paid_or_unknown_secret_lookups", minimum=0)
+    if free_only and (paid_network != 0 or secret_lookups != 0):
+        fail("FREE_ONLY_BOUNDARY_BREACH")
+
     authority = req_obj(data, "authority")
     required_true = {
         "miniunifieddb_is_truth_authority",
@@ -171,19 +268,51 @@ def validate(data: dict) -> None:
         fail("BOOT_RECEIPT_CANNOT_GRANT_WHOLE_PRODUCT_PASS")
 
 
+def verify_lens_artifact(data: dict, lens_path: str | Path) -> None:
+    validate(data)
+    observed = semantic_digest_from_lens_checkpoint(lens_path)
+    jspace = data["jspace"]
+    if observed["artifact_sha256"] != jspace["lens_file_sha256"]:
+        fail("LENS_FILE_HASH_MISMATCH")
+    if observed["semantic_sha256"] != jspace["lens_semantic_sha256"]:
+        fail("LENS_SEMANTIC_HASH_MISMATCH")
+    if observed["semantic_digest_method"] != jspace["lens_semantic_digest_method"]:
+        fail("LENS_SEMANTIC_METHOD_MISMATCH")
+    if observed["n_prompts"] != jspace["n_prompts"]:
+        fail("LENS_PROMPT_COUNT_MISMATCH")
+    if observed["d_model"] != jspace["d_model"]:
+        fail("LENS_D_MODEL_MISMATCH")
+    if observed["source_layers"] != jspace["source_layers"]:
+        fail("LENS_SOURCE_LAYERS_MISMATCH")
+
+
+def reject_nonfinite_json(_: str):
+    fail("NONFINITE_JSON")
+
+
 def main() -> int:
-    if len(sys.argv) != 2:
-        print("usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json", file=sys.stderr)
+    if len(sys.argv) not in {2, 3}:
+        print(
+            "usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json [LENS.pt]",
+            file=sys.stderr,
+        )
         return 2
     try:
-        data = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+        data = json.loads(
+            Path(sys.argv[1]).read_text(encoding="utf-8"),
+            parse_constant=reject_nonfinite_json,
+        )
         if not isinstance(data, dict):
             fail("TOP_LEVEL_NOT_OBJECT")
-        validate(data)
+        if len(sys.argv) == 3:
+            verify_lens_artifact(data, sys.argv[2])
+        else:
+            validate(data)
     except (OSError, json.JSONDecodeError, ValidationError) as exc:
         print(f"FAIL {exc}")
         return 1
-    print("PASS JSPACE_GWT_BOOT_BINDING_RECEIPT/v1")
+    suffix = " EXACT_LENS_ARTIFACT_VERIFIED" if len(sys.argv) == 3 else " STRUCTURAL_ONLY"
+    print("PASS JSPACE_GWT_BOOT_BINDING_RECEIPT/v1" + suffix)
     return 0
 
 

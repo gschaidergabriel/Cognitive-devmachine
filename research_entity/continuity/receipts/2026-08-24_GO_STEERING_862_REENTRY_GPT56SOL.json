@@ -1,0 +1,54 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "join": {
+    "main_sha_at_join": "cdbcaabd23aeb0168463196e29981c6ce8d61bc7",
+    "newest_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "newest_supervisor_supersedes": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json"
+  },
+  "material_finding": "Current main had a successor-authority split: SUPERVISOR_INBOX and SUPERVISOR_STEERING_8_62 admitted bounded included-tier FREE Vercel Hobby Sandbox execution, while BOOTSTRAP_MINIMAL, PROGRAM_STATE, artifact manifest and visible status protocol still routed through 8.61. A fresh worker following only the canonical boot surfaces could therefore deterministically miss the newly admitted FREE execution lane or report the wrong execution frontier.",
+  "unusual_experiment": {
+    "name": "STEERING_SUCCESSOR_SPLIT_POISON",
+    "count_for_this_macrocycle": 1,
+    "intervention": "Resolve current execution authority twice from the exact same main snapshot: once through canonical boot/program/manifest pointers only, and once through current supervisor inbox plus newest steering successor.",
+    "prediction_if_no_split": "Both paths resolve the same supervisor and the same Sandbox admission state.",
+    "prediction_if_split": "Boot/program/manifest resolve 8.61 and blocked/free-only wording while inbox/newest steering resolve 8.62 and bounded included-tier Hobby Sandbox admission.",
+    "observed": "SPLIT_CONFIRMED",
+    "result": "Boot/program/manifest/status surfaces were stale at 8.61 while SUPERVISOR_INBOX and SUPERVISOR_STEERING_8_62 selected bounded FREE Hobby Sandbox admission.",
+    "evidence_class": "EXACT_SOURCE_COUNTERFACTUAL_AUTHORITY_RESOLUTION",
+    "runtime_credit": 0
+  },
+  "delta": {
+    "branch": "go/entityos-hcu-steering-862-reentry-20260824-sol",
+    "bootstrap": "rebound to 8.62 and bounded FREE Sandbox conditions",
+    "program_state": "rebound to 8.62; records bounded Hobby admission and zero whole-runtime credit",
+    "artifact_manifest": "rebound to 8.62; records fixed-capsule/quota/billing fail-closed execution law",
+    "status_footer": "rebound to 8.62 execution/training boundary"
+  },
+  "hcu_track_b": "HCU_NO_CHANGE_WITH_REASON: retained PR1263 remains the single HCU donor lane; this branch intentionally adds no duplicate router, Entry, GRID10, J-Space, state, effect or recovery implementation.",
+  "training_track_c": "READINESS_DELTA: authority now exposes the bounded FREE Sandbox lane consistently on repaired canonical surfaces; no Together preflight, credential lookup, network call, job creation or paid spend occurred.",
+  "execution_evidence": {
+    "new_sandbox_run_started_by_this_organ": false,
+    "reason": "Connected Vercel tooling exposes inspection/fetch surfaces but no arbitrary POST/Sandbox start primitive for the retained credential-bearing fixed-capsule controller. Creating a second ingress would violate the single-controller authority boundary.",
+    "existing_component_credit": "JSPACE_FAMILY_SPLIT_EXACT_CURRENT_6_OF_6_PASS_TWICE_FROM_PREEXISTING_8_62_EVIDENCE",
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "remaining_known_source_blocker": "tools/validate_clayverse_authority_consistency.py on current main still contains an older CURRENT_AUTHORITY and requires a separate careful fusion/rebase from the retained authority-guard donor work before this branch can claim full authority-guard coherence.",
+  "next_exact_gate": "Fuse the authority validator onto exact current 8.62 semantics without duplicating existing PR1399 donor work, then use the retained controller to run one fixed exact-source repaired HCU capsule on the admitted Hobby Sandbox surface when the callable credential-bearing POST path is available; bind source trees, capsule digest, executor, result digest, secret fence and cleanup in one immutable receipt.",
+  "safety": {
+    "together_used": false,
+    "paid_execution": false,
+    "vps_or_self_hosted_testing": false,
+    "secret_accessed_or_persisted": false,
+    "second_authority_created": false
+  }
+}

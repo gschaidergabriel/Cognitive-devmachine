@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "96c6df65836e3c61618d09ca3a04c39d4051464b",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "executor_delta": {
+    "observed_pre_delta_head": "6811e432324fbb89e81ff41c388c768736cd3562",
+    "committed_head": "244c511febe5c393618fe098eebe4b2c23950774",
+    "commit_message": "guard(hcu): restore exact 14-result promotion fence",
+    "file": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-v4-v3-promotion-contract-v2.mjs",
+    "guard_schema": "ENTITYOS_HCU_JSPACE_PROMOTION_GUARD/v4",
+    "guard_blob": "63a2c385aef258e352170a79c640cd6d6c8407e3",
+    "parallel_terminal_quarantine_fix_observed": "72daa7cbaad35cfef42093b8cf9f48a4b47bd6e8",
+    "parallel_ready_source_verification_guard_observed": "6811e432324fbb89e81ff41c388c768736cd3562"
+  },
+  "hardening": {
+    "exact_regression_source_method_count": 14,
+    "requires_all_14_test_names_on_route_result_surface": true,
+    "requires_expected_regression_test_array": true,
+    "requires_count_derived_from_array": true,
+    "requires_all_names_observed": true,
+    "requires_ran_14_tests_in_summary": true,
+    "requires_standalone_plain_ok": true,
+    "requires_failed_marker_handling": true,
+    "requires_skipped_summary_handling": true,
+    "requires_expected_failures_summary_handling": true,
+    "effect": "FAIL_CLOSED_UNTIL_EXECUTABLE_ROUTE_RESTORES_THE_SAME_EXACT_RESULT_SEMANTICS"
+  },
+  "current_route_gap": {
+    "observed_at_executor_head": "244c511febe5c393618fe098eebe4b2c23950774",
+    "route_still_uses_expected_test_count_literal": true,
+    "route_still_uses_only_seven_semantic_markers": true,
+    "route_still_uses_generic_ok_substring": true,
+    "route_exact_14_result_fence_complete": false,
+    "interpretation": "The new promotion guard intentionally prevents source promotion until the route is made equally strict. No runtime credit is minted by guard hardening."
+  },
+  "external_execution_evidence": {
+    "vercel_exact_head_status": "FAILURE_BUILD_RATE_LIMIT",
+    "sandbox_runtime_observed": false,
+    "route_invocation_observed": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "together_preflight_or_credential_use": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: PR810 now has terminal SOURCE_REBIND_REQUIRED quarantine plus an exact-result promotion guard that refuses the weaker executable route instead of normalizing to it.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the 17-blob producer-derived causal chain remains the sole retained executor source closure and cannot cross into Sandbox execution while its promotion evidence boundary is weaker than declared.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: all 14 declared Inference/v4, atomic ModelExecution and JSpaceBinding/v3 regression identities are again mandatory on the eventual executable result surface before component promotion."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The retained executor and Research main are moving under parallel organs; append-only receipts preserve exact-head changes without overwriting a transient artefact README state."
+  },
+  "next_exact_gate": "Update the single retained hcu-jspace-grid10-binding-capsule route so its executable result predicate exposes the same explicit 14-name set, count derived from that set, every-name observation, exact Ran 14 tests in summary, standalone plain OK, and rejection of FAILED/skipped=/expected failures=. Keep SOURCE_REBIND_REQUIRED terminal. Only after source guards agree may a coherent SOURCE_REBOUND_READY transition and exact-head FREE_ONLY Vercel execution be considered."
+}

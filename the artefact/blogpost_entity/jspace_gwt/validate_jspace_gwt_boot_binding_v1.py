@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
+import hashlib
 import json
 import math
 import re
 import sys
 from pathlib import Path
 
+HERE = Path(__file__).resolve().parent
+MINI_COGNITION = HERE.parent / "mini_cognition"
+if str(MINI_COGNITION) not in sys.path:
+    sys.path.insert(0, str(MINI_COGNITION))
+
+from bundled_cognition_manifest_v1 import (  # noqa: E402
+    ManifestError as BundledManifestError,
+    SCHEMA as BUNDLED_MANIFEST_SCHEMA,
+    load_and_validate as load_bundled_manifest,
+)
+
 SCHEMA = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1"
+SOURCE_LOCK_SCHEMA = "BUNDLED_COGNITION_SOURCE_LOCK/v1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
-ACTION_ORIGINS = {
-    "ZERO",
-    "HOOK_TIMER",
-    "CLAUDE_CODE",
-    "PROXY_SANDBOX_CONTROLLER",
-    "OTHER",
-}
+ACTION_ORIGINS = {"ZERO", "HOOK_TIMER", "CLAUDE_CODE", "PROXY_SANDBOX_CONTROLLER", "OTHER"}
 
 
 class ValidationError(ValueError):
@@ -73,6 +82,40 @@ def req_sha(parent: dict, key: str, length: int = 64) -> str:
     return value
 
 
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def validate_source_lock(lock: dict) -> None:
+    if lock.get("schema") != SOURCE_LOCK_SCHEMA:
+        fail("SOURCE_LOCK_SCHEMA_MISMATCH")
+    allowed = {
+        "schema",
+        "status",
+        "authority",
+        "manifest_file_sha256",
+        "manifest_identity_sha256",
+        "integration_identity_sha256",
+        "note",
+    }
+    unknown = sorted(set(lock) - allowed)
+    if unknown:
+        fail("SOURCE_LOCK_UNKNOWN_FIELDS:" + ",".join(unknown))
+    if req_str(lock, "status") != "BOUND":
+        fail("SOURCE_LOCK_NOT_BOUND")
+    if req_str(lock, "authority") != "repository_source_tree":
+        fail("SOURCE_LOCK_AUTHORITY_INVALID")
+    req_sha(lock, "manifest_file_sha256")
+    req_sha(lock, "manifest_identity_sha256")
+    req_sha(lock, "integration_identity_sha256")
+    if "note" in lock:
+        req_str(lock, "note")
+
+
 def validate(data: dict) -> None:
     if data.get("schema") != SCHEMA:
         fail("SCHEMA_MISMATCH")
@@ -98,14 +141,19 @@ def validate(data: dict) -> None:
     req_sha(core, "tokenizer_sha256")
     req_sha(core, "runtime_sha256")
     req_sha(core, "manifest_sha256")
+    if "quantization_runtime_identity" in core:
+        req_str(core, "quantization_runtime_identity")
     if not req_bool(core, "exact_bytes_verified"):
         fail("BUNDLED_CORE_BYTES_UNVERIFIED")
 
     jspace = req_obj(data, "jspace")
     req_sha(jspace, "jlens_upstream_commit", 40)
+    req_sha(jspace, "jspace_profile_sha256")
     req_sha(jspace, "lens_file_sha256")
     req_sha(jspace, "lens_profile_sha256")
     req_sha(jspace, "fit_corpus_sha256")
+    if "steering_calibration_sha256" in jspace:
+        req_sha(jspace, "steering_calibration_sha256")
     req_int(jspace, "n_prompts", minimum=1)
     skip_first = req_int(jspace, "skip_first_positions", minimum=0)
     req_str(jspace, "storage_dtype")
@@ -179,14 +227,13 @@ def validate(data: dict) -> None:
         req_bool(action, "effect_requested")
 
     authority = req_obj(data, "authority")
-    required_true = {
+    for key in {
         "miniunifieddb_is_truth_authority",
         "claude_result_is_candidate_only",
         "jspace_measurement_is_not_truth",
         "gwt_workspace_is_not_truth",
         "effect_gate_required",
-    }
-    for key in required_true:
+    }:
         if not req_bool(authority, key):
             fail(f"AUTHORITY_LAW_FALSE:{key}")
 
@@ -197,16 +244,83 @@ def validate(data: dict) -> None:
         fail("BOOT_RECEIPT_CANNOT_GRANT_WHOLE_PRODUCT_PASS")
 
 
+def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict) -> None:
+    validate_source_lock(source_lock)
+    try:
+        validated = load_bundled_manifest(manifest_path)
+    except BundledManifestError as exc:
+        fail(f"BUNDLED_MANIFEST_INVALID:{exc}")
+
+    raw_sha = sha256_file(manifest_path)
+    if raw_sha != req_sha(source_lock, "manifest_file_sha256"):
+        fail("SOURCE_LOCK_MANIFEST_FILE_MISMATCH")
+    if validated.manifest_identity_sha256 != req_sha(source_lock, "manifest_identity_sha256"):
+        fail("SOURCE_LOCK_MANIFEST_IDENTITY_MISMATCH")
+    if validated.integration_identity_sha256 != req_sha(source_lock, "integration_identity_sha256"):
+        fail("SOURCE_LOCK_INTEGRATION_IDENTITY_MISMATCH")
+
+    manifest = validated.manifest
+    core = req_obj(data, "bundled_core")
+    if req_str(core, "manifest_version") != BUNDLED_MANIFEST_SCHEMA:
+        fail("BUNDLED_MANIFEST_VERSION_MISMATCH")
+    if req_sha(core, "manifest_sha256") != raw_sha:
+        fail("BOOT_MANIFEST_FILE_MISMATCH")
+    if req_str(core, "engine_id") != manifest["engine_id"]:
+        fail("BOOT_ENGINE_ID_MISMATCH")
+    if req_str(core, "model_family") != manifest["model_family"]:
+        fail("BOOT_MODEL_FAMILY_MISMATCH")
+    if req_sha(core, "checkpoint_sha256") != manifest["checkpoint_digest"]:
+        fail("BOOT_CHECKPOINT_MISMATCH")
+    if req_sha(core, "tokenizer_sha256") != manifest["tokenizer_digest"]:
+        fail("BOOT_TOKENIZER_MISMATCH")
+
+    expected_runtime_identity = manifest.get("quantization_runtime_identity")
+    observed_runtime_identity = core.get("quantization_runtime_identity")
+    if expected_runtime_identity is None:
+        if observed_runtime_identity is not None:
+            fail("BOOT_UNEXPECTED_QUANTIZATION_RUNTIME_IDENTITY")
+    elif observed_runtime_identity != expected_runtime_identity:
+        fail("BOOT_QUANTIZATION_RUNTIME_IDENTITY_MISMATCH")
+
+    jspace = req_obj(data, "jspace")
+    if req_sha(jspace, "jspace_profile_sha256") != manifest["jspace_profile_digest"]:
+        fail("BOOT_JSPACE_PROFILE_MISMATCH")
+    if req_sha(jspace, "lens_profile_sha256") != manifest["lens_profile_digest"]:
+        fail("BOOT_LENS_PROFILE_MISMATCH")
+
+    expected_steering = manifest.get("steering_calibration_digest")
+    observed_steering = jspace.get("steering_calibration_sha256")
+    if expected_steering is None:
+        if observed_steering is not None:
+            fail("BOOT_UNEXPECTED_STEERING_CALIBRATION")
+    elif observed_steering != expected_steering:
+        fail("BOOT_STEERING_CALIBRATION_MISMATCH")
+
+    gwt = req_obj(data, "gwt")
+    if req_sha(gwt, "calibration_sha256") != manifest["workspace_calibration_digest"]:
+        fail("BOOT_WORKSPACE_CALIBRATION_MISMATCH")
+
+
 def main() -> int:
-    if len(sys.argv) != 2:
-        print("usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json", file=sys.stderr)
+    if len(sys.argv) != 4:
+        print(
+            "usage: validate_jspace_gwt_boot_binding_v1.py RECEIPT.json BUNDLED_MANIFEST.json SOURCE_LOCK.json",
+            file=sys.stderr,
+        )
         return 2
     try:
-        data = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+        receipt_path = Path(sys.argv[1])
+        manifest_path = Path(sys.argv[2])
+        source_lock_path = Path(sys.argv[3])
+        data = json.loads(receipt_path.read_text(encoding="utf-8"))
+        source_lock = json.loads(source_lock_path.read_text(encoding="utf-8"))
         if not isinstance(data, dict):
             fail("TOP_LEVEL_NOT_OBJECT")
+        if not isinstance(source_lock, dict):
+            fail("SOURCE_LOCK_TOP_LEVEL_NOT_OBJECT")
         validate(data)
-    except (OSError, json.JSONDecodeError, ValidationError) as exc:
+        validate_manifest_binding(data, manifest_path, source_lock)
+    except (OSError, json.JSONDecodeError, ValidationError, BundledManifestError) as exc:
         print(f"FAIL {exc}")
         return 1
     print("PASS JSPACE_GWT_BOOT_BINDING_RECEIPT/v1")

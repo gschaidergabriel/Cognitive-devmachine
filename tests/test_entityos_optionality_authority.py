@@ -3,72 +3,85 @@ import tempfile
 import unittest
 from pathlib import Path
 
-
-OWNER_DIRECTIVE = "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md"
 MANIFEST = "the artefact/manifest.json"
-EXPECTED_ROLE = "STAGED_INTERNAL_EXECUTION_SECURITY_RUNTIME_SUBSTRATE_EXECUTION_OPTIONAL"
-EXPECTED_DEFAULT = "DISABLED"
-EXPECTED_GATE = "CONDITIONAL_ON_EXPLICIT_ADMISSION"
-UNCONDITIONAL_FINAL_GATE = "complete accepted EntityOS embedded in final image"
-CONDITIONAL_FINAL_GATE = "if EntityOS execution is enabled in the accepted profile"
-OWNER_OPTIONALITY_SENTENCE = (
-    "EntityOS is an internal execution/security/runtime substrate carried inside ClayVerse "
-    "when separately admitted"
-)
+STEERING = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json"
+LEGACY_MANIFEST_BLOB = "fe6a601efdbe350a7b34816c4ffceb182df5cab8"
 
 
-def validate_entityos_optionality(root: Path) -> list[str]:
+def validate_entityos_current_authority(root: Path) -> list[str]:
+    """Compatibility test module: EntityOS is now the product, not a ClayVerse option."""
     errors: list[str] = []
-    directive_path = root / OWNER_DIRECTIVE
     manifest_path = root / MANIFEST
-    if not directive_path.is_file():
-        return ["MISSING_OWNER_DIRECTIVE"]
+    steering_path = root / STEERING
     if not manifest_path.is_file():
         return ["MISSING_MANIFEST"]
-
-    directive = directive_path.read_text(encoding="utf-8")
+    if not steering_path.is_file():
+        return ["MISSING_STEERING_852"]
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    final_gates = "\n".join(str(item) for item in manifest.get("requires_for_final_pass", []))
+    steering = json.loads(steering_path.read_text(encoding="utf-8"))
 
-    if OWNER_OPTIONALITY_SENTENCE not in directive:
-        errors.append("OWNER_ENTITYOS_OPTIONALITY_NOT_CURRENT")
-    if manifest.get("entityos_role") != EXPECTED_ROLE:
-        errors.append("MANIFEST_ENTITYOS_ROLE_NOT_OPTIONAL")
-    if manifest.get("entityos_execution_default") != EXPECTED_DEFAULT:
-        errors.append("MANIFEST_ENTITYOS_DEFAULT_NOT_DISABLED")
-    if manifest.get("entityos_whole_product_gate") != EXPECTED_GATE:
-        errors.append("MANIFEST_ENTITYOS_GATE_NOT_CONDITIONAL")
-    if UNCONDITIONAL_FINAL_GATE in final_gates:
-        errors.append("MANIFEST_ENTITYOS_UNCONDITIONAL_FINAL_GATE")
-    if CONDITIONAL_FINAL_GATE not in final_gates:
-        errors.append("MANIFEST_ENTITYOS_CONDITIONAL_FINAL_GATE_MISSING")
-    if "CLAYVERSE_ENABLE_ENTITYOS_EXEC=0" not in final_gates:
-        errors.append("MANIFEST_ENTITYOS_DISABLED_ACCEPTANCE_MISSING")
+    if steering.get("status") != "CURRENT_OWNER_AUTHORITY_CORRECTION":
+        errors.append("STEERING_852_NOT_CURRENT")
+    if steering.get("product") != "EntityOS":
+        errors.append("STEERING_ENTITYOS_NOT_PRODUCT")
+    if steering.get("integrated_cognition_compute_architecture") != "HCU":
+        errors.append("STEERING_HCU_NOT_COMPUTE_ARCHITECTURE")
+    adjudication = steering.get("adjudication") or {}
+    if adjudication.get("clayverse") != "HISTORICAL_DONOR_PROVENANCE_ONLY":
+        errors.append("STEERING_CLAYVERSE_NOT_HISTORICAL")
+
+    if manifest.get("artifact") != "EntityOS":
+        errors.append("MANIFEST_ENTITYOS_NOT_ARTIFACT")
+    if manifest.get("product_endpoint") != "EntityOS":
+        errors.append("MANIFEST_ENTITYOS_NOT_PRODUCT_ENDPOINT")
+    if manifest.get("integrated_cognition_compute_architecture") != "HCU":
+        errors.append("MANIFEST_HCU_NOT_COMPUTE_ARCHITECTURE")
+    provenance = manifest.get("legacy_manifest_provenance") or {}
+    if provenance.get("prior_manifest_git_blob_sha1") != LEGACY_MANIFEST_BLOB:
+        errors.append("LEGACY_CLAYVERSE_MANIFEST_PROVENANCE_MISMATCH")
+    if provenance.get("classification") != "HISTORICAL_DONOR_PROVENANCE_ONLY":
+        errors.append("LEGACY_CLAYVERSE_MANIFEST_NOT_HISTORICAL")
+    acceptance = manifest.get("acceptance") or {}
+    if acceptance.get("entityos_hcu_whole_runtime_credit") != 0:
+        errors.append("ENTITYOS_HCU_RUNTIME_CREDIT_INFLATED")
+    if acceptance.get("whole_product_pass") is not False:
+        errors.append("ENTITYOS_HCU_WHOLE_PASS_UNJUSTIFIED")
     return errors
 
 
-class EntityOSOptionalityAuthorityTests(unittest.TestCase):
+class EntityOSCurrentAuthorityTests(unittest.TestCase):
     def make_tree(self):
         td = tempfile.TemporaryDirectory()
         root = Path(td.name)
-        directive = root / OWNER_DIRECTIVE
         manifest = root / MANIFEST
-        directive.parent.mkdir(parents=True, exist_ok=True)
+        steering = root / STEERING
         manifest.parent.mkdir(parents=True, exist_ok=True)
-        directive.write_text(
-            "# current owner\n- " + OWNER_OPTIONALITY_SENTENCE + "; it is not the product endpoint.\n",
-            encoding="utf-8",
-        )
+        steering.parent.mkdir(parents=True, exist_ok=True)
         manifest.write_text(
             json.dumps(
                 {
-                    "entityos_role": EXPECTED_ROLE,
-                    "entityos_execution_default": EXPECTED_DEFAULT,
-                    "entityos_whole_product_gate": EXPECTED_GATE,
-                    "requires_for_final_pass": [
-                        CONDITIONAL_FINAL_GATE
-                        + ", exact accepted EntityOS bytes are required; otherwise CLAYVERSE_ENABLE_ENTITYOS_EXEC=0 remains valid"
-                    ],
+                    "artifact": "EntityOS",
+                    "product_endpoint": "EntityOS",
+                    "integrated_cognition_compute_architecture": "HCU",
+                    "legacy_manifest_provenance": {
+                        "prior_manifest_git_blob_sha1": LEGACY_MANIFEST_BLOB,
+                        "classification": "HISTORICAL_DONOR_PROVENANCE_ONLY",
+                    },
+                    "acceptance": {
+                        "entityos_hcu_whole_runtime_credit": 0,
+                        "whole_product_pass": False,
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
+        steering.write_text(
+            json.dumps(
+                {
+                    "status": "CURRENT_OWNER_AUTHORITY_CORRECTION",
+                    "product": "EntityOS",
+                    "integrated_cognition_compute_architecture": "HCU",
+                    "adjudication": {"clayverse": "HISTORICAL_DONOR_PROVENANCE_ONLY"},
                 }
             ),
             encoding="utf-8",
@@ -77,38 +90,50 @@ class EntityOSOptionalityAuthorityTests(unittest.TestCase):
 
     def test_current_repository_contract(self):
         root = Path(__file__).resolve().parents[1]
-        self.assertEqual([], validate_entityos_optionality(root))
+        self.assertEqual([], validate_entityos_current_authority(root))
 
-    def test_coherent_optional_contract_passes(self):
+    def test_coherent_entityos_hcu_contract_passes(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
-        self.assertEqual([], validate_entityos_optionality(root))
+        self.assertEqual([], validate_entityos_current_authority(root))
 
-    def test_mandatory_role_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / MANIFEST
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["entityos_role"] = "MANDATORY_IN_FINAL_ACCEPTED_IMAGE"
-        path.write_text(json.dumps(data), encoding="utf-8")
-        self.assertIn("MANIFEST_ENTITYOS_ROLE_NOT_OPTIONAL", validate_entityos_optionality(root))
-
-    def test_unconditional_final_gate_fails_closed(self):
+    def test_clayverse_product_regression_fails_closed(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
         path = root / MANIFEST
         data = json.loads(path.read_text(encoding="utf-8"))
-        data["requires_for_final_pass"] = [UNCONDITIONAL_FINAL_GATE]
+        data["product_endpoint"] = "ClayVerse"
         path.write_text(json.dumps(data), encoding="utf-8")
-        errors = validate_entityos_optionality(root)
-        self.assertIn("MANIFEST_ENTITYOS_UNCONDITIONAL_FINAL_GATE", errors)
-        self.assertIn("MANIFEST_ENTITYOS_CONDITIONAL_FINAL_GATE_MISSING", errors)
+        self.assertIn("MANIFEST_ENTITYOS_NOT_PRODUCT_ENDPOINT", validate_entityos_current_authority(root))
 
-    def test_owner_directive_change_fails_closed(self):
+    def test_hcu_alias_cannot_become_second_compute_architecture(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
-        (root / OWNER_DIRECTIVE).write_text("# changed owner law\nEntityOS mandatory.\n", encoding="utf-8")
-        self.assertIn("OWNER_ENTITYOS_OPTIONALITY_NOT_CURRENT", validate_entityos_optionality(root))
+        path = root / MANIFEST
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["integrated_cognition_compute_architecture"] = "XCU"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("MANIFEST_HCU_NOT_COMPUTE_ARCHITECTURE", validate_entityos_current_authority(root))
+
+    def test_legacy_manifest_provenance_cannot_be_silently_rewritten(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / MANIFEST
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["legacy_manifest_provenance"]["prior_manifest_git_blob_sha1"] = "f" * 40
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("LEGACY_CLAYVERSE_MANIFEST_PROVENANCE_MISMATCH", validate_entityos_current_authority(root))
+
+    def test_runtime_promotion_without_evidence_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / MANIFEST
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["acceptance"] = {"entityos_hcu_whole_runtime_credit": 1, "whole_product_pass": True}
+        path.write_text(json.dumps(data), encoding="utf-8")
+        errors = validate_entityos_current_authority(root)
+        self.assertIn("ENTITYOS_HCU_RUNTIME_CREDIT_INFLATED", errors)
+        self.assertIn("ENTITYOS_HCU_WHOLE_PASS_UNJUSTIFIED", errors)
 
 
 if __name__ == "__main__":

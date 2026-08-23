@@ -1,0 +1,87 @@
+{
+  "schema": "ENTITYOS_HCU_GO_LOADER_CONSUMPTION_ADMISSION_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_immediately_before_write": "482e6993d83ced472c4333be3888b425cb928faa",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_available": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "canonical_atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed_by_this_organ": false,
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT_PLUS_ORDINARY_DETERMINISTIC_REGRESSION",
+    "reason": "Supervisor 8.63 atomic-lease fallback requires reproducible whole-second user-message metadata when no shared immutable request identity exists. This surface exposed only minute precision, so no unusual intervention was claimed or run."
+  },
+  "donor_source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_head_observed_immediately_before_write": "8ba9f52451c73f2c81281eca5c4c5dc251aef00c",
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "engine_load_path": "the artefact/MicroEntity/hcu/engine_load_lease_v1.py",
+    "engine_load_git_blob_sha": "8fc3d0291b23267015956c1201e1eddfbd46db74",
+    "engine_load_sha256": "502710d3e3ebf31b0271786e1184be0612e95eb44a2afd39e4d164159cf6f2fe",
+    "entry_canonicalization_git_blob_sha": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "entry_canonicalization_sha256": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f",
+    "source_commits_from_this_organ": [
+      "953b8bac79417e31db2581f79012bf930261e82b",
+      "912746256999f4663bd6f3817e065d070a410b27",
+      "66380182a92fa5619e908706a3f26e14617d41da"
+    ],
+    "selected_delta": "verify_loader_consumption now requires an externally admitted exact normalized LoaderConsumption record; merely setting evidence_source=ACTUAL_LOADER_READ_PATH no longer self-admits the observation."
+  },
+  "hypothesis": {
+    "preferred": "A loader evidence-source label plus matching digests is insufficient because caller-constructed data can impersonate the actual loader path unless an independent admission boundary binds the observation.",
+    "counterhypothesis": "Exact digests plus ACTUAL_LOADER_READ_PATH label are already sufficient at this component boundary.",
+    "discriminator": "Keep bytes and ACTUAL_LOADER_READ_PATH exact while removing the external admission record; verification must fail closed."
+  },
+  "execution": {
+    "surface": "AUTHORIZED_ISOLATED_SESSION_CONTAINER_COMPONENT_REGRESSION",
+    "python": "3.13.5",
+    "network_or_credentials_used_by_test": false,
+    "exact_source_binding": "Git object hashes verified for engine_load_lease_v1.py and entry_canonicalization_v1.py before execution",
+    "dependency_scope": "EXACT_ENGINE_LOAD_LEASE_PLUS_EXACT_RFC8785_JCS; ENGINE_ADMISSION_TYPES_MINIMAL_DETERMINISTIC_TEST_DOUBLE",
+    "runs": 2,
+    "tests_per_run": 5,
+    "result_each_run": "5_OF_5_PASS",
+    "cases": [
+      "exact externally admitted loader-consumption record passes",
+      "exact bytes plus ACTUAL_LOADER_READ_PATH with empty external registry fails LOADER_CONSUMPTION_NOT_ADMITTED",
+      "registry substitution under the expected digest fails LOADER_CONSUMPTION_REGISTRY_MISMATCH",
+      "POSTHOC_FILESYSTEM_REHASH fails ACTUAL_LOADER_READ_EVIDENCE_REQUIRED",
+      "stale generation fails closed"
+    ]
+  },
+  "measured_boundary": {
+    "supported": "The selected engine-load verification component no longer accepts self-asserted ACTUAL_LOADER_READ_PATH data without an exact externally admitted normalized observation, and the tested substitution/staleness boundaries fail closed.",
+    "not_supported": "The external registry is an interface to trusted runtime authority, not proof that a real model loader produced the observation. No real checkpoint/tokenizer/runtime/build was loaded and no model inference occurred.",
+    "real_loader_instrumented": false,
+    "real_local_08b_model_loaded": false,
+    "full_hcu_dependency_graph_executed": false
+  },
+  "credit": {
+    "component_mechanism_evidence": "SUPPORTED",
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "tracks": {
+    "entityos_executable_convergence": "ADVANCED_BY_FAIL_CLOSED_ENGINE_LOAD_EVIDENCE_BOUNDARY_AND_COMPONENT_REGRESSION",
+    "hcu_typed_entry": "ADVANCED_AT_ENGINE_LOAD_CAUSAL_EVIDENCE_BOUNDARY_ON_RETAINED_DONOR_ONLY",
+    "global_jspace_gwt_free_only_readiness": "NO_ADDITIONAL_UNIQUE_RUNTIME_CREDIT; PARALLEL MAIN ALREADY RECORDED BINDER_V2_GRID10_COMPONENT_REPLICATION"
+  },
+  "migration_reuse_score": "EASIER_CROSS_MODE",
+  "next_exact_gate": "Fuse only the retained loader-admission mechanism onto exact current main when its surrounding engine-load path is admitted; then instrument an actual zero-cost local ~0.8B loader to produce the canonical consumption observation and execute the full Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure through the single admitted FREE executor path."
+}

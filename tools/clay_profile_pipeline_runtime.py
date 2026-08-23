@@ -24,7 +24,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.4"
+VERSION = "clay-profile-pipeline-runtime/0.5"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -98,12 +98,14 @@ class ProfilePipelineRuntime(clay.Runtime):
         root: str | Path = ".",
         allow_network: bool = False,
         provider_override: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+        local_exec_runner: str | Path | None = None,
     ):
         super().__init__()
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.allow_network = allow_network
         self.provider_override = provider_override
+        self.local_exec_runner = local_exec_runner
         self.effect_trace: list[dict[str, Any]] = []
         self._active_secrets: list[str] = []
         self.builtins["effect"] = self.effect
@@ -712,7 +714,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                 "CANONICAL_STATE_HASH": compiled["canonical_state_hash"],
                 "PACKET_HASH": compiled["packet_hash"],
                 "CANONICAL_STATE": compiled["canonical"],
-                "PERSONALITY_STATE": compiled["personality_state"],
+                "PERSONALITY_STATE": compiled["canonical"]["personality_state"],
                 "NEW_EVENT_PACKET": compiled["packet"],
                 "PREVIOUS_CONTINUITY": previous.get("continuity", {}),
                 "ALLOWED_EVIDENCE_REFS": compiled["allowed_evidence_refs"],
@@ -879,6 +881,12 @@ class ProfilePipelineRuntime(clay.Runtime):
     ) -> dict[str, Any]:
         prompt_path: Path | None = None
         try:
+            if self.local_exec_runner is None:
+                raise PipelineFault("LOCAL_EXEC_NOT_ADMITTED")
+            trusted_runner = self._resolve(str(self.local_exec_runner))
+            if not trusted_runner.is_file():
+                raise PipelineFault("LOCAL_EXEC_RUNNER_NOT_READABLE")
+
             model_value = str(
                 inference.get("local_model_path") or inference.get("model_path") or ""
             )
@@ -888,15 +896,13 @@ class ProfilePipelineRuntime(clay.Runtime):
             if not model_path.is_file():
                 raise PipelineFault("LOCAL_MODEL_NOT_READABLE")
 
-            argv_spec = inference.get("local_argv_json", inference.get("argv"))
-            if isinstance(argv_spec, str):
-                argv_spec = json.loads(argv_spec)
-            if (
-                not isinstance(argv_spec, list)
-                or not argv_spec
-                or not all(isinstance(item, str) for item in argv_spec)
-            ):
-                raise PipelineFault("LOCAL_ARGV_INVALID")
+            if "local_argv_json" in inference or "argv" in inference:
+                raise PipelineFault("LOCAL_EXEC_PROFILE_COMMAND_FORBIDDEN")
+            args_spec = inference.get("local_args_json", inference.get("args_json", []))
+            if isinstance(args_spec, str):
+                args_spec = json.loads(args_spec)
+            if not isinstance(args_spec, list) or not all(isinstance(item, str) for item in args_spec):
+                raise PipelineFault("LOCAL_ARGS_INVALID")
 
             prompt_template = str(
                 inference.get("local_prompt_template", "{{SYSTEM}}\n\n{{USER}}\n")
@@ -921,8 +927,8 @@ class ProfilePipelineRuntime(clay.Runtime):
                 "{{MAX_TOKENS}}": str(inference.get("max_tokens", 2000)),
                 "{{TEMPERATURE}}": str(inference.get("temperature", 0.7)),
             }
-            argv: list[str] = []
-            for item in argv_spec:
+            argv: list[str] = [str(trusted_runner)]
+            for item in args_spec:
                 rendered = item
                 for key, value in replacements.items():
                     rendered = rendered.replace(key, value)
@@ -1029,7 +1035,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                     raise PipelineFault("SECRET_LEAK")
 
             allowed = set(compiled["allowed_evidence_refs"])
-            metrics = compiled["personality_state"]
+            metrics = compiled["canonical"]["personality_state"]
             for section in payload[contract["sections_field"]]:
                 refs = section.get(contract["section_evidence_field"], [])
                 if gate.get("require_evidence_per_section", True) and not refs:

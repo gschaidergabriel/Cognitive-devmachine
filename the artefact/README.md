@@ -82,3 +82,9 @@ Runtime credit remains **ZERO** for this delta because no exact authorized whole
 After the authority reconciliation merged, adversarial source review found a narrower false-green: top-level ClayVerse authority could remain valid while nested `PROGRAM_STATE.json` work-selection fields were changed back toward a retired program. The authority validator now also binds the current stage goal, primary dynamic target, current frontier and `go` contract to ClayVerse, with poison regressions for stale nested work selection.
 
 The post-merge frontier is now re-entered explicitly as exact-current ClayVerse authority/full-suite/OCI build-startup on an actually-started authorized isolated executor, followed by the Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/EntityOS/recovery path. This is source/control hardening only; whole-product runtime credit remains **ZERO** until that exact execution exists.
+
+## 2026-08-23 `go` re-entry — inherited control composition fence
+
+A further adversarial review found that authority-validator v2 still accepted Control 4.4's claims that earlier controls remained intact without reading Controls 4.1, 4.2 and 4.3 themselves. That was a fail-open composition boundary: an inherited FREE_ONLY, no-VPS/self-hosted, or exact-runtime-evidence rule could be weakened while unchanged 4.4 metadata continued to say it was preserved.
+
+Validator v3 now reads and checks the effective 4.1 -> 4.2 -> 4.3 -> 4.4 chain directly while preserving the newer nested-work-selector and root-`CLAUDE.md` routing guards. Poison regressions cover paid fallback, direct VPS execution, and removal of the exact admitted runtime-evidence requirement. Fresh fused-branch runtime credit remains **ZERO**; the next empirical gate is still an actually-started authorized isolated executor followed by exact OCI build/startup identity binding.

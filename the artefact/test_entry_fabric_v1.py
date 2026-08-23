@@ -1,6 +1,11 @@
 import unittest
 
-from entry_fabric_v1 import EntryAdmissionError, bind_entry
+from entry_fabric_v1 import (
+    CANONICALIZATION_SCHEMA,
+    MAX_SAFE_JSON_INTEGER,
+    EntryAdmissionError,
+    bind_entry,
+)
 
 
 def base_entry():
@@ -35,60 +40,69 @@ class EntryFabricTests(unittest.TestCase):
         self.assertEqual(pa.entry_sha256, pb.entry_sha256)
         self.assertEqual(pa.capability_scope, ("cognition.request", "state.read"))
         self.assertEqual(pa.observed_at, "2026-08-23T15:00:00Z")
+        self.assertEqual(pa.canonicalization_schema, CANONICALIZATION_SCHEMA)
 
     def test_distinct_event_identity_changes_packet_identity(self):
-        a = base_entry()
-        b = base_entry()
-        b["event_id"] = "evt-002"
-        self.assertNotEqual(
-            bind_entry(a, current_generation=7).entry_sha256,
-            bind_entry(b, current_generation=7).entry_sha256,
-        )
+        a = base_entry(); b = base_entry(); b["event_id"] = "evt-002"
+        self.assertNotEqual(bind_entry(a, current_generation=7).entry_sha256, bind_entry(b, current_generation=7).entry_sha256)
 
     def test_distinct_payload_digest_changes_packet_identity(self):
-        a = base_entry()
-        b = base_entry()
-        b["payload_sha256"] = "c" * 64
-        self.assertNotEqual(
-            bind_entry(a, current_generation=7).entry_sha256,
-            bind_entry(b, current_generation=7).entry_sha256,
-        )
+        a = base_entry(); b = base_entry(); b["payload_sha256"] = "c" * 64
+        self.assertNotEqual(bind_entry(a, current_generation=7).entry_sha256, bind_entry(b, current_generation=7).entry_sha256)
 
     def test_stale_generation_fails_closed(self):
         with self.assertRaisesRegex(EntryAdmissionError, "STALE_ENTITY_GENERATION"):
             bind_entry(base_entry(), current_generation=8)
 
     def test_unknown_budget_key_fails_closed(self):
-        e = base_entry()
-        e["budget"]["gpu_seconds"] = 1
+        e = base_entry(); e["budget"]["gpu_seconds"] = 1
         with self.assertRaisesRegex(EntryAdmissionError, "budget:UNKNOWN_KEY"):
             bind_entry(e, current_generation=7)
 
+    def test_budget_above_jcs_safe_integer_fails_closed(self):
+        e = base_entry(); e["budget"]["max_tokens"] = MAX_SAFE_JSON_INTEGER + 1
+        with self.assertRaisesRegex(EntryAdmissionError, "JCS_SAFE_INTEGER_REQUIRED"):
+            bind_entry(e, current_generation=7)
+
+    def test_generation_above_jcs_safe_integer_fails_closed(self):
+        e = base_entry(); e["entity_generation"] = MAX_SAFE_JSON_INTEGER + 1
+        with self.assertRaisesRegex(EntryAdmissionError, "JCS_SAFE_INTEGER_REQUIRED"):
+            bind_entry(e, current_generation=MAX_SAFE_JSON_INTEGER + 1)
+
     def test_invalid_digest_fails_closed(self):
-        e = base_entry()
-        e["provenance_sha256"] = "not-a-digest"
+        e = base_entry(); e["provenance_sha256"] = "not-a-digest"
         with self.assertRaisesRegex(EntryAdmissionError, "provenance_sha256:HEX_FORMAT_INVALID"):
             bind_entry(e, current_generation=7)
 
     def test_partial_trace_context_fails_closed(self):
-        e = base_entry()
-        e["trace_id"] = "1" * 32
+        e = base_entry(); e["trace_id"] = "1" * 32
         with self.assertRaisesRegex(EntryAdmissionError, "TRACE_CONTEXT_PARTIAL"):
             bind_entry(e, current_generation=7)
 
     def test_valid_trace_context_is_bound(self):
-        e = base_entry()
-        e["trace_id"] = "1" * 32
-        e["parent_span_id"] = "2" * 16
+        e = base_entry(); e["trace_id"] = "1" * 32; e["parent_span_id"] = "2" * 16
         p = bind_entry(e, current_generation=7)
         self.assertEqual(p.trace_id, "1" * 32)
         self.assertEqual(p.parent_span_id, "2" * 16)
 
     def test_boolean_generation_is_rejected(self):
-        e = base_entry()
-        e["entity_generation"] = True
+        e = base_entry(); e["entity_generation"] = True
         with self.assertRaisesRegex(EntryAdmissionError, "ENTITY_GENERATION_INVALID"):
             bind_entry(e, current_generation=1)
+
+    def test_non_ascii_capability_token_is_rejected_before_sorting(self):
+        e = base_entry(); e["capability_scope"] = ["state.read", "cognition.😀"]
+        with self.assertRaisesRegex(EntryAdmissionError, "TOKEN_REQUIRED"):
+            bind_entry(e, current_generation=7)
+
+    def test_unpaired_surrogate_fails_closed(self):
+        e = base_entry(); e["event_id"] = "bad-\ud800"
+        with self.assertRaisesRegex(EntryAdmissionError, "event_id:UNICODE_REQUIRED"):
+            bind_entry(e, current_generation=7)
+
+    def test_cross_language_reference_vector(self):
+        p = bind_entry(base_entry(), current_generation=7)
+        self.assertEqual(p.entry_sha256, "d6f14d8792c1653b19c95ec4f39653a671772f809e238c8e8e91a19df26ea5de")
 
 
 if __name__ == "__main__":

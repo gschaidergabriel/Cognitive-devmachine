@@ -1,41 +1,63 @@
 {
-  "schema_version": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v1",
-  "status": "SOURCE_CONTRACT_CROSS_LANGUAGE_IDENTITY_NOT_YET_ADMITTED",
+  "schema_version": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v2",
+  "status": "SOURCE_CANDIDATES_CROSS_LANGUAGE_IDENTITY_NOT_YET_ADMITTED",
   "date": "2026-08-23",
-  "program": "ENTITYOS_HCU_XENO",
-  "scope": "Xeno Entry Fabric causal event identity for HCU/XCU routing and downstream inference receipts",
+  "program": "ENTITYOS_HCU",
+  "scope": "Typed Entry Fabric causal identity, HCU routing identities and downstream inference receipts",
   "authority": {
     "canonical_state_evidence": "DETERMINISTIC_EXTERNAL_TO_MODEL_COGNITION",
     "effect_authority": "EffectGate/EffectJournal",
     "canonicalization_is_truth_authority": false,
     "canonicalization_is_effect_authority": false
   },
-  "current_implementation_scope": {
-    "router": "reactive_event_router_v1.py",
+  "superseded_implementation_scope": {
     "serializer": "PYTHON_JSON_SORT_KEYS_COMPACT_UTF8/v1",
     "cross_language_identity_claim": false,
-    "law": "Current Python-local deterministic hashes MUST NOT be represented as proof of heterogeneous Entry-Fabric hash identity. Existing receipts keep their original schema/identity and are never silently reinterpreted under a later canonicalizer."
+    "law": "Legacy Python-local deterministic hashes retain only their original scoped identity and are never silently reinterpreted under a later canonicalizer."
   },
-  "target_candidate": {
+  "standard_candidate": {
     "canonicalization": "RFC8785_JCS_IJSON/v1",
     "reference": "RFC 8785 JSON Canonicalization Scheme",
     "admission_status": "CANDIDATE_REQUIRES_IMPLEMENTATION_AND_INDEPENDENT_CONFORMANCE_EVIDENCE",
-    "required_input_constraints": [
-      "duplicate object property names rejected at raw ingress before ordinary Mapping construction can erase them",
-      "all strings are valid Unicode and lone surrogates fail closed",
-      "string contents are preserved as-is with no Unicode normalization performed by the canonicalization layer",
-      "JSON numbers are finite and representable as IEEE-754 binary64; NaN and Infinity fail closed",
-      "higher-precision numeric application values are represented by an explicitly typed string/integer contract rather than silently rounded"
+    "advantages": [
+      "published interoperable JSON canonicalization scheme",
+      "ECMAScript-compatible primitive serialization",
+      "deterministic UTF-16 property ordering"
     ],
-    "required_serialization": [
-      "no inter-token whitespace",
-      "JSON primitive serialization follows the RFC 8785 ECMAScript-compatible rules",
-      "object properties sort recursively by raw property-name UTF-16 code units",
-      "array element order is preserved while objects inside arrays are recursively canonicalized",
-      "canonical output bytes are UTF-8"
+    "costs_or_risks": [
+      "full number serialization conformance must be implemented rather than approximated with Python json.dumps",
+      "raw duplicate-property rejection must occur before ordinary Mapping construction",
+      "lone-surrogate and I-JSON constraints require explicit ingress checks"
+    ]
+  },
+  "typed_candidate": {
+    "canonicalization": "HCU_TYPED_CANONICAL/v1",
+    "implementation": "typed_canonical_v1.py",
+    "admission_status": "SOURCE_IMPLEMENTED_CANDIDATE_REQUIRES_INDEPENDENT_CROSS_LANGUAGE_CONFORMANCE",
+    "scope": "already-admitted typed EntityOS/HCU structures, not arbitrary raw JSON",
+    "wire_law": [
+      "domain-separated version header",
+      "distinct null boolean signed-int64 IEEE754-binary64 UTF8-string sequence and string-key-map tags",
+      "negative floating zero normalizes to positive zero",
+      "NaN and Infinity reject",
+      "strings preserve exact Unicode scalar content and encode strict UTF-8 with no normalization",
+      "map keys sort by raw UTF-8 bytes",
+      "sequence order is preserved",
+      "unsupported types reject"
+    ],
+    "advantages": [
+      "avoids host-language JSON number formatting as a hash dependency",
+      "preserves integer-versus-float type identity",
+      "small explicit codec surface suitable for an independent second implementation"
+    ],
+    "costs_or_risks": [
+      "custom wire contract creates maintenance burden compared with a published standard",
+      "cross-language identity remains unproven until a second implementation reproduces exact bytes/digests",
+      "raw JSON duplicate-key rejection remains an ingress-parser responsibility"
     ]
   },
   "causal_identity_boundary": {
+    "current_source_candidate_canonicalization": "HCU_TYPED_CANONICAL/v1",
     "causal_event_excludes_routing_resolution_metadata": [
       "requested_internal_provider",
       "resolved_internal_engine",
@@ -71,21 +93,20 @@
     "legacy_python_scoped_hashes_remain_valid_only_at_original_scope": true,
     "cross_language_promotion_requires_new_versioned_identity_schema": true,
     "mixed_canonicalizer_replay_without_schema_binding": "REJECT",
-    "canonicalizer_downgrade_or_unknown_version": "REJECT"
+    "canonicalizer_downgrade_or_unknown_version": "REJECT",
+    "switch_between_jcs_and_typed_candidate_without_new_identity_version": "REJECT"
   },
   "required_discriminators_before_cross_language_promotion": [
-    "official RFC 8785 number serialization vectors",
-    "official RFC 8785 UTF-16 property ordering vector",
-    "same admitted typed event canonicalized independently by at least two implementations/languages yields byte-identical canonical output and identical event digest",
-    "same event with reordered JSON properties yields identical canonical bytes/digest",
-    "duplicate-property raw JSON is rejected before event identity is minted",
-    "NaN Infinity lone-surrogate and untyped-extension cases fail closed",
-    "numeric edge cases including negative zero exponent formatting and IEEE-754 rounding match the admitted canonicalization contract",
+    "same admitted typed event canonicalized independently by at least two implementations or languages yields byte-identical canonical output and identical event digest",
+    "same event with reordered mapping properties yields identical canonical bytes and digest",
+    "NaN Infinity lone-surrogate unsupported-type and unknown-version cases fail closed",
+    "numeric edge cases including negative zero and integer-versus-float typing match the admitted contract",
     "causal event digest remains stable across engine resolution while route digest changes when exact engine artifact identity changes",
-    "downstream inference receipt with wrong or missing canonicalization version fails closed"
+    "downstream inference receipt with wrong or missing canonicalization version fails closed",
+    "if RFC8785_JCS_IJSON is selected instead, official RFC8785 number serialization and UTF-16 property ordering vectors must pass"
   ],
   "promotion_credit": 0,
   "runtime_credit": 0,
   "whole_entityos_pass": false,
-  "note": "This contract advances the Xeno Entry Fabric/XPU/XCU identity seam without adding a second state, routing, or effect authority. RFC 8785 is a candidate interoperability mechanism; source documentation alone does not establish conformance."
+  "note": "The typed codec is a smaller explicit alternative for already-typed HCU structures, not a claim of RFC 8785 conformance. Source implementation does not establish cross-language equivalence; independent conformance remains the gate."
 }

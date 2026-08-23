@@ -1,0 +1,73 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "canonical_main_observed_before_receipt": "00d35e24859ca770526b20006b41733265ce5596",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "user_message_timestamp_precision": "MINUTE_ONLY_2026-08-24T03:52+07:00",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_lane_created": false
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed_after_executor_write": "70ba265cebec55249a4c2937eba3827e31a70e95",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_after_write": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+    "executor_pinned_donor": "511d568932bf47828679e3ca6ba05650f18d284d"
+  },
+  "finding": {
+    "classification": "EXECUTOR_ROUTE_CONTRACT_DONOR_IDENTITY_GUARD_GAP",
+    "observed": [
+      "A failed partial successor rebind produced deployment dpl_AUu1yY3ADYiCtecE7Q8rvhzZhqDh with a deployment-carried global_jspace_gwt_v1.py blob mismatch against the still-pinned 511d closure.",
+      "A subsequent partial rebind produced deployment dpl_26pNV41EYrvFuWKRBFCHUPjQN2Xk and failed with manifest=d371ccac... versus contract=511d5689... donor drift before Sandbox execution.",
+      "The executor route was then briefly changed to require donor d371ccac... while the contract, independent manifest and 17-blob carrier still described donor 511d5689....",
+      "A parallel organ restored the live executor route to the coherent 511d donor before this organ wrote.",
+      "The existing permission/build guard checked FREE_ONLY state, source verification ordering and permission semantics but did not independently assert that the route REQUIRED_DONOR_COMMIT equals contract.retained_donor_commit."
+    ],
+    "hypothesis": "Without a build-time route-to-contract donor equality check, a future partial donor rebind can reintroduce a mixed source authority and survive some structural guards until a later build or route verification stage.",
+    "counterhypothesis": "Manifest-to-contract equality plus runtime route verification is sufficient, so a dedicated route-to-contract build guard adds no material safety.",
+    "counterhypothesis_assessment": "REJECTED_AT_SOURCE_LEVEL: the observed partial rebind sequence demonstrated route, manifest and contract can move independently; earlier rejection is cheaper and preserves one coherent executor discriminator."
+  },
+  "durable_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "commit": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+    "file": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-rebind-permission-semantics.mjs",
+    "change": "Parse the route REQUIRED_DONOR_COMMIT, require exact equality with contract.retained_donor_commit, fail closed on missing/mismatched route donor identity, and surface the bound donor in guard output.",
+    "execution_scope": "SOURCE_BUILD_GUARD_ONLY",
+    "runtime_executed_by_this_organ": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: hardened the single retained executor so partial donor rebind drift fails closed at build-guard scope before FREE_ONLY Sandbox creation; preserved the coherent pinned 511d runtime discriminator.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_FUSION: re-entered the moving retained donor and verified parallel convergence of causal Event family splitting, admitted canonical Vector-Control packet provenance, parent InferenceReceipt admission, and model-input-control causality work without creating duplicate HCU/state authorities.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_FUSION: current main now carries the temporal causality gate requiring packet(t) -> invocation(t+1), while donor training admission/family-split provenance has tightened; no model/training/runtime credit promoted."
+  },
+  "execution": {
+    "new_unusual_experiment": false,
+    "new_sandbox_invocation_by_this_organ": false,
+    "paid_provider_or_upgrade": false,
+    "together_preflight_or_training": false,
+    "vps_self_hosted_or_production_test": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a concurrently moving current-facing surface under many parallel go organs; this exact append-only receipt plus the executor commit preserves the delta without risking a stale whole-file overwrite."
+  },
+  "next_exact_action": "First require a naturally available included-tier Vercel preview whose immutable Git SHA exactly equals the then-current PR810 head and require the fixed pinned 511d 17-blob/14-result build/source closure to pass before invoking the FREE_ONLY route. Separately continue the donor's acyclic packet(t)->invocation(t+1) deterministic regression and only after the pinned runtime discriminator decide one coherent immutable successor donor rebind."
+}

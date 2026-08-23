@@ -1,0 +1,69 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_FAMILY_SPLIT_SINGLE_AUTHORITY_FUSION/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_receipt": "24df76ee0bbef8f1b0dd1ae0a52690ffa81501f8",
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "together_general_inference": "FORBIDDEN",
+    "together_paid_preflight_or_job": "FORBIDDEN_IN_CURRENT_SUPERVISOR_MODE"
+  },
+  "retained_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "single_authority_lane_preserved": true
+  },
+  "finding": {
+    "classification": "DATASET_SPLIT_AUTHORITY_DIVERGENCE",
+    "prior_observed_discriminator": "trace_family_id=episode:1 had holdout under the retired private JCS family splitter and train under ENTITYOS_HCU_JSPACE_DATASET_FAMILY_SPLIT/v1",
+    "risk": "Correlated causal families could receive inconsistent split labels across training compilation stages, invalidating dataset-freeze comparability even if each individual splitter was internally leak-free."
+  },
+  "fusion": {
+    "selected_splitter": "the artefact/MicroEntity/hcu/jspace_dataset_family_split_v1.py::split_for_family",
+    "selected_split_schema": "ENTITYOS_HCU_JSPACE_DATASET_FAMILY_SPLIT/v1",
+    "compiler": "the artefact/MicroEntity/hcu/compile_jspace_bootstrap_dataset_v1.py",
+    "compiler_commit": "7e09ca9a5f01f2624e576396b0f869548ad99182",
+    "compiler_blob": "c00c78c64c522dbe258b49ad777a19a936a9fe24",
+    "repair": "Removed the bootstrap compiler's private family hash/split semantics and imported the selected split_for_family authority directly; emitted rows and dataset receipts now bind FAMILY_SPLIT_SCHEMA.",
+    "executor_suite_test_commit": "cfa23e1827f385423eff797eefd5fb6ae278d1c3",
+    "executor_suite_test_blob": "a017563929d9705a9c3fb5c3f8f892e15ba8dab6",
+    "parity_regression": "Existing executor-covered test_compile_jspace_bootstrap_dataset_v1 now asserts object identity of split_for_family, schema identity, episode:1 -> train, and exact parity across 260 deterministic family ids.",
+    "temporary_extra_parity_test_removed": "f21fdd35c4e50698408d70b4733f239c64d66ca8",
+    "parallel_split_authority_created": false
+  },
+  "coordination": {
+    "executor_stale_dependency_repair_by_parallel_worker": true,
+    "executor_sync_receipt_main_commit": "24df76ee0bbef8f1b0dd1ae0a52690ffa81501f8",
+    "stale_executor_write_rejected_by_github_409": true,
+    "stale_overwrite_forced": false,
+    "current_executor_already_runs_test_compile_jspace_bootstrap_dataset_v1": true
+  },
+  "execution": {
+    "exact_current_full_spine_sandbox_run_started_here": false,
+    "runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "reason": "Vercel Sandbox callability is empirically established, but current FREE_ONLY policy now fail-closes new metered/unknown-cost Sandbox execution until explicit zero-monetary-cost admission or newer authority."
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_count_here": 0,
+    "shared_go_unusual_experiment": "HASH_LAUNDERING_COUNTER_REALITY/v1",
+    "shared_go_unusual_experiment_total": 1
+  },
+  "training": {
+    "together_preflight_performed": false,
+    "together_credential_lookup_performed": false,
+    "together_job_created": false,
+    "paid_spend": 0
+  },
+  "next_exact_gate": "After FREE_ONLY cost admission is explicit, execute the synchronized fixed SHA/tree-bound full-spine Sandbox capsule against exact current main plus retained/fused HCU head; require the executor-covered family-split parity test and all causal Entry->route->verified-load->inference->GRID10->J-Space/GWT->dataset admission regressions before any dataset freeze or zero-cost local ~0.8B specialization receives runtime credit.",
+  "claim_class": "SOURCE_FUSION_AND_EXECUTOR_REGRESSION_COVERAGE_ONLY_NOT_RUNTIME_ACCEPTANCE",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

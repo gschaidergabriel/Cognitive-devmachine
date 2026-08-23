@@ -1,0 +1,48 @@
+{
+  "schema": "CLAY_SOURCE_FALSIFIER_REPAIR/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "base_main": "368b31145663d3ea9944527d9a30a9a44b596b6c",
+  "source_path": "tools/miniunifieddb_cognition_store_v1.py",
+  "regressed_main_source_blob": "7e43e3dbfa4fd72377fb8746507e025b5e3b5928",
+  "repaired_source_blob": "0f994288ba6184ccd510001e7a553c3801b013f1",
+  "generation_fence_test_blob": "20d550d021f16ebaa68da8080b96739ef13487ed",
+  "observed_regression": "_require_admitted_digest accepted cognition-object admissions from any admitted_generation <= requested/live entity_generation, allowing stale admission authority to survive a generation advance.",
+  "repair": "require mini_cognition_object_admissions.admitted_generation to equal the requested/live entity generation exactly while preserving the landed read-tamper digest revalidation and transaction-safe cognition schema bootstrap",
+  "falsifier": "a generation-3 object admission must not authorize a generation-4 cognition boot binding after entity_state.generation advances to 4",
+  "regression_test": "tests/test_miniunifieddb_cognition_generation_fence_v1.py::CognitionGenerationFenceTests::test_prior_generation_object_admission_cannot_authorize_new_boot_binding",
+  "evidence": {
+    "source_identity_bound": true,
+    "prior_bounded_sql_mechanism_discriminator": "generation-3 admission was visible to old <= query and absent from exact-generation query",
+    "current_exact_branch_test_execution": "NOT_OBSERVED_FROM_AVAILABLE_GITHUB_SURFACE",
+    "runtime_credit": 0,
+    "bundled_08b_credit": 0,
+    "jspace_credit": 0,
+    "whole_gwt_credit": 0,
+    "claude_adapter_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "zero": "runtime identity/configuration only",
+    "model_output": "candidate only",
+    "effects": "EffectGate only"
+  },
+  "coordination": {
+    "lane": "existing generation-fence lane reconstructed on newest overlapping store ancestry instead of merging stale bytes",
+    "macrocycle_id": null,
+    "unusual_experiment": {
+      "count_for_this_macrocycle": 0,
+      "id": null,
+      "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID"
+    },
+    "hcu": "NO_CHANGE_NON_DUPLICATION; no new admitted HCU runtime surface was available and current work addressed a prerequisite authority fence on the canonical cognition path"
+  },
+  "classification": "SOURCE_REPAIR_PLUS_EXISTING_BOUNDED_MECHANISM_EVIDENCE_RUNTIME_UNVERIFIED",
+  "next_gate": "land the exact-generation fence without regressing transaction/read-integrity protections; then bind the single retained reference runtime Cognitive Fabric handler to the canonical invocation selector, resolve_prepare_binding and existing Zero workspace/InferencePacket chain, followed by actually-started authorized isolated exact-source execution"
+}

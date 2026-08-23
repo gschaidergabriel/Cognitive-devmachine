@@ -1,0 +1,99 @@
+{
+  "schema": "CLAYVERSE_GO_CONTROLLER_READY_FRONTIER/v3",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT temporary organ",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main": "eddbe94ac0bd2611084d2da3c538c75d4f357fa1",
+  "linear_branch": "gpt56sol/go-controller-ready-frontier-v2-20260823-1657",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "observed": {
+    "retained_controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "retained_controller_pr": 810,
+    "retained_controller_head": "24aec8164557f6020d1b76845a0a37b46a31a843",
+    "retained_controller_head_commit_time_utc": "2026-08-17T19:32:19Z",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "sandbox_bridge_historical_admission": true,
+    "runtime_one_shot_token_ingress_implemented": true,
+    "exact_retained_controller_head_ready_deployment_observed": false,
+    "owner_token_post_observed": false,
+    "whole_clayverse_runtime_credit": 0
+  },
+  "vercel_control_plane_discriminator": {
+    "latest_project_deployments_checked": true,
+    "post_head_window_start_utc": "2026-08-17T19:30:00Z",
+    "post_head_window_end_utc": "2026-08-18T02:10:00Z",
+    "deployments_in_post_head_window": 8,
+    "matching_head_deployments": 0,
+    "matching_head_ready_deployments": 0,
+    "interpretation": "Historical READY deployments prove the controller topology can deploy, but none binds the current retained PR #810 head. Token ingress is therefore not the only current pre-execution gate."
+  },
+  "counterhypothesis": {
+    "claim": "Because Sandbox.create and runtime token ingress are historically proven, the only remaining blocker is the owner-held GITHUB_READ_TOKEN POST.",
+    "falsifier": "A READY deployment bound to the exact current retained PR #810 head must exist before the owner-held token POST can be treated as the sole next gate.",
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_CONTROL_PLANE_SCOPE"
+  },
+  "delta": {
+    "program_state_schema": "8.3",
+    "stage_gate": "BLOCKED_ON_EXACT_RETAINED_CONTROLLER_READY_REBIND_AND_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS",
+    "retained_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "controller_ready_binding": "EXACT_RETAINED_CONTROLLER_HEAD_READY_REQUIRED_BEFORE_TOKEN_POST",
+    "parallel_provider_semantic_fusion": "Merged PR #1350 current-owner/Claude/retired-provider/conditional-EntityOS continuity fences are preserved in the same execution-boundary guard and focused test file.",
+    "parallel_python_hash_transition_preserved": "Merged PR #1345 is inherited from exact base main and not overwritten.",
+    "duplicate_execution_path_created": false,
+    "runtime_credit_minted": false
+  },
+  "mechanism_evidence": {
+    "surface": "isolated OpenAI Python fused decision-helper reconstruction",
+    "cases_run": 10,
+    "cases_passed": 10,
+    "cases": [
+      "current exact-controller READY+token sequence and current provider semantics accepted",
+      "stale generic execution-surface selector rejected",
+      "token-only selector without controller READY binding rejected",
+      "wrong retained controller rejected",
+      "false whole-product runtime credit rejected",
+      "degraded Vercel continuity rejected",
+      "stale mandatory provider contract rejected",
+      "missing conditional EntityOS law rejected",
+      "missing canonical normal interactive Claude Code marker rejected",
+      "retired final acceptance probe authority rejected"
+    ],
+    "scope": "fused decision-helper mechanism only; not exact full-checkout pytest, not OCI/runtime evidence"
+  },
+  "github_ci_observation": {
+    "superseded_pr_head": "006c52b9086c35129ad61774e79634ccfdc6e241",
+    "identity_guard_run": 32633295976,
+    "verify_run": 32633296049,
+    "jobs_visible_steps": null,
+    "classification": "RUNNER_OR_EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION_NOT_PRODUCT_TEST_FAILURE"
+  },
+  "coordination": {
+    "duplicate_pr_1317_closed": true,
+    "duplicate_pr_1186_closed": true,
+    "conflict_pr_1349_closed_unmerged": true,
+    "parallel_pr_1350_fused_not_overwritten": true,
+    "linear_reconstruction_from_exact_current_main": true,
+    "single_retained_execution_controller": "Dr.-Unterweger#810",
+    "authority_switch_rechecked": true
+  },
+  "unusual_experiment": {
+    "new_experiment_started": false,
+    "reason": "The shared user-triggered go unusual-experiment slot was already consumed by AUTHORITY_ROLLBACK_POISON_REPLAY during the owner-authority re-entry; this control-plane discriminator and deterministic helper regression are not a second unusual experiment."
+  },
+  "safety": {
+    "unifieddb_canonical": true,
+    "effectgate_only_external_effect_authority": true,
+    "together_used": false,
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "github_read_token_requested_or_accessed": false,
+    "secret_persisted": false,
+    "paid_or_final_training_started": false
+  },
+  "next_exact_gate": "Rebind the single retained PR #810 controller to exact current Research/admitted source identity and obtain a READY deployment; then owner-start the one-shot POST with a scoped read-only GITHUB_READ_TOKEN, verify exact private source identities and post-fetch credential absence, run exact-current regressions, build/capture/start the exact ClayVerse OCI image, and only then continue the integrated acceptance vector.",
+  "evidence_boundary": "CONTROL_PLANE_OBSERVATION + SOURCE_WORK_SELECTION_REPAIR + FUSED_DECISION_HELPER_MECHANISM_SUPPORT_ONLY; NOT EXACT FULL_CHECKOUT PASS, NOT OCI PASS, NOT WHOLE_CLAYVERSE PASS"
+}

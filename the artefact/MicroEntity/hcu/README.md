@@ -43,7 +43,9 @@ Required invariants:
 
 `jspace_vector_control_v1.py` is the first executable candidate for the owner-required `JSPACE_VECTOR_CONTROL_ABI/v1`. It converts a bounded vector into a deterministic q8 text/byte packet suitable for both a normal CausalLM Together SFT surface and a local HCU runtime. Basis, role, generation, q8 payload, gate metadata and workspace handles are hash-bound. Wrong-basis, stale-generation, role-swap and payload/metadata-poison cases fail closed.
 
-This is only the vector-control transport primitive. It does **not** establish Global J-Space causality, hidden-state control, GWT behavior, model-runtime integration or training readiness by itself. The next required layer is an instrumented functional Global J-Space/GWT prototype that emits exact trace records and causal lesion/control outcomes using this ABI.
+`jspace_gwt_prototype_v1.py` is the first functional deterministic external Global J-Space/GWT prototype layer above that ABI. It performs bounded score competition, resource-budgeted broadcast selection, preserves Hyperposition branch IDs, emits exact `ENTITYOS_HCU_JSPACE_GWT_TRACE/v1` records, and binds those records to generation plus Typed Entry event/admission, route and GRID-plan identities. A matched-budget `EMPTY_BROADCAST` lesion changes the broadcast/slice and a rescue reproduces the baseline transition identity exactly.
+
+These components are transport/prototype mechanisms only. They do **not** establish model-local J-Space causality, direct hidden-state control, trained-model GWT behavior, model-runtime integration or whole EntityOS/HCU acceptance. The next required layer is to bind the prototype into the retained real Entry -> route -> EngineAdmission/load -> inference/GRID10 path and then derive episode-family training traces plus deterministic hard negatives.
 
 ## Retained donor lane
 
@@ -60,6 +62,8 @@ Draft PR #1263 is the retained HCU donor/integration lane for the richer Typed E
 - `test_capacity_guard_v1.py` — deterministic capacity poison regressions.
 - `jspace_vector_control_v1.py` — deterministic q8 `JSPACE_VECTOR_CONTROL_ABI/v1` candidate.
 - `test_jspace_vector_control_v1.py` — deterministic ABI regressions and the bounded metadata-only-vs-payload-bound poison experiment.
+- `jspace_gwt_prototype_v1.py` — deterministic Global J-Space/GWT competition, broadcast, slice and trace prototype.
+- `test_jspace_gwt_prototype_v1.py` — trace-field, Hyperposition, generation, lesion/shuffle/rescue regressions.
 - `receipts/` — bounded non-secret evidence receipts.
 
 ## Execution and evidence law
@@ -68,4 +72,4 @@ Current build/test/experiment/runtime credit comes only from `AUTHORIZED_ISOLATE
 
 Together general inference/fallback remains forbidden. The owner has authorized **exactly one** ~0.8B J-Space/GWT specialization fine-tuning job after the functional prototype -> exact traces -> causal/lesion controls -> versioned ABI -> dataset/splits -> frozen baseline/base-model/preflight gates are ready. The authorization is not consumed until a Together fine-tuning job is actually created and its non-secret job ID is receipted; a second paid training run requires new owner authorization.
 
-Current whole EntityOS/HCU runtime credit remains zero until the exact current path is actually executed and bound to exact source, model/checkpoint/tokenizer/runtime, capacity, causal/admission and effect identities. Component-level isolated evidence for this ABI must not be inflated into whole-product PASS.
+Current whole EntityOS/HCU runtime credit remains zero until the exact current path is actually executed and bound to exact source, model/checkpoint/tokenizer/runtime, capacity, causal/admission and effect identities. Component-level isolated evidence for the ABI/prototype must not be inflated into whole-product PASS.

@@ -9,25 +9,21 @@
   "authority": {
     "current_supervisor_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
     "supervisor_mode": "FREE_ONLY",
-    "durable_state_authority": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB",
+    "paid_fallback": "FORBIDDEN",
+    "together_general_inference": "FORBIDDEN",
+    "together_paid_preflight_key_lookup_network_job_creation": "FORBIDDEN",
+    "durable_state_authority": "DETERMINISTIC_ENTITYOS_AUTHORITY",
     "effect_authority": "EffectGate+EffectJournal",
     "model_jspace_output_authority": "CANDIDATE_MEASUREMENT_ONLY"
   },
   "source_scope": {
     "repository": "gschaidergabriel/clay-global-research-entity",
     "canonical_main_initial_observation": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
-    "canonical_main_reentry_observation": "fbc605b3d99328d71b72440b52ade09fd988ceeb",
+    "canonical_main_latest_observation_before_receipt_update": "27c7b3b0b6765d7ccfcb851742e4f8046ced896b",
     "retained_hcu_pr": 1263,
     "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
-    "pr_head_observed_after_fusion": "423f70553d222cf6cfec513ca0bb7880ad6df585"
-  },
-  "observed_problem": {
-    "class": "JSPACE_TRAINING_PROVENANCE_AND_DATASET_ABI_DRIFT",
-    "initial_findings": [
-      "the training-trace binder did not initially bind the prototype basis_sha256 to the supplied Vector Control packet",
-      "the bootstrap compiler initially referenced legacy VectorControlPacket APIs and later legacy reject labels while the current ABI uses top-level parse/decode helpers and JSPACE_/STALE_ error identities",
-      "training data must not teach a control protocol different from the runtime ABI"
-    ]
+    "retained_hcu_head_latest_observation_before_receipt_update": "5c84684efdb31c26f1215e5fa7744090918d81bc",
+    "retained_lane_state": "OPEN_DRAFT_DIVERGED_NOT_SAFE_TO_MERGE_AS_IS"
   },
   "unusual_experiment": {
     "name": "BASIS_DIGEST_ALIAS_TRANSPLANT",
@@ -37,52 +33,47 @@
     "repaired_predicate_observation": "rejected by explicit prototype_step.basis_sha256 == vector_control_packet.basis_sha256 binding",
     "classification": "SYNTHETIC_MECHANISM_SUPPORTED_ONLY",
     "runtime_credit": 0,
-    "global_parallel_note": "A concurrent worker later materialized an equivalent same-basis-id/different-basis-digest regression. It is treated as the same discriminator class; this organ ran no second distinct unusual experiment."
+    "no_second_unusual_experiment": true
   },
   "durable_delta": {
-    "organ_commit": "46a328148a256aeb1bba3c11595781f7291d982c",
-    "organ_change": "bind jspace_training_trace_v1 Vector Control packet to exact prototype basis_sha256",
-    "parallel_fusion_observed": [
-      "training trace additionally binds control condition, exact packet identity and exact packet wire text",
-      "bootstrap dataset compiler advanced to ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3",
-      "compiler now consumes ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1 rather than raw prototype traces",
-      "compiler splits by trace_family_id to reduce train/validation/holdout family leakage",
-      "compiler emits six machine-checkable rows including stale generation, basis id, basis digest and role negatives using current ABI error identities",
-      "J-Space inference binding now cross-binds HCU_INFERENCE_RECEIPT/v3 engine/load/output evidence",
-      "causal training trace binder cross-binds Typed Entry, route, GRID10, inference and J-Space source identities"
+    "basis_digest_binding_commit": "46a328148a256aeb1bba3c11595781f7291d982c",
+    "serious_dataset_ancestry_conflict_guard_commit": "831e8a9335a5f133ba58b6fc7c245f707b79c897",
+    "serious_dataset_ancestry_conflict_regression_commit": "ac86ad8ee8f49ea50b21fa9b1667331d6c9837b0",
+    "changes": [
+      "bind J-Space training trace to exact prototype basis digest",
+      "preserve the selected serious dataset pipeline: DatasetAdmission + HCU inference binding + admitted basis registry before row emission",
+      "revalidate duplicate training-trace records before idempotent dedupe",
+      "reject one training-trace digest if a later record presents different admitted transition/inference ancestry",
+      "add deterministic regression requiring TRAINING_TRACE_ANCESTRY_CONFLICT and preventing second lower-level row emission"
     ],
-    "coordination": "Three stale full-file writes were rejected by GitHub 409 and were not forced; latest concurrent bytes were re-fetched and preserved."
+    "parallel_fusion_observed": [
+      "bootstrap compiler advanced to ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v4",
+      "serious compiler selected as ENTITYOS_HCU_ADMITTED_JSPACE_TRAINING_PIPELINE/v1",
+      "family-level split and external J-Space basis admission are present",
+      "current Vercel full-spine batch includes test_compile_admitted_jspace_training_dataset_v1 and no longer requires stale missing causal-side-path modules"
+    ],
+    "coordination": "Earlier stale full-file writes were rejected with GitHub 409 and not forced; all later writes used refreshed blob identities."
   },
   "execution_evidence": {
-    "vercel_controller_deployment": "dpl_5L1PZpoG8oxHTiMp8XPuGEueAKSr",
-    "vercel_controller_commit": "a85d75fed192d9dd8cfbec49dedff9bfa6e0e520",
-    "vercel_controller_state": "READY",
-    "vercel_runtime_log_window": "24h",
-    "vercel_go_cycle_v2_observation": "one GET returned 405; no credential-bearing POST observed",
-    "worker_callable_arbitrary_post_or_sandbox_start": false,
-    "github_workflow_runs_for_observed_pr_head": 0,
-    "exact_entityos_hcu_runtime_executed_by_this_organ": false,
+    "vercel_sandbox_infrastructure_callability_previously_verified_on_exact_older_bridge": true,
+    "vercel_sandbox_infrastructure_runtime_credit_scope": "INFRASTRUCTURE_ONLY",
+    "current_full_hcu_jspace_batch_executed_by_this_organ": false,
+    "new_sandbox_run_started_after_cost_gate": false,
+    "free_only_cost_gate": "BLOCKED_UNTIL_EXPLICIT_ZERO_MONETARY_COST_OR_NEWER_AUTHORITY_ADMISSION",
+    "reason": "Vercel Sandbox is metered/usage-based and exact zero-monetary-cost admission for a new run is not established under FREE_ONLY",
     "runtime_credit": 0,
     "jspace_model_runtime_credit": 0,
     "training_credit": 0,
     "whole_product_pass": false
   },
   "training": {
-    "repository_owner_paid_one_shot_directive_present": true,
+    "repository_owner_paid_one_shot_directive_present_as_provenance": true,
+    "owner_paid_one_shot_job_consumed": false,
     "current_supervisor_mode": "FREE_ONLY",
-    "together_general_inference_or_fallback": "FORBIDDEN",
-    "together_paid_training_for_this_supervisor": "FORBIDDEN_BEFORE_CREDENTIAL_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION",
-    "job_created_by_this_organ": false,
-    "one_shot_consumed_by_this_organ": false,
     "paid_lane_status": "QUARANTINED_ZERO_EXECUTION_CREDIT",
-    "current_allowed_training_work": "ZERO_COST_LOCAL_APPROX_08B_JSPACE_GWT_WORK_ONLY_AFTER_REQUIRED_FREE_EXECUTABLE_EVIDENCE",
-    "remaining_free_only_gates": [
-      "actually start exact-source authorized FREE isolated Vercel EntityOS/HCU execution",
-      "bind actual Entry route + engine admission/load + inference + GRID10 identities into real J-Space training traces",
-      "obtain causal lesion/shuffle/rescue evidence on exact runtime traces",
-      "only after executable evidence bind a zero-cost local ~0.8B checkpoint/tokenizer/runtime/build and evaluate it locally"
-    ]
+    "current_allowed_training_work": "ZERO_COST_LOCAL_APPROX_08B_JSPACE_GWT_WORK_ONLY_AFTER_EXECUTABLE_AND_CAUSAL_GATES",
+    "training_launch_allowed_now": false
   },
-  "next_exact_discriminator": "obtain a callable authorized FREE start path for the retained exact Vercel controller, then bind current Research main SHA/tree plus current PR1263 SHA/tree and execute Typed Entry -> HCU route -> verified engine load -> inference -> GRID10 -> J-Space training-trace regressions",
-  "evidence_boundary": "SOURCE_AND_SYNTHETIC_MECHANISM_DELTA_PLUS_LIVE_CONTROLLER_INSPECTION_ONLY. READY controller, source/component evidence, dataset generation or owner paid-training provenance do not imply EntityOS/HCU runtime, model-runtime, training or whole-product PASS."
+  "next_exact_discriminator": "first establish an explicitly zero-monetary-cost/included isolated execution surface or newer authority admitting metered Vercel Sandbox; then run one fixed SHA/tree-bound current Research-main + fused HCU capsule covering Typed Entry -> route -> verified engine load -> inference v3 -> GRID10 -> J-Space/GWT -> DatasetAdmission -> admitted compiler, including the duplicate-ancestry regression; only after that bind a real zero-cost local ~0.8B checkpoint/tokenizer/runtime and collect request-scoped causal traces",
+  "evidence_boundary": "SOURCE_AND_SYNTHETIC_MECHANISM_DELTA_PLUS_PRIOR_INFRASTRUCTURE_CALLABILITY_ONLY. No source candidate, READY deployment, compiler output, capsule source binding, historical component execution, owner paid directive, or completed future training job implies EntityOS/HCU runtime, J-Space model runtime, training, effect, or whole-product PASS."
 }

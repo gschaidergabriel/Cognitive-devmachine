@@ -25,6 +25,7 @@ try:
         TrainingTrace,
         validate_training_trace,
     )
+    from .reactive_event_router_v1 import ENTRY_BINDING_SCHEMA
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from inference_receipt_v1 import (
@@ -37,6 +38,7 @@ except ImportError:
         TrainingTrace,
         validate_training_trace,
     )
+    from reactive_event_router_v1 import ENTRY_BINDING_SCHEMA
 
 SCHEMA = "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v1"
 
@@ -124,6 +126,10 @@ def _validate_inference_receipt(receipt: InferenceReceipt) -> None:
         raise JSpaceInferenceBindingError("HCU_INFERENCE_RECEIPT_SCHEMA_OR_STATUS_UNSUPPORTED")
     if receipt.hash_serialization_schema != CANONICALIZATION_SCHEMA:
         raise JSpaceInferenceBindingError("HCU_INFERENCE_RECEIPT_CANONICALIZATION_MISMATCH")
+    if receipt.entry_binding_schema != ENTRY_BINDING_SCHEMA:
+        raise JSpaceInferenceBindingError("HCU_INFERENCE_RECEIPT_ENTRY_BINDING_SCHEMA_MISMATCH")
+    if receipt.engine_load_canonicalization_schema != CANONICALIZATION_SCHEMA:
+        raise JSpaceInferenceBindingError("HCU_INFERENCE_RECEIPT_ENGINE_LOAD_CANONICALIZATION_MISMATCH")
     material = asdict(receipt)
     observed = _sha256(material.pop("receipt_sha256", None), "inference_receipt.receipt_sha256")
     expected = _canonical_sha256(material, "HCU_INFERENCE_RECEIPT")

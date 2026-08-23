@@ -113,6 +113,24 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
                 with self.assertRaisesRegex(JSpaceInferenceBindingError, code):
                     bind_training_trace_to_inference(trace, receipt)
 
+    def test_inference_receipt_schema_authorities_fail_closed(self):
+        trace = self.training_trace()
+        cases = [
+            (
+                {"entry_binding_schema": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/foreign"},
+                "HCU_INFERENCE_RECEIPT_ENTRY_BINDING_SCHEMA_MISMATCH",
+            ),
+            (
+                {"engine_load_canonicalization_schema": "FOREIGN_CANONICALIZATION/v1"},
+                "HCU_INFERENCE_RECEIPT_ENGINE_LOAD_CANONICALIZATION_MISMATCH",
+            ),
+        ]
+        for overrides, code in cases:
+            with self.subTest(code=code):
+                receipt = self.inference_receipt(trace, **overrides)
+                with self.assertRaisesRegex(JSpaceInferenceBindingError, code):
+                    bind_training_trace_to_inference(trace, receipt)
+
     def test_model_lane_must_bind_trace_role(self):
         trace = self.training_trace()
         receipt = self.inference_receipt(trace, model_lanes=("world",))

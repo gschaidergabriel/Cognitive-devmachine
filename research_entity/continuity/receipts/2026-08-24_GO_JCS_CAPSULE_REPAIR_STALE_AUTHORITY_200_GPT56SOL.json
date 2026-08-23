@@ -1,0 +1,66 @@
+{
+  "schema": "ENTITYOS_HCU_GO_STALE_AUTHORITY_REPAIRED_JCS_CAPSULE_200/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "current_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "cost_gate_commit_already_on_main_before_rerun": "2d47370e40dbda3619bc7c802daa1e127a22c06e",
+    "cost_gate_rule": "No new metered/unknown-cost Vercel Sandbox execution receives admission under FREE_ONLY without explicit zero-monetary-cost/included-budget evidence or newer authority.",
+    "policy_race": true
+  },
+  "execution_observation": {
+    "vercel_project": "dr-unterweger",
+    "execution_repo": "gschaidergabriel/Dr.-Unterweger",
+    "execution_pr": 810,
+    "deployment_id": "dpl_Arke3DNu36SzT3TUwfr8YL9cpE8V",
+    "deployment_commit": "7e3a45d6ff32183eb1d194d39ac18f4d3a440216",
+    "route": "GET /api/hcu-entry-capsule",
+    "runtime_log_timestamp_utc": "2026-08-23T18:01:05Z",
+    "runtime_log_http_status": 200,
+    "runtime_log_environment": "preview",
+    "runtime_log_cache": "MISS",
+    "response_body_for_this_200": "NOT_CAPTURED_BY_LOG_QUERY",
+    "sandbox_identity_for_this_200": "UNRESOLVED_FROM_AVAILABLE_RUNTIME_LOG",
+    "together_used": false,
+    "paid_fallback_used": false
+  },
+  "endpoint_contract_at_deployment_commit": {
+    "capsule": "HCU_ENTRY_CANONICALIZATION_CAPSULE/v1",
+    "source_repository": "gschaidergabriel/clay-global-research-entity",
+    "source_pr": 1263,
+    "source_commit": "2b7b06f4c93543501e86d5f4692efa36fd191938",
+    "source_git_blob": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "test_git_blob": "bc9262473f91dbd04ddaf647e667920664495f54",
+    "source_sha256": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f",
+    "test_sha256": "b0b5f519c6c7b751d2ed388661bb617fc1a2ee73055faaab1208a47c6612891b",
+    "fixed_command": "python3 -m unittest -v test_entry_canonicalization_v1",
+    "deployment_boundary_identity_checks": "Git blob SHA1 plus SHA256",
+    "sandbox_pretest_identity_check": "sha256sum -c",
+    "secret_fence": "GITHUB_READ_TOKEN and TOGETHER_API_KEY rejected if present",
+    "http_200_contract": "Endpoint returns 200 only when fixed Sandbox command exits 0 after identity checks; whole-HCU/model/training/whole-product flags remain false in the endpoint contract."
+  },
+  "interpretation": {
+    "technical_mechanism_result": "REPAIRED_FIXED_CAPSULE_ENDPOINT_REACHED_HTTP_200",
+    "what_this_supports": "The heredoc delimiter failure observed in the earlier capsule attempt is repaired at deployment commit 7e3a45d6ff32183eb1d194d39ac18f4d3a440216, and the fixed endpoint's own 200 contract indicates the bounded component regression command completed successfully.",
+    "what_this_does_not_support": "It does not establish current-main or whole-HCU runtime acceptance, real model/J-Space runtime causality, training readiness, or whole EntityOS PASS. The capsule source is a bounded older retained-donor component identity.",
+    "acceptance_promotion": "QUARANTINED_ZERO_CREDIT_DUE_TO_FREE_ONLY_COST_GATE"
+  },
+  "credit": {
+    "this_rerun_acceptance_credit": 0,
+    "entityos_hcu_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  },
+  "corrective_action": {
+    "additional_vercel_sandbox_runs_started_after_cost_gate_discovery": false,
+    "next_exact_gate": "Do not start another Vercel Sandbox under supervisor 8.61 until exact zero-monetary-cost/included-budget admission is established or newer authority explicitly admits it. Continue source/fusion/capsule convergence offline; then execute one exact-current full HCU/J-Space closure when execution admission is restored."
+  }
+}

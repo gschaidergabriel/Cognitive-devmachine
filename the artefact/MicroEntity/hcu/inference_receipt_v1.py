@@ -3,9 +3,9 @@
 
 This module does not invoke a model and grants no truth/effect authority. It consumes the
 canonical HCU RouteDecision, then fail-closes unless the concrete Typed-Entry admission
-still binds to that causal event, the exact engine artifact is still independently
-admitted, and the entity generation is current. The runtime caller must hash the actual
-model-output bytes before supplying `output_sha256`.
+still binds to that causal event, the route decision is independently bound to the live
+entity generation, the exact engine artifact is still independently admitted, and the
+runtime caller supplies a hash of the actual model-output bytes.
 """
 from __future__ import annotations
 
@@ -80,27 +80,39 @@ def _text(value: Any, field: str) -> str:
     return value
 
 
-def _generation(value: Any, current_generation: int) -> int:
+def _nonnegative_int(value: Any, field: str) -> int:
     if isinstance(value, bool) or not isinstance(value, int) or value < 0:
-        raise InferenceReceiptError("entity_generation:NONNEGATIVE_INTEGER_REQUIRED")
-    if isinstance(current_generation, bool) or not isinstance(current_generation, int) or current_generation < 0:
-        raise InferenceReceiptError("current_generation:NONNEGATIVE_INTEGER_REQUIRED")
-    if value != current_generation:
-        raise InferenceReceiptError("STALE_ENTITY_GENERATION")
+        raise InferenceReceiptError(f"{field}:NONNEGATIVE_INTEGER_REQUIRED")
     return value
+
+
+def _generation(
+    decision: RouteDecision,
+    *,
+    current_generation: int,
+    admitted_route_generations: Mapping[str, Any],
+) -> int:
+    current_generation = _nonnegative_int(current_generation, "current_generation")
+    if not isinstance(admitted_route_generations, Mapping):
+        raise InferenceReceiptError("ADMITTED_ROUTE_GENERATION_REGISTRY_REQUIRED")
+    bound_generation = admitted_route_generations.get(decision.decision_sha256)
+    if bound_generation is None:
+        raise InferenceReceiptError("ROUTE_GENERATION_NOT_ADMITTED")
+    bound_generation = _nonnegative_int(bound_generation, "admitted_route_generation")
+    if bound_generation != current_generation:
+        raise InferenceReceiptError("STALE_ROUTE_GENERATION")
+    return bound_generation
 
 
 def _output_size(value: Any) -> int:
-    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
-        raise InferenceReceiptError("output_size:NONNEGATIVE_INTEGER_REQUIRED")
-    return value
+    return _nonnegative_int(value, "output_size")
 
 
 def make_inference_receipt(
     decision: RouteDecision,
     *,
-    entity_generation: int,
     current_generation: int,
+    admitted_route_generations: Mapping[str, Any],
     entry_admission_sha256: str,
     admitted_entry_bindings: Mapping[str, Any],
     admitted_engine_artifacts: Mapping[str, Any],
@@ -111,10 +123,10 @@ def make_inference_receipt(
 ) -> InferenceReceipt:
     """Produce a candidate-only inference receipt from already-admitted route evidence.
 
-    The caller must provide authority-owned registries, not values copied from the
-    untrusted event. For the current product path, inference without a concrete Typed
-    Entry admission is intentionally rejected even though the router retains legacy
-    compatibility for script/internal source tests.
+    All three registries are authority/control-plane views, not values copied from the
+    untrusted event: decision->generation, admission->causal-event and engine->artifact.
+    For the current product path, inference without a concrete Typed Entry admission is
+    intentionally rejected even though the router retains a legacy/internal script path.
     """
     if not isinstance(decision, RouteDecision):
         raise InferenceReceiptError("ROUTE_DECISION_REQUIRED")
@@ -123,8 +135,15 @@ def make_inference_receipt(
     if decision.hash_serialization_schema != HASH_SERIALIZATION_SCHEMA:
         raise InferenceReceiptError("ROUTE_SERIALIZATION_SCHEMA_UNSUPPORTED")
 
-    generation = _generation(entity_generation, current_generation)
+    generation = _generation(
+        decision,
+        current_generation=current_generation,
+        admitted_route_generations=admitted_route_generations,
+    )
+
     admission_sha256 = _sha256(entry_admission_sha256, "entry_admission_sha256")
+    if decision.entry_admission_sha256 != admission_sha256:
+        raise InferenceReceiptError("ROUTE_ENTRY_ADMISSION_IDENTITY_MISMATCH")
     if not isinstance(admitted_entry_bindings, Mapping):
         raise InferenceReceiptError("ADMITTED_ENTRY_BINDING_REGISTRY_REQUIRED")
     admitted_event_sha256 = admitted_entry_bindings.get(admission_sha256)

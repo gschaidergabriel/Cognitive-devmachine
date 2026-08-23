@@ -46,6 +46,8 @@ def _number_bytes(value: int | float) -> bytes:
     elif isinstance(value, float):
         if not math.isfinite(value):
             raise HCUCanonicalizationError("NONFINITE_NUMBER_FORBIDDEN")
+        if value.is_integer() and abs(value) > _MAX_SAFE_INTEGER:
+            raise HCUCanonicalizationError("INTEGER_OUTSIDE_IJSON_SAFE_RANGE")
         number = value
     else:
         raise HCUCanonicalizationError("NUMBER_REQUIRED")

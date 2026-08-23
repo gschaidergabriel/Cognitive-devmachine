@@ -1,0 +1,44 @@
+{
+  "schema": "CLAYVERSE_SOURCE_MECHANISM_RECEIPT/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main_sha": "0b80a8f5d1e5657787482eadfc4315db9cb75cd0",
+  "finding": "Current owner directive makes EntityOS an internal optional admitted execution/security/runtime substrate, while the canonical manifest still made complete EntityOS a mandatory final-image/whole-product acceptance gate.",
+  "authority_source": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "delta": [
+    "manifest EntityOS role changed from unconditional final-product requirement to staged internal substrate with execution optional",
+    "EntityOS execution default explicitly DISABLED",
+    "whole-product EntityOS gate made conditional on explicit admission",
+    "unconditional final-pass EntityOS requirement removed",
+    "ClayVerse authority validator now fails closed on mandatory-EntityOS regression",
+    "two focused regression cases added"
+  ],
+  "exact_blob_evidence": {
+    "validator_blob_sha": "15df257b5ec9cce5e541d888f6feb34dc0eb67ca",
+    "test_blob_sha": "5c2293a247aac53ef7c8960094e13e3cfbc706b6",
+    "local_git_hash_object_match": true,
+    "py_compile": "PASS",
+    "unittest": "8/8 PASS"
+  },
+  "evidence_scope": "EXACT_GIT_BLOB_COMPONENT_MECHANISM_ONLY",
+  "runtime_credit": {
+    "whole_clayverse": 0,
+    "oci": 0,
+    "entityos_execution": 0
+  },
+  "execution_boundary": {
+    "authorized_isolated_container_used_for_component_regression": true,
+    "github_checkout_available": false,
+    "github_network_from_container": "DNS_UNAVAILABLE",
+    "whole_repo_exact_checkout_test": "NOT_EXECUTED",
+    "vps_or_self_hosted_test": false,
+    "together": false,
+    "paid_execution": false
+  },
+  "unusual_experiment": {
+    "consumed": false,
+    "reason": "NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE_EXPOSED; deterministic authority regression only"
+  },
+  "next_gate": "merge source fence, then execute exact-current ClayVerse authority/full regression and OCI build/startup on an actually-started authorized isolated executor"
+}

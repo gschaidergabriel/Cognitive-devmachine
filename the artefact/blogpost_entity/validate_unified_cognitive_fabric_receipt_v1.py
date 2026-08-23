@@ -23,7 +23,7 @@ ENGINE_CLASSES = {"LOCAL_08B", "CLAUDE_CODE", "ADAPTIVE_BACKEND", "DETERMINISTIC
 DECISIONS = {"ACCEPTED_CANDIDATE", "REJECTED", "STALE", "BLOCKED", "ERROR", "NO_INFERENCE"}
 TERMINAL_STATUSES = {"DONE", "REJECTED", "BLOCKED", "ABORTED", "ERROR", "UNKNOWN"}
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
-COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
+GIT_OID_RE = re.compile(r"^(?:[0-9a-f]{40}|[0-9a-f]{64})$")
 
 
 class ReceiptError(ValueError):
@@ -73,9 +73,9 @@ def _sha256(value: Any, code: str) -> str:
     return text
 
 
-def _commit(value: Any, code: str) -> str:
+def _git_oid(value: Any, code: str) -> str:
     text = _exact_str(value, code)
-    if COMMIT_RE.fullmatch(text) is None:
+    if GIT_OID_RE.fullmatch(text) is None:
         _fail(code)
     return text
 
@@ -139,8 +139,8 @@ def validate_receipt(
         _fail("PHASE_UNSUPPORTED")
 
     source = _exact_dict(r.get("source"), "SOURCE_REQUIRED")
-    source_commit = _commit(source.get("commit"), "SOURCE_COMMIT_INVALID")
-    source_tree = _sha256(source.get("tree"), "SOURCE_TREE_INVALID")
+    source_commit = _git_oid(source.get("commit"), "SOURCE_COMMIT_INVALID")
+    source_tree = _git_oid(source.get("tree"), "SOURCE_TREE_INVALID")
     _exact_bool(source.get("dirty"), "SOURCE_DIRTY_REQUIRED")
     _exact_str(source.get("executor"), "SOURCE_EXECUTOR_REQUIRED")
     _exact_str(source.get("runtime_identity"), "SOURCE_RUNTIME_IDENTITY_REQUIRED")

@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "branch": "gpt56sol/go-861-free-only-coherence-20260824",
+  "branch_base_observed": "fbc605b3d99328d71b72440b52ade09fd988ceeb",
+  "latest_main_refresh_after_delta": "4877fbbf0ae7945d92c42415acebd2e7675fabc2",
+  "latest_main_manifest_blob_after_refresh": "e7f31b42caf416e38813c120c9b08b0a6954cc86",
+  "authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+  "authority_finding": {
+    "free_only": true,
+    "paid_fallback": "FORBIDDEN",
+    "together_general_inference": "FORBIDDEN",
+    "together_training": "FORBIDDEN_IN_THIS_SUPERVISOR_MODE",
+    "owner_paid_one_shot_directive": "PROVENANCE_ONLY_QUARANTINED_FOR_THIS_ORGAN",
+    "paid_provider_boundary": "FAIL_CLOSED_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION"
+  },
+  "observed_split": {
+    "bootstrap": "8.61_CURRENT",
+    "program_state": "8.61_CURRENT",
+    "manifest_before_delta": "8.52_POINTER_PLUS_PAID_ONE_SHOT_EXECUTION_SEMANTICS",
+    "authority_validator_before_delta": "8.52_CURRENT_AUTHORITY_CONSTANT_AND_OLD_FIELD_CONTRACT",
+    "root_claude_before_delta": "8.52_POINTER_AND_TWO_TRACK_GO",
+    "artefact_readme_before_delta": "8.52_POINTER_AND_TWO_TRACK_GO",
+    "impact": "CURRENT_AUTHORITY_SPLIT_COULD_PRODUCE_FALSE_REDS_OR_ROUTE_AN_ORGAN_TOWARD_A_QUARANTINED_PAID_LANE"
+  },
+  "delta": [
+    "manifest v3 binds steering 8.61 FREE_ONLY provider-admission semantics and zero runtime/J-Space/training credit",
+    "compatibility-named authority validator v3 binds current 8.61 while preserving immutable 4.1-4.4 donor/safety ancestry",
+    "authority validator tests cover stale manifest authority, paid-preflight enabling, paid-provider-boundary weakening and training self-promotion",
+    "root CLAUDE routing shim binds steering 8.61 and three FREE_ONLY go tracks",
+    "the artefact README binds steering 8.61 and quarantines paid owner provenance"
+  ],
+  "unusual_experiment": {
+    "count_for_this_user_triggered_macrocycle": 1,
+    "name": "STEERING_8_53_AUTHORITY_SPLIT_POISON",
+    "scope": "SOURCE_LEVEL_AUTHORITY_GUARD_FALSIFIER",
+    "result": "RETAINED_MECHANISM_FINDING",
+    "observation": "the old 8.52 validator predicates deterministically conflict with newer authority field/value shapes; subsequent main refresh to steering 8.61 strengthened the finding because current authority now explicitly quarantines the paid lane",
+    "runtime_credit": 0
+  },
+  "execution_surface_discovery": {
+    "vercel_team": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_project": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "latest_ready_controller_observed": "dpl_5L1PZpoG8oxHTiMp8XPuGEueAKSr",
+    "controller_path": "/api/go-cycle-v2",
+    "get_probe_observed": "405_POST_ONLY",
+    "direct_sandbox_create_or_runcommand_exposed_to_this_connector": false,
+    "arbitrary_credential_bearing_post_exposed_to_this_connector": false,
+    "exact_free_sandbox_start_observed_by_this_organ": false,
+    "github_workflow_runs_on_branch_head_before_pr": 0
+  },
+  "provider_actions": {
+    "together_key_lookup": false,
+    "together_preflight": false,
+    "together_network_io": false,
+    "together_job_created": false,
+    "paid_spend": false,
+    "training_credit": 0
+  },
+  "evidence_scope": {
+    "source_delta": "YES",
+    "local_component_fixture_evidence": "BOUNDED_ONLY",
+    "exact_current_branch_isolated_runtime": "NOT_OBSERVED",
+    "entityos_hcu_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Actually start an exact-source authorized FREE isolated run bound to then-current Research main plus the retained HCU donor, executor identity and result digest; execute Typed Entry -> route -> positive engine admission/load -> inference -> GRID10 -> Global J-Space/GWT; preserve credential nonpersistence and zero paid-provider entry."
+}

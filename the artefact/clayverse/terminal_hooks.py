@@ -28,11 +28,13 @@ def _runtime() -> tuple[UnifiedDB, str, str, TurnLifecycle]:
     expected_session = os.environ.get("CLAYVERSE_SESSION_ID", "").strip()
     if user_id not in CANONICAL_USER_IDS:
         raise TerminalHookError("terminal user identity is missing or invalid")
+    if not expected_session:
+        raise TerminalHookError("terminal session identity is missing")
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
     session_id = db.ensure_session(user_id, f"terminal-{user_id}")
-    if expected_session and expected_session != session_id:
+    if expected_session != session_id:
         db.close()
         raise TerminalHookError("terminal session identity mismatch")
     return db, user_id, session_id, TurnLifecycle(db, user_id, session_id, entityos_bridge=None)

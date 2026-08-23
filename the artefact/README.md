@@ -232,3 +232,19 @@ Re-entry also found the retained lanes continuing to advance without justifying 
 Next exact gate: re-enter the newest PR1263 and `gschaidergabriel/Dr.-Unterweger#810` heads, bind one immutable executor closure to the newest corrected donor bytes including current J-Space provenance-revalidation obligations, remove `SOURCE_REBIND_REQUIRED` only atomically with complete source/transitive-fixture/blob/command/result coherence, and execute only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission fence actually permits the fixed capsule.
 
 Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_ATOMIC_LEASE_ENTITYOS_HCU_BOUNDARY_REPAIR_GPT56SOL.json`.
+
+## Current `go` delta — concurrent invocation single downstream J-Space winner
+
+`README=UPDATED_CONCURRENT_INVOCATION_SINGLE_DOWNSTREAM_JSPACE_WINNER`.
+
+This macrocycle tightened a cross-layer race invariant that was previously split between two tests. The canonical MiniUnifiedDB admission-store regression already required exactly one winner for concurrent divergent observations of the same executor invocation, while the integrated execution-store -> Inference/v4 -> J-Space/v3 regression only checked the downstream replay fence sequentially. That left an untested counterhypothesis: DB-level uniqueness could be correct while two concurrent callers still both escaped into downstream inference/J-Space construction outside the transaction boundary.
+
+PR1263 commit `48d1bcb8357df0cf90d99133027f88ab67361a3f` closes that source-level gap. `test_execution_store_inference_jspace_chain_v1.py` now starts two divergent observations concurrently against one invocation key and permits InferenceReceipt/v4 plus a semantically validated JSpaceBinding/v3 only after `admit_and_verify_model_execution` returns. The regression requires exactly one downstream winner, one `MODEL_EXECUTION_INVOCATION_REPLAY_DIVERGENCE` rejection, and exactly one persisted invocation/observation pair. New test blob: `a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4`.
+
+The single retained PR810 executor contract was then re-entered rather than force-written across parallel movement. An initial update correctly failed with HTTP 409 on a stale blob; after refresh, executor commit `f4c720c1f547d4415b2d95652c602a22b4124a6d` kept `SOURCE_REBIND_REQUIRED` active while rebinding the target to donor `48d1bcb8357df0cf90d99133027f88ab67361a3f`, the new test blob, and the stronger assertion that only the concurrent atomic winner may reach InferenceReceipt/v4 plus validated JSpaceBinding/v3.
+
+No deterministic regression, Vercel Sandbox, actual loader I/O or actual model-executor I/O was executed by this organ. The new mechanism remains **SOURCE_ONLY_UNEXECUTED**. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model runtime and training credit remain `0`; whole-product PASS remains false. The observed Hobby build-rate limitation remains infrastructure/admission evidence, not a product regression.
+
+Next exact gate: in the same PR810 fixed route, vendor the exact donor `48d1bcb8357df0cf90d99133027f88ab67361a3f` source/regression/transitive closure, require the route manifest blob map to equal the rebind contract including `a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4`, remove `SOURCE_REBIND_REQUIRED` only atomically with that complete closure, and execute only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission actually permits it.
+
+Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_CONCURRENT_MODEL_INVOCATION_SINGLE_JSPACE_WINNER_SOURCE_GPT56SOL.json`.

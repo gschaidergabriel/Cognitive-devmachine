@@ -1,10 +1,13 @@
 import copy
+import json
 import unittest
 
 from reactive_event_router_v1 import ReactiveRoutingError, route_event
 from xeno_entry_fabric_v1 import (
     EntryFabricError,
     admit_entry,
+    admit_entry_json,
+    parse_entry_json,
     to_hcu_reactive_event,
 )
 
@@ -40,9 +43,22 @@ def base_entry():
     }
 
 
+def raw_entry():
+    return json.dumps(base_entry(), separators=(",", ":"), ensure_ascii=True)
+
+
 def admit(entry, *, current_generation=7, binding=CAPABILITY_BINDING_SHA256, capabilities=ADMITTED_CAPABILITIES):
     return admit_entry(
         entry,
+        current_generation=current_generation,
+        expected_capability_binding_sha256=binding,
+        admitted_capabilities=capabilities,
+    )
+
+
+def admit_raw(raw, *, current_generation=7, binding=CAPABILITY_BINDING_SHA256, capabilities=ADMITTED_CAPABILITIES):
+    return admit_entry_json(
+        raw,
         current_generation=current_generation,
         expected_capability_binding_sha256=binding,
         admitted_capabilities=capabilities,
@@ -72,6 +88,43 @@ class EntryFabricTests(unittest.TestCase):
         self.assertEqual(a, b)
         self.assertEqual(len(a.event_sha256), 64)
         self.assertEqual(len(a.admission_sha256), 64)
+
+    def test_raw_json_roundtrip_preserves_current_typed_identities(self):
+        raw_packet = admit_raw(raw_entry())
+        mapping_packet = admit(base_entry())
+        self.assertEqual(raw_packet, mapping_packet)
+        self.assertEqual(raw_packet.event_sha256, mapping_packet.event_sha256)
+        self.assertEqual(raw_packet.admission_sha256, mapping_packet.admission_sha256)
+
+    def test_raw_json_duplicate_top_level_property_rejected_before_mapping(self):
+        raw = raw_entry()
+        needle = '"capabilities":["memory.read","hcu.route"],'
+        poisoned = raw.replace(needle, needle + '"capabilities":["effect.request"],', 1)
+        self.assertNotEqual(raw, poisoned)
+        with self.assertRaisesRegex(EntryFabricError, "RAW_JSON_DUPLICATE_PROPERTY:capabilities"):
+            parse_entry_json(poisoned)
+
+    def test_raw_json_duplicate_nested_budget_property_rejected_before_mapping(self):
+        raw = raw_entry()
+        needle = '"max_tokens":2048,'
+        poisoned = raw.replace(needle, needle + '"max_tokens":999999,', 1)
+        self.assertNotEqual(raw, poisoned)
+        with self.assertRaisesRegex(EntryFabricError, "RAW_JSON_DUPLICATE_PROPERTY:max_tokens"):
+            parse_entry_json(poisoned)
+
+    def test_raw_json_nonfinite_number_and_lone_surrogate_fail_closed(self):
+        raw = raw_entry()
+        nonfinite = raw.replace('"max_tokens":2048', '"max_tokens":NaN', 1)
+        with self.assertRaisesRegex(EntryFabricError, "RAW_JSON_NONFINITE_NUMBER_FORBIDDEN:NaN"):
+            parse_entry_json(nonfinite)
+
+        surrogate = raw.replace(
+            '"payload_ref":"unifieddb:payload:test:1"',
+            '"payload_ref":"\\ud800"',
+            1,
+        )
+        with self.assertRaisesRegex(EntryFabricError, "RAW_JSON_LONE_SURROGATE_FORBIDDEN"):
+            parse_entry_json(surrogate)
 
     def test_stale_generation_fails_closed(self):
         with self.assertRaisesRegex(EntryFabricError, "STALE_ENTITY_GENERATION"):

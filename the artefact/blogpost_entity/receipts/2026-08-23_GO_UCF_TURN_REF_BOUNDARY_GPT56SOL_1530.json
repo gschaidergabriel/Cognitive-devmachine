@@ -1,0 +1,76 @@
+{
+  "schema": "GO_UCF_TURN_REF_BOUNDARY_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated component organ",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "main_base_sha": "be65164ea5989940518e3073faec1afcf5c86066",
+  "branch": "gpt56sol/go-ucf-turn-ref-boundary-20260823-1530",
+  "source_head_before_receipt": "297652861176930e4dc3ff50dab65f621923822c",
+  "classification": "EXACT_BRANCH_SOURCE_PLUS_BOUNDED_COMPONENT_MECHANISM_SUPPORT_ONLY",
+  "observed_current_gap": {
+    "canonical_clay_blob": "1cacba72476b1f905acd0443746b5f593c22191d",
+    "canonical_clay_admission_input": "compiled_plus_prompt_only",
+    "missing_at_admission_boundary": ["causal_turn_id", "original_task_text_or_verified_turn_ref"],
+    "reference_runtime_blob": "8ea8a2db0ac1068ae9221f0ab0426e7d8f7149a7",
+    "reference_runtime_cognitive_fabric_handler": "MISSING",
+    "finding": "A real Cognitive Fabric handler cannot call resolve_prepare_binding without either a verified lookup key or an unsafe invented causal/task identity."
+  },
+  "delta": {
+    "bridge": "tools/mini_entity_cognition_turn_ref_v1.py",
+    "source_guard": "tools/check_ucf_turn_ref_source_v1.py",
+    "tests": "tests/test_ucf_turn_ref_boundary_v1.py",
+    "contract": "the artefact/blogpost_entity/jspace_gwt/COGNITION_TURN_REF_BOUNDARY_V1.md",
+    "mechanism": "Treat causal_turn_id + exact task text/hash as an untrusted lookup assertion; revalidate them through same-MiniUnifiedDB resolve_prepare_binding at the exact live generation before any Zero capsule/InferencePacket compilation.",
+    "canonical_state_authority": "MiniUnifiedDB",
+    "effect_authority": "EffectGate",
+    "truth_authority_change": "NONE",
+    "second_state_authority_created": false,
+    "second_effect_path_created": false,
+    "runtime_handler_claimed_complete": false
+  },
+  "exact_git_blobs": {
+    "tools/mini_entity_cognition_turn_ref_v1.py": "1cd02fcb2d8106fa9574cb5e7e4f64db32a50c83",
+    "tools/check_ucf_turn_ref_source_v1.py": "c943391482b6665d8da7745cd1c0f6393cc55f12",
+    "tests/test_ucf_turn_ref_boundary_v1.py": "fe3ae66bce97c34bc3780cfdd8ebdc050a3146f9",
+    "the artefact/blogpost_entity/jspace_gwt/COGNITION_TURN_REF_BOUNDARY_V1.md": "0c973a31197ca85eacc54ac8ff53cdc43867ecba"
+  },
+  "exact_content_sha256": {
+    "tools/mini_entity_cognition_turn_ref_v1.py": "476da9a79ada4f34ba47574fbd2f1f0490a1b36bf5b23fb358e006bd49f0bc1e",
+    "tools/check_ucf_turn_ref_source_v1.py": "0d9b6ea4a654ae6fbe2a38892014c06c17fa4e570a3440d9fe1bba544d662626",
+    "tests/test_ucf_turn_ref_boundary_v1.py": "ba61a05615f7e3323b7be41c4180778a6c6f1f64e0f156983a4105b6886dd4c0",
+    "the artefact/blogpost_entity/jspace_gwt/COGNITION_TURN_REF_BOUNDARY_V1.md": "978042b132715ab246d67162ee10df680bb8a8dde1cc9655f54e06e918a034a1"
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Linux component container",
+    "commands": [
+      "python3 -m py_compile tools/mini_entity_cognition_turn_ref_v1.py tools/check_ucf_turn_ref_source_v1.py tests/test_ucf_turn_ref_boundary_v1.py",
+      "python3 -m unittest -v tests/test_ucf_turn_ref_boundary_v1.py"
+    ],
+    "tests_run": 6,
+    "tests_passed": 6,
+    "result": "PASS_BOUNDED_COMPONENT_MECHANISM_ONLY",
+    "byte_binding": "GitHub blob SHA values matched locally tested git hash-object identities for all four authored source/test/contract files."
+  },
+  "unusual_experiment": {
+    "name": "PACKET_HASH_TURN_ALIAS_POISON",
+    "count_for_this_go_macrocycle": 1,
+    "intervention": "Set causal_turn_id from compiled.packet_hash in an otherwise shaped Cognitive Fabric admission source fragment.",
+    "prediction_if_unsafe": "Static source could appear converged while inventing causal identity from a packet digest.",
+    "observed": "UCF_TURN_REF_SOURCE_GUARD/v1 rejected with UNSAFE_CAUSAL_TURN_DERIVATION.",
+    "result": "FAIL_CLOSED_AS_REQUIRED"
+  },
+  "hcu_pass": {
+    "architecture_reviewed": "the artefact/MicroEntity/hcu/HCU_ARCHITECTURE.md",
+    "delta": "NO_CHANGE",
+    "reason": "Current HCU capacity claims require admitted KVM4-equivalent measurement; VPS/self-hosted testing is forbidden and the connected Vercel surface exposed no executable sandbox start/exec action in this run. A second source-only topology would duplicate existing architecture without new evidence.",
+    "runtime_credit": 0
+  },
+  "limitations": [
+    "Canonical BLOGPOST_ENTITY.clay still does not carry a verified turn_ref into Cognitive Fabric admission.",
+    "Retained clay_profile_pipeline_runtime.py still lacks executable Cognitive Fabric admission/finalization handlers.",
+    "The branch bridge was dependency-injected against a bounded fake store for component discrimination; exact full-repository integration was not executed.",
+    "No bundled-0.8B, J-Space, GWT, Claude Code, HCU, EntityOS, or whole Mini Entity runtime credit is implied."
+  ],
+  "next_exact_step": "Version the canonical .clay entry/handoff so it carries MINI_ENTITY_COGNITION_TURN_REF/v1, wire the retained Python Cognitive Fabric admission handler to resolve_turn_ref -> current MiniUnifiedDB resolve_prepare_binding -> ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v2, then perform exact authorized isolated integrated execution before any runtime credit."
+}

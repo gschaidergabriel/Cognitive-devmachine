@@ -5,6 +5,7 @@ from jspace_dataset_admission_gate_v1 import ADMISSION_SCHEMA as CANONICAL_DATAS
 from jspace_dataset_family_split_v1 import (
     DATASET_ADMISSION_SCHEMA,
     JSpaceDatasetFamilySplitError,
+    causal_family_id_from_event,
     partition_admitted_training_traces,
     split_for_family,
 )
@@ -14,23 +15,24 @@ def h(n: int) -> str:
     return f"{n:064x}"
 
 
-def training(trace_id: str, family_id: str, n: int) -> dict:
+def training(trace_id: str, family_id: str, n: int, *, event_n: int | None = None) -> dict:
+    event_n = n if event_n is None else event_n
     return {
         "schema_version": "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1",
         "trace_id": trace_id,
         "trace_family_id": family_id,
         "trace_sha256": h(1000 + n),
         "generation": 7,
-        "entry_event_sha256": h(1),
-        "entry_admission_sha256": h(2),
-        "route_decision_sha256": h(3),
-        "grid_plan_sha256": h(4),
+        "entry_event_sha256": h(event_n),
+        "entry_admission_sha256": h(2000 + n),
+        "route_decision_sha256": h(3000 + n),
+        "grid_plan_sha256": h(4000 + n),
         "cell_id": f"cell-{n:02d}",
         "role": "critic",
         "jspace_basis_id": "basis:7",
         "jspace_basis_sha256": h(5),
-        "prototype_trace_sha256": h(7),
-        "vector_control_packet_sha256": h(8),
+        "prototype_trace_sha256": h(5000 + n),
+        "vector_control_packet_sha256": h(6000 + n),
         "vector_control_condition": "BASELINE",
         "credit_label": "UNKNOWN",
         "outcome_receipt_sha256": None,
@@ -80,25 +82,55 @@ class FamilySplitTests(unittest.TestCase):
                 admitted_training_traces=registry,
             )
 
-    def test_correlated_family_never_crosses_train_validation_holdout(self):
+    def test_correlated_causal_family_never_crosses_train_validation_holdout(self):
         traces = []
         for family_n in range(80):
-            family = f"episode:{family_n}"
-            traces.append(training(f"trace:{family_n}:baseline", family, family_n * 2 + 1))
-            traces.append(training(f"trace:{family_n}:lesion", family, family_n * 2 + 2))
+            event_n = family_n + 1
+            traces.append(
+                training(
+                    f"trace:{family_n}:baseline",
+                    f"episode:{family_n}:baseline-label",
+                    family_n * 2 + 101,
+                    event_n=event_n,
+                )
+            )
+            traces.append(
+                training(
+                    f"trace:{family_n}:lesion",
+                    f"episode:{family_n}:lesion-label",
+                    family_n * 2 + 102,
+                    event_n=event_n,
+                )
+            )
         result = self.partition(traces)
         owners = {}
         for split, rows in result["splits"].items():
             for row in rows:
-                owners.setdefault(row["trace_family_id"], set()).add(split)
+                causal_family = causal_family_id_from_event(row["entry_event_sha256"])
+                owners.setdefault(causal_family, set()).add(split)
         self.assertTrue(owners)
         self.assertTrue(all(len(splits) == 1 for splits in owners.values()))
         self.assertEqual(result["family_count"], 80)
         self.assertEqual(result["trace_count"], 160)
 
+    def test_same_causal_ancestry_different_labels_one_split(self):
+        baseline = training("trace:baseline", "caller-alias:train-looking", 801, event_n=77)
+        lesion = training("trace:lesion", "caller-alias:holdout-looking", 802, event_n=77)
+        result = self.partition([baseline, lesion])
+
+        occupied = [name for name, rows in result["splits"].items() if rows]
+        self.assertEqual(len(occupied), 1)
+        self.assertEqual(result["family_count"], 1)
+        causal_family = causal_family_id_from_event(h(77))
+        self.assertEqual(result["family_assignments"][causal_family], occupied[0])
+        self.assertEqual(
+            result["supplied_family_aliases"][causal_family],
+            ["caller-alias:holdout-looking", "caller-alias:train-looking"],
+        )
+
     def test_split_is_deterministic_and_domain_bound_to_family(self):
-        self.assertEqual(split_for_family("episode:alpha"), split_for_family("episode:alpha"))
-        observed = {split_for_family(f"episode:{n}") for n in range(200)}
+        self.assertEqual(split_for_family("family:alpha"), split_for_family("family:alpha"))
+        observed = {split_for_family(f"family:{n}") for n in range(200)}
         self.assertEqual(observed, {"train", "validation", "holdout"})
 
     def test_family_relabel_after_admission_fails_exact_registry_rebind(self):

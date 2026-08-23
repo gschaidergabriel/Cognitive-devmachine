@@ -1,0 +1,53 @@
+{
+  "schema": "ENTITYOS_HCU_SCHEDULED_INFERENCE_RECEIPT_CONTRACT/v2",
+  "status": "SOURCE_CANDIDATE_CURRENT_DONOR_BOUND",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "candidate_schema": "HCU_SCHEDULED_INFERENCE_RECEIPT/v4",
+  "implementation": "scheduled_inference_receipt_v4.py",
+  "inner_inference_schema": "HCU_INFERENCE_RECEIPT/v3",
+  "required_grid_plan_schema": "ENTITYOS_HCU_GRID_PLAN/v2",
+  "required_canonicalization_schema": "RFC8785_JCS_IJSON/v1",
+  "required_entry_binding_schema": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2",
+  "required_chain": [
+    "typed JCS Entry admission binding",
+    "JCS HCU RouteDecision",
+    "verified engine admission",
+    "generation-fenced VerifiedEngineLoad with actual-loader evidence",
+    "HCU inference receipt v3",
+    "independently admitted JCS GRID10 plan v2",
+    "exact MODEL CellLease bound to one routed model lane",
+    "capacity receipt and runtime profile",
+    "candidate output digest/size"
+  ],
+  "plan_admission_binding": {
+    "schema": "ENTITYOS_HCU_GRID_PLAN_ADMISSION_BINDING/v1",
+    "authority": "external deterministic control plane",
+    "binds": [
+      "grid_plan_schema",
+      "grid_plan_sha256",
+      "route_decision_sha256",
+      "entity_generation",
+      "capacity_receipt_sha256",
+      "canonicalization_schema",
+      "entry_binding_schema"
+    ]
+  },
+  "anti_alias_law": "a downstream scheduled inference identity must change when the admitted GRID plan/capacity/cell/lane changes even if the route and output bytes are otherwise identical",
+  "anti_laundering_law": "legacy or non-JCS GRID/inference identity is rejected rather than relabelled beneath v4",
+  "cell_lane_law": "one receipt names one exact MODEL cell and one route model lane; SCRIPT cells, cross-lane claims and decoder-lane overflow fail closed",
+  "authority_law": [
+    "scheduled receipt is evidence only",
+    "scheduled receipt does not route or schedule",
+    "scheduled receipt does not mint truth",
+    "scheduled receipt does not grant capability, engine, loader or capacity authority",
+    "scheduled receipt does not grant effect authority",
+    "EffectGate and EffectJournal remain the sole real-effect authority"
+  ],
+  "execution": {
+    "source_regression_present": true,
+    "exact_current_branch_runtime_executed": false,
+    "runtime_credit": 0
+  },
+  "promotion": "NOT_RUNTIME_PROMOTED"
+}

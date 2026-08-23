@@ -1,0 +1,58 @@
+{
+  "schema_version": "HCU_JCS_INTEGER_BINARY64_EXACT_REGRESSION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "candidate_pr": 1378,
+  "candidate_head": "5342e732a8fc27a1f591a29e3ca27216628ab057",
+  "base_pr": 1263,
+  "source_files": {
+    "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py": {
+      "git_blob_sha1_expected": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+      "git_blob_sha1_executed": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+      "bytes": 5713
+    },
+    "the artefact/MicroEntity/hcu/test_entry_canonicalization_v1.py": {
+      "git_blob_sha1_expected": "6e2127b6b35b1f151acded1a6db2565b4734b27d",
+      "git_blob_sha1_executed": "6e2127b6b35b1f151acded1a6db2565b4734b27d",
+      "bytes": 4352
+    }
+  },
+  "finding_repaired": "HOST_LANGUAGE_INT_TYPE_MUST_NOT_CHANGE_RFC8785_NUMBER_CANONICALIZATION_FOR_EXACT_BINARY64_VALUES",
+  "spec_basis": {
+    "rfc": 8785,
+    "sections": ["3.1", "3.2.2.3", "Appendix B"],
+    "interpretation": "JCS serializes JSON numbers using IEEE-754 binary64 / ECMAScript-compatible number serialization. Appendix B includes 2^53. The +/- (2^53-1) true-integer range is a SHOULD for maximum ECMAScript compatibility rather than an algorithmic rejection rule for an already admitted exactly representable binary64 value."
+  },
+  "repair": {
+    "python_int_policy": "convert to finite binary64 and require exact mathematical round-trip before using the same serialization path as float",
+    "allow_examples": [
+      "2^53 int == 2^53 float -> 9007199254740992",
+      "2^68 int == 2^68 float -> 295147905179352830000"
+    ],
+    "reject_example": "2^53+1 -> INTEGER_NOT_EXACT_BINARY64"
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Python tool container",
+    "source_identity_check": "PASS_BOTH_GIT_BLOBS_EXACT",
+    "commands": [
+      "python -m py_compile entry_canonicalization_v1.py test_entry_canonicalization_v1.py",
+      "python -m unittest -v test_entry_canonicalization_v1.py"
+    ],
+    "py_compile": "PASS_EXIT_0",
+    "unittest": "PASS_6_OF_6_EXIT_0",
+    "appendix_b_finite_vectors": "PASS_24_OF_24",
+    "stderr_note": "Container emitted an unrelated artifact_tool spreadsheet warmup timeout during Python startup; both requested Python commands completed with exit code 0 and the canonicalization tests passed."
+  },
+  "classification": "EXACT_SOURCE_COMPONENT_REGRESSION_NOT_A_SECOND_UNUSUAL_EXPERIMENT",
+  "credit": {
+    "mechanism": "SUPPORTED_ON_EXACT_PR1378_SOURCE",
+    "cross_language_identity": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "counterhypothesis_remaining": "The hand-built Python canonicalizer may still diverge from ECMAScript/JCS on cases not discriminated by the repository test corpus or may not match an independent second implementation byte-for-byte.",
+  "next_gate": "Compare the same typed Entry corpus byte-for-byte and digest-for-digest against an independent admitted RFC8785/JCS implementation, then fuse the smallest proven canonicalization authority into the single retained PR1263 lane without keeping parallel hash semantics."
+}

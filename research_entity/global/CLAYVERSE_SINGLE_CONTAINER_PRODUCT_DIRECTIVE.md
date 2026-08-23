@@ -1,67 +1,27 @@
 # CLAYVERSE SINGLE-CONTAINER PRODUCT DIRECTIVE
 
-Status: **CURRENT OWNER DIRECTIVE**
-Date: 2026-08-23
-Persistent research entity: **Clay**
-Active product: **ClayVerse**
-Canonical workspace: `gschaidergabriel/clay-global-research-entity/main/the artefact/`
-Release form: **one OCI/Docker-compatible ClayVerse container image**
+Status: **SUPERSEDED FOR CURRENT PROGRAM / DONOR EVIDENCE ONLY**
+Original directive date: 2026-08-23
+Superseded by: `research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md`
+Superseding control: `research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_5_MINI_ENTITY_GO_AUTHORITY.json`
 
-This directive supersedes the temporary Mini Entity / Blogpost product endpoint while preserving useful bounded implementation evidence from that line.
+The latest explicit owner correction restores **Mini Entity / EntityOS** as the active `go` program and work-selection target.
 
-## Identity and authority law
+This ClayVerse directive must therefore not select current `go` work, product identity, stage, endpoint, bootstrap state, swarm prompts or status output.
 
-- Clay remains the persistent research entity; temporary workers/models are organs, never new Clay identities.
-- ClayVerse is the product Clay is building.
-- Exactly one persistent central ClayVerse entity is shared by the two canonical equal-rights user perspectives `gabriel` and `andreas`.
-- UnifiedDB is the sole durable canonical state/world/memory/data/wiki/causal authority.
-- ClayGraph is derived and rebuildable only.
-- Claude Code is runtime cognition, never durable identity, truth, memory, or effect authority.
-- MicroClay is a bounded adaptive memory entry/retrieval organ; retrieval score never mints truth.
-- EffectGate/EffectJournal are the only admitted external/state-changing effect authority path.
-- EntityOS is an internal execution/security/runtime substrate carried inside ClayVerse when separately admitted; it is not the top-level product endpoint or a second state authority.
-- No hidden second transcript, memory store, identity service, effect path, recovery ledger, or consciousness daemon is allowed.
+Its prior detailed contents remain preserved in Git history and may be used only as bounded donor evidence where a mechanism strengthens the active Mini Entity architecture without importing ClayVerse product identity or creating a second durable authority.
 
-## Product path
+Current active authority:
 
-Canonical visible path:
+- program: `MINI_ENTITY_PIPELINE_ALL_IN_ONE`;
+- stage: `MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT`;
+- owner directive: `MINI_ENTITY_GO_OWNER_DIRECTIVE.md`;
+- primary architecture: `ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md`;
+- canonical durable product authority: MiniUnifiedDB;
+- bundled ~0.8B generic ClayCode cognition: mandatory first-class local path;
+- Unified J-Space/GWT: fixed versioned measured/control cognitive fabric;
+- Claude Code: first-class targeted candidate inference, not truth/effect authority;
+- `go`: maximum-depth Mini Entity product convergence;
+- `zero`: same Mini Entity boundary with Zero/J-Space/GWT focus.
 
-`Browser -> Clerk -> verified JWT -> authenticated WebSocket PTY -> user-bound persistent tmux -> normal interactive Claude Code -> managed UserPromptSubmit/Stop/StopFailure hooks -> UnifiedDB causal lifecycle -> MicroClay/ClayGraph/Hyperposition/workspace context -> Claude reasoning -> effect-only MCP -> EffectGate -> optional admitted EntityOS -> verified outcome -> causal re-entry -> UnifiedDB`
-
-The retired custom chat API/headless `claude -p` path is not the canonical product runtime.
-
-## Container and recovery law
-
-Final product acceptance requires one exact OCI image containing all mandatory application runtime pieces, with non-root execution, read-only root filesystem at admitted scope, dropped Linux capabilities, `no-new-privileges`, bounded tmpfs, explicit persistent state/workspace volumes, supply-chain identity, and exact image/runtime evidence.
-
-Restart/recovery must preserve canonical state and uncertainty, mint/fence one new global entity generation when required, close/re-enter interrupted turns explicitly, expire stale leases, rebuild derived projections from UnifiedDB, and never blindly replay an ambiguous external effect.
-
-## Memory and learning law
-
-Meta-learning is a required subsystem, not the whole product. ClayVerse may preserve validated reusable methods separately from evidence, but:
-
-`FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`
-
-Method memory proposes how to investigate/test; it never manufactures missing facts. MicroClay changes accessibility/routing only and starts behind a deterministic safe baseline until held-out/replay evidence supports promotion.
-
-## Execution and evidence law
-
-All current build/test/experiment/runtime-validation work is isolated-sandbox-only. VPS/self-hosted/production-host test evidence is forbidden unless a newer explicit owner directive changes this.
-
-Whole-product PASS requires exact-current evidence across source identity, OCI build/digest, startup/readiness, Clerk/browser/WebSocket PTY, persistent tmux, both canonical users, normal interactive Claude Code, managed hook lifecycle, UnifiedDB persistence, MicroClay retrieval, ClayGraph/Hyperposition/workspace, effect-only MCP/EffectGate, admitted EntityOS round trip, recovery/restart, concurrency/generation fencing, privacy, supply chain, and deployment runtime.
-
-A component PASS, source-tree PASS, PR merge, workflow definition, deployment READY state, historical Mini Entity/Frank/EntityOS receipt, or synthetic demo is not whole ClayVerse PASS.
-
-## Execution-control law
-
-Together API/service remains forbidden. Secrets never enter source, prompts, receipts, or durable state. Final paid/model training requires explicit owner authorization. Current stricter execution controls remain binding until explicitly changed.
-
-## Trigger law
-
-Exact `go` means: refresh current authority/main/parallel work; choose the highest-information non-duplicate ClayVerse blocker; generate alternatives/counterhypotheses; run the cheapest available falsifiers; repair the canonical path; execute the strongest authorized isolated evidence available; regress; persist a bounded receipt/code/work delta; refresh changed reality; continue until useful safe work is exhausted or truly blocked.
-
-Exact `zero` uses the same ClayVerse boundary but focuses on Agent Zero / EntityOS + Global J-Space / Nested Workspace causal coupling without creating a second entity, memory authority, or hidden-state mythology.
-
-## Anti-regression
-
-Any current file or worker claiming that ClayVerse is superseded by Mini Entity/Blogpost is stale relative to this directive and must fail closed until reconciled.
+All current FREE_ONLY, sandbox-only, Together-forbidden, provenance, exact-runtime-credit and Frank-Harness protections remain in force.

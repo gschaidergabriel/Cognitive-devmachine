@@ -1,0 +1,37 @@
+{
+  "schema": "ENTITYOS_HCU_INFERENCE_RECEIPT_CONTRACT/v1",
+  "status": "SOURCE_CANDIDATE_DEPENDENT_ON_CURRENT_ENTRY_BINDING_REPAIR",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "current_candidate": "HCU_SCHEDULED_INFERENCE_RECEIPT/v2",
+  "implementation": "scheduled_inference_receipt_v2.py",
+  "inner_receipt": {
+    "schema": "HCU_INFERENCE_RECEIPT/v1",
+    "implementation": "inference_receipt_v1.py",
+    "status": "REQUIRED_INNER_EVIDENCE_NOT_SUFFICIENT_AS_SCHEDULED_EXECUTION_RECEIPT",
+    "reason": "v1 binds verified engine admission and loader-consumed lease evidence but still omits GridPlan/capacity/MODEL-cell identity"
+  },
+  "required_causal_chain": [
+    "typed Entry admission",
+    "HCU RouteDecision",
+    "verified engine-admission receipt",
+    "generation-fenced physical engine-load lease",
+    "independently admitted GRID10 GridPlan",
+    "concrete MODEL CellLease",
+    "actual model output digest/size"
+  ],
+  "plan_admission_law": "GridPlan construction is not authority by itself; deterministic control-plane admission of plan_sha256 -> route_decision_sha256 is required",
+  "anti_alias_law": "distinct admitted plan_sha256 values must produce distinct scheduled inference receipt identities even when route, model_call_id and output bytes are otherwise identical",
+  "known_upstream_dependency": "current donor router requires versioned ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2 while current Grid10/inference consumers still retain bare admission->event binding shapes; this contract does not legitimize that mixed authority representation and receives zero runtime credit until the single versioned binding contract converges",
+  "authority_law": [
+    "scheduled receipt cannot mint truth",
+    "scheduled receipt cannot grant capability",
+    "scheduled receipt cannot grant engine admission",
+    "scheduled receipt cannot mint loader evidence",
+    "scheduled receipt cannot grant effect authority",
+    "EffectGate+EffectJournal remain the only real-effect authority",
+    "canonical durable state remains UnifiedDB or the currently admitted compatibility MiniUnifiedDB substrate"
+  ],
+  "promotion": "NOT_RUNTIME_PROMOTED",
+  "runtime_credit": 0
+}

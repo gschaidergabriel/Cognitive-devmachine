@@ -9,10 +9,10 @@ DatasetAdmission gate and be bound to the canonical HCU_INFERENCE_RECEIPT/v3 loa
 chain.
 
 This module is the orchestration boundary that requires all three before rows are emitted:
-external basis admission, exact training/transition/prototype admission, and exact inference
-loader/output binding. It mints no truth, model authority, effect authority, runtime credit,
-or paid-training permission. Current FREE_ONLY supervisor policy can still forbid provider
-execution after this source gate passes.
+external basis admission, exact training/transition/prototype/GRID admission, and exact
+inference loader/output binding. It mints no truth, model authority, effect authority,
+runtime credit, or paid-training permission. Current FREE_ONLY supervisor policy can still
+forbid provider execution after this source gate passes.
 """
 from __future__ import annotations
 
@@ -215,6 +215,10 @@ def validate_pipeline_evidence(
                 training_trace.get("vector_control_packet_sha256"),
                 "training_trace.vector_control_packet_sha256",
             ),
+            "admission": _sha256(
+                admission.vector_control_packet_sha256,
+                "admission.vector_control_packet_sha256",
+            ),
             "inference_binding": _sha256(
                 inference_binding.vector_control_packet_sha256,
                 "inference_binding.vector_control_packet_sha256",
@@ -314,17 +318,19 @@ def compile_admitted_records(
     admitted_training_traces: Mapping[str, Mapping[str, Any]],
     admitted_transition_traces: Mapping[str, Mapping[str, Any]],
     admitted_prototype_traces: Mapping[str, Mapping[str, Any]],
+    admitted_grid_plans: Mapping[str, Mapping[str, Any]],
     admitted_inference_bindings: Mapping[str, JSpaceInferenceBinding],
     admitted_bases: Mapping[str, str],
     admitted_outcome_receipts: Mapping[str, Any] | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Compile only traces that pass basis, cross-trace, and inference admission.
+    """Compile only traces that pass basis, cross-trace, GRID, and inference admission.
 
     ``records`` contains ``(training_trace, transition_trace)`` pairs. The admission gate
-    uses caller-owned registries rather than rebuilding trust from each row. The matching
-    inference binding is looked up by training-trace SHA and must validate under the
-    selected RFC8785/JCS identity rules. The selected lower-level compiler then separately
-    enforces the external basis id+digest registry before rendering any dataset rows.
+    uses caller-owned registries rather than rebuilding trust from each row, including an
+    externally admitted GRID10 plan registry. The matching inference binding is looked up
+    by training-trace SHA and must validate under the selected RFC8785/JCS identity rules.
+    The selected lower-level compiler then separately enforces the external basis id+digest
+    registry before rendering any dataset rows.
 
     Exact duplicate records are idempotent only after their full admitted ancestry has been
     revalidated. Reusing one training-trace digest with a different transition/inference
@@ -332,6 +338,7 @@ def compile_admitted_records(
     """
     out = {"train": [], "validation": [], "holdout": []}
     seen: dict[str, tuple[str, str, str]] = {}
+    admitted_grid_plans = _mapping(admitted_grid_plans, "admitted_grid_plans")
     admitted_inference_bindings = _mapping(
         admitted_inference_bindings,
         "admitted_inference_bindings",
@@ -352,6 +359,7 @@ def compile_admitted_records(
                 admitted_training_traces=admitted_training_traces,
                 admitted_transition_traces=admitted_transition_traces,
                 admitted_prototype_traces=admitted_prototype_traces,
+                admitted_grid_plans=admitted_grid_plans,
                 admitted_outcome_receipts=admitted_outcome_receipts,
             )
         except JSpaceDatasetAdmissionError as exc:

@@ -40,6 +40,28 @@ class CanonicalUcfPathStaticTest(unittest.TestCase):
         self.assertFalse(report["pass"], report)
         self.assertTrue(report["temporal_false_green"]["final_receipt_sent_pre_inference"])
 
+    def test_finalize_before_gate_regression_fails_closed(self):
+        # Deterministic regression, not a second unusual experiment.
+        poisoned = self.source.replace(
+            '  let gate_data = map_new()',
+            '  let temporal_regression = phase("pipeline_cognitive_fabric_finalize",entity_db,source_db,profile,previous,map_new())\n\n'
+            '  let gate_data = map_new()',
+            1,
+        )
+        report = evaluate(poisoned)
+        self.assertFalse(report["pass"], report)
+        self.assertFalse(report["ordered_prompt_prepare_inference_gate_commit_finalize"], report)
+
+    def test_final_receipt_cannot_authorize_gate_or_commit(self):
+        poisoned = self.source.replace(
+            'map_set(gate_data,"cognitive_fabric_prepare",prepared)',
+            'map_set(gate_data,"cognitive_fabric",finalized)',
+            1,
+        )
+        report = evaluate(poisoned)
+        self.assertFalse(report["pass"], report)
+        self.assertTrue(report["temporal_false_green"]["final_receipt_authorizes_gate"])
+
     def test_legacy_one_phase_admit_cannot_reappear(self):
         poisoned = self.source.replace(
             'phase("pipeline_cognitive_fabric_prepare"',

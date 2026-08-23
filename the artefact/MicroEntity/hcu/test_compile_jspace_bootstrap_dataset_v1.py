@@ -10,7 +10,7 @@ class CompilerTests(unittest.TestCase):
             CellContribution("a", "world", (0.8, 0.1), 0.8, 0.1, 0.2, 0.1, 0.1),
             CellContribution("b", "critic", (-0.4, 0.8), 0.2, 0.9, 0.7, 0.1, 0.1),
         ]
-        return step(cells, generation=gen, basis_id=f"B{gen}").trace
+        return step(cells, generation=gen, basis_id=f"B{gen}", basis_sha256=f"{gen:064x}").trace
 
     def test_each_trace_derives_four_machine_checkable_rows(self):
         rows = derive_bootstrap_examples(self.trace())

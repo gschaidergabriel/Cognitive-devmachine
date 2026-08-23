@@ -60,11 +60,12 @@ class RuntimeUcfAdmissionBridgeTests(unittest.TestCase):
         self.assertLess(entity, install)
         self.assertLess(install, commit)
 
-    def test_admission_reuses_canonical_compositor_read_only(self):
+    def test_admission_reuses_canonical_profile_runtime_bridge(self):
         source = _method_source("_pipeline_cognitive_fabric_admit")
-        self.assertIn("pipeline_cognitive_fabric_admission_v1", source)
-        self.assertIn("build_pre_inference_admission", source)
-        self.assertIn("self._read_only_db", source)
+        self.assertIn("profile_runtime_cognitive_fabric_binding_v1", source)
+        self.assertIn("admit_profile_runtime_payload", source)
+        self.assertNotIn("pipeline_cognitive_fabric_admission_v1", source)
+        self.assertNotIn("build_pre_inference_admission", source)
         self.assertNotIn("self._db(", source)
         self.assertNotIn("_pipeline_commit", source)
         self.assertNotIn("_inference_generate", source)

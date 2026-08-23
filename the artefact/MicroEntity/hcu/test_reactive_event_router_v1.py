@@ -10,6 +10,9 @@ from reactive_event_router_v1 import (
 
 ENGINE_A_SHA256 = "a" * 64
 ENGINE_B_SHA256 = "b" * 64
+ENTRY_EVENT_SHA256 = "e" * 64
+ENTRY_ADMISSION_A_SHA256 = "1" * 64
+ENTRY_ADMISSION_B_SHA256 = "2" * 64
 
 
 def base_event():
@@ -36,6 +39,22 @@ def bind_local_engine(event, *, artifact_sha256=ENGINE_A_SHA256):
     return event
 
 
+def bind_entry_projection(
+    event,
+    *,
+    ingress_id="ingress:test:a",
+    admission_sha256=ENTRY_ADMISSION_A_SHA256,
+    event_sha256=ENTRY_EVENT_SHA256,
+):
+    event.update(
+        ingress_id=ingress_id,
+        causal_id="causal:test:entry",
+        entry_event_sha256=event_sha256,
+        entry_admission_sha256=admission_sha256,
+    )
+    return event
+
+
 def engine_registry(*, artifact_sha256=ENGINE_A_SHA256):
     return {"hcu_local_08b": artifact_sha256}
 
@@ -45,6 +64,21 @@ def route_model(event, *, artifact_sha256=ENGINE_A_SHA256):
         event,
         current_generation=7,
         admitted_engine_artifacts=engine_registry(artifact_sha256=artifact_sha256),
+    )
+
+
+def route_entry_model(
+    event,
+    *,
+    admission_sha256=ENTRY_ADMISSION_A_SHA256,
+    event_sha256=ENTRY_EVENT_SHA256,
+    artifact_sha256=ENGINE_A_SHA256,
+):
+    return route_event(
+        event,
+        current_generation=7,
+        admitted_engine_artifacts=engine_registry(artifact_sha256=artifact_sha256),
+        admitted_entry_bindings={admission_sha256: event_sha256},
     )
 
 
@@ -179,6 +213,40 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertEqual(a.model_lanes, b.model_lanes)
         self.assertNotEqual(a.engine_identity_sha256, b.engine_identity_sha256)
         self.assertNotEqual(a.decision_sha256, b.decision_sha256)
+
+    def test_typed_entry_projection_requires_independent_admission_binding(self):
+        e = bind_local_engine(bind_entry_projection(base_event())); e.update(novelty=0.8)
+        with self.assertRaisesRegex(ReactiveRoutingError, "ADMITTED_ENTRY_BINDING_REGISTRY_REQUIRED"):
+            route_event(e, current_generation=7, admitted_engine_artifacts=engine_registry())
+
+    def test_typed_entry_projection_rejects_event_identity_not_bound_to_admission(self):
+        e = bind_local_engine(bind_entry_projection(base_event())); e.update(novelty=0.8)
+        with self.assertRaisesRegex(ReactiveRoutingError, "ENTRY_EVENT_SHA256_MISMATCH"):
+            route_event(
+                e,
+                current_generation=7,
+                admitted_engine_artifacts=engine_registry(),
+                admitted_entry_bindings={ENTRY_ADMISSION_A_SHA256: "f" * 64},
+            )
+
+    def test_transport_replay_keeps_causal_route_identity_but_changes_admission_binding(self):
+        # Regression of the already-identified Entry event-vs-admission conflation gap;
+        # this is not a second unusual experiment for the parent GO macrocycle.
+        a_event = bind_local_engine(bind_entry_projection(base_event())); a_event.update(novelty=0.8)
+        b_event = bind_local_engine(bind_entry_projection(
+            base_event(),
+            ingress_id="ingress:test:b",
+            admission_sha256=ENTRY_ADMISSION_B_SHA256,
+        )); b_event.update(novelty=0.8)
+        a = route_entry_model(a_event)
+        b = route_entry_model(
+            b_event,
+            admission_sha256=ENTRY_ADMISSION_B_SHA256,
+        )
+        self.assertEqual(a.event_sha256, ENTRY_EVENT_SHA256)
+        self.assertEqual(b.event_sha256, ENTRY_EVENT_SHA256)
+        self.assertEqual(a.model_lanes, b.model_lanes)
+        self.assertEqual(a.decision_sha256, b.decision_sha256)
 
     def test_inference_receipt_must_echo_event_route_exact_engine_and_serializer(self):
         e = bind_local_engine(base_event()); e.update(novelty=0.8)

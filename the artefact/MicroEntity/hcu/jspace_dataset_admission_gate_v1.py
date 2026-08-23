@@ -1,7 +1,13 @@
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
 from typing import Any, Mapping
+
+try:
+    from .entry_canonicalization_v1 import CanonicalizationError, canonicalize
+except ImportError:
+    from entry_canonicalization_v1 import CanonicalizationError, canonicalize
 
 ADMISSION_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2"
 PROTOTYPE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3"
@@ -64,6 +70,16 @@ def _sha256_ref(value: Any, field: str) -> str:
     if not value.startswith(prefix):
         raise JSpaceDatasetAdmissionError(f"{field}:SHA256_REF_REQUIRED")
     return _sha256(value[len(prefix):], field)
+
+
+def _canonical_mapping_sha256(value: Any, field: str) -> str:
+    """Bind a mapping identity to the single admitted RFC8785/JCS authority."""
+    value = _mapping(value, field)
+    try:
+        payload = canonicalize(dict(value))
+    except CanonicalizationError as exc:
+        raise JSpaceDatasetAdmissionError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
+    return hashlib.sha256(payload).hexdigest()
 
 
 def _generation(value: Any, field: str) -> int:
@@ -129,6 +145,7 @@ def _verify_grid_plan_binding(
 def _verify_outcome_binding(
     receipt: Any,
     *,
+    outcome_receipt_sha256: str,
     training_sha: str,
     transition_sha: str,
     generation: int,
@@ -137,12 +154,16 @@ def _verify_outcome_binding(
     role: str,
     credit: str,
 ) -> None:
-    """Require any admitted outcome reference to bind the exact causal training family.
+    """Require any admitted outcome reference to bind exact receipt bytes and causal family.
 
     UNKNOWN keeps credit epistemically unknown; it does not permit an unrelated admitted
-    receipt to become false provenance for this training row.
+    receipt to become false provenance for this training row. The receipt mapping itself is
+    canonicalized through the already-selected RFC8785/JCS authority and must hash to the
+    claimed outcome_receipt_sha256 before any semantic/causal fields are trusted.
     """
     receipt = _mapping(receipt, "admitted_outcome_receipt")
+    if _canonical_mapping_sha256(receipt, "admitted_outcome_receipt") != outcome_receipt_sha256:
+        raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_DIGEST_MISMATCH")
     if _text(receipt.get("status"), "admitted_outcome_receipt.status").upper() != "VERIFIED":
         raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_VERIFIED")
     if _text(receipt.get("credit_label"), "admitted_outcome_receipt.credit_label").upper() != credit:
@@ -306,6 +327,7 @@ def admit_for_training_dataset(
             raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_ADMITTED")
         _verify_outcome_binding(
             receipt,
+            outcome_receipt_sha256=outcome,
             training_sha=training_sha,
             transition_sha=transition_sha,
             generation=generation,

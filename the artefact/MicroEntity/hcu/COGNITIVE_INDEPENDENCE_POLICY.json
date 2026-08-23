@@ -1,6 +1,6 @@
 {
-  "schema_version": "HCU_COGNITIVE_INDEPENDENCE/v1",
-  "status": "OWNER_DIRECTED_SOURCE_POLICY",
+  "schema_version": "HCU_COGNITIVE_INDEPENDENCE/v2",
+  "status": "OWNER_DIRECTED_SOURCE_POLICY_CANDIDATE",
   "internal_cognition": {
     "required_external_provider": false,
     "required_external_embedding_service": false,
@@ -10,19 +10,44 @@
     "script_first": true,
     "reactive_selective_model_activation": true
   },
+  "typed_entry_admission": {
+    "required_before_routing": true,
+    "required_fields": [
+      "event_id",
+      "causal_id",
+      "entity_generation",
+      "modality",
+      "observed_at",
+      "provenance",
+      "permissions",
+      "budget"
+    ],
+    "provenance_minimum": ["source_type", "source_id"],
+    "permissions_minimum": ["cognition"],
+    "budget_minimum": ["allow_model_cognition", "max_model_lanes"],
+    "unknown_or_stale_generation": "REJECT",
+    "route_identity_binding": "event_sha256 + causal_id + router_policy_sha256 + engine_identity_sha256 + routing_result"
+  },
   "internal_engine_admission": {
     "mode": "POSITIVE_FAIL_CLOSED_REGISTRY",
     "provider_aliases": ["hcu", "local", "xeno"],
+    "provider_alias_authority": false,
+    "engine_registry_required_for_model_activation": true,
     "engines": {
       "hcu_local_08b": {
         "class": "LOCAL_SHARED_WEIGHT_08B",
         "role": "SELECTIVE_HCU_MODEL_LANES",
-        "runtime_checkpoint_identity": "REQUIRED_BEFORE_RUNTIME_ACCEPTANCE"
+        "runtime_identity": "REQUIRED",
+        "checkpoint_identity": "REQUIRED",
+        "tokenizer_identity": "REQUIRED",
+        "artifact_sha256": "REQUIRED_LOWERCASE_SHA256",
+        "network_required": false,
+        "secret_lookup_required": false
       }
     },
+    "event_self_asserted_engine_digest_without_registry_match": "REJECT",
     "unknown_provider_or_engine": "REJECT",
-    "route_identity_binding": "event_sha256 + resolved_engine_identity + resolved_engine_class + routing_result",
-    "downstream_inference_receipt": "MUST_ECHO_EVENT_ROUTE_AND_ENGINE_IDENTITIES"
+    "downstream_inference_receipt": "MUST_ECHO_CAUSAL_EVENT_ROUTE_AND_ENGINE_IDENTITIES"
   },
   "providers": {
     "nvidia": {

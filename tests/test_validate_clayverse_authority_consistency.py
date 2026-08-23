@@ -33,6 +33,7 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "active_program": mod.EXPECTED_PROGRAM,
                 "active_stage": mod.EXPECTED_STAGE,
                 "sole_owner_directive": mod.OWNER_DIRECTIVE,
+                "all_worker_protocol": mod.ALL_WORKER_PROTOCOL,
                 "product_endpoint": "ClayVerse",
                 "release_form": mod.EXPECTED_RELEASE,
                 "together_api": "FORBIDDEN",
@@ -162,6 +163,17 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "`STAGE=CLAYVERSE_ARTIFACT`\n"
                 "Read research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md first.\n"
             ),
+            mod.ALL_WORKER_PROTOCOL: (
+                "# ClayCode All-Workers Execution Directive — ClayVerse\n"
+                "Status: **CURRENT PROJECT OWNER WORKER DIRECTIVE**\n"
+                f"Current product authority: `{mod.OWNER_DIRECTIVE}`\n"
+                "Active product: **ClayVerse**\n"
+                f"{mod.WORKER_PROMPT_MARKER}\n"
+                "Active product: ClayVerse single-container.\n"
+                "VPS/self-hosted/production-host test evidence is forbidden.\n"
+                "Together API/service is forbidden.\n"
+                "Final paid/model training requires explicit owner authorization.\n"
+            ),
             mod.LEGACY_BLOGPOST: (
                 "# HISTORICAL MINI ENTITY / BLOGPOST DIRECTIVE — COMPATIBILITY REDIRECT\n"
                 "Status: SUPERSEDED / HISTORICAL DONOR EVIDENCE ONLY\n"
@@ -223,6 +235,37 @@ class AuthorityConsistencyTests(unittest.TestCase):
         data["identity"] = {}
         path.write_text(json.dumps(data), encoding="utf-8")
         self.assertIn("BOOTSTRAP_IDENTITY_GUARD_POINTER_MISSING", mod.validate(root)["errors"])
+
+    def test_worker_protocol_pointer_regression_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["all_worker_protocol"] = "research_entity/claycode/MINI_ENTITY_ALL_WORKERS.md"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("BOOTSTRAP_ALL_WORKER_PROTOCOL_MISMATCH", mod.validate(root)["errors"])
+
+    def test_worker_protocol_mini_entity_prompt_poison_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.ALL_WORKER_PROTOCOL
+        text = path.read_text(encoding="utf-8")
+        text = text.replace(mod.WORKER_PROMPT_MARKER, "[MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]")
+        path.write_text(text, encoding="utf-8")
+        errors = mod.validate(root)["errors"]
+        self.assertIn("WORKER_PROTOCOL_CLAYVERSE_MARKER_MISSING", errors)
+        self.assertIn("WORKER_PROTOCOL_MINI_ENTITY_MARKER_ACTIVE", errors)
+
+    def test_worker_protocol_execution_fence_loss_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.ALL_WORKER_PROTOCOL
+        text = path.read_text(encoding="utf-8").replace(
+            "VPS/self-hosted/production-host test evidence is forbidden.",
+            "VPS testing may be used when convenient.",
+        )
+        path.write_text(text, encoding="utf-8")
+        self.assertIn("WORKER_PROTOCOL_VPS_FENCE_MISSING", mod.validate(root)["errors"])
 
     def test_control41_paid_fallback_weakening_fails_closed(self):
         td, root = self.make_tree()

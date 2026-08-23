@@ -10,6 +10,20 @@
     "script_first": true,
     "reactive_selective_model_activation": true
   },
+  "internal_engine_admission": {
+    "mode": "POSITIVE_FAIL_CLOSED_REGISTRY",
+    "provider_aliases": ["hcu", "local", "xeno"],
+    "engines": {
+      "hcu_local_08b": {
+        "class": "LOCAL_SHARED_WEIGHT_08B",
+        "role": "SELECTIVE_HCU_MODEL_LANES",
+        "runtime_checkpoint_identity": "REQUIRED_BEFORE_RUNTIME_ACCEPTANCE"
+      }
+    },
+    "unknown_provider_or_engine": "REJECT",
+    "route_identity_binding": "event_sha256 + resolved_engine_identity + resolved_engine_class + routing_result",
+    "downstream_inference_receipt": "MUST_ECHO_EVENT_ROUTE_AND_ENGINE_IDENTITIES"
+  },
   "providers": {
     "nvidia": {
       "internal_cognitive_dependency": false,

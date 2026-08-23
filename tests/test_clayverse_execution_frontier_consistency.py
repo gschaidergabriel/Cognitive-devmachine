@@ -1,6 +1,10 @@
 from copy import deepcopy
 
 from tools.assert_clayverse_execution_boundary import (
+    BRIDGE_ENTITYOS_POLICY,
+    BRIDGE_PROVIDER_POLICY,
+    BRIDGE_REBIND_POLICY,
+    CURRENT_OWNER_DIRECTIVE,
     EXPECTED_EXECUTION_GATE,
     EXPECTED_VERCEL_BRIDGE,
     VERCEL_EXECUTION_PATH,
@@ -8,10 +12,14 @@ from tools.assert_clayverse_execution_boundary import (
 )
 
 
-VERCEL_CURRENT = """
+VERCEL_CURRENT = f"""
 Status: BRIDGE CONFIRMED / SANDBOX ADMISSION PROVEN / RUNTIME GITHUB TOKEN INGRESS IMPLEMENTED
+Current owner directive: {CURRENT_OWNER_DIRECTIVE}
 Sandbox.create is not the blocker.
 Runtime one-shot ingress accepts GITHUB_READ_TOKEN through the owner-started POST path.
+{BRIDGE_PROVIDER_POLICY}
+{BRIDGE_ENTITYOS_POLICY}
+{BRIDGE_REBIND_POLICY}
 """
 
 
@@ -49,3 +57,18 @@ def test_claimed_bridge_fails_closed_when_continuity_evidence_degrades():
     degraded = VERCEL_CURRENT.replace("Sandbox.create is not the blocker.\n", "")
     errors = execution_frontier_errors(current_program(), degraded)
     assert "VERCEL_EXECUTION_BRIDGE_EVIDENCE_MISSING_OR_DEGRADED" in errors
+
+
+def test_stale_mandatory_provider_contract_fails_closed():
+    poisoned = VERCEL_CURRENT + "\nMistral is mandatory for this final test as an inference provider only.\n"
+    assert "VERCEL_BRIDGE_STALE_MANDATORY_PROVIDER" in execution_frontier_errors(current_program(), poisoned)
+
+
+def test_missing_entityos_conditionality_fails_closed():
+    poisoned = VERCEL_CURRENT.replace(BRIDGE_ENTITYOS_POLICY + "\n", "")
+    assert "VERCEL_BRIDGE_ENTITYOS_CONDITIONALITY_MISSING" in execution_frontier_errors(current_program(), poisoned)
+
+
+def test_missing_pr810_semantic_rebind_fence_fails_closed():
+    poisoned = VERCEL_CURRENT.replace(BRIDGE_REBIND_POLICY + "\n", "")
+    assert "VERCEL_BRIDGE_PR810_SEMANTIC_REBIND_FENCE_MISSING" in execution_frontier_errors(current_program(), poisoned)

@@ -60,6 +60,14 @@ def base_receipt():
         },
         "inference": {
             "engine_class": "LOCAL_08B",
+            "jspace_mode": "FULL_LOCAL_LATENT",
+            "local_activation_access": True,
+            "external_hidden_state_claimed": False,
+            "jspace_intervention": {
+                "executed": False,
+                "implementation_digest": None,
+                "calibration_digest": None,
+            },
             "packet_digest": d("d"),
             "candidate_result_digest": d("e"),
             "candidate_only": True,
@@ -68,6 +76,8 @@ def base_receipt():
         "validation": {
             "decision": "ACCEPTED_CANDIDATE",
             "reconciliation_digest": d("f"),
+            "candidate_attempted_direct_state_mutation": False,
+            "candidate_attempted_direct_effect": False,
             "canonical_write": True,
             "effect_requested": False,
             "effect_admitted": False,
@@ -79,6 +89,7 @@ def base_receipt():
         },
         "boundary": {
             "free_only": True,
+            "cost_class": "LOCAL",
             "secret_lookup_count": 0,
             "network_attempt_count": 0,
             "first_action_origin": "zero:inference_scheduler",
@@ -106,20 +117,36 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         self.assertEqual(result["phase"], "BOOT_BINDING")
         self.assertEqual(len(result["source_tree"]), 40)
         self.assertEqual(result["epistemic_status"], "MEASURED_SUPPORTED")
+        self.assertEqual(result["jspace_mode"], "FULL_LOCAL_LATENT")
 
     def test_exact_identity_expectations_reject_stale_manifest(self):
         receipt = base_receipt()
         with self.assertRaisesRegex(ReceiptError, "STALE_BUNDLED_MANIFEST"):
             validate_receipt(receipt, expected_bundled_manifest_digest=d("0"))
 
-    def test_free_only_rejects_secret_or_network_touch(self):
-        for key in ("secret_lookup_count", "network_attempt_count"):
-            with self.subTest(key=key):
+    def test_free_only_blocks_nonfree_external_touch_but_not_free_network(self):
+        for cost_class in ("PAID", "SUBSCRIPTION", "UNKNOWN"):
+            with self.subTest(cost_class=cost_class):
                 receipt = base_receipt()
-                receipt["boundary"][key] = 1
+                receipt["boundary"]["cost_class"] = cost_class
+                receipt["boundary"]["network_attempt_count"] = 1
                 redigest(receipt)
-                with self.assertRaisesRegex(ReceiptError, "FREE_ONLY_EXTERNAL_TOUCH"):
+                with self.assertRaisesRegex(ReceiptError, "FREE_ONLY_NETWORK_TOUCH"):
                     validate_receipt(receipt)
+
+        receipt = base_receipt()
+        receipt["boundary"]["cost_class"] = "FREE"
+        receipt["boundary"]["network_attempt_count"] = 1
+        redigest(receipt)
+        self.assertTrue(validate_receipt(receipt)["ok"])
+
+    def test_free_only_nonfree_lane_blocks_secret_touch(self):
+        receipt = base_receipt()
+        receipt["boundary"]["cost_class"] = "SUBSCRIPTION"
+        receipt["boundary"]["secret_lookup_count"] = 1
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "FREE_ONLY_SECRET_TOUCH"):
+            validate_receipt(receipt)
 
     def test_model_and_workspace_cannot_mint_authority(self):
         for key in (
@@ -148,23 +175,68 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         with self.assertRaisesRegex(ReceiptError, "EPISTEMIC_STATUS_REQUIRED"):
             validate_receipt(receipt)
 
-    def test_claude_requires_adapter_and_capability_identity(self):
+    def test_claude_must_be_compiled_external_without_hidden_state_claim(self):
         receipt = base_receipt()
-        receipt["inference"]["engine_class"] = "CLAUDE_CODE"
+        receipt["inference"].update(
+            {
+                "engine_class": "CLAUDE_CODE",
+                "jspace_mode": "FULL_LOCAL_LATENT",
+                "local_activation_access": True,
+                "adapter_version": "claude-code-adapter/v1",
+                "capability_profile_digest": d("1"),
+            }
+        )
         redigest(receipt)
-        with self.assertRaisesRegex(ReceiptError, "CLAUDE_ADAPTER_VERSION_REQUIRED"):
+        with self.assertRaisesRegex(ReceiptError, "CLAUDE_JSPACE_MODE_MUST_BE_COMPILED_EXTERNAL"):
             validate_receipt(receipt)
 
-        receipt["inference"]["adapter_version"] = "claude-code-adapter/v1"
+        receipt["inference"]["jspace_mode"] = "COMPILED_EXTERNAL"
+        receipt["inference"]["local_activation_access"] = False
+        receipt["inference"]["external_hidden_state_claimed"] = True
         redigest(receipt)
-        with self.assertRaisesRegex(ReceiptError, "CLAUDE_CAPABILITY_PROFILE_DIGEST_INVALID"):
+        with self.assertRaisesRegex(ReceiptError, "EXTERNAL_HIDDEN_STATE_CLAIM_FORBIDDEN"):
             validate_receipt(receipt)
+
+    def test_jspace_intervention_requires_latent_access_and_bound_calibration(self):
+        receipt = base_receipt()
+        receipt["inference"]["jspace_mode"] = "LOCAL_OBSERVE_ONLY"
+        receipt["inference"]["jspace_intervention"]["executed"] = True
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "JSPACE_INTERVENTION_REQUIRES_FULL_LOCAL_LATENT"):
+            validate_receipt(receipt)
+
+        receipt = base_receipt()
+        receipt["inference"]["jspace_intervention"]["executed"] = True
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "JSPACE_INTERVENTION_IMPLEMENTATION_DIGEST_REQUIRED"):
+            validate_receipt(receipt)
+
+        receipt["inference"]["jspace_intervention"]["implementation_digest"] = d("1")
+        receipt["inference"]["jspace_intervention"]["calibration_digest"] = d("2")
+        redigest(receipt)
+        self.assertTrue(validate_receipt(receipt)["ok"])
 
     def test_gwt_cannot_have_two_winners(self):
         receipt = base_receipt()
         receipt["workspace"]["gwt_candidates"][1]["winner"] = True
         redigest(receipt)
         with self.assertRaisesRegex(ReceiptError, "GWT_MULTIPLE_WINNERS"):
+            validate_receipt(receipt)
+
+    def test_direct_candidate_authority_attempt_cannot_be_accepted(self):
+        receipt = base_receipt()
+        receipt["validation"]["candidate_attempted_direct_state_mutation"] = True
+        receipt["validation"]["canonical_write"] = False
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "DIRECT_AUTHORITY_ATTEMPT_ACCEPTED"):
+            validate_receipt(receipt)
+
+        receipt = base_receipt()
+        receipt["validation"]["candidate_attempted_direct_effect"] = True
+        receipt["validation"]["effect_requested"] = True
+        receipt["validation"]["effect_admitted"] = True
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "DIRECT_EFFECT_BYPASS"):
             validate_receipt(receipt)
 
     def test_canonical_write_requires_accepted_candidate(self):
@@ -205,6 +277,8 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
     def test_deterministic_only_requires_not_applicable_epistemic_status(self):
         receipt = base_receipt()
         receipt["inference"]["engine_class"] = "DETERMINISTIC_ONLY"
+        receipt["inference"]["jspace_mode"] = "NONE"
+        receipt["inference"]["local_activation_access"] = False
         receipt["inference"]["candidate_result_digest"] = None
         receipt["inference"]["epistemic_status"] = "MEASURED_SUPPORTED"
         receipt["validation"]["decision"] = "NO_INFERENCE"

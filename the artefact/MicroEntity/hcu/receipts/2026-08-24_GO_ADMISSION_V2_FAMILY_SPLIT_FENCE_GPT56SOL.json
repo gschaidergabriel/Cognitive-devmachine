@@ -1,0 +1,75 @@
+{
+  "schema": "ENTITYOS_HCU_GO_ADMISSION_V2_FAMILY_SPLIT_FENCE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "newest_supervisor_observed": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "supervisor_supersedes": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed": "6a499541c38910e2a062b3eef50b73266c70445a",
+    "bounded_vercel_hobby_included_tier_admitted": true,
+    "together_forbidden": true,
+    "paid_fallback_forbidden": true
+  },
+  "coordination": {
+    "retained_fusion_pr": 1401,
+    "branch": "gpt56sol/fuse-hcu-v12-freeonly-main-20260824",
+    "branch_head_observed_before_receipt": "4c7634c3d47356ed4ea1131345b5e9851f93f7c6",
+    "main_branch_relation": "DIVERGED_AHEAD_7_BEHIND_7_AT_OBSERVATION",
+    "promotion_ready": false,
+    "rebase_or_fusion_required_before_promotion": true
+  },
+  "finding": {
+    "class": "SOURCE_CONTRACT_DRIFT",
+    "admission_gate_schema": "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2",
+    "former_family_split_expected_schema": "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1",
+    "hidden_test_gap": "The family-split fixture constructed v1 admission records instead of consuming the selected gate schema, so the stale schema contract was self-consistent in that test only.",
+    "v2_bindings_missing_from_former_family_split": [
+      "vector_control_packet_sha256",
+      "vector_control_condition"
+    ]
+  },
+  "repair": {
+    "family_split_path": "the artefact/MicroEntity/hcu/jspace_dataset_family_split_v1.py",
+    "family_split_commit": "9f0f8de377951eec9b79e7c9845374ed8bedb075",
+    "family_split_blob": "fd51ff489aa85fb0303c1e758a6c5adfb114206d",
+    "test_path": "the artefact/MicroEntity/hcu/test_jspace_dataset_family_split_v1.py",
+    "test_commit": "e591bdd64d54869456c7422512ac7c18b9bea69c",
+    "test_blob": "b956e5ab1786f3b2f3af00a353b4ac8c4cf934d0",
+    "changes": [
+      "Family split imports ADMISSION_SCHEMA from the single selected dataset-admission gate instead of minting an independent schema literal.",
+      "Family split rebinds vector_control_packet_sha256 and vector_control_condition from training trace to admission evidence.",
+      "Regression fixture uses the selected gate schema and v2 fields.",
+      "Regression source rejects legacy v1 admission, packet transplant and control-condition transplant."
+    ]
+  },
+  "experiment_accounting": {
+    "local_probe": "ADMISSION_SCHEMA_DRIFT_POISON",
+    "observation": "A v2 admission is rejected by the former v1-only predicate while the legacy v1 fixture passes.",
+    "classification": "SYNTHETIC_SOURCE_LEVEL_DIAGNOSTIC_ONLY",
+    "parallel_refresh_found_existing_go_0136_unusual_discriminator": "MODEL_CALL_ID_LABEL_LAUNDERING",
+    "global_unusual_experiment_credit_added_here": 0,
+    "reason": "Shared macrocycle uniqueness could not be established before the local probe; after refresh, the concurrent retained PR documented an existing GO_0136 unusual discriminator. This probe is therefore quarantined from global experiment credit and no further unusual experiment is performed."
+  },
+  "execution": {
+    "changed_branch_bytes_executed_in_authorized_free_sandbox": false,
+    "existing_main_component_receipts_reused_as_changed_branch_runtime_credit": false,
+    "new_sandbox_started_by_this_organ_after_repair": false,
+    "source_bytes_refetched_after_parallel_write": true,
+    "secret_accessed_or_persisted": false
+  },
+  "credit": {
+    "source_repair": "WRITTEN_AND_REFETCHED",
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Re-fuse PR1401 onto exact current main under supervisor 8.62, preserve the single retained HCU/J-Space authorities, then execute a fixed exact-source FREE capsule containing the repaired family-split plus its selected DatasetAdmission v2 dependency and adjacent admitted compiler path. Bind exact source/tree/result/secret-fence/cleanup evidence before any promotion."
+}

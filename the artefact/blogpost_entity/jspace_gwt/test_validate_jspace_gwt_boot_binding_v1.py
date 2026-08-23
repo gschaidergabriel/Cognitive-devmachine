@@ -53,7 +53,7 @@ def valid_receipt():
         "gwt": {
             "workspace_policy_sha256": H64,
             "calibration_sha256": H64,
-            "slot_count": 3,
+            "slot_count": None,
             "calibration_status": "UNMEASURED_SOURCE_ONLY",
         },
         "zero_grf": {
@@ -125,6 +125,31 @@ class BootBindingValidatorTests(unittest.TestCase):
         cp = run_validator(receipt)
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("BOOT_RECEIPT_CANNOT_GRANT_WHOLE_GWT_CREDIT", cp.stdout)
+
+    def test_placeholder_digest_fails_closed(self):
+        receipt = valid_receipt()
+        receipt["bundled_core"]["checkpoint_sha256"] = "0" * 64
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("PLACEHOLDER_SHA64:checkpoint_sha256", cp.stdout)
+
+    def test_unmeasured_gwt_cannot_bind_slot_count(self):
+        receipt = valid_receipt()
+        receipt["gwt"]["slot_count"] = 3
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("UNMEASURED_GWT_SLOT_COUNT_MUST_BE_NULL", cp.stdout)
+
+    def test_measured_gwt_requires_positive_slot_count(self):
+        receipt = valid_receipt()
+        receipt["gwt"]["calibration_status"] = "MEASURED_EXACT_BUNDLE"
+        receipt["gwt"]["slot_count"] = None
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("INVALID_INT:slot_count", cp.stdout)
+        receipt["gwt"]["slot_count"] = 3
+        cp = run_validator(receipt)
+        self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
 
 
 if __name__ == "__main__":

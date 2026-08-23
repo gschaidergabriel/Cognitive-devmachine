@@ -12,8 +12,11 @@ A self-consistent JSpaceInferenceBinding is therefore necessary but not sufficie
 module rejects "binding-only" evidence laundering where a caller re-hashes a plausible
 binding around invented inference provenance. Serious train/validation/holdout ownership is
 also derived from admitted upstream causal ancestry, never from the caller-controlled
-``trace_family_id`` label alone. It mints no truth, model authority, effect authority,
-runtime credit, or paid-training permission.
+``trace_family_id`` label alone. The DatasetAdmission call also receives the caller-owned
+registry of exact canonical Vector-Control packet preimages, so a shared digest label cannot
+be laundered into training rows without validation by the sole JSPACE_VECTOR_CONTROL_ABI/v1
+implementation. It mints no truth, model authority, effect authority, runtime credit, or
+paid-training permission.
 """
 from __future__ import annotations
 
@@ -465,15 +468,20 @@ def compile_admitted_records(
     admitted_transition_traces: Mapping[str, Mapping[str, Any]],
     admitted_prototype_traces: Mapping[str, Mapping[str, Any]],
     admitted_grid_plans: Mapping[str, Mapping[str, Any]],
+    admitted_vector_control_packets: Mapping[str, Any],
     admitted_inference_bindings: Mapping[str, JSpaceInferenceBinding],
     admitted_inference_receipts: Mapping[str, Any],
     admitted_bases: Mapping[str, str],
     admitted_outcome_receipts: Mapping[str, Any] | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Compile only traces with external basis, trace, GRID, binding, and receipt admission."""
+    """Compile only traces with external basis, trace, GRID, vector, binding, and receipt admission."""
     out = {"train": [], "validation": [], "holdout": []}
     seen: dict[str, tuple[str, str, str, str]] = {}
     admitted_grid_plans = _mapping(admitted_grid_plans, "admitted_grid_plans")
+    admitted_vector_control_packets = _mapping(
+        admitted_vector_control_packets,
+        "admitted_vector_control_packets",
+    )
     admitted_inference_bindings = _mapping(admitted_inference_bindings, "admitted_inference_bindings")
     admitted_inference_receipts = _mapping(admitted_inference_receipts, "admitted_inference_receipts")
     admitted_bases = _mapping(admitted_bases, "admitted_bases")
@@ -493,6 +501,7 @@ def compile_admitted_records(
                 admitted_transition_traces=admitted_transition_traces,
                 admitted_prototype_traces=admitted_prototype_traces,
                 admitted_grid_plans=admitted_grid_plans,
+                admitted_vector_control_packets=admitted_vector_control_packets,
                 admitted_outcome_receipts=admitted_outcome_receipts,
             )
         except JSpaceDatasetAdmissionError as exc:

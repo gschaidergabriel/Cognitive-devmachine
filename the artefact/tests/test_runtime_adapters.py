@@ -108,13 +108,17 @@ def test_claude_code_adapter_ephemeral_receipt_v1(tmp_path, monkeypatch):
     probe = _claude_boundary_probe(tmp_path, monkeypatch)
     args = probe["args"]
     env = probe["env"]
+    child_home = Path(env["HOME"])
     assert "--bare" not in args
     assert args[args.index("--max-turns") + 1] == "1"
     assert "--no-session-persistence" in args
+    assert args[args.index("--setting-sources") + 1] == ""
     assert env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] == "1"
     assert env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] == "1"
     assert env["CLAUDE_CODE_DISABLE_CLAUDE_MDS"] == "1"
-    assert env["HOME"] == str(probe["home"])
+    assert child_home != probe["home"]
+    assert env["CLAUDE_CONFIG_DIR"] == str(child_home / ".claude")
+    assert not child_home.exists()
 
 
 def test_claude_code_adapter_structured_output_receipt_v1(tmp_path, monkeypatch):
@@ -130,10 +134,13 @@ def test_claude_code_adapter_structured_output_receipt_v1(tmp_path, monkeypatch)
 def test_claude_code_adapter_env_isolation_receipt_v1(tmp_path, monkeypatch):
     probe = _claude_boundary_probe(tmp_path, monkeypatch)
     env = probe["env"]
+    child_home = Path(env["HOME"])
     assert env["ANTHROPIC_API_KEY"] == "allowed-auth"
-    assert env["HOME"] == str(probe["home"])
+    assert child_home != probe["home"]
+    assert env["CLAUDE_CONFIG_DIR"] == str(child_home / ".claude")
     assert "CLERK_SECRET_KEY" not in env
     assert "RANDOM_DATABASE_PASSWORD" not in env
+    assert not child_home.exists()
 
 
 def test_claude_failure_does_not_echo_stderr_secret(tmp_path):

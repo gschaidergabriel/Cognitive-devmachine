@@ -21,6 +21,7 @@ r0.observe(
 
 r3.counter(
   lens_serialization_nonfinite,
+  lens_artifact_substitution_under_stable_profile,
   unfitted_position_readout,
   prompt_copy_confound,
   stale_or_substituted_manifest,
@@ -55,6 +56,7 @@ r4.discriminate(
   require(boot_tokenizer_sha256 == bundled_manifest.tokenizer_digest),
   require(boot_runtime_sha256 == bundled_manifest.runtime_digest),
   require(boot_jspace_profile_sha256 == bundled_manifest.jspace_profile_digest),
+  require(boot_lens_file_sha256 == bundled_manifest.lens_artifact_digest),
   require(boot_lens_profile_sha256 == bundled_manifest.lens_profile_digest),
   require(boot_workspace_calibration_sha256 == bundled_manifest.workspace_calibration_digest),
   require(source_lock.integration_identity_sha256 == bundled_manifest.integration_identity_sha256)
@@ -74,7 +76,9 @@ The boot receipt is not allowed to self-authorize a plausible collection of dige
 2. `BUNDLED_COGNITION_SOURCE_LOCK/v1` as the explicit source-side admission lock;
 3. the observed `JSPACE_GWT_BOOT_BINDING_RECEIPT/v1`.
 
-The source lock binds both the raw manifest file digest and the manifest validator's complete and semantic integration identities. The boot receipt must then match the admitted manifest for engine/model/checkpoint/tokenizer, exact runtime bytes, optional quantization/runtime identity, J-Space profile, lens profile, optional steering calibration and workspace calibration. `runtime_digest` is identity-bearing in the bundled manifest when present and is mandatory for boot admission; a stable runtime name cannot authorize different executable bytes.
+The source lock binds both the raw manifest file digest and the manifest validator's complete and semantic integration identities. The boot receipt must then match the admitted manifest for engine/model/checkpoint/tokenizer, exact runtime bytes, exact persisted lens artifact bytes, optional quantization/runtime identity, J-Space profile, lens profile, optional steering calibration and workspace calibration.
+
+`runtime_digest` and `lens_artifact_digest` are identity-bearing in the bundled manifest when present and are mandatory for boot admission. A stable runtime name cannot authorize different executable bytes, and a stable lens profile identity cannot authorize a different persisted lens artifact.
 
 The repository ships the source-lock file intentionally as `UNBOUND`. This is a fail-closed state, not a missing-data convenience: it must remain unable to admit cognition until exact bundled checkpoint/tokenizer/runtime/J-Space/lens/workspace artifacts have been measured and the corresponding manifest has been explicitly admitted.
 
@@ -85,6 +89,15 @@ python validate_jspace_gwt_boot_binding_v1.py RECEIPT.json BUNDLED_MANIFEST.json
 ```
 
 This composition preserves `PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY`: a valid-looking J-Space/lens/workspace tuple from another calibration bundle cannot receive boot admission merely because every individual digest is syntactically valid.
+
+## Lens artifact identity versus lens profile identity
+
+`lens_profile_digest` and `lens_artifact_digest` are deliberately distinct:
+
+- `lens_profile_digest` binds the admitted calibration/profile contract;
+- `lens_artifact_digest` binds the exact persisted lens file bytes used by the booted bundle.
+
+Neither digest alone substitutes for runtime measurement or proves semantic usefulness. The exact artifact digest only closes byte substitution under a stable profile identity; model-specific lens quality and causal utility still require the later exact Qwen/J-Space calibration gate.
 
 ## Provenance hardening
 

@@ -1,0 +1,67 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "98d24a84a10799646b220d11e32927c5ab49d4a4",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "8d8c02dbc4640d16c440f205d1fd5a30f5227b01",
+    "finding_comment_id": 5388203077,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "force_push_used": false,
+    "duplicate_executor_lane_created": false
+  },
+  "source_observation": {
+    "route": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js",
+    "route_blob_observed": "e4f6bcc7686a774bba966d570afb80435a4e4729",
+    "contract_status_expected_by_route": "SOURCE_REBIND_REQUIRED",
+    "route_flag": "SOURCE_REBIND_REQUIRED=true",
+    "route_behavior": "After successful loadReboundSourceAuthority() and verifyDeploymentCarriedSource(), control falls through to sandboxExecutionAdmitted() and then Sandbox.create; there is no unconditional terminal post-verification return in the SOURCE_REBIND_REQUIRED block at the observed head.",
+    "permission_guard": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-rebind-permission-semantics.mjs",
+    "permission_guard_blob_observed": "dd305d11cf9440bf9690f141ec02dfe86fc3289d",
+    "permission_guard_schema": "ENTITYOS_HCU_JSPACE_REBIND_PERMISSION_GUARD/v2",
+    "permission_guard_requirement": "For contract status SOURCE_REBIND_REQUIRED, parse the actual quarantine block structurally and require an unconditional return res.status(409) after the try/catch and before the FREE_ONLY cost gate, with status SOURCE_REBIND_VERIFIED_AWAITING_PROMOTION and zero-credit/sandbox_create_attempted:false fields.",
+    "source_level_discriminator": "CURRENT_ROUTE_FAILS_PERMISSION_GUARD_V2_TERMINAL_CONTROL_FLOW_REQUIREMENT",
+    "runtime_execution_of_guard_observed": false
+  },
+  "interpretation": {
+    "finding": "The current route source and current permission guard intentionally disagree at source level: the route still has the pre-fix fallthrough, while the newer guard encodes the required hard terminal quarantine. This is safe-by-build-gate provided the prebuild guard actually executes; it is not yet a coherent promotable route.",
+    "counterhypothesis": "A successful 17-blob verification itself constitutes SOURCE_REBOUND_READY and may proceed while the contract remains SOURCE_REBIND_REQUIRED.",
+    "falsifier": "The current permission guard preserves sandbox_create_permitted_before_source_rebind=false, forbids sandbox_create_permitted_after_source_rebind=true in SOURCE_REBIND_REQUIRED state, and mechanically requires the terminal SOURCE_REBIND_VERIFIED_AWAITING_PROMOTION return. Therefore source verification alone is not current promotion authority.",
+    "promotion_rule": "Do not weaken or bypass the permission guard. Repair the single route so SOURCE_REBIND_REQUIRED terminates after exact source verification, or atomically move contract+route+guards to an explicit SOURCE_REBOUND_READY state with source_rebind_complete=true and sandbox_create_permitted_after_source_rebind=true."
+  },
+  "deployment_evidence": {
+    "executor_head_vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "build_rate_target_indicates_upgrade_to_pro": true,
+    "paid_upgrade_or_fallback_attempted": false,
+    "current_head_prebuild_guard_observed_executing": false,
+    "current_head_sandbox_execution_observed": false,
+    "current_head_function_invocation_observed": false,
+    "interpretation": "INFRASTRUCTURE_OR_PLAN_ADMISSION_BLOCKER_NOT_PRODUCT_REGRESSION",
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: identified the exact route permission/control-flow contradiction and verified that the successor permission guard now blocks promotion unless quarantine is terminal before cost/Sandbox execution.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the protected route remains bound to the exact 17-blob producer-derived Typed Entry -> route -> engine admission/load -> GRID10 -> model-execution chain; the new control-flow fence prevents that source closure from silently becoming execution authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: exact J-Space/Inference v4/v3 source closure and result semantics stay behind a source-structural permission gate; no J-Space model or training credit is granted."
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "High-churn parallel organs are actively updating current-facing PR and artefact state. The exact finding and gate are preserved append-only here without overwriting concurrent current-facing text."
+  },
+  "next_exact_gate": "Re-enter current research main and Dr.-Unterweger#810. If contract status remains SOURCE_REBIND_REQUIRED, make the route return SOURCE_REBIND_VERIFIED_AWAITING_PROMOTION with sandbox_create_attempted:false immediately after successful 17-blob verification and before sandboxExecutionAdmitted(). Then require the exact donor guard, promotion guard, permission guard and global executor guard to be source-coherent. Only after a coherent explicit SOURCE_REBOUND_READY promotion may the route reach FREE_ONLY cost admission/Sandbox.create; runtime credit requires exact-current admitted execution evidence."
+}

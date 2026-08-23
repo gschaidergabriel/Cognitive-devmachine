@@ -1,0 +1,85 @@
+{
+  "schema": "GO_CANONICAL_UCF_CAUSAL_PATH_WIRING_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "gpt56sol/go-mini-entity-ucf-causal-path-20260823-1150",
+  "branch_base_main": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "execution_policy": "FREE_ONLY_AUTHORIZED_ISOLATED_SANDBOX_ONLY",
+  "observed_frontier": {
+    "prior_exact_clay_blob": "66898a4980a51e17ba2717e97352403164b4bdf8",
+    "prior_path": [
+      "pipeline_build_prompt",
+      "inference_generate"
+    ],
+    "prior_result": "SOURCE_LEVEL_CANONICAL_PATH_BYPASSED_UNIFIED_COGNITIVE_FABRIC_BEFORE_INFERENCE",
+    "reference_receipt": "the artefact/blogpost_entity/receipts/2026-08-23_GO_CANONICAL_UCF_PATH_LESION_GPT56SOL.json"
+  },
+  "delta": {
+    "canonical_clay": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "new_clay_blob": "00cd5370be3f180e356d6c977888c2028ccc9b75",
+    "new_regression": "the artefact/blogpost_entity/test_canonical_cognitive_fabric_path.py",
+    "new_regression_blob": "5df1df21d7987892ecc8b5f345c56754a94e7f77",
+    "causal_order": [
+      "pipeline_build_prompt",
+      "pipeline_cognitive_fabric_admit",
+      "inference_generate",
+      "pipeline_gate",
+      "pipeline_commit"
+    ],
+    "inference_inputs": "engine/system/user plus inference_packet_digest and cognitive_fabric_receipt_digest are read from the admitted Cognitive Fabric envelope, not raw profile/prompt",
+    "downstream_binding": "the same admitted envelope is carried into pipeline_gate and pipeline_commit",
+    "authority_boundary": "MiniUnifiedDB remains canonical durable authority; the Cognitive Fabric envelope and inference engine remain candidate/measurement context only and receive no direct truth/effect authority"
+  },
+  "unusual_experiment": {
+    "status": "CONSUMED",
+    "count": 1,
+    "experiment_id": "RAW_PROFILE_INFERENCE_BYPASS_POISON",
+    "scope": "exact changed canonical Clay blob plus exact regression blob",
+    "hypothesis": "The new source guard detects a regression that reconnects inference directly to profile.inference instead of the admitted Cognitive Fabric envelope.",
+    "intervention": "Mutate exactly one executable binding from admitted.inference back to profile.inference while leaving the fabric stage present.",
+    "falsifier": "If the guard accepts the poisoned source, the source-level causal-path repair is not robust against a direct engine bypass.",
+    "observed": "FAIL_CLOSED_AS_REQUIRED"
+  },
+  "bounded_execution": {
+    "environment": "isolated ChatGPT Linux/Python component environment; no VPS/self-hosted/production host and no provider network execution",
+    "identity_method": "GitHub branch files were reconstructed byte-for-byte and verified with git hash-object against GitHub blob SHA",
+    "identity": {
+      "BLOGPOST_ENTITY.clay": "00cd5370be3f180e356d6c977888c2028ccc9b75",
+      "test_canonical_cognitive_fabric_path.py": "5df1df21d7987892ecc8b5f345c56754a94e7f77"
+    },
+    "command": "python -S test_canonical_cognitive_fabric_path.py -v",
+    "exit_code": 0,
+    "tests": {
+      "passed": 2,
+      "failed": 0,
+      "canonical_path": "PASS",
+      "raw_profile_inference_poison": "FAIL_CLOSED_AS_REQUIRED"
+    },
+    "classification": "EXACT_BLOB_BOUNDED_SOURCE_MECHANISM_EVIDENCE_ONLY"
+  },
+  "remaining_gap": {
+    "reference_runtime": "tools/clay_profile_pipeline_runtime.py on base main still lacks executable pipeline_cognitive_fabric_admit support and is already behind the DB-resident profile/inference_generate Clay contract",
+    "next_source_gate": "Implement one runtime pipeline_cognitive_fabric_admit producer that reuses the existing single UCF/J-Space/GWT authority chain and cross-binds MiniUnifiedDB generation plus packet/workspace/receipt identities; do not create a second fabric.",
+    "next_execution_gate": "Run the exact fused source/runtime on an actually-started authorized isolated executor, then exercise bundled-0.8B/J-Space/GWT/Claude adapter paths before any runtime promotion."
+  },
+  "credit": {
+    "source_mechanism": "SUPPORTED",
+    "bundled_08b_runtime_credit_change": 0,
+    "jspace_runtime_credit_change": 0,
+    "whole_gwt_runtime_credit_change": 0,
+    "claude_adapter_runtime_credit_change": 0,
+    "whole_mini_entity_credit_change": 0
+  },
+  "safety": {
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "vps_or_production_testing": false,
+    "final_training": false
+  }
+}

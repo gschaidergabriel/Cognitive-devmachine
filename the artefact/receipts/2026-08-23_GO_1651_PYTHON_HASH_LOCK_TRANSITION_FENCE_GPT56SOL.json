@@ -1,0 +1,78 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-23T16:51:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "468a6dcad44b32cd640711a3df307d21f1978b53",
+  "branch": "gpt56sol/go-clayverse-python-lock-transition-rebind-20260823-1651",
+  "classification": "PYTHON_HASH_LOCK_ATOMIC_TRANSITION_SOURCE_FENCE_OWNER_ONE_SHOT_EXECUTION_BLOCKED",
+  "observed": {
+    "current_product_authority": "ClayVerse one OCI/Docker-compatible container; Mini Entity/Blogpost current-work authority is donor evidence only",
+    "source_lock_open_gap": "Python requirements are version pinned but not yet installed with --require-hashes",
+    "requirements_lock_materialized": false,
+    "generator_present": true,
+    "vercel_sandbox_bridge": "CONFIRMED_HISTORICALLY_WITH_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED",
+    "current_owner_started_token_bearing_run": false,
+    "owner_gate": "a scoped read-only GITHUB_READ_TOKEN must be supplied by the owner through retained runtime one-shot ingress; never commit, persist or infer it"
+  },
+  "delta": {
+    "test_path": "the artefact/tests/test_python_dependency_lock.py",
+    "rules": [
+      "top-level generator inputs remain exact-version pinned",
+      "before requirements.lock.txt exists, SOURCE_LOCK keeps the hash gap explicit and Dockerfile cannot claim --require-hashes",
+      "after a verified lock exists, Dockerfile must COPY/use it with --require-hashes, .dockerignore must admit it, and SOURCE_LOCK retires the gap in the same source state",
+      "generator workflow continues tracking requirements, lock, Dockerfile, SOURCE_LOCK and both dependency-lock regression files",
+      "no guessed or unexecuted lock bytes are materialized"
+    ],
+    "readme": "NO_CHANGE_COORDINATION: PR #1324 updated the same artefact README during this go with the precise retained Vercel owner-one-shot frontier; duplicate README editing was dropped during rebind"
+  },
+  "negative_execution_evidence_from_superseded_first_branch": {
+    "github_runs": [
+      {
+        "run_id": 32632953289,
+        "name": "clayverse-python-lock-generator",
+        "job_id": 97178390700,
+        "conclusion": "failure",
+        "observed_steps": [],
+        "classification": "FAILED_BEFORE_VISIBLE_STEP_EXECUTION_NOT_GENERATOR_TEST_FAIL"
+      },
+      {
+        "run_id": 32632953304,
+        "name": "Research Entity Identity Guard",
+        "job_id": 97178390916,
+        "conclusion": "failure",
+        "observed_steps": [],
+        "classification": "FAILED_BEFORE_VISIBLE_STEP_EXECUTION_NOT_IDENTITY_TEST_FAIL"
+      }
+    ]
+  },
+  "evidence": {
+    "source_write_observed": true,
+    "actually_started_authorized_exact_test": false,
+    "exact_lock_generation": false,
+    "exact_dependency_install": false,
+    "exact_oci_build": false,
+    "startup_readiness": false,
+    "whole_clayverse_runtime_credit": 0
+  },
+  "coordination": {
+    "superseded_conflicting_pr": 1323,
+    "rebind_reason": "main merged PR #1324 into the same README region after #1323 opened; retain only non-overlapping fence+receipt on current head",
+    "semantic_cognition_finding": "parallel PR #1298 landed during this go, covering the earlier semantic-version ancestry finding; no duplicate Mini Entity integration is proposed",
+    "unusual_experiment": "NO_NEW_EXPERIMENT; shared go experiment lease already consumed by current owner-authority re-entry evidence"
+  },
+  "authority": {
+    "durable_state": "UnifiedDB only",
+    "derived_graph": "ClayGraph rebuildable only",
+    "runtime_cognition": "Claude Code",
+    "adaptive_retrieval": "MicroClay accessibility/routing only",
+    "effects": "EffectGate+EffectJournal only",
+    "entityos": "optional internal substrate only",
+    "together": "FORBIDDEN",
+    "paid_or_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "next_exact_gate": "owner-start retained Vercel Sandbox one-shot with scoped read-only GITHUB_READ_TOKEN -> verify exact private-source identity and token absence after fetch -> exact-current regressions + Python lock generator in exact pinned base -> materialize byte-identical verified requirements.lock.txt -> atomically enable Docker --require-hashes + dockerignore/source-lock transition -> exact OCI build/digest/startup -> downstream whole-product acceptance",
+  "whole_product_acceptance": "IN_PROGRESS"
+}

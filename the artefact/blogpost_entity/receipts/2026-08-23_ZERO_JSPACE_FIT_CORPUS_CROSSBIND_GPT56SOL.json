@@ -10,6 +10,7 @@
     "program_state_schema": "7.11",
     "branch_base_main_sha": "23c0f4c32fe0570a79aa81f94ff75948448d06c8",
     "branch": "zero/jspace-fit-corpus-crossbind-20260823-1036",
+    "pull_request": 1147,
     "free_only": true
   },
   "observed": {
@@ -19,10 +20,16 @@
     "consequence": "a structurally coherent boot receipt could relabel the lens fit corpus while retaining the same admitted bundle integration identity",
     "parallel_overlap": "Open PR #1077 independently binds an actual fit_corpus artifact to the receipt digest, but does not bind fit corpus identity into the bundled cognition manifest integration identity; this delta is therefore non-duplicate and composes with that harder artifact-root path.",
     "main_advanced_after_branch": {
-      "latest_observed_main_sha": "3a4fbfe83d90dff6829aeaaf3615cd24dd7565d0",
+      "latest_observed_main_sha_before_pr": "3a4fbfe83d90dff6829aeaaf3615cd24dd7565d0",
       "commits_since_branch_base": 11,
       "overlap_with_changed_jspace_manifest_paths": false,
       "observed_scope": "Claude adapter boundaries and native-v2 evidence receipts only"
+    },
+    "pull_request": {
+      "number": 1147,
+      "state": "OPEN",
+      "draft": false,
+      "mergeable_after_recheck": true
     }
   },
   "counterhypothesis": {
@@ -81,6 +88,35 @@
     "whole_gwt_runtime_credit": 0,
     "claude_adapter_runtime_credit": 0,
     "whole_product_credit": 0
+  },
+  "github_actions_observation": {
+    "head_before_receipt_update": "d57d993abaecb94cae632fba00efe71d8ab748ff",
+    "runs": [
+      {
+        "run_id": 32616088503,
+        "workflow": "Research Entity Identity Guard",
+        "job_id": 97136950025,
+        "conclusion": "failure",
+        "steps": null,
+        "logs_url": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT"
+      },
+      {
+        "run_id": 32616088528,
+        "workflow": "claycog-validator-pr",
+        "job_id": 97136950239,
+        "conclusion": "failure",
+        "steps": null,
+        "logs_url": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT"
+      }
+    ],
+    "other_head_workflows_observed_failed": [
+      "mini-cognition-qwen35-08b-pr",
+      "claycog-08b-direct-admission"
+    ],
+    "semantic_test_failure_observed": false,
+    "runtime_credit": 0
   },
   "grf": {
     "R0_OBSERVE": "Fit-corpus provenance existed in the boot receipt but not in the bundle integration identity.",

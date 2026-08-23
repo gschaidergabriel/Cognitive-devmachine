@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "research_main_observed_before_receipt": "d32b808cb471327174a3f5f72b14aa5813607a01",
+  "retained_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "observed_head": "511d568932bf47828679e3ca6ba05650f18d284d"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "route_alignment_commit": "3b174c0f7ce9d1bb6ae19395666dfcab0178abe2",
+    "schema_drift_guard_commit": "7ad6b0bc5706435a3148f5d1308d14bd62100482"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_identity_available": false,
+    "user_message_timestamp_precision_sufficient_for_fallback": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0
+  },
+  "observation": {
+    "research_main_at_initial_reentry": "6b061732169b1267ebcbaf345c8785d99564cd1b",
+    "research_main_after_parallel_movement": "d32b808cb471327174a3f5f72b14aa5813607a01",
+    "recurrent_executor_schema_drift": [
+      "deployment-carried rebind contract advanced while the quarantined route retained an older hard-coded schema expectation",
+      "a parallel executor commit aa69308075b07ed2dcf4dc93c773974dd03d746e changed the route expectation from v4 to v3 while the contract at the same head remained ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4"
+    ],
+    "latest_contract_at_repaired_executor_head": {
+      "schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+      "status": "SOURCE_REBIND_REQUIRED",
+      "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+      "integrated_test_git_blob": "cd0abb3fe22d0fa015befe35c896f56fa006f08c",
+      "candidate_chain": "Typed Entry -> Route -> VerifiedEngineAdmission -> VerifiedEngineLoad -> GRID10/v2 -> actual model-executor observation -> MiniUnifiedDB atomic invocation/observation admission -> VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 -> semantic revalidation"
+    }
+  },
+  "hypothesis": "A hard-coded route-side contract schema version can become self-stale under rapid one-lane donor/executor fusion, causing SOURCE_REBIND_CONTRACT_INVALID even though the deployment-carried contract is the intended current quarantine authority.",
+  "counterhypothesis": "Exact route-side schema pinning is required for safety and any dynamic comparison would weaken fail-closed behavior.",
+  "discriminator": "Keep SOURCE_REBIND_REQUIRED=true and all execution/credit fences unchanged, but make the exclusive build guard parse the deployment-carried contract and require the quarantined route's exact schema literal to match that contract plus EntityOS/HCU/FREE_ONLY/zero-credit boundaries. This detects drift without admitting Sandbox execution.",
+  "writes": [
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "3b174c0f7ce9d1bb6ae19395666dfcab0178abe2",
+      "path": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js",
+      "delta": "restored exact v4 route-contract alignment while preserving SOURCE_REBIND_REQUIRED"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "7ad6b0bc5706435a3148f5d1308d14bd62100482",
+      "path": "mcp/vercel-sandbox-mcp/scripts/guard-entityos-hcu-current-executor.mjs",
+      "delta": "build guard now parses the carried rebind contract and fails on route-schema drift or EntityOS/HCU/FREE_ONLY/zero-credit quarantine-boundary drift"
+    }
+  ],
+  "track_a_entityos_executable_convergence": {
+    "status": "ADVANCED_SOURCE_CONTROL_PLANE",
+    "delta": "The retained executor no longer misclassifies the current v4 quarantine contract as invalid, and future route/contract schema divergence becomes a build-guard failure rather than a latent deployed response-path defect."
+  },
+  "track_b_hcu_and_typed_entry_fabric_co_development": {
+    "status": "ADVANCED_HCU_CAUSAL_CLOSURE_GUARD",
+    "delta": "The guarded contract remains bound to the exact Typed Entry -> route -> engine/load -> GRID10 -> atomic model-execution admission chain and requires EntityOS/HCU authority plus zero-credit boundaries while quarantined."
+  },
+  "track_c_global_jspace_gwt_training_readiness_free_only": {
+    "status": "ADVANCED_JSPACE_SOURCE_CLOSURE_SAFETY",
+    "delta": "The current v4 contract points to donor 511d5689 and the producer-derived integrated execution-to-J-Space regression blob cd0abb3f; schema drift can no longer silently block the intended J-Space rebind quarantine response at build time. No model/training promotion is granted."
+  },
+  "verification": {
+    "source_review": "PASS_AT_RECORDED_IDENTITIES",
+    "github_write": "PASS",
+    "executor_ci_status": "VERCEL_FAILURE_BUILD_RATE_LIMIT",
+    "executor_ci_classification": "INFRASTRUCTURE_ADMISSION_LIMIT_NOT_PRODUCT_REGRESSION",
+    "deterministic_regression_executed_by_this_organ": false,
+    "sandbox_executed_by_this_organ": false,
+    "actual_loader_io_observed": false,
+    "actual_model_executor_io_observed": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "UPDATE_REQUIRED_AFTER_RECEIPT",
+    "reason": "Record this source-control-plane delta and preserve the exact runtime evidence boundary."
+  },
+  "next_exact_gate": "Keep PR810 SOURCE_REBIND_REQUIRED until one fixed route carries every exact donor-511d5689 production/regression/transitive blob and route manifest equality is proven; then, only if supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission permits, execute the fixed command with in-sandbox hashes, secret fence and cleanup. Require actual zero-cost local model-executor I/O through canonical MiniUnifiedDB atomic admission before any J-Space model-runtime or training credit."
+}

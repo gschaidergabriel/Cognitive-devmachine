@@ -1,13 +1,19 @@
 {
   "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
-  "timestamp_utc": "2026-08-23T08:18:00Z",
+  "timestamp_utc": "2026-08-23T08:22:00Z",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority_refresh": {
+    "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+    "branch_cut_main": "10c372e4cbf089756aee53bda56628743c068968",
+    "current_main_after_parallel_reentry": "596a70366ffa74c2d5259ecc64d8e8c2fd2672ba",
+    "parallel_temporal_adjudication": "beea31cba0b78d26093cb12b567152737c08adb5",
+    "parallel_frontier_update": "596a70366ffa74c2d5259ecc64d8e8c2fd2672ba"
+  },
   "source": {
     "repository": "gschaidergabriel/clay-global-research-entity",
-    "base_main": "10c372e4cbf089756aee53bda56628743c068968",
     "branch": "gpt56sol/go-cognition-store-v1-20260823-1511",
     "tested_module": {
       "path": "tools/mini_cognition_store_v1.py",
@@ -16,11 +22,26 @@
     },
     "tested_regression": {
       "path": "tests/test_mini_cognition_store_v1.py",
-      "sha256": "dfb3792f69c00a7c075cf3b9aa6a5c739b385c93a07732d88e6c9f11decb1c9f",
-      "git_blob": "601844a41b633c2bb4bb2b26b319f81811d0b019"
+      "sha256": "3bcedd36f1007c5206d6a7a5f0ea3744c27e9a053630816fc7b61f772d55b3d4",
+      "git_blob": "8cad653a271d7926db843db897c7702599f064eb"
     }
   },
-  "observed_problem": "The causally correct two-phase Unified Cognitive Fabric lane requires versioned ZERO/GRF/Hyperposition/workspace/boot/model/lens bindings from the same MiniUnifiedDB authority, but no executable cognition-object/binding store existed. Mutable profile fields or placeholder digests would create an unverified authority path.",
+  "observed_problem": "Current main now explicitly names the next runtime gate as a single MiniUnifiedDB-resident versioned cognition-object binding store feeding pre-inference ZERO_WORKSPACE_CAPSULE -> ZERO_INFERENCE_PACKET admission. No executable store for ZERO/GRF/Hyperposition/workspace/boot/model/lens identities existed on the retained reference runtime path; mutable profile fields or placeholders would create an unverified authority path.",
+  "temporal_authority_alignment": {
+    "canonical_order": [
+      "pipeline_compile",
+      "pipeline_build_prompt",
+      "pipeline_cognitive_fabric_prepare_or_admit",
+      "inference_generate",
+      "pipeline_gate",
+      "pipeline_commit_or_explicit_no_commit",
+      "pipeline_cognitive_fabric_finalize_runtime_receipt",
+      "post_turn_causal_binding"
+    ],
+    "pre_inference_receipt": "candidate/provenance admission only",
+    "final_ucf_runtime_receipt": "post-terminal gate/commit evidence only",
+    "same_receipt_identity_for_both": "FORBIDDEN"
+  },
   "delta": {
     "classification": "SOURCE_COMPONENT_MECHANISM",
     "summary": "Add an immutable provenance-bound cognition-object store plus exactly one live generation-fenced binding inside the existing MiniUnifiedDB.",
@@ -55,15 +76,7 @@
     "tests": 6,
     "failures": 0,
     "errors": 0,
-    "exact_byte_binding": "The locally executed module/test Git blobs equal the branch blobs b579a206350f2ef01388ecf793f7740ebfd687d5 and 601844a41b633c2bb4bb2b26b319f81811d0b019."
-  },
-  "unusual_experiment": {
-    "count": 1,
-    "id": "COGNITION_BINDING_GENERATION_REPLAY_POISON",
-    "counterhypothesis": "A previously valid cognition binding can be copied to a later entity generation by changing only its stored generation while retaining its old binding identity.",
-    "intervention": "After a valid generation-0 binding was created, entity_state.generation and the stored binding generation were changed to 1 while the original binding_digest was retained.",
-    "observation": "load_active_binding rejected the poisoned row with BINDING_DIGEST_MISMATCH.",
-    "outcome": "COUNTERHYPOTHESIS_REJECTED_AT_COMPONENT_SCOPE"
+    "exact_byte_binding": "The final regression rerun used module/test Git blobs b579a206350f2ef01388ecf793f7740ebfd687d5 and 8cad653a271d7926db843db897c7702599f064eb, identical to the branch bytes after correction."
   },
   "regression_coverage": [
     "round-trip object/binding verification",
@@ -71,12 +84,31 @@
     "payload tamper detection",
     "wrong-kind object laundering rejection",
     "failed replacement preserves prior active binding",
-    "generation replay poison fails closed"
+    "generation-bound binding digest rejects relabelled replay row"
   ],
+  "unusual_experiment_accounting": {
+    "accepted_global_count": 1,
+    "accepted_global_id": "AUTHORITY_ROUTING_CLAYVERSE_REACTIVATION_POISON",
+    "accepted_global_source": "parallel go authority-routing lane already fused during this macrocycle",
+    "late_local_probe": {
+      "id": "COGNITION_BINDING_GENERATION_REPLAY_POISON",
+      "status": "NON_AUTHORIZING_COORDINATION_OVERRUN_DETECTED_AFTER_PARALLEL_REENTRY",
+      "observation_preserved": "BINDING_DIGEST_MISMATCH fail-closed",
+      "promotion_credit": "ZERO",
+      "repair": "The committed test was renamed/reframed and rerun only as a deterministic replay/generation regression after the global experiment budget was discovered to be consumed. No second unusual experiment is claimed or counted."
+    }
+  },
   "hcu_parallel_pass": {
     "delta": "NO_CHANGE_NON_DUPLICATE_FRONTIER_ALREADY_ACTIVE",
-    "reason": "Current main already carries the owner-directed HCU architecture/package/capacity claim guard. The highest-information nonduplicate HCU next step remains exact authorized-isolated KVM4-equivalent resource/capacity/scheduler measurement; no such executor was used here.",
+    "reason": "Current main already carries the owner-directed HCU architecture/package/capacity claim guard. The highest-information nonduplicate HCU next step remains exact authorized-isolated KVM4-equivalent resource/capacity/scheduler measurement; no admitted executor for that measurement was used here.",
     "runtime_capacity_credit": 0
+  },
+  "execution_admission": {
+    "github_pr_head_checked": "dac9d9c4249560a57fad141e4d355a8482f7d471",
+    "research_entity_identity_guard": "FAILURE_WITH_STEPS_NULL_PRE_STEP_ADMISSION_FAILURE",
+    "research_entity_verify": "FAILURE_WITH_STEPS_NULL_PRE_STEP_ADMISSION_FAILURE",
+    "classification": "CONTROL_PLANE_EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE_NOT_PASS",
+    "vercel_connected_surface": "NO_SANDBOX_START_OR_EXEC_ACTION_EXPOSED; DOCUMENTATION_SEARCH_ONLY"
   },
   "execution_and_safety": {
     "free_only": true,
@@ -95,7 +127,7 @@
     "whole_gwt": 0,
     "claude_adapter": 0,
     "hcu_runtime": 0,
-    "note": "This receipt proves only the exact cognition-store source/component mechanism on the listed bytes. It does not prove the two-phase UCF runtime, model, J-Space/GWT, Claude adapter, HCU capacity or whole Mini Entity."
+    "note": "This receipt proves only the exact cognition-store source/component mechanism on the listed final bytes. It does not prove the integrated UCF runtime, model, J-Space/GWT, Claude adapter, HCU capacity or whole Mini Entity."
   },
-  "next_exact_gate": "Fuse this same-MiniUnifiedDB store into the causally correct pipeline_cognitive_fabric_prepare -> inference_generate -> pipeline_cognitive_fabric_finalize lane (PR #1207 or a fresh-current adjudicated successor), bind exact admitted cognition artifacts, and execute the exact integrated bytes in an actually-started authorized isolated executor. Missing/unbound/stale cognition objects must block or typed-abstain before inference."
+  "next_exact_gate": "Fresh-current fusion: wire this same-MiniUnifiedDB store into the single pre-inference pipeline_cognitive_fabric_prepare_or_admit path; compile the existing ZERO workspace capsule/inference packet from exact live-generation objects; perform candidate inference; run the existing deterministic gate and commit-or-explicit-no-commit; only then emit the canonical final UCF-v1 runtime receipt and post-turn binding. Missing/unbound/stale cognition objects must block or typed-abstain before inference. Then obtain actually-started authorized isolated exact-source execution."
 }

@@ -1,360 +1,148 @@
-# MINI ENTITY HYPERPOSITION COMPUTATIONAL UNIT
+# EntityOS Hyperposition Computational Unit (HCU)
 
-Status: **OWNER-DIRECTED ARCHITECTURE CANDIDATE / SOURCE CONTRACT v1**
+Status: **CURRENT ENTITYOS/HCU ARCHITECTURE CONTRACT — SOURCE CANDIDATE**
 Date: 2026-08-23
-Product: Mini Entity / EntityOS
-Package root: `the artefact/MicroEntity/hcu/`
+Product: **EntityOS**
+Compute architecture: **HCU**
+Compatibility root: `the artefact/MicroEntity/hcu/`
+
+The `MicroEntity` path is retained for exact implementation/provenance compatibility only. It does not define a current Mini Entity product or a second runtime identity. Historical versions of this file remain available in Git history and receipts.
 
 ## 1. Objective
 
-Build a permanent, resource-adaptive **Hyperposition Computational Unit (HCU)** that can run on a separate low-cost VPS and coordinate as many useful logical ~0.8B cognition modules as the measured host can sustain.
+HCU is the single integrated cognition/compute architecture inside EntityOS. It coordinates deterministic control, typed ingress, bounded logical cognition cells, Hyperposition/workspace coordination and measured execution capacity while preserving canonical truth and effect authority outside model-generated cognition.
 
-Reference host:
+The active computer path is:
 
 ```text
-KVM 4
-4 CPU cores
-16 GB RAM
-200 GB disk
-16 TB bandwidth
+new data / event / prompt
+        |
+        v
+  TYPED ENTRY FABRIC
+        |
+        +--> immutable event identity
+        +--> concrete admission identity
+        +--> generation / provenance / capability / resource bindings
+        |
+        v
+canonical durable state/evidence
+        |
+  +-----+-----------------+
+  |                       |
+  v                       v
+deterministic          HCU accelerator
+control plane          shared-weight/vector/
+                       inference/J-Space cells
+  |                       |
+  +-----------+-----------+
+              v
+ typed causal packet / Hyperposition / workspace
+              |
+      +-------+---------+----------+----------+
+      |                 |          |          |
+   GRID10            COGSIM10    WM_TEST   NESTED_SIM
+      |                 |          |          |
+      +-------+---------+----------+----------+
+              |
+           SCALEOUT
+              |
+      calibrated candidate
+              |
+ effect translation -> EffectGate + EffectJournal
 ```
 
-The HCU is intended to support:
-
-- persistent causal world-model maintenance;
-- dynamic goal-candidate generation and goal-progress checking;
-- long iterative forward and counterfactual simulations;
-- an observable-behavior model of Zero;
-- improvement-hypothesis generation and critique;
-- confidence-calibrated future branches;
-- ingestion of FREE_ONLY external LLM candidate information;
-- continuous strategic proposals back into Zero/EntityOS.
-
-## 2. Non-negotiable authority boundary
-
-The HCU is a compute organ inside the same Mini Entity.
+## 2. Authority boundary
 
 ```text
-MiniUnifiedDB = canonical durable state/evidence/configuration authority
-EffectGate    = only admitted real-effect authority
-HCU           = scheduled cognition / simulation / proposal fabric
-Zero          = runtime identity/configuration and operational perspective
-LLMs          = candidate inference providers
-Hyperposition = unresolved alternative holder, never truth by vote
+EntityOS       = sole current product/system identity
+HCU            = sole integrated cognition/compute architecture
+UnifiedDB      = canonical durable state/evidence authority
+MiniUnifiedDB  = compatibility implementation surface where exact migration is incomplete
+EffectGate + EffectJournal = only real/state-changing effect authority
+HCU/J-Space/world-model/workspace/model output = candidate/projection/measurement only
+Hyperposition  = unresolved alternative holder, never truth by vote
 ```
 
 Required laws:
 
-`HCU != SECOND_ENTITY`
+- `HCU != SECOND_ENTITY`
+- `HCU != SECOND_WORLD_TRUTH`
+- `HCU != EFFECT_AUTHORITY`
+- `MODEL_OUTPUT != CANONICAL_TRUTH`
+- `MAJORITY_VOTE != TRUTH`
+- `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`
+- unknown external effect outcomes remain unknown and are never blindly replayed.
 
-`HCU != SECOND_WORLD_TRUTH`
+## 3. Typed Entry and causal identity
 
-`HCU != EFFECT_AUTHORITY`
+All new data converges toward one Typed Entry Fabric before HCU cognition.
 
-`MODULE_OUTPUT = CANDIDATE`
+A causal event has a replay-stable identity over immutable event semantics. A concrete admission has a separate identity because receive time, resource budget, capability snapshot or transport metadata can differ without redefining the underlying event.
 
-`FREE_LLM_OUTPUT = CANDIDATE`
+Untrusted Entry content may request a capability or resource envelope, but it may only narrow independently admitted deterministic authority. It may never self-grant or broaden it.
 
-`ZERO_BEHAVIOR_MODEL != HIDDEN_MIND_ACCESS`
+HCU routing consumes event identity only through an admitted Entry binding. Concrete admission identity stays available downstream so a valid inference receipt cannot be replayed across a distinct admission.
 
-`FORECAST_CONFIDENCE != FACTUAL_TRUTH`
+## 4. Engine admission
 
-`MAJORITY_VOTE != TRUTH`
+Local/internal cognition is positive-admission only. Absence from an external-provider denylist is not engine authority.
 
-No HCU module may directly commit canonical facts, broaden permissions, execute host commands, bypass MiniUnifiedDB, or bypass EffectGate.
+Engine/provider/class/checkpoint/tokenizer/runtime identities come from deterministic control-plane evidence, not the causal event. Exact artifact bytes and measured runtime capacity are separate admission dimensions.
 
-## 3. GPU-like grid without RAM duplication
+The current retained donor lane is PR #1263. It contains candidate mechanisms for `EngineAdmission`, Typed Entry, routing, inference receipts and GRID10. Those mechanisms must be rebased/fused into current EntityOS/HCU authority; a competing router or admission path is forbidden.
 
-The owner analogy is a graphics card: many small modules connected into one computational unit.
+## 5. HCU modes
 
-On a 4-core / 16-GB CPU VPS, the practical architecture is a **logical module grid over a small resident worker pool**, not one full model process per module.
+### GRID10
 
-```text
-                    ┌──────────────────────────────┐
-                    │      HCU SCHEDULER           │
-                    │ resource + causal + priority │
-                    └──────────────┬───────────────┘
-                                   │
-               ┌───────────────────┼───────────────────┐
-               │                   │                   │
-        ┌──────▼──────┐      ┌─────▼──────┐      ┌────▼───────┐
-        │ ~0.8B worker│      │~0.8B worker│      │ optional   │
-        │ resident A  │      │ resident B │      │ burst slot │
-        └──────┬──────┘      └─────┬──────┘      └────┬───────┘
-               │                   │                   │
-      many logical contexts / roles / adapters / branches
-               │                   │                   │
-               └───────────────────┼───────────────────┘
-                                   ▼
-                         Hyperposition merge
-                                   ▼
-                     deterministic admission gates
-                                   ▼
-                           MiniUnifiedDB / Zero
-```
+Deterministic 10 logical-cell baseline. Ten logical cells do not imply ten resident models or ten simultaneous decoders. MODEL cells are bounded by separately admitted resource/capacity evidence.
 
-The topology MUST adapt from measured runtime facts:
+### COGSIM10
 
-- free RAM;
-- per-worker resident set size;
-- KV/context memory;
-- CPU saturation;
-- p50/p95 decode latency;
-- queue depth;
-- swap pressure;
-- thermal/host throttling signals where available.
+Request-scoped cognition simulation using temporary logical function slots for hypotheses, counterhypotheses, plans and critics. Outputs are candidates only.
 
-No fixed module count is promoted as a runtime fact before measurement.
+### WM_TEST
 
-## 4. Reference logical lanes
+Bounded noncanonical world/transition-model experiment. Predictions must be calibrated against later observations before stronger claims.
 
-The initial KVM4 profile allocates 16 logical slots:
+### NESTED_SIM
 
-| Lane | Slots | Function |
-|---|---:|---|
-| world | 3 | causal state update, contradiction scan, temporal stitching |
-| goal | 2 | propose goals, check progress/falsifiers |
-| simulation | 4 | forward, counterfactual, failure and recovery branches |
-| zero_model | 2 | predict Zero's observable behavior/outcomes |
-| hypothesis | 2 | improvement hypotheses and discriminating tests |
-| critic | 2 | adversarial review, confidence calibration, Goodhart checks |
-| provenance | 1 | source/receipt/identity checking |
+Selective higher-cost nested simulation. It is not permanent reality, a second entity or a truth authority.
 
-These are logical roles. They MAY share one checkpoint and one runtime process. A role is not a persistent identity.
+### SCALEOUT
 
-## 5. Scheduling model
+Logical-context scaling over shared physical workers. The benchmark ladder is `10 -> 32 -> 64 -> 128 -> 256 -> ~600`; physical decode concurrency is measured separately. The ~600 H100-class target remains a hypothesis until exact benchmark evidence exists.
 
-The scheduler uses two distinct limits:
+## 6. Hyperposition and workspace
 
-1. **logical slots** — queued or suspended module contexts;
-2. **physical decode concurrency** — simultaneously decoding model workers.
+Disagreement is preserved as typed alternatives with evidence, counterevidence, unresolved facets and discriminators. Collapse requires evidence or deterministic policy; recurrence, sampling count or provider consensus cannot mint truth.
 
-Reference KVM4 source profile:
+Workspace/J-Space coupling is an empirical causal-interface hypothesis. Injected context, traces or self-report are not proof of model-internal causal use. Promotion requires discriminating intervention or model-specific evidence.
 
-- target logical slots: 16;
-- adaptive ceiling: 24;
-- target resident inference workers: 2;
-- hard physical decode concurrency: 4;
-- default decode concurrency: 2;
-- reserve at least 2 GiB RAM for OS, DB, scheduler and safety margin;
-- soft Mini Entity RAM budget: 12 GiB;
-- hard Mini Entity RAM budget: 14 GiB.
+## 7. Scheduling and capacity
 
-The scheduler MUST reduce residency/concurrency before swap thrash or memory exhaustion. It MAY increase logical slots when suspended-context storage is cheap enough.
+The efficient HCU design multiplexes many logical roles/contexts over a bounded physical worker pool rather than duplicating one full model per logical cell.
 
-## 6. Persistent world model
+Historical `topology.kvm4.json` values remain planning data only. Current runtime capacity can be admitted only through exact, authorized isolated measurement bound to source/model/tokenizer/runtime identities. VPS, self-hosted and production-host testing are forbidden for current acceptance credit.
 
-The permanent world model is not a second database. It is canonical MiniUnifiedDB state plus rebuildable HCU projections.
+## 8. Effects and recovery
 
-Recommended canonical record classes:
-
-```text
-hcu_observation
-hcu_causal_edge
-hcu_hypothesis
-hcu_counterevidence
-hcu_goal_candidate
-hcu_goal_progress
-hcu_simulation_branch
-hcu_zero_behavior_model
-hcu_strategic_proposal
-hcu_feed_receipt
-hcu_calibration_receipt
-```
+HCU emits candidates or typed effect requests. Real effects remain journaled and generation/provenance fenced through EffectGate + EffectJournal. A crash does not convert an uncertain effect into success and does not authorize blind replay.
 
-Each durable row should bind:
+No HCU component may create a second recovery ledger, second state authority or generic host execution bypass.
 
-- entity generation;
-- causal/episode/turn identifiers where applicable;
-- source/provenance;
-- valid/observed time;
-- confidence class and calibration version;
-- contradiction links;
-- supersession/retraction status.
+## 9. Canonicalization convergence
 
-Caches, vector indexes and graph projections are rebuildable.
+Current HCU/Entry work contains historical or experimental encoder identities. Before heterogeneous/cross-language identity is promoted, EntityOS must select exactly one versioned current Entry+HCU canonical identity path and explicitly preserve older hashes as provenance rather than silently rewriting them.
 
-## 7. Dynamic goals
+## 10. Acceptance frontier
 
-The HCU MAY autonomously generate **goal candidates**.
+Source architecture alone grants zero EntityOS/HCU runtime credit. The next executable frontier is:
 
-It MUST NOT autonomously mint effect authority.
+1. positive local engine/checkpoint/tokenizer/runtime admission from the real deterministic control plane;
+2. bind immutable causal event identity + concrete Entry admission identity + resolved engine identity into the current HCU route/inference receipt path;
+3. preserve capability/resource narrowing and generation fences;
+4. run exact combined Entry + route + inference-receipt + GRID10 regressions in an actually-started authorized isolated executor;
+5. then measure physical model fit, throughput, latency and scale separately from logical module count.
 
-Goal lifecycle:
-
-```text
-observation / unresolved state
--> goal candidate
--> critic + falsifier
--> deterministic GoalGate
--> admitted strategic goal OR rejected/deferred
--> simulation / planning
--> StrategicProposal to Zero
--> normal EntityOS/EffectGate path
-```
-
-A goal candidate can be useful even when rejected; it remains research/evidence data.
-
-## 8. Long iterative simulation
-
-Simulation branches are first-class typed objects rather than hidden chain-of-thought.
-
-A branch stores concise state transitions, assumptions, interventions, predicted observations and uncertainty — not private model reasoning.
-
-```text
-SimulationBranch {
-    branch_id
-    parent_branch_id?
-    causal_anchor
-    horizon_steps
-    assumptions[]
-    proposed_actions[]
-    predicted_observations[]
-    uncertainty
-    falsifiers[]
-    status
-}
-```
-
-Long simulation is implemented as resumable batches. The scheduler can pause branches and re-enter them later without keeping all model KV state resident.
-
-## 9. Forecast confidence
-
-Future confidence must decay and be calibrated against observed outcomes.
-
-A candidate ranking function may use:
-
-```text
-forecast_score =
-    calibrated_base
-    * exp(-lambda_step * simulated_depth)
-    * exp(-lambda_time * forecast_horizon)
-    * evidence_quality
-    * branch_stability
-```
-
-This is a prioritization/calibration quantity only.
-
-It MUST NOT be stored or displayed as factual probability unless an accepted calibration procedure justifies that interpretation.
-
-## 10. Modeling Zero
-
-The HCU may maintain a **Zero behavioral surrogate** using observable data:
-
-- tasks presented to Zero;
-- context/projection given;
-- selected actions;
-- verified outcomes;
-- errors/retries;
-- latency/resource observations;
-- explicit user corrections.
-
-It must not claim access to Zero's private hidden cognition or Claude's internal activations unless an admitted local mechanism actually measures them.
-
-The purpose is predictive control:
-
-```text
-"If Zero receives context X under state S, which action/outcome class is likely?"
-```
-
-not metaphysical mind-reading.
-
-## 11. Improvement-hypothesis feedback
-
-The HCU may derive improvement hypotheses for Zero/EntityOS, but the feedback path is fail-closed:
-
-```text
-observed failure / inefficiency
--> hypothesis
--> counterhypothesis
--> cheapest discriminator
--> source/test proposal
--> admitted isolated test
--> measured receipt
--> owner/policy promotion gate
--> optional product change
-```
-
-No module can silently rewrite its own authority, merge code, deploy itself, or relax gates merely because internal simulations prefer a change.
-
-## 12. FREE_ONLY LLM feed
-
-The HCU can be continuously fed from the project's existing free-token/provider pool.
-
-The feed uses typed `ExternalCandidatePacket` records and reuses the existing FREE_ONLY controller/rate-limit policy.
-
-Hard rules:
-
-- no paid fallback;
-- Together execution remains forbidden under the current owner control;
-- HTTP 402 is a hard stop;
-- HTTP 429 triggers provider-wide backoff, not key rotation;
-- tokens/credentials never enter prompts, source, MiniUnifiedDB exports or ZIP archives;
-- provider output never becomes canonical truth on arrival;
-- duplicate/provider-correlated answers are not independent evidence;
-- external models do not receive effect authority.
-
-The feed should prioritize evidence diversity, provenance and unresolved questions over raw volume.
-
-## 13. Hyperposition aggregation
-
-Module disagreement is an asset.
-
-The HCU stores competing outputs as an unresolved set:
-
-```text
-HyperpositionSet {
-    issue_id
-    alternatives[]
-    supporting_evidence[]
-    counterevidence[]
-    discriminators[]
-    unresolved_facets[]
-}
-```
-
-Collapse requires evidence or a deterministic policy decision. Raw vote count, repeated sampling or provider consensus cannot silently promote a factual claim.
-
-## 14. Data and package placement
-
-All HCU project artefacts generated for release belong under:
-
-`the artefact/MicroEntity/hcu/`
-
-and are included in:
-
-`the artefact/MicroEntity/MICROENTITY_CURRENT.zip`
-
-The archive includes non-secret HCU source/config/contracts/receipts and admitted privacy-filtered data exports.
-
-Operational MiniUnifiedDB remains runtime state. Secrets and credential-bearing files are excluded even when other HCU data is packaged.
-
-## 15. `go` integration
-
-Every exact `go` must treat HCU as a first-class parallel Mini Entity workstream.
-
-The HCU does not permanently steal the whole frontier. Work selection remains:
-
-`information gain × Mini Entity convergence × non-duplication × executable availability`.
-
-A useful `go` may advance the core Mini Entity, the HCU, or both. When an HCU delta is made, package files and `MICROENTITY_CURRENT.zip` must stay synchronized.
-
-## 16. Acceptance gates for the KVM4 deployment target
-
-Before claiming the HCU fits or performs on the target VPS, collect exact admitted evidence for:
-
-- model/runtime/checkpoint identity;
-- peak RSS per resident worker;
-- per-context/KV memory;
-- safe logical-slot ceiling;
-- safe physical decode concurrency;
-- token throughput and p95 latency under representative queue load;
-- scheduler degradation under RAM pressure;
-- restart/recovery with no state fork;
-- MiniUnifiedDB generation fencing;
-- FREE_ONLY feed backoff;
-- Hyperposition non-collapse regressions;
-- Zero behavioral-surrogate calibration;
-- effect-path non-bypass.
-
-Until then, KVM4 capacity numbers are planning targets, not verified performance claims.
+Together API and paid fallback remain forbidden. Final paid/model training requires explicit owner authorization.

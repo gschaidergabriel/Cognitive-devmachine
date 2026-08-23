@@ -1,0 +1,99 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "macrocycle_id": "go-20260822T1949+07-gpt56sol-mini-reference",
+  "macrocycle_identity_status": "JOINED_POST_FUSION",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "canonical_main_observed_before_branch": "df8c25d526206ea6ac5722dbe3e3a9b11981dd3c",
+  "latest_main_observed_after_gate_execution_attempt": "f577e826ed9532a323fa89af459de1d3de90e8c4",
+  "execution_policy": "FREE_ONLY",
+  "scope": "adjudicate overlapping structured-reference convergence candidates without creating another runtime implementation",
+  "observed_authority": {
+    "native_tables": ["entity_state", "profiles"],
+    "native_profile_selector": "entity_state.active_profile -> profiles.profile_id",
+    "native_profile_integrity": "sha256 over stored profile_json bytes compared with profiles.profile_sha256"
+  },
+  "parallel_candidates_reviewed": [727, 728, 949, 954, 955],
+  "findings": [
+    {
+      "kind": "BLOCKING_STATE_AUTHORITY_FORK",
+      "candidates": [949, 955],
+      "detail": "Both candidates introduce eos_pipeline_profiles/eos_pipeline_profile_components rather than reusing native entity_state.active_profile + profiles. This would create a second active-profile authority inside one MiniUnifiedDB contract."
+    },
+    {
+      "kind": "BLOCKING_SECRET_BOUNDARY_REGRESSION",
+      "candidates": [949, 955],
+      "detail": "Their local_exec subprocess.run has no explicit env mapping, so a local model runner inherits the full parent process environment, potentially including provider secrets."
+    },
+    {
+      "kind": "SUPPORTED_DONOR_DELTA",
+      "candidates": [949, 955],
+      "detail": "Their inference pointer parser supports RFC6901-style /choices/0/message/content, consistent with the shipped v2 profile and the macrocycle's canonical unusual-experiment result."
+    }
+  ],
+  "durable_gate_added": "the artefact/blogpost_entity/native/test_reference_profile_authority_convergence.py",
+  "gate_semantics": [
+    "reference runtime must use the native entity_state/active_profile/profiles/profile_sha256 authority",
+    "reference runtime must not introduce eos_pipeline_profile or eos_pipeline_profiles",
+    "any subprocess.run added to the canonical reference runtime must use an explicit child env mapping"
+  ],
+  "unusual_experiment": {
+    "this_organ_local_count": 0,
+    "global_macrocycle_count": 1,
+    "canonical_id": "RFC6901_RESPONSE_POINTER_REAL_PROFILE_FALSIFIER",
+    "canonical_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_REFERENCE_V2_POINTER_FALSIFIER_GPT56SOL.json",
+    "reason": "The same macrocycle already consumed the single globally allowed unusual-experiment slot; this organ performs deterministic adjudication/regression work only."
+  },
+  "runtime_execution": {
+    "vercel_sandbox_start_exec_surface": "NOT_EXPOSED_BY_CURRENT_CONNECTOR",
+    "github_actions_gate_head": [
+      {
+        "run_id": 32574594742,
+        "workflow": "Research Entity Identity Guard",
+        "job_id": 97034952380,
+        "status": "completed",
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+      },
+      {
+        "run_id": 32574594849,
+        "workflow": "Mini Entity native 0.7 exact repro",
+        "job_id": 97034952680,
+        "status": "completed",
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+      }
+    ],
+    "rerun_started": false,
+    "rerun_reason": "No new execution discriminator; blind repeat of zero-step admission failures would not add evidence.",
+    "exact_runtime_credit": 0,
+    "test_failure_claimed": false
+  },
+  "provider_execution": {
+    "together": "NOT_ATTEMPTED",
+    "remote_provider": "NOT_ATTEMPTED",
+    "paid_execution": "NOT_ATTEMPTED",
+    "secrets_read": false,
+    "spend": 0
+  },
+  "next_canonical_repair": [
+    "fuse pipeline_profile_read onto native entity_state.active_profile -> profiles",
+    "verify profile_sha256 with the same stored-byte identity contract as native",
+    "retain canonical inference_generate and RFC6901 response-pointer support",
+    "retain explicit allowlisted local_exec child environment",
+    "deauthorize legacy profile_load/provider_chat_json",
+    "run structured convergence plus native-authority gate on exact fresh head in authorized isolated execution"
+  ],
+  "acceptance": "RED_GATE_BOUND_PROFILE_AUTHORITY_FUSION_REQUIRED",
+  "non_claims": [
+    "No reference-runtime PASS is claimed.",
+    "No exact isolated runtime execution PASS is claimed.",
+    "No full native profile-v2 parity PASS is claimed.",
+    "No real provider or local-model quality PASS is claimed."
+  ]
+}

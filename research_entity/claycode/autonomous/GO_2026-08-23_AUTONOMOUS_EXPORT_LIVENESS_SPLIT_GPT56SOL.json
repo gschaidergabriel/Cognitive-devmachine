@@ -1,0 +1,107 @@
+{
+  "schema_version": "AUTONOMOUS_EXPORT_LIVENESS_SPLIT_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_main_before_write": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+  "program_authority": {
+    "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+    "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "execution_policy": "FREE_ONLY",
+    "supervisor_state": "9.9",
+    "control": "4.1+4.2-execution-boundary-addendum"
+  },
+  "macrocycle_identity": {
+    "macrocycle_id": null,
+    "status": "UNRESOLVED_NO_UPSTREAM_ID",
+    "reason": "No upstream orchestrator-issued macrocycle_id was supplied; repository timing is not sufficient to invent one after the fact."
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "CROSS_PIPELINE_EXPORT_LIVENESS_SPLIT_DISCRIMINATOR",
+    "class": "bounded repository-observation discriminator",
+    "question": "Is the missing AgentZero evidence cadence best explained by a global GitHub/repository write outage, or by a local exporter/timer/host/shared-dependency failure?",
+    "hypotheses": {
+      "H_global_repo_outage": "After the AgentZero exporter stops, no independent producer or supervisor can write to the same repository.",
+      "H_agentzero_specific_or_shared_local_failure": "AgentZero export can stop while another producer still writes; both local autonomous producers may later stop while unrelated repository writes remain possible."
+    },
+    "observations": {
+      "agentzero_export_cadence_utc": [
+        "2026-08-22T18:06:43Z",
+        "2026-08-22T18:36:43Z",
+        "2026-08-22T19:06:44Z",
+        "2026-08-22T19:36:44Z",
+        "2026-08-22T20:06:44Z"
+      ],
+      "agentzero_last_export_commit": "5e134f5f07ddebc0a1c182d04579e361bbbe82a8",
+      "agentzero_last_export_generation": 276,
+      "agentzero_last_test_receipt_utc": "2026-08-22T20:07:42Z",
+      "agentzero_last_test_result": "1486 green / 1 red",
+      "agentzero_persistent_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
+      "rating_export_cadence_utc": [
+        "2026-08-22T18:25:04Z",
+        "2026-08-22T18:55:04Z",
+        "2026-08-22T19:25:04Z",
+        "2026-08-22T19:55:04Z",
+        "2026-08-22T20:25:04Z"
+      ],
+      "rating_last_export_commit": "9452c6fe621bc2d8c6f8cf5eb3f9fb88fd91591d",
+      "later_repository_write_utc": "2026-08-22T23:40:10Z",
+      "later_repository_write_commit": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+      "later_repository_write_subject": "claycode supervisor: bind autonomous export liveness stall"
+    },
+    "result": {
+      "H_global_repo_outage": "REJECTED_AT_REPOSITORY_SCOPE",
+      "H_agentzero_specific_or_shared_local_failure": "RETAINED",
+      "narrowing": "The rating exporter continued for one scheduled tick after the last AgentZero export, then both autonomous export cadences stopped while unrelated repository writing remained possible. This is inconsistent with a repository-wide GitHub write outage and is more consistent with an AgentZero-specific failure followed by a shared local dependency/host/timer failure, or a common local shutdown after 20:25Z.",
+      "not_resolved": [
+        "NO_NEW_STATE",
+        "RUN_FAILED",
+        "RUN_BLOCKED",
+        "PUSH_FAILED_ON_EXPORTER_CREDENTIALS",
+        "TIMER_DISABLED",
+        "PROCESS_STUCK",
+        "DB_LOCKED",
+        "DISK_FULL",
+        "AUTH_FAILED_ON_EXPORTER_SCOPE",
+        "HOST_OR_SHARED_DEPENDENCY_OFFLINE",
+        "UNKNOWN"
+      ]
+    }
+  },
+  "required_next_observation": {
+    "receipt": "AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1",
+    "must_bind": [
+      "export timer/service enabled and active state",
+      "rating timer/service enabled and active state",
+      "last-trigger and next-trigger timestamps",
+      "last successful run id",
+      "process exit code",
+      "stdout and stderr digests",
+      "lock and SQLite busy state",
+      "disk and inode availability",
+      "git worktree, remote, push result",
+      "network and auth result",
+      "generation before and after",
+      "which timer/service/shared dependency stopped first"
+    ],
+    "mutation_rule": "Do not restart the export pipeline and do not mutate product state until the failure class is observed."
+  },
+  "execution_evidence": {
+    "host_runtime_observed": false,
+    "vercel_sandbox_execution_available_in_current_connector_surface": false,
+    "github_repository_observation": true,
+    "provider_network_calls": 0,
+    "together_calls": 0,
+    "paid_execution": false,
+    "spend_usd": 0
+  },
+  "product_effect": {
+    "product_code_changed": false,
+    "product_state_changed": false,
+    "supervisor_policy_changed": false,
+    "research_delta": "Narrowed the liveness fault domain by rejecting a repository-wide GitHub outage while preserving fail-closed local failure classes."
+  },
+  "evidence_boundary": "REPOSITORY_OBSERVATION_SUPPORTED; HOST_FAILURE_CLASS_UNRESOLVED; NO_RUNTIME_OR_PRODUCT_PASS",
+  "next_product_frontier_after_liveness_resolution": "Return to the current PROGRAM_STATE gate: converge the structured reference effect surface to pipeline_profile_read/inference_generate, then complete native profile-v2 parity and obtain exact-current source-bound runtime/fault/CAS evidence on an actually-started authorized runner."
+}

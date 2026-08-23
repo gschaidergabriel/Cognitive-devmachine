@@ -1,12 +1,132 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-22T12:36:43Z. 1110 Commits aus vier Repos, davon 537 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-22T20:06:45Z. 1110 Commits aus vier Repos, davon 551 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-22
+
+### Merge PR #975: bind one generation/CAS authority invariant
+
+`eb4674cc97a6` · agentzero-export · 20:13 UTC · Gabriel Gschaider
+
+```
+Add the auto-activating one-generation-authority guard on top of current profile/truth guards. Native entity_state.generation remains the sole live CAS authority. Source/acceptance guard only; no runtime PASS, no added unusual experiment.
+```
+
+### Merge PR #976: bind claim metrics into canonical hash
+
+`c3ba0d6acb43` · agentzero-export · 20:12 UTC · Gabriel Gschaider
+
+```
+Add an auto-activating truth-boundary guard requiring converged reference runtimes to hash-bind the metrics used for state-claim authorization. Deterministic source contract only; no runtime PASS and no additional unusual experiment.
+```
+
+### Merge PR #973: fuse one profile authority guard
+
+`c56b4f8a5358` · agentzero-export · 20:09 UTC · Gabriel Gschaider
+
+```
+Replace the earlier always-active duplicate with the current-main auto-activating one-profile-authority invariant. No runtime PASS and no additional unusual experiment.
+```
+
+### evidence: join this go receipts to shared macrocycle
+
+`90f8f99bfdd9` · agentzero-export · 20:08 UTC · Gabriel Gschaider
+
+```
+Correct local receipt accounting to the shared 19:49 go macrocycle. The sole unusual slot remains the RFC6901 response-pointer falsifier; local shims/poisons are ordinary regressions.
+```
+
+### Merge PR #969: bind single profile authority gate
+
+`06799ff2cd6e` · agentzero-export · 20:06 UTC · Gabriel Gschaider
+
+```
+Fuse the native MiniUnifiedDB profile-authority convergence guard and joined macrocycle receipt. Source/architecture guard only; no runtime PASS, no additional unusual experiment.
+```
+
+### contract(reference): bind native profile authority convergence gate
+
+`18db1397eb72` · agentzero-export · 20:06 UTC · Gabriel Gschaider
+
+```
+Fail closed on a second active-profile authority and on local_exec subprocesses without an explicit child environment. Source contract only; no runtime PASS implied.
+```
+
+### contract(reference): bind single profile authority gate
+
+`9f825c9f5c09` · agentzero-export · 20:05 UTC · Gabriel Gschaider
+
+```
+Fuse the deterministic native-profile-authority guard and joined macrocycle receipt onto fresh main. No runtime PASS; no additional unusual experiment.
+```
+
+### contract(native): bind donor extraction preservation matrix
+
+`7feca575be3a` · agentzero-export · 20:05 UTC · Gabriel Gschaider
+
+```
+Fuse the non-duplicate fresh-main donor-only preservation matrix on top of #957/#959 and reference responsibility semantics. Keep native v2 fail closed; no runtime PASS or provider execution claimed.
+```
+
+### Merge PR #964: bind staged cognition single authority path
+
+`9cb37a3c1e9e` · agentzero-export · 20:04 UTC · Gabriel Gschaider
+
+```
+Fuse the staged-cognition donor contract into one canonical acceptance path, add executable source-coherence/ClayCog role-neutrality guards, and preserve FREE_ONLY plus runtime-evidence boundaries. Source contract only; no staged runtime PASS.
+```
+
+### cognition: enforce campaign-neutral reusable SFT v2
+
+`2971facc836c` · agentzero-export · 20:04 UTC · Gabriel Gschaider
+
+```
+Fuse the narrow campaign-literal corpus gate on current semantic-slot validation. Reuse donor regressions only; exact GitHub runner had steps=null, so no test PASS or training claim.
+```
+
+### contract(native): require reference effect semantics, not names
+
+`f577e826ed95` · agentzero-export · 20:01 UTC · Gabriel Gschaider
+
+```
+Fuse the responsibility-level parity guard on top of the AST executable-binding guard. Keep native profile-v2 fail closed; no runtime PASS implied.
+```
+
+### Merge PR #957: fence reference convergence security invariants
+
+`b54e7a738ea7` · agentzero-export · 20:00 UTC · Gabriel Gschaider
+
+```
+Source/contract fusion only. Preserve shipped derived inputs, recursive value-only persisted-string leak scanning, single-runtime authority, and explicit local_exec child-environment isolation. No runtime PASS claimed.
+```
+
+### Merge PR #959: bind structured effect parity to executable syntax
+
+`11d0726d823b` · agentzero-export · 19:58 UTC · Gabriel Gschaider
+
+```
+Fail closed on comment/docstring/dead-string false convergence. Source/mechanism delta only; reference effect implementation and exact runtime remain open.
+```
+
+### evidence(go): reject stale structured-runtime full graft
+
+`555dc01dc67e` · agentzero-export · 19:56 UTC · Gabriel Gschaider
+
+```
+Record the bounded source-fusion falsifier and preserve the exact evidence boundary. This does not claim runtime PASS or provider execution.
+```
+
+### fix(mini-entity): boot neutral DB before profile read
+
+`ed58970b66fb` · agentzero-export · 19:52 UTC · Gabriel Gschaider
+
+```
+Fuse the existing non-duplicate fresh-DB ordering repair: initialize the neutral MiniUnifiedDB before DB-resident profile read, retain fail-closed no-profile behavior, and add the static ordering guard. No runtime PASS implied.
+```
 
 ### Merge PR #946: bind FREE_ONLY fallback cost classes to canonical source
 
@@ -925,14 +1045,6 @@ kein Uebersetzer haengt dran (kein Mensch liest hier mit).
 
 AUTO_LIVE/ENABLED bleiben unangetastet (0) -- kein Rebuild, kein Deploy aus
 diesem Branch. Isolierter Worktree/Branch, kein git add -A.
-```
-
-### research: isolate Gen245 shopping-grounding failure mode
-
-`c89af32407ee` · agentzero-export · 21:47 UTC · Gabriel Gschaider
-
-```
-Bind the first Gen245 negative-rated shopping turn to same-session correction, first-party catalog grounding, causal/retrieval receipts, and the terminal frontend export-gap discriminator. Research-only; agentZero product bytes unchanged.
 ```
 
 ### EOS-Chronik 2026-08-21 21:41:54 +0000 — entityos: 2 Aenderungen
@@ -2068,271 +2180,6 @@ Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
 Dateien: 4
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 09:32:19 +0000 — entityos: 1 Aenderungen
-
-`354ec8528b13` · entityos · 09:32 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/omnimind_anreicherung.py
-
-Zeit: 2026-08-21T09:32:19+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 09:30:19 +0000 — entityos: 3 Aenderungen
-
-`4584d073b347` · entityos · 09:30 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/omnimind_anreicherung.py
-  the artefact/web/omnimind/omnimind.js
-  the artefact/web/omnimind/vorschau.html
-
-Zeit: 2026-08-21T09:30:19+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 3
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 09:11:26 +0000 — entityos: 1 Aenderungen
-
-`faa750f611fe` · entityos · 09:11 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/omnimind.py
-
-Zeit: 2026-08-21T09:11:26+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 09:08:26 +0000 — entityos: 3 Aenderungen
-
-`8356b11c06df` · entityos · 09:08 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/betrieb/systemd/entityos-omnimind-anreicherung.service
-  the artefact/betrieb/systemd/entityos-omnimind-anreicherung.timer
-  the artefact/tests/test_omnimind_anreicherung.py
-
-Zeit: 2026-08-21T09:08:26+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 3
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 09:04:40 +0000 — entityos: 1 Aenderungen
-
-`bafd64b8d7ce` · entityos · 09:04 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/tests/test_omnimind.py
-
-Zeit: 2026-08-21T09:04:40+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 09:01:20 +0000 — entityos: 4 Aenderungen
-
-`0cad76e17e13` · entityos · 09:01 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/web/omnimind/index.html
-  the artefact/web/omnimind/omnimind.css
-  the artefact/web/omnimind/omnimind.js
-  the artefact/web/omnimind/vorschau.html
-
-Zeit: 2026-08-21T09:01:20+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 4
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:56:09 +0000 — entityos: 1 Aenderungen
-
-`500a96b144a9` · entityos · 08:56 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/omnimind.py
-
-Zeit: 2026-08-21T08:56:09+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:51:36 +0000 — entityos: 1 Aenderungen
-
-`c81ed95301d2` · entityos · 08:51 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/runtime_CLAUDE.md
-
-Zeit: 2026-08-21T08:51:36+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:49:36 +0000 — entityos: 5 Aenderungen
-
-`fbf38bfd684c` · entityos · 08:49 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mcp_server.py
-  the artefact/clayverse/mistral_prestage/headless_zero.py
-  the artefact/clayverse/terminal_gateway.py
-  the artefact/policy/managed-settings.json
-  the artefact/web/schale/schale.js
-
-Zeit: 2026-08-21T08:49:36+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 5
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:47:36 +0000 — entityos: 1 Aenderungen
-
-`8bea7c38d374` · entityos · 08:47 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/heimpc.py
-
-Zeit: 2026-08-21T08:47:36+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:44:08 +0000 — entityos: 1 Aenderungen
-
-`44158da9d77a` · entityos · 08:44 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/omnimind_anreicherung.py
-
-Zeit: 2026-08-21T08:44:08+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:42:07 +0000 — entityos: 1 Aenderungen
-
-`93c53d574395` · entityos · 08:42 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/omnimind_anreicherung.py
-
-Zeit: 2026-08-21T08:42:07+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:40:07 +0000 — entityos: 2 Aenderungen
-
-`426fd9e3f83d` · entityos · 08:40 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/omnimind.py
-  the artefact/clayverse/omnimind_anreicherung.py
-
-Zeit: 2026-08-21T08:40:07+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 08:27:32 +0000 — entityos: 2 Aenderungen
-
-`e1de3d439726` · entityos · 08:27 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/sicht.py
-  the artefact/compose.yaml
-
-Zeit: 2026-08-21T08:27:32+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 ```

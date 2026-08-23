@@ -1,0 +1,48 @@
+{
+  "schema_version": "HCU_ENTRY_CANONICALIZATION_RFC8785_VECTORS/v1",
+  "status": "PRIMARY_SPEC_CONFORMANCE_VECTORS_NOT_PRODUCT_AUTHORITY",
+  "date": "2026-08-23",
+  "program": "ENTITYOS_HCU",
+  "source": {
+    "title": "RFC 8785 JSON Canonicalization Scheme (JCS)",
+    "publisher": "RFC Editor",
+    "rfc": 8785,
+    "published": "2020-06",
+    "scope": "Appendix B number serialization samples and Section 3.2.3 property ordering"
+  },
+  "number_vectors": [
+    {"ieee754_hex": "0000000000000000", "jcs_json": "0", "comment": "zero"},
+    {"ieee754_hex": "8000000000000000", "jcs_json": "0", "comment": "minus zero"},
+    {"ieee754_hex": "0000000000000001", "jcs_json": "5e-324", "comment": "minimum positive subnormal"},
+    {"ieee754_hex": "8000000000000001", "jcs_json": "-5e-324", "comment": "minimum negative subnormal"},
+    {"ieee754_hex": "7fefffffffffffff", "jcs_json": "1.7976931348623157e+308", "comment": "maximum finite positive"},
+    {"ieee754_hex": "4340000000000000", "jcs_json": "9007199254740992", "comment": "2^53"},
+    {"ieee754_hex": "4430000000000000", "jcs_json": "295147905179352830000", "comment": "approximately 2^68"},
+    {"ieee754_hex": "44b52d02c7e14af6", "jcs_json": "1e+23", "comment": "number formatting boundary"},
+    {"ieee754_hex": "444b1ae4d6e2ef50", "jcs_json": "1e+21", "comment": "number formatting boundary"}
+  ],
+  "must_reject_number_encodings": [
+    {"ieee754_hex": "7fffffffffffffff", "class": "NaN"},
+    {"ieee754_hex": "7ff0000000000000", "class": "Infinity"}
+  ],
+  "property_order_vector": {
+    "input_keys_escaped": ["\\u20ac", "\\r", "\\ufb33", "1", "\\ud83d\\ude00", "\\u0080", "\\u00f6"],
+    "expected_value_order": [
+      "Carriage Return",
+      "One",
+      "Control",
+      "Latin Small Letter O With Diaeresis",
+      "Euro Sign",
+      "Emoji: Grinning Face",
+      "Hebrew Letter Dalet With Dagesh"
+    ],
+    "sorting_law": "raw property names sorted lexicographically by unsigned UTF-16 code units"
+  },
+  "entry_fabric_gate": {
+    "current_python_json_hashes": "LEGACY_IMPLEMENTATION_SCOPED_ONLY",
+    "cross_language_identity": "FAIL_UNTIL_AN_ADMITTED_CANONICALIZER_PASSES_THESE_AND_FULL_REQUIRED_VECTORS",
+    "promotion_credit": 0,
+    "runtime_credit": 0
+  },
+  "note": "This fixture is a compact repository-owned transcription of selected RFC 8785 conformance examples. It does not itself implement JCS and must not be treated as proof of conformance."
+}

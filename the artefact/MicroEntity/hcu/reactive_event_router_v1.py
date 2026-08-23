@@ -2,9 +2,9 @@
 """Deterministic script-first router for the HCU reactive world model.
 
 This component does not perform model inference. It consumes only HCU events carrying
-a typed Entry-Fabric admission identity, decides which bounded HCU lanes deserve model
-work, and requires model routes to match an independently admitted local engine record.
-Event/provider fields alone never mint engine authority.
+typed Entry-Fabric causal-event and admission identities, decides which bounded HCU
+lanes deserve model work, and requires model routes to match an independently admitted
+local engine record. Event/provider fields alone never mint engine authority.
 """
 from __future__ import annotations
 
@@ -43,7 +43,12 @@ ROUTER_POLICY = {
     "schema": ROUTER_POLICY_SCHEMA,
     "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
     "scripts": SCRIPT_STAGES,
-    "entry_handshake": ("ingress_id", "causal_id", "entry_admission_sha256"),
+    "entry_handshake": (
+        "ingress_id",
+        "causal_id",
+        "entry_event_sha256",
+        "entry_admission_sha256",
+    ),
     "admitted_internal_provider_aliases": tuple(sorted(ADMITTED_INTERNAL_PROVIDER_ALIASES)),
     "admitted_internal_engines": tuple(sorted(ADMITTED_INTERNAL_ENGINES.items())),
     "model_route_engine_lock": (
@@ -86,6 +91,7 @@ class RouteDecision:
     hash_serialization_schema: str
     ingress_id: str
     causal_id: str
+    entry_event_sha256: str
     entry_admission_sha256: str
     event_sha256: str
     router_policy_sha256: str
@@ -147,14 +153,18 @@ def _sha256_text(value: Any, field: str) -> str:
     return value
 
 
-def _validate_entry_handshake(event: Mapping[str, Any]) -> tuple[str, str, str]:
+def _validate_entry_handshake(event: Mapping[str, Any]) -> tuple[str, str, str, str]:
     ingress_id = _text(event.get("ingress_id"), "ingress_id")
     causal_id = _text(event.get("causal_id"), "causal_id")
+    entry_event_sha256 = _sha256_text(
+        event.get("entry_event_sha256"),
+        "ENTRY_EVENT_SHA256",
+    )
     entry_admission_sha256 = _sha256_text(
         event.get("entry_admission_sha256"),
         "ENTRY_ADMISSION_SHA256",
     )
-    return ingress_id, causal_id, entry_admission_sha256
+    return ingress_id, causal_id, entry_event_sha256, entry_admission_sha256
 
 
 def _validate_internal_provider(event: Mapping[str, Any]) -> None:
@@ -261,7 +271,7 @@ def _resolve_internal_engine(
 
 def _event_identity(event: Mapping[str, Any]) -> str:
     # Engine/provider resolution is routing metadata, not the immutable causal event.
-    # Entry admission identity remains part of the causal event.
+    # Entry causal-event and admission identities remain part of this HCU event identity.
     payload = dict(event)
     for key in (
         "requested_internal_provider",
@@ -293,7 +303,12 @@ def route_event(
     if generation != current_generation:
         raise ReactiveRoutingError("STALE_ENTITY_GENERATION")
 
-    ingress_id, causal_id, entry_admission_sha256 = _validate_entry_handshake(event)
+    (
+        ingress_id,
+        causal_id,
+        entry_event_sha256,
+        entry_admission_sha256,
+    ) = _validate_entry_handshake(event)
     _validate_internal_provider(event)
     (
         resolved_engine_identity,
@@ -346,6 +361,7 @@ def route_event(
         "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
         "ingress_id": ingress_id,
         "causal_id": causal_id,
+        "entry_event_sha256": entry_event_sha256,
         "entry_admission_sha256": entry_admission_sha256,
         "event_sha256": event_sha256,
         "router_policy_sha256": router_policy_sha256,
@@ -368,6 +384,7 @@ def route_event(
         hash_serialization_schema=HASH_SERIALIZATION_SCHEMA,
         ingress_id=ingress_id,
         causal_id=causal_id,
+        entry_event_sha256=entry_event_sha256,
         entry_admission_sha256=entry_admission_sha256,
         event_sha256=event_sha256,
         router_policy_sha256=router_policy_sha256,
@@ -392,6 +409,7 @@ def assert_inference_echo(decision: RouteDecision, receipt: Mapping[str, Any]) -
         "hash_serialization_schema": decision.hash_serialization_schema,
         "ingress_id": decision.ingress_id,
         "causal_id": decision.causal_id,
+        "entry_event_sha256": decision.entry_event_sha256,
         "entry_admission_sha256": decision.entry_admission_sha256,
         "event_sha256": decision.event_sha256,
         "decision_sha256": decision.decision_sha256,

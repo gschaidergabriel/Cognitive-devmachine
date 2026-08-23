@@ -26,6 +26,7 @@ INVOCATION_FIELDS = {
     "task_text",
     "turn_binding_digest",
 }
+_LOCAL_JSPACE_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
 _ROOT = Path(__file__).resolve().parents[1]
 _ZERO_IMPL = _ROOT / "research_entity" / "global" / "j-space" / "implementations"
@@ -185,6 +186,7 @@ def build_pre_inference_admission(
     capsule_module: Any | None = None,
     packet_module: Any | None = None,
     capability_module: Any | None = None,
+    capability_evidence_module: Any | None = None,
 ) -> dict[str, Any]:
     """Build one candidate-only admission from exact same-store bound material."""
     _need(type(entity_generation) is int and entity_generation >= 0, "GENERATION_INVALID")
@@ -248,11 +250,38 @@ def build_pre_inference_admission(
         "PREPARE_AUTHORITY_ESCALATION",
     )
 
-    route = capability_module.resolve_bound_route(
-        profile,
-        prepare,
-        expected_generation=entity_generation,
-    )
+    raw_inference = profile.get("inference")
+    _need(isinstance(raw_inference, Mapping), "PROFILE_INFERENCE_OBJECT_REQUIRED")
+    raw_binding = raw_inference.get("capability_binding")
+    _need(isinstance(raw_binding, Mapping), "INFERENCE_CAPABILITY_BINDING_REQUIRED")
+    raw_mode = str(raw_binding.get("jspace_mode", ""))
+    capability_evidence = None
+    if raw_mode in _LOCAL_JSPACE_MODES:
+        _need(
+            hasattr(capability_module, "resolve_from_profile"),
+            "CAPABILITY_RESOLVER_REQUIRED_FOR_LOCAL_ROUTE",
+        )
+        capability = capability_module.resolve_from_profile(profile)
+        if capability_evidence_module is None:
+            import mini_inference_capability_evidence_v1 as capability_evidence_module  # type: ignore[no-redef]
+        capability_evidence = capability_evidence_module.resolve_capability_evidence(
+            db,
+            capability=capability,
+            prepare=prepare,
+            expected_generation=entity_generation,
+        )
+        route = capability_module.resolve_bound_route(
+            profile,
+            prepare,
+            expected_generation=entity_generation,
+            capability_evidence=capability_evidence,
+        )
+    else:
+        route = capability_module.resolve_bound_route(
+            profile,
+            prepare,
+            expected_generation=entity_generation,
+        )
     _need(type(route) is dict and route.get("ok") is True, "BOUND_ROUTE_RESOLUTION_FAILED")
     _need(
         route.get("authority") == "ROUTING_ONLY_BOUND_TO_CANONICAL_PREPARE",
@@ -270,6 +299,12 @@ def build_pre_inference_admission(
     jspace_mode = _text(route.get("jspace_mode"), "jspace_mode")
     capability_binding_digest = _digest(route.get("capability_binding_digest"), "capability_binding_digest")
     capability_receipt_digest = _digest(route.get("capability_receipt_digest"), "capability_receipt_digest")
+    capability_evidence_binding_digest = None
+    if jspace_mode in _LOCAL_JSPACE_MODES:
+        capability_evidence_binding_digest = _digest(
+            route.get("capability_evidence_binding_digest"),
+            "capability_evidence_binding_digest",
+        )
     profile_id = _text(route.get("profile_id"), "profile_id")
     profile_hash = _digest(route.get("profile_hash"), "profile_hash")
     inference = profile.get("inference")
@@ -351,9 +386,11 @@ def build_pre_inference_admission(
         "authority": "CANDIDATE_INFERENCE_ONLY",
         "real_effect_executed": False,
     }
+    if capability_evidence_binding_digest is not None:
+        receipt["capability_evidence_binding_digest"] = capability_evidence_binding_digest
     admission_digest = _sha256_obj(receipt)
 
-    return {
+    out = {
         "ok": True,
         "schema": ADMISSION_SCHEMA,
         "generation": entity_generation,
@@ -378,6 +415,9 @@ def build_pre_inference_admission(
         "workspace_capsule_digest": capsule_digest,
         "admission_receipt": receipt,
     }
+    if capability_evidence_binding_digest is not None:
+        out["capability_evidence_binding_digest"] = capability_evidence_binding_digest
+    return out
 
 
 __all__ = [

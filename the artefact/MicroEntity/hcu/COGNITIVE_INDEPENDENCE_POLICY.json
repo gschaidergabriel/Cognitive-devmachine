@@ -17,11 +17,13 @@
       "hcu_local_08b": {
         "class": "LOCAL_SHARED_WEIGHT_08B",
         "role": "SELECTIVE_HCU_MODEL_LANES",
-        "runtime_checkpoint_identity": "REQUIRED_BEFORE_RUNTIME_ACCEPTANCE"
+        "runtime_checkpoint_identity": "LOWERCASE_SHA256_REQUIRED_FOR_MODEL_ACTIVATION"
       }
     },
     "unknown_provider_or_engine": "REJECT",
-    "route_identity_binding": "event_sha256 + resolved_engine_identity + resolved_engine_class + routing_result",
+    "script_only_engine_selection": "REJECT",
+    "engine_identity_binding": "resolved_engine_identity + resolved_engine_class + resolved_internal_engine_artifact_sha256",
+    "route_identity_binding": "event_sha256 + router_policy_sha256 + engine_identity_sha256 + routing_result",
     "downstream_inference_receipt": "MUST_ECHO_EVENT_ROUTE_AND_ENGINE_IDENTITIES"
   },
   "providers": {

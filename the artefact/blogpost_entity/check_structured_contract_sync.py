@@ -21,6 +21,7 @@ from typing import Any
 
 REQUIRED_EFFECTS = {
     "pipeline_profile_read": "_pipeline_profile_read",
+    "pipeline_cognitive_fabric_admit": "_pipeline_cognitive_fabric_admit",
     "inference_generate": "_inference_generate",
 }
 LEGACY_EFFECTS = {"profile_load", "provider_chat_json"}

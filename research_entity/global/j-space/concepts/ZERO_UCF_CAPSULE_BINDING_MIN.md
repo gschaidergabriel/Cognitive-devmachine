@@ -1,13 +1,13 @@
 # ZERO CAPSULE -> INFERENCEPACKET -> UCF BINDING — v1
 
-Status: SOURCE CANDIDATE / MECHANISM SUPPORTED AT ANCESTOR; CURRENT CLOSED-SCHEMA DELTA AWAITS EXACT RUNNER
+Status: SOURCE CANDIDATE / MECHANISM SUPPORTED AT ANCESTOR; CURRENT CLOSED-SCHEMA + PRODUCT-PATH DELTA AWAITS EXACT RUNNER
 Date: 2026-08-23
 
 Purpose: close the causal handoff gap between the deterministic `ZERO_WORKSPACE_CAPSULE/v1` and the canonical `UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1` without creating another truth, state, identity, effect, recovery, UCF, or turn authority.
 
 ## One path
 
-`accepted workspace -> ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v1 -> canonical UCF receipt -> existing UCF+boot ancestry validator`
+`accepted workspace -> ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v1 -> canonical UCF receipt -> existing UCF+boot ancestry validator -> canonical .clay cognition admission -> inference_generate`
 
 The packet is a deterministic admission envelope only. It binds:
 - `entity_generation`;
@@ -28,6 +28,8 @@ The strict composition validator requires the UCF receipt to carry the same caus
 
 For `WORKSPACE_BOUND`, UCF `workspace.after_digest` must equal the capsule workspace digest. For `ABSTAINED`, inference cannot execute and neither canonical state nor effects may commit.
 
+The canonical `.clay` path on this branch now places `pipeline_cognitive_fabric_admit` after prompt build and before `inference_generate`; inference receives the admitted inference/system/user fields plus the packet and Cognitive Fabric receipt digests, and the admitted envelope re-enters gate and commit. This is source-contract progress only until the retained single reference-runtime lane implements the same phase and exact admitted execution observes it.
+
 ## Complement to current main
 
 Current main additionally requires executed UCF cycles to evidence one GWT winner and, for non-plain modes, typed J-Space observation references. A separate matched three-arm discriminator distinguishes observation/projection from causal use.
@@ -43,7 +45,8 @@ Those gates do not replace packet ancestry:
 - workspace capsule regression: `0256ab7e92d7829d8a7becb493bcdb86e36ba4e3`;
 - packet compiler/validator: `2001ae22ea94c1b2550d7d4c7d160db953db2082`;
 - strict chain: `3a3e7243d81c0472c5b3659ac9f43494281f9d7d`;
-- branch chain regression: `b4043cd8f0da65c53b805a467c50c79ff6450e44`.
+- current branch chain/product-path regression: `29732bb5aa441014ae4bd24f5abf59c942506e01`;
+- canonical `.clay` UCF-path commit: `7614f40574b50936f1225fd8b148a09359a77261`.
 
 ## Evidence boundary
 
@@ -56,8 +59,9 @@ The ancestor packet compiler blob `c3278a4c46e7af25304f67727d1ed0de9b839aeb` was
 The current closed-schema delta adds authored regressions for:
 - unknown capsule top-level field + recomputed `capsule_digest`;
 - unknown nested task field + recomputed `capsule_digest`;
-- unknown packet top-level field + recomputed `packet_digest`.
+- unknown packet top-level field + recomputed `packet_digest`;
+- canonical inference ordering and data dependency through Cognitive Fabric admission.
 
-Those new exact blobs have not yet been executed by an actually-started exact-checkout runner in this branch. No ancestor PASS is promoted to the changed blobs. GitHub-hosted fused-head jobs have repeatedly failed before visible steps (`steps=null`), which is execution-admission failure rather than semantic test failure.
+Those current exact blobs have not yet been executed by an actually-started exact-checkout runner in this branch. No ancestor PASS is promoted to the changed blobs. Current GitHub-hosted branch jobs fail before visible steps (`steps=null`), which is execution-admission failure rather than semantic test failure.
 
 This does not establish a live model invocation, J-Space causal use, GWT runtime behavior, Ubuntu runtime acceptance, effect execution, or whole-product PASS. All such runtime credit remains zero until exact admitted execution.

@@ -1,6 +1,7 @@
 import copy
 import unittest
 
+from reactive_event_router_v1 import ReactiveRoutingError, route_event
 from xeno_entry_fabric_v1 import (
     EntryFabricError,
     admit_entry,
@@ -46,6 +47,20 @@ def admit(entry, *, current_generation=7, binding=CAPABILITY_BINDING_SHA256, cap
         expected_capability_binding_sha256=binding,
         admitted_capabilities=capabilities,
     )
+
+
+def transport_replay_entry():
+    replay_entry = copy.deepcopy(base_entry())
+    replay_entry["ingress_id"] = "ingress:test:replay"
+    replay_entry["received_time"] = "2026-08-23T23:24:03+07:00"
+    replay_entry["payload_ref"] = "object:alternate-location"
+    replay_entry["capabilities"] = ["hcu.route"]
+    replay_entry["budget"] = {
+        "max_model_calls": 1,
+        "max_tokens": 1024,
+        "max_wall_ms": 2500,
+    }
+    return replay_entry
 
 
 class EntryFabricTests(unittest.TestCase):
@@ -160,17 +175,7 @@ class EntryFabricTests(unittest.TestCase):
         # Regression-only fusion of the already-selected causal-alias discriminator.
         # Transport/admission metadata must not redefine the causal event.
         original = admit(base_entry())
-        replay_entry = copy.deepcopy(base_entry())
-        replay_entry["ingress_id"] = "ingress:test:replay"
-        replay_entry["received_time"] = "2026-08-23T23:24:03+07:00"
-        replay_entry["payload_ref"] = "object:alternate-location"
-        replay_entry["capabilities"] = ["hcu.route"]
-        replay_entry["budget"] = {
-            "max_model_calls": 1,
-            "max_tokens": 1024,
-            "max_wall_ms": 2500,
-        }
-        replay = admit(replay_entry)
+        replay = admit(transport_replay_entry())
         self.assertEqual(original.event_sha256, replay.event_sha256)
         self.assertNotEqual(original.admission_sha256, replay.admission_sha256)
 
@@ -196,6 +201,41 @@ class EntryFabricTests(unittest.TestCase):
         b = admit(e)
         self.assertNotEqual(a.event_sha256, b.event_sha256)
         self.assertNotEqual(a.admission_sha256, b.admission_sha256)
+
+    def test_entry_router_transport_replay_keeps_causal_route_identity(self):
+        original = admit(base_entry())
+        replay = admit(transport_replay_entry())
+        original_event = to_hcu_reactive_event(original)
+        replay_event = to_hcu_reactive_event(replay)
+        bindings = {
+            original.admission_sha256: original.event_sha256,
+            replay.admission_sha256: replay.event_sha256,
+        }
+        original_route = route_event(
+            original_event,
+            current_generation=7,
+            admitted_entry_bindings=bindings,
+        )
+        replay_route = route_event(
+            replay_event,
+            current_generation=7,
+            admitted_entry_bindings=bindings,
+        )
+        self.assertEqual(original_route.event_sha256, replay_route.event_sha256)
+        self.assertEqual(original_route.decision_sha256, replay_route.decision_sha256)
+        self.assertNotEqual(original.admission_sha256, replay.admission_sha256)
+
+    def test_entry_router_rejects_missing_or_poisoned_authority_binding(self):
+        packet = admit(base_entry())
+        event = to_hcu_reactive_event(packet)
+        with self.assertRaisesRegex(ReactiveRoutingError, "ADMITTED_ENTRY_BINDING_REGISTRY_REQUIRED"):
+            route_event(event, current_generation=7)
+        with self.assertRaisesRegex(ReactiveRoutingError, "ENTRY_EVENT_SHA256_MISMATCH"):
+            route_event(
+                event,
+                current_generation=7,
+                admitted_entry_bindings={packet.admission_sha256: "f" * 64},
+            )
 
 
 if __name__ == "__main__":

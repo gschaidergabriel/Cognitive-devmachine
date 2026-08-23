@@ -19,6 +19,8 @@ ADMITTED_BUDGET = {
     "max_tokens": 4096,
     "max_wall_ms": 10_000,
 }
+ENTRY_BINDING_SCHEMA = "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2"
+CANONICALIZATION_SCHEMA = "RFC8785_JCS_IJSON/v1"
 
 
 def base_entry():
@@ -84,6 +86,15 @@ def admit_raw(
         admitted_capabilities=capabilities,
         admitted_budget=admitted_budget,
     )
+
+
+def admitted_entry_binding(event_sha256):
+    """Versioned authority receipt consumed by the router; never trust a bare digest alias."""
+    return {
+        "schema": ENTRY_BINDING_SCHEMA,
+        "canonicalization_schema": CANONICALIZATION_SCHEMA,
+        "event_sha256": event_sha256,
+    }
 
 
 def transport_replay_entry():
@@ -315,8 +326,8 @@ class EntryFabricTests(unittest.TestCase):
         original_event = to_hcu_reactive_event(original)
         replay_event = to_hcu_reactive_event(replay)
         bindings = {
-            original.admission_sha256: original.event_sha256,
-            replay.admission_sha256: replay.event_sha256,
+            original.admission_sha256: admitted_entry_binding(original.event_sha256),
+            replay.admission_sha256: admitted_entry_binding(replay.event_sha256),
         }
         original_route = route_event(
             original_event,
@@ -341,7 +352,9 @@ class EntryFabricTests(unittest.TestCase):
             route_event(
                 event,
                 current_generation=7,
-                admitted_entry_bindings={packet.admission_sha256: "f" * 64},
+                admitted_entry_bindings={
+                    packet.admission_sha256: admitted_entry_binding("f" * 64),
+                },
             )
 
 

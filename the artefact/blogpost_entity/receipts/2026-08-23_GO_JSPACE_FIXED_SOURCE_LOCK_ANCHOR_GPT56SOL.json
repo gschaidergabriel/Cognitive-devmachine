@@ -1,0 +1,78 @@
+{
+  "schema": "mini-entity-go-source-authority-repair/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_identity": {
+    "macrocycle_id": null,
+    "status": "UNRESOLVED_NO_UPSTREAM_IMMUTABLE_ID",
+    "unusual_experiment_credit": 0,
+    "note": "Deterministic source regressions only; no globally attributable unusual experiment is claimed without an upstream immutable macrocycle id/lease."
+  },
+  "base_main": "8461c83a11cacf03c52a4aa950691e0ecdd7d865",
+  "issue": 1075,
+  "claim_class": "SOURCE_AUTHORITY_GATE_REPAIR_BOUNDED_LOCAL_COMPONENT",
+  "r0_observed": [
+    "Current canonical JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 at base main validates a source-lock object but accepts both BUNDLED_MANIFEST.json and SOURCE_LOCK.json as caller-selected CLI paths.",
+    "The source-lock authority check at base main is a field comparison against the string repository_source_tree; caller-controlled bytes can reproduce that string.",
+    "Therefore a caller can supply a mutually self-consistent alternate manifest and alternate lock and still satisfy the intended external-anchor shape unless the validator itself chooses the repository-owned path.",
+    "The base-main source lock does not bind bundled_core.runtime_sha256 and the boot receipt does not explicitly fence local-latent cognition mode."
+  ],
+  "r1_infer": "A trust anchor is external only if its bytes/location are selected by the trusted validator/repository, not by the untrusted observed receipt caller.",
+  "r2_alternatives": [
+    "retain caller-selected manifest/lock paths and trust the authority string",
+    "add a second validator around the existing validator",
+    "harden the existing canonical validator so it resolves one fixed repository source lock and one fixed admitted manifest itself"
+  ],
+  "r3_counter": "Caller-selected paths might be harmless if runtime invocation is always trusted, but the boot gate is specifically meant to prevent the observed runtime from authoring its own expected identity, so the invocation boundary itself must fail closed.",
+  "repair": {
+    "canonical_validator": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
+    "fixed_source_lock": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_source_lock_v1.json",
+    "fixed_admitted_manifest": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_admitted_v1.json",
+    "cli": "validate_jspace_gwt_boot_binding_v1.py RECEIPT.json",
+    "source_lock_addition": "runtime_sha256",
+    "local_modes": ["FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"],
+    "rejected_local_credit_mode_example": "COMPILED_EXTERNAL"
+  },
+  "deterministic_regressions": {
+    "surface": "isolated local Linux container",
+    "python": "3.13.5",
+    "py_compile": "PASS",
+    "unittest": "PASS",
+    "tests_passed": 18,
+    "tests_failed": 0,
+    "new_checks": [
+      "caller cannot append alternate manifest/source-lock paths",
+      "UNBOUND repository lock remains fail closed",
+      "repository lock binds exact runtime_sha256",
+      "nonlocal COMPILED_EXTERNAL mode cannot claim local bundled J-Space boot admission"
+    ],
+    "preserved_checks": [
+      "raw/complete/semantic manifest identity cross-binding",
+      "checkpoint/tokenizer/J-Space/lens/steering/workspace equality",
+      "dirty source requires dirty_diff_sha256",
+      "first-action origin/id/effect provenance",
+      "post-load lens finiteness",
+      "unfitted readout rejection",
+      "prompt-copy confound guard",
+      "boot receipt cannot grant Whole-GWT credit"
+    ]
+  },
+  "evidence_boundary": {
+    "exact_ubuntu_runtime_credit_added": 0,
+    "bundled_08b_runtime_credit_added": 0,
+    "jspace_runtime_credit_added": 0,
+    "whole_gwt_credit_added": 0,
+    "claude_adapter_runtime_credit_added": 0,
+    "model_quality_credit_added": 0,
+    "whole_product_credit_added": 0
+  },
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "training": false,
+    "money_spent_usd": 0
+  },
+  "next_gate": "On the next authorized exact Ubuntu start, measure and review the exact bundled checkpoint/tokenizer/runtime/J-Space/lens/workspace bytes, create the fixed admitted manifest, change the fixed repository source lock from UNBOUND to BOUND, then validate the observed boot receipt using only that one receipt argument. If admitted, continue Qwen3.5 text-only layout -> weighted forward hooks -> bounded Jacobian before any J-Space/GWT runtime credit. The frozen Claude Code adapter runtime red remains an independent gate."
+}

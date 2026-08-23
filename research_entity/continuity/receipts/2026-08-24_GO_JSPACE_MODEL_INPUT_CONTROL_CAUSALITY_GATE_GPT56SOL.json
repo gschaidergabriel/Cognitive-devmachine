@@ -1,0 +1,69 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_main_before_delta": "1ce2ff7b1f4ae4d42546074186bfc7fc19ff757a",
+  "retained_hcu_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "head": "511d568932bf47828679e3ca6ba05650f18d284d"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "head": "b6fcb5e26b66f30951a308caf6f23df8192d4040",
+    "source_status": "SOURCE_REBOUND_READY",
+    "vercel_combined_status": "failure",
+    "vercel_failure_class": "HOBBY_BUILD_RATE_LIMIT_UPGRADE_PATH_INFRASTRUCTURE_ADMISSION",
+    "runtime_invocation_observed": false
+  },
+  "observation": {
+    "id": "JSPACE_VECTOR_CONTROL_NOT_BOUND_TO_ACTUAL_MODEL_INPUT_BYTES",
+    "source_facts": [
+      "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3 stores vector_control_packet_sha256 from TrainingTrace and input_sha256/input_size from InferenceReceipt, but has no invariant that derives or matches the executor input bytes to the Vector Control packet.",
+      "The integrated execution-store/inference/J-Space producer regression constructs ModelExecutionObservation.input_sha256 independently before it constructs the Global J-Space/GWT step and Vector Control packet used by TrainingTrace/v1.",
+      "Therefore current source invariants can satisfy the same JSpaceBinding/v3 chain under both a control-consumed world and a post-hoc-association world."
+    ],
+    "hypothesis": "The exact JSPACE_VECTOR_CONTROL_ABI/v1 packet or an admitted deterministic transform is consumed in the exact model-executor input bytes for the bound invocation.",
+    "counterhypothesis": "The model consumes unrelated input bytes and the Vector Control packet is created later and only associated through trace metadata.",
+    "current_discriminator_result": "CURRENT_V3_SOURCE_CANNOT_DISCRIMINATE_H1_FROM_H0"
+  },
+  "delta": {
+    "commit": "fd719615d32ae342f732a09feb799c8a8c7e9e86",
+    "file": "research_entity/claycode/HCU_JSPACE_MODEL_INPUT_CONTROL_CAUSALITY_GATE_V1.md",
+    "effect": "Adds a fail-closed acceptance boundary: current JSpaceBinding/v3 may earn association/causal-metadata component credit but cannot establish Vector-Control consumption, model-internal J-Space causality, J-Space model-runtime credit, or training promotion.",
+    "next_primitive": "HCU_MODEL_INPUT_CONTROL_BINDING/v1",
+    "required_future_evidence": "Executor-side exact input-byte binding from Vector Control packet (or a versioned deterministic input-envelope transform) through invocation observation -> VerifiedModelExecution -> InferenceReceipt -> J-Space binding."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_ACCEPTANCE_BOUNDARY_PREVENTS_FALSE_MODEL_RUNTIME_PROMOTION_WHILE_PRESERVING_SINGLE_PR810_EXECUTOR_LANE",
+    "track_b_hcu_typed_entry": "ADVANCED_HCU_CAUSAL_INTERCONNECT_SPEC_FROM_VECTOR_PACKET_TO_EXACT_EXECUTOR_INPUT_AND_EXISTING_ENTRY_ROUTE_GRID_IDENTITIES",
+    "track_c_jspace_training_readiness": "ADVANCED_BY_SEPARATING_JSPACE_ASSOCIATION_FROM_ACTUAL_CONTROL_CONSUMPTION_AND_DEFINING_THE_NEXT_ZERO_COST_MODEL_INPUT_EVIDENCE_GATE"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "timestamp_fallback_sufficient": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0
+  },
+  "execution": {
+    "paid_provider_used": false,
+    "together_preflight_or_training": false,
+    "vps_or_self_hosted_test": false,
+    "new_vercel_deployment_or_sandbox_invocation": false,
+    "reason": "Exact PR810 head is currently blocked by Vercel Hobby build-rate-limit/upgrade-path status; supervisor 8.63 requires FREE_ONLY fail-closed behavior."
+  },
+  "credits_after_delta": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Keep the current 17-blob PR810 capsule component-scoped if FREE_ONLY build admission naturally returns. In the retained single donor/executor lanes, add and test HCU_MODEL_INPUT_CONTROL_BINDING/v1 so exact executor-consumed input bytes are derivably bound to JSPACE_VECTOR_CONTROL_ABI/v1 plus generation, Entry, route, GRID10, cell/role and invocation identity before any J-Space model-runtime promotion."
+}

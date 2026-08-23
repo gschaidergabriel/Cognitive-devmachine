@@ -103,6 +103,55 @@ class CapabilityBindingTests(unittest.TestCase):
         self.assertEqual(out["jspace_mode"], "COMPILED_EXTERNAL")
         self.assertFalse(out["local_activation_access"])
 
+    def test_bound_route_uses_canonical_prepare_ancestry_without_profile_duplication(self):
+        p = profile(binding())
+        prepare = {
+            "ok": True,
+            "entity_generation": 9,
+            "causal_turn_id": "turn-9-a",
+            "turn_binding_digest": h("turn-binding"),
+            "boot_binding_digest": h("boot-binding"),
+            "workspace_digest": h("workspace"),
+        }
+        for field in cap.PREPARE_DIGEST_FIELDS:
+            prepare[field] = h(field)
+        out = cap.resolve_bound_route(p, prepare, expected_generation=9)
+        self.assertEqual(out["target_engine_class"], "ADAPTIVE_BACKEND")
+        self.assertEqual(out["cognition"]["jspace_profile_digest"], h("jspace_profile_digest"))
+        self.assertEqual(len(out["route_digest"]), 64)
+        self.assertNotIn("cognition", p["inference"]["capability_binding"])
+
+    def test_bound_route_rejects_stale_prepare_generation(self):
+        p = profile(binding())
+        prepare = {
+            "ok": True,
+            "entity_generation": 8,
+            "causal_turn_id": "turn-8-a",
+            "turn_binding_digest": h("turn-binding"),
+            "boot_binding_digest": h("boot-binding"),
+            "workspace_digest": h("workspace"),
+        }
+        for field in cap.PREPARE_DIGEST_FIELDS:
+            prepare[field] = h(field)
+        with self.assertRaisesRegex(cap.CapabilityBindingError, "STALE_GENERATION"):
+            cap.resolve_bound_route(p, prepare, expected_generation=9)
+
+    def test_bound_route_rejects_missing_prepare_cognition_digest(self):
+        p = profile(binding())
+        prepare = {
+            "ok": True,
+            "entity_generation": 9,
+            "causal_turn_id": "turn-9-a",
+            "turn_binding_digest": h("turn-binding"),
+            "boot_binding_digest": h("boot-binding"),
+            "workspace_digest": h("workspace"),
+        }
+        for field in cap.PREPARE_DIGEST_FIELDS:
+            prepare[field] = h(field)
+        del prepare["policy_authority_digest"]
+        with self.assertRaisesRegex(cap.CapabilityBindingError, "prepare.policy_authority_digest:SHA256_REQUIRED"):
+            cap.resolve_bound_route(p, prepare, expected_generation=9)
+
 
 if __name__ == "__main__":
     unittest.main()

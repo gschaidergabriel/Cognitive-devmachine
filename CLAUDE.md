@@ -22,7 +22,7 @@ This root file is a repository-organ routing shim, not canonical durable product
 
 `SUPERVISOR_STEERING_8_61.json` is the active autonomous work/execution authority in verified current `main`. The repository also retains the owner one-shot ~0.8B Together directive as provenance, but 8.61 quarantines that paid lane for the current FREE_ONLY supervisor. Owner paid provenance is not executable permission for this organ.
 
-If current files disagree, fail closed and reconcile one canonical path before credential lookup, provider network I/O, spend or runtime promotion.
+If current files disagree, fail closed and reconcile one canonical path before credential lookup, provider network I/O, metered execution, spend or runtime promotion.
 
 ## Current naming law
 
@@ -85,14 +85,15 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 
 - current autonomous supervisor mode is **FREE_ONLY** with no paid fallback;
 - current build/test/experiment/runtime credit comes only from authorized isolated FREE execution surfaces;
-- a protected Vercel Preview bridge has demonstrated worker-callable `Sandbox.create` + `runCommand`; that is infrastructure callability credit only until exact EntityOS/HCU source capsules and regressions execute there;
+- a protected Vercel Preview bridge has demonstrated worker-callable `Sandbox.create` + `runCommand`; that establishes infrastructure callability only;
+- Vercel Sandbox is metered/usage-based under the current evidence, and explicit zero-monetary-cost or included-budget admission for another run has not been established; therefore **no new Vercel Sandbox run is currently admitted by this FREE_ONLY organ**;
+- metered, paid, subscription and unknown-cost execution lanes fail closed before new execution unless explicit zero-cost/included-budget admission or newer authority permits them;
 - VPS/self-hosted/production-host testing is forbidden under current control;
 - Together general inference and training are forbidden in this supervisor mode;
 - the owner one-shot approximately 0.8B J-Space/GWT Together directive remains repository provenance only; do not perform Together preflight, credential/key lookup, network I/O, job creation, spend, provider credit or training credit;
-- paid, subscription and unknown provider lanes fail closed before credential lookup and network I/O;
 - zero-cost local approximately 0.8B J-Space/GWT prototype/trace/ABI/dataset-readiness work may continue only after the required exact FREE executable-evidence gates;
 - never expose or commit secrets;
 - source/component/historical PASS never implies broader EntityOS/HCU runtime acceptance;
 - preserve exact provenance, stale-generation, replay, privacy and effect boundaries.
 
-Current immediate frontier: package fixed SHA-bound current Research main + retained PR1263 source capsules for the verified protected-preview Vercel Sandbox bridge; execute exact Entry -> HCU route -> verified engine admission/load -> inference -> GRID10 -> Global J-Space/GWT regressions; bind result digest; then continue zero-cost local ~0.8B loader/J-Space/GWT work and external prototype-trace admission without entering a paid provider lane.
+Current immediate frontier: first establish an execution surface that is explicitly zero-monetary-cost/included under supervisor 8.61 FREE_ONLY (or receive newer authority that explicitly admits the metered Vercel call). Then feed the verified protected-preview bridge fixed SHA-bound current Research main + retained/fused HCU source capsules without runtime GitHub credentials; execute exact Entry -> HCU route -> verified engine admission/load -> inference -> GRID10 -> Global J-Space/GWT -> causal training/dataset regressions; bind source/tree/executor/result digests; then continue zero-cost local ~0.8B loader/J-Space/GWT work without entering a paid provider lane.

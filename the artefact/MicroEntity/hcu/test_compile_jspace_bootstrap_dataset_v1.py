@@ -21,7 +21,8 @@ class CompilerTests(unittest.TestCase):
         self.assertEqual(len(rows), 4)
         self.assertEqual(rows[0]["metadata"]["family"], "VECTOR_CONTROL_VALIDATE")
         self.assertIn('"decision":"REJECT"', rows[1]["messages"][2]["content"])
-        self.assertIn("JCTL_BASIS_MISMATCH", rows[2]["messages"][2]["content"])
+        self.assertIn("STALE_VECTOR_CONTROL_GENERATION", rows[1]["messages"][2]["content"])
+        self.assertIn("JSPACE_BASIS_ID_MISMATCH", rows[2]["messages"][2]["content"])
         self.assertEqual(rows[3]["metadata"]["family"], "GWT_BROADCAST_FROM_TRACE")
         self.assertIn(trace["basis_sha256"], rows[0]["messages"][1]["content"])
 
@@ -51,6 +52,18 @@ class CompilerTests(unittest.TestCase):
         trace = dict(self.trace(9))
         trace["control_packet_wire_sha256"] = "c" * 64
         with self.assertRaisesRegex(DatasetError, "TRACE_CONTROL_PACKET_WIRE_SHA256_MISMATCH"):
+            derive_bootstrap_examples(trace)
+
+    def test_control_condition_cannot_be_relabelled_around_packet(self):
+        trace = dict(self.trace(11))
+        trace["control_condition"] = "LESION"
+        with self.assertRaisesRegex(DatasetError, "TRACE_CONTROL_PACKET_CONDITION_MISMATCH"):
+            derive_bootstrap_examples(trace)
+
+    def test_packet_identity_digest_is_bound_independently_of_wire_digest(self):
+        trace = dict(self.trace(12))
+        trace["control_packet_identity_sha256"] = "d" * 64
+        with self.assertRaisesRegex(DatasetError, "TRACE_CONTROL_PACKET_IDENTITY_MISMATCH"):
             derive_bootstrap_examples(trace)
 
 

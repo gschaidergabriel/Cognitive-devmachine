@@ -1,0 +1,91 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "macrocycle_id": "go-20260823T0851+07-gpt56sol-reference-convergence",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "authority": {
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
+    "execution_control": "FREE_ONLY"
+  },
+  "main_join": {
+    "source_sha": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+    "reference_candidate_pr": 966,
+    "reference_candidate_head": "3d490ee3179400d889bdc81ea8a769d84212e481",
+    "candidate_divergence": "main is 54 commits ahead and branch has 3 unique commits from merge-base 7feca575be3a7ba7be1f9fb70a04a2117b0f2cc2"
+  },
+  "grf": {
+    "R0_OBSERVE": [
+      "Current main binds entity_state.generation as the sole native live generation/CAS authority.",
+      "Current fail-closed invariant forbids eos_pipeline_state from remaining a second live generation/CAS authority once DB-profile reference convergence appears.",
+      "PR #966 currently keeps eos_pipeline_state.generation, chooses max(native_generation, mirror_generation) on every _ensure_schema call, and updates the mirror generation during commit."
+    ],
+    "R1_INFER": "The #966 mirror is not merely compatibility storage: because _ensure_schema repeatedly takes max(native, mirror), any stale/tampered/higher legacy generation can reassert authority after migration.",
+    "R2_GENERATE": [
+      "One-time migration: when entity_state did not exist before schema admission, legacy eos_pipeline_state.generation may seed entity_state once; after that legacy generation is inert.",
+      "Hard reset: ignore legacy generation entirely and initialize native generation at zero.",
+      "Permanent mirror: continue max/native-mirror synchronization."
+    ],
+    "R3_COUNTER": "Ignoring legacy generation avoids split authority but can silently reset continuity on existing legacy-only databases; permanent mirroring preserves continuity but preserves two authority-capable counters.",
+    "R4_DISCRIMINATE": {
+      "unusual_experiment_id": "LEGACY_GENERATION_REASSERTION_AFTER_MIGRATION",
+      "question": "Can continuity be preserved exactly once without allowing a later legacy mirror value to overwrite native generation?",
+      "interventions": [
+        "legacy-only DB starts eos_pipeline_state.generation=7; migrate; mutate legacy generation to 99; re-run schema/state admission",
+        "native entity_state.generation=5 coexists with legacy eos_pipeline_state.generation=99; admit schema/state"
+      ],
+      "prototype_environment": {
+        "python": "3.13.5",
+        "sqlite": "3.46.1",
+        "platform": "Linux 6.18.35 x86_64 glibc 2.41"
+      },
+      "observed": {
+        "legacy_only_one_time_migration": "native 7 after migration and still 7 after legacy mutated to 99",
+        "native_wins_over_legacy": "native remained 5 while legacy was 99",
+        "fresh_reference_schema": "fresh eos_pipeline_state contained no generation column"
+      }
+    },
+    "R5_EMERGENT": "Compatibility migration and live authority are distinct responsibilities. Legacy state may be an initialization donor only under an explicit preexisting-native test; repeated reconciliation is an authority fork.",
+    "R6_VERIFY": {
+      "mechanism": "SUPPORTED_BY_LOCAL_ISOLATED_PROTOTYPE",
+      "exact_repository_runtime": "UNOBSERVED",
+      "candidate_966_current_main_compatibility": "FALSIFIED_AT_SOURCE_CONTRACT_LEVEL",
+      "whole_product": "IN_PROGRESS"
+    }
+  },
+  "delta": {
+    "branch": "gpt56sol/go-reference-generation-one-time-migration-20260823",
+    "test": "the artefact/blogpost_entity/test_reference_generation_migration_invariant.py",
+    "activation": "only when ProfilePipelineRuntime exposes _pipeline_profile_read",
+    "obligations": [
+      "legacy-only generation may seed native entity_state exactly once",
+      "subsequent legacy generation mutation must not change live native generation",
+      "pre-existing native generation always outranks legacy generation"
+    ]
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "LEGACY_GENERATION_REASSERTION_AFTER_MIGRATION",
+    "additional_unusual_experiments": 0
+  },
+  "execution": {
+    "provider_network_call": false,
+    "together_preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0,
+    "vps_test": false
+  },
+  "next_step": "Repair/fresh-extract the #966 reference candidate so entity_state is the only live generation/CAS authority: import legacy generation only when native entity_state genuinely did not preexist, never max/reconcile on later schema calls, stop updating eos_pipeline_state.generation, and preserve continuity/cursors without a second live counter. Then run the new migration invariant plus existing profile/generation/effect-surface regressions on exact repaired bytes in an actually-started authorized isolated runner.",
+  "evidence_boundary": {
+    "new_generation_migration_contract": "SOURCE_TEST_DELTA",
+    "mechanism_discriminator": "LOCAL_ISOLATED_PROTOTYPE_PASS",
+    "reference_runtime_repair": "OPEN",
+    "native_profile_v2": "FAIL_CLOSED",
+    "cognition_training": "NOT_STARTED_FREE_ONLY",
+    "whole_product": "IN_PROGRESS"
+  }
+}

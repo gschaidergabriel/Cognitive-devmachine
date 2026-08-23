@@ -65,7 +65,13 @@
   "vercel_batch": {
     "direct_vector_abi_test_present": true,
     "latest_observed_controller_mode": "FREE_ONLY_8.61",
-    "runtime_execution_in_this_go": "BLOCKED_NO_CALLABLE_CREDENTIAL_BEARING_POST",
+    "latest_observed_ready_deployment": "dpl_8RydxSGDscHEDFVi1YJbTW7Utgr5",
+    "latest_observed_ready_commit": "b723aaafc86f2f1b96e60bc600bdb57082b17572",
+    "sandbox_probe_source": "api/sandbox-probe.js uses tokenless GET -> Sandbox.create -> runCommand -> secret fence -> cleanup on the admitted preview branch",
+    "sandbox_probe_attempt": "GET through available Vercel protected-fetch surface",
+    "sandbox_probe_observed_result": "HTTP_302_SSO_REDIRECT_BEFORE_FUNCTION; fresh generated share URL remained intercepted",
+    "sandbox_probe_execution_credit": "NONE",
+    "runtime_execution_in_this_go": "BLOCKED_BY_PROTECTED_PREVIEW_INGRESS_AND_NO_CALLABLE_CREDENTIAL_BEARING_POST",
     "whole_runtime_credit": false
   },
   "training": {
@@ -79,5 +85,5 @@
     "reason_not_launched": "Supervisor 8.61 is FREE_ONLY and forbids paid/unknown provider credential lookup, preflight, network I/O and job creation."
   },
   "evidence_boundary": "Source/component evidence is not EntityOS/HCU runtime PASS, model-loader PASS, J-Space causal-use proof, training PASS, or whole-product PASS.",
-  "next_exact_gate": "Start an exact-source authorized FREE isolated run through the current retained PR810 controller when the explicit transient owner GitHub-read credential can be supplied; require current Research main + PR1263 binding, token nonpersistence, direct vector ABI + Global J-Space/GWT + Entry/route/load/inference/GRID10 regressions, then bind a real local ~0.8B loader and use exact traces for zero-cost local dataset/baseline readiness. Do not preflight or launch Together in current FREE_ONLY mode."
+  "next_exact_gate": "Repair or use an admitted protected-preview ingress that actually reaches the tokenless FREE sandbox probe, then start an exact-source authorized FREE isolated run through the retained PR810 controller when the explicit transient owner GitHub-read credential can be supplied; require current Research main + PR1263 binding, token nonpersistence, direct vector ABI + Global J-Space/GWT + Entry/route/load/inference/GRID10 regressions. Then bind a real local ~0.8B loader and use exact traces for zero-cost local dataset/baseline readiness. Do not preflight or launch Together in current FREE_ONLY mode."
 }

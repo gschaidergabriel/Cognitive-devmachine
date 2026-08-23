@@ -1,0 +1,57 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority_source": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "base_main": "d757589e20804e77bb7849f550b34ed9b7a300dd",
+  "finding": {
+    "classification": "PRODUCT_TO_MEASUREMENT_POLICY_DRIFT",
+    "observed": "After the first-class Claude adapter transport/executable fence merged, CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 still treated ambient proxy, Anthropic base URL and CA override keys as canonical child-environment policy while omitting current invocation-local config and memory-fence keys.",
+    "risk": "A receipt could self-authorize environment controls the product adapter now forbids, while a truthful current adapter environment could be rejected for keys the validator did not know.",
+    "authority_unchanged": "MiniUnifiedDB remains canonical truth/state authority; Claude remains candidate inference only; no J-Space/GWT/effect authority changed."
+  },
+  "delta": {
+    "validator": "agentzeroforschung/instrumente/validate_claude_adapter_boundary_receipt_v1.py",
+    "validator_git_blob": "a1f231bd3ac6f35382b73e3ef148b8ce56d77b43",
+    "test": "agentzeroforschung/instrumente/test_claude_adapter_boundary_receipt_v1.py",
+    "test_git_blob": "127973689ef4b7dacb2bfece5a551a2fc9e850d5",
+    "removed_from_canonical_env_policy": [
+      "HTTP_PROXY",
+      "HTTPS_PROXY",
+      "ANTHROPIC_BASE_URL",
+      "SSL_CERT_FILE",
+      "SSL_CERT_DIR",
+      "NODE_EXTRA_CA_CERTS"
+    ],
+    "added_to_canonical_env_policy": [
+      "CLAUDE_CONFIG_DIR",
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY",
+      "CLAUDE_CODE_DISABLE_CLAUDE_MDS"
+    ]
+  },
+  "exact_component_evidence": {
+    "surface": "isolated ChatGPT Linux component",
+    "validator_local_git_hash_object_matches_github_blob": true,
+    "test_local_git_hash_object_matches_github_blob": true,
+    "py_compile": "PASS",
+    "focused_unittest": "28/28 PASS",
+    "runtime_credit": 0,
+    "live_claude_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_credit": 0,
+    "whole_product_credit": 0
+  },
+  "execution_boundary": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "training_started": false,
+    "unusual_experiment": "NOT_CLAIMED_NO_ATOMIC_SHARED_MACROCYCLE_LEASE"
+  },
+  "next_gate": "Fuse on current main if non-overlapping, then on the next intentional exact Ubuntu Claude run measure the complete child environment and require the same-invocation boundary receipt to validate under the fenced policy before any Claude-adapter runtime promotion."
+}

@@ -1,6 +1,12 @@
 import unittest
 
-from validate_claude_adapter_boundary_receipt_v1 import canonical_sha256, diagnose, validate, ReceiptError
+from validate_claude_adapter_boundary_receipt_v1 import (
+    CANONICAL_ENV_ALLOWLIST,
+    ReceiptError,
+    canonical_sha256,
+    diagnose,
+    validate,
+)
 
 H40A = "1234567890abcdef1234567890abcdef12345678"
 H40B = "abcdef1234567890abcdef1234567890abcdef12"
@@ -44,7 +50,8 @@ def mark_fail(x, name):
 class TestReceipt(unittest.TestCase):
     def assert_reject(self, mutate):
         x = fixture(); mutate(x)
-        with self.assertRaises(ReceiptError): validate(x)
+        with self.assertRaises(ReceiptError):
+            validate(x)
 
     def test_clean_fixture_passes(self):
         self.assertTrue(validate(fixture())["ok"])
@@ -121,6 +128,32 @@ class TestReceipt(unittest.TestCase):
             x["boundaries"]["env_isolation"].__setitem__("allowed_env_keys", ["HOME", "PATH", "AWS_SECRET_ACCESS_KEY"]),
             x["boundaries"]["env_isolation"].__setitem__("observed_child_env_keys", ["HOME", "PATH", "AWS_SECRET_ACCESS_KEY"]),
         ))
+
+    def test_route_endpoint_and_trust_keys_are_not_canonical(self):
+        forbidden = (
+            "HTTP_PROXY", "HTTPS_PROXY", "ANTHROPIC_BASE_URL",
+            "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS",
+        )
+        for key in forbidden:
+            with self.subTest(key=key):
+                self.assertNotIn(key, CANONICAL_ENV_ALLOWLIST)
+                self.assert_reject(lambda x, key=key: (
+                    x["boundaries"]["env_isolation"].__setitem__("allowed_env_keys", ["HOME", "PATH", key]),
+                    x["boundaries"]["env_isolation"].__setitem__("observed_child_env_keys", ["HOME", "PATH", key]),
+                ))
+
+    def test_current_ephemeral_and_memory_fence_keys_are_canonical(self):
+        required = {
+            "PATH", "HOME", "TMPDIR", "CLAUDE_CONFIG_DIR",
+            "DISABLE_AUTOUPDATER", "CLAUDE_CODE_SKIP_PROMPT_HISTORY",
+            "CLAUDE_CODE_DISABLE_AUTO_MEMORY", "CLAUDE_CODE_DISABLE_CLAUDE_MDS",
+        }
+        self.assertTrue(required.issubset(CANONICAL_ENV_ALLOWLIST))
+        x = fixture()
+        keys = sorted(required)
+        x["boundaries"]["env_isolation"]["allowed_env_keys"] = keys
+        x["boundaries"]["env_isolation"]["observed_child_env_keys"] = keys
+        self.assertTrue(validate(x)["ok"])
 
     def test_secret_leak_rejected(self):
         self.assert_reject(lambda x: x["boundaries"]["env_isolation"].__setitem__("secret_value_leak_count", 1))

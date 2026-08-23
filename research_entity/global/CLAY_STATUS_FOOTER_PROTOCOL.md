@@ -30,10 +30,10 @@ Scale: 10-cell baseline; 10→32→64→128→256→~600 is a benchmark ladder; 
 Authority: canonical durable state/evidence remains deterministic; HCU/world-model/J-Space/workspace/model outputs are candidate/projection/measurement only; EffectGate/EffectJournal remain the only real-effect authority
 Global J-Space: empirical causal coordination/interface hypothesis; local J-Space claims require model-specific evidence
 World simulation: NOT_REQUIRED_PERMANENTLY; bounded WM_TEST and selective NESTED_SIM are noncanonical research modes
-Execution: AUTHORIZED_ISOLATED_SANDBOX_ONLY for current build/test/experiment/runtime credit; VPS/self-hosted/production-host testing forbidden under current control
+Execution: AUTHORIZED_ISOLATED_FREE_SANDBOX_ONLY; Vercel Hobby included-tier Sandbox is admitted only under SUPERVISOR_STEERING_8_62 fixed-capsule/quota/billing fail-closed conditions; VPS/self-hosted/production-host testing forbidden
 Together API: FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE; GENERAL_INFERENCE_FORBIDDEN; PAID ONE_SHOT OWNER DIRECTIVE QUARANTINED; DO_NOT_PREFLIGHT_OR_CONSUME_CREDENTIALS
 Paid fallback: FORBIDDEN; NO PAID TRAINING/PROVIDER EXECUTION IN CURRENT FREE_ONLY SUPERVISOR MODE
-Model training: ZERO_COST_LOCAL_APPROX_08B_JSPACE_GWT_WORK_ONLY_AFTER_EXECUTABLE_EVIDENCE; PAID ONE_SHOT HAS ZERO EXECUTION CREDIT AND REQUIRES A FUTURE AUTHORITY MODE CHANGE
+Model training: ZERO_COST_LOCAL_APPROX_08B_JSPACE_GWT_WORK_ONLY_AFTER_EXECUTABLE EVIDENCE; PAID ONE_SHOT HAS ZERO EXECUTION CREDIT AND REQUIRES A FUTURE AUTHORITY MODE CHANGE
 Current frontier: <dynamic EntityOS blocker/delta + HCU/Typed Entry co-development + Global J-Space/GWT training-readiness discriminator>
 Migration/reuse score: EASIER_CROSS_MODE|EASIER|NEUTRAL|HARDER_WITH_EVIDENCE
 Progress: <canonical dynamic percent/bar OR UNRESOLVED>
@@ -43,4 +43,4 @@ Evidence note: source/component/historical PASS does not imply EntityOS/HCU runt
 Short commands: 666 · go · zero · q12 · q23 · atomic · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifiedb · harness · spawn
 ```
 
-Training authority note: `research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md` remains repository provenance for an owner-authorized bounded paid run, but `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json` supersedes it for the current explicitly FREE_ONLY autonomous supervisor. In this mode no Together preflight, credential lookup, network call, job creation, spend, provider credit, training credit or acceptance credit is allowed. Only zero-cost local ~0.8B J-Space/GWT work may continue after the required executable-evidence gates.
+Training/execution authority note: `research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md` remains repository provenance for an owner-authorized bounded paid run, but `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json` supersedes it for the current explicitly FREE_ONLY autonomous supervisor. In this mode no Together preflight, credential lookup, network call, job creation, spend, provider credit, training credit or acceptance credit is allowed. Vercel Hobby Sandbox is admitted only inside the observed included-tier entitlement, with fixed source-hash-bound capsules, short isolated execution, prompt cleanup, and fail-closed behavior before execution if quota exhaustion, billing, upgrade, plan mismatch or any monetary charge path appears. Only zero-cost local ~0.8B J-Space/GWT work may continue after the required executable-evidence gates.

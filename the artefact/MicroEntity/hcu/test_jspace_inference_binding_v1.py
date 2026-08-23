@@ -4,7 +4,15 @@ from dataclasses import asdict, replace
 
 from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
 from global_jspace_gwt_v1 import CellContribution, step
-from grid10_scheduler_v1 import CellLease, ExecutionClass, GridPlan, HCUMode, PLAN_SCHEMA
+from grid10_scheduler_v1 import (
+    CellLease,
+    ExecutionClass,
+    GridPlan,
+    HCUMode,
+    PLAN_SCHEMA,
+    grid_plan_material,
+    validate_grid_plan_identity,
+)
 from inference_receipt_v1 import InferenceReceipt, SCHEMA as INFERENCE_RECEIPT_SCHEMA, STATUS as INFERENCE_RECEIPT_STATUS
 from jspace_inference_binding_v1 import JSpaceInferenceBindingError, SCHEMA as JSPACE_INFERENCE_BINDING_SCHEMA, bind_training_trace_to_inference, validate_binding
 from jspace_training_trace_v1 import build_training_trace
@@ -73,12 +81,10 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
             "cells": tuple(cells),
         }
         payload.update(overrides)
-        canonical = {
-            **{key: value for key, value in payload.items() if key not in {"mode", "cells"}},
-            "mode": payload["mode"].value,
-            "cells": [{"cell_id": cell.cell_id, "function": cell.function, "execution_class": cell.execution_class.value, "model_token_budget": cell.model_token_budget, "physical_decoder_lane": cell.physical_decoder_lane} for cell in payload["cells"]],
-        }
-        return GridPlan(plan_sha256=canonical_sha256(canonical), **payload)
+        provisional = GridPlan(plan_sha256="1" * 64, **payload)
+        plan = replace(provisional, plan_sha256=canonical_sha256(grid_plan_material(provisional)))
+        validate_grid_plan_identity(plan)
+        return plan
 
     def training_trace(self, grid_plan=None):
         proto = self.prototype()

@@ -1,0 +1,100 @@
+{
+  "schema": "GO_TYPED_ENTRY_CANONICALIZATION_FUSION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "ca0076d54c64996bc028746f4ad9d084ede28676",
+  "donor_pr": 1263,
+  "donor_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+  "donor_head_observed": "f38d91e847496d9d132567b0db86e0b4f884bb56",
+  "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+  "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+  "fusion_delta": [
+    "retained the existing single EntityOS/HCU route lane rather than creating a second router/admission authority",
+    "retained the stronger concurrent replay-stable event_sha256 versus admission_sha256 split",
+    "added versioned ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1 deterministic canonicalization for Typed Entry causal/admission identity",
+    "normalized admitted RFC3339 timestamps to UTC before causal identity hashing",
+    "projected causal Entry identity/canonicalization into HCU while excluding transport-only receipt identity from the reactive causal event",
+    "indexed canonicalizer and parity tests as compatibility-package required source artifacts; MICROENTITY_CURRENT.zip remains stale until rebuilt from settled semantics"
+  ],
+  "hypothesis": "Versioned deterministic CBOR for the float-free Typed Entry identity domain produces independently reproducible causal bytes across implementations while preserving a separate transport admission receipt.",
+  "counterhypothesis": "Implementation-scoped Python sort_keys JSON is sufficient and an independent canonicalization profile adds complexity without causal/replay benefit.",
+  "primary_evidence": [
+    "RFC 8949 deterministic CBOR core rules for shortest encodings and deterministic map-key ordering",
+    "RFC 8785 rationale that cryptographic hashing/signing requires an invariant canonical representation"
+  ],
+  "prior_exact_replication_on_main": {
+    "source_receipt_commit": "ca0076d54c64996bc028746f4ad9d084ede28676",
+    "entry_blob": "0f4d39159be77bace7ee95397b744c781e8f8599",
+    "tests": "15/15 PASS exact source component scope",
+    "status": "supports event/admission identity split but predates deterministic CBOR fusion"
+  },
+  "new_exact_component_bytes": {
+    "typed_entry_canonical_v1.py": "2bcd576003ac58cec07e026a5105bc0a0b3413bb",
+    "xeno_entry_fabric_v1.py": "cdc0bc44edecbf4758bce0152cdab87f26a81efe",
+    "test_typed_entry_canonical_v1.py": "1cc073260bd0bcea0832e0c1087a151cf5b47600"
+  },
+  "isolated_component_replication": {
+    "surface": "ChatGPT isolated container",
+    "python": "3.13.5",
+    "node": "v22.16.0",
+    "pytest": "9.0.2",
+    "result": "8/8 PASS",
+    "checks": [
+      "RFC8949 subset known vectors",
+      "encoded-key deterministic map ordering",
+      "float and unsafe integer fail closed at Typed Entry identity boundary",
+      "independent Python and Node canonical byte parity on Entry-shaped corpus",
+      "transport replay changes admission_sha256 but preserves causal event_sha256 and downstream route identity",
+      "equivalent RFC3339 offsets normalize to one observed instant",
+      "payload identity change changes causal event identity"
+    ]
+  },
+  "parallel_coordination": {
+    "stale_write_guard_observed": "GitHub 409 rejected a stale overwrite of xeno_entry_fabric_v1.py",
+    "resolution": "adopted the newer concurrent event/admission split and fused only the missing canonicalization mechanism",
+    "duplicate_route_or_state_authority_created": false
+  },
+  "grid10_parallel_fusion_observed": {
+    "source": "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py",
+    "status": "SOURCE_CANDIDATE_ON_SAME_DRAFT_PR",
+    "useful_invariant": "10 logical cells, model-call count and physical decoder concurrency are separate; plan is capacity-receipt bound",
+    "runtime_credit": 0
+  },
+  "github_actions": {
+    "identity_guard_run": 32652556239,
+    "job": 97226308792,
+    "conclusion": "failure",
+    "executed_steps": 0,
+    "classification": "EXECUTION_ADMISSION_OR_RUNNER_FAILURE_BEFORE_STEPS_NOT_SEMANTIC_TEST_FAIL"
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "the user-triggered go unusual experiment was already consumed by the causal/provenance alias lesion; later canonicalization and replay work is deterministic regression/replication"
+  },
+  "evidence_boundary": {
+    "exact_entry_and_canonicalizer_component_bytes_executed": true,
+    "independent_cross_language_canonicalizer_parity_observed": true,
+    "combined_exact_current_pr_entry_router_grid10_suite_executed_on_authorized_external_sandbox": false,
+    "real_local_08b_engine_artifact_bound_and_executed": false,
+    "jspace_causal_use_verified": false,
+    "entityos_hcu_whole_runtime_accepted": false
+  },
+  "current_blockers": [
+    "actually-started authorized isolated executor for the exact current combined Entry + HCU route + inference-echo + GRID10 suite",
+    "bind real local ~0.8B checkpoint/tokenizer/runtime bytes to the positive HCU engine artifact registry and downstream inference receipt producer",
+    "rebuild/digest-bind the legacy-named compatibility ZIP only after source semantics settle",
+    "keep current EntityOS/HCU authority and canonical state/effect boundaries synchronized while parallel workers converge"
+  ],
+  "security": {
+    "vps_self_hosted_or_production_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "promotion": "MECHANISM_SUPPORTED_AND_DURABLY_FUSED_NOT_RUNTIME_PROMOTED"
+}

@@ -16,15 +16,15 @@ def evaluate(source: str) -> dict[str, object]:
         "prompt": 'phase("pipeline_build_prompt"',
         "prepare": 'phase("pipeline_cognitive_fabric_prepare"',
         "infer": 'effect("inference_generate"',
-        "finalize": 'phase("pipeline_cognitive_fabric_finalize"',
         "gate": 'phase("pipeline_gate"',
         "commit": 'phase("pipeline_commit"',
+        "finalize": 'phase("pipeline_cognitive_fabric_finalize"',
     }
     positions = {name: code.find(marker) for name, marker in markers.items()}
     ordered = (
         all(v >= 0 for v in positions.values())
         and positions["prompt"] < positions["prepare"] < positions["infer"]
-        < positions["finalize"] < positions["gate"] < positions["commit"]
+        < positions["gate"] < positions["commit"] < positions["finalize"]
     )
 
     required_bindings = {
@@ -32,10 +32,14 @@ def evaluate(source: str) -> dict[str, object]:
         "system_from_prepared": 'map_set(infer,"system",prepared.system)' in code,
         "user_from_prepared": 'map_set(infer,"user",prepared.user)' in code,
         "packet_digest_to_inference": 'map_set(infer,"inference_packet_digest",prepared.inference_packet_digest)' in code,
-        "generated_to_finalize": 'map_set(cognition_finalize_data,"generated",generated)' in code,
+        "prepared_to_gate": 'map_set(gate_data,"cognitive_fabric_prepare",prepared)' in code,
+        "packet_digest_to_gate": 'map_set(gate_data,"inference_packet_digest",prepared.inference_packet_digest)' in code,
+        "prepared_to_commit": 'map_set(commit_data,"cognitive_fabric_prepare",prepared)' in code,
+        "packet_digest_to_commit": 'map_set(commit_data,"inference_packet_digest",prepared.inference_packet_digest)' in code,
         "prepared_to_finalize": 'map_set(cognition_finalize_data,"prepared",prepared)' in code,
-        "fabric_to_gate": 'map_set(gate_data,"cognitive_fabric",finalized)' in code,
-        "fabric_to_commit": 'map_set(commit_data,"cognitive_fabric",finalized)' in code,
+        "generated_to_finalize": 'map_set(cognition_finalize_data,"generated",generated)' in code,
+        "gated_to_finalize": 'map_set(cognition_finalize_data,"gated",gated)' in code,
+        "committed_to_finalize": 'map_set(cognition_finalize_data,"committed",committed)' in code,
         "final_receipt_only_from_finalize": 'map_set(result,"cognitive_fabric_receipt_digest",finalized.cognitive_fabric_receipt_digest)' in code,
     }
     forbidden_raw_bypasses = {
@@ -47,6 +51,8 @@ def evaluate(source: str) -> dict[str, object]:
         "legacy_single_admit_phase": 'phase("pipeline_cognitive_fabric_admit"' in code,
         "final_receipt_sent_pre_inference": 'map_set(infer,"cognitive_fabric_receipt_digest"' in code,
         "prepared_claims_final_receipt": 'prepared.cognitive_fabric_receipt_digest' in code,
+        "final_receipt_authorizes_gate": 'map_set(gate_data,"cognitive_fabric",finalized)' in code,
+        "final_receipt_authorizes_commit": 'map_set(commit_data,"cognitive_fabric",finalized)' in code,
     }
     pass_ = (
         ordered
@@ -55,9 +61,9 @@ def evaluate(source: str) -> dict[str, object]:
         and not any(temporal_false_green.values())
     )
     return {
-        "schema": "canonical-ucf-path-static/v2",
+        "schema": "canonical-ucf-path-static/v3",
         "positions": positions,
-        "ordered_prompt_prepare_inference_finalize_gate_commit": ordered,
+        "ordered_prompt_prepare_inference_gate_commit_finalize": ordered,
         "required_bindings": required_bindings,
         "forbidden_raw_bypasses": forbidden_raw_bypasses,
         "temporal_false_green": temporal_false_green,

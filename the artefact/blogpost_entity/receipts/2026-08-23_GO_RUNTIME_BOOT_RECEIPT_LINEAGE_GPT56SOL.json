@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "d3703db7d0d665545bc25b06335c47f06ce4c62b",
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "status": "UNRESOLVED_NO_UPSTREAM_ID",
+    "unusual_experiment_local_count": 0,
+    "classification": "DETERMINISTIC_PROVENANCE_REGRESSION_ONLY"
+  },
+  "r0_observed": [
+    "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 required many exact identities but did not cryptographically name the immediately upstream JSPACE_GWT_BOOT_BINDING_RECEIPT/v1.",
+    "Its source spec said to pair the runtime receipt with boot-binding evidence, but the validator and tests had no explicit parent-receipt digest or cross-receipt identity check.",
+    "The canonical boot-binding receipt already carries source, bundled-core, lens, GWT policy/calibration, Zero/GRF and Claude capability identities, making an explicit lineage check possible without duplicating boot validation."
+  ],
+  "r1_mechanism": "Without an explicit parent edge, individually valid boot/runtime receipts could be paired across different provenance contexts. A parent hash alone closes byte substitution but not a hash-consistent semantic splice, so chain admission also cross-checks identity-bearing fields.",
+  "r3_counter": "Adding a digest field could create false confidence if the runtime validator merely checks SHA-256 syntax or if it duplicates/competes with the canonical boot-binding validator.",
+  "repair": {
+    "runtime_receipt_fields": [
+      "provenance.boot_binding_receipt_version",
+      "provenance.boot_binding_receipt_digest"
+    ],
+    "chain_function": "validate_receipt_chain(receipt, boot_binding_raw)",
+    "parent_digest": "SHA-256 over exact serialized bytes of the actually presented JSPACE_GWT_BOOT_BINDING_RECEIPT/v1",
+    "cross_identity_fields": [
+      "source commit/tree",
+      "bundled manifest/checkpoint/tokenizer/runtime",
+      "Zero/GRF",
+      "GWT workspace policy/calibration",
+      "lens profile when present",
+      "Claude adapter version/capability when CLAUDE_CODE is active"
+    ],
+    "non_duplication": "The canonical validate_jspace_gwt_boot_binding_v1.py remains responsible for validating the boot receipt itself; the downstream validator only proves exact parent bytes and cross-layer identity consistency.",
+    "cli_boundary": "Structural validation without --boot-binding-receipt reports chain_verified=false; chain_verified=true is possible only after successful parent-byte and cross-identity validation."
+  },
+  "exact_git_blobs": {
+    "agentzeroforschung/instrumente/validate_unified_cognitive_fabric_receipt_v1.py": "155ae52165a7625cb324cac98d5d6a653c973184",
+    "agentzeroforschung/instrumente/test_unified_cognitive_fabric_receipt_v1.py": "75cba1588e0a92679efd0b9ae302d486d12c426a",
+    "agentzeroforschung/instrumente/UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_v1.md": "c552e6801639ecdda29b345d6af752a04c7cbf3a"
+  },
+  "isolated_execution": {
+    "surface": "OpenAI isolated container",
+    "initial_network_attempt": "DNS failed before file retrieval for raw.githubusercontent.com; no test/runtime claim was inferred from that admission failure.",
+    "exact_blob_reconstruction": "PASS; executable files reconstructed from submitted GitHub contents matched GitHub git-blob SHAs exactly before execution.",
+    "py_compile": "PASS",
+    "unittest": "11/11 PASS",
+    "positive_chain_cli": "ok=true; chain_verified=true; errors=[]",
+    "structural_only_cli": "ok=true; chain_verified=false; errors=[]",
+    "tampered_parent_cli": "ok=false; chain_verified=false; BOOT_BINDING_RECEIPT_DIGEST_MISMATCH; exit=2",
+    "covered_lineage_controls": [
+      "missing boot-binding digest",
+      "malformed boot-binding digest",
+      "wrong boot-binding receipt version",
+      "exact byte-matched boot/runtime chain accepted",
+      "one-byte parent substitution rejected",
+      "hash-consistent checkpoint identity splice rejected",
+      "missing parent GWT calibration identity rejected"
+    ],
+    "evidence_class": "EXACT_GIT_BLOB_LOCAL_COMPONENT_PASS"
+  },
+  "non_claims": [
+    "no exact Ubuntu/AgentZero runtime execution",
+    "no real boot receipt emitted from the intentionally offline host",
+    "no bundled model quality or checkpoint acceptance",
+    "no J-Space calibration or Whole-GWT production acceptance",
+    "no Claude Code adapter runtime acceptance",
+    "no provider/Together secret lookup, network, training or spend",
+    "no whole Mini Entity/EntityOS product PASS"
+  ],
+  "next_gate": "On the next intentional exact Ubuntu start, validate the real JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 with its canonical validator, then validate the emitted UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 with --boot-binding-receipt against those exact parent bytes; only chain_verified=true plus the existing PRESTART/POSTSTART boundary can contribute runtime credit."
+}

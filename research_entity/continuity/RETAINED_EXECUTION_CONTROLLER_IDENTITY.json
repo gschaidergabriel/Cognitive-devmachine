@@ -1,0 +1,45 @@
+{
+  "schema": "ENTITYOS_HCU_RETAINED_EXECUTION_CONTROLLER_IDENTITY/v1",
+  "status": "CURRENT_COORDINATION_SELECTOR_CANDIDATE",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "8.63",
+  "mode": "FREE_ONLY",
+  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "retained_hcu_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pull_request": 1263,
+    "qualified_ref": "gschaidergabriel/clay-global-research-entity#1263",
+    "head_observed_2026_08_24": "57bc0acfc23bd58261746c7253529a79adc6c70a",
+    "role": "SINGLE_HCU_TYPED_ENTRY_JSPACE_DONOR_LANE"
+  },
+  "retained_execution_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "qualified_ref": "gschaidergabriel/Dr.-Unterweger#810",
+    "head_observed_2026_08_24": "e636f6e01f38143b07d9d38cefbd88a4616777f0",
+    "role": "SINGLE_BOUNDED_VERCEL_SANDBOX_EXECUTION_CONTROLLER_LANE"
+  },
+  "head_freshness": {
+    "snapshot_heads_are_current_authority": false,
+    "execution_requires_live_refresh": true,
+    "rule": "The stored head_observed fields are evidence snapshots only. Every execution attempt MUST refresh both retained pull requests and bind the exact then-current head SHAs into the fixed capsule/receipt; a stored snapshot may never substitute for that live re-entry."
+  },
+  "ambiguity_fence": {
+    "unqualified_pr810_for_current_executor_selection": "FORBIDDEN",
+    "reason": "Pull request numbers are repository-local. gschaidergabriel/clay-global-research-entity#810 exists and is a different historical cognition/SFT validator lane, so the token PR810 alone is not a unique executor identity.",
+    "known_wrong_resolution": "gschaidergabriel/clay-global-research-entity#810",
+    "known_wrong_resolution_head_observed_2026_08_24": "7c49b41ceb14d65783b7d35c2939c4005565baa5",
+    "selection_rule": "Any executable coordination, source binding, receipt, guard or handoff that selects the retained execution controller MUST use the fully-qualified repository plus pull-request identity and MUST additionally bind the exact live head SHA for the execution attempt."
+  },
+  "authority_boundary": {
+    "creates_new_executor": false,
+    "creates_new_state_or_effect_authority": false,
+    "runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_gate": "Finish the existing gschaidergabriel/Dr.-Unterweger#810 ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v2 closure against exact then-current Research main plus exact then-current donor head, bind every required Git blob and live head, remove SOURCE_REBIND_REQUIRED only coherently, then execute when FREE_ONLY Vercel Hobby build/function admission is available."
+}

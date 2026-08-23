@@ -24,6 +24,7 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertEqual(decision.model_lanes, ())
         self.assertFalse(decision.zero_projection)
         self.assertFalse(decision.external_provider_dependency)
+        self.assertEqual(len(decision.event_sha256), 64)
 
     def test_contradiction_selectively_activates_world_hypothesis_critic(self):
         e = base_event(); e.update(contradiction=0.8, uncertainty=0.7)
@@ -55,8 +56,18 @@ class ReactiveRouterTests(unittest.TestCase):
     def test_same_input_is_deterministic(self):
         e = base_event(); e.update(novelty=0.8, zero_relevance=0.8)
         a = route_event(e, current_generation=7)
-        b = route_event(e, current_generation=7)
+        b = route_event(dict(reversed(list(e.items()))), current_generation=7)
         self.assertEqual(a, b)
+
+    def test_distinct_events_with_same_route_do_not_alias_decision_identity(self):
+        a_event = base_event(); a_event.update(novelty=0.80, zero_relevance=0.80)
+        b_event = base_event(); b_event.update(novelty=0.81, zero_relevance=0.80)
+        a = route_event(a_event, current_generation=7)
+        b = route_event(b_event, current_generation=7)
+        self.assertEqual(a.model_lanes, b.model_lanes)
+        self.assertEqual(a.zero_projection, b.zero_projection)
+        self.assertNotEqual(a.event_sha256, b.event_sha256)
+        self.assertNotEqual(a.decision_sha256, b.decision_sha256)
 
 
 if __name__ == "__main__":

@@ -10,6 +10,10 @@ def digest(label: str) -> str:
     return hashlib.sha256(label.encode("utf-8")).hexdigest()
 
 
+def admitted_for(*traces):
+    return {trace["jspace_basis_id"]: trace["jspace_basis_sha256"] for trace in traces}
+
+
 class CompilerTests(unittest.TestCase):
     def trace(self, gen=1, *, family=None, trace_id=None):
         cells = [
@@ -47,7 +51,8 @@ class CompilerTests(unittest.TestCase):
         return trace_dict(training)
 
     def test_each_trace_derives_six_machine_checkable_rows(self):
-        rows = derive_bootstrap_examples(self.trace())
+        trace = self.trace()
+        rows = derive_bootstrap_examples(trace, admitted_bases=admitted_for(trace))
         self.assertEqual(len(rows), 6)
         self.assertEqual(rows[0]["metadata"]["family"], "VECTOR_CONTROL_VALIDATE")
         self.assertIn('"decision":"REJECT"', rows[1]["messages"][2]["content"])
@@ -63,7 +68,7 @@ class CompilerTests(unittest.TestCase):
             self.trace(40, family="episode:shared", trace_id="trace:shared:a"),
             self.trace(41, family="episode:shared", trace_id="trace:shared:b"),
         ])
-        compiled = compile_traces(traces)
+        compiled = compile_traces(traces, admitted_bases=admitted_for(*traces))
         family_owners = {}
         trace_owners = {}
         for split, rows in compiled.items():
@@ -76,14 +81,15 @@ class CompilerTests(unittest.TestCase):
 
     def test_duplicate_trace_is_deduplicated(self):
         trace = self.trace(5)
-        compiled = compile_traces([trace, trace])
+        compiled = compile_traces([trace, trace], admitted_bases=admitted_for(trace))
         self.assertEqual(sum(len(rows) for rows in compiled.values()), 6)
 
     def test_compiler_rejects_training_trace_digest_tamper(self):
         trace = dict(self.trace(7))
+        admission = admitted_for(trace)
         trace["role"] = "tampered"
         with self.assertRaisesRegex(DatasetError, "TRAINING_TRACE_DIGEST_MISMATCH"):
-            compile_traces([trace])
+            compile_traces([trace], admitted_bases=admission)
 
     def test_compiler_rejects_vector_basis_digest_substitution_even_after_rehash(self):
         trace = dict(self.trace(8))
@@ -93,7 +99,24 @@ class CompilerTests(unittest.TestCase):
         from entry_canonicalization_v1 import canonicalize
         trace["trace_sha256"] = hashlib.sha256(canonicalize(material)).hexdigest()
         with self.assertRaisesRegex(DatasetError, "TRACE_CONTROL_PACKET_INVALID:JSPACE_BASIS_SHA256_MISMATCH"):
+            compile_traces([trace], admitted_bases=admitted_for(trace))
+
+    def test_missing_external_basis_admission_fails_closed(self):
+        trace = self.trace(13)
+        with self.assertRaisesRegex(DatasetError, "JSPACE_BASIS_ADMISSION_REQUIRED"):
             compile_traces([trace])
+
+    def test_self_consistent_rogue_basis_cannot_self_admit(self):
+        rogue = self.trace(14)
+        trusted = {"basis:trusted": digest("basis:trusted")}
+        with self.assertRaisesRegex(DatasetError, "JSPACE_BASIS_NOT_ADMITTED"):
+            compile_traces([rogue], admitted_bases=trusted)
+
+    def test_basis_id_cannot_rebind_to_unadmitted_digest(self):
+        trace = self.trace(15)
+        wrong_registry = {trace["jspace_basis_id"]: digest("different-admitted-basis")}
+        with self.assertRaisesRegex(DatasetError, "JSPACE_BASIS_ADMISSION_DIGEST_MISMATCH"):
+            compile_traces([trace], admitted_bases=wrong_registry)
 
 
 if __name__ == "__main__":

@@ -2,9 +2,9 @@
 """Canonical control-plane capability projection for EntityOS/HCU Typed Entry.
 
 This module is an adapter, not a second permission authority. It derives one bounded
-capability view from canonical session/generation state plus the existing EffectGate
-capability surface, then binds that view with the selected RFC8785/JCS canonicalizer.
-Untrusted Entry claims may narrow this view but can never mint or broaden it.
+Typed-Entry capability view from canonical session/generation state while binding the
+existing EffectGate capability surface as control-plane context. Effect capabilities are
+never copied into Typed Entry: real-effect authority remains exclusively EffectGate.
 """
 from __future__ import annotations
 
@@ -131,12 +131,13 @@ def snapshot_capability_authority(
         INTERNAL_POLICY_CAPABILITIES,
         "INTERNAL_POLICY_CAPABILITIES",
     )
-    admitted_capabilities = tuple(sorted(set(internal_capabilities) | set(effect_capabilities)))
+    admitted_capabilities = internal_capabilities
     policy_material = {
         "schema": POLICY_SCHEMA,
         "canonicalization_schema": CANONICALIZATION_SCHEMA,
-        "internal_capabilities": list(internal_capabilities),
+        "typed_entry_capabilities": list(internal_capabilities),
         "effect_capability_source": "EffectGate.available_capabilities",
+        "effect_capabilities_are_entry_authority": False,
         "forbidden_effect_capabilities": sorted(FORBIDDEN_EFFECT_CAPABILITIES),
     }
     policy_sha256 = _canonical_sha256(policy_material, "CAPABILITY_POLICY")
@@ -148,7 +149,7 @@ def snapshot_capability_authority(
         "session_id": session_id,
         "entity_generation": generation,
         "internal_capabilities": list(internal_capabilities),
-        "effect_capabilities": list(effect_capabilities),
+        "effect_capabilities_observed": list(effect_capabilities),
         "admitted_capabilities": list(admitted_capabilities),
     }
     binding_sha256 = _canonical_sha256(binding_material, "CAPABILITY_BINDING")

@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main": "7d6041213ecd549b9bcc9c66b62bc423bd42807b",
+  "branch": "gpt56sol/go-cognition-semantic-resolver-v1-20260823-1540",
+  "classification": "SOURCE_SEMANTIC_AUTHORITY_FENCE_RUNTIME_UNVERIFIED",
+  "observed": {
+    "selector_path_on_main": "PR #1272 merged; bounded cognition invocation now reaches canonical admission call",
+    "active_prepare_on_main": "PR #1271 merged; active-turn prepare resolution is read-only",
+    "boot_binding_v1_identity": "object kind + object digest without object_version",
+    "store_resolution_behavior": "matching exact-generation rows are ordered by object_version and one row is selected",
+    "semantic_risk": "the same external object digest can be registered/admitted under multiple versions with different payload metadata; a later same-generation admission can therefore alter selected payload semantics without changing the existing boot-binding digest",
+    "handler_dependency": "pipeline_cognitive_fabric_admit must resolve J-Space/policy/model semantics from admitted versioned object payloads rather than provider/model-name guesses"
+  },
+  "delta": {
+    "resolver": "tools/miniunifieddb_cognition_resolution_v1.py",
+    "resolver_blob": "6aa09211c520b910bee3372d0a817a6582661496",
+    "tests": "tests/test_miniunifieddb_cognition_resolution_v1.py",
+    "tests_blob": "c097c5bec8ad954992e777c9486f328c08258724",
+    "rules": [
+      "resolve_prepare_binding first, preserving live generation + turn/task/boot/workspace integrity",
+      "require expected turn-binding digest when supplied by MINI_COGNITIVE_INVOCATION/v1",
+      "resolve every boot cognition payload only from exact-current-generation admissions",
+      "reject more than one admitted object_version for the same kind+digest as COGNITION_OBJECT_VERSION_AMBIGUOUS",
+      "recheck payload digest, canonical JSON, provenance refs and admission receipt before semantic use",
+      "create no table, durable state, truth authority or effect path"
+    ]
+  },
+  "deterministic_regressions": [
+    "single admitted version resolves exact payload semantics",
+    "same digest + two admitted versions fails closed",
+    "registered but unadmitted second version does not create false ambiguity",
+    "wrong expected turn-binding digest fails closed",
+    "payload row tamper fails before semantic use"
+  ],
+  "execution": {
+    "actually_started_authorized_exact_test": false,
+    "reason": "no actually-started authorized isolated executor was exposed in this organ before receipt write",
+    "runtime_credit": 0,
+    "bundled_08b_credit": 0,
+    "jspace_credit": 0,
+    "whole_gwt_credit": 0,
+    "claude_adapter_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "coordination": {
+    "generation_fence": "already landed via PR #1269 and mixed-generation regression via PR #1274; not duplicated",
+    "active_turn_prepare": "already landed read-only via PR #1271; not duplicated",
+    "selector_plumbing": "already landed via PR #1272; not duplicated",
+    "causal_turn_id": "open PR #1267 owns deterministic causal-turn-id proposal; not duplicated",
+    "db_write_guards": "open PR #1261 owns direct-SQL generation/immutability triggers; not duplicated",
+    "hcu": "NO_CHANGE_NON_DUPLICATION: open PR #1263 already owns the reactive provider-independent HCU world-model substrate; no competing HCU path created",
+    "macrocycle_id": null,
+    "unusual_experiment": {
+      "count_here": 0,
+      "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+      "note": "semantic ambiguity analysis and deterministic regressions are not claimed as an unusual experiment"
+    }
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB only",
+    "zero": "runtime identity/configuration only",
+    "model_output": "candidate only",
+    "effects": "EffectGate only",
+    "together": "FORBIDDEN",
+    "paid_training": "OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "next_gate": "compose the read-only active-turn resolver with this strict semantic payload resolver behind the landed invocation selector, then compile the verified same-turn ZERO_WORKSPACE_CAPSULE/v1 and ZERO_INFERENCE_PACKET/v2 without guessed engine/J-Space semantics; keep final UCF runtime receipt post-terminal only; execute exact integrated bytes on an actually-started authorized isolated executor"
+}

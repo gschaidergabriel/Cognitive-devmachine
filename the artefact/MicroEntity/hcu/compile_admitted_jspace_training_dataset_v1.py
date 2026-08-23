@@ -15,23 +15,20 @@ also derived from admitted upstream causal ancestry, never from the caller-contr
 ``trace_family_id`` label alone. The DatasetAdmission call also receives the caller-owned
 registry of exact canonical Vector-Control packet preimages, so a shared digest label cannot
 be laundered into training rows without validation by the sole JSPACE_VECTOR_CONTROL_ABI/v1
-implementation. It mints no truth, model authority, effect authority, runtime credit, or
-paid-training permission.
+implementation. InferenceReceipt parent validation delegates to the single reusable
+``jspace_inference_parent_admission_v1`` guard; this compiler keeps only compatibility error
+translation, not a second validation implementation. It mints no truth, model authority,
+effect authority, runtime credit, or paid-training permission.
 """
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, fields
+from dataclasses import dataclass
 import hashlib
 from typing import Any, Iterable, Mapping
 
 try:
     from .compile_jspace_bootstrap_dataset_v1 import compile_traces as compile_training_traces
-    from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
-    from .inference_receipt_v1 import (
-        InferenceReceipt,
-        SCHEMA as INFERENCE_RECEIPT_SCHEMA,
-        STATUS as INFERENCE_RECEIPT_STATUS,
-    )
+    from .entry_canonicalization_v1 import CanonicalizationError, canonicalize
     from .jspace_dataset_admission_gate_v1 import (
         ADMISSION_SCHEMA,
         DatasetAdmission,
@@ -45,15 +42,14 @@ try:
         JSpaceInferenceBindingError,
         validate_binding,
     )
+    from .jspace_inference_parent_admission_v1 import (
+        JSpaceInferenceParentAdmissionError,
+        require_admitted_inference_receipt_parent,
+    )
     from .jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
 except ImportError:
     from compile_jspace_bootstrap_dataset_v1 import compile_traces as compile_training_traces
-    from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
-    from inference_receipt_v1 import (
-        InferenceReceipt,
-        SCHEMA as INFERENCE_RECEIPT_SCHEMA,
-        STATUS as INFERENCE_RECEIPT_STATUS,
-    )
+    from entry_canonicalization_v1 import CanonicalizationError, canonicalize
     from jspace_dataset_admission_gate_v1 import (
         ADMISSION_SCHEMA,
         DatasetAdmission,
@@ -66,6 +62,10 @@ except ImportError:
         JSpaceInferenceBinding,
         JSpaceInferenceBindingError,
         validate_binding,
+    )
+    from jspace_inference_parent_admission_v1 import (
+        JSpaceInferenceParentAdmissionError,
+        require_admitted_inference_receipt_parent,
     )
     from jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
 
@@ -171,100 +171,42 @@ def _derive_causal_family_sha256(*, generation: int, causal: Mapping[str, str]) 
     )
 
 
-def _normalize_admitted_inference_receipt(value: Any) -> dict[str, Any]:
-    if isinstance(value, InferenceReceipt):
-        receipt = asdict(value)
-    elif isinstance(value, Mapping):
-        receipt = dict(value)
-    else:
-        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_VALUE_INVALID")
-    expected_fields = {field.name for field in fields(InferenceReceipt)}
-    if set(receipt) != expected_fields:
-        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_FIELD_SET_MISMATCH")
-    return receipt
-
-
-_RECEIPT_BINDING_FIELDS = {
-    "entity_generation": "generation",
-    "entry_admission_sha256": "entry_admission_sha256",
-    "event_sha256": "entry_event_sha256",
-    "decision_sha256": "route_decision_sha256",
-    "engine_identity_sha256": "engine_identity_sha256",
-    "resolved_engine_identity": "resolved_engine_identity",
-    "resolved_engine_class": "resolved_engine_class",
-    "resolved_engine_artifact_sha256": "resolved_engine_artifact_sha256",
-    "engine_admission_receipt_sha256": "engine_admission_receipt_sha256",
-    "engine_load_loader_binding_sha256": "engine_load_loader_binding_sha256",
-    "engine_load_lease_sha256": "engine_load_lease_sha256",
-    "engine_load_consumption_receipt_sha256": "engine_load_consumption_receipt_sha256",
-    "engine_load_loader_id": "engine_load_loader_id",
-    "model_execution_receipt_sha256": "model_execution_receipt_sha256",
-    "model_execution_observation_sha256": "model_execution_observation_sha256",
-    "model_execution_executor_id": "model_execution_executor_id",
-    "model_execution_invocation_id": "model_execution_invocation_id",
-    "grid_plan_sha256": "grid_plan_sha256",
-    "output_producing_cell_id": "output_producing_cell_id",
-    "model_execution_role": "model_execution_role",
-    "input_sha256": "input_sha256",
-    "input_size": "input_size",
-    "model_call_id": "model_call_id",
-    "output_ref": "output_ref",
-    "output_sha256": "output_sha256",
-    "output_size": "output_size",
+_INFERENCE_PARENT_ERROR_COMPATIBILITY = {
+    "INFERENCE_RECEIPT_PARENT_NOT_ADMITTED": "INFERENCE_RECEIPT_NOT_ADMITTED_FOR_BINDING",
+    "ADMITTED_INFERENCE_RECEIPT_VALUE_INVALID": "ADMITTED_INFERENCE_RECEIPT_VALUE_INVALID",
+    "ADMITTED_INFERENCE_RECEIPT_FIELD_SET_MISMATCH": "ADMITTED_INFERENCE_RECEIPT_FIELD_SET_MISMATCH",
+    "INFERENCE_RECEIPT_SCHEMA_UNSUPPORTED": "ADMITTED_INFERENCE_RECEIPT_SCHEMA_MISMATCH",
+    "INFERENCE_RECEIPT_STATUS_UNSUPPORTED": "ADMITTED_INFERENCE_RECEIPT_STATUS_UNSUPPORTED",
+    "INFERENCE_RECEIPT_PARENT_IDENTITY_MISMATCH": "ADMITTED_INFERENCE_RECEIPT_KEY_IDENTITY_MISMATCH",
+    "INFERENCE_RECEIPT_DIGEST_MISMATCH": "ADMITTED_INFERENCE_RECEIPT_DIGEST_MISMATCH",
+    "INFERENCE_RECEIPT_MODEL_LANES_INVALID": "ADMITTED_INFERENCE_RECEIPT_MODEL_LANES_INVALID",
+    "INFERENCE_RECEIPT_ROLE_NOT_IN_MODEL_LANES": "ADMITTED_INFERENCE_RECEIPT_ROLE_NOT_IN_MODEL_LANES",
 }
+
+
+def _translate_inference_parent_error(exc: JSpaceInferenceParentAdmissionError) -> str:
+    message = str(exc)
+    canonicalization_prefix = "INFERENCE_RECEIPT_CANONICALIZATION_SCHEMA_MISMATCH:"
+    if message.startswith(canonicalization_prefix):
+        return "ADMITTED_INFERENCE_RECEIPT_CANONICALIZATION_MISMATCH:" + message[len(canonicalization_prefix):]
+    binding_prefix = "INFERENCE_RECEIPT_PARENT_BINDING_MISMATCH:"
+    if message.startswith(binding_prefix):
+        return "INFERENCE_RECEIPT_BINDING_MISMATCH:" + message[len(binding_prefix):]
+    return _INFERENCE_PARENT_ERROR_COMPATIBILITY.get(
+        message,
+        f"INFERENCE_PARENT_ADMISSION_REJECTED:{message}",
+    )
 
 
 def _require_admitted_inference_receipt(
     binding: JSpaceInferenceBinding,
     admitted_inference_receipts: Mapping[str, Any],
-) -> dict[str, Any]:
-    """Require exact admitted receipt content behind a binding's digest reference."""
-    admitted_inference_receipts = _mapping(
-        admitted_inference_receipts,
-        "admitted_inference_receipts",
-    )
-    receipt_sha = _sha256(
-        binding.inference_receipt_sha256,
-        "inference_binding.inference_receipt_sha256",
-    )
-    raw_receipt = admitted_inference_receipts.get(receipt_sha)
-    if raw_receipt is None:
-        raise AdmittedTrainingDatasetError("INFERENCE_RECEIPT_NOT_ADMITTED_FOR_BINDING")
-    receipt = _normalize_admitted_inference_receipt(raw_receipt)
-
-    if receipt.get("schema") != INFERENCE_RECEIPT_SCHEMA or receipt.get("schema") != binding.inference_receipt_schema:
-        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_SCHEMA_MISMATCH")
-    if receipt.get("status") != INFERENCE_RECEIPT_STATUS:
-        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_STATUS_UNSUPPORTED")
-    for field in (
-        "hash_serialization_schema",
-        "engine_load_canonicalization_schema",
-        "model_execution_canonicalization_schema",
-    ):
-        if receipt.get(field) != CANONICALIZATION_SCHEMA or receipt.get(field) != binding.canonicalization_schema:
-            raise AdmittedTrainingDatasetError(f"ADMITTED_INFERENCE_RECEIPT_CANONICALIZATION_MISMATCH:{field}")
-
-    observed_sha = _sha256(receipt.get("receipt_sha256"), "admitted_inference_receipt.receipt_sha256")
-    if observed_sha != receipt_sha:
-        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_KEY_IDENTITY_MISMATCH")
-    material = dict(receipt)
-    material.pop("receipt_sha256")
-    if _canonical_sha256(material, "ADMITTED_INFERENCE_RECEIPT") != receipt_sha:
-        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_DIGEST_MISMATCH")
-
-    for receipt_field, binding_field in _RECEIPT_BINDING_FIELDS.items():
-        if receipt.get(receipt_field) != getattr(binding, binding_field):
-            raise AdmittedTrainingDatasetError(
-                f"INFERENCE_RECEIPT_BINDING_MISMATCH:{receipt_field}"
-            )
-
-    model_lanes = receipt.get("model_lanes")
-    if isinstance(model_lanes, (str, bytes, bytearray)) or not isinstance(model_lanes, (list, tuple)):
-        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_MODEL_LANES_INVALID")
-    normalized_lanes = tuple(_text(value, "admitted_inference_receipt.model_lane", max_len=256) for value in model_lanes)
-    if binding.role not in normalized_lanes:
-        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_ROLE_NOT_IN_MODEL_LANES")
-    return receipt
+) -> Mapping[str, Any]:
+    """Compatibility adapter to the single reusable InferenceReceipt parent guard."""
+    try:
+        return require_admitted_inference_receipt_parent(binding, admitted_inference_receipts)
+    except JSpaceInferenceParentAdmissionError as exc:
+        raise AdmittedTrainingDatasetError(_translate_inference_parent_error(exc)) from exc
 
 
 def validate_pipeline_evidence(

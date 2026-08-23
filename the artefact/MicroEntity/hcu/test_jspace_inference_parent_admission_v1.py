@@ -112,6 +112,44 @@ class ParentAdmissionTests(unittest.TestCase):
         )
         self.assertEqual(dict(observed), receipt)
 
+    def test_unknown_receipt_field_is_rejected_before_parent_admission(self):
+        receipt = receipt_with_sha()
+        binding = binding_for(receipt)
+        altered = dict(receipt)
+        altered["untrusted_extra"] = "laundered"
+        with self.assertRaisesRegex(
+            JSpaceInferenceParentAdmissionError,
+            "ADMITTED_INFERENCE_RECEIPT_FIELD_SET_MISMATCH",
+        ):
+            require_admitted_inference_receipt_parent(
+                binding,
+                {receipt["receipt_sha256"]: altered},
+            )
+
+    def test_all_receipt_canonicalization_layers_must_match_binding_authority(self):
+        receipt = receipt_with_sha(engine_load_canonicalization_schema="OTHER_CANONICALIZER/v1")
+        binding = binding_for(receipt)
+        with self.assertRaisesRegex(
+            JSpaceInferenceParentAdmissionError,
+            "INFERENCE_RECEIPT_CANONICALIZATION_SCHEMA_MISMATCH:engine_load_canonicalization_schema",
+        ):
+            require_admitted_inference_receipt_parent(
+                binding,
+                {receipt["receipt_sha256"]: receipt},
+            )
+
+    def test_binding_role_must_be_present_in_parent_model_lanes(self):
+        receipt = receipt_with_sha(model_lanes=("critic",))
+        binding = binding_for(receipt)
+        with self.assertRaisesRegex(
+            JSpaceInferenceParentAdmissionError,
+            "INFERENCE_RECEIPT_ROLE_NOT_IN_MODEL_LANES",
+        ):
+            require_admitted_inference_receipt_parent(
+                binding,
+                {receipt["receipt_sha256"]: receipt},
+            )
+
     def test_self_consistent_binding_without_parent_is_rejected(self):
         receipt = receipt_with_sha()
         binding = binding_for(receipt)

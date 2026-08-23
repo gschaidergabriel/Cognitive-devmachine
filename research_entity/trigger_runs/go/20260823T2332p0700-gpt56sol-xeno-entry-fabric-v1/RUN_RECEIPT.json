@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "record_type": "XENO_GO_COMPONENT_EVIDENCE_RECEIPT",
+  "recorded_at_local": "2026-08-23T23:32:51+07:00",
+  "run_id": "go-20260823T2332p0700-gpt56sol-xeno-entry-fabric-v1",
+  "persistent_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU_XENO",
+  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "base_main_at_join": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "work_branch": "gpt56sol/xeno-entry-fabric-v1-go-20260823",
+  "tested_branch_commit_before_receipt": "2d327e6c43b2a070783e449482aeffda2c50abf8",
+  "parallel_coordination": {
+    "pr": 1263,
+    "observed_initial_head": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "observed_later_head": "0e1f7429447a217e817750a6bb002b2bf3a98bd3",
+    "finding": "parallel worker added event_sha256 binding to the HCU reactive route identity while this go was running; this go did not overwrite that branch",
+    "remaining_parallel_gap": "positive engine admission and resolved engine identity remain separate from the new Xeno ingress identity and still require downstream fusion"
+  },
+  "grf": {
+    "observed": "the initial PR1263 HCU route decision digest committed routing output and generation but not immutable input-event identity",
+    "hypothesis": "one normalized pre-cognition Xeno ingress digest can serve as a reusable causal handle across HCU/XCU routing, workspace ancestry and later effect/outcome re-entry",
+    "counterhypothesis": "routing-output identity or caller-provided IDs are sufficient and a separate typed ingress digest adds only ceremony",
+    "discriminator": "causal alias matrix plus fail-closed normalization/admission regressions",
+    "fusion": "retain the parallel HCU event-hash repair, but move canonical causal binding earlier into the Xeno Entry Fabric so downstream organs consume one admitted ingress identity rather than independently hashing caller dictionaries"
+  },
+  "unusual_experiment": {
+    "count_for_macro_cycle": 1,
+    "name": "CAUSAL_ALIAS_MATRIX_V1",
+    "exact_router_git_blob_sha1": "7c0fee26fd3d8a48b99da7eca7f3bca8fea046ae",
+    "variant_count": 11,
+    "unique_event_digests": 11,
+    "unique_decision_digests": 1,
+    "largest_alias_group": 11,
+    "result": "PREFERRED_OUTPUT_DIGEST_AS_CAUSAL_IDENTITY_FALSIFIED_AT_TESTED_BLOB"
+  },
+  "delta": {
+    "track_a": "XENO_EXECUTABLE_CONVERGENCE: first current-facing executable Xeno Entry primitive added under the artefact/Xeno",
+    "track_b": "XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT: typed fail-closed ingress admission with stable ingress_sha256 causal binding",
+    "entry_fabric_source": "the artefact/Xeno/entry_fabric_v1.py",
+    "entry_fabric_blob_sha1": "26d2d8e8c5ba231550878673c4d3d684af7afed0",
+    "entry_fabric_tests": "the artefact/Xeno/test_entry_fabric_v1.py",
+    "entry_fabric_test_blob_sha1": "7d27e6c5debc1ade5bfb341ff10844e97344cad9",
+    "readme_updated": "the artefact/Xeno/README.md",
+    "reusable_binding": "ingress_sha256 binds normalized ingress_id, causal_id, generation, admitted source/source_ref, provenance, modality, canonicalized timestamps, admitted permissions/capabilities, parent/stream id, bounded resource budget, payload_ref and payload_sha256",
+    "authority_law": "caller-provided source identity, permissions, capabilities and resource requests cannot self-authorize; deterministic authority inputs must admit them"
+  },
+  "component_execution": {
+    "evidence_class": "PROVIDED_ISOLATED_TOOL_CONTAINER_COMPONENT_CHECK",
+    "platform": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "commands": [
+      "python3 -m py_compile entry_fabric_v1.py test_entry_fabric_v1.py",
+      "python3 -m unittest -v test_entry_fabric_v1.py"
+    ],
+    "source_blob_match": true,
+    "test_blob_match": true,
+    "test_count": 17,
+    "pass_count": 17,
+    "fail_count": 0,
+    "runtime_acceptance_credit": 0,
+    "whole_product_credit": 0
+  },
+  "adversarial_cases": [
+    "stale generation rejected",
+    "source class spoof rejected",
+    "source identity spoof rejected",
+    "permission escalation rejected",
+    "capability escalation rejected",
+    "resource budget escalation rejected",
+    "unknown budget dimensions rejected",
+    "malformed budget authority rejected even when unused",
+    "unknown top-level fields rejected",
+    "invalid payload digest rejected",
+    "naive timestamp rejected",
+    "mapping/set order normalized deterministically",
+    "timezone-equivalent timestamps normalized deterministically",
+    "payload or causal-id changes produce distinct ingress identity"
+  ],
+  "evidence_boundary": {
+    "source_candidate": true,
+    "mechanism_supported": true,
+    "exact_entityos_runtime_verified": false,
+    "exact_xcu_runtime_verified": false,
+    "whole_product_accepted": false,
+    "vercel_executable_sandbox_surface_observed_in_available_connector": false,
+    "vps_testing_used": false,
+    "together_api_used": false
+  },
+  "next_discriminator": "fuse admitted ingress_sha256 into the HCU route identity together with positive resolved-engine identity, then prove same exact ingress+engine+policy replay is stable while any event/engine change either changes route identity or fails closed",
+  "migration_reuse_score": "EASIER_CROSS_MODE"
+}

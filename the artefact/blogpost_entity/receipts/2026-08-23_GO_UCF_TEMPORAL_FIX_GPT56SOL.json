@@ -1,0 +1,92 @@
+{
+  "schema": "GO_UCF_TEMPORAL_FIX_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "branch": "gpt56sol/go-mini-ucf-temporal-fix-20260823-1510",
+  "branch_base": "d7d561232494687d5e88009089e240a4b2cb9ef5",
+  "latest_main_observed_before_receipt": "d44264cc88713e00035d6eb831abd3c95c871f6b",
+  "parallel_fusion": {
+    "miniunifieddb_cognition_store": {
+      "status": "FUSED_ON_MAIN_VIA_PR_1234",
+      "path": "tools/miniunifieddb_cognition_store_v1.py",
+      "git_blob": "0edbe664259cc5aa788577834e1b0ea5a9050e4d",
+      "note": "A parallel local candidate was discarded from the active lane because main's implementation is stronger: explicit object registration/admission, generation-bound boot binding and causal-turn binding."
+    },
+    "zero_inference_packet_v2": {
+      "status": "FUSED_ON_MAIN_VIA_PR_1240",
+      "note": "Exact downstream inference/system/user context binding strengthens PREPARE admission and does not replace the temporal PREPARE/FINALIZE split."
+    },
+    "microentity_package_integrity": "FAIL_CLOSED_VERIFIER_FUSED_ON_MAIN_VIA_PR_1235; binary repair remains separate"
+  },
+  "source_delta": {
+    "canonical_clay_temporal_split": {
+      "path": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+      "git_blob": "11bb85615204086d7dd5e8eac83e590f6ca61e3c",
+      "causal_order": [
+        "pipeline_build_prompt",
+        "pipeline_cognitive_fabric_prepare",
+        "inference_generate",
+        "pipeline_cognitive_fabric_finalize",
+        "pipeline_gate",
+        "pipeline_commit"
+      ]
+    },
+    "temporal_path_guard": "tools/check_canonical_ucf_path.py",
+    "temporal_path_tests": "tests/test_canonical_ucf_path_static.py",
+    "structured_sync_guard": {
+      "path": "the artefact/blogpost_entity/check_structured_contract_sync.py",
+      "git_blob": "99cd07de9d314f0a8132282ba2d8ac3899199b14",
+      "schema": "clay-structured-contract-sync/v4"
+    },
+    "structured_sync_guard_tests": {
+      "path": "the artefact/blogpost_entity/test_structured_contract_sync_guard.py",
+      "git_blob": "6006d756ca5ac261033c0688ae03067e3ce81045"
+    }
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "experiment_id": "PREINFERENCE_FINAL_RECEIPT_TIME_TRAVEL",
+    "hypothesis": "The final canonical UCF runtime receipt can be supplied to inference before inference executes.",
+    "falsifier": "Canonical UCF-v1 validation requires candidate_result_digest when inference executed and evaluates authority/commit state; these facts do not exist at the pre-inference boundary.",
+    "observed_source": "Current main still passes admitted.cognitive_fabric_receipt_digest into inference_generate before generated candidate exists.",
+    "result": "FALSIFIED_AT_CAUSAL_SOURCE_CONTRACT_SCOPE",
+    "repair": "PREPARE returns only admitted engine/context/InferencePacket identity; FINALIZE occurs after generated candidate and supplies the final UCF receipt to downstream gate/commit evidence."
+  },
+  "execution": {
+    "authorized_isolated_runtime_started": false,
+    "reason": "No Vercel Sandbox start/exec action is exposed in the connected interface; observed GitHub runner failures in this workstream have occurred before visible test steps.",
+    "tests_in_this_delta": "NOT_EXECUTED",
+    "runtime_credit_change": 0,
+    "model_credit_change": 0,
+    "jspace_credit_change": 0,
+    "whole_gwt_credit_change": 0,
+    "claude_adapter_credit_change": 0,
+    "hcu_capacity_credit_change": 0,
+    "whole_product_credit_change": 0
+  },
+  "next_gate": [
+    "rejoin latest main and preserve PR #1234 cognition store plus PR #1240 packet-v2 context binding",
+    "implement executable pipeline_cognitive_fabric_prepare using exact MiniUnifiedDB causal-turn/boot binding and ZERO_WORKSPACE_CAPSULE -> ZERO_INFERENCE_PACKET/v2",
+    "implement executable pipeline_cognitive_fabric_finalize after inference without minting state/effect authority",
+    "keep deterministic pipeline_gate/pipeline_commit as the only canonical validation/CAS write path",
+    "run exact-source focused and adjacent regressions in an actually-started authorized isolated executor",
+    "then advance bundled ~0.8B/J-Space/GWT/Claude runtime evidence and HCU KVM4-equivalent capacity evidence"
+  ],
+  "hcu_parallel": {
+    "source_change": "NO_DUPLICATE_DELTA",
+    "runtime_capacity_credit": 0,
+    "reason": "HCU source/package work already has dedicated current lanes; exact KVM4-equivalent resource/scheduler evidence remains blocked on authorized isolated execution."
+  },
+  "safety": {
+    "free_only": true,
+    "together_used": false,
+    "paid_execution_or_training": false,
+    "provider_secret_lookup": false,
+    "provider_network_inference": false,
+    "vps_self_hosted_production_testing": false
+  },
+  "claim_class": "SOURCE_CONTRACT_DELTA_PLUS_TEST_OBLIGATIONS_NO_RUNTIME_PASS"
+}

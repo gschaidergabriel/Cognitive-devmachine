@@ -1,0 +1,85 @@
+{
+  "schema": "GO_CLAUDE_ADAPTER_BOUNDARY_RECEIPTS_EVIDENCE/v1",
+  "trigger": "go",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main_sha": "3c1de71010b15311881d70e9a96bba141775ca9f",
+  "branch": "go/claude-adapter-boundary-binder-v1",
+  "parallel_fusion": {
+    "merged_pr": 1092,
+    "merge_sha": "3c1de71010b15311881d70e9a96bba141775ca9f",
+    "observed_delta": "split the monolithic Claude adapter boundary test into TOOLLESS/EPHEMERAL/STRUCTURED_OUTPUT/ENV_ISOLATION pytest nodes and bind test-local HOME plus shell sentinel",
+    "duplication_decision": "retain only the downstream machine-readable cross-receipt binding validator; do not create a second adapter/test split"
+  },
+  "frontier": {
+    "historical_generation": 276,
+    "frozen_suite_state": "1486 green / 1 red",
+    "persistent_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
+    "classification": "HISTORICAL_REPLICATED_BOUNDARY_RED; SOURCE_TEST_SPLIT_MERGED; EXACT_RUNTIME_RECHECK_PENDING"
+  },
+  "delta": {
+    "contract": "the artefact/blogpost_entity/runtime/CLAUDE_ADAPTER_BOUNDARY_RECEIPTS_V1.md",
+    "validator": "the artefact/blogpost_entity/runtime/validate_claude_adapter_boundary_receipts_v1.py",
+    "tests": "the artefact/blogpost_entity/runtime/test_validate_claude_adapter_boundary_receipts_v1.py",
+    "subreceipts": [
+      "TOOLLESS_RECEIPT/v1",
+      "EPHEMERAL_RECEIPT/v1",
+      "STRUCTURED_OUTPUT_RECEIPT/v1",
+      "ENV_ISOLATION_RECEIPT/v1"
+    ],
+    "shared_binding_law": "all four materialized subreceipts must bind identical full source/tree/dirty state, run id, suite, Ubuntu executor, Claude binary/version, adapter source/version, HOME, environment allowlist/digest and tool/MCP config",
+    "new_information_beyond_pr_1092": "independent pytest nodes are not by themselves proof that four exported observations came from one exact immutable run boundary; validator rejects cross-receipt provenance drift"
+  },
+  "exact_blob_component_evidence": {
+    "environment": {
+      "os": "Linux",
+      "kernel": "6.18.35",
+      "arch": "x86_64",
+      "python": "3.13.5",
+      "scope": "isolated local component execution; not AgentZero/Claude product runtime"
+    },
+    "validator_git_blob": "7134d3eeede7d6d121fd696a4bcb3e930209adca",
+    "validator_sha256": "dd00506913c5b8171807f399fa54575ffee0bfbd10d0e3cb48b200dd3c4d334e",
+    "tests_git_blob": "b541912c4cb9c3cc0425acfa6f25dcc8734cd42c",
+    "tests_sha256": "3b715d78126b32ced87b8d82f47181d2617cb1d050e8b0651547618aace3ddd6",
+    "py_compile": "PASS",
+    "unit_tests": {
+      "passed": 9,
+      "failed": 0,
+      "cases": [
+        "clean four-receipt bundle",
+        "cross-receipt source/tree drift",
+        "tool admission",
+        "session reuse",
+        "unstructured output acceptance",
+        "ambient secret visibility",
+        "child environment outside allowlist",
+        "placeholder source identity",
+        "binding digest tamper"
+      ]
+    }
+  },
+  "unusual_experiment": {
+    "status": "NOT_EXECUTED",
+    "reason": "no immutable shared macrocycle lease/id surface was available to this organ; deterministic regressions do not consume the unusual-experiment slot"
+  },
+  "execution_policy": {
+    "free_only_preserved": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "training": false
+  },
+  "credit": {
+    "receipt_validator_mechanism": "EXACT_BLOB_COMPONENT_SUPPORTED",
+    "claude_adapter_source_test_split": "MERGED_PR_1092_SOURCE_ONLY",
+    "claude_adapter_runtime_fix": "ZERO",
+    "claude_runtime": "ZERO",
+    "bundled_08b_runtime": "ZERO",
+    "jspace_runtime": "ZERO",
+    "whole_gwt": "ZERO",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_gate": "On the next intentional exact Ubuntu start, instrument the four merged #1092 pytest nodes to emit all four subreceipts under one immutable run binding, validate the bundle, then rerun the full suite. Grant defect credit only to a failing invariant and runtime repair credit only after exact source/tree/dirty/executor/Claude/adapter/environment binding."
+}

@@ -23,6 +23,7 @@ D4 = "4" * 64
 D5 = "5" * 64
 D6 = "6" * 64
 D7 = "7" * 64
+D8 = "8" * 64
 
 
 def valid_manifest():
@@ -30,7 +31,7 @@ def valid_manifest():
         "schema": "mini-entity-bundled-cognition-manifest/v1",
         "engine_id": "bundled-qwen35-08b",
         "model_family": "Qwen3.5-0.8B",
-        "checkpoint_digest": D0,
+        "checkpoint_digest": D8,
         "tokenizer_digest": D1,
         "quantization_runtime_identity": "gguf-q4_k_m+llama.cpp:test-fixture",
         "runtime_digest": D7,
@@ -104,7 +105,7 @@ def valid_receipt(manifest, raw):
         "gwt": {
             "workspace_policy_sha256": D6,
             "calibration_sha256": manifest["workspace_calibration_digest"],
-            "slot_count": 3,
+            "slot_count": None,
             "calibration_status": "UNMEASURED_SOURCE_ONLY",
         },
         "zero_grf": {"zero_identity_sha256": D6, "grf_sha256": D6, "projection_policy_sha256": D6},
@@ -252,6 +253,29 @@ class BootBindingValidatorTests(unittest.TestCase):
         cp = run_validator(receipt=r)
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("BOOT_RECEIPT_CANNOT_GRANT_WHOLE_GWT_CREDIT", cp.stdout)
+
+    def test_placeholder_digest_fails_closed(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["bundled_core"]["runtime_sha256"] = D0
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("PLACEHOLDER_SHA64:runtime_sha256", cp.stdout)
+
+    def test_unmeasured_gwt_cannot_bind_slot_count(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["gwt"]["slot_count"] = 3
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("UNMEASURED_GWT_SLOT_COUNT_MUST_BE_NULL", cp.stdout)
+
+    def test_measured_gwt_requires_positive_slot_count(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw)
+        r["gwt"]["calibration_status"] = "MEASURED_EXACT_BUNDLE"
+        r["gwt"]["slot_count"] = None
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("INVALID_INT:slot_count", cp.stdout)
+        r["gwt"]["slot_count"] = 3
+        cp = run_validator(receipt=r)
+        self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
 
 
 if __name__ == "__main__":

@@ -6,7 +6,8 @@ The canonical Clay source has already moved to a DB-resident profile plus generi
 must be explicit and must never cause the canonical Clay contract to be rolled backward.
 
 Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
-unwired handler names do not count as runtime support.
+unwired handler names do not count as runtime support. Canonical Clay call-order admission
+likewise scans executable `phase("...")` / `effect("...")` calls rather than raw text.
 """
 from __future__ import annotations
 
@@ -19,6 +20,7 @@ from typing import Any
 
 REQUIRED_EFFECTS = {
     "pipeline_profile_read": "_pipeline_profile_read",
+    "pipeline_cognitive_fabric_admit": "_pipeline_cognitive_fabric_admit",
     "inference_generate": "_inference_generate",
 }
 LEGACY_EFFECTS = {"profile_load", "provider_chat_json"}
@@ -45,6 +47,70 @@ def _attribute_name(node: ast.AST) -> str | None:
     if isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name) and node.value.id == "self":
         return node.attr
     return None
+
+
+def clay_literal_effect_order(source: str) -> list[str]:
+    """Return executable literal first-argument calls to phase/effect, ignoring comments/strings."""
+    out: list[str] = []
+    i = 0
+    n = len(source)
+    while i < n:
+        if source.startswith("//", i):
+            end = source.find("\n", i + 2)
+            i = n if end < 0 else end + 1
+            continue
+        ch = source[i]
+        if ch == '"':
+            i += 1
+            while i < n:
+                if source[i] == "\\":
+                    i += 2
+                    continue
+                if source[i] == '"':
+                    i += 1
+                    break
+                i += 1
+            continue
+        if ch.isalpha() or ch == "_":
+            start = i
+            i += 1
+            while i < n and (source[i].isalnum() or source[i] == "_"):
+                i += 1
+            ident = source[start:i]
+            if ident not in {"phase", "effect"}:
+                continue
+            j = i
+            while j < n and source[j].isspace():
+                j += 1
+            if j >= n or source[j] != "(":
+                continue
+            j += 1
+            while j < n and source[j].isspace():
+                j += 1
+            if j >= n or source[j] != '"':
+                continue
+            k = j + 1
+            escaped = False
+            while k < n:
+                if escaped:
+                    escaped = False
+                elif source[k] == "\\":
+                    escaped = True
+                elif source[k] == '"':
+                    break
+                k += 1
+            if k >= n:
+                continue
+            try:
+                value = json.loads(source[j : k + 1])
+            except json.JSONDecodeError:
+                continue
+            if isinstance(value, str):
+                out.append(value)
+            i = k + 1
+            continue
+        i += 1
+    return out
 
 
 def runtime_effect_contract(runtime: str) -> dict[str, Any]:
@@ -173,13 +239,26 @@ def main() -> int:
     if signature:
         run_args = [item.strip().split(":", 1)[0].strip() for item in signature.group(1).split(",") if item.strip()]
 
+    effect_order = clay_literal_effect_order(clay)
+    try:
+        prompt_idx = effect_order.index("pipeline_build_prompt")
+        fabric_idx = effect_order.index("pipeline_cognitive_fabric_admit")
+        inference_idx = effect_order.index("inference_generate")
+    except ValueError:
+        prompt_idx = fabric_idx = inference_idx = -1
+
     clay_contract = {
         "run_args": run_args,
         "three_argument_runtime_boundary": run_args == ["entity_db", "source_db", "secret_file"],
-        "db_resident_profile_effect": 'effect("pipeline_profile_read"' in clay,
-        "generic_inference_effect": 'effect("inference_generate"' in clay,
-        "old_profile_load_absent": 'effect("profile_load"' not in clay,
-        "old_provider_chat_absent": 'effect("provider_chat_json"' not in clay,
+        "effect_order": effect_order,
+        "db_resident_profile_effect": "pipeline_profile_read" in effect_order,
+        "cognitive_fabric_admit_effect": effect_order.count("pipeline_cognitive_fabric_admit") == 1,
+        "cognitive_fabric_between_prompt_and_inference": (
+            prompt_idx >= 0 and fabric_idx > prompt_idx and inference_idx > fabric_idx
+        ),
+        "generic_inference_effect": "inference_generate" in effect_order,
+        "old_profile_load_absent": "profile_load" not in effect_order,
+        "old_provider_chat_absent": "provider_chat_json" not in effect_order,
     }
 
     runtime_contract = runtime_effect_contract(runtime)
@@ -192,6 +271,8 @@ def main() -> int:
         [
             clay_contract["three_argument_runtime_boundary"],
             clay_contract["db_resident_profile_effect"],
+            clay_contract["cognitive_fabric_admit_effect"],
+            clay_contract["cognitive_fabric_between_prompt_and_inference"],
             clay_contract["generic_inference_effect"],
             clay_contract["old_profile_load_absent"],
             clay_contract["old_provider_chat_absent"],
@@ -210,13 +291,13 @@ def main() -> int:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v2",
+        "schema": "clay-structured-contract-sync/v3",
         "canonical_clay": clay_contract,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay DB-resident profile + inference_generate semantics are forward authority; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
+        "policy": "Canonical Clay DB-resident profile -> single Cognitive Fabric admission -> inference_generate semantics are forward authority; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
         "errors": errors,
         "pass": not errors,
     }

@@ -1,0 +1,53 @@
+{
+  "schema": "GO_CLAUDE_PINNED_SAFE_MODE_BOUNDARY/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": {
+    "base_main_sha": "b391a0dec94f7de2408e45f4f8940ef7e748891b",
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false
+  },
+  "observed": {
+    "source_lock": "the artefact/SOURCE_LOCK.json",
+    "pinned_claude_code_version": "2.1.233",
+    "pinned_linux_x64_sha256": "23eec49e0453a3a7b9d933228cb09639fc0bcd962039258d8e4cde72fa5b8741",
+    "upstream_exact_tag": "anthropics/claude-code@v2.1.233",
+    "upstream_changelog_fact": "--safe-mode and CLAUDE_CODE_SAFE_MODE were added in 2.1.169 to disable Claude customizations including CLAUDE.md, plugins, skills, hooks and MCP servers.",
+    "current_main_before_delta": "b391a0dec94f7de2408e45f4f8940ef7e748891b",
+    "prior_side_memory_repair": "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 and CLAUDE_CODE_DISABLE_CLAUDE_MDS=1 already merged on main; HOME remains intentionally preserved for subscription/OAuth."
+  },
+  "delta": {
+    "adapter_path": "the artefact/clayverse/adapters.py",
+    "adapter_blob_after": "df19765f3a6adf4292b26c53e4cf2c6fddf9855c",
+    "change": "prepend --safe-mode to every ClaudeCodeInference reasoning invocation",
+    "focused_test": "the artefact/tests/test_claude_safe_mode_boundary.py",
+    "purpose": "defense-in-depth against Claude-side customization surfaces without replacing the existing tool-less, strict-MCP, no-session and side-memory fences"
+  },
+  "grf": {
+    "R0_OBSERVE": "Pinned Claude Code 2.1.233 postdates the upstream 2.1.169 introduction of --safe-mode; current adapter did not pass the flag.",
+    "R1_INFER": "The pinned runtime can admit safe-mode without relying on a newer unbound Claude version.",
+    "R2_GENERATE": ["add --safe-mode", "leave current explicit tool/session/memory fences intact"],
+    "R3_COUNTER": "Safe-mode does not establish invocation-specific HOME creation/removal and therefore cannot resolve the current ephemerality receipt contradiction.",
+    "R4_DISCRIMINATE": "Focused fake-child regression checks exact argv/environment shape; live Claude/Ubuntu remains a separate exact runtime gate.",
+    "R5_EMERGENT": "Customization authority and credential-state isolation are separate boundaries; hardening the first must not be misreported as solving the second.",
+    "R6_VERIFY": "SOURCE_CONTRACT_BOUND; EXACT_LIVE_CLAUDE_RUNTIME_UNOBSERVED"
+  },
+  "credit": {
+    "source_mechanism": "CANDIDATE",
+    "claude_adapter_live_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "coordination": {
+    "unusual_experiment": "NOT_CLAIMED_NO_SHARED_MACROCYCLE_ID",
+    "overlap": "Current main had already merged side-memory authority repairs; no open safe-mode adapter PR was found before this branch write."
+  },
+  "next_gate": "Execute focused and adjacent adapter regressions on exact branch bytes, then run the pinned 2.1.233 Claude binary in an actually-started authorized isolated Ubuntu runtime and bind all four canonical adapter boundary receipts. HOME ephemerality remains unresolved until measured or the receipt schema is reconciled."
+}

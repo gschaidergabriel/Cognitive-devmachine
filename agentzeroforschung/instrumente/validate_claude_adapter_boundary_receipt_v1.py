@@ -7,6 +7,13 @@ from pathlib import Path
 
 SCHEMA = "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1"
 BOUNDARIES = ("tool_less", "ephemeral", "structured_output", "env_isolation")
+CANONICAL_ENV_ALLOWLIST = frozenset({
+    "PATH", "HOME", "LANG", "LC_ALL", "TMPDIR",
+    "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS",
+    "HTTP_PROXY", "HTTPS_PROXY",
+    "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
+    "DISABLE_AUTOUPDATER", "CLAUDE_CODE_SKIP_PROMPT_HISTORY",
+})
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
 
@@ -90,6 +97,7 @@ def boundary_violations(name, b):
         need(isinstance(observed, list) and all(isinstance(x, str) for x in observed), "observed_child_env_keys invalid")
         need(len(allowed) == len(set(allowed)), "allowed_env_keys duplicate")
         need(len(observed) == len(set(observed)), "observed_child_env_keys duplicate")
+        need(set(allowed).issubset(CANONICAL_ENV_ALLOWLIST), "allowed_env_keys exceed canonical Claude child policy")
         need(isinstance(b.get("forbidden_key_count"), int) and not isinstance(b.get("forbidden_key_count"), bool) and b["forbidden_key_count"] >= 0, "forbidden_key_count invalid")
         need(isinstance(b.get("secret_value_leak_count"), int) and not isinstance(b.get("secret_value_leak_count"), bool) and b["secret_value_leak_count"] >= 0, "secret_value_leak_count invalid")
         need(is_nonplaceholder_hex(b.get("environment_shape_sha256"), SHA256), "environment shape digest invalid")

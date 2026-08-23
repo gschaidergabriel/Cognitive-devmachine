@@ -8,6 +8,7 @@ PROTOTYPE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3"
 TRANSITION_SCHEMA = "JSPACE_GWT_TRANSITION_TRACE/v1"
 TRAINING_SCHEMA = "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1"
 VECTOR_ABI = "JSPACE_VECTOR_CONTROL_ABI/v1"
+CREDIT_LABELS = frozenset({"UNKNOWN", "POSITIVE", "NEGATIVE", "NEUTRAL"})
 
 
 class JSpaceDatasetAdmissionError(ValueError):
@@ -79,6 +80,49 @@ def _same(values: Mapping[str, Any], field: str) -> Any:
         elif value != unique[0]:
             raise JSpaceDatasetAdmissionError(f"{field}:MISMATCH:{label}")
     return unique[0] if unique else None
+
+
+def _verify_outcome_binding(
+    receipt: Any,
+    *,
+    training_sha: str,
+    transition_sha: str,
+    generation: int,
+    causal: Mapping[str, str],
+    cell_id: str,
+    role: str,
+    credit: str,
+) -> None:
+    """Require an admitted credited outcome to bind the exact causal training family.
+
+    Registry membership alone is not enough: an outcome from another Entry/route/GRID10
+    episode must never be transplantable into this row as reward. This gate validates the
+    minimum causal binding only; it does not mint outcome truth or replace the upstream
+    authority that admitted the receipt.
+    """
+    receipt = _mapping(receipt, "admitted_outcome_receipt")
+    if _text(receipt.get("status"), "admitted_outcome_receipt.status").upper() != "VERIFIED":
+        raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_VERIFIED")
+    if _text(receipt.get("credit_label"), "admitted_outcome_receipt.credit_label").upper() != credit:
+        raise JSpaceDatasetAdmissionError("OUTCOME_CREDIT_LABEL_MISMATCH")
+    if _sha256(receipt.get("training_trace_sha256"), "admitted_outcome_receipt.training_trace_sha256") != training_sha:
+        raise JSpaceDatasetAdmissionError("OUTCOME_TRAINING_TRACE_MISMATCH")
+    if _sha256(receipt.get("transition_trace_sha256"), "admitted_outcome_receipt.transition_trace_sha256") != transition_sha:
+        raise JSpaceDatasetAdmissionError("OUTCOME_TRANSITION_TRACE_MISMATCH")
+    if _generation(receipt.get("generation"), "admitted_outcome_receipt.generation") != generation:
+        raise JSpaceDatasetAdmissionError("OUTCOME_GENERATION_MISMATCH")
+    for field in (
+        "entry_event_sha256",
+        "entry_admission_sha256",
+        "route_decision_sha256",
+        "grid_plan_sha256",
+    ):
+        if _sha256(receipt.get(field), f"admitted_outcome_receipt.{field}") != causal[field]:
+            raise JSpaceDatasetAdmissionError(f"OUTCOME_CAUSAL_BINDING_MISMATCH:{field}")
+    if _text(receipt.get("cell_id"), "admitted_outcome_receipt.cell_id") != cell_id:
+        raise JSpaceDatasetAdmissionError("OUTCOME_CELL_MISMATCH")
+    if _text(receipt.get("role"), "admitted_outcome_receipt.role") != role:
+        raise JSpaceDatasetAdmissionError("OUTCOME_ROLE_MISMATCH")
 
 
 def admit_for_training_dataset(
@@ -179,12 +223,26 @@ def admit_for_training_dataset(
         raise JSpaceDatasetAdmissionError("TRANSITION_VECTOR_ABI_UNSUPPORTED")
 
     credit = _text(training_trace.get("credit_label"), "training_trace.credit_label").upper()
+    if credit not in CREDIT_LABELS:
+        raise JSpaceDatasetAdmissionError("CREDIT_LABEL_UNSUPPORTED")
     outcome = training_trace.get("outcome_receipt_sha256")
     if outcome is not None:
         outcome = _sha256(outcome, "training_trace.outcome_receipt_sha256")
-        admitted_outcome_receipts = _mapping(admitted_outcome_receipts, "admitted_outcome_receipts")
-        if outcome not in admitted_outcome_receipts:
+        outcome_registry = _mapping(admitted_outcome_receipts, "admitted_outcome_receipts")
+        receipt = outcome_registry.get(outcome)
+        if receipt is None:
             raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_ADMITTED")
+        if credit != "UNKNOWN":
+            _verify_outcome_binding(
+                receipt,
+                training_sha=training_sha,
+                transition_sha=transition_sha,
+                generation=generation,
+                causal=causal,
+                cell_id=cell_id,
+                role=role,
+                credit=credit,
+            )
     elif credit != "UNKNOWN":
         raise JSpaceDatasetAdmissionError("NONUNKNOWN_CREDIT_REQUIRES_ADMITTED_OUTCOME_RECEIPT")
 

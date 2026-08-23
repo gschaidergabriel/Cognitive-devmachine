@@ -11,6 +11,12 @@ InferenceReceipt/v3 identifies the route-level model-lane set, not one output-pr
 lane. Therefore v3 can prove an output-to-cell relation only for the causally unambiguous
 single-model-lane GRID10 case. Multi-lane v3 evidence fails closed until the canonical
 single inference producer grows an explicit output-producing lane/cell identity.
+
+InferenceReceipt/v3 also accepts ``model_call_id`` from its caller. That field is opaque
+correlation metadata, not independent output-producing-cell authority. This binder must
+therefore never manufacture cell proof by parsing or constraining a caller-controlled
+``model_call_id``; exact GRID10 plan identity plus the single-lane/single-model-cell fence
+is the admitted v3 proof boundary.
 """
 from __future__ import annotations
 
@@ -221,11 +227,6 @@ def bind_training_trace_to_inference(
     if model_cell.function != f"MODEL:{role}":
         raise JSpaceInferenceBindingError("GRID10_MODEL_CELL_DOES_NOT_BIND_TRACE_ROLE")
 
-    model_call_id = _text(inference_receipt.model_call_id, "inference_receipt.model_call_id")
-    expected_model_call_id = f"grid10:{grid_plan.plan_sha256}:{cell_id}:{role}"
-    if model_call_id != expected_model_call_id:
-        raise JSpaceInferenceBindingError("INFERENCE_MODEL_CALL_ID_DOES_NOT_BIND_GRID10_CELL_ROLE")
-
     material = {
         "schema": SCHEMA,
         "canonicalization_schema": CANONICALIZATION_SCHEMA,
@@ -251,7 +252,7 @@ def bind_training_trace_to_inference(
         "engine_load_lease_sha256": _sha256(inference_receipt.engine_load_lease_sha256, "inference_receipt.engine_load_lease_sha256"),
         "engine_load_consumption_receipt_sha256": _sha256(inference_receipt.engine_load_consumption_receipt_sha256, "inference_receipt.engine_load_consumption_receipt_sha256"),
         "engine_load_loader_id": _text(inference_receipt.engine_load_loader_id, "inference_receipt.engine_load_loader_id"),
-        "model_call_id": model_call_id,
+        "model_call_id": _text(inference_receipt.model_call_id, "inference_receipt.model_call_id"),
         "output_ref": _text(inference_receipt.output_ref, "inference_receipt.output_ref"),
         "output_sha256": _sha256(inference_receipt.output_sha256, "inference_receipt.output_sha256"),
         "output_size": _nonnegative_int(inference_receipt.output_size, "inference_receipt.output_size"),

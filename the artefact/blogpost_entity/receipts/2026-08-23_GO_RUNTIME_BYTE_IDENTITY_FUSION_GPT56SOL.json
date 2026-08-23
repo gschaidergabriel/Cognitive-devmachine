@@ -1,0 +1,93 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": {
+    "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+    "fusion_base_main": "3c1de71010b15311881d70e9a96bba141775ca9f",
+    "tested_branch_commit": "bcdaf20f1bbf2d3c9564557a324f70cfaf7b9b1e",
+    "pull_request": 1097,
+    "supersedes_source_delta_pr": 1085,
+    "preserves_merged_hardening_pr": 1087
+  },
+  "coordination": {
+    "macrocycle_id": null,
+    "unusual_experiment": {
+      "count_local": 0,
+      "id": null,
+      "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID"
+    },
+    "classification": "DETERMINISTIC_CURRENT_MAIN_FUSION_AND_EXACT_BLOB_REGRESSION",
+    "free_only_preserved": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "training": false,
+    "money_spent_usd": 0
+  },
+  "delta": {
+    "runtime_digest_identity_bound": true,
+    "boot_runtime_digest_required": true,
+    "boot_runtime_bytes_must_match_manifest": true,
+    "placeholder_digest_guard_preserved": true,
+    "unmeasured_gwt_slot_null_guard_preserved": true,
+    "measured_gwt_positive_slot_guard_preserved": true,
+    "canonical_validator_path_count": 1
+  },
+  "exact_git_blobs": {
+    "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py": "0b62ed04e4c33c491ca5ca14deded5cb4a5a30aa",
+    "the artefact/blogpost_entity/mini_cognition/test_bundled_cognition_manifest_v1.py": "21f2e0ff9181326af7d8f23e0fead9e50316e8d8",
+    "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py": "e0e075b320b57783ef6e9e86f872d94860629689",
+    "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py": "e088b8ce828b6c316d6a843d901a548051757bd2"
+  },
+  "isolated_execution": {
+    "environment": {
+      "surface": "OpenAI isolated container",
+      "os": "Debian GNU/Linux 13",
+      "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+      "python": "Python 3.13.5",
+      "python_binary_sha256": "e59d0124ff06c248546876e01fcfb1ea3cda63534949f94a9372bfcfe3bfc3f5",
+      "git": "git version 2.47.3"
+    },
+    "byte_identity_method": "GitHub-returned exact blob content reconstructed in isolated container; git hash-object matched every PR blob SHA before test credit",
+    "manifest_suite": {
+      "command": "cd /tmp/clay1097/mini_cognition && python3 -m py_compile bundled_cognition_manifest_v1.py test_bundled_cognition_manifest_v1.py && python3 -m unittest -v test_bundled_cognition_manifest_v1.py",
+      "result": "PASS",
+      "tests": 11,
+      "failures": 0
+    },
+    "boot_binding_suite": {
+      "command": "cd /tmp/clay1097/jspace_gwt && python3 -m py_compile validate_jspace_gwt_boot_binding_v1.py test_validate_jspace_gwt_boot_binding_v1.py ../mini_cognition/bundled_cognition_manifest_v1.py && python3 -m unittest -v test_validate_jspace_gwt_boot_binding_v1.py",
+      "result": "PASS",
+      "tests": 20,
+      "failures": 0
+    },
+    "component_total": {
+      "tests": 31,
+      "failures": 0,
+      "result": "PASS"
+    }
+  },
+  "github_actions": {
+    "head": "bcdaf20f1bbf2d3c9564557a324f70cfaf7b9b1e",
+    "mini_cognition_run": 32615179955,
+    "mini_cognition_job": 97134622387,
+    "observed_job_state": "completed/failure",
+    "visible_steps": null,
+    "classification": "EXECUTION_ADMISSION_OR_RUNNER_FAILURE_BEFORE_VISIBLE_STEPS_NOT_TEST_FAILURE",
+    "other_pr_workflows_observed": "completed/failure before visible steps"
+  },
+  "evidence_class": "EXACT_GIT_BLOB_ISOLATED_COMPONENT_REGRESSION",
+  "credits": {
+    "bundled_08b_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_gwt": 0,
+    "claude_adapter_runtime": 0,
+    "whole_product": 0
+  },
+  "interpretation": "The exact source bytes for the fused runtime-digest identity fence pass their deterministic component regressions. This supports the source mechanism only. It does not show that real checkpoint/tokenizer/runtime/J-Space/lens/workspace bytes exist, boot together, calibrate correctly, meet resource targets, or satisfy whole-product acceptance.",
+  "next_gate": "On the next admitted exact bundled Ubuntu/runtime execution, measure and bind the real runtime byte SHA-256 alongside checkpoint/tokenizer/J-Space/lens/workspace identities, then validate the externally materialized source lock and boot receipt without granting truth from geometry or model output."
+}

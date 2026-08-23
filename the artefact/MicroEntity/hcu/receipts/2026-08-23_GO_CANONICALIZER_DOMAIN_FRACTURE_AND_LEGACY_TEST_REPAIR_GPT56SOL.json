@@ -1,0 +1,83 @@
+{
+  "schema": "ENTITYOS_HCU_GO_CANONICALIZER_DOMAIN_FRACTURE_AND_LEGACY_TEST_REPAIR/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "current_main_observed_before_receipt": "5911c9218bc2566c39d8f2d49ce80cb7e570017a",
+  "retained_lane": "PR_1263",
+  "canonicalization_authority": {
+    "selected": "RFC8785_JCS_IJSON/v1",
+    "selection_source": "canonical main adjudication 5d99c6c37fc9dbecaa557f6091de06f703e9a412 plus append-only correction 847cce80b5c52f7d9ceb47c43acc3c184ad2c87d",
+    "typed_binary_candidate": "RESEARCH_PROVENANCE_ONLY_NOT_SELECTED",
+    "cbor_candidate": "LEGACY_CURRENT_ENTRY_SOURCE_DEPENDENCY_PENDING_VERSIONED_MIGRATION",
+    "python_sort_keys_json": "LEGACY_ROUTER_RECEIPT_IDENTITY_PENDING_VERSIONED_MIGRATION"
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "name": "CANONICALIZER_DOMAIN_FRACTURE_MATRIX",
+    "upstream_macrocycle_id_received": false,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "hypothesis": "A single candidate can cover the current Entry plus HCU identity value domain without a layer-specific exception path.",
+    "counterhypothesis": "The current deterministic CBOR Entry encoder can serve unchanged as the single end-to-end canonicalization authority.",
+    "intervention": "Exercise Entry event/admission, router-policy, engine, route, Unicode and numeric-shaped identity values against the current candidate domains; separately compare the JCS binary64 number path with V8 JSON.stringify over a deterministic finite-binary64 corpus.",
+    "observed": {
+      "cbor": "REJECTED_ROUTER_POLICY_FLOAT_DOMAIN",
+      "jcs": "COVERED_EXERCISED_CURRENT_DOMAIN",
+      "custom_typed_binary": "COVERED_EXERCISED_CURRENT_DOMAIN_BUT_NOT_SELECTED_AUTHORITY",
+      "jcs_v8_binary64_vectors": 10006,
+      "jcs_v8_mismatches": 0
+    },
+    "scope": "BOUNDED_DIAGNOSTIC_RECONSTRUCTED_SOURCE_COMPONENT_ONLY",
+    "exact_branch_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "source_repair": {
+    "commit": "70ca18398ff544b6641595d87dac2c1618ee77a8",
+    "file": "the artefact/MicroEntity/hcu/test_typed_entry_canonical_v1.py",
+    "previous_blob": "1cc073260bd0bcea0832e0c1087a151cf5b47600",
+    "new_blob": "a336bcbf92501f88a7faae206d58e29f829a8087",
+    "finding": "legacy CBOR regression test had drifted behind current Entry and router contracts: it omitted mandatory externally admitted compute budget, assumed distinct transport admissions produced identical HCU event projections, and omitted the required independent admission-to-event registry at route rebind.",
+    "repair": [
+      "supply explicit admitted_budget authority to admit_entry",
+      "preserve stable causal event identity while expecting distinct concrete admission and ingress projections",
+      "supply independent admission_sha256 to event_sha256 bindings to each route_event call",
+      "assert route decision identity stays stable while concrete entry admission identity remains distinct"
+    ],
+    "authority_change": false,
+    "legacy_cbor_promoted": false
+  },
+  "execution_boundary": {
+    "authorized_vercel_sandbox_exec_available_to_this_organ": false,
+    "current_main_records_vercel_execution_admission_blocker": "5911c9218bc2566c39d8f2d49ce80cb7e570017a",
+    "exact_current_combined_entry_route_inference_grid10_execution": false,
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "runtime_credit_change": 0
+  },
+  "coordination": {
+    "second_canonicalizer_lane_created": false,
+    "second_router_created": false,
+    "second_state_truth_effect_or_recovery_authority_created": false,
+    "main_advanced_concurrently": true,
+    "note": "Source repair is intentionally limited to a stale legacy regression contract while parallel organs advance the selected JCS migration and GRID10 binding."
+  },
+  "next_gate": [
+    "finish new-version RFC8785_JCS_IJSON/v1 identity wiring across Entry event/admission, router policy, EngineAdmission, route and inference receipt without rewriting historical hashes",
+    "reject mixed unknown and downgrade canonicalization schemas fail-closed",
+    "run exact-current combined Entry route inference canonicalizer GRID10 regressions on an actually-started authorized isolated executor",
+    "bind exact local checkpoint tokenizer runtime build bytes and measured capacity receipt before HCU runtime promotion"
+  ],
+  "security": {
+    "together_used": false,
+    "paid_fallback_used": false,
+    "final_model_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "acceptance": "IN_PROGRESS_ZERO_RUNTIME_CREDIT"
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_GO_ORDINARY_RFC8785_V8_DIFFERENTIAL_REPLICATION",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "parent_macrocycle_receipt": "research_entity/trigger_runs/go/20260823T2357p0700-gpt56sol-entityos-hcu-authority-fusion/RUN_RECEIPT.json",
+  "persistent_research_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "main_observed_before_write": "ae2e9e4b0a97b3f93fb63a24cdb1d90cb27d7683",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_observed_before_write": "365d103943064e320902827bda559e52fe39efed",
+  "authority": {
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "implementation_git_blob": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+    "focused_test_git_blob": "6e2127b6b35b1f151acded1a6db2565b4734b27d",
+    "alternatives": "RESEARCH_OR_LEGACY_SCOPE_ONLY_NOT_ACTIVE_AUTHORITY",
+    "runtime_credit": 0
+  },
+  "purpose": "Independently stress the selected exact JCS component against V8 JSON.stringify semantics over a much broader nested finite-binary64/Unicode corpus than the stored focused vectors, without creating another canonicalizer or claiming end-to-end runtime evidence.",
+  "execution": {
+    "surface": "isolated ChatGPT Linux tool container",
+    "python": "3.13.5",
+    "node": "v22.16.0",
+    "deterministic_seed": "0x878520260823",
+    "harness_sha256": "d1e8b738628705448d92222ddee33f21a5565bddb4ac484a4979a01064ab2efa",
+    "vectors": 5000,
+    "accepted_exact_matches": 5000,
+    "python_fail_closed_nonexact_ints": 0,
+    "mismatches": 0,
+    "status": "PASS"
+  },
+  "reference_method": {
+    "node_execution": "single batched Node process",
+    "object_order": "JavaScript UTF-16 property ordering before JSON.stringify",
+    "serialization_reference": "V8 JSON.stringify for admitted finite JSON values",
+    "generated_domains": [
+      "finite IEEE-754 binary64 numbers including boundary-scale magnitudes",
+      "Unicode strings including astral characters, combining characters, controls and U+2028/U+2029",
+      "nested arrays",
+      "nested string-keyed objects",
+      "null and booleans"
+    ]
+  },
+  "interpretation": {
+    "supported": "For the exact selected implementation blob at this bounded component scope, all 5000 generated admitted values serialized to exactly the same UTF-8 JCS bytes as the independent V8 reference path.",
+    "not_supported": [
+      "end-to-end Typed Entry to HCU route to inference identity equivalence",
+      "mixed/unknown/downgrade canonicalization rejection across every consumer",
+      "physical engine loader attestation",
+      "GRID10 integrated exact-current execution",
+      "real local model execution",
+      "EntityOS/HCU whole runtime acceptance"
+    ]
+  },
+  "coordination": {
+    "product_source_write": "NO_CHANGE",
+    "reason": "The exact JCS component and focused 6/6 replication were already durably recorded; this receipt records only the nonduplicate 5000-vector independent differential evidence.",
+    "duplicate_canonicalizer_created": false,
+    "new_state_route_effect_or_recovery_authority_created": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "This is ordinary independent differential replication. The parent 23:57 go macrocycle already records its single unusual experiment."
+  },
+  "current_frontier_observed_after_replication": "Typed Entry has advanced to RFC8785/JCS v2 identities and the retained router is concurrently migrating to JCS; downstream inference-receipt hashing and exact combined Entry+route+engine-load-lease+inference+GRID10 execution remain acceptance gates.",
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "credit": {
+    "research_write": "COMMITTED_RECEIPT",
+    "component_evidence": "5000_OF_5000_EXACT_V8_DIFFERENTIAL_MATCHES",
+    "runtime_credit_change": 0,
+    "whole_product_pass": false,
+    "acceptance": "IN_PROGRESS"
+  }
+}

@@ -50,13 +50,48 @@ class ClayVerseEngine:
         return 1.0 if isinstance(outcome, dict) and outcome.get("ok") is True else 0.0
 
     @staticmethod
-    def _inference_provenance(decision, reasoning_generation, episode_id):
+    def _workspace_binding(ws, *, session_id, turn_id, generation):
+        """Bind the deterministic workspace episode into this inference call.
+
+        This is a causal/audit envelope only. It deliberately grants no J-Space,
+        factual-truth, or effect-authority credit before exact latent calibration.
+        """
+        binding = {
+            "schema": "COGNITIVE_WORKSPACE_BINDING/v1",
+            "binding_class": "DETERMINISTIC_WORKSPACE_EPISODE",
+            "jspace_status": "JSPACE_UNAVAILABLE",
+            "jspace_reason": "EXACT_LATENT_WORKSPACE_NOT_BOUND",
+            "session_id": str(session_id),
+            "observation_turn_id": str(turn_id),
+            "episode_id": str(ws["episode_id"]),
+            "generation": int(generation),
+            "salience": float(ws["salience"]),
+            "alternatives": ws["alternatives"],
+            "truth_authority": False,
+            "effect_authority": False,
+        }
+        raw = json.dumps(
+            binding,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        return binding, hashlib.sha256(raw).hexdigest()
+
+    @staticmethod
+    def _inference_provenance(
+        decision,
+        reasoning_generation,
+        episode_id,
+        workspace_binding_sha256,
+    ):
         """Build non-secret provenance for the pre-effect model-response re-ingest."""
         provenance = {
             "source": "inference-adapter",
             "phase": "pre-effect-reingest",
             "reasoning_generation": int(reasoning_generation),
             "workspace_episode_id": episode_id,
+            "workspace_binding_sha256": workspace_binding_sha256,
         }
         receipt = decision.get("inference_receipt") if isinstance(decision, dict) else None
         if isinstance(receipt, dict):
@@ -91,6 +126,13 @@ class ClayVerseEngine:
         world["runtime_capabilities"] = list(self.effects.available_capabilities())
         ws = self.workspace.open(sid, tid, content, resources)
         reasoning_generation = self.db.session_generation(sid)
+        workspace_binding, workspace_binding_sha256 = self._workspace_binding(
+            ws,
+            session_id=sid,
+            turn_id=tid,
+            generation=reasoning_generation,
+        )
+        world["cognitive_workspace_binding"] = workspace_binding
         decision = self.inference.reason(world, content)
         self.workspace.select(ws["episode_id"], decision.get("selection", "respond"))
 
@@ -107,7 +149,10 @@ class ClayVerseEngine:
             decision.get("text", ""),
             resources=resources,
             provenance=self._inference_provenance(
-                decision, reasoning_generation, ws["episode_id"]
+                decision,
+                reasoning_generation,
+                ws["episode_id"],
+                workspace_binding_sha256,
             ),
         )
 
@@ -181,6 +226,7 @@ class ClayVerseEngine:
             "assistant_turn_id": aid,
             "effect_notice_turn_id": effect_notice_turn_id,
             "workspace": ws,
+            "workspace_binding_sha256": workspace_binding_sha256,
             "decision": decision,
             "effect_id": effect_id,
             "outcome": outcome,

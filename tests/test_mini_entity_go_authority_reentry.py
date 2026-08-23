@@ -43,11 +43,33 @@ class TestMiniEntityGoAuthorityReentry(unittest.TestCase):
                 "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md\n"
                 "MINI_ENTITY_PIPELINE_ALL_IN_ONE\n"
                 "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT\n"
+                "Hyperposition Computational Unit\n"
+                "the artefact/MicroEntity/hcu/\n"
+                "the artefact/MicroEntity/MICROENTITY_CURRENT.zip\n"
                 "[/CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]\n",
                 encoding="utf-8",
             )
             self.mod.PROTOCOL = poison
             with self.assertRaisesRegex(RuntimeError, "WORKER_PROTOCOL_MARKER_MISSING"):
+                self.mod.preflight()
+        self.mod.PROTOCOL = old
+
+    def test_worker_protocol_omitting_hcu_parallel_law_fails_closed(self):
+        old = self.mod.PROTOCOL
+        with tempfile.TemporaryDirectory() as td:
+            poison = Path(td) / "protocol.md"
+            poison.write_text(
+                "[MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]\n"
+                "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md\n"
+                "MINI_ENTITY_PIPELINE_ALL_IN_ONE\n"
+                "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT\n"
+                "the artefact/MicroEntity/hcu/\n"
+                "the artefact/MicroEntity/MICROENTITY_CURRENT.zip\n"
+                "[/MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]\n",
+                encoding="utf-8",
+            )
+            self.mod.PROTOCOL = poison
+            with self.assertRaisesRegex(RuntimeError, "WORKER_PROTOCOL_HCU_WORKSTREAM_MISSING"):
                 self.mod.preflight()
         self.mod.PROTOCOL = old
 
@@ -58,7 +80,10 @@ class TestMiniEntityGoAuthorityReentry(unittest.TestCase):
             poison.write_text(
                 "PROGRAM=CLAYVERSE_SINGLE_CONTAINER\n"
                 "STAGE=MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT\n"
-                "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md\n",
+                "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md\n"
+                "Hyperposition Computational Unit\n"
+                "the artefact/MicroEntity/hcu/\n"
+                "the artefact/MicroEntity/MICROENTITY_CURRENT.zip\n",
                 encoding="utf-8",
             )
             self.mod.ROOT_CLAUDE = poison
@@ -73,11 +98,30 @@ class TestMiniEntityGoAuthorityReentry(unittest.TestCase):
             poison.write_text(
                 "PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE\n"
                 "STAGE=MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT\n"
-                "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n",
+                "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n"
+                "Hyperposition Computational Unit\n"
+                "the artefact/MicroEntity/hcu/\n"
+                "the artefact/MicroEntity/MICROENTITY_CURRENT.zip\n",
                 encoding="utf-8",
             )
             self.mod.ROOT_CLAUDE = poison
             with self.assertRaisesRegex(RuntimeError, "ROOT_CLAUDE_OWNER_MISMATCH"):
+                self.mod.preflight()
+        self.mod.ROOT_CLAUDE = old
+
+    def test_root_omitting_hcu_package_law_fails_closed(self):
+        old = self.mod.ROOT_CLAUDE
+        with tempfile.TemporaryDirectory() as td:
+            poison = Path(td) / "CLAUDE.md"
+            poison.write_text(
+                "PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE\n"
+                "STAGE=MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT\n"
+                "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md\n"
+                "Hyperposition Computational Unit\n",
+                encoding="utf-8",
+            )
+            self.mod.ROOT_CLAUDE = poison
+            with self.assertRaisesRegex(RuntimeError, "ROOT_CLAUDE_HCU_PACKAGE_PATH_MISSING"):
                 self.mod.preflight()
         self.mod.ROOT_CLAUDE = old
 

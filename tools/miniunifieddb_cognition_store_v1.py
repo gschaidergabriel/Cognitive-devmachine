@@ -103,25 +103,34 @@ def _current_generation(db: sqlite3.Connection) -> int:
 
 
 def install_schema(db: sqlite3.Connection) -> None:
-    """Install tables only after canonical entity_state already exists."""
+    """Install cognition tables inside the caller transaction without implicit commit."""
     _current_generation(db)
-    db.executescript(
-        """
-        PRAGMA foreign_keys=ON;
-        CREATE TABLE IF NOT EXISTS mini_cognition_objects(
+    # SQLite foreign-key enforcement is connection-local and cannot be switched on safely
+    # after a transaction has started. The canonical runtime must enable it on connection
+    # open; fail closed here rather than silently installing an enforcement-disabled schema.
+    fk_row = db.execute("PRAGMA foreign_keys").fetchone()
+    _need(fk_row is not None and int(fk_row[0]) == 1, "FOREIGN_KEYS_REQUIRED_BEFORE_TRANSACTION")
+    # Never use executescript(): Python's sqlite3 wrapper commits a pending transaction
+    # before executing it, which would split the runtime's BEGIN IMMEDIATE bootstrap.
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS mini_cognition_objects(
           object_kind TEXT NOT NULL, object_version TEXT NOT NULL, object_digest TEXT NOT NULL,
           digest_basis TEXT NOT NULL CHECK(digest_basis IN ('CANONICAL_JSON','EXTERNAL_BYTES')),
           payload_json TEXT NOT NULL, payload_digest TEXT NOT NULL,
           provenance_refs_json TEXT NOT NULL, created_at TEXT NOT NULL,
-          PRIMARY KEY(object_kind,object_version,object_digest));
-        CREATE TABLE IF NOT EXISTS mini_cognition_object_admissions(
+          PRIMARY KEY(object_kind,object_version,object_digest))"""
+    )
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS mini_cognition_object_admissions(
           object_kind TEXT NOT NULL, object_version TEXT NOT NULL, object_digest TEXT NOT NULL,
           admitted_generation INTEGER NOT NULL, admission_receipt_digest TEXT NOT NULL,
           admitted_at TEXT NOT NULL,
           PRIMARY KEY(object_kind,object_version,object_digest,admitted_generation),
           FOREIGN KEY(object_kind,object_version,object_digest)
-            REFERENCES mini_cognition_objects(object_kind,object_version,object_digest));
-        CREATE TABLE IF NOT EXISTS mini_cognition_boot_bindings(
+            REFERENCES mini_cognition_objects(object_kind,object_version,object_digest))"""
+    )
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS mini_cognition_boot_bindings(
           binding_digest TEXT PRIMARY KEY, schema TEXT NOT NULL, entity_generation INTEGER NOT NULL,
           zero_identity_digest TEXT NOT NULL, grf_digest TEXT NOT NULL,
           hyperposition_digest TEXT NOT NULL, bundled_manifest_digest TEXT NOT NULL,
@@ -129,8 +138,10 @@ def install_schema(db: sqlite3.Connection) -> None:
           jspace_profile_digest TEXT NOT NULL, jacobian_lens_digest TEXT NOT NULL,
           workspace_calibration_digest TEXT NOT NULL, boot_source_lock_digest TEXT NOT NULL,
           policy_authority_digest TEXT NOT NULL, provenance_refs_json TEXT NOT NULL,
-          created_at TEXT NOT NULL, UNIQUE(entity_generation));
-        CREATE TABLE IF NOT EXISTS mini_cognition_turn_bindings(
+          created_at TEXT NOT NULL, UNIQUE(entity_generation))"""
+    )
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS mini_cognition_turn_bindings(
           entity_generation INTEGER NOT NULL, causal_turn_id TEXT NOT NULL,
           binding_digest TEXT NOT NULL, schema TEXT NOT NULL, boot_binding_digest TEXT NOT NULL,
           task_sha256 TEXT NOT NULL, workspace_digest TEXT NOT NULL,
@@ -138,8 +149,7 @@ def install_schema(db: sqlite3.Connection) -> None:
           provenance_refs_json TEXT NOT NULL, required_zero_mode TEXT NOT NULL,
           created_at TEXT NOT NULL, PRIMARY KEY(entity_generation,causal_turn_id),
           UNIQUE(binding_digest),
-          FOREIGN KEY(boot_binding_digest) REFERENCES mini_cognition_boot_bindings(binding_digest));
-        """
+          FOREIGN KEY(boot_binding_digest) REFERENCES mini_cognition_boot_bindings(binding_digest))"""
     )
 
 

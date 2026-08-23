@@ -21,6 +21,7 @@ Newest explicit owner/supervisor authority and exact executable evidence outrank
 - `XCU` = transitional/research alias for HCU only.
 - `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*` = historical implementation/provenance surfaces where exact migration has not occurred.
 - ClayVerse and Frank = historical donor/provenance only unless explicitly re-admitted.
+- The persistent research entity remains **Clay**; temporary workers are organs, not entities.
 
 Do not bulk-rename hashes, receipts, schemas, ABI/API names, persisted state or compatibility paths when that would break reproducibility. Useful mechanisms are fused into EntityOS/HCU rather than promoted as competing systems.
 
@@ -88,47 +89,15 @@ Material architecture work uses:
 
 `OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
 
-Prefer primitives reusable across multiple HCU modes.
-
-## HCU modes
-
-### `GRID10`
-
-Cheap 10 logical-cell shared-worker baseline for scheduler tests, lesions, small parallel reasoning and exact compute-matched baselines.
-
-### `COGSIM10`
-
-Request-scoped cognition simulation. A temporary 10-cell topology explores hypotheses/counterhypotheses/plans/critics and emits only candidates. No simulated action has direct real effects.
-
-### `WM_TEST`
-
-Bounded experimental world/transition-model mode. Predictions are noncanonical and must be calibrated against later observations.
-
-### `NESTED_SIM`
-
-Selective high-cost mode:
-
-`observed state -> bounded world model -> virtual computer -> simulated AI cognition -> proposed action -> hypothesis/counterhypothesis comparison -> calibrated candidate -> EffectGate`
-
-It is not the default and does not create a second reality authority.
-
-### `SCALEOUT`
-
-Scale logical contexts over shared physical workers. Benchmark ladder:
-
-`10 -> 32 -> 64 -> 128 -> 256 -> ~600 logical contexts`
-
-The ~600 H100-class target is a **research hypothesis only**. Logical module count is never reported as the same thing as resident model count or simultaneous decode streams.
-
 ## Authority law
 
 - canonical durable state/evidence remains outside model-generated cognition and simulation;
 - current compatibility MiniUnifiedDB/UnifiedDB surfaces may remain during exact migration;
 - world-model state is projection/candidate state;
-- HCU/J-Space/workspace outputs cannot mint canonical truth;
+- HCU/J-Space/workspace/model outputs cannot mint canonical truth;
 - Hyperposition preserves unresolved alternatives; majority vote is not truth;
 - `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`;
-- stale generation/provenance uncertainty fail closed;
+- stale generation/provenance uncertainty fails closed;
 - unknown external effect outcome remains UNKNOWN until verified;
 - EffectGate + EffectJournal remain the only real/state-changing effect authority;
 - no second persistent identity, truth store, effect path or recovery ledger is admitted.
@@ -137,7 +106,7 @@ The ~600 H100-class target is a **research hypothesis only**. Logical module cou
 
 All new data paths converge toward one typed ingress binding before cognition:
 
-- immutable ingress/causal identity;
+- replay-stable causal event identity distinct from concrete admission identity;
 - generation;
 - source/provenance;
 - modality/type/schema;
@@ -149,7 +118,7 @@ All new data paths converge toward one typed ingress binding before cognition:
 
 Capability claims in an untrusted Entry packet are **not authority**. Entry admission compares them against existing deterministic permission/capability authority; the packet may narrow but may never self-grant or broaden it.
 
-Replay-stable causal event identity and concrete transport/admission identity remain distinct. HCU route events and downstream inference receipts must re-enter through this fabric so event identity, generation, engine identity and causal provenance remain bound instead of becoming a side ledger.
+HCU route events and downstream inference receipts must re-enter through this fabric so event identity, generation, engine identity and causal provenance remain bound instead of becoming a side ledger.
 
 ## HCU reactive cognition
 
@@ -169,24 +138,40 @@ The connected Vercel Hobby surface is admitted only for **bounded, fixed, source
 
 VPS, self-hosted and production-host testing remain forbidden. Together general inference and Together training/preflight/key lookup/job creation remain forbidden in this supervisor mode. The historical owner paid one-shot directive is quarantined provenance only and grants zero execution/training credit here.
 
-## Current executable evidence
+## Current executable evidence — 2026-08-24
 
 Observed bounded evidence now includes:
 
 - protected-preview Vercel `Sandbox.create + runCommand` infrastructure callability with cleanup/secret fences;
-- exact-source RFC8785/JCS Entry canonicalization component runtime PASS in an admitted FREE Sandbox;
+- exact-source **manifest-bound v2 RFC8785/JCS Entry canonicalization component runtime PASS**;
 - exact-current J-Space dataset family-split component runtime PASS (6/6, reproduced within the same evidence family).
 
-These are **component-only** credits. Whole EntityOS/HCU runtime credit remains `0`; J-Space model runtime credit remains `0`; training credit remains `0`; whole-product PASS remains false.
+Latest Entry v2 receipt:
 
-The Entry capsule proved current component bytes but exposed a stale embedded `source_commit` label. Exact-head manifest identity therefore still requires rebinding and rerun before the capsule can be extended as a full-spine acceptance carrier.
+`research_entity/continuity/receipts/2026-08-24_GO_HCU_ENTRY_V2_MANIFEST_BOUND_SANDBOX_GPT56SOL.json`
+
+Latest Entry v2 observed binding:
+
+- capsule `HCU_ENTRY_CANONICALIZATION_CAPSULE/v2`;
+- PR1263 commit `c032c73800152c0bf6a211d6976ca5c11a3d1896`;
+- source manifest SHA-256 `9941bbebe44d5a840779b9ac4a69188cbd7d3699d45fe22b4160a342ad8f4a1c`;
+- Sandbox `fuchsia-clever-caribou-T8PcjT`;
+- **7/7 PASS**;
+- secret fence **PASS**;
+- exit code `0`;
+- cleanup **PASS**;
+- result-log SHA-256 `2f3263d15ef397be77144194264ffdf72b78195a58c4d2dfa51fe51c8c835b24`.
+
+This closes the earlier stale embedded `source_commit` label blocker for the declared Entry canonicalization capsule. Credit is **component-only**. Whole EntityOS/HCU runtime credit remains `0`; J-Space model runtime credit remains `0`; training credit remains `0`; whole-product PASS remains false.
+
+Same-family reruns are reproducibility evidence, not independent replication.
 
 ## Current frontier
 
 1. keep `BOOTSTRAP_MINIMAL`, `PROGRAM_STATE`, root `CLAUDE.md`, artifact manifest/README, footer and the compatibility-named authority validator on one supervisor-8.62 authority epoch;
-2. repair the fixed HCU Entry capsule metadata to bind exact current Research `main` + exact current retained PR1263 head while preserving exact source-blob/digest verification;
-3. keep PR1263 as the single retained HCU donor lane and PR810 as the single retained Sandbox execution-controller lane;
-4. extend the same fixed hash-verified executor closure toward `Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure`;
+2. keep PR1263 as the single retained HCU donor lane and PR810 as the single retained Sandbox execution-controller lane;
+3. rebase/fuse the strongest PR1263 mechanisms onto exact current `main` before promotion, rather than creating a second HCU path;
+4. extend the same fixed hash-verified executor closure toward **Typed Entry admission -> route -> verified physical engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure**;
 5. bind a real **zero-cost local** ~0.8B checkpoint/tokenizer/runtime/build through deterministic engine admission and verified loader-consumption evidence before model-runtime credit;
 6. emit real J-Space/GWT traces under `JSPACE_VECTOR_CONTROL_ABI/v1` with lesion/shuffle/rescue controls before any training promotion;
 7. derive leak-resistant family-level train/validation/holdout data only through admitted causal identities and deterministic hard negatives;
@@ -194,10 +179,10 @@ The Entry capsule proved current component bytes but exposed a stale embedded `s
 
 ## Latest `go` README re-entry — 2026-08-24
 
-`README=UPDATED_SUPERVISOR_8_62_AND_EXACT_COMPONENT_RUNTIME`.
+`README=UPDATED_ENTRY_V2_MANIFEST_BOUND_RUNTIME_AND_SUPERVISOR_8_62`.
 
-This cycle resolved a stale authority-epoch split: Bootstrap and Program State were concurrently rejoined to supervisor 8.62; the artifact manifest was rejoined to 8.62 with explicit bounded Hobby Sandbox conditions and component-only runtime credit; root organ routing was changed from stale supervisor 8.52/two-track `go` to supervisor 8.62/three-track `go` plus exact macrocycle-ID bookkeeping.
+This macrocycle first exposed a current-facing authority split across supervisor 8.62, stale 8.61 documents/state, and a compatibility validator still hard-coded to 8.52. Parallel and current-organ fusion rejoined Bootstrap, Program State, manifest, footer and README to the 8.62 epoch without overwriting newer concurrent work; stale writes were rejected with 409 and refreshed before re-entry.
 
-A fixed protected-preview HCU Entry capsule executed successfully in an admitted Vercel Hobby Sandbox: Python 3.13, seven RFC8785/JCS regression tests PASS, source SHA-256/Git-blob checks PASS, secret fence PASS, exit code 0 and cleanup PASS. Current PR1263 source/test blobs remained byte-identical to the executed capsule, but the endpoint's embedded donor `source_commit` label was stale. Therefore the measured mechanism is retained as **exact-source component evidence**, not exact-head full-spine evidence.
+The fixed protected-preview Entry capsule was then rerun after metadata rebinding. The v2 run directly returned manifest-bound source identity, 7/7 RFC8785/JCS tests PASS, secret fence PASS, exit 0, cleanup PASS and a bound result-log digest. The earlier stale capsule-label blocker is therefore closed for this component.
 
-No whole HCU/EntityOS, J-Space-model or training promotion follows from this README update.
+No whole HCU/EntityOS, J-Space-model or training promotion follows from this README update. The compatibility-named authority validator remains a separate source-level repair target and must not be weakened merely to make an authority check green.

@@ -1,0 +1,71 @@
+{
+  "schema": "ENTITYOS_HCU_GO_SUPERVISOR_863_REENTRY/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "all_worker_directive": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md",
+    "atomic_lease_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+    "mode": "FREE_ONLY",
+    "main_observed_before_write": "0c84e96c798dd3cea2a56fb3f10a03d9cb7266bc"
+  },
+  "midcycle_authority_reentry": {
+    "prior_receipt": "research_entity/continuity/receipts/2026-08-24_GO_ENTRY_GENERATION_IDENTITY_RECOVERY_FENCE_GPT56SOL.json",
+    "prior_receipt_commit": "a6b9132c77d06de83d31c04ff26d090e1164627c",
+    "prior_authority_at_write": "SUPERVISOR_STEERING_8_62.json",
+    "new_authority_landed_after_prior_receipt": true,
+    "new_supervisor": "8.63",
+    "history_policy": "PRESERVE_PRIOR_OBSERVATION; DO_NOT_REWRITE; DO_NOT_TREAT_8_62_LOCAL_COUNTER_AS_A_VALID_8_63_ATOMIC_LEASE"
+  },
+  "unusual_experiment_coordination": {
+    "upstream_shared_immutable_request_or_macrocycle_id_available_to_this_worker": false,
+    "available_exact_user_message_timestamp_metadata": "2026-08-24T01:37+07:00",
+    "timestamp_precision": "MINUTE_ONLY",
+    "timestamp_fallback_valid_under_atomic_protocol": false,
+    "canonical_trigger_key": null,
+    "atomic_claim_created": false,
+    "classification_under_current_8_63_authority": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_after_8_63_reentry": 0,
+    "note": "The source hardening and attempted protected-preview execution recorded under the earlier 8.62 receipt remain historical bounded observations. They are not retroactively promoted into an 8.63 lease claim or global one-experiment proof."
+  },
+  "preserved_source_delta": {
+    "retained_hcu_pr": 1263,
+    "source_path": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+    "source_git_blob_sha": "7dc71dbb3388a5c2df280cdd4080c6ea3f5f6278",
+    "test_path": "the artefact/MicroEntity/hcu/test_entry_generation_replay_identity_v1.py",
+    "test_git_blob_sha": "6270a093ebcd79cfeeadab6f6ae49e2fc800032b",
+    "mechanism": "immutable event identity no longer includes entity_generation; generation remains in concrete admission identity and stale-generation admission remains fail-closed",
+    "runtime_status_of_new_generation_regression": "NOT_OBSERVED",
+    "runtime_credit_change": 0
+  },
+  "execution_reentry": {
+    "retained_executor_pr": 810,
+    "fixed_capsule_endpoint_commit": "79e941beb5e015580136c067f2da9334884d024d",
+    "deployment_id": "dpl_621XxcUfCHAU2dADdS8gpa3WCSuG",
+    "deployment_ready_observed": true,
+    "function_or_sandbox_start_observed": false,
+    "blocker": "VERCEL_DEPLOYMENT_PROTECTION_AUTH_FLOW_302_THEN_PROTECTION_BYPASS_429",
+    "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAIL",
+    "repeat_auth_probe_now": false
+  },
+  "credit": {
+    "source_hardening_preserved": true,
+    "new_exact_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_SOURCE_HARDENING_PLUS_FIXED_CAPSULE_STAGING; EXECUTION_BLOCKED_BEFORE_SANDBOX",
+    "track_b": "ADVANCED_BY_EVENT_VS_ADMISSION_GENERATION_IDENTITY_REPAIR; RUNTIME REGRESSION STILL REQUIRED",
+    "track_c": "NO_DIRECT_MODEL_OR_TRAINING DELTA; CAUSAL IDENTITY PREREQUISITE STRENGTHENED ONLY"
+  },
+  "next_exact_gate": "Under 8.63, perform only ordinary deterministic/exact-source work until a canonical atomic lease exists for any new unusual intervention. For executable convergence, refresh exact main/PR1263/PR810 identities and run the fixed generation regression or the higher-value combined HCU/J-Space capsule only when the admitted Vercel protection/access boundary is callable without billing/quota/plan ambiguity."
+}

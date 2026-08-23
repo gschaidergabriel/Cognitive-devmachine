@@ -1,0 +1,85 @@
+{
+  "schema": "ENTITYOS_HCU_GO_POST_REPAIR_ENTRY_CAPSULE_REPLICATION_GRIDPLAN_AUTHORITY/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "main_observed_before_receipt_write": "ca05046e98c279f31dbdbaec92157c5cd85c8529",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_head_observed": "912746256999f4663bd6f3817e065d070a410b27"
+  },
+  "execution_replication": {
+    "classification": "SAME_FAMILY_REPRODUCIBILITY_AFTER_SOURCE_REBIND_NOT_INDEPENDENT_REPLICATION",
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "executor_pr": 810,
+    "executor_commit": "cc5a8c1bfdb471cf84e6c56be93fd9254ba63f47",
+    "deployment_id": "dpl_9b9McNRbpGVHxgLzhqyT3BDHci7E",
+    "route": "GET /api/hcu-entry-capsule",
+    "generic_command_input": false,
+    "capsule": "HCU_ENTRY_CANONICALIZATION_CAPSULE/v2",
+    "source_main_commit": "a477fd5743b10d908dfd838f454e552249699b7c",
+    "source_pr_commit": "912746256999f4663bd6f3817e065d070a410b27",
+    "source_manifest_sha256": "44bed7c4953935c0675f923ff424b3c8d352e01ea2b3105a346563217b3b2958",
+    "source_git_blobs": {
+      "entry_canonicalization_v1.py": "00d1d79cbb66a1956a278de4755cd8395e854199",
+      "test_entry_canonicalization_v1.py": "bc9262473f91dbd04ddaf647e667920664495f54"
+    },
+    "source_sha256": {
+      "entry_canonicalization_v1.py": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f",
+      "test_entry_canonicalization_v1.py": "b0b5f519c6c7b751d2ed388661bb617fc1a2ee73055faaab1208a47c6612891b"
+    },
+    "sandbox_id": "red-eventual-crane-gEKE8K",
+    "exit_code": 0,
+    "tests_run": 7,
+    "tests_passed": 7,
+    "secret_fence": "PASS",
+    "sandbox_cleanup": "PASS",
+    "cleanup_error": null,
+    "result_log_sha256": "d1085d6cd24b5a06f00488f9ac8ff2541ed4d5550c0ff118b0b527396cc820f7",
+    "credit": "EXACT_SHA_BOUND_HCU_SOURCE_COMPONENT_ONLY",
+    "whole_hcu_runtime_credit_change": 0,
+    "entityos_whole_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "causal_binding_adjudication": {
+    "observed_parallel_resolution": "PR1400 closed unmerged; PR1396 merged into retained PR1263; PR1401 retains the fusion adjudication.",
+    "selected_semantics": "PR1396 exact GridPlan binding plus fail-closed single-lane/single-model-cell HCU_INFERENCE_RECEIPT/v3 policy",
+    "rejected_semantics": "PR1400 caller-controlled deterministic model_call_id label is insufficient to prove the output-producing GRID10 cell",
+    "local_discriminator": {
+      "id": "SELF_DERIVED_MODEL_CALL_RELABEL",
+      "finding": "Two differently relabelled trace/receipt pairs can each satisfy a self-derived model_call_id equality when both sides derive identity from the same relabelled fields.",
+      "scope": "MECHANISM_LEVEL_STRUCTURAL_REPRODUCTION_ONLY",
+      "global_credit": "QUARANTINED_AS_DUPLICATE_OF_ALREADY_DURABLE_GO_0136_LABEL_LAUNDERING_FINDING",
+      "macrocycle_id": null,
+      "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID"
+    }
+  },
+  "new_architecture_seam": {
+    "status": "OPEN_SINGLE_AUTHORITY_REPAIR",
+    "file": "the artefact/MicroEntity/hcu/jspace_inference_binding_v1.py",
+    "finding": "The selected PR1396 repair contains its own _grid_plan_material/_validate_grid_plan reconstruction while grid10_scheduler_v1.py independently constructs the canonical GridPlan material used for plan_sha256.",
+    "risk": "Two copies of GRID10 plan serialization can drift under later schema evolution, creating a hidden second hash-validation authority and false accept/reject behavior.",
+    "recommended_minimal_delta": "Move/export one canonical GridPlan materialization plus plan-identity validator from grid10_scheduler_v1.py and make jspace_inference_binding_v1.py consume that single scheduler-owned authority. Keep multi-lane v3 fail-closed until the canonical inference producer carries output-producing cell/lane identity.",
+    "runtime_credit": 0
+  },
+  "experiment_accounting": {
+    "local_unusual_experiment_performed": 1,
+    "new_global_unusual_experiment_credit_claimed": 0,
+    "reason": "The local discriminator independently reproduced a finding already made durable by concurrent GO_0136; no second global unusual-experiment credit is claimed."
+  },
+  "free_only": {
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "vps_self_hosted_production_testing": "FORBIDDEN",
+    "secrets_requested_or_persisted": false
+  },
+  "next_exact_gate": "Extend the same fixed hash-bound single Vercel executor from Entry canonicalization into the minimum causal closure Typed Entry -> route -> verified engine admission/load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset, while first collapsing GRID10 plan serialization/validation to one scheduler-owned authority and preserving exact source/result/secret-fence/cleanup receipts."
+}

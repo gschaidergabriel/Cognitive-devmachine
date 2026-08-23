@@ -64,7 +64,7 @@
   },
   "runtime_credit": {
     "component_runtime_credit": [
-      "RFC8785_JCS_ENTRY_CANONICALIZATION_EXACT_SOURCE_COMPONENT_ONLY",
+      "RFC8785_JCS_ENTRY_CANONICALIZATION_MANIFEST_BOUND_V2_COMPONENT_ONLY",
       "JSPACE_DATASET_FAMILY_SPLIT_EXACT_CURRENT_COMPONENT_ONLY"
     ],
     "entityos_hcu_whole_runtime_credit": 0,
@@ -72,6 +72,17 @@
     "jspace_model_runtime_credit": 0,
     "training_credit": 0,
     "whole_product_pass": false
+  },
+  "latest_component_evidence": {
+    "receipt": "research_entity/continuity/receipts/2026-08-24_GO_HCU_ENTRY_V2_MANIFEST_BOUND_SANDBOX_GPT56SOL.json",
+    "capsule": "HCU_ENTRY_CANONICALIZATION_CAPSULE/v2",
+    "source_pr1263_commit": "c032c73800152c0bf6a211d6976ca5c11a3d1896",
+    "source_manifest_sha256": "9941bbebe44d5a840779b9ac4a69188cbd7d3699d45fe22b4160a342ad8f4a1c",
+    "result_log_sha256": "2f3263d15ef397be77144194264ffdf72b78195a58c4d2dfa51fe51c8c835b24",
+    "tests": "7_OF_7_PASS",
+    "secret_fence": "PASS",
+    "cleanup": "PASS",
+    "scope": "ENTRY_CANONICALIZATION_COMPONENT_ONLY"
   },
   "compatibility_names": {
     "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
@@ -87,8 +98,7 @@
   },
   "current_frontier": [
     "keep all current-facing authority surfaces aligned to EntityOS + HCU + SUPERVISOR_STEERING_8_62 FREE_ONLY without destructive provenance renames",
-    "repair the fixed HCU entry-capsule manifest/source_commit binding to exact current retained PR1263 identity before claiming exact-head capsule identity",
-    "extend the single fixed hash-verified executor/capsule authority toward Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure",
+    "extend the single fixed hash-verified executor/capsule authority beyond manifest-bound Entry canonicalization toward Typed Entry admission -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure",
     "rebase and fuse the strongest retained HCU/J-Space donor mechanisms onto exact current main without restoring superseded authority or duplicate paths",
     "finish replay-stable causal event identity versus transport/admission identity split in the Typed Entry Fabric",
     "wire Entry capability admission to the canonical deterministic capability authority",
@@ -96,7 +106,7 @@
     "bind the actual downstream inference receipt producer to event route engine serializer and loader-lease identity",
     "build and instrument the functional Global J-Space/GWT prototype with JSPACE_VECTOR_CONTROL_ABI/v1",
     "derive leak-resistant family-split training validation and holdout data from admitted J-Space/GWT traces plus deterministic hard negatives for zero-cost local experimentation",
-    "continue only FREE_ONLY local approximately-0.8B specialization after exact executable and real-trace gates; do not preflight or launch Together under supervisor 8.62",
+    "continue only FREE_ONLY local approximately-0.8B specialization after full executable and real-trace gates; do not preflight or launch Together under supervisor 8.62",
     "obtain exact authorized-isolated combined Entry HCU route inference GRID10 J-Space evidence before runtime promotion"
   ]
 }

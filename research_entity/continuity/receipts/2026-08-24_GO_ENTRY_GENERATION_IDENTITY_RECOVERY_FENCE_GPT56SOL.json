@@ -1,0 +1,96 @@
+{
+  "schema": "ENTITYOS_HCU_GO_ENTRY_GENERATION_IDENTITY_RECOVERY_FENCE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "bootstrap_schema": "8.62",
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "main_observed_immediately_before_write": "7cb3e7038dad29476079ca4b97b9a4df2b36485b",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN",
+    "execution_surface": "AUTHORIZED_ISOLATED_FREE_SANDBOX_ONLY; VERCEL_HOBBY_INCLUDED_TIER_ONLY_UNDER_FIXED_HASH_BOUND_SHORT_CAPSULE_RULES"
+  },
+  "problem": {
+    "class": "ENTRY_CAUSAL_IDENTITY_GENERATION_COUPLING",
+    "observed_source_mechanism": "The retained Typed Entry donor described event_sha256 as immutable/replay-stable causal event identity but included entity_generation in the event identity preimage.",
+    "counterexample": "The same immutable event re-admitted after restart under a new live entity generation would receive a different event_sha256 solely because the recovery fence changed.",
+    "architecture_conflict": "Current EntityOS/HCU architecture separates immutable causal event identity from transport/admission/control identity; generation is a live admission/control-plane fence."
+  },
+  "source_delta": {
+    "retained_hcu_pr": 1263,
+    "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "original_patch_commit": "e507375eecbfa40cd54a6e056d92b1bc15b3bd41",
+    "regression_commit": "8d5b46365cc271829397b61882b0e7a183d11ee5",
+    "current_pr_head_observed_before_receipt": "18be64b3d59b08fd460ccf4737a7bb368d2e2d60",
+    "source_path": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+    "source_git_blob_sha": "7dc71dbb3388a5c2df280cdd4080c6ea3f5f6278",
+    "test_path": "the artefact/MicroEntity/hcu/test_entry_generation_replay_identity_v1.py",
+    "test_git_blob_sha": "6270a093ebcd79cfeeadab6f6ae49e2fc800032b",
+    "source_blob_still_present_at_current_pr_head": true,
+    "changes": [
+      "ENTRY_EVENT_IDENTITY_SCHEMA advanced from v2 to v3",
+      "ENTRY_ADMISSION_IDENTITY_SCHEMA advanced from v2 to v3",
+      "entity_generation removed from immutable event identity preimage",
+      "entity_generation added to concrete admission identity preimage",
+      "stale generation admission check remains fail-closed",
+      "focused recovery-generation regression added"
+    ],
+    "claim_class": "SOURCE_HARDENING_AND_REGRESSION_OBLIGATION"
+  },
+  "unusual_experiment": {
+    "id": "ENTRY_EVENT_IDENTITY_GENERATION_ROLLOVER",
+    "local_intervention_count": 1,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "hypothesis": "If entity generation is only an admission/control fence, re-admitting byte/provenance-identical immutable event semantics in a later generation must preserve event_sha256 while changing admission_sha256.",
+    "counterhypothesis": "entity_generation is part of event ontology, so restart/recovery should create a distinct causal event identity even when the immutable event is a re-admission of the same occurrence.",
+    "discriminator": "generation 7 versus generation 8 re-admission with unchanged causal_id, observed_time, source/provenance and payload digest; ingress, received time and payload reference may differ as admission metadata.",
+    "expected_if_hypothesis": "event_sha256 equal; admission_sha256 different; stale generation rejected",
+    "expected_if_counterhypothesis": "event_sha256 different solely from generation rollover",
+    "runtime_execution_started": false,
+    "sandbox_started": false,
+    "runtime_result": "NOT_OBSERVED",
+    "reason": "The fixed protected-preview capsule deployment became READY, but authenticated fetch remained at Vercel deployment-protection 302 and a subsequent protection-bypass request returned 429 before the function/Sandbox could start."
+  },
+  "execution_capsule": {
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "executor_pr": 810,
+    "executor_branch": "clay/fusion-vcr-native-20260817",
+    "capsule_endpoint_commit": "79e941beb5e015580136c067f2da9334884d024d",
+    "capsule_endpoint_path": "mcp/vercel-sandbox-mcp/api/hcu-entry-generation-replay-capsule.js",
+    "capsule_endpoint_git_blob_at_current_executor_head": "004f8f4249e37a6705e1317ebaf24333afb696ad",
+    "deployment_id": "dpl_621XxcUfCHAU2dADdS8gpa3WCSuG",
+    "deployment_state_observed": "READY",
+    "route": "GET /api/hcu-entry-generation-replay-capsule",
+    "fixed_command_only": true,
+    "generic_command_input": false,
+    "source_fixture_blob_match": true,
+    "test_fixture_blob_match": true,
+    "execution_attempt_result": "BLOCKED_BEFORE_FUNCTION_AND_SANDBOX_START_BY_DEPLOYMENT_PROTECTION_AUTH_FLOW",
+    "http_observation": "302 SSO redirect; later protection-bypass creation returned 429 Too Many Requests",
+    "execution_credit": 0
+  },
+  "evidence_and_credit": {
+    "source_mechanism_supported": true,
+    "source_repair_committed": true,
+    "regression_source_committed": true,
+    "exact_new_regression_runtime_verified": false,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_FIXED_HASH_BOUND_CAPSULE_STAGING_AND_PRECISE_EXECUTION_ADMISSION_BLOCKER; NO_RUNTIME_PROMOTION",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_RECOVERY_STABLE_EVENT_IDENTITY_SOURCE_REPAIR_AND_REGRESSION",
+    "track_c_global_jspace_training_readiness": "NO_DIRECT_MODEL_OR_TRAINING_DELTA; STRENGTHENED_CAUSAL_IDENTITY_PREREQUISITE_ONLY"
+  },
+  "next_exact_gate": "Do not repeat protected-preview auth requests until the access boundary is available. Rebind or reuse the single fixed PR810 executor only after refreshing exact main/PR1263 identities; run the recovery-generation regression once, then continue toward the combined Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure. No whole-HCU/model/training credit before that evidence."
+}

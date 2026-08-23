@@ -1,26 +1,34 @@
 {
-  "schema_version": "8.62",
-  "latest_cycle": "go-20260824-entityos-hcu-entry-capsule-v2-manifest-bound",
+  "schema_version": "8.63",
+  "latest_cycle": "go-20260824-supervisor-863-atomic-lease-reentry",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "latest_repo_head_inspected_before_write": "a477fd5743b10d908dfd838f454e552249699b7c",
-  "material_finding": "The bounded Vercel Hobby included-tier protected-preview bridge executed HCU_ENTRY_CANONICALIZATION_CAPSULE/v2 with exact manifest binding: source PR1263 commit c032c73800152c0bf6a211d6976ca5c11a3d1896, manifest SHA-256 9941bbebe44d5a840779b9ac4a69188cbd7d3699d45fe22b4160a342ad8f4a1c, 7/7 tests PASS, secret fence PASS, cleanup PASS, exit 0, result-log SHA-256 2f3263d15ef397be77144194264ffdf72b78195a58c4d2dfa51fe51c8c835b24. The earlier stale source_commit-label blocker is closed for this component capsule. Credit remains Entry canonicalization component only; no whole HCU, J-Space model, training, EntityOS or canonical-semantics credit is created.",
+  "latest_repo_head_inspected_before_write": "0c84e96c798dd3cea2a56fb3f10a03d9cb7266bc",
+  "material_finding": "The manifest-bound HCU Entry canonicalization capsule remains a bounded component runtime PASS (7/7 tests, secret fence PASS, cleanup PASS, exit 0), while current supervisor authority has advanced to 8.63. Supervisor 8.63 makes unusual experiments fail closed unless a canonical atomic lease is acquired before intervention. A READY generation-replay capsule that would count ENTRY_EVENT_IDENTITY_GENERATION_ROLLOVER as a new unusual experiment therefore must not be invoked without that lease. No whole HCU, J-Space model, training, EntityOS or canonical-semantics credit is created by this coordination repair.",
   "current_frontier": {
     "retained_hcu_pr": 1263,
     "retained_hcu_pr_state": "OPEN_DRAFT_NOT_MERGED",
-    "retained_hcu_pr_head_observed": "c032c73800152c0bf6a211d6976ca5c11a3d1896",
+    "retained_execution_controller_pr": 810,
     "sandbox_execution_surface": "VERCEL_HOBBY_BOUNDED_INCLUDED_TIER_FREE_ADMITTED",
     "remaining_sandbox_quota_directly_observed": false,
     "entry_canonicalization_component_runtime": "MANIFEST_BOUND_V2_7_OF_7_PASS",
     "entry_capsule_manifest_binding": "VERIFIED_FOR_DECLARED_COMPONENT_BYTES",
-    "jspace_family_split_component_runtime": "EXACT_CURRENT_6_OF_6_PASS_TWICE",
-    "together_job_created": false,
+    "jspace_family_split_component_runtime": "EXACT_CURRENT_COMPONENT_PASS",
+    "jspace_output_grid10_binding": "SOURCE_MECHANISM_CANDIDATE_REQUIRES_EXACT_FREE_RUNTIME_EVIDENCE",
+    "generation_replay_unusual_experiment": "COORDINATION_BLOCKED_WITHOUT_CANONICAL_ATOMIC_LEASE",
     "entityos_whole_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
     "jspace_model_runtime_credit": 0,
     "training_credit": 0
+  },
+  "coordination": {
+    "macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
+    "atomic_lease_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+    "required_before_unusual_intervention": true,
+    "no_valid_shared_id_or_atomic_claim": "ZERO_NEW_UNUSUAL_EXPERIMENTS",
+    "ordinary_deterministic_regression_fusion_and_exact_source_acceptance_work": "ALLOWED"
   },
   "free_only": {
     "enabled": true,
@@ -29,34 +37,33 @@
     "paid_subscription_unknown_fail_closed": true,
     "admission_boundary": "BEFORE_SECRET_OR_KEY_LOOKUP_AND_BEFORE_NETWORK_IO",
     "vercel_hobby_execution": "ALLOWED_ONLY_WITHIN_INCLUDED_ENTITLEMENT_AND_FIXED_HASH_BOUND_CAPSULE_CONDITIONS",
-    "fail_closed_on_quota_billing_upgrade_or_charge_path": true,
-    "historical_or_owner_paid_authorization_execution_credit": 0
+    "fail_closed_on_quota_billing_upgrade_plan_mismatch_or_charge_path": true
   },
   "evidence_law": [
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
-    "GOODMAN_ANCESTRY_COLLAPSE_ACTIVE",
     "SOURCE_OR_COMPONENT_PASS_DOES_NOT_CREATE_WHOLE_RUNTIME_CREDIT",
     "MANIFEST_BOUND_COMPONENT_PASS_IS_SCOPED_TO_DECLARED_BYTES_AND_TESTS_ONLY",
-    "SAME_FAMILY_RERUN_IS_REPRODUCIBILITY_NOT_INDEPENDENT_REPLICATION",
-    "STALE_AUTHORITY_CAPSULES_REMAIN_QUARANTINED_NO_RETROACTIVE_REWRITE",
+    "NO_ID_UNUSUAL_EXPERIMENT_RECEIPTS_MUST_NOT_BE_GROUPED_POST_HOC",
+    "NO_UNUSUAL_INTERVENTION_WITHOUT_CANONICAL_ATOMIC_LEASE",
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW"
   ],
   "next_focus": [
-    "KEEP_PR1263_AS_SINGLE_DRAFT_HCU_DONOR_LANE_AND_FUSE_REBASE_TO_EXACT_CURRENT_FREE_ONLY_MAIN_BEFORE_PROMOTION",
-    "EXTEND_THE_SAME_FIXED_HASH_BOUND_SINGLE_EXECUTOR_AUTHORITY_TOWARD_TYPED_ENTRY_ADMISSION_ROUTE_VERIFIED_ENGINE_LOAD_INFERENCE_GRID10_JSPACE_GWT_ADMITTED_CAUSAL_DATASET_CLOSURE",
-    "BIND_RESEARCH_MAIN_SHA_TREE_PR1263_SHA_TREE_CAPSULE_DIGEST_EXECUTOR_RESULT_SECRET_FENCE_AND_CLEANUP_IN_EACH_IMMUTABLE_RECEIPT",
-    "REPAIR_REMAINING_CURRENT_FACING_861_OR_852_AUTHORITY_POINTERS_WITHOUT_CREATING_A_SECOND_AUTHORITY_PATH",
+    "KEEP_PR1263_AS_SINGLE_DRAFT_HCU_DONOR_LANE_AND_REFUSE_STALE_BRANCH_PROMOTION",
+    "KEEP_PR810_AS_SINGLE_BOUNDED_EXECUTION_CONTROLLER_LANE",
+    "EXTEND_ONE_FIXED_EXACT_SOURCE_FREE_SANDBOX_CAPSULE_TO_CURRENT_JSPACE_INFERENCE_BINDING_V2_PLUS_EXACT_GRID10_PLAN_CELL_CLOSURE",
+    "CONTINUE_TOWARD_TYPED_ENTRY_ROUTE_VERIFIED_ENGINE_LOAD_INFERENCE_GRID10_JSPACE_GWT_ADMITTED_CAUSAL_DATASET_CLOSURE",
+    "RESOLVE_OUTCOME_RECEIPT_CONTENT_KEY_IDENTITY_SEMANTICS_IN_THE_SINGLE_CANONICAL_DATASET_ADMISSION_PATH_AFTER_EXACT_CURRENT_REFUSION",
     "FAIL_CLOSED_BEFORE_EXECUTION_IF_QUOTA_BILLING_UPGRADE_PLAN_MISMATCH_OR_ANY_MONETARY_CHARGE_PATH_APPEARS",
-    "DO_NOT_PROMOTE_ENTITYOS_HCU_JSPACE_MODEL_OR_TRAINING_FROM_COMPONENT_PASS_OR_MODEL_CONSENSUS"
+    "DO_NOT_PREFLIGHT_OR_LAUNCH_TOGETHER_UNDER_CURRENT_FREE_ONLY_SUPERVISOR",
+    "DO_NOT_RUN_ANOTHER_UNUSUAL_EXPERIMENT_WITHOUT_A_SUCCESSFUL_CANONICAL_ATOMIC_LEASE"
   ],
   "promotion_state": {
+    "coordination_guard": "SUPERVISOR_8_63_ATOMIC_LEASE_ACTIVE",
     "entityos_whole_runtime_pass": false,
     "hcu_full_runtime_pass": false,
-    "provider_capability_change": "BOUNDED_FREE_SANDBOX_EXECUTION_SURFACE_AVAILABLE",
-    "component_runtime_credit": "JSPACE_FAMILY_SPLIT_PLUS_ENTRY_CANONICALIZATION_ONLY",
     "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
-  "latest_receipt": "research_entity/continuity/receipts/2026-08-24_GO_HCU_ENTRY_V2_MANIFEST_BOUND_SANDBOX_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+  "latest_runtime_receipt": "research_entity/continuity/receipts/2026-08-24_GO_HCU_ENTRY_V2_MANIFEST_BOUND_SANDBOX_GPT56SOL.json"
 }

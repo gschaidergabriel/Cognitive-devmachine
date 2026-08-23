@@ -76,6 +76,28 @@ def _assert_reference_uses_native_generation_authority(source: str) -> None:
         )
 
 
+def _assert_bootstrap_cannot_promote_legacy_generation_mirror(source: str) -> None:
+    """A compatibility projection may never write its counter back into canonical generation.
+
+    This guard is deliberately separate from the live read/commit checks above because a
+    refactor can move schema/migration logic behind `_ensure_schema()` while `_pipeline_init`
+    merely calls that helper. A legacy mirror is allowed to be written from canonical state,
+    but it may not be read as an input that can advance `entity_state.generation`.
+    """
+    tree = ast.parse(source)
+    ensure = _function(tree, "_ensure_schema")
+    if ensure is None:
+        return
+    ensure_body = _body(source, ensure)
+    assert "SELECT generation FROM eos_pipeline_state" not in ensure_body, (
+        "legacy eos_pipeline_state generation may not be read as bootstrap/migration authority"
+    )
+    assert not (
+        "eos_pipeline_state" in ensure_body
+        and "UPDATE entity_state SET generation" in ensure_body
+    ), "schema/bootstrap logic may not promote a legacy mirror into canonical generation"
+
+
 def test_native_miniunifieddb_is_the_bound_generation_and_cas_authority() -> None:
     native00 = NATIVE_PART00.read_text(encoding="utf-8")
     native01 = NATIVE_PART01.read_text(encoding="utf-8")
@@ -100,6 +122,7 @@ def test_future_current_reference_must_reuse_one_generation_authority() -> None:
     if _function(tree, "_pipeline_profile_read") is None:
         return
     _assert_reference_uses_native_generation_authority(source)
+    _assert_bootstrap_cannot_promote_legacy_generation_mirror(source)
 
 
 def test_reference_parity_cannot_turn_green_with_parallel_generation_authority() -> None:
@@ -110,3 +133,4 @@ def test_reference_parity_cannot_turn_green_with_parallel_generation_authority()
         return
     source = RUNTIME_PATH.read_text(encoding="utf-8")
     _assert_reference_uses_native_generation_authority(source)
+    _assert_bootstrap_cannot_promote_legacy_generation_mirror(source)

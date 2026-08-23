@@ -1,4 +1,3 @@
-import copy
 import sqlite3
 import unittest
 
@@ -69,7 +68,6 @@ class ControlPlaneCapabilityBindingTests(unittest.TestCase):
         self.gate = EffectGateFixture(self.db)
 
     def test_cross_session_same_rights_same_generation_do_not_alias(self):
-        """Unusual discriminator: equal capability sets must remain session-bound."""
         a = snapshot_capability_authority(
             self.db, self.gate, user_id="user:a", session_id="session:a"
         )
@@ -109,7 +107,7 @@ class ControlPlaneCapabilityBindingTests(unittest.TestCase):
                 admitted_budget=ADMITTED_BUDGET,
             )
 
-    def test_entry_cannot_self_grant_unavailable_effect_capability(self):
+    def test_entry_cannot_self_grant_effect_capability(self):
         view = snapshot_capability_authority(
             self.db, self.gate, user_id="user:a", session_id="session:a"
         )
@@ -127,7 +125,7 @@ class ControlPlaneCapabilityBindingTests(unittest.TestCase):
                 admitted_budget=ADMITTED_BUDGET,
             )
 
-    def test_effect_gate_capability_changes_binding_and_admitted_view(self):
+    def test_effect_gate_change_rebinds_context_but_never_grants_entry_effect_right(self):
         before = snapshot_capability_authority(
             self.db, self.gate, user_id="user:a", session_id="session:a"
         )
@@ -136,8 +134,9 @@ class ControlPlaneCapabilityBindingTests(unittest.TestCase):
             self.db, enabled_gate, user_id="user:a", session_id="session:a"
         )
         self.assertNotEqual(before.binding_sha256, after.binding_sha256)
-        self.assertNotIn("entityos.exec", before.admitted_capabilities)
-        self.assertIn("entityos.exec", after.admitted_capabilities)
+        self.assertEqual(before.admitted_capabilities, after.admitted_capabilities)
+        self.assertNotIn("entityos.exec", after.admitted_capabilities)
+        self.assertIn("entityos.exec", after.effect_capabilities)
 
     def test_effect_gate_must_share_canonical_db(self):
         other_db = CanonicalDBFixture()

@@ -39,6 +39,9 @@ class RecordingCompositor:
             db.execute("CREATE TABLE forbidden_write(x INTEGER)")
         except sqlite3.OperationalError:
             write_blocked = True
+        snapshot = kwargs["profile"].get("_runtime_profile_snapshot")
+        if not isinstance(snapshot, dict):
+            raise ValueError("PROFILE_SNAPSHOT_MISSING")
         self.calls.append((kwargs, write_blocked))
         return {
             "ok": True,
@@ -99,7 +102,7 @@ class BindingTests(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
-    def test_delegates_real_runtime_profile_snapshot_on_read_only_db(self):
+    def test_delegates_verified_runtime_profile_snapshot_on_read_only_db(self):
         compositor = RecordingCompositor()
         out = binding.admit_profile_runtime_payload(
             self.runtime, self.payload, compositor_module=compositor
@@ -108,8 +111,13 @@ class BindingTests(unittest.TestCase):
         kwargs, write_blocked = compositor.calls[0]
         self.assertTrue(write_blocked)
         self.assertEqual(kwargs["entity_generation"], 7)
-        self.assertEqual(kwargs["profile"], self.profile)
-        self.assertNotIn("_runtime_profile_snapshot", kwargs["profile"])
+        self.assertEqual(
+            kwargs["profile"]["_runtime_profile_snapshot"],
+            {"profile_id": "p1", "profile_hash": self.profile_hash},
+        )
+        persisted = dict(kwargs["profile"])
+        persisted.pop("_runtime_profile_snapshot")
+        self.assertEqual(persisted, self.profile)
         self.assertEqual(kwargs["origin"], binding.BINDING_VERSION)
 
     def test_rejects_profile_substitution_before_compositor(self):

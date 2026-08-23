@@ -1,0 +1,115 @@
+{
+  "schema": "ENTITYOS_HCU_GO_SUCCESSOR_FUSION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "compatibility_path": "the artefact/Xeno/",
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "successor_branch": "gpt56sol/entityos-hcu-entry-admission-grid10-fusion-20260823",
+    "successor_base_sha": "ca0076d54c64996bc028746f4ad9d084ede28676",
+    "latest_main_observed_before_receipt": "cd4ee9a8c556765390ac58b44a7c7c4775924632",
+    "main_delta_since_successor_base": "5 commits; no overlap with the four Entry/GRID10 implementation/test paths"
+  },
+  "fusion_lineage": {
+    "retained_hcu_route_engine_lane": "PR_1263",
+    "superseded_entry_grid_lane": "PR_1363",
+    "successor_role": "TYPED_ENTRY_ADMISSION_IDENTITY_PLUS_GRID10_ONLY",
+    "duplicate_route_authority_present": false,
+    "decision": "ONE_HCU_ROUTE_ENGINE_AUTHORITY_PLUS_SEPARATE_TYPED_ENTRY_ADMISSION_AND_GRID10_LANE"
+  },
+  "material_source_findings_fused": [
+    {
+      "finding": "EVENT_VS_ADMISSION_IDENTITY_CONFLATION",
+      "repair": "event_sha256 binds replay-stable causal event fields; admission_sha256 separately binds arrival time, admitted permissions/capabilities, capability authority binding, budget and payload_ref"
+    },
+    {
+      "finding": "TYPED_ENTRY_CAPABILITY_SELF_GRANT_GAP",
+      "repair": "raw permission/capability claims are compared against a separately supplied TrustedCapabilitySnapshot and fail closed on mismatch; Entry adopts only trusted snapshot values"
+    },
+    {
+      "finding": "GRID10_TRANSPORT_REPLAY_IDENTITY",
+      "repair": "semantic_plan_sha256 is event-stable while concrete plan/task identities bind admission_sha256 so transport/admission replays remain audit-distinct"
+    }
+  ],
+  "exact_files": [
+    {
+      "path": "the artefact/Xeno/entry_fabric_v1.py",
+      "git_blob": "5fe174fdf293791421cfd2df4d75f83093823e0f",
+      "sha256": "0b6cf875256177cf3a50aa1bc42b195830fb5cb74b7b901abd6e774041ea7102"
+    },
+    {
+      "path": "the artefact/Xeno/grid10_scheduler_v1.py",
+      "git_blob": "26415a2c5327e950cf6e5d1750346e9719730a74",
+      "sha256": "059fa2c3c02ec3de331fd3aecd98bdd11badf8b7f7cdc056b0775d86f69b8d56"
+    },
+    {
+      "path": "the artefact/Xeno/test_entry_fabric_v1.py",
+      "git_blob": "dfd293ea929fc16488ceb6d09a40b88efb383128",
+      "sha256": "d23b95c7ac136de7fadfe35ed409d0446c0c5805c6318416a0957af36526c383"
+    },
+    {
+      "path": "the artefact/Xeno/test_grid10_scheduler_v1.py",
+      "git_blob": "9a5d2e53d22037a54acda9348e4416973fa834d8",
+      "sha256": "c4505c0431b7f41f51027961735103f6b22a5c13db39f30fd33e3f41dbebc6f8"
+    }
+  ],
+  "isolated_exact_file_component_evidence": {
+    "environment": "isolated ChatGPT Linux/Python tool container",
+    "python": "3.13.5",
+    "compile": "PASS",
+    "unittest": {
+      "tests_run": 22,
+      "tests_passed": 22,
+      "tests_failed": 0,
+      "exit_code": 0
+    },
+    "blob_binding": "all four successor GitHub blob identities exactly match the locally tested git hash-object identities"
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "macrocycle_existing_discriminator": "EVENT_ALIAS_POISON_SAME_ROUTE_SHAPE",
+    "note": "the existing event-alias discriminator was rerun only as deterministic regression; no second unusual experiment was introduced"
+  },
+  "canonicalization_gate": {
+    "current_preferred_candidate": "ENTITYOS_HCU_TYPED_CANONICAL/v1 from retained PR_1263",
+    "current_evidence": "exact-source 9/9 component replication including Python-vs-Node byte/SHA equivalence",
+    "successor_status": "NOT_AUTHORITY_FOR_CANONICALIZATION",
+    "merge_requirement": "select exactly one versioned causal canonicalization schema and wire it across Entry event/admission plus retained HCU route/inference identities with explicit migration/version rules; do not create another canonicalizer"
+  },
+  "authority_invariants": [
+    "EntityOS remains the sole product/system identity.",
+    "HCU remains the sole integrated cognition/compute architecture.",
+    "Xeno schema/path names are compatibility identifiers only.",
+    "Entry does not mint permissions, truth, durable state or effect authority.",
+    "PR_1263 remains the sole retained HCU route/engine authority.",
+    "GRID10 logical-cell count never implies equal resident-model count or physical decode concurrency.",
+    "EffectGate/EffectJournal remain the only real/state-changing effect authority."
+  ],
+  "execution_boundary": {
+    "authorized_isolated_full_entityos_hcu_executor_available_to_this_organ": false,
+    "vps_self_hosted_production_testing_used": false,
+    "together_used": false,
+    "paid_execution_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "credit": {
+    "entry_grid_exact_file_component_mechanism": "PASS",
+    "canonicalizer_integration": "NOT_YET_FUSED",
+    "retained_hcu_route_integrated_execution": "NOT_EXECUTED",
+    "entityos_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "fuse ENTITYOS_HCU_TYPED_CANONICAL/v1 into Entry event/admission identity without duplicating the canonicalizer",
+    "resolve TrustedCapabilitySnapshot from the existing canonical permission/capability authority rather than caller construction",
+    "make retained PR_1263 route consume event_sha256 and admission_sha256 under one versioned causal identity contract while preserving its sole route/engine authority",
+    "run exact current combined Entry + GRID10 + HCU route + inference echo + stale-generation + transport replay + cross-language regressions in an actually-started authorized isolated executor"
+  ]
+}

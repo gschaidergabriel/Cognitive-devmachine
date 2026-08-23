@@ -233,7 +233,9 @@ def step(
         "global_vector_q127": [_q_signed(v) for v in global_vector],
         "control_condition": packet.control_condition,
         "control_packet_schema": ABI_SCHEMA,
+        "control_packet_text": packet_text,
         "control_packet_identity_sha256": packet.packet_sha256,
+        "control_packet_sha256": packet_sha256,
         "control_packet_wire_sha256": packet_sha256,
         "contributions": [
             {

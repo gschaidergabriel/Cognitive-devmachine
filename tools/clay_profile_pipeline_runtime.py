@@ -511,7 +511,8 @@ class ProfilePipelineRuntime(clay.Runtime):
                     path = self._resolve(str(spec["path"]))
                     if not path.is_file():
                         raise FileNotFoundError(str(path))
-                    cursor = int(cursors.get(kind, 0))
+                    cursor_key = source_namespace
+                    cursor = int(cursors.get(cursor_key, 0))
                     raw = path.read_bytes()[cursor:]
                     limit = max(0, int(spec.get("limit", 60)))
                     consumed_bytes = 0
@@ -529,7 +530,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                         except Exception as exc:
                             raise PipelineFault("MALFORMED_JSONL") from exc
                         rows.append(parsed if isinstance(parsed, dict) else {"text": str(parsed)})
-                    cursors[kind] = cursor + consumed_bytes
+                    cursors[cursor_key] = cursor + consumed_bytes
                     source_count += len(rows)
                 else:
                     raise PipelineFault("UNKNOWN_SOURCE_ADAPTER:" + adapter)

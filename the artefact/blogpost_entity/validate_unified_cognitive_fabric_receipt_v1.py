@@ -21,6 +21,7 @@ RECEIPT_TYPE = "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1"
 PHASES = {"BOOT_BINDING", "INFERENCE_CYCLE"}
 ENGINE_CLASSES = {"LOCAL_08B", "CLAUDE_CODE", "ADAPTIVE_BACKEND", "DETERMINISTIC_ONLY"}
 DECISIONS = {"ACCEPTED_CANDIDATE", "REJECTED", "STALE", "BLOCKED", "ERROR", "NO_INFERENCE"}
+EPISTEMIC_STATUSES = {"MEASURED_SUPPORTED", "UNKNOWN", "ERROR", "REFUTED", "NOT_APPLICABLE"}
 TERMINAL_STATUSES = {"DONE", "REJECTED", "BLOCKED", "ABORTED", "ERROR", "UNKNOWN"}
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 GIT_OID_RE = re.compile(r"^(?:[0-9a-f]{40}|[0-9a-f]{64})$")
@@ -203,12 +204,20 @@ def validate_receipt(
     if not candidate_only:
         _fail("MODEL_RESULT_NOT_CANDIDATE_ONLY")
 
+    epistemic_status = _exact_str(inference.get("epistemic_status"), "EPISTEMIC_STATUS_REQUIRED")
+    if epistemic_status not in EPISTEMIC_STATUSES:
+        _fail("EPISTEMIC_STATUS_UNSUPPORTED")
+
     result_digest = inference.get("candidate_result_digest")
     if engine_class == "DETERMINISTIC_ONLY":
         if result_digest is not None:
             _fail("DETERMINISTIC_ONLY_RESULT_DIGEST_MUST_BE_NULL")
+        if epistemic_status != "NOT_APPLICABLE":
+            _fail("DETERMINISTIC_ONLY_EPISTEMIC_STATUS_MUST_BE_NOT_APPLICABLE")
     else:
         _sha256(result_digest, "CANDIDATE_RESULT_DIGEST_INVALID")
+        if epistemic_status == "NOT_APPLICABLE":
+            _fail("LEARNED_INFERENCE_EPISTEMIC_STATUS_REQUIRED")
 
     if engine_class == "CLAUDE_CODE":
         _exact_str(inference.get("adapter_version"), "CLAUDE_ADAPTER_VERSION_REQUIRED")
@@ -231,6 +240,8 @@ def validate_receipt(
         _fail("CANONICAL_WRITE_WITHOUT_ACCEPTED_CANDIDATE")
     if effect_admitted and not effect_requested:
         _fail("EFFECT_ADMITTED_WITHOUT_REQUEST")
+    if (canonical_write or effect_admitted) and epistemic_status != "MEASURED_SUPPORTED":
+        _fail("UNSUPPORTED_EPISTEMIC_AUTHORITY")
 
     authority = _exact_dict(r.get("authority"), "AUTHORITY_REQUIRED")
     for key in ("model_is_truth_authority", "model_is_effect_authority", "workspace_stability_is_factual_truth"):
@@ -278,6 +289,7 @@ def validate_receipt(
         "source_tree": source_tree,
         "generation": generation,
         "engine_class": engine_class,
+        "epistemic_status": epistemic_status,
         "packet_digest": packet_digest,
         "terminal_digest": terminal_digest,
     }

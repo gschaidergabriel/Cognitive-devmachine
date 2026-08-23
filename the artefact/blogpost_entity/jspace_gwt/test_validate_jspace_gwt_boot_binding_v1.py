@@ -1,3 +1,4 @@
+import importlib.util
 import json
 import subprocess
 import sys
@@ -9,6 +10,16 @@ HERE = Path(__file__).resolve().parent
 VALIDATOR = HERE / "validate_jspace_gwt_boot_binding_v1.py"
 H40 = "a" * 40
 H64 = "b" * 64
+
+SPEC = importlib.util.spec_from_file_location("boot_validator", VALIDATOR)
+boot_validator = importlib.util.module_from_spec(SPEC)
+assert SPEC and SPEC.loader
+SPEC.loader.exec_module(boot_validator)
+
+try:
+    import torch
+except ImportError:  # pragma: no cover - CI environment dependent
+    torch = None
 
 
 def valid_receipt():
@@ -33,9 +44,14 @@ def valid_receipt():
         "jspace": {
             "jlens_upstream_commit": H40,
             "lens_file_sha256": H64,
+            "lens_semantic_sha256": "c" * 64,
+            "lens_semantic_digest_method": "ordered-fp32-finite-v1",
             "lens_profile_sha256": H64,
             "fit_corpus_sha256": H64,
             "n_prompts": 100,
+            "d_model": 2,
+            "source_layers": [1, 2],
+            "sparsity_k": 8,
             "skip_first_positions": 16,
             "storage_dtype": "float32",
             "numeric_integrity": {
@@ -70,6 +86,11 @@ def valid_receipt():
             "first_engine_choice": "BUNDLED_LOCAL_08B",
             "origin_attribution": "boot-probe",
         },
+        "policy": {
+            "free_only": True,
+            "paid_or_unknown_network_attempts": 0,
+            "paid_or_unknown_secret_lookups": 0,
+        },
         "authority": {
             "miniunifieddb_is_truth_authority": True,
             "claude_result_is_candidate_only": True,
@@ -81,22 +102,42 @@ def valid_receipt():
     }
 
 
-def run_validator(receipt):
+def run_validator(receipt, lens_path=None):
     with tempfile.TemporaryDirectory() as td:
         path = Path(td) / "receipt.json"
         path.write_text(json.dumps(receipt), encoding="utf-8")
-        return subprocess.run(
-            [sys.executable, str(VALIDATOR), str(path)],
-            text=True,
-            capture_output=True,
-            check=False,
-        )
+        command = [sys.executable, str(VALIDATOR), str(path)]
+        if lens_path is not None:
+            command.append(str(lens_path))
+        return subprocess.run(command, text=True, capture_output=True, check=False)
+
+
+def lens_checkpoint():
+    if torch is None:
+        raise unittest.SkipTest("torch unavailable")
+    return {
+        "J": {
+            1: torch.tensor([[1.0, 2.0], [3.0, 4.0]]),
+            2: torch.tensor([[5.0, 6.0], [7.0, 8.0]]),
+        },
+        "n_prompts": 100,
+        "source_layers": [1, 2],
+        "d_model": 2,
+    }
 
 
 class BootBindingValidatorTests(unittest.TestCase):
-    def test_valid_source_only_receipt_passes(self):
+    def test_valid_source_only_receipt_passes_structural_only(self):
         cp = run_validator(valid_receipt())
         self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
+        self.assertIn("STRUCTURAL_ONLY", cp.stdout)
+
+    def test_dirty_source_fails_closed(self):
+        receipt = valid_receipt()
+        receipt["source"]["dirty"] = True
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("SOURCE_DIRTY", cp.stdout)
 
     def test_poison_post_load_nonfinite_fails_closed(self):
         receipt = valid_receipt()
@@ -125,6 +166,73 @@ class BootBindingValidatorTests(unittest.TestCase):
         cp = run_validator(receipt)
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("BOOT_RECEIPT_CANNOT_GRANT_WHOLE_GWT_CREDIT", cp.stdout)
+
+    def test_semantic_digest_is_mandatory(self):
+        receipt = valid_receipt()
+        del receipt["jspace"]["lens_semantic_sha256"]
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("MISSING_STRING:lens_semantic_sha256", cp.stdout)
+
+    def test_jspace_sparsity_k_is_mandatory(self):
+        receipt = valid_receipt()
+        receipt["jspace"]["sparsity_k"] = 0
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("INVALID_INT:sparsity_k", cp.stdout)
+
+    def test_free_only_secret_lookup_fails_closed(self):
+        receipt = valid_receipt()
+        receipt["policy"]["paid_or_unknown_secret_lookups"] = 1
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("FREE_ONLY_BOUNDARY_BREACH", cp.stdout)
+
+    @unittest.skipIf(torch is None, "torch unavailable")
+    def test_equivalent_save_semantics_regression(self):
+        checkpoint = lens_checkpoint()
+        with tempfile.TemporaryDirectory() as td:
+            first = Path(td) / "first.pt"
+            second = Path(td) / "second.pt"
+            torch.save(checkpoint, first)
+            torch.save(checkpoint, second)
+            a = boot_validator.semantic_digest_from_lens_checkpoint(first)
+            b = boot_validator.semantic_digest_from_lens_checkpoint(second)
+            self.assertNotEqual(a["artifact_sha256"], b["artifact_sha256"])
+            self.assertEqual(a["semantic_sha256"], b["semantic_sha256"])
+
+    @unittest.skipIf(torch is None, "torch unavailable")
+    def test_exact_lens_artifact_binds_byte_and_semantic_identity(self):
+        checkpoint = lens_checkpoint()
+        with tempfile.TemporaryDirectory() as td:
+            lens_path = Path(td) / "lens.pt"
+            torch.save(checkpoint, lens_path)
+            observed = boot_validator.semantic_digest_from_lens_checkpoint(lens_path)
+            receipt = valid_receipt()
+            receipt["jspace"].update(
+                {
+                    "lens_file_sha256": observed["artifact_sha256"],
+                    "lens_semantic_sha256": observed["semantic_sha256"],
+                    "n_prompts": observed["n_prompts"],
+                    "d_model": observed["d_model"],
+                    "source_layers": observed["source_layers"],
+                }
+            )
+            cp = run_validator(receipt, lens_path)
+            self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
+            self.assertIn("EXACT_LENS_ARTIFACT_VERIFIED", cp.stdout)
+
+    @unittest.skipIf(torch is None, "torch unavailable")
+    def test_exact_lens_artifact_rejects_nonfinite_matrix(self):
+        checkpoint = lens_checkpoint()
+        checkpoint["J"][1][0, 0] = float("inf")
+        with tempfile.TemporaryDirectory() as td:
+            lens_path = Path(td) / "lens.pt"
+            torch.save(checkpoint, lens_path)
+            receipt = valid_receipt()
+            cp = run_validator(receipt, lens_path)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("LENS_POST_LOAD_NONFINITE", cp.stdout)
 
 
 if __name__ == "__main__":

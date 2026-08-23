@@ -1,0 +1,121 @@
+{
+  "schema": "GO_MINI_RUNTIME_UCF_FUSION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "macrocycle_id": null,
+  "macrocycle_identity": "UNRESOLVED_NO_UPSTREAM_ID",
+  "authority": {
+    "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+    "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+    "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+    "state_authority": "MiniUnifiedDB",
+    "effect_authority": "DETERMINISTIC_EFFECT_GATE_ONLY",
+    "free_only": true,
+    "together_forbidden": true,
+    "execution": "AUTHORIZED_ISOLATED_SANDBOX_ONLY"
+  },
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "base_main": "77582d2f78b4907f8f1249621ad2fe4725014ba7",
+    "base_runtime_fusion_parent": "768c93e3f8d8950421f8337dfb004009e43e0195",
+    "fusion_commit_before_receipt": "c6d1196180e8e16d39a94bdd65220eca5fc5767e",
+    "fusion_tree": "3763531377d5280d1ab2dd6688173ee8511af7ca",
+    "branch": "gpt56sol/go-mini-runtime-ucf-fusion-20260823-1205"
+  },
+  "donors": {
+    "reference_runtime": {
+      "pr": 1210,
+      "policy": "SINGLE_RETAINED_RUNTIME_DONOR",
+      "runtime_blob": "8ea8a2db0ac1068ae9221f0ab0426e7d8f7149a7",
+      "mechanisms": [
+        "MiniUnifiedDB DB-resident active profile authority",
+        "entity_state.generation sole live generation/CAS authority",
+        "pipeline_profile_read and generic inference_generate",
+        "read-only observational DB access",
+        "profile snapshot integrity",
+        "RFC6901 response pointer",
+        "bounded local_exec environment",
+        "recursive secret/leak gates",
+        "three-argument canonical Clay boundary"
+      ]
+    },
+    "canonical_ucf_path": {
+      "pr": 1213,
+      "policy": "SOURCE_PATH_DONOR_ONLY",
+      "clay_blob": "cad8de246ae237d2ef1b108349915c4747175977",
+      "path_test_blob": "d30e68fc211ac7f6560735221a715ca010917233",
+      "sync_guard_blob": "3916ea88cf1fc649a4a05dcdc4b9764159544a0a",
+      "sync_guard_test_blob": "e667242988a61af37caf435f13f8b1f1ac4e7e93",
+      "native_contract_blob": "790b7d5fe56185a4beb04b745abba9c9bae66da3"
+    },
+    "zero_ucf_ancestry": {
+      "pr": 1209,
+      "policy": "STRICT_ANCESTRY_DONOR_ONLY",
+      "workspace_capsule_blob": "5a6eb721bb82595914d8434d3f57dce032b6c3db",
+      "inference_packet_blob": "2001ae22ea94c1b2550d7d4c7d160db953db2082",
+      "validator_blob": "3a3e7243d81c0472c5b3659ac9f43494281f9d7d",
+      "test_blob": "29732bb5aa441014ae4bd24f5abf59c942506e01"
+    },
+    "post_turn_binding": {
+      "pr": 1216,
+      "policy": "DONOR_ONLY_NOT_FUSED_YET",
+      "reason": "PR 1216 explicitly defines a post-turn validator and a separate MINI_ENTITY_INFERENCE_PACKET/v1. It is not copied into the pre-inference fusion until its packet identity is harmonized with ZERO_INFERENCE_PACKET/v1, avoiding two competing packet authorities."
+    }
+  },
+  "fusion_result": {
+    "single_reference_runtime": true,
+    "canonical_path": "pipeline_build_prompt -> pipeline_cognitive_fabric_admit -> inference_generate -> pipeline_gate -> pipeline_commit",
+    "raw_profile_prompt_inference_bypass_rejected_by_source_contract": true,
+    "strict_zero_workspace_capsule_to_inference_packet_to_ucf_chain_present": true,
+    "hcu_current_main_ancestry_preserved": true,
+    "second_runtime_created": false,
+    "second_state_authority_created": false,
+    "second_effect_path_created": false,
+    "second_ucf_created": false
+  },
+  "remaining_exact_source_blocker": {
+    "id": "REFERENCE_RUNTIME_UCF_HANDLER_MISSING",
+    "runtime_blob": "8ea8a2db0ac1068ae9221f0ab0426e7d8f7149a7",
+    "observed_allowed_effects": [
+      "pipeline_init",
+      "pipeline_profile_read",
+      "pipeline_state_read",
+      "pipeline_collect",
+      "pipeline_compile",
+      "pipeline_build_prompt",
+      "inference_generate",
+      "pipeline_gate",
+      "pipeline_commit"
+    ],
+    "missing_effect": "pipeline_cognitive_fabric_admit",
+    "missing_handler": "_pipeline_cognitive_fabric_admit",
+    "required_behavior": "Compose the existing single Zero workspace capsule -> Zero inference packet -> canonical UCF+boot ancestry under the exact MiniUnifiedDB generation/profile/compiled/prompt identity; stale, missing, ABSTAINED, mismatched or unvalidated admission must stop before inference. No dummy shim or sidecar success is admissible."
+  },
+  "evidence": {
+    "pre_fusion_ucf_path_exact_blob_component_test": "3/3 PASS on PR 1213 source/path-test blobs; source/mechanism scope only",
+    "integrated_branch_authorized_runner_execution": false,
+    "runtime_credit": 0,
+    "bundled_08b_credit": 0,
+    "jspace_credit": 0,
+    "whole_gwt_credit": 0,
+    "claude_adapter_credit": 0,
+    "hcu_runtime_capacity_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "additional_experiments_in_fusion": 0,
+    "inherited_bounded_falsifier": "DIGEST_DECORATED_RAW_INFERENCE_BYPASS_POISON",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "note": "No second unusual intervention was introduced by deterministic donor fusion."
+  },
+  "safety": {
+    "provider_secret_lookup": false,
+    "provider_network_calls": 0,
+    "paid_execution": false,
+    "training_started": false,
+    "vps_or_self_hosted_test": false,
+    "together_used": false
+  },
+  "next_exact_gate": "Implement the one missing pipeline_cognitive_fabric_admit handler in the retained runtime without changing authority boundaries, then execute focused sync/ancestry/runtime regressions on exact branch bytes in an actually-started authorized isolated runner. Only after that may bundled ~0.8B/J-Space/GWT/Claude causal runtime credit be attempted."
+}

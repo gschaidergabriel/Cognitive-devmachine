@@ -13,6 +13,7 @@ import uuid
 from pathlib import Path
 
 SCHEMA = "CLAUDE_CODE_ADAPTER_BOUNDARY_RECEIPT_SET/v1"
+NODE_TIMEOUT_SECONDS = 120
 NODES = (
     "tests/test_claude_code_adapter_boundaries.py::test_claude_code_adapter_toolless_boundary",
     "tests/test_claude_code_adapter_boundaries.py::test_claude_code_adapter_ephemeral_boundary",
@@ -100,27 +101,38 @@ def build_source_identity(repo: Path, artefact: Path, runner_path: Path) -> dict
 
 def run_node(artefact: Path, node: str) -> dict:
     started_ns = time.time_ns()
-    cp = subprocess.run(
-        [sys.executable, "-m", "pytest", "-q", node],
-        cwd=artefact,
-        shell=False,
-        capture_output=True,
-        check=False,
-    )
+    try:
+        cp = subprocess.run(
+            [sys.executable, "-m", "pytest", "-q", node],
+            cwd=artefact,
+            shell=False,
+            capture_output=True,
+            check=False,
+            timeout=NODE_TIMEOUT_SECONDS,
+        )
+        stdout = cp.stdout
+        stderr = cp.stderr
+        returncode = int(cp.returncode)
+        status = "PASS" if returncode == 0 else "FAIL"
+    except subprocess.TimeoutExpired as exc:
+        stdout = exc.stdout or b""
+        stderr = exc.stderr or b""
+        returncode = 124
+        status = "TIMEOUT"
+
     ended_ns = time.time_ns()
-    stdout = cp.stdout
-    stderr = cp.stderr
     signature = stdout + b"\x00" + stderr
     return {
         "node_id": node,
-        "returncode": int(cp.returncode),
-        "status": "PASS" if cp.returncode == 0 else "FAIL",
+        "returncode": returncode,
+        "status": status,
+        "timeout_seconds": NODE_TIMEOUT_SECONDS,
         "duration_ms": round((ended_ns - started_ns) / 1_000_000, 3),
         "stdout_sha256": sha256_bytes(stdout),
         "stdout_bytes": len(stdout),
         "stderr_sha256": sha256_bytes(stderr),
         "stderr_bytes": len(stderr),
-        "failure_signature_sha256": None if cp.returncode == 0 else sha256_bytes(signature),
+        "failure_signature_sha256": None if status == "PASS" else sha256_bytes(signature),
     }
 
 
@@ -133,6 +145,7 @@ def main() -> int:
     repo = runner_path.parents[2]
     artefact = repo / "the artefact"
     started_ns = time.time_ns()
+    python_path = Path(sys.executable).resolve()
 
     receipt = {
         "schema": SCHEMA,
@@ -140,7 +153,8 @@ def main() -> int:
         "started_unix_ns": started_ns,
         "source": None,
         "executor": {
-            "python_executable_sha256": sha256_bytes(sys.executable.encode("utf-8")),
+            "python_executable_path_sha256": sha256_bytes(str(python_path).encode("utf-8")),
+            "python_executable_file_sha256": sha256_file(python_path) if python_path.is_file() else None,
             "python_version": platform.python_version(),
             "platform": platform.platform(),
             "machine": platform.machine(),
@@ -168,7 +182,7 @@ def main() -> int:
         exit_code = 2
 
     receipt["ended_unix_ns"] = time.time_ns()
-    receipt["receipt_sha256"] = sha256_bytes(
+    receipt["receipt_payload_sha256"] = sha256_bytes(
         json.dumps(receipt, sort_keys=True, separators=(",", ":")).encode("utf-8")
     )
 

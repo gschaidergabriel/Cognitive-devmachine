@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 import tempfile
 import unittest
@@ -30,7 +31,8 @@ def common() -> dict:
             "tool_mcp_config_sha256": sha("8"),
         },
     }
-    base["binding_sha256"] = v.validate_common(base).digest
+    binding = v.validate_common(base).digest
+    base["binding_sha256"] = binding
     return base
 
 
@@ -38,12 +40,7 @@ def receipt(kind: str) -> dict:
     d = common()
     d["schema"] = v.SCHEMAS[kind]
     if kind == "tool_less":
-        d["evidence"] = {
-            "tools_admitted": [],
-            "mcp_servers_admitted": [],
-            "tool_call_count": 0,
-            "passed": True,
-        }
+        d["evidence"] = {"tools_admitted": [], "mcp_servers_admitted": [], "tool_call_count": 0, "passed": True}
     elif kind == "ephemeral":
         d["evidence"] = {
             "home_mode": "TEMPORARY_EMPTY",
@@ -78,67 +75,67 @@ class Tests(unittest.TestCase):
     def write_bundle(self, docs: dict[str, dict], root: Path) -> dict[str, Path]:
         out = {}
         for kind, doc in docs.items():
-            path = root / f"{kind}.json"
-            path.write_text(json.dumps(doc), encoding="utf-8")
-            out[kind] = path
+            p = root / f"{kind}.json"
+            p.write_text(json.dumps(doc), encoding="utf-8")
+            out[kind] = p
         return out
 
     def test_clean_bundle_passes(self):
         with tempfile.TemporaryDirectory() as td:
-            docs = {kind: receipt(kind) for kind in v.SCHEMAS}
+            docs = {k: receipt(k) for k in v.SCHEMAS}
             result = v.validate_bundle(self.write_bundle(docs, Path(td)))
             self.assertEqual(result["status"], "PASS")
             self.assertEqual(result["whole_product_credit"], "ZERO")
 
     def test_cross_receipt_source_drift_fails(self):
         with tempfile.TemporaryDirectory() as td:
-            docs = {kind: receipt(kind) for kind in v.SCHEMAS}
+            docs = {k: receipt(k) for k in v.SCHEMAS}
             docs["ephemeral"]["source"]["tree_sha"] = sha40("c")
             docs["ephemeral"]["binding_sha256"] = v.validate_common(docs["ephemeral"]).digest
             with self.assertRaisesRegex(v.ValidationError, "CROSS_RECEIPT_BINDING_MISMATCH"):
                 v.validate_bundle(self.write_bundle(docs, Path(td)))
 
     def test_tool_admission_fails(self):
-        data = receipt("tool_less")
-        data["evidence"]["tools_admitted"] = ["Bash"]
+        d = receipt("tool_less")
+        d["evidence"]["tools_admitted"] = ["Bash"]
         with self.assertRaisesRegex(v.ValidationError, "TOOLS_ADMITTED"):
-            v.validate_one("tool_less", data)
+            v.validate_one("tool_less", d)
 
     def test_session_reuse_fails(self):
-        data = receipt("ephemeral")
-        data["evidence"]["session_reuse"] = True
+        d = receipt("ephemeral")
+        d["evidence"]["session_reuse"] = True
         with self.assertRaisesRegex(v.ValidationError, "SESSION_REUSE_OBSERVED"):
-            v.validate_one("ephemeral", data)
+            v.validate_one("ephemeral", d)
 
     def test_unstructured_acceptance_fails(self):
-        data = receipt("structured_output")
-        data["evidence"]["unstructured_probe_rejected"] = False
+        d = receipt("structured_output")
+        d["evidence"]["unstructured_probe_rejected"] = False
         with self.assertRaisesRegex(v.ValidationError, "UNSTRUCTURED_OUTPUT_ACCEPTED"):
-            v.validate_one("structured_output", data)
+            v.validate_one("structured_output", d)
 
     def test_ambient_secret_visibility_fails(self):
-        data = receipt("env_isolation")
-        data["evidence"]["ambient_secret_keys_seen"] = ["AWS_SECRET_ACCESS_KEY"]
+        d = receipt("env_isolation")
+        d["evidence"]["ambient_secret_keys_seen"] = ["AWS_SECRET_ACCESS_KEY"]
         with self.assertRaisesRegex(v.ValidationError, "AMBIENT_SECRET_VISIBLE"):
-            v.validate_one("env_isolation", data)
+            v.validate_one("env_isolation", d)
 
     def test_child_env_outside_allowlist_fails(self):
-        data = receipt("env_isolation")
-        data["evidence"]["child_env_keys"] = ["HOME", "LANG", "PATH", "SSH_AUTH_SOCK"]
+        d = receipt("env_isolation")
+        d["evidence"]["child_env_keys"] = ["HOME", "LANG", "PATH", "SSH_AUTH_SOCK"]
         with self.assertRaisesRegex(v.ValidationError, "CHILD_ENV_OUTSIDE_ALLOWLIST"):
-            v.validate_one("env_isolation", data)
+            v.validate_one("env_isolation", d)
 
     def test_placeholder_source_identity_fails(self):
-        data = receipt("tool_less")
-        data["source"]["commit_sha"] = "0" * 40
+        d = receipt("tool_less")
+        d["source"]["commit_sha"] = "0" * 40
         with self.assertRaisesRegex(v.ValidationError, "PLACEHOLDER_SHA40"):
-            v.validate_one("tool_less", data)
+            v.validate_one("tool_less", d)
 
     def test_binding_digest_tamper_fails(self):
-        data = receipt("tool_less")
-        data["binding_sha256"] = sha("d")
+        d = receipt("tool_less")
+        d["binding_sha256"] = sha("d")
         with self.assertRaisesRegex(v.ValidationError, "BINDING_DIGEST_MISMATCH"):
-            v.validate_one("tool_less", data)
+            v.validate_one("tool_less", d)
 
 
 if __name__ == "__main__":

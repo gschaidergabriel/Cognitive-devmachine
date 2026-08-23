@@ -1,6 +1,6 @@
 {
-  "schema_version": "8.55",
-  "latest_cycle": "automation-20260823-hcu-route-causal-event-binding",
+  "schema_version": "8.56",
+  "latest_cycle": "go-20260823-hcu-causal-route-fusion-and-entry-canonicalization-review",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
@@ -13,14 +13,35 @@
     "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY",
     "mini_entity_clayverse_frank": "HISTORICAL_OR_DONOR_PROVENANCE_ONLY"
   },
-  "latest_repo_head_inspected": "4225a991a5a6d00cadcef8152bba065d0578f98d",
-  "material_finding": "SOURCE_CONFIRMED_CAUSAL_ROUTE_IDENTITY_GAP: draft PR 1263 computes decision_sha256 from derived routing output and generation, but not from an immutable identity/digest of the causal HCU_REACTIVE_EVENT/v1 input. Two materially different events that cross the same thresholds and choose the same lanes/projection can therefore alias to the same route-decision digest. After provider admission and engine binding are repaired, route identity would still be insufficient for causal replay/audit unless the canonical event identity is also committed.",
+  "latest_repo_head_inspected": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "material_finding": "SOURCE_CANDIDATE_ADVANCED_WITH_NEW_ENTRY_IDENTITY_GATE: draft PR 1263 head 0794250d9e562cc61a8a93895c7c4b0d75b6c94f now closes the previously identified source-level provider/engine/event route-identity gaps substantially: positive internal-provider aliases, admitted engine identity/class, exact engine artifact SHA-256, causal event digest separated from routing metadata, router-policy digest, route decision digest, and downstream inference echo are all present. The next highest-information source gap is cross-language causal identity: the router's _canonical() uses Python json.dumps rather than an explicitly admitted RFC 8785 JCS/I-JSON or equivalent typed canonicalization contract. Therefore deterministic replay is source-supported only within this exact Python serialization contract; stable causal/event/route hashes across a future heterogeneous Entry Fabric remain UNPROVEN until canonicalization is standardized and tested independently.",
   "source_candidate": {
     "pr": 1263,
-    "head": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "head": "0794250d9e562cc61a8a93895c7c4b0d75b6c94f",
     "file": "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
+    "test_file": "the artefact/MicroEntity/hcu/test_reactive_event_router_v1.py",
     "merge_state": "DRAFT_OPEN_NOT_MERGED",
-    "promotion_credit": 0
+    "promotion_credit": 0,
+    "source_mechanisms_now_present": [
+      "POSITIVE_INTERNAL_PROVIDER_ALIAS_ADMISSION",
+      "POSITIVE_INTERNAL_ENGINE_IDENTITY_AND_CLASS_ADMISSION",
+      "ENGINE_ARTIFACT_SHA256_BINDING",
+      "CAUSAL_EVENT_DIGEST_SEPARATE_FROM_ROUTING_METADATA",
+      "ROUTER_POLICY_DIGEST",
+      "ROUTE_DECISION_DIGEST_BOUND_TO_EVENT_POLICY_ENGINE_AND_ROUTING_RESULT",
+      "DOWNSTREAM_INFERENCE_ECHO_CHECK",
+      "SCRIPT_ONLY_ENGINE_SELECTION_REJECTION"
+    ],
+    "unusual_discriminator_source": "SAME_CAUSAL_EVENT_ENGINE_ARTIFACT_FLIP_CHANGES_ENGINE_AND_ROUTE_IDENTITY_ONLY",
+    "unusual_discriminator_execution_credit": "UNRESOLVED_NOT_PROMOTED_BY_THIS_SUPERVISOR_REVIEW"
+  },
+  "github_workflow_observation": {
+    "run_id": 32651779586,
+    "head": "0794250d9e562cc61a8a93895c7c4b0d75b6c94f",
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "failure",
+    "semantic_test_execution": "UNRESOLVED_FROM_AVAILABLE_RUN_METADATA",
+    "runtime_credit": 0
   },
   "runtime_state": {
     "host_status": "INTENTIONALLY_OFFLINE_OWNER_CONFIRMED",
@@ -31,6 +52,9 @@
     "entityos_hcu_whole_runtime_credit": 0,
     "whole_product_pass": false
   },
+  "external_primary_evidence": {
+    "rfc8785_json_canonicalization_scheme": "Cryptographic hashing/signing over JSON requires an invariant canonical representation; JCS defines deterministic property ordering and strict primitive serialization over I-JSON. This is evidence for an explicit cross-language canonicalization contract, not proof that current HCU routing is wrong inside one Python implementation."
+  },
   "evidence_law": [
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
     "GOODMAN_ANCESTRY_COLLAPSE_ACTIVE",
@@ -39,7 +63,9 @@
     "PROVIDER_INDEPENDENCE_REQUIRES_POSITIVE_BOUND_IDENTITY_NOT_DENYLIST_ABSENCE",
     "UNKNOWN_EXTERNAL_OR_UNRESOLVED_PROVIDER_IDENTITY_FAILS_CLOSED",
     "ROUTE_DECISION_IDENTITY_MUST_COMMIT_TO_COGNITION_ENGINE_IDENTITY",
-    "ROUTE_DECISION_IDENTITY_MUST_COMMIT_TO_CAUSAL_EVENT_IDENTITY"
+    "ROUTE_DECISION_IDENTITY_MUST_COMMIT_TO_CAUSAL_EVENT_IDENTITY",
+    "CROSS_LANGUAGE_HASH_IDENTITY_REQUIRES_AN_EXPLICIT_CANONICALIZATION_CONTRACT",
+    "PYTHON_LOCAL_DETERMINISM_MUST_NOT_BE_REPORTED_AS_HETEROGENEOUS_ENTRY_FABRIC_IDENTITY_PROOF"
   ],
   "free_only": {
     "enabled": true,
@@ -54,11 +80,12 @@
     "must_bind": [
       "exact_source_commit_tree",
       "router_policy_digest",
+      "canonicalization_schema_and_version",
       "canonical_event_identity_or_event_sha256",
       "requested_provider_identity",
       "resolved_engine_identity_and_class",
-      "resolved_model_runtime_checkpoint_identity_when_applicable",
-      "route_decision_digest_bound_to_event_and_resolved_engine_identity",
+      "resolved_model_runtime_checkpoint_or_artifact_identity_when_applicable",
+      "route_decision_digest_bound_to_event_policy_and_resolved_engine_identity",
       "downstream_inference_echo_of_event_digest_route_digest_and_engine_identity",
       "secret_lookup_count",
       "network_attempt_count",
@@ -71,23 +98,25 @@
       "known external provider -> REJECT",
       "arbitrary unknown provider string -> REJECT",
       "typo case whitespace or novel provider aliases -> REJECT unless resolved to an explicitly admitted local identity",
-      "provider absent -> ALLOW only when a positive local/internal engine identity is otherwise bound",
+      "provider absent -> ALLOW only when a positive local/internal engine identity is otherwise bound for model activation",
       "PAID SUBSCRIPTION UNKNOWN -> 0 secret lookups and 0 network attempts",
       "rejected cases must never report external_provider_dependency=false as a proven fact",
-      "same event plus two distinct admitted engine identities -> distinct route decision digests or rejection",
+      "same event plus two distinct admitted engine artifact identities -> distinct route decision digests or rejection",
       "aliases resolving to the same canonical local engine may converge only after explicit canonical resolution",
       "two materially different events selecting the same lanes/projection -> distinct route decision digests unless explicitly canonicalized to the same immutable event identity",
       "same exact event replay with same engine and policy -> deterministic identical route decision digest",
-      "downstream inference event identity and engine identity must equal the admitted route identities"
+      "downstream inference event identity and engine identity must equal the admitted route identities",
+      "independent admitted implementations canonicalizing the same typed Entry event -> identical event digest; otherwise cross-language identity claim FAILS"
     ]
   },
   "next_focus": [
-    "DO_NOT_MERGE_OR_PROMOTE_PR1263_PROVIDER_INDEPENDENCE_OR_CAUSAL_PROVENANCE_CLAIMS_UNTIL POSITIVE_FAIL_CLOSED_ADMISSION_ENGINE_BINDING_AND_EVENT_BINDING_ARE_PROVEN",
-    "REPLACE_FINITE_EXTERNAL_PROVIDER_DENYLIST_AS_AUTHORITY_WITH_CANONICAL_POSITIVE_ENGINE_CAPABILITY_CLASS_RESOLUTION",
-    "BIND_CANONICAL_RESOLVED_ENGINE_IDENTITY_AND_IMMUTABLE_EVENT_IDENTITY_INTO_ROUTE_DECISION_SHA256_AND_DOWNSTREAM_INFERENCE_RECEIPT",
-    "PREFER_ONE_CAUSAL_ROUTE_IDENTITY_FORMULA_H_EVENT_ENGINE_ROUTING_RESULT_OVER_PARALLEL_IDENTITY_GUARDS",
+    "KEEP_PR1263_DRAFT_AND_ZERO_RUNTIME_CREDIT_UNTIL_EXACT_AUTHORIZED_ISOLATED_EXECUTION_OF_CURRENT_HEAD",
+    "STANDARDIZE_CAUSAL_EVENT_CANONICALIZATION_AT_THE_ENTITYOS_HCU_ENTRY_BOUNDARY_USING_RFC8785_JCS_OR_AN_EXPLICITLY_VERSIONED_TYPED_EQUIVALENT_BEFORE_CROSS_LANGUAGE_HASH_IDENTITY_IS_CLAIMED",
+    "BIND_CANONICALIZATION_SCHEMA_VERSION_INTO_EVENT_ROUTE_AND_DOWNSTREAM_INFERENCE_RECEIPTS",
+    "TEST_SAME_TYPED_EVENT_THROUGH_AT_LEAST_TWO_INDEPENDENT_CANONICALIZERS_OR_KEEP_THE_ROUTE_IDENTITY_EXPLICITLY_PYTHON_SCOPED",
+    "PRESERVE_ONE_CAUSAL_ROUTE_IDENTITY_FORMULA_H_EVENT_POLICY_ENGINE_ROUTING_RESULT_OVER_PARALLEL_IDENTITY_GUARDS",
     "RUN_HCU_INTERNAL_PROVIDER_ADMISSION_RECEIPT_V1_IN_AN_AUTHORIZED_ISOLATED_ENVIRONMENT_WHEN_RUNTIME_IS_INTENTIONALLY_RESTARTED",
-    "PRESERVE_ENTITYOS_HCU_ONLY_AUTHORITY_AND_FUSE_USEFUL_DONOR_MECHANISMS_WITHOUT_CREATING_A_SECOND_PRODUCT_IDENTITY",
+    "PRESERVE_ENTITYOS_HCU_ONLY_AUTHORITY_AND_FUSE_USEFUL_ENTRY_XRAM_XPU_XCU_DONOR_MECHANISMS_WITHOUT_CREATING_A_SECOND_PRODUCT_OR_COMPUTE_IDENTITY",
     "PREFER_EXECUTABLE_DISCRIMINATORS_OVER_MORE_SOURCE_AUTHORITY_GUARDS",
     "ON_NEXT_INTENTIONAL_RUNTIME_START_BIND_FULL_SOURCE_TREE_DIRTY_STATE_EXECUTOR_HCU_CONFIGURATION_AND_EFFECT_BOUNDARY_IN_ONE_IMMUTABLE_RECEIPT",
     "REPRODUCE_THE_PERSISTENT_CLAUDE_CODE_ADAPTER_BOUNDARY_ON_THE_EXACT_SANDBOXED_RUNTIME_BEFORE_PATCHING"

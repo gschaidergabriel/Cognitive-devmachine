@@ -1,0 +1,73 @@
+{
+  "schema": "ClayGoBoundedReceipt/v1",
+  "date_local": "2026-08-23T17:10:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "trigger": "go",
+  "persistent_entity": "Clay",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main_sha": "243d630b79a83ad3a8f9e67071861860854a4147",
+  "branch": "gpt56sol/go-clayverse-vercel-semantic-fence-rebase-20260823",
+  "branch_head_before_receipt": "8a3ddd8ee9a5e8c2ef10ca961182594d77be9fde",
+  "problem": {
+    "classification": "CURRENT_EXECUTION_CONTINUITY_SEMANTIC_DRIFT",
+    "observed": "The CURRENT Vercel continuity record still encoded an older fixed Mistral-mandatory and unconditional EntityOS-oriented final-test contract after the 2026-08-23 ClayVerse owner authority made API-provider admission profile-dependent and EntityOS execution conditional.",
+    "risk": "A future go could correctly select the retained Vercel bridge yet execute a semantically stale acceptance vector, producing false-negative or false-positive product conclusions even with exact source/runtime identity."
+  },
+  "delta": {
+    "continuity_record": {
+      "path": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
+      "git_blob_sha": "49ad51e7f2fc384f4a75fed7f8c8209351cea4a1",
+      "change": "Reclassify historical Sandbox admission separately from current product semantics; require provider-neutral current acceptance, conditional EntityOS execution, and full semantic PR810 rebind before runtime credit."
+    },
+    "existing_guard_extended": {
+      "path": "tools/assert_clayverse_execution_boundary.py",
+      "git_blob_sha": "7c25e742456edfe99c9a939afa33f0bf080b68bf",
+      "sha256": "3341d476b115affc207d847e2b6d34e6ed24b34530dca909424b6b75ca3c5bb8",
+      "change": "Extend the single existing execution-boundary authority path; no second validator is introduced."
+    },
+    "focused_regression": {
+      "path": "tests/test_clayverse_execution_frontier_consistency.py",
+      "git_blob_sha": "fc6553373adf7e21d16b62ea6dfa3851153cc145",
+      "sha256": "7c0f3d039bd02c9ce1889445706b941ce282d2a5a6c166a220db81fd3afb2caa"
+    }
+  },
+  "bounded_execution_evidence": {
+    "environment": "isolated local OpenAI Linux source/component runtime; not an authorized ClayVerse product-runtime acceptance surface",
+    "python_compile": "PASS",
+    "pytest": {
+      "command": "PYTHONPATH=/tmp/clay-bridge pytest -q tests/test_clayverse_execution_frontier_consistency.py",
+      "result": "7 passed in 0.05s",
+      "exit_code": 0
+    },
+    "exact_blob_binding": "PASS: locally executed guard/test git hash-object values equal the written GitHub content blobs",
+    "scope": "SOURCE_COMPONENT_MECHANISM_ONLY_ZERO_OCI_RUNTIME_CREDIT"
+  },
+  "falsifiers_added": [
+    "stale fixed mandatory-provider language fails closed",
+    "missing EntityOS conditional-admission marker fails closed",
+    "missing PR810 semantic-rebind-before-credit marker fails closed"
+  ],
+  "coordination": {
+    "parallel_pr_1318": "FUSED_NOT_DUPLICATED: PR #1318 already bound PROGRAM_STATE to the owner-started Vercel token-ingress frontier; this delta extends that same guard to product-semantic consistency.",
+    "parallel_main_after_first_attempt": "Ten intervening main commits changed only README/final-acceptance/deployment/receipt/test paths, not this continuity record or guard/test paths; the delta was rederived on current main without force overwrite.",
+    "unusual_experiment": "NO_ADDITIONAL_EXPERIMENT",
+    "shared_macrocycle_experiment": "AUTHORITY_ROLLBACK_POISON_REPLAY already consumed earlier in this user-triggered go",
+    "unusual_experiment_count_added": 0
+  },
+  "runtime_credit": {
+    "source_current_runtime": 0,
+    "oci_runtime": 0,
+    "whole_clayverse": 0
+  },
+  "next_gate": "Immediately before an owner-secure one-shot, rebind all retained PR #810 phases and guards together to the exact then-current ClayVerse owner contract/source; deploy those exact controller bytes; then owner-start the scoped read-only GitHub-token ingress outside project chat and execute exact-current regressions plus OCI build/startup in Vercel Sandbox.",
+  "safety": {
+    "vps_testing": "FORBIDDEN_NOT_USED",
+    "self_hosted_testing": "FORBIDDEN_NOT_USED",
+    "production_host_testing": "FORBIDDEN_NOT_USED",
+    "together": "FORBIDDEN_NOT_USED",
+    "secrets": "NOT_ACCESSED_NOT_REQUESTED_NOT_PERSISTED",
+    "paid_or_model_training": "NOT_STARTED_OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "whole_product_pass": false
+}

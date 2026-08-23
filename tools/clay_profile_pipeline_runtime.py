@@ -24,7 +24,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.4"
+VERSION = "clay-profile-pipeline-runtime/0.5"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -98,12 +98,14 @@ class ProfilePipelineRuntime(clay.Runtime):
         root: str | Path = ".",
         allow_network: bool = False,
         provider_override: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+        local_runner: list[str] | tuple[str, ...] | None = None,
     ):
         super().__init__()
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.allow_network = allow_network
         self.provider_override = provider_override
+        self.local_runner = local_runner
         self.effect_trace: list[dict[str, Any]] = []
         self._active_secrets: list[str] = []
         self.builtins["effect"] = self.effect
@@ -263,8 +265,8 @@ class ProfilePipelineRuntime(clay.Runtime):
             db = self._db(entity_db)
 
             # Fail closed rather than silently resetting a legacy-only non-native generation.
-            # A legacy projection may be inspected for migration presence, but it never
-            # supplies or advances canonical entity_state.generation.
+            # The failure occurs before any canonical schema/row materialization so retry sees
+            # the exact same unresolved authority boundary.
             tables = {
                 str(row[0])
                 for row in db.execute(
@@ -384,20 +386,21 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _pipeline_state_read(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             with self._read_only_db(str(p["entity_db"])) as db:
-                row = db.execute(
-                    """SELECT e.generation,s.continuity_json,s.canonical_hash,s.cursors_json
-                       FROM entity_state e
-                       JOIN eos_pipeline_state s ON s.singleton=1
-                       WHERE e.id=1"""
+                generation_row = db.execute(
+                    "SELECT generation FROM entity_state WHERE id=1"
                 ).fetchone()
-            if row is None:
+                projection_row = db.execute(
+                    """SELECT continuity_json,canonical_hash,cursors_json
+                       FROM eos_pipeline_state WHERE singleton=1"""
+                ).fetchone()
+            if generation_row is None or projection_row is None:
                 raise PipelineFault("PIPELINE_STATE_MISSING")
             return {
                 "ok": True,
-                "generation": int(row["generation"]),
-                "continuity": json.loads(row["continuity_json"]),
-                "canonical_hash": str(row["canonical_hash"]),
-                "cursors": json.loads(row["cursors_json"]),
+                "generation": int(generation_row[0]),
+                "continuity": json.loads(projection_row["continuity_json"]),
+                "canonical_hash": str(projection_row["canonical_hash"]),
+                "cursors": json.loads(projection_row["cursors_json"]),
             }
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
@@ -857,6 +860,14 @@ class ProfilePipelineRuntime(clay.Runtime):
     ) -> dict[str, Any]:
         prompt_path: Path | None = None
         try:
+            runner = self.local_runner
+            if (
+                not isinstance(runner, (list, tuple))
+                or not runner
+                or not all(isinstance(item, str) and item for item in runner)
+            ):
+                raise PipelineFault("LOCAL_EXEC_NOT_ADMITTED")
+
             model_value = str(
                 inference.get("local_model_path") or inference.get("model_path") or ""
             )
@@ -866,15 +877,17 @@ class ProfilePipelineRuntime(clay.Runtime):
             if not model_path.is_file():
                 raise PipelineFault("LOCAL_MODEL_NOT_READABLE")
 
-            argv_spec = inference.get("local_argv_json", inference.get("argv"))
+            # The DB profile may parameterize an already-admitted runtime runner, but it may
+            # not choose the executable/process capability itself.
+            argv_spec = inference.get("local_args_json", inference.get("args", []))
             if isinstance(argv_spec, str):
                 argv_spec = json.loads(argv_spec)
-            if (
-                not isinstance(argv_spec, list)
-                or not argv_spec
-                or not all(isinstance(item, str) for item in argv_spec)
+            if not isinstance(argv_spec, list) or not all(
+                isinstance(item, str) for item in argv_spec
             ):
-                raise PipelineFault("LOCAL_ARGV_INVALID")
+                raise PipelineFault("LOCAL_ARGS_INVALID")
+            if "local_argv_json" in inference or "argv" in inference:
+                raise PipelineFault("PROFILE_OWNED_LOCAL_ARGV_FORBIDDEN")
 
             prompt_template = str(
                 inference.get("local_prompt_template", "{{SYSTEM}}\n\n{{USER}}\n")
@@ -899,7 +912,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                 "{{MAX_TOKENS}}": str(inference.get("max_tokens", 2000)),
                 "{{TEMPERATURE}}": str(inference.get("temperature", 0.7)),
             }
-            argv: list[str] = []
+            argv: list[str] = list(runner)
             for item in argv_spec:
                 rendered = item
                 for key, value in replacements.items():

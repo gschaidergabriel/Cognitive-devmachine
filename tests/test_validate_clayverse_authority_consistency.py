@@ -143,11 +143,38 @@ class AuthorityConsistencyTests(unittest.TestCase):
                     "legacy_mini_entity_swarm_controller": "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION",
                 },
             },
-            mod.STEERING844: {
+            mod.STEERING849: {
+                "schema_version": "8.49",
+                "status": "CURRENT_POSTMERGE_CLAYVERSE_STEERING",
                 "program": mod.EXPECTED_PROGRAM,
                 "stage": mod.EXPECTED_STAGE,
-                "effective_control": mod.EXPECTED_EFFECTIVE_CONTROL,
-                "adjudication": {"free_only": True, "together_forbidden": True, "vps_testing": False},
+                "product_endpoint": "ClayVerse",
+                "owner_directive": mod.OWNER_DIRECTIVE,
+                "postmerge_authority_state": {
+                    "bootstrap": mod.EXPECTED_PROGRAM,
+                    "program_state": "clayverse-single-container",
+                    "control_4_4": "ACTIVE",
+                    "control_4_5": "SUPERSEDED_HISTORICAL_DONOR_ONLY",
+                    "durable_authority": "UnifiedDB",
+                    "external_effect_authority": "EffectGate+EffectJournal",
+                },
+                "execution_admission": {
+                    "test_failure_claimed": False,
+                    "runtime_credit": 0,
+                    "oci_credit": 0,
+                },
+                "unusual_experiment": {
+                    "macrocycle_count": 1,
+                    "already_consumed": "AUTHORITY_ROLLBACK_POISON_REPLAY",
+                    "additional_unusual_experiment_forbidden_this_go": True,
+                },
+                "steering": [
+                    "KEEP_CLAYVERSE_OWNER_AUTHORITY_MERGED_AND_FAIL_CLOSED_AGAINST_STALE_MINI_ENTITY_WORK_SELECTION",
+                    "NEXT_RUNTIME_GATE_REQUIRES_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXACT_CURRENT_EXECUTION",
+                ],
+                "together_forbidden": True,
+                "vps_self_hosted_production_testing_forbidden": True,
+                "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED",
             },
         }
         text = {
@@ -273,6 +300,40 @@ class AuthorityConsistencyTests(unittest.TestCase):
         data["preserved_hard_rules"]["free_only"] = False
         path.write_text(json.dumps(data), encoding="utf-8")
         self.assertIn("CONTROL44_FREE_ONLY_WEAKENED", mod.validate(root)["errors"])
+
+    def test_current_steering_mini_entity_regression_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.STEERING849
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("STEERING849_PROGRAM_STAGE_MISMATCH", mod.validate(root)["errors"])
+
+    def test_current_steering_runtime_credit_mint_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.STEERING849
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["execution_admission"]["runtime_credit"] = 1
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("STEERING849_RUNTIME_CREDIT_MINTED", mod.validate(root)["errors"])
+
+    def test_current_steering_unusual_experiment_fence_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.STEERING849
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["unusual_experiment"]["additional_unusual_experiment_forbidden_this_go"] = False
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("STEERING849_UNUSUAL_EXPERIMENT_FENCE_MISSING", mod.validate(root)["errors"])
+
+    def test_current_steering_missing_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        (root / mod.STEERING849).unlink()
+        errors = mod.validate(root)["errors"]
+        self.assertTrue(any(error.startswith("MISSING:steering849:") for error in errors))
 
     def test_nested_work_selector_poison_fails_closed(self):
         td, root = self.make_tree()

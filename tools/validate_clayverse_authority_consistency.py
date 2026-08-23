@@ -18,7 +18,7 @@ CONTROL41 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json"
 CONTROL42 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json"
 CONTROL43 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_PROGRAM_AUTHORITY.json"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
-STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
+STEERING849 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_49.json"
 ROOT_CLAUDE = "CLAUDE.md"
 LEGACY_BLOGPOST = "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md"
 LEGACY_LOCAL_INFERENCE = "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md"
@@ -60,7 +60,7 @@ def validate(root: Path) -> dict:
         "control42": root / CONTROL42,
         "control43": root / CONTROL43,
         "control44": root / CONTROL44,
-        "steering844": root / STEERING844,
+        "steering849": root / STEERING849,
     }
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
@@ -76,7 +76,7 @@ def validate(root: Path) -> dict:
         control42 = load_json(paths["control42"])
         control43 = load_json(paths["control43"])
         control44 = load_json(paths["control44"])
-        steering = load_json(paths["steering844"])
+        steering = load_json(paths["steering849"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
             "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
@@ -196,10 +196,33 @@ def validate(root: Path) -> dict:
     require(errors, hard44.get("frank_harness_modification") == "FORBIDDEN", "CONTROL44_FRANK_HARNESS_FENCE_WEAKENED")
     require(errors, hard44.get("legacy_mini_entity_swarm_controller") == "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION", "CONTROL44_SWARM_QUARANTINE_WEAKENED")
 
-    require(errors, steering.get("program") == EXPECTED_PROGRAM and steering.get("stage") == EXPECTED_STAGE, "STEERING844_PROGRAM_STAGE_MISMATCH")
-    require(errors, steering.get("effective_control") == EXPECTED_EFFECTIVE_CONTROL, "STEERING844_CONTROL44_NOT_EFFECTIVE")
-    adjudication = steering.get("adjudication") or {}
-    require(errors, adjudication.get("free_only") is True and adjudication.get("together_forbidden") is True and adjudication.get("vps_testing") is False, "STEERING844_SAFETY_WEAKENED")
+    # Bind the current postmerge owner steering itself. 8.44 and 8.48 remain historical
+    # evidence and must not keep this guard green if current 8.49 is removed or poisoned.
+    require(errors, steering.get("schema_version") == "8.49", "STEERING849_VERSION_MISMATCH")
+    require(errors, steering.get("status") == "CURRENT_POSTMERGE_CLAYVERSE_STEERING", "STEERING849_STATUS_MISMATCH")
+    require(errors, steering.get("program") == EXPECTED_PROGRAM and steering.get("stage") == EXPECTED_STAGE, "STEERING849_PROGRAM_STAGE_MISMATCH")
+    require(errors, steering.get("product_endpoint") == "ClayVerse", "STEERING849_PRODUCT_ENDPOINT_MISMATCH")
+    require(errors, steering.get("owner_directive") == OWNER_DIRECTIVE, "STEERING849_OWNER_DIRECTIVE_MISMATCH")
+    postmerge = steering.get("postmerge_authority_state") or {}
+    require(errors, postmerge.get("bootstrap") == EXPECTED_PROGRAM, "STEERING849_BOOTSTRAP_MISMATCH")
+    require(errors, postmerge.get("program_state") == "clayverse-single-container", "STEERING849_PROGRAM_STATE_MISMATCH")
+    require(errors, postmerge.get("control_4_4") == "ACTIVE", "STEERING849_CONTROL44_NOT_ACTIVE")
+    require(errors, "SUPERSEDED" in str(postmerge.get("control_4_5", "")), "STEERING849_CONTROL45_NOT_SUPERSEDED")
+    require(errors, postmerge.get("durable_authority") == "UnifiedDB", "STEERING849_UNIFIEDDB_AUTHORITY_MISMATCH")
+    require(errors, postmerge.get("external_effect_authority") == "EffectGate+EffectJournal", "STEERING849_EFFECT_AUTHORITY_MISMATCH")
+    admission = steering.get("execution_admission") or {}
+    require(errors, admission.get("test_failure_claimed") is False, "STEERING849_PRESTEP_MISCLASSIFIED_TEST_FAILURE")
+    require(errors, admission.get("runtime_credit") == 0 and admission.get("oci_credit") == 0, "STEERING849_RUNTIME_CREDIT_MINTED")
+    unusual = steering.get("unusual_experiment") or {}
+    require(errors, unusual.get("macrocycle_count") == 1, "STEERING849_UNUSUAL_EXPERIMENT_COUNT_MISMATCH")
+    require(errors, unusual.get("already_consumed") == "AUTHORITY_ROLLBACK_POISON_REPLAY", "STEERING849_UNUSUAL_EXPERIMENT_ID_MISMATCH")
+    require(errors, unusual.get("additional_unusual_experiment_forbidden_this_go") is True, "STEERING849_UNUSUAL_EXPERIMENT_FENCE_MISSING")
+    steering49 = steering.get("steering") or []
+    require(errors, "KEEP_CLAYVERSE_OWNER_AUTHORITY_MERGED_AND_FAIL_CLOSED_AGAINST_STALE_MINI_ENTITY_WORK_SELECTION" in steering49, "STEERING849_CLAYVERSE_REENTRY_MISSING")
+    require(errors, "NEXT_RUNTIME_GATE_REQUIRES_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXACT_CURRENT_EXECUTION" in steering49, "STEERING849_RUNTIME_GATE_MISSING")
+    require(errors, steering.get("together_forbidden") is True, "STEERING849_TOGETHER_FENCE_MISSING")
+    require(errors, steering.get("vps_self_hosted_production_testing_forbidden") is True, "STEERING849_VPS_SELFHOSTED_PRODUCTION_FENCE_MISSING")
+    require(errors, steering.get("final_paid_model_training") == "OWNER_AUTHORIZATION_REQUIRED", "STEERING849_PAID_TRAINING_FENCE_MISSING")
 
     directive_upper = directive[:1200].upper()
     require(errors, "CURRENT OWNER DIRECTIVE" in directive_upper, "DIRECTIVE_NOT_CURRENT")

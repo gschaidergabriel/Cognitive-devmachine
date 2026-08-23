@@ -1,5 +1,5 @@
 {
-  "schema_version": "8.4",
+  "schema_version": "8.5",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
   "identity": {
@@ -8,26 +8,31 @@
   },
   "mandatory_invariants": [
     "temporary workers are organs of Clay, never new persistent entities",
-    "Xeno is the active operational go bootstrap; Mini Entity is a legacy compatibility name",
-    "EntityOS is the architectural destination and HCU/XCU is its integrated cognition/compute architecture",
-    "every go co-develops Xeno executable convergence plus XCU/Entry Fabric or records XCU_NO_CHANGE_WITH_REASON",
+    "EntityOS is the sole current product/runtime system identity",
+    "HCU is the sole current integrated cognition/compute architecture inside EntityOS",
+    "Xeno is a transitional implementation compatibility codename only; Mini Entity is historical implementation provenance",
+    "Entry Fabric, XRAM, XPU, prior XCU terminology, GRID/simulation/scaleout mechanisms are fused into EntityOS/HCU rather than becoming a second product or compute architecture",
     "canonical durable state/evidence remains outside model-generated cognition and simulation",
-    "model output, J-Space measurement, HCU/XCU output, world-model output and workspace stability cannot mint canonical truth",
+    "model output, J-Space measurement, HCU output, world-model output and workspace stability cannot mint canonical truth",
     "real/state-changing effects remain behind deterministic EffectGate authority",
     "logical module count is distinct from physical decode concurrency",
     "unknown external effect outcome remains unknown and is never blindly replayed"
   ],
-  "active_program": "ENTITYOS_HCU_XENO",
+  "active_program": "ENTITYOS_HCU",
   "active_stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
-  "go_operational_start": "XENO_CURRENT_IMPLEMENTATION",
+  "active_stage_semantics": "TRANSITIONAL_IMPLEMENTATION_STAGE_LABEL_ONLY",
+  "go_operational_start": "CURRENT_XENO_IMPLEMENTATION_AS_TRANSITIONAL_ENTITYOS_HCU_DONOR",
   "legacy_operational_alias": "MINI_ENTITY_CURRENT_IMPLEMENTATION",
-  "go_owner_directive": "research_entity/global/XENO_GO_OWNER_DIRECTIVE.md",
+  "current_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json",
+  "current_authority_rebase": "research_entity/claycode/autonomous/GO_20260823_1744_ENTITYOS_HCU_AUTHORITY_REBASE.json",
+  "go_owner_directive": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json",
   "research_fusion": "research_entity/global/XENO_COMPUTATIONAL_UNIT_RESEARCH_FUSION_2026-08-23.md",
+  "research_fusion_role": "DONOR_MECHANISM_SOURCE_REENTERED_UNDER_ENTITYOS_HCU",
   "product_endpoint": "EntityOS",
-  "integrated_cognition_architecture": "HCU_XCU",
+  "integrated_cognition_architecture": "HCU",
   "target_cognitive_law": "ZERO_TO_ENTITY_FROM_FUNCTION",
   "target_compute_form": "MULTIMODE_COGNITIVE_COMPUTATIONAL_APPLIANCE",
-  "entry_fabric": "MANDATORY_CO_DEVELOPMENT",
+  "entry_fabric": "MANDATORY_HCU_CO_DEVELOPMENT",
   "target_modes": [
     "XENO_GRID10",
     "XENO_COGSIM10",
@@ -35,10 +40,11 @@
     "XENO_NESTED_SIM",
     "XENO_SCALEOUT"
   ],
+  "target_mode_semantics": "TRANSITIONAL_COMPATIBILITY_IDENTIFIERS_FOR_ENTITYOS_HCU_WORKLOADS",
   "computer_decomposition_target": [
     "XRAM_STATE_FABRIC",
     "XPU_CONTROL_PLANE",
-    "XCU_ACCELERATOR_PLANE",
+    "HCU_ACCELERATOR_PLANE",
     "PACKET_INTERCONNECT_FABRIC",
     "ENTRY_IO_FABRIC",
     "EFFECT_TRANSLATION_PLANE"
@@ -49,8 +55,8 @@
     "physical_decode_concurrency": "MEASURED_SEPARATELY",
     "claim_status": "UNVERIFIED_UNTIL_EXACT_BENCHMARK"
   },
-  "world_simulation_policy": "NOT_REQUIRED_PERMANENTLY; BOUNDED_WM_TEST_AND_OPTIONAL_NESTED_SIM_ARE_ACTIVE_RESEARCH_MODES",
-  "persistent_authority": "UnifiedDB_or_current_Xeno_MiniUnifiedDB_canonical_state_evidence_substrate",
+  "world_simulation_policy": "NOT_REQUIRED_PERMANENTLY; BOUNDED_WM_TEST_AND_OPTIONAL_NESTED_SIM_ARE_ACTIVE_HCU_RESEARCH_MODES",
+  "persistent_authority": "UnifiedDB_or_current_transitional_MiniUnifiedDB_canonical_state_evidence_substrate",
   "effect_authority": "EffectGate+EffectJournal",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
@@ -61,23 +67,23 @@
   "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
   "go_zero_swarm_contract": "research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md",
   "go_macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
-  "go_prompt_injection": "Every go child receives Xeno as current executable bootstrap plus mandatory XCU/Entry co-development and EntityOS destination. Every material run uses hypotheses, counterhypotheses, discriminators and bounded evidence.",
-  "go": "XENO_PLUS_XCU_ENTRY_COMPUTERIZATION_MACROCYCLE",
-  "zero": "ENTITYOS_HCU_XENO_ZERO_JSPACE_FUNCTION_FABRIC_LENS",
+  "go_prompt_injection": "Every go child receives EntityOS as the sole current system and HCU as the sole integrated cognition/compute architecture. Transitional Xeno/Mini identifiers may be used only where compatibility or provenance requires them. Every material run uses hypotheses, counterhypotheses, discriminators and bounded evidence.",
+  "go": "ENTITYOS_HCU_CONVERGENCE_MACROCYCLE",
+  "zero": "ENTITYOS_HCU_ZERO_JSPACE_FUNCTION_FABRIC_LENS",
   "epistemic_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
   "go_transition_questions": [
-    "Does this improve executable Xeno now?",
-    "Does this advance XCU or the typed Entry Fabric, or record an exact no-change reason?",
-    "Can the primitive serve multiple Xeno modes rather than one special case?",
-    "Does this make eventual EntityOS computerization easier or neutral?",
+    "Does this improve the strongest current EntityOS implementation path now?",
+    "Does this advance HCU or typed Entry Fabric/computerization, or record an exact no-change reason?",
+    "Can the primitive serve multiple HCU modes rather than one special case?",
+    "Does this reduce eventual EntityOS migration work rather than create a second system?",
     "Does this preserve exact state/provenance/generation/effect boundaries?",
     "Can the claim be falsified with executable evidence?"
   ],
   "architecture_frontier": [
-    "rename active current-facing Mini Entity semantics to Xeno while preserving legacy compatibility identifiers",
-    "typed Xeno Entry Fabric for all new data",
-    "10-cell shared-worker baseline grid",
-    "XRAM/XPU/XCU/interconnect architectural separation",
+    "bind transitional Xeno implementation results to sole EntityOS/HCU authority without bulk-renaming compatibility identifiers",
+    "typed Entry Fabric for all new data",
+    "10-cell shared-worker HCU baseline grid",
+    "XRAM/XPU/HCU/interconnect architectural separation",
     "request-scoped cognition simulation",
     "bounded test world-model mode with prediction-observation calibration",
     "optional nested world-model -> virtual computer -> simulated AI -> candidate-action mode",
@@ -85,7 +91,7 @@
     "Hyperposition plus calibrated evidence-based candidate reduction",
     "measured scale-out from 10 toward hundreds of logical contexts without conflating logical cells with simultaneous decodes",
     "strict EffectGate non-bypass and recovery/generation fencing",
-    "eventual minimal EntityOS cognitive-computer convergence"
+    "minimal EntityOS cognitive-computer convergence"
   ],
-  "legacy_scope": "Frank and ClayVerse remain bounded historical/donor evidence. Mini Entity/MicroEntity/mini_* names remain legacy compatibility/provenance surfaces; Xeno is the active current-facing name."
+  "legacy_scope": "ClayVerse, Frank and Mini Entity remain historical/donor provenance. Xeno/XCU names remain transitional compatibility/research aliases only; EntityOS/HCU owns all new product and compute authority."
 }

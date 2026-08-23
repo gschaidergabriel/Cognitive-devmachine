@@ -15,8 +15,12 @@ try:
         ABI_SCHEMA,
         TRACE_CANONICALIZATION_SCHEMA,
         TRACE_SCHEMA,
-        JSpaceError,
-        VectorControlPacket,
+    )
+    from .jspace_vector_control_v1 import (
+        JSpaceVectorControlError,
+        decode_vector,
+        packet_bytes,
+        parse_packet_text,
     )
 except ImportError:
     from entry_canonicalization_v1 import (
@@ -28,11 +32,15 @@ except ImportError:
         ABI_SCHEMA,
         TRACE_CANONICALIZATION_SCHEMA,
         TRACE_SCHEMA,
-        JSpaceError,
-        VectorControlPacket,
+    )
+    from jspace_vector_control_v1 import (
+        JSpaceVectorControlError,
+        decode_vector,
+        packet_bytes,
+        parse_packet_text,
     )
 
-DATASET_SCHEMA = "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v2"
+DATASET_SCHEMA = "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3"
 SYSTEM = (
     "You are a narrow EntityOS/HCU cognitive coprocessor. "
     "Follow JSPACE_VECTOR_CONTROL_ABI/v1, GWT/Hyperposition, generation/basis/role fences, "
@@ -46,12 +54,10 @@ class DatasetError(ValueError):
 
 
 def _canonical_json(value: Any) -> str:
-    """Deterministic JSONL transport encoding, not trace identity authority."""
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True, allow_nan=False)
 
 
 def _trace_sha(trace: dict[str, Any]) -> str:
-    """Reuse the selected HCU RFC8785/JCS bytes for trace-family identity."""
     try:
         return hashlib.sha256(canonicalize(trace)).hexdigest()
     except CanonicalizationError as exc:
@@ -59,7 +65,6 @@ def _trace_sha(trace: dict[str, Any]) -> str:
 
 
 def _split(trace_sha256: str) -> str:
-    # Deterministic whole-trace-family split: ~80 / 10 / 10.
     bucket = int(trace_sha256[:2], 16)
     if bucket < 205:
         return "train"
@@ -85,6 +90,14 @@ def _row(kind: str, user: dict[str, Any], assistant: dict[str, Any], trace_sha25
     }
 
 
+def _sha256(value: Any, field: str) -> str:
+    if not isinstance(value, str) or len(value) != 64 or value.lower() != value:
+        raise DatasetError(f"{field}:LOWERCASE_SHA256_REQUIRED")
+    if any(ch not in "0123456789abcdef" for ch in value):
+        raise DatasetError(f"{field}:LOWERCASE_SHA256_REQUIRED")
+    return value
+
+
 def _validate_trace(trace: dict[str, Any]) -> str:
     if not isinstance(trace, dict) or trace.get("schema") != TRACE_SCHEMA:
         raise DatasetError("TRACE_SCHEMA_UNSUPPORTED")
@@ -96,13 +109,16 @@ def _validate_trace(trace: dict[str, Any]) -> str:
     required = (
         "generation",
         "basis_id",
+        "basis_sha256",
         "winner_cell_id",
         "winner_role",
         "winner_gate_q",
         "hyperposition_cells",
+        "control_condition",
         "control_packet_schema",
         "control_packet_text",
-        "control_packet_sha256",
+        "control_packet_identity_sha256",
+        "control_packet_wire_sha256",
         "contributions",
         "authority",
     )
@@ -116,9 +132,11 @@ def _validate_trace(trace: dict[str, Any]) -> str:
 
     generation = trace["generation"]
     basis_id = trace["basis_id"]
+    basis_sha256 = _sha256(trace["basis_sha256"], "TRACE_BASIS_SHA256")
     winner_role = trace["winner_role"]
     winner_cell_id = trace["winner_cell_id"]
     winner_gate_q = trace["winner_gate_q"]
+    control_condition = trace["control_condition"]
     if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
         raise DatasetError("TRACE_GENERATION_INVALID")
     if not isinstance(basis_id, str) or not basis_id:
@@ -129,21 +147,32 @@ def _validate_trace(trace: dict[str, Any]) -> str:
         raise DatasetError("TRACE_WINNER_CELL_ID_INVALID")
     if isinstance(winner_gate_q, bool) or not isinstance(winner_gate_q, int) or not 0 <= winner_gate_q <= 10000:
         raise DatasetError("TRACE_WINNER_GATE_Q_INVALID")
+    if not isinstance(control_condition, str) or not control_condition:
+        raise DatasetError("TRACE_CONTROL_CONDITION_INVALID")
 
     try:
-        packet = VectorControlPacket.decode_text(
-            trace["control_packet_text"],
+        packet = parse_packet_text(trace["control_packet_text"])
+        decode_vector(
+            packet,
+            current_generation=generation,
             expected_basis_id=basis_id,
+            expected_basis_sha256=basis_sha256,
             expected_role=winner_role,
-            expected_generation=generation,
+            expected_control_condition=control_condition,
         )
-    except JSpaceError as exc:
+        wire = packet_bytes(packet)
+    except JSpaceVectorControlError as exc:
         raise DatasetError(f"TRACE_CONTROL_PACKET_INVALID:{exc}") from exc
-    if packet.gate_q != winner_gate_q:
-        raise DatasetError("TRACE_CONTROL_PACKET_GATE_MISMATCH")
-    packet_sha = hashlib.sha256(packet.encode_bytes()).hexdigest()
-    if trace["control_packet_sha256"] != packet_sha:
-        raise DatasetError("TRACE_CONTROL_PACKET_SHA256_MISMATCH")
+
+    if packet.packet_sha256 != _sha256(
+        trace["control_packet_identity_sha256"], "TRACE_CONTROL_PACKET_IDENTITY_SHA256"
+    ):
+        raise DatasetError("TRACE_CONTROL_PACKET_IDENTITY_SHA256_MISMATCH")
+    packet_wire_sha256 = hashlib.sha256(wire).hexdigest()
+    if packet_wire_sha256 != _sha256(
+        trace["control_packet_wire_sha256"], "TRACE_CONTROL_PACKET_WIRE_SHA256"
+    ):
+        raise DatasetError("TRACE_CONTROL_PACKET_WIRE_SHA256_MISMATCH")
 
     contributions = trace["contributions"]
     if not isinstance(contributions, list) or not contributions:
@@ -186,8 +215,10 @@ def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
     common = {
         "control_packet": trace["control_packet_text"],
         "expected_basis_id": trace["basis_id"],
+        "expected_basis_sha256": trace["basis_sha256"],
         "expected_role": trace["winner_role"],
         "expected_generation": trace["generation"],
+        "expected_control_condition": trace["control_condition"],
     }
     accept = {
         "decision": "ACCEPT_CONTROL",
@@ -203,7 +234,7 @@ def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
         _row(
             "VECTOR_CONTROL_VALIDATE",
             {**common, "expected_generation": trace["generation"] + 1},
-            {"decision": "REJECT", "reason": "JCTL_GENERATION_MISMATCH"},
+            {"decision": "REJECT", "reason": "STALE_VECTOR_CONTROL_GENERATION"},
             sha,
         )
     )
@@ -211,7 +242,7 @@ def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
         _row(
             "VECTOR_CONTROL_VALIDATE",
             {**common, "expected_basis_id": trace["basis_id"] + "#WRONG"},
-            {"decision": "REJECT", "reason": "JCTL_BASIS_MISMATCH"},
+            {"decision": "REJECT", "reason": "JSPACE_BASIS_ID_MISMATCH"},
             sha,
         )
     )
@@ -221,6 +252,7 @@ def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
             {
                 "generation": trace["generation"],
                 "basis_id": trace["basis_id"],
+                "basis_sha256": trace["basis_sha256"],
                 "contributions": trace["contributions"],
             },
             {

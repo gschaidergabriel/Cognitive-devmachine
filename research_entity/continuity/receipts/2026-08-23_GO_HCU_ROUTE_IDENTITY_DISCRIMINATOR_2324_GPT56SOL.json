@@ -1,0 +1,92 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "macrocycle_global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated component organ",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "cognition_compute_architecture": "HCU",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "gpt56sol/go-hcu-route-identity-contract-20260823-2324",
+  "branch_base_main": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "retained_candidate": {
+    "pr": 1263,
+    "head": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "router_path": "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
+    "router_git_blob": "7c0fee26fd3d8a48b99da7eca7f3bca8fea046ae",
+    "status": "DRAFT_OPEN_NOT_MERGED"
+  },
+  "hypothesis": "A valid HCU route decision identity must commit to immutable causal event identity, resolved cognition-engine identity/class, and the routing result; a finite external-provider denylist is insufficient positive admission.",
+  "counterhypothesis": "Generation plus derived routing output is sufficient because materially relevant events or engine choices necessarily change the chosen lanes/projection.",
+  "unusual_experiment": {
+    "count_for_this_organ": 1,
+    "id": "ROUTE_IDENTITY_ALIAS_MATRIX",
+    "status": "CONSUMED_EXACTLY_ONCE_LOCALLY_GLOBAL_UNIQUENESS_UNRESOLVED",
+    "intervention": "Hold generation and routing-result thresholds constant while varying causal event_id and resolved local engine identity across a 2x2 matrix.",
+    "observed_digest": "2379e6db50f9e21013691a3ff6adae518b6488a12cfff87ca81211bbd3e604dc",
+    "observed": "All four materially distinct event/engine combinations collapsed to the same route decision digest.",
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_EXACT_SOURCE_COMPONENT_SCOPE"
+  },
+  "delta": {
+    "verifier": "research_entity/continuity/tools/verify_hcu_route_identity_contract.py",
+    "verifier_git_blob": "79f5da7fb7e4d1f97ec805ee87cca9fe2b594ee7",
+    "verifier_tests": "research_entity/continuity/tests/test_verify_hcu_route_identity_contract.py",
+    "verifier_tests_git_blob": "269575ce81bdfc0b6591cb8dbb5b0cfc312456ab",
+    "required_identity_formula": "H(canonical_event_identity,resolved_engine_identity,routing_result)",
+    "track_a_entityos_hcu": "Adds a deterministic acceptance discriminator for the retained HCU route path without creating a second state/effect/recovery authority.",
+    "track_b_entry_compute": "Makes typed ingress event identity and resolved HCU engine class/identity explicit cross-plane bindings between Entry/causal admission and HCU compute routing."
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Linux component container",
+    "exact_blob_reconstruction": {
+      "verifier": "MATCHED_GITHUB_BLOB_79f5da7fb7e4d1f97ec805ee87cca9fe2b594ee7",
+      "verifier_test": "MATCHED_GITHUB_BLOB_269575ce81bdfc0b6591cb8dbb5b0cfc312456ab",
+      "pr1263_router": "MATCHED_GITHUB_BLOB_7c0fee26fd3d8a48b99da7eca7f3bca8fea046ae"
+    },
+    "py_compile": "PASS",
+    "verifier_self_tests": {
+      "run": 2,
+      "passed": 2,
+      "result": "PASS"
+    },
+    "pr1263_contract_check": {
+      "exit_code": 1,
+      "status": "FAIL",
+      "checks": {
+        "same_exact_event_replay_is_deterministic": true,
+        "different_causal_event_cannot_alias": false,
+        "different_resolved_engine_cannot_alias": false,
+        "model_route_requires_resolved_engine_identity": false,
+        "external_engine_class_fails_closed": false
+      },
+      "classification": "EXACT_SOURCE_COMPONENT_CONTRACT_FAIL_NOT_ENTITYOS_HCU_RUNTIME_FAIL"
+    }
+  },
+  "repair_contract_for_retained_pr1263": [
+    "replace finite provider-denylist authority with positive local HCU engine capability/class admission",
+    "require resolved cognition-engine identity for model-activation routes",
+    "bind immutable canonical event identity or event_sha256 into route decision identity",
+    "bind canonical resolved engine identity/class into route decision identity",
+    "require downstream inference receipts to echo event identity, route decision identity and engine identity",
+    "same exact event+engine+policy replay must be deterministic",
+    "different causal events with same lanes must not alias unless explicitly canonicalized to one immutable event identity",
+    "different admitted engine identities must not alias unless explicitly resolved to one canonical engine identity",
+    "rebuild the package snapshot after router/test/policy changes and keep the retained PR draft until exact verifier PASS"
+  ],
+  "runtime_credit": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_model_runtime": 0,
+    "global_jspace_causal_use": 0,
+    "provider_independence_runtime": 0
+  },
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_or_production_testing": false,
+    "together_used": false,
+    "paid_execution_or_training": false,
+    "secrets_persisted": false
+  },
+  "next_exact_gate": "Repair retained PR 1263 in place to satisfy the positive local-engine + causal-event identity contract, rebuild its deterministic package snapshot, then run this verifier against the exact repaired router in an authorized isolated executor before any provider-independence or causal-route promotion."
+}

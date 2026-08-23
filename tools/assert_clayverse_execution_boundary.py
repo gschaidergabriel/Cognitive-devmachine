@@ -14,12 +14,13 @@ CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_C
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
 VERCEL_EXECUTION_PATH = "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md"
 EXPECTED_SURFACE = "AUTHORIZED_ISOLATED_SANDBOX_ONLY"
-EXPECTED_EXECUTION_GATE = "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
+EXPECTED_EXECUTION_GATE = "BLOCKED_ON_EXACT_CONTROLLER_REBIND_AND_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
 EXPECTED_VERCEL_BRIDGE = "SANDBOX_ADMISSION_PROVEN_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED"
 CURRENT_OWNER_DIRECTIVE = "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md"
 BRIDGE_CANONICAL_CLAUDE_MARKER = "normal interactive claude code"
 BRIDGE_ENTITYOS_CONDITIONAL_MARKER = "entityos execution remains conditional"
 BRIDGE_RETIRED_PROVIDER_MARKER = "historical mistral/custom-engine acceptance path"
+BRIDGE_CONTROLLER_REBIND_MARKER = "rebind retained #810 controller"
 STALE_MANDATORY_PROVIDER_TEXT = "mistral is mandatory for this final test"
 STALE_RETIRED_PROBE_TEXT = "final_acceptance_probe.py::run_mistral_acceptance_probe"
 
@@ -41,7 +42,8 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
     this bridge/frontier, loss or degradation of required continuity evidence must fail closed.
     The continuity record must also remain aligned to the current ClayVerse owner semantics:
     normal interactive Claude Code is canonical cognition, retired Mistral/custom-engine paths
-    stay retired, and EntityOS execution remains conditional on explicit admission.
+    stay retired, EntityOS execution remains conditional on explicit admission, and the retained
+    controller must be rebound to the exact accepted Research identity before owner token ingress.
     This never grants source, OCI, or product runtime credit.
     """
     errors: list[str] = []
@@ -50,6 +52,7 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
         "sandbox.create is not the blocker" in lower
         and "runtime one-shot ingress" in lower
         and "github_read_token" in lower
+        and BRIDGE_CONTROLLER_REBIND_MARKER in lower
     )
     stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
     execution = program.get("execution_policy") or {}
@@ -78,7 +81,13 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
     require(errors, stage_gate == EXPECTED_EXECUTION_GATE, "PROGRAM_EXECUTION_FRONTIER_STALE_GENERIC_SURFACE_BLOCK")
     require(errors, execution.get("vercel_sandbox_bridge") == EXPECTED_VERCEL_BRIDGE, "PROGRAM_VERCEL_BRIDGE_STATE_MISSING")
     require(errors, execution.get("execution_frontier_binding") == VERCEL_EXECUTION_PATH, "PROGRAM_VERCEL_FRONTIER_BINDING_MISSING")
-    require(errors, "owner-start" in frontier.lower() and "github_read_token" in frontier.lower(), "PROGRAM_CURRENT_FRONTIER_TOKEN_INGRESS_MISSING")
+    require(
+        errors,
+        "rebind" in frontier.lower()
+        and "owner-start" in frontier.lower()
+        and "github_read_token" in frontier.lower(),
+        "PROGRAM_CURRENT_FRONTIER_REBIND_OR_TOKEN_INGRESS_MISSING",
+    )
     require(errors, credit.get("whole_clayverse") == 0, "PROGRAM_VERCEL_BRIDGE_FALSE_RUNTIME_CREDIT")
     return errors
 

@@ -7,19 +7,20 @@ truth, permissions, compute budget or effects.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from typing import Any, Mapping, Sequence
 
 try:
-    from .hcu_causal_canonical_v1 import CANONICALIZATION_SCHEMA, HCUCanonicalizationError, canonical_sha256
+    from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
 except ImportError:
-    from hcu_causal_canonical_v1 import CANONICALIZATION_SCHEMA, HCUCanonicalizationError, canonical_sha256
+    from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
 
 ENTRY_SCHEMA = "XENO_ENTRY_PACKET/v1"  # compatibility wire name; product authority is EntityOS/HCU
-ENTRY_EVENT_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v1"
-ENTRY_ADMISSION_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v1"
+ENTRY_EVENT_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2"
+ENTRY_ADMISSION_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2"
 HCU_EVENT_SCHEMA = "HCU_REACTIVE_EVENT/v1"
 
 SOURCE_KINDS = {
@@ -66,9 +67,10 @@ class EntryPacket:
 
 def _identity_sha256(value: Any, field: str) -> str:
     try:
-        return canonical_sha256(value)
-    except HCUCanonicalizationError as exc:
+        encoded = canonicalize(value)
+    except CanonicalizationError as exc:
         raise EntryFabricError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _text(value: Any, field: str, *, optional: bool = False) -> str | None:
@@ -194,8 +196,7 @@ def parse_entry_json(raw: str | bytes | bytearray) -> Mapping[str, Any]:
     """Parse untrusted raw JSON before typed admission or causal identity creation.
 
     This closes the pre-Mapping prerequisite in ENTRY_CANONICALIZATION_CONTRACT.json.
-    Canonical identity is produced only by the separately versioned selected
-    ENTITYOS_HCU_TYPED_CANONICAL/v1 profile after typed admission.
+    Canonical identity is produced only by the selected versioned RFC8785/JCS profile.
     """
     if not isinstance(raw, (str, bytes, bytearray)):
         raise EntryFabricError("RAW_JSON_TEXT_OR_BYTES_REQUIRED")

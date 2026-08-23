@@ -1,0 +1,97 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "d1dcdee1298ab3aec133da3c8fd4bc42d973cfab",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "executor_promotion": {
+    "parent": "8da62da2b43b58117e7b68097dc2f70e12a4d4e0",
+    "commit": "b6fcb5e26b66f30951a308caf6f23df8192d4040",
+    "message": "promote(hcu): atomically mark J-Space source rebound ready",
+    "transition": "SOURCE_REBIND_REQUIRED_TERMINAL_QUARANTINE -> SOURCE_REBOUND_READY_SOURCE_ONLY",
+    "atomic_files": {
+      "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js": "96db8789442cb826a9104d0bb2279accf2049608",
+      "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-v4-v3-current-rebind-contract.json": "3313ddd36549ef407cff51c8916c3f0aa6d0d834",
+      "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-v4-v3-current-donor-exact-blobs.mjs": "08e8f10ffffa0bcffeb1263b20b496a1418ff0e1",
+      "mcp/vercel-sandbox-mcp/scripts/check-hcu-jspace-rebind-contract-sync.mjs": "a04b98c16de6d2b99ac31bfadd5fd6d33300a879"
+    },
+    "independent_blob_manifest": {
+      "path": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-v4-v3-required-blobs-511d5689.json",
+      "git_blob": "c60dfb67be62e596d9d8af3151e64d16542029e5",
+      "changed": false,
+      "status": "SOURCE_REBIND_REQUIRED",
+      "role": "IMMUTABLE_SOURCE_CLOSURE_PROVENANCE_NOT_EXECUTION_PERMISSION_AUTHORITY"
+    }
+  },
+  "observed_source_state": {
+    "contract_status": "SOURCE_REBOUND_READY",
+    "source_rebind_complete": true,
+    "sandbox_create_permitted_before_source_rebind": false,
+    "sandbox_create_permitted_after_source_rebind": true,
+    "exact_donor_blob_count": 17,
+    "expected_regression_count": 14,
+    "source_verification_precedes_free_only_cost_gate": true,
+    "sandbox_create_preceded_by_source_verification_and_cost_gate": true,
+    "exact_result_fence": "14_VERBOSE_IDENTITIES + RAN_14_SUMMARY + STANDALONE_OK + REJECT_FAILED_SKIPPED_EXPECTED_FAILURES + EXIT_0 + SECRET/FIXED_COMMAND_SENTINELS",
+    "source_scope_only": true
+  },
+  "evidence_boundary": {
+    "vercel_exact_head_status": "FAILURE_BUILD_RATE_LIMIT",
+    "vercel_failure_class": "INFRASTRUCTURE_QUOTA_NOT_PRODUCT_LOGIC",
+    "sandbox_runtime_executed_by_this_organ": false,
+    "route_invoked_by_this_organ": false,
+    "local_static_checkout_attempted": true,
+    "local_static_checkout_result": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB_COM_BEFORE_SOURCE_RETRIEVAL",
+    "local_static_test_credit": 0,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "runtime_credit_change": 0
+  },
+  "finding": {
+    "classification": "ATOMIC_SOURCE_REBOUND_READY_PROMOTION_WITH_PERMISSION_PROVENANCE_SPLIT",
+    "observed": [
+      "The single retained executor branch fast-forwarded atomically from exact parent 8da62da2 to b6fcb5e2; no force update was used.",
+      "The promoted route still constructs current contract+manifest authority and verifies all 17 deployment-carried Git-blob identities before consulting the FREE_ONLY cost gate.",
+      "The rebind contract is now SOURCE_REBOUND_READY with source_rebind_complete=true and explicit post-rebind Sandbox permission while preserving sandbox_create_permitted_before_source_rebind=false.",
+      "The independent 17-blob manifest remains SOURCE_REBIND_REQUIRED and unchanged, separating immutable source-closure provenance from successor execution permission.",
+      "The exact 14-result J-Space/Inference acceptance fence remains source-required on the promoted route.",
+      "Vercel still blocks the exact promoted head at the Hobby build-rate limit, so no exact-current build or runtime command is observed."
+    ],
+    "inference": "The executor has crossed the source-state-machine promotion gate without rewriting pre-rebind evidence or weakening the exact donor/result fences. The next scientific/product discriminator is now an exact-current included-tier deployment invocation, not another source flag repair.",
+    "counterhypothesis": "Changing SOURCE_REBIND_REQUIRED to READY could silently convert source presence into runtime authority.",
+    "counterhypothesis_rejection": "The independent source manifest remains unchanged, the contract records only source/guard readiness, every runtime/model/training/product credit remains zero, and the route still requires exact source verification plus separate FREE_ONLY cost admission before Sandbox creation."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: PR810 reached a coherent SOURCE_REBOUND_READY source state in one non-force atomic commit while keeping exact source verification before cost admission and Sandbox creation.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the retained exact 17-blob Typed Entry -> route -> engine/load -> GRID10 -> atomic ModelExecution -> Inference/v4 closure is preserved byte-identically and now cleanly separated from execution-permission state.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: the explicit exact-14 Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 result fence survives the READY transition; J-Space model and training credit remain zero."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Research main and PR810 are moving rapidly under parallel organs. This append-only exact-SHA receipt preserves the atomic READY transition without overwriting a moving current-facing artefact README snapshot."
+  },
+  "next_exact_gate": "Require a naturally available included-tier Vercel preview whose immutable Git SHA equals the then-current PR810 head. Do not upgrade or use paid fallback. Invoke only that exact FREE_ONLY route and require pre-cost 17-blob verification, in-Sandbox SHA-256 checks, secret fence, exact 14-result identities/summary/hard-negative fence, exit 0 and cleanup; keep any PASS component-scoped. Then separately require real zero-cost local approximately-0.8B loader/model-executor I/O bound to verified loader-consumption and canonical MiniUnifiedDB atomic ModelExecution before J-Space model-runtime credit, while continuing JSPACE_VECTOR_CONTROL_ABI/v1 and leak-resistant causal DatasetAdmission readiness in PR1263."
+}

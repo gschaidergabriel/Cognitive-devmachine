@@ -1,5 +1,5 @@
 {
-  "schema": "GO_ENTITYOS_HCU_VERCEL_EXECUTION_ADMISSION_RECHECK/v2",
+  "schema": "GO_ENTITYOS_HCU_VERCEL_EXECUTION_ADMISSION_RECHECK/v3",
   "date": "2026-08-23",
   "trigger": "go",
   "persistent_research_entity": "Clay",
@@ -10,7 +10,6 @@
   "integrated_cognition_compute_architecture": "HCU",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
-  "canonical_main_observed_before_first_write": "f6066c126b67699983842c0549378806d5f4c405",
   "authority_sources": [
     "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
     "research_entity/rooms/PROGRAM_STATE.json",
@@ -19,64 +18,80 @@
   ],
   "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
   "track_b": "HCU_NO_CHANGE_WITH_REASON",
-  "track_b_reason": "Retained PR 1263 is the active single HCU/Typed-Entry donor lane and moved repeatedly during this macrocycle while parallel work reconciled its canonicalization authority. Writing another router, Entry, canonicalizer, or inference path would duplicate or race the retained authority path.",
-  "vercel_observation": {
+  "track_b_reason": "Retained PR 1263 is the active single HCU/Typed-Entry donor lane and moved repeatedly during this macrocycle. This organ changed no competing HCU/Entry/router/canonicalizer implementation; it repaired only the retained isolated-execution ingress and its bounded combined regression gate.",
+  "superseded_observation": {
+    "controller_commit": "84838e74335a638c15328d6f8f2c9222ab0635ae",
+    "deployment": "dpl_FfJ4ZGgPnZxHVdrjYyfuwtLgEyhP",
+    "problem": "The READY retained controller was hard-bound to stale Research SHA cb6b6d0e... and still launched run-clayverse-insandbox-batch.sh, so it could not admit current EntityOS/HCU execution."
+  },
+  "implemented_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "commit": "26a8830c52385540d1a273c5411e4ffc13c32740",
+    "product_semantics": "EntityOS + HCU",
+    "single_executor_path_preserved": true,
+    "source_snapshot_policy": "RESOLVE_CURRENT_THEN_REVERIFY_BEFORE_EXEC",
+    "start_sequence": [
+      "accept explicit scoped read-only GitHub token in one POST",
+      "resolve current Research refs/heads/main SHA plus Git tree",
+      "resolve current retained HCU PR 1263 head SHA plus Git tree",
+      "Sandbox.create",
+      "fetch both exact private commit archives inside disposable Sandbox",
+      "verify exact commit/tree identity and codeload HTTPS redirect boundary",
+      "re-resolve both heads and fail closed if either moved during fetch",
+      "clear token reference and prove token absent in a fresh Sandbox process",
+      "start detached EntityOS/HCU combined regression batch"
+    ],
+    "combined_gate": [
+      "current EntityOS/HCU authority from BOOTSTRAP_MINIMAL + PROGRAM_STATE + manifest",
+      "RFC8785/JCS canonicalizer unit regressions",
+      "Typed Entry regressions",
+      "reactive HCU route regressions",
+      "engine-admission regressions",
+      "inference-receipt regressions",
+      "GRID10 scheduler regressions",
+      "end-to-end JCS byte fence for Entry/router/inference",
+      "legacy GRID10 typed-CBOR canonicalizer rejection"
+    ],
+    "runtime_credit_minted_by_source_change": false,
+    "whole_product_pass": false
+  },
+  "deployment_evidence": {
     "team": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
     "project": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
-    "latest_ready_deployment": "dpl_FfJ4ZGgPnZxHVdrjYyfuwtLgEyhP",
-    "latest_ready_controller_commit": "84838e74335a638c15328d6f8f2c9222ab0635ae",
-    "retained_controller_pr": 810,
-    "controller_path": "mcp/vercel-sandbox-mcp/api/go-cycle-v2.js",
-    "controller_blob": "f2469b36618f5bbc8e5cb5c74adc7e79836308a5",
-    "controller_bound_research_sha": "cb6b6d0e1ffc6db58b519d988ed530675e6f551f",
-    "controller_bound_research_tree": "1595eeb6d3c4a23ec309adbe4b2c6a9106ee436d",
-    "controller_batch": "run-clayverse-insandbox-batch.sh",
-    "source_guard_order": "verifyResearchRefHead -> verifyCommit -> Sandbox.create",
-    "current_program_conflict": "Controller still identifies and launches the historical ClayVerse acceptance batch while current main authority requires EntityOS as sole product/system and HCU as sole cognition/compute architecture."
+    "deployment": "dpl_9AniDMjwwRZCBdmvmC3PuDrHYmLw",
+    "deployment_commit": "26a8830c52385540d1a273c5411e4ffc13c32740",
+    "state": "READY",
+    "build_guard_schema": "EntityOSHCUCurrentExecutorGuard/v1",
+    "build_guard_status": "CURRENT_MAIN_PLUS_RETAINED_HCU_PR_ATOMIC_SNAPSHOT_EXECUTOR",
+    "build_log_observed": true,
+    "live_ingress_probe": {
+      "method": "GET_WITHOUT_CREDENTIAL",
+      "path": "/api/go-cycle-v2",
+      "http_status": 405,
+      "allow": "POST",
+      "body_status": "METHOD_NOT_ALLOWED",
+      "credential_supplied": false,
+      "sandbox_started": false
+    }
   },
-  "live_ready_endpoint_probe": {
-    "method": "GET_WITHOUT_CREDENTIAL",
-    "path": "/api/go-cycle-v2",
-    "observed_http_status": 405,
-    "observed_allow": "POST",
-    "observed_body_status": "METHOD_NOT_ALLOWED",
-    "observed_cache_control": "no-store, no-cache, must-revalidate, private",
-    "classification": "READY_RUNTIME_INGRESS_FUNCTION_PRESENT_FAIL_CLOSED_WITHOUT_POST",
-    "credential_supplied": false,
-    "sandbox_started": false,
-    "runtime_credit": 0
-  },
-  "observed_result": {
-    "ready_preview_exists": true,
-    "ready_runtime_ingress_function_live": true,
-    "sandbox_api_path_present_in_ready_controller_source": true,
+  "mechanism_result": {
+    "old_stale_sha_pre_sandbox_blocker": "RESOLVED_AT_CONTROLLER_SOURCE_AND_READY_DEPLOYMENT_SCOPE",
+    "old_clayverse_batch_semantic_blocker": "RESOLVED_AT_CONTROLLER_SOURCE_AND_READY_DEPLOYMENT_SCOPE",
+    "current_blocker": "OWNER_CREDENTIAL_BOUNDED_POST_NOT_EXECUTED",
     "exact_current_entityos_hcu_sandbox_started": false,
-    "reason": "Current main no longer equals the controller-bound cb6b6d0e... SHA, so the controller's verifyResearchRefHead fence would reject before Sandbox.create. Even a simple SHA rebind is insufficient because the retained batch remains ClayVerse-semantic rather than current EntityOS/HCU-semantic.",
-    "classification": "PRE_SANDBOX_EXACT_SOURCE_AND_PROGRAM_ADMISSION_BLOCKER",
     "semantic_test_fail": false,
     "runtime_credit": 0,
     "whole_product_pass": false
   },
-  "hypothesis": "The retained PR 810 Vercel controller can remain the single isolated-execution ingress if it is atomically rebound to one exact current EntityOS/HCU Research identity and its admitted batch/guards are semantically migrated from historical ClayVerse acceptance to current EntityOS/HCU acceptance.",
-  "counterhypothesis": "Updating only RESEARCH_SHA/RESEARCH_TREE on PR 810 is sufficient to restore current runtime acceptance.",
-  "counterhypothesis_disposition": "REJECTED_AT_SOURCE_SCOPE because the exact READY controller still writes/starts run-clayverse-insandbox-batch.sh and emits ClayVerse lifecycle/status semantics after the source-head fence.",
-  "next_exact_discriminator": [
-    "freeze one accepted current EntityOS/HCU Research source identity and retained HCU donor set",
-    "semantically rebind the existing retained PR 810 controller once without creating a second executor path",
-    "deploy and capture a READY preview for those exact controller bytes",
-    "owner-start the existing scoped read-only GitHub-token ingress only after that exact READY closure exists",
-    "inside the disposable Vercel Sandbox prove exact current source identity and post-fetch credential absence",
-    "run exact combined Typed Entry + HCU route + inference + selected canonicalization + GRID10 regressions",
-    "only then assign bounded runtime credit and proceed to physical local-engine admission"
-  ],
-  "hcu_current_source_observation": {
-    "retained_pr": 1263,
-    "current_problem": "Selected RFC8785_JCS_IJSON/v1 authority is not yet fully wired end to end across active Entry, router, engine/route and inference receipt identities.",
-    "write_disposition": "NO_DUPLICATE_HCU_SOURCE_WRITE_DURING_HOT_PARALLEL_FUSION"
-  },
+  "hypothesis": "Runtime-time atomic resolution of current Research main plus the retained HCU donor, followed by exact archive fetch and post-fetch head revalidation, is a stronger execution-admission mechanism than repeatedly hard-coding a fast-staling Research SHA into the Vercel deployment.",
+  "counterhypothesis": "Build-time hard-coded Research SHA/tree is required for exact provenance.",
+  "counterhypothesis_disposition": "REJECTED_AT_MECHANISM_SCOPE: runtime resolution still binds exact SHA/tree before private fetch, records them in the start response, fetches by those immutable commits, and aborts if main or PR 1263 moves before execution. This preserves exact provenance while removing avoidable stale-head admission failure.",
+  "next_exact_discriminator": "One explicit owner-held scoped read-only GitHub-token POST against READY deployment dpl_9AniDMjwwRZCBdmvmC3PuDrHYmLw; then observe exact bound Research/HCU identities, Sandbox.create, credential nonpersistence, and the combined Entry->route->engine->inference->GRID10/JCS result.",
   "unusual_experiment": {
     "new_experiment_count": 0,
-    "reason": "An overlapping retained-HCU organ recorded a bounded canonicalizer-authority discriminator while global macrocycle identity was unresolved. This organ conservatively adds no second unusual experiment and counts the Vercel source/live-endpoint inspection as control-plane verification, not a new intervention."
+    "reason": "An overlapping retained-HCU organ already recorded a bounded discriminator without a globally resolved macrocycle id. This organ conservatively added no second unusual experiment; controller migration, build validation and live 405 probing are execution-admission repair/verification only."
   },
   "security": {
     "secrets_accessed_or_persisted": false,
@@ -85,6 +100,6 @@
     "together_api_used": false,
     "paid_fallback_or_training_used": false
   },
-  "evidence_boundary": "SOURCE_AND_CONNECTED_CONTROL_PLANE_EVIDENCE_ONLY. READY deployment and a live 405 POST-only ingress do not imply Sandbox execution, EntityOS/HCU runtime acceptance, model execution, J-Space causality, or whole-product PASS.",
-  "promotion": "EXECUTION_PATH_BLOCKER_REFINED_NO_RUNTIME_PROMOTION"
+  "evidence_boundary": "SOURCE + BUILD + CONNECTED CONTROL-PLANE EVIDENCE. READY deployment and live POST-only ingress do not imply Sandbox execution, HCU semantic PASS, model execution, J-Space causality, EntityOS whole-product PASS, or training acceptance.",
+  "promotion": "RETAINED_EXECUTOR_READY_FOR_OWNER_STARTED_ISOLATED_DISCRIMINATOR_NO_RUNTIME_PROMOTION"
 }

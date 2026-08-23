@@ -1,80 +1,90 @@
-# GO/ZERO FREE_ONLY swarm trigger contract — ClayVerse
+# GO/ZERO FREE_ONLY swarm trigger contract — Mini Entity bootstrap -> EntityOS + HCU
 
-Status: **CURRENT / FAIL-CLOSED UNTIL CLAYVERSE CONTROLLER ADMISSION**
+Status: **CURRENT / FAIL-CLOSED UNTIL TRANSITION-AWARE CONTROLLER ADMISSION**
 Date: 2026-08-23
-Current product authority: `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
-Current control: `4.1 + 4.2 + historical 4.3 + 4.4-clayverse-product-authority-addendum`
+Current go work-selection authority: `research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md`
+Current product destination: **EntityOS + HCU**
 Macrocycle identity: `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
 
 ## Current admission state
 
-Provider swarm execution for `go` / `zero` is **BLOCKED** until a controller is source-admitted that binds the current ClayVerse product/program authority before secret lookup or network I/O.
+Provider swarm execution for `go` / `zero` is BLOCKED until an exact controller is source-admitted that binds BOTH:
 
-The historical base controller `tools/run_free_go_swarm.py` is **LEGACY_MINI_ENTITY_CONTROLLER_NOT_ADMITTED** because its source currently:
+1. the current Mini Entity implementation as the operational `go` starting point; and
+2. EntityOS + HCU / `Zero -> Entity <- Function` as the architectural destination.
 
-- hard-codes the Mini Entity approximately-1B training directive as `OWNER_DIRECTIVE_PATH`;
-- injects Mini Entity role/task language;
-- expects the Mini Entity worker-protocol marker;
-- therefore can recreate product-authority drift even when Bootstrap/PROGRAM_STATE/Control 4.4 select ClayVerse.
+A controller that treats Mini Entity as the final standalone product is stale. A controller that skips the current Mini Entity and routes directly to a parallel replacement architecture is also stale.
 
-The previously named implementation `tools/run_go_zero_swarm.py` is not admitted by this contract unless the exact file exists and passes the current ClayVerse authority guard. A missing implementation is BLOCKED, never silently substituted with the legacy Mini Entity controller.
+## Required controller contract
 
-## Required ClayVerse controller contract
+Before provider key lookup or network I/O, the admitted controller MUST fail closed unless:
 
-Before any provider key lookup or provider network call, the admitted controller MUST fail closed unless all of the following agree:
-
-- `BOOTSTRAP_MINIMAL.active_program == CLAYVERSE_SINGLE_CONTAINER`;
-- `BOOTSTRAP_MINIMAL.active_stage == CLAYVERSE_ARTIFACT`;
-- `PROGRAM_STATE.program_id == clayverse-single-container`;
-- current owner directive is `CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`;
-- effective control includes `4.4-clayverse-product-authority-addendum`;
-- FREE_ONLY is active;
-- Together is forbidden;
-- VPS/self-hosted/production-host testing remains forbidden;
+- `BOOTSTRAP_MINIMAL.active_program == ENTITYOS_HCU`;
+- `BOOTSTRAP_MINIMAL.active_stage == MINI_ENTITY_BOOTSTRAP_TO_ENTITYOS_HCU`;
+- `PROGRAM_STATE.program_id == entityos-hcu`;
+- current go directive is `MINI_ENTITY_GO_OWNER_DIRECTIVE.md`;
+- current Mini Entity is named as operational bootstrap;
+- EntityOS + HCU is named as the final architectural destination;
+- target cognition is request-scoped/dynamic rather than a permanent standing world simulation;
+- Zero trends toward ingress/admission, Entity toward causal/state coherence, and HCU cells toward ephemeral function roles;
+- canonical state/evidence and EffectGate authority remain outside candidate model cognition;
+- FREE_ONLY is active and Together is forbidden;
 - exact runtime credit still requires admitted isolated execution;
-- worker prompts preserve Clay as the persistent research entity and workers as temporary organs;
-- worker prompts describe ClayVerse, not Mini Entity/Blogpost, as the current product;
+- Clay remains the persistent research entity and temporary workers remain organs;
 - one shared `macrocycle_id` and one unusual-experiment lease law are preserved across children.
 
 ## Trigger law
 
-Every explicit user `go` or `zero` remains eligible for maximum useful FREE_ONLY research/build concurrency **only when an admitted controller and admitted free credentials are actually available**.
+Every explicit user `go` starts from the strongest current Mini Entity code/research/package state and advances it toward the end-state without forcing a premature rewrite.
 
-If either is unavailable, record the blocker and continue all non-provider work possible in the current turn. Do not fabricate a running swarm and do not fall back to a stale product controller.
+Work selection favors:
 
-`go` and `zero` are parent triggers. Any future admitted API/model child receives child `go`, the current ClayVerse owner/product context, and the mandatory GRF/ClayCode worker protocol at the top of its prompt. A child never creates a new persistent Clay identity or a second user-triggered macrocycle.
+`information gain × current Mini Entity convergence × future EntityOS/HCU migration value × non-duplication × executable availability`.
+
+Each material candidate SHOULD be classified `EASIER`, `NEUTRAL`, or `HARDER` for later migration to `Zero -> Entity <- Function`. Prefer `EASIER`; `HARDER` requires explicit evidence.
+
+`zero` may focus more deeply on Zero/J-Space/Workspace/HCU coupling, but it must re-enter the same transition path and may not create a second identity, state authority, effect path or hidden consciousness daemon.
+
+## Cognitive transition law
+
+The controller MUST NOT instruct children to build a permanent simulated duplicate world or permanent HCU subconscious as the target.
+
+Allowed transitional work includes:
+
+- existing MiniUnifiedDB and HCU world/state projections;
+- fixed or semi-fixed HCU roles;
+- task-local forward/counterfactual consequence estimation;
+- J-Space/GWT experiments;
+- current Zero integration;
+- UCF/Hyperposition/causal-turn/effect/recovery work.
+
+New work should progressively support request-scoped dynamic function allocation while preserving empirical compatibility with the current Mini Entity.
 
 ## Provider safety law
 
-When a ClayVerse controller is later admitted:
-
-- FREE_ONLY must be verified before secret/key lookup and before network I/O;
-- no paid fallback, quota purchase, subscription upgrade, or automatic billing escalation;
+- FREE_ONLY must be verified before secret/key lookup and network I/O;
+- no paid fallback, quota purchase or automatic billing escalation;
 - HTTP 402 is hard stop;
 - HTTP 429 is provider-wide cooldown/backoff, never key rotation to evade a shared limit;
-- credentials remain environment/vault-only and never enter prompts, receipts, peer state, or source;
-- absent quota metadata is UNKNOWN, not unlimited entitlement.
+- credentials remain environment/vault-only and never enter prompts, receipts, peer state or source;
+- absent quota metadata is UNKNOWN, not unlimited entitlement;
+- Together remains forbidden.
 
-## Coordination law
+## Coordination and epistemic law
 
-Any admitted swarm uses one cross-process coordination state and atomically leases non-overlapping research lanes. Each lease binds at least macrocycle id, parent trigger, child trigger, provider/model/key fingerprint, lane/task, worker serial, expiry/heartbeat, and reserved output-token demand.
-
-Before each call the child receives bounded peer state plus current repository/program/control/owner context. Model agreement remains candidate evidence only and never becomes canonical truth.
-
-## Product boundary
-
-Swarm is research/build orchestration only. Product runtime remains **one persistent central ClayVerse entity**. A swarm may not create a second durable identity, UnifiedDB alternative, truth authority, EffectGate bypass, recovery ledger, or consciousness daemon.
+Any admitted swarm uses one cross-process coordination state and atomically leases non-overlapping lanes. Model agreement is candidate evidence only. Majority vote does not mint truth. Local/model J-Space claims require model-specific measurement and causal intervention evidence where available.
 
 ## Re-admission gate
 
-Unblock provider swarm execution only after a ClayVerse controller exists and a deterministic source gate demonstrates at minimum:
+Unblock provider swarm execution only after a deterministic source gate demonstrates at minimum:
 
-1. current ClayVerse authority accepted;
-2. Mini Entity product authority rejected;
-3. Control 4.4 required;
-4. FREE_ONLY weakening rejected before key lookup;
-5. stale/missing macrocycle identity rejected;
-6. worker prompt begins with current ClayVerse/GRF/ClayCode context;
-7. no secret value appears in generated prompt/receipt state.
+1. current Mini Entity bootstrap accepted;
+2. Mini Entity as final standalone product rejected;
+3. EntityOS + HCU destination accepted;
+4. permanent world-simulation target rejected;
+5. FREE_ONLY weakening rejected before key lookup;
+6. stale/missing macrocycle identity rejected;
+7. worker prompt begins with current transition + GRF/ClayCode context;
+8. no secret value appears in generated prompt/receipt state.
 
-Passing this source gate still gives **ZERO provider/model/whole-product runtime credit** until actual admitted execution occurs.
+Passing this source gate gives ZERO provider/model/whole-product runtime credit until actual admitted execution occurs.

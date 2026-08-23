@@ -106,7 +106,10 @@ def valid_boot_binding() -> dict:
             "tokenizer_sha256": _h("5"),
             "runtime_sha256": _h("6"),
         },
-        "jspace": {"lens_profile_sha256": _h("8")},
+        "jspace": {
+            "jspace_profile_sha256": _h("7"),
+            "lens_profile_sha256": _h("8"),
+        },
         "gwt": {
             "workspace_policy_sha256": _h("9"),
             "calibration_sha256": _h("a"),
@@ -167,6 +170,17 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         receipt["provenance"]["boot_binding_receipt_digest"] = hashlib.sha256(raw).hexdigest()
         self.assertIn(
             "BOOT_RUNTIME_IDENTITY_MISMATCH:bundled_core.checkpoint_digest",
+            validate_receipt_chain(receipt, raw),
+        )
+
+    def test_boot_runtime_jspace_profile_splice_is_rejected(self) -> None:
+        receipt = valid_receipt()
+        boot = valid_boot_binding()
+        boot["jspace"]["jspace_profile_sha256"] = _h("e")
+        raw = _boot_bytes(boot)
+        receipt["provenance"]["boot_binding_receipt_digest"] = hashlib.sha256(raw).hexdigest()
+        self.assertIn(
+            "BOOT_RUNTIME_IDENTITY_MISMATCH:fabric.jspace_profile_digest",
             validate_receipt_chain(receipt, raw),
         )
 

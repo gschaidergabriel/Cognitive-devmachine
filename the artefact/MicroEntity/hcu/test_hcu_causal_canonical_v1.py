@@ -90,6 +90,7 @@ class HCUCanonicalizationTests(unittest.TestCase):
             {"schema": "HCU_REACTIVE_EVENT/v1", "entity_generation": 7, "novelty": 0.55, "due_recheck": False},
             {"z": [-0.0, 1, 1.5, 1e-7], "a": "€", "😀": {"ä": True, "n": None}},
             {"engine": {"id": "hcu_local_08b", "artifact": "a" * 64}, "lanes": ["critic", "world"], "projection": True},
+            {"\ue000": "BMP_PRIVATE_USE", "\U00010000": "SUPPLEMENTARY"},
         ]
         for vector in vectors:
             raw = subprocess.check_output(

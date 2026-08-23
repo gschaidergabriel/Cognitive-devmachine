@@ -9,6 +9,14 @@ SCHEMA = "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v2"
 BOUNDARIES = ("tool_less", "ephemeral", "structured_output", "env_isolation")
 PERSISTENCE_SCOPE_SCHEMA = "CLAUDE_USER_PERSISTENCE_SURFACE/v1"
 PERSISTENCE_SCOPE_KINDS = ["auto_memory", "prompt_history", "transcripts"]
+CANONICAL_ENV_ALLOWLIST = frozenset({
+    "PATH", "HOME", "LANG", "LC_ALL", "TMPDIR",
+    "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS",
+    "HTTP_PROXY", "HTTPS_PROXY",
+    "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
+    "DISABLE_AUTOUPDATER", "CLAUDE_CODE_SKIP_PROMPT_HISTORY",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY", "CLAUDE_CODE_DISABLE_CLAUDE_MDS",
+})
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
 
@@ -102,7 +110,8 @@ def validate_env(boundary):
     need(isinstance(observed, list) and all(isinstance(x, str) for x in observed), "observed env invalid")
     need(len(allowed) == len(set(allowed)), "allowed env duplicate")
     need(len(observed) == len(set(observed)), "observed env duplicate")
-    need(set(observed).issubset(set(allowed)), "child env exceeds allowlist")
+    need(set(allowed).issubset(CANONICAL_ENV_ALLOWLIST), "allowed env exceeds canonical Claude child policy")
+    need(set(observed).issubset(set(allowed)), "child env exceeds declared allowlist")
     need(boundary.get("forbidden_key_count") == 0, "forbidden env key observed")
     need(boundary.get("secret_value_leak_count") == 0, "secret value leak observed")
     need(is_nonplaceholder_hex(boundary.get("environment_shape_sha256"), SHA256), "environment shape digest invalid")

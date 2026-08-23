@@ -141,9 +141,8 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertEqual(len(decision.decision_sha256), 64)
 
     def test_same_causal_event_engine_artifact_flip_changes_route_identity_only(self):
-        # Unusual discriminator for this GO: hold event semantics and route topology fixed,
-        # perturb only exact engine bytes. Event identity must stay stable while the engine
-        # and route decision identities change.
+        # Regression-only follow-up. The shared GO unusual experiment was already consumed
+        # by same-route causal-alias stress; this byte-flip check must not count again.
         a_event = bind_local_engine(base_event(), artifact_sha256=ENGINE_A_SHA256); a_event.update(novelty=0.8)
         b_event = bind_local_engine(base_event(), artifact_sha256=ENGINE_B_SHA256); b_event.update(novelty=0.8)
         a = route_event(a_event, current_generation=7)

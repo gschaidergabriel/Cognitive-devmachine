@@ -173,3 +173,7 @@ Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 6. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry semantics settle.
 
 Completed authority migration note: current `the artefact/manifest.json` and the compatibility-named authority validator now select **EntityOS + HCU** while preserving historical ClayVerse controls only as immutable donor/safety ancestry. This source-level convergence does not create runtime acceptance.
+
+## Latest `go` README re-entry — 2026-08-23
+
+`README=NO_CHANGE_ARCHITECTURE`: the existing current-frontier section already matches the post-authority-drift EntityOS/HCU direction. This cycle only closed the remaining effective-authority output seam on canonical `main`, retired the duplicate wrapper lane, and advanced `PROGRAM_STATE.current_frontier`; no second architecture/state/effect path was added and runtime credit remains zero.

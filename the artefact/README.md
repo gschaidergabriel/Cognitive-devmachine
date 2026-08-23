@@ -143,6 +143,10 @@ All new data paths converge toward one typed ingress binding before cognition:
 
 Inputs may originate from humans, tools, external events, sensor/stream data, canonical database changes or intrinsic system events.
 
+Capability claims in an untrusted Entry packet are **not authority**. Entry admission must compare them against the existing deterministic permission/capability authority and its exact binding/receipt identity; the packet may narrow an admitted capability set but may never self-grant or broaden it. No second HCU permission authority is introduced.
+
+Replay-stable causal event identity and concrete transport/admission identity must remain distinguishable: changes such as receive time, payload reference, permission snapshot or resource budget may change the admission identity without silently redefining the underlying immutable event identity. Changing immutable payload/provenance/event semantics must change event identity.
+
 HCU route events and downstream inference receipts must ultimately re-enter through this fabric so event identity, generation, engine identity and causal provenance remain bound instead of becoming a side ledger.
 
 ## HCU reactive cognition
@@ -161,9 +165,10 @@ Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 
 ## Current frontier
 
-1. finish control-plane authority convergence to EntityOS/HCU across current-facing workspace surfaces without destructive compatibility renames;
-2. re-enter `HCU_REACTIVE_EVENT/v1` and causal route receipts through the Typed Entry Fabric;
-3. define positive fail-closed local HCU engine capability admission bound to exact checkpoint/tokenizer/runtime identity;
-4. bind event identity + resolved engine identity/class + routing result into one causal route/inference receipt;
-5. rebase/fuse the strongest HCU implementation onto current `main`;
-6. obtain exact authorized-isolated runtime evidence before promotion.
+1. **close current authority split-brain without weakening inherited guards:** `the artefact/README.md` and current bootstrap/program/footer select EntityOS+HCU, while `the artefact/manifest.json` and the legacy `tools/validate_clayverse_authority_consistency.py` still encode ClayVerse product authority; migrate the guard and manifest coherently, preserving all safety/provenance checks rather than bulk-renaming them;
+2. finish the replay-stable **event identity vs admission identity** split and fuse the useful Typed Entry/GRID10 candidate into the retained HCU route lane without creating a second route authority;
+3. wire Typed Entry capability claims to the existing canonical permission/capability authority; exact source-component regression already proves self-grant rejection when a trusted capability snapshot/binding is supplied, but the real authority producer is not yet wired;
+4. bind the real admitted local HCU checkpoint/tokenizer/runtime bytes and capability record instead of trusting event-supplied model identity;
+5. bind the downstream inference receipt **producer** to the already-defined event/route/engine echo contract;
+6. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry semantics settle;
+7. run exact combined Entry + HCU route + inference-echo + GRID10 regressions on an actually-started authorized isolated executor, then measure GRID10/COGSIM10 cost utility before widening WM_TEST/NESTED_SIM.

@@ -1,51 +1,38 @@
 #!/usr/bin/env python3
-"""Typed legacy-Xeno Entry Fabric admission for EntityOS/HCU cognition.
+"""Typed Entry Fabric admission for EntityOS/HCU cognition.
 
-This module is deterministic and non-cognitive. It binds replay-stable causal event
-identity separately from concrete admission/transport identity before any HCU/model work.
-It does not mint truth, permissions or effects.
+Deterministic and non-cognitive. It binds immutable causal event identity separately
+from transport/admission receipt identity before any HCU/model work. It does not mint
+truth, permissions or effects.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 from dataclasses import asdict, dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Mapping, Sequence
 
-ENTRY_SCHEMA = "XENO_ENTRY_PACKET/v1"
-EVENT_IDENTITY_SCHEMA = "ENTITYOS_HCU_CAUSAL_EVENT_IDENTITY/v1"
-ADMISSION_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v1"
+try:
+    from .typed_entry_canonical_v1 import CANONICALIZATION_SCHEMA, CanonicalEncodingError, encode_canonical
+except ImportError:
+    from typed_entry_canonical_v1 import CANONICALIZATION_SCHEMA, CanonicalEncodingError, encode_canonical
+
+ENTRY_SCHEMA = "XENO_ENTRY_PACKET/v1"  # compatibility wire name; product authority is EntityOS/HCU
+ENTRY_EVENT_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v1"
+ENTRY_ADMISSION_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v1"
 HCU_EVENT_SCHEMA = "HCU_REACTIVE_EVENT/v1"
 
 SOURCE_KINDS = {
-    "HUMAN_PROMPT",
-    "EXTERNAL_EVENT",
-    "TOOL_OUTCOME",
-    "SENSOR_STREAM",
-    "DATABASE_CHANGE",
-    "INTRINSIC_SYSTEM_EVENT",
+    "HUMAN_PROMPT", "EXTERNAL_EVENT", "TOOL_OUTCOME", "SENSOR_STREAM",
+    "DATABASE_CHANGE", "INTRINSIC_SYSTEM_EVENT",
 }
 MODALITIES = {"TEXT", "JSON", "BINARY_REF", "SENSOR", "EVENT"}
 ENTRY_FIELDS = {
-    "schema",
-    "ingress_id",
-    "causal_id",
-    "entity_generation",
-    "source_kind",
-    "source_id",
-    "modality",
-    "observed_time",
-    "received_time",
-    "provenance_ref",
-    "provenance_sha256",
-    "capabilities",
-    "capability_binding_sha256",
-    "parent_id",
-    "stream_id",
-    "budget",
-    "payload_ref",
-    "payload_sha256",
+    "schema", "ingress_id", "causal_id", "entity_generation", "source_kind", "source_id",
+    "modality", "observed_time", "received_time", "provenance_ref", "provenance_sha256",
+    "capabilities", "capability_binding_sha256", "parent_id", "stream_id", "budget",
+    "payload_ref", "payload_sha256",
 }
 BUDGET_FIELDS = {"max_model_calls", "max_tokens", "max_wall_ms"}
 
@@ -78,14 +65,12 @@ class EntryPacket:
     admission_sha256: str
 
 
-def _canonical(value: Any) -> bytes:
-    return json.dumps(
-        value,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-        allow_nan=False,
-    ).encode("utf-8")
+def _identity_sha256(value: Any, field: str) -> str:
+    try:
+        encoded = encode_canonical(value)
+    except CanonicalEncodingError as exc:
+        raise EntryFabricError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _text(value: Any, field: str, *, optional: bool = False) -> str | None:
@@ -118,7 +103,7 @@ def _timestamp(value: Any, field: str, *, optional: bool = False) -> str | None:
         raise EntryFabricError(f"{field}:RFC3339_REQUIRED") from exc
     if parsed.tzinfo is None:
         raise EntryFabricError(f"{field}:TIMEZONE_REQUIRED")
-    return value
+    return parsed.astimezone(timezone.utc).isoformat(timespec="microseconds").replace("+00:00", "Z")
 
 
 def _generation(value: Any, current_generation: int) -> int:
@@ -157,6 +142,8 @@ def _budget(value: Any) -> tuple[tuple[str, int], ...]:
         item = value[field]
         if isinstance(item, bool) or not isinstance(item, int) or item < 0:
             raise EntryFabricError(f"budget.{field}:NONNEGATIVE_INTEGER_REQUIRED")
+        if item > 9_007_199_254_740_991:
+            raise EntryFabricError(f"budget.{field}:IJSON_SAFE_INTEGER_REQUIRED")
         normalized[field] = item
     return tuple(normalized.items())
 
@@ -168,17 +155,6 @@ def admit_entry(
     expected_capability_binding_sha256: str,
     admitted_capabilities: Sequence[str],
 ) -> EntryPacket:
-    """Admit one typed ingress packet against an externally-authorized capability view.
-
-    `event_sha256` is replay-stable for the same causal event. It deliberately excludes
-    arrival/transport identity, payload location, permissions/capabilities and resource
-    budget. `admission_sha256` binds those concrete admission-instance properties.
-
-    `expected_capability_binding_sha256` and `admitted_capabilities` must come from the
-    deterministic authority/control plane for the current identity/generation. The entry
-    may narrow that set, but it cannot self-grant a capability or substitute another
-    capability-binding receipt.
-    """
     if not isinstance(entry, Mapping):
         raise EntryFabricError("ENTRY_MAPPING_REQUIRED")
     unknown = set(entry) - ENTRY_FIELDS
@@ -207,30 +183,23 @@ def admit_entry(
     assert received_time is not None
 
     provenance_sha256 = _sha256(entry.get("provenance_sha256"), "provenance_sha256")
-    capability_binding_sha256 = _sha256(
-        entry.get("capability_binding_sha256"),
-        "capability_binding_sha256",
-    )
-    expected_capability_binding_sha256 = _sha256(
-        expected_capability_binding_sha256,
-        "expected_capability_binding_sha256",
-    )
+    capability_binding_sha256 = _sha256(entry.get("capability_binding_sha256"), "capability_binding_sha256")
+    expected_capability_binding_sha256 = _sha256(expected_capability_binding_sha256, "expected_capability_binding_sha256")
     if capability_binding_sha256 != expected_capability_binding_sha256:
         raise EntryFabricError("CAPABILITY_BINDING_MISMATCH")
-
     payload_sha256 = _sha256(entry.get("payload_sha256"), "payload_sha256")
     capabilities = _capabilities(entry.get("capabilities"))
     authority_capabilities = _capabilities(admitted_capabilities, "admitted_capabilities")
     unauthorized = sorted(set(capabilities) - set(authority_capabilities))
     if unauthorized:
         raise EntryFabricError(f"CAPABILITY_NOT_ADMITTED:{','.join(unauthorized)}")
-
     budget = _budget(entry.get("budget"))
     parent_id = _text(entry.get("parent_id"), "parent_id", optional=True)
     stream_id = _text(entry.get("stream_id"), "stream_id", optional=True)
 
-    causal_identity = {
-        "schema": EVENT_IDENTITY_SCHEMA,
+    event_identity = {
+        "schema": ENTRY_EVENT_IDENTITY_SCHEMA,
+        "canonicalization_schema": CANONICALIZATION_SCHEMA,
         "causal_id": causal_id,
         "entity_generation": generation,
         "source_kind": source_kind,
@@ -243,58 +212,50 @@ def admit_entry(
         "stream_id": stream_id,
         "payload_sha256": payload_sha256,
     }
-    event_sha256 = hashlib.sha256(_canonical(causal_identity)).hexdigest()
+    event_sha256 = _identity_sha256(event_identity, "ENTRY_EVENT_IDENTITY")
+    admission_sha256 = _identity_sha256(
+        {
+            "schema": ENTRY_ADMISSION_IDENTITY_SCHEMA,
+            "canonicalization_schema": CANONICALIZATION_SCHEMA,
+            "event_sha256": event_sha256,
+            "ingress_id": ingress_id,
+            "received_time": received_time,
+            "capabilities": list(capabilities),
+            "capability_binding_sha256": capability_binding_sha256,
+            "budget": dict(budget),
+            "payload_ref": payload_ref,
+        },
+        "ENTRY_ADMISSION_IDENTITY",
+    )
+    return EntryPacket(
+        schema=ENTRY_SCHEMA,
+        ingress_id=ingress_id,
+        causal_id=causal_id,
+        entity_generation=generation,
+        source_kind=source_kind,
+        source_id=source_id,
+        modality=modality,
+        observed_time=observed_time,
+        received_time=received_time,
+        provenance_ref=provenance_ref,
+        provenance_sha256=provenance_sha256,
+        capabilities=capabilities,
+        capability_binding_sha256=capability_binding_sha256,
+        parent_id=parent_id,
+        stream_id=stream_id,
+        budget=budget,
+        payload_ref=payload_ref,
+        payload_sha256=payload_sha256,
+        event_sha256=event_sha256,
+        admission_sha256=admission_sha256,
+    )
 
-    admission_identity = {
-        "schema": ADMISSION_IDENTITY_SCHEMA,
-        "event_sha256": event_sha256,
-        "ingress_id": ingress_id,
-        "received_time": received_time,
-        "capabilities": capabilities,
-        "capability_binding_sha256": capability_binding_sha256,
-        "budget": budget,
-        "payload_ref": payload_ref,
-    }
-    admission_sha256 = hashlib.sha256(_canonical(admission_identity)).hexdigest()
 
-    normalized = {
-        "schema": ENTRY_SCHEMA,
-        "ingress_id": ingress_id,
-        "causal_id": causal_id,
-        "entity_generation": generation,
-        "source_kind": source_kind,
-        "source_id": source_id,
-        "modality": modality,
-        "observed_time": observed_time,
-        "received_time": received_time,
-        "provenance_ref": provenance_ref,
-        "provenance_sha256": provenance_sha256,
-        "capabilities": capabilities,
-        "capability_binding_sha256": capability_binding_sha256,
-        "parent_id": parent_id,
-        "stream_id": stream_id,
-        "budget": budget,
-        "payload_ref": payload_ref,
-        "payload_sha256": payload_sha256,
-        "event_sha256": event_sha256,
-        "admission_sha256": admission_sha256,
-    }
-    return EntryPacket(**normalized)
-
-
-def to_hcu_reactive_event(
-    packet: EntryPacket,
-    *,
-    novelty: float = 0.0,
-    contradiction: float = 0.0,
-    uncertainty: float = 0.0,
-    forecast_need: float = 0.0,
-    effect_pressure: float = 0.0,
-    zero_relevance: float = 0.0,
-    due_recheck: bool = False,
-    provenance_gap: bool = False,
-    goal_pressure: float | None = None,
-) -> dict[str, Any]:
+def to_hcu_reactive_event(packet: EntryPacket, *, novelty: float = 0.0, contradiction: float = 0.0,
+                          uncertainty: float = 0.0, forecast_need: float = 0.0,
+                          effect_pressure: float = 0.0, zero_relevance: float = 0.0,
+                          due_recheck: bool = False, provenance_gap: bool = False,
+                          goal_pressure: float | None = None) -> dict[str, Any]:
     if not isinstance(packet, EntryPacket):
         raise EntryFabricError("ENTRY_PACKET_REQUIRED")
 
@@ -311,10 +272,9 @@ def to_hcu_reactive_event(
 
     event: dict[str, Any] = {
         "schema": HCU_EVENT_SCHEMA,
-        "ingress_id": packet.ingress_id,
         "causal_id": packet.causal_id,
         "entry_event_sha256": packet.event_sha256,
-        "entry_admission_sha256": packet.admission_sha256,
+        "entry_canonicalization_schema": CANONICALIZATION_SCHEMA,
         "entity_generation": packet.entity_generation,
         "novelty": unit(novelty, "novelty"),
         "contradiction": unit(contradiction, "contradiction"),
@@ -331,9 +291,4 @@ def to_hcu_reactive_event(
 
 
 def packet_json(packet: EntryPacket) -> str:
-    return json.dumps(
-        asdict(packet),
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-    )
+    return json.dumps(asdict(packet), sort_keys=True, separators=(",", ":"), ensure_ascii=False)

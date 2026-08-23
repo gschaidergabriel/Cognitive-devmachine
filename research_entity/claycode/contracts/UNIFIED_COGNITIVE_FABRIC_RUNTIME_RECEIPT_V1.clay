@@ -1,0 +1,26 @@
+// Unified Cognitive Fabric runtime receipt boundary.
+// ClayCode semantic entry point; deterministic host/native validation owns admission.
+module clay.unified_cognitive_fabric_receipt_v1
+
+fn validate(receipt:Map)->Map {
+  // The effect implementation MUST enforce the v1 invariants documented by the
+  // canonical validator: exact source/runtime bindings, one Zero/GRF/workspace
+  // identity, J-Space/GWT as cognition-only, candidate-only inference return,
+  // fail-closed stale/capability bindings, FREE_ONLY admission, and no direct
+  // candidate state/effect authority.
+  let checked = effect("unified_cognitive_fabric_receipt_validate_v1", receipt)
+  require checked.ok
+  return checked
+}
+
+fn persist(receipt:Map)->Map {
+  let checked = validate(receipt)
+  let payload = map_new()
+  map_set(payload,"schema","UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1")
+  map_set(payload,"receipt_digest",checked.receipt_digest)
+  map_set(payload,"source_commit",checked.source_commit)
+  map_set(payload,"generation",checked.generation)
+  map_set(payload,"engine_class",checked.engine_class)
+  // Persistence is receipt/evidence storage only. It is not canonical state/effect authority.
+  return effect("research_receipt_persist",payload)
+}

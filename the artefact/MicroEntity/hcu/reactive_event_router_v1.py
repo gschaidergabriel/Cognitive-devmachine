@@ -17,14 +17,26 @@ SCHEMA = "HCU_REACTIVE_EVENT/v1"
 ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v2"
 ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v1"
 ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v1"
-# Exact implementation-scoped hash serialization profile. This is deliberately NOT a
-# claim of RFC 8785 JCS or heterogeneous Entry-Fabric canonicalization. Any future
-# cross-language profile must use a distinct versioned identity.
+# Exact implementation-scoped serialization profile; not a cross-language canonicalization claim.
 HASH_SERIALIZATION_SCHEMA = "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1"
+ENGINE_BINDING_FIELDS = frozenset(
+    {
+        "resolved_internal_engine",
+        "resolved_internal_engine_class",
+        "resolved_internal_engine_artifact_sha256",
+    }
+)
+EVENT_FORBIDDEN_ADMISSION_FIELDS = frozenset(
+    {
+        "requested_internal_provider",
+        "resolved_internal_engine",
+        "resolved_internal_engine_class",
+        "resolved_internal_engine_artifact_sha256",
+    }
+)
 
-# Internal cognition is admitted positively. Unknown/future provider or engine labels do
-# not become internal merely because they are absent from a denylist.
-ADMITTED_INTERNAL_PROVIDER_ALIASES = {"hcu", "local", "xeno"}
+# Internal cognition is admitted positively by the deterministic Entry/XPU boundary.
+# Event payload labels are never admission authority.
 ADMITTED_INTERNAL_ENGINES = {
     "hcu_local_08b": "LOCAL_SHARED_WEIGHT_08B",
 }
@@ -44,7 +56,9 @@ ROUTER_POLICY = {
     "schema": ROUTER_POLICY_SCHEMA,
     "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
     "scripts": SCRIPT_STAGES,
-    "admitted_internal_provider_aliases": tuple(sorted(ADMITTED_INTERNAL_PROVIDER_ALIASES)),
+    "engine_admission_boundary": "OUT_OF_BAND_ENTRY_XPU_BINDING",
+    "artifact_admission_boundary": "OUT_OF_BAND_XRAM_LOCK_REGISTRY",
+    "event_provider_labels_are_admission_authority": False,
     "admitted_internal_engines": tuple(sorted(ADMITTED_INTERNAL_ENGINES.items())),
     "thresholds": {
         "world_novelty": 0.55,
@@ -119,25 +133,20 @@ def _sha256_text(value: Any, field: str) -> str:
     return value
 
 
-def _validate_internal_provider(event: Mapping[str, Any]) -> None:
-    provider = event.get("requested_internal_provider")
-    if provider is None:
-        return
-    if not isinstance(provider, str) or not provider.strip():
-        raise ReactiveRoutingError("REQUESTED_INTERNAL_PROVIDER_STRING_REQUIRED")
-    if provider.strip().lower() not in ADMITTED_INTERNAL_PROVIDER_ALIASES:
-        raise ReactiveRoutingError("UNKNOWN_OR_EXTERNAL_PROVIDER_FORBIDDEN_AS_INTERNAL_COGNITIVE_DEPENDENCY")
-
-
 def _resolve_internal_engine(
-    event: Mapping[str, Any],
+    binding: Mapping[str, Any] | None,
     admitted_engine_artifacts: Mapping[str, Any] | None,
 ) -> tuple[str | None, str | None, str | None, str | None]:
-    identity = event.get("resolved_internal_engine")
-    engine_class = event.get("resolved_internal_engine_class")
-    artifact_sha256 = event.get("resolved_internal_engine_artifact_sha256")
-    if identity is None and engine_class is None and artifact_sha256 is None:
+    if binding is None:
         return None, None, None, None
+    if not isinstance(binding, Mapping):
+        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_BINDING_MAPPING_REQUIRED")
+    if set(binding) - ENGINE_BINDING_FIELDS:
+        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_BINDING_SCHEMA_INVALID")
+
+    identity = binding.get("resolved_internal_engine")
+    engine_class = binding.get("resolved_internal_engine_class")
+    artifact_sha256 = binding.get("resolved_internal_engine_artifact_sha256")
     if not isinstance(identity, str) or not identity.strip():
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_IDENTITY_REQUIRED")
     if not isinstance(engine_class, str) or not engine_class.strip():
@@ -150,9 +159,6 @@ def _resolve_internal_engine(
     if engine_class != admitted_class:
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_CLASS_MISMATCH")
     artifact_sha256 = _sha256_text(artifact_sha256, "RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256")
-
-    # The event may report what bytes it thinks were resolved, but that claim is not
-    # authority. XPU/XRAM must separately supply the currently admitted artifact lock.
     if not isinstance(admitted_engine_artifacts, Mapping):
         raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_ARTIFACT_REGISTRY_REQUIRED")
     admitted_artifact_sha256 = admitted_engine_artifacts.get(identity)
@@ -164,7 +170,6 @@ def _resolve_internal_engine(
     )
     if artifact_sha256 != admitted_artifact_sha256:
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256_MISMATCH")
-
     engine_identity_sha256 = _sha256_canonical(
         {
             "schema": ENGINE_IDENTITY_SCHEMA,
@@ -179,20 +184,10 @@ def _resolve_internal_engine(
 
 
 def _event_identity(event: Mapping[str, Any]) -> str:
-    # Engine/provider resolution is routing metadata, not the immutable causal event.
-    # Separating the two lets identical events be compared across admitted engines.
-    payload = dict(event)
-    for key in (
-        "requested_internal_provider",
-        "resolved_internal_engine",
-        "resolved_internal_engine_class",
-        "resolved_internal_engine_artifact_sha256",
-    ):
-        payload.pop(key, None)
     return _sha256_canonical(
         {
             "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
-            "event": payload,
+            "event": dict(event),
         },
         "EVENT",
     )
@@ -202,6 +197,7 @@ def route_event(
     event: Mapping[str, Any],
     *,
     current_generation: int,
+    resolved_engine: Mapping[str, Any] | None = None,
     admitted_engine_artifacts: Mapping[str, Any] | None = None,
 ) -> RouteDecision:
     if not isinstance(event, Mapping) or event.get("schema") != SCHEMA:
@@ -211,14 +207,15 @@ def route_event(
         raise ReactiveRoutingError("ENTITY_GENERATION_INVALID")
     if generation != current_generation:
         raise ReactiveRoutingError("STALE_ENTITY_GENERATION")
+    if any(field in event for field in EVENT_FORBIDDEN_ADMISSION_FIELDS):
+        raise ReactiveRoutingError("ENGINE_OR_PROVIDER_ADMISSION_FIELDS_FORBIDDEN_IN_EVENT_PAYLOAD")
 
-    _validate_internal_provider(event)
     (
         resolved_engine_identity,
         resolved_engine_class,
         resolved_engine_artifact_sha256,
         engine_identity_sha256,
-    ) = _resolve_internal_engine(event, admitted_engine_artifacts)
+    ) = _resolve_internal_engine(resolved_engine, admitted_engine_artifacts)
 
     novelty = _unit(event.get("novelty", 0.0), "novelty")
     contradiction = _unit(event.get("contradiction", 0.0), "contradiction")
@@ -247,8 +244,8 @@ def route_event(
         lanes.add("goal")
         lanes.add("critic")
 
-    # A route that asks for model work must already carry a positively admitted exact
-    # internal engine identity/class/artifact digest. Script-only events require none.
+    # A route that asks for model work must receive a positively admitted exact internal
+    # engine binding from the deterministic control plane. Script-only events require none.
     if lanes and resolved_engine_identity is None:
         raise ReactiveRoutingError("MODEL_ACTIVATION_REQUIRES_ADMITTED_INTERNAL_ENGINE")
     if not lanes and resolved_engine_identity is not None:

@@ -5,6 +5,7 @@
 `STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`
 `PRODUCT=EntityOS`
 `COMPUTE_ARCHITECTURE=HCU`
+`AUTONOMOUS_SUPERVISOR=SUPERVISOR_STEERING_8_62`
 
 This root file is a repository-organ routing shim, not canonical durable product memory or a second authority. The persistent research entity remains Clay; every temporary Claude/model/session/worker is an organ of that same research entity.
 
@@ -12,15 +13,17 @@ This root file is a repository-organ routing shim, not canonical durable product
 
 1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
+3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json`
 4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
 5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
-6. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
-7. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
-8. `the artefact/README.md`
-9. task-relevant current or compatibility implementation files.
+6. `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
+7. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
+8. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
+9. `the artefact/manifest.json`
+10. `the artefact/README.md`
+11. task-relevant current or compatibility implementation files.
 
-Newest explicit owner authority plus verified current `main` outranks cached/historical program material. If current files disagree, fail closed and reconcile one canonical path.
+Newest explicit owner authority plus verified current `main` outranks cached/historical program material. If current files disagree, fail closed and reconcile one canonical path. Never infer current authority from an old receipt, old branch, path name or compatibility filename.
 
 ## Current naming law
 
@@ -29,24 +32,25 @@ Newest explicit owner authority plus verified current `main` outranks cached/his
 - `Xeno` = transitional implementation compatibility codename only.
 - `XCU` = transitional/research alias for HCU only.
 - `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*` = historical implementation/provenance surfaces where exact migration has not occurred.
-- ClayVerse and Frank = historical donor/provenance only.
+- ClayVerse and Frank = historical donor/provenance only unless a newer explicit owner directive re-admits them.
 
 Do not bulk-rename hashes, receipts, ABI/API names, schemas, paths or stateful compatibility surfaces when that would break reproducibility.
 
 ## `go`
 
-Exact `go` means maximum useful **EntityOS + HCU convergence**.
-
-Every `go` has two coupled tracks:
+Exact `go` means maximum useful **EntityOS + HCU convergence** across three coupled tracks:
 
 1. `ENTITYOS_EXECUTABLE_CONVERGENCE`
 2. `HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT`
+3. `GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY`
 
-If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` plus the next discriminator.
+If Track 2 or 3 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` or `TRAINING_READINESS_NO_CHANGE_WITH_REASON` plus the next discriminator.
 
 For material work use:
 
 `OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
+
+A user-triggered `go` has one unusual-experiment budget shared only through an exact upstream `macrocycle_id`. Never infer sibling macrocycles from time, trigger text, organ name or nearby commits; if no upstream ID exists, global uniqueness is `UNRESOLVED_NO_UPSTREAM_ID`.
 
 Prefer reusable HCU machine primitives across:
 
@@ -82,12 +86,23 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 
 ## Execution and safety
 
-- current build/test/experiment/runtime credit comes only from authorized isolated sandbox execution unless newer owner authority changes this;
+- current build/test/experiment/runtime credit comes only from authorized isolated FREE sandbox execution unless newer owner authority changes this;
+- current Vercel Hobby admission is bounded to fixed, source/hash-bound short regression capsules on the admitted Hobby team/project;
+- remaining Sandbox quota is never assumed; quota exhaustion, billing, upgrade, plan mismatch or any monetary charge path fails closed before execution;
+- no caller-supplied generic Sandbox command path may earn credit;
 - VPS/self-hosted/production-host testing is forbidden under current control;
-- Together API/service forbidden;
-- no paid fallback; final paid/model training requires explicit owner authorization;
+- Together general inference, Together training/preflight/key lookup/job creation and all paid/unknown provider fallback are forbidden in the current FREE_ONLY supervisor mode;
+- the historical owner paid one-shot directive remains quarantined provenance and grants zero execution/training credit here;
 - never expose or commit secrets;
 - source/component/historical PASS never implies broader EntityOS/HCU runtime acceptance;
 - preserve exact provenance, stale-generation, replay, privacy and effect boundaries.
 
-Current immediate frontier: positive fail-closed local/internal cognition-engine admission plus one causal HCU route identity binding immutable event identity, resolved engine identity/class, policy and routing result; then exact isolated execution and downstream receipt echo before promotion.
+## Current empirical frontier
+
+Bounded FREE Vercel Sandbox execution is available and exact-source RFC8785/JCS Entry canonicalization plus J-Space dataset family-split have component-only runtime evidence. Whole EntityOS/HCU, J-Space model and training credit remain zero.
+
+Next: keep the single retained PR1263 HCU donor and single PR810 execution-controller authorities; repair fixed capsule manifest/source-commit metadata to exact current Research/PR1263 identity; then extend one hash-verified executor closure toward:
+
+`Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure`.
+
+Do not promote from component PASS, model consensus, deployment READY state or copied fixture identity alone.

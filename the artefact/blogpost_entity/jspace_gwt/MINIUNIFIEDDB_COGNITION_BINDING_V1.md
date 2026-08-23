@@ -36,6 +36,21 @@ It is not a second database, memory authority, effect path, truth ledger, or mod
 - reusing a turn id with different material fails closed;
 - resolving a turn with a stale generation or different task text fails closed.
 
+## Read-integrity law
+
+A stored binding digest is a verification boundary, not merely an identifier. `resolve_prepare_binding` MUST reconstruct the canonical material of both the persisted turn binding and its referenced boot binding before returning any pre-inference ancestry.
+
+Required on every resolve:
+
+- the stored turn schema, live generation, causal turn id, boot-binding digest, task digest, workspace digest, selected slots, contradiction state, provenance and required Zero mode are typed and canonicalized exactly as at bind time;
+- `sha256(canonical_turn_material)` MUST equal the persisted `turn_binding_digest`;
+- the stored boot schema, generation, all cognition digests and boot provenance are typed and canonicalized exactly as at boot-bind time;
+- `sha256(canonical_boot_material)` MUST equal the persisted `boot_binding_digest`;
+- persisted JSON list fields MUST parse as lists and MUST equal their canonical JSON serialization before they participate in digest reconstruction;
+- any mismatch is a fail-closed pre-inference error and MUST NOT be repaired by accepting the mutated row under the old digest.
+
+This protects against a corrupted or improperly mutated MiniUnifiedDB row re-entering cognition ancestry while retaining a stale digest identity. It does not make SQLite itself a semantic truth oracle; it only ensures the canonical binding identity still matches the bytes/fields being returned.
+
 ## Required boot identities
 
 The v1 boot binding requires admitted identities for:
@@ -56,7 +71,7 @@ This is deliberately strict. The current intentionally `UNBOUND` boot/model stat
 
 ## Runtime integration target
 
-`pipeline_cognitive_fabric_prepare` should call the same-store resolver using the exact live generation, causal turn id and task text. Only a successful exact binding may feed the existing ZERO workspace capsule and inference-packet compilers. Missing/stale/conflicting bindings must `BLOCK` or typed-`ABSTAIN` before model execution.
+`pipeline_cognitive_fabric_prepare` should call the same-store resolver using the exact live generation, causal turn id and task text. Only a successful exact binding may feed the existing ZERO workspace capsule and inference-packet compilers. Missing/stale/conflicting/corrupt bindings must `BLOCK` or typed-`ABSTAIN` before model execution.
 
 After candidate inference, the existing deterministic gate/CAS path decides commit or explicit no-commit. Only then may `pipeline_cognitive_fabric_finalize_runtime_receipt` emit the canonical final `UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1`, reusing the same turn/boot/packet ancestry and binding the observed terminal outcome. Post-turn causal binding follows that final receipt. Finalization itself does not become a second truth/effect authority.
 

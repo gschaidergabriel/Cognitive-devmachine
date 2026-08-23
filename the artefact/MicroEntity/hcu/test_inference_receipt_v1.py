@@ -1,7 +1,11 @@
 import copy
+import hashlib
 import unittest
+from dataclasses import asdict
 
+from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
 from inference_receipt_v1 import (
+    SCHEMA,
     InferenceReceiptError,
     make_inference_receipt,
 )
@@ -12,6 +16,11 @@ from xeno_entry_fabric_v1 import admit_entry, to_hcu_reactive_event
 CAPABILITY_BINDING_SHA256 = "b" * 64
 ENGINE_SHA256 = "a" * 64
 OUTPUT_SHA256 = "d" * 64
+ADMITTED_BUDGET = {
+    "max_model_calls": 2,
+    "max_tokens": 2048,
+    "max_wall_ms": 5000,
+}
 
 
 def base_entry():
@@ -47,6 +56,7 @@ def admitted_packet():
         current_generation=7,
         expected_capability_binding_sha256=CAPABILITY_BINDING_SHA256,
         admitted_capabilities=("memory.read", "hcu.route"),
+        admitted_budget=ADMITTED_BUDGET,
     )
 
 
@@ -94,6 +104,9 @@ class InferenceReceiptTests(unittest.TestCase):
         a = make_inference_receipt(decision, **kwargs)
         b = make_inference_receipt(decision, **copy.deepcopy(kwargs))
         self.assertEqual(a, b)
+        self.assertEqual(a.schema, SCHEMA)
+        self.assertEqual(a.schema, "HCU_INFERENCE_RECEIPT/v2")
+        self.assertEqual(a.hash_serialization_schema, CANONICALIZATION_SCHEMA)
         self.assertEqual(a.status, "CANDIDATE_ONLY")
         self.assertEqual(a.entity_generation, 7)
         self.assertEqual(a.entry_admission_sha256, packet.admission_sha256)
@@ -101,6 +114,9 @@ class InferenceReceiptTests(unittest.TestCase):
         self.assertEqual(a.decision_sha256, decision.decision_sha256)
         self.assertEqual(a.resolved_engine_artifact_sha256, ENGINE_SHA256)
         self.assertEqual(len(a.receipt_sha256), 64)
+        payload = asdict(a)
+        receipt_sha256 = payload.pop("receipt_sha256")
+        self.assertEqual(receipt_sha256, hashlib.sha256(canonicalize(payload)).hexdigest())
 
     def test_stale_bound_route_generation_fails_closed(self):
         _packet, decision, kwargs = receipt_kwargs()

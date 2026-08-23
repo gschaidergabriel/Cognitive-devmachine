@@ -17,50 +17,54 @@ class ExecutionBoundaryTests(unittest.TestCase):
         root = Path(td.name)
         json_files = {
             mod.BOOTSTRAP: {
-                "execution_surface": "AUTHORIZED_ISOLATED_SANDBOX_OR_INDEPENDENT_KERNEL_GUEST_ONLY",
+                "execution_surface": mod.EXPECTED_SURFACE,
                 "vps_testing": "FORBIDDEN",
-                "vps_testing_scope": mod.DIRECT_SCOPE,
-                "vps_disposable_independent_kernel_guest_testing": mod.GUEST_ADMISSION,
-                "vps_execution_directive": mod.VPS_GUEST_DIRECTIVE,
+                "vps_disposable_independent_kernel_guest_testing": "FORBIDDEN",
+                "self_hosted_vps_test_runners": "FORBIDDEN",
+                "production_host_testing": "FORBIDDEN",
             },
             mod.PROGRAM: {
                 "execution_policy": {
                     "isolated_sandbox_only": True,
                     "vps_testing_forbidden": True,
-                    "vps_testing_forbidden_scope": mod.DIRECT_SCOPE,
-                    "vps_disposable_independent_kernel_guest_testing_admitted": True,
-                    "qemu_tcg_guest_development_evidence_only": True,
-                    "final_hardware_microvm_credit_requires_hardware_virtualized_guest": True,
-                    "vps_execution_directive": mod.VPS_GUEST_DIRECTIVE,
+                    "vps_disposable_independent_kernel_guest_testing_admitted": False,
+                    "self_hosted_vps_test_runners_forbidden": True,
+                    "production_host_testing_forbidden": True,
                 }
             },
             mod.CONTROL44: {
                 "composition_rule": "PRESERVE ALL 4.2 EXECUTION-BOUNDARY RULES",
                 "preserved_hard_rules": {
                     "vps_testing": False,
-                    "vps_testing_scope": mod.DIRECT_SCOPE,
-                    "vps_disposable_independent_kernel_guest_testing": True,
-                    "qemu_tcg_guest_final_hardware_microvm_credit": False,
-                    "vps_execution_directive": mod.VPS_GUEST_DIRECTIVE,
+                    "vps_disposable_independent_kernel_guest_testing": False,
+                    "self_hosted_vps_test_runners": False,
+                    "production_host_testing": False,
+                    "authorized_isolated_sandbox_only": True,
                 },
             },
             mod.STEERING844: {
                 "adjudication": {
                     "vps_testing": False,
-                    "vps_testing_scope": mod.DIRECT_SCOPE,
-                    "vps_disposable_independent_kernel_guest_testing": True,
-                    "qemu_tcg_guest_final_hardware_microvm_credit": False,
+                    "vps_disposable_independent_kernel_guest_testing": False,
+                    "self_hosted_vps_test_runners": False,
+                    "production_host_testing": False,
+                    "authorized_isolated_sandbox_only": True,
                 }
             },
         }
         text_files = {
             mod.SANDBOX_DIRECTIVE: (
-                "direct test/build/experiment execution on a VPS host remains forbidden\n"
-                "freshly created disposable independent-kernel guest test sandbox\n"
+                "Current authority: 2026-08-23\n"
+                "VPS testing is **FORBIDDEN**.\n"
+                "VPS-hosted disposable KVM/VM/microVM/TCG guest testing is **FORBIDDEN**.\n"
+                "Self-hosted VPS test runners are **FORBIDDEN**.\n"
+                "Production/deployment-host testing is **FORBIDDEN**.\n"
             ),
             mod.VPS_GUEST_DIRECTIVE: (
-                "Direct execution of product/test commands on the VPS host remains forbidden.\n"
-                "disposable independent-kernel guest\n"
+                "Original authority time: 2026-08-18\n"
+                "**Status:** **SUPERSEDED**\n"
+                "superseded by the newer owner-directed ClayVerse bootstrap dated **2026-08-23**\n"
+                "VPS-hosted disposable KVM/VM/microVM/TCG guest testing is forbidden\n"
             ),
         }
         for rel, data in json_files.items():
@@ -73,46 +77,69 @@ class ExecutionBoundaryTests(unittest.TestCase):
             path.write_text(text, encoding="utf-8")
         return td, root
 
-    def test_current_host_guest_split_passes(self):
+    def test_current_sandbox_only_contract_passes(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
         result = mod.validate(root)
         self.assertTrue(result["pass"], result["errors"])
         self.assertEqual(result["credit"], "SOURCE_POLICY_ASSERTION_ONLY_ZERO_RUNTIME_CREDIT")
 
-    def test_guest_lane_removal_fails_closed(self):
+    def test_program_guest_readmission_fails_closed(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
         path = root / mod.PROGRAM
         data = json.loads(path.read_text(encoding="utf-8"))
-        data["execution_policy"]["vps_disposable_independent_kernel_guest_testing_admitted"] = False
+        data["execution_policy"]["vps_disposable_independent_kernel_guest_testing_admitted"] = True
         path.write_text(json.dumps(data), encoding="utf-8")
-        self.assertIn("PROGRAM_DISPOSABLE_GUEST_ADMISSION_MISSING", mod.validate(root)["errors"])
+        self.assertIn("PROGRAM_VPS_GUEST_REAUTHORIZED", mod.validate(root)["errors"])
 
-    def test_scope_broadening_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.BOOTSTRAP
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["vps_testing_scope"] = "ALL_VPS_HOSTED_EXECUTION"
-        path.write_text(json.dumps(data), encoding="utf-8")
-        self.assertIn("BOOTSTRAP_VPS_SCOPE_NOT_DIRECT_HOST_ONLY", mod.validate(root)["errors"])
-
-    def test_direct_host_ban_removal_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.VPS_GUEST_DIRECTIVE
-        path.write_text("disposable independent-kernel guest\n", encoding="utf-8")
-        self.assertIn("VPS_GUEST_DIRECTIVE_HOST_BAN_MISSING", mod.validate(root)["errors"])
-
-    def test_tcg_cannot_mint_final_hardware_microvm_credit(self):
+    def test_control_guest_readmission_fails_closed(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
         path = root / mod.CONTROL44
         data = json.loads(path.read_text(encoding="utf-8"))
-        data["preserved_hard_rules"]["qemu_tcg_guest_final_hardware_microvm_credit"] = True
+        data["preserved_hard_rules"]["vps_disposable_independent_kernel_guest_testing"] = True
         path.write_text(json.dumps(data), encoding="utf-8")
-        self.assertIn("CONTROL44_TCG_FINAL_CREDIT_WEAKENED", mod.validate(root)["errors"])
+        self.assertIn("CONTROL44_VPS_GUEST_REAUTHORIZED", mod.validate(root)["errors"])
+
+    def test_stale_vps_directive_current_status_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.VPS_GUEST_DIRECTIVE
+        path.write_text(
+            "Original authority time: 2026-08-18\n"
+            "**Status:** **CURRENT**\n"
+            "disposable independent-kernel guest is admitted\n",
+            encoding="utf-8",
+        )
+        self.assertIn("VPS_GUEST_DIRECTIVE_NOT_SUPERSEDED", mod.validate(root)["errors"])
+
+    def test_bootstrap_stale_directive_pointer_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.BOOTSTRAP
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["vps_execution_directive"] = mod.VPS_GUEST_DIRECTIVE
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("BOOTSTRAP_STALE_VPS_DIRECTIVE_POINTER", mod.validate(root)["errors"])
+
+    def test_self_hosted_vps_readmission_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.PROGRAM
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["execution_policy"]["self_hosted_vps_test_runners_forbidden"] = False
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("PROGRAM_SELF_HOSTED_BAN_MISSING", mod.validate(root)["errors"])
+
+    def test_production_host_readmission_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.STEERING844
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["adjudication"]["production_host_testing"] = True
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("STEERING844_PRODUCTION_REAUTHORIZED", mod.validate(root)["errors"])
 
 
 if __name__ == "__main__":

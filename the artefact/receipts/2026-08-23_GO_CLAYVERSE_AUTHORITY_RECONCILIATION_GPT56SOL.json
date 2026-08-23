@@ -1,0 +1,38 @@
+{
+  "schema": "CLAYVERSE_GO_AUTHORITY_RECONCILIATION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "dbb73ac784fab32d625297ff9272989b861ae909",
+  "observation": {
+    "split_brain": true,
+    "clayverse_sources": [
+      "the artefact/manifest.json",
+      "the artefact/ARCHITECTURE.md"
+    ],
+    "stale_conflicting_sources": [
+      "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+      "research_entity/rooms/PROGRAM_STATE.json",
+      "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+      "research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md",
+      "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md",
+      "the artefact/README.md"
+    ]
+  },
+  "delta": {
+    "authority_reconciled_to": "CLAYVERSE_SINGLE_CONTAINER",
+    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+    "validator": "tools/validate_clayverse_authority_consistency.py",
+    "regression": "tests/test_validate_clayverse_authority_consistency.py"
+  },
+  "evidence": {
+    "scope": "SOURCE_MECHANISM_ONLY",
+    "whole_product_runtime_credit": 0,
+    "vercel_sandbox_start_exec_exposed": false,
+    "vps_test_used": false,
+    "together_used": false,
+    "paid_training_used": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE"
+  },
+  "next_gate": "Run the authority validator plus full exact-current ClayVerse suite and OCI build/startup on an actually-started authorized isolated sandbox, then bind source SHA/image digest/runtime evidence before any runtime promotion."
+}

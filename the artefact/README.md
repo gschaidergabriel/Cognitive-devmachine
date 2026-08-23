@@ -77,7 +77,6 @@ These are software architecture roles, not claims of custom silicon.
 ## Mandatory `go` law
 
 Every explicit `go` has three coupled tracks:
-
 1. **ENTITYOS_EXECUTABLE_CONVERGENCE** — improve the strongest real current implementation toward EntityOS.
 2. **HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one HCU or typed Entry primitive.
 3. **GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY** — advance functional J-Space/GWT instrumentation and zero-cost local ~0.8B readiness without entering paid lanes.
@@ -248,3 +247,17 @@ No deterministic regression, Vercel Sandbox, actual loader I/O or actual model-e
 Next exact gate: in the same PR810 fixed route, vendor the exact donor `48d1bcb8357df0cf90d99133027f88ab67361a3f` source/regression/transitive closure, require the route manifest blob map to equal the rebind contract including `a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4`, remove `SOURCE_REBIND_REQUIRED` only atomically with that complete closure, and execute only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission actually permits it.
 
 Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_CONCURRENT_MODEL_INVOCATION_SINGLE_JSPACE_WINNER_SOURCE_GPT56SOL.json`.
+
+## Current `go` delta — canonical MiniUnifiedDB execution-to-Inference/v4 fusion
+
+`README=UPDATED_MINIUNIFIEDDB_EXECUTION_INFERENCE_V4_FUSION`.
+
+The retained PR810 positive component harness previously demonstrated `VerifiedModelExecution/v1 -> InferenceReceipt/v4` using caller-constructed admitted-observation/invocation maps even though the retained donor already supplied `HCU_MODEL_EXECUTION_ADMISSION_STORE/v1`. This macrocycle fused that existing canonical admission owner into the same retained executor lane instead of creating a second registry or executor. Commit `a3c916d9d86104fbc4419f46860e61725287e363` routes the integration harness through `admit_and_verify_model_execution` on the existing MiniUnifiedDB SQLite connection; `e042336a1942976d12537f72899342db08d2d99c` hash-binds that path into the fixed positive capsule; `d0c1ec632c6086c56977b4b4963574b07d416304` makes the executor build guard require the canonical MiniUnifiedDB admission markers and zero-credit boundary.
+
+The fused deterministic source regression now covers six boundaries: observation+invocation persistence before verification, idempotent exact replay, divergent same-invocation rollback, stale-generation no-write, exact admitted `VerifiedModelExecution` consumption by Inference/v4, and post-verification provenance-tamper rejection. Re-entry proved the guard commit remains an ancestor of the continuing single PR810 lineage; at the observed successor `c6dbbdd3bee56f5d358d996ccb89b91a980938bc`, 18 subsequent commits had built additional exact-source/J-Space/concurrency closure on top of it rather than replacing it.
+
+No admitted Sandbox run or actual model-executor I/O was executed by this organ for this fused capsule. Therefore this is a durable **source/executor convergence** result, not runtime evidence: whole EntityOS/HCU runtime, full-HCU runtime, J-Space model-runtime and training credit remain `0`; whole-product PASS remains false. No unusual experiment was performed.
+
+Next exact gate: preserve `SOURCE_REBIND_REQUIRED` until the single PR810 route carries and hash-binds one immutable corrected donor snapshot for every production source, regression and transitive fixture through Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3. Execute the fixed closure only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission permits, and require actual zero-cost local model-executor I/O to enter through the same MiniUnifiedDB atomic admission path before any model/J-Space runtime promotion.
+
+Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_MINIUNIFIEDDB_EXECUTION_INFERENCE_V4_FUSION_GPT56SOL.json`.

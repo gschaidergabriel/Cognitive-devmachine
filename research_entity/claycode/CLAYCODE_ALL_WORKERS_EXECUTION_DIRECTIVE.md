@@ -1,7 +1,7 @@
 # ClayCode All-Workers Execution Directive — EntityOS + HCU
 
 Status: **CURRENT PROJECT OWNER WORKER DIRECTIVE**  
-Date: 2026-08-23  
+Date: 2026-08-24  
 Persistent research entity: **Clay**  
 Current product/system: **EntityOS**  
 Current integrated cognition/compute architecture: **HCU**
@@ -108,6 +108,30 @@ The benchmark ladder is `10 -> 32 -> 64 -> 128 -> 256 -> ~600`; ~600 H100-class 
 - Together is forbidden; no paid fallback; secrets never enter prompts/source/receipts;
 - final paid/model training requires explicit owner authorization.
 
+## Mandatory sandbox/API discovery and PASS-seeking law
+
+Owner directive 2026-08-24: every worker must actively inspect the sandbox APIs, SDKs, CLIs, connector actions, deployment/runtime surfaces and execution tools actually available to that worker before classifying executable work as blocked.
+
+For Vercel Sandbox specifically, workers must know that the platform currently provides mechanisms including `Sandbox.create`, `sandbox.runCommand`, CLI `sandbox run` / `sandbox exec`, REST session command execution under `/v2/sandboxes/sessions/{sessionId}/cmd`, and sandbox snapshot/fork/lifecycle operations. This is capability knowledge, not proof that every worker surface exposes every operation.
+
+Mandatory behavior:
+
+- perform tool/action discovery on the current surface before writing `SANDBOX_UNAVAILABLE`, `EXECUTOR_UNAVAILABLE`, or equivalent;
+- distinguish **platform capability** from **currently exposed connector capability**;
+- if direct Sandbox create/start/exec is exposed, use it for the highest-information authorized exact-source test instead of stopping at source review;
+- if the current connector exposes only deployment/project/log/protected-fetch operations, inspect the retained authorized deployment/controller path and determine whether it can safely bridge into Sandbox execution;
+- use deployment build logs, runtime logs, protected deployment fetch, project/deployment identity and controller receipts to falsify stale blockers before declaring execution unavailable;
+- prefer exact disposable microVM execution, exact source/artifact binding, deterministic regression, OCI build/start, loader-consumed-byte evidence, Entry->HCU route->lease->inference->GRID10 integration, restart/recovery and effect-boundary tests whenever the admitted surface permits them;
+- continue through adjacent executable gates while they remain safe and high-information; do not stop merely because a component test is green;
+- never weaken provenance, auth, generation, capability, EffectGate, recovery or secret-handling constraints just to obtain a green result;
+- never fabricate a token, secret, runtime observation, Sandbox start, command execution or PASS;
+- owner-held credentials may enter only through an explicitly admitted transient runtime ingress and must never be committed, copied into prompts/receipts, baked into images, or persisted after the bounded operation;
+- an unavailable credential or missing callable action is a precise blocker, not permission to use VPS/self-hosted/production substitutes;
+- source/component evidence remains zero whole-runtime credit until the exact executable path actually runs;
+- every worker handoff must state which sandbox/API/tool surfaces were discovered, which were actually callable, what was executed, and the next executable PASS gate.
+
+PASS-seeking means maximizing real acceptance evidence, not maximizing green labels. A fail-closed negative result that removes a false assumption is valid progress; a synthetic or source-only green must not be promoted to runtime PASS.
+
 ## Mandatory prompt injection
 
 The surrounding marker below is retained **only as a compatibility ABI for the existing loader**. Its words do not grant `Mini Entity` current product authority. The authoritative payload inside is EntityOS/HCU.
@@ -152,12 +176,16 @@ AUTHORITY
 
 EXECUTION / SECURITY
 - Refresh current main/authority/program state before overlapping writes.
+- Before declaring execution blocked, inspect the sandbox APIs/SDK/CLI, connector actions, deployment runtime/log/fetch tools and any admitted controller bridge actually available on the current surface.
+- Vercel platform capability includes Sandbox.create/runCommand, sandbox run/exec, REST sandbox command execution and snapshot/fork lifecycle; use any of these only when the current worker surface really exposes an authorized callable path.
+- Prefer real exact-source isolated execution toward PASS over additional prose/source assertions whenever safely callable.
+- If direct Sandbox exec is absent but an admitted retained controller/deployment can bridge into Sandbox safely, inspect and use that bridge subject to exact-current binding and credential rules.
 - Current runtime/test credit is authorized-isolated-sandbox-only unless newer owner authority changes this.
 - Together forbidden; no paid fallback; secrets never enter prompts/source/receipts.
 - Runtime/capacity PASS requires exact executable evidence.
 
 HANDOFF
-- State: EntityOS delta; HCU/Entry delta or no-change reason; hypothesis; strongest counterhypothesis; discriminator; measured-vs-inferred boundary; cross-mode reuse; next executable step.
+- State: EntityOS delta; HCU/Entry delta or no-change reason; hypothesis; strongest counterhypothesis; discriminator; measured-vs-inferred boundary; cross-mode reuse; sandbox/API/tool surfaces discovered and actually callable; next executable PASS gate.
 
 [/ENTITYOS/HCU CURRENT AUTHORITY]
 [/MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]
@@ -169,11 +197,11 @@ Any worker spawning another worker in the same trigger prepends the current prot
 
 ## Execution owner rule
 
-When an authorized executable surface is callable, execute the highest-information applicable test rather than stop at a proposal. Unavailable execution remains `BLOCKED/UNOBSERVED`, never PASS or semantic FAIL. Preserve exact source/artifact/runtime identity and negative results.
+When an authorized executable surface is callable, execute the highest-information applicable test rather than stop at a proposal. Unavailable execution remains `BLOCKED/UNOBSERVED`, never PASS or semantic FAIL. Preserve exact source/artifact/runtime identity and negative results. A worker may call execution unavailable only after current-surface sandbox/API/tool discovery has been performed and reported.
 
 ## Continuation law
 
-`observe -> hypotheses -> counterhypotheses -> discriminate -> execute/measure when authorized -> verify -> fuse -> repair/build -> regression -> re-entry`
+`observe -> hypotheses -> counterhypotheses -> discriminate -> discover executable surfaces -> execute/measure when authorized -> verify -> fuse -> repair/build -> regression -> re-entry`
 
 not
 

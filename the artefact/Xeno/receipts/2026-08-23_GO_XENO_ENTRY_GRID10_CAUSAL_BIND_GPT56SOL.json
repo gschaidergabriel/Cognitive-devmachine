@@ -7,6 +7,8 @@
   "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
   "base_main": "2178d9b0a062636231ff0e3c533417c2268a7a96",
   "branch": "go/xeno-entry-grid10-causal-bind-20260823",
+  "pr": 1354,
+  "source_candidate_head_before_receipt_update": "557610fb96defb6f9d4a88a0cd033f65e15ff2f4",
   "goal": "Bind all new Xeno data before cognition and compile a reusable deterministic 10-cell logical plan over shared physical workers without creating truth/effect authority.",
   "hypothesis": "A single typed ingress identity plus deterministic XPU plan compiler can serve GRID10 and later COGSIM10/WM_TEST/NESTED_SIM while eliminating route-decision causal aliasing.",
   "counterhypothesis": "The shared packet/control abstraction merely moves complexity into metadata and scheduler logic, adding latency and failure modes without improving replay/provenance safety.",
@@ -16,7 +18,7 @@
     "name": "CAUSAL_ALIAS_POISON",
     "intervention": "Hold causal_id, payload reference, resource budget and requested routing functions fixed while mutating immutable event provenance; require different ingress/plan digests, then replay the exact first event and require identical digests.",
     "source_test": "the artefact/Xeno/test_entry_grid_v1.py::GoUnusualExperiment::test_causal_alias_poison_same_routing_different_event_identity",
-    "execution_status": "SOURCE_ENCODED_NOT_YET_OBSERVED_IN_AUTHORIZED_ISOLATED_EXECUTOR"
+    "execution_status": "NOT_EXECUTED_RUNNER_FAILED_BEFORE_VISIBLE_STEP"
   },
   "source_delta": [
     "the artefact/Xeno/entry_fabric_v1.py",
@@ -39,11 +41,20 @@
     "XENO_WM_TEST",
     "XENO_NESTED_SIM"
   ],
+  "execution_evidence": {
+    "vercel_callable_sandbox_create_exec": false,
+    "github_workflow": "Research Entity Identity Guard",
+    "workflow_run_id": 32651779315,
+    "job_id": 97224412867,
+    "job_name": "identity-guard",
+    "job_conclusion": "failure",
+    "visible_steps": [],
+    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT"
+  },
   "runtime_credit": 0,
   "whole_product_pass": false,
-  "execution_surface_observation": "Connected Vercel capability exposes no Sandbox create/start/exec action; current main had no PR-triggered workflow run at inspection time.",
   "together_api": "FORBIDDEN_AND_UNUSED",
   "vps_testing": "NOT_USED",
   "paid_or_model_training": "NOT_USED",
-  "next_gate": "Actually start an authorized isolated executor on the exact branch bytes; run the focused Xeno tests plus adjacent HCU/fabric/generation regressions. Only then consider fusion to main and model-worker integration."
+  "next_gate": "Actually start an authorized isolated executor on the exact then-current PR bytes; run the focused Xeno Entry/GRID10 tests plus adjacent HCU/fabric/generation regressions. Only after observed green execution should the source candidate be fused into main and extended toward shared model-worker integration."
 }

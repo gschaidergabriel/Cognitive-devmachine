@@ -113,11 +113,20 @@ class ReactiveRouterTests(unittest.TestCase):
 
     def test_bundled_local_model_requires_exact_checkpoint_digest(self):
         e = base_event(); e.update(contradiction=0.8)
-        for bad in (None, "", "xyz", "A" * 64):
+        for bad in (None, "", "xyz", "a" * 63, "g" * 64):
             with self.subTest(checkpoint=bad):
                 binding = local_engine(checkpoint_sha256=bad)
                 with self.assertRaises(ReactiveRoutingError):
                     route_event(e, current_generation=7, resolved_engine=binding)
+
+    def test_uppercase_checkpoint_digest_is_canonicalized(self):
+        e = base_event(); e.update(contradiction=0.8)
+        decision = route_event(
+            e,
+            current_generation=7,
+            resolved_engine=local_engine(checkpoint_sha256="A" * 64),
+        )
+        self.assertEqual(decision.engine_checkpoint_sha256, CHECKPOINT_A)
 
     def test_stale_generation_fails_closed(self):
         with self.assertRaisesRegex(ReactiveRoutingError, "STALE_ENTITY_GENERATION"):

@@ -1,0 +1,54 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "fresh_main_base": "7028a6f66ac0d61a09487f09caf1b2df417325f4",
+  "owner_architecture_commit": "5f3c2a7cc9aeab8f851d38450fa50a3e1451d767",
+  "coordination": {
+    "merged_macrocycle_id": "cdd2fb97-a30f-41b3-9573-ae97c0346f31",
+    "merged_unusual_experiment": "JSPACE_TRANSFER_ASSUMPTION_FALSIFIER",
+    "additional_unusual_experiment_performed": false,
+    "reason": "Current main already contains the transfer falsifier for this J-Space frontier; this delta is deterministic contract implementation/regression only."
+  },
+  "delta": {
+    "contract": "the artefact/blogpost_entity/mini_cognition/JSPACE_GWT_BINDING_V1.md",
+    "validator": "the artefact/blogpost_entity/mini_cognition/validate_jspace_gwt_binding_v1.py",
+    "tests": "the artefact/blogpost_entity/mini_cognition/test_validate_jspace_gwt_binding_v1.py"
+  },
+  "exact_local_component_bytes_sha256": {
+    "JSPACE_GWT_BINDING_V1.md": "f27ee5845c9f0e8ae66881eb30b37b810a819ea3b8904f03718366386a86229e",
+    "validate_jspace_gwt_binding_v1.py": "85750372fd291117dfa3a91ddfe95a5905f8f07c453f4a30eda6d6401c9eb018",
+    "test_validate_jspace_gwt_binding_v1.py": "b5c65fe12823e4cfdf57708b4ee805983ae15cdcced0c1f8744b6a7fc9b62969"
+  },
+  "component_execution": {
+    "command": "python -m pytest -q /tmp/clay_jspace_fresh/test_validate_jspace_gwt_binding_v1.py",
+    "result": "PASS",
+    "tests": 10,
+    "failures": 0,
+    "scope": "isolated local component validator only"
+  },
+  "guards": [
+    "exact 40-char source and owner-architecture Git SHA shape",
+    "exact 40-char Jacobian-Lens implementation revision",
+    "non-placeholder checkpoint/tokenizer/lens/corpus/workspace digests",
+    "source/target layer ordering and model-shape bounds",
+    "UNMEASURED slot calibration cannot select a canonical slot count",
+    "MEASURED slot calibration requires a receipt digest",
+    "MiniUnifiedDB remains canonical truth authority",
+    "J-Space measurement remains interpretability telemetry, not truth",
+    "bundled-core binding accepts only LOCAL_OBSERVE_ONLY or FULL_LOCAL_LATENT",
+    "research intervention requires FULL_LOCAL_LATENT, receipt, finite non-zero alpha and canonical_write_allowed=false"
+  ],
+  "evidence_class": "BOUNDED_EXACT_LOCAL_COMPONENT_MECHANISM",
+  "runtime_credit": 0,
+  "bundled_08b_runtime_credit": 0,
+  "jspace_runtime_credit": 0,
+  "whole_gwt_production_credit": 0,
+  "provider_calls": 0,
+  "paid_execution": false,
+  "free_only_preserved": true,
+  "next_executable_gate": "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 on an authorized exact runtime: bind checkpoint/tokenizer/runtime/lens/workspace identities, then run jlens.from_hf, minimal apply, bounded jacobian_for_prompt and small fit/reload before any calibrated layer/slot/steering claim."
+}

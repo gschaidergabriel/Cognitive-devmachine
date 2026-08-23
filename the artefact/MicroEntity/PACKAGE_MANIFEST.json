@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "package": "MicroEntity",
   "root": "the artefact/MicroEntity",
   "snapshot": "MICROENTITY_CURRENT.zip",
@@ -24,10 +24,20 @@
     "hcu/HCU_ARCHITECTURE.md",
     "hcu/topology.kvm4.json",
     "hcu/FREE_LLM_FEED_CONTRACT.json",
-    "hcu/HCU_DATA_INDEX.json"
+    "hcu/HCU_DATA_INDEX.json",
+    "build_microentity_zip.py",
+    "hcu/capacity_plan.py",
+    "hcu/generated/HCU_CAPACITY_PLAN_KVM4.json",
+    "hcu/module_roles.json",
+    "hcu/protocol_schemas.json",
+    "hcu/data/README.md",
+    "hcu/receipts/README.md",
+    "hcu/receipts/2026-08-23_HCU_CAPACITY_PROTOCOL_FUSION_GPT56SOL.json"
   ],
   "generated_hcu_data_policy": "include non-secret release artefacts/receipts and privacy-filtered exports; operational state remains canonical in MiniUnifiedDB",
   "secrets_in_archive": false,
-  "source_base_head": "5aa665364894245c05513ea91c41e3304f3e7368",
-  "claim_class": "SOURCE_PACKAGE_CONTRACT_ONLY_NOT_RUNTIME_EVIDENCE"
+  "source_base_head": "efec8ecff35c28cea6f7445a87aa65ddcc339cab",
+  "claim_class": "SOURCE_PACKAGE_CONTRACT_ONLY_NOT_RUNTIME_EVIDENCE",
+  "archive_builder": "build_microentity_zip.py",
+  "hcu_archive_policy": "ALL_NON_SECRET_REGULAR_FILES_UNDER_HCU_RECURSIVELY_INCLUDED"
 }

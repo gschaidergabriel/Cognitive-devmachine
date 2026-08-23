@@ -51,3 +51,6 @@ This makes the grid GPU-like only in the scheduling sense: many logical lanes fe
 ## Evidence boundary
 
 This package defines a **SOURCE/ARCHITECTURE CONTRACT**. It does not claim measured throughput, resident-module count, memory fit, model quality or whole Mini Entity runtime acceptance on the KVM4 host.
+## Deterministic capacity/protocol supplement
+
+The package also carries `capacity_plan.py` plus a generated KVM4 planning result, a 16-tile role map and typed inter-module protocol schemas. These refine scheduling/provenance contracts without replacing `HCU_ARCHITECTURE.md` or `topology.kvm4.json`. The generated capacity plan is planning-only; runtime residency/concurrency is promoted only from exact measured receipts.

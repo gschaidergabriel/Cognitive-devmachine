@@ -1,0 +1,43 @@
+{
+  "claim_class": "DETERMINISTIC_PLANNING_ONLY_NOT_RUNTIME_CREDIT",
+  "hardware": {
+    "bandwidth_tb": 16,
+    "cpu_cores": 4,
+    "disk_gib": 200,
+    "ram_mib": 16384
+  },
+  "planning_budget": {
+    "adaptive_logical_ceiling": 24,
+    "estimated_hot_lane_overhead_mib": 640,
+    "estimated_logical_state_mib": 64,
+    "estimated_weight_mib": 620,
+    "mini_entity_hard_mib": 14336,
+    "mini_entity_soft_mib": 12288,
+    "target_hot_lanes": 2,
+    "target_logical_slots": 16
+  },
+  "planning_caps": {
+    "independent_replica_memory_cap_under_soft_budget": 9,
+    "logical_state_memory_cap_after_default_lanes": 162,
+    "shared_weight_lane_memory_cap_under_soft_budget": 18
+  },
+  "promotion_gate": [
+    "exact_checkpoint_and_runtime_identity",
+    "measured_worker_rss",
+    "measured_context_kv_bytes",
+    "p50_p95_decode_latency",
+    "token_throughput_under_queue_load",
+    "swap_pressure",
+    "restart_generation_fencing"
+  ],
+  "schema_version": "HCU_CAPACITY_PLAN/v2",
+  "topology": {
+    "hard_parallel_decode_ceiling_from_cpu_and_estimated_memory": 4,
+    "logical_slots_adaptive_ceiling": 24,
+    "logical_slots_target": 16,
+    "planning_burst_hot_lanes": 3,
+    "resident_hot_lanes_target": 2,
+    "scheduler": "RESOURCE_ADAPTIVE_WEIGHTED_QUEUE_PLUS_GWT_HYPERPOSITION_BARRIERS",
+    "weight_strategy": "SHARED_FILE_PAGE_CACHE_OR_READ_ONLY_MMAP_WHERE_RUNTIME_SUPPORTS_IT"
+  }
+}

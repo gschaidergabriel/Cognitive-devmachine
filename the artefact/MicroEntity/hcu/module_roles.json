@@ -1,0 +1,34 @@
+{
+  "schema_version": "HCU_MODULE_ROLE_GRID/v1",
+  "status": "SOURCE_ROLE_MAP_LOGICAL_CONTEXTS_NOT_DISTINCT_ENTITIES",
+  "authority": {
+    "canonical_durable_state": "MiniUnifiedDB",
+    "real_effect_path": "EffectGate",
+    "all_module_outputs": "CANDIDATE_OR_MEASUREMENT"
+  },
+  "execution": {
+    "logical_tile_state": "PERSISTENT_TYPED_CONTEXT",
+    "hot_lane_assignment": "EPHEMERAL_RESOURCE_ADAPTIVE",
+    "shared_weights_preferred": true,
+    "kvm4_target_logical_slots": 16,
+    "kvm4_target_resident_hot_lanes": 2
+  },
+  "tiles": [
+    {"id": "M00", "class": "world", "role": "observation_integrator"},
+    {"id": "M01", "class": "world", "role": "causal_graph_builder"},
+    {"id": "M02", "class": "world", "role": "temporal_consistency_checker"},
+    {"id": "M03", "class": "goal", "role": "goal_proposer"},
+    {"id": "M04", "class": "goal", "role": "goal_progress_and_falsifier_critic"},
+    {"id": "M05", "class": "simulation", "role": "forward_simulator"},
+    {"id": "M06", "class": "simulation", "role": "counterfactual_simulator"},
+    {"id": "M07", "class": "simulation", "role": "failure_branch_simulator"},
+    {"id": "M08", "class": "simulation", "role": "recovery_branch_simulator"},
+    {"id": "M09", "class": "zero_model", "role": "zero_behavior_surrogate"},
+    {"id": "M10", "class": "zero_model", "role": "zero_outcome_calibrator"},
+    {"id": "M11", "class": "hypothesis", "role": "improvement_hypothesis_generator"},
+    {"id": "M12", "class": "hypothesis", "role": "counterhypothesis_and_discriminator_generator"},
+    {"id": "M13", "class": "critic", "role": "adversarial_plan_critic"},
+    {"id": "M14", "class": "critic", "role": "uncertainty_goodhart_critic"},
+    {"id": "M15", "class": "provenance", "role": "receipt_identity_and_feed_router"}
+  ]
+}

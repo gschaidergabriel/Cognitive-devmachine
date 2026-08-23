@@ -1,0 +1,68 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main": "abca3544a4c6526e292bce20f29ec66e9f95bad1",
+  "branch": "gpt56sol/go-microentity-package-integrity-20260823-1511",
+  "source_head_before_receipt": "38619f118085f971cc3a69fb683555b8ecb5e353",
+  "finding": {
+    "canonical_blocker": "MICROENTITY_CURRENT.zip remains a known truncated package while the manifest requires an exact ordered 12-member snapshot; existing repair workflow executions terminated before visible job steps.",
+    "nonduplicate_gap": "No repository verifier was found that fail-closes on ZIP truncation, exact manifest member order, duplicate/path abuse, CRC failure and source-byte drift before package promotion."
+  },
+  "delta": [
+    "add one repository-level verifier outside the MicroEntity package tree so the package manifest/snapshot member set is not changed by the guard itself",
+    "require exact manifest member set and order",
+    "reject duplicate, directory, encrypted, path-traversal and non-regular ZIP members",
+    "run ZIP CRC validation",
+    "require every decompressed archive member to be byte-identical to its versioned source under the package root",
+    "emit PACKAGE_ARTIFACT_RECEIPT/v1 only with exact Git commit/tree identities and zero runtime/model/HCU-capacity credit"
+  ],
+  "exact_git_blobs": {
+    "research_entity/continuity/tools/verify_microentity_package.py": "d21d20eddc1ffec6302021b3ab07fe07dc6d2816",
+    "research_entity/continuity/tests/test_verify_microentity_package.py": "96454d9fdb140e62ef1b57ca96d574d5c965afab"
+  },
+  "exact_content_sha256": {
+    "research_entity/continuity/tools/verify_microentity_package.py": "f69ed4b943a80680fe0e6fe0c67b077a94f77d8831f015b8460b8b394ae25757",
+    "research_entity/continuity/tests/test_verify_microentity_package.py": "4e3d3e45be3744abec856debe1b564afa2d1cb4528b309f58285cae14a5521b9"
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Linux component container",
+    "commands": [
+      "python3 -m py_compile research_entity/continuity/tools/verify_microentity_package.py research_entity/continuity/tests/test_verify_microentity_package.py",
+      "python3 -m unittest -v research_entity.continuity.tests.test_verify_microentity_package"
+    ],
+    "tests_run": 8,
+    "tests_passed": 8,
+    "result": "PASS_EXACT_BLOB_COMPONENT_MECHANISM_ONLY"
+  },
+  "falsifiers": [
+    "truncated ZIP tail -> ZIP_BAD_OR_TRUNCATED",
+    "missing member -> ZIP_MEMBER_SET_OR_ORDER_MISMATCH",
+    "member reorder -> ZIP_MEMBER_SET_OR_ORDER_MISMATCH",
+    "stale member bytes -> ZIP_MEMBER_BYTES_MISMATCH",
+    "duplicate member -> ZIP_DUPLICATE_MEMBER",
+    "manifest traversal -> MANIFEST_MEMBER_PATH_FORBIDDEN"
+  ],
+  "unusual_experiment": {
+    "consumed_here": false,
+    "reason": "No immutable shared macrocycle lease identity was exposed; all checks are deterministic package-integrity regressions and no cross-organ experiment claim is invented."
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "real_effects": "EffectGate",
+    "package_guard_is_state_authority": false,
+    "package_guard_is_builder": false
+  },
+  "runtime_credit": {
+    "whole_mini_entity": 0,
+    "bundled_08b": 0,
+    "jspace_gwt": 0,
+    "claude_adapter": 0,
+    "hcu": 0,
+    "package_artifact_integrity": "SOURCE_VERIFIER_SUPPORTED; CURRENT_BINARY_REPAIR_STILL_BLOCKED"
+  },
+  "next_exact_gate": "Materialize MICROENTITY_CURRENT.zip from exactly the 12 current PACKAGE_MANIFEST.json members, run this verifier against the exact repaired branch bytes, bind the emitted PACKAGE_ARTIFACT_RECEIPT/v1 to exact source commit/tree and ZIP Git blob, remove the temporary write-capable repair workflow, then merge the repair only if the verifier passes."
+}

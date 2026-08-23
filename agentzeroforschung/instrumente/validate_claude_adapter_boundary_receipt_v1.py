@@ -3,6 +3,7 @@ import hashlib
 import json
 import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 SCHEMA = "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1"
@@ -44,6 +45,15 @@ def validate_common(common):
         need(isinstance(ex.get(key), str) and ex[key].strip(), f"executor.{key} missing")
     need(isinstance(common.get("started_at"), str) and common["started_at"].strip(), "started_at missing")
     need(isinstance(common.get("finished_at"), str) and common["finished_at"].strip(), "finished_at missing")
+    try:
+        started = datetime.fromisoformat(common["started_at"].replace("Z", "+00:00"))
+        finished = datetime.fromisoformat(common["finished_at"].replace("Z", "+00:00"))
+    except ValueError:
+        fail("started_at/finished_at must be ISO-8601 timestamps")
+    need(started.tzinfo is not None and finished.tzinfo is not None, "started_at/finished_at must be timezone-aware")
+    need(started.utcoffset() == timezone.utc.utcoffset(started), "started_at must be UTC")
+    need(finished.utcoffset() == timezone.utc.utcoffset(finished), "finished_at must be UTC")
+    need(finished >= started, "finished_at precedes started_at")
     return canonical_sha256(common)
 
 def validate_boundary_shape(name, b, common_digest):

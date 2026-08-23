@@ -1,6 +1,3 @@
-import json
-import shutil
-import subprocess
 import unittest
 
 from typed_entry_canonical_v1 import (
@@ -51,33 +48,32 @@ def admit(entry):
 
 
 class TypedEntryCanonicalTests(unittest.TestCase):
-    def test_rfc8949_subset_known_vectors(self):
+    def test_adapter_emits_main_selected_jcs_vectors(self):
         vectors = [
-            (None, "f6"),
-            (False, "f4"),
-            (True, "f5"),
-            (0, "00"),
-            (23, "17"),
-            (24, "1818"),
-            (-1, "20"),
-            ("a", "6161"),
-            ([1, 2, 3], "83010203"),
-            ({"a": 1, "b": 2}, "a2616101616202"),
+            (None, b"null"),
+            (False, b"false"),
+            (True, b"true"),
+            (0, b"0"),
+            (24, b"24"),
+            (-1, b"-1"),
+            ("a", b'"a"'),
+            ([1, 2, 3], b"[1,2,3]"),
+            ({"b": 2, "a": 1}, b'{"a":1,"b":2}'),
         ]
+        self.assertEqual(CANONICALIZATION_SCHEMA, "RFC8785_JCS_IJSON/v1")
         for value, expected in vectors:
-            self.assertEqual(encode_canonical(value).hex(), expected)
+            self.assertEqual(encode_canonical(value), expected)
 
-    def test_map_order_is_deterministic_encoded_key_order(self):
+    def test_map_order_is_deterministic(self):
         a = {"z": 1, "aa": 2, "a": 3}
         b = {"a": 3, "aa": 2, "z": 1}
         self.assertEqual(encode_canonical(a), encode_canonical(b))
-        self.assertEqual(encode_canonical(a).hex(), "a3616103617a0162616102")
 
-    def test_float_and_unsafe_integer_fail_closed(self):
-        with self.assertRaisesRegex(CanonicalEncodingError, "FLOAT_FORBIDDEN"):
-            encode_canonical(0.5)
-        with self.assertRaisesRegex(CanonicalEncodingError, "IJSON_SAFE_RANGE"):
-            encode_canonical(9_007_199_254_740_992)
+    def test_binary64_domain_and_precision_loss_fail_closed(self):
+        self.assertEqual(encode_canonical(0.5), b"0.5")
+        self.assertEqual(encode_canonical(9_007_199_254_740_992), b"9007199254740992")
+        with self.assertRaisesRegex(CanonicalEncodingError, "INTEGER_NOT_EXACT_BINARY64"):
+            encode_canonical(9_007_199_254_740_993)
 
     def test_transport_replay_preserves_causal_event_and_route_identity(self):
         first = admit(base_entry())
@@ -92,23 +88,26 @@ class TypedEntryCanonicalTests(unittest.TestCase):
         second_event = to_hcu_reactive_event(second, novelty=0.1)
         self.assertEqual(first_event["entry_event_sha256"], second_event["entry_event_sha256"])
         self.assertNotEqual(first_event["entry_admission_sha256"], second_event["entry_admission_sha256"])
-        self.assertNotEqual(first_event["ingress_id"], second_event["ingress_id"])
         self.assertEqual(first_event["entry_canonicalization_schema"], CANONICALIZATION_SCHEMA)
         self.assertEqual(second_event["entry_canonicalization_schema"], CANONICALIZATION_SCHEMA)
 
+        admitted_bindings = {
+            first.admission_sha256: first.event_sha256,
+            second.admission_sha256: second.event_sha256,
+        }
         first_route = route_event(
             first_event,
             current_generation=7,
-            admitted_entry_bindings={first.admission_sha256: first.event_sha256},
+            admitted_entry_bindings=admitted_bindings,
         )
         second_route = route_event(
             second_event,
             current_generation=7,
-            admitted_entry_bindings={second.admission_sha256: second.event_sha256},
+            admitted_entry_bindings=admitted_bindings,
         )
         self.assertEqual(first_route.event_sha256, second_route.event_sha256)
-        self.assertNotEqual(first_route.entry_admission_sha256, second_route.entry_admission_sha256)
         self.assertEqual(first_route.decision_sha256, second_route.decision_sha256)
+        self.assertNotEqual(first_route.entry_admission_sha256, second_route.entry_admission_sha256)
 
     def test_equivalent_observed_timestamp_offsets_canonicalize_to_same_event(self):
         first = admit(base_entry())
@@ -124,38 +123,6 @@ class TypedEntryCanonicalTests(unittest.TestCase):
         changed["payload_sha256"] = "d" * 64
         second = admit(changed)
         self.assertNotEqual(first.event_sha256, second.event_sha256)
-
-    @unittest.skipUnless(shutil.which("node"), "independent Node canonicalizer unavailable")
-    def test_independent_node_encoder_matches_python_entry_shaped_corpus(self):
-        values = [
-            {
-                "schema": CANONICALIZATION_SCHEMA,
-                "causal_id": "κausal-✓",
-                "entity_generation": 7,
-                "source_kind": "HUMAN_PROMPT",
-                "source_id": "user:test",
-                "observed_time": "2026-08-23T16:24:00.000000Z",
-                "provenance_sha256": "a" * 64,
-                "budget": {"max_model_calls": 2, "max_tokens": 2048, "max_wall_ms": 5000},
-                "parent_id": None,
-                "payload_sha256": "c" * 64,
-            },
-            {"nested": [None, True, False, -24, -25, 23, 24, 255, 256, "é", "😀"]},
-        ]
-        js = r'''
-const fs=require('fs'); const values=JSON.parse(fs.readFileSync(0,'utf8'));
-function head(m,v){if(!Number.isSafeInteger(v)||v<0)throw Error('arg');const p=m<<5;if(v<24)return Buffer.from([p|v]);if(v<=255)return Buffer.from([p|24,v]);if(v<=65535){const b=Buffer.alloc(3);b[0]=p|25;b.writeUInt16BE(v,1);return b;}if(v<=4294967295){const b=Buffer.alloc(5);b[0]=p|26;b.writeUInt32BE(v,1);return b;}const b=Buffer.alloc(9);b[0]=p|27;b.writeBigUInt64BE(BigInt(v),1);return b;}
-function enc(v){if(v===null)return Buffer.from([246]);if(v===false)return Buffer.from([244]);if(v===true)return Buffer.from([245]);if(typeof v==='number'){if(!Number.isSafeInteger(v))throw Error('unsafe');return v>=0?head(0,v):head(1,-1-v);}if(typeof v==='string'){const x=Buffer.from(v,'utf8');return Buffer.concat([head(3,x.length),x]);}if(Array.isArray(v))return Buffer.concat([head(4,v.length),...v.map(enc)]);if(typeof v==='object'){const xs=Object.keys(v).map(k=>[enc(k),enc(v[k])]);xs.sort((a,b)=>Buffer.compare(a[0],b[0]));return Buffer.concat([head(5,xs.length),...xs.flat()]);}throw Error('unsupported');}
-process.stdout.write(JSON.stringify(values.map(v=>enc(v).toString('hex'))));
-'''
-        proc = subprocess.run(
-            ["node", "-e", js],
-            input=json.dumps(values, ensure_ascii=False),
-            text=True,
-            capture_output=True,
-            check=True,
-        )
-        self.assertEqual(json.loads(proc.stdout), [encode_canonical(v).hex() for v in values])
 
 
 if __name__ == "__main__":

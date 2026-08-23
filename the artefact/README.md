@@ -157,6 +157,8 @@ The current HCU direction is script-first and selective:
 
 External providers are not admitted as required internal cognition. Exact local checkpoint/tokenizer/runtime identity is an acceptance gate, not an inferred fact. Until a positive local engine capability record exists, absence from an external-provider denylist is insufficient to prove internal engine admission.
 
+**Pre-load hashing is not loader attestation.** A positive `EngineAdmission` constructed from checkpoint/tokenizer/runtime/build hashes receives zero HCU runtime credit unless the actual model loader is bound to the same consumed bytes. The admitted path must therefore use a generation-fenced physical engine lease or an enforced read-only/content-addressed artifact boundary and must echo the loader-consumed artifact identity into the downstream inference receipt. Wrong-path loads, post-admission mutation, stale lease reuse or unknown consumed bytes fail closed.
+
 ## Execution policy
 
 Current build/test/experiment/runtime credit comes only from authorized isolated sandbox execution unless newer owner authority changes it. VPS/self-hosted/production-host testing is forbidden under current control. Together API and paid fallback are forbidden. Secrets do not enter source/receipts. Final paid/model training requires explicit owner authorization.
@@ -165,15 +167,15 @@ Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 
 ## Current frontier
 
-1. wire the retained HCU route's separate `EngineAdmission` to the **real deterministic EntityOS/HCU control-plane producer** and bind it to the actually loaded local checkpoint/tokenizer/runtime identity; an untrusted causal Entry event may request but may never mint engine authority;
+1. wire the retained HCU route's separate `EngineAdmission` to the **real deterministic EntityOS/HCU control-plane producer** and bind it through a generation-fenced physical engine lease to the bytes actually consumed by the local checkpoint/tokenizer/runtime loader; a pre-load hash alone receives zero runtime credit, and an untrusted causal Entry event may request but may never mint engine authority;
 2. keep the replay-stable **event identity vs concrete admission identity** split and wire Typed Entry capability claims to the existing canonical deterministic capability authority rather than a test fixture or event self-claim;
-3. bind the downstream inference receipt **producer** to the already-defined serializer/event/Entry-admission/route/engine/class/artifact echo contract;
+3. bind the downstream inference receipt **producer** to the already-defined serializer/event/Entry-admission/route/engine/class/artifact echo contract plus the exact physical loader lease/consumed-byte identity;
 4. converge the versioned Typed Entry canonicalization path to one accepted authority before making heterogeneous/cross-language hash-identity claims;
-5. run exact combined Entry + HCU route + inference-echo + GRID10 regressions on an actually-started authorized isolated executor, then measure GRID10/COGSIM10 cost utility before widening WM_TEST/NESTED_SIM;
-6. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry semantics settle.
+5. run exact combined Entry + HCU route + engine-load-lease + inference-echo + GRID10 regressions on an actually-started authorized isolated executor, then measure GRID10/COGSIM10 cost utility before widening WM_TEST/NESTED_SIM;
+6. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry/loader semantics settle.
 
 Completed authority migration note: current `the artefact/manifest.json` and the compatibility-named authority validator now select **EntityOS + HCU** while preserving historical ClayVerse controls only as immutable donor/safety ancestry. This source-level convergence does not create runtime acceptance.
 
 ## Latest `go` README re-entry — 2026-08-23
 
-`README=NO_CHANGE_ARCHITECTURE`: the existing current-frontier section already matches the post-authority-drift EntityOS/HCU direction. This cycle only closed the remaining effective-authority output seam on canonical `main`, retired the duplicate wrapper lane, and advanced `PROGRAM_STATE.current_frontier`; no second architecture/state/effect path was added and runtime credit remains zero.
+`README=UPDATED_ENGINE_LOAD_BOUNDARY`: one bounded unusual discriminator showed that an admitted pre-load checkpoint digest can diverge from bytes later read through the same mutable source path, while loading from a separately staged verified snapshot preserved the admitted bytes after the original path was mutated. This is mechanism evidence only: ordinary writable staging is not itself immutable loader attestation. Current architecture therefore requires loader-bound physical engine lease/consumed-byte evidence before any HCU runtime credit. Whole EntityOS/HCU runtime credit remains zero.

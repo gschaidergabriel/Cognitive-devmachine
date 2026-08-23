@@ -261,3 +261,19 @@ No admitted Sandbox run or actual model-executor I/O was executed by this organ 
 Next exact gate: preserve `SOURCE_REBIND_REQUIRED` until the single PR810 route carries and hash-binds one immutable corrected donor snapshot for every production source, regression and transitive fixture through Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3. Execute the fixed closure only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission permits, and require actual zero-cost local model-executor I/O to enter through the same MiniUnifiedDB atomic admission path before any model/J-Space runtime promotion.
 
 Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_MINIUNIFIEDDB_EXECUTION_INFERENCE_V4_FUSION_GPT56SOL.json`.
+
+## Current `go` delta — PR810 rebind route/contract drift guard
+
+`README=UPDATED_PR810_REBIND_SCHEMA_DRIFT_GUARD`.
+
+Re-entry exposed a concrete fail-closed controller defect during rapid one-lane fusion: executor commit `aa69308075b07ed2dcf4dc93c773974dd03d746e` changed the quarantined route's hard-coded rebind schema expectation from v4 to v3 while the deployment-carried `jspace-v4-v3-current-rebind-contract.json` at that same head remained `ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4`. The route would therefore have returned `SOURCE_REBIND_CONTRACT_INVALID` instead of the intended `SOURCE_REBIND_REQUIRED`, even though no Sandbox execution was admitted.
+
+Executor commit `3b174c0f7ce9d1bb6ae19395666dfcab0178abe2` restores exact v4 alignment without opening the quarantine. Commit `7ad6b0bc5706435a3148f5d1308d14bd62100482` then converts the recurrence into a build-time invariant: the exclusive EntityOS/HCU executor guard parses the deployment-carried rebind contract, requires a valid versioned rebind schema plus EntityOS/HCU/supervisor-8.63/FREE_ONLY/zero-credit boundaries, and requires the quarantined route's exact schema literal to match the carried contract. Future route/contract schema drift therefore fails the build guard before a misleading deployed response path can exist.
+
+At the repaired executor snapshot the v4 contract points to retained donor `511d568932bf47828679e3ca6ba05650f18d284d` and exact integrated producer-derived execution-to-J-Space regression blob `cd0abb3fe22d0fa015befe35c896f56fa006f08c`. The contract still requires `SOURCE_REBIND_REQUIRED`; it also preserves the Typed Entry -> route -> verified engine/load -> GRID10 -> canonical MiniUnifiedDB atomic model-execution admission -> VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 chain and zero runtime/model/training credit until exact admitted execution exists.
+
+The current Vercel status for the guard commit is failure due the Hobby build-rate limit. That is infrastructure/admission evidence, not a product regression and not execution evidence. This organ ran no Sandbox, loader I/O or actual model-executor I/O and performed zero unusual experiments. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model-runtime and training credit remain `0`; whole-product PASS remains false.
+
+Next exact gate: keep PR810 quarantined until one fixed route carries every exact donor-`511d5689` production/regression/transitive blob and route-manifest equality is proven, then execute the fixed command only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission actually permits it. Require actual zero-cost local model-executor I/O through canonical MiniUnifiedDB atomic admission before any J-Space model-runtime or training promotion.
+
+Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_PR810_REBIND_SCHEMA_DRIFT_GUARD_GPT56SOL.json`.

@@ -86,6 +86,8 @@ def _sha256(value: Any, field: str) -> str:
     text = _nonempty_string(value, field)
     if not DIGEST_RE.fullmatch(text):
         raise ManifestError(f"{field}:LOWERCASE_SHA256_REQUIRED")
+    if text in {"0" * 64, "f" * 64}:
+        raise ManifestError(f"{field}:PLACEHOLDER_SHA256_FORBIDDEN")
     return text
 
 

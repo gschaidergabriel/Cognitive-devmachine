@@ -63,10 +63,13 @@ class DecodedVectorControl:
     packet_sha256: str
 
 
-def _text(value: Any, field: str) -> str:
+def _text(value: Any, field: str, *, canonical: bool = False) -> str:
     if not isinstance(value, str) or not value.strip():
         raise JSpaceVectorControlError(f"{field}:NONEMPTY_STRING_REQUIRED")
-    value = value.strip()
+    stripped = value.strip()
+    if canonical and stripped != value:
+        raise JSpaceVectorControlError(f"{field}:NONCANONICAL_TEXT")
+    value = stripped
     if len(value.encode("utf-8")) > MAX_TEXT_BYTES:
         raise JSpaceVectorControlError(f"{field}:TOO_LONG")
     return value
@@ -127,7 +130,7 @@ def _scale_to_hex(scale: float) -> str:
 
 
 def _scale_from_hex(value: Any) -> float:
-    value = _text(value, "scale_f64_be_hex")
+    value = _text(value, "scale_f64_be_hex", canonical=True)
     if len(value) != 16 or value.lower() != value or any(ch not in "0123456789abcdef" for ch in value):
         raise JSpaceVectorControlError("scale_f64_be_hex:IEEE754_HEX_REQUIRED")
     scale = struct.unpack(">d", bytes.fromhex(value))[0]
@@ -142,7 +145,7 @@ def _q8_encode(values: Sequence[int]) -> str:
 
 
 def _q8_decode(value: Any, dimensions: int) -> tuple[int, ...]:
-    value = _text(value, "q8_b64url")
+    value = _text(value, "q8_b64url", canonical=True)
     if any(ch not in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_" for ch in value):
         raise JSpaceVectorControlError("q8_b64url:BASE64URL_REQUIRED")
     padding = "=" * ((4 - len(value) % 4) % 4)
@@ -270,8 +273,8 @@ def decode_vector_control(
     }
     if set(material) != required:
         raise JSpaceVectorControlError("packet:FIELD_SET_MISMATCH")
-    basis_id = _text(material["basis_id"], "basis_id")
-    role = _text(material["role"], "role")
+    basis_id = _text(material["basis_id"], "basis_id", canonical=True)
+    role = _text(material["role"], "role", canonical=True)
     generation = _generation(material["generation"])
     if basis_id != _text(expected_basis_id, "expected_basis_id"):
         raise JSpaceVectorControlError("WRONG_JSPACE_BASIS")

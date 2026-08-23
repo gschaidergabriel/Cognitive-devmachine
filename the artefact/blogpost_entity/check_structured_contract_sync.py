@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Fail-closed static guard for canonical Clay <-> Python reference contract drift.
 
-The canonical Clay source owns the forward contract: DB-resident profile, one explicit
-pre-inference Cognitive Fabric admission, generic inference, deterministic gate/CAS commit,
-and one post-turn UCF runtime-receipt finalization. The Python reference runtime/tests may
-lag, but that lag must stay explicit and must never roll the canonical Clay contract back.
+The canonical Clay source owns the forward contract: DB-resident profile, one bounded
+routing-only cognition invocation selector, one explicit pre-inference Cognitive Fabric
+admission, generic inference, deterministic gate/CAS commit, and one post-turn UCF
+runtime-receipt finalization. The Python reference runtime/tests may lag, but that lag
+must stay explicit and must never roll the canonical Clay contract back.
 
 Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
 unwired handler names do not count as runtime support.
@@ -198,7 +199,24 @@ def main() -> int:
 
     clay_contract = {
         "run_args": run_args,
-        "three_argument_runtime_boundary": run_args == ["entity_db", "source_db", "secret_file"],
+        "bounded_cognition_invocation_runtime_boundary": run_args == [
+            "entity_db", "source_db", "secret_file", "cognition_invocation"
+        ],
+        "cognition_invocation_threaded_to_admission": (
+            'map_set(cognition_data,"invocation",cognition_invocation)' in clay
+        ),
+        "caller_cognition_authority_not_threaded": all(
+            marker not in clay
+            for marker in (
+                'map_set(cognition_data,"zero_identity_digest"',
+                'map_set(cognition_data,"grf_digest"',
+                'map_set(cognition_data,"hyperposition_digest"',
+                'map_set(cognition_data,"local_model_digest"',
+                'map_set(cognition_data,"workspace_digest"',
+                'map_set(cognition_data,"jspace_profile_digest"',
+                'map_set(cognition_data,"policy_authority_digest"',
+            )
+        ),
         "db_resident_profile_effect": 'effect("pipeline_profile_read"' in clay,
         "cognitive_fabric_admission_effect": 'phase("pipeline_cognitive_fabric_admit"' in clay,
         "cognitive_fabric_finalization_effect": 'phase("pipeline_cognitive_fabric_finalize"' in clay,
@@ -244,7 +262,9 @@ def main() -> int:
 
     canonical_current = all(
         [
-            clay_contract["three_argument_runtime_boundary"],
+            clay_contract["bounded_cognition_invocation_runtime_boundary"],
+            clay_contract["cognition_invocation_threaded_to_admission"],
+            clay_contract["caller_cognition_authority_not_threaded"],
             clay_contract["db_resident_profile_effect"],
             clay_contract["cognitive_fabric_admission_effect"],
             clay_contract["cognitive_fabric_finalization_effect"],
@@ -273,13 +293,13 @@ def main() -> int:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v4",
+        "schema": "clay-structured-contract-sync/v5",
         "canonical_clay": clay_contract,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay authority is DB-resident profile -> pre-inference Cognitive Fabric admission -> inference_generate -> deterministic gate/MiniUnifiedDB CAS commit -> post-turn UCF runtime-receipt finalization; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
+        "policy": "Canonical Clay authority is DB-resident profile + bounded routing-only MINI_COGNITIVE_INVOCATION/v1 -> pre-inference Cognitive Fabric admission -> inference_generate -> deterministic gate/MiniUnifiedDB CAS commit -> post-turn UCF runtime-receipt finalization; caller selector material may only select an already-bound turn and runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
         "errors": errors,
         "pass": not errors,
     }

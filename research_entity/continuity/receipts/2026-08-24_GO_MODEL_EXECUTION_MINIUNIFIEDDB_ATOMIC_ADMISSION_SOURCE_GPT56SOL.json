@@ -1,0 +1,83 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_before_write": "7350d9e5088801c83627677ddc9a927ef0527287",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_ZERO_NEW_UNUSUAL_EXPERIMENTS",
+    "reason": "No shared immutable request id was exposed and the available user-message timestamp metadata is minute precision only, which cannot form the canonical atomic-lease fallback key.",
+    "unusual_experiment_count_added": 0,
+    "retained_hcu_donor_pr": 1263,
+    "retained_hcu_donor_head_after_delta": "6d92398eab24da96dc43726028ba331305a3ddec",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "21c5f808403463dc75dee1e3a7301a9f12442c88",
+    "duplicate_executor_created": false,
+    "second_truth_or_state_authority_created": false
+  },
+  "observed_frontier": {
+    "previous_model_execution_gap": "verify_model_execution required externally admitted observation and invocation registries, but the real atomic owner for invocation_id -> observation_sha256 had not yet been bound to canonical state authority.",
+    "executor_parallel_delta": "PR810 has begun vendoring the exact model_execution_receipt_v1 producer while the fixed route remains SOURCE_REBIND_REQUIRED and therefore cannot mint stale execution credit.",
+    "current_executor_route_runtime_credit": 0
+  },
+  "hypothesis": "The model-execution replay trust split can be closed without a second registry authority by admitting executor observations and invocation uniqueness atomically inside the existing canonical MiniUnifiedDB before VerifiedModelExecution is produced.",
+  "counterhypothesis": "A standalone executor-local registry or caller-supplied Mapping could appear to enforce replay uniqueness while remaining outside canonical state authority or failing under concurrent divergent admissions.",
+  "deterministic_discriminator": "Use the existing canonical MiniUnifiedDB sqlite connection, BEGIN IMMEDIATE, exact RFC8785/JCS observation bytes and a create-once invocation key; encode idempotent replay, divergent replay rollback, stale generation no-write and concurrent divergent one-winner regressions. This is source-contract evidence only until executed on the admitted exact-source path.",
+  "source_delta": {
+    "donor_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "admission_store_path": "the artefact/MicroEntity/hcu/model_execution_admission_store_v1.py",
+    "admission_store_schema": "HCU_MODEL_EXECUTION_ADMISSION_STORE/v1",
+    "admission_store_commit": "b2fe8be3665b6e1eb82c0e17ed9426a038b10077",
+    "admission_store_blob": "0d1b1aa1f4c71f167b94374bc359d8dd2c07eed7",
+    "regression_path": "the artefact/MicroEntity/hcu/test_model_execution_admission_store_v1.py",
+    "regression_repair_commit": "df43e7b394282589339b146d5203e29e10a4cf7f",
+    "regression_blob": "19cca07584db3d4818ccb77b8c96ba7f127d7bd3",
+    "manifest_commit": "6d92398eab24da96dc43726028ba331305a3ddec",
+    "manifest_blob": "40ee6a35dd344c7676f50af0ca6dfe56e53f9f54",
+    "atomicity": "BEGIN_IMMEDIATE_ON_CALLER_SUPPLIED_EXISTING_CANONICAL_MINIUNIFIEDDB_CONNECTION",
+    "observation_identity": "SHA256_RFC8785_JCS_EXACT_OBSERVATION_BYTES",
+    "replay_rule": "ONE_EXECUTOR_SCOPED_INVOCATION_KEY_BINDS_TO_EXACTLY_ONE_OBSERVATION_SHA256",
+    "failure_semantics": "VERIFY_OR_REPLAY_FAILURE_ROLLS_BACK_PARTIAL_ADMISSION"
+  },
+  "regression_obligations_encoded": [
+    "exact invocation persists before VerifiedModelExecution returns",
+    "byte-identical exact replay is idempotent",
+    "same executor/invocation with different output bytes fails MODEL_EXECUTION_INVOCATION_REPLAY_DIVERGENCE and rolls back the divergent observation",
+    "stale entity generation fails before admission tables or rows are created",
+    "two concurrent divergent observations for one invocation yield exactly one admitted winner and one fail-closed loser"
+  ],
+  "execution_evidence": {
+    "new_source_tests_executed": false,
+    "donor_head_ci_status": "NO_STATUS",
+    "donor_head_workflow_runs": 0,
+    "classification": "SOURCE_ONLY_UNEXECUTED",
+    "local_or_vps_testing_used": false,
+    "paid_provider_used": false,
+    "together_used": false,
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_ADMISSION_OWNER_FOR_MODEL_EXECUTION; SINGLE_PR810_EXACT_EXECUTOR_REBIND_REMAINS_REQUIRED",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_CANONICAL_MINIUNIFIEDDB_ATOMIC_MODEL_INVOCATION_REPLAY_FENCE_WITHOUT_SECOND_STATE_AUTHORITY",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_CAUSAL_MODEL_OUTPUT_PROVENANCE_PATH_TOWARD_INFERENCE_V4_JSPACE_V3; ZERO_MODEL_RUNTIME_OR_TRAINING_CREDIT"
+  },
+  "credit": {
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Keep PR810 as the single executor and rebind its fixed SOURCE_REBIND_REQUIRED route to one immutable current donor closure including the canonical MiniUnifiedDB admission store, exact model-execution producer, Inference/v4 and J-Space/v3 dependencies.",
+    "Run the deterministic admission-store plus model-execution/inference/J-Space regressions only through an admitted FREE_ONLY exact-source Vercel Sandbox capsule when source and access admission are available.",
+    "Require the real zero-cost local model-executor I/O boundary to use the same canonical MiniUnifiedDB atomic admission path before granting any J-Space model-runtime credit.",
+    "Then continue through causal DatasetAdmission/family-split closure and only FREE_ONLY local approximately-0.8B specialization."
+  ]
+}

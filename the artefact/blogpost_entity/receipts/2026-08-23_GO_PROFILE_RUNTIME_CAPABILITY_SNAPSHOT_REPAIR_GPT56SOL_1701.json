@@ -1,0 +1,56 @@
+{
+  "schema": "GO_PROFILE_RUNTIME_CAPABILITY_SNAPSHOT_REPAIR/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main_sha": "4ed806f54555ca63a814a5a52fd2a9c474d2d1e7",
+  "branch": "gpt56sol/go-ucf-profile-snapshot-capability-fix-20260823-1701",
+  "counterexample": {
+    "observed_main_binding_blob": "a71baddd5cb1fa6c33a0f3ba724cfa3c7f19c920",
+    "observed_capability_blob": "9625ce4dfd944851e03a90fe08de1cb9c7d139a4",
+    "mechanism": "The merged runtime bridge verifies _runtime_profile_snapshot, strips it to compare persisted profile bytes, and then passes the stripped stored profile to the canonical compositor. The canonical compositor calls mini_inference_capability_binding_v1.resolve_bound_route -> resolve_from_profile, which requires _runtime_profile_snapshot. Therefore the real cross-module path is structurally capable of failing with PROFILE_SNAPSHOT_MISSING even though the bridge's RecordingCompositor test passes.",
+    "test_blindspot": "The merged bridge regression injects RecordingCompositor and explicitly asserts _runtime_profile_snapshot is absent, so it does not exercise the downstream real capability resolver requirement."
+  },
+  "repair": {
+    "binding_blob": "64b4550e866b4b2f41711dc5ea103b468d8bb122",
+    "binding_sha256": "bb84a90b5cc27903ffe6118a57e78db7a8c7757b399875c9a801f84265e20c85",
+    "test_blob": "9cf2db3fe2c4f61fb5974bb8aad59bafacdfffce",
+    "test_sha256": "89b7e2e8d531c8f4bc287d452f9390338af68039f260a0f199cd7f6c85b5e3d3",
+    "mechanism": "After exact active-profile byte/hash equality succeeds, reconstruct only the runtime snapshot from verified MiniUnifiedDB active_profile + profile_sha256 and pass that verified ephemeral field into the single canonical compositor. No caller-supplied J-Space/model/capability authority is added.",
+    "regression_strengthening": "The success-path RecordingCompositor now calls the real mini_inference_capability_binding_v1.resolve_from_profile on the delegated profile, requiring the read->capability snapshot continuity fence to survive."
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "effect_authority": "EffectGate",
+    "cognitive_fabric_paths": 1,
+    "profile_snapshot_authority": "verified MiniUnifiedDB active profile id + persisted-byte hash only",
+    "caller_can_smuggle_snapshot_fields": false
+  },
+  "evidence": {
+    "authored_binding_py_compile": "PASS",
+    "authored_test_py_compile": "PASS",
+    "local_git_blob_matches_github_binding_blob": true,
+    "local_git_blob_matches_github_test_blob": true,
+    "exact_repository_test_execution": false,
+    "classification": "SOURCE_DELTA_PLUS_CROSS_MODULE_STATIC_MECHANISM_AND_AUTHORED_BYTES_SYNTAX_EVIDENCE",
+    "runtime_credit": 0
+  },
+  "coordination": {
+    "closed_overlapping_pr": 1301,
+    "overlap_reason": "main merged PR #1296 during this go; broad wrapper lane was closed rather than duplicated",
+    "hcu": "NO_CHANGE_NON_DUPLICATE",
+    "unusual_experiment": "NONE_NEW_CROSS_ORGAN_ID_UNAVAILABLE"
+  },
+  "safety": {
+    "free_only": true,
+    "together_used": false,
+    "paid_execution": false,
+    "training": false,
+    "vps_or_self_hosted_testing": false,
+    "production_testing": false,
+    "secrets_persisted": false
+  },
+  "next_gate": "Run the exact branch regression with the real capability resolver on an actually-started authorized isolated executor; then wire the retained ProfilePipelineRuntime effect/dispatch to this single bridge and preserve post-commit-only final UCF receipt semantics."
+}

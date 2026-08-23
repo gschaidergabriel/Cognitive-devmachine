@@ -39,6 +39,12 @@ Required invariants:
 - one versioned canonical identity path must be selected before heterogeneous/cross-language hash identity is promoted;
 - no second router, Entry authority, canonicalizer authority, state authority, identity service, recovery ledger or effect path is created to bypass a blocker.
 
+## Global J-Space / GWT training interface
+
+`jspace_vector_control_v1.py` is the first executable candidate for the owner-required `JSPACE_VECTOR_CONTROL_ABI/v1`. It converts a bounded vector into a deterministic q8 text/byte packet suitable for both a normal CausalLM Together SFT surface and a local HCU runtime. Basis, role, generation, q8 payload, gate metadata and workspace handles are hash-bound. Wrong-basis, stale-generation, role-swap and payload/metadata-poison cases fail closed.
+
+This is only the vector-control transport primitive. It does **not** establish Global J-Space causality, hidden-state control, GWT behavior, model-runtime integration or training readiness by itself. The next required layer is an instrumented functional Global J-Space/GWT prototype that emits exact trace records and causal lesion/control outcomes using this ABI.
+
 ## Retained donor lane
 
 Draft PR #1263 is the retained HCU donor/integration lane for the richer Typed Entry + EngineAdmission + router + inference-receipt + GRID10 mechanisms. It is donor evidence, not a second product head, and must be rebased/fused into current EntityOS/HCU authority rather than duplicated.
@@ -52,12 +58,14 @@ Draft PR #1263 is the retained HCU donor/integration lane for the richer Typed E
 - `HCU_DATA_INDEX.json` — current compatibility-subtree data/package index.
 - `capacity_guard_v1.py` — fail-closed capacity-admission donor primitive.
 - `test_capacity_guard_v1.py` — deterministic capacity poison regressions.
+- `jspace_vector_control_v1.py` — deterministic q8 `JSPACE_VECTOR_CONTROL_ABI/v1` candidate.
+- `test_jspace_vector_control_v1.py` — deterministic ABI regressions and the bounded metadata-only-vs-payload-bound poison experiment.
 - `receipts/` — bounded non-secret evidence receipts.
 
 ## Execution and evidence law
 
 Current build/test/experiment/runtime credit comes only from `AUTHORIZED_ISOLATED_SANDBOX_ONLY`. VPS, self-hosted and production-host testing are forbidden under current control. A KVM/VPS profile is a deployment/planning target only until separately authorized; it cannot provide current acceptance credit.
 
-Together API and paid fallback are forbidden. Final paid/model training requires explicit owner authorization. Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
+Together general inference/fallback remains forbidden. The owner has authorized **exactly one** ~0.8B J-Space/GWT specialization fine-tuning job after the functional prototype -> exact traces -> causal/lesion controls -> versioned ABI -> dataset/splits -> frozen baseline/base-model/preflight gates are ready. The authorization is not consumed until a Together fine-tuning job is actually created and its non-secret job ID is receipted; a second paid training run requires new owner authorization.
 
-Current runtime credit remains zero until the exact current EntityOS/HCU path is actually executed and bound to exact source, model/checkpoint/tokenizer/runtime, capacity, causal/admission and effect identities.
+Current whole EntityOS/HCU runtime credit remains zero until the exact current path is actually executed and bound to exact source, model/checkpoint/tokenizer/runtime, capacity, causal/admission and effect identities. Component-level isolated evidence for this ABI must not be inflated into whole-product PASS.

@@ -1,0 +1,57 @@
+{
+  "schema": "GO_HCU_INFERENCE_RECEIPT_PRODUCER_SOURCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority": {
+    "product": "EntityOS",
+    "integrated_cognition_compute_architecture": "HCU",
+    "xeno_xcu": "TRANSITIONAL_COMPATIBILITY_OR_RESEARCH_ALIASES_ONLY",
+    "canonical_state": "UnifiedDB_or_current_compatibility_MiniUnifiedDB",
+    "effect_authority": "EffectGate+EffectJournal"
+  },
+  "parent_candidate": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "source_head_at_branch_creation": "cb6450c88137c944f3e8111b1b55108ad04152f9",
+    "latest_parent_head_observed_after_write": "4bb4fc4c22cbea9e2a16430d5fc723f124bb5b7e",
+    "parent_advance_overlap": "NONE_OBSERVED: two later parent commits touched ENTRY_CANONICALIZATION_CONTRACT.json and HCU_DATA_INDEX.json only"
+  },
+  "finding": "PR1263 validates downstream event/route/engine echo fields but does not yet contain a deterministic producer that derives those fields from the admitted RouteDecision and binds the actual candidate result into the receipt identity.",
+  "delta": {
+    "producer": "the artefact/MicroEntity/hcu/inference_receipt_v1.py",
+    "producer_git_blob": "da6cac88e207004e22cb68946c45789ac1b708d2",
+    "tests": "the artefact/MicroEntity/hcu/test_inference_receipt_v1.py",
+    "tests_git_blob": "9a56cb6918ee0e31385dd8e39965d9a7b7624af2",
+    "receipt_schema": "HCU_INFERENCE_RECEIPT/v1",
+    "identity": "H(admitted event, router policy, route decision, exact admitted engine identity/artifact, canonical candidate-result digest)",
+    "authority_change": false,
+    "effect_path_change": false,
+    "canonical_truth_change": false
+  },
+  "falsifiers_encoded_not_executed": [
+    "producer derives event/route/engine echo from RouteDecision rather than caller-supplied echo fields",
+    "same route plus different candidate result changes candidate and receipt digests",
+    "post-hoc route echo mutation fails closed",
+    "post-hoc candidate digest mutation breaks receipt identity",
+    "supplied actual candidate must match bound candidate digest",
+    "script-only route cannot emit an inference receipt",
+    "non-canonical candidate result fails closed",
+    "exact replay is deterministic"
+  ],
+  "evidence": {
+    "source_bytes_refetched": true,
+    "authorized_isolated_execution_started": false,
+    "test_pass_claim": false,
+    "runtime_credit": 0,
+    "entityos_hcu_whole_product_credit": 0,
+    "reason": "Connected Vercel surface exposes documentation search but no authorized Sandbox create/start/exec primitive in this session; VPS/self-hosted/production execution is forbidden."
+  },
+  "coordination": {
+    "duplicate_route_identity_branch_created_earlier_this_turn": "UNPROMOTED_ABANDONED_AFTER_PR1356_PR1358_OVERLAP_DISCOVERY",
+    "new_unusual_experiment": false,
+    "reason": "No upstream macrocycle identity was available and overlapping HCU lanes already contain an unusual discriminator; this delta adds ordinary deterministic regression obligations only."
+  },
+  "package_state": "NOT_YET_PACKAGE_ADMITTED: PACKAGE_MANIFEST/HCU_DATA_INDEX/MICROENTITY_CURRENT.zip intentionally unchanged in this child source candidate; integrate them atomically only after producer semantics are accepted.",
+  "next_exact_gate": "Fuse the producer into current PR1263, then on an actually-started authorized exact-source isolated sandbox execute Entry-Fabric/router/inference-receipt regressions and bind the producer to the actual local HCU inference result path before any runtime credit."
+}

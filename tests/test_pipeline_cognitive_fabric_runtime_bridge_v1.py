@@ -1,5 +1,10 @@
 import copy
+import sys
 import unittest
+from pathlib import Path
+
+TOOLS = Path(__file__).resolve().parents[1] / "tools"
+sys.path.insert(0, str(TOOLS))
 
 from pipeline_cognitive_fabric_runtime_bridge_v1 import (
     RuntimeCognitiveFabricBridgeError,

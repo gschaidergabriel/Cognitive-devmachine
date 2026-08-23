@@ -1,0 +1,70 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "timestamp_local": "2026-08-23T23:31:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "active_program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "base_main_sha": "82431fe1a9996a7b08d68470147aacda26531e15",
+  "branch": "gpt56sol/entityos-hcu-entry-fabric-v1-20260823-2331",
+  "authority": {
+    "product_system": "EntityOS",
+    "cognition_compute_architecture": "HCU",
+    "xeno": "TRANSITIONAL_COMPATIBILITY_CODENAME_ONLY",
+    "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY",
+    "durable_state": "UnifiedDB_or_current_compatibility_MiniUnifiedDB",
+    "real_effects": "EffectGate+EffectJournal"
+  },
+  "tracks": {
+    "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE_SOURCE_CANDIDATE",
+    "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_ADVANCED"
+  },
+  "observed": "Current EntityOS/HCU frontier requires one typed Entry Fabric and one causal route identity. Existing HCU route work has source-confirmed event/engine identity gaps; the artifact authority has now converged to EntityOS/HCU naming.",
+  "hypothesis": "A deterministic pre-cognition EntryPacket that binds immutable ingress identity, causal identity, generation, provenance, payload digest, capability scope and compute budget gives HCU one reusable causal ingress primitive across GRID10, COGSIM10, WM_TEST, NESTED_SIM and SCALEOUT.",
+  "counterhypothesis": "A naive hash of raw ingress can create false identity churn or false confidence. The candidate therefore canonicalizes timestamps and capability ordering, binds payload/provenance by explicit digests plus references, rejects unknown budget keys, and keeps truth/effect/engine authority outside the packet binder.",
+  "delta": {
+    "source": "the artefact/entry_fabric_v1.py",
+    "tests": "the artefact/test_entry_fabric_v1.py",
+    "input_schema": "ENTITYOS_ENTRY/v1",
+    "packet_schema": "ENTITYOS_ENTRY_PACKET/v1",
+    "source_sha256": "4c42c25213eb5820dd5c9f6d7a1da103c8356159d0c2046a86e4992593c2d1a2",
+    "tests_sha256": "a3f6f1bb3a6f91894d8b1f0a5fbb91dc4151388262033b9e3c6b2aaddb7fe52d",
+    "source_commit": "3ec63b05a42a54b0cd56c6656b6b6c377507f159",
+    "tests_commit": "d5499b53d53b74cccd268b5d0f8d8b6c897689c7"
+  },
+  "isolated_regression": {
+    "surface": "isolated ChatGPT container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "command": "python3 -m unittest -v test_entry_fabric_v1.py",
+    "result": "9/9 PASS",
+    "scope": "ENTRY_FABRIC_COMPONENT_ONLY",
+    "entityos_hcu_whole_runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "count_for_user_go": 1,
+    "id": "XENO_ENTRY_IDENTITY_COLLISION_LESION_V1",
+    "performed_on_immediate_pre_authority_rebind_predecessor": true,
+    "predecessor_source_sha256": "ea7141686a15641f1e3912a89aa96035578749f7779e7ec031aca76333249e68",
+    "intervention": "semantic replay normalization versus same source+event id with substituted payload digest",
+    "result": "semantic replay converged; payload substitution did not collide",
+    "final_candidate_status": "same mechanism retained; final EntityOS-named bytes covered by ordinary regression only; experiment not repeated"
+  },
+  "external_primary_evidence": [
+    "CloudEvents 1.0 separates event context from data and defines source+id as distinct-event identity with duplicate replay semantics.",
+    "W3C Trace Context standardizes portable request/trace correlation independent of vendor-specific state."
+  ],
+  "nonclaims": [
+    "entry packet does not mint semantic truth",
+    "entry packet does not grant rights",
+    "entry packet does not resolve HCU engine identity",
+    "entry packet does not grant effect authority",
+    "component regression does not imply EntityOS/HCU runtime acceptance"
+  ],
+  "next_discriminator": "Fuse ENTITYOS_ENTRY_PACKET/v1 entry_sha256 into the existing HCU reactive route candidate together with positive LOCAL_INTERNAL resolved engine identity/class so route identity is H(entry identity, engine identity, routing result), then run exact isolated replay/substitution/engine-alias tests on the fused current-head implementation.",
+  "acceptance": "IN_PROGRESS",
+  "together_api": "FORBIDDEN",
+  "paid_fallback": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

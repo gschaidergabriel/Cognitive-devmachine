@@ -34,11 +34,13 @@ REQUIRED_FIELDS = {
 }
 OPTIONAL_FIELDS = {
     "quantization_runtime_identity",
+    "runtime_digest",
     "steering_calibration_digest",
 }
 DIGEST_FIELDS = {
     "checkpoint_digest",
     "tokenizer_digest",
+    "runtime_digest",
     "jspace_profile_digest",
     "lens_profile_digest",
     "workspace_calibration_digest",
@@ -51,6 +53,7 @@ IDENTITY_FIELDS = (
     "checkpoint_digest",
     "tokenizer_digest",
     "quantization_runtime_identity",
+    "runtime_digest",
     "jspace_profile_digest",
     "lens_profile_digest",
     "workspace_calibration_digest",

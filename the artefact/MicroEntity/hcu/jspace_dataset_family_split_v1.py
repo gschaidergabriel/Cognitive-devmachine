@@ -15,9 +15,13 @@ trace into another split.
 import hashlib
 from typing import Any, Iterable, Mapping
 
+try:
+    from .jspace_dataset_admission_gate_v1 import ADMISSION_SCHEMA as DATASET_ADMISSION_SCHEMA
+except ImportError:
+    from jspace_dataset_admission_gate_v1 import ADMISSION_SCHEMA as DATASET_ADMISSION_SCHEMA
+
 SPLIT_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_FAMILY_SPLIT/v1"
 TRAINING_TRACE_SCHEMA = "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1"
-DATASET_ADMISSION_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1"
 SPLIT_NAMES = ("train", "validation", "holdout")
 
 

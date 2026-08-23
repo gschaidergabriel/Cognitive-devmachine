@@ -87,6 +87,13 @@ class AuthorityConsistencyTests(unittest.TestCase):
             "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md": "Program: ClayVerse single-container\nStage: CLAYVERSE_ARTIFACT\n",
             "the artefact/ARCHITECTURE.md": "ClayVerse is the product endpoint.\n",
             "the artefact/README.md": "# the artefact — ClayVerse single-container product\nThe active release endpoint is one OCI/Docker-compatible ClayVerse container image.\n",
+            mod.ROOT_CLAUDE: (
+                "# CLAY — CLAYVERSE BUILD ORGAN\n"
+                "PROGRAM=CLAYVERSE_SINGLE_CONTAINER\n"
+                "STAGE=CLAYVERSE_ARTIFACT\n"
+                "PRODUCT=one OCI/Docker-compatible ClayVerse container image\n"
+                f"{mod.OWNER_DIRECTIVE}\n"
+            ),
         }
         for rel, data in files.items():
             path = root / rel
@@ -147,6 +154,29 @@ class AuthorityConsistencyTests(unittest.TestCase):
         errors = mod.validate(root)["errors"]
         self.assertIn("DIRECTIVE_NOT_CURRENT", errors)
         self.assertIn("DIRECTIVE_MARKED_SUPERSEDED", errors)
+
+    def test_stale_root_claude_program_selector_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.ROOT_CLAUDE
+        path.write_text(
+            "# CLAY — MULTI-USE MINI ENTITY BUILD ORGAN\n"
+            "PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE\n"
+            "There is one active goal only: finish and prove one portable persistent multi-use Mini Entity.\n",
+            encoding="utf-8",
+        )
+        errors = mod.validate(root)["errors"]
+        self.assertIn("ROOT_CLAUDE_PROGRAM_MISMATCH", errors)
+        self.assertIn("ROOT_CLAUDE_STALE_MINI_ENTITY_SELECTOR", errors)
+        self.assertIn("ROOT_CLAUDE_STALE_MINI_ENTITY_GOAL", errors)
+
+    def test_root_claude_owner_pointer_loss_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.ROOT_CLAUDE
+        text = path.read_text(encoding="utf-8").replace(mod.OWNER_DIRECTIVE, "missing-owner-directive")
+        path.write_text(text, encoding="utf-8")
+        self.assertIn("ROOT_CLAUDE_OWNER_DIRECTIVE_POINTER_MISSING", mod.validate(root)["errors"])
 
 
 if __name__ == "__main__":

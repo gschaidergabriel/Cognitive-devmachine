@@ -45,19 +45,17 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   let prompt = phase("pipeline_build_prompt",entity_db,source_db,profile,previous,compiled)
   require prompt.ok
 
-  // One Cognitive Fabric, two temporal phases. PREPARE is pre-inference admission only:
-  // it binds the fresh workspace/Zero/GRF/generation state into the exact InferencePacket
-  // and returns the admitted engine/context. It cannot claim a completed UCF runtime receipt,
-  // candidate result, canonical write, effect, or measured J-Space outcome before inference exists.
+  // PREPARE is pre-inference admission only. It binds fresh MiniUnifiedDB generation,
+  // Zero/GRF/workspace identity and the exact InferencePacket, but cannot claim a
+  // completed UCF runtime receipt, candidate outcome, gate decision or commit state.
   let cognition_prepare_data = map_new()
   map_set(cognition_prepare_data,"compiled",compiled)
   map_set(cognition_prepare_data,"prompt",prompt)
   let prepared = phase("pipeline_cognitive_fabric_prepare",entity_db,source_db,profile,previous,cognition_prepare_data)
   require prepared.ok
 
-  // Inference is replaceable candidate cognition. Raw prompt/profile fields cannot bypass
-  // the prepared Cognitive Fabric envelope. Only the exact prepared InferencePacket identity
-  // crosses into the engine boundary before execution.
+  // Inference is replaceable candidate cognition. Raw profile/prompt fields may not
+  // bypass the prepared Cognitive Fabric envelope.
   let infer = map_new()
   map_set(infer,"inference",prepared.inference)
   map_set(infer,"system",prepared.system)
@@ -67,33 +65,41 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   let generated = effect("inference_generate",infer)
   require generated.ok
 
-  // FINALIZE is necessarily post-inference: only now can the canonical UCF runtime receipt
-  // bind executed/result/epistemic/authority fields to the exact prepared packet and candidate.
-  // This is the same fabric/causal turn, not a second state/effect/truth authority.
-  let cognition_finalize_data = map_new()
-  map_set(cognition_finalize_data,"prepared",prepared)
-  map_set(cognition_finalize_data,"generated",generated)
-  map_set(cognition_finalize_data,"compiled",compiled)
-  map_set(cognition_finalize_data,"prompt",prompt)
-  let finalized = phase("pipeline_cognitive_fabric_finalize",entity_db,source_db,profile,previous,cognition_finalize_data)
-  require finalized.ok
-
+  // Deterministic gate authority remains independent of the final UCF receipt.
+  // It consumes the candidate plus the exact prepared packet identity.
   let gate_data = map_new()
   map_set(gate_data,"generated",generated)
   map_set(gate_data,"compiled",compiled)
   map_set(gate_data,"prompt",prompt)
-  map_set(gate_data,"cognitive_fabric",finalized)
+  map_set(gate_data,"cognitive_fabric_prepare",prepared)
+  map_set(gate_data,"inference_packet_digest",prepared.inference_packet_digest)
   let gated = phase("pipeline_gate",entity_db,source_db,profile,previous,gate_data)
   require gated.ok
 
+  // MiniUnifiedDB CAS/commit remains the only durable state transition authority.
   let commit_data = map_new()
   map_set(commit_data,"gated",gated)
   map_set(commit_data,"compiled",compiled)
   map_set(commit_data,"collected",collected)
   map_set(commit_data,"generated",generated)
-  map_set(commit_data,"cognitive_fabric",finalized)
+  map_set(commit_data,"cognitive_fabric_prepare",prepared)
+  map_set(commit_data,"inference_packet_digest",prepared.inference_packet_digest)
   let committed = phase("pipeline_commit",entity_db,source_db,profile,previous,commit_data)
   require committed.ok
+
+  // FINALIZE is post-turn evidence. Only now can the canonical UCF runtime receipt
+  // truthfully bind execution/result/epistemic status, validation_decision and
+  // canonical_write_committed/effect_committed to the exact prepared packet.
+  // The receipt records what happened; it does not retroactively authorize gate/commit.
+  let cognition_finalize_data = map_new()
+  map_set(cognition_finalize_data,"prepared",prepared)
+  map_set(cognition_finalize_data,"generated",generated)
+  map_set(cognition_finalize_data,"gated",gated)
+  map_set(cognition_finalize_data,"committed",committed)
+  map_set(cognition_finalize_data,"compiled",compiled)
+  map_set(cognition_finalize_data,"prompt",prompt)
+  let finalized = phase("pipeline_cognitive_fabric_finalize",entity_db,source_db,profile,previous,cognition_finalize_data)
+  require finalized.ok
 
   let result = map_new()
   map_set(result,"ok",true)

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Compatibility entry point for the current fail-closed product-authority assertion.
+"""Compatibility entry point for the current fail-closed EntityOS/HCU authority assertion.
 
-The historical 4.1+4.2+4.3 Mini Entity assertion was correct for its then-current
-bootstrap, but the 2026-08-23 owner product directive now selects ClayVerse. Keep one
-assertion authority by delegating to the ClayVerse consistency validator rather than
-leaving a competing Mini Entity gate active.
+The filename and import path are retained because existing workflows/receipts may call
+this entry point. Current product selection comes from the EntityOS/HCU consistency
+validator; historical ClayVerse control names are provenance/safety donors only.
 """
 from __future__ import annotations
 
@@ -19,40 +18,32 @@ if str(TOOLS) not in sys.path:
 
 from validate_clayverse_authority_consistency import validate
 
+PROGRAM = "ENTITYOS_HCU"
+STAGE = "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP"
+PRODUCT = "EntityOS"
+COMPUTE_ARCHITECTURE = "HCU"
+VALIDATOR_SCHEMA = "ENTITYOS_HCU_AUTHORITY_CONSISTENCY/v1"
+
 
 def main() -> int:
     result = validate(ROOT)
-    if not result.get("pass"):
-        print(
-            json.dumps(
-                {
-                    "schema": "EFFECTIVE_PROGRAM_AUTHORITY_ASSERTION/v2",
-                    "status": "FAIL",
-                    "program": "CLAYVERSE_SINGLE_CONTAINER",
-                    "stage": "CLAYVERSE_ARTIFACT",
-                    "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
-                    "errors": result.get("errors", []),
-                    "credit": "ZERO_RUNTIME_CREDIT",
-                },
-                sort_keys=True,
-            )
-        )
-        return 2
-    print(
-        json.dumps(
-            {
-                "schema": "EFFECTIVE_PROGRAM_AUTHORITY_ASSERTION/v2",
-                "status": "PASS",
-                "program": "CLAYVERSE_SINGLE_CONTAINER",
-                "stage": "CLAYVERSE_ARTIFACT",
-                "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
-                "authority_validator": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
-                "credit": "SOURCE_CONTROL_ASSERTION_ONLY_ZERO_RUNTIME_CREDIT",
-            },
-            sort_keys=True,
-        )
-    )
-    return 0
+    payload = {
+        "schema": "EFFECTIVE_PROGRAM_AUTHORITY_ASSERTION/v3",
+        "status": "PASS" if result.get("pass") else "FAIL",
+        "program": PROGRAM,
+        "stage": STAGE,
+        "product": PRODUCT,
+        "compute_architecture": COMPUTE_ARCHITECTURE,
+        "authority_validator": VALIDATOR_SCHEMA,
+        "errors": result.get("errors", []),
+        "credit": (
+            "SOURCE_CONTROL_ASSERTION_ONLY_ZERO_RUNTIME_CREDIT"
+            if result.get("pass")
+            else "ZERO_RUNTIME_CREDIT"
+        ),
+    }
+    print(json.dumps(payload, sort_keys=True))
+    return 0 if result.get("pass") else 2
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 {
-  "schema": "ENTITYOS_HCU_GO_SOURCE_COHERENCE_RECEIPT/v3",
+  "schema": "ENTITYOS_HCU_GO_SOURCE_COHERENCE_RECEIPT/v4",
   "date": "2026-08-24",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
@@ -13,28 +13,29 @@
     "owner_steering_claimed_prototype_path": "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
     "main_path_fetch": "NOT_FOUND_AT_BOUND_MAIN",
     "retained_hcu_pr": 1263,
-    "interpretation": "The J-Space implementation described by steering is retained-lane work, not yet canonical-main bytes."
+    "interpretation": "The J-Space implementation described by steering remains retained-lane work rather than canonical-main bytes."
   },
-  "same_cycle_parallel_resolution": {
-    "retained_hcu_pr_head_observed": "a25c4fa0c02d67912f4e96abb6c59f53f0f75ac6",
-    "global_jspace_blob": "8e1245f1ea668e1b71d268ba3125ebb384d6f660",
-    "dataset_compiler_blob": "99c116e994ef77bf8202efdd4e0bd3cd15f03051",
-    "dataset_compiler_test_blob": "9caaf7e164e780911e7e49561fc3fea4c23e3215",
-    "substantive_trace_codec_mismatch": "REPAIRED_BY_PARALLEL_RETAINED_LANE",
-    "observed_current_contract": [
-      "Global J-Space TRACE v3 carries basis_sha256, exact control_packet_text, packet identity digest and wire digest.",
-      "Bootstrap compiler uses current parse_packet_text and packet_bytes APIs and binds generation, basis id, basis digest, role and control condition.",
-      "Bootstrap compiler carries current basis digest into generated validation/broadcast examples."
+  "same_cycle_parallel_convergence": {
+    "latest_retained_hcu_pr_head_observed": "0524f286b25fc1dd1dac28b43e74e96a27b48787",
+    "bootstrap_trace_codec_contract": "SOURCE_COHERENT_AT_LATEST_OBSERVATION",
+    "bootstrap_regression_drift": "RESOLVED_AT_LATEST_OBSERVATION",
+    "training_eligible_compiler_added": "the artefact/MicroEntity/hcu/compile_jspace_training_dataset_v1.py",
+    "training_dataset_schema": "ENTITYOS_HCU_JSPACE_TRAINING_DATASET/v1",
+    "training_trace_input_schema": "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1",
+    "training_compiler_contract": [
+      "Consumes causal training traces binding observable J-Space/GWT state to Entry -> route -> GRID10 identities.",
+      "Keeps raw prototype traces separate from serious training evidence.",
+      "Uses trace-family splitting to reduce train/validation/holdout leakage.",
+      "Validates vector-control generation, basis id, basis digest, role and control condition.",
+      "Requires external outcome receipt plus verified-outcome provenance before non-UNKNOWN credit can be admitted."
     ],
-    "remaining_regression_drift": "test_compile_jspace_bootstrap_dataset_v1.py still expects legacy JCTL_BASIS_MISMATCH while compiler emits JSPACE_BASIS_ID_MISMATCH.",
-    "coordination_action": "PR #1263 was notified; no duplicate compiler/ABI path was created.",
     "evidence_class": "EXACT_CURRENT_SOURCE_CONTRACT_ANALYSIS_NO_EXECUTION_CREDIT"
   },
   "stale_write_protection": {
     "attempted_patch_branch": "gpt56sol/fix-pr1263-jspace-bootstrap-compiler-current-20260824",
     "first_write_result": "GITHUB_409_SOURCE_MOVED",
     "partial_code_write": false,
-    "interpretation": "Concurrent retained-lane work moved the target; stale overwrite correctly failed closed."
+    "interpretation": "Concurrent retained-lane repair moved the target; stale overwrite correctly failed closed."
   },
   "execution_surface_discovery": {
     "vercel_connector_sandbox_create_start_exec_callable": false,
@@ -55,13 +56,13 @@
     "together_one_shot_authorized": true,
     "job_consumed": false,
     "job_started_by_this_organ": false,
-    "reason_not_started": "J-Space/HCU bytes are still retained-lane rather than canonical-main integrated runtime evidence; exact authorized isolated execution, real Entry-route-engine-outcome traces, causal lesion/shuffle/rescue evidence, frozen base identity/pretraining evaluation and Together support/price preflight are not established by this run."
+    "reason_not_started": "The source path has materially converged, including a first training-eligible causal dataset compiler, but the bytes remain retained-lane rather than canonical-main exact runtime evidence. Actually-started authorized isolated execution, real integrated causal traces and interventions, exact base/pretraining evaluation, retained-capability floors and Together support/price preflight remain unproven here."
   },
   "next_exact_gate": [
-    "Close the residual compiler regression string drift on retained PR #1263 and keep current TRACE v3/vector-ABI contract coherent.",
-    "Rebase/adjudicate the retained dependency-complete J-Space/GWT + Vector Control ABI + causal training-trace/compiler slice onto current main without duplicating Entry/router/canonicalization/inference authority.",
+    "Adjudicate/rebase the dependency-complete retained J-Space/GWT + Vector Control ABI + causal training trace + training dataset compiler slice onto current main without duplicating authority paths.",
     "Run exact bound source in an actually-started authorized isolated executor and capture source identity, commands, exits and logs.",
-    "Produce real integrated Entry -> route -> engine/load -> GRID10 -> J-Space/GWT -> downstream-outcome traces with lesion/shuffle/rescue controls.",
-    "Only after frozen leak-resistant train/validation/holdout data, exact ~0.8B base identity, retained-capability baseline and Together support/price preflight may the single authorized training job be created."
+    "Produce real Entry -> route -> engine/load -> GRID10 -> J-Space/GWT -> downstream-outcome trace families with lesion/shuffle/rescue controls.",
+    "Freeze leak-resistant train/validation/holdout data only from admitted causal trace families and deterministic hard negatives.",
+    "Freeze exact ~0.8B base identity and retained-capability baseline, complete Together support/price preflight, then and only then create the single owner-authorized training job."
   ]
 }

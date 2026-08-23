@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Fail-closed admission shim for the canonical Mini Entity GO/ZERO swarm.
 
-This shim validates current Mini Entity program/control/worker authority before handing
-off to `tools/run_go_zero_swarm.py`. It does not inspect provider secrets.
+This shim validates current Mini Entity program/control/worker/HCU authority before
+handing off to `tools/run_go_zero_swarm.py`. It does not inspect provider secrets.
 """
 from __future__ import annotations
 
@@ -18,6 +18,8 @@ CONTROL = ROOT / "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_
 OWNER = ROOT / "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md"
 PROTOCOL = ROOT / "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
 ROOT_CLAUDE = ROOT / "CLAUDE.md"
+HCU_ARCH = ROOT / "the artefact/MicroEntity/hcu/HCU_ARCHITECTURE.md"
+MICROENTITY_ZIP = ROOT / "the artefact/MicroEntity/MICROENTITY_CURRENT.zip"
 CONTROLLER = ROOT / "tools/run_go_zero_swarm.py"
 
 PROGRAM = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
@@ -31,6 +33,9 @@ PROTOCOL_END_MARKER = "[/MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL
 ROOT_PROGRAM_MARKER = "PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE"
 ROOT_STAGE_MARKER = "STAGE=MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT"
 STALE_ROOT_PROGRAM_MARKER = "PROGRAM=CLAYVERSE_SINGLE_CONTAINER"
+HCU_MARKER = "Hyperposition Computational Unit"
+HCU_PACKAGE_REL = "the artefact/MicroEntity/hcu/"
+HCU_ZIP_REL = "the artefact/MicroEntity/MICROENTITY_CURRENT.zip"
 
 
 def load_json(path: Path) -> dict:
@@ -78,6 +83,13 @@ def preflight() -> None:
 
     require(OWNER.exists(), "OWNER_DIRECTIVE_MISSING")
     require(CONTROLLER.exists(), "COORDINATED_SWARM_CONTROLLER_MISSING")
+    require(HCU_ARCH.exists(), "HCU_ARCHITECTURE_MISSING")
+    require(MICROENTITY_ZIP.exists(), "MICROENTITY_ZIP_MISSING")
+
+    owner_text = OWNER.read_text(encoding="utf-8")
+    require(HCU_MARKER in owner_text, "OWNER_HCU_WORKSTREAM_MISSING")
+    require(HCU_PACKAGE_REL in owner_text, "OWNER_HCU_PACKAGE_PATH_MISSING")
+    require(HCU_ZIP_REL in owner_text, "OWNER_HCU_ZIP_PATH_MISSING")
 
     protocol_text = PROTOCOL.read_text(encoding="utf-8")
     require(PROTOCOL_MARKER in protocol_text, "WORKER_PROTOCOL_MARKER_MISSING")
@@ -85,11 +97,17 @@ def preflight() -> None:
     require(OWNER_REL in protocol_text, "WORKER_PROTOCOL_OWNER_MISMATCH")
     require(PROGRAM in protocol_text, "WORKER_PROTOCOL_PROGRAM_MISMATCH")
     require(STAGE in protocol_text, "WORKER_PROTOCOL_STAGE_MISMATCH")
+    require(HCU_MARKER in protocol_text, "WORKER_PROTOCOL_HCU_WORKSTREAM_MISSING")
+    require(HCU_PACKAGE_REL in protocol_text, "WORKER_PROTOCOL_HCU_PACKAGE_PATH_MISSING")
+    require(HCU_ZIP_REL in protocol_text, "WORKER_PROTOCOL_HCU_ZIP_PATH_MISSING")
 
     root_text = ROOT_CLAUDE.read_text(encoding="utf-8")
     require(ROOT_PROGRAM_MARKER in root_text, "ROOT_CLAUDE_PROGRAM_MISMATCH")
     require(ROOT_STAGE_MARKER in root_text, "ROOT_CLAUDE_STAGE_MISMATCH")
     require(OWNER_REL in root_text, "ROOT_CLAUDE_OWNER_MISMATCH")
+    require(HCU_MARKER in root_text, "ROOT_CLAUDE_HCU_WORKSTREAM_MISSING")
+    require(HCU_PACKAGE_REL in root_text, "ROOT_CLAUDE_HCU_PACKAGE_PATH_MISSING")
+    require(HCU_ZIP_REL in root_text, "ROOT_CLAUDE_HCU_ZIP_PATH_MISSING")
     require(STALE_ROOT_PROGRAM_MARKER not in root_text, "ROOT_CLAUDE_STALE_CLAYVERSE_PROGRAM")
 
     attested = (os.getenv("CLAY_FREE_ONLY_ATTESTED") or "").strip().lower()

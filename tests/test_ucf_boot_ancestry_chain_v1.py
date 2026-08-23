@@ -51,6 +51,7 @@ def cycle_from_boot(boot: dict) -> dict:
         lens_profile_digest=boot["jspace"]["lens_profile_sha256"],
         workspace_calibration_digest=boot["gwt"]["calibration_sha256"],
     )
+    cycle["runtime"]["generation"] = boot["runtime"]["entity_generation"]
     cycle["binding"].update(
         zero_identity_digest=cycle["identity"]["zero_identity_digest"],
         grf_digest=cycle["identity"]["grf_digest"],
@@ -114,6 +115,25 @@ class UcfBootAncestryChainTests(unittest.TestCase):
         redigest(self.cycle)
         self.assertTrue(ucf.validate(self.cycle)["ok"])
         self.assertIn("BOOT_JSPACE_PROFILE_MISMATCH", chain.validate_chain(self.cycle, self.boot, self.manifest_path, self.lock))
+
+    def test_self_reported_generation_freshness_cannot_replace_boot_crossbind(self):
+        self.cycle["runtime"]["generation"] += 1
+        self.cycle["freshness"]["stale_generation"] = False
+        redigest(self.cycle)
+        self.assertTrue(ucf.validate(self.cycle)["ok"])
+        self.assertIn("BOOT_ENTITY_GENERATION_MISMATCH", chain.validate_chain(self.cycle, self.boot, self.manifest_path, self.lock))
+
+    def test_missing_boot_generation_fails_before_composition(self):
+        poisoned = copy.deepcopy(self.boot)
+        poisoned.pop("runtime")
+        errors = chain.validate_chain(self.cycle, poisoned, self.manifest_path, self.lock)
+        self.assertTrue(any("MISSING_OBJECT:runtime" in error for error in errors), errors)
+
+    def test_boolean_boot_generation_fails_before_composition(self):
+        poisoned = copy.deepcopy(self.boot)
+        poisoned["runtime"]["entity_generation"] = True
+        errors = chain.validate_chain(self.cycle, poisoned, self.manifest_path, self.lock)
+        self.assertTrue(any("INVALID_INT:entity_generation" in error for error in errors), errors)
 
     def test_boot_runtime_substitution_is_stopped_upstream(self):
         poisoned = copy.deepcopy(self.boot)

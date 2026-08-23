@@ -129,6 +129,9 @@ def validate(data: dict) -> None:
     if dirty:
         req_sha(source, "dirty_diff_sha256")
 
+    runtime = req_obj(data, "runtime")
+    req_int(runtime, "entity_generation", minimum=0)
+
     executor = req_obj(data, "executor")
     if req_str(executor, "host_class") != "UBUNTU":
         fail("EXECUTOR_NOT_UBUNTU")

@@ -234,8 +234,8 @@ def _require_admitted_digest(db: sqlite3.Connection, *, object_kind: str,
              FROM mini_cognition_objects o JOIN mini_cognition_object_admissions a
                ON a.object_kind=o.object_kind AND a.object_version=o.object_version
               AND a.object_digest=o.object_digest
-            WHERE o.object_kind=? AND o.object_digest=? AND a.admitted_generation<=?
-            ORDER BY a.admitted_generation DESC,o.object_version DESC LIMIT 1""",
+            WHERE o.object_kind=? AND o.object_digest=? AND a.admitted_generation=?
+            ORDER BY o.object_version DESC LIMIT 1""",
         (object_kind, object_digest, entity_generation),
     ).fetchone()
     _need(row is not None, f"COGNITION_OBJECT_NOT_ADMITTED:{object_kind}")

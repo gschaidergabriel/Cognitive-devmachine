@@ -84,10 +84,23 @@ class EntryCanonicalizationTests(unittest.TestCase):
             canonicalize({"a": [3, 2, 1], "b": 1}),
         )
 
-    def test_integer_input_stays_inside_ijson_safe_domain(self):
+    def test_integer_input_uses_exact_binary64_semantics_not_host_safe_int_policy(self):
+        # RFC 8785 Appendix B includes 2^53 as a valid Number serialization; the
+        # safe-integer range is a SHOULD for application data, not a JCS algorithm gate.
         self.assertEqual(canonicalize(9007199254740991), b"9007199254740991")
-        with self.assertRaisesRegex(CanonicalizationError, "IJSON_SAFE_RANGE"):
-            canonicalize(9007199254740992)
+        self.assertEqual(canonicalize(9007199254740992), b"9007199254740992")
+        self.assertEqual(canonicalize(9007199254740992), canonicalize(float(9007199254740992)))
+
+        # 2^68 is exactly representable as binary64 but ECMAScript/JCS chooses this
+        # shortest decimal wire representation rather than Python's integer spelling.
+        two_to_68 = 1 << 68
+        self.assertEqual(canonicalize(two_to_68), b"295147905179352830000")
+        self.assertEqual(canonicalize(two_to_68), canonicalize(float(two_to_68)))
+
+        # 2^53+1 is not exactly representable as binary64; silently rounding it would
+        # violate the admitted I-JSON value before canonicalization.
+        with self.assertRaisesRegex(CanonicalizationError, "INTEGER_NOT_EXACT_BINARY64"):
+            canonicalize(9007199254740993)
 
     def test_lone_surrogate_fails_closed(self):
         with self.assertRaisesRegex(CanonicalizationError, "LONE_SURROGATE"):

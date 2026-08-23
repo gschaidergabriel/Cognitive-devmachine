@@ -1,34 +1,52 @@
-# the artefact — Multi-use Mini Entity pipeline all-in-one
+# the artefact — Multi-use Mini Entity / EntityOS integrated cognitive architecture
 
 `the artefact/` is the canonical product workspace for the current owner-directed Mini Entity program in `gschaidergabriel/clay-global-research-entity/main`.
 
-The previous ClayVerse single-container endpoint and the former 0.5B-primary campaign are superseded as active product/training targets. Their accepted mechanisms remain bounded historical evidence only where they strengthen the current Mini Entity.
+The previous ClayVerse single-container endpoint, the former 0.5B-primary campaign, and the later assumption that the approximately-0.8B cognition checkpoint is only an optional attachment are superseded as active product assumptions. Accepted prior mechanisms remain bounded evidence only where they strengthen the current Mini Entity.
 
 ## Current authority
 
-Read current repository state before making consequential claims. At the 2026-08-22 re-entry represented by this README, the relevant authority chain is:
+Read current repository state before making consequential claims. At the 2026-08-23 re-entry represented by this README, the relevant authority chain is:
 
-1. `research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md` — current cognition/training owner directive;
-2. `research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md` — prior supporting architecture/safety directive where not superseded;
-3. `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md` — base Mini Entity product directive;
-4. `research_entity/rooms/PROGRAM_STATE.json` — current program state;
-5. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json` — current execution-control policy for research/provider spend.
+1. `research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md` — current owner architecture for bundled ~0.8B cognition, Unified J-Space/GWT, first-class Claude Code integration and adaptive inference;
+2. `research_entity/global/ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md` — canonical Mini Entity / EntityOS / Zero hierarchy and one-cognitive-fabric law;
+3. `research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md` — current ~0.8B training/cognition campaign and maximum-depth `go` law;
+4. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md` — mandatory GRF/ClayCode-first worker protocol;
+5. `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md` — base Mini Entity product directive where not superseded;
+6. `research_entity/continuity/BOOTSTRAP_MINIMAL.json` — compact current join contract;
+7. `research_entity/rooms/PROGRAM_STATE.json` — detailed program state; currently contains older optional-cognition wording and must not override the newer explicit owner architecture;
+8. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json` — current execution-control policy for research/provider spend.
 
-The product is **IN_PROGRESS**. Source presence, a green component test, generated corpus, fine-tuning job, checkpoint, quantized file, or inference demo never implies whole-product acceptance.
+The product is **IN_PROGRESS**. Owner-architecture source presence, a green component test, generated corpus, fine-tuning job, checkpoint, lens fit, quantized file, inference demo or workspace visualization never implies whole-product acceptance.
 
 ## Product target
 
-The release shape remains deliberately small and replaceable:
+The product remains one persistent Mini Entity with explicit authority boundaries, but its local cognition path is now first-class rather than optional:
 
 1. one application-neutral and inference-neutral native `.clay` pipeline executable (`mini_entity.clay`);
-2. one SQLite MiniUnifiedDB (`mini_entity.db`) as persistent state/config/evidence authority;
-3. one optional replaceable generic **approximately-1B ClayCode cognition checkpoint**.
+2. one SQLite MiniUnifiedDB (`mini_entity.db`) as persistent canonical state/config/evidence authority;
+3. one bundled, first-class generic **approximately-0.8B ClayCode cognition core** available without an external API;
+4. one fixed, versioned integration contract between that bundled core and the **Unified J-Space/GWT Cognitive Fabric**;
+5. one first-class `ClaudeCodeEngineAdapter` for Zero's targeted high-capability candidate inference;
+6. one adaptive capability/profile layer for other local models and APIs, with model-specific J-Space only where real latent access exists;
+7. one self-hosted MicroEntity control/inspection surface with a simple Cognitive Module ON/OFF UX and explicit measured-vs-compiled-vs-canonical labels.
 
-The current primary training base selected by owner directive is `Qwen/Qwen3.5-0.8B`.
+The current primary training base selected by owner directive remains `Qwen/Qwen3.5-0.8B`.
 
-`zero_blog` is only the fully replaceable shipped preset. Zero, blogging, presentation language, personality, provider, model name, API choice, local runner choice, role, goal, audience and application semantics are runtime configuration/data — never executable or durable entity identity.
+`zero_blog` remains only a fully replaceable shipped preset. Zero, blogging, presentation language, personality, provider, model name, API choice, local runner choice, role, goal, audience and application semantics are runtime configuration/data — never executable or durable entity identity.
 
 ## Architecture law
+
+### Mini Entity / EntityOS / Zero
+
+```text
+Mini Entity = generic cognitive machine architecture
+EntityOS    = runtime / operating environment containing and executing Mini Entity
+Zero        = one runtime identity + cognition configuration instantiated on Mini Entity
+Claude Code = selectively invoked targeted inference engine; never Zero itself
+```
+
+All admitted cognition concepts — J-Space, GWT, Thalamus, EPQ, GRF, Hyperposition, ClayCode, omega, retrieval, provenance and deterministic gates — belong to the generic Mini Entity architecture. They must not be duplicated as a separate Zero-only cognitive stack.
 
 ### Native executable
 
@@ -36,18 +54,18 @@ The executable owns generic machinery only:
 
 - evidence/source preprocessing;
 - canonical run/state envelope;
-- generic inference dispatch;
+- generic cognition/inference scheduling and dispatch;
 - immutable truth/secret/admission gates;
 - exactly-once source consumption;
 - generation CAS;
 - atomic SQLite persistence;
 - deterministic effect/state authority boundaries.
 
-If a replaceable application, personality, provider, model, prompt, presentation label, or tool description can live in runtime configuration, hard-coding it into executable identity is a regression.
+If a replaceable application, personality, provider, model, prompt, presentation label or tool description can live in runtime configuration, hard-coding it into executable identity is a regression.
 
 ### MiniUnifiedDB
 
-SQLite owns continuing state and runtime configuration. Switching application preset, inference backend, local weights, provider, prompt, role, goal or personality must not fork or reset entity continuity.
+SQLite owns continuing state and runtime configuration. Switching application preset, external inference backend, local weights, provider, prompt, role, goal or personality — or version-migrating the bundled local checkpoint — must not fork or reset entity continuity.
 
 Epistemic law:
 
@@ -56,11 +74,21 @@ UNKNOWN != ZERO != ERROR != MEASURED
 REPORTED != MEASURED
 MODEL_OUTPUT != CANONICAL_TRUTH
 MODEL_PROPOSAL != EFFECT_AUTHORITY
+JSPACE_MEASUREMENT != GWT_TRUTH
+WORKSPACE_STABILITY != FACTUAL_TRUTH
 ```
 
-### Replaceable ~1B cognition
+### Bundled ~0.8B cognition core
 
-The cognition checkpoint is inference data, not canonical identity/state/effect authority. It must remain reusable across applications and runtime identities.
+The product MUST have one bundled, first-class generic local cognition path. The **integration contract is fixed and versioned**; exact checkpoint bytes are not immutable forever.
+
+```text
+FIXED_INTEGRATION != IMMUTABLE_MODEL_BYTES_FOREVER
+MODEL_UPGRADE_REQUIRES_VERSIONED_MIGRATION
+MODEL_UPGRADE_MUST_NOT_RESET_MINIUNIFIEDDB
+```
+
+The bundled checkpoint is cognition/inference data, not canonical identity/state/effect authority. It must remain reusable across applications and runtime identities.
 
 Required learned machinery includes:
 
@@ -75,6 +103,41 @@ Required learned machinery includes:
 - runtime-bound entity id, continuity, role, goal, personality, tool inventory and authorities.
 
 `R_next = F` is an admission invariant, not neural infallibility.
+
+The bundled core eventually requires a pinned manifest binding at least exact checkpoint, tokenizer, runtime/quantization identity where relevant, J-Space/lens profile, workspace calibration, ClayCode/GRF/Hyperposition contract versions, compatibility range and provenance.
+
+### Unified J-Space/GWT Cognitive Fabric
+
+J-Space and GWT are one product cognition fabric with two inseparable views:
+
+- **J-Space**: measured checkpoint-specific latent geometry/readout on hookable local models;
+- **GWT**: bounded competition, occupancy, persistence and broadcast/control over measured/derived candidates plus explicit ClayCode/GRF state.
+
+Thalamus-style gating, EPQ telemetry, GRF, Hyperposition, ClayCode and omega participate in that same fabric.
+
+No alpha, workspace layer/band, slot count, collapse threshold, lens, steering vector or truth threshold is canonical merely because it worked elsewhere. Exact values require measurement on the matching checkpoint + tokenizer + runtime and a provenance-bound calibration receipt.
+
+The normal product surface may expose this as one `COGNITIVE MODULE: ON/OFF` control, but the internal typed components and authority boundaries remain independently inspectable.
+
+### Claude Code and adaptive inference
+
+Claude Code is a first-class **targeted high-capability candidate-inference engine** through a versioned `ClaudeCodeEngineAdapter`. It is not Zero, entity identity, canonical truth, durable memory or direct effect authority.
+
+Canonical path:
+
+```text
+Unified J-Space/GWT Fabric
+  -> Inference Scheduler / Zero InferencePacket compiler
+  -> ClaudeCodeEngineAdapter
+  -> Claude Code targeted inference
+  -> typed candidate + provenance receipt
+  -> deterministic EntityOS validation/reconciliation
+  -> MiniUnifiedDB / next workspace cycle
+```
+
+Closed external engines do not expose their private residual streams merely because they are powerful. They operate in `COMPILED_EXTERNAL` mode: the local cognitive fabric compiles the context/control packet, the external engine returns candidate inference, and the result re-enters deterministic validation. No adapter may pretend hidden-state/J-Space control occurred when the backend did not expose it.
+
+Other admitted modes are `FULL_LOCAL_LATENT`, `LOCAL_OBSERVE_ONLY` and `PLAIN_COMPATIBILITY`, selected from actual engine capabilities rather than provider-name assumptions.
 
 ## Canonical SFT v2 curriculum
 
@@ -162,9 +225,26 @@ Durable receipt:
 
 The model-neutral SFT-v2 manifest was subsequently regenerated and merged with exact-blob evidence; the current materialized manifest no longer carries stale Qwen2.5 base identity.
 
+## J-Space/GWT evidence boundary — 2026-08-23
+
+Current owner architecture binds the bundled ~0.8B core as the reference local latent substrate and makes exact J-Space/GWT integration a first-class product contract. Current source-level primary-evidence work supports the architectural transfer hypothesis but explicitly rejects blind transplantation of model-specific Claude workspace layers/vectors/calibration into Qwen3.5-0.8B.
+
+Exact local J-Space runtime credit remains **ZERO** until an admitted isolated run binds exact checkpoint/tokenizer/runtime/lens identities and executes the relevant observer/Jacobian path. The strongest current counterhypothesis is that a library can recognize the Qwen/Hugging Face residual-stack structure while actual hook/backward/Jacobian semantics fail or calibrate differently on Qwen3.5's hybrid Gated DeltaNet/full-attention blocks.
+
+The next executable gate is therefore narrow and falsifiable before any full calibration campaign:
+
+1. load exact admitted Qwen3.5-0.8B checkpoint/tokenizer under a pinned hookable runtime;
+2. bind the Jacobian-Lens adapter to the actual residual stack;
+3. assert observed layer count / hidden dimension against exact model config;
+4. verify hook-visible forward behavior across both hybrid block classes;
+5. run one bounded `jacobian_for_prompt`-class probe;
+6. only then fit a versioned lens and sweep empirical workspace band, GWT slots, steering dose and stability.
+
+No source-layout match is an exact runtime PASS.
+
 ## Evaluation and promotion boundary
 
-The ~1B checkpoint is not promoted merely because the lane source, corpus, or local pre-provider path is green.
+The bundled ~0.8B checkpoint is not promoted merely because the lane source, corpus, local pre-provider path or J-Space concept is green.
 
 Promotion still requires the applicable current gates, including:
 
@@ -172,11 +252,12 @@ Promotion still requires the applicable current gates, including:
 - matched evaluation against the untuned base and a larger general model;
 - OOD/semantic evaluation that cannot be gamed by strings/comments/dead control flow;
 - failure/counterexample retention;
-- Q4_K_M quantization;
-- measured peak RSS below 1 GiB at context 2048;
-- real generic `local_exec` integration without MiniUnifiedDB reset or fixed application identity.
+- exact hookable checkpoint/tokenizer/J-Space/lens/workspace calibration evidence;
+- quantization/runtime identity appropriate to the admitted deployment path;
+- measured resource envelope, including the applicable peak-RSS target;
+- real generic local integration without MiniUnifiedDB reset or fixed application identity.
 
-Do not claim consciousness, AGI, mathematical correctness, superiority, successful Together training, `<1 GiB RAM`, or local integration from source structure alone.
+Do not claim consciousness, AGI, mathematical correctness, superiority, successful Together training, `<1 GiB RAM`, local integration or Whole-GWT from source structure alone.
 
 ## Native Mini Entity frontier
 

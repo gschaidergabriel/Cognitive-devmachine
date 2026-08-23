@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "work_class": "DETERMINISTIC_SOURCE_GUARD_REPAIR",
+    "duplicate_lane_created": false
+  },
+  "reentry": {
+    "retained_hcu_donor_pr": 1263,
+    "donor_head_observed": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_executor_pr": 810,
+    "executor_head_after_delta": "85e0f27cf10e2d6d5d8af2573a5c9c79788f9d96",
+    "current_rebind_contract_schema_observed": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+    "current_required_blob_manifest_schema_observed": "ENTITYOS_HCU_JSPACE_V4_V3_REQUIRED_BLOBS/v3",
+    "current_required_blob_count": 17
+  },
+  "observation": {
+    "stale_guard": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-v4-v3-exact-blobs.mjs still read jspace-v4-v3-required-jspace-blobs-5c59891b.json, required manifest schema v2 and hard-coded 18 required files.",
+    "current_manifest": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-v4-v3-required-blobs-511d5689.json",
+    "current_manifest_delta": "The exact-current producer-derived donor 511d5689 requires 17 blobs and removes test_inference_receipt_v1.py from the actual transitive fixture graph because the integrated chain now constructs upstream trust objects through production constructors.",
+    "classification": "STALE_SELF_CONSISTENT_EXACT_BLOB_GUARD"
+  },
+  "counterhypothesis": {
+    "claim": "The old guard remains useful because it still checks a valid immutable 5c59891b historical snapshot.",
+    "falsifier": "The guard is named as the current v4/v3 exact-blob fence while the current rebind contract targets donor 511d5689. A historical 18-blob PASS or failure cannot establish coherence of the current 17-blob contract and may preserve a removed fixture by convention."
+  },
+  "delta": {
+    "executor_commit": "85e0f27cf10e2d6d5d8af2573a5c9c79788f9d96",
+    "file": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-v4-v3-exact-blobs.mjs",
+    "changes": [
+      "The guard now reads jspace-v4-v3-required-blobs-511d5689.json.",
+      "Manifest schema validation is successor-dynamic within ENTITYOS_HCU_JSPACE_V4_V3_REQUIRED_BLOBS/vN rather than frozen to v2.",
+      "Required blob count is derived from manifest.required_exact_blob_count instead of hard-coded 18.",
+      "Manifest group count, contract required-file count and exact donor blob map must all agree exactly.",
+      "The closure target is successor-specific jspace-execution-store-511d5689, so absent current bytes fail closed instead of accidentally validating the historical 5c59891b directory.",
+      "Runtime/model/training credit boundaries remain zero and SOURCE_REBIND_REQUIRED remains active."
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the pre-promotion exact-source guard now evaluates the current one-lane executor target rather than a superseded historical closure.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: exact Typed Entry/route/engine/load/GRID10/model-execution producer identity is checked against the current 17-blob donor contract without stale fixture inflation.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: the J-Space/GWT TrainingTrace/JSpaceBinding acceptance source guard is aligned to the producer-derived donor and exact current import graph; runtime/model/training credit remains zero."
+  },
+  "execution_evidence": {
+    "source_write": "COMMITTED",
+    "vercel_status_for_executor_commit": "FAILURE_BUILD_RATE_LIMIT",
+    "vercel_target": "upgradeToPro=build-rate-limit",
+    "build_executed": false,
+    "guard_runtime_executed": false,
+    "function_executed": false,
+    "sandbox_executed": false,
+    "interpretation": "SOURCE_GUARD_REPAIR_ONLY; INFRASTRUCTURE_RATE_LIMIT_NOT_PRODUCT_FAILURE"
+  },
+  "credit": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "ALREADY_UPDATED_THIS_MACROCYCLE",
+    "existing_delta": "the artefact/README.md already records this macrocycle's single-rebind-target authority repair after a concurrent-write-safe reentry; this additional narrower successor-guard repair is preserved append-only here to avoid overwriting newer parallel README deltas."
+  },
+  "next_exact_action": "Populate the single successor-specific jspace-execution-store-511d5689 closure with all 17 exact donor blobs, run the exact-blob guard and require PASS, bind the same 17-name/blob map plus fixed command/result assertions into the existing quarantined route, remove SOURCE_REBIND_REQUIRED only atomically with that complete closure, and execute the deterministic regressions only when supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission is actually available."
+}

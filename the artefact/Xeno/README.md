@@ -1,34 +1,33 @@
-# Xeno — current operational bootstrap
+# Xeno compatibility implementation root — EntityOS + HCU
 
-**Xeno** is the current-facing name of the executable system previously called Mini Entity.
+`Xeno` is retained here only as a **transitional implementation/path codename** while exact migration is incomplete. The sole current product/system identity is **EntityOS** and the integrated cognition/compute architecture is **HCU**.
 
-This directory is the migration-safe current-facing root for new Xeno architecture artefacts. Existing `the artefact/MicroEntity/`, `mini_*`, `MINI_*`, database schema names and receipts remain compatibility/provenance surfaces until exact migration; they are not bulk-renamed because doing so can break hashes, imports, recovery or reproducibility.
+Existing `the artefact/MicroEntity/`, `mini_*`, `MINI_*`, Xeno path names, database schema names and receipts remain compatibility/provenance surfaces where exact migration is not yet safe; they are not bulk-renamed because doing so can break hashes, imports, recovery or reproducibility.
 
 Current authority:
 
-- `research_entity/global/XENO_GO_OWNER_DIRECTIVE.md`
-- `research_entity/global/XENO_COMPUTATIONAL_UNIT_RESEARCH_FUSION_2026-08-23.md`
+- `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 - `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
+- `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
+- `research_entity/global/XENO_GO_OWNER_DIRECTIVE.md` for retained implementation details that do not conflict with the newer EntityOS + HCU authority correction.
 
-## Xeno goal
-
-Xeno incrementally becomes a multi-mode cognitive computational appliance and eventually the bootstrap of an EntityOS cognitive computer.
+## EntityOS + HCU computer path
 
 ```text
 new data
    |
    v
-Xeno Entry Fabric
+Typed Entry Fabric
    |
    v
-XRAM state fabric
+canonical state / XRAM compatibility layer
    |
-   +---- XPU deterministic control
+   +---- deterministic control / XPU compatibility layer
    |
-   +---- XCU shared-weight/vector inference
+   +---- HCU shared-weight/vector/inference/J-Space plane
    |
    v
-typed interconnect / workspace / Hyperposition
+typed causal interconnect / workspace / Hyperposition
    |
    +---- GRID10
    +---- COGSIM10
@@ -37,24 +36,26 @@ typed interconnect / workspace / Hyperposition
    +---- SCALEOUT
    |
    v
-candidate action -> EffectGate -> reality
+candidate action -> typed effect request -> EffectGate/EffectJournal -> reality
 ```
 
-Every `go` advances normal executable Xeno work **and** XCU/Entry co-development, or records `XCU_NO_CHANGE_WITH_REASON`.
+Every `go` advances **ENTITYOS_EXECUTABLE_CONVERGENCE** and **HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT**, or records an exact HCU no-change reason.
 
 ## Executable bootstrap candidate
 
-The current Xeno source candidate now starts the common machine substrate instead of adding another agent framework:
+The current compatibility-path source candidate starts common machine primitives rather than adding another agent framework:
 
 - `runtime/entry_fabric_v1.py` — strict typed ingress admission before cognition; binds generation, causal identity, source/provenance, modality, time, permission scope, parent ancestry, compute budget and payload identity into deterministic `XENO_ENTRY_PACKET/v1`;
 - `runtime/grid10_v1.py` — deterministic `XENO_GRID10_SCHEDULE/v1` control/interconnect baseline with ten logical slots, bounded function allocation and ancestry-bound work packets;
 - `tests/test_xeno_entry_grid10_v1.py` — generation, permission, budget, replay and causal-alias regressions;
-- `receipts/2026-08-23_GO_XENO_ENTRY_GRID10_GPT56SOL.json` — exact-file bounded component evidence.
+- `receipts/2026-08-23_GO_XENO_ENTRY_GRID10_GPT56SOL.json` — exact-file bounded component evidence under current EntityOS + HCU authority.
 
-Current evidence is **component/mechanism only**. These primitives do not yet receive integrated Xeno, HCU/XCU model-runtime or EntityOS runtime credit. Next they must enter the single canonical XRAM/MiniUnifiedDB-to-UnifiedDB path and drive one real current HCU/XCU invocation under exact isolated execution.
+The `XENO_*` schema names above are compatibility identifiers, not a second product identity.
 
-Authority remains outside generated cognition: Entry/GRID10 do not write canonical truth, do not create a second identity or recovery ledger, and do not grant real-effect authority. EffectGate remains the only real/state-changing boundary.
+Current evidence is **component/mechanism only**. These primitives do not yet receive integrated EntityOS or HCU model-runtime credit. Next they must enter the single canonical UnifiedDB/current MiniUnifiedDB compatibility state substrate and drive one positive-admitted HCU invocation with resolved engine identity under exact isolated execution.
+
+Authority remains outside generated cognition: Entry/GRID10 do not write canonical truth, do not create a second identity or recovery ledger, and do not grant real-effect authority. EffectGate/EffectJournal remain the only real/state-changing boundary.
 
 ## Scale semantics
 
-The baseline is 10 logical cells. Larger targets are logical contexts over shared physical workers. A future H100-class target around 600 logical modules is research planning only until exact memory/throughput/concurrency benchmarks exist.
+The baseline is 10 logical cells. Larger targets are logical contexts over shared physical workers. The ladder `10 -> 32 -> 64 -> 128 -> 256 -> ~600` is a benchmark ladder. A future H100-class target around 600 logical modules is hypothesis-only until exact memory/throughput/concurrency benchmarks exist; logical module count never implies equal resident-model count or simultaneous decode streams.

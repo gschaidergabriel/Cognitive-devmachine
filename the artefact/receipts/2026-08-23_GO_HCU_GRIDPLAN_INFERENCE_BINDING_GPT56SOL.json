@@ -1,0 +1,91 @@
+{
+  "schema": "GO_HCU_GRIDPLAN_INFERENCE_BINDING/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_joined": "97d0363a481da26a1ca0810a8bd2bc5febc9c769",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_observed_after_experiment": "9a8b9905dc11bcf38e7fd7bec9c8273475fc2549",
+  "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+  "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+  "finding": "CURRENT_INFERENCE_RECEIPT_DOES_NOT_ATTEST_CAUSAL_USE_OF_AN_ADMITTED_GRID_PLAN",
+  "observed_source": {
+    "inference_receipt_v1.py": {
+      "git_blob_sha1": "61c56447d8125008585c449a18ee634dacf6d669",
+      "role": "candidate-only downstream inference receipt producer",
+      "plan_sha256_field": false,
+      "grid_plan_argument": false,
+      "capacity_receipt_field": false,
+      "model_cell_lease_field": false
+    },
+    "grid10_scheduler_v1.py": {
+      "git_blob_sha1": "be7ad08b90cf69066cf626934746b2fcb7a71f5a",
+      "role": "deterministic HCU GRID10 plan compiler",
+      "plan_sha256": true,
+      "binds_entry_admission": true,
+      "binds_route_decision": true,
+      "binds_engine_identity": true,
+      "binds_capacity_receipt": true,
+      "binds_model_token_budget_per_cell": true
+    }
+  },
+  "hypothesis": "A valid downstream inference receipt is sufficient evidence that model work causally followed the admitted GRID10 scheduler plan and therefore the admitted Entry budget/capacity lease.",
+  "counterhypothesis": "Inference receipt validity is currently independent of GridPlan existence or identity; a route/output receipt can therefore be valid without attesting scheduler-plan causality.",
+  "unusual_experiment": {
+    "name": "GRID_PLAN_ERASURE_COUNTERFACTUAL",
+    "new_experiment_count": 1,
+    "surface": "isolated ChatGPT Linux/Python tool container",
+    "exact_product_blob_executed": "61c56447d8125008585c449a18ee634dacf6d669",
+    "source_identity_check": "PASS_EXACT_GIT_BLOB",
+    "dependency_stub": "minimal reactive_event_router_v1 interface stub used only to isolate the exact inference receipt producer; no route/runtime credit",
+    "world_a": "no GridPlan object, plan digest or plan registry exists",
+    "world_b": "a hypothetical valid GridPlan exists with plan_sha256/capacity receipt/model token budget, but none is supplied to the receipt producer",
+    "world_a_receipt_sha256": "73042f3f756b2e21584253e4144169b38827682f865934d750331200b7bec653",
+    "world_b_receipt_sha256": "73042f3f756b2e21584253e4144169b38827682f865934d750331200b7bec653",
+    "receipts_equal": true,
+    "plan_observable_in_receipt": false,
+    "result": "COUNTERHYPOTHESIS_SUPPORTED_AT_EXACT_INFERENCE_COMPONENT_SCOPE"
+  },
+  "architectural_consequence": [
+    "A receipt can bind route generation, concrete Entry admission, engine artifact and output digest while still being unable to prove that the model call was scheduled by the admitted GRID10 plan.",
+    "Entry compute budget and runtime-capacity authority are therefore not yet causally re-attested at the downstream inference receipt boundary.",
+    "This does not prove that a future executor will violate the plan; it proves that the current receipt cannot distinguish plan-following from plan-erasure worlds."
+  ],
+  "repair_invariant": "DOWNSTREAM_MODEL_OUTPUT_RECEIPT_MUST_BIND_AN_INDEPENDENTLY_ADMITTED_GRID_PLAN_IDENTITY_AND_THE_SPECIFIC_MODEL_CELL_LEASE_WITHOUT_CREATING_A_SECOND_ROUTE_OR_COMPUTE_AUTHORITY",
+  "minimum_next_source_delta": [
+    "extend the single retained inference-receipt path to consume an admitted GridPlan identity rather than create a parallel receipt path",
+    "bind plan_sha256 plus exact route decision, Entry admission, generation, engine identity and capacity receipt",
+    "bind the specific MODEL cell lease/model-call ordinal and its admitted token/decoder budget",
+    "reject missing, stale, cross-admission, cross-route, cross-engine, cross-capacity and SCRIPT-cell plan bindings fail-closed",
+    "preserve canonicalization-version migration law and historical hash scope"
+  ],
+  "coordination": {
+    "duplicate_pr_search_for_plan_sha256_inference": "NO_EXISTING_MATCH_FOUND",
+    "do_not_fork_second_receipt_authority": true,
+    "canonicalization_note": "current authority has moved to ENTITYOS_HCU_TYPED_CANONICAL/v1; RFC8785/JCS evidence remains bounded alternative evidence and was not force-merged"
+  },
+  "execution_boundary": {
+    "exact_inference_component_executed": true,
+    "exact_full_router_grid_entry_suite_executed": false,
+    "actually_started_authorized_external_sandbox_full_path": false,
+    "real_local_model_executed": false,
+    "entityos_hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "security": {
+    "vps_self_hosted_or_production_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_IN_THIS_BRANCH",
+    "reason": "record the discriminator first without racing the rapidly moving canonical README; retained PR1263 and current PROGRAM_STATE already select the same Entry->route->inference->GRID10 convergence lane, and this receipt adds the newly discovered missing plan-binding invariant for adjudication"
+  },
+  "promotion": "MECHANISM_GAP_VERIFIED_AT_EXACT_INFERENCE_COMPONENT_SCOPE_NOT_RUNTIME_ACCEPTANCE",
+  "next_gate": "fuse plan/cell-lease binding into the single retained PR1263 inference receipt path, then run exact-current combined Entry + canonicalizer + route + GridPlan + inference receipt regressions on an actually-started authorized isolated executor"
+}

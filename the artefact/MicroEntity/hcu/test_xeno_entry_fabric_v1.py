@@ -1,3 +1,4 @@
+import copy
 import unittest
 
 from xeno_entry_fabric_v1 import (
@@ -54,6 +55,7 @@ class EntryFabricTests(unittest.TestCase):
         reversed_entry["capabilities"] = list(reversed(reversed_entry["capabilities"]))
         b = admit(reversed_entry)
         self.assertEqual(a, b)
+        self.assertEqual(len(a.event_sha256), 64)
         self.assertEqual(len(a.admission_sha256), 64)
 
     def test_stale_generation_fails_closed(self):
@@ -134,7 +136,7 @@ class EntryFabricTests(unittest.TestCase):
         with self.assertRaisesRegex(EntryFabricError, "ALL_FIELDS_REQUIRED"):
             admit(e)
 
-    def test_hcu_projection_preserves_causal_entry_identity(self):
+    def test_hcu_projection_preserves_causal_and_admission_identity(self):
         packet = admit(base_entry())
         event = to_hcu_reactive_event(
             packet,
@@ -145,6 +147,7 @@ class EntryFabricTests(unittest.TestCase):
         self.assertEqual(event["schema"], "HCU_REACTIVE_EVENT/v1")
         self.assertEqual(event["ingress_id"], packet.ingress_id)
         self.assertEqual(event["causal_id"], packet.causal_id)
+        self.assertEqual(event["entry_event_sha256"], packet.event_sha256)
         self.assertEqual(event["entry_admission_sha256"], packet.admission_sha256)
         self.assertEqual(event["entity_generation"], 7)
 
@@ -153,11 +156,45 @@ class EntryFabricTests(unittest.TestCase):
         with self.assertRaisesRegex(EntryFabricError, "UNIT_INTERVAL_REQUIRED"):
             to_hcu_reactive_event(packet, novelty=1.1)
 
-    def test_payload_change_changes_admission_identity(self):
+    def test_transport_replay_preserves_event_identity_but_changes_admission_identity(self):
+        # Regression-only fusion of the already-selected causal-alias discriminator.
+        # Transport/admission metadata must not redefine the causal event.
+        original = admit(base_entry())
+        replay_entry = copy.deepcopy(base_entry())
+        replay_entry["ingress_id"] = "ingress:test:replay"
+        replay_entry["received_time"] = "2026-08-23T23:24:03+07:00"
+        replay_entry["payload_ref"] = "object:alternate-location"
+        replay_entry["capabilities"] = ["hcu.route"]
+        replay_entry["budget"] = {
+            "max_model_calls": 1,
+            "max_tokens": 1024,
+            "max_wall_ms": 2500,
+        }
+        replay = admit(replay_entry)
+        self.assertEqual(original.event_sha256, replay.event_sha256)
+        self.assertNotEqual(original.admission_sha256, replay.admission_sha256)
+
+    def test_causal_payload_or_provenance_change_changes_event_identity(self):
+        original = admit(base_entry())
+
+        payload_change = copy.deepcopy(base_entry())
+        payload_change["payload_sha256"] = "d" * 64
+        changed_payload = admit(payload_change)
+        self.assertNotEqual(original.event_sha256, changed_payload.event_sha256)
+        self.assertNotEqual(original.admission_sha256, changed_payload.admission_sha256)
+
+        provenance_change = copy.deepcopy(base_entry())
+        provenance_change["provenance_sha256"] = "e" * 64
+        changed_provenance = admit(provenance_change)
+        self.assertNotEqual(original.event_sha256, changed_provenance.event_sha256)
+        self.assertNotEqual(original.admission_sha256, changed_provenance.admission_sha256)
+
+    def test_distinct_causal_occurrence_changes_event_identity(self):
         a = admit(base_entry())
-        e = base_entry()
-        e["payload_sha256"] = "d" * 64
+        e = copy.deepcopy(base_entry())
+        e["causal_id"] = "causal:test:2"
         b = admit(e)
+        self.assertNotEqual(a.event_sha256, b.event_sha256)
         self.assertNotEqual(a.admission_sha256, b.admission_sha256)
 
 

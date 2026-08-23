@@ -7,9 +7,23 @@
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "canonical_main_at_branch": "63fdd580aee5d383a3c7d01213a3ba41a2b8bf02",
+  "latest_main_reentered_after_writes": "2f5e5d6894331d2a43ba958288ee52f95e05a17d",
   "branch": "gpt56sol/go-entityos-hcu-canonical-v1-current-20260823-2336",
   "head_after_source_tests": "fd5070323a690d68cb08b757d9e030ea4f9be71f",
   "finding": "CROSS_LANGUAGE_CAUSAL_IDENTITY_NEEDS_VERSIONED_CANONICAL_BYTES",
+  "go_tracks": {
+    "track_a": {
+      "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "result": "NO_CHANGE_WITH_REASON",
+      "observed_blocker": "Current BOOTSTRAP_MINIMAL and PROGRAM_STATE select EntityOS+HCU, but the artefact/manifest.json and tools/validate_clayverse_authority_consistency.py still bind a large historical ClayVerse release/microVM/steering contract.",
+      "reason_no_blind_migration": "Current EntityOS+HCU authority does not yet provide exact one-for-one replacement values for all legacy release-form, outer-isolation, deployment and steering ancestry fields. Bulk renaming or deleting inherited guards would weaken provenance/security and could manufacture semantics.",
+      "next_discriminator": "Define an explicit EntityOS/HCU manifest migration schema mapping retained safety invariants versus historical donor-only fields, then migrate the validator and manifest together and prove the guard still fails closed on stale ClayVerse work-selection authority."
+    },
+    "track_b": {
+      "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+      "result": "SOURCE_AND_COMPONENT_MECHANISM_ADVANCED"
+    }
+  },
   "source_delta": {
     "module": "the artefact/hcu_typed_canonical_v1.py",
     "module_blob": "a00e2f18e2bf8a689f2c6b18c8aeaf529b30a3f3",
@@ -37,6 +51,17 @@
     "scope": "LOCAL_ISOLATED_COMPONENT_MECHANISM_ONLY",
     "runtime_credit": 0
   },
+  "github_workflow_observation": {
+    "run_id": 32652246072,
+    "job_id": 97225554595,
+    "job": "identity-guard",
+    "conclusion": "failure",
+    "visible_steps": 0,
+    "job_log_available": false,
+    "classification": "RUNNER_OR_EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION",
+    "semantic_test_failure_claimed": false,
+    "runtime_credit": 0
+  },
   "go_unusual_experiment": {
     "name": "EVENT_ALIAS_POISON_SAME_ROUTE_SHAPE",
     "consumed_once_for_this_user_triggered_macrocycle": true,
@@ -48,7 +73,9 @@
     "retained_typed_entry_lane": "PR_1263",
     "this_delta_is_second_entry_implementation": false,
     "purpose": "shared canonical identity utility for eventual fusion into retained HCU/Typed Entry route and GRID modes",
-    "known_separate_blocker": "Typed Entry capability self-grant must be repaired against an external trusted capability authority before privileged capability claims can be admitted"
+    "capability_self_grant_status_on_latest_main": "SOURCE_COMPONENT_REPAIR_REPLICATED_WITH_TRUSTED_SNAPSHOT_ARGUMENTS_BUT_REAL_CANONICAL_AUTHORITY_PRODUCER_NOT_YET_WIRED",
+    "superseded_transitional_pr": "PR_1363_CLOSED_NOT_MERGED",
+    "current_utility_pr": "PR_1375_DRAFT"
   },
   "execution_policy": {
     "vercel_sandbox_exec_exposed_to_this_organ": false,
@@ -66,5 +93,5 @@
     "entityos_runtime_credit": 0,
     "whole_product_pass": false
   },
-  "next_gate": "Fuse this canonical-byte contract into the retained PR 1263 Typed Entry/HCU route identity after the capability self-grant boundary is externally verified, add an independent second-language vector implementation, then run exact source in an authorized isolated executor."
+  "next_gate": "First specify a safe EntityOS/HCU manifest+authority-guard migration map without weakening inherited fences. In parallel, fuse this canonical-byte contract into retained PR 1263 after its real capability authority producer is wired, add an independent second-language vector implementation, then run exact retained source in an authorized isolated executor."
 }

@@ -45,6 +45,7 @@ BASIS_SHA = "c1" * 32
 CONTROL_CONDITION = "BASELINE"
 ADMITTED_BASES = {BASIS_ID: BASIS_SHA}
 ADMITTED_GRID_PLANS = {GRID_SHA: {"schema": "ENTITYOS_HCU_GRID_PLAN/v2"}}
+ADMITTED_VECTOR_PACKETS = {VECTOR_SHA: "packet-preimage-covered-by-dedicated-gate-tests"}
 
 
 def _training_trace(**overrides):
@@ -187,6 +188,7 @@ def _compile_kwargs(trace, binding, receipt):
         "admitted_transition_traces": {TRANSITION_SHA: {}},
         "admitted_prototype_traces": {PROTOTYPE_SHA: {}},
         "admitted_grid_plans": ADMITTED_GRID_PLANS,
+        "admitted_vector_control_packets": ADMITTED_VECTOR_PACKETS,
         "admitted_inference_bindings": {TRACE_SHA: binding},
         "admitted_inference_receipts": {receipt["receipt_sha256"]: receipt},
         "admitted_bases": ADMITTED_BASES,
@@ -252,6 +254,10 @@ class AdmittedJSpaceTrainingDatasetTests(unittest.TestCase):
         ) as compiler:
             compiled = compile_admitted_records([(trace, transition)], **_compile_kwargs(trace, binding, receipt))
         gate.assert_called_once()
+        self.assertEqual(
+            gate.call_args.kwargs["admitted_vector_control_packets"],
+            ADMITTED_VECTOR_PACKETS,
+        )
         compiler.assert_called_once_with([dict(trace)], admitted_bases=ADMITTED_BASES)
         metadata = compiled["train"][0]["metadata"]
         self.assertEqual(metadata["pipeline_schema"], PIPELINE_SCHEMA)

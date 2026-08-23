@@ -75,6 +75,7 @@ def profile_a() -> dict:
         "sources": [
             {
                 "kind": "alpha",
+                "source_namespace": "fixture-alpha",
                 "adapter": "sqlite_query",
                 "required_for_quiet": True,
                 "db": "source",
@@ -125,6 +126,7 @@ def profile_b() -> dict:
         "sources": [
             {
                 "kind": "beta",
+                "source_namespace": "fixture-beta",
                 "adapter": "sqlite_query",
                 "required_for_quiet": True,
                 "db": "source",

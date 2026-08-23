@@ -22,7 +22,14 @@ from grid10_scheduler_v1 import (
 GENERATION = 17
 
 
-def draft(*, provenance=("source:human",), observed_at="2026-08-23T16:00:00+00:00", payload_ref="sha256:" + "a" * 64):
+def draft(
+    *,
+    provenance=("source:human",),
+    observed_at="2026-08-23T16:00:00+00:00",
+    received_at="2026-08-23T16:00:01+00:00",
+    payload_ref="sha256:" + "a" * 64,
+    isolation_domain="session:test",
+):
     return XenoIngressDraft(
         causal_id="causal:test:1",
         generation=GENERATION,
@@ -30,7 +37,8 @@ def draft(*, provenance=("source:human",), observed_at="2026-08-23T16:00:00+00:0
         provenance=tuple(provenance),
         modality=Modality.TEXT,
         observed_at=observed_at,
-        received_at="2026-08-23T16:00:01+00:00",
+        received_at=received_at,
+        isolation_domain=isolation_domain,
         permissions=("context.read",),
         capability_scope=(),
         resource_budget=ResourceBudget(
@@ -63,6 +71,18 @@ class EntryFabricRegressionTests(unittest.TestCase):
         self.assertEqual(a.ingress_id, b.ingress_id)
         self.assertEqual(a.receipt(), b.receipt())
 
+    def test_equivalent_timestamp_encodings_canonicalize(self):
+        a = admit_ingress(
+            draft(observed_at="2026-08-23T16:00:00Z", received_at="2026-08-23T16:00:01Z"),
+            current_generation=GENERATION,
+        )
+        b = admit_ingress(
+            draft(observed_at="2026-08-23T18:00:00+02:00", received_at="2026-08-23T18:00:01+02:00"),
+            current_generation=GENERATION,
+        )
+        self.assertEqual(a.ingress_id, b.ingress_id)
+        self.assertEqual(a.observed_at, "2026-08-23T16:00:00.000000Z")
+
     def test_stale_generation_fails_closed(self):
         with self.assertRaises(AdmissionError):
             admit_ingress(draft(), current_generation=GENERATION + 1)
@@ -70,6 +90,15 @@ class EntryFabricRegressionTests(unittest.TestCase):
     def test_raw_payload_is_not_admitted_as_payload_ref(self):
         with self.assertRaises(AdmissionError):
             admit_ingress(draft(payload_ref="this is raw prompt text"), current_generation=GENERATION)
+
+    def test_malformed_sha256_payload_ref_fails_closed(self):
+        with self.assertRaises(AdmissionError):
+            admit_ingress(draft(payload_ref="sha256:not-a-real-digest"), current_generation=GENERATION)
+
+    def test_isolation_domain_is_bound_into_ingress_identity(self):
+        a = admit_ingress(draft(isolation_domain="session:a"), current_generation=GENERATION)
+        b = admit_ingress(draft(isolation_domain="session:b"), current_generation=GENERATION)
+        self.assertNotEqual(a.ingress_id, b.ingress_id)
 
     def test_grid10_is_logical_over_shared_workers_and_budget_bounded(self):
         packet = admit_ingress(draft(), current_generation=GENERATION)
@@ -112,22 +141,13 @@ class GoUnusualExperiment(unittest.TestCase):
         """Exactly-one GO unusual experiment: CAUSAL_ALIAS_POISON.
 
         Intervention: hold causal_id, payload, budget and requested functions fixed, but
-        mutate immutable event provenance/time. A route digest based only on routing
-        result would alias. Xeno must instead produce distinct ingress and plan identities,
+        mutate immutable event provenance. A route digest based only on routing result
+        would alias. Xeno must instead produce distinct ingress and plan identities,
         while exact replay remains stable.
         """
-        left = admit_ingress(
-            draft(provenance=("sensor:A",), observed_at="2026-08-23T16:00:00+00:00"),
-            current_generation=GENERATION,
-        )
-        right = admit_ingress(
-            draft(provenance=("sensor:B",), observed_at="2026-08-23T16:00:00+00:00"),
-            current_generation=GENERATION,
-        )
-        left_replay = admit_ingress(
-            draft(provenance=("sensor:A",), observed_at="2026-08-23T16:00:00+00:00"),
-            current_generation=GENERATION,
-        )
+        left = admit_ingress(draft(provenance=("sensor:A",)), current_generation=GENERATION)
+        right = admit_ingress(draft(provenance=("sensor:B",)), current_generation=GENERATION)
+        left_replay = admit_ingress(draft(provenance=("sensor:A",)), current_generation=GENERATION)
 
         left_plan = compile_grid_plan(
             left, functions(4), mode=XenoMode.XENO_GRID10, current_generation=GENERATION

@@ -24,8 +24,10 @@ from pathlib import Path
 from typing import Any, Callable
 
 import claycode_structured_backend as clay
+import miniunifieddb_cognition_bootstrap_v1 as cognition_bootstrap
+import pipeline_cognitive_fabric_admission_v1 as cognitive_admission
 
-VERSION = "clay-profile-pipeline-runtime/0.6.3"
+VERSION = "clay-profile-pipeline-runtime/0.6.4"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -58,6 +60,7 @@ _SAFE_ENV_NAMES = {
     "HIP_VISIBLE_DEVICES",
     "OMP_NUM_THREADS",
 }
+_HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
 IMMUTABLE_GUARD = """IMMUTABLE PIPELINE GUARD:
 You may transform and narrate supplied state, but you may not invent canonical state.
@@ -130,9 +133,11 @@ class ProfilePipelineRuntime(clay.Runtime):
             "pipeline_collect",
             "pipeline_compile",
             "pipeline_build_prompt",
+            "pipeline_cognitive_fabric_admit",
             "inference_generate",
             "pipeline_gate",
             "pipeline_commit",
+            "pipeline_cognitive_fabric_finalize",
         }
 
     def _resolve(self, value: str) -> Path:
@@ -154,6 +159,43 @@ class ProfilePipelineRuntime(clay.Runtime):
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA query_only=ON")
         return conn
+
+    @staticmethod
+    def _identity_digest(value: Any, error: str) -> str:
+        if not isinstance(value, str) or _HEX64.fullmatch(value) is None:
+            raise PipelineFault(error + ":SHA256_REQUIRED")
+        if value in {"0" * 64, "f" * 64}:
+            raise PipelineFault(error + ":PLACEHOLDER_REJECTED")
+        return value
+
+    @classmethod
+    def _verify_admission_reentry(cls, data: Mapping[str, Any]) -> dict[str, Any]:
+        admission = data.get("cognitive_fabric_admission")
+        generated = data.get("generated")
+        compiled = data.get("compiled")
+        if not isinstance(admission, Mapping) or admission.get("ok") is not True:
+            raise PipelineFault("COGNITIVE_FABRIC_ADMISSION_REQUIRED")
+        if not isinstance(generated, Mapping) or generated.get("ok") is not True:
+            raise PipelineFault("GENERATED_CANDIDATE_REQUIRED")
+        if not isinstance(compiled, Mapping):
+            raise PipelineFault("COMPILED_STATE_REQUIRED")
+
+        packet_digest = cls._identity_digest(
+            admission.get("inference_packet_digest"), "INFERENCE_PACKET_DIGEST"
+        )
+        admission_digest = cls._identity_digest(
+            admission.get("cognitive_fabric_receipt_digest"),
+            "COGNITIVE_FABRIC_ADMISSION_RECEIPT_DIGEST",
+        )
+        if generated.get("inference_packet_digest") != packet_digest:
+            raise PipelineFault("INFERENCE_PACKET_DIGEST_MISMATCH")
+        if generated.get("cognitive_fabric_admission_receipt_digest") != admission_digest:
+            raise PipelineFault("COGNITIVE_FABRIC_ADMISSION_RECEIPT_MISMATCH")
+        if admission.get("canonical_state_hash") != compiled.get("canonical_state_hash"):
+            raise PipelineFault("COGNITIVE_FABRIC_CANONICAL_STATE_DRIFT")
+        if admission.get("packet_hash") != compiled.get("packet_hash"):
+            raise PipelineFault("COGNITIVE_FABRIC_PACKET_DRIFT")
+        return dict(admission)
 
     @staticmethod
     def _forbid_embedded_secrets(value: Any, path: str = "") -> None:
@@ -268,9 +310,11 @@ class ProfilePipelineRuntime(clay.Runtime):
             "pipeline_collect": self._pipeline_collect,
             "pipeline_compile": self._pipeline_compile,
             "pipeline_build_prompt": self._pipeline_build_prompt,
+            "pipeline_cognitive_fabric_admit": self._pipeline_cognitive_fabric_admit,
             "inference_generate": self._inference_generate,
             "pipeline_gate": self._pipeline_gate,
             "pipeline_commit": self._pipeline_commit,
+            "pipeline_cognitive_fabric_finalize": self._pipeline_cognitive_fabric_finalize,
         }
         started = time.time()
         ok = False
@@ -294,6 +338,7 @@ class ProfilePipelineRuntime(clay.Runtime):
         """Own all schema/bootstrap writes before observational pipeline phases begin."""
         db = self._db(str(p["entity_db"]))
         try:
+            cognition_bootstrap.prepare_connection(db)
             db.execute("BEGIN IMMEDIATE")
             entity_table_preexisting = db.execute(
                 "SELECT 1 FROM sqlite_master WHERE type='table' AND name='entity_state'"
@@ -343,6 +388,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                    VALUES(1,0,NULL,?,?)""",
                 (now, now),
             )
+            cognition_bootstrap.install_cognition_schema(db)
 
             if eos_preexisting and "generation" in eos_columns:
                 db.execute(
@@ -852,6 +898,26 @@ class ProfilePipelineRuntime(clay.Runtime):
         )
         return {"ok": True, "system": system, "user": user}
 
+    def _pipeline_cognitive_fabric_admit(self, p: dict[str, Any]) -> dict[str, Any]:
+        try:
+            previous = p["previous"]
+            data = p["data"]
+            generation = previous.get("generation")
+            if not isinstance(generation, int) or isinstance(generation, bool) or generation < 0:
+                raise PipelineFault("COGNITION_GENERATION_INVALID")
+            with self._read_only_db(str(p["entity_db"])) as db:
+                return cognitive_admission.build_pre_inference_admission(
+                    db,
+                    entity_generation=generation,
+                    invocation=data["invocation"],
+                    compiled=data["compiled"],
+                    prompt=data["prompt"],
+                    profile=p["profile"],
+                    origin="ProfilePipelineRuntime.pipeline_cognitive_fabric_admit",
+                )
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
+
     def _keys(self, names: list[str], secret_file: str | None) -> list[str]:
         file_values: dict[str, str] = {}
         if secret_file:
@@ -1103,6 +1169,13 @@ class ProfilePipelineRuntime(clay.Runtime):
 
     def _inference_generate(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
+            packet_digest = self._identity_digest(
+                p.get("inference_packet_digest"), "INFERENCE_PACKET_DIGEST"
+            )
+            admission_digest = self._identity_digest(
+                p.get("cognitive_fabric_admission_receipt_digest"),
+                "COGNITIVE_FABRIC_ADMISSION_RECEIPT_DIGEST",
+            )
             inference = dict(p["inference"])
             kind = str(inference.get("kind", ""))
             if self.provider_override is not None and kind == "mock":
@@ -1117,12 +1190,18 @@ class ProfilePipelineRuntime(clay.Runtime):
                     "payload": payload,
                     "provider_kind": "mock",
                     "model": inference.get("model"),
+                    "inference_packet_digest": packet_digest,
+                    "cognitive_fabric_admission_receipt_digest": admission_digest,
                 }
             if kind == "local_exec":
-                return self._inference_local_exec(inference, p)
-            if kind in _ADMITTED_API_INFERENCE_KINDS:
-                return self._inference_api(inference, p)
-            raise PipelineFault("UNKNOWN_INFERENCE_KIND:" + kind)
+                result = self._inference_local_exec(inference, p)
+            elif kind in _ADMITTED_API_INFERENCE_KINDS:
+                result = self._inference_api(inference, p)
+            else:
+                raise PipelineFault("UNKNOWN_INFERENCE_KIND:" + kind)
+            result["inference_packet_digest"] = packet_digest
+            result["cognitive_fabric_admission_receipt_digest"] = admission_digest
+            return result
         except Exception as exc:
             self._active_secrets = []
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
@@ -1132,11 +1211,12 @@ class ProfilePipelineRuntime(clay.Runtime):
         data = p["data"]
         generated = data["generated"]
         compiled = data["compiled"]
-        payload = generated["payload"]
         contract = profile["personality"]["output_contract"]
         gate = profile.get("gate", {})
 
         try:
+            self._verify_admission_reentry(data)
+            payload = generated["payload"]
             if gate.get("require_hash_echo", True):
                 if payload.get("canonical_state_hash_seen") != compiled["canonical_state_hash"]:
                     raise PipelineFault("CANONICAL_HASH_MISMATCH")
@@ -1200,18 +1280,23 @@ class ProfilePipelineRuntime(clay.Runtime):
         collected = data["collected"]
         compiled = data["compiled"]
         generated = data["generated"]
-        payload = data["gated"]["payload"]
         contract = profile["personality"]["output_contract"]
         output_id = secrets.token_hex(16)
         now = time.time()
         generation = int(previous["generation"]) + 1
-        continuity = {
-            "narrative": payload.get(contract["continuity_field"]),
-            "autobiographical_hypotheses": payload.get(contract["autobiographical_hypotheses_field"]),
-        }
         snapshot = profile.get("_runtime_profile_snapshot")
         if not isinstance(snapshot, Mapping):
             return {"ok": False, "error_kind": "PipelineFault", "error": "PROFILE_SNAPSHOT_MISSING"}
+
+        try:
+            self._verify_admission_reentry(data)
+            payload = data["gated"]["payload"]
+            continuity = {
+                "narrative": payload.get(contract["continuity_field"]),
+                "autobiographical_hypotheses": payload.get(contract["autobiographical_hypotheses_field"]),
+            }
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
         db = self._db(entity_db)
         try:
@@ -1303,6 +1388,78 @@ class ProfilePipelineRuntime(clay.Runtime):
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
         finally:
             db.close()
+
+    def _pipeline_cognitive_fabric_finalize(self, p: dict[str, Any]) -> dict[str, Any]:
+        """Validate terminal ancestry without fabricating a canonical UCF runtime receipt.
+
+        The canonical UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 requires exact source,
+        runtime, bundled-core, workspace, inference, authority, execution and freshness
+        evidence that this reference phase does not yet possess. Post-commit finalization
+        therefore records explicit evidence debt instead of hashing a partial object and
+        mislabeling it as the canonical runtime receipt.
+        """
+        try:
+            data = p["data"]
+            admitted = data["admitted"]
+            generated = data["generated"]
+            gated = data["gated"]
+            committed = data["committed"]
+            compiled = data["compiled"]
+            prompt = data["prompt"]
+            if not isinstance(admitted, Mapping) or admitted.get("ok") is not True:
+                raise PipelineFault("FINALIZE_ADMISSION_REQUIRED")
+            if not isinstance(generated, Mapping) or generated.get("ok") is not True:
+                raise PipelineFault("FINALIZE_GENERATED_REQUIRED")
+            if not isinstance(gated, Mapping) or gated.get("ok") is not True:
+                raise PipelineFault("FINALIZE_GATE_REQUIRED")
+            if not isinstance(committed, Mapping) or committed.get("ok") is not True:
+                raise PipelineFault("FINALIZE_COMMIT_REQUIRED")
+            if not isinstance(compiled, Mapping) or not isinstance(prompt, Mapping):
+                raise PipelineFault("FINALIZE_CONTEXT_REQUIRED")
+
+            packet_digest = self._identity_digest(
+                admitted.get("inference_packet_digest"), "INFERENCE_PACKET_DIGEST"
+            )
+            admission_digest = self._identity_digest(
+                admitted.get("cognitive_fabric_receipt_digest"),
+                "COGNITIVE_FABRIC_ADMISSION_RECEIPT_DIGEST",
+            )
+            if generated.get("inference_packet_digest") != packet_digest:
+                raise PipelineFault("FINALIZE_INFERENCE_PACKET_DRIFT")
+            if generated.get("cognitive_fabric_admission_receipt_digest") != admission_digest:
+                raise PipelineFault("FINALIZE_ADMISSION_RECEIPT_DRIFT")
+            if admitted.get("canonical_state_hash") != compiled.get("canonical_state_hash"):
+                raise PipelineFault("FINALIZE_CANONICAL_STATE_DRIFT")
+            if admitted.get("packet_hash") != compiled.get("packet_hash"):
+                raise PipelineFault("FINALIZE_PACKET_DRIFT")
+            if not isinstance(prompt.get("system"), str) or not isinstance(prompt.get("user"), str):
+                raise PipelineFault("FINALIZE_PROMPT_REQUIRED")
+
+            terminal_material = {
+                "schema": "MINI_ENTITY_UCF_TERMINAL_ANCESTRY_DEBT/v1",
+                "admission_receipt_digest": admission_digest,
+                "inference_packet_digest": packet_digest,
+                "candidate_result_digest": _sha256_text(_canonical_json(generated.get("payload"))),
+                "gated_result_digest": _sha256_text(_canonical_json(gated.get("payload"))),
+                "output_id": str(committed.get("output_id", "")),
+                "generation": committed.get("generation"),
+                "canonical_state_hash": compiled.get("canonical_state_hash"),
+                "packet_hash": compiled.get("packet_hash"),
+            }
+            if not terminal_material["output_id"]:
+                raise PipelineFault("FINALIZE_OUTPUT_ID_REQUIRED")
+            terminal_ancestry_digest = _sha256_text(_canonical_json(terminal_material))
+            return {
+                "ok": False,
+                "error_kind": "PipelineFault",
+                "error": "UCF_RUNTIME_RECEIPT_EVIDENCE_INCOMPLETE",
+                "terminal_state": "COMMITTED_FINALIZATION_EVIDENCE_DEBT",
+                "terminal_ancestry_digest": terminal_ancestry_digest,
+                "canonical_receipt_schema": "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1",
+                "authority": "EVIDENCE_ONLY_NO_SECOND_COMMIT_OR_EFFECT_AUTHORITY",
+            }
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
 
 def execute_source(

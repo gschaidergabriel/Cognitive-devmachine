@@ -9,6 +9,8 @@ law workspace_stability_is_not_factual_truth = true
 law latent_geometry_is_not_factual_truth = true
 law JSPACE_OBSERVED != JSPACE_INTERVENED
 law portable_architecture != portable_geometry
+law executed_cognitive_cycle_requires_gwt_winner = true
+law executed_nonplain_jspace_requires_observation = true
 law canonical_write_requires_measured_supported = true
 law effect_commit_requires_measured_supported = true
 law inference_execution_requires_backend_admission = true
@@ -23,6 +25,7 @@ fn validate(receipt:Map)->Map {
   // The effect implementation MUST enforce the v1 invariants documented by the
   // canonical validator: exact source/runtime/boot bindings, one Zero/GRF/workspace
   // identity, J-Space/GWT as cognition-only, observation/intervention separation,
+  // causal J-Space observation + one GWT winner for executed non-plain cycles,
   // candidate-only inference, explicit epistemic status, fail-closed stale/capability
   // bindings, upstream backend admission, FREE_ONLY cost-class admission, envelope
   // integrity, and no direct candidate state/effect authority.

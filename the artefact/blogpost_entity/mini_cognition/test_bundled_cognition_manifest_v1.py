@@ -12,6 +12,7 @@ D5 = "5" * 64
 D6 = "6" * 64
 D7 = "7" * 64
 D8 = "8" * 64
+D9 = "9" * 64
 
 
 def base_manifest():
@@ -24,6 +25,7 @@ def base_manifest():
         "quantization_runtime_identity": "gguf-q4_k_m+llama.cpp:test-fixture",
         "runtime_digest": D7,
         "lens_artifact_digest": D8,
+        "fit_corpus_digest": D9,
         "jspace_profile_digest": D2,
         "lens_profile_digest": D3,
         "workspace_calibration_digest": D4,
@@ -51,9 +53,9 @@ class BundledCognitionManifestTests(unittest.TestCase):
         b["jspace_profile_digest"] = "a" * 64
         self.assertNotEqual(validate_manifest(a).integration_identity_sha256, validate_manifest(b).integration_identity_sha256)
 
-    def test_lens_and_workspace_are_identity_bound(self):
+    def test_lens_workspace_and_fit_corpus_are_identity_bound(self):
         base = validate_manifest(base_manifest()).integration_identity_sha256
-        for field in ("lens_profile_digest", "workspace_calibration_digest"):
+        for field in ("lens_profile_digest", "workspace_calibration_digest", "fit_corpus_digest"):
             poisoned = base_manifest()
             poisoned[field] = "b" * 64
             self.assertNotEqual(base, validate_manifest(poisoned).integration_identity_sha256)
@@ -80,6 +82,12 @@ class BundledCognitionManifestTests(unittest.TestCase):
         data = base_manifest()
         data["lens_artifact_digest"] = "ABC"
         with self.assertRaisesRegex(ManifestError, "lens_artifact_digest:LOWERCASE_SHA256_REQUIRED"):
+            validate_manifest(data)
+
+    def test_malformed_fit_corpus_digest_fails_closed(self):
+        data = base_manifest()
+        data["fit_corpus_digest"] = "ABC"
+        with self.assertRaisesRegex(ManifestError, "fit_corpus_digest:LOWERCASE_SHA256_REQUIRED"):
             validate_manifest(data)
 
     def test_missing_calibration_digest_fails_closed(self):

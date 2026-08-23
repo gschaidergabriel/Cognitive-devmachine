@@ -1,50 +1,43 @@
 {
-  "schema_version": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v1",
-  "status": "RFC8785_SOURCE_IMPLEMENTATION_CANDIDATE_NOT_YET_WIRED_OR_ADMITTED",
+  "schema_version": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v2",
+  "status": "ONE_SOURCE_CANONICALIZATION_AUTHORITY_SELECTED_WIRING_PENDING",
   "date": "2026-08-23",
   "program": "ENTITYOS_HCU",
-  "scope": "Typed Entry Fabric causal event identity for HCU routing and downstream inference receipts",
+  "scope": "Typed Entry Fabric causal event/admission identity, HCU router policy/engine/route identity, and downstream inference receipt identity",
   "authority": {
     "canonical_state_evidence": "DETERMINISTIC_EXTERNAL_TO_MODEL_COGNITION",
     "effect_authority": "EffectGate/EffectJournal",
     "canonicalization_is_truth_authority": false,
+    "canonicalization_is_permission_authority": false,
+    "canonicalization_is_engine_admission_authority": false,
     "canonicalization_is_effect_authority": false
   },
-  "current_implementation_scope": {
-    "router": "reactive_event_router_v1.py",
-    "serializer": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
-    "cross_language_identity_claim": false,
-    "law": "Current Python-local deterministic hashes remain legacy implementation-scoped until a newly versioned RFC8785 identity is wired and admitted. Existing receipts retain their original identity schema and are never silently reinterpreted."
-  },
-  "target_candidate": {
-    "canonicalization": "RFC8785_JCS_IJSON/v1",
-    "reference": "RFC 8785 JSON Canonicalization Scheme",
-    "implementation": "entry_canonicalization_v1.py",
-    "tests": "test_entry_canonicalization_v1.py",
-    "admission_status": "SOURCE_IMPLEMENTATION_CANDIDATE_WITH_BOUNDED_CONFORMANCE_EVIDENCE_NOT_YET_IN_ROUTE_PATH",
-    "bounded_conformance": {
-      "official_selected_number_utf16_reorder_failure_vectors": "PASS_IN_ISOLATED_PROTOTYPE_6_OF_6_TESTS",
-      "independent_python_node_composite_vectors": "BYTE_IDENTICAL_3_OF_3",
-      "exact_branch_head_runtime_credit": 0
-    },
-    "required_input_constraints": [
-      "duplicate object property names rejected at raw ingress before ordinary Mapping construction can erase them",
-      "all strings are valid Unicode and lone surrogates fail closed",
-      "string contents are preserved as-is with no Unicode normalization performed by the canonicalization layer",
-      "JSON numbers are finite and representable as IEEE-754 binary64; NaN and Infinity fail closed",
-      "higher-precision integer application values do not silently exceed the I-JSON-safe identity domain"
+  "selected_source_authority": {
+    "canonicalization": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
+    "implementation": "hcu_causal_canonical_v1.py",
+    "tests": "test_hcu_causal_canonical_v1.py",
+    "selection_basis": [
+      "current supervisor steering names this as the strongest current candidate",
+      "exact component replication recorded 9/9 PASS at exact component blob scope",
+      "independent Python and Node implementations produced byte-for-byte and SHA-256-equivalent vectors at the recorded component scope",
+      "the admitted value domain covers current HCU binary64 reactive signals while remaining explicitly versioned and typed",
+      "the schema prefix domain-separates these bytes from legacy Python JSON, JCS and CBOR candidates"
     ],
-    "required_serialization": [
-      "no inter-token whitespace",
-      "JSON primitive serialization follows RFC 8785 ECMAScript-compatible rules",
-      "object properties sort recursively by raw property-name UTF-16 code units",
-      "array element order is preserved while objects inside arrays are recursively canonicalized",
-      "canonical output bytes are UTF-8"
-    ]
+    "promotion_credit": 0,
+    "runtime_credit": 0,
+    "wiring_state": "SELECTED_BUT_NOT_YET_END_TO_END_WIRED"
+  },
+  "current_implementation_split": {
+    "typed_entry_current_encoder": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1 via typed_entry_canonical_v1.py",
+    "router_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "inference_receipt_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1 for receipt hash",
+    "cross_language_current_end_to_end_identity_claim": false,
+    "law": "Selection of ENTITYOS_HCU_TYPED_CANONICAL/v1 does not retroactively reinterpret current or historical hashes. Until all active identity producers/consumers are explicitly wired to the selected schema and tested together, mixed-schema identity is not admitted for cross-language or runtime promotion."
   },
   "alternative_candidate_adjudication": {
-    "hcu_causal_canonical_v1.py": "RETAIN_RESEARCH_PROVENANCE_ONLY_NOT_ADMITTED; custom typed binary identity would require a separate bespoke interoperability contract and is not selected over the already-specified RFC8785 path",
-    "typed_entry_canonical_v1.py": "RETAIN_RESEARCH_PROVENANCE_ONLY_NOT_ADMITTED; deterministic CBOR subset rejects float-valued reactive signals and is not selected as the single end-to-end event-route canonicalizer",
+    "entry_canonicalization_v1.py": "EXPERIMENTAL_CONFORMANCE_AND_COUNTERHYPOTHESIS_ONLY; RFC8785/JCS evidence remains useful but this encoder is not the selected active Entry+HCU causal identity authority",
+    "typed_entry_canonical_v1.py": "LEGACY_CURRENT_SOURCE_DEPENDENCY_PENDING_MIGRATION; deterministic CBOR subset remains valid only for its original bounded source scope and must not be promoted as a second active causal identity authority",
+    "other_or_future_encoders": "REQUIRE_EXPLICIT_VERSIONED_MIGRATION_OR_EXPERIMENTAL_SCOPE; UNKNOWN_SCHEMA_FAILS_CLOSED",
     "package_or_runtime_authority_for_alternatives": false
   },
   "causal_identity_boundary": {
@@ -52,49 +45,63 @@
       "requested_internal_provider",
       "resolved_internal_engine",
       "resolved_internal_engine_class",
-      "resolved_internal_engine_artifact_sha256"
+      "resolved_internal_engine_artifact_sha256",
+      "engine_identity_sha256"
     ],
     "causal_event_includes_all_other_admitted_typed_fields": true,
+    "entry_admission_identity_remains_distinct_from_replay_stable_causal_event_identity": true,
     "unknown_or_untyped_extension_fields": "FAIL_CLOSED_OR_REQUIRE_EXPLICIT_VERSIONED_EXTENSION_SCHEMA",
     "domain_separation_required": true,
     "event_identity_must_bind": [
       "event_identity_schema_version",
-      "canonicalization_schema_version",
+      "selected canonicalization_schema_version",
       "canonical causal event bytes"
+    ],
+    "entry_admission_identity_must_bind": [
+      "entry_admission_identity_schema_version",
+      "selected canonicalization_schema_version",
+      "event_sha256",
+      "concrete admission-only fields"
     ],
     "route_identity_must_bind": [
       "event_sha256",
-      "canonicalization_schema_version",
+      "selected canonicalization_schema_version",
       "router_policy_sha256",
       "engine_identity_sha256",
       "generation",
       "deterministic routing result"
     ],
     "downstream_inference_receipt_must_echo": [
-      "canonicalization_schema_version",
+      "selected canonicalization_schema_version",
       "event_sha256",
+      "entry_admission_sha256",
       "decision_sha256",
       "engine_identity_sha256",
-      "resolved_engine_identity"
+      "resolved_engine_identity",
+      "resolved_engine_class",
+      "resolved_engine_artifact_sha256"
     ]
   },
   "migration_law": {
     "silent_hash_rewrite": false,
-    "legacy_python_scoped_hashes_remain_valid_only_at_original_scope": true,
-    "cross_language_promotion_requires_new_versioned_identity_schema": true,
+    "legacy_hashes_remain_valid_only_at_original_schema_and_source_scope": true,
+    "selected_schema_requires_new_or_explicitly_versioned_identity_records": true,
     "mixed_canonicalizer_replay_without_schema_binding": "REJECT",
-    "canonicalizer_downgrade_or_unknown_version": "REJECT"
+    "canonicalizer_downgrade_or_unknown_version": "REJECT",
+    "historical_receipts": "PRESERVE_ORIGINAL_HASH_SCHEMA_AND_NEVER_REHASH_IN_PLACE"
   },
-  "remaining_gates_before_cross_language_promotion": [
-    "wire the selected RFC8785 implementation into Entry event, router policy, engine and route identity under new versioned schemas",
-    "bind canonicalization schema/version into downstream inference receipts",
-    "reject duplicate-property raw JSON before Mapping construction",
-    "run exact-source isolated branch regressions after wiring",
-    "independently compare the exact admitted event through at least two implementations/languages",
-    "rebuild the package snapshot only after canonicalization semantics settle"
+  "remaining_gates_before_source_promotion": [
+    "wire ENTITYOS_HCU_TYPED_CANONICAL/v1 into Typed Entry event and admission identity production",
+    "wire the same selected schema into router policy, engine and route identity production",
+    "wire the same selected schema into downstream inference receipt hashing and echo checks",
+    "update focused tests to prove one schema version is present end to end and mixed/unknown versions fail closed",
+    "retain raw JSON duplicate-name, nonfinite-number and lone-surrogate rejection before ordinary Mapping construction",
+    "run exact-current combined Entry+router+inference+GRID10 regressions on an actually-started authorized isolated executor",
+    "rebuild the compatibility package only after source identity semantics settle"
   ],
+  "unusual_experiment_credit": "NONE_ADDED; CURRENT_GO_EXPERIMENT_ALREADY_CONSUMED_BY_CAUSAL_ROUTE_ALIAS_DISCRIMINATOR",
   "promotion_credit": 0,
   "runtime_credit": 0,
   "whole_entityos_pass": false,
-  "note": "This selects one interoperability candidate without creating a second state, routing, truth, recovery, or effect authority. Source/prototype conformance does not establish exact EntityOS/HCU runtime acceptance."
+  "note": "This adjudicates one source canonicalization authority without creating a second state, routing, truth, permission, recovery or effect authority. Selection is not runtime acceptance; active source wiring is still incomplete and therefore fails closed for cross-language promotion."
 }

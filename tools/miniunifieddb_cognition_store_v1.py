@@ -297,15 +297,14 @@ def _require_admitted_digest(
     entity_generation: int,
 ) -> None:
     row = db.execute(
-        """SELECT o.object_version,MAX(a.admitted_generation)
+        """SELECT o.object_version,a.admitted_generation
              FROM mini_cognition_objects o
              JOIN mini_cognition_object_admissions a
                ON a.object_kind=o.object_kind
               AND a.object_version=o.object_version
               AND a.object_digest=o.object_digest
-            WHERE o.object_kind=? AND o.object_digest=? AND a.admitted_generation<=?
-            GROUP BY o.object_version
-            ORDER BY MAX(a.admitted_generation) DESC, o.object_version DESC
+            WHERE o.object_kind=? AND o.object_digest=? AND a.admitted_generation=?
+            ORDER BY o.object_version DESC
             LIMIT 1""",
         (object_kind, object_digest, entity_generation),
     ).fetchone()

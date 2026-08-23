@@ -74,6 +74,12 @@ class HCUCanonicalizationTests(unittest.TestCase):
         with self.assertRaisesRegex(HCUCanonicalizationError, "INTEGER_OUTSIDE_IJSON_SAFE_RANGE"):
             canonical_bytes({"n": 2**53})
 
+    def test_integer_valued_float_outside_ijson_safe_range_fails_closed(self):
+        for value in (float(2**53), 1e20, -float(2**53), -1e20):
+            with self.subTest(value=value):
+                with self.assertRaisesRegex(HCUCanonicalizationError, "INTEGER_OUTSIDE_IJSON_SAFE_RANGE"):
+                    canonical_bytes({"n": value})
+
     def test_value_change_changes_digest(self):
         self.assertNotEqual(canonical_sha256({"x": 0.55}), canonical_sha256({"x": 0.56}))
 
@@ -100,6 +106,22 @@ class HCUCanonicalizationTests(unittest.TestCase):
             self.assertEqual(reference["schema"], CANONICALIZATION_SCHEMA)
             self.assertEqual(reference["hex"], canonical_bytes(vector).hex())
             self.assertEqual(reference["sha256"], canonical_sha256(vector))
+
+    def test_node_and_python_both_reject_unsafe_integer_valued_numbers(self):
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node runtime unavailable; cross-language rejection gate remains unexecuted")
+        for value in (float(2**53), 1e20, -float(2**53), -1e20):
+            with self.subTest(value=value):
+                with self.assertRaisesRegex(HCUCanonicalizationError, "INTEGER_OUTSIDE_IJSON_SAFE_RANGE"):
+                    canonical_bytes({"n": value})
+                proc = subprocess.run(
+                    [node, "-e", NODE_REFERENCE, json.dumps({"n": value}, separators=(",", ":"))],
+                    text=True,
+                    capture_output=True,
+                )
+                self.assertNotEqual(proc.returncode, 0)
+                self.assertIn("INTEGER_OUTSIDE_IJSON_SAFE_RANGE", proc.stderr)
 
 
 if __name__ == "__main__":

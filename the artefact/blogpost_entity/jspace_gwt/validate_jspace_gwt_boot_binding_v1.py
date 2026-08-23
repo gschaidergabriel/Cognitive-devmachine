@@ -8,6 +8,13 @@ from pathlib import Path
 SCHEMA = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
+ACTION_ORIGINS = {
+    "ZERO",
+    "HOOK_TIMER",
+    "CLAUDE_CODE",
+    "PROXY_SANDBOX_CONTROLLER",
+    "OTHER",
+}
 
 
 class ValidationError(ValueError):
@@ -73,7 +80,9 @@ def validate(data: dict) -> None:
     source = req_obj(data, "source")
     req_sha(source, "main_sha", 40)
     req_sha(source, "tree_sha", 40)
-    req_bool(source, "dirty")
+    dirty = req_bool(source, "dirty")
+    if dirty:
+        req_sha(source, "dirty_diff_sha256")
 
     executor = req_obj(data, "executor")
     if req_str(executor, "host_class") != "UBUNTU":
@@ -151,6 +160,23 @@ def validate(data: dict) -> None:
     }:
         fail("INVALID_FIRST_ENGINE_CHOICE")
     req_str(inference, "origin_attribution")
+    first_actions = inference.get("first_actions")
+    if not isinstance(first_actions, list) or not first_actions:
+        fail("MISSING_FIRST_ACTIONS")
+    seen_action_ids: set[str] = set()
+    for action in first_actions:
+        if not isinstance(action, dict):
+            fail("FIRST_ACTION_NOT_OBJECT")
+        action_id = req_str(action, "action_id")
+        if action_id in seen_action_ids:
+            fail("DUPLICATE_FIRST_ACTION_ID")
+        seen_action_ids.add(action_id)
+        origin = req_str(action, "origin")
+        if origin not in ACTION_ORIGINS:
+            fail("INVALID_FIRST_ACTION_ORIGIN")
+        if origin == "OTHER":
+            req_str(action, "origin_detail")
+        req_bool(action, "effect_requested")
 
     authority = req_obj(data, "authority")
     required_true = {

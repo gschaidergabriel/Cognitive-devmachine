@@ -76,3 +76,9 @@ Observed `main` carried a split-brain authority state: `the artefact/manifest.js
 This cycle reconciles those control-plane files to the current ClayVerse owner directive and adds `tools/validate_clayverse_authority_consistency.py` plus deterministic regressions so a future split cannot silently pass source admission.
 
 Runtime credit remains **ZERO** for this delta because no exact authorized whole-product sandbox start/exec surface was available through the connected Vercel tool. Local deterministic validator tests are source/mechanism evidence only.
+
+## 2026-08-23 `go` re-entry — nested work-selector fence
+
+After the authority reconciliation merged, adversarial source review found a narrower false-green: top-level ClayVerse authority could remain valid while nested `PROGRAM_STATE.json` work-selection fields were changed back toward a retired program. The authority validator now also binds the current stage goal, primary dynamic target, current frontier and `go` contract to ClayVerse, with poison regressions for stale nested work selection.
+
+The post-merge frontier is now re-entered explicitly as exact-current ClayVerse authority/full-suite/OCI build-startup on an actually-started authorized isolated executor, followed by the Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/EntityOS/recovery path. This is source/control hardening only; whole-product runtime credit remains **ZERO** until that exact execution exists.

@@ -2,6 +2,7 @@
   "schema": "ENTITYOS_HCU_GO_ADMISSION_V2_FAMILY_SPLIT_FENCE/v1",
   "date": "2026-08-24",
   "trigger": "go",
+  "macrocycle_id": null,
   "persistent_research_entity": "Clay",
   "temporary_worker": "GPT-5.6 Sol organ",
   "program": "ENTITYOS_HCU",
@@ -11,7 +12,9 @@
     "newest_supervisor_observed": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
     "supervisor_supersedes": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
     "mode": "FREE_ONLY",
-    "canonical_main_observed": "6a499541c38910e2a062b3eef50b73266c70445a",
+    "canonical_main_observed_at_initial_receipt": "6a499541c38910e2a062b3eef50b73266c70445a",
+    "canonical_main_observed_before_accounting_correction": "d2a44f9eef93181fe6a9538f6025a419fa711f40",
+    "go_macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
     "bounded_vercel_hobby_included_tier_admitted": true,
     "together_forbidden": true,
     "paid_fallback_forbidden": true
@@ -19,8 +22,8 @@
   "coordination": {
     "retained_fusion_pr": 1401,
     "branch": "gpt56sol/fuse-hcu-v12-freeonly-main-20260824",
-    "branch_head_observed_before_receipt": "4c7634c3d47356ed4ea1131345b5e9851f93f7c6",
-    "main_branch_relation": "DIVERGED_AHEAD_7_BEHIND_7_AT_OBSERVATION",
+    "branch_head_observed_before_initial_receipt": "4c7634c3d47356ed4ea1131345b5e9851f93f7c6",
+    "main_branch_relation": "DIVERGED_AND_MOVING; REFRESH_REQUIRED_BEFORE_PROMOTION",
     "promotion_ready": false,
     "rebase_or_fusion_required_before_promotion": true
   },
@@ -49,12 +52,15 @@
     ]
   },
   "experiment_accounting": {
+    "local_intervention_count": 1,
     "local_probe": "ADMISSION_SCHEMA_DRIFT_POISON",
     "observation": "A v2 admission is rejected by the former v1-only predicate while the legacy v1 fixture passes.",
     "classification": "SYNTHETIC_SOURCE_LEVEL_DIAGNOSTIC_ONLY",
-    "parallel_refresh_found_existing_go_0136_unusual_discriminator": "MODEL_CALL_ID_LABEL_LAUNDERING",
-    "global_unusual_experiment_credit_added_here": 0,
-    "reason": "Shared macrocycle uniqueness could not be established before the local probe; after refresh, the concurrent retained PR documented an existing GO_0136 unusual discriminator. This probe is therefore quarantined from global experiment credit and no further unusual experiment is performed."
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "cross_receipt_slot_adjudication": "FORBIDDEN_WITHOUT_EXACT_MATCHING_MACROCYCLE_ID",
+    "concurrent_no_id_discriminators_observed": true,
+    "historical_correction": "The initial receipt incorrectly quarantined this probe by grouping a concurrent no-ID GO_0136 receipt. GO_MACROCYCLE_IDENTITY_CONTRACT forbids that inference; the observation is preserved locally and global uniqueness remains unresolved.",
+    "further_unusual_experiment_performed_after_correction": false
   },
   "execution": {
     "changed_branch_bytes_executed_in_authorized_free_sandbox": false,

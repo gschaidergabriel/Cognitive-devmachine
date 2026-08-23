@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-"""Deterministic script-first router for the HCU reactive world model.
+"""Deterministic script-first router for the EntityOS HCU reactive world model.
 
 This source component does not perform model inference. It decides which bounded HCU
 lanes, if any, deserve model work and whether Zero should receive a compact ClayCode
-projection. External providers are explicitly excluded from the internal cognitive
-routing graph.
+projection.
+
+Trust domains are intentionally separated:
+- ``event`` is causal Entry-Fabric input and may express a requested internal provider;
+- ``EngineAdmission`` is a deterministic HCU control-plane binding and cannot be minted by
+  copying ``resolved_*`` fields into the event mapping;
+- route identity commits to event, router policy, admitted engine bytes and routing result.
 """
 from __future__ import annotations
 
@@ -14,16 +19,20 @@ from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 
 SCHEMA = "HCU_REACTIVE_EVENT/v1"
-ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v2"
+ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v3"
 ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v1"
 ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v1"
 
-# Internal cognition is admitted positively. Unknown/future provider or engine labels do
-# not become internal merely because they are absent from a denylist.
 ADMITTED_INTERNAL_PROVIDER_ALIASES = {"hcu", "local", "xeno"}
 ADMITTED_INTERNAL_ENGINES = {
     "hcu_local_08b": "LOCAL_SHARED_WEIGHT_08B",
 }
+RESERVED_EVENT_AUTHORITY_FIELDS = frozenset({
+    "resolved_internal_engine",
+    "resolved_internal_engine_class",
+    "resolved_internal_engine_artifact_sha256",
+    "engine_identity_sha256",
+})
 
 SCRIPT_STAGES = (
     "generation_check",
@@ -41,6 +50,8 @@ ROUTER_POLICY = {
     "scripts": SCRIPT_STAGES,
     "admitted_internal_provider_aliases": tuple(sorted(ADMITTED_INTERNAL_PROVIDER_ALIASES)),
     "admitted_internal_engines": tuple(sorted(ADMITTED_INTERNAL_ENGINES.items())),
+    "engine_authority_source": "SEPARATE_HCU_CONTROL_PLANE_ADMISSION",
+    "reserved_event_authority_fields": tuple(sorted(RESERVED_EVENT_AUTHORITY_FIELDS)),
     "thresholds": {
         "world_novelty": 0.55,
         "world_contradiction": 0.35,
@@ -58,6 +69,16 @@ ROUTER_POLICY = {
 
 class ReactiveRoutingError(ValueError):
     pass
+
+
+@dataclass(frozen=True)
+class EngineAdmission:
+    """Deterministic control-plane authorization for one exact internal engine artifact."""
+
+    provider_alias: str
+    engine_identity: str
+    engine_class: str
+    engine_artifact_sha256: str
 
 
 @dataclass(frozen=True)
@@ -113,76 +134,95 @@ def _sha256_text(value: Any, field: str) -> str:
     return value
 
 
-def _validate_internal_provider(event: Mapping[str, Any]) -> None:
+def _provider_alias(value: Any, field: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ReactiveRoutingError(f"{field}:STRING_REQUIRED")
+    value = value.strip().lower()
+    if value not in ADMITTED_INTERNAL_PROVIDER_ALIASES:
+        raise ReactiveRoutingError(f"{field}:NOT_ADMITTED")
+    return value
+
+
+def _validate_event_authority_boundary(event: Mapping[str, Any]) -> None:
+    forbidden = sorted(key for key in RESERVED_EVENT_AUTHORITY_FIELDS if key in event)
+    if forbidden:
+        raise ReactiveRoutingError("EVENT_MUST_NOT_MINT_ENGINE_AUTHORITY:" + ",".join(forbidden))
+
+
+def _requested_provider(event: Mapping[str, Any]) -> str | None:
     provider = event.get("requested_internal_provider")
     if provider is None:
-        return
-    if not isinstance(provider, str) or not provider.strip():
-        raise ReactiveRoutingError("REQUESTED_INTERNAL_PROVIDER_STRING_REQUIRED")
-    if provider.strip().lower() not in ADMITTED_INTERNAL_PROVIDER_ALIASES:
-        raise ReactiveRoutingError("UNKNOWN_OR_EXTERNAL_PROVIDER_FORBIDDEN_AS_INTERNAL_COGNITIVE_DEPENDENCY")
+        return None
+    return _provider_alias(provider, "REQUESTED_INTERNAL_PROVIDER")
 
 
-def _resolve_internal_engine(event: Mapping[str, Any]) -> tuple[str | None, str | None, str | None, str | None]:
-    identity = event.get("resolved_internal_engine")
-    engine_class = event.get("resolved_internal_engine_class")
-    artifact_sha256 = event.get("resolved_internal_engine_artifact_sha256")
-    if identity is None and engine_class is None and artifact_sha256 is None:
-        return None, None, None, None
-    if not isinstance(identity, str) or not identity.strip():
-        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_IDENTITY_REQUIRED")
-    if not isinstance(engine_class, str) or not engine_class.strip():
-        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_CLASS_REQUIRED")
-    identity = identity.strip().lower()
-    engine_class = engine_class.strip().upper()
+def _resolve_internal_engine(admission: EngineAdmission | None) -> tuple[str | None, str | None, str | None, str | None, str | None]:
+    if admission is None:
+        return None, None, None, None, None
+    if not isinstance(admission, EngineAdmission):
+        raise ReactiveRoutingError("ENGINE_ADMISSION_TYPE_REQUIRED")
+
+    provider_alias = _provider_alias(admission.provider_alias, "ENGINE_ADMISSION_PROVIDER")
+    if not isinstance(admission.engine_identity, str) or not admission.engine_identity.strip():
+        raise ReactiveRoutingError("ENGINE_ADMISSION_IDENTITY_REQUIRED")
+    if not isinstance(admission.engine_class, str) or not admission.engine_class.strip():
+        raise ReactiveRoutingError("ENGINE_ADMISSION_CLASS_REQUIRED")
+
+    identity = admission.engine_identity.strip().lower()
+    engine_class = admission.engine_class.strip().upper()
     admitted_class = ADMITTED_INTERNAL_ENGINES.get(identity)
     if admitted_class is None:
-        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_NOT_ADMITTED")
+        raise ReactiveRoutingError("ENGINE_ADMISSION_IDENTITY_NOT_ADMITTED")
     if engine_class != admitted_class:
-        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_CLASS_MISMATCH")
-    artifact_sha256 = _sha256_text(artifact_sha256, "RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256")
+        raise ReactiveRoutingError("ENGINE_ADMISSION_CLASS_MISMATCH")
+    artifact_sha256 = _sha256_text(admission.engine_artifact_sha256, "ENGINE_ADMISSION_ARTIFACT_SHA256")
     engine_identity_sha256 = _sha256_canonical(
         {
             "schema": ENGINE_IDENTITY_SCHEMA,
+            "provider_alias": provider_alias,
             "resolved_engine_identity": identity,
             "resolved_engine_class": engine_class,
             "resolved_engine_artifact_sha256": artifact_sha256,
         },
         "ENGINE_IDENTITY",
     )
-    return identity, engine_class, artifact_sha256, engine_identity_sha256
+    return provider_alias, identity, engine_class, artifact_sha256, engine_identity_sha256
 
 
 def _event_identity(event: Mapping[str, Any]) -> str:
-    # Engine/provider resolution is routing metadata, not the immutable causal event.
-    # Separating the two lets identical events be compared across admitted engines.
+    # Provider selection is routing metadata rather than causal event content. Exact engine
+    # authority is never accepted from the event and is committed separately.
     payload = dict(event)
-    for key in (
-        "requested_internal_provider",
-        "resolved_internal_engine",
-        "resolved_internal_engine_class",
-        "resolved_internal_engine_artifact_sha256",
-    ):
-        payload.pop(key, None)
+    payload.pop("requested_internal_provider", None)
     return _sha256_canonical(payload, "EVENT")
 
 
-def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDecision:
+def route_event(
+    event: Mapping[str, Any],
+    *,
+    current_generation: int,
+    engine_admission: EngineAdmission | None = None,
+) -> RouteDecision:
     if not isinstance(event, Mapping) or event.get("schema") != SCHEMA:
         raise ReactiveRoutingError("EVENT_SCHEMA_UNSUPPORTED")
+    _validate_event_authority_boundary(event)
+
     generation = event.get("entity_generation")
     if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
         raise ReactiveRoutingError("ENTITY_GENERATION_INVALID")
     if generation != current_generation:
         raise ReactiveRoutingError("STALE_ENTITY_GENERATION")
 
-    _validate_internal_provider(event)
+    requested_provider = _requested_provider(event)
     (
+        admitted_provider,
         resolved_engine_identity,
         resolved_engine_class,
         resolved_engine_artifact_sha256,
         engine_identity_sha256,
-    ) = _resolve_internal_engine(event)
+    ) = _resolve_internal_engine(engine_admission)
+    if requested_provider is not None and admitted_provider is not None and requested_provider != admitted_provider:
+        raise ReactiveRoutingError("REQUESTED_PROVIDER_ENGINE_ADMISSION_MISMATCH")
 
     novelty = _unit(event.get("novelty", 0.0), "novelty")
     contradiction = _unit(event.get("contradiction", 0.0), "contradiction")
@@ -192,33 +232,30 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
     zero_relevance = _unit(event.get("zero_relevance", 0.0), "zero_relevance")
     due_recheck = _bool(event.get("due_recheck", False), "due_recheck")
 
+    t = ROUTER_POLICY["thresholds"]
     lanes: set[str] = set()
-    if novelty >= 0.55 or contradiction >= 0.35 or due_recheck:
+    if novelty >= t["world_novelty"] or contradiction >= t["world_contradiction"] or due_recheck:
         lanes.add("world")
-    if contradiction >= 0.35 or uncertainty >= 0.60:
+    if contradiction >= t["hypothesis_contradiction"] or uncertainty >= t["hypothesis_uncertainty"]:
         lanes.add("hypothesis")
-    if forecast_need >= 0.50 or effect_pressure >= 0.45:
+    if forecast_need >= t["simulation_forecast_need"] or effect_pressure >= t["simulation_effect_pressure"]:
         lanes.add("simulation")
-    if effect_pressure >= 0.45 or zero_relevance >= 0.70:
+    if effect_pressure >= t["zero_model_effect_pressure"] or zero_relevance >= t["zero_model_relevance"]:
         lanes.add("zero_model")
     if lanes:
         lanes.add("critic")
     if event.get("provenance_gap") is True:
         lanes.add("provenance")
-
-    # Goal cognition is selective; a plain event cannot create a goal lane by default.
-    if event.get("goal_pressure") is not None and _unit(event["goal_pressure"], "goal_pressure") >= 0.70:
+    if event.get("goal_pressure") is not None and _unit(event["goal_pressure"], "goal_pressure") >= t["goal_pressure"]:
         lanes.add("goal")
         lanes.add("critic")
 
-    # A route that asks for model work must already carry a positively admitted exact
-    # internal engine identity/class/artifact digest. Script-only events require none.
     if lanes and resolved_engine_identity is None:
-        raise ReactiveRoutingError("MODEL_ACTIVATION_REQUIRES_ADMITTED_INTERNAL_ENGINE")
+        raise ReactiveRoutingError("MODEL_ACTIVATION_REQUIRES_CONTROL_PLANE_ENGINE_ADMISSION")
     if not lanes and resolved_engine_identity is not None:
         raise ReactiveRoutingError("SCRIPT_ONLY_EVENT_MUST_NOT_SELECT_INTERNAL_ENGINE")
 
-    projection = zero_relevance >= 0.60 and bool(lanes)
+    projection = zero_relevance >= t["zero_projection_relevance"] and bool(lanes)
     event_sha256 = _event_identity(event)
     router_policy_sha256 = _sha256_canonical(ROUTER_POLICY, "ROUTER_POLICY")
     payload = {

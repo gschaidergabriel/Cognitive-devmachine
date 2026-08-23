@@ -1,0 +1,99 @@
+{
+  "schema": "GO_GRIDPLAN_INFERENCE_CAUSAL_BINDING/v2",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+  "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+  "canonical_main_refreshed": "35c97f311a8aec009535613ac9f5c8813f679928",
+  "retained_hcu_pr": 1263,
+  "branch": "gpt56sol/go-hcu-gridplan-inference-binding-20260823",
+  "branch_base_observed_for_final_source": "d56056551e66facd78ccab8b6b6a628dceb29fe6",
+  "retained_hcu_head_after_final_source_write": "d0aee3f7b53a167a863c6150a76a004181b9ef62",
+  "coordination_state": "STACKED_SOURCE_CANDIDATE_BEHIND_MOVING_RETAINED_DONOR_NOT_MERGE_READY",
+  "finding": "Current inference evidence can bind Entry/route/engine admission/loader lease/output while still omitting the exact GRID10 GridPlan, capacity receipt and concrete MODEL CellLease that authorized computation. Therefore plan-distinct executions can remain causally indistinguishable at the downstream scheduled-execution evidence boundary unless plan identity re-enters the receipt.",
+  "strongest_counterhypothesis": "GridPlan already binds route, engine and capacity, so separate downstream plan binding is redundant.",
+  "counterhypothesis_result": "REJECTED_AS_EVIDENCE_CONTRACT: downstream evidence that omits plan_sha256 cannot prove which admitted plan/capacity/cell authorized the output.",
+  "source_delta": {
+    "candidate_schema": "HCU_SCHEDULED_INFERENCE_RECEIPT/v2",
+    "scheduled_inference_receipt_blob_sha": "7af6b7241345aad3527cf30f8624108a9da740d3",
+    "focused_test_blob_sha": "23e898e1554a2ddd4d797a17bb8369ad6d5129c9",
+    "contract_blob_sha": "00831783ac50bd828940ece41af4f44bd6897dfd",
+    "requires": [
+      "current inner HCU inference receipt",
+      "verified engine-admission receipt",
+      "generation-fenced physical engine-load lease",
+      "independently admitted plan_sha256 -> route_decision_sha256",
+      "exact GRID10 MODEL CellLease"
+    ],
+    "identity_reentry": [
+      "inner_receipt_sha256",
+      "engine_admission_receipt_sha256",
+      "engine_load_lease_sha256",
+      "grid_plan_sha256",
+      "grid_cell_id",
+      "capacity_receipt_sha256",
+      "runtime_profile_id",
+      "model output digest/size"
+    ]
+  },
+  "known_upstream_blocker": {
+    "status": "SOURCE_INTERFACE_BREAK_ALREADY_RECORDED_BY_RETAINED_DONOR",
+    "detail": "router now requires versioned ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2 and selected RFC8785/JCS while current inference/GRID10 consumers still retain bare admission->event binding assumptions; inference identity migration must converge first and this candidate must reuse that single repaired authority",
+    "runtime_credit": 0
+  },
+  "experiment_accounting": {
+    "global_macrocycle_unusual_experiment": "AUTHORITY_CONSTANT_TRANSPLANT",
+    "global_credit_count": 1,
+    "local_alias_diagnostic_name": "SAME_ROUTE_DISTINCT_GRID_PLAN_RECEIPT_ALIAS",
+    "local_alias_digest_observed": "51d2bdf6dcb9877120e598b8376fd0196a1389f30edca99d98ecba8a81f3c275",
+    "local_alias_diagnostic_credit": 0,
+    "classification": "UNACCREDITED_COORDINATION_COLLISION_DIAGNOSTIC_NOT_A_SECOND_GO_EXPERIMENT",
+    "correction": "the local diagnostic was initiated before the shared retained lane exposed that the 23:57 macrocycle experiment slot had already been consumed; no second experiment is promoted or counted"
+  },
+  "sandbox_api_discovery": {
+    "owner_directive_sha": "35c97f311a8aec009535613ac9f5c8813f679928",
+    "platform_capability_confirmed_from_current_docs": [
+      "Sandbox SDK runCommand",
+      "REST POST /v2/sandboxes/sessions/{sessionId}/cmd",
+      "snapshot lifecycle",
+      "fork lifecycle",
+      "persistent Sandbox CLI lifecycle"
+    ],
+    "current_connector_direct_sandbox_create_or_exec_action": false,
+    "current_local_cli_vercel_or_sandbox_auth_surface": false,
+    "vercel_project_visible": "dr-unterweger",
+    "retained_controller_pr": 810,
+    "retained_controller_deployment": "dpl_9AniDMjwwRZCBdmvmC3PuDrHYmLw",
+    "controller_state": "READY",
+    "build_guard": "EntityOSHCUCurrentExecutorGuard/v1 CURRENT_MAIN_PLUS_RETAINED_HCU_PR_ATOMIC_SNAPSHOT_EXECUTOR",
+    "runtime_logs_current_deployment": "NONE_OBSERVED_IN_QUERIED_WINDOW",
+    "controller_bridge_can_create_disposable_sandbox": true,
+    "current_callable_start_gate": "BLOCKED_BY_EXPLICIT_OWNER_CREDENTIAL_BEARING_POST_AND_NO_POST_ACTION_ON_CURRENT_CONNECTOR",
+    "github_read_token_available_to_this_organ": false
+  },
+  "execution_evidence": {
+    "exact_branch_source_refetched": true,
+    "exact_branch_focused_test_executed": false,
+    "authorized_sandbox_product_runtime_executed": false,
+    "github_runner_semantic_test_credit": 0,
+    "entityos_hcu_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "security": {
+    "vps_self_hosted_or_production_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_or_training_used": false,
+    "secrets_accessed_persisted_or_logged": false
+  },
+  "artifact_readme": {
+    "status": "NO_CHANGE",
+    "reason": "stacked donor source candidate has zero runtime credit and current product/authority README on main is moving concurrently; avoid stale duplicate documentation until the inference JCS/binding authority converges"
+  },
+  "promotion": "SOURCE_CANDIDATE_ONLY",
+  "migration_reuse_score": "EASIER_CROSS_MODE",
+  "next_exact_gate": "owner-started credential-bearing POST to retained READY controller #810, atomically binding current Research main and retained HCU PR #1263; execute exact Entry -> RFC8785/JCS route -> engine admission/load lease -> repaired inference -> GRID10 regressions in disposable Vercel Sandbox, then rebase/fuse the plan-bound scheduled receipt only if the single versioned Entry/inference authority is preserved"
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": "HCU_DATA_INDEX/v3",
+  "schema_version": "HCU_DATA_INDEX/v4",
   "package": "MicroEntity",
   "hcu_root": "hcu/",
   "generated_release_artifacts": [
@@ -9,8 +9,10 @@
     "hcu/HYPERPOSITIONAL_SEMANTIC_FIELD_MATH.md",
     "hcu/COGNITIVE_INDEPENDENCE_POLICY.json",
     "hcu/ZERO_CLAYCODE_PROJECTION_CONTRACT.json",
+    "hcu/typed_entry_canonical_v1.py",
     "hcu/xeno_entry_fabric_v1.py",
     "hcu/test_xeno_entry_fabric_v1.py",
+    "hcu/test_typed_entry_canonical_v1.py",
     "hcu/reactive_event_router_v1.py",
     "hcu/test_reactive_event_router_v1.py",
     "hcu/topology.kvm4.json",
@@ -22,8 +24,10 @@
     "hcu/receipts/2026-08-23_HCU_REACTIVE_WORLDMODEL_OWNER_DELTA_GPT56SOL.json"
   ],
   "runtime_data_authority": "MiniUnifiedDB",
-  "entry_fabric_policy": "XENO_ENTRY_PACKET_V1_BINDS_INGRESS_CAUSAL_GENERATION_PROVENANCE_CAPABILITY_BUDGET_AND_PAYLOAD_IDENTITY_BEFORE_HCU_COGNITION",
+  "entry_fabric_policy": "TYPED_ENTRY_SEPARATES_REPLAY_STABLE_CAUSAL_EVENT_IDENTITY_FROM_TRANSPORT_ADMISSION_IDENTITY_AND_USES_VERSIONED_RFC8949_DETERMINISTIC_CBOR_SUBSET",
   "entry_fabric_authority_boundary": "ENTRY_PACKET_BINDS_UPSTREAM_CAPABILITY_RECEIPT_BUT_CANNOT_MINT_TRUTH_PERMISSIONS_OR_EFFECTS",
+  "entry_canonicalization": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1",
+  "entry_float_policy": "FLOATS_FORBIDDEN_IN_CAUSAL_ENTRY_IDENTITY; REACTIVE_FLOAT_SIGNALS_REMAIN_ROUTER_LOCAL_MEASUREMENT_INPUTS",
   "internal_cognition_dependency_policy": "NO_REQUIRED_EXTERNAL_PROVIDER_OR_EXTERNAL_EMBEDDING_SERVICE",
   "zero_projection_policy": "BOUNDED_HIGH_SPECIFICITY_CLAYCODE",
   "world_model_policy": "REACTIVE_SCRIPT_FIRST_OPEN_WORLD_HYPERPOSITION_WITH_STRICT_FALSIFICATION",
@@ -35,5 +39,5 @@
     "include_credential_bearing_files": false
   },
   "capacity_claim_policy": "NUMERIC_RUNTIME_CAPACITY_REQUIRES_EXACT_AUTHORIZED_ISOLATED_MEASUREMENT_RECEIPT",
-  "claim_class": "SOURCE_ARCHITECTURE_PLUS_TYPED_ENTRY_FABRIC_AND_DETERMINISTIC_REACTIVE_ROUTER_COMPONENT_EVIDENCE_NOT_HCU_RUNTIME_ACCEPTANCE"
+  "claim_class": "SOURCE_ARCHITECTURE_PLUS_TYPED_ENTRY_CAUSAL_CANONICALIZATION_AND_DETERMINISTIC_REACTIVE_ROUTER_COMPONENT_EVIDENCE_NOT_HCU_RUNTIME_ACCEPTANCE"
 }

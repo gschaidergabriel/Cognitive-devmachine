@@ -1,0 +1,48 @@
+{
+  "schema": "CLAYVERSE_GO_INHERITED_CONTROL_FENCE/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "4a24d3202921d1fa72b8c76cb4852623eb489d7b",
+  "observation": {
+    "authority_reconciliation_merged": true,
+    "prior_validator_schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+    "fail_open": "The v2 authority validator trusted Control 4.4/program-state preservation claims without reading the inherited 4.1, 4.2 and 4.3 control files themselves.",
+    "risk": "A weakened inherited FREE_ONLY/VPS/exact-runtime-evidence fence could be masked by unchanged 4.4 self-attestation and falsely pass source admission."
+  },
+  "delta": {
+    "validator_schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
+    "validator": "tools/validate_clayverse_authority_consistency.py",
+    "regression": "tests/test_validate_clayverse_authority_consistency.py",
+    "directly_validated_control_chain": [
+      "4.1 base control",
+      "4.2 execution-boundary addendum",
+      "4.3 historical program-authority addendum",
+      "4.4 ClayVerse product-authority addendum"
+    ],
+    "poison_regressions_added": [
+      "4.1 paid_fallback=true must fail closed",
+      "4.2 direct VPS execution allowed must fail closed even when 4.4 still claims preservation",
+      "4.3 exact admitted runtime evidence requirement removed must fail closed even when 4.4 still claims preservation"
+    ]
+  },
+  "bounded_local_mechanism_evidence": {
+    "environment": "isolated ChatGPT Linux component container",
+    "python_compile": "PASS",
+    "focused_regressions": "9/9 PASS",
+    "scope": "locally reconstructed validator/test mechanism only; not an exact Git checkout or whole-product runtime"
+  },
+  "runtime_credit": {
+    "exact_current_branch": 0,
+    "whole_clayverse": 0,
+    "oci": 0
+  },
+  "execution_surface": {
+    "vercel_sandbox_start_exec_exposed_by_connector": false,
+    "vps_or_self_hosted_test_used": false,
+    "together_used": false,
+    "paid_or_model_training_used": false,
+    "unusual_experiment": "NOT_CONSUMED_NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE"
+  },
+  "next_gate": "Run v3 authority consistency plus swarm admission and the full exact-current ClayVerse suite on an actually-started authorized isolated executor, then build/start the exact OCI image and bind source SHA, image digest and runtime identity."
+}

@@ -1,0 +1,78 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "8461c83a11cacf03c52a4aa950691e0ecdd7d865",
+  "branch": "go-20260823-gpt56sol-runtime-digest-identity",
+  "coordination": {
+    "macrocycle_id": null,
+    "unusual_experiment_count": 0,
+    "classification": "DETERMINISTIC_SOURCE_FUSION_ONLY",
+    "note": "The shared go cycle already consumed its unusual J-Space transfer discriminator. This delta adds no second unusual experiment."
+  },
+  "problem": "Merged PR #1080 atomically source-locks the bundled cognition manifest and boot receipt, but exact runtime bytes remained only in bundled_core.runtime_sha256. The canonical manifest integration identity bound a runtime name/identity but not a runtime byte digest, so runtime-byte substitution under a stable runtime identity was not source-locked into the same cognition bundle identity.",
+  "delta": {
+    "manifest_validator": {
+      "path": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py",
+      "git_blob": "f7e30922c90dd316c4bf77f6b3a8085ae724e724",
+      "law": "runtime_digest is an admitted SHA-256 field and participates in integration_identity_sha256 when present"
+    },
+    "manifest_tests": {
+      "path": "the artefact/blogpost_entity/mini_cognition/test_bundled_cognition_manifest_v1.py",
+      "git_blob": "8e5befbcacd6ce81066d224dc62441180aa1a0e6"
+    },
+    "boot_validator": {
+      "path": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
+      "git_blob": "67d4c129c387a8499f379560a35cb419f34e2ac6",
+      "laws": [
+        "BOOT_MANIFEST_RUNTIME_DIGEST_REQUIRED",
+        "boot bundled_core.runtime_sha256 must equal admitted manifest.runtime_digest"
+      ]
+    },
+    "boot_tests": {
+      "path": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py",
+      "git_blob": "35fc34f7814277b3c925b88456173a71b6824c3a",
+      "added_cases": [
+        "runtime digest mismatch must fail closed",
+        "boot manifest without runtime_digest must fail closed"
+      ]
+    },
+    "contract_doc": {
+      "path": "the artefact/blogpost_entity/jspace_gwt/JSPACE_GWT_BOOT_BINDING_V1.md",
+      "git_blob": "8f2f449ff637d7487110d2b05b82eec1663d15a1"
+    }
+  },
+  "evidence": {
+    "manifest_exact_blob_local_py_compile": "PASS",
+    "manifest_exact_blob_local_unittest": "PASS_10_OF_10",
+    "manifest_exact_blob_identity": "f7e30922c90dd316c4bf77f6b3a8085ae724e724 + 8e5befbcacd6ce81066d224dc62441180aa1a0e6",
+    "boot_exact_branch_suite": "NOT_EXECUTED",
+    "boot_execution_blocker": "No executable Vercel Sandbox action is exposed by the connected Vercel surface; direct Git clone from the isolated ChatGPT container is network/DNS blocked. Source write and exact Git blob identity are observed, but exact branch boot regression execution is not.",
+    "evidence_class": "SOURCE_DELTA_WITH_PARTIAL_EXACT_COMPONENT_REGRESSION"
+  },
+  "preserved": [
+    "PR #1080 repository-owned source lock",
+    "PR #1071 dirty-diff provenance",
+    "PR #1071 typed first-action provenance",
+    "J-Space numeric/readout/prompt-copy guards",
+    "MiniUnifiedDB truth authority",
+    "Unified Cognitive Fabric runtime receipt as downstream evidence envelope"
+  ],
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "training": false,
+    "money_spent_usd": 0
+  },
+  "credits": {
+    "bundled_08b_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "whole_product": 0
+  },
+  "next_gate": "Execute the exact branch boot + manifest regression suites in an authorized isolated runtime. If green, merge this minimal runtime-byte identity fence. Then the next intentional Ubuntu boot can bind checkpoint/tokenizer/runtime/J-Space/lens/workspace bytes into the admitted source lock before any runtime credit."
+}

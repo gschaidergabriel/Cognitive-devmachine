@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
-"""Generation-fenced physical engine lease for EntityOS/HCU.
+"""Generation-fenced physical engine-load lease for EntityOS/HCU.
 
-Deterministic control-plane plumbing only. This module does not load a model or prove
-that a loader consumed bytes. It binds separately supplied loader-consumption evidence
-to the already-admitted EngineAdmission and current artifact registries. Pre-load hashes
-alone receive no runtime credit.
+Deterministic control-plane plumbing only. This module does not load a model and does not
+by itself prove that a loader consumed bytes. It binds separately supplied loader-consumed
+checkpoint/tokenizer/runtime/build identities to one already verified EngineAdmission
+receipt and the live entity generation. Pre-load hashes alone receive no runtime credit.
 """
 from __future__ import annotations
 
 import hashlib
-from dataclasses import dataclass
-from typing import Any, Mapping
+from dataclasses import asdict, dataclass
+from typing import Any
 
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
-    from .reactive_event_router_v1 import EngineAdmission
+    from .engine_admission_v1 import VerifiedEngineAdmission
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
-    from reactive_event_router_v1 import EngineAdmission
+    from engine_admission_v1 import VerifiedEngineAdmission
 
-SCHEMA = "HCU_PHYSICAL_ENGINE_LEASE/v1"
-ADMISSION_BINDING_SCHEMA = "HCU_ENGINE_ADMISSION_BINDING/v1"
+SCHEMA = "HCU_PHYSICAL_ENGINE_LOAD_LEASE/v2"
 
 
 class PhysicalEngineLeaseError(ValueError):
@@ -32,19 +31,19 @@ class PhysicalEngineLease:
     schema: str
     canonicalization_schema: str
     entity_generation: int
-    lease_id: str
-    loader_instance_id: str
-    artifact_boundary_receipt_sha256: str
+    engine_admission_receipt_sha256: str
     provider_alias: str
     engine_identity: str
     engine_class: str
-    admitted_checkpoint_sha256: str
-    admitted_tokenizer_sha256: str
-    admitted_runtime_build_sha256: str
-    loader_consumed_checkpoint_sha256: str
-    loader_consumed_tokenizer_sha256: str
-    loader_consumed_runtime_build_sha256: str
-    engine_admission_binding_sha256: str
+    engine_artifact_sha256: str
+    consumed_checkpoint_sha256: str
+    consumed_tokenizer_sha256: str
+    consumed_runtime_sha256: str
+    consumed_build_sha256: str
+    loader_instance_id: str
+    loader_runtime_sha256: str
+    artifact_boundary_receipt_sha256: str
+    lease_id: str
     lease_sha256: str
 
 
@@ -61,7 +60,12 @@ def _sha256(value: Any, field: str) -> str:
     if not isinstance(value, str):
         raise PhysicalEngineLeaseError(f"{field}:LOWERCASE_SHA256_REQUIRED")
     value = value.strip()
-    if len(value) != 64 or value.lower() != value or any(ch not in "0123456789abcdef" for ch in value) or value in {"0" * 64, "f" * 64}:
+    if (
+        len(value) != 64
+        or value.lower() != value
+        or any(ch not in "0123456789abcdef" for ch in value)
+        or value in {"0" * 64, "f" * 64}
+    ):
         raise PhysicalEngineLeaseError(f"{field}:LOWERCASE_NONPLACEHOLDER_SHA256_REQUIRED")
     return value
 
@@ -72,7 +76,7 @@ def _generation(value: Any, field: str) -> int:
     return value
 
 
-def _canonical_sha256(value: Mapping[str, Any], field: str) -> str:
+def _canonical_sha256(value: dict[str, Any], field: str) -> str:
     try:
         encoded = canonicalize(value)
     except CanonicalizationError as exc:
@@ -80,137 +84,183 @@ def _canonical_sha256(value: Mapping[str, Any], field: str) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-def _admitted_aux_digest(admitted_aux_artifacts: Mapping[str, Any], engine_identity: str, key: str) -> str:
-    if not isinstance(admitted_aux_artifacts, Mapping):
-        raise PhysicalEngineLeaseError("ADMITTED_AUX_ARTIFACT_REGISTRY_REQUIRED")
-    record = admitted_aux_artifacts.get(engine_identity)
-    if not isinstance(record, Mapping):
-        raise PhysicalEngineLeaseError("ENGINE_AUX_ARTIFACT_RECORD_NOT_ADMITTED")
-    if key not in record:
-        raise PhysicalEngineLeaseError(f"ENGINE_AUX_ARTIFACT_{key.upper()}_NOT_ADMITTED")
-    return _sha256(record[key], f"admitted_{key}")
+def _verified_admission(
+    verified: VerifiedEngineAdmission,
+    *,
+    current_generation: int,
+) -> tuple[str, str, str, str, str, str, str, str, str]:
+    if not isinstance(verified, VerifiedEngineAdmission):
+        raise PhysicalEngineLeaseError("VERIFIED_ENGINE_ADMISSION_REQUIRED")
+    current_generation = _generation(current_generation, "current_generation")
+    if verified.entity_generation != current_generation:
+        raise PhysicalEngineLeaseError("STALE_VERIFIED_ENGINE_ADMISSION")
+
+    provider_alias = _text(verified.admission.provider_alias, "provider_alias").lower()
+    engine_identity = _text(verified.admission.engine_identity, "engine_identity").lower()
+    engine_class = _text(verified.admission.engine_class, "engine_class").upper()
+    engine_artifact_sha256 = _sha256(verified.engine_artifact_sha256, "engine_artifact_sha256")
+    if _sha256(verified.admission.engine_artifact_sha256, "engine_admission.engine_artifact_sha256") != engine_artifact_sha256:
+        raise PhysicalEngineLeaseError("ENGINE_ADMISSION_BUNDLE_IDENTITY_MISMATCH")
+
+    checkpoint_sha256 = _sha256(verified.checkpoint.sha256, "verified_checkpoint_sha256")
+    tokenizer_sha256 = _sha256(verified.tokenizer.sha256, "verified_tokenizer_sha256")
+    runtime_sha256 = _sha256(verified.runtime.sha256, "verified_runtime_sha256")
+    build_sha256 = _sha256(verified.build.sha256, "verified_build_sha256")
+    receipt_sha256 = _sha256(verified.receipt_sha256, "engine_admission_receipt_sha256")
+    return (
+        provider_alias,
+        engine_identity,
+        engine_class,
+        engine_artifact_sha256,
+        checkpoint_sha256,
+        tokenizer_sha256,
+        runtime_sha256,
+        build_sha256,
+        receipt_sha256,
+    )
 
 
 def issue_physical_engine_lease(
-    engine_admission: EngineAdmission,
+    verified_engine_admission: VerifiedEngineAdmission,
     *,
     current_generation: int,
     loader_generation: int,
-    admitted_engine_artifacts: Mapping[str, Any],
-    admitted_aux_artifacts: Mapping[str, Any],
     loader_consumed_checkpoint_sha256: str,
     loader_consumed_tokenizer_sha256: str,
-    loader_consumed_runtime_build_sha256: str,
+    loader_consumed_runtime_sha256: str,
+    loader_consumed_build_sha256: str,
     loader_instance_id: str,
+    loader_runtime_sha256: str,
     lease_id: str,
     artifact_boundary_receipt_sha256: str,
 ) -> PhysicalEngineLease:
-    """Bind real-loader evidence to one current control-plane EngineAdmission."""
-    if not isinstance(engine_admission, EngineAdmission):
-        raise PhysicalEngineLeaseError("ENGINE_ADMISSION_REQUIRED")
+    """Bind loader-consumed component identities to one verified engine bundle.
+
+    The caller remains responsible for obtaining the consumed digests from an admitted
+    loader/boundary. Supplying matching strings here is not runtime attestation by itself.
+    """
     current_generation = _generation(current_generation, "current_generation")
     loader_generation = _generation(loader_generation, "loader_generation")
     if loader_generation != current_generation:
         raise PhysicalEngineLeaseError("STALE_LOADER_GENERATION")
 
-    provider_alias = _text(engine_admission.provider_alias, "provider_alias").lower()
-    engine_identity = _text(engine_admission.engine_identity, "engine_identity").lower()
-    engine_class = _text(engine_admission.engine_class, "engine_class").upper()
-    admitted_checkpoint_sha256 = _sha256(engine_admission.engine_artifact_sha256, "engine_admission_artifact_sha256")
+    (
+        provider_alias,
+        engine_identity,
+        engine_class,
+        engine_artifact_sha256,
+        checkpoint_sha256,
+        tokenizer_sha256,
+        runtime_sha256,
+        build_sha256,
+        engine_admission_receipt_sha256,
+    ) = _verified_admission(
+        verified_engine_admission,
+        current_generation=current_generation,
+    )
 
-    if not isinstance(admitted_engine_artifacts, Mapping):
-        raise PhysicalEngineLeaseError("ADMITTED_ENGINE_ARTIFACT_REGISTRY_REQUIRED")
-    registry_checkpoint = admitted_engine_artifacts.get(engine_identity)
-    if registry_checkpoint is None:
-        raise PhysicalEngineLeaseError("ENGINE_CHECKPOINT_NOT_ADMITTED")
-    registry_checkpoint = _sha256(registry_checkpoint, "admitted_checkpoint_sha256")
-    if registry_checkpoint != admitted_checkpoint_sha256:
-        raise PhysicalEngineLeaseError("ENGINE_ADMISSION_CHECKPOINT_REGISTRY_MISMATCH")
-
-    admitted_tokenizer_sha256 = _admitted_aux_digest(admitted_aux_artifacts, engine_identity, "tokenizer_sha256")
-    admitted_runtime_build_sha256 = _admitted_aux_digest(admitted_aux_artifacts, engine_identity, "runtime_build_sha256")
     consumed_checkpoint = _sha256(loader_consumed_checkpoint_sha256, "loader_consumed_checkpoint_sha256")
     consumed_tokenizer = _sha256(loader_consumed_tokenizer_sha256, "loader_consumed_tokenizer_sha256")
-    consumed_runtime = _sha256(loader_consumed_runtime_build_sha256, "loader_consumed_runtime_build_sha256")
-    if consumed_checkpoint != admitted_checkpoint_sha256:
+    consumed_runtime = _sha256(loader_consumed_runtime_sha256, "loader_consumed_runtime_sha256")
+    consumed_build = _sha256(loader_consumed_build_sha256, "loader_consumed_build_sha256")
+    if consumed_checkpoint != checkpoint_sha256:
         raise PhysicalEngineLeaseError("LOADER_CONSUMED_CHECKPOINT_MISMATCH")
-    if consumed_tokenizer != admitted_tokenizer_sha256:
+    if consumed_tokenizer != tokenizer_sha256:
         raise PhysicalEngineLeaseError("LOADER_CONSUMED_TOKENIZER_MISMATCH")
-    if consumed_runtime != admitted_runtime_build_sha256:
-        raise PhysicalEngineLeaseError("LOADER_CONSUMED_RUNTIME_BUILD_MISMATCH")
+    if consumed_runtime != runtime_sha256:
+        raise PhysicalEngineLeaseError("LOADER_CONSUMED_RUNTIME_MISMATCH")
+    if consumed_build != build_sha256:
+        raise PhysicalEngineLeaseError("LOADER_CONSUMED_BUILD_MISMATCH")
 
-    loader_instance_id = _text(loader_instance_id, "loader_instance_id")
-    lease_id = _text(lease_id, "lease_id")
-    boundary_receipt = _sha256(artifact_boundary_receipt_sha256, "artifact_boundary_receipt_sha256")
-
-    admission_binding_payload = {
-        "schema": ADMISSION_BINDING_SCHEMA,
-        "canonicalization_schema": CANONICALIZATION_SCHEMA,
-        "entity_generation": current_generation,
-        "provider_alias": provider_alias,
-        "engine_identity": engine_identity,
-        "engine_class": engine_class,
-        "admitted_checkpoint_sha256": admitted_checkpoint_sha256,
-        "admitted_tokenizer_sha256": admitted_tokenizer_sha256,
-        "admitted_runtime_build_sha256": admitted_runtime_build_sha256,
-    }
-    admission_binding_sha256 = _canonical_sha256(admission_binding_payload, "ENGINE_ADMISSION_BINDING")
     payload = {
         "schema": SCHEMA,
         "canonicalization_schema": CANONICALIZATION_SCHEMA,
         "entity_generation": current_generation,
-        "lease_id": lease_id,
-        "loader_instance_id": loader_instance_id,
-        "artifact_boundary_receipt_sha256": boundary_receipt,
+        "engine_admission_receipt_sha256": engine_admission_receipt_sha256,
         "provider_alias": provider_alias,
         "engine_identity": engine_identity,
         "engine_class": engine_class,
-        "admitted_checkpoint_sha256": admitted_checkpoint_sha256,
-        "admitted_tokenizer_sha256": admitted_tokenizer_sha256,
-        "admitted_runtime_build_sha256": admitted_runtime_build_sha256,
-        "loader_consumed_checkpoint_sha256": consumed_checkpoint,
-        "loader_consumed_tokenizer_sha256": consumed_tokenizer,
-        "loader_consumed_runtime_build_sha256": consumed_runtime,
-        "engine_admission_binding_sha256": admission_binding_sha256,
+        "engine_artifact_sha256": engine_artifact_sha256,
+        "consumed_checkpoint_sha256": consumed_checkpoint,
+        "consumed_tokenizer_sha256": consumed_tokenizer,
+        "consumed_runtime_sha256": consumed_runtime,
+        "consumed_build_sha256": consumed_build,
+        "loader_instance_id": _text(loader_instance_id, "loader_instance_id"),
+        "loader_runtime_sha256": _sha256(loader_runtime_sha256, "loader_runtime_sha256"),
+        "artifact_boundary_receipt_sha256": _sha256(
+            artifact_boundary_receipt_sha256,
+            "artifact_boundary_receipt_sha256",
+        ),
+        "lease_id": _text(lease_id, "lease_id"),
     }
-    return PhysicalEngineLease(**payload, lease_sha256=_canonical_sha256(payload, "PHYSICAL_ENGINE_LEASE"))
+    return PhysicalEngineLease(
+        **payload,
+        lease_sha256=_canonical_sha256(payload, "PHYSICAL_ENGINE_LOAD_LEASE"),
+    )
 
 
 def assert_physical_engine_lease_current(
     lease: PhysicalEngineLease,
     *,
     current_generation: int,
-    admitted_engine_artifacts: Mapping[str, Any],
-    admitted_aux_artifacts: Mapping[str, Any],
+    verified_engine_admission: VerifiedEngineAdmission,
 ) -> None:
-    """Re-check the lease immediately before inference/receipt production."""
+    """Re-check the lease against the current verified engine bundle before inference."""
     if not isinstance(lease, PhysicalEngineLease):
         raise PhysicalEngineLeaseError("PHYSICAL_ENGINE_LEASE_REQUIRED")
     current_generation = _generation(current_generation, "current_generation")
+    if lease.schema != SCHEMA or lease.canonicalization_schema != CANONICALIZATION_SCHEMA:
+        raise PhysicalEngineLeaseError("PHYSICAL_ENGINE_LEASE_SCHEMA_UNSUPPORTED")
     if lease.entity_generation != current_generation:
         raise PhysicalEngineLeaseError("STALE_PHYSICAL_ENGINE_LEASE")
-    if not isinstance(admitted_engine_artifacts, Mapping):
-        raise PhysicalEngineLeaseError("ADMITTED_ENGINE_ARTIFACT_REGISTRY_REQUIRED")
-    checkpoint = admitted_engine_artifacts.get(lease.engine_identity)
-    if checkpoint is None:
-        raise PhysicalEngineLeaseError("ENGINE_CHECKPOINT_NOT_CURRENTLY_ADMITTED")
-    if _sha256(checkpoint, "current_admitted_checkpoint_sha256") != lease.admitted_checkpoint_sha256:
-        raise PhysicalEngineLeaseError("PHYSICAL_ENGINE_LEASE_CHECKPOINT_REVOKED")
-    if _admitted_aux_digest(admitted_aux_artifacts, lease.engine_identity, "tokenizer_sha256") != lease.admitted_tokenizer_sha256:
-        raise PhysicalEngineLeaseError("PHYSICAL_ENGINE_LEASE_TOKENIZER_REVOKED")
-    if _admitted_aux_digest(admitted_aux_artifacts, lease.engine_identity, "runtime_build_sha256") != lease.admitted_runtime_build_sha256:
-        raise PhysicalEngineLeaseError("PHYSICAL_ENGINE_LEASE_RUNTIME_BUILD_REVOKED")
+
+    (
+        provider_alias,
+        engine_identity,
+        engine_class,
+        engine_artifact_sha256,
+        checkpoint_sha256,
+        tokenizer_sha256,
+        runtime_sha256,
+        build_sha256,
+        engine_admission_receipt_sha256,
+    ) = _verified_admission(
+        verified_engine_admission,
+        current_generation=current_generation,
+    )
+    expected = {
+        "provider_alias": provider_alias,
+        "engine_identity": engine_identity,
+        "engine_class": engine_class,
+        "engine_artifact_sha256": engine_artifact_sha256,
+        "engine_admission_receipt_sha256": engine_admission_receipt_sha256,
+        "consumed_checkpoint_sha256": checkpoint_sha256,
+        "consumed_tokenizer_sha256": tokenizer_sha256,
+        "consumed_runtime_sha256": runtime_sha256,
+        "consumed_build_sha256": build_sha256,
+    }
+    for field, value in expected.items():
+        if getattr(lease, field) != value:
+            raise PhysicalEngineLeaseError(f"PHYSICAL_ENGINE_LEASE_{field.upper()}_REVOKED")
+
+    payload = asdict(lease)
+    observed_sha256 = payload.pop("lease_sha256")
+    if _canonical_sha256(payload, "PHYSICAL_ENGINE_LOAD_LEASE") != observed_sha256:
+        raise PhysicalEngineLeaseError("PHYSICAL_ENGINE_LEASE_DIGEST_MISMATCH")
 
 
 def inference_lease_echo(lease: PhysicalEngineLease) -> dict[str, str | int]:
     if not isinstance(lease, PhysicalEngineLease):
         raise PhysicalEngineLeaseError("PHYSICAL_ENGINE_LEASE_REQUIRED")
     return {
-        "physical_engine_lease_sha256": lease.lease_sha256,
-        "physical_engine_lease_generation": lease.entity_generation,
+        "engine_load_lease_sha256": lease.lease_sha256,
+        "engine_load_lease_generation": lease.entity_generation,
+        "engine_admission_receipt_sha256": lease.engine_admission_receipt_sha256,
         "loader_instance_id": lease.loader_instance_id,
+        "loader_runtime_sha256": lease.loader_runtime_sha256,
         "artifact_boundary_receipt_sha256": lease.artifact_boundary_receipt_sha256,
-        "loader_consumed_checkpoint_sha256": lease.loader_consumed_checkpoint_sha256,
-        "loader_consumed_tokenizer_sha256": lease.loader_consumed_tokenizer_sha256,
-        "loader_consumed_runtime_build_sha256": lease.loader_consumed_runtime_build_sha256,
+        "consumed_checkpoint_sha256": lease.consumed_checkpoint_sha256,
+        "consumed_tokenizer_sha256": lease.consumed_tokenizer_sha256,
+        "consumed_runtime_sha256": lease.consumed_runtime_sha256,
+        "consumed_build_sha256": lease.consumed_build_sha256,
     }

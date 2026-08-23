@@ -33,14 +33,14 @@
       "MiniUnifiedDB truth authority and zero Whole-GWT credit"
     ]
   },
-  "candidate_git_blobs": {
+  "exact_git_blobs": {
     "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py": "9893b17ee2dfb03a3f2ad18c5c5cd21e6ba043f1",
     "the artefact/blogpost_entity/mini_cognition/test_bundled_cognition_manifest_v1.py": "4fe23f72ee44a3f4a55443d482f302bc98d97641",
     "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py": "d035ae7df6e262c42735c2577f8199c663055c38",
     "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py": "d62954315a1498fd41f6f8f4889fff0546f6e706",
     "the artefact/blogpost_entity/jspace_gwt/JSPACE_GWT_BOOT_BINDING_V1.md": "96831766c2fe3d04b2940f221b60be0eb8f81806"
   },
-  "focused_equivalent_falsifier": {
+  "focused_falsifier": {
     "result": "PASS",
     "pre_fix_prediction": "changing only lens artifact digest does not change old integration identity",
     "pre_fix_observed": "CONFIRMED",
@@ -49,11 +49,38 @@
     "mismatch_prediction": "wrong boot lens_file_sha256 -> BOOT_LENS_ARTIFACT_DIGEST_MISMATCH",
     "mismatch_observed": "CONFIRMED",
     "missing_prediction": "missing manifest lens_artifact_digest -> BOOT_MANIFEST_LENS_ARTIFACT_DIGEST_REQUIRED",
-    "missing_observed": "CONFIRMED",
-    "evidence_scope": "FOCUSED_BEHAVIORALLY_EQUIVALENT_MECHANISM_NOT_EXACT_BRANCH_EXECUTION"
+    "missing_observed": "CONFIRMED"
+  },
+  "isolated_exact_blob_execution": {
+    "surface": "isolated local container",
+    "transport_proof": "Each authored Python file was reconstructed locally and git hash-object was required to equal its GitHub branch content blob SHA before execution.",
+    "py_compile": "PASS",
+    "manifest_suite": {
+      "tests": 13,
+      "failures": 0,
+      "result": "PASS"
+    },
+    "boot_crossbinding_suite": {
+      "tests": 22,
+      "failures": 0,
+      "result": "PASS"
+    },
+    "total": {
+      "tests": 35,
+      "failures": 0,
+      "result": "PASS"
+    },
+    "evidence_scope": "EXACT_GIT_BLOB_COMPONENT_REGRESSION"
+  },
+  "github_actions": {
+    "head": "da852507d0b76ce9332ffa3e813b1997fe51cb1c",
+    "workflow_runs_observed": 4,
+    "conclusion": "EXECUTION_ADMISSION_FAILURE",
+    "validator_job_id": 97135398528,
+    "validator_job_steps": null,
+    "interpretation": "Hosted jobs failed before visible step execution; this is not test failure and grants no hosted runtime credit."
   },
   "execution_boundary": {
-    "exact_branch_regression": "NOT_YET_OBSERVED",
     "bundled_08b_runtime_credit": 0,
     "jspace_runtime_credit": 0,
     "whole_gwt_credit": 0,
@@ -65,5 +92,5 @@
     "training": false,
     "money_spent_usd": 0
   },
-  "next_gate": "Run exact branch manifest + boot suites in an admitted executor or repository CI. If green and current-main ancestry remains compatible, fuse this minimal identity fence and retire the stale heavier overlapping PR #1088. The real next runtime gate remains an intentional exact Ubuntu boot that populates the currently UNBOUND source lock from measured checkpoint/tokenizer/runtime/lens/J-Space/workspace artifacts."
+  "next_gate": "If current-main ancestry remains compatible, fuse this exact-blob component-verified identity fence and retire the stale heavier overlapping PR #1088. The real next runtime gate remains an intentional exact Ubuntu boot that populates the currently UNBOUND source lock from measured checkpoint/tokenizer/runtime/lens/J-Space/workspace artifacts."
 }

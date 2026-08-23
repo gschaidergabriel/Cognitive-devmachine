@@ -10,6 +10,7 @@ This contract operationalizes the owner-required `JSPACE_GWT_BOOT_BINDING_RECEIP
 ```claycode
 r0.observe(
   source(main_sha, tree_sha, dirty, dirty_diff_sha256?),
+  runtime(entity_generation),
   executor(UBUNTU, host_identity_sha256, kernel),
   bundled_core(manifest_version, manifest_sha256, checkpoint_sha256, tokenizer_sha256, runtime_sha256, quantization_runtime_identity?),
   jspace(jlens_upstream_commit, jspace_profile_sha256, lens_file_sha256, lens_profile_sha256, steering_calibration_sha256?, fit_corpus_sha256),
@@ -20,6 +21,7 @@ r0.observe(
 )
 
 r3.counter(
+  self_reported_cycle_generation_freshness,
   lens_serialization_nonfinite,
   lens_artifact_substitution_under_stable_profile,
   unfitted_position_readout,
@@ -37,6 +39,7 @@ r3.counter(
 )
 
 r4.discriminate(
+  require(type(entity_generation) == int && entity_generation >= 0),
   require(dirty == true -> sha256(dirty_diff_sha256)),
   require(unique(first_actions.action_id)),
   require(first_actions.origin in [ZERO, HOOK_TIMER, CLAUDE_CODE, PROXY_SANDBOX_CONTROLLER, OTHER]),
@@ -57,6 +60,7 @@ r4.discriminate(
   require(boot_runtime_sha256 == bundled_manifest.runtime_digest),
   require(boot_jspace_profile_sha256 == bundled_manifest.jspace_profile_digest),
   require(boot_lens_file_sha256 == bundled_manifest.lens_artifact_digest),
+  require(boot_fit_corpus_sha256 == bundled_manifest.fit_corpus_digest),
   require(boot_lens_profile_sha256 == bundled_manifest.lens_profile_digest),
   require(boot_workspace_calibration_sha256 == bundled_manifest.workspace_calibration_digest),
   require(source_lock.integration_identity_sha256 == bundled_manifest.integration_identity_sha256)
@@ -70,70 +74,28 @@ r6.verify(
 
 ## Atomic bundled-cognition binding
 
-The boot receipt is not allowed to self-authorize a plausible collection of digests. Runtime admission now composes three separately scoped objects:
+The boot receipt is not allowed to self-authorize a plausible collection of digests. Runtime admission composes the repository-owned bundled-cognition manifest, the explicit source-side admission lock, and the observed boot receipt. Exact runtime bytes, persisted lens bytes, the fit-corpus digest, J-Space/lens profiles and workspace calibration remain cross-bound rather than inferred from names.
 
-1. the repository-owned canonical `mini-entity-bundled-cognition-manifest/v1`;
-2. `BUNDLED_COGNITION_SOURCE_LOCK/v1` as the explicit source-side admission lock;
-3. the observed `JSPACE_GWT_BOOT_BINDING_RECEIPT/v1`.
+The repository source lock can remain `UNBOUND`; that is a fail-closed state, not permission to infer missing runtime evidence.
 
-The source lock binds both the raw manifest file digest and the manifest validator's complete and semantic integration identities. The boot receipt must then match the admitted manifest for engine/model/checkpoint/tokenizer, exact runtime bytes, exact persisted lens artifact bytes, optional quantization/runtime identity, J-Space profile, lens profile, optional steering calibration and workspace calibration.
+## Runtime generation provenance
 
-`runtime_digest` and `lens_artifact_digest` are identity-bearing in the bundled manifest when present and are mandatory for boot admission. A stable runtime name cannot authorize different executable bytes, and a stable lens profile identity cannot authorize a different persisted lens artifact.
+`runtime.entity_generation` is an observed boot fact, not a constant inferred from source bytes and not a value that a later UCF cycle may authenticate by repeating itself. The boot validator requires a real non-negative integer and rejects booleans or missing values.
 
-The repository ships the source-lock file intentionally as `UNBOUND`. This is a fail-closed state, not a missing-data convenience: it must remain unable to admit cognition until exact bundled checkpoint/tokenizer/runtime/J-Space/lens/workspace artifacts have been measured and the corresponding manifest has been explicitly admitted.
+When `UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1` is composed with this boot evidence, the UCF cycle's `runtime.generation` must equal the independently carried boot observation. A cycle that changes its generation and merely reports `freshness.stale_generation=false` may remain self-consistent at the bare receipt layer but is insufficient for runtime ancestry credit; the composition must fail closed.
 
-Validation CLI:
+This evidence field does not create a second state authority. MiniUnifiedDB/global generation fencing remains authoritative; the receipt only records the generation observed at the admitted boot boundary.
 
-```text
-python validate_jspace_gwt_boot_binding_v1.py RECEIPT.json BUNDLED_MANIFEST.json SOURCE_LOCK.json
-```
+## Fit-corpus and lens identity
 
-This composition preserves `PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY`: a valid-looking J-Space/lens/workspace tuple from another calibration bundle cannot receive boot admission merely because every individual digest is syntactically valid.
-
-## Lens artifact identity versus lens profile identity
-
-`lens_profile_digest` and `lens_artifact_digest` are deliberately distinct:
-
-- `lens_profile_digest` binds the admitted calibration/profile contract;
-- `lens_artifact_digest` binds the exact persisted lens file bytes used by the booted bundle.
-
-Neither digest alone substitutes for runtime measurement or proves semantic usefulness. The exact artifact digest only closes byte substitution under a stable profile identity; model-specific lens quality and causal utility still require the later exact Qwen/J-Space calibration gate.
+The fitted lens is not fully identified by a profile name or persisted file alone. `fit_corpus_digest` binds the exact corpus used for fitting, while `lens_artifact_digest` binds the persisted lens bytes and `lens_profile_digest` binds the admitted profile contract. These identities are distinct and all remain subordinate to later exact-bundle measurement.
 
 ## Provenance hardening
 
-`dirty=true` is not an exact source identity by itself. A dirty worktree can contain arbitrarily different bytes under the same Git commit/tree pair, so the receipt must additionally bind `dirty_diff_sha256` whenever dirty state is observed.
-
-Likewise one free-form `origin_attribution` string is not sufficient to attribute the first post-start actions. The receipt therefore binds a non-empty `first_actions` list with unique `action_id`, a controlled origin class, and an explicit boolean `effect_requested`. `OTHER` remains available but requires typed detail instead of silently collapsing an unknown actor into a known origin.
-
-These are provenance guards only. They do not establish autonomy, causal correctness, effect success, or model quality.
-
-## Identity and calibration hardening
-
-Cross-binding only helps if every bound identity is real. A syntactically valid SHA containing only zeroes or only `f` characters is therefore rejected by both the bundled cognition manifest validator and the boot/source-lock validator. Test fixtures must use non-placeholder digests, so a placeholder cannot acquire authority merely because the same placeholder is repeated consistently across manifest, source lock and receipt.
-
-The GWT slot count follows the owner epistemic law `UNKNOWN != ZERO != MEASURED`:
-
-- `UNMEASURED_SOURCE_ONLY` requires `slot_count: null`. A candidate/default slot count may exist in research configuration but is not an admitted measurement.
-- `MEASURED_EXACT_BUNDLE` requires an integer `slot_count >= 1` on the exact cross-bound bundle.
-
-`null` means no admitted slot-count measurement. It is neither numeric zero nor an implicit default.
-
-## External measurement hardening
-
-Current upstream Jacobian-Lens code fits with a configurable leading-position skip whose default is 16. Current upstream issue #5 reports that `apply()` can still return those unfitted positions and that prompt-token copying can confound naive concept-presence measurements. Current upstream issue #6 reports that the default float16 lens serialization can overflow large finite fp32 Jacobians to `inf`.
-
-Therefore this receipt binds the exact upstream commit and makes numeric finiteness plus position-policy checks explicit fail-closed conditions.
-
-Primary upstream references:
-- https://github.com/anthropics/jacobian-lens
-- https://github.com/anthropics/jacobian-lens/issues/5
-- https://github.com/anthropics/jacobian-lens/issues/6
-- https://transformer-circuits.pub/2026/workspace/index.html
-
-These guards do not prove that a lens is well-conditioned or semantically valid. They only block known classes of false measurement credit.
+`dirty=true` requires `dirty_diff_sha256`; first post-start actions require unique typed origins and explicit effect-request flags. These are provenance guards only and do not establish autonomy, effect success, or model quality.
 
 ## Evidence boundary
 
-A passing validator means only that the receipt is structurally coherent with this source contract. Runtime credit still requires an actually observed exact-source Ubuntu boot and exact artifact hashes. J-Space measurements remain `MEASURED_INTERPRETABILITY`, not canonical fact. GWT workspace stability remains a control observation, not truth. Claude Code results remain candidate inference.
+A passing validator means only that the receipt is structurally coherent with this source contract. Runtime credit still requires an actually observed exact-source Ubuntu boot and exact artifact hashes. J-Space measurements remain interpretability evidence, GWT workspace stability remains a control observation, Claude Code results remain candidate inference, and whole-product acceptance remains separate.
 
 The current `FREE_ONLY` execution boundary remains unchanged. This contract performs no provider key lookup, network request, training, billed create, or paid execution.

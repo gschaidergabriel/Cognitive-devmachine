@@ -4,10 +4,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BOOT = ROOT / "research_entity" / "continuity" / "BOOTSTRAP_MINIMAL.json"
+STATE = ROOT / "research_entity" / "rooms" / "PROGRAM_STATE.json"
 
 
 def _load():
     return json.loads(BOOT.read_text(encoding="utf-8"))
+
+
+def _load_state():
+    return json.loads(STATE.read_text(encoding="utf-8"))
 
 
 def test_bootstrap_binds_current_owner_architecture_without_runtime_credit():
@@ -70,3 +75,28 @@ def test_current_architecture_is_not_reclassified_as_legacy():
     legacy = b["legacy_scope"]
     assert "ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION" in legacy
     assert "supersede the prior optional-0.8B/loose-J-Space-GWT assumptions" in legacy
+
+
+def test_program_state_matches_boot_owner_architecture_and_zero_credit():
+    b = _load()
+    s = _load_state()
+
+    assert s["schema_version"] == "7.11"
+    assert s["stage"] == b["active_stage"]
+    assert s["owner_directive"] == b["sole_owner_directive"]
+
+    boot_source = b["owner_architecture_source"]
+    state_source = s["owner_architecture_2026_08_23"]
+    assert state_source["status"] == boot_source["status"]
+    assert state_source["architecture_commit"] == boot_source["architecture_commit"]
+    assert state_source["bundled_08b_exact_runtime_credit"] == boot_source["bundled_08b_exact_runtime_credit"] == 0
+    assert state_source["jspace_runtime_credit"] == boot_source["jspace_runtime_credit"] == 0
+    assert state_source["whole_gwt_production_credit"] == boot_source["whole_gwt_production_credit"] == 0
+    assert state_source["claude_code_adapter_runtime_credit"] == boot_source["claude_code_adapter_runtime_credit"] == 0
+
+    assert s["unified_cognitive_fabric"]["law"] == b["unified_cognitive_fabric"]["law"]
+    assert set(s["unified_cognitive_fabric"]["adaptive_jspace_modes"]) == set(b["unified_cognitive_fabric"]["adaptive_jspace_modes"])
+    assert s["execution_policy"]["free_only"] is True
+    assert s["together_api"]["credentialed_preflight_allowed_now"] is False
+    assert "FREE_ONLY" in s["together_api"]["training_campaign_approx1b"]
+    assert "optional replaceable" not in s["sole_target"].lower()

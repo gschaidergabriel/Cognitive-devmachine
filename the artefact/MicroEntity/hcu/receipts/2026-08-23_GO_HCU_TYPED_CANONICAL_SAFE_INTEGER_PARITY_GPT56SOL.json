@@ -1,0 +1,66 @@
+{
+  "schema": "ENTITYOS_HCU_COMPONENT_EVIDENCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority": {
+    "product": "EntityOS",
+    "integrated_cognition_compute_architecture": "HCU",
+    "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+    "persistent_research_entity": "Clay"
+  },
+  "scope": "DEPENDENT_DONOR_COMPONENT_ONLY",
+  "parent_pr": 1263,
+  "parent_head_sha": "b41afec49bd6384680d001395177c3f274b9be5e",
+  "issue": 1372,
+  "finding": {
+    "class": "CROSS_LANGUAGE_NUMERIC_HOST_TYPE_ASYMMETRY",
+    "mechanism": "ENTITYOS_HCU_TYPED_CANONICAL/v1 intended an I-JSON-like safe-integer domain, but Python rejected integer 2^53 while accepting float(2^53); the independent Node reference rejected the same integer-valued Number. Therefore identical mathematical JSON-number values could be admitted differently by host representation before this repair.",
+    "counterhypothesis": "Python int and float are intentionally distinct typed inputs for this canonicalizer.",
+    "counterhypothesis_result": "REJECTED_AT_CONTRACT_SCOPE: the module explicitly targets a JSON/I-JSON-like cross-language value domain and already collapses equal int/float values such as 1 and 1.0. Host representation is therefore not intended semantic authority."
+  },
+  "repair": {
+    "policy": "INTEGER_VALUED_FLOATS_OUTSIDE_IJSON_SAFE_INTEGER_RANGE_FAIL_CLOSED",
+    "schema_change": false,
+    "reason_no_schema_change": "The Node reference and existing safe-integer test already encoded the intended domain; this narrows the Python implementation to that existing contract and leaves all previously admitted in-domain canonical bytes unchanged.",
+    "files": {
+      "the artefact/MicroEntity/hcu/hcu_causal_canonical_v1.py": {
+        "git_blob_sha1": "9e108a02aa88c2fd11dc084723c81856526134e2",
+        "sha256": "e88c3aab71a2956a37cf085a8f32f94e0e251a69bd891b5290a0a5e1695b0825"
+      },
+      "the artefact/MicroEntity/hcu/test_hcu_causal_canonical_v1.py": {
+        "git_blob_sha1": "8aa22bccdd0d0ccf83e3b15522966ce04fc191e9",
+        "sha256": "0557077922a23307dda9bb972e3ae2a80fa0233a45e744edd47d8c1f22b681bb"
+      }
+    }
+  },
+  "isolated_component_execution": {
+    "surface": "isolated ChatGPT Linux tool container",
+    "exact_source_binding": "TESTED_LOCAL_GIT_BLOB_SHA1_EQUALS_GITHUB_WRITTEN_BLOB_SHA1_FOR_BOTH_CHANGED_SOURCE_FILES",
+    "python_compile": "PASS",
+    "unittest": "9/9 PASS",
+    "node_reference": "PASS_INCLUDED_IN_SUITE",
+    "node_version": "v22.16.0",
+    "runtime_credit": "COMPONENT_MECHANISM_ONLY_ZERO_ENTITYOS_HCU_WHOLE_RUNTIME_CREDIT"
+  },
+  "regression_obligations": [
+    "2^53 as Python int fails closed",
+    "2^53 as Python float fails closed with the same domain error",
+    "negative 2^53 int/float forms fail closed",
+    "2^53-1 int and equal float produce identical canonical digest",
+    "independent Node reference remains exact-byte and SHA-256 equivalent on admitted vectors"
+  ],
+  "coordination": {
+    "duplicate_check": "No open PR was found targeting hcu_causal_canonical_v1 safe-integer host-type parity. PR #1378 repairs a separate RFC8785/JCS Entry canonicalizer path.",
+    "readme": "NO_CHANGE_COORDINATION: current main README already names canonicalization convergence as a frontier; this dependent donor repair does not change current-main product authority or acceptance until fused.",
+    "unusual_experiment": "NO_NEW_UNUSUAL_EXPERIMENT: parent PR #1263 records the shared go unusual experiment as already consumed by the same-route causal-alias discriminator; this work is deterministic falsifier/regression repair only."
+  },
+  "evidence_boundary": [
+    "No real HCU model inference executed.",
+    "No checkpoint/tokenizer/runtime engine admission established.",
+    "No EntityOS whole-runtime or whole-product PASS claimed.",
+    "No VPS/self-hosted/production testing used.",
+    "Together API and paid fallback not used."
+  ],
+  "next_gate": "Adjudicate this repair into the single retained canonicalizer lane, then wire one chosen versioned canonicalizer through Typed Entry event/admission, HCU route, engine identity, inference receipt and GRID10 before exact combined isolated runtime promotion."
+}

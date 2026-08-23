@@ -12,15 +12,12 @@ from pathlib import Path, PurePosixPath
 FIXED_ZIP_DT = (1980, 1, 1, 0, 0, 0)
 RECEIPT_SCHEMA = "PACKAGE_ARTIFACT_RECEIPT/v1"
 
-
 class SnapshotError(RuntimeError):
     pass
-
 
 def _git_blob_sha(data: bytes) -> str:
     header = f"blob {len(data)}\0".encode("ascii")
     return hashlib.sha1(header + data).hexdigest()
-
 
 def _validate_member_name(name: str) -> PurePosixPath:
     p = PurePosixPath(name)
@@ -29,7 +26,6 @@ def _validate_member_name(name: str) -> PurePosixPath:
     if "\\" in name:
         raise SnapshotError(f"NON_POSIX_MEMBER_PATH:{name}")
     return p
-
 
 def _load_manifest(root: Path) -> tuple[dict, list[str]]:
     path = root / "PACKAGE_MANIFEST.json"
@@ -46,7 +42,6 @@ def _load_manifest(root: Path) -> tuple[dict, list[str]]:
         _validate_member_name(member)
     return manifest, members
 
-
 def _member_bytes(root: Path, member: str) -> bytes:
     base = root.resolve()
     path = (root / Path(*PurePosixPath(member).parts)).resolve()
@@ -57,7 +52,6 @@ def _member_bytes(root: Path, member: str) -> bytes:
     if not path.is_file():
         raise SnapshotError(f"MISSING_MEMBER:{member}")
     return path.read_bytes()
-
 
 def _build_bytes(root: Path, members: list[str]) -> bytes:
     fd, tmp_name = tempfile.mkstemp(prefix="microentity-snapshot-", suffix=".zip")
@@ -75,7 +69,6 @@ def _build_bytes(root: Path, members: list[str]) -> bytes:
         return tmp.read_bytes()
     finally:
         tmp.unlink(missing_ok=True)
-
 
 def verify_bytes(data: bytes, expected_members: list[str]) -> dict:
     fd, tmp_name = tempfile.mkstemp(prefix="microentity-verify-", suffix=".zip")
@@ -110,7 +103,6 @@ def verify_bytes(data: bytes, expected_members: list[str]) -> dict:
         "archive_git_blob_sha": _git_blob_sha(data),
     }
 
-
 def rebuild(root: Path, output: Path, receipt_path: Path | None, source_head: str | None, source_tree: str | None) -> dict:
     manifest, members = _load_manifest(root)
     data = _build_bytes(root, members)
@@ -139,7 +131,6 @@ def rebuild(root: Path, output: Path, receipt_path: Path | None, source_head: st
         receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return receipt
 
-
 def main() -> int:
     ap = argparse.ArgumentParser(description="Deterministically rebuild and verify MICROENTITY_CURRENT.zip")
     ap.add_argument("--root", type=Path, default=Path(__file__).resolve().parent)
@@ -154,7 +145,6 @@ def main() -> int:
     result = rebuild(root, output, receipt, args.source_head, args.source_tree)
     print(json.dumps(result, sort_keys=True))
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

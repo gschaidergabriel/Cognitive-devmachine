@@ -14,6 +14,7 @@ import json
 from entry_fabric_v1 import XenoIngressPacket
 
 SCHEMA_ID = "XENO_GRID_PLAN/v1"
+_MAX_GENERATION = 2**63 - 1
 
 
 class ScheduleError(ValueError):
@@ -28,6 +29,23 @@ class XenoMode(str, Enum):
     XENO_NESTED_SIM = "XENO_NESTED_SIM"
 
 
+def _strict_int(value: object, field: str, *, minimum: int, maximum: int) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise ScheduleError(f"{field} must be an integer")
+    if not minimum <= value <= maximum:
+        raise ScheduleError(f"{field} must be in [{minimum},{maximum}]")
+    return value
+
+
+def _strict_text(value: object, field: str, *, max_len: int) -> str:
+    if not isinstance(value, str):
+        raise ScheduleError(f"{field} must be a string")
+    cleaned = value.strip()
+    if not cleaned or len(cleaned) > max_len:
+        raise ScheduleError(f"{field} must be non-empty and <= {max_len} chars")
+    return cleaned
+
+
 @dataclass(frozen=True, slots=True)
 class FunctionRequest:
     name: str
@@ -37,21 +55,19 @@ class FunctionRequest:
     authority_class: str = "CANDIDATE_COMPUTE"
 
     def normalized(self) -> "FunctionRequest":
-        name = str(self.name).strip()
-        if not name or len(name) > 128:
-            raise ScheduleError("function name must be non-empty and <= 128 chars")
-        priority = int(self.priority)
-        if not 0 <= priority <= 100:
-            raise ScheduleError("priority must be in [0,100]")
-        tokens = int(self.estimated_tokens)
-        if not 0 <= tokens <= 10_000_000:
-            raise ScheduleError("estimated_tokens is out of range")
+        name = _strict_text(self.name, "function name", max_len=128)
+        priority = _strict_int(self.priority, "priority", minimum=0, maximum=100)
+        tokens = _strict_int(
+            self.estimated_tokens, "estimated_tokens", minimum=0, maximum=10_000_000
+        )
+        if not isinstance(self.inference_required, bool):
+            raise ScheduleError("inference_required must be boolean")
         if self.authority_class != "CANDIDATE_COMPUTE":
             raise ScheduleError("logical cells may carry candidate compute only")
         return FunctionRequest(
             name=name,
             priority=priority,
-            inference_required=bool(self.inference_required),
+            inference_required=self.inference_required,
             estimated_tokens=tokens,
             authority_class="CANDIDATE_COMPUTE",
         )
@@ -63,10 +79,18 @@ class SchedulerConfig:
     shared_workers: tuple[str, ...] = ("xcu:shared-worker-0",)
 
     def normalized(self) -> "SchedulerConfig":
-        cells = int(self.max_logical_cells)
-        if not 1 <= cells <= 10:
-            raise ScheduleError("GRID10 scheduler max_logical_cells must be in [1,10]")
-        workers = tuple(sorted({str(w).strip() for w in self.shared_workers if str(w).strip()}))
+        cells = _strict_int(
+            self.max_logical_cells,
+            "GRID10 scheduler max_logical_cells",
+            minimum=1,
+            maximum=10,
+        )
+        if not isinstance(self.shared_workers, tuple):
+            raise ScheduleError("shared_workers must be a tuple of strings")
+        workers_list: list[str] = []
+        for worker in self.shared_workers:
+            workers_list.append(_strict_text(worker, "shared worker", max_len=256))
+        workers = tuple(sorted(set(workers_list)))
         if not workers:
             raise ScheduleError("at least one shared worker is required")
         if len(workers) > 10:
@@ -139,7 +163,15 @@ def compile_grid_plan(
     selected leases. Two different admitted events cannot alias to the same route plan
     simply because they select the same functions.
     """
-    if int(packet.generation) != int(current_generation):
+    if not isinstance(packet, XenoIngressPacket):
+        raise ScheduleError("packet must be an admitted XenoIngressPacket")
+    packet_generation = _strict_int(
+        packet.generation, "packet generation", minimum=0, maximum=_MAX_GENERATION
+    )
+    live_generation = _strict_int(
+        current_generation, "current_generation", minimum=0, maximum=_MAX_GENERATION
+    )
+    if packet_generation != live_generation:
         raise ScheduleError("packet generation is stale or future")
     try:
         selected_mode = XenoMode(mode).value
@@ -147,7 +179,14 @@ def compile_grid_plan(
         raise ScheduleError("unsupported mode") from exc
 
     cfg = config.normalized()
-    normalized = tuple(req.normalized() for req in functions)
+    if not isinstance(functions, tuple):
+        raise ScheduleError("functions must be a tuple of FunctionRequest values")
+    normalized_items: list[FunctionRequest] = []
+    for req in functions:
+        if not isinstance(req, FunctionRequest):
+            raise ScheduleError("functions must contain FunctionRequest values only")
+        normalized_items.append(req.normalized())
+    normalized = tuple(normalized_items)
     if not normalized:
         raise ScheduleError("at least one function request is required")
 

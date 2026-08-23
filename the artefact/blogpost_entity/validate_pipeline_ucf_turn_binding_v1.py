@@ -7,6 +7,11 @@ profile snapshot, canonical/packet hashes, boot binding, inference packet and ca
 must be the same causal object that the UCF receipt describes and that the atomic pipeline
 commit records.
 
+This is a POST-TURN evidence validator. The canonical UCF runtime receipt contains final
+commit/effect outcome fields, so this validator must never be used as a pre-commit authority.
+The immutable inference packet is bound before inference; deterministic gate + MiniUnifiedDB CAS
+own the commit; the final UCF receipt and this binding are emitted/validated after the turn.
+
 A PASS is source/mechanism evidence only. It does not prove that the bundled ~0.8B model,
 J-Space/GWT, Claude adapter, or Mini Entity runtime actually executed.
 """

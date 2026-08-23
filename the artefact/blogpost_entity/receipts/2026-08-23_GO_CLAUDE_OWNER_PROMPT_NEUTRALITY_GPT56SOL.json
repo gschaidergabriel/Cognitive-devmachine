@@ -1,0 +1,109 @@
+{
+  "schema": "GO_CLAUDE_OWNER_PROMPT_NEUTRALITY/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": {
+    "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+    "program_state_schema": "7.11",
+    "source_fusion_base_main_sha": "fca47017f97410a5fa2570cbbfbd552bea3d89c8",
+    "source_fusion_base_main_tree": "68ad021a1def50db6d793b123c3ec5b24dcd26a3",
+    "branch": "gpt56sol/go-claude-owner-prompt-neutrality-20260823-1028",
+    "pr": 1116,
+    "merged_main_sha": "f2a55ccdc3a6d25842ee87b6bfa3a2b84fe3e033",
+    "merged_main_tree": "1e1d442cc5a0ca0c75dd4e01c77423f261f01cae"
+  },
+  "observed": {
+    "adapter_path": "the artefact/clayverse/adapters.py",
+    "adapter_blob_before": "993511314f8ec858dda7a46b7b6f156af8127e72",
+    "adapter_blob_after_and_on_merged_main": "3b8d24607de42b305c522590be7e64b59d9c2e1f",
+    "focused_test_blob": "2db65057904761f93645ddc3bc8fcbaf92a58157",
+    "parallel_main_fusion": "main merged PR #1120 during this go; the final candidate preserves CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 and CLAUDE_CODE_DISABLE_CLAUDE_MDS=1 while applying prompt neutrality",
+    "stale_prompt_fragments_removed": [
+      "You are the cognition engine inside ClayVerse, one persistent central entity shared by authenticated users.",
+      "UnifiedDB is authoritative state",
+      "ClayGraph is a derived projection",
+      "ClayVerse independently validates and executes it through EffectGate."
+    ],
+    "current_owner_identity_law_bound": [
+      "Mini Entity = generic cognitive machine",
+      "EntityOS = runtime/operating environment",
+      "Zero = runtime identity/configuration on Mini Entity",
+      "Claude Code != Zero",
+      "Claude Code result = candidate inference",
+      "MiniUnifiedDB plus deterministic authority/effect gates outrank model output"
+    ],
+    "finding": "The fixed first-class Claude adapter injected superseded ClayVerse/shared-central-entity semantics through --append-system-prompt on every targeted inference call. The merged source now removes that active conditioning and binds the current Mini Entity / EntityOS candidate-inference contract."
+  },
+  "counterhypothesis": {
+    "claim": "The old wording is harmless because deterministic gates still dominate.",
+    "resolution": "REJECT_AT_SOURCE_CONTRACT_SCOPE",
+    "reason": "Deterministic gates prevent authority bypass, but stale fixed system conditioning can still bias candidate inference toward superseded entity/product semantics and conflicts with runtime-configuration neutrality."
+  },
+  "delta": {
+    "product_code_changed": true,
+    "merged_to_main": true,
+    "security_contract_weakened": false,
+    "adapter_changes": [
+      "replace stale ClayVerse/shared-user identity language with current EntityOS / Mini Entity targeted candidate-inference law",
+      "state explicitly that Claude Code is not Zero and owns no entity identity, canonical truth, durable memory or direct effects",
+      "name MiniUnifiedDB plus deterministic grammar/type/schema/truth/authority/generation/effect gates as authoritative",
+      "preserve tool-less, no-session, environment allowlist, strict schema, EffectGate-only execution and PR #1120 side-memory fences",
+      "factor the injected Claude system prompt into a dedicated _system_prompt() contract"
+    ],
+    "regression": "the artefact/tests/test_claude_adapter_owner_prompt.py",
+    "regression_guards": [
+      "actual reason() invocation injects the current owner prompt",
+      "EntityOS / Mini Entity, candidate inference, Claude != Zero and MiniUnifiedDB authority are present",
+      "ClayVerse, shared-central-entity and ClayGraph prompt fragments are absent",
+      "shell=False, tools empty and no-session-persistence remain present",
+      "prompt history, auto-memory and CLAUDE.md memory inputs remain disabled"
+    ]
+  },
+  "coordination": {
+    "overlap_check": "No open PR matching ClaudeCodeInference ClayVerse-to-Mini-Entity prompt neutrality was found before the write. Main advanced repeatedly during the macrocycle; each same-file advance was re-read and fused rather than overwritten.",
+    "macrocycle_id": null,
+    "unusual_experiment": {
+      "count_local": 0,
+      "id": null,
+      "credit": "NONE_DETERMINISTIC_SOURCE_REPAIR_NO_ATOMIC_MACROCYCLE_LEASE"
+    },
+    "free_only_preserved": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false
+  },
+  "evidence": {
+    "source_merge": {
+      "status": "MERGED",
+      "pr": 1116,
+      "merge_commit": "f2a55ccdc3a6d25842ee87b6bfa3a2b84fe3e033"
+    },
+    "github_actions_identity_guard": {
+      "run_id": 32615763894,
+      "initial_job_id": 97136104089,
+      "initial_result": "FAILURE_BEFORE_VISIBLE_STEPS",
+      "initial_steps": null,
+      "initial_logs_url": null,
+      "controlled_retry_job_id": 97136260251,
+      "controlled_retry_result": "FAILURE_BEFORE_VISIBLE_STEPS",
+      "controlled_retry_steps": null,
+      "controlled_retry_logs_url": null,
+      "classification": "EXECUTION_ADMISSION_OR_CONTROL_PLANE_FAILURE_NOT_TEST_FAILURE"
+    },
+    "authorized_isolated_runtime": "NOT_YET_OBSERVED",
+    "claude_live_invocation": "NOT_RUN",
+    "claude_adapter_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "next_gate": [
+    "Obtain an actually-started authorized isolated executor under current Control 4.1 + 4.2 routing.",
+    "Run exact merged-main py_compile and focused owner-prompt regression, then the four Claude adapter boundary receipt nodes and cross-bound receipt validator on the same exact source/executor identity.",
+    "Only after assertion-reaching execution passes rerun the full suite; source merge and zero-step guard failures grant no runtime credit."
+  ]
+}

@@ -34,11 +34,15 @@ REQUIRED_FIELDS = {
 }
 OPTIONAL_FIELDS = {
     "quantization_runtime_identity",
+    "runtime_digest",
+    "lens_artifact_digest",
     "steering_calibration_digest",
 }
 DIGEST_FIELDS = {
     "checkpoint_digest",
     "tokenizer_digest",
+    "runtime_digest",
+    "lens_artifact_digest",
     "jspace_profile_digest",
     "lens_profile_digest",
     "workspace_calibration_digest",
@@ -51,6 +55,8 @@ IDENTITY_FIELDS = (
     "checkpoint_digest",
     "tokenizer_digest",
     "quantization_runtime_identity",
+    "runtime_digest",
+    "lens_artifact_digest",
     "jspace_profile_digest",
     "lens_profile_digest",
     "workspace_calibration_digest",
@@ -83,6 +89,8 @@ def _sha256(value: Any, field: str) -> str:
     text = _nonempty_string(value, field)
     if not DIGEST_RE.fullmatch(text):
         raise ManifestError(f"{field}:LOWERCASE_SHA256_REQUIRED")
+    if text in {"0" * 64, "f" * 64}:
+        raise ManifestError(f"{field}:PLACEHOLDER_SHA256_FORBIDDEN")
     return text
 
 

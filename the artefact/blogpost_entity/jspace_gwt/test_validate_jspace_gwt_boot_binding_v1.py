@@ -23,6 +23,8 @@ D4 = "4" * 64
 D5 = "5" * 64
 D6 = "6" * 64
 D7 = "7" * 64
+D8 = "8" * 64
+D9 = "9" * 64
 
 
 def valid_manifest():
@@ -30,9 +32,11 @@ def valid_manifest():
         "schema": "mini-entity-bundled-cognition-manifest/v1",
         "engine_id": "bundled-qwen35-08b",
         "model_family": "Qwen3.5-0.8B",
-        "checkpoint_digest": D0,
+        "checkpoint_digest": D8,
         "tokenizer_digest": D1,
         "quantization_runtime_identity": "gguf-q4_k_m+llama.cpp:test-fixture",
+        "runtime_digest": D7,
+        "lens_artifact_digest": D9,
         "jspace_profile_digest": D2,
         "lens_profile_digest": D3,
         "workspace_calibration_digest": D4,
@@ -73,7 +77,7 @@ def valid_receipt(manifest, raw):
             "model_family": manifest["model_family"],
             "checkpoint_sha256": manifest["checkpoint_digest"],
             "tokenizer_sha256": manifest["tokenizer_digest"],
-            "runtime_sha256": D7,
+            "runtime_sha256": manifest["runtime_digest"],
             "manifest_sha256": hashlib.sha256(raw).hexdigest(),
             "quantization_runtime_identity": manifest["quantization_runtime_identity"],
             "exact_bytes_verified": True,
@@ -81,7 +85,7 @@ def valid_receipt(manifest, raw):
         "jspace": {
             "jlens_upstream_commit": H40,
             "jspace_profile_sha256": manifest["jspace_profile_digest"],
-            "lens_file_sha256": D6,
+            "lens_file_sha256": manifest["lens_artifact_digest"],
             "lens_profile_sha256": manifest["lens_profile_digest"],
             "steering_calibration_sha256": manifest["steering_calibration_digest"],
             "fit_corpus_sha256": D7,
@@ -103,7 +107,7 @@ def valid_receipt(manifest, raw):
         "gwt": {
             "workspace_policy_sha256": D6,
             "calibration_sha256": manifest["workspace_calibration_digest"],
-            "slot_count": 3,
+            "slot_count": None,
             "calibration_status": "UNMEASURED_SOURCE_ONLY",
         },
         "zero_grf": {"zero_identity_sha256": D6, "grf_sha256": D6, "projection_policy_sha256": D6},
@@ -199,11 +203,41 @@ class BootBindingValidatorTests(unittest.TestCase):
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("BOOT_CHECKPOINT_MISMATCH", cp.stdout)
 
+    def test_boot_runtime_digest_must_match_manifest(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["bundled_core"]["runtime_sha256"] = D6
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BOOT_RUNTIME_DIGEST_MISMATCH", cp.stdout)
+
+    def test_boot_manifest_requires_runtime_digest(self):
+        m = valid_manifest(); del m["runtime_digest"]; raw = manifest_bytes(m)
+        r = valid_receipt(valid_manifest(), manifest_bytes(valid_manifest()))
+        r["bundled_core"]["manifest_sha256"] = hashlib.sha256(raw).hexdigest()
+        lock = source_lock_for(m, raw)
+        cp = run_validator(receipt=r, manifest=m, source_lock=lock)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BOOT_MANIFEST_RUNTIME_DIGEST_REQUIRED", cp.stdout)
+
     def test_boot_jspace_profile_must_match_manifest(self):
         m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["jspace"]["jspace_profile_sha256"] = D7
         cp = run_validator(receipt=r)
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("BOOT_JSPACE_PROFILE_MISMATCH", cp.stdout)
+
+    def test_boot_lens_artifact_digest_must_match_manifest(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["jspace"]["lens_file_sha256"] = D6
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BOOT_LENS_ARTIFACT_DIGEST_MISMATCH", cp.stdout)
+
+    def test_boot_manifest_requires_lens_artifact_digest(self):
+        m = valid_manifest(); del m["lens_artifact_digest"]; raw = manifest_bytes(m)
+        r = valid_receipt(valid_manifest(), manifest_bytes(valid_manifest()))
+        r["bundled_core"]["manifest_sha256"] = hashlib.sha256(raw).hexdigest()
+        lock = source_lock_for(m, raw)
+        cp = run_validator(receipt=r, manifest=m, source_lock=lock)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BOOT_MANIFEST_LENS_ARTIFACT_DIGEST_REQUIRED", cp.stdout)
 
     def test_source_lock_rejects_alternate_manifest_identity(self):
         m = valid_manifest(); raw = manifest_bytes(m); lock = source_lock_for(m, raw)
@@ -236,6 +270,29 @@ class BootBindingValidatorTests(unittest.TestCase):
         cp = run_validator(receipt=r)
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("BOOT_RECEIPT_CANNOT_GRANT_WHOLE_GWT_CREDIT", cp.stdout)
+
+    def test_placeholder_digest_fails_closed(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["bundled_core"]["runtime_sha256"] = D0
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("PLACEHOLDER_SHA64:runtime_sha256", cp.stdout)
+
+    def test_unmeasured_gwt_cannot_bind_slot_count(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["gwt"]["slot_count"] = 3
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("UNMEASURED_GWT_SLOT_COUNT_MUST_BE_NULL", cp.stdout)
+
+    def test_measured_gwt_requires_positive_slot_count(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw)
+        r["gwt"]["calibration_status"] = "MEASURED_EXACT_BUNDLE"
+        r["gwt"]["slot_count"] = None
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("INVALID_INT:slot_count", cp.stdout)
+        r["gwt"]["slot_count"] = 3
+        cp = run_validator(receipt=r)
+        self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
 
 
 if __name__ == "__main__":

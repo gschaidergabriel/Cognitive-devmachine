@@ -1,0 +1,91 @@
+{
+  "schema": "GO_CLAUDE_ADAPTER_BOUNDARY_RECEIPT_SPLIT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": {
+    "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+    "base_main_sha": "d24af2a8edb5412d2a045dd9fcf21bcf479d7f6f",
+    "branch": "gpt56sol/go-claude-adapter-receipt-split-20260823-1015",
+    "test_commit": "a17149a676a22a9ec074454902fffb72745fe0eb"
+  },
+  "coordination": {
+    "macrocycle_id": null,
+    "unusual_experiment": {
+      "count_local": 0,
+      "id": null,
+      "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID"
+    },
+    "overlap_check": "No open PR matching the Claude adapter toolless/ephemeral/structured/env-isolation split was found before the branch write. Active current PRs were concentrated on J-Space/boot/runtime ancestry and the retained reference-runtime lane.",
+    "free_only_preserved": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false
+  },
+  "observed": {
+    "canonical_adapter_path": "the artefact/clayverse/adapters.py",
+    "canonical_adapter_blob": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507",
+    "test_path": "the artefact/tests/test_runtime_adapters.py",
+    "test_blob_before": "bde4937f4194640e4cfd158a3192fcb69170cc9b",
+    "test_blob_after": "0cf1f06ed02d795c53e11497d145ec9ff750b4c3",
+    "prior_replication": {
+      "source": "agentzeroforschung/analysen/2026-08-22T1843Z_GEN276_ADAPTER_DREIFACH_REPLIKATION.md",
+      "runs": 3,
+      "result_each": "1486_GREEN_1_RED",
+      "single_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
+      "exact_full_source_identity": "NOT_BOUND_IN_PRIOR_RECEIPTS"
+    }
+  },
+  "source_discriminator": {
+    "finding": "The monolithic red test itself depended on two ambient host states unrelated to the security semantics it intended to measure.",
+    "ambient_dependencies": [
+      {
+        "name": "HOME",
+        "before": "test asserted HOME exists in the subprocess environment but did not set/bind HOME itself",
+        "after": "test creates a tmp_path-local home directory, sets HOME explicitly, and asserts exact equality"
+      },
+      {
+        "name": "shell_sentinel",
+        "before": "test used the fixed global path /tmp/SHOULD_NOT_EXIST and asserted that it did not exist",
+        "after": "test uses a unique tmp_path-local sentinel and asserts that this exact per-test path is not created"
+      }
+    ],
+    "implication": "A persistent red bit could be produced by pre-existing host state or absent HOME even when ClaudeCodeInference remained shell=False, tool-less, schema-constrained and secret-isolated. This does not prove that either ambient dependency caused the historical red; it proves the old test could not cleanly distinguish those host-state cases from an adapter boundary defect.",
+    "counterhypothesis_retained": "A real adapter defect may still exist. The split tests are designed to localize it without weakening any boundary."
+  },
+  "delta": {
+    "product_code_changed": false,
+    "security_contract_weakened": false,
+    "test_changes": [
+      "replace the monolithic adapter boundary node with four independently addressable receipt nodes",
+      "TOOLLESS receipt binds -p, permission-mode plan, tools empty, strict MCP and shell-sentinel non-creation",
+      "EPHEMERAL receipt binds max-turns=1, no-session-persistence, prompt-history suppression and explicit test HOME",
+      "STRUCTURED_OUTPUT receipt binds normalized response plus the exact effect capability enum",
+      "ENV_ISOLATION receipt binds Claude auth preservation and Clerk/database secret exclusion",
+      "remove unbound dependency on global /tmp residue and ambient HOME presence"
+    ],
+    "receipt_nodes": [
+      "test_claude_code_adapter_toolless_receipt_v1",
+      "test_claude_code_adapter_ephemeral_receipt_v1",
+      "test_claude_code_adapter_structured_output_receipt_v1",
+      "test_claude_code_adapter_env_isolation_receipt_v1"
+    ]
+  },
+  "evidence": {
+    "source_review": "MECHANISM_SUPPORTED",
+    "exact_branch_authorized_ubuntu_execution": "NOT_YET_OBSERVED",
+    "claude_adapter_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "next_gate": [
+    "Run the exact branch bytes in an actually-started authorized isolated executor.",
+    "Bind full commit/tree, test blob, adapter blob, executor identity, Python/pytest versions and exact failing node if any.",
+    "If all four receipt nodes pass, rerun the full suite before classifying the historical single red as fixed/test-metrology-related.",
+    "If one node fails, classify only that phase and preserve the others as independent evidence; do not weaken the adapter contract."
+  ]
+}

@@ -79,6 +79,8 @@ def req_sha(parent: dict, key: str, length: int = 64) -> str:
     regex = HEX64 if length == 64 else HEX40
     if regex.fullmatch(value) is None:
         fail(f"INVALID_SHA{length}:{key}")
+    if value in {"0" * length, "f" * length}:
+        fail(f"PLACEHOLDER_SHA{length}:{key}")
     return value
 
 
@@ -182,12 +184,17 @@ def validate(data: dict) -> None:
     gwt = req_obj(data, "gwt")
     req_sha(gwt, "workspace_policy_sha256")
     req_sha(gwt, "calibration_sha256")
-    req_int(gwt, "slot_count", minimum=1)
-    if req_str(gwt, "calibration_status") not in {
+    calibration_status = req_str(gwt, "calibration_status")
+    if calibration_status not in {
         "MEASURED_EXACT_BUNDLE",
         "UNMEASURED_SOURCE_ONLY",
     }:
         fail("INVALID_GWT_CALIBRATION_STATUS")
+    if calibration_status == "UNMEASURED_SOURCE_ONLY":
+        if gwt.get("slot_count") is not None:
+            fail("UNMEASURED_GWT_SLOT_COUNT_MUST_BE_NULL")
+    else:
+        req_int(gwt, "slot_count", minimum=1)
 
     zero = req_obj(data, "zero_grf")
     req_sha(zero, "zero_identity_sha256")
@@ -274,6 +281,12 @@ def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict
     if req_sha(core, "tokenizer_sha256") != manifest["tokenizer_digest"]:
         fail("BOOT_TOKENIZER_MISMATCH")
 
+    expected_runtime_digest = manifest.get("runtime_digest")
+    if expected_runtime_digest is None:
+        fail("BOOT_MANIFEST_RUNTIME_DIGEST_REQUIRED")
+    if req_sha(core, "runtime_sha256") != expected_runtime_digest:
+        fail("BOOT_RUNTIME_DIGEST_MISMATCH")
+
     expected_runtime_identity = manifest.get("quantization_runtime_identity")
     observed_runtime_identity = core.get("quantization_runtime_identity")
     if expected_runtime_identity is None:
@@ -285,6 +298,13 @@ def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict
     jspace = req_obj(data, "jspace")
     if req_sha(jspace, "jspace_profile_sha256") != manifest["jspace_profile_digest"]:
         fail("BOOT_JSPACE_PROFILE_MISMATCH")
+
+    expected_lens_artifact_digest = manifest.get("lens_artifact_digest")
+    if expected_lens_artifact_digest is None:
+        fail("BOOT_MANIFEST_LENS_ARTIFACT_DIGEST_REQUIRED")
+    if req_sha(jspace, "lens_file_sha256") != expected_lens_artifact_digest:
+        fail("BOOT_LENS_ARTIFACT_DIGEST_MISMATCH")
+
     if req_sha(jspace, "lens_profile_sha256") != manifest["lens_profile_digest"]:
         fail("BOOT_LENS_PROFILE_MISMATCH")
 

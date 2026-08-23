@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_GO_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated component organ",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main_at_branch_cut": "41a74acbff00b3ddf4d4db98ebe6f24b3cf695ce",
+  "main_observed_after_branch_cut": "be65164ea5989940518e3073faec1afcf5c86066",
+  "branch": "gpt56sol/go-active-turn-readonly-resolve-v1-20260823",
+  "pull_request": 1271,
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "problem": "The newly landed active cognition turn resolver called install_schema() from resolve_active_prepare(), causing pre-inference resolution to attempt DDL. A strict query-only MiniUnifiedDB handle would therefore reject the path, forcing a future Cognitive Fabric admission handler toward a write-capable DB surface.",
+  "delta": {
+    "module": "tools/miniunifieddb_active_turn_v1.py",
+    "tests": "tests/test_miniunifieddb_active_turn_v1.py",
+    "mechanism": "separate explicit schema installation from read-time schema verification; resolve_active_prepare now performs catalog/PRAGMA validation only",
+    "read_time_ddl": false,
+    "auto_schema_install_during_prepare": false,
+    "schema_shape_fail_closed": true,
+    "authority_change": "NONE",
+    "second_turn_ledger_created": false,
+    "truth_or_effect_authority_created": false
+  },
+  "exact_source": {
+    "tools/miniunifieddb_active_turn_v1.py": {
+      "git_blob_sha1": "20bc30fb188720296c43caf7c1c936593f3355bd",
+      "sha256": "6e6d6b85956ea6d0b64719fec71fda35ff56ee57159ef4af4a981d5c43b4e5d4",
+      "bytes": 10382,
+      "local_blob_identity_matched_github_blob": true
+    },
+    "tests/test_miniunifieddb_active_turn_v1.py": {
+      "git_blob_sha1": "bda3f929ee06677d2566749262b3f5d95ccbb536"
+    },
+    "branch_head_before_receipt": "d52ab9ba29447bd9cc5c206e10a14510455f3193"
+  },
+  "bounded_isolated_component_evidence": {
+    "surface": "ChatGPT isolated Linux/Python component container",
+    "module_identity": "EXACT_GITHUB_BLOB_SHA1_MATCH",
+    "py_compile": "PASS",
+    "focused_checks": 3,
+    "failures": 0,
+    "errors": 0,
+    "result": "PASS",
+    "covered": [
+      "resolve_active_prepare succeeds with PRAGMA query_only=ON after explicit schema installation and activation",
+      "missing active-turn schema fails with ACTIVE_TURN_SCHEMA_REQUIRED and is not auto-created",
+      "malformed active-turn schema fails with ACTIVE_TURN_SCHEMA_INVALID"
+    ],
+    "scope": "bounded component mechanism only; not full repo test suite and not Cognitive Fabric runtime acceptance"
+  },
+  "github_ci": {
+    "head": "d52ab9ba29447bd9cc5c206e10a14510455f3193",
+    "runs": [
+      {"id": 32628772879, "name": "Research Entity Identity Guard", "conclusion": "failure", "job_id": 97168177555, "steps": 0},
+      {"id": 32628772878, "name": "Research Entity Verify", "conclusion": "failure", "job_id": 97168177682, "steps": 0}
+    ],
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_STEPS_NOT_TEST_FAILURE"
+  },
+  "unusual_experiment": {
+    "new_count": 0,
+    "reason": "The global user-triggered macrocycle unusual experiment was already consumed upstream; this delta used deterministic regression/falsifier checks only."
+  },
+  "hcu_parallel": {
+    "delta_this_component": "NO_CHANGE_NON_DUPLICATE",
+    "runtime_capacity": "UNVERIFIED"
+  },
+  "evidence_credit": {
+    "read_only_active_prepare_resolution": "SUPPORTED_EXACT_BLOB_BOUNDED_COMPONENT",
+    "pipeline_cognitive_fabric_admit_runtime_handler": 0,
+    "pipeline_cognitive_fabric_finalize_runtime_handler": 0,
+    "bundled_08b_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_gwt_runtime": 0,
+    "claude_adapter_runtime": 0,
+    "hcu_capacity": 0,
+    "whole_mini_entity": 0
+  },
+  "next_gate": "Fuse PR #1271, then implement the retained ProfilePipelineRuntime pre-inference Cognitive Fabric handler using the now read-only active-turn resolver plus exact MiniUnifiedDB cognition material -> ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v2, preserving post-gate/CAS final UCF receipt ordering. Exact integrated execution remains required.",
+  "safety": {
+    "free_only": true,
+    "together_used": false,
+    "paid_execution": false,
+    "provider_network_execution": false,
+    "vps_or_self_hosted_or_production_testing": false,
+    "model_execution": false,
+    "training": false
+  }
+}

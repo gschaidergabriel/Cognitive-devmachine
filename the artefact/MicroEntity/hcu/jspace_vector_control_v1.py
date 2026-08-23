@@ -159,13 +159,8 @@ def _packet_material(packet: VectorControlPacket) -> dict[str, Any]:
     return material
 
 
-def _scale_fraction(numerator_text: Any, denominator_text: Any) -> Fraction:
-    """Parse the sole admitted finite-binary64 q8 scale representation.
-
-    Packet hashes authenticate bytes, not semantic safety. A caller can construct and hash a
-    new packet, so the scale itself must be bounded, reduced and provably decodable to a
-    positive finite binary64 anchor before the packet earns admission.
-    """
+def _validate_scale_text_syntax(numerator_text: Any, denominator_text: Any) -> None:
+    """Cheap pre-hash bounds only; semantic rational admission happens after digest identity."""
     for value, field in (
         (numerator_text, "scale_numerator"),
         (denominator_text, "scale_denominator"),
@@ -174,6 +169,16 @@ def _scale_fraction(numerator_text: Any, denominator_text: Any) -> Fraction:
             raise JSpaceVectorControlError(f"{field}:DECIMAL_STRING_BOUNDS_REQUIRED")
         if any(ch < "0" or ch > "9" for ch in value):
             raise JSpaceVectorControlError(f"{field}:UNSIGNED_DECIMAL_STRING_REQUIRED")
+
+
+def _scale_fraction(numerator_text: Any, denominator_text: Any) -> Fraction:
+    """Parse the sole admitted finite-binary64 q8 scale representation.
+
+    Packet hashes authenticate bytes, not semantic safety. A caller can construct and hash a
+    new packet, so the scale itself must be bounded, reduced and provably decodable to a
+    positive finite binary64 anchor before the packet earns admission.
+    """
+    _validate_scale_text_syntax(numerator_text, denominator_text)
 
     scale_numerator = int(numerator_text)
     scale_denominator = int(denominator_text)
@@ -277,15 +282,22 @@ def validate_packet(packet: VectorControlPacket) -> None:
         if isinstance(value, bool) or not isinstance(value, int) or not -127 <= value <= 127:
             raise JSpaceVectorControlError(f"q8_values[{index}]:SIGNED_Q8_REQUIRED")
     _sha256(packet.source_vector_sha256, "source_vector_sha256")
+
+    # Bound untrusted scale text before hashing, but preserve the established identity fence:
+    # syntactically admissible packets with changed content fail DIGEST_MISMATCH before any
+    # semantic q8/scale interpretation. Self-consistent newly hashed packets then face the
+    # stronger rational/range admission below.
+    _validate_scale_text_syntax(packet.scale_numerator, packet.scale_denominator)
+    observed = _sha256(packet.packet_sha256, "packet_sha256")
+    expected = _canonical_sha256(_packet_material(packet), "VECTOR_CONTROL_PACKET")
+    if observed != expected:
+        raise JSpaceVectorControlError("VECTOR_CONTROL_PACKET_DIGEST_MISMATCH")
+
     scale = _scale_fraction(packet.scale_numerator, packet.scale_denominator)
     if scale.numerator == 0 and any(packet.q8_values):
         raise JSpaceVectorControlError("ZERO_SCALE_REQUIRES_NULL_Q8_VECTOR")
     if scale.numerator > 0 and max(abs(value) for value in packet.q8_values) != 127:
         raise JSpaceVectorControlError("NONZERO_VECTOR_REQUIRES_FULL_Q8_SCALE_ANCHOR")
-    observed = _sha256(packet.packet_sha256, "packet_sha256")
-    expected = _canonical_sha256(_packet_material(packet), "VECTOR_CONTROL_PACKET")
-    if observed != expected:
-        raise JSpaceVectorControlError("VECTOR_CONTROL_PACKET_DIGEST_MISMATCH")
 
 
 def decode_vector(

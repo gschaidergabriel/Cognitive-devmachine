@@ -1,12 +1,20 @@
 {
-  "schema": "XENO_GO_RECEIPT/v1",
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
   "date": "2026-08-23",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
   "persistent_research_entity": "Clay",
-  "program": "entityos-hcu-xeno",
-  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
-  "owner_directive": "research_entity/global/XENO_GO_OWNER_DIRECTIVE.md",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product_endpoint": "EntityOS",
+  "integrated_compute_architecture": "HCU",
+  "compatibility_path": "the artefact/Xeno/",
+  "compatibility_note": "Xeno is a transitional implementation/path codename only; the candidate advances EntityOS + HCU and does not establish Xeno as a competing product identity.",
+  "authority": [
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md",
+    "research_entity/global/XENO_GO_OWNER_DIRECTIVE.md"
+  ],
   "source": {
     "repository": "gschaidergabriel/clay-global-research-entity",
     "base_branch": "main",
@@ -14,22 +22,24 @@
     "candidate_branch": "gpt56sol/xeno-entry-grid10-v1-20260823"
   },
   "go_tracks": {
-    "track_a_xeno_executable_convergence": {
+    "ENTITYOS_EXECUTABLE_CONVERGENCE": {
       "status": "ADVANCED",
-      "delta": "First current-facing executable Xeno runtime primitives under the artefact/Xeno/runtime: typed ingress admission plus deterministic GRID10 scheduling/interconnect."
+      "delta": "Added first current implementation-level executable Entry/GRID10 machine primitives under the retained Xeno compatibility path, explicitly serving the EntityOS computer path rather than creating a second product/runtime."
     },
-    "track_b_xcu_and_entry_fabric": {
+    "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
       "status": "ADVANCED",
-      "delta": "XENO_ENTRY_PACKET/v1 binds causal/generation/provenance/permission/modality/time/budget/payload identity before cognition; XENO_GRID10_SCHEDULE/v1 allocates bounded logical function cells and emits ancestry-bound work packets."
+      "delta": "XENO_ENTRY_PACKET/v1 binds causal/generation/provenance/permission/modality/time/budget/payload identity before cognition; XENO_GRID10_SCHEDULE/v1 provides the 10-cell logical HCU baseline and emits ancestry-bound work packets."
     }
   },
   "authority_invariants": [
+    "EntityOS remains the sole current product/system identity.",
+    "HCU remains the sole current integrated cognition/compute architecture.",
     "Entry Fabric does not write canonical durable state.",
     "GRID10 does not create a second state, truth, identity, recovery or effect authority.",
     "Unknown request fields and unsupported permissions fail closed.",
     "Stale entity generation fails closed before scheduling.",
     "Logical cell count is explicitly distinct from physical decode concurrency.",
-    "No generated candidate can bypass EffectGate for real/state-changing effects."
+    "No generated candidate can bypass EffectGate/EffectJournal for real/state-changing effects."
   ],
   "exact_files": [
     {
@@ -66,7 +76,7 @@
   "unusual_experiment": {
     "count": 1,
     "id": "CAUSAL_ENTRY_ALIAS_FALSIFIER",
-    "hypothesis": "Materially different causal input events must remain distinguishable even when they select the same logical scheduler topology.",
+    "hypothesis": "Materially different causal input events must remain distinguishable even when they select the same logical HCU scheduler topology.",
     "counterhypothesis": "Generation plus selected routing/scheduler topology is sufficient identity for replay and audit.",
     "intervention": "Hold generation, causal metadata, budgets, permissions and requested COGSIM10 function topology constant while changing only material payload content.",
     "observed": "The two events produced different payload SHA-256 values, different EntryPacket packet_id values and different GRID10 schedule_id values; exact same-event replay remained deterministic.",
@@ -74,13 +84,12 @@
   },
   "donor_coordination": {
     "pr_1263": "DONOR_FALSIFIER_ONLY_NOT_CURRENT_AUTHORITY",
-    "reason": "PR #1263 was observed open/draft and materially behind current main; this candidate does not extend its stale runtime path. Its route-identity alias gap informed the EntryPacket discriminator."
+    "reason": "PR #1263 was observed open/draft and materially behind current main; this candidate does not extend its stale MiniEntity/HCU runtime path. Its route-identity alias gap informed the EntryPacket discriminator."
   },
   "evidence_class": "EXACT_FILE_BOUNDED_COMPONENT_MECHANISM_PASS",
   "runtime_credit": {
-    "xeno_integrated_runtime": 0,
-    "xcu_model_runtime": 0,
-    "entityos": 0,
+    "entityos_integrated_runtime": 0,
+    "hcu_model_runtime": 0,
     "whole_product_pass": false
   },
   "execution_boundary": {
@@ -92,5 +101,5 @@
     "paid_execution_or_training_used": false,
     "secrets_accessed_or_persisted": false
   },
-  "next_exact_discriminator": "Integrate XENO_ENTRY_PACKET/v1 with the single canonical XRAM/MiniUnifiedDB-to-UnifiedDB state path, then route one current HCU/XCU function invocation through the packet/schedule ancestry and execute exact integrated stale-generation/replay/recovery regressions in an authorized isolated executor."
+  "next_exact_discriminator": "Integrate the typed EntryPacket with the single canonical UnifiedDB/current MiniUnifiedDB compatibility state substrate, then route one positive-admitted HCU function invocation through EntryPacket -> GRID10 work-packet ancestry while binding resolved engine identity and execute integrated stale-generation/replay/recovery regressions in an authorized isolated executor."
 }

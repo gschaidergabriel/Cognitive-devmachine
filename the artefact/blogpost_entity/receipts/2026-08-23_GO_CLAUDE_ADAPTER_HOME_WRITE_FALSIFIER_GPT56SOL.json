@@ -1,0 +1,87 @@
+{
+  "schema": "GO_CLAUDE_ADAPTER_HOME_WRITE_FALSIFIER/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main": "3b225a1b2d56b8bd489f0ed8310c0e6626df23bb",
+  "status": "BOUNDED_PROCESS_BOUNDARY_FALSIFIER_RUNTIME_UNVERIFIED",
+  "scope": "Claude Code adapter ephemerality measurement only",
+  "extends_receipt": "the artefact/blogpost_entity/receipts/2026-08-23_GO_CLAUDE_EPHEMERALITY_CONTRACT_MISMATCH_GPT56SOL.json",
+  "source_identity": {
+    "adapter_path": "the artefact/clayverse/adapters.py",
+    "adapter_blob": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507",
+    "runtime_test_path": "the artefact/tests/test_runtime_adapters.py",
+    "runtime_test_blob": "0cf1f06ed02d795c53e11497d145ec9ff750b4c3",
+    "boundary_contract_path": "agentzeroforschung/instrumente/CLAUDE_ADAPTER_BOUNDARY_RECEIPT_v1.md",
+    "boundary_contract_blob": "0ce51613f6781f90416c959f49cbabcb4420b1e1"
+  },
+  "hypothesis": "The split ephemerality regression can be green while the subprocess boundary still exposes a durable writable HOME, so it cannot by itself establish temporary-home creation/removal or zero persistent-config write capability.",
+  "strongest_counterhypothesis": "The real Claude binary honors --no-session-persistence and CLAUDE_CODE_SKIP_PROMPT_HISTORY strongly enough that retaining writable HOME is acceptable and no durable state is written. This remains plausible and is not falsified by a fake child; it requires exact Claude runtime filesystem observation.",
+  "bounded_experiment": {
+    "classification": "ONE_BOUNDED_UNUSUAL_EXPERIMENT_EXECUTED_BUT_NOT_FORMAL_MACROCYCLE_CREDIT",
+    "formal_unusual_experiment_credit": false,
+    "reason_credit_withheld": "No shared atomic macrocycle lease/id was available on this surface, so the global one-experiment coordination law cannot be proven.",
+    "executor": {
+      "os": "Debian GNU/Linux 13 (trixie)",
+      "arch": "x86_64",
+      "python": "3.13.5",
+      "claude_binary_present": false
+    },
+    "method": "A bounded standalone reproduction of the current ClaudeCodeInference subprocess boundary used the same environment allowlist and relevant CLI flags with a deterministic fake child. Parent HOME was a durable test directory; the fake child logged its received environment and wrote one marker beneath HOME/.claude. No provider secret lookup or network was performed.",
+    "observed": {
+      "return_code": 0,
+      "home_inherited": true,
+      "persistent_home_marker_exists_after_call": true,
+      "no_session_persistence_flag_present": true,
+      "safe_mode_flag_present": false,
+      "bare_flag_present": false,
+      "forbidden_clerk_secret_crossed": false,
+      "allowed_anthropic_auth_crossed": true
+    },
+    "limits": [
+      "The standalone probe was a manually bounded reproduction of the relevant subprocess boundary, not execution of a clean exact Git checkout.",
+      "The child was fake Claude, therefore this does not prove that the real Claude binary writes persistent state under the current flags.",
+      "The executor was Debian, not the required exact Ubuntu acceptance runtime.",
+      "No Claude/provider/model/runtime credit is granted."
+    ]
+  },
+  "external_primary_evidence": [
+    {
+      "source": "https://code.claude.com/docs/en/cli-reference",
+      "claim": "--no-session-persistence disables session persistence in print mode; --tools empty disables built-in tools; --strict-mcp-config without --mcp-config prevents MCP loading; --bare disables hook/skill/plugin/MCP/auto-memory/CLAUDE.md auto-discovery but leaves built-in tools unless separately restricted; --safe-mode disables customizations and auto-memory while authentication remains available, although managed settings policy still applies."
+    },
+    {
+      "source": "https://code.claude.com/docs/en/env-vars",
+      "claim": "CLAUDE_CONFIG_DIR relocates settings, session history and plugins and, on Linux/Windows, credentials; therefore naive per-invocation config isolation can break or duplicate credential state."
+    }
+  ],
+  "inference": [
+    "Current environment isolation is stronger than the old monolithic red in one dimension: ambient CLERK_SECRET_KEY did not cross the reproduced allowlist while admitted Anthropic auth did.",
+    "Current ephemerality evidence remains under-specified: writable inherited HOME is outside the temporary-home requirement in CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1.",
+    "Adding temporary HOME blindly is not yet justified because Claude subscription/OAuth credentials are stored under the Claude config path on Linux/Windows.",
+    "A stronger canonical design should measure actual persistent-config read/write behavior and customization loading rather than equating one test-local HOME with product ephemerality."
+  ],
+  "recommended_next_gate": [
+    "Define one explicit Claude EPHEMERAL_AUTH_PROFILE contract that separates credential continuity from writable cognition/session state.",
+    "On the exact supported Claude Code version, compare current flags against a safe-mode candidate while retaining --tools empty, --strict-mcp-config, --no-session-persistence and prompt-history suppression.",
+    "Bind pre/post filesystem manifests for HOME, CLAUDE_CONFIG_DIR and relevant project .claude surfaces; derive persistence fields from observed writes rather than constants.",
+    "Explicitly account for managed-settings hooks because current Claude Code safe-mode documentation says managed settings policy still applies.",
+    "Run the four boundary nodes and aggregate validator on one exact clean authorized Ubuntu runtime before any EPHEMERAL or aggregate runtime promotion."
+  ],
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_or_subscription_execution": false,
+    "together_used": false
+  },
+  "credit": {
+    "source_mechanism": "SUPPORTED_BOUNDARY_COUNTEREXAMPLE",
+    "claude_runtime": 0,
+    "model": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "whole_product": 0
+  },
+  "acceptance": "IN_PROGRESS"
+}

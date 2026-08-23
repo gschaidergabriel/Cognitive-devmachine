@@ -23,7 +23,7 @@ from typing import Any, Callable
 import claycode_structured_backend as clay
 import _clay_profile_pipeline_runtime_v063_core as _core
 import miniunifieddb_cognition_bootstrap_v1 as cognition_bootstrap
-import pipeline_cognitive_fabric_admission_v1 as cognitive_fabric_admission
+import profile_runtime_cognitive_fabric_binding_v1 as cognitive_fabric_binding
 
 VERSION = "clay-profile-pipeline-runtime/0.6.4"
 PROFILE_SCHEMAS = _core.PROFILE_SCHEMAS
@@ -283,7 +283,7 @@ class ProfilePipelineRuntime(_core.ProfilePipelineRuntime):
         return value
 
     def _pipeline_cognitive_fabric_admit(self, p: dict[str, Any]) -> dict[str, Any]:
-        """Resolve one already-active MiniUnifiedDB turn and compile candidate-only admission."""
+        """Resolve one active turn through the single read-only runtime admission bridge."""
         try:
             entity_db = str(p["entity_db"])
             previous = p["previous"]
@@ -308,22 +308,17 @@ class ProfilePipelineRuntime(_core.ProfilePipelineRuntime):
             if not isinstance(invocation, Mapping):
                 raise PipelineFault("COGNITION_INVOCATION_OBJECT_REQUIRED")
 
+            # Cheap early fence only. The canonical bridge below re-reads generation and the
+            # exact active profile on its own read-only handle before delegating to the sole
+            # pre-inference compositor; this check is not a second admission path.
             with self._read_only_db(entity_db) as db:
                 row = db.execute(
                     "SELECT generation FROM entity_state WHERE id=1"
                 ).fetchone()
                 if row is None or int(row["generation"]) != generation:
                     raise PipelineFault("STALE_GENERATION")
-                admitted = cognitive_fabric_admission.build_pre_inference_admission(
-                    db,
-                    entity_generation=generation,
-                    invocation=invocation,
-                    compiled=compiled,
-                    prompt=prompt,
-                    profile=profile,
-                    origin=VERSION,
-                )
 
+            admitted = cognitive_fabric_binding.admit_profile_runtime_payload(self, p)
             if type(admitted) is not dict or admitted.get("ok") is not True:
                 raise PipelineFault("COGNITIVE_FABRIC_ADMISSION_FAILED")
             if admitted.get("generation") != generation:

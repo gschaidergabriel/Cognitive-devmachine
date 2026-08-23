@@ -1,0 +1,76 @@
+{
+  "base_main_sha": "209e780b1e41e7946823ecf447ee61f22972764d",
+  "bounded_execution": {
+    "command": "python -m unittest -v tests/test_claude_turn_admission_timeout_fence.py",
+    "environment": "isolated ChatGPT Linux component environment; reconstructed exact Git blobs only",
+    "exact_blob_check": {
+      "gate": "MATCH",
+      "managed_settings": "MATCH",
+      "source_lock": "MATCH",
+      "test": "MATCH"
+    },
+    "exit_code": 0,
+    "oci_credit": 0,
+    "result": "3/3 PASS",
+    "runtime_credit": 0
+  },
+  "branch": "gpt56sol/go-claude-userprompt-timeout-fence-r2-20260823",
+  "date": "2026-08-23",
+  "delta": [
+    "Machine-readable timeout acceptance gate.",
+    "Deterministic source regression.",
+    "Architecture blocker and promotion discriminator.",
+    "README frontier re-entry."
+  ],
+  "execution_surface": {
+    "paid_or_training": "NOT_USED",
+    "together": "FORBIDDEN_NOT_USED",
+    "vercel_connector": "NO_SANDBOX_START_EXEC_ACTION_EXPOSED",
+    "vps_self_hosted_production": "FORBIDDEN_NOT_USED"
+  },
+  "finding": {
+    "claim": "ClayVerse cannot currently receive fail-closed turn-admission or whole-product acceptance credit from its timeout-bounded UserPromptSubmit command hook because upstream semantics allow the prompt to continue when that hook times out.",
+    "classification": "WHOLE_PRODUCT_ACCEPTANCE_BLOCKER",
+    "id": "CLAUDE_USERPROMPT_COMMAND_TIMEOUT_FAIL_OPEN",
+    "not_claimed": [
+      "No exact pinned ClayVerse image runtime failure is claimed.",
+      "No whole-product runtime execution credit is claimed.",
+      "No exact OCI build/startup result is claimed."
+    ]
+  },
+  "next_exact_gate": [
+    "Fuse this acceptance blocker.",
+    "Select a fail-closed pre-model admission mechanism that preserves UnifiedDB as the single durable turn authority.",
+    "On an actually-started authorized isolated executor with exact pinned Claude Code and exact source/image identity, deliberately stall/fail admission and prove zero model response/tool/effect/accepted completion, then run the matching normal control.",
+    "Retest Stop/StopFailure, restart/recovery, generation fencing, Clerk/PTY and dual-session behavior on the same exact candidate."
+  ],
+  "organ": "gpt-5.6-sol",
+  "pre_receipt_branch_head": "65f564b919ae0fa6679b8478e90027fc0f0edb05",
+  "schema": "ClayVerseGoReceipt/v1",
+  "source_binding": {
+    "blocker_doc_blob": "c7d32f950aff34d7a6fbbbbbf1d67f3fa889d0ab",
+    "claude_code_version": "2.1.233",
+    "gate_blob": "53ce7c7870231bfaa2fcead3da2c056dbbe8c748",
+    "managed_settings_blob": "627887d5dc0c981bd3b6129ac946ded56f59b05e",
+    "readme_blob": "4eabf333476dda14f8d5697f89c3175ce87007d5",
+    "source_lock_blob": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+    "test_blob": "54f000f188fb47d777a6e5448a28aa3c23f51ec3",
+    "user_prompt_handler": {
+      "command": "/usr/local/bin/python -m clayverse.terminal_hooks user_prompt",
+      "timeout_seconds": 10,
+      "type": "command"
+    }
+  },
+  "trigger": "go",
+  "unusual_experiment": {
+    "claimed": false,
+    "reason": "No immutable shared macrocycle/request identity or second-precision fallback identity is exposed to this organ, so cross-organ exactly-one uniqueness cannot be safely asserted. This cycle used deterministic source/upstream-semantics falsification only."
+  },
+  "upstream_evidence": {
+    "accessed_on": "2026-08-23",
+    "primary": "https://code.claude.com/docs/en/hooks",
+    "semantics": "UserPromptSubmit command/http/mcp_tool hook timeout cancels hook and discards output/additionalContext while prompt still reaches Claude.",
+    "version_context": "Documentation history records the timeout notice as of v2.1.196 and callback-specific fail-closed behavior change by v2.1.208; ClayVerse pins v2.1.233."
+  },
+  "whole_product_acceptance": "IN_PROGRESS_BLOCKED_ON_TURN_ADMISSION_FAIL_CLOSED_MECHANISM"
+}

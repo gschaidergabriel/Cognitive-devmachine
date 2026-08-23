@@ -1,0 +1,89 @@
+{
+  "schema": "HCU_PHYSICAL_ENGINE_LOAD_LEASE_SOURCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "retained_parent": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "parent_head_at_stack_creation": "4167e155a01efee9f23afca5a84a1b89033940ea",
+    "policy": "dependent donor only; no second router, Entry, state, effect or recovery authority"
+  },
+  "candidate_branch": "gpt56sol/hcu-engine-load-lease-20260823",
+  "source": {
+    "path": "the artefact/MicroEntity/hcu/engine_load_lease_v1.py",
+    "git_blob_sha": "2b62c63aeeeec059610e8ad5d58bf9c4d53a9654",
+    "local_source_sha256_before_write": "e2f65e06a331b02314318d5c9f7137df85f43dbbb64fdd971d91fad7d1aacb55",
+    "schema": "HCU_PHYSICAL_ENGINE_LOAD_LEASE/v1"
+  },
+  "tests": {
+    "path": "the artefact/MicroEntity/hcu/test_engine_load_lease_v1.py",
+    "git_blob_sha": "27f0257e8ebe4fe8f1075f6f730a03992aa5d98a",
+    "coverage": [
+      "original source mutation after lease does not change staged loader bytes",
+      "staged-byte mutation is detected",
+      "stale generation is rejected",
+      "source mutation before staging is rejected",
+      "symlink source member is rejected",
+      "same verified identity deterministically reuses the same lease id"
+    ]
+  },
+  "mechanism": {
+    "input": "existing VerifiedEngineAdmission plus exact source paths and current generation",
+    "action": "copy checkpoint/tokenizer/runtime/build into a content-addressed staged snapshot, re-digest with the existing EngineAdmission digest function, set ordinary filesystem read-only modes, and return only lease paths plus lease identity",
+    "lease_identity_binds": [
+      "entity_generation",
+      "engine_identity",
+      "engine_artifact_sha256",
+      "engine_admission_receipt_sha256",
+      "checkpoint_sha256",
+      "tokenizer_sha256",
+      "runtime_sha256",
+      "build_sha256"
+    ],
+    "runtime_credit": "ZERO_UNTIL_REAL_LOADER_CONSUMPTION_ECHO",
+    "authority_boundary": "lease is physical-input evidence only; it cannot mint canonical truth, capability, engine admission, effect authority or recovery truth"
+  },
+  "executed_evidence": {
+    "environment": "isolated ChatGPT Linux/Python tool container",
+    "py_compile": "PASS",
+    "focused_regressions": "6_OF_6_PASS",
+    "engine_admission_dependency": "API_COMPATIBLE_TEST_STUB_REPRODUCING_REQUIRED_ENGINE_ADMISSION_INTERFACE_AND_DIGEST_CONTRACT",
+    "exact_parent_branch_engine_admission_import_executed": false,
+    "real_model_loader_executed": false,
+    "runtime_credit_change": 0,
+    "classification": "COMPONENT_MECHANISM_EVIDENCE_ONLY"
+  },
+  "unusual_experiment_accounting": {
+    "new_experiment_count_in_this_source_step": 0,
+    "macrocycle_experiment": "PRELOAD_HASH_THEN_PATH_MUTATION_VS_VERIFIED_SNAPSHOT_LOAD",
+    "macrocycle_receipt": "research_entity/continuity/receipts/2026-08-23_GO_ENTITYOS_HCU_ENGINE_LOAD_TOCTOU_GPT56SOL.json",
+    "note": "all checks after that discriminator are ordinary regressions; no second unusual experiment is claimed"
+  },
+  "known_limits": [
+    "ordinary chmod read-only modes are not an immutable security boundary for the same OS user",
+    "a loader that ignores lease paths remains untrusted",
+    "content-addressed staging protects against original-path drift but does not by itself attest what a real model loader consumed",
+    "exact parent-branch integration tests and actual local model loading remain unexecuted"
+  ],
+  "next_exact_gate": [
+    "execute this exact branch source against the exact retained parent EngineAdmission module in an actually-started authorized isolated executor",
+    "wire the real local model loader to consume only lease.loader_paths() or an equivalently enforced read-only artifact boundary",
+    "bind lease_id_sha256 and exact consumed artifact identities into inference_receipt_v1",
+    "reject wrong-path loads, stale-generation reuse, post-lease staging mutation, restored-after-poison ambiguity and crash/recovery uncertainty",
+    "rebase or fuse this mechanism into retained PR1263 only after current canonicalization wiring and parent-head coordination are rechecked",
+    "grant zero EntityOS/HCU runtime credit until an exact real-loader receipt exists"
+  ],
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  }
+}

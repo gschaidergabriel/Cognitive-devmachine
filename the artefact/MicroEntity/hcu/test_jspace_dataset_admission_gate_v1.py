@@ -1,6 +1,8 @@
+import hashlib
 import unittest
 from copy import deepcopy
 
+from entry_canonicalization_v1 import canonicalize
 from jspace_dataset_admission_gate_v1 import (
     JSpaceDatasetAdmissionError,
     admit_for_training_dataset,
@@ -9,6 +11,10 @@ from jspace_dataset_admission_gate_v1 import (
 
 def h(ch):
     return ch * 64
+
+
+def receipt_sha(receipt):
+    return hashlib.sha256(canonicalize(receipt)).hexdigest()
 
 
 class GateTests(unittest.TestCase):
@@ -207,32 +213,38 @@ class GateTests(unittest.TestCase):
     def test_unknown_credit_outcome_requires_exact_causal_binding(self):
         _, transition, training, regs = self.fixtures()
         unknown = deepcopy(training)
-        unknown["outcome_receipt_sha256"] = h("6")
-        regs = deepcopy(regs)
-        regs["admitted_training_traces"][unknown["trace_sha256"]] = unknown
-
         unrelated = self.bound_outcome(
             unknown,
             transition,
             credit="UNKNOWN",
             entry_event_sha256=h("9"),
         )
+        unrelated_sha = receipt_sha(unrelated)
+        unknown["outcome_receipt_sha256"] = unrelated_sha
+        regs = deepcopy(regs)
+        regs["admitted_training_traces"][unknown["trace_sha256"]] = unknown
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_CAUSAL_BINDING_MISMATCH:entry_event_sha256"):
             self.admit(
                 transition=transition,
                 training=unknown,
                 regs=regs,
-                outcomes={h("6"): unrelated},
+                outcomes={unrelated_sha: unrelated},
             )
 
+        accepted = deepcopy(training)
+        accepted_receipt = self.bound_outcome(accepted, transition, credit="UNKNOWN")
+        accepted_sha = receipt_sha(accepted_receipt)
+        accepted["outcome_receipt_sha256"] = accepted_sha
+        accepted_regs = deepcopy(regs)
+        accepted_regs["admitted_training_traces"][accepted["trace_sha256"]] = accepted
         admission = self.admit(
             transition=transition,
-            training=unknown,
-            regs=regs,
-            outcomes={h("6"): self.bound_outcome(unknown, transition, credit="UNKNOWN")},
+            training=accepted,
+            regs=accepted_regs,
+            outcomes={accepted_sha: accepted_receipt},
         )
         self.assertEqual(admission.credit_label, "UNKNOWN")
-        self.assertEqual(admission.outcome_receipt_sha256, h("6"))
+        self.assertEqual(admission.outcome_receipt_sha256, accepted_sha)
 
     def test_nonunknown_credit_requires_exact_causal_outcome_binding(self):
         _, transition, training, regs = self.fixtures()
@@ -249,21 +261,73 @@ class GateTests(unittest.TestCase):
             self.admit(transition=credited_transition, training=credited, regs=regs, outcomes={})
 
         unrelated = self.bound_outcome(credited, credited_transition, entry_event_sha256=h("9"))
+        unrelated_sha = receipt_sha(unrelated)
+        credited["outcome_receipt_sha256"] = unrelated_sha
+        regs["admitted_training_traces"][credited["trace_sha256"]] = credited
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_CAUSAL_BINDING_MISMATCH:entry_event_sha256"):
             self.admit(
                 transition=credited_transition,
                 training=credited,
                 regs=regs,
-                outcomes={h("6"): unrelated},
+                outcomes={unrelated_sha: unrelated},
             )
 
+        accepted_receipt = self.bound_outcome(credited, credited_transition)
+        accepted_sha = receipt_sha(accepted_receipt)
+        credited["outcome_receipt_sha256"] = accepted_sha
+        regs["admitted_training_traces"][credited["trace_sha256"]] = credited
         admission = self.admit(
             transition=credited_transition,
             training=credited,
             regs=regs,
-            outcomes={h("6"): self.bound_outcome(credited, credited_transition)},
+            outcomes={accepted_sha: accepted_receipt},
         )
         self.assertEqual(admission.credit_label, "POSITIVE")
+        self.assertEqual(admission.outcome_receipt_sha256, accepted_sha)
+
+    def test_outcome_registry_key_must_match_canonical_receipt_bytes(self):
+        _, transition, training, regs = self.fixtures()
+        credited = deepcopy(training)
+        credited["credit_label"] = "POSITIVE"
+        credited_transition = deepcopy(transition)
+        credited_transition["credit_label"] = "POSITIVE"
+        receipt = self.bound_outcome(credited, credited_transition)
+        claimed_sha = h("6")
+        self.assertNotEqual(receipt_sha(receipt), claimed_sha)
+        credited["outcome_receipt_sha256"] = claimed_sha
+        regs = deepcopy(regs)
+        regs["admitted_training_traces"][credited["trace_sha256"]] = credited
+        regs["admitted_transition_traces"][credited_transition["trace_sha256"]] = credited_transition
+        with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_RECEIPT_DIGEST_MISMATCH"):
+            self.admit(
+                transition=credited_transition,
+                training=credited,
+                regs=regs,
+                outcomes={claimed_sha: receipt},
+            )
+
+    def test_byte_distinct_receipt_cannot_reuse_previous_sha_identity(self):
+        _, transition, training, regs = self.fixtures()
+        credited = deepcopy(training)
+        credited["credit_label"] = "POSITIVE"
+        credited_transition = deepcopy(transition)
+        credited_transition["credit_label"] = "POSITIVE"
+        receipt = self.bound_outcome(credited, credited_transition)
+        claimed_sha = receipt_sha(receipt)
+        altered = deepcopy(receipt)
+        altered["evidence_note"] = "byte-distinct"
+        self.assertNotEqual(receipt_sha(altered), claimed_sha)
+        credited["outcome_receipt_sha256"] = claimed_sha
+        regs = deepcopy(regs)
+        regs["admitted_training_traces"][credited["trace_sha256"]] = credited
+        regs["admitted_transition_traces"][credited_transition["trace_sha256"]] = credited_transition
+        with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_RECEIPT_DIGEST_MISMATCH"):
+            self.admit(
+                transition=credited_transition,
+                training=credited,
+                regs=regs,
+                outcomes={claimed_sha: altered},
+            )
 
 
 if __name__ == "__main__":

@@ -12,9 +12,9 @@ import hashlib
 import json
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
+from typing import Any, Mapping
 
-from xeno_entry_fabric_v1 import EntryPacket
+from xeno_entry_fabric_v1 import EntryFabricError, EntryPacket, admit_entry
 
 
 class GridScheduleError(ValueError):
@@ -182,9 +182,58 @@ def choose_mode(signals: RoutingSignals) -> HCUMode:
     return HCUMode.DIRECT
 
 
-def _entry_budget(packet: EntryPacket) -> dict[str, int]:
+def _verify_admitted_entry(
+    packet: EntryPacket,
+    admitted_entry_bindings: Mapping[str, str],
+) -> dict[str, int]:
+    """Re-verify Entry identity plus external admission before allocating HCU compute.
+
+    EntryPacket is frozen but constructible, so type membership alone is not an authority
+    proof. Re-admission catches field/hash mutation; the external binding registry catches
+    a newly forged but internally self-consistent packet that was never canonically admitted.
+    """
     if not isinstance(packet, EntryPacket):
         raise GridScheduleError("ADMITTED_ENTRY_PACKET_REQUIRED")
+    if not isinstance(admitted_entry_bindings, Mapping):
+        raise GridScheduleError("ADMITTED_ENTRY_BINDING_REGISTRY_REQUIRED")
+
+    expected_event_sha256 = admitted_entry_bindings.get(packet.admission_sha256)
+    if expected_event_sha256 is None:
+        raise GridScheduleError("ENTRY_ADMISSION_NOT_REGISTERED")
+    if expected_event_sha256 != packet.event_sha256:
+        raise GridScheduleError("ENTRY_EVENT_SHA256_MISMATCH")
+
+    try:
+        rebuilt = admit_entry(
+            {
+                "schema": packet.schema,
+                "ingress_id": packet.ingress_id,
+                "causal_id": packet.causal_id,
+                "entity_generation": packet.entity_generation,
+                "source_kind": packet.source_kind,
+                "source_id": packet.source_id,
+                "modality": packet.modality,
+                "observed_time": packet.observed_time,
+                "received_time": packet.received_time,
+                "provenance_ref": packet.provenance_ref,
+                "provenance_sha256": packet.provenance_sha256,
+                "capabilities": list(packet.capabilities),
+                "capability_binding_sha256": packet.capability_binding_sha256,
+                "parent_id": packet.parent_id,
+                "stream_id": packet.stream_id,
+                "budget": dict(packet.budget),
+                "payload_ref": packet.payload_ref,
+                "payload_sha256": packet.payload_sha256,
+            },
+            current_generation=packet.entity_generation,
+            expected_capability_binding_sha256=packet.capability_binding_sha256,
+            admitted_capabilities=packet.capabilities,
+        )
+    except (EntryFabricError, TypeError, ValueError) as exc:
+        raise GridScheduleError("ENTRY_PACKET_SELF_VERIFICATION_FAILED") from exc
+    if rebuilt != packet:
+        raise GridScheduleError("ENTRY_PACKET_IDENTITY_MISMATCH")
+
     budget = dict(packet.budget)
     required = {"max_model_calls", "max_tokens", "max_wall_ms"}
     if set(budget) != required:
@@ -192,8 +241,14 @@ def _entry_budget(packet: EntryPacket) -> dict[str, int]:
     return budget
 
 
-def compile_plan(packet: EntryPacket, *, mode: HCUMode, capacity: RuntimeCapacity) -> GridPlan:
-    budget = _entry_budget(packet)
+def compile_plan(
+    packet: EntryPacket,
+    *,
+    mode: HCUMode,
+    capacity: RuntimeCapacity,
+    admitted_entry_bindings: Mapping[str, str],
+) -> GridPlan:
+    budget = _verify_admitted_entry(packet, admitted_entry_bindings)
     capacity.validate()
     if not isinstance(mode, HCUMode):
         raise GridScheduleError("HCU_MODE_REQUIRED")

@@ -9,6 +9,7 @@ from model_execution_admission_store_v1 import (
     ModelExecutionAdmissionStoreError,
     admit_and_verify_model_execution,
 )
+from model_execution_receipt_v1 import model_execution_observation_sha256
 from test_model_execution_receipt_v1 import digest, grid_plan, observation, verified_load
 
 
@@ -94,7 +95,7 @@ class ModelExecutionAdmissionStoreTests(unittest.TestCase):
         row = db.execute(
             "SELECT observation_sha256 FROM hcu_model_execution_invocations"
         ).fetchone()
-        self.assertEqual(row[0], original and __import__("model_execution_receipt_v1").model_execution_observation_sha256(original))
+        self.assertEqual(row[0], model_execution_observation_sha256(original))
         self.assertEqual(
             db.execute("SELECT COUNT(*) FROM hcu_model_execution_observations").fetchone()[0],
             1,
@@ -159,7 +160,11 @@ class ModelExecutionAdmissionStoreTests(unittest.TestCase):
         self.assertEqual(sum(1 for status, _ in outcomes if status == "PASS"), 1)
         self.assertEqual(sum(1 for status, _ in outcomes if status == "REJECT"), 1)
         self.assertTrue(
-            any("MODEL_EXECUTION_INVOCATION_REPLAY_DIVERGENCE" in detail for status, detail in outcomes if status == "REJECT")
+            any(
+                "MODEL_EXECUTION_INVOCATION_REPLAY_DIVERGENCE" in detail
+                for status, detail in outcomes
+                if status == "REJECT"
+            )
         )
 
 

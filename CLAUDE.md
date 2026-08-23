@@ -12,7 +12,7 @@ This root file is a repository-organ routing shim, not canonical durable product
 
 1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
+3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json`
 4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
 5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
 6. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
@@ -20,7 +20,9 @@ This root file is a repository-organ routing shim, not canonical durable product
 8. `the artefact/README.md`
 9. task-relevant current or compatibility implementation files.
 
-Newest explicit owner authority plus verified current `main` outranks cached/historical program material. If current files disagree, fail closed and reconcile one canonical path.
+`SUPERVISOR_STEERING_8_61.json` is the active autonomous work/execution authority in verified current `main`. The repository also retains the owner one-shot ~0.8B Together directive as provenance, but 8.61 quarantines that paid lane for the current FREE_ONLY supervisor. Owner paid provenance is not executable permission for this organ.
+
+If current files disagree, fail closed and reconcile one canonical path before credential lookup, provider network I/O, spend or runtime promotion.
 
 ## Current naming law
 
@@ -35,14 +37,13 @@ Do not bulk-rename hashes, receipts, ABI/API names, schemas, paths or stateful c
 
 ## `go`
 
-Exact `go` means maximum useful **EntityOS + HCU convergence**.
-
-Every `go` has two coupled tracks:
+Exact `go` means maximum useful **EntityOS + HCU convergence** across three coupled tracks:
 
 1. `ENTITYOS_EXECUTABLE_CONVERGENCE`
 2. `HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT`
+3. `GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS`
 
-If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` plus the next discriminator.
+If track 2 or 3 cannot safely advance, record the corresponding NO_CHANGE reason plus the next discriminator.
 
 For material work use:
 
@@ -82,12 +83,16 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 
 ## Execution and safety
 
-- current build/test/experiment/runtime credit comes only from authorized isolated sandbox execution unless newer owner authority changes this;
+- current autonomous supervisor mode is **FREE_ONLY** with no paid fallback;
+- current build/test/experiment/runtime credit comes only from authorized isolated FREE execution surfaces;
+- a protected Vercel Preview bridge has demonstrated worker-callable `Sandbox.create` + `runCommand`; that is infrastructure callability credit only until exact EntityOS/HCU source capsules and regressions execute there;
 - VPS/self-hosted/production-host testing is forbidden under current control;
-- Together API/service forbidden;
-- no paid fallback; final paid/model training requires explicit owner authorization;
+- Together general inference and training are forbidden in this supervisor mode;
+- the owner one-shot approximately 0.8B J-Space/GWT Together directive remains repository provenance only; do not perform Together preflight, credential/key lookup, network I/O, job creation, spend, provider credit or training credit;
+- paid, subscription and unknown provider lanes fail closed before credential lookup and network I/O;
+- zero-cost local approximately 0.8B J-Space/GWT prototype/trace/ABI/dataset-readiness work may continue only after the required exact FREE executable-evidence gates;
 - never expose or commit secrets;
 - source/component/historical PASS never implies broader EntityOS/HCU runtime acceptance;
 - preserve exact provenance, stale-generation, replay, privacy and effect boundaries.
 
-Current immediate frontier: positive fail-closed local/internal cognition-engine admission plus one causal HCU route identity binding immutable event identity, resolved engine identity/class, policy and routing result; then exact isolated execution and downstream receipt echo before promotion.
+Current immediate frontier: package fixed SHA-bound current Research main + retained PR1263 source capsules for the verified protected-preview Vercel Sandbox bridge; execute exact Entry -> HCU route -> verified engine admission/load -> inference -> GRID10 -> Global J-Space/GWT regressions; bind result digest; then continue zero-cost local ~0.8B loader/J-Space/GWT work and external prototype-trace admission without entering a paid provider lane.

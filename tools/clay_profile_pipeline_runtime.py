@@ -24,7 +24,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.4"
+VERSION = "clay-profile-pipeline-runtime/0.5"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -98,12 +98,14 @@ class ProfilePipelineRuntime(clay.Runtime):
         root: str | Path = ".",
         allow_network: bool = False,
         provider_override: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+        local_exec_runner: list[str] | tuple[str, ...] | None = None,
     ):
         super().__init__()
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.allow_network = allow_network
         self.provider_override = provider_override
+        self.local_exec_runner = local_exec_runner
         self.effect_trace: list[dict[str, Any]] = []
         self._active_secrets: list[str] = []
         self.builtins["effect"] = self.effect
@@ -176,10 +178,8 @@ class ProfilePipelineRuntime(clay.Runtime):
         return out
 
     @staticmethod
-    def _ensure_schema(db: sqlite3.Connection) -> None:
-        # Legacy reference generation is historical migration evidence, never an
-        # implicit bootstrap authority. Detect a legacy-only DB before creating the
-        # canonical entity_state row so continuity cannot be silently reset or adopted.
+    def _assert_legacy_generation_migration_resolved(db: sqlite3.Connection) -> None:
+        """Reject ambiguous legacy-only generation before native authority is materialized."""
         entity_state_preexisting = db.execute(
             "SELECT 1 FROM sqlite_master WHERE type='table' AND name='entity_state'"
         ).fetchone() is not None
@@ -192,6 +192,10 @@ class ProfilePipelineRuntime(clay.Runtime):
             }
             if "generation" in legacy_columns:
                 raise PipelineFault("LEGACY_GENERATION_MIGRATION_REQUIRED")
+
+    @classmethod
+    def _ensure_schema(cls, db: sqlite3.Connection) -> None:
+        cls._assert_legacy_generation_migration_resolved(db)
 
         # Native profile/generation authority. These definitions intentionally match the
         # native MiniUnifiedDB contract rather than inventing a second profile table.
@@ -344,6 +348,17 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _pipeline_init(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             with self._db(str(p["entity_db"])) as db:
+                # Keep the canonical generation authority visibly owned by pipeline_init,
+                # but only after the legacy-only ambiguity is rejected atomically.
+                self._assert_legacy_generation_migration_resolved(db)
+                db.execute(
+                    """CREATE TABLE IF NOT EXISTS entity_state(
+                         id INTEGER PRIMARY KEY CHECK(id=1),
+                         generation INTEGER NOT NULL,
+                         active_profile TEXT,
+                         created_at TEXT NOT NULL,
+                         updated_at TEXT NOT NULL)"""
+                )
                 self._ensure_schema(db)
             return {"ok": True}
         except Exception as exc:
@@ -379,20 +394,21 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _pipeline_state_read(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             with self._read_only_db(str(p["entity_db"])) as db:
-                row = db.execute(
-                    """SELECT e.generation,s.continuity_json,s.canonical_hash,s.cursors_json
-                       FROM entity_state e
-                       JOIN eos_pipeline_state s ON s.singleton=1
-                       WHERE e.id=1"""
+                generation_row = db.execute(
+                    "SELECT generation FROM entity_state WHERE id=1"
                 ).fetchone()
-            if row is None:
+                state_row = db.execute(
+                    """SELECT continuity_json,canonical_hash,cursors_json
+                       FROM eos_pipeline_state WHERE singleton=1"""
+                ).fetchone()
+            if generation_row is None or state_row is None:
                 raise PipelineFault("PIPELINE_STATE_MISSING")
             return {
                 "ok": True,
-                "generation": int(row["generation"]),
-                "continuity": json.loads(row["continuity_json"]),
-                "canonical_hash": str(row["canonical_hash"]),
-                "cursors": json.loads(row["cursors_json"]),
+                "generation": int(generation_row["generation"]),
+                "continuity": json.loads(state_row["continuity_json"]),
+                "canonical_hash": str(state_row["canonical_hash"]),
+                "cursors": json.loads(state_row["cursors_json"]),
             }
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
@@ -847,11 +863,24 @@ class ProfilePipelineRuntime(clay.Runtime):
         upper = name.upper()
         return upper in _SAFE_ENV_NAMES and upper not in secret_names
 
+    @staticmethod
+    def _render_local_arg(template: str, replacements: Mapping[str, Any]) -> str:
+        rendered = str(template)
+        for key, value in replacements.items():
+            rendered = rendered.replace(str(key), str(value))
+        return rendered
+
     def _inference_local_exec(
         self, inference: dict[str, Any], p: dict[str, Any]
     ) -> dict[str, Any]:
         prompt_path: Path | None = None
         try:
+            if not self.local_exec_runner:
+                raise PipelineFault("LOCAL_EXEC_NOT_ADMITTED")
+            runner_spec = list(self.local_exec_runner)
+            if not runner_spec or not all(isinstance(item, str) and item for item in runner_spec):
+                raise PipelineFault("LOCAL_EXEC_RUNNER_INVALID")
+
             model_value = str(
                 inference.get("local_model_path") or inference.get("model_path") or ""
             )
@@ -861,15 +890,11 @@ class ProfilePipelineRuntime(clay.Runtime):
             if not model_path.is_file():
                 raise PipelineFault("LOCAL_MODEL_NOT_READABLE")
 
-            argv_spec = inference.get("local_argv_json", inference.get("argv"))
-            if isinstance(argv_spec, str):
-                argv_spec = json.loads(argv_spec)
-            if (
-                not isinstance(argv_spec, list)
-                or not argv_spec
-                or not all(isinstance(item, str) for item in argv_spec)
-            ):
-                raise PipelineFault("LOCAL_ARGV_INVALID")
+            args_spec = inference.get("local_args_json", [])
+            if isinstance(args_spec, str):
+                args_spec = json.loads(args_spec)
+            if not isinstance(args_spec, list) or not all(isinstance(item, str) for item in args_spec):
+                raise PipelineFault("LOCAL_ARGS_INVALID")
 
             prompt_template = str(
                 inference.get("local_prompt_template", "{{SYSTEM}}\n\n{{USER}}\n")
@@ -894,12 +919,11 @@ class ProfilePipelineRuntime(clay.Runtime):
                 "{{MAX_TOKENS}}": str(inference.get("max_tokens", 2000)),
                 "{{TEMPERATURE}}": str(inference.get("temperature", 0.7)),
             }
-            argv: list[str] = []
-            for item in argv_spec:
-                rendered = item
-                for key, value in replacements.items():
-                    rendered = rendered.replace(key, value)
-                argv.append(rendered)
+            command_template = runner_spec + list(args_spec)
+            argv = [
+                self._render_local_arg(item, replacements)
+                for item in command_template
+            ]
 
             requested_env = inference.get("local_env_allowlist", sorted(_SAFE_ENV_NAMES))
             if not isinstance(requested_env, list) or not all(
@@ -1104,9 +1128,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                 ),
             )
             native_update = db.execute(
-                """UPDATE entity_state
-                   SET generation=?,updated_at=?
-                   WHERE id=1 AND generation=? AND active_profile=?""",
+                "UPDATE entity_state SET generation=?,updated_at=? WHERE id=1 AND generation=? AND active_profile=?",
                 (
                     generation,
                     _utc_now(),

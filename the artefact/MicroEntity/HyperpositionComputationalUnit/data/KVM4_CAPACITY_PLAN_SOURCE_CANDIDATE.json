@@ -1,0 +1,38 @@
+{
+  "candidate_profiles": {
+    "balanced": {
+      "active_decode_slots": 2,
+      "logical_cells": 48,
+      "resident_cells": 8
+    },
+    "conservative": {
+      "active_decode_slots": 1,
+      "logical_cells": 24,
+      "resident_cells": 6
+    },
+    "dense": {
+      "active_decode_slots": 2,
+      "logical_cells": 64,
+      "resident_cells": 12
+    }
+  },
+  "cpu": {
+    "cores": 4,
+    "estimated_parallel_decode_slots": 2,
+    "threads_per_active_decoder": 2
+  },
+  "memory": {
+    "assumed_q4_cell_rss_gib": 0.85,
+    "memory_bound_resident_cells": 14,
+    "reserve_gib": 4.0,
+    "total_gib": 16,
+    "usable_gib": 12.0
+  },
+  "recommendation": {
+    "first_profile": "balanced",
+    "promotion_gate": "measure exact RSS and 1/2/4 decoder throughput before deployment promotion",
+    "reason": "keep RAM headroom while limiting simultaneous decode to the 4-core CPU"
+  },
+  "schema": "HCU_CAPACITY_PLAN/v1",
+  "status": "PLANNING_ONLY_NOT_RUNTIME_EVIDENCE"
+}

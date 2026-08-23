@@ -6,20 +6,26 @@ This path is retained because older receipts, branches and research notes refere
 
 Current owner/product authority:
 
-`research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+`research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md`
+
+Current control:
+
+`research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_5_MINI_ENTITY_GO_AUTHORITY.json`
 
 Current program/stage:
 
-- `CLAYVERSE_SINGLE_CONTAINER`
-- `CLAYVERSE_ARTIFACT`
-- release form: one OCI/Docker-compatible ClayVerse container image
+- `MINI_ENTITY_PIPELINE_ALL_IN_ONE`
+- `MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT`
+- product endpoint: Mini Entity / EntityOS integrated cognitive architecture.
 
-The exact pre-supersession Mini Entity / Blogpost directive remains recoverable from Git history as blob:
+The exact pre-supersession Blogpost/Mini Entity directive remains recoverable from Git history as blob:
 
 `eeb9945e4c1d01a32e13bf6cb74db0c0c49d2767`
 
-Its pipeline, inference-neutrality, epistemic typing, exactly-once/CAS, secret-gating and other mechanisms may be reused only as bounded donor/regression evidence when they strengthen the current ClayVerse product. Historical wording such as `SOLE CANONICAL OWNER DIRECTIVE`, `Status: CURRENT`, `MINI_ENTITY_PIPELINE_ALL_IN_ONE`, or a portable Mini Entity as the sole goal has no current work-selection authority.
+Its pipeline, inference-neutrality, epistemic typing, exactly-once/CAS, secret-gating and other mechanisms remain bounded donor/regression evidence where they strengthen the current product.
 
-Clay remains the persistent research entity. UnifiedDB remains the current ClayVerse durable authority; ClayGraph is derived; Claude Code is runtime cognition; MicroClay is routing/accessibility only; EffectGate/EffectJournal control external effects; EntityOS is an internal substrate only.
+The later ClayVerse 4.4 product override is itself superseded for current program/work-selection authority by the explicit 4.5 Mini Entity owner correction. ClayVerse security/runtime mechanisms remain bounded donor evidence.
 
-If this compatibility path conflicts with the current ClayVerse owner directive, fail closed and follow the current owner directive.
+Clay remains the persistent research entity. MiniUnifiedDB is the current Mini Entity durable authority. Zero is runtime identity/configuration. The bundled ~0.8B core, Unified J-Space/GWT, Claude Code and any HCU/grid modules are cognition/measurement/inference organs only and may not become truth/state/effect authority.
+
+If this compatibility path conflicts with the current Mini Entity owner directive, fail closed and follow the current owner directive.

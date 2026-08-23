@@ -60,6 +60,16 @@ def cycle_from_boot(boot: dict) -> dict:
     return redigest(cycle)
 
 
+def claude_cycle_from_boot(boot: dict) -> dict:
+    cycle = cycle_from_boot(boot)
+    ucf_fixture.blocked_nonfree(cycle)
+    cycle["inference"].update(
+        adapter_version=boot["claude_adapter"]["adapter_version"],
+        capability_profile_digest=boot["claude_adapter"]["capability_profile_sha256"],
+    )
+    return redigest(cycle)
+
+
 class UcfBootAncestryChainTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup)
@@ -120,6 +130,19 @@ class UcfBootAncestryChainTests(unittest.TestCase):
         poisoned_cycle = cycle_from_boot(poisoned_boot)
         errors = chain.validate_chain(poisoned_cycle, poisoned_boot, poisoned_path, self.lock)
         self.assertTrue(any("SOURCE_LOCK_MANIFEST_FILE_MISMATCH" in error for error in errors), errors)
+
+    def test_claude_cycle_fails_if_bound_boot_adapter_is_disabled(self):
+        cycle = claude_cycle_from_boot(self.boot)
+        self.assertTrue(ucf.validate(cycle)["ok"])
+        self.assertFalse(self.boot["claude_adapter"]["enabled"])
+        self.assertIn("BOOT_CLAUDE_ADAPTER_DISABLED", chain.validate_chain(cycle, self.boot, self.manifest_path, self.lock))
+
+    def test_claude_cycle_can_descend_from_matching_enabled_boot_adapter(self):
+        boot = copy.deepcopy(self.boot)
+        boot["claude_adapter"]["enabled"] = True
+        cycle = claude_cycle_from_boot(boot)
+        self.assertTrue(ucf.validate(cycle)["ok"])
+        self.assertEqual(chain.validate_chain(cycle, boot, self.manifest_path, self.lock), [])
 
 
 if __name__ == "__main__":

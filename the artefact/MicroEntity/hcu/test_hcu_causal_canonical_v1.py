@@ -62,6 +62,10 @@ class HCUCanonicalizationTests(unittest.TestCase):
 
     def test_integer_and_equal_float_are_same_json_number(self):
         self.assertEqual(canonical_sha256({"n": 1}), canonical_sha256({"n": 1.0}))
+        self.assertEqual(
+            canonical_sha256({"n": (2**53) - 1}),
+            canonical_sha256({"n": float((2**53) - 1)}),
+        )
 
     def test_negative_zero_collapses_to_zero(self):
         self.assertEqual(canonical_sha256({"n": -0.0}), canonical_sha256({"n": 0.0}))
@@ -70,9 +74,11 @@ class HCUCanonicalizationTests(unittest.TestCase):
         with self.assertRaisesRegex(HCUCanonicalizationError, "NONFINITE_NUMBER_FORBIDDEN"):
             canonical_bytes({"n": float("nan")})
 
-    def test_integer_outside_ijson_safe_range_fails_closed(self):
-        with self.assertRaisesRegex(HCUCanonicalizationError, "INTEGER_OUTSIDE_IJSON_SAFE_RANGE"):
-            canonical_bytes({"n": 2**53})
+    def test_integer_outside_ijson_safe_range_fails_closed_for_host_types(self):
+        for value in (2**53, float(2**53), -(2**53), -float(2**53)):
+            with self.subTest(value=value, host_type=type(value).__name__):
+                with self.assertRaisesRegex(HCUCanonicalizationError, "INTEGER_OUTSIDE_IJSON_SAFE_RANGE"):
+                    canonical_bytes({"n": value})
 
     def test_value_change_changes_digest(self):
         self.assertNotEqual(canonical_sha256({"x": 0.55}), canonical_sha256({"x": 0.56}))
@@ -90,6 +96,7 @@ class HCUCanonicalizationTests(unittest.TestCase):
             {"schema": "HCU_REACTIVE_EVENT/v1", "entity_generation": 7, "novelty": 0.55, "due_recheck": False},
             {"z": [-0.0, 1, 1.5, 1e-7], "a": "€", "😀": {"ä": True, "n": None}},
             {"engine": {"id": "hcu_local_08b", "artifact": "a" * 64}, "lanes": ["critic", "world"], "projection": True},
+            {"safe_integer_edge": (2**53) - 1},
         ]
         for vector in vectors:
             raw = subprocess.check_output(

@@ -3,15 +3,21 @@ from __future__ import annotations
 from dataclasses import dataclass
 import base64
 import hashlib
-import json
 import math
 import struct
 from typing import Sequence
 
+try:
+    from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+except ImportError:
+    from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+
 ABI_SCHEMA = "JSPACE_VECTOR_CONTROL_ABI/v1"
-TRACE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v1"
+TRACE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v2"
+TRACE_CANONICALIZATION_SCHEMA = CANONICALIZATION_SCHEMA
 MAGIC = b"JCTL1\x00"
 MAX_DIM = 4096
+MAX_JCS_SAFE_INTEGER = 9007199254740991
 HYPERPOSITION_MARGIN_Q = 750  # 0.075 on 0..10000 gate scale
 
 
@@ -37,6 +43,14 @@ def _text(value: str, field: str, max_bytes: int = 255) -> str:
     return value
 
 
+def _generation(value: int) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+        raise JSpaceError("GENERATION_NONNEGATIVE_INTEGER_REQUIRED")
+    if value > MAX_JCS_SAFE_INTEGER:
+        raise JSpaceError("GENERATION_JCS_SAFE_INTEGER_REQUIRED")
+    return value
+
+
 def _q_unit(value: float) -> int:
     return int(math.floor(_unit(value, "unit") * 10000.0 + 0.5))
 
@@ -57,6 +71,8 @@ def _q_signed(value: float) -> int:
 
 
 def _decode_q_signed(value: int) -> float:
+    if value < -127 or value > 127:
+        raise JSpaceError("JCTL_VECTOR_NONCANONICAL")
     return float(value) / 127.0
 
 
@@ -116,10 +132,7 @@ class VectorControlPacket:
     def encode_bytes(self) -> bytes:
         basis = _text(self.basis_id, "basis_id").encode("utf-8")
         role = _text(self.role, "role").encode("utf-8")
-        if isinstance(self.generation, bool) or not isinstance(self.generation, int) or self.generation < 0:
-            raise JSpaceError("GENERATION_NONNEGATIVE_INTEGER_REQUIRED")
-        if self.generation > (2**64 - 1):
-            raise JSpaceError("GENERATION_TOO_LARGE")
+        generation = _generation(self.generation)
         if not self.vector or len(self.vector) > MAX_DIM:
             raise JSpaceError("VECTOR_DIMENSION_UNSUPPORTED")
         if isinstance(self.gate_q, bool) or not isinstance(self.gate_q, int) or not 0 <= self.gate_q <= 10000:
@@ -131,7 +144,7 @@ class VectorControlPacket:
             + basis
             + bytes([len(role)])
             + role
-            + struct.pack(">QHH", self.generation, len(self.vector), self.gate_q)
+            + struct.pack(">QHH", generation, len(self.vector), self.gate_q)
             + qvec
         )
 
@@ -153,7 +166,7 @@ class VectorControlPacket:
         payload = text[6:]
         padding = "=" * ((4 - len(payload) % 4) % 4)
         try:
-            raw = base64.urlsafe_b64decode(payload + padding)
+            raw = base64.b64decode(payload + padding, altchars=b"-_", validate=True)
         except Exception as exc:
             raise JSpaceError("JCTL_BASE64_INVALID") from exc
         if not raw.startswith(MAGIC):
@@ -163,23 +176,40 @@ class VectorControlPacket:
             raise JSpaceError("JCTL_TRUNCATED")
         basis_len = raw[offset]
         offset += 1
-        basis = raw[offset:offset + basis_len].decode("utf-8", "strict")
+        if basis_len == 0 or len(raw) < offset + basis_len:
+            raise JSpaceError("JCTL_BASIS_LENGTH")
+        try:
+            basis = raw[offset:offset + basis_len].decode("utf-8", "strict")
+        except UnicodeDecodeError as exc:
+            raise JSpaceError("JCTL_BASIS_UTF8") from exc
+        _text(basis, "basis_id")
         offset += basis_len
         if offset >= len(raw):
             raise JSpaceError("JCTL_TRUNCATED")
         role_len = raw[offset]
         offset += 1
-        role = raw[offset:offset + role_len].decode("utf-8", "strict")
+        if role_len == 0 or len(raw) < offset + role_len:
+            raise JSpaceError("JCTL_ROLE_LENGTH")
+        try:
+            role = raw[offset:offset + role_len].decode("utf-8", "strict")
+        except UnicodeDecodeError as exc:
+            raise JSpaceError("JCTL_ROLE_UTF8") from exc
+        _text(role, "role")
         offset += role_len
         if len(raw) < offset + 12:
             raise JSpaceError("JCTL_TRUNCATED")
         generation, dim, gate_q = struct.unpack(">QHH", raw[offset:offset + 12])
         offset += 12
+        _generation(generation)
+        if gate_q > 10000:
+            raise JSpaceError("JCTL_GATE_Q_RANGE")
         if dim < 1 or dim > MAX_DIM or len(raw) != offset + dim:
             raise JSpaceError("JCTL_DIM_OR_LENGTH")
         qvec = tuple(struct.unpack("b", bytes([b]))[0] for b in raw[offset:])
         vector = tuple(_decode_q_signed(v) for v in qvec)
         packet = cls(basis, role, generation, vector, gate_q)
+        if packet.encode_text() != text:
+            raise JSpaceError("JCTL_NONCANONICAL_ENCODING")
         if expected_basis_id is not None and basis != expected_basis_id:
             raise JSpaceError("JCTL_BASIS_MISMATCH")
         if expected_role is not None and role != expected_role:
@@ -199,20 +229,18 @@ class JSpaceStep:
     winner_gate_q: int
     hyperposition_cells: tuple[str, ...]
     control_packet_text: str
+    control_packet_sha256: str
     trace_sha256: str
     trace: dict
 
 
 def _trace_bytes(value: dict) -> bytes:
     # Prototype evidence identity only, not canonical durable-state authority.
-    # All model-relevant floats are quantized to bounded integers in the trace.
-    return json.dumps(
-        value,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=True,
-        allow_nan=False,
-    ).encode("ascii")
+    # Reuse the selected HCU JCS canonicalizer so trace identity cannot drift by host JSON behavior.
+    try:
+        return canonicalize(value)
+    except CanonicalizationError as exc:
+        raise JSpaceError(f"TRACE_CANONICALIZATION_FAILED:{exc}") from exc
 
 
 def step(
@@ -221,8 +249,7 @@ def step(
     generation: int,
     basis_id: str,
 ) -> JSpaceStep:
-    if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
-        raise JSpaceError("GENERATION_NONNEGATIVE_INTEGER_REQUIRED")
+    generation = _generation(generation)
     _text(basis_id, "basis_id")
     if not contributions:
         raise JSpaceError("CONTRIBUTION_REQUIRED")
@@ -252,10 +279,13 @@ def step(
         vector=global_vector,
         gate_q=winner_gate_q,
     )
+    packet_bytes = packet.encode_bytes()
     packet_text = packet.encode_text()
+    packet_sha256 = hashlib.sha256(packet_bytes).hexdigest()
 
     trace = {
         "schema": TRACE_SCHEMA,
+        "canonicalization_schema": TRACE_CANONICALIZATION_SCHEMA,
         "generation": generation,
         "basis_id": basis_id,
         "dimension": dim,
@@ -266,6 +296,7 @@ def step(
         "global_vector_q127": [_q_signed(v) for v in global_vector],
         "control_packet_schema": ABI_SCHEMA,
         "control_packet_text": packet_text,
+        "control_packet_sha256": packet_sha256,
         "contributions": [
             {
                 "cell_id": c.cell_id,
@@ -293,6 +324,7 @@ def step(
         winner_gate_q=winner_gate_q,
         hyperposition_cells=hyper,
         control_packet_text=packet_text,
+        control_packet_sha256=packet_sha256,
         trace_sha256=trace_sha,
         trace=trace,
     )

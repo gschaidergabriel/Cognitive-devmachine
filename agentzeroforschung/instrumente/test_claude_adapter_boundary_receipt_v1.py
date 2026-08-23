@@ -97,6 +97,12 @@ class TestReceipt(unittest.TestCase):
     def test_extra_env_key_rejected(self):
         self.assert_reject(lambda x: x["boundaries"]["env_isolation"].__setitem__("observed_child_env_keys", ["HOME", "AWS_SECRET_ACCESS_KEY"]))
 
+    def test_receipt_cannot_self_authorize_forbidden_env_key(self):
+        self.assert_reject(lambda x: (
+            x["boundaries"]["env_isolation"].__setitem__("allowed_env_keys", ["HOME", "PATH", "AWS_SECRET_ACCESS_KEY"]),
+            x["boundaries"]["env_isolation"].__setitem__("observed_child_env_keys", ["HOME", "PATH", "AWS_SECRET_ACCESS_KEY"]),
+        ))
+
     def test_secret_leak_rejected(self):
         self.assert_reject(lambda x: x["boundaries"]["env_isolation"].__setitem__("secret_value_leak_count", 1))
 

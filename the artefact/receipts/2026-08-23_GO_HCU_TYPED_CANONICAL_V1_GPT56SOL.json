@@ -9,7 +9,6 @@
   "canonical_main_at_branch": "63fdd580aee5d383a3c7d01213a3ba41a2b8bf02",
   "latest_main_reentered_after_writes": "2f5e5d6894331d2a43ba958288ee52f95e05a17d",
   "branch": "gpt56sol/go-entityos-hcu-canonical-v1-current-20260823-2336",
-  "head_after_source_tests": "fd5070323a690d68cb08b757d9e030ea4f9be71f",
   "finding": "CROSS_LANGUAGE_CAUSAL_IDENTITY_NEEDS_VERSIONED_CANONICAL_BYTES",
   "go_tracks": {
     "track_a": {
@@ -21,14 +20,20 @@
     },
     "track_b": {
       "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
-      "result": "SOURCE_AND_COMPONENT_MECHANISM_ADVANCED"
+      "result": "CROSS_LANGUAGE_COMPONENT_MECHANISM_ADVANCED"
     }
   },
   "source_delta": {
-    "module": "the artefact/hcu_typed_canonical_v1.py",
-    "module_blob": "a00e2f18e2bf8a689f2c6b18c8aeaf529b30a3f3",
-    "test": "the artefact/tests/test_hcu_typed_canonical_v1.py",
-    "test_blob": "513da25540a0e6a355aa59c1f89c293f3f361161",
+    "python_module": "the artefact/hcu_typed_canonical_v1.py",
+    "python_module_blob": "a00e2f18e2bf8a689f2c6b18c8aeaf529b30a3f3",
+    "javascript_module": "the artefact/hcu_typed_canonical_v1.mjs",
+    "javascript_module_blob": "e54fb834f7dff7562e567c9e17e62b3732efb8df",
+    "python_test": "the artefact/tests/test_hcu_typed_canonical_v1.py",
+    "python_test_blob": "636b0c9910a49c8db873592ff7d7afeaf9a5289e",
+    "javascript_test": "the artefact/tests/test_hcu_typed_canonical_v1.mjs",
+    "javascript_test_blob": "ae8414b030914d8b082bcd9a4208030f334ed8ea",
+    "shared_vectors": "the artefact/tests/hcu_typed_canonical_vectors_v1.json",
+    "shared_vectors_blob": "9af5ea0009e1ce1724dfc50298bbab36ec90e0bc",
     "contract": "ENTITYOS_HCU_TYPED_CANONICAL/v1"
   },
   "mechanism": [
@@ -46,9 +51,14 @@
   },
   "component_check": {
     "exact_git_blob_reproduction": true,
-    "py_compile": "PASS",
-    "unittest": "10/10 PASS",
-    "scope": "LOCAL_ISOLATED_COMPONENT_MECHANISM_ONLY",
+    "python_py_compile": "PASS",
+    "python_unittest": "11/11 PASS",
+    "javascript_syntax_check": "PASS",
+    "javascript_regressions": "5 shared vectors + 6 fail-closed regressions PASS",
+    "shared_cross_language_vectors": 5,
+    "python_javascript_canonical_byte_match": "5/5 PASS",
+    "python_javascript_identity_sha256_match": "5/5 PASS",
+    "scope": "LOCAL_ISOLATED_CROSS_LANGUAGE_COMPONENT_MECHANISM_ONLY",
     "runtime_credit": 0
   },
   "github_workflow_observation": {
@@ -67,7 +77,8 @@
     "consumed_once_for_this_user_triggered_macrocycle": true,
     "result": "distinct immutable event payload identity produced distinct ingress/task identity while exact replay remained stable",
     "classification": "MECHANISM_SUPPORTED_BOUNDED_REPRODUCTION_ONLY",
-    "additional_unusual_experiments_after_consumption": 0
+    "additional_unusual_experiments_after_consumption": 0,
+    "cross_language_replication_is_unusual_experiment": false
   },
   "coordination": {
     "retained_typed_entry_lane": "PR_1263",
@@ -75,7 +86,7 @@
     "purpose": "shared canonical identity utility for eventual fusion into retained HCU/Typed Entry route and GRID modes",
     "capability_self_grant_status_on_latest_main": "SOURCE_COMPONENT_REPAIR_REPLICATED_WITH_TRUSTED_SNAPSHOT_ARGUMENTS_BUT_REAL_CANONICAL_AUTHORITY_PRODUCER_NOT_YET_WIRED",
     "superseded_transitional_pr": "PR_1363_CLOSED_NOT_MERGED",
-    "current_utility_pr": "PR_1375_DRAFT"
+    "current_utility_pr": "PR_1375_DRAFT_MERGEABLE"
   },
   "execution_policy": {
     "vercel_sandbox_exec_exposed_to_this_organ": false,
@@ -88,10 +99,11 @@
   "credit": {
     "source_candidate": "SUPPORTED",
     "component_mechanism": "SUPPORTED",
-    "cross_language_independent_implementation_match": "UNOBSERVED",
+    "cross_language_independent_implementation_match": "SUPPORTED_LOCAL_ISOLATED_COMPONENT_SCOPE",
+    "cross_language_product_runtime_match": "UNOBSERVED",
     "hcu_runtime_credit": 0,
     "entityos_runtime_credit": 0,
     "whole_product_pass": false
   },
-  "next_gate": "First specify a safe EntityOS/HCU manifest+authority-guard migration map without weakening inherited fences. In parallel, fuse this canonical-byte contract into retained PR 1263 after its real capability authority producer is wired, add an independent second-language vector implementation, then run exact retained source in an authorized isolated executor."
+  "next_gate": "First specify a safe EntityOS/HCU manifest+authority-guard migration map without weakening inherited fences. In parallel, fuse the now independently replicated canonical-byte contract into retained PR 1263 after its real capability authority producer is wired, then run exact retained source in an authorized isolated executor."
 }

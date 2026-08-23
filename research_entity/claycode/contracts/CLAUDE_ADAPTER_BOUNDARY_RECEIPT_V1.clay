@@ -1,0 +1,36 @@
+// Diagnostic evidence contract for the persistent Claude Code adapter red.
+// This contract splits one monolithic invariant into four independent receipts.
+module clay.claude_adapter_boundary_receipt_v1
+
+law ONE_ADAPTER_IDENTITY = true
+law split_receipts_share_exact_run_binding = true
+law failed_subreceipt_is_valid_negative_evidence = true
+law receipt_validation_does_not_execute_claude = true
+law receipt_validation_does_not_fix_adapter_behavior = true
+law receipt_validation_grants_runtime_credit = false
+law receipt_validation_grants_product_credit = false
+law raw_secret_material_in_receipt = false
+law raw_environment_values_in_receipt = false
+law HOME_OAUTH_ADMISSION != CONFIGURATION_INGRESS_PERMISSION
+law ANTHROPIC_CREDENTIAL_ADMISSION != TOOL_AUTHORITY
+law TOOLLESS_PASS != EPHEMERAL_PASS
+law EPHEMERAL_PASS != STRUCTURED_OUTPUT_PASS
+law STRUCTURED_OUTPUT_PASS != ENV_ISOLATION_PASS
+
+fn validate(receipt:Map)->Map {
+  let checked = effect("claude_adapter_boundary_receipt_validate_v1", receipt)
+  require checked.ok
+  return checked
+}
+
+fn persist(receipt:Map)->Map {
+  let checked = validate(receipt)
+  let payload = map_new()
+  map_set(payload,"schema",checked.schema)
+  map_set(payload,"source_commit",checked.source_commit)
+  map_set(payload,"run_binding_digest",checked.run_binding_digest)
+  map_set(payload,"boundary_passed",checked.boundary_passed)
+  map_set(payload,"receipt_digest",checked.receipt_digest)
+  // Evidence persistence only. No runtime/product acceptance is minted here.
+  return effect("research_receipt_persist",payload)
+}

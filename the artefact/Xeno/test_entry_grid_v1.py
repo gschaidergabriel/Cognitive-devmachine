@@ -163,6 +163,29 @@ class EntryFabricRegressionTests(unittest.TestCase):
                 current_generation=GENERATION + 1,
             )
 
+    def test_scheduler_rejects_forged_admitted_packet_identity(self):
+        packet = admit_ingress(draft(), current_generation=GENERATION)
+        forged_id = replace(packet, ingress_id="xeno-ingress:" + "0" * 64)
+        forged_budget = replace(
+            packet,
+            resource_budget=ResourceBudget(
+                max_logical_cells=10,
+                max_inference_calls=10,
+                max_tokens=999999,
+                wall_ms=packet.resource_budget.wall_ms,
+                memory_bytes=packet.resource_budget.memory_bytes,
+            ),
+        )
+        for poisoned in (forged_id, forged_budget):
+            with self.subTest(poisoned=poisoned.ingress_id):
+                with self.assertRaisesRegex(ScheduleError, "unverified ingress packet"):
+                    compile_grid_plan(
+                        poisoned,
+                        functions(2),
+                        mode=XenoMode.XENO_GRID10,
+                        current_generation=GENERATION,
+                    )
+
     def test_scheduler_rejects_string_boolean_coercion(self):
         packet = admit_ingress(draft(), current_generation=GENERATION)
         with self.assertRaisesRegex(ScheduleError, "inference_required must be boolean"):
@@ -197,26 +220,14 @@ class EntryFabricRegressionTests(unittest.TestCase):
 
 class GoUnusualExperiment(unittest.TestCase):
     def test_causal_alias_poison_same_routing_different_event_identity(self):
-        """Exactly-one GO unusual experiment: CAUSAL_ALIAS_POISON.
-
-        Intervention: hold causal_id, payload, budget and requested functions fixed, but
-        mutate immutable event provenance. A route digest based only on routing result
-        would alias. Xeno must instead produce distinct ingress and plan identities,
-        while exact replay remains stable.
-        """
+        """Exactly-one GO unusual experiment: CAUSAL_ALIAS_POISON."""
         left = admit_ingress(draft(provenance=("sensor:A",)), current_generation=GENERATION)
         right = admit_ingress(draft(provenance=("sensor:B",)), current_generation=GENERATION)
         left_replay = admit_ingress(draft(provenance=("sensor:A",)), current_generation=GENERATION)
 
-        left_plan = compile_grid_plan(
-            left, functions(4), mode=XenoMode.XENO_GRID10, current_generation=GENERATION
-        )
-        right_plan = compile_grid_plan(
-            right, functions(4), mode=XenoMode.XENO_GRID10, current_generation=GENERATION
-        )
-        replay_plan = compile_grid_plan(
-            left_replay, functions(4), mode=XenoMode.XENO_GRID10, current_generation=GENERATION
-        )
+        left_plan = compile_grid_plan(left, functions(4), mode=XenoMode.XENO_GRID10, current_generation=GENERATION)
+        right_plan = compile_grid_plan(right, functions(4), mode=XenoMode.XENO_GRID10, current_generation=GENERATION)
+        replay_plan = compile_grid_plan(left_replay, functions(4), mode=XenoMode.XENO_GRID10, current_generation=GENERATION)
 
         self.assertNotEqual(left.ingress_id, right.ingress_id)
         self.assertNotEqual(left_plan.plan_id, right_plan.plan_id)

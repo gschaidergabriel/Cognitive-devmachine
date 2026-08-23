@@ -51,6 +51,7 @@ def cycle_from_boot(boot: dict) -> dict:
         lens_profile_digest=boot["jspace"]["lens_profile_sha256"],
         workspace_calibration_digest=boot["gwt"]["calibration_sha256"],
     )
+    cycle["runtime"]["generation"] = boot["runtime"]["entity_generation"]
     cycle["binding"].update(
         zero_identity_digest=cycle["identity"]["zero_identity_digest"],
         grf_digest=cycle["identity"]["grf_digest"],
@@ -69,10 +70,6 @@ class UcfBootAncestryChainTests(unittest.TestCase):
         self.manifest_path = root / "manifest.json"; self.manifest_path.write_bytes(self.raw)
         self.lock = boot_fixture.source_lock_for(self.manifest, self.raw)
         self.boot = boot_fixture.valid_receipt(self.manifest, self.raw)
-        # Composition-only observed boot fact. The standalone J-Space/GWT validator
-        # remains its own bounded authority; the UCF ancestry chain cross-binds this
-        # runtime generation to the canonical cycle generation.
-        self.boot["runtime"] = {"entity_generation": ucf_fixture.valid_receipt()["runtime"]["generation"]}
         self.cycle = cycle_from_boot(self.boot)
 
     def test_valid_canonical_cycle_descends_from_valid_boot(self):
@@ -110,9 +107,8 @@ class UcfBootAncestryChainTests(unittest.TestCase):
         self.assertIn("BOOT_JSPACE_PROFILE_MISMATCH", chain.validate_chain(self.cycle, self.boot, self.manifest_path, self.lock))
 
     def test_self_reported_generation_freshness_cannot_replace_boot_crossbind(self):
-        # This is the false-green discriminator: canonical UCF alone accepts a
-        # self-consistent cycle with stale_generation=false after its generation is
-        # changed, because freshness cannot independently authenticate itself.
+        # False-green discriminator: bare UCF accepts this self-consistent mutation,
+        # but composed runtime ancestry must reject it against the boot observation.
         self.cycle["runtime"]["generation"] += 1
         self.cycle["freshness"]["stale_generation"] = False
         redigest(self.cycle)
@@ -122,17 +118,17 @@ class UcfBootAncestryChainTests(unittest.TestCase):
             chain.validate_chain(self.cycle, self.boot, self.manifest_path, self.lock),
         )
 
-    def test_missing_boot_generation_fails_composed_ancestry(self):
+    def test_missing_boot_generation_fails_before_composition(self):
         poisoned = copy.deepcopy(self.boot)
         poisoned.pop("runtime")
         errors = chain.validate_chain(self.cycle, poisoned, self.manifest_path, self.lock)
-        self.assertIn("BOOT_ENTITY_GENERATION_MISSING", errors)
+        self.assertTrue(any("MISSING_OBJECT:runtime" in error for error in errors), errors)
 
-    def test_boolean_boot_generation_fails_composed_ancestry(self):
+    def test_boolean_boot_generation_fails_before_composition(self):
         poisoned = copy.deepcopy(self.boot)
         poisoned["runtime"]["entity_generation"] = True
         errors = chain.validate_chain(self.cycle, poisoned, self.manifest_path, self.lock)
-        self.assertIn("BOOT_ENTITY_GENERATION_INVALID", errors)
+        self.assertTrue(any("INVALID_INT:entity_generation" in error for error in errors), errors)
 
     def test_boot_runtime_substitution_is_stopped_upstream(self):
         poisoned = copy.deepcopy(self.boot)
@@ -146,7 +142,6 @@ class UcfBootAncestryChainTests(unittest.TestCase):
         poisoned_raw = boot_fixture.manifest_bytes(poisoned_manifest)
         poisoned_path = Path(self.temp.name) / "poisoned.json"; poisoned_path.write_bytes(poisoned_raw)
         poisoned_boot = boot_fixture.valid_receipt(poisoned_manifest, poisoned_raw)
-        poisoned_boot["runtime"] = {"entity_generation": ucf_fixture.valid_receipt()["runtime"]["generation"]}
         poisoned_cycle = cycle_from_boot(poisoned_boot)
         errors = chain.validate_chain(poisoned_cycle, poisoned_boot, poisoned_path, self.lock)
         self.assertTrue(any("SOURCE_LOCK_MANIFEST_FILE_MISMATCH" in error for error in errors), errors)

@@ -1,33 +1,77 @@
-# HISTORICAL MINI ENTITY GO OWNER DIRECTIVE — COMPATIBILITY REDIRECT
+# CURRENT MINI ENTITY GO TRANSITION DIRECTIVE
 
-Status: **SUPERSEDED / HISTORICAL DONOR EVIDENCE ONLY**
-Original active date: 2026-08-23
-Superseded by newer owner re-entry: 2026-08-23T16:49+07:00
+Status: **CURRENT OWNER WORK-SELECTION DIRECTIVE**
+Date: 2026-08-23
 Persistent research entity: **Clay**
 
-This path is retained because later Mini Entity/HCU/UCF/J-Space research, receipts and branches reference it. It is no longer current product/program/work-selection authority.
+## Core decision
 
-Current owner/product authority:
+`go` remains operationally anchored in the **current Mini Entity implementation** as the starting body of work.
 
-`research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+Mini Entity is **not** the final product identity. The architectural destination remains:
 
-Current program/stage:
+- **EntityOS** as the target product/runtime system;
+- **HCU** as the integrated cognition/compute architecture;
+- target cognitive law: `Zero -> Entity <- Function`;
+- request-scoped dynamic cognition rather than a permanent simulated world;
+- canonical durable state/evidence remains outside model-generated cognition;
+- real/state-changing effects remain behind deterministic EffectGate authority.
 
-- `CLAYVERSE_SINGLE_CONTAINER`
-- `CLAYVERSE_ARTIFACT`
-- product endpoint: ClayVerse
-- release form: one OCI/Docker-compatible ClayVerse container image
+This directive supersedes the previous classification of Mini Entity as historical-only for `go` work selection. Historical receipts remain historical evidence, but the current Mini Entity code/package/research line is again the **operational bootstrap path** for `go`.
 
-The exact formerly-active Mini Entity directive is preserved in Git history at blob:
+## GO transition law
 
-`ba3972bffef492de89aa371c1bed64f5b1d7733d`
+Every explicit user `go` MUST:
 
-Its MiniUnifiedDB cognition-store work, HCU shared-worker/grid concepts, UCF/J-Space/GWT contracts, Zero integration, ~0.8B cognition mechanisms, Claude adapter ideas, tests, counterexamples and receipts remain bounded donor/internal evidence. They may be fused into ClayVerse only when they preserve the current product authority law:
+1. refresh current `main`, newest owner steering, active branches/PRs and exact execution evidence;
+2. begin from the strongest current Mini Entity implementation rather than starting a parallel replacement architecture;
+3. select the highest-information non-duplicate Mini Entity blocker or capability delta;
+4. preserve useful current MiniUnifiedDB, HCU, UCF/J-Space/GWT, Zero, Hyperposition, EffectGate, retrieval, causal-turn and recovery mechanisms;
+5. prefer deltas that reduce later migration cost toward EntityOS + request-scoped HCU;
+6. reject new permanent complexity that would have to be removed to reach `Zero -> Entity <- Function` unless executable evidence shows it is necessary;
+7. preserve explicit counterhypotheses, falsifiers and exact evidence boundaries;
+8. persist bounded code/research/receipt deltas when justified.
 
-- UnifiedDB remains canonical durable authority;
-- ClayGraph remains rebuildable projection;
-- EffectGate/EffectJournal remain the external-effect authority;
-- EntityOS remains internal substrate;
-- no Mini Entity/HCU/UCF component becomes a second persistent identity, durable truth authority, effect path or recovery ledger.
+## End-state compatibility test
 
-A higher historical control number or later Git commit does not override a newer explicit owner instruction. If this file conflicts with the current ClayVerse owner directive, fail closed and follow the current ClayVerse owner directive.
+Before promoting a material new Mini Entity mechanism, ask:
+
+`Does this delta make the later transition to minimal EntityOS + dynamic HCU Function Fabric easier, neutral, or harder?`
+
+Prefer `EASIER`. Allow `NEUTRAL` when necessary for measured reliability or safety. `HARDER` requires explicit evidence and justification.
+
+## Cognitive migration direction
+
+Current fixed or semi-fixed HCU roles remain allowed as transitional implementation mechanisms. New work should progressively make them compatible with:
+
+- Zero as universal cognitive ingress/admission point rather than persistent persona;
+- Entity as causal/state/authority coherence boundary rather than anthropomorphic identity;
+- HCU cells as logical compute/function slots rather than durable mini-agents;
+- dynamic role/topology allocation per request;
+- local J-Space claims only where model-specific latent access and causal interventions exist;
+- Global J-Space as an empirically instrumented coordination/coupling layer, not hidden-mind mythology;
+- Hyperposition preserving unresolved alternatives rather than majority-vote truth;
+- calibrated candidate selection based on evidence, counterhypotheses, perturbation stability and verified outcomes;
+- ephemeral cognitive structure that may dissolve after the request while provenance-bound accepted outcomes/methods persist.
+
+## No permanent world-simulation target
+
+`go` MUST NOT introduce a permanent standing world simulation as the architectural destination.
+
+World/state facts remain canonical observations/evidence. HCU may perform bounded consequence estimation, counterfactual reasoning and task-local simulations, but the target architecture is **request-scoped cognitive simulation**, not a continuously simulated duplicate reality or a hidden permanent subconscious entity.
+
+Existing HCU world-model records may remain as transitional projections/evidence where useful; they do not become a second canonical reality.
+
+## Authority and safety
+
+- model/HCU/J-Space outputs are candidate or measurement only;
+- no HCU cell may mint canonical truth, identity, permissions or effect authority;
+- stale generation, provenance uncertainty and unknown effect outcomes fail closed;
+- FREE_ONLY remains required where current control requires it;
+- Together API remains forbidden;
+- final paid/model training requires explicit owner authorization;
+- runtime/product claims require exact executable evidence at the claimed scope.
+
+## Short definition
+
+`go = improve the real Mini Entity now, but shape every new delta so Mini Entity can evolve into minimal EntityOS + request-scoped HCU without an architectural rewrite.`

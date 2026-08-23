@@ -17,6 +17,7 @@ CHECKPOINT_SHA256 = "1" * 64
 TOKENIZER_SHA256 = "2" * 64
 RUNTIME_SHA256 = "3" * 64
 BUILD_SHA256 = "4" * 64
+LOADER_RUNTIME_SHA256 = "5" * 64
 OUTPUT_SHA256 = "d" * 64
 
 
@@ -85,6 +86,27 @@ def engine_admission_receipt(*, generation=7):
     return {**material, "receipt_sha256": receipt_sha256}
 
 
+def engine_load_lease(*, engine_receipt=None, generation=7):
+    engine_receipt = engine_receipt or engine_admission_receipt(generation=generation)
+    material = {
+        "schema": "HCU_PHYSICAL_ENGINE_LOAD_LEASE/v1",
+        "entity_generation": generation,
+        "engine_identity": "hcu_local_08b",
+        "engine_class": "LOCAL_SHARED_WEIGHT_08B",
+        "engine_artifact_sha256": ENGINE_SHA256,
+        "engine_admission_receipt_sha256": engine_receipt["receipt_sha256"],
+        "consumed_checkpoint_sha256": CHECKPOINT_SHA256,
+        "consumed_tokenizer_sha256": TOKENIZER_SHA256,
+        "consumed_runtime_sha256": RUNTIME_SHA256,
+        "consumed_build_sha256": BUILD_SHA256,
+        "loader_identity": "entityos:hcu:local-loader:v1",
+        "loader_runtime_sha256": LOADER_RUNTIME_SHA256,
+        "lease_id": "engine-lease:g7:001",
+    }
+    lease_sha256 = hashlib.sha256(_canonical(material)).hexdigest()
+    return {**material, "lease_sha256": lease_sha256}
+
+
 def base_entry():
     return {
         "schema": "XENO_ENTRY_PACKET/v1",
@@ -143,10 +165,12 @@ def model_route():
     return packet, decision, entry_bindings, engine_artifacts
 
 
-def receipt_kwargs(*, engine_receipt=None):
+def receipt_kwargs(*, engine_receipt=None, load_lease=None):
     packet, decision, entry_bindings, engine_artifacts = model_route()
     engine_receipt = engine_receipt or engine_admission_receipt()
     engine_receipt_sha256 = engine_receipt["receipt_sha256"]
+    load_lease = load_lease or engine_load_lease(engine_receipt=engine_receipt)
+    load_lease_sha256 = load_lease["lease_sha256"]
     kwargs = {
         "current_generation": 7,
         "admitted_route_generations": {decision.decision_sha256: 7},
@@ -156,6 +180,10 @@ def receipt_kwargs(*, engine_receipt=None):
         "engine_admission_receipt_sha256": engine_receipt_sha256,
         "admitted_engine_admission_receipts": {
             engine_receipt_sha256: engine_receipt,
+        },
+        "engine_load_lease_sha256": load_lease_sha256,
+        "admitted_engine_load_leases": {
+            load_lease_sha256: load_lease,
         },
         "model_call_id": "model-call:receipt:1",
         "output_ref": "unifieddb:candidate-output:receipt:1",
@@ -180,6 +208,10 @@ class InferenceReceiptTests(unittest.TestCase):
         self.assertEqual(
             a.engine_admission_receipt_sha256,
             kwargs["engine_admission_receipt_sha256"],
+        )
+        self.assertEqual(
+            a.engine_load_lease_sha256,
+            kwargs["engine_load_lease_sha256"],
         )
         self.assertEqual(len(a.receipt_sha256), 64)
 
@@ -227,7 +259,8 @@ class InferenceReceiptTests(unittest.TestCase):
 
     def test_engine_admission_receipt_generation_is_bound(self):
         stale_receipt = engine_admission_receipt(generation=6)
-        _packet, decision, kwargs = receipt_kwargs(engine_receipt=stale_receipt)
+        stale_lease = engine_load_lease(engine_receipt=stale_receipt, generation=6)
+        _packet, decision, kwargs = receipt_kwargs(engine_receipt=stale_receipt, load_lease=stale_lease)
         with self.assertRaisesRegex(InferenceReceiptError, "STALE_ENGINE_ADMISSION_RECEIPT_GENERATION"):
             make_inference_receipt(decision, **kwargs)
 
@@ -242,6 +275,49 @@ class InferenceReceiptTests(unittest.TestCase):
             InferenceReceiptError,
             "ENGINE_ADMISSION_RECEIPT_BUNDLE_DIGEST_MISMATCH|ENGINE_ADMISSION_RECEIPT_DIGEST_MISMATCH",
         ):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_missing_physical_engine_load_lease_fails_closed(self):
+        _packet, decision, kwargs = receipt_kwargs()
+        kwargs["admitted_engine_load_leases"] = {}
+        with self.assertRaisesRegex(InferenceReceiptError, "ENGINE_LOAD_LEASE_NOT_ADMITTED"):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_stale_physical_engine_load_lease_fails_closed(self):
+        receipt = engine_admission_receipt()
+        stale_lease = engine_load_lease(engine_receipt=receipt, generation=6)
+        _packet, decision, kwargs = receipt_kwargs(engine_receipt=receipt, load_lease=stale_lease)
+        with self.assertRaisesRegex(InferenceReceiptError, "STALE_ENGINE_LOAD_LEASE_GENERATION"):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_physical_engine_load_lease_must_bind_engine_admission_receipt(self):
+        _packet, decision, kwargs = receipt_kwargs()
+        lease = copy.deepcopy(next(iter(kwargs["admitted_engine_load_leases"].values())))
+        lease["engine_admission_receipt_sha256"] = "9" * 64
+        old_sha = kwargs["engine_load_lease_sha256"]
+        kwargs["admitted_engine_load_leases"] = {old_sha: lease}
+        with self.assertRaisesRegex(InferenceReceiptError, "ENGINE_LOAD_LEASE_ADMISSION_RECEIPT_MISMATCH"):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_physical_engine_load_lease_consumed_bytes_must_match_admission(self):
+        _packet, decision, kwargs = receipt_kwargs()
+        lease = copy.deepcopy(next(iter(kwargs["admitted_engine_load_leases"].values())))
+        lease["consumed_checkpoint_sha256"] = "9" * 64
+        old_sha = kwargs["engine_load_lease_sha256"]
+        kwargs["admitted_engine_load_leases"] = {old_sha: lease}
+        with self.assertRaisesRegex(
+            InferenceReceiptError,
+            "ENGINE_LOAD_LEASE_CONSUMED_BYTES_MISMATCH:checkpoint_sha256",
+        ):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_physical_engine_load_lease_digest_tamper_fails_closed(self):
+        _packet, decision, kwargs = receipt_kwargs()
+        lease = copy.deepcopy(next(iter(kwargs["admitted_engine_load_leases"].values())))
+        lease["loader_identity"] = "entityos:hcu:tampered-loader"
+        old_sha = kwargs["engine_load_lease_sha256"]
+        kwargs["admitted_engine_load_leases"] = {old_sha: lease}
+        with self.assertRaisesRegex(InferenceReceiptError, "ENGINE_LOAD_LEASE_DIGEST_MISMATCH"):
             make_inference_receipt(decision, **kwargs)
 
     def test_output_digest_and_size_are_typed(self):
@@ -265,6 +341,7 @@ class InferenceReceiptTests(unittest.TestCase):
             admitted_entry_bindings=entry_bindings,
         )
         engine_receipt = engine_admission_receipt()
+        load_lease = engine_load_lease(engine_receipt=engine_receipt)
         with self.assertRaisesRegex(InferenceReceiptError, "MODEL_ACTIVATION_ROUTE_REQUIRED"):
             make_inference_receipt(
                 decision,
@@ -276,6 +353,10 @@ class InferenceReceiptTests(unittest.TestCase):
                 engine_admission_receipt_sha256=engine_receipt["receipt_sha256"],
                 admitted_engine_admission_receipts={
                     engine_receipt["receipt_sha256"]: engine_receipt,
+                },
+                engine_load_lease_sha256=load_lease["lease_sha256"],
+                admitted_engine_load_leases={
+                    load_lease["lease_sha256"]: load_lease,
                 },
                 model_call_id="model-call:should-not-exist",
                 output_ref="unifieddb:candidate-output:should-not-exist",

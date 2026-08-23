@@ -1,0 +1,22 @@
+{
+  "schema_version": "HCU_DATA_INDEX/v1",
+  "package": "MicroEntity",
+  "hcu_root": "hcu/",
+  "generated_release_artifacts": [
+    "hcu/README.md",
+    "hcu/HCU_ARCHITECTURE.md",
+    "hcu/topology.kvm4.json",
+    "hcu/FREE_LLM_FEED_CONTRACT.json",
+    "hcu/HCU_DATA_INDEX.json"
+  ],
+  "runtime_data_authority": "MiniUnifiedDB",
+  "archive_policy": {
+    "include_non_secret_generated_hcu_files": true,
+    "include_non_secret_receipts": true,
+    "include_privacy_filtered_data_exports_when_generated": true,
+    "include_plaintext_secrets": false,
+    "include_credential_bearing_files": false
+  },
+  "source_base_head": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "claim_class": "SOURCE_PACKAGE_CONTRACT_ONLY_NOT_RUNTIME_EVIDENCE"
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "HCU_SOURCE_MECHANISM_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "macrocycle_global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_observed_before_intervention": "a7accad970d9ae53197bc74f9b5b2cc260d53794",
+  "lane": {
+    "pull_request": 1231,
+    "branch": "gpt56sol/hcu-typed-fabric-fusion-20260823",
+    "purpose": "repair existing HCU typed candidate-fabric lane; no duplicate HCU implementation"
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "HCU_NESTED_AUTHORITY_SMUGGLING",
+    "counterhypothesis": "top-level forbidden-key filtering is sufficient to prevent HCU candidate packets from expressing canonical/effect authority",
+    "intervention": "place direct_effect=true one mapping level below the payload root while preserving an otherwise valid candidate packet",
+    "pre_repair_observation": "BYPASS_ACCEPTED",
+    "classification": "COUNTERHYPOTHESIS_REJECTED_SECURITY_GAP_CONFIRMED"
+  },
+  "repair": {
+    "fabric_commit": "990dd5e790229e010868963e392cd6f0321e55ed",
+    "test_commit": "a102170a8405fa193787f5319412120bbc108a12",
+    "fabric_git_blob": "bbd746bcb5ed3c81be7a0782fe45ec3fde6df3ec",
+    "test_git_blob": "0ddefb7806eb2bf161b77073ff42a673383a86fa",
+    "mechanism": [
+      "recursive forbidden-authority-field traversal across mappings and sequences",
+      "fail-closed rejection of cyclic payload containers",
+      "fail-closed rejection of non-string mapping keys"
+    ]
+  },
+  "bounded_isolated_regression": {
+    "environment": "isolated ChatGPT Linux/Python component environment",
+    "python_mode": "python3 -S",
+    "py_compile": "PASS",
+    "unit_tests": {
+      "passed": 9,
+      "failed": 0,
+      "errors": 0
+    },
+    "exact_blob_hash_reproduction": {
+      "fabric": "bbd746bcb5ed3c81be7a0782fe45ec3fde6df3ec",
+      "tests": "0ddefb7806eb2bf161b77073ff42a673383a86fa"
+    }
+  },
+  "authority": {
+    "MiniUnifiedDB": "CANONICAL_DURABLE_AUTHORITY_UNCHANGED",
+    "EffectGate": "ONLY_REAL_EFFECT_AUTHORITY_UNCHANGED",
+    "HCU_packet_output": "CANDIDATE_OR_SIMULATION_ONLY"
+  },
+  "credit": "EXACT_BLOB_BOUNDED_SOURCE_COMPONENT_MECHANISM_ONLY",
+  "runtime_credit": 0,
+  "hcu_capacity_credit": 0,
+  "whole_product_credit": 0,
+  "packaging": "NOT_REPAIRED_BY_THIS_DELTA; PR branch ZIP must be rebuilt after rebase and must not be merged stale",
+  "next_gate": "rebase/fuse the repaired typed fabric onto then-current main, rebuild MICROENTITY_CURRENT.zip from the current manifest/source bytes, then obtain actually-started authorized isolated execution before runtime promotion",
+  "safety": {
+    "free_only": true,
+    "together": "FORBIDDEN_UNUSED",
+    "provider_network_inference": false,
+    "paid_execution": false,
+    "vps_testing": false,
+    "training": false
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "fresh_base_main": "380446042cf1d7e8ed00b7b51d1f8b129bd081dd",
+  "branch": "go-20260823-gpt56sol-runtime-digest-fused-r2",
+  "coordination": {
+    "unusual_experiment_count": 0,
+    "classification": "DETERMINISTIC_CANONICAL_PATH_FUSION",
+    "source_pr_runtime_digest": 1085,
+    "source_pr_crossbinding_hardening": 1087,
+    "note": "PR #1087 landed first. PR #1085 then became conflict-bearing, so its runtime-byte identity mechanism was rebased onto the hardened canonical path instead of force-merging stale overlapping bytes."
+  },
+  "delta": {
+    "manifest_runtime_digest": "runtime_digest is a validated SHA-256 identity field and participates in integration_identity_sha256 when present",
+    "boot_runtime_binding": "boot bundled_core.runtime_sha256 must equal admitted manifest.runtime_digest and boot admission rejects a manifest without runtime_digest",
+    "placeholder_guard_preserved": true,
+    "unknown_gwt_slot_semantics_preserved": true,
+    "single_source_lock_preserved": true,
+    "new_authority_created": false
+  },
+  "exact_git_blobs": {
+    "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py": "737798d541db462048a7ac7fad34af6438480905",
+    "the artefact/blogpost_entity/mini_cognition/test_bundled_cognition_manifest_v1.py": "b83fae041589feac116cd21b3da0ebdcf19a779e",
+    "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py": "c41cdfc5dded65b5bebe5048152dd659cc7196ef",
+    "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py": "7a93c3e3101af8195b5f5eafa224cd05d2600558",
+    "the artefact/blogpost_entity/jspace_gwt/JSPACE_GWT_BOOT_BINDING_V1.md": "126442c71ee360e89ba734baf55b7a0319cc6534"
+  },
+  "isolated_exact_blob_execution": {
+    "runner": "isolated local container",
+    "transport_proof": "Each locally executed Python file was reconstructed from the exact authored GitHub update payload and git hash-object matched the GitHub content blob SHA before execution.",
+    "py_compile": "PASS",
+    "manifest_suite": {
+      "tests": 11,
+      "failures": 0,
+      "result": "PASS"
+    },
+    "boot_crossbinding_suite": {
+      "tests": 20,
+      "failures": 0,
+      "result": "PASS"
+    },
+    "total": {
+      "tests": 31,
+      "failures": 0,
+      "result": "PASS"
+    }
+  },
+  "falsifiers_preserved_or_added": [
+    "runtime byte substitution under stable quantization/runtime identity fails closed",
+    "boot manifest missing runtime_digest fails closed",
+    "all-zero/all-f placeholder digests fail closed",
+    "UNMEASURED_SOURCE_ONLY with numeric slot_count fails closed",
+    "MEASURED_EXACT_BUNDLE without positive slot_count fails closed",
+    "cross-bundle manifest/source-lock substitution remains rejected"
+  ],
+  "execution_boundary": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "training": false,
+    "money_spent_usd": 0
+  },
+  "credits": {
+    "source_mechanism": "EXACT_BLOB_COMPONENT_REGRESSION_PASS",
+    "bundled_08b_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "whole_product": 0
+  },
+  "next_gate": "Fuse onto then-current main if ancestry remains clean. Whole runtime promotion still requires an intentional exact Ubuntu boot that binds real checkpoint/tokenizer/runtime/J-Space/lens/workspace bytes through the source lock and records runtime observations."
+}

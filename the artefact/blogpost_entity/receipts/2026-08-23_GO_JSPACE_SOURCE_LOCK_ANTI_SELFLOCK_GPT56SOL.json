@@ -1,0 +1,78 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "a492051e5e22c051cde97c82ae3b7db7194456ed",
+  "branch": "go/jspace-boot-binding-guard-20260823-gpt56sol",
+  "claim_class": "SOURCE_MECHANISM_SUPPORTED_LOCAL_ISOLATED_COMPONENT_ONLY",
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_call": false,
+    "paid_execution": false,
+    "host_started": false
+  },
+  "fusion": {
+    "existing_manifest_validator_main_commit": "76b3a2a50f5c533cc42403563a16148b039015b5",
+    "existing_boot_validator_main_commit": "883c7e43efc4cfa32765059fe8b89276d987721b",
+    "decision": "REUSE_AND_HARDEN_EXISTING_CANONICAL_PATH",
+    "rejected_parallel_design": "Separate bundled-cognition manifest/boot schema from earlier draft branch was discarded after current-main refresh because it would create duplicate authority.",
+    "new_mechanism_only": "Repository-owned pre-existing expected bundle identity prevents a runtime receipt from self-authorizing its own observed manifest/integration identities."
+  },
+  "delta": {
+    "validator": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
+    "tests": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py",
+    "source_lock": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_source_lock_v1.json",
+    "contract": "the artefact/blogpost_entity/jspace_gwt/JSPACE_GWT_BOOT_BINDING_V1.md",
+    "validator_sha256_local_tested_bytes": "676d0180d7418f281ebdea2cf86eb9e0826ef1ff2841d373469a63bc45042cac",
+    "tests_sha256_local_tested_bytes": "fdb2f46d3b1dfcce67cfe4e3259893d3557cd09465126ce496e1a88bf61c2875",
+    "source_lock_sha256_local_tested_bytes": "c3a11fbf3ca84ed6ffc174ea2b1b5469441abca32d3bd085ef384118f01e1a81",
+    "source_lock_status": "UNBOUND",
+    "source_lock_authority": "repository_source_tree"
+  },
+  "grf": {
+    "R0_OBSERVE": "Current main already contains the bundled-cognition manifest identity validator and JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 structural/numeric validator. The latter accepted any syntactically valid manifest_sha256 plus exact_bytes_verified=true without comparing that identity to a pre-existing source-owned expected bundle.",
+    "R1_INFER": "A runtime can be internally self-consistent yet substituted. Runtime observation and expected source authority must be different typed inputs.",
+    "R2_GENERATE": [
+      "caller-supplied expected hash",
+      "source-lock containing current source commit/tree plus manifest hash",
+      "repository-owned bundle identity lock loaded from a fixed product path"
+    ],
+    "R3_COUNTER": "Caller-supplied expected values permit self-lock. Embedding the current commit/tree in the same committed lock introduces circular self-reference. A repository-owned lock should therefore bind only the already-validated bundle manifest/integration identities, while source/tree remain explicit independently observed boot provenance.",
+    "R4_DISCRIMINATE": "Deterministic anti-self-lock regression mutates both manifest_sha256 and integration_identity_sha256 in an otherwise valid boot receipt. The unchanged repository lock must reject the receipt.",
+    "R5_EMERGENT": [
+      "RUNTIME_OBSERVATION != SOURCE_AUTHORITY",
+      "SELF_CONSISTENT_RECEIPT != ADMITTED_BUNDLE",
+      "SOURCE_LOCK_NOT_BOUND -> BOOT_ADMISSION_FAIL_CLOSED",
+      "PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY"
+    ],
+    "R6_VERIFY": "Exact locally written hardened validator/test/UNBOUND-lock bytes passed py_compile and unittest 8/8 in the isolated ChatGPT Linux container. Current repository lock remains intentionally UNBOUND, therefore real CLI boot admission fails closed and receives zero runtime/model/semantic credit."
+  },
+  "unusual_experiment": {
+    "count_claimed": 0,
+    "shared_macrocycle_slot": "ALREADY_CONSUMED_ON_CURRENT_MAIN",
+    "existing_id": "JSPACE_TRANSFER_ASSUMPTION_FALSIFIER",
+    "local_anti_self_lock_case": "DETERMINISTIC_REGRESSION_ONLY"
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Linux container",
+    "python": "3.13.5",
+    "command": "python3 -m py_compile validate_jspace_gwt_boot_binding_v1.py test_validate_jspace_gwt_boot_binding_v1.py && python3 -m unittest -v",
+    "tests_total": 8,
+    "tests_passed": 8,
+    "exit_code": 0,
+    "host_runtime_credit": 0,
+    "model_quality_credit": 0,
+    "whole_gwt_credit": 0,
+    "whole_product_credit": 0
+  },
+  "negative_evidence": [
+    "No exact bundled Qwen3.5-0.8B checkpoint/tokenizer/runtime/lens/workspace calibration identities were measured in this run.",
+    "The committed bundle source lock is intentionally UNBOUND and cannot pass the product CLI boot validator.",
+    "No Ubuntu AgentZero/EntityOS host was started; intentional offline state remains intact.",
+    "No Claude Code adapter runtime PASS was obtained.",
+    "No paid/subscription/unknown provider secret lookup, network call, training or spend occurred."
+  ],
+  "next_gate": "At the next intentional exact Ubuntu start, after exact bundled manifest identities are measured and independently reviewed, bind manifest_identity_sha256 plus integration_identity_sha256 into an evidence-backed repository source-lock change; then capture PRESTART/POSTSTART plus JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 and verify that observed bundle identities match the pre-existing BOUND lock before any J-Space/GWT runtime credit."
+}

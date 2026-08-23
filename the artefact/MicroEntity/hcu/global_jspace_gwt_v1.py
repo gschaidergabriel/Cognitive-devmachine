@@ -194,8 +194,12 @@ def step(
     ranked = sorted(validated, key=lambda c: (-c.gate_q(), c.cell_id))
     winner = ranked[0]
     winner_gate_q = winner.gate_q()
-    hyper = tuple(c.cell_id for c in ranked if winner_gate_q - c.gate_q() <= HYPERPOSITION_MARGIN_Q)
-    global_vector = _global_vector(validated, dim)
+    coalition = tuple(c for c in ranked if winner_gate_q - c.gate_q() <= HYPERPOSITION_MARGIN_Q)
+    hyper = tuple(c.cell_id for c in coalition)
+    # Broadcast only the selected GWT/Hyperposition coalition. Cells outside the admitted
+    # selection margin remain observable in the trace but cannot silently reverse a packet
+    # labelled with the winner's role.
+    global_vector = _global_vector(coalition, dim)
 
     # One role-relevant Global J-Space return packet using the sole selected Vector Control ABI.
     packet = encode_vector(
@@ -230,6 +234,7 @@ def step(
         "winner_role": winner.role,
         "winner_gate_q": winner_gate_q,
         "hyperposition_cells": list(hyper),
+        "broadcast_contributor_cells": list(hyper),
         "global_vector_q127": [_q_signed(v) for v in global_vector],
         "control_condition": packet.control_condition,
         "control_packet_schema": ABI_SCHEMA,

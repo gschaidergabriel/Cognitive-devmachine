@@ -4,10 +4,12 @@ from __future__ import annotations
 import hashlib
 import json
 import sqlite3
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import profile_runtime_cognitive_fabric_binding_v1 as binding
 
 

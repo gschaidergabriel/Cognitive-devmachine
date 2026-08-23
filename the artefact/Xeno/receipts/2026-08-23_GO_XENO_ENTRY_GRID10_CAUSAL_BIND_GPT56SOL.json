@@ -1,0 +1,49 @@
+{
+  "schema": "XENO_GO_ENTRY_GRID10_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_entity": "Clay",
+  "active_program": "ENTITYOS_HCU_XENO",
+  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "base_main": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "branch": "go/xeno-entry-grid10-causal-bind-20260823",
+  "goal": "Bind all new Xeno data before cognition and compile a reusable deterministic 10-cell logical plan over shared physical workers without creating truth/effect authority.",
+  "hypothesis": "A single typed ingress identity plus deterministic XPU plan compiler can serve GRID10 and later COGSIM10/WM_TEST/NESTED_SIM while eliminating route-decision causal aliasing.",
+  "counterhypothesis": "The shared packet/control abstraction merely moves complexity into metadata and scheduler logic, adding latency and failure modes without improving replay/provenance safety.",
+  "discriminator": "Compare deterministic replay, stale-generation rejection, causal event alias resistance, cell/inference/token budget enforcement and logical-vs-physical worker separation before adding model runtime complexity.",
+  "unusual_experiment": {
+    "count": 1,
+    "name": "CAUSAL_ALIAS_POISON",
+    "intervention": "Hold causal_id, payload reference, resource budget and requested routing functions fixed while mutating immutable event provenance; require different ingress/plan digests, then replay the exact first event and require identical digests.",
+    "source_test": "the artefact/Xeno/test_entry_grid_v1.py::GoUnusualExperiment::test_causal_alias_poison_same_routing_different_event_identity",
+    "execution_status": "SOURCE_ENCODED_NOT_YET_OBSERVED_IN_AUTHORIZED_ISOLATED_EXECUTOR"
+  },
+  "source_delta": [
+    "the artefact/Xeno/entry_fabric_v1.py",
+    "the artefact/Xeno/grid10_scheduler_v1.py",
+    "the artefact/Xeno/test_entry_grid_v1.py",
+    "the artefact/Xeno/README.md"
+  ],
+  "authority_invariants": [
+    "Xeno ingress and grid plans are candidate/control metadata only",
+    "canonical durable truth remains UnifiedDB or the current Xeno MiniUnifiedDB compatibility substrate",
+    "EffectGate+EffectJournal remain the only real effect authority",
+    "logical cell count is not physical decode concurrency",
+    "stale or future generation fails closed",
+    "raw payload is not stored in packet identity; only opaque/digest-backed payload_ref is admitted",
+    "plan identity commits to ingress/event identity so identical routing output cannot erase causal provenance"
+  ],
+  "cross_mode_reuse": [
+    "XENO_GRID10",
+    "XENO_COGSIM10",
+    "XENO_WM_TEST",
+    "XENO_NESTED_SIM"
+  ],
+  "runtime_credit": 0,
+  "whole_product_pass": false,
+  "execution_surface_observation": "Connected Vercel capability exposes no Sandbox create/start/exec action; current main had no PR-triggered workflow run at inspection time.",
+  "together_api": "FORBIDDEN_AND_UNUSED",
+  "vps_testing": "NOT_USED",
+  "paid_or_model_training": "NOT_USED",
+  "next_gate": "Actually start an authorized isolated executor on the exact branch bytes; run the focused Xeno tests plus adjacent HCU/fabric/generation regressions. Only then consider fusion to main and model-worker integration."
+}

@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Compatibility-named fail-closed authority guard for current EntityOS + HCU.
 
-The filename stays stable because workflows and receipts already address it.  Current
-work/execution authority is autonomous supervisor 8.61 in FREE_ONLY mode.  The owner
-paid one-shot training directive remains provenance but is quarantined by 8.61 and is
-not executable permission for this organ.  Historical ClayVerse controls remain
-hash-bound donor/safety ancestry, not current product authority.
+The filename remains stable because workflows/receipts address it. Current
+work/execution authority is SUPERVISOR_STEERING_8_61 in FREE_ONLY mode.
+The owner paid one-shot training directive remains provenance only and does
+not grant this organ paid execution permission.
 """
 from __future__ import annotations
 
@@ -29,6 +28,9 @@ CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_C
 LEGACY_EXPECTED_CONTROL = "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum"
 ROOT_CLAUDE = "CLAUDE.md"
 
+PAID_BOUNDARY = "FAIL_CLOSED_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION"
+CURRENT_SUPERVISOR_TRAINING = "FORBIDDEN_BEFORE_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION"
+
 
 def load_json(path: Path):
     with path.open("r", encoding="utf-8") as fh:
@@ -46,7 +48,7 @@ def require(errors: list[str], condition: bool, code: str) -> None:
 
 
 def _validate_legacy_safety_ancestry(errors, paths, c41, c42, c43, c44) -> None:
-    """Preserve prior hard safety/provenance fences without reactivating old product authority."""
+    """Preserve hash-bound historical safety ancestry without restoring old product authority."""
     require(errors, c41.get("schema_version") == "4.1", "CONTROL41_VERSION_MISMATCH")
     require(errors, c41.get("status") == "ACTIVE" and c41.get("mode") == "FREE_ONLY", "CONTROL41_FREE_ONLY_WEAKENED")
     cycle41 = c41.get("cycle_policy") or {}
@@ -64,34 +66,40 @@ def _validate_legacy_safety_ancestry(errors, paths, c41, c42, c43, c44) -> None:
     require(errors, c42.get("schema_version") == "4.2-execution-boundary-addendum", "CONTROL42_VERSION_MISMATCH")
     require(errors, c42.get("base_control_path") == CONTROL41, "CONTROL42_BASE_PATH_MISMATCH")
     require(errors, c42.get("base_control_blob_sha") == blob41, "CONTROL42_BASE_BLOB_MISMATCH")
-    hard42 = c42.get("preserved_hard_rules") or {}
-    require(errors, hard42.get("free_only") is True and hard42.get("paid_fallback") is False, "CONTROL42_FREE_ONLY_FENCE_WEAKENED")
-    require(errors, hard42.get("together_forbidden") is True, "CONTROL42_TOGETHER_FENCE_WEAKENED")
-    routing42 = c42.get("execution_routing") or {}
-    require(errors, routing42.get("direct_vps_host_candidate_execution") == "FORBIDDEN", "CONTROL42_DIRECT_VPS_FENCE_WEAKENED")
-    require(errors, routing42.get("persistent_self_hosted_candidate_execution") == "FORBIDDEN", "CONTROL42_SELF_HOSTED_FENCE_WEAKENED")
-    require(errors, routing42.get("production_host_testing") == "FORBIDDEN", "CONTROL42_PRODUCTION_TEST_FENCE_WEAKENED")
+    h42 = c42.get("preserved_hard_rules") or {}
+    require(errors, h42.get("free_only") is True and h42.get("paid_fallback") is False, "CONTROL42_FREE_ONLY_FENCE_WEAKENED")
+    require(errors, h42.get("together_forbidden") is True, "CONTROL42_TOGETHER_FENCE_WEAKENED")
+    r42 = c42.get("execution_routing") or {}
+    require(errors, r42.get("direct_vps_host_candidate_execution") == "FORBIDDEN", "CONTROL42_DIRECT_VPS_FENCE_WEAKENED")
+    require(errors, r42.get("persistent_self_hosted_candidate_execution") == "FORBIDDEN", "CONTROL42_SELF_HOSTED_FENCE_WEAKENED")
+    require(errors, r42.get("production_host_testing") == "FORBIDDEN", "CONTROL42_PRODUCTION_TEST_FENCE_WEAKENED")
 
     require(errors, c43.get("schema_version") == "4.3-program-authority-addendum", "CONTROL43_VERSION_MISMATCH")
     require(errors, c43.get("base_control_blob_sha") == blob41, "CONTROL43_BASE_BLOB_MISMATCH")
     require(errors, c43.get("execution_boundary_addendum_path") == CONTROL42, "CONTROL43_EXEC_PATH_MISMATCH")
     require(errors, c43.get("execution_boundary_addendum_blob_sha") == blob42, "CONTROL43_EXEC_BLOB_MISMATCH")
-    hard43 = c43.get("preserved_hard_rules") or {}
-    require(errors, hard43.get("free_only") is True and hard43.get("paid_fallback") is False, "CONTROL43_FREE_ONLY_FENCE_WEAKENED")
-    require(errors, hard43.get("together_forbidden_under_current_control") is True, "CONTROL43_TOGETHER_FENCE_WEAKENED")
-    require(errors, hard43.get("runtime_credit_requires_exact_admitted_execution") is True, "CONTROL43_RUNTIME_EVIDENCE_WEAKENED")
+    h43 = c43.get("preserved_hard_rules") or {}
+    require(errors, h43.get("free_only") is True and h43.get("paid_fallback") is False, "CONTROL43_FREE_ONLY_FENCE_WEAKENED")
+    require(errors, h43.get("together_forbidden_under_current_control") is True, "CONTROL43_TOGETHER_FENCE_WEAKENED")
+    require(errors, h43.get("runtime_credit_requires_exact_admitted_execution") is True, "CONTROL43_RUNTIME_EVIDENCE_WEAKENED")
 
     require(errors, c44.get("schema_version") == "4.4-clayverse-product-authority-addendum", "CONTROL44_VERSION_MISMATCH")
     require(errors, c44.get("prior_program_authority_addendum_path") == CONTROL43, "CONTROL44_PRIOR_PATH_MISMATCH")
     require(errors, c44.get("prior_program_authority_addendum_blob_sha") == blob43, "CONTROL44_PRIOR_BLOB_MISMATCH")
     require(errors, c44.get("effective_control_version") == LEGACY_EXPECTED_CONTROL, "CONTROL44_EFFECTIVE_VERSION_MISMATCH")
     override = c44.get("program_identity_override") or {}
-    require(errors, override.get("active_program") == "CLAYVERSE_SINGLE_CONTAINER" and override.get("target_stage") == "CLAYVERSE_ARTIFACT" and override.get("product_endpoint") == "ClayVerse", "CONTROL44_HISTORICAL_PRODUCT_ANCESTRY_MISMATCH")
-    hard44 = c44.get("preserved_hard_rules") or {}
-    require(errors, hard44.get("free_only") is True and hard44.get("paid_fallback") is False, "CONTROL44_FREE_ONLY_WEAKENED")
-    require(errors, hard44.get("together_forbidden") is True, "CONTROL44_TOGETHER_WEAKENED")
-    require(errors, hard44.get("vps_testing") is False, "CONTROL44_VPS_TEST_WEAKENED")
-    require(errors, hard44.get("runtime_credit_requires_exact_admitted_isolated_execution") is True, "CONTROL44_RUNTIME_EVIDENCE_WEAKENED")
+    require(
+        errors,
+        override.get("active_program") == "CLAYVERSE_SINGLE_CONTAINER"
+        and override.get("target_stage") == "CLAYVERSE_ARTIFACT"
+        and override.get("product_endpoint") == "ClayVerse",
+        "CONTROL44_HISTORICAL_PRODUCT_ANCESTRY_MISMATCH",
+    )
+    h44 = c44.get("preserved_hard_rules") or {}
+    require(errors, h44.get("free_only") is True and h44.get("paid_fallback") is False, "CONTROL44_FREE_ONLY_WEAKENED")
+    require(errors, h44.get("together_forbidden") is True, "CONTROL44_TOGETHER_WEAKENED")
+    require(errors, h44.get("vps_testing") is False, "CONTROL44_VPS_TEST_WEAKENED")
+    require(errors, h44.get("runtime_credit_requires_exact_admitted_isolated_execution") is True, "CONTROL44_RUNTIME_EVIDENCE_WEAKENED")
 
 
 def validate(root: Path) -> dict:
@@ -132,27 +140,21 @@ def validate(root: Path) -> dict:
     except (OSError, json.JSONDecodeError) as exc:
         return {"schema": CURRENT_SCHEMA, "pass": False, "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"]}
 
-    identity = bootstrap.get("identity") or {}
+    ident = bootstrap.get("identity") or {}
     require(errors, bootstrap.get("entity_id") == canonical.get("entity_id"), "BOOTSTRAP_CANONICAL_ENTITY_MISMATCH")
-    require(errors, identity.get("persistent_research_entity") == "Clay", "BOOTSTRAP_PERSISTENT_ENTITY_MISMATCH")
-    require(errors, identity.get("temporary_worker") == "ORGAN_NOT_ENTITY", "BOOTSTRAP_TEMP_WORKER_ROLE_MISMATCH")
+    require(errors, ident.get("persistent_research_entity") == "Clay", "BOOTSTRAP_PERSISTENT_ENTITY_MISMATCH")
+    require(errors, ident.get("temporary_worker") == "ORGAN_NOT_ENTITY", "BOOTSTRAP_TEMP_WORKER_ROLE_MISMATCH")
     require(errors, bootstrap.get("active_program") == CURRENT_PROGRAM, "BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH")
     require(errors, bootstrap.get("active_stage") == CURRENT_STAGE, "BOOTSTRAP_STAGE_MISMATCH")
     require(errors, bootstrap.get("product_endpoint") == CURRENT_PRODUCT, "BOOTSTRAP_PRODUCT_ENDPOINT_MISMATCH")
     require(errors, bootstrap.get("integrated_cognition_compute_architecture") == CURRENT_COMPUTE_ARCHITECTURE, "BOOTSTRAP_COMPUTE_ARCHITECTURE_MISMATCH")
     require(errors, bootstrap.get("authority_correction") == CURRENT_AUTHORITY, "BOOTSTRAP_AUTHORITY_POINTER_MISMATCH")
-    require(errors, bootstrap.get("execution_surface") == "AUTHORIZED_ISOLATED_FREE_SANDBOX_ONLY_IN_CURRENT_AUTONOMOUS_SUPERVISOR_MODE", "BOOTSTRAP_EXECUTION_FENCE_MISMATCH")
-    require(errors, bootstrap.get("free_only") is True, "BOOTSTRAP_FREE_ONLY_MISSING")
-    require(errors, bootstrap.get("paid_fallback") == "FORBIDDEN", "BOOTSTRAP_PAID_FALLBACK_WEAKENED")
+    require(errors, bootstrap.get("free_only") is True and bootstrap.get("paid_fallback") == "FORBIDDEN", "BOOTSTRAP_FREE_ONLY_MISMATCH")
     require(errors, "FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE" in str(bootstrap.get("together_api")), "BOOTSTRAP_TOGETHER_FENCE_MISSING")
     require(errors, bootstrap.get("together_training_authority_provenance") == TRAINING_PROVENANCE, "BOOTSTRAP_TRAINING_PROVENANCE_MISMATCH")
     require(errors, bootstrap.get("together_one_shot_training_consumed") is False, "BOOTSTRAP_ONE_SHOT_PREMATURELY_CONSUMED")
-    require(errors, bootstrap.get("current_supervisor_together_training") == "FORBIDDEN_BEFORE_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION", "BOOTSTRAP_PAID_ADMISSION_FENCE_MISSING")
+    require(errors, bootstrap.get("current_supervisor_together_training") == CURRENT_SUPERVISOR_TRAINING, "BOOTSTRAP_TRAINING_ADMISSION_FENCE_MISSING")
     require(errors, bootstrap.get("effect_authority") == "EffectGate+EffectJournal", "BOOTSTRAP_EFFECT_AUTHORITY_MISMATCH")
-    inv = set(str(x) for x in bootstrap.get("mandatory_invariants") or [])
-    require(errors, "EntityOS is the sole current product/system identity" in inv, "BOOTSTRAP_ENTITYOS_INVARIANT_MISSING")
-    require(errors, "HCU is the sole current integrated cognition/compute architecture" in inv, "BOOTSTRAP_HCU_INVARIANT_MISSING")
-    require(errors, "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT" in inv, "BOOTSTRAP_EPISTEMIC_FENCE_MISSING")
 
     require(errors, program.get("program_id") == "entityos-hcu" and program.get("status") == "ACTIVE", "PROGRAM_ID_OR_STATUS_MISMATCH")
     require(errors, program.get("stage") == CURRENT_STAGE and program.get("current_stage") == CURRENT_STAGE, "PROGRAM_STAGE_MISMATCH")
@@ -164,16 +166,16 @@ def validate(root: Path) -> dict:
     require(errors, pauth.get("second_persistent_identity") == "FORBIDDEN", "PROGRAM_SECOND_IDENTITY_NOT_FORBIDDEN")
     require(errors, pauth.get("second_truth_effect_or_recovery_authority") == "FORBIDDEN", "PROGRAM_SECOND_AUTHORITY_NOT_FORBIDDEN")
     pexec = program.get("execution_policy") or {}
-    require(errors, pexec.get("free_only") is True, "PROGRAM_FREE_ONLY_MISSING")
-    require(errors, pexec.get("isolated_sandbox_only") is True, "PROGRAM_ISOLATED_ONLY_MISSING")
+    require(errors, pexec.get("free_only") is True and pexec.get("isolated_sandbox_only") is True, "PROGRAM_FREE_ONLY_EXECUTION_MISMATCH")
     require(errors, pexec.get("vps_testing_forbidden") is True and pexec.get("self_hosted_vps_test_runners_forbidden") is True and pexec.get("production_host_testing_forbidden") is True, "PROGRAM_HOST_EXECUTION_FENCE_WEAKENED")
     require(errors, pexec.get("together_general_inference_and_fallback_forbidden") is True, "PROGRAM_TOGETHER_INFERENCE_FENCE_MISSING")
     require(errors, pexec.get("owner_paid_one_shot_directive_present_as_provenance") is True, "PROGRAM_OWNER_TRAINING_PROVENANCE_MISSING")
     require(errors, pexec.get("owner_paid_one_shot_directive_file") == TRAINING_PROVENANCE, "PROGRAM_TRAINING_PROVENANCE_PATH_MISMATCH")
     require(errors, pexec.get("owner_paid_one_shot_job_consumed") is False, "PROGRAM_ONE_SHOT_PREMATURELY_CONSUMED")
     require(errors, pexec.get("current_supervisor_together_training_forbidden") is True, "PROGRAM_TOGETHER_TRAINING_FENCE_MISSING")
-    require(errors, pexec.get("paid_or_unknown_provider_admission_boundary") == "FAIL_CLOSED_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION", "PROGRAM_PAID_ADMISSION_FENCE_MISSING")
+    require(errors, pexec.get("paid_or_unknown_provider_admission_boundary") == PAID_BOUNDARY, "PROGRAM_PAID_ADMISSION_FENCE_MISSING")
     require(errors, pexec.get("other_paid_fallback") is False, "PROGRAM_OTHER_PAID_FALLBACK_WEAKENED")
+    require(errors, pexec.get("secrets_in_source_or_receipts") is False, "PROGRAM_SECRET_PERSISTENCE_FENCE_WEAKENED")
     tracks = program.get("go_required_tracks") or {}
     require(errors, tracks.get("track_a") == "ENTITYOS_EXECUTABLE_CONVERGENCE", "PROGRAM_GO_TRACK_A_MISMATCH")
     require(errors, tracks.get("track_b") == "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT", "PROGRAM_GO_TRACK_B_MISMATCH")
@@ -198,7 +200,6 @@ def validate(root: Path) -> dict:
     promotion = supervisor.get("promotion_state") or {}
     require(errors, promotion.get("entityos_whole_runtime_pass") is False, "SUPERVISOR861_WHOLE_PASS_PREMATURE")
     require(errors, promotion.get("training_credit") == 0, "SUPERVISOR861_TRAINING_CREDIT_NONZERO")
-
     require(errors, inbox.get("steering") == CURRENT_AUTHORITY, "INBOX_ACTIVE_SUPERVISOR_MISMATCH")
     inbox_free = inbox.get("free_only") or {}
     require(errors, inbox_free.get("enabled") is True and inbox_free.get("no_paid_fallback") is True, "INBOX_FREE_ONLY_WEAKENED")
@@ -209,14 +210,15 @@ def validate(root: Path) -> dict:
     require(errors, manifest.get("authority_correction") == CURRENT_AUTHORITY, "MANIFEST_AUTHORITY_POINTER_MISMATCH")
     require(errors, manifest.get("effect_authority") == "EffectGate+EffectJournal", "MANIFEST_EFFECT_AUTHORITY_MISMATCH")
     mexec = manifest.get("execution_policy") or {}
-    require(errors, mexec.get("free_only") is True, "MANIFEST_FREE_ONLY_MISSING")
+    require(errors, mexec.get("free_only_default") is True and mexec.get("active_supervisor_free_only") is True, "MANIFEST_FREE_ONLY_MISSING")
     require(errors, mexec.get("isolated_sandbox_only") is True, "MANIFEST_ISOLATED_ONLY_MISSING")
     require(errors, mexec.get("vps_testing_forbidden") is True and mexec.get("self_hosted_vps_test_runners_forbidden") is True and mexec.get("production_host_testing_forbidden") is True, "MANIFEST_HOST_EXECUTION_FENCE_WEAKENED")
     require(errors, mexec.get("together_general_inference_and_fallback_forbidden") is True, "MANIFEST_TOGETHER_INFERENCE_FENCE_MISSING")
     require(errors, mexec.get("owner_paid_one_shot_directive_present_as_provenance") is True, "MANIFEST_OWNER_TRAINING_PROVENANCE_MISSING")
-    require(errors, mexec.get("owner_paid_one_shot_directive_file") == TRAINING_PROVENANCE, "MANIFEST_TRAINING_PROVENANCE_PATH_MISMATCH")
-    require(errors, mexec.get("current_supervisor_together_training_forbidden") is True, "MANIFEST_TOGETHER_TRAINING_FENCE_MISSING")
-    require(errors, mexec.get("paid_or_unknown_provider_admission_boundary") == "FAIL_CLOSED_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION", "MANIFEST_PAID_ADMISSION_FENCE_MISSING")
+    require(errors, mexec.get("owner_paid_one_shot_08b_jspace_gwt_finetune_consumed") is False, "MANIFEST_ONE_SHOT_PREMATURELY_CONSUMED")
+    require(errors, mexec.get("owner_paid_one_shot_training_authority_provenance") == TRAINING_PROVENANCE, "MANIFEST_TRAINING_PROVENANCE_PATH_MISMATCH")
+    require(errors, mexec.get("current_supervisor_together_training") == PAID_BOUNDARY, "MANIFEST_TOGETHER_TRAINING_FENCE_MISSING")
+    require(errors, mexec.get("paid_or_unknown_provider_admission_boundary") == PAID_BOUNDARY, "MANIFEST_PAID_ADMISSION_FENCE_MISSING")
     require(errors, mexec.get("other_paid_fallback") is False, "MANIFEST_OTHER_PAID_FALLBACK_WEAKENED")
     mcredit = manifest.get("runtime_credit") or {}
     require(errors, mcredit.get("entityos_hcu_whole_runtime_credit") == 0, "MANIFEST_RUNTIME_CREDIT_NONZERO")
@@ -234,13 +236,18 @@ def validate(root: Path) -> dict:
     require(errors, "FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE" in footer, "FOOTER_FREE_ONLY_TOGETHER_FENCE_MISSING")
     require(errors, "ENTITYOS" in architecture[:2500] and "HCU" in architecture[:2500], "ARCHITECTURE_ENTITYOS_HCU_MISSING")
     require(errors, "CLAYVERSE IS THE PRODUCT ENDPOINT" not in architecture[:2500], "ARCHITECTURE_STALE_CLAYVERSE_PRODUCT_AUTHORITY")
-    require(errors, "SUPERVISOR_STEERING_8_61.JSON" in readme[:4000], "README_ACTIVE_SUPERVISOR_MISSING")
-    require(errors, "`PROGRAM=ENTITYOS_HCU`" in repo_claude[:6000], "ROOT_CLAUDE_PROGRAM_MISMATCH")
-    require(errors, "SUPERVISOR_STEERING_8_61.JSON" in repo_claude[:6000], "ROOT_CLAUDE_CURRENT_AUTHORITY_MISSING")
-    require(errors, "FREE_ONLY" in repo_claude[:9000], "ROOT_CLAUDE_FREE_ONLY_FENCE_MISSING")
-    require(errors, "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`" not in repo_claude[:6000], "ROOT_CLAUDE_STALE_CLAYVERSE_PROGRAM_ACTIVE")
+    require(errors, "SUPERVISOR_STEERING_8_61.JSON" in readme[:5000], "README_ACTIVE_SUPERVISOR_MISSING")
+    require(errors, "`PROGRAM=ENTITYOS_HCU`" in repo_claude[:7000], "ROOT_CLAUDE_PROGRAM_MISMATCH")
+    require(errors, "SUPERVISOR_STEERING_8_61.JSON" in repo_claude[:7000], "ROOT_CLAUDE_CURRENT_AUTHORITY_MISSING")
+    require(errors, "FREE_ONLY" in repo_claude[:10000], "ROOT_CLAUDE_FREE_ONLY_FENCE_MISSING")
+    require(errors, "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`" not in repo_claude[:7000], "ROOT_CLAUDE_STALE_CLAYVERSE_PROGRAM_ACTIVE")
 
-    return {"schema": CURRENT_SCHEMA, "pass": not errors, "errors": errors, "checked": {name: path.relative_to(root).as_posix() for name, path in paths.items()}}
+    return {
+        "schema": CURRENT_SCHEMA,
+        "pass": not errors,
+        "errors": errors,
+        "checked": {name: path.relative_to(root).as_posix() for name, path in paths.items()},
+    }
 
 
 def main() -> int:

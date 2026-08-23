@@ -1,0 +1,108 @@
+{
+  "schema": "GO_CANONICAL_UCF_PATH_REENTRY_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "branch": "gpt56sol/go-mini-entity-canonical-ucf-path-20260823-1149",
+  "pre_receipt_head": "2a05602af166ef3a4eb74839b2cb3bd6e6465d5e",
+  "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "frontier": "canonical .clay -> Unified Cognitive Fabric -> inference_generate causal path",
+  "delta": {
+    "canonical_source": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "canonical_source_blob_sha": "f59b28e137bbb005a2d81ab8f9e6c96b4fe5d5c1",
+    "contract_guard": "the artefact/blogpost_entity/check_structured_contract_sync.py",
+    "contract_guard_blob_sha": "044bf49775ec58a2fe85b7e016cbbb604f21ac13",
+    "focused_regression": "the artefact/blogpost_entity/test_canonical_ucf_path_contract.py",
+    "focused_regression_blob_sha": "7f9f32a39ffe3b72ecd7a694748ed636f981da3c",
+    "source_path_change": [
+      "pipeline_build_prompt",
+      "pipeline_cognitive_fabric_admit",
+      "inference_generate",
+      "pipeline_gate",
+      "pipeline_commit"
+    ],
+    "inference_inputs": [
+      "admitted.inference",
+      "admitted.system",
+      "admitted.user",
+      "admitted.inference_packet_digest",
+      "admitted.cognitive_fabric_receipt_digest"
+    ],
+    "raw_bypass_forbidden": [
+      "profile.inference -> inference_generate",
+      "prompt.system -> inference_generate",
+      "prompt.user -> inference_generate"
+    ],
+    "reentry": [
+      "cognitive_fabric -> pipeline_gate",
+      "cognitive_fabric -> pipeline_commit"
+    ]
+  },
+  "hypotheses": {
+    "preferred": "A single explicit cognitive-fabric admission phase on the canonical Clay path can prevent raw profile/prompt bypass while preserving MiniUnifiedDB as durable authority and inference as candidate-only.",
+    "counter": "A decorative fabric phase can coexist with a partial raw-input bypass, so source presence/order alone is insufficient."
+  },
+  "unusual_experiment": {
+    "status": "CONSUMED",
+    "count": 1,
+    "experiment_id": "ADMITTED_USER_HALF_BYPASS_POISON",
+    "intervention": "Keep pipeline_cognitive_fabric_admit before inference_generate but replace only admitted.user with raw prompt.user at the inference handoff.",
+    "prediction_preferred": "The strengthened contract rejects the partial bypass even though the fabric phase remains present and ordered.",
+    "prediction_counter": "A presence/order-only guard still passes the poisoned source.",
+    "observed": "DETECTED_FAIL_CLOSED",
+    "classification": "SOURCE_LEVEL_COUNTERFACTUAL_ONLY"
+  },
+  "component_reproduction": {
+    "environment": "isolated tool-local Linux component reproduction; not an exact repository checkout and not product runtime admission",
+    "canonical_source_git_hash_object": "f59b28e137bbb005a2d81ab8f9e6c96b4fe5d5c1",
+    "github_canonical_source_blob": "f59b28e137bbb005a2d81ab8f9e6c96b4fe5d5c1",
+    "source_blob_identity_match": true,
+    "focused_regression_git_hash_object": "7f9f32a39ffe3b72ecd7a694748ed636f981da3c",
+    "github_focused_regression_blob": "7f9f32a39ffe3b72ecd7a694748ed636f981da3c",
+    "focused_regression_blob_identity_match": true,
+    "focused_unittest": {
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "cases": [
+        "current canonical UCF handoff contract",
+        "half-bypass raw prompt.user poison",
+        "fabric-after-inference ordering poison"
+      ]
+    }
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "zero": "runtime identity/configuration only",
+    "cognitive_fabric": "candidate/measurement/control projection only; not durable truth authority",
+    "inference": "candidate inference only",
+    "effects": "deterministic EntityOS/Mini Entity effect gates only"
+  },
+  "non_duplication": {
+    "closed_donor_pr": 1152,
+    "decision": "Re-derived only the single UCF handoff mechanism on current Mini Entity main after the later owner override restored Mini Entity work selection; no second UCF/state/effect authority introduced."
+  },
+  "execution_boundary": {
+    "free_only": true,
+    "together_used": false,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "vps_or_production_testing": false,
+    "exact_current_checkout_runtime_credit": false,
+    "bundled_08b_runtime_credit_change": 0,
+    "jspace_runtime_credit_change": 0,
+    "whole_gwt_runtime_credit_change": 0,
+    "claude_adapter_runtime_credit_change": 0,
+    "whole_product_credit_change": 0
+  },
+  "next_exact_gate": [
+    "Implement pipeline_cognitive_fabric_admit in the single admitted current Mini Entity runtime using the existing UCF/InferencePacket authority chain rather than a second fabric.",
+    "Cross-bind entity generation, causal turn/workspace identity, packet digest and cognitive-fabric receipt to MiniUnifiedDB state and reject ABSTAINED/stale/mismatch before inference.",
+    "On an actually-started authorized isolated exact-checkout executor, run the focused regressions plus canonical runtime path and then exact bundled-0.8B/J-Space/GWT/Claude-adapter evidence."
+  ],
+  "promotion": "SOURCE_MECHANISM_HARDENED_RUNTIME_UNVERIFIED"
+}

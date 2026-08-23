@@ -17,6 +17,12 @@ HEX64 = re.compile(r"^[0-9a-f]{64}$")
 TARGETS = {"CLAUDE_CODE", "BUNDLED_LOCAL_08B", "ADAPTIVE_BACKEND", "NO_MODEL_REQUIRED"}
 JSPACE_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY", "COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY"}
 ENGINE_TO_UCF = {"CLAUDE_CODE":"claude_code", "BUNDLED_LOCAL_08B":"local_08b", "ADAPTIVE_BACKEND":"adaptive_backend"}
+PACKET_KEYS = {
+    "schema", "compiler_version", "packet_id", "entity_generation", "causal_turn_id",
+    "workspace_capsule_digest", "task_sha256", "zero_identity_digest", "grf_digest",
+    "workspace_digest", "capsule_mode", "required_zero_mode", "target_engine_class",
+    "jspace_mode", "authority", "packet_digest",
+}
 
 class PacketError(ValueError): pass
 
@@ -76,6 +82,7 @@ def compile_packet(capsule: dict[str, Any], *, target_engine_class: str, jspace_
 
 def validate(packet: dict[str, Any], capsule: dict[str, Any] | None = None) -> dict[str, Any]:
     _need(type(packet) is dict, "PACKET_OBJECT_REQUIRED")
+    _need(set(packet) == PACKET_KEYS, "PACKET_FIELDS_MISMATCH")
     _need(packet.get("schema") == SCHEMA, "SCHEMA_MISMATCH")
     _need(packet.get("compiler_version") == COMPILER_VERSION, "COMPILER_VERSION_MISMATCH")
     _digest(packet.get("packet_id"), "packet_id")

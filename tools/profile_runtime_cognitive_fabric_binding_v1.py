@@ -117,9 +117,9 @@ def admit_profile_runtime_payload(
             "RUNTIME_PROFILE_NOT_ACTIVE_MINIUNIFIEDDB_PROFILE",
         )
 
-        # The canonical capability router requires the verified runtime snapshot. Reattach
-        # only the values just revalidated against MiniUnifiedDB, never caller-supplied
-        # additional capability/J-Space authority fields.
+        # The canonical capability router deliberately requires the verified runtime snapshot.
+        # Reattach only the values just revalidated against MiniUnifiedDB; never trust a caller
+        # to supply additional capability/J-Space authority through ephemeral profile metadata.
         delegated_profile = dict(stored_profile)
         delegated_profile[_RUNTIME_PROFILE_SNAPSHOT] = {
             "profile_id": active_profile,

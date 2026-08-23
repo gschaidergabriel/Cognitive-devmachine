@@ -1,7 +1,30 @@
 {
-  "schema_version": "HCU_DATA_INDEX/v5",
-  "package": "MicroEntity",
+  "schema_version": "HCU_DATA_INDEX/v6",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "compatibility_subtree": "MicroEntity",
   "hcu_root": "hcu/",
+  "current_causal_identity_authority": "RFC8785_JCS_IJSON/v1",
+  "current_entry_path": {
+    "fabric": "hcu/xeno_entry_fabric_v1.py",
+    "event_identity": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2",
+    "admission_identity": "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2",
+    "binding": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2"
+  },
+  "current_engine_path": {
+    "admission": "hcu/engine_admission_v1.py",
+    "loader_consumption": "hcu/engine_load_lease_v1.py",
+    "verified_load_schema": "HCU_VERIFIED_ENGINE_LOAD/v1",
+    "inference_receipt": "hcu/inference_receipt_v2.py",
+    "inference_receipt_schema": "HCU_INFERENCE_RECEIPT/v2",
+    "runtime_credit": 0
+  },
+  "historical_or_noncurrent_source": {
+    "hcu/inference_receipt_v1.py": "HISTORICAL_PRE_V2_INFERENCE_IDENTITY_NOT_CURRENT_PRODUCT_PATH",
+    "hcu/physical_engine_lease_v1.py": "NONCURRENT_OVERLAPPING_LEASE_CANDIDATE_NOT_SELECTED_FOR_V2_PATH",
+    "hcu/typed_entry_canonical_v1.py": "RESEARCH_PROVENANCE_ONLY_NOT_CURRENT_CANONICALIZER",
+    "hcu/hcu_causal_canonical_v1.py": "RESEARCH_PROVENANCE_ONLY_NOT_CURRENT_CANONICALIZER"
+  },
   "generated_release_artifacts": [
     "hcu/README.md",
     "hcu/HCU_ARCHITECTURE.md",
@@ -12,16 +35,16 @@
     "hcu/ENTRY_CANONICALIZATION_CONTRACT.json",
     "hcu/entry_canonicalization_v1.py",
     "hcu/test_entry_canonicalization_v1.py",
-    "hcu/typed_entry_canonical_v1.py",
-    "hcu/hcu_causal_canonical_v1.py",
-    "hcu/test_hcu_causal_canonical_v1.py",
     "hcu/xeno_entry_fabric_v1.py",
     "hcu/test_xeno_entry_fabric_v1.py",
-    "hcu/test_typed_entry_canonical_v1.py",
     "hcu/reactive_event_router_v1.py",
     "hcu/test_reactive_event_router_v1.py",
-    "hcu/inference_receipt_v1.py",
-    "hcu/test_inference_receipt_v1.py",
+    "hcu/engine_admission_v1.py",
+    "hcu/test_engine_admission_v1.py",
+    "hcu/engine_load_lease_v1.py",
+    "hcu/test_engine_load_lease_v1.py",
+    "hcu/inference_receipt_v2.py",
+    "hcu/test_inference_receipt_v2.py",
     "hcu/grid10_scheduler_v1.py",
     "hcu/test_grid10_scheduler_v1.py",
     "hcu/topology.kvm4.json",
@@ -29,34 +52,19 @@
     "hcu/HCU_DATA_INDEX.json",
     "hcu/capacity_guard_v1.py",
     "hcu/test_capacity_guard_v1.py",
-    "hcu/receipts/2026-08-23_GO_HCU_CAPACITY_GUARD_GPT56SOL.json",
-    "hcu/receipts/2026-08-23_HCU_REACTIVE_WORLDMODEL_OWNER_DELTA_GPT56SOL.json",
-    "hcu/receipts/2026-08-23_GO_HCU_GRID10_LOGICAL_PHYSICAL_SEPARATION_GPT56SOL.json"
+    "hcu/receipts/"
   ],
-  "runtime_data_authority": "MiniUnifiedDB",
-  "entry_fabric_policy": "TYPED_ENTRY_SEPARATES_REPLAY_STABLE_CAUSAL_EVENT_IDENTITY_FROM_TRANSPORT_ADMISSION_IDENTITY; CURRENT_MAIN_SELECTS_RFC8785_JCS_IJSON_V1_AS_THE_SINGLE_END_TO_END_TARGET; ACTIVE_ENTRY_CBOR_AND_ROUTER_PYTHON_JSON_HASHES_REMAIN_LEGACY_VERSIONED_SOURCE_DEPENDENCIES_PENDING_EXPLICIT_MIGRATION",
-  "entry_fabric_authority_boundary": "ENTRY_PACKET_BINDS_UPSTREAM_CAPABILITY_RECEIPT_BUT_CANNOT_MINT_TRUTH_PERMISSIONS_ENGINE_ADMISSION_OR_EFFECTS",
-  "entry_canonicalization": "RFC8785_JCS_IJSON/v1",
-  "entry_canonicalization_implementation": "entry_canonicalization_v1.py",
-  "entry_canonicalization_tests": "test_entry_canonicalization_v1.py",
-  "entry_canonicalization_status": "SELECTED_BY_CURRENT_MAIN_NOT_YET_END_TO_END_WIRED_OR_RUNTIME_ADMITTED",
-  "entry_canonicalization_alternatives": {
-    "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1": "LEGACY_CURRENT_ENTRY_SOURCE_DEPENDENCY_PENDING_VERSIONED_MIGRATION",
-    "ENTITYOS_HCU_TYPED_CANONICAL/v1": "RESEARCH_PROVENANCE_ONLY_NOT_SELECTED_BY_CURRENT_MAIN",
-    "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1": "LEGACY_ROUTER_AND_RECEIPT_IDENTITY_PENDING_VERSIONED_MIGRATION"
+  "authority": {
+    "canonical_state_and_evidence": "DETERMINISTIC_ENTITYOS_AUTHORITY",
+    "effect_authority": "EffectGate/EffectJournal",
+    "hcu_outputs": "CANDIDATE_OR_MEASUREMENT_ONLY",
+    "entry_data_may_mint_engine_authority": false,
+    "loader_claims_may_mint_runtime_credit_without_actual_loader_evidence": false
   },
-  "entry_number_policy": "SELECTED_RFC8785_TARGET_USES_FINITE_BINARY64_NUMBER_SEMANTICS; CURRENT_CBOR_ENTRY_IDENTITY_REMAINS_FLOAT_FREE_UNTIL_EXPLICIT_VERSIONED_MIGRATION",
+  "loader_evidence_law": "PRELOAD_HASH_IS_NOT_LOADER_ATTESTATION; CURRENT_V2_PATH_REQUIRES_A_GENERATION_FENCED_ENGINE_LOAD_LEASE_PLUS_ACTUAL_LOADER_READ_PATH_CONSUMPTION_EVIDENCE_REBOUND_AS_HCU_VERIFIED_ENGINE_LOAD_V1",
   "grid10_policy": "TEN_LOGICAL_CELLS_ARE_NOT_TEN_MODEL_CALLS_OR_TEN_PHYSICAL_DECODERS; ENTRY_BUDGET_PLUS_SEPARATELY_ADMITTED_CAPACITY_RECEIPT_BOUND",
   "internal_cognition_dependency_policy": "NO_REQUIRED_EXTERNAL_PROVIDER_OR_EXTERNAL_EMBEDDING_SERVICE",
-  "zero_projection_policy": "BOUNDED_HIGH_SPECIFICITY_CLAYCODE",
-  "world_model_policy": "REACTIVE_SCRIPT_FIRST_OPEN_WORLD_HYPERPOSITION_WITH_STRICT_FALSIFICATION",
-  "archive_policy": {
-    "include_non_secret_generated_hcu_files": true,
-    "include_non_secret_receipts": true,
-    "include_privacy_filtered_data_exports_when_generated": true,
-    "include_plaintext_secrets": false,
-    "include_credential_bearing_files": false
-  },
   "capacity_claim_policy": "NUMERIC_RUNTIME_CAPACITY_REQUIRES_EXACT_AUTHORIZED_ISOLATED_MEASUREMENT_RECEIPT",
-  "claim_class": "SOURCE_ARCHITECTURE_PLUS_MAIN_SELECTED_RFC8785_CANONICALIZATION_CONVERGENCE_REACTIVE_ROUTER_AND_GRID10_COMPONENT_EVIDENCE_NOT_HCU_RUNTIME_ACCEPTANCE"
+  "execution_policy": "AUTHORIZED_ISOLATED_SANDBOX_ONLY_FOR_CURRENT_RUNTIME_CREDIT",
+  "claim_class": "SOURCE_COHERENCE_CANDIDATE_ONLY_NOT_ENTITYOS_HCU_RUNTIME_ACCEPTANCE"
 }

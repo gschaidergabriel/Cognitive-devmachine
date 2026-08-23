@@ -1,0 +1,68 @@
+{
+  "schema_version": "HCU_ENTRY_CAUSAL_RUNTIME_LOCK_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "parent_pr": 1263,
+  "parent_source_snapshot": "b1b76fe9310f4bbcbf8e938b0bc6417e1086fc69",
+  "candidate_source_commit_before_receipt": "3a0e6d64b08a9ad6b0ecb9cbbc1f213a74eb54bb",
+  "source_files": {
+    "the artefact/MicroEntity/hcu/reactive_event_router_v1.py": {
+      "git_blob_sha1": "4e962246dc0156548ec64e06acb5483bfbde8a72"
+    },
+    "the artefact/MicroEntity/hcu/test_reactive_event_router_v1.py": {
+      "git_blob_sha1": "967a5693aa8350d929c5a99727f7d8292d76c8b7"
+    },
+    "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py": {
+      "git_blob_sha1": "0f4d39159be77bace7ee95397b744c781e8f8599",
+      "source": "parent_snapshot"
+    },
+    "the artefact/MicroEntity/hcu/COGNITIVE_INDEPENDENCE_POLICY.json": {
+      "git_blob_sha1": "010762d01ace35d14b43373a1d033b55fe62b750"
+    }
+  },
+  "execution": {
+    "surface": "isolated ChatGPT tool container",
+    "os": "Linux 6.18.35 x86_64 GNU/Linux glibc 2.41",
+    "python": "CPython 3.13.5",
+    "exact_blob_checks": {
+      "reactive_event_router_v1.py": "MATCH",
+      "test_reactive_event_router_v1.py": "MATCH",
+      "xeno_entry_fabric_v1.py": "MATCH"
+    },
+    "commands": [
+      "git hash-object reactive_event_router_v1.py test_reactive_event_router_v1.py xeno_entry_fabric_v1.py",
+      "python3 -m py_compile reactive_event_router_v1.py test_reactive_event_router_v1.py",
+      "python3 -m unittest -v test_reactive_event_router_v1.py",
+      "deterministic integration: admit_entry(authority-bound capabilities) -> to_hcu_reactive_event -> route_event(full runtime registry) -> assert_inference_echo"
+    ],
+    "py_compile": "PASS",
+    "unittest": "24/24 PASS",
+    "entry_causal_admission_router_runtime_lock_inference_echo_integration": "PASS",
+    "exit_code": 0,
+    "integration_outputs": {
+      "entry_event_sha256": "d6df60bcb3fa9c51a02baf0f661372c7122fad69689d31e690fd78ed460e76a9",
+      "entry_admission_sha256": "f9e14ecec2bf096ed51492e885d3a60fd7cea7e7bb1c4aa80a8b5e0eed630908",
+      "decision_sha256": "469fe3e1f23f076b87478ea292ccc8466194e388eb57d086d67204c75619b236",
+      "engine_identity_sha256": "f0785a63b65eeb158a38480b2124659d2c0e48ea1795bd1d1a8104d4ba612ca8"
+    }
+  },
+  "mechanisms_supported": [
+    "router requires Entry Fabric ingress causal event digest and admission digest before HCU routing",
+    "Entry Fabric replay-stable causal event identity and concrete admission identity survive the HCU route boundary",
+    "model route requires an independent full runtime registry rather than event claims or a bare artifact digest",
+    "engine identity binds id class artifact runtime checkpoint tokenizer and zero network/secret dependency",
+    "event artifact mismatch and network-dependent registry entries fail closed",
+    "route identity explicitly binds Entry causal/admission identity plus HCU event router policy and trusted engine identity",
+    "downstream inference echo binds serializer Entry causal/admission HCU event route and full engine runtime lock"
+  ],
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment_in_this_delta": false,
+    "shared_go_experiment": "same-route causal-alias stress already consumed in parent PR 1263",
+    "status_here": "REGRESSION_ONLY",
+    "engine_artifact_rotation": "REGRESSION_ONLY_NOT_SECOND_EXPERIMENT"
+  },
+  "scope_limit": "Exact source/blob Python mechanism and deterministic Entry-Fabric-to-router integration evidence only. Registry runtime/checkpoint/tokenizer identifiers are fixtures, not executed real ~0.8B bytes. No HCU runtime-fit, throughput, Global J-Space causal-use, EntityOS whole-runtime, VPS, or whole-product acceptance credit.",
+  "promotion_credit": 0,
+  "acceptance": "MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED"
+}

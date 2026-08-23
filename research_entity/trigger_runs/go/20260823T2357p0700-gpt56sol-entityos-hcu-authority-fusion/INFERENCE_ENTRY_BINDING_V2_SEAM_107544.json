@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_INFERENCE_ENTRY_BINDING_V2_SEAM",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "ae2e9e4b0a97b3f93fb63a24cdb1d90cb27d7683",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_observed": "10754436e48295309a5330b5b1ec243ef19dea89",
+  "authority": {
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "exact_selected_component_replication_on_main": "6_OF_6_PASS_AT_BOUND_COMPONENT_SCOPE",
+    "runtime_credit": 0
+  },
+  "observed_source_state": {
+    "entry": "JCS-backed new v2 event/admission identities",
+    "router": "JCS-backed HCU_CAUSAL_ROUTE_IDENTITY/v4 plus ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2 authority object",
+    "inference_receipt": "still HCU_INFERENCE_RECEIPT/v1 with Python-json receipt hash and legacy raw admission->event registry consumption",
+    "engine_loader_receipts": "separate legacy/current control-plane receipt schemas; do not silently reinterpret their existing hashes"
+  },
+  "finding": "The router now requires each admitted Entry binding to be a versioned mapping containing schema, canonicalization_schema, and event_sha256, but inference_receipt_v1.py still reads admitted_entry_bindings[admission_sha256] as if it were a raw SHA-256 string. A valid new Router-v4/JCS binding therefore cannot pass the downstream inference receipt path without a compatibility regression or bypass.",
+  "counterhypothesis": "Inference may continue treating the binding registry as raw digests because the RouteDecision already contains event_sha256.",
+  "counterhypothesis_status": "REJECTED_AT_SOURCE_INTERFACE_SCOPE",
+  "reason": "The inference function explicitly re-verifies the independent admission->event authority registry. Reading the new typed binding object as a digest fails its own _sha256 contract and would either error or require weakening the authority check.",
+  "required_repair": [
+    "Reuse reactive_event_router_v1.resolve_admitted_entry_binding instead of inventing a second binding parser in inference_receipt_v1.py.",
+    "Bump the inference receipt identity schema before changing its receipt hash bytes; do not reinterpret HCU_INFERENCE_RECEIPT/v1 hashes in place.",
+    "Use the selected RFC8785/JCS canonicalizer for the new inference-receipt identity while preserving existing EngineAdmission and physical-load-lease receipt hash schemas until their producers are explicitly version-migrated.",
+    "Update inference tests/fixtures to construct ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2 values and add valid-chain plus legacy/raw/unknown-canonicalizer rejection regressions.",
+    "Run exact-current Entry-v2 -> Router-v4 -> Inference-receipt-new-version -> GRID10 regression in authorized isolated execution before runtime promotion."
+  ],
+  "coordination": {
+    "source_write_to_active_donor_files": "NO_CHANGE_TO_AVOID_OVERWRITING_CONCURRENT_PR1263_WORK",
+    "attempted_stale_router_write": "REJECTED_BY_GITHUB_409_BEFORE_COMMIT",
+    "stale_write_created_product_delta": false,
+    "new_route_entry_state_effect_or_recovery_authority_created": false,
+    "pr_comment_required": true
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "Source-interface adjudication/regression review only; no new unusual intervention."
+  },
+  "execution": {
+    "exact_current_combined_semantic_test_execution": false,
+    "authorized_product_runtime_started": false,
+    "runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_fallback_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  }
+}

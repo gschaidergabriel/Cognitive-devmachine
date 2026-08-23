@@ -82,6 +82,19 @@ def route_entry_model(
     )
 
 
+def inference_receipt(decision):
+    return {
+        "hash_serialization_schema": decision.hash_serialization_schema,
+        "event_sha256": decision.event_sha256,
+        "entry_admission_sha256": decision.entry_admission_sha256,
+        "decision_sha256": decision.decision_sha256,
+        "engine_identity_sha256": decision.engine_identity_sha256,
+        "resolved_engine_identity": decision.resolved_engine_identity,
+        "resolved_engine_class": decision.resolved_engine_class,
+        "resolved_engine_artifact_sha256": decision.resolved_engine_artifact_sha256,
+    }
+
+
 class ReactiveRouterTests(unittest.TestCase):
     def test_low_change_event_stays_script_only(self):
         decision = route_event(base_event(), current_generation=7)
@@ -91,6 +104,7 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertFalse(decision.external_provider_dependency)
         self.assertEqual(decision.hash_serialization_schema, HASH_SERIALIZATION_SCHEMA)
         self.assertEqual(len(decision.event_sha256), 64)
+        self.assertIsNone(decision.entry_admission_sha256)
         self.assertEqual(len(decision.router_policy_sha256), 64)
         self.assertIsNone(decision.resolved_engine_identity)
         self.assertIsNone(decision.resolved_engine_class)
@@ -247,19 +261,28 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertEqual(b.event_sha256, ENTRY_EVENT_SHA256)
         self.assertEqual(a.model_lanes, b.model_lanes)
         self.assertEqual(a.decision_sha256, b.decision_sha256)
+        self.assertEqual(a.entry_admission_sha256, ENTRY_ADMISSION_A_SHA256)
+        self.assertEqual(b.entry_admission_sha256, ENTRY_ADMISSION_B_SHA256)
+        self.assertNotEqual(a.entry_admission_sha256, b.entry_admission_sha256)
+
+    def test_typed_entry_inference_receipt_must_echo_concrete_admission(self):
+        e = bind_local_engine(bind_entry_projection(base_event())); e.update(novelty=0.8)
+        decision = route_entry_model(e)
+        receipt = inference_receipt(decision)
+        assert_inference_echo(decision, receipt)
+        poisoned = dict(receipt)
+        poisoned["entry_admission_sha256"] = ENTRY_ADMISSION_B_SHA256
+        with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_ENTRY_ADMISSION_SHA256_MISMATCH"):
+            assert_inference_echo(decision, poisoned)
+        missing = dict(receipt)
+        missing.pop("entry_admission_sha256")
+        with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_ENTRY_ADMISSION_SHA256_MISMATCH"):
+            assert_inference_echo(decision, missing)
 
     def test_inference_receipt_must_echo_event_route_exact_engine_and_serializer(self):
         e = bind_local_engine(base_event()); e.update(novelty=0.8)
         decision = route_model(e)
-        receipt = {
-            "hash_serialization_schema": decision.hash_serialization_schema,
-            "event_sha256": decision.event_sha256,
-            "decision_sha256": decision.decision_sha256,
-            "engine_identity_sha256": decision.engine_identity_sha256,
-            "resolved_engine_identity": decision.resolved_engine_identity,
-            "resolved_engine_class": decision.resolved_engine_class,
-            "resolved_engine_artifact_sha256": decision.resolved_engine_artifact_sha256,
-        }
+        receipt = inference_receipt(decision)
         assert_inference_echo(decision, receipt)
         poisoned = dict(receipt); poisoned["event_sha256"] = "0" * 64
         with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_EVENT_SHA256_MISMATCH"):

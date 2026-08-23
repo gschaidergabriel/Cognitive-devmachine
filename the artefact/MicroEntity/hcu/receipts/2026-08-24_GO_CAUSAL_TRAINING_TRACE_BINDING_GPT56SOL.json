@@ -1,0 +1,63 @@
+{
+  "schema": "ENTITYOS_HCU_GO_CAUSAL_TRAINING_TRACE_BINDING/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "join": {
+    "research_main_observed": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "single_retained_hcu_lane_preserved": true
+  },
+  "observed_source": {
+    "selected_transition_path": "jspace_gwt_prototype_v1.py / JSPACE_GWT_TRANSITION_TRACE/v1",
+    "training_trace_path": "jspace_training_trace_v1.py / ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1",
+    "dataset_path": "compile_jspace_bootstrap_dataset_v1.py / ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3",
+    "training_trace_observation": "entry_event_sha256, entry_admission_sha256, route_decision_sha256 and grid_plan_sha256 are accepted after SHA-256 shape checks but are not validated against one concrete validated JSPACE_GWT_TRANSITION_TRACE/v1 object",
+    "test_observation": "current dataset tests can construct these causal hashes from arbitrary deterministic labels while marking provenance as EXACT_PROTOTYPE_TRACE"
+  },
+  "finding": {
+    "classification": "CAUSAL_PROVENANCE_ADMISSION_GAP",
+    "risk": "a dataset row can be cryptographically self-consistent yet claim exact causal Entry->Route->GRID ancestry that was never demonstrated by the selected causal transition path",
+    "counterhypothesis": "digest-shaped causal labels are sufficient because the training trace is only telemetry",
+    "counterhypothesis_result": "REJECTED_AT_SOURCE_SCOPE",
+    "reason": "the owner training gate requires exact causal traces and the selected JSPACE_GWT_TRANSITION_TRACE/v1 already exists specifically to validate cross-bound Entry/admission/route/GRID/vector identities"
+  },
+  "repair": {
+    "commit": "67b5013c5dfbc6c148eb79e9814a7c6c738a2357",
+    "file": "the artefact/MicroEntity/hcu/HCU_DATA_INDEX.json",
+    "index_schema": "HCU_DATA_INDEX/v9",
+    "action": "training readiness now fails closed on exact causal training-trace binding until TrainingTrace is bound to one validated causal transition object or equivalent exact evidence",
+    "training_launch_allowed_now": false,
+    "one_shot_together_training_consumed": false
+  },
+  "coordination": {
+    "first_write_attempt": "REJECTED_409_STALE_BLOB_AFTER_PARALLEL_WORKER_ADVANCE",
+    "stale_overwrite_performed": false,
+    "second_write_after_refresh": "COMMITTED",
+    "parallel_worker_fusion_observed": true
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "the retained macrocycle already records AUTHORITY_CONSTANT_TRANSPLANT as the single unusual experiment; this work is source inspection, adversarial review and fail-closed architecture repair"
+  },
+  "execution": {
+    "authorized_sandbox_started_by_this_organ": false,
+    "connected_vercel_controller_ready": true,
+    "runtime_log_observed_for_sandbox_start_in_checked_window": false,
+    "tests_executed_by_this_organ": false,
+    "runtime_credit_change": 0
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "together_job_created": false,
+    "secrets_requested_or_persisted": false
+  },
+  "next_exact_gate": "Implement a single causal adapter that accepts a validated JSPACE_GWT_TRANSITION_TRACE/v1 (or exact equivalent), cross-checks Entry event/admission, route, GRID, generation, cell/role, basis/vector packet and inference identities, then emits ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1; regress arbitrary-hash substitution fail-closed in an authorized isolated sandbox before dataset freeze or one-shot training."
+}

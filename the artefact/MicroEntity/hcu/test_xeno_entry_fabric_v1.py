@@ -60,6 +60,20 @@ class EntryFabricTests(unittest.TestCase):
         with self.assertRaisesRegex(EntryFabricError, "STALE_ENTITY_GENERATION"):
             admit(base_entry(), current_generation=8)
 
+    def test_current_generation_authority_must_be_real_nonnegative_integer(self):
+        e = base_entry()
+        e["entity_generation"] = 1
+        with self.assertRaisesRegex(EntryFabricError, "current_generation:NONNEGATIVE_INTEGER_REQUIRED"):
+            admit(e, current_generation=True)
+
+        e = base_entry()
+        e["entity_generation"] = 0
+        with self.assertRaisesRegex(EntryFabricError, "current_generation:NONNEGATIVE_INTEGER_REQUIRED"):
+            admit(e, current_generation=False)
+
+        with self.assertRaisesRegex(EntryFabricError, "current_generation:NONNEGATIVE_INTEGER_REQUIRED"):
+            admit(base_entry(), current_generation=-1)
+
     def test_unknown_field_cannot_smuggle_effect_or_truth_authority(self):
         e = base_entry()
         e["effect_request"] = {"capability": "host.exec"}

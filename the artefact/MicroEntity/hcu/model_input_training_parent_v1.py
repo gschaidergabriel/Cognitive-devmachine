@@ -4,12 +4,15 @@
 ``HCU_MODEL_INPUT_CONTROL_ADMISSION_STORE/v1`` atomically admits an exact
 ``HCU_MODEL_INPUT_CONTROL_BINDING/v1`` behind one already-admitted ModelExecution
 invocation in the caller-supplied canonical MiniUnifiedDB. This module is the read-side
-closure: it re-reads those canonical rows, revalidates their exact stored JCS bytes and
+bridge: it re-reads those canonical rows, revalidates their exact stored JCS bytes and
 ModelExecution parent, revalidates the exact executor-consumed input bytes, and cross-binds
-the result to the already-admitted J-Space training parents.
+that evidence to already-admitted J-Space DatasetAdmission/InferenceBinding parents.
 
-It is deterministic evidence plumbing only. It creates no database, performs no write,
-mints no truth/effect authority, and grants no runtime/model/training credit.
+Parent semantics are delegated to the current single reusable InferenceReceipt and
+Vector-Control parent guards. This module adds only the previously missing relation from
+their admitted row to canonical model-input-control evidence. It creates no database,
+performs no write, mints no truth/effect authority, and grants no runtime/model/training
+credit.
 """
 from __future__ import annotations
 
@@ -23,9 +26,13 @@ try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
     from .jspace_dataset_admission_gate_v1 import DatasetAdmission
     from .jspace_inference_binding_v1 import JSpaceInferenceBinding
-    from .jspace_training_parent_closure_v1 import (
-        JSpaceTrainingParentClosureError,
-        require_admitted_training_parent_closure,
+    from .jspace_inference_parent_admission_v1 import (
+        JSpaceInferenceParentAdmissionError,
+        require_admitted_inference_receipt_parent,
+    )
+    from .jspace_vector_control_parent_admission_v1 import (
+        JSpaceVectorControlParentAdmissionError,
+        require_admitted_vector_control_packet_parent,
     )
     from .jspace_vector_control_v1 import VectorControlPacket
     from .model_execution_receipt_v1 import (
@@ -48,9 +55,13 @@ except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
     from jspace_dataset_admission_gate_v1 import DatasetAdmission
     from jspace_inference_binding_v1 import JSpaceInferenceBinding
-    from jspace_training_parent_closure_v1 import (
-        JSpaceTrainingParentClosureError,
-        require_admitted_training_parent_closure,
+    from jspace_inference_parent_admission_v1 import (
+        JSpaceInferenceParentAdmissionError,
+        require_admitted_inference_receipt_parent,
+    )
+    from jspace_vector_control_parent_admission_v1 import (
+        JSpaceVectorControlParentAdmissionError,
+        require_admitted_vector_control_packet_parent,
     )
     from jspace_vector_control_v1 import VectorControlPacket
     from model_execution_receipt_v1 import (
@@ -245,7 +256,11 @@ def _read_canonical_model_input_parent(
         str(invocation_observation_sha256),
         "invocation.model_execution_observation_sha256",
     )
-    _same(str(binding_observation_sha256), observation_sha256, "binding.model_execution_observation_sha256")
+    _same(
+        str(binding_observation_sha256),
+        observation_sha256,
+        "binding.model_execution_observation_sha256",
+    )
     observation_record = _canonical_object(observation_jcs, "MODEL_EXECUTION_OBSERVATION")
     _need(
         hashlib.sha256(canonicalize(observation_record)).hexdigest() == observation_sha256,
@@ -297,17 +312,30 @@ def require_admitted_model_input_training_parent(
     admitted_inference_receipts: Mapping[str, Any],
     admitted_vector_control_packets: Mapping[str, VectorControlPacket],
 ) -> ModelInputTrainingParent:
-    """Require one serious J-Space row to inherit one canonical executor-input parent."""
+    """Require one admitted J-Space row to inherit one canonical executor-input parent.
+
+    This guard assumes the serious-training caller also runs its canonical row-level
+    TrainingTrace/DatasetAdmission/InferenceBinding closure. Here we only delegate the two
+    external parent admissions and add the missing canonical ModelInputControl relation.
+    """
     try:
-        parent = require_admitted_training_parent_closure(
-            admission,
+        require_admitted_inference_receipt_parent(
             inference_binding,
-            admitted_inference_receipts=admitted_inference_receipts,
-            admitted_vector_control_packets=admitted_vector_control_packets,
+            admitted_inference_receipts,
         )
-    except JSpaceTrainingParentClosureError as exc:
+    except JSpaceInferenceParentAdmissionError as exc:
         raise ModelInputTrainingParentError(
-            f"JSPACE_TRAINING_PARENT_REJECTED:{exc}"
+            f"INFERENCE_PARENT_ADMISSION_REJECTED:{exc}"
+        ) from exc
+
+    try:
+        require_admitted_vector_control_packet_parent(
+            admission,
+            admitted_vector_control_packets,
+        )
+    except JSpaceVectorControlParentAdmissionError as exc:
+        raise ModelInputTrainingParentError(
+            f"VECTOR_CONTROL_PARENT_ADMISSION_REJECTED:{exc}"
         ) from exc
 
     binding, observation_sha256, model_input_admission_sha256 = (
@@ -319,6 +347,7 @@ def require_admitted_model_input_training_parent(
         )
     )
 
+    # Unique new relation: canonical model-input evidence -> admitted DatasetAdmission row.
     for field in (
         "generation",
         "entry_event_sha256",
@@ -332,25 +361,29 @@ def require_admitted_model_input_training_parent(
         "vector_control_packet_sha256",
         "vector_control_condition",
     ):
-        _same(getattr(parent, field), getattr(binding, field), field)
+        _same(getattr(admission, field), getattr(binding, field), f"admission.{field}")
 
-    _same(
-        inference_binding.model_execution_executor_id,
-        binding.executor_id,
-        "inference.executor_id",
-    )
-    _same(
-        inference_binding.model_execution_invocation_id,
-        binding.invocation_id,
-        "inference.invocation_id",
-    )
-    _same(inference_binding.input_sha256, binding.input_sha256, "inference.input_sha256")
-    _same(inference_binding.input_size, binding.input_size, "inference.input_size")
-    _same(
-        inference_binding.model_execution_observation_sha256,
-        observation_sha256,
-        "inference.model_execution_observation_sha256",
-    )
+    # Unique new relation: canonical model-input evidence -> admitted ModelExecution/Inference row.
+    for field, left, right in (
+        (
+            "inference.executor_id",
+            inference_binding.model_execution_executor_id,
+            binding.executor_id,
+        ),
+        (
+            "inference.invocation_id",
+            inference_binding.model_execution_invocation_id,
+            binding.invocation_id,
+        ),
+        ("inference.input_sha256", inference_binding.input_sha256, binding.input_sha256),
+        ("inference.input_size", inference_binding.input_size, binding.input_size),
+        (
+            "inference.model_execution_observation_sha256",
+            inference_binding.model_execution_observation_sha256,
+            observation_sha256,
+        ),
+    ):
+        _same(left, right, field)
 
     return ModelInputTrainingParent(
         schema=PARENT_SCHEMA,
@@ -360,19 +393,19 @@ def require_admitted_model_input_training_parent(
         model_input_binding_schema=BINDING_SCHEMA,
         model_input_binding_sha256=binding.binding_sha256,
         model_execution_observation_sha256=observation_sha256,
-        training_trace_sha256=parent.training_trace_sha256,
-        inference_receipt_sha256=parent.inference_receipt_sha256,
-        vector_control_packet_sha256=parent.vector_control_packet_sha256,
-        generation=parent.generation,
-        entry_event_sha256=parent.entry_event_sha256,
-        entry_admission_sha256=parent.entry_admission_sha256,
-        route_decision_sha256=parent.route_decision_sha256,
-        grid_plan_sha256=parent.grid_plan_sha256,
-        cell_id=parent.cell_id,
-        role=parent.role,
-        jspace_basis_id=parent.jspace_basis_id,
-        jspace_basis_sha256=parent.jspace_basis_sha256,
-        vector_control_condition=parent.vector_control_condition,
+        training_trace_sha256=admission.training_trace_sha256,
+        inference_receipt_sha256=inference_binding.inference_receipt_sha256,
+        vector_control_packet_sha256=admission.vector_control_packet_sha256,
+        generation=admission.generation,
+        entry_event_sha256=admission.entry_event_sha256,
+        entry_admission_sha256=admission.entry_admission_sha256,
+        route_decision_sha256=admission.route_decision_sha256,
+        grid_plan_sha256=admission.grid_plan_sha256,
+        cell_id=admission.cell_id,
+        role=admission.role,
+        jspace_basis_id=admission.jspace_basis_id,
+        jspace_basis_sha256=admission.jspace_basis_sha256,
+        vector_control_condition=admission.vector_control_condition,
         executor_id=binding.executor_id,
         invocation_id=binding.invocation_id,
         input_sha256=binding.input_sha256,

@@ -11,6 +11,7 @@ EXPECTED_PROGRAM = "CLAYVERSE_SINGLE_CONTAINER"
 EXPECTED_STAGE = "CLAYVERSE_ARTIFACT"
 EXPECTED_RELEASE = "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE"
 EXPECTED_DYNAMIC_PRIMARY = "WHOLE_CLAYVERSE_OCI_PRODUCT"
+EXPECTED_ENTITYOS_ROLE = "STAGED_INTERNAL_EXECUTION_SECURITY_RUNTIME_SUBSTRATE_EXECUTION_OPTIONAL"
 IDENTITY_GUARD = "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
@@ -107,6 +108,15 @@ def validate(root: Path) -> dict:
     require(errors, manifest.get("product_endpoint") == "ClayVerse", "MANIFEST_PRODUCT_ENDPOINT_MISMATCH")
     require(errors, manifest.get("release_form") == EXPECTED_RELEASE, "MANIFEST_RELEASE_FORM_MISMATCH")
     require(errors, manifest.get("canonical_workspace") == "the artefact/", "MANIFEST_WORKSPACE_MISMATCH")
+    # EntityOS may be staged and digest-bound inside the image, but current owner law makes
+    # its execution an optional, explicitly admitted internal substrate rather than a
+    # prerequisite for ClayVerse identity or whole-product acceptance.
+    require(errors, manifest.get("entityos_role") == EXPECTED_ENTITYOS_ROLE, "MANIFEST_ENTITYOS_ROLE_MUST_BE_OPTIONAL")
+    require(errors, manifest.get("entityos_execution_default") == "DISABLED", "MANIFEST_ENTITYOS_DEFAULT_MUST_BE_DISABLED")
+    require(errors, manifest.get("entityos_whole_product_gate") == "CONDITIONAL_ON_EXPLICIT_ADMISSION", "MANIFEST_ENTITYOS_GATE_MUST_BE_CONDITIONAL")
+    final_gates = "\n".join(str(x) for x in manifest.get("requires_for_final_pass", []))
+    require(errors, "complete accepted EntityOS embedded in final image" not in final_gates, "MANIFEST_ENTITYOS_UNCONDITIONAL_FINAL_GATE")
+    require(errors, "if EntityOS execution is enabled in the accepted profile" in final_gates, "MANIFEST_ENTITYOS_CONDITIONAL_FINAL_GATE_MISSING")
 
     override = control.get("program_identity_override") or {}
     hard = control.get("preserved_hard_rules") or {}

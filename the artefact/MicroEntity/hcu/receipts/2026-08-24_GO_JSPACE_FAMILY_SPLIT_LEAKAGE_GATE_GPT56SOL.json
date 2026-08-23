@@ -1,0 +1,75 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "organ": "GPT-5.6 Sol",
+  "finding": "The existing bootstrap dataset compiler partitions prototype traces by each individual trace hash, while the richer J-Space training-trace envelope carries an explicit trace_family_id intended to keep correlated episode/control traces together. A new bounded family-split gate now partitions only exact registry-admitted training traces by trace_family_id, rebinds the dataset admission causal/basis/credit fields, rejects post-admission family relabeling, rejects trace_id collisions, and deduplicates identical traces idempotently.",
+  "authority_reentry": {
+    "current_main_free_only_supervisor_commit_observed": "1edf2b5f63afda8321cf8b8139073d439615053f",
+    "current_main_free_only_inbox_commit_observed": "2d10d7c804bbee3ea104a0bc48308ab189114bb2",
+    "paid_together_training_for_this_supervisor": "FORBIDDEN_FREE_ONLY",
+    "together_job_created": false,
+    "training_credit_change": 0
+  },
+  "retained_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "family_split_source_commit": "85458d3ab4bc03f7b7d4e9a154f32da838254ab5",
+    "family_split_test_commit": "e62fb5497c8308c1fb6218f715ddb3849683f463",
+    "later_descendant_head_observed": "fece0c9f52e9ca7f0358641b05ef06c2a1fd373e",
+    "descendant_distance_from_test_commit": 7
+  },
+  "exact_tested_files": {
+    "the artefact/MicroEntity/hcu/jspace_dataset_family_split_v1.py": {
+      "git_blob_sha1": "c0fb3369150a6ee5d7ec2a3d384266d559c630f4",
+      "sha256": "3e26d8def1b2da36eebaf61f5effb006deacbc0ce31b9f9f670e7504ba782dcb",
+      "bytes": 9186
+    },
+    "the artefact/MicroEntity/hcu/test_jspace_dataset_family_split_v1.py": {
+      "git_blob_sha1": "44adb707c1702180eed04441426dfefa51a77fee",
+      "sha256": "63b8bb0fe77ff422a7f0ce425cf4d38c54cfb7eb5b168632e88d2cbfbd1a97f7",
+      "bytes": 5294
+    }
+  },
+  "execution": {
+    "surface": "ChatGPT isolated tool container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "commands": [
+      "python -m py_compile jspace_dataset_family_split_v1.py test_jspace_dataset_family_split_v1.py",
+      "python -m unittest -v test_jspace_dataset_family_split_v1.py"
+    ],
+    "tests_run": 6,
+    "tests_passed": 6,
+    "tests_failed": 0,
+    "exit_status": 0,
+    "evidence_scope": "EXACT_NEW_FILE_BYTES_COMPONENT_REGRESSION_ONLY",
+    "authorized_isolated_full_pr_execution": false,
+    "runtime_credit_change": 0
+  },
+  "covered_falsifiers": [
+    "two correlated baseline/lesion traces from each of 80 families cannot cross train/validation/holdout",
+    "family split is deterministic and reaches train/validation/holdout over a broad family sample",
+    "trace_family_id relabel after registry admission fails closed",
+    "same trace_id with different trace identity fails closed",
+    "causal grid-plan transplant against DatasetAdmission fails closed",
+    "duplicate identical trace is idempotent"
+  ],
+  "unusual_experiment_accounting": {
+    "current_go_unusual_experiment_already_consumed_before_this_delta": true,
+    "experiment": "current-API replay of stale J-Space tests against the new mandatory basis_sha256 fence",
+    "this_family_split_run_class": "ORDINARY_DETERMINISTIC_REGRESSION_NOT_A_SECOND_UNUSUAL_EXPERIMENT"
+  },
+  "remaining_blockers": [
+    "HCU_DATA_INDEX/v9 still records exact causal training-trace binding as blocked until the training trace is validated against the selected JSPACE_GWT_TRANSITION_TRACE/v1 or equivalent exact causal object.",
+    "The family splitter is not yet wired as the selected dataset compiler partition stage.",
+    "Real instrumented ~0.8B J-Space/model traces remain zero.",
+    "No actually-started exact-source authorized FREE Vercel Sandbox run has been observed.",
+    "No runtime, model, training, provider, or whole-product acceptance credit is granted by this component PASS."
+  ],
+  "next_exact_step": "After the causal training-trace admission repair is selected, wire this family splitter into the single selected dataset compilation path, run the combined dataset-admission + family-split regressions on an actually-started authorized FREE isolated executor, and preserve family-level holdout isolation in the dataset freeze receipt.",
+  "claim_class": "SOURCE_AND_EXACT_NEW_FILE_COMPONENT_REGRESSION_PASS_ONLY_NOT_ENTITYOS_HCU_RUNTIME_OR_TRAINING_ACCEPTANCE"
+}

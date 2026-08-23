@@ -1,52 +1,92 @@
-# AUTHORITATIVE STATE RESOLUTION — CLAYVERSE OWNER RE-ENTRY
+# AUTHORITATIVE STATE RESOLUTION — XENO COMPUTATIONAL UNIT RE-ENTRY
 
 Status: **CURRENT**
-Owner re-entry observed: **2026-08-23T16:49+07:00**
+Owner correction date: **2026-08-23**
 Persistent research entity: **Clay**
 
 ## Current owner mission authority
 
 The newest explicit owner direction selects:
 
-`research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+`research_entity/global/XENO_GO_OWNER_DIRECTIVE.md`
 
-as the current product/work-selection authority.
+as current `go` product/work-selection authority, with research fusion:
 
-Current product: **ClayVerse**.
-Canonical workspace: `the artefact/`.
-Release form: **one OCI/Docker-compatible ClayVerse container image**.
+`research_entity/global/XENO_COMPUTATIONAL_UNIT_RESEARCH_FUSION_2026-08-23.md`
 
-The later-in-Git-history Mini Entity 4.5 routing was authored earlier on 2026-08-23 than this owner re-entry and is therefore superseded for product/program/work-selection authority. Its Mini Entity/HCU/UCF/J-Space/MiniUnifiedDB implementation work remains preserved as bounded donor/internal evidence and may be fused into ClayVerse when it preserves the ClayVerse authority boundaries.
+Current executable bootstrap: **Xeno** (renamed from Mini Entity).
+Destination: **EntityOS cognitive computer with integrated HCU/XCU**.
+
+Historical `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*` identifiers remain valid compatibility/provenance surfaces where exact migration has not occurred. They do not define a competing current product identity.
 
 ## Authority / evidence precedence
 
 1. newest explicit owner directive;
-2. actually observed exact-identity authorized isolated execution for executable behavior at that exact scope;
+2. actually observed exact-identity authorized execution for executable behavior at that exact scope;
 3. verified current GitHub bytes/history/receipts;
-4. current `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, product manifest/architecture/README and admitted controls;
+4. current `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, root worker shims and current Xeno artefact docs;
 5. validated bounded donor/historical evidence;
 6. cache/project files;
 7. chat/model memory.
 
-A later commit timestamp does not by itself outrank a newer explicit owner instruction. A higher control/steering version number does not by itself become product authority after its owner premise has been superseded.
+A later commit timestamp or higher historical control number does not by itself outrank a newer explicit owner instruction.
 
-## Current product authority law
+## Current work-selection law
 
-- UnifiedDB is the sole durable canonical ClayVerse state/world/memory/data/wiki/causal authority.
-- ClayGraph is derived/rebuildable only.
-- Claude Code is runtime cognition, never durable truth/memory/effect authority.
-- MicroClay is adaptive retrieval/accessibility only.
-- EffectGate/EffectJournal are the only admitted external/state-changing effect path.
-- EntityOS is an internal execution/security/runtime substrate, not a competing product/state authority.
-- Mini Entity/HCU/UCF/J-Space components may be internal/donor organs only; they may not create a second durable identity, state authority, effect path or recovery ledger.
+Every exact `go` has two mandatory coupled tracks:
 
-## Execution law
+1. `XENO_EXECUTABLE_CONVERGENCE`
+2. `XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT`
 
-Current build/test/experiment/runtime validation remains authorized-isolated-sandbox-only. VPS/self-hosted/production-host testing is forbidden. Together remains forbidden. Final paid/model training requires explicit owner authorization.
+If track 2 cannot safely advance, the run records `XCU_NO_CHANGE_WITH_REASON` plus a discriminator. Material architecture work uses hypotheses, counterhypotheses, cheapest discriminators, evidence fusion and bounded re-entry.
+
+The Xeno common substrate is incrementally prepared for:
+
+- `XENO_GRID10`;
+- `XENO_COGSIM10`;
+- `XENO_WM_TEST`;
+- `XENO_NESTED_SIM`;
+- `XENO_SCALEOUT`.
+
+New primitives should be cross-mode reusable.
+
+## Computerization law
+
+Xeno progressively separates:
+
+- Entry I/O / typed new-data fabric;
+- XRAM state hierarchy;
+- XPU deterministic control/scheduler/recovery;
+- XCU shared-weight/vector/inference/J-Space acceleration;
+- typed causal interconnect/workspace/Hyperposition;
+- action translation into EffectGate requests.
+
+These are software architecture roles, not claims of custom silicon.
+
+Scale claims remain empirical. `logical_module_count != resident_model_count != physical_decode_concurrency`. The baseline is 10 logical cells; `10 -> 32 -> 64 -> 128 -> 256 -> ~600` is a benchmark ladder. ~600 on H100-class hardware is hypothesis/planning only until exact model/quantization/KV/HBM/throughput/latency/recovery evidence exists.
+
+## State / truth / effect law
+
+- canonical durable state/evidence remains outside model-generated cognition and simulation;
+- current Xeno may use existing MiniUnifiedDB/UnifiedDB implementation surfaces during migration;
+- world-model state is noncanonical projection/candidate state;
+- HCU/XCU/J-Space/workspace/model outputs cannot mint canonical truth;
+- Hyperposition preserves unresolved alternatives; majority vote is not truth;
+- unknown external effect outcome remains UNKNOWN until verified;
+- EffectGate/EffectJournal remain the only admitted real/state-changing effect path;
+- no second persistent identity, truth store, effect path or recovery ledger.
 
 `UNKNOWN != ZERO != ERROR != MEASURED`.
 `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
 
+## World/nested simulation law
+
+A permanent duplicate world is not required for normal operation. Bounded `WM_TEST` and selective high-cost `NESTED_SIM` are active research modes of the same Xeno compute substrate. Their outputs remain candidates and are calibrated against observed reality.
+
+## Execution law
+
+Current build/test/experiment/runtime validation remains authorized-isolated-sandbox-only unless newer owner authority changes it. VPS/self-hosted/production-host testing is forbidden under current control. Together remains forbidden. No paid fallback. Final paid/model training requires explicit owner authorization.
+
 ## Fail-closed routing rule
 
-Any active bootstrap, program state, root worker shim, swarm contract, control, or supervisor steering that selects Mini Entity/Blogpost as the current top-level product after this owner re-entry is stale and must fail closed until reconciled. Preserve its research bytes as donor evidence; do not erase them and do not silently execute them as current product authority.
+Any active bootstrap, program state, root worker shim, swarm contract, control or supervisor steering that selects ClayVerse, Frank or Mini Entity as a competing current top-level authority is stale. Preserve its research bytes as donor/compatibility evidence but do not let it override the current Xeno + XCU/Entry `go` law.

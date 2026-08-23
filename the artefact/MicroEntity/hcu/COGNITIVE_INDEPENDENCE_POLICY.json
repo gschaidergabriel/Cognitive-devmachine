@@ -1,6 +1,6 @@
 {
-  "schema_version": "HCU_COGNITIVE_INDEPENDENCE/v1",
-  "status": "OWNER_DIRECTED_SOURCE_POLICY",
+  "schema_version": "HCU_COGNITIVE_INDEPENDENCE/v2",
+  "status": "OWNER_DIRECTED_SOURCE_POLICY_CANDIDATE",
   "internal_cognition": {
     "required_external_provider": false,
     "required_external_embedding_service": false,
@@ -10,24 +10,45 @@
     "script_first": true,
     "reactive_selective_model_activation": true
   },
+  "typed_entry_router_handshake": {
+    "required_before_hcu_routing": true,
+    "entry_fabric": "xeno_entry_fabric_v1.py compatibility path toward EntityOS Entry Fabric",
+    "required_route_fields": [
+      "ingress_id",
+      "causal_id",
+      "entry_event_sha256",
+      "entry_admission_sha256",
+      "entity_generation"
+    ],
+    "entry_event_sha256": "LOWERCASE_SHA256_REQUIRED",
+    "entry_admission_sha256": "LOWERCASE_SHA256_REQUIRED",
+    "route_identity_binding": "ingress_id + causal_id + entry_event_sha256 + entry_admission_sha256 + HCU event_sha256 + router_policy_sha256 + engine_identity_sha256 + routing_result",
+    "downstream_inference_receipt": "MUST_ECHO_ENTRY_CAUSAL_ADMISSION_EVENT_ROUTE_AND_ENGINE_IDENTITIES"
+  },
   "internal_engine_admission": {
-    "mode": "POSITIVE_FAIL_CLOSED_REGISTRY",
+    "mode": "POSITIVE_FAIL_CLOSED_TRUSTED_RUNTIME_REGISTRY",
     "provider_aliases": ["hcu", "local", "xeno"],
+    "provider_alias_authority": false,
     "engines": {
       "hcu_local_08b": {
         "class": "LOCAL_SHARED_WEIGHT_08B",
         "role": "SELECTIVE_HCU_MODEL_LANES",
-        "runtime_checkpoint_identity": "LOWERCASE_SHA256_REQUIRED_FOR_MODEL_ACTIVATION"
+        "artifact_sha256": "LOWERCASE_SHA256_REQUIRED",
+        "runtime_identity": "REQUIRED",
+        "checkpoint_identity": "REQUIRED",
+        "tokenizer_identity": "REQUIRED",
+        "network_required": false,
+        "secret_lookup_required": false
       }
     },
     "unknown_provider_or_engine": "REJECT",
     "script_only_engine_selection": "REJECT",
-    "artifact_admission_authority": "INDEPENDENT_XPU_XRAM_ARTIFACT_REGISTRY_NOT_EVENT_PAYLOAD",
+    "artifact_admission_authority": "INDEPENDENT_XPU_XRAM_RUNTIME_REGISTRY_NOT_EVENT_PAYLOAD",
     "event_reported_artifact_digest": "MUST_EQUAL_CURRENT_INDEPENDENT_ADMITTED_ARTIFACT_DIGEST",
-    "missing_or_mismatched_artifact_registry": "REJECT",
-    "engine_identity_binding": "resolved_engine_identity + resolved_engine_class + independently_admitted_resolved_internal_engine_artifact_sha256",
-    "route_identity_binding": "event_sha256 + router_policy_sha256 + engine_identity_sha256 + routing_result",
-    "downstream_inference_receipt": "MUST_ECHO_EVENT_ROUTE_ENGINE_CLASS_AND_EXACT_ARTIFACT_IDENTITIES"
+    "bare_artifact_digest_registry": "INSUFFICIENT_FOR_MODEL_ACTIVATION",
+    "missing_or_mismatched_runtime_registry": "REJECT",
+    "engine_identity_binding": "resolved engine id + class + independently admitted artifact sha256 + runtime identity + checkpoint identity + tokenizer identity + zero network/secret dependency",
+    "downstream_inference_receipt": "MUST_ECHO_ENTRY_EVENT_ROUTE_ENGINE_CLASS_ARTIFACT_RUNTIME_CHECKPOINT_AND_TOKENIZER_IDENTITIES"
   },
   "providers": {
     "nvidia": {

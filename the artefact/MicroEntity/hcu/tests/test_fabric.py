@@ -37,6 +37,24 @@ class FabricTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.packet(payload={"canonical_fact": "x"}).validate()
 
+    def test_nested_authority_field_is_forbidden(self):
+        with self.assertRaises(ValueError):
+            self.packet(payload={"wrapper": {"direct_effect": True}}).validate()
+
+    def test_authority_field_inside_sequence_is_forbidden(self):
+        with self.assertRaises(ValueError):
+            self.packet(payload={"branches": [{"claim": "ok"}, {"canonical_write": {"x": 1}}]}).validate()
+
+    def test_cyclic_payload_is_rejected_fail_closed(self):
+        payload = {"claim": "candidate only"}
+        payload["self"] = payload
+        with self.assertRaises(ValueError):
+            self.packet(payload=payload).validate()
+
+    def test_non_string_mapping_key_is_rejected(self):
+        with self.assertRaises(ValueError):
+            self.packet(payload={1: "ambiguous"}).validate()
+
     def test_simulated_state_must_be_explicitly_typed(self):
         with self.assertRaises(ValueError):
             self.packet(packet_class=MOD.PacketClass.SIMULATED_STATE).validate()

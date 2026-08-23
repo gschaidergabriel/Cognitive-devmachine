@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Fail-closed static guard for canonical Clay <-> Python reference contract drift.
 
-The canonical Clay source owns the forward contract: DB-resident profile, one explicit
-pre-inference Cognitive Fabric admission, generic inference, deterministic gate/CAS commit,
-and one post-turn UCF runtime-receipt finalization. The Python reference runtime/tests may
-lag, but that lag must stay explicit and must never roll the canonical Clay contract back.
+The canonical Clay source owns the forward contract: DB-resident profile, one bounded
+MiniUnifiedDB turn-selector input, one explicit pre-inference Cognitive Fabric admission,
+generic inference, deterministic gate/CAS commit, and one post-turn UCF runtime-receipt
+finalization. The Python reference runtime/tests may lag, but that lag must stay explicit
+and must never roll the canonical Clay contract back.
 
 Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
 unwired handler names do not count as runtime support.
@@ -158,27 +159,9 @@ def _literal_pipeline_calls(clay: str) -> list[str]:
     return [match.group(1) for match in matches]
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--allow-gap",
-        action="store_true",
-        help="Report the current convergence gap without returning failure",
-    )
-    args = parser.parse_args()
-
-    here = Path(__file__).resolve()
-    root = here.parents[2]
-    clay_path = here.with_name("BLOGPOST_ENTITY.clay")
-    runtime_path = root / "tools" / "clay_profile_pipeline_runtime.py"
-    tests_path = here.with_name("test_blogpost_entity.py")
-
-    clay = clay_path.read_text(encoding="utf-8")
-    runtime = runtime_path.read_text(encoding="utf-8")
-    tests = tests_path.read_text(encoding="utf-8")
-
+def clay_contract(clay: str) -> dict[str, Any]:
     signature = re.search(r"fn\s+run\((.*?)\)\s*->\s*Map", clay, re.S)
-    run_args = []
+    run_args: list[str] = []
     if signature:
         run_args = [item.strip().split(":", 1)[0].strip() for item in signature.group(1).split(",") if item.strip()]
 
@@ -196,9 +179,24 @@ def main() -> int:
         positions = [call_sequence.index(name) for name in required_order]
         order_ok = positions == sorted(positions)
 
-    clay_contract = {
+    return {
         "run_args": run_args,
-        "three_argument_runtime_boundary": run_args == ["entity_db", "source_db", "secret_file"],
+        "cognition_invocation_runtime_boundary": run_args
+        == ["entity_db", "source_db", "secret_file", "cognition_invocation"],
+        "cognition_invocation_passed_only_to_admission": (
+            'map_set(cognition_data,"invocation",cognition_invocation)' in clay
+            and 'map_set(infer,"invocation",cognition_invocation)' not in clay
+            and 'map_set(gate_data,"invocation",cognition_invocation)' not in clay
+            and 'map_set(commit_data,"invocation",cognition_invocation)' not in clay
+            and 'map_set(finalize_data,"invocation",cognition_invocation)' not in clay
+        ),
+        "caller_cognition_authority_absent": (
+            'map_set(cognition_data,"zero_identity_digest",' not in clay
+            and 'map_set(cognition_data,"grf_digest",' not in clay
+            and 'map_set(cognition_data,"workspace_digest",' not in clay
+            and 'map_set(cognition_data,"local_model_digest",' not in clay
+            and 'map_set(cognition_data,"jspace_mode",' not in clay
+        ),
         "db_resident_profile_effect": 'effect("pipeline_profile_read"' in clay,
         "cognitive_fabric_admission_effect": 'phase("pipeline_cognitive_fabric_admit"' in clay,
         "cognitive_fabric_finalization_effect": 'phase("pipeline_cognitive_fabric_finalize"' in clay,
@@ -236,6 +234,27 @@ def main() -> int:
         "literal_call_sequence": call_sequence,
     }
 
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--allow-gap",
+        action="store_true",
+        help="Report the current convergence gap without returning failure",
+    )
+    args = parser.parse_args()
+
+    here = Path(__file__).resolve()
+    root = here.parents[2]
+    clay_path = here.with_name("BLOGPOST_ENTITY.clay")
+    runtime_path = root / "tools" / "clay_profile_pipeline_runtime.py"
+    tests_path = here.with_name("test_blogpost_entity.py")
+
+    clay = clay_path.read_text(encoding="utf-8")
+    runtime = runtime_path.read_text(encoding="utf-8")
+    tests = tests_path.read_text(encoding="utf-8")
+
+    canonical = clay_contract(clay)
     runtime_contract = runtime_effect_contract(runtime)
     tests_contract = {
         "still_mentions_external_profile_path": "str(profile_path)" in tests,
@@ -244,20 +263,22 @@ def main() -> int:
 
     canonical_current = all(
         [
-            clay_contract["three_argument_runtime_boundary"],
-            clay_contract["db_resident_profile_effect"],
-            clay_contract["cognitive_fabric_admission_effect"],
-            clay_contract["cognitive_fabric_finalization_effect"],
-            clay_contract["cognitive_fabric_temporal_order"],
-            clay_contract["generic_inference_effect"],
-            clay_contract["inference_consumes_admitted_engine"],
-            clay_contract["inference_consumes_admitted_context"],
-            clay_contract["inference_binds_pre_admission_only"],
-            clay_contract["gate_commit_bind_same_admission"],
-            clay_contract["finalizer_binds_terminal_turn"],
-            clay_contract["raw_profile_prompt_inference_bypass_absent"],
-            clay_contract["old_profile_load_absent"],
-            clay_contract["old_provider_chat_absent"],
+            canonical["cognition_invocation_runtime_boundary"],
+            canonical["cognition_invocation_passed_only_to_admission"],
+            canonical["caller_cognition_authority_absent"],
+            canonical["db_resident_profile_effect"],
+            canonical["cognitive_fabric_admission_effect"],
+            canonical["cognitive_fabric_finalization_effect"],
+            canonical["cognitive_fabric_temporal_order"],
+            canonical["generic_inference_effect"],
+            canonical["inference_consumes_admitted_engine"],
+            canonical["inference_consumes_admitted_context"],
+            canonical["inference_binds_pre_admission_only"],
+            canonical["gate_commit_bind_same_admission"],
+            canonical["finalizer_binds_terminal_turn"],
+            canonical["raw_profile_prompt_inference_bypass_absent"],
+            canonical["old_profile_load_absent"],
+            canonical["old_provider_chat_absent"],
         ]
     )
     reference_converged = (
@@ -273,13 +294,13 @@ def main() -> int:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v4",
-        "canonical_clay": clay_contract,
+        "schema": "clay-structured-contract-sync/v5",
+        "canonical_clay": canonical,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay authority is DB-resident profile -> pre-inference Cognitive Fabric admission -> inference_generate -> deterministic gate/MiniUnifiedDB CAS commit -> post-turn UCF runtime-receipt finalization; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
+        "policy": "Canonical Clay authority is bounded MINI_COGNITIVE_INVOCATION/v1 selector -> DB-resident profile/state -> pre-inference Cognitive Fabric admission resolving only already-bound MiniUnifiedDB material -> inference_generate -> deterministic gate/MiniUnifiedDB CAS commit -> post-turn UCF runtime-receipt finalization; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
         "errors": errors,
         "pass": not errors,
     }

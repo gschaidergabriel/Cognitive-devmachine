@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "Multi-use Mini Entity / EntityOS integrated cognitive architecture",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main": "3a4fbfe83d90dff6829aeaaf3615cd24dd7565d0",
+  "branch": "go/claude-env-receipt-policy-sync-v2-20260823",
+  "supersedes_local_pr": 1142,
+  "finding": {
+    "class": "CLAUDE_ADAPTER_ENV_RECEIPT_POLICY_DRIFT",
+    "status": "SOURCE_MECHANISM_SUPPORTED_RUNTIME_UNVERIFIED",
+    "observed": "ClaudeCodeInference._subprocess_env() sets CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 and CLAUDE_CODE_DISABLE_CLAUDE_MDS=1, while the merged CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 canonical environment allowlist omitted both keys.",
+    "consequence": "A truthful exact child-environment receipt could falsely reject the adapter's own defensive variables as outside canonical policy, independently of the real Claude boundary behavior.",
+    "counterhypothesis": "The receipt generator could omit the variables from allowed/observed keys. Rejected as admissible evidence design because that would make the measured environment incomplete and could hide the exact protection surface being claimed.",
+    "repair": "Add only the two existing adapter-owned defensive variables to CANONICAL_ENV_ALLOWLIST; retain rejection of unrelated environment keys and secrets."
+  },
+  "source_identity": {
+    "validator_before_blob": "70cb425538f49071a97c21898c96c36e7915940d",
+    "validator_after_blob": "72ac5d2edbabd9145d6116bd4b52221148cd4612",
+    "focused_test_blob": "e104f17d158839d99defede8ff5bc162b88d612f",
+    "validator_commit": "398348f610f005e209f5c62f076350d1b66fa2eb",
+    "test_commit": "b3701687cc79aee9e60c5a3055aa91beaadba515"
+  },
+  "preserved_parallel_hardening": [
+    "cross-bound stdout_sha256 identity enforcement",
+    "cross-bound stderr_sha256 identity enforcement",
+    "canonical env allowlist authority from merged #1124"
+  ],
+  "focused_regressions_authored": [
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY is canonical",
+    "CLAUDE_CODE_DISABLE_CLAUDE_MDS is canonical",
+    "truthful receipt carrying both protection keys is accepted",
+    "AWS_SECRET_ACCESS_KEY remains rejected even if a receipt attempts to self-authorize it"
+  ],
+  "execution_evidence": {
+    "exact_runtime_executed": false,
+    "component_tests_executed": false,
+    "reason": "No admitted exact repository checkout/executable Claude runtime was available on the connected isolated execution surface during this organ run. Authored source identities are GitHub-bound; no unexecuted test is reported as PASS.",
+    "claude_adapter_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_credit": 0,
+    "whole_product_credit": 0
+  },
+  "parallel_coordination": {
+    "safe_mode_lane": "PR #1126 independently addresses ambient Claude customization with --safe-mode and is not duplicated here.",
+    "receipt_env_authority_lane": "Merged PR #1124 added canonical allowlist authority but omitted the two already-set defensive variables; this receipt closes only that remaining policy-sync seam.",
+    "stale_first_attempt": "PR #1142 was based on an older validator blob and became non-mergeable after main acquired newer evidence-composition hardening; it must be closed in favor of the rebased lane.",
+    "duplicate_implementation_created": false
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "status": "CONSUMED",
+    "name": "CLAUDE_AMBIENT_CUSTOMIZATION_BYPASS_SOURCE_SPEC_DISCRIMINATOR",
+    "result": "The hypothesis that --tools '' plus strict MCP/no-session persistence alone suppresses all ambient Claude customization was falsified against current Claude Code control-surface documentation; safe-mode/bare-mode-class isolation is separately required. No second unusual experiment was performed."
+  },
+  "execution_policy": {
+    "free_only_preserved": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "training": false,
+    "together_used": false
+  },
+  "remaining_blockers": [
+    "Adjudicate/merge the nonduplicate safe-mode product-code lane (#1126) against current main.",
+    "Revise the stale CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 ephemeral contract: current temporary-HOME creation/removal semantics conflict with the adapter's intentional persistent authentication HOME.",
+    "Run one exact authorized isolated Ubuntu boundary invocation with the admitted pinned Claude Code bytes, one invocation identity, complete child-environment observation, diagnostic validation first, strict validation only if all boundaries pass.",
+    "Rerun adjacent/full suite on the same exact source/executor identity before any runtime promotion."
+  ],
+  "evidence_law": "SOURCE CANDIDATE / MECHANISM SUPPORTED != EXACT RUNTIME VERIFIED != WHOLE PRODUCT ACCEPTED"
+}

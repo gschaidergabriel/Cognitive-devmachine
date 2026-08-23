@@ -1,0 +1,67 @@
+{
+  "schema": "GO_CLAUDE_OWNER_IDENTITY_PROMPT_MISMATCH/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "observed_main_before_write": "3b225a1b2d56b8bd489f0ed8310c0e6626df23bb",
+  "status": "OWNER_ARCHITECTURE_IDENTITY_MISMATCH_BOUND_RUNTIME_UNVERIFIED",
+  "scope": "first-class Claude Code candidate-inference identity boundary only",
+  "source_identity": {
+    "owner_directive_path": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+    "owner_directive_blob": "21119659263a44ea8dd7b7902ef832e27a4dbec7",
+    "adapter_path": "the artefact/clayverse/adapters.py",
+    "adapter_blob": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507",
+    "runtime_boundary_test_path": "the artefact/tests/test_runtime_adapters.py",
+    "runtime_boundary_test_blob": "0cf1f06ed02d795c53e11497d145ec9ff750b4c3"
+  },
+  "observations": [
+    "Current owner law says INFERENCE_ENGINE != ENTITY_IDENTITY, CLAUDE_CODE != ZERO, and CLAUDE_CODE_RESULT = CANDIDATE_INFERENCE.",
+    "Current owner law defines the Claude path as targeted inference compiled from Mini Entity/Zero and returned to EntityOS validation/reconciliation.",
+    "Current ClaudeCodeInference system prompt still states: You are the cognition engine inside ClayVerse, one persistent central entity shared by authenticated users.",
+    "The same prompt says ClayVerse independently validates effects, retaining the superseded top-level product identity inside the inference instruction.",
+    "The split #1092 boundary tests cover tool-less behavior, ephemerality, structured output and environment isolation; they do not assert current owner-architecture identity neutrality.",
+    "Therefore the current first-class Claude adapter can satisfy those boundary nodes while still receiving a superseded fixed entity/product identity in its system prompt."
+  ],
+  "grf_claycode": "grf{r0:[owner_law(\"CLAUDE_CODE!=ZERO\"),owner_law(\"INFERENCE_ENGINE!=ENTITY_IDENTITY\"),source(adapter_blob=\"6dfaa81d0ad0fb57acb1dcc69d45009538b8c507\"),prompt_contains(\"ClayVerse\"),prompt_contains(\"one persistent central entity\")],r1:[mismatch(\"first_class_candidate_engine\",\"fixed_retired_entity_identity_prompt\")],r2:[candidate(\"neutral_candidate_prompt\",\"Mini Entity / EntityOS authority wording without runtime identity claim\")],r3:[counter(\"legacy wording is harmless label only\",reject_if=\"prompt explicitly assigns entity identity to inference engine\")],r4:[discriminator(\"retain #1092 tool/env/structured fences while removing retired identity assertions\")],r5:[invariant(\"candidate inference may know architecture and authority boundaries but must not be instructed that it is the persistent entity or Zero\")],r6:[class(\"SOURCE_MISMATCH_VERIFIED; PATCH_MECHANISM_SUPPORTED; LIVE_CLAUDE_RUNTIME_UNVERIFIED\")]}",
+  "deterministic_candidate_discriminator": {
+    "environment": "isolated ChatGPT Linux container; Python 3.13.5",
+    "method": "focused fake-Claude subprocess probe preserving the merged tool-less, no-session, structured-output and environment-allowlist assertions plus one new owner-identity-neutrality assertion",
+    "tests": 5,
+    "passed": 5,
+    "new_identity_guards": [
+      "system prompt contains no ClayVerse identity",
+      "system prompt contains no one-persistent-central-entity self assignment",
+      "system prompt states targeted candidate-inference engine",
+      "system prompt states not Zero / no direct effect authority",
+      "system prompt leaves MiniUnifiedDB + deterministic EntityOS validation authoritative"
+    ],
+    "evidence_class": "BOUNDED_PATCH_MECHANISM_ONLY_NOT_EXACT_GIT_BRANCH_RUNTIME"
+  },
+  "strongest_counterhypothesis": "The old ClayVerse language is merely explanatory and cannot affect authority because downstream deterministic gates still reject unauthorized effects. Retained only at effect-authority scope; rejected at identity/prompt-contract scope because owner law explicitly forbids the inference engine from being entity identity and the model is directly instructed that it is the persistent entity.",
+  "interaction_with_current_ephemerality_finding": "ORTHOGONAL. The 2026-08-23 Claude ephemerality contract mismatch remains open. Fixing prompt identity does not establish config/session ephemerality and must not convert any EPHEMERAL receipt to PASS.",
+  "recommended_smallest_repair": [
+    "Replace the Claude system instruction self-identity with candidate-inference wording: invoked by Mini Entity through EntityOS; not Zero/entity identity/truth/durable memory/direct effect authority.",
+    "Keep MiniUnifiedDB + deterministic EntityOS validation as authority and effect output as intent only.",
+    "Add a deterministic owner-identity-neutrality regression without weakening the four #1092 security boundary nodes.",
+    "Then execute the exact adapter boundary suite plus the new identity guard on one admitted clean source/runtime; separately resolve the open ephemerality measurement mismatch before aggregate runtime promotion."
+  ],
+  "execution": {
+    "live_claude_binary_invocation": false,
+    "exact_git_branch_runtime": false,
+    "vercel_sandbox_exec_surface": "UNAVAILABLE_IN_CURRENT_CONNECTOR",
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "swarm": {
+    "status": "NOT_STARTED_NO_CALLABLE_ADMITTED_CREDENTIAL_BEARING_PROVIDER_SURFACE",
+    "free_only_preserved": true
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_CLAIM",
+    "reason": "No shared immutable macrocycle id / exact cross-organ experiment lease key was exposed to this organ; deterministic regressions do not claim the unusual-experiment slot."
+  },
+  "acceptance": "IN_PROGRESS"
+}

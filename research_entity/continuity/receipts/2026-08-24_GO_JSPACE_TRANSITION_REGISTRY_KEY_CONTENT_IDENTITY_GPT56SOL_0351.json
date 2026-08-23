@@ -1,0 +1,95 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_TRANSITION_KEY_CONTENT_IDENTITY_GAP/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "f4e8e52a1326dd2616e6f1e5cdadd4fd69cf3dfc",
+    "schema": "8.63",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together_inference_training_preflight_key_lookup": "FORBIDDEN",
+    "vps_self_hosted_production_testing": "FORBIDDEN"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_exposed": false,
+    "available_exact_user_message_time_precision": "MINUTE_ONLY",
+    "atomic_timestamp_fallback_reproducible_under_current_protocol": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_source_review_fusion": "ALLOWED",
+    "duplicate_lane_created": false
+  },
+  "retained_lanes": {
+    "hcu_donor": {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "pr": 1263,
+      "head_observed": "30a097c1d9af6f7a2e1d11100fd5a5750c5c141e"
+    },
+    "execution_controller": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 810,
+      "head_observed": "8f850d6efcf62d7b6ee8b8c698001cf44c55475c"
+    }
+  },
+  "execution_reentry": {
+    "connected_vercel_plan_observed": "HOBBY",
+    "exact_current_pr810_ready_deployment_observed": false,
+    "newer_predecessor_deployments_observed": [
+      "926c22dd57ef82447787e24c7412548c3ed2b890:ERROR",
+      "aa80683e8b3cbc0eb9b0fced784820005b0d55d6:ERROR"
+    ],
+    "latest_ready_snapshot_observed": "2dfa1edcab41fba34282b34956716e7c222ee517:READY",
+    "exact_head_sandbox_invoked": false,
+    "classification": "EXACT_HEAD_EXECUTION_ADMISSION_UNAVAILABLE_STALE_OR_ERROR_DEPLOYMENTS_NOT_CREDITABLE",
+    "runtime_credit_change": 0
+  },
+  "source_observation": {
+    "dataset_admission_path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "dataset_admission_blob_observed_at_live_donor": "c6290060f64f8d6ba683bda9f54096755d742b01",
+    "transition_producer_path": "the artefact/MicroEntity/hcu/jspace_gwt_prototype_v1.py",
+    "serious_compiler_path": "the artefact/MicroEntity/hcu/compile_admitted_jspace_training_dataset_v1.py",
+    "finding": "The existing DatasetAdmission _registry_exact boundary requires admitted_transition_traces[transition_trace.trace_sha256] to equal the caller-supplied transition mapping, but it does not prove that the registry key/trace_sha256 equals SHA-256 of the exact RFC8785/JCS transition-trace material before transition fields contribute to causal dataset admission.",
+    "producer_identity_law": "jspace_gwt_prototype_v1.make_transition_trace defines transition trace_sha256 from SHA-256 over the selected RFC8785/JCS canonical transition material, and validate_transition_trace can recompute that identity.",
+    "downstream_observation": "At live donor head 30a097c1, compile_admitted_jspace_training_dataset_v1 carries admission.transition_trace_sha256 into PipelineEvidence but does not independently recompute the transition mapping content digest there.",
+    "training_boundary_distinction": "The lower bootstrap compiler separately recomputes the TrainingTrace content digest, so this finding is specifically transition-evidence provenance and does not claim arbitrary training bytes are emitted.",
+    "parallel_reentry": "Current main already contains prototype-registry key/content identity receipts. This receipt deliberately does not duplicate the prototype finding; it isolates the remaining transition-trace analogue.",
+    "scope": "SOURCE_LEVEL_PROVENANCE_GAP_ONLY_NOT_RUNTIME_EXPLOIT_PROOF"
+  },
+  "hypothesis": "If admitted_transition_traces is not itself guaranteed content-addressed before DatasetAdmission, a caller-controlled registry alias can make a transition mapping appear admitted beneath an asserted digest key even though the exact mapping bytes do not hash to that identity, while all currently cross-bound semantic fields remain mutually consistent.",
+  "counterhypothesis": "The external transition registry producer may guarantee canonical key/content identity upstream, making local revalidation redundant.",
+  "counterhypothesis_adjudication": "The DatasetAdmission function contract accepts caller-owned mappings and does not receive a typed proof that admitted_transition_traces was produced by validate_transition_trace. The serious compiler later trusts admission.transition_trace_sha256 rather than revalidating transition bytes. Therefore a local fail-closed content-identity check is a useful provenance invariant unless an exact upstream registry-construction proof is made mandatory.",
+  "cheapest_high_information_discriminator": {
+    "work_class": "ORDINARY_DETERMINISTIC_REGRESSION_OR_SOURCE_HARDENING_NOT_UNUSUAL_EXPERIMENT",
+    "test": "Construct a producer-valid transition trace, serialize its exact canonical material, register unchanged or digest-relevant-mutated transition bytes beneath a nonmatching claimed transition trace SHA while preserving the semantic fields currently consumed by DatasetAdmission, and require deterministic rejection before dataset rows are emitted.",
+    "acceptance_if_hardening_is_needed": "The single existing DatasetAdmission authority recomputes SHA256 over exact RFC8785/JCS transition material and requires equality with transition_trace.trace_sha256 / the registry key, with alias-key and byte-mutation hard negatives.",
+    "preferred_fusion": "Harden prototype and transition key/content identity in one coherent DatasetAdmission patch rather than create separate authorities or repeated executor churn."
+  },
+  "coordination_write": {
+    "retained_donor_pr": 1263,
+    "comment_id": 5388424848,
+    "purpose": "Place the distinct transition-registry repair specification on the single retained donor lane."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "NO_CHANGE_WITH_REASON: PR810 moved to observed head 8f850d6e while connected Vercel showed newer predecessor ERROR deployments and no READY deployment at that exact head; no stale deployment was invoked, no duplicate executor was created and no paid path was used.",
+    "track_b_hcu_typed_entry_fabric": "ADVANCED_BY_CAUSAL_PROVENANCE_HARDENING_SPEC: isolated the transition-trace key/content identity boundary inside the single causal DatasetAdmission path and coordinated the minimal fail-closed fusion on PR1263.",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "ADVANCED: serious training-data provenance now has a distinct transition-evidence identity discriminator, complementing the already-recorded prototype and Vector-Control admission gaps without granting model/training credit."
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md and both retained lanes are moving rapidly under parallel organs; this bounded nonduplicate delta is persisted append-only plus coordinated on PR1263 rather than risking a stale whole-file overwrite."
+  },
+  "next_exact_gate": "On the single retained PR1263 donor lane, fuse prototype plus transition RFC8785/JCS registry key/content identity revalidation into the existing DatasetAdmission authority with deterministic alias-key and byte-mutation hard negatives; preserve the lower TrainingTrace self-hash boundary. Then select one immutable donor snapshot for any future PR810 rebind. Independently, invoke PR810 only if a naturally available included-tier Vercel preview exactly matches the then-current executor head and all FREE_ONLY source/result/secret/cleanup fences hold."
+}

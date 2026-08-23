@@ -1,0 +1,43 @@
+{
+  "schema": "CLAY_SOURCE_FALSIFIER_REPAIR/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "owner_authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "base_main": "31b8edecc06af26653961ba097a9b7cb60fcb721",
+  "regressed_main_source_blob": "0edbe664259cc5aa788577834e1b0ea5a9050e4d",
+  "repaired_source_commit": "548f76b084e9238b29937879603b01ee91469013",
+  "repaired_source_blob": "c283e58aabc01ab6f37f66b3ded71a2caf081820",
+  "generation_fence_test_blob": "723e80befffcd7b04b30dc3e02c1a09100268cd6",
+  "observed_regression": "_require_admitted_digest accepted any admission with admitted_generation <= requested entity_generation, so a generation-3 object admission could authorize a new generation-4 cognition boot binding after the entity generation advanced.",
+  "authority_impact": "stale pre-restart cognition admission authority could silently cross a recovery/global-generation fence",
+  "repair": "require mini_cognition_object_admissions.admitted_generation to equal the requested/live entity generation exactly",
+  "adversarial_regression": "test_prior_generation_object_admission_cannot_authorize_new_boot_binding",
+  "isolated_discriminator": {
+    "scope": "SQL mechanism only; not whole module/runtime acceptance",
+    "environment": {
+      "python": "3.13.5",
+      "sqlite": "3.46.1",
+      "platform": "Linux x86_64 isolated ChatGPT execution container"
+    },
+    "fixture": "one ZERO_IDENTITY object admitted at generation 3, queried for generation 4",
+    "old_query_result": ["v1", 3],
+    "new_query_result": null,
+    "mechanism_supported": true
+  },
+  "compare_to_base": {
+    "source_file_changes": "3 additions / 4 deletions",
+    "test_file": "68-line new deterministic regression",
+    "unexpected_file_drift": false
+  },
+  "unusual_experiment": "NO_NEW_EXPERIMENT; deterministic stale-generation falsifier/regression only",
+  "runtime_credit": 0,
+  "bundled_08b_credit": 0,
+  "jspace_credit": 0,
+  "whole_gwt_credit": 0,
+  "claude_adapter_credit": 0,
+  "hcu_runtime_credit": 0,
+  "classification": "SOURCE_REPAIR_PLUS_BOUNDED_COMPONENT_MECHANISM_EVIDENCE",
+  "next_gate": "Run the exact branch unit regression in an actually-started authorized isolated source checkout, then merge if green; continue with the single real pipeline_cognitive_fabric_admit/prepare integration and post-terminal UCF-v1 finalization."
+}

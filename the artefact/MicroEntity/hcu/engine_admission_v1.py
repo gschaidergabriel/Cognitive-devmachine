@@ -13,20 +13,26 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import hashlib
-import json
 import os
 from pathlib import Path
 import re
 from typing import Any
 
+try:
+    from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+except ImportError:
+    from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+
 from reactive_event_router_v1 import (
     ADMITTED_INTERNAL_ENGINES,
     ADMITTED_INTERNAL_PROVIDER_ALIASES,
     EngineAdmission,
+    HASH_SERIALIZATION_SCHEMA,
 )
 
-LOCK_SCHEMA = "HCU_ENGINE_ARTIFACT_LOCK/v1"
-BUNDLE_SCHEMA = "HCU_ENGINE_ARTIFACT_BUNDLE/v1"
+LOCK_SCHEMA = "HCU_ENGINE_ARTIFACT_LOCK/v2"
+BUNDLE_SCHEMA = "HCU_ENGINE_ARTIFACT_BUNDLE/v2"
+ENGINE_ADMISSION_RECEIPT_SCHEMA = "HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v2"
 TREE_SCHEMA = b"HCU_ARTIFACT_TREE_SHA256/v1\x00"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _CHUNK = 1024 * 1024
@@ -81,7 +87,8 @@ class VerifiedEngineAdmission:
 
     def receipt(self) -> dict[str, Any]:
         return {
-            "schema": "HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v1",
+            "schema": ENGINE_ADMISSION_RECEIPT_SCHEMA,
+            "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
             "entity_generation": self.entity_generation,
             "provider_alias": self.admission.provider_alias,
             "engine_identity": self.admission.engine_identity,
@@ -96,13 +103,10 @@ class VerifiedEngineAdmission:
 
 
 def _canonical(value: Any) -> bytes:
-    return json.dumps(
-        value,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-        allow_nan=False,
-    ).encode("utf-8")
+    try:
+        return canonicalize(value)
+    except CanonicalizationError as exc:
+        raise EngineAdmissionError(f"CANONICALIZATION_FAILED:{exc}") from exc
 
 
 def _text(value: Any, field: str) -> str:
@@ -232,6 +236,7 @@ def digest_artifact_path(path: Path) -> ArtifactDigest:
 def derive_engine_artifact_sha256(lock: EngineArtifactLock) -> str:
     material = {
         "schema": BUNDLE_SCHEMA,
+        "hash_serialization_schema": CANONICALIZATION_SCHEMA,
         "provider_alias": lock.provider_alias,
         "engine_identity": lock.engine_identity,
         "engine_class": lock.engine_class,
@@ -248,6 +253,8 @@ def _validate_lock(lock: EngineArtifactLock) -> EngineArtifactLock:
         raise EngineAdmissionError("ENGINE_ARTIFACT_LOCK_TYPE_REQUIRED")
     if lock.schema != LOCK_SCHEMA:
         raise EngineAdmissionError("ENGINE_ARTIFACT_LOCK_SCHEMA_UNSUPPORTED")
+    if HASH_SERIALIZATION_SCHEMA != CANONICALIZATION_SCHEMA:
+        raise EngineAdmissionError("ENGINE_ROUTER_CANONICALIZATION_SCHEMA_MISMATCH")
     provider = _text(lock.provider_alias, "provider_alias").lower()
     if provider not in ADMITTED_INTERNAL_PROVIDER_ALIASES:
         raise EngineAdmissionError("ENGINE_PROVIDER_NOT_ADMITTED")
@@ -321,7 +328,8 @@ def verify_and_construct_engine_admission(
         engine_artifact_sha256=lock.engine_artifact_sha256,
     )
     receipt_material = {
-        "schema": "HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v1",
+        "schema": ENGINE_ADMISSION_RECEIPT_SCHEMA,
+        "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
         "entity_generation": generation,
         "provider_alias": admission.provider_alias,
         "engine_identity": admission.engine_identity,

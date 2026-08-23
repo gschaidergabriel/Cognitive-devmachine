@@ -1,0 +1,36 @@
+{
+  "schema": "clay-source-evidence-correction/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "corrects_receipt": "the artefact/blogpost_entity/receipts/2026-08-23_GO_OWNER_ARCHITECTURE_BOOTSTRAP_CONVERGENCE_GPT56SOL.json",
+  "correction_scope": "Do not require the first Qwen3.5 J-lens gate to bind specifically through model.language_model. The exact expected layout depends on the Hugging Face wrapper class.",
+  "coordination": "ordinary source review/correction; no unusual experiment executed",
+  "claycode_grf": {
+    "R0_OBSERVE": [
+      "Anthropic jlens hf.py tries Layout('model') before Layout('model.language_model') and accepts a text decoder exposing layers, norm and embed_tokens plus outer lm_head.",
+      "Current Hugging Face Qwen3.5 source defines Qwen3_5ForCausalLM with self.model = Qwen3_5TextModel(config).",
+      "Current Hugging Face Qwen3.5 tests explicitly exercise AutoModelForCausalLM unwrapping a composite Qwen3_5Config into Qwen3_5ForCausalLM with Qwen3_5TextConfig.",
+      "The official Qwen3.5-0.8B model metadata reports a 24-layer, hidden-size-1024 language model using a hybrid Gated DeltaNet/full-attention stack."
+    ],
+    "R1_INFER": "For language-only mechanistic J-Space calibration, the narrowest first target is Qwen3_5ForCausalLM / Qwen3_5TextModel through jlens Layout('model'), avoiding the vision wrapper unless multimodal latent experiments later require it.",
+    "R2_GENERATE": [
+      "TEXT_BACKBONE_FIRST: load/unwrap exact checkpoint to Qwen3_5ForCausalLM and fit/validate J-lens on language residuals.",
+      "FULL_MULTIMODAL_FIRST: use Qwen3_5ForConditionalGeneration and locate model.language_model.",
+      "CUSTOM_ADAPTER_FIRST: implement a new LensModel adapter before testing the official from_hf layouts."
+    ],
+    "R3_COUNTER": "The exact released checkpoint/runtime may not support text-only loading exactly as the current upstream test path suggests, or hybrid block backward/hook semantics may still fail even after layout discovery succeeds.",
+    "R4_DISCRIMINATE": "In an admitted isolated runtime, pin exact transformers + jlens identities, load the exact Qwen3.5-0.8B checkpoint via the text-only CausalLM surface when supported, run jlens.from_hf and assert Layout('model'), n_layers=24, d_model=1024, then verify ActivationRecorder and one bounded jacobian_for_prompt across prompts exercising both Gated DeltaNet and full-attention layers. Fall back to the multimodal wrapper only if exact checkpoint loading requires it; do not implement a custom adapter until official from_hf is actually falsified.",
+    "R5_EMERGENT": "The J-Space profile should bind the exact text-cognition substrate rather than accidental outer multimodal packaging. Wrapper identity belongs in provenance, while workspace geometry is calibrated against the actual text residual stack.",
+    "R6_VERIFY": "SOURCE_MECHANISM_SUPPORTED_ONLY_RUNTIME_UNOBSERVED"
+  },
+  "architecture_delta": {
+    "preferred_first_jlens_surface": "Qwen3_5ForCausalLM / Qwen3_5TextModel",
+    "expected_official_jlens_layout_when_text_only_surface_loads": "model",
+    "multimodal_wrapper_layout": "model.language_model is an available jlens known layout when that wrapper is used and exposes the expected decoder attributes",
+    "custom_adapter_policy": "DEFER_UNTIL_OFFICIAL_FROM_HF_RUNTIME_FALSIFIED"
+  },
+  "runtime_credit_added": 0,
+  "whole_product_credit_added": 0,
+  "german_summary": "Korrektur: Für den ersten Qwen3.5-J-Lens-Test ist der text-only CausalLM-Sprachkern der bessere und einfachere Zielpfad. `jlens` sollte ihn über das Standardlayout `model` erkennen. `model.language_model` bleibt nur für den multimodalen Wrapper relevant. Das ist Source-Evidenz; der echte Runtime-Test steht noch aus."
+}

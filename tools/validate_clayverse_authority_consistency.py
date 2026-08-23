@@ -37,13 +37,14 @@ def validate(root: Path) -> dict:
         "manifest": root / "the artefact/manifest.json",
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
+        "root_claude": root / "CLAUDE.md",
         "control44": root / CONTROL44,
         "steering844": root / STEERING844,
     }
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
     if errors:
-        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2", "pass": False, "errors": errors}
+        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3", "pass": False, "errors": errors}
 
     try:
         canonical = load_json(paths["canonical"])
@@ -54,7 +55,7 @@ def validate(root: Path) -> dict:
         steering = load_json(paths["steering844"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
-            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
             "pass": False,
             "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
         }
@@ -64,6 +65,7 @@ def validate(root: Path) -> dict:
     footer = paths["footer"].read_text(encoding="utf-8")
     architecture = paths["architecture"].read_text(encoding="utf-8")
     readme = paths["readme"].read_text(encoding="utf-8")
+    root_claude = paths["root_claude"].read_text(encoding="utf-8")
 
     # Preserve the older canonical research-entity join/identity fences while changing product authority.
     require(errors, bootstrap.get("entity_id") == canonical.get("entity_id"), "BOOTSTRAP_CANONICAL_ENTITY_MISMATCH")
@@ -129,8 +131,21 @@ def validate(root: Path) -> dict:
     require(errors, "CLAYVERSE" in readme_head and "ONE OCI/DOCKER-COMPATIBLE" in readme_head, "README_RELEASE_MISMATCH")
     require(errors, not ("CLAYVERSE SINGLE-CONTAINER ENDPOINT" in readme_head and "SUPERSEDED" in readme_head), "README_CLAYVERSE_SUPERSEDED")
 
+    # Root CLAUDE.md is an executable worker steering surface. It must not silently
+    # route repository workers back into the superseded Mini Entity program.
+    root_claude_upper = root_claude.upper()
+    root_claude_head = root_claude_upper[:5000]
+    require(errors, "PROGRAM=CLAYVERSE_SINGLE_CONTAINER" in root_claude_head, "CLAUDE_ROOT_PROGRAM_MISMATCH")
+    require(errors, "STAGE=CLAYVERSE_ARTIFACT" in root_claude_head, "CLAUDE_ROOT_STAGE_MISMATCH")
+    require(errors, OWNER_DIRECTIVE.upper() in root_claude_upper, "CLAUDE_ROOT_OWNER_DIRECTIVE_MISSING")
+    require(errors, "ONE OCI/DOCKER-COMPATIBLE CLAYVERSE CONTAINER IMAGE" in root_claude_head, "CLAUDE_ROOT_PRODUCT_ENDPOINT_MISMATCH")
+    require(errors, "UNIFIEDDB REMAINS THE SOLE DURABLE CANONICAL" in root_claude_upper, "CLAUDE_ROOT_UNIFIEDDB_AUTHORITY_MISSING")
+    require(errors, "TOGETHER API/SERVICE: **FORBIDDEN**" in root_claude_upper, "CLAUDE_ROOT_TOGETHER_FENCE_MISSING")
+    require(errors, "PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in root_claude_upper, "CLAUDE_ROOT_STALE_MINI_ENTITY_AUTHORITY")
+    require(errors, "REPOSITORY-WORKER INSTRUCTION ONLY" in root_claude_upper, "CLAUDE_ROOT_RUNTIME_MEMORY_SCOPE_MISSING")
+
     return {
-        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
         "pass": not errors,
         "errors": errors,
         "checked": {name: path.relative_to(root).as_posix() for name, path in paths.items()},

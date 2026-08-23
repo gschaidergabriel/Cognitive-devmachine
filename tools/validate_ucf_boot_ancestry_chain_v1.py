@@ -113,6 +113,8 @@ def validate_chain(
     inference = cycle.get("inference", {})
     if inference.get("engine_class") == "claude_code":
         boot_claude = boot_receipt.get("claude_adapter", {})
+        if boot_claude.get("enabled") is not True:
+            errors.append("BOOT_CLAUDE_ADAPTER_DISABLED")
         if inference.get("adapter_version") != boot_claude.get("adapter_version"):
             errors.append("BOOT_CLAUDE_ADAPTER_VERSION_MISMATCH")
         if inference.get("capability_profile_digest") != boot_claude.get("capability_profile_sha256"):

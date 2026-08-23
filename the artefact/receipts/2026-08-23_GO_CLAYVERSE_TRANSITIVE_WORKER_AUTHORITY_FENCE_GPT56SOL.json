@@ -5,7 +5,7 @@
   "organ": "gpt-5.6-sol",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "base_main_sha": "243d630b79a83ad3a8f9e67071861860854a4147",
+  "base_main_sha": "8798f0ff02866d2f253ce223e50aebaa617e4549",
   "finding": {
     "classification": "TRANSITIVE_WORKER_AUTHORITY_FALSE_GREEN",
     "summary": "BOOTSTRAP_MINIMAL actively points all_worker_protocol at the ClayVerse all-workers directive, but the canonical ClayVerse authority consistency validator did not read or validate that transitive worker prompt surface. A future worker-directive regression could therefore restore Mini Entity steering while top-level authority checks remained green."

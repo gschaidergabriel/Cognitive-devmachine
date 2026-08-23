@@ -1,9 +1,20 @@
 # Vercel Sandbox execution path — CURRENT
 
-Status: **BRIDGE CONFIRMED / SANDBOX ADMISSION PROVEN / RUNTIME GITHUB TOKEN INGRESS IMPLEMENTED / FINAL TEST-OF-TESTS DEFINED**  
-Current owner corrections: 2026-08-17 23:03–23:35 +07:00
+Status: **BRIDGE CONFIRMED / SANDBOX ADMISSION PROVEN / RUNTIME GITHUB TOKEN INGRESS IMPLEMENTED / OWNER ONE-SHOT REQUIRED**  
+Current product authority: `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`  
+Canonical product workspace: `main/the artefact/`
 
-## Current truth
+## Authority boundary
+
+This file is an execution-frontier record below the current ClayVerse owner directive and current `the artefact/manifest.json`. If historical text in this file conflicts with those authorities, the ClayVerse directive/manifest wins and this file must be repaired rather than routing product work through a retired runtime.
+
+Current canonical visible runtime is:
+
+`Browser -> Clerk -> verified JWT -> authenticated WebSocket PTY -> persistent user-bound tmux -> normal interactive Claude Code -> managed UserPromptSubmit/Stop/StopFailure hooks -> UnifiedDB causal lifecycle -> retrieval/workspace -> candidate reasoning -> effect-only MCP/EffectGate -> optional separately admitted EntityOS -> verified outcome -> causal re-entry`.
+
+The historical Mistral/custom-engine acceptance path and headless `claude -p` path are retired product runtimes. Current `the artefact/clayverse/final_acceptance_probe.py` is intentionally a fail-closed compatibility tombstone and MUST NOT be treated as final acceptance machinery. GLM remains only the separate token/API inference-only path described by the current manifest where that accepted profile requires it; it never replaces the canonical terminal/Claude Code path or gains state/effect authority.
+
+## Current Vercel truth
 
 The authorized bridge has actually created disposable Vercel Sandbox Firecracker microVMs and executed commands inside them. `Sandbox.create` is not the blocker.
 
@@ -19,98 +30,86 @@ VPS/self-hosted/production-host testing remains forbidden. Together remains forb
 
 Previous retained runs reached `Sandbox.create=PASS_CREATED`, attested the guest kernel and then stopped before private-source staging because no `GITHUB_READ_TOKEN` was available to the build-triggered controller.
 
-The latest such bounded run on controller v7 was deployment `dpl_6jeexw8EZa48jApm4NhgfaLMJoM5`: Sandbox admission passed, guest kernel `Linux 6.18.40 x86_64` was observed, then the run failed closed at `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`, with source/OCI runtime credit still zero and clean Sandbox stop.
+The bounded controller-v7 run on deployment `dpl_6jeexw8EZa48jApm4NhgfaLMJoM5` observed Sandbox admission plus guest kernel `Linux 6.18.40 x86_64`, then failed closed at `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`, with source/OCI runtime credit still zero and clean Sandbox stop.
 
-These remain valid historical observations only. They do not imply that the token must be configured in Vercel Environment Variables.
+These are historical observations only. They do not imply that the token must be configured in Vercel Environment Variables and do not establish current-source or product-runtime PASS.
 
-## Owner correction — GitHub read token MAY enter the Sandbox
+## Owner-corrected GitHub read-token ingress
 
-The previous rule that `GITHUB_READ_TOKEN` must remain host-side and must never be forwarded into the disposable Sandbox is **SUPERSEDED**.
+A scoped read-only `GITHUB_READ_TOKEN` MAY be securely injected/forwarded into an authorized disposable Vercel Sandbox for the narrow private Research/EntityOS fetch step under `research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md`.
 
-A scoped read-only `GITHUB_READ_TOKEN` MAY be securely injected/forwarded into an authorized disposable Vercel Sandbox for the narrow private Research/EntityOS fetch step.
-
-Current directive:
-`research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md`.
-
-Required controls remain:
+Required controls:
 - never commit or print the token;
 - never persist it in UnifiedDB, ClayGraph, snapshots, receipts, generated locks, OCI layers or durable workspace/state;
 - use least privilege and bounded lifetime;
 - verify exact expected repository/commit/tree/blob/archive identity before provenance credit;
 - fail closed on substitution or identity uncertainty;
 - remove/unset the credential after the fetch where possible;
+- prove credential absence in a fresh process after fetch;
 - stop/clean the Sandbox after the bounded batch.
 
-## Runtime token ingress — no Vercel secret coupling required
+The user cannot couple this GitHub token to Vercel as a Preview environment secret. The retained controller therefore supports runtime one-shot ingress:
 
-The additional owner constraint is that the user cannot couple this GitHub token to Vercel as a Preview environment secret. The retained controller therefore now supports **runtime one-shot ingress** instead.
+`owner-held token -> HTTPS POST /api/go-cycle-v2 -> transient request/function memory -> exact private Research + EntityOS access proof -> Sandbox.create -> token only in one Sandbox.runCommand env for private fetch -> exact source identity verification -> command exits -> token reference cleared -> fresh-process secret-absence fence -> continue exact-source/OCI gates`.
 
-Current mechanism in PR #810:
+The Preview build itself does not need the GitHub token. The token is not a Vercel Environment Variable, not committed, and must never enter Docker build args/context/image or ClayVerse runtime.
 
-`owner-held token -> HTTPS POST /api/go-cycle-v2 -> transient request/function memory -> exact private Research + EntityOS commit/tree access proof -> current v7 controller -> Sandbox.create -> token only in one Sandbox.runCommand env for private fetch -> exact source identity verification -> command exits -> token reference cleared -> fresh-process secret-absence fence -> continue source/OCI gates`.
+Observed architectural-unblock evidence:
+- deployment `dpl_6RSuuunC96JnmXeXN3Z9eYGTceE9` on commit `ba52934acff8bd620e1d968dfa437bf96dbf1a54` reached READY without a configured GitHub token;
+- the runtime ingress endpoint was deployed;
+- direct GET to `/api/go-cycle-v2` returned `405 Method Not Allowed`, `Allow: POST`, plus no-store/no-referrer/nosniff headers.
 
-Important properties:
-- the Preview build itself no longer runs the private-source controller and no longer needs `GITHUB_READ_TOKEN`;
-- the token is not a Vercel Environment Variable;
-- the token is not committed;
-- the token is not passed to Docker build args/context/image or ClayVerse runtime;
-- the runtime endpoint accepts only POST and uses no-store/no-referrer/nosniff response policy;
-- the controller defensively redacts the exact submitted token from returned child stdout/stderr;
-- the branch also contains a password-style start panel that stores nothing in localStorage/cookies and clears the input immediately after constructing the request.
+No recorded owner-started token-bearing run through this ingress exists yet. Therefore current private-source/full-suite/OCI runtime credit remains zero.
 
-Observed deployment evidence for the architectural unblock:
-- deployment `dpl_6RSuuunC96JnmXeXN3Z9eYGTceE9` on commit `ba52934acff8bd620e1d968dfa437bf96dbf1a54` reached **READY without any GitHub token configured** because `vercel-build` now performs only the exact retained source guard;
-- that READY closure includes the runtime ingress endpoint commit;
-- a direct GET to `/api/go-cycle-v2` returned `405 Method Not Allowed`, `Allow: POST`, and no-store/no-referrer/nosniff headers, proving the endpoint is deployed and fail-closed without an explicit start request.
+## Final test-of-tests — current ClayVerse form
 
-Therefore the structural blocker **"GITHUB_READ_TOKEN must be coupled to Vercel Preview environment" is removed**. A real token value has still not been supplied through this new ingress during recorded evidence, so prior source/OCI runtime credit remains zero until the explicit one-shot run happens.
+The whole-product acceptance run must exercise the current product, not a retired inference wrapper:
 
-## Final test-of-tests — mandatory
+`Vercel Sandbox Firecracker guest -> exact accepted ClayVerse OCI digest -> Clerk/browser/WebSocket PTY -> persistent tmux -> normal interactive Claude Code + managed hooks -> UnifiedDB/retrieval/workspace -> candidate reasoning -> EffectGate/optional admitted EntityOS -> causal outcome re-entry -> persistence/recovery -> full Sandbox/appliance destruction and recreation from the SAME image digest -> recovered canonical state under a new generation -> repeated canonical operation`.
 
-The final acceptance run is a real full-system test:
+The Vercel Sandbox Firecracker guest may serve as the independent guest-kernel outer envelope when its guest identity and the exact inner OCI digest are both attested. A second nested KVM/Kata guest is not required merely to satisfy that invariant. Separate Kata deployment hardening remains additional evidence.
 
-`Vercel Sandbox Firecracker microVM -> Docker/OCI runtime -> exact accepted ClayVerse OCI digest -> runtime Vault/approved secret-store Mistral acquisition -> transient Mistral token injection -> full ClayVerse causal operation -> recovery -> full Sandbox/appliance destruction and recreation from the SAME image digest -> Vault secret reacquisition -> repeated real cognition`.
+Provider law for final acceptance:
+- canonical interactive cognition must prove normal Claude Code terminal login/runtime through the managed PTY/tmux surface;
+- any API provider retained by the exact accepted manifest/profile (currently the separate GLM inference-only path in the manifest) must be verified only at its bounded inference boundary, with transient secret handling and zero direct state/effect authority;
+- no historical Mistral acceptance probe, custom chat API or headless `claude -p` route receives product credit;
+- model completion alone is never reward, truth or effect authority.
 
-The Vercel Sandbox microVM itself may serve as the independent guest-kernel outer envelope; a second nested KVM/Kata guest is not required merely to satisfy that invariant when the Sandbox guest identity and exact inner OCI digest are both attested. Separate Kata deployment hardening remains useful additional evidence.
-
-Mistral is mandatory for this final test as an inference provider only. Canonical Research now contains the final Mistral acceptance path (`the artefact/clayverse/final_acceptance_probe.py::run_mistral_acceptance_probe`) and final-only secret/model preflight hardening. The token must be acquired at runtime from the approved Vault/secret store, injected transiently, never persisted, and reacquired after full appliance/Sandbox recreation.
+EntityOS execution remains conditional. If the accepted profile keeps `CLAYVERSE_ENABLE_ENTITYOS_EXEC=0`, exact staged identity verification is sufficient for that baseline; if execution is explicitly admitted, the exact embedded artifact and admitted EffectGate round-trip must also pass.
 
 ## Next accepted execution sequence
 
 At the next real owner-started one-shot run:
 
-`refresh exact current Research main + retained admitted lanes once`
-`-> rebind retained #810 controller once`
+`refresh exact current Research main + retained admitted controller once`
+`-> rebind retained #810 controller to that exact source identity`
 `-> owner supplies scoped read-only GITHUB_READ_TOKEN through runtime POST/start panel, not Vercel Environment`
 `-> Sandbox.create`
-`-> attest Sandbox Firecracker guest identity/kernel`
+`-> attest Firecracker guest identity/kernel`
 `-> forward GitHub token only to one private-fetch command`
-`-> fetch exact private Research + EntityOS inside Sandbox`
+`-> fetch exact private Research + required EntityOS artifact inside Sandbox`
 `-> verify exact Git/object/artifact identities`
 `-> prove GitHub token absence after fetch`
-`-> reconstruct/attest accepted EntityOS`
-`-> full exact source regressions`
+`-> run exact-current ClayVerse full regressions, including OCI service import-closure guard`
 `-> build exact ClayVerse OCI`
-`-> capture immutable image digest + APT/tmux/Claude/Python/supply-chain identities`
+`-> capture immutable image digest plus APT/tmux/Claude/Python/supply-chain identities`
 `-> run the EXACT accepted ClayVerse digest inside the Firecracker guest`
-`-> enforce read-only root + declared persistent/tmpfs surfaces`
-`-> retrieve Mistral token from approved Vault/secret store`
-`-> inject Mistral token transiently into the running ClayVerse container`
-`-> enable only admitted network/auth paths`
+`-> enforce non-root/read-only-root/declared persistent+tmpfs write surfaces`
 `-> bring /healthz and full /readyz to intended states`
-`-> run real authenticated cognition through UnifiedDB/retrieval/workspace/Mistral`
-`-> re-ingest model output before effect authority`
-`-> execute safe admitted EntityOS/EffectGate round-trip`
-`-> verify effect/outcome causal re-entry`
-`-> verify one-entity/two-user generation and persistence contracts`
+`-> run real Clerk-authenticated WebSocket PTY sessions for both canonical users`
+`-> prove persistent tmux + normal interactive Claude Code + managed lifecycle hooks`
+`-> prove UnifiedDB authority, MicroClay/retrieval, ClayGraph/Hyperposition/workspace boundaries`
+`-> re-ingest candidate reasoning before any real effect authority`
+`-> execute a safe admitted EffectGate round-trip; include EntityOS only if explicitly admitted`
+`-> verify effect/outcome causal re-entry and stale-generation fencing`
+`-> verify one-entity/two-user persistence/concurrency/privacy contracts`
 `-> exercise Tier-1 recovery`
 `-> destroy/recreate the full Sandbox/appliance from the SAME image digest`
 `-> recover UnifiedDB/WAL/snapshot/EffectJournal under a new generation`
-`-> reacquire Mistral secret from Vault, never from recovered ClayVerse state`
 `-> prove stale-result rejection and no blind effect replay`
-`-> repeat real Mistral cognition after recovery`
-`-> complete Clerk/WebSocket PTY + managed terminal + dual-user gates at admitted final scope`
-`-> WHOLE_CLAYVERSE_PASS only if the complete vector is green`.
+`-> repeat canonical authenticated cognition after recovery`
+`-> verify any manifest-retained API inference-only provider boundary without granting it terminal/state/effect authority`
+`-> WHOLE_CLAYVERSE_PASS only if the complete current acceptance vector is green`.
 
 ## Evidence law
 
@@ -118,6 +117,7 @@ At the next real owner-started one-shot run:
 - Runtime GitHub-token ingress alone is not product PASS.
 - Successful private Git fetch alone is not product PASS.
 - Successful OCI build alone is not product PASS.
-- A direct Mistral API call outside ClayVerse is not product PASS.
+- A direct provider API call outside the canonical ClayVerse lifecycle is not product PASS.
 - Container liveness alone is not product PASS.
-- Whole-product credit requires the integrated exact-digest path and recovery/causal/security contracts actually to execute.
+- Source/component regressions and PR merges do not imply exact OCI/runtime acceptance.
+- Whole-product credit requires the integrated exact-digest current ClayVerse path and recovery/causal/security contracts actually to execute.

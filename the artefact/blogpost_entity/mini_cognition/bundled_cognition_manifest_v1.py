@@ -70,6 +70,7 @@ class ManifestError(ValueError):
 class ValidatedManifest:
     manifest: dict[str, Any]
     integration_identity_sha256: str
+    manifest_identity_sha256: str
 
 
 def _nonempty_string(value: Any, field: str) -> str:
@@ -85,15 +86,22 @@ def _sha256(value: Any, field: str) -> str:
     return text
 
 
+def _canonical_json_bytes(value: Any) -> bytes:
+    try:
+        return json.dumps(
+            value,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        ).encode("utf-8")
+    except (TypeError, ValueError) as exc:
+        raise ManifestError(f"MANIFEST_NOT_CANONICAL_JSON:{exc.__class__.__name__}") from exc
+
+
 def _canonical_identity_payload(manifest: Mapping[str, Any]) -> bytes:
     payload = {name: manifest.get(name) for name in IDENTITY_FIELDS}
-    return json.dumps(
-        payload,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-        allow_nan=False,
-    ).encode("utf-8")
+    return _canonical_json_bytes(payload)
 
 
 def validate_manifest(data: Any) -> ValidatedManifest:
@@ -138,8 +146,13 @@ def validate_manifest(data: Any) -> ValidatedManifest:
         if isinstance(value, float) and not (value == value and abs(value) != float("inf")):
             raise ManifestError("provenance:NONFINITE_VALUE_FORBIDDEN")
 
-    identity = hashlib.sha256(_canonical_identity_payload(manifest)).hexdigest()
-    return ValidatedManifest(manifest=manifest, integration_identity_sha256=identity)
+    integration_identity = hashlib.sha256(_canonical_identity_payload(manifest)).hexdigest()
+    manifest_identity = hashlib.sha256(_canonical_json_bytes(manifest)).hexdigest()
+    return ValidatedManifest(
+        manifest=manifest,
+        integration_identity_sha256=integration_identity,
+        manifest_identity_sha256=manifest_identity,
+    )
 
 
 def load_and_validate(path: Path) -> ValidatedManifest:

@@ -1,0 +1,79 @@
+{
+  "schema_version": "8.41",
+  "cycle": "automation-20260823-offline-ucf-jspace-fit-corpus-crossbind",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "mode": "FREE_ONLY",
+  "host_state": "INTENTIONALLY_OFFLINE_OWNER_CONFIRMED",
+  "frozen_runtime_baseline": {
+    "generation": 276,
+    "tests_green": 1486,
+    "tests_red": 1,
+    "sole_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
+    "runtime_credit_change": 0
+  },
+  "latest_repo_head_inspected": "6d84eadda88a4cba5093b2a251ee0653d019bbf6",
+  "latest_repo_head_tree": "bbb4b5ddb75c56ae326f2236dcc6419200d87a6c",
+  "material_source_findings": [
+    {
+      "commit": "1100467840e91233b1d45746259cbbff73efab26",
+      "classification": "SOURCE_MECHANISM_ONLY",
+      "finding": "Bundled cognition identity now binds fit_corpus_digest and JSPACE_GWT_BOOT_BINDING requires the observed fit-corpus digest to match the admitted manifest.",
+      "credit": "ZERO_RUNTIME_ZERO_MODEL_ZERO_WHOLE_GWT_ZERO_BASE"
+    },
+    {
+      "commit": "394dec7b71279a5c0376570e1544cd923ad83abd",
+      "classification": "SOURCE_MECHANISM_ONLY",
+      "finding": "Executed UCF cycles now require exactly one GWT winner; executed non-plain J-Space cycles require J-Space observation evidence. Blocked/nonexecuted and plain compatibility semantics remain scoped separately.",
+      "credit": "ZERO_RUNTIME_ZERO_SEMANTIC_ZERO_BASE"
+    },
+    {
+      "commit": "681723f8aa517b3e44dfe75d6b9b2db7e0c8318e",
+      "classification": "ADJUDICATED_SOURCE_FRONTIER",
+      "finding": "Claude adapter mixed-output false-green is already source-hardened; opaque invocation_id remains deferred until a trusted atomic Ubuntu receipt producer mints one immutable RUN_ID. Do not add another source-only receipt guard.",
+      "credit": "ZERO_RUNTIME_ZERO_PRODUCT"
+    }
+  ],
+  "hosted_execution_observation": {
+    "github_hosted_checks": "FAILED_BEFORE_VISIBLE_STEPS",
+    "semantic_credit": 0,
+    "runtime_credit": 0,
+    "reason": "pre-step runner/control-plane failure is instrument state, not executable semantic evidence"
+  },
+  "next_intentional_ubuntu_start_gate": {
+    "required": true,
+    "receipt": "POSTSTART_OBSERVATION_RECEIPT/v1 + JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 + UCF_RUNTIME_RECEIPT/v1",
+    "must_bind": [
+      "full_source_commit",
+      "source_tree",
+      "dirty_state",
+      "ubuntu_executor_identity",
+      "bundled_core_manifest_digest",
+      "checkpoint_digest",
+      "tokenizer_digest",
+      "runtime_digest",
+      "fit_corpus_digest",
+      "lens_and_jspace_profile_digests_if_present",
+      "workspace_gwt_policy_digest",
+      "zero_identity_and_grf_projection_digests",
+      "claude_adapter_version_and_capability_profile",
+      "one_immutable_run_id_minted_at_execution_boundary",
+      "jspace_observation_refs_for_executed_nonplain_cycles",
+      "exactly_one_gwt_winner_for_each_executed_cognitive_cycle",
+      "origin_attribution_for_first_poststart_actions"
+    ]
+  },
+  "steering": [
+    "Do not add another source-only guard unless a new executable counterexample justifies it.",
+    "Treat fit-corpus cross-binding and UCF causal-coupling changes as bounded source/mechanism evidence only until exact Ubuntu execution.",
+    "Preserve the frozen offline runtime baseline; intentional downtime is not a liveness failure.",
+    "Keep PAID/SUBSCRIPTION/UNKNOWN provider lanes quarantined before secret lookup and network I/O under FREE_ONLY.",
+    "Never promote BASE work packages from model agreement or same-family source tests.",
+    "Never promote canonical semantics without executable counterevidence and review.",
+    "Never modify Frank's Harness."
+  ],
+  "base_release_gate": "NOT_PASS",
+  "base_credit": "WP01_WP02_EXISTING_ONLY_WP03_WP14_OPEN",
+  "goodman_ancestry_collapse": true,
+  "frank_target": "UBUNTU_ONLY_V0_1",
+  "frank_harness_modified": false
+}

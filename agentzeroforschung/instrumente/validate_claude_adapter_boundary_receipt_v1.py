@@ -17,6 +17,7 @@ CANONICAL_ENV_ALLOWLIST = frozenset({
 })
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
+INVOCATION_ID = re.compile(r"^[A-Za-z0-9._:-]{8,128}$")
 
 class ReceiptError(ValueError):
     pass
@@ -46,6 +47,7 @@ def validate_common(common):
     need(isinstance(common.get("claude_version"), str) and common["claude_version"].strip(), "claude_version missing")
     need(is_nonplaceholder_hex(common.get("command_sha256"), SHA256), "command_sha256 invalid/placeholder")
     need(is_nonplaceholder_hex(common.get("input_sha256"), SHA256), "input_sha256 invalid/placeholder")
+    need(isinstance(common.get("invocation_id"), str) and INVOCATION_ID.fullmatch(common["invocation_id"]), "invocation_id invalid")
     need(isinstance(common.get("executor"), dict), "executor missing")
     ex = common["executor"]
     for key in ("os", "arch", "runtime"):

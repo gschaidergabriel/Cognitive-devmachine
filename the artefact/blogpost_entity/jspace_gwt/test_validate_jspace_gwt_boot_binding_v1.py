@@ -37,6 +37,7 @@ def valid_manifest():
         "quantization_runtime_identity": "gguf-q4_k_m+llama.cpp:test-fixture",
         "runtime_digest": D7,
         "lens_artifact_digest": D9,
+        "fit_corpus_digest": D6,
         "jspace_profile_digest": D2,
         "lens_profile_digest": D3,
         "workspace_calibration_digest": D4,
@@ -88,7 +89,7 @@ def valid_receipt(manifest, raw):
             "lens_file_sha256": manifest["lens_artifact_digest"],
             "lens_profile_sha256": manifest["lens_profile_digest"],
             "steering_calibration_sha256": manifest["steering_calibration_digest"],
-            "fit_corpus_sha256": D7,
+            "fit_corpus_sha256": manifest["fit_corpus_digest"],
             "n_prompts": 100,
             "skip_first_positions": 16,
             "storage_dtype": "float32",
@@ -238,6 +239,21 @@ class BootBindingValidatorTests(unittest.TestCase):
         cp = run_validator(receipt=r, manifest=m, source_lock=lock)
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("BOOT_MANIFEST_LENS_ARTIFACT_DIGEST_REQUIRED", cp.stdout)
+
+    def test_boot_fit_corpus_must_match_manifest(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["jspace"]["fit_corpus_sha256"] = D7
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BOOT_FIT_CORPUS_MISMATCH", cp.stdout)
+
+    def test_boot_manifest_requires_fit_corpus_digest(self):
+        m = valid_manifest(); del m["fit_corpus_digest"]; raw = manifest_bytes(m)
+        r = valid_receipt(valid_manifest(), manifest_bytes(valid_manifest()))
+        r["bundled_core"]["manifest_sha256"] = hashlib.sha256(raw).hexdigest()
+        lock = source_lock_for(m, raw)
+        cp = run_validator(receipt=r, manifest=m, source_lock=lock)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BOOT_MANIFEST_FIT_CORPUS_DIGEST_REQUIRED", cp.stdout)
 
     def test_source_lock_rejects_alternate_manifest_identity(self):
         m = valid_manifest(); raw = manifest_bytes(m); lock = source_lock_for(m, raw)

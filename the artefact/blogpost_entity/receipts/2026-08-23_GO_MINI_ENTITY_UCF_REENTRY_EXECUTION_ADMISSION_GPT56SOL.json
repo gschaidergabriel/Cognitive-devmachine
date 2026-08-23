@@ -1,0 +1,95 @@
+{
+  "schema": "GO_MINI_ENTITY_UCF_REENTRY_EXECUTION_ADMISSION_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "date": "2026-08-23",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "feature_pr": 1201,
+  "feature_branch": "gpt56sol/go-mini-ucf-product-path-20260823-1150",
+  "feature_head_before_this_receipt": "2eec4677d1f2cd4689e43a2d56e5d440ebdd0bbd",
+  "fresh_main_reentry": {
+    "main": "efec8ecff35c28cea6f7445a87aa65ddcc339cab",
+    "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+    "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+    "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+    "parallel_hcu_commit": "201aed23e048f09abf67e262da3e23fa643c6956",
+    "parallel_hcu_scope": "the artefact/MicroEntity/hcu plus package/owner-directive bindings",
+    "parallel_worker_swarm_authority_merge": "efec8ecff35c28cea6f7445a87aa65ddcc339cab",
+    "overlap_with_pr1201_product_files": false,
+    "coordination_result": "KEEP_SINGLE_UCF_LANE_PR1201; HCU_AND_WORKER_AUTHORITY_MAIN_DELTAS_ARE_CANONICAL_NONOVERLAPPING_PARALLEL_PROGRESS"
+  },
+  "pr1201_source_delta": {
+    "canonical_clay_ucf_admission_on_path": true,
+    "raw_prompt_profile_inference_bypass_guarded": true,
+    "structured_runtime_binding_guard_requires_ucf_handler": true,
+    "native_profile_v2_contract_schema": "mini-entity-native-profile-v2-parity-contract/v5",
+    "native_contract_requires_ucf_phase": true,
+    "reference_runtime_ucf_handler_implemented": false,
+    "classification": "SOURCE_CANDIDATE_FAIL_CLOSED_RUNTIME_GAP"
+  },
+  "execution_admission": {
+    "pr_head_observed": "2eec4677d1f2cd4689e43a2d56e5d440ebdd0bbd",
+    "workflow_runs": [
+      {
+        "run_id": 32619088519,
+        "name": "claycog-validator-pr",
+        "conclusion": "failure",
+        "job_id": 97144372177,
+        "job": "strict-admission",
+        "steps": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_TEST_FAILURE"
+      },
+      {
+        "run_id": 32619088538,
+        "name": "Research Entity Identity Guard",
+        "conclusion": "failure",
+        "job_id": 97144371917,
+        "job": "identity-guard",
+        "steps": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_TEST_FAILURE"
+      },
+      {
+        "run_id": 32619088529,
+        "name": "Mini Entity native 0.7 exact repro",
+        "conclusion": "failure",
+        "job_id": 97144371924,
+        "job": "source-bound-native-repro",
+        "steps": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_TEST_FAILURE"
+      }
+    ],
+    "semantic_tests_executed": false,
+    "runtime_credit": 0,
+    "bundled_08b_credit": 0,
+    "jspace_credit": 0,
+    "whole_gwt_credit": 0,
+    "claude_adapter_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unsafe_sync_attempt": {
+    "pull_request": 1218,
+    "state": "CLOSED_UNMERGED",
+    "reason": "main advanced during sync creation and head=main/base=feature represented feature-only UCF changes as reverse diff; merging was rejected fail-closed",
+    "feature_pr1201_modified_by_sync": false,
+    "credit": 0
+  },
+  "unusual_experiment_accounting": {
+    "count_for_this_go": 1,
+    "experiment_id": "AUTHORITY_REVERSAL_DONOR_REENTRY_DISCRIMINATOR",
+    "new_experiment_in_this_receipt": false
+  },
+  "policy": {
+    "free_only": true,
+    "together_used": false,
+    "paid_execution": false,
+    "provider_secret_lookup": false,
+    "vps_self_hosted_production_testing": false,
+    "authorized_isolated_sandbox_runtime_available_to_this_organ": false
+  },
+  "next_exact_gate": [
+    "freshly rebind PR1201 source delta to then-current main without reverse-diff synchronization",
+    "narrowly extract current DB-resident pipeline_profile_read and generic inference_generate mechanisms into the single canonical reference runtime while preserving current guards",
+    "implement exactly one pipeline_cognitive_fabric_admit runtime producer that composes the admitted Unified Cognitive Fabric/J-Space/GWT contracts and binds MiniUnifiedDB generation plus InferencePacket/fabric receipt identities",
+    "obtain actually-started exact-source authorized isolated execution before any runtime/model/J-Space/GWT/Claude/product promotion"
+  ]
+}

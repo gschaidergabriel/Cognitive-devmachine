@@ -147,3 +147,18 @@ Current testing remains authorized-isolated-sandbox-only unless a newer owner di
 ## Current frontier
 
 Build the **typed Xeno Entry Fabric** and a reusable **GRID10 scheduler/state/interconnect baseline**, then progressively separate XRAM/XPU/XCU responsibilities so COGSIM10, WM_TEST, NESTED_SIM and measured SCALEOUT reuse the same machine primitives rather than requiring architectural rewrites.
+
+## Current `go` delta — 2026-08-23
+
+Draft PR **#1354** now carries the first executable-shaped Entry/GRID10 substrate on fresh `main@2178d9b0a062636231ff0e3c533417c2268a7a96`:
+
+- typed deterministic ingress admission in `Xeno/entry_fabric_v1.py`;
+- deterministic 10-logical-cell XPU planner over shared physical workers in `Xeno/grid10_scheduler_v1.py`;
+- causal route identity is bound to the admitted event identity, closing the source-level alias class where materially different events could otherwise select identical routing outputs;
+- exactly one unusual discriminator is encoded: `CAUSAL_ALIAS_POISON`;
+- candidate cells are explicitly non-effect `CANDIDATE_COMPUTE` only;
+- stale/future generation and resource-budget violations fail closed.
+
+Execution evidence remains **BLOCKED/PRE-STEP**: PR workflow run `32651779315`, job `97224412867`, concluded `failure` with `steps=[]`. This is `EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT`, not a semantic test failure. The unusual experiment and ordinary regressions are therefore still unexecuted at runtime scope.
+
+Fresh upstream vLLM documentation continues to support the architecture distinction between logical requests and shared cache/worker resources: scheduling is request/token-step based and prefix KV can be reused across requests. Xeno must additionally preserve isolation domains before any future cache/KV reuse; cache reuse can never weaken user/session/provenance boundaries.

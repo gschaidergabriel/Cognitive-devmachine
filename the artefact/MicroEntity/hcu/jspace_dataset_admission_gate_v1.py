@@ -1,0 +1,207 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any, Mapping
+
+ADMISSION_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1"
+PROTOTYPE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3"
+TRANSITION_SCHEMA = "JSPACE_GWT_TRANSITION_TRACE/v1"
+TRAINING_SCHEMA = "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1"
+VECTOR_ABI = "JSPACE_VECTOR_CONTROL_ABI/v1"
+
+
+class JSpaceDatasetAdmissionError(ValueError):
+    pass
+
+
+@dataclass(frozen=True)
+class DatasetAdmission:
+    schema: str
+    training_trace_sha256: str
+    transition_trace_sha256: str
+    prototype_trace_sha256: str
+    generation: int
+    entry_event_sha256: str
+    entry_admission_sha256: str
+    route_decision_sha256: str
+    grid_plan_sha256: str
+    cell_id: str
+    role: str
+    jspace_basis_id: str
+    jspace_basis_sha256: str
+    credit_label: str
+    outcome_receipt_sha256: str | None
+
+
+def _mapping(value: Any, field: str) -> Mapping[str, Any]:
+    if not isinstance(value, Mapping):
+        raise JSpaceDatasetAdmissionError(f"{field}:MAPPING_REQUIRED")
+    return value
+
+
+def _text(value: Any, field: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise JSpaceDatasetAdmissionError(f"{field}:NONEMPTY_STRING_REQUIRED")
+    return value.strip()
+
+
+def _sha256(value: Any, field: str) -> str:
+    value = _text(value, field)
+    if len(value) != 64 or value.lower() != value or any(ch not in "0123456789abcdef" for ch in value):
+        raise JSpaceDatasetAdmissionError(f"{field}:LOWERCASE_SHA256_REQUIRED")
+    if value in {"0" * 64, "f" * 64}:
+        raise JSpaceDatasetAdmissionError(f"{field}:PLACEHOLDER_SHA256_FORBIDDEN")
+    return value
+
+
+def _generation(value: Any, field: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+        raise JSpaceDatasetAdmissionError(f"{field}:NONNEGATIVE_INTEGER_REQUIRED")
+    if value > 9_007_199_254_740_991:
+        raise JSpaceDatasetAdmissionError(f"{field}:IJSON_SAFE_INTEGER_REQUIRED")
+    return value
+
+
+def _registry_exact(registry: Any, sha: str, observed: Mapping[str, Any], field: str) -> None:
+    registry = _mapping(registry, field)
+    admitted = registry.get(sha)
+    if not isinstance(admitted, Mapping):
+        raise JSpaceDatasetAdmissionError(f"{field}:TRACE_NOT_ADMITTED")
+    if dict(admitted) != dict(observed):
+        raise JSpaceDatasetAdmissionError(f"{field}:TRACE_REGISTRY_MISMATCH")
+
+
+def _same(values: Mapping[str, Any], field: str) -> Any:
+    unique = []
+    for label, value in values.items():
+        if not unique:
+            unique.append(value)
+        elif value != unique[0]:
+            raise JSpaceDatasetAdmissionError(f"{field}:MISMATCH:{label}")
+    return unique[0] if unique else None
+
+
+def admit_for_training_dataset(
+    training_trace: Mapping[str, Any],
+    transition_trace: Mapping[str, Any],
+    *,
+    admitted_training_traces: Mapping[str, Mapping[str, Any]],
+    admitted_transition_traces: Mapping[str, Mapping[str, Any]],
+    admitted_prototype_traces: Mapping[str, Mapping[str, Any]],
+    admitted_outcome_receipts: Mapping[str, Any] | None = None,
+) -> DatasetAdmission:
+    """Fail-closed admission for one-shot-training dataset material.
+
+    This gate does not mint truth. It only proves that an already-admitted training trace,
+    an already-admitted live causal transition trace, and an already-admitted prototype
+    trace refer to the same generation/cell/role/basis and Entry->Route->GRID10 identities.
+    A raw standalone prototype or self-consistent training row is insufficient.
+    """
+    training_trace = _mapping(training_trace, "training_trace")
+    transition_trace = _mapping(transition_trace, "transition_trace")
+
+    if training_trace.get("schema_version") != TRAINING_SCHEMA:
+        raise JSpaceDatasetAdmissionError("TRAINING_TRACE_SCHEMA_UNSUPPORTED")
+    if transition_trace.get("schema_version") != TRANSITION_SCHEMA:
+        raise JSpaceDatasetAdmissionError("TRANSITION_TRACE_SCHEMA_UNSUPPORTED")
+
+    training_sha = _sha256(training_trace.get("trace_sha256"), "training_trace.trace_sha256")
+    transition_sha = _sha256(transition_trace.get("trace_sha256"), "transition_trace.trace_sha256")
+    prototype_sha = _sha256(training_trace.get("prototype_trace_sha256"), "training_trace.prototype_trace_sha256")
+
+    _registry_exact(admitted_training_traces, training_sha, training_trace, "admitted_training_traces")
+    _registry_exact(admitted_transition_traces, transition_sha, transition_trace, "admitted_transition_traces")
+    prototype_trace = _mapping(admitted_prototype_traces, "admitted_prototype_traces").get(prototype_sha)
+    if not isinstance(prototype_trace, Mapping):
+        raise JSpaceDatasetAdmissionError("admitted_prototype_traces:TRACE_NOT_ADMITTED")
+    if prototype_trace.get("schema") != PROTOTYPE_SCHEMA:
+        raise JSpaceDatasetAdmissionError("PROTOTYPE_TRACE_SCHEMA_UNSUPPORTED")
+
+    generation = _same(
+        {
+            "transition": _generation(transition_trace.get("generation"), "transition_trace.generation"),
+            "prototype": _generation(prototype_trace.get("generation"), "prototype_trace.generation"),
+            "training": _generation(training_trace.get("generation"), "training_trace.generation"),
+        },
+        "GENERATION_BINDING",
+    )
+    cell_id = _same(
+        {
+            "transition": _text(transition_trace.get("cell_id"), "transition_trace.cell_id"),
+            "prototype": _text(prototype_trace.get("winner_cell_id"), "prototype_trace.winner_cell_id"),
+            "training": _text(training_trace.get("cell_id"), "training_trace.cell_id"),
+        },
+        "CELL_BINDING",
+    )
+    role = _same(
+        {
+            "transition": _text(transition_trace.get("role"), "transition_trace.role"),
+            "prototype": _text(prototype_trace.get("winner_role"), "prototype_trace.winner_role"),
+            "training": _text(training_trace.get("role"), "training_trace.role"),
+        },
+        "ROLE_BINDING",
+    )
+    basis_id = _same(
+        {
+            "transition": _text(transition_trace.get("jspace_basis_id"), "transition_trace.jspace_basis_id"),
+            "prototype": _text(prototype_trace.get("basis_id"), "prototype_trace.basis_id"),
+            "training": _text(training_trace.get("jspace_basis_id"), "training_trace.jspace_basis_id"),
+        },
+        "BASIS_ID_BINDING",
+    )
+    basis_sha = _same(
+        {
+            "transition": _sha256(transition_trace.get("jspace_basis_sha256"), "transition_trace.jspace_basis_sha256"),
+            "prototype": _sha256(prototype_trace.get("basis_sha256"), "prototype_trace.basis_sha256"),
+            "training": _sha256(training_trace.get("jspace_basis_sha256"), "training_trace.jspace_basis_sha256"),
+        },
+        "BASIS_SHA256_BINDING",
+    )
+
+    causal = {}
+    for field in (
+        "entry_event_sha256",
+        "entry_admission_sha256",
+        "route_decision_sha256",
+        "grid_plan_sha256",
+    ):
+        causal[field] = _same(
+            {
+                "transition": _sha256(transition_trace.get(field), f"transition_trace.{field}"),
+                "training": _sha256(training_trace.get(field), f"training_trace.{field}"),
+            },
+            f"CAUSAL_BINDING:{field}",
+        )
+
+    if _text(training_trace.get("jspace_input_codec_version"), "training_trace.jspace_input_codec_version") != VECTOR_ABI:
+        raise JSpaceDatasetAdmissionError("TRAINING_VECTOR_ABI_UNSUPPORTED")
+    if _text(transition_trace.get("jspace_vector_control_abi"), "transition_trace.jspace_vector_control_abi") != VECTOR_ABI:
+        raise JSpaceDatasetAdmissionError("TRANSITION_VECTOR_ABI_UNSUPPORTED")
+
+    credit = _text(training_trace.get("credit_label"), "training_trace.credit_label").upper()
+    outcome = training_trace.get("outcome_receipt_sha256")
+    if outcome is not None:
+        outcome = _sha256(outcome, "training_trace.outcome_receipt_sha256")
+        admitted_outcome_receipts = _mapping(admitted_outcome_receipts, "admitted_outcome_receipts")
+        if outcome not in admitted_outcome_receipts:
+            raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_ADMITTED")
+    elif credit != "UNKNOWN":
+        raise JSpaceDatasetAdmissionError("NONUNKNOWN_CREDIT_REQUIRES_ADMITTED_OUTCOME_RECEIPT")
+
+    return DatasetAdmission(
+        schema=ADMISSION_SCHEMA,
+        training_trace_sha256=training_sha,
+        transition_trace_sha256=transition_sha,
+        prototype_trace_sha256=prototype_sha,
+        generation=generation,
+        entry_event_sha256=causal["entry_event_sha256"],
+        entry_admission_sha256=causal["entry_admission_sha256"],
+        route_decision_sha256=causal["route_decision_sha256"],
+        grid_plan_sha256=causal["grid_plan_sha256"],
+        cell_id=cell_id,
+        role=role,
+        jspace_basis_id=basis_id,
+        jspace_basis_sha256=basis_sha,
+        credit_label=credit,
+        outcome_receipt_sha256=outcome,
+    )

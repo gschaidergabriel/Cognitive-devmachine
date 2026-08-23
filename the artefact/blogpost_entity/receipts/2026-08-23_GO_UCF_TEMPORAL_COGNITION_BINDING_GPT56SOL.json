@@ -1,0 +1,111 @@
+{
+  "schema": "GO_UCF_TEMPORAL_COGNITION_BINDING_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "current_main_observed_after_parallel_advance": "596a70366ffa74c2d5259ecc64d8e8c2fd2672ba",
+  "branch": "go-20260823-gpt56sol-mini-entity-ucf-rejoin",
+  "branch_source_head_before_receipt": "d98a364dd350e42fc025766c507611f4c06a811f",
+  "ancestry_note": "Branch was reset to merged UCF integration main 862f62bd1f8bcf903f226f241f670002a2a05f79 before this delta; later main advances are non-overlapping PROGRAM_STATE/package-integrity work and must be rejoined before merge.",
+  "owner_authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "source_delta": {
+    "canonical_clay_temporal_split": {
+      "path": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+      "git_blob": "5c8a896089c2ac1def0182b81168f3cb8583488e",
+      "order": [
+        "pipeline_build_prompt",
+        "pipeline_cognitive_fabric_prepare",
+        "inference_generate",
+        "pipeline_cognitive_fabric_finalize",
+        "pipeline_gate",
+        "pipeline_commit"
+      ]
+    },
+    "temporal_path_guard": {
+      "path": "tools/check_canonical_ucf_path.py",
+      "git_blob": "743441760dd1383716980de77a3af70372323913"
+    },
+    "temporal_path_tests": {
+      "path": "tests/test_canonical_ucf_path_static.py",
+      "git_blob": "6f0570ae1b98eb3ab2ee82876874e3947e5f353c",
+      "execution": "NOT_EXECUTED_CURRENT_INTERFACE"
+    },
+    "structured_sync_guard": {
+      "path": "the artefact/blogpost_entity/check_structured_contract_sync.py",
+      "git_blob": "99cd07de9d314f0a8132282ba2d8ac3899199b14",
+      "contract_version": "v4"
+    },
+    "structured_sync_tests": {
+      "path": "the artefact/blogpost_entity/test_structured_contract_sync_guard.py",
+      "git_blob": "6006d756ca5ac261033c0688ae03067e3ce81045",
+      "execution": "NOT_EXECUTED_CURRENT_INTERFACE"
+    },
+    "cognition_binding_store": {
+      "path": "tools/mini_cognition_binding_store_v1.py",
+      "git_blob": "bccbfbf5973b6cd48cab90a4f873140e6d49e57d",
+      "authority": "MiniUnifiedDB",
+      "activation_fence": "entity_state.generation CAS with generation increment"
+    },
+    "cognition_binding_tests": {
+      "path": "tests/test_mini_cognition_binding_store_v1.py",
+      "git_blob": "a2d8c2a753455131c5463b98ff499fa8911d86a1",
+      "execution": "NOT_EXECUTED_CURRENT_INTERFACE"
+    }
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "experiment_id": "PREINFERENCE_FINAL_RECEIPT_TIME_TRAVEL",
+    "hypothesis": "A pre-inference Cognitive Fabric admission can carry the final canonical UCF runtime receipt digest without violating causal ordering.",
+    "counterhypothesis": "The final UCF runtime receipt is necessarily post-inference/post-outcome evidence because its canonical schema binds executed candidate result and authority/commit state.",
+    "discriminator": "Compare the merged canonical Clay pre-inference handoff with the canonical UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 field/validation dependencies.",
+    "observed": "Merged source handed cognitive_fabric_receipt_digest into inference before inference_generate, while final UCF validation requires candidate_result_digest for executed inference and evaluates canonical_write_committed/effect_committed authority state.",
+    "result": "HYPOTHESIS_FALSIFIED_AT_SOURCE_CONTRACT_CAUSAL_ORDER_SCOPE",
+    "repair": "Split the single fabric into PREPARE admission before inference and FINALIZE receipt construction after generated candidate; no second fabric/state/effect authority is introduced."
+  },
+  "cognition_store_invariants": [
+    "all cognition objects and active binding reside in the same MiniUnifiedDB",
+    "objects are immutable digest-bound identity/configuration/evidence records",
+    "required kinds are ZERO_IDENTITY, GRF, HYPERPOSITION, BUNDLED_MODEL, JACOBIAN_LENS, WORKSPACE_CALIBRATION",
+    "binding activation is generation-CAS fenced and increments entity_state.generation",
+    "stale generation, missing/wrong-kind objects, placeholder digests, repeated activation and mutated binding bytes must fail closed",
+    "model/J-Space/GRF/Zero records do not gain truth or direct effect authority"
+  ],
+  "execution_evidence": {
+    "authorized_isolated_executor_available_to_this_organ": false,
+    "vercel_sandbox_start_exec_exposed": false,
+    "github_runner_history": "PRE_STEP_FAILURES_OBSERVED_ELSEWHERE_NOT_SEMANTIC_TEST_FAILURES",
+    "tests_executed_for_this_delta": false,
+    "runtime_credit_change": 0,
+    "bundled_08b_runtime_credit_change": 0,
+    "jspace_runtime_credit_change": 0,
+    "whole_gwt_runtime_credit_change": 0,
+    "claude_adapter_runtime_credit_change": 0,
+    "hcu_capacity_credit_change": 0,
+    "whole_product_credit_change": 0
+  },
+  "hcu_parallel": {
+    "status": "NO_RUNTIME_CREDIT_CHANGE",
+    "reason": "Canonical HCU source/package path already exists; exact KVM4-equivalent capacity/scheduler evidence still requires an authorized isolated executor. Current MicroEntity binary repair/integrity work is owned by separate package lane and is not duplicated here."
+  },
+  "next_exact_gate": [
+    "rejoin then-current main without overwriting parallel PROGRAM_STATE/package-integrity work",
+    "integrate cognition binding schema installation/read into the retained ProfilePipelineRuntime without adding a second DB/state authority",
+    "add real pipeline_cognitive_fabric_prepare and pipeline_cognitive_fabric_finalize handlers that consume an exact active MiniUnifiedDB cognition binding and existing ZERO_WORKSPACE_CAPSULE -> ZERO_INFERENCE_PACKET -> canonical UCF ancestry",
+    "introduce/persist exact causal_turn_id rather than deriving an untracked placeholder",
+    "missing/stale/unbound cognition identities must stop or typed-abstain before inference",
+    "run focused and adjacent exact-source regressions on an actually-started authorized isolated executor",
+    "only then bind exact bundled ~0.8B checkpoint/tokenizer/runtime/J-Space identities and perform causal J-Space/GWT tests"
+  ],
+  "safety": {
+    "free_only": true,
+    "together_used": false,
+    "paid_execution": false,
+    "provider_secret_lookup": false,
+    "provider_network_inference": false,
+    "vps_self_hosted_production_testing": false,
+    "training": false
+  },
+  "claim_class": "SOURCE_MECHANISM_CANDIDATE_PLUS_TEST_OBLIGATIONS_NO_RUNTIME_PASS"
+}

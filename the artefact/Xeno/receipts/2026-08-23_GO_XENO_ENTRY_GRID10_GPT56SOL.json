@@ -1,0 +1,96 @@
+{
+  "schema": "XENO_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "entityos-hcu-xeno",
+  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "owner_directive": "research_entity/global/XENO_GO_OWNER_DIRECTIVE.md",
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "base_branch": "main",
+    "base_sha": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+    "candidate_branch": "gpt56sol/xeno-entry-grid10-v1-20260823"
+  },
+  "go_tracks": {
+    "track_a_xeno_executable_convergence": {
+      "status": "ADVANCED",
+      "delta": "First current-facing executable Xeno runtime primitives under the artefact/Xeno/runtime: typed ingress admission plus deterministic GRID10 scheduling/interconnect."
+    },
+    "track_b_xcu_and_entry_fabric": {
+      "status": "ADVANCED",
+      "delta": "XENO_ENTRY_PACKET/v1 binds causal/generation/provenance/permission/modality/time/budget/payload identity before cognition; XENO_GRID10_SCHEDULE/v1 allocates bounded logical function cells and emits ancestry-bound work packets."
+    }
+  },
+  "authority_invariants": [
+    "Entry Fabric does not write canonical durable state.",
+    "GRID10 does not create a second state, truth, identity, recovery or effect authority.",
+    "Unknown request fields and unsupported permissions fail closed.",
+    "Stale entity generation fails closed before scheduling.",
+    "Logical cell count is explicitly distinct from physical decode concurrency.",
+    "No generated candidate can bypass EffectGate for real/state-changing effects."
+  ],
+  "exact_files": [
+    {
+      "path": "the artefact/Xeno/runtime/entry_fabric_v1.py",
+      "git_blob": "a5dd96830449710ccdd3396ae5785207207660a1",
+      "sha256": "5aab2c443425f3e045410406ee4f0fcb189a62729c06d10e55a9b4ebfaee86f9",
+      "bytes": 10032
+    },
+    {
+      "path": "the artefact/Xeno/runtime/grid10_v1.py",
+      "git_blob": "837f938839f2b9076046bb6b465e60c0c434cef5",
+      "sha256": "a54383930ffc201e9d38f1ae108401a5584c11a233a7185b02312839d55239da",
+      "bytes": 5562
+    },
+    {
+      "path": "the artefact/Xeno/tests/test_xeno_entry_grid10_v1.py",
+      "git_blob": "3112a58c22eac39a9e005da566aafb984db82f7c",
+      "sha256": "e03fa3e2d7b226cc4329a3b28e52e15164ac2284f8bd2a9084fff00bf5fd5850",
+      "bytes": 6556
+    }
+  ],
+  "isolated_component_evidence": {
+    "environment": "OpenAI isolated Linux/Python tool environment",
+    "python": "3.13.5",
+    "py_compile_exit_code": 0,
+    "unittest": {
+      "tests_run": 11,
+      "passed": 11,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "identity_binding": "Local git hash-object values matched the GitHub candidate blob identities before evidence promotion."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "CAUSAL_ENTRY_ALIAS_FALSIFIER",
+    "hypothesis": "Materially different causal input events must remain distinguishable even when they select the same logical scheduler topology.",
+    "counterhypothesis": "Generation plus selected routing/scheduler topology is sufficient identity for replay and audit.",
+    "intervention": "Hold generation, causal metadata, budgets, permissions and requested COGSIM10 function topology constant while changing only material payload content.",
+    "observed": "The two events produced different payload SHA-256 values, different EntryPacket packet_id values and different GRID10 schedule_id values; exact same-event replay remained deterministic.",
+    "outcome": "COUNTERHYPOTHESIS_REJECTED_AT_COMPONENT_MECHANISM_SCOPE"
+  },
+  "donor_coordination": {
+    "pr_1263": "DONOR_FALSIFIER_ONLY_NOT_CURRENT_AUTHORITY",
+    "reason": "PR #1263 was observed open/draft and materially behind current main; this candidate does not extend its stale runtime path. Its route-identity alias gap informed the EntryPacket discriminator."
+  },
+  "evidence_class": "EXACT_FILE_BOUNDED_COMPONENT_MECHANISM_PASS",
+  "runtime_credit": {
+    "xeno_integrated_runtime": 0,
+    "xcu_model_runtime": 0,
+    "entityos": 0,
+    "whole_product_pass": false
+  },
+  "execution_boundary": {
+    "vercel_callable_sandbox_create_exec_exposed_to_this_organ": false,
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "next_exact_discriminator": "Integrate XENO_ENTRY_PACKET/v1 with the single canonical XRAM/MiniUnifiedDB-to-UnifiedDB state path, then route one current HCU/XCU function invocation through the packet/schedule ancestry and execute exact integrated stale-generation/replay/recovery regressions in an authorized isolated executor."
+}

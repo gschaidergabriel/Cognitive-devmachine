@@ -1,0 +1,41 @@
+{
+  "schema": "HCU_HOST_PROFILE/v1",
+  "profile_id": "owner-kvm4-2026-08-23",
+  "status": "PLANNING_ESTIMATE_NOT_RUNTIME_MEASURED",
+  "host": {
+    "plan": "KVM 4",
+    "vcpu": 4,
+    "memory_gib": 16.0,
+    "disk_gb": 200.0,
+    "bandwidth_tb": 16.0
+  },
+  "safety": {
+    "ram_utilization_fraction": 0.85,
+    "non_model_reserve_gib": 4.0,
+    "disk_reserve_gb": 40.0,
+    "threads_per_active_tile": 2
+  },
+  "provisional_tile_footprint": {
+    "model_class": "approximately-0.8B quantized local cognition tile",
+    "resident_rss_gib": 0.75,
+    "active_context_increment_gib": 0.50,
+    "artifact_size_gb": 0.60,
+    "measurement_status": "UNVERIFIED_PLANNING_VALUES"
+  },
+  "scheduler": {
+    "resident_policy": "largest safe count after reserving active-context headroom",
+    "active_policy": "bounded by CPU threads, resident count and RAM headroom",
+    "cold_policy": "disk-backed exact artifacts; load/evict by measured utility",
+    "shared_weight_pages": "PREFERRED_WHEN_RUNTIME_MEASURES_REAL_READ_ONLY_PAGE_SHARING"
+  },
+  "expected_planning_output": {
+    "max_resident_tiles": 11,
+    "max_parallel_active_tiles": 2,
+    "max_cold_distinct_artifacts": 266
+  },
+  "deployment": {
+    "role": "dedicated HCU / persistent world-model host",
+    "current_vps_acceptance_testing": "FORBIDDEN_BY_CURRENT_EXECUTION_CONTROL",
+    "deployment_requires_explicit_authorization_after_admitted_acceptance": true
+  }
+}

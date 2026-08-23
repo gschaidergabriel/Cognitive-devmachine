@@ -36,9 +36,11 @@ class ClaudeCodeInference:
 
     Cognition runs with all built-in tools disabled, MCP configuration fail-closed,
     no Claude session persistence, and an explicit environment allowlist. HOME is
-    retained so Claude subscription/OAuth credentials remain usable. UnifiedDB /
-    WorldAssembler remains the sole durable ClayVerse state authority. Claude may
-    return a schema-validated effect intent, but only EffectGate can execute it.
+    retained so Claude subscription/OAuth credentials remain usable. Safe mode
+    suppresses user/project customizations and auto-memory without disabling auth.
+    UnifiedDB / WorldAssembler remains the sole durable ClayVerse state authority.
+    Claude may return a schema-validated effect intent, but only EffectGate can
+    execute it.
     """
 
     ENV_ALLOWLIST = (
@@ -60,6 +62,10 @@ class ClaudeCodeInference:
         env.setdefault("PATH", "/usr/local/bin:/usr/bin:/bin")
         env["DISABLE_AUTOUPDATER"] = "1"
         env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] = "1"
+        # Defense in depth with --safe-mode: auto-memory must never become a
+        # competing durable state authority even if upstream safe-mode behavior
+        # changes independently of the pinned CLI contract.
+        env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
         return env
 
     def available(self) -> bool:
@@ -93,7 +99,8 @@ class ClaudeCodeInference:
         args = [
             self.binary, "-p", prompt, "--output-format", "json", "--json-schema", schema,
             "--max-turns", "1", "--permission-mode", "plan", "--tools", "",
-            "--strict-mcp-config", "--no-session-persistence", "--append-system-prompt", system,
+            "--safe-mode", "--strict-mcp-config", "--no-session-persistence",
+            "--append-system-prompt", system,
         ]
         with self._lock:
             try:

@@ -1,9 +1,10 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "date": "2026-08-23",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
   "base_main": "d3703db7d0d665545bc25b06335c47f06ce4c62b",
+  "reentry_parent_main": "8461c83a11cacf03c52a4aa950691e0ecdd7d865",
   "coordination": {
     "upstream_macrocycle_id": null,
     "status": "UNRESOLVED_NO_UPSTREAM_ID",
@@ -13,7 +14,8 @@
   "r0_observed": [
     "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 required many exact identities but did not cryptographically name the immediately upstream JSPACE_GWT_BOOT_BINDING_RECEIPT/v1.",
     "Its source spec said to pair the runtime receipt with boot-binding evidence, but the validator and tests had no explicit parent-receipt digest or cross-receipt identity check.",
-    "The canonical boot-binding receipt already carries source, bundled-core, lens, GWT policy/calibration, Zero/GRF and Claude capability identities, making an explicit lineage check possible without duplicating boot validation."
+    "The canonical boot-binding receipt already carries source, bundled-core, J-Space/lens, GWT policy/calibration, Zero/GRF and Claude capability identities.",
+    "Parallel main then strengthened the parent again by atomically binding the boot receipt to the admitted bundled-cognition manifest and explicitly requiring jspace.jspace_profile_sha256; this child chain re-entered that stronger parent and added the matching J-Space-profile crossbind."
   ],
   "r1_mechanism": "Without an explicit parent edge, individually valid boot/runtime receipts could be paired across different provenance contexts. A parent hash alone closes byte substitution but not a hash-consistent semantic splice, so chain admission also cross-checks identity-bearing fields.",
   "r3_counter": "Adding a digest field could create false confidence if the runtime validator merely checks SHA-256 syntax or if it duplicates/competes with the canonical boot-binding validator.",
@@ -28,6 +30,7 @@
       "source commit/tree",
       "bundled manifest/checkpoint/tokenizer/runtime",
       "Zero/GRF",
+      "J-Space profile",
       "GWT workspace policy/calibration",
       "lens profile when present",
       "Claude adapter version/capability when CLAUDE_CODE is active"
@@ -36,16 +39,16 @@
     "cli_boundary": "Structural validation without --boot-binding-receipt reports chain_verified=false; chain_verified=true is possible only after successful parent-byte and cross-identity validation."
   },
   "exact_git_blobs": {
-    "agentzeroforschung/instrumente/validate_unified_cognitive_fabric_receipt_v1.py": "155ae52165a7625cb324cac98d5d6a653c973184",
-    "agentzeroforschung/instrumente/test_unified_cognitive_fabric_receipt_v1.py": "75cba1588e0a92679efd0b9ae302d486d12c426a",
-    "agentzeroforschung/instrumente/UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_v1.md": "c552e6801639ecdda29b345d6af752a04c7cbf3a"
+    "agentzeroforschung/instrumente/validate_unified_cognitive_fabric_receipt_v1.py": "6e196e25c598a980a12fa662e5ba8197792bb4d9",
+    "agentzeroforschung/instrumente/test_unified_cognitive_fabric_receipt_v1.py": "770ea8baa5e2c67395d0a05d8b5567f35bdaa587",
+    "agentzeroforschung/instrumente/UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_v1.md": "114e6a5411a4174a072dfb39562766cb59bfb424"
   },
   "isolated_execution": {
     "surface": "OpenAI isolated container",
     "initial_network_attempt": "DNS failed before file retrieval for raw.githubusercontent.com; no test/runtime claim was inferred from that admission failure.",
     "exact_blob_reconstruction": "PASS; executable files reconstructed from submitted GitHub contents matched GitHub git-blob SHAs exactly before execution.",
     "py_compile": "PASS",
-    "unittest": "11/11 PASS",
+    "unittest": "12/12 PASS",
     "positive_chain_cli": "ok=true; chain_verified=true; errors=[]",
     "structural_only_cli": "ok=true; chain_verified=false; errors=[]",
     "tampered_parent_cli": "ok=false; chain_verified=false; BOOT_BINDING_RECEIPT_DIGEST_MISMATCH; exit=2",
@@ -56,10 +59,15 @@
       "exact byte-matched boot/runtime chain accepted",
       "one-byte parent substitution rejected",
       "hash-consistent checkpoint identity splice rejected",
+      "hash-consistent J-Space-profile identity splice rejected",
       "missing parent GWT calibration identity rejected"
     ],
     "evidence_class": "EXACT_GIT_BLOB_LOCAL_COMPONENT_PASS"
   },
+  "negative_evidence": [
+    "The first attempt to retrieve branch bytes through raw.githubusercontent.com failed on DNS before execution; this was correctly classified as execution-admission/network failure, not TEST_FAIL.",
+    "Structural runtime receipt validation can still be green without a parent artifact, but the CLI explicitly reports chain_verified=false and the contract forbids using that state for runtime credit."
+  ],
   "non_claims": [
     "no exact Ubuntu/AgentZero runtime execution",
     "no real boot receipt emitted from the intentionally offline host",

@@ -1,0 +1,78 @@
+{
+  "base_main_sha": "e72e7101753fb8d2d7bc54bf5abcd86d709416f4",
+  "bounded_execution": {
+    "command": "python -m unittest -v tests/test_claude_turn_admission_timeout_fence.py",
+    "environment": "isolated ChatGPT Linux component environment; reconstructed exact Git blobs only",
+    "environment_noise": "An unrelated artifact_tool spreadsheet warmup emitted stderr before unittest discovery; the unittest process exited 0 and the three fence tests passed. No spreadsheet/tooling behavior is part of the ClayVerse test.",
+    "exact_blob_check": {
+      "blocker_doc": "MATCH",
+      "gate": "MATCH",
+      "managed_settings": "MATCH",
+      "source_lock": "MATCH",
+      "test": "MATCH"
+    },
+    "exit_code": 0,
+    "oci_credit": 0,
+    "result": "3/3 PASS",
+    "runtime_credit": 0
+  },
+  "branch": "gpt56sol/go-claude-userprompt-timeout-fence-20260823",
+  "date": "2026-08-23",
+  "delta": [
+    "Added machine-readable CLAUDE_TURN_ADMISSION_TIMEOUT_GATE.json.",
+    "Added source regression tying current command-hook timeout to BLOCKED whole-product acceptance state.",
+    "Added architecture blocker with rejected pseudo-fixes and exact promotion discriminator.",
+    "Updated the artefact/README.md with this frontier re-entry."
+  ],
+  "execution_surface": {
+    "github_hosted_runtime": "NOT_USED_FOR_THIS_LOCAL_COMPONENT_RESULT",
+    "paid_or_training": "NOT_USED",
+    "together": "FORBIDDEN_NOT_USED",
+    "vercel_connector": "NO_SANDBOX_START_EXEC_ACTION_EXPOSED",
+    "vps_self_hosted_production": "FORBIDDEN_NOT_USED"
+  },
+  "finding": {
+    "claim": "ClayVerse cannot currently receive fail-closed turn-admission or whole-product acceptance credit from its timeout-bounded UserPromptSubmit command hook because upstream semantics allow the prompt to continue when that hook times out.",
+    "classification": "WHOLE_PRODUCT_ACCEPTANCE_BLOCKER",
+    "id": "CLAUDE_USERPROMPT_COMMAND_TIMEOUT_FAIL_OPEN",
+    "not_claimed": [
+      "No exact pinned ClayVerse image runtime failure is claimed.",
+      "No whole-product runtime execution credit is claimed.",
+      "No exact OCI build/startup result is claimed."
+    ]
+  },
+  "next_exact_gate": [
+    "Fuse the acceptance blocker without weakening normal interactive Claude Code as the product runtime.",
+    "Select a fail-closed pre-model admission mechanism that preserves UnifiedDB as the single durable turn authority.",
+    "On an actually-started authorized isolated executor with exact pinned Claude Code and exact source/image identity, deliberately stall/fail admission and prove zero model response/tool/effect/accepted completion, then run the matching normal control.",
+    "Retest Stop/StopFailure, restart/recovery, generation fencing, Clerk/PTTY and dual-session behavior on the same exact candidate."
+  ],
+  "organ": "gpt-5.6-sol",
+  "pre_receipt_branch_head": "501d2c2691121ce647df85619f0dc82a0c53e139",
+  "schema": "ClayVerseGoReceipt/v1",
+  "source_binding": {
+    "blocker_doc_blob": "68a5b3c6693c779cbdc02fb2fdd67c2d15562f86",
+    "claude_code_version": "2.1.233",
+    "gate_blob": "c2ace840b2e0047af8bd70938ce8dec077b81a34",
+    "managed_settings_blob": "627887d5dc0c981bd3b6129ac946ded56f59b05e",
+    "source_lock_blob": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+    "test_blob": "7949ac84de79bfa4bf66da65d14db80a5d22dc09",
+    "user_prompt_handler": {
+      "command": "/usr/local/bin/python -m clayverse.terminal_hooks user_prompt",
+      "timeout_seconds": 10,
+      "type": "command"
+    }
+  },
+  "trigger": "go",
+  "unusual_experiment": {
+    "claimed": false,
+    "reason": "No immutable shared macrocycle/request identity or second-precision fallback identity is exposed to this organ, so cross-organ exactly-one uniqueness cannot be safely asserted. This cycle used deterministic source/upstream-semantics falsification only."
+  },
+  "upstream_evidence": {
+    "accessed_on": "2026-08-23",
+    "primary": "https://code.claude.com/docs/en/hooks",
+    "semantics": "UserPromptSubmit command/http/mcp_tool hook timeout cancels hook and discards output/additionalContext while prompt still reaches Claude.",
+    "version_context": "Documentation history records timeout notice as of v2.1.196 and callback-specific fail-closed behavior change by v2.1.208; ClayVerse pins v2.1.233."
+  },
+  "whole_product_acceptance": "IN_PROGRESS_BLOCKED_ON_TURN_ADMISSION_FAIL_CLOSED_MECHANISM"
+}

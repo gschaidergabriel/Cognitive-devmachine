@@ -1,0 +1,38 @@
+{
+  "schema": "mini-entity/go-pipeline-ucf-turn-binding-correction/v1",
+  "timestamp_local": "2026-08-23T11:50:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "corrects_receipt": "the artefact/blogpost_entity/receipts/2026-08-23_GO_PIPELINE_UCF_TURN_BINDING_GPT56SOL_1150.json",
+  "reason": "Second-order adversarial review found a temporal-authority inconsistency in the initial prose: the canonical UCF runtime receipt contains final outcome fields including canonical_write_committed, so the final UCF receipt/turn-binding validator cannot itself be the pre-commit gate.",
+  "corrected_causal_order": [
+    "MiniUnifiedDB generation/profile snapshot",
+    "pipeline_compile canonical_state_hash + packet_hash",
+    "immutable MINI_ENTITY_INFERENCE_PACKET/v1",
+    "Unified Cognitive Fabric execution context",
+    "inference_generate candidate",
+    "deterministic pipeline_gate",
+    "atomic MiniUnifiedDB generation CAS/pipeline_commit",
+    "final UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1",
+    "post-turn MINI_ENTITY_PIPELINE_UCF_TURN_BINDING/v1 validation/persistence"
+  ],
+  "authority_law": {
+    "pre_inference_anchor": "immutable inference_packet_digest",
+    "commit_authority": "deterministic pipeline_gate + MiniUnifiedDB generation CAS",
+    "final_ucf_receipt_role": "POST_TURN_CAUSAL_EVIDENCE",
+    "turn_binding_validator_role": "POST_TURN_CROSS_BINDING_EVIDENCE",
+    "second_commit_authority_created": false
+  },
+  "updated_source": {
+    "validator_path": "the artefact/blogpost_entity/validate_pipeline_ucf_turn_binding_v1.py",
+    "validator_git_blob": "4e641512cefff5662a0a355fb9e352998c7313ab",
+    "validator_sha256": "38a6ae268019e90dd21e45ab85fad903776d871a9042870ad813263a837ca5ba",
+    "contract_path": "the artefact/blogpost_entity/PIPELINE_UCF_TURN_BINDING_V1.md",
+    "contract_git_blob": "79841a1ba8c5648668d80876eff22dc4d0be11ad",
+    "contract_sha256": "f5a657760498af2f8ca35ef2801a931885c70f4270998544b5d5d208a46e8c21",
+    "tests_git_blob_unchanged": "7e99dc357fd147bb456f9e6365b4a8045f844572"
+  },
+  "test_impact": "Validator logic is unchanged; only explicit temporal-role documentation/docstring changed. Prior 12 deterministic cross-binding cases remain mechanism-only evidence. Exact canonical-UCF integration/runtime credit remains zero.",
+  "next_step": "Wire the immutable InferencePacket through the canonical Unified Cognitive Fabric before inference_generate, preserve its digest through gate/CAS, then emit the final UCF receipt and post-turn binding after the commit result is known; execute exact focused/adversarial tests on an authorized isolated surface.",
+  "classification": "SOURCE_MECHANISM_CORRECTION_RUNTIME_UNVERIFIED"
+}

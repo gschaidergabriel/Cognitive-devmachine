@@ -115,9 +115,8 @@ def _current_generation(db: sqlite3.Connection) -> int:
 def install_schema(db: sqlite3.Connection) -> None:
     """Install cognition tables after the canonical pipeline has created entity_state."""
     _current_generation(db)
-    db.executescript(
-        """
-        CREATE TABLE IF NOT EXISTS mini_cognition_objects(
+    statements = (
+        """CREATE TABLE IF NOT EXISTS mini_cognition_objects(
           object_kind TEXT NOT NULL,
           object_version TEXT NOT NULL,
           object_digest TEXT NOT NULL,
@@ -127,9 +126,8 @@ def install_schema(db: sqlite3.Connection) -> None:
           provenance_refs_json TEXT NOT NULL,
           created_at TEXT NOT NULL,
           PRIMARY KEY(object_kind,object_version,object_digest)
-        );
-
-        CREATE TABLE IF NOT EXISTS mini_cognition_object_admissions(
+        )""",
+        """CREATE TABLE IF NOT EXISTS mini_cognition_object_admissions(
           object_kind TEXT NOT NULL,
           object_version TEXT NOT NULL,
           object_digest TEXT NOT NULL,
@@ -139,9 +137,8 @@ def install_schema(db: sqlite3.Connection) -> None:
           PRIMARY KEY(object_kind,object_version,object_digest,admitted_generation),
           FOREIGN KEY(object_kind,object_version,object_digest)
             REFERENCES mini_cognition_objects(object_kind,object_version,object_digest)
-        );
-
-        CREATE TABLE IF NOT EXISTS mini_cognition_boot_bindings(
+        )""",
+        """CREATE TABLE IF NOT EXISTS mini_cognition_boot_bindings(
           binding_digest TEXT PRIMARY KEY,
           schema TEXT NOT NULL,
           entity_generation INTEGER NOT NULL,
@@ -159,9 +156,8 @@ def install_schema(db: sqlite3.Connection) -> None:
           provenance_refs_json TEXT NOT NULL,
           created_at TEXT NOT NULL,
           UNIQUE(entity_generation)
-        );
-
-        CREATE TABLE IF NOT EXISTS mini_cognition_turn_bindings(
+        )""",
+        """CREATE TABLE IF NOT EXISTS mini_cognition_turn_bindings(
           entity_generation INTEGER NOT NULL,
           causal_turn_id TEXT NOT NULL,
           binding_digest TEXT NOT NULL,
@@ -177,9 +173,10 @@ def install_schema(db: sqlite3.Connection) -> None:
           PRIMARY KEY(entity_generation,causal_turn_id),
           UNIQUE(binding_digest),
           FOREIGN KEY(boot_binding_digest) REFERENCES mini_cognition_boot_bindings(binding_digest)
-        );
-        """
+        )""",
     )
+    for statement in statements:
+        db.execute(statement)
 
 
 def register_object(

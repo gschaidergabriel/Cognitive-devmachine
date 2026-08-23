@@ -71,6 +71,7 @@ def valid_receipt(manifest, raw):
     return {
         "schema": "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1",
         "source": {"main_sha": H40, "tree_sha": H40, "dirty": False},
+        "runtime": {"entity_generation": 276},
         "executor": {"host_class": "UBUNTU", "host_identity_sha256": D6, "kernel": "Linux 6.x"},
         "bundled_core": {
             "manifest_version": manifest["schema"],
@@ -156,6 +157,17 @@ class BootBindingValidatorTests(unittest.TestCase):
     def test_valid_bound_receipt_passes(self):
         cp = run_validator()
         self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
+
+    def test_runtime_generation_is_required_and_not_boolean(self):
+        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r.pop("runtime")
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("MISSING_OBJECT:runtime", cp.stdout)
+
+        r = valid_receipt(m, raw); r["runtime"]["entity_generation"] = True
+        cp = run_validator(receipt=r)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("INVALID_INT:entity_generation", cp.stdout)
 
     def test_source_lock_must_be_bound(self):
         m = valid_manifest(); raw = manifest_bytes(m); lock = source_lock_for(m, raw); lock["status"] = "UNBOUND"

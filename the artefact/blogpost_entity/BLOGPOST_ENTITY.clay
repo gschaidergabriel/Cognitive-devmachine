@@ -67,33 +67,39 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   let generated = effect("inference_generate",infer)
   require generated.ok
 
-  // FINALIZE is necessarily post-inference: only now can the canonical UCF runtime receipt
-  // bind executed/result/epistemic/authority fields to the exact prepared packet and candidate.
-  // This is the same fabric/causal turn, not a second state/effect/truth authority.
-  let cognition_finalize_data = map_new()
-  map_set(cognition_finalize_data,"prepared",prepared)
-  map_set(cognition_finalize_data,"generated",generated)
-  map_set(cognition_finalize_data,"compiled",compiled)
-  map_set(cognition_finalize_data,"prompt",prompt)
-  let finalized = phase("pipeline_cognitive_fabric_finalize",entity_db,source_db,profile,previous,cognition_finalize_data)
-  require finalized.ok
-
+  // Deterministic truth/evidence gate runs before any final UCF runtime receipt exists.
+  // It receives only the PREPARE ancestry plus the candidate generation output.
   let gate_data = map_new()
   map_set(gate_data,"generated",generated)
   map_set(gate_data,"compiled",compiled)
   map_set(gate_data,"prompt",prompt)
-  map_set(gate_data,"cognitive_fabric",finalized)
+  map_set(gate_data,"cognitive_fabric",prepared)
   let gated = phase("pipeline_gate",entity_db,source_db,profile,previous,gate_data)
   require gated.ok
 
+  // MiniUnifiedDB CAS/commit is canonical durable authority. PREPARE identity is carried
+  // through commit so the later receipt can prove exactly which admitted packet was used.
   let commit_data = map_new()
   map_set(commit_data,"gated",gated)
   map_set(commit_data,"compiled",compiled)
   map_set(commit_data,"collected",collected)
   map_set(commit_data,"generated",generated)
-  map_set(commit_data,"cognitive_fabric",finalized)
+  map_set(commit_data,"cognitive_fabric",prepared)
   let committed = phase("pipeline_commit",entity_db,source_db,profile,previous,commit_data)
   require committed.ok
+
+  // FINALIZE is post-terminal evidence only. A canonical UCF runtime receipt may now bind
+  // inference + deterministic gate + actual commit outcome. It is evidence/provenance,
+  // never a pre-inference capability, state authority, truth authority or effect authority.
+  let cognition_finalize_data = map_new()
+  map_set(cognition_finalize_data,"prepared",prepared)
+  map_set(cognition_finalize_data,"generated",generated)
+  map_set(cognition_finalize_data,"compiled",compiled)
+  map_set(cognition_finalize_data,"prompt",prompt)
+  map_set(cognition_finalize_data,"gated",gated)
+  map_set(cognition_finalize_data,"committed",committed)
+  let finalized = phase("pipeline_cognitive_fabric_finalize",entity_db,source_db,profile,previous,cognition_finalize_data)
+  require finalized.ok
 
   let result = map_new()
   map_set(result,"ok",true)

@@ -7,27 +7,31 @@
   "macrocycle_identity_status": "ORCHESTRATOR_ISSUED_SINGLE_ORGAN",
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
-  "canonical_main": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+  "canonical_main_initial": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+  "canonical_main_reentry": "b288b689b5938ec0e0b0b3af982d8e183577c50a",
   "execution_policy": "FREE_ONLY",
-  "scope": "adjudicate whether PR #966 remains a current-main-safe implementation donor after the merged claim-metric hash boundary",
+  "scope": "adjudicate whether PR #966 remains a current-main-safe implementation donor after strengthened claim-metric and generation-authority boundaries",
   "grf": {
     "R0_observed": [
-      "Current main canonical BLOGPOST_ENTITY.clay requires pipeline_profile_read and inference_generate.",
+      "Current canonical BLOGPOST_ENTITY.clay requires pipeline_profile_read and inference_generate.",
       "Current main legacy reference runtime still authorizes profile_load and provider_chat_json.",
       "PR #966 head 3d490ee3179400d889bdc81ea8a769d84212e481 implements the current effect names, one native profile authority, generation CAS, RFC6901 response pointers and explicit local_exec child env isolation.",
       "PR #966 runtime blob e885804f14d106f6bd86dbdd5d5aac8f25442315 computes personality_state metrics but canonical_state_hash serializes canonical without those metrics.",
-      "Current main test_reference_metric_hash_boundary.py blob 3a8a79738d6e3d6814e124878364195cc3af3205 auto-activates after _pipeline_profile_read exists and requires claim-authorizing metrics to be bound into canonical_raw before hashing."
+      "Current main test_reference_metric_hash_boundary.py blob 3a8a79738d6e3d6814e124878364195cc3af3205 auto-activates after _pipeline_profile_read exists and requires claim-authorizing metrics to be bound into canonical_raw before hashing.",
+      "Main re-entered at b288b689b5938ec0e0b0b3af982d8e183577c50a with a new guard that forbids reading eos_pipeline_state.generation in _ensure_schema or promoting that legacy mirror into entity_state.generation.",
+      "PR #966 _ensure_schema reads both entity_state.generation and eos_pipeline_state.generation, takes max(native_generation, mirror_generation), and can update entity_state.generation from that maximum."
     ],
     "R1_inferred": [
-      "PR #966 cannot be promoted by rebase-only fusion onto current main because the current metric-hash boundary is semantically stronger than its donor bytes."
+      "PR #966 cannot be promoted by rebase-only fusion onto current main because at least two current-main semantic guards are stronger than its donor bytes: claim-metric hash binding and one-way generation authority."
     ],
     "R2_generated": [
       "H_REBASE_ONLY: reuse PR #966 bytes unchanged except ancestry rebind.",
-      "H_METRIC_HASH_REPAIR: extract PR #966 mechanisms onto fresh main and additionally bind claim-authorizing metrics into the canonical hashed state.",
+      "H_FRESH_REPAIR: extract PR #966 mechanisms onto fresh main, bind claim-authorizing metrics into canonical hash identity, and make eos_pipeline_state.generation a one-way projection from entity_state.generation only.",
       "H_SEPARATE_CLAIM_DIGEST: introduce a separately echoed and verified claim-authority digest rather than enlarging canonical_state_hash."
     ],
     "R3_counter": [
-      "Evidence refs may appear to make metric hashing redundant, but evidence refs do not commit the numerical claim-authorizing values themselves."
+      "Evidence refs may appear to make metric hashing redundant, but refs do not commit the numerical/status values that authorize claims.",
+      "Taking max(native, mirror) may appear migration-safe, but it lets a compatibility mirror advance canonical entity_state.generation and therefore violates one-authority semantics."
     ],
     "R4_discriminate": {
       "id": "CLAIM_AUTH_METRIC_HASH_TWIN_STATE",
@@ -41,11 +45,12 @@
     },
     "R5_emergent": [
       "A convergence donor can become unsafe without changing its own bytes when current-main admission invariants strengthen after the donor branch point.",
-      "Fresh-main extraction must therefore re-run current semantic guards, not merely resolve textual conflicts."
+      "Fresh-main extraction must therefore re-run current semantic guards, not merely resolve textual conflicts.",
+      "Compatibility projections are acceptable only when information authority flows canonical -> projection, never projection -> canonical."
     ],
     "R6_verify": {
       "H_REBASE_ONLY": "REJECT_AS_WRITTEN",
-      "H_METRIC_HASH_REPAIR": "RETAIN",
+      "H_FRESH_REPAIR": "RETAIN",
       "H_SEPARATE_CLAIM_DIGEST": "RETAIN_AS_STRUCTURALLY_DIFFERENT_ALTERNATIVE",
       "runtime_credit": 0,
       "whole_product_credit": 0
@@ -55,6 +60,12 @@
     "count_for_this_macrocycle": 1,
     "id": "CLAIM_AUTH_METRIC_HASH_TWIN_STATE",
     "no_second_unusual_experiment": true
+  },
+  "ordinary_regression_reentry": {
+    "kind": "CURRENT_MAIN_SOURCE_GUARD_REVIEW_NOT_NEW_EXPERIMENT",
+    "main_commit": "b288b689b5938ec0e0b0b3af982d8e183577c50a",
+    "finding": "PR #966 also violates the newly merged one-way generation-authority guard because _ensure_schema reads eos_pipeline_state.generation and may update entity_state.generation from max(native, mirror).",
+    "required_direction": "entity_state.generation may drive any compatibility mirror; the mirror may not drive canonical generation."
   },
   "parallel_coordination": {
     "open_donor_pr": 966,
@@ -74,7 +85,7 @@
   "required_fresh_main_repair": [
     "preserve PR #966 one-profile-authority extraction onto entity_state.active_profile -> profiles(profile_json, profile_sha256)",
     "preserve current effect surface pipeline_profile_read + inference_generate and deauthorize profile_load/provider_chat_json",
-    "preserve entity_state.generation as the single CAS authority",
+    "make entity_state.generation the only generation/CAS authority; any eos_pipeline_state generation is write-only projection from canonical state and never bootstrap input",
     "preserve RFC6901 response-pointer support",
     "preserve explicit allowlisted local_exec child environment",
     "preserve recursive value-only persisted-string leak/secret gate and current expression/adapter semantics",
@@ -83,7 +94,7 @@
     "obtain actually-started exact-source authorized isolated execution before runtime/native-v2 promotion"
   ],
   "evidence_boundary": {
-    "new_result": "PR966_REBASE_ONLY_FALSIFIED_BY_CURRENT_METRIC_HASH_BOUNDARY",
+    "new_result": "PR966_REBASE_ONLY_FALSIFIED_BY_CURRENT_METRIC_HASH_AND_GENERATION_AUTHORITY_BOUNDARIES",
     "evidence_class": "SOURCE_MECHANISM_SUPPORTED",
     "reference_runtime": "OPEN",
     "native_profile_v2": "FAIL_CLOSED",

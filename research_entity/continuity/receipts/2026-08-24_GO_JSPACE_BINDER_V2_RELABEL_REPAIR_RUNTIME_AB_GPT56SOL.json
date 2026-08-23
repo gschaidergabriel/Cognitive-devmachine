@@ -1,0 +1,103 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_BINDER_V2_RELABEL_REPAIR_RUNTIME_AB/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_immediately_before_write": "e7e597cf749ba1c890be2329efaa756869d0ceb4",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_head_observed_immediately_before_write": "8ba9f52451c73f2c81281eca5c4c5dc251aef00c",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_available": false,
+    "canonical_atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed_by_this_organ": false,
+    "classification": "ORDINARY_DETERMINISTIC_RECORDED_DEFECT_REGRESSION_AND_REPAIR_RECHECK",
+    "unusual_experiment_count_added": 0
+  },
+  "observation_a_defect_reproduction": {
+    "deployment_id": "dpl_3p792zcTPNKC4JY8LRghBx7NzLEe",
+    "deployment_commit": "af3857e5a5825684cff5505623db2c4f1b8c37f8",
+    "capsule": "HCU_JSPACE_BINDER_V2_MODEL_CALL_RELABEL_REGRESSION/v1",
+    "source_main_commit": "d2a44f9eef93181fe6a9538f6025a419fa711f40",
+    "source_main_tree": "bebac227bebb026458be726688adf11b747988f2",
+    "source_pr_commit": "18be64b3d59b08fd460ccf4737a7bb368d2e2d60",
+    "source_pr_tree": "1f2edc78d0e9e817fc83ed4acd579ff1a280c879",
+    "source_manifest_sha256": "2b33057e7f9065ab1b98a80c160ff3d5f6ba9afceefc228004102de4278c4839",
+    "sandbox_id": "chocolate-traditional-tyrannosaurus-j1813b",
+    "exit_code": 0,
+    "secret_fence": "PASS",
+    "cleanup": "PASS",
+    "result_log_sha256": "114c2f8b6069855190a39de64fe1ab5f52a7f84c744a898caa41bcfcff6758e6",
+    "measured_markers": {
+      "baseline_bind": "PASS",
+      "relabel_bind_accepted": true,
+      "trace_cell": "cell-02",
+      "relabeled_model_call_cell": "cell-09",
+      "mechanism": "MODEL_CALL_ID_NOT_SEMANTICALLY_BOUND_TO_GRID_PLAN_CELL_ROLE"
+    },
+    "interpretation": "Exact bound historical component bytes reproduce the cross-cell model_call_id relabel defect. This is defect evidence, not positive runtime capability credit."
+  },
+  "observation_b_repaired_component": {
+    "deployment_id": "dpl_7Le8masacNa2Ga9FdKSPjAUXoRy9",
+    "deployment_commit": "d595a19ea323f14ca09d8d717f5b5cf770508db7",
+    "capsule": "HCU_JSPACE_INFERENCE_BINDING_V2_EXACT_GRID10_PLAN_CELL_CAPSULE/v3",
+    "source_main_context_observed": "d19f581151e634a60096724e1caee06914212bc0",
+    "source_pr_head_observed": "9c7a3c8bb23b27aee6e71275af836f0bc3b13bfb",
+    "source_manifest_sha256": "dfe0397fbbdd9779939be43c9b0d6922c4165a9bc95550704a6dbb8712f67f61",
+    "source_files": {
+      "entry_canonicalization_v1.py": "00d1d79cbb66a1956a278de4755cd8395e854199",
+      "grid10_scheduler_v1.py": "22d7407dd87b38f9ae53c2ef8bdff3383110875c",
+      "jspace_inference_binding_v1.py": "9830a6833922b05d84e2863bfbdfb8dfff2c06cf",
+      "test_binding_v2_deterministic.py": "2a9cba2c9d25ecc40acc7f891c4b44de9b529456"
+    },
+    "sandbox_id": "blue-integral-egret-d9tGJg",
+    "exit_code": 0,
+    "secret_fence": "PASS",
+    "cleanup": "PASS",
+    "stderr": "",
+    "result_log_sha256": "7cccd9ec75e470aebcc2c28f95ab939fab15dfe472d39fb31bd46545c7cfc6c5",
+    "measured_markers": {
+      "baseline": "PASS",
+      "exact_grid10_plan_cell_types": "PASS",
+      "model_call_grid_cell_relabel": "FAIL_CLOSED_PASS",
+      "multilane_v3_ambiguity": "FAIL_CLOSED_PASS",
+      "receipt_digest_tamper": "FAIL_CLOSED_PASS",
+      "grid_digest_tamper": "FAIL_CLOSED_PASS",
+      "role_lane_mismatch": "FAIL_CLOSED_PASS",
+      "deterministic_regressions": "6_OF_6_PASS"
+    },
+    "execution_credit": "JSPACE_BINDER_V2_EXACT_GRID10_PLAN_CELL_COMPONENT_CLOSURE_ONLY",
+    "interpretation": "The repaired exact bound component snapshot rejects the recorded cross-cell model_call_id relabel while preserving the valid baseline. Upstream Router/Entry/InferenceReceipt/TrainingTrace producers remain bounded test doubles."
+  },
+  "collapse": {
+    "old_mechanism": "REJECT_AS_UNSAFE_BINDING_REGION",
+    "repair_mechanism": "SUPPORTED_AT_BOUND_COMPONENT_SCOPE",
+    "causal_delta": "model_call_id must bind grid plan digest + output-producing cell_id + role; cross-cell relabel is now rejected",
+    "independent_current_head_promotion": false,
+    "reason_current_head_not_promoted": "The repaired Sandbox capsule is bound to PR1263 head 9c7a3c8 while the retained donor had advanced to 8ba9f524 at receipt time; exact-current donor-head replication remains required."
+  },
+  "credit": {
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "tracks": {
+    "entityos_executable_convergence": "ADVANCED_BY_ACTUAL_FREE_SANDBOX_DEFECT_TO_REPAIR_AB_EVIDENCE",
+    "hcu_typed_entry": "ADVANCED_AT_GRID10_TO_JSPACE_BINDING_COMPONENT_SCOPE_ONLY",
+    "global_jspace_gwt_free_only_readiness": "ADVANCED_BY_CAUSAL_OUTPUT_CELL_BINDING_FENCE; MODEL_CAUSALITY_UNPROVEN"
+  },
+  "next_exact_gate": "Rebind the single retained fixed executor to the exact latest PR1263 GRID10 and J-Space binder blobs and rerun the same 6-of-6 deterministic closure. Then extend the same one-path capsule to real canonical Entry -> route -> verified engine load/consumption -> inference receipt -> GRID10 -> J-Space/GWT, preserving zero model/training/whole-product credit until those real dependencies execute."
+}

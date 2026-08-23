@@ -1,44 +1,52 @@
-# AUTHORITATIVE STATE RESOLUTION — RAE-8.9
+# AUTHORITATIVE STATE RESOLUTION — CLAYVERSE OWNER RE-ENTRY
 
-## Owner mission authority
+Status: **CURRENT**
+Owner re-entry observed: **2026-08-23T16:49+07:00**
+Persistent research entity: **Clay**
 
-The sole current product/research mission directive is:
+## Current owner mission authority
 
-`research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
+The newest explicit owner direction selects:
 
-It is the highest current owner instruction for target selection, product boundary and `go` behavior. Older ClayVerse-container, EntityOS-as-product, Frank/UCM and other mission files are historical/donor evidence wherever they conflict with it.
+`research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
 
-The current product/research target is exactly one portable persistent Blogpost/Mini Entity:
+as the current product/work-selection authority.
 
-`the artefact/blogpost_entity/BLOGPOST_ENTITY.clay`
+Current product: **ClayVerse**.
+Canonical workspace: `the artefact/`.
+Release form: **one OCI/Docker-compatible ClayVerse container image**.
 
-Release shape: one executable `.clay` runtime plus one SQLite MiniUnifiedDB (`blogpost_entity.db`). Mistral is the default provider profile, not identity or a fixed dependency; provider/token/model/system prompt are runtime-configurable under the immutable architecture truth guard.
+The later-in-Git-history Mini Entity 4.5 routing was authored earlier on 2026-08-23 than this owner re-entry and is therefore superseded for product/program/work-selection authority. Its Mini Entity/HCU/UCF/J-Space/MiniUnifiedDB implementation work remains preserved as bounded donor/internal evidence and may be fused into ClayVerse when it preserves the ClayVerse authority boundaries.
 
-This mission change does not erase empirical research continuity. Governance/configuration changes alone do not increment the canonical empirical research revision unless they contain a valid empirical progression event.
+## Authority / evidence precedence
 
-## Canonical empirical-state authority order
+1. newest explicit owner directive;
+2. actually observed exact-identity authorized isolated execution for executable behavior at that exact scope;
+3. verified current GitHub bytes/history/receipts;
+4. current `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, product manifest/architecture/README and admitted controls;
+5. validated bounded donor/historical evidence;
+6. cache/project files;
+7. chat/model memory.
 
-1. Verified remote `main` in `gschaidergabriel/clay-global-research-entity`, including:
-   - `research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json`
-   - `research_entity/rooms/PROGRAM_STATE.json`
-   - `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
-   - current canonical Blogpost/Mini Entity source/tests/receipts.
-2. If remote is unavailable: last locally verified snapshot with matching lineage/hash.
-3. Project Files / File Library: source cache only.
-4. Chat/model memory: non-authoritative.
+A later commit timestamp does not by itself outrank a newer explicit owner instruction. A higher control/steering version number does not by itself become product authority after its owner premise has been superseded.
 
-## Boot rule
+## Current product authority law
 
-Boot mission first from `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`, then resolve empirical continuity and the newest valid artifact/test evidence.
+- UnifiedDB is the sole durable canonical ClayVerse state/world/memory/data/wiki/causal authority.
+- ClayGraph is derived/rebuildable only.
+- Claude Code is runtime cognition, never durable truth/memory/effect authority.
+- MicroClay is adaptive retrieval/accessibility only.
+- EffectGate/EffectJournal are the only admitted external/state-changing effect path.
+- EntityOS is an internal execution/security/runtime substrate, not a competing product/state authority.
+- Mini Entity/HCU/UCF/J-Space components may be internal/donor organs only; they may not create a second durable identity, state authority, effect path or recovery ledger.
 
-Never select implementation truth by filename timestamp alone. Resolve commit lineage, successor/falsification state, candidate/promoted status and exact receipts.
+## Execution law
 
-## Truth law
+Current build/test/experiment/runtime validation remains authorized-isolated-sandbox-only. VPS/self-hosted/production-host testing is forbidden. Together remains forbidden. Final paid/model training requires explicit owner authorization.
 
 `UNKNOWN != ZERO != ERROR != MEASURED`.
+`FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
 
-Mock/local/component PASS never implies real-provider final PASS. A missing secret is a blocker, never evidence of provider success.
+## Fail-closed routing rule
 
-## `go` rule
-
-Exact `go` runs the maximal swarm research/build cycle on this single mini entity only. Swarm lanes are temporary research organs; they must fuse back into the same canonical artifact and may not create competing runtime entities.
+Any active bootstrap, program state, root worker shim, swarm contract, control, or supervisor steering that selects Mini Entity/Blogpost as the current top-level product after this owner re-entry is stale and must fail closed until reconciled. Preserve its research bytes as donor evidence; do not erase them and do not silently execute them as current product authority.

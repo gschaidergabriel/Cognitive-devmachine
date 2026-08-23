@@ -1,0 +1,100 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+  "retained_hcu_lane": 1263,
+  "exact_parent_head": "46a328148a256aeb1bba3c11595781f7291d982c",
+  "candidate_branch": "gpt56sol/go-jspace-training-contract-repair-20260824-0040",
+  "candidate_code_head_before_receipt": "b1bf01a81f49ea796651c0817d3e6e0809e4a2c6",
+  "finding": {
+    "class": "SOURCE_CONTRACT_DRIFT",
+    "summary": "The selected Global J-Space producer and bootstrap dataset compiler had diverged after the Vector Control ABI gained basis-byte identity and current packet parsing/validation. The producer trace did not export the exact canonical packet text consumed by the compiler, while the compiler still referenced superseded packet methods and fields.",
+    "runtime_test_failure_claimed": false
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "TRAINING_PIPELINE_DRIFT_TRIANGLE",
+    "scope": "SOURCE_CONTRACT_DISCRIMINATOR_ONLY",
+    "result": "Prototype trace, Vector Control ABI, and compiler were compared as one three-boundary contract. The mismatch localized to trace transport/export and stale compiler consumption rather than a second architecture or state-authority defect.",
+    "runtime_credit": 0
+  },
+  "delta": {
+    "global_jspace_gwt_v1.py": {
+      "trace_schema": "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v4",
+      "content_blob": "18e38d085c63b3c7f4a9a16b00c6b798667599d3",
+      "changes": [
+        "exports exact canonical control_packet_text",
+        "retains packet identity SHA-256 separately from wire SHA-256",
+        "retains explicit basis_sha256/generation/role/control_condition fences"
+      ]
+    },
+    "compile_jspace_bootstrap_dataset_v1.py": {
+      "dataset_schema": "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3",
+      "content_blob": "ec2a74c48f8d72dc0f781a92da5f295bf4f563f5",
+      "changes": [
+        "consumes current parse_packet_text/decode_vector/packet_bytes API",
+        "validates basis SHA-256 plus generation, role and control condition",
+        "validates packet identity SHA-256 and exact wire SHA-256 independently",
+        "removes dependency on superseded packet methods/fields"
+      ]
+    },
+    "test_compile_jspace_bootstrap_dataset_v1.py": {
+      "content_blob": "937db4f3a16adca7e8a451e80305f9ca3c0dd726",
+      "changes": [
+        "supplies explicit basis_sha256",
+        "uses current fail-closed error identities",
+        "adds ordinary packet-text transport drift regression"
+      ]
+    },
+    "test_global_jspace_gwt_v1.py": {
+      "content_blob": "1bf52ce7b93bf1c87b64404c2f93d2ac7371cf7d",
+      "changes": [
+        "asserts trace carries exact packet text, packet identity digest, wire digest and basis digest"
+      ]
+    },
+    "HCU_DATA_INDEX.json": {
+      "content_blob": "a7d7b80cf010792ca20a832ed6e9d72ece7dbcb4",
+      "changes": [
+        "indexes the repaired Global J-Space trace v4 and bootstrap dataset v3 path",
+        "keeps real instrumented model trace count at zero",
+        "keeps Together training launch disallowed until executable causal gates are satisfied"
+      ]
+    }
+  },
+  "compare_to_parent": {
+    "ahead_by": 5,
+    "behind_by": 0,
+    "files_changed": 5,
+    "additions": 103,
+    "deletions": 39
+  },
+  "execution_evidence": {
+    "authorized_isolated_runtime_started_by_this_organ": false,
+    "vercel_connector_callable_sandbox_exec_exposed": false,
+    "local_chatgpt_container_github_materialization": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "semantic_test_pass_claimed": false,
+    "semantic_test_fail_claimed": false,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "training": {
+    "together_general_inference_used": false,
+    "one_shot_training_job_created": false,
+    "one_shot_training_consumed": false,
+    "dataset_frozen": false,
+    "training_ready": false
+  },
+  "authority_preserved": {
+    "second_persistent_identity_created": false,
+    "second_state_truth_authority_created": false,
+    "second_effect_path_created": false,
+    "effect_authority": "EffectGate+EffectJournal",
+    "canonical_durable_state": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB"
+  },
+  "next_exact_gate": "Execute the focused Global J-Space, Vector Control ABI and bootstrap compiler regressions on the exact candidate in an authorized isolated sandbox. If green, fuse/rebase onto the retained HCU lane and integrate trace emission into GRID10 with actual Typed Entry, route, verified engine-load, inference receipt, downstream outcome and matched-budget lesion/shuffle/rescue evidence before dataset freeze or Together job creation.",
+  "acceptance": "SOURCE_CANDIDATE_IN_PROGRESS_NOT_RUNTIME_PASS"
+}

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import hashlib
 import json
 import math
 import re
@@ -6,6 +7,7 @@ import sys
 from pathlib import Path
 
 SCHEMA = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1"
+SOURCE_LOCK_SCHEMA = "mini-entity-bundled-cognition-source-lock/v1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 ACTION_ORIGINS = {
@@ -15,6 +17,37 @@ ACTION_ORIGINS = {
     "PROXY_SANDBOX_CONTROLLER",
     "OTHER",
 }
+LOCAL_JSPACE_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}
+SOURCE_LOCK_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "mini_cognition"
+    / "BUNDLED_COGNITION_SOURCE_LOCK_V1.json"
+)
+SOURCE_LOCK_KEYS = {
+    "schema",
+    "status",
+    "lock_revision",
+    "engine_id",
+    "model_family",
+    "manifest_version",
+    "checkpoint_sha256",
+    "tokenizer_sha256",
+    "runtime_sha256",
+    "manifest_identity_sha256",
+    "integration_identity_sha256",
+    "local_jspace_mode",
+    "jlens_upstream_commit",
+    "jspace_profile_sha256",
+    "lens_file_sha256",
+    "lens_profile_sha256",
+    "fit_corpus_sha256",
+    "measurement_policy_sha256",
+    "workspace_policy_sha256",
+    "workspace_calibration_sha256",
+    "admission_evidence_receipt_sha256",
+    "note",
+}
+SOURCE_LOCK_BOUND_FIELDS = SOURCE_LOCK_KEYS - {"schema", "status", "lock_revision", "note"}
 
 
 class ValidationError(ValueError):
@@ -73,9 +106,92 @@ def req_sha(parent: dict, key: str, length: int = 64) -> str:
     return value
 
 
+def canonical_json_sha256(value: object) -> str:
+    try:
+        raw = json.dumps(
+            value,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        ).encode("utf-8")
+    except (TypeError, ValueError):
+        fail("NONCANONICAL_JSON_VALUE")
+    return hashlib.sha256(raw).hexdigest()
+
+
+def _load_source_lock() -> tuple[dict, str]:
+    try:
+        raw = SOURCE_LOCK_PATH.read_bytes()
+        data = json.loads(raw.decode("utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        fail("SOURCE_LOCK_READ_OR_JSON_ERROR")
+    if not isinstance(data, dict):
+        fail("SOURCE_LOCK_OBJECT_REQUIRED")
+    keys = set(data)
+    if keys != SOURCE_LOCK_KEYS:
+        missing = sorted(SOURCE_LOCK_KEYS - keys)
+        unknown = sorted(keys - SOURCE_LOCK_KEYS)
+        if missing:
+            fail("SOURCE_LOCK_MISSING_FIELDS:" + ",".join(missing))
+        fail("SOURCE_LOCK_UNKNOWN_FIELDS:" + ",".join(unknown))
+    if data.get("schema") != SOURCE_LOCK_SCHEMA:
+        fail("SOURCE_LOCK_SCHEMA_MISMATCH")
+    revision = data.get("lock_revision")
+    if isinstance(revision, bool) or not isinstance(revision, int) or revision < 1:
+        fail("SOURCE_LOCK_REVISION_INVALID")
+    status = data.get("status")
+    if status not in {"BOUND", "UNBOUND"}:
+        fail("SOURCE_LOCK_STATUS_INVALID")
+    note = data.get("note")
+    if not isinstance(note, str) or not note.strip():
+        fail("SOURCE_LOCK_NOTE_REQUIRED")
+    if status == "UNBOUND":
+        if any(data.get(key) is not None for key in SOURCE_LOCK_BOUND_FIELDS):
+            fail("SOURCE_LOCK_UNBOUND_CONTAINS_IDENTITY")
+    else:
+        for key in (
+            "engine_id",
+            "model_family",
+            "manifest_version",
+            "local_jspace_mode",
+        ):
+            req_str(data, key)
+        if data["local_jspace_mode"] not in LOCAL_JSPACE_MODES:
+            fail("SOURCE_LOCK_LOCAL_JSPACE_MODE_INVALID")
+        req_sha(data, "jlens_upstream_commit", 40)
+        for key in (
+            "checkpoint_sha256",
+            "tokenizer_sha256",
+            "runtime_sha256",
+            "manifest_identity_sha256",
+            "integration_identity_sha256",
+            "jspace_profile_sha256",
+            "lens_file_sha256",
+            "lens_profile_sha256",
+            "fit_corpus_sha256",
+            "measurement_policy_sha256",
+            "workspace_policy_sha256",
+            "workspace_calibration_sha256",
+            "admission_evidence_receipt_sha256",
+        ):
+            req_sha(data, key)
+    return data, hashlib.sha256(raw).hexdigest()
+
+
+def _require_expected(observed: str, expected_lock: dict, lock_key: str) -> None:
+    expected = expected_lock.get(lock_key)
+    if observed != expected:
+        fail(f"EXPECTED_BUNDLE_MISMATCH:{lock_key}")
+
+
 def validate(data: dict) -> None:
     if data.get("schema") != SCHEMA:
         fail("SCHEMA_MISMATCH")
+
+    expected_lock, source_lock_sha256 = _load_source_lock()
+    if expected_lock["status"] != "BOUND":
+        fail("SOURCE_LOCK_UNBOUND")
 
     source = req_obj(data, "source")
     req_sha(source, "main_sha", 40)
@@ -91,21 +207,29 @@ def validate(data: dict) -> None:
     req_str(executor, "kernel")
 
     core = req_obj(data, "bundled_core")
-    req_str(core, "manifest_version")
-    req_str(core, "engine_id")
-    req_str(core, "model_family")
-    req_sha(core, "checkpoint_sha256")
-    req_sha(core, "tokenizer_sha256")
-    req_sha(core, "runtime_sha256")
-    req_sha(core, "manifest_sha256")
+    manifest_version = req_str(core, "manifest_version")
+    engine_id = req_str(core, "engine_id")
+    model_family = req_str(core, "model_family")
+    checkpoint_sha256 = req_sha(core, "checkpoint_sha256")
+    tokenizer_sha256 = req_sha(core, "tokenizer_sha256")
+    runtime_sha256 = req_sha(core, "runtime_sha256")
+    manifest_sha256 = req_sha(core, "manifest_sha256")
+    integration_identity_sha256 = req_sha(core, "integration_identity_sha256")
+    observed_source_lock_sha256 = req_sha(core, "source_lock_sha256")
+    if observed_source_lock_sha256 != source_lock_sha256:
+        fail("SOURCE_LOCK_BYTE_IDENTITY_MISMATCH")
     if not req_bool(core, "exact_bytes_verified"):
         fail("BUNDLED_CORE_BYTES_UNVERIFIED")
 
     jspace = req_obj(data, "jspace")
-    req_sha(jspace, "jlens_upstream_commit", 40)
-    req_sha(jspace, "lens_file_sha256")
-    req_sha(jspace, "lens_profile_sha256")
-    req_sha(jspace, "fit_corpus_sha256")
+    local_jspace_mode = req_str(jspace, "local_mode")
+    if local_jspace_mode not in LOCAL_JSPACE_MODES:
+        fail("INVALID_LOCAL_JSPACE_MODE")
+    jlens_upstream_commit = req_sha(jspace, "jlens_upstream_commit", 40)
+    jspace_profile_sha256 = req_sha(jspace, "profile_sha256")
+    lens_file_sha256 = req_sha(jspace, "lens_file_sha256")
+    lens_profile_sha256 = req_sha(jspace, "lens_profile_sha256")
+    fit_corpus_sha256 = req_sha(jspace, "fit_corpus_sha256")
     req_int(jspace, "n_prompts", minimum=1)
     skip_first = req_int(jspace, "skip_first_positions", minimum=0)
     req_str(jspace, "storage_dtype")
@@ -130,16 +254,45 @@ def validate(data: dict) -> None:
             fail("JSPACE_UNFITTED_POSITION")
     if not req_bool(measurement, "prompt_copy_confound_guard_enabled"):
         fail("PROMPT_COPY_CONFOUND_GUARD_DISABLED")
+    measurement_policy_sha256 = req_sha(jspace, "measurement_policy_sha256")
+    if measurement_policy_sha256 != canonical_json_sha256(measurement):
+        fail("MEASUREMENT_POLICY_DIGEST_MISMATCH")
 
     gwt = req_obj(data, "gwt")
-    req_sha(gwt, "workspace_policy_sha256")
-    req_sha(gwt, "calibration_sha256")
+    workspace_policy_sha256 = req_sha(gwt, "workspace_policy_sha256")
+    workspace_calibration_sha256 = req_sha(gwt, "calibration_sha256")
     req_int(gwt, "slot_count", minimum=1)
-    if req_str(gwt, "calibration_status") not in {
+    calibration_status = req_str(gwt, "calibration_status")
+    if calibration_status not in {
         "MEASURED_EXACT_BUNDLE",
         "UNMEASURED_SOURCE_ONLY",
     }:
         fail("INVALID_GWT_CALIBRATION_STATUS")
+    if calibration_status != "MEASURED_EXACT_BUNDLE":
+        fail("BOUND_SOURCE_LOCK_REQUIRES_MEASURED_GWT_CALIBRATION")
+
+    # Repository-owned expected identity. The receipt reports observations only;
+    # it cannot author the values on the right-hand side of these comparisons.
+    for observed, lock_key in (
+        (manifest_version, "manifest_version"),
+        (engine_id, "engine_id"),
+        (model_family, "model_family"),
+        (checkpoint_sha256, "checkpoint_sha256"),
+        (tokenizer_sha256, "tokenizer_sha256"),
+        (runtime_sha256, "runtime_sha256"),
+        (manifest_sha256, "manifest_identity_sha256"),
+        (integration_identity_sha256, "integration_identity_sha256"),
+        (local_jspace_mode, "local_jspace_mode"),
+        (jlens_upstream_commit, "jlens_upstream_commit"),
+        (jspace_profile_sha256, "jspace_profile_sha256"),
+        (lens_file_sha256, "lens_file_sha256"),
+        (lens_profile_sha256, "lens_profile_sha256"),
+        (fit_corpus_sha256, "fit_corpus_sha256"),
+        (measurement_policy_sha256, "measurement_policy_sha256"),
+        (workspace_policy_sha256, "workspace_policy_sha256"),
+        (workspace_calibration_sha256, "workspace_calibration_sha256"),
+    ):
+        _require_expected(observed, expected_lock, lock_key)
 
     zero = req_obj(data, "zero_grf")
     req_sha(zero, "zero_identity_sha256")
@@ -209,7 +362,7 @@ def main() -> int:
     except (OSError, json.JSONDecodeError, ValidationError) as exc:
         print(f"FAIL {exc}")
         return 1
-    print("PASS JSPACE_GWT_BOOT_BINDING_RECEIPT/v1")
+    print("PASS JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 SOURCE_LOCK_BOUND")
     return 0
 
 

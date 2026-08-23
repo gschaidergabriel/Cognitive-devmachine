@@ -100,7 +100,7 @@ class ClaudeCodeInference:
         prompt = f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"
         schema = json.dumps(CLAUDE_DECISION_SCHEMA, sort_keys=True, separators=(",", ":"))
         args = [
-            self.binary, "-p", prompt, "--output-format", "json", "--json-schema", schema,
+            self.binary, "--safe-mode", "-p", prompt, "--output-format", "json", "--json-schema", schema,
             "--max-turns", "1", "--permission-mode", "plan", "--tools", "",
             "--strict-mcp-config", "--no-session-persistence", "--append-system-prompt", system,
         ]

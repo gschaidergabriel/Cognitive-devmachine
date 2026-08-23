@@ -20,14 +20,12 @@ fn phase(kind:String, entity_db:String, source_db:String, profile:Map, previous:
 }
 
 fn run(entity_db:String, source_db:String, secret_file:String)->Map {
-  // Boot the neutral MiniUnifiedDB before asking it for application/personality state.
-  // A fresh database is therefore initialized by the executable itself and then fails
-  // closed at profile read until an explicit profile has been imported/configured.
+  // FETCH: boot the neutral MiniUnifiedDB before asking it for application/personality state.
   let initialized = phase("pipeline_init",entity_db,source_db,map_new(),map_new(),map_new())
   require initialized.ok
 
   // Active application/personality/inference profile is persistent DB state.
-  // External preset JSON is only an import/configuration surface, never a mandatory runtime file.
+  // External preset JSON is only an import/configuration surface, never mandatory runtime state.
   let profile_req = payload("entity_db",entity_db)
   let loaded = effect("pipeline_profile_read",profile_req)
   require loaded.ok
@@ -45,28 +43,56 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   let prompt = phase("pipeline_build_prompt",entity_db,source_db,profile,previous,compiled)
   require prompt.ok
 
-  // One inference contract for remote APIs, loopback local servers or local model runners.
-  // Inference is replaceable cognition, never entity identity/state authority.
+  // PRE-INFERENCE ADMISSION (FETCH -> EXECUTE boundary):
+  // produce/validate the fresh ZERO_WORKSPACE_CAPSULE/v1 and ZERO_INFERENCE_PACKET/v1
+  // against the single Mini Entity Cognitive Fabric lineage. This is an admission envelope,
+  // NOT a post-execution UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1.
+  let admission_data = map_new()
+  map_set(admission_data,"compiled",compiled)
+  map_set(admission_data,"prompt",prompt)
+  let admitted = phase("pipeline_cognitive_fabric_admit",entity_db,source_db,profile,previous,admission_data)
+  require admitted.ok
+
+  // EXECUTE: inference receives only the admitted engine/context plus exact pre-inference
+  // capsule/packet identity. Raw profile/prompt data cannot bypass workspace admission.
   let infer = map_new()
-  map_set(infer,"inference",profile.inference)
-  map_set(infer,"system",prompt.system)
-  map_set(infer,"user",prompt.user)
+  map_set(infer,"inference",admitted.inference)
+  map_set(infer,"system",admitted.system)
+  map_set(infer,"user",admitted.user)
+  map_set(infer,"zero_workspace_capsule_digest",admitted.zero_workspace_capsule_digest)
+  map_set(infer,"inference_packet_digest",admitted.inference_packet_digest)
   map_set(infer,"secret_file",secret_file)
   let generated = effect("inference_generate",infer)
   require generated.ok
+
+  // POST-INFERENCE VALIDATION (EXECUTE -> WRITE_BACK boundary): only now can the
+  // UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 exist, because it binds executed inference,
+  // GWT/J-Space observations where required, exact capsule/packet ancestry and result identity.
+  let cycle_data = map_new()
+  map_set(cycle_data,"admission",admitted)
+  map_set(cycle_data,"generated",generated)
+  map_set(cycle_data,"compiled",compiled)
+  map_set(cycle_data,"prompt",prompt)
+  let cognitive_cycle = phase("pipeline_cognitive_fabric_validate",entity_db,source_db,profile,previous,cycle_data)
+  require cognitive_cycle.ok
 
   let gate_data = map_new()
   map_set(gate_data,"generated",generated)
   map_set(gate_data,"compiled",compiled)
   map_set(gate_data,"prompt",prompt)
+  map_set(gate_data,"cognitive_admission",admitted)
+  map_set(gate_data,"cognitive_cycle",cognitive_cycle)
   let gated = phase("pipeline_gate",entity_db,source_db,profile,previous,gate_data)
   require gated.ok
 
+  // WRITE_BACK: deterministic gate + commit remain the only canonical state path.
   let commit_data = map_new()
   map_set(commit_data,"gated",gated)
   map_set(commit_data,"compiled",compiled)
   map_set(commit_data,"collected",collected)
   map_set(commit_data,"generated",generated)
+  map_set(commit_data,"cognitive_admission",admitted)
+  map_set(commit_data,"cognitive_cycle",cognitive_cycle)
   let committed = phase("pipeline_commit",entity_db,source_db,profile,previous,commit_data)
   require committed.ok
 
@@ -76,8 +102,11 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(result,"generation",committed.generation)
   map_set(result,"source_count",compiled.source_count)
   map_set(result,"profile_id",profile.profile_id)
-  map_set(result,"inference_kind",profile.inference.kind)
+  map_set(result,"inference_kind",admitted.inference.kind)
   map_set(result,"canonical_state_hash",compiled.canonical_state_hash)
   map_set(result,"packet_hash",compiled.packet_hash)
+  map_set(result,"zero_workspace_capsule_digest",admitted.zero_workspace_capsule_digest)
+  map_set(result,"inference_packet_digest",admitted.inference_packet_digest)
+  map_set(result,"cognitive_fabric_receipt_digest",cognitive_cycle.cognitive_fabric_receipt_digest)
   return result
 }

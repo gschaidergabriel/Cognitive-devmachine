@@ -1,0 +1,85 @@
+{
+  "GoalCandidate": {
+    "fields": [
+      "goal_id",
+      "source",
+      "objective",
+      "constraints",
+      "priority_candidate",
+      "evidence_refs",
+      "generation",
+      "status"
+    ],
+    "status": [
+      "PROPOSED",
+      "SIMULATING",
+      "ADMITTED",
+      "REJECTED",
+      "STALE"
+    ]
+  },
+  "HypothesisPacket": {
+    "fields": [
+      "hypothesis_id",
+      "claim",
+      "counterhypothesis",
+      "evidence_refs",
+      "discriminator",
+      "expected_if_claim",
+      "expected_if_counter",
+      "confidence",
+      "generation"
+    ],
+    "law": "HYPOTHESIS_PACKET_CANNOT_AUTO_PROMOTE_TRUTH"
+  },
+  "ModulePacket": {
+    "epistemic_class": [
+      "OBSERVED",
+      "INFERRED",
+      "GENERATED",
+      "COUNTER_REALITY",
+      "MEASURED",
+      "UNKNOWN"
+    ],
+    "fields": [
+      "packet_id",
+      "source_tile",
+      "target_tile_or_broadcast",
+      "payload_type",
+      "payload_digest",
+      "causal_id",
+      "turn_id",
+      "generation",
+      "epistemic_class"
+    ]
+  },
+  "SimulationBranch": {
+    "fields": [
+      "branch_id",
+      "parent_id",
+      "horizon_step",
+      "state_projection",
+      "assumptions",
+      "confidence",
+      "confidence_calibration_id",
+      "module_votes",
+      "falsifiers",
+      "generation"
+    ],
+    "law": "FUTURE_STATE_IS_PREDICTION_NOT_FACT"
+  },
+  "ZeroTwinPrediction": {
+    "fields": [
+      "prediction_id",
+      "zero_profile_version",
+      "visible_input_digest",
+      "assumptions",
+      "predicted_action_class",
+      "confidence",
+      "falsifier",
+      "generation"
+    ],
+    "law": "ZERO_TWIN_IS_MODEL_NOT_PRIVATE_HIDDEN_STATE"
+  },
+  "schema_version": "hcu-protocol-schemas/v1"
+}

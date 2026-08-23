@@ -22,13 +22,17 @@ The active target is one persistent portable multi-use Mini Entity executed by E
 - one first-class Claude Code targeted-inference adapter returning candidate inference only;
 - adaptive profiled integration for other admitted local/API inference engines;
 - self-hosted MicroEntity control/inspection dashboard;
-- deterministic truth/schema/authority/generation/effect gates around all model output and state changes.
+- deterministic truth/schema/authority/generation/effect gates around all model output and state changes;
+- one first-class **Hyperposition Computational Unit (HCU)** co-development lane: a grid of many logical ~0.8B module roles scheduled over bounded hot inference lanes, designed for the owner-provided KVM 4 target (4 CPU, 16 GB RAM, 200 GB disk, 16 TB bandwidth), with a persistent causal world-model projection, dynamic goal candidates, long simulations, Zero-twin modelling and hypothesis feedback.
 
 Primary architecture source remains:
 `research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md`
 
 Supporting architecture:
 `research_entity/global/ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md`
+
+HCU package contract:
+`the artefact/MicroEntity/hcu/README.md`
 
 ## Exact `go` law
 
@@ -38,12 +42,14 @@ Every exact user `go` means:
 2. inject the mandatory GRF + ClayCode Mini Entity worker protocol into every spawned child-go worker;
 3. start as much useful admitted FREE_ONLY Groq/Mistral/NVIDIA-Nemotron research concurrency as the current controller, credentials and provider limits safely permit;
 4. select the highest-information non-duplicate **Mini Entity** blocker;
-5. generate multiple hypotheses/counterhypotheses and cheapest falsifiers;
-6. build/repair the canonical Mini Entity/EntityOS path;
-7. preserve MiniUnifiedDB as canonical authority, model/J-Space/GWT output as candidate/measurement only, and exact generation/provenance/effect fences;
-8. execute the strongest authorized isolated evidence available;
-9. fuse durable source/evidence delta and re-enter changed reality;
-10. continue useful current-turn work until truly blocked.
+5. include the HCU lane in every frontier scan and co-develop it when it is the strongest non-duplicate product-convergent step;
+6. generate multiple hypotheses/counterhypotheses and cheapest falsifiers;
+7. build/repair the canonical Mini Entity/EntityOS path;
+8. preserve MiniUnifiedDB as canonical authority, model/J-Space/GWT/HCU output as candidate/measurement only, and exact generation/provenance/effect fences;
+9. execute the strongest authorized isolated evidence available;
+10. fuse durable source/evidence delta and re-enter changed reality;
+11. store every generated HCU design/data/receipt/exportable artifact under `the artefact/MicroEntity/hcu/` and rebuild `the artefact/MicroEntity/MICROENTITY_CURRENT.zip` so all non-secret HCU files are included;
+12. continue useful current-turn work until truly blocked.
 
 `go` must not silently switch back to ClayVerse work selection.
 
@@ -59,6 +65,12 @@ Every exact user `go` means:
 
 `OTHER_INFERENCE_ENGINES = ADAPTIVE_PROFILED_CONTRACT`
 
+`HCU = FIRST_CLASS_SAME_ENTITY_COMPUTATIONAL_ORGAN`
+
+`HCU_WORLD_MODEL != SECOND_TRUTH_AUTHORITY`
+
+`HCU_GOALS = CANDIDATES_UNTIL_ADMITTED`
+
 `MINIUNIFIEDDB = CANONICAL_DURABLE_AUTHORITY`
 
 `INFERENCE_ENGINE != ENTITY_IDENTITY`
@@ -68,6 +80,18 @@ Every exact user `go` means:
 `INFERENCE_ENGINE != DIRECT_EFFECT_AUTHORITY`
 
 `MEASURED_JSPACE != FACTUAL_TRUTH`
+
+## HCU resource law
+
+For the current 4-core/16-GB VPS target, HCU SHOULD maximize **logical module count** before maximizing independent weight replicas.
+
+Default source-level target:
+- 16 logical module tiles;
+- 2 hot local ~0.8B inference lanes;
+- one shared/read-only memory-mapped weight image where the admitted runtime supports it;
+- dynamic burst lane count only after measured throughput/latency evidence.
+
+Many logical 0.8B modules do not automatically become one larger neural network. Their composition is system-level through scheduler, workspace, Hyperposition, typed messages and evidence gates.
 
 ## Execution controls preserved
 
@@ -81,7 +105,8 @@ This owner correction does **not** weaken current safety/execution controls:
 - HTTP 429 causes provider-wide backoff, never quota-evasion key rotation;
 - current build/test/runtime-validation remains authorized-isolated-sandbox-only;
 - VPS/self-hosted/production-host test evidence remains forbidden;
-- exact runtime/model/J-Space/GWT/Claude-adapter/whole-product credit requires exact admitted execution;
+- the HCU VPS is a deployment target, not an acceptance-test exception;
+- exact runtime/model/J-Space/GWT/Claude-adapter/HCU/whole-product credit requires exact admitted execution;
 - final paid/model training requires explicit owner authorization;
 - Frank Harness modification remains forbidden.
 

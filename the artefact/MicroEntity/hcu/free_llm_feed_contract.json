@@ -1,0 +1,46 @@
+{
+  "admission_path": [
+    "RATE_LIMIT_AND_COST_GATE",
+    "PROVENANCE_BIND",
+    "SECRET_LEAK_SCAN",
+    "DUPLICATE_AND_STALENESS_CHECK",
+    "CANDIDATE_CLASSIFICATION",
+    "CROSS_CHECK_OR_COUNTEREVIDENCE_QUEUE",
+    "MINIUNIFIEDDB_ADMISSION_IF_JUSTIFIED"
+  ],
+  "hard_rules": {
+    "http_402": "HARD_STOP",
+    "http_429": "PROVIDER_WIDE_BACKOFF_NO_KEY_ROTATION_EVASION",
+    "paid_fallback": false,
+    "provider_output_direct_effect": false,
+    "provider_output_direct_truth_write": false,
+    "secret_storage_in_package": false,
+    "secret_values_in_prompt_or_receipt": false,
+    "together_execution": "FORBIDDEN_UNDER_CURRENT_CONTROL"
+  },
+  "mode": "FREE_ONLY",
+  "packet": {
+    "cost_class": "ZERO_COST_CONFIRMED_OR_REQUEST_NOT_ADMITTED",
+    "required_fields": [
+      "feed_packet_id",
+      "provider_profile_id",
+      "model_id",
+      "request_time",
+      "purpose",
+      "input_digest",
+      "output_digest",
+      "provenance",
+      "cost_class",
+      "generation",
+      "candidate_payload"
+    ]
+  },
+  "provider_families": [
+    "GROQ_FREE_WHERE_CURRENTLY_ADMITTED",
+    "MISTRAL_FREE_WHERE_CURRENTLY_ADMITTED",
+    "NVIDIA_NEMOTRON_OR_NIM_FREE_WHERE_CURRENTLY_ADMITTED",
+    "OTHER_EXPLICITLY_ADMITTED_ZERO_COST_PROFILES"
+  ],
+  "purpose": "continuously feed candidate evidence, counterevidence, hypotheses and synthetic replay material into the HCU",
+  "schema_version": "hcu-free-llm-feed/v1"
+}

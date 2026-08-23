@@ -1,0 +1,47 @@
+{
+  "authority_invariants": {
+    "canonical_durable_authority": "MiniUnifiedDB",
+    "effect_authority": "EffectGate",
+    "module_output": "CANDIDATE_OR_MEASUREMENT",
+    "no_second_memory_authority": true,
+    "no_second_truth_authority": true,
+    "world_model_is": "DERIVED_TYPED_VIEW_AND_CANDIDATE_SIMULATION_OVER_CANONICAL_STATE",
+    "zero_identity": "RUNTIME_CONFIGURATION_NOT_SECOND_ENTITY"
+  },
+  "core_design": {
+    "dynamic_goal_candidates": true,
+    "hypothesis_feedback": true,
+    "logical_grid_default": 16,
+    "long_simulation": "CHECKPOINTED_BOUNDED_STEPS",
+    "model_class": "~0.8B generic ClayCog/local cognition compatible",
+    "recommended_hot_local_lanes": 2,
+    "scheduler": "WEIGHTED_FAIR_QUEUE_WITH_GWT_BROADCAST_AND_HYPERPOSITION_BRANCH_BARRIERS",
+    "weight_strategy": "SHARED_OR_MMAP_READ_ONLY_WEIGHTS_WHERE_SUPPORTED",
+    "zero_twin": true
+  },
+  "data_layout": {
+    "archive_rule": "ALL_NON_SECRET_HCU_FILES_RECURSIVELY_INCLUDED",
+    "data": "hcu/data",
+    "generated": "hcu/generated",
+    "receipts": "hcu/receipts",
+    "release_snapshot": "MICROENTITY_CURRENT.zip",
+    "root": "the artefact/MicroEntity/hcu"
+  },
+  "name": "Mini Entity Hyperposition Computational Unit",
+  "scale_law": [
+    "LOGICAL_TILES_FIRST",
+    "SCHEDULING_AND_CACHE_REUSE_SECOND",
+    "MEASURE_THROUGHPUT_THIRD",
+    "HOT_LANES_OR_REPLICAS_ONLY_FROM_MEASURED_BENEFIT",
+    "MULTI_HOST_LATER_WITH_ONE_CANONICAL_AUTHORITY"
+  ],
+  "schema_version": "hyperposition-computational-unit/v1",
+  "scope": "SAME_MINI_ENTITY_DISTRIBUTED_COGNITIVE_COMPUTE_SUBSYSTEM",
+  "target_hardware": {
+    "bandwidth_tb": 16,
+    "cpu_cores": 4,
+    "disk_gib": 200,
+    "memory_gib": 16,
+    "plan": "KVM 4"
+  }
+}

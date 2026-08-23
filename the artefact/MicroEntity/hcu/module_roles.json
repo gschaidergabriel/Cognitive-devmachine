@@ -1,0 +1,102 @@
+{
+  "authority": {
+    "all_module_outputs": "CANDIDATE_OR_MEASUREMENT",
+    "canonical_durable_state": "MiniUnifiedDB",
+    "real_effect_path": "EffectGate"
+  },
+  "default_logical_modules": 16,
+  "execution": {
+    "barrier_modes": [
+      "GWT_BROADCAST",
+      "HYPERPOSITION_BRANCH_JOIN",
+      "EVIDENCE_ADMISSION"
+    ],
+    "hot_lane_assignment_is_ephemeral": true,
+    "logical_tile_state_is_persistent": true,
+    "recommended_hot_lanes_kvm4": 2,
+    "shared_weights_preferred": true
+  },
+  "schema_version": "hcu-module-grid/v1",
+  "tiles": [
+    {
+      "class": "world_model",
+      "id": "M00",
+      "role": "observation_integrator"
+    },
+    {
+      "class": "world_model",
+      "id": "M01",
+      "role": "causal_graph_builder"
+    },
+    {
+      "class": "world_model",
+      "id": "M02",
+      "role": "temporal_consistency_checker"
+    },
+    {
+      "class": "world_model",
+      "id": "M03",
+      "role": "uncertainty_calibrator"
+    },
+    {
+      "class": "strategy",
+      "id": "M04",
+      "role": "goal_proposer"
+    },
+    {
+      "class": "strategy",
+      "id": "M05",
+      "role": "goal_critic"
+    },
+    {
+      "class": "strategy",
+      "id": "M06",
+      "role": "planner"
+    },
+    {
+      "class": "strategy",
+      "id": "M07",
+      "role": "plan_verifier"
+    },
+    {
+      "class": "meta_cognition",
+      "id": "M08",
+      "role": "zero_twin"
+    },
+    {
+      "class": "meta_cognition",
+      "id": "M09",
+      "role": "memory_retrieval_router"
+    },
+    {
+      "class": "simulation",
+      "id": "M10",
+      "role": "counterfactual_simulator"
+    },
+    {
+      "class": "simulation",
+      "id": "M11",
+      "role": "long_horizon_rollout_controller"
+    },
+    {
+      "class": "science",
+      "id": "M12",
+      "role": "hypothesis_generator"
+    },
+    {
+      "class": "science",
+      "id": "M13",
+      "role": "counterhypothesis_generator"
+    },
+    {
+      "class": "science",
+      "id": "M14",
+      "role": "falsifier_designer"
+    },
+    {
+      "class": "control",
+      "id": "M15",
+      "role": "resource_scheduler_and_feed_router"
+    }
+  ]
+}

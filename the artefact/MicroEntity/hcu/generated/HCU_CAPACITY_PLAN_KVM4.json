@@ -1,0 +1,35 @@
+{
+  "budget": {
+    "control_plane_mib": 1024,
+    "hot_lane_mib": 640,
+    "logical_modules_per_core": 4,
+    "logical_state_mib": 64,
+    "operator_logical_cap": 32,
+    "reserve_mib": 4096,
+    "weight_mib": 620
+  },
+  "claim_class": "DETERMINISTIC_PLANNING_ONLY_NOT_RUNTIME_CREDIT",
+  "hardware": {
+    "bandwidth_tb": 16,
+    "cpu_cores": 4,
+    "disk_gib": 200,
+    "ram_mib": 16384
+  },
+  "resource_reasoning": {
+    "cpu_hot_lane_cap_after_control_reserve": 3,
+    "note": "More resident copies are possible by RAM, but on 4 CPU cores they usually reduce throughput. Scale logical tiles first; scale hot lanes only from measured throughput/latency.",
+    "replicated_weight_memory_cap": 8,
+    "shared_weight_memory_hot_lane_cap": 16,
+    "usable_after_reserve_and_control_mib": 11264
+  },
+  "schema_version": "hcu-capacity-plan/v1",
+  "topology": {
+    "burst_hot_inference_lanes": 3,
+    "logical_modules": 16,
+    "module_state": "SEPARATE_TYPED_STATE_PER_LOGICAL_TILE",
+    "recommended_hot_inference_lanes": 2,
+    "recommended_independent_weight_replicas_if_sharing_unavailable": 2,
+    "scheduler": "WEIGHTED_FAIR_QUEUE_PLUS_GWT_BROADCAST_BARRIERS",
+    "weight_strategy": "ONE_READ_ONLY_SHARED_OR_MMAP_WEIGHT_IMAGE_WHERE_RUNTIME_SUPPORTS_IT"
+  }
+}

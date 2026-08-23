@@ -1,0 +1,95 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_BINDER_V2_BOUND_SNAPSHOT_RUNTIME_OBSERVATION/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_immediately_before_write": "19781cf10f110569ece8104cbacfc8e5a7292f3d",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_available": false,
+    "canonical_atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed_by_this_organ": false,
+    "classification": "ORDINARY_RUNTIME_EVIDENCE_REENTRY_AND_OBSERVATION",
+    "caller_of_observed_runtime_request": "UNKNOWN_NOT_ATTRIBUTED_TO_THIS_ORGAN"
+  },
+  "observed_vercel_runtime": {
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_4ecoW3wVEvTvLFRk9UJxCGGNZypk",
+    "deployment_commit": "bdb4a8b6d38ffd44f73a39fc4dcc4a9af6c3b489",
+    "deployment_state": "READY",
+    "request_observed_at_utc": "2026-08-23T18:49:23Z",
+    "request": "GET /api/hcu-entry-capsule",
+    "http_status": 200,
+    "runtime_surface": "Vercel serverless protected preview",
+    "cache": "MISS",
+    "response_body_observed_by_this_organ": false,
+    "sandbox_id_observed_by_this_organ": false,
+    "stdout_stderr_observed_by_this_organ": false
+  },
+  "exact_deployed_handler": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "path": "mcp/vercel-sandbox-mcp/api/hcu-entry-capsule.js",
+    "git_blob_sha_at_deployment": "de4d123522dd9ab1695530699a7fed73f09f5532",
+    "capsule_id": "HCU_JSPACE_BINDER_V2_MODEL_CALL_RELABEL_REGRESSION/v1",
+    "regression_class": "RECORDED_CROSS_CELL_MODEL_CALL_ALIAS",
+    "bound_research_main_commit": "d2a44f9eef93181fe6a9538f6025a419fa711f40",
+    "bound_research_main_tree": "bebac227bebb026458be726688adf11b747988f2",
+    "bound_retained_pr1263_commit": "18be64b3d59b08fd460ccf4737a7bb368d2e2d60",
+    "bound_retained_pr1263_tree": "1f2edc78d0e9e817fc83ed4acd579ff1a280c879",
+    "fixed_command": "python3 test_model_call_relabel_v2.py"
+  },
+  "handler_control_flow_evidence": {
+    "before_execution": [
+      "preview branch authorization required",
+      "FREE_ONLY sandbox admission required",
+      "fixture Git blob SHA identity verified"
+    ],
+    "sandbox_path": [
+      "Sandbox.create python3.13 persistent=false timeout=60s",
+      "fixed admitted files written to disposable sandbox",
+      "inside-sandbox SHA-256 verification",
+      "GITHUB_READ_TOKEN and TOGETHER_API_KEY secret fence",
+      "fixed Python regression command"
+    ],
+    "success_condition": "handler returns HTTP 200 only when reproduced=true and sandbox cleanup succeeded",
+    "reproduced_requires": [
+      "command exit_code == 0",
+      "stdout contains exact regression class marker",
+      "stdout contains RELABEL_BIND_ACCEPTED=TRUE",
+      "stdout contains UNUSUAL_EXPERIMENT_COUNT_ADDED=0"
+    ],
+    "cleanup_condition": "sandbox.delete succeeds or sandbox.stop fallback succeeds; cleanup failure forces non-200 result"
+  },
+  "bounded_inference": {
+    "claim": "The observed HTTP 200 on this exact deployment supports that the fixed SHA-bound binder-v2 deterministic regression reached the handler success path and cleanup at the deployment-bound source snapshot.",
+    "classification": "BOUND_SNAPSHOT_HCU_BINDER_V2_COMPONENT_RUNTIME_SUPPORTED",
+    "why_not_exact_current": "The capsule was frozen to research main d2a44f9... and PR1263 18be64b..., while canonical main and retained donor continued advancing; exact-current source identity was not re-established by this observation.",
+    "why_not_full_runtime": "The capsule exercises one deterministic J-Space inference-binding v2 defect regression, not the complete Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT causal path.",
+    "uncertainty": "Response JSON/stdout/sandbox identifier were not retrieved by this organ, so this receipt relies on the observed serverless 200 plus exact deployed handler control-flow contract and does not invent missing output fields."
+  },
+  "credit": {
+    "bounded_snapshot_binder_v2_component_runtime_evidence": "SUPPORTED",
+    "exact_current_binder_v2_component_runtime_credit": false,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "tracks": {
+    "entityos_executable_convergence": "ADVANCED_BY_BOUND_RUNTIME_EVIDENCE_WITHOUT_OVERPROMOTION",
+    "hcu_typed_entry": "NO_NEW_TYPED_ENTRY_RUNTIME_CREDIT_FROM_THIS OBSERVATION",
+    "global_jspace_gwt_free_only_readiness": "ADVANCED: BINDER_V2 SUCCESS PATH OBSERVED AT A BOUND OLDER SNAPSHOT; EXACT_CURRENT GRID10 CAUSAL CLOSURE REMAINS OPEN"
+  },
+  "next_exact_gate": "Refresh current Research main + PR1263 + PR810, freeze one fixed hash-bound FREE capsule at that exact snapshot, and execute J-Space inference-binding v2 plus exact GRID10 plan/cell causal closure through the retained controller. Then extend the same executor toward Typed Entry -> route -> verified physical engine load -> inference receipt -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure. Preserve zero new unusual experiments unless a canonical atomic lease is acquired."
+}

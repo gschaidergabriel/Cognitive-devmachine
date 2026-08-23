@@ -1,0 +1,73 @@
+{
+  "schema": "GO_MINI_EXECUTION_IDENTITY_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "source_base_main": "6699f994d650e9105833903fff7eb21a51dd7e60",
+  "branch": "gpt56sol/go-mini-execution-identity-v1-20260823-1552",
+  "delta": {
+    "contract": "MINI_ENTITY_EXECUTION_IDENTITY/v1",
+    "purpose": "bind clean source/runtime/artifact/build identity to the same MiniUnifiedDB boot source lock before terminal UCF evidence finalization",
+    "authority": "EXECUTION_EVIDENCE_ONLY_NO_TRUTH_STATE_EFFECT_AUTHORITY",
+    "canonical_durable_authority": "MiniUnifiedDB",
+    "real_effect_authority": "EffectGate",
+    "runtime_integration_completed": false,
+    "ucf_finalizer_completed": false
+  },
+  "exact_new_bytes": {
+    "module": {
+      "path": "tools/mini_execution_identity_v1.py",
+      "git_blob_sha1": "3c36ce83773c72ed01f6be742b381670e8236241",
+      "sha256": "8580aa816856cbd3d16388c57ff0e394b15c34278289d0c41b60a68b8ed03f86"
+    },
+    "test": {
+      "path": "tests/test_mini_execution_identity_v1.py",
+      "git_blob_sha1": "7591824e5b4890d05317615d38391a82e4f655a9",
+      "sha256": "7e6f50928ea8a1555c326c56e9adde02567afd6062496eb97f1ec00a6f97e583"
+    }
+  },
+  "isolated_component_execution": {
+    "python": "3.13.5",
+    "platform": "Linux 6.18.35 x86_64",
+    "py_compile": "PASS",
+    "unittest": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "result": "PASS"
+    },
+    "scope": "EXACT_NEW_BLOB_COMPONENT_MECHANISM_ONLY"
+  },
+  "fences": [
+    "dirty source rejected",
+    "placeholder runtime digest rejected",
+    "unknown profile/model authority field rejected",
+    "boot source-lock mismatch rejected",
+    "generation mismatch rejected",
+    "artifact-byte change changes identity",
+    "post-digest tamper rejected",
+    "valid identity binds to exact prepare ancestry"
+  ],
+  "coordination": {
+    "pre_inference_compositor": "merged PR #1275; not duplicated",
+    "cognition_bootstrap": "open PR #1290; separate responsibility; not duplicated",
+    "redundant_admission_prs_closed_this_go": [1284, 1287],
+    "hcu": "NO_CHANGE_NON_DUPLICATE",
+    "unusual_experiment": "NO_NEW_UNUSUAL_EXPERIMENT_SHARED_MACROCYCLE_SLOT_ALREADY_CONSUMED"
+  },
+  "evidence_boundary": {
+    "reference_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "next_gate": "integrate trusted build/launcher production of exact execution identity, transaction-safe cognition bootstrap, the single retained ProfilePipelineRuntime admission handler, downstream identity-preserving inference and a terminal non-authorizing UCF finalizer; then execute exact integrated repository bytes on an actually-started authorized isolated executor",
+  "policy": {
+    "free_only": true,
+    "together": "FORBIDDEN",
+    "vps_self_hosted_production_acceptance_testing": "FORBIDDEN",
+    "paid_or_final_training": "OWNER_AUTHORIZATION_REQUIRED"
+  }
+}

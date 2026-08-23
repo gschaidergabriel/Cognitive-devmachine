@@ -1,0 +1,46 @@
+{
+  "schema": "CLAY_ARCHITECTURE_ADJUDICATION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "observed_main_before_write": "5c4d848f65f294ca53d54b861fafe716aa7333d5",
+  "observations": [
+    "Current main BLOGPOST_ENTITY.clay still routes pipeline_build_prompt directly into inference_generate using profile.inference and prompt.system/user.",
+    "MINI_ENTITY_COGNITIVE_FABRIC_ADMISSION/v1 is explicitly a pre-inference candidate/provenance admission boundary and grants no canonical truth/effect authority.",
+    "The canonical UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 validator requires post-inference fields including inference.executed, candidate_result_digest, authority.validation_decision, authority.canonical_write_committed, authority.effect_committed and execution.terminal_result_digest.",
+    "Therefore the final canonical UCF runtime receipt cannot truthfully be completed before the deterministic gate and commit/no-commit outcome are known."
+  ],
+  "adjudicated_causal_order": [
+    "pipeline_compile",
+    "pipeline_build_prompt",
+    "pipeline_cognitive_fabric_prepare_or_admit",
+    "inference_generate",
+    "pipeline_gate",
+    "pipeline_commit_or_explicit_no_commit",
+    "pipeline_cognitive_fabric_finalize_runtime_receipt",
+    "post_turn_causal_binding"
+  ],
+  "identity_law": {
+    "pre_inference_receipt": "MINI_ENTITY_COGNITIVE_FABRIC_ADMISSION/v1 or an explicitly versioned equivalent; candidate/provenance only",
+    "final_runtime_receipt": "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1; emitted only after terminal gate/commit state exists",
+    "same_digest_or_schema_for_both": "FORBIDDEN",
+    "miniunifieddb": "SOLE_CANONICAL_DURABLE_AUTHORITY",
+    "effectgate": "SOLE_REAL_EFFECT_AUTHORITY"
+  },
+  "donor_adjudication": {
+    "one_phase_admit_lanes": "RETAIN_AS_PRE_ADMISSION_DONOR_ONLY; they do not by themselves emit the final post-turn UCF-v1 receipt",
+    "prepare_finalize_before_gate_lane_1207": "RETAIN_PARTIAL_DONOR_ONLY; PREPARE insight is useful, but FINALIZE-before-GATE/COMMIT is too early for canonical UCF-v1 authority fields",
+    "post_turn_binding_lane_1216": "RETAIN_AS_POST_TURN_DONOR; it correctly recognizes canonical_write_committed makes the final UCF receipt post-commit evidence",
+    "reference_runtime_lanes_1210_1227": "RETAIN_RUNTIME_DONORS_ONLY; fuse mechanisms fresh on current main rather than create a second runtime"
+  },
+  "next_implementation_gate": "Fresh-current single integration lane: one MiniUnifiedDB-resident versioned cognition-object binding store -> one pre-inference Zero workspace capsule/InferencePacket admission -> inference -> existing deterministic gate/CAS commit -> canonical final UCF-v1 receipt -> post-turn binding. Missing/stale/unbound cognition objects must block or typed-abstain before inference.",
+  "unusual_experiment": "NO_NEW_EXPERIMENT; macrocycle experiment already consumed by AUTHORITY_ROUTING_CLAYVERSE_REACTIVATION_POISON",
+  "runtime_credit": 0,
+  "jspace_credit": 0,
+  "whole_gwt_credit": 0,
+  "claude_adapter_credit": 0,
+  "hcu_runtime_credit": 0,
+  "classification": "ARCHITECTURE_TEMPORAL_AUTHORITY_BREAKTHROUGH_SOURCE_EVIDENCE_ONLY"
+}

@@ -6,8 +6,11 @@ import sys
 from pathlib import Path
 
 SCHEMA = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1"
+SOURCE_LOCK_SCHEMA = "mini-entity-bundled-cognition-source-lock/v1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
+HERE = Path(__file__).resolve().parent
+SOURCE_LOCK_PATH = HERE.parent / "mini_cognition" / "bundled_cognition_source_lock_v1.json"
 
 
 class ValidationError(ValueError):
@@ -66,9 +69,52 @@ def req_sha(parent: dict, key: str, length: int = 64) -> str:
     return value
 
 
-def validate(data: dict) -> None:
+def load_source_lock(path: Path = SOURCE_LOCK_PATH) -> dict:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        fail(f"SOURCE_LOCK_READ_OR_JSON_ERROR:{exc.__class__.__name__}")
+    if not isinstance(data, dict):
+        fail("SOURCE_LOCK_TOP_LEVEL_NOT_OBJECT")
+    return data
+
+
+def validate_source_lock(source_lock: dict) -> tuple[str, str]:
+    allowed = {
+        "schema",
+        "status",
+        "manifest_identity_sha256",
+        "integration_identity_sha256",
+        "authority",
+        "evidence_receipt",
+        "note",
+    }
+    unknown = sorted(set(source_lock) - allowed)
+    if unknown:
+        fail("SOURCE_LOCK_UNKNOWN_FIELDS:" + ",".join(unknown))
+    if source_lock.get("schema") != SOURCE_LOCK_SCHEMA:
+        fail("SOURCE_LOCK_SCHEMA_MISMATCH")
+    if req_str(source_lock, "authority") != "repository_source_tree":
+        fail("SOURCE_LOCK_AUTHORITY_INVALID")
+    status = req_str(source_lock, "status")
+    if status != "BOUND":
+        fail("SOURCE_LOCK_NOT_BOUND")
+    manifest_identity = req_sha(source_lock, "manifest_identity_sha256")
+    integration_identity = req_sha(source_lock, "integration_identity_sha256")
+    req_str(source_lock, "evidence_receipt")
+    note = source_lock.get("note")
+    if note is not None and (not isinstance(note, str) or not note.strip()):
+        fail("SOURCE_LOCK_NOTE_INVALID")
+    return manifest_identity, integration_identity
+
+
+def validate(data: dict, *, source_lock: dict | None = None) -> None:
     if data.get("schema") != SCHEMA:
         fail("SCHEMA_MISMATCH")
+
+    locked_manifest_identity, locked_integration_identity = validate_source_lock(
+        load_source_lock() if source_lock is None else source_lock
+    )
 
     source = req_obj(data, "source")
     req_sha(source, "main_sha", 40)
@@ -88,7 +134,12 @@ def validate(data: dict) -> None:
     req_sha(core, "checkpoint_sha256")
     req_sha(core, "tokenizer_sha256")
     req_sha(core, "runtime_sha256")
-    req_sha(core, "manifest_sha256")
+    manifest_identity = req_sha(core, "manifest_sha256")
+    integration_identity = req_sha(core, "integration_identity_sha256")
+    if manifest_identity != locked_manifest_identity:
+        fail("BUNDLED_MANIFEST_SOURCE_LOCK_MISMATCH")
+    if integration_identity != locked_integration_identity:
+        fail("BUNDLED_INTEGRATION_SOURCE_LOCK_MISMATCH")
     if not req_bool(core, "exact_bytes_verified"):
         fail("BUNDLED_CORE_BYTES_UNVERIFIED")
 

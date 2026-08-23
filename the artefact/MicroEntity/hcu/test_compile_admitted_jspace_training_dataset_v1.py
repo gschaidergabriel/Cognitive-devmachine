@@ -52,6 +52,7 @@ def _training_trace(**overrides):
     value = {
         "schema_version": TRAINING_TRACE_SCHEMA,
         "trace_sha256": TRACE_SHA,
+        "trace_family_id": "episode:test:admitted",
         "prototype_trace_sha256": PROTOTYPE_SHA,
         "generation": GENERATION,
         "entry_event_sha256": ENTRY_EVENT_SHA,
@@ -259,7 +260,7 @@ class AdmittedJSpaceTrainingDatasetTests(unittest.TestCase):
             ADMITTED_VECTOR_PACKETS,
         )
         compiler.assert_called_once_with([dict(trace)], admitted_bases=ADMITTED_BASES)
-        metadata = compiled["train"][0]["metadata"]
+        metadata = next(row for rows in compiled.values() for row in rows)["metadata"]
         self.assertEqual(metadata["pipeline_schema"], PIPELINE_SCHEMA)
         self.assertEqual(metadata["inference_receipt_sha256"], receipt["receipt_sha256"])
         self.assertEqual(metadata["engine_load_consumption_receipt_sha256"], LOAD_CONSUMPTION_SHA)

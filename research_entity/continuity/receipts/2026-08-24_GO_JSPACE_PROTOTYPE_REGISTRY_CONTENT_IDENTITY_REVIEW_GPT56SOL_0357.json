@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "6f114740719208c8bb4ec908b7fb405dc7edec20",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; AVAILABLE_CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "atomic_claim_created": false,
+    "duplicate_hcu_lane_created": false,
+    "duplicate_executor_lane_created": false,
+    "retained_hcu_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_donor_head_observed": "fe51c9da33ec94031701fc7ad53af00ea00888b3",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "b6fcb5e26b66f30951a308caf6f23df8192d4040"
+  },
+  "source_observation": {
+    "dataset_gate_path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "prototype_producer_path": "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
+    "dataset_gate_blob_at_donor_head": "current donor source fetched at fe51c9da33ec94031701fc7ad53af00ea00888b3",
+    "prototype_identity_rule": "global_jspace_gwt_v1 computes prototype trace_sha256 as SHA256 over the selected RFC8785/JCS canonical bytes of the prototype trace",
+    "dataset_registry_rule": "jspace_dataset_admission_gate_v1 validates training and transition registries by exact stored mapping equality, but retrieves admitted_prototype_traces[prototype_trace_sha256] and currently checks prototype schema plus cross-layer semantic fields without independently recomputing the prototype mapping RFC8785/JCS digest against the registry key",
+    "parallel_delta_reentry": "PR1263 advanced seven commits from 511d5689 to fe51c9da; changed files include Global J-Space/GWT, Vector Control, family split and inference-parent admission, but not jspace_dataset_admission_gate_v1.py, so this source asymmetry survives the observed donor-head movement"
+  },
+  "research_finding": {
+    "id": "JSPACE_PROTOTYPE_REGISTRY_KEY_CONTENT_IDENTITY_REVALIDATION_GAP",
+    "reality_level": "R1_INFERRED_FROM_EXACT_CURRENT_SOURCE_REVIEW",
+    "claim_scope": "SOURCE_REVIEW_COUNTERHYPOTHESIS_ONLY_NOT_EXPLOIT_PROOF_NOT_RUNTIME_FAILURE",
+    "hypothesis": "If admitted_prototype_traces is not itself guaranteed content-addressed before this boundary, a registry entry could be stored beneath a claimed prototype_trace_sha256 key whose JCS bytes do not hash to that key. Semantic cross-bindings may still match downstream training/transition fields, so dataset admission would be relying on external registry key integrity rather than proving the prototype evidence identity it names.",
+    "counterhypothesis": "admitted_prototype_traces may be defined as a previously verified content-addressed registry whose key/content identity is guaranteed by its producer, making local rehash at DatasetAdmission intentionally redundant.",
+    "why_material": "The current producer explicitly defines prototype evidence identity by JCS content hash, and outcome receipts already receive an analogous canonical key/content identity verification inside the dataset gate. A prototype registry that is merely keyed by an asserted hash would weaken provenance symmetry at the training-admission boundary.",
+    "not_claimed": [
+      "an exploitable current runtime bypass",
+      "a failing exact-current regression",
+      "whole EntityOS/HCU runtime failure",
+      "J-Space model runtime credit",
+      "training credit",
+      "canonical truth corruption"
+    ]
+  },
+  "cheapest_high_information_discriminator": {
+    "status": "NOT_EXECUTED_AT_THIS_MACROCYCLE_BECAUSE_ATOMIC_LEASE_UNAVAILABLE",
+    "test": "Construct an otherwise cross-bound admitted prototype mapping, preserve the registry key claimed by the training trace, alter one digest-relevant prototype field while keeping all fields consumed by current semantic cross-binding compatible where possible, and require DatasetAdmission to reject on prototype key/content digest mismatch before training rows are emitted.",
+    "acceptance_if_hardening_is_needed": "The gate recomputes SHA256(RFC8785/JCS(prototype_trace)) and requires exact equality with prototype_trace_sha256, with a deterministic regression proving altered registry bytes under an unchanged key fail closed.",
+    "falsifier_for_this_finding": "Demonstrate from exact current source that admitted_prototype_traces can only be constructed by a canonical producer that already validates the same JCS key/content identity and cannot accept caller-supplied unverified mappings at this boundary."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "NO_CHANGE_WITH_REASON: parallel main already reconciled the retained executor live-deployment identity boundary; exact current PR810 head deployment remains unobserved in the admitted evidence, and this organ did not create a duplicate deployment or paid path.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: after re-entering the seven-commit donor movement, no nonduplicate Typed Entry/HCU executable delta was safer or higher-information than preserving the retained lane and avoiding overlap; current causal spine remains source candidate with zero full-runtime credit.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_EVIDENCE: identified a surviving second-order prototype-registry content-identity boundary in serious dataset admission, separated the hypothesis from its counterhypothesis, and defined the exact fail-closed discriminator without consuming an unauthorized unusual-experiment slot."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "execution": {
+    "new_vercel_sandbox_invocation": false,
+    "new_deployment_triggered": false,
+    "vps_or_self_hosted_test": false,
+    "together_preflight_or_key_lookup": false,
+    "paid_fallback": false,
+    "source_review_only": true
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving current-facing shared surface and parallel go cycles are updating main; this cycle records the nonduplicate source-review result in an append-only exact-identity receipt rather than risking a stale whole-file overwrite."
+  },
+  "next_exact_gate": "First re-enter current main and PR1263. If the prototype key/content identity gap still exists and a canonical atomic lease is available for the exact user macrocycle, run the one targeted deterministic prototype-registry key/content mismatch discriminator on exact-current source. If it rejects already, close the hypothesis with evidence; if it false-greens, harden the single existing DatasetAdmission authority with RFC8785/JCS prototype digest revalidation plus one fail-closed regression, without creating a second registry or truth authority. Independently keep the PR810 runtime path gated on an exact-head READY included-tier preview before invocation."
+}

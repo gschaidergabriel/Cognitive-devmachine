@@ -20,6 +20,10 @@ CONTROL43 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_P
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
 ROOT_CLAUDE = "CLAUDE.md"
+LEGACY_BLOGPOST = "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md"
+LEGACY_LOCAL_INFERENCE = "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md"
+LEGACY_BLOGPOST_BLOB = "eeb9945e4c1d01a32e13bf6cb74db0c0c49d2767"
+LEGACY_LOCAL_INFERENCE_BLOB = "57de4d4f460c0755d3be21cb9ce00369104dbf60"
 
 
 def load_json(path: Path):
@@ -50,6 +54,8 @@ def validate(root: Path) -> dict:
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
         "repo_claude": root / ROOT_CLAUDE,
+        "legacy_blogpost": root / LEGACY_BLOGPOST,
+        "legacy_local_inference": root / LEGACY_LOCAL_INFERENCE,
         "control41": root / CONTROL41,
         "control42": root / CONTROL42,
         "control43": root / CONTROL43,
@@ -84,6 +90,8 @@ def validate(root: Path) -> dict:
     architecture = paths["architecture"].read_text(encoding="utf-8")
     readme = paths["readme"].read_text(encoding="utf-8")
     repo_claude = paths["repo_claude"].read_text(encoding="utf-8")
+    legacy_blogpost = paths["legacy_blogpost"].read_text(encoding="utf-8")
+    legacy_local_inference = paths["legacy_local_inference"].read_text(encoding="utf-8")
 
     # Preserve the canonical research-entity join/identity fences while changing product authority.
     require(errors, bootstrap.get("entity_id") == canonical.get("entity_id"), "BOOTSTRAP_CANONICAL_ENTITY_MISMATCH")
@@ -214,6 +222,21 @@ def validate(root: Path) -> dict:
     require(errors, "CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.MD" in repo_claude_head, "ROOT_CLAUDE_OWNER_DIRECTIVE_MISSING")
     require(errors, "MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in repo_claude_head, "ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE")
     require(errors, "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.MD" not in repo_claude_head, "ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE")
+
+    # Known superseded Mini Entity authority paths remain addressable only as historical
+    # compatibility redirects. Their old exact bytes stay available through Git blob anchors.
+    blogpost_head = legacy_blogpost[:1800].upper()
+    require(errors, "SUPERSEDED" in blogpost_head[:500], "LEGACY_BLOGPOST_NOT_SUPERSEDED")
+    require(errors, "STATUS: CURRENT" not in blogpost_head[:350], "LEGACY_BLOGPOST_STILL_CURRENT")
+    require(errors, "SOLE CANONICAL OWNER DIRECTIVE" not in blogpost_head[:180], "LEGACY_BLOGPOST_STILL_SOLE_OWNER")
+    require(errors, OWNER_DIRECTIVE.upper() in blogpost_head, "LEGACY_BLOGPOST_REDIRECT_MISSING")
+    require(errors, LEGACY_BLOGPOST_BLOB.upper() in blogpost_head, "LEGACY_BLOGPOST_BLOB_MISSING")
+
+    local_head = legacy_local_inference[:1600].upper()
+    require(errors, "SUPERSEDED" in local_head[:500], "LEGACY_LOCAL_INFERENCE_NOT_SUPERSEDED")
+    require(errors, "STATUS: CURRENT" not in local_head[:350], "LEGACY_LOCAL_INFERENCE_STILL_CURRENT")
+    require(errors, OWNER_DIRECTIVE.upper() in local_head, "LEGACY_LOCAL_INFERENCE_REDIRECT_MISSING")
+    require(errors, LEGACY_LOCAL_INFERENCE_BLOB.upper() in local_head, "LEGACY_LOCAL_INFERENCE_BLOB_MISSING")
 
     return {
         "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",

@@ -1,41 +1,24 @@
-# Mini Entity — Local Inference Requirement
+# HISTORICAL MINI ENTITY LOCAL-INFERENCE REQUIREMENT — DONOR REDIRECT
 
-Status: CURRENT
-Date: 2026-08-22
-Program: MINI_ENTITY_PIPELINE_ALL_IN_ONE
+Status: **SUPERSEDED AS CURRENT PROGRAM REQUIREMENT / HISTORICAL DONOR EVIDENCE**
 
-The application-neutral Mini Entity pipeline must support interchangeable inference backends without resetting its SQLite MiniUnifiedDB identity, history, evidence consumption or narrative continuity.
+This path is retained for historical receipts and mechanism references. It does **not** define the current product program or active `go` frontier.
 
-Required modes:
+Current owner/product authority:
 
-1. `remote_api` — configurable remote text-generation endpoint/model/auth/request/response mapping.
-2. `local_server` — localhost/OpenAI-compatible text-generation service with optional authentication; tokenless loopback is permitted when explicitly configured.
-3. `local_exec` — direct local model attachment with no remote service or API token required. Reference target: GGUF through llama.cpp-compatible or another configured runner.
+`research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
 
-Local runtime configuration belongs in SQLite and includes model path, runner argv template, optional local prompt template and generation parameters. Runner invocation must not pass through a shell.
+Current program/stage:
 
-The model is replaceable inference substrate, never application identity. Zero/blog/personality semantics remain fully replaceable SQLite configuration. The executable remains the neutral processing pipeline:
+- `CLAYVERSE_SINGLE_CONTAINER`
+- `CLAYVERSE_ARTIFACT`
 
-`evidence -> preprocessing -> canonical envelope -> configured inference -> generic gates -> exactly-once/CAS -> atomic SQLite persistence`
+The exact prior Mini Entity local-inference requirement is preserved in Git history as blob:
 
-## Current evidence
+`57de4d4f460c0755d3be21cb9ce00369104dbf60`
 
-Sandbox native `mini-entity/0.6.0` has implemented and contract-tested `local_exec` using:
+Reusable donor mechanisms from that historical requirement include replaceable inference substrate, no-shell local runner invocation, provider/model identity separation, atomic persistence, exactly-once/CAS fencing and secret isolation. Those mechanisms gain no current ClayVerse authority merely because they were previously contract-tested in the Mini Entity line.
 
-- `inference_mode=local_exec`;
-- readable local model path;
-- JSON argv runner configuration;
-- direct exec-style runner invocation with no shell;
-- no API token;
-- normal immutable gate path;
-- exactly-once event consumption;
-- generation/CAS persistence;
-- SQLite `integrity_check = ok`.
+Current ClayVerse inference/runtime authority is defined by the ClayVerse owner directive, `the artefact/manifest.json`, `the artefact/ARCHITECTURE.md`, current source and exact admitted evidence. Claude Code remains runtime cognition; any additional local/API inference path must preserve the same UnifiedDB causal authority and EffectGate boundary and cannot fork identity/state.
 
-Receipt:
-
-`the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json`
-
-This proves the local-model transport/persistence contract with fixture weights/runner. It does not yet prove quality or compatibility of a real GGUF model. Final local-model acceptance requires at least one actual supported local LLM run.
-
-`go` must now treat real local-model acceptance and convergence of the structured Clay runtime onto the same backend contract as active frontiers, not re-open the already-proven transport contract without new evidence.
+Historical fixture/local-model transport evidence is component donor evidence only and is not whole ClayVerse runtime acceptance.

@@ -10,13 +10,16 @@
   "hyperposition_computational_unit": {
     "status": "SOURCE_ARCHITECTURE_CANDIDATE_RUNTIME_CREDIT_0",
     "root": "hcu",
-    "architecture": "concepts/MINI_ENTITY_HYPERPOSITION_COMPUTATIONAL_UNIT.md",
+    "canonical_research_architecture": "research_entity/global/MINI_ENTITY_HYPERPOSITION_COMPUTATIONAL_UNIT.md",
+    "architecture_mirror": "concepts/MINI_ENTITY_HYPERPOSITION_COMPUTATIONAL_UNIT.md",
     "owner_addendum": "research_entity/global/MINI_ENTITY_HYPERPOSITION_COMPUTATIONAL_UNIT_OWNER_ADDENDUM.md",
     "deployment_profile": "hcu/KVM4_PROFILE.json",
+    "topology": "hcu/HCU_TOPOLOGY.json",
     "capacity_planner": "hcu/capacity_planner.py",
     "same_entity": true,
     "canonical_authority": "MiniUnifiedDB",
     "direct_effect_authority": false,
+    "free_llm_feed": "EXISTING_ADAPTIVE_INFERENCE_FABRIC_CANDIDATE_ONLY",
     "go_parallel_lane": "CONSIDER_EVERY_EXACT_GO; ADVANCE_WHEN_NON_DUPLICATE_USEFUL; OTHERWISE_RECORD_HCU_NO_CHANGE"
   },
   "snapshot_include": [
@@ -28,10 +31,15 @@
     "hcu/README.md",
     "hcu/HCU_ARCHITECTURE.md",
     "hcu/KVM4_PROFILE.json",
+    "hcu/HCU_TOPOLOGY.json",
     "hcu/capacity_planner.py",
-    "hcu/tests/test_capacity_planner.py"
+    "hcu/tests/test_capacity_planner.py",
+    "hcu/data/README.md",
+    "hcu/generated/README.md",
+    "hcu/receipts/README.md",
+    "hcu/receipts/2026-08-23_HCU_SOURCE_INTEGRATION_GPT56SOL.json"
   ],
   "hcu_generated_material_policy": "All HCU package-facing source/config/schema/test/receipt/deployment-template artifacts are stored under hcu/ and included in the current package ZIP; secret-bearing live runtime data is excluded.",
   "secrets_in_archive": false,
-  "source_head_at_contract_creation": "5f3c2a7cc9aeab8f851d38450fa50a3e1451d767"
+  "source_base_main": "5aa665364894245c05513ea91c41e3304f3e7368"
 }

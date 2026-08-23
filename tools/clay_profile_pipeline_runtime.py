@@ -24,8 +24,9 @@ from pathlib import Path
 from typing import Any, Callable
 
 import claycode_structured_backend as clay
+import mini_entity_cognitive_fabric_admission_v1 as cognitive_fabric
 
-VERSION = "clay-profile-pipeline-runtime/0.6.3"
+VERSION = "clay-profile-pipeline-runtime/0.7.0"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -122,6 +123,7 @@ class ProfilePipelineRuntime(clay.Runtime):
         self.local_exec_runner = local_exec_runner
         self.effect_trace: list[dict[str, Any]] = []
         self._active_secrets: list[str] = []
+        self._cognitive_admissions: dict[str, dict[str, Any]] = {}
         self.builtins["effect"] = self.effect
         self.allowed_effects = {
             "pipeline_init",
@@ -130,6 +132,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             "pipeline_collect",
             "pipeline_compile",
             "pipeline_build_prompt",
+            "pipeline_cognitive_fabric_admit",
             "inference_generate",
             "pipeline_gate",
             "pipeline_commit",
@@ -268,6 +271,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             "pipeline_collect": self._pipeline_collect,
             "pipeline_compile": self._pipeline_compile,
             "pipeline_build_prompt": self._pipeline_build_prompt,
+            "pipeline_cognitive_fabric_admit": self._pipeline_cognitive_fabric_admit,
             "inference_generate": self._inference_generate,
             "pipeline_gate": self._pipeline_gate,
             "pipeline_commit": self._pipeline_commit,
@@ -343,6 +347,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                    VALUES(1,0,NULL,?,?)""",
                 (now, now),
             )
+            cognitive_fabric.install_schema(db)
 
             if eos_preexisting and "generation" in eos_columns:
                 db.execute(
@@ -727,7 +732,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             )
         if op == "div":
             numerator = self._expr(expr["a"], context)
-            denominator = self._expr(expr["b"], context)
+            denominator = self._expr(expr["b"] if "b" in expr else expr["denominator"], context)
             divisor = self._expr_number(denominator, "NONFINITE_NUMERIC_EXPRESSION:div")
             return (
                 0.0
@@ -851,6 +856,12 @@ class ProfilePipelineRuntime(clay.Runtime):
             default=str,
         )
         return {"ok": True, "system": system, "user": user}
+
+    def _pipeline_cognitive_fabric_admit(self, p: dict[str, Any]) -> dict[str, Any]:
+        try:
+            return cognitive_fabric.admit(self, p)
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
     def _keys(self, names: list[str], secret_file: str | None) -> list[str]:
         file_values: dict[str, str] = {}
@@ -1105,6 +1116,14 @@ class ProfilePipelineRuntime(clay.Runtime):
         try:
             inference = dict(p["inference"])
             kind = str(inference.get("kind", ""))
+            admitted_kind = (
+                (self.provider_override is not None and kind == "mock")
+                or kind == "local_exec"
+                or kind in _ADMITTED_API_INFERENCE_KINDS
+            )
+            if not admitted_kind:
+                raise PipelineFault("UNKNOWN_INFERENCE_KIND:" + kind)
+            cognitive_fabric.require_inference_admission(self, p)
             if self.provider_override is not None and kind == "mock":
                 self._active_secrets = []
                 request = dict(p)
@@ -1112,17 +1131,17 @@ class ProfilePipelineRuntime(clay.Runtime):
                 payload = self.provider_override(request)
                 if not isinstance(payload, dict):
                     raise PipelineFault("INFERENCE_OUTPUT_NOT_OBJECT")
-                return {
+                result = {
                     "ok": True,
                     "payload": payload,
                     "provider_kind": "mock",
                     "model": inference.get("model"),
                 }
-            if kind == "local_exec":
-                return self._inference_local_exec(inference, p)
-            if kind in _ADMITTED_API_INFERENCE_KINDS:
-                return self._inference_api(inference, p)
-            raise PipelineFault("UNKNOWN_INFERENCE_KIND:" + kind)
+            elif kind == "local_exec":
+                result = self._inference_local_exec(inference, p)
+            else:
+                result = self._inference_api(inference, p)
+            return cognitive_fabric.attach_generated(self, p, result)
         except Exception as exc:
             self._active_secrets = []
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
@@ -1137,6 +1156,7 @@ class ProfilePipelineRuntime(clay.Runtime):
         gate = profile.get("gate", {})
 
         try:
+            cognitive_fabric.validate_gate(self, p)
             if gate.get("require_hash_echo", True):
                 if payload.get("canonical_state_hash_seen") != compiled["canonical_state_hash"]:
                     raise PipelineFault("CANONICAL_HASH_MISMATCH")
@@ -1214,6 +1234,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             return {"ok": False, "error_kind": "PipelineFault", "error": "PROFILE_SNAPSHOT_MISSING"}
 
         db = self._db(entity_db)
+        receipt_digest: str | None = None
         try:
             db.execute("BEGIN IMMEDIATE")
             profile_row = db.execute(
@@ -1237,6 +1258,8 @@ class ProfilePipelineRuntime(clay.Runtime):
             ).fetchone()
             if state_row is None or int(state_row[0]) != int(previous["generation"]):
                 raise PipelineFault("STALE_GENERATION")
+
+            receipt_digest = cognitive_fabric.validate_commit(self, p, db)
 
             for item in collected["consume"]:
                 db.execute(
@@ -1297,6 +1320,8 @@ class ProfilePipelineRuntime(clay.Runtime):
             if projection_update.rowcount != 1:
                 raise PipelineFault("CONTINUITY_PROJECTION_MISSING")
             db.commit()
+            if receipt_digest is not None:
+                cognitive_fabric.finalize_admission(self, receipt_digest)
             return {"ok": True, "output_id": output_id, "generation": generation}
         except Exception as exc:
             db.rollback()

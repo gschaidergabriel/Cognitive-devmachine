@@ -1,12 +1,19 @@
 # Vercel Sandbox execution path — CURRENT
 
-Status: **BRIDGE CONFIRMED / SANDBOX ADMISSION PROVEN / RUNTIME GITHUB TOKEN INGRESS IMPLEMENTED / OWNER ONE-SHOT REQUIRED**  
+Status: **BRIDGE CONFIRMED / SANDBOX ADMISSION PROVEN / RUNTIME GITHUB TOKEN INGRESS IMPLEMENTED / PR810 SEMANTIC REBIND + READY PREVIEW + OWNER ONE-SHOT REQUIRED**  
 Current product authority: `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`  
 Canonical product workspace: `main/the artefact/`
 
 ## Authority boundary
 
 This file is an execution-frontier record below the current ClayVerse owner directive and current `the artefact/manifest.json`. If historical text in this file conflicts with those authorities, the ClayVerse directive/manifest wins and this file must be repaired rather than routing product work through a retired runtime.
+
+Machine-readable current semantic fences:
+
+- `NO_SPECIFIC_API_PROVIDER_MANDATORY_UNLESS_EXPLICITLY_ADMITTED`
+- `ENTITYOS_EXECUTION_CONDITIONAL_ON_EXPLICIT_ADMISSION`
+- `PR810_SEMANTIC_REBIND_REQUIRED_BEFORE_CURRENT_RUNTIME_CREDIT`
+- `PR810_READY_PREVIEW_REQUIRED_BEFORE_OWNER_ONE_SHOT`
 
 Current canonical visible runtime is:
 
@@ -33,6 +40,12 @@ Previous retained runs reached `Sandbox.create=PASS_CREATED`, attested the guest
 The bounded controller-v7 run on deployment `dpl_6jeexw8EZa48jApm4NhgfaLMJoM5` observed Sandbox admission plus guest kernel `Linux 6.18.40 x86_64`, then failed closed at `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`, with source/OCI runtime credit still zero and clean Sandbox stop.
 
 These are historical observations only. They do not imply that the token must be configured in Vercel Environment Variables and do not establish current-source or product-runtime PASS.
+
+## Current controller coherence evidence
+
+The retained PR #810 lane is execution infrastructure, not semantic authority. Current live preview/build observations during the 2026-08-23 `go` re-entry failed closed before Sandbox/product execution because the retained source guard and moving controller phases were not one coherent exact-source closure. In particular, the start endpoint, provider/effect phases and phase/source guards were observed bound to different Research/source identities during sequential rebind commits.
+
+This is a controller/source-admission failure, not a ClayVerse semantic test failure. It grants zero source-runtime, OCI-runtime or whole-product credit. The safe repair is not another moving-head chase: freeze the exact accepted current Research identity and admitted retained lanes, then semantically rebind all retained #810 phases and guards together once and require a READY preview of those exact bytes before any owner credential-bearing start.
 
 ## Owner-corrected GitHub read-token ingress
 
@@ -79,10 +92,12 @@ EntityOS execution remains conditional. If the accepted profile keeps `CLAYVERSE
 
 ## Next accepted execution sequence
 
-At the next real owner-started one-shot run:
+Immediately before the next real owner-started one-shot run:
 
-`refresh exact current Research main + retained admitted controller once`
-`-> rebind retained #810 controller to that exact source identity`
+`refresh exact current Research main + current owner directive + manifest + active retained lanes`
+`-> freeze the exact accepted source/contract identity`
+`-> semantically rebind all retained #810 phases and source/phase guards once to that exact current ClayVerse contract`
+`-> obtain a READY preview for those exact controller bytes`
 `-> owner supplies scoped read-only GITHUB_READ_TOKEN through runtime POST/start panel, not Vercel Environment`
 `-> Sandbox.create`
 `-> attest Firecracker guest identity/kernel`
@@ -119,5 +134,6 @@ At the next real owner-started one-shot run:
 - Successful OCI build alone is not product PASS.
 - A direct provider API call outside the canonical ClayVerse lifecycle is not product PASS.
 - Container liveness alone is not product PASS.
+- Controller source coherence or Vercel READY alone is not product PASS.
 - Source/component regressions and PR merges do not imply exact OCI/runtime acceptance.
 - Whole-product credit requires the integrated exact-digest current ClayVerse path and recovery/causal/security contracts actually to execute.

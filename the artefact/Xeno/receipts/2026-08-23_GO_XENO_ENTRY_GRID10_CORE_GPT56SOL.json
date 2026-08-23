@@ -1,0 +1,107 @@
+{
+  "schema": "XENO_GO_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU_XENO",
+  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "base_main_sha": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "branch": "go/xeno-entry-grid10-core-20260823-2324-sol",
+  "source_candidate_commit_before_receipt": "c295a513e877c23e915788aa3071e7ff75cf325c",
+  "tracks": {
+    "A_XENO_EXECUTABLE_CONVERGENCE": "PASS_SOURCE_COMPONENT_CANDIDATE",
+    "B_XCU_ENTRY_CO_DEVELOPMENT": "PASS_SOURCE_COMPONENT_CANDIDATE"
+  },
+  "delta": [
+    "add stdlib-only XENO_INGRESS_PACKET/v1 admission",
+    "bind producer source + source_event_id into source_event_key",
+    "bind causal_id, generation, provenance, permissions, capability scope, timestamps, resource budget and payload_ref into ingress_id",
+    "reject stale generation, unknown schema keys, malformed types, non-content-addressed payloads and capability escalation",
+    "add reusable GRID10 planner for GRID10/COGSIM10/WM_TEST/NESTED_SIM",
+    "separate logical_cell_count=10 from active_decode_limit",
+    "add candidate-only XENO_COMPUTE_PACKET/v1 interconnect binding source_event_key/ingress/causal/generation/plan identity"
+  ],
+  "exact_blobs": {
+    "the artefact/Xeno/xeno_core_v1.py": {
+      "git_blob": "e48f36b3ec1d4b42c7757faf71e936b25199ecf1",
+      "sha256": "31828c461fcbcd80673ea996375c884d8c4015df51e72b5bee7d4032a38afedd",
+      "bytes": 15574
+    },
+    "the artefact/Xeno/test_xeno_core_v1.py": {
+      "git_blob": "4a6d857604a9ebfe032568f65050b898b52f7384",
+      "sha256": "ab8681c0e6c2092b07894e1cb7940ba9b3e4fea897e84f08943c355c112f2d84",
+      "bytes": 7177
+    }
+  },
+  "isolated_component_evidence": {
+    "environment": "isolated ChatGPT container; not Vercel Sandbox and not product runtime",
+    "commands": [
+      "python3 -S -m py_compile xeno_core_v1.py test_xeno_core_v1.py",
+      "python3 -S -m unittest -v test_xeno_core_v1.py"
+    ],
+    "exit_code": 0,
+    "tests": "19/19 PASS",
+    "py_compile": "PASS",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "hypothesis": "A single deterministic typed ingress identity plus a separate GRID10 control plan can serve multiple Xeno modes while preserving causal/generation/effect authority and without equating logical cells with simultaneous decodes.",
+  "counterhypothesis": "A payload-centric identity and fixed one-cell-per-decode model is simpler and sufficient; extra causal/provenance and logical/physical separation only add bookkeeping.",
+  "cheapest_discriminators": [
+    "same payload under distinct causal/provenance contexts must not alias",
+    "10 logical cells with active_decodes_max=2 must produce logical_cell_count=10 and active_decode_limit=2",
+    "stale generation/capability escalation/malformed resource types must fail closed"
+  ],
+  "unusual_experiment": {
+    "name": "INGRESS_PAYLOAD_ONLY_CAUSAL_ALIAS",
+    "count_for_this_user_go": 1,
+    "setup": "Two events share the exact payload_ref and producer source/source_event_id but differ in causal_id and provenance.",
+    "payload_only_digest_a": "9f447b1b473d359884f2b8541a1ad0b7d194ed59b79e8eee48047ec4830564fd",
+    "payload_only_digest_b": "9f447b1b473d359884f2b8541a1ad0b7d194ed59b79e8eee48047ec4830564fd",
+    "full_ingress_id_a": "sha256:590beeac13c05bb31e3a9692d84a1ee81f7224ff3eb16c0d4d60e1eca21c63af",
+    "full_ingress_id_b": "sha256:0aad3069301bde138ef300588f852f24cb9294c32c9034f46cf7168d0ec64d83",
+    "source_event_key_both": "sha256:ad72b6db4d954de1b8ca90427e7281ab996f41ccc75c5303bdf13bdcc0dcbdaf",
+    "result": "PAYLOAD_ONLY_ALIASES; FULL_CAUSAL_INGRESS_SEPARATES; PRODUCER_EVENT_KEY_REMAINS_STABLE",
+    "classification": "MECHANISM_SUPPORTED_EXACT_SOURCE_COMPONENT"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "CloudEvents specification",
+      "url": "https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md",
+      "relevance": "producer source + event id identity and extensible event context"
+    },
+    {
+      "source": "PagedAttention / vLLM",
+      "url": "https://arxiv.org/abs/2309.06180",
+      "relevance": "dynamic request/KV management supports separating logical request population from physical memory/concurrency"
+    },
+    {
+      "source": "vLLM scheduler documentation",
+      "url": "https://docs.vllm.ai/en/stable/cli/run-batch/",
+      "relevance": "explicit request scheduling and admission limits rather than assuming all requests execute concurrently"
+    }
+  ],
+  "fusion": "RETAIN_AND_PROMOTE_TO_BRANCH_CANDIDATE",
+  "cross_mode_reuse": ["XENO_GRID10", "XENO_COGSIM10", "XENO_WM_TEST", "XENO_NESTED_SIM"],
+  "authority_boundary": {
+    "canonical_truth": "UNCHANGED_OUTSIDE_THIS_COMPONENT",
+    "effect_authority": "EffectGate+EffectJournal unchanged",
+    "compute_packet_authority": "CANDIDATE_ONLY",
+    "second_identity_or_truth_store": false
+  },
+  "known_limits": [
+    "no UnifiedDB persistence adapter wired yet",
+    "no HCU/shared-weight inference worker wired yet",
+    "no crash/recovery lease implementation yet",
+    "no SCALEOUT planner beyond the admitted 10-cell baseline",
+    "no Vercel Sandbox/product runtime execution available in this session"
+  ],
+  "next_exact_gate": "Wire XENO_INGRESS_PACKET/v1 into the canonical Xeno/MiniUnifiedDB state path with source_event_key replay-conflict detection, then bind GRID10 plans to the retained HCU engine identity and execute exact branch bytes on an authorized Vercel Sandbox when an exec surface is available.",
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_runner_testing": false,
+    "production_host_testing": false,
+    "together_used": false,
+    "paid_execution_or_training": false,
+    "secrets_persisted": false
+  }
+}

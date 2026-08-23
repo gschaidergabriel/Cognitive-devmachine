@@ -8,12 +8,16 @@ from pathlib import Path
 
 SCHEMA = "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1"
 BOUNDARIES = ("tool_less", "ephemeral", "structured_output", "env_isolation")
+# This is the receipt-side mirror of the production Claude child environment in
+# the artefact/clayverse/adapters.py. Route, endpoint, trust-root and executable
+# selection are authority-bearing and therefore must not be self-authorizable by
+# a receipt. PATH/HOME/config/tmp are product-controlled values, while the named
+# auth variables may cross explicitly by value without being persisted in receipts.
 CANONICAL_ENV_ALLOWLIST = frozenset({
-    "PATH", "HOME", "LANG", "LC_ALL", "TMPDIR",
-    "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS",
-    "HTTP_PROXY", "HTTPS_PROXY",
-    "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
+    "PATH", "HOME", "CLAUDE_CONFIG_DIR", "TMPDIR", "LANG", "LC_ALL",
+    "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN",
     "DISABLE_AUTOUPDATER", "CLAUDE_CODE_SKIP_PROMPT_HISTORY",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY", "CLAUDE_CODE_DISABLE_CLAUDE_MDS",
 })
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SHA40 = re.compile(r"^[0-9a-f]{40}$")

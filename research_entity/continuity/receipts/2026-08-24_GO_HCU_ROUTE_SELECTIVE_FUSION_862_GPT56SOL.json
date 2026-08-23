@@ -1,0 +1,56 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_SELECTIVE_FUSION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+  "target_main_before_fusion": "4e6f0564e43b7f604f7546d227b7e59f2a8dc965",
+  "target_main_tree_before_fusion": "2123052a762ab4cc6bb49bdf4a42ce899629ed3e",
+  "retained_donor_pr": 1263,
+  "retained_donor_head": "ad92eede3472aadb7cb42675b8af16da985b8f57",
+  "fusion_branch": "gpt56sol/go-fuse-hcu-route-862-20260824",
+  "fusion_commit": "f04a8d8fe7a88593ee60ce2b901a286498be8283",
+  "fused_files": {
+    "the artefact/MicroEntity/hcu/reactive_event_router_v1.py": "7b317f7c3f53c55fc8beb318b35c315dcc5b0625",
+    "the artefact/MicroEntity/hcu/test_reactive_event_router_v1.py": "946067da1af1791b258e63886cc3225071764d65"
+  },
+  "canonicalization_seam": {
+    "main_entry_canonicalization_blob": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "donor_entry_canonicalization_blob": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "identity": "BYTE_IDENTICAL",
+    "schema": "RFC8785_JCS_IJSON/v1"
+  },
+  "mechanism": "Route identity binds immutable Entry event/admission identity, router policy, routing result, and separately admitted engine identity/class/artifact; event input cannot mint reserved engine-authority fields.",
+  "counterhypothesis": "The retained route may be unsafe to fuse because its identity canonicalization or Entry seam differs from the already admitted main Entry component.",
+  "discriminator": "Compare the exact Git blob used by the route canonicalizer dependency on retained PR1263 with exact current-main Entry canonicalization bytes before fusion.",
+  "result": "COUNTERHYPOTHESIS_REJECTED_AT_SOURCE_SEAM_SCOPE: exact dependency blob is identical; route and regression test were transplanted without restoring PR1263 control-plane authority.",
+  "historical_donor_evidence": "the artefact/MicroEntity/hcu/receipts/2026-08-23_GO_CAUSAL_ROUTE_EXACT_HEAD_REGRESSION_GPT56SOL.json",
+  "unusual_experiment": {
+    "name": "legacy-free-only-alias poison against 8.62 authority guard candidate",
+    "surface": "isolated local tool container",
+    "candidate_validator_git_blob": "1f88b94cc3db9529b6410a9500d93d5ccb463d6d",
+    "candidate_test_git_blob": "3919281babf3dd829ae1c9ec921121e68020673d",
+    "intervention": "Replace current manifest free_only_default + active_supervisor_free_only flags with only legacy free_only=true.",
+    "predicted_fail_closed_error": "MANIFEST_FREE_ONLY_MISSING",
+    "result": "PASS: poison rejected; full synthetic 8.62 guard suite 11/11 PASS on two consecutive executions after fixture repair.",
+    "promotion": "NO_GUARD_SOURCE_PROMOTION: main authority moved during work and the guard/docs remain a separate convergence item."
+  },
+  "track_a": "Observed canonical main already advanced to manifest-bound Entry/JCS component runtime PASS; this branch does not add new runtime credit.",
+  "track_b": "ADVANCED_SOURCE_CANDIDATE: current-main Entry now has a selectively fused causal HCU route source/test candidate on one branch.",
+  "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: route -> verified physical engine load -> inference -> GRID10 -> J-Space/GWT must gain exact free isolated execution before any local ~0.8B readiness promotion.",
+  "execution_credit": {
+    "route_current_main_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_gate": "Run exact fusion-branch route regression on an authorized bounded FREE isolated surface, then extend only through one physical engine-load lease/consumption -> inference receipt -> GRID10 causal closure.",
+  "free_only": true,
+  "together": "FORBIDDEN",
+  "vps_self_hosted_production_testing": "FORBIDDEN"
+}

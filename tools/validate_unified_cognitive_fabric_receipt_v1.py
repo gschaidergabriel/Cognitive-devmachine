@@ -64,6 +64,10 @@ def _count(parent: dict[str, Any], key: str) -> int:
     return value
 
 
+def _is_placeholder_hex(value: str) -> bool:
+    return value == ("0" * len(value)) or value == ("f" * len(value))
+
+
 def _hex(parent: dict[str, Any], key: str, pattern: re.Pattern[str], *, nullable: bool = False) -> str | None:
     value = parent.get(key)
     if value is None and nullable:
@@ -71,6 +75,8 @@ def _hex(parent: dict[str, Any], key: str, pattern: re.Pattern[str], *, nullable
     value = _text(parent, key)
     if pattern.fullmatch(value) is None:
         raise ReceiptError(f"{key}:DIGEST_FORMAT")
+    if _is_placeholder_hex(value):
+        raise ReceiptError(f"{key}:IDENTITY_PLACEHOLDER")
     return value
 
 

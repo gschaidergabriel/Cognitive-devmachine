@@ -281,9 +281,19 @@ PR `#1092` is merged and replaces the former Generation-276 monolithic adapter r
 
 PR `#1099` is also merged and adds the evidence-composition layer that #1092 intentionally did not provide: all four child results must share one exact clean source commit/tree, Claude binary/version, command/input digest and executor identity before aggregate `CLAUDE_ADAPTER_BOUNDARY_ONLY` credit is possible. Exact authored validator/test/contract blobs passed `py_compile` and **15/15** deterministic isolated component regressions. This is measurement-contract mechanism evidence, not a live Claude invocation.
 
-The #1092 PR-head Actions run `32615049819` supplied **zero runtime test credit**: its `identity-guard` job concluded `failure`, but the observed job step list was empty and no job log blob was available. This is execution admission/control-plane failure before visible test execution, not a semantic test failure.
+PR `#1109` preserves measured negative boundary evidence without weakening strict promotion: diagnostic FAIL remains valid evidence with `runtime_credit=ZERO`, while strict validation still requires aggregate PASS.
 
-Current exact gate: run the four merged #1092 nodes on one authorized isolated clean runtime, emit #1099 cross-bound receipts, validate their aggregate identity, then rerun the full suite on the same exact source. Until that happens, historical `1486 green / 1 red` remains historical diagnostic evidence and current Claude-adapter runtime credit remains **ZERO**.
+Parallel hardening subsequently closed two additional false-green classes on current `main`: PR `#1123` requires timezone-aware UTC run timestamps with `finished_at >= started_at`, and PR `#1124` prevents an ENV_ISOLATION receipt from self-authorizing forbidden child environment keys by constraining its declared allowlist to the canonical child-process policy.
+
+This `go` found a remaining atomic-run composition gap: the v1 contract said all four boundaries came from one exact invocation, but the validator did not require an invocation identifier or equal stdout/stderr digests across the four children. The current candidate adds an opaque `invocation_id` to the common identity and requires one identical process-output digest pair across all four receipts while preserving the temporal and environment-policy gates. Exact candidate Git blobs `8d38b4c39d4d6133c2aa9bad36b1908771b5d38c` (validator) and `0e6cf6ada2ba74ba7a52efcc03b68821bf6513b1` (tests) were reconstructed byte-identically in the isolated ChatGPT container; `py_compile` and **24/24** deterministic regressions passed. This remains source/measurement-mechanism evidence only.
+
+The #1092 PR-head Actions run `32615049819` supplied **zero runtime test credit**: its `identity-guard` job concluded `failure`, but the observed job step list was empty and no job log blob was available. This is execution admission/control-plane failure before visible test execution, not a semantic test failure. The same evidence law applies to later hosted identity-guard admission failures before visible steps.
+
+Current exact gate: on the next intentional authorized Ubuntu start, mint one invocation id before Claude starts; bind exact clean source/tree, Claude binary/version, command/input and executor; record a coherent UTC interval; derive all four measured boundaries from that one invocation with the same stdout/stderr digests; run diagnostic validation first, strict validation only on aggregate PASS, then rerun the full exact-source suite. Until that happens, historical `1486 green / 1 red` remains historical diagnostic evidence and current Claude-adapter runtime credit remains **ZERO**.
+
+Durable receipt for this `go`:
+
+`blogpost_entity/receipts/2026-08-23_GO_CLAUDE_ADAPTER_INVOCATION_BINDING_GPT56SOL.json`
 
 ## Evidence law
 

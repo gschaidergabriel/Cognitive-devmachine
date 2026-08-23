@@ -1,17 +1,17 @@
 {
-  "schema_version": "8.7",
+  "schema_version": "8.61",
   "program_id": "entityos-hcu",
   "status": "ACTIVE",
   "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
   "current_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
-  "current_stage_goal": "Converge the strongest existing implementation into EntityOS while co-developing one integrated HCU cognition/compute architecture, typed Entry Fabric, and an instrumented Global J-Space/GWT prototype capable of producing training traces for the owner-authorized one-shot ~0.8B specialization run.",
+  "current_stage_goal": "Converge the strongest existing implementation into EntityOS while co-developing one integrated HCU cognition/compute architecture, typed Entry Fabric, and an instrumented Global J-Space/GWT prototype that can produce exact causal traces for zero-cost local ~0.8B experimentation after executable evidence.",
   "stage_order": [
     "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
     "ENTITYOS_HCU_MULTIMODE_COMPUTE_INTEGRATION",
     "ENTITYOS_HCU_SCALEOUT_AND_NESTED_SIM_ACCEPTANCE",
     "ENTITYOS_EXACT_RUNTIME_ACCEPTANCE"
   ],
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
@@ -37,23 +37,24 @@
     "second_truth_effect_or_recovery_authority": "FORBIDDEN"
   },
   "execution_policy": {
-    "free_only_default": true,
+    "free_only": true,
     "isolated_sandbox_only": true,
     "vps_testing_forbidden": true,
     "self_hosted_vps_test_runners_forbidden": true,
     "production_host_testing_forbidden": true,
     "together_general_inference_and_fallback_forbidden": true,
-    "together_one_shot_08b_jspace_gwt_finetune_authorized": true,
-    "together_one_shot_08b_jspace_gwt_finetune_consumed": false,
-    "together_training_authority_file": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
-    "second_together_training_requires_new_owner_authorization": true,
+    "owner_paid_one_shot_directive_present_as_provenance": true,
+    "owner_paid_one_shot_directive_file": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
+    "owner_paid_one_shot_job_consumed": false,
+    "current_supervisor_together_training_forbidden": true,
+    "paid_or_unknown_provider_admission_boundary": "FAIL_CLOSED_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION",
     "other_paid_fallback": false,
     "secrets_in_source_or_receipts": false
   },
   "go_required_tracks": {
     "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
     "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
-    "track_c": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_ONE_SHOT_08B_TRAINING_READINESS",
+    "track_c": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
     "track_b_no_change": "HCU_NO_CHANGE_WITH_REASON_REQUIRED_IF_NO_SAFE_USEFUL_DELTA",
     "track_c_no_change": "TRAINING_READINESS_NO_CHANGE_WITH_REASON_REQUIRED_IF_NO_SAFE_USEFUL_DELTA"
   },
@@ -81,12 +82,13 @@
   "training_program": {
     "target": "SPECIALIZED_LOCAL_APPROX_08B_HCU_MODEL",
     "purpose": "GLOBAL_JSPACE_GWT_XENO_VECTOR_CONTROL_AND_HCU_PROTOCOL_SPECIALIZATION",
-    "required_precondition": "FUNCTIONAL_INSTRUMENTED_GLOBAL_JSPACE_GWT_PROTOTYPE_WITH_REAL_TRACES",
+    "required_precondition": "ACTUALLY_STARTED_EXACT_SOURCE_FREE_ISOLATED_EXECUTION_THEN_FUNCTIONAL_INSTRUMENTED_GLOBAL_JSPACE_GWT_WITH_REAL_TRACES",
     "vector_control_abi": "JSPACE_VECTOR_CONTROL_ABI/v1_REQUIRED_BEFORE_DATASET_FREEZE",
-    "preferred_first_method": "FULL_SFT_IF_EXACT_BASE_AND_TOGETHER_SUPPORT_AND_PRICE_PREFLIGHT_PASS",
+    "current_method": "ZERO_COST_LOCAL_EXPERIMENTATION_ONLY",
     "dataset_source": "REAL_PROTOTYPE_TRACES_PLUS_DETERMINISTIC_HARD_NEGATIVES_AND_BOUNDED_TRANSFORMS",
-    "one_shot_job_authorized": true,
-    "one_shot_job_consumed": false,
+    "owner_paid_one_shot_directive_status": "QUARANTINED_FOR_CURRENT_FREE_ONLY_SUPERVISOR",
+    "owner_paid_one_shot_job_consumed": false,
+    "paid_preflight_or_job_creation_allowed_now": false,
     "promotion_requires": "MUST_GAIN_JSPACE_GWT_HCU; MUST_RETAIN_PROTOCOL_LANGUAGE_LOGIC_SAFETY; CAUSAL_LESION_RESCUE_AND_FAIL_CLOSED_TESTS_PASS",
     "completed_training_alone_is_pass": false
   },
@@ -99,16 +101,19 @@
     "HCU cells are request-scoped logical function slots rather than persistent mini-agents.",
     "Permanent duplicate reality is not required; WM_TEST and selective NESTED_SIM remain bounded experimental modes.",
     "Global J-Space remains an empirically instrumented coupling hypothesis; model-specific causal evidence is required.",
-    "The Global J-Space/GWT prototype must produce exact observable training traces before the one-shot fine-tune is launched.",
-    "The ~0.8B training target is deliberate specialization; unrelated capabilities may degrade but required protocol/language/logic/safety floors remain mandatory.",
+    "The Global J-Space/GWT prototype must produce exact observable traces before any training promotion.",
+    "Current autonomous execution is FREE_ONLY; paid, subscription and unknown provider lanes fail closed before credential/key lookup and network I/O.",
+    "The repository owner paid one-shot directive has zero execution/training credit in this supervisor mode and cannot trigger Together preflight or job creation.",
     "Hyperposition preserves unresolved alternatives; majority vote cannot mint truth.",
     "Logical module count cannot be reported as simultaneous model/decode count.",
     "Real effects remain deterministic, journaled and gated."
   ],
-  "current_frontier": "Converge one canonical Typed Entry causal identity -> HCU route -> loader-bound inference receipt path; obtain exact authorized isolated execution; build and instrument the first functional Global J-Space/GWT prototype and JSPACE_VECTOR_CONTROL_ABI/v1 so real traces can be compiled into the owner-authorized one-shot ~0.8B Together full-fine-tuning dataset.",
-  "go_contract": "Every go refreshes current main/newest owner authority, advances the highest-information nonduplicate EntityOS blocker, HCU/Entry co-development, and Global-J-Space/GWT training readiness; executes when an authorized sandbox surface exists; preserves canonical-state/provenance/generation/effect fences; and records bounded evidence without inflating source evidence or a completed training job into runtime PASS.",
+  "current_frontier": "Obtain an actually-started exact-source authorized FREE isolated EntityOS/HCU run over the retained current Research main + PR1263 spine; then bind a real local ~0.8B loader and instrument Global J-Space/GWT/JSPACE_VECTOR_CONTROL_ABI/v1 with real traces using zero-cost local execution. Do not preflight or launch the paid Together lane in current FREE_ONLY supervisor mode.",
+  "go_contract": "Every go refreshes current main/newest owner and supervisor authority, advances the highest-information nonduplicate EntityOS blocker, HCU/Entry co-development and Global-J-Space/GWT free-only readiness; executes only on authorized isolated FREE surfaces; preserves canonical-state/provenance/generation/effect fences; and records bounded evidence without inflating source evidence into runtime PASS.",
   "runtime_credit": {
     "entityos_hcu_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
     "whole_product_pass": false
   },
   "legacy_scope": "Xeno/XCU are transitional compatibility/research aliases only. Mini Entity/MicroEntity, ClayVerse and Frank remain historical implementation or donor provenance unless explicitly re-admitted."

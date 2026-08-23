@@ -242,14 +242,20 @@ def _global_vector(validated: Sequence[CellContribution], dim: int) -> tuple[flo
     )
 
 
-def step(
+def _step_impl(
     contributions: Sequence[CellContribution],
     *,
     generation: int,
     basis_id: str,
     basis_sha256: str,
-    control_condition: str = "BASELINE",
+    control_condition: str,
 ) -> JSpaceStep:
+    """Single producer implementation used by baseline and explicit interventions.
+
+    Non-baseline labels may enter here only from an intervention constructor that performs
+    the corresponding perturbation before calling this helper. The public ``step`` API below
+    is intentionally baseline-only so a caller cannot mint causal-control labels by string.
+    """
     generation = _generation(generation)
     basis_id = _text(basis_id, "basis_id")
     basis_sha256 = _sha256(basis_sha256, "basis_sha256")
@@ -348,6 +354,31 @@ def step(
     )
 
 
+def step(
+    contributions: Sequence[CellContribution],
+    *,
+    generation: int,
+    basis_id: str,
+    basis_sha256: str,
+    control_condition: str = "BASELINE",
+) -> JSpaceStep:
+    """Produce the ordinary baseline J-Space step.
+
+    Causal controls are interventions, not labels. Public baseline callers therefore cannot
+    request a non-baseline label. Each admitted control condition needs a dedicated producer
+    that performs the actual transformation before entering ``_step_impl``.
+    """
+    if control_condition != "BASELINE":
+        raise JSpaceError("NONBASELINE_CONTROL_REQUIRES_EXPLICIT_INTERVENTION")
+    return _step_impl(
+        contributions,
+        generation=generation,
+        basis_id=basis_id,
+        basis_sha256=basis_sha256,
+        control_condition="BASELINE",
+    )
+
+
 def lesion(
     contributions: Sequence[CellContribution],
     *,
@@ -361,7 +392,7 @@ def lesion(
         raise JSpaceError("LESION_CELL_UNKNOWN")
     if not remaining:
         raise JSpaceError("LESION_REMOVED_ALL_CELLS")
-    return step(
+    return _step_impl(
         remaining,
         generation=generation,
         basis_id=basis_id,

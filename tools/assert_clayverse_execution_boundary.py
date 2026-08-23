@@ -12,7 +12,10 @@ BOOTSTRAP = "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
 PROGRAM = "research_entity/rooms/PROGRAM_STATE.json"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
+VERCEL_EXECUTION_PATH = "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md"
 EXPECTED_SURFACE = "AUTHORIZED_ISOLATED_SANDBOX_ONLY"
+EXPECTED_EXECUTION_GATE = "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
+EXPECTED_VERCEL_BRIDGE = "SANDBOX_ADMISSION_PROVEN_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED"
 
 
 def load_json(path: Path):
@@ -23,6 +26,45 @@ def load_json(path: Path):
 def require(errors: list[str], condition: bool, code: str) -> None:
     if not condition:
         errors.append(code)
+
+
+def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]:
+    """Cross-bind retained Vercel continuity and current work-selection in both directions.
+
+    Positive bridge evidence constrains PROGRAM_STATE. Conversely, if PROGRAM_STATE claims
+    this bridge/frontier, loss or degradation of required continuity evidence must fail closed.
+    This never grants source, OCI, or product runtime credit.
+    """
+    errors: list[str] = []
+    lower = vercel_execution.lower()
+    bridge_proven = (
+        "sandbox.create is not the blocker" in lower
+        and "runtime one-shot ingress" in lower
+        and "github_read_token" in lower
+    )
+    stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
+    execution = program.get("execution_policy") or {}
+    frontier = str(program.get("current_frontier", ""))
+    credit = program.get("runtime_credit") or {}
+    program_claims_bridge = (
+        stage_gate == EXPECTED_EXECUTION_GATE
+        or execution.get("vercel_sandbox_bridge") == EXPECTED_VERCEL_BRIDGE
+        or execution.get("execution_frontier_binding") == VERCEL_EXECUTION_PATH
+    )
+
+    if program_claims_bridge and not bridge_proven:
+        errors.append("VERCEL_EXECUTION_BRIDGE_EVIDENCE_MISSING_OR_DEGRADED")
+        require(errors, credit.get("whole_clayverse") == 0, "PROGRAM_VERCEL_BRIDGE_FALSE_RUNTIME_CREDIT")
+        return errors
+    if not bridge_proven:
+        return errors
+
+    require(errors, stage_gate == EXPECTED_EXECUTION_GATE, "PROGRAM_EXECUTION_FRONTIER_STALE_GENERIC_SURFACE_BLOCK")
+    require(errors, execution.get("vercel_sandbox_bridge") == EXPECTED_VERCEL_BRIDGE, "PROGRAM_VERCEL_BRIDGE_STATE_MISSING")
+    require(errors, execution.get("execution_frontier_binding") == VERCEL_EXECUTION_PATH, "PROGRAM_VERCEL_FRONTIER_BINDING_MISSING")
+    require(errors, "owner-start" in frontier.lower() and "github_read_token" in frontier.lower(), "PROGRAM_CURRENT_FRONTIER_TOKEN_INGRESS_MISSING")
+    require(errors, credit.get("whole_clayverse") == 0, "PROGRAM_VERCEL_BRIDGE_FALSE_RUNTIME_CREDIT")
+    return errors
 
 
 def validate(root: Path) -> dict:
@@ -81,6 +123,21 @@ def validate(root: Path) -> dict:
     require(errors, execution.get("self_hosted_vps_test_runners_forbidden") is True, "PROGRAM_SELF_HOSTED_BAN_MISSING")
     require(errors, execution.get("production_host_testing_forbidden") is True, "PROGRAM_PRODUCTION_BAN_MISSING")
     require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(execution, sort_keys=True), "PROGRAM_STALE_VPS_DIRECTIVE_POINTER")
+
+    # The retained Vercel bridge is itself an authorized isolated sandbox path. If its
+    # continuity record is present, positive evidence must agree with PROGRAM_STATE; if
+    # PROGRAM_STATE selects it, the continuity record must exist and remain positive.
+    vercel_path = root / VERCEL_EXECUTION_PATH
+    stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
+    program_claims_vercel = (
+        stage_gate == EXPECTED_EXECUTION_GATE
+        or execution.get("vercel_sandbox_bridge") == EXPECTED_VERCEL_BRIDGE
+        or execution.get("execution_frontier_binding") == VERCEL_EXECUTION_PATH
+    )
+    if vercel_path.is_file():
+        errors.extend(execution_frontier_errors(program, vercel_path.read_text(encoding="utf-8")))
+    elif program_claims_vercel:
+        errors.append(f"MISSING:vercel_execution:{VERCEL_EXECUTION_PATH}")
 
     hard = control.get("preserved_hard_rules") or {}
     require(errors, hard.get("vps_testing") is False, "CONTROL44_VPS_BAN_WEAKENED")

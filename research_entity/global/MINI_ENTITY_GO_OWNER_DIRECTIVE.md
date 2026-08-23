@@ -30,6 +30,43 @@ Primary architecture source remains:
 Supporting architecture:
 `research_entity/global/ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md`
 
+## Parallel Hyperposition Computational Unit workstream
+
+Owner direction 2026-08-23 additionally makes the **Hyperposition Computational Unit (HCU)** a first-class parallel `go` workstream inside Mini Entity.
+
+Reference deployment target supplied by the owner:
+
+- KVM 4;
+- 4 CPU cores;
+- 16 GB RAM;
+- 200 GB disk;
+- 16 TB bandwidth.
+
+The HCU goal is a resource-adaptive grid of as many useful logical approximately-0.8B cognition modules as measured host limits permit, coordinated like one modular compute fabric. It supports persistent world-model maintenance, dynamic goal candidates, long counterfactual simulation, Zero behavioral modeling, improvement hypotheses and FREE_ONLY external LLM feeding.
+
+The implementation SHOULD prefer a small resident ~0.8B worker pool with many time-sliced logical module contexts/roles instead of duplicating full model weights for every module.
+
+Authority remains unchanged:
+
+`HCU != SECOND_ENTITY`
+
+`HCU != SECOND_DURABLE_TRUTH_AUTHORITY`
+
+`HCU_MODULE_OUTPUT = CANDIDATE`
+
+`MINIUNIFIEDDB = CANONICAL_DURABLE_AUTHORITY`
+
+`EFFECTGATE = ONLY_REAL_EFFECT_AUTHORITY`
+
+`FREE_LLM_FEED = CANDIDATE_EVIDENCE_ONLY`
+
+Every exact `go` must consider a useful non-duplicate HCU delta alongside the wider Mini Entity frontier. HCU work must not create a competing state/effect/identity path or permanently starve the rest of Mini Entity.
+
+All HCU source/config/contracts/receipts and non-secret generated release artefacts belong under `the artefact/MicroEntity/hcu/` and must be synchronized into `the artefact/MicroEntity/MICROENTITY_CURRENT.zip`. Operational state remains canonical in MiniUnifiedDB; secrets and credential-bearing files are never archived.
+
+Canonical package architecture:
+`the artefact/MicroEntity/hcu/HCU_ARCHITECTURE.md`
+
 ## Exact `go` law
 
 Every exact user `go` means:

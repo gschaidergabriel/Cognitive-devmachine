@@ -1,5 +1,5 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "package": "MicroEntity",
   "root": "the artefact/MicroEntity",
   "snapshot": "MICROENTITY_CURRENT.zip",
@@ -15,9 +15,17 @@
     "semantic_field_math": "hcu/HYPERPOSITIONAL_SEMANTIC_FIELD_MATH.md",
     "cognitive_independence": "hcu/COGNITIVE_INDEPENDENCE_POLICY.json",
     "zero_projection": "hcu/ZERO_CLAYCODE_PROJECTION_CONTRACT.json",
-    "entry_canonicalization": "hcu/typed_entry_canonical_v1.py",
+    "entry_canonicalization_contract": "hcu/ENTRY_CANONICALIZATION_CONTRACT.json",
+    "entry_canonicalization_selected_target": "hcu/entry_canonicalization_v1.py",
+    "entry_canonicalization_selected_schema": "RFC8785_JCS_IJSON/v1",
+    "entry_canonicalization_status": "SELECTED_SOURCE_CANDIDATE_NOT_YET_WIRED_OR_ADMITTED",
+    "entry_canonicalization_research_alternatives": [
+      "hcu/typed_entry_canonical_v1.py",
+      "hcu/hcu_causal_canonical_v1.py"
+    ],
     "entry_fabric": "hcu/xeno_entry_fabric_v1.py",
     "reactive_router": "hcu/reactive_event_router_v1.py",
+    "inference_receipt": "hcu/inference_receipt_v1.py",
     "grid10_scheduler": "hcu/grid10_scheduler_v1.py",
     "reference_topology": "hcu/topology.kvm4.json",
     "free_llm_feed": "hcu/FREE_LLM_FEED_CONTRACT.json",
@@ -36,12 +44,17 @@
     "hcu/HYPERPOSITIONAL_SEMANTIC_FIELD_MATH.md",
     "hcu/COGNITIVE_INDEPENDENCE_POLICY.json",
     "hcu/ZERO_CLAYCODE_PROJECTION_CONTRACT.json",
+    "hcu/ENTRY_CANONICALIZATION_CONTRACT.json",
+    "hcu/entry_canonicalization_v1.py",
+    "hcu/test_entry_canonicalization_v1.py",
     "hcu/typed_entry_canonical_v1.py",
     "hcu/xeno_entry_fabric_v1.py",
     "hcu/test_xeno_entry_fabric_v1.py",
     "hcu/test_typed_entry_canonical_v1.py",
     "hcu/reactive_event_router_v1.py",
     "hcu/test_reactive_event_router_v1.py",
+    "hcu/inference_receipt_v1.py",
+    "hcu/test_inference_receipt_v1.py",
     "hcu/grid10_scheduler_v1.py",
     "hcu/test_grid10_scheduler_v1.py",
     "hcu/topology.kvm4.json",
@@ -54,12 +67,12 @@
     "hcu/receipts/2026-08-23_GO_HCU_GRID10_LOGICAL_PHYSICAL_SEPARATION_GPT56SOL.json"
   ],
   "generated_hcu_data_policy": "include non-secret release artefacts/receipts and privacy-filtered exports; operational state remains canonical in MiniUnifiedDB",
-  "entry_fabric_policy": "TYPED_FAIL_CLOSED_INGRESS_SEPARATES_REPLAY_STABLE_CAUSAL_EVENT_IDENTITY_FROM_TRANSPORT_ADMISSION_AND_USES_ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET_V1",
+  "entry_fabric_policy": "TYPED_FAIL_CLOSED_INGRESS_SEPARATES_REPLAY_STABLE_CAUSAL_EVENT_IDENTITY_FROM_TRANSPORT_ADMISSION; RFC8785_JCS_IJSON_V1_IS_SELECTED_END_TO_END_TARGET_BUT_NOT_YET_WIRED_OR_RUNTIME_ADMITTED; LEGACY_PYTHON_JSON_CBOR_AND_CUSTOM_TYPED_HASHES_KEEP_ONLY_ORIGINAL_VERSIONED_SCOPE",
   "grid10_policy": "LOGICAL_CELL_POPULATION_MODEL_CALL_BUDGET_AND_PHYSICAL_DECODE_CONCURRENCY_ARE_SEPARATE_AND_CAPACITY_RECEIPT_BOUND",
   "internal_cognition_policy": "SCRIPT_FIRST_LOCAL_08B_GLOBAL_JSPACE_NO_REQUIRED_NVIDIA_MISTRAL_OR_EXTERNAL_EMBEDDING_DEPENDENCY",
   "zero_cognitive_load_policy": "BOUNDED_HIGH_SPECIFICITY_CLAYCODE_PROJECTION_DEFAULT",
   "capacity_claim_policy": "planning targets remain non-runtime; numeric runtime capacity requires exact authorized-isolated measurement receipt",
   "secrets_in_archive": false,
   "source_base_head": "ef46979f7d8e2ed1153dfd4e49fb4c7886b765f4",
-  "claim_class": "SOURCE_PACKAGE_REACTIVE_WORLDMODEL_TYPED_ENTRY_CAUSAL_CANONICALIZATION_PLUS_GRID10_SCHEDULER_COMPONENT_EVIDENCE_NOT_HCU_RUNTIME_ACCEPTANCE"
+  "claim_class": "SOURCE_PACKAGE_REACTIVE_WORLDMODEL_TYPED_ENTRY_CANONICALIZATION_CONVERGENCE_PLUS_GRID10_SCHEDULER_COMPONENT_EVIDENCE_NOT_HCU_RUNTIME_ACCEPTANCE"
 }

@@ -10,17 +10,24 @@ The canonical `UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1` proves only that one
 
 This contract closes that causal-identity gap without creating a second truth, state, effect, J-Space or receipt authority.
 
-Canonical path target:
+Canonical causal path target:
 
 ```text
 MiniUnifiedDB generation/profile snapshot
   -> pipeline_compile canonical_state_hash + packet_hash
-  -> MINI_ENTITY_INFERENCE_PACKET/v1
-  -> existing UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1
-  -> candidate result digest
+  -> immutable MINI_ENTITY_INFERENCE_PACKET/v1
+  -> Unified Cognitive Fabric execution context
+  -> inference_generate -> candidate result digest
   -> deterministic pipeline_gate
-  -> same atomic MiniUnifiedDB generation CAS / pipeline_commit
+  -> atomic MiniUnifiedDB generation CAS / pipeline_commit
+  -> final UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1
+  -> post-turn MINI_ENTITY_PIPELINE_UCF_TURN_BINDING/v1 validation/persistence
 ```
+
+The final UCF runtime receipt contains outcome fields such as `canonical_write_committed`.
+Therefore the final receipt and this turn-binding validator are **post-turn evidence**, not a
+pre-commit authority. The pre-inference causal anchor is the immutable inference-packet digest;
+the deterministic gate and MiniUnifiedDB CAS remain the only commit authorities.
 
 ## Non-duplication law
 
@@ -64,4 +71,4 @@ A rejected or blocked candidate must not increment generation or leave commit id
 
 Current `main@efec8ecff35c28cea6f7445a87aa65ddcc339cab` still has `BLOGPOST_ENTITY.clay` routing directly from `pipeline_build_prompt` to `inference_generate`, and the Python reference runtime still exposes the legacy effect surface. Therefore this contract is intentionally **ahead of runtime implementation** and mints zero runtime credit.
 
-The next implementation gate is to emit this binding from the canonical `.clay`/EntityOS path and enforce it before `pipeline_commit`, while preserving the already-current profile/generation/snapshot/hash authority guards.
+The next implementation gate is to route the immutable inference packet through the canonical Unified Cognitive Fabric before `inference_generate`, carry its digest unchanged through gate/CAS, and emit the final UCF receipt plus this post-turn binding after the commit outcome is known. The existing deterministic gate, MiniUnifiedDB generation CAS, and profile/generation/snapshot/hash authority guards remain unchanged.

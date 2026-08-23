@@ -1,0 +1,75 @@
+{
+  "schema": "ENTITYOS_HCU_CAUSAL_ROUTE_IDENTITY_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority": {
+    "persistent_research_entity": "Clay",
+    "product_system": "EntityOS",
+    "integrated_cognition_compute_architecture": "HCU",
+    "xeno_xcu": "TRANSITIONAL_OR_DONOR_PROVENANCE_ONLY",
+    "clayverse_mini_entity_frank": "HISTORICAL_OR_DONOR_PROVENANCE_ONLY"
+  },
+  "bound_main": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "source_candidate_branch": "gpt56sol/go-entityos-hcu-causal-route-identity-20260823-2324",
+  "donor": {
+    "pr": 1263,
+    "head": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "router_blob": "7c0fee26fd3d8a48b99da7eca7f3bca8fea046ae",
+    "classification": "MECHANISM_DONOR_NOT_CURRENT_PRODUCT_AUTHORITY"
+  },
+  "observed_source_defects": [
+    "donor route decision digest binds derived routing result and generation but not immutable causal event identity",
+    "distinct causal events choosing the same lanes/projection can alias to the same route decision digest",
+    "donor internal-provider authority is a finite denylist, so unknown provider labels can pass the negative test",
+    "material unknown event fields can be omitted from routing identity unless the schema rejects them"
+  ],
+  "hypothesis": "One route identity chain H(normalized causal event) -> positive local engine admission -> H(event_digest + engine_identity + routing_result) prevents event/engine aliasing without creating another authority path.",
+  "counterhypotheses": [
+    "generation plus routing result is sufficient because downstream semantics do not require exact causal-event replay identity",
+    "a finite external-provider denylist is sufficient because all relevant providers are already enumerated",
+    "hashing the raw event would be safer than a typed normalized event contract"
+  ],
+  "discriminators": [
+    "two materially distinct event ids with identical routing outputs must produce distinct event and decision digests",
+    "same exact event replay with same admitted engine must reproduce identical digests",
+    "model activation with missing or non-local engine class must fail closed",
+    "unknown event fields must fail rather than silently disappear from identity"
+  ],
+  "source_delta": {
+    "router": "the artefact/EntityOS/hcu/reactive_event_router_v1.py",
+    "router_blob": "c6818d617961fe0cb054caeee8e62c9b1c982096",
+    "tests": "the artefact/EntityOS/hcu/test_reactive_event_router_v1.py",
+    "tests_blob": "56bc8f0ba666b136f22376492f42d0160f9b94c8",
+    "current_facing_readme": "the artefact/EntityOS/README.md",
+    "canonicalization_marker": "PYTHON_JSON_SORT_KEYS_V1",
+    "rfc8785_jcs_claim": false,
+    "route_identity_formula": "SHA256({schema,canonicalization,event_sha256,engine,routing})",
+    "positive_model_engine_class": "LOCAL_HCU_MODEL"
+  },
+  "unusual_experiment": {
+    "name": "CAUSAL_EVENT_ALIAS_COLLISION_PAIR",
+    "global_count_for_this_go": 1,
+    "definition": "Two causal events differ only in event_id while crossing identical thresholds and selecting the same lanes/projection; the repaired route must preserve identical routing behavior but produce distinct event_sha256 and decision_sha256.",
+    "execution_status": "DESIGNED_NOT_YET_EXECUTED_ON_AUTHORIZED_ISOLATED_RUNTIME",
+    "runtime_credit": 0
+  },
+  "evidence_boundary": {
+    "source_bytes_refetched_after_write": true,
+    "authorized_isolated_runtime_executed": false,
+    "entityos_hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "execution_surface_observation": {
+    "vercel_connector": "INSPECTION_DEPLOYMENT_LOG_SURFACE_PRESENT_NO_SANDBOX_CREATE_START_EXEC_ACTION_EXPOSED",
+    "vps_self_hosted_production_fallback": "FORBIDDEN_NOT_USED",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_or_model_training": "NOT_USED_OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "next_exact_gate": [
+    "run the focused EntityOS/HCU router regressions on an actually-started authorized isolated executor bound to exact branch bytes",
+    "confirm CAUSAL_EVENT_ALIAS_COLLISION_PAIR and replay determinism",
+    "bind the same event_sha256 and engine identity into the downstream HCU inference receipt",
+    "only then consider fusion into current main; no HCU runtime or whole EntityOS credit before exact execution"
+  ]
+}

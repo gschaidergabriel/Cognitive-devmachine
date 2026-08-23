@@ -1,6 +1,6 @@
 {
-  "schema_version": "8.59",
-  "latest_cycle": "go-20260823-entityos-hcu-jcs-loader-bound-frontier",
+  "schema_version": "8.60",
+  "latest_cycle": "go-20260824-entityos-hcu-executable-frontier",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
@@ -9,83 +9,94 @@
   "authority": {
     "entityos": "SOLE_CURRENT_PRODUCT_SYSTEM_IDENTITY",
     "hcu": "SOLE_CURRENT_INTEGRATED_COGNITION_COMPUTE_ARCHITECTURE",
-    "xeno_xcu_microentity_clayverse_frank": "HISTORICAL_TRANSITIONAL_OR_DONOR_PROVENANCE_ONLY"
+    "xeno_xcu_microentity_clayverse_frank": "HISTORICAL_TRANSITIONAL_OR_DONOR_PROVENANCE_ONLY",
+    "sandbox_pass_seeking_directive": "CURRENT_OWNER_REQUIRED"
   },
-  "latest_repo_head_inspected": "5911c9218bc2566c39d8f2d49ce80cb7e570017a",
-  "material_finding": "CANONICALIZATION_SELECTION_IS_CLOSED_AT_CURRENT_MAIN_AUTHORITY_SCOPE: append-only correction 847cce80b5c52f7d9ceb47c43acc3c184ad2c87d establishes RFC8785_JCS_IJSON/v1 as the selected Entry+HCU target and supersedes the stale typed-v1 coordination selection. Retained PR1263 remains the single draft donor lane and is still mixed-schema, so zero runtime credit transfers. GRID10 plan identity is also part of the same migration envelope because plan_sha256 is currently causal execution-plan identity. Independently, current main now requires EngineAdmission to be bound to loader-consumed checkpoint/tokenizer/runtime bytes through a generation-fenced physical engine lease or enforced content-addressed/read-only load boundary; pre-load hashing alone grants zero HCU runtime credit. Vercel execution remains blocked before Sandbox.create because the retained controller is stale-source-bound and still ClayVerse-semantic.",
+  "latest_repo_head_inspected_before_write": "35c97f311a8aec009535613ac9f5c8813f679928",
+  "material_finding": "The selected RFC8785_JCS_IJSON/v1 path has advanced materially on the single retained PR1263 donor lane: Entry emits new v2 JCS event/admission identities, Router v4 requires a typed JCS admission binding, EngineAdmission uses versioned JCS receipt identities, and inference has advanced to HCU_INFERENCE_RECEIPT/v2 using the selected JCS canonicalizer plus the shared typed Entry-binding resolver. A physical engine-load lease source candidate now binds loader-consumed component identities and generation, but real loader consumption remains unobserved. The highest-information blocker is therefore exact combined execution and loader evidence, not further canonicalizer selection. Execution-surface discovery required by owner directive was performed: the current Vercel connector exposes deployment/project/build-log/runtime-log/protected-fetch operations but no direct Sandbox.create/runCommand/REST-cmd action; the retained Dr.-Unterweger#810 deployment is READY and its /api/go-cycle-v2 serverless function has a real 405 GET runtime log, but no POST is observed and no owner-held transient GITHUB_READ_TOKEN is available on this worker surface. GitHub Actions rerun is callable, but rerunning the existing HCU identity-guard job again failed before step execution with steps=[] and no log blob. The isolated local tool container is callable but network-closed and cannot resolve github.com, so it cannot self-fetch the private exact source without an inadmissible secret bridge.",
   "source_candidate": {
     "retained_pr": 1263,
-    "observed_head": "b02059a74a37bb2bf65b2c8ff1c3e220b804d74a",
+    "observed_head": "bfca7da1133d0ad8b84d8685312d730d1ce93210",
     "merge_state": "DRAFT_DONOR_LANE_NOT_CANONICAL_PRODUCT_HEAD",
     "promotion_credit": 0,
-    "router_file": "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
-    "entry_file": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
-    "policy_file": "the artefact/MicroEntity/hcu/COGNITIVE_INDEPENDENCE_POLICY.json",
-    "engine_admission_file": "the artefact/MicroEntity/hcu/engine_admission_v1.py",
-    "inference_receipt_candidate": "the artefact/MicroEntity/hcu/inference_receipt_v1.py",
-    "grid10_scheduler": "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py",
-    "current_mechanisms": [
-      "TYPED_ENTRY_EVENT_IDENTITY_SEPARATE_FROM_CONCRETE_ADMISSION_IDENTITY",
-      "EXTERNALLY_AUTHORIZED_ENTRY_CAPABILITY_NARROWING_WITH_SELF_GRANT_REJECTION",
-      "INDEPENDENT_ENTRY_ADMISSION_TO_EVENT_REBIND_BEFORE_HCU_ROUTING",
-      "SEPARATE_ENTITYOS_HCU_CONTROL_PLANE_ENGINE_ADMISSION",
-      "EVENT_ENGINE_AUTHORITY_FIELDS_RESERVED_AND_FAIL_CLOSED",
-      "POSITIVE_INTERNAL_ENGINE_IDENTITY_CLASS_AND_EXACT_ARTIFACT_REGISTRY",
-      "ENGINE_ARTIFACT_TREE_MEMBERSHIP_RECHECK_DURING_PRELOAD_HASH",
-      "REQUESTED_PROVIDER_MUST_MATCH_ENGINE_ADMISSION_WHEN_PRESENT",
-      "MODEL_ROUTE_REQUIRES_ENGINE_ADMISSION_AND_SCRIPT_ONLY_ROUTE_REJECTS_IT",
-      "ROUTE_IDENTITY_BINDS_CAUSAL_EVENT_ROUTER_POLICY_ADMITTED_ENGINE_AND_ROUTING_RESULT",
-      "INFERENCE_RECEIPT_ECHO_BINDS_CONCRETE_ENTRY_ADMISSION_EVENT_ROUTE_ENGINE_ARTIFACT_AND_SERIALIZER",
-      "GRID10_PLAN_IDENTITY_IS_PART_OF_THE_CAUSAL_EXECUTION_PATH"
-    ],
-    "remaining_source_semantic_gap": "ONE_COORDINATED_VERSIONED_RFC8785_MIGRATION_ACROSS_ENTRY_EVENT_ADMISSION_ROUTER_POLICY_ENGINE_ROUTE_GRIDPLAN_AND_INFERENCE_RECEIPT"
-  },
-  "typed_entry_capability_repair": {
-    "mechanism": "RETAINED_SOURCE_REQUIRES_EXTERNAL_CAPABILITY_BINDING_AND_ADMITTED_CAPABILITY_SET",
-    "earlier_exact_component_execution": "15_OF_15_PASS_AT_EARLIER_EXACT_BLOB_SCOPE_AS_RECORDED_ON_MAIN",
-    "current_combined_head_credit": "UNPROVEN_UNTIL_EXACT_CURRENT_HEAD_EXECUTION"
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "entry_identity": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2_PLUS_ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2",
+    "router_identity": "HCU_CAUSAL_ROUTE_IDENTITY/v4",
+    "entry_binding": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2",
+    "engine_admission": "VERSIONED_JCS_CONTROL_PLANE_RECEIPT_PATH",
+    "inference_receipt": "HCU_INFERENCE_RECEIPT/v2_JCS_TYPED_BINDING_RESOLVER",
+    "physical_engine_lease": "SOURCE_CANDIDATE_LOADER_CONSUMED_BYTE_AND_GENERATION_BINDING",
+    "grid10": "DETERMINISTIC_BASELINE_REQUIRES_CURRENT_COMBINED_REGRESSION",
+    "remaining_source_semantic_gap": "FUSE_CURRENT_ENGINE_LOAD_LEASE_AND_GRID10_IDENTITIES_INTO_ONE_TESTED_ENTRY_TO_INFERENCE_CHAIN_WITHOUT_REINTERPRETING_HISTORICAL_HASHES"
   },
   "canonicalization_frontier": {
     "selected_current_authority": "RFC8785_JCS_IJSON/v1",
     "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
     "authority_correction_commit": "847cce80b5c52f7d9ceb47c43acc3c184ad2c87d",
-    "selection_status": "SELECTED_CURRENT_MAIN_AUTHORITY_WIRING_PENDING",
-    "bounded_component_evidence": "FINITE_BINARY64_V8_DIFFERENTIAL_50014_CASES_ZERO_MISMATCHES_PLUS_BINARY64_CONSISTENT_PYTHON_INTEGER_REPAIR_ON_RETAINED_LANE",
-    "alternative_typed_canonical": "RESEARCH_PROVENANCE_ONLY_NOT_CURRENT_AUTHORITY",
-    "legacy_cbor": "CURRENT_SOURCE_DEPENDENCY_PENDING_VERSIONED_MIGRATION",
-    "legacy_python_json": "IMPLEMENTATION_SCOPED_IDENTITY_PENDING_VERSIONED_MIGRATION",
-    "promotion_credit": 0,
-    "required": "NEW_VERSIONED_IDENTITIES_USE_ONE_RFC8785_AUTHORITY_END_TO_END; MIXED_UNKNOWN_OR_DOWNGRADE_REPLAY_FAILS_CLOSED; HISTORICAL_HASHES_KEEP_ORIGINAL_SCOPE"
+    "selection_status": "SELECTED_AND_WIRED_ACROSS_ENTRY_ROUTER_ENGINE_AND_INFERENCE_SOURCE_CANDIDATES_AT_OBSERVED_DONOR_SCOPE",
+    "bounded_component_evidence": "EXACT_SELECTED_JCS_COMPONENT_REPLICATION_RECORDED_ON_MAIN_PLUS_V8_DIFFERENTIAL_REPLICATION; ZERO_WHOLE_RUNTIME_CREDIT",
+    "legacy_identity_law": "HISTORICAL_CBOR_TYPED_CANONICAL_AND_HOST_PYTHON_HASHES_KEEP_ORIGINAL_VERSIONED_SCOPE_ONLY",
+    "next": "EXACT_COMBINED_CURRENT_HEAD_EXECUTION_AND_GRID10_DOWNGRADE_REJECTION"
   },
   "engine_runtime_frontier": {
     "preload_hashing": "NECESSARY_BUT_NOT_LOADER_ATTESTATION",
-    "artifact_tree_membership_race_repair": "COMPONENT_MECHANISM_SUPPORTED_ON_RETAINED_PR1263_ZERO_RUNTIME_CREDIT",
-    "runtime_credit_requirement": "GENERATION_FENCED_PHYSICAL_ENGINE_LEASE_OR_ENFORCED_CONTENT_ADDRESSED_READ_ONLY_LOAD_BOUNDARY_PLUS_LOADER_CONSUMED_BYTE_IDENTITY_ECHO",
-    "fail_closed_cases": [
-      "wrong path load",
-      "post-admission mutation",
-      "stale engine lease reuse",
-      "unknown loader-consumed bytes",
-      "artifact membership change during preload hash"
-    ]
+    "physical_lease_candidate": "HCU_PHYSICAL_ENGINE_LOAD_LEASE_SOURCE_PATH_PRESENT_ON_RETAINED_LANE",
+    "runtime_credit_requirement": "REAL_ADMITTED_LOADER_CONSUMPTION_EVIDENCE_BOUND_TO_GENERATION_FENCED_PHYSICAL_ENGINE_LEASE_AND_DOWNSTREAM_INFERENCE_ECHO",
+    "real_loader_consumption_observed": false,
+    "real_local_model_observed": false,
+    "runtime_credit": 0
+  },
+  "execution_discovery": {
+    "owner_directive_commit": "35c97f311a8aec009535613ac9f5c8813f679928",
+    "vercel_platform_capability_known": [
+      "Sandbox.create",
+      "sandbox.runCommand",
+      "CLI sandbox run/exec",
+      "REST /v2/sandboxes/sessions/{sessionId}/cmd",
+      "snapshot/fork/lifecycle"
+    ],
+    "current_vercel_connector_callable": [
+      "project/deployment identity",
+      "build logs",
+      "runtime logs",
+      "protected deployment fetch",
+      "deployment operations"
+    ],
+    "current_vercel_connector_direct_sandbox_action_exposed": false,
+    "vercel_project": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "vercel_team": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "retained_controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "retained_controller_pr": 810,
+    "retained_controller_head": "84838e74335a638c15328d6f8f2c9222ab0635ae",
+    "ready_deployment": "dpl_FfJ4ZGgPnZxHVdrjYyfuwtLgEyhP",
+    "ready_deployment_status": "READY",
+    "serverless_ingress_observation": "GET /api/go-cycle-v2 -> 405 in runtime logs at 2026-08-23T17:03:58Z",
+    "post_observation": "NO_POST_LOG_FOUND_IN_LAST_2H_AT_DISCOVERY_TIME",
+    "controller_semantics": "STALE_CLAYVERSE_BATCH_REQUIRES_ATOMIC_ENTITYOS_HCU_REBIND_BEFORE_CREDENTIAL_BEARING_START",
+    "owner_held_github_read_token_available_to_this_worker": false,
+    "github_actions_callable": true,
+    "github_actions_rerun": {
+      "run_id": 32653717002,
+      "new_job_id": 97229916731,
+      "conclusion": "failure",
+      "steps": [],
+      "job_log_fetch": "404_BLOB_NOT_FOUND",
+      "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_NOT_SEMANTIC_TEST_FAILURE"
+    },
+    "isolated_tool_container_callable": true,
+    "isolated_tool_container_private_source_ingress": "BLOCKED_NETWORK_DNS_GITHUB_COM_UNRESOLVABLE_WITHOUT_SECRET_BRIDGE",
+    "runtime_credit_change": 0
   },
   "execution_admission": {
     "preferred_surface": "VERCEL_SANDBOX",
-    "current_state": "BLOCKED_BEFORE_SANDBOX_CREATE",
-    "retained_controller_pr": 810,
-    "blocker": "controller is bound to stale research SHA/tree and still launches historical ClayVerse-semantic batch",
+    "current_state": "BLOCKED_BEFORE_SANDBOX_CREATE_ON_THIS_WORKER_SURFACE",
+    "blockers": [
+      "retained controller still launches historical ClayVerse-semantic acceptance batch",
+      "current connector has no direct Sandbox create/exec action",
+      "credential-bearing controller POST requires an owner-held scoped read-only GitHub token not available to this worker"
+    ],
     "semantic_test_failure": false,
-    "runtime_credit": 0,
-    "required": "ATOMically_REBIND_SINGLE_EXISTING_CONTROLLER_TO_EXACT_ENTITYOS_HCU_SOURCE_AND_CURRENT_ACCEPTANCE_BATCH_BEFORE_OWNER_STARTED_SCOPED_INGRESS"
-  },
-  "runtime_state": {
-    "host_status": "INTENTIONALLY_OFFLINE_OWNER_CONFIRMED",
-    "last_frozen_runtime_generation": 276,
-    "last_durable_tests_green": 1486,
-    "last_durable_tests_red": 1,
-    "persistent_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
-    "entityos_hcu_whole_runtime_credit": 0,
-    "whole_product_pass": false
+    "required": "ATOMically_REBIND_THE_SINGLE_EXISTING_DR_UNTERWEGER_PR810_CONTROLLER_TO_ONE_EXACT_CURRENT_ENTITYOS_HCU_RESEARCH_SNAPSHOT_AND_RETAINED_DONOR_ACCEPTANCE_BATCH_THEN_OWNER_START_THE_EXISTING_TRANSIENT_TOKEN_INGRESS; OR USE_A_NEWLY_EXPOSED_DIRECT_SANDBOX_ACTION_IF_CURRENT_SURFACE_CHANGES"
   },
   "evidence_law": [
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
@@ -93,74 +104,29 @@
     "SOURCE_COMPONENT_PASS_DOES_NOT_CREATE_WHOLE_RUNTIME_CREDIT",
     "OLDER_EXACT_BLOB_EXECUTION_DOES_NOT_TRANSFER_TO_A_CHANGED_CURRENT_BLOB",
     "CAUSAL_EVENT_DATA_MUST_NOT_MINT_ENGINE_ADMISSION_AUTHORITY",
-    "ENGINE_ADMISSION_MUST_COME_FROM_A_SEPARATELY_VERIFIED_ENTITYOS_HCU_CONTROL_PLANE",
     "PRELOAD_HASH_IS_NOT_LOADER_ATTESTATION",
-    "LOADER_CONSUMED_BYTES_MUST_BE_BOUND_TO_GENERATION_FENCED_PHYSICAL_ENGINE_LEASE_OR_ENFORCED_CONTENT_ADDRESSED_READ_ONLY_BOUNDARY",
-    "ROUTE_IDENTITY_MUST_BIND_CAUSAL_EVENT_ROUTER_POLICY_ADMITTED_ENGINE_AND_ROUTING_RESULT",
-    "ENTRY_ADMISSION_IDENTITY_MUST_NOT_REDEFINE_REPLAY_STABLE_CAUSAL_EVENT_IDENTITY",
-    "CONCRETE_ADMISSION_MUST_REMAIN_BOUND_IN_DOWNSTREAM_RECEIPTS_TO_PREVENT_CROSS_ADMISSION_RECEIPT_REUSE",
-    "GRIDPLAN_EXECUTION_IDENTITY_MUST_REENTER_THE_SAME_VERSIONED_CANONICALIZATION_MIGRATION",
-    "CROSS_LANGUAGE_HASH_IDENTITY_REQUIRES_ONE_EXPLICIT_VERSIONED_CANONICALIZATION_AUTHORITY",
-    "NO_BASE_OR_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW"
+    "LOADER_CONSUMED_BYTES_REQUIRE_GENERATION_FENCED_PHYSICAL_ENGINE_LEASE_OR_ENFORCED_CONTENT_ADDRESSED_READ_ONLY_BOUNDARY",
+    "ENTRY_ROUTE_ENGINE_INFERENCE_AND_GRIDPLAN_MUST_SHARE_EXPLICIT_VERSIONED_CANONICALIZATION_AUTHORITY_FOR_NEW_IDENTITIES",
+    "HISTORICAL_HASHES_ARE_NOT_REINTERPRETED",
+    "A_RUNNER_FAILURE_WITH_ZERO_STEPS_IS_EXECUTION_ADMISSION_FAILURE_NOT_SEMANTIC_TEST_FAILURE",
+    "NO_RUNTIME_PASS_WITHOUT_ACTUALLY_STARTED_EXACT_SOURCE_ISOLATED_EXECUTION"
   ],
   "free_only": {
     "enabled": true,
     "no_paid_fallback": true,
     "together_forbidden": true,
-    "paid_subscription_unknown_external_lanes": "FAIL_CLOSED_BEFORE_SECRET_LOOKUP_NETWORK_IO_OR_EXTERNAL_COGNITION_DELEGATION",
-    "historical_paid_execution": "APPEND_ONLY_BREACH_EVIDENCE_NO_CURRENT_CREDIT",
-    "hcu_internal_admission": "ALLOW_ONLY_SEPARATELY_VERIFIED_LOCAL_INTERNAL_ENGINE_ADMISSION"
-  },
-  "required_receipt": {
-    "schema": "HCU_ENGINE_ADMISSION_CAUSAL_BINDING_RECEIPT/v1",
-    "must_bind": [
-      "exact_source_commit_tree_dirty_state",
-      "entityos_hcu_executor_identity",
-      "selected_canonicalization_schema_version",
-      "entry_event_sha256",
-      "entry_admission_sha256",
-      "engine_admission_source_authority",
-      "checkpoint_tokenizer_runtime_build_byte_identities",
-      "physical_engine_lease_generation",
-      "loader_consumed_artifact_identity",
-      "engine_identity_class_artifact_sha256",
-      "router_policy_sha256",
-      "route_decision_sha256",
-      "grid_plan_sha256",
-      "downstream_inference_echo",
-      "secret_lookup_count",
-      "network_attempt_count",
-      "result_digest"
-    ],
-    "falsifier_matrix": [
-      "event self-mints resolved engine fields without separate EngineAdmission -> REJECT",
-      "event requested provider disagrees with separate EngineAdmission -> REJECT",
-      "model lane without EngineAdmission -> REJECT",
-      "script-only lane with EngineAdmission -> REJECT",
-      "unknown external paid subscription engine -> REJECT with zero secret lookups and zero network attempts",
-      "same causal event plus two distinct admitted engine artifacts -> distinct route digests",
-      "same exact event policy and admitted engine replay -> identical route digest",
-      "same causal event replay under distinct Entry admissions -> identical stable causal route identity but distinct concrete admission receipt identity",
-      "mixed unknown or downgraded canonicalization schema across Entry Route GridPlan Inference -> REJECT",
-      "loader consumes bytes not identical to admitted artifact identity -> REJECT",
-      "stale physical engine lease generation -> REJECT",
-      "inference receipt must echo event admission route GridPlan engine lease and loader-consumed identities exactly",
-      "independent implementations of RFC8785_JCS_IJSON/v1 -> identical admitted bytes and digests"
-    ]
+    "secrets_never_committed_or_persisted": true,
+    "final_paid_or_model_training": "OWNER_AUTHORIZATION_REQUIRED"
   },
   "next_focus": [
-    "KEEP_PR1263_DRAFT_AND_ZERO_RUNTIME_CREDIT",
-    "WIRE_RFC8785_JCS_IJSON_V1_UNDER_NEW_VERSIONED_IDENTITIES_ACROSS_ENTRY_EVENT_ADMISSION_ROUTER_POLICY_ENGINE_ROUTE_GRIDPLAN_AND_INFERENCE_RECEIPT",
-    "REJECT_MIXED_UNKNOWN_AND_DOWNGRADE_CANONICALIZATION_WITHOUT_REINTERPRETING_HISTORICAL_HASHES",
-    "FUSE_LOADER_CONSUMED_BYTE_PHYSICAL_ENGINE_LEASE_REQUIREMENT_WITH_RETAINED_ENGINE_ADMISSION_PATH",
-    "SEMANTICALLY_REBIND_EXISTING_PR810_VERCEL_CONTROLLER_TO_ONE_EXACT_CURRENT_ENTITYOS_HCU_SOURCE_AND_ACCEPTANCE_BATCH_WITHOUT_SECOND_EXECUTOR_PATH",
-    "RUN_EXACT_CURRENT_COMBINED_ENTRY_ROUTE_GRIDPLAN_INFERENCE_CANONICALIZER_AND_ENGINE_LEASE_REGRESSIONS_ON_AN_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXECUTOR",
-    "REBASE_OR_FUSE_RETAINED_MECHANISMS_ONTO_CURRENT_ENTITYOS_HCU_MAIN_WITHOUT_SECOND_ROUTE_STATE_OR_EFFECT_AUTHORITY",
-    "BIND_REAL_LOCAL_APPROX_08B_CHECKPOINT_TOKENIZER_RUNTIME_BUILD_BYTES_AND_CAPABILITY_RECORD_TO_ENGINE_ADMISSION_AND_LOADER_LEASE",
-    "RUN_HCU_ENGINE_ADMISSION_CAUSAL_BINDING_RECEIPT_V1_ON_AUTHORIZED_ISOLATED_EXECUTION",
-    "REBUILD_AND_DIGEST_BIND_COMPATIBILITY_ZIP_ONLY_AFTER_SOURCE_AND_LOADER_IDENTITIES_SETTLE",
-    "MEASURE_GRID10_AND_COGSIM10_BEFORE_WM_TEST_OR_NESTED_SIM_PROMOTION",
-    "REPRODUCE_PERSISTENT_CLAUDE_CODE_ADAPTER_BOUNDARY_ON_EXACT_SANDBOXED_ENTITYOS_RUNTIME_BEFORE_PATCHING"
+    "KEEP_PR1263_AS_THE_SINGLE_DRAFT_HCU_ENTRY_DONOR_LANE_AND_ZERO_RUNTIME_CREDIT",
+    "VERIFY_CURRENT_GRID10_AND_INFERENCE_V2_CHAIN_AGAINST_THE_LATEST_DONOR_HEAD_WITH_TYPED_JCS_ENTRY_BINDINGS",
+    "FUSE_PHYSICAL_ENGINE_LEASE_EVIDENCE_INTO_THE_SAME_DOWNSTREAM_RECEIPT_CHAIN_WITHOUT_SECOND_ENGINE_AUTHORITY",
+    "SEMANTICALLY_REBIND_EXISTING_DR_UNTERWEGER_PR810_VERCEL_CONTROLLER_FROM_CLAYVERSE_TO_ONE_EXACT_ENTITYOS_HCU_SOURCE_AND_CURRENT_FOCUSED_ACCEPTANCE_BATCH",
+    "AFTER_REBIND_USE_OWNER_HELD_TRANSIENT_GITHUB_READ_TOKEN_INGRESS_OR_NEWLY_EXPOSED_DIRECT_SANDBOX_ACTION_TO_ACTUALLY_START_VERCEL_SANDBOX",
+    "RUN_EXACT_CURRENT_ENTRY_V2_ROUTE_V4_ENGINE_ADMISSION_PHYSICAL_LOAD_LEASE_INFERENCE_V2_GRID10_REGRESSIONS",
+    "BIND_REAL_LOCAL_APPROX_08B_CHECKPOINT_TOKENIZER_RUNTIME_BUILD_BYTES_TO_AN_ACTUAL_ADMITTED_LOADER_BEFORE_ANY_RUNTIME_PROMOTION",
+    "ONLY_AFTER_EXECUTABLE_EVIDENCE_REBASE_OR_FUSE_SETTLED_MECHANISMS_ONTO_CURRENT_MAIN_AND_REBUILD_COMPATIBILITY_PACKAGE"
   ],
   "promotion_state": {
     "base_release_gate": "NOT_PASS",

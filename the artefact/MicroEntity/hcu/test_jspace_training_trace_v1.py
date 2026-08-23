@@ -1,6 +1,7 @@
 import unittest
 from dataclasses import replace
 
+import jspace_training_trace_v1 as trace_module
 from global_jspace_gwt_v1 import CellContribution, step
 from jspace_training_trace_v1 import (
     JSpaceTrainingTraceError,
@@ -58,6 +59,15 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
         )
         kwargs.update(overrides)
         return build_training_trace(proto, packet, **kwargs)
+
+    def resign(self, trace):
+        return replace(
+            trace,
+            trace_sha256=trace_module._canonical_sha256(
+                trace_module._material(trace),
+                "TEST_SELF_CONSISTENT_FORGERY",
+            ),
+        )
 
     def test_exact_prototype_and_vector_packet_bind_to_complete_trace(self):
         trace = self.build()
@@ -126,9 +136,6 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
         with self.assertRaisesRegex(JSpaceTrainingTraceError, "NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_OUTCOME_PROVENANCE"):
             self.build(credit_label="POSITIVE", outcome_receipt_sha256="6" * 64)
 
-        # The trace envelope intentionally records a typed reference only. The canonical
-        # dataset-admission gate must independently admit and causally bind this receipt
-        # before serious training data can be emitted.
         trace = self.build(
             credit_label="POSITIVE",
             outcome_receipt_sha256="6" * 64,
@@ -144,6 +151,37 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
         tampered = replace(trace, observed_downstream_outcome="CHANGED_AFTER_HASH")
         with self.assertRaisesRegex(JSpaceTrainingTraceError, "TRAINING_TRACE_DIGEST_MISMATCH"):
             validate_training_trace(tampered)
+
+    def test_self_consistent_outer_hash_cannot_launder_tampered_vector_packet_wire(self):
+        trace = self.build()
+        tampered_wire = trace.vector_control_packet_jcs_utf8.replace(
+            '"control_condition":"BASELINE"',
+            '"control_condition":"LESION"',
+            1,
+        )
+        self.assertNotEqual(tampered_wire, trace.vector_control_packet_jcs_utf8)
+        forged = self.resign(replace(trace, vector_control_packet_jcs_utf8=tampered_wire))
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "VECTOR_CONTROL_PACKET_REVALIDATION_FAILED"):
+            validate_training_trace(forged)
+
+    def test_self_consistent_outer_hash_cannot_launder_packet_identity_reference(self):
+        trace = self.build()
+        forged = self.resign(replace(trace, vector_control_packet_sha256="7" * 64))
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "VECTOR_CONTROL_PACKET_IDENTITY_MISMATCH"):
+            validate_training_trace(forged)
+
+    def test_self_consistent_outer_hash_cannot_launder_unknown_credit_label(self):
+        trace = self.build()
+        forged = self.resign(
+            replace(
+                trace,
+                credit_label="PROMOTE",
+                outcome_receipt_sha256="6" * 64,
+                provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
+            )
+        )
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "credit_label:UNSUPPORTED_OR_NONCANONICAL"):
+            validate_training_trace(forged)
 
     def test_placeholder_causal_receipt_is_rejected(self):
         with self.assertRaisesRegex(JSpaceTrainingTraceError, "PLACEHOLDER_SHA256_FORBIDDEN"):

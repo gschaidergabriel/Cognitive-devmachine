@@ -6,39 +6,15 @@ from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from .entry_canonicalization_v1 import (
-        CANONICALIZATION_SCHEMA,
-        CanonicalizationError,
-        canonicalize,
-    )
-    from .global_jspace_gwt_v1 import (
-        ABI_SCHEMA,
-        TRACE_CANONICALIZATION_SCHEMA,
-        TRACE_SCHEMA,
-    )
-    from .jspace_vector_control_v1 import (
-        JSpaceVectorControlError,
-        packet_bytes,
-        parse_packet_text,
-    )
+    from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from .jspace_training_trace_v1 import TRACE_SCHEMA
+    from .jspace_vector_control_v1 import ABI_SCHEMA, JSpaceVectorControlError, decode_vector, parse_packet_text
 except ImportError:
-    from entry_canonicalization_v1 import (
-        CANONICALIZATION_SCHEMA,
-        CanonicalizationError,
-        canonicalize,
-    )
-    from global_jspace_gwt_v1 import (
-        ABI_SCHEMA,
-        TRACE_CANONICALIZATION_SCHEMA,
-        TRACE_SCHEMA,
-    )
-    from jspace_vector_control_v1 import (
-        JSpaceVectorControlError,
-        packet_bytes,
-        parse_packet_text,
-    )
+    from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from jspace_training_trace_v1 import TRACE_SCHEMA
+    from jspace_vector_control_v1 import ABI_SCHEMA, JSpaceVectorControlError, decode_vector, parse_packet_text
 
-DATASET_SCHEMA = "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v2"
+DATASET_SCHEMA = "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3"
 SYSTEM = (
     "You are a narrow EntityOS/HCU cognitive coprocessor. "
     "Follow JSPACE_VECTOR_CONTROL_ABI/v1, GWT/Hyperposition, generation/basis/role fences, "
@@ -52,21 +28,30 @@ class DatasetError(ValueError):
 
 
 def _canonical_json(value: Any) -> str:
-    """Deterministic JSONL transport encoding, not trace identity authority."""
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True, allow_nan=False)
 
 
-def _trace_sha(trace: dict[str, Any]) -> str:
-    """Reuse the selected HCU RFC8785/JCS bytes for trace-family identity."""
+def _canonical_sha256(value: Any, field: str) -> str:
     try:
-        return hashlib.sha256(canonicalize(trace)).hexdigest()
+        return hashlib.sha256(canonicalize(value)).hexdigest()
     except CanonicalizationError as exc:
-        raise DatasetError(f"TRACE_CANONICALIZATION_FAILED:{exc}") from exc
+        raise DatasetError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
 
 
-def _split(trace_sha256: str) -> str:
-    # Deterministic whole-trace-family split: ~80 / 10 / 10.
-    bucket = int(trace_sha256[:2], 16)
+def _trace_material(trace: dict[str, Any]) -> dict[str, Any]:
+    material = dict(trace)
+    material.pop("trace_sha256", None)
+    return material
+
+
+def _family_sha256(trace_family_id: str) -> str:
+    if not isinstance(trace_family_id, str) or not trace_family_id.strip():
+        raise DatasetError("TRACE_FAMILY_ID_INVALID")
+    return _canonical_sha256({"trace_family_id": trace_family_id.strip()}, "TRACE_FAMILY")
+
+
+def _split_family(family_sha256: str) -> str:
+    bucket = int(family_sha256[:2], 16)
     if bucket < 205:
         return "train"
     if bucket < 230:
@@ -74,7 +59,7 @@ def _split(trace_sha256: str) -> str:
     return "holdout"
 
 
-def _row(kind: str, user: dict[str, Any], assistant: dict[str, Any], trace_sha256: str) -> dict[str, Any]:
+def _row(kind: str, user: dict[str, Any], assistant: dict[str, Any], *, trace_sha256: str, trace_family_id: str) -> dict[str, Any]:
     return {
         "messages": [
             {"role": "system", "content": SYSTEM},
@@ -84,203 +69,186 @@ def _row(kind: str, user: dict[str, Any], assistant: dict[str, Any], trace_sha25
         "metadata": {
             "dataset_schema": DATASET_SCHEMA,
             "trace_schema": TRACE_SCHEMA,
-            "trace_canonicalization_schema": TRACE_CANONICALIZATION_SCHEMA,
+            "trace_canonicalization_schema": CANONICALIZATION_SCHEMA,
             "trace_sha256": trace_sha256,
+            "trace_family_id": trace_family_id,
             "family": kind,
         },
     }
 
 
-def _lower_sha256(value: Any, field: str) -> str:
-    if not isinstance(value, str) or len(value) != 64 or value.lower() != value:
-        raise DatasetError(f"{field}:LOWERCASE_SHA256_REQUIRED")
-    if any(ch not in "0123456789abcdef" for ch in value):
+def _sha256(value: Any, field: str) -> str:
+    if not isinstance(value, str) or len(value) != 64 or value.lower() != value or any(ch not in "0123456789abcdef" for ch in value):
         raise DatasetError(f"{field}:LOWERCASE_SHA256_REQUIRED")
     return value
 
 
-def _validate_trace(trace: dict[str, Any]) -> str:
-    if not isinstance(trace, dict) or trace.get("schema") != TRACE_SCHEMA:
+def _validate_trace(trace: dict[str, Any]) -> tuple[str, str]:
+    if not isinstance(trace, dict) or trace.get("schema_version") != TRACE_SCHEMA:
         raise DatasetError("TRACE_SCHEMA_UNSUPPORTED")
-    if TRACE_CANONICALIZATION_SCHEMA != CANONICALIZATION_SCHEMA:
-        raise DatasetError("TRACE_CANONICALIZATION_AUTHORITY_MISMATCH")
-    if trace.get("canonicalization_schema") != TRACE_CANONICALIZATION_SCHEMA:
+    if trace.get("canonicalization_schema") != CANONICALIZATION_SCHEMA:
         raise DatasetError("TRACE_CANONICALIZATION_SCHEMA_MISMATCH")
 
     required = (
-        "generation",
-        "basis_id",
-        "basis_sha256",
-        "winner_cell_id",
-        "winner_role",
-        "winner_gate_q",
-        "hyperposition_cells",
-        "control_condition",
-        "control_packet_schema",
-        "control_packet_text",
-        "control_packet_identity_sha256",
-        "control_packet_sha256",
-        "control_packet_wire_sha256",
-        "contributions",
-        "authority",
+        "trace_id", "trace_family_id", "generation", "entry_event_sha256", "entry_admission_sha256",
+        "route_decision_sha256", "grid_plan_sha256", "cell_id", "role", "jspace_basis_id",
+        "jspace_basis_sha256", "jspace_input_vector_ref", "jspace_input_codec_version",
+        "vector_control_packet_sha256", "vector_control_packet_jcs_utf8", "vector_control_condition",
+        "local_workspace_state_ref", "gwt_competition_set", "gwt_broadcast_gate",
+        "global_jspace_slice_ref", "hyperposition_branch_ids", "provenance_evidence_class",
+        "resource_budget", "requested_action_class", "expected_structured_model_output",
+        "observed_downstream_outcome", "outcome_receipt_sha256", "falsifier_lesion_condition",
+        "credit_label", "prototype_trace_sha256", "trace_sha256",
     )
     for key in required:
         if key not in trace:
             raise DatasetError(f"TRACE_FIELD_MISSING:{key}")
-    if trace["authority"] != "CANDIDATE_MEASUREMENT_ONLY_NOT_TRUTH_OR_EFFECT":
-        raise DatasetError("TRACE_AUTHORITY_INVALID")
-    if trace["control_packet_schema"] != ABI_SCHEMA:
-        raise DatasetError("TRACE_CONTROL_PACKET_SCHEMA_MISMATCH")
 
     generation = trace["generation"]
-    basis_id = trace["basis_id"]
-    basis_sha256 = _lower_sha256(trace["basis_sha256"], "TRACE_BASIS_SHA256")
-    winner_role = trace["winner_role"]
-    winner_cell_id = trace["winner_cell_id"]
-    winner_gate_q = trace["winner_gate_q"]
-    if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
+    if isinstance(generation, bool) or not isinstance(generation, int) or not 0 <= generation <= 9_007_199_254_740_991:
         raise DatasetError("TRACE_GENERATION_INVALID")
-    if not isinstance(basis_id, str) or not basis_id:
-        raise DatasetError("TRACE_BASIS_ID_INVALID")
-    if not isinstance(winner_role, str) or not winner_role:
-        raise DatasetError("TRACE_WINNER_ROLE_INVALID")
-    if not isinstance(winner_cell_id, str) or not winner_cell_id:
-        raise DatasetError("TRACE_WINNER_CELL_ID_INVALID")
-    if isinstance(winner_gate_q, bool) or not isinstance(winner_gate_q, int) or not 0 <= winner_gate_q <= 10000:
-        raise DatasetError("TRACE_WINNER_GATE_Q_INVALID")
+
+    for key in (
+        "trace_id", "trace_family_id", "cell_id", "role", "jspace_basis_id", "jspace_input_vector_ref",
+        "vector_control_condition", "local_workspace_state_ref", "global_jspace_slice_ref",
+        "provenance_evidence_class", "requested_action_class", "expected_structured_model_output",
+        "observed_downstream_outcome", "falsifier_lesion_condition", "credit_label",
+    ):
+        if not isinstance(trace[key], str) or not trace[key].strip():
+            raise DatasetError(f"TRACE_TEXT_INVALID:{key}")
+
+    for key in (
+        "entry_event_sha256", "entry_admission_sha256", "route_decision_sha256", "grid_plan_sha256",
+        "jspace_basis_sha256", "vector_control_packet_sha256", "prototype_trace_sha256", "trace_sha256",
+    ):
+        _sha256(trace[key], key)
+
+    trace_sha256 = trace["trace_sha256"]
+    if trace_sha256 != _canonical_sha256(_trace_material(trace), "TRAINING_TRACE"):
+        raise DatasetError("TRAINING_TRACE_DIGEST_MISMATCH")
+    if trace["jspace_input_codec_version"] != ABI_SCHEMA:
+        raise DatasetError("TRACE_VECTOR_CONTROL_ABI_MISMATCH")
 
     try:
-        packet = parse_packet_text(trace["control_packet_text"])
+        packet = parse_packet_text(trace["vector_control_packet_jcs_utf8"])
+        decode_vector(
+            packet,
+            current_generation=generation,
+            expected_basis_id=trace["jspace_basis_id"],
+            expected_basis_sha256=trace["jspace_basis_sha256"],
+            expected_role=trace["role"],
+            expected_control_condition=trace["vector_control_condition"],
+        )
     except JSpaceVectorControlError as exc:
         raise DatasetError(f"TRACE_CONTROL_PACKET_INVALID:{exc}") from exc
-    if packet.abi_schema != ABI_SCHEMA:
-        raise DatasetError("TRACE_CONTROL_PACKET_ABI_MISMATCH")
-    if packet.generation != generation:
-        raise DatasetError("TRACE_CONTROL_PACKET_GENERATION_MISMATCH")
-    if packet.basis_id != basis_id:
-        raise DatasetError("TRACE_CONTROL_PACKET_BASIS_ID_MISMATCH")
-    if packet.basis_sha256 != basis_sha256:
-        raise DatasetError("TRACE_CONTROL_PACKET_BASIS_SHA256_MISMATCH")
-    if packet.role != winner_role:
-        raise DatasetError("TRACE_CONTROL_PACKET_ROLE_MISMATCH")
-    if packet.control_condition != trace["control_condition"]:
-        raise DatasetError("TRACE_CONTROL_PACKET_CONDITION_MISMATCH")
-
-    identity_sha = _lower_sha256(
-        trace["control_packet_identity_sha256"],
-        "TRACE_CONTROL_PACKET_IDENTITY_SHA256",
-    )
-    if identity_sha != packet.packet_sha256:
+    if packet.packet_sha256 != trace["vector_control_packet_sha256"]:
         raise DatasetError("TRACE_CONTROL_PACKET_IDENTITY_MISMATCH")
-    wire_sha = hashlib.sha256(packet_bytes(packet)).hexdigest()
-    for field in ("control_packet_sha256", "control_packet_wire_sha256"):
-        if _lower_sha256(trace[field], f"TRACE_{field.upper()}") != wire_sha:
-            raise DatasetError("TRACE_CONTROL_PACKET_WIRE_SHA256_MISMATCH")
 
-    contributions = trace["contributions"]
-    if not isinstance(contributions, list) or not contributions:
-        raise DatasetError("TRACE_CONTRIBUTIONS_REQUIRED")
-    cell_ids: list[str] = []
-    winner_rows: list[dict[str, Any]] = []
-    for row in contributions:
-        if not isinstance(row, dict):
-            raise DatasetError("TRACE_CONTRIBUTION_OBJECT_REQUIRED")
-        cell_id = row.get("cell_id")
-        role = row.get("role")
-        gate_q = row.get("gate_q")
-        if not isinstance(cell_id, str) or not cell_id:
-            raise DatasetError("TRACE_CONTRIBUTION_CELL_ID_INVALID")
-        if not isinstance(role, str) or not role:
-            raise DatasetError("TRACE_CONTRIBUTION_ROLE_INVALID")
+    competition = trace["gwt_competition_set"]
+    if not isinstance(competition, list) or not competition:
+        raise DatasetError("TRACE_GWT_COMPETITION_REQUIRED")
+    ids: list[str] = []
+    winners: list[dict[str, Any]] = []
+    for row in competition:
+        if not isinstance(row, dict) or set(row) != {"cell_id", "role", "gate_q"}:
+            raise DatasetError("TRACE_GWT_COMPETITION_ROW_SCHEMA_MISMATCH")
+        cell_id, role, gate_q = row["cell_id"], row["role"], row["gate_q"]
+        if not isinstance(cell_id, str) or not cell_id or not isinstance(role, str) or not role:
+            raise DatasetError("TRACE_GWT_COMPETITION_IDENTITY_INVALID")
         if isinstance(gate_q, bool) or not isinstance(gate_q, int) or not 0 <= gate_q <= 10000:
-            raise DatasetError("TRACE_CONTRIBUTION_GATE_Q_INVALID")
-        cell_ids.append(cell_id)
-        if cell_id == winner_cell_id:
-            winner_rows.append(row)
-    if len(cell_ids) != len(set(cell_ids)):
-        raise DatasetError("TRACE_CONTRIBUTION_CELL_ID_DUPLICATE")
-    if len(winner_rows) != 1:
-        raise DatasetError("TRACE_WINNER_CONTRIBUTION_MISSING")
-    if winner_rows[0].get("role") != winner_role or winner_rows[0].get("gate_q") != winner_gate_q:
-        raise DatasetError("TRACE_WINNER_CONTRIBUTION_MISMATCH")
+            raise DatasetError("TRACE_GWT_GATE_INVALID")
+        ids.append(cell_id)
+        if cell_id == trace["cell_id"]:
+            winners.append(row)
+    if len(ids) != len(set(ids)):
+        raise DatasetError("TRACE_GWT_CELL_ID_DUPLICATE")
+    if len(winners) != 1 or winners[0]["role"] != trace["role"] or winners[0]["gate_q"] != trace["gwt_broadcast_gate"]:
+        raise DatasetError("TRACE_GWT_WINNER_BINDING_MISMATCH")
 
-    hyper = trace["hyperposition_cells"]
-    if not isinstance(hyper, list) or any(not isinstance(cell_id, str) for cell_id in hyper):
+    branches = trace["hyperposition_branch_ids"]
+    if not isinstance(branches, list) or any(not isinstance(branch, str) or not branch for branch in branches) or len(branches) != len(set(branches)):
         raise DatasetError("TRACE_HYPERPOSITION_INVALID")
-    if len(hyper) != len(set(hyper)) or not set(hyper).issubset(set(cell_ids)):
-        raise DatasetError("TRACE_HYPERPOSITION_BINDING_MISMATCH")
 
-    return _trace_sha(trace)
+    budget = trace["resource_budget"]
+    if not isinstance(budget, dict) or not budget:
+        raise DatasetError("TRACE_RESOURCE_BUDGET_INVALID")
+    if any(not isinstance(k, str) or not k or isinstance(v, bool) or not isinstance(v, int) or v < 0 for k, v in budget.items()):
+        raise DatasetError("TRACE_RESOURCE_BUDGET_INVALID")
+
+    credit = trace["credit_label"]
+    receipt = trace["outcome_receipt_sha256"]
+    if credit != "UNKNOWN":
+        if receipt is None:
+            raise DatasetError("NONUNKNOWN_CREDIT_REQUIRES_OUTCOME_RECEIPT")
+        _sha256(receipt, "outcome_receipt_sha256")
+        if trace["provenance_evidence_class"] != "EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME":
+            raise DatasetError("NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_OUTCOME_PROVENANCE")
+    elif receipt is not None:
+        _sha256(receipt, "outcome_receipt_sha256")
+
+    return trace_sha256, _family_sha256(trace["trace_family_id"])
 
 
 def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
-    sha = _validate_trace(trace)
+    trace_sha256, _ = _validate_trace(trace)
+    trace_family_id = trace["trace_family_id"]
     common = {
-        "control_packet": trace["control_packet_text"],
-        "expected_basis_id": trace["basis_id"],
-        "expected_basis_sha256": trace["basis_sha256"],
-        "expected_role": trace["winner_role"],
+        "control_packet": trace["vector_control_packet_jcs_utf8"],
+        "expected_basis_id": trace["jspace_basis_id"],
+        "expected_basis_sha256": trace["jspace_basis_sha256"],
+        "expected_role": trace["role"],
         "expected_generation": trace["generation"],
+        "expected_control_condition": trace["vector_control_condition"],
     }
     accept = {
         "decision": "ACCEPT_CONTROL",
-        "winner_cell_id": trace["winner_cell_id"],
-        "winner_role": trace["winner_role"],
-        "winner_gate_q": trace["winner_gate_q"],
-        "hyperposition_cells": trace["hyperposition_cells"],
+        "cell_id": trace["cell_id"],
+        "role": trace["role"],
+        "gwt_broadcast_gate": trace["gwt_broadcast_gate"],
+        "hyperposition_branch_ids": trace["hyperposition_branch_ids"],
         "authority": "CANDIDATE_CONTROL_ONLY",
     }
+    def row(kind: str, user: dict[str, Any], assistant: dict[str, Any]) -> dict[str, Any]:
+        return _row(kind, user, assistant, trace_sha256=trace_sha256, trace_family_id=trace_family_id)
 
-    rows = [_row("VECTOR_CONTROL_VALIDATE", common, accept, sha)]
-    rows.append(
-        _row(
-            "VECTOR_CONTROL_VALIDATE",
-            {**common, "expected_generation": trace["generation"] + 1},
-            {"decision": "REJECT", "reason": "STALE_VECTOR_CONTROL_GENERATION"},
-            sha,
-        )
-    )
-    rows.append(
-        _row(
-            "VECTOR_CONTROL_VALIDATE",
-            {**common, "expected_basis_id": trace["basis_id"] + "#WRONG"},
-            {"decision": "REJECT", "reason": "JSPACE_BASIS_ID_MISMATCH"},
-            sha,
-        )
-    )
-    rows.append(
-        _row(
-            "GWT_BROADCAST_FROM_TRACE",
+    wrong_basis_sha = "0" * 63 + ("1" if trace["jspace_basis_sha256"] != "0" * 63 + "1" else "2")
+    return [
+        row("VECTOR_CONTROL_VALIDATE", common, accept),
+        row("VECTOR_CONTROL_VALIDATE", {**common, "expected_generation": trace["generation"] + 1}, {"decision": "REJECT", "reason": "STALE_VECTOR_CONTROL_GENERATION"}),
+        row("VECTOR_CONTROL_VALIDATE", {**common, "expected_basis_id": trace["jspace_basis_id"] + "#WRONG"}, {"decision": "REJECT", "reason": "JSPACE_BASIS_ID_MISMATCH"}),
+        row("VECTOR_CONTROL_VALIDATE", {**common, "expected_basis_sha256": wrong_basis_sha}, {"decision": "REJECT", "reason": "JSPACE_BASIS_SHA256_MISMATCH"}),
+        row("VECTOR_CONTROL_VALIDATE", {**common, "expected_role": trace["role"] + "#SWAPPED"}, {"decision": "REJECT", "reason": "JSPACE_ROLE_MISMATCH"}),
+        row(
+            "GWT_BROADCAST_FROM_TRAINING_TRACE",
             {
-                "generation": trace["generation"],
-                "basis_id": trace["basis_id"],
-                "basis_sha256": trace["basis_sha256"],
-                "contributions": trace["contributions"],
+                "generation": trace["generation"], "basis_id": trace["jspace_basis_id"],
+                "basis_sha256": trace["jspace_basis_sha256"], "competition_set": trace["gwt_competition_set"],
+                "resource_budget": trace["resource_budget"], "requested_action_class": trace["requested_action_class"],
             },
             {
-                "decision": "GWT_BROADCAST",
-                "winner_cell_id": trace["winner_cell_id"],
-                "winner_role": trace["winner_role"],
-                "winner_gate_q": trace["winner_gate_q"],
-                "hyperposition_cells": trace["hyperposition_cells"],
-                "control_packet": trace["control_packet_text"],
-                "authority": "CANDIDATE_CONTROL_ONLY",
+                "decision": "GWT_BROADCAST", "cell_id": trace["cell_id"], "role": trace["role"],
+                "gwt_broadcast_gate": trace["gwt_broadcast_gate"], "hyperposition_branch_ids": trace["hyperposition_branch_ids"],
+                "control_packet": trace["vector_control_packet_jcs_utf8"], "authority": "CANDIDATE_CONTROL_ONLY",
             },
-            sha,
-        )
-    )
-    return rows
+        ),
+    ]
 
 
 def compile_traces(traces: Iterable[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     out = {"train": [], "validation": [], "holdout": []}
     seen: set[str] = set()
+    family_owner: dict[str, str] = {}
     for trace in traces:
-        sha = _validate_trace(trace)
-        if sha in seen:
+        trace_sha256, family_sha256 = _validate_trace(trace)
+        if trace_sha256 in seen:
             continue
-        seen.add(sha)
-        out[_split(sha)].extend(derive_bootstrap_examples(trace))
+        seen.add(trace_sha256)
+        split = _split_family(family_sha256)
+        family_id = trace["trace_family_id"]
+        previous = family_owner.setdefault(family_id, split)
+        if previous != split:
+            raise DatasetError("TRACE_FAMILY_SPLIT_INCONSISTENT")
+        out[split].extend(derive_bootstrap_examples(trace))
     if not seen:
         raise DatasetError("NO_TRACES")
     return out
@@ -303,7 +271,8 @@ def compile_jsonl(input_path: Path, output_dir: Path) -> dict[str, Any]:
     receipt = {
         "schema": DATASET_SCHEMA,
         "trace_schema": TRACE_SCHEMA,
-        "trace_canonicalization_schema": TRACE_CANONICALIZATION_SCHEMA,
+        "trace_canonicalization_schema": CANONICALIZATION_SCHEMA,
+        "split_unit": "trace_family_id",
         "input_trace_count": len(traces),
         "splits": {},
     }
@@ -313,10 +282,9 @@ def compile_jsonl(input_path: Path, output_dir: Path) -> dict[str, Any]:
         path.write_text(payload, encoding="ascii")
         receipt["splits"][split] = {
             "row_count": len(rows),
+            "trace_family_count": len({row["metadata"]["trace_family_id"] for row in rows}),
             "sha256": hashlib.sha256(payload.encode("ascii")).hexdigest(),
             "path": path.name,
         }
-
-    receipt_path = output_dir / "dataset_receipt.json"
-    receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (output_dir / "dataset_receipt.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return receipt

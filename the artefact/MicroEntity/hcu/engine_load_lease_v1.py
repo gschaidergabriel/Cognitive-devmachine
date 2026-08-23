@@ -6,12 +6,16 @@ capabilities, routing authority, durable state authority, or effects. A Verified
 proves pre-load artifact identity; this module separately binds that admission to evidence
 reported from the actual loader read path. Source-level construction alone grants zero runtime
 credit until the real loader is instrumented to emit the consumed-byte evidence used here.
+
+The raw loader observation is not self-authorizing: verification additionally requires the
+exact normalized observation to exist in an externally admitted loader-consumption registry.
+Merely setting ``evidence_source=ACTUAL_LOADER_READ_PATH`` is therefore insufficient.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 import hashlib
-from typing import Any
+from typing import Any, Mapping
 
 from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
 from engine_admission_v1 import ArtifactDigest, VerifiedEngineAdmission
@@ -232,18 +236,76 @@ def _consumed_artifact(
     return actual
 
 
+def loader_consumption_record(consumption: LoaderConsumption) -> dict[str, Any]:
+    """Normalize one loader observation for external admission.
+
+    Serialization is not admission. A caller can construct this record, but verification
+    succeeds only when an external canonical registry already contains the exact record
+    under its RFC8785/JCS digest.
+    """
+    if not isinstance(consumption, LoaderConsumption):
+        raise EngineLoadLeaseError("LOADER_CONSUMPTION_REQUIRED")
+
+    def artifact(value: LoaderConsumedArtifact, field: str) -> dict[str, Any]:
+        if not isinstance(value, LoaderConsumedArtifact):
+            raise EngineLoadLeaseError(f"{field}:LOADER_CONSUMED_ARTIFACT_REQUIRED")
+        return {
+            "kind": _text(value.kind, f"{field}.kind"),
+            "sha256": _sha256(value.sha256, f"{field}.sha256"),
+            "file_count": _count(value.file_count, f"{field}.file_count"),
+            "byte_count": _count(value.byte_count, f"{field}.byte_count"),
+            "evidence_source": _text(value.evidence_source, f"{field}.evidence_source"),
+        }
+
+    return {
+        "schema": _text(consumption.schema, "consumption.schema"),
+        "entity_generation": _generation(consumption.entity_generation, "consumption.entity_generation"),
+        "loader_id": _text(consumption.loader_id, "consumption.loader_id"),
+        "loader_binding_sha256": _sha256(consumption.loader_binding_sha256, "consumption.loader_binding_sha256"),
+        "engine_identity": _text(consumption.engine_identity, "consumption.engine_identity"),
+        "engine_artifact_sha256": _sha256(consumption.engine_artifact_sha256, "consumption.engine_artifact_sha256"),
+        "checkpoint": artifact(consumption.checkpoint, "checkpoint"),
+        "tokenizer": artifact(consumption.tokenizer, "tokenizer"),
+        "runtime": artifact(consumption.runtime, "runtime"),
+        "build": artifact(consumption.build, "build"),
+    }
+
+
+def loader_consumption_record_sha256(consumption: LoaderConsumption) -> str:
+    """Stable identity of the exact normalized raw loader observation; not authority."""
+    return _canonical_sha256(loader_consumption_record(consumption), "LOADER_CONSUMPTION_RECORD")
+
+
+def _require_admitted_loader_consumption(
+    consumption: LoaderConsumption,
+    admitted_loader_consumptions: Mapping[str, Any],
+) -> str:
+    if not isinstance(admitted_loader_consumptions, Mapping):
+        raise EngineLoadLeaseError("ADMITTED_LOADER_CONSUMPTION_REGISTRY_REQUIRED")
+    record = loader_consumption_record(consumption)
+    record_sha256 = _canonical_sha256(record, "LOADER_CONSUMPTION_RECORD")
+    admitted = admitted_loader_consumptions.get(record_sha256)
+    if not isinstance(admitted, Mapping):
+        raise EngineLoadLeaseError("LOADER_CONSUMPTION_NOT_ADMITTED")
+    if dict(admitted) != record:
+        raise EngineLoadLeaseError("LOADER_CONSUMPTION_REGISTRY_MISMATCH")
+    return record_sha256
+
+
 def verify_loader_consumption(
     lease: EngineLoadLease,
     verified_admission: VerifiedEngineAdmission,
     consumption: LoaderConsumption,
     *,
+    admitted_loader_consumptions: Mapping[str, Any],
     current_generation: int,
 ) -> VerifiedEngineLoad:
-    """Bind actual-loader consumption evidence to one admitted physical engine lease.
+    """Bind externally admitted actual-loader evidence to one physical engine lease.
 
-    Runtime credit remains zero unless the real loader is the producer of `consumption`.
-    A caller-constructed or post-hoc filesystem rehash is not equivalent evidence and must
-    not be represented as loader attestation.
+    Runtime credit remains zero unless the real loader is the producer of ``consumption``
+    and the canonical external loader-consumption registry admitted that exact normalized
+    observation. A caller-constructed object, a forged evidence-source string, or a post-hoc
+    filesystem rehash is not sufficient by itself.
     """
     if not isinstance(lease, EngineLoadLease):
         raise EngineLoadLeaseError("ENGINE_LOAD_LEASE_REQUIRED")
@@ -290,6 +352,7 @@ def verify_loader_consumption(
     tokenizer = _consumed_artifact(consumption.tokenizer, verified.tokenizer, "tokenizer")
     runtime = _consumed_artifact(consumption.runtime, verified.runtime, "runtime")
     build = _consumed_artifact(consumption.build, verified.build, "build")
+    _require_admitted_loader_consumption(consumption, admitted_loader_consumptions)
 
     material = {
         "schema": VERIFIED_LOAD_SCHEMA,

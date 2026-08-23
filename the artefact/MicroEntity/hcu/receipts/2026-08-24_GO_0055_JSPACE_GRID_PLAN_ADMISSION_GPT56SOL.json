@@ -6,15 +6,19 @@
   "program": "EntityOS + HCU",
   "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
   "authority_scope": "FREE_ONLY",
-  "canonical_main_observed": "0be7a202267484e28d0ddbe0d9a7406d2298181a",
+  "canonical_main_observed_before_delta": "0be7a202267484e28d0ddbe0d9a7406d2298181a",
+  "canonical_main_observed_after_coordination_refresh": "ef8c5314480bf20e75cf9cd2d21042ad2be41216",
   "retained_pr": 1263,
   "retained_pr_head_observed_before_receipt": "49f4d50b885d00d4e2a6004023ff9fe2739f95ba",
   "finding": {
     "name": "CAUSAL_HASH_TRANSPLANT",
-    "class": "EXACTLY_ONE_UNUSUAL_EXPERIMENT_FOR_THIS_USER_GO_MACROCYCLE",
+    "class": "INDEPENDENT_REPLICATION_OF_SAME_GLOBAL_UNUSUAL_EXPERIMENT_FAMILY",
+    "global_second_distinct_unusual_experiment_added": false,
+    "canonical_parallel_receipt": "the artefact/MicroEntity/hcu/receipts/2026-08-24_GO_CAUSAL_BINDING_TRANSPLANT_GPT56SOL.json",
+    "canonical_parallel_receipt_commit": "ef8c5314480bf20e75cf9cd2d21042ad2be41216",
     "evidence_scope": "SOURCE_DERIVED_SYNTHETIC_DISCRIMINATOR",
     "observation": "Training/transition layers could agree on a syntactically valid but never-admitted grid_plan_sha256; matching trace hashes alone did not prove that GRID10 plan identity belonged to the same admitted Entry->route causal spine.",
-    "result": "MECHANISM_SUPPORTED",
+    "result": "MECHANISM_SUPPORTED_AND_INDEPENDENTLY_REPLICATED",
     "runtime_credit": 0
   },
   "coordination": {
@@ -22,6 +26,8 @@
     "duplicate_execution_binding_module_created": false,
     "stale_write_409_observed": true,
     "stale_write_overwrote_newer_worker": false,
+    "parallel_same_intervention_discovered_after_execution": true,
+    "experiment_accounting_correction": "same intervention family is counted once globally; this worker's run is replication/adjudication rather than a second distinct unusual experiment",
     "fusion_strategy": "strengthen_existing_dataset_admission_gate_only"
   },
   "delta": {

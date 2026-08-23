@@ -79,6 +79,22 @@ class CompilerTests(unittest.TestCase):
         self.assertTrue(all(len(v) == 1 for v in trace_owners.values()))
         self.assertEqual(len(family_owners["episode:shared"]), 1)
 
+    def test_compiler_reuses_selected_family_split_authority(self):
+        import compile_jspace_bootstrap_dataset_v1 as compiler
+        import jspace_dataset_family_split_v1 as family_split
+
+        self.assertIs(compiler.split_for_family, family_split.split_for_family)
+        self.assertEqual(compiler.FAMILY_SPLIT_SCHEMA, family_split.SPLIT_SCHEMA)
+        self.assertEqual(compiler.split_for_family("episode:1"), "train")
+        families = [f"episode:{index}" for index in range(256)]
+        families.extend(("episode:A", "episode:B", "unicode:Δ", "nested/a:b"))
+        for trace_family_id in families:
+            with self.subTest(trace_family_id=trace_family_id):
+                self.assertEqual(
+                    compiler.split_for_family(trace_family_id),
+                    family_split.split_for_family(trace_family_id),
+                )
+
     def test_duplicate_trace_is_deduplicated(self):
         trace = self.trace(5)
         compiled = compile_traces([trace, trace], admitted_bases=admitted_for(trace))

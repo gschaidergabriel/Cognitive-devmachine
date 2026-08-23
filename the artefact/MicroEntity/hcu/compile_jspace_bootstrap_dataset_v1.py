@@ -7,10 +7,12 @@ from typing import Any, Iterable, Mapping
 
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from .jspace_dataset_family_split_v1 import SPLIT_SCHEMA as FAMILY_SPLIT_SCHEMA, split_for_family
     from .jspace_training_trace_v1 import TRACE_SCHEMA
     from .jspace_vector_control_v1 import ABI_SCHEMA, JSpaceVectorControlError, decode_vector, parse_packet_text
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from jspace_dataset_family_split_v1 import SPLIT_SCHEMA as FAMILY_SPLIT_SCHEMA, split_for_family
     from jspace_training_trace_v1 import TRACE_SCHEMA
     from jspace_vector_control_v1 import ABI_SCHEMA, JSpaceVectorControlError, decode_vector, parse_packet_text
 
@@ -45,21 +47,6 @@ def _trace_material(trace: dict[str, Any]) -> dict[str, Any]:
     return material
 
 
-def _family_sha256(trace_family_id: str) -> str:
-    if not isinstance(trace_family_id, str) or not trace_family_id.strip():
-        raise DatasetError("TRACE_FAMILY_ID_INVALID")
-    return _canonical_sha256({"trace_family_id": trace_family_id.strip()}, "TRACE_FAMILY")
-
-
-def _split_family(family_sha256: str) -> str:
-    bucket = int(family_sha256[:2], 16)
-    if bucket < 205:
-        return "train"
-    if bucket < 230:
-        return "validation"
-    return "holdout"
-
-
 def _row(kind: str, user: dict[str, Any], assistant: dict[str, Any], *, trace_sha256: str, trace_family_id: str) -> dict[str, Any]:
     return {
         "messages": [
@@ -71,6 +58,7 @@ def _row(kind: str, user: dict[str, Any], assistant: dict[str, Any], *, trace_sh
             "dataset_schema": DATASET_SCHEMA,
             "trace_schema": TRACE_SCHEMA,
             "trace_canonicalization_schema": CANONICALIZATION_SCHEMA,
+            "family_split_schema": FAMILY_SPLIT_SCHEMA,
             "trace_sha256": trace_sha256,
             "trace_family_id": trace_family_id,
             "family": kind,
@@ -226,7 +214,8 @@ def _validate_trace(
     elif receipt is not None:
         _sha256(receipt, "outcome_receipt_sha256")
 
-    return trace_sha256, _family_sha256(trace["trace_family_id"])
+    family_id = trace["trace_family_id"].strip()
+    return trace_sha256, family_id
 
 
 def derive_bootstrap_examples(
@@ -289,12 +278,11 @@ def compile_traces(
     seen: set[str] = set()
     family_owner: dict[str, str] = {}
     for trace in traces:
-        trace_sha256, family_sha256 = _validate_trace(trace, admitted_bases=normalized_bases)
+        trace_sha256, family_id = _validate_trace(trace, admitted_bases=normalized_bases)
         if trace_sha256 in seen:
             continue
         seen.add(trace_sha256)
-        split = _split_family(family_sha256)
-        family_id = trace["trace_family_id"]
+        split = split_for_family(family_id)
         previous = family_owner.setdefault(family_id, split)
         if previous != split:
             raise DatasetError("TRACE_FAMILY_SPLIT_INCONSISTENT")
@@ -329,6 +317,7 @@ def compile_jsonl(
         "trace_schema": TRACE_SCHEMA,
         "trace_canonicalization_schema": CANONICALIZATION_SCHEMA,
         "split_unit": "trace_family_id",
+        "family_split_schema": FAMILY_SPLIT_SCHEMA,
         "admitted_basis_registry_sha256": _canonical_sha256(normalized_bases, "ADMITTED_JSPACE_BASIS_REGISTRY"),
         "input_trace_count": len(traces),
         "splits": {},

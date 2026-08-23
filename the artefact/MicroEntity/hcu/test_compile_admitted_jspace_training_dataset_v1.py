@@ -35,7 +35,9 @@ CELL_ID = "cell:critic:0"
 ROLE = "critic"
 BASIS_ID = "basis:test:admitted"
 BASIS_SHA = "c1" * 32
+CONTROL_CONDITION = "BASELINE"
 ADMITTED_BASES = {BASIS_ID: BASIS_SHA}
+ADMITTED_GRID_PLANS = {GRID_SHA: {"schema": "ENTITYOS_HCU_GRID_PLAN/v2"}}
 
 
 def _training_trace(**overrides):
@@ -51,6 +53,7 @@ def _training_trace(**overrides):
         "cell_id": CELL_ID,
         "role": ROLE,
         "vector_control_packet_sha256": VECTOR_SHA,
+        "vector_control_condition": CONTROL_CONDITION,
         "credit_label": "UNKNOWN",
         "outcome_receipt_sha256": None,
     }
@@ -74,6 +77,8 @@ def _admission(trace=None, **overrides):
         "role": trace["role"],
         "jspace_basis_id": BASIS_ID,
         "jspace_basis_sha256": BASIS_SHA,
+        "vector_control_packet_sha256": trace["vector_control_packet_sha256"],
+        "vector_control_condition": trace["vector_control_condition"],
         "credit_label": trace["credit_label"],
         "outcome_receipt_sha256": trace["outcome_receipt_sha256"],
     }
@@ -135,8 +140,15 @@ class AdmittedJSpaceTrainingDatasetTests(unittest.TestCase):
         with self.assertRaisesRegex(AdmittedTrainingDatasetError, "CAUSAL_BINDING:route_decision_sha256"):
             validate_pipeline_evidence(trace, admission, _binding(trace))
 
+    def test_crossbound_vector_packet_mismatch_fails_closed(self):
+        trace = _training_trace()
+        admission = _admission(trace, vector_control_packet_sha256="ab" * 32)
+        with self.assertRaisesRegex(AdmittedTrainingDatasetError, "VECTOR_CONTROL_PACKET_BINDING"):
+            validate_pipeline_evidence(trace, admission, _binding(trace))
+
     def test_compile_path_invokes_dataset_gate_and_selected_basis_guard(self):
         trace = _training_trace()
+        transition = {"schema_version": "JSPACE_GWT_TRANSITION_TRACE/v1"}
         admission = _admission(trace)
         binding = _binding(trace)
         lower = {
@@ -152,14 +164,23 @@ class AdmittedJSpaceTrainingDatasetTests(unittest.TestCase):
             return_value=lower,
         ) as compiler:
             compiled = compile_admitted_records(
-                [(trace, {"schema_version": "JSPACE_GWT_TRANSITION_TRACE/v1"})],
+                [(trace, transition)],
                 admitted_training_traces={TRACE_SHA: trace},
                 admitted_transition_traces={TRANSITION_SHA: {}},
                 admitted_prototype_traces={PROTOTYPE_SHA: {}},
+                admitted_grid_plans=ADMITTED_GRID_PLANS,
                 admitted_inference_bindings={TRACE_SHA: binding},
                 admitted_bases=ADMITTED_BASES,
             )
-        gate.assert_called_once()
+        gate.assert_called_once_with(
+            trace,
+            transition,
+            admitted_training_traces={TRACE_SHA: trace},
+            admitted_transition_traces={TRANSITION_SHA: {}},
+            admitted_prototype_traces={PROTOTYPE_SHA: {}},
+            admitted_grid_plans=ADMITTED_GRID_PLANS,
+            admitted_outcome_receipts=None,
+        )
         compiler.assert_called_once_with([dict(trace)], admitted_bases=ADMITTED_BASES)
         metadata = compiled["train"][0]["metadata"]
         self.assertEqual(metadata["pipeline_schema"], PIPELINE_SCHEMA)
@@ -185,10 +206,47 @@ class AdmittedJSpaceTrainingDatasetTests(unittest.TestCase):
                     admitted_training_traces={TRACE_SHA: trace},
                     admitted_transition_traces={TRANSITION_SHA: {}},
                     admitted_prototype_traces={PROTOTYPE_SHA: {}},
+                    admitted_grid_plans=ADMITTED_GRID_PLANS,
                     admitted_inference_bindings={},
                     admitted_bases=ADMITTED_BASES,
                 )
         compiler.assert_not_called()
+
+    def test_duplicate_training_trace_with_conflicting_ancestry_fails_closed(self):
+        trace = _training_trace()
+        binding = _binding(trace)
+        first = _admission(trace)
+        second = _admission(trace, transition_trace_sha256="de" * 32)
+        lower = {
+            "train": [{"messages": [], "metadata": {"trace_sha256": TRACE_SHA}}],
+            "validation": [],
+            "holdout": [],
+        }
+        with patch(
+            "compile_admitted_jspace_training_dataset_v1.admit_for_training_dataset",
+            side_effect=[first, second],
+        ) as gate, patch(
+            "compile_admitted_jspace_training_dataset_v1.compile_training_traces",
+            return_value=lower,
+        ) as compiler:
+            with self.assertRaisesRegex(
+                AdmittedTrainingDatasetError,
+                "TRAINING_TRACE_ANCESTRY_CONFLICT",
+            ):
+                compile_admitted_records(
+                    [
+                        (trace, {"schema_version": "JSPACE_GWT_TRANSITION_TRACE/v1", "trace_sha256": TRANSITION_SHA}),
+                        (trace, {"schema_version": "JSPACE_GWT_TRANSITION_TRACE/v1", "trace_sha256": "de" * 32}),
+                    ],
+                    admitted_training_traces={TRACE_SHA: trace},
+                    admitted_transition_traces={TRANSITION_SHA: {}, "de" * 32: {}},
+                    admitted_prototype_traces={PROTOTYPE_SHA: {}},
+                    admitted_grid_plans=ADMITTED_GRID_PLANS,
+                    admitted_inference_bindings={TRACE_SHA: binding},
+                    admitted_bases=ADMITTED_BASES,
+                )
+        self.assertEqual(gate.call_count, 2)
+        compiler.assert_called_once_with([dict(trace)], admitted_bases=ADMITTED_BASES)
 
 
 if __name__ == "__main__":

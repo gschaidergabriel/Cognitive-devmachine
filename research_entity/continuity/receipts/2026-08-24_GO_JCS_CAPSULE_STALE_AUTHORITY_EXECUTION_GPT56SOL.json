@@ -1,0 +1,81 @@
+{
+  "schema": "ENTITYOS_HCU_GO_STALE_AUTHORITY_SANDBOX_EXECUTION_QUARANTINE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "current_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "current_main_observed_before_this_receipt": "5ec96315ea1c87e28ba7087f29f3bbc56fc65a56",
+    "cost_gate_commit_already_on_main_before_execution": "2d47370e40dbda3619bc7c802daa1e127a22c06e",
+    "cost_gate_created_at_utc": "2026-08-23T17:58:10Z",
+    "execution_response_date_utc": "2026-08-23T17:59:18Z",
+    "policy_race": true,
+    "race_description": "The worker invoked one fixed Vercel Sandbox component capsule from a stale authority view after current main had already added the FREE_ONLY metered-Sandbox cost gate. The run is preserved but quarantined and receives zero acceptance credit. No rerun is admitted under supervisor 8.61 until explicit zero-monetary-cost/included-budget admission exists or newer owner/supervisor authority changes the gate."
+  },
+  "execution": {
+    "vercel_project": "dr-unterweger",
+    "execution_repo": "gschaidergabriel/Dr.-Unterweger",
+    "execution_pr": 810,
+    "deployment_id": "dpl_CSDQvENnj5nzWZCVf75YFEwn8msq",
+    "deployment_commit": "f361bed38a85ccc3863833c187a40495c8e6e0d0",
+    "route": "GET /api/hcu-jcs-capsule-probe",
+    "sandbox_name": "plum-calm-pig-VwDemy",
+    "sandbox_session_id": "sbx_jvxiyl3uDsHXyt5cZN8zeJgbTY7d",
+    "sandbox_cleanup": "DELETE_PASS",
+    "overall_http_status": 500,
+    "overall_command_exit_code": 1,
+    "secret_leak_observed": false,
+    "together_used": false,
+    "paid_fallback_used": false
+  },
+  "source_capsule": {
+    "source_repository": "gschaidergabriel/clay-global-research-entity",
+    "source_pr": 1263,
+    "source_commit_declared_by_capsule": "2b7b06f4c93543501e86d5f4692efa36fd191938",
+    "source_path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "test_path": "the artefact/MicroEntity/hcu/test_entry_canonicalization_v1.py",
+    "source_git_blob": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "test_git_blob": "bc9262473f91dbd04ddaf647e667920664495f54",
+    "source_sha256": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f",
+    "test_sha256": "b0b5f519c6c7b751d2ed388661bb617fc1a2ee73055faaab1208a47c6612891b",
+    "byte_identity_note": "The same Git blob SHAs were independently observed on the live retained PR1263 lane before execution. This binds only this component and test bytes, not the whole donor branch or current main."
+  },
+  "observed_test_result": {
+    "tests_started": true,
+    "tests_run": 7,
+    "tests_passed": 7,
+    "tests_failed": 0,
+    "unittest_result": "OK",
+    "post_test_receipt_step_failed": true,
+    "failure_class": "HARNESS_HEREDOC_DELIMITER_SYNTAX_ERROR",
+    "failure_detail": "The fixed route joined a Python heredoc command and the following shell command with '; ', producing a closing delimiter equivalent to 'PY; printf ...'. Python then saw the following shell text and raised SyntaxError. This occurred after unittest reported 7/7 OK.",
+    "semantic_interpretation": "JCS component tests themselves passed at these exact capsule bytes, but the overall executor run is FAIL because the receipt/harness command failed. Under the stale-authority quarantine, even the component pass receives no acceptance promotion."
+  },
+  "repair": {
+    "execution_repo_pr": 810,
+    "repair_commit": "7e3a45d6ff32183eb1d194d39ac18f4d3a440216",
+    "repair": "Replace heredoc-based in-Sandbox identity receipt with fixed SHA256 verification before unittest; preserve exact Git-blob verification at deployment boundary and fixed no-caller-command surface.",
+    "repair_execution_status": "NOT_RERUN_DUE_TO_FREE_ONLY_COST_GATE",
+    "deployment_build_may_continue_automatically": true,
+    "runtime_credit_from_repair": 0
+  },
+  "credit": {
+    "vercel_sandbox_infrastructure_callability": "PREVIOUSLY_VERIFIED_SEPARATELY",
+    "this_run_acceptance_credit": 0,
+    "entityos_hcu_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false,
+    "claim_class": "QUARANTINED_STALE_AUTHORITY_EXECUTION_PLUS_HARNESS_NEGATIVE_EVIDENCE"
+  },
+  "experiment_accounting": {
+    "unusual_experiment_count_added": 0,
+    "reason": "This was a deterministic component regression/execution-admission attempt, not a new unusual experiment."
+  },
+  "next_exact_gate": "Do not start another Vercel Sandbox under current supervisor 8.61 until exact zero-monetary-cost/included-budget admission is established or newer authority explicitly admits metered Sandbox. Continue source/capsule convergence without runtime execution; when cost admission exists, execute the already-repaired fixed JCS capsule once, then extend the same provenance pattern toward the minimum full HCU/J-Space regression closure."
+}

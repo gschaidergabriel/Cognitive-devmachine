@@ -100,13 +100,7 @@ def _verify_grid_plan_binding(
     generation: int,
     causal: Mapping[str, str],
 ) -> None:
-    """Require GRID10 identity to come from external admitted plan evidence.
-
-    Matching hashes in two traces are not enough: both traces could carry the same
-    transplanted, never-admitted GRID plan hash. The registry is deterministic external
-    authority and must bind the selected GRID_PLAN/v2 identity to this generation and
-    Entry -> route causal spine. It is evidence only and grants no compute/effect authority.
-    """
+    """Require GRID10 identity to come from external admitted plan evidence."""
     registry = _mapping(admitted_grid_plans, "admitted_grid_plans")
     plan = registry.get(grid_plan_sha256)
     if not isinstance(plan, Mapping):
@@ -143,7 +137,11 @@ def _verify_outcome_binding(
     role: str,
     credit: str,
 ) -> None:
-    """Require an admitted credited outcome to bind the exact causal training family."""
+    """Require any admitted outcome reference to bind the exact causal training family.
+
+    UNKNOWN keeps credit epistemically unknown; it does not permit an unrelated admitted
+    receipt to become false provenance for this training row.
+    """
     receipt = _mapping(receipt, "admitted_outcome_receipt")
     if _text(receipt.get("status"), "admitted_outcome_receipt.status").upper() != "VERIFIED":
         raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_VERIFIED")
@@ -306,17 +304,16 @@ def admit_for_training_dataset(
         receipt = outcome_registry.get(outcome)
         if receipt is None:
             raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_ADMITTED")
-        if credit != "UNKNOWN":
-            _verify_outcome_binding(
-                receipt,
-                training_sha=training_sha,
-                transition_sha=transition_sha,
-                generation=generation,
-                causal=causal,
-                cell_id=cell_id,
-                role=role,
-                credit=credit,
-            )
+        _verify_outcome_binding(
+            receipt,
+            training_sha=training_sha,
+            transition_sha=transition_sha,
+            generation=generation,
+            causal=causal,
+            cell_id=cell_id,
+            role=role,
+            credit=credit,
+        )
     elif credit != "UNKNOWN":
         raise JSpaceDatasetAdmissionError("NONUNKNOWN_CREDIT_REQUIRES_ADMITTED_OUTCOME_RECEIPT")
 

@@ -257,10 +257,69 @@ def bind_training_trace_to_inference(
 
 
 def validate_binding(binding: JSpaceInferenceBinding) -> None:
+    """Revalidate both digest identity and execution-critical semantic cross-binds.
+
+    A caller can deserialize or otherwise construct a dataclass without going through
+    ``bind_training_trace_to_inference``. Therefore a self-consistent recomputed binding
+    digest is necessary but not sufficient: the validator must independently reject a
+    binding whose top-level trace cell/role or model-call identity diverges from the
+    embedded VerifiedModelExecution provenance.
+    """
     if not isinstance(binding, JSpaceInferenceBinding):
         raise JSpaceInferenceBindingError("JSPACE_INFERENCE_BINDING_REQUIRED")
     if binding.schema != SCHEMA or binding.canonicalization_schema != CANONICALIZATION_SCHEMA:
         raise JSpaceInferenceBindingError("JSPACE_INFERENCE_BINDING_SCHEMA_UNSUPPORTED")
+    if binding.training_trace_schema != TRAINING_TRACE_SCHEMA:
+        raise JSpaceInferenceBindingError("JSPACE_INFERENCE_BINDING_TRACE_SCHEMA_UNSUPPORTED")
+    if binding.inference_receipt_schema != INFERENCE_RECEIPT_SCHEMA:
+        raise JSpaceInferenceBindingError("JSPACE_INFERENCE_BINDING_INFERENCE_SCHEMA_UNSUPPORTED")
+
+    _safe_generation(binding.generation, "binding.generation")
+    for field in (
+        "training_trace_sha256",
+        "prototype_trace_sha256",
+        "entry_event_sha256",
+        "entry_admission_sha256",
+        "route_decision_sha256",
+        "grid_plan_sha256",
+        "vector_control_packet_sha256",
+        "inference_receipt_sha256",
+        "engine_identity_sha256",
+        "resolved_engine_artifact_sha256",
+        "engine_admission_receipt_sha256",
+        "engine_load_loader_binding_sha256",
+        "engine_load_lease_sha256",
+        "engine_load_consumption_receipt_sha256",
+        "model_execution_receipt_sha256",
+        "model_execution_observation_sha256",
+        "input_sha256",
+        "output_sha256",
+    ):
+        _sha256(getattr(binding, field), f"binding.{field}")
+    for field in (
+        "cell_id",
+        "role",
+        "resolved_engine_identity",
+        "resolved_engine_class",
+        "engine_load_loader_id",
+        "model_execution_executor_id",
+        "model_execution_invocation_id",
+        "output_producing_cell_id",
+        "model_execution_role",
+        "model_call_id",
+        "output_ref",
+    ):
+        _text(getattr(binding, field), f"binding.{field}")
+    _nonnegative_int(binding.input_size, "binding.input_size")
+    _nonnegative_int(binding.output_size, "binding.output_size")
+
+    if binding.output_producing_cell_id != binding.cell_id:
+        raise JSpaceInferenceBindingError("MODEL_EXECUTION_CELL_DOES_NOT_BIND_TRACE_CELL")
+    if binding.model_execution_role != binding.role:
+        raise JSpaceInferenceBindingError("MODEL_EXECUTION_ROLE_DOES_NOT_BIND_TRACE_ROLE")
+    if binding.model_execution_invocation_id != binding.model_call_id:
+        raise JSpaceInferenceBindingError("MODEL_CALL_ID_NOT_EXECUTOR_MINTED_INVOCATION")
+
     material = asdict(binding)
     observed = _sha256(material.pop("binding_sha256", None), "binding.binding_sha256")
     expected = _canonical_sha256(material, "JSPACE_INFERENCE_BINDING")

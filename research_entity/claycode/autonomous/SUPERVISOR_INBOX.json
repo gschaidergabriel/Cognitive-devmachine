@@ -1,6 +1,6 @@
 {
-  "schema_version": "8.53",
-  "latest_cycle": "automation-20260823-hcu-provider-admission-failclosed",
+  "schema_version": "8.54",
+  "latest_cycle": "automation-20260823-hcu-route-engine-identity-binding",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
@@ -13,12 +13,13 @@
     "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY",
     "mini_entity_clayverse_frank": "HISTORICAL_OR_DONOR_PROVENANCE_ONLY"
   },
-  "latest_repo_head_inspected": "995252b49badea9387d1f7199bc3b71fe9d08afa",
-  "material_finding": "SOURCE_CONFIRMED_FREE_ONLY_FAIL_OPEN_CANDIDATE: draft PR 1263 claims a provider-independent HCU internal cognition path, but reactive_event_router_v1.py rejects only a finite denylist of known external providers. An unknown or future external provider label can pass internal admission and be reported with external_provider_dependency=false. Provider independence must be positively proven, not inferred from absence on a denylist.",
+  "latest_repo_head_inspected": "a50def98989329b64c8e83598134034b30c48bc5",
+  "material_finding": "SOURCE_CONFIRMED_ROUTE_IDENTITY_GAP: draft PR 1263 not only uses a finite denylist for internal-provider admission; route_event() also omits the requested/resolved cognition-engine identity from the payload hashed into decision_sha256. Distinct admitted engines can therefore alias to the same route decision identity. Positive fail-closed admission is necessary but insufficient: the canonical resolved engine identity/class must be cryptographically bound into the route decision and echoed by downstream inference receipts.",
   "source_candidate": {
     "pr": 1263,
     "head": "cb48a9cacfa942316a5e036388d4a8433d405376",
     "file": "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
+    "blob": "7c0fee26fd3d8a48b99da7eca7f3bca8fea046ae",
     "merge_state": "DRAFT_OPEN_NOT_MERGED",
     "promotion_credit": 0
   },
@@ -37,7 +38,8 @@
     "SOURCE_OR_OWNER_ARCHITECTURE_WORDING_DOES_NOT_CREATE_RUNTIME_OR_SEMANTIC_CREDIT",
     "NO_BASE_OR_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
     "PROVIDER_INDEPENDENCE_REQUIRES_POSITIVE_BOUND_IDENTITY_NOT_DENYLIST_ABSENCE",
-    "UNKNOWN_EXTERNAL_OR_UNRESOLVED_PROVIDER_IDENTITY_FAILS_CLOSED"
+    "UNKNOWN_EXTERNAL_OR_UNRESOLVED_PROVIDER_IDENTITY_FAILS_CLOSED",
+    "ROUTE_DECISION_IDENTITY_MUST_COMMIT_TO_COGNITION_ENGINE_IDENTITY"
   ],
   "free_only": {
     "enabled": true,
@@ -54,6 +56,9 @@
       "router_policy_digest",
       "requested_provider_identity",
       "resolved_engine_identity_and_class",
+      "resolved_model_runtime_checkpoint_identity_when_applicable",
+      "route_decision_digest_bound_to_resolved_engine_identity",
+      "downstream_inference_echo_of_route_digest_and_engine_identity",
       "secret_lookup_count",
       "network_attempt_count",
       "external_cognition_delegation_count",
@@ -67,12 +72,16 @@
       "typo case whitespace or novel provider aliases -> REJECT unless resolved to an explicitly admitted local identity",
       "provider absent -> ALLOW only when a positive local/internal engine identity is otherwise bound",
       "PAID SUBSCRIPTION UNKNOWN -> 0 secret lookups and 0 network attempts",
-      "rejected cases must never report external_provider_dependency=false as a proven fact"
+      "rejected cases must never report external_provider_dependency=false as a proven fact",
+      "same event plus two distinct admitted engine identities -> distinct route decision digests or rejection",
+      "aliases resolving to the same canonical local engine may converge only after explicit canonical resolution",
+      "downstream inference engine identity must equal admitted route engine identity"
     ]
   },
   "next_focus": [
-    "DO_NOT_MERGE_OR_PROMOTE_PR1263_PROVIDER_INDEPENDENCE_CLAIM_UNTIL_POSITIVE_FAIL_CLOSED_ADMISSION_IS_PROVEN",
+    "DO_NOT_MERGE_OR_PROMOTE_PR1263_PROVIDER_INDEPENDENCE_CLAIM_UNTIL_POSITIVE_FAIL_CLOSED_ADMISSION_AND_ENGINE_IDENTITY_BINDING_ARE_PROVEN",
     "REPLACE_FINITE_EXTERNAL_PROVIDER_DENYLIST_AS_AUTHORITY_WITH_CANONICAL_POSITIVE_ENGINE_CAPABILITY_CLASS_RESOLUTION",
+    "BIND_CANONICAL_RESOLVED_ENGINE_IDENTITY_INTO_ROUTE_DECISION_SHA256_AND_DOWNSTREAM_INFERENCE_RECEIPT",
     "RUN_HCU_INTERNAL_PROVIDER_ADMISSION_RECEIPT_V1_IN_AN_AUTHORIZED_ISOLATED_ENVIRONMENT_WHEN_RUNTIME_IS_INTENTIONALLY_RESTARTED",
     "PRESERVE_ENTITYOS_HCU_ONLY_AUTHORITY_AND_FUSE_USEFUL_DONOR_MECHANISMS_WITHOUT_CREATING_A_SECOND_PRODUCT_IDENTITY",
     "PREFER_EXECUTABLE_DISCRIMINATORS_OVER_MORE_SOURCE_AUTHORITY_GUARDS",

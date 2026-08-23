@@ -12,14 +12,19 @@ import json
 from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 
+try:
+    from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+except ImportError:
+    from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+
 SCHEMA = "HCU_REACTIVE_EVENT/v1"
-ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v3"
-ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v1"
-ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v1"
-# Exact implementation-scoped hash serialization profile. This is deliberately NOT a
-# claim of RFC 8785 JCS or heterogeneous Entry-Fabric canonicalization. Any future
-# cross-language profile must use a distinct versioned identity.
-HASH_SERIALIZATION_SCHEMA = "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1"
+ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v4"
+ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v2"
+ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v2"
+# Compatibility field name retained in RouteDecision/receipts. New v2/v4 identities
+# are bound to the current-main-selected RFC8785 JCS profile. Historical v1/v3 hashes
+# keep their original implementation-scoped Python-JSON meaning and are never rewritten.
+HASH_SERIALIZATION_SCHEMA = CANONICALIZATION_SCHEMA
 
 ADMITTED_INTERNAL_PROVIDER_ALIASES = {"hcu", "local", "xeno"}
 ADMITTED_INTERNAL_ENGINES = {
@@ -105,14 +110,14 @@ class RouteDecision:
 
 
 def _canonical(value: Any) -> bytes:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
+    return canonicalize(value)
 
 
 def _sha256_canonical(value: Any, field: str) -> str:
     try:
         encoded = _canonical(value)
-    except (TypeError, ValueError) as exc:
-        raise ReactiveRoutingError(f"{field}:CANONICALIZATION_FAILED") from exc
+    except CanonicalizationError as exc:
+        raise ReactiveRoutingError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
     return hashlib.sha256(encoded).hexdigest()
 
 
@@ -239,6 +244,8 @@ def _event_identity(
     if has_entry_projection:
         _nonempty_text(event.get("ingress_id"), "INGRESS_ID")
         _nonempty_text(event.get("causal_id"), "CAUSAL_ID")
+        if event.get("entry_canonicalization_schema") != HASH_SERIALIZATION_SCHEMA:
+            raise ReactiveRoutingError("ENTRY_CANONICALIZATION_SCHEMA_MISMATCH")
         event_sha256 = _sha256_text(event.get("entry_event_sha256"), "ENTRY_EVENT_SHA256")
         admission_sha256 = _sha256_text(event.get("entry_admission_sha256"), "ENTRY_ADMISSION_SHA256")
         if not isinstance(admitted_entry_bindings, Mapping):

@@ -1,0 +1,73 @@
+{
+  "schema": "ENTITYOS_HCU_GO_ENTRY_MANIFEST_V2_EXACT_BINDING_SANDBOX/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN_IN_CURRENT_SUPERVISOR_MODE",
+    "execution_surface": "VERCEL_HOBBY_BOUNDED_INCLUDED_TIER_FREE_ADMITTED"
+  },
+  "execution_manifest": {
+    "capsule": "HCU_ENTRY_CANONICALIZATION_CAPSULE/v2",
+    "source_repository": "gschaidergabriel/clay-global-research-entity",
+    "source_main_commit": "8105d1614bfa999431a9aeb63a7702cdbf033146",
+    "source_pr": 1263,
+    "source_pr_commit": "c032c73800152c0bf6a211d6976ca5c11a3d1896",
+    "source_manifest_sha256": "abc510d6be36217ae86f89f1bfeea12bc096339fd797b1dc400db3ee6eda7aa2",
+    "source_git_blobs": {
+      "entry_canonicalization_v1.py": "00d1d79cbb66a1956a278de4755cd8395e854199",
+      "test_entry_canonicalization_v1.py": "bc9262473f91dbd04ddaf647e667920664495f54"
+    },
+    "source_sha256": {
+      "entry_canonicalization_v1.py": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f",
+      "test_entry_canonicalization_v1.py": "b0b5f519c6c7b751d2ed388661bb617fc1a2ee73055faaab1208a47c6612891b"
+    }
+  },
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "deployment_commit": "928dda687a3d392e3a09d763b97696d5154febdc",
+    "deployment_id": "dpl_EecnerhCVFgYoDX6pB5fNL7Hn6f2",
+    "route": "GET /api/hcu-entry-capsule",
+    "generic_command_input": false,
+    "deployment_protection_bypass": "TEMPORARY_VERCEL_SHARE_ONLY"
+  },
+  "execution": {
+    "status": "HCU_EXACT_SOURCE_COMPONENT_SANDBOX_PASS",
+    "sandbox_id": "coral-stuck-marsupial-bYT7HC",
+    "exit_code": 0,
+    "tests_run": 7,
+    "tests_passed": 7,
+    "secret_fence": "PASS",
+    "sandbox_cleanup": "PASS",
+    "cleanup_error": null,
+    "result_log_sha256": "b9808b013c2d4f6d36738add4d3df6f5f760ce0bb5575d923b309b929d21dfe1",
+    "result_scope": "RFC8785/JCS ENTRY CANONICALIZATION COMPONENT ONLY"
+  },
+  "reentry": {
+    "main_observed_after_execution_before_receipt": "5f2f57a78927d5ec36d7bb3dd4a05138cf04d74a",
+    "main_tree_observed": "c3e572e54d9711afbb06e55c363d5445d4abddf5",
+    "executed_source_blob_still_on_reentry_main": true,
+    "executed_test_blob_still_on_reentry_main": true,
+    "source_blob_at_reentry_main": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "test_blob_at_reentry_main": "bc9262473f91dbd04ddaf647e667920664495f54",
+    "interpretation": "The v2 capsule repaired the previously stale PR1263 source_commit label and bound the executed component to exact source-manifest identity. Research main moved afterward through non-byte-changing coordination/receipt work; the executed component bytes remained identical at the re-entry head."
+  },
+  "credit": {
+    "component_runtime_credit": "ENTRY_CANONICALIZATION_ONLY",
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  },
+  "next_exact_gate": "Stop iterating on Entry/JCS component identity. Extend the existing single fixed hash-verified PR810 executor authority to the minimum combined Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset regression closure, then execute it on the bounded FREE isolated surface with exact source/result identities."
+}

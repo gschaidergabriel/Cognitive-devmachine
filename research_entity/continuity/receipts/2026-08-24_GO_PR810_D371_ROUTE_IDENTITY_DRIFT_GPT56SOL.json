@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "bf592fad1b51aa7b79b19b4ad2ac8a17d2b6ece0",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; AVAILABLE_USER_MESSAGE_TIME_HAS_MINUTE_PRECISION_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "work_class": "ORDINARY_SOURCE_REVIEW_AND_EXECUTOR_CONVERGENCE",
+    "duplicate_executor_lane_created": false
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "cd4c84badf45b723bce9ff33d1da4e3a2c0e25ad",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "8f850d6efcf62d7b6ee8b8c698001cf44c55475c",
+    "executor_pinned_donor_target": "d371ccaca994f234a4cd127d48c3867cfe10ab56"
+  },
+  "observed_executor_convergence": {
+    "predecessor_error_deployment": "dpl_26pNV41EYrvFuWKRBFCHUPjQN2Xk",
+    "predecessor_executor_sha": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+    "predecessor_build_error": "JSPACE_V4_V3_CURRENT_SUCCESSOR_DONOR_DRIFT:manifest=d371ccaca994f234a4cd127d48c3867cfe10ab56;contract=511d568932bf47828679e3ca6ba05650f18d284d",
+    "predecessor_runtime_or_sandbox_reached": false,
+    "current_contract_at_8f850d6": "retained_donor_commit=d371ccaca994f234a4cd127d48c3867cfe10ab56; global_jspace_gwt_v1 git blob=aa87a61aaedde3452e63f2851f0c07508ebda753",
+    "current_route_at_8f850d6": "REQUIRED_DONOR_COMMIT=511d568932bf47828679e3ca6ba05650f18d284d",
+    "classification": "CURRENT_EXECUTOR_ROUTE_CONTRACT_DONOR_IDENTITY_DRIFT_SOURCE_BLOCKER",
+    "exact_current_ready_deployment_observed": false,
+    "runtime_invocation_observed": false
+  },
+  "hypothesis": "The d371 control-label-fence rebind is source-coherent only after the single fixed executor route resolves the same immutable donor identity as the current rebind contract and independent manifest.",
+  "counterhypothesis": "Updating only the contract and manifest is sufficient because the route donor constant is presentation-only.",
+  "discriminator_result": "COUNTERHYPOTHESIS_REJECTED_BY_SOURCE: loadReboundSourceAuthority compares contract and manifest retained_donor_commit against route REQUIRED_DONOR_COMMIT, so the stale 511d route constant will fail closed before Sandbox.create even when contract and manifest agree on d371.",
+  "required_minimal_repair": {
+    "lane": "gschaidergabriel/Dr.-Unterweger#810 only",
+    "rule": "Complete the existing d371 rebind atomically; do not create a second executor or weaken the donor-equality guard.",
+    "source_delta": "Set the fixed route REQUIRED_DONOR_COMMIT to d371ccaca994f234a4cd127d48c3867cfe10ab56 and keep contract/manifest/deployment-carried 17-blob equality fail-closed. Preserve historical carrier path names where renaming would break reproducibility.",
+    "acceptance": [
+      "current build guards pass without weakening donor identity equality",
+      "exact-current Vercel preview Git SHA equals then-current PR810 head and is READY",
+      "route verifies all deployment-carried pinned blobs before FREE_ONLY cost admission",
+      "only then may Sandbox.create be reached",
+      "fixed 14-result fence, secret fence, exit 0 and cleanup remain required",
+      "any PASS remains component-scoped"
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: isolated the exact remaining source identity split in the retained executor after the parallel d371 contract promotion; runtime credit remains zero.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: preserved one exact causal source identity across donor manifest, contract and executor route instead of permitting mixed-snapshot HCU evidence.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: the d371 explicit control-label producer fence cannot be projected into runtime/training evidence until the fixed executor actually carries and admits that exact donor identity; J-Space model-input control consumption remains a separate later gate."
+  },
+  "execution_and_credit_boundary": {
+    "sandbox_runtime_executed_by_this_organ": false,
+    "route_invoked_by_this_organ": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "whole_entityos_hcu_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current-facing authority and executor surfaces are moving concurrently. This cycle records the exact narrow source blocker append-only instead of overwriting the large artefact README from a partial connector view."
+  },
+  "next_exact_action": "Complete the d371 identity rebind in the existing PR810 route without weakening equality guards. Re-enter the then-current executor head and Vercel preview set; only an exact-head READY preview may be invoked through the fixed FREE_ONLY route. Separately retain HCU_MODEL_INPUT_CONTROL_BINDING/v1 as the next J-Space model-causality gate before model-runtime or training promotion."
+}

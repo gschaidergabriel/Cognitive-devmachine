@@ -127,7 +127,7 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
             "engine_load_lease_sha256": LOAD_LEASE_SHA256,
             "engine_load_consumption_receipt_sha256": LOAD_CONSUMPTION_SHA256,
             "engine_load_loader_id": "loader:1",
-            "model_call_id": "call:1",
+            "model_call_id": f"grid10:{trace.grid_plan_sha256}:{trace.cell_id}:{trace.role}",
             "output_ref": "unifieddb:model-output:1",
             "output_sha256": OUTPUT_SHA256,
             "output_size": 123,

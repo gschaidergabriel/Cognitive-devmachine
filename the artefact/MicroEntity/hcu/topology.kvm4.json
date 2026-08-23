@@ -1,0 +1,80 @@
+{
+  "schema_version": "HCU_TOPOLOGY/v1",
+  "profile_id": "kvm4-4c16g-200g-16tb",
+  "status": "SOURCE_PROFILE_UNVERIFIED_RUNTIME",
+  "owner_supplied_host": {
+    "plan": "KVM 4",
+    "cpu_cores": 4,
+    "memory_gib": 16,
+    "disk_gib": 200,
+    "bandwidth_tb": 16
+  },
+  "cognition": {
+    "model_class": "~0.8B_GENERIC_CLAYCOG",
+    "exact_checkpoint": "UNRESOLVED_UNTIL_BUNDLED_MANIFEST",
+    "quantization": "MEASURE_AND_BIND_AT_RUNTIME",
+    "weight_strategy": "MINIMIZE_DUPLICATION_SHARED_FILE_PAGE_CACHE_OR_RUNTIME_EQUIVALENT",
+    "target_resident_inference_workers": 2,
+    "default_parallel_decode": 2,
+    "hard_parallel_decode_ceiling": 4
+  },
+  "resource_policy": {
+    "os_db_scheduler_reserve_gib": 2,
+    "mini_entity_ram_soft_limit_gib": 12,
+    "mini_entity_ram_hard_limit_gib": 14,
+    "swap_thrashing": "DEGRADE_RESIDENCY_AND_CONCURRENCY_BEFORE_SWAP_THRASH",
+    "admission_inputs": [
+      "free_ram",
+      "worker_rss",
+      "context_kv_bytes",
+      "cpu_load",
+      "queue_depth",
+      "p50_decode_latency",
+      "p95_decode_latency"
+    ]
+  },
+  "logical_grid": {
+    "target_slots": 16,
+    "adaptive_ceiling": 24,
+    "lanes": {
+      "world": 3,
+      "goal": 2,
+      "simulation": 4,
+      "zero_model": 2,
+      "hypothesis": 2,
+      "critic": 2,
+      "provenance": 1
+    },
+    "slot_semantics": "LOGICAL_CONTEXT_ROLE_NOT_DISTINCT_ENTITY_OR_WEIGHT_COPY"
+  },
+  "persistence": {
+    "authority": "MiniUnifiedDB",
+    "rebuildable": [
+      "HCU_CACHE",
+      "HCU_GRAPH_PROJECTION",
+      "SUSPENDED_RUNTIME_CONTEXT"
+    ],
+    "canonical_record_prefix": "hcu_",
+    "generation_fenced": true
+  },
+  "effects": {
+    "authority": "EffectGate",
+    "module_direct_effects": false,
+    "strategic_output": "StrategicProposal"
+  },
+  "external_feed": {
+    "mode": "FREE_ONLY",
+    "reuse_existing_free_provider_controller": true,
+    "paid_fallback": false,
+    "together_execution": "FORBIDDEN_CURRENT_OWNER_CONTROL",
+    "provider_output_class": "CANDIDATE",
+    "http_402": "HARD_STOP",
+    "http_429": "PROVIDER_WIDE_BACKOFF_NO_KEY_ROTATION"
+  },
+  "evidence": {
+    "runtime_fit": "UNVERIFIED",
+    "throughput": "UNVERIFIED",
+    "safe_slot_ceiling": "UNVERIFIED",
+    "whole_hcu_acceptance": "IN_PROGRESS"
+  }
+}

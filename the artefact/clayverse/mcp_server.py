@@ -24,7 +24,6 @@ class ClayVerseEffectBridge:
 
     @classmethod
     def from_env(cls):
-        from .entityos_bridge import EntityOSBridge
         from .identity import IdentityRouter
         from .store import UnifiedDB
         from .turn_lifecycle import TurnLifecycle
@@ -37,14 +36,20 @@ class ClayVerseEffectBridge:
 
         entityos = None
         enable_exec = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
-        path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
-        sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
         if enable_exec:
-            if not path or not sha256 or not os.path.isabs(path):
+            # Reuse the exact image-owned admission used by service readiness.
+            # MCP/runtime environment may enable the embedded substrate, but it
+            # may never select a different EntityOS path or digest.
+            from .service import _entityos_config
+
+            try:
+                entityos, _status = _entityos_config()
+            except RuntimeError as exc:
                 db.close()
-                raise BridgeStateError("EntityOS execution enabled without complete digest binding")
-            entityos = EntityOSBridge(path=path, sha256=sha256)
-            entityos.verify()
+                raise BridgeStateError(f"image-owned EntityOS admission failed: {exc}") from exc
+            if entityos is None:
+                db.close()
+                raise BridgeStateError("EntityOS execution enabled but image-owned admission returned no bridge")
         return cls(TurnLifecycle(db, user_id, session_id, entityos_bridge=entityos))
 
     def _active_autonomy_identity(self) -> tuple[str, str] | None:

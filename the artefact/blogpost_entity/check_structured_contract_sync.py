@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Fail-closed static guard for canonical Clay <-> Python reference contract drift.
 
-The canonical Clay source has already moved to a DB-resident profile plus generic
-`inference_generate` boundary. The Python reference runtime/tests may lag, but that lag
-must be explicit and must never cause the canonical Clay contract to be rolled backward.
+The canonical Clay source has moved to a DB-resident profile, explicit Unified Cognitive
+Fabric admission, and generic `inference_generate` boundary. The Python reference
+runtime/tests may lag, but that lag must be explicit and must never cause the canonical
+Clay contract to be rolled backward or let a prompt-to-inference bypass look converged.
 
 Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
 unwired handler names do not count as runtime support.
@@ -19,6 +20,7 @@ from typing import Any
 
 REQUIRED_EFFECTS = {
     "pipeline_profile_read": "_pipeline_profile_read",
+    "pipeline_cognitive_fabric_admit": "_pipeline_cognitive_fabric_admit",
     "inference_generate": "_inference_generate",
 }
 LEGACY_EFFECTS = {"profile_load", "provider_chat_json"}
@@ -177,6 +179,7 @@ def main() -> int:
         "run_args": run_args,
         "three_argument_runtime_boundary": run_args == ["entity_db", "source_db", "secret_file"],
         "db_resident_profile_effect": 'effect("pipeline_profile_read"' in clay,
+        "cognitive_fabric_admission_effect": 'phase("pipeline_cognitive_fabric_admit"' in clay,
         "generic_inference_effect": 'effect("inference_generate"' in clay,
         "old_profile_load_absent": 'effect("profile_load"' not in clay,
         "old_provider_chat_absent": 'effect("provider_chat_json"' not in clay,
@@ -192,6 +195,7 @@ def main() -> int:
         [
             clay_contract["three_argument_runtime_boundary"],
             clay_contract["db_resident_profile_effect"],
+            clay_contract["cognitive_fabric_admission_effect"],
             clay_contract["generic_inference_effect"],
             clay_contract["old_profile_load_absent"],
             clay_contract["old_provider_chat_absent"],
@@ -210,13 +214,13 @@ def main() -> int:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v2",
+        "schema": "clay-structured-contract-sync/v3",
         "canonical_clay": clay_contract,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay DB-resident profile + inference_generate semantics are forward authority; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
+        "policy": "Canonical Clay DB-resident profile + explicit cognitive-fabric admission + inference_generate semantics are forward authority; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
         "errors": errors,
         "pass": not errors,
     }

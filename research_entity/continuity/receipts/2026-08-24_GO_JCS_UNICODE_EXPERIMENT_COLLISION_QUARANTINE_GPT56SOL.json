@@ -1,0 +1,70 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JCS_UNICODE_EXPERIMENT_COLLISION_QUARANTINE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "main_observed_before_write": "2882c341ea260a77d035a0ee7c9eef6b908dd168",
+    "main_tree_observed_before_write": "7e55a25ef78b933207f6dc3a823d5dc2c2c3c604",
+    "newest_supervisor_observed": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_head_observed": "912746256999f4663bd6f3817e065d070a410b27",
+    "accepted_macrocycle_unusual_experiment_receipt": "research_entity/continuity/receipts/2026-08-24_GO_ENTRY_CAPSULE_FREE_RUNTIME_GPT56SOL_0137.json",
+    "accepted_macrocycle_unusual_experiment": "CALLER_QUERY_COMMAND_POISON",
+    "one_unusual_experiment_law": "ENFORCED"
+  },
+  "coordination_race": {
+    "classification": "PARALLEL_MACROCYCLE_EXPERIMENT_COLLISION_QUARANTINED",
+    "detail": "This organ executed a bounded JCS Unicode normalization discriminator before observing that a parallel organ had already durably consumed the one unusual-experiment slot for the shared go macrocycle. The observation is preserved as quarantined diagnostic evidence only and receives no unusual-experiment or acceptance credit.",
+    "retry_performed_after_collision_discovery": false,
+    "second_unusual_experiment_admitted": false,
+    "unusual_experiment_count_added": 0
+  },
+  "diagnostic": {
+    "name": "JCS_UNICODE_NORMALIZATION_AS_IS",
+    "scope": "RFC8785/JCS entry canonicalization component only",
+    "hypothesis": "The canonicalizer preserves Unicode string code-point sequences as supplied; canonically equivalent NFC and NFD spellings therefore remain distinct canonical bytes and causal hashes unless an explicit upstream normalization policy exists.",
+    "counterhypothesis": "An implicit Unicode normalization step collapses NFC and NFD spellings onto one canonical byte sequence and one causal identity.",
+    "source_path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "source_git_blob_sha1": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "source_sha256": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f",
+    "source_status": "SAME_EXECUTED_BLOB_ADMITTED_TO_MAIN_BY_65bedfb5ff7b81aec5d989f662e9f8f2173aaf9d",
+    "first_reconstruction_attempt": {
+      "status": "REJECTED_NO_CREDIT",
+      "reason": "Reconstructed fixture text was not byte-identical to the canonical source; the Git blob identity check failed closed before semantic credit."
+    },
+    "exact_source_retry": {
+      "surface": "isolated session tool container",
+      "external_provider_credentials_used": false,
+      "network_required": false,
+      "source_git_blob_identity": "VERIFIED",
+      "nfc_input_key": "U+00E9",
+      "nfd_input_key": "U+0065 U+0301",
+      "nfc_canonical_sha256": "ddcfcf4765da163969972bb20660092ca2787782d9352d1d8a38e93f70acf3bf",
+      "nfd_canonical_sha256": "e5bb0b455cae8a4f7c6b6d839a50c4e7d0cf32dded3bcb83f6a9bd122d16c559",
+      "canonical_bytes_equal": false,
+      "observed_assertion": "UNICODE_NORMALIZATION_AS_IS_FENCE=PASS"
+    }
+  },
+  "evidence_boundary": {
+    "diagnostic_observation_preserved": true,
+    "diagnostic_acceptance_credit": 0,
+    "canonical_semantics_promotion": false,
+    "entry_component_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "entityos_whole_runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "current_frontier": {
+    "entry_canonicalization": "EXECUTED_COMPONENT_ADMITTED_TO_MAIN",
+    "jspace_inference_binding": "V2_SOURCE_CANDIDATE_BINDS_OUTPUT_TO_EXACT_GRID10_PLAN_CELL_BUT_REQUIRES_EXACT_FREE_RUNTIME_EVIDENCE",
+    "next_exact_gate": "Build/extend the single fixed manifest/hash-bound FREE Sandbox capsule to the exact-current J-Space inference binding v2 + GRID10 causal closure, then continue deterministically toward Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> admitted causal dataset full spine. Do not add another unusual experiment in this macrocycle."
+  }
+}

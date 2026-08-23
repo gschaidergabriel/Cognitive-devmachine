@@ -1,0 +1,70 @@
+{
+  "schema": "go-reference-local-exec-capability-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "authority": {
+    "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+    "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+    "free_only": true,
+    "provider_execution": "NOT_ATTEMPTED"
+  },
+  "join": {
+    "initial_main": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+    "fresh_main_before_delta": "3a7a12303e54b24aaefc3c79f1f1ea63a1a9212b",
+    "moving_main_observed": true,
+    "reference_donor_blob": "e885804f14d106f6bd86dbdd5d5aac8f25442315",
+    "reference_donor_origin": "PR #966 mechanism donor"
+  },
+  "grf": {
+    "R0_observed": [
+      "The current donor local_exec checks that local_model_path/model_path names a readable file.",
+      "The complete argv is then loaded from DB-profile-controlled local_argv_json/argv.",
+      "The donor executes that rendered argv with subprocess.run(shell=False, env=child_env).",
+      "The existing current-main local_exec security invariant binds explicit child env but does not bind executable/runner authority."
+    ],
+    "R1_inferred": "A DB-resident cognition profile can mint generic local process capability even when parent-environment inheritance is closed.",
+    "R2_generated": [
+      "Keep complete argv profile-owned and rely on shell=False plus safe env.",
+      "Require model placeholder use but keep executable profile-owned.",
+      "Move executable/runner authority to trusted runtime admission and allow the profile only to parameterize an already-admitted runner."
+    ],
+    "R3_counter_reality": "The readable model-path precondition might be sufficient to prove the launched command is a model runner, making a separate runner authority unnecessary.",
+    "R4_intervention": {
+      "id": "LOCAL_EXEC_DECOY_MODEL_ARBITRARY_ARGV_FALSIFIER",
+      "class": "bounded synthetic source-mechanism reproduction",
+      "setup": "Create a harmless readable fake weights.gguf, choose an argv that never references the model path, and execute the donor-equivalent subprocess shape with shell=false, explicit minimal env, no network and no secrets.",
+      "observation": {
+        "returncode": 0,
+        "stdout": "{\"executed\":\"unrelated_binary\",\"model_used\":false}",
+        "fake_model_exists": true,
+        "argv_mentions_model_path": false
+      }
+    },
+    "R5_emergent": "The cognition/profile boundary is also a capability boundary: replaceable cognition must not imply replaceable process authority.",
+    "R6_verified": "SOURCE_MECHANISM_SUPPORTED_ONLY"
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "LOCAL_EXEC_DECOY_MODEL_ARBITRARY_ARGV_FALSIFIER",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID"
+  },
+  "result": {
+    "preferred_architecture": "Trusted runtime admission owns the executable/runner; DB profile may only parameterize an already-admitted cognition runner.",
+    "new_guard": "the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py",
+    "runtime_patch": "NOT_IMPLEMENTED_IN_THIS_DELTA",
+    "exact_product_runtime_credit": 0,
+    "provider_runtime_credit": 0
+  },
+  "boundaries": [
+    "No Together/provider call.",
+    "No secret lookup.",
+    "No network access.",
+    "No VPS/self-hosted/production execution.",
+    "Synthetic mechanism reproduction is not exact reference-runtime PASS.",
+    "The donor remains non-promotable until all current authority/hash/read-phase/capability guards and exact isolated execution pass."
+  ],
+  "german_summary": "Der aktuelle local_exec-Donor ist trotz explizitem Kindprozess-Environment noch zu maechtig: Ein DB-Profil kann den gesamten lokalen Prozessbefehl bestimmen und ein beliebiges lesbares Fake-Modell nur als Eintrittskarte benutzen. Der neue Guard trennt deshalb Kognitionskonfiguration von Prozess-Capability: Der Runner muss aus einer vertrauenswuerdigen Runtime-Zulassung kommen; das Profil darf ihn nur parametrisieren."
+}

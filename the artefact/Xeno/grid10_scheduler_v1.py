@@ -1,8 +1,7 @@
 """Xeno deterministic 10-cell scheduler/control-plane baseline v1.
 
-This is an XPU-style allocator over typed Xeno ingress. It owns no truth, no durable
-state and no effects. Logical cells are leases over shared workers or deterministic
-control functions; plan identity is causally bound to the admitted ingress identity.
+XPU-style allocator over verified typed Xeno ingress. It owns no truth, durable state
+or effects. Logical cells are leases over shared workers/control functions.
 """
 from __future__ import annotations
 
@@ -11,7 +10,7 @@ from enum import Enum
 import hashlib
 import json
 
-from entry_fabric_v1 import XenoIngressPacket
+from entry_fabric_v1 import AdmissionError, XenoIngressPacket, verify_ingress_packet
 
 SCHEMA_ID = "XENO_GRID_PLAN/v1"
 
@@ -122,24 +121,26 @@ class GridPlan:
 
 
 def _digest(value: object) -> str:
-    payload = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+    payload = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True, allow_nan=False).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
 
 
 def compile_grid_plan(packet: XenoIngressPacket, functions: tuple[FunctionRequest, ...], *, mode: XenoMode,
                       current_generation: int, config: SchedulerConfig = SchedulerConfig()) -> GridPlan:
-    """Compile a deterministic bounded plan over shared workers."""
-    if not isinstance(packet, XenoIngressPacket):
-        raise ScheduleError("packet must be XenoIngressPacket")
+    """Compile a deterministic bounded plan only after Entry identity re-verification."""
     current = _strict_int(current_generation, "current_generation", 0, 2**63 - 1)
-    if packet.generation != current:
-        raise ScheduleError("packet generation is stale or future")
+    try:
+        verify_ingress_packet(packet, current_generation=current)
+    except AdmissionError as exc:
+        raise ScheduleError("unverified ingress packet") from exc
     try:
         selected_mode = XenoMode(mode).value
     except (TypeError, ValueError) as exc:
         raise ScheduleError("unsupported mode") from exc
     if isinstance(functions, (str, bytes)) or not isinstance(functions, (tuple, list)):
         raise ScheduleError("functions must be a sequence of FunctionRequest")
+    if len(functions) > 256:
+        raise ScheduleError("too many function requests")
     cfg = config.normalized()
     normalized = []
     for req in functions:

@@ -1,0 +1,51 @@
+{
+  "schema": "CLAYVERSE_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "75ebc129fe9ee19ea2863bb5447c7aa34fbd3d85",
+  "branch": "go/clayverse-demote-stale-mini-directives-20260823-1112",
+  "finding": {
+    "class": "DIRECT_LEGACY_AUTHORITY_REACTIVATION_PATH",
+    "paths": [
+      "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+      "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md"
+    ],
+    "observed": [
+      "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md still said SOLE CANONICAL OWNER DIRECTIVE / Status: CURRENT / MINI_ENTITY_PIPELINE_ALL_IN_ONE on current main after ClayVerse reconciliation.",
+      "LOCAL_INFERENCE_REQUIREMENT.md still said Status: CURRENT / Program: MINI_ENTITY_PIPELINE_ALL_IN_ONE and told go to select Mini Entity local-model acceptance as an active frontier."
+    ],
+    "risk": "A direct file reader, old receipt, branch helper or stale tool could bypass corrected root routing and resurrect superseded Mini Entity work selection."
+  },
+  "counterhypothesis": {
+    "claim": "Correct root CLAUDE.md and canonical ClayVerse files are sufficient; stale direct legacy files are harmless.",
+    "result": "REJECTED_AS_DIRECT_READ_AUTHORITY_RISK",
+    "reason": "Both legacy paths self-described as CURRENT and one self-described as the sole canonical owner directive, so direct consumers could reasonably treat them as live authority."
+  },
+  "delta": [
+    "Replace the stale Blogpost canonical-owner file with a short superseded compatibility redirect to the current ClayVerse owner directive while preserving its exact historical blob id.",
+    "Replace the stale Mini Entity local-inference current-program file with a historical donor redirect while preserving its exact historical blob id.",
+    "Extend the existing single ClayVerse authority validator to require both legacy paths to remain superseded redirects and to preserve their historical blob anchors.",
+    "Add poison regressions that reject reactivation of either legacy path as Status: CURRENT."
+  ],
+  "historical_blobs": {
+    "blogpost_directive": "eeb9945e4c1d01a32e13bf6cb74db0c0c49d2767",
+    "local_inference_requirement": "57de4d4f460c0755d3be21cb9ce00369104dbf60"
+  },
+  "evidence": {
+    "source_inspection": "PASS_FOR_FINDING_AND_DELTA",
+    "exact_branch_test_execution": "NOT_YET_OBSERVED",
+    "authorized_vercel_sandbox_start_exec_exposed": false,
+    "whole_clayverse_runtime_credit": 0,
+    "classification": "SOURCE_CANDIDATE_PENDING_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXECUTION"
+  },
+  "unusual_experiment": "NOT_CONSUMED_NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE",
+  "safety": {
+    "free_only_preserved": true,
+    "together_used": false,
+    "vps_or_self_hosted_test_used": false,
+    "paid_or_model_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "next_gate": "Run the exact branch authority validator and focused regressions on an actually-started authorized isolated executor; if admitted, fuse the source delta, then proceed to full exact-current ClayVerse regression and OCI build/startup identity."
+}

@@ -1,6 +1,7 @@
 import hashlib
 import sqlite3
 import tempfile
+import threading
 import unittest
 from dataclasses import asdict, replace
 from pathlib import Path
@@ -188,6 +189,96 @@ class ExecutionStoreInferenceJSpaceChainTests(unittest.TestCase):
                     divergent,
                     current_generation=plan.entity_generation,
                 )
+            self.assertEqual(
+                db.execute("SELECT COUNT(*) FROM hcu_model_execution_invocations").fetchone()[0],
+                1,
+            )
+            self.assertEqual(
+                db.execute("SELECT COUNT(*) FROM hcu_model_execution_observations").fetchone()[0],
+                1,
+            )
+        finally:
+            db.close()
+
+    def test_concurrent_divergent_invocation_yields_one_downstream_jspace_binding(self):
+        packet, decision, kwargs = fixture()
+        plan = kwargs["grid_plan"]
+        load = kwargs["verified_engine_load"]
+        original = executor_observation_from_fixture(kwargs)
+        divergent = replace(
+            original,
+            output_sha256=digest("concurrent-divergent-chain-output"),
+        )
+
+        bootstrap = open_db(self.db_path, plan.entity_generation)
+        bootstrap.close()
+        barrier = threading.Barrier(2)
+        outcomes = []
+        outcome_lock = threading.Lock()
+
+        def worker(candidate):
+            db = open_db(self.db_path, plan.entity_generation)
+            barrier.wait()
+            try:
+                execution = admit_and_verify_model_execution(
+                    db,
+                    plan,
+                    load,
+                    candidate,
+                    current_generation=plan.entity_generation,
+                )
+                local_kwargs = dict(kwargs)
+                local_kwargs["verified_model_execution"] = execution
+                local_kwargs["admitted_verified_model_executions"] = {
+                    execution.receipt_sha256: asdict(execution)
+                }
+                inference = make_inference_receipt(decision, **local_kwargs)
+                trace = training_trace_for(
+                    packet,
+                    decision,
+                    local_kwargs,
+                    execution,
+                )
+                binding = bind_training_trace_to_inference(
+                    trace,
+                    inference,
+                    plan,
+                )
+                validate_binding(binding)
+                result = ("PASS", binding)
+            except ModelExecutionAdmissionStoreError as exc:
+                result = ("REJECT", str(exc))
+            finally:
+                db.close()
+            with outcome_lock:
+                outcomes.append(result)
+
+        threads = [
+            threading.Thread(target=worker, args=(original,)),
+            threading.Thread(target=worker, args=(divergent,)),
+        ]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join(timeout=10)
+
+        self.assertFalse(any(thread.is_alive() for thread in threads))
+        winners = [detail for status, detail in outcomes if status == "PASS"]
+        rejects = [detail for status, detail in outcomes if status == "REJECT"]
+        self.assertEqual(len(winners), 1)
+        self.assertEqual(len(rejects), 1)
+        self.assertIn("MODEL_EXECUTION_INVOCATION_REPLAY_DIVERGENCE", rejects[0])
+
+        binding = winners[0]
+        self.assertEqual(binding.model_execution_invocation_id, original.invocation_id)
+        self.assertEqual(binding.model_call_id, original.invocation_id)
+        self.assertIn(
+            binding.output_sha256,
+            {original.output_sha256, divergent.output_sha256},
+        )
+
+        db = open_db(self.db_path, plan.entity_generation)
+        try:
             self.assertEqual(
                 db.execute("SELECT COUNT(*) FROM hcu_model_execution_invocations").fetchone()[0],
                 1,

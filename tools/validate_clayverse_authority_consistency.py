@@ -13,6 +13,9 @@ EXPECTED_RELEASE = "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE"
 IDENTITY_GUARD = "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
+VERCEL_EXECUTION_PATH = "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md"
+EXPECTED_EXECUTION_GATE = "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS"
+EXPECTED_VERCEL_BRIDGE = "SANDBOX_ADMISSION_PROVEN_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED"
 
 
 def load_json(path: Path):
@@ -23,6 +26,35 @@ def load_json(path: Path):
 def require(errors: list[str], condition: bool, code: str) -> None:
     if not condition:
         errors.append(code)
+
+
+def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]:
+    """Cross-bind active execution-state selection to the current Vercel bridge record.
+
+    This does not grant runtime credit. It only prevents a proven Sandbox admission
+    bridge from being misclassified as a generic missing execution surface.
+    """
+    errors: list[str] = []
+    lower = vercel_execution.lower()
+    bridge_proven = (
+        "sandbox.create is not the blocker" in lower
+        and "runtime one-shot ingress" in lower
+        and "github_read_token" in lower
+    )
+    if not bridge_proven:
+        return errors
+
+    stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
+    execution = program.get("execution_policy") or {}
+    frontier = str(program.get("current_frontier", ""))
+    credit = program.get("runtime_credit") or {}
+
+    require(errors, stage_gate == EXPECTED_EXECUTION_GATE, "PROGRAM_EXECUTION_FRONTIER_STALE_GENERIC_SURFACE_BLOCK")
+    require(errors, execution.get("vercel_sandbox_bridge") == EXPECTED_VERCEL_BRIDGE, "PROGRAM_VERCEL_BRIDGE_STATE_MISSING")
+    require(errors, execution.get("execution_frontier_binding") == VERCEL_EXECUTION_PATH, "PROGRAM_VERCEL_FRONTIER_BINDING_MISSING")
+    require(errors, "owner-started" in frontier.lower() and "github_read_token" in frontier.lower(), "PROGRAM_CURRENT_FRONTIER_TOKEN_INGRESS_MISSING")
+    require(errors, credit.get("whole_clayverse") == 0, "PROGRAM_VERCEL_BRIDGE_FALSE_RUNTIME_CREDIT")
+    return errors
 
 
 def validate(root: Path) -> dict:
@@ -37,13 +69,14 @@ def validate(root: Path) -> dict:
         "manifest": root / "the artefact/manifest.json",
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
+        "vercel_execution": root / VERCEL_EXECUTION_PATH,
         "control44": root / CONTROL44,
         "steering844": root / STEERING844,
     }
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
     if errors:
-        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2", "pass": False, "errors": errors}
+        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3", "pass": False, "errors": errors}
 
     try:
         canonical = load_json(paths["canonical"])
@@ -54,7 +87,7 @@ def validate(root: Path) -> dict:
         steering = load_json(paths["steering844"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
-            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
             "pass": False,
             "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
         }
@@ -64,6 +97,7 @@ def validate(root: Path) -> dict:
     footer = paths["footer"].read_text(encoding="utf-8")
     architecture = paths["architecture"].read_text(encoding="utf-8")
     readme = paths["readme"].read_text(encoding="utf-8")
+    vercel_execution = paths["vercel_execution"].read_text(encoding="utf-8")
 
     # Preserve the older canonical research-entity join/identity fences while changing product authority.
     require(errors, bootstrap.get("entity_id") == canonical.get("entity_id"), "BOOTSTRAP_CANONICAL_ENTITY_MISMATCH")
@@ -93,6 +127,7 @@ def validate(root: Path) -> dict:
     require(errors, execution.get("isolated_sandbox_only") is True, "PROGRAM_ISOLATED_ONLY_MISSING")
     require(errors, execution.get("vps_testing_forbidden") is True, "PROGRAM_VPS_TEST_FENCE_MISSING")
     require(errors, execution.get("together_forbidden") is True, "PROGRAM_TOGETHER_FENCE_MISSING")
+    errors.extend(execution_frontier_errors(program, vercel_execution))
 
     require(errors, manifest.get("artifact") == "ClayVerse", "MANIFEST_ARTIFACT_MISMATCH")
     require(errors, manifest.get("product_endpoint") == "ClayVerse", "MANIFEST_PRODUCT_ENDPOINT_MISMATCH")
@@ -130,7 +165,7 @@ def validate(root: Path) -> dict:
     require(errors, not ("CLAYVERSE SINGLE-CONTAINER ENDPOINT" in readme_head and "SUPERSEDED" in readme_head), "README_CLAYVERSE_SUPERSEDED")
 
     return {
-        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
         "pass": not errors,
         "errors": errors,
         "checked": {name: path.relative_to(root).as_posix() for name, path in paths.items()},

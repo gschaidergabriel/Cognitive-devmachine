@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Fail closed when ClayVerse product authority or inherited safety fences disagree."""
+"""Compatibility-named fail-closed authority guard for current EntityOS + HCU.
+
+The filename is retained because workflows/receipts may address it.  Current product
+selection is EntityOS + HCU.  Historical ClayVerse 4.1->4.4 controls remain checked as
+immutable donor/safety ancestry; their historical product choice is not current
+work-selection authority.
+"""
 from __future__ import annotations
 
 import argparse
@@ -7,28 +13,22 @@ import hashlib
 import json
 from pathlib import Path
 
-OWNER_DIRECTIVE = "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md"
-EXPECTED_PROGRAM = "CLAYVERSE_SINGLE_CONTAINER"
-EXPECTED_STAGE = "CLAYVERSE_ARTIFACT"
-EXPECTED_RELEASE = "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE"
-EXPECTED_DYNAMIC_PRIMARY = "WHOLE_CLAYVERSE_OCI_PRODUCT"
-EXPECTED_EFFECTIVE_CONTROL = "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum"
-CURRENT_REENTRY_ENTITY_VERSION = "RAE-8.8"
-AUTHORITY_REENTRY_PR = 1302
-AUTHORITY_REENTRY_MERGE = "d2f04f3bbc2eae314c7a940d010896aef7b33c4a"
-IDENTITY_GUARD = "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
+CURRENT_PROGRAM = "ENTITYOS_HCU"
+CURRENT_STAGE = "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP"
+CURRENT_PRODUCT = "EntityOS"
+CURRENT_COMPUTE_ARCHITECTURE = "HCU"
+CURRENT_AUTHORITY = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json"
+CURRENT_SCHEMA = "ENTITYOS_HCU_AUTHORITY_CONSISTENCY/v1"
+
+# Historical donor/safety ancestry.  These paths and bytes remain validated so the
+# authority migration cannot silently weaken inherited free-only/execution/provenance
+# fences.  Their ClayVerse product selection is historical, not current authority.
 CONTROL41 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json"
 CONTROL42 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json"
 CONTROL43 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_PROGRAM_AUTHORITY.json"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
-STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
-STEERING848 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_48.json"
-STEERING849 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_49.json"
+LEGACY_EXPECTED_CONTROL = "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum"
 ROOT_CLAUDE = "CLAUDE.md"
-LEGACY_BLOGPOST = "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md"
-LEGACY_LOCAL_INFERENCE = "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md"
-LEGACY_BLOGPOST_BLOB = "eeb9945e4c1d01a32e13bf6cb74db0c0c49d2767"
-LEGACY_LOCAL_INFERENCE_BLOB = "57de4d4f460c0755d3be21cb9ce00369104dbf60"
 
 
 def load_json(path: Path):
@@ -46,190 +46,205 @@ def require(errors: list[str], condition: bool, code: str) -> None:
         errors.append(code)
 
 
-def validate_current_reentry_steering(
-    errors: list[str], bootstrap: dict, steering848: dict | None
+def _validate_legacy_safety_ancestry(
+    errors: list[str],
+    paths: dict[str, Path],
+    control41: dict,
+    control42: dict,
+    control43: dict,
+    control44: dict,
 ) -> None:
-    """Bind the 16:49 owner re-entry steering for the current RAE-8.8 lineage."""
-    if bootstrap.get("expected_entity_version") != CURRENT_REENTRY_ENTITY_VERSION:
-        return
-
-    require(errors, isinstance(steering848, dict), "STEERING848_MISSING")
-    if not isinstance(steering848, dict):
-        return
-
-    require(errors, steering848.get("schema_version") == "8.48", "STEERING848_SCHEMA_MISMATCH")
+    """Preserve prior hard safety/provenance fences without reactivating old product authority."""
+    require(errors, control41.get("schema_version") == "4.1", "CONTROL41_VERSION_MISMATCH")
     require(
         errors,
-        steering848.get("status") == "CURRENT_OWNER_REENTRY_STEERING",
-        "STEERING848_STATUS_MISMATCH",
+        control41.get("status") == "ACTIVE" and control41.get("mode") == "FREE_ONLY",
+        "CONTROL41_FREE_ONLY_WEAKENED",
     )
+    cycle41 = control41.get("cycle_policy") or {}
+    require(errors, cycle41.get("paid_fallback") is False, "CONTROL41_PAID_FALLBACK_WEAKENED")
     require(
         errors,
-        steering848.get("program") == EXPECTED_PROGRAM
-        and steering848.get("stage") == EXPECTED_STAGE,
-        "STEERING848_PROGRAM_STAGE_MISMATCH",
+        cycle41.get("automatic_subscription_upgrade") is False,
+        "CONTROL41_AUTO_UPGRADE_WEAKENED",
     )
+    require(errors, cycle41.get("vps_testing") == "FORBIDDEN", "CONTROL41_VPS_TEST_WEAKENED")
+    authority41 = control41.get("authority_rules") or []
+    require(errors, "model_output_is_candidate_not_truth" in authority41, "CONTROL41_MODEL_TRUTH_FENCE_MISSING")
     require(
         errors,
-        steering848.get("product_endpoint") == "ClayVerse"
-        and steering848.get("release_form") == EXPECTED_RELEASE,
-        "STEERING848_ENDPOINT_RELEASE_MISMATCH",
-    )
-    require(
-        errors,
-        steering848.get("owner_directive") == OWNER_DIRECTIVE,
-        "STEERING848_OWNER_DIRECTIVE_MISMATCH",
+        "autonomous_cycle_may_not_modify_FRANK_harness" in authority41,
+        "CONTROL41_FRANK_HARNESS_FENCE_MISSING",
     )
 
-    authority = steering848.get("authority_adjudication") or {}
+    blob41 = git_blob_sha(paths["control41"])
+    blob42 = git_blob_sha(paths["control42"])
+    blob43 = git_blob_sha(paths["control43"])
+
     require(
         errors,
-        authority.get("mini_entity_4_5")
-        == "SUPERSEDED_FOR_PROGRAM_PRODUCT_TRIGGER_AND_WORK_SELECTION_BY_NEWER_OWNER_REENTRY",
-        "STEERING848_MINI_ENTITY_NOT_SUPERSEDED",
-    )
-    require(errors, authority.get("durable_authority") == "UnifiedDB", "STEERING848_DURABLE_AUTHORITY_MISMATCH")
-    require(
-        errors,
-        authority.get("external_effect_authority") == "EffectGate+EffectJournal",
-        "STEERING848_EFFECT_AUTHORITY_MISMATCH",
+        control42.get("schema_version") == "4.2-execution-boundary-addendum",
+        "CONTROL42_VERSION_MISMATCH",
     )
     require(
         errors,
-        authority.get("second_identity_or_state_or_effect_authority") == "FORBIDDEN",
-        "STEERING848_SECOND_AUTHORITY_NOT_FORBIDDEN",
+        control42.get("status") == "ACTIVE" and control42.get("mode") == "FREE_ONLY",
+        "CONTROL42_FREE_ONLY_WEAKENED",
+    )
+    require(errors, control42.get("base_control_path") == CONTROL41, "CONTROL42_BASE_PATH_MISMATCH")
+    require(errors, control42.get("base_control_blob_sha") == blob41, "CONTROL42_BASE_BLOB_MISMATCH")
+    hard42 = control42.get("preserved_hard_rules") or {}
+    require(
+        errors,
+        hard42.get("free_only") is True and hard42.get("paid_fallback") is False,
+        "CONTROL42_FREE_ONLY_FENCE_WEAKENED",
+    )
+    require(errors, hard42.get("together_forbidden") is True, "CONTROL42_TOGETHER_FENCE_WEAKENED")
+    require(
+        errors,
+        hard42.get("frank_harness_modification") == "FORBIDDEN",
+        "CONTROL42_FRANK_HARNESS_FENCE_WEAKENED",
+    )
+    routing42 = control42.get("execution_routing") or {}
+    require(
+        errors,
+        routing42.get("direct_vps_host_candidate_execution") == "FORBIDDEN",
+        "CONTROL42_DIRECT_VPS_FENCE_WEAKENED",
+    )
+    require(
+        errors,
+        routing42.get("persistent_self_hosted_candidate_execution") == "FORBIDDEN",
+        "CONTROL42_SELF_HOSTED_FENCE_WEAKENED",
+    )
+    require(
+        errors,
+        routing42.get("production_host_testing") == "FORBIDDEN",
+        "CONTROL42_PRODUCTION_TEST_FENCE_WEAKENED",
     )
 
-    execution = steering848.get("execution") or {}
     require(
         errors,
-        execution.get("free_only") is True
-        and execution.get("authorized_isolated_sandbox_only") is True
-        and execution.get("vps_testing") is False
-        and execution.get("self_hosted_vps_test_runners") is False
-        and execution.get("production_host_testing") is False
-        and execution.get("together_allowed") is False,
-        "STEERING848_SAFETY_WEAKENED",
-    )
-    require(errors, execution.get("runtime_credit") == 0, "STEERING848_RUNTIME_CREDIT_NONZERO")
-
-    steering_rules = set(steering848.get("steering") or [])
-    require(
-        errors,
-        "RUN_THE_EXISTING_CLAYVERSE_AUTHORITY_CONSISTENCY_GUARD_BEFORE_PROMOTING_ANY_FUTURE_PRODUCT_ROUTING_CHANGE"
-        in steering_rules,
-        "STEERING848_GUARD_REENTRY_MISSING",
+        control43.get("schema_version") == "4.3-program-authority-addendum",
+        "CONTROL43_VERSION_MISMATCH",
     )
     require(
         errors,
-        "FAIL_CLOSED_IF_BOOTSTRAP_PROGRAM_ROOT_WORKER_SWARM_CONTROL_OR_OWNER_DIRECTIVE_SELECTS_MINI_ENTITY_OR_BLOGPOST_AS_CURRENT_PRODUCT"
-        in steering_rules,
-        "STEERING848_FAIL_CLOSED_ROUTING_MISSING",
+        control43.get("status") == "ACTIVE" and control43.get("mode") == "FREE_ONLY",
+        "CONTROL43_FREE_ONLY_WEAKENED",
     )
-
-
-def validate_postmerge_steering(
-    errors: list[str], bootstrap: dict, steering849: dict | None
-) -> None:
-    """Bind the post-merge evidence steering that closes the 8.48 re-entry ancestry."""
-    if bootstrap.get("expected_entity_version") != CURRENT_REENTRY_ENTITY_VERSION:
-        return
-
-    require(errors, isinstance(steering849, dict), "STEERING849_MISSING")
-    if not isinstance(steering849, dict):
-        return
-
-    require(errors, steering849.get("schema_version") == "8.49", "STEERING849_SCHEMA_MISMATCH")
+    require(errors, control43.get("base_control_path") == CONTROL41, "CONTROL43_BASE_PATH_MISMATCH")
+    require(errors, control43.get("base_control_blob_sha") == blob41, "CONTROL43_BASE_BLOB_MISMATCH")
     require(
         errors,
-        steering849.get("status") == "CURRENT_POSTMERGE_CLAYVERSE_STEERING",
-        "STEERING849_STATUS_MISMATCH",
+        control43.get("execution_boundary_addendum_path") == CONTROL42,
+        "CONTROL43_EXEC_PATH_MISMATCH",
     )
     require(
         errors,
-        steering849.get("program") == EXPECTED_PROGRAM
-        and steering849.get("stage") == EXPECTED_STAGE
-        and steering849.get("product_endpoint") == "ClayVerse",
-        "STEERING849_PROGRAM_STAGE_MISMATCH",
+        control43.get("execution_boundary_addendum_blob_sha") == blob42,
+        "CONTROL43_EXEC_BLOB_MISMATCH",
+    )
+    hard43 = control43.get("preserved_hard_rules") or {}
+    require(
+        errors,
+        hard43.get("free_only") is True and hard43.get("paid_fallback") is False,
+        "CONTROL43_FREE_ONLY_FENCE_WEAKENED",
     )
     require(
         errors,
-        steering849.get("owner_directive") == OWNER_DIRECTIVE,
-        "STEERING849_OWNER_DIRECTIVE_MISMATCH",
+        hard43.get("together_forbidden_under_current_control") is True,
+        "CONTROL43_TOGETHER_FENCE_WEAKENED",
     )
     require(
         errors,
-        steering849.get("authority_reentry_pr") == AUTHORITY_REENTRY_PR
-        and steering849.get("authority_merge_commit") == AUTHORITY_REENTRY_MERGE,
-        "STEERING849_REENTRY_ANCESTRY_MISMATCH",
+        hard43.get("model_output_is_candidate_not_truth") is True,
+        "CONTROL43_MODEL_TRUTH_FENCE_WEAKENED",
+    )
+    require(
+        errors,
+        hard43.get("runtime_credit_requires_exact_admitted_execution") is True,
+        "CONTROL43_RUNTIME_EVIDENCE_WEAKENED",
+    )
+    require(
+        errors,
+        hard43.get("frank_harness_modification") == "FORBIDDEN",
+        "CONTROL43_FRANK_HARNESS_FENCE_WEAKENED",
     )
 
-    state = steering849.get("postmerge_authority_state") or {}
-    require(errors, state.get("bootstrap") == EXPECTED_PROGRAM, "STEERING849_BOOTSTRAP_AUTHORITY_MISMATCH")
-    require(errors, state.get("program_state") == "clayverse-single-container", "STEERING849_PROGRAM_AUTHORITY_MISMATCH")
-    require(errors, state.get("control_4_4") == "ACTIVE", "STEERING849_CONTROL44_NOT_ACTIVE")
     require(
         errors,
-        state.get("control_4_5") == "SUPERSEDED_HISTORICAL_DONOR_ONLY",
-        "STEERING849_CONTROL45_NOT_SUPERSEDED",
+        control44.get("schema_version") == "4.4-clayverse-product-authority-addendum",
+        "CONTROL44_VERSION_MISMATCH",
     )
-    require(errors, state.get("durable_authority") == "UnifiedDB", "STEERING849_DURABLE_AUTHORITY_MISMATCH")
     require(
         errors,
-        state.get("external_effect_authority") == "EffectGate+EffectJournal",
-        "STEERING849_EFFECT_AUTHORITY_MISMATCH",
+        control44.get("status") == "ACTIVE" and control44.get("mode") == "FREE_ONLY",
+        "CONTROL44_NOT_ACTIVE_FREE_ONLY",
+    )
+    require(errors, control44.get("base_control_path") == CONTROL41, "CONTROL44_BASE_PATH_MISMATCH")
+    require(
+        errors,
+        control44.get("execution_boundary_addendum_path") == CONTROL42,
+        "CONTROL44_EXEC_PATH_MISMATCH",
+    )
+    require(
+        errors,
+        control44.get("prior_program_authority_addendum_path") == CONTROL43,
+        "CONTROL44_PRIOR_PATH_MISMATCH",
+    )
+    require(
+        errors,
+        control44.get("prior_program_authority_addendum_blob_sha") == blob43,
+        "CONTROL44_PRIOR_BLOB_MISMATCH",
+    )
+    require(
+        errors,
+        control44.get("composition_order")
+        == [
+            "4.1",
+            "4.2-execution-boundary-addendum",
+            "4.3-program-authority-addendum",
+            "4.4-clayverse-product-authority-addendum",
+        ],
+        "CONTROL44_COMPOSITION_ORDER_MISMATCH",
+    )
+    require(
+        errors,
+        control44.get("effective_control_version") == LEGACY_EXPECTED_CONTROL,
+        "CONTROL44_EFFECTIVE_VERSION_MISMATCH",
     )
 
-    admission = steering849.get("execution_admission") or {}
+    # Historical product identity is checked as provenance, never as current authority.
+    override = control44.get("program_identity_override") or {}
     require(
         errors,
-        admission.get("classification") == "RUNNER_OR_EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION"
-        and admission.get("test_failure_claimed") is False,
-        "STEERING849_EXECUTION_ADMISSION_MISCLASSIFIED",
+        override.get("active_program") == "CLAYVERSE_SINGLE_CONTAINER"
+        and override.get("target_stage") == "CLAYVERSE_ARTIFACT"
+        and override.get("product_endpoint") == "ClayVerse",
+        "CONTROL44_HISTORICAL_PRODUCT_ANCESTRY_MISMATCH",
+    )
+    hard44 = control44.get("preserved_hard_rules") or {}
+    require(
+        errors,
+        hard44.get("free_only") is True and hard44.get("paid_fallback") is False,
+        "CONTROL44_FREE_ONLY_WEAKENED",
+    )
+    require(errors, hard44.get("together_forbidden") is True, "CONTROL44_TOGETHER_WEAKENED")
+    require(errors, hard44.get("vps_testing") is False, "CONTROL44_VPS_TEST_WEAKENED")
+    require(
+        errors,
+        hard44.get("runtime_credit_requires_exact_admitted_isolated_execution") is True,
+        "CONTROL44_RUNTIME_EVIDENCE_WEAKENED",
     )
     require(
         errors,
-        admission.get("runtime_credit") == 0 and admission.get("oci_credit") == 0,
-        "STEERING849_RUNTIME_OR_OCI_CREDIT_NONZERO",
-    )
-
-    experiment = steering849.get("unusual_experiment") or {}
-    require(
-        errors,
-        experiment.get("macrocycle_count") == 1
-        and experiment.get("already_consumed") == "AUTHORITY_ROLLBACK_POISON_REPLAY"
-        and experiment.get("additional_unusual_experiment_forbidden_this_go") is True,
-        "STEERING849_EXPERIMENT_LEASE_MISMATCH",
-    )
-
-    steering_rules = set(steering849.get("steering") or [])
-    require(
-        errors,
-        "KEEP_CLAYVERSE_OWNER_AUTHORITY_MERGED_AND_FAIL_CLOSED_AGAINST_STALE_MINI_ENTITY_WORK_SELECTION"
-        in steering_rules,
-        "STEERING849_CLAYVERSE_FAILCLOSED_RULE_MISSING",
+        hard44.get("model_output_is_candidate_not_truth") is True,
+        "CONTROL44_MODEL_TRUTH_FENCE_WEAKENED",
     )
     require(
         errors,
-        "DO_NOT_CLASSIFY_GITHUB_JOBS_WITH_STEPS_EMPTY_AS_PRODUCT_TEST_FAILURE" in steering_rules,
-        "STEERING849_PRESTEP_CLASSIFICATION_RULE_MISSING",
-    )
-    require(
-        errors,
-        "NEXT_RUNTIME_GATE_REQUIRES_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXACT_CURRENT_EXECUTION"
-        in steering_rules,
-        "STEERING849_EXACT_RUNTIME_GATE_MISSING",
-    )
-    require(errors, steering849.get("together_forbidden") is True, "STEERING849_TOGETHER_FENCE_WEAKENED")
-    require(
-        errors,
-        steering849.get("vps_self_hosted_production_testing_forbidden") is True,
-        "STEERING849_VPS_SELFHOSTED_PRODUCTION_FENCE_WEAKENED",
-    )
-    require(
-        errors,
-        steering849.get("final_paid_model_training") == "OWNER_AUTHORIZATION_REQUIRED",
-        "STEERING849_PAID_TRAINING_FENCE_WEAKENED",
+        hard44.get("frank_harness_modification") == "FORBIDDEN",
+        "CONTROL44_FRANK_HARNESS_FENCE_WEAKENED",
     )
 
 
@@ -239,223 +254,201 @@ def validate(root: Path) -> dict:
         "canonical": root / "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
         "bootstrap": root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
         "program": root / "research_entity/rooms/PROGRAM_STATE.json",
-        "directive": root / OWNER_DIRECTIVE,
-        "fast_boot": root / "research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md",
+        "steering852": root / CURRENT_AUTHORITY,
         "footer": root / "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md",
         "manifest": root / "the artefact/manifest.json",
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
         "repo_claude": root / ROOT_CLAUDE,
-        "legacy_blogpost": root / LEGACY_BLOGPOST,
-        "legacy_local_inference": root / LEGACY_LOCAL_INFERENCE,
         "control41": root / CONTROL41,
         "control42": root / CONTROL42,
         "control43": root / CONTROL43,
         "control44": root / CONTROL44,
-        "steering844": root / STEERING844,
     }
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
     if errors:
-        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2", "pass": False, "errors": errors}
+        return {"schema": CURRENT_SCHEMA, "pass": False, "errors": errors}
 
     try:
         canonical = load_json(paths["canonical"])
         bootstrap = load_json(paths["bootstrap"])
         program = load_json(paths["program"])
+        steering852 = load_json(paths["steering852"])
         manifest = load_json(paths["manifest"])
         control41 = load_json(paths["control41"])
         control42 = load_json(paths["control42"])
         control43 = load_json(paths["control43"])
         control44 = load_json(paths["control44"])
-        steering = load_json(paths["steering844"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
-            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+            "schema": CURRENT_SCHEMA,
             "pass": False,
             "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
         }
 
-    checked_paths = dict(paths)
-    steering848 = None
-    steering849 = None
-    if bootstrap.get("expected_entity_version") == CURRENT_REENTRY_ENTITY_VERSION:
-        steering848_path = root / STEERING848
-        steering849_path = root / STEERING849
-        checked_paths["steering848"] = steering848_path
-        checked_paths["steering849"] = steering849_path
-        if steering848_path.is_file():
-            try:
-                steering848 = load_json(steering848_path)
-            except (OSError, json.JSONDecodeError) as exc:
-                errors.append(f"STEERING848_JSON_LOAD_ERROR:{type(exc).__name__}:{exc}")
-        if steering849_path.is_file():
-            try:
-                steering849 = load_json(steering849_path)
-            except (OSError, json.JSONDecodeError) as exc:
-                errors.append(f"STEERING849_JSON_LOAD_ERROR:{type(exc).__name__}:{exc}")
-        validate_current_reentry_steering(errors, bootstrap, steering848)
-        validate_postmerge_steering(errors, bootstrap, steering849)
-
-    directive = paths["directive"].read_text(encoding="utf-8")
-    fast_boot = paths["fast_boot"].read_text(encoding="utf-8")
-    footer = paths["footer"].read_text(encoding="utf-8")
-    architecture = paths["architecture"].read_text(encoding="utf-8")
-    readme = paths["readme"].read_text(encoding="utf-8")
-    repo_claude = paths["repo_claude"].read_text(encoding="utf-8")
-    legacy_blogpost = paths["legacy_blogpost"].read_text(encoding="utf-8")
-    legacy_local_inference = paths["legacy_local_inference"].read_text(encoding="utf-8")
-
-    # Preserve the canonical research-entity join/identity fences while changing product authority.
+    # Persistent research-entity identity must survive product migrations.
     require(errors, bootstrap.get("entity_id") == canonical.get("entity_id"), "BOOTSTRAP_CANONICAL_ENTITY_MISMATCH")
-    require(errors, bootstrap.get("expected_entity_version") == canonical.get("entity_version"), "BOOTSTRAP_CANONICAL_VERSION_MISMATCH")
-    require(errors, bootstrap.get("expected_revision") == canonical.get("revision"), "BOOTSTRAP_CANONICAL_REVISION_MISMATCH")
-    require(errors, bootstrap.get("expected_state_hash") == canonical.get("state_hash"), "BOOTSTRAP_CANONICAL_STATE_HASH_MISMATCH")
-    require(errors, (bootstrap.get("identity") or {}).get("every_turn_guard") == IDENTITY_GUARD, "BOOTSTRAP_IDENTITY_GUARD_POINTER_MISSING")
-    require(errors, "every substantive prompt_run_id" in str((bootstrap.get("per_turn") or {}).get("identity_injection", "")), "BOOTSTRAP_PER_TURN_IDENTITY_INJECTION_MISSING")
-    invariants = "\n".join(str(x) for x in bootstrap.get("mandatory_invariants", []))
-    require(errors, "every substantive prompt_run_id refreshes the Research Entity identity injection" in invariants, "BOOTSTRAP_IDENTITY_INVARIANT_MISSING")
+    identity = bootstrap.get("identity") or {}
+    require(errors, identity.get("persistent_research_entity") == "Clay", "BOOTSTRAP_PERSISTENT_ENTITY_MISMATCH")
+    require(errors, identity.get("temporary_worker") == "ORGAN_NOT_ENTITY", "BOOTSTRAP_TEMP_WORKER_ROLE_MISMATCH")
 
-    require(errors, bootstrap.get("active_program") == EXPECTED_PROGRAM, "BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH")
-    require(errors, bootstrap.get("active_stage") == EXPECTED_STAGE, "BOOTSTRAP_STAGE_MISMATCH")
-    require(errors, bootstrap.get("sole_owner_directive") == OWNER_DIRECTIVE, "BOOTSTRAP_OWNER_DIRECTIVE_MISMATCH")
-    require(errors, bootstrap.get("product_endpoint") == "ClayVerse", "BOOTSTRAP_PRODUCT_ENDPOINT_MISMATCH")
-    require(errors, bootstrap.get("release_form") == EXPECTED_RELEASE, "BOOTSTRAP_RELEASE_FORM_MISMATCH")
+    # Current product/work-selection authority.
+    require(errors, bootstrap.get("active_program") == CURRENT_PROGRAM, "BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH")
+    require(errors, bootstrap.get("active_stage") == CURRENT_STAGE, "BOOTSTRAP_STAGE_MISMATCH")
+    require(errors, bootstrap.get("product_endpoint") == CURRENT_PRODUCT, "BOOTSTRAP_PRODUCT_ENDPOINT_MISMATCH")
+    require(
+        errors,
+        bootstrap.get("integrated_cognition_compute_architecture") == CURRENT_COMPUTE_ARCHITECTURE,
+        "BOOTSTRAP_COMPUTE_ARCHITECTURE_MISMATCH",
+    )
+    require(errors, bootstrap.get("authority_correction") == CURRENT_AUTHORITY, "BOOTSTRAP_AUTHORITY_POINTER_MISMATCH")
+    require(errors, bootstrap.get("execution_surface") == "AUTHORIZED_ISOLATED_SANDBOX_ONLY", "BOOTSTRAP_EXECUTION_FENCE_MISSING")
     require(errors, bootstrap.get("together_api") == "FORBIDDEN", "BOOTSTRAP_TOGETHER_FENCE_MISSING")
-    require(errors, bootstrap.get("vps_testing") == "FORBIDDEN", "BOOTSTRAP_VPS_TEST_FENCE_MISSING")
+    require(errors, bootstrap.get("paid_fallback") == "FORBIDDEN", "BOOTSTRAP_PAID_FALLBACK_FENCE_MISSING")
+    require(
+        errors,
+        bootstrap.get("final_paid_model_training") == "OWNER_AUTHORIZATION_REQUIRED",
+        "BOOTSTRAP_PAID_TRAINING_GATE_MISSING",
+    )
+    require(errors, bootstrap.get("effect_authority") == "EffectGate+EffectJournal", "BOOTSTRAP_EFFECT_AUTHORITY_MISMATCH")
+    invariants = set(str(x) for x in bootstrap.get("mandatory_invariants") or [])
+    require(errors, "EntityOS is the sole current product/system identity" in invariants, "BOOTSTRAP_ENTITYOS_INVARIANT_MISSING")
+    require(errors, "HCU is the sole current integrated cognition/compute architecture" in invariants, "BOOTSTRAP_HCU_INVARIANT_MISSING")
+    require(errors, "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT" in invariants, "BOOTSTRAP_EPISTEMIC_FENCE_MISSING")
 
-    require(errors, program.get("program_id") == "clayverse-single-container", "PROGRAM_ID_MISMATCH")
-    require(errors, program.get("stage") == EXPECTED_STAGE and program.get("current_stage") == EXPECTED_STAGE, "PROGRAM_STAGE_MISMATCH")
-    require(errors, program.get("owner_directive") == OWNER_DIRECTIVE, "PROGRAM_OWNER_DIRECTIVE_MISMATCH")
-    require(errors, program.get("product_endpoint") == "ClayVerse", "PROGRAM_PRODUCT_ENDPOINT_MISMATCH")
-    require(errors, program.get("release_form") == EXPECTED_RELEASE, "PROGRAM_RELEASE_FORM_MISMATCH")
-    require(errors, "CLAYVERSE" in str(program.get("current_stage_goal", "")).upper(), "PROGRAM_STAGE_GOAL_NOT_CLAYVERSE")
-    dynamic = program.get("dynamic_targets") or {}
-    require(errors, dynamic.get("primary") == EXPECTED_DYNAMIC_PRIMARY, "PROGRAM_DYNAMIC_PRIMARY_MISMATCH")
-    require(errors, "CLAYVERSE" in str(program.get("current_frontier", "")).upper(), "PROGRAM_FRONTIER_NOT_CLAYVERSE")
-    require(errors, "CLAYVERSE" in str(program.get("go_contract", "")).upper(), "PROGRAM_GO_CONTRACT_NOT_CLAYVERSE")
+    require(errors, program.get("program_id") == "entityos-hcu", "PROGRAM_ID_MISMATCH")
+    require(errors, program.get("status") == "ACTIVE", "PROGRAM_NOT_ACTIVE")
+    require(
+        errors,
+        program.get("stage") == CURRENT_STAGE and program.get("current_stage") == CURRENT_STAGE,
+        "PROGRAM_STAGE_MISMATCH",
+    )
+    require(errors, program.get("product") == CURRENT_PRODUCT, "PROGRAM_PRODUCT_MISMATCH")
+    require(
+        errors,
+        program.get("integrated_cognition_compute_architecture") == CURRENT_COMPUTE_ARCHITECTURE,
+        "PROGRAM_COMPUTE_ARCHITECTURE_MISMATCH",
+    )
+    pidentity = program.get("identity") or {}
+    require(errors, pidentity.get("persistent_research_entity") == "Clay", "PROGRAM_PERSISTENT_ENTITY_MISMATCH")
+    require(errors, pidentity.get("temporary_workers") == "ORGANS_NOT_ENTITIES", "PROGRAM_TEMP_WORKER_ROLE_MISMATCH")
+    pauthority = program.get("authority") or {}
+    require(errors, pauthority.get("external_effects") == "EffectGate+EffectJournal", "PROGRAM_EFFECT_AUTHORITY_MISMATCH")
+    require(errors, pauthority.get("second_persistent_identity") == "FORBIDDEN", "PROGRAM_SECOND_IDENTITY_NOT_FORBIDDEN")
+    require(
+        errors,
+        pauthority.get("second_truth_effect_or_recovery_authority") == "FORBIDDEN",
+        "PROGRAM_SECOND_AUTHORITY_NOT_FORBIDDEN",
+    )
     execution = program.get("execution_policy") or {}
     require(errors, execution.get("free_only") is True, "PROGRAM_FREE_ONLY_MISSING")
     require(errors, execution.get("isolated_sandbox_only") is True, "PROGRAM_ISOLATED_ONLY_MISSING")
     require(errors, execution.get("vps_testing_forbidden") is True, "PROGRAM_VPS_TEST_FENCE_MISSING")
+    require(errors, execution.get("self_hosted_vps_test_runners_forbidden") is True, "PROGRAM_SELF_HOSTED_FENCE_MISSING")
+    require(errors, execution.get("production_host_testing_forbidden") is True, "PROGRAM_PRODUCTION_TEST_FENCE_MISSING")
     require(errors, execution.get("together_forbidden") is True, "PROGRAM_TOGETHER_FENCE_MISSING")
+    require(errors, execution.get("paid_fallback") is False, "PROGRAM_PAID_FALLBACK_WEAKENED")
+    tracks = program.get("go_required_tracks") or {}
+    require(errors, tracks.get("track_a") == "ENTITYOS_EXECUTABLE_CONVERGENCE", "PROGRAM_GO_TRACK_A_MISMATCH")
+    require(
+        errors,
+        tracks.get("track_b") == "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+        "PROGRAM_GO_TRACK_B_MISMATCH",
+    )
+    credit = program.get("runtime_credit") or {}
+    require(errors, credit.get("entityos_hcu_whole_runtime_credit") == 0, "PROGRAM_RUNTIME_CREDIT_NONZERO")
+    require(errors, credit.get("whole_product_pass") is False, "PROGRAM_WHOLE_PASS_PREMATURE")
 
-    require(errors, manifest.get("artifact") == "ClayVerse", "MANIFEST_ARTIFACT_MISMATCH")
-    require(errors, manifest.get("product_endpoint") == "ClayVerse", "MANIFEST_PRODUCT_ENDPOINT_MISMATCH")
-    require(errors, manifest.get("release_form") == EXPECTED_RELEASE, "MANIFEST_RELEASE_FORM_MISMATCH")
+    require(errors, steering852.get("schema_version") == "8.52", "STEERING852_SCHEMA_MISMATCH")
+    require(
+        errors,
+        steering852.get("status") == "CURRENT_OWNER_AUTHORITY_CORRECTION",
+        "STEERING852_STATUS_MISMATCH",
+    )
+    require(errors, steering852.get("program") == CURRENT_PROGRAM, "STEERING852_PROGRAM_MISMATCH")
+    require(errors, steering852.get("product") == CURRENT_PRODUCT, "STEERING852_PRODUCT_MISMATCH")
+    require(
+        errors,
+        steering852.get("integrated_cognition_compute_architecture") == CURRENT_COMPUTE_ARCHITECTURE,
+        "STEERING852_COMPUTE_ARCHITECTURE_MISMATCH",
+    )
+    adjudication = steering852.get("adjudication") or {}
+    require(errors, adjudication.get("entityos") == "SOLE_CURRENT_PRODUCT_SYSTEM_IDENTITY", "STEERING852_ENTITYOS_AUTHORITY_MISMATCH")
+    require(errors, adjudication.get("hcu") == "SOLE_CURRENT_INTEGRATED_COGNITION_COMPUTE_ARCHITECTURE", "STEERING852_HCU_AUTHORITY_MISMATCH")
+    require(errors, adjudication.get("clayverse") == "HISTORICAL_DONOR_PROVENANCE_ONLY", "STEERING852_CLAYVERSE_NOT_DONOR")
+    routing = set(str(x) for x in steering852.get("routing_law") or [])
+    require(errors, "FREE_ONLY_REMAINS_FAIL_CLOSED_WITH_NO_PAID_FALLBACK" in routing, "STEERING852_FREE_ONLY_FENCE_MISSING")
+    require(errors, "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS" in routing, "STEERING852_EVIDENCE_FENCE_MISSING")
+    sruntime = steering852.get("current_runtime_evidence") or {}
+    require(errors, sruntime.get("entityos_hcu_whole_runtime_credit") == 0, "STEERING852_RUNTIME_CREDIT_NONZERO")
+    require(errors, sruntime.get("whole_product_pass") is False, "STEERING852_WHOLE_PASS_PREMATURE")
+
+    require(errors, manifest.get("artifact") == CURRENT_PRODUCT, "MANIFEST_ARTIFACT_MISMATCH")
+    require(errors, manifest.get("product_endpoint") == CURRENT_PRODUCT, "MANIFEST_PRODUCT_ENDPOINT_MISMATCH")
+    require(
+        errors,
+        manifest.get("integrated_cognition_compute_architecture") == CURRENT_COMPUTE_ARCHITECTURE,
+        "MANIFEST_COMPUTE_ARCHITECTURE_MISMATCH",
+    )
+    require(errors, manifest.get("stage") == CURRENT_STAGE, "MANIFEST_STAGE_MISMATCH")
     require(errors, manifest.get("canonical_workspace") == "the artefact/", "MANIFEST_WORKSPACE_MISMATCH")
+    require(errors, manifest.get("authority_correction") == CURRENT_AUTHORITY, "MANIFEST_AUTHORITY_POINTER_MISMATCH")
+    require(errors, manifest.get("effect_authority") == "EffectGate+EffectJournal", "MANIFEST_EFFECT_AUTHORITY_MISMATCH")
+    mexec = manifest.get("execution_policy") or {}
+    require(errors, mexec.get("free_only") is True, "MANIFEST_FREE_ONLY_MISSING")
+    require(errors, mexec.get("isolated_sandbox_only") is True, "MANIFEST_ISOLATED_ONLY_MISSING")
+    require(errors, mexec.get("vps_testing_forbidden") is True, "MANIFEST_VPS_TEST_FENCE_MISSING")
+    require(errors, mexec.get("together_forbidden") is True, "MANIFEST_TOGETHER_FENCE_MISSING")
+    require(errors, mexec.get("paid_fallback") is False, "MANIFEST_PAID_FALLBACK_WEAKENED")
+    mcredit = manifest.get("runtime_credit") or {}
+    require(errors, mcredit.get("entityos_hcu_whole_runtime_credit") == 0, "MANIFEST_RUNTIME_CREDIT_NONZERO")
+    require(errors, mcredit.get("whole_product_pass") is False, "MANIFEST_WHOLE_PASS_PREMATURE")
+    donor = manifest.get("legacy_donor") or {}
+    require(errors, donor.get("prior_product") == "ClayVerse", "MANIFEST_DONOR_PRODUCT_MISSING")
+    require(errors, donor.get("scope") == "HISTORICAL_DONOR_PROVENANCE_ONLY", "MANIFEST_DONOR_SCOPE_MISMATCH")
 
-    # Do not trust 4.4's preservation claims by themselves. Bind the actual inherited
-    # 4.1 -> 4.2 -> 4.3 bytes and their safety-critical fields before accepting 4.4.
-    require(errors, control41.get("schema_version") == "4.1", "CONTROL41_VERSION_MISMATCH")
-    require(errors, control41.get("status") == "ACTIVE" and control41.get("mode") == "FREE_ONLY", "CONTROL41_FREE_ONLY_WEAKENED")
-    cycle41 = control41.get("cycle_policy") or {}
-    require(errors, cycle41.get("paid_fallback") is False, "CONTROL41_PAID_FALLBACK_WEAKENED")
-    require(errors, cycle41.get("automatic_subscription_upgrade") is False, "CONTROL41_AUTO_UPGRADE_WEAKENED")
-    require(errors, cycle41.get("vps_testing") == "FORBIDDEN", "CONTROL41_VPS_TEST_WEAKENED")
-    authority41 = control41.get("authority_rules") or []
-    require(errors, "model_output_is_candidate_not_truth" in authority41, "CONTROL41_MODEL_TRUTH_FENCE_MISSING")
-    require(errors, "autonomous_cycle_may_not_modify_FRANK_harness" in authority41, "CONTROL41_FRANK_HARNESS_FENCE_MISSING")
+    _validate_legacy_safety_ancestry(errors, paths, control41, control42, control43, control44)
 
-    blob41 = git_blob_sha(paths["control41"])
-    blob42 = git_blob_sha(paths["control42"])
-    blob43 = git_blob_sha(paths["control43"])
+    footer = paths["footer"].read_text(encoding="utf-8").upper()
+    architecture = paths["architecture"].read_text(encoding="utf-8").upper()
+    readme = paths["readme"].read_text(encoding="utf-8").upper()
+    repo_claude = paths["repo_claude"].read_text(encoding="utf-8").upper()
 
-    require(errors, control42.get("schema_version") == "4.2-execution-boundary-addendum", "CONTROL42_VERSION_MISMATCH")
-    require(errors, control42.get("status") == "ACTIVE" and control42.get("mode") == "FREE_ONLY", "CONTROL42_FREE_ONLY_WEAKENED")
-    require(errors, control42.get("base_control_path") == CONTROL41, "CONTROL42_BASE_PATH_MISMATCH")
-    require(errors, control42.get("base_control_blob_sha") == blob41, "CONTROL42_BASE_BLOB_MISMATCH")
-    hard42 = control42.get("preserved_hard_rules") or {}
-    require(errors, hard42.get("free_only") is True and hard42.get("paid_fallback") is False, "CONTROL42_FREE_ONLY_FENCE_WEAKENED")
-    require(errors, hard42.get("together_forbidden") is True, "CONTROL42_TOGETHER_FENCE_WEAKENED")
-    require(errors, hard42.get("frank_harness_modification") == "FORBIDDEN", "CONTROL42_FRANK_HARNESS_FENCE_WEAKENED")
-    routing42 = control42.get("execution_routing") or {}
-    require(errors, routing42.get("direct_vps_host_candidate_execution") == "FORBIDDEN", "CONTROL42_DIRECT_VPS_FENCE_WEAKENED")
-    require(errors, routing42.get("persistent_self_hosted_candidate_execution") == "FORBIDDEN", "CONTROL42_SELF_HOSTED_FENCE_WEAKENED")
-    require(errors, routing42.get("production_host_testing") == "FORBIDDEN", "CONTROL42_PRODUCTION_TEST_FENCE_WEAKENED")
+    require(errors, "PROGRAM: ENTITYOS + HCU" in footer, "FOOTER_PROGRAM_MISMATCH")
+    require(errors, "STAGE: ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP" in footer, "FOOTER_STAGE_MISMATCH")
+    require(errors, "PRODUCT: ENTITYOS" in footer, "FOOTER_PRODUCT_MISMATCH")
+    require(errors, "COMPUTE ARCHITECTURE: HCU" in footer, "FOOTER_COMPUTE_ARCHITECTURE_MISMATCH")
 
-    require(errors, control43.get("schema_version") == "4.3-program-authority-addendum", "CONTROL43_VERSION_MISMATCH")
-    require(errors, control43.get("status") == "ACTIVE" and control43.get("mode") == "FREE_ONLY", "CONTROL43_FREE_ONLY_WEAKENED")
-    require(errors, control43.get("base_control_path") == CONTROL41, "CONTROL43_BASE_PATH_MISMATCH")
-    require(errors, control43.get("base_control_blob_sha") == blob41, "CONTROL43_BASE_BLOB_MISMATCH")
-    require(errors, control43.get("execution_boundary_addendum_path") == CONTROL42, "CONTROL43_EXEC_PATH_MISMATCH")
-    require(errors, control43.get("execution_boundary_addendum_blob_sha") == blob42, "CONTROL43_EXEC_BLOB_MISMATCH")
-    hard43 = control43.get("preserved_hard_rules") or {}
-    require(errors, hard43.get("free_only") is True and hard43.get("paid_fallback") is False, "CONTROL43_FREE_ONLY_FENCE_WEAKENED")
-    require(errors, hard43.get("together_forbidden_under_current_control") is True, "CONTROL43_TOGETHER_FENCE_WEAKENED")
-    require(errors, hard43.get("model_output_is_candidate_not_truth") is True, "CONTROL43_MODEL_TRUTH_FENCE_WEAKENED")
-    require(errors, hard43.get("runtime_credit_requires_exact_admitted_execution") is True, "CONTROL43_RUNTIME_EVIDENCE_WEAKENED")
-    require(errors, hard43.get("frank_harness_modification") == "FORBIDDEN", "CONTROL43_FRANK_HARNESS_FENCE_WEAKENED")
+    require(errors, "ENTITYOS" in architecture[:2500], "ARCHITECTURE_ENTITYOS_MISSING")
+    require(errors, "HCU" in architecture[:2500], "ARCHITECTURE_HCU_MISSING")
+    require(
+        errors,
+        "CLAYVERSE IS THE PRODUCT ENDPOINT" not in architecture[:2500],
+        "ARCHITECTURE_STALE_CLAYVERSE_PRODUCT_AUTHORITY",
+    )
+    require(errors, "ENTITYOS" in readme[:2500] and "HCU" in readme[:2500], "README_ENTITYOS_HCU_MISSING")
 
-    override = control44.get("program_identity_override") or {}
-    hard44 = control44.get("preserved_hard_rules") or {}
-    require(errors, control44.get("schema_version") == "4.4-clayverse-product-authority-addendum", "CONTROL44_VERSION_MISMATCH")
-    require(errors, control44.get("status") == "ACTIVE" and control44.get("mode") == "FREE_ONLY", "CONTROL44_NOT_ACTIVE_FREE_ONLY")
-    require(errors, control44.get("base_control_path") == CONTROL41, "CONTROL44_BASE_PATH_MISMATCH")
-    require(errors, control44.get("execution_boundary_addendum_path") == CONTROL42, "CONTROL44_EXEC_PATH_MISMATCH")
-    require(errors, control44.get("prior_program_authority_addendum_path") == CONTROL43, "CONTROL44_PRIOR_PATH_MISMATCH")
-    require(errors, control44.get("prior_program_authority_addendum_blob_sha") == blob43, "CONTROL44_PRIOR_BLOB_MISMATCH")
-    require(errors, control44.get("composition_order") == ["4.1", "4.2-execution-boundary-addendum", "4.3-program-authority-addendum", "4.4-clayverse-product-authority-addendum"], "CONTROL44_COMPOSITION_ORDER_MISMATCH")
-    require(errors, control44.get("effective_control_version") == EXPECTED_EFFECTIVE_CONTROL, "CONTROL44_EFFECTIVE_VERSION_MISMATCH")
-    require(errors, override.get("active_program") == EXPECTED_PROGRAM, "CONTROL44_PROGRAM_MISMATCH")
-    require(errors, override.get("target_stage") == EXPECTED_STAGE, "CONTROL44_STAGE_MISMATCH")
-    require(errors, override.get("product_endpoint") == "ClayVerse", "CONTROL44_ENDPOINT_MISMATCH")
-    require(errors, override.get("release_form") == EXPECTED_RELEASE, "CONTROL44_RELEASE_MISMATCH")
-    require(errors, hard44.get("free_only") is True and hard44.get("paid_fallback") is False, "CONTROL44_FREE_ONLY_WEAKENED")
-    require(errors, hard44.get("together_forbidden") is True, "CONTROL44_TOGETHER_WEAKENED")
-    require(errors, hard44.get("vps_testing") is False, "CONTROL44_VPS_TEST_WEAKENED")
-    require(errors, hard44.get("runtime_credit_requires_exact_admitted_isolated_execution") is True, "CONTROL44_RUNTIME_EVIDENCE_WEAKENED")
-    require(errors, hard44.get("model_output_is_candidate_not_truth") is True, "CONTROL44_MODEL_TRUTH_FENCE_WEAKENED")
-    require(errors, hard44.get("frank_harness_modification") == "FORBIDDEN", "CONTROL44_FRANK_HARNESS_FENCE_WEAKENED")
-    require(errors, hard44.get("legacy_mini_entity_swarm_controller") == "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION", "CONTROL44_SWARM_QUARANTINE_WEAKENED")
-
-    require(errors, steering.get("program") == EXPECTED_PROGRAM and steering.get("stage") == EXPECTED_STAGE, "STEERING844_PROGRAM_STAGE_MISMATCH")
-    require(errors, steering.get("effective_control") == EXPECTED_EFFECTIVE_CONTROL, "STEERING844_CONTROL44_NOT_EFFECTIVE")
-    adjudication = steering.get("adjudication") or {}
-    require(errors, adjudication.get("free_only") is True and adjudication.get("together_forbidden") is True and adjudication.get("vps_testing") is False, "STEERING844_SAFETY_WEAKENED")
-
-    directive_upper = directive[:1200].upper()
-    require(errors, "CURRENT OWNER DIRECTIVE" in directive_upper, "DIRECTIVE_NOT_CURRENT")
-    require(errors, "SUPERSEDED" not in directive_upper[:220], "DIRECTIVE_MARKED_SUPERSEDED")
-    require(errors, "ACTIVE CLAYVERSE PROGRAM" in fast_boot.upper(), "FAST_BOOT_NOT_ACTIVE_CLAYVERSE")
-    require(errors, "PROGRAM: CLAYVERSE SINGLE-CONTAINER" in footer.upper(), "FOOTER_PROGRAM_MISMATCH")
-    require(errors, "STAGE: CLAYVERSE_ARTIFACT" in footer.upper(), "FOOTER_STAGE_MISMATCH")
-    require(errors, "CLAYVERSE IS THE PRODUCT ENDPOINT" in architecture.upper(), "ARCHITECTURE_PRODUCT_MISMATCH")
-
-    readme_head = readme[:3000].upper()
-    require(errors, "CLAYVERSE SINGLE-CONTAINER PRODUCT" in readme_head, "README_PRODUCT_MISMATCH")
-    require(errors, "CLAYVERSE" in readme_head and "ONE OCI/DOCKER-COMPATIBLE" in readme_head, "README_RELEASE_MISMATCH")
-    require(errors, not ("CLAYVERSE SINGLE-CONTAINER ENDPOINT" in readme_head and "SUPERSEDED" in readme_head), "README_CLAYVERSE_SUPERSEDED")
-
-    # Root CLAUDE.md is a high-leverage repository-organ routing surface. It must not
-    # silently reactivate a superseded Mini Entity/Blogpost program after convergence.
-    repo_claude_head = repo_claude[:7000].upper()
-    require(errors, "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`" in repo_claude_head, "ROOT_CLAUDE_PROGRAM_MISMATCH")
-    require(errors, "`STAGE=CLAYVERSE_ARTIFACT`" in repo_claude_head, "ROOT_CLAUDE_STAGE_MISMATCH")
-    require(errors, "CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.MD" in repo_claude_head, "ROOT_CLAUDE_OWNER_DIRECTIVE_MISSING")
-    require(errors, "MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in repo_claude_head, "ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE")
-    require(errors, "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.MD" not in repo_claude_head, "ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE")
-
-    # Known superseded Mini Entity authority paths remain addressable only as historical
-    # compatibility redirects. Their old exact bytes stay available through Git blob anchors.
-    blogpost_head = legacy_blogpost[:1800].upper()
-    require(errors, "SUPERSEDED" in blogpost_head[:500], "LEGACY_BLOGPOST_NOT_SUPERSEDED")
-    require(errors, "STATUS: CURRENT" not in blogpost_head[:350], "LEGACY_BLOGPOST_STILL_CURRENT")
-    require(errors, "SOLE CANONICAL OWNER DIRECTIVE" not in blogpost_head[:180], "LEGACY_BLOGPOST_STILL_SOLE_OWNER")
-    require(errors, OWNER_DIRECTIVE.upper() in blogpost_head, "LEGACY_BLOGPOST_REDIRECT_MISSING")
-    require(errors, LEGACY_BLOGPOST_BLOB.upper() in blogpost_head, "LEGACY_BLOGPOST_BLOB_MISSING")
-
-    local_head = legacy_local_inference[:1600].upper()
-    require(errors, "SUPERSEDED" in local_head[:500], "LEGACY_LOCAL_INFERENCE_NOT_SUPERSEDED")
-    require(errors, "STATUS: CURRENT" not in local_head[:350], "LEGACY_LOCAL_INFERENCE_STILL_CURRENT")
-    require(errors, OWNER_DIRECTIVE.upper() in local_head, "LEGACY_LOCAL_INFERENCE_REDIRECT_MISSING")
-    require(errors, LEGACY_LOCAL_INFERENCE_BLOB.upper() in local_head, "LEGACY_LOCAL_INFERENCE_BLOB_MISSING")
+    require(errors, "`PROGRAM=ENTITYOS_HCU`" in repo_claude[:5000], "ROOT_CLAUDE_PROGRAM_MISMATCH")
+    require(
+        errors,
+        "`STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`" in repo_claude[:5000],
+        "ROOT_CLAUDE_STAGE_MISMATCH",
+    )
+    require(errors, "`PRODUCT=ENTITYOS`" in repo_claude[:5000], "ROOT_CLAUDE_PRODUCT_MISMATCH")
+    require(errors, "`COMPUTE_ARCHITECTURE=HCU`" in repo_claude[:5000], "ROOT_CLAUDE_COMPUTE_ARCHITECTURE_MISMATCH")
+    require(errors, "SUPERVISOR_STEERING_8_52.JSON" in repo_claude[:5000], "ROOT_CLAUDE_CURRENT_AUTHORITY_MISSING")
+    require(
+        errors,
+        "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`" not in repo_claude[:5000],
+        "ROOT_CLAUDE_STALE_CLAYVERSE_PROGRAM_ACTIVE",
+    )
 
     return {
-        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+        "schema": CURRENT_SCHEMA,
         "pass": not errors,
         "errors": errors,
-        "checked": {name: path.relative_to(root).as_posix() for name, path in checked_paths.items()},
+        "checked": {name: path.relative_to(root).as_posix() for name, path in paths.items()},
     }
 
 

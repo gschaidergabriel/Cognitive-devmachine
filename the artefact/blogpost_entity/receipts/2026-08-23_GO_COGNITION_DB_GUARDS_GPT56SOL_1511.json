@@ -1,0 +1,99 @@
+{
+  "schema": "GO_MINI_COGNITION_DB_GUARD_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main_sha": "2192ea63f41fc3158d4d3c13597bde156d56a2f9",
+  "canonical_store_origin": "PR_1234_MAIN",
+  "canonical_store_current_sha": "2192ea63f41fc3158d4d3c13597bde156d56a2f9",
+  "canonical_store_path": "tools/miniunifieddb_cognition_store_v1.py",
+  "finding": {
+    "class": "GENERATION_CHECK_INSERT_TOCTOU_AND_DIRECT_MUTATION_GAP",
+    "observed_source_fact": "canonical store validates live generation in Python before INSERT while the landed store schema contains no DB trigger repeating the live-generation constraint at INSERT time",
+    "counterexample_schedule": [
+      "caller validates generation g",
+      "another canonical writer commits entity_state generation g+1",
+      "first caller attempts its already-prepared generation-g INSERT"
+    ],
+    "required_property": "SQLite itself must reject the stale write at the final write boundary"
+  },
+  "delta": {
+    "guard_module": {
+      "path": "tools/miniunifieddb_cognition_db_guards_v1.py",
+      "git_blob": "915d7a126b4869a75f3903c0897d6c7fe30cb9d5"
+    },
+    "regressions": [
+      {
+        "path": "tests/test_miniunifieddb_cognition_db_guards_v1.py",
+        "git_blob": "29042ace4842d05cea3849f0aee3e32248b89a4d"
+      },
+      {
+        "path": "tests/test_miniunifieddb_cognition_db_guard_generation_reuse_v1.py",
+        "git_blob": "e015430bdf7bde60def8016e5db277481cd88160"
+      }
+    ],
+    "contract": {
+      "path": "the artefact/blogpost_entity/jspace_gwt/MINIUNIFIEDDB_COGNITION_DB_GUARDS_V1.md",
+      "git_blob": "002224b1b73c58f8ea133fbcc17c21025ef4af68"
+    },
+    "new_tables": 0,
+    "expected_triggers": 11,
+    "properties": [
+      "object-admission INSERT must equal live entity generation",
+      "boot-binding INSERT must equal live generation and reference exact-current-generation admitted cognition objects",
+      "turn-binding INSERT must equal live generation and reference a same-generation boot binding",
+      "objects/admissions/boot bindings/turn bindings reject direct UPDATE and DELETE",
+      "guard installation fails when canonical cognition tables are missing"
+    ]
+  },
+  "coordination": {
+    "duplicate_pr_closed": 1238,
+    "duplicate_parallel_pr_noted": 1242,
+    "read_integrity": "MERGED_PR_1247_DO_NOT_DUPLICATE",
+    "api_exact_generation_admission": "PR_1249_OPEN_DO_NOT_DUPLICATE",
+    "this_lane_scope": "DB_WRITE_BOUNDARY_AND_APPEND_ONLY_GUARDS_ONLY",
+    "second_store_created": false,
+    "hcu_parallel_pass": "NO_CHANGE_NON_DUPLICATE"
+  },
+  "falsifiers": [
+    {
+      "name": "POST_CHECK_GENERATION_ADVANCE_BEFORE_INSERT",
+      "status": "ENCODED_NOT_EXECUTED",
+      "required_observation": "direct generation-g admission/boot/turn INSERT fails after live generation advances to g+1 and leaves no stale row"
+    },
+    {
+      "name": "DIRECT_PRIOR_GENERATION_ADMISSION_REUSE",
+      "status": "ENCODED_NOT_EXECUTED",
+      "required_observation": "a generation-g+1 boot INSERT cannot reuse only generation-g object admissions even through direct SQL"
+    }
+  ],
+  "execution": {
+    "authorized_isolated_execution_observed": false,
+    "tests_executed": 0,
+    "runtime_credit": 0,
+    "model_credit": 0,
+    "jspace_credit": 0,
+    "gwt_credit": 0,
+    "claude_adapter_credit": 0,
+    "hcu_capacity_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "consumed_here": false,
+    "reason": "No immutable shared macrocycle lease identity was exposed; the discriminators are encoded as deterministic regressions only."
+  },
+  "next_gate": "After the exact-generation admission repair is fused, install these DB guards immediately after cognition-store schema installation in the single retained MiniUnifiedDB pipeline_init/bootstrap path, then execute exact integrated source on an actually-started authorized isolated executor before any runtime credit.",
+  "safety": {
+    "free_only": true,
+    "together": "FORBIDDEN",
+    "paid_execution": false,
+    "provider_secret_lookup": false,
+    "vps_test_execution": false,
+    "self_hosted_test_execution": false,
+    "production_test_execution": false,
+    "model_training": false
+  },
+  "classification": "SOURCE_HARDENING_CANDIDATE_NO_RUNTIME_CREDIT"
+}

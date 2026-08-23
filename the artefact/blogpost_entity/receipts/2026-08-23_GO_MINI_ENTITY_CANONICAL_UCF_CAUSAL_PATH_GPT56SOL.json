@@ -57,7 +57,32 @@
     "counterhypothesis": "A source can contain the UCF admission and admitted-envelope fields while still invoking inference first, producing a presence-only false green.",
     "intervention": "Construct a run() source where inference_generate consumes admitted-named fields but pipeline_cognitive_fabric_admit occurs only after inference.",
     "required_result": "fail closed on ordered_prompt_ucf_inference=false",
-    "execution_status": "SOURCE_TEST_DEFINED_NOT_EXECUTED_ON_AUTHORIZED_ISOLATED_RUNNER"
+    "execution_status": "SOURCE_TEST_DEFINED_BUT_WORKFLOW_ADMISSION_FAILED_BEFORE_VISIBLE_STEPS"
+  },
+  "execution_observation": {
+    "observed_head": "bc00db5c008df2600dee87d5dea7a74b5e735e33",
+    "runs": [
+      {
+        "run_id": 32618982844,
+        "workflow": "claycog-validator-pr",
+        "job_id": 97144107268,
+        "job": "strict-admission",
+        "conclusion": "failure",
+        "steps": null
+      },
+      {
+        "run_id": 32618982878,
+        "workflow": "Research Entity Identity Guard",
+        "job_id": 97144107207,
+        "job": "identity-guard",
+        "conclusion": "failure",
+        "steps": null
+      }
+    ],
+    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT",
+    "semantic_test_failure_observed": false,
+    "authorized_isolated_execution_credit": 0,
+    "vercel_connector_surface": "DOCUMENTATION_AND_DEPLOYMENT_ONLY_NO_SANDBOX_EXEC_ACTION_EXPOSED"
   },
   "non_duplication": {
     "donor": "closed PR #1152",
@@ -76,7 +101,7 @@
   "next_exact_gate": [
     "Implement pipeline_cognitive_fabric_admit in the admitted current Mini Entity runtime by reusing the existing ZERO_WORKSPACE_CAPSULE -> ZERO_INFERENCE_PACKET -> UCF authority chain.",
     "Bind generation/turn/workspace/packet identities and MiniUnifiedDB provenance into that single producer path.",
-    "Execute the exact branch/source/runtime on an actually-started authorized isolated executor and preserve pre-step admission failure separately from semantic failure.",
+    "Obtain an actually-started authorized isolated executor for exact branch bytes; the observed GitHub jobs failed before visible steps and the exposed Vercel connector has no Sandbox execution action.",
     "Only then evaluate bundled-0.8B/J-Space/GWT/Claude-adapter runtime credit."
   ],
   "safety": {

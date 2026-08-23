@@ -18,9 +18,7 @@ import miniunifieddb_cognition_store_v1 as store
 class CognitionStoreV1Tests(unittest.TestCase):
     def make_db(self, generation: int = 3) -> sqlite3.Connection:
         db = sqlite3.connect(":memory:")
-        db.execute(
-            "CREATE TABLE entity_state(id INTEGER PRIMARY KEY, generation INTEGER NOT NULL)"
-        )
+        db.execute("CREATE TABLE entity_state(id INTEGER PRIMARY KEY, generation INTEGER NOT NULL)")
         db.execute("INSERT INTO entity_state(id,generation) VALUES(1,?)", (generation,))
         store.install_schema(db)
         return db
@@ -63,6 +61,20 @@ class CognitionStoreV1Tests(unittest.TestCase):
         )
         return values, result["binding_digest"]
 
+    def bind_fixture_turn(self, db: sqlite3.Connection, boot_digest: str, turn_id: str = "turn-x"):
+        return store.bind_turn(
+            db,
+            entity_generation=3,
+            causal_turn_id=turn_id,
+            boot_binding_digest=boot_digest,
+            task_text="run bounded reasoning",
+            workspace_digest=self.digest("workspace-current"),
+            selected_workspace_slots=["slot-1", "slot-2"],
+            contradiction_state="UNRESOLVED",
+            provenance_refs=["test:turn"],
+            required_zero_mode="ACTIVE",
+        )
+
     def test_canonical_json_object_digest_must_match_payload(self):
         db = self.make_db()
         with self.assertRaisesRegex(store.CognitionStoreError, "OBJECT_DIGEST_PAYLOAD_MISMATCH"):
@@ -79,19 +91,12 @@ class CognitionStoreV1Tests(unittest.TestCase):
     def test_boot_binding_requires_every_referenced_object_to_be_admitted(self):
         db = self.make_db()
         values = self.register_and_admit_boot_objects(db)
-        db.execute(
-            "DELETE FROM mini_cognition_object_admissions WHERE object_kind='JACOBIAN_LENS_PROFILE'"
-        )
+        db.execute("DELETE FROM mini_cognition_object_admissions WHERE object_kind='JACOBIAN_LENS_PROFILE'")
         with self.assertRaisesRegex(
             store.CognitionStoreError,
             "COGNITION_OBJECT_NOT_ADMITTED:JACOBIAN_LENS_PROFILE",
         ):
-            store.admit_boot_binding(
-                db,
-                entity_generation=3,
-                provenance_refs=["test:boot"],
-                **values,
-            )
+            store.admit_boot_binding(db, entity_generation=3, provenance_refs=["test:boot"], **values)
 
     def test_stale_generation_cannot_admit_or_bind(self):
         db = self.make_db(generation=4)
@@ -144,7 +149,6 @@ class CognitionStoreV1Tests(unittest.TestCase):
         )
         self.assertEqual(first["binding_digest"], second["binding_digest"])
         self.assertTrue(second["idempotent"])
-
         with self.assertRaisesRegex(store.CognitionStoreError, "TURN_BINDING_CONFLICT"):
             store.bind_turn(
                 db,
@@ -162,18 +166,7 @@ class CognitionStoreV1Tests(unittest.TestCase):
     def test_resolve_prepare_binding_cross_binds_task_boot_and_workspace(self):
         db = self.make_db()
         values, boot_digest = self.admit_boot(db)
-        turn = store.bind_turn(
-            db,
-            entity_generation=3,
-            causal_turn_id="turn-2",
-            boot_binding_digest=boot_digest,
-            task_text="run bounded reasoning",
-            workspace_digest=self.digest("workspace-current"),
-            selected_workspace_slots=["slot-1", "slot-2"],
-            contradiction_state="UNRESOLVED",
-            provenance_refs=["test:turn"],
-            required_zero_mode="ACTIVE",
-        )
+        turn = self.bind_fixture_turn(db, boot_digest, "turn-2")
         resolved = store.resolve_prepare_binding(
             db,
             entity_generation=3,
@@ -186,13 +179,60 @@ class CognitionStoreV1Tests(unittest.TestCase):
         self.assertEqual(resolved["workspace_digest"], self.digest("workspace-current"))
         self.assertFalse(resolved["authority"]["direct_truth_authority"])
         self.assertFalse(resolved["authority"]["direct_effect_authority"])
-
         with self.assertRaisesRegex(store.CognitionStoreError, "TURN_TASK_BINDING_MISMATCH"):
             store.resolve_prepare_binding(
                 db,
                 entity_generation=3,
                 causal_turn_id="turn-2",
                 task_text="different task",
+            )
+
+    def test_resolve_rejects_turn_binding_row_tamper(self):
+        db = self.make_db()
+        _, boot_digest = self.admit_boot(db)
+        self.bind_fixture_turn(db, boot_digest, "turn-tamper")
+        db.execute(
+            "UPDATE mini_cognition_turn_bindings SET workspace_digest=? WHERE entity_generation=3 AND causal_turn_id='turn-tamper'",
+            (self.digest("workspace-poison"),),
+        )
+        with self.assertRaisesRegex(store.CognitionStoreError, "TURN_BINDING_DIGEST_MISMATCH"):
+            store.resolve_prepare_binding(
+                db, entity_generation=3, causal_turn_id="turn-tamper", task_text="run bounded reasoning"
+            )
+
+    def test_resolve_rejects_boot_binding_row_tamper(self):
+        db = self.make_db()
+        _, boot_digest = self.admit_boot(db)
+        self.bind_fixture_turn(db, boot_digest, "turn-boot-tamper")
+        db.execute(
+            "UPDATE mini_cognition_boot_bindings SET grf_digest=? WHERE binding_digest=?",
+            (self.digest("tampered-grf"), boot_digest),
+        )
+        with self.assertRaisesRegex(store.CognitionStoreError, "BOOT_BINDING_DIGEST_MISMATCH"):
+            store.resolve_prepare_binding(
+                db, entity_generation=3, causal_turn_id="turn-boot-tamper", task_text="run bounded reasoning"
+            )
+
+    def test_resolve_rejects_removed_boot_object_admission(self):
+        db = self.make_db()
+        _, boot_digest = self.admit_boot(db)
+        self.bind_fixture_turn(db, boot_digest, "turn-admission-delete")
+        db.execute("DELETE FROM mini_cognition_object_admissions WHERE object_kind='GRF'")
+        with self.assertRaisesRegex(store.CognitionStoreError, "COGNITION_OBJECT_NOT_ADMITTED:GRF"):
+            store.resolve_prepare_binding(
+                db, entity_generation=3, causal_turn_id="turn-admission-delete", task_text="run bounded reasoning"
+            )
+
+    def test_resolve_rejects_corrupt_turn_json(self):
+        db = self.make_db()
+        _, boot_digest = self.admit_boot(db)
+        self.bind_fixture_turn(db, boot_digest, "turn-json-corrupt")
+        db.execute(
+            "UPDATE mini_cognition_turn_bindings SET selected_workspace_slots_json='not-json' WHERE entity_generation=3 AND causal_turn_id='turn-json-corrupt'"
+        )
+        with self.assertRaisesRegex(store.CognitionStoreError, "TURN_BINDING_JSON_CORRUPT"):
+            store.resolve_prepare_binding(
+                db, entity_generation=3, causal_turn_id="turn-json-corrupt", task_text="run bounded reasoning"
             )
 
 

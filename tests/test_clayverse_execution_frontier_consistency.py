@@ -12,6 +12,7 @@ VERCEL_CURRENT = """
 Status: BRIDGE CONFIRMED / SANDBOX ADMISSION PROVEN / RUNTIME GITHUB TOKEN INGRESS IMPLEMENTED
 Sandbox.create is not the blocker.
 Runtime one-shot ingress accepts GITHUB_READ_TOKEN through the owner-started POST path.
+rebind retained #810 controller to that exact source identity
 """
 
 
@@ -24,7 +25,7 @@ def current_program():
             "vercel_sandbox_bridge": EXPECTED_VERCEL_BRIDGE,
             "execution_frontier_binding": VERCEL_EXECUTION_PATH,
         },
-        "current_frontier": "owner-start the retained Vercel Sandbox runtime POST with scoped GITHUB_READ_TOKEN for ClayVerse",
+        "current_frontier": "rebind retained #810 controller to exact current Research, deploy exact closure, then owner-start runtime POST with scoped GITHUB_READ_TOKEN for ClayVerse",
         "runtime_credit": {"whole_clayverse": 0},
     }
 
@@ -39,6 +40,12 @@ def test_stale_generic_execution_surface_fails_closed():
     assert "PROGRAM_EXECUTION_FRONTIER_STALE_GENERIC_SURFACE_BLOCK" in execution_frontier_errors(poisoned, VERCEL_CURRENT)
 
 
+def test_token_only_frontier_fails_closed_without_controller_rebind():
+    poisoned = deepcopy(current_program())
+    poisoned["current_frontier"] = "owner-start the retained Vercel Sandbox runtime POST with scoped GITHUB_READ_TOKEN for ClayVerse"
+    assert "PROGRAM_CURRENT_FRONTIER_REBIND_OR_TOKEN_INGRESS_MISSING" in execution_frontier_errors(poisoned, VERCEL_CURRENT)
+
+
 def test_bridge_never_mints_runtime_credit():
     poisoned = deepcopy(current_program())
     poisoned["runtime_credit"]["whole_clayverse"] = 1
@@ -47,5 +54,11 @@ def test_bridge_never_mints_runtime_credit():
 
 def test_claimed_bridge_fails_closed_when_continuity_evidence_degrades():
     degraded = VERCEL_CURRENT.replace("Sandbox.create is not the blocker.\n", "")
+    errors = execution_frontier_errors(current_program(), degraded)
+    assert "VERCEL_EXECUTION_BRIDGE_EVIDENCE_MISSING_OR_DEGRADED" in errors
+
+
+def test_claimed_bridge_fails_closed_when_rebind_obligation_disappears():
+    degraded = VERCEL_CURRENT.replace("rebind retained #810 controller to that exact source identity\n", "")
     errors = execution_frontier_errors(current_program(), degraded)
     assert "VERCEL_EXECUTION_BRIDGE_EVIDENCE_MISSING_OR_DEGRADED" in errors

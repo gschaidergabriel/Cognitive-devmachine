@@ -5,6 +5,7 @@ This module is an adapter, not a second permission authority. It derives one bou
 Typed-Entry capability view from canonical session/generation state while binding the
 existing EffectGate capability surface as control-plane context. Effect capabilities are
 never copied into Typed Entry: real-effect authority remains exclusively EffectGate.
+Trusted ingress identity is checked separately before Typed Entry admission.
 """
 from __future__ import annotations
 
@@ -174,9 +175,20 @@ def admit_entry_with_control_plane(
     effect_gate: Any,
     user_id: str,
     session_id: str,
+    trusted_source_kind: str,
+    trusted_source_id: str,
     admitted_budget: Mapping[str, Any],
 ) -> Any:
-    """Admit one Entry against a freshly derived canonical capability snapshot."""
+    """Admit one Entry against canonical capabilities and trusted ingress identity."""
+    if not isinstance(entry, Mapping):
+        raise CapabilityBindingError("ENTRY_MAPPING_REQUIRED")
+    trusted_source_kind = _text(trusted_source_kind, "trusted_source_kind")
+    trusted_source_id = _text(trusted_source_id, "trusted_source_id")
+    if entry.get("source_kind") != trusted_source_kind:
+        raise CapabilityBindingError("TRUSTED_SOURCE_KIND_MISMATCH")
+    if entry.get("source_id") != trusted_source_id:
+        raise CapabilityBindingError("TRUSTED_SOURCE_ID_MISMATCH")
+
     try:
         from .xeno_entry_fabric_v1 import admit_entry
     except ImportError:

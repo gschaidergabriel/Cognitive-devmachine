@@ -29,7 +29,7 @@ from pathlib import Path
 from typing import Any
 
 
-EXPECTED_MODEL_TYPE = "qwen3_5"
+EXPECTED_MODEL_TYPE = "qwen3_5_text"
 EXPECTED_LAYERS = 24
 EXPECTED_D_MODEL = 1024
 

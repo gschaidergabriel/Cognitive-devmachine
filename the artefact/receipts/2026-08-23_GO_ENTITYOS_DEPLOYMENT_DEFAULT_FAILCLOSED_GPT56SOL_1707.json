@@ -1,0 +1,69 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "recorded_at": "2026-08-23T17:07:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "7e936ed2d7677ca404f875f39444d6619ec1b50b",
+  "classification": "SOURCE_CANDIDATE_UNEXECUTED",
+  "frontier": "fail-open EntityOS execution default in the mandatory final Kata/microVM reference deployment profile",
+  "observed_defect": {
+    "template": "the artefact/deployment/clayverse-kata-statefulset.template.yaml",
+    "pre_delta_value": "CLAYVERSE_ENABLE_ENTITYOS_EXEC=1",
+    "conflicting_authority": [
+      "manifest.entityos_execution_default=DISABLED",
+      "manifest.entityos_whole_product_gate=CONDITIONAL_ON_EXPLICIT_ADMISSION",
+      "manifest.entityos_admission says execution is optional and defaults disabled",
+      "Dockerfile baseline defaults CLAYVERSE_ENABLE_ENTITYOS_EXEC=0"
+    ],
+    "risk": "using the final-acceptance reference template would automatically widen the execution surface and convert an optional separately admitted EntityOS capability into a deployment default"
+  },
+  "selected_repair": {
+    "mechanism": "keep the single reference Kata profile fail-closed with CLAYVERSE_ENABLE_ENTITYOS_EXEC=0",
+    "explicit_enablement": "deployment-specific explicit admission after exact accepted embedded EntityOS evidence",
+    "second_authority_created": false,
+    "entityos_product_identity_created": false
+  },
+  "changed_blobs": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "d6bdaab398b18e6db50836f04400dffbaa3550ce",
+    "the artefact/tests/test_entityos_deployment_default_failclosed.py": "0efa4220ffa079ccb87adea60e474e0f61003ec9"
+  },
+  "regression_obligations": [
+    "reference Kata template contains exactly one CLAYVERSE_ENABLE_ENTITYOS_EXEC and its value is 0",
+    "template statement remains aligned with manifest disabled/conditional admission law",
+    "reference template must not encode EntityOS enablement as an acceptance shortcut"
+  ],
+  "counterhypothesis": {
+    "claim": "the final Kata template should force EntityOS execution because EntityOS is staged in the image",
+    "status": "REJECTED_AT_SOURCE_AUTHORITY_SCOPE",
+    "basis": "current manifest explicitly distinguishes staged embedded bytes from optional execution and makes whole-product EntityOS execution conditional on explicit admission"
+  },
+  "execution_evidence": {
+    "authorized_exact_repo_test_executed": false,
+    "authorized_exact_oci_or_kata_run_executed": false,
+    "reason": "current connected Vercel surface exposes documentation but no Sandbox create/start/exec action; VPS/self-hosted/production fallback is forbidden",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "valid_credit": 0,
+    "reason": "no shared immutable macrocycle/experiment lease identity was exposed; deterministic source repair only"
+  },
+  "parallel_nonduplication": {
+    "python_hash_lock_lane": 622,
+    "apt_snapshot_lane": 422,
+    "microvm_startup_probe_lane": 647,
+    "overlap_with_this_delta": false
+  },
+  "next_gate": "execute the focused deployment contract regressions on exact branch bytes in an actually-started authorized isolated executor; then retain CLAYVERSE_ENABLE_ENTITYOS_EXEC=0 for any accepted profile unless a separately evidenced EntityOS capability admission is explicitly selected",
+  "acceptance": "IN_PROGRESS",
+  "security": {
+    "secret_exposed": false,
+    "vps_used": false,
+    "self_hosted_or_production_test_used": false,
+    "together_used": false,
+    "paid_or_training_execution": false
+  }
+}

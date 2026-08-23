@@ -1,90 +1,140 @@
-# GO/ZERO FREE_ONLY swarm trigger contract — Mini Entity bootstrap -> EntityOS + HCU
+# GO/ZERO FREE_ONLY swarm trigger contract — Xeno -> XCU -> EntityOS
 
-Status: **CURRENT / FAIL-CLOSED UNTIL TRANSITION-AWARE CONTROLLER ADMISSION**
+Status: **CURRENT / FAIL-CLOSED UNTIL XENO-TRANSITION-AWARE CONTROLLER ADMISSION**
 Date: 2026-08-23
-Current go work-selection authority: `research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md`
-Current product destination: **EntityOS + HCU**
+Current go work-selection authority: `research_entity/global/XENO_GO_OWNER_DIRECTIVE.md`
+Research fusion: `research_entity/global/XENO_COMPUTATIONAL_UNIT_RESEARCH_FUSION_2026-08-23.md`
+Current executable bootstrap: **Xeno**
+Current product destination: **EntityOS + HCU/XCU**
 Macrocycle identity: `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
+
+## Rename law
+
+`Mini Entity` is a legacy compatibility/provenance name for the current Xeno bootstrap. New worker prompts and work-selection language use `Xeno`. Historical paths, hashes, APIs, receipts and schemas may retain Mini Entity/MicroEntity/mini_* names until exact compatibility migration.
 
 ## Current admission state
 
-Provider swarm execution for `go` / `zero` is BLOCKED until an exact controller is source-admitted that binds BOTH:
+Provider swarm execution for `go` / `zero` remains BLOCKED until an exact controller is source-admitted that binds all of:
 
-1. the current Mini Entity implementation as the operational `go` starting point; and
-2. EntityOS + HCU / `Zero -> Entity <- Function` as the architectural destination.
+1. Xeno as current executable bootstrap;
+2. EntityOS as destination;
+3. HCU/XCU as integrated multi-mode computational architecture;
+4. mandatory XCU + Entry Fabric co-development on every `go`;
+5. canonical state/evidence and EffectGate authority outside candidate cognition/simulation.
 
-A controller that treats Mini Entity as the final standalone product is stale. A controller that skips the current Mini Entity and routes directly to a parallel replacement architecture is also stale.
+## GO dual-track law
 
-## Required controller contract
+Every explicit user `go` MUST run two coupled work-selection tracks:
 
-Before provider key lookup or network I/O, the admitted controller MUST fail closed unless:
+- **A: XENO_EXECUTABLE_CONVERGENCE** — improve the strongest real current Xeno implementation.
+- **B: XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one computational-unit or entry primitive.
 
-- `BOOTSTRAP_MINIMAL.active_program == ENTITYOS_HCU`;
-- `BOOTSTRAP_MINIMAL.active_stage == MINI_ENTITY_BOOTSTRAP_TO_ENTITYOS_HCU`;
-- `PROGRAM_STATE.program_id == entityos-hcu`;
-- current go directive is `MINI_ENTITY_GO_OWNER_DIRECTIVE.md`;
-- current Mini Entity is named as operational bootstrap;
-- EntityOS + HCU is named as the final architectural destination;
-- target cognition is request-scoped/dynamic rather than a permanent standing world simulation;
-- Zero trends toward ingress/admission, Entity toward causal/state coherence, and HCU cells toward ephemeral function roles;
-- canonical state/evidence and EffectGate authority remain outside candidate model cognition;
-- FREE_ONLY is active and Together is forbidden;
-- exact runtime credit still requires admitted isolated execution;
-- Clay remains the persistent research entity and temporary workers remain organs;
-- one shared `macrocycle_id` and one unusual-experiment lease law are preserved across children.
-
-## Trigger law
-
-Every explicit user `go` starts from the strongest current Mini Entity code/research/package state and advances it toward the end-state without forcing a premature rewrite.
+If B cannot produce a safe useful delta, the run records `XCU_NO_CHANGE_WITH_REASON` with the blocker/discriminator. It may not silently omit the XCU/Entry track.
 
 Work selection favors:
 
-`information gain × current Mini Entity convergence × future EntityOS/HCU migration value × non-duplication × executable availability`.
+`information gain × executable Xeno value × XCU/Entry progress × cross-mode reuse × EntityOS migration value × falsifiability × non-duplication × executable availability`.
 
-Each material candidate SHOULD be classified `EASIER`, `NEUTRAL`, or `HARDER` for later migration to `Zero -> Entity <- Function`. Prefer `EASIER`; `HARDER` requires explicit evidence.
+## Mandatory research cycle
 
-`zero` may focus more deeply on Zero/J-Space/Workspace/HCU coupling, but it must re-enter the same transition path and may not create a second identity, state authority, effect path or hidden consciousness daemon.
+For material architecture/capability work, each go uses:
 
-## Cognitive transition law
+`OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
 
-The controller MUST NOT instruct children to build a permanent simulated duplicate world or permanent HCU subconscious as the target.
+Model agreement, branch agreement and module count are candidate evidence only.
 
-Allowed transitional work includes:
+## Xeno multi-mode computational target
 
-- existing MiniUnifiedDB and HCU world/state projections;
-- fixed or semi-fixed HCU roles;
-- task-local forward/counterfactual consequence estimation;
-- J-Space/GWT experiments;
-- current Zero integration;
-- UCF/Hyperposition/causal-turn/effect/recovery work.
+The shared Xeno substrate is prepared incrementally for:
 
-New work should progressively support request-scoped dynamic function allocation while preserving empirical compatibility with the current Mini Entity.
+- `XENO_GRID10`: simple 10 logical-cell baseline;
+- `XENO_COGSIM10`: request-scoped pure cognition simulation on 10 cells;
+- `XENO_WM_TEST`: bounded experimental world-model rollout;
+- `XENO_NESTED_SIM`: optional world-model -> virtual computer -> simulated AI -> candidate-action pipeline;
+- `XENO_SCALEOUT`: hundreds of logical contexts/modules over a smaller physical worker pool where exact hardware measurements permit.
+
+The mode changes scheduling/topology, never canonical truth/effect authority.
+
+## Entry Fabric law
+
+All new data paths should converge on a typed Xeno Entry Fabric that binds before cognition:
+
+- causal_id;
+- entity/global generation;
+- provenance/source;
+- observed/event time;
+- modality/type;
+- permissions/capabilities;
+- request/resource budget;
+- parent/stream identity where applicable.
+
+Inputs may include human prompts, external events, tool outcomes, sensors/streams, database changes and intrinsic system events.
+
+## Computer decomposition law
+
+Every go should progressively make reusable separation possible between:
+
+- `XRAM`: canonical + hot + scratch state tiers;
+- `XPU`: deterministic processor/control scheduler, leases, routing, generation fences and recovery;
+- `XCU`: shared-weight/vector/inference/J-Space acceleration and logical function cells;
+- `INTERCONNECT`: typed packets, ancestry, workspace/broadcast and Hyperposition;
+- `ENTRY_IO`: typed new-data ingress;
+- `EFFECT_TRANSLATION`: candidate -> typed effect request -> EffectGate.
+
+These are architectural roles, not claims of literal custom silicon.
+
+## Scaling law
+
+`logical_module_count != resident_model_count != physical_decode_concurrency`.
+
+A future H100-class target around 600 logical modules is a **benchmark hypothesis only**. Workers MUST NOT describe it as 600 concurrent ~0.8B models. Scale claims require exact checkpoint/quantization, weight residency, KV/context memory, active/suspended ratio, HBM/RAM pressure, throughput, p95 latency, scheduler overhead and recovery evidence.
+
+Recommended scale gates:
+
+`10 -> 32 -> 64 -> 128 -> 256 -> 600`
+
+No later gate is promoted before the prior one has measured evidence.
+
+## World-model and nested-simulation law
+
+A permanent duplicate simulated reality is NOT required for normal Xeno operation.
+
+However, unlike the previous narrower transition contract, Xeno now explicitly co-develops bounded `WM_TEST` and selective `NESTED_SIM` modes as workloads of the same XCU substrate.
+
+- world-model output is projection/candidate state;
+- full nested simulation is high-cost and selectively invoked;
+- prediction-observation mismatch feeds calibration;
+- cheap direct/GRID10/COGSIM modes remain preferred when sufficient;
+- simulated action never bypasses EffectGate.
+
+## J-Space / workspace law
+
+Global J-Space is an instrumented coordination interface/hypothesis. Local J-Space claims require exact model-specific latent measurement/intervention. Closed-model text/tool outputs must not be presented as hidden-state access.
 
 ## Provider safety law
 
-- FREE_ONLY must be verified before secret/key lookup and network I/O;
-- no paid fallback, quota purchase or automatic billing escalation;
-- HTTP 402 is hard stop;
-- HTTP 429 is provider-wide cooldown/backoff, never key rotation to evade a shared limit;
-- credentials remain environment/vault-only and never enter prompts, receipts, peer state or source;
-- absent quota metadata is UNKNOWN, not unlimited entitlement;
-- Together remains forbidden.
-
-## Coordination and epistemic law
-
-Any admitted swarm uses one cross-process coordination state and atomically leases non-overlapping lanes. Model agreement is candidate evidence only. Majority vote does not mint truth. Local/model J-Space claims require model-specific measurement and causal intervention evidence where available.
+- FREE_ONLY verified before secret/key lookup and provider network I/O;
+- no paid fallback or billing escalation;
+- HTTP 402 hard stop;
+- HTTP 429 provider-wide cooldown/backoff, no key rotation to evade shared limits;
+- credentials remain environment/vault-only and never enter prompts/source/receipts;
+- Together remains forbidden;
+- absent quota metadata is UNKNOWN.
 
 ## Re-admission gate
 
-Unblock provider swarm execution only after a deterministic source gate demonstrates at minimum:
+A future controller is admitted only after deterministic source gates demonstrate at minimum:
 
-1. current Mini Entity bootstrap accepted;
-2. Mini Entity as final standalone product rejected;
-3. EntityOS + HCU destination accepted;
-4. permanent world-simulation target rejected;
-5. FREE_ONLY weakening rejected before key lookup;
-6. stale/missing macrocycle identity rejected;
-7. worker prompt begins with current transition + GRF/ClayCode context;
-8. no secret value appears in generated prompt/receipt state.
+1. Xeno current name/legacy Mini Entity alias handled correctly;
+2. XENO_GO_OWNER_DIRECTIVE bound;
+3. Xeno current executable bootstrap accepted;
+4. XCU + Entry dual-track `go` required;
+5. EntityOS destination accepted;
+6. GRID10/COGSIM10/WM_TEST/NESTED_SIM/SCALEOUT represented as modes, not truth authorities;
+7. logical modules separated from physical concurrency;
+8. FREE_ONLY weakening rejected before key lookup;
+9. stale/missing macrocycle identity rejected;
+10. no secret value appears in generated prompts/receipts;
+11. EffectGate non-bypass remains hard.
 
-Passing this source gate gives ZERO provider/model/whole-product runtime credit until actual admitted execution occurs.
+Passing source gates gives ZERO new XCU/EntityOS runtime credit until actual admitted execution occurs.

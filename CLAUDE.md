@@ -18,11 +18,12 @@ This root file is a repository-organ routing shim, not canonical durable product
 5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md`
 6. `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
 7. `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
-8. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
-9. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
-10. `the artefact/manifest.json`
-11. `the artefact/README.md`
-12. task-relevant current or compatibility implementation files.
+8. `research_entity/continuity/RETAINED_EXECUTION_CONTROLLER_IDENTITY.json`
+9. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
+10. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
+11. `the artefact/manifest.json`
+12. `the artefact/README.md`
+13. task-relevant current or compatibility implementation files.
 
 Newest explicit owner authority plus verified current `main` outranks cached/historical program material. If current files disagree, fail closed and reconcile one canonical path. Never infer current authority from an old receipt, old branch, path name or compatibility filename.
 
@@ -102,8 +103,10 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 
 Bounded FREE Vercel Sandbox execution is available and exact-source RFC8785/JCS Entry canonicalization plus J-Space dataset family-split have component-only runtime evidence. The Entry canonicalizer is fused to `main`. Whole EntityOS/HCU, J-Space model and training credit remain zero.
 
-Keep the single retained PR1263 HCU donor and single PR810 execution-controller authorities. Extend one fixed hash-verified FREE executor closure toward:
+Keep `gschaidergabriel/clay-global-research-entity#1263` as the single retained HCU donor and `gschaidergabriel/Dr.-Unterweger#810` as the single bounded execution-controller authority. Pull-request numbers are repository-local: unqualified `PR810` is forbidden for current executor selection. Resolve the controller through `research_entity/continuity/RETAINED_EXECUTION_CONTROLLER_IDENTITY.json` and bind its exact observed head SHA at each execution attempt.
 
-`Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure`.
+Extend one fixed hash-verified FREE executor closure toward:
 
-Immediate high-information gate: exact-current J-Space inference-binding v2 plus GRID10 plan/cell causal binding on the bounded fixed-capsule FREE Sandbox path. Do not promote from component PASS, model consensus, deployment READY state or copied fixture identity alone.
+`Typed Entry -> route -> verified engine admission -> verified actual-loader consumption -> GRID10 -> actual model-executor observation -> canonical MiniUnifiedDB atomic invocation admission -> VerifiedModelExecution/v1 -> HCU_INFERENCE_RECEIPT/v4 -> ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3 -> admitted causal dataset/family split`.
+
+Immediate high-information gate: rebind the fully-qualified retained executor to exact then-current Research `main` plus exact retained donor head, then execute the current v4/v3 model-execution/J-Space chain with exact GRID10 plan/cell causal binding on the bounded fixed-capsule FREE Sandbox path. Do not promote from component PASS, model consensus, deployment READY state or copied fixture identity alone.

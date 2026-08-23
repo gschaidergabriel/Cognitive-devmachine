@@ -1,0 +1,33 @@
+{
+  "schema": "CLAYVERSE_GO_INHERITED_CONTROL_FENCE/v2",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "75ebc129fe9ee19ea2863bb5447c7aa34fbd3d85",
+  "observation": {
+    "authority_reconciliation_merged": true,
+    "parallel_guards_preserved": ["nested PROGRAM_STATE work selectors", "root CLAUDE.md ClayVerse routing"],
+    "fail_open": "The authority validator still trusted Control 4.4 preservation claims without directly validating inherited Controls 4.1, 4.2 and 4.3.",
+    "risk": "A weakened inherited FREE_ONLY/VPS/exact-runtime-evidence rule could remain hidden behind unchanged 4.4 self-attestation."
+  },
+  "delta": {
+    "validator_schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
+    "direct_control_chain": ["4.1", "4.2-execution-boundary-addendum", "4.3-program-authority-addendum", "4.4-clayverse-product-authority-addendum"],
+    "preserved_parallel_checks": ["PROGRAM_DYNAMIC_PRIMARY_MISMATCH", "PROGRAM_FRONTIER_NOT_CLAYVERSE", "ROOT_CLAUDE_PROGRAM_MISMATCH", "ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE"],
+    "poison_regressions_added": ["BASE41_PAID_FALLBACK_WEAKENED", "EXEC42_DIRECT_VPS_WEAKENED", "PROGRAM43_RUNTIME_EVIDENCE_WEAKENED"]
+  },
+  "bounded_mechanism_evidence": {
+    "pre_fusion_reconstruction": "Python compile PASS; 9/9 focused tests PASS before concurrent main guards were fused",
+    "fresh_fused_branch_exact_runtime": "UNOBSERVED",
+    "credit": "SOURCE_MECHANISM_ONLY"
+  },
+  "execution_surface": {
+    "vercel_connector_sandbox_start_exec": "NOT_EXPOSED",
+    "vps_or_self_hosted_test_used": false,
+    "together_used": false,
+    "paid_or_model_training_used": false,
+    "unusual_experiment": "NOT_CONSUMED_NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE"
+  },
+  "runtime_credit": {"exact_current_branch": 0, "whole_clayverse": 0, "oci": 0},
+  "next_gate": "Execute v3 authority consistency plus swarm-admission assertion and full exact-current ClayVerse regressions on an actually-started authorized isolated executor, then exact OCI build/startup with source/image/runtime identity binding."
+}

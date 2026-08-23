@@ -9,6 +9,7 @@
   "base_main": "5aa665364894245c05513ea91c41e3304f3e7368",
   "candidate_commit_before_receipt": "f608274e11f2ccbcc407f9e59f572e4829dc5250",
   "branch": "go/20260823-1149-mini-reference-convergence-gpt56sol",
+  "pull_request": 1206,
   "problem": {
     "canonical_clay_blob": "66898a4980a51e17ba2717e97352403164b4bdf8",
     "main_reference_runtime_blob": "fa3031ac7bf4cea6a12c57f781c29c9c3650ebef",
@@ -69,7 +70,13 @@
     "vercel_connector_exposes_sandbox_execution": false,
     "exact_changed_blob_tests_executed": false,
     "runtime_credit": 0,
-    "reason": "No admitted executable isolated sandbox action is exposed in the current tool surface; source-only evidence must not be promoted to runtime PASS."
+    "github_pr_workflows": [
+      {"run_id": 32619046086, "workflow": "claycog-validator-pr", "job": "strict-admission", "conclusion": "failure", "steps": null, "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP"},
+      {"run_id": 32619046096, "workflow": "pipeline-persisted-string-scan-pr", "job": "exact-gate", "conclusion": "failure", "steps": null, "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP"},
+      {"run_id": 32619046103, "workflow": "Research Entity Identity Guard", "job": "identity-guard", "conclusion": "failure", "steps": null, "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP"},
+      {"run_id": 32619046123, "workflow": "Research Entity Verify", "job": "verify", "conclusion": "failure", "steps": null, "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP"}
+    ],
+    "reason": "No admitted executable isolated sandbox action is exposed in the current tool surface, and all four GitHub PR workflows terminated before visible step execution. This is execution-admission failure, not semantic test failure and not PASS."
   },
   "next_gate": [
     "actually start an authorized isolated executor on the exact candidate commit and run the canonical/reference regressions",

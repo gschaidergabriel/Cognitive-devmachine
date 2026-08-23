@@ -20,6 +20,8 @@ from typing import Any
 RECEIPT_TYPE = "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1"
 PHASES = {"BOOT_BINDING", "INFERENCE_CYCLE"}
 ENGINE_CLASSES = {"LOCAL_08B", "CLAUDE_CODE", "ADAPTIVE_BACKEND", "DETERMINISTIC_ONLY"}
+JSPACE_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY", "COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY", "NONE"}
+COST_CLASSES = {"LOCAL", "FREE", "PAID", "SUBSCRIPTION", "UNKNOWN"}
 DECISIONS = {"ACCEPTED_CANDIDATE", "REJECTED", "STALE", "BLOCKED", "ERROR", "NO_INFERENCE"}
 EPISTEMIC_STATUSES = {"MEASURED_SUPPORTED", "UNKNOWN", "ERROR", "REFUTED", "NOT_APPLICABLE"}
 TERMINAL_STATUSES = {"DONE", "REJECTED", "BLOCKED", "ABORTED", "ERROR", "UNKNOWN"}
@@ -199,6 +201,25 @@ def validate_receipt(
     engine_class = _exact_str(inference.get("engine_class"), "ENGINE_CLASS_REQUIRED")
     if engine_class not in ENGINE_CLASSES:
         _fail("ENGINE_CLASS_UNSUPPORTED")
+    jspace_mode = _exact_str(inference.get("jspace_mode"), "JSPACE_MODE_REQUIRED")
+    if jspace_mode not in JSPACE_MODES:
+        _fail("JSPACE_MODE_UNSUPPORTED")
+    local_activation_access = _exact_bool(inference.get("local_activation_access"), "LOCAL_ACTIVATION_ACCESS_REQUIRED")
+    external_hidden_state_claimed = _exact_bool(inference.get("external_hidden_state_claimed"), "EXTERNAL_HIDDEN_STATE_CLAIM_REQUIRED")
+
+    if engine_class == "LOCAL_08B" and jspace_mode not in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}:
+        _fail("LOCAL_08B_JSPACE_MODE_INVALID")
+    if engine_class == "CLAUDE_CODE" and jspace_mode != "COMPILED_EXTERNAL":
+        _fail("CLAUDE_JSPACE_MODE_MUST_BE_COMPILED_EXTERNAL")
+    if engine_class == "DETERMINISTIC_ONLY" and jspace_mode != "NONE":
+        _fail("DETERMINISTIC_ONLY_JSPACE_MODE_MUST_BE_NONE")
+    if jspace_mode == "FULL_LOCAL_LATENT" and not local_activation_access:
+        _fail("FULL_LOCAL_LATENT_REQUIRES_ACTIVATION_ACCESS")
+    if jspace_mode in {"COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY", "NONE"} and local_activation_access:
+        _fail("EXTERNAL_OR_NONE_MODE_CANNOT_CLAIM_LOCAL_ACTIVATION_ACCESS")
+    if jspace_mode in {"COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY", "NONE"} and external_hidden_state_claimed:
+        _fail("EXTERNAL_HIDDEN_STATE_CLAIM_FORBIDDEN")
+
     packet_digest = _sha256(inference.get("packet_digest"), "INFERENCE_PACKET_DIGEST_INVALID")
     candidate_only = _exact_bool(inference.get("candidate_only"), "CANDIDATE_ONLY_REQUIRED")
     if not candidate_only:
@@ -224,18 +245,39 @@ def validate_receipt(
         _sha256(inference.get("capability_profile_digest"), "CLAUDE_CAPABILITY_PROFILE_DIGEST_INVALID")
     elif engine_class == "ADAPTIVE_BACKEND":
         _sha256(inference.get("capability_profile_digest"), "ADAPTIVE_CAPABILITY_PROFILE_DIGEST_INVALID")
-        jspace_mode = _exact_str(inference.get("jspace_mode"), "ADAPTIVE_JSPACE_MODE_REQUIRED")
-        if jspace_mode not in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY", "COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY"}:
-            _fail("ADAPTIVE_JSPACE_MODE_UNSUPPORTED")
+
+    intervention = _exact_dict(inference.get("jspace_intervention"), "JSPACE_INTERVENTION_REQUIRED")
+    intervention_executed = _exact_bool(intervention.get("executed"), "JSPACE_INTERVENTION_EXECUTED_REQUIRED")
+    if intervention_executed:
+        if jspace_mode != "FULL_LOCAL_LATENT":
+            _fail("JSPACE_INTERVENTION_REQUIRES_FULL_LOCAL_LATENT")
+        if not local_activation_access:
+            _fail("JSPACE_INTERVENTION_REQUIRES_ACTIVATION_ACCESS")
+        _sha256(intervention.get("implementation_digest"), "JSPACE_INTERVENTION_IMPLEMENTATION_DIGEST_REQUIRED")
+        _sha256(intervention.get("calibration_digest"), "JSPACE_INTERVENTION_CALIBRATION_DIGEST_REQUIRED")
 
     validation = _exact_dict(r.get("validation"), "VALIDATION_REQUIRED")
     decision = _exact_str(validation.get("decision"), "VALIDATION_DECISION_REQUIRED")
     if decision not in DECISIONS:
         _fail("VALIDATION_DECISION_UNSUPPORTED")
     _sha256(validation.get("reconciliation_digest"), "RECONCILIATION_DIGEST_INVALID")
+    candidate_attempted_direct_state = _exact_bool(
+        validation.get("candidate_attempted_direct_state_mutation"),
+        "CANDIDATE_DIRECT_STATE_ATTEMPT_REQUIRED",
+    )
+    candidate_attempted_direct_effect = _exact_bool(
+        validation.get("candidate_attempted_direct_effect"),
+        "CANDIDATE_DIRECT_EFFECT_ATTEMPT_REQUIRED",
+    )
     canonical_write = _exact_bool(validation.get("canonical_write"), "CANONICAL_WRITE_REQUIRED")
     effect_requested = _exact_bool(validation.get("effect_requested"), "EFFECT_REQUESTED_REQUIRED")
     effect_admitted = _exact_bool(validation.get("effect_admitted"), "EFFECT_ADMITTED_REQUIRED")
+    if candidate_attempted_direct_state and canonical_write:
+        _fail("DIRECT_STATE_MUTATION_BYPASS")
+    if candidate_attempted_direct_effect and effect_admitted:
+        _fail("DIRECT_EFFECT_BYPASS")
+    if (candidate_attempted_direct_state or candidate_attempted_direct_effect) and decision == "ACCEPTED_CANDIDATE":
+        _fail("DIRECT_AUTHORITY_ATTEMPT_ACCEPTED")
     if canonical_write and decision != "ACCEPTED_CANDIDATE":
         _fail("CANONICAL_WRITE_WITHOUT_ACCEPTED_CANDIDATE")
     if effect_admitted and not effect_requested:
@@ -251,11 +293,17 @@ def validate_receipt(
 
     boundary = _exact_dict(r.get("boundary"), "BOUNDARY_REQUIRED")
     free_only = _exact_bool(boundary.get("free_only"), "FREE_ONLY_REQUIRED")
+    cost_class = _exact_str(boundary.get("cost_class"), "COST_CLASS_REQUIRED")
+    if cost_class not in COST_CLASSES:
+        _fail("COST_CLASS_UNSUPPORTED")
     secret_lookup_count = _exact_int(boundary.get("secret_lookup_count"), "SECRET_LOOKUP_COUNT_INVALID")
     network_attempt_count = _exact_int(boundary.get("network_attempt_count"), "NETWORK_ATTEMPT_COUNT_INVALID")
     _exact_str(boundary.get("first_action_origin"), "FIRST_ACTION_ORIGIN_REQUIRED")
-    if free_only and (secret_lookup_count != 0 or network_attempt_count != 0):
-        _fail("FREE_ONLY_EXTERNAL_TOUCH")
+    if free_only and cost_class in {"PAID", "SUBSCRIPTION", "UNKNOWN"}:
+        if secret_lookup_count != 0:
+            _fail("FREE_ONLY_SECRET_TOUCH")
+        if network_attempt_count != 0:
+            _fail("FREE_ONLY_NETWORK_TOUCH")
 
     terminal = _exact_dict(r.get("terminal"), "TERMINAL_REQUIRED")
     status = _exact_str(terminal.get("status"), "TERMINAL_STATUS_REQUIRED")
@@ -289,7 +337,9 @@ def validate_receipt(
         "source_tree": source_tree,
         "generation": generation,
         "engine_class": engine_class,
+        "jspace_mode": jspace_mode,
         "epistemic_status": epistemic_status,
+        "cost_class": cost_class,
         "packet_digest": packet_digest,
         "terminal_digest": terminal_digest,
     }

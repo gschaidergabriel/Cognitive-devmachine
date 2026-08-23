@@ -1,26 +1,32 @@
 #!/usr/bin/env python3
 """Fail-closed orchestration for serious EntityOS/HCU J-Space training data.
 
-The selected lower-level ``compile_jspace_bootstrap_dataset_v1`` module validates and
-renders a TrainingTrace into deterministic family-split JSONL rows while requiring an
-external admitted J-Space basis registry. That alone is deliberately insufficient for
-serious training admission: a self-consistent trace must also survive the cross-trace
-DatasetAdmission gate and be bound to the canonical HCU_INFERENCE_RECEIPT/v3 loader/output
-chain.
+The lower-level compiler validates and renders TrainingTrace records into deterministic
+family-split JSONL rows while requiring an externally admitted J-Space basis registry.
+That alone is deliberately insufficient for serious training admission: a trace must also
+survive DatasetAdmission, bind to the canonical HCU_INFERENCE_RECEIPT/v4 chain, and prove
+that the referenced inference receipt itself exists byte/field-consistently in an external
+admission registry.
 
-This module is the orchestration boundary that requires all three before rows are emitted:
-external basis admission, exact training/transition/prototype/GRID admission, and exact
-inference loader/output binding. It mints no truth, model authority, effect authority,
-runtime credit, or paid-training permission. Current FREE_ONLY supervisor policy can still
-forbid provider execution after this source gate passes.
+A self-consistent JSpaceInferenceBinding is therefore necessary but not sufficient. This
+module rejects "binding-only" evidence laundering where a caller re-hashes a plausible
+binding around invented inference provenance. It mints no truth, model authority, effect
+authority, runtime credit, or paid-training permission.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, fields
+import hashlib
 from typing import Any, Iterable, Mapping
 
 try:
     from .compile_jspace_bootstrap_dataset_v1 import compile_traces as compile_training_traces
+    from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from .inference_receipt_v1 import (
+        InferenceReceipt,
+        SCHEMA as INFERENCE_RECEIPT_SCHEMA,
+        STATUS as INFERENCE_RECEIPT_STATUS,
+    )
     from .jspace_dataset_admission_gate_v1 import (
         ADMISSION_SCHEMA,
         DatasetAdmission,
@@ -36,6 +42,12 @@ try:
     from .jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
 except ImportError:
     from compile_jspace_bootstrap_dataset_v1 import compile_traces as compile_training_traces
+    from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from inference_receipt_v1 import (
+        InferenceReceipt,
+        SCHEMA as INFERENCE_RECEIPT_SCHEMA,
+        STATUS as INFERENCE_RECEIPT_STATUS,
+    )
     from jspace_dataset_admission_gate_v1 import (
         ADMISSION_SCHEMA,
         DatasetAdmission,
@@ -121,12 +133,115 @@ def _same(observed: Mapping[str, Any], field: str) -> Any:
     return None if current is first else current
 
 
+def _canonical_sha256(value: Any, field: str) -> str:
+    try:
+        return hashlib.sha256(canonicalize(value)).hexdigest()
+    except CanonicalizationError as exc:
+        raise AdmittedTrainingDatasetError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
+
+
+def _normalize_admitted_inference_receipt(value: Any) -> dict[str, Any]:
+    if isinstance(value, InferenceReceipt):
+        receipt = asdict(value)
+    elif isinstance(value, Mapping):
+        receipt = dict(value)
+    else:
+        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_VALUE_INVALID")
+    expected_fields = {field.name for field in fields(InferenceReceipt)}
+    if set(receipt) != expected_fields:
+        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_FIELD_SET_MISMATCH")
+    return receipt
+
+
+_RECEIPT_BINDING_FIELDS = {
+    "entity_generation": "generation",
+    "entry_admission_sha256": "entry_admission_sha256",
+    "event_sha256": "entry_event_sha256",
+    "decision_sha256": "route_decision_sha256",
+    "engine_identity_sha256": "engine_identity_sha256",
+    "resolved_engine_identity": "resolved_engine_identity",
+    "resolved_engine_class": "resolved_engine_class",
+    "resolved_engine_artifact_sha256": "resolved_engine_artifact_sha256",
+    "engine_admission_receipt_sha256": "engine_admission_receipt_sha256",
+    "engine_load_loader_binding_sha256": "engine_load_loader_binding_sha256",
+    "engine_load_lease_sha256": "engine_load_lease_sha256",
+    "engine_load_consumption_receipt_sha256": "engine_load_consumption_receipt_sha256",
+    "engine_load_loader_id": "engine_load_loader_id",
+    "model_execution_receipt_sha256": "model_execution_receipt_sha256",
+    "model_execution_observation_sha256": "model_execution_observation_sha256",
+    "model_execution_executor_id": "model_execution_executor_id",
+    "model_execution_invocation_id": "model_execution_invocation_id",
+    "grid_plan_sha256": "grid_plan_sha256",
+    "output_producing_cell_id": "output_producing_cell_id",
+    "model_execution_role": "model_execution_role",
+    "input_sha256": "input_sha256",
+    "input_size": "input_size",
+    "model_call_id": "model_call_id",
+    "output_ref": "output_ref",
+    "output_sha256": "output_sha256",
+    "output_size": "output_size",
+}
+
+
+def _require_admitted_inference_receipt(
+    binding: JSpaceInferenceBinding,
+    admitted_inference_receipts: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Require exact admitted receipt content behind a binding's digest reference."""
+    admitted_inference_receipts = _mapping(
+        admitted_inference_receipts,
+        "admitted_inference_receipts",
+    )
+    receipt_sha = _sha256(
+        binding.inference_receipt_sha256,
+        "inference_binding.inference_receipt_sha256",
+    )
+    raw_receipt = admitted_inference_receipts.get(receipt_sha)
+    if raw_receipt is None:
+        raise AdmittedTrainingDatasetError("INFERENCE_RECEIPT_NOT_ADMITTED_FOR_BINDING")
+    receipt = _normalize_admitted_inference_receipt(raw_receipt)
+
+    if receipt.get("schema") != INFERENCE_RECEIPT_SCHEMA or receipt.get("schema") != binding.inference_receipt_schema:
+        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_SCHEMA_MISMATCH")
+    if receipt.get("status") != INFERENCE_RECEIPT_STATUS:
+        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_STATUS_UNSUPPORTED")
+    for field in (
+        "hash_serialization_schema",
+        "engine_load_canonicalization_schema",
+        "model_execution_canonicalization_schema",
+    ):
+        if receipt.get(field) != CANONICALIZATION_SCHEMA or receipt.get(field) != binding.canonicalization_schema:
+            raise AdmittedTrainingDatasetError(f"ADMITTED_INFERENCE_RECEIPT_CANONICALIZATION_MISMATCH:{field}")
+
+    observed_sha = _sha256(receipt.get("receipt_sha256"), "admitted_inference_receipt.receipt_sha256")
+    if observed_sha != receipt_sha:
+        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_KEY_IDENTITY_MISMATCH")
+    material = dict(receipt)
+    material.pop("receipt_sha256")
+    if _canonical_sha256(material, "ADMITTED_INFERENCE_RECEIPT") != receipt_sha:
+        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_DIGEST_MISMATCH")
+
+    for receipt_field, binding_field in _RECEIPT_BINDING_FIELDS.items():
+        if receipt.get(receipt_field) != getattr(binding, binding_field):
+            raise AdmittedTrainingDatasetError(
+                f"INFERENCE_RECEIPT_BINDING_MISMATCH:{receipt_field}"
+            )
+
+    model_lanes = receipt.get("model_lanes")
+    if isinstance(model_lanes, (str, bytes, bytearray)) or not isinstance(model_lanes, (list, tuple)):
+        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_MODEL_LANES_INVALID")
+    normalized_lanes = tuple(_text(value, "admitted_inference_receipt.model_lane", max_len=256) for value in model_lanes)
+    if binding.role not in normalized_lanes:
+        raise AdmittedTrainingDatasetError("ADMITTED_INFERENCE_RECEIPT_ROLE_NOT_IN_MODEL_LANES")
+    return receipt
+
+
 def validate_pipeline_evidence(
     training_trace: Mapping[str, Any],
     admission: DatasetAdmission,
     inference_binding: JSpaceInferenceBinding,
 ) -> PipelineEvidence:
-    """Cross-bind one compiler input to its admission and real-inference evidence."""
+    """Cross-bind one compiler input to its admission and inference-binding evidence."""
     training_trace = _mapping(training_trace, "training_trace")
     if training_trace.get("schema_version") != TRAINING_TRACE_SCHEMA:
         raise AdmittedTrainingDatasetError("TRAINING_TRACE_SCHEMA_UNSUPPORTED")
@@ -147,10 +262,7 @@ def validate_pipeline_evidence(
         {
             "trace": _sha256(training_trace.get("trace_sha256"), "training_trace.trace_sha256"),
             "admission": _sha256(admission.training_trace_sha256, "admission.training_trace_sha256"),
-            "inference_binding": _sha256(
-                inference_binding.training_trace_sha256,
-                "inference_binding.training_trace_sha256",
-            ),
+            "inference_binding": _sha256(inference_binding.training_trace_sha256, "inference_binding.training_trace_sha256"),
         },
         "TRAINING_TRACE_BINDING",
     )
@@ -158,10 +270,7 @@ def validate_pipeline_evidence(
         {
             "trace": _sha256(training_trace.get("prototype_trace_sha256"), "training_trace.prototype_trace_sha256"),
             "admission": _sha256(admission.prototype_trace_sha256, "admission.prototype_trace_sha256"),
-            "inference_binding": _sha256(
-                inference_binding.prototype_trace_sha256,
-                "inference_binding.prototype_trace_sha256",
-            ),
+            "inference_binding": _sha256(inference_binding.prototype_trace_sha256, "inference_binding.prototype_trace_sha256"),
         },
         "PROTOTYPE_TRACE_BINDING",
     )
@@ -185,10 +294,7 @@ def validate_pipeline_evidence(
             {
                 "trace": _sha256(training_trace.get(field), f"training_trace.{field}"),
                 "admission": _sha256(getattr(admission, field), f"admission.{field}"),
-                "inference_binding": _sha256(
-                    getattr(inference_binding, field),
-                    f"inference_binding.{field}",
-                ),
+                "inference_binding": _sha256(getattr(inference_binding, field), f"inference_binding.{field}"),
             },
             f"CAUSAL_BINDING:{field}",
         )
@@ -211,18 +317,9 @@ def validate_pipeline_evidence(
     )
     _same(
         {
-            "trace": _sha256(
-                training_trace.get("vector_control_packet_sha256"),
-                "training_trace.vector_control_packet_sha256",
-            ),
-            "admission": _sha256(
-                admission.vector_control_packet_sha256,
-                "admission.vector_control_packet_sha256",
-            ),
-            "inference_binding": _sha256(
-                inference_binding.vector_control_packet_sha256,
-                "inference_binding.vector_control_packet_sha256",
-            ),
+            "trace": _sha256(training_trace.get("vector_control_packet_sha256"), "training_trace.vector_control_packet_sha256"),
+            "admission": _sha256(admission.vector_control_packet_sha256, "admission.vector_control_packet_sha256"),
+            "inference_binding": _sha256(inference_binding.vector_control_packet_sha256, "inference_binding.vector_control_packet_sha256"),
         },
         "VECTOR_CONTROL_PACKET_BINDING",
     )
@@ -246,19 +343,10 @@ def validate_pipeline_evidence(
     return PipelineEvidence(
         schema=PIPELINE_SCHEMA,
         training_trace_sha256=training_sha,
-        transition_trace_sha256=_sha256(
-            admission.transition_trace_sha256,
-            "admission.transition_trace_sha256",
-        ),
+        transition_trace_sha256=_sha256(admission.transition_trace_sha256, "admission.transition_trace_sha256"),
         prototype_trace_sha256=prototype_sha,
-        inference_binding_sha256=_sha256(
-            inference_binding.binding_sha256,
-            "inference_binding.binding_sha256",
-        ),
-        inference_receipt_sha256=_sha256(
-            inference_binding.inference_receipt_sha256,
-            "inference_binding.inference_receipt_sha256",
-        ),
+        inference_binding_sha256=_sha256(inference_binding.binding_sha256, "inference_binding.binding_sha256"),
+        inference_receipt_sha256=_sha256(inference_binding.inference_receipt_sha256, "inference_binding.inference_receipt_sha256"),
         engine_load_consumption_receipt_sha256=_sha256(
             inference_binding.engine_load_consumption_receipt_sha256,
             "inference_binding.engine_load_consumption_receipt_sha256",
@@ -304,7 +392,6 @@ def _annotate_rows(
 
 
 def _evidence_identity(evidence: PipelineEvidence) -> tuple[str, str, str]:
-    """Identity of the exact ancestry accepted for one training-trace digest."""
     return (
         evidence.transition_trace_sha256,
         evidence.inference_binding_sha256,
@@ -320,29 +407,16 @@ def compile_admitted_records(
     admitted_prototype_traces: Mapping[str, Mapping[str, Any]],
     admitted_grid_plans: Mapping[str, Mapping[str, Any]],
     admitted_inference_bindings: Mapping[str, JSpaceInferenceBinding],
+    admitted_inference_receipts: Mapping[str, Any],
     admitted_bases: Mapping[str, str],
     admitted_outcome_receipts: Mapping[str, Any] | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Compile only traces that pass basis, cross-trace, GRID, and inference admission.
-
-    ``records`` contains ``(training_trace, transition_trace)`` pairs. The admission gate
-    uses caller-owned registries rather than rebuilding trust from each row, including an
-    externally admitted GRID10 plan registry. The matching inference binding is looked up
-    by training-trace SHA and must validate under the selected RFC8785/JCS identity rules.
-    The selected lower-level compiler then separately enforces the external basis id+digest
-    registry before rendering any dataset rows.
-
-    Exact duplicate records are idempotent only after their full admitted ancestry has been
-    revalidated. Reusing one training-trace digest with a different transition/inference
-    ancestry fails closed; record ordering can therefore never hide contradictory evidence.
-    """
+    """Compile only traces with external basis, trace, GRID, binding, and receipt admission."""
     out = {"train": [], "validation": [], "holdout": []}
     seen: dict[str, tuple[str, str, str]] = {}
     admitted_grid_plans = _mapping(admitted_grid_plans, "admitted_grid_plans")
-    admitted_inference_bindings = _mapping(
-        admitted_inference_bindings,
-        "admitted_inference_bindings",
-    )
+    admitted_inference_bindings = _mapping(admitted_inference_bindings, "admitted_inference_bindings")
+    admitted_inference_receipts = _mapping(admitted_inference_receipts, "admitted_inference_receipts")
     admitted_bases = _mapping(admitted_bases, "admitted_bases")
 
     for record in records:
@@ -368,6 +442,7 @@ def compile_admitted_records(
         inference_binding = admitted_inference_bindings.get(training_sha)
         if not isinstance(inference_binding, JSpaceInferenceBinding):
             raise AdmittedTrainingDatasetError("INFERENCE_BINDING_NOT_ADMITTED_FOR_TRAINING_TRACE")
+        _require_admitted_inference_receipt(inference_binding, admitted_inference_receipts)
         evidence = validate_pipeline_evidence(training_trace, admission, inference_binding)
         evidence_identity = _evidence_identity(evidence)
         previous_identity = seen.get(training_sha)
@@ -376,10 +451,7 @@ def compile_admitted_records(
                 raise AdmittedTrainingDatasetError("TRAINING_TRACE_ANCESTRY_CONFLICT")
             continue
 
-        compiled = compile_training_traces(
-            [dict(training_trace)],
-            admitted_bases=admitted_bases,
-        )
+        compiled = compile_training_traces([dict(training_trace)], admitted_bases=admitted_bases)
         annotated = _annotate_rows(compiled, evidence)
         for split in out:
             out[split].extend(annotated[split])

@@ -148,6 +148,60 @@ def _budget(value: Any) -> tuple[tuple[str, int], ...]:
     return tuple(normalized.items())
 
 
+def _raw_json_pairs_no_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    """Reject duplicate object names before Mapping construction can erase evidence."""
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise EntryFabricError(f"RAW_JSON_DUPLICATE_PROPERTY:{key}")
+        result[key] = value
+    return result
+
+
+def _reject_nonfinite_json_constant(value: str) -> None:
+    raise EntryFabricError(f"RAW_JSON_NONFINITE_NUMBER_FORBIDDEN:{value}")
+
+
+def _reject_lone_surrogates(value: Any, path: str = "$") -> None:
+    if isinstance(value, str):
+        if any(0xD800 <= ord(ch) <= 0xDFFF for ch in value):
+            raise EntryFabricError(f"RAW_JSON_LONE_SURROGATE_FORBIDDEN:{path}")
+        return
+    if isinstance(value, Mapping):
+        for key, item in value.items():
+            _reject_lone_surrogates(key, f"{path}.<key>")
+            _reject_lone_surrogates(item, f"{path}.{key}")
+        return
+    if isinstance(value, list):
+        for index, item in enumerate(value):
+            _reject_lone_surrogates(item, f"{path}[{index}]")
+
+
+def parse_entry_json(raw: str | bytes | bytearray) -> Mapping[str, Any]:
+    """Parse untrusted raw JSON before typed admission or causal identity creation.
+
+    This closes the pre-Mapping prerequisite in ENTRY_CANONICALIZATION_CONTRACT.json.
+    It does not itself establish RFC 8785/JCS conformance; canonical identity remains the
+    responsibility of the separately versioned typed_entry_canonical_v1 profile.
+    """
+    if not isinstance(raw, (str, bytes, bytearray)):
+        raise EntryFabricError("RAW_JSON_TEXT_OR_BYTES_REQUIRED")
+    try:
+        value = json.loads(
+            raw,
+            object_pairs_hook=_raw_json_pairs_no_duplicates,
+            parse_constant=_reject_nonfinite_json_constant,
+        )
+    except EntryFabricError:
+        raise
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        raise EntryFabricError("RAW_JSON_PARSE_FAILED") from exc
+    if not isinstance(value, Mapping):
+        raise EntryFabricError("ENTRY_MAPPING_REQUIRED")
+    _reject_lone_surrogates(value)
+    return value
+
+
 def admit_entry(
     entry: Mapping[str, Any],
     *,
@@ -248,6 +302,22 @@ def admit_entry(
         payload_sha256=payload_sha256,
         event_sha256=event_sha256,
         admission_sha256=admission_sha256,
+    )
+
+
+def admit_entry_json(
+    raw: str | bytes | bytearray,
+    *,
+    current_generation: int,
+    expected_capability_binding_sha256: str,
+    admitted_capabilities: Sequence[str],
+) -> EntryPacket:
+    """Loss-preserving raw-ingress boundary followed by normal typed admission."""
+    return admit_entry(
+        parse_entry_json(raw),
+        current_generation=current_generation,
+        expected_capability_binding_sha256=expected_capability_binding_sha256,
+        admitted_capabilities=admitted_capabilities,
     )
 
 

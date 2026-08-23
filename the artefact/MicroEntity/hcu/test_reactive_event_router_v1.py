@@ -62,6 +62,7 @@ def bind_entry_projection(
         causal_id="causal:test:entry",
         entry_event_sha256=event_sha256,
         entry_admission_sha256=admission_sha256,
+        entry_canonicalization_schema=HASH_SERIALIZATION_SCHEMA,
     )
     return event
 
@@ -260,6 +261,17 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertEqual(a.model_lanes, b.model_lanes)
         self.assertNotEqual(a.engine_identity_sha256, b.engine_identity_sha256)
         self.assertNotEqual(a.decision_sha256, b.decision_sha256)
+
+    def test_typed_entry_projection_requires_matching_canonicalization_schema(self):
+        for value in (None, "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1", "UNKNOWN/v999"):
+            with self.subTest(value=value):
+                e = request_local_engine(bind_entry_projection(base_event())); e.update(novelty=0.8)
+                if value is None:
+                    e.pop("entry_canonicalization_schema")
+                else:
+                    e["entry_canonicalization_schema"] = value
+                with self.assertRaisesRegex(ReactiveRoutingError, "ENTRY_CANONICALIZATION_SCHEMA_MISMATCH"):
+                    route_entry_model(e)
 
     def test_typed_entry_projection_requires_independent_admission_binding(self):
         e = request_local_engine(bind_entry_projection(base_event())); e.update(novelty=0.8)

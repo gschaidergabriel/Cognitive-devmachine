@@ -6,7 +6,7 @@ Current authority is resolved from verified current `main`, especially:
 
 - `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 - `research_entity/rooms/PROGRAM_STATE.json`
-- `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json`
+- `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json`
 - `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
 - `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
 
@@ -71,12 +71,13 @@ These are software architecture roles, not claims of custom silicon.
 
 ## Mandatory `go` law
 
-Every explicit `go` has two coupled tracks:
+Every explicit `go` has three coupled tracks:
 
 1. **ENTITYOS_EXECUTABLE_CONVERGENCE** — improve the strongest real current implementation toward EntityOS.
 2. **HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one HCU or typed Entry primitive.
+3. **GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS** — advance causal J-Space/GWT instrumentation and zero-cost local ~0.8B readiness without entering paid execution.
 
-If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` and the next discriminator.
+If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` and the next discriminator. If track 3 cannot safely advance, record `TRAINING_READINESS_NO_CHANGE_WITH_REASON` and the next discriminator.
 
 Material architecture work uses:
 
@@ -161,24 +162,27 @@ External providers are not admitted as required internal cognition. Exact local 
 
 ## Execution policy
 
-Current autonomous supervisor `8.61` is **FREE_ONLY**. Build/test/experiment/runtime credit comes only from authorized isolated execution surfaces that do not introduce a new paid provider/resource fallback. VPS/self-hosted/production-host testing is forbidden under current control. Together inference/training is forbidden in this supervisor mode. Secrets do not enter source/receipts.
+Current autonomous supervisor `8.62` is **FREE_ONLY**. Build/test/experiment/runtime credit comes only from authorized isolated FREE execution surfaces that do not introduce a new paid provider/resource fallback. VPS/self-hosted/production-host testing is forbidden under current control. Together inference/training is forbidden in this supervisor mode. Secrets do not enter source/receipts.
 
-A protected Vercel Preview route on retained PR810 has now empirically demonstrated worker-callable `Sandbox.create` + `runCommand` without a GitHub token or separate Sandbox probe secret. This grants **Vercel Sandbox infrastructure callability credit only**. It does not grant EntityOS/HCU runtime, local-model, J-Space-model, training, target-hardware, effect, or whole-product acceptance. Vercel team plan observed through the authorized connector is `hobby`; explicit zero-monetary-cost Sandbox pricing was not established by the available documentation, so FREE_ONLY accounting must not infer cost from plan name alone.
+Vercel Hobby Sandbox is now admitted only to the bounded extent of the observed included-tier entitlement. Credit-bearing runs must use fixed source-hash-bound short capsules, bind exact source/result/secret-fence/cleanup evidence, and fail closed before execution if quota exhaustion, billing, upgrade, plan mismatch or any monetary charge path appears. Remaining Sandbox quota is not assumed.
+
+The exact-current J-Space dataset family-split component has bounded isolated execution evidence (6/6 PASS twice). That is component runtime credit only; it does not grant whole HCU, J-Space model, training, EntityOS or canonical-semantics credit. Earlier Vercel capsule runs that raced stale cost authority remain quarantined with zero acceptance credit.
 
 Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 
 ## Current frontier
 
-1. replace the old credential-bearing arbitrary POST dependency with the verified protected-preview Sandbox bridge plus fixed SHA-bound source capsules/regression commands, so exact private Research bytes can be executed without persisting or requesting a GitHub runtime token;
-2. wire the retained HCU route's separate `EngineAdmission` to the **real deterministic EntityOS/HCU control-plane producer** and bind it through a generation-fenced physical engine lease to the bytes actually consumed by the local checkpoint/tokenizer/runtime loader; a pre-load hash alone receives zero runtime credit, and an untrusted causal Entry event may request but may never mint engine authority;
-3. keep the replay-stable **event identity vs concrete admission identity** split and wire Typed Entry capability claims to the existing canonical deterministic capability authority rather than a test fixture or event self-claim;
-4. bind the downstream inference receipt **producer** to the already-defined serializer/event/Entry-admission/route/engine/class/artifact echo contract plus the exact physical loader lease/consumed-byte identity;
-5. converge the versioned Typed Entry canonicalization path to one accepted authority before making heterogeneous/cross-language hash-identity claims;
-6. run exact combined Entry + HCU route + engine-load-lease + inference-echo + GRID10 + J-Space regressions through the now-callable protected-preview Vercel Sandbox bridge, with exact Research main/PR1263 identities and result digests bound in one receipt;
-7. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry/loader semantics settle.
+1. keep PR1263 as the single retained HCU donor lane and fuse/rebase its retained mechanisms onto exact current FREE_ONLY `main` before promotion;
+2. run one fixed exact-source repaired HCU capsule on the bounded admitted Vercel Hobby Sandbox surface and bind Research main SHA/tree, retained PR1263 SHA/tree, capsule/source digests, executor/result, secret fence and cleanup in one immutable receipt;
+3. only after that pass, extend toward the minimum full Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> admitted causal dataset closure;
+4. wire the retained HCU route's separate `EngineAdmission` to the real deterministic EntityOS/HCU control-plane producer and bind it through a generation-fenced physical engine lease to the bytes actually consumed by the local checkpoint/tokenizer/runtime loader;
+5. keep the replay-stable event identity vs concrete admission identity split and wire Typed Entry capability claims to the existing canonical deterministic capability authority rather than a test fixture or event self-claim;
+6. bind the downstream inference receipt producer to the serializer/event/Entry-admission/route/engine/class/artifact echo contract plus the exact physical loader lease/consumed-byte identity;
+7. converge the versioned Typed Entry canonicalization path to one accepted authority before making heterogeneous/cross-language hash-identity claims;
+8. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry/loader semantics settle.
 
-Completed authority migration note: current `the artefact/manifest.json` and the compatibility-named authority validator now select **EntityOS + HCU** while preserving historical ClayVerse controls only as immutable donor/safety ancestry. This source-level convergence does not create runtime acceptance.
+Current authority migration note: `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, `the artefact/manifest.json`, this README, the root routing shim and visible status footer are being converged on **SUPERVISOR_STEERING_8_62**. The compatibility-named production authority validator remains a separate stale 8.52 implementation debt until its current semantics are safely fused; this README does not claim that validator debt is already closed.
 
 ## Latest `go` README re-entry — 2026-08-24
 
-`README=UPDATED_VERCEL_SANDBOX_CALLABILITY`: the previous blocker was not a lack of Vercel Sandbox capability but an uncallable execution-admission shape: retained PR810 required an arbitrary credential-bearing POST before `Sandbox.create`. A bounded PR810 delta changed only the diagnostic probe to a protected-preview, exact-branch GET surface with no extra probe secret. Deployment `dpl_9vST7MFPJzdcHjw8s47MSHs4DbSM` from bridge commit `33cdfd2aecf820c9b48e7d47376f126d0e831bfd` returned `VERCEL_SANDBOX_EXECUTION_VERIFIED`: Linux x86_64, Python 3.13.1, filesystem hash `77707d7ae00b238db00d1d983a78f73b357afd36fdf5268c6f89a49509308436`, secret fence PASS, exit 0, cleanup PASS. Receipt: `the artefact/MicroEntity/hcu/receipts/2026-08-24_GO_SANDBOX_CALLABILITY_GPT56SOL.json`. This is an execution-infrastructure breakthrough only; EntityOS/HCU/model/J-Space/training/whole-product runtime credit remains zero. The next discriminator is to use this callable bridge with fixed SHA-bound source capsules rather than runtime GitHub credentials.
+`README=UPDATED_SUPERVISOR_862_ALIGNMENT`: current `main` was observed at `cdbcaabd23aeb0168463196e29981c6ce8d61bc7`. `SUPERVISOR_INBOX.json` and `SUPERVISOR_STEERING_8_62.json` already admitted bounded included-tier Vercel Hobby Sandbox execution and recorded exact-current J-Space family-split component credit, while several current-facing surfaces still pointed to 8.61 and the root routing shim/compatibility-named validator still pointed to 8.52. This `go` aligns the current-facing state/routing documentation to 8.62 without granting whole-runtime credit and leaves the stale production validator explicitly visible as the next authority-guard fusion debt.

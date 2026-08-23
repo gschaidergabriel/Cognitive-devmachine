@@ -254,6 +254,8 @@ def activate_binding(
     objects_json = _canonical_bytes(normalized).decode("utf-8")
     now = _utc_now()
 
+    # The caller controls the transaction boundary. These statements preserve the old
+    # active row until all object and generation validation above has succeeded.
     db.execute(
         "UPDATE cognition_bindings SET retired_at=? WHERE retired_at IS NULL AND binding_digest<>?",
         (now, binding_digest),

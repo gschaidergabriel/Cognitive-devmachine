@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "18a480ce0cf9a3a053e1fb12e4c29b3df049ea2c",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "work_class": "DETERMINISTIC_SOURCE_IDENTITY_AND_IMPORT_GRAPH_FALSIFIER",
+    "duplicate_lane_created": false
+  },
+  "reentry": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "5325c490cc1d1857c51a5ac499355340d9e3d6f7",
+    "executor_required_blobs_schema": "ENTITYOS_HCU_JSPACE_V4_V3_REQUIRED_BLOBS/v2",
+    "executor_pinned_donor": "5c59891b208d245b4b445772c70da5108447d794",
+    "executor_status": "SOURCE_REBIND_REQUIRED"
+  },
+  "exact_identity_finding": {
+    "executor_pinned_composite_regression_blob": "3180a62c8d5d6d5a2777b1285169d548b9f2e58a",
+    "current_donor_composite_regression_blob": "cd0abb3fe22d0fa015befe35c896f56fa006f08c",
+    "changed_file": "the artefact/MicroEntity/hcu/test_execution_store_inference_jspace_chain_v1.py",
+    "current_donor_change": "The composite regression no longer imports test_inference_receipt_v1.fixture. It now constructs Typed Entry admission, route, verified engine admission from real artifact files, verified loader consumption, scheduler-owned GRID10 and the executor observation using the production constructors exercised by the chain.",
+    "unchanged_admission_store_regression_blob": "19cca07584db3d4818ccb77b8c96ba7f127d7bd3",
+    "remaining_test_fixture_import": "test_model_execution_admission_store_v1.py still imports digest/grid_plan/observation/verified_load from test_model_execution_receipt_v1.py.",
+    "obsolete_transitive_fixture_for_current_composite": "test_inference_receipt_v1.py is no longer imported by the current composite execution-store-to-J-Space regression."
+  },
+  "finding": {
+    "classification": "SUCCESSOR_DONOR_PRODUCER_DERIVED_TRUST_FENCE_STALES_EXECUTOR_REBIND_TARGET",
+    "observed": "PR810's full-snapshot v2 gate is internally exact for donor 5c59891b, but the retained donor has advanced to 511d5689 with a materially stronger composite regression that derives upstream trust objects from production constructors rather than a test fixture.",
+    "inference": "Executing the 5c59891b fixed command could still establish evidence at that immutable historical donor snapshot, but it would not establish exact-current closure for the retained donor head and would miss the stronger producer-derived upstream-trust discriminator now available.",
+    "counterhypothesis": "The old composite regression is sufficient because production source blobs are otherwise unchanged and only test construction changed.",
+    "falsifier": "The acceptance claim includes the causal chain from Typed Entry through engine/load/GRID10 to atomic model execution and J-Space. A regression that imports preassembled upstream trust objects exercises a weaker trust boundary than one deriving those objects through the production constructors. Therefore current promotion should bind the stronger successor regression unless authority explicitly freezes the older snapshot scope.",
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_PREVENTING_SOURCE_REBIND_QUARANTINE_REMOVAL_AGAINST_A_NOW_STALE_ACCEPTANCE_TEST_SNAPSHOT",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_REQUIRING_CURRENT_TYPED_ENTRY_ROUTE_ENGINE_LOAD_GRID10_TRUST_OBJECTS_TO_BE_DERIVED_THROUGH_PRODUCTION_CONSTRUCTORS_IN_THE_INTEGRATED_EXECUTION_CHAIN_TEST",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_STRENGTHENING_THE_EXACT_EXECUTION_TO_JSPACE_V3_TRAINING_TRACE_ACCEPTANCE_DISCRIMINATOR_AND_REMOVING_RELIANCE_ON_THE_OLD_INFERENCE_TEST_FIXTURE"
+  },
+  "promotion_delta_required": {
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "required_composite_regression_blob": "cd0abb3fe22d0fa015befe35c896f56fa006f08c",
+    "required_fixed_command": "python3 -m unittest -v test_model_execution_admission_store_v1.py test_execution_store_inference_jspace_chain_v1.py test_jspace_inference_binding_revalidation_v3.py",
+    "transitive_fixture_import_graph": [
+      "test_model_execution_receipt_v1.py remains required by test_model_execution_admission_store_v1.py",
+      "test_inference_receipt_v1.py is no longer required by test_execution_store_inference_jspace_chain_v1.py at donor 511d5689; retain it only if another exact executed test/import requires it"
+    ],
+    "source_rebind_required_must_remain": true
+  },
+  "evidence_boundary": {
+    "source_identity_only": true,
+    "new_ci_execution_observed": false,
+    "new_admitted_sandbox_execution_observed": false,
+    "actual_model_executor_io_observed": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md was already updated in this organ after concurrent-write-safe reentry to record the atomic lease boundary repair and the one-lane SOURCE_REBIND_REQUIRED frontier. This successor finding narrows the exact current donor/test identity and is preserved append-only here; another large README replacement during active parallel writes would risk overwriting newer worker deltas."
+  },
+  "next_exact_gate": "Re-enter PR1263 and PR810, advance the single executor's v2 required-blobs authority from donor 5c59891b to current donor 511d5689 (or a newer exact successor), replace composite regression blob 3180a62c with cd0abb3f or its current successor, recompute the actual test import graph instead of carrying stale transitive fixtures by convention, keep SOURCE_REBIND_REQUIRED until the whole immutable source/test/blob/command/result closure is coherent, then execute only when FREE_ONLY Vercel Hobby build/function admission permits."
+}

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 import unittest
 
 from entry_fabric_v1 import (
@@ -86,6 +87,33 @@ class EntryFabricRegressionTests(unittest.TestCase):
     def test_stale_generation_fails_closed(self):
         with self.assertRaises(AdmissionError):
             admit_ingress(draft(), current_generation=GENERATION + 1)
+
+    def test_generation_and_budget_reject_bool_or_string_coercion(self):
+        with self.assertRaisesRegex(AdmissionError, "generation must be an integer"):
+            admit_ingress(replace(draft(), generation=True), current_generation=1)
+        with self.assertRaisesRegex(AdmissionError, "current_generation must be an integer"):
+            admit_ingress(draft(), current_generation=str(GENERATION))
+        bool_budget = ResourceBudget(
+            max_logical_cells=True,
+            max_inference_calls=4,
+            max_tokens=2400,
+            wall_ms=8000,
+            memory_bytes=256 * 1024 * 1024,
+        )
+        with self.assertRaisesRegex(AdmissionError, "max_logical_cells must be an integer"):
+            admit_ingress(replace(draft(), resource_budget=bool_budget), current_generation=GENERATION)
+
+    def test_security_collections_reject_scalar_or_mapping_coercion(self):
+        malformed = (
+            ("provenance", "source:human"),
+            ("permissions", "context.read"),
+            ("capability_scope", "effect.request"),
+            ("provenance", {"source": "human"}),
+        )
+        for field, value in malformed:
+            with self.subTest(field=field, value=value):
+                with self.assertRaisesRegex(AdmissionError, f"{field} must be a collection of strings"):
+                    admit_ingress(replace(draft(), **{field: value}), current_generation=GENERATION)
 
     def test_raw_payload_is_not_admitted_as_payload_ref(self):
         with self.assertRaises(AdmissionError):

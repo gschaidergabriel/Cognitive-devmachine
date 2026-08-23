@@ -1,8 +1,25 @@
 {
-  "schema_version": "8.0",
+  "schema_version": "8.1",
   "program_id": "clayverse-single-container",
   "status": "ACTIVE",
   "stage": "CLAYVERSE_ARTIFACT",
+  "current_stage": "CLAYVERSE_ARTIFACT",
+  "current_stage_goal": "Converge and empirically validate the complete one-container ClayVerse product without creating a second durable authority.",
+  "stage_order": ["CLAYVERSE_ARTIFACT", "CLAYVERSE_EXACT_OCI_ACCEPTANCE", "CLAYVERSE_DEPLOYMENT_READINESS"],
+  "dynamic_targets": {
+    "primary": "WHOLE_CLAYVERSE_OCI_PRODUCT",
+    "runtime_evidence": "AUTHORIZED_ISOLATED_EXACT_SOURCE_ONLY",
+    "next": "authority-consistent source -> exact OCI build/runtime -> full product path acceptance"
+  },
+  "progress_semantics": {
+    "bar_cells": 20,
+    "progress_percent": "UNRESOLVED_UNLESS_DERIVED_FROM_CURRENT_CLAYVERSE_ACCEPTANCE_VECTOR"
+  },
+  "stage_gates": {
+    "CLAYVERSE_ARTIFACT": {"status": "IN_PROGRESS"},
+    "CLAYVERSE_EXACT_OCI_ACCEPTANCE": {"status": "BLOCKED_ON_EXECUTION_SURFACE"},
+    "CLAYVERSE_DEPLOYMENT_READINESS": {"status": "NOT_YET_ADMITTED"}
+  },
   "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
@@ -20,12 +37,15 @@
   },
   "identity": {
     "persistent_research_entity": "Clay",
+    "legacy_canonical_research_entity_id": "frank-project-global-research-entity",
     "central_product_entity_count": 1,
     "canonical_users": ["gabriel", "andreas"],
     "rights": "equal",
     "global_generation": "single shared live generation fenced across both canonical sessions"
   },
   "execution_policy": {
+    "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
+    "free_only": true,
     "isolated_sandbox_only": true,
     "vps_testing_forbidden": true,
     "together_forbidden": true,
@@ -53,6 +73,7 @@
     "whole_clayverse": 0,
     "note": "Authority reconciliation is source-level only until exact authorized isolated runtime evidence is observed."
   },
-  "current_frontier": "reconcile active ClayVerse authority across bootstrap/program/readme/footer and enforce fail-closed consistency before further product work",
+  "compatibility_note": "Legacy Frank/Mini-Entity-specific progress and campaign structures are no longer current product authority. Historical tools may return UNKNOWN for retired fields rather than silently steering current ClayVerse work.",
+  "current_frontier": "complete authority reconciliation and run exact-current ClayVerse authority/full-suite/OCI gates on an actually-started authorized isolated executor",
   "legacy_scope": "Prior Mini Entity/Blogpost/Frank/EntityOS-top-level paths remain historical bounded evidence only."
 }

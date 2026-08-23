@@ -127,15 +127,20 @@ def diagnose(doc):
     need(set(boundaries) == set(BOUNDARIES), "exact four boundary receipts required")
     details = {}
     failing = []
+    stream_digests = {"stdout_sha256": set(), "stderr_sha256": set()}
     for name in BOUNDARIES:
         b = boundaries[name]
         validate_boundary_shape(name, b, common_digest)
+        for stream_field in stream_digests:
+            stream_digests[stream_field].add(b[stream_field])
         violations = boundary_violations(name, b)
         derived = "PASS" if not violations else "FAIL"
         need(b.get("status") == derived, f"{name} status does not match measured observations")
         details[name] = violations
         if violations:
             failing.append(name)
+    for stream_field, digests in stream_digests.items():
+        need(len(digests) == 1, f"boundary {stream_field} mismatch")
     aggregate = "PASS" if not failing else "FAIL"
     need(doc.get("aggregate_status") == aggregate, "aggregate_status does not match boundary observations")
     expected_credit = "CLAUDE_ADAPTER_BOUNDARY_ONLY" if aggregate == "PASS" else "ZERO"

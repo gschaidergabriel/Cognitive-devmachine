@@ -3,92 +3,83 @@
   "date": "2026-08-23",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
-  "control": {
-    "bootstrap_schema": "7.1",
-    "fresh_main_before_final_fusion": "d3703db7d0d665545bc25b06335c47f06ce4c62b",
-    "free_only": true,
-    "provider_secret_lookup": false,
-    "provider_network_call": false,
-    "together_preflight": false,
-    "billed_create": false,
-    "training_started": false,
-    "money_spent_usd": 0,
-    "coordinated_swarm_execution": "NO_ADMITTED_PROVIDER_CHILD_EXECUTION_SURFACE_EXPOSED_TO_THIS_ORGAN"
-  },
   "coordination": {
     "macrocycle_id": null,
     "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "unusual_experiment_count": 0,
-    "note": "No atomic user-turn experiment lease was exposed to this organ. No post-hoc macrocycle id was invented; all mutations are deterministic regressions."
+    "note": "No atomic user-turn experiment lease surface was exposed. All mutations here are deterministic fusion regressions; no second unusual experiment is claimed."
   },
   "pr": 1059,
-  "adjudication": {
-    "rejected_initial_candidate": "second standalone bundled-manifest validator",
-    "reason": "Current main independently landed the canonical bundled manifest validator and the separate JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 validator. A second manifest authority would duplicate the canonical path and mix source identity with runtime measurement semantics.",
-    "retained_gap": "cross-binding between independently valid manifest and boot receipt identities"
-  },
-  "canonical_inputs_observed": {
-    "bundled_manifest_validator": {
-      "path": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py",
-      "git_blob": "4f4655f441b21601922ab18cb4ca4983ada77ce8"
-    },
-    "boot_receipt_validator_before_delta": {
-      "path": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
-      "git_blob": "5bfd29093eef183dde044a796a2e82fbc909a132"
-    },
-    "boot_receipt_tests_before_delta": {
-      "path": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py",
-      "git_blob": "796024571f515b3e5711abdac7bd6ce06eb25dd7"
-    }
-  },
+  "rejoined_base_observed": "d3703db7d0d665545bc25b06335c47f06ce4c62b",
+  "role": "ADDITIVE_CROSS_BIND_ONLY_NOT_SECOND_RECEIPT_OR_TRUTH_AUTHORITY",
   "delta": {
+    "manifest_validator": {
+      "path": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py",
+      "git_blob": "f7e30922c90dd316c4bf77f6b3a8085ae724e724",
+      "sha256": "1d183ad9d90d987cf6e9908e39df3483ac49e28a4ad6980dfbf92833310732f5",
+      "change": "runtime_digest is admitted and identity-bearing when present"
+    },
+    "manifest_tests": {
+      "path": "the artefact/blogpost_entity/mini_cognition/test_bundled_cognition_manifest_v1.py",
+      "git_blob": "8e5befbcacd6ce81066d224dc62441180aa1a0e6",
+      "sha256": "57afa46cd2abbf6a5348173281aef5fcf9e79419df73218c40ec3db212efc4be"
+    },
     "cross_validator": {
       "path": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_manifest_cross_binding_v1.py",
-      "git_blob": "0850edbb4f1747e6ab091814aba27a60fab1cf78",
-      "sha256": "cb9222163cb8d86287173bf1dc9cf331fce19e4037ab645b4d8b6a75fbccb5cd"
+      "git_blob": "b8747788a9ccff1386a194600064c2cc0b8b914f",
+      "sha256": "eed1c2210df426af768ba3a9bc7af8ee85ea01e6567b800450304220454b2f8c"
     },
     "cross_tests": {
       "path": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_manifest_cross_binding_v1.py",
-      "git_blob": "4a7db3d87484a2b9d382b8442d0007584f43ea52",
-      "sha256": "166b63c390a34694978ee52e67a679fc58818cffd22f7b8af4ede60e9e2f14c0"
-    },
-    "boot_validator_after_fusion": {
-      "git_blob": "38389175400f814dc9c129fa784d20c05d22fd6b",
-      "change": "require jspace.jspace_profile_sha256 while preserving the landed dirty-source and first-action provenance guards"
-    },
-    "boot_tests_after_fusion": {
-      "git_blob": "cb7e577a7bda0dbc01b59d2b498be30672cf3584",
-      "change": "add missing-jspace-profile fail-closed regression while preserving the landed provenance regressions"
+      "git_blob": "7d28f92676d3fe95c92c00d8e9c16f479c7697b0",
+      "sha256": "2c91540831fab873af7f0dde6f4501f32bdfdfdbbcc64ccd815476005e0648b0"
     }
   },
-  "cross_binding_contract": [
-    "exact manifest file SHA-256 == bundled_core.manifest_sha256",
-    "engine_id and model_family match",
-    "checkpoint_digest == checkpoint_sha256",
-    "tokenizer_digest == tokenizer_sha256",
-    "jspace_profile_digest == jspace_profile_sha256",
-    "lens_profile_digest == lens_profile_sha256",
-    "workspace_calibration_digest == gwt.calibration_sha256",
-    "steering_calibration_digest == jspace.steering_calibration_sha256 when steering is present"
-  ],
-  "deterministic_regressions": {
-    "cross_binding_suite": "PASS_8_OF_8",
-    "boot_binding_suite_after_jspace_profile_fusion": "PASS_12_OF_12",
-    "rehash_manifest_with_stale_checkpoint_shadow": "REJECTED",
-    "missing_jspace_profile_in_boot_receipt": "REJECTED",
-    "prior_dirty_source_and_first_action_provenance_guards": "PRESERVED_GREEN"
+  "contract": {
+    "source_lock": "actual manifest raw SHA-256 must equal an externally supplied expected source/startup lock before receipt comparison",
+    "receipt_manifest_bytes": "bundled_core.manifest_sha256 must equal actual manifest raw SHA-256",
+    "checkpoint_tokenizer": "must cross-bind exactly",
+    "runtime_digest": "manifest runtime_digest is mandatory at boot cross-binding and must equal receipt runtime_sha256",
+    "runtime_identity": "manifest quantization_runtime_identity is mandatory at boot cross-binding and must equal receipt runtime_identity",
+    "jspace_lens_workspace": "profile/calibration digests must cross-bind exactly",
+    "steering": "presence and value are symmetric"
   },
   "execution": {
-    "environment": "Linux 6.18.35 x86_64 / Python 3.13.5",
+    "surface": "isolated ChatGPT Linux x86_64",
+    "python": "3.13.5",
     "py_compile": "PASS",
-    "evidence_class": "LOCAL_EXACT_SOURCE_MECHANISM_SUPPORTED"
+    "manifest_suite": "PASS_10_OF_10",
+    "cross_binding_suite": "PASS_11_OF_11",
+    "combined_changed_suite": "PASS_21_OF_21",
+    "ubuntu_owner_host_started": false,
+    "model_or_jacobian_runtime_executed": false
+  },
+  "key_regressions": [
+    "self-consistent substituted manifest rejected against external source lock",
+    "rehash-with-stale-checkpoint shadow rejected",
+    "runtime digest mismatch rejected",
+    "runtime identity mismatch rejected",
+    "missing boot runtime digest rejected",
+    "J-Space/lens/workspace mismatches rejected",
+    "unexpected steering calibration rejected"
+  ],
+  "preserved_main_guards": "Current-main JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 dirty-source and structured first-action provenance guards remain a separate prerequisite and are not replaced by this cross-binder.",
+  "downstream_evidence": "Merged Unified Cognitive Fabric runtime receipt remains the downstream cognition-cycle evidence envelope; no second runtime receipt family is created.",
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_call": false,
+    "billed_create": false,
+    "training_started": false,
+    "money_spent_usd": 0
   },
   "credits": {
     "runtime": 0,
     "model_quality": 0,
     "jspace_runtime": 0,
     "whole_gwt": 0,
+    "claude_adapter": 0,
     "whole_product": 0
   },
-  "next_gate": "At the next authorized exact Ubuntu start, produce an actual JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 carrying jspace_profile_sha256; validate the canonical bundled manifest and boot receipt independently; then cross-bind them on exact observed bytes before any bundled J-Space/GWT runtime credit."
+  "next_gate": "At the next intentional exact Ubuntu start: standalone manifest validation -> canonical boot receipt validation -> source-locked manifest/runtime cross-binding -> Unified Cognitive Fabric runtime receipt. Only exact observed runtime evidence can earn later credit."
 }

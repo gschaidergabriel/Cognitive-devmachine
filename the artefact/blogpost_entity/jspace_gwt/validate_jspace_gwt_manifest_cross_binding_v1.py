@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
-"""Cross-bind the canonical bundled-cognition manifest to a J-Space/GWT boot receipt.
+"""Cross-bind source-locked bundled cognition manifest to a J-Space/GWT boot receipt.
 
-This module is deliberately *not* a replacement for either canonical standalone
-validator. It checks only that two independently validated records describe the
-same exact bundle/calibration identities. A cross-binding PASS grants no runtime,
-model-quality, semantic, or Whole-GWT credit.
+Additive validation layer only: canonical manifest and boot-receipt validators remain
+independent authorities for their own schemas. This gate proves only identity coherence.
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import re
-import sys
 from pathlib import Path
 from typing import Any
 
@@ -30,14 +28,14 @@ def fail(code: str) -> None:
 
 def obj(parent: dict[str, Any], key: str) -> dict[str, Any]:
     value = parent.get(key)
-    if not isinstance(value, dict):
+    if type(value) is not dict:
         fail(f"CROSS_BINDING_OBJECT_REQUIRED:{key}")
     return value
 
 
 def text(parent: dict[str, Any], key: str) -> str:
     value = parent.get(key)
-    if not isinstance(value, str) or not value.strip():
+    if type(value) is not str or not value.strip():
         fail(f"CROSS_BINDING_TEXT_REQUIRED:{key}")
     return value
 
@@ -59,10 +57,11 @@ def cross_validate(
     receipt: Any,
     *,
     manifest_raw_sha256: str,
+    expected_manifest_raw_sha256: str,
 ) -> None:
-    if not isinstance(manifest, dict):
+    if type(manifest) is not dict:
         fail("MANIFEST_OBJECT_REQUIRED")
-    if not isinstance(receipt, dict):
+    if type(receipt) is not dict:
         fail("RECEIPT_OBJECT_REQUIRED")
     if manifest.get("schema") != MANIFEST_SCHEMA:
         fail("MANIFEST_SCHEMA_MISMATCH")
@@ -70,45 +69,46 @@ def cross_validate(
         fail("RECEIPT_SCHEMA_MISMATCH")
     if HEX64.fullmatch(manifest_raw_sha256) is None:
         fail("MANIFEST_RAW_SHA256_INVALID")
+    if HEX64.fullmatch(expected_manifest_raw_sha256) is None:
+        fail("EXPECTED_MANIFEST_RAW_SHA256_INVALID")
+
+    # External source/startup lock defeats a self-consistent manifest+receipt substitution.
+    eq("source_locked_manifest_raw_sha256", manifest_raw_sha256, expected_manifest_raw_sha256)
 
     core = obj(receipt, "bundled_core")
     jspace = obj(receipt, "jspace")
     gwt = obj(receipt, "gwt")
 
-    # Bind the receipt to the exact manifest file bytes, not only its semantic fields.
+    # Receipt must name the exact same manifest bytes observed by this gate.
     eq("manifest_raw_sha256", sha(core, "manifest_sha256"), manifest_raw_sha256)
 
-    # Then bind the independently surfaced runtime identities back to the manifest.
-    # This prevents a re-hashed/substituted manifest from shadowing stale receipt fields.
+    # Identity-bearing components must agree after independent schema validation.
     eq("engine_id", text(core, "engine_id"), text(manifest, "engine_id"))
     eq("model_family", text(core, "model_family"), text(manifest, "model_family"))
     eq("checkpoint_digest", sha(core, "checkpoint_sha256"), sha(manifest, "checkpoint_digest"))
     eq("tokenizer_digest", sha(core, "tokenizer_sha256"), sha(manifest, "tokenizer_digest"))
-    eq(
-        "jspace_profile_digest",
-        sha(jspace, "jspace_profile_sha256"),
-        sha(manifest, "jspace_profile_digest"),
-    )
-    eq(
-        "lens_profile_digest",
-        sha(jspace, "lens_profile_sha256"),
-        sha(manifest, "lens_profile_digest"),
-    )
-    eq(
-        "workspace_calibration_digest",
-        sha(gwt, "calibration_sha256"),
-        sha(manifest, "workspace_calibration_digest"),
-    )
+
+    runtime_digest = manifest.get("runtime_digest")
+    if runtime_digest is None:
+        fail("CROSS_BINDING_RUNTIME_DIGEST_REQUIRED")
+    eq("runtime_digest", sha(core, "runtime_sha256"), sha(manifest, "runtime_digest"))
+
+    runtime_identity = manifest.get("quantization_runtime_identity")
+    if runtime_identity is None:
+        fail("CROSS_BINDING_RUNTIME_IDENTITY_REQUIRED")
+    eq("quantization_runtime_identity", text(core, "runtime_identity"), text(manifest, "quantization_runtime_identity"))
+
+    eq("jspace_profile_digest", sha(jspace, "jspace_profile_sha256"), sha(manifest, "jspace_profile_digest"))
+    eq("lens_profile_digest", sha(jspace, "lens_profile_sha256"), sha(manifest, "lens_profile_digest"))
+    eq("workspace_calibration_digest", sha(gwt, "calibration_sha256"), sha(manifest, "workspace_calibration_digest"))
 
     steering = manifest.get("steering_calibration_digest")
     if steering is not None:
-        if not isinstance(steering, str) or HEX64.fullmatch(steering) is None:
+        if type(steering) is not str or HEX64.fullmatch(steering) is None:
             fail("CROSS_BINDING_SHA256_REQUIRED:steering_calibration_digest")
-        eq(
-            "steering_calibration_digest",
-            sha(jspace, "steering_calibration_sha256"),
-            steering,
-        )
+        eq("steering_calibration_digest", sha(jspace, "steering_calibration_sha256"), steering)
+    elif jspace.get("steering_calibration_sha256") is not None:
+        fail("CROSS_BINDING_UNEXPECTED_STEERING_CALIBRATION")
 
 
 def load_json(path: Path) -> tuple[dict[str, Any], bytes]:
@@ -117,30 +117,30 @@ def load_json(path: Path) -> tuple[dict[str, Any], bytes]:
         data = json.loads(raw.decode("utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         fail(f"READ_OR_JSON_ERROR:{path.name}:{exc.__class__.__name__}")
-    if not isinstance(data, dict):
+    if type(data) is not dict:
         fail(f"TOP_LEVEL_OBJECT_REQUIRED:{path.name}")
     return data, raw
 
 
 def main() -> int:
-    if len(sys.argv) != 3:
-        print(
-            "usage: validate_jspace_gwt_manifest_cross_binding_v1.py MANIFEST.json RECEIPT.json",
-            file=sys.stderr,
-        )
-        return 2
+    parser = argparse.ArgumentParser()
+    parser.add_argument("manifest", type=Path)
+    parser.add_argument("receipt", type=Path)
+    parser.add_argument("--expected-manifest-raw-sha256", required=True)
+    args = parser.parse_args()
     try:
-        manifest, manifest_raw = load_json(Path(sys.argv[1]))
-        receipt, _ = load_json(Path(sys.argv[2]))
+        manifest, manifest_raw = load_json(args.manifest)
+        receipt, _ = load_json(args.receipt)
         cross_validate(
             manifest,
             receipt,
             manifest_raw_sha256=hashlib.sha256(manifest_raw).hexdigest(),
+            expected_manifest_raw_sha256=args.expected_manifest_raw_sha256,
         )
     except CrossBindingError as exc:
         print(f"FAIL {exc}")
         return 1
-    print("PASS JSPACE_GWT_MANIFEST_CROSS_BINDING/v1")
+    print("PASS JSPACE_GWT_MANIFEST_CROSS_BINDING/v1 SOURCE_LOCKED_RUNTIME_BOUND")
     print("EVIDENCE_CREDIT ZERO_RUNTIME_ZERO_MODEL_ZERO_WHOLE_GWT")
     return 0
 

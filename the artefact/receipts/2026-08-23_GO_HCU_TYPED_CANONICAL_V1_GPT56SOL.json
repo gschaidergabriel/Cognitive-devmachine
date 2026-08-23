@@ -1,0 +1,70 @@
+{
+  "schema": "GO_HCU_TYPED_CANONICAL_IDENTITY/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_at_branch": "63fdd580aee5d383a3c7d01213a3ba41a2b8bf02",
+  "branch": "gpt56sol/go-entityos-hcu-canonical-v1-current-20260823-2336",
+  "head_after_source_tests": "fd5070323a690d68cb08b757d9e030ea4f9be71f",
+  "finding": "CROSS_LANGUAGE_CAUSAL_IDENTITY_NEEDS_VERSIONED_CANONICAL_BYTES",
+  "source_delta": {
+    "module": "the artefact/hcu_typed_canonical_v1.py",
+    "module_blob": "a00e2f18e2bf8a689f2c6b18c8aeaf529b30a3f3",
+    "test": "the artefact/tests/test_hcu_typed_canonical_v1.py",
+    "test_blob": "513da25540a0e6a355aa59c1f89c293f3f361161",
+    "contract": "ENTITYOS_HCU_TYPED_CANONICAL/v1"
+  },
+  "mechanism": [
+    "domain-separated versioned SHA-256 identity",
+    "printable ASCII object keys with byte-order sorting",
+    "Unicode scalar values preserved without normalization",
+    "fixed JSON control-character escaping",
+    "I-JSON-safe integer range",
+    "floats rejected from the identity domain",
+    "opaque objects and surrogate code points fail closed"
+  ],
+  "external_primary_evidence": {
+    "reference": "RFC 8785 JSON Canonicalization Scheme",
+    "use": "supports the requirement that cryptographic JSON identity use an invariant canonical representation; this candidate intentionally implements a smaller explicitly versioned typed equivalent rather than claiming full JCS"
+  },
+  "component_check": {
+    "exact_git_blob_reproduction": true,
+    "py_compile": "PASS",
+    "unittest": "10/10 PASS",
+    "scope": "LOCAL_ISOLATED_COMPONENT_MECHANISM_ONLY",
+    "runtime_credit": 0
+  },
+  "go_unusual_experiment": {
+    "name": "EVENT_ALIAS_POISON_SAME_ROUTE_SHAPE",
+    "consumed_once_for_this_user_triggered_macrocycle": true,
+    "result": "distinct immutable event payload identity produced distinct ingress/task identity while exact replay remained stable",
+    "classification": "MECHANISM_SUPPORTED_BOUNDED_REPRODUCTION_ONLY",
+    "additional_unusual_experiments_after_consumption": 0
+  },
+  "coordination": {
+    "retained_typed_entry_lane": "PR_1263",
+    "this_delta_is_second_entry_implementation": false,
+    "purpose": "shared canonical identity utility for eventual fusion into retained HCU/Typed Entry route and GRID modes",
+    "known_separate_blocker": "Typed Entry capability self-grant must be repaired against an external trusted capability authority before privileged capability claims can be admitted"
+  },
+  "execution_policy": {
+    "vercel_sandbox_exec_exposed_to_this_organ": false,
+    "vps_or_self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "together_used": false,
+    "paid_execution_used": false,
+    "secrets_used": false
+  },
+  "credit": {
+    "source_candidate": "SUPPORTED",
+    "component_mechanism": "SUPPORTED",
+    "cross_language_independent_implementation_match": "UNOBSERVED",
+    "hcu_runtime_credit": 0,
+    "entityos_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_gate": "Fuse this canonical-byte contract into the retained PR 1263 Typed Entry/HCU route identity after the capability self-grant boundary is externally verified, add an independent second-language vector implementation, then run exact source in an authorized isolated executor."
+}

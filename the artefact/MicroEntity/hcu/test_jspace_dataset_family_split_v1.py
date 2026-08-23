@@ -29,6 +29,9 @@ def training(trace_id: str, family_id: str, n: int) -> dict:
         "role": "critic",
         "jspace_basis_id": "basis:7",
         "jspace_basis_sha256": h(5),
+        "prototype_trace_sha256": h(7),
+        "vector_control_packet_sha256": h(8),
+        "vector_control_condition": "BASELINE",
         "credit_label": "UNKNOWN",
         "outcome_receipt_sha256": None,
     }
@@ -39,7 +42,7 @@ def admission(trace: dict) -> dict:
         "schema": DATASET_ADMISSION_SCHEMA,
         "training_trace_sha256": trace["trace_sha256"],
         "transition_trace_sha256": h(6),
-        "prototype_trace_sha256": h(7),
+        "prototype_trace_sha256": trace["prototype_trace_sha256"],
         "generation": trace["generation"],
         "entry_event_sha256": trace["entry_event_sha256"],
         "entry_admission_sha256": trace["entry_admission_sha256"],
@@ -49,6 +52,8 @@ def admission(trace: dict) -> dict:
         "role": trace["role"],
         "jspace_basis_id": trace["jspace_basis_id"],
         "jspace_basis_sha256": trace["jspace_basis_sha256"],
+        "vector_control_packet_sha256": trace["vector_control_packet_sha256"],
+        "vector_control_condition": trace["vector_control_condition"],
         "credit_label": trace["credit_label"],
         "outcome_receipt_sha256": trace["outcome_receipt_sha256"],
     }
@@ -125,6 +130,48 @@ class FamilySplitTests(unittest.TestCase):
         with self.assertRaisesRegex(
             JSpaceDatasetFamilySplitError,
             "TRAINING_TRACE_ADMISSION_BINDING_MISMATCH:grid_plan_sha256",
+        ):
+            partition_admitted_training_traces(
+                [(trace, forged)],
+                admitted_training_traces=registry,
+            )
+
+    def test_admission_prototype_transplant_fails_closed(self):
+        trace = training("trace:a", "episode:A", 1)
+        registry = {trace["trace_sha256"]: deepcopy(trace)}
+        forged = admission(trace)
+        forged["prototype_trace_sha256"] = h(99)
+        with self.assertRaisesRegex(
+            JSpaceDatasetFamilySplitError,
+            "TRAINING_TRACE_ADMISSION_BINDING_MISMATCH:prototype_trace_sha256",
+        ):
+            partition_admitted_training_traces(
+                [(trace, forged)],
+                admitted_training_traces=registry,
+            )
+
+    def test_admission_vector_control_transplant_fails_closed(self):
+        trace = training("trace:a", "episode:A", 1)
+        registry = {trace["trace_sha256"]: deepcopy(trace)}
+        forged = admission(trace)
+        forged["vector_control_packet_sha256"] = h(99)
+        with self.assertRaisesRegex(
+            JSpaceDatasetFamilySplitError,
+            "TRAINING_TRACE_ADMISSION_BINDING_MISMATCH:vector_control_packet_sha256",
+        ):
+            partition_admitted_training_traces(
+                [(trace, forged)],
+                admitted_training_traces=registry,
+            )
+
+    def test_admission_control_condition_transplant_fails_closed(self):
+        trace = training("trace:a", "episode:A", 1)
+        registry = {trace["trace_sha256"]: deepcopy(trace)}
+        forged = admission(trace)
+        forged["vector_control_condition"] = "LESION"
+        with self.assertRaisesRegex(
+            JSpaceDatasetFamilySplitError,
+            "TRAINING_TRACE_ADMISSION_BINDING_MISMATCH:vector_control_condition",
         ):
             partition_admitted_training_traces(
                 [(trace, forged)],

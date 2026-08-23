@@ -1,0 +1,104 @@
+{
+  "schema": "GO_RFC8785_ENTRY_GRIDPLAN_V2_WIRING/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_refresh": {
+    "main_observed": "b1839054ec6e48fa57d2e7b5bc514991014b2794",
+    "main_message": "go: sync supervisor inbox to JCS and loader-bound HCU frontier",
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "retained_donor_pr": 1263,
+    "retained_donor_parent": "42b476eb43363c71100ccbfe5d53e64cc9f23bf2",
+    "work_branch": "gpt56sol/go-rfc8785-entry-wiring-current-20260823"
+  },
+  "frontier_observation": {
+    "entry_parent_state": "ENTRY_EVENT_AND_ADMISSION_ALREADY_MIGRATED_TO_RFC8785_UNDER_V2_IDENTITIES",
+    "remaining_split_before_delta": [
+      "typed_entry_canonical_v1.py still implemented active CBOR compatibility bytes",
+      "GRID10 plan_sha256 still consumed that CBOR encoder under ENTITYOS_HCU_GRID_PLAN/v1",
+      "router and inference receipt still use implementation-scoped Python JSON identities"
+    ],
+    "selected_delta": "remove active CBOR compatibility/GRID10 encoder, converge it on main-selected JCS, and introduce explicit ENTITYOS_HCU_GRID_PLAN/v2 with canonicalization_schema binding"
+  },
+  "source_delta": {
+    "selected_jcs_blob": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+    "entry_parent_v2_blob": "8644b472e4310df718db99c84c58632eb5883d8a",
+    "typed_entry_adapter_blob": "fe617ed6a51b0ebed7ea08087f5c0768b530a544",
+    "typed_entry_compat_test_blob": "97a5a087957c4e9a0e6610b8f7a3ccb6f289583e",
+    "adapter_focus_test_blob": "ed8dbbfa2dffee8233ba96f4e24a34399564d599",
+    "grid10_v2_blob": "ec05d95ffaab0bb81ebf303bdaef466f1164a1a9",
+    "grid10_test_blob": "693e5d3a36144a615f0af5e4fe9e73899b50581f",
+    "canonicalization_contract_v7_blob": "d005de4c019b0ddbf1d1aa7b9c0113a6382284fd",
+    "entry_identity_schema": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2 + ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2",
+    "grid_plan_identity_schema": "ENTITYOS_HCU_GRID_PLAN/v2",
+    "canonicalization_schema": "RFC8785_JCS_IJSON/v1"
+  },
+  "exact_component_evidence": {
+    "environment": "isolated ChatGPT Python tool kernel",
+    "exact_git_blob_reproduction": {
+      "entry_canonicalization_v1.py": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+      "typed_entry_canonical_v1.py": "fe617ed6a51b0ebed7ea08087f5c0768b530a544",
+      "test_typed_entry_selected_canonical_adapter_v1.py": "ed8dbbfa2dffee8233ba96f4e24a34399564d599"
+    },
+    "command": "python -m unittest -v test_typed_entry_selected_canonical_adapter_v1.py",
+    "tests_run": 5,
+    "tests_passed": 5,
+    "tests_failed": 0,
+    "result": "PASS_EXACT_BLOB_COMPONENT_SCOPE",
+    "covered": [
+      "adapter exposes current main RFC8785 schema",
+      "Entry v2-shaped values are byte-exact with selected JCS implementation",
+      "mapping order invariance",
+      "binary64 number-domain behavior and nonfinite/precision-loss rejection",
+      "legacy byte-string CBOR domain is not retained as an active compatibility encoder"
+    ],
+    "noise": "artifact_tool spreadsheet warmup emitted an unrelated startup warning; unittest process exit code was 0 and all five tests passed"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "CANONICALIZATION_PROFILE_SPLIT_MATRIX",
+    "question": "Can one semantic Entry identity be silently reinterpreted across the three active/candidate canonicalization profiles?",
+    "same_semantic_value_results": {
+      "legacy_cbor": {"length": 473, "sha256": "2934217c38167a51c186d988a76bb79300a705df33e857b721ad87fa4011eaab"},
+      "typed_canonical_candidate": {"length": 709, "sha256": "b502569b18f8b68983cc45ecb6e162a55886cd0c9030117a4cf77ab951dcaa80"},
+      "python_sorted_json": {"length": 522, "sha256": "df01b2d62e7f9bc7c239984b24330e8042c14e159d9dca132c1b363f1983aea2"}
+    },
+    "all_digests_distinct": true,
+    "finding": "silent reinterpretation is invalid; migration must be explicitly schema/version fenced",
+    "additional_unusual_experiment": false
+  },
+  "adversarial_corrections": [
+    "an earlier transient read of the donor PR body suggested ENTITYOS_HCU_TYPED_CANONICAL/v1; exact current contract/main authority falsified that and selected RFC8785/JCS instead",
+    "the stale intermediate typed-canonical adapter was not promoted and no longer exists on the retained current work branch",
+    "a second-order check found that changing GRID10 bytes under GRID_PLAN/v1 would be a silent hash rewrite; the plan identity was therefore versioned to ENTITYOS_HCU_GRID_PLAN/v2 before promotion"
+  ],
+  "execution_admission": {
+    "vercel_sandbox_exec_available_in_current_connector": false,
+    "generic_replit_exec_available": false,
+    "vps_or_production_fallback_used": false,
+    "combined_entry_route_gridplan_inference_exact_current_execution": "NOT_EXECUTED",
+    "semantic_test_failure": false,
+    "runtime_credit": 0
+  },
+  "open_gates": [
+    "version and migrate router policy/engine/route identity to RFC8785/JCS",
+    "version and migrate inference receipt identity/hash/echo to RFC8785/JCS",
+    "add explicit mixed/unknown/downgrade rejection across Entry Route GridPlan Inference",
+    "run exact-current combined Entry+Router+GRID10+Inference regressions in an actually-started authorized isolated executor",
+    "bind loader-consumed checkpoint/tokenizer/runtime bytes to generation-fenced physical engine lease",
+    "rebase/fuse retained donor mechanisms onto current EntityOS/HCU main without a second authority path"
+  ],
+  "credit": {
+    "source_architecture_delta": true,
+    "exact_adapter_component_evidence": true,
+    "grid10_source_identity_migration": true,
+    "grid10_integrated_runtime_verified": false,
+    "router_inference_end_to_end_canonicalization_verified": false,
+    "hcu_runtime_credit": 0,
+    "whole_entityos_pass": false
+  }
+}

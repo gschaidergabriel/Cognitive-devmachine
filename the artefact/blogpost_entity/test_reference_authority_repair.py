@@ -114,6 +114,40 @@ def test_legacy_only_nonzero_generation_requires_explicit_migration(tmp_path: Pa
         assert db.execute("SELECT generation FROM eos_pipeline_state WHERE singleton=1").fetchone()[0] == 7
 
 
+def test_partial_native_table_without_singleton_row_cannot_discard_legacy_generation(tmp_path: Path) -> None:
+    """Table presence alone is not evidence that canonical generation authority exists."""
+    entity_db = tmp_path / "partial-native.db"
+    with sqlite3.connect(entity_db) as db:
+        db.execute(
+            """CREATE TABLE entity_state(
+                 id INTEGER PRIMARY KEY CHECK(id=1),
+                 generation INTEGER NOT NULL,
+                 active_profile TEXT,
+                 created_at TEXT NOT NULL,
+                 updated_at TEXT NOT NULL)"""
+        )
+        db.execute(
+            """CREATE TABLE eos_pipeline_state(
+                 singleton INTEGER PRIMARY KEY CHECK(singleton=1),
+                 generation INTEGER NOT NULL DEFAULT 0,
+                 continuity_json TEXT NOT NULL DEFAULT '{}',
+                 canonical_json TEXT NOT NULL DEFAULT '{}',
+                 canonical_hash TEXT NOT NULL DEFAULT '',
+                 cursors_json TEXT NOT NULL DEFAULT '{}',
+                 updated_at REAL NOT NULL DEFAULT 0)"""
+        )
+        db.execute("INSERT INTO eos_pipeline_state(singleton,generation) VALUES(1,7)")
+
+    runtime = ProfilePipelineRuntime(root=tmp_path)
+    result = runtime.effect("pipeline_init", {"entity_db": str(entity_db)})
+    assert result["ok"] is False
+    assert "LEGACY_GENERATION_MIGRATION_REQUIRED" in result["error"]
+    with sqlite3.connect(entity_db) as db:
+        assert db.execute("SELECT 1 FROM entity_state WHERE id=1").fetchone() is None
+        assert "generation" in {row[1] for row in db.execute("PRAGMA table_info(eos_pipeline_state)")}
+        assert db.execute("SELECT generation FROM eos_pipeline_state WHERE singleton=1").fetchone()[0] == 7
+
+
 def test_profile_json_only_tamper_aborts_commit_with_zero_durable_delta(tmp_path: Path) -> None:
     entity_db = tmp_path / "entity.db"
     runtime = ProfilePipelineRuntime(root=tmp_path)

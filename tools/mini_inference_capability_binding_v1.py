@@ -160,24 +160,35 @@ def validate_binding(doc: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def resolve_from_profile(profile: Mapping[str, Any]) -> dict[str, Any]:
-    """Resolve only an explicit binding from a verified runtime profile snapshot.
+    """Resolve one capability only from a still-valid canonical profile snapshot.
 
-    The caller must have obtained this profile through the canonical MiniUnifiedDB profile
-    read path. Model/provider/kind strings are intentionally ignored for capability routing.
+    The profile must have been obtained through the MiniUnifiedDB profile read path.  The
+    snapshot is re-derived here so an in-memory mutation after that read cannot retain the
+    old profile identity while changing provider/model/inference/capability material.
+    Provider/model/kind strings still never grant capability by themselves.
     """
     _need(isinstance(profile, Mapping), "PROFILE_OBJECT_REQUIRED")
     snapshot = profile.get("_runtime_profile_snapshot")
     _need(isinstance(snapshot, Mapping), "PROFILE_SNAPSHOT_MISSING")
-    _text(snapshot.get("profile_id"), "profile_snapshot.profile_id")
-    _digest(snapshot.get("profile_hash"), "profile_snapshot.profile_hash")
+    snapshot_profile_id = _text(snapshot.get("profile_id"), "profile_snapshot.profile_id")
+    snapshot_profile_hash = _digest(snapshot.get("profile_hash"), "profile_snapshot.profile_hash")
+    profile_id = _text(profile.get("profile_id"), "profile.profile_id")
+    _need(profile_id == snapshot_profile_id, "PROFILE_SNAPSHOT_ID_MISMATCH")
+
+    current_profile = dict(profile)
+    current_profile.pop("_runtime_profile_snapshot", None)
+    _need(sha256_obj(current_profile) == snapshot_profile_hash, "PROFILE_SNAPSHOT_HASH_MISMATCH")
+
     inference = profile.get("inference")
     _need(isinstance(inference, Mapping), "PROFILE_INFERENCE_OBJECT_REQUIRED")
+    inference_config_digest = sha256_obj(dict(inference))
     binding = inference.get("capability_binding")
     _need(isinstance(binding, Mapping), "INFERENCE_CAPABILITY_BINDING_REQUIRED")
     result = validate_binding(binding)
     result.update({
-        "profile_id": str(snapshot["profile_id"]),
-        "profile_hash": str(snapshot["profile_hash"]),
+        "profile_id": profile_id,
+        "profile_hash": snapshot_profile_hash,
+        "inference_config_digest": inference_config_digest,
     })
     return result
 
@@ -187,6 +198,7 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
 
     Cognition identities are not duplicated into profile configuration. They are taken only
     from the already-verified MiniUnifiedDB prepare material and folded into one route digest.
+    The exact still-valid inference configuration is also included in that route identity.
     """
     _need(isinstance(prepare, Mapping) and prepare.get("ok") is True, "PREPARE_BINDING_REQUIRED")
     _need(type(expected_generation) is int and expected_generation >= 0, "EXPECTED_GENERATION_INVALID")
@@ -207,6 +219,7 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
         "workspace_digest": workspace_digest,
         "profile_id": capability["profile_id"],
         "profile_hash": capability["profile_hash"],
+        "inference_config_digest": capability["inference_config_digest"],
         "capability_binding_digest": capability["binding_digest"],
         "capability_receipt_digest": capability["capability_receipt_digest"],
         "target_engine_class": capability["target_engine_class"],

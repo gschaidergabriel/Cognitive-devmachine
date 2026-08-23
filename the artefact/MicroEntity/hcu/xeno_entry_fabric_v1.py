@@ -119,6 +119,8 @@ def _timestamp(value: Any, field: str, *, optional: bool = False) -> str | None:
 
 
 def _generation(value: Any, current_generation: int) -> int:
+    if isinstance(current_generation, bool) or not isinstance(current_generation, int) or current_generation < 0:
+        raise EntryFabricError("current_generation:NONNEGATIVE_INTEGER_REQUIRED")
     if isinstance(value, bool) or not isinstance(value, int) or value < 0:
         raise EntryFabricError("entity_generation:NONNEGATIVE_INTEGER_REQUIRED")
     if value != current_generation:

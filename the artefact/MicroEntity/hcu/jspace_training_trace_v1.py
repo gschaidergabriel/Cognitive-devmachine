@@ -25,11 +25,23 @@ from typing import Any, Mapping, Sequence
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from .global_jspace_gwt_v1 import JSpaceStep, TRACE_CANONICALIZATION_SCHEMA
-    from .jspace_vector_control_v1 import ABI_SCHEMA, VectorControlPacket, packet_bytes, validate_packet
+    from .jspace_vector_control_v1 import (
+        ABI_SCHEMA,
+        VectorControlPacket,
+        packet_bytes,
+        parse_packet_text,
+        validate_packet,
+    )
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from global_jspace_gwt_v1 import JSpaceStep, TRACE_CANONICALIZATION_SCHEMA
-    from jspace_vector_control_v1 import ABI_SCHEMA, VectorControlPacket, packet_bytes, validate_packet
+    from jspace_vector_control_v1 import (
+        ABI_SCHEMA,
+        VectorControlPacket,
+        packet_bytes,
+        parse_packet_text,
+        validate_packet,
+    )
 
 TRACE_SCHEMA = "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1"
 CREDIT_LABELS = frozenset({"UNKNOWN", "POSITIVE", "NEGATIVE", "NEUTRAL"})
@@ -299,20 +311,92 @@ def build_training_trace(
 
 
 def validate_training_trace(trace: TrainingTrace) -> None:
-    """Validate only the trace envelope's own schema/digest/reference invariants.
+    """Revalidate the self-authenticating trace envelope without admitting outcome truth.
 
-    This function deliberately does not validate or admit downstream outcome truth.
+    Outer trace hashing authenticates bytes, not the semantics of the embedded Vector
+    Control packet or the typed credit/provenance fields. Revalidation therefore parses the
+    exact canonical packet wire again and binds it back to the trace envelope before the
+    trace can be exported into an admission registry. Outcome truth remains deliberately
+    outside this function and is admitted only by the canonical dataset-admission gate.
     """
     if not isinstance(trace, TrainingTrace):
         raise JSpaceTrainingTraceError("TRAINING_TRACE_REQUIRED")
     if trace.schema_version != TRACE_SCHEMA or trace.canonicalization_schema != CANONICALIZATION_SCHEMA:
         raise JSpaceTrainingTraceError("TRAINING_TRACE_SCHEMA_UNSUPPORTED")
+
     observed = _sha256(trace.trace_sha256, "trace_sha256")
     expected = _canonical_sha256(_material(trace), "JSPACE_TRAINING_TRACE")
     if observed != expected:
         raise JSpaceTrainingTraceError("TRAINING_TRACE_DIGEST_MISMATCH")
-    if trace.credit_label != "UNKNOWN" and trace.outcome_receipt_sha256 is None:
-        raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_OUTCOME_RECEIPT_REFERENCE")
+
+    generation = _generation(trace.generation)
+    for value, field, max_len in (
+        (trace.trace_id, "trace_id", 256),
+        (trace.trace_family_id, "trace_family_id", 256),
+        (trace.cell_id, "cell_id", 256),
+        (trace.role, "role", 256),
+        (trace.jspace_basis_id, "jspace_basis_id", 256),
+        (trace.jspace_input_vector_ref, "jspace_input_vector_ref", 8192),
+        (trace.local_workspace_state_ref, "local_workspace_state_ref", 8192),
+        (trace.global_jspace_slice_ref, "global_jspace_slice_ref", 8192),
+        (trace.requested_action_class, "requested_action_class", 128),
+        (trace.expected_structured_model_output, "expected_structured_model_output", 8192),
+        (trace.observed_downstream_outcome, "observed_downstream_outcome", 8192),
+        (trace.falsifier_lesion_condition, "falsifier_lesion_condition", 8192),
+    ):
+        _text(value, field, max_len)
+
+    for value, field in (
+        (trace.entry_event_sha256, "entry_event_sha256"),
+        (trace.entry_admission_sha256, "entry_admission_sha256"),
+        (trace.route_decision_sha256, "route_decision_sha256"),
+        (trace.grid_plan_sha256, "grid_plan_sha256"),
+        (trace.jspace_basis_sha256, "jspace_basis_sha256"),
+        (trace.vector_control_packet_sha256, "vector_control_packet_sha256"),
+        (trace.prototype_trace_sha256, "prototype_trace_sha256"),
+    ):
+        _sha256(value, field)
+
+    if trace.jspace_input_codec_version != ABI_SCHEMA:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_ABI_MISMATCH")
+
+    packet_wire = _text(
+        trace.vector_control_packet_jcs_utf8,
+        "vector_control_packet_jcs_utf8",
+        262144,
+    )
+    try:
+        packet = parse_packet_text(packet_wire)
+    except Exception as exc:
+        raise JSpaceTrainingTraceError(f"VECTOR_CONTROL_PACKET_REVALIDATION_FAILED:{exc}") from exc
+    if packet.packet_sha256 != trace.vector_control_packet_sha256:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_PACKET_IDENTITY_MISMATCH")
+    if packet.generation != generation:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_GENERATION_MISMATCH")
+    if packet.basis_id != trace.jspace_basis_id:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_BASIS_MISMATCH")
+    if packet.basis_sha256 != trace.jspace_basis_sha256:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_BASIS_SHA256_MISMATCH")
+    if packet.role != trace.role:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_ROLE_MISMATCH")
+    if packet.control_condition != trace.vector_control_condition:
+        raise JSpaceTrainingTraceError("VECTOR_CONTROL_CONDITION_MISMATCH")
+
+    credit = _text(trace.credit_label, "credit_label", 32).upper()
+    if trace.credit_label != credit or credit not in CREDIT_LABELS:
+        raise JSpaceTrainingTraceError("credit_label:UNSUPPORTED_OR_NONCANONICAL")
+    provenance = _text(trace.provenance_evidence_class, "provenance_evidence_class", 128).upper()
+    if trace.provenance_evidence_class != provenance or provenance not in PROVENANCE_CLASSES:
+        raise JSpaceTrainingTraceError("provenance_evidence_class:UNSUPPORTED_OR_NONCANONICAL")
+
+    outcome_receipt = trace.outcome_receipt_sha256
+    if outcome_receipt is not None:
+        _sha256(outcome_receipt, "outcome_receipt_sha256")
+    if credit != "UNKNOWN":
+        if outcome_receipt is None:
+            raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_OUTCOME_RECEIPT_REFERENCE")
+        if provenance != "EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME":
+            raise JSpaceTrainingTraceError("NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_OUTCOME_PROVENANCE")
 
 
 def trace_dict(trace: TrainingTrace) -> dict[str, Any]:

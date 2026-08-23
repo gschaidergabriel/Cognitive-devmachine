@@ -265,7 +265,6 @@ def digest_artifact_path(path: Path) -> ArtifactDigest:
 
     return ArtifactDigest("TREE_SHA256_V1", tree.hexdigest(), len(members), total)
 
-
 def derive_engine_artifact_sha256(lock: EngineArtifactLock) -> str:
     material = {
         "schema": BUNDLE_SCHEMA,

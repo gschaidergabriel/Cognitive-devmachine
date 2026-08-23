@@ -8,7 +8,7 @@
   "base_main": "2178d9b0a062636231ff0e3c533417c2268a7a96",
   "branch": "go/xeno-entry-grid10-causal-bind-20260823",
   "pr": 1354,
-  "source_candidate_head_before_receipt_update": "557610fb96defb6f9d4a88a0cd033f65e15ff2f4",
+  "source_candidate_head_before_receipt_update": "7982defb0b26299e0c3c54fe4a474fdda75acb7a",
   "goal": "Bind all new Xeno data before cognition and compile a reusable deterministic 10-cell logical plan over shared physical workers without creating truth/effect authority.",
   "hypothesis": "A single typed ingress identity plus deterministic XPU plan compiler can serve GRID10 and later COGSIM10/WM_TEST/NESTED_SIM while eliminating route-decision causal aliasing.",
   "counterhypothesis": "The shared packet/control abstraction merely moves complexity into metadata and scheduler logic, adding latency and failure modes without improving replay/provenance safety.",
@@ -26,14 +26,28 @@
     "the artefact/Xeno/test_entry_grid_v1.py",
     "the artefact/Xeno/README.md"
   ],
+  "fusion_updates": {
+    "one_path_convergence": "REMOVED independent monolithic Xeno/entry_grid10_v1.py plus its separate regression surface; retained split entry_fabric_v1.py + grid10_scheduler_v1.py + test_entry_grid_v1.py as the single current candidate path.",
+    "typed_ingress_hardening": "Current branch rejects bool/string numeric coercion for generation/resource budgets and rejects scalar/mapping coercion for provenance/permissions/capability collections.",
+    "regression_binding_commit": "69f20e800cafcd643e3e884b69b40ea8d1eb5c5b",
+    "one_path_commits": [
+      "83a8fc0ef0909b2ec8f7164d69096a8a1f26bb67",
+      "4f22b167162d1b7265494d8f24a87a418b6e0f42"
+    ],
+    "runtime_credit": 0,
+    "evidence_class": "SOURCE_AND_REGRESSION_BINDING_ONLY_UNTIL_AUTHORIZED_ISOLATED_EXECUTION"
+  },
   "authority_invariants": [
     "Xeno ingress and grid plans are candidate/control metadata only",
     "canonical durable truth remains UnifiedDB or the current Xeno MiniUnifiedDB compatibility substrate",
     "EffectGate+EffectJournal remain the only real effect authority",
     "logical cell count is not physical decode concurrency",
     "stale or future generation fails closed",
+    "typed ingress does not coerce bool/string values into numeric generation or resource-budget authority",
+    "provenance/permissions/capability collections do not accept scalar strings or mappings as implicit collections",
     "raw payload is not stored in packet identity; only opaque/digest-backed payload_ref is admitted",
-    "plan identity commits to ingress/event identity so identical routing output cannot erase causal provenance"
+    "plan identity commits to ingress/event identity so identical routing output cannot erase causal provenance",
+    "one canonical Entry/GRID10 source path is retained"
   ],
   "cross_mode_reuse": [
     "XENO_GRID10",
@@ -49,12 +63,13 @@
     "job_name": "identity-guard",
     "job_conclusion": "failure",
     "visible_steps": [],
-    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT"
+    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT",
+    "exact_head_69f20_workflow_runs": 0
   },
   "runtime_credit": 0,
   "whole_product_pass": false,
   "together_api": "FORBIDDEN_AND_UNUSED",
   "vps_testing": "NOT_USED",
   "paid_or_model_training": "NOT_USED",
-  "next_gate": "Actually start an authorized isolated executor on the exact then-current PR bytes; run the focused Xeno Entry/GRID10 tests plus adjacent HCU/fabric/generation regressions. Only after observed green execution should the source candidate be fused into main and extended toward shared model-worker integration."
+  "next_gate": "Actually start an authorized isolated executor on the exact then-current PR bytes; run the focused Xeno Entry/GRID10 tests plus adjacent HCU/fabric/generation regressions. Then bind the exact local HCU checkpoint/tokenizer/runtime identity into the inference admission/receipt path before granting any model/HCU runtime credit."
 }

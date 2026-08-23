@@ -1,20 +1,20 @@
 {
   "schema_version": "8.62",
-  "latest_cycle": "go-20260824-entityos-hcu-entry-capsule-exact-current-component",
+  "latest_cycle": "go-20260824-entityos-hcu-entry-capsule-v2-manifest-bound",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "latest_repo_head_inspected_before_write": "6a499541c38910e2a062b3eef50b73266c70445a",
-  "material_finding": "The bounded Vercel Hobby included-tier protected-preview bridge executed the fixed HCU entry canonicalization capsule successfully: 7/7 tests PASS, secret fence PASS, cleanup PASS, exit 0. The two executed source/test Git blobs are byte-identical at current retained PR1263 head c032c73800152c0bf6a211d6976ca5c11a3d1896. The endpoint still emits an older source_commit label, so exact-current component-byte runtime credit is admitted but exact-head capsule-manifest identity remains incomplete until that label is repaired. This creates entry-canonicalization component runtime credit only; it does not create whole HCU, J-Space model, training, EntityOS or canonical-semantics credit.",
+  "latest_repo_head_inspected_before_write": "a477fd5743b10d908dfd838f454e552249699b7c",
+  "material_finding": "The bounded Vercel Hobby included-tier protected-preview bridge executed HCU_ENTRY_CANONICALIZATION_CAPSULE/v2 with exact manifest binding: source PR1263 commit c032c73800152c0bf6a211d6976ca5c11a3d1896, manifest SHA-256 9941bbebe44d5a840779b9ac4a69188cbd7d3699d45fe22b4160a342ad8f4a1c, 7/7 tests PASS, secret fence PASS, cleanup PASS, exit 0, result-log SHA-256 2f3263d15ef397be77144194264ffdf72b78195a58c4d2dfa51fe51c8c835b24. The earlier stale source_commit-label blocker is closed for this component capsule. Credit remains Entry canonicalization component only; no whole HCU, J-Space model, training, EntityOS or canonical-semantics credit is created.",
   "current_frontier": {
     "retained_hcu_pr": 1263,
     "retained_hcu_pr_state": "OPEN_DRAFT_NOT_MERGED",
     "retained_hcu_pr_head_observed": "c032c73800152c0bf6a211d6976ca5c11a3d1896",
     "sandbox_execution_surface": "VERCEL_HOBBY_BOUNDED_INCLUDED_TIER_FREE_ADMITTED",
     "remaining_sandbox_quota_directly_observed": false,
-    "entry_canonicalization_component_runtime": "EXACT_CURRENT_PR_COMPONENT_BYTES_7_OF_7_PASS",
-    "entry_capsule_manifest_binding": "STALE_SOURCE_COMMIT_LABEL_REPAIR_REQUIRED",
+    "entry_canonicalization_component_runtime": "MANIFEST_BOUND_V2_7_OF_7_PASS",
+    "entry_capsule_manifest_binding": "VERIFIED_FOR_DECLARED_COMPONENT_BYTES",
     "jspace_family_split_component_runtime": "EXACT_CURRENT_6_OF_6_PASS_TWICE",
     "together_job_created": false,
     "entityos_whole_runtime_credit": 0,
@@ -36,16 +36,16 @@
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
     "GOODMAN_ANCESTRY_COLLAPSE_ACTIVE",
     "SOURCE_OR_COMPONENT_PASS_DOES_NOT_CREATE_WHOLE_RUNTIME_CREDIT",
-    "BYTE_IDENTITY_AT_CURRENT_PR_HEAD_CAN_SUPPORT_COMPONENT_SCOPE_EVEN_WHEN_A_STALE_MANIFEST_LABEL_IS_EXPLICITLY_QUARANTINED",
+    "MANIFEST_BOUND_COMPONENT_PASS_IS_SCOPED_TO_DECLARED_BYTES_AND_TESTS_ONLY",
     "SAME_FAMILY_RERUN_IS_REPRODUCIBILITY_NOT_INDEPENDENT_REPLICATION",
     "STALE_AUTHORITY_CAPSULES_REMAIN_QUARANTINED_NO_RETROACTIVE_REWRITE",
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW"
   ],
   "next_focus": [
     "KEEP_PR1263_AS_SINGLE_DRAFT_HCU_DONOR_LANE_AND_FUSE_REBASE_TO_EXACT_CURRENT_FREE_ONLY_MAIN_BEFORE_PROMOTION",
-    "REBIND_HCU_ENTRY_CAPSULE_SOURCE_COMMIT_LABEL_TO_EXACT_CURRENT_PR1263_HEAD_AND_RERUN_THE_SAME_FIXED_HASH_VERIFIED_CAPSULE",
-    "BIND_RESEARCH_MAIN_SHA_TREE_PR1263_SHA_TREE_CAPSULE_DIGEST_EXECUTOR_RESULT_SECRET_FENCE_AND_CLEANUP_IN_ONE_IMMUTABLE_RECEIPT",
-    "EXTEND_ONLY_AFTER_MANIFEST_REPAIR_TOWARD_TYPED_ENTRY_ROUTE_VERIFIED_ENGINE_LOAD_INFERENCE_GRID10_JSPACE_GWT_ADMITTED_CAUSAL_DATASET_CLOSURE",
+    "EXTEND_THE_SAME_FIXED_HASH_BOUND_SINGLE_EXECUTOR_AUTHORITY_TOWARD_TYPED_ENTRY_ADMISSION_ROUTE_VERIFIED_ENGINE_LOAD_INFERENCE_GRID10_JSPACE_GWT_ADMITTED_CAUSAL_DATASET_CLOSURE",
+    "BIND_RESEARCH_MAIN_SHA_TREE_PR1263_SHA_TREE_CAPSULE_DIGEST_EXECUTOR_RESULT_SECRET_FENCE_AND_CLEANUP_IN_EACH_IMMUTABLE_RECEIPT",
+    "REPAIR_REMAINING_CURRENT_FACING_861_OR_852_AUTHORITY_POINTERS_WITHOUT_CREATING_A_SECOND_AUTHORITY_PATH",
     "FAIL_CLOSED_BEFORE_EXECUTION_IF_QUOTA_BILLING_UPGRADE_PLAN_MISMATCH_OR_ANY_MONETARY_CHARGE_PATH_APPEARS",
     "DO_NOT_PROMOTE_ENTITYOS_HCU_JSPACE_MODEL_OR_TRAINING_FROM_COMPONENT_PASS_OR_MODEL_CONSENSUS"
   ],
@@ -58,5 +58,5 @@
     "training_credit": 0
   },
   "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
-  "latest_receipt": "research_entity/continuity/receipts/2026-08-24_GO_HCU_ENTRY_EXACT_CURRENT_COMPONENT_SANDBOX_GPT56SOL.json"
+  "latest_receipt": "research_entity/continuity/receipts/2026-08-24_GO_HCU_ENTRY_V2_MANIFEST_BOUND_SANDBOX_GPT56SOL.json"
 }

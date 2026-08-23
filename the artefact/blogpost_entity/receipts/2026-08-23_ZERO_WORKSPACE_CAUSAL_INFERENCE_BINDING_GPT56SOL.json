@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_ZERO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "zero",
+  "program": "mini-entity-pipeline-all-in-one",
+  "owner_architecture": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "base_main_commit": "3a4fbfe83d90dff6829aeaaf3615cd24dd7565d0",
+  "branch": "zero/workspace-causal-inference-binding-20260823",
+  "pull_request": 1144,
+  "source_observation": {
+    "engine_path": "the artefact/clayverse/engine.py",
+    "finding": "the engine opened the current workspace episode but invoked inference.reason(world, content) without inserting that fresh workspace into world",
+    "consequence": "workspace existence and later selection could coexist with an inference call that never received the current workspace; this is a source-level causal disconnect for compiled-external workspace conditioning"
+  },
+  "delta": {
+    "engine_commit": "0f6f01063fa915b84d099d80dd1c7e20a6df0b9b",
+    "test_commit": "9ddb316715f9c2aba5f69948b31ff2647ebf89c7",
+    "mechanism": [
+      "compile current workspace into bounded workspace_control before inference",
+      "bind episode_id, turn_id, session generation, salience and offered alternatives",
+      "mark truth_authority=false and effect_authority=false",
+      "compute SHA-256 control_digest over canonical control material",
+      "supply workspace_control inside world to the inference adapter",
+      "return workspace_control_digest for bounded observability",
+      "regression asserts exact episode/turn/generation/alternatives/authority flags and digest recomputation"
+    ]
+  },
+  "evidence": {
+    "class": "SOURCE_MECHANISM_CANDIDATE",
+    "github_pr_mergeable_observed": true,
+    "workflow_run_id": 32616011418,
+    "workflow_name": "Research Entity Identity Guard",
+    "workflow_conclusion": "failure",
+    "workflow_job": "identity-guard",
+    "workflow_steps": null,
+    "workflow_interpretation": "execution admission/control-plane failure before visible steps; not test failure and not runtime evidence",
+    "local_exact_runtime_executed": false,
+    "vercel_sandbox_exec_surface_available": false
+  },
+  "epistemic_boundary": {
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_credit": 0,
+    "claude_code_runtime_credit": 0,
+    "whole_product_credit": 0,
+    "claude_hidden_state_claim": false,
+    "causal_use_verified": false
+  },
+  "next_discriminator": {
+    "type": "PAIRED_WORKSPACE_CONTROL_COUNTERFACTUAL",
+    "instruction": "on an admitted exact runtime, hold observation, evidence, model and adapter fixed; perturb only the admitted workspace_control; cross-bind the exact control digest to the inference packet and compare downstream candidate behavior; report MEASURED_SUPPORTED, REFUTED or UNKNOWN rather than inferring causality from receipt presence",
+    "promotion_rule": "workspace receipt or digest presence alone must never count as causal-use evidence"
+  },
+  "policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_call": false,
+    "paid_execution": false,
+    "together_used": false,
+    "training_started": false
+  }
+}

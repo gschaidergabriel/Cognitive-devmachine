@@ -1,0 +1,89 @@
+{
+  "schema": "GO_CLAUDE_ADAPTER_EXECUTION_ADMISSION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": {
+    "base_main_sha": "698c3c63b4c7b501540ac01d4ced3f76ccea38f4",
+    "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+    "all_worker_directive": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
+    "free_only": true
+  },
+  "coordination": {
+    "branch": "gpt56sol/go-claude-adapter-admission-blocker-20260823",
+    "overlap": "PR #1109 was independently merged to main during this organ's exact-byte replication; no duplicate validator or adapter implementation was created.",
+    "macrocycle_id": null,
+    "unusual_experiment": {
+      "count_local": 0,
+      "id": null,
+      "status": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID"
+    },
+    "free_provider_swarm": "AVAILABLE_IN_PROJECT_STATE_BUT_NOT_CALLABLE_HERE_NO_ADMITTED_PROVIDER_CREDENTIAL_SURFACE",
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false
+  },
+  "observed_source": {
+    "claude_adapter_path": "the artefact/clayverse/adapters.py",
+    "claude_adapter_blob": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507",
+    "adapter_boundary_test_path": "the artefact/tests/test_runtime_adapters.py",
+    "adapter_boundary_test_blob": "0cf1f06ed02d795c53e11497d145ec9ff750b4c3",
+    "negative_evidence_validator_path": "agentzeroforschung/instrumente/validate_claude_adapter_boundary_receipt_v1.py",
+    "negative_evidence_validator_blob": "a6f68b7f4e7c9ccce2090c37e0e198d8ffe09fa8",
+    "negative_evidence_test_path": "agentzeroforschung/instrumente/test_claude_adapter_boundary_receipt_v1.py",
+    "negative_evidence_test_blob": "3ceb00c9cf6137efc2ca85229a9e46c8a6adb5db"
+  },
+  "isolated_execution": {
+    "executor": {
+      "os": "Linux",
+      "kernel": "6.18.35",
+      "arch": "x86_64",
+      "python": "3.13.5",
+      "pytest": "9.0.2"
+    },
+    "exact_blob_binding": {
+      "method": "git hash-object on reconstructed connector-fetched bytes",
+      "validator_observed": "a6f68b7f4e7c9ccce2090c37e0e198d8ffe09fa8",
+      "test_observed": "3ceb00c9cf6137efc2ca85229a9e46c8a6adb5db",
+      "matches_github": true
+    },
+    "commands": [
+      "python -S -m py_compile validate_claude_adapter_boundary_receipt_v1.py test_claude_adapter_boundary_receipt_v1.py",
+      "python -S -m unittest -q test_claude_adapter_boundary_receipt_v1.py",
+      "command -v claude"
+    ],
+    "results": {
+      "py_compile": "PASS_EXIT_0",
+      "negative_evidence_regressions": "PASS_19_OF_19",
+      "claude_binary_path": null,
+      "claude_binary_available": false
+    }
+  },
+  "grf": {
+    "R0_OBSERVE": [
+      "Current main contains the four-way Claude adapter boundary split and the same-schema diagnostic negative-evidence validator.",
+      "Exact validator/test Git blobs independently match GitHub identities and pass 19/19 deterministic regressions in this isolated runtime.",
+      "This isolated runtime exposes no claude executable."
+    ],
+    "R1_INFER": "The receipt-composition mechanism is independently supported, but this executor cannot satisfy the live Claude Code boundary gate because the required binary is absent.",
+    "R2_GENERATE": [
+      "Run live boundary receipts on an authorized isolated executor that contains the exact admitted Claude binary.",
+      "Do not substitute a fake Claude run for live runtime credit; fake-Claude tests remain deterministic boundary tests only."
+    ],
+    "R3_COUNTER": "A live adapter defect may still exist even though receipt validators pass; absence of the Claude binary prevents discrimination here.",
+    "R4_DISCRIMINATE": "Next executor must bind source commit/tree, exact Claude binary/version/digest, command/input digest and all four boundary observations under one common identity, then run strict validation only if diagnostics aggregate PASS.",
+    "R5_EMERGENT": "MEASURED_FAIL can be preserved without promotion, but EXECUTION_UNAVAILABLE cannot be converted into PASS or FAIL of Claude semantics.",
+    "R6_VERIFY": "BOUNDARY_RECEIPT_VALIDATOR_EXACT_BLOB_19_OF_19_PASS; LIVE_CLAUDE_EXECUTION_BLOCKED_BINARY_ABSENT"
+  },
+  "credit": {
+    "receipt_validator_mechanism": "SUPPORTED_EXACT_BLOB_ISOLATED",
+    "claude_adapter_live_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "next_gate": "Actually-started authorized isolated runtime with an admitted Claude executable: execute the four canonical adapter boundary nodes under one exact common identity, preserve diagnostic FAIL if present, and rerun the full suite only after all four are PASS."
+}

@@ -46,6 +46,31 @@ class JSpaceVectorControlTextAdmissionTests(unittest.TestCase):
             ):
                 admission.admit_packet_text(surrogate)
 
+    def test_canonical_parser_recursion_is_normalized_to_domain_rejection(self):
+        with patch.object(
+            admission,
+            "_parse_packet_text",
+            side_effect=RecursionError("decoder nesting limit"),
+        ):
+            with self.assertRaisesRegex(
+                admission.JSpaceVectorControlError,
+                "VECTOR_CONTROL_TEXT_JSON_DEPTH_EXCEEDED",
+            ):
+                admission.admit_packet_text("{}")
+
+    def test_deep_json_within_text_budget_never_leaks_recursion_error(self):
+        depth = 10_000
+        nested = "[" * depth + "0" + "]" * depth
+        self.assertLess(len(nested), admission.MAX_PACKET_TEXT_CHARS)
+        try:
+            admission.admit_packet_text(nested)
+        except admission.JSpaceVectorControlError:
+            pass
+        except RecursionError as exc:  # pragma: no cover - explicit regression sentinel
+            self.fail(f"raw RecursionError escaped bounded admission: {exc}")
+        else:
+            self.fail("deep non-packet JSON unexpectedly admitted")
+
     def test_empty_or_non_text_input_fails_closed(self):
         for value in ("", None, b"{}"):
             with self.assertRaisesRegex(

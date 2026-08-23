@@ -57,6 +57,12 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "product_endpoint": "ClayVerse",
                 "release_form": mod.EXPECTED_RELEASE,
                 "canonical_workspace": "the artefact/",
+                "entityos_role": mod.EXPECTED_ENTITYOS_ROLE,
+                "entityos_execution_default": "DISABLED",
+                "entityos_whole_product_gate": "CONDITIONAL_ON_EXPLICIT_ADMISSION",
+                "requires_for_final_pass": [
+                    "if EntityOS execution is enabled in the accepted profile, exact accepted EntityOS bytes plus an admitted effect round trip are required"
+                ],
             },
             mod.CONTROL44: {
                 "status": "ACTIVE",
@@ -138,6 +144,26 @@ class AuthorityConsistencyTests(unittest.TestCase):
         data["preserved_hard_rules"]["free_only"] = False
         path.write_text(json.dumps(data), encoding="utf-8")
         self.assertIn("CONTROL44_FREE_ONLY_WEAKENED", mod.validate(root)["errors"])
+
+    def test_manifest_mandatory_entityos_role_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "the artefact/manifest.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["entityos_role"] = "MANDATORY_IN_FINAL_ACCEPTED_IMAGE"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("MANIFEST_ENTITYOS_ROLE_MUST_BE_OPTIONAL", mod.validate(root)["errors"])
+
+    def test_manifest_unconditional_entityos_final_gate_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "the artefact/manifest.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["requires_for_final_pass"] = ["complete accepted EntityOS embedded in final image"]
+        path.write_text(json.dumps(data), encoding="utf-8")
+        errors = mod.validate(root)["errors"]
+        self.assertIn("MANIFEST_ENTITYOS_UNCONDITIONAL_FINAL_GATE", errors)
+        self.assertIn("MANIFEST_ENTITYOS_CONDITIONAL_FINAL_GATE_MISSING", errors)
 
     def test_superseded_directive_fails_closed(self):
         td, root = self.make_tree()

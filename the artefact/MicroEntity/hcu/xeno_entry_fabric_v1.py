@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Typed Xeno Entry Fabric admission for HCU/EntityOS cognition.
+"""Typed legacy-Xeno Entry Fabric admission for EntityOS/HCU cognition.
 
 This module is deterministic and non-cognitive. It binds identity, generation,
-provenance, modality, capability snapshot, resource budget and payload identity before
-any HCU/model work. It does not mint truth, permissions or effects.
+provenance, modality, an externally-authorized capability snapshot, resource budget and
+payload identity before any HCU/model work. It does not mint truth, permissions or effects.
 """
 from __future__ import annotations
 
@@ -126,16 +126,16 @@ def _generation(value: Any, current_generation: int) -> int:
     return value
 
 
-def _capabilities(value: Any) -> tuple[str, ...]:
+def _capabilities(value: Any, field: str = "capabilities") -> tuple[str, ...]:
     if isinstance(value, (str, bytes)) or not isinstance(value, Sequence):
-        raise EntryFabricError("capabilities:SEQUENCE_REQUIRED")
+        raise EntryFabricError(f"{field}:SEQUENCE_REQUIRED")
     normalized: list[str] = []
     for item in value:
         text = _text(item, "capability")
         assert text is not None
         normalized.append(text)
     if len(set(normalized)) != len(normalized):
-        raise EntryFabricError("capabilities:DUPLICATE_FORBIDDEN")
+        raise EntryFabricError(f"{field}:DUPLICATE_FORBIDDEN")
     return tuple(sorted(normalized))
 
 
@@ -156,7 +156,20 @@ def _budget(value: Any) -> tuple[tuple[str, int], ...]:
     return tuple(normalized.items())
 
 
-def admit_entry(entry: Mapping[str, Any], *, current_generation: int) -> EntryPacket:
+def admit_entry(
+    entry: Mapping[str, Any],
+    *,
+    current_generation: int,
+    expected_capability_binding_sha256: str,
+    admitted_capabilities: Sequence[str],
+) -> EntryPacket:
+    """Admit one typed ingress packet against an externally-authorized capability view.
+
+    `expected_capability_binding_sha256` and `admitted_capabilities` must come from the
+    deterministic authority/control plane for the current identity/generation. The entry
+    may narrow that set, but it cannot self-grant a capability or substitute another
+    capability-binding receipt.
+    """
     if not isinstance(entry, Mapping):
         raise EntryFabricError("ENTRY_MAPPING_REQUIRED")
     unknown = set(entry) - ENTRY_FIELDS
@@ -189,8 +202,20 @@ def admit_entry(entry: Mapping[str, Any], *, current_generation: int) -> EntryPa
         entry.get("capability_binding_sha256"),
         "capability_binding_sha256",
     )
+    expected_capability_binding_sha256 = _sha256(
+        expected_capability_binding_sha256,
+        "expected_capability_binding_sha256",
+    )
+    if capability_binding_sha256 != expected_capability_binding_sha256:
+        raise EntryFabricError("CAPABILITY_BINDING_MISMATCH")
+
     payload_sha256 = _sha256(entry.get("payload_sha256"), "payload_sha256")
     capabilities = _capabilities(entry.get("capabilities"))
+    authority_capabilities = _capabilities(admitted_capabilities, "admitted_capabilities")
+    unauthorized = sorted(set(capabilities) - set(authority_capabilities))
+    if unauthorized:
+        raise EntryFabricError(f"CAPABILITY_NOT_ADMITTED:{','.join(unauthorized)}")
+
     budget = _budget(entry.get("budget"))
     parent_id = _text(entry.get("parent_id"), "parent_id", optional=True)
     stream_id = _text(entry.get("stream_id"), "stream_id", optional=True)

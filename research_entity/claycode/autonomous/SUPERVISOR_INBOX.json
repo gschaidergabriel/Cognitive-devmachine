@@ -1,6 +1,6 @@
 {
-  "schema_version": "8.58",
-  "latest_cycle": "go-20260823-hcu-engine-admission-fused-canonicalization-frontier",
+  "schema_version": "8.59",
+  "latest_cycle": "go-20260823-entityos-hcu-jcs-loader-bound-frontier",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
@@ -11,17 +11,19 @@
     "hcu": "SOLE_CURRENT_INTEGRATED_COGNITION_COMPUTE_ARCHITECTURE",
     "xeno_xcu_microentity_clayverse_frank": "HISTORICAL_TRANSITIONAL_OR_DONOR_PROVENANCE_ONLY"
   },
-  "latest_repo_head_inspected": "2b9775e3f5b1b645ba643c816d30fe942e9d554f",
-  "material_finding": "ENGINE_ADMISSION_SOURCE_TRUST_GAP_IS_NOW_CLOSED_AT_SOURCE-MECHANISM_SCOPE_ON_RETAINED_PR1263: observed draft head 180c6939894f6bb80c8bb479b753e7bb90f10359 separates EngineAdmission from causal Entry data, rejects event-minted engine authority fields, requires positive exact artifact registry agreement, independently rebinds Entry admission->causal event identity, and carries concrete Entry admission plus event/route/engine/artifact/serializer identity into downstream inference receipt checking. A candidate-only inference receipt producer is also present. The next source-level semantic blocker is canonicalization convergence: multiple canonicalizer candidates exist while the active Entry/router path must collapse to exactly one versioned causal identity contract before heterogeneous/cross-language identity can be promoted. Exact-current combined runtime execution remains unobserved because the current GitHub identity-guard job failed before any visible step.",
+  "latest_repo_head_inspected": "5911c9218bc2566c39d8f2d49ce80cb7e570017a",
+  "material_finding": "CANONICALIZATION_SELECTION_IS_CLOSED_AT_CURRENT_MAIN_AUTHORITY_SCOPE: append-only correction 847cce80b5c52f7d9ceb47c43acc3c184ad2c87d establishes RFC8785_JCS_IJSON/v1 as the selected Entry+HCU target and supersedes the stale typed-v1 coordination selection. Retained PR1263 remains the single draft donor lane and is still mixed-schema, so zero runtime credit transfers. GRID10 plan identity is also part of the same migration envelope because plan_sha256 is currently causal execution-plan identity. Independently, current main now requires EngineAdmission to be bound to loader-consumed checkpoint/tokenizer/runtime bytes through a generation-fenced physical engine lease or enforced content-addressed/read-only load boundary; pre-load hashing alone grants zero HCU runtime credit. Vercel execution remains blocked before Sandbox.create because the retained controller is stale-source-bound and still ClayVerse-semantic.",
   "source_candidate": {
     "retained_pr": 1263,
-    "observed_head": "180c6939894f6bb80c8bb479b753e7bb90f10359",
-    "merge_state": "DRAFT_DONOR_LANE_NOT_MERGE_READY",
+    "observed_head": "b02059a74a37bb2bf65b2c8ff1c3e220b804d74a",
+    "merge_state": "DRAFT_DONOR_LANE_NOT_CANONICAL_PRODUCT_HEAD",
     "promotion_credit": 0,
     "router_file": "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
     "entry_file": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
     "policy_file": "the artefact/MicroEntity/hcu/COGNITIVE_INDEPENDENCE_POLICY.json",
+    "engine_admission_file": "the artefact/MicroEntity/hcu/engine_admission_v1.py",
     "inference_receipt_candidate": "the artefact/MicroEntity/hcu/inference_receipt_v1.py",
+    "grid10_scheduler": "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py",
     "current_mechanisms": [
       "TYPED_ENTRY_EVENT_IDENTITY_SEPARATE_FROM_CONCRETE_ADMISSION_IDENTITY",
       "EXTERNALLY_AUTHORIZED_ENTRY_CAPABILITY_NARROWING_WITH_SELF_GRANT_REJECTION",
@@ -29,37 +31,52 @@
       "SEPARATE_ENTITYOS_HCU_CONTROL_PLANE_ENGINE_ADMISSION",
       "EVENT_ENGINE_AUTHORITY_FIELDS_RESERVED_AND_FAIL_CLOSED",
       "POSITIVE_INTERNAL_ENGINE_IDENTITY_CLASS_AND_EXACT_ARTIFACT_REGISTRY",
+      "ENGINE_ARTIFACT_TREE_MEMBERSHIP_RECHECK_DURING_PRELOAD_HASH",
       "REQUESTED_PROVIDER_MUST_MATCH_ENGINE_ADMISSION_WHEN_PRESENT",
       "MODEL_ROUTE_REQUIRES_ENGINE_ADMISSION_AND_SCRIPT_ONLY_ROUTE_REJECTS_IT",
       "ROUTE_IDENTITY_BINDS_CAUSAL_EVENT_ROUTER_POLICY_ADMITTED_ENGINE_AND_ROUTING_RESULT",
-      "INFERENCE_RECEIPT_ECHO_BINDS_CONCRETE_ENTRY_ADMISSION_EVENT_ROUTE_ENGINE_ARTIFACT_AND_SERIALIZER"
+      "INFERENCE_RECEIPT_ECHO_BINDS_CONCRETE_ENTRY_ADMISSION_EVENT_ROUTE_ENGINE_ARTIFACT_AND_SERIALIZER",
+      "GRID10_PLAN_IDENTITY_IS_PART_OF_THE_CAUSAL_EXECUTION_PATH"
     ],
-    "pr1368_disposition": "ENGINE_ADMISSION_TRUST_SPLIT_FUSED_INTO_RETAINED_PR1263; DO_NOT_CREATE_SECOND_ROUTER",
-    "remaining_source_semantic_gap": "SELECT_EXACTLY_ONE_VERSIONED_ENTRY_PLUS_HCU_CAUSAL_CANONICALIZATION_AUTHORITY"
+    "remaining_source_semantic_gap": "ONE_COORDINATED_VERSIONED_RFC8785_MIGRATION_ACROSS_ENTRY_EVENT_ADMISSION_ROUTER_POLICY_ENGINE_ROUTE_GRIDPLAN_AND_INFERENCE_RECEIPT"
   },
   "typed_entry_capability_repair": {
-    "mechanism": "CURRENT_RETAINED_SOURCE_REQUIRES_EXTERNAL_CAPABILITY_BINDING_AND_ADMITTED_CAPABILITY_SET",
+    "mechanism": "RETAINED_SOURCE_REQUIRES_EXTERNAL_CAPABILITY_BINDING_AND_ADMITTED_CAPABILITY_SET",
     "earlier_exact_component_execution": "15_OF_15_PASS_AT_EARLIER_EXACT_BLOB_SCOPE_AS_RECORDED_ON_MAIN",
     "current_combined_head_credit": "UNPROVEN_UNTIL_EXACT_CURRENT_HEAD_EXECUTION"
   },
   "canonicalization_frontier": {
-    "strongest_current_candidate": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
-    "candidate_file": "the artefact/MicroEntity/hcu/hcu_causal_canonical_v1.py",
-    "exact_component_replication": "9_OF_9_PASS_AT_EXACT_COMPONENT_BLOB_SCOPE_WITH_PYTHON_NODE_BYTE_AND_DIGEST_EQUIVALENCE_AS_RECORDED_ON_MAIN",
-    "alternative_candidates": ["RFC8785_JCS", "CBOR_OR_OTHER_TYPED_CANONICAL_CANDIDATES"],
+    "selected_current_authority": "RFC8785_JCS_IJSON/v1",
+    "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "authority_correction_commit": "847cce80b5c52f7d9ceb47c43acc3c184ad2c87d",
+    "selection_status": "SELECTED_CURRENT_MAIN_AUTHORITY_WIRING_PENDING",
+    "bounded_component_evidence": "FINITE_BINARY64_V8_DIFFERENTIAL_50014_CASES_ZERO_MISMATCHES_PLUS_BINARY64_CONSISTENT_PYTHON_INTEGER_REPAIR_ON_RETAINED_LANE",
+    "alternative_typed_canonical": "RESEARCH_PROVENANCE_ONLY_NOT_CURRENT_AUTHORITY",
+    "legacy_cbor": "CURRENT_SOURCE_DEPENDENCY_PENDING_VERSIONED_MIGRATION",
+    "legacy_python_json": "IMPLEMENTATION_SCOPED_IDENTITY_PENDING_VERSIONED_MIGRATION",
     "promotion_credit": 0,
-    "required": "ONE_RETAINED_VERSIONED_CANONICALIZATION_CONTRACT_WIRED_END_TO_END; OTHER_ENCODERS_EXPERIMENTAL_LEGACY_OR_EXPLICIT_MIGRATION_ONLY"
+    "required": "NEW_VERSIONED_IDENTITIES_USE_ONE_RFC8785_AUTHORITY_END_TO_END; MIXED_UNKNOWN_OR_DOWNGRADE_REPLAY_FAILS_CLOSED; HISTORICAL_HASHES_KEEP_ORIGINAL_SCOPE"
   },
-  "github_workflow_observation": {
-    "head": "180c6939894f6bb80c8bb479b753e7bb90f10359",
-    "run_id": 32652696819,
-    "job_id": 97226650746,
-    "workflow": "Research Entity Identity Guard",
-    "conclusion": "failure",
-    "visible_steps": 0,
-    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_NOT_SEMANTIC_TEST_FAILURE",
-    "semantic_test_execution": "UNPROVEN",
-    "runtime_credit": 0
+  "engine_runtime_frontier": {
+    "preload_hashing": "NECESSARY_BUT_NOT_LOADER_ATTESTATION",
+    "artifact_tree_membership_race_repair": "COMPONENT_MECHANISM_SUPPORTED_ON_RETAINED_PR1263_ZERO_RUNTIME_CREDIT",
+    "runtime_credit_requirement": "GENERATION_FENCED_PHYSICAL_ENGINE_LEASE_OR_ENFORCED_CONTENT_ADDRESSED_READ_ONLY_LOAD_BOUNDARY_PLUS_LOADER_CONSUMED_BYTE_IDENTITY_ECHO",
+    "fail_closed_cases": [
+      "wrong path load",
+      "post-admission mutation",
+      "stale engine lease reuse",
+      "unknown loader-consumed bytes",
+      "artifact membership change during preload hash"
+    ]
+  },
+  "execution_admission": {
+    "preferred_surface": "VERCEL_SANDBOX",
+    "current_state": "BLOCKED_BEFORE_SANDBOX_CREATE",
+    "retained_controller_pr": 810,
+    "blocker": "controller is bound to stale research SHA/tree and still launches historical ClayVerse-semantic batch",
+    "semantic_test_failure": false,
+    "runtime_credit": 0,
+    "required": "ATOMically_REBIND_SINGLE_EXISTING_CONTROLLER_TO_EXACT_ENTITYOS_HCU_SOURCE_AND_CURRENT_ACCEPTANCE_BATCH_BEFORE_OWNER_STARTED_SCOPED_INGRESS"
   },
   "runtime_state": {
     "host_status": "INTENTIONALLY_OFFLINE_OWNER_CONFIRMED",
@@ -77,9 +94,12 @@
     "OLDER_EXACT_BLOB_EXECUTION_DOES_NOT_TRANSFER_TO_A_CHANGED_CURRENT_BLOB",
     "CAUSAL_EVENT_DATA_MUST_NOT_MINT_ENGINE_ADMISSION_AUTHORITY",
     "ENGINE_ADMISSION_MUST_COME_FROM_A_SEPARATELY_VERIFIED_ENTITYOS_HCU_CONTROL_PLANE",
+    "PRELOAD_HASH_IS_NOT_LOADER_ATTESTATION",
+    "LOADER_CONSUMED_BYTES_MUST_BE_BOUND_TO_GENERATION_FENCED_PHYSICAL_ENGINE_LEASE_OR_ENFORCED_CONTENT_ADDRESSED_READ_ONLY_BOUNDARY",
     "ROUTE_IDENTITY_MUST_BIND_CAUSAL_EVENT_ROUTER_POLICY_ADMITTED_ENGINE_AND_ROUTING_RESULT",
     "ENTRY_ADMISSION_IDENTITY_MUST_NOT_REDEFINE_REPLAY_STABLE_CAUSAL_EVENT_IDENTITY",
     "CONCRETE_ADMISSION_MUST_REMAIN_BOUND_IN_DOWNSTREAM_RECEIPTS_TO_PREVENT_CROSS_ADMISSION_RECEIPT_REUSE",
+    "GRIDPLAN_EXECUTION_IDENTITY_MUST_REENTER_THE_SAME_VERSIONED_CANONICALIZATION_MIGRATION",
     "CROSS_LANGUAGE_HASH_IDENTITY_REQUIRES_ONE_EXPLICIT_VERSIONED_CANONICALIZATION_AUTHORITY",
     "NO_BASE_OR_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW"
   ],
@@ -101,9 +121,12 @@
       "entry_admission_sha256",
       "engine_admission_source_authority",
       "checkpoint_tokenizer_runtime_build_byte_identities",
+      "physical_engine_lease_generation",
+      "loader_consumed_artifact_identity",
       "engine_identity_class_artifact_sha256",
       "router_policy_sha256",
       "route_decision_sha256",
+      "grid_plan_sha256",
       "downstream_inference_echo",
       "secret_lookup_count",
       "network_attempt_count",
@@ -115,23 +138,27 @@
       "model lane without EngineAdmission -> REJECT",
       "script-only lane with EngineAdmission -> REJECT",
       "unknown external paid subscription engine -> REJECT with zero secret lookups and zero network attempts",
-      "separately admitted bundled local 0.8B exact artifact -> ALLOW",
       "same causal event plus two distinct admitted engine artifacts -> distinct route digests",
       "same exact event policy and admitted engine replay -> identical route digest",
       "same causal event replay under distinct Entry admissions -> identical stable causal route identity but distinct concrete admission receipt identity",
-      "inference receipt must echo event admission route and admitted engine identities exactly",
-      "independent implementations of the selected canonicalization schema -> identical bytes and digests"
+      "mixed unknown or downgraded canonicalization schema across Entry Route GridPlan Inference -> REJECT",
+      "loader consumes bytes not identical to admitted artifact identity -> REJECT",
+      "stale physical engine lease generation -> REJECT",
+      "inference receipt must echo event admission route GridPlan engine lease and loader-consumed identities exactly",
+      "independent implementations of RFC8785_JCS_IJSON/v1 -> identical admitted bytes and digests"
     ]
   },
   "next_focus": [
     "KEEP_PR1263_DRAFT_AND_ZERO_RUNTIME_CREDIT",
-    "SELECT_ONE_VERSIONED_CAUSAL_CANONICALIZATION_AUTHORITY_FOR_TYPED_ENTRY_PLUS_HCU_AND_EXPLICITLY_BOUND_OR_RETIRE_ALTERNATIVES",
-    "WIRE_SELECTED_CANONICALIZATION_SCHEMA_VERSION_INTO_ENTRY_EVENT_ADMISSION_ROUTER_POLICY_ENGINE_ROUTE_AND_INFERENCE_RECEIPTS_WITHOUT_REWRITING_LEGACY_HASHES",
-    "RUN_EXACT_CURRENT_HEAD_COMBINED_ENTRY_ROUTE_INFERENCE_PRODUCER_AND_CROSS_LANGUAGE_REGRESSIONS_ON_AN_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXECUTOR",
+    "WIRE_RFC8785_JCS_IJSON_V1_UNDER_NEW_VERSIONED_IDENTITIES_ACROSS_ENTRY_EVENT_ADMISSION_ROUTER_POLICY_ENGINE_ROUTE_GRIDPLAN_AND_INFERENCE_RECEIPT",
+    "REJECT_MIXED_UNKNOWN_AND_DOWNGRADE_CANONICALIZATION_WITHOUT_REINTERPRETING_HISTORICAL_HASHES",
+    "FUSE_LOADER_CONSUMED_BYTE_PHYSICAL_ENGINE_LEASE_REQUIREMENT_WITH_RETAINED_ENGINE_ADMISSION_PATH",
+    "SEMANTICALLY_REBIND_EXISTING_PR810_VERCEL_CONTROLLER_TO_ONE_EXACT_CURRENT_ENTITYOS_HCU_SOURCE_AND_ACCEPTANCE_BATCH_WITHOUT_SECOND_EXECUTOR_PATH",
+    "RUN_EXACT_CURRENT_COMBINED_ENTRY_ROUTE_GRIDPLAN_INFERENCE_CANONICALIZER_AND_ENGINE_LEASE_REGRESSIONS_ON_AN_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXECUTOR",
     "REBASE_OR_FUSE_RETAINED_MECHANISMS_ONTO_CURRENT_ENTITYOS_HCU_MAIN_WITHOUT_SECOND_ROUTE_STATE_OR_EFFECT_AUTHORITY",
-    "BIND_REAL_LOCAL_APPROX_08B_CHECKPOINT_TOKENIZER_RUNTIME_BUILD_BYTES_AND_CAPABILITY_RECORD_TO_ENGINE_ADMISSION_CONSTRUCTION",
+    "BIND_REAL_LOCAL_APPROX_08B_CHECKPOINT_TOKENIZER_RUNTIME_BUILD_BYTES_AND_CAPABILITY_RECORD_TO_ENGINE_ADMISSION_AND_LOADER_LEASE",
     "RUN_HCU_ENGINE_ADMISSION_CAUSAL_BINDING_RECEIPT_V1_ON_AUTHORIZED_ISOLATED_EXECUTION",
-    "REBUILD_AND_DIGEST_BIND_COMPATIBILITY_ZIP_ONLY_AFTER_SOURCE_IDENTITIES_SETTLE",
+    "REBUILD_AND_DIGEST_BIND_COMPATIBILITY_ZIP_ONLY_AFTER_SOURCE_AND_LOADER_IDENTITIES_SETTLE",
     "MEASURE_GRID10_AND_COGSIM10_BEFORE_WM_TEST_OR_NESTED_SIM_PROMOTION",
     "REPRODUCE_PERSISTENT_CLAUDE_CODE_ADAPTER_BOUNDARY_ON_EXACT_SANDBOXED_ENTITYOS_RUNTIME_BEFORE_PATCHING"
   ],

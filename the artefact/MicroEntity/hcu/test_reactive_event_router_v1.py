@@ -1,6 +1,7 @@
 import unittest
 
 from reactive_event_router_v1 import (
+    ENTRY_BINDING_SCHEMA,
     HASH_SERIALIZATION_SCHEMA,
     EngineAdmission,
     ReactiveRoutingError,
@@ -50,6 +51,14 @@ def control_plane_admission(
     )
 
 
+def entry_binding(event_sha256=ENTRY_EVENT_SHA256, *, canonicalization_schema=HASH_SERIALIZATION_SCHEMA):
+    return {
+        "schema": ENTRY_BINDING_SCHEMA,
+        "canonicalization_schema": canonicalization_schema,
+        "event_sha256": event_sha256,
+    }
+
+
 def bind_entry_projection(
     event,
     *,
@@ -60,6 +69,7 @@ def bind_entry_projection(
     event.update(
         ingress_id=ingress_id,
         causal_id="causal:test:entry",
+        entry_canonicalization_schema=HASH_SERIALIZATION_SCHEMA,
         entry_event_sha256=event_sha256,
         entry_admission_sha256=admission_sha256,
     )
@@ -92,7 +102,7 @@ def route_entry_model(
         current_generation=7,
         engine_admission=admission or control_plane_admission(artifact_sha256=artifact_sha256),
         admitted_engine_artifacts=engine_registry(artifact_sha256=artifact_sha256),
-        admitted_entry_bindings={admission_sha256: event_sha256},
+        admitted_entry_bindings={admission_sha256: entry_binding(event_sha256)},
     )
 
 
@@ -271,6 +281,32 @@ class ReactiveRouterTests(unittest.TestCase):
                 admitted_engine_artifacts=engine_registry(),
             )
 
+    def test_typed_entry_projection_rejects_legacy_bare_binding(self):
+        e = request_local_engine(bind_entry_projection(base_event())); e.update(novelty=0.8)
+        with self.assertRaisesRegex(ReactiveRoutingError, "ENTRY_ADMISSION_BINDING_V2_REQUIRED"):
+            route_event(
+                e,
+                current_generation=7,
+                engine_admission=control_plane_admission(),
+                admitted_engine_artifacts=engine_registry(),
+                admitted_entry_bindings={ENTRY_ADMISSION_A_SHA256: ENTRY_EVENT_SHA256},
+            )
+
+    def test_typed_entry_projection_rejects_wrong_binding_canonicalization(self):
+        e = request_local_engine(bind_entry_projection(base_event())); e.update(novelty=0.8)
+        with self.assertRaisesRegex(ReactiveRoutingError, "ENTRY_BINDING_CANONICALIZATION_SCHEMA_UNSUPPORTED"):
+            route_event(
+                e,
+                current_generation=7,
+                engine_admission=control_plane_admission(),
+                admitted_engine_artifacts=engine_registry(),
+                admitted_entry_bindings={
+                    ENTRY_ADMISSION_A_SHA256: entry_binding(
+                        canonicalization_schema="ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1"
+                    )
+                },
+            )
+
     def test_typed_entry_projection_rejects_event_identity_not_bound_to_admission(self):
         e = request_local_engine(bind_entry_projection(base_event())); e.update(novelty=0.8)
         with self.assertRaisesRegex(ReactiveRoutingError, "ENTRY_EVENT_SHA256_MISMATCH"):
@@ -279,7 +315,7 @@ class ReactiveRouterTests(unittest.TestCase):
                 current_generation=7,
                 engine_admission=control_plane_admission(),
                 admitted_engine_artifacts=engine_registry(),
-                admitted_entry_bindings={ENTRY_ADMISSION_A_SHA256: "f" * 64},
+                admitted_entry_bindings={ENTRY_ADMISSION_A_SHA256: entry_binding("f" * 64)},
             )
 
     def test_transport_replay_keeps_causal_route_identity_but_changes_admission_binding(self):

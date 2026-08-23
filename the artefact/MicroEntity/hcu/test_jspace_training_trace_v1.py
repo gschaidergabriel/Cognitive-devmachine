@@ -11,19 +11,22 @@ from jspace_training_trace_v1 import (
 from jspace_vector_control_v1 import encode_vector
 
 
+BASIS_SHA256 = "1" * 64
+
+
 class JSpaceTrainingTraceTests(unittest.TestCase):
     def prototype(self):
         cells = [
             CellContribution("world.0", "world", (0.8, 0.1, -0.2), 0.8, 0.1, 0.2, 0.2, 0.1),
             CellContribution("critic.0", "critic", (-0.3, 0.9, 0.4), 0.2, 0.95, 0.7, 0.1, 0.1),
         ]
-        return step(cells, generation=7, basis_id="basis:7")
+        return step(cells, generation=7, basis_id="basis:7", basis_sha256=BASIS_SHA256)
 
     def packet(self, proto=None, **overrides):
         proto = proto or self.prototype()
         kwargs = dict(
             basis_id=proto.basis_id,
-            basis_sha256="1" * 64,
+            basis_sha256=BASIS_SHA256,
             generation=proto.generation,
             role=proto.winner_role,
             control_condition="BASELINE",

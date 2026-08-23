@@ -45,3 +45,17 @@ Every `go` advances normal executable Xeno work **and** XCU/Entry co-development
 ## Scale semantics
 
 The baseline is 10 logical cells. Larger targets are logical contexts over shared physical workers. A future H100-class target around 600 logical modules is research planning only until exact memory/throughput/concurrency benchmarks exist.
+
+## Current executable core candidate — 2026-08-23
+
+Branch candidate `go/xeno-entry-grid10-core-20260823-2324-sol` adds the first current-facing stdlib-only Xeno machine primitive under this root:
+
+- `xeno_core_v1.py` — fail-closed `XENO_INGRESS_PACKET/v1`, producer `source_event_key`, deterministic GRID10 planning and candidate-only `XENO_COMPUTE_PACKET/v1` interconnect;
+- `test_xeno_core_v1.py` — exact component regressions for generation, schema, capability, payload identity, budget and logical-vs-physical scheduling fences;
+- `receipts/2026-08-23_GO_XENO_ENTRY_GRID10_CORE_GPT56SOL.json` — exact source/evidence boundary and the single unusual discriminator for the `go` macrocycle.
+
+The candidate deliberately separates:
+
+`producer event identity -> admitted causal ingress identity -> logical 10-cell plan -> physical active-decode limit -> candidate packet`
+
+This makes the same primitive reusable by `XENO_GRID10`, `XENO_COGSIM10`, `XENO_WM_TEST` and `XENO_NESTED_SIM`. It does **not** yet wire UnifiedDB persistence, HCU model workers, recovery leases or SCALEOUT, and it has zero product-runtime credit until exact authorized isolated runtime execution exists.

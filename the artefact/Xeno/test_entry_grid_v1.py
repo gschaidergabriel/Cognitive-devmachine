@@ -163,6 +163,37 @@ class EntryFabricRegressionTests(unittest.TestCase):
                 current_generation=GENERATION + 1,
             )
 
+    def test_scheduler_rejects_string_boolean_coercion(self):
+        packet = admit_ingress(draft(), current_generation=GENERATION)
+        with self.assertRaisesRegex(ScheduleError, "inference_required must be boolean"):
+            compile_grid_plan(
+                packet,
+                (FunctionRequest("critic", 90, inference_required="false", estimated_tokens=100),),
+                mode=XenoMode.XENO_GRID10,
+                current_generation=GENERATION,
+            )
+
+    def test_scheduler_rejects_fractional_priority_coercion(self):
+        packet = admit_ingress(draft(), current_generation=GENERATION)
+        with self.assertRaisesRegex(ScheduleError, "priority must be an integer"):
+            compile_grid_plan(
+                packet,
+                (FunctionRequest("critic", 90.9, estimated_tokens=100),),
+                mode=XenoMode.XENO_GRID10,
+                current_generation=GENERATION,
+            )
+
+    def test_scheduler_rejects_scalar_worker_collection(self):
+        packet = admit_ingress(draft(), current_generation=GENERATION)
+        with self.assertRaisesRegex(ScheduleError, "shared_workers must be a collection"):
+            compile_grid_plan(
+                packet,
+                functions(2),
+                mode=XenoMode.XENO_GRID10,
+                current_generation=GENERATION,
+                config=SchedulerConfig(shared_workers="xcu:worker-a"),
+            )
+
 
 class GoUnusualExperiment(unittest.TestCase):
     def test_causal_alias_poison_same_routing_different_event_identity(self):

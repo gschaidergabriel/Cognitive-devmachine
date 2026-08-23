@@ -1,57 +1,63 @@
 {
-  "schema_version": "8.57",
-  "latest_cycle": "go-20260823-hcu-engine-admission-trust-separation",
+  "schema_version": "8.58",
+  "latest_cycle": "go-20260823-hcu-engine-admission-fused-canonicalization-frontier",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "control_sync_required_before_research_spend": true,
+  "control_sync_required_before_research_spend": false,
   "authority": {
     "entityos": "SOLE_CURRENT_PRODUCT_SYSTEM_IDENTITY",
     "hcu": "SOLE_CURRENT_INTEGRATED_COGNITION_COMPUTE_ARCHITECTURE",
     "xeno_xcu_microentity_clayverse_frank": "HISTORICAL_TRANSITIONAL_OR_DONOR_PROVENANCE_ONLY"
   },
-  "latest_repo_head_inspected": "322fb4557b206400a3e1565114a0b49b5b4b71bd",
-  "material_finding": "ENGINE_ADMISSION_TRUST_DOMAIN_STILL_OPEN_ON_RETAINED_PR1263: current draft head cd2e6f6a2829eb24f7de8597c58aa3868bbf0218 positively checks an admitted local engine artifact registry and binds event+policy+engine+routing into route identity, but resolved_internal_engine, resolved_internal_engine_class and resolved_internal_engine_artifact_sha256 are still read from the same caller-supplied HCU_REACTIVE_EVENT mapping. The registry proves that claimed bytes are admitted; it does not prove that the event itself was authorized to select that engine. Dependent PR1368 correctly separates EngineAdmission from causal Entry data and is the preferred fusion direction. Typed Entry capability self-grant was repaired on an earlier exact component blob and 12/12 passed, but later causal-identity changes altered the current Entry blob, so that earlier exact component replication must not be promoted as exact-current-head execution.",
+  "latest_repo_head_inspected": "2b9775e3f5b1b645ba643c816d30fe942e9d554f",
+  "material_finding": "ENGINE_ADMISSION_SOURCE_TRUST_GAP_IS_NOW_CLOSED_AT_SOURCE-MECHANISM_SCOPE_ON_RETAINED_PR1263: observed draft head 180c6939894f6bb80c8bb479b753e7bb90f10359 separates EngineAdmission from causal Entry data, rejects event-minted engine authority fields, requires positive exact artifact registry agreement, independently rebinds Entry admission->causal event identity, and carries concrete Entry admission plus event/route/engine/artifact/serializer identity into downstream inference receipt checking. A candidate-only inference receipt producer is also present. The next source-level semantic blocker is canonicalization convergence: multiple canonicalizer candidates exist while the active Entry/router path must collapse to exactly one versioned causal identity contract before heterogeneous/cross-language identity can be promoted. Exact-current combined runtime execution remains unobserved because the current GitHub identity-guard job failed before any visible step.",
   "source_candidate": {
     "retained_pr": 1263,
-    "current_head": "cd2e6f6a2829eb24f7de8597c58aa3868bbf0218",
+    "observed_head": "180c6939894f6bb80c8bb479b753e7bb90f10359",
+    "merge_state": "DRAFT_DONOR_LANE_NOT_MERGE_READY",
+    "promotion_credit": 0,
     "router_file": "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
     "entry_file": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
-    "merge_state": "DRAFT_OPEN_NOT_MERGED",
-    "promotion_credit": 0,
-    "current_router_mechanisms": [
-      "POSITIVE_INTERNAL_PROVIDER_ALIAS_ADMISSION",
-      "POSITIVE_INTERNAL_ENGINE_REGISTRY",
-      "EXACT_ENGINE_ARTIFACT_SHA256_MATCH",
-      "EVENT_POLICY_ENGINE_ROUTE_DIGEST_BINDING",
-      "DOWNSTREAM_INFERENCE_ECHO_ASSERTION"
+    "policy_file": "the artefact/MicroEntity/hcu/COGNITIVE_INDEPENDENCE_POLICY.json",
+    "inference_receipt_candidate": "the artefact/MicroEntity/hcu/inference_receipt_v1.py",
+    "current_mechanisms": [
+      "TYPED_ENTRY_EVENT_IDENTITY_SEPARATE_FROM_CONCRETE_ADMISSION_IDENTITY",
+      "EXTERNALLY_AUTHORIZED_ENTRY_CAPABILITY_NARROWING_WITH_SELF_GRANT_REJECTION",
+      "INDEPENDENT_ENTRY_ADMISSION_TO_EVENT_REBIND_BEFORE_HCU_ROUTING",
+      "SEPARATE_ENTITYOS_HCU_CONTROL_PLANE_ENGINE_ADMISSION",
+      "EVENT_ENGINE_AUTHORITY_FIELDS_RESERVED_AND_FAIL_CLOSED",
+      "POSITIVE_INTERNAL_ENGINE_IDENTITY_CLASS_AND_EXACT_ARTIFACT_REGISTRY",
+      "REQUESTED_PROVIDER_MUST_MATCH_ENGINE_ADMISSION_WHEN_PRESENT",
+      "MODEL_ROUTE_REQUIRES_ENGINE_ADMISSION_AND_SCRIPT_ONLY_ROUTE_REJECTS_IT",
+      "ROUTE_IDENTITY_BINDS_CAUSAL_EVENT_ROUTER_POLICY_ADMITTED_ENGINE_AND_ROUTING_RESULT",
+      "INFERENCE_RECEIPT_ECHO_BINDS_CONCRETE_ENTRY_ADMISSION_EVENT_ROUTE_ENGINE_ARTIFACT_AND_SERIALIZER"
     ],
-    "remaining_trust_gap": "ENGINE_IDENTITY_CLASS_AND_ARTIFACT_CLAIMS_ORIGINATE_INSIDE_UNTRUSTED_EVENT_MAPPING",
-    "preferred_fusion_candidate": {
-      "pr": 1368,
-      "purpose": "SEPARATE_ENGINE_ADMISSION_FROM_CAUSAL_EVENT_AUTHORITY",
-      "runtime_credit": 0
-    }
+    "pr1368_disposition": "ENGINE_ADMISSION_TRUST_SPLIT_FUSED_INTO_RETAINED_PR1263; DO_NOT_CREATE_SECOND_ROUTER",
+    "remaining_source_semantic_gap": "SELECT_EXACTLY_ONE_VERSIONED_ENTRY_PLUS_HCU_CAUSAL_CANONICALIZATION_AUTHORITY"
   },
   "typed_entry_capability_repair": {
-    "earlier_exact_component_head": "4eadd47eb944f86d6659b02dcb283661b0876bd1",
-    "earlier_exact_component_result": "12_OF_12_PASS",
-    "current_head_entry_blob": "0f4d39159be77bace7ee95397b744c781e8f8599",
-    "credit": "MECHANISM_PRESENT_CURRENT_HEAD_BUT_EXACT_CURRENT_HEAD_EXECUTION_UNPROVEN"
+    "mechanism": "CURRENT_RETAINED_SOURCE_REQUIRES_EXTERNAL_CAPABILITY_BINDING_AND_ADMITTED_CAPABILITY_SET",
+    "earlier_exact_component_execution": "15_OF_15_PASS_AT_EARLIER_EXACT_BLOB_SCOPE_AS_RECORDED_ON_MAIN",
+    "current_combined_head_credit": "UNPROVEN_UNTIL_EXACT_CURRENT_HEAD_EXECUTION"
   },
   "canonicalization_frontier": {
-    "pr1375": "VERSIONED_TYPED_CANONICAL_COMPONENT_10_OF_10_LOCAL_ONLY",
-    "pr1376": "VERSIONED_TYPED_CANONICAL_COMPONENT_9_OF_9_LOCAL_ONLY",
-    "cross_language_identity_credit": 0,
-    "required": "ONE_RETAINED_VERSIONED_CANONICALIZATION_CONTRACT_PLUS_INDEPENDENT_SECOND_IMPLEMENTATION_BYTE_AND_DIGEST_EQUALITY"
+    "strongest_current_candidate": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
+    "candidate_file": "the artefact/MicroEntity/hcu/hcu_causal_canonical_v1.py",
+    "exact_component_replication": "9_OF_9_PASS_AT_EXACT_COMPONENT_BLOB_SCOPE_WITH_PYTHON_NODE_BYTE_AND_DIGEST_EQUIVALENCE_AS_RECORDED_ON_MAIN",
+    "alternative_candidates": ["RFC8785_JCS", "CBOR_OR_OTHER_TYPED_CANONICAL_CANDIDATES"],
+    "promotion_credit": 0,
+    "required": "ONE_RETAINED_VERSIONED_CANONICALIZATION_CONTRACT_WIRED_END_TO_END; OTHER_ENCODERS_EXPERIMENTAL_LEGACY_OR_EXPLICIT_MIGRATION_ONLY"
   },
   "github_workflow_observation": {
-    "head": "cd2e6f6a2829eb24f7de8597c58aa3868bbf0218",
-    "run_id": 32652270574,
+    "head": "180c6939894f6bb80c8bb479b753e7bb90f10359",
+    "run_id": 32652696819,
+    "job_id": 97226650746,
     "workflow": "Research Entity Identity Guard",
     "conclusion": "failure",
     "visible_steps": 0,
+    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_NOT_SEMANTIC_TEST_FAILURE",
     "semantic_test_execution": "UNPROVEN",
     "runtime_credit": 0
   },
@@ -72,6 +78,9 @@
     "CAUSAL_EVENT_DATA_MUST_NOT_MINT_ENGINE_ADMISSION_AUTHORITY",
     "ENGINE_ADMISSION_MUST_COME_FROM_A_SEPARATELY_VERIFIED_ENTITYOS_HCU_CONTROL_PLANE",
     "ROUTE_IDENTITY_MUST_BIND_CAUSAL_EVENT_ROUTER_POLICY_ADMITTED_ENGINE_AND_ROUTING_RESULT",
+    "ENTRY_ADMISSION_IDENTITY_MUST_NOT_REDEFINE_REPLAY_STABLE_CAUSAL_EVENT_IDENTITY",
+    "CONCRETE_ADMISSION_MUST_REMAIN_BOUND_IN_DOWNSTREAM_RECEIPTS_TO_PREVENT_CROSS_ADMISSION_RECEIPT_REUSE",
+    "CROSS_LANGUAGE_HASH_IDENTITY_REQUIRES_ONE_EXPLICIT_VERSIONED_CANONICALIZATION_AUTHORITY",
     "NO_BASE_OR_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW"
   ],
   "free_only": {
@@ -87,10 +96,11 @@
     "must_bind": [
       "exact_source_commit_tree_dirty_state",
       "entityos_hcu_executor_identity",
-      "canonicalization_schema_version",
+      "selected_canonicalization_schema_version",
       "entry_event_sha256",
       "entry_admission_sha256",
       "engine_admission_source_authority",
+      "checkpoint_tokenizer_runtime_build_byte_identities",
       "engine_identity_class_artifact_sha256",
       "router_policy_sha256",
       "route_decision_sha256",
@@ -108,18 +118,22 @@
       "separately admitted bundled local 0.8B exact artifact -> ALLOW",
       "same causal event plus two distinct admitted engine artifacts -> distinct route digests",
       "same exact event policy and admitted engine replay -> identical route digest",
-      "inference receipt must echo event route and admitted engine identities exactly"
+      "same causal event replay under distinct Entry admissions -> identical stable causal route identity but distinct concrete admission receipt identity",
+      "inference receipt must echo event admission route and admitted engine identities exactly",
+      "independent implementations of the selected canonicalization schema -> identical bytes and digests"
     ]
   },
   "next_focus": [
     "KEEP_PR1263_DRAFT_AND_ZERO_RUNTIME_CREDIT",
-    "FUSE_PR1368_ENGINE_ADMISSION_TRUST_SPLIT_INTO_THE_SINGLE_RETAINED_PR1263_LANE_OR_EQUIVALENTLY_REPAIR_THERE_WITHOUT_SECOND_ROUTER",
-    "RERUN_COMBINED_TYPED_ENTRY_ROUTER_INFERENCE_REGRESSIONS_ON_THE_EXACT_CURRENT_HEAD_AFTER_FUSION",
-    "CONVERGE_PR1375_AND_PR1376_TO_ONE_VERSIONED_CANONICALIZATION_AUTHORITY_BEFORE_CROSS_LANGUAGE_HASH_CLAIMS",
-    "RUN_HCU_ENGINE_ADMISSION_CAUSAL_BINDING_RECEIPT_V1_ON_AN_AUTHORIZED_ISOLATED_EXECUTOR_WHEN_RUNTIME_IS_INTENTIONALLY_RESTARTED",
-    "REBUILD_AND_DIGEST_BIND_THE_COMPATIBILITY_ZIP_ONLY_AFTER_SOURCE_SEMANTICS_SETTLE",
-    "PREFER_EXECUTABLE_DISCRIMINATORS_OVER_MORE_PARALLEL_SOURCE_GUARDS",
-    "REPRODUCE_THE_PERSISTENT_CLAUDE_CODE_ADAPTER_BOUNDARY_ON_THE_EXACT_SANDBOXED_ENTITYOS_RUNTIME_BEFORE_PATCHING"
+    "SELECT_ONE_VERSIONED_CAUSAL_CANONICALIZATION_AUTHORITY_FOR_TYPED_ENTRY_PLUS_HCU_AND_EXPLICITLY_BOUND_OR_RETIRE_ALTERNATIVES",
+    "WIRE_SELECTED_CANONICALIZATION_SCHEMA_VERSION_INTO_ENTRY_EVENT_ADMISSION_ROUTER_POLICY_ENGINE_ROUTE_AND_INFERENCE_RECEIPTS_WITHOUT_REWRITING_LEGACY_HASHES",
+    "RUN_EXACT_CURRENT_HEAD_COMBINED_ENTRY_ROUTE_INFERENCE_PRODUCER_AND_CROSS_LANGUAGE_REGRESSIONS_ON_AN_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXECUTOR",
+    "REBASE_OR_FUSE_RETAINED_MECHANISMS_ONTO_CURRENT_ENTITYOS_HCU_MAIN_WITHOUT_SECOND_ROUTE_STATE_OR_EFFECT_AUTHORITY",
+    "BIND_REAL_LOCAL_APPROX_08B_CHECKPOINT_TOKENIZER_RUNTIME_BUILD_BYTES_AND_CAPABILITY_RECORD_TO_ENGINE_ADMISSION_CONSTRUCTION",
+    "RUN_HCU_ENGINE_ADMISSION_CAUSAL_BINDING_RECEIPT_V1_ON_AUTHORIZED_ISOLATED_EXECUTION",
+    "REBUILD_AND_DIGEST_BIND_COMPATIBILITY_ZIP_ONLY_AFTER_SOURCE_IDENTITIES_SETTLE",
+    "MEASURE_GRID10_AND_COGSIM10_BEFORE_WM_TEST_OR_NESTED_SIM_PROMOTION",
+    "REPRODUCE_PERSISTENT_CLAUDE_CODE_ADAPTER_BOUNDARY_ON_EXACT_SANDBOXED_ENTITYOS_RUNTIME_BEFORE_PATCHING"
   ],
   "promotion_state": {
     "base_release_gate": "NOT_PASS",

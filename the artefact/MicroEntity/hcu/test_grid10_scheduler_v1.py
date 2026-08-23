@@ -1,8 +1,9 @@
 import unittest
 from dataclasses import replace
 
-from grid10_scheduler_v1 import ExecutionClass, GridScheduleError, HCUMode, RuntimeCapacity, compile_plan
-from reactive_event_router_v1 import EngineAdmission, route_event
+from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA
+from grid10_scheduler_v1 import GRID_PLAN_SCHEMA, ExecutionClass, GridScheduleError, HCUMode, RuntimeCapacity, compile_plan
+from reactive_event_router_v1 import ENTRY_BINDING_SCHEMA, EngineAdmission, route_event
 from xeno_entry_fabric_v1 import admit_entry, to_hcu_reactive_event
 
 CAPABILITY_BINDING_SHA256 = "2" * 64
@@ -24,19 +25,29 @@ def packet(*, max_model_calls=3, max_tokens=2048, capabilities=("hcu.route",)):
                        admitted_capabilities=("hcu.route",), admitted_budget=entry["budget"])
 
 
+def entry_binding(p):
+    return {
+        "schema": ENTRY_BINDING_SCHEMA,
+        "canonicalization_schema": CANONICALIZATION_SCHEMA,
+        "event_sha256": p.event_sha256,
+    }
+
+
+def entry_bindings(p): return {p.admission_sha256: entry_binding(p)}
+
+
 def model_decision(p):
     event = to_hcu_reactive_event(p, contradiction=0.8, uncertainty=0.7)
     admission = EngineAdmission("hcu", "hcu_local_08b", "LOCAL_SHARED_WEIGHT_08B", ENGINE_SHA256)
     return route_event(event, current_generation=7, engine_admission=admission,
                        admitted_engine_artifacts={"hcu_local_08b": ENGINE_SHA256},
-                       admitted_entry_bindings={p.admission_sha256: p.event_sha256})
+                       admitted_entry_bindings=entry_bindings(p))
 
 
 def capacity(*, logical=10, physical=1, receipt="4" * 64):
     return RuntimeCapacity("runtime:kvm4:test", receipt, logical, physical)
 
 
-def entry_bindings(p): return {p.admission_sha256: p.event_sha256}
 def capacity_receipts(c):
     return {c.capacity_receipt_sha256: {"profile_id": c.profile_id, "max_logical_cells": c.max_logical_cells,
                                         "physical_decoder_limit": c.physical_decoder_limit}}
@@ -48,6 +59,8 @@ def compile(p, d, c, *, mode=HCUMode.GRID10, generation=7):
 class Grid10SchedulerTests(unittest.TestCase):
     def test_grid10_binds_route_and_separates_logical_model_physical_counts(self):
         p=packet(); d=model_decision(p); c=capacity(physical=1); plan=compile(p,d,c)
+        self.assertEqual(plan.schema,GRID_PLAN_SCHEMA); self.assertEqual(GRID_PLAN_SCHEMA,"ENTITYOS_HCU_GRID_PLAN/v2")
+        self.assertEqual(plan.canonicalization_schema,CANONICALIZATION_SCHEMA); self.assertEqual(CANONICALIZATION_SCHEMA,"RFC8785_JCS_IJSON/v1")
         self.assertEqual(plan.logical_cell_count,10); self.assertEqual(plan.model_call_count,len(d.model_lanes)); self.assertEqual(plan.physical_decoder_limit,1)
         self.assertEqual(plan.route_decision_sha256,d.decision_sha256); self.assertEqual(plan.engine_identity_sha256,d.engine_identity_sha256)
         models=[x for x in plan.cells if x.execution_class is ExecutionClass.MODEL]
@@ -71,10 +84,17 @@ class Grid10SchedulerTests(unittest.TestCase):
 
     def test_external_entry_and_capacity_authorities_are_required(self):
         p=packet(); d=model_decision(p); c=capacity()
-        with self.assertRaisesRegex(GridScheduleError,"ENTRY_ADMISSION_NOT_REGISTERED"):
+        with self.assertRaisesRegex(GridScheduleError,"ENTRY_ADMISSION_NOT_ADMITTED"):
             compile_plan(p,decision=d,mode=HCUMode.GRID10,capacity=c,current_generation=7,admitted_entry_bindings={},admitted_capacity_receipts=capacity_receipts(c))
         with self.assertRaisesRegex(GridScheduleError,"CAPACITY_RECEIPT_NOT_ADMITTED"):
             compile_plan(p,decision=d,mode=HCUMode.GRID10,capacity=c,current_generation=7,admitted_entry_bindings=entry_bindings(p),admitted_capacity_receipts={})
+
+    def test_legacy_bare_entry_binding_fails_closed(self):
+        p=packet(); d=model_decision(p); c=capacity()
+        with self.assertRaisesRegex(GridScheduleError,"ENTRY_ADMISSION_BINDING_V2_REQUIRED"):
+            compile_plan(p,decision=d,mode=HCUMode.GRID10,capacity=c,current_generation=7,
+                         admitted_entry_bindings={p.admission_sha256:p.event_sha256},
+                         admitted_capacity_receipts=capacity_receipts(c))
 
     def test_stale_generation_fails(self):
         p=packet(); d=model_decision(p); c=capacity()

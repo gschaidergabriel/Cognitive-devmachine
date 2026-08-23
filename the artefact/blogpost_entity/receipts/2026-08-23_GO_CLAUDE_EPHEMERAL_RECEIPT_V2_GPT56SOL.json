@@ -1,0 +1,117 @@
+{
+  "schema": "GO_CLAUDE_EPHEMERAL_RECEIPT_V2/v1",
+  "date_utc": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "status": "MEASUREMENT_CONTRACT_DELTA_EXACT_BLOB_COMPONENT_PASS_RUNTIME_UNVERIFIED",
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "go/claude-ephemeral-receipt-v2-20260823-1035",
+    "branch_base": "b391a0dec94f7de2408e45f4f8940ef7e748891b",
+    "latest_main_observed_before_receipt": "f2a55ccdc3a6d25842ee87b6bfa3a2b84fe3e033",
+    "contract_path": "agentzeroforschung/instrumente/CLAUDE_ADAPTER_BOUNDARY_RECEIPT_v2.md",
+    "validator_path": "agentzeroforschung/instrumente/validate_claude_adapter_boundary_receipt_v2.py",
+    "validator_git_blob": "a1b21273e9fe9c8f4b9832ffa9a97d9ce80908b8",
+    "test_path": "agentzeroforschung/instrumente/test_claude_adapter_boundary_receipt_v2.py",
+    "test_git_blob": "698768113c061749117ef0ece3a0670429d59cd9"
+  },
+  "fused_current_main": {
+    "memory_authority_repair": {
+      "merge": "fca47017f97410a5fa2570cbbfbd552bea3d89c8",
+      "law": "retained auth HOME plus forced CLAUDE_CODE_DISABLE_AUTO_MEMORY=1, CLAUDE_CODE_DISABLE_CLAUDE_MDS=1 and prompt-history suppression; explicitly not EPHEMERAL PASS"
+    },
+    "parallel_memory_repair": "b391a0dec94f7de2408e45f4f8940ef7e748891b",
+    "env_allowlist_authority_fence": {
+      "merge": "f0cf19f38cd352745c23e5c0eb49079cdd6b1444",
+      "law": "receipt-declared environment allowlist cannot self-authorize keys outside canonical child policy"
+    },
+    "targeted_inference_identity_repair": "f2a55ccdc3a6d25842ee87b6bfa3a2b84fe3e033"
+  },
+  "delta": {
+    "product_runtime_bytes_changed": false,
+    "new_receipt_family_version": "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v2",
+    "v1_retained_as_historical": true,
+    "ephemeral_semantics": [
+      "retained authentication HOME is explicit rather than falsely reported as temporary",
+      "--no-session-persistence must be measured",
+      "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1 must be measured",
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 must be measured",
+      "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1 must be measured",
+      "transcript/prompt-history/auto-memory persistence surface must be completely measured before and after the same exact invocation",
+      "before/after persistence digests must match",
+      "all three write counts must be zero"
+    ],
+    "env_authority_inherited": "receipt-declared allowed_env_keys must be a subset of the current canonical Claude child-process policy; receipt self-authorization is fail-closed"
+  },
+  "bounded_execution": {
+    "surface": "isolated ChatGPT Linux component environment",
+    "validator_local_git_blob": "a1b21273e9fe9c8f4b9832ffa9a97d9ce80908b8",
+    "validator_blob_matches_github": true,
+    "test_local_git_blob": "698768113c061749117ef0ece3a0670429d59cd9",
+    "test_blob_matches_github": true,
+    "py_compile": "PASS",
+    "unit_regressions": "21/21 PASS",
+    "coverage": [
+      "valid retained-auth fixture",
+      "v1 not silently reinterpreted",
+      "dirty/cross-run provenance rejection",
+      "session/history/auto-memory/CLAUDE.md guards required",
+      "complete three-class persistence scope required",
+      "pre/post persistence mutation rejected",
+      "transcript/prompt-history/auto-memory writes rejected independently",
+      "tool/canonical-write violations rejected",
+      "environment escape rejected",
+      "receipt env self-authorization rejected",
+      "secret leak rejected",
+      "whole-product credit rejected"
+    ],
+    "live_claude_invocation": false,
+    "exact_ubuntu_runtime": "UNOBSERVED"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "https://code.claude.com/docs/en/cli-reference",
+      "observation": "--no-session-persistence disables print-mode session persistence; --setting-sources exists for user/project/local sources"
+    },
+    {
+      "source": "https://code.claude.com/docs/en/memory",
+      "observation": "auto memory is enabled by default, can be disabled with CLAUDE_CODE_DISABLE_AUTO_MEMORY=1, and persists under the per-project Claude memory tree"
+    },
+    {
+      "source": "https://code.claude.com/docs/en/env-vars",
+      "observation": "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1 prevents loading user/project/auto-memory CLAUDE.md inputs; CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 prevents auto-memory create/load"
+    },
+    {
+      "source": "https://github.com/anthropics/claude-code/issues/49565",
+      "observation": "historical version-specific no-session-persistence regression motivates measuring filesystem effects rather than trusting flags alone"
+    }
+  ],
+  "coordination": {
+    "duplicate_product_repair_created": false,
+    "parallel_product_fix_used_instead": [1120, 1119],
+    "parallel_env_validator_fix_fused": 1124,
+    "macrocycle_id": null,
+    "unusual_experiment_count_claimed": 0,
+    "reason": "No upstream shared macrocycle identity/atomic experiment lease was exposed. The env self-authorization case is a deterministic regression of already-merged PR #1124, not a new unusual experiment."
+  },
+  "execution_controls": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "vps_or_self_hosted_test_execution": false
+  },
+  "credit": {
+    "measurement_contract": "EXACT_BLOB_COMPONENT_VERIFIED",
+    "claude_adapter_runtime": 0,
+    "bundled_08b_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_gwt": 0,
+    "whole_product": 0,
+    "acceptance": "IN_PROGRESS"
+  },
+  "next_exact_gate": "On one intentionally started clean authorized Ubuntu runtime, derive the complete three-class Claude cognition persistence surface before/after one exact targeted inference invocation with retained auth HOME, emit the four v2 receipts under one common identity, validate v2, preserve any write as EPHEMERAL FAIL, then rerun the complete product suite."
+}

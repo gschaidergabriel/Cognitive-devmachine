@@ -109,6 +109,30 @@ class EntryFabricTests(unittest.TestCase):
         with self.assertRaisesRegex(IngressAdmissionError, "POLICY_LIMIT_EXCEEDED"):
             self.admit(p)
 
+    def test_malformed_budget_policy_fails_closed_even_if_dimension_unused(self):
+        with self.assertRaisesRegex(IngressAdmissionError, "policy.max_budget.bad:INVALID"):
+            admit_ingress(
+                packet(),
+                current_generation=7,
+                allowed_sources=ALLOWED_SOURCES,
+                allowed_source_refs=ALLOWED_SOURCE_REFS,
+                allowed_permissions=ALLOWED_PERMISSIONS,
+                allowed_capabilities=ALLOWED,
+                max_budget={**MAX_BUDGET, "bad": True},
+            )
+
+    def test_invalid_budget_policy_key_fails_closed(self):
+        with self.assertRaisesRegex(IngressAdmissionError, "IDENTIFIER_INVALID"):
+            admit_ingress(
+                packet(),
+                current_generation=7,
+                allowed_sources=ALLOWED_SOURCES,
+                allowed_source_refs=ALLOWED_SOURCE_REFS,
+                allowed_permissions=ALLOWED_PERMISSIONS,
+                allowed_capabilities=ALLOWED,
+                max_budget={**MAX_BUDGET, "bad key": 1},
+            )
+
     def test_unknown_budget_dimension_fails_closed(self):
         p = packet(); p["resource_budget"]["gpu_count"] = 1
         with self.assertRaisesRegex(IngressAdmissionError, "UNKNOWN_DIMENSION"):

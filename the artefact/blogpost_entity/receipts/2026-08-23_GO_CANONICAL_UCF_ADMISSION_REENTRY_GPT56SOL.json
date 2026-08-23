@@ -1,0 +1,75 @@
+{
+  "schema": "GO_CANONICAL_UCF_ADMISSION_REENTRY_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "branch": "gpt56sol/go-mini-canonical-ucf-admission-20260823",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "frontier": "canonical .clay pipeline must traverse the single Unified Cognitive Fabric before inference_generate",
+  "observed": {
+    "main_source_blob_before": "66898a4980a51e17ba2717e97352403164b4bdf8",
+    "prior_source_lesion_receipt": "the artefact/blogpost_entity/receipts/2026-08-23_GO_CANONICAL_UCF_PATH_LESION_GPT56SOL.json",
+    "prior_lesion_result": "canonical prompt-to-inference path directly bypassed UCF/J-Space/GWT",
+    "historical_donor_pr": 1152,
+    "historical_donor_status": "CLOSED_UNMERGED_AFTER_TEMPORARY_CLAYVERSE_AUTHORITY_SWITCH; MECHANISM_DONOR_ONLY",
+    "current_open_duplicate_lane_found": false,
+    "reference_runtime_blob": "fa3031ac7bf4cea6a12c57f781c29c9c3650ebef",
+    "reference_runtime_gap": "still lacks canonical pipeline_profile_read/inference_generate convergence and also lacks pipeline_cognitive_fabric_admit"
+  },
+  "delta": {
+    "source_path": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "source_blob_after": "543a5dc591d1539c023f8011929665bd00b71bf3",
+    "test_path": "the artefact/blogpost_entity/test_canonical_ucf_path.py",
+    "test_blob": "52ff43dccc713bdc864066ef34384dbfe469a8c9",
+    "mechanism": [
+      "insert pipeline_cognitive_fabric_admit after pipeline_build_prompt and before inference_generate",
+      "feed inference only from the admitted envelope rather than raw profile.inference/prompt.system/prompt.user",
+      "carry inference_packet_digest and cognitive_fabric_receipt_digest into inference, gate, commit and result",
+      "require admitted.ok so absence/failure of the single Cognitive Fabric is fail-closed rather than silently bypassed"
+    ],
+    "authority_boundary": "MiniUnifiedDB remains canonical durable authority; UCF/J-Space/GWT output is admission/measurement/candidate context only; inference has no truth/effect authority"
+  },
+  "deterministic_isolated_evidence": {
+    "scope": "exact two changed blobs only; static causal-path/source regressions",
+    "source_blob_reproduced_with_git_hash_object": true,
+    "test_blob_reproduced_with_git_hash_object": true,
+    "command": "python -m pytest -q test_canonical_ucf_path_exec.py",
+    "result": "3 passed in 0.05s",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "kernel": "Linux 6.18.35 x86_64",
+    "runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "counterhypothesis_and_falsifier": {
+    "counterhypothesis": "the source can still reach inference with raw profile/prompt data or without a UCF admission step",
+    "falsifier": "strip line comments, extract executable effect/phase order and inspect inference map assignments; any inference_generate before admission or any raw profile/prompt assignment to the inference envelope fails the regression",
+    "result": "counterhypothesis rejected at exact-source static scope"
+  },
+  "coordination": {
+    "unusual_experiment_count": 0,
+    "reason": "no immutable shared macrocycle/request identity is exposed on this surface; deterministic regression/source repair only",
+    "duplicate_policy": "do not revive PR 1152 wholesale and do not create a second UCF; reuse the single canonical UCF authority chain"
+  },
+  "remaining_blocker": {
+    "classification": "SOURCE_WIRED_RUNTIME_EFFECT_UNIMPLEMENTED",
+    "next": "fresh-main converge tools/clay_profile_pipeline_runtime.py to pipeline_profile_read + inference_generate while preserving current guards, then implement one pipeline_cognitive_fabric_admit handler that binds generation/packet/prompt to the existing UCF/InferencePacket chain; exact authorized isolated execution is required before runtime credit"
+  },
+  "safety": {
+    "free_only": true,
+    "provider_secret_accessed": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "vps_self_hosted_or_production_testing": false,
+    "final_training_started": false
+  }
+}

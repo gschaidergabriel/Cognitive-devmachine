@@ -45,35 +45,44 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   let prompt = phase("pipeline_build_prompt",entity_db,source_db,profile,previous,compiled)
   require prompt.ok
 
-  // Canonical cognition admission is on the causal path, not a sidecar receipt.
-  // The effect implementation must reuse the single ZERO_WORKSPACE_CAPSULE ->
-  // ZERO_INFERENCE_PACKET -> Unified Cognitive Fabric authority chain and return
-  // only an admitted candidate-inference envelope. It cannot mint truth/state/effects.
-  let cognition_data = map_new()
-  map_set(cognition_data,"compiled",compiled)
-  map_set(cognition_data,"prompt",prompt)
-  let admitted = phase("pipeline_cognitive_fabric_admit",entity_db,source_db,profile,previous,cognition_data)
-  require admitted.ok
+  // One Cognitive Fabric, two temporal phases. PREPARE is pre-inference admission only:
+  // it binds the fresh MiniUnifiedDB boot/turn cognition state into the exact InferencePacket
+  // and returns admitted engine/context. It cannot claim a completed UCF runtime receipt,
+  // candidate result, canonical write, effect, or measured J-Space outcome before inference exists.
+  let cognition_prepare_data = map_new()
+  map_set(cognition_prepare_data,"compiled",compiled)
+  map_set(cognition_prepare_data,"prompt",prompt)
+  let prepared = phase("pipeline_cognitive_fabric_prepare",entity_db,source_db,profile,previous,cognition_prepare_data)
+  require prepared.ok
 
-  // One inference contract for Claude Code, bundled local cognition, adaptive APIs,
-  // loopback local servers or local model runners. The actual engine + context are
-  // supplied by the admitted Cognitive Fabric envelope so raw prompt/profile data
-  // cannot bypass workspace/packet/generation admission.
+  // Inference is replaceable candidate cognition. Raw prompt/profile fields cannot bypass
+  // the prepared Cognitive Fabric envelope. Only exact prepared InferencePacket identity
+  // crosses into the engine boundary before execution.
   let infer = map_new()
-  map_set(infer,"inference",admitted.inference)
-  map_set(infer,"system",admitted.system)
-  map_set(infer,"user",admitted.user)
-  map_set(infer,"inference_packet_digest",admitted.inference_packet_digest)
-  map_set(infer,"cognitive_fabric_receipt_digest",admitted.cognitive_fabric_receipt_digest)
+  map_set(infer,"inference",prepared.inference)
+  map_set(infer,"system",prepared.system)
+  map_set(infer,"user",prepared.user)
+  map_set(infer,"inference_packet_digest",prepared.inference_packet_digest)
   map_set(infer,"secret_file",secret_file)
   let generated = effect("inference_generate",infer)
   require generated.ok
+
+  // FINALIZE is necessarily post-inference: only now can the canonical UCF runtime receipt
+  // bind executed/result/epistemic data. The finalized evidence then follows the deterministic
+  // gate/CAS path; it is the same fabric/causal turn, not a second authority.
+  let cognition_finalize_data = map_new()
+  map_set(cognition_finalize_data,"prepared",prepared)
+  map_set(cognition_finalize_data,"generated",generated)
+  map_set(cognition_finalize_data,"compiled",compiled)
+  map_set(cognition_finalize_data,"prompt",prompt)
+  let finalized = phase("pipeline_cognitive_fabric_finalize",entity_db,source_db,profile,previous,cognition_finalize_data)
+  require finalized.ok
 
   let gate_data = map_new()
   map_set(gate_data,"generated",generated)
   map_set(gate_data,"compiled",compiled)
   map_set(gate_data,"prompt",prompt)
-  map_set(gate_data,"cognitive_fabric",admitted)
+  map_set(gate_data,"cognitive_fabric",finalized)
   let gated = phase("pipeline_gate",entity_db,source_db,profile,previous,gate_data)
   require gated.ok
 
@@ -82,7 +91,7 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(commit_data,"compiled",compiled)
   map_set(commit_data,"collected",collected)
   map_set(commit_data,"generated",generated)
-  map_set(commit_data,"cognitive_fabric",admitted)
+  map_set(commit_data,"cognitive_fabric",finalized)
   let committed = phase("pipeline_commit",entity_db,source_db,profile,previous,commit_data)
   require committed.ok
 
@@ -92,10 +101,10 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(result,"generation",committed.generation)
   map_set(result,"source_count",compiled.source_count)
   map_set(result,"profile_id",profile.profile_id)
-  map_set(result,"inference_kind",admitted.inference.kind)
+  map_set(result,"inference_kind",prepared.inference.kind)
   map_set(result,"canonical_state_hash",compiled.canonical_state_hash)
   map_set(result,"packet_hash",compiled.packet_hash)
-  map_set(result,"inference_packet_digest",admitted.inference_packet_digest)
-  map_set(result,"cognitive_fabric_receipt_digest",admitted.cognitive_fabric_receipt_digest)
+  map_set(result,"inference_packet_digest",prepared.inference_packet_digest)
+  map_set(result,"cognitive_fabric_receipt_digest",finalized.cognitive_fabric_receipt_digest)
   return result
 }

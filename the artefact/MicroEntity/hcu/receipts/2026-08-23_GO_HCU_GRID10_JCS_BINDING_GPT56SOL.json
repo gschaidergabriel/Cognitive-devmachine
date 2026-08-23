@@ -1,0 +1,76 @@
+{
+  "schema": "ENTITYOS_HCU_GRID10_JCS_BINDING_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "coordination": {
+    "retained_parent_lane": "PR_1263",
+    "dependent_pr": 1391,
+    "dependent_branch": "gpt56sol/hcu-grid10-jcs-binding-20260823",
+    "branch_parent_at_creation": "b78763d2518910aa8f8941b28418235e619ced93",
+    "authority_added": false,
+    "second_router_or_entry_or_canonicalizer_added": false
+  },
+  "observed_source_break": {
+    "grid10_source_blob_before": "be7ad08b90cf69066cf626934746b2fcb7a71f5a",
+    "facts": [
+      "GRID10 plan identity still used typed_entry_canonical_v1.encode_canonical while retained router/Entry had selected RFC8785_JCS_IJSON/v1",
+      "GRID10 still accepted bare admission_sha256 to event_sha256 mappings while retained router required ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2",
+      "GRID10 did not explicitly bind its plan identity to the selected canonicalization schema"
+    ],
+    "classification": "SOURCE_INTERFACE_BREAK_NOT_RUNTIME_FAILURE"
+  },
+  "repair": {
+    "grid10_source_blob": "6301cd05ed33902291ff33453b4344c3de9815de",
+    "grid10_test_blob": "67f42086ab9668341d9850220f6480c3416fec5b",
+    "plan_schema": "ENTITYOS_HCU_GRID_PLAN/v2",
+    "canonicalization_schema": "RFC8785_JCS_IJSON/v1",
+    "changes": [
+      "reuse selected entry_canonicalization_v1 canonicalizer",
+      "reuse router resolve_admitted_entry_binding typed-v2 resolver",
+      "reject bare legacy Entry bindings",
+      "reject wrong binding canonicalization schema",
+      "reject route canonicalizer label mismatch",
+      "keep external runtime-capacity, route, Entry-budget and decoder authorities separate"
+    ]
+  },
+  "focused_component_regression": {
+    "environment": "isolated ChatGPT Linux/Python component harness",
+    "source_blob_exact_to_github": true,
+    "test_blob_exact_to_github": true,
+    "dependency_scope": "STUBBED_CURRENT_ROUTER_ENTRY_CANONICALIZER_APIS",
+    "py_compile": "PASS",
+    "tests_run": 14,
+    "tests_passed": 14,
+    "tests_failed": 0,
+    "credit": "COMPONENT_CONTRACT_ONLY_NO_INTEGRATED_RUNTIME_CREDIT"
+  },
+  "macrocycle_experiment_accounting": {
+    "unusual_experiment_credit_claimed_here": false,
+    "reason": "Retained PR1263 records AUTHORITY_CONSTANT_TRANSPLANT as the single unusual experiment for this 23:57 go macrocycle; this GRID10 work is deterministic regression/repair only."
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE",
+    "reason": "Top-level README already describes GRID10 as an open integrated HCU frontier; this dependent donor does not change EntityOS/HCU authority or acceptance."
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "credit": {
+    "research_delta": "COMMITTED_DEPENDENT_DONOR_PR",
+    "entityos_runtime_credit_change": 0,
+    "hcu_runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Rebase/adjudicate PR1391 against the moving retained PR1263 after inference-receipt JCS/typed-binding repair, then run exact current combined Entry -> route -> engine-load lease -> inference -> GRID10 on an actually-started authorized isolated executor."
+}

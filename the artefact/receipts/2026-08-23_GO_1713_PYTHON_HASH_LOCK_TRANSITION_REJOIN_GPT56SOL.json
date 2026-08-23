@@ -1,0 +1,52 @@
+{
+  "schema": "CLAYVERSE_GO_PYTHON_HASH_LOCK_TRANSITION_REJOIN/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main_sha": "51fa70ac0deb584c77f44cc045b8eafe899a3d97",
+  "branch": "gpt56sol/go-python-lock-fence-rejoin-20260823-1713",
+  "finding": "Current SOURCE_LOCK truthfully keeps the Python --require-hashes gap open and current Dockerfile still installs requirements.txt without hash enforcement; the repository-owned generator transition test named by the workflow was absent from current main.",
+  "delta": {
+    "test_path": "the artefact/tests/test_python_dependency_lock.py",
+    "test_blob": "762a56f9a587e97990a91915cafb1b642cacaefd",
+    "rule": "requirements.lock.txt materialization, Docker --require-hashes consumption, .dockerignore admission, and SOURCE_LOCK gap retirement must become true atomically; before exact resolver execution the open gap must remain explicit",
+    "requirements_lock_materialized": false,
+    "readme_rewritten": false,
+    "reason_readme_not_rewritten": "merged PR #1324 already owns the current living README Vercel-frontier re-entry; stale README text from donor PR #1323 was deliberately not replayed"
+  },
+  "evidence": {
+    "exact_test_blob_rederived": true,
+    "exact_test_blob_matches_reviewed_donor": true,
+    "first_rejoin_overlap_check": "PASS_ONLY_VERCEL_CONTINUITY_CHANGED_BETWEEN_5c061e30_AND_8798f0ff",
+    "final_rejoin_overlap_check": "PASS_NO_TARGET_PATH_OVERLAP_BETWEEN_8798f0ff_AND_51fa70ac",
+    "actually_started_exact_repository_test": false,
+    "exact_lock_generation": false,
+    "exact_dependency_install": false,
+    "exact_oci_build_or_start": false,
+    "whole_clayverse_runtime_credit": 0,
+    "classification": "SOURCE_TRANSITION_FENCE_ONLY"
+  },
+  "coordination": {
+    "donor_pr": 1323,
+    "stale_readme_replayed": false,
+    "creates_second_lock_generator": false,
+    "creates_second_state_or_effect_authority": false,
+    "rejoined_exact_current_main_before_final_write": true
+  },
+  "unusual_experiment": {
+    "new_experiment": false,
+    "note": "Current canonical go authority already records the one unusual intervention consumed by owner-authority re-entry; this deterministic source fence does not consume another slot."
+  },
+  "execution_boundary": {
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_vps_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN",
+    "paid_or_model_training": "OWNER_AUTHORIZATION_REQUIRED",
+    "secret_access_or_persistence": false
+  },
+  "next_gate": "Owner-start the retained Vercel Sandbox one-shot with a scoped read-only GITHUB_READ_TOKEN; after exact source identity and token-absence proof, run exact-current regressions and the existing lock generator in the exact pinned product base, materialize only byte-identical verified requirements.lock.txt, atomically activate --require-hashes, then build/bind/start the exact ClayVerse OCI image.",
+  "acceptance": "IN_PROGRESS"
+}

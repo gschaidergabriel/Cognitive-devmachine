@@ -12,6 +12,12 @@ Fixed product components:
 7. MiniUnifiedDB/deterministic gates remain truth/state/effect authority;
 8. self-hosted dashboard with explicit first activation, autostart and stable local URL where the host permits it, plus deterministic loopback fallback.
 
+Canonical cognition-path invariant:
+
+`pipeline_build_prompt -> pipeline_cognitive_fabric_admit -> inference_generate`
+
+The inference request must be derived from the admitted Cognitive Fabric envelope, including its InferencePacket and fabric-receipt digests. Merely naming or observing a J-Space/GWT/UCF stage is not causal-use credit, and no cognition stage may bypass MiniUnifiedDB truth/state authority or deterministic effect gates.
+
 Closed APIs are `COMPILED_EXTERNAL` and never represented as hidden-state-integrated. Local hookable models may be `FULL_LOCAL_LATENT` after exact model/profile calibration.
 
 Package snapshot: `MICROENTITY_CURRENT.zip`.

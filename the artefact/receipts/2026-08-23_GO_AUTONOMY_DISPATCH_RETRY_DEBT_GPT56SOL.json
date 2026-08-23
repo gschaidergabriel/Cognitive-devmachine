@@ -47,15 +47,32 @@
     },
     "evidence_scope": "synthetic bounded state-machine discriminator derived from exact current source semantics; not exact ClayVerse runtime execution"
   },
-  "repair_invariant": "After a valid dispatch token has been consumed, every admission/context failure before a successful autonomous canonical turn continuation must terminalize or requeue the exact bound goal-step through the existing AutonomyController state machine. If an autonomous active turn exists it is aborted first; if the same generation/goal/step is still ADMITTED it is failed through the canonical retry path. Stale or changed identity fails closed. Effects are never replayed.",
+  "repair_invariant": "After a valid dispatch token has been consumed, every admission/context failure before a successful autonomous canonical turn continuation must terminalize or requeue the exact bound goal-step through the existing AutonomyController state machine. If an exact matching autonomous active turn exists it is aborted first; unrelated human/other active turns are never preempted. If the same generation/goal/step is still ADMITTED it is failed through the canonical retry path. Stale or changed identity fails closed. Effects are never replayed.",
+  "source_candidate": {
+    "branch": "go/clayverse-autonomy-dispatch-retry-debt-20260823",
+    "draft_pr": 1336,
+    "head_commit": "527de75c6584bfe45bf9fe7e33134f7f85894bfa",
+    "terminal_hooks_blob": "5964ff7c59075a5ea0c2504792e173c08f3f7823",
+    "test_autonomy_hook_dispatch_blob": "cabb4eaab421b4d2857d2fefb09689f40a7570ce",
+    "mechanism": "user_prompt dispatch-exception handling now calls one compensation helper that optionally aborts only the exact matching autonomous active turn, then revalidates exact user/session/generation/goal/step and records failure through AutonomyController if the step is still ADMITTED",
+    "new_parallel_authority": false
+  },
   "regression_obligations": [
     "consumed nonce plus pre-active-turn admission failure fails the exact ADMITTED step",
-    "post-active-turn failure performs lifecycle abort plus exact controller failure re-entry",
+    "post-active-turn context failure performs lifecycle abort plus exact controller failure re-entry",
     "repeated deterministic failures hit the existing retry budget and become BLOCKED",
     "stale generation or changed goal/step cannot be compensated into another state",
     "verified or pending effects are never replayed or reclassified by dispatch compensation",
     "ordinary human prompt/preemption behavior remains unchanged"
   ],
+  "regression_source_candidate": {
+    "added": true,
+    "executed_on_authorized_isolated_executor": false,
+    "coverage": [
+      "actual UserPromptSubmit wiring with forced pre-admission failure across the full existing retry budget",
+      "actual UserPromptSubmit wiring with forced post-admission context failure, active-turn abort, exact failure re-entry and zero effects"
+    ]
+  },
   "execution_evidence": {
     "authorized_exact_runtime_executed": false,
     "whole_clayverse_runtime_credit": 0,
@@ -68,5 +85,5 @@
     "paid_execution_or_training": "NOT_USED_OWNER_AUTHORIZATION_REQUIRED",
     "secrets_persisted": false
   },
-  "next_exact_gate": "Implement the single canonical compensation transition around autonomy dispatch admission, execute focused and adjacent regressions on exact current bytes in an actually-started authorized isolated executor, then continue exact-current full regression and OCI build/startup acceptance."
+  "next_exact_gate": "Run the focused new autonomy-hook regressions plus adjacent autonomy/lifecycle suites against this exact branch on an actually-started authorized isolated executor; if green, rebase/fuse the smallest source delta into current main and continue exact-current full regression plus OCI build/startup acceptance."
 }

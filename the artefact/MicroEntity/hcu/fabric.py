@@ -7,6 +7,7 @@ MiniUnifiedDB write primitive and no real-effect execution primitive.
 
 from __future__ import annotations
 
+from collections.abc import Mapping as MappingABC, Sequence
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Mapping
@@ -35,6 +36,50 @@ FORBIDDEN_AUTHORITY_FIELDS = frozenset(
 )
 
 
+def _forbidden_authority_paths(value: Any, path: str = "$", active: set[int] | None = None) -> list[str]:
+    """Return forbidden authority-field paths anywhere inside a JSON-like payload.
+
+    Traversal is fail-closed for cyclic containers and non-string mapping keys so validation cannot
+    be bypassed with a shape that canonical JSON encoding would interpret ambiguously.
+    """
+
+    if active is None:
+        active = set()
+
+    if isinstance(value, MappingABC):
+        object_id = id(value)
+        if object_id in active:
+            raise ValueError("payload containers must be acyclic")
+        active.add(object_id)
+        found: list[str] = []
+        try:
+            for key, child in value.items():
+                if not isinstance(key, str):
+                    raise ValueError("payload mapping keys must be strings")
+                child_path = f"{path}.{key}"
+                if key in FORBIDDEN_AUTHORITY_FIELDS:
+                    found.append(child_path)
+                found.extend(_forbidden_authority_paths(child, child_path, active))
+        finally:
+            active.remove(object_id)
+        return found
+
+    if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
+        object_id = id(value)
+        if object_id in active:
+            raise ValueError("payload containers must be acyclic")
+        active.add(object_id)
+        found = []
+        try:
+            for index, child in enumerate(value):
+                found.extend(_forbidden_authority_paths(child, f"{path}[{index}]", active))
+        finally:
+            active.remove(object_id)
+        return found
+
+    return []
+
+
 @dataclass(frozen=True)
 class HCUPacket:
     packet_class: PacketClass
@@ -58,9 +103,9 @@ class HCUPacket:
             raise ValueError("simulated=true is reserved for SIMULATED_STATE packets")
         if self.confidence is not None and not 0.0 <= self.confidence <= 1.0:
             raise ValueError("confidence must be within [0,1]")
-        overlap = FORBIDDEN_AUTHORITY_FIELDS.intersection(self.payload)
-        if overlap:
-            raise ValueError(f"forbidden authority fields: {sorted(overlap)}")
+        forbidden_paths = _forbidden_authority_paths(self.payload)
+        if forbidden_paths:
+            raise ValueError(f"forbidden authority fields: {forbidden_paths}")
 
     def packet_id(self) -> str:
         self.validate()

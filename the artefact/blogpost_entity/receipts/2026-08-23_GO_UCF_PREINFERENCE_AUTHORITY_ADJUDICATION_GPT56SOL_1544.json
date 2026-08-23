@@ -29,20 +29,35 @@
     },
     {
       "id": "PROFILE_ROUTE_CANNOT_MINT_LOCAL_LATENT_CAPABILITY",
-      "subject": "PR #1283",
-      "finding": "A standalone route resolver allowed ADAPTIVE_BACKEND to select local-latent J-Space modes from profile configuration without an independently admitted capability/adapter contract.",
-      "risk": "Profile text could claim local activation/private latent access before inference evidence exists.",
-      "observed_followup": "PR #1283 was intentionally closed donor-only to avoid a second permanent routing path.",
-      "required_fusion": "Provider/model names never infer capability. Local-latent modes require exact capability/artifact binding; Claude remains COMPILED_EXTERNAL. Fold this obligation into the single retained admission compositor.",
-      "status": "DONOR_OBLIGATION_NOT_YET_CANONICALLY_FUSED"
+      "subject": "PR #1283 -> merged donor repair #1279",
+      "finding": "The standalone route draft could allow ADAPTIVE_BACKEND to select local-latent J-Space modes from profile configuration without an independently admitted capability contract.",
+      "risk": "Provider/profile text could claim local activation/private latent access before inference evidence exists.",
+      "observed_followup": "PR #1283 was closed donor-only; PR #1279 merged a conservative MINI_INFERENCE_CAPABILITY_BINDING/v1 that ignores provider/model names and requires local activation plus BUNDLED_MANIFEST or RUNTIME_PROBE evidence kind for local modes.",
+      "status": "STRUCTURAL_ROUTE_REPAIR_MERGED"
+    },
+    {
+      "id": "CAPABILITY_EVIDENCE_DIGEST_NOT_CAUSALLY_VERIFIED",
+      "subject": "merged PR #1279 / tools/mini_inference_capability_binding_v1.py",
+      "finding": "The merged capability binder validates capability_receipt_digest only as a non-placeholder SHA-256 and validates the declared evidence kind, but does not resolve that digest to the same MiniUnifiedDB cognition boot ancestry, actual bundled manifest/model/tokenizer/J-Space identities, or an independently validated runtime-probe receipt.",
+      "counterevidence": "The existing MiniUnifiedDB cognition boot binding already revalidates admitted BUNDLED_MANIFEST, LOCAL_MODEL_CHECKPOINT, TOKENIZER, JSPACE_PROFILE, lens, calibration and source-lock objects for the current generation; the JSPACE_GWT_BOOT_BINDING validator separately cross-binds manifest/checkpoint/tokenizer/runtime/J-Space/lens/calibration bytes.",
+      "risk": "A profile can structurally declare capability_evidence_kind=BUNDLED_MANIFEST and provide an arbitrary well-formed capability_receipt_digest; structural capability validation alone is therefore insufficient to grant local-latent runtime admission.",
+      "required_repair": "Before BUNDLED_LOCAL_08B local-latent admission, causally cross-bind the capability evidence to the exact same current-generation prepare/boot ancestry or to an independently validated runtime-probe contract. Do not manufacture a second state/evidence authority.",
+      "status": "OPEN_BLOCKER_BEFORE_LOCAL_LATENT_RUNTIME_WIRING"
     },
     {
       "id": "DUPLICATE_PREINFERENCE_MATERIALIZER_AUTHORITY_WEAKENING",
       "subject": "PR #1284",
-      "finding": "The parallel materializer does not consume the canonical cognition_invocation selector, does not yet cross-bind route capability to exact admitted model/tokenizer/J-Space/lens identities, and omits provenance identities already carried by PR #1275.",
-      "risk": "A second weaker admission path could admit the active pointer without proving caller-to-turn identity or exact engine capability ancestry.",
-      "required_fusion": "Keep one compositor lineage: retain #1275 invocation/provenance/default-module-loader strength, add #1284 prompt-to-compiled identity binding, and fuse only the route/capability obligations donated by #1283.",
-      "status": "OPEN_DUPLICATE_REQUIRES_ADJUDICATION"
+      "finding": "The parallel materializer did not consume the canonical cognition_invocation selector, did not cross-bind route capability to exact admitted ancestry, and omitted provenance identities already carried by PR #1275.",
+      "observed_followup": "PR #1284 was closed unmerged and reset to current main; no unique implementation remains.",
+      "status": "CLOSED_DUPLICATE"
+    },
+    {
+      "id": "SECOND_ACTIVE_POINTER_COMPOSITOR_DUPLICATE",
+      "subject": "PR #1287",
+      "finding": "The later compositor resolved only ACTIVE_COGNITION_TURN, did not prove the caller cognition_invocation selector against that active turn, mutated global sys.path for dependency loading, and carried a narrower provenance envelope than the current #1275 lineage.",
+      "useful_donor": "Deep-copy the candidate inference object before packet/admission binding so later source-profile mutation cannot alter admitted downstream bytes.",
+      "observed_followup": "PR #1287 was closed donor-only during this go to preserve one pre-inference compositor.",
+      "status": "CLOSED_DUPLICATE_DONOR_ONLY"
     }
   ],
   "selected_direction": {
@@ -52,7 +67,8 @@
       "exact cognition_invocation cross-binding",
       "canonical Zero workspace capsule and inference packet dependency resolution",
       "prompt-to-compiled canonical_state_hash and packet_hash binding",
-      "engine/J-Space route capability cross-binding to exact admitted artifacts or adapter capability contract",
+      "merged #1279 capability structure plus causal verification of capability evidence against current prepare/boot ancestry or an independently validated runtime probe",
+      "deep-copied admitted inference bytes",
       "candidate-only authority and complete provenance envelope"
     ],
     "next_runtime_path": "ProfilePipelineRuntime.pipeline_cognitive_fabric_admit -> packet-bound inference -> deterministic gate/MiniUnifiedDB commit -> pipeline_cognitive_fabric_finalize"
@@ -80,5 +96,5 @@
     "training": false,
     "provider_secrets_used": false
   },
-  "next_exact_gate": "Fuse one pre-inference compositor with explicit capability binding, wire real ADMIT and FINALIZE handlers into the retained runtime, then obtain actually-started exact-source authorized isolated execution."
+  "next_exact_gate": "Causally bind local capability evidence to current MiniUnifiedDB/boot ancestry, finish the single #1275 compositor including immutable admitted inference bytes, wire real ADMIT and FINALIZE handlers into the retained runtime, then obtain actually-started exact-source authorized isolated execution."
 }

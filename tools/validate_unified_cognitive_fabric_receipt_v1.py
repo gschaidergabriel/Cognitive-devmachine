@@ -217,8 +217,8 @@ def validate(receipt: dict[str, Any]) -> dict[str, Any]:
         raise ReceiptError("LOCAL_08B_JSPACE_MODE_INVALID")
     if jspace_mode in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"} and lens_profile_digest is None:
         raise ReceiptError("LOCAL_JSPACE_REQUIRES_LENS_PROFILE")
-    if jspace_mode == "FULL_LOCAL_LATENT" and not local_activation_access:
-        raise ReceiptError("FULL_LOCAL_LATENT_REQUIRES_ACTIVATION_ACCESS")
+    if jspace_mode in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"} and not local_activation_access:
+        raise ReceiptError("LOCAL_JSPACE_REQUIRES_ACTIVATION_ACCESS")
     if jspace_mode in {"COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY"} and local_activation_access:
         raise ReceiptError("EXTERNAL_MODE_CANNOT_CLAIM_LOCAL_ACTIVATION_ACCESS")
     if jspace_mode in {"COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY"} and external_hidden_state_claimed:

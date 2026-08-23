@@ -8,9 +8,19 @@ This directory owns the package-facing view of:
 - first-class Claude Code adapter;
 - adaptive model/API engine profiles;
 - self-hosted MicroEntity dashboard and activation/autostart contracts;
-- package manifests, product implementation artifacts, tests and receipts.
+- **Hyperposition Computational Unit (HCU): sparse grid of ~0.8B cognition cells**;
+- package manifests, product implementation artifacts, tests, data and receipts.
 
-`MICROENTITY_CURRENT.zip` is the current portable package snapshot. It must be rebuilt whenever this package or a linked product architecture contract changes.
+`MICROENTITY_CURRENT.zip` is the current portable package snapshot. It must be rebuilt
+whenever this package or a linked product architecture contract changes.
+
+The snapshot is now defined as a **recursive package snapshot**: everything below
+`the artefact/MicroEntity/` is included except the ZIP itself and explicitly blocked
+secret/credential file classes. HCU data and generated files therefore enter the ZIP
+automatically when stored in the canonical HCU subtree.
+
+HCU canonical subtree:
+`the artefact/MicroEntity/HyperpositionComputationalUnit/`
 
 The Zero research workspace lives at `research_entity/global/j-space/`.
 Zero-trigger changes that affect the product must update both package roots and both ZIPs.

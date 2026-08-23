@@ -7,16 +7,26 @@ from typing import Any, Iterable, Mapping
 
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
-    from .jspace_dataset_family_split_v1 import SPLIT_SCHEMA as FAMILY_SPLIT_SCHEMA, split_for_family
+    from .jspace_dataset_family_split_v1 import (
+        CAUSAL_FAMILY_SCHEMA,
+        SPLIT_SCHEMA as FAMILY_SPLIT_SCHEMA,
+        causal_family_id_from_event,
+        split_for_family,
+    )
     from .jspace_training_trace_v1 import TRACE_SCHEMA
     from .jspace_vector_control_v1 import ABI_SCHEMA, JSpaceVectorControlError, decode_vector, parse_packet_text
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
-    from jspace_dataset_family_split_v1 import SPLIT_SCHEMA as FAMILY_SPLIT_SCHEMA, split_for_family
+    from jspace_dataset_family_split_v1 import (
+        CAUSAL_FAMILY_SCHEMA,
+        SPLIT_SCHEMA as FAMILY_SPLIT_SCHEMA,
+        causal_family_id_from_event,
+        split_for_family,
+    )
     from jspace_training_trace_v1 import TRACE_SCHEMA
     from jspace_vector_control_v1 import ABI_SCHEMA, JSpaceVectorControlError, decode_vector, parse_packet_text
 
-DATASET_SCHEMA = "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v4"
+DATASET_SCHEMA = "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v5"
 SYSTEM = (
     "You are a narrow EntityOS/HCU cognitive coprocessor. "
     "Follow JSPACE_VECTOR_CONTROL_ABI/v1, GWT/Hyperposition, generation/basis/role fences, "
@@ -47,7 +57,15 @@ def _trace_material(trace: dict[str, Any]) -> dict[str, Any]:
     return material
 
 
-def _row(kind: str, user: dict[str, Any], assistant: dict[str, Any], *, trace_sha256: str, trace_family_id: str) -> dict[str, Any]:
+def _row(
+    kind: str,
+    user: dict[str, Any],
+    assistant: dict[str, Any],
+    *,
+    trace_sha256: str,
+    trace_family_id: str,
+    causal_family_id: str,
+) -> dict[str, Any]:
     return {
         "messages": [
             {"role": "system", "content": SYSTEM},
@@ -59,8 +77,10 @@ def _row(kind: str, user: dict[str, Any], assistant: dict[str, Any], *, trace_sh
             "trace_schema": TRACE_SCHEMA,
             "trace_canonicalization_schema": CANONICALIZATION_SCHEMA,
             "family_split_schema": FAMILY_SPLIT_SCHEMA,
+            "causal_family_schema": CAUSAL_FAMILY_SCHEMA,
             "trace_sha256": trace_sha256,
             "trace_family_id": trace_family_id,
+            "causal_family_id": causal_family_id,
             "family": kind,
         },
     }
@@ -105,7 +125,7 @@ def _validate_trace(
     trace: dict[str, Any],
     *,
     admitted_bases: Mapping[str, str] | None = None,
-) -> tuple[str, str]:
+) -> tuple[str, str, str]:
     if not isinstance(trace, dict) or trace.get("schema_version") != TRACE_SCHEMA:
         raise DatasetError("TRACE_SCHEMA_UNSUPPORTED")
     if trace.get("canonicalization_schema") != CANONICALIZATION_SCHEMA:
@@ -214,8 +234,9 @@ def _validate_trace(
     elif receipt is not None:
         _sha256(receipt, "outcome_receipt_sha256")
 
-    family_id = trace["trace_family_id"].strip()
-    return trace_sha256, family_id
+    supplied_family_id = trace["trace_family_id"].strip()
+    causal_family_id = causal_family_id_from_event(trace["entry_event_sha256"])
+    return trace_sha256, supplied_family_id, causal_family_id
 
 
 def derive_bootstrap_examples(
@@ -223,8 +244,10 @@ def derive_bootstrap_examples(
     *,
     admitted_bases: Mapping[str, str] | None = None,
 ) -> list[dict[str, Any]]:
-    trace_sha256, _ = _validate_trace(trace, admitted_bases=admitted_bases)
-    trace_family_id = trace["trace_family_id"]
+    trace_sha256, trace_family_id, causal_family_id = _validate_trace(
+        trace,
+        admitted_bases=admitted_bases,
+    )
     common = {
         "control_packet": trace["vector_control_packet_jcs_utf8"],
         "expected_basis_id": trace["jspace_basis_id"],
@@ -243,7 +266,14 @@ def derive_bootstrap_examples(
     }
 
     def row(kind: str, user: dict[str, Any], assistant: dict[str, Any]) -> dict[str, Any]:
-        return _row(kind, user, assistant, trace_sha256=trace_sha256, trace_family_id=trace_family_id)
+        return _row(
+            kind,
+            user,
+            assistant,
+            trace_sha256=trace_sha256,
+            trace_family_id=trace_family_id,
+            causal_family_id=causal_family_id,
+        )
 
     wrong_basis_sha = "0" * 63 + ("1" if trace["jspace_basis_sha256"] != "0" * 63 + "1" else "2")
     return [
@@ -278,14 +308,17 @@ def compile_traces(
     seen: set[str] = set()
     family_owner: dict[str, str] = {}
     for trace in traces:
-        trace_sha256, family_id = _validate_trace(trace, admitted_bases=normalized_bases)
+        trace_sha256, _, causal_family_id = _validate_trace(
+            trace,
+            admitted_bases=normalized_bases,
+        )
         if trace_sha256 in seen:
             continue
         seen.add(trace_sha256)
-        split = split_for_family(family_id)
-        previous = family_owner.setdefault(family_id, split)
+        split = split_for_family(causal_family_id)
+        previous = family_owner.setdefault(causal_family_id, split)
         if previous != split:
-            raise DatasetError("TRACE_FAMILY_SPLIT_INCONSISTENT")
+            raise DatasetError("CAUSAL_FAMILY_SPLIT_INCONSISTENT")
         out[split].extend(derive_bootstrap_examples(trace, admitted_bases=normalized_bases))
     if not seen:
         raise DatasetError("NO_TRACES")
@@ -316,7 +349,8 @@ def compile_jsonl(
         "schema": DATASET_SCHEMA,
         "trace_schema": TRACE_SCHEMA,
         "trace_canonicalization_schema": CANONICALIZATION_SCHEMA,
-        "split_unit": "trace_family_id",
+        "split_unit": "replay_stable_entry_event_identity",
+        "causal_family_schema": CAUSAL_FAMILY_SCHEMA,
         "family_split_schema": FAMILY_SPLIT_SCHEMA,
         "admitted_basis_registry_sha256": _canonical_sha256(normalized_bases, "ADMITTED_JSPACE_BASIS_REGISTRY"),
         "input_trace_count": len(traces),
@@ -328,7 +362,8 @@ def compile_jsonl(
         path.write_text(payload, encoding="ascii")
         receipt["splits"][split] = {
             "row_count": len(rows),
-            "trace_family_count": len({row["metadata"]["trace_family_id"] for row in rows}),
+            "causal_family_count": len({row["metadata"]["causal_family_id"] for row in rows}),
+            "supplied_trace_family_label_count": len({row["metadata"]["trace_family_id"] for row in rows}),
             "sha256": hashlib.sha256(payload.encode("ascii")).hexdigest(),
             "path": path.name,
         }

@@ -122,6 +122,36 @@ class GateTests(unittest.TestCase):
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "BASIS_SHA256_BINDING:MISMATCH"):
             self.admit(transition=transition, training=forged, regs=regs)
 
+    def test_unknown_credit_outcome_still_requires_exact_causal_binding(self):
+        _, transition, training, regs = self.fixtures()
+        unknown = deepcopy(training)
+        unknown["outcome_receipt_sha256"] = h("6")
+        regs = deepcopy(regs)
+        regs["admitted_training_traces"][unknown["trace_sha256"]] = unknown
+
+        unrelated = self.bound_outcome(
+            unknown,
+            transition,
+            credit="UNKNOWN",
+            entry_event_sha256=h("9"),
+        )
+        with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_CAUSAL_BINDING_MISMATCH:entry_event_sha256"):
+            self.admit(
+                transition=transition,
+                training=unknown,
+                regs=regs,
+                outcomes={h("6"): unrelated},
+            )
+
+        admission = self.admit(
+            transition=transition,
+            training=unknown,
+            regs=regs,
+            outcomes={h("6"): self.bound_outcome(unknown, transition, credit="UNKNOWN")},
+        )
+        self.assertEqual(admission.credit_label, "UNKNOWN")
+        self.assertEqual(admission.outcome_receipt_sha256, h("6"))
+
     def test_nonunknown_credit_requires_exact_causal_outcome_binding(self):
         _, transition, training, regs = self.fixtures()
         credited = deepcopy(training)

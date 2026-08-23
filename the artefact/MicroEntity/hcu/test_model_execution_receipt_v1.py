@@ -19,6 +19,7 @@ from model_execution_receipt_v1 import (
     OBSERVATION_SCHEMA,
     ModelExecutionObservation,
     ModelExecutionReceiptError,
+    model_execution_invocation_binding_key,
     model_execution_observation_record,
     model_execution_observation_sha256,
     validate_verified_model_execution,
@@ -110,17 +111,26 @@ def observation(plan: GridPlan, load: VerifiedEngineLoad) -> ModelExecutionObser
     )
 
 
+def admission_registries(obs: ModelExecutionObservation):
+    record = model_execution_observation_record(obs)
+    observation_sha256 = model_execution_observation_sha256(obs)
+    return (
+        {observation_sha256: record},
+        {model_execution_invocation_binding_key(obs): observation_sha256},
+    )
+
+
 def verify(plan=None, load=None, obs=None):
     plan = plan or grid_plan()
     load = load or verified_load(plan)
     obs = obs or observation(plan, load)
-    record = model_execution_observation_record(obs)
-    registry = {model_execution_observation_sha256(obs): record}
+    observations, invocations = admission_registries(obs)
     return verify_model_execution(
         plan,
         load,
         obs,
-        admitted_model_execution_observations=registry,
+        admitted_model_execution_observations=observations,
+        admitted_model_execution_invocations=invocations,
         current_generation=plan.entity_generation,
     )
 
@@ -148,6 +158,25 @@ class ModelExecutionReceiptTests(unittest.TestCase):
                 load,
                 obs,
                 admitted_model_execution_observations={},
+                admitted_model_execution_invocations={
+                    model_execution_invocation_binding_key(obs): model_execution_observation_sha256(obs)
+                },
+                current_generation=plan.entity_generation,
+            )
+
+    def test_claimed_actual_path_without_invocation_admission_fails_closed(self):
+        plan = grid_plan()
+        load = verified_load(plan)
+        obs = observation(plan, load)
+        record = model_execution_observation_record(obs)
+        observation_sha256 = model_execution_observation_sha256(obs)
+        with self.assertRaisesRegex(ModelExecutionReceiptError, "MODEL_EXECUTION_INVOCATION_NOT_ADMITTED"):
+            verify_model_execution(
+                plan,
+                load,
+                obs,
+                admitted_model_execution_observations={observation_sha256: record},
+                admitted_model_execution_invocations={},
                 current_generation=plan.entity_generation,
             )
 
@@ -171,6 +200,29 @@ class ModelExecutionReceiptTests(unittest.TestCase):
                 load,
                 tampered,
                 admitted_model_execution_observations={original_sha: original_record},
+                admitted_model_execution_invocations={model_execution_invocation_binding_key(obs): original_sha},
+                current_generation=plan.entity_generation,
+            )
+
+    def test_same_invocation_with_different_output_fails_closed_even_if_both_observations_are_admitted(self):
+        plan = grid_plan()
+        load = verified_load(plan)
+        original = observation(plan, load)
+        tampered = replace(original, output_sha256=digest("different-output"))
+        original_sha = model_execution_observation_sha256(original)
+        tampered_sha = model_execution_observation_sha256(tampered)
+        observations = {
+            original_sha: model_execution_observation_record(original),
+            tampered_sha: model_execution_observation_record(tampered),
+        }
+        invocations = {model_execution_invocation_binding_key(original): original_sha}
+        with self.assertRaisesRegex(ModelExecutionReceiptError, "MODEL_EXECUTION_INVOCATION_OBSERVATION_MISMATCH"):
+            verify_model_execution(
+                plan,
+                load,
+                tampered,
+                admitted_model_execution_observations=observations,
+                admitted_model_execution_invocations=invocations,
                 current_generation=plan.entity_generation,
             )
 
@@ -179,12 +231,14 @@ class ModelExecutionReceiptTests(unittest.TestCase):
         load = verified_load(plan)
         obs = replace(observation(plan, load), output_producing_cell_id="cell-00", role="INGRESS")
         record = model_execution_observation_record(obs)
+        observation_sha256 = model_execution_observation_sha256(obs)
         with self.assertRaisesRegex(ModelExecutionReceiptError, "MODEL_EXECUTION_OUTPUT_CELL_NOT_MODEL"):
             verify_model_execution(
                 plan,
                 load,
                 obs,
-                admitted_model_execution_observations={model_execution_observation_sha256(obs): record},
+                admitted_model_execution_observations={observation_sha256: record},
+                admitted_model_execution_invocations={model_execution_invocation_binding_key(obs): observation_sha256},
                 current_generation=plan.entity_generation,
             )
 
@@ -193,12 +247,14 @@ class ModelExecutionReceiptTests(unittest.TestCase):
         load = verified_load(plan)
         obs = replace(observation(plan, load), entity_generation=6)
         record = model_execution_observation_record(obs)
+        observation_sha256 = model_execution_observation_sha256(obs)
         with self.assertRaisesRegex(ModelExecutionReceiptError, "STALE_MODEL_EXECUTION_OBSERVATION_GENERATION"):
             verify_model_execution(
                 plan,
                 load,
                 obs,
-                admitted_model_execution_observations={model_execution_observation_sha256(obs): record},
+                admitted_model_execution_observations={observation_sha256: record},
+                admitted_model_execution_invocations={model_execution_invocation_binding_key(obs): observation_sha256},
                 current_generation=7,
             )
 

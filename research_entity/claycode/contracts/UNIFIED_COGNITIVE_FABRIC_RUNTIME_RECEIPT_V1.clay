@@ -12,6 +12,7 @@ law portable_architecture != portable_geometry
 law canonical_write_requires_measured_supported = true
 law effect_commit_requires_measured_supported = true
 law inference_execution_requires_backend_admission = true
+law executed_inference_requires_one_gwt_winner = true
 law stale_identity_blocks_admission_and_execution = true
 law provider_policy_authority_is_external_existing_supervisor_gate = true
 law receipt_does_not_mint_provider_policy = true
@@ -23,9 +24,10 @@ fn validate(receipt:Map)->Map {
   // The effect implementation MUST enforce the v1 invariants documented by the
   // canonical validator: exact source/runtime/boot bindings, one Zero/GRF/workspace
   // identity, J-Space/GWT as cognition-only, observation/intervention separation,
-  // candidate-only inference, explicit epistemic status, fail-closed stale/capability
-  // bindings, upstream backend admission, FREE_ONLY cost-class admission, envelope
-  // integrity, and no direct candidate state/effect authority.
+  // one selected GWT winner before any inference execution, candidate-only inference,
+  // explicit epistemic status, fail-closed stale/capability bindings, upstream backend
+  // admission, FREE_ONLY cost-class admission, envelope integrity, and no direct
+  // candidate state/effect authority.
   let checked = effect("unified_cognitive_fabric_receipt_validate_v1", receipt)
   require checked.ok
   return checked

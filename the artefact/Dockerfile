@@ -67,7 +67,7 @@ RUN useradd --system --uid 10001 --create-home --shell /opt/clayverse/runtime/de
 USER clayverse
 VOLUME ["/var/lib/clayverse", "/workspace"]
 EXPOSE 3000
-# Image health is liveness-only. Runtime readiness (canonical state + managed
-# tmux/Claude admission) is intentionally exposed separately at /readyz.
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 CMD ["python","-c","import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:'+os.environ.get('PORT','3000')+'/healthz',timeout=3).read()"]
+# Docker health follows product readiness so canonical state/policy loss fails closed.
+# /healthz remains a separate process-liveness surface for deployment-specific probes.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 CMD ["python","-c","import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:'+os.environ.get('PORT','3000')+'/readyz',timeout=3).read()"]
 ENTRYPOINT ["python","-m","clayverse.service"]

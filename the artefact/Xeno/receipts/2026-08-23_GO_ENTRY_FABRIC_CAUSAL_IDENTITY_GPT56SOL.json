@@ -1,0 +1,88 @@
+{
+  "schema_version": "XENO_GO_ENTRY_FABRIC_CAUSAL_IDENTITY/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "organ": "GPT-5.6 Sol",
+  "program": "EntityOS + HCU/XCU",
+  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "base_main": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "branch": "gpt56sol/xeno-entry-fabric-v1-20260823",
+  "go_tracks": {
+    "track_a": "XENO_EXECUTABLE_CONVERGENCE: executable typed ingress admission added under the current-facing Xeno root",
+    "track_b": "XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT: immutable causal/generation/provenance/payload/budget binding before cognition"
+  },
+  "observed_problem": {
+    "source_candidate_pr": 1263,
+    "source_candidate_head": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "legacy_router_blob": "7c0fee26fd3d8a48b99da7eca7f3bca8fea046ae",
+    "finding": "HCU route decision identity is derived from routing output plus generation and can alias materially distinct causal events selecting the same lanes; current provider admission is also denylist-based. This receipt addresses the event-ingress identity primitive only and does not claim the provider/engine identity gap is closed."
+  },
+  "hypothesis": "A deterministic typed ingress identity that binds causal_id, generation, provenance, normalized timestamps, permissions/capability scope, resource budget and immutable payload digest will remove causal event aliasing before XPU/XCU cognition while remaining reusable across GRID10, COGSIM10, WM_TEST, NESTED_SIM and SCALEOUT.",
+  "counterhypothesis": "Typed ingress adds latency and schema rigidity without materially improving causal auditability because downstream routing/effect receipts could bind raw payloads directly.",
+  "candidate": {
+    "module": "the artefact/Xeno/entry_fabric_v1.py",
+    "module_git_blob": "3bf892d1c969f1a7bf961ce2b9fa18bf19853d5b",
+    "module_sha256": "249fbca06fede9d262eafbe236da6e95ccecfb465995e855b3797caab07183c8",
+    "tests": "the artefact/Xeno/test_entry_fabric_v1.py",
+    "tests_git_blob": "887ac65f94a454873a6a9ac2c21ce07e99d1d293",
+    "tests_sha256": "6dfbba521b8b80001c61eb2ffd4f43704bbe1cb00e6943b4c0ec790dfb797213",
+    "request_schema": "XENO_INGRESS_REQUEST/v1",
+    "packet_schema": "XENO_INGRESS_PACKET/v1",
+    "identity_formula": "sha256(canonical normalized packet fields including payload_sha256)",
+    "authority_boundary": "admission/binding only; no semantic truth promotion and no effect authority"
+  },
+  "deterministic_component_evidence": {
+    "environment": "connected isolated ChatGPT container; exact tested local bytes matched the subsequently fetched Git blob identities",
+    "commands": [
+      "python -m py_compile entry_fabric_v1.py test_entry_fabric_v1.py",
+      "python -m unittest -v test_entry_fabric_v1.py"
+    ],
+    "result": "PASS",
+    "tests_passed": 10,
+    "tests_failed": 0,
+    "coverage_obligations": [
+      "deterministic replay identity",
+      "set-order and timezone normalization",
+      "payload digest sensitivity",
+      "causal identity sensitivity",
+      "stale generation rejection",
+      "unknown unbound field rejection",
+      "invalid payload digest rejection",
+      "timestamp ordering rejection",
+      "boolean-as-integer budget rejection",
+      "deterministic receipt JSON"
+    ]
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "HCU_ROUTE_ALIAS_LESION_V1",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "protocol": "Generate 512 materially distinct HCU_REACTIVE_EVENT/v1 inputs intentionally constrained to select the same legacy router lanes, then compare legacy route-decision digest cardinality with Xeno ingress digest cardinality.",
+    "observed": {
+      "distinct_input_events": 512,
+      "legacy_route_decision_digests": 1,
+      "xeno_ingress_digests": 512,
+      "legacy_alias_ratio": 512.0,
+      "entry_admission_median_us": 19.323,
+      "entry_admission_p95_us": 22.914
+    },
+    "classification": "MECHANISM_SUPPORTED_BOUNDED_SYNTHETIC_COMPONENT_ONLY",
+    "performance_boundary": "container microtiming is diagnostic only and is not product/hardware throughput evidence"
+  },
+  "fusion": {
+    "result": "RETAIN_SOURCE_CANDIDATE",
+    "reason": "The causal alias discriminator supports one reusable ingress identity primitive. It should become the immutable input identity consumed by HCU/XPU route receipts rather than adding parallel router-specific event hashes.",
+    "cross_mode_reuse": "EASIER_CROSS_MODE",
+    "entityos_migration": "EASIER",
+    "provider_engine_gap": "OPEN_NOT_CLOSED_BY_THIS_DELTA"
+  },
+  "runtime_credit": {
+    "xeno_full_runtime": 0,
+    "xcu_runtime": 0,
+    "entityos": 0,
+    "whole_product_pass": false,
+    "reason": "No exact full-repository authorized Vercel Sandbox build/runtime was available through the connected surface; component execution only."
+  },
+  "next_exact_discriminator": "Wire ingress_sha256 into the single retained HCU route identity together with positively resolved local engine identity, then prove: different admitted ingress -> different route digest when routing result is identical; same exact replay -> identical route digest; downstream inference receipt echoes ingress, route and engine identities."
+}

@@ -1,0 +1,74 @@
+{
+  "schema": "HCU_CONFIG/v1",
+  "status": "SOURCE_CANDIDATE_RUNTIME_UNVERIFIED",
+  "host_profile": {
+    "plan": "KVM 4",
+    "vcpu": 4,
+    "memory_gb": 16,
+    "disk_gb": 200,
+    "bandwidth_tb": 16
+  },
+  "authority": {
+    "canonical_state": "MiniUnifiedDB",
+    "runtime_identity": "Zero",
+    "hcu_role": "NONAUTHORITATIVE_PERSISTENT_COMPUTE_AND_SIMULATION_ORGAN",
+    "direct_effect_authority": false,
+    "offline_mode": "DEGRADED_NONCANONICAL_SIMULATION"
+  },
+  "grid": {
+    "model_class": "approximately-0.8B generic cognition core",
+    "physical_workers_target": 1,
+    "physical_workers_hard_cap_before_benchmark": 2,
+    "logical_cells": 16,
+    "active_cells_per_round_max": 4,
+    "shared_weights_preferred": true,
+    "memory_map_preferred": true,
+    "sparse_activation": true,
+    "scheduler": "priority_plus_value_of_information",
+    "roles": [
+      "observer",
+      "causal",
+      "goal",
+      "planner",
+      "counterfactual",
+      "critic",
+      "zero_model",
+      "verifier",
+      "compression",
+      "method"
+    ]
+  },
+  "world_model": {
+    "persistent": true,
+    "causal_timeline": true,
+    "dynamic_goal_candidates": true,
+    "goal_completion_checks": true,
+    "long_iterative_simulation": true,
+    "counterfactual_branches": true,
+    "zero_cognition_model_candidates": true,
+    "improvement_hypothesis_feedback": true,
+    "future_confidence_requires_empirical_calibration": true
+  },
+  "free_inference_fundus": {
+    "mode": "FREE_ONLY",
+    "provider_set": "CURRENT_ADMITTED_FREE_PROVIDER_FUNDUS",
+    "paid_fallback": false,
+    "together_allowed": false,
+    "http_402": "HARD_STOP",
+    "http_429": "PROVIDER_WIDE_BACKOFF",
+    "quota_evasion_key_rotation": false,
+    "provider_output_authority": "CANDIDATE_ONLY"
+  },
+  "packaging": {
+    "root": "the artefact/MicroEntity/hcu",
+    "recursive_include_in_microentity_zip": true,
+    "secrets_in_package": false,
+    "external_model_blobs": "LOCK_BY_DIGEST_UNLESS_EXPLICITLY_VENDORED"
+  },
+  "acceptance": {
+    "resident_worker_count": "UNRESOLVED_UNTIL_MEASURED",
+    "logical_cell_count": "TUNABLE",
+    "whole_hcu_runtime_credit": 0,
+    "deployment_host_runtime_credit": 0
+  }
+}

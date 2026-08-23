@@ -13,6 +13,7 @@ EXPECTED_RELEASE = "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE"
 IDENTITY_GUARD = "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
+ROOT_CLAUDE = "CLAUDE.md"
 
 
 def load_json(path: Path):
@@ -37,6 +38,7 @@ def validate(root: Path) -> dict:
         "manifest": root / "the artefact/manifest.json",
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
+        "repo_claude": root / ROOT_CLAUDE,
         "control44": root / CONTROL44,
         "steering844": root / STEERING844,
     }
@@ -64,6 +66,7 @@ def validate(root: Path) -> dict:
     footer = paths["footer"].read_text(encoding="utf-8")
     architecture = paths["architecture"].read_text(encoding="utf-8")
     readme = paths["readme"].read_text(encoding="utf-8")
+    repo_claude = paths["repo_claude"].read_text(encoding="utf-8")
 
     # Preserve the older canonical research-entity join/identity fences while changing product authority.
     require(errors, bootstrap.get("entity_id") == canonical.get("entity_id"), "BOOTSTRAP_CANONICAL_ENTITY_MISMATCH")
@@ -128,6 +131,16 @@ def validate(root: Path) -> dict:
     require(errors, "CLAYVERSE SINGLE-CONTAINER PRODUCT" in readme_head, "README_PRODUCT_MISMATCH")
     require(errors, "CLAYVERSE" in readme_head and "ONE OCI/DOCKER-COMPATIBLE" in readme_head, "README_RELEASE_MISMATCH")
     require(errors, not ("CLAYVERSE SINGLE-CONTAINER ENDPOINT" in readme_head and "SUPERSEDED" in readme_head), "README_CLAYVERSE_SUPERSEDED")
+
+    # Root CLAUDE.md is a high-leverage repository-organ routing surface. It must not
+    # silently reactivate a superseded Mini Entity/Blogpost program after the canonical
+    # authority spine has converged on ClayVerse.
+    repo_claude_head = repo_claude[:7000].upper()
+    require(errors, "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`" in repo_claude_head, "ROOT_CLAUDE_PROGRAM_MISMATCH")
+    require(errors, "`STAGE=CLAYVERSE_ARTIFACT`" in repo_claude_head, "ROOT_CLAUDE_STAGE_MISMATCH")
+    require(errors, "CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.MD" in repo_claude_head, "ROOT_CLAUDE_OWNER_DIRECTIVE_MISSING")
+    require(errors, "MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in repo_claude_head, "ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE")
+    require(errors, "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.MD" not in repo_claude_head, "ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE")
 
     return {
         "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",

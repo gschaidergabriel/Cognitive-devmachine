@@ -4,8 +4,9 @@
 This module does not invoke a model and grants no truth/effect authority. It consumes the
 canonical HCU RouteDecision, then fail-closes unless the concrete Typed-Entry admission
 still binds to that causal event, the route decision is independently bound to the live
-entity generation, the exact engine artifact is still independently admitted, and the
-runtime caller supplies a hash of the actual model-output bytes.
+entity generation, the exact engine artifact is still independently admitted, a verified
+engine-admission receipt binds the same engine bundle/generation, and the runtime caller
+supplies a hash of the actual model-output bytes.
 """
 from __future__ import annotations
 
@@ -14,6 +15,7 @@ import json
 from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 
+from engine_admission_v1 import EngineArtifactLock, derive_engine_artifact_sha256
 from reactive_event_router_v1 import (
     HASH_SERIALIZATION_SCHEMA,
     RouteDecision,
@@ -22,6 +24,8 @@ from reactive_event_router_v1 import (
 
 SCHEMA = "HCU_INFERENCE_RECEIPT/v1"
 STATUS = "CANDIDATE_ONLY"
+ENGINE_ADMISSION_RECEIPT_SCHEMA = "HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v1"
+ENGINE_ARTIFACT_LOCK_SCHEMA = "HCU_ENGINE_ARTIFACT_LOCK/v1"
 
 
 class InferenceReceiptError(ValueError):
@@ -42,6 +46,7 @@ class InferenceReceipt:
     resolved_engine_identity: str
     resolved_engine_class: str
     resolved_engine_artifact_sha256: str
+    engine_admission_receipt_sha256: str
     model_call_id: str
     output_ref: str
     output_sha256: str
@@ -108,6 +113,116 @@ def _output_size(value: Any) -> int:
     return _nonnegative_int(value, "output_size")
 
 
+def _artifact_receipt_part(value: Any, field: str) -> dict[str, Any]:
+    if not isinstance(value, Mapping):
+        raise InferenceReceiptError(f"{field}:MAPPING_REQUIRED")
+    required = {"kind", "sha256", "file_count", "byte_count"}
+    if set(value) != required:
+        raise InferenceReceiptError(f"{field}:SCHEMA_MISMATCH")
+    return {
+        "kind": _text(value.get("kind"), f"{field}.kind"),
+        "sha256": _sha256(value.get("sha256"), f"{field}.sha256"),
+        "file_count": _nonnegative_int(value.get("file_count"), f"{field}.file_count"),
+        "byte_count": _nonnegative_int(value.get("byte_count"), f"{field}.byte_count"),
+    }
+
+
+def _verify_engine_admission_receipt(
+    *,
+    engine_admission_receipt_sha256: str,
+    admitted_engine_admission_receipts: Mapping[str, Any],
+    generation: int,
+    expected_engine_identity: str,
+    expected_engine_class: str,
+    expected_engine_artifact_sha256: str,
+) -> str:
+    receipt_sha256 = _sha256(
+        engine_admission_receipt_sha256,
+        "engine_admission_receipt_sha256",
+    )
+    if not isinstance(admitted_engine_admission_receipts, Mapping):
+        raise InferenceReceiptError("ADMITTED_ENGINE_ADMISSION_RECEIPT_REGISTRY_REQUIRED")
+    receipt = admitted_engine_admission_receipts.get(receipt_sha256)
+    if not isinstance(receipt, Mapping):
+        raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_NOT_ADMITTED")
+    required = {
+        "schema",
+        "entity_generation",
+        "provider_alias",
+        "engine_identity",
+        "engine_class",
+        "checkpoint",
+        "tokenizer",
+        "runtime",
+        "build",
+        "engine_artifact_sha256",
+        "receipt_sha256",
+    }
+    if set(receipt) != required:
+        raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_SCHEMA_MISMATCH")
+    if receipt.get("schema") != ENGINE_ADMISSION_RECEIPT_SCHEMA:
+        raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_SCHEMA_UNSUPPORTED")
+    receipt_generation = _nonnegative_int(
+        receipt.get("entity_generation"),
+        "engine_admission_receipt.entity_generation",
+    )
+    if receipt_generation != generation:
+        raise InferenceReceiptError("STALE_ENGINE_ADMISSION_RECEIPT_GENERATION")
+
+    provider_alias = _text(receipt.get("provider_alias"), "engine_admission_receipt.provider_alias").lower()
+    engine_identity = _text(receipt.get("engine_identity"), "engine_admission_receipt.engine_identity").lower()
+    engine_class = _text(receipt.get("engine_class"), "engine_admission_receipt.engine_class").upper()
+    artifact_sha256 = _sha256(
+        receipt.get("engine_artifact_sha256"),
+        "engine_admission_receipt.engine_artifact_sha256",
+    )
+    if engine_identity != expected_engine_identity:
+        raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_IDENTITY_MISMATCH")
+    if engine_class != expected_engine_class:
+        raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_CLASS_MISMATCH")
+    if artifact_sha256 != expected_engine_artifact_sha256:
+        raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_ARTIFACT_MISMATCH")
+
+    checkpoint = _artifact_receipt_part(receipt.get("checkpoint"), "engine_admission_receipt.checkpoint")
+    tokenizer = _artifact_receipt_part(receipt.get("tokenizer"), "engine_admission_receipt.tokenizer")
+    runtime = _artifact_receipt_part(receipt.get("runtime"), "engine_admission_receipt.runtime")
+    build = _artifact_receipt_part(receipt.get("build"), "engine_admission_receipt.build")
+    lock = EngineArtifactLock(
+        schema=ENGINE_ARTIFACT_LOCK_SCHEMA,
+        provider_alias=provider_alias,
+        engine_identity=engine_identity,
+        engine_class=engine_class,
+        checkpoint_sha256=checkpoint["sha256"],
+        tokenizer_sha256=tokenizer["sha256"],
+        runtime_sha256=runtime["sha256"],
+        build_sha256=build["sha256"],
+        engine_artifact_sha256=artifact_sha256,
+    )
+    if derive_engine_artifact_sha256(lock) != artifact_sha256:
+        raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_BUNDLE_DIGEST_MISMATCH")
+
+    material = {
+        "schema": ENGINE_ADMISSION_RECEIPT_SCHEMA,
+        "entity_generation": receipt_generation,
+        "provider_alias": provider_alias,
+        "engine_identity": engine_identity,
+        "engine_class": engine_class,
+        "checkpoint": checkpoint,
+        "tokenizer": tokenizer,
+        "runtime": runtime,
+        "build": build,
+        "engine_artifact_sha256": artifact_sha256,
+    }
+    observed_receipt_sha256 = _sha256(
+        receipt.get("receipt_sha256"),
+        "engine_admission_receipt.receipt_sha256",
+    )
+    recomputed_receipt_sha256 = hashlib.sha256(_canonical(material)).hexdigest()
+    if observed_receipt_sha256 != receipt_sha256 or recomputed_receipt_sha256 != receipt_sha256:
+        raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_DIGEST_MISMATCH")
+    return receipt_sha256
+
+
 def make_inference_receipt(
     decision: RouteDecision,
     *,
@@ -116,6 +231,8 @@ def make_inference_receipt(
     entry_admission_sha256: str,
     admitted_entry_bindings: Mapping[str, Any],
     admitted_engine_artifacts: Mapping[str, Any],
+    engine_admission_receipt_sha256: str,
+    admitted_engine_admission_receipts: Mapping[str, Any],
     model_call_id: str,
     output_ref: str,
     output_sha256: str,
@@ -123,10 +240,10 @@ def make_inference_receipt(
 ) -> InferenceReceipt:
     """Produce a candidate-only inference receipt from already-admitted route evidence.
 
-    All three registries are authority/control-plane views, not values copied from the
-    untrusted event: decision->generation, admission->causal-event and engine->artifact.
-    For the current product path, inference without a concrete Typed Entry admission is
-    intentionally rejected even though the router retains a legacy/internal script path.
+    Authority/control-plane inputs remain separate from causal event data: decision->generation,
+    admission->causal-event, engine->artifact, and verified-engine-receipt admission. The
+    verified engine receipt is recomputed and generation/bundle checked here so a bare
+    caller-constructed ``EngineAdmission`` cannot by itself mint a downstream inference receipt.
     """
     if not isinstance(decision, RouteDecision):
         raise InferenceReceiptError("ROUTE_DECISION_REQUIRED")
@@ -169,6 +286,15 @@ def make_inference_receipt(
     if current_engine_artifact != engine_artifact_sha256:
         raise InferenceReceiptError("ENGINE_ARTIFACT_ADMISSION_MISMATCH")
 
+    verified_engine_admission_receipt_sha256 = _verify_engine_admission_receipt(
+        engine_admission_receipt_sha256=engine_admission_receipt_sha256,
+        admitted_engine_admission_receipts=admitted_engine_admission_receipts,
+        generation=generation,
+        expected_engine_identity=engine_id,
+        expected_engine_class=engine_class,
+        expected_engine_artifact_sha256=engine_artifact_sha256,
+    )
+
     model_call_id = _text(model_call_id, "model_call_id")
     output_ref = _text(output_ref, "output_ref")
     output_sha256 = _sha256(output_sha256, "output_sha256")
@@ -187,6 +313,7 @@ def make_inference_receipt(
         "resolved_engine_identity": engine_id,
         "resolved_engine_class": engine_class,
         "resolved_engine_artifact_sha256": engine_artifact_sha256,
+        "engine_admission_receipt_sha256": verified_engine_admission_receipt_sha256,
         "model_call_id": model_call_id,
         "output_ref": output_ref,
         "output_sha256": output_sha256,

@@ -1,0 +1,81 @@
+{
+  "schema": "mini-entity/go-reference-donor-adjudication/v1",
+  "timestamp_local": "2026-08-23T08:50:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "branch_base_main_sha": "3a7a12303e54b24aaefc3c79f1f1ea63a1a9212b",
+  "execution_policy": {
+    "free_only": true,
+    "provider_execution": "NOT_ATTEMPTED",
+    "provider_secret_lookup": "NOT_ATTEMPTED",
+    "spend_usd": 0
+  },
+  "grf": {
+    "R0_observed": [
+      "Canonical BLOGPOST_ENTITY.clay requires the three-argument DB-profile path and effects pipeline_profile_read plus inference_generate.",
+      "Current main Python reference runtime remains on legacy profile_load plus provider_chat_json and therefore is source-mismatched to the canonical Clay entry path.",
+      "Current main profile-authority guard requires entity_state.active_profile -> profiles(profile_json, profile_sha256) and forbids a parallel eos_pipeline_profile(s) authority.",
+      "Current main generation-authority guard requires entity_state.generation to be the sole live generation/CAS authority once DB-profile convergence lands and forbids a legacy eos_pipeline_state generation mirror from promoting itself back into canonical generation.",
+      "Current main metric-hash guard requires personality/state metrics used to authorize state claims to be included in the canonical serialization bound by canonical_state_hash.",
+      "Retained donor PR #966 implemented useful current effect/profile/inference mechanisms but violated both the generation-authority and metric-hash guards and is now closed unmerged.",
+      "PR #972 remained open with an explicit instruction to preserve eos_pipeline_state generation/CAS, which contradicts current main authority law.",
+      "Older broad structured-runtime PRs #727, #728 and #731 were open, non-mergeable and predated the current authority/hash guards."
+    ],
+    "R1_inferred": [
+      "Target-file non-overlap and Git mergeability are insufficient promotion evidence because adjacent auto-activating invariants can invalidate an otherwise clean donor.",
+      "Leaving stale donors open is an architectural hazard because later workers can accidentally inherit superseded profile/generation authorities while extracting otherwise useful mechanisms."
+    ],
+    "R2_generated": [
+      "Promote #966 wholesale after rebase.",
+      "Keep a compatibility generation mirror with bidirectional reconciliation.",
+      "Rebuild a fresh narrow reference convergence lane from current main using only donor mechanisms that preserve one profile authority, one generation authority and one claim-authorizing canonical hash boundary."
+    ],
+    "R3_counter": [
+      "A clean textual rebase can still violate current semantic/source guards.",
+      "A reference-only generation mirror is not passive if it can advance entity_state.generation or participate in CAS.",
+      "A canonical hash is not a complete truth-boundary commitment if the deterministic claim gate consumes metrics excluded from the hashed serialization."
+    ],
+    "R4_discriminate": {
+      "unusual_experiment_id": "STALE_DONOR_CURRENT_GUARD_ACTIVATION",
+      "count_for_this_macrocycle": 1,
+      "intervention": "Re-evaluate the strongest retained reference donor under later current-main auto-activating profile, generation and metric-hash guards instead of using changed-file overlap or mergeability as the promotion discriminator.",
+      "observation": "The donor is rejected as a whole: it retains a parallel mirrored generation/CAS path and excludes claim-authorizing metrics from canonical_state_hash. Useful profile/inference transport mechanisms remain separable donor material.",
+      "outcome": "REJECT_WHOLE_DONOR_RETAIN_NARROW_MECHANISMS",
+      "evidence_class": "EXACT_GITHUB_SOURCE_ADJUDICATION_NO_RUNTIME_CREDIT"
+    },
+    "R5_emergent": [
+      "Reference convergence now has a stricter minimal invariant set: one DB profile authority + one generation/CAS authority + one canonical hash covering every metric that can authorize a claim + one current effect surface.",
+      "Compatibility projections may be derived from canonical state but must never be able to promote themselves back into canonical authority."
+    ],
+    "R6_verify": {
+      "runtime_verified": false,
+      "whole_product_verified": false,
+      "source_adjudication_verified": true,
+      "reason_runtime_unverified": "No callable authorized isolated execution surface started exact repaired current-main bytes in this organ; GitHub runner failures observed for donor work were pre-step/steps-null and earn zero semantic runtime credit."
+    }
+  },
+  "coordination_delta": {
+    "closed_as_superseded": [727, 728, 731, 972],
+    "already_closed_by_parallel_current_work": [966],
+    "retained_open_evidence_only": [994, 995],
+    "duplication_rule": "Do not open another broad reference-runtime donor from stale branches. Build the next implementation narrowly from fresh current main."
+  },
+  "replacement_lane_contract": [
+    "Reuse entity_state.active_profile -> profiles(profile_json, profile_sha256) as the only profile authority.",
+    "Use entity_state.generation as the only live generation read/CAS/write authority.",
+    "Remove live generation/CAS semantics from eos_pipeline_state; any legacy migration must be explicit, one-time, provenance-bound and unable to overwrite an already-established canonical generation.",
+    "Bind every personality/state metric used by deterministic state-claim authorization into the canonical serialization before canonical_state_hash is computed.",
+    "Converge effects to pipeline_init, pipeline_profile_read, pipeline_state_read, pipeline_collect, pipeline_compile, pipeline_build_prompt, inference_generate, pipeline_gate and pipeline_commit only.",
+    "Preserve profile hash verification, embedded-secret-value rejection, read-only evidence SQL, recursive persisted-string value-only leak scanning, RFC6901 response pointers and shell-free local_exec with explicit child environment.",
+    "Preserve exactly-once consumption, atomic persistence, stale-generation rejection, UNKNOWN semantics and gate-before-commit.",
+    "Obtain actually-started exact-current-source isolated focused plus adjacent regression execution before any PARITY/runtime credit."
+  ],
+  "cognition_lane": {
+    "status": "NOT_EXECUTED_PROVIDER_FREE_ONLY",
+    "primary_base": "Qwen/Qwen3.5-0.8B",
+    "note": "Current provider/training lane remains dormant under FREE_ONLY. Source-side cognition work may continue independently but cannot substitute for the reference-runtime convergence gate."
+  },
+  "final_classification": "MECHANISM_FRONTIER_NARROWED_COORDINATION_CONVERGED_RUNTIME_UNVERIFIED"
+}

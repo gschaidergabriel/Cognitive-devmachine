@@ -1,0 +1,109 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "bf592fad1b51aa7b79b19b4ad2ac8a17d2b6ece0",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "duplicate_donor_lane_created": false,
+    "force_update_used": false
+  },
+  "observation": {
+    "loader_boundary_gap": "engine_load_lease_v1 requires an externally admitted exact loader-consumption registry before verify_loader_consumption; the analogous model-execution boundary already has HCU_MODEL_EXECUTION_ADMISSION_STORE/v1 inside the existing canonical MiniUnifiedDB",
+    "parallel_solution_found_at_last_refresh": false,
+    "last_observed_live_donor_head": "56d8a27fc2b6f2ad9447d9bb170ab4aaada9ca80",
+    "current_executor_runtime_candidate_remains_independently_pinned_to_donor_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "executor_source_state_at_latest_verified_reentry": "SOURCE_REBOUND_READY_SOURCE_ONLY"
+  },
+  "prepared_source_candidate": {
+    "status": "SOURCE_CANDIDATE_SYNC_PENDING_NOT_FUSED",
+    "implementation_path": "the artefact/MicroEntity/hcu/engine_load_admission_store_v1.py",
+    "implementation_blob": "181d288e8af9ce7379d58bcf763ad1a749f3b630",
+    "test_path": "the artefact/MicroEntity/hcu/test_engine_load_admission_store_v1.py",
+    "test_blob": "e9efadd0aa973dc26dc8122b94d810f813321b47",
+    "schema": "HCU_ENGINE_LOAD_ADMISSION_STORE/v1",
+    "mechanism": [
+      "reuse caller-supplied existing canonical MiniUnifiedDB sqlite connection",
+      "BEGIN IMMEDIATE before loader-evidence admission",
+      "fail closed on stale live entity generation before admission-store creation",
+      "persist exact RFC8785/JCS loader-consumption bytes under exact observation SHA-256",
+      "bind one engine-load lease SHA-256 to exactly one observation SHA-256",
+      "exact replay is idempotent; divergent same-lease replay is rejected",
+      "construct the pure verify_loader_consumption registry only from rows read back under the locked canonical transaction",
+      "rollback observation and lease binding if verification fails",
+      "do not treat store presence as evidence that a real loader executed"
+    ],
+    "regression_obligations": [
+      "persistence before VerifiedEngineLoad return",
+      "exact replay idempotence",
+      "divergent same-lease no-rebind",
+      "stale-generation no-store",
+      "non-actual-loader evidence rollback",
+      "concurrent exact replay converges to one observation/binding"
+    ],
+    "detached_candidate_commits_not_authority": [
+      "673d3c265a93b7f721082b1d9025459fa34c0163",
+      "d5ec0883c228e22dc2e2450947bfe5e9ad0a61bd",
+      "c6005692957d68fbe18d8dc3b1fc09fb28117e28"
+    ],
+    "fusion_attempts": "THREE_NON_FORCE_FAST_FORWARD_ATTEMPTS_REJECTED_BECAUSE_PR1263_MOVED_BETWEEN_REENTRY_AND_REF_UPDATE",
+    "donor_coordination_comment_id": 5388432027
+  },
+  "vercel_evidence": {
+    "team_plan": "hobby",
+    "project": "dr-unterweger",
+    "exact_executor_head_at_verified_reentry": "b6fcb5e26b66f30951a308caf6f23df8192d4040",
+    "exact_head_ready_observed": false,
+    "newest_ready_observed_sha": "2dfa1edcab41fba34282b34956716e7c222ee517",
+    "newest_deployment_attempt_observed_sha": "bb34db97bdc250ce63ae4beab3030d26c06b6bfc",
+    "newest_deployment_attempt_state": "ERROR",
+    "deployment_after_observed_cutoff": false,
+    "route_invoked": false,
+    "sandbox_runtime_executed": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false
+  },
+  "evidence_boundary": {
+    "exact_repository_tests_for_prepared_candidate": "NOT_OBSERVED",
+    "admitted_sandbox_execution_for_prepared_candidate": false,
+    "real_local_08b_loader_io": false,
+    "real_local_08b_model_executor_io": false,
+    "source_candidate_credit_only": true,
+    "runtime_credit_change": 0
+  },
+  "finding": {
+    "classification": "CANONICAL_LOADER_CONSUMPTION_ADMISSION_GAP_IDENTIFIED_AND_NONFORCE_SOURCE_CANDIDATE_COORDINATED",
+    "counterhypothesis": "The free-standing Mapping required by verify_loader_consumption is already sufficient as canonical admission authority.",
+    "counterhypothesis_rejection": "A caller can construct such a Mapping directly; unlike HCU_MODEL_EXECUTION_ADMISSION_STORE/v1 it does not by itself bind the observation to the existing canonical MiniUnifiedDB transaction/replay authority. The proposed store removes that second-authority-shaped gap without changing the pure verifier or claiming loader execution.",
+    "coordination_result": "Because the retained donor moved continuously during three non-force write windows, forcing the prepared commit would violate the single-donor convergence law. The candidate was therefore left SYNC_PENDING and attached to PR1263 for successor fusion."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_COORDINATION_AND_DESIGN: identified the missing canonical loader-consumption admission bridge immediately before VerifiedEngineLoad and prepared a concrete two-file source/test delta; fusion is SYNC_PENDING because the retained donor head moved through every non-force write window.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: specified and prepared HCU_ENGINE_LOAD_ADMISSION_STORE/v1 so loader-consumption evidence can reuse canonical MiniUnifiedDB atomic generation/replay fencing rather than a caller-constructed free-standing registry.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_PREREQUISITE: closes a source-level prerequisite for binding a future real zero-cost local approximately-0.8B loader/model-executor I/O path into VerifiedEngineLoad -> GRID10 -> ModelExecution -> J-Space without granting model/training credit."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Canonical main and retained donor were moving rapidly under parallel organs. This append-only receipt and retained-donor coordination comment preserve the exact source candidate without overwriting a moving current-facing README snapshot."
+  },
+  "next_exact_gate": "On a stable refreshed PR1263 head, first verify no successor already closed the loader-consumption canonical-admission gap, then fuse the prepared implementation/test blobs without force and execute the exact regressions only on an admitted FREE_ONLY exact-source surface. Keep PR810 pinned to its immutable 511d runtime candidate until its own exact-head Vercel discriminator or an explicit coherent rebind decision. Separately require the real zero-cost local approximately-0.8B loader to emit actual consumed-byte evidence through the canonical MiniUnifiedDB admission store before VerifiedEngineLoad/model-runtime credit."
+}

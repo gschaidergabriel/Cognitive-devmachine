@@ -76,6 +76,30 @@ class Packet:
         return doc
 
 
+class Capability:
+    @staticmethod
+    def resolve_from_profile(profile):
+        snapshot = profile.get("_runtime_profile_snapshot")
+        if not isinstance(snapshot, dict):
+            raise ValueError("PROFILE_SNAPSHOT_MISSING")
+        binding = profile.get("inference", {}).get("capability_binding")
+        if not isinstance(binding, dict):
+            raise ValueError("INFERENCE_CAPABILITY_BINDING_REQUIRED")
+        return {
+            "ok": True,
+            "authority": "ROUTING_ONLY_NO_TRUTH_STATE_EFFECT_AUTHORITY",
+            "binding_digest": binding["binding_digest"],
+            "capability_receipt_digest": binding["capability_receipt_digest"],
+            "capability_evidence_kind": binding["capability_evidence_kind"],
+            "adapter_version": binding["adapter_version"],
+            "target_engine_class": binding["engine_class"],
+            "ucf_engine_class": "claude_code",
+            "jspace_mode": binding["jspace_mode"],
+            "profile_id": snapshot["profile_id"],
+            "profile_hash": snapshot["profile_hash"],
+        }
+
+
 class AdmissionTests(unittest.TestCase):
     @staticmethod
     def invocation(**overrides):
@@ -88,23 +112,60 @@ class AdmissionTests(unittest.TestCase):
         value.update(overrides)
         return value
 
+    @staticmethod
+    def profile(**inference_overrides):
+        inference = {
+            "kind": "json_chat",
+            "model": "candidate",
+            "capability_binding": {
+                "binding_digest": h("capability-binding"),
+                "capability_receipt_digest": h("capability-receipt"),
+                "capability_evidence_kind": "STATIC_CONSERVATIVE",
+                "adapter_version": "claude-code/v1",
+                "engine_class": "CLAUDE_CODE",
+                "jspace_mode": "COMPILED_EXTERNAL",
+            },
+        }
+        inference.update(inference_overrides)
+        return {
+            "profile_id": "p1",
+            "_runtime_profile_snapshot": {
+                "profile_id": "p1",
+                "profile_hash": h("profile"),
+            },
+            "inference": inference,
+        }
+
+    @staticmethod
+    def prompt(*, state_hash=None, packet_hash=None, payload="USR"):
+        state_hash = state_hash or h("state")
+        packet_hash = packet_hash or h("source-packet")
+        return {
+            "system": "SYS",
+            "user": json.dumps(
+                {
+                    "CANONICAL_STATE_HASH": state_hash,
+                    "PACKET_HASH": packet_hash,
+                    "payload": payload,
+                },
+                sort_keys=True,
+            ),
+        }
+
     def call(self, **overrides):
         args = dict(
             db=object(),
             entity_generation=7,
             invocation=self.invocation(),
             compiled={"canonical_state_hash": h("state"), "packet_hash": h("source-packet")},
-            prompt={"system": "SYS", "user": "USR"},
-            inference={"kind": "claude_code", "model": "candidate"},
-            target_engine_class="CLAUDE_CODE",
-            jspace_mode="COMPILED_EXTERNAL",
+            prompt=self.prompt(),
+            profile=self.profile(),
             expected_activation_digest=h("activation"),
-            profile_id="p1",
-            profile_hash=h("profile"),
             origin="go",
             active_turn_module=Active,
             capsule_module=Capsule,
             packet_module=Packet,
+            capability_module=Capability,
         )
         args.update(overrides)
         return sut.build_pre_inference_admission(**args)
@@ -117,16 +178,23 @@ class AdmissionTests(unittest.TestCase):
         self.assertFalse(out["admission_receipt"]["real_effect_executed"])
         self.assertNotIn("ucf_runtime_receipt_digest", out)
         self.assertEqual(out["generation"], 7)
+        self.assertEqual(out["target_engine_class"], "CLAUDE_CODE")
+        self.assertEqual(out["jspace_mode"], "COMPILED_EXTERNAL")
+        self.assertEqual(out["capability_binding_digest"], h("capability-binding"))
         self.assertEqual(
             out["cognition_invocation_digest"],
             sut._sha256_obj({"schema": sut.INVOCATION_SCHEMA, **self.invocation()}),
         )
 
     def test_downstream_context_changes_packet_and_admission_identity(self):
-        a = self.call(prompt={"system": "SYS", "user": "USR-A"})
-        b = self.call(prompt={"system": "SYS", "user": "USR-B"})
+        a = self.call(prompt=self.prompt(payload="USR-A"))
+        b = self.call(prompt=self.prompt(payload="USR-B"))
         self.assertNotEqual(a["inference_packet_digest"], b["inference_packet_digest"])
         self.assertNotEqual(a["cognitive_fabric_receipt_digest"], b["cognitive_fabric_receipt_digest"])
+
+    def test_prompt_compiled_identity_mismatch_fails_closed(self):
+        with self.assertRaisesRegex(sut.CognitiveFabricAdmissionError, "PROMPT_COMPILED_IDENTITY_MISMATCH"):
+            self.call(prompt=self.prompt(packet_hash=h("wrong-packet")))
 
     def test_placeholder_compiled_digest_fails_closed(self):
         with self.assertRaisesRegex(sut.CognitiveFabricAdmissionError, "PLACEHOLDER_REJECTED"):
@@ -178,6 +246,22 @@ class AdmissionTests(unittest.TestCase):
         poisoned["zero_identity_digest"] = h("caller-zero")
         with self.assertRaisesRegex(sut.CognitiveFabricAdmissionError, "COGNITION_INVOCATION_FIELDS_MISMATCH"):
             self.call(invocation=poisoned)
+
+    def test_caller_route_parameters_are_not_part_of_api(self):
+        with self.assertRaises(TypeError):
+            self.call(target_engine_class="BUNDLED_LOCAL_08B")
+
+    def test_profile_route_controls_engine_even_when_provider_metadata_is_poisoned(self):
+        profile = self.profile(kind="local_exec", model="FULL_LOCAL_LATENT_SUPER_HOOKABLE")
+        out = self.call(profile=profile)
+        self.assertEqual(out["target_engine_class"], "CLAUDE_CODE")
+        self.assertEqual(out["jspace_mode"], "COMPILED_EXTERNAL")
+
+    def test_missing_profile_capability_binding_fails_closed(self):
+        profile = self.profile()
+        del profile["inference"]["capability_binding"]
+        with self.assertRaisesRegex(ValueError, "INFERENCE_CAPABILITY_BINDING_REQUIRED"):
+            self.call(profile=profile)
 
 
 if __name__ == "__main__":

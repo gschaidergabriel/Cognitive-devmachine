@@ -1,0 +1,75 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "owner_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "canonical_main_rejoined": "681723f8aa517b3e44dfe75d6b9b2db7e0c8318e",
+  "branch": "go/ucf-boot-generation-fence-v1-fresh",
+  "superseded_draft_pr": 1133,
+  "finding": {
+    "status": "SOURCE_FALSE_GREEN_CONFIRMED",
+    "mechanism": "UCF runtime.generation could be mutated while the same receipt self-reported freshness.stale_generation=false; the pre-delta boot ancestry composition independently bound source/artifacts/identity but not generation.",
+    "risk": "A stale generation could remain structurally valid at the bare-UCF layer without independent freshness evidence.",
+    "counterhypothesis": "Current boot ancestry already independently authenticated runtime.generation.",
+    "counterhypothesis_result": "REFUTED_AT_SOURCE"
+  },
+  "fusion": {
+    "current_main_overlap_observed": [
+      "tools/validate_ucf_boot_ancestry_chain_v1.py",
+      "tests/test_ucf_boot_ancestry_chain_v1.py"
+    ],
+    "preserved_main_delta": "BOOT_CLAUDE_ADAPTER_DISABLED ancestry fence and its enabled/disabled regressions",
+    "duplicate_permanent_path": false,
+    "fresh_branch_created_from_current_main": true
+  },
+  "delta": {
+    "authority_path": "existing JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 plus existing UCF boot ancestry composition; no second receipt/state authority",
+    "chain_blob_sha": "1a313946970acf93476fbe29752bc3c2a8be8dac",
+    "chain_test_blob_sha": "622fa39c51486066268047e1f5f752d8aebe5d61",
+    "boot_validator_blob_sha": "d76d4bf233bf33c82aafb6488315f0c3563b0e0b",
+    "boot_test_blob_sha": "87e86e71d29f14acb5a555c8a80f1379598f2d10",
+    "boot_contract_blob_sha": "61f50040b2c9baa01ffe50e55fe2a8153af3a7f0",
+    "claycode_blob_sha": "1f89ffe44c30acb404ec557a2ead041a7059c1f4",
+    "law": "runtime_generation_must_cross_bind_boot_observation",
+    "boot_observation_field": "runtime.entity_generation"
+  },
+  "bounded_evidence": {
+    "prior_exact_mechanism_blob": {
+      "chain_blob_sha": "2584e5bd7151a86e8f5770b22b93ef8e6e0fa5e3",
+      "git_hash_object_match": true,
+      "py_compile": "PASS",
+      "generation_match": "PASS",
+      "generation_mismatch": "BOOT_ENTITY_GENERATION_MISMATCH",
+      "scope": "pre-fusion exact chain component only"
+    },
+    "fresh_fused_branch": {
+      "exact_integrated_execution": false,
+      "runtime_credit": 0,
+      "reason": "fresh fusion preserves newly merged Claude boot ancestry and has not executed on an admitted exact-source isolated runner"
+    },
+    "github_hosted_execution": {
+      "latest_observed_prior_pr_head_identity_guard": "FAIL_BEFORE_VISIBLE_STEPS",
+      "latest_observed_prior_pr_head_verify": "FAIL_BEFORE_VISIBLE_STEPS",
+      "semantic_test_failure_observed": false,
+      "test_credit": 0
+    }
+  },
+  "promotion": {
+    "status": "NOT_PROMOTED",
+    "reason": "Exact fresh fused boot-validator + UCF ancestry regression execution and exact-source admitted Ubuntu boot evidence are absent."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No immutable shared macrocycle/request identifier was exposed; no lease was invented."
+  },
+  "claims": {
+    "bundled_08b_exact_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_production_credit": 0,
+    "claude_code_adapter_runtime_credit": 0,
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_gate": "Run exact fresh-branch boot-validator/boot tests and fused UCF ancestry regressions on an actually-started authorized isolated executor, then perform exact-source admitted Ubuntu boot emitting runtime.entity_generation and cross-bind it to the UCF cycle generation."
+}

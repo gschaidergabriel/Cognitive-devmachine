@@ -6,7 +6,7 @@ This guard layer hardens the already-canonical `tools/miniunifieddb_cognition_st
 
 ## Observed gap
 
-The canonical store checks `entity_state.generation` in Python before inserting object admissions, boot bindings, and causal-turn bindings. The database schema on current `main` does not independently repeat that live-generation check at INSERT time.
+The canonical store checks `entity_state.generation` in Python before inserting object admissions, boot bindings, and causal-turn bindings. The database schema does not independently repeat that live-generation check at INSERT time.
 
 Therefore a concurrency schedule exists in which:
 
@@ -16,7 +16,7 @@ Therefore a concurrency schedule exists in which:
 
 Application-side validation alone is insufficient to prove that step 3 cannot materialize stale cognition ancestry. The database must reject it at the write boundary.
 
-A parallel current-main adjudication also identified that prior-generation cognition admission must not authorize a new boot generation. Cognition object bytes may persist, but runtime admission authority must be re-established at the exact live generation.
+Current canonical store source also still resolves cognition-object admission with `admitted_generation <= entity_generation`. A repair PR for exact equality was closed unmerged. Therefore prior-generation admission can still satisfy the Python pre-check for a new boot generation unless the database write boundary independently requires exact-current-generation admission.
 
 ## Guard contract
 
@@ -31,13 +31,23 @@ The guard module refuses installation unless the existing canonical store tables
 
 ## Why append-only
 
-The current cognition contract describes immutable cognition-object identities, explicit generation-bound admissions, one boot binding per generation, and exact causal-turn bindings. Allowing arbitrary direct SQL UPDATE/DELETE would permit a later caller to rewrite or erase the provenance ancestry that a prior turn used. Corrections therefore belong in a new generation/new binding, not in-place mutation of admitted evidence.
+The cognition contract describes immutable cognition-object identities, explicit generation-bound admissions, one boot binding per generation, and exact causal-turn bindings. Allowing arbitrary direct SQL UPDATE/DELETE would permit a later caller to rewrite or erase the provenance ancestry that a prior turn used. Corrections therefore belong in a new generation/new binding, not in-place mutation of admitted evidence.
 
 Old admissions remain durable evidence but are not current-generation runtime authority.
 
+## Regression obligations
+
+The source tests cover three distinct write-boundary classes:
+
+1. post-check generation advance before a direct INSERT;
+2. direct SQL attempt to construct a new-generation boot binding from only prior-generation admissions;
+3. the current canonical `store.admit_boot_binding()` API path itself attempting the same prior-generation reuse while guards are installed.
+
+The third case is important: the guard must close the current application-level `<=` gap even before that helper is separately simplified to exact equality.
+
 ## Coordination boundary
 
-This lane does **not** duplicate the persisted-row digest reconstruction/read-integrity repair owned by the current cognition-read hardening lane. It only protects the database write boundary and append-only evidence invariants.
+The persisted-row digest reconstruction/read-integrity repair is already merged into the canonical store and is not duplicated here. The earlier parallel exact-generation API repair was closed unmerged; this lane therefore owns the final database-level enforcement of that invariant without creating another store.
 
 ## Authority
 
@@ -55,6 +65,6 @@ The guards cannot promote model/J-Space/GWT/HCU output to truth and cannot perfo
 
 When the canonical cognition-store schema is installed in the retained `pipeline_init`/bootstrap path, install these guards immediately afterward in the same MiniUnifiedDB before any cognition object/admission/binding write is allowed.
 
-Then execute the exact integrated source on an actually-started authorized isolated executor. Required falsifiers include a post-check generation advance before INSERT, direct stale boot/turn writes, prior-generation admission reuse, unadmitted boot-object injection, and direct UPDATE/DELETE mutation attempts.
+Then execute the exact integrated source on an actually-started authorized isolated executor. Required falsifiers include a post-check generation advance before INSERT, direct stale boot/turn writes, prior-generation admission reuse through both direct SQL and the canonical store API, unadmitted boot-object injection, and direct UPDATE/DELETE mutation attempts.
 
 Until that exact integration executes, this remains source hardening only and grants zero runtime/model/J-Space/GWT/Claude/HCU/whole-product credit.

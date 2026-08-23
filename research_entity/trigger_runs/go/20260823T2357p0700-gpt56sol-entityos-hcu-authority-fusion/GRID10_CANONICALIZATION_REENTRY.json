@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_GO_SOURCE_REENTRY_OBLIGATION",
+  "recorded_at_local": "2026-08-24T00:03:00+07:00",
+  "persistent_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "f6066c126b67699983842c0549378806d5f4c405",
+  "retained_pr": 1263,
+  "retained_pr_head_observed": "091cd2be71b0e97123a70c3089bb103bffb747d0",
+  "current_canonical_authority": {
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "reentry_correction_commit": "847cce80b5c52f7d9ceb47c43acc3c184ad2c87d"
+  },
+  "source_finding": {
+    "path": "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py",
+    "git_blob": "be7ad08b90cf69066cf626934746b2fcb7a71f5a",
+    "finding": "GRID10 plan_sha256 is still produced with typed_entry_canonical_v1.encode_canonical, i.e. the legacy ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1 encoder, while current main selects RFC8785_JCS_IJSON/v1 for the converged Entry+HCU causal identity path.",
+    "classification": "POST_ROUTE_CANONICALIZATION_FORK_PENDING_MIGRATION",
+    "runtime_credit": 0
+  },
+  "why_material": [
+    "GRID10 consumes admitted Entry and the single HCU RouteDecision and emits a durable plan identity used to bind causal execution planning.",
+    "Migrating Entry, router and inference receipt to JCS while leaving GridPlan on CBOR would reintroduce mixed active identity semantics immediately downstream of the migrated route.",
+    "Changing GridPlan alone now would be premature and would temporarily increase mixed-schema surface; migration must be coordinated and versioned end to end.",
+    "Historical GridPlan hashes must retain their original encoder scope and must not be silently rehashed or reinterpreted."
+  ],
+  "required_reentry": [
+    "include ENTITYOS_HCU_GRID_PLAN identity in the same versioned RFC8785 migration envelope as new Entry event/admission, router policy/EngineAdmission/route and inference receipt identities",
+    "bind canonicalization schema/version into the new GridPlan identity",
+    "reject mixed, unknown and downgrade canonicalization versions across Entry -> Route -> GridPlan -> Inference boundaries",
+    "preserve historical CBOR/Python-local hashes at original schema/source scope",
+    "run exact-current combined Entry+route+GridPlan+inference+canonicalizer regression on an actually-started authorized isolated executor before runtime promotion"
+  ],
+  "counterhypothesis": "GridPlan may keep a separate deterministic CBOR identity because it is only a scheduler artifact.",
+  "counterhypothesis_status": "REJECT_FOR_CURRENT_SINGLE_CAUSAL_PATH_UNLESS_GRIDPLAN_IS_EXPLICITLY_NONCAUSAL_AND_NEVER_USED_AS_EXECUTION_OR_RECEIPT_IDENTITY; current source exposes plan_sha256 as execution-plan identity, so separate active canonicalization would preserve a schema fork.",
+  "coordination": {
+    "source_patch_written": false,
+    "reason": "Do not migrate GRID10 alone before the upstream Entry/router/inference versioned migration; record the dependency so the retained lane changes once rather than creating another temporary hash authority.",
+    "second_router_or_canonicalizer_created": false,
+    "second_state_truth_effect_or_recovery_authority_created": false,
+    "readme_status": "NO_CHANGE",
+    "readme_reason": "Current README already names single-canonicalization convergence and combined GRID10 exact execution as frontier; this receipt narrows the migration obligation to include GridPlan identity."
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment_count": 0,
+    "note": "Source inspection/re-entry only. No additional unusual experiment is claimed."
+  },
+  "execution_boundary": {
+    "authorized_product_runtime_started": false,
+    "semantic_runtime_test_executed": false,
+    "vps_testing_used": false,
+    "self_hosted_or_production_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_used": false,
+    "secrets_used": false,
+    "entityos_hcu_runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Perform one coordinated versioned RFC8785 migration across Entry event/admission -> router policy/EngineAdmission/route -> GridPlan -> inference receipt, then execute the exact combined path in an authorized isolated executor with mixed/unknown/downgrade-schema falsifiers and loader-consumed-byte lease binding."
+}

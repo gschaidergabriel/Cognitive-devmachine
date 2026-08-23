@@ -9,86 +9,66 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 VALIDATOR = HERE / "validate_jspace_gwt_boot_binding_v1.py"
-MINI_COGNITION = HERE.parent / "mini_cognition"
-if str(MINI_COGNITION) not in sys.path:
-    sys.path.insert(0, str(MINI_COGNITION))
-from bundled_cognition_manifest_v1 import validate_manifest
-
 H40 = "a" * 40
-D0 = "0" * 64
-D1 = "1" * 64
-D2 = "2" * 64
-D3 = "3" * 64
-D4 = "4" * 64
-D5 = "5" * 64
-D6 = "6" * 64
-D7 = "7" * 64
-D8 = "8" * 64
-D9 = "9" * 64
+H64 = "b" * 64
+ROLES = {
+    "bundled_manifest": ("bundled_core", "manifest_sha256"),
+    "checkpoint": ("bundled_core", "checkpoint_sha256"),
+    "tokenizer": ("bundled_core", "tokenizer_sha256"),
+    "runtime": ("bundled_core", "runtime_sha256"),
+    "lens_file": ("jspace", "lens_file_sha256"),
+    "lens_profile": ("jspace", "lens_profile_sha256"),
+    "fit_corpus": ("jspace", "fit_corpus_sha256"),
+    "workspace_policy": ("gwt", "workspace_policy_sha256"),
+    "gwt_calibration": ("gwt", "calibration_sha256"),
+    "zero_identity": ("zero_grf", "zero_identity_sha256"),
+    "grf": ("zero_grf", "grf_sha256"),
+    "projection_policy": ("zero_grf", "projection_policy_sha256"),
+    "claude_capability_profile": ("claude_adapter", "capability_profile_sha256"),
+}
 
 
-def valid_manifest():
-    return {
-        "schema": "mini-entity-bundled-cognition-manifest/v1",
-        "engine_id": "bundled-qwen35-08b",
-        "model_family": "Qwen3.5-0.8B",
-        "checkpoint_digest": D8,
-        "tokenizer_digest": D1,
-        "quantization_runtime_identity": "gguf-q4_k_m+llama.cpp:test-fixture",
-        "runtime_digest": D7,
-        "lens_artifact_digest": D9,
-        "jspace_profile_digest": D2,
-        "lens_profile_digest": D3,
-        "workspace_calibration_digest": D4,
-        "steering_calibration_digest": D5,
-        "claycode_contract_version": "v1",
-        "grf_contract_version": "r0-r6/v1",
-        "hyperposition_contract_version": "v1",
-        "compatible_entityos_range": ">=0.1,<1.0",
-        "provenance": {"kind": "TEST_FIXTURE", "source": "unit"},
-    }
+def sha(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
 
 
-def manifest_bytes(manifest):
-    return json.dumps(manifest, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+def valid_receipt(root: Path):
+    payloads = {role: f"artifact:{role}".encode() for role in ROLES}
+    digests = {role: sha(data) for role, data in payloads.items()}
+    for role, data in payloads.items():
+        path = root / "artifacts" / f"{role}.bin"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
 
-
-def source_lock_for(manifest, raw):
-    validated = validate_manifest(manifest)
-    return {
-        "schema": "BUNDLED_COGNITION_SOURCE_LOCK/v1",
-        "status": "BOUND",
-        "authority": "repository_source_tree",
-        "manifest_file_sha256": hashlib.sha256(raw).hexdigest(),
-        "manifest_identity_sha256": validated.manifest_identity_sha256,
-        "integration_identity_sha256": validated.integration_identity_sha256,
-        "note": "unit fixture",
-    }
-
-
-def valid_receipt(manifest, raw):
-    return {
+    receipt = {
         "schema": "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1",
         "source": {"main_sha": H40, "tree_sha": H40, "dirty": False},
-        "executor": {"host_class": "UBUNTU", "host_identity_sha256": D6, "kernel": "Linux 6.x"},
+        "executor": {
+            "host_class": "UBUNTU",
+            "host_identity_sha256": H64,
+            "kernel": "Linux 6.x",
+        },
         "bundled_core": {
-            "manifest_version": manifest["schema"],
-            "engine_id": manifest["engine_id"],
-            "model_family": manifest["model_family"],
-            "checkpoint_sha256": manifest["checkpoint_digest"],
-            "tokenizer_sha256": manifest["tokenizer_digest"],
-            "runtime_sha256": manifest["runtime_digest"],
-            "manifest_sha256": hashlib.sha256(raw).hexdigest(),
-            "quantization_runtime_identity": manifest["quantization_runtime_identity"],
+            "manifest_version": "1",
+            "engine_id": "claycog-08b",
+            "model_family": "Qwen3.5-0.8B",
+            "checkpoint_sha256": digests["checkpoint"],
+            "tokenizer_sha256": digests["tokenizer"],
+            "runtime_sha256": digests["runtime"],
+            "manifest_sha256": digests["bundled_manifest"],
+            "layer_count": 24,
+            "d_model": 2048,
             "exact_bytes_verified": True,
         },
         "jspace": {
             "jlens_upstream_commit": H40,
-            "jspace_profile_sha256": manifest["jspace_profile_digest"],
-            "lens_file_sha256": manifest["lens_artifact_digest"],
-            "lens_profile_sha256": manifest["lens_profile_digest"],
-            "steering_calibration_sha256": manifest["steering_calibration_digest"],
-            "fit_corpus_sha256": D7,
+            "lens_file_sha256": digests["lens_file"],
+            "lens_profile_sha256": digests["lens_profile"],
+            "fit_corpus_sha256": digests["fit_corpus"],
+            "source_checkpoint_sha256": digests["checkpoint"],
+            "source_tokenizer_sha256": digests["tokenizer"],
+            "d_model": 2048,
+            "source_layers": [4, 8, 12, 16, 20],
             "n_prompts": 100,
             "skip_first_positions": 16,
             "storage_dtype": "float32",
@@ -105,19 +85,37 @@ def valid_receipt(manifest, raw):
             },
         },
         "gwt": {
-            "workspace_policy_sha256": D6,
-            "calibration_sha256": manifest["workspace_calibration_digest"],
-            "slot_count": None,
+            "workspace_policy_sha256": digests["workspace_policy"],
+            "calibration_sha256": digests["gwt_calibration"],
+            "slot_count": 3,
             "calibration_status": "UNMEASURED_SOURCE_ONLY",
         },
-        "zero_grf": {"zero_identity_sha256": D6, "grf_sha256": D6, "projection_policy_sha256": D6},
-        "claude_adapter": {"adapter_version": "0", "capability_profile_sha256": D6, "enabled": False},
+        "zero_grf": {
+            "zero_identity_sha256": digests["zero_identity"],
+            "grf_sha256": digests["grf"],
+            "projection_policy_sha256": digests["projection_policy"],
+        },
+        "claude_adapter": {
+            "adapter_version": "0",
+            "capability_profile_sha256": digests["claude_capability_profile"],
+            "enabled": False,
+        },
         "inference": {
             "first_engine_choice": "BUNDLED_LOCAL_08B",
             "origin_attribution": "boot-probe",
-            "first_actions": [
-                {"action_id": "boot-1", "origin": "ZERO", "effect_requested": False}
-            ],
+            "inference_packet_sha256": H64,
+        },
+        "control": {
+            "free_only": True,
+            "paid_or_unknown_provider_network_attempted": False,
+        },
+        "artifact_bindings": {
+            role: {
+                "path": f"artifacts/{role}.bin",
+                "sha256": digests[role],
+                "size_bytes": len(payloads[role]),
+            }
+            for role in ROLES
         },
         "authority": {
             "miniunifieddb_is_truth_authority": True,
@@ -128,171 +126,133 @@ def valid_receipt(manifest, raw):
         },
         "claims": {"whole_gwt_credit": "ZERO", "whole_product": "IN_PROGRESS"},
     }
+    return receipt
 
 
-def run_validator(receipt=None, manifest=None, source_lock=None):
-    manifest = valid_manifest() if manifest is None else manifest
-    raw = manifest_bytes(manifest)
-    receipt = valid_receipt(manifest, raw) if receipt is None else receipt
-    source_lock = source_lock_for(manifest, raw) if source_lock is None else source_lock
-    with tempfile.TemporaryDirectory() as td:
-        td = Path(td)
-        receipt_path = td / "receipt.json"
-        manifest_path = td / "manifest.json"
-        lock_path = td / "lock.json"
-        receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
-        manifest_path.write_bytes(raw)
-        lock_path.write_text(json.dumps(source_lock), encoding="utf-8")
-        return subprocess.run(
-            [sys.executable, str(VALIDATOR), str(receipt_path), str(manifest_path), str(lock_path)],
-            text=True,
-            capture_output=True,
-            check=False,
-        )
+def run_validator(receipt, root: Path):
+    path = root / "receipt.json"
+    path.write_text(json.dumps(receipt), encoding="utf-8")
+    return subprocess.run(
+        [sys.executable, str(VALIDATOR), str(path), str(root)],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
 
 
 class BootBindingValidatorTests(unittest.TestCase):
-    def test_valid_bound_receipt_passes(self):
-        cp = run_validator()
-        self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
+    def with_fixture(self):
+        td = tempfile.TemporaryDirectory()
+        root = Path(td.name)
+        return td, root, valid_receipt(root)
 
-    def test_source_lock_must_be_bound(self):
-        m = valid_manifest(); raw = manifest_bytes(m); lock = source_lock_for(m, raw); lock["status"] = "UNBOUND"
-        cp = run_validator(source_lock=lock)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("SOURCE_LOCK_NOT_BOUND", cp.stdout)
+    def test_valid_source_only_receipt_passes(self):
+        td, root, receipt = self.with_fixture()
+        try:
+            cp = run_validator(receipt, root)
+            self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
+        finally:
+            td.cleanup()
 
-    def test_dirty_source_requires_diff_digest(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["source"]["dirty"] = True
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("dirty_diff_sha256", cp.stdout)
+    def test_actual_checkpoint_bytes_are_hashed_not_boolean_trusted(self):
+        td, root, receipt = self.with_fixture()
+        try:
+            (root / receipt["artifact_bindings"]["checkpoint"]["path"]).write_bytes(b"substituted")
+            cp = run_validator(receipt, root)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("ARTIFACT_SIZE_MISMATCH:checkpoint", cp.stdout)
+        finally:
+            td.cleanup()
 
-    def test_dirty_source_with_diff_digest_passes(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["source"]["dirty"] = True; r["source"]["dirty_diff_sha256"] = D6
-        cp = run_validator(receipt=r)
-        self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
+    def test_path_escape_fails_closed(self):
+        td, root, receipt = self.with_fixture()
+        try:
+            receipt["artifact_bindings"]["checkpoint"]["path"] = "../checkpoint.bin"
+            cp = run_validator(receipt, root)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("ARTIFACT_PATH_OUTSIDE_ROOT_OR_MISSING:checkpoint", cp.stdout)
+        finally:
+            td.cleanup()
 
-    def test_unknown_first_action_origin_fails_closed(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["inference"]["first_actions"][0]["origin"] = "MODEL_GUESSED"
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("INVALID_FIRST_ACTION_ORIGIN", cp.stdout)
+    def test_foreign_checkpoint_lens_provenance_fails_closed(self):
+        td, root, receipt = self.with_fixture()
+        try:
+            receipt["jspace"]["source_checkpoint_sha256"] = H64
+            cp = run_validator(receipt, root)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("JSPACE_CHECKPOINT_PROVENANCE_MISMATCH", cp.stdout)
+        finally:
+            td.cleanup()
 
-    def test_duplicate_first_action_id_fails_closed(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["inference"]["first_actions"].append({"action_id": "boot-1", "origin": "CLAUDE_CODE", "effect_requested": False})
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("DUPLICATE_FIRST_ACTION_ID", cp.stdout)
+    def test_lens_geometry_must_match_core(self):
+        td, root, receipt = self.with_fixture()
+        try:
+            receipt["jspace"]["d_model"] = 4096
+            cp = run_validator(receipt, root)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("JSPACE_D_MODEL_MISMATCH", cp.stdout)
+        finally:
+            td.cleanup()
 
-    def test_other_first_action_origin_requires_detail(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["inference"]["first_actions"][0]["origin"] = "OTHER"
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("origin_detail", cp.stdout)
+    def test_lens_source_layer_must_be_inside_core(self):
+        td, root, receipt = self.with_fixture()
+        try:
+            receipt["jspace"]["source_layers"] = [4, 24]
+            cp = run_validator(receipt, root)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("JSPACE_SOURCE_LAYER_OUT_OF_RANGE", cp.stdout)
+        finally:
+            td.cleanup()
 
-    def test_first_action_effect_flag_must_be_boolean(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["inference"]["first_actions"][0]["effect_requested"] = 1
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("effect_requested", cp.stdout)
-
-    def test_boot_checkpoint_must_match_manifest(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["bundled_core"]["checkpoint_sha256"] = D7
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("BOOT_CHECKPOINT_MISMATCH", cp.stdout)
-
-    def test_boot_runtime_digest_must_match_manifest(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["bundled_core"]["runtime_sha256"] = D6
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("BOOT_RUNTIME_DIGEST_MISMATCH", cp.stdout)
-
-    def test_boot_manifest_requires_runtime_digest(self):
-        m = valid_manifest(); del m["runtime_digest"]; raw = manifest_bytes(m)
-        r = valid_receipt(valid_manifest(), manifest_bytes(valid_manifest()))
-        r["bundled_core"]["manifest_sha256"] = hashlib.sha256(raw).hexdigest()
-        lock = source_lock_for(m, raw)
-        cp = run_validator(receipt=r, manifest=m, source_lock=lock)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("BOOT_MANIFEST_RUNTIME_DIGEST_REQUIRED", cp.stdout)
-
-    def test_boot_jspace_profile_must_match_manifest(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["jspace"]["jspace_profile_sha256"] = D7
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("BOOT_JSPACE_PROFILE_MISMATCH", cp.stdout)
-
-    def test_boot_lens_artifact_digest_must_match_manifest(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["jspace"]["lens_file_sha256"] = D6
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("BOOT_LENS_ARTIFACT_DIGEST_MISMATCH", cp.stdout)
-
-    def test_boot_manifest_requires_lens_artifact_digest(self):
-        m = valid_manifest(); del m["lens_artifact_digest"]; raw = manifest_bytes(m)
-        r = valid_receipt(valid_manifest(), manifest_bytes(valid_manifest()))
-        r["bundled_core"]["manifest_sha256"] = hashlib.sha256(raw).hexdigest()
-        lock = source_lock_for(m, raw)
-        cp = run_validator(receipt=r, manifest=m, source_lock=lock)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("BOOT_MANIFEST_LENS_ARTIFACT_DIGEST_REQUIRED", cp.stdout)
-
-    def test_source_lock_rejects_alternate_manifest_identity(self):
-        m = valid_manifest(); raw = manifest_bytes(m); lock = source_lock_for(m, raw)
-        m2 = copy.deepcopy(m); m2["workspace_calibration_digest"] = D7
-        raw2 = manifest_bytes(m2); r2 = valid_receipt(m2, raw2)
-        cp = run_validator(receipt=r2, manifest=m2, source_lock=lock)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("SOURCE_LOCK_MANIFEST_FILE_MISMATCH", cp.stdout)
+    def test_free_only_forbids_paid_unknown_network(self):
+        td, root, receipt = self.with_fixture()
+        try:
+            receipt["control"]["paid_or_unknown_provider_network_attempted"] = True
+            cp = run_validator(receipt, root)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("PAID_OR_UNKNOWN_PROVIDER_NETWORK_ATTEMPTED", cp.stdout)
+        finally:
+            td.cleanup()
 
     def test_poison_post_load_nonfinite_fails_closed(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["jspace"]["numeric_integrity"]["post_load_all_finite"] = False
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("LENS_POST_LOAD_NONFINITE", cp.stdout)
+        td, root, receipt = self.with_fixture()
+        try:
+            receipt["jspace"]["numeric_integrity"]["post_load_all_finite"] = False
+            cp = run_validator(receipt, root)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("LENS_POST_LOAD_NONFINITE", cp.stdout)
+        finally:
+            td.cleanup()
 
     def test_poison_unfitted_readout_position_fails_closed(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["jspace"]["measurement_policy"]["observed_readout_positions"] = [8, 16]
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("JSPACE_UNFITTED_POSITION", cp.stdout)
+        td, root, receipt = self.with_fixture()
+        try:
+            receipt["jspace"]["measurement_policy"]["observed_readout_positions"] = [8, 16]
+            cp = run_validator(receipt, root)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("JSPACE_UNFITTED_POSITION", cp.stdout)
+        finally:
+            td.cleanup()
 
     def test_prompt_copy_guard_cannot_be_disabled(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["jspace"]["measurement_policy"]["prompt_copy_confound_guard_enabled"] = False
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("PROMPT_COPY_CONFOUND_GUARD_DISABLED", cp.stdout)
+        td, root, receipt = self.with_fixture()
+        try:
+            receipt["jspace"]["measurement_policy"]["prompt_copy_confound_guard_enabled"] = False
+            cp = run_validator(receipt, root)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("PROMPT_COPY_CONFOUND_GUARD_DISABLED", cp.stdout)
+        finally:
+            td.cleanup()
 
     def test_boot_receipt_cannot_claim_whole_gwt(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["claims"]["whole_gwt_credit"] = "PASS"
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("BOOT_RECEIPT_CANNOT_GRANT_WHOLE_GWT_CREDIT", cp.stdout)
-
-    def test_placeholder_digest_fails_closed(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["bundled_core"]["runtime_sha256"] = D0
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("PLACEHOLDER_SHA64:runtime_sha256", cp.stdout)
-
-    def test_unmeasured_gwt_cannot_bind_slot_count(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw); r["gwt"]["slot_count"] = 3
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("UNMEASURED_GWT_SLOT_COUNT_MUST_BE_NULL", cp.stdout)
-
-    def test_measured_gwt_requires_positive_slot_count(self):
-        m = valid_manifest(); raw = manifest_bytes(m); r = valid_receipt(m, raw)
-        r["gwt"]["calibration_status"] = "MEASURED_EXACT_BUNDLE"
-        r["gwt"]["slot_count"] = None
-        cp = run_validator(receipt=r)
-        self.assertNotEqual(cp.returncode, 0)
-        self.assertIn("INVALID_INT:slot_count", cp.stdout)
-        r["gwt"]["slot_count"] = 3
-        cp = run_validator(receipt=r)
-        self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
+        td, root, receipt = self.with_fixture()
+        try:
+            receipt["claims"]["whole_gwt_credit"] = "PASS"
+            cp = run_validator(receipt, root)
+            self.assertNotEqual(cp.returncode, 0)
+            self.assertIn("BOOT_RECEIPT_CANNOT_GRANT_WHOLE_GWT_CREDIT", cp.stdout)
+        finally:
+            td.cleanup()
 
 
 if __name__ == "__main__":

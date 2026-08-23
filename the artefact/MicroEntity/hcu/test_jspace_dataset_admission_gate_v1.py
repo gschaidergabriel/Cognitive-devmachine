@@ -63,10 +63,19 @@ class GateTests(unittest.TestCase):
             "credit_label": "UNKNOWN",
             "outcome_receipt_sha256": None,
         }
+        grid_plan = {
+            "schema": "ENTITYOS_HCU_GRID_PLAN/v2",
+            "plan_sha256": h("4"),
+            "entity_generation": 7,
+            "entry_event_sha256": h("1"),
+            "entry_admission_sha256": h("2"),
+            "route_decision_sha256": h("3"),
+        }
         regs = {
             "admitted_training_traces": {training_sha: training},
             "admitted_transition_traces": {transition_sha: transition},
             "admitted_prototype_traces": {prototype_sha: prototype},
+            "admitted_grid_plans": {h("4"): grid_plan},
         }
         return prototype, transition, training, regs
 
@@ -101,6 +110,7 @@ class GateTests(unittest.TestCase):
 
     def test_exact_admitted_binding_passes(self):
         admission = self.admit()
+        self.assertEqual(admission.schema, "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2")
         self.assertEqual(admission.generation, 7)
         self.assertEqual(admission.grid_plan_sha256, h("4"))
         self.assertEqual(admission.vector_control_packet_sha256, h("5"))
@@ -150,6 +160,40 @@ class GateTests(unittest.TestCase):
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "VECTOR_CONTROL_CONDITION_BINDING:MISMATCH:training"):
             self.admit(transition=transition, training=forged, regs=regs)
 
+    def test_shared_but_unadmitted_grid_hash_fails(self):
+        _, transition, training, regs = self.fixtures()
+        forged_transition = deepcopy(transition)
+        forged_training = deepcopy(training)
+        forged_transition["grid_plan_sha256"] = h("9")
+        forged_training["grid_plan_sha256"] = h("9")
+        regs = deepcopy(regs)
+        regs["admitted_transition_traces"][forged_transition["trace_sha256"]] = forged_transition
+        regs["admitted_training_traces"][forged_training["trace_sha256"]] = forged_training
+        with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "GRID_PLAN_NOT_ADMITTED"):
+            self.admit(transition=forged_transition, training=forged_training, regs=regs)
+
+    def test_admitted_grid_plan_crossbinds_generation_entry_and_route(self):
+        _, transition, training, regs = self.fixtures()
+        cases = [
+            ("entity_generation", 8, "GRID_PLAN_GENERATION_MISMATCH"),
+            ("entry_event_sha256", h("9"), "GRID_PLAN_CAUSAL_BINDING_MISMATCH:entry_event_sha256"),
+            ("entry_admission_sha256", h("9"), "GRID_PLAN_CAUSAL_BINDING_MISMATCH:entry_admission_sha256"),
+            ("route_decision_sha256", h("9"), "GRID_PLAN_CAUSAL_BINDING_MISMATCH:route_decision_sha256"),
+        ]
+        for field, value, code in cases:
+            with self.subTest(code=code):
+                poisoned = deepcopy(regs)
+                poisoned["admitted_grid_plans"][h("4")][field] = value
+                with self.assertRaisesRegex(JSpaceDatasetAdmissionError, code):
+                    self.admit(transition=transition, training=training, regs=poisoned)
+
+    def test_grid_plan_receipt_schema_is_exact(self):
+        _, transition, training, regs = self.fixtures()
+        poisoned = deepcopy(regs)
+        poisoned["admitted_grid_plans"][h("4")]["extra"] = "untrusted"
+        with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "GRID_PLAN_RECEIPT_SCHEMA_MISMATCH"):
+            self.admit(transition=transition, training=training, regs=poisoned)
+
     def test_credit_label_must_match_live_transition(self):
         _, transition, training, regs = self.fixtures()
         forged = deepcopy(training)
@@ -174,11 +218,7 @@ class GateTests(unittest.TestCase):
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_RECEIPT_NOT_ADMITTED"):
             self.admit(transition=credited_transition, training=credited, regs=regs, outcomes={})
 
-        unrelated = self.bound_outcome(
-            credited,
-            credited_transition,
-            entry_event_sha256=h("9"),
-        )
+        unrelated = self.bound_outcome(credited, credited_transition, entry_event_sha256=h("9"))
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_CAUSAL_BINDING_MISMATCH:entry_event_sha256"):
             self.admit(
                 transition=credited_transition,

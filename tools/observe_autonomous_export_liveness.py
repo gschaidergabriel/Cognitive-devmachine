@@ -78,9 +78,42 @@ def parse_kv(text: str) -> dict[str, str]:
     return out
 
 
+def journal_flags(text: str) -> dict[str, bool]:
+    low = text.lower()
+
+    def any_of(*needles: str) -> bool:
+        return any(needle in low for needle in needles)
+
+    return {
+        "db_locked": any_of("database is locked", "database is busy", "sqlite_busy", "sqlite_locked"),
+        "disk_full": any_of("no space left on device", "disk quota exceeded"),
+        "auth_failed": any_of(
+            "authentication failed",
+            "permission denied (publickey)",
+            "could not read username",
+            "http 401",
+            "http 403",
+        ),
+        "push_failed": any_of(
+            "failed to push",
+            "remote rejected",
+            "non-fast-forward",
+            "updates were rejected",
+        ),
+        "network_failed": any_of(
+            "network is unreachable",
+            "temporary failure in name resolution",
+            "could not resolve host",
+            "connection timed out",
+            "connection refused",
+        ),
+    }
+
+
 def unit_snapshot(unit: str) -> dict[str, Any]:
     show = run(["systemctl", "show", unit, "--property=" + ",".join(SYSTEMCTL_KEYS)])
     journal = run(["journalctl", "-u", unit, "-n", "200", "--no-pager", "-o", "short-iso"])
+    journal_text = journal.get("stdout", "") if journal.get("exit_code") == 0 else ""
     return {
         "unit": unit,
         "systemctl_exit_code": show.get("exit_code"),
@@ -88,6 +121,7 @@ def unit_snapshot(unit: str) -> dict[str, Any]:
         "journal_exit_code": journal.get("exit_code"),
         "journal_stdout_sha256": journal.get("stdout_sha256"),
         "journal_stderr_sha256": journal.get("stderr_sha256"),
+        "journal_flags": journal_flags(journal_text),
     }
 
 
@@ -161,10 +195,24 @@ def classify(
     disk: dict[str, Any],
     db: dict[str, Any],
 ) -> dict[str, Any]:
-    if db.get("status") == "DB_LOCKED":
-        return {"class": "DB_LOCKED", "confidence": "HIGH"}
-    if disk.get("bytes_free") == 0 or disk.get("inodes_free") == 0:
-        return {"class": "DISK_FULL", "confidence": "HIGH"}
+    units = [*timer_units, *service_units]
+    if db.get("status") == "DB_LOCKED" or any(x.get("journal_flags", {}).get("db_locked") for x in units):
+        return {"class": "DB_LOCKED", "confidence": "MEDIUM_OR_HIGH"}
+    if disk.get("bytes_free") == 0 or disk.get("inodes_free") == 0 or any(
+        x.get("journal_flags", {}).get("disk_full") for x in units
+    ):
+        return {"class": "DISK_FULL", "confidence": "MEDIUM_OR_HIGH"}
+    if any(x.get("journal_flags", {}).get("auth_failed") for x in units):
+        return {"class": "AUTH_FAILED", "confidence": "MEDIUM", "source": "recent_journal_tail"}
+    if any(x.get("journal_flags", {}).get("push_failed") for x in units):
+        return {"class": "PUSH_FAILED", "confidence": "MEDIUM", "source": "recent_journal_tail"}
+    if any(x.get("journal_flags", {}).get("network_failed") for x in units):
+        return {
+            "class": "RUN_BLOCKED",
+            "confidence": "MEDIUM",
+            "reason": "NETWORK_FAILURE_SIGNAL",
+            "source": "recent_journal_tail",
+        }
 
     for snap in timer_units:
         fields = snap.get("fields", {})
@@ -217,7 +265,6 @@ def main() -> int:
         "required_followup_fields_not_observable_here": [
             "last_successful_run_id_if_not_present_in_journal",
             "explicit_push_result_if_prior_run_did_not_log_it",
-            "network_auth_result_if_prior_run_did_not_log_it",
             "generation_before_after_if_not_present_in_local_export_metadata"
         ],
     }

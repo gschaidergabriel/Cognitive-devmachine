@@ -77,25 +77,49 @@ def _assert_reference_uses_native_generation_authority(source: str) -> None:
 
 
 def _assert_bootstrap_cannot_promote_legacy_generation_mirror(source: str) -> None:
-    """A compatibility projection may never write its counter back into canonical generation.
+    """Schema admission may inspect a legacy mirror, but may never promote it.
 
-    This guard is deliberately separate from the live read/commit checks above because a
-    refactor can move schema/migration logic behind `_ensure_schema()` while `_pipeline_init`
-    merely calls that helper. A legacy mirror is allowed to be written from canonical state,
-    but it may not be read as an input that can advance `entity_state.generation`.
+    A read-only mirror check is useful for explicit divergence detection and fail-closed
+    migration decisions. What must never happen in recurrent `_ensure_schema()` admission
+    is a write to canonical `entity_state.generation`: canonical generation can advance only
+    through the normal CAS commit path (or a separately admitted one-shot migration path).
     """
     tree = ast.parse(source)
     ensure = _function(tree, "_ensure_schema")
     if ensure is None:
         return
     ensure_body = _body(source, ensure)
-    assert "SELECT generation FROM eos_pipeline_state" not in ensure_body, (
-        "legacy eos_pipeline_state generation may not be read as bootstrap/migration authority"
+    assert "UPDATE entity_state SET generation" not in ensure_body, (
+        "schema/bootstrap logic may inspect a legacy mirror but may not write canonical generation"
     )
-    assert not (
-        "eos_pipeline_state" in ensure_body
-        and "UPDATE entity_state SET generation" in ensure_body
-    ), "schema/bootstrap logic may not promote a legacy mirror into canonical generation"
+
+
+def test_generation_guard_allows_read_only_fail_closed_mirror_divergence_check() -> None:
+    source = '''
+def _ensure_schema(db):
+    native = db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()
+    mirror = db.execute("SELECT generation FROM eos_pipeline_state WHERE singleton=1").fetchone()
+    if native is not None and mirror is not None and int(mirror[0]) > int(native[0]):
+        raise RuntimeError("LEGACY_GENERATION_DIVERGENCE")
+    if native is not None and mirror is not None and int(mirror[0]) < int(native[0]):
+        db.execute("UPDATE eos_pipeline_state SET generation=? WHERE singleton=1", (int(native[0]),))
+'''
+    _assert_bootstrap_cannot_promote_legacy_generation_mirror(source)
+
+
+def test_generation_guard_rejects_bootstrap_write_to_canonical_generation() -> None:
+    source = '''
+def _ensure_schema(db):
+    native = db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()
+    mirror = db.execute("SELECT generation FROM eos_pipeline_state WHERE singleton=1").fetchone()
+    migrated = max(int(native[0]), int(mirror[0]))
+    db.execute("UPDATE entity_state SET generation=? WHERE id=1", (migrated,))
+'''
+    try:
+        _assert_bootstrap_cannot_promote_legacy_generation_mirror(source)
+    except AssertionError:
+        return
+    raise AssertionError("guard accepted a bootstrap write to canonical generation")
 
 
 def test_native_miniunifieddb_is_the_bound_generation_and_cas_authority() -> None:

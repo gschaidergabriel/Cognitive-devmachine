@@ -536,11 +536,16 @@ class ProfilePipelineRuntime(clay.Runtime):
                         raise FileNotFoundError(str(path))
                     cursor = int(cursors.get(kind, 0))
                     raw = path.read_bytes()[cursor:]
-                    parts = raw.split(b"\n")
-                    tail = parts.pop() if raw and not raw.endswith(b"\n") else b""
-                    consumed_bytes = len(raw) - len(tail)
-                    for line in parts[: int(spec.get("limit", 60))]:
-                        line = line.strip()
+                    limit = max(0, int(spec.get("limit", 60)))
+                    admitted_records = 0
+                    consumed_bytes = 0
+                    for chunk in raw.splitlines(keepends=True):
+                        if admitted_records >= limit:
+                            break
+                        if not chunk.endswith(b"\n"):
+                            break
+                        consumed_bytes += len(chunk)
+                        line = chunk[:-1].strip()
                         if not line:
                             continue
                         try:
@@ -548,6 +553,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                         except Exception as exc:
                             raise PipelineFault("MALFORMED_JSONL") from exc
                         rows.append(parsed if isinstance(parsed, dict) else {"text": str(parsed)})
+                        admitted_records += 1
                     cursors[kind] = cursor + consumed_bytes
                     source_count += len(rows)
                 else:

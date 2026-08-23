@@ -41,7 +41,11 @@ def _source_db(path: Path) -> None:
 
 def _profile() -> dict:
     return {
+        "schema": "clay-pipeline-profile/v2",
         "profile_id": "same-kind-two-logical-sources",
+        "inference": {"kind": "mock"},
+        "personality": {"output_contract": {}},
+        "gate": {},
         "sources": [
             {
                 "kind": "event",
@@ -70,31 +74,40 @@ def _profile() -> dict:
 
 
 @pytest.mark.skipif(not _reference_is_active(), reason="activates with DB-profile reference convergence")
-def test_same_kind_distinct_logical_sources_cannot_be_consumed_without_packetization(tmp_path: Path) -> None:
-    """Exactly-once consumption must not outrun packet/source representation.
+def test_same_kind_distinct_logical_sources_are_represented_or_fail_closed(tmp_path: Path) -> None:
+    """Exactly-once consumption may never outrun source/packet representation.
 
-    The retained reference design explicitly permits distinct logical sources to share one
-    source kind. Both admitted source identities may therefore enter the consume set, but
-    neither source may disappear from the packet merely because the implementation uses
-    `kind` as a dictionary key. A later successful commit iterates the full consume set, so
-    silent packet overwrite would irreversibly mark unseen evidence as consumed.
+    Two repairs satisfy the invariant without prescribing a packet schema:
+    1. reject duplicate source kinds fail-closed during profile admission; or
+    2. admit them only if every logical source remains independently materialized before
+       its exactly-once identity can be committed.
 
-    This test intentionally does not prescribe the internal packet shape. It requires only
-    that every admitted same-kind source payload remains represented before commit.
+    The current retained source does neither: admission succeeds, collection counts both
+    logical sources and queues both consume identities, but `sources[kind]` silently
+    overwrites the first payload.
     """
     runtime_module = _runtime_module()
     runtime = runtime_module.ProfilePipelineRuntime(root=tmp_path)
+    profile = _profile()
+
+    try:
+        normalized = runtime._normalize_profile(profile)
+    except runtime_module.PipelineFault as exc:
+        assert "DUPLICATE" in str(exc).upper() and "SOURCE" in str(exc).upper(), (
+            "duplicate same-kind sources may be rejected, but the failure must be explicit and typed"
+        )
+        return
+
     entity_db = tmp_path / "entity.db"
     source_db = tmp_path / "source.db"
     _source_db(source_db)
     assert runtime.effect("pipeline_init", {"entity_db": str(entity_db)}).get("ok") is True
 
-    profile = _profile()
     collected = runtime._pipeline_collect(
         {
             "entity_db": str(entity_db),
             "source_db": str(source_db),
-            "profile": profile,
+            "profile": normalized,
             "previous": {"cursors": {}},
         }
     )
@@ -108,7 +121,7 @@ def test_same_kind_distinct_logical_sources_cannot_be_consumed_without_packetiza
         ("logical-B", "event", "2"),
     }
 
-    compiled = runtime._pipeline_compile({"profile": profile, "data": collected})
+    compiled = runtime._pipeline_compile({"profile": normalized, "data": collected})
     assert compiled.get("ok") is True
     packet_blob = json.dumps(compiled["packet"], sort_keys=True)
 

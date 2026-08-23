@@ -1,88 +1,60 @@
 {
-  "schema_version": "8.2",
+  "schema_version": "8.3",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
-  "expected_entity_version": "RAE-8.8",
-  "expected_revision": 2,
-  "expected_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
   "identity": {
     "persistent_research_entity": "Clay",
-    "legacy_canonical_entity_id": "frank-project-global-research-entity",
-    "temporary_worker": "ORGAN_NOT_ENTITY",
-    "every_turn_guard": "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
-  },
-  "per_turn": {
-    "identity_injection": "every substantive prompt_run_id refreshes the Research Entity identity injection before material reasoning"
+    "temporary_worker": "ORGAN_NOT_ENTITY"
   },
   "mandatory_invariants": [
-    "Clay is not self.root/Frank; temporary workers remain organs of the persistent research entity",
-    "Andreas uses the human surface Frank only where legacy compatibility requires it; this does not change ClayVerse product identity",
-    "every substantive prompt_run_id refreshes the Research Entity identity injection",
-    "UnifiedDB is the sole durable ClayVerse cognition/state/memory/data authority",
-    "ClayGraph is derived and rebuildable only",
-    "model output, J-Space measurement and workspace stability cannot mint canonical truth",
+    "temporary workers are organs of Clay, never new persistent entities",
+    "Mini Entity is the operational go bootstrap, not a second final product identity",
+    "EntityOS is the architectural destination and HCU is its integrated cognition/compute architecture",
+    "canonical durable state/evidence remains outside model-generated cognition",
+    "model output, J-Space measurement, HCU output and workspace stability cannot mint canonical truth",
+    "real/state-changing effects remain behind deterministic EffectGate authority",
     "unknown external effect outcome remains unknown and is never blindly replayed"
   ],
-  "research_team": {
-    "rule": "evidence first; temporary workers are organs of Clay, never new persistent entities"
-  },
-  "active_program": "CLAYVERSE_SINGLE_CONTAINER",
-  "active_stage": "CLAYVERSE_ARTIFACT",
-  "sole_owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "active_program": "ENTITYOS_HCU",
+  "active_stage": "MINI_ENTITY_BOOTSTRAP_TO_ENTITYOS_HCU",
+  "go_operational_start": "MINI_ENTITY_CURRENT_IMPLEMENTATION",
+  "go_owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "product_endpoint": "EntityOS",
+  "integrated_cognition_architecture": "HCU",
+  "target_cognitive_law": "ZERO_TO_ENTITY_FROM_FUNCTION",
+  "target_cognition": "REQUEST_SCOPED_DYNAMIC_FUNCTION_FABRIC",
+  "world_simulation_target": "NONE_PERMANENT",
+  "persistent_authority": "UnifiedDB_or_current_MiniUnifiedDB_canonical_state_evidence_substrate",
+  "effect_authority": "EffectGate+EffectJournal",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
-  "product_endpoint": "ClayVerse",
-  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
-  "persistent_authority": "UnifiedDB",
-  "derived_projection": "ClayGraph",
-  "canonical_users": ["gabriel", "andreas"],
-  "rights": "equal",
-  "entityos_role": "INTERNAL_EXECUTION_SECURITY_RUNTIME_SUBSTRATE",
-  "claude_code_role": "RUNTIME_COGNITION_NOT_DURABLE_AUTHORITY",
-  "microclay_role": "ADAPTIVE_RETRIEVAL_ENTRY_POINT_NOT_TRUTH_AUTHORITY",
-  "effect_authority": "EffectGate+EffectJournal",
   "execution_surface": "AUTHORIZED_ISOLATED_SANDBOX_ONLY",
-  "vps_testing": "FORBIDDEN",
-  "vps_disposable_independent_kernel_guest_testing": "FORBIDDEN",
-  "self_hosted_vps_test_runners": "FORBIDDEN",
-  "production_host_testing": "FORBIDDEN",
   "together_api": "FORBIDDEN",
   "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED",
-  "acceptance": "IN_PROGRESS",
   "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
   "go_zero_swarm_contract": "research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md",
   "go_macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
-  "go_prompt_injection": "MANDATORY_TOP_OF_PROMPT_TRANSITIVE: every spawned child receives the current GRF+ClayCode worker protocol plus the current ClayVerse owner/product authority; never substitute stale Mini Entity/Blogpost product authority.",
-  "trigger_swarm": "FREE_ONLY coordinated research/build orchestration only; provider children may run only when the current execution-control contract explicitly admits the credential/provider surface, and the product remains one ClayVerse entity rather than a durable swarm.",
-  "go": "CLAYVERSE_MAXIMUM_PRODUCT_CONVERGENCE_MACROCYCLE",
-  "zero": "CLAYVERSE_AGENT_ZERO_ENTITYOS_GLOBAL_JSPACE_NESTED_WORKSPACE_LENS",
+  "go_prompt_injection": "Every go child receives current Mini Entity implementation context as the operational starting point plus the EntityOS+HCU destination law. It must improve the current Mini Entity without minting Mini Entity as a competing final product identity.",
+  "go": "MINI_ENTITY_BOOTSTRAP_TO_ENTITYOS_HCU_MACROCYCLE",
+  "zero": "ENTITYOS_HCU_ZERO_JSPACE_FUNCTION_FABRIC_LENS",
   "epistemic_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
-  "active_experiment_ids": [
-    "EXP-LIVE-GWT-LESION",
-    "EXP-LIVE-XENO-CLAY-FACTORIAL",
-    "EXP-LIVE-HYPERPOSITION-BACKEND",
-    "EXP-FORMAL-RC11"
-  ],
-  "critical_negative_result_ids": [
-    "N-G3-001",
-    "N-G3-002",
-    "N-G3-003",
-    "N-G3-005",
-    "N-G3-006",
-    "N-G3-007"
+  "go_transition_questions": [
+    "Does this improve the real current Mini Entity?",
+    "Does this preserve exact state/provenance/effect boundaries?",
+    "Does this make later Zero -> Entity <- Function migration easier or neutral?",
+    "Does this avoid creating a permanent world simulation, second identity or second truth/effect authority?",
+    "Can the claim be falsified with exact executable evidence?"
   ],
   "architecture_frontier": [
-    "ClayVerse one-container source authority reconciliation",
-    "exact isolated OCI build/runtime identity",
-    "Clerk/WebSocket PTY/persistent tmux/Claude lifecycle",
-    "UnifiedDB/MicroClay/ClayGraph/workspace causal integration",
-    "EffectGate/internal EntityOS/restart-recovery/concurrency acceptance"
+    "stabilize and simplify current Mini Entity as the executable bootstrap",
+    "progressively reinterpret HCU roles as logical function cells rather than persistent mini-agents",
+    "Zero ingress/admission separation from persona",
+    "request-scoped dynamic topology and cognitive simulation",
+    "model-specific empirical J-Space coupling and Global J-Space instrumentation",
+    "Hyperposition plus calibrated evidence-based candidate reduction",
+    "strict EffectGate non-bypass and recovery/generation fencing",
+    "eventual minimal EntityOS packaging/runtime convergence"
   ],
-  "superseded_bootstrap_snapshot": {
-    "git_blob_sha": "48fa25625dd02d4af4bbfaa64a8e6e4d371922e5",
-    "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
-    "classification": "HISTORICAL_DONOR_EVIDENCE_NOT_CURRENT_WORK_SELECTION_AUTHORITY"
-  },
-  "legacy_scope": "Mini Entity/Blogpost/Frank historical material remains addressable through Git history and original receipts as bounded donor evidence only; it is not current product authority."
+  "legacy_scope": "Frank and ClayVerse remain bounded historical/donor evidence. Existing Mini Entity mechanisms are active bootstrap material for go, but Mini Entity is not the final product identity."
 }

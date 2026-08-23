@@ -1,0 +1,79 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "fresh_base_main": "d388a0129efa8a47a96a58ad1f64dc011aa940d1",
+  "source_commit_before_receipt": "da6c67f16822ebc29095110d09fec2c3b7855196",
+  "subject": "MiniUnifiedDB cognition binding read-integrity",
+  "observed_defect": {
+    "source_blob_before": "0edbe664259cc5aa788577834e1b0ea5a9050e4d",
+    "finding": "resolve_prepare_binding returned persisted turn and boot binding digests beside mutable row fields without reconstructing and revalidating those digests on read; persisted row mutation could therefore survive beside an old digest unless another independent check happened to reject it.",
+    "authority_impact": "Unsafe prerequisite for runtime prepare consumption because MiniUnifiedDB is the canonical durable authority and exact cognition bindings must fail closed on persisted mutation."
+  },
+  "delta": [
+    "Reconstruct and re-hash the complete persisted turn binding before returning pre-inference prepare material.",
+    "Reconstruct and re-hash the complete persisted boot binding before returning it.",
+    "Validate persisted turn/boot schemas and stored JSON fields fail-closed.",
+    "Re-check every referenced boot cognition object admission and object metadata/payload integrity at read time.",
+    "Keep the existing MiniUnifiedDB tables and APIs; no second store, ledger, state authority, UCF or effect path is added."
+  ],
+  "exact_blobs": {
+    "tools/miniunifieddb_cognition_store_v1.py": "59abf62dba3bd186e7601c020fec67e915159c9e",
+    "tests/test_miniunifieddb_cognition_store_v1.py": "0150e354d74e5de7b1b599b4f04b05e654c3b29c"
+  },
+  "execution": {
+    "class": "ISOLATED_TOOL_CONTAINER_EXACT_BLOB_COMPONENT_REGRESSION",
+    "exact_git_blob_identity_reproduced": true,
+    "python": "3.13",
+    "commands": [
+      "python3 -m py_compile tools/miniunifieddb_cognition_store_v1.py tests/test_miniunifieddb_cognition_store_v1.py",
+      "python3 -m unittest -v tests.test_miniunifieddb_cognition_store_v1",
+      "git hash-object tools/miniunifieddb_cognition_store_v1.py",
+      "git hash-object tests/test_miniunifieddb_cognition_store_v1.py"
+    ],
+    "result": "PASS_9_OF_9",
+    "new_fail_closed_regressions": [
+      "TURN_BINDING_ROW_TAMPER",
+      "BOOT_BINDING_ROW_TAMPER",
+      "REMOVED_BOOT_OBJECT_ADMISSION",
+      "CORRUPT_TURN_JSON"
+    ],
+    "runtime_model_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "temporal_authority": {
+    "pre_inference": "MiniUnifiedDB exact cognition/turn/boot prepare identity -> ZERO_WORKSPACE_CAPSULE -> ZERO_INFERENCE_PACKET/v2 -> exact downstream context fence",
+    "terminal": "inference -> deterministic gate -> MiniUnifiedDB CAS commit or explicit no-commit",
+    "post_turn": "final UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 -> post-turn causal validation/binding",
+    "final_ucf_before_terminal_state": "FORBIDDEN"
+  },
+  "unusual_experiment": {
+    "new_count_this_organ": 0,
+    "reason": "The user-triggered macrocycle unusual-experiment budget was already consumed by the authority-routing poison recorded on main. These are deterministic regression/fail-closed tests only."
+  },
+  "hcu_parallel_pass": {
+    "delta": "NO_CHANGE_NON_DUPLICATE",
+    "reason": "Current HCU source/package lanes already own HCU work; exact KVM4-equivalent runtime capacity remains unverified."
+  },
+  "parallel_progress_observed": {
+    "microentity_package_binary": "REPAIRED_AND_MERGED_ON_MAIN_BY_PR_1244",
+    "zero_ucf_temporal_authority": "CORRECTED_AND_MERGED_ON_MAIN_BY_PR_1246"
+  },
+  "next_gate": "Fuse this hardened same-store resolver into the single canonical pre-inference Cognitive Fabric prepare handler, preserve packet-v2 downstream context binding, then deterministic gate/CAS, post-terminal UCF-v1 finalization and exact authorized isolated integrated runtime execution.",
+  "safety": {
+    "free_only": true,
+    "together_forbidden": true,
+    "provider_network_used": false,
+    "paid_execution_used": false,
+    "vps_test_used": false,
+    "model_training_started": false
+  }
+}

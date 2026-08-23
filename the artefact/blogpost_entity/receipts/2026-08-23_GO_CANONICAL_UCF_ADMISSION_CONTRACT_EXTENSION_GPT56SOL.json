@@ -1,0 +1,39 @@
+{
+  "schema": "GO_CANONICAL_UCF_ADMISSION_CONTRACT_EXTENSION_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "branch": "chatgpt/go-mini-ucf-admit-20260823-1150",
+  "parent_go_receipt": "the artefact/blogpost_entity/receipts/2026-08-23_GO_CANONICAL_UCF_ADMISSION_FUSION_GPT56SOL.json",
+  "source_contract": "the artefact/blogpost_entity/jspace_gwt/COGNITIVE_FABRIC_ADMISSION_V1.md",
+  "source_contract_commit": "ec933c1aad39769e9aeea93ea4eaac434b9152de",
+  "reason": "Current main has J-Space/GWT boot-binding validators but no admitted runtime producer for pipeline_cognitive_fabric_admit. Implementing an ad-hoc handler would risk creating a second UCF authority. The exact effect envelope is therefore fixed first as a single fail-closed source contract.",
+  "contract_closes": [
+    "single causal position between pipeline_build_prompt and inference_generate",
+    "generation/canonical_state_hash/packet_hash input identity",
+    "exact inference_packet_digest and cognitive_fabric_receipt_digest output identity",
+    "candidate-inference-only authority",
+    "stale/replay/restart generation fencing",
+    "FREE_ONLY and Together-forbidden routing law",
+    "J-Space/GWT UNKNOWN/UNMEASURED preservation",
+    "typed fail-closed failure classes",
+    "same admission identity propagated through inference, gate and commit",
+    "runtime acceptance obligations without granting source-only runtime credit"
+  ],
+  "coordination": {
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0,
+    "reason": "Immutable user-message metadata available to this organ remains minute-precision only."
+  },
+  "evidence": {
+    "classification": "SOURCE_CONTRACT_ONLY",
+    "authorized_isolated_execution_started": false,
+    "whole_product_runtime_credit_change": 0,
+    "bundled_08b_runtime_credit_change": 0,
+    "jspace_runtime_credit_change": 0,
+    "whole_gwt_runtime_credit_change": 0,
+    "claude_adapter_runtime_credit_change": 0
+  },
+  "next_exact_gate": "Implement this exact effect contract once in the admitted current Mini Entity runtime and execute deterministic malformed/stale/replay guards on an actually-started authorized isolated executor."
+}

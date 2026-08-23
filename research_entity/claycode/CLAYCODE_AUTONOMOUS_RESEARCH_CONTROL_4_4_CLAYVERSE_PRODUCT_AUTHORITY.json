@@ -1,79 +1,21 @@
 {
   "schema_version": "4.4-clayverse-product-authority-addendum",
-  "status": "ACTIVE",
+  "status": "SUPERSEDED_BY_4_5_MINI_ENTITY_OWNER_CORRECTION",
   "mode": "FREE_ONLY",
   "process_id": "claycode-autonomous-research-cycles",
-  "base_control_path": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json",
-  "base_control_version": "4.1",
-  "execution_boundary_addendum_path": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json",
-  "prior_program_authority_addendum_path": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_PROGRAM_AUTHORITY.json",
-  "prior_program_authority_addendum_blob_sha": "317f399e792a22cc8ab44899ba248d5f32275c44",
-  "composition_order": [
-    "4.1",
-    "4.2-execution-boundary-addendum",
-    "4.3-program-authority-addendum",
-    "4.4-clayverse-product-authority-addendum"
+  "superseded_by": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_5_MINI_ENTITY_GO_AUTHORITY.json",
+  "superseding_owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "historical_role": "BOUNDED_DONOR_EVIDENCE_ONLY",
+  "preserved_rules": [
+    "FREE_ONLY",
+    "NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "AUTHORIZED_ISOLATED_SANDBOX_ONLY",
+    "VPS_SELF_HOSTED_PRODUCTION_TESTING_FORBIDDEN",
+    "EXACT_RUNTIME_CREDIT_REQUIRED",
+    "MODEL_OUTPUT_NOT_TRUTH",
+    "GOODMAN_ANCESTRY_COLLAPSE",
+    "FRANK_HARNESS_MODIFICATION_FORBIDDEN"
   ],
-  "effective_control_version": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
-  "composition_rule": "LOSSLESS_OVERRIDE_ONLY_FOR_CURRENT_PRODUCT_PROGRAM_IDENTITY_STAGE_ENDPOINT_AND_WORK_SELECTION; ALL UNMENTIONED 4.1 AUTHORITY/GOODMAN/BASE/SEMANTIC/PROVIDER RULES AND ALL 4.2 EXECUTION-BOUNDARY/FREE_ONLY/ISOLATION RULES REMAIN IN FORCE",
-  "owner_program_authority": {
-    "source": "owner-directed ClayVerse fast bootstrap 2026-08-23 plus reconciled BOOTSTRAP_MINIMAL/PROGRAM_STATE/owner directive",
-    "owner_directive_path": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
-    "active_program": "CLAYVERSE_SINGLE_CONTAINER",
-    "stage": "CLAYVERSE_ARTIFACT",
-    "product_endpoint": "ClayVerse",
-    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE"
-  },
-  "program_identity_override": {
-    "active_program": "CLAYVERSE_SINGLE_CONTAINER",
-    "target_stage": "CLAYVERSE_ARTIFACT",
-    "component_target": "WHOLE_CLAYVERSE_OCI_PRODUCT_CONVERGENCE",
-    "product_endpoint": "ClayVerse",
-    "product_endpoint_definition": "ONE_PERSISTENT_CENTRAL_ENTITY_PLUS_UNIFIEDDB_PLUS_CLERK_WEB_PTY_PLUS_CLAUDE_CODE_PLUS_MICROCLAY_PLUS_CLAYGRAPH_WORKSPACE_PLUS_EFFECTGATE_PLUS_INTERNAL_ENTITYOS_IN_ONE_OCI_IMAGE",
-    "canonical_workspace": "the artefact/",
-    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE"
-  },
-  "superseded_program_selection_metadata": [
-    {"source": "4.3-program-authority-addendum", "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE", "classification": "STALE_PARALLEL_RECONCILIATION_BASED_ON_PRE_OVERRIDE_BOOTSTRAP"},
-    {"source": "4.1/SUPERVISOR_INBOX legacy fields", "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY", "classification": "STALE_PREVIOUS_CLAY_MACHINE_SINGLE_FILE_METADATA"}
-  ],
-  "work_selection_override": [
-    "REFRESH_CURRENT_CLAYVERSE_OWNER_AUTHORITY_AND_EXACT_MAIN",
-    "SELECT_NON_DUPLICATE_FRONTIER_BY_WHOLE_CLAYVERSE_OCI_PRODUCT_CONVERGENCE_AND_INFORMATION_GAIN",
-    "PRESERVE_UNIFIEDDB_AS_SOLE_DURABLE_AUTHORITY_AND_CLAYGRAPH_AS_DERIVED_ONLY",
-    "PRESERVE_CLAUDE_CODE_AS_RUNTIME_COGNITION_AND_MICROCLAY_AS_ROUTING_ONLY",
-    "PRESERVE_EFFECTGATE_EFFECTJOURNAL_AS_EXTERNAL_EFFECT_AUTHORITY_AND_ENTITYOS_AS_INTERNAL_SUBSTRATE_ONLY",
-    "PRESERVE_FREE_ONLY_AND_ALL_4_2_EXECUTION_BOUNDARY_RULES",
-    "PRESERVE_2026_08_23_AUTHORIZED_ISOLATED_SANDBOX_ONLY_EXECUTION_LAW",
-    "FAIL_CLOSED_LEGACY_MINI_ENTITY_SWARM_UNTIL_CLAYVERSE_CONTROLLER_ADMISSION",
-    "REENTER_EVERY_DELTA_INTO_THE_SAME_ONE_CONTAINER_CLAYVERSE_PRODUCT_BOUNDARY"
-  ],
-  "preserved_hard_rules": {
-    "free_only": true,
-    "paid_fallback": false,
-    "together_forbidden": true,
-    "secret_lookup_before_admission": false,
-    "vps_testing": false,
-    "vps_disposable_independent_kernel_guest_testing": false,
-    "self_hosted_vps_test_runners": false,
-    "production_host_testing": false,
-    "authorized_isolated_sandbox_only": true,
-    "runtime_credit_requires_exact_admitted_isolated_execution": true,
-    "model_output_is_candidate_not_truth": true,
-    "canonical_semantics_require_executable_counterevidence_and_review": true,
-    "goodman_ancestry_collapse": true,
-    "frank_harness_modification": "FORBIDDEN",
-    "legacy_mini_entity_swarm_controller": "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION",
-    "go_zero_swarm_contract": "research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md"
-  },
-  "credit": {
-    "source_control_authority_sync": "SOURCE_ONLY",
-    "whole_clayverse_runtime": 0,
-    "oci_runtime": 0,
-    "clerk_browser_pty_runtime": 0,
-    "claude_runtime": 0,
-    "microclay_runtime": 0,
-    "entityos_effect_runtime": 0,
-    "provider_swarm_runtime": 0
-  }
+  "note": "The 4.4 ClayVerse product/work-selection override is no longer current authority. Program/product/stage/trigger/work selection now come from 4.5. This file remains only to preserve ancestry and inherited safety evidence."
 }

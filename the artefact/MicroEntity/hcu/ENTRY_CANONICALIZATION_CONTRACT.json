@@ -1,144 +1,86 @@
 {
-  "schema_version": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v5",
-  "status": "CURRENT_MAIN_RFC8785_SELECTED_WIRING_PENDING",
+  "schema_version": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v8",
+  "status": "RFC8785_CORE_CAUSAL_SOURCE_PATH_COHERENT_EXACT_COMBINED_EXECUTION_PENDING",
   "date": "2026-08-23",
   "program": "ENTITYOS_HCU",
-  "scope": "Typed Entry Fabric causal event/admission identity, HCU router policy/engine/route identity, GRID10 plan identity, and downstream inference receipt identity",
+  "scope": "Entry event/admission, typed admission binding, router policy/engine/route, verified engine admission, physical engine lease, inference receipt and GRID10 plan identity",
   "authority_source": {
     "canonical_repository": "gschaidergabriel/clay-global-research-entity",
     "canonical_branch": "main",
     "explicit_selection_commit": "5d99c6c37fc9dbecaa557f6091de06f703e9a412",
     "append_only_reentry_correction_commit": "847cce80b5c52f7d9ceb47c43acc3c184ad2c87d",
-    "typed_followup_correction_commit": "f6066c126b67699983842c0549378806d5f4c405",
-    "latest_main_observed_before_write": "5911c9218bc2566c39d8f2d49ce80cb7e570017a",
-    "law": "Explicit current-main selection and its newer append-only corrections govern current work selection. Supervisor strongest-candidate language is research prioritization, not a silent override of an explicit canonical-main adjudication. Historical receipts and hashes retain their original scope and are never rewritten in place."
-  },
-  "authority": {
-    "canonical_state_evidence": "DETERMINISTIC_EXTERNAL_TO_MODEL_COGNITION",
-    "effect_authority": "EffectGate/EffectJournal",
-    "canonicalization_is_truth_authority": false,
-    "canonicalization_is_permission_authority": false,
-    "canonicalization_is_engine_admission_authority": false,
-    "canonicalization_is_effect_authority": false
+    "retained_donor_parent": "d0aee3f7b53a167a863c6150a76a004181b9ef62",
+    "latest_main_observed_before_work": "b1839054ec6e48fa57d2e7b5bc514991014b2794",
+    "law": "Current main selects RFC8785_JCS_IJSON/v1. Historical hashes remain valid only in their original schema/source scope and are never rehashed in place. Source coherence is not runtime acceptance."
   },
   "selected_source_authority": {
     "canonicalization": "RFC8785_JCS_IJSON/v1",
     "implementation": "entry_canonicalization_v1.py",
-    "tests": "test_entry_canonicalization_v1.py",
-    "reference": "RFC 8785 JSON Canonicalization Scheme",
-    "selection_basis": [
-      "canonical main explicitly selected RFC8785_JCS_IJSON/v1 in commit 5d99c6c37fc9dbecaa557f6091de06f703e9a412",
-      "newer current-main append-only corrections 847cce80b5c52f7d9ceb47c43acc3c184ad2c87d and f6066c126b67699983842c0549378806d5f4c405 explicitly preserve RFC8785/JCS as current selected authority",
-      "the retained donor lane contains the RFC8785 implementation and binary64-consistent integer repair with bounded component evidence",
-      "historical CBOR, typed-canonical and host-Python identities remain useful counterexample/provenance evidence without becoming competing active authorities"
-    ],
     "promotion_credit": 0,
-    "runtime_credit": 0,
-    "wiring_state": "SELECTED_BY_CURRENT_MAIN_BUT_NOT_YET_END_TO_END_WIRED"
+    "runtime_credit": 0
   },
-  "current_implementation_split": {
-    "typed_entry_current_encoder": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1 via typed_entry_canonical_v1.py",
-    "router_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
-    "inference_receipt_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1 for receipt hash",
-    "target_encoder": "RFC8785_JCS_IJSON/v1",
-    "cross_language_current_end_to_end_identity_claim": false,
-    "law": "Selection of RFC8785_JCS_IJSON/v1 does not retroactively reinterpret current or historical hashes. Until all active identity producers and consumers are explicitly migrated under new versioned identities and tested together, mixed-schema identity is not admitted for cross-language or runtime promotion."
+  "current_core_source_path": {
+    "entry_event": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2 -> RFC8785_JCS_IJSON/v1",
+    "entry_admission": "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2 -> RFC8785_JCS_IJSON/v1",
+    "entry_binding": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2 -> canonicalization_schema=RFC8785_JCS_IJSON/v1",
+    "router_policy": "HCU_REACTIVE_ROUTER_POLICY/v2 -> RFC8785_JCS_IJSON/v1",
+    "engine_identity": "HCU_INTERNAL_ENGINE_IDENTITY/v2 -> RFC8785_JCS_IJSON/v1",
+    "route_identity": "HCU_CAUSAL_ROUTE_IDENTITY/v4 -> RFC8785_JCS_IJSON/v1",
+    "engine_artifact_lock": "HCU_ENGINE_ARTIFACT_LOCK/v2 -> RFC8785_JCS_IJSON/v1",
+    "engine_admission_receipt": "HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v2 -> RFC8785_JCS_IJSON/v1",
+    "physical_engine_load_lease": "HCU_PHYSICAL_ENGINE_LOAD_LEASE/v2 -> RFC8785_JCS_IJSON/v1",
+    "inference_receipt": "HCU_INFERENCE_RECEIPT/v2 -> RFC8785_JCS_IJSON/v1",
+    "grid_plan": "ENTITYOS_HCU_GRID_PLAN/v2 -> RFC8785_JCS_IJSON/v1"
   },
-  "alternative_candidate_adjudication": {
-    "hcu_causal_canonical_v1.py": "RESEARCH_PROVENANCE_AND_FALSIFIER_EVIDENCE_ONLY_NOT_CURRENT_SELECTED_AUTHORITY; exact component evidence remains valid at original scope",
-    "typed_entry_canonical_v1.py": "LEGACY_CURRENT_SOURCE_DEPENDENCY_PENDING_MIGRATION; deterministic CBOR subset remains valid only at original bounded source scope",
-    "python_sort_keys_json": "LEGACY_IMPLEMENTATION_SCOPED_IDENTITY_PENDING_VERSIONED_MIGRATION",
-    "other_or_future_encoders": "REQUIRE_EXPLICIT_CURRENT_MAIN_AUTHORITY_AND_VERSIONED_MIGRATION_OR EXPERIMENTAL_SCOPE; UNKNOWN_SCHEMA_FAILS_CLOSED",
-    "package_or_runtime_authority_for_alternatives": false
-  },
-  "causal_identity_boundary": {
-    "causal_event_excludes_routing_resolution_metadata": [
-      "requested_internal_provider",
-      "resolved_internal_engine",
-      "resolved_internal_engine_class",
-      "resolved_internal_engine_artifact_sha256",
-      "engine_identity_sha256"
-    ],
-    "causal_event_includes_all_other_admitted_typed_fields": true,
-    "entry_admission_identity_remains_distinct_from_replay_stable_causal_event_identity": true,
-    "unknown_or_untyped_extension_fields": "FAIL_CLOSED_OR_REQUIRE_EXPLICIT_VERSIONED_EXTENSION_SCHEMA",
-    "domain_separation_required": true,
-    "event_identity_must_bind": [
-      "event_identity_schema_version",
-      "RFC8785_JCS_IJSON/v1",
-      "canonical causal event bytes"
-    ],
-    "entry_admission_identity_must_bind": [
-      "entry_admission_identity_schema_version",
-      "RFC8785_JCS_IJSON/v1",
-      "event_sha256",
-      "concrete admission-only fields"
-    ],
-    "route_identity_must_bind": [
-      "event_sha256",
-      "RFC8785_JCS_IJSON/v1",
-      "router_policy_sha256",
-      "engine_identity_sha256",
-      "generation",
-      "deterministic routing result"
-    ],
-    "grid10_plan_identity_must_bind": [
-      "RFC8785_JCS_IJSON/v1",
-      "event_sha256",
-      "entry_admission_sha256 or its explicitly admitted relation when plan semantics are admission-specific",
-      "generation",
-      "mode",
-      "admitted Entry budget identity",
-      "runtime-capacity receipt identity",
-      "deterministic plan result"
-    ],
-    "downstream_inference_receipt_must_echo": [
-      "RFC8785_JCS_IJSON/v1",
-      "event_sha256",
-      "entry_admission_sha256",
-      "decision_sha256",
-      "engine_identity_sha256",
-      "resolved_engine_identity",
-      "resolved_engine_class",
-      "resolved_engine_artifact_sha256"
+  "grid10_reentry_delta": {
+    "parent_grid10_blob": "be7ad08b90cf69066cf626934746b2fcb7a71f5a",
+    "grid10_jcs_typed_binding_blob": "7e8fdd9f58924e8df27324754aab16bc1c1babfe",
+    "grid10_test_blob": "f9c6e65734ac01fdf0d4c340a5063ceeccfb1017",
+    "changes": [
+      "GRID10 no longer imports the legacy CBOR canonicalizer path",
+      "GRID10 hashes plan identity directly with the selected RFC8785/JCS implementation",
+      "new plans use ENTITYOS_HCU_GRID_PLAN/v2 and bind canonicalization_schema explicitly",
+      "GRID10 consumes the same resolve_admitted_entry_binding resolver as the router",
+      "legacy bare admission_sha256 -> event_sha256 maps fail closed instead of becoming a second admission-binding contract"
     ]
+  },
+  "legacy_scope": {
+    "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1": "HISTORICAL_OR_BOUNDED_DONOR_PROVENANCE_ONLY_NOT_ACTIVE_CORE_IDENTITY_PATH",
+    "ENTITYOS_HCU_TYPED_CANONICAL/v1": "RESEARCH_PROVENANCE_ONLY_NOT_CURRENT_SELECTED_AUTHORITY",
+    "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1": "HISTORICAL_IMPLEMENTATION_SCOPED_IDENTITY_ONLY_AFTER_CURRENT_ROUTER_AND_INFERENCE_JCS_MIGRATION",
+    "ENTITYOS_HCU_GRID_PLAN/v1": "HISTORICAL_OR_DONOR_SCOPE_ONLY; NEVER_REHASH_AS_V2"
   },
   "migration_law": {
     "silent_hash_rewrite": false,
     "legacy_hashes_remain_valid_only_at_original_schema_and_source_scope": true,
-    "selected_schema_requires_new_or_explicitly_versioned_identity_records": true,
-    "mixed_canonicalizer_replay_without_schema_binding": "REJECT",
-    "canonicalizer_downgrade_or_unknown_version": "REJECT",
-    "historical_receipts": "PRESERVE_ORIGINAL_HASH_SCHEMA_AND_NEVER_REHASH_IN_PLACE",
-    "donor_authority_override_of_main": "REJECT"
+    "new_hashes_require_explicit_identity_version_and_canonicalization_schema": true,
+    "mixed_unknown_or_downgraded_canonicalization": "REJECT",
+    "legacy_bare_entry_binding": "REJECT_AT_ROUTER_AND_GRID10",
+    "historical_receipts": "PRESERVE_ORIGINAL_HASH_SCHEMA_AND_NEVER_REHASH_IN_PLACE"
   },
-  "superseded_donor_v4": {
-    "commit": "091cd2be71b0e97123a70c3089bb103bffb747d0",
-    "selection": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
-    "disposition": "STALE_CONCURRENT_AUTHORITY_READ_CORRECTED_IN_PLACE_ON_RETAINED_DONOR_BRANCH",
-    "reason": "v4 was written from a transient main observation before newer canonical-main append-only correction evidence was refreshed; no runtime or promotion credit was claimed"
+  "evidence_boundary": {
+    "source_core_path_single_selected_canonicalizer": true,
+    "source_entry_binding_contract_shared_by_router_and_grid10": true,
+    "exact_adapter_component_replication_from_local_organ": "5_OF_5_PASS_AT_EXACT_JCS_AND_ADAPTER_BLOB_SCOPE_BUT_NOT_GLOBAL_MACROCYCLE_EXPERIMENT_CREDIT",
+    "exact_current_combined_entry_route_engine_lease_inference_grid10_execution": false,
+    "actual_loader_consumed_bytes_attested": false,
+    "hcu_runtime_credit": 0,
+    "whole_entityos_pass": false
   },
-  "remaining_gates_before_source_promotion": [
-    "wire RFC8785_JCS_IJSON/v1 into Typed Entry event and admission identity production under new versioned identities",
-    "wire the same selected schema into router policy, EngineAdmission identity and route identity production",
-    "wire the selected schema/version into GRID10 plan identity consistently with the current main migration contract",
-    "wire the same selected schema into downstream inference receipt hashing and echo checks",
-    "update focused tests to prove one schema version is present end to end and mixed, unknown or downgraded versions fail closed",
-    "retain raw JSON duplicate-name, nonfinite-number and lone-surrogate rejection before ordinary Mapping construction",
-    "run exact-current combined Entry+router+inference+canonicalization+GRID10 regressions on an actually-started authorized isolated executor",
-    "rebase and fuse the settled retained mechanisms onto current main without duplicate authority",
-    "bind real loader-consumed checkpoint, tokenizer, runtime/build bytes, capability record and measured capacity receipt before physical model runtime promotion",
-    "rebuild the compatibility package only after source identity semantics settle"
+  "remaining_gates": [
+    "run exact-current combined Entry -> typed binding -> Route -> EngineAdmission -> physical load lease -> InferenceReceipt -> GRID10 v2 regressions on an actually-started authorized isolated executor",
+    "prove mixed unknown and downgrade canonicalization failures across the whole current source head",
+    "bind a real admitted local checkpoint/tokenizer/runtime/build boundary to loader-consumed byte evidence and live generation",
+    "rebase/fuse the retained donor onto current EntityOS/HCU main without creating a second route/state/effect authority",
+    "rebuild compatibility packaging only after source and loader identities settle"
   ],
-  "correction": {
-    "corrects_donor_contract_v4": true,
-    "new_unusual_experiment": false,
-    "evidence_scope": "AUTHORITY_COORDINATION_AND_SOURCE_CONTRACT_ONLY",
+  "coordination_note": {
+    "global_go_unusual_experiment_credit": "ALREADY_CONSUMED_BY_PARALLEL_23_57_GO_AUTHORITY_CONSTANT_TRANSPLANT_PER_REFRESHED_PR1263; THIS DELTA CLAIMS_NO_ADDITIONAL_GLOBAL_UNUSUAL_EXPERIMENT",
+    "stale_local_grid10_adapter_branches": "NOT_PROMOTED",
     "runtime_credit": 0
   },
-  "unusual_experiment_credit": "NONE_ADDED_BY_THIS_CORRECTION; NO_CROSS_MACROCYCLE_UNIQUENESS_CLAIM",
   "promotion_credit": 0,
   "runtime_credit": 0,
   "whole_entityos_pass": false,
-  "note": "This correction restores the retained donor lane to the newest explicit canonical-main JCS authority after a concurrent stale-read error. It creates no second state, routing, truth, permission, recovery or effect authority and does not claim runtime acceptance."
+  "note": "At source level, the known core causal identity path now converges on the selected JCS authority through GRID10 and shares one typed Entry-binding resolver. This is a source architecture delta only until exact combined authorized execution and real loader evidence exist."
 }

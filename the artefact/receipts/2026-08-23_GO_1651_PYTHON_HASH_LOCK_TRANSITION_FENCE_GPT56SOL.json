@@ -7,7 +7,8 @@
   "stage": "CLAYVERSE_ARTIFACT",
   "base_main": "f303060b1ab79cd113f1308221a3e95f784eeab4",
   "branch": "gpt56sol/go-clayverse-python-lock-transition-20260823-1651",
-  "classification": "PYTHON_HASH_LOCK_ATOMIC_TRANSITION_SOURCE_FENCE_RUNTIME_UNVERIFIED",
+  "pr": 1323,
+  "classification": "PYTHON_HASH_LOCK_ATOMIC_TRANSITION_SOURCE_FENCE_EXECUTION_ADMISSION_BLOCKED",
   "observed": {
     "current_product_authority": "ClayVerse one OCI/Docker-compatible container; Mini Entity/Blogpost current-work authority superseded and retained only as donor evidence",
     "source_lock_open_gap": "Python requirements are version pinned but not yet installed with --require-hashes",
@@ -37,13 +38,34 @@
   "evidence": {
     "source_write_observed": true,
     "post_write_source_read_observed": true,
+    "pr_mergeable_observed": true,
+    "github_runs": [
+      {
+        "run_id": 32632953289,
+        "name": "clayverse-python-lock-generator",
+        "job_id": 97178390700,
+        "job": "generate-lock",
+        "conclusion": "failure",
+        "observed_steps": [],
+        "classification": "FAILED_BEFORE_VISIBLE_STEP_EXECUTION_NOT_GENERATOR_TEST_FAIL"
+      },
+      {
+        "run_id": 32632953304,
+        "name": "Research Entity Identity Guard",
+        "job_id": 97178390916,
+        "job": "identity-guard",
+        "conclusion": "failure",
+        "observed_steps": [],
+        "classification": "FAILED_BEFORE_VISIBLE_STEP_EXECUTION_NOT_IDENTITY_TEST_FAIL"
+      }
+    ],
     "actually_started_authorized_exact_test": false,
     "exact_lock_generation": false,
     "exact_dependency_install": false,
     "exact_oci_build": false,
     "startup_readiness": false,
     "whole_clayverse_runtime_credit": 0,
-    "reason": "no authorized isolated sandbox create/start/exec surface is exposed in the current connected execution tooling"
+    "reason": "both PR jobs failed before any visible step and no authorized isolated sandbox create/start/exec surface is exposed in the current connected execution tooling"
   },
   "coordination": {
     "semantic_cognition_donor": "parallel PR #1298 landed on main during this go, covering the earlier cognition semantic-version ancestry finding; no duplicate PR retained from this organ",

@@ -24,8 +24,8 @@ class ClayVerseEffectBridge:
 
     @classmethod
     def from_env(cls):
-        from .entityos_bridge import EntityOSBridge
         from .identity import IdentityRouter
+        from .service import _entityos_config
         from .store import UnifiedDB
         from .turn_lifecycle import TurnLifecycle
 
@@ -35,16 +35,14 @@ class ClayVerseEffectBridge:
         user_id = os.environ.get("CLAYVERSE_USER_ID", "").strip()
         session_id = os.environ.get("CLAYVERSE_SESSION_ID", "").strip()
 
-        entityos = None
-        enable_exec = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
-        path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
-        sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
-        if enable_exec:
-            if not path or not sha256 or not os.path.isabs(path):
-                db.close()
-                raise BridgeStateError("EntityOS execution enabled without complete digest binding")
-            entityos = EntityOSBridge(path=path, sha256=sha256)
-            entityos.verify()
+        # EntityOS executable identity is owned by the immutable image lock. The MCP
+        # may inherit the execution-enable toggle, but it must never accept a separate
+        # runtime path/digest authority from Claude/tmux/process environment.
+        try:
+            entityos, _entityos_status = _entityos_config()
+        except Exception as exc:
+            db.close()
+            raise BridgeStateError("EntityOS image-authority verification failed") from exc
         return cls(TurnLifecycle(db, user_id, session_id, entityos_bridge=entityos))
 
     def _active_autonomy_identity(self) -> tuple[str, str] | None:

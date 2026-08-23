@@ -39,6 +39,7 @@ except ImportError:
     )
 
 SCHEMA = "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v1"
+MODEL_CALL_BINDING_SCHEMA = "ENTITYOS_HCU_GRID10_MODEL_CALL_BINDING/v1"
 
 
 class JSpaceInferenceBindingError(ValueError):
@@ -117,6 +118,17 @@ def _canonical_sha256(value: Any, field: str) -> str:
         raise JSpaceInferenceBindingError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
 
 
+def grid10_model_call_id(*, grid_plan_sha256: str, cell_id: str, role: str) -> str:
+    """Derive the deterministic GRID10 model-call identity for one plan cell/role."""
+    material = {
+        "schema": MODEL_CALL_BINDING_SCHEMA,
+        "grid_plan_sha256": _sha256(grid_plan_sha256, "grid_plan_sha256"),
+        "cell_id": _text(cell_id, "cell_id", 256),
+        "role": _text(role, "role", 256),
+    }
+    return "grid10:" + _canonical_sha256(material, "GRID10_MODEL_CALL_BINDING")
+
+
 def _validate_inference_receipt(receipt: InferenceReceipt) -> None:
     if not isinstance(receipt, InferenceReceipt):
         raise JSpaceInferenceBindingError("HCU_INFERENCE_RECEIPT_REQUIRED")
@@ -159,6 +171,15 @@ def bind_training_trace_to_inference(
     if not lanes or role not in lanes:
         raise JSpaceInferenceBindingError("INFERENCE_MODEL_LANE_DOES_NOT_BIND_TRACE_ROLE")
 
+    expected_model_call_id = grid10_model_call_id(
+        grid_plan_sha256=training_trace.grid_plan_sha256,
+        cell_id=training_trace.cell_id,
+        role=role,
+    )
+    observed_model_call_id = _text(inference_receipt.model_call_id, "inference_receipt.model_call_id")
+    if observed_model_call_id != expected_model_call_id:
+        raise JSpaceInferenceBindingError("INFERENCE_GRID10_MODEL_CALL_BINDING_MISMATCH")
+
     material = {
         "schema": SCHEMA,
         "canonicalization_schema": CANONICALIZATION_SCHEMA,
@@ -184,7 +205,7 @@ def bind_training_trace_to_inference(
         "engine_load_lease_sha256": _sha256(inference_receipt.engine_load_lease_sha256, "inference_receipt.engine_load_lease_sha256"),
         "engine_load_consumption_receipt_sha256": _sha256(inference_receipt.engine_load_consumption_receipt_sha256, "inference_receipt.engine_load_consumption_receipt_sha256"),
         "engine_load_loader_id": _text(inference_receipt.engine_load_loader_id, "inference_receipt.engine_load_loader_id"),
-        "model_call_id": _text(inference_receipt.model_call_id, "inference_receipt.model_call_id"),
+        "model_call_id": observed_model_call_id,
         "output_ref": _text(inference_receipt.output_ref, "inference_receipt.output_ref"),
         "output_sha256": _sha256(inference_receipt.output_sha256, "inference_receipt.output_sha256"),
         "output_size": _nonnegative_int(inference_receipt.output_size, "inference_receipt.output_size"),

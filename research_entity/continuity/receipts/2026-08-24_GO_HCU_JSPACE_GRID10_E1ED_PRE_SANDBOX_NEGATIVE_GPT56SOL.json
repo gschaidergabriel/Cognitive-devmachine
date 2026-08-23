@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_GO_BOUNDED_EXECUTION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "research_main_at_receipt_branch_base": "2be809ed5f3d070131b9e94c5b8de5449332019c",
+    "unusual_experiment_atomic_lease": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+    "unusual_experiment_status_for_this_organ": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "note": "No reproducible shared trigger identity was available to this organ; no new unusual intervention was admitted. An earlier local rollback-poison regression performed before the 8.63 lease law was observed receives zero unusual-experiment credit."
+  },
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "deployment_commit": "e1ed979735b7553454e81699a260cf8106efdbc8",
+    "deployment_id": "dpl_DpoubGTYLKQdgYfT8dnSV6QPNB5c",
+    "deployment_state_observed": "READY",
+    "route": "/api/hcu-jspace-binding-v2-capsule",
+    "runtime_log_observation": {
+      "timestamp_utc": "2026-08-23T18:55:03Z",
+      "http_status": 500,
+      "function_invocation_observed": true
+    }
+  },
+  "exact_source_discriminator": {
+    "capsule_id_at_deployment": "HCU_JSPACE_INFERENCE_BINDING_V2_EXACT_GRID10_PLAN_CELL_CAPSULE/v2",
+    "route_expected_test_git_blob_sha": "c3ff3386576dcbad3e08fe890152c7da70140f02",
+    "actual_test_file_git_blob_sha_at_same_deployment_commit": "2a9cba2c9d25ecc40acc7f891c4b44de9b529456",
+    "route_stage_before_sandbox_create": "FIXTURE_IDENTITY",
+    "route_failure_contract_on_blob_mismatch": "CAPSULE_DEPLOYMENT_BLOB_MISMATCH",
+    "classification": "PRE_SANDBOX_EXACT_FIXTURE_IDENTITY_FAILURE",
+    "inference": "Because the handler compares the actual fixture Git blob against the embedded expected blob before Sandbox.create and these exact values differ at deployment commit e1ed979735b7553454e81699a260cf8106efdbc8, the observed HTTP 500 is explained by the fail-closed fixture-identity path. No Sandbox execution credit is granted for this invocation."
+  },
+  "sandbox_execution_credit": {
+    "sandbox_create_proven_for_e1ed_invocation": false,
+    "fixed_regression_command_proven_executed_for_e1ed_invocation": false,
+    "jspace_binder_v2_grid10_component_runtime_credit_from_e1ed": false,
+    "full_hcu_dependency_graph_credit": false,
+    "entityos_hcu_whole_runtime_credit": false,
+    "jspace_model_runtime_credit": false,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "repair_candidate_source_only": {
+    "observed_executor_commit": "8be11b8555e7cf1bf8fe63da343c8f49e8d01237",
+    "capsule_id": "HCU_JSPACE_INFERENCE_BINDING_V2_EXACT_GRID10_PLAN_CELL_CAPSULE/v3",
+    "expected_test_git_blob_sha": "2a9cba2c9d25ecc40acc7f891c4b44de9b529456",
+    "deterministic_marker_target": "BINDER_V2_DETERMINISTIC_REGRESSIONS=6_OF_6_PASS",
+    "model_call_grid_cell_fail_closed_marker": "BINDER_V2_MODEL_CALL_GRID_CELL_FAIL_CLOSED=PASS",
+    "status": "SOURCE_REPAIR_CANDIDATE_ONLY_NOT_RUNTIME_CREDIT",
+    "note": "The v3 wrapper and exact fixture identity are source-coherent at the observed commit, but a successful exact isolated route result was not observed by this organ."
+  },
+  "client_access_observation": {
+    "after_ready_attempts": [
+      "deployment URL GET intercepted by Vercel SSO with HTTP 302",
+      "generated preview share URLs still intercepted by Vercel SSO with HTTP 302",
+      "branch-alias bypass request later returned 429 while attempting to create protection bypass"
+    ],
+    "classification": "CLIENT_PREVIEW_AUTH_PATH_BLOCKED_FOR_THIS_ORGAN",
+    "note": "These client-side SSO/429 observations do not reclassify the earlier e1ed function 500 and do not prove a current v3 runtime result."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "NEGATIVE_EVIDENCE_BOUND: exact pre-Sandbox fixture identity drift found in retained PR810 executor path; no duplicate executor created.",
+    "track_b_hcu_typed_entry": "SOURCE_REPAIR_OBSERVED: v3 binds exact GRID10 scheduler plan/cell types plus repaired J-Space binder v2 and adds the model-call/grid-cell fail-closed discriminator; runtime acceptance still pending.",
+    "track_c_jspace_training_readiness": "NO_RUNTIME_PROMOTION: exact causal binder/GRID10 closure remains a prerequisite; no model/runtime/training credit and no paid lane entered."
+  },
+  "next_discriminator": "Execute the source-coherent v3 fixed capsule on the admitted Vercel Hobby Sandbox path and capture HTTP 200 plus exact manifest/result digests, Sandbox identity, exit code 0, all 6/6 deterministic markers, secret fence and cleanup. If the route still returns non-200, preserve its exact result without inferring HCU semantic failure from provider/auth/build preconditions.",
+  "paid_or_together_activity": false,
+  "secrets_recorded": false
+}

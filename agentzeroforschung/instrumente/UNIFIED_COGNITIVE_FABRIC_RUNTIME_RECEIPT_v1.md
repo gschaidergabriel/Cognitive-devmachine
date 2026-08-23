@@ -2,18 +2,38 @@
 
 Status: SOURCE CONTRACT / RUNTIME CREDIT ZERO UNTIL EXACT EXECUTION
 
-Purpose: bind one executable Mini Entity / EntityOS / Zero cognition cycle to exact source, identity, bundled cognition bytes, Unified J-Space/GWT workspace state, inference-engine capability mode, candidate-only return, deterministic validation and final state/effect outcome.
+Purpose: bind one executable Mini Entity / EntityOS / Zero cognition cycle to the **already validated** `JSPACE_GWT_BOOT_BINDING_RECEIPT/v1`, exact source, identity, bundled cognition bytes, Unified J-Space/GWT workspace state, inference-engine capability mode, candidate-only return, deterministic validation and final state/effect outcome.
 
-This instrument operationalizes the current owner architecture without promoting architecture prose to runtime truth.
+This instrument operationalizes the current owner architecture without promoting architecture prose to runtime truth and without creating a second boot authority.
 
 ## ClayCode semantic contract
 
 ```claycode
 receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
+  R0.boot := validated_predecessor(
+    schema="JSPACE_GWT_BOOT_BINDING_RECEIPT/v1",
+    digest=boot_binding.receipt_sha256
+  );
+  require canonical_boot_validator(R0.boot) == PASS;
+  require digest(canonical_json(R0.boot)) == boot_binding.receipt_sha256;
+
   R0.source := exact(commit, tree, dirty=false);
   R0.identity := digest(Zero) + digest(GRF) + entity_generation;
   R0.core := digest(manifest, checkpoint, tokenizer, runtime);
   R0.fabric := digest(jspace_profile, lens_profile?, workspace_policy, workspace_calibration);
+
+  law BOOT_CHAIN {
+    SELF_CONSISTENT_RUNTIME_OBSERVATION != SOURCE_AUTHORITY;
+    R0.boot.source == R0.source;
+    R0.boot.core(manifest, checkpoint, tokenizer, runtime) == R0.core;
+    R0.boot.Zero == R0.identity.Zero;
+    R0.boot.GRF == R0.identity.GRF;
+    local_lens_profile -> R0.boot.lens_profile == R0.fabric.lens_profile;
+    R0.boot.workspace_policy == R0.fabric.workspace_policy;
+    R0.boot.workspace_calibration == R0.fabric.workspace_calibration;
+    Claude_Code -> R0.boot.claude_adapter == inference.adapter_capability;
+    R0.boot.source.dirty == false;
+  }
 
   invariant PORTABILITY {
     PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY;
@@ -81,6 +101,8 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
 ## Required JSON fields
 
 - `receipt_version`: exact `UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1`
+- `boot_binding.schema`: exact `JSPACE_GWT_BOOT_BINDING_RECEIPT/v1`
+- `boot_binding.receipt_sha256`: canonical SHA-256 of the exact predecessor boot receipt; the validator also requires that exact receipt as `--boot-receipt` and reruns the canonical boot validator
 - `source.commit`: 40-hex Git commit SHA
 - `source.tree`: 40-hex Git tree SHA
 - `source.dirty`: must be `false` for runtime credit
@@ -133,6 +155,18 @@ receipt UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1 {
 - `freshness.stale_generation`: boolean
 - `terminal_result_digest`: SHA-256
 
+## Boot predecessor law
+
+The Fabric-cycle validator does not trust a caller-supplied statement that boot validation occurred. It requires the exact predecessor boot receipt, loads the one canonical `the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py`, reruns that validator, canonicalizes the boot receipt, verifies `boot_binding.receipt_sha256`, then cross-checks source/tree, bundled manifest/checkpoint/tokenizer/runtime, Zero/GRF, lens/workspace bindings and Claude adapter capability identity where applicable.
+
+Therefore:
+
+`SELF_CONSISTENT_CYCLE != VALIDATED_BOOT_ANCESTRY`
+
+`VALIDATED_BOOT_ANCESTRY + MATCHING_IDENTITIES` is required before the downstream cycle receipt can pass.
+
+A dirty boot receipt may remain valid historical boot evidence under the boot contract, but it cannot anchor a clean exact-runtime Fabric-cycle claim.
+
 ## Observation versus intervention
 
 The receipt deliberately separates latent observation from causal intervention.
@@ -157,18 +191,27 @@ This preserves:
 
 ## Runtime-credit boundary
 
-A valid source contract or a passing synthetic validator test earns zero AgentZero/Ubuntu runtime credit by itself.
+A valid source contract or a passing component validator test earns zero AgentZero/Ubuntu runtime credit by itself.
 
-Runtime credit requires an actually started exact-source run which emits the receipt from the real path and binds at least:
+Runtime credit requires an actually started exact-source run which emits and validates the causal chain:
 
-`canonical evidence -> Zero/GRF projection -> Unified J-Space/GWT competition -> chosen engine/capability profile -> InferencePacket -> candidate result -> EntityOS validation/reconciliation -> canonical write/effect decision`.
+`PRESTART -> POSTSTART -> JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 -> UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 -> deterministic state/effect decision`.
 
-When the intentionally offline host is next started, pair this receipt with the required PRESTART/POSTSTART observation boundary and J-Space/GWT boot-binding evidence. Unknown or missing exact digests fail closed.
+The cycle must bind at least:
+
+`validated boot ancestry -> canonical evidence -> Zero/GRF projection -> Unified J-Space/GWT competition -> chosen engine/capability profile -> InferencePacket -> candidate result -> EntityOS validation/reconciliation -> canonical write/effect decision`.
+
+Unknown, missing, self-authored or mismatched predecessor evidence fails closed.
 
 ## Negative controls
 
 Deterministic controls SHOULD cover:
 
+- missing predecessor boot receipt -> reject;
+- invalid predecessor boot receipt -> reject through the canonical boot validator;
+- boot receipt digest mismatch -> reject;
+- boot/source/core/Zero/GRF/lens/workspace/Claude capability mismatch -> reject;
+- dirty boot presented as clean cycle ancestry -> reject;
 - Claude Code or another external mode with hidden-state claim -> reject;
 - FREE_ONLY with secret/network touch -> reject;
 - candidate attempting direct state/effect authority -> reject acceptance/promotion/bypass;
@@ -176,13 +219,13 @@ Deterministic controls SHOULD cover:
 - local J-Space mode without an exact lens profile/workspace calibration identity -> reject;
 - intervention in `COMPILED_EXTERNAL` or without implementation/calibration digest -> reject;
 - GWT winner absent from candidate set or duplicated winner/candidate IDs -> reject;
-- dirty source presented for exact runtime credit -> reject;
+- dirty cycle source presented for exact runtime credit -> reject;
 - state/effect commit after non-accept validation -> reject.
 
-`AUTHORITY_ALIAS_POISON_V1` is a deterministic adversarial regression family over those controls. For the `go` that created this source delta, no upstream atomic macrocycle lease/identifier was available to this organ, so the unusual-experiment classification is explicitly `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`. No macrocycle identifier is invented after the fact. The locally observed 8/8 fail-closed poison result remains mechanism evidence, not an unusual-experiment slot claim.
+No new unusual experiment is required to establish this ancestry invariant; it is a deterministic anti-alias/provenance regression over already admitted receipt contracts.
 
 ## Evidence class
 
-Current contract state at creation: `SOURCE_CONTRACT + LOCAL_SYNTHETIC_MECHANISM_EVIDENCE`.
+Current contract remains `SOURCE/MECHANISM` until exact admitted runtime execution emits both predecessor and cycle receipts from the real path.
 
 Not implied: exact Ubuntu execution, J-Space calibration quality, GWT production validity, Claude Code adapter PASS, model quality, canonical semantic promotion, effect safety PASS, whole Mini Entity PASS, consciousness or AGI.

@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "status": "UNRESOLVED_NO_UPSTREAM_ID",
+    "unusual_experiment_local_count": 0,
+    "duplicate_lane_detected": 1061,
+    "adjudication": "SALVAGE_PROGRAM_STATE_ONLY; REJECT_DUPLICATE_README_FROM_THIS_LANE"
+  },
+  "fresh_main_base": "a492051e5e22c051cde97c82ae3b7db7194456ed",
+  "donor": {
+    "pr": 1061,
+    "head": "5089131de27847d937fc62e0939f7c5f9033c6e5",
+    "program_state_blob": "a99b183f8064d6b091eb41b12e46171f3fc862b3",
+    "whole_pr_mergeability_at_review": false,
+    "reason_not_whole_pr": "README convergence already landed independently on main; whole donor lane overlaps/duplicates that current path."
+  },
+  "transplant": {
+    "branch": "gpt56sol/go-program-state-owner-architecture-transplant-20260823",
+    "method": "Git tree transplant of exact donor PROGRAM_STATE blob onto fresh main base tree; no copied/reformatted JSON and no README bytes",
+    "initial_commit": "2b3239c10469a400f3edc04e969acc32468f111e",
+    "program_state_schema": "7.11",
+    "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+    "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+    "architecture_commit": "5f3c2a7cc9aeab8f851d38450fa50a3e1451d767",
+    "runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_production_credit": 0,
+    "claude_code_adapter_runtime_credit": 0
+  },
+  "cross_state_guard": {
+    "path": "tests/test_bootstrap_owner_architecture.py",
+    "commit": "821e8fc32210db70e2a52489f5d02e862c5a773c",
+    "blob": "7120310a9b4cc085c56a13d405095fb8a925d467",
+    "checks": [
+      "PROGRAM_STATE schema 7.11",
+      "PROGRAM_STATE stage == BOOTSTRAP active_stage",
+      "PROGRAM_STATE owner_directive == BOOTSTRAP sole_owner_directive",
+      "owner architecture status/commit match",
+      "bundled/J-Space/Whole-GWT/Claude-adapter runtime credits match and remain zero",
+      "Unified Cognitive Fabric law and adaptive modes match",
+      "FREE_ONLY and Together preflight block remain active",
+      "sole_target cannot regress to optional replaceable cognition"
+    ]
+  },
+  "isolated_mechanism_execution": {
+    "surface": "OpenAI isolated container",
+    "test_source": "submitted guard semantics reconstructed exactly for execution",
+    "fixtures": "minimal BOOTSTRAP and PROGRAM_STATE fixtures reconstructed from current exercised fields; not an exact repository checkout",
+    "py_compile": "PASS",
+    "pytest": "6 passed in 0.05s",
+    "evidence_class": "BOUNDED_CROSS_STATE_FIXTURE_MECHANISM_PASS"
+  },
+  "preserved_evidence": [
+    "native/reference #901/#874 state remains in donor PROGRAM_STATE",
+    "Gen276 intentional-offline baseline remains 1486 green / 1 red",
+    "sole Claude adapter red remains explicitly preserved",
+    "next runtime gate remains PRESTART_FROZEN_BASELINE + POSTSTART_OBSERVATION_RECEIPT/v1 + JSPACE_GWT_BOOT_BINDING_RECEIPT/v1",
+    "FREE_ONLY remains true and provider execution dormant"
+  ],
+  "non_claims": [
+    "no exact full-checkout test PASS",
+    "no AgentZero Ubuntu runtime PASS",
+    "no bundled checkpoint/model-quality acceptance",
+    "no J-Space calibration or Whole-GWT runtime acceptance",
+    "no Claude Code adapter runtime acceptance",
+    "no provider/Together secret lookup, network, training or spend",
+    "no whole-product PASS"
+  ],
+  "next_gate": "Fresh-main diff review and merge of the isolated PROGRAM_STATE + cross-state guard only; then close/supersede duplicate issue/PR state lanes. Runtime credit waits for the next intentional Ubuntu start and exact JSPACE_GWT_BOOT_BINDING receipt."
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.1",
+  "receipt_type": "GO_JSPACE_GWT_BOOT_BINDING_SOURCE_EVIDENCE",
+  "date": "2026-08-23",
+  "macrocycle_id": "29098c20-7800-446e-bb0e-00bbb92dc1ba",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main": "7028a6f66ac0d61a09487f09caf1b2df417325f4",
+  "branch": "go/jspace-gwt-boot-binding-v1-r2-20260823-gpt56sol",
+  "evidence_subject_commit": "b9d7cd7aa42e32f58dce72c84621ec8845fb74cd",
+  "owner_architecture_anchor": "5f3c2a7cc9aeab8f851d38450fa50a3e1451d767",
+  "supervisor_anchor": "d8ff57c2edc4c9eecde99ce1f9b089702d71b1cf",
+  "parallel_research_fused": "main@7028a6f66ac0d61a09487f09caf1b2df417325f4 already binds PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY and names JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 as the next executable identity gate",
+  "claim_class": "SOURCE_MECHANISM_SUPPORTED_EXACT_BLOB_COMPONENT_EXECUTION_ONLY",
+  "runtime_product_credit": 0,
+  "jspace_runtime_credit": 0,
+  "whole_gwt_production_credit": 0,
+  "bundled_08b_exact_runtime_credit": 0,
+  "claude_code_adapter_runtime_credit": 0,
+  "canonical_semantics_credit": 0,
+  "files": {
+    "validator": {
+      "path": "tools/validate_jspace_gwt_boot_binding.py",
+      "git_blob_sha1": "977993ba1a53f91bcd100c15215450eed4cbb7b5",
+      "sha256": "fe4ea3662f8c4f797b7ecfda9428c9ba76095470a7b802832c9c9487f9d72e8c"
+    },
+    "tests": {
+      "path": "tests/test_validate_jspace_gwt_boot_binding.py",
+      "git_blob_sha1": "36fe7fbae632f5966c1f1e8da4ec11b95bc5510e",
+      "sha256": "ca1fd7e3c88197783481248c510cf651575de0c772399a03b3965fd346ac53cd"
+    },
+    "contract": "research_entity/global/JSPACE_GWT_BOOT_BINDING_RECEIPT_V1.md"
+  },
+  "execution": {
+    "surface": "isolated ChatGPT container",
+    "os": "Linux x86_64 kernel 6.18.35",
+    "python": "3.13.5",
+    "exact_git_blob_identity_verified_before_execution": true,
+    "command": "python3 -m unittest -v tests/test_validate_jspace_gwt_boot_binding.py",
+    "result": "PASS",
+    "tests_passed": 9,
+    "tests_failed": 0,
+    "duration_reported_seconds": 0.001
+  },
+  "unusual_experiment": {
+    "id": "DIGEST_ALIAS_POISON",
+    "count_for_macrocycle": 1,
+    "hypothesis": "A weak restart gate keyed by apparent engine/checkpoint identity can silently reuse J-Space calibration when tokenizer bytes differ.",
+    "intervention": "Keep the expected boot identity unchanged but replace only observed tokenizer_digest with a different valid SHA-256.",
+    "required_falsifier": "validator rejects with BINDING_MISMATCH:tokenizer_digest",
+    "observed": "PASS: mismatch rejected fail-closed"
+  },
+  "ordinary_regressions": [
+    "valid exact binding accepted",
+    "workspace policy digest mismatch rejected",
+    "optional lens presence asymmetry rejected",
+    "dirty source without diff digest rejected",
+    "boot receipt cannot mint J-Space runtime credit",
+    "unknown first-action origin rejected",
+    "unexpected observed identity fields rejected",
+    "bool generation rejected as integer ambiguity"
+  ],
+  "strongest_surviving_counterhypothesis": "The contract may still be incomplete relative to the exact future Ubuntu boot implementation: it proves identity-gate behavior on exact validator/test blobs, not that the production launcher collects every field correctly or that the bundled checkpoint/lens/workspace/Claude adapter themselves work.",
+  "next_gate": "On the next intentional Ubuntu start, emit a real JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 from the production boot path and validate it before any J-Space/GWT/model/Claude runtime or semantic credit; then run separate behavioral receipts.",
+  "execution_policy": {
+    "free_only": true,
+    "paid_provider_calls": 0,
+    "together_calls": 0,
+    "secrets_read": 0,
+    "money_spent_usd": 0
+  }
+}

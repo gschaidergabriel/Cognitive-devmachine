@@ -10,6 +10,7 @@ OWNER_DIRECTIVE = "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIR
 EXPECTED_PROGRAM = "CLAYVERSE_SINGLE_CONTAINER"
 EXPECTED_STAGE = "CLAYVERSE_ARTIFACT"
 EXPECTED_RELEASE = "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE"
+EXPECTED_ENTITYOS_ROLE = "OPTIONAL_INTERNAL_EXECUTION_SECURITY_RUNTIME_SUBSTRATE"
 IDENTITY_GUARD = "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
@@ -43,7 +44,7 @@ def validate(root: Path) -> dict:
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
     if errors:
-        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2", "pass": False, "errors": errors}
+        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3", "pass": False, "errors": errors}
 
     try:
         canonical = load_json(paths["canonical"])
@@ -54,7 +55,7 @@ def validate(root: Path) -> dict:
         steering = load_json(paths["steering844"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
-            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
             "pass": False,
             "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
         }
@@ -80,6 +81,8 @@ def validate(root: Path) -> dict:
     require(errors, bootstrap.get("sole_owner_directive") == OWNER_DIRECTIVE, "BOOTSTRAP_OWNER_DIRECTIVE_MISMATCH")
     require(errors, bootstrap.get("product_endpoint") == "ClayVerse", "BOOTSTRAP_PRODUCT_ENDPOINT_MISMATCH")
     require(errors, bootstrap.get("release_form") == EXPECTED_RELEASE, "BOOTSTRAP_RELEASE_FORM_MISMATCH")
+    require(errors, bootstrap.get("entityos_role") == "INTERNAL_EXECUTION_SECURITY_RUNTIME_SUBSTRATE", "BOOTSTRAP_ENTITYOS_ROLE_MISMATCH")
+    require(errors, bootstrap.get("entityos_required_for_whole_product_pass") is False, "BOOTSTRAP_ENTITYOS_MANDATORY_REGRESSION")
     require(errors, bootstrap.get("together_api") == "FORBIDDEN", "BOOTSTRAP_TOGETHER_FENCE_MISSING")
     require(errors, bootstrap.get("vps_testing") == "FORBIDDEN", "BOOTSTRAP_VPS_TEST_FENCE_MISSING")
 
@@ -88,6 +91,8 @@ def validate(root: Path) -> dict:
     require(errors, program.get("owner_directive") == OWNER_DIRECTIVE, "PROGRAM_OWNER_DIRECTIVE_MISMATCH")
     require(errors, program.get("product_endpoint") == "ClayVerse", "PROGRAM_PRODUCT_ENDPOINT_MISMATCH")
     require(errors, program.get("release_form") == EXPECTED_RELEASE, "PROGRAM_RELEASE_FORM_MISMATCH")
+    gates = program.get("whole_product_gates") or []
+    require(errors, "effectgate_and_entityos_round_trip_when_admitted" in gates, "PROGRAM_ENTITYOS_CONDITIONAL_GATE_MISSING")
     execution = program.get("execution_policy") or {}
     require(errors, execution.get("free_only") is True, "PROGRAM_FREE_ONLY_MISSING")
     require(errors, execution.get("isolated_sandbox_only") is True, "PROGRAM_ISOLATED_ONLY_MISSING")
@@ -98,6 +103,13 @@ def validate(root: Path) -> dict:
     require(errors, manifest.get("product_endpoint") == "ClayVerse", "MANIFEST_PRODUCT_ENDPOINT_MISMATCH")
     require(errors, manifest.get("release_form") == EXPECTED_RELEASE, "MANIFEST_RELEASE_FORM_MISMATCH")
     require(errors, manifest.get("canonical_workspace") == "the artefact/", "MANIFEST_WORKSPACE_MISMATCH")
+    require(errors, manifest.get("entityos_role") == EXPECTED_ENTITYOS_ROLE, "MANIFEST_ENTITYOS_ROLE_MISMATCH")
+    require(errors, manifest.get("entityos_required_for_whole_product_pass") is False, "MANIFEST_ENTITYOS_MANDATORY_REGRESSION")
+    require(
+        errors,
+        "if omitted with execution disabled" in str(manifest.get("entityos_admission", "")).lower(),
+        "MANIFEST_ENTITYOS_OPTIONAL_ADMISSION_MISSING",
+    )
 
     override = control.get("program_identity_override") or {}
     hard = control.get("preserved_hard_rules") or {}
@@ -116,21 +128,27 @@ def validate(root: Path) -> dict:
     adjudication = steering.get("adjudication") or {}
     require(errors, adjudication.get("free_only") is True and adjudication.get("together_forbidden") is True and adjudication.get("vps_testing") is False, "STEERING844_SAFETY_WEAKENED")
 
-    directive_upper = directive[:1200].upper()
-    require(errors, "CURRENT OWNER DIRECTIVE" in directive_upper, "DIRECTIVE_NOT_CURRENT")
+    directive_upper = directive.upper()
+    require(errors, "CURRENT OWNER DIRECTIVE" in directive_upper[:1200], "DIRECTIVE_NOT_CURRENT")
     require(errors, "SUPERSEDED" not in directive_upper[:220], "DIRECTIVE_MARKED_SUPERSEDED")
+    require(
+        errors,
+        "OMISSION WITH ENTITYOS EXECUTION DISABLED DOES NOT BY ITSELF BLOCK WHOLE-PRODUCT PASS" in directive_upper,
+        "DIRECTIVE_ENTITYOS_OPTIONAL_LAW_MISSING",
+    )
     require(errors, "ACTIVE CLAYVERSE PROGRAM" in fast_boot.upper(), "FAST_BOOT_NOT_ACTIVE_CLAYVERSE")
     require(errors, "PROGRAM: CLAYVERSE SINGLE-CONTAINER" in footer.upper(), "FOOTER_PROGRAM_MISMATCH")
     require(errors, "STAGE: CLAYVERSE_ARTIFACT" in footer.upper(), "FOOTER_STAGE_MISMATCH")
     require(errors, "CLAYVERSE IS THE PRODUCT ENDPOINT" in architecture.upper(), "ARCHITECTURE_PRODUCT_MISMATCH")
 
-    readme_head = readme[:3000].upper()
+    readme_head = readme[:4000].upper()
     require(errors, "CLAYVERSE SINGLE-CONTAINER PRODUCT" in readme_head, "README_PRODUCT_MISMATCH")
     require(errors, "CLAYVERSE" in readme_head and "ONE OCI/DOCKER-COMPATIBLE" in readme_head, "README_RELEASE_MISMATCH")
     require(errors, not ("CLAYVERSE SINGLE-CONTAINER ENDPOINT" in readme_head and "SUPERSEDED" in readme_head), "README_CLAYVERSE_SUPERSEDED")
+    require(errors, "ENTITYOS" in readme_head and "OPTIONAL" in readme_head, "README_ENTITYOS_OPTIONAL_LAW_MISSING")
 
     return {
-        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
         "pass": not errors,
         "errors": errors,
         "checked": {name: path.relative_to(root).as_posix() for name, path in paths.items()},

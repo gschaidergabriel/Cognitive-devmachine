@@ -25,7 +25,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.6"
+VERSION = "clay-profile-pipeline-runtime/0.6.1"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -680,6 +680,11 @@ class ProfilePipelineRuntime(clay.Runtime):
             value = value.get(part)
         return value
 
+    @staticmethod
+    def _expr_number(value: Any, error: str) -> float:
+        """Coerce a numeric-expression value only after preserving boolean identity."""
+        return _finite_number(0.0 if value is None else value, error)
+
     def _expr(self, expr: Any, context: dict[str, Any]) -> Any:
         if not isinstance(expr, dict):
             return expr
@@ -699,7 +704,9 @@ class ProfilePipelineRuntime(clay.Runtime):
             rows = self._ref(context, spec["ref"]) or []
             where = spec["where"]
             return sum(
-                float(row.get(spec["value_field"], 0) or 0)
+                self._expr_number(
+                    row.get(spec["value_field"]), "NONFINITE_NUMERIC_EXPRESSION:sum_where"
+                )
                 for row in rows
                 if row.get(where["field"]) == where.get("eq")
             )
@@ -713,12 +720,26 @@ class ProfilePipelineRuntime(clay.Runtime):
         if op == "eq":
             return self._expr(expr["a"], context) == self._expr(expr["b"], context)
         if op == "add":
-            return sum(float(self._expr(item, context) or 0) for item in expr.get("args", []))
+            values = [self._expr(item, context) for item in expr.get("args", [])]
+            return sum(
+                self._expr_number(value, "NONFINITE_NUMERIC_EXPRESSION:add")
+                for value in values
+            )
         if op == "div":
-            divisor = float(self._expr(expr["b"], context))
-            return 0.0 if divisor == 0 else float(self._expr(expr["a"], context) or 0) / divisor
+            numerator = self._expr(expr["a"], context)
+            denominator = self._expr(expr["b"], context)
+            divisor = self._expr_number(denominator, "NONFINITE_NUMERIC_EXPRESSION:div")
+            return (
+                0.0
+                if divisor == 0
+                else self._expr_number(numerator, "NONFINITE_NUMERIC_EXPRESSION:div") / divisor
+            )
         if op == "clamp01":
-            return max(0.0, min(1.0, float(self._expr(expr["arg"], context) or 0)))
+            value = self._expr(expr["arg"], context)
+            return max(
+                0.0,
+                min(1.0, self._expr_number(value, "NONFINITE_NUMERIC_EXPRESSION:clamp01")),
+            )
         if op == "if":
             branch = expr["then"] if self._expr(expr["cond"], context) else expr["else"]
             return self._expr(branch, context)

@@ -50,6 +50,31 @@ class ClayVerseEngine:
         return 1.0 if isinstance(outcome, dict) and outcome.get("ok") is True else 0.0
 
     @staticmethod
+    def _workspace_control(ws, turn_id, generation):
+        """Compile the current bounded workspace into the inference boundary.
+
+        This object is guidance only. It is explicitly non-authoritative and carries a
+        digest so later receipts can cross-bind the exact workspace projection that was
+        supplied to the inference adapter.
+        """
+        material = {
+            "episode_id": ws["episode_id"],
+            "turn_id": turn_id,
+            "generation": int(generation),
+            "salience": ws["salience"],
+            "alternatives": ws["alternatives"],
+            "truth_authority": False,
+            "effect_authority": False,
+        }
+        encoded = json.dumps(
+            material,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        return {**material, "control_digest": hashlib.sha256(encoded).hexdigest()}
+
+    @staticmethod
     def _inference_provenance(decision, reasoning_generation, episode_id):
         """Build non-secret provenance for the pre-effect model-response re-ingest."""
         provenance = {
@@ -91,6 +116,8 @@ class ClayVerseEngine:
         world["runtime_capabilities"] = list(self.effects.available_capabilities())
         ws = self.workspace.open(sid, tid, content, resources)
         reasoning_generation = self.db.session_generation(sid)
+        workspace_control = self._workspace_control(ws, tid, reasoning_generation)
+        world["workspace_control"] = workspace_control
         decision = self.inference.reason(world, content)
         self.workspace.select(ws["episode_id"], decision.get("selection", "respond"))
 
@@ -181,6 +208,7 @@ class ClayVerseEngine:
             "assistant_turn_id": aid,
             "effect_notice_turn_id": effect_notice_turn_id,
             "workspace": ws,
+            "workspace_control_digest": workspace_control["control_digest"],
             "decision": decision,
             "effect_id": effect_id,
             "outcome": outcome,

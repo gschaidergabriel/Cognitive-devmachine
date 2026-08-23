@@ -30,17 +30,17 @@ Scale: 10-cell baseline; 10→32→64→128→256→~600 is a benchmark ladder; 
 Authority: canonical durable state/evidence remains deterministic; HCU/world-model/J-Space/workspace/model outputs are candidate/projection/measurement only; EffectGate/EffectJournal remain the only real-effect authority
 Global J-Space: empirical causal coordination/interface hypothesis; local J-Space claims require model-specific evidence
 World simulation: NOT_REQUIRED_PERMANENTLY; bounded WM_TEST and selective NESTED_SIM are noncanonical research modes
-Execution: AUTHORIZED_ISOLATED_SANDBOX_ONLY for current build/test/experiment/runtime credit; VPS/self-hosted/production-host testing forbidden under current control
-Together API: FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE; GENERAL_INFERENCE_FORBIDDEN; PAID ONE_SHOT OWNER DIRECTIVE QUARANTINED; DO_NOT_PREFLIGHT_OR_CONSUME_CREDENTIALS
+Execution: AUTHORIZED_ISOLATED_FREE_SANDBOX_ONLY; under supervisor 8.62 Vercel Hobby is BOUNDED_INCLUDED_TIER_FREE_ADMITTED for fixed hash-bound deterministic capsules only; fail closed before execution on quota/billing/upgrade/plan-mismatch/monetary-charge path; VPS/self-hosted/production-host testing forbidden
+Together API: FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE; GENERAL_INFERENCE_FORBIDDEN; PAID ONE SHOT OWNER DIRECTIVE QUARANTINED; DO_NOT_PREFLIGHT_OR_CONSUME_CREDENTIALS
 Paid fallback: FORBIDDEN; NO PAID TRAINING/PROVIDER EXECUTION IN CURRENT FREE_ONLY SUPERVISOR MODE
-Model training: ZERO_COST_LOCAL_APPROX_08B_JSPACE_GWT_WORK_ONLY_AFTER_EXECUTABLE_EVIDENCE; PAID ONE_SHOT HAS ZERO EXECUTION CREDIT AND REQUIRES A FUTURE AUTHORITY MODE CHANGE
+Model training: ZERO_COST_LOCAL_APPROX_08B_JSPACE_GWT_WORK_ONLY_AFTER_EXECUTABLE_EVIDENCE; PAID ONE SHOT HAS ZERO EXECUTION CREDIT AND REQUIRES A FUTURE AUTHORITY MODE CHANGE
 Current frontier: <dynamic EntityOS blocker/delta + HCU/Typed Entry co-development + Global J-Space/GWT training-readiness discriminator>
 Migration/reuse score: EASIER_CROSS_MODE|EASIER|NEUTRAL|HARDER_WITH_EVIDENCE
 Progress: <canonical dynamic percent/bar OR UNRESOLVED>
 Acceptance: IN_PROGRESS|PASS|BLOCKED|UNRESOLVED
 ETA: <canonical dynamic range OR UNRESOLVED>
-Evidence note: source/component/historical PASS does not imply EntityOS/HCU runtime acceptance; logical module count never implies equal resident-model count or physical decode concurrency; completed training alone is not PASS
+Evidence note: source/component/historical PASS does not imply EntityOS/HCU runtime acceptance; the exact-current J-Space family-split 6/6 x2 is component credit only; logical module count never implies equal resident-model count or physical decode concurrency; completed training alone is not PASS
 Short commands: 666 · go · zero · q12 · q23 · atomic · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifiedb · harness · spawn
 ```
 
-Training authority note: `research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md` remains repository provenance for an owner-authorized bounded paid run, but `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json` supersedes it for the current explicitly FREE_ONLY autonomous supervisor. In this mode no Together preflight, credential lookup, network call, job creation, spend, provider credit, training credit or acceptance credit is allowed. Only zero-cost local ~0.8B J-Space/GWT work may continue after the required executable-evidence gates.
+Training authority note: `research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md` remains repository provenance for an owner-authorized bounded paid run, but `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json` is the current explicitly FREE_ONLY autonomous supervisor authority. In this mode no Together preflight, credential lookup, network call, job creation, spend, provider credit, training credit or acceptance credit is allowed. Vercel Hobby execution is admitted only within the observed included-tier entitlement and fixed hash-bound capsule conditions; remaining quota is not assumed, and any quota/billing/upgrade/plan-mismatch/monetary-charge path fails closed before execution. Only zero-cost local ~0.8B J-Space/GWT work may continue after the required executable-evidence gates.

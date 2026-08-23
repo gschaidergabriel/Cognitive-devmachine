@@ -46,7 +46,7 @@ def main() -> int:
                 "program": "CLAYVERSE_SINGLE_CONTAINER",
                 "stage": "CLAYVERSE_ARTIFACT",
                 "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
-                "authority_validator": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+                "authority_validator": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
                 "credit": "SOURCE_CONTROL_ASSERTION_ONLY_ZERO_RUNTIME_CREDIT",
             },
             sort_keys=True,

@@ -19,7 +19,11 @@ CONTROL42 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_E
 CONTROL43 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_PROGRAM_AUTHORITY.json"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
+STEERING849 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_49.json"
 ROOT_CLAUDE = "CLAUDE.md"
+WORKER_DIRECTIVE = "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
+CLAYVERSE_WORKER_MARKER = "[CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]"
+LEGACY_WORKER_MARKER = "[MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]"
 LEGACY_BLOGPOST = "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md"
 LEGACY_LOCAL_INFERENCE = "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md"
 LEGACY_BLOGPOST_BLOB = "eeb9945e4c1d01a32e13bf6cb74db0c0c49d2767"
@@ -54,6 +58,7 @@ def validate(root: Path) -> dict:
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
         "repo_claude": root / ROOT_CLAUDE,
+        "worker_directive": root / WORKER_DIRECTIVE,
         "legacy_blogpost": root / LEGACY_BLOGPOST,
         "legacy_local_inference": root / LEGACY_LOCAL_INFERENCE,
         "control41": root / CONTROL41,
@@ -61,11 +66,12 @@ def validate(root: Path) -> dict:
         "control43": root / CONTROL43,
         "control44": root / CONTROL44,
         "steering844": root / STEERING844,
+        "steering849": root / STEERING849,
     }
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
     if errors:
-        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2", "pass": False, "errors": errors}
+        return {"schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3", "pass": False, "errors": errors}
 
     try:
         canonical = load_json(paths["canonical"])
@@ -76,10 +82,11 @@ def validate(root: Path) -> dict:
         control42 = load_json(paths["control42"])
         control43 = load_json(paths["control43"])
         control44 = load_json(paths["control44"])
-        steering = load_json(paths["steering844"])
+        steering844 = load_json(paths["steering844"])
+        steering849 = load_json(paths["steering849"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
-            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+            "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
             "pass": False,
             "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
         }
@@ -90,6 +97,7 @@ def validate(root: Path) -> dict:
     architecture = paths["architecture"].read_text(encoding="utf-8")
     readme = paths["readme"].read_text(encoding="utf-8")
     repo_claude = paths["repo_claude"].read_text(encoding="utf-8")
+    worker_directive = paths["worker_directive"].read_text(encoding="utf-8")
     legacy_blogpost = paths["legacy_blogpost"].read_text(encoding="utf-8")
     legacy_local_inference = paths["legacy_local_inference"].read_text(encoding="utf-8")
 
@@ -110,6 +118,10 @@ def validate(root: Path) -> dict:
     require(errors, bootstrap.get("release_form") == EXPECTED_RELEASE, "BOOTSTRAP_RELEASE_FORM_MISMATCH")
     require(errors, bootstrap.get("together_api") == "FORBIDDEN", "BOOTSTRAP_TOGETHER_FENCE_MISSING")
     require(errors, bootstrap.get("vps_testing") == "FORBIDDEN", "BOOTSTRAP_VPS_TEST_FENCE_MISSING")
+    require(errors, bootstrap.get("all_worker_protocol") == WORKER_DIRECTIVE, "BOOTSTRAP_WORKER_DIRECTIVE_POINTER_MISMATCH")
+    prompt_injection = str(bootstrap.get("go_prompt_injection", ""))
+    require(errors, "ClayVerse owner/product authority" in prompt_injection, "BOOTSTRAP_TRANSITIVE_CLAYVERSE_PROMPT_AUTHORITY_MISSING")
+    require(errors, "never substitute stale Mini Entity/Blogpost product authority" in prompt_injection, "BOOTSTRAP_TRANSITIVE_STALE_PRODUCT_FENCE_MISSING")
 
     require(errors, program.get("program_id") == "clayverse-single-container", "PROGRAM_ID_MISMATCH")
     require(errors, program.get("stage") == EXPECTED_STAGE and program.get("current_stage") == EXPECTED_STAGE, "PROGRAM_STAGE_MISMATCH")
@@ -196,10 +208,32 @@ def validate(root: Path) -> dict:
     require(errors, hard44.get("frank_harness_modification") == "FORBIDDEN", "CONTROL44_FRANK_HARNESS_FENCE_WEAKENED")
     require(errors, hard44.get("legacy_mini_entity_swarm_controller") == "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION", "CONTROL44_SWARM_QUARANTINE_WEAKENED")
 
-    require(errors, steering.get("program") == EXPECTED_PROGRAM and steering.get("stage") == EXPECTED_STAGE, "STEERING844_PROGRAM_STAGE_MISMATCH")
-    require(errors, steering.get("effective_control") == EXPECTED_EFFECTIVE_CONTROL, "STEERING844_CONTROL44_NOT_EFFECTIVE")
-    adjudication = steering.get("adjudication") or {}
+    # Preserve the older 8.44 control-chain steering as ancestry evidence.
+    require(errors, steering844.get("program") == EXPECTED_PROGRAM and steering844.get("stage") == EXPECTED_STAGE, "STEERING844_PROGRAM_STAGE_MISMATCH")
+    require(errors, steering844.get("effective_control") == EXPECTED_EFFECTIVE_CONTROL, "STEERING844_CONTROL44_NOT_EFFECTIVE")
+    adjudication = steering844.get("adjudication") or {}
     require(errors, adjudication.get("free_only") is True and adjudication.get("together_forbidden") is True and adjudication.get("vps_testing") is False, "STEERING844_SAFETY_WEAKENED")
+
+    # 8.49 is the post-merge live steering selected after the 2026-08-23 owner re-entry.
+    # A healthy historical 8.44 must not mask a later product-routing regression.
+    require(errors, steering849.get("schema_version") == "8.49", "STEERING849_VERSION_MISMATCH")
+    require(errors, steering849.get("status") == "CURRENT_POSTMERGE_CLAYVERSE_STEERING", "STEERING849_NOT_CURRENT")
+    require(errors, steering849.get("persistent_research_entity") == "Clay", "STEERING849_ENTITY_MISMATCH")
+    require(errors, steering849.get("program") == EXPECTED_PROGRAM and steering849.get("stage") == EXPECTED_STAGE, "STEERING849_PROGRAM_STAGE_MISMATCH")
+    require(errors, steering849.get("product_endpoint") == "ClayVerse", "STEERING849_PRODUCT_ENDPOINT_MISMATCH")
+    require(errors, steering849.get("owner_directive") == OWNER_DIRECTIVE, "STEERING849_OWNER_DIRECTIVE_MISMATCH")
+    postmerge = steering849.get("postmerge_authority_state") or {}
+    require(errors, postmerge.get("bootstrap") == EXPECTED_PROGRAM, "STEERING849_BOOTSTRAP_AUTHORITY_MISMATCH")
+    require(errors, postmerge.get("program_state") == "clayverse-single-container", "STEERING849_PROGRAM_STATE_MISMATCH")
+    require(errors, postmerge.get("control_4_4") == "ACTIVE", "STEERING849_CONTROL44_NOT_ACTIVE")
+    require(errors, postmerge.get("control_4_5") == "SUPERSEDED_HISTORICAL_DONOR_ONLY", "STEERING849_CONTROL45_NOT_SUPERSEDED")
+    execution_admission = steering849.get("execution_admission") or {}
+    require(errors, execution_admission.get("test_failure_claimed") is False, "STEERING849_PRESTEP_FAILURE_MISCLASSIFIED")
+    require(errors, execution_admission.get("runtime_credit") == 0 and execution_admission.get("oci_credit") == 0, "STEERING849_RUNTIME_CREDIT_INFLATED")
+    require(errors, steering849.get("together_forbidden") is True and steering849.get("vps_self_hosted_production_testing_forbidden") is True, "STEERING849_SAFETY_WEAKENED")
+    steering849_rules = steering849.get("steering") or []
+    require(errors, "KEEP_CLAYVERSE_OWNER_AUTHORITY_MERGED_AND_FAIL_CLOSED_AGAINST_STALE_MINI_ENTITY_WORK_SELECTION" in steering849_rules, "STEERING849_CLAYVERSE_REENTRY_RULE_MISSING")
+    require(errors, "NEXT_RUNTIME_GATE_REQUIRES_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXACT_CURRENT_EXECUTION" in steering849_rules, "STEERING849_EXACT_RUNTIME_GATE_MISSING")
 
     directive_upper = directive[:1200].upper()
     require(errors, "CURRENT OWNER DIRECTIVE" in directive_upper, "DIRECTIVE_NOT_CURRENT")
@@ -214,14 +248,23 @@ def validate(root: Path) -> dict:
     require(errors, "CLAYVERSE" in readme_head and "ONE OCI/DOCKER-COMPATIBLE" in readme_head, "README_RELEASE_MISMATCH")
     require(errors, not ("CLAYVERSE SINGLE-CONTAINER ENDPOINT" in readme_head and "SUPERSEDED" in readme_head), "README_CLAYVERSE_SUPERSEDED")
 
-    # Root CLAUDE.md is a high-leverage repository-organ routing surface. It must not
-    # silently reactivate a superseded Mini Entity/Blogpost program after convergence.
+    # Root CLAUDE.md is a high-leverage repository-organ routing surface.
     repo_claude_head = repo_claude[:7000].upper()
     require(errors, "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`" in repo_claude_head, "ROOT_CLAUDE_PROGRAM_MISMATCH")
     require(errors, "`STAGE=CLAYVERSE_ARTIFACT`" in repo_claude_head, "ROOT_CLAUDE_STAGE_MISMATCH")
     require(errors, "CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.MD" in repo_claude_head, "ROOT_CLAUDE_OWNER_DIRECTIVE_MISSING")
     require(errors, "MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in repo_claude_head, "ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE")
     require(errors, "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.MD" not in repo_claude_head, "ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE")
+
+    # BOOTSTRAP_MINIMAL actively routes delegated workers here. Treat it as a transitive
+    # authority surface so top-level ClayVerse truth cannot coexist with stale child prompts.
+    worker_upper = worker_directive.upper()
+    require(errors, "ACTIVE PRODUCT: **CLAYVERSE**" in worker_upper, "WORKER_DIRECTIVE_CLAYVERSE_PRODUCT_MISSING")
+    require(errors, OWNER_DIRECTIVE.upper() in worker_upper, "WORKER_DIRECTIVE_OWNER_POINTER_MISSING")
+    require(errors, CLAYVERSE_WORKER_MARKER.upper() in worker_upper, "WORKER_DIRECTIVE_CLAYVERSE_PROMPT_MARKER_MISSING")
+    require(errors, LEGACY_WORKER_MARKER.upper() not in worker_upper, "WORKER_DIRECTIVE_LEGACY_MINI_ENTITY_PROMPT_MARKER")
+    require(errors, "ALL MINI ENTITY WORKERS OPERATE" not in worker_upper, "WORKER_DIRECTIVE_LEGACY_ACTIVE_ROLE")
+    require(errors, "CURRENT MINI ENTITY ACCEPTANCE CONTRACTS REMAIN AUTHORITATIVE" not in worker_upper, "WORKER_DIRECTIVE_LEGACY_ACCEPTANCE_AUTHORITY")
 
     # Known superseded Mini Entity authority paths remain addressable only as historical
     # compatibility redirects. Their old exact bytes stay available through Git blob anchors.
@@ -239,7 +282,7 @@ def validate(root: Path) -> dict:
     require(errors, LEGACY_LOCAL_INFERENCE_BLOB.upper() in local_head, "LEGACY_LOCAL_INFERENCE_BLOB_MISSING")
 
     return {
-        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
+        "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v3",
         "pass": not errors,
         "errors": errors,
         "checked": {name: path.relative_to(root).as_posix() for name, path in paths.items()},

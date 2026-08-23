@@ -37,6 +37,8 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "release_form": mod.EXPECTED_RELEASE,
                 "together_api": "FORBIDDEN",
                 "vps_testing": "FORBIDDEN",
+                "all_worker_protocol": mod.WORKER_DIRECTIVE,
+                "go_prompt_injection": "MANDATORY_TOP_OF_PROMPT_TRANSITIVE: every spawned child receives the current GRF+ClayCode worker protocol plus the current ClayVerse owner/product authority; never substitute stale Mini Entity/Blogpost product authority.",
             },
             "research_entity/rooms/PROGRAM_STATE.json": {
                 "program_id": "clayverse-single-container",
@@ -149,6 +151,32 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "effective_control": mod.EXPECTED_EFFECTIVE_CONTROL,
                 "adjudication": {"free_only": True, "together_forbidden": True, "vps_testing": False},
             },
+            mod.STEERING849: {
+                "schema_version": "8.49",
+                "status": "CURRENT_POSTMERGE_CLAYVERSE_STEERING",
+                "persistent_research_entity": "Clay",
+                "program": mod.EXPECTED_PROGRAM,
+                "stage": mod.EXPECTED_STAGE,
+                "product_endpoint": "ClayVerse",
+                "owner_directive": mod.OWNER_DIRECTIVE,
+                "postmerge_authority_state": {
+                    "bootstrap": mod.EXPECTED_PROGRAM,
+                    "program_state": "clayverse-single-container",
+                    "control_4_4": "ACTIVE",
+                    "control_4_5": "SUPERSEDED_HISTORICAL_DONOR_ONLY",
+                },
+                "execution_admission": {
+                    "test_failure_claimed": False,
+                    "runtime_credit": 0,
+                    "oci_credit": 0,
+                },
+                "steering": [
+                    "KEEP_CLAYVERSE_OWNER_AUTHORITY_MERGED_AND_FAIL_CLOSED_AGAINST_STALE_MINI_ENTITY_WORK_SELECTION",
+                    "NEXT_RUNTIME_GATE_REQUIRES_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXACT_CURRENT_EXECUTION",
+                ],
+                "together_forbidden": True,
+                "vps_self_hosted_production_testing_forbidden": True,
+            },
         }
         text = {
             mod.OWNER_DIRECTIVE: "# ClayVerse\nStatus: CURRENT OWNER DIRECTIVE\n",
@@ -161,6 +189,14 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
                 "`STAGE=CLAYVERSE_ARTIFACT`\n"
                 "Read research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md first.\n"
+            ),
+            mod.WORKER_DIRECTIVE: (
+                "# ClayCode All-Workers Execution Directive — ClayVerse\n"
+                f"Current product authority: `{mod.OWNER_DIRECTIVE}`\n"
+                "Active product: **ClayVerse**\n"
+                "[CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]\n"
+                "Persistent research entity: Clay.\n"
+                "[/CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]\n"
             ),
             mod.LEGACY_BLOGPOST: (
                 "# HISTORICAL MINI ENTITY / BLOGPOST DIRECTIVE — COMPATIBILITY REDIRECT\n"
@@ -202,162 +238,119 @@ class AuthorityConsistencyTests(unittest.TestCase):
         return td, root
 
     def test_coherent_clayverse_authority_passes(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        self.assertTrue(mod.validate(root)["pass"])
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        result = mod.validate(root)
+        self.assertTrue(result["pass"], result["errors"])
+        self.assertEqual(result["schema"], "CLAYVERSE_AUTHORITY_CONSISTENCY/v3")
 
     def test_old_mini_entity_bootstrap_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
         path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["active_program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
-        path.write_text(json.dumps(data), encoding="utf-8")
+        data = json.loads(path.read_text()); data["active_program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"; path.write_text(json.dumps(data))
         self.assertIn("BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH", mod.validate(root)["errors"])
 
     def test_identity_guard_loss_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
         path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["identity"] = {}
-        path.write_text(json.dumps(data), encoding="utf-8")
+        data = json.loads(path.read_text()); data["identity"] = {}; path.write_text(json.dumps(data))
         self.assertIn("BOOTSTRAP_IDENTITY_GUARD_POINTER_MISSING", mod.validate(root)["errors"])
 
     def test_control41_paid_fallback_weakening_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL41
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["cycle_policy"]["paid_fallback"] = True
-        path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL41; data = json.loads(path.read_text()); data["cycle_policy"]["paid_fallback"] = True; path.write_text(json.dumps(data, sort_keys=True))
         errors = mod.validate(root)["errors"]
-        self.assertIn("CONTROL41_PAID_FALLBACK_WEAKENED", errors)
-        self.assertIn("CONTROL42_BASE_BLOB_MISMATCH", errors)
-        self.assertIn("CONTROL43_BASE_BLOB_MISMATCH", errors)
+        self.assertIn("CONTROL41_PAID_FALLBACK_WEAKENED", errors); self.assertIn("CONTROL42_BASE_BLOB_MISMATCH", errors); self.assertIn("CONTROL43_BASE_BLOB_MISMATCH", errors)
 
     def test_control42_together_weakening_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL42
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["preserved_hard_rules"]["together_forbidden"] = False
-        path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL42; data = json.loads(path.read_text()); data["preserved_hard_rules"]["together_forbidden"] = False; path.write_text(json.dumps(data, sort_keys=True))
         errors = mod.validate(root)["errors"]
-        self.assertIn("CONTROL42_TOGETHER_FENCE_WEAKENED", errors)
-        self.assertIn("CONTROL43_EXEC_BLOB_MISMATCH", errors)
+        self.assertIn("CONTROL42_TOGETHER_FENCE_WEAKENED", errors); self.assertIn("CONTROL43_EXEC_BLOB_MISMATCH", errors)
 
     def test_control43_mutation_breaks_control44_ancestry(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL43
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["credit"] = {"tampered": True}
-        path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL43; data = json.loads(path.read_text()); data["credit"] = {"tampered": True}; path.write_text(json.dumps(data, sort_keys=True))
         self.assertIn("CONTROL44_PRIOR_BLOB_MISMATCH", mod.validate(root)["errors"])
 
     def test_control44_mini_entity_regression_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL44
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["program_identity_override"]["active_program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
-        path.write_text(json.dumps(data), encoding="utf-8")
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL44; data = json.loads(path.read_text()); data["program_identity_override"]["active_program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"; path.write_text(json.dumps(data))
         self.assertIn("CONTROL44_PROGRAM_MISMATCH", mod.validate(root)["errors"])
 
     def test_control44_safety_weakening_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL44
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["preserved_hard_rules"]["free_only"] = False
-        path.write_text(json.dumps(data), encoding="utf-8")
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL44; data = json.loads(path.read_text()); data["preserved_hard_rules"]["free_only"] = False; path.write_text(json.dumps(data))
         self.assertIn("CONTROL44_FREE_ONLY_WEAKENED", mod.validate(root)["errors"])
 
     def test_nested_work_selector_poison_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / "research_entity/rooms/PROGRAM_STATE.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["dynamic_targets"]["primary"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
-        path.write_text(json.dumps(data), encoding="utf-8")
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / "research_entity/rooms/PROGRAM_STATE.json"; data = json.loads(path.read_text()); data["dynamic_targets"]["primary"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"; path.write_text(json.dumps(data))
         self.assertIn("PROGRAM_DYNAMIC_PRIMARY_MISMATCH", mod.validate(root)["errors"])
 
     def test_non_clayverse_frontier_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / "research_entity/rooms/PROGRAM_STATE.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["current_frontier"] = "Continue Mini Entity work selection."
-        path.write_text(json.dumps(data), encoding="utf-8")
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / "research_entity/rooms/PROGRAM_STATE.json"; data = json.loads(path.read_text()); data["current_frontier"] = "Continue Mini Entity work selection."; path.write_text(json.dumps(data))
         self.assertIn("PROGRAM_FRONTIER_NOT_CLAYVERSE", mod.validate(root)["errors"])
 
     def test_superseded_directive_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.OWNER_DIRECTIVE
-        path.write_text("# SUPERSEDED — compatibility redirect\n", encoding="utf-8")
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.OWNER_DIRECTIVE; path.write_text("# SUPERSEDED — compatibility redirect\n")
         errors = mod.validate(root)["errors"]
-        self.assertIn("DIRECTIVE_NOT_CURRENT", errors)
-        self.assertIn("DIRECTIVE_MARKED_SUPERSEDED", errors)
+        self.assertIn("DIRECTIVE_NOT_CURRENT", errors); self.assertIn("DIRECTIVE_MARKED_SUPERSEDED", errors)
 
     def test_root_claude_mini_entity_program_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
         path = root / mod.ROOT_CLAUDE
-        path.write_text(
-            "# stale repo organ\n"
-            "`PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE`\n"
-            "`STAGE=CLAYVERSE_ARTIFACT`\n"
-            "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n",
-            encoding="utf-8",
-        )
+        path.write_text("# stale\n`PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE`\n`STAGE=CLAYVERSE_ARTIFACT`\nresearch_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n")
         errors = mod.validate(root)["errors"]
-        self.assertIn("ROOT_CLAUDE_PROGRAM_MISMATCH", errors)
-        self.assertIn("ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE", errors)
+        self.assertIn("ROOT_CLAUDE_PROGRAM_MISMATCH", errors); self.assertIn("ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE", errors)
 
     def test_root_claude_stale_blogpost_directive_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
         path = root / mod.ROOT_CLAUDE
-        path.write_text(
-            "# stale first-read redirect\n"
-            "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
-            "`STAGE=CLAYVERSE_ARTIFACT`\n"
-            "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n"
-            "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md\n",
-            encoding="utf-8",
-        )
+        path.write_text("`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n`STAGE=CLAYVERSE_ARTIFACT`\nresearch_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\nresearch_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md\n")
         self.assertIn("ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE", mod.validate(root)["errors"])
 
     def test_legacy_blogpost_cannot_be_current_owner_again(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.LEGACY_BLOGPOST
-        path.write_text(
-            "# MULTI-USE MINI ENTITY — SOLE CANONICAL OWNER DIRECTIVE\n"
-            "Status: CURRENT\n"
-            "Active program: MINI_ENTITY_PIPELINE_ALL_IN_ONE\n",
-            encoding="utf-8",
-        )
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.LEGACY_BLOGPOST; path.write_text("# MULTI-USE MINI ENTITY — SOLE CANONICAL OWNER DIRECTIVE\nStatus: CURRENT\nActive program: MINI_ENTITY_PIPELINE_ALL_IN_ONE\n")
         errors = mod.validate(root)["errors"]
-        self.assertIn("LEGACY_BLOGPOST_NOT_SUPERSEDED", errors)
-        self.assertIn("LEGACY_BLOGPOST_STILL_CURRENT", errors)
-        self.assertIn("LEGACY_BLOGPOST_STILL_SOLE_OWNER", errors)
+        self.assertIn("LEGACY_BLOGPOST_NOT_SUPERSEDED", errors); self.assertIn("LEGACY_BLOGPOST_STILL_CURRENT", errors); self.assertIn("LEGACY_BLOGPOST_STILL_SOLE_OWNER", errors)
 
     def test_legacy_local_inference_cannot_select_current_program(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / mod.LEGACY_LOCAL_INFERENCE
-        path.write_text(
-            "# Mini Entity — Local Inference Requirement\n"
-            "Status: CURRENT\n"
-            "Program: MINI_ENTITY_PIPELINE_ALL_IN_ONE\n",
-            encoding="utf-8",
-        )
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.LEGACY_LOCAL_INFERENCE; path.write_text("# Mini Entity — Local Inference Requirement\nStatus: CURRENT\nProgram: MINI_ENTITY_PIPELINE_ALL_IN_ONE\n")
         errors = mod.validate(root)["errors"]
-        self.assertIn("LEGACY_LOCAL_INFERENCE_NOT_SUPERSEDED", errors)
-        self.assertIn("LEGACY_LOCAL_INFERENCE_STILL_CURRENT", errors)
+        self.assertIn("LEGACY_LOCAL_INFERENCE_NOT_SUPERSEDED", errors); self.assertIn("LEGACY_LOCAL_INFERENCE_STILL_CURRENT", errors)
+
+    def test_legacy_mini_entity_worker_prompt_fails_closed(self):
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.WORKER_DIRECTIVE
+        path.write_text(f"Current product authority: {mod.OWNER_DIRECTIVE}\nActive product: **ClayVerse**\n[MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]\nAll Mini Entity workers operate ClayCode-first.\n")
+        errors = mod.validate(root)["errors"]
+        self.assertIn("WORKER_DIRECTIVE_CLAYVERSE_PROMPT_MARKER_MISSING", errors); self.assertIn("WORKER_DIRECTIVE_LEGACY_MINI_ENTITY_PROMPT_MARKER", errors); self.assertIn("WORKER_DIRECTIVE_LEGACY_ACTIVE_ROLE", errors)
+
+    def test_missing_worker_directive_pointer_fails_closed(self):
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"; data = json.loads(path.read_text()); data["all_worker_protocol"] = "research_entity/claycode/legacy.md"; path.write_text(json.dumps(data))
+        self.assertIn("BOOTSTRAP_WORKER_DIRECTIVE_POINTER_MISMATCH", mod.validate(root)["errors"])
+
+    def test_transitive_prompt_authority_loss_fails_closed(self):
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"; data = json.loads(path.read_text()); data["go_prompt_injection"] = "prepend generic worker protocol"; path.write_text(json.dumps(data))
+        errors = mod.validate(root)["errors"]
+        self.assertIn("BOOTSTRAP_TRANSITIVE_CLAYVERSE_PROMPT_AUTHORITY_MISSING", errors); self.assertIn("BOOTSTRAP_TRANSITIVE_STALE_PRODUCT_FENCE_MISSING", errors)
+
+    def test_live_849_mini_entity_regression_fails_closed(self):
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.STEERING849; data = json.loads(path.read_text()); data["program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"; path.write_text(json.dumps(data))
+        self.assertIn("STEERING849_PROGRAM_STAGE_MISMATCH", mod.validate(root)["errors"])
+
+    def test_live_849_safety_and_credit_weakening_fails_closed(self):
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.STEERING849; data = json.loads(path.read_text()); data["together_forbidden"] = False; data["execution_admission"]["runtime_credit"] = 1; path.write_text(json.dumps(data))
+        errors = mod.validate(root)["errors"]
+        self.assertIn("STEERING849_SAFETY_WEAKENED", errors); self.assertIn("STEERING849_RUNTIME_CREDIT_INFLATED", errors)
 
 
 if __name__ == "__main__":

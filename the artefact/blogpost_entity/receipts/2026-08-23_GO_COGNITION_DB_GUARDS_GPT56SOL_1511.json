@@ -5,19 +5,23 @@
   "organ": "GPT-5.6 Sol",
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
-  "base_main_sha": "2192ea63f41fc3158d4d3c13597bde156d56a2f9",
+  "base_main_sha": "f61c15f8b0fb083dcc8a20d905c2d91fe8944e3d",
   "canonical_store_origin": "PR_1234_MAIN",
-  "canonical_store_current_sha": "2192ea63f41fc3158d4d3c13597bde156d56a2f9",
+  "canonical_store_read_integrity": "MERGED_PR_1247",
   "canonical_store_path": "tools/miniunifieddb_cognition_store_v1.py",
   "finding": {
-    "class": "GENERATION_CHECK_INSERT_TOCTOU_AND_DIRECT_MUTATION_GAP",
-    "observed_source_fact": "canonical store validates live generation in Python before INSERT while the landed store schema contains no DB trigger repeating the live-generation constraint at INSERT time",
+    "class": "GENERATION_CHECK_INSERT_TOCTOU_PLUS_PRIOR_ADMISSION_REUSE",
+    "observed_source_facts": [
+      "canonical store validates live generation in Python before INSERT while its schema contains no DB trigger repeating the live-generation constraint at INSERT time",
+      "current canonical _require_admitted_digest still accepts admitted_generation <= entity_generation",
+      "PR 1249 proposed exact equality but closed unmerged with zero changed files"
+    ],
     "counterexample_schedule": [
       "caller validates generation g",
       "another canonical writer commits entity_state generation g+1",
       "first caller attempts its already-prepared generation-g INSERT"
     ],
-    "required_property": "SQLite itself must reject the stale write at the final write boundary"
+    "required_property": "SQLite itself rejects stale writes and a new boot generation cannot derive runtime authority from only prior-generation admissions"
   },
   "delta": {
     "guard_module": {
@@ -32,11 +36,15 @@
       {
         "path": "tests/test_miniunifieddb_cognition_db_guard_generation_reuse_v1.py",
         "git_blob": "e015430bdf7bde60def8016e5db277481cd88160"
+      },
+      {
+        "path": "tests/test_miniunifieddb_cognition_db_guard_api_fence_v1.py",
+        "git_blob": "d554033dc64a2223eac0f0cb2edc93b314d57b49"
       }
     ],
     "contract": {
       "path": "the artefact/blogpost_entity/jspace_gwt/MINIUNIFIEDDB_COGNITION_DB_GUARDS_V1.md",
-      "git_blob": "002224b1b73c58f8ea133fbcc17c21025ef4af68"
+      "git_blob": "8e5e47f9cc42dfaefcca53bf2b9d587e6e19090b"
     },
     "new_tables": 0,
     "expected_triggers": 11,
@@ -52,8 +60,8 @@
     "duplicate_pr_closed": 1238,
     "duplicate_parallel_pr_noted": 1242,
     "read_integrity": "MERGED_PR_1247_DO_NOT_DUPLICATE",
-    "api_exact_generation_admission": "PR_1249_OPEN_DO_NOT_DUPLICATE",
-    "this_lane_scope": "DB_WRITE_BOUNDARY_AND_APPEND_ONLY_GUARDS_ONLY",
+    "exact_generation_api_pr": "PR_1249_CLOSED_UNMERGED",
+    "this_lane_scope": "CANONICAL_STORE_DB_WRITE_BOUNDARY_AND_APPEND_ONLY_GUARDS",
     "second_store_created": false,
     "hcu_parallel_pass": "NO_CHANGE_NON_DUPLICATE"
   },
@@ -66,7 +74,12 @@
     {
       "name": "DIRECT_PRIOR_GENERATION_ADMISSION_REUSE",
       "status": "ENCODED_NOT_EXECUTED",
-      "required_observation": "a generation-g+1 boot INSERT cannot reuse only generation-g object admissions even through direct SQL"
+      "required_observation": "a generation-g+1 boot INSERT cannot reuse only generation-g object admissions through direct SQL"
+    },
+    {
+      "name": "CANONICAL_STORE_API_PRIOR_ADMISSION_REUSE",
+      "status": "ENCODED_NOT_EXECUTED",
+      "required_observation": "the current store.admit_boot_binding API cannot materialize generation g+1 from only generation-g admissions when DB guards are installed"
     }
   ],
   "execution": {
@@ -84,7 +97,7 @@
     "consumed_here": false,
     "reason": "No immutable shared macrocycle lease identity was exposed; the discriminators are encoded as deterministic regressions only."
   },
-  "next_gate": "After the exact-generation admission repair is fused, install these DB guards immediately after cognition-store schema installation in the single retained MiniUnifiedDB pipeline_init/bootstrap path, then execute exact integrated source on an actually-started authorized isolated executor before any runtime credit.",
+  "next_gate": "Install these guards immediately after canonical cognition-store schema installation in the single retained MiniUnifiedDB pipeline_init/bootstrap path, then execute exact integrated source on an actually-started authorized isolated executor before any runtime credit.",
   "safety": {
     "free_only": true,
     "together": "FORBIDDEN",

@@ -1,0 +1,99 @@
+{
+  "schema": "AUTONOMOUS_EXPORT_LIVENESS_OBSERVATION/v1",
+  "macrocycle_id": "go-20260823T0818+07-gpt56sol-liveness",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "created_local": "2026-08-23T08:18:00+07:00",
+  "source_binding": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "base_branch": "main",
+    "base_sha": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+    "supervisor_schema_version": "8.38",
+    "supervisor_cycle": "automation-20260823-gen276-export-liveness-stall",
+    "execution_policy": "FREE_ONLY",
+    "product_mutation_performed": false,
+    "host_restart_performed": false
+  },
+  "observed_github_timeline": {
+    "agentzero_exports": [
+      "2026-08-22T19:06:44Z",
+      "2026-08-22T19:36:44Z",
+      "2026-08-22T20:06:44Z"
+    ],
+    "agentzero_last_visible_commit": "5e134f5f07ddebc0a1c182d04579e361bbbe82a8",
+    "agentzero_last_visible_generation": 276,
+    "agentzero_last_visible_receipt_timestamp": "2026-08-22T20:07:42Z",
+    "agentzero_last_visible_test_summary": {
+      "green": 1486,
+      "red": 1,
+      "sole_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
+    },
+    "rating_last_visible_commit_time": "2026-08-22T20:25:04Z",
+    "rating_last_visible_commit": "9452c6fe621bc2d8c6f8cf5eb3f9fb88fd91591d",
+    "repo_supervisor_bind_commit": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+    "visible_stop_order": "AGENTZERO_EXPORT_SURFACE_FIRST_THEN_RATING_SURFACE",
+    "stop_order_scope": "GitHub-visible successful export commits only; does not prove timer/process stop order"
+  },
+  "read_only_inference": {
+    "strongest_supported_statement": "The two GitHub-visible export surfaces did not cease at the same observed successful timestamp: rating evidence continued after the last AgentZero export. A strictly simultaneous shared failure before 20:06:44Z is therefore incompatible with the visible history.",
+    "candidate_failure_window_if_one_shared_host_event_stopped_both": "after 2026-08-22T20:25:04Z and before the next expected AgentZero cadence point near 2026-08-22T20:36:44Z; this is only a counterfactual bound, not an observed host event",
+    "leading_hypotheses": [
+      "A host-wide timer/service/process stop after the last rating success and before the next AgentZero cadence point.",
+      "The next AgentZero export started and became stuck/blocked, then interfered with a shared lock/worktree/resource before the next rating export.",
+      "Both jobs kept running locally but Git push/auth/network failed, making GitHub an incomplete liveness observer.",
+      "Independent failures occurred on the AgentZero and rating paths at different times."
+    ],
+    "rejected_or_not_yet_rejected": {
+      "simultaneous_failure_before_last_agentzero_success": "REJECTED_BY_VISIBLE_TIMELINE",
+      "NO_NEW_STATE": "NOT_ESTABLISHED",
+      "RUN_FAILED": "NOT_ESTABLISHED",
+      "RUN_BLOCKED": "NOT_ESTABLISHED",
+      "PUSH_FAILED": "NOT_ESTABLISHED",
+      "TIMER_DISABLED": "NOT_ESTABLISHED",
+      "PROCESS_STUCK": "NOT_ESTABLISHED",
+      "DB_LOCKED": "NOT_ESTABLISHED",
+      "DISK_FULL": "NOT_ESTABLISHED",
+      "AUTH_FAILED": "NOT_ESTABLISHED",
+      "UNKNOWN": "RETAINED"
+    }
+  },
+  "required_live_fields": {
+    "timer_enabled_active": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "last_trigger_time": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "next_trigger_time": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "last_successful_run_id": "UNKNOWN_NO_HOST_RUN_ID_OBSERVED",
+    "process_exit_code": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "stdout_digest": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "stderr_digest": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "lock_state": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "sqlite_busy_state": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "disk_space": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "inode_availability": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "git_worktree_state": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "git_remote_push_result": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "network_result": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "auth_result": "UNKNOWN_LIVE_HOST_UNAVAILABLE_TO_THIS_ORGAN",
+    "generation_before_next_run": 276,
+    "generation_after_next_run": "UNKNOWN_NO_NEXT_VISIBLE_RUN",
+    "which_timer_service_or_dependency_stopped_first": "UNKNOWN_AT_LIVE_RUNTIME; GitHub-visible success ordering shows AgentZero surface ceased before rating surface"
+  },
+  "classification": "BLOCKED_UNKNOWN_LIVE_RUNTIME_STATE",
+  "credit": {
+    "autonomous_export_liveness_receipt_v1": 0,
+    "runtime_credit": 0,
+    "product_acceptance_credit": 0,
+    "reason": "Required read-only host timer/journal/process/lock/disk/git/network observations are unavailable. This receipt records only exact GitHub-visible timeline evidence and must not be promoted to liveness PASS."
+  },
+  "next_exact_read_only_discriminator": [
+    "Capture systemctl timer/service enabled+active state for AgentZero export and rating export.",
+    "Capture last-trigger/next-trigger and journal entries around 2026-08-22T20:25Z..20:56Z.",
+    "Capture running/stuck process and lock/SQLite busy state before any restart.",
+    "Capture df space+inode state and repository worktree/remote/push result.",
+    "Capture network/auth result without paid-provider execution.",
+    "Only after classification consider a safe restart, with pre/post generation and no-replay receipt."
+  ],
+  "unusual_experiment": {
+    "consumed": false,
+    "reason": "No intervention was performed; this was deterministic read-only timeline analysis."
+  }
+}

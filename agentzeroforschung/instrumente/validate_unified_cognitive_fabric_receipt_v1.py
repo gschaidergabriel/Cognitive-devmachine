@@ -26,6 +26,7 @@ JSPACE_MODES = {
     "PLAIN_COMPATIBILITY",
     "NONE",
 }
+VALIDATION_DECISIONS = {"ACCEPT_CANDIDATE", "REJECT_CANDIDATE", "ABSTAIN", "ERROR"}
 
 
 def _get(receipt: dict[str, Any], path: str, errors: list[str]) -> Any:
@@ -49,6 +50,13 @@ def _nonnegative_int(receipt: dict[str, Any], path: str, errors: list[str]) -> A
     value = _get(receipt, path, errors)
     if value is not None and (type(value) is not int or value < 0):
         errors.append(f"TYPE_NONNEGATIVE_INT:{path}")
+    return value
+
+
+def _nonempty_string(receipt: dict[str, Any], path: str, errors: list[str]) -> Any:
+    value = _get(receipt, path, errors)
+    if value is not None and (not isinstance(value, str) or not value.strip()):
+        errors.append(f"TYPE_NONEMPTY_STRING:{path}")
     return value
 
 
@@ -84,10 +92,8 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
     if dirty is not False:
         errors.append("SOURCE_NOT_CLEAN")
 
-    for path in ("runtime.entityos_version", "runtime.mini_entity_version"):
-        value = _get(receipt, path, errors)
-        if value is not None and (not isinstance(value, str) or not value.strip()):
-            errors.append(f"TYPE_NONEMPTY_STRING:{path}")
+    _nonempty_string(receipt, "runtime.entityos_version", errors)
+    _nonempty_string(receipt, "runtime.mini_entity_version", errors)
     _nonnegative_int(receipt, "runtime.entity_generation", errors)
 
     for path in (
@@ -99,14 +105,18 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
         "bundled_core.runtime_digest",
         "fabric.jspace_profile_digest",
         "fabric.workspace_policy_digest",
+        "fabric.workspace_calibration_digest",
         "workspace.digest_before",
         "workspace.digest_after",
+        "inference.capability_profile_digest",
+        "inference.adapter_contract_digest",
         "inference.inference_packet_digest",
         "inference.candidate_result_digest",
+        "validation.reconciliation_digest",
         "terminal_result_digest",
     ):
         _digest(receipt, path, errors)
-    _digest(receipt, "fabric.lens_profile_digest", errors, nullable=True)
+    lens_digest = _digest(receipt, "fabric.lens_profile_digest", errors, nullable=True)
 
     candidates = _list(receipt, "workspace.gwt_candidates", errors)
     winners = _list(receipt, "workspace.gwt_winners", errors)
@@ -134,30 +144,44 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
                 errors.append("GWT_CANDIDATE_ID_DUPLICATE")
             candidate_ids.add(candidate_id)
     if isinstance(winners, list):
+        winner_ids: set[str] = set()
         for winner in winners:
             if not isinstance(winner, str) or winner not in candidate_ids:
                 errors.append("GWT_WINNER_NOT_CANDIDATE")
+                continue
+            if winner in winner_ids:
+                errors.append("GWT_WINNER_DUPLICATE")
+            winner_ids.add(winner)
 
     engine = _get(receipt, "inference.engine_class", errors)
     mode = _get(receipt, "inference.jspace_mode", errors)
+    _nonempty_string(receipt, "inference.adapter_version", errors)
     local_activation = _bool(receipt, "inference.local_activation_access", errors)
     hidden_claim = _bool(receipt, "inference.external_hidden_state_claimed", errors)
     if engine not in ENGINE_CLASSES:
         errors.append("ENGINE_CLASS_INVALID")
     if mode not in JSPACE_MODES:
         errors.append("JSPACE_MODE_INVALID")
+    if engine == "NONE" and mode != "NONE":
+        errors.append("NONE_ENGINE_REQUIRES_NONE_MODE")
+    if engine != "NONE" and mode == "NONE":
+        errors.append("ACTIVE_ENGINE_CANNOT_USE_NONE_MODE")
 
-    if engine == "CLAUDE_CODE":
-        if mode != "COMPILED_EXTERNAL":
-            errors.append("CLAUDE_MUST_BE_COMPILED_EXTERNAL")
-        if hidden_claim is not False:
-            errors.append("CLAUDE_HIDDEN_STATE_CLAIM_FORBIDDEN")
+    if engine == "CLAUDE_CODE" and mode != "COMPILED_EXTERNAL":
+        errors.append("CLAUDE_MUST_BE_COMPILED_EXTERNAL")
     if engine == "BUNDLED_08B" and mode not in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}:
         errors.append("BUNDLED_CORE_MODE_INVALID")
+    if mode in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"} and lens_digest is None:
+        errors.append("LOCAL_JSPACE_REQUIRES_LENS_PROFILE")
     if mode == "FULL_LOCAL_LATENT" and local_activation is not True:
         errors.append("FULL_LOCAL_LATENT_REQUIRES_ACTIVATION_ACCESS")
-    if mode in {"COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY", "NONE"} and local_activation is True:
-        errors.append("EXTERNAL_MODE_CANNOT_CLAIM_LOCAL_ACTIVATION_ACCESS")
+    if mode in {"COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY", "NONE"}:
+        if local_activation is True:
+            errors.append("EXTERNAL_MODE_CANNOT_CLAIM_LOCAL_ACTIVATION_ACCESS")
+        if hidden_claim is not False:
+            errors.append("EXTERNAL_HIDDEN_STATE_CLAIM_FORBIDDEN")
+    if engine == "CLAUDE_CODE" and hidden_claim is not False:
+        errors.append("CLAUDE_HIDDEN_STATE_CLAIM_FORBIDDEN")
 
     intervention = _get(receipt, "fabric.intervention", errors)
     if not isinstance(intervention, dict):
@@ -176,7 +200,7 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
                     errors.append(f"INTERVENTION_{key.upper()}_REQUIRED")
 
     decision = _get(receipt, "validation.decision", errors)
-    if not isinstance(decision, str) or not decision:
+    if decision not in VALIDATION_DECISIONS:
         errors.append("VALIDATION_DECISION_INVALID")
     attempted_state = _bool(receipt, "validation.candidate_attempted_direct_state_mutation", errors)
     attempted_effect = _bool(receipt, "validation.candidate_attempted_direct_effect", errors)
@@ -187,6 +211,8 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
         errors.append("DIRECT_STATE_MUTATION_BYPASS")
     if attempted_effect is True and effect_executed is True:
         errors.append("DIRECT_EFFECT_BYPASS")
+    if (attempted_state is True or attempted_effect is True) and decision == "ACCEPT_CANDIDATE":
+        errors.append("DIRECT_AUTHORITY_ATTEMPT_ACCEPTED")
     if state_write is True and decision != "ACCEPT_CANDIDATE":
         errors.append("STATE_WRITE_WITHOUT_ACCEPT")
     if effect_executed is True and decision != "ACCEPT_CANDIDATE":

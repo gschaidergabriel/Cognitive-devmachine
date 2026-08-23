@@ -5,6 +5,7 @@
 `STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`
 `PRODUCT=EntityOS`
 `COMPUTE_ARCHITECTURE=HCU`
+`SUPERVISOR_MODE=FREE_ONLY`
 
 This root file is a repository-organ routing shim, not canonical durable product memory or a second authority. The persistent research entity remains Clay; every temporary Claude/model/session/worker is an organ of that same research entity.
 
@@ -12,7 +13,7 @@ This root file is a repository-organ routing shim, not canonical durable product
 
 1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
+3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json`
 4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
 5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
 6. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
@@ -20,7 +21,7 @@ This root file is a repository-organ routing shim, not canonical durable product
 8. `the artefact/README.md`
 9. task-relevant current or compatibility implementation files.
 
-Newest explicit owner authority plus verified current `main` outranks cached/historical program material. If current files disagree, fail closed and reconcile one canonical path.
+Newest explicit owner/product authority and current supervisor authority plus verified current `main` outrank cached/historical material. If files disagree, fail closed and reconcile one canonical path.
 
 ## Current naming law
 
@@ -35,32 +36,25 @@ Do not bulk-rename hashes, receipts, ABI/API names, schemas, paths or stateful c
 
 ## `go`
 
-Exact `go` means maximum useful **EntityOS + HCU convergence**.
+Exact `go` means maximum useful **EntityOS + HCU convergence** under the current `FREE_ONLY` supervisor boundary.
 
-Every `go` has two coupled tracks:
+Every `go` has three coupled tracks:
 
 1. `ENTITYOS_EXECUTABLE_CONVERGENCE`
 2. `HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT`
+3. `GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS`
 
-If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` plus the next discriminator.
+If a track cannot safely advance, record the exact no-change reason and next discriminator. Track 3 means zero-cost local readiness only in this supervisor mode; it is not permission for paid preflight or training.
 
 For material work use:
 
 `OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
 
-Prefer reusable HCU machine primitives across:
-
-- `GRID10` — cheap 10 logical-cell baseline;
-- `COGSIM10` — request-scoped cognition simulation;
-- `WM_TEST` — bounded noncanonical world-model experiment;
-- `NESTED_SIM` — selective world-model -> virtual computer -> simulated AI -> candidate-action experiment;
-- `SCALEOUT` — measured logical-context scaling over shared physical workers.
-
-Useful legacy XRAM/XPU/XCU/Entry concepts are implementation roles inside EntityOS/HCU, not competing systems. New current-facing compute-architecture language names HCU.
+Prefer reusable HCU primitives across `GRID10`, `COGSIM10`, `WM_TEST`, `NESTED_SIM` and `SCALEOUT`.
 
 Scale semantics remain strict:
 
-`logical_module_count != resident_model_count != physical_decode_concurrency`.
+`logical_module_count != resident_model_count != active_KV_context_count != physical_decode_concurrency`.
 
 The baseline is 10 logical cells. `10 -> 32 -> 64 -> 128 -> 256 -> ~600` is a benchmark ladder; ~600 on H100-class hardware remains hypothesis only until exact model/quantization/KV/HBM/throughput/latency/recovery evidence exists.
 
@@ -80,14 +74,19 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 - EffectGate + EffectJournal remain the only admitted real/state-changing effect authority;
 - no second persistent identity, truth store, effect path or recovery ledger.
 
-## Execution and safety
+## Execution and safety — FREE_ONLY
 
-- current build/test/experiment/runtime credit comes only from authorized isolated sandbox execution unless newer owner authority changes this;
-- VPS/self-hosted/production-host testing is forbidden under current control;
-- Together API/service forbidden;
-- no paid fallback; final paid/model training requires explicit owner authorization;
+- current build/test/experiment/runtime credit comes only from authorized isolated **FREE** sandbox execution unless newer authority changes this;
+- inspect the sandbox/API/SDK/CLI/connector actions actually callable by the current worker before classifying execution as blocked;
+- platform capability is not proof of worker callability;
+- VPS/self-hosted/production-host testing is forbidden;
+- paid, subscription and unknown-provider lanes fail closed **before credential/key lookup, provider preflight, network I/O or job creation**;
+- Together general inference/fallback is forbidden;
+- Together training is forbidden in this supervisor mode;
+- the repository's owner one-shot ~0.8B paid-training directive is retained as provenance only and creates zero permission, provider, runtime or training credit for this organ;
+- no paid fallback; do not request, inspect or consume Together credentials;
 - never expose or commit secrets;
-- source/component/historical PASS never implies broader EntityOS/HCU runtime acceptance;
-- preserve exact provenance, stale-generation, replay, privacy and effect boundaries.
+- source/component/historical PASS or a READY deployment never implies EntityOS/HCU runtime acceptance;
+- preserve exact provenance, generation, replay, privacy, loader-consumed-byte and EffectGate boundaries.
 
-Current immediate frontier: positive fail-closed local/internal cognition-engine admission plus one causal HCU route identity binding immutable event identity, resolved engine identity/class, policy and routing result; then exact isolated execution and downstream receipt echo before promotion.
+Current immediate frontier: obtain an actually-started exact-source authorized **FREE** isolated EntityOS/HCU run over current Research main + the retained HCU donor; then bind a real local ~0.8B checkpoint/tokenizer/runtime/build to loader-consumption evidence and instrument Global J-Space/GWT plus `JSPACE_VECTOR_CONTROL_ABI/v1` with real causal traces using zero-cost local execution.

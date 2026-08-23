@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "macrocycle_id": "20260824T0040p0700-gpt56sol-entityos-hcu-authority-successor-fence",
+  "trigger": "go",
+  "entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "current_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+  "fresh_branch_base_sha": "1b2c5f1449815eed215faad622c6d2ce441c54af",
+  "main_sha_observed_at_pr_creation": "ef8c5314480bf20e75cf9cd2d21042ad2be41216",
+  "branch": "gpt56sol/go-0040-authority-861-freeonly-fence",
+  "pull_request": 1398,
+  "finding": {
+    "classification": "CURRENT_AUTHORITY_SUCCESSOR_SPLIT_BRAIN",
+    "observed": [
+      "BOOTSTRAP_MINIMAL.json and PROGRAM_STATE.json already select FREE_ONLY supervisor 8.61.",
+      "tools/validate_clayverse_authority_consistency.py still selected supervisor 8.52.",
+      "the artefact/manifest.json still selected supervisor 8.52 and retained the earlier one-shot-authorized paid-training execution shape.",
+      "root CLAUDE.md still routed workers through supervisor 8.52.",
+      "the artefact/README.md already reflected 8.61 and the verified protected-preview Vercel Sandbox infrastructure-callability evidence."
+    ],
+    "effect": "Machine validation and current-facing runtime metadata could lag or contradict the active FREE_ONLY supervisor, especially around paid-provider admission before credential/preflight/network/job creation."
+  },
+  "superseded_intermediate_work": {
+    "branch": "gpt56sol/go-0040-authority-853-successor-fence",
+    "status": "NOT_PROMOTED",
+    "reason": "main advanced during the macrocycle from owner steering 8.53 to autonomous FREE_ONLY steering 8.61; the 8.53 source delta became stale before PR promotion and is retained only as Git provenance."
+  },
+  "delta": {
+    "validator": "ENTITYOS_HCU_AUTHORITY_CONSISTENCY/v2 now selects 8.61 and enforces FREE_ONLY, sandbox-only, pre-network paid-lane rejection, zero runtime/J-Space/training credit and legacy 4.1-4.4 safety ancestry.",
+    "manifest": "authority pointer moved to 8.61; paid one-shot retained only as unconsumed provenance; current Together training and other paid fallback forbidden; runtime/J-Space/training credit fixed at zero.",
+    "root_routing": "CLAUDE.md now points to 8.61, names three current GO tracks and states the FREE_ONLY pre-credential/preflight/network boundary.",
+    "tests": "focused successor/free-only regressions added without creating a second authority path."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "AUTHORITY_SUCCESSOR_ROLLBACK_POISON",
+    "initial_intervention": "During this macrocycle the current-authority pointer was poisoned backward to an older supervisor in a bounded synthetic fixture and required fail-closed rejection.",
+    "8_61_use": "Regression/re-entry of the same already-consumed intervention family; not a second unusual experiment."
+  },
+  "go_tracks": {
+    "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE advanced by repairing current machine-authority surfaces.",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: PR1263 remains the single retained hot HCU/Typed-Entry donor lane; no duplicate router/canonicalizer/inference/GRID10 authority was created.",
+    "track_c": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS advanced by preventing stale paid-training semantics from bypassing current FREE_ONLY supervisor authority."
+  },
+  "execution_surface_evidence": {
+    "vercel": "Current repository evidence records protected-preview Vercel Sandbox infrastructure callability; latest inspected READY deployment metadata is aligned to FREE_ONLY steering 8.61. Infrastructure callability is not EntityOS/HCU runtime acceptance.",
+    "github_pr_workflows": [
+      {"run_id": 32656455059, "name": "Research Entity Verify", "conclusion": "failure", "job": "verify", "steps": null},
+      {"run_id": 32656455060, "name": "Research Entity Identity Guard", "conclusion": "failure", "job": "identity-guard", "steps": null}
+    ],
+    "classification": "EXECUTION_ADMISSION_OR_RUNNER_FAILURE_BEFORE_VISIBLE_STEPS; NOT_SEMANTIC_TEST_FAILURE; NOT_PASS"
+  },
+  "authority_and_cost_state": {
+    "free_only": true,
+    "together_general_inference": "FORBIDDEN",
+    "together_training": "FORBIDDEN_IN_CURRENT_SUPERVISOR_MODE",
+    "owner_paid_one_shot_directive": "PROVENANCE_ONLY_QUARANTINED",
+    "owner_paid_one_shot_job_consumed": false,
+    "paid_preflight_or_job_creation": "FORBIDDEN_NOW",
+    "vps_self_hosted_production_test_fallback": "FORBIDDEN_NOT_USED"
+  },
+  "acceptance": {
+    "source_candidate": true,
+    "exact_current_branch_tests_executed": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Re-refresh current main and PR1263 identities, then run fixed SHA-bound Research main + retained PR1263 source capsules through the already-demonstrated protected-preview Vercel Sandbox bridge only when the current FREE_ONLY accounting/admission contract is satisfied; execute the authority guard plus Typed Entry -> route -> verified EngineAdmission/load lease -> inference receipt -> GRID10/J-Space regressions and bind result digest/cleanup in one exact receipt."
+}

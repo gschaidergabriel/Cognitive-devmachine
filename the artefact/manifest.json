@@ -8,7 +8,7 @@
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
   "persistent_research_entity": "Clay",
   "temporary_worker_role": "ORGAN_NOT_ENTITY",
   "canonical_state_authority": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB_CANONICAL_STATE_EVIDENCE_SUBSTRATE",
@@ -43,20 +43,23 @@
   "hyperposition_policy": "PRESERVE_UNRESOLVED_ALTERNATIVES; RECURRENCE_OR_MAJORITY_CANNOT_MINT_TRUTH",
   "epistemic_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
   "execution_policy": {
-    "free_only_default": true,
+    "free_only": true,
     "isolated_sandbox_only": true,
     "vps_testing_forbidden": true,
     "self_hosted_vps_test_runners_forbidden": true,
     "production_host_testing_forbidden": true,
     "together_general_inference_and_fallback_forbidden": true,
-    "together_one_shot_08b_jspace_gwt_finetune_authorized": true,
-    "together_one_shot_08b_jspace_gwt_finetune_consumed": false,
-    "together_training_authority": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
-    "other_paid_fallback": false,
-    "second_paid_training_requires_owner_authorization": true
+    "owner_paid_one_shot_directive_present_as_provenance": true,
+    "owner_paid_one_shot_directive_file": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
+    "owner_paid_one_shot_job_consumed": false,
+    "current_supervisor_together_training_forbidden": true,
+    "paid_or_unknown_provider_admission_boundary": "FAIL_CLOSED_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION",
+    "other_paid_fallback": false
   },
   "runtime_credit": {
     "entityos_hcu_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
     "whole_product_pass": false
   },
   "compatibility_names": {
@@ -72,15 +75,15 @@
     "policy": "prior ClayVerse-specific container/web/Clerk/Claude/MicroClay fields and acceptance gates remain available through Git provenance as donor evidence only; none are current EntityOS acceptance obligations unless explicitly re-admitted under current authority"
   },
   "current_frontier": [
-    "keep all current-facing authority surfaces aligned to EntityOS + HCU without destructive provenance renames",
+    "keep all current-facing authority surfaces aligned to EntityOS + HCU + current FREE_ONLY supervisor without destructive provenance renames",
+    "obtain an actually-started exact-source authorized FREE isolated EntityOS/HCU regression run through the protected-preview Sandbox bridge",
     "finish replay-stable causal event identity versus transport/admission identity split in the Typed Entry Fabric",
     "wire Entry capability admission to the canonical deterministic capability authority",
-    "bind real local HCU checkpoint tokenizer runtime and build bytes to positive engine admission",
+    "bind real local HCU checkpoint tokenizer runtime and build bytes to positive engine admission and loader-consumption evidence",
     "bind the actual downstream inference receipt producer to event route engine serializer and loader-lease identity",
     "build and instrument the functional Global J-Space/GWT prototype with JSPACE_VECTOR_CONTROL_ABI/v1",
-    "derive leak-resistant Together training data from exact J-Space/GWT traces plus deterministic hard negatives",
-    "launch exactly one owner-authorized full fine-tuning job for the exact intended ~0.8B HCU base after data/base/price/preflight gates",
-    "rebase and fuse the strongest HCU donor candidate onto current main",
-    "obtain exact authorized-isolated combined Entry HCU route inference GRID10 J-Space evidence before runtime promotion"
+    "derive leak-resistant train/validation/holdout data from exact J-Space/GWT traces plus deterministic hard negatives for zero-cost local experimentation",
+    "do not preflight, credential, network-call or create a paid Together training job in current FREE_ONLY supervisor mode",
+    "rebase and fuse the strongest HCU donor candidate onto current main only after exact executable evidence"
   ]
 }

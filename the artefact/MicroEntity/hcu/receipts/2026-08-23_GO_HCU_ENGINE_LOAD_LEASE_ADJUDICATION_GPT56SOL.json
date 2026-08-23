@@ -1,0 +1,44 @@
+{
+  "schema": "HCU_ENGINE_LOAD_LEASE_DONOR_ADJUDICATION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "candidate_branch": "gpt56sol/hcu-engine-load-lease-20260823",
+  "candidate_disposition": "SUPERSEDED_DONOR_NO_PR_OPENED",
+  "candidate_source_blob": "2b62c63aeeeec059610e8ad5d58bf9c4d53a9654",
+  "retained_parent": {
+    "pr": 1263,
+    "head_observed_at_adjudication": "d56056551e66facd78ccab8b6b6a628dceb29fe6",
+    "retained_source": "the artefact/MicroEntity/hcu/engine_load_lease_v1.py",
+    "retained_source_blob": "8809f54f8f132c18b5580c434253324254cf8fe8",
+    "retained_mechanism": "generation-fenced EngineLoadLease plus LoaderConsumption and VerifiedEngineLoad binding actual-loader-read evidence to the existing VerifiedEngineAdmission and downstream inference echo"
+  },
+  "adjudication": {
+    "finding": "the retained parent advanced during this go and now contains a stronger same-responsibility engine-load lease path",
+    "why_parent_is_stronger": [
+      "it separates pre-load admission from actual loader-consumption evidence",
+      "it binds loader_id and loader_binding_sha256",
+      "it compares checkpoint/tokenizer/runtime/build consumed identities to the admitted identities",
+      "it emits a VerifiedEngineLoad with downstream inference echo fields",
+      "it explicitly states that caller-constructed or post-hoc rehash is not loader attestation"
+    ],
+    "useful_donor_evidence_retained": [
+      "content-addressed staging can protect against original-source-path drift",
+      "ordinary chmod read-only staging is not a same-user immutable security boundary",
+      "post-admission path mutation is a concrete TOCTOU falsifier for pre-load-hash-only runtime claims"
+    ],
+    "fusion_law": "do not open a second PR or create a second physical engine lease authority; preserve this branch only as bounded donor/provenance evidence",
+    "runtime_credit": 0
+  },
+  "next_exact_gate": "instrument the actual admitted local model loader in the retained PR1263 path so its read path produces the LoaderConsumption evidence, bind VerifiedEngineLoad into inference receipt production, then execute exact-current combined Entry+route+engine-load+inference+GRID10 evidence in an authorized isolated executor",
+  "safety": {
+    "new_router_or_entry_authority_created": false,
+    "new_state_truth_effect_or_recovery_authority_created": false,
+    "vps_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  }
+}

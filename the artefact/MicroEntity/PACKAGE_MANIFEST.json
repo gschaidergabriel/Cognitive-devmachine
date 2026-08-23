@@ -18,6 +18,7 @@
     "entry_canonicalization": "hcu/typed_entry_canonical_v1.py",
     "entry_fabric": "hcu/xeno_entry_fabric_v1.py",
     "reactive_router": "hcu/reactive_event_router_v1.py",
+    "grid10_scheduler": "hcu/grid10_scheduler_v1.py",
     "reference_topology": "hcu/topology.kvm4.json",
     "free_llm_feed": "hcu/FREE_LLM_FEED_CONTRACT.json",
     "capacity_claim_guard": "hcu/capacity_guard_v1.py",
@@ -41,6 +42,8 @@
     "hcu/test_typed_entry_canonical_v1.py",
     "hcu/reactive_event_router_v1.py",
     "hcu/test_reactive_event_router_v1.py",
+    "hcu/grid10_scheduler_v1.py",
+    "hcu/test_grid10_scheduler_v1.py",
     "hcu/topology.kvm4.json",
     "hcu/FREE_LLM_FEED_CONTRACT.json",
     "hcu/HCU_DATA_INDEX.json",
@@ -51,10 +54,11 @@
   ],
   "generated_hcu_data_policy": "include non-secret release artefacts/receipts and privacy-filtered exports; operational state remains canonical in MiniUnifiedDB",
   "entry_fabric_policy": "TYPED_FAIL_CLOSED_INGRESS_SEPARATES_REPLAY_STABLE_CAUSAL_EVENT_IDENTITY_FROM_TRANSPORT_ADMISSION_AND_USES_ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET_V1",
+  "grid10_policy": "LOGICAL_CELL_POPULATION_MODEL_CALL_BUDGET_AND_PHYSICAL_DECODE_CONCURRENCY_ARE_SEPARATE_AND_CAPACITY_RECEIPT_BOUND",
   "internal_cognition_policy": "SCRIPT_FIRST_LOCAL_08B_GLOBAL_JSPACE_NO_REQUIRED_NVIDIA_MISTRAL_OR_EXTERNAL_EMBEDDING_DEPENDENCY",
   "zero_cognitive_load_policy": "BOUNDED_HIGH_SPECIFICITY_CLAYCODE_PROJECTION_DEFAULT",
   "capacity_claim_policy": "planning targets remain non-runtime; numeric runtime capacity requires exact authorized-isolated measurement receipt",
   "secrets_in_archive": false,
   "source_base_head": "ef46979f7d8e2ed1153dfd4e49fb4c7886b765f4",
-  "claim_class": "SOURCE_PACKAGE_REACTIVE_WORLDMODEL_PLUS_TYPED_ENTRY_CAUSAL_CANONICALIZATION_COMPONENT_EVIDENCE_NOT_HCU_RUNTIME_ACCEPTANCE"
+  "claim_class": "SOURCE_PACKAGE_REACTIVE_WORLDMODEL_TYPED_ENTRY_CAUSAL_CANONICALIZATION_PLUS_GRID10_SCHEDULER_COMPONENT_EVIDENCE_NOT_HCU_RUNTIME_ACCEPTANCE"
 }

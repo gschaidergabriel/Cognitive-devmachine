@@ -1,0 +1,78 @@
+{
+  "schema": "HCU_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU_XENO",
+  "product_endpoint": "EntityOS",
+  "parent_pr": 1263,
+  "parent_head_rebased": "c4678877f8d07c515ee1fca7c207114a7526c308",
+  "stack_branch": "gpt56sol/go-hcu-engine-trust-boundary-20260823-2324",
+  "finding": {
+    "status": "MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED",
+    "gap": "ENGINE_IDENTITY_CLASS_TRUST_BOUNDARY",
+    "description": "Parent independently locks engine artifact bytes but still accepts provider/engine identity/class claims from HCU_REACTIVE_EVENT/v1. This stack keeps the artifact registry and versioned hash serializer while moving the complete engine tuple to a separate Entry/XPU control-plane binding; event-carried admission metadata fails closed.",
+    "counterhypothesis": "The event is already fully trusted post-Entry/XPU control metadata.",
+    "counterhypothesis_status": "NOT_BOUND_BY_ROUTER_API"
+  },
+  "single_unusual_experiment": {
+    "name": "SAME_ROUTE_DISTINCT_EVENT_IDENTITY_COLLISION",
+    "count": 1,
+    "old_router_blob": "7c0fee26fd3d8a48b99da7eca7f3bca8fea046ae",
+    "event_a_novelty": 0.60,
+    "event_b_novelty": 0.95,
+    "same_old_decision_sha256": "2379e6db50f9e21013691a3ff6adae518b6488a12cfff87ca81211bbd3e604dc",
+    "collision_observed": true,
+    "note": "Parent repaired the event-identity collision during this macrocycle. Subsequent checks were deterministic regressions only."
+  },
+  "delta": {
+    "router_blob": "b89f0f521b3af15ac1eaa0fcf2c253e20ed4b962",
+    "test_blob": "3ce77d3adc449c90e028114e38b67b109f407dff",
+    "preserves": [
+      "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1 hash serialization identity",
+      "router_policy_sha256",
+      "event_sha256",
+      "engine_identity_sha256",
+      "out-of-band admitted engine artifact registry",
+      "route identity v2",
+      "full inference receipt echo",
+      "script-only no-engine rule"
+    ],
+    "adds": [
+      "event payload forbids requested provider and resolved engine admission fields",
+      "resolved_engine is a separate exact-schema Entry/XPU input",
+      "resolved engine identity/class/artifact must pass positive registry and artifact-lock checks",
+      "causal event identity is independent of separately admitted engine metadata"
+    ]
+  },
+  "evidence": {
+    "environment": "isolated local container available to this organ",
+    "github_blob_equals_tested_blob": true,
+    "py_compile": "PASS",
+    "focused_regressions": "18/18 PASS",
+    "runtime_credit": "BOUNDED_SOURCE_COMPONENT_MECHANISM_ONLY",
+    "hcu_model_runtime_credit": 0,
+    "entityos_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "dual_track": {
+    "xeno": "Executable router now separates causal event data from cognition-engine admission.",
+    "xcu_entry_fabric": "Entry/XPU engine resolution and XRAM artifact locking are explicit separate inputs fused only into route identity."
+  },
+  "next_gate": [
+    "Wire resolved_engine from the actual typed Xeno Entry/XPU resolver.",
+    "Source admitted_engine_artifacts from the exact locked runtime/package manifest.",
+    "Bind tokenizer/runtime/checkpoint identities at the actual local ~0.8B worker boundary.",
+    "Bind the real downstream inference receipt producer.",
+    "Run integrated exact-source authorized isolated runtime evidence before promotion."
+  ],
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_host_testing": false,
+    "together_used": false,
+    "paid_execution": false,
+    "model_training": false,
+    "secrets_persisted": false
+  }
+}

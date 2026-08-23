@@ -279,11 +279,21 @@ The next implementation step remains a fresh-current-main convergence of DB-resi
 
 PR `#1092` is merged and replaces the former Generation-276 monolithic adapter red with four independently addressable boundary nodes: tool-less behavior, ephemerality, structured output and environment isolation. It also removes two ambient-host dependencies by binding both `HOME` and the shell-injection sentinel to `tmp_path`. No `ClaudeCodeInference` product code or security contract was weakened.
 
-PR `#1099` is also merged and adds the evidence-composition layer that #1092 intentionally did not provide: all four child results must share one exact clean source commit/tree, Claude binary/version, command/input digest and executor identity before aggregate `CLAUDE_ADAPTER_BOUNDARY_ONLY` credit is possible. Exact authored validator/test/contract blobs passed `py_compile` and **15/15** deterministic isolated component regressions. This is measurement-contract mechanism evidence, not a live Claude invocation.
+PR `#1099` adds the shared clean source/tree, Claude binary/version, command/input and executor identity needed before aggregate `CLAUDE_ADAPTER_BOUNDARY_ONLY` credit. PR `#1109` preserves measured negative boundary evidence without weakening strict promotion: diagnostic FAIL remains valid evidence with `runtime_credit=ZERO`, while strict validation still requires aggregate PASS.
 
-The #1092 PR-head Actions run `32615049819` supplied **zero runtime test credit**: its `identity-guard` job concluded `failure`, but the observed job step list was empty and no job log blob was available. This is execution admission/control-plane failure before visible test execution, not a semantic test failure.
+Current `main` has now fused three further non-duplicate receipt hardenings: PR `#1123` requires timezone-aware UTC timestamps with `finished_at >= started_at`; PR `#1124` prevents an ENV_ISOLATION receipt from self-authorizing forbidden environment keys; and PR `#1121` requires all four boundary receipts to carry the same stdout/stderr digest pair. Together these close the concrete mixed-run false-green found during this frontier without needing a second parallel implementation.
 
-Current exact gate: run the four merged #1092 nodes on one authorized isolated clean runtime, emit #1099 cross-bound receipts, validate their aggregate identity, then rerun the full suite on the same exact source. Until that happens, historical `1486 green / 1 red` remains historical diagnostic evidence and current Claude-adapter runtime credit remains **ZERO**.
+The product adapter itself also advanced: PR `#1136` makes targeted Claude inference filesystem roots invocation-local and ephemeral, with explicit authentication crossing and cleanup behavior, while preserving the tool, side-memory, owner-neutrality and effect fences. This is a stronger product-path repair than adding another receipt-only guard, but it still has **ZERO exact Claude/Ubuntu runtime credit** until observed on the admitted host.
+
+During this `go`, a separate candidate added an opaque `invocation_id` plus the same output-digest cross-binding and passed exact-blob `py_compile` plus **24/24** deterministic regressions. After `main` independently merged #1121, the overlapping source guard was rejected as duplicate. The remaining opaque `invocation_id` is explicitly **DEFERRED**, not promoted: current supervisor policy says `source_only_guard_accumulation_pause=true`, and a validator-only id is manually copyable metadata unless it is minted by the trusted atomic receipt producer. The stronger next form is one immutable RUN_ID emitted at the actual Ubuntu execution boundary and shared by all four measured child observations.
+
+The available isolated ChatGPT runtime is Debian 13 with Python 3.13.5 and has no `claude` executable on PATH, so it cannot substitute for the required exact Ubuntu Claude run. No live adapter PASS is inferred from the local 24/24 mechanism regression.
+
+Current exact gate: on the next intentional authorized Ubuntu host start, run `PRESTART_FROZEN_BASELINE + POSTSTART_OBSERVATION_RECEIPT/v1` first, then execute the exact current Claude adapter through a trusted producer that mints one immutable RUN_ID and binds source/tree/dirty state, Claude binary/version, command/input, executor, coherent UTC interval, child environment/filesystem roots, shared stdout/stderr, all four boundary measurements and cleanup. Run diagnostic validation first, strict validation only on aggregate PASS, then rerun the full exact-source suite. Until then current Claude-adapter runtime credit remains **ZERO**.
+
+Durable adjudication receipt:
+
+`blogpost_entity/receipts/2026-08-23_GO_CLAUDE_ADAPTER_BOUNDARY_ADJUDICATION_GPT56SOL.json`
 
 ## Evidence law
 

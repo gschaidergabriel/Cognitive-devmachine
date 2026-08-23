@@ -1,0 +1,95 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "macrocycle_id": "cdd2fb97-a30f-41b3-9573-ae97c0346f31",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "86dcc1fec8add7888773aea0425be3931b5a78f9",
+  "branch": "gpt56sol/go-jspace-transfer-falsifier-20260823",
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_call": false,
+    "billed_create": false,
+    "training_started": false,
+    "host_started": false,
+    "runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "JSPACE_TRANSFER_ASSUMPTION_FALSIFIER",
+    "class": "PRIMARY_SOURCE_ARCHITECTURE_TRANSFER_DISCRIMINATOR"
+  },
+  "grf": {
+    "R0": "Anthropic 2026 global-workspace article, Transformer Circuits paper, and anthropics/jacobian-lens reference implementation establish Jacobian/residual-based J-space readout and causal interventions with explicit limitations.",
+    "R1": "The architecture can transfer; exact J-space geometry/calibration cannot be assumed model-independent.",
+    "R2": [
+      "H_DIRECT_TRANSPLANT: reuse Claude/J-lens geometry as universal drop-in control",
+      "H_CALIBRATED_TRANSFER: refit/calibrate exact bundled checkpoint and compile workspace context for closed external engines"
+    ],
+    "R3": "Cross-Claude functional similarity might imply sufficiently universal fixed geometry.",
+    "R4": "Cross-check primary method definition, intervention success, vocabulary limits, calibration dependence, and external-engine latent access.",
+    "R5": [
+      "PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY",
+      "COMPILED_EXTERNAL != FULL_LOCAL_LATENT",
+      "JSPACE_SIGNAL != FACT"
+    ],
+    "R6": {
+      "H_DIRECT_TRANSPLANT": "REJECT",
+      "H_CALIBRATED_TRANSFER": "RETAIN",
+      "current_owner_architecture": "SURVIVES_DISCRIMINATOR",
+      "runtime_credit": 0,
+      "model_quality_credit": 0,
+      "whole_gwt_credit": 0
+    }
+  },
+  "primary_sources": [
+    {
+      "url": "https://www.anthropic.com/research/global-workspace",
+      "published": "2026-07-06",
+      "role": "official research summary"
+    },
+    {
+      "url": "https://transformer-circuits.pub/2026/workspace/index.html",
+      "published": "2026-07-06",
+      "role": "full paper"
+    },
+    {
+      "url": "https://github.com/anthropics/jacobian-lens",
+      "role": "official companion/reference implementation"
+    }
+  ],
+  "observed_external_constraints": {
+    "jacobian_lens": "average input-output Jacobian transports intermediate residuals toward final-layer verbalizable basis",
+    "causal_intervention": "supported by coordinate swaps/ablations in the paper",
+    "swap_success_not_universal": "paper reports 54%/70%/70% top-1 two-hop swap success for Haiku/Sonnet/Opus 4.5",
+    "multi_token_limit": "current construction is vocabulary-token based and degrades for multi-token concepts",
+    "calibration": "workspace loading/range is empirical and intervention success varies",
+    "closed_external_engine": "no public evidence in these sources that Claude Code exposes the residual/Jacobian surface required for FULL_LOCAL_LATENT"
+  },
+  "product_fusion": {
+    "bundled_08b": "retain first-class J-Space/GWT integration but require exact checkpoint/tokenizer/runtime/lens/workspace calibration binding",
+    "claude_code": "retain COMPILED_EXTERNAL targeted-inference boundary unless separately admitted latent access exists",
+    "truth_authority": "MiniUnifiedDB plus deterministic gates remain above all model/J-space output",
+    "next_gate": "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 on next authorized exact Ubuntu start, then model-specific calibration and causal ablation"
+  },
+  "reference_runtime_sync": {
+    "retained_pr": 997,
+    "sync_pr": 1036,
+    "attempted_merge": true,
+    "result": "MERGE_CONFLICT",
+    "classification": "SYNC_BLOCKED_REQUIRES_SELECTIVE_FUSION",
+    "main_and_retained_branch_relation": "diverged",
+    "note": "No forced merge or second runtime lane created."
+  },
+  "evidence_boundary": "SOURCE_EXTERNAL_PRIMARY_SUPPORTED_ONLY",
+  "non_claims": [
+    "no Mini Entity runtime PASS",
+    "no bundled 0.8B J-Space calibration PASS",
+    "no Claude Code adapter PASS",
+    "no whole GWT PASS",
+    "no provider admission",
+    "no Together preflight or training",
+    "no RAM/quantization claim"
+  ]
+}

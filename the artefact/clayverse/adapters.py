@@ -47,16 +47,18 @@ class ClaudeCodeInference:
     memory, or effects.
     """
 
+    DEFAULT_BINARY = "/usr/local/bin/claude"
+    FIXED_PATH = "/usr/local/bin:/usr/bin:/bin"
     ENV_ALLOWLIST = (
-        "PATH", "LANG", "LC_ALL",
-        "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS",
-        "HTTP_PROXY", "HTTPS_PROXY",
-        "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
-        "CLAUDE_CODE_OAUTH_TOKEN",
+        "LANG", "LC_ALL",
+        "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN",
     )
 
     def __init__(self, binary: str | None = None, cwd: str | None = None, timeout: int | None = None):
-        self.binary = binary or os.environ.get("CLAUDE_CODE_BIN", "claude")
+        # The admitted image installs digest-locked Claude at this exact path.
+        # Explicit overrides remain available only to bounded tests/diagnostics;
+        # ambient host environment cannot retarget production cognition.
+        self.binary = binary or self.DEFAULT_BINARY
         self.cwd = cwd or os.environ.get("CLAYVERSE_WORKSPACE", "/workspace")
         self.timeout = int(timeout or os.environ.get("CLAYVERSE_CLAUDE_TIMEOUT_SECONDS", "120"))
         self._lock = threading.Lock()
@@ -64,7 +66,10 @@ class ClaudeCodeInference:
     @classmethod
     def _subprocess_env(cls) -> dict[str, str]:
         env = {key: os.environ[key] for key in cls.ENV_ALLOWLIST if key in os.environ}
-        env.setdefault("PATH", "/usr/local/bin:/usr/bin:/bin")
+        # Route, endpoint, trust roots and executable search are authority-bearing
+        # configuration. They must come from explicit EntityOS profile contracts,
+        # never ambient HTTP[S]_PROXY / ANTHROPIC_BASE_URL / CA / PATH inheritance.
+        env["PATH"] = cls.FIXED_PATH
         env["DISABLE_AUTOUPDATER"] = "1"
         env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] = "1"
         env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
@@ -102,8 +107,17 @@ class ClaudeCodeInference:
             "independently validates/reconciles it and EffectGate alone decides whether execution is admitted."
         )
 
+    def _resolved_binary(self) -> str | None:
+        if not isinstance(self.binary, str) or not self.binary or "\x00" in self.binary:
+            return None
+        if os.path.isabs(self.binary):
+            if os.path.isfile(self.binary) and os.access(self.binary, os.X_OK):
+                return os.path.realpath(self.binary)
+            return None
+        return shutil.which(self.binary, path=self.FIXED_PATH)
+
     def available(self) -> bool:
-        executable = shutil.which(self.binary)
+        executable = self._resolved_binary()
         if executable is None:
             return False
         try:
@@ -117,6 +131,9 @@ class ClaudeCodeInference:
             return False
 
     def reason(self, world: Any, observation: str) -> dict[str, Any]:
+        executable = self._resolved_binary()
+        if executable is None:
+            raise RuntimeError("Claude Code executable unavailable")
         world_json = json.dumps(world, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         if len(world_json) > 600_000:
             raise RuntimeError("assembled world exceeds Claude Code boundary")
@@ -124,7 +141,7 @@ class ClaudeCodeInference:
         prompt = f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"
         schema = json.dumps(CLAUDE_DECISION_SCHEMA, sort_keys=True, separators=(",", ":"))
         args = [
-            self.binary, "--safe-mode", "-p", prompt, "--output-format", "json", "--json-schema", schema,
+            executable, "--safe-mode", "-p", prompt, "--output-format", "json", "--json-schema", schema,
             "--max-turns", "1", "--permission-mode", "plan", "--tools", "",
             "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence",
             "--append-system-prompt", system,

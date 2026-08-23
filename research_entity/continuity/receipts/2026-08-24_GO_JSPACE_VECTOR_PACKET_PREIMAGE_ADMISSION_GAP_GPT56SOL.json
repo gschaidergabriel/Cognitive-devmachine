@@ -1,0 +1,88 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_at_reentry": "ea686558fd730cdecd54fb825b30b3ef38f1b241",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; AVAILABLE_USER_MESSAGE_TIME_HAS_MINUTE_PRECISION_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "work_class": "ORDINARY_SOURCE_REVIEW_AND_CAUSAL_TRUST_FUSION",
+    "duplicate_lane_created": false
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "sandbox_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "sandbox_executor_head_observed": "b6fcb5e26b66f30951a308caf6f23df8192d4040"
+  },
+  "observed_source_gap": {
+    "classification": "JSPACE_VECTOR_CONTROL_PACKET_PREIMAGE_ADMISSION_GAP",
+    "dataset_gate": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "dataset_gate_test": "the artefact/MicroEntity/hcu/test_jspace_dataset_admission_gate_v1.py",
+    "vector_control_implementation": "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+    "direct_observations": [
+      "DatasetAdmission cross-binds transition/prototype/training references to one vector_control_packet_sha256 and cross-binds one vector_control_condition.",
+      "DatasetAdmission checks the training/transition ABI label equals JSPACE_VECTOR_CONTROL_ABI/v1.",
+      "DatasetAdmission has no admitted_vector_control_packets input and does not call jspace_vector_control_v1.validate_packet on an exact packet preimage.",
+      "The positive DatasetAdmission unit fixture uses an arbitrary synthetic control_packet_sha equal to 64 repeated '5' hex characters and admits it without constructing or validating a VectorControlPacket.",
+      "Therefore cross-layer digest equality proves agreement on a label/digest but does not prove that the digest names an admitted, canonical, semantically valid JSPACE_VECTOR_CONTROL_ABI/v1 packet."
+    ],
+    "epistemic_boundary": "SOURCE_DIRECT; no runtime or unusual intervention required to establish the missing admission edge"
+  },
+  "hypothesis": "A collusively self-consistent training/transition/prototype family can carry the same syntactically valid but nonexistent or invalid vector-control digest through DatasetAdmission because packet preimage admission is not independently required.",
+  "counterhypothesis": "Cross-layer equality of the vector-control digest plus ABI string is sufficient because one of the admitted trace registries already proves the packet semantics.",
+  "counterhypothesis_rejection": "The inspected gate registries contain training, transition, prototype and GRID evidence only; none supplies or validates the VectorControlPacket preimage. The positive test fixture demonstrates admission with an arbitrary digest and no packet object.",
+  "minimal_fail_closed_patch_contract": {
+    "authority": "extend the existing single DatasetAdmission path; do not create a second dataset or vector-control authority",
+    "required_input": "caller-owned admitted_vector_control_packets registry keyed by exact packet.packet_sha256",
+    "required_checks": [
+      "referenced vector_control_packet_sha256 must exist in admitted_vector_control_packets",
+      "registry key must equal the exact packet.packet_sha256",
+      "packet must pass jspace_vector_control_v1.validate_packet",
+      "packet.generation must equal the cross-bound training/transition/prototype generation",
+      "packet.basis_id must equal the cross-bound J-Space basis id",
+      "packet.basis_sha256 must equal the cross-bound J-Space basis digest",
+      "packet.role must equal the cross-bound role",
+      "packet.control_condition must equal the cross-bound vector-control condition",
+      "missing, malformed, tampered, stale-generation, wrong-basis, wrong-role or wrong-condition packet evidence must fail closed"
+    ],
+    "required_propagation": "compile_admitted_jspace_training_dataset_v1 must pass the same external packet registry into DatasetAdmission before dataset rows are emitted",
+    "required_regressions": [
+      "shared arbitrary digest with no packet preimage is rejected",
+      "valid admitted packet with exact generation/basis/role/condition passes",
+      "registry-key versus packet_sha256 mismatch is rejected",
+      "tampered/self-inconsistent packet is rejected by validate_packet",
+      "stale generation packet is rejected",
+      "basis id or basis digest transplant is rejected",
+      "role transplant is rejected",
+      "control-condition transplant is rejected"
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "NO_NEW_RUNTIME_CREDIT: exact-current executor head still lacks an observed exact-head READY deployment; stale READY/older ERROR deployments are not execution evidence for b6fcb5e2. This cycle avoids creating a duplicate executor or paid deployment path.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: identified a missing independent admission edge between JSPACE_VECTOR_CONTROL_ABI/v1 packet semantics and the single causal DatasetAdmission authority; supplied a minimal fail-closed fusion contract without creating a second authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: training-readiness provenance now has an explicit blocker preventing a digest-only vector-control label from being laundered into admitted causal dataset rows without an exact validated packet preimage."
+  },
+  "execution_and_credit_boundary": {
+    "sandbox_runtime_executed_by_this_organ": false,
+    "route_invoked_by_this_organ": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "whole_entityos_hcu_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "donor_head_stability_decision": "Do not mutate PR1263 in this receipt commit. The exact executor is already source-rebound to donor 511d5689 while exact-head Vercel runtime admission is blocked; moving the donor before coordinating the packet-preimage patch would intentionally invalidate the current 17-blob executor closure. Preserve the discovered gap and acceptance contract append-only, then fuse it in the single donor lane as the next source change when that movement is explicitly taken.",
+  "next_exact_action": "In PR1263 only, extend jspace_dataset_admission_gate_v1 plus compile_admitted_jspace_training_dataset_v1 and their existing regressions to require an externally admitted exact VectorControlPacket preimage and validate generation/basis/role/control-condition identity before dataset admission. Then rebind the single Dr.-Unterweger#810 executor to the resulting exact donor head; do not create a second executor. Runtime promotion still requires a naturally available exact-head FREE_ONLY READY preview and fixed route invocation."
+}

@@ -9,15 +9,21 @@ explicit ``trace_family_id`` together when forming train/validation/holdout part
 Inputs are expected to have already passed ``jspace_dataset_admission_gate_v1``. The exact
 training-trace object is nevertheless re-bound to the admitted-training-trace registry here
 so a caller cannot relabel ``trace_family_id`` after admission and silently move a correlated
-trace into another split.
+trace into another split. The accepted admission schema is imported from the selected
+admission gate, and v2 packet/control-condition bindings are rechecked rather than copied as
+an independent schema authority.
 """
 
 import hashlib
 from typing import Any, Iterable, Mapping
 
+try:
+    from .jspace_dataset_admission_gate_v1 import ADMISSION_SCHEMA as DATASET_ADMISSION_SCHEMA
+except ImportError:
+    from jspace_dataset_admission_gate_v1 import ADMISSION_SCHEMA as DATASET_ADMISSION_SCHEMA
+
 SPLIT_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_FAMILY_SPLIT/v1"
 TRAINING_TRACE_SCHEMA = "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1"
-DATASET_ADMISSION_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1"
 SPLIT_NAMES = ("train", "validation", "holdout")
 
 
@@ -104,6 +110,7 @@ def _bind_admission(training_trace: Mapping[str, Any], admission: Mapping[str, A
         "route_decision_sha256",
         "grid_plan_sha256",
         "jspace_basis_sha256",
+        "vector_control_packet_sha256",
     ):
         left = _sha256(training_trace.get(field), f"training_trace.{field}")
         right = _sha256(admission.get(field), f"admission.{field}")
@@ -114,7 +121,7 @@ def _bind_admission(training_trace: Mapping[str, Any], admission: Mapping[str, A
     if generation != _generation(admission.get("generation"), "admission.generation"):
         raise JSpaceDatasetFamilySplitError("TRAINING_TRACE_ADMISSION_BINDING_MISMATCH:generation")
 
-    for field in ("cell_id", "role", "jspace_basis_id"):
+    for field in ("cell_id", "role", "jspace_basis_id", "vector_control_condition"):
         left = _text(training_trace.get(field), f"training_trace.{field}")
         right = _text(admission.get(field), f"admission.{field}")
         if left != right:

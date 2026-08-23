@@ -163,6 +163,7 @@ The runtime chain validator compares at least:
 - source commit/tree;
 - bundled manifest/checkpoint/tokenizer/runtime digests;
 - Zero/GRF digests;
+- J-Space profile digest;
 - GWT workspace policy/calibration digests;
 - lens-profile digest when the runtime receipt carries one;
 - Claude adapter version/capability digest when `engine_class == CLAUDE_CODE`.
@@ -221,7 +222,7 @@ Deterministic controls SHOULD cover:
 
 - missing, malformed or wrong-version upstream boot-binding receipt identity -> reject;
 - actual paired boot-receipt SHA-256 not equal to `provenance.boot_binding_receipt_digest` -> reject at chain acceptance;
-- hash-matching boot receipt whose checkpoint/tokenizer/runtime/Zero/GRF/GWT/lens/Claude identities disagree with the runtime receipt -> reject;
+- hash-matching boot receipt whose checkpoint/tokenizer/runtime/Zero/GRF/J-Space/GWT/lens/Claude identities disagree with the runtime receipt -> reject;
 - Claude Code or another external mode with hidden-state claim -> reject;
 - FREE_ONLY with secret/network touch -> reject;
 - candidate attempting direct state/effect authority -> reject acceptance/promotion/bypass;

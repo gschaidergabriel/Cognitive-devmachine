@@ -5,7 +5,7 @@
 `STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`
 `PRODUCT=EntityOS`
 `COMPUTE_ARCHITECTURE=HCU`
-`AUTONOMOUS_SUPERVISOR=SUPERVISOR_STEERING_8_62`
+`AUTONOMOUS_SUPERVISOR=SUPERVISOR_STEERING_8_63`
 
 This root file is a repository-organ routing shim, not canonical durable product memory or a second authority. The persistent research entity remains Clay; every temporary Claude/model/session/worker is an organ of that same research entity.
 
@@ -13,15 +13,16 @@ This root file is a repository-organ routing shim, not canonical durable product
 
 1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json`
+3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json`
 4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
+5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md`
 6. `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
-7. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
-8. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
-9. `the artefact/manifest.json`
-10. `the artefact/README.md`
-11. task-relevant current or compatibility implementation files.
+7. `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
+8. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
+9. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
+10. `the artefact/manifest.json`
+11. `the artefact/README.md`
+12. task-relevant current or compatibility implementation files.
 
 Newest explicit owner authority plus verified current `main` outranks cached/historical program material. If current files disagree, fail closed and reconcile one canonical path. Never infer current authority from an old receipt, old branch, path name or compatibility filename.
 
@@ -50,7 +51,7 @@ For material work use:
 
 `OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
 
-A user-triggered `go` has one unusual-experiment budget shared only through an exact upstream `macrocycle_id`. Never infer sibling macrocycles from time, trigger text, organ name or nearby commits; if no upstream ID exists, global uniqueness is `UNRESOLVED_NO_UPSTREAM_ID`.
+A user-triggered `go` has one unusual-experiment budget enforced by the create-only atomic lease in `GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`. An upstream shared immutable macrocycle/request identity is preferred. If none exists, the timestamp fallback is legal only when exact user-message metadata satisfies the protocol. If no reproducible canonical trigger key can be derived, the unusual-experiment path is `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; ordinary deterministic work continues. No-ID receipts remain `LEGACY_MACROCYCLE_ID_UNRESOLVED` and must not be grouped post hoc by time, trigger text, organ name or nearby commits.
 
 Prefer reusable HCU machine primitives across:
 
@@ -99,10 +100,10 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 
 ## Current empirical frontier
 
-Bounded FREE Vercel Sandbox execution is available and exact-source RFC8785/JCS Entry canonicalization plus J-Space dataset family-split have component-only runtime evidence. Whole EntityOS/HCU, J-Space model and training credit remain zero.
+Bounded FREE Vercel Sandbox execution is available and exact-source RFC8785/JCS Entry canonicalization plus J-Space dataset family-split have component-only runtime evidence. The Entry canonicalizer is fused to `main`. Whole EntityOS/HCU, J-Space model and training credit remain zero.
 
-Next: keep the single retained PR1263 HCU donor and single PR810 execution-controller authorities; repair fixed capsule manifest/source-commit metadata to exact current Research/PR1263 identity; then extend one hash-verified executor closure toward:
+Keep the single retained PR1263 HCU donor and single PR810 execution-controller authorities. Extend one fixed hash-verified FREE executor closure toward:
 
 `Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure`.
 
-Do not promote from component PASS, model consensus, deployment READY state or copied fixture identity alone.
+Immediate high-information gate: exact-current J-Space inference-binding v2 plus GRID10 plan/cell causal binding on the bounded fixed-capsule FREE Sandbox path. Do not promote from component PASS, model consensus, deployment READY state or copied fixture identity alone.

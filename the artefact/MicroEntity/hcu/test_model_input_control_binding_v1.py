@@ -119,6 +119,40 @@ class ModelInputControlBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(ModelInputControlBindingError, "input_size:INTEGER_REQUIRED"):
             validate_model_input_control_binding(forged, consumed)
 
+    def test_self_consistent_outer_hash_cannot_launder_normalization_aliases(self):
+        consumed = self.input_bytes()
+        binding = self.bind(consumed=consumed)
+        cases = (
+            (
+                self.resign(replace(binding, entry_event_sha256=" " + binding.entry_event_sha256)),
+                "entry_event_sha256:NONCANONICAL_SHA256",
+            ),
+            (
+                self.resign(replace(binding, executor_id=" " + binding.executor_id)),
+                "executor_id:NONCANONICAL_TEXT",
+            ),
+            (
+                self.resign(
+                    replace(
+                        binding,
+                        vector_control_packet_jcs_utf8=binding.vector_control_packet_jcs_utf8 + "\n",
+                    )
+                ),
+                "vector_control_packet_jcs_utf8:NONCANONICAL_TEXT",
+            ),
+        )
+        for forged, code in cases:
+            with self.subTest(code=code):
+                with self.assertRaisesRegex(ModelInputControlBindingError, code):
+                    validate_model_input_control_binding(forged, consumed)
+
+    def test_binding_digest_spelling_itself_must_be_canonical(self):
+        consumed = self.input_bytes()
+        binding = self.bind(consumed=consumed)
+        forged = replace(binding, binding_sha256=" " + binding.binding_sha256)
+        with self.assertRaisesRegex(ModelInputControlBindingError, "binding_sha256:NONCANONICAL_SHA256"):
+            validate_model_input_control_binding(forged, consumed)
+
     def test_binding_digest_tamper_fails_closed(self):
         consumed = self.input_bytes()
         binding = self.bind(consumed=consumed)

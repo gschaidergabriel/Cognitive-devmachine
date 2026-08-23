@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Pure pre-inference Cognitive Fabric admission compositor.
 
-This module does not own turn allocation, durable truth, model execution, effects, or
-post-turn UCF finalization. It resolves the already-active MiniUnifiedDB cognition turn,
-cross-checks the bounded caller selector against that same canonical turn, resolves the
-hash-bound inference/J-Space capability from the verified MiniUnifiedDB profile snapshot,
-compiles the existing ZERO workspace capsule and InferencePacket v2, and emits the
-pre-inference MINI_ENTITY_COGNITIVE_FABRIC_ADMISSION/v1 envelope.
+This module owns no turn allocation, truth, durable state, model execution, effects, or
+post-turn UCF finalization. It resolves one already-active MiniUnifiedDB cognition turn,
+cross-checks the bounded caller selector, binds routing through the canonical
+MINI_INFERENCE_BOUND_ROUTE/v1 capability ancestry, compiles the repository-owned ZERO
+workspace capsule + InferencePacket v2, and emits candidate-only pre-inference admission.
 """
 from __future__ import annotations
 
@@ -84,7 +83,7 @@ def _digest(value: Any, name: str) -> str:
 
 def _text(value: Any, name: str) -> str:
     _need(type(value) is str and bool(value.strip()), f"{name}:NONEMPTY_TEXT_REQUIRED")
-    return value
+    return value.strip()
 
 
 def _ordered_unique_refs(*groups: Any) -> list[str]:
@@ -93,7 +92,7 @@ def _ordered_unique_refs(*groups: Any) -> list[str]:
     for group in groups:
         _need(type(group) is list, "PROVENANCE_REFS_LIST_REQUIRED")
         for item in group:
-            ref = _text(item, "provenance_ref").strip()
+            ref = _text(item, "provenance_ref")
             if ref not in seen:
                 seen.add(ref)
                 out.append(ref)
@@ -116,7 +115,7 @@ def _load_module(path: Path, name: str) -> Any:
 
 
 def load_default_zero_modules() -> tuple[Any, Any]:
-    """Load the single canonical ZERO capsule/packet implementations by repo path."""
+    """Load exactly the canonical ZERO capsule/packet implementations by repo path."""
     capsule = _load_module(_CAPSULE_IMPL, "zero_workspace_capsule_v1")
     previous = sys.modules.get("zero_workspace_capsule_v1")
     sys.modules["zero_workspace_capsule_v1"] = capsule
@@ -139,7 +138,7 @@ def _validate_invocation(invocation: Mapping[str, Any], *, entity_generation: in
     generation = material.get("expected_generation")
     _need(type(generation) is int and generation >= 0, "COGNITION_INVOCATION_GENERATION_INVALID")
     _need(generation == entity_generation, "COGNITION_INVOCATION_STALE_GENERATION")
-    causal_turn_id = _text(material.get("causal_turn_id"), "cognition_invocation.causal_turn_id").strip()
+    causal_turn_id = _text(material.get("causal_turn_id"), "cognition_invocation.causal_turn_id")
     task_text = material.get("task_text")
     _need(type(task_text) is str, "COGNITION_INVOCATION_TASK_TEXT_REQUIRED")
     turn_binding_digest = _digest(
@@ -154,8 +153,9 @@ def _validate_invocation(invocation: Mapping[str, Any], *, entity_generation: in
     }
 
 
-def _verify_prompt_compiled_identity(prompt: Mapping[str, Any], *, canonical_state_hash: str,
-                                     packet_hash: str) -> tuple[str, str]:
+def _verify_prompt_compiled_identity(
+    prompt: Mapping[str, Any], *, canonical_state_hash: str, packet_hash: str
+) -> tuple[str, str]:
     system = _text(prompt.get("system"), "prompt.system")
     user = _text(prompt.get("user"), "prompt.user")
     try:
@@ -186,11 +186,10 @@ def build_pre_inference_admission(
     packet_module: Any | None = None,
     capability_module: Any | None = None,
 ) -> dict[str, Any]:
-    """Build candidate-only admission from one exact same-store active cognition turn."""
+    """Build one candidate-only admission from exact same-store bound material."""
     _need(type(entity_generation) is int and entity_generation >= 0, "GENERATION_INVALID")
     selector = _validate_invocation(invocation, entity_generation=entity_generation)
     selector_digest = _sha256_obj({"schema": INVOCATION_SCHEMA, **selector})
-    _digest(selector_digest, "cognition_invocation_digest")
 
     _need(isinstance(compiled, Mapping), "COMPILED_OBJECT_REQUIRED")
     _need(isinstance(prompt, Mapping), "PROMPT_OBJECT_REQUIRED")
@@ -202,11 +201,10 @@ def build_pre_inference_admission(
         canonical_state_hash=canonical_state_hash,
         packet_hash=packet_hash,
     )
-
     if expected_activation_digest is not None:
         expected_activation_digest = _digest(expected_activation_digest, "expected_activation_digest")
     if origin is not None:
-        origin = _text(origin, "origin").strip()
+        origin = _text(origin, "origin")
 
     if active_turn_module is None:
         import miniunifieddb_active_turn_v1 as active_turn_module  # type: ignore[no-redef]
@@ -214,26 +212,8 @@ def build_pre_inference_admission(
         import mini_inference_capability_binding_v1 as capability_module  # type: ignore[no-redef]
     if capsule_module is None or packet_module is None:
         default_capsule, default_packet = load_default_zero_modules()
-        if capsule_module is None:
-            capsule_module = default_capsule
-        if packet_module is None:
-            packet_module = default_packet
-
-    route = capability_module.resolve_from_profile(profile)
-    _need(type(route) is dict and route.get("ok") is True, "CAPABILITY_BINDING_RESOLUTION_FAILED")
-    _need(
-        route.get("authority") == "ROUTING_ONLY_NO_TRUTH_STATE_EFFECT_AUTHORITY",
-        "CAPABILITY_AUTHORITY_ESCALATION",
-    )
-    target_engine_class = _text(route.get("target_engine_class"), "target_engine_class").strip()
-    jspace_mode = _text(route.get("jspace_mode"), "jspace_mode").strip()
-    capability_binding_digest = _digest(route.get("binding_digest"), "capability_binding_digest")
-    capability_receipt_digest = _digest(route.get("capability_receipt_digest"), "capability_receipt_digest")
-    profile_id = _text(route.get("profile_id"), "profile_id").strip()
-    profile_hash = _digest(route.get("profile_hash"), "profile_hash")
-    inference = profile.get("inference")
-    _need(isinstance(inference, Mapping), "PROFILE_INFERENCE_OBJECT_REQUIRED")
-    inference_config = dict(inference)
+        capsule_module = capsule_module or default_capsule
+        packet_module = packet_module or default_packet
 
     prepare = active_turn_module.resolve_active_prepare(
         db,
@@ -242,12 +222,11 @@ def build_pre_inference_admission(
     )
     _need(type(prepare) is dict and prepare.get("ok") is True, "ACTIVE_PREPARE_RESOLUTION_FAILED")
     _need(prepare.get("entity_generation") == entity_generation, "STALE_PREPARE_GENERATION")
-    causal_turn_id = _text(prepare.get("causal_turn_id"), "causal_turn_id").strip()
+    causal_turn_id = _text(prepare.get("causal_turn_id"), "causal_turn_id")
     task_text = prepare.get("task_text")
     _need(type(task_text) is str, "TASK_TEXT_REQUIRED")
     expected_task_hash = hashlib.sha256(task_text.encode("utf-8")).hexdigest()
     _need(prepare.get("task_sha256") == expected_task_hash, "TASK_BINDING_MISMATCH")
-
     for name in _REQUIRED_PREPARE_DIGESTS:
         _digest(prepare.get(name), name)
     activation_digest = _digest(prepare.get("activation_digest"), "activation_digest")
@@ -258,10 +237,9 @@ def build_pre_inference_admission(
         selector["turn_binding_digest"] == prepare["turn_binding_digest"],
         "COGNITION_INVOCATION_TURN_BINDING_MISMATCH",
     )
-
-    authority = prepare.get("authority")
     _need(
-        authority == {
+        prepare.get("authority")
+        == {
             "durable_state": "MiniUnifiedDB",
             "candidate_only": True,
             "direct_truth_authority": False,
@@ -269,12 +247,40 @@ def build_pre_inference_admission(
         },
         "PREPARE_AUTHORITY_ESCALATION",
     )
+
+    route = capability_module.resolve_bound_route(
+        profile,
+        prepare,
+        expected_generation=entity_generation,
+    )
+    _need(type(route) is dict and route.get("ok") is True, "BOUND_ROUTE_RESOLUTION_FAILED")
+    _need(
+        route.get("authority") == "ROUTING_ONLY_BOUND_TO_CANONICAL_PREPARE",
+        "CAPABILITY_AUTHORITY_ESCALATION",
+    )
+    route_digest = _digest(route.get("route_digest"), "capability_route_digest")
+    _need(route.get("entity_generation") == entity_generation, "BOUND_ROUTE_GENERATION_DRIFT")
+    _need(route.get("causal_turn_id") == causal_turn_id, "BOUND_ROUTE_TURN_DRIFT")
+    _need(route.get("turn_binding_digest") == prepare["turn_binding_digest"], "BOUND_ROUTE_BINDING_DRIFT")
+    _need(route.get("boot_binding_digest") == prepare["boot_binding_digest"], "BOUND_ROUTE_BOOT_DRIFT")
+    _need(route.get("workspace_digest") == prepare["workspace_digest"], "BOUND_ROUTE_WORKSPACE_DRIFT")
+
+    target_engine_class = _text(route.get("target_engine_class"), "target_engine_class")
+    ucf_engine_class = _text(route.get("ucf_engine_class"), "ucf_engine_class")
+    jspace_mode = _text(route.get("jspace_mode"), "jspace_mode")
+    capability_binding_digest = _digest(route.get("capability_binding_digest"), "capability_binding_digest")
+    capability_receipt_digest = _digest(route.get("capability_receipt_digest"), "capability_receipt_digest")
+    profile_id = _text(route.get("profile_id"), "profile_id")
+    profile_hash = _digest(route.get("profile_hash"), "profile_hash")
+    inference = profile.get("inference")
+    _need(isinstance(inference, Mapping), "PROFILE_INFERENCE_OBJECT_REQUIRED")
+    inference_config = json.loads(_canonical_json(dict(inference)))
+
     refs = _ordered_unique_refs(
         prepare.get("turn_provenance_refs"),
         prepare.get("boot_provenance_refs"),
         prepare.get("activation_provenance_refs"),
     )
-
     capsule = capsule_module.compile_workspace_capsule(
         entity_generation=entity_generation,
         causal_turn_id=causal_turn_id,
@@ -303,7 +309,7 @@ def build_pre_inference_admission(
     )
     _need(type(packet) is dict and packet.get("schema") == "ZERO_INFERENCE_PACKET/v2", "PACKET_V2_REQUIRED")
     inference_packet_digest = _digest(packet.get("packet_digest"), "inference_packet_digest")
-    _digest(packet.get("admitted_context_digest"), "admitted_context_digest")
+    admitted_context_digest = _digest(packet.get("admitted_context_digest"), "admitted_context_digest")
 
     receipt = {
         "schema": ADMISSION_SCHEMA,
@@ -330,22 +336,22 @@ def build_pre_inference_admission(
         "workspace_calibration_digest": prepare["workspace_calibration_digest"],
         "boot_source_lock_digest": prepare["boot_source_lock_digest"],
         "policy_authority_digest": prepare["policy_authority_digest"],
+        "capability_route_digest": route_digest,
         "capability_binding_digest": capability_binding_digest,
         "capability_receipt_digest": capability_receipt_digest,
         "capability_evidence_kind": _text(route.get("capability_evidence_kind"), "capability_evidence_kind"),
         "adapter_version": _text(route.get("adapter_version"), "adapter_version"),
         "target_engine_class": target_engine_class,
-        "ucf_engine_class": _text(route.get("ucf_engine_class"), "ucf_engine_class"),
+        "ucf_engine_class": ucf_engine_class,
         "jspace_mode": jspace_mode,
         "inference_packet_digest": inference_packet_digest,
-        "admitted_context_digest": packet["admitted_context_digest"],
+        "admitted_context_digest": admitted_context_digest,
         "origin": origin,
         "provenance_refs": refs,
         "authority": "CANDIDATE_INFERENCE_ONLY",
         "real_effect_executed": False,
     }
     admission_digest = _sha256_obj(receipt)
-    _digest(admission_digest, "cognitive_fabric_receipt_digest")
 
     return {
         "ok": True,
@@ -354,10 +360,11 @@ def build_pre_inference_admission(
         "canonical_state_hash": canonical_state_hash,
         "packet_hash": packet_hash,
         "cognition_invocation_digest": selector_digest,
+        "capability_route_digest": route_digest,
         "capability_binding_digest": capability_binding_digest,
         "capability_receipt_digest": capability_receipt_digest,
         "target_engine_class": target_engine_class,
-        "ucf_engine_class": route["ucf_engine_class"],
+        "ucf_engine_class": ucf_engine_class,
         "jspace_mode": jspace_mode,
         "inference_packet_digest": inference_packet_digest,
         "cognitive_fabric_receipt_digest": admission_digest,

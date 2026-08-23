@@ -10,7 +10,8 @@ from reactive_event_router_v1 import (
 
 ENGINE_A_SHA256 = "a" * 64
 ENGINE_B_SHA256 = "b" * 64
-ENTRY_SHA256 = "e" * 64
+ENTRY_EVENT_SHA256 = "c" * 64
+ENTRY_ADMISSION_SHA256 = "e" * 64
 
 
 def base_event():
@@ -18,7 +19,8 @@ def base_event():
         "schema": "HCU_REACTIVE_EVENT/v1",
         "ingress_id": "ingress-0001",
         "causal_id": "causal-0001",
-        "entry_admission_sha256": ENTRY_SHA256,
+        "entry_event_sha256": ENTRY_EVENT_SHA256,
+        "entry_admission_sha256": ENTRY_ADMISSION_SHA256,
         "entity_generation": 7,
         "novelty": 0.05,
         "contradiction": 0.0,
@@ -73,7 +75,8 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertEqual(decision.hash_serialization_schema, HASH_SERIALIZATION_SCHEMA)
         self.assertEqual(decision.ingress_id, "ingress-0001")
         self.assertEqual(decision.causal_id, "causal-0001")
-        self.assertEqual(decision.entry_admission_sha256, ENTRY_SHA256)
+        self.assertEqual(decision.entry_event_sha256, ENTRY_EVENT_SHA256)
+        self.assertEqual(decision.entry_admission_sha256, ENTRY_ADMISSION_SHA256)
         self.assertEqual(len(decision.event_sha256), 64)
         self.assertEqual(len(decision.router_policy_sha256), 64)
         self.assertIsNone(decision.resolved_engine_identity)
@@ -112,6 +115,11 @@ class ReactiveRouterTests(unittest.TestCase):
     def test_unknown_future_provider_fails_closed(self):
         e = base_event(); e["requested_internal_provider"] = "future-free-cloud"
         with self.assertRaisesRegex(ReactiveRoutingError, "UNKNOWN_OR_EXTERNAL_PROVIDER_FORBIDDEN"):
+            route_event(e, current_generation=7)
+
+    def test_missing_entry_event_digest_fails_closed(self):
+        e = base_event(); del e["entry_event_sha256"]
+        with self.assertRaisesRegex(ReactiveRoutingError, "ENTRY_EVENT_SHA256"):
             route_event(e, current_generation=7)
 
     def test_missing_entry_admission_digest_fails_closed(self):
@@ -239,6 +247,7 @@ class ReactiveRouterTests(unittest.TestCase):
             "hash_serialization_schema": decision.hash_serialization_schema,
             "ingress_id": decision.ingress_id,
             "causal_id": decision.causal_id,
+            "entry_event_sha256": decision.entry_event_sha256,
             "entry_admission_sha256": decision.entry_admission_sha256,
             "event_sha256": decision.event_sha256,
             "decision_sha256": decision.decision_sha256,
@@ -251,6 +260,9 @@ class ReactiveRouterTests(unittest.TestCase):
             "resolved_engine_tokenizer_identity": decision.resolved_engine_tokenizer_identity,
         }
         assert_inference_echo(decision, receipt)
+        poisoned = dict(receipt); poisoned["entry_event_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_ENTRY_EVENT_SHA256_MISMATCH"):
+            assert_inference_echo(decision, poisoned)
         poisoned = dict(receipt); poisoned["entry_admission_sha256"] = "0" * 64
         with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_ENTRY_ADMISSION_SHA256_MISMATCH"):
             assert_inference_echo(decision, poisoned)

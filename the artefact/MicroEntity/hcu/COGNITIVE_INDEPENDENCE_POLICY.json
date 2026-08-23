@@ -22,9 +22,12 @@
     },
     "unknown_provider_or_engine": "REJECT",
     "script_only_engine_selection": "REJECT",
-    "engine_identity_binding": "resolved_engine_identity + resolved_engine_class + resolved_internal_engine_artifact_sha256",
+    "artifact_admission_authority": "INDEPENDENT_XPU_XRAM_ARTIFACT_REGISTRY_NOT_EVENT_PAYLOAD",
+    "event_reported_artifact_digest": "MUST_EQUAL_CURRENT_INDEPENDENT_ADMITTED_ARTIFACT_DIGEST",
+    "missing_or_mismatched_artifact_registry": "REJECT",
+    "engine_identity_binding": "resolved_engine_identity + resolved_engine_class + independently_admitted_resolved_internal_engine_artifact_sha256",
     "route_identity_binding": "event_sha256 + router_policy_sha256 + engine_identity_sha256 + routing_result",
-    "downstream_inference_receipt": "MUST_ECHO_EVENT_ROUTE_AND_ENGINE_IDENTITIES"
+    "downstream_inference_receipt": "MUST_ECHO_EVENT_ROUTE_ENGINE_CLASS_AND_EXACT_ARTIFACT_IDENTITIES"
   },
   "providers": {
     "nvidia": {

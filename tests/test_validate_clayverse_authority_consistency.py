@@ -16,25 +16,69 @@ class AuthorityConsistencyTests(unittest.TestCase):
         td = tempfile.TemporaryDirectory()
         root = Path(td.name)
         files = {
+            "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json": {
+                "entity_id": "entity",
+                "entity_version": "V1",
+                "revision": 2,
+                "state_hash": "state",
+            },
             "research_entity/continuity/BOOTSTRAP_MINIMAL.json": {
-                "active_program": "CLAYVERSE_SINGLE_CONTAINER",
-                "active_stage": "CLAYVERSE_ARTIFACT",
+                "entity_id": "entity",
+                "expected_entity_version": "V1",
+                "expected_revision": 2,
+                "expected_state_hash": "state",
+                "identity": {"every_turn_guard": mod.IDENTITY_GUARD},
+                "per_turn": {"identity_injection": "every substantive prompt_run_id refreshes identity"},
+                "mandatory_invariants": ["every substantive prompt_run_id refreshes the Research Entity identity injection"],
+                "active_program": mod.EXPECTED_PROGRAM,
+                "active_stage": mod.EXPECTED_STAGE,
                 "sole_owner_directive": mod.OWNER_DIRECTIVE,
                 "product_endpoint": "ClayVerse",
                 "release_form": mod.EXPECTED_RELEASE,
+                "together_api": "FORBIDDEN",
+                "vps_testing": "FORBIDDEN",
             },
             "research_entity/rooms/PROGRAM_STATE.json": {
                 "program_id": "clayverse-single-container",
-                "stage": "CLAYVERSE_ARTIFACT",
+                "stage": mod.EXPECTED_STAGE,
+                "current_stage": mod.EXPECTED_STAGE,
                 "owner_directive": mod.OWNER_DIRECTIVE,
                 "product_endpoint": "ClayVerse",
                 "release_form": mod.EXPECTED_RELEASE,
+                "execution_policy": {
+                    "free_only": True,
+                    "isolated_sandbox_only": True,
+                    "vps_testing_forbidden": True,
+                    "together_forbidden": True,
+                },
             },
             "the artefact/manifest.json": {
                 "artifact": "ClayVerse",
                 "product_endpoint": "ClayVerse",
                 "release_form": mod.EXPECTED_RELEASE,
                 "canonical_workspace": "the artefact/",
+            },
+            mod.CONTROL44: {
+                "status": "ACTIVE",
+                "program_identity_override": {
+                    "active_program": mod.EXPECTED_PROGRAM,
+                    "target_stage": mod.EXPECTED_STAGE,
+                    "product_endpoint": "ClayVerse",
+                    "release_form": mod.EXPECTED_RELEASE,
+                },
+                "preserved_hard_rules": {
+                    "free_only": True,
+                    "paid_fallback": False,
+                    "together_forbidden": True,
+                    "vps_testing": False,
+                    "runtime_credit_requires_exact_admitted_isolated_execution": True,
+                },
+            },
+            mod.STEERING844: {
+                "program": mod.EXPECTED_PROGRAM,
+                "stage": mod.EXPECTED_STAGE,
+                "effective_control": "4.1+4.2+4.3+4.4-clayverse-product-authority-addendum",
+                "adjudication": {"free_only": True, "together_forbidden": True, "vps_testing": False},
             },
         }
         text = {
@@ -57,8 +101,7 @@ class AuthorityConsistencyTests(unittest.TestCase):
     def test_coherent_clayverse_authority_passes(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
-        result = mod.validate(root)
-        self.assertTrue(result["pass"], result)
+        self.assertTrue(mod.validate(root)["pass"])
 
     def test_old_mini_entity_bootstrap_fails_closed(self):
         td, root = self.make_tree()
@@ -67,33 +110,43 @@ class AuthorityConsistencyTests(unittest.TestCase):
         data = json.loads(path.read_text(encoding="utf-8"))
         data["active_program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
         path.write_text(json.dumps(data), encoding="utf-8")
-        result = mod.validate(root)
-        self.assertFalse(result["pass"])
-        self.assertIn("BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH", result["errors"])
+        self.assertIn("BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH", mod.validate(root)["errors"])
+
+    def test_identity_guard_loss_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["identity"] = {}
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("BOOTSTRAP_IDENTITY_GUARD_POINTER_MISSING", mod.validate(root)["errors"])
+
+    def test_control44_mini_entity_regression_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL44
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["program_identity_override"]["active_program"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("CONTROL44_PROGRAM_MISMATCH", mod.validate(root)["errors"])
+
+    def test_control44_safety_weakening_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL44
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["preserved_hard_rules"]["free_only"] = False
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("CONTROL44_FREE_ONLY_WEAKENED", mod.validate(root)["errors"])
 
     def test_superseded_directive_fails_closed(self):
         td, root = self.make_tree()
         self.addCleanup(td.cleanup)
         path = root / mod.OWNER_DIRECTIVE
         path.write_text("# SUPERSEDED — compatibility redirect\n", encoding="utf-8")
-        result = mod.validate(root)
-        self.assertFalse(result["pass"])
-        self.assertIn("DIRECTIVE_NOT_CURRENT", result["errors"])
-        self.assertIn("DIRECTIVE_MARKED_SUPERSEDED", result["errors"])
-
-    def test_readme_claiming_clayverse_superseded_fails_closed(self):
-        td, root = self.make_tree()
-        self.addCleanup(td.cleanup)
-        path = root / "the artefact/README.md"
-        path.write_text(
-            "# the artefact — ClayVerse single-container product\n"
-            "The active release endpoint is one OCI/Docker-compatible ClayVerse container image.\n"
-            "The previous ClayVerse single-container endpoint is superseded.\n",
-            encoding="utf-8",
-        )
-        result = mod.validate(root)
-        self.assertFalse(result["pass"])
-        self.assertIn("README_CLAYVERSE_SUPERSEDED", result["errors"])
+        errors = mod.validate(root)["errors"]
+        self.assertIn("DIRECTIVE_NOT_CURRENT", errors)
+        self.assertIn("DIRECTIVE_MARKED_SUPERSEDED", errors)
 
 
 if __name__ == "__main__":

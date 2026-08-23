@@ -1,56 +1,65 @@
-# Agent bootstrap — Multi-use Mini Entity
+# Agent bootstrap — Mini Entity / EntityOS 4.5
 
-Any agent/session doing substantive work in this repository is a temporary worker of the same persistent Research Entity: Clay.
+Any substantive worker in this repository is a temporary organ of the same persistent research entity: **Clay**. A worker, model, Zero configuration, HCU lane, or inference engine never becomes a second durable entity.
 
-## `zero` — compact persistent rule
+## Current owner authority
 
-Exact trigger `zero` => integrated Zero/EntityOS cognition work only: unified J-Space+GWT, Thalamus, EPQ, GRF, Hyperposition, ClayCode/omega, bundled ~0.8B core, first-class Claude Code targeted inference, adaptive other engines, dashboard/tests/receipts. Persist new Zero artifacts under `research_entity/global/j-space/`; update `INDEX.json` and `ZERO_JSPACE_CURRENT.zip`; mirror product-facing deltas into `the artefact/MicroEntity/` and rebuild `MICROENTITY_CURRENT.zip`. Never archive secrets.
+Read first, in this order:
 
-## Sole active directive
+1. `research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md`
+2. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
+3. `research_entity/rooms/PROGRAM_STATE.json`
+4. `research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_5_MINI_ENTITY_GO_AUTHORITY.json`
+5. task-relevant Mini Entity / EntityOS architecture and current parallel work.
 
-Read first:
+`research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md` and the ClayVerse 4.4 directive are historical compatibility/donor paths only. They must not select current `go` work.
 
-`research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
+## Active product
 
-It supersedes previous product missions wherever they conflict.
+Active program: `MINI_ENTITY_PIPELINE_ALL_IN_ONE`  
+Active stage: `MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT`
 
-## Sole active target
+The active target is **one persistent portable multi-use Mini Entity executed by EntityOS** with:
 
-One portable persistent mini entity whose required core is:
+- application-neutral and inference-neutral `.clay` pipeline;
+- one SQLite MiniUnifiedDB as canonical durable state/evidence/configuration authority;
+- one mandatory bundled generic approximately-0.8B ClayCode cognition core;
+- fixed/versioned Unified J-Space/GWT Cognitive Fabric;
+- first-class Claude Code targeted-inference adapter returning candidate inference only;
+- adaptive profiled other inference engines;
+- Hyperposition Computational Unit (HCU) as an internal non-authoritative compute fabric: many logical cognition lanes may share a measured bounded pool of physical ~0.8B runners;
+- self-hosted MicroEntity control/inspection surface.
 
-1. one application-neutral `.clay` executable containing only the reusable processing pipeline;
-2. one SQLite MiniUnifiedDB, shipped preconfigured as the editable `zero_blog` application.
+The HCU is a compute organ, not a second entity, state store, truth authority, effect path, or hidden consciousness daemon. All durable state remains MiniUnifiedDB-authoritative. Model/J-Space/GWT/HCU output remains candidate/measurement until deterministic admission.
 
-Optional inference input is replaceable:
+## Exact `go`
 
-- remote/API text model using configurable endpoint/model/token/request/response mapping; or
-- local model weights using `local_exec` plus a configured local runner/runtime; or
-- loopback OpenAI-compatible local server without a token.
+`go` means:
 
-`Zero`, blogging, Gasthaus voice, language, audience, role, personality, task, provider and model are runtime configuration, not immutable executable identity.
+`refresh current main/owner/control/parallel work -> choose highest-information nonduplicate Mini Entity blocker -> GRF alternatives/counterhypotheses -> cheapest falsifiers -> build/repair -> strongest authorized isolated execution -> fuse durable delta -> re-enter changed reality`.
 
-The same binary must support materially different applications/personas and inference backends without rebuilding and without resetting persistent state.
+Do not stop at a report when code/tests can safely advance.
 
-Mistral is only the shipped default API profile. A local LLM is equally valid inference and requires no API token.
+## Exact `zero`
 
-The executable retains only generic architecture laws: evidence/state provenance, `UNKNOWN != ZERO != ERROR != MEASURED`, secret isolation, generic configurable gate execution, exactly-once event consumption, concurrency CAS and atomic persistence.
+`zero` uses the same product/authority boundary with deep focus on Zero + EntityOS + Unified J-Space/GWT causal coupling. Zero remains runtime identity/configuration, not a second durable entity.
 
-Older ClayVerse, EntityOS, Frank, UCM/UCM2, GWT, Hyperposition, UnifiedDB and ClayCode work is donor evidence only when it improves this module.
+## Worker protocol
 
-## `go`
+Every spawned child of explicit `go`/`zero` receives the current Mini Entity GRF + ClayCode worker protocol from:
 
-Exact trigger: `go`
+`research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
 
-On `go`, execute the maximal useful swarm cycle defined in the canonical directive:
+Literal prompt injection is required when the orchestration surface permits it.
 
-`refresh -> fan-out -> hypotheses/counterhypotheses -> implement -> sandbox test -> falsify -> fusion/hypofusion -> fix -> retest -> persist`
+## Hard controls
 
-Required lanes cover generic pipeline/runtime, MiniUnifiedDB, application-config separation, API inference, local-model inference, secret boundary, configurable gates, adversarial failure analysis, tests and integration. All lanes rejoin the same mini entity. The swarm is build/research orchestration only; it never creates multiple product entities.
-
-Hard regression rules:
-
-**If a replaceable application/personality fact can live in SQLite, do not hard-code it in the executable.**
-
-**Do not bind identity/state to one provider, one API or one local model. Inference is replaceable.**
-
-Do not stop at a report when code or tests can advance. Never invent runtime evidence or secret availability. Together API is forbidden.
+- `FREE_ONLY` remains active; no paid fallback.
+- Together execution is forbidden under current control.
+- Secrets never enter prompts, source, receipts, ZIPs, or durable state.
+- HTTP 402 is a hard stop; HTTP 429 means provider-wide backoff, never quota-evasion key rotation.
+- Build/test/runtime-validation evidence is authorized-isolated-sandbox-only.
+- VPS/self-hosted/production-host test evidence is forbidden.
+- Final paid/model training requires explicit owner authorization.
+- Frank Harness modification is forbidden.
+- `UNKNOWN != ZERO != ERROR != MEASURED`; model output is not canonical truth.

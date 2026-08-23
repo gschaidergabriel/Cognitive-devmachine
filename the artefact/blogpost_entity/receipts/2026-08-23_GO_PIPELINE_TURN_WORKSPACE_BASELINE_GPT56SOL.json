@@ -1,0 +1,115 @@
+{
+  "schema": "GO_PIPELINE_TURN_WORKSPACE_BASELINE_RECEIPT/v1",
+  "trigger": "go",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "real_effects": "EffectGate",
+    "model_jspace_gwt": "CANDIDATE_OR_MEASUREMENT_ONLY",
+    "together_api": "FORBIDDEN",
+    "paid_or_final_training": "OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "source_binding": {
+    "base_main_sha": "be65164ea5989940518e3073faec1afcf5c86066",
+    "source_commit_before_receipt": "9cbb1f09390feafd59ca268c243e7289ff8c1e41",
+    "branch": "gpt56sol/go-pipeline-turn-workspace-v1-20260823-1540",
+    "files": {
+      "tools/mini_pipeline_turn_workspace_v1.py": {
+        "git_blob": "23aa5a6f51d9349ecfe9a767d86e537974b89341",
+        "sha256": "802708047dc8937d4b645d7a49927e0e6a14db1ad86ad325b265b5d679fd4cea"
+      },
+      "tests/test_mini_pipeline_turn_workspace_v1.py": {
+        "git_blob": "62a093c52d8f87c699c15862b288c49ea062ad95",
+        "sha256": "af0c437e390400ec68e0799f3302ef661396722d3f058a78f9d5176b257689b9"
+      },
+      "the artefact/blogpost_entity/jspace_gwt/PIPELINE_TURN_WORKSPACE_BASELINE_V1.md": {
+        "git_blob": "de962a66ded0d80608e054c2cdfd78352c7a257b",
+        "sha256": "7fdf167249024de7fc33d45adea2cb9fd878d6f1ce5ffa79c3684be8131df11c"
+      }
+    }
+  },
+  "observed_gap": {
+    "class": "MISSING_PREINFERENCE_TASK_AND_WORKSPACE_PRODUCER",
+    "detail": "The canonical Cognitive Fabric admission contract requires exact task/workspace/boot/provenance material, while the retained three-argument pipeline currently supplies previous+compiled+prompt only. COGNITIVE_FABRIC_PREPARE_INPUT/v1 forbids inventing causal/task/workspace identity from packet hash, generation, wall clock, randomness, output id or prompt prose.",
+    "parallel_coordination": "PR #1267 owns deterministic causal-turn identity and explicitly leaves the workspace producer open; this delta does not duplicate that responsibility."
+  },
+  "delta": {
+    "task_schema": "MINI_ENTITY_PIPELINE_TASK/v1",
+    "workspace_schema": "MINI_ENTITY_TEXT_WORKSPACE/v1",
+    "task_basis": [
+      "entity_generation",
+      "active profile_id",
+      "active profile stored-byte hash",
+      "canonical_state_hash",
+      "packet_hash"
+    ],
+    "workspace_basis": [
+      "task_sha256",
+      "canonical_state_hash",
+      "packet_hash",
+      "bounded sorted allowed_evidence_refs"
+    ],
+    "explicit_unknowns": {
+      "contradiction_state": "UNKNOWN",
+      "jspace": "UNMEASURED",
+      "gwt": "TEXT_ONLY_BASELINE"
+    },
+    "same_store_path": "resolve exact live-generation boot binding -> existing MiniUnifiedDB boot integrity validator -> PR #1267 MINI_ENTITY_CAUSAL_TURN_ID/v1 -> existing MiniUnifiedDB bind_turn",
+    "creates_new_table": false,
+    "creates_second_state_authority": false,
+    "creates_truth_authority": false,
+    "creates_effect_authority": false
+  },
+  "isolated_component_execution": {
+    "environment": "authorized ChatGPT isolated Linux container; Linux 6.18.35 x86_64; Python 3.13.5",
+    "network": "not used",
+    "provider_or_model_execution": false,
+    "commands": [
+      "python3 -m py_compile tools/mini_pipeline_turn_workspace_v1.py tests/test_mini_pipeline_turn_workspace_v1.py",
+      "python3 -m unittest -v tests/test_mini_pipeline_turn_workspace_v1.py",
+      "git hash-object tools/mini_pipeline_turn_workspace_v1.py tests/test_mini_pipeline_turn_workspace_v1.py",
+      "sha256sum tools/mini_pipeline_turn_workspace_v1.py tests/test_mini_pipeline_turn_workspace_v1.py"
+    ],
+    "result": {
+      "py_compile": "PASS",
+      "unit_tests": "8/8 PASS",
+      "source_git_blob_match": true,
+      "test_git_blob_match": true
+    },
+    "scope": "EXACT_BLOB_COMPONENT_MECHANISM_ONLY"
+  },
+  "false_green_correction": {
+    "observed": "The first local test layout placed module and test in one directory, which could hide the repository tools import boundary.",
+    "repair": "The test was changed to the repository-standard tests -> tools sys.path binding and re-executed from a repo-shaped directory.",
+    "post_repair_result": "8/8 PASS"
+  },
+  "unusual_experiment": {
+    "consumed_here": false,
+    "reason": "Current parallel PR #1267 records that this user-triggered macrocycle already contains parallel unusual-intervention evidence; no second unusual intervention is claimed. All checks here are deterministic regressions."
+  },
+  "hcu": {
+    "result": "NO_CHANGE_NON_DUPLICATION",
+    "reason": "Open PR #1263 already owns the current reactive/provider-independent HCU world-model substrate and capacity lane. This go delta does not create a competing HCU path or claim KVM4 runtime evidence."
+  },
+  "credit": {
+    "source_contract": "CANDIDATE",
+    "component_mechanism": "SUPPORTED_BY_EXACT_LOCAL_BLOBS",
+    "reference_runtime_handler": "NOT_IMPLEMENTED_BY_THIS_DELTA",
+    "bundled_08b_runtime": "ZERO",
+    "jspace_runtime": "ZERO",
+    "whole_gwt_runtime": "ZERO",
+    "claude_adapter_runtime": "ZERO",
+    "hcu_runtime": "ZERO",
+    "whole_mini_entity": "ZERO"
+  },
+  "next_gates": [
+    "Adjudicate/land PR #1267 causal-turn identity or equivalent single retained mechanism.",
+    "Integrate this task/workspace material into the single retained pipeline_cognitive_fabric_admit handler without raw profile/prompt bypass.",
+    "Compile ZERO_WORKSPACE_CAPSULE/v1 and ZERO_INFERENCE_PACKET/v2 from the resolved same-MiniUnifiedDB binding and validate exact downstream inference context.",
+    "Implement post-terminal pipeline_cognitive_fabric_finalize using the exact same admission/candidate/gate/commit ancestry.",
+    "Run exact integrated bytes on an actually-started authorized isolated executor; current Vercel connector exposes no Sandbox start/exec action and the local git network path is unavailable."
+  ]
+}

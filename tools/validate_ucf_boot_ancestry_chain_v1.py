@@ -4,6 +4,11 @@
 This tool adds no receipt/state/truth authority. It first executes the current canonical
 UCF validator and the current canonical boot+manifest+source-lock validator, then checks
 that the UCF cycle actually descends from that admitted boot evidence.
+
+Runtime generation is deliberately cross-bound here rather than trusted from the UCF
+cycle's self-reported freshness booleans. For composed runtime credit the boot evidence
+must carry ``runtime.entity_generation`` as an independently observed non-negative
+integer and it must equal ``cycle.runtime.generation``.
 """
 from __future__ import annotations
 
@@ -81,6 +86,20 @@ def validate_chain(
     if boot_source.get("dirty") is not False:
         errors.append("BOOT_SOURCE_DIRTY_FOR_CYCLE")
 
+    # A cycle cannot prove its own generation freshness by carrying both the generation
+    # and a self-reported stale_generation=false flag. The admitted boot evidence is the
+    # independent observation boundary for this composition gate.
+    cycle_runtime = cycle.get("runtime", {})
+    boot_runtime = boot_receipt.get("runtime")
+    if type(boot_runtime) is not dict:
+        errors.append("BOOT_ENTITY_GENERATION_MISSING")
+    else:
+        boot_generation = boot_runtime.get("entity_generation")
+        if type(boot_generation) is not int or boot_generation < 0:
+            errors.append("BOOT_ENTITY_GENERATION_INVALID")
+        elif cycle_runtime.get("generation") != boot_generation:
+            errors.append("BOOT_ENTITY_GENERATION_MISMATCH")
+
     identity = cycle.get("identity", {})
     boot_identity = boot_receipt.get("zero_grf", {})
     if identity.get("zero_identity_digest") != boot_identity.get("zero_identity_sha256"):
@@ -109,7 +128,7 @@ def validate_chain(
 
     # Runtime-byte identity is transitive here: current UCF v1 binds the exact bundled
     # manifest digest, while current boot admission requires manifest.runtime_digest ==
-    # bundled_core.runtime_sha256. We deliberately do not invent a second runtime field.
+    # bundled_core.runtime_sha256. We deliberately do not invent a second runtime-byte field.
     inference = cycle.get("inference", {})
     if inference.get("engine_class") == "claude_code":
         boot_claude = boot_receipt.get("claude_adapter", {})

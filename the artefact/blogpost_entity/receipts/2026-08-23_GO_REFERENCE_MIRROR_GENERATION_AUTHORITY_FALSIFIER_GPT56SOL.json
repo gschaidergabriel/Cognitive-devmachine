@@ -1,0 +1,113 @@
+{
+  "schema": "MINI_ENTITY_REFERENCE_GENERATION_AUTHORITY_FALSIFIER/v1",
+  "timestamp_utc": "2026-08-23T01:50:00Z",
+  "macrocycle_id": "go-20260823T0850+07-gpt56sol-mini-entity-reference",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "protocol": "GRF_CLAYCODE_FIRST",
+  "canonical_main": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+  "execution_control": {
+    "free_only": true,
+    "provider_network_used": false,
+    "provider_secret_lookup_used": false,
+    "paid_execution_used": false,
+    "spend_usd": 0
+  },
+  "target_candidate": {
+    "pr": 966,
+    "head": "3d490ee3179400d889bdc81ea8a769d84212e481",
+    "runtime_path": "tools/clay_profile_pipeline_runtime.py",
+    "runtime_blob": "e885804f14d106f6bd86dbdd5d5aac8f25442315",
+    "contract_path": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json",
+    "claim_under_test": "entity_state.generation is the sole live generation/CAS authority and eos_pipeline_state is continuity-only bookkeeping"
+  },
+  "current_main_discriminator": {
+    "path": "the artefact/blogpost_entity/test_reference_generation_authority_invariant.py",
+    "blob": "43a1a79321fba9a9c2364c6ee90a5c5dd39a9377",
+    "requirement": "once reference effect/profile parity turns current, eos_pipeline_state must not retain generation or participate in a second generation/CAS authority"
+  },
+  "grf": {
+    "R0_OBSERVE": [
+      "PR #966 creates entity_state.generation and reads it in pipeline_state_read.",
+      "PR #966 also retains eos_pipeline_state.generation.",
+      "_ensure_schema computes migrated_generation=max(entity_state.generation,eos_pipeline_state.generation) and writes the maximum back to both tables.",
+      "_pipeline_commit advances entity_state with a generation CAS and then separately advances eos_pipeline_state with a second generation CAS.",
+      "current main added a fail-closed invariant that rejects reference PARITY if eos_pipeline_state retains generation or a second CAS path."
+    ],
+    "R1_INFER": "The eos_pipeline_state generation is not a passive mirror: it can change canonical entity_state generation during schema convergence and can independently veto a commit. Therefore the candidate has two operational generation authorities.",
+    "R2_GENERATE": [
+      "H1: mirror generation is harmless compatibility metadata.",
+      "H2: mirror generation is a second authority because it can drive canonical generation or independently reject commit.",
+      "H3: one-time legacy migration can preserve historical generation without keeping a live second authority."
+    ],
+    "R3_COUNTER": "Strongest defense of H1: both updates occur in one SQLite transaction, so divergence should normally be impossible after convergence. Counterpoint: upgrade state can already be divergent, the max() rule explicitly lets the legacy mirror overwrite canonical generation, and the second CAS remains a separate acceptance condition even after convergence.",
+    "R4_DISCRIMINATE": {
+      "unusual_experiment_id": "PARALLEL_GENERATION_MIRROR_DOMINANCE",
+      "scope": "bounded isolated SQLite mechanism reproduction of the exact max(native,mirror) migration law; no repository/product/provider mutation",
+      "cases": [
+        {
+          "case": "native_ahead",
+          "before_native": 8,
+          "before_mirror": 5,
+          "after_native": 8,
+          "after_mirror": 8,
+          "mirror_changed_canonical": false
+        },
+        {
+          "case": "mirror_ahead",
+          "before_native": 5,
+          "before_mirror": 8,
+          "after_native": 8,
+          "after_mirror": 8,
+          "mirror_changed_canonical": true
+        },
+        {
+          "case": "equal",
+          "before_native": 7,
+          "before_mirror": 7,
+          "after_native": 7,
+          "after_mirror": 7,
+          "mirror_changed_canonical": false
+        }
+      ]
+    },
+    "R5_EMERGENT": "Compatibility state becomes authority whenever it can monotonically advance canonical state or independently gate canonical commit. Transactional co-location does not erase semantic authority duplication.",
+    "R6_VERIFY": {
+      "result": "H2_SUPPORTED_H1_FALSIFIED_AT_MECHANISM_SCOPE",
+      "collapse": "PR966_SINGLE_GENERATION_AUTHORITY_CLAIM_REJECTED_CURRENT_FORM",
+      "evidence_class": "SOURCE_EXACT_BLOB_REVIEW_PLUS_BOUNDED_ISOLATED_SQLITE_MECHANISM_MEASUREMENT",
+      "full_pr_runtime_credit": 0,
+      "whole_product_credit": 0
+    }
+  },
+  "repair_contract": {
+    "required": [
+      "Treat entity_state.generation as the only live generation/CAS source after convergence.",
+      "Remove generation from the live eos_pipeline_state schema and remove mirror generation CAS from pipeline_commit.",
+      "For an upgrade DB where entity_state did not exist but legacy eos_pipeline_state generation did exist, permit exactly one explicit migration seed into newly-created entity_state before retiring the legacy generation field.",
+      "If entity_state already existed before migration, never let a legacy mirror value advance or overwrite it.",
+      "Rebuild legacy eos_pipeline_state to continuity/canonical/cursor fields only, atomically and fail-closed.",
+      "Run the current-main generation-authority invariant together with #966 focused reference regressions on exact repaired bytes."
+    ],
+    "forbidden": [
+      "max(entity_state.generation,eos_pipeline_state.generation) after entity_state is already authoritative",
+      "second live generation CAS on eos_pipeline_state",
+      "marking NATIVE_PROFILE_V2_PARITY_CONTRACT reference status PARITY while parallel generation authority remains"
+    ]
+  },
+  "runner_attempt": {
+    "workflow_run_id": 32575124024,
+    "rerun_requested": true,
+    "latest_observed_job_id": 97125049500,
+    "latest_observed_status": "queued",
+    "runtime_credit_at_receipt": 0,
+    "rule": "queued or pre-step failure is not executable PASS or semantic FAIL"
+  },
+  "unusual_experiment_accounting": {
+    "count": 1,
+    "experiment_id": "PARALLEL_GENERATION_MIRROR_DOMINANCE",
+    "additional_unusual_experiments_allowed_in_this_macrocycle": false
+  },
+  "promotion": "REJECT_CURRENT_PR966_FORM_REPAIR_THEN_EXECUTE",
+  "next_exact_gate": "Repair #966 so legacy generation is one-time migration input only and entity_state is the sole live generation/CAS authority; then execute the current-main invariant plus focused/adjacent reference tests on exact repaired branch bytes in an actually-started authorized runner."
+}

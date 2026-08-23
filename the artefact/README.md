@@ -9,6 +9,7 @@ Current authority is resolved from verified current `main`, especially:
 - `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
 - `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
 - `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
+- `research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md`
 
 ## Current naming law
 
@@ -71,12 +72,11 @@ These are software architecture roles, not claims of custom silicon.
 
 ## Mandatory `go` law
 
-Every explicit `go` has two coupled tracks:
+Every explicit `go` has three coupled tracks:
 
-1. **ENTITYOS_EXECUTABLE_CONVERGENCE** — improve the strongest real current implementation toward EntityOS.
-2. **HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one HCU or typed Entry primitive.
-
-If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` and the next discriminator.
+1. **ENTITYOS_EXECUTABLE_CONVERGENCE** — improve the strongest real current implementation toward EntityOS, or preserve the exact executable blocker when no safe non-duplicate write is justified.
+2. **HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one HCU or typed Entry primitive; otherwise record `HCU_NO_CHANGE_WITH_REASON`.
+3. **GLOBAL_JSPACE_GWT_PROTOTYPE_AND_ONE_SHOT_08B_TRAINING_READINESS** — advance the functional instrumented Global J-Space/GWT prototype, trace interface, vector-control ABI, leak-resistant dataset readiness or exact base/preflight gates; otherwise record `TRAINING_READINESS_NO_CHANGE_WITH_REASON`.
 
 Material architecture work uses:
 
@@ -159,23 +159,36 @@ External providers are not admitted as required internal cognition. Exact local 
 
 **Pre-load hashing is not loader attestation.** A positive `EngineAdmission` constructed from checkpoint/tokenizer/runtime/build hashes receives zero HCU runtime credit unless the actual model loader is bound to the same consumed bytes. The admitted path must therefore use a generation-fenced physical engine lease or an enforced read-only/content-addressed artifact boundary and must echo the loader-consumed artifact identity into the downstream inference receipt. Wrong-path loads, post-admission mutation, stale lease reuse or unknown consumed bytes fail closed.
 
+## Global J-Space / GWT prototype and training interface
+
+The first executable component candidate now lives in the HCU compatibility subtree:
+
+- `jspace_vector_control_v1.py` — deterministic q8 `JSPACE_VECTOR_CONTROL_ABI/v1` for a reproducible CausalLM text/byte training/runtime boundary;
+- `jspace_gwt_prototype_v1.py` — deterministic bounded competition/broadcast prototype that emits `ENTITYOS_HCU_JSPACE_GWT_TRACE/v1` records bound to generation, Typed Entry event/admission identity, route identity and GRID plan identity;
+- paired regression files include wrong-basis/stale-generation/role/payload poison fences, Hyperposition preservation, matched-budget `EMPTY_BROADCAST` lesion and exact rescue.
+
+These components are explicit external control/prototype mechanisms. They do **not** prove model-local hidden-state access, residual-stream injection, trained-model GWT use or whole EntityOS/HCU runtime acceptance. The next training-readiness gate is to bind this prototype to the retained actual Entry -> route -> engine/load -> inference/GRID10 path, produce episode-family trace corpora from that exact path, add deterministic hard negatives, and freeze train/validation/sealed-holdout plus a pre-train base baseline before job creation.
+
 ## Execution policy
 
-Current build/test/experiment/runtime credit comes only from authorized isolated sandbox execution unless newer owner authority changes it. VPS/self-hosted/production-host testing is forbidden under current control. Together API and paid fallback are forbidden. Secrets do not enter source/receipts. Final paid/model training requires explicit owner authorization.
+Current build/test/experiment/runtime credit comes only from authorized isolated sandbox execution unless newer owner authority changes it. VPS/self-hosted/production-host testing is forbidden under current control. Secrets do not enter source/receipts.
 
-Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
+Together **general inference and fallback remain forbidden**. The owner has authorized exactly one serious ~0.8B J-Space/GWT specialization fine-tune after the required functional prototype -> exact trace -> causal/lesion -> ABI -> dataset/split -> baseline/base-model/price-preflight gates. This exception is not consumed until an actual Together fine-tuning job is created and its non-secret job ID is receipted. A second paid training job requires new owner authorization.
+
+Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance, and completed training alone is not PASS.
 
 ## Current frontier
 
-1. wire the retained HCU route's separate `EngineAdmission` to the **real deterministic EntityOS/HCU control-plane producer** and bind it through a generation-fenced physical engine lease to the bytes actually consumed by the local checkpoint/tokenizer/runtime loader; a pre-load hash alone receives zero runtime credit, and an untrusted causal Entry event may request but may never mint engine authority;
+1. run the retained HCU route's exact Typed Entry -> route -> verified EngineAdmission -> physical engine load lease -> inference receipt -> GRID10 path on an actually-started authorized isolated executor and bind real loader-consumed checkpoint/tokenizer/runtime/build bytes;
 2. keep the replay-stable **event identity vs concrete admission identity** split and wire Typed Entry capability claims to the existing canonical deterministic capability authority rather than a test fixture or event self-claim;
 3. bind the downstream inference receipt **producer** to the already-defined serializer/event/Entry-admission/route/engine/class/artifact echo contract plus the exact physical loader lease/consumed-byte identity;
 4. converge the versioned Typed Entry canonicalization path to one accepted authority before making heterogeneous/cross-language hash-identity claims;
-5. run exact combined Entry + HCU route + engine-load-lease + inference-echo + GRID10 regressions on an actually-started authorized isolated executor, then measure GRID10/COGSIM10 cost utility before widening WM_TEST/NESTED_SIM;
-6. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry/loader semantics settle.
+5. fuse `JSPACE_VECTOR_CONTROL_ABI/v1` and the functional trace prototype into the retained Entry/HCU route without creating a parallel inference or state authority; then generate exact episode-family traces and matched causal lesions;
+6. compile leak-resistant train/validation/sealed-holdout plus adversarial non-training suites from exact prototype traces and deterministic hard negatives; freeze the exact ~0.8B base baseline and Together model/price/preflight before consuming the one authorized job;
+7. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry/loader/J-Space semantics settle.
 
-Completed authority migration note: current `the artefact/manifest.json` and the compatibility-named authority validator now select **EntityOS + HCU** while preserving historical ClayVerse controls only as immutable donor/safety ancestry. This source-level convergence does not create runtime acceptance.
+Completed authority migration note: current `the artefact/manifest.json` and the compatibility-named authority validator select **EntityOS + HCU** while preserving historical ClayVerse controls only as immutable donor/safety ancestry. This source-level convergence does not create runtime acceptance.
 
-## Latest `go` README re-entry — 2026-08-23
+## Latest `go` README re-entry — 2026-08-24 00:40 +07
 
-`README=UPDATED_ENGINE_LOAD_BOUNDARY`: one bounded unusual discriminator showed that an admitted pre-load checkpoint digest can diverge from bytes later read through the same mutable source path, while loading from a separately staged verified snapshot preserved the admitted bytes after the original path was mutated. This is mechanism evidence only: ordinary writable staging is not itself immutable loader attestation. Current architecture therefore requires loader-bound physical engine lease/consumed-byte evidence before any HCU runtime credit. Whole EntityOS/HCU runtime credit remains zero.
+`README=UPDATED_JSPACE_GWT_PROTOTYPE`: current `main@d0b46007567fa2066954b9ac4cbf80132e1a7e02` had owner authorization for one bounded ~0.8B specialization run but no code implementation of `JSPACE_VECTOR_CONTROL_ABI/v1`. This GO adds a deterministic q8 ABI candidate plus a functional deterministic Global J-Space/GWT trace prototype on a fresh current-main branch. Isolated component regressions reached 21/21 PASS after an early precision-context failure exposed and repaired a real decoder-determinism bug. The one unusual experiment compared metadata-only admission against payload-bound admission under a foreign q8 payload: the metadata-only control accepted the poison while ABI/v1 rejected it by payload digest. Normal matched-budget GWT lesion/rescue regressions also PASS. Evidence scope remains bounded component/prototype only: no exact retained-route runtime, model-local J-Space causality, Together job, paid fallback, VPS/self-hosted/production testing or whole-product PASS is claimed.

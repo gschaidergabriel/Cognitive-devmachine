@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Fail-closed binding for the bundled ~0.8B J-Space/GWT cognition manifest.
 
-This module is intentionally dependency-free. It validates source structure separately
-from boot admission: a source/template manifest may exist before calibration, but it must
-not receive boot/runtime credit until every required identity and calibration is measured.
+This module is intentionally dependency-free. It validates a structurally complete,
+exactly identified candidate separately from boot admission; SOURCE_ONLY candidates
+must never receive boot/runtime credit until all required identities/calibrations are
+measured and the manifest is explicitly promoted to MEASURED.
 """
 
 from __future__ import annotations

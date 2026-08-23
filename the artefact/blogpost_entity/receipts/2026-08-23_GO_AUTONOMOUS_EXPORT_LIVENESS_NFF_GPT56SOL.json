@@ -1,0 +1,93 @@
+{
+  "schema": "AUTONOMOUS_EXPORT_LIVENESS_MECHANISM_RECEIPT/v1",
+  "status": "MECHANISM_SUPPORTED_RUNTIME_CLASSIFICATION_OPEN",
+  "macrocycle_id": "go-20260823T0818+07-gpt56sol-export-liveness",
+  "source_main": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+  "trigger": "go",
+  "execution_policy": {
+    "free_only": true,
+    "provider_network_used": false,
+    "paid_execution_used": false,
+    "production_or_vps_mutation": false
+  },
+  "observed_repo_timeline": [
+    {
+      "commit": "5e134f5f07ddebc0a1c182d04579e361bbbe82a8",
+      "subject": "agentZero-Export 2026-08-22T20:06:44Z (Generation 276, 60 Dateien, 9 geschwaerzt)",
+      "meaning": "last observed AgentZero export on main"
+    },
+    {
+      "commit": "9452c6fe621bc2d8c6f8cf5eb3f9fb88fd91591d",
+      "subject": "eos-bewertung-export 2026-08-22T20:25:04Z (12 Bewertungen, 7 hoch/5 runter)",
+      "meaning": "independent later writer advanced main after the last AgentZero export"
+    },
+    {
+      "commit": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+      "subject": "claycode supervisor: bind autonomous export liveness stall",
+      "meaning": "supervisor records unexplained liveness stall; no export/timer repair in this commit"
+    }
+  ],
+  "source_mechanism": {
+    "path": "agentZero/code/export/agentzero_export.py",
+    "git_helper_blob_sha": "2f0a9ce6919657ea605dc97656b3f30097819de9",
+    "observed_sequence": [
+      "git add agentZero",
+      "git commit ...",
+      "git push origin HEAD:main"
+    ],
+    "pre_push_remote_sync_present": false,
+    "explicit_fetch_pull_rebase_before_commit_push": false,
+    "push_failure_behavior": "returns nonzero and prints PUSH-FEHLER; no convergence/rebase path is present in the observed final push path"
+  },
+  "hypothesis": "After AgentZero pushed at 20:06, the independent rating writer advanced main at 20:25. If the AgentZero export clone did not fetch/rebase before its next run, its next commit became non-fast-forward and every subsequent direct push could remain rejected while local export commits continued accumulating.",
+  "counterhypotheses": [
+    "the AgentZero timer/service stopped or became stuck before the next run",
+    "the export process failed before git commit/push (DB lock, disk/inode, source exception)",
+    "SSH/auth/network failed independently of ancestry",
+    "the export ran with no changed state and returned unchanged",
+    "a different shared dependency stopped both export families after the rating run"
+  ],
+  "unusual_experiment": {
+    "id": "NON_FAST_FORWARD_EXPORT_STALL_REPRO",
+    "count_for_macrocycle": 1,
+    "environment": "isolated local git simulation; no project runtime or provider network",
+    "intervention": "two independent clones write the same main branch; AgentZero clone performs commit+push without remote sync; rating clone syncs then advances main; AgentZero then performs two more commit+push cycles without fetch/pull/rebase",
+    "result": {
+      "first_agent_push": "PASS",
+      "rating_push_after_sync": "PASS",
+      "next_agent_push": "FAIL_FETCH_FIRST_NON_FAST_FORWARD",
+      "following_agent_push_without_sync": "FAIL_FETCH_FIRST_NON_FAST_FORWARD",
+      "remote_head_remains_rating_commit": true,
+      "agent_local_commits_continue_accumulating": true
+    },
+    "prediction_supported": true
+  },
+  "inference": {
+    "classification": "PUSH_FAILED_NON_FAST_FORWARD_IS_A_HIGH_PROBABILITY_MECHANISM_CANDIDATE",
+    "why": "The exact observed main ancestry contains a later independent writer after the last AgentZero export, and the export source lacks a remote convergence step before direct push. The isolated discriminator reproduces a persistent visible-export stall with that exact ordering.",
+    "runtime_claim": "NOT_VERIFIED_ON_FRANK_API",
+    "confidence_scope": "mechanism only; not host root-cause proof"
+  },
+  "required_runtime_receipt_still_open": {
+    "schema": "AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1",
+    "must_bind": [
+      "timer/service enabled+active state",
+      "last-trigger and next-trigger times",
+      "last successful run id",
+      "process exit code",
+      "stdout/stderr digests",
+      "git worktree status",
+      "local HEAD and origin/main ancestry",
+      "last push stderr/return code",
+      "lock/SQLite busy state",
+      "disk/inode availability",
+      "network/auth result",
+      "generation before/after",
+      "whether export timer, rating timer, or shared dependency stopped first"
+    ],
+    "discriminating_observation": "If local AgentZero HEAD contains post-20:06 export commits while origin/main descends through 9452c6f and push stderr contains non-fast-forward/fetch-first, classify PUSH_FAILED_NON_FAST_FORWARD. If there are no later local AgentZero commits, investigate timer/process/DB/disk/auth classes instead."
+  },
+  "promotion": "RETAIN_MECHANISM_CANDIDATE_DO_NOT_PATCH_OR_RESTART_FROM_THIS_RECEIPT_ALONE",
+  "research_delta": "A previously generic unexplained export stall now has a source-bound, timeline-bound, experimentally reproduced non-fast-forward mechanism candidate with a single exact runtime discriminator.",
+  "spend_usd": 0
+}

@@ -5,6 +5,8 @@ from jspace_vector_control_v1 import (
     ABI_SCHEMA,
     CODEC_SCHEMA,
     JSpaceVectorControlError,
+    _canonical_sha256,
+    _packet_material,
     decode_vector,
     encode_vector,
     packet_bytes,
@@ -156,6 +158,79 @@ class JSpaceVectorControlTests(unittest.TestCase):
         tampered = replace(packet, q8_values=(126,) + packet.q8_values[1:])
         with self.assertRaisesRegex(JSpaceVectorControlError, "VECTOR_CONTROL_PACKET_DIGEST_MISMATCH"):
             validate_packet(tampered)
+
+    def test_self_consistent_extreme_scale_packet_fails_closed_before_decode(self):
+        packet = encode_vector(
+            (1.0, -0.5),
+            basis_id=BASIS_ID,
+            basis_sha256=BASIS_SHA256,
+            generation=GENERATION,
+            role=ROLE,
+        )
+        poisoned = replace(
+            packet,
+            scale_numerator="1" + ("0" * 309),
+            packet_sha256="0" * 64,
+        )
+        poisoned = replace(
+            poisoned,
+            packet_sha256=_canonical_sha256(_packet_material(poisoned), "VECTOR_CONTROL_PACKET"),
+        )
+        with self.assertRaisesRegex(JSpaceVectorControlError, "SCALE_RATIONAL_BINARY64_RANGE_REQUIRED"):
+            validate_packet(poisoned)
+        with self.assertRaisesRegex(JSpaceVectorControlError, "SCALE_RATIONAL_BINARY64_RANGE_REQUIRED"):
+            decode_vector(
+                poisoned,
+                current_generation=GENERATION,
+                expected_basis_id=BASIS_ID,
+                expected_basis_sha256=BASIS_SHA256,
+                expected_role=ROLE,
+            )
+
+    def test_binary64_scale_endpoints_remain_admitted(self):
+        for value in (
+            float.fromhex("0x0.0000000000001p-1022"),
+            float.fromhex("0x1.fffffffffffffp+1023"),
+        ):
+            packet = encode_vector(
+                (value,),
+                basis_id=BASIS_ID,
+                basis_sha256=BASIS_SHA256,
+                generation=GENERATION,
+                role=ROLE,
+            )
+            validate_packet(packet)
+            self.assertEqual(
+                decode_vector(
+                    packet,
+                    current_generation=GENERATION,
+                    expected_basis_id=BASIS_ID,
+                    expected_basis_sha256=BASIS_SHA256,
+                    expected_role=ROLE,
+                ),
+                (value,),
+            )
+
+    def test_equivalent_nonreduced_scale_alias_fails_closed(self):
+        packet = encode_vector(
+            (1.0, -0.5),
+            basis_id=BASIS_ID,
+            basis_sha256=BASIS_SHA256,
+            generation=GENERATION,
+            role=ROLE,
+        )
+        aliased = replace(
+            packet,
+            scale_numerator=str(int(packet.scale_numerator) * 2),
+            scale_denominator=str(int(packet.scale_denominator) * 2),
+            packet_sha256="0" * 64,
+        )
+        aliased = replace(
+            aliased,
+            packet_sha256=_canonical_sha256(_packet_material(aliased), "VECTOR_CONTROL_PACKET"),
+        )
+        with self.assertRaisesRegex(JSpaceVectorControlError, "SCALE_RATIONAL_NOT_REDUCED"):
+            validate_packet(aliased)
 
     def test_nonfinite_and_inexact_integer_inputs_fail_closed(self):
         for value in (float("nan"), float("inf"), float("-inf")):

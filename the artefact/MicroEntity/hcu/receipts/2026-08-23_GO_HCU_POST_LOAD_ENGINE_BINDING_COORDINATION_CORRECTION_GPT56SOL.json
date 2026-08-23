@@ -1,0 +1,22 @@
+{
+  "schema": "ENTITYOS_HCU_COORDINATION_CORRECTION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "corrects": "2026-08-23_GO_HCU_POST_LOAD_ENGINE_BINDING_GPT56SOL.json",
+  "reason": "After the bounded local path-substitution check completed, the retained PR1263 shared state was refreshed and showed that the same 23:57 go macrocycle had already consumed its globally allowed unusual experiment as AUTHORITY_CONSTANT_TRANSPLANT. The local observation remains valid component evidence but may not receive a second unusual-experiment credit.",
+  "experiment_accounting": {
+    "global_macrocycle_unusual_experiment": "AUTHORITY_CONSTANT_TRANSPLANT",
+    "global_credit_count": 1,
+    "post_admission_atomic_path_substitution_credit": "NO_ADDITIONAL_UNUSUAL_EXPERIMENT_CREDIT",
+    "post_admission_atomic_path_substitution_evidence_disposition": "RETAIN_AS_UNCREDITED_COMPONENT_BOUNDARY_OBSERVATION"
+  },
+  "source_disposition": {
+    "branch": "gpt56sol/hcu-engine-postload-binding-20260823",
+    "pr_opened": false,
+    "promotion": "NO_PROMOTION_DONOR_ONLY",
+    "why": "PR1263 concurrently introduced the physical-engine loader-consumption lease boundary and then advanced EngineAdmission onto RFC8785/JCS v2 identities. Merging the older post-load branch directly would regress the retained current identity migration and duplicate the loader-bound control-plane lane."
+  },
+  "runtime_credit_change": 0,
+  "whole_product_pass": false
+}

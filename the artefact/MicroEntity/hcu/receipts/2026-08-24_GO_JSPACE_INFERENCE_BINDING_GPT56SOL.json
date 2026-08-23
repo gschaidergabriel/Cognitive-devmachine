@@ -2,6 +2,8 @@
   "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
   "date": "2026-08-24",
   "trigger": "go",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
   "organ": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
   "persistent_research_entity": "Clay",
   "program": "ENTITYOS_HCU",
@@ -24,13 +26,16 @@
   "counterhypothesis": "A TrainingTrace outcome_receipt_sha256 field alone is sufficient causal evidence even when it does not structurally prove that generation, Entry event/admission, route, model lane, verified loader chain and output bytes belong to the same canonical inference receipt.",
   "counterhypothesis_result": "REJECTED_AT_SOURCE_CONTRACT_SCOPE_ONLY",
   "unusual_experiment": {
-    "count": 1,
-    "name": "TRAINING_TRACE_BASIS_ALIAS_POISON",
+    "local_intervention_count": 1,
+    "count_for_shared_macrocycle": "UNRESOLVED_NO_UPSTREAM_ID",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "id": "TRAINING_TRACE_BASIS_ALIAS_POISON",
     "class": "SYNTHETIC_SOURCE_EQUIVALENT_MECHANISM_ONLY",
     "purpose": "Test whether same basis_id with different basis bytes could enter a training trace before basis-byte identity was fenced.",
     "observation": "The earlier simplified gate accepted the alias case; adding basis_sha256 equality rejected it. Before this organ could write that repair, a concurrent worker advanced PR1263 and independently added the basis SHA fence plus stronger packet condition/identity/wire transplant fences.",
     "credit": "MECHANISM_DISCRIMINATOR_ONLY_ZERO_RUNTIME_CREDIT",
-    "additional_unusual_experiments": 0
+    "additional_local_unusual_experiments": 0,
+    "coordination_law": "No shared macrocycle identity was supplied, so this receipt does not claim cross-organ experiment-slot uniqueness."
   },
   "coordination": {
     "stale_write_rejection": "A GitHub 409 rejected this organ's stale jspace_training_trace_v1.py update after PR1263 advanced; no newer worker bytes were overwritten.",

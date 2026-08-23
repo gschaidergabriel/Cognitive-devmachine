@@ -143,11 +143,13 @@ All new data paths converge toward one typed ingress binding before cognition:
 
 Inputs may originate from humans, tools, external events, sensor/stream data, canonical database changes or intrinsic system events.
 
+Capability claims in an untrusted Entry packet are **not authority**. Entry admission must compare them against the existing deterministic permission/capability authority and its exact binding/receipt identity; the packet may narrow an admitted capability set but may never self-grant or broaden it. No second HCU permission authority is introduced.
+
+Replay-stable causal event identity and concrete transport/admission identity must remain distinguishable: changes such as receive time, payload reference, permission snapshot or resource budget may change the admission identity without silently redefining the underlying immutable event identity. Changing immutable payload/provenance/event semantics must change event identity.
+
 HCU route events and downstream inference receipts must ultimately re-enter through this fabric so event identity, generation, engine identity and causal provenance remain bound instead of becoming a side ledger.
 
-Entry admission must never convert caller-supplied capability claims into authority. Privileged capabilities require comparison against a separately trusted canonical capability/permission snapshot or verified resolver result; unknown/mismatched authority fails closed.
-
-Cross-language causal identity also needs one explicit byte contract. The current candidate `hcu_typed_canonical_v1.py` defines `ENTITYOS_HCU_TYPED_CANONICAL/v1`, a deliberately restricted versioned identity domain: safe integers, no floats, printable ASCII object keys, exact Unicode scalar values, fixed escapes, deterministic ordering and domain-separated SHA-256. It is a typed equivalent for HCU/Entry identity, not a claim of full RFC 8785 JCS implementation. Promotion requires independent second-language vectors and exact isolated execution.
+Cross-language causal identity additionally requires one explicit byte contract. Candidate `hcu_typed_canonical_v1.py` defines `ENTITYOS_HCU_TYPED_CANONICAL/v1`: safe integers, no floats, printable ASCII object keys, exact Unicode scalar values, fixed escapes, deterministic ordering and domain-separated SHA-256. It is an intentionally restricted typed equivalent for identity-bearing Entry/HCU envelopes, not a claim of full RFC 8785 JCS. Promotion requires independent second-language byte/digest vectors plus exact authorized-isolated execution.
 
 ## HCU reactive cognition
 
@@ -165,10 +167,10 @@ Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 
 ## Current frontier
 
-1. keep PR #1263 as the single retained Typed Entry/HCU routing lane; do not fork a second admission/router implementation;
-2. repair Typed Entry capability admission so caller claims are verified against a separately trusted canonical capability/permission authority before cognition;
-3. fuse the versioned `ENTITYOS_HCU_TYPED_CANONICAL/v1` byte contract into retained Entry/event/route/inference receipts, then verify it with an independent second-language implementation;
-4. bind the real admitted local HCU checkpoint/tokenizer/runtime bytes to positive engine capability identity;
-5. rebuild the compatibility package only from the exact settled retained source head;
-6. obtain exact authorized-isolated Entry/router/inference regressions and then GRID10/COGSIM10 evidence before promotion;
-7. keep WM_TEST/NESTED_SIM selective and noncanonical until cheaper modes plus measured discriminators justify them.
+1. **close current authority split-brain without weakening inherited guards:** `the artefact/README.md` and current bootstrap/program/footer select EntityOS+HCU, while `the artefact/manifest.json` and the legacy `tools/validate_clayverse_authority_consistency.py` still encode ClayVerse product authority; migrate the guard and manifest coherently, preserving all safety/provenance checks rather than bulk-renaming them;
+2. finish the replay-stable **event identity vs admission identity** split, standardize the versioned cross-language canonical-byte contract, and fuse the useful Typed Entry/GRID10 candidate into the retained HCU route lane without creating a second route authority;
+3. wire Typed Entry capability claims to the existing canonical permission/capability authority; exact source-component regression already proves self-grant rejection when a trusted capability snapshot/binding is supplied, but the real authority producer is not yet wired;
+4. bind the real admitted local HCU checkpoint/tokenizer/runtime bytes and capability record instead of trusting event-supplied model identity;
+5. bind the downstream inference receipt **producer** to the already-defined event/route/engine echo contract;
+6. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry semantics settle;
+7. run exact combined Entry + HCU route + inference-echo + GRID10 regressions on an actually-started authorized isolated executor, then measure GRID10/COGSIM10 cost utility before widening WM_TEST/NESTED_SIM.

@@ -6,9 +6,10 @@
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "base_main": "f303060b1ab79cd113f1308221a3e95f784eeab4",
+  "latest_main_rebound": "cb6b6d0e1ffc6db58b519d988ed530675e6f551f",
   "branch": "gpt56sol/go-clayverse-python-lock-transition-20260823-1651",
   "pr": 1323,
-  "classification": "PYTHON_HASH_LOCK_ATOMIC_TRANSITION_SOURCE_FENCE_EXECUTION_ADMISSION_BLOCKED",
+  "classification": "PYTHON_HASH_LOCK_ATOMIC_TRANSITION_SOURCE_FENCE_OWNER_ONE_SHOT_EXECUTION_BLOCKED",
   "observed": {
     "current_product_authority": "ClayVerse one OCI/Docker-compatible container; Mini Entity/Blogpost current-work authority superseded and retained only as donor evidence",
     "source_lock_open_gap": "Python requirements are version pinned but not yet installed with --require-hashes",
@@ -16,7 +17,9 @@
     "requirements_lock_materialized": false,
     "generator_present": ".github/workflows/clayverse-python-lock-generator.yml derives exact digest-pinned product base, resolves twice, diffs locks, and downloads binary artifacts with --require-hashes",
     "missing_transition_guard_on_base": "the artefact/tests/test_python_dependency_lock.py absent although named in generator workflow path filters",
-    "authorized_exact_executor_exposed": false
+    "vercel_sandbox_bridge": "CONFIRMED_HISTORICALLY_WITH_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED",
+    "current_owner_started_token_bearing_run": false,
+    "current_owner_gate": "scoped read-only GITHUB_READ_TOKEN must be supplied by owner through the retained one-shot runtime POST; token must not be committed, persisted or inferred from other secrets"
   },
   "delta": {
     "test_path": "the artefact/tests/test_python_dependency_lock.py",
@@ -65,7 +68,7 @@
     "exact_oci_build": false,
     "startup_readiness": false,
     "whole_clayverse_runtime_credit": 0,
-    "reason": "both PR jobs failed before any visible step and no authorized isolated sandbox create/start/exec surface is exposed in the current connected execution tooling"
+    "reason": "PR jobs failed before any visible step; the retained Vercel Sandbox path is now known to exist, but the next exact run is owner-gated on a real scoped read-only GitHub token supplied only through runtime one-shot ingress"
   },
   "coordination": {
     "semantic_cognition_donor": "parallel PR #1298 landed on main during this go, covering the earlier cognition semantic-version ancestry finding; no duplicate PR retained from this organ",
@@ -86,6 +89,6 @@
     "together": "FORBIDDEN",
     "paid_or_model_training": "OWNER_AUTHORIZATION_REQUIRED"
   },
-  "next_exact_gate": "on an actually-started authorized isolated executor, run current authority/full regressions and the existing Python lock generator inside the exact digest-pinned product base; materialize only the byte-identical verified requirements.lock.txt; atomically switch Dockerfile/.dockerignore/SOURCE_LOCK to --require-hashes; build the exact OCI image, capture image digest, start it and continue readiness plus Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/recovery acceptance",
+  "next_exact_gate": "owner starts the retained Vercel Sandbox one-shot with a scoped read-only GITHUB_READ_TOKEN; inside the admitted Sandbox verify exact private source identity and token absence after fetch, run exact-current authority/full regressions and the Python lock generator in the exact pinned product base, materialize only the byte-identical verified requirements.lock.txt, atomically switch Dockerfile/.dockerignore/SOURCE_LOCK to --require-hashes, build and bind the exact OCI digest, start it, then continue Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/optional-EntityOS/recovery acceptance",
   "whole_product_acceptance": "IN_PROGRESS"
 }

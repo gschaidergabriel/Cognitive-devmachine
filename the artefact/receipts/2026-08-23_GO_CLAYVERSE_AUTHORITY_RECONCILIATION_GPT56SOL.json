@@ -1,10 +1,10 @@
 {
-  "schema": "CLAYVERSE_GO_AUTHORITY_RECONCILIATION/v2",
+  "schema": "CLAYVERSE_GO_AUTHORITY_RECONCILIATION/v3",
   "date": "2026-08-23",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
-  "base_main_sha": "dbb73ac784fab32d625297ff9272989b861ae909",
-  "latest_main_observed_during_cycle": "8b2ba6d422370d5df1e174dc08372513b93a0274",
+  "initial_main_sha": "dbb73ac784fab32d625297ff9272989b861ae909",
+  "rebased_main_sha": "63b82c6f5784457642acee1b3c7f3e8f0d1d5182",
   "observation": {
     "split_brain": true,
     "clayverse_sources": [
@@ -22,9 +22,10 @@
     ],
     "parallel_drift": [
       "PR #1155 merged a Mini Entity authority cross-bind derived from the stale pre-reconciliation bootstrap",
-      "PR #1158 merged Control 4.3 selecting Mini Entity from the same stale authority chain"
+      "PR #1158 merged Control 4.3 selecting Mini Entity from the same stale authority chain",
+      "PR #1166 merged a fail-closed 4.1+4.2+4.3 Mini Entity assertion, creating a new direct conflict with the later owner ClayVerse authority"
     ],
-    "causal_risk": "workers can select different product endpoints depending on which authority file/control generation they read"
+    "causal_risk": "workers and validators can select different product endpoints depending on which authority generation they read"
   },
   "delta": {
     "authority_reconciled_to": "CLAYVERSE_SINGLE_CONTAINER",
@@ -33,7 +34,10 @@
     "control_override": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json",
     "supervisor_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json",
     "validator": "tools/validate_clayverse_authority_consistency.py",
+    "compatibility_assertion": "tools/assert_effective_program_authority.py delegates to the single ClayVerse v2 validator instead of leaving a competing Mini Entity assertion",
     "regression": "tests/test_validate_clayverse_authority_consistency.py",
+    "superseded_bootstrap_blob_preserved": "48fa25625dd02d4af4bbfaa64a8e6e4d371922e5",
+    "superseded_program_state_blob_preserved": "d2a7b849e7a8f7b38b28aca3ae1704bf447a367d",
     "inherited_safety_preserved": [
       "canonical entity/version/revision/state-hash join binding",
       "every-turn identity guard pointer and invariant",
@@ -68,5 +72,5 @@
     "paid_training_used": false,
     "unusual_experiment": "NOT_CONSUMED_NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE"
   },
-  "next_gate": "Re-adjudicate against fresh main, merge/fuse only if authority and safety changes remain non-regressive, then run the v2 authority validator plus full exact-current ClayVerse suite and OCI build/startup on an actually-started authorized isolated sandbox; bind source SHA, image digest and runtime evidence before any runtime promotion."
+  "next_gate": "Open the rebased authority PR, verify mergeability against fresh main, then run the v2 authority assertion plus full exact-current ClayVerse suite and OCI build/startup on an actually-started authorized isolated sandbox; bind source SHA, image digest and runtime evidence before any runtime promotion."
 }

@@ -17,7 +17,6 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from collections.abc import Mapping
 from typing import Any
 
 SCHEMA = "ENTITYOS_TYPED_CANONICAL_JSON/v1"
@@ -60,7 +59,7 @@ def _validate(value: Any) -> None:
         for item in value:
             _validate(item)
         return
-    if isinstance(value, Mapping):
+    if type(value) is dict:
         for key, item in value.items():
             _need(type(key) is str, "OBJECT_KEY_STRING_REQUIRED")
             _string(key, key=True)
@@ -70,7 +69,28 @@ def _validate(value: Any) -> None:
 
 
 def _encode_string(value: str) -> str:
-    return json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
+    # Exact v1 escaping contract: required JSON escapes for quote/backslash/control
+    # characters, lowercase \u00xx for remaining C0 controls, raw Unicode otherwise.
+    escapes = {
+        '"': '\\"',
+        "\\": "\\\\",
+        "\b": "\\b",
+        "\t": "\\t",
+        "\n": "\\n",
+        "\f": "\\f",
+        "\r": "\\r",
+    }
+    out: list[str] = ['"']
+    for char in value:
+        escaped = escapes.get(char)
+        if escaped is not None:
+            out.append(escaped)
+        elif ord(char) < 0x20:
+            out.append(f"\\u{ord(char):04x}")
+        else:
+            out.append(char)
+    out.append('"')
+    return "".join(out)
 
 
 def _serialize(value: Any) -> str:
@@ -86,7 +106,7 @@ def _serialize(value: Any) -> str:
         return _encode_string(value)
     if type(value) is list:
         return "[" + ",".join(_serialize(item) for item in value) + "]"
-    if isinstance(value, Mapping):
+    if type(value) is dict:
         # Keys are restricted to ASCII; code-point and UTF-16 lexical ordering coincide.
         items = sorted(value.items(), key=lambda item: item[0])
         return "{" + ",".join(

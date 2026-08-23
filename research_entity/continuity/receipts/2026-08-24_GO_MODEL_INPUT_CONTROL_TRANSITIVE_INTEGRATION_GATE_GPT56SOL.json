@@ -1,0 +1,79 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "bf592fad1b51aa7b79b19b4ad2ac8a17d2b6ece0",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; USER_MESSAGE_TIME_AVAILABLE_ONLY_AT_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "work_class": "ORDINARY_SOURCE_REENTRY_CAUSAL_BOUNDARY_REVIEW_AND_DURABLE_FUSION",
+    "duplicate_lane_created": false
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_live_head_observed_during_reentry": "ba96ed91bff901f0e33cd085eb2c6d824cf33643",
+    "model_input_control_primitive_observed_at_ancestor": "b85ea49ab0b7b0dbc0d5f95ba5bf605cdffe4b21",
+    "sandbox_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_live_head_observed": "4b983e4e4cb566f2831f6ff4084a3e274e269ae2"
+  },
+  "observed_successor_delta": {
+    "primitive": "HCU_MODEL_INPUT_CONTROL_BINDING/v1",
+    "source": "the artefact/MicroEntity/hcu/model_input_control_binding_v1.py",
+    "direct_source_facts": [
+      "The retained donor now contains a primitive that validates one exact canonical JSPACE_VECTOR_CONTROL_ABI/v1 packet and requires that packet wire to occur exactly once in the exact executor-consumed input bytes.",
+      "The primitive recomputes executor input SHA-256 and size from the consumed bytes and binds generation, Entry event/admission, route, GRID10, cell, role, basis, executor and invocation identity.",
+      "The observed VerifiedModelExecution/v1 schema still carries input_sha256/input_size but does not carry an HCU_MODEL_INPUT_CONTROL_BINDING/v1 identity.",
+      "The observed HCU_INFERENCE_RECEIPT/v4 schema echoes VerifiedModelExecution input identity but likewise carries no model-input-control-binding identity.",
+      "Therefore existence of the new primitive does not yet make Vector-Control consumption transitive through ModelExecution -> InferenceReceipt -> JSpaceBinding; without explicit integration, the primitive can remain an unconsumed side proof."
+    ],
+    "evidence_scope": "SOURCE_DIRECT_AT_EXACT_OBSERVED_DONOR_SNAPSHOTS; NO_RUNTIME_OR_MODEL_CAUSALITY_CREDIT"
+  },
+  "hypothesis": "If the exact ModelInputControlBinding identity is admitted at the same executor invocation boundary and then echoed/cross-bound through VerifiedModelExecution, InferenceReceipt and JSpaceBinding, the source chain can distinguish exact control-consumption provenance from a merely adjacent standalone control proof.",
+  "counterhypothesis": "Keeping the ModelInputControlBinding as a standalone validated object is sufficient because matching input_sha256/input_size elsewhere implicitly connects it to the same invocation.",
+  "counterhypothesis_result": "REJECTED_AT_SOURCE_AUTHORITY_SCOPE: no currently observed downstream schema requires the standalone binding identity, so equal input digest fields do not prove that downstream admission actually consumed or validated that control-binding object.",
+  "next_patch_contract": {
+    "single_authority": "extend existing ModelExecution/Inference/JSpace causal spine; do not create a second inference or truth authority",
+    "required_edges": [
+      "executor invocation admission must produce or externally admit one exact HCU_MODEL_INPUT_CONTROL_BINDING/v1 for the same executor_id + invocation_id",
+      "VerifiedModelExecution must bind the control-binding digest plus exact input_sha256/input_size and generation/GRID/cell/role identity",
+      "InferenceReceipt must derive/echo that admitted control-binding identity from VerifiedModelExecution rather than accept a caller assertion",
+      "JspaceInferenceBinding must cross-bind the same control-binding identity to TrainingTrace.vector_control_packet_sha256 and inference input identity",
+      "tampered binding, wrong invocation, wrong input digest/size, wrong packet, wrong generation/GRID/cell/role or missing binding must fail closed for control-consumption credit"
+    ],
+    "credit_boundary": "Association-only J-Space component evidence may remain valid; J-Space control-consumption/model-runtime credit remains zero until admitted exact execution proves the integrated path."
+  },
+  "executor_runtime_reentry": {
+    "latest_executor_head_observed": "4b983e4e4cb566f2831f6ff4084a3e274e269ae2",
+    "latest_visible_vercel_deployment": "dpl_26pNV41EYrvFuWKRBFCHUPjQN2Xk",
+    "latest_visible_deployment_git_sha": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+    "latest_visible_deployment_state": "ERROR",
+    "exact_head_ready_observed": false,
+    "sandbox_invocation_by_this_organ": false,
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_EXACT_REENTRY_AND_FAIL_CLOSED_EXECUTION_DISCRIMINATION: retained executor is newer than the latest visible Vercel deployment, so no stale deployment is invoked or credited; next executable gate remains an exact-head FREE_ONLY READY preview.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the new exact model-input-control primitive is recognized as a reusable HCU causal-interconnect object, and the missing transitive admission edges into the existing ModelExecution/Inference/J-Space spine are specified without creating a second authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: source-level acceptance now separates existence of an exact control-in-input proof from downstream consumption of that proof; model/J-Space/training promotion remains blocked until the binding is transitively admitted and then executed on real zero-cost local model I/O."
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md and both retained lanes are moving concurrently. Replacing the large current-facing README from a transient snapshot risks erasing newer parallel convergence; this append-only exact-SHA receipt is the durable delta for later README fusion."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Re-enter the newest PR1263 head and, only if no parallel integration already exists, wire HCU_MODEL_INPUT_CONTROL_BINDING/v1 into the existing ModelExecution -> InferenceReceipt/v4 -> JSpaceBinding successor chain with deterministic fail-closed regressions. Keep PR810 as the single executor; do not invoke any deployment unless a naturally available FREE_ONLY READY preview matches its exact then-current Git SHA."
+}

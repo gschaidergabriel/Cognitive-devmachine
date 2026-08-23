@@ -2,9 +2,10 @@
 """Fail-closed static guard for canonical Clay <-> Python reference contract drift.
 
 The canonical Clay source owns the forward contract: DB-resident profile, one Unified
-Cognitive Fabric split into PREPARE before inference and FINALIZE after inference, and no
-legacy provider effect path. The Python reference runtime/tests may lag, but that lag must
-stay explicit and must never cause the canonical Clay contract to be rolled backward.
+Cognitive Fabric split into PREPARE before inference and FINALIZE only after deterministic
+gate plus canonical commit, and no legacy provider effect path. The Python reference
+runtime/tests may lag, but that lag must stay explicit and must never cause the canonical
+Clay contract to be rolled backward.
 
 Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
 unwired handler names do not count as runtime support.
@@ -187,9 +188,9 @@ def main() -> int:
         "pipeline_build_prompt",
         "pipeline_cognitive_fabric_prepare",
         "inference_generate",
-        "pipeline_cognitive_fabric_finalize",
         "pipeline_gate",
         "pipeline_commit",
+        "pipeline_cognitive_fabric_finalize",
     ]
     order_ok = all(name in call_sequence for name in required_order)
     if order_ok:
@@ -213,13 +214,17 @@ def main() -> int:
             'map_set(infer,"inference_packet_digest",prepared.inference_packet_digest)' in clay
             and 'map_set(infer,"cognitive_fabric_receipt_digest"' not in clay
         ),
-        "finalize_binds_prepared_and_generated": (
+        "prepared_fabric_reaches_gate_commit": (
+            'map_set(gate_data,"cognitive_fabric",prepared)' in clay
+            and 'map_set(commit_data,"cognitive_fabric",prepared)' in clay
+            and 'map_set(gate_data,"cognitive_fabric",finalized)' not in clay
+            and 'map_set(commit_data,"cognitive_fabric",finalized)' not in clay
+        ),
+        "finalize_binds_prepared_generated_and_terminal_outcome": (
             'map_set(cognition_finalize_data,"prepared",prepared)' in clay
             and 'map_set(cognition_finalize_data,"generated",generated)' in clay
-        ),
-        "finalized_fabric_reaches_gate_commit": (
-            'map_set(gate_data,"cognitive_fabric",finalized)' in clay
-            and 'map_set(commit_data,"cognitive_fabric",finalized)' in clay
+            and 'map_set(cognition_finalize_data,"gated",gated)' in clay
+            and 'map_set(cognition_finalize_data,"committed",committed)' in clay
         ),
         "final_receipt_exposed_from_finalize": (
             'map_set(result,"cognitive_fabric_receipt_digest",finalized.cognitive_fabric_receipt_digest)' in clay
@@ -252,8 +257,8 @@ def main() -> int:
             clay_contract["inference_consumes_prepared_engine"],
             clay_contract["inference_consumes_prepared_context"],
             clay_contract["inference_binds_prepared_packet_only"],
-            clay_contract["finalize_binds_prepared_and_generated"],
-            clay_contract["finalized_fabric_reaches_gate_commit"],
+            clay_contract["prepared_fabric_reaches_gate_commit"],
+            clay_contract["finalize_binds_prepared_generated_and_terminal_outcome"],
             clay_contract["final_receipt_exposed_from_finalize"],
             clay_contract["raw_profile_prompt_inference_bypass_absent"],
             clay_contract["legacy_single_admit_absent"],
@@ -274,13 +279,13 @@ def main() -> int:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v4",
+        "schema": "clay-structured-contract-sync/v5",
         "canonical_clay": clay_contract,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay DB-resident profile -> Cognitive Fabric PREPARE -> inference_generate -> FINALIZE semantics are forward authority; final UCF receipt is post-inference; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
+        "policy": "Canonical Clay DB-resident profile -> Cognitive Fabric PREPARE -> inference_generate -> deterministic gate -> canonical commit -> FINALIZE is forward authority. Final UCF receipt is post-terminal evidence; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
         "errors": errors,
         "pass": not errors,
     }

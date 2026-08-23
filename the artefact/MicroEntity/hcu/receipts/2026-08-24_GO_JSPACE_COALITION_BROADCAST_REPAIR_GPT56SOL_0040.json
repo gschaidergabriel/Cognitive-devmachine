@@ -1,0 +1,63 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_COALITION_BROADCAST_REPAIR/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "research_main_observed": "fbc605b3d99328d71b72440b52ade09fd988ceeb",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "free_only": true,
+    "paid_or_together_execution_admitted": false
+  },
+  "retained_lane": {
+    "pull_request": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "source_commit": "2a7012a2f6e98904ac8468457a822f66f5d6a82e",
+    "regression_commit": "de109c3cf3b2739dd933ad57240bcac5d5c27ea0",
+    "canonical_main_promotion": false,
+    "rebase_fusion_required_before_promotion": true
+  },
+  "finding": {
+    "prior_counterexample": "OUT_OF_COALITION_BROADCAST_REVERSAL",
+    "failure": "Cells outside the selected Hyperposition/GWT coalition could dominate or reverse the emitted role-labelled Global J-Space vector.",
+    "repair": "The emitted vector is now aggregated only from the selected winner-margin coalition. Nonselected contributions remain present in the trace for observability but cannot silently alter the broadcast packet.",
+    "trace_delta": "broadcast_contributor_cells explicitly records the selected coalition."
+  },
+  "regression": {
+    "name": "test_out_of_coalition_cells_cannot_reverse_role_broadcast",
+    "case": "one +1 winner at gate_q 9000 versus six -1 cells at gate_q 8000, outside the 750-point Hyperposition margin",
+    "required": [
+      "winner remains winner",
+      "hyperposition coalition contains only winner",
+      "broadcast_contributor_cells contains only winner",
+      "broadcast remains positive",
+      "all seven contributions remain observable in trace"
+    ],
+    "execution_status": "SOURCE_REGRESSION_ADDED_NOT_EXECUTED_IN_AUTHORIZED_SANDBOX"
+  },
+  "sandbox": {
+    "latest_ready_controller_observed": true,
+    "runtime_log_observation": "GET /api/go-cycle-v2 -> 405 only",
+    "credential_bearing_post_observed": false,
+    "sandbox_create_observed": false,
+    "runtime_credit_change": 0
+  },
+  "coordination": {
+    "duplicate_hcu_lane_created": false,
+    "prior_stale_same_file_write_failed_closed_with_409": true,
+    "shared_unusual_experiment_slot_consumed_elsewhere": true,
+    "this_repair_is_regression_fusion_not_second_unusual_experiment": true
+  },
+  "evidence_boundary": {
+    "source_mechanism_repair": "COMMITTED_ON_RETAINED_DONOR_LANE",
+    "authorized_isolated_execution": "NOT_OBSERVED",
+    "jspace_runtime_causality": "UNVERIFIED",
+    "entityos_hcu_whole_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse/rebase the retained HCU/J-Space mechanisms onto exact current FREE_ONLY main without restoring stale authority, keep the full-spine Vercel executor synchronized, then run the exact-source authorized FREE isolated batch via the required credential-bearing controller POST."
+}

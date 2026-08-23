@@ -1,0 +1,59 @@
+{
+  "schema": "mini-entity-hcu-grid/v1",
+  "name": "Hyperposition Computational Unit",
+  "classification": "CANDIDATE_COMPUTE_ORGAN_NOT_ENTITY",
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "runtime_identity_configuration": "Zero",
+    "effects": "EntityOS deterministic effect gate only",
+    "grid_output": "candidate_or_measurement_only",
+    "jspace_measurement": "not factual truth"
+  },
+  "topology": {
+    "module_class": "approximately-0.8B local cognition",
+    "coordination": "task-decomposition + bounded parallel candidate generation + Unified J-Space/GWT projection + diversity-capped fusion",
+    "parameter_parallelism_claim": false,
+    "larger_model_equivalence_claim": false,
+    "active_slots": "min(measured-RAM resident slots, admitted CPU concurrency)",
+    "resident_slots": "derived only from measured per-worker peak RSS and configured reserve",
+    "overflow": "queue_or_park_never_RAM_overcommit"
+  },
+  "vps_target_hint_not_test_evidence": {
+    "cpu_cores": 4,
+    "ram_gib": 16,
+    "disk_gb": 200,
+    "bandwidth_tb": 16
+  },
+  "mandatory_fences": [
+    "no second durable identity",
+    "no second durable memory/state authority",
+    "no direct effect authority",
+    "no consensus-equals-truth promotion",
+    "correlated clones cannot multiply confidence",
+    "independence-group metadata is provenance and requires runtime binding",
+    "stale generation proposals fail closed",
+    "unknown/tied fusion remains UNKNOWN",
+    "measured worker RSS required before resident-slot admission"
+  ],
+  "data_flow": [
+    "MiniUnifiedDB/context -> deterministic scheduler",
+    "scheduler -> bounded module tasks",
+    "module outputs -> candidate receipts",
+    "candidate receipts -> J-Space/GWT/Hyperposition coalition",
+    "diversity-capped fusion -> candidate transition",
+    "deterministic schema/authority/generation validation",
+    "MiniUnifiedDB canonical write and/or EntityOS effect gate"
+  ],
+  "free_llm_feeding": {
+    "role": "external research/candidate/context supply only",
+    "authority": "never canonical by provider output alone",
+    "current_control": "FREE_ONLY; Together forbidden; 402 hard stop; 429 provider-wide backoff"
+  },
+  "packaging": {
+    "root": "the artefact/blogpost_entity/mini_cognition/hyperposition_compute/",
+    "zip_policy": "recursive_all_files",
+    "generated_data_policy": "store under this Mini Entity subtree before release packaging"
+  },
+  "runtime_credit": 0,
+  "acceptance": "SOURCE_CANDIDATE"
+}

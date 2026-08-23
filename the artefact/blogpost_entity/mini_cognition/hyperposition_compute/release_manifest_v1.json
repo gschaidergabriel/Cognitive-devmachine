@@ -1,0 +1,19 @@
+{
+  "schema": "mini-entity-hcu-release-manifest/v1",
+  "component": "Hyperposition Computational Unit",
+  "source_root": "the artefact/blogpost_entity/mini_cognition/hyperposition_compute/",
+  "include_policy": "recursive_all_files",
+  "required_files": [
+    "README.md",
+    "grid_contract_v1.json",
+    "hcu_grid_v1.py",
+    "test_hcu_grid_v1.py",
+    "release_manifest_v1.json"
+  ],
+  "generated_artifacts": {
+    "policy": "all HCU generated data, receipts, calibration, benchmark and runtime-plan files remain below source_root and are included recursively",
+    "secrets": "forbidden",
+    "model_weights": "only if separately admitted and license/source-lock permits"
+  },
+  "zip_status": "PACKAGING_CONTRACT_ADDED_NO_EXISTING_CANONICAL_ZIP_BUILDER_FOUND_ON_MAIN"
+}

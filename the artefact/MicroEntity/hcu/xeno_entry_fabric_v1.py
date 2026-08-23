@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Typed legacy-Xeno Entry Fabric admission for EntityOS/HCU cognition.
 
-This module is deterministic and non-cognitive. It binds identity, generation,
-provenance, modality, an externally-authorized capability snapshot, resource budget and
-payload identity before any HCU/model work. It does not mint truth, permissions or effects.
+This module is deterministic and non-cognitive. It binds replay-stable causal event
+identity separately from concrete admission/transport identity before any HCU/model work.
+It does not mint truth, permissions or effects.
 """
 from __future__ import annotations
 
@@ -14,6 +14,8 @@ from datetime import datetime
 from typing import Any, Mapping, Sequence
 
 ENTRY_SCHEMA = "XENO_ENTRY_PACKET/v1"
+EVENT_IDENTITY_SCHEMA = "ENTITYOS_HCU_CAUSAL_EVENT_IDENTITY/v1"
+ADMISSION_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v1"
 HCU_EVENT_SCHEMA = "HCU_REACTIVE_EVENT/v1"
 
 SOURCE_KINDS = {
@@ -72,6 +74,7 @@ class EntryPacket:
     budget: tuple[tuple[str, int], ...]
     payload_ref: str
     payload_sha256: str
+    event_sha256: str
     admission_sha256: str
 
 
@@ -167,6 +170,10 @@ def admit_entry(
 ) -> EntryPacket:
     """Admit one typed ingress packet against an externally-authorized capability view.
 
+    `event_sha256` is replay-stable for the same causal event. It deliberately excludes
+    arrival/transport identity, payload location, permissions/capabilities and resource
+    budget. `admission_sha256` binds those concrete admission-instance properties.
+
     `expected_capability_binding_sha256` and `admitted_capabilities` must come from the
     deterministic authority/control plane for the current identity/generation. The entry
     may narrow that set, but it cannot self-grant a capability or substitute another
@@ -222,6 +229,34 @@ def admit_entry(
     parent_id = _text(entry.get("parent_id"), "parent_id", optional=True)
     stream_id = _text(entry.get("stream_id"), "stream_id", optional=True)
 
+    causal_identity = {
+        "schema": EVENT_IDENTITY_SCHEMA,
+        "causal_id": causal_id,
+        "entity_generation": generation,
+        "source_kind": source_kind,
+        "source_id": source_id,
+        "modality": modality,
+        "observed_time": observed_time,
+        "provenance_ref": provenance_ref,
+        "provenance_sha256": provenance_sha256,
+        "parent_id": parent_id,
+        "stream_id": stream_id,
+        "payload_sha256": payload_sha256,
+    }
+    event_sha256 = hashlib.sha256(_canonical(causal_identity)).hexdigest()
+
+    admission_identity = {
+        "schema": ADMISSION_IDENTITY_SCHEMA,
+        "event_sha256": event_sha256,
+        "ingress_id": ingress_id,
+        "received_time": received_time,
+        "capabilities": capabilities,
+        "capability_binding_sha256": capability_binding_sha256,
+        "budget": budget,
+        "payload_ref": payload_ref,
+    }
+    admission_sha256 = hashlib.sha256(_canonical(admission_identity)).hexdigest()
+
     normalized = {
         "schema": ENTRY_SCHEMA,
         "ingress_id": ingress_id,
@@ -241,9 +276,10 @@ def admit_entry(
         "budget": budget,
         "payload_ref": payload_ref,
         "payload_sha256": payload_sha256,
+        "event_sha256": event_sha256,
+        "admission_sha256": admission_sha256,
     }
-    admission_sha256 = hashlib.sha256(_canonical(normalized)).hexdigest()
-    return EntryPacket(**normalized, admission_sha256=admission_sha256)
+    return EntryPacket(**normalized)
 
 
 def to_hcu_reactive_event(
@@ -277,6 +313,7 @@ def to_hcu_reactive_event(
         "schema": HCU_EVENT_SCHEMA,
         "ingress_id": packet.ingress_id,
         "causal_id": packet.causal_id,
+        "entry_event_sha256": packet.event_sha256,
         "entry_admission_sha256": packet.admission_sha256,
         "entity_generation": packet.entity_generation,
         "novelty": unit(novelty, "novelty"),

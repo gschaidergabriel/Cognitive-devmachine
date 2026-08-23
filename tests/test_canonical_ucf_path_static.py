@@ -17,7 +17,6 @@ class CanonicalUcfPathStaticTest(unittest.TestCase):
         self.assertTrue(report["pass"], report)
 
     def test_raw_prompt_bypass_mutation_fails_closed(self):
-        # This is the one bounded unusual experiment for the enclosing GO macrocycle.
         poisoned = self.source.replace(
             'map_set(infer,"system",prepared.system)',
             'map_set(infer,"system",prompt.system)',
@@ -28,8 +27,7 @@ class CanonicalUcfPathStaticTest(unittest.TestCase):
         self.assertTrue(report["forbidden_raw_bypasses"]["prompt_system_direct"])
         self.assertFalse(report["required_bindings"]["system_from_prepared"])
 
-    def test_final_ucf_receipt_cannot_be_claimed_before_inference(self):
-        # Deterministic regression for the second-order temporal false-green found in review.
+    def test_final_ucf_receipt_cannot_be_sent_to_inference(self):
         poisoned = self.source.replace(
             'map_set(infer,"inference_packet_digest",prepared.inference_packet_digest)',
             'map_set(infer,"inference_packet_digest",prepared.inference_packet_digest)\n'
@@ -39,6 +37,16 @@ class CanonicalUcfPathStaticTest(unittest.TestCase):
         report = evaluate(poisoned)
         self.assertFalse(report["pass"], report)
         self.assertTrue(report["temporal_false_green"]["final_receipt_sent_pre_inference"])
+
+    def test_finalize_before_gate_commit_fails_closed(self):
+        # Ordinary deterministic temporal regression: emulate the superseded ordering.
+        finalize_block = '''  let cognition_finalize_data = map_new()\n  map_set(cognition_finalize_data,"prepared",prepared)\n  map_set(cognition_finalize_data,"generated",generated)\n  map_set(cognition_finalize_data,"compiled",compiled)\n  map_set(cognition_finalize_data,"prompt",prompt)\n  map_set(cognition_finalize_data,"gated",gated)\n  map_set(cognition_finalize_data,"committed",committed)\n  let finalized = phase("pipeline_cognitive_fabric_finalize",entity_db,source_db,profile,previous,cognition_finalize_data)\n  require finalized.ok\n\n'''
+        poisoned = self.source.replace(finalize_block, "", 1)
+        marker = "  let gate_data = map_new()\n"
+        poisoned = poisoned.replace(marker, finalize_block + marker, 1)
+        report = evaluate(poisoned)
+        self.assertFalse(report["pass"], report)
+        self.assertTrue(report["temporal_false_green"]["finalize_before_terminal_commit"])
 
     def test_legacy_one_phase_admit_cannot_reappear(self):
         poisoned = self.source.replace(

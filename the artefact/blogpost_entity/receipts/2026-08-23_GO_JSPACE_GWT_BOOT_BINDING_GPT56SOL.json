@@ -1,16 +1,22 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "receipt_type": "GO_JSPACE_GWT_BOOT_BINDING_SOURCE_EVIDENCE",
   "date": "2026-08-23",
-  "macrocycle_id": "29098c20-7800-446e-bb0e-00bbb92dc1ba",
+  "macrocycle_id": null,
   "organ": "GPT-5.6 Sol",
   "trigger": "go",
   "base_main": "7028a6f66ac0d61a09487f09caf1b2df417325f4",
   "branch": "go/jspace-gwt-boot-binding-v1-r2-20260823-gpt56sol",
-  "evidence_subject_commit": "b9d7cd7aa42e32f58dce72c84621ec8845fb74cd",
   "owner_architecture_anchor": "5f3c2a7cc9aeab8f851d38450fa50a3e1451d767",
   "supervisor_anchor": "d8ff57c2edc4c9eecde99ce1f9b089702d71b1cf",
   "parallel_research_fused": "main@7028a6f66ac0d61a09487f09caf1b2df417325f4 already binds PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY and names JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 as the next executable identity gate",
+  "coordination": {
+    "current_bootstrap_rule": "An unusual experiment slot may be claimed only with an atomically bound shared request/lease identity.",
+    "shared_atomic_lease_available": false,
+    "unusual_experiment_credit": 0,
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT_CREDIT",
+    "normalization": "DIGEST_ALIAS_POISON is retained as an ordinary deterministic adversarial regression; no global unusual-experiment slot is claimed."
+  },
   "claim_class": "SOURCE_MECHANISM_SUPPORTED_EXACT_BLOB_COMPONENT_EXECUTION_ONLY",
   "runtime_product_credit": 0,
   "jspace_runtime_credit": 0,
@@ -42,9 +48,9 @@
     "tests_failed": 0,
     "duration_reported_seconds": 0.001
   },
-  "unusual_experiment": {
+  "deterministic_adversarial_regression": {
     "id": "DIGEST_ALIAS_POISON",
-    "count_for_macrocycle": 1,
+    "unusual_experiment_credit": 0,
     "hypothesis": "A weak restart gate keyed by apparent engine/checkpoint identity can silently reuse J-Space calibration when tokenizer bytes differ.",
     "intervention": "Keep the expected boot identity unchanged but replace only observed tokenizer_digest with a different valid SHA-256.",
     "required_falsifier": "validator rejects with BINDING_MISMATCH:tokenizer_digest",
@@ -60,8 +66,17 @@
     "unexpected observed identity fields rejected",
     "bool generation rejected as integer ambiguity"
   ],
+  "hosted_runner": {
+    "head_observed": "74ff9c6d91af854c4b632f849d1b56d0a9ee466a",
+    "research_entity_verify_run": 32614121802,
+    "research_entity_verify_job": 97131864476,
+    "identity_guard_run": 32614121805,
+    "identity_guard_job": 97131864336,
+    "observed_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+  },
   "strongest_surviving_counterhypothesis": "The contract may still be incomplete relative to the exact future Ubuntu boot implementation: it proves identity-gate behavior on exact validator/test blobs, not that the production launcher collects every field correctly or that the bundled checkpoint/lens/workspace/Claude adapter themselves work.",
-  "next_gate": "On the next intentional Ubuntu start, emit a real JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 from the production boot path and validate it before any J-Space/GWT/model/Claude runtime or semantic credit; then run separate behavioral receipts.",
+  "next_gate": "On the next intentional Ubuntu start, emit a real JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 from the production boot path and validate it before any J-Space/GWT/model/Claude runtime or semantic credit; then run exact checkpoint/tokenizer/runtime jlens construction, hook-visible forward/ActivationRecorder and one bounded jacobian_for_prompt before calibration promotion.",
   "execution_policy": {
     "free_only": true,
     "paid_provider_calls": 0,

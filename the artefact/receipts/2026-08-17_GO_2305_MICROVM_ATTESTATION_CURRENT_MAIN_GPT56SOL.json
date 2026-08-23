@@ -1,0 +1,91 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_at": "2026-08-17T23:18:00+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "FOCUSED_TEST_PASS_KUBERNETES_SNAPSHOT_TOOLING_ONLY",
+  "base_main_commit": "fad0dea5b17a114d288494b89aa8a6a9a39e84a2",
+  "branch": "gpt56sol/go-microvm-attestation-current-main-20260817-2305",
+  "supersedes_candidate_pr": 635,
+  "source": {
+    "collector_path": "the artefact/deployment/collect_microvm_attestation.py",
+    "collector_schema": "clayverse-microvm-attestation/v3",
+    "collector_blob": "eda4a6c56b0f300a4289cfb38b22e9ad74f581fc",
+    "test_path": "the artefact/tests/test_microvm_attestation_collector.py",
+    "test_blob": "6b021d3b6a87163cc0b8aefe51f755667f991751",
+    "source_head_before_receipt": "7632a066442bfe3f0d29c177e025953fa81b5c10"
+  },
+  "adversarial_repairs": [
+    {
+      "counterexample": "NetworkPolicy podSelector uses NotIn for a key absent from the ClayVerse Pod. Kubernetes selector semantics still select that Pod, so excluding the absent key can hide an additive broad policy.",
+      "repair": "NotIn rejects only when the key exists and the live label value is in the excluded set.",
+      "regressions": "absent-key NotIn broad egress fails closed; absent-key NotIn empty egress appears in the selecting-policy inventory"
+    },
+    {
+      "counterexample": "A Kubernetes securityContext, RuntimeClass, NetworkPolicy object, or caller-supplied annotation expectation is declarative/expected state and can be overinterpreted as independently reviewed runtime enforcement.",
+      "repair": "v3 explicitly distinguishes caller-supplied expectations, observed Kubernetes snapshot/declarative state, and still-unobserved external/runtime acceptance evidence.",
+      "fences": [
+        "expectations.external_review_binding_observed=false",
+        "runtime.independent_guest_kernel_proven_by_this_collector=false",
+        "runtime.kata_runtime_version_observed=false",
+        "runtime.kata_runtime_configuration_observed=false",
+        "network_policy.selecting_policy_review_observed=false",
+        "network_policy.cni_identity_observed=false",
+        "network_policy.enforcement_observed=false",
+        "storage.nonroot_rw_semantics_observed=false",
+        "storage.post_replacement_rw_semantics_observed=false",
+        "security.runtime_enforcement_observed=false",
+        "tier2.sandbox_vm_identity_observed=false",
+        "tier2.full_replacement_observed=false",
+        "whole_product_pass=false"
+      ]
+    }
+  ],
+  "snapshot_scope": {
+    "image": "expected digest must match Pod spec and observed runtime imageID; acceptance authority for the expectation remains external",
+    "runtime_class": "RuntimeClass object/handler and Pod selection are recorded; they do not prove current-supported Kata version/configuration or independent VM identity",
+    "guest_kernel": "in-guest uname must differ from node kernel; this is a discriminator only and is not promoted to independent guest-boundary proof",
+    "pod_security": "declared host-namespace, ServiceAccount, seccomp, non-root, uid/gid, read-only-root, privilege and capability profile is fenced; active enforcement still required",
+    "persistence": "fsGroup plus exact two PVC/PV/StorageClass/CSIDriver identities are recorded; non-root create/write/fsync/read/rename/delete still requires active before/after-replacement proof",
+    "health": "declared readiness /readyz and liveness /healthz remain distinct",
+    "network": "all selecting NetworkPolicies are enumerated and hashed under supported LabelSelector semantics; canonical default-deny is required; obvious broad allows and malformed peer types fail closed; external policy review, CNI identity and active enforcement remain open",
+    "kata_annotations": "effective post-admission io.katacontainers.* annotations must equal a caller-supplied expected set; that set is not itself treated as proof of independent security review",
+    "tier2": "Pod UID is observed; sandbox/VM identity and full replacement are not"
+  },
+  "execution": {
+    "surface": "authorized isolated OpenAI non-production container",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "commands": [
+      "python -m py_compile deployment/collect_microvm_attestation.py tests/test_microvm_attestation_collector.py",
+      "python -m pytest -q tests/test_microvm_attestation_collector.py",
+      "git hash-object deployment/collect_microvm_attestation.py tests/test_microvm_attestation_collector.py"
+    ],
+    "result": "12 passed in 0.04s; py_compile PASS",
+    "exit_code": 0,
+    "exact_blob_rebind": {
+      "collector": "eda4a6c56b0f300a4289cfb38b22e9ad74f581fc",
+      "tests": "6b021d3b6a87163cc0b8aefe51f755667f991751"
+    }
+  },
+  "evidence_boundary": {
+    "kubernetes_snapshot_tooling": "FOCUSED_TEST_PASS",
+    "exact_oci": "UNOBSERVED",
+    "kata_runtime_version_configuration": "UNOBSERVED",
+    "independent_guest_boundary": "UNOBSERVED_FINAL_PROOF",
+    "cni_enforcement": "UNOBSERVED",
+    "persistent_volume_rw_semantics": "UNOBSERVED",
+    "tier2_full_sandbox_replacement": "UNOBSERVED",
+    "whole_product": "IN_PROGRESS"
+  },
+  "owner_reentry_2026_08_17_2303": {
+    "credential_routing": "A scoped read-only GITHUB_READ_TOKEN may be securely injected into the authorized disposable Vercel Sandbox for bounded private-source fetch, or used host-side; never log, persist, commit, bake into the image, or treat token presence as runtime evidence; exact Git/object identities remain mandatory.",
+    "final_test_of_tests": "Vercel Sandbox Firecracker microVM -> Docker/OCI runtime -> exact accepted ClayVerse OCI digest -> runtime Vault/secret-store Mistral token acquisition -> canonical cognition/effect/recovery loop -> Tier-2 full appliance recreation from the same digest -> secret reacquisition -> repeated real cognition.",
+    "historical_run_status": "The latest observed retained PR810 Vercel run still had github_secret_forwarded_to_sandbox=false and stopped before private source fetch with GITHUB_READ_TOKEN_MISSING; source_runtime_credit=0 and oci_runtime_credit=0. The owner correction changes future permission, not that historical observation."
+  },
+  "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count": 0,
+  "next_gate": "Provision/inject the approved scoped read-only GITHUB_READ_TOKEN through an owner-approved secret path available to the retained Vercel controller, refresh and bind exact then-current Research/EntityOS plus deliberately admitted lanes, verify exact Git/object identities, then build/start the final EntityOS-bearing OCI inside the admitted Firecracker Sandbox and capture its digest. Continue the mandatory final test-of-tests with runtime Vault Mistral secret acquisition, real canonical cognition/effect re-entry, Tier-1 recovery, Tier-2 full appliance recreation from the same digest, secret reacquisition, and the remaining auth/PTY/concurrency/network/storage acceptance gates."
+}

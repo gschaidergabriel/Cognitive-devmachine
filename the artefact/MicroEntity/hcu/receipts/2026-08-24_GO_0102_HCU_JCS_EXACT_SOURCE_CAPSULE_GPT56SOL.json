@@ -1,0 +1,56 @@
+{
+  "schema": "ENTITYOS_HCU_EXACT_SOURCE_COMPONENT_SANDBOX_RECEIPT/v1",
+  "date": "2026-08-24",
+  "local_cycle_label": "GO_0102",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "supervisor": "SUPERVISOR_STEERING_8_61",
+    "free_only": true,
+    "unusual_experiment_count_added": 0
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "deployment_id": "dpl_Arke3DNu36SzT3TUwfr8YL9cpE8V",
+    "controller_commit": "7e3a45d6ff32183eb1d194d39ac18f4d3a440216",
+    "endpoint": "/api/hcu-entry-capsule"
+  },
+  "capsule": {
+    "id": "HCU_ENTRY_CANONICALIZATION_CAPSULE/v1",
+    "source_repository": "gschaidergabriel/clay-global-research-entity",
+    "source_pr": 1263,
+    "source_commit": "2b7b06f4c93543501e86d5f4692efa36fd191938",
+    "source_path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "source_git_blob_sha1": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "source_sha256": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f",
+    "test_path": "the artefact/MicroEntity/hcu/test_entry_canonicalization_v1.py",
+    "test_git_blob_sha1": "bc9262473f91dbd04ddaf647e667920664495f54",
+    "test_sha256": "b0b5f519c6c7b751d2ed388661bb617fc1a2ee73055faaab1208a47c6612891b"
+  },
+  "execution": {
+    "http_status": 200,
+    "status": "HCU_EXACT_SOURCE_COMPONENT_SANDBOX_PASS",
+    "sandbox_id": "tan-numerous-herring-GuHNXQ",
+    "exit_code": 0,
+    "sandbox_sha256_checks": "PASS",
+    "secret_fence": "PASS",
+    "tests_run": 7,
+    "tests_passed": 7,
+    "tests_failed": 0,
+    "stderr_test_summary": "Ran 7 tests in 0.001s; OK"
+  },
+  "credit": {
+    "execution_credit": "EXACT_SHA_BOUND_HCU_SOURCE_COMPONENT_ONLY",
+    "entityos_hcu_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "finding": "The exact frozen RFC8785/JCS Entry canonicalization source and test blobs executed successfully in disposable Vercel Sandbox after the prior executor heredoc false-red was repaired. The result is scoped to these exact component bytes and does not establish whole EntityOS/HCU runtime acceptance.",
+  "next_exact_discriminator": "Extend the same fixed hash-verified non-generic capsule contract to the minimum causal HCU/J-Space closure and execute it at an exact admitted source identity."
+}

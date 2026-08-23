@@ -1,0 +1,48 @@
+{
+  "schema_version": "HCU_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_entity": "Clay",
+  "active_program": "ENTITYOS_HCU_XENO",
+  "scope": "reactive HCU route identity / Xeno XCU entry-control fabric",
+  "source_observations": {
+    "legacy_pr_head_inspected": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "legacy_finding": "route decision identity depended on derived routing output plus generation and could alias materially different causal events; internal provider admission also relied on a finite denylist",
+    "parallel_fused_head_inspected": "f250bbc3d242915e1077fd5d5565af680bf030ff",
+    "parallel_fused_finding": "current draft source positively admits internal provider/engine labels, requires an admitted engine for model activation, and binds canonical event plus resolved engine identity/class into decision_sha256",
+    "stale_write_guard": "PASS: attempted overwrite from an older blob SHA was rejected by GitHub with HTTP 409; no stale branch overwrite occurred"
+  },
+  "hypothesis": "A causal route identity that commits to immutable event identity and exact cognition-engine identity prevents replay/audit aliasing that is invisible when identity commits only to the selected lanes/projection.",
+  "counterhypothesis": "Binding event/engine identity adds no useful discrimination because materially different events that select the same route are operationally equivalent.",
+  "unusual_experiment": {
+    "name": "same-route causal-alias stress",
+    "execution_scope": "isolated local tool sandbox; mechanism evidence only",
+    "events": 256,
+    "constraint": "all events intentionally selected one identical lane set while novelty varied",
+    "legacy_unique_decision_digests": 1,
+    "legacy_aliases": 255,
+    "event_engine_bound_unique_decision_digests": 256,
+    "event_engine_bound_aliases": 0,
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_MECHANISM_SCOPE"
+  },
+  "local_candidate_regression": {
+    "py_compile": "PASS",
+    "reactive_router_tests": "12/12 PASS",
+    "credit": "LOCAL_MECHANISM_ONLY_NOT_CURRENT_HEAD_RUNTIME"
+  },
+  "remaining_gaps": [
+    "bind exact local checkpoint/runtime identity rather than symbolic engine name/class only",
+    "bind explicit router-policy/threshold digest into route identity",
+    "downstream inference receipt must echo event digest, route digest and exact engine/checkpoint identity",
+    "rebuild package snapshot only after final route semantics settle",
+    "run authorized exact-source isolated runtime evidence before promotion"
+  ],
+  "authority_invariants": [
+    "canonical state/evidence remains outside model cognition",
+    "EffectGate remains the only real-effect authority",
+    "unknown external effect outcomes remain UNKNOWN",
+    "logical HCU cells are not physical concurrent decode claims"
+  ],
+  "promotion_credit": 0,
+  "whole_product_pass": false
+}

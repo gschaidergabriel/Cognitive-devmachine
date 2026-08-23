@@ -135,6 +135,8 @@ The `go` user turn represented by the 2026-08-17 13:35 +07 minute metadata and l
 
 This is an `EXPERIMENT_BUDGET_RACE_VIOLATION`, not two valid leases. Because the available shared timestamp metadata for this turn is only minute-precision, no additional canonical fallback claim may be minted for it. The unusual-experiment slot is CLOSED; preserve all existing claims/results and run no further distinct unusual experiment for that macro-cycle.
 
-## 8. Product-boundary note
+## 8. Product / state / effect boundary
 
-This protocol is research/execution coordination substrate, not a second ClayVerse product authority. It exists to preserve the integrity of evidence used to converge `main/the artefact/` toward the one ClayVerse OCI container. It never overrides owner directives, UnifiedDB product authority, or exact isolated runtime evidence.
+This protocol is research/execution coordination substrate, **not** a second product, persistent identity, canonical truth store, recovery authority or effect path. It exists to preserve evidence integrity while the single current product **EntityOS** converges with its integrated **HCU** cognition/compute architecture.
+
+It never overrides newer explicit owner/supervisor authority, deterministic canonical state/evidence authority, or `EffectGate`/`EffectJournal`. Current compatibility `UnifiedDB`/`MiniUnifiedDB` surfaces are state/evidence substrate only; they are not a competing product identity. Historical ClayVerse/Frank product wording is donor/provenance only unless a newer explicit authority re-admits a mechanism.

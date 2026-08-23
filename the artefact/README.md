@@ -1,42 +1,43 @@
-# the artefact — Xeno -> EntityOS cognitive computer
+# the artefact — EntityOS + HCU cognitive computer
 
-`the artefact/` is the canonical product/research workspace for the current **Xeno** bootstrap and its convergence toward **EntityOS + HCU/XCU**.
+`the artefact/` is the canonical product/research workspace for the current **EntityOS** product and its integrated **HCU** cognition/compute architecture.
 
-Current owner/work-selection authority:
+`Xeno` and `XCU` are transitional compatibility/research aliases only. Existing `the artefact/Xeno/`, `the artefact/MicroEntity/`, `mini_*`, `MINI_*`, database schema names and historical receipts remain where exact migration is not yet safe; they do not create competing product, state, identity or effect authority.
 
-- `research_entity/global/XENO_GO_OWNER_DIRECTIVE.md`
-- `research_entity/global/XENO_COMPUTATIONAL_UNIT_RESEARCH_FUSION_2026-08-23.md`
+Current authority:
+
+- `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 - `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
+- `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
+- retained Xeno/HCU research directives only where consistent with the authority correction above.
 
-Current-facing Xeno root:
+Current compatibility implementation root for newly built Entry/GRID primitives:
 
 - `the artefact/Xeno/`
 
-Historical `MicroEntity`, `Mini Entity`, `mini_*` and `MINI_*` paths/identifiers remain compatibility and provenance surfaces until exact migration. Git history preserves prior ClayVerse/Mini Entity authority states; they are not current work-selection authority.
-
 ## Current architecture goal
 
-Xeno is incrementally built as a **multi-mode cognitive computational appliance** rather than a permanent swarm of agents.
+EntityOS is incrementally built as a **multi-mode cognitive computational appliance** rather than a permanent swarm of agents.
 
 ```text
 new data / event / prompt
           |
           v
-   XENO ENTRY FABRIC
+   TYPED ENTRY FABRIC
           |
           v
-   XRAM STATE FABRIC
+ canonical state / XRAM compatibility layer
           |
     +-----+------+
     |            |
     v            v
- XPU CONTROL   XCU ACCELERATOR
- deterministic  shared-weight/vector
- scheduler      inference/function cells
+ deterministic   HCU
+ control / XPU   shared-weight/vector/
+ compatibility  inference/J-Space plane
     |            |
     +-----+------+
           |
- typed interconnect / workspace / Hyperposition
+ typed causal interconnect / workspace / Hyperposition
           |
   +-------+---------+----------+----------+
   |                 |          |          |
@@ -48,50 +49,48 @@ GRID10           COGSIM10    WM_TEST   NESTED_SIM
           |
  calibrated ActionCandidate
           |
- Effect translator -> EffectGate -> reality
+ typed effect translation -> EffectGate/EffectJournal -> reality
 ```
 
-EntityOS is the eventual computer/runtime destination. The long-term decomposition is intentionally computer-like:
+The computer-like decomposition is intentional:
 
-- **XRAM** — canonical/hot/rebuildable/scratch/paged state tiers;
-- **XPU** — deterministic processor/control plane;
-- **XCU** — accelerator/vector/inference/J-Space plane;
+- **canonical state / XRAM compatibility layer** — canonical/hot/rebuildable/scratch/paged state tiers without creating a second truth store;
+- **deterministic control / XPU compatibility layer** — processor/control scheduling responsibilities;
+- **HCU** — shared-weight/vector/inference/J-Space acceleration and specialized function cells;
 - **Interconnect** — typed causal packets, workspace and Hyperposition;
 - **Entry I/O** — typed ingress for all new data;
-- **Effect translation** — candidate to typed effect request, then EffectGate.
+- **Effect translation** — candidate to typed effect request, then EffectGate/EffectJournal.
 
-These names are architectural roles, not claims of custom silicon.
+Compatibility names are architectural/path roles, not claims of custom silicon or competing product identities.
 
 ## Mandatory `go` law
 
 Every explicit `go` has two required coupled tracks:
 
-1. **XENO_EXECUTABLE_CONVERGENCE** — improve the strongest real current Xeno implementation.
-2. **XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one Computational Unit or Entry primitive.
-
-If track 2 cannot safely advance, record `XCU_NO_CHANGE_WITH_REASON` and the next discriminator. It must not silently disappear from a `go` run.
+1. **ENTITYOS_EXECUTABLE_CONVERGENCE** — improve executable EntityOS now or strengthen the strongest retained implementation directly toward it.
+2. **HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one HCU or Entry primitive, or record `HCU_NO_CHANGE_WITH_REASON`.
 
 Material architecture work uses:
 
 `OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
 
-Prefer primitives reusable across multiple Xeno modes.
+Prefer primitives reusable across multiple modes.
 
-## Xeno modes
+## Reference modes
 
-### `XENO_GRID10`
+### `GRID10`
 
 Simple 10 logical-cell shared-worker baseline for scheduler tests, lesions, small parallel reasoning and exact compute-matched baselines.
 
-### `XENO_COGSIM10`
+### `COGSIM10`
 
-Request-scoped pure cognition simulation. A temporary 10-cell topology forms, explores hypotheses/counterhypotheses/plans/critics and emits only candidates. No simulated action has direct real effects.
+Request-scoped pure cognition simulation. A temporary logical topology explores hypotheses/counterhypotheses/plans/critics and emits only candidates. No simulated action has direct real effects.
 
-### `XENO_WM_TEST`
+### `WM_TEST`
 
 Bounded experimental world/transition-model mode. Predictions are noncanonical and must be calibrated against later observations.
 
-### `XENO_NESTED_SIM`
+### `NESTED_SIM`
 
 Selective high-cost mode:
 
@@ -99,26 +98,28 @@ Selective high-cost mode:
 
 It is not the default and does not create a second reality authority.
 
-### `XENO_SCALEOUT`
+### `SCALEOUT`
 
-Scale logical contexts over shared physical workers. Baseline gate sequence:
+Scale logical contexts over shared physical workers. Baseline benchmark ladder:
 
 `10 -> 32 -> 64 -> 128 -> 256 -> ~600 logical contexts`
 
-The ~600 H100-class target is a **research hypothesis only**. Logical module count is never reported as the same thing as resident model count or simultaneous decode streams.
+The ~600 H100-class target is **hypothesis-only**. Logical module count is never reported as the same thing as resident model count or simultaneous decode streams.
 
 ## Authority law
 
+- EntityOS is the sole current product/system identity;
+- HCU is the sole current integrated cognition/compute architecture;
 - canonical durable state/evidence remains outside model-generated cognition and simulation;
 - world-model state is projection/candidate state;
-- HCU/XCU/J-Space/workspace outputs cannot mint canonical truth;
+- HCU/J-Space/workspace outputs cannot mint canonical truth;
 - Hyperposition preserves unresolved alternatives; majority vote is not truth;
 - stale generation/provenance uncertainty fail closed;
 - unknown external effect outcome remains UNKNOWN until verified;
 - EffectGate + EffectJournal remain the real/state-changing effect authority;
 - no second persistent identity, truth store, effect path or recovery ledger is admitted.
 
-## Entry Fabric
+## Typed Entry Fabric
 
 All new data paths should converge on a typed ingress packet binding before cognition:
 
@@ -130,20 +131,33 @@ All new data paths should converge on a typed ingress packet binding before cogn
 - permissions/capability scope;
 - parent/stream relation;
 - compute/resource budget;
-- payload reference.
+- payload identity/reference.
 
 Inputs may originate from humans, tools, external events, sensor/stream data, canonical database changes or intrinsic system events.
 
+## Current executable candidate
+
+The compatibility implementation path now contains the first bounded common-machine source candidate:
+
+- `Xeno/runtime/entry_fabric_v1.py` — deterministic typed Entry admission and packet identity;
+- `Xeno/runtime/grid10_v1.py` — deterministic 10-cell logical scheduler/interconnect and work-packet ancestry;
+- `Xeno/tests/test_xeno_entry_grid10_v1.py` — exact-file Entry/GRID10 regressions;
+- `Xeno/receipts/2026-08-23_GO_XENO_ENTRY_GRID10_GPT56SOL.json` — exact-file component receipt bound to current EntityOS + HCU authority.
+
+The `XENO_*` schema/path names in this candidate are compatibility identifiers only.
+
+Current bounded evidence: Python compile PASS and 11/11 focused exact-file tests PASS in an isolated Linux/Python environment after local Git blob identities were matched to the candidate GitHub blobs. This is **component/mechanism evidence only** and grants zero integrated EntityOS/HCU model-runtime or whole-product credit.
+
 ## Research fusion
 
-Current design is informed by external evidence on heterogeneous compute/memory/interconnect (NVIDIA DGX/Grace Hopper/Rubin), shared-weight inference scheduling and paged KV (vLLM/SGLang/TensorRT-LLM), dynamic compute allocation (Mixture-of-Depths), self-regulated planning, world-model planning, generated environments and generalist agents (DeepMind Genie/SIMA), conditional multi-agent/test-time scaling, and Global Workspace/J-Space research.
+Current design is informed by external evidence on heterogeneous compute/memory/interconnect, shared-weight inference scheduling and paged KV, dynamic compute allocation, self-regulated planning, world-model planning, conditional multi-agent/test-time scaling, and Global Workspace/J-Space research.
 
-The architecture treats these as evidence for mechanisms, not proof that Xeno already exhibits their claimed capacity. Runtime promotion requires exact executable evidence at the claimed scope.
+These are evidence for mechanisms, not proof that EntityOS/HCU already exhibits their claimed capacity. Runtime promotion requires exact executable evidence at the claimed scope.
 
 ## Execution policy
 
-Current testing remains authorized-isolated-sandbox-only unless a newer owner directive changes it. Together API is forbidden. Secrets do not enter source/receipts. Final paid/model training requires explicit owner authorization.
+Current testing remains authorized-isolated-sandbox-only unless a newer owner directive changes it. VPS/self-hosted/production-host testing is forbidden for current runtime credit. Together API and paid fallback are forbidden. Secrets do not enter source/receipts. Final paid/model training requires explicit owner authorization.
 
 ## Current frontier
 
-Build the **typed Xeno Entry Fabric** and a reusable **GRID10 scheduler/state/interconnect baseline**, then progressively separate XRAM/XPU/XCU responsibilities so COGSIM10, WM_TEST, NESTED_SIM and measured SCALEOUT reuse the same machine primitives rather than requiring architectural rewrites.
+Integrate the typed EntryPacket into the single canonical UnifiedDB/current MiniUnifiedDB compatibility state substrate, add **positive fail-closed internal HCU engine admission**, and bind both immutable causal-event identity and resolved engine identity into one route/work ancestry. Then drive one HCU function through `Entry -> GRID10 -> HCU -> candidate re-entry` and execute stale-generation/replay/recovery falsifiers in an authorized isolated executor before any integrated runtime promotion.

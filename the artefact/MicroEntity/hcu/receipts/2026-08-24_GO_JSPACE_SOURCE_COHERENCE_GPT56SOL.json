@@ -1,5 +1,5 @@
 {
-  "schema": "ENTITYOS_HCU_GO_SOURCE_COHERENCE_RECEIPT/v1",
+  "schema": "ENTITYOS_HCU_GO_SOURCE_COHERENCE_RECEIPT/v2",
   "date": "2026-08-24",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
@@ -13,10 +13,26 @@
     "owner_steering_claimed_prototype_path": "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
     "main_path_fetch": "NOT_FOUND_AT_BOUND_MAIN",
     "retained_hcu_pr": 1263,
-    "retained_hcu_pr_head_observed": "d195755c16f704996c0b84eb7fa0d5ff2a5913ef",
+    "retained_hcu_pr_head_first_observed": "d195755c16f704996c0b84eb7fa0d5ff2a5913ef",
+    "retained_hcu_pr_head_refreshed": "bbad88fecdf82c750d9a260f0954467bb7bc04a4",
     "retained_pr_prototype_blob_sha": "928c773a08158254335817c7d95d0c0a7011ceb3",
     "retained_pr_trace_schema_observed": "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3",
     "interpretation": "Current steering describes a J-Space implementation delta that is not yet present in canonical main. Treat prototype/test evidence as retained-lane component evidence until exact bytes and required dependencies are fused onto current main and executed there."
+  },
+  "retained_lane_current_contract_check": {
+    "head": "bbad88fecdf82c750d9a260f0954467bb7bc04a4",
+    "global_jspace_blob": "928c773a08158254335817c7d95d0c0a7011ceb3",
+    "global_jspace_test_blob": "602de9d98c857b60eee69d4d63a46249188db935",
+    "dataset_compiler_blob": "dd83d575daca18bde6abb335c30dcb97e68b49d1",
+    "dataset_compiler_test_blob": "64e94e27550a748e805f569abd1ce6d77714c9ac",
+    "global_jspace_test_status_by_source_contract": "UPDATED_FOR_BASIS_SHA256_AND_CURRENT_VECTOR_CODEC",
+    "dataset_compiler_status_by_source_contract": "STALE_INCOMPATIBLE_WITH_CURRENT_TRACE_AND_VECTOR_CODEC",
+    "compiler_mismatches": [
+      "compiler requires trace.control_packet_text and trace.control_packet_sha256, but current global_jspace trace emits control_packet_identity_sha256 and control_packet_wire_sha256 and omits packet text",
+      "compiler calls VectorControlPacket.decode_text and packet.encode_bytes/gate_q, but current JSPACE_VECTOR_CONTROL_ABI/v1 exposes parse_packet_text/packet_bytes and the packet has no gate_q field",
+      "compiler test still calls global_jspace.step without required basis_sha256"
+    ],
+    "evidence_class": "EXACT_CURRENT_SOURCE_CONTRACT_ANALYSIS_NO_EXECUTION_CREDIT"
   },
   "execution_surface_discovery": {
     "vercel_connector_sandbox_create_start_exec_callable": false,
@@ -37,11 +53,12 @@
     "together_one_shot_authorized": true,
     "job_consumed": false,
     "job_started_by_this_organ": false,
-    "reason_not_started": "Functional J-Space/GWT implementation is not yet canonically fused on main and exact real-trace/base/eval/preflight gates are not established by this run."
+    "reason_not_started": "Functional J-Space/GWT bytes are not canonically fused on main; the retained-lane dataset compiler is source-incompatible with the refreshed current prototype/vector ABI; real integrated traces, frozen base, retained-capability evaluation and Together support/price preflight are not established."
   },
   "next_exact_gate": [
-    "Rebase/adjudicate retained PR #1263 against current main and isolate the smallest dependency-complete J-Space/GWT + Vector Control ABI + trace/compiler slice.",
-    "Fuse that slice without creating a second Entry/router/canonicalization/inference authority.",
+    "Repair the retained PR #1263 dataset compiler against current TRACE v3 and current JSPACE_VECTOR_CONTROL_ABI/v1 rather than creating a duplicate compiler path.",
+    "Add a compiler regression that consumes an actual current global_jspace.step(..., basis_sha256=...) trace and validates packet text/digest/basis/generation/role with the current vector codec.",
+    "After retained-lane coherence, rebase/adjudicate #1263 against current main and isolate the smallest dependency-complete J-Space/GWT + Vector Control ABI + trace/compiler slice.",
     "Run exact bound source in an authorized isolated executor; source-only or retained-lane component evidence grants zero EntityOS/HCU runtime credit.",
     "Only after real integrated traces, lesion/shuffle/rescue evidence, frozen ABI, leak-resistant splits, exact base identity and Together price/support preflight may the single authorized training job be created."
   ]

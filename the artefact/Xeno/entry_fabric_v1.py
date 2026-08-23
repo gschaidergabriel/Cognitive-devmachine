@@ -141,23 +141,28 @@ def _budget(
 ) -> tuple[tuple[str, int], ...]:
     if not isinstance(value, Mapping):
         raise IngressAdmissionError("resource_budget:OBJECT_REQUIRED")
-    if not max_budget:
+    policy_budget: dict[str, int] = {}
+    for raw_key, maximum in max_budget.items():
+        key = _identifier(raw_key, "policy.max_budget.key")
+        if isinstance(maximum, bool) or not isinstance(maximum, int) or maximum < 0:
+            raise IngressAdmissionError(f"policy.max_budget.{key}:INVALID")
+        policy_budget[key] = maximum
+    if not policy_budget:
         if value:
             raise IngressAdmissionError("resource_budget:NO_DIMENSIONS_ADMITTED")
         return ()
-    unknown = set(value) - set(max_budget)
+    unknown = set(value) - set(policy_budget)
     if unknown:
         raise IngressAdmissionError("resource_budget:UNKNOWN_DIMENSION")
     normalized: list[tuple[str, int]] = []
-    for key, requested in value.items():
+    for raw_key, requested in value.items():
+        key = _identifier(raw_key, "resource_budget.key")
         if isinstance(requested, bool) or not isinstance(requested, int) or requested < 0:
             raise IngressAdmissionError(f"resource_budget.{key}:NONNEGATIVE_INTEGER_REQUIRED")
-        maximum = max_budget.get(key)
-        if isinstance(maximum, bool) or not isinstance(maximum, int) or maximum < 0:
-            raise IngressAdmissionError(f"policy.max_budget.{key}:INVALID")
+        maximum = policy_budget[key]
         if requested > maximum:
             raise IngressAdmissionError(f"resource_budget.{key}:POLICY_LIMIT_EXCEEDED")
-        normalized.append((_identifier(key, "resource_budget.key"), requested))
+        normalized.append((key, requested))
     return tuple(sorted(normalized))
 
 

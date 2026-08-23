@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import re
 import secrets
@@ -24,7 +25,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.5"
+VERSION = "clay-profile-pipeline-runtime/0.6"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -70,6 +71,19 @@ these rules."""
 
 class PipelineFault(RuntimeError):
     pass
+
+
+def _finite_number(value: Any, error: str) -> float:
+    """Parse a claim-authorizing numeric value without IEEE nonfinite/bool ambiguity."""
+    if isinstance(value, bool):
+        raise PipelineFault(error + ":BOOL")
+    try:
+        number = float(value)
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise PipelineFault(error) from exc
+    if not math.isfinite(number):
+        raise PipelineFault(error)
+    return number
 
 
 def _canonical_json(value: Any) -> str:
@@ -173,6 +187,24 @@ class ProfilePipelineRuntime(clay.Runtime):
             raise PipelineFault("PROFILE_BAD_PERSONALITY")
         if not isinstance(out["personality"].get("output_contract"), dict):
             raise PipelineFault("PROFILE_MISSING_OUTPUT_CONTRACT")
+        if not isinstance(out["sources"], list):
+            raise PipelineFault("PROFILE_BAD_SOURCES")
+        seen_kinds: set[str] = set()
+        for source in out["sources"]:
+            if not isinstance(source, dict):
+                raise PipelineFault("PROFILE_BAD_SOURCE")
+            kind = str(source.get("kind", "")).strip()
+            if not kind:
+                raise PipelineFault("SOURCE_KIND_REQUIRED")
+            if kind in seen_kinds:
+                raise PipelineFault("DUPLICATE_SOURCE_KIND:" + kind)
+            seen_kinds.add(kind)
+            adapter = str(source.get("adapter", "")).strip()
+            if adapter in {"sqlite_query", "jsonl_cursor"}:
+                namespace = source.get("source_namespace")
+                if not isinstance(namespace, str) or not namespace.strip():
+                    raise PipelineFault("SOURCE_NAMESPACE_REQUIRED:" + kind)
+                source["source_namespace"] = namespace.strip()
         cls._forbid_embedded_secrets(out)
         out["schema"] = "clay-pipeline-profile/v2"
         return out
@@ -349,6 +381,11 @@ class ProfilePipelineRuntime(clay.Runtime):
                 str(row[1]) for row in db.execute("PRAGMA table_info(eos_pipeline_consumed)").fetchall()
             } if consumed_preexisting else set()
             if consumed_preexisting and "source_namespace" not in consumed_columns:
+                legacy_consumed_count = int(
+                    db.execute("SELECT COUNT(*) FROM eos_pipeline_consumed").fetchone()[0]
+                )
+                if legacy_consumed_count:
+                    raise PipelineFault("LEGACY_CONSUMED_NAMESPACE_MIGRATION_REQUIRED")
                 db.execute(
                     """CREATE TABLE eos_pipeline_consumed_v2(
                          source_namespace TEXT NOT NULL,
@@ -357,12 +394,6 @@ class ProfilePipelineRuntime(clay.Runtime):
                          output_id TEXT NOT NULL,
                          consumed_at REAL NOT NULL,
                          PRIMARY KEY(source_namespace,source_kind,source_id))"""
-                )
-                db.execute(
-                    """INSERT INTO eos_pipeline_consumed_v2(
-                           source_namespace,source_kind,source_id,output_id,consumed_at)
-                       SELECT 'kind:' || source_kind,source_kind,source_id,output_id,consumed_at
-                       FROM eos_pipeline_consumed"""
                 )
                 db.execute("DROP TABLE eos_pipeline_consumed")
                 db.execute("ALTER TABLE eos_pipeline_consumed_v2 RENAME TO eos_pipeline_consumed")
@@ -498,11 +529,23 @@ class ProfilePipelineRuntime(clay.Runtime):
         cursors = dict(previous.get("cursors", {}))
         source_count = 0
 
-        for spec in profile.get("sources", []):
+        specs = profile.get("sources", [])
+        kinds = [str(spec.get("kind", "")).strip() for spec in specs if isinstance(spec, Mapping)]
+        if len(kinds) != len(set(kinds)):
+            return {
+                "ok": False,
+                "error_kind": "PipelineFault",
+                "error": "DUPLICATE_SOURCE_KIND",
+            }
+
+        for spec in specs:
             kind = str(spec["kind"])
-            source_namespace = str(spec.get("source_namespace") or f"kind:{kind}")
+            raw_namespace = spec.get("source_namespace")
+            source_namespace = str(raw_namespace).strip() if raw_namespace is not None else ""
             adapter = str(spec["adapter"])
             try:
+                if adapter in {"sqlite_query", "jsonl_cursor"} and not source_namespace:
+                    raise PipelineFault("SOURCE_NAMESPACE_REQUIRED:" + kind)
                 rows: list[dict[str, Any]] = []
                 value: Any = None
                 if adapter == "sqlite_query":
@@ -534,7 +577,9 @@ class ProfilePipelineRuntime(clay.Runtime):
                     path = self._resolve(str(spec["path"]))
                     if not path.is_file():
                         raise FileNotFoundError(str(path))
-                    cursor = int(cursors.get(kind, 0))
+                    if source_namespace not in cursors and kind in cursors and kind != source_namespace:
+                        raise PipelineFault("LEGACY_CURSOR_NAMESPACE_MIGRATION_REQUIRED:" + kind)
+                    cursor = int(cursors.get(source_namespace, 0))
                     raw = path.read_bytes()[cursor:]
                     limit = max(0, int(spec.get("limit", 60)))
                     admitted_records = 0
@@ -554,12 +599,14 @@ class ProfilePipelineRuntime(clay.Runtime):
                             raise PipelineFault("MALFORMED_JSONL") from exc
                         rows.append(parsed if isinstance(parsed, dict) else {"text": str(parsed)})
                         admitted_records += 1
-                    cursors[kind] = cursor + consumed_bytes
+                    cursors[source_namespace] = cursor + consumed_bytes
                     source_count += len(rows)
                 else:
                     raise PipelineFault("UNKNOWN_SOURCE_ADAPTER:" + adapter)
                 sources[kind] = {
                     "ok": True,
+                    "kind": kind,
+                    "source_namespace": source_namespace,
                     "rows": rows,
                     "value": value,
                     "evidence_prefix": spec.get("evidence_prefix", ""),
@@ -569,6 +616,8 @@ class ProfilePipelineRuntime(clay.Runtime):
             except Exception as exc:
                 sources[kind] = {
                     "ok": False,
+                    "kind": kind,
+                    "source_namespace": source_namespace,
                     "rows": [],
                     "value": None,
                     "error_kind": type(exc).__name__,
@@ -693,7 +742,10 @@ class ProfilePipelineRuntime(clay.Runtime):
             status = spec.get("status")
             if status is None:
                 status = "UNKNOWN" if bool(self._expr(spec.get("unknown_if", False), context)) else "VERIFIED"
-            value = float(self._expr(spec.get("value", 0.0), context) or 0.0)
+            raw_value = self._expr(spec.get("value", 0.0), context)
+            if raw_value is None:
+                raw_value = 0.0
+            value = _finite_number(raw_value, "NONFINITE_STATE_METRIC:" + name)
             metrics[name] = {
                 "status": status,
                 "value": value,
@@ -712,20 +764,22 @@ class ProfilePipelineRuntime(clay.Runtime):
             "source_count": collected["source_count"],
             "quiet_sensors_ok": collected["quiet_sensors_ok"],
         }
-        canonical_raw = json.dumps(canonical, sort_keys=True, separators=(",", ":"), default=str)
-        packet_raw = json.dumps(packet, sort_keys=True, separators=(",", ":"), default=str)
+        canonical_raw = _canonical_json(canonical)
+        packet_raw = _canonical_json(packet)
 
         refs: list[str] = []
         for source in collected["sources"].values():
             prefix = str(source.get("evidence_prefix", ""))
             if not source.get("ok") or not prefix:
                 continue
+            namespace = str(source.get("source_namespace", "")).strip()
+            identity_prefix = prefix + (namespace + "::" if namespace else "")
             for row in source.get("rows", []):
                 source_id = row.get("source_id")
                 if source_id is not None:
-                    refs.append(prefix + str(source_id))
+                    refs.append(identity_prefix + str(source_id))
             if source.get("value") is not None:
-                refs.append(prefix)
+                refs.append(identity_prefix)
         for probe in collected["probes"].values():
             if probe.get("ok"):
                 refs.append(str(probe["evidence_ref"]))
@@ -1084,6 +1138,9 @@ class ProfilePipelineRuntime(clay.Runtime):
 
             allowed = set(compiled["allowed_evidence_refs"])
             metrics = compiled["canonical"]["personality_state"]
+            tolerance = _finite_number(
+                gate.get("max_claim_overshoot", 0.0), "NONFINITE_CLAIM_TOLERANCE"
+            )
             for section in payload[contract["sections_field"]]:
                 refs = section.get(contract["section_evidence_field"], [])
                 if gate.get("require_evidence_per_section", True) and not refs:
@@ -1096,7 +1153,13 @@ class ProfilePipelineRuntime(clay.Runtime):
                     metric = metrics[name]
                     if metric["status"] != "VERIFIED":
                         raise PipelineFault("UNVERIFIED_STATE_CLAIM")
-                    if float(strength) > float(metric["value"]) + float(gate.get("max_claim_overshoot", 0.0)):
+                    claim_value = _finite_number(
+                        strength, "NONFINITE_STATE_CLAIM:" + str(name)
+                    )
+                    metric_value = _finite_number(
+                        metric["value"], "NONFINITE_STATE_METRIC:" + str(name)
+                    )
+                    if claim_value > metric_value + tolerance:
                         raise PipelineFault("STATE_CLAIM_OVERSHOOT")
                     if metric["evidence_ref"] not in refs:
                         raise PipelineFault("STATE_CLAIM_WITHOUT_METRIC_EVIDENCE")
@@ -1164,7 +1227,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                     now,
                     generation,
                     profile["profile_id"],
-                    json.dumps(payload, ensure_ascii=False),
+                    json.dumps(payload, ensure_ascii=False, allow_nan=False),
                     generated.get("provider_kind", ""),
                     generated.get("model"),
                     compiled["packet_hash"],
@@ -1199,10 +1262,10 @@ class ProfilePipelineRuntime(clay.Runtime):
                    SET continuity_json=?,canonical_json=?,canonical_hash=?,cursors_json=?,updated_at=?
                    WHERE singleton=1""",
                 (
-                    json.dumps(continuity, ensure_ascii=False),
-                    json.dumps(compiled["canonical"], ensure_ascii=False),
+                    json.dumps(continuity, ensure_ascii=False, allow_nan=False),
+                    json.dumps(compiled["canonical"], ensure_ascii=False, allow_nan=False),
                     compiled["canonical_state_hash"],
-                    json.dumps(collected["next_cursors"]),
+                    json.dumps(collected["next_cursors"], allow_nan=False),
                     now,
                 ),
             )

@@ -12,6 +12,9 @@
     "test_path": "the artefact/tests/test_claude_code_adapter_boundaries.py",
     "test_git_blob": "d7e190b7e24c10065b914a1ac873f46357dd83d7",
     "test_sha256": "8411d6e4d81d68989b2c30918b9e933517d2a29e6f3db0b167c4fc4b85f17276",
+    "runner_commit": "6df23c942f79d701c0432bb10d8fd3ebf7a94587",
+    "runner_path": "the artefact/tools/run_claude_adapter_boundary_receipts.py",
+    "runner_git_blob": "66c7397d620000d6cda999969b5d76699f312b03",
     "canonical_adapter_path": "the artefact/clayverse/adapters.py",
     "canonical_adapter_git_blob_observed_on_main": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507"
   },
@@ -29,6 +32,17 @@
       "test_claude_code_adapter_structured_output_boundary",
       "test_claude_code_adapter_environment_isolation_boundary"
     ],
+    "exact_receipt_runner_added": true,
+    "runner_contract": [
+      "clean Git tree required",
+      "full commit + tree bound",
+      "test/adapter/runner Git blobs and SHA-256 bound",
+      "four fixed node ids executed independently",
+      "per-node stdout/stderr digests and byte counts",
+      "per-node failure signature digest",
+      "120 second timeout per node",
+      "atomic JSON receipt output"
+    ],
     "authority_change": false,
     "security_boundary_weakened": false
   },
@@ -41,8 +55,18 @@
       "structured_output": "PASS",
       "environment_isolation": "PASS"
     },
+    "receipt_runner_synthetic_clean_checkout": {
+      "overall": "PASS",
+      "node_statuses": ["PASS", "PASS", "PASS", "PASS"],
+      "source_files_bound": ["adapter", "runner", "test"]
+    },
+    "receipt_runner_dirty_tree_poison": {
+      "exit_code": 2,
+      "overall": "PROVENANCE_OR_RUNNER_REJECTED",
+      "runner_error_type": "RuntimeError"
+    },
     "scope": "MECHANISM_ONLY_NOT_EXACT_REPOSITORY_RUNTIME",
-    "limitation": "connected isolated container did not execute the exact repository checkout/import graph"
+    "limitation": "connected isolated container did not execute the exact repository checkout/import graph; runner regressions used an isolated synthetic Git checkout with the same runner semantics"
   },
   "github_execution": {
     "workflow_run_id": 32615016551,
@@ -52,6 +76,12 @@
     "conclusion": "failure",
     "steps": null,
     "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+  },
+  "pull_request": {
+    "number": 1090,
+    "state": "OPEN_DRAFT",
+    "mergeable_observed": true,
+    "reason_for_draft": "exact branch runtime remains unobserved"
   },
   "evidence_boundary": {
     "exact_branch_runtime_credit": 0,
@@ -71,5 +101,5 @@
   "provider_secret_lookup": false,
   "provider_network": false,
   "paid_execution": false,
-  "next_exact_gate": "On the next intentional exact Ubuntu start, bind full commit+tree plus adapter/test blobs, Claude CLI/version and executor/environment identity; execute the four node ids independently; persist failing phase/signature; then rerun the full suite before classifying SOURCE_DEFECT vs TEST_STALE vs ENVIRONMENT_DRIFT vs FLAKE vs FIXED."
+  "next_exact_gate": "On the next intentional exact Ubuntu start, execute the committed receipt runner from a clean exact checkout; if it emits four bound node results, persist that receipt and only then classify SOURCE_DEFECT vs TEST_STALE vs ENVIRONMENT_DRIFT vs FLAKE vs FIXED before a full-suite rerun."
 }

@@ -1,0 +1,97 @@
+{
+  "schema": "AUTONOMOUS_EXPORT_LIVENESS_REMOTE_OBSERVATION/v1",
+  "status": "BOUNDED_REMOTE_EVIDENCE_NOT_FULL_LIVENESS_RECEIPT",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "macrocycle_identity": "UNRESOLVED_NO_UPSTREAM_ID",
+  "canonical_start_sha": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+  "control_authority": {
+    "supervisor_state": "9.9",
+    "autonomous_control": "4.1+4.2-execution-boundary-addendum",
+    "free_only": true,
+    "required_gate": "AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1"
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "id": "dual_cadence_common_cutoff_localization",
+    "intervention": "non-mutating comparison of two independent periodic GitHub export traces"
+  },
+  "observations": {
+    "agentzero_export": {
+      "cadence_seconds_observed": 1800,
+      "last_three_source_times_utc": [
+        "2026-08-22T19:06:44Z",
+        "2026-08-22T19:36:44Z",
+        "2026-08-22T20:06:44Z"
+      ],
+      "last_commit": "5e134f5f07ddebc0a1c182d04579e361bbbe82a8",
+      "last_generation": 276,
+      "exporter_identity_from_payload": "/opt/agentzero-export/agentzero_export.py on frank-api",
+      "next_expected_source_time_if_cadence_continued_utc": "2026-08-22T20:36:44Z",
+      "next_expected_export_observed": false
+    },
+    "rating_export": {
+      "cadence_seconds_observed": 1800,
+      "last_three_times_utc": [
+        "2026-08-22T19:25:04Z",
+        "2026-08-22T19:55:04Z",
+        "2026-08-22T20:25:04Z"
+      ],
+      "last_commit": "9452c6fe621bc2d8c6f8cf5eb3f9fb88fd91591d",
+      "source_from_payload": "UnifiedDB /var/lib/clay/wiki.db, table eos_bewertungen",
+      "next_expected_time_if_cadence_continued_utc": "2026-08-22T20:55:04Z",
+      "next_expected_export_observed": false,
+      "unchanged_state_still_exported_before_stall": true
+    },
+    "later_repository_write": {
+      "commit": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+      "time_utc": "2026-08-22T23:40:10Z",
+      "meaning": "GitHub repository writes were possible from at least one path after the periodic export stall; this does not prove frank-api network/auth health."
+    }
+  },
+  "derived_discriminator": {
+    "common_cutoff_window_utc": {
+      "after": "2026-08-22T20:25:04Z",
+      "before_or_at": "2026-08-22T20:36:44Z",
+      "basis": "rating lane completed at 20:25:04Z; the next normally scheduled AgentZero lane at approximately 20:36:44Z is absent, followed by absence of the normally scheduled rating lane at 20:55:04Z"
+    },
+    "no_new_state": {
+      "classification": "REJECTED_AS_PRIMARY_CAUSE",
+      "reason": "The rating exporter repeatedly committed the same 12-rating / 7-up / 5-down current-state snapshot at 30-minute intervals, so lack of semantic change did not suppress scheduled exports."
+    },
+    "global_github_outage": {
+      "classification": "DISFAVORED_NOT_EXCLUDED_FOR_HOST_SPECIFIC_PATH",
+      "reason": "A later repository write succeeded, but frank-api-specific network/auth state remains unobserved."
+    },
+    "independent_dual_timer_failure": {
+      "classification": "POSSIBLE_BUT_LESS_PARSIMONIOUS",
+      "reason": "Two previously stable 30-minute lanes cease across the same approximately 11m40s cutoff window."
+    },
+    "shared_host_scheduler_or_dependency_stop": {
+      "classification": "PREFERRED_HYPOTHESIS_NOT_VERIFIED",
+      "reason": "The synchronized loss of both recurring evidence producers is more consistent with a shared execution-host, scheduler, power, process-supervision, filesystem, database, or local connectivity dependency than with no-new-state."
+    }
+  },
+  "required_full_receipt_fields": {
+    "timer_service_enabled_active": "UNKNOWN_REMOTE_ONLY",
+    "last_trigger_next_trigger": "PARTIALLY_INFERRED_FROM_GIT_TRACE_NOT_SYSTEMD_VERIFIED",
+    "last_successful_run_id": "PARTIALLY_BOUND_BY_LAST_COMMITS_ONLY",
+    "process_exit_code": "UNKNOWN",
+    "stdout_stderr_digests": "UNKNOWN",
+    "lock_sqlite_busy_state": "UNKNOWN",
+    "disk_inode_availability": "UNKNOWN",
+    "git_worktree_remote_push_result_on_frank_api": "UNKNOWN",
+    "network_auth_result_on_frank_api": "UNKNOWN",
+    "generation_before_after": "LAST_OBSERVED_276_TO_276",
+    "which_timer_or_shared_dependency_stopped_first": "UNKNOWN"
+  },
+  "failure_class": "UNKNOWN",
+  "reason_failure_class_not_promoted": "Supervisor requires direct host/runtime evidence before classifying TIMER_DISABLED, PROCESS_STUCK, DB_LOCKED, DISK_FULL, AUTH_FAILED, RUN_FAILED, RUN_BLOCKED, PUSH_FAILED, or shared-dependency failure.",
+  "product_mutation": false,
+  "runtime_restart": false,
+  "provider_network_execution": false,
+  "paid_execution": false,
+  "next_exact_step": "On the authorized frank-api forensic/sandbox access path, observe systemd timer/service enabled+active state and journals for both exporters plus process exit, lock/SQLite, disk/inode, git remote/push, network/auth and generation evidence BEFORE restarting or mutating product services; then emit the full AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1.",
+  "promotion_effect": "NARROWS_CAUSE; DOES_NOT_SATISFY_AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1; DOES_NOT_AUTHORIZE_PRODUCT_PATCHING_OR_RUNTIME_RESTART"
+}

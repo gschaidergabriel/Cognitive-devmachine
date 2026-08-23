@@ -11,6 +11,7 @@ D4 = "4" * 64
 D5 = "5" * 64
 D6 = "6" * 64
 D7 = "7" * 64
+D8 = "8" * 64
 
 
 def base_manifest():
@@ -22,6 +23,7 @@ def base_manifest():
         "tokenizer_digest": D1,
         "quantization_runtime_identity": "gguf-q4_k_m+llama.cpp:test-fixture",
         "runtime_digest": D7,
+        "lens_artifact_digest": D8,
         "jspace_profile_digest": D2,
         "lens_profile_digest": D3,
         "workspace_calibration_digest": D4,
@@ -68,6 +70,18 @@ class BundledCognitionManifestTests(unittest.TestCase):
         with self.assertRaisesRegex(ManifestError, "runtime_digest:LOWERCASE_SHA256_REQUIRED"):
             validate_manifest(data)
 
+    def test_lens_artifact_digest_is_identity_bound_when_present(self):
+        a = base_manifest()
+        b = copy.deepcopy(a)
+        b["lens_artifact_digest"] = "a" * 64
+        self.assertNotEqual(validate_manifest(a).integration_identity_sha256, validate_manifest(b).integration_identity_sha256)
+
+    def test_malformed_lens_artifact_digest_fails_closed(self):
+        data = base_manifest()
+        data["lens_artifact_digest"] = "ABC"
+        with self.assertRaisesRegex(ManifestError, "lens_artifact_digest:LOWERCASE_SHA256_REQUIRED"):
+            validate_manifest(data)
+
     def test_missing_calibration_digest_fails_closed(self):
         data = base_manifest()
         del data["lens_profile_digest"]
@@ -79,7 +93,6 @@ class BundledCognitionManifestTests(unittest.TestCase):
         data["checkpoint_digest"] = "ABC"
         with self.assertRaisesRegex(ManifestError, "LOWERCASE_SHA256_REQUIRED"):
             validate_manifest(data)
-
 
     def test_placeholder_digest_fails_closed(self):
         data = base_manifest()

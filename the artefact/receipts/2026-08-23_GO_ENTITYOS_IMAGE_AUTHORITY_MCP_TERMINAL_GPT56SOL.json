@@ -1,0 +1,77 @@
+{
+  "schema": "CLAYVERSE_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_ENTITYOS_IMAGE_AUTHORITY_HARDENING_ONLY",
+  "canonical_main_observed_at_close": "36e26e0d4233658cba259fcbeb6dc7cb6db7f6a2",
+  "candidate_head_before_receipt": "40a5e27c8a9c729c333da05e31901f7f397dcfde",
+  "pull_request": 1188,
+  "observed": {
+    "defect": "EntityOS executable identity remained runtime-selectable across service, effect MCP, terminal environment and deployment configuration despite an image-owned embedded lock contract",
+    "embedded_lock_schema": "ClayVerseEntityOSArtifactLock/v1",
+    "embedded_entityos_sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+    "embedded_entityos_size_bytes": 9181696,
+    "predecessor_exact_runtime_test_head": "7f34c2ee1ace0e1292e2c11c41f228e06561cf79",
+    "github_identity_guard_run_id": 32617540941,
+    "github_identity_guard_steps": null,
+    "github_lock_generator_run_id": 32617540943,
+    "github_lock_generator_steps": null,
+    "execution_classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT",
+    "final_head_workflow_runs_observed_before_receipt": 0,
+    "whole_product_runtime_credit": 0
+  },
+  "delta": {
+    "service": "fixed /opt/entityos/EntityOS identity and derive digest/size only from /opt/entityos/entityos.lock.json with bounded fail-closed verification",
+    "mcp": "reuse service image-owned EntityOS admission only when execution is enabled; remove independent runtime path/digest authority",
+    "terminal": "propagate only CLAYVERSE_ENABLE_ENTITYOS_EXEC into managed Claude/MCP environment, never path/digest",
+    "packaging": "remove runtime EntityOS path/digest authority from Docker ENV, Compose and Kata deployment template while retaining build-time digest cross-check",
+    "tests": "cross-file authority fence plus malicious alternate executable with matching attacker digest must not redirect the MCP bridge",
+    "documentation": "living artefact README records this go re-entry and zero-runtime-credit boundary"
+  },
+  "authority_preserved": {
+    "unifieddb_sole_durable_authority": true,
+    "effectgate_effectjournal_sole_external_effect_authority": true,
+    "entityos_internal_substrate_only": true,
+    "second_identity_authority_created": false,
+    "second_state_authority_created": false,
+    "second_memory_authority_created": false,
+    "second_effect_path_created": false
+  },
+  "coordination": {
+    "stale_predecessor_pr_1174_closed_unmerged": true,
+    "retained_current_lane_pr": 1188,
+    "overlapping_execution_frontier_pr": 1186,
+    "global_unusual_experiment_observed": "EXECUTION_FRONTIER_SPLIT_BRAIN_POISON",
+    "global_unusual_experiment_owner_lane": 1186,
+    "local_unusual_experiment_count": 0,
+    "reason_no_second_experiment": "one unusual experiment is global per user-triggered go macrocycle; deterministic adversarial regressions in this lane do not consume another slot"
+  },
+  "execution_frontier": {
+    "canonical_main_still_requires_exact_authorized_isolated_execution": true,
+    "retained_vercel_bridge_candidate_records_sandbox_create": true,
+    "owner_one_shot_scoped_github_read_token_ingress_still_required": true,
+    "no_secret_value_accessed_or_persisted_by_this_lane": true,
+    "next_gate": "owner-start retained Vercel one-shot with scoped read-only GitHub source credential, verify exact source identities inside disposable Sandbox, clear credential, run focused EntityOS service/MCP/terminal regressions, then full regressions and exact OCI build/startup with image digest binding"
+  },
+  "non_claims": {
+    "focused_pytest_pass": false,
+    "full_suite_pass": false,
+    "exact_oci_build_pass": false,
+    "exact_image_digest_observed": false,
+    "live_entityos_round_trip_pass": false,
+    "clerk_pty_claude_runtime_pass": false,
+    "restart_concurrency_pass": false,
+    "whole_clayverse_pass": false
+  },
+  "policy": {
+    "together_used": false,
+    "direct_vps_host_test_used": false,
+    "production_host_test_used": false,
+    "paid_execution_used": false,
+    "final_model_training_used": false,
+    "secrets_accessed": false
+  }
+}

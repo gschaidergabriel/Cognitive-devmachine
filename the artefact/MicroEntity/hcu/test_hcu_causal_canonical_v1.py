@@ -74,6 +74,19 @@ class HCUCanonicalizationTests(unittest.TestCase):
         with self.assertRaisesRegex(HCUCanonicalizationError, "INTEGER_OUTSIDE_IJSON_SAFE_RANGE"):
             canonical_bytes({"n": 2**53})
 
+    def test_integer_valued_float_outside_ijson_safe_range_fails_closed(self):
+        unsafe = float(2**53)
+        with self.assertRaisesRegex(HCUCanonicalizationError, "INTEGER_OUTSIDE_IJSON_SAFE_RANGE"):
+            canonical_bytes({"n": unsafe})
+        node = shutil.which("node")
+        if node:
+            with self.assertRaises(subprocess.CalledProcessError):
+                subprocess.check_output(
+                    [node, "-e", NODE_REFERENCE, json.dumps({"n": unsafe}, separators=(",", ":"))],
+                    text=True,
+                    stderr=subprocess.DEVNULL,
+                )
+
     def test_value_change_changes_digest(self):
         self.assertNotEqual(canonical_sha256({"x": 0.55}), canonical_sha256({"x": 0.56}))
 

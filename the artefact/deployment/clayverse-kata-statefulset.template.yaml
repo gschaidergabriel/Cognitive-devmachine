@@ -105,8 +105,12 @@ spec:
               value: /workspace
             - name: CLAYVERSE_REQUIRE_CLAUDE
               value: "1"
+            # EntityOS execution is a conditional capability and remains fail-closed
+            # in the baseline deployment. A separately reviewed deployment-specific
+            # overlay may set this to 1 only after exact embedded-artifact admission
+            # and effect-path evidence; this template must never opt in implicitly.
             - name: CLAYVERSE_ENABLE_ENTITYOS_EXEC
-              value: "1"
+              value: "0"
             - name: CLAYVERSE_ENTITYOS_PATH
               value: /opt/entityos/EntityOS
             # EntityOS artifact identity is image-authoritative. The image bakes

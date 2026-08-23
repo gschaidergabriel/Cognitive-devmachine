@@ -30,6 +30,11 @@ LOADER_BINDING_SHA = "8" * 64
 LEASE_SHA = "9" * 64
 LOAD_CONSUMPTION_SHA = "a1" * 32
 OUTPUT_SHA = "b1" * 32
+MODEL_EXECUTION_RECEIPT_SHA = "d1" * 32
+MODEL_EXECUTION_OBSERVATION_SHA = "e1" * 32
+INPUT_SHA = "f1" * 32
+MODEL_EXECUTION_EXECUTOR_ID = "executor:test:1"
+MODEL_CALL_ID = "model-call:test:1"
 GENERATION = 73
 CELL_ID = "cell:critic:0"
 ROLE = "critic"
@@ -102,7 +107,7 @@ def _binding(trace=None, **overrides):
         "cell_id": trace["cell_id"],
         "role": trace["role"],
         "vector_control_packet_sha256": trace["vector_control_packet_sha256"],
-        "inference_receipt_schema": "HCU_INFERENCE_RECEIPT/v3",
+        "inference_receipt_schema": "HCU_INFERENCE_RECEIPT/v4",
         "inference_receipt_sha256": INFERENCE_SHA,
         "engine_identity_sha256": ENGINE_ID_SHA,
         "resolved_engine_identity": "hcu_local_08b",
@@ -113,7 +118,15 @@ def _binding(trace=None, **overrides):
         "engine_load_lease_sha256": LEASE_SHA,
         "engine_load_consumption_receipt_sha256": LOAD_CONSUMPTION_SHA,
         "engine_load_loader_id": "loader:test:1",
-        "model_call_id": "model-call:test:1",
+        "model_execution_receipt_sha256": MODEL_EXECUTION_RECEIPT_SHA,
+        "model_execution_observation_sha256": MODEL_EXECUTION_OBSERVATION_SHA,
+        "model_execution_executor_id": MODEL_EXECUTION_EXECUTOR_ID,
+        "model_execution_invocation_id": MODEL_CALL_ID,
+        "output_producing_cell_id": trace["cell_id"],
+        "model_execution_role": trace["role"],
+        "input_sha256": INPUT_SHA,
+        "input_size": 11,
+        "model_call_id": MODEL_CALL_ID,
         "output_ref": "unifieddb:model-output:test:1",
         "output_sha256": OUTPUT_SHA,
         "output_size": 17,
@@ -133,6 +146,18 @@ class AdmittedJSpaceTrainingDatasetTests(unittest.TestCase):
         self.assertEqual(evidence.inference_receipt_sha256, INFERENCE_SHA)
         self.assertEqual(evidence.engine_load_consumption_receipt_sha256, LOAD_CONSUMPTION_SHA)
         self.assertEqual(evidence.output_sha256, OUTPUT_SHA)
+
+    def test_stale_v3_inference_fixture_fails_closed(self):
+        trace = _training_trace()
+        with self.assertRaisesRegex(
+            AdmittedTrainingDatasetError,
+            "JSPACE_INFERENCE_BINDING_REJECTED:JSPACE_INFERENCE_BINDING_INFERENCE_SCHEMA_UNSUPPORTED",
+        ):
+            validate_pipeline_evidence(
+                trace,
+                _admission(trace),
+                _binding(trace, inference_receipt_schema="HCU_INFERENCE_RECEIPT/v3"),
+            )
 
     def test_crossbound_causal_identity_mismatch_fails_closed(self):
         trace = _training_trace()

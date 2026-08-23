@@ -226,7 +226,7 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
             validate_training_trace(tampered)
 
     def test_placeholder_causal_receipt_is_rejected(self):
-        with self.assertRaisesRegex(JSpaceTrainingTrainingTraceError, "PLACEHOLDER_SHA256_FORBIDDEN"):
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "PLACEHOLDER_SHA256_FORBIDDEN"):
             self.build(entry_event_sha256="0" * 64)
 
     def test_trace_family_is_explicit_not_inferred_from_neighbor_rows(self):

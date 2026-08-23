@@ -18,11 +18,11 @@ from typing import Any, Mapping, Sequence
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from .global_jspace_gwt_v1 import JSpaceStep, TRACE_CANONICALIZATION_SCHEMA
-    from .jspace_vector_control_v1 import ABI_SCHEMA, VectorControlPacket, validate_packet
+    from .jspace_vector_control_v1 import ABI_SCHEMA, VectorControlPacket, packet_bytes, validate_packet
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from global_jspace_gwt_v1 import JSpaceStep, TRACE_CANONICALIZATION_SCHEMA
-    from jspace_vector_control_v1 import ABI_SCHEMA, VectorControlPacket, validate_packet
+    from jspace_vector_control_v1 import ABI_SCHEMA, VectorControlPacket, packet_bytes, validate_packet
 
 TRACE_SCHEMA = "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1"
 CREDIT_LABELS = frozenset({"UNKNOWN", "POSITIVE", "NEGATIVE", "NEUTRAL"})
@@ -55,6 +55,7 @@ class TrainingTrace:
     jspace_input_vector_ref: str
     jspace_input_codec_version: str
     vector_control_packet_sha256: str
+    vector_control_packet_jcs_utf8: str
     vector_control_condition: str
     local_workspace_state_ref: str
     gwt_competition_set: tuple[tuple[str, str, int], ...]
@@ -73,7 +74,7 @@ class TrainingTrace:
     trace_sha256: str
 
 
-def _text(value: Any, field: str, max_len: int = 1024) -> str:
+def _text(value: Any, field: str, max_len: int = 8192) -> str:
     if not isinstance(value, str) or not value.strip():
         raise JSpaceTrainingTraceError(f"{field}:NONEMPTY_STRING_REQUIRED")
     value = value.strip()
@@ -199,6 +200,7 @@ def build_training_trace(
 
     try:
         validate_packet(vector_control_packet)
+        packet_wire = packet_bytes(vector_control_packet).decode("utf-8", "strict")
     except Exception as exc:
         raise JSpaceTrainingTraceError(f"VECTOR_CONTROL_PACKET_REJECTED:{exc}") from exc
     if vector_control_packet.abi_schema != ABI_SCHEMA:
@@ -244,6 +246,7 @@ def build_training_trace(
         "jspace_input_vector_ref": _text(jspace_input_vector_ref, "jspace_input_vector_ref"),
         "jspace_input_codec_version": ABI_SCHEMA,
         "vector_control_packet_sha256": _sha256(vector_control_packet.packet_sha256, "vector_control_packet_sha256"),
+        "vector_control_packet_jcs_utf8": packet_wire,
         "vector_control_condition": _text(vector_control_packet.control_condition, "vector_control_condition", 64),
         "local_workspace_state_ref": _text(local_workspace_state_ref, "local_workspace_state_ref"),
         "gwt_competition_set": _competition(prototype_step),

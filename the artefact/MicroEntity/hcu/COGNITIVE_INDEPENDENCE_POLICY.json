@@ -1,0 +1,40 @@
+{
+  "schema_version": "HCU_COGNITIVE_INDEPENDENCE/v1",
+  "status": "OWNER_DIRECTED_SOURCE_POLICY",
+  "internal_cognition": {
+    "required_external_provider": false,
+    "required_external_embedding_service": false,
+    "canonical_semantic_substrate": "HCU_LOCAL_08B_PLUS_GLOBAL_JSPACE_WORLD_FIELD",
+    "canonical_state_authority": "MiniUnifiedDB",
+    "effect_authority": "EffectGate",
+    "script_first": true,
+    "reactive_selective_model_activation": true
+  },
+  "providers": {
+    "nvidia": {
+      "internal_cognitive_dependency": false,
+      "embedding_dependency": false,
+      "allowed_roles": ["RESEARCH_WORKER", "OPTIONAL_CANDIDATE_FEED", "DIRECT_TARGETED_FALLBACK"]
+    },
+    "mistral": {
+      "internal_cognitive_dependency": false,
+      "allowed_roles": ["RESEARCH_WORKER", "OPTIONAL_CANDIDATE_FEED", "DIRECT_TARGETED_FALLBACK"]
+    },
+    "groq": {
+      "internal_cognitive_dependency": false,
+      "allowed_roles": ["RESEARCH_WORKER", "OPTIONAL_CANDIDATE_FEED", "DIRECT_TARGETED_FALLBACK"]
+    },
+    "claude_code": {
+      "internal_cognitive_dependency": false,
+      "role": "PREFERRED_HIGH_CAPABILITY_TARGETED_CANDIDATE_INFERENCE",
+      "direct_private_latent_access": "UNOBSERVED",
+      "jspace_mode": "COMPILED_EXTERNAL_UNTIL_MEASURED_OTHERWISE"
+    }
+  },
+  "boot_without_external_providers": "REQUIRED",
+  "world_model_continuity_without_external_providers": "REQUIRED",
+  "semantic_retrieval_without_external_providers": "REQUIRED",
+  "zero_context_projection_without_external_providers": "REQUIRED",
+  "external_output_truth_authority": false,
+  "external_output_effect_authority": false
+}

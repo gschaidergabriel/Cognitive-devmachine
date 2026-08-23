@@ -14,6 +14,13 @@ from collections.abc import Mapping
 from typing import Any
 
 SCHEMA = "MINI_INFERENCE_CAPABILITY_BINDING/v1"
+BOUND_ROUTE_SCHEMA = "MINI_INFERENCE_BOUND_ROUTE/v1"
+PREPARE_DIGEST_FIELDS = (
+    "zero_identity_digest", "grf_digest", "hyperposition_digest",
+    "bundled_manifest_digest", "local_model_digest", "tokenizer_digest",
+    "jspace_profile_digest", "jacobian_lens_digest", "workspace_calibration_digest",
+    "boot_source_lock_digest", "policy_authority_digest",
+)
 EVIDENCE_KINDS = {"STATIC_CONSERVATIVE", "BUNDLED_MANIFEST", "RUNTIME_PROBE"}
 ENGINE_CLASSES = {"CLAUDE_CODE", "BUNDLED_LOCAL_08B", "ADAPTIVE_BACKEND"}
 JSPACE_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY", "COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY"}
@@ -175,4 +182,50 @@ def resolve_from_profile(profile: Mapping[str, Any]) -> dict[str, Any]:
     return result
 
 
-__all__ = ["SCHEMA", "CapabilityBindingError", "compile_binding", "validate_binding", "resolve_from_profile", "sha256_obj"]
+def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], *, expected_generation: int) -> dict[str, Any]:
+    """Bind explicit capability routing to one exact canonical cognition prepare result.
+
+    Cognition identities are not duplicated into profile configuration. They are taken only
+    from the already-verified MiniUnifiedDB prepare material and folded into one route digest.
+    """
+    _need(isinstance(prepare, Mapping) and prepare.get("ok") is True, "PREPARE_BINDING_REQUIRED")
+    _need(type(expected_generation) is int and expected_generation >= 0, "EXPECTED_GENERATION_INVALID")
+    _need(prepare.get("entity_generation") == expected_generation, "STALE_GENERATION")
+    causal_turn_id = _text(prepare.get("causal_turn_id"), "prepare.causal_turn_id")
+    turn_binding_digest = _digest(prepare.get("turn_binding_digest"), "prepare.turn_binding_digest")
+    boot_binding_digest = _digest(prepare.get("boot_binding_digest"), "prepare.boot_binding_digest")
+    workspace_digest = _digest(prepare.get("workspace_digest"), "prepare.workspace_digest")
+    cognition = {field: _digest(prepare.get(field), f"prepare.{field}") for field in PREPARE_DIGEST_FIELDS}
+
+    capability = resolve_from_profile(profile)
+    material = {
+        "schema": BOUND_ROUTE_SCHEMA,
+        "entity_generation": expected_generation,
+        "causal_turn_id": causal_turn_id,
+        "turn_binding_digest": turn_binding_digest,
+        "boot_binding_digest": boot_binding_digest,
+        "workspace_digest": workspace_digest,
+        "profile_id": capability["profile_id"],
+        "profile_hash": capability["profile_hash"],
+        "capability_binding_digest": capability["binding_digest"],
+        "capability_receipt_digest": capability["capability_receipt_digest"],
+        "target_engine_class": capability["target_engine_class"],
+        "ucf_engine_class": capability["ucf_engine_class"],
+        "jspace_mode": capability["jspace_mode"],
+        "cognition": cognition,
+    }
+    route_digest = sha256_obj(material)
+    return {
+        "ok": True,
+        **material,
+        "route_digest": route_digest,
+        "local_activation_access": capability["local_activation_access"],
+        "external_hidden_state_claimed": capability["external_hidden_state_claimed"],
+        "provider_observability_claim_supported": capability["provider_observability_claim_supported"],
+        "adapter_version": capability["adapter_version"],
+        "capability_evidence_kind": capability["capability_evidence_kind"],
+        "authority": "ROUTING_ONLY_BOUND_TO_CANONICAL_PREPARE",
+    }
+
+
+__all__ = ["SCHEMA", "BOUND_ROUTE_SCHEMA", "PREPARE_DIGEST_FIELDS", "CapabilityBindingError", "compile_binding", "validate_binding", "resolve_from_profile", "resolve_bound_route", "sha256_obj"]

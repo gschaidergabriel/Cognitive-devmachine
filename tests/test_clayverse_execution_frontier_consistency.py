@@ -1,6 +1,8 @@
 from copy import deepcopy
 
 from tools.assert_clayverse_execution_boundary import (
+    EXPECTED_CONTROLLER,
+    EXPECTED_CONTROLLER_READY_BINDING,
     EXPECTED_EXECUTION_GATE,
     EXPECTED_VERCEL_BRIDGE,
     VERCEL_EXECUTION_PATH,
@@ -23,8 +25,13 @@ def current_program():
         "execution_policy": {
             "vercel_sandbox_bridge": EXPECTED_VERCEL_BRIDGE,
             "execution_frontier_binding": VERCEL_EXECUTION_PATH,
+            "retained_vercel_controller": EXPECTED_CONTROLLER,
+            "vercel_controller_ready_binding": EXPECTED_CONTROLLER_READY_BINDING,
         },
-        "current_frontier": "owner-start the retained Vercel Sandbox runtime POST with scoped GITHUB_READ_TOKEN for ClayVerse",
+        "current_frontier": (
+            "rebind retained Vercel controller PR #810 to exact current source and obtain READY; "
+            "then owner-start the runtime POST with scoped GITHUB_READ_TOKEN for ClayVerse"
+        ),
         "runtime_credit": {"whole_clayverse": 0},
     }
 
@@ -37,6 +44,21 @@ def test_stale_generic_execution_surface_fails_closed():
     poisoned = deepcopy(current_program())
     poisoned["stage_gates"]["CLAYVERSE_EXACT_OCI_ACCEPTANCE"]["status"] = "BLOCKED_ON_EXECUTION_SURFACE"
     assert "PROGRAM_EXECUTION_FRONTIER_STALE_GENERIC_SURFACE_BLOCK" in execution_frontier_errors(poisoned, VERCEL_CURRENT)
+
+
+def test_token_only_frontier_without_exact_controller_ready_rebind_fails_closed():
+    poisoned = deepcopy(current_program())
+    poisoned["execution_policy"].pop("vercel_controller_ready_binding")
+    poisoned["current_frontier"] = "owner-start retained Vercel runtime POST with scoped GITHUB_READ_TOKEN for ClayVerse"
+    errors = execution_frontier_errors(poisoned, VERCEL_CURRENT)
+    assert "PROGRAM_VERCEL_CONTROLLER_READY_BINDING_MISSING" in errors
+    assert "PROGRAM_CURRENT_FRONTIER_CONTROLLER_READY_AND_TOKEN_SEQUENCE_MISSING" in errors
+
+
+def test_wrong_retained_controller_fails_closed():
+    poisoned = deepcopy(current_program())
+    poisoned["execution_policy"]["retained_vercel_controller"] = "other/controller#1"
+    assert "PROGRAM_RETAINED_VERCEL_CONTROLLER_MISSING" in execution_frontier_errors(poisoned, VERCEL_CURRENT)
 
 
 def test_bridge_never_mints_runtime_credit():

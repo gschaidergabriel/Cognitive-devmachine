@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_GO_EXPERIMENT_RECEIPT",
+  "recorded_at_local": "2026-08-23T23:59:00+07:00",
+  "persistent_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "main_before_receipt": "8c32dfb04756bb5c05ea75ef6fd4e4802b1cc063",
+  "retained_donor_pr": 1263,
+  "retained_donor_head": "b41afec49bd6384680d001395177c3f274b9be5e",
+  "target": {
+    "path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "git_blob_sha": "0f51451786dcd21a5e58e4bf7dd8a650761d55d4",
+    "schema": "RFC8785_JCS_IJSON/v1"
+  },
+  "unusual_experiment": {
+    "name": "JCS_BINARY64_V8_DIFFERENTIAL_50014",
+    "macrocycle_count": 1,
+    "purpose": "falsify the selected HCU JCS float serializer by comparing its exact binary64 canonical text against an independent V8 JSON.stringify oracle over deterministic edge cases plus random finite IEEE-754 bit patterns",
+    "seed_decimal": 3248996574,
+    "cases": 50014,
+    "edge_cases_included": 14,
+    "random_finite_binary64_cases": 50000,
+    "independent_runtime": "Node v22.16.0 / V8 JSON.stringify(Number(...))",
+    "environment": "isolated ChatGPT Linux tool container",
+    "source_blob_reproduction": "PASS_EXACT_GIT_BLOB",
+    "observed_mismatches": 0,
+    "process_result": "PASS"
+  },
+  "interpretation": {
+    "supported": "For the tested finite binary64 corpus, the exact PR1263 JCS candidate float serializer matched V8 JSON number serialization byte-for-byte.",
+    "not_supported": [
+      "full RFC8785 conformance",
+      "Python-int host-type consistency",
+      "Entry/HCU end-to-end canonical identity",
+      "EntityOS/HCU runtime acceptance",
+      "real model or J-Space causality",
+      "whole-product PASS"
+    ],
+    "known_adjacent_counterevidence": "PR1378 separately identifies Python-int versus binary64 host-type inconsistency in this candidate and proposes a repair; this experiment does not retire that defect.",
+    "historical_triangulation": "The 2026-08-09 ClayCode numeric run showed host-native Python-vs-Node JSON presentation mismatches; this experiment tests the newer explicit HCU JCS candidate rather than host-native Python JSON and observed zero mismatches on the bounded corpus.",
+    "promotion": "MECHANISM_SUPPORTED_BOUNDED_FLOAT_SERIALIZATION_ONLY"
+  },
+  "coordination": {
+    "second_canonicalizer_created": false,
+    "canonicalizer_promotion_performed": false,
+    "artefact_readme": {
+      "status": "NO_CHANGE",
+      "reason": "Current README already states the single-versioned canonicalization convergence gate and exact combined Entry+route+inference+GRID10 execution blocker; this bounded float differential does not change product-facing acceptance language."
+    }
+  },
+  "execution_boundary": {
+    "authorized_product_runtime_started": false,
+    "runtime_credit": 0,
+    "whole_product_credit": 0,
+    "vps_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_used": false,
+    "secrets_used": false
+  },
+  "next_discriminator": "Resolve the PR1378 host-int repair and single canonicalizer selection, then run exact combined Typed Entry + route + inference receipt + GRID10 regressions on an actually-started authorized isolated executor before any HCU runtime promotion."
+}

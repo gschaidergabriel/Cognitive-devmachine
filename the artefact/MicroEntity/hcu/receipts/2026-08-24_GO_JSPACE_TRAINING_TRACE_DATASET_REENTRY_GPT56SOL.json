@@ -7,14 +7,16 @@
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "authority": {
-    "current_owner_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+    "current_supervisor_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "supervisor_mode": "FREE_ONLY",
     "durable_state_authority": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB",
     "effect_authority": "EffectGate+EffectJournal",
     "model_jspace_output_authority": "CANDIDATE_MEASUREMENT_ONLY"
   },
   "source_scope": {
     "repository": "gschaidergabriel/clay-global-research-entity",
-    "canonical_main_observed": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+    "canonical_main_initial_observation": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+    "canonical_main_reentry_observation": "fbc605b3d99328d71b72440b52ade09fd988ceeb",
     "retained_hcu_pr": 1263,
     "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
     "pr_head_observed_after_fusion": "423f70553d222cf6cfec513ca0bb7880ad6df585"
@@ -45,33 +47,42 @@
       "bootstrap dataset compiler advanced to ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3",
       "compiler now consumes ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1 rather than raw prototype traces",
       "compiler splits by trace_family_id to reduce train/validation/holdout family leakage",
-      "compiler emits six machine-checkable rows including stale generation, basis id, basis digest and role negatives using current ABI error identities"
+      "compiler emits six machine-checkable rows including stale generation, basis id, basis digest and role negatives using current ABI error identities",
+      "J-Space inference binding now cross-binds HCU_INFERENCE_RECEIPT/v3 engine/load/output evidence",
+      "causal training trace binder cross-binds Typed Entry, route, GRID10, inference and J-Space source identities"
     ],
     "coordination": "Three stale full-file writes were rejected by GitHub 409 and were not forced; latest concurrent bytes were re-fetched and preserved."
   },
   "execution_evidence": {
-    "vercel_connector_callable_sandbox_create_or_exec": false,
-    "vercel_platform_sandbox_capability_known": true,
+    "vercel_controller_deployment": "dpl_5L1PZpoG8oxHTiMp8XPuGEueAKSr",
+    "vercel_controller_commit": "a85d75fed192d9dd8cfbec49dedff9bfa6e0e520",
+    "vercel_controller_state": "READY",
+    "vercel_runtime_log_window": "24h",
+    "vercel_go_cycle_v2_observation": "one GET returned 405; no credential-bearing POST observed",
+    "worker_callable_arbitrary_post_or_sandbox_start": false,
     "github_workflow_runs_for_observed_pr_head": 0,
     "exact_entityos_hcu_runtime_executed_by_this_organ": false,
     "runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
     "whole_product_pass": false
   },
   "training": {
+    "repository_owner_paid_one_shot_directive_present": true,
+    "current_supervisor_mode": "FREE_ONLY",
     "together_general_inference_or_fallback": "FORBIDDEN",
-    "one_shot_approx_08b_finetune_authorized": true,
+    "together_paid_training_for_this_supervisor": "FORBIDDEN_BEFORE_CREDENTIAL_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION",
     "job_created_by_this_organ": false,
     "one_shot_consumed_by_this_organ": false,
-    "launch_status": "NOT_READY_NOT_STARTED",
-    "remaining_gates": [
-      "owner-start exact authorized Vercel Sandbox combined EntityOS/HCU execution",
+    "paid_lane_status": "QUARANTINED_ZERO_EXECUTION_CREDIT",
+    "current_allowed_training_work": "ZERO_COST_LOCAL_APPROX_08B_JSPACE_GWT_WORK_ONLY_AFTER_REQUIRED_FREE_EXECUTABLE_EVIDENCE",
+    "remaining_free_only_gates": [
+      "actually start exact-source authorized FREE isolated Vercel EntityOS/HCU execution",
       "bind actual Entry route + engine admission/load + inference + GRID10 identities into real J-Space training traces",
       "obtain causal lesion/shuffle/rescue evidence on exact runtime traces",
-      "freeze exact intended ~0.8B base checkpoint/tokenizer/runtime identity and pre-training evaluation",
-      "Together supported-model and price preflight through transient secret-safe runtime ingress",
-      "only then create the single authorized full fine-tuning job"
+      "only after executable evidence bind a zero-cost local ~0.8B checkpoint/tokenizer/runtime/build and evaluate it locally"
     ]
   },
-  "next_exact_discriminator": "owner-authorized transient POST to the retained exact Vercel controller, followed by exact private-source identity proof and combined Typed Entry -> HCU route -> verified engine load -> inference -> GRID10 -> J-Space training-trace execution",
-  "evidence_boundary": "SOURCE_AND_SYNTHETIC_MECHANISM_DELTA_ONLY. No source/component result, READY controller, dataset compiler, or completed future training job implies EntityOS/HCU runtime or whole-product PASS."
+  "next_exact_discriminator": "obtain a callable authorized FREE start path for the retained exact Vercel controller, then bind current Research main SHA/tree plus current PR1263 SHA/tree and execute Typed Entry -> HCU route -> verified engine load -> inference -> GRID10 -> J-Space training-trace regressions",
+  "evidence_boundary": "SOURCE_AND_SYNTHETIC_MECHANISM_DELTA_PLUS_LIVE_CONTROLLER_INSPECTION_ONLY. READY controller, source/component evidence, dataset generation or owner paid-training provenance do not imply EntityOS/HCU runtime, model-runtime, training or whole-product PASS."
 }

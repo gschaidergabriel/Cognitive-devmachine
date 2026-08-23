@@ -1,0 +1,89 @@
+{
+  "schema": "CLAYVERSE_GO_PYTHON_LOCK_GENERATOR_BOOTSTRAP_FUSION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "authority": {
+    "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+    "canonical_workspace": "the artefact/",
+    "durable_state": "UnifiedDB",
+    "effect_authority": "EffectGate+EffectJournal",
+    "entityos_role": "internal_optional_execution_security_runtime_substrate"
+  },
+  "source_identity": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "gpt56sol/go-clayverse-python-lock-bootstrap-fusion-20260823-1657",
+    "branch_base_main_sha": "14744411b7c7f4bdeaac647168a7d5e9c1fd4569",
+    "main_observed_after_writes": "468a6dcad44b32cd640711a3df307d21f1978b53",
+    "branch_head_before_receipt": "2a5d2dc1b108d7efb1ebe3a99f94ffd3c5a10201",
+    "main_delta_after_branch_cut": 9,
+    "overlap_assessment": "recent main commits inspected as Vercel-frontier/README and EntityOS-deployment work; branch compare exposes only the three intended Python lock-generator paths; re-adjudicate immediately before merge"
+  },
+  "observed_gap": {
+    "main_workflow": "the canonical Python lock generator installed pip-tools from the network without a source-locked bootstrap, did not explicitly checkout pull_request.head.sha, and compared two generated locks under distinct output paths",
+    "product_dockerfile": "product dependencies still install from version-pinned requirements.txt without --require-hashes",
+    "classification": "SUPPLY_CHAIN_ACCEPTANCE_GAP"
+  },
+  "delta": [
+    "bind workflow checkout and runtime assertion to exact pull_request.head.sha",
+    "cross-bind Dockerfile first FROM image identity to SOURCE_LOCK base_image",
+    "source-lock pip-tools 7.5.3 plus its complete Python-3.13 bootstrap wheel closure",
+    "download bootstrap wheels under --only-binary=:all: --require-hashes and verify exact filenames/SHA-256",
+    "install the generator bootstrap offline with --no-index and --require-hashes",
+    "assert exact pip 26.1.2 and pip-tools 7.5.3 after bootstrap",
+    "compile twice to one stable output path before byte comparison",
+    "record generator environment, bootstrap-wheel and resolved wheelhouse identities",
+    "add focused source regressions and keep product requirements external to the workflow"
+  ],
+  "exact_branch_blobs": {
+    ".github/workflows/clayverse-python-lock-generator.yml": "efce045bd7ac13163b2ee08915fbca663e5266c6",
+    "the artefact/SOURCE_LOCK.json": "5f68dbd63cf5a134ed7fd90fb88d213e33515804",
+    "the artefact/tests/test_python_lock_generator_source_binding.py": "8eb74e8a72e81c67a06591d8e7ceb019ad5a799d"
+  },
+  "external_primary_metadata_review": {
+    "source": "official PyPI project/file metadata",
+    "pip_tools_7_5_3_python_313_support": "SUPPORTED_BY_PUBLISHED_REQUIRES_PYTHON_AND_DEPENDENCY_METADATA",
+    "wheel_hashes": "MATCHED_SOURCE_LOCK_VALUES_FOR_PIP_TOOLS_AND_BOOTSTRAP_SET",
+    "note": "metadata verification supports source locking; it is not an executed dependency-resolution or product-runtime PASS"
+  },
+  "bounded_execution_evidence": {
+    "environment": "isolated ChatGPT Linux component environment, Python 3.13.5, no Docker daemon",
+    "py_compile": "PASS",
+    "focused_source_regressions": "7/7 PASS",
+    "focused_runtime_scope": "source/mechanism slice only",
+    "network_resolution_attempt": "BLOCKED_DNS_PYPI_NAME_RESOLUTION",
+    "network_failure_class": "EXECUTION_NETWORK_ADMISSION_FAILURE_NOT_DEPENDENCY_TEST_FAILURE",
+    "exact_authorized_whole_repo_sandbox": "NOT_EXECUTED",
+    "oci_build": "NOT_EXECUTED",
+    "product_runtime_credit": 0
+  },
+  "promotion_boundary": {
+    "requirements_lock_materialized": false,
+    "dockerfile_switched_to_require_hashes": false,
+    "reason": "do not fabricate or promote a product dependency lock until the exact source-bound generator executes reproducibly on an authorized isolated network-capable surface"
+  },
+  "coordination": {
+    "donor_pr": 622,
+    "donor_status": "STALE_DIVERGED_DONOR_ONLY",
+    "donor_observed_behind_main_commits": 216,
+    "new_path": "fresh-current ClayVerse fusion; no stale Mini Entity/VPS authority imported",
+    "unusual_experiment": {
+      "count_local": 0,
+      "macrocycle_id": null,
+      "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID"
+    }
+  },
+  "safety": {
+    "free_only": true,
+    "together_used": false,
+    "vps_test_execution": false,
+    "self_hosted_test_execution": false,
+    "production_host_test_execution": false,
+    "paid_or_final_training": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "next_exact_gate": "owner-start the retained authorized Vercel one-shot with a scoped read-only GitHub source credential; inside the disposable sandbox bind exact current source, run full regressions and the hash-locked generator, independently reproduce the resulting requirements.lock, then and only then commit the lock and switch the product Dockerfile to --require-hashes before exact OCI build/startup and downstream ClayVerse acceptance"
+}

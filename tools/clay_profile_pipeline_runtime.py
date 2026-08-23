@@ -281,9 +281,6 @@ class ProfilePipelineRuntime(clay.Runtime):
                 str(row[1]) for row in db.execute("PRAGMA table_info(eos_pipeline_state)").fetchall()
             } if eos_preexisting else set()
 
-            # A table shell is not native authority; the singleton row is. If no native
-            # singleton exists, a nonzero legacy generation requires an explicit,
-            # provenance-bound migration rather than a silent reset or max().
             if not native_row_preexisting and "generation" in eos_columns:
                 legacy_row = db.execute(
                     "SELECT generation FROM eos_pipeline_state WHERE singleton=1"
@@ -315,9 +312,6 @@ class ProfilePipelineRuntime(clay.Runtime):
                 (now, now),
             )
 
-            # eos_pipeline_state is a continuity projection only. If an old physical
-            # generation column is present alongside native authority, drop it without
-            # reading it into canonical state.
             if eos_preexisting and "generation" in eos_columns:
                 db.execute(
                     """CREATE TABLE eos_pipeline_state_v2(
@@ -347,14 +341,41 @@ class ProfilePipelineRuntime(clay.Runtime):
                          updated_at REAL NOT NULL DEFAULT 0)"""
                 )
             db.execute("INSERT OR IGNORE INTO eos_pipeline_state(singleton) VALUES(1)")
-            db.execute(
-                """CREATE TABLE IF NOT EXISTS eos_pipeline_consumed(
-                     source_kind TEXT NOT NULL,
-                     source_id TEXT NOT NULL,
-                     output_id TEXT NOT NULL,
-                     consumed_at REAL NOT NULL,
-                     PRIMARY KEY(source_kind,source_id))"""
-            )
+
+            consumed_preexisting = db.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' AND name='eos_pipeline_consumed'"
+            ).fetchone() is not None
+            consumed_columns = {
+                str(row[1]) for row in db.execute("PRAGMA table_info(eos_pipeline_consumed)").fetchall()
+            } if consumed_preexisting else set()
+            if consumed_preexisting and "source_namespace" not in consumed_columns:
+                db.execute(
+                    """CREATE TABLE eos_pipeline_consumed_v2(
+                         source_namespace TEXT NOT NULL,
+                         source_kind TEXT NOT NULL,
+                         source_id TEXT NOT NULL,
+                         output_id TEXT NOT NULL,
+                         consumed_at REAL NOT NULL,
+                         PRIMARY KEY(source_namespace,source_kind,source_id))"""
+                )
+                db.execute(
+                    """INSERT INTO eos_pipeline_consumed_v2(
+                           source_namespace,source_kind,source_id,output_id,consumed_at)
+                       SELECT 'kind:' || source_kind,source_kind,source_id,output_id,consumed_at
+                       FROM eos_pipeline_consumed"""
+                )
+                db.execute("DROP TABLE eos_pipeline_consumed")
+                db.execute("ALTER TABLE eos_pipeline_consumed_v2 RENAME TO eos_pipeline_consumed")
+            else:
+                db.execute(
+                    """CREATE TABLE IF NOT EXISTS eos_pipeline_consumed(
+                         source_namespace TEXT NOT NULL,
+                         source_kind TEXT NOT NULL,
+                         source_id TEXT NOT NULL,
+                         output_id TEXT NOT NULL,
+                         consumed_at REAL NOT NULL,
+                         PRIMARY KEY(source_namespace,source_kind,source_id))"""
+                )
             db.execute(
                 """CREATE TABLE IF NOT EXISTS eos_pipeline_outputs(
                      output_id TEXT PRIMARY KEY,
@@ -434,11 +455,14 @@ class ProfilePipelineRuntime(clay.Runtime):
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
-    def _already_consumed(self, entity_db: str, kind: str, source_id: Any) -> bool:
+    def _already_consumed(
+        self, entity_db: str, source_namespace: str, kind: str, source_id: Any
+    ) -> bool:
         with self._read_only_db(entity_db) as db:
             return db.execute(
-                "SELECT 1 FROM eos_pipeline_consumed WHERE source_kind=? AND source_id=?",
-                (kind, str(source_id)),
+                """SELECT 1 FROM eos_pipeline_consumed
+                   WHERE source_namespace=? AND source_kind=? AND source_id=?""",
+                (source_namespace, kind, str(source_id)),
             ).fetchone() is not None
 
     def _query(self, db_path: str, sql: str) -> list[dict[str, Any]]:
@@ -476,6 +500,7 @@ class ProfilePipelineRuntime(clay.Runtime):
 
         for spec in profile.get("sources", []):
             kind = str(spec["kind"])
+            source_namespace = str(spec.get("source_namespace") or f"kind:{kind}")
             adapter = str(spec["adapter"])
             try:
                 rows: list[dict[str, Any]] = []
@@ -488,9 +513,17 @@ class ProfilePipelineRuntime(clay.Runtime):
                         source_id = row.get(id_field)
                         if source_id is None:
                             continue
-                        if not self._already_consumed(entity_db, kind, source_id):
+                        if not self._already_consumed(
+                            entity_db, source_namespace, kind, source_id
+                        ):
                             rows.append(row)
-                            consume.append({"kind": kind, "id": str(source_id)})
+                            consume.append(
+                                {
+                                    "namespace": source_namespace,
+                                    "kind": kind,
+                                    "id": str(source_id),
+                                }
+                            )
                     source_count += len(rows)
                 elif adapter == "json_snapshot":
                     path = self._resolve(str(spec["path"]))
@@ -789,7 +822,6 @@ class ProfilePipelineRuntime(clay.Runtime):
 
     @staticmethod
     def _iter_persisted_string_leaves(value: Any):
-        """Yield persisted string values recursively; object keys are policy-neutral."""
         stack = [value]
         while stack:
             current = stack.pop()
@@ -1114,8 +1146,10 @@ class ProfilePipelineRuntime(clay.Runtime):
 
             for item in collected["consume"]:
                 db.execute(
-                    "INSERT INTO eos_pipeline_consumed(source_kind,source_id,output_id,consumed_at) VALUES(?,?,?,?)",
-                    (item["kind"], item["id"], output_id, now),
+                    """INSERT INTO eos_pipeline_consumed(
+                           source_namespace,source_kind,source_id,output_id,consumed_at)
+                       VALUES(?,?,?,?,?)""",
+                    (item["namespace"], item["kind"], item["id"], output_id, now),
                 )
             db.execute(
                 "INSERT INTO eos_pipeline_outputs VALUES(?,?,?,?,?,?,?,?,?)",

@@ -60,6 +60,8 @@ class ClaudeCodeInference:
         env.setdefault("PATH", "/usr/local/bin:/usr/bin:/bin")
         env["DISABLE_AUTOUPDATER"] = "1"
         env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] = "1"
+        env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
+        env["CLAUDE_CODE_DISABLE_CLAUDE_MDS"] = "1"
         return env
 
     def available(self) -> bool:

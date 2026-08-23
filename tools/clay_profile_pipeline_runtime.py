@@ -175,6 +175,21 @@ class ProfilePipelineRuntime(clay.Runtime):
         out["schema"] = "clay-pipeline-profile/v2"
         return out
 
+    @staticmethod
+    def _source_namespace(spec: Mapping[str, Any]) -> str:
+        explicit = str(spec.get("source_namespace", "")).strip()
+        if explicit:
+            return explicit
+        stable_descriptor = {
+            "kind": spec.get("kind"),
+            "adapter": spec.get("adapter"),
+            "db": spec.get("db"),
+            "query": spec.get("query"),
+            "path": spec.get("path"),
+            "id_field": spec.get("id_field"),
+        }
+        return "derived:" + _sha256_text(_canonical_json(stable_descriptor))
+
     def import_profile(
         self,
         entity_db: str,
@@ -315,12 +330,18 @@ class ProfilePipelineRuntime(clay.Runtime):
                 db.execute("INSERT OR IGNORE INTO eos_pipeline_state(singleton) VALUES(1)")
                 db.execute(
                     """CREATE TABLE IF NOT EXISTS eos_pipeline_consumed(
+                         source_namespace TEXT NOT NULL,
                          source_kind TEXT NOT NULL,
                          source_id TEXT NOT NULL,
                          output_id TEXT NOT NULL,
                          consumed_at REAL NOT NULL,
-                         PRIMARY KEY(source_kind,source_id))"""
+                         PRIMARY KEY(source_namespace,source_kind,source_id))"""
                 )
+                consumed_columns = {
+                    str(row[1]) for row in db.execute("PRAGMA table_info(eos_pipeline_consumed)")
+                }
+                if "source_namespace" not in consumed_columns:
+                    raise PipelineFault("CONSUMED_SOURCE_NAMESPACE_MIGRATION_REQUIRED")
                 db.execute(
                     """CREATE TABLE IF NOT EXISTS eos_pipeline_outputs(
                          output_id TEXT PRIMARY KEY,
@@ -395,11 +416,17 @@ class ProfilePipelineRuntime(clay.Runtime):
         except Exception as exc:
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
-    def _already_consumed(self, entity_db: str, kind: str, source_id: Any) -> bool:
+    def _already_consumed(
+        self,
+        entity_db: str,
+        source_namespace: str,
+        kind: str,
+        source_id: Any,
+    ) -> bool:
         with self._read_only_db(entity_db) as db:
             return db.execute(
-                "SELECT 1 FROM eos_pipeline_consumed WHERE source_kind=? AND source_id=?",
-                (kind, str(source_id)),
+                "SELECT 1 FROM eos_pipeline_consumed WHERE source_namespace=? AND source_kind=? AND source_id=?",
+                (source_namespace, kind, str(source_id)),
             ).fetchone() is not None
 
     def _query(self, db_path: str, sql: str) -> list[dict[str, Any]]:
@@ -437,6 +464,7 @@ class ProfilePipelineRuntime(clay.Runtime):
 
         for spec in profile.get("sources", []):
             kind = str(spec["kind"])
+            source_namespace = self._source_namespace(spec)
             adapter = str(spec["adapter"])
             try:
                 rows: list[dict[str, Any]] = []
@@ -449,9 +477,17 @@ class ProfilePipelineRuntime(clay.Runtime):
                         source_id = row.get(id_field)
                         if source_id is None:
                             continue
-                        if not self._already_consumed(entity_db, kind, source_id):
+                        if not self._already_consumed(
+                            entity_db, source_namespace, kind, source_id
+                        ):
                             rows.append(row)
-                            consume.append({"kind": kind, "id": str(source_id)})
+                            consume.append(
+                                {
+                                    "namespace": source_namespace,
+                                    "kind": kind,
+                                    "id": str(source_id),
+                                }
+                            )
                     source_count += len(rows)
                 elif adapter == "json_snapshot":
                     path = self._resolve(str(spec["path"]))
@@ -484,6 +520,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                     "ok": True,
                     "rows": rows,
                     "value": value,
+                    "source_namespace": source_namespace,
                     "evidence_prefix": spec.get("evidence_prefix", ""),
                     "required_for_quiet": bool(spec.get("required_for_quiet", False)),
                 }
@@ -493,6 +530,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                     "ok": False,
                     "rows": [],
                     "value": None,
+                    "source_namespace": source_namespace,
                     "error_kind": type(exc).__name__,
                     "error": str(exc),
                     "evidence_prefix": spec.get("evidence_prefix", ""),
@@ -1065,8 +1103,16 @@ class ProfilePipelineRuntime(clay.Runtime):
 
             for item in collected["consume"]:
                 db.execute(
-                    "INSERT INTO eos_pipeline_consumed(source_kind,source_id,output_id,consumed_at) VALUES(?,?,?,?)",
-                    (item["kind"], item["id"], output_id, now),
+                    """INSERT INTO eos_pipeline_consumed(
+                           source_namespace,source_kind,source_id,output_id,consumed_at)
+                       VALUES(?,?,?,?,?)""",
+                    (
+                        item["namespace"],
+                        item["kind"],
+                        item["id"],
+                        output_id,
+                        now,
+                    ),
                 )
             db.execute(
                 "INSERT INTO eos_pipeline_outputs VALUES(?,?,?,?,?,?,?,?,?)",

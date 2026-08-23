@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "4ad0791f5422aadf236f5647062986771642c121",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; USER_MESSAGE_TIMESTAMP_AVAILABLE_ONLY_AT_MINUTE_PRECISION_2026-08-24T03:51+07:00",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "81958b994202e92f5fc76ad93d2e63ea100c950a",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "b6fcb5e26b66f30951a308caf6f23df8192d4040",
+    "executor_exact_bound_donor_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "executor_source_state": "SOURCE_REBOUND_READY_SOURCE_ONLY"
+  },
+  "execution_gate": {
+    "surface": "VERCEL_HOBBY_INCLUDED_TIER_ONLY",
+    "team_plan_observed": "hobby",
+    "project": "dr-unterweger",
+    "exact_executor_head_status": "FAILURE_BUILD_RATE_LIMIT_UPGRADE_PATH",
+    "ready_exact_executor_head_observed": false,
+    "sandbox_route_invoked_by_this_organ": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "classification": "INFRASTRUCTURE_QUOTA_BLOCK_NOT_PRODUCT_LOGIC_FAILURE"
+  },
+  "finding": {
+    "classification": "JSPACE_GWT_SELECTOR_PREIMAGE_REPLAY_GAP_SOURCE_ONLY",
+    "observed": [
+      "select_gwt computes gwt_selection_sha256 from selector schema, canonicalization schema, max_slots, broadcast_threshold, the ordered competition set, winner_ids, and broadcast_gate.",
+      "JSpaceGWTTransitionTrace persists gwt_selection_sha256, the competition set, winner ids and broadcast gate, but does not persist max_slots or broadcast_threshold and does not carry another exact selector-preimage authority from which those values can be recovered.",
+      "validate_transition_trace currently validates the selection digest only as lowercase SHA-256 text, structurally validates competition ordering/selected-prefix/winner ids, checks broadcast_gate only for Boolean type, and finally authenticates the outer transition-trace digest.",
+      "The current deterministic validator fixture constructs a nominally valid transition trace with an arbitrary gwt_selection_sha256 of 64 repeated '7' characters, rehashes only the outer trace, and expects validate_transition_trace to accept it.",
+      "The current donor head 81958b99 independently adds training-trace laundering regressions but does not change this selector-preimage omission in jspace_gwt_prototype_v1.py."
+    ],
+    "hypothesis": "A self-consistently rehashed transition trace can carry a syntactically valid but semantically unproven gwt_selection_sha256 and broadcast decision because the validator lacks the selector parameters required to reconstruct the selection preimage.",
+    "counterhypothesis": "The selector digest may be intended as informational provenance only, with the outer transition digest plus structural competition checks sufficient for the current trace contract.",
+    "counterhypothesis_assessment": "WEAK: validate_transition_trace explicitly states that a matching hash proves identity only and that self-contained semantic invariants should be rechecked. The producer defines gwt_selection_sha256 as a deterministic selector identity, so accepting an unreconstructable arbitrary selector digest weakens that stated evidence boundary even if the winner prefix remains structurally plausible.",
+    "cheapest_high_information_discriminator": "Ordinary deterministic regression, not an unusual experiment: construct a producer-valid trace, alter only selector identity/threshold semantics while preserving a self-consistent outer trace digest, and require rejection after adding the missing selector-preimage fields or an exact admitted selector-material reference.",
+    "recommended_minimal_repair": [
+      "Promote the transition trace contract with selector parameters sufficient to reconstruct the deterministic selection preimage, at minimum max_slots and broadcast_threshold, or carry an exact admitted selector-material record whose canonical bytes are hash-bound.",
+      "Recompute the selector material under RFC8785/JCS and require its SHA-256 to equal gwt_selection_sha256.",
+      "Require selected winners to equal deterministic rank truncation under max_slots and require gwt_broadcast_gate to equal top_score >= broadcast_threshold.",
+      "Add fail-closed regressions for arbitrary selection digest, altered max_slots, altered broadcast_threshold, and altered gate with a re-signed outer trace.",
+      "Preserve Global J-Space output as candidate/measurement only; this repair must not create truth, state, model-runtime or effect authority."
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "NO_RUNTIME_PROMOTION: exact retained executor head remains blocked by the Vercel Hobby build-rate-limit/upgrade path. FREE_ONLY correctly forbids upgrade or paid fallback; no duplicate executor was created.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the retained executor is still exact-source bound to donor snapshot 511d5689 across its 17-blob closure while the donor lane has moved to 81958b99. Mutating/rebinding the executor during a quota-blocked runtime gate would discard a coherent exact-source discriminator before it has executed; preserve the single causal lane and rebind only as one coherent successor after the current runtime gate or a stronger source-critical blocker requires it.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_RESEARCH: identified and bounded a selector-preimage replay gap that prevents gwt_selection_sha256 from being independently reconstructed from the persisted transition trace; specified the deterministic successor repair and falsifier without consuming an unusual experiment."
+  },
+  "evidence_boundary": {
+    "source_review_only": true,
+    "runtime_executed_for_this_finding": false,
+    "unusual_experiment_executed": false,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Use an append-only exact-identity receipt for this source finding while canonical main and the retained donor lane are moving rapidly; do not overwrite a large current-facing README from a partial read or destabilize the currently coherent executor source snapshot."
+  },
+  "next_exact_gate": "First preserve the current FREE_ONLY executor discriminator: require a naturally available included-tier Vercel preview whose immutable Git SHA exactly equals the then-current retained executor head, then invoke only the fixed hash-bound route and require source verification, cost gate, exact regression-result fence, secret fence, exit 0 and cleanup with component-scoped credit only. In the retained donor lane, close the GWT selector-preimage replay gap with deterministic successor-schema/source tests, then rebind that successor into the same executor lane as one exact source closure before granting any J-Space training-readiness promotion. Separately, require real zero-cost local approximately-0.8B loader/model-executor I/O bound to verified loader consumption and canonical MiniUnifiedDB atomic ModelExecution before J-Space model-runtime credit."
+}

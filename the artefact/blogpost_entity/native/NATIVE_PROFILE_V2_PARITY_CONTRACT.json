@@ -1,5 +1,5 @@
 {
-  "schema": "mini-entity-native-profile-v2-parity-contract/v4",
+  "schema": "mini-entity-native-profile-v2-parity-contract/v6",
   "canonical_profile_schema": "clay-pipeline-profile/v2",
   "canonical_pipeline": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
   "canonical_reference_runtime": "tools/clay_profile_pipeline_runtime.py",
@@ -11,7 +11,9 @@
     "pipeline_collect",
     "pipeline_compile",
     "pipeline_build_prompt",
+    "pipeline_cognitive_fabric_admit",
     "inference_generate",
+    "pipeline_cognitive_fabric_validate",
     "pipeline_gate",
     "pipeline_commit"
   ],
@@ -22,7 +24,9 @@
     "pipeline_collect",
     "pipeline_compile",
     "pipeline_build_prompt",
+    "pipeline_cognitive_fabric_admit",
     "inference_generate",
+    "pipeline_cognitive_fabric_validate",
     "pipeline_gate",
     "pipeline_commit"
   ],
@@ -44,68 +48,77 @@
       ],
       "responsibility": "Read exactly one active runtime profile from MiniUnifiedDB, bind the read to entity_db, and fail closed on persisted profile-integrity mismatch."
     },
+    "pipeline_cognitive_fabric_admit": {
+      "method": "_pipeline_cognitive_fabric_admit",
+      "required_method_body_tokens": [
+        "zero_workspace_capsule_digest",
+        "inference_packet_digest",
+        "entity_generation",
+        "causal_turn_id"
+      ],
+      "responsibility": "FETCH->EXECUTE admission only: bind a fresh ZERO_WORKSPACE_CAPSULE/v1 to a deterministic ZERO_INFERENCE_PACKET/v1 under current MiniUnifiedDB generation/turn/workspace identity. It may select admitted inference/context but must not claim a post-execution UCF runtime receipt."
+    },
     "inference_generate": {
       "method": "_inference_generate",
       "required_method_body_tokens": [
         "p[\"inference\"]",
         "UNKNOWN_INFERENCE_KIND"
       ],
-      "responsibility": "Dispatch the runtime-configured generic inference contract from the inference payload and fail closed on an unadmitted inference kind; no provider-specific alternate effect path."
+      "responsibility": "Execute only the inference contract admitted by the pre-inference Cognitive Fabric envelope; no provider-specific alternate effect path or raw profile/prompt bypass."
+    },
+    "pipeline_cognitive_fabric_validate": {
+      "method": "_pipeline_cognitive_fabric_validate",
+      "required_method_body_tokens": [
+        "cognitive_fabric_receipt_digest",
+        "inference_packet_digest",
+        "zero_workspace_capsule_digest",
+        "generated"
+      ],
+      "responsibility": "EXECUTE->WRITE_BACK validation only: after inference, build/validate the single UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 and strict Zero capsule/InferencePacket/UCF ancestry; stale, abstained, mismatched or unsupported evidence fails closed before pipeline_gate/commit."
     }
   },
   "reference_runtime_effect_surface": {
     "status": "FAIL_CLOSED_MISMATCH",
     "missing_current_effects": [
-      "pipeline_profile_read",
-      "inference_generate"
+      "pipeline_cognitive_fabric_admit",
+      "pipeline_cognitive_fabric_validate"
     ],
-    "stale_current_effects": [
-      "profile_load",
-      "provider_chat_json"
-    ],
+    "stale_current_effects": [],
     "missing_semantic_requirements": {
-      "pipeline_profile_read": [
-        "missing_method:_pipeline_profile_read"
+      "pipeline_cognitive_fabric_admit": [
+        "missing_method:_pipeline_cognitive_fabric_admit"
       ],
-      "inference_generate": [
-        "missing_method:_inference_generate"
+      "pipeline_cognitive_fabric_validate": [
+        "missing_method:_pipeline_cognitive_fabric_validate"
       ]
     },
-    "stale_legacy_methods": [
-      "_profile_load",
-      "_provider_chat_json"
-    ],
-    "promotion_requires": "The canonical reference runtime must expose the current effect names and implement their current state/payload responsibilities. Name-only aliases or shims do not establish parity. Missing current effects, missing required method-body semantics, retained legacy alternate methods, or stale legacy effects keep admission fail-closed."
+    "stale_legacy_methods": [],
+    "promotion_requires": "The retained reference runtime must implement both temporal Cognitive Fabric boundaries. A pre-inference runtime receipt, no-op handler, raw prompt/profile bypass, second fabric, or post-inference receipt omission keeps parity fail-closed."
   },
   "reference_runtime_fresh_main_fusion": {
-    "status": "NARROW_FRESH_MAIN_EXTRACTION_REQUIRED",
+    "status": "PROFILE_AND_GENERIC_INFERENCE_SOURCE_CONVERGED_UCF_TEMPORAL_HANDLERS_REQUIRED",
     "donor_policy": "Mechanisms may be extracted only onto freshly rebound current main. No stale donor branch is a whole-runtime promotion candidate.",
     "donors": [
       {
-        "pull_request": 727,
-        "role": "PREFERRED_MECHANISM_DONOR_ONLY",
-        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED",
-        "reusable_mechanisms": [
-          "db_resident_profile_read_with_integrity_check",
-          "generic_inference_generate",
-          "rfc6901_or_dotted_response_pointer_decoder",
-          "embedded_profile_secret_rejection",
-          "read_only_evidence_queries",
-          "local_exec_parent_environment_isolation"
+        "pull_request": 1215,
+        "role": "CURRENT_DB_PROFILE_AND_GENERIC_INFERENCE_DONOR",
+        "whole_branch_merge": "NOT_USED",
+        "reused_exact_blobs": [
+          "tools/clay_profile_pipeline_runtime.py@8ea8a2db0ac1068ae9221f0ab0426e7d8f7149a7",
+          "the artefact/blogpost_entity/test_blogpost_entity.py@7b7e6586e6a8056354df3d6313a7da66e1f5cef2",
+          "the artefact/blogpost_entity/presets/zero_blog.json@2f7f3f4a778a84d033ce742008d85d6384fa265f"
         ]
       },
       {
-        "pull_request": 728,
-        "role": "SECONDARY_MECHANISM_DONOR_ONLY",
-        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED",
-        "reusable_mechanisms": [
-          "db_resident_profile_shape",
-          "generic_inference_dispatch_shape"
+        "pull_request": 1152,
+        "role": "PRE_INFERENCE_CAPSULE_PACKET_ANCESTRY_DONOR_ONLY",
+        "whole_branch_merge": "FORBIDDEN_STALE_AUTHORITY_CONTEXT",
+        "reused_exact_blobs": [
+          "research_entity/global/j-space/implementations/zero_workspace_capsule_v1.py@5a6eb721bb82595914d8434d3f57dce032b6c3db",
+          "research_entity/global/j-space/implementations/zero_inference_packet_v1.py@2001ae22ea94c1b2550d7d4c7d160db953db2082",
+          "tools/validate_zero_ucf_capsule_chain_v1.py@3a3e7243d81c0472c5b3659ac9f43494281f9d7d"
         ],
-        "do_not_copy_verbatim": [
-          "local_exec subprocess without an explicit child env",
-          "any response-pointer decoder that does not satisfy shipped /choices/0/message/content semantics"
-        ]
+        "rejected_donor_assumption": "A UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 can be required as an input to inference. Current UCF v1 semantics make it post-execution evidence, so the canonical path now separates admission from validation."
       }
     ],
     "preservation_matrix": [
@@ -118,8 +131,12 @@
         "bound_source": "the artefact/blogpost_entity/check_structured_contract_sync.py"
       },
       {
-        "invariant": "effect_responsibility_semantics",
-        "bound_source": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json#required_reference_effect_semantics"
+        "invariant": "fetch_execute_writeback_ucf_temporal_order",
+        "bound_source": "the artefact/blogpost_entity/test_canonical_ucf_temporal_path.py"
+      },
+      {
+        "invariant": "zero_capsule_packet_strict_ancestry",
+        "bound_source": "tests/test_zero_ucf_capsule_chain_v1.py"
       },
       {
         "invariant": "rfc6901_response_pointer_semantics",
@@ -152,12 +169,14 @@
     ],
     "must_not_introduce": [
       "second_profile_state_authority",
+      "second_ucf_or_workspace_authority",
+      "pre_inference_post_execution_receipt_cycle",
       "external_profile_file_as_mandatory_runtime_state",
       "provider_or_application_identity_in_executable",
       "generic_host_shell_effect_path",
-      "study_or_presentation_side_path_required_for_reference_convergence"
+      "raw_profile_or_prompt_inference_bypass"
     ],
-    "promotion_requires": "Implement only the missing current responsibilities on freshly rebound current main, preserve every bound invariant, align the structured regression adapter to the three-argument DB-resident profile boundary, and obtain exact-source authorized isolated execution before reference/native parity promotion."
+    "promotion_requires": "Implement only the two missing temporal UCF responsibilities on this single retained runtime, preserve the preservation_matrix, and obtain exact-source authorized isolated execution before reference/native parity promotion."
   },
   "required_source_adapters_from_shipped_v2": [
     "json_snapshot",
@@ -215,15 +234,14 @@
     "blocker": "CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY",
     "runtime_receipt": null,
     "promotion_requires": [
-      "canonical_reference_runtime_effect_names_and_semantics_match_current_pipeline_before_reference-equivalent claims",
-      "fresh-main reference convergence preserves the reference_runtime_fresh_main_fusion preservation_matrix",
-      "all_required_contracts_implemented_on_one_native_path",
-      "exact_source_bound_build_of_candidate",
-      "shipped_v2_profile_executes_with_reference-equivalent_compile_and_gate_semantics",
-      "adversarial_hash_evidence_claim_leak_secret_and_atomicity_matrix_passes",
-      "count_where_sum_where_and_sources_sensors_probes_refs_are_executed_not_degraded_to_unknown",
-      "profile_source_and_probe_adapters_are_executed_not_replaced_by_mini_entity_events_only",
-      "guard_removed_only_in_same_exact_candidate_that_has_parity_evidence"
+      "reference runtime implements executable pipeline_cognitive_fabric_admit before inference and pipeline_cognitive_fabric_validate after inference",
+      "pre-inference admission binds exact fresh ZERO_WORKSPACE_CAPSULE/v1 and ZERO_INFERENCE_PACKET/v1 to current generation/causal turn/workspace",
+      "post-inference validation binds the executed candidate to UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 plus strict Zero/packet/UCF ancestry",
+      "no post-execution receipt is required or claimed before inference execution",
+      "fresh-main reference convergence preserves the preservation_matrix",
+      "all required profile-v2 compile/gate semantics remain on one native path",
+      "exact-source authorized isolated runtime execution",
+      "bundled-0.8B/J-Space/GWT/Claude-adapter claims remain zero until separately measured"
     ]
   },
   "known_rejected_partial_candidate": {

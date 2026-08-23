@@ -1,0 +1,57 @@
+{
+  "schema": "CLAYVERSE_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "75ebc129fe9ee19ea2863bb5447c7aa34fbd3d85",
+  "classification": "BOUNDED_SOURCE_MECHANISM_EVIDENCE",
+  "finding": {
+    "id": "SWARM_ADMISSION_CONTROLLER_PRESENCE_FALSE_GREEN",
+    "predecessor_assertion_blob": "24ef015abbecca59fa30f6e6b78f63dad68a495b",
+    "mechanism": "The predecessor ClayVerse swarm admission assertion returned status PASS when tools/run_go_zero_swarm.py existed without validating that controller. File presence could therefore turn the quarantine assertion green even for a stale or unreviewed controller.",
+    "risk": "A copied/renamed legacy Mini Entity controller could bypass the intended source-level quarantine signal and recreate product-authority drift before a real ClayVerse controller admission contract exists."
+  },
+  "delta": {
+    "assertion_path": "tools/assert_clayverse_swarm_admission.py",
+    "assertion_blob": "abb534145edbedf327d8ec5d6f8524b85bf2949c",
+    "test_path": "tests/test_assert_clayverse_swarm_admission.py",
+    "test_blob": "69bab78357e9cac18fbbe427c49ce166d7bbc927",
+    "rule": "CLAYVERSE_SWARM_ADMISSION_ASSERTION/v2 is quarantine-only. Any current-controller file fails closed with CURRENT_CONTROLLER_PRESENT_REQUIRES_SEPARATE_VALIDATION until a separately reviewed versioned controller validator explicitly replaces this contract.",
+    "provider_swarm_admitted": false
+  },
+  "bounded_execution": {
+    "environment": "isolated OpenAI component container",
+    "exact_product_blob_match": true,
+    "assertion_git_blob": "abb534145edbedf327d8ec5d6f8524b85bf2949c",
+    "test_git_blob": "69bab78357e9cac18fbbe427c49ce166d7bbc927",
+    "py_compile": "PASS",
+    "focused_unittest": "7/7 PASS",
+    "poison_cases": [
+      "legacy Mini Entity controller copied to tools/run_go_zero_swarm.py -> FAIL_CLOSED",
+      "arbitrary ClayVerse-named candidate at tools/run_go_zero_swarm.py -> FAIL_CLOSED",
+      "FREE_ONLY weakened -> FAIL_CLOSED",
+      "bootstrap product regressed to Mini Entity -> FAIL_CLOSED",
+      "fail-closed contract marker removed -> FAIL_CLOSED"
+    ]
+  },
+  "authority_and_safety": {
+    "persistent_entity": "Clay",
+    "product": "ClayVerse",
+    "unifieddb_authority_unchanged": true,
+    "effectgate_authority_unchanged": true,
+    "free_only_preserved": true,
+    "together_forbidden_preserved": true,
+    "vps_testing_forbidden_preserved": true,
+    "secret_lookup": "NOT_PERFORMED",
+    "provider_network": "NOT_PERFORMED",
+    "paid_or_model_training": "NOT_PERFORMED"
+  },
+  "evidence_boundary": {
+    "whole_clayverse_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "authorized_full_checkout_execution": "UNAVAILABLE_ON_CURRENT_CONNECTED_SANDBOX_SURFACE",
+    "unusual_experiment": "NOT_CONSUMED_NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE"
+  },
+  "next_gate": "Merge only as source-level fail-closed hardening after current-main compatibility review. A future provider swarm remains blocked until a real ClayVerse controller and a separately versioned deterministic controller admission validator exist and execute before secret lookup/network I/O."
+}

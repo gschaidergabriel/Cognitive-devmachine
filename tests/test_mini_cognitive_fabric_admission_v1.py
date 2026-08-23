@@ -36,6 +36,14 @@ def profile() -> dict:
     }
 
 
+def invocation() -> dict:
+    return {
+        "schema": admission.INVOCATION_SCHEMA, "expected_generation": 7,
+        "causal_turn_id": "turn-7", "task_text": "task",
+        "turn_binding_digest": h("turn-binding"),
+    }
+
+
 def resolve_active(_db, **kwargs):
     assert kwargs == {"entity_generation": 7}
     return binding()
@@ -67,7 +75,7 @@ def packet(_capsule, *, target_engine_class, jspace_mode, inference, system, use
 class AdmissionTests(unittest.TestCase):
     def call(self, **overrides):
         args = dict(
-            db=None, profile=profile(), previous={"generation": 7},
+            db=None, profile=profile(), invocation=invocation(), previous={"generation": 7},
             compiled={"canonical_state_hash": h("canonical"), "packet_hash": h("source-packet")},
             prompt={"system": "system", "user": "user"}, resolve_active_prepare=resolve_active,
             resolve_capability=resolve_capability, compile_workspace_capsule=capsule, compile_packet=packet,
@@ -92,6 +100,21 @@ class AdmissionTests(unittest.TestCase):
         bad = binding(); bad["task_sha256"] = h("wrong-task")
         with self.assertRaisesRegex(admission.AdmissionError, "ACTIVE_TASK_BINDING_MISMATCH"):
             self.call(resolve_active_prepare=lambda *_a, **_k: bad)
+
+    def test_invocation_generation_mismatch_fails_before_active_resolution(self):
+        inv = invocation(); inv["expected_generation"] = 6
+        called = {"active": False}
+        def no_active(*_a, **_k):
+            called["active"] = True
+            raise AssertionError("active resolver must not run")
+        with self.assertRaisesRegex(admission.AdmissionError, "INVOCATION_GENERATION_MISMATCH"):
+            self.call(invocation=inv, resolve_active_prepare=no_active)
+        self.assertFalse(called["active"])
+
+    def test_invocation_must_match_active_turn(self):
+        inv = invocation(); inv["causal_turn_id"] = "other-turn"
+        with self.assertRaisesRegex(admission.AdmissionError, "INVOCATION_ACTIVE_TURN_MISMATCH"):
+            self.call(invocation=inv)
 
     def test_capability_profile_snapshot_drift_fails_closed(self):
         bad = resolve_capability(profile()); bad["profile_hash"] = h("other-profile")

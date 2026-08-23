@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_GO_SOURCE_DELTA_RECEIPT",
+  "recorded_at_local": "2026-08-23T23:49:30+07:00",
+  "run_id": "go-20260823T2349p0700-gpt56sol-effective-authority-assertion",
+  "persistent_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "clean_branch_base": "cd52bbc1e707c44432be92a1b5037f4f8f9dd9bc",
+  "work_branch": "gpt56sol/entityos-hcu-effective-authority-assertion-20260823",
+  "draft_pr": 1381,
+  "source_delta": {
+    "file": "tools/assert_effective_program_authority.py",
+    "change": "compatibility wrapper now imports current program/stage/product/compute/schema constants from the sole EntityOS/HCU authority validator instead of re-emitting historical ClayVerse labels",
+    "regression_test": "tests/test_assert_effective_program_authority_entityos.py",
+    "second_authority_path_created": false
+  },
+  "parallel_fusion": {
+    "broader_manifest_validator_branch_proposed": false,
+    "reason": "parallel work had already migrated the manifest, main authority validator and stale EntityOS-optionality test to EntityOS/HCU on main; duplicate changes were intentionally not proposed",
+    "superseded_pr_1370_closed": true,
+    "retained_hcu_donor_pr": 1263
+  },
+  "unusual_experiment": {
+    "macrocycle_count": 1,
+    "already_consumed": "CAUSAL_ALIAS_MATRIX_V1",
+    "additional_unusual_experiment_run": false,
+    "result_summary": "11 distinct causal event digests collapsed to one legacy routing-output decision digest at the tested old HCU router blob, falsifying route-output digest as causal identity"
+  },
+  "execution_evidence": {
+    "direct_git_clone_attempt": {
+      "status": "EXECUTION_ADMISSION_BLOCKED",
+      "reason": "isolated container DNS could not resolve github.com",
+      "semantic_test_failure": false
+    },
+    "github_actions": [
+      {
+        "run_id": 32652849007,
+        "workflow": "Research Entity Verify",
+        "conclusion": "failure",
+        "job_id": 97227013743,
+        "visible_step_count": 0,
+        "classification": "RUNNER_OR_EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION"
+      },
+      {
+        "run_id": 32652849002,
+        "workflow": "Research Entity Identity Guard",
+        "conclusion": "failure",
+        "job_id": 97227013556,
+        "visible_step_count": 0,
+        "classification": "RUNNER_OR_EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION"
+      }
+    ],
+    "source_component_test_executed": false,
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "evidence_boundary": {
+    "source_candidate": true,
+    "source_delta_committed": true,
+    "exact_test_execution_observed": false,
+    "entityos_hcu_runtime_verified": false,
+    "whole_product_pass": false,
+    "vps_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_used": false
+  },
+  "next_discriminator": "obtain actually-started exact-source execution of PR1381 or its merged equivalent and verify the effective authority assertion emits ENTITYOS_HCU/EntityOS/HCU on both PASS and FAIL while the inherited safety/provenance validator remains green",
+  "migration_reuse_score": "EASIER_CROSS_MODE"
+}

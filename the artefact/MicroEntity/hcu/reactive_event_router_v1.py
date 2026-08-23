@@ -75,6 +75,7 @@ class RouteDecision:
     external_provider_dependency: bool
     hash_serialization_schema: str
     event_sha256: str
+    entry_admission_sha256: str | None
     router_policy_sha256: str
     resolved_engine_identity: str | None
     resolved_engine_class: str | None
@@ -302,6 +303,11 @@ def route_event(
 
     projection = zero_relevance >= 0.60 and bool(lanes)
     event_sha256 = _event_identity(event, admitted_entry_bindings)
+    entry_admission_sha256 = (
+        _sha256_text(event.get("entry_admission_sha256"), "ENTRY_ADMISSION_SHA256")
+        if event.get("entry_event_sha256") is not None
+        else None
+    )
     router_policy_sha256 = _sha256_canonical(ROUTER_POLICY, "ROUTER_POLICY")
     payload = {
         "schema": ROUTE_IDENTITY_SCHEMA,
@@ -326,6 +332,7 @@ def route_event(
         external_provider_dependency=False,
         hash_serialization_schema=HASH_SERIALIZATION_SCHEMA,
         event_sha256=event_sha256,
+        entry_admission_sha256=entry_admission_sha256,
         router_policy_sha256=router_policy_sha256,
         resolved_engine_identity=resolved_engine_identity,
         resolved_engine_class=resolved_engine_class,
@@ -336,7 +343,13 @@ def route_event(
 
 
 def assert_inference_echo(decision: RouteDecision, receipt: Mapping[str, Any]) -> None:
-    """Fail closed unless inference echoes the exact admitted event/route/engine tuple."""
+    """Fail closed unless inference echoes the exact admitted event/route/engine tuple.
+
+    For Typed Entry routes, the stable causal route identity intentionally excludes the
+    concrete admission identity so a transport replay does not redefine causal reality.
+    The inference receipt nevertheless echoes that admission identity, preventing a
+    correct inference receipt from being reused across two different admissions.
+    """
     if decision.status != "SELECTIVE_MODEL_ACTIVATION":
         raise ReactiveRoutingError("INFERENCE_ECHO_NOT_VALID_FOR_SCRIPT_ONLY_ROUTE")
     if not isinstance(receipt, Mapping):
@@ -344,6 +357,7 @@ def assert_inference_echo(decision: RouteDecision, receipt: Mapping[str, Any]) -
     expected = {
         "hash_serialization_schema": decision.hash_serialization_schema,
         "event_sha256": decision.event_sha256,
+        "entry_admission_sha256": decision.entry_admission_sha256,
         "decision_sha256": decision.decision_sha256,
         "engine_identity_sha256": decision.engine_identity_sha256,
         "resolved_engine_identity": decision.resolved_engine_identity,

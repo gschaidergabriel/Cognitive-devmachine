@@ -1,0 +1,81 @@
+{
+  "schema": "PACKAGE_ARTIFACT_RECEIPT/v1",
+  "classification": "PACKAGE_ARTIFACT_INTEGRITY_ONLY",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated component organ",
+  "package_path": "the artefact/MicroEntity",
+  "source_commit": "d7d561232494687d5e88009089e240a4b2cb9ef5",
+  "source_tree": "0941bdddb71a63b53caa85fabfbb4b645a088e42",
+  "manifest_git_blob_sha1": "1f592c019b0961b51d9827a7fa72a5110fc36bec",
+  "manifest_sha256": "b5320e616273168ba394d32a46e4ab228e313cd7a21f9202aa47c92ea66b881d",
+  "zip_size": 19256,
+  "zip_sha256": "da1e374f9bf55fbe0e59b160c447f79358de4f64d742fe76291dc90b159fc637",
+  "zip_git_blob_sha1": "12c2c53eeb72ea6075aa9dc09ca888341f008feb",
+  "known_truncated_git_blob_sha1": "e3eb5d33c70c2c1dc9b03d430b6114a5630d868b",
+  "known_truncated_size_bytes": 7515,
+  "archive_members_ordered": [
+    "CURRENT_PRODUCT_CONSOLIDATED.md",
+    "PACKAGE_MANIFEST.json",
+    "README.md",
+    "ZERO_LINK.md",
+    "hcu/README.md",
+    "hcu/HCU_ARCHITECTURE.md",
+    "hcu/topology.kvm4.json",
+    "hcu/FREE_LLM_FEED_CONTRACT.json",
+    "hcu/HCU_DATA_INDEX.json",
+    "hcu/capacity_guard_v1.py",
+    "hcu/test_capacity_guard_v1.py",
+    "hcu/receipts/2026-08-23_GO_HCU_CAPACITY_GUARD_GPT56SOL.json"
+  ],
+  "member_sha256": {
+    "CURRENT_PRODUCT_CONSOLIDATED.md": "cfbaaab72f5f447f7d25ac9e5caeb50f4060928f2c480f2010944935dce7ccd0",
+    "PACKAGE_MANIFEST.json": "b5320e616273168ba394d32a46e4ab228e313cd7a21f9202aa47c92ea66b881d",
+    "README.md": "ed27add41679cc82f7fb77e20f59b96f99edde6e2676c978394fdd8d77f8cc14",
+    "ZERO_LINK.md": "b0377c4f63e424e3753659d43a72e7833f0d953487598fd9bd899a07b70ebfaf",
+    "hcu/README.md": "ce7320d61bff11d6cc05c2fb9ab5766eee30c243faeaa11599efc080afb467ce",
+    "hcu/HCU_ARCHITECTURE.md": "7da6506413980953e374adfaa8242bac95662c2a89631a10a07edafdd60a138a",
+    "hcu/topology.kvm4.json": "72ecd145ee13c4259fb803b87d8764b4f2d25505a81b829b396502eac44553a3",
+    "hcu/FREE_LLM_FEED_CONTRACT.json": "26926a8cc0588496ee0015f6bb846b697cd0aa9e64424913a57cc0f2a3b9cd31",
+    "hcu/HCU_DATA_INDEX.json": "888ec0543a562c7a1874a5a3407c7b90d51adc156124dd86f0a27b8bf6d64d1b",
+    "hcu/capacity_guard_v1.py": "404ea02966a044b5241a59844b6280be617bd40a2a20a58715b53fecae22150b",
+    "hcu/test_capacity_guard_v1.py": "87e06d9c0eac362c94891fe97d43f98d49e6d6006bc8c81f090bc16c8228e5da",
+    "hcu/receipts/2026-08-23_GO_HCU_CAPACITY_GUARD_GPT56SOL.json": "442f1919076c1311c0b0dc3a53f1a9948b0f26c962ded8d974f128ea6a805300"
+  },
+  "member_git_blobs": {
+    "CURRENT_PRODUCT_CONSOLIDATED.md": "9e859009571c3d51ff904413cd51e6da491ec7c5",
+    "PACKAGE_MANIFEST.json": "1f592c019b0961b51d9827a7fa72a5110fc36bec",
+    "README.md": "0848cdbc48c9d2b650ce6fe9e0bdf23abfb16165",
+    "ZERO_LINK.md": "cb81c858aeb9f36c51ca5230e61f93c14efab24c",
+    "hcu/README.md": "622d9f89c57b0eeb5b8023a876cd844cf11babd3",
+    "hcu/HCU_ARCHITECTURE.md": "c57317279954668c9096d82f5f19f0fa35a6336c",
+    "hcu/topology.kvm4.json": "bf1e1929b03c616aee968e4252acad222dbf9e3c",
+    "hcu/FREE_LLM_FEED_CONTRACT.json": "1378769f6fd2eaa0f68739ec756e2d7bd4532215",
+    "hcu/HCU_DATA_INDEX.json": "5066fc8b001bbbe73a926723a196252a38fcd35f",
+    "hcu/capacity_guard_v1.py": "a17ebcc0717f4b186bdbdb11fd3ab4c94d7d81af",
+    "hcu/test_capacity_guard_v1.py": "f828126a207783028c1fba6250ebf2f90230cac3",
+    "hcu/receipts/2026-08-23_GO_HCU_CAPACITY_GUARD_GPT56SOL.json": "3c5b364bc50076799ba6434d4e740398c283e667"
+  },
+  "verification": {
+    "exact_member_bytes": "PASS",
+    "member_order": "PASS",
+    "zip_crc": "PASS",
+    "canonical_verifier_contract": "research_entity/continuity/tools/verify_microentity_package.py@d21d20eddc1ffec6302021b3ab07fe07dc6d2816",
+    "execution_surface": "isolated ChatGPT Linux component container"
+  },
+  "adversarial_regression": {
+    "id": "CRC_VALID_MEMBER_IDENTITY_POISON",
+    "classification": "DETERMINISTIC_PACKAGE_INTEGRITY_REGRESSION_NOT_NEW_MACROCYCLE_EXPERIMENT",
+    "observed": "CRC/order passed while exact source-byte identity rejected poisoned ZERO_LINK.md",
+    "poison_zip_sha256": "009bd5fd3929a6d8f9901c269deda1f3b605b080756511f30e7a1e7d62ebf78b"
+  },
+  "unusual_experiment": {
+    "consumed_here": false,
+    "reason": "Current shared macrocycle receipt reports the unusual-experiment budget already consumed by parallel current-go work; this package poison was treated only as deterministic integrity regression."
+  },
+  "runtime_credit": 0,
+  "model_credit": 0,
+  "hcu_capacity_credit": 0,
+  "jspace_gwt_credit": 0,
+  "whole_mini_entity_credit": 0
+}

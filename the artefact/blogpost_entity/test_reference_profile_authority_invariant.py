@@ -130,6 +130,35 @@ def test_future_reference_read_effects_do_not_reenter_schema_or_migration_writes
             )
 
 
+def test_future_commit_snapshot_fence_rehashes_current_profile_bytes() -> None:
+    """Hash metadata alone cannot fence a mid-turn profile_json byte mutation.
+
+    Native MiniUnifiedDB defines profile integrity as SHA-256 over the persisted
+    profile_json text bytes. A converged reference commit therefore has to fetch the
+    current profile_json bytes and recompute their digest before accepting the snapshot;
+    comparing only the stored profile_sha256 column to the turn snapshot leaves a TOCTOU
+    gap when profile_json changes but stale hash metadata does not.
+    """
+    source = RUNTIME_PATH.read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    profile_read = _function(tree, "_pipeline_profile_read")
+    if profile_read is None:
+        return
+
+    commit = _function(tree, "_pipeline_commit")
+    assert commit is not None
+    commit_body = _body(source, commit)
+
+    assert "profile_json" in commit_body, (
+        "commit snapshot fence must fetch current persisted profile_json bytes, not only hash metadata"
+    )
+    assert "profile_sha256" in commit_body
+    assert "PROFILE_SNAPSHOT_STALE" in commit_body
+    assert "_sha256_text" in commit_body or "hashlib.sha256" in commit_body, (
+        "commit snapshot fence must recompute SHA-256 from current profile_json bytes"
+    )
+
+
 def test_parity_metadata_may_not_turn_green_while_profile_authority_is_parallel() -> None:
     """Prevent Goodhart: contract PARITY cannot coexist with a second profile table."""
     source = RUNTIME_PATH.read_text(encoding="utf-8")

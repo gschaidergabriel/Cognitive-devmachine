@@ -12,14 +12,18 @@ import json
 from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 
+try:
+    from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+except ImportError:
+    from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+
 SCHEMA = "HCU_REACTIVE_EVENT/v1"
-ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v3"
-ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v1"
-ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v1"
-# Exact implementation-scoped hash serialization profile. This is deliberately NOT a
-# claim of RFC 8785 JCS or heterogeneous Entry-Fabric canonicalization. Any future
-# cross-language profile must use a distinct versioned identity.
-HASH_SERIALIZATION_SCHEMA = "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1"
+ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v4"
+ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v2"
+ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v2"
+ENTRY_BINDING_SCHEMA = "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2"
+HASH_SERIALIZATION_SCHEMA = CANONICALIZATION_SCHEMA
+ENTRY_BINDING_FIELDS = frozenset({"schema", "canonicalization_schema", "event_sha256"})
 
 ADMITTED_INTERNAL_PROVIDER_ALIASES = {"hcu", "local", "xeno"}
 ADMITTED_INTERNAL_ENGINES = {
@@ -46,6 +50,7 @@ SCRIPT_STAGES = (
 ROUTER_POLICY = {
     "schema": ROUTER_POLICY_SCHEMA,
     "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
+    "entry_binding_schema": ENTRY_BINDING_SCHEMA,
     "scripts": SCRIPT_STAGES,
     "admitted_internal_provider_aliases": tuple(sorted(ADMITTED_INTERNAL_PROVIDER_ALIASES)),
     "admitted_internal_engines": tuple(sorted(ADMITTED_INTERNAL_ENGINES.items())),
@@ -105,14 +110,17 @@ class RouteDecision:
 
 
 def _canonical(value: Any) -> bytes:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
+    try:
+        return canonicalize(value)
+    except CanonicalizationError as exc:
+        raise ReactiveRoutingError(f"CANONICALIZATION_FAILED:{exc}") from exc
 
 
 def _sha256_canonical(value: Any, field: str) -> str:
     try:
         encoded = _canonical(value)
-    except (TypeError, ValueError) as exc:
-        raise ReactiveRoutingError(f"{field}:CANONICALIZATION_FAILED") from exc
+    except ReactiveRoutingError as exc:
+        raise ReactiveRoutingError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
     return hashlib.sha256(encoded).hexdigest()
 
 
@@ -168,6 +176,43 @@ def _requested_provider(event: Mapping[str, Any]) -> str | None:
     return _provider_alias(provider, "REQUESTED_INTERNAL_PROVIDER")
 
 
+def resolve_admitted_entry_binding(
+    admitted_entry_bindings: Mapping[str, Any] | None,
+    admission_sha256: str,
+    *,
+    expected_event_sha256: str | None = None,
+) -> str:
+    """Resolve a versioned admission->event binding from independent authority state.
+
+    A bare admission->digest mapping is intentionally no longer admitted: without the
+    canonicalization schema, historical CBOR/custom/Python-JSON identities could be
+    relabelled as the selected RFC8785/JCS identity after migration.
+    """
+    admission_sha256 = _sha256_text(admission_sha256, "ENTRY_ADMISSION_SHA256")
+    if not isinstance(admitted_entry_bindings, Mapping):
+        raise ReactiveRoutingError("ADMITTED_ENTRY_BINDING_REGISTRY_REQUIRED")
+    binding = admitted_entry_bindings.get(admission_sha256)
+    if binding is None:
+        raise ReactiveRoutingError("ENTRY_ADMISSION_NOT_ADMITTED")
+    if not isinstance(binding, Mapping):
+        raise ReactiveRoutingError("ENTRY_ADMISSION_BINDING_V2_REQUIRED")
+    unknown = sorted(set(binding) - ENTRY_BINDING_FIELDS)
+    if unknown:
+        raise ReactiveRoutingError("ENTRY_BINDING_UNKNOWN_FIELDS:" + ",".join(unknown))
+    if set(binding) != ENTRY_BINDING_FIELDS:
+        raise ReactiveRoutingError("ENTRY_BINDING_ALL_FIELDS_REQUIRED")
+    if binding.get("schema") != ENTRY_BINDING_SCHEMA:
+        raise ReactiveRoutingError("ENTRY_BINDING_SCHEMA_UNSUPPORTED")
+    if binding.get("canonicalization_schema") != HASH_SERIALIZATION_SCHEMA:
+        raise ReactiveRoutingError("ENTRY_BINDING_CANONICALIZATION_SCHEMA_UNSUPPORTED")
+    event_sha256 = _sha256_text(binding.get("event_sha256"), "ADMITTED_ENTRY_EVENT_SHA256")
+    if expected_event_sha256 is not None:
+        expected_event_sha256 = _sha256_text(expected_event_sha256, "ENTRY_EVENT_SHA256")
+        if event_sha256 != expected_event_sha256:
+            raise ReactiveRoutingError("ENTRY_EVENT_SHA256_MISMATCH")
+    return event_sha256
+
+
 def _resolve_internal_engine(
     admission: EngineAdmission | None,
     admitted_engine_artifacts: Mapping[str, Any] | None,
@@ -192,8 +237,6 @@ def _resolve_internal_engine(
         raise ReactiveRoutingError("ENGINE_ADMISSION_CLASS_MISMATCH")
     artifact_sha256 = _sha256_text(admission.engine_artifact_sha256, "ENGINE_ADMISSION_ARTIFACT_SHA256")
 
-    # The separate EngineAdmission chooses the engine; the positive artifact registry is
-    # an additional independent lock on the exact currently admitted bytes.
     if not isinstance(admitted_engine_artifacts, Mapping):
         raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_ARTIFACT_REGISTRY_REQUIRED")
     admitted_artifact_sha256 = admitted_engine_artifacts.get(identity)
@@ -224,35 +267,29 @@ def _event_identity(
     event: Mapping[str, Any],
     admitted_entry_bindings: Mapping[str, Any] | None,
 ) -> str:
-    """Resolve immutable causal event identity without trusting ingress claims.
-
-    Typed Entry projections carry separate replay-stable `entry_event_sha256` and
-    concrete `entry_admission_sha256`. For that path the router requires an independent
-    authority/control-plane binding of admission -> event identity. Transport identity,
-    permission/budget metadata and payload location therefore cannot redefine the causal
-    event, while a caller cannot simply self-assert an event digest.
-    """
+    """Resolve immutable causal event identity without trusting ingress claims."""
     has_entry_projection = any(
         event.get(field) is not None
-        for field in ("ingress_id", "entry_event_sha256", "entry_admission_sha256")
+        for field in (
+            "ingress_id",
+            "entry_event_sha256",
+            "entry_admission_sha256",
+            "entry_canonicalization_schema",
+        )
     )
     if has_entry_projection:
         _nonempty_text(event.get("ingress_id"), "INGRESS_ID")
         _nonempty_text(event.get("causal_id"), "CAUSAL_ID")
+        if event.get("entry_canonicalization_schema") != HASH_SERIALIZATION_SCHEMA:
+            raise ReactiveRoutingError("ENTRY_CANONICALIZATION_SCHEMA_UNSUPPORTED")
         event_sha256 = _sha256_text(event.get("entry_event_sha256"), "ENTRY_EVENT_SHA256")
         admission_sha256 = _sha256_text(event.get("entry_admission_sha256"), "ENTRY_ADMISSION_SHA256")
-        if not isinstance(admitted_entry_bindings, Mapping):
-            raise ReactiveRoutingError("ADMITTED_ENTRY_BINDING_REGISTRY_REQUIRED")
-        admitted_event_sha256 = admitted_entry_bindings.get(admission_sha256)
-        if admitted_event_sha256 is None:
-            raise ReactiveRoutingError("ENTRY_ADMISSION_NOT_ADMITTED")
-        admitted_event_sha256 = _sha256_text(admitted_event_sha256, "ADMITTED_ENTRY_EVENT_SHA256")
-        if event_sha256 != admitted_event_sha256:
-            raise ReactiveRoutingError("ENTRY_EVENT_SHA256_MISMATCH")
-        return event_sha256
+        return resolve_admitted_entry_binding(
+            admitted_entry_bindings,
+            admission_sha256,
+            expected_event_sha256=event_sha256,
+        )
 
-    # Provider request is routing metadata, not immutable causal event content. Engine
-    # authority fields are forbidden above and therefore never enter this legacy path.
     payload = dict(event)
     payload.pop("requested_internal_provider", None)
     return _sha256_canonical(
@@ -337,6 +374,7 @@ def route_event(
     payload = {
         "schema": ROUTE_IDENTITY_SCHEMA,
         "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
+        "entry_binding_schema": ENTRY_BINDING_SCHEMA if entry_admission_sha256 is not None else None,
         "event_sha256": event_sha256,
         "router_policy_sha256": router_policy_sha256,
         "engine_identity_sha256": engine_identity_sha256,
@@ -368,12 +406,7 @@ def route_event(
 
 
 def assert_inference_echo(decision: RouteDecision, receipt: Mapping[str, Any]) -> None:
-    """Fail closed unless inference echoes the exact admitted event/route/engine tuple.
-
-    For Typed Entry routes, stable causal route identity intentionally excludes the
-    concrete admission identity so a transport replay does not redefine causal reality.
-    The inference receipt nevertheless echoes that admission identity.
-    """
+    """Fail closed unless inference echoes the exact admitted event/route/engine tuple."""
     if decision.status != "SELECTIVE_MODEL_ACTIVATION":
         raise ReactiveRoutingError("INFERENCE_ECHO_NOT_VALID_FOR_SCRIPT_ONLY_ROUTE")
     if not isinstance(receipt, Mapping):

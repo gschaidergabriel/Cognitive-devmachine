@@ -65,28 +65,41 @@ class BindingTests(unittest.TestCase):
             "gate": {},
         }
         raw = canonical_json(self.profile)
+        self.profile_hash = hashlib.sha256(raw.encode()).hexdigest()
         conn = sqlite3.connect(self.db_path)
         conn.execute("CREATE TABLE entity_state(id INTEGER PRIMARY KEY,generation INTEGER,active_profile TEXT)")
         conn.execute("CREATE TABLE profiles(profile_id TEXT PRIMARY KEY,profile_json TEXT,profile_sha256 TEXT)")
         conn.execute("INSERT INTO entity_state VALUES(1,7,'p1')")
-        conn.execute("INSERT INTO profiles VALUES(?,?,?)", ("p1", raw, hashlib.sha256(raw.encode()).hexdigest()))
+        conn.execute("INSERT INTO profiles VALUES(?,?,?)", ("p1", raw, self.profile_hash))
         conn.commit()
         conn.close()
         self.runtime = FakeRuntime(self.db_path)
+        carried_profile = {
+            **self.profile,
+            "_runtime_profile_snapshot": {
+                "profile_id": "p1",
+                "profile_hash": self.profile_hash,
+            },
+        }
         self.payload = {
             "entity_db": str(self.db_path),
-            "profile": self.profile,
+            "profile": carried_profile,
             "data": {
                 "compiled": {"canonical_state_hash": "a" * 64, "packet_hash": "b" * 64},
                 "prompt": {"system": "s", "user": "{}"},
-                "invocation": {"expected_generation": 7, "causal_turn_id": "ct", "task_text": "t", "turn_binding_digest": "c" * 64},
+                "invocation": {
+                    "expected_generation": 7,
+                    "causal_turn_id": "ct",
+                    "task_text": "t",
+                    "turn_binding_digest": "c" * 64,
+                },
             },
         }
 
     def tearDown(self):
         self.tmp.cleanup()
 
-    def test_delegates_exact_active_profile_on_read_only_db(self):
+    def test_delegates_real_runtime_profile_snapshot_on_read_only_db(self):
         compositor = RecordingCompositor()
         out = binding.admit_profile_runtime_payload(
             self.runtime, self.payload, compositor_module=compositor
@@ -96,15 +109,68 @@ class BindingTests(unittest.TestCase):
         self.assertTrue(write_blocked)
         self.assertEqual(kwargs["entity_generation"], 7)
         self.assertEqual(kwargs["profile"], self.profile)
+        self.assertNotIn("_runtime_profile_snapshot", kwargs["profile"])
         self.assertEqual(kwargs["origin"], binding.BINDING_VERSION)
 
     def test_rejects_profile_substitution_before_compositor(self):
         compositor = RecordingCompositor()
         poisoned = dict(self.payload)
-        poisoned["profile"] = {**self.profile, "profile_id": "attacker"}
+        poisoned["profile"] = {**self.payload["profile"], "profile_id": "attacker"}
         with self.assertRaisesRegex(
             binding.ProfileRuntimeCognitiveFabricBindingError,
             "RUNTIME_PROFILE_NOT_ACTIVE_MINIUNIFIEDDB_PROFILE",
+        ):
+            binding.admit_profile_runtime_payload(
+                self.runtime, poisoned, compositor_module=compositor
+            )
+        self.assertEqual(compositor.calls, [])
+
+    def test_rejects_missing_runtime_snapshot(self):
+        compositor = RecordingCompositor()
+        poisoned = dict(self.payload)
+        poisoned["profile"] = dict(self.profile)
+        with self.assertRaisesRegex(
+            binding.ProfileRuntimeCognitiveFabricBindingError,
+            "RUNTIME_PROFILE_SNAPSHOT_REQUIRED",
+        ):
+            binding.admit_profile_runtime_payload(
+                self.runtime, poisoned, compositor_module=compositor
+            )
+        self.assertEqual(compositor.calls, [])
+
+    def test_rejects_forged_runtime_snapshot_hash(self):
+        compositor = RecordingCompositor()
+        poisoned = dict(self.payload)
+        poisoned["profile"] = {
+            **self.profile,
+            "_runtime_profile_snapshot": {
+                "profile_id": "p1",
+                "profile_hash": "f" * 64,
+            },
+        }
+        with self.assertRaisesRegex(
+            binding.ProfileRuntimeCognitiveFabricBindingError,
+            "RUNTIME_PROFILE_SNAPSHOT_HASH_MISMATCH",
+        ):
+            binding.admit_profile_runtime_payload(
+                self.runtime, poisoned, compositor_module=compositor
+            )
+        self.assertEqual(compositor.calls, [])
+
+    def test_rejects_runtime_snapshot_extra_authority_fields(self):
+        compositor = RecordingCompositor()
+        poisoned = dict(self.payload)
+        poisoned["profile"] = {
+            **self.profile,
+            "_runtime_profile_snapshot": {
+                "profile_id": "p1",
+                "profile_hash": self.profile_hash,
+                "jspace_mode": "FULL_LOCAL_LATENT",
+            },
+        }
+        with self.assertRaisesRegex(
+            binding.ProfileRuntimeCognitiveFabricBindingError,
+            "RUNTIME_PROFILE_SNAPSHOT_FIELDS_MISMATCH",
         ):
             binding.admit_profile_runtime_payload(
                 self.runtime, poisoned, compositor_module=compositor

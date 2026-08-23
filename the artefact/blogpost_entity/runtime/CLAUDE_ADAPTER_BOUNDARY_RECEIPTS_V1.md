@@ -1,6 +1,6 @@
 # Claude Code Adapter Boundary Receipts v1
 
-Status: source/mechanism contract for the persistent Generation-276 adapter red.
+Status: source/mechanism contract downstream of merged PR #1092 for the persistent Generation-276 adapter red.
 
 ## Purpose
 
@@ -8,7 +8,11 @@ The historical monolithic runtime assertion
 
 `test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated`
 
-has replicated red on the same shortened source family. A single boolean red cannot distinguish four materially different failure classes. This contract decomposes the next exact Ubuntu observation into four independently materialized receipts that MUST share one immutable run binding:
+replicated red on the same shortened source family. Merged PR #1092 already made the correct first repair: it split that one-bit assertion into four independently addressable pytest receipt nodes and removed two ambient-host dependencies by binding a test-local `HOME` and shell sentinel.
+
+This contract does not duplicate that split. It closes the next evidence seam: on a real exact Ubuntu run, the four observations must be materialized as machine-readable receipts that prove they came from the same immutable source/executor/Claude/adapter/environment boundary.
+
+Required materialized receipts:
 
 - `TOOLLESS_RECEIPT/v1`
 - `EPHEMERAL_RECEIPT/v1`
@@ -67,4 +71,4 @@ It does NOT establish:
 
 ## Next executable gate
 
-On the next intentional exact Ubuntu start, emit all four receipts from the same adapter invocation boundary and validate them with `validate_claude_adapter_boundary_receipts_v1.py`. If one receipt fails, retain the other three observations and localize the repair to the failing invariant rather than broad-patching the adapter.
+On the next intentional exact Ubuntu start, instrument the four #1092 pytest nodes to emit these receipts under one shared binding and validate them with `validate_claude_adapter_boundary_receipts_v1.py`. If one receipt fails, retain the other three observations and localize the repair to the failing invariant rather than broad-patching the adapter.

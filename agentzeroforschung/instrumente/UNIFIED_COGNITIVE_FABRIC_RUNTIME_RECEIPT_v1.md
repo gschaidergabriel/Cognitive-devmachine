@@ -148,7 +148,7 @@ Deterministic controls SHOULD cover:
 - dirty source presented for exact runtime credit -> reject;
 - state/effect commit after non-accept validation -> reject.
 
-One bounded unusual experiment family is defined for the creating `go` as `AUTHORITY_ALIAS_POISON_V1`: apply the above authority/observability poisons to one otherwise-valid synthetic receipt and require every poison to fail closed. Regressions after that are ordinary deterministic tests, not additional unusual experiments.
+`AUTHORITY_ALIAS_POISON_V1` is a deterministic adversarial regression family over those controls. For the `go` that created this source delta, no upstream atomic macrocycle lease/identifier was available to this organ, so the unusual-experiment classification is explicitly `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`. No macrocycle identifier is invented after the fact. The locally observed 8/8 fail-closed poison result remains mechanism evidence, not an unusual-experiment slot claim.
 
 ## Evidence class
 

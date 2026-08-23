@@ -1,19 +1,21 @@
 {
-  "schema_version": "8.61",
-  "latest_cycle": "go-20260824-entityos-hcu-free-only-control-reconciliation",
+  "schema_version": "8.62",
+  "latest_cycle": "go-20260824-entityos-hcu-bounded-free-sandbox-component-runtime",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "latest_repo_head_inspected_before_write": "296e71172b9e6ee658a0b20771259c9f9cd51bb1",
-  "material_finding": "A new repository owner directive authorizes one paid Together ~0.8B J-Space/GWT fine-tune, but this autonomous supervisor is explicitly FREE_ONLY with no paid fallback. The latest executor preflight records no Sandbox run, no Together job, runtime_credit=0, jspace_model_runtime_credit=0, training_credit=0, and execution blocked before the credential-bearing Vercel POST. Therefore the paid one-shot directive is quarantined for this supervisor and must not trigger key lookup, network I/O, job creation, spend, provider credit or acceptance credit.",
+  "latest_repo_head_inspected_before_write": "b5b6e72faea1fbd0056b6508f628c83f78d230e6",
+  "material_finding": "Vercel Hobby Sandbox is now admitted only as a bounded included-tier FREE isolated execution surface under explicit fail-closed cost conditions. Separately, the exact-current J-Space dataset family-split component executed 6/6 PASS twice in an isolated session container with source identity verified and no external provider credentials. This creates bounded execution-surface capability and component runtime credit only; it does not create whole HCU, J-Space model, training, EntityOS or canonical-semantics credit. Earlier Vercel capsule runs that raced stale cost authority remain quarantined with zero acceptance credit.",
   "current_frontier": {
     "retained_hcu_pr": 1263,
     "retained_hcu_pr_state": "OPEN_DRAFT_NOT_MERGED",
-    "sandbox_controller": "READY_SOURCE_PRESENT_BUT_NOT_EXECUTED",
-    "sandbox_run_observed": false,
+    "sandbox_execution_surface": "VERCEL_HOBBY_BOUNDED_INCLUDED_TIER_FREE_ADMITTED",
+    "remaining_sandbox_quota_directly_observed": false,
+    "jspace_family_split_component_runtime": "EXACT_CURRENT_6_OF_6_PASS_TWICE",
     "together_job_created": false,
-    "runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
     "jspace_model_runtime_credit": 0,
     "training_credit": 0
   },
@@ -23,31 +25,33 @@
     "together_forbidden": true,
     "paid_subscription_unknown_fail_closed": true,
     "admission_boundary": "BEFORE_SECRET_OR_KEY_LOOKUP_AND_BEFORE_NETWORK_IO",
+    "vercel_hobby_execution": "ALLOWED_ONLY_WITHIN_INCLUDED_ENTITLEMENT_AND_FIXED_HASH_BOUND_CAPSULE_CONDITIONS",
+    "fail_closed_on_quota_billing_upgrade_or_charge_path": true,
     "historical_or_owner_paid_authorization_execution_credit": 0
   },
   "evidence_law": [
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
     "GOODMAN_ANCESTRY_COLLAPSE_ACTIVE",
     "SOURCE_OR_COMPONENT_PASS_DOES_NOT_CREATE_WHOLE_RUNTIME_CREDIT",
-    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
-    "NO_RUNTIME_PASS_WITHOUT_ACTUALLY_STARTED_EXACT_SOURCE_ISOLATED_EXECUTION",
-    "PAID_OWNER_PROSE_DOES_NOT_OVERRIDE_THIS_FREE_ONLY_SUPERVISOR_CONTRACT"
+    "SAME_FAMILY_6_OF_6_RERUN_IS_REPRODUCIBILITY_NOT_INDEPENDENT_REPLICATION",
+    "STALE_AUTHORITY_CAPSULES_REMAIN_QUARANTINED_NO_RETROACTIVE_REWRITE",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW"
   ],
   "next_focus": [
-    "DO_NOT_CREATE_OR_PREFLIGHT_A_PAID_TOGETHER_JOB_AND_DO_NOT_CONSUME_TOGETHER_CREDENTIALS",
-    "KEEP_PR1263_AS_SINGLE_DRAFT_HCU_DONOR_LANE_WITH_ZERO_RUNTIME_CREDIT",
-    "USE_ONLY_AUTHORIZED_ISOLATED_FREE_EXECUTION_SURFACES",
-    "START_AN_EXACT_SOURCE_FREE_SANDBOX_RUN_WHEN_A_CALLABLE_NONPAID_EXECUTION_PATH_EXISTS",
-    "BIND_RESEARCH_MAIN_SHA_TREE_PR1263_SHA_TREE_EXECUTOR_RESULT_DIGEST_AND_CREDENTIAL_NONPERSISTENCE_IN_ONE_RECEIPT",
-    "CONTINUE_LOCAL_ZERO_COST_APPROX_08B_JSPACE_GWT_WORK_ONLY_AFTER_EXECUTABLE_EVIDENCE",
-    "DO_NOT_PROMOTE_ENTITYOS_OR_HCU_FROM_MODEL_CONSENSUS_OR_SOURCE_GUARDS_ALONE"
+    "KEEP_PR1263_AS_SINGLE_DRAFT_HCU_DONOR_LANE_AND_FUSE_REBASE_TO_EXACT_CURRENT_FREE_ONLY_MAIN_BEFORE_PROMOTION",
+    "RUN_ONE_FIXED_EXACT_SOURCE_REPAIRED_HCU_CAPSULE_ON_THE_BOUNDED_ADMITTED_HOBBY_SANDBOX_SURFACE",
+    "BIND_RESEARCH_MAIN_SHA_TREE_PR1263_SHA_TREE_CAPSULE_DIGEST_EXECUTOR_RESULT_SECRET_FENCE_AND_CLEANUP_IN_ONE_IMMUTABLE_RECEIPT",
+    "FAIL_CLOSED_BEFORE_EXECUTION_IF_QUOTA_BILLING_UPGRADE_PLAN_MISMATCH_OR_ANY_MONETARY_CHARGE_PATH_APPEARS",
+    "EXTEND_ONLY_AFTER_PASS_TOWARD_TYPED_ENTRY_ROUTE_VERIFIED_ENGINE_LOAD_INFERENCE_GRID10_JSPACE_GWT_ADMITTED_CAUSAL_DATASET_CLOSURE",
+    "DO_NOT_PROMOTE_ENTITYOS_HCU_JSPACE_MODEL_OR_TRAINING_FROM_COMPONENT_PASS_OR_MODEL_CONSENSUS"
   ],
   "promotion_state": {
     "entityos_whole_runtime_pass": false,
-    "hcu_runtime_credit_change": false,
-    "provider_capability_change": false,
+    "hcu_full_runtime_pass": false,
+    "provider_capability_change": "BOUNDED_FREE_SANDBOX_EXECUTION_SURFACE_AVAILABLE",
+    "component_runtime_credit": "JSPACE_FAMILY_SPLIT_ONLY",
     "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json"
 }

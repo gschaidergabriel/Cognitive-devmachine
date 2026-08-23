@@ -2,38 +2,47 @@
 
 ## Authority
 
-**Updated by explicit owner instruction: 2026-08-18 01:58 +07:00.**
+**Current authority:** owner-directed ClayVerse bootstrap, 2026-08-23.
 
-All Clay/ClayVerse executable testing remains isolated-sandbox-only. The categorical ban on every VPS-hosted test is superseded by `VPS_DISPOSABLE_GUEST_TEST_EXECUTION_DIRECTIVE.md`.
-
-The operative distinction is now:
-
-- **direct test/build/experiment execution on a VPS host remains forbidden**;
-- **a VPS may act as trusted orchestration substrate for a freshly created disposable independent-kernel guest test sandbox**, subject to the newer VPS disposable-guest directive;
-- a self-hosted VPS runner may orchestrate such a guest but may not execute the code-under-test on the host itself.
+This is the current execution law for Clay/ClayVerse build, test, experiment and runtime-validation work.
 
 ## Mandatory execution boundary
 
-- All tests run only in isolated sandboxes/guests.
-- All experiments run only in isolated sandboxes/guests.
-- All build validation and runtime validation run only in isolated sandboxes/guests.
-- Direct VPS-host execution of product/test commands is forbidden.
-- Direct self-hosted-runner execution of product/test commands is forbidden.
-- Production application processes and production host namespaces are forbidden as test environments.
-- Vercel Sandbox and Daytona remain admitted isolated execution providers when available.
-- VPS-hosted disposable guests are admitted when they satisfy `VPS_DISPOSABLE_GUEST_TEST_EXECUTION_DIRECTIVE.md`.
-- Existing historical direct-VPS/self-hosted receipts remain historical evidence only and do not become current evidence merely because the new guest lane is authorized.
+- All current tests run only in **authorized isolated sandboxes**.
+- All current experiments run only in **authorized isolated sandboxes**.
+- All current build validation and runtime validation run only in **authorized isolated sandboxes**.
+- VPS testing is **FORBIDDEN**.
+- VPS-hosted disposable KVM/VM/microVM/TCG guest testing is **FORBIDDEN** under the current 2026-08-23 authority.
+- Self-hosted VPS test runners are **FORBIDDEN**.
+- Production/deployment-host testing is **FORBIDDEN**.
+- Direct host-kernel Docker/OCI execution on a VPS, self-hosted runner or production host is not an admitted substitute.
+- A VPS may later be a deployment target only after explicit owner authorization; that does not grant current test authority.
+- Preferred isolated surface remains Vercel Sandbox when an executable Sandbox start/exec capability is actually available; other explicitly authorized isolated sandbox providers may be used when admitted.
+
+The historical 2026-08-18 VPS disposable-guest permission is superseded by the newer 2026-08-23 owner bootstrap and must not be reactivated by a worker, control-plane addendum, receipt or compatibility reader.
+
+## Evidence law
+
+Only an actually-started authorized isolated execution with exact source/artifact identity can establish executable behavior at that scope.
+
+For every accepted run preserve, as applicable:
+
+- exact source SHA/tree;
+- exact OCI/image/artifact digest;
+- command/test contract;
+- exit status and bounded logs;
+- sandbox/provider identity and relevant versions;
+- environment/config identity without exposing secrets;
+- stop/result state and cleanup outcome.
+
+Source inspection, PR mergeability, CI/workflow definition, orchestration success, deployment READY state, or a runner failure before visible test steps is not runtime PASS.
+
+If no authorized isolated sandbox can actually start/execute, classify the gate as **BLOCKED_EXECUTION_ADMISSION**. Do not reinterpret that as a semantic test failure, and do not bypass it through a VPS guest lane.
 
 ## `go`
 
-Exact `go` must perform every executable research/build/test/experiment step inside an admitted isolated environment. It may now use the real VPS as an orchestrator for a disposable independent-kernel guest when the newer VPS directive is satisfied.
+Exact `go` must keep executable work inside the current authorized isolated-sandbox boundary. When the execution surface is unavailable, `go` may continue source-level architecture, falsification, repair and coordination work, but executable/runtime credit remains zero until exact isolated execution is observed.
 
-`go` must never treat the host runner, host shell, host Docker daemon, host filesystem or host kernel namespace as the ClayVerse test target.
+## Supersession
 
-If KVM/nested virtualization is unavailable, `go` may use the explicitly hardened QEMU/TCG independent-kernel lane for development/runtime evidence, but must not promote that run to the separate hardware-virtualized final MicroVM acceptance gate.
-
-## Release evidence
-
-Release and acceptance evidence must come from the environment that actually executed the exact bound source/artifact. Source inspection, orchestration success and deployment readiness do not substitute for guest execution.
-
-Final ClayVerse whole-product acceptance continues to require the same exact accepted OCI digest behind the independent hardware-virtualized VM/microVM guest-kernel boundary specified by the current ClayVerse MicroVM directive. A VPS QEMU/TCG test guest is a powerful development/validation surface, not automatic final MicroVM credit.
+`research_entity/global/VPS_DISPOSABLE_GUEST_TEST_EXECUTION_DIRECTIVE.md` is historical/superseded evidence only under the current 2026-08-23 owner authority.

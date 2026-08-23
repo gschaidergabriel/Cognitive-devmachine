@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Fail-closed static guard for canonical Clay <-> Python reference contract drift.
 
-The canonical Clay source has already moved to a DB-resident profile plus generic
-`inference_generate` boundary. The Python reference runtime/tests may lag, but that lag
-must be explicit and must never cause the canonical Clay contract to be rolled backward.
+The canonical Clay source uses a DB-resident profile, one explicit Cognitive Fabric
+admission stage, and the generic `inference_generate` boundary. The Python reference
+runtime/tests may lag, but that lag must be explicit and must never cause the canonical
+Clay contract to be rolled backward.
 
 Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
 unwired handler names do not count as runtime support.
@@ -19,6 +20,7 @@ from typing import Any
 
 REQUIRED_EFFECTS = {
     "pipeline_profile_read": "_pipeline_profile_read",
+    "pipeline_cognitive_fabric_admit": "_pipeline_cognitive_fabric_admit",
     "inference_generate": "_inference_generate",
 }
 LEGACY_EFFECTS = {"profile_load", "provider_chat_json"}
@@ -173,11 +175,24 @@ def main() -> int:
     if signature:
         run_args = [item.strip().split(":", 1)[0].strip() for item in signature.group(1).split(",") if item.strip()]
 
+    cognition_marker = 'phase("pipeline_cognitive_fabric_admit"'
+    inference_marker = 'effect("inference_generate"'
+    cognition_index = clay.find(cognition_marker)
+    inference_index = clay.find(inference_marker)
+
     clay_contract = {
         "run_args": run_args,
         "three_argument_runtime_boundary": run_args == ["entity_db", "source_db", "secret_file"],
         "db_resident_profile_effect": 'effect("pipeline_profile_read"' in clay,
-        "generic_inference_effect": 'effect("inference_generate"' in clay,
+        "cognitive_fabric_effect": cognition_index >= 0,
+        "cognitive_fabric_precedes_inference": cognition_index >= 0 and inference_index > cognition_index,
+        "generic_inference_effect": inference_index >= 0,
+        "raw_profile_inference_absent": 'map_set(infer,"inference",profile.inference)' not in clay,
+        "raw_prompt_system_inference_absent": 'map_set(infer,"system",prompt.system)' not in clay,
+        "raw_prompt_user_inference_absent": 'map_set(infer,"user",prompt.user)' not in clay,
+        "admitted_inference_used": 'map_set(infer,"inference",admitted.inference)' in clay,
+        "admitted_packet_digest_bound": 'map_set(infer,"inference_packet_digest",admitted.inference_packet_digest)' in clay,
+        "admitted_fabric_digest_bound": 'map_set(infer,"cognitive_fabric_receipt_digest",admitted.cognitive_fabric_receipt_digest)' in clay,
         "old_profile_load_absent": 'effect("profile_load"' not in clay,
         "old_provider_chat_absent": 'effect("provider_chat_json"' not in clay,
     }
@@ -192,7 +207,15 @@ def main() -> int:
         [
             clay_contract["three_argument_runtime_boundary"],
             clay_contract["db_resident_profile_effect"],
+            clay_contract["cognitive_fabric_effect"],
+            clay_contract["cognitive_fabric_precedes_inference"],
             clay_contract["generic_inference_effect"],
+            clay_contract["raw_profile_inference_absent"],
+            clay_contract["raw_prompt_system_inference_absent"],
+            clay_contract["raw_prompt_user_inference_absent"],
+            clay_contract["admitted_inference_used"],
+            clay_contract["admitted_packet_digest_bound"],
+            clay_contract["admitted_fabric_digest_bound"],
             clay_contract["old_profile_load_absent"],
             clay_contract["old_provider_chat_absent"],
         ]
@@ -210,13 +233,13 @@ def main() -> int:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v2",
+        "schema": "clay-structured-contract-sync/v3",
         "canonical_clay": clay_contract,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay DB-resident profile + inference_generate semantics are forward authority; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
+        "policy": "Canonical Clay DB-resident profile -> Cognitive Fabric admission -> inference_generate semantics are forward authority; raw prompt/profile inference bypass is forbidden; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
         "errors": errors,
         "pass": not errors,
     }

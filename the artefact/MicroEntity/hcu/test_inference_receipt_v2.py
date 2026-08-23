@@ -13,7 +13,12 @@ from inference_receipt_v2 import (
     InferenceReceiptV2Error,
     make_inference_receipt_v2,
 )
-from reactive_event_router_v1 import EngineAdmission, route_event
+from reactive_event_router_v1 import (
+    ENTRY_BINDING_SCHEMA,
+    HASH_SERIALIZATION_SCHEMA,
+    EngineAdmission,
+    route_event,
+)
 
 
 GENERATION = 7
@@ -26,12 +31,25 @@ LOADER_BINDING_SHA256 = "3" * 64
 OUTPUT_SHA256 = "9" * 64
 
 
+def _entry_binding(*, schema=ENTRY_BINDING_SCHEMA, canonicalization_schema=HASH_SERIALIZATION_SCHEMA, event_sha256=ENTRY_EVENT_SHA256):
+    return {
+        "schema": schema,
+        "canonicalization_schema": canonicalization_schema,
+        "event_sha256": event_sha256,
+    }
+
+
+def _entry_bindings():
+    return {ENTRY_ADMISSION_SHA256: _entry_binding()}
+
+
 def _route():
     event = {
         "schema": "HCU_REACTIVE_EVENT/v1",
         "entity_generation": GENERATION,
         "ingress_id": "ingress:test:v2",
         "causal_id": "causal:test:v2",
+        "entry_canonicalization_schema": HASH_SERIALIZATION_SCHEMA,
         "entry_event_sha256": ENTRY_EVENT_SHA256,
         "entry_admission_sha256": ENTRY_ADMISSION_SHA256,
         "novelty": 0.8,
@@ -52,7 +70,7 @@ def _route():
             engine_artifact_sha256=ENGINE_ARTIFACT_SHA256,
         ),
         admitted_engine_artifacts={"hcu_local_08b": ENGINE_ARTIFACT_SHA256},
-        admitted_entry_bindings={ENTRY_ADMISSION_SHA256: ENTRY_EVENT_SHA256},
+        admitted_entry_bindings=_entry_bindings(),
     )
 
 
@@ -101,7 +119,7 @@ def _load():
     )
 
 
-def _make(decision=None, load=None, *, admitted_load=True):
+def _make(decision=None, load=None, *, admitted_load=True, entry_bindings=None):
     decision = decision or _route()
     load = load or _load()
     load_registry = {load.consumption_receipt_sha256: load} if admitted_load else {}
@@ -110,7 +128,7 @@ def _make(decision=None, load=None, *, admitted_load=True):
         current_generation=GENERATION,
         admitted_route_generations={decision.decision_sha256: GENERATION},
         entry_admission_sha256=ENTRY_ADMISSION_SHA256,
-        admitted_entry_bindings={ENTRY_ADMISSION_SHA256: ENTRY_EVENT_SHA256},
+        admitted_entry_bindings=_entry_bindings() if entry_bindings is None else entry_bindings,
         admitted_engine_artifacts={"hcu_local_08b": ENGINE_ARTIFACT_SHA256},
         verified_engine_load_receipt_sha256=load.consumption_receipt_sha256,
         admitted_verified_engine_loads=load_registry,
@@ -138,6 +156,19 @@ class InferenceReceiptV2Tests(unittest.TestCase):
         decision = replace(_route(), hash_serialization_schema="HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1")
         with self.assertRaisesRegex(InferenceReceiptV2Error, "ROUTE_CANONICALIZATION_SCHEMA_UNSUPPORTED"):
             _make(decision=decision)
+
+    def test_legacy_bare_entry_binding_fails_closed(self):
+        with self.assertRaisesRegex(InferenceReceiptV2Error, "ENTRY_BINDING_REJECTED:ENTRY_ADMISSION_BINDING_V2_REQUIRED"):
+            _make(entry_bindings={ENTRY_ADMISSION_SHA256: ENTRY_EVENT_SHA256})
+
+    def test_wrong_entry_binding_canonicalizer_fails_closed(self):
+        bindings = {
+            ENTRY_ADMISSION_SHA256: _entry_binding(
+                canonicalization_schema="ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1"
+            )
+        }
+        with self.assertRaisesRegex(InferenceReceiptV2Error, "ENTRY_BINDING_REJECTED:ENTRY_BINDING_CANONICALIZATION_SCHEMA_UNSUPPORTED"):
+            _make(entry_bindings=bindings)
 
     def test_unadmitted_verified_load_fails_closed(self):
         with self.assertRaisesRegex(InferenceReceiptV2Error, "VERIFIED_ENGINE_LOAD_NOT_ADMITTED"):

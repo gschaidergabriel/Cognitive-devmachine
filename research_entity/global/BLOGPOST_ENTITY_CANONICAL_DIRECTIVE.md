@@ -6,20 +6,23 @@ This path is retained because older receipts, branches and research notes refere
 
 Current owner/product authority:
 
-`research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+`research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
 
-Current program/stage:
+Current program/system and architecture:
 
-- `CLAYVERSE_SINGLE_CONTAINER`
-- `CLAYVERSE_ARTIFACT`
-- release form: one OCI/Docker-compatible ClayVerse container image
+- program: `ENTITYOS_HCU`
+- product/system: **EntityOS**
+- cognition/compute architecture: **HCU**
+- stage: `ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`
+
+`Xeno` and `XCU` may remain only as transitional compatibility/research aliases where exact provenance requires them. Mini Entity/MicroEntity, ClayVerse and Frank are historical implementation/donor provenance unless newer explicit owner authority re-admits a bounded mechanism.
 
 The exact pre-supersession Mini Entity / Blogpost directive remains recoverable from Git history as blob:
 
 `eeb9945e4c1d01a32e13bf6cb74db0c0c49d2767`
 
-Its pipeline, inference-neutrality, epistemic typing, exactly-once/CAS, secret-gating and other mechanisms may be reused only as bounded donor/regression evidence when they strengthen the current ClayVerse product. Historical wording such as `SOLE CANONICAL OWNER DIRECTIVE`, `Status: CURRENT`, `MINI_ENTITY_PIPELINE_ALL_IN_ONE`, or a portable Mini Entity as the sole goal has no current work-selection authority.
+Its pipeline, inference-neutrality, epistemic typing, exactly-once/CAS, secret-gating and other mechanisms may be reused only as bounded donor/regression evidence when they strengthen the current EntityOS/HCU path. Historical wording such as `SOLE CANONICAL OWNER DIRECTIVE`, `Status: CURRENT`, `MINI_ENTITY_PIPELINE_ALL_IN_ONE`, a portable Mini Entity as the sole goal, or ClayVerse as current product has no current work-selection authority.
 
-Clay remains the persistent research entity. UnifiedDB remains the current ClayVerse durable authority; ClayGraph is derived; Claude Code is runtime cognition; MicroClay is routing/accessibility only; EffectGate/EffectJournal control external effects; EntityOS is an internal substrate only.
+Clay remains the persistent research entity. Canonical durable state/evidence remains outside model-generated HCU cognition/simulation; EffectGate/EffectJournal remain the only real/state-changing effect authority. HCU/J-Space/world-model/workspace outputs are candidate/projection/measurement only and cannot mint truth.
 
-If this compatibility path conflicts with the current ClayVerse owner directive, fail closed and follow the current owner directive.
+If this compatibility path conflicts with current `main`, `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, or `SUPERVISOR_STEERING_8_52.json`, fail closed and follow the newest explicit owner authority.

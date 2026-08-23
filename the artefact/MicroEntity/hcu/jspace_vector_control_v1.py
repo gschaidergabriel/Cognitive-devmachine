@@ -33,6 +33,11 @@ CONTROL_CONDITIONS = frozenset({
     "LESION",
 })
 MAX_DIMENSION = 4096
+# Every scale emitted from a finite IEEE-754 binary64 source vector is far below this
+# bound (max finite numerator ~309 decimal digits; min subnormal denominator ~326).
+# Bound text before int/Fraction construction so an untrusted packet cannot turn scale
+# parsing into arbitrary big-integer work.
+MAX_SCALE_DECIMAL_DIGITS = 512
 _PACKET_FIELDS = frozenset({
     "schema",
     "abi_schema",
@@ -154,6 +159,42 @@ def _packet_material(packet: VectorControlPacket) -> dict[str, Any]:
     return material
 
 
+def _scale_fraction(numerator_text: Any, denominator_text: Any) -> Fraction:
+    """Parse the sole admitted finite-binary64 q8 scale representation.
+
+    Packet hashes authenticate bytes, not semantic safety. A caller can construct and hash a
+    new packet, so the scale itself must be bounded, reduced and provably decodable to a
+    positive finite binary64 anchor before the packet earns admission.
+    """
+    for value, field in (
+        (numerator_text, "scale_numerator"),
+        (denominator_text, "scale_denominator"),
+    ):
+        if not isinstance(value, str) or not 1 <= len(value) <= MAX_SCALE_DECIMAL_DIGITS:
+            raise JSpaceVectorControlError(f"{field}:DECIMAL_STRING_BOUNDS_REQUIRED")
+        if any(ch < "0" or ch > "9" for ch in value):
+            raise JSpaceVectorControlError(f"{field}:UNSIGNED_DECIMAL_STRING_REQUIRED")
+
+    scale_numerator = int(numerator_text)
+    scale_denominator = int(denominator_text)
+    if str(scale_numerator) != numerator_text or str(scale_denominator) != denominator_text:
+        raise JSpaceVectorControlError("SCALE_RATIONAL_NONCANONICAL_DECIMAL_STRING")
+    if scale_denominator <= 0:
+        raise JSpaceVectorControlError("SCALE_RATIONAL_INVALID")
+
+    scale = Fraction(scale_numerator, scale_denominator)
+    if scale.numerator != scale_numerator or scale.denominator != scale_denominator:
+        raise JSpaceVectorControlError("SCALE_RATIONAL_NOT_REDUCED")
+    if scale_numerator > 0:
+        try:
+            anchor = float(scale * 127)
+        except OverflowError as exc:
+            raise JSpaceVectorControlError("SCALE_RATIONAL_BINARY64_RANGE_REQUIRED") from exc
+        if not math.isfinite(anchor) or anchor <= 0.0:
+            raise JSpaceVectorControlError("SCALE_RATIONAL_BINARY64_RANGE_REQUIRED")
+    return scale
+
+
 def encode_vector(
     values: Sequence[Any],
     *,
@@ -236,18 +277,10 @@ def validate_packet(packet: VectorControlPacket) -> None:
         if isinstance(value, bool) or not isinstance(value, int) or not -127 <= value <= 127:
             raise JSpaceVectorControlError(f"q8_values[{index}]:SIGNED_Q8_REQUIRED")
     _sha256(packet.source_vector_sha256, "source_vector_sha256")
-    try:
-        scale_numerator = int(packet.scale_numerator)
-        scale_denominator = int(packet.scale_denominator)
-    except (TypeError, ValueError) as exc:
-        raise JSpaceVectorControlError("SCALE_RATIONAL_DECIMAL_STRINGS_REQUIRED") from exc
-    if str(scale_numerator) != packet.scale_numerator or str(scale_denominator) != packet.scale_denominator:
-        raise JSpaceVectorControlError("SCALE_RATIONAL_NONCANONICAL_DECIMAL_STRING")
-    if scale_numerator < 0 or scale_denominator <= 0:
-        raise JSpaceVectorControlError("SCALE_RATIONAL_INVALID")
-    if scale_numerator == 0 and any(packet.q8_values):
+    scale = _scale_fraction(packet.scale_numerator, packet.scale_denominator)
+    if scale.numerator == 0 and any(packet.q8_values):
         raise JSpaceVectorControlError("ZERO_SCALE_REQUIRES_NULL_Q8_VECTOR")
-    if scale_numerator > 0 and max(abs(value) for value in packet.q8_values) != 127:
+    if scale.numerator > 0 and max(abs(value) for value in packet.q8_values) != 127:
         raise JSpaceVectorControlError("NONZERO_VECTOR_REQUIRES_FULL_Q8_SCALE_ANCHOR")
     observed = _sha256(packet.packet_sha256, "packet_sha256")
     expected = _canonical_sha256(_packet_material(packet), "VECTOR_CONTROL_PACKET")
@@ -277,7 +310,7 @@ def decode_vector(
     if expected_control_condition is not None and packet.control_condition != expected_control_condition:
         raise JSpaceVectorControlError("JSPACE_CONTROL_CONDITION_MISMATCH")
 
-    scale = Fraction(int(packet.scale_numerator), int(packet.scale_denominator))
+    scale = _scale_fraction(packet.scale_numerator, packet.scale_denominator)
     return tuple(float(value * scale) for value in packet.q8_values)
 
 

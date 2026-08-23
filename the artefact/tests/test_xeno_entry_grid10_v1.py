@@ -10,7 +10,7 @@ import sys
 import unittest
 
 HERE = pathlib.Path(__file__).resolve().parent
-MODULE = HERE.parent / "xeno" / "entry_grid10_v1.py"
+MODULE = HERE.parent / "Xeno" / "entry_grid10_v1.py"
 spec = importlib.util.spec_from_file_location("xeno_entry_grid10_v1", MODULE)
 xeno = importlib.util.module_from_spec(spec)
 assert spec.loader is not None

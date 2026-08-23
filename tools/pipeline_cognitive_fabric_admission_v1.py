@@ -3,6 +3,7 @@
 
 This module owns no turn allocation, truth, durable state, model execution, effects, or
 post-turn UCF finalization. It resolves one already-active MiniUnifiedDB cognition turn,
+resolves the exact admitted semantic version of every boot-bound cognition object,
 cross-checks the bounded caller selector, binds routing through the canonical
 MINI_INFERENCE_BOUND_ROUTE/v1 capability ancestry, compiles the repository-owned ZERO
 workspace capsule + InferencePacket v2, and emits candidate-only pre-inference admission.
@@ -31,10 +32,7 @@ _ROOT = Path(__file__).resolve().parents[1]
 _ZERO_IMPL = _ROOT / "research_entity" / "global" / "j-space" / "implementations"
 _CAPSULE_IMPL = _ZERO_IMPL / "zero_workspace_capsule_v1.py"
 _PACKET_IMPL = _ZERO_IMPL / "zero_inference_packet_v2.py"
-_REQUIRED_PREPARE_DIGESTS = (
-    "turn_binding_digest",
-    "boot_binding_digest",
-    "workspace_digest",
+_COGNITION_OBJECT_FIELDS = (
     "zero_identity_digest",
     "grf_digest",
     "hyperposition_digest",
@@ -47,6 +45,19 @@ _REQUIRED_PREPARE_DIGESTS = (
     "boot_source_lock_digest",
     "policy_authority_digest",
 )
+_REQUIRED_PREPARE_DIGESTS = (
+    "turn_binding_digest",
+    "boot_binding_digest",
+    "workspace_digest",
+    *_COGNITION_OBJECT_FIELDS,
+)
+_SEMANTIC_AUTHORITY = {
+    "durable_state": "MiniUnifiedDB",
+    "routing_only": True,
+    "candidate_configuration_only": True,
+    "direct_truth_authority": False,
+    "direct_effect_authority": False,
+}
 
 
 class CognitiveFabricAdmissionError(ValueError):
@@ -171,6 +182,76 @@ def _verify_prompt_compiled_identity(
     return system, user
 
 
+def _bind_semantic_prepare(
+    semantic: Mapping[str, Any],
+    *,
+    prepare: Mapping[str, Any],
+    entity_generation: int,
+    causal_turn_id: str,
+) -> tuple[str, dict[str, str], list[str]]:
+    """Cross-bind versioned payload semantics to the already-active same-turn prepare."""
+    _need(isinstance(semantic, Mapping) and semantic.get("ok") is True, "SEMANTIC_PREPARE_REQUIRED")
+    _need(semantic.get("entity_generation") == entity_generation, "SEMANTIC_GENERATION_DRIFT")
+    _need(semantic.get("causal_turn_id") == causal_turn_id, "SEMANTIC_TURN_DRIFT")
+    _need(
+        semantic.get("turn_binding_digest") == prepare.get("turn_binding_digest"),
+        "SEMANTIC_TURN_BINDING_DRIFT",
+    )
+    _need(
+        semantic.get("boot_binding_digest") == prepare.get("boot_binding_digest"),
+        "SEMANTIC_BOOT_BINDING_DRIFT",
+    )
+    _need(
+        semantic.get("workspace_digest") == prepare.get("workspace_digest"),
+        "SEMANTIC_WORKSPACE_DRIFT",
+    )
+    _need(semantic.get("task_sha256") == prepare.get("task_sha256"), "SEMANTIC_TASK_DRIFT")
+    _need(semantic.get("authority") == _SEMANTIC_AUTHORITY, "SEMANTIC_AUTHORITY_ESCALATION")
+
+    objects = semantic.get("objects")
+    _need(isinstance(objects, Mapping), "SEMANTIC_OBJECTS_REQUIRED")
+    _need(set(objects) == set(_COGNITION_OBJECT_FIELDS), "SEMANTIC_OBJECT_SET_MISMATCH")
+
+    material_objects: dict[str, dict[str, Any]] = {}
+    versions: dict[str, str] = {}
+    semantic_refs: list[str] = []
+    for field in _COGNITION_OBJECT_FIELDS:
+        item = objects.get(field)
+        _need(isinstance(item, Mapping), f"SEMANTIC_OBJECT_REQUIRED:{field}")
+        object_digest = _digest(item.get("object_digest"), f"semantic.{field}.object_digest")
+        _need(object_digest == prepare.get(field), f"SEMANTIC_OBJECT_DIGEST_DRIFT:{field}")
+        _need(item.get("admitted_generation") == entity_generation, f"SEMANTIC_OBJECT_STALE:{field}")
+        _need(isinstance(item.get("payload"), Mapping), f"SEMANTIC_OBJECT_PAYLOAD_REQUIRED:{field}")
+        object_kind = _text(item.get("object_kind"), f"semantic.{field}.object_kind")
+        object_version = _text(item.get("object_version"), f"semantic.{field}.object_version")
+        payload_digest = _digest(item.get("payload_digest"), f"semantic.{field}.payload_digest")
+        admission_receipt_digest = _digest(
+            item.get("admission_receipt_digest"),
+            f"semantic.{field}.admission_receipt_digest",
+        )
+        refs = item.get("provenance_refs")
+        _need(type(refs) is list and bool(refs), f"SEMANTIC_OBJECT_PROVENANCE_REQUIRED:{field}")
+        semantic_refs.extend(refs)
+        versions[field] = object_version
+        material_objects[field] = {
+            "object_kind": object_kind,
+            "object_version": object_version,
+            "object_digest": object_digest,
+            "payload_digest": payload_digest,
+            "admission_receipt_digest": admission_receipt_digest,
+        }
+
+    semantic_material = {
+        "schema": "MINI_ENTITY_COGNITION_SEMANTIC_BINDING/v1",
+        "entity_generation": entity_generation,
+        "causal_turn_id": causal_turn_id,
+        "turn_binding_digest": prepare["turn_binding_digest"],
+        "boot_binding_digest": prepare["boot_binding_digest"],
+        "objects": material_objects,
+    }
+    return _sha256_obj(semantic_material), versions, semantic_refs
+
+
 def build_pre_inference_admission(
     db: Any,
     *,
@@ -182,6 +263,7 @@ def build_pre_inference_admission(
     expected_activation_digest: str | None = None,
     origin: str | None = None,
     active_turn_module: Any | None = None,
+    semantic_resolver_module: Any | None = None,
     capsule_module: Any | None = None,
     packet_module: Any | None = None,
     capability_module: Any | None = None,
@@ -208,6 +290,8 @@ def build_pre_inference_admission(
 
     if active_turn_module is None:
         import miniunifieddb_active_turn_v1 as active_turn_module  # type: ignore[no-redef]
+    if semantic_resolver_module is None:
+        import miniunifieddb_cognition_resolution_v1 as semantic_resolver_module  # type: ignore[no-redef]
     if capability_module is None:
         import mini_inference_capability_binding_v1 as capability_module  # type: ignore[no-redef]
     if capsule_module is None or packet_module is None:
@@ -248,6 +332,20 @@ def build_pre_inference_admission(
         "PREPARE_AUTHORITY_ESCALATION",
     )
 
+    semantic = semantic_resolver_module.resolve_prepare_bundle(
+        db,
+        entity_generation=entity_generation,
+        causal_turn_id=causal_turn_id,
+        task_text=task_text,
+        expected_turn_binding_digest=selector["turn_binding_digest"],
+    )
+    semantic_binding_digest, semantic_versions, semantic_refs = _bind_semantic_prepare(
+        semantic,
+        prepare=prepare,
+        entity_generation=entity_generation,
+        causal_turn_id=causal_turn_id,
+    )
+
     route = capability_module.resolve_bound_route(
         profile,
         prepare,
@@ -264,6 +362,10 @@ def build_pre_inference_admission(
     _need(route.get("turn_binding_digest") == prepare["turn_binding_digest"], "BOUND_ROUTE_BINDING_DRIFT")
     _need(route.get("boot_binding_digest") == prepare["boot_binding_digest"], "BOUND_ROUTE_BOOT_DRIFT")
     _need(route.get("workspace_digest") == prepare["workspace_digest"], "BOUND_ROUTE_WORKSPACE_DRIFT")
+    route_cognition = route.get("cognition")
+    _need(isinstance(route_cognition, Mapping), "BOUND_ROUTE_COGNITION_REQUIRED")
+    for field in _COGNITION_OBJECT_FIELDS:
+        _need(route_cognition.get(field) == prepare.get(field), f"BOUND_ROUTE_COGNITION_DRIFT:{field}")
 
     target_engine_class = _text(route.get("target_engine_class"), "target_engine_class")
     ucf_engine_class = _text(route.get("ucf_engine_class"), "ucf_engine_class")
@@ -280,6 +382,7 @@ def build_pre_inference_admission(
         prepare.get("turn_provenance_refs"),
         prepare.get("boot_provenance_refs"),
         prepare.get("activation_provenance_refs"),
+        semantic_refs,
     )
     capsule = capsule_module.compile_workspace_capsule(
         entity_generation=entity_generation,
@@ -323,6 +426,8 @@ def build_pre_inference_admission(
         "activation_digest": activation_digest,
         "turn_binding_digest": prepare["turn_binding_digest"],
         "boot_binding_digest": prepare["boot_binding_digest"],
+        "cognition_semantic_binding_digest": semantic_binding_digest,
+        "cognition_object_versions": semantic_versions,
         "workspace_capsule_digest": capsule_digest,
         "workspace_digest": prepare["workspace_digest"],
         "zero_identity_digest": prepare["zero_identity_digest"],
@@ -360,6 +465,7 @@ def build_pre_inference_admission(
         "canonical_state_hash": canonical_state_hash,
         "packet_hash": packet_hash,
         "cognition_invocation_digest": selector_digest,
+        "cognition_semantic_binding_digest": semantic_binding_digest,
         "capability_route_digest": route_digest,
         "capability_binding_digest": capability_binding_digest,
         "capability_receipt_digest": capability_receipt_digest,

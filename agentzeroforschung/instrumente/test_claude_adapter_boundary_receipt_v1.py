@@ -21,6 +21,7 @@ def fixture():
         "claude_version": "2.1.0-test",
         "command_sha256": H64B,
         "input_sha256": H64C,
+        "invocation_id": "claude-adapter-run-0001",
         "executor": {"os": "ubuntu", "arch": "x86_64", "runtime": "python3.13"},
         "started_at": "2026-08-23T03:16:00Z",
         "finished_at": "2026-08-23T03:16:01Z",
@@ -56,6 +57,12 @@ class TestReceipt(unittest.TestCase):
 
     def test_common_tamper_rejected(self):
         self.assert_reject(lambda x: x["common"].__setitem__("claude_version", "tampered"))
+
+    def test_missing_invocation_id_rejected(self):
+        self.assert_reject(lambda x: x["common"].pop("invocation_id"))
+
+    def test_short_invocation_id_rejected(self):
+        self.assert_reject(lambda x: x["common"].__setitem__("invocation_id", "short"))
 
     def test_invalid_timestamp_rejected(self):
         self.assert_reject(lambda x: x["common"].__setitem__("started_at", "not-a-timestamp"))

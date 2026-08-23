@@ -293,7 +293,7 @@ def _ascii_json_string_payload_size(value: str, stop_after: int) -> int:
             total += 2
         elif codepoint <= 0x1F:
             total += 6
-        elif codepoint <= 0x7F:
+        elif codepoint < 0x7F:
             total += 1
         elif codepoint <= 0xFFFF:
             total += 6

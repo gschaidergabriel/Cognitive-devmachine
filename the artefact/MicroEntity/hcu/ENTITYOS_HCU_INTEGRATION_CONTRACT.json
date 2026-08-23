@@ -1,0 +1,55 @@
+{
+  "schema_version": "ENTITYOS_HCU_INTEGRATION_CONTRACT/v1",
+  "status": "ACTIVE",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "compatibility_path": "the artefact/MicroEntity/hcu/",
+  "compatibility_name_policy": {
+    "MicroEntity": "HISTORICAL_IMPLEMENTATION_OR_PROVENANCE_ONLY",
+    "Mini Entity": "HISTORICAL_IMPLEMENTATION_OR_PROVENANCE_ONLY",
+    "Xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
+    "XCU": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY"
+  },
+  "authority": {
+    "durable_state": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB_CANONICAL_STATE_EVIDENCE_SUBSTRATE",
+    "effects": "EffectGate+EffectJournal",
+    "hcu_output": "CANDIDATE_PROJECTION_MEASUREMENT_ONLY",
+    "second_product_identity": "FORBIDDEN",
+    "second_state_truth_effect_or_recovery_authority": "FORBIDDEN"
+  },
+  "entry_route_invariants": {
+    "typed_entry_required_for_new_data": true,
+    "replay_stable_event_identity_distinct_from_concrete_admission_identity": true,
+    "entry_capability_claim_may_narrow_but_never_self_grant_or_broaden": true,
+    "entry_resource_claim_may_narrow_but_never_self_grant_or_broaden": true,
+    "engine_identity_and_artifact_authority_must_come_from_independent_deterministic_control_plane_admission": true,
+    "untrusted_causal_event_may_not_mint_engine_provider_class_or_artifact_authority": true,
+    "downstream_inference_receipt_must_echo_current_event_admission_route_engine_and_artifact_bindings": true,
+    "one_versioned_current_canonical_identity_path_required_before_cross_language_hash_promotion": true,
+    "duplicate_router_entry_canonicalizer_or_effect_authority": "FORBIDDEN"
+  },
+  "hcu_modes": ["GRID10", "COGSIM10", "WM_TEST", "NESTED_SIM", "SCALEOUT"],
+  "retained_donor": {
+    "pull_request": 1263,
+    "role": "HCU_TYPED_ENTRY_ENGINE_ADMISSION_ROUTER_INFERENCE_GRID10_DONOR_LANE",
+    "promotion": "REBASE_AND_FUSE_INTO_CURRENT_ENTITYOS_HCU_AUTHORITY;DO_NOT_DUPLICATE"
+  },
+  "execution_policy": {
+    "current_credit_surface": "AUTHORIZED_ISOLATED_SANDBOX_ONLY",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "canonicalization": {
+    "status": "CONVERGENCE_REQUIRED",
+    "law": "EXACTLY_ONE_VERSIONED_CURRENT_ENTRY_HCU_CANONICAL_IDENTITY_PATH_BEFORE_HETEROGENEOUS_HASH_PROMOTION",
+    "historical_hashes": "PRESERVE_AS_PROVENANCE;DO_NOT_SILENTLY_REWRITE"
+  },
+  "runtime_credit": 0,
+  "whole_product_pass": false,
+  "epistemic_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+}

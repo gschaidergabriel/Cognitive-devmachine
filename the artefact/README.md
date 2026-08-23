@@ -88,7 +88,7 @@ Material architecture work uses:
 
 `OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
 
-Prefer primitives reusable across multiple HCU modes.
+Prefer primitives reusable across multiple HCU modes. A component PASS is not a whole-HCU or whole-EntityOS PASS.
 
 ## HCU modes
 
@@ -161,6 +161,8 @@ External providers are not admitted as required internal cognition. Exact local 
 
 **Pre-load hashing is not loader attestation.** A positive `EngineAdmission` receives zero HCU runtime credit unless the actual loader is bound to the same consumed bytes and the downstream inference receipt echoes that consumed identity. Wrong-path loads, post-admission mutation, stale lease reuse or unknown consumed bytes fail closed.
 
+A newly recorded source-level security gap must be resolved before verified-engine-load promotion: `verify_loader_consumption` accepts an `admitted_loader_consumptions` mapping, but the core API type alone does not prove that this mapping came from a separate canonical authority. A positive integration path must obtain the admission independently from a trusted generation/provenance-fenced lookup or receipt; deriving the accepted registry entry directly from the same `LoaderConsumption` being verified risks self-authorization. Serialization/hash helpers provide identity, not authority.
+
 ## Execution policy — supervisor 8.62
 
 Current autonomous supervisor `8.62` is **FREE_ONLY**.
@@ -174,30 +176,28 @@ VPS, self-hosted and production-host testing remain forbidden. Together general 
 Observed bounded evidence now includes:
 
 - protected-preview Vercel `Sandbox.create + runCommand` infrastructure callability with cleanup/secret fences;
-- exact-source RFC8785/JCS Entry canonicalization component runtime PASS in an admitted FREE Sandbox;
-- exact-current J-Space dataset family-split component runtime PASS (6/6, reproduced within the same evidence family).
+- exact-current J-Space dataset family-split component runtime PASS (6/6, reproduced within the same evidence family);
+- RFC8785/JCS Entry canonicalization v1 component PASS (7/7), whose first route retained a stale `source_commit` metadata label;
+- **`HCU_ENTRY_CANONICALIZATION_CAPSULE/v2` exact-manifest PASS (7/7)** with source main commit, retained PR1263 commit, source-manifest SHA-256, Git blob/SHA-256 identities, result-log digest, secret fence PASS and cleanup PASS.
 
-These are **component-only** credits. Whole EntityOS/HCU runtime credit remains `0`; J-Space model runtime credit remains `0`; training credit remains `0`; whole-product PASS remains false.
+The v2 capsule closes the stale Entry metadata seam at component scope. Stop spending cycles on Entry/JCS component identity unless a new falsifier appears.
 
-The Entry capsule proved current component bytes but exposed a stale embedded `source_commit` label. Exact-head manifest identity therefore still requires rebinding and rerun before the capsule can be extended as a full-spine acceptance carrier.
+These are **component-only** credits. Whole EntityOS/HCU runtime credit remains `0`; verified-engine-load/full-HCU credit remains `0`; J-Space model runtime credit remains `0`; training credit remains `0`; whole-product PASS remains false.
 
 ## Current frontier
 
-1. keep `BOOTSTRAP_MINIMAL`, `PROGRAM_STATE`, root `CLAUDE.md`, artifact manifest/README, footer and the compatibility-named authority validator on one supervisor-8.62 authority epoch;
-2. repair the fixed HCU Entry capsule metadata to bind exact current Research `main` + exact current retained PR1263 head while preserving exact source-blob/digest verification;
-3. keep PR1263 as the single retained HCU donor lane and PR810 as the single retained Sandbox execution-controller lane;
-4. extend the same fixed hash-verified executor closure toward `Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure`;
-5. bind a real **zero-cost local** ~0.8B checkpoint/tokenizer/runtime/build through deterministic engine admission and verified loader-consumption evidence before model-runtime credit;
-6. emit real J-Space/GWT traces under `JSPACE_VECTOR_CONTROL_ABI/v1` with lesion/shuffle/rescue controls before any training promotion;
-7. derive leak-resistant family-level train/validation/holdout data only through admitted causal identities and deterministic hard negatives;
-8. keep whole EntityOS/HCU, J-Space model and training credit at zero until the corresponding exact admitted execution gates pass.
+1. resolve the **loader-consumption admission authority boundary** on the single retained HCU path so a forged observation cannot self-authorize by supplying its own matching admitted mapping; positive integration evidence must obtain admission from a trusted canonical generation/provenance-fenced lookup or receipt;
+2. keep PR1263 as the single retained HCU donor lane and PR810 as the single retained Sandbox execution-controller lane;
+3. extend the same fixed hash-verified executor closure toward `Typed Entry -> route -> trusted verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure`;
+4. bind a real **zero-cost local** ~0.8B checkpoint/tokenizer/runtime/build through deterministic engine admission and trusted loader-consumption evidence before model-runtime credit;
+5. emit real J-Space/GWT traces under `JSPACE_VECTOR_CONTROL_ABI/v1` with lesion/shuffle/rescue controls before any training promotion;
+6. derive leak-resistant family-level train/validation/holdout data only through admitted causal identities and deterministic hard negatives;
+7. keep whole EntityOS/HCU, J-Space model and training credit at zero until the corresponding exact admitted execution gates pass.
 
 ## Latest `go` README re-entry — 2026-08-24
 
-`README=UPDATED_SUPERVISOR_8_62_AND_EXACT_COMPONENT_RUNTIME`.
+`README=UPDATED_ENTRY_V2_EXACT_MANIFEST_AND_LOADER_AUTHORITY_FRONTIER`.
 
-This cycle resolved a stale authority-epoch split: Bootstrap and Program State were concurrently rejoined to supervisor 8.62; the artifact manifest was rejoined to 8.62 with explicit bounded Hobby Sandbox conditions and component-only runtime credit; root organ routing was changed from stale supervisor 8.52/two-track `go` to supervisor 8.62/three-track `go` plus exact macrocycle-ID bookkeeping.
+Supervisor 8.62, three-track `go`, bounded Hobby fixed-capsule execution and exact macrocycle-ID bookkeeping remain current. Since the prior README re-entry, Entry capsule v2 has repaired the stale donor-commit label and passed 7/7 with an exact source manifest. The highest-value nonduplicate blocker has therefore moved to the loader-consumption authority boundary and the still-unexecuted combined HCU spine.
 
-A fixed protected-preview HCU Entry capsule executed successfully in an admitted Vercel Hobby Sandbox: Python 3.13, seven RFC8785/JCS regression tests PASS, source SHA-256/Git-blob checks PASS, secret fence PASS, exit code 0 and cleanup PASS. Current PR1263 source/test blobs remained byte-identical to the executed capsule, but the endpoint's embedded donor `source_commit` label was stale. Therefore the measured mechanism is retained as **exact-source component evidence**, not exact-head full-spine evidence.
-
-No whole HCU/EntityOS, J-Space-model or training promotion follows from this README update.
+No whole HCU/EntityOS, J-Space-model or training promotion follows from these component passes.

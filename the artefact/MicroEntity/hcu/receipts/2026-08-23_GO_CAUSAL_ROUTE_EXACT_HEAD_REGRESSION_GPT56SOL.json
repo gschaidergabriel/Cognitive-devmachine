@@ -1,10 +1,13 @@
 {
-  "schema_version": "HCU_EXACT_SOURCE_REGRESSION_RECEIPT/v1",
+  "schema_version": "HCU_EXACT_SOURCE_REGRESSION_RECEIPT/v2",
   "date": "2026-08-23",
   "trigger": "go",
-  "program": "ENTITYOS_HCU_XENO",
+  "program": "ENTITYOS_HCU",
   "candidate_pr": 1263,
-  "exact_source_commit": "beb62d9668f016050ddab2ca0597c8af34e5d7d6",
+  "exact_source_heads": {
+    "route_regression": "beb62d9668f016050ddab2ca0597c8af34e5d7d6",
+    "typed_entry_capability_regression": "b98daf7997fe8ba95a89b336787a3a3d823c4dbb"
+  },
   "source_files": {
     "the artefact/MicroEntity/hcu/reactive_event_router_v1.py": {
       "git_blob_sha1": "e62a73401618242b630e59847782cd1e4111b6d3",
@@ -13,20 +16,32 @@
     "the artefact/MicroEntity/hcu/test_reactive_event_router_v1.py": {
       "git_blob_sha1": "03b92e3b14372ce9b2acc7f7630bd157777ea6d7",
       "bytes": 8633
+    },
+    "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py": {
+      "git_blob_sha1": "89cda2894f4a90440964a2ffdb01ef274c3279ad",
+      "bytes": 10641
+    },
+    "the artefact/MicroEntity/hcu/test_xeno_entry_fabric_v1.py": {
+      "git_blob_sha1": "a5c5666c52b3def5b15d1e5b3d96836822b3fc6f",
+      "bytes": 5486
     }
   },
   "execution": {
     "surface": "isolated ChatGPT tool container",
-    "os": "Linux 6.18.35 x86_64 glibc 2.41",
+    "os": "Linux x86_64 isolated tool container",
     "python": "CPython 3.13.5",
-    "commands": [
+    "route_commands": [
       "python3 -m py_compile reactive_event_router_v1.py test_reactive_event_router_v1.py",
       "python3 -m unittest -v test_reactive_event_router_v1.py"
     ],
-    "py_compile": "PASS",
-    "unittest": "16/16 PASS",
-    "exit_code": 0,
-    "execution_mode": "REGRESSION_ONLY; no second new unusual experiment introduced"
+    "route_result": "py_compile PASS; 16/16 PASS; exit_code=0",
+    "typed_entry_commands": [
+      "python3 -m py_compile xeno_entry_fabric_v1.py test_xeno_entry_fabric_v1.py",
+      "python3 -m unittest -v test_xeno_entry_fabric_v1.py"
+    ],
+    "typed_entry_result": "py_compile PASS; 12/12 PASS; exit_code=0",
+    "blob_identity_check": "PASS: locally executed Typed Entry source/test Git blob hashes exactly matched GitHub blobs 89cda289... and a5c5666c... before execution",
+    "execution_mode": "REGRESSION_ONLY; shared GO unusual experiment remains the single same-route causal-alias stress already recorded elsewhere"
   },
   "verified_mechanisms": [
     "unknown/future internal provider labels fail closed",
@@ -36,7 +51,23 @@
     "router policy digest enters causal route identity",
     "engine artifact changes alter engine and route identity while preserving identical causal event identity",
     "downstream inference receipt must echo event, route and engine identities",
-    "stale entity generations fail closed"
+    "stale entity generations fail closed",
+    "Typed Entry capability-binding digest must equal the deterministic control-plane supplied binding",
+    "Typed Entry capabilities may narrow but cannot exceed the externally admitted capability set",
+    "unknown Entry fields cannot smuggle effect or truth authority",
+    "Entry admission preserves ingress/causal/generation/payload/provenance/budget identity into the HCU event projection"
+  ],
+  "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE advanced through the single retained HCU route/entry implementation; no competing identity/state/effect path introduced.",
+  "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT advanced with exact-source capability authority fencing and causal Entry->HCU projection regressions.",
+  "external_primary_evidence": {
+    "rfc8785": "Primary RFC review confirms JCS requires I-JSON constraints, ECMAScript-compatible IEEE-754 number serialization and recursive UTF-16 property ordering; current Python json.dumps hash identity therefore remains Python-scoped until an independently verified versioned canonicalizer is admitted."
+  },
+  "remaining_gates": [
+    "admit and bind a cross-language canonicalization scheme before claiming heterogeneous causal hash identity",
+    "bind real admitted local checkpoint/tokenizer/runtime bytes to engine artifact identity",
+    "wire the real downstream inference receipt producer to the v2 echo contract",
+    "rebuild/digest-bind the legacy-named compatibility ZIP only after exact branch semantics settle",
+    "run integrated EntityOS/HCU runtime and GRID10/COGSIM10 measurements on an authorized exact-source isolated executor"
   ],
   "scope_limit": "Exact source-level Python mechanism regression only. No bundled real ~0.8B checkpoint/runtime, throughput, provider-free boot, Global J-Space causal-use, HCU runtime-fit, EntityOS runtime or whole-product acceptance credit.",
   "promotion_credit": 0,

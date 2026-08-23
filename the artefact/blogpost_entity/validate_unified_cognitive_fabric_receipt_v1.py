@@ -201,6 +201,7 @@ def validate_receipt(
     engine_class = _exact_str(inference.get("engine_class"), "ENGINE_CLASS_REQUIRED")
     if engine_class not in ENGINE_CLASSES:
         _fail("ENGINE_CLASS_UNSUPPORTED")
+    inference_executed = _exact_bool(inference.get("executed"), "INFERENCE_EXECUTED_REQUIRED")
     jspace_mode = _exact_str(inference.get("jspace_mode"), "JSPACE_MODE_REQUIRED")
     if jspace_mode not in JSPACE_MODES:
         _fail("JSPACE_MODE_UNSUPPORTED")
@@ -231,14 +232,21 @@ def validate_receipt(
 
     result_digest = inference.get("candidate_result_digest")
     if engine_class == "DETERMINISTIC_ONLY":
+        if inference_executed:
+            _fail("DETERMINISTIC_ONLY_MUST_NOT_EXECUTE_MODEL")
         if result_digest is not None:
             _fail("DETERMINISTIC_ONLY_RESULT_DIGEST_MUST_BE_NULL")
         if epistemic_status != "NOT_APPLICABLE":
             _fail("DETERMINISTIC_ONLY_EPISTEMIC_STATUS_MUST_BE_NOT_APPLICABLE")
-    else:
+    elif inference_executed:
         _sha256(result_digest, "CANDIDATE_RESULT_DIGEST_INVALID")
         if epistemic_status == "NOT_APPLICABLE":
             _fail("LEARNED_INFERENCE_EPISTEMIC_STATUS_REQUIRED")
+    else:
+        if result_digest is not None:
+            _fail("NONEXECUTED_INFERENCE_RESULT_DIGEST_MUST_BE_NULL")
+        if epistemic_status != "NOT_APPLICABLE":
+            _fail("NONEXECUTED_INFERENCE_EPISTEMIC_STATUS_MUST_BE_NOT_APPLICABLE")
 
     if engine_class == "CLAUDE_CODE":
         _exact_str(inference.get("adapter_version"), "CLAUDE_ADAPTER_VERSION_REQUIRED")
@@ -249,6 +257,8 @@ def validate_receipt(
     intervention = _exact_dict(inference.get("jspace_intervention"), "JSPACE_INTERVENTION_REQUIRED")
     intervention_executed = _exact_bool(intervention.get("executed"), "JSPACE_INTERVENTION_EXECUTED_REQUIRED")
     if intervention_executed:
+        if not inference_executed:
+            _fail("JSPACE_INTERVENTION_REQUIRES_EXECUTED_INFERENCE")
         if jspace_mode != "FULL_LOCAL_LATENT":
             _fail("JSPACE_INTERVENTION_REQUIRES_FULL_LOCAL_LATENT")
         if not local_activation_access:
@@ -296,10 +306,20 @@ def validate_receipt(
     cost_class = _exact_str(boundary.get("cost_class"), "COST_CLASS_REQUIRED")
     if cost_class not in COST_CLASSES:
         _fail("COST_CLASS_UNSUPPORTED")
+    backend_admitted = _exact_bool(boundary.get("backend_admitted"), "BACKEND_ADMITTED_REQUIRED")
+    _sha256(boundary.get("policy_authority_digest"), "POLICY_AUTHORITY_DIGEST_INVALID")
     secret_lookup_count = _exact_int(boundary.get("secret_lookup_count"), "SECRET_LOOKUP_COUNT_INVALID")
     network_attempt_count = _exact_int(boundary.get("network_attempt_count"), "NETWORK_ATTEMPT_COUNT_INVALID")
     _exact_str(boundary.get("first_action_origin"), "FIRST_ACTION_ORIGIN_REQUIRED")
+
+    if inference_executed and not backend_admitted:
+        _fail("INFERENCE_EXECUTED_WITHOUT_BACKEND_ADMISSION")
+    if engine_class == "DETERMINISTIC_ONLY" and backend_admitted:
+        _fail("DETERMINISTIC_ONLY_BACKEND_ADMISSION_INVALID")
+
     if free_only and cost_class in {"PAID", "SUBSCRIPTION", "UNKNOWN"}:
+        if backend_admitted:
+            _fail("FREE_ONLY_NONFREE_BACKEND_ADMITTED")
         if secret_lookup_count != 0:
             _fail("FREE_ONLY_SECRET_TOUCH")
         if network_attempt_count != 0:
@@ -337,9 +357,11 @@ def validate_receipt(
         "source_tree": source_tree,
         "generation": generation,
         "engine_class": engine_class,
+        "inference_executed": inference_executed,
         "jspace_mode": jspace_mode,
         "epistemic_status": epistemic_status,
         "cost_class": cost_class,
+        "backend_admitted": backend_admitted,
         "packet_digest": packet_digest,
         "terminal_digest": terminal_digest,
     }

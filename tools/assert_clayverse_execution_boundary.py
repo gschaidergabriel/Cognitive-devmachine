@@ -69,7 +69,7 @@ def validate(root: Path) -> dict:
     )
     require(
         errors,
-        "direct execution of clay/clayverse candidate code on the vps host remains forbidden" in guest_text,
+        "direct execution of product/test commands on the vps host remains forbidden" in guest_text,
         "VPS_GUEST_DIRECTIVE_HOST_BAN_MISSING",
     )
     require(

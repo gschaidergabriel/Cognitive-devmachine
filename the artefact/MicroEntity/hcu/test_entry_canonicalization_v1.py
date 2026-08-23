@@ -3,7 +3,11 @@ import math
 import struct
 import unittest
 
-from entry_canonicalization_v1 import CanonicalizationError, canonicalize
+from entry_canonicalization_v1 import (
+    MAX_CANONICAL_NESTING_DEPTH,
+    CanonicalizationError,
+    canonicalize,
+)
 
 
 # RFC 8785 Appendix B finite-number sample set, excluding minus zero.
@@ -114,6 +118,23 @@ class EntryCanonicalizationTests(unittest.TestCase):
     def test_lone_surrogate_fails_closed(self):
         with self.assertRaisesRegex(CanonicalizationError, "LONE_SURROGATE"):
             canonicalize({"x": "\ud800"})
+
+    def test_nesting_depth_boundary_fails_through_typed_channel(self):
+        admitted = 0
+        for _ in range(MAX_CANONICAL_NESTING_DEPTH):
+            admitted = [admitted]
+        canonicalize(admitted)
+
+        rejected = [admitted]
+        with self.assertRaisesRegex(CanonicalizationError, "MAX_NESTING_DEPTH_EXCEEDED"):
+            canonicalize(rejected)
+
+    def test_extreme_nesting_does_not_leak_python_recursion_error(self):
+        value = 0
+        for _ in range(5000):
+            value = [value]
+        with self.assertRaisesRegex(CanonicalizationError, "MAX_NESTING_DEPTH_EXCEEDED"):
+            canonicalize(value)
 
 
 if __name__ == "__main__":

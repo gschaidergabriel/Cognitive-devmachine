@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_SOURCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main_sha": "10c372e4cbf089756aee53bda56628743c068968",
+  "branch": "gpt56sol/go-mini-cognition-bindings-20260823-1511",
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "zero": "RUNTIME_IDENTITY_CONFIGURATION_NOT_SECOND_ENTITY",
+    "effects": "EffectGate only",
+    "model_jspace_gwt": "CANDIDATE_OR_MEASUREMENT_ONLY"
+  },
+  "observed_blocker": "The canonical pre-inference UCF admission integration lacks a same-MiniUnifiedDB versioned cognition-object and generation/turn binding source for ZERO, GRF, Hyperposition, exact bundled model/tokenizer/J-Space/lens/workspace-calibration/boot-source-lock/policy identities. Mutable profile fields or placeholder digests would create an authority/provenance bypass.",
+  "selected_delta": {
+    "mechanism": "immutable cognition objects + explicit object admissions + one boot binding per entity generation + exact causal-turn binding in the existing MiniUnifiedDB SQLite authority",
+    "source_blob": "0edbe664259cc5aa788577834e1b0ea5a9050e4d",
+    "test_blob": "a56bc8edbec13777585026380ebd88f152e8a1d0",
+    "contract_blob": "cbe20a35ec533d1626784c6a3dcc13a0ddad2853",
+    "files": [
+      "tools/miniunifieddb_cognition_store_v1.py",
+      "tests/test_miniunifieddb_cognition_store_v1.py",
+      "the artefact/blogpost_entity/jspace_gwt/MINIUNIFIEDDB_COGNITION_BINDING_V1.md"
+    ]
+  },
+  "temporal_authority": {
+    "order": [
+      "pre_inference_prepare_or_admit",
+      "inference",
+      "deterministic_gate",
+      "commit_or_explicit_no_commit",
+      "final_UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_v1",
+      "post_turn_causal_binding"
+    ],
+    "pre_admission_and_final_receipt_are_distinct_identities": true,
+    "final_receipt_before_terminal_gate_commit_state": "FORBIDDEN"
+  },
+  "fences": [
+    "same SQLite MiniUnifiedDB only; no second state store",
+    "exact live entity_state.generation required for admission and turn binding",
+    "one boot binding per generation; conflicting replacement fails closed",
+    "immutable object-key collisions fail closed",
+    "CANONICAL_JSON object digest must equal canonical payload digest",
+    "EXTERNAL_BYTES identities require separate admission receipt identity",
+    "all boot identities must already be explicitly admitted",
+    "causal turn binds exact task hash + workspace digest + boot binding + provenance",
+    "turn-id rebinding with different material fails closed",
+    "stale generation, missing binding, or task mismatch fails closed before inference"
+  ],
+  "counterhypothesis": "A runtime-local or profile-local digest bundle would be simpler and sufficient for UCF preparation.",
+  "counterhypothesis_status": "REJECTED_AT_ARCHITECTURE_SCOPE because it would permit mutable application configuration or sidecar state to select cognition authority outside MiniUnifiedDB generation/provenance fences.",
+  "execution": {
+    "authorized_isolated_runtime_started": false,
+    "semantic_tests_executed": false,
+    "classification": "SOURCE_CANDIDATE_NO_RUNTIME_CREDIT",
+    "note": "No runtime/test PASS is claimed from source creation or inspection. Exact execution remains required on an admitted isolated surface."
+  },
+  "runtime_credit": {
+    "whole_mini_entity": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu": 0
+  },
+  "parallel_hcu": {
+    "delta": "NO_CHANGE",
+    "reason": "Current HCU source/package lanes already have overlapping open PRs (#1230, #1231, #1232), while the next material HCU discriminator remains exact KVM4-equivalent resource/capacity/scheduler evidence on an authorized isolated surface. A parallel source implementation here would duplicate canonical paths."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UPSTREAM_MACROCYCLE_ID",
+    "local_count": 0,
+    "note": "No cross-organ macrocycle identifier was exposed; no experiment identity is invented after the trigger boundary. The added tests are deterministic regression obligations, not claimed executed experiments."
+  },
+  "next_gate": "Fuse this same-store resolver into the single canonical pre-inference cognitive-fabric admission runtime lane; after inference and deterministic gate/CAS commit-or-no-commit, emit the final UCF-v1 runtime receipt and post-turn binding. Then obtain actually-started exact-source authorized isolated execution. Exact boot/model/lens identities must remain unavailable until separately measured and admitted."
+}

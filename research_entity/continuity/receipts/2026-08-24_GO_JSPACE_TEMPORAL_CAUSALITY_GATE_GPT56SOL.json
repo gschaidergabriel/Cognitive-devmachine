@@ -1,0 +1,68 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "canonical_main_observed_before_guard_write": "8e5d37f3177dc8af105d8afdd2a3a3237cef8d56",
+    "guard_commit": "45d193b00df6c6dc074a7664df150c69e6c083fb",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "timestamp_fallback_sufficient": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_lane_created": false
+  },
+  "observed_sources": {
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_during_temporal_review": "b28d0d3c98a1d6263297612ff7d4cf8c18e74506",
+    "model_input_binding": "the artefact/MicroEntity/hcu/model_input_control_binding_v1.py",
+    "integrated_execution_regression": "the artefact/MicroEntity/hcu/test_execution_store_inference_jspace_chain_v1.py",
+    "jspace_producer": "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
+    "training_trace": "the artefact/MicroEntity/hcu/jspace_training_trace_v1.py",
+    "acceptance_guard": "research_entity/claycode/HCU_JSPACE_MODEL_INPUT_CONTROL_CAUSALITY_GATE_V1.md"
+  },
+  "finding": {
+    "name": "SAME_INVOCATION_JSPACE_CONTROL_TEMPORAL_CIRCULARITY",
+    "observed_order": "model invocation(i) -> ModelExecutionObservation(i) -> model contribution/output(i) -> JSpaceStep(i) -> VectorControlPacket(i)",
+    "problem": "VectorControlPacket(i), being produced downstream of invocation(i), cannot be credited as the packet that controlled the exact input bytes of invocation(i). Exact hashes and a byte-occurrence binding can remain internally consistent while the claimed same-step control direction is temporally impossible.",
+    "counterhypothesis": "The current byte-binding primitive could be correct in isolation but be integrated post hoc onto the same invocation whose output helped produce the packet, yielding association rather than forward control.",
+    "required_topology": "JSpaceStep(t)/VectorControlPacket(t) -> ModelInputControlBinding(t->t+1) -> ModelExecutionObservation(t+1) -> VerifiedModelExecution(t+1) -> InferenceReceipt(t+1) -> contribution/output(t+1) -> JSpaceStep(t+1)/VectorControlPacket(t+1)",
+    "boot_rule": "An initial invocation may use an explicit versioned NO_PREDECESSOR_CONTROL/null-control condition; it must never be backfilled with a packet produced after the invocation."
+  },
+  "durable_delta": {
+    "guard_path": "research_entity/claycode/HCU_JSPACE_CONTROL_TEMPORAL_CAUSALITY_GATE_V1.md",
+    "guard_commit": "45d193b00df6c6dc074a7664df150c69e6c083fb",
+    "promotion_rule": "HCU_MODEL_INPUT_CONTROL_BINDING/v1 may establish exact packet presence in exact executor input bytes at component scope, but positive forward-control credit additionally requires an admitted acyclic predecessor J-Space identity. Same-invocation post-hoc binding receives zero control-direction credit.",
+    "next_deterministic_regression": "Use two adjacent logical steps: produce packet(t) from completed JSpaceStep(t), embed it exactly once in immutable executor input for invocation(t+1), bind/admit before or at execution admission, and reject any edge rebinding packet(t+1) generated from output(t+1) onto invocation(t+1)."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: retained PR810 execution evidence was re-entered earlier in this macrocycle, stale deployments were not invoked, and the new temporal gate prevents a future green component run from being over-promoted through a causally impossible same-invocation loop.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: defined the missing acyclic packet(t)->invocation(t+1) causal interconnect requirement while preserving existing Entry event/admission, route, GRID, cell/role, executor and input-byte identities and without creating a second authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: separated J-Space packet production from the later invocation it may control, providing a falsifiable temporal discriminator needed before model-input control or training causality promotion."
+  },
+  "execution": {
+    "new_unusual_experiment": false,
+    "new_sandbox_invocation": false,
+    "paid_provider_or_upgrade": false,
+    "together_preflight_or_training": false,
+    "vps_self_hosted_or_production_test": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a concurrently moving current-facing surface under many parallel go organs. The append-only exact-SHA guard and receipt preserve this new acceptance law without risking a stale whole-file overwrite. README fusion must consume the newest main after parallel convergence."
+  },
+  "next_exact_action": "In the single retained HCU donor lane, add a deterministic two-step temporal-control regression and successor binding/admission identity that prove an admitted predecessor JSpaceStep(t)/VectorControlPacket(t) exists before invocation(t+1), bind that predecessor packet to the exact consumed input bytes of t+1, and propagate the control-edge identity through VerifiedModelExecution -> InferenceReceipt -> JSpace/Training provenance. Keep hidden-state causal credit separate and require atomic-lease intervention evidence for that later claim."
+}

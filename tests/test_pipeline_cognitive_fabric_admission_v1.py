@@ -77,26 +77,38 @@ class Packet:
 
 
 class Capability:
-    @staticmethod
-    def resolve_from_profile(profile):
+    route_digest = h("bound-route")
+    authority = "ROUTING_ONLY_BOUND_TO_CANONICAL_PREPARE"
+
+    @classmethod
+    def resolve_bound_route(cls, profile, prepare, *, expected_generation):
         snapshot = profile.get("_runtime_profile_snapshot")
         if not isinstance(snapshot, dict):
             raise ValueError("PROFILE_SNAPSHOT_MISSING")
         binding = profile.get("inference", {}).get("capability_binding")
         if not isinstance(binding, dict):
             raise ValueError("INFERENCE_CAPABILITY_BINDING_REQUIRED")
+        if prepare.get("entity_generation") != expected_generation:
+            raise ValueError("STALE_GENERATION")
         return {
             "ok": True,
-            "authority": "ROUTING_ONLY_NO_TRUTH_STATE_EFFECT_AUTHORITY",
-            "binding_digest": binding["binding_digest"],
+            "schema": "MINI_INFERENCE_BOUND_ROUTE/v1",
+            "entity_generation": expected_generation,
+            "causal_turn_id": prepare["causal_turn_id"],
+            "turn_binding_digest": prepare["turn_binding_digest"],
+            "boot_binding_digest": prepare["boot_binding_digest"],
+            "workspace_digest": prepare["workspace_digest"],
+            "profile_id": snapshot["profile_id"],
+            "profile_hash": snapshot["profile_hash"],
+            "capability_binding_digest": binding["binding_digest"],
             "capability_receipt_digest": binding["capability_receipt_digest"],
             "capability_evidence_kind": binding["capability_evidence_kind"],
             "adapter_version": binding["adapter_version"],
             "target_engine_class": binding["engine_class"],
             "ucf_engine_class": "claude_code",
             "jspace_mode": binding["jspace_mode"],
-            "profile_id": snapshot["profile_id"],
-            "profile_hash": snapshot["profile_hash"],
+            "route_digest": cls.route_digest,
+            "authority": cls.authority,
         }
 
 
@@ -170,7 +182,7 @@ class AdmissionTests(unittest.TestCase):
         args.update(overrides)
         return sut.build_pre_inference_admission(**args)
 
-    def test_success_is_pre_inference_candidate_only(self):
+    def test_success_is_bound_route_candidate_only(self):
         out = self.call()
         self.assertTrue(out["ok"])
         self.assertEqual(out["schema"], sut.ADMISSION_SCHEMA)
@@ -180,6 +192,7 @@ class AdmissionTests(unittest.TestCase):
         self.assertEqual(out["generation"], 7)
         self.assertEqual(out["target_engine_class"], "CLAUDE_CODE")
         self.assertEqual(out["jspace_mode"], "COMPILED_EXTERNAL")
+        self.assertEqual(out["capability_route_digest"], h("bound-route"))
         self.assertEqual(out["capability_binding_digest"], h("capability-binding"))
         self.assertEqual(
             out["cognition_invocation_digest"],
@@ -191,6 +204,33 @@ class AdmissionTests(unittest.TestCase):
         b = self.call(prompt=self.prompt(payload="USR-B"))
         self.assertNotEqual(a["inference_packet_digest"], b["inference_packet_digest"])
         self.assertNotEqual(a["cognitive_fabric_receipt_digest"], b["cognitive_fabric_receipt_digest"])
+
+    def test_bound_route_digest_changes_admission_identity(self):
+        class OtherCapability(Capability):
+            route_digest = h("bound-route-other")
+
+        a = self.call()
+        b = self.call(capability_module=OtherCapability)
+        self.assertNotEqual(a["capability_route_digest"], b["capability_route_digest"])
+        self.assertNotEqual(a["cognitive_fabric_receipt_digest"], b["cognitive_fabric_receipt_digest"])
+
+    def test_bound_route_authority_escalation_fails_closed(self):
+        class BadCapability(Capability):
+            authority = "TRUTH_AUTHORITY"
+
+        with self.assertRaisesRegex(sut.CognitiveFabricAdmissionError, "CAPABILITY_AUTHORITY_ESCALATION"):
+            self.call(capability_module=BadCapability)
+
+    def test_bound_route_turn_drift_fails_closed(self):
+        class BadCapability(Capability):
+            @classmethod
+            def resolve_bound_route(cls, profile, prepare, *, expected_generation):
+                out = super().resolve_bound_route(profile, prepare, expected_generation=expected_generation)
+                out["causal_turn_id"] = "other-turn"
+                return out
+
+        with self.assertRaisesRegex(sut.CognitiveFabricAdmissionError, "BOUND_ROUTE_TURN_DRIFT"):
+            self.call(capability_module=BadCapability)
 
     def test_prompt_compiled_identity_mismatch_fails_closed(self):
         with self.assertRaisesRegex(sut.CognitiveFabricAdmissionError, "PROMPT_COMPILED_IDENTITY_MISMATCH"):
@@ -212,6 +252,7 @@ class AdmissionTests(unittest.TestCase):
                 out["authority"] = dict(out["authority"])
                 out["authority"]["direct_truth_authority"] = True
                 return out
+
         with self.assertRaisesRegex(sut.CognitiveFabricAdmissionError, "PREPARE_AUTHORITY_ESCALATION"):
             self.call(active_turn_module=BadActive)
 
@@ -222,6 +263,7 @@ class AdmissionTests(unittest.TestCase):
                 out = Active.resolve_active_prepare(*args, **kwargs)
                 out["task_sha256"] = h("other task")
                 return out
+
         with self.assertRaisesRegex(sut.CognitiveFabricAdmissionError, "TASK_BINDING_MISMATCH"):
             self.call(active_turn_module=BadActive)
 
@@ -251,7 +293,7 @@ class AdmissionTests(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.call(target_engine_class="BUNDLED_LOCAL_08B")
 
-    def test_profile_route_controls_engine_even_when_provider_metadata_is_poisoned(self):
+    def test_profile_provider_metadata_cannot_override_bound_route(self):
         profile = self.profile(kind="local_exec", model="FULL_LOCAL_LATENT_SUPER_HOOKABLE")
         out = self.call(profile=profile)
         self.assertEqual(out["target_engine_class"], "CLAUDE_CODE")

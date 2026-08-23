@@ -50,6 +50,13 @@ class GlobalJSpaceGWTTests(unittest.TestCase):
         for observed, expected in zip(decoded, a.global_vector):
             self.assertLessEqual(abs(observed - expected), 1 / 127 + 1e-12)
 
+    def test_trace_exports_exact_packet_transport_and_identity(self):
+        result = self.run_step()
+        self.assertEqual(result.trace["control_packet_text"], result.control_packet_text)
+        self.assertEqual(result.trace["control_packet_identity_sha256"], result.control_packet.packet_sha256)
+        self.assertEqual(result.trace["control_packet_wire_sha256"], result.control_packet_sha256)
+        self.assertEqual(result.trace["basis_sha256"], BASIS_SHA256)
+
     def test_contradiction_can_win_gwt_without_minting_truth(self):
         result = self.run_step()
         self.assertEqual(result.winner_cell_id, "critic.0")

@@ -276,10 +276,18 @@ def validate_packet(packet: VectorControlPacket) -> None:
         raise JSpaceVectorControlError("VECTOR_CONTROL_CANONICALIZATION_SCHEMA_UNSUPPORTED")
     if packet.codec_schema != CODEC_SCHEMA or packet.wire_format != WIRE_FORMAT:
         raise JSpaceVectorControlError("VECTOR_CONTROL_CODEC_UNSUPPORTED")
-    _text(packet.basis_id, "basis_id")
-    _sha256(packet.basis_sha256, "basis_sha256")
+
+    # Validation must admit one exact wire identity, not a value that becomes valid only
+    # after helper normalization. Otherwise a caller can mint self-consistent packet bytes
+    # with padded identifiers/digests which validate here but compare differently at the
+    # decoder or downstream admission boundary.
+    if packet.basis_id != _text(packet.basis_id, "basis_id"):
+        raise JSpaceVectorControlError("basis_id:NONCANONICAL_TEXT")
+    if packet.basis_sha256 != _sha256(packet.basis_sha256, "basis_sha256"):
+        raise JSpaceVectorControlError("basis_sha256:NONCANONICAL_SHA256")
     _generation(packet.generation)
-    _text(packet.role, "role")
+    if packet.role != _text(packet.role, "role"):
+        raise JSpaceVectorControlError("role:NONCANONICAL_TEXT")
     if packet.control_condition not in CONTROL_CONDITIONS:
         raise JSpaceVectorControlError("control_condition:UNSUPPORTED")
     if isinstance(packet.dimension, bool) or not isinstance(packet.dimension, int) or not 1 <= packet.dimension <= MAX_DIMENSION:
@@ -289,7 +297,8 @@ def validate_packet(packet: VectorControlPacket) -> None:
     for index, value in enumerate(packet.q8_values):
         if isinstance(value, bool) or not isinstance(value, int) or not -127 <= value <= 127:
             raise JSpaceVectorControlError(f"q8_values[{index}]:SIGNED_Q8_REQUIRED")
-    _sha256(packet.source_vector_sha256, "source_vector_sha256")
+    if packet.source_vector_sha256 != _sha256(packet.source_vector_sha256, "source_vector_sha256"):
+        raise JSpaceVectorControlError("source_vector_sha256:NONCANONICAL_SHA256")
 
     # Bound untrusted scale text before hashing, but preserve the established identity fence:
     # syntactically admissible packets with changed content fail DIGEST_MISMATCH before any
@@ -297,6 +306,8 @@ def validate_packet(packet: VectorControlPacket) -> None:
     # stronger rational/range admission below.
     _validate_scale_text_syntax(packet.scale_numerator, packet.scale_denominator)
     observed = _sha256(packet.packet_sha256, "packet_sha256")
+    if packet.packet_sha256 != observed:
+        raise JSpaceVectorControlError("packet_sha256:NONCANONICAL_SHA256")
     expected = _canonical_sha256(_packet_material(packet), "VECTOR_CONTROL_PACKET")
     if observed != expected:
         raise JSpaceVectorControlError("VECTOR_CONTROL_PACKET_DIGEST_MISMATCH")

@@ -10,6 +10,7 @@ D3 = "3" * 64
 D4 = "4" * 64
 D5 = "5" * 64
 D6 = "6" * 64
+D7 = "7" * 64
 
 
 def base_manifest():
@@ -20,6 +21,7 @@ def base_manifest():
         "checkpoint_digest": D6,
         "tokenizer_digest": D1,
         "quantization_runtime_identity": "gguf-q4_k_m+llama.cpp:test-fixture",
+        "runtime_digest": D7,
         "jspace_profile_digest": D2,
         "lens_profile_digest": D3,
         "workspace_calibration_digest": D4,
@@ -56,6 +58,27 @@ class BundledCognitionManifestTests(unittest.TestCase):
             poisoned = base_manifest()
             poisoned[field] = "b" * 64
             self.assertNotEqual(base, validate_manifest(poisoned).integration_identity_sha256)
+
+    def test_runtime_digest_is_identity_bound_when_present(self):
+        a = base_manifest()
+        b = copy.deepcopy(a)
+        b["runtime_digest"] = "a" * 64
+        self.assertNotEqual(
+            validate_manifest(a).integration_identity_sha256,
+            validate_manifest(b).integration_identity_sha256,
+        )
+
+    def test_malformed_runtime_digest_fails_closed(self):
+        data = base_manifest()
+        data["runtime_digest"] = "ABC"
+        with self.assertRaisesRegex(ManifestError, "runtime_digest:LOWERCASE_SHA256_REQUIRED"):
+            validate_manifest(data)
+
+    def test_placeholder_runtime_digest_fails_closed(self):
+        data = base_manifest()
+        data["runtime_digest"] = D0
+        with self.assertRaisesRegex(ManifestError, "runtime_digest:PLACEHOLDER_SHA256_FORBIDDEN"):
+            validate_manifest(data)
 
     def test_missing_calibration_digest_fails_closed(self):
         data = base_manifest()

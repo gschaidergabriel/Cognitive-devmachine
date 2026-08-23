@@ -8,6 +8,22 @@ Primary paid-training base for generic ClayCode cognition: `Qwen/Qwen3.5-0.8B`.
 
 Together's current supported-model table explicitly lists `Qwen/Qwen3.5-0.8B` for Full fine-tuning. This direct native lane therefore replaces the old Qwen2.5-0.5B BYOM architecture/template route for the paid campaign while preserving the same application-neutral cognition target: ClayCode only, GRF R0..R6, Hyperposition, typed omega, runtime-bound identity/job/personality/tools, MiniUnifiedDB truth/state authority, and deterministic effect admission.
 
+## Current provider fact refresh — 2026-08-23
+
+Primary Together documentation was refreshed without authenticated provider execution, file upload, estimate call or spend.
+
+Observed current source facts:
+- `Qwen/Qwen3.5-0.8B` remains explicitly listed for **Full fine-tuning** as well as LoRA;
+- the Full fine-tuning table advertises SFT context length `131072`, DPO context length `131072`, maximum batch size `8`, and minimum batch size `8` for this model;
+- Together's current fine-tuning pricing documentation states a **USD 4.00 minimum charge per fine-tuning job**, while noting that some models may be exempt.
+
+Preflight consequences:
+- the live provider estimate remains authoritative for the exact admitted campaign fingerprint and must still satisfy the existing USD 18 / EUR 20 campaign ceiling;
+- absent current explicit evidence that `Qwen/Qwen3.5-0.8B` is exempt, no projected bill below USD 4 may be treated as the expected payable amount;
+- the USD 4 floor is a billing/preflight constraint, not training authorization and not a reason to spend;
+- `FREE_ONLY` remains binding until a newer explicit owner directive permits authenticated/provider-paid execution;
+- no provider support, price or limit snapshot is eternal truth: refresh primary provider documentation again before any future authenticated preflight or billed create.
+
 The launcher uses current SDK/API contracts:
 - exact model is hard-bound to `Qwen/Qwen3.5-0.8B`;
 - live fine-tuning model limits must advertise Full training support;

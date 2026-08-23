@@ -1,0 +1,86 @@
+{
+  "schema": "CLAY_GO_SOURCE_REPAIR_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "target_pr": 1259,
+  "branch": "gpt56sol/fuse-cognition-fk-transaction-20260823-1511",
+  "base_main_observed_at_retarget": "ac3789d31668d5a1860d0eb4488eefcb2271530e",
+  "canonical_store_pre_fix_blob": "fe7fc09fbdbff71d4cbbd956437d42777b064bf4",
+  "defect": {
+    "classification": "BOOTSTRAP_TRANSACTION_SPLIT_BY_SQLITE_EXECUTESCRIPT",
+    "summary": "canonical cognition install_schema used sqlite3.Connection.executescript while the retained runtime bootstrap owns BEGIN IMMEDIATE; Python sqlite3 commits a pending transaction before executescript, so cognition schema installation could split caller-owned bootstrap atomicity",
+    "foreign_key_ordering": "PRAGMA foreign_keys is connection-local and must be active before the transaction; enabling it inside the schema script is not an admissible substitute for connection-open enforcement"
+  },
+  "repair": {
+    "store_blob": "7e43e3dbfa4fd72377fb8746507e025b5e3b5928",
+    "existing_test_blob": "ed0db209c05a67b477c3677fa357af379f40f69d",
+    "transaction_test_blob": "ae842dc23",
+    "mechanism": [
+      "require PRAGMA foreign_keys=1 before cognition schema install",
+      "replace executescript with four ordinary CREATE TABLE statements inside the caller transaction",
+      "preserve rollback of entity_state plus cognition schema as one bootstrap unit",
+      "fail closed on FK-off caller state without committing it"
+    ]
+  },
+  "execution_evidence": {
+    "github_head_before_receipt": "d3a01a6df7a2a6a1f02719d4bbdd59b954a21096",
+    "research_entity_verify": {
+      "run_id": 32628588195,
+      "initial_job_id": 97167723849,
+      "rerun_job_id": 97167795486,
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "RUNNER_ADMISSION_FAILURE_NO_TEST_STEP"
+    },
+    "identity_guard": {
+      "run_id": 32628588258,
+      "initial_job_id": 97167723914,
+      "rerun_job_id": 97167808181,
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "RUNNER_ADMISSION_FAILURE_NO_TEST_STEP"
+    },
+    "local_checkout_attempt": {
+      "result": "NOT_STARTED",
+      "reason": "container DNS could not resolve github.com before checkout",
+      "classification": "EXECUTION_ADMISSION_FAILURE_NOT_SEMANTIC_FAIL"
+    },
+    "exact_head_semantic_tests": "UNOBSERVED"
+  },
+  "prior_mechanism_evidence": {
+    "classification": "BOUNDED_LOCAL_SQLITE_MECHANISM_ONLY",
+    "observation": "an isolated Python/SQLite probe observed executescript transition an active transaction to inactive and leave pre-script state plus schema committed across rollback",
+    "note": "mechanism evidence does not promote this PR head to runtime PASS"
+  },
+  "unusual_experiment": {
+    "new_count": 0,
+    "classification": "REGRESSION_FUSION_ONLY",
+    "note": "same user-triggered macrocycle already records its unusual experiment elsewhere; no additional intervention consumed"
+  },
+  "hcu": {
+    "delta": "NO_CHANGE_NON_DUPLICATION",
+    "runtime_capacity_credit": 0
+  },
+  "credits": {
+    "source_repair": true,
+    "exact_head_component_execution": false,
+    "runtime": 0,
+    "model": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu": 0,
+    "whole_mini_entity": 0
+  },
+  "next_exact_gate": "On the single retained runtime path, enable and verify PRAGMA foreign_keys=ON immediately after sqlite connection open, then call cognition install_schema inside pipeline_init's BEGIN IMMEDIATE transaction and execute exact focused cognition + pipeline regressions in an actually-started authorized isolated runner before wiring the real pipeline_cognitive_fabric_admit producer.",
+  "forbidden_preserved": [
+    "Together API",
+    "VPS/self-hosted/production acceptance testing",
+    "paid/final training without owner authorization"
+  ],
+  "classification": "SOURCE_REPAIR_CANDIDATE_RUNTIME_UNVERIFIED"
+}

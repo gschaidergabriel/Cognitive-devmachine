@@ -6,7 +6,7 @@
   "repository": "gschaidergabriel/clay-global-research-entity",
   "base_main_sha": "5aa665364894245c05513ea91c41e3304f3e7368",
   "branch": "gpt56sol/go-mini-entity-hcu-grid-20260823-1150",
-  "source_head_before_receipt": "19c784dab977f01966f8122b6f2607ce1b51e1cd",
+  "source_head_before_snapshot": "6d90ea7ebae9b763846c7a024b470a3e12a7bab2",
   "classification": "SOURCE_CANDIDATE_PLUS_EXACT_BRANCH_COMPONENT_MECHANISM_SUPPORT",
   "delta": {
     "name": "Hyperposition Computational Unit grid",
@@ -22,7 +22,7 @@
     "runtime/hcu_grid_manifest_v1.py": "1b3ce58f973a7b92b6bbad5f6f12e602c016c29f",
     "tests/test_hcu_grid_manifest_v1.py": "62a31f72bcd49dff89a847e16f92c88b87a45ac0",
     "profiles/HCU_GRID_VPS_KVM4_PROFILE.json": "7b7fff0112c6ef3a7af8031cf5ce5dd835a6274f",
-    "HYPERPOSITION_COMPUTATIONAL_UNIT_GRID.md": "98b53c53ba497137723ad1e42af26ec949bf0a29",
+    "HYPERPOSITION_COMPUTATIONAL_UNIT_GRID.md": "f890ddd9ec0e2eafd9979f45a690823fc2a410f7",
     "README.md": "220d10cc8a79d3a0d264341794d7258259a0dd39",
     "CURRENT_PRODUCT_CONSOLIDATED.md": "80c6a91e7a62aec3c76e6d2f06cd9129f6f5ce13",
     "PACKAGE_MANIFEST.json": "2a4bdc91948b48dd23b9376a2a68dfa18368f525"
@@ -65,6 +65,12 @@
     "authorized_isolated_runtime_required": true,
     "vps_is_deployment_target_only": true,
     "secrets_accessed": false
+  },
+  "packaging": {
+    "microentity_root_required": true,
+    "all_hcu_generated_product_files_in_snapshot": true,
+    "snapshot_path": "the artefact/MicroEntity/MICROENTITY_CURRENT.zip",
+    "snapshot_identity": "PENDING_NEXT_COMMIT"
   },
   "next_exact_gate": "On an authorized isolated surface, bind the exact bundled ~0.8B checkpoint/tokenizer/runtime and measure shared-weight RSS, incremental lane/KV RSS, CPU tokens-per-second scaling and J-Space/GWT lane scheduling; only then replace UNRESOLVED numeric KVM4 capacity fields.",
   "evidence_note": "7/7 deterministic component regressions support the HCU manifest/capacity mechanism. They do not establish exact model runtime, J-Space/GWT causality, VPS deployment behavior or whole Mini Entity acceptance."

@@ -1,0 +1,70 @@
+{
+  "schema": "clay-go-source-fusion-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "a492051e5e22c051cde97c82ae3b7db7194456ed",
+  "branch": "go/jspace-boot-provenance-fusion-20260823-gpt56sol",
+  "claim_class": "BOUNDED_EXACT_VALIDATOR_BLOB_SOURCE_MECHANISM",
+  "coordination": {
+    "macrocycle_id": null,
+    "unusual_experiment_credit": 0,
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "note": "All poison cases are deterministic regression/fusion checks; no atomic shared unusual-experiment lease was available."
+  },
+  "fusion_target": {
+    "merged_pr": 1057,
+    "merged_main": "883c7e43efc4cfa32765059fe8b89276d987721b",
+    "reason": "Preserve the already-merged stronger J-Space/lens boot gate and selectively fuse only non-duplicate provenance guards from superseded PR #1055."
+  },
+  "delta": [
+    "dirty=true now requires dirty_diff_sha256 so uncommitted source bytes are identity-bound",
+    "inference.first_actions is now required and non-empty",
+    "first action ids must be unique",
+    "first action origin is restricted to ZERO, HOOK_TIMER, CLAUDE_CODE, PROXY_SANDBOX_CONTROLLER, or OTHER",
+    "OTHER requires origin_detail",
+    "effect_requested must be a real boolean"
+  ],
+  "exact_validator": {
+    "path": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
+    "git_blob_sha1": "5bfd29093eef183dde044a796a2e82fbc909a132",
+    "sha256": "f180d0c49493299dfd01119e528840154d5d75a5be99357f2c096220f8f5cbe8",
+    "git_blob_identity_matched_isolated_copy": true
+  },
+  "isolated_regression": {
+    "surface": "isolated ChatGPT container",
+    "py_compile": "PASS",
+    "tests_passed": 11,
+    "tests_failed": 0,
+    "preserved_existing_guards": [
+      "post-load nonfinite lens rejection",
+      "unfitted readout-position rejection",
+      "prompt-copy confound guard rejection",
+      "Whole-GWT credit non-promotion"
+    ],
+    "new_guards": [
+      "dirty source without diff digest rejection",
+      "dirty source with bound diff digest acceptance",
+      "unknown first-action origin rejection",
+      "duplicate first-action id rejection",
+      "OTHER without detail rejection",
+      "non-boolean effect flag rejection"
+    ]
+  },
+  "runtime_credit": {
+    "ubuntu_boot": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "whole_product": 0
+  },
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "training": false,
+    "money_spent_usd": 0
+  },
+  "next_gate": "Merge this selective provenance hardening if exact-head admission does not reveal a semantic regression; then on the next intentional Ubuntu start emit the real boot-binding receipt and run the already-added offline Qwen3.5/Jacobian-lens admission gate before any J-Space/GWT runtime credit."
+}

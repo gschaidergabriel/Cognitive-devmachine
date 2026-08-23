@@ -9,13 +9,13 @@ This contract operationalizes the owner-required `JSPACE_GWT_BOOT_BINDING_RECEIP
 
 ```claycode
 r0.observe(
-  source(main_sha, tree_sha, dirty),
+  source(main_sha, tree_sha, dirty, dirty_diff_sha256?),
   executor(UBUNTU, host_identity_sha256, kernel),
   bundled_core(manifest_sha256, checkpoint_sha256, tokenizer_sha256, runtime_sha256),
   jspace(jlens_upstream_commit, lens_file_sha256, lens_profile_sha256, fit_corpus_sha256),
   zero_grf(zero_identity_sha256, grf_sha256, projection_policy_sha256),
   claude_adapter(adapter_version, capability_profile_sha256),
-  inference(first_engine_choice, origin_attribution)
+  inference(first_engine_choice, origin_attribution, first_actions[])
 )
 
 r3.counter(
@@ -23,11 +23,18 @@ r3.counter(
   unfitted_position_readout,
   prompt_copy_confound,
   stale_or_substituted_manifest,
+  dirty_source_without_byte_identity,
+  unattributed_or_duplicate_first_action,
   gwt_workspace_mistaken_for_truth,
   claude_candidate_mistaken_for_authority
 )
 
 r4.discriminate(
+  require(dirty == true -> sha256(dirty_diff_sha256)),
+  require(unique(first_actions.action_id)),
+  require(first_actions.origin in [ZERO, HOOK_TIMER, CLAUDE_CODE, PROXY_SANDBOX_CONTROLLER, OTHER]),
+  require(first_actions.origin == OTHER -> nonempty(origin_detail)),
+  require(type(first_actions.effect_requested) == bool),
   require(pre_save_all_finite == true),
   require(post_load_all_finite == true),
   require(minimum_readout_position >= skip_first_positions),
@@ -41,6 +48,14 @@ r6.verify(
   claim(whole_product == IN_PROGRESS)
 )
 ```
+
+## Provenance hardening
+
+`dirty=true` is not an exact source identity by itself. A dirty worktree can contain arbitrarily different bytes under the same Git commit/tree pair, so the receipt must additionally bind `dirty_diff_sha256` whenever dirty state is observed.
+
+Likewise one free-form `origin_attribution` string is not sufficient to attribute the first post-start actions. The receipt therefore binds a non-empty `first_actions` list with unique `action_id`, a controlled origin class, and an explicit boolean `effect_requested`. `OTHER` remains available but requires typed detail instead of silently collapsing an unknown actor into a known origin.
+
+These are provenance guards only. They do not establish autonomy, causal correctness, effect success, or model quality.
 
 ## External measurement hardening
 

@@ -5,7 +5,7 @@ from inference_receipt_v1 import (
     InferenceReceiptError,
     make_inference_receipt,
 )
-from reactive_event_router_v1 import route_event
+from reactive_event_router_v1 import EngineAdmission, route_event
 from xeno_entry_fabric_v1 import admit_entry, to_hcu_reactive_event
 
 
@@ -53,17 +53,19 @@ def admitted_packet():
 def model_route():
     packet = admitted_packet()
     event = to_hcu_reactive_event(packet, novelty=0.8, zero_relevance=0.8)
-    event.update(
-        requested_internal_provider="hcu",
-        resolved_internal_engine="hcu_local_08b",
-        resolved_internal_engine_class="LOCAL_SHARED_WEIGHT_08B",
-        resolved_internal_engine_artifact_sha256=ENGINE_SHA256,
-    )
+    event["requested_internal_provider"] = "hcu"
     entry_bindings = {packet.admission_sha256: packet.event_sha256}
     engine_artifacts = {"hcu_local_08b": ENGINE_SHA256}
+    engine_admission = EngineAdmission(
+        provider_alias="hcu",
+        engine_identity="hcu_local_08b",
+        engine_class="LOCAL_SHARED_WEIGHT_08B",
+        engine_artifact_sha256=ENGINE_SHA256,
+    )
     decision = route_event(
         event,
         current_generation=7,
+        engine_admission=engine_admission,
         admitted_engine_artifacts=engine_artifacts,
         admitted_entry_bindings=entry_bindings,
     )
@@ -73,8 +75,8 @@ def model_route():
 def receipt_kwargs():
     packet, decision, entry_bindings, engine_artifacts = model_route()
     kwargs = {
-        "entity_generation": 7,
         "current_generation": 7,
+        "admitted_route_generations": {decision.decision_sha256: 7},
         "entry_admission_sha256": packet.admission_sha256,
         "admitted_entry_bindings": entry_bindings,
         "admitted_engine_artifacts": engine_artifacts,
@@ -93,22 +95,35 @@ class InferenceReceiptTests(unittest.TestCase):
         b = make_inference_receipt(decision, **copy.deepcopy(kwargs))
         self.assertEqual(a, b)
         self.assertEqual(a.status, "CANDIDATE_ONLY")
+        self.assertEqual(a.entity_generation, 7)
         self.assertEqual(a.entry_admission_sha256, packet.admission_sha256)
         self.assertEqual(a.event_sha256, packet.event_sha256)
         self.assertEqual(a.decision_sha256, decision.decision_sha256)
         self.assertEqual(a.resolved_engine_artifact_sha256, ENGINE_SHA256)
         self.assertEqual(len(a.receipt_sha256), 64)
 
-    def test_stale_generation_fails_closed(self):
+    def test_stale_bound_route_generation_fails_closed(self):
         _packet, decision, kwargs = receipt_kwargs()
         kwargs["current_generation"] = 8
-        with self.assertRaisesRegex(InferenceReceiptError, "STALE_ENTITY_GENERATION"):
+        with self.assertRaisesRegex(InferenceReceiptError, "STALE_ROUTE_GENERATION"):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_missing_route_generation_binding_fails_closed(self):
+        _packet, decision, kwargs = receipt_kwargs()
+        kwargs["admitted_route_generations"] = {}
+        with self.assertRaisesRegex(InferenceReceiptError, "ROUTE_GENERATION_NOT_ADMITTED"):
             make_inference_receipt(decision, **kwargs)
 
     def test_unadmitted_entry_receipt_fails_closed(self):
         _packet, decision, kwargs = receipt_kwargs()
         kwargs["admitted_entry_bindings"] = {}
         with self.assertRaisesRegex(InferenceReceiptError, "ENTRY_ADMISSION_NOT_ADMITTED"):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_route_entry_admission_must_match_receipt_admission(self):
+        _packet, decision, kwargs = receipt_kwargs()
+        kwargs["entry_admission_sha256"] = "9" * 64
+        with self.assertRaisesRegex(InferenceReceiptError, "ROUTE_ENTRY_ADMISSION_IDENTITY_MISMATCH"):
             make_inference_receipt(decision, **kwargs)
 
     def test_entry_binding_must_match_route_event(self):
@@ -146,8 +161,8 @@ class InferenceReceiptTests(unittest.TestCase):
         with self.assertRaisesRegex(InferenceReceiptError, "MODEL_ACTIVATION_ROUTE_REQUIRED"):
             make_inference_receipt(
                 decision,
-                entity_generation=7,
                 current_generation=7,
+                admitted_route_generations={decision.decision_sha256: 7},
                 entry_admission_sha256=packet.admission_sha256,
                 admitted_entry_bindings=entry_bindings,
                 admitted_engine_artifacts={"hcu_local_08b": ENGINE_SHA256},

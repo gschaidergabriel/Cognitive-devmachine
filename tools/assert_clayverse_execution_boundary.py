@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assert current ClayVerse isolated-execution policy without collapsing VPS host and guest scopes."""
+"""Assert the current 2026-08-23 ClayVerse sandbox-only execution authority."""
 from __future__ import annotations
 
 import argparse
@@ -12,8 +12,7 @@ BOOTSTRAP = "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
 PROGRAM = "research_entity/rooms/PROGRAM_STATE.json"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
-DIRECT_SCOPE = "DIRECT_VPS_HOST_ONLY"
-GUEST_ADMISSION = "ADMITTED_SUBJECT_TO_VPS_DISPOSABLE_GUEST_TEST_EXECUTION_DIRECTIVE"
+EXPECTED_SURFACE = "AUTHORIZED_ISOLATED_SANDBOX_ONLY"
 
 
 def load_json(path: Path):
@@ -39,7 +38,7 @@ def validate(root: Path) -> dict:
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
     if errors:
-        return {"schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v1", "pass": False, "errors": errors}
+        return {"schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2", "pass": False, "errors": errors}
 
     try:
         bootstrap = load_json(paths["bootstrap"])
@@ -48,7 +47,7 @@ def validate(root: Path) -> dict:
         steering = load_json(paths["steering844"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
-            "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v1",
+            "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2",
             "pass": False,
             "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
         }
@@ -56,42 +55,52 @@ def validate(root: Path) -> dict:
     sandbox_text = paths["sandbox_directive"].read_text(encoding="utf-8").lower()
     guest_text = paths["vps_guest_directive"].read_text(encoding="utf-8").lower()
 
-    require(errors, "direct test/build/experiment execution on a vps host remains forbidden" in sandbox_text, "SANDBOX_DIRECTIVE_DIRECT_VPS_HOST_BAN_MISSING")
-    require(errors, "freshly created disposable independent-kernel guest test sandbox" in sandbox_text, "SANDBOX_DIRECTIVE_DISPOSABLE_GUEST_ADMISSION_MISSING")
-    require(errors, "direct execution of product/test commands on the vps host remains forbidden" in guest_text, "VPS_GUEST_DIRECTIVE_HOST_BAN_MISSING")
-    require(errors, "disposable independent-kernel guest" in guest_text, "VPS_GUEST_DIRECTIVE_GUEST_CONTRACT_MISSING")
+    # Newest owner authority: current executable work is isolated-sandbox-only.
+    require(errors, "2026-08-23" in sandbox_text, "SANDBOX_DIRECTIVE_CURRENT_OWNER_DATE_MISSING")
+    require(errors, "vps testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_VPS_BAN_MISSING")
+    require(errors, "vps-hosted disposable kvm/vm/microvm/tcg guest testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_VPS_GUEST_BAN_MISSING")
+    require(errors, "self-hosted vps test runners are **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_SELF_HOSTED_BAN_MISSING")
+    require(errors, "production/deployment-host testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_PRODUCTION_BAN_MISSING")
 
-    require(errors, bootstrap.get("execution_surface") == "AUTHORIZED_ISOLATED_SANDBOX_OR_INDEPENDENT_KERNEL_GUEST_ONLY", "BOOTSTRAP_EXECUTION_SURFACE_MISMATCH")
-    require(errors, bootstrap.get("vps_testing") == "FORBIDDEN", "BOOTSTRAP_LEGACY_VPS_HOST_BAN_MISSING")
-    require(errors, bootstrap.get("vps_testing_scope") == DIRECT_SCOPE, "BOOTSTRAP_VPS_SCOPE_NOT_DIRECT_HOST_ONLY")
-    require(errors, bootstrap.get("vps_disposable_independent_kernel_guest_testing") == GUEST_ADMISSION, "BOOTSTRAP_DISPOSABLE_GUEST_ADMISSION_MISSING")
-    require(errors, bootstrap.get("vps_execution_directive") == VPS_GUEST_DIRECTIVE, "BOOTSTRAP_VPS_DIRECTIVE_POINTER_MISMATCH")
+    # The older 2026-08-18 guest directive must stay historical and non-operative.
+    require(errors, "**status:** **superseded**" in guest_text, "VPS_GUEST_DIRECTIVE_NOT_SUPERSEDED")
+    require(errors, "superseded by the newer owner-directed clayverse bootstrap dated **2026-08-23**" in guest_text, "VPS_GUEST_DIRECTIVE_NEWER_AUTHORITY_MISSING")
+    require(errors, "vps-hosted disposable kvm/vm/microvm/tcg guest testing is forbidden" in guest_text, "VPS_GUEST_DIRECTIVE_CURRENT_GUEST_BAN_MISSING")
+
+    require(errors, bootstrap.get("execution_surface") == EXPECTED_SURFACE, "BOOTSTRAP_EXECUTION_SURFACE_MISMATCH")
+    require(errors, bootstrap.get("vps_testing") == "FORBIDDEN", "BOOTSTRAP_VPS_BAN_MISSING")
+    require(errors, bootstrap.get("vps_disposable_independent_kernel_guest_testing") == "FORBIDDEN", "BOOTSTRAP_VPS_GUEST_BAN_MISSING")
+    require(errors, bootstrap.get("self_hosted_vps_test_runners") == "FORBIDDEN", "BOOTSTRAP_SELF_HOSTED_BAN_MISSING")
+    require(errors, bootstrap.get("production_host_testing") == "FORBIDDEN", "BOOTSTRAP_PRODUCTION_BAN_MISSING")
+    require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(bootstrap, sort_keys=True), "BOOTSTRAP_STALE_VPS_DIRECTIVE_POINTER")
 
     execution = program.get("execution_policy") or {}
     require(errors, execution.get("isolated_sandbox_only") is True, "PROGRAM_ISOLATED_EXECUTION_MISSING")
-    require(errors, execution.get("vps_testing_forbidden") is True, "PROGRAM_LEGACY_VPS_HOST_BAN_MISSING")
-    require(errors, execution.get("vps_testing_forbidden_scope") == DIRECT_SCOPE, "PROGRAM_VPS_SCOPE_NOT_DIRECT_HOST_ONLY")
-    require(errors, execution.get("vps_disposable_independent_kernel_guest_testing_admitted") is True, "PROGRAM_DISPOSABLE_GUEST_ADMISSION_MISSING")
-    require(errors, execution.get("qemu_tcg_guest_development_evidence_only") is True, "PROGRAM_TCG_SCOPE_WEAKENED")
-    require(errors, execution.get("final_hardware_microvm_credit_requires_hardware_virtualized_guest") is True, "PROGRAM_FINAL_MICROVM_GATE_WEAKENED")
-    require(errors, execution.get("vps_execution_directive") == VPS_GUEST_DIRECTIVE, "PROGRAM_VPS_DIRECTIVE_POINTER_MISMATCH")
+    require(errors, execution.get("vps_testing_forbidden") is True, "PROGRAM_VPS_BAN_MISSING")
+    require(errors, execution.get("vps_disposable_independent_kernel_guest_testing_admitted") is False, "PROGRAM_VPS_GUEST_REAUTHORIZED")
+    require(errors, execution.get("self_hosted_vps_test_runners_forbidden") is True, "PROGRAM_SELF_HOSTED_BAN_MISSING")
+    require(errors, execution.get("production_host_testing_forbidden") is True, "PROGRAM_PRODUCTION_BAN_MISSING")
+    require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(execution, sort_keys=True), "PROGRAM_STALE_VPS_DIRECTIVE_POINTER")
 
     hard = control.get("preserved_hard_rules") or {}
-    require(errors, hard.get("vps_testing") is False, "CONTROL44_DIRECT_VPS_HOST_BAN_WEAKENED")
-    require(errors, hard.get("vps_testing_scope") == DIRECT_SCOPE, "CONTROL44_VPS_SCOPE_NOT_DIRECT_HOST_ONLY")
-    require(errors, hard.get("vps_disposable_independent_kernel_guest_testing") is True, "CONTROL44_DISPOSABLE_GUEST_ADMISSION_MISSING")
-    require(errors, hard.get("qemu_tcg_guest_final_hardware_microvm_credit") is False, "CONTROL44_TCG_FINAL_CREDIT_WEAKENED")
-    require(errors, hard.get("vps_execution_directive") == VPS_GUEST_DIRECTIVE, "CONTROL44_VPS_DIRECTIVE_POINTER_MISMATCH")
+    require(errors, hard.get("vps_testing") is False, "CONTROL44_VPS_BAN_WEAKENED")
+    require(errors, hard.get("vps_disposable_independent_kernel_guest_testing") is False, "CONTROL44_VPS_GUEST_REAUTHORIZED")
+    require(errors, hard.get("self_hosted_vps_test_runners") is False, "CONTROL44_SELF_HOSTED_REAUTHORIZED")
+    require(errors, hard.get("production_host_testing") is False, "CONTROL44_PRODUCTION_REAUTHORIZED")
+    require(errors, hard.get("authorized_isolated_sandbox_only") is True, "CONTROL44_SANDBOX_ONLY_FENCE_MISSING")
+    require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(control, sort_keys=True), "CONTROL44_STALE_VPS_DIRECTIVE_POINTER")
     require(errors, "4.2 EXECUTION-BOUNDARY" in str(control.get("composition_rule", "")), "CONTROL44_4_2_EXECUTION_BOUNDARY_NOT_PRESERVED")
 
     adjudication = steering.get("adjudication") or {}
-    require(errors, adjudication.get("vps_testing") is False, "STEERING844_DIRECT_VPS_HOST_BAN_WEAKENED")
-    require(errors, adjudication.get("vps_testing_scope") == DIRECT_SCOPE, "STEERING844_VPS_SCOPE_NOT_DIRECT_HOST_ONLY")
-    require(errors, adjudication.get("vps_disposable_independent_kernel_guest_testing") is True, "STEERING844_DISPOSABLE_GUEST_ADMISSION_MISSING")
-    require(errors, adjudication.get("qemu_tcg_guest_final_hardware_microvm_credit") is False, "STEERING844_TCG_FINAL_CREDIT_WEAKENED")
+    require(errors, adjudication.get("vps_testing") is False, "STEERING844_VPS_BAN_WEAKENED")
+    require(errors, adjudication.get("vps_disposable_independent_kernel_guest_testing") is False, "STEERING844_VPS_GUEST_REAUTHORIZED")
+    require(errors, adjudication.get("self_hosted_vps_test_runners") is False, "STEERING844_SELF_HOSTED_REAUTHORIZED")
+    require(errors, adjudication.get("production_host_testing") is False, "STEERING844_PRODUCTION_REAUTHORIZED")
+    require(errors, adjudication.get("authorized_isolated_sandbox_only") is True, "STEERING844_SANDBOX_ONLY_FENCE_MISSING")
+    require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(steering, sort_keys=True), "STEERING844_STALE_VPS_DIRECTIVE_POINTER")
 
     return {
-        "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v1",
+        "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2",
         "pass": not errors,
         "errors": errors,
         "credit": "SOURCE_POLICY_ASSERTION_ONLY_ZERO_RUNTIME_CREDIT",

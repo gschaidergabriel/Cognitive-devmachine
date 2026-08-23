@@ -1,0 +1,86 @@
+{
+  "schema_version": "GO_CLAUDE_MEMORY_AUTHORITY_FENCE/v2",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "organ": "GPT-5.6 Sol",
+  "rebased_main": "3b225a1b2d56b8bd489f0ed8310c0e6626df23bb",
+  "branch": "go-20260823-claude-memory-authority",
+  "source_delta": {
+    "adapter_path": "the artefact/clayverse/adapters.py",
+    "adapter_blob": "993511314f8ec858dda7a46b7b6f156af8127e72",
+    "test_path": "the artefact/tests/test_claude_memory_authority.py",
+    "test_blob": "aaab00ff161e76db700cc14500299f1dd9cdb61e"
+  },
+  "observed_gap": {
+    "adapter_retains_HOME_for_oauth": true,
+    "prompt_history_disabled": true,
+    "pre_delta_explicit_auto_memory_disable": false,
+    "pre_delta_explicit_claude_md_disable": false,
+    "risk": "Claude Code may load or create side-memory under retained HOME/project context, competing with the canonical durable state authority."
+  },
+  "primary_external_evidence": [
+    {
+      "source": "https://code.claude.com/docs/en/memory",
+      "observation": "Claude Code documents CLAUDE.md and auto memory as cross-session memory; auto memory is on by default and CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 disables it."
+    },
+    {
+      "source": "https://code.claude.com/docs/en/env-vars",
+      "observation": "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1 prevents user, project and auto-memory CLAUDE.md memory inputs from loading into context."
+    }
+  ],
+  "repair": {
+    "preserve_home_for_auth": true,
+    "preserve_anthropic_auth_allowlist": true,
+    "force_child_env": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
+      "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",
+      "CLAUDE_CODE_SKIP_PROMPT_HISTORY": "1"
+    },
+    "parent_override_behavior": "fail_closed_to_1_even_if_parent_exports_0"
+  },
+  "parallel_fusion": {
+    "main_receipt": "the artefact/blogpost_entity/receipts/2026-08-23_GO_CLAUDE_EPHEMERALITY_CONTRACT_MISMATCH_GPT56SOL.json",
+    "main_commit": "3b225a1b2d56b8bd489f0ed8310c0e6626df23bb",
+    "conclusion": "This memory-authority fence is a necessary partial repair only. It does not establish EPHEMERAL PASS because product HOME remains persistent while the current receipt contract expects measured temporary-home creation/removal. The canonical next design must reconcile credential persistence with invocation-isolated Claude config/session roots or revise the receipt to measure the actual persistence boundary."
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "POISONED_HOME_MEMORY_AUTHORITY_CANARY",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "execution_surface": "isolated ChatGPT Linux component environment",
+    "intervention": "Create poison user CLAUDE.md and auto-memory MEMORY.md under retained HOME, compare pre-delta and proposed child-env contracts while preserving OAuth HOME/token.",
+    "result": {
+      "before_guarded": false,
+      "after_guarded": true,
+      "oauth_home_preserved": true,
+      "auto_memory_guard": "1",
+      "claude_md_guard": "1"
+    }
+  },
+  "regression_contract": [
+    "parent memory-enable values are overridden fail-closed",
+    "HOME remains bound for OAuth/subscription auth",
+    "Anthropic auth token remains admitted",
+    "unrelated secrets remain excluded",
+    "memory-disable guards reach the Claude subprocess environment"
+  ],
+  "execution_evidence": {
+    "source_mechanism": "SUPPORTED_BY_BOUNDED_ISOLATED_CANARY",
+    "exact_repo_pytest": "NOT_YET_OBSERVED",
+    "live_claude_invocation": "NOT_EXECUTED",
+    "exact_ubuntu_runtime": "NOT_EXECUTED",
+    "ephemeral_receipt_pass": false,
+    "claude_adapter_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_credit": 0,
+    "whole_product_credit": 0
+  },
+  "execution_surface_blocker": "Connected Vercel surface exposes documentation search only; no executable Sandbox start/exec action is available. The isolated container cannot resolve github.com for an exact branch checkout.",
+  "free_only": true,
+  "provider_secret_lookup": false,
+  "provider_network_execution": false,
+  "training_started": false,
+  "together_used": false
+}

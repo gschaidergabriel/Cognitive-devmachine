@@ -2,9 +2,10 @@
 """Compose the canonical Mini Entity pre-inference Cognitive Fabric admission.
 
 The runtime reads one generation-scoped ACTIVE_COGNITION_TURN from MiniUnifiedDB,
-uses the canonical explicit inference-capability binding, and composes the existing
-ZERO workspace-capsule and InferencePacket-v2 contracts. It creates no second turn,
-state, truth, identity, recovery, inference-capability, or effect authority.
+uses the canonical explicit inference-capability route bound to that exact cognition
+ancestry, and composes the existing ZERO workspace-capsule and InferencePacket-v2
+contracts. It creates no second turn, state, truth, identity, recovery,
+inference-capability, or effect authority.
 """
 from __future__ import annotations
 
@@ -79,7 +80,7 @@ def _default_dependencies():
     import zero_workspace_capsule_v1 as capsule_v1
     return (
         active_turn.resolve_active_prepare,
-        capability.resolve_from_profile,
+        capability.resolve_bound_route,
         capsule_v1.compile_workspace_capsule,
         packet_v2.compile_packet,
     )
@@ -131,14 +132,21 @@ def prepare_admission(
     _need(invocation_obj["task_text"] == task_text, "INVOCATION_ACTIVE_TASK_MISMATCH")
     _need(invocation_obj["turn_binding_digest"] == turn_binding_digest, "INVOCATION_ACTIVE_BINDING_MISMATCH")
 
-    route = resolve_capability(profile)
-    _need(isinstance(route, Mapping) and route.get("ok") is True, "CAPABILITY_BINDING_UNAVAILABLE")
+    route = resolve_capability(profile, binding, expected_generation=generation)
+    _need(isinstance(route, Mapping) and route.get("ok") is True, "CAPABILITY_BOUND_ROUTE_UNAVAILABLE")
+    _need(
+        route.get("authority") == "ROUTING_ONLY_BOUND_TO_CANONICAL_PREPARE",
+        "CAPABILITY_BOUND_ROUTE_AUTHORITY_MISMATCH",
+    )
     target_engine_class = route.get("target_engine_class")
     jspace_mode = route.get("jspace_mode")
     _need(target_engine_class in _PACKET_TARGETS, "CAPABILITY_PACKET_TARGET_INVALID")
     _need(jspace_mode in _JSPACE_MODES, "CAPABILITY_JSPACE_MODE_INVALID")
-    capability_binding_digest = _digest(route.get("binding_digest"), "capability_binding_digest")
+    capability_binding_digest = _digest(route.get("capability_binding_digest"), "capability_binding_digest")
     capability_receipt_digest = _digest(route.get("capability_receipt_digest"), "capability_receipt_digest")
+    capability_route_digest = _digest(route.get("route_digest"), "capability_route_digest")
+    capability_evidence_kind = _text(route.get("capability_evidence_kind"), "capability_evidence_kind")
+    ucf_engine_class = _text(route.get("ucf_engine_class"), "ucf_engine_class")
     adapter_version = _text(route.get("adapter_version"), "adapter_version")
 
     capsule = compile_workspace_capsule(
@@ -180,8 +188,16 @@ def prepare_admission(
     _need(isinstance(snapshot, Mapping), "PROFILE_SNAPSHOT_MISSING")
     profile_id = _text(snapshot.get("profile_id"), "profile_snapshot.profile_id")
     profile_hash = _digest(snapshot.get("profile_hash"), "profile_snapshot.profile_hash")
-    _need(route.get("profile_id") in {None, profile_id}, "CAPABILITY_PROFILE_ID_DRIFT")
-    _need(route.get("profile_hash") in {None, profile_hash}, "CAPABILITY_PROFILE_HASH_DRIFT")
+    _need(route.get("profile_id") == profile_id, "CAPABILITY_PROFILE_ID_DRIFT")
+    _need(route.get("profile_hash") == profile_hash, "CAPABILITY_PROFILE_HASH_DRIFT")
+    _need(route.get("entity_generation") == generation, "CAPABILITY_ROUTE_GENERATION_DRIFT")
+    _need(route.get("causal_turn_id") == causal_turn_id, "CAPABILITY_ROUTE_CAUSAL_TURN_DRIFT")
+    _need(route.get("turn_binding_digest") == turn_binding_digest, "CAPABILITY_ROUTE_TURN_BINDING_DRIFT")
+    _need(
+        route.get("boot_binding_digest") == binding.get("boot_binding_digest"),
+        "CAPABILITY_ROUTE_BOOT_BINDING_DRIFT",
+    )
+    _need(route.get("workspace_digest") == binding.get("workspace_digest"), "CAPABILITY_ROUTE_WORKSPACE_DRIFT")
 
     receipt = {
         "schema": ADMISSION_SCHEMA,
@@ -203,21 +219,26 @@ def prepare_admission(
         "policy_authority_digest": _digest(binding.get("policy_authority_digest"), "policy_authority_digest"),
         "capability_binding_digest": capability_binding_digest,
         "capability_receipt_digest": capability_receipt_digest,
+        "capability_route_digest": capability_route_digest,
+        "capability_evidence_kind": capability_evidence_kind,
         "adapter_version": adapter_version,
         "target_engine_class": target_engine_class,
+        "ucf_engine_class": ucf_engine_class,
         "jspace_mode": jspace_mode,
         "inference_packet_digest": inference_packet_digest,
         "authority": "CANDIDATE_INFERENCE_ONLY",
         "real_effect_executed": False,
     }
+    admission_digest = sha256_obj(receipt)
     return {
         "ok": True,
         "schema": ADMISSION_SCHEMA,
         "generation": generation,
         "canonical_state_hash": canonical_state_hash,
         "packet_hash": packet_hash,
+        "capability_route_digest": capability_route_digest,
         "inference_packet_digest": inference_packet_digest,
-        "cognitive_fabric_receipt_digest": sha256_obj(receipt),
+        "cognitive_fabric_receipt_digest": admission_digest,
         "inference": inference,
         "system": admitted_system,
         "user": admitted_user,

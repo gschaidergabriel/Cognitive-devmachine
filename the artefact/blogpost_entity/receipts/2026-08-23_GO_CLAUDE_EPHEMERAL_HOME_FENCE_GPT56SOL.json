@@ -1,0 +1,78 @@
+{
+  "schema": "GO_CLAUDE_EPHEMERAL_HOME_FENCE/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_authority": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "branch": "go/claude-ephemeral-home-fence-20260823",
+  "branch_base": "f0cf19f38cd352745c23e5c0eb49079cdd6b1444",
+  "latest_main_observed_before_receipt": "23c0f4c32fe0570a79aa81f94ff75948448d06c8",
+  "finding": {
+    "class": "CLAUDE_EPHEMERAL_BOUNDARY_CONTRACT_GAP",
+    "contract": "agentzeroforschung/instrumente/CLAUDE_ADAPTER_BOUNDARY_RECEIPT_v1.md",
+    "product_path": "the artefact/clayverse/adapters.py",
+    "test_path": "the artefact/tests/test_runtime_adapters.py",
+    "gap": "The canonical EPHEMERAL receipt requires a temporary HOME created and removed for targeted Claude inference, while current main intentionally retains ambient HOME for subscription/OAuth credentials. Parallel main repairs already disable Claude auto-memory and CLAUDE.md inputs; they explicitly do not close the temporary-HOME clause."
+  },
+  "delta": [
+    "Preserve the merged Mini Entity owner-neutral Claude targeted-inference prompt and side-memory fences.",
+    "Run each targeted inference under a new mode-0700 temporary HOME and CLAUDE_CONFIG_DIR.",
+    "Pass --setting-sources with an empty source set so user/project/local settings do not become an implicit inference authority.",
+    "Preserve explicit API/OAuth environment credentials through the canonical child allowlist.",
+    "When no explicit inference credential is configured, copy only the bounded Claude .credentials.json into the temporary config with mode 0600.",
+    "Open ambient credential bytes with O_NOFOLLOW where supported, require a bounded regular file, and fail closed on unsafe source metadata.",
+    "Destroy the temporary HOME after the subprocess returns or raises.",
+    "Update the canonical ephemerality and environment-isolation regression expectations and add dedicated credential-bridge regressions."
+  ],
+  "primary_dependency_evidence": [
+    "Current Claude Code documentation describes setting-source control for user/project/local settings and explicit disabling of auto-memory for isolation.",
+    "Current Claude Code documentation describes CLAUDE_CONFIG_DIR as relocating Claude configuration/credentials and Linux credentials under the Claude config directory.",
+    "Current Claude Code documentation exposes CLAUDE_CODE_OAUTH_TOKEN for explicit OAuth credential injection."
+  ],
+  "bounded_execution": {
+    "environment": "ChatGPT isolated Linux container",
+    "python": "3.13",
+    "provider_network": false,
+    "provider_secret_lookup": false,
+    "claude_live_invocation": false,
+    "together_used": false,
+    "paid_execution": false,
+    "py_compile": "PASS",
+    "focused_regressions": "3/3 PASS",
+    "covered": [
+      "credential-only temporary HOME copy + mode 0600 + ambient CLAUDE.md exclusion + cleanup",
+      "symlinked ambient credential source fails closed before Claude subprocess start",
+      "explicit CLAUDE_CODE_OAUTH_TOKEN bypasses ambient credential-file copy"
+    ],
+    "evidence_scope": "BOUNDED_COMPONENT_MECHANISM_ONLY"
+  },
+  "parallel_fusion": {
+    "merged_side_memory_prs_observed": [1119, 1120],
+    "merged_owner_prompt_pr_observed": 1116,
+    "duplicate_side_memory_path_created": false,
+    "preserved_newer_main_semantics_in_branch_content": true,
+    "note": "Branch ancestry began before the newest prompt merge; the branch adapter content was explicitly fused to preserve the current Mini Entity candidate-inference identity law before PR creation."
+  },
+  "unusual_experiment": {
+    "formal_credit": "NONE",
+    "reason": "Only deterministic source/component regressions were run; no shared atomic macrocycle lease or unusual intervention was claimed."
+  },
+  "credit": {
+    "claude_runtime_credit": 0,
+    "native_v2_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "next_exact_gate": [
+    "Adjudicate/merge only if current main still lacks a temporary-HOME implementation and the PR preserves newer main ancestry without conflict.",
+    "On the next admitted exact Ubuntu runtime, execute real Claude targeted inference on one clean bound source/tree and emit the four canonical CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 children under one common identity.",
+    "Run diagnostic validation first; only an all-PASS aggregate may receive CLAUDE_ADAPTER_BOUNDARY_ONLY credit.",
+    "Rerun the full suite on the same exact source before any runtime promotion."
+  ],
+  "acceptance": "IN_PROGRESS",
+  "epistemic_guard": "COMPONENT_MECHANISM_PASS != LIVE_CLAUDE_RUNTIME_PASS; TEMP_HOME_SOURCE_DELTA != NATIVE_V2_PARITY; MODEL_OUTPUT != CANONICAL_TRUTH"
+}

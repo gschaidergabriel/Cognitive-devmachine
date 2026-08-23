@@ -47,6 +47,44 @@ Every exact user `go` means:
 
 `go` must not silently switch back to ClayVerse work selection.
 
+## Hyperposition Computational Unit additive owner law
+
+The owner additionally requires the **Hyperposition Computational Unit (HCU)** to be developed
+in parallel during exact `go` work, without creating a second program or authority.
+
+Canonical HCU project root:
+
+`the artefact/MicroEntity/HyperpositionComputationalUnit/`
+
+Canonical HCU product contract:
+
+`the artefact/MicroEntity/HyperpositionComputationalUnit/OWNER_CONTRACT.md`
+
+The HCU is a sparse modular grid of approximately-0.8B cognition cells targeted at the owner's
+separate KVM4 VPS profile (4 CPU cores, 16 GB RAM, 200 GB disk, 16 TB bandwidth). It is intended
+to carry long-lived causal world-model, strategic supervision, dynamic goal proposal, long
+simulation, Zero-cognition modeling and improvement-hypothesis functions.
+
+Every exact `go` must consider a non-duplicate HCU lane and advance it when useful/unblocked.
+The resident-cell count is measured, not asserted. Logical/resident/active cells are separated
+so CPU concurrency does not collapse merely to maximize module count.
+
+HCU data generation uses the existing FREE_ONLY LLM/token fundus where useful. Provider/model
+output is candidate data only and remains provenance/rate-limit bound.
+
+All HCU-generated project data, configs, receipts, benchmark outputs, planner outputs, generated
+code and calibration artifacts must live under the canonical HCU root and be included in the
+recursive `the artefact/MicroEntity/MICROENTITY_CURRENT.zip` snapshot. Secrets/credentials are
+never packaged.
+
+This additive HCU law does not weaken current authority boundaries:
+
+- MiniUnifiedDB remains canonical durable authority;
+- HCU/model outputs do not mint truth;
+- existing generation/provenance/effect gates remain authoritative;
+- HCU is not a second persistent entity;
+- current VPS test prohibition remains in force until explicitly superseded.
+
 ## Current cognitive product law
 
 `MINI_ENTITY_HAS_BUNDLED_COGNITION_CORE = TRUE`

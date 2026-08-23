@@ -1,8 +1,6 @@
-import hashlib
-import json
 import unittest
 
-from xeno_entry_fabric_v1 import EntryPacket
+from xeno_entry_fabric_v1 import admit_entry
 from grid10_scheduler_v1 import (
     ExecutionClass,
     GridScheduleError,
@@ -14,8 +12,12 @@ from grid10_scheduler_v1 import (
 )
 
 
-def packet(*, max_model_calls=2, max_tokens=2048, admission_seed="a"):
-    normalized = {
+CAPABILITY_BINDING_SHA256 = "2" * 64
+ADMITTED_CAPABILITIES = ("hcu.route",)
+
+
+def packet(*, max_model_calls=2, max_tokens=2048):
+    entry = {
         "schema": "XENO_ENTRY_PACKET/v1",
         "ingress_id": "ingress:test:grid",
         "causal_id": "causal:test:grid",
@@ -27,21 +29,24 @@ def packet(*, max_model_calls=2, max_tokens=2048, admission_seed="a"):
         "received_time": "2026-08-23T23:40:01+07:00",
         "provenance_ref": "unifieddb:source:test:grid",
         "provenance_sha256": "1" * 64,
-        "capabilities": ("hcu.route",),
-        "capability_binding_sha256": "2" * 64,
+        "capabilities": ["hcu.route"],
+        "capability_binding_sha256": CAPABILITY_BINDING_SHA256,
         "parent_id": None,
         "stream_id": "stream:test:grid",
-        "budget": tuple(sorted({
+        "budget": {
             "max_model_calls": max_model_calls,
             "max_tokens": max_tokens,
             "max_wall_ms": 5000,
-        }.items())),
+        },
         "payload_ref": "unifieddb:payload:test:grid",
         "payload_sha256": "3" * 64,
     }
-    # Admission identity is treated as already produced by the retained Entry Fabric.
-    admission = hashlib.sha256((admission_seed + json.dumps(normalized, sort_keys=True, default=list)).encode()).hexdigest()
-    return EntryPacket(**normalized, admission_sha256=admission)
+    return admit_entry(
+        entry,
+        current_generation=7,
+        expected_capability_binding_sha256=CAPABILITY_BINDING_SHA256,
+        admitted_capabilities=ADMITTED_CAPABILITIES,
+    )
 
 
 def capacity(*, logical=10, physical=1, receipt="4" * 64):

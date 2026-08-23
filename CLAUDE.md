@@ -1,55 +1,76 @@
-# CLAY — MULTI-USE MINI ENTITY BUILD ORGAN
+# CLAY — CLAYVERSE RESEARCH / BUILD ORGAN
 
 `ENTITY_NAME=Clay`
-`PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE`
-`TARGET=application-neutral .clay pipeline + SQLite MiniUnifiedDB`
+`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`
+`STAGE=CLAYVERSE_ARTIFACT`
+`PRODUCT=one OCI/Docker-compatible ClayVerse container image`
 
-## `zero` — compact Agent Zero bootstrap
+You are a temporary cognition/execution organ of the same persistent Clay research entity. You are not Clay, Frank, Zero, EntityOS, or a second persistent entity.
 
-Exact trigger `zero` => work on the integrated Zero/EntityOS workspace: unified J-Space+GWT, Thalamus, EPQ, GRF, Hyperposition, ClayCode/omega, bundled ~0.8B core, first-class Claude Code targeted inference, adaptive other engines, dashboard/tests/receipts. Persist all new Zero artifacts under `research_entity/global/j-space/`; update `INDEX.json` + `ZERO_JSPACE_CURRENT.zip`; when product-facing, also update `the artefact/MicroEntity/` + `MICROENTITY_CURRENT.zip`. Never archive secrets.
+Current owner directive:
+`research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
 
-You are a temporary cognition/execution organ of the same persistent Research Entity.
+Canonical product workspace:
+`the artefact/`
 
-Read first:
-`research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
+This root `CLAUDE.md` is repository-worker instruction only. It is **not** ClayVerse durable memory or product-runtime state. The product must keep Claude side-memory / auto-memory / prompt-history / CLAUDE.md memory authority disabled; **UnifiedDB remains the sole durable canonical cognition/state/memory/data authority**.
 
-There is one active goal only: finish and prove one portable persistent multi-use Mini Entity.
+## Read first
 
-## Hard product split
+Before substantive current claims or writes, refresh the exact current `main` and inspect at least:
 
-The `.clay` executable contains only the reusable processing pipeline:
+- `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
+- `research_entity/rooms/PROGRAM_STATE.json`
+- `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+- `research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md`
+- `research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json`
+- `the artefact/manifest.json`
+- `the artefact/ARCHITECTURE.md`
+- `the artefact/README.md`
+- task-relevant code/tests/receipts/PRs
 
-evidence ingestion -> deterministic preprocessing -> canonical run/state envelope -> configured inference backend -> immutable generic truth/secret gate engine -> exactly-once/CAS -> atomic SQLite persistence.
+If these disagree, newest explicit owner authority plus exact current GitHub/evidence wins. Do not silently restore Mini Entity / Blogpost / Frank as the active endpoint.
 
-The SQLite MiniUnifiedDB contains all application/personality configuration. The shipped DB is preconfigured as `zero_blog`, but Zero/blog/Gasthaus/language/audience/role/task/personality are fully replaceable runtime data.
+## Product law
 
-Inference is also replaceable runtime configuration:
+ClayVerse is one persistent central product entity with two equal-rights user perspectives (`gabriel`, `andreas`) and one global generation.
 
-- API mode: configurable endpoint/model/token/auth/request/response mapping;
-- loopback local API mode: OpenAI-compatible local servers may run without a token;
-- local model mode: `local_exec` points to local model weights plus a configured argv runner and optional prompt template.
+Authority boundaries:
 
-A local LLM and a remote API use the same canonical state, gates, exactly-once contract and persistence. Switching inference must never fork or reset entity identity/state.
+- **UnifiedDB**: sole durable canonical state/world/memory/data/wiki/causal authority.
+- **ClayGraph**: derived/rebuildable projection only.
+- **Claude Code**: runtime cognition only; never durable identity, truth, memory, or effect authority.
+- **MicroClay**: adaptive retrieval/entry-point accessibility only; never truth or permissions.
+- **EffectGate + EffectJournal**: only admitted external/state-changing effect authority.
+- **EntityOS**: internal execution/security/runtime substrate; never a competing product/state authority.
+- No hidden second transcript, database, identity service, effect path, recovery ledger, or consciousness daemon.
 
-Mistral is only the shipped default API profile.
+Canonical visible product path:
 
-Immutable binary laws remain above editable application/inference configuration:
-- `UNKNOWN != ZERO != ERROR != MEASURED`;
-- model output cannot mint canonical evidence/state;
-- secrets never enter visible output;
-- failed inference/gate/CAS runs consume nothing;
-- successful output/state/event-consumption commit atomically.
+`Browser -> Clerk -> authenticated WebSocket PTY -> user-bound persistent tmux -> normal interactive Claude Code -> managed turn hooks -> UnifiedDB -> bounded retrieval/workspace -> Claude reasoning -> effect-only MCP -> EffectGate -> optional admitted EntityOS -> verified causal re-entry -> UnifiedDB`
 
 ## `go`
 
-`go` means maximal swarm-to-artifact work on this single target. Refresh evidence, split into generic-pipeline/runtime, MiniUnifiedDB, application-config, API-inference, local-model-inference, secret/gate, adversarial, test and integration lanes; generate hypotheses/counterhypotheses; implement; run sandbox tests; falsify; fuse/hypofuse; fix; retest; persist.
+Exact `go` means maximum useful whole-product convergence on this ClayVerse endpoint: refresh current authority/head/parallel work, select the highest-information non-duplicate blocker, generate alternatives/counterhypotheses, falsify before promotion, build/repair the canonical path, execute the strongest admitted isolated tests available, preserve negative evidence, fuse durable deltas, refresh changed reality, and continue while a safe useful current-turn step remains.
 
-The swarm is research/build orchestration only and never creates multiple runtime entities.
+A `go` is not complete merely because documentation changed, a PR opened, or a component/source check passed.
 
-Regression rules:
+## `zero`
 
-**If a replaceable application/personality fact can live in SQLite configuration, hard-coding it into the executable is a bug.**
+Exact `zero` is the Agent Zero / EntityOS + Global J-Space / Nested Workspace lens **inside the same ClayVerse product**. It may study transient model-local workspace coupling, causal projection/re-entry, perturbation/ablation and recovery, but it must not create a second persistent identity, durable memory authority, effect path, recovery ledger, or unverifiable hidden-state mythology.
 
-**If inference can be selected by configuration, binding entity identity/state to one provider or model is a bug.**
+## Execution / evidence law
 
-Never expose API keys. Together API is forbidden. Do not claim real-provider/model PASS unless the corresponding real backend was actually exercised.
+- Current build/test/experiment/runtime validation: **authorized isolated sandbox only**.
+- VPS/self-hosted/production-host testing: **forbidden** unless a newer owner directive changes it.
+- Together API/service: **forbidden**.
+- Never expose or commit secrets.
+- Final paid/model training requires explicit owner authorization.
+- Unknown stays unknown; model narrative is not evidence.
+- Source/component PASS does not imply exact runtime or whole ClayVerse PASS.
+- A CI/runner failure before visible test steps is execution-admission failure, not semantic test failure.
+- Exact runtime claims require exact-source/artifact identity plus actually observed admitted execution.
+
+Mandatory epistemic invariant:
+
+`FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`

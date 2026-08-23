@@ -60,9 +60,14 @@ def test_clerk_config_fails_closed_without_authorized_parties(monkeypatch):
         ClerkConfig.from_env()
 
 
-def test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated(tmp_path, monkeypatch):
+def _claude_boundary_probe(tmp_path, monkeypatch):
+    """Run one deterministic fake-Claude boundary probe with test-local host state."""
     log = tmp_path / "args.json"
     fake = tmp_path / "claude"
+    home = tmp_path / "home"
+    home.mkdir()
+    sentinel = tmp_path / "SHOULD_NOT_EXIST"
+    observation = f"hello; touch {sentinel}"
     fake.write_text(
         "#!/usr/bin/env python3\n"
         "import json,os,sys\n"
@@ -70,34 +75,63 @@ def test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated(t
         "print(json.dumps({'structured_output':{'text':'ok','effect':None}}))\n"
     )
     fake.chmod(fake.stat().st_mode | stat.S_IXUSR)
+    monkeypatch.setenv("HOME", str(home))
     monkeypatch.setenv("CLERK_SECRET_KEY", "must-not-cross-cognition-boundary")
     monkeypatch.setenv("RANDOM_DATABASE_PASSWORD", "must-not-cross-either")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "allowed-auth")
     adapter = ClaudeCodeInference(binary=str(fake), cwd=str(tmp_path), timeout=5)
-    out = adapter.reason({"shared": "state"}, "hello; touch /tmp/SHOULD_NOT_EXIST")
+    out = adapter.reason({"shared": "state"}, observation)
     payload = json.loads(log.read_text())
-    args = payload["args"]
-    env = payload["env"]
-    assert out == {"text": "ok", "selection": "respond", "effect": None}
-    assert "--bare" not in args
+    return {
+        "out": out,
+        "args": payload["args"],
+        "env": payload["env"],
+        "home": home,
+        "sentinel": sentinel,
+        "observation": observation,
+    }
+
+
+def test_claude_code_adapter_toolless_receipt_v1(tmp_path, monkeypatch):
+    probe = _claude_boundary_probe(tmp_path, monkeypatch)
+    args = probe["args"]
     assert "-p" in args
     assert args[args.index("--permission-mode") + 1] == "plan"
-    assert args[args.index("--max-turns") + 1] == "1"
     assert args[args.index("--tools") + 1] == ""
     assert "--strict-mcp-config" in args
+    prompt = args[args.index("-p") + 1]
+    assert probe["observation"] in prompt
+    assert not probe["sentinel"].exists()
+
+
+def test_claude_code_adapter_ephemeral_receipt_v1(tmp_path, monkeypatch):
+    probe = _claude_boundary_probe(tmp_path, monkeypatch)
+    args = probe["args"]
+    env = probe["env"]
+    assert "--bare" not in args
+    assert args[args.index("--max-turns") + 1] == "1"
     assert "--no-session-persistence" in args
+    assert env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] == "1"
+    assert env["HOME"] == str(probe["home"])
+
+
+def test_claude_code_adapter_structured_output_receipt_v1(tmp_path, monkeypatch):
+    probe = _claude_boundary_probe(tmp_path, monkeypatch)
+    args = probe["args"]
+    assert probe["out"] == {"text": "ok", "selection": "respond", "effect": None}
     assert "--json-schema" in args
     schema = json.loads(args[args.index("--json-schema") + 1])
     capability = schema["properties"]["effect"]["anyOf"][1]["properties"]["capability"]
     assert set(capability["enum"]) == {"entityos.exec", "state.noop"}
-    assert env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] == "1"
+
+
+def test_claude_code_adapter_env_isolation_receipt_v1(tmp_path, monkeypatch):
+    probe = _claude_boundary_probe(tmp_path, monkeypatch)
+    env = probe["env"]
     assert env["ANTHROPIC_API_KEY"] == "allowed-auth"
-    assert "HOME" in env
+    assert env["HOME"] == str(probe["home"])
     assert "CLERK_SECRET_KEY" not in env
     assert "RANDOM_DATABASE_PASSWORD" not in env
-    prompt = args[args.index("-p") + 1]
-    assert "hello; touch /tmp/SHOULD_NOT_EXIST" in prompt
-    assert not Path("/tmp/SHOULD_NOT_EXIST").exists()
 
 
 def test_claude_failure_does_not_echo_stderr_secret(tmp_path):

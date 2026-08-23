@@ -1,0 +1,56 @@
+{
+  "schema": "mini-entity-go-research-receipt/v1",
+  "macrocycle_id": "go-20260823T0850+07-gpt56sol-mini-entity-generation-mirror",
+  "trigger": "go",
+  "organ": "gpt-5.6-sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "head_joined_main": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+  "candidate_pr": 966,
+  "candidate_head_before_regression": "3d490ee3179400d889bdc81ea8a769d84212e481",
+  "candidate_runtime_blob": "e885804f14d106f6bd86dbdd5d5aac8f25442315",
+  "evidence_class": "MECHANISM_MEASURED_NOT_EXACT_PRODUCT_RUNTIME",
+  "unusual_experiment": {
+    "slot": "1/1",
+    "id": "GENERATION_MIRROR_AUTHORITY_ESCALATION_FALSIFIER",
+    "question": "Can legacy eos_pipeline_state.generation advance the canonical entity_state.generation through PR #966 reconciliation?",
+    "intervention": {
+      "entity_state_generation": 4,
+      "eos_pipeline_state_generation": 999,
+      "operation": "execute the exact PR #966 reconciliation formula migrated_generation=max(native_generation,mirror_generation) and its two updates in isolated SQLite"
+    },
+    "observed_before": {
+      "entity_state_generation": 4,
+      "eos_pipeline_state_generation": 999
+    },
+    "observed_after": {
+      "entity_state_generation": 999,
+      "eos_pipeline_state_generation": 999
+    },
+    "result": "COUNTERHYPOTHESIS_CONFIRMED",
+    "counterhypothesis": "The legacy mirror is not passive: a larger mirror value can become a second generation authority and advance canonical state.",
+    "scope_limit": "This reproduces the exact reconciliation mechanism but is not an exact full-branch/full-product runtime execution receipt."
+  },
+  "product_implication": {
+    "status": "PR_966_NOT_PROMOTABLE_UNTIL_REPAIRED",
+    "violated_intent": "entity_state.generation is the sole canonical CAS authority; eos_pipeline_state is reference-only mirrored continuity bookkeeping",
+    "required_repair": [
+      "permit legacy mirror -> canonical transfer only as an explicit one-time migration when no canonical entity_state row existed before admission",
+      "after canonical authority exists, never reconcile mirror -> canonical",
+      "fail closed on unexpected generation divergence or reconcile canonical -> mirror only under an explicit audited policy",
+      "regress legacy-only migration separately from post-migration tamper/divergence"
+    ]
+  },
+  "execution_policy": {
+    "free_only": true,
+    "provider_network_calls": 0,
+    "provider_secret_lookups": 0,
+    "together_calls": 0,
+    "money_spent_usd": 0
+  },
+  "durable_actions": [
+    "PR #966 comment 5383670631 records the falsifier and required repair",
+    "new regression test file test_reference_generation_authority.py committed on PR #966 branch"
+  ],
+  "next_gate": "Repair _ensure_schema so legacy migration is one-time and post-admission mirror divergence cannot advance entity_state; then run the new regression plus existing #966 focused tests on an actually-started authorized isolated runner.",
+  "whole_product_acceptance": "IN_PROGRESS"
+}

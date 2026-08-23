@@ -75,8 +75,8 @@ class CognitionStoreTests(unittest.TestCase):
         loaded = store.load_active_binding(self.db, expected_generation=0)
         self.assertEqual(loaded["binding_digest"], first["binding_digest"])
 
-    def test_replayed_binding_digest_cannot_be_rebound_to_new_generation(self):
-        # Unusual experiment: poison a copied valid row by changing only its generation.
+    def test_generation_bound_digest_rejects_relabelled_row(self):
+        # Deterministic replay/generation regression; not an unusual-experiment claim.
         ids = self._objects()
         first = store.activate_binding(self.db, generation=0, object_ids=ids)
         self.db.execute("UPDATE entity_state SET generation=1 WHERE id=1")

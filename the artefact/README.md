@@ -6,9 +6,12 @@ Current authority is resolved from verified current `main`, especially:
 
 - `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 - `research_entity/rooms/PROGRAM_STATE.json`
-- `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
+- `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json`
 - `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
 - `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
+- `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
+
+The repository also retains `research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md` as owner-provenance. In the current autonomous **FREE_ONLY** supervisor mode it grants this organ no permission to inspect keys, preflight a paid provider, make paid network calls, create a Together job, spend, or claim provider/training credit.
 
 ## Current naming law
 
@@ -71,12 +74,13 @@ These are software architecture roles, not claims of custom silicon.
 
 ## Mandatory `go` law
 
-Every explicit `go` has two coupled tracks:
+Every explicit `go` has three coupled tracks under current authority:
 
 1. **ENTITYOS_EXECUTABLE_CONVERGENCE** — improve the strongest real current implementation toward EntityOS.
 2. **HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one HCU or typed Entry primitive.
+3. **GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS** — advance the functional J-Space/GWT prototype, exact causal traces, vector-control ABI, local checkpoint/loader binding and zero-cost local dataset/evaluation readiness.
 
-If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` and the next discriminator.
+If a track cannot safely advance, record the exact no-change reason and next discriminator. Track 3 is explicitly **FREE_ONLY** in this supervisor mode. It does not admit Together preflight or training.
 
 Material architecture work uses:
 
@@ -86,33 +90,17 @@ Prefer primitives reusable across multiple HCU modes.
 
 ## HCU modes
 
-### `GRID10`
+- `GRID10` — cheap 10 logical-cell shared-worker baseline for scheduler tests, lesions and compute-matched baselines.
+- `COGSIM10` — request-scoped cognition simulation producing candidates only.
+- `WM_TEST` — bounded noncanonical world/transition-model experiment.
+- `NESTED_SIM` — selective high-cost nested simulation; never a second reality authority.
+- `SCALEOUT` — measured logical-context scaling over shared physical workers.
 
-Cheap 10 logical-cell shared-worker baseline for scheduler tests, lesions, small parallel reasoning and exact compute-matched baselines.
+Scale semantics remain strict:
 
-### `COGSIM10`
+`logical_module_count != resident_model_count != active_KV_context_count != physical_decode_concurrency`.
 
-Request-scoped cognition simulation. A temporary 10-cell topology explores hypotheses/counterhypotheses/plans/critics and emits only candidates. No simulated action has direct real effects.
-
-### `WM_TEST`
-
-Bounded experimental world/transition-model mode. Predictions are noncanonical and must be calibrated against later observations.
-
-### `NESTED_SIM`
-
-Selective high-cost mode:
-
-`observed state -> bounded world model -> virtual computer -> simulated AI cognition -> proposed action -> hypothesis/counterhypothesis comparison -> calibrated candidate -> EffectGate`
-
-It is not the default and does not create a second reality authority.
-
-### `SCALEOUT`
-
-Scale logical contexts over shared physical workers. Benchmark ladder:
-
-`10 -> 32 -> 64 -> 128 -> 256 -> ~600 logical contexts`
-
-The ~600 H100-class target is a **research hypothesis only**. Logical module count is never reported as the same thing as resident model count or simultaneous decode streams.
+The benchmark ladder remains `10 -> 32 -> 64 -> 128 -> 256 -> ~600`; ~600 H100-class logical modules are hypothesis only until exact capacity/throughput/recovery evidence exists.
 
 ## Authority law
 
@@ -127,55 +115,42 @@ The ~600 H100-class target is a **research hypothesis only**. Logical module cou
 - EffectGate + EffectJournal remain the only real/state-changing effect authority;
 - no second persistent identity, truth store, effect path or recovery ledger is admitted.
 
-## Typed Entry Fabric
+## Typed Entry Fabric and loader identity
 
-All new data paths converge toward one typed ingress binding before cognition:
+All new data paths converge toward one typed ingress binding before cognition: replay-stable causal event identity, concrete admission identity, generation, provenance/source, modality/schema, observed/received time, permissions/capability scope, parent/stream relation, resource budget and payload reference/digest.
 
-- immutable ingress/causal identity;
-- generation;
-- source/provenance;
-- modality/type/schema;
-- observed/received time;
-- permissions/capability scope;
-- parent/stream relation;
-- compute/resource budget;
-- payload reference/digest.
+Capability claims in an untrusted Entry packet are **not authority**. Entry admission may narrow an already-admitted capability set but may never self-grant or broaden it.
 
-Inputs may originate from humans, tools, external events, sensor/stream data, canonical database changes or intrinsic system events.
+Replay-stable event identity and concrete transport/admission identity remain distinct. Downstream HCU route/inference receipts must echo event, admission, generation, engine/class, policy and exact loader-consumed artifact identity.
 
-Capability claims in an untrusted Entry packet are **not authority**. Entry admission must compare them against the existing deterministic permission/capability authority and its exact binding/receipt identity; the packet may narrow an admitted capability set but may never self-grant or broaden it. No second HCU permission authority is introduced.
+**Pre-load hashing is not loader attestation.** A positive `EngineAdmission` receives zero HCU runtime credit unless the physical loader is bound to the same consumed checkpoint/tokenizer/runtime/build bytes through a generation-fenced lease or equivalent enforced content-addressed/read-only boundary.
 
-Replay-stable causal event identity and concrete transport/admission identity must remain distinguishable: changes such as receive time, payload reference, permission snapshot or resource budget may change the admission identity without silently redefining the underlying immutable event identity. Changing immutable payload/provenance/event semantics must change event identity.
+## Global J-Space/GWT
 
-HCU route events and downstream inference receipts must ultimately re-enter through this fabric so event identity, generation, engine identity and causal provenance remain bound instead of becoming a side ledger.
+Global J-Space is an empirically instrumented causal-coupling hypothesis, not canonical truth or proof of hidden model state. Promotion requires real request-scoped traces and discriminating lesion/shuffle/rescue controls that distinguish causal use from mere context injection/display. `JSPACE_VECTOR_CONTROL_ABI/v1` must be frozen against observed trace semantics, not invented labels.
 
-## HCU reactive cognition
+Current ~0.8B work is **zero-cost local experimentation only** after exact FREE isolated execution and loader binding. The owner paid one-shot directive remains provenance but is quarantined by `SUPERVISOR_STEERING_8_61.json` for this organ.
 
-The current HCU direction is script-first and selective:
+## Execution policy — FREE_ONLY
 
-`canonical event -> deterministic maintenance -> selective HCU lane activation -> Hyperposition/J-Space candidate computation -> bounded projection -> EntityOS decision path`.
+Current build/test/experiment/runtime credit comes only from authorized isolated **FREE** execution. Workers must discover the sandbox/API/SDK/CLI/connector actions actually callable on their surface and distinguish platform capability from worker callability.
 
-External providers are not admitted as required internal cognition. Exact local checkpoint/tokenizer/runtime identity is an acceptance gate, not an inferred fact. Until a positive local engine capability record exists, absence from an external-provider denylist is insufficient to prove internal engine admission.
+VPS/self-hosted/production-host testing is forbidden. Paid, subscription and unknown-provider lanes fail closed **before credential/key lookup, provider preflight, network I/O or job creation**. Together general inference/fallback is forbidden; Together training is forbidden in the current autonomous supervisor mode; no paid fallback is admitted. Secrets never enter source or receipts.
 
-**Pre-load hashing is not loader attestation.** A positive `EngineAdmission` constructed from checkpoint/tokenizer/runtime/build hashes receives zero HCU runtime credit unless the actual model loader is bound to the same consumed bytes. The admitted path must therefore use a generation-fenced physical engine lease or an enforced read-only/content-addressed artifact boundary and must echo the loader-consumed artifact identity into the downstream inference receipt. Wrong-path loads, post-admission mutation, stale lease reuse or unknown consumed bytes fail closed.
-
-## Execution policy
-
-Current build/test/experiment/runtime credit comes only from authorized isolated sandbox execution unless newer owner authority changes it. VPS/self-hosted/production-host testing is forbidden under current control. Together API and paid fallback are forbidden. Secrets do not enter source/receipts. Final paid/model training requires explicit owner authorization.
-
-Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
+A source/component PASS, READY deployment, historical receipt, model consensus or paid owner-provenance does not imply EntityOS/HCU runtime acceptance.
 
 ## Current frontier
 
-1. wire the retained HCU route's separate `EngineAdmission` to the **real deterministic EntityOS/HCU control-plane producer** and bind it through a generation-fenced physical engine lease to the bytes actually consumed by the local checkpoint/tokenizer/runtime loader; a pre-load hash alone receives zero runtime credit, and an untrusted causal Entry event may request but may never mint engine authority;
-2. keep the replay-stable **event identity vs concrete admission identity** split and wire Typed Entry capability claims to the existing canonical deterministic capability authority rather than a test fixture or event self-claim;
-3. bind the downstream inference receipt **producer** to the already-defined serializer/event/Entry-admission/route/engine/class/artifact echo contract plus the exact physical loader lease/consumed-byte identity;
-4. converge the versioned Typed Entry canonicalization path to one accepted authority before making heterogeneous/cross-language hash-identity claims;
-5. run exact combined Entry + HCU route + engine-load-lease + inference-echo + GRID10 regressions on an actually-started authorized isolated executor, then measure GRID10/COGSIM10 cost utility before widening WM_TEST/NESTED_SIM;
-6. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry/loader semantics settle.
+1. obtain an actually-started exact-source authorized FREE isolated run over current Research `main` + the retained HCU donor spine;
+2. bind exact executor/source identities plus credential nonpersistence into one receipt;
+3. run the combined Typed Entry -> HCU route -> positive engine admission/load -> inference receipt -> GRID10 -> Global J-Space/GWT path;
+4. bind a real local ~0.8B checkpoint/tokenizer/runtime/build to loader-consumption evidence before model-runtime credit;
+5. emit real J-Space/GWT causal traces and run lesion/shuffle/rescue/hard-negative controls;
+6. freeze `JSPACE_VECTOR_CONTROL_ABI/v1` only after the causal interface is supported;
+7. derive leak-resistant train/validation/holdout data for zero-cost local experimentation;
+8. preserve generation, provenance, capability, recovery and EffectGate fences throughout;
+9. do **not** enter Together key lookup, preflight, network I/O or job creation in current FREE_ONLY supervisor mode.
 
-Completed authority migration note: current `the artefact/manifest.json` and the compatibility-named authority validator now select **EntityOS + HCU** while preserving historical ClayVerse controls only as immutable donor/safety ancestry. This source-level convergence does not create runtime acceptance.
+## Latest `go` README re-entry — 2026-08-24
 
-## Latest `go` README re-entry — 2026-08-23
-
-`README=UPDATED_ENGINE_LOAD_BOUNDARY`: one bounded unusual discriminator showed that an admitted pre-load checkpoint digest can diverge from bytes later read through the same mutable source path, while loading from a separately staged verified snapshot preserved the admitted bytes after the original path was mutated. This is mechanism evidence only: ordinary writable staging is not itself immutable loader attestation. Current architecture therefore requires loader-bound physical engine lease/consumed-byte evidence before any HCU runtime credit. Whole EntityOS/HCU runtime credit remains zero.
+`README=UPDATED_FREE_ONLY_STEERING_861_COHERENCE`: current `BOOTSTRAP_MINIMAL.json` and `PROGRAM_STATE.json` moved to `SUPERVISOR_STEERING_8_61.json`, while the artefact manifest, root routing shim and compatibility-named authority validator still referenced older authority/provider semantics. This cycle repairs that source-level split and explicitly quarantines paid-owner provenance under the current FREE_ONLY supervisor. Runtime, J-Space model and training credit remain zero until exact authorized FREE execution supplies evidence.

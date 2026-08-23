@@ -1,0 +1,87 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_main_before_write": "b128a1f3784a2b41d9f35ce915ea134e03312b1d",
+  "retained_hcu_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "observed_head_before_parallel_reentry": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "guard_source_commit": "aa8707f94f8767e484c24bd9de674231f57090de",
+    "guard_test_commit": "dedfa071b434c0841f573b2d91cb01ae5c0b7ae8",
+    "reentered_head": "707de21f1b0828ac72a858aa9c51825ffb4234a6"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "observed_head": "b6fcb5e26b66f30951a308caf6f23df8192d4040",
+    "source_status": "SOURCE_REBOUND_READY",
+    "runtime_invocation_observed": false,
+    "blocking_evidence": "VERCEL_HOBBY_BUILD_RATE_LIMIT_UPGRADE_PATH_INFRASTRUCTURE_ADMISSION"
+  },
+  "observation": {
+    "id": "JSPACE_INFERENCE_CHILD_BINDING_PARENT_ADMISSION_GAP",
+    "source_facts": [
+      "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3 is a deterministic child envelope whose validate_binding path revalidates schema, mirrored internal fields and binding digest but does not require an externally admitted HCU_INFERENCE_RECEIPT/v4 parent registry.",
+      "compile_admitted_jspace_training_dataset_v1 accepts admitted_inference_bindings keyed by training-trace SHA and calls validate_binding, but at the observed source identity does not independently require the referenced parent InferenceReceipt bytes to be externally admitted.",
+      "make_inference_receipt is stronger upstream evidence because it derives HCU_INFERENCE_RECEIPT/v4 from admitted route, engine admission, actual loader-consumption, GRID10 and admitted VerifiedModelExecution evidence.",
+      "Therefore a self-consistent child binding must not be permitted to launder parent execution ancestry merely because the child digest is internally valid."
+    ],
+    "hypothesis": "Serious J-Space training admission should require the exact externally admitted HCU_INFERENCE_RECEIPT/v4 parent bytes and cross-bind every execution-critical field mirrored into the J-Space binding.",
+    "counterhypothesis": "The self-authenticating J-Space binding alone is sufficient because its constructor normally derives from a valid InferenceReceipt.",
+    "discriminator": "Check whether validate_binding and the serious training compiler independently require an admitted parent InferenceReceipt registry rather than trusting constructor provenance.",
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_SOURCE_LEVEL_PARENT_REGISTRY_NOT_REQUIRED_AT_OBSERVED_COMPILER_BOUNDARY"
+  },
+  "delta": {
+    "guard_file": "the artefact/MicroEntity/hcu/jspace_inference_parent_admission_v1.py",
+    "guard_schema": "ENTITYOS_HCU_JSPACE_INFERENCE_PARENT_ADMISSION/v1",
+    "test_file": "the artefact/MicroEntity/hcu/test_jspace_inference_parent_admission_v1.py",
+    "effect": "Adds a reusable fail-closed parent-evidence primitive that requires the exact admitted InferenceReceipt parent, rehashes its RFC8785/JCS bytes, and cross-binds generation, Entry/route/GRID identities, engine/load evidence, ModelExecution provenance and exact input/output identities against the child binding.",
+    "tests_encoded": [
+      "exact admitted parent passes",
+      "self-consistent child binding without admitted parent fails",
+      "byte-distinct parent under a claimed key fails",
+      "self-consistent child rebound to a different valid parent but with a transplanted mirrored field fails"
+    ],
+    "current_integration_status": "SOURCE_GUARD_PRESENT_ON_RETAINED_DONOR_NOT_YET_WIRED_INTO_SERIOUS_TRAINING_COMPILER",
+    "test_execution_status": "NOT_EXECUTED_THIS_MACROCYCLE"
+  },
+  "parallel_reentry": {
+    "canonical_main_after_parallel_work": "b128a1f3784a2b41d9f35ce915ea134e03312b1d",
+    "complementary_finding": "JSPACE_VECTOR_CONTROL_NOT_BOUND_TO_ACTUAL_MODEL_INPUT_BYTES",
+    "relationship": "COMPLEMENTARY_NOT_DUPLICATE",
+    "future_primitive": "HCU_MODEL_INPUT_CONTROL_BINDING/v1"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_SOURCE_ACCEPTANCE_BOUNDARY_BY_PREVENTING_CHILD_BINDING_FROM_SUBSTITUTING_FOR_PARENT_INFERENCE_EVIDENCE; EXACT_RUNTIME_REMAINS_BLOCKED_BY_FREE_SURFACE_ADMISSION",
+    "track_b_hcu_typed_entry": "ADVANCED_HCU_CAUSAL_PROVENANCE_CHAIN_FROM_ENTRY_ROUTE_GRID_THROUGH_ENGINE_LOAD_AND_MODEL_EXECUTION_PARENT_EVIDENCE",
+    "track_c_jspace_training_readiness": "ADVANCED_FAIL_CLOSED_TRAINING_ANCESTRY_GUARD; MUST_FUSE_PARENT_REGISTRY_REQUIREMENT_AND_MODEL_INPUT_CONTROL_BINDING_BEFORE PROMOTION"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "timestamp_fallback_sufficient": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0
+  },
+  "execution": {
+    "paid_provider_used": false,
+    "together_preflight_or_training": false,
+    "vps_or_self_hosted_test": false,
+    "new_vercel_deployment_or_sandbox_invocation": false,
+    "local_test_execution_claimed_as_runtime_evidence": false
+  },
+  "credits_after_delta": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On the retained PR1263 lane, fuse require_admitted_inference_receipt_parent into compile_admitted_jspace_training_dataset_v1 so serious dataset compilation requires an admitted HCU_INFERENCE_RECEIPT/v4 registry and negative regressions prove synthetic-child rejection. Then compose that ancestry fence with HCU_MODEL_INPUT_CONTROL_BINDING/v1 so the exact executor-consumed input bytes are derivably bound to JSPACE_VECTOR_CONTROL_ABI/v1. Only after one coherent donor closure exists should PR810's fixed FREE_ONLY source manifest be extended and executed when included-tier Vercel build/function admission naturally permits."
+}

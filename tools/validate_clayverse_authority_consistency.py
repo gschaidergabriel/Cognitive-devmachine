@@ -11,6 +11,7 @@ OWNER_DIRECTIVE = "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIR
 EXPECTED_PROGRAM = "CLAYVERSE_SINGLE_CONTAINER"
 EXPECTED_STAGE = "CLAYVERSE_ARTIFACT"
 EXPECTED_RELEASE = "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE"
+EXPECTED_DYNAMIC_PRIMARY = "WHOLE_CLAYVERSE_OCI_PRODUCT"
 EXPECTED_EFFECTIVE_CONTROL = "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum"
 IDENTITY_GUARD = "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
 CONTROL41 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json"
@@ -18,6 +19,7 @@ CONTROL42 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_E
 CONTROL43 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_PROGRAM_AUTHORITY.json"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
 STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
+ROOT_CLAUDE = "CLAUDE.md"
 
 
 def load_json(path: Path):
@@ -27,8 +29,7 @@ def load_json(path: Path):
 
 def git_blob_sha(path: Path) -> str:
     data = path.read_bytes()
-    header = f"blob {len(data)}\0".encode("ascii")
-    return hashlib.sha1(header + data).hexdigest()
+    return hashlib.sha1(f"blob {len(data)}\0".encode("ascii") + data).hexdigest()
 
 
 def require(errors: list[str], condition: bool, code: str) -> None:
@@ -48,6 +49,7 @@ def validate(root: Path) -> dict:
         "manifest": root / "the artefact/manifest.json",
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
+        "repo_claude": root / ROOT_CLAUDE,
         "control41": root / CONTROL41,
         "control42": root / CONTROL42,
         "control43": root / CONTROL43,
@@ -81,6 +83,7 @@ def validate(root: Path) -> dict:
     footer = paths["footer"].read_text(encoding="utf-8")
     architecture = paths["architecture"].read_text(encoding="utf-8")
     readme = paths["readme"].read_text(encoding="utf-8")
+    repo_claude = paths["repo_claude"].read_text(encoding="utf-8")
 
     # Preserve the canonical research-entity join/identity fences while changing product authority.
     require(errors, bootstrap.get("entity_id") == canonical.get("entity_id"), "BOOTSTRAP_CANONICAL_ENTITY_MISMATCH")
@@ -105,6 +108,11 @@ def validate(root: Path) -> dict:
     require(errors, program.get("owner_directive") == OWNER_DIRECTIVE, "PROGRAM_OWNER_DIRECTIVE_MISMATCH")
     require(errors, program.get("product_endpoint") == "ClayVerse", "PROGRAM_PRODUCT_ENDPOINT_MISMATCH")
     require(errors, program.get("release_form") == EXPECTED_RELEASE, "PROGRAM_RELEASE_FORM_MISMATCH")
+    require(errors, "CLAYVERSE" in str(program.get("current_stage_goal", "")).upper(), "PROGRAM_STAGE_GOAL_NOT_CLAYVERSE")
+    dynamic = program.get("dynamic_targets") or {}
+    require(errors, dynamic.get("primary") == EXPECTED_DYNAMIC_PRIMARY, "PROGRAM_DYNAMIC_PRIMARY_MISMATCH")
+    require(errors, "CLAYVERSE" in str(program.get("current_frontier", "")).upper(), "PROGRAM_FRONTIER_NOT_CLAYVERSE")
+    require(errors, "CLAYVERSE" in str(program.get("go_contract", "")).upper(), "PROGRAM_GO_CONTRACT_NOT_CLAYVERSE")
     execution = program.get("execution_policy") or {}
     require(errors, execution.get("free_only") is True, "PROGRAM_FREE_ONLY_MISSING")
     require(errors, execution.get("isolated_sandbox_only") is True, "PROGRAM_ISOLATED_ONLY_MISSING")
@@ -116,7 +124,8 @@ def validate(root: Path) -> dict:
     require(errors, manifest.get("release_form") == EXPECTED_RELEASE, "MANIFEST_RELEASE_FORM_MISMATCH")
     require(errors, manifest.get("canonical_workspace") == "the artefact/", "MANIFEST_WORKSPACE_MISMATCH")
 
-    # Preserve the inherited 4.1 -> 4.2 -> 4.3 safety chain instead of trusting 4.4's self-report.
+    # Do not trust 4.4's preservation claims by themselves. Bind the actual inherited
+    # 4.1 -> 4.2 -> 4.3 bytes and their safety-critical fields before accepting 4.4.
     require(errors, control41.get("schema_version") == "4.1", "CONTROL41_VERSION_MISMATCH")
     require(errors, control41.get("status") == "ACTIVE" and control41.get("mode") == "FREE_ONLY", "CONTROL41_FREE_ONLY_WEAKENED")
     cycle41 = control41.get("cycle_policy") or {}
@@ -159,6 +168,7 @@ def validate(root: Path) -> dict:
 
     override = control44.get("program_identity_override") or {}
     hard44 = control44.get("preserved_hard_rules") or {}
+    require(errors, control44.get("schema_version") == "4.4-clayverse-product-authority-addendum", "CONTROL44_VERSION_MISMATCH")
     require(errors, control44.get("status") == "ACTIVE" and control44.get("mode") == "FREE_ONLY", "CONTROL44_NOT_ACTIVE_FREE_ONLY")
     require(errors, control44.get("base_control_path") == CONTROL41, "CONTROL44_BASE_PATH_MISMATCH")
     require(errors, control44.get("execution_boundary_addendum_path") == CONTROL42, "CONTROL44_EXEC_PATH_MISMATCH")
@@ -176,6 +186,7 @@ def validate(root: Path) -> dict:
     require(errors, hard44.get("runtime_credit_requires_exact_admitted_isolated_execution") is True, "CONTROL44_RUNTIME_EVIDENCE_WEAKENED")
     require(errors, hard44.get("model_output_is_candidate_not_truth") is True, "CONTROL44_MODEL_TRUTH_FENCE_WEAKENED")
     require(errors, hard44.get("frank_harness_modification") == "FORBIDDEN", "CONTROL44_FRANK_HARNESS_FENCE_WEAKENED")
+    require(errors, hard44.get("legacy_mini_entity_swarm_controller") == "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION", "CONTROL44_SWARM_QUARANTINE_WEAKENED")
 
     require(errors, steering.get("program") == EXPECTED_PROGRAM and steering.get("stage") == EXPECTED_STAGE, "STEERING844_PROGRAM_STAGE_MISMATCH")
     require(errors, steering.get("effective_control") == EXPECTED_EFFECTIVE_CONTROL, "STEERING844_CONTROL44_NOT_EFFECTIVE")
@@ -194,6 +205,15 @@ def validate(root: Path) -> dict:
     require(errors, "CLAYVERSE SINGLE-CONTAINER PRODUCT" in readme_head, "README_PRODUCT_MISMATCH")
     require(errors, "CLAYVERSE" in readme_head and "ONE OCI/DOCKER-COMPATIBLE" in readme_head, "README_RELEASE_MISMATCH")
     require(errors, not ("CLAYVERSE SINGLE-CONTAINER ENDPOINT" in readme_head and "SUPERSEDED" in readme_head), "README_CLAYVERSE_SUPERSEDED")
+
+    # Root CLAUDE.md is a high-leverage repository-organ routing surface. It must not
+    # silently reactivate a superseded Mini Entity/Blogpost program after convergence.
+    repo_claude_head = repo_claude[:7000].upper()
+    require(errors, "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`" in repo_claude_head, "ROOT_CLAUDE_PROGRAM_MISMATCH")
+    require(errors, "`STAGE=CLAYVERSE_ARTIFACT`" in repo_claude_head, "ROOT_CLAUDE_STAGE_MISMATCH")
+    require(errors, "CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.MD" in repo_claude_head, "ROOT_CLAUDE_OWNER_DIRECTIVE_MISSING")
+    require(errors, "MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in repo_claude_head, "ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE")
+    require(errors, "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.MD" not in repo_claude_head, "ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE")
 
     return {
         "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",

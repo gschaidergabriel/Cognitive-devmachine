@@ -1,14 +1,34 @@
+import importlib.util
 import json
 import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 HERE = Path(__file__).resolve().parent
-VALIDATOR = HERE / "validate_jspace_gwt_boot_binding_v1.py"
+VALIDATOR_PATH = HERE / "validate_jspace_gwt_boot_binding_v1.py"
 H40 = "a" * 40
 H64 = "b" * 64
+C64 = "c" * 64
+
+spec = importlib.util.spec_from_file_location("jspace_boot_validator", VALIDATOR_PATH)
+VALIDATOR = importlib.util.module_from_spec(spec)
+assert spec.loader is not None
+spec.loader.exec_module(VALIDATOR)
+
+
+def valid_source_lock():
+    return {
+        "schema": "mini-entity-bundled-cognition-source-lock/v1",
+        "status": "BOUND",
+        "manifest_identity_sha256": H64,
+        "integration_identity_sha256": C64,
+        "authority": "repository_source_tree",
+        "evidence_receipt": "receipts/exact-bundle.json",
+        "note": "synthetic-test-fixture-only",
+    }
 
 
 def valid_receipt():
@@ -28,6 +48,7 @@ def valid_receipt():
             "tokenizer_sha256": H64,
             "runtime_sha256": H64,
             "manifest_sha256": H64,
+            "integration_identity_sha256": C64,
             "exact_bytes_verified": True,
         },
         "jspace": {
@@ -84,16 +105,16 @@ def valid_receipt():
     }
 
 
-def run_validator(receipt):
-    with tempfile.TemporaryDirectory() as td:
-        path = Path(td) / "receipt.json"
-        path.write_text(json.dumps(receipt), encoding="utf-8")
-        return subprocess.run(
-            [sys.executable, str(VALIDATOR), str(path)],
-            text=True,
-            capture_output=True,
-            check=False,
-        )
+def run_validator(receipt, source_lock=None):
+    try:
+        VALIDATOR.validate(receipt, source_lock=source_lock or valid_source_lock())
+    except VALIDATOR.ValidationError as exc:
+        return SimpleNamespace(returncode=1, stdout=f"FAIL {exc}\n", stderr="")
+    return SimpleNamespace(
+        returncode=0,
+        stdout="PASS JSPACE_GWT_BOOT_BINDING_RECEIPT/v1\n",
+        stderr="",
+    )
 
 
 class BootBindingValidatorTests(unittest.TestCase):
@@ -172,6 +193,34 @@ class BootBindingValidatorTests(unittest.TestCase):
         cp = run_validator(receipt)
         self.assertNotEqual(cp.returncode, 0)
         self.assertIn("effect_requested", cp.stdout)
+
+    def test_repository_lock_is_intentionally_unbound_and_cli_fails_closed(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "receipt.json"
+            path.write_text(json.dumps(valid_receipt()), encoding="utf-8")
+            cp = subprocess.run(
+                [sys.executable, str(VALIDATOR_PATH), str(path)],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("SOURCE_LOCK_NOT_BOUND", cp.stdout)
+
+    def test_self_consistent_manifest_substitution_cannot_self_lock(self):
+        receipt = valid_receipt()
+        receipt["bundled_core"]["manifest_sha256"] = "d" * 64
+        receipt["bundled_core"]["integration_identity_sha256"] = "e" * 64
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("BUNDLED_MANIFEST_SOURCE_LOCK_MISMATCH", cp.stdout)
+
+    def test_source_lock_unknown_field_fails_closed(self):
+        lock = valid_source_lock()
+        lock["runtime_observed_manifest"] = H64
+        cp = run_validator(valid_receipt(), source_lock=lock)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("SOURCE_LOCK_UNKNOWN_FIELDS:runtime_observed_manifest", cp.stdout)
 
 
 if __name__ == "__main__":

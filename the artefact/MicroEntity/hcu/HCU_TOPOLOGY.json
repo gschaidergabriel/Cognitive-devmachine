@@ -1,0 +1,50 @@
+{
+  "schema": "HCU_TOPOLOGY/v1",
+  "status": "SOURCE_CANDIDATE_PLANNING_ONLY",
+  "fabric": "Mini Entity Hyperposition Computational Unit",
+  "model_class": "approximately-0.8B local cognition tile",
+  "authority": {
+    "canonical_state": "MiniUnifiedDB",
+    "runtime_identity": "Zero",
+    "cognitive_selection": "Unified J-Space/GWT",
+    "external_effects": "deterministic EntityOS/Mini Entity effect authority",
+    "tile_direct_truth_write": false,
+    "tile_direct_external_effect": false
+  },
+  "scheduler": {
+    "host_profile": "KVM4_PROFILE.json",
+    "resident_count": "DERIVE_FROM_CAPACITY_PLANNER_AND_MEASURED_RSS",
+    "active_count": "DERIVE_FROM_CPU_AND_CONTEXT_PRESSURE",
+    "cold_count": "DERIVE_FROM_DISK_AND_ARTIFACT_SIZE",
+    "logical_tiles_may_share_exact_read_only_base_weights": true
+  },
+  "initial_logical_tiles": [
+    {"id": "tile-01", "role": "feed_ingest"},
+    {"id": "tile-02", "role": "world_projection"},
+    {"id": "tile-03", "role": "causal_update"},
+    {"id": "tile-04", "role": "goal_proposer"},
+    {"id": "tile-05", "role": "plan_generator"},
+    {"id": "tile-06", "role": "counterfactual_a"},
+    {"id": "tile-07", "role": "counterfactual_b"},
+    {"id": "tile-08", "role": "zero_twin"},
+    {"id": "tile-09", "role": "adversarial_critic"},
+    {"id": "tile-10", "role": "uncertainty_calibrator"},
+    {"id": "tile-11", "role": "evidence_verifier"},
+    {"id": "tile-12", "role": "synthesis"}
+  ],
+  "persistent_world_model": {
+    "canonical_world_authority": "MiniUnifiedDB",
+    "derived_graph_cache_rebuildable": true,
+    "future_branches_are_factual_truth": false,
+    "future_epistemic_class": "SIMULATED_FUTURE",
+    "counterfactual_epistemic_class": "COUNTERFACTUAL",
+    "zero_twin_is_zero_identity": false
+  },
+  "free_feed": {
+    "reuse_existing_adaptive_inference_fabric": true,
+    "default_epistemic_class": "UNTRUSTED_CANDIDATE",
+    "multi_model_consensus_is_verification": false,
+    "together": "FORBIDDEN_UNDER_CURRENT_CONTROL",
+    "paid_fallback": false
+  }
+}

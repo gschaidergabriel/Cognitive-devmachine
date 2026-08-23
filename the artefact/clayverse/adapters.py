@@ -34,11 +34,12 @@ def urlopen(request, timeout):
 class ClaudeCodeInference:
     """Tool-less Claude Code cognition boundary for ClayVerse.
 
-    Cognition runs with all built-in tools disabled, MCP configuration fail-closed,
-    no Claude session persistence, and an explicit environment allowlist. HOME is
-    retained so Claude subscription/OAuth credentials remain usable. UnifiedDB /
-    WorldAssembler remains the sole durable ClayVerse state authority. Claude may
-    return a schema-validated effect intent, but only EffectGate can execute it.
+    Cognition runs with all built-in tools and Claude auto-memory disabled, MCP
+    configuration fail-closed, no Claude session persistence, and an explicit
+    environment allowlist. HOME is retained so Claude subscription/OAuth
+    credentials remain usable. UnifiedDB / WorldAssembler remains the sole durable
+    ClayVerse state authority. Claude may return a schema-validated effect intent,
+    but only EffectGate can execute it.
     """
 
     ENV_ALLOWLIST = (
@@ -60,6 +61,7 @@ class ClaudeCodeInference:
         env.setdefault("PATH", "/usr/local/bin:/usr/bin:/bin")
         env["DISABLE_AUTOUPDATER"] = "1"
         env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] = "1"
+        env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
         return env
 
     def available(self) -> bool:

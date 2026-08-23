@@ -268,6 +268,11 @@ def bind_training_trace_to_inference(
     if model_cell.function != f"MODEL:{role}":
         raise JSpaceInferenceBindingError("GRID10_MODEL_CELL_DOES_NOT_BIND_TRACE_ROLE")
 
+    model_call_id = _text(inference_receipt.model_call_id, "inference_receipt.model_call_id")
+    expected_model_call_id = f"grid10:{grid_plan.plan_sha256}:{cell_id}:{role}"
+    if model_call_id != expected_model_call_id:
+        raise JSpaceInferenceBindingError("INFERENCE_MODEL_CALL_ID_DOES_NOT_BIND_GRID10_CELL_ROLE")
+
     material = {
         "schema": SCHEMA,
         "canonicalization_schema": CANONICALIZATION_SCHEMA,
@@ -293,7 +298,7 @@ def bind_training_trace_to_inference(
         "engine_load_lease_sha256": _sha256(inference_receipt.engine_load_lease_sha256, "inference_receipt.engine_load_lease_sha256"),
         "engine_load_consumption_receipt_sha256": _sha256(inference_receipt.engine_load_consumption_receipt_sha256, "inference_receipt.engine_load_consumption_receipt_sha256"),
         "engine_load_loader_id": _text(inference_receipt.engine_load_loader_id, "inference_receipt.engine_load_loader_id"),
-        "model_call_id": _text(inference_receipt.model_call_id, "inference_receipt.model_call_id"),
+        "model_call_id": model_call_id,
         "output_ref": _text(inference_receipt.output_ref, "inference_receipt.output_ref"),
         "output_sha256": _sha256(inference_receipt.output_sha256, "inference_receipt.output_sha256"),
         "output_size": _nonnegative_int(inference_receipt.output_size, "inference_receipt.output_size"),

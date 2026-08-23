@@ -1,0 +1,77 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EVIDENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "current_owner_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+    "durable_state_authority": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB",
+    "effect_authority": "EffectGate+EffectJournal",
+    "model_jspace_output_authority": "CANDIDATE_MEASUREMENT_ONLY"
+  },
+  "source_scope": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_main_observed": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "pr_head_observed_after_fusion": "423f70553d222cf6cfec513ca0bb7880ad6df585"
+  },
+  "observed_problem": {
+    "class": "JSPACE_TRAINING_PROVENANCE_AND_DATASET_ABI_DRIFT",
+    "initial_findings": [
+      "the training-trace binder did not initially bind the prototype basis_sha256 to the supplied Vector Control packet",
+      "the bootstrap compiler initially referenced legacy VectorControlPacket APIs and later legacy reject labels while the current ABI uses top-level parse/decode helpers and JSPACE_/STALE_ error identities",
+      "training data must not teach a control protocol different from the runtime ABI"
+    ]
+  },
+  "unusual_experiment": {
+    "name": "BASIS_DIGEST_ALIAS_TRANSPLANT",
+    "count_for_this_organ": 1,
+    "intervention": "keep generation, basis_id and role equal while substituting a different basis_sha256 on the Vector Control packet",
+    "old_predicate_observation": "accepted by the then-observed training-trace cross-binding predicate",
+    "repaired_predicate_observation": "rejected by explicit prototype_step.basis_sha256 == vector_control_packet.basis_sha256 binding",
+    "classification": "SYNTHETIC_MECHANISM_SUPPORTED_ONLY",
+    "runtime_credit": 0,
+    "global_parallel_note": "A concurrent worker later materialized an equivalent same-basis-id/different-basis-digest regression. It is treated as the same discriminator class; this organ ran no second distinct unusual experiment."
+  },
+  "durable_delta": {
+    "organ_commit": "46a328148a256aeb1bba3c11595781f7291d982c",
+    "organ_change": "bind jspace_training_trace_v1 Vector Control packet to exact prototype basis_sha256",
+    "parallel_fusion_observed": [
+      "training trace additionally binds control condition, exact packet identity and exact packet wire text",
+      "bootstrap dataset compiler advanced to ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3",
+      "compiler now consumes ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1 rather than raw prototype traces",
+      "compiler splits by trace_family_id to reduce train/validation/holdout family leakage",
+      "compiler emits six machine-checkable rows including stale generation, basis id, basis digest and role negatives using current ABI error identities"
+    ],
+    "coordination": "Three stale full-file writes were rejected by GitHub 409 and were not forced; latest concurrent bytes were re-fetched and preserved."
+  },
+  "execution_evidence": {
+    "vercel_connector_callable_sandbox_create_or_exec": false,
+    "vercel_platform_sandbox_capability_known": true,
+    "github_workflow_runs_for_observed_pr_head": 0,
+    "exact_entityos_hcu_runtime_executed_by_this_organ": false,
+    "runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "training": {
+    "together_general_inference_or_fallback": "FORBIDDEN",
+    "one_shot_approx_08b_finetune_authorized": true,
+    "job_created_by_this_organ": false,
+    "one_shot_consumed_by_this_organ": false,
+    "launch_status": "NOT_READY_NOT_STARTED",
+    "remaining_gates": [
+      "owner-start exact authorized Vercel Sandbox combined EntityOS/HCU execution",
+      "bind actual Entry route + engine admission/load + inference + GRID10 identities into real J-Space training traces",
+      "obtain causal lesion/shuffle/rescue evidence on exact runtime traces",
+      "freeze exact intended ~0.8B base checkpoint/tokenizer/runtime identity and pre-training evaluation",
+      "Together supported-model and price preflight through transient secret-safe runtime ingress",
+      "only then create the single authorized full fine-tuning job"
+    ]
+  },
+  "next_exact_discriminator": "owner-authorized transient POST to the retained exact Vercel controller, followed by exact private-source identity proof and combined Typed Entry -> HCU route -> verified engine load -> inference -> GRID10 -> J-Space training-trace execution",
+  "evidence_boundary": "SOURCE_AND_SYNTHETIC_MECHANISM_DELTA_ONLY. No source/component result, READY controller, dataset compiler, or completed future training job implies EntityOS/HCU runtime or whole-product PASS."
+}

@@ -4,17 +4,25 @@
 This module resolves packet/UCF routing only from an explicit capability binding carried
 inside the canonical MiniUnifiedDB profile snapshot. Provider/model names are descriptive
 metadata and never grant latent access, truth, state, or effect authority.
+
+Local latent/observe routing has an additional evidence boundary: a syntactically valid
+SHA-256 in profile configuration is never sufficient. BUNDLED_MANIFEST evidence must
+resolve to the exact current-generation admitted MiniUnifiedDB manifest receipt and is
+cross-bound to the complete version-unambiguous cognition prepare ancestry. RUNTIME_PROBE
+remains fail-closed until a typed current-generation probe receipt is admitted.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 import re
+import sqlite3
 from collections.abc import Mapping
 from typing import Any
 
 SCHEMA = "MINI_INFERENCE_CAPABILITY_BINDING/v1"
 BOUND_ROUTE_SCHEMA = "MINI_INFERENCE_BOUND_ROUTE/v1"
+CAPABILITY_EVIDENCE_SCHEMA = "MINI_INFERENCE_CAPABILITY_EVIDENCE_RESOLUTION/v1"
 PREPARE_DIGEST_FIELDS = (
     "zero_identity_digest", "grf_digest", "hyperposition_digest",
     "bundled_manifest_digest", "local_model_digest", "tokenizer_digest",
@@ -182,11 +190,113 @@ def resolve_from_profile(profile: Mapping[str, Any]) -> dict[str, Any]:
     return result
 
 
-def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], *, expected_generation: int) -> dict[str, Any]:
+def _resolve_local_capability_evidence(
+    db: sqlite3.Connection | None,
+    *,
+    capability: Mapping[str, Any],
+    prepare: Mapping[str, Any],
+    expected_generation: int,
+    cognition_resolution_module: Any | None = None,
+) -> dict[str, Any]:
+    """Authenticate local capability evidence against current MiniUnifiedDB ancestry.
+
+    This function is deliberately read-only. The capability profile may point at an
+    admitted receipt, but cannot mint or repair one. The current turn/boot/object ancestry
+    is independently resolved from MiniUnifiedDB before the receipt can authorize routing.
+    """
+    _need(isinstance(db, sqlite3.Connection), "LOCAL_CAPABILITY_EVIDENCE_DB_REQUIRED")
+    task_text = prepare.get("task_text")
+    _need(type(task_text) is str, "PREPARE_TASK_TEXT_REQUIRED_FOR_CAPABILITY_EVIDENCE")
+    if cognition_resolution_module is None:
+        import miniunifieddb_cognition_resolution_v1 as cognition_resolution_module  # type: ignore[no-redef]
+
+    try:
+        bundle = cognition_resolution_module.resolve_prepare_bundle(
+            db,
+            entity_generation=expected_generation,
+            causal_turn_id=_text(prepare.get("causal_turn_id"), "prepare.causal_turn_id"),
+            task_text=task_text,
+            expected_turn_binding_digest=_digest(
+                prepare.get("turn_binding_digest"), "prepare.turn_binding_digest"
+            ),
+        )
+    except Exception as exc:
+        if isinstance(exc, CapabilityBindingError):
+            raise
+        raise CapabilityBindingError(
+            f"CAPABILITY_EVIDENCE_RESOLUTION_FAILED:{type(exc).__name__}:{exc}"
+        ) from exc
+
+    _need(type(bundle) is dict and bundle.get("ok") is True, "CAPABILITY_EVIDENCE_BUNDLE_REQUIRED")
+    _need(bundle.get("entity_generation") == expected_generation, "CAPABILITY_EVIDENCE_STALE_GENERATION")
+    _need(bundle.get("causal_turn_id") == prepare.get("causal_turn_id"), "CAPABILITY_EVIDENCE_TURN_DRIFT")
+    _need(bundle.get("turn_binding_digest") == prepare.get("turn_binding_digest"), "CAPABILITY_EVIDENCE_BINDING_DRIFT")
+    _need(bundle.get("boot_binding_digest") == prepare.get("boot_binding_digest"), "CAPABILITY_EVIDENCE_BOOT_DRIFT")
+    _need(bundle.get("workspace_digest") == prepare.get("workspace_digest"), "CAPABILITY_EVIDENCE_WORKSPACE_DRIFT")
+
+    objects = bundle.get("objects")
+    _need(isinstance(objects, Mapping), "CAPABILITY_EVIDENCE_OBJECTS_REQUIRED")
+    ancestry: dict[str, Any] = {}
+    for field in PREPARE_DIGEST_FIELDS:
+        obj = objects.get(field)
+        _need(isinstance(obj, Mapping), f"CAPABILITY_EVIDENCE_OBJECT_MISSING:{field}")
+        expected_digest = _digest(prepare.get(field), f"prepare.{field}")
+        _need(obj.get("object_digest") == expected_digest, f"CAPABILITY_EVIDENCE_OBJECT_DRIFT:{field}")
+        _need(obj.get("admitted_generation") == expected_generation, f"CAPABILITY_EVIDENCE_OBJECT_STALE:{field}")
+        ancestry[field] = {
+            "object_kind": _text(obj.get("object_kind"), f"{field}.object_kind"),
+            "object_version": _text(obj.get("object_version"), f"{field}.object_version"),
+            "object_digest": expected_digest,
+            "payload_digest": _digest(obj.get("payload_digest"), f"{field}.payload_digest"),
+            "admission_receipt_digest": _digest(
+                obj.get("admission_receipt_digest"), f"{field}.admission_receipt_digest"
+            ),
+        }
+
+    evidence_kind = _text(capability.get("capability_evidence_kind"), "capability_evidence_kind")
+    capability_receipt = _digest(
+        capability.get("capability_receipt_digest"), "capability_receipt_digest"
+    )
+    if evidence_kind == "BUNDLED_MANIFEST":
+        manifest_receipt = ancestry["bundled_manifest_digest"]["admission_receipt_digest"]
+        _need(
+            capability_receipt == manifest_receipt,
+            "CAPABILITY_RECEIPT_NOT_CURRENT_BUNDLED_MANIFEST_ADMISSION",
+        )
+    elif evidence_kind == "RUNTIME_PROBE":
+        raise CapabilityBindingError("RUNTIME_PROBE_TYPED_EVIDENCE_REQUIRED")
+    else:
+        raise CapabilityBindingError("LOCAL_CAPABILITY_EVIDENCE_KIND_INVALID")
+
+    evidence = {
+        "schema": CAPABILITY_EVIDENCE_SCHEMA,
+        "entity_generation": expected_generation,
+        "causal_turn_id": prepare["causal_turn_id"],
+        "turn_binding_digest": prepare["turn_binding_digest"],
+        "boot_binding_digest": prepare["boot_binding_digest"],
+        "workspace_digest": prepare["workspace_digest"],
+        "capability_evidence_kind": evidence_kind,
+        "capability_receipt_digest": capability_receipt,
+        "ancestry": ancestry,
+        "authority": "READ_ONLY_CAPABILITY_EVIDENCE_ONLY",
+    }
+    evidence["resolution_digest"] = sha256_obj(evidence)
+    return evidence
+
+
+def resolve_bound_route(
+    profile: Mapping[str, Any],
+    prepare: Mapping[str, Any],
+    *,
+    expected_generation: int,
+    db: sqlite3.Connection | None = None,
+    cognition_resolution_module: Any | None = None,
+) -> dict[str, Any]:
     """Bind explicit capability routing to one exact canonical cognition prepare result.
 
     Cognition identities are not duplicated into profile configuration. They are taken only
     from the already-verified MiniUnifiedDB prepare material and folded into one route digest.
+    Local latent/observe routes additionally require current-generation evidence resolution.
     """
     _need(isinstance(prepare, Mapping) and prepare.get("ok") is True, "PREPARE_BINDING_REQUIRED")
     _need(type(expected_generation) is int and expected_generation >= 0, "EXPECTED_GENERATION_INVALID")
@@ -198,6 +308,17 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
     cognition = {field: _digest(prepare.get(field), f"prepare.{field}") for field in PREPARE_DIGEST_FIELDS}
 
     capability = resolve_from_profile(profile)
+    local_mode = capability["jspace_mode"] in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}
+    evidence_resolution = None
+    if local_mode:
+        evidence_resolution = _resolve_local_capability_evidence(
+            db,
+            capability=capability,
+            prepare=prepare,
+            expected_generation=expected_generation,
+            cognition_resolution_module=cognition_resolution_module,
+        )
+
     material = {
         "schema": BOUND_ROUTE_SCHEMA,
         "entity_generation": expected_generation,
@@ -209,6 +330,9 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
         "profile_hash": capability["profile_hash"],
         "capability_binding_digest": capability["binding_digest"],
         "capability_receipt_digest": capability["capability_receipt_digest"],
+        "capability_evidence_resolution_digest": (
+            evidence_resolution["resolution_digest"] if evidence_resolution is not None else None
+        ),
         "target_engine_class": capability["target_engine_class"],
         "ucf_engine_class": capability["ucf_engine_class"],
         "jspace_mode": capability["jspace_mode"],
@@ -224,8 +348,20 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
         "provider_observability_claim_supported": capability["provider_observability_claim_supported"],
         "adapter_version": capability["adapter_version"],
         "capability_evidence_kind": capability["capability_evidence_kind"],
+        "capability_evidence_resolution": evidence_resolution,
         "authority": "ROUTING_ONLY_BOUND_TO_CANONICAL_PREPARE",
     }
 
 
-__all__ = ["SCHEMA", "BOUND_ROUTE_SCHEMA", "PREPARE_DIGEST_FIELDS", "CapabilityBindingError", "compile_binding", "validate_binding", "resolve_from_profile", "resolve_bound_route", "sha256_obj"]
+__all__ = [
+    "SCHEMA",
+    "BOUND_ROUTE_SCHEMA",
+    "CAPABILITY_EVIDENCE_SCHEMA",
+    "PREPARE_DIGEST_FIELDS",
+    "CapabilityBindingError",
+    "compile_binding",
+    "validate_binding",
+    "resolve_from_profile",
+    "resolve_bound_route",
+    "sha256_obj",
+]

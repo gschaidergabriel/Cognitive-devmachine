@@ -17,6 +17,7 @@ SCHEMA = "HCU_REACTIVE_EVENT/v1"
 ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v2"
 ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v1"
 ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v1"
+ENGINE_ADMISSION_SCHEMA = "HCU_ENGINE_ARTIFACT_ADMISSION/v1"
 
 # Internal cognition is admitted positively. Unknown/future provider or engine labels do
 # not become internal merely because they are absent from a denylist.
@@ -70,6 +71,7 @@ class RouteDecision:
     external_provider_dependency: bool
     event_sha256: str
     router_policy_sha256: str
+    engine_admission_sha256: str
     resolved_engine_identity: str | None
     resolved_engine_class: str | None
     resolved_engine_artifact_sha256: str | None
@@ -123,7 +125,35 @@ def _validate_internal_provider(event: Mapping[str, Any]) -> None:
         raise ReactiveRoutingError("UNKNOWN_OR_EXTERNAL_PROVIDER_FORBIDDEN_AS_INTERNAL_COGNITIVE_DEPENDENCY")
 
 
-def _resolve_internal_engine(event: Mapping[str, Any]) -> tuple[str | None, str | None, str | None, str | None]:
+def _normalize_engine_artifact_admission(
+    admitted_engine_artifacts: Mapping[str, str] | None,
+) -> tuple[dict[str, str], str]:
+    if admitted_engine_artifacts is None:
+        normalized: dict[str, str] = {}
+    elif not isinstance(admitted_engine_artifacts, Mapping):
+        raise ReactiveRoutingError("ENGINE_ARTIFACT_ADMISSION_MAPPING_REQUIRED")
+    else:
+        normalized = {}
+        for identity, digest in admitted_engine_artifacts.items():
+            if not isinstance(identity, str) or not identity.strip():
+                raise ReactiveRoutingError("ENGINE_ARTIFACT_ADMISSION_IDENTITY_REQUIRED")
+            identity = identity.strip().lower()
+            if identity not in ADMITTED_INTERNAL_ENGINES:
+                raise ReactiveRoutingError("ENGINE_ARTIFACT_ADMISSION_ENGINE_NOT_ADMITTED")
+            normalized[identity] = _sha256_text(digest, "ENGINE_ARTIFACT_ADMISSION_SHA256")
+    admission_sha256 = _sha256_canonical(
+        {
+            "schema": ENGINE_ADMISSION_SCHEMA,
+            "engine_artifacts": tuple(sorted(normalized.items())),
+        },
+        "ENGINE_ARTIFACT_ADMISSION",
+    )
+    return normalized, admission_sha256
+
+
+def _resolve_internal_engine(
+    event: Mapping[str, Any], *, admitted_engine_artifacts: Mapping[str, str]
+) -> tuple[str | None, str | None, str | None, str | None]:
     identity = event.get("resolved_internal_engine")
     engine_class = event.get("resolved_internal_engine_class")
     artifact_sha256 = event.get("resolved_internal_engine_artifact_sha256")
@@ -141,6 +171,11 @@ def _resolve_internal_engine(event: Mapping[str, Any]) -> tuple[str | None, str 
     if engine_class != admitted_class:
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_CLASS_MISMATCH")
     artifact_sha256 = _sha256_text(artifact_sha256, "RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256")
+    admitted_artifact_sha256 = admitted_engine_artifacts.get(identity)
+    if admitted_artifact_sha256 is None:
+        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_ARTIFACT_NOT_ADMITTED")
+    if artifact_sha256 != admitted_artifact_sha256:
+        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_ARTIFACT_DIGEST_MISMATCH")
     engine_identity_sha256 = _sha256_canonical(
         {
             "schema": ENGINE_IDENTITY_SCHEMA,
@@ -167,7 +202,12 @@ def _event_identity(event: Mapping[str, Any]) -> str:
     return _sha256_canonical(payload, "EVENT")
 
 
-def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDecision:
+def route_event(
+    event: Mapping[str, Any],
+    *,
+    current_generation: int,
+    admitted_engine_artifacts: Mapping[str, str] | None = None,
+) -> RouteDecision:
     if not isinstance(event, Mapping) or event.get("schema") != SCHEMA:
         raise ReactiveRoutingError("EVENT_SCHEMA_UNSUPPORTED")
     generation = event.get("entity_generation")
@@ -177,12 +217,13 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         raise ReactiveRoutingError("STALE_ENTITY_GENERATION")
 
     _validate_internal_provider(event)
+    normalized_admission, engine_admission_sha256 = _normalize_engine_artifact_admission(admitted_engine_artifacts)
     (
         resolved_engine_identity,
         resolved_engine_class,
         resolved_engine_artifact_sha256,
         engine_identity_sha256,
-    ) = _resolve_internal_engine(event)
+    ) = _resolve_internal_engine(event, admitted_engine_artifacts=normalized_admission)
 
     novelty = _unit(event.get("novelty", 0.0), "novelty")
     contradiction = _unit(event.get("contradiction", 0.0), "contradiction")
@@ -225,6 +266,7 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         "schema": ROUTE_IDENTITY_SCHEMA,
         "event_sha256": event_sha256,
         "router_policy_sha256": router_policy_sha256,
+        "engine_admission_sha256": engine_admission_sha256,
         "engine_identity_sha256": engine_identity_sha256,
         "scripts": SCRIPT_STAGES,
         "model_lanes": sorted(lanes),
@@ -243,6 +285,7 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         external_provider_dependency=False,
         event_sha256=event_sha256,
         router_policy_sha256=router_policy_sha256,
+        engine_admission_sha256=engine_admission_sha256,
         resolved_engine_identity=resolved_engine_identity,
         resolved_engine_class=resolved_engine_class,
         resolved_engine_artifact_sha256=resolved_engine_artifact_sha256,
@@ -260,6 +303,7 @@ def assert_inference_echo(decision: RouteDecision, receipt: Mapping[str, Any]) -
     expected = {
         "event_sha256": decision.event_sha256,
         "decision_sha256": decision.decision_sha256,
+        "engine_admission_sha256": decision.engine_admission_sha256,
         "engine_identity_sha256": decision.engine_identity_sha256,
         "resolved_engine_identity": decision.resolved_engine_identity,
     }

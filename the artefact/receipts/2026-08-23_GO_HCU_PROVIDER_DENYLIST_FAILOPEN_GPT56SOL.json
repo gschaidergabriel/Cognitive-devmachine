@@ -1,0 +1,38 @@
+{
+  "schema": "GO_HCU_PROVIDER_DENYLIST_FAILOPEN/v1",
+  "date": "2026-08-23",
+  "authority": {
+    "product": "EntityOS",
+    "cognition_compute_architecture": "HCU",
+    "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
+    "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY"
+  },
+  "canonical_main_observed": "2a6b851f20ffaaec03eb3df348cebb9fa44a69fd",
+  "source_candidate": {
+    "pr": 1263,
+    "head": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "file": "the artefact/MicroEntity/hcu/reactive_event_router_v1.py"
+  },
+  "finding": "HCU_INTERNAL_PROVIDER_DENYLIST_FAIL_OPEN",
+  "mechanism": {
+    "observed": "requested_internal_provider is rejected only when its normalized string belongs to a finite denylist of known external providers; unknown provider names pass while RouteDecision reports external_provider_dependency=false",
+    "risk": "an external or future provider can be misclassified as an internal provider-independent cognition path merely because its name is absent from the denylist",
+    "required_invariant": "internal cognition admission must use positive capability/class identity; UNKNOWN or EXTERNAL must fail closed before internal-cognition admission"
+  },
+  "required_receipt": "HCU_INTERNAL_PROVIDER_ADMISSION_RECEIPT/v1",
+  "falsifier_matrix": [
+    "bound bundled local 0.8B/runtime identity -> ALLOW",
+    "known external provider -> REJECT",
+    "unknown arbitrary provider string -> REJECT",
+    "typo/case/whitespace variants -> REJECT unless resolved to an explicitly admitted local identity",
+    "provider absent -> ALLOW only when a positive local/internal engine identity is otherwise bound"
+  ],
+  "evidence_class": "SOURCE_LEVEL_MECHANISM_FINDING_ONLY",
+  "runtime_credit": 0,
+  "hcu_credit": 0,
+  "model_credit": 0,
+  "jspace_gwt_credit": 0,
+  "provider_network_execution": false,
+  "together_used": false,
+  "whole_entityos_pass": false
+}

@@ -43,13 +43,7 @@ def source_version(native_dir: Path, identity: dict) -> str | None:
 
 
 def credited_state_identity(native_state: dict) -> tuple[str, str, str]:
-    """Read the historical credited identity across PROGRAM_STATE schema evolution.
-
-    Schema 7.1 renamed the formerly generic version/binary_sha256 keys so the current
-    0.7 source line cannot be confused with historical 0.6 runtime evidence. Prefer the
-    explicit historical keys and retain the old names only as a bounded compatibility
-    path for older exact checkouts.
-    """
+    """Read one historical credited identity across native-state schema evolution."""
     if "historical_credited_version" in native_state or "historical_binary_sha256" in native_state:
         version = native_state.get("historical_credited_version")
         digest = native_state.get("historical_binary_sha256")
@@ -66,6 +60,35 @@ def credited_state_identity(native_state: dict) -> tuple[str, str, str]:
     if missing:
         raise RuntimeError("PROGRAM_STATE_CREDITED_NATIVE_IDENTITY_MISSING:" + ",".join(missing))
     return version, digest, schema
+
+
+def credited_state_record(state: dict) -> tuple[dict, str]:
+    """Locate the historical 0.6 identity without confusing it with current 0.7 evidence.
+
+    Older PROGRAM_STATE schemas stored the credited native record under
+    sandbox_evidence.native_pipeline. Current schema 7.9 moved the active line to native_0_7
+    and retains a historical_source_bound_evidence object, but that object currently binds a
+    different pre-fix 0.7 artifact and does not identify the credited 0.6 receipt. Never reuse
+    its elf_sha256 as though it were the 0.6 binary. If future current-state bytes add explicit
+    historical_credited_version/historical_binary_sha256 fields, they are safe to consume.
+    """
+    sandbox = state.get("sandbox_evidence")
+    if isinstance(sandbox, dict):
+        old = sandbox.get("native_pipeline")
+        if isinstance(old, dict):
+            return old, "sandbox_evidence.native_pipeline"
+
+    current = state.get("native_0_7")
+    if isinstance(current, dict):
+        hist = current.get("historical_source_bound_evidence")
+        if isinstance(hist, dict):
+            if "historical_credited_version" in hist or "historical_binary_sha256" in hist:
+                return hist, "native_0_7.historical_source_bound_evidence"
+            raise RuntimeError(
+                "PROGRAM_STATE_CREDITED_0_6_IDENTITY_UNBOUND_IN_CURRENT_SCHEMA:native_0_7"
+            )
+
+    raise RuntimeError("PROGRAM_STATE_NATIVE_IDENTITY_SECTION_MISSING")
 
 
 def main() -> int:
@@ -93,14 +116,15 @@ def main() -> int:
     reference = reference_path.read_text(encoding="utf-8")
 
     errors: list[str] = []
-    native_state = state["sandbox_evidence"]["native_pipeline"]
+    state_record_path = "UNRESOLVED"
     try:
+        native_state, state_record_path = credited_state_record(state)
         state_version, state_hash, state_identity_schema = credited_state_identity(native_state)
     except RuntimeError as exc:
         errors.append(str(exc))
         state_version = "UNRESOLVED"
         state_hash = "UNRESOLVED"
-        state_identity_schema = "INVALID"
+        state_identity_schema = "UNRESOLVED"
     receipt_version = str(receipt["version"])
     receipt_hash = str(receipt["binary_sha256"])
 
@@ -155,9 +179,10 @@ def main() -> int:
         reproducibility = "SOURCE_CLOSURE_PRESENT_REBUILD_NOT_YET_CREDITED"
 
     report = {
-        "schema": "mini-entity-native-provenance-check/v2",
+        "schema": "mini-entity-native-provenance-check/v3",
         "version": receipt_version,
         "credited_binary_sha256": receipt_hash,
+        "program_state_record_path": state_record_path,
         "program_state_identity_schema": state_identity_schema,
         "state_receipt_hash_match": state_hash == receipt_hash,
         "reference_binds_credited_hash": receipt_hash in reference,

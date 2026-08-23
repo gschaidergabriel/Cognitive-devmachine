@@ -1,0 +1,56 @@
+{
+  "schema": "ENTITYOS_HCU_JSPACE_BINDING_COMPONENT_SANDBOX_RECEIPT/v1",
+  "date": "2026-08-24",
+  "local_cycle_label": "GO_0103",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "supervisor": "SUPERVISOR_STEERING_8_61",
+    "free_only": true,
+    "unusual_experiment_count_added": 0
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "deployment_id": "dpl_FXMNj9Hez95R2EcKPuJ6saZG3ot4",
+    "controller_commit": "3d3176ea839d225266da16e31254a946f1c76fe8",
+    "endpoint": "/api/jspace-binding-capsule"
+  },
+  "capsule": {
+    "class": "EXACT_BINDER_SOURCE_WITH_STUBBED_DEPENDENCIES_COMPONENT_REGRESSION",
+    "binder_git_blob_sha1": "6ba74b9313893fc7e6af42753622bc22febc0597",
+    "binder_sha256": "57c8acf429c8e5a2bbfb722315d5613418931ecb00794abaa87cfd159bd41596",
+    "harness_sha256": "60549aede357c068dd9aa2f24b1e8b3b06672988420d32977354efc8303cc899"
+  },
+  "execution": {
+    "http_status": 200,
+    "status": "JSPACE_BINDING_CAPSULE_COMPONENT_PASS",
+    "sandbox_id": "fuchsia-regulatory-aardvark-pmwAwP",
+    "sandbox_session_id": "sbx_ZCxTXySoxIJqbiAeYmB4DauOyPPN",
+    "exit_code": 0,
+    "binder_control_logic": "PASS",
+    "generation_entry_route_lane_fences": "PASS",
+    "inference_and_binding_digest_tamper_fences": "PASS",
+    "secret_fence": "PASS",
+    "stderr_empty": true,
+    "sandbox_cleanup": "PASS"
+  },
+  "scope_limits": {
+    "semantic_test_executed": true,
+    "full_hcu_dependency_graph_tested": false,
+    "rfc8785_implementation_tested_here": false,
+    "real_model_loader_tested": false,
+    "real_instrumented_model_trace_count_change": 0
+  },
+  "credit": {
+    "entityos_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "finding": "The exact retained J-Space inference-binding source logic passes bounded control, generation/Entry/route/lane, inference digest and binding digest tamper-fence regressions in Vercel Sandbox with stubbed dependencies. This is component evidence only.",
+  "next_exact_discriminator": "Execute the exact family-split component capsule, then converge these independently verified components into one manifest-bound full causal HCU/J-Space closure with real selected dependencies."
+}

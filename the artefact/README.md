@@ -134,6 +134,24 @@ All new data paths should converge on a typed ingress packet binding before cogn
 
 Inputs may originate from humans, tools, external events, sensor/stream data, canonical database changes or intrinsic system events.
 
+## Current executable delta — Entry Fabric + GRID10 v1
+
+`the artefact/Xeno/runtime/` now contains the first current-facing executable Xeno path:
+
+`stdin JSON -> typed Xeno ingress packet -> immutable event_sha256 -> deterministic XPU-like route -> logical function cells -> candidate-only result`.
+
+The v1 path binds provenance, causal identity, generation, permissions, capability scope, time and resource budget before cognition. Route identity commits to immutable event identity, so two different events cannot alias merely because they select the same route. Transport replay of the same observed event may receive a new ingress receipt while preserving the same causal event and route identity.
+
+The GRID10 baseline exposes 10 logical function cells while keeping physical worker budget as a separate measured quantity. This directly preserves `logical_module_count != physical_concurrent_decode_count`.
+
+Exact component branch bytes were exercised in an isolated container: 10/10 regressions PASS plus CLI smoke PASS. The one unusual experiment for this `go`, `PROVENANCE_COLLISION_LESION`, falsified payload-only identity as sufficient: identical payloads from distinct provenance sources collided under the weak lesion but not under the Xeno event identity.
+
+Evidence is bounded: no ~0.8B XCU inference, UnifiedDB/MiniUnifiedDB integration, EffectGate execution, world model, nested simulation, Vercel Sandbox runtime or whole EntityOS acceptance is claimed.
+
+Receipt:
+
+- `the artefact/Xeno/receipts/2026-08-23_GO_XENO_ENTRY_GRID10_GPT56SOL.json`
+
 ## Research fusion
 
 Current design is informed by external evidence on heterogeneous compute/memory/interconnect (NVIDIA DGX/Grace Hopper/Rubin), shared-weight inference scheduling and paged KV (vLLM/SGLang/TensorRT-LLM), dynamic compute allocation (Mixture-of-Depths), self-regulated planning, world-model planning, generated environments and generalist agents (DeepMind Genie/SIMA), conditional multi-agent/test-time scaling, and Global Workspace/J-Space research.
@@ -146,4 +164,4 @@ Current testing remains authorized-isolated-sandbox-only unless a newer owner di
 
 ## Current frontier
 
-Build the **typed Xeno Entry Fabric** and a reusable **GRID10 scheduler/state/interconnect baseline**, then progressively separate XRAM/XPU/XCU responsibilities so COGSIM10, WM_TEST, NESTED_SIM and measured SCALEOUT reuse the same machine primitives rather than requiring architectural rewrites.
+Wire the new **XenoIngressPacket/event_sha256** into the retained HCU reactive-router candidate so route decisions bind causal event identity and resolved engine identity in one formula; then bind admitted Entry events into the canonical MiniUnifiedDB/UnifiedDB state path. After that, execute exact integration regressions before promoting PR #1263 or any provider-independence/causal-route runtime claim. In parallel, retain the GRID10 primitives as the common substrate for COGSIM10, WM_TEST, NESTED_SIM and later measured SCALEOUT rather than introducing mode-specific authority stacks.

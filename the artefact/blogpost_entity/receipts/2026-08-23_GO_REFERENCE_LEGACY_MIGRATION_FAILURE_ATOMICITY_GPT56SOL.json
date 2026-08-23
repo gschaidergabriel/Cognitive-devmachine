@@ -1,0 +1,55 @@
+{
+  "schema": "MINI_ENTITY_GO_RECEIPT/v1",
+  "trigger": "go",
+  "macrocycle_id": "go-20260823T0851+07-gpt56sol-reference-convergence",
+  "organ": "GPT-5.6-Sol",
+  "current_main_after_reentry": "770286bf52623a2cd91f464ca8310321c1fe0be7",
+  "execution_policy": "FREE_ONLY",
+  "grf": {
+    "R0_observe": [
+      "main@770286bf52623a2cd91f464ca8310321c1fe0be7 now binds the safe legacy-generation Hyperposition: explicit fail-closed migration-required outcome OR exact one-shot preservation into canonical entity_state",
+      "that main test rejects silent generation-zero reset and later legacy-mirror authority",
+      "the fail-closed branch currently specifies the error contract but does not separately assert rollback of a partially materialized entity_state row before returning the migration-required error"
+    ],
+    "R1_infer": "A fail-closed result is not truly fail-closed if it leaves entity_state(generation=0) or another live canonical row behind, because an immediate retry can then observe native authority and bypass the original ambiguity.",
+    "R2_generate": [
+      "accept error string alone as sufficient fail-closed evidence",
+      "require migration failure to be atomic: no canonical generation row, legacy evidence unchanged, retry remains equally fail-closed",
+      "force automatic migration only and remove the fail-closed branch"
+    ],
+    "R3_counter": "Partial schema DDL may be acceptable if no canonical row is live; the invariant therefore targets live entity_state state rather than requiring every created table to roll back.",
+    "R4_discriminate": "No second unusual experiment. Add a deterministic auto-activating runtime-shaped regression for fail-closed atomicity and immediate-retry stability; if the implementation selects the already-admitted successful one-shot path, only verify exact generation preservation and defer mirror-tamper semantics to main's broader migration test.",
+    "R5_emergent": "Fail-closed is a state-transition property, not merely an error label. Failure must preserve the same epistemic/authority boundary for the next attempt.",
+    "R6_verify": {
+      "new_test": "the artefact/blogpost_entity/test_reference_legacy_migration_failure_atomicity.py",
+      "evidence_class": "SOURCE_TEST_CONTRACT",
+      "exact_converged_runtime": "UNOBSERVED",
+      "whole_product": "IN_PROGRESS"
+    }
+  },
+  "macrocycle_unusual_experiment_accounting": {
+    "count": 1,
+    "already_consumed_id": "LEGACY_GENERATION_REASSERTION_AFTER_MIGRATION",
+    "additional_experiment_for_this_delta": false
+  },
+  "superseded_local_policy": {
+    "earlier_candidate": "ordinary legacy-only init must always fail closed",
+    "current_adjudication": "REJECTED_AS_TOO_STRICT_AFTER_MAIN_770286; exact one-shot preservation is also admitted",
+    "retained_unique_obligation": "if implementation chooses fail-closed migration-required branch, failure is atomic and retry-stable"
+  },
+  "delta": {
+    "branch": "gpt56sol/go-legacy-only-generation-failclosed-20260823",
+    "test": "the artefact/blogpost_entity/test_reference_legacy_migration_failure_atomicity.py",
+    "required_fail_closed_behavior": [
+      "error contains LEGACY_GENERATION_MIGRATION_REQUIRED",
+      "no live entity_state generation row is left behind",
+      "legacy generation evidence remains unchanged",
+      "immediate retry remains fail closed with the same migration obligation"
+    ],
+    "admitted_success_alternative": "if init performs a separately admitted one-shot migration instead, canonical generation must equal the exact legacy generation"
+  },
+  "provider_execution": false,
+  "money_spent_usd": 0,
+  "next_gate": "Fuse this failure-atomicity obligation with the current one-shot-or-fail-closed migration boundary, then implement/fresh-extract the structured reference runtime on current main and execute the combined generation/profile/effect/read-purity/profile-byte gates on exact bytes in an actually-started authorized isolated runner.",
+  "german_summary": "Main erlaubt jetzt korrekt entweder eine echte einmalige Generationserhaltung oder ein explizites Migration-required Fail-Closed. Neu gebunden ist der noch offene Fehlerpfad: ein Fail-Closed darf keinen lebenden entity_state-Generationseintrag hinterlassen und muss beim direkten Retry weiterhin sperren. Das ist ein deterministischer Test, kein zweites ungewöhnliches Experiment."
+}

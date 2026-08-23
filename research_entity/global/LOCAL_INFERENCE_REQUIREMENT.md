@@ -2,23 +2,27 @@
 
 Status: **SUPERSEDED AS CURRENT PROGRAM REQUIREMENT / HISTORICAL DONOR EVIDENCE**
 
-This path is retained for historical receipts and mechanism references. It does **not** define the current product program or active `go` frontier.
+This path is retained for historical receipts and mechanism references. It does **not** define the current product program, active `go` frontier, provider admission policy or HCU engine authority.
 
 Current owner/product authority:
 
-`research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+`research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
 
-Current program/stage:
+Current program/system and architecture:
 
-- `CLAYVERSE_SINGLE_CONTAINER`
-- `CLAYVERSE_ARTIFACT`
+- program: `ENTITYOS_HCU`
+- product/system: **EntityOS**
+- cognition/compute architecture: **HCU**
+- stage: `ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`
 
 The exact prior Mini Entity local-inference requirement is preserved in Git history as blob:
 
 `57de4d4f460c0755d3be21cb9ce00369104dbf60`
 
-Reusable donor mechanisms from that historical requirement include replaceable inference substrate, no-shell local runner invocation, provider/model identity separation, atomic persistence, exactly-once/CAS fencing and secret isolation. Those mechanisms gain no current ClayVerse authority merely because they were previously contract-tested in the Mini Entity line.
+Reusable donor mechanisms include replaceable inference substrate, no-shell local runner invocation, provider/model identity separation, atomic persistence, exactly-once/CAS fencing and secret isolation. Those mechanisms gain no current authority merely because they were previously contract-tested in the Mini Entity or ClayVerse lines.
 
-Current ClayVerse inference/runtime authority is defined by the ClayVerse owner directive, `the artefact/manifest.json`, `the artefact/ARCHITECTURE.md`, current source and exact admitted evidence. Claude Code remains runtime cognition; any additional local/API inference path must preserve the same UnifiedDB causal authority and EffectGate boundary and cannot fork identity/state.
+Current HCU engine admission is positive and fail-closed: source/event claims or provider aliases do not themselves admit an engine. Exact checkpoint/tokenizer/runtime/build identity plus the current deterministic capability authority and bounded receipts are required before runtime promotion. External provider output remains candidate reasoning only and cannot grant effects or canonical truth.
 
-Historical fixture/local-model transport evidence is component donor evidence only and is not whole ClayVerse runtime acceptance.
+Canonical durable state/evidence remains outside model-generated cognition/simulation. EffectGate/EffectJournal remain the only real/state-changing effect authority. Runtime credit requires actually observed authorized isolated execution; VPS/self-hosted/production-host testing and Together remain forbidden under current control.
+
+If this compatibility path conflicts with current `main`, `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, or `SUPERVISOR_STEERING_8_52.json`, fail closed and follow the newest explicit owner authority.

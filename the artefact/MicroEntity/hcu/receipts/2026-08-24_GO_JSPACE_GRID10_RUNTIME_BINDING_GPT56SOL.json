@@ -1,0 +1,97 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EVIDENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "chatgpt-gpt56sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "owner_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_parent_head": "df2067f0ac7796a1d3d732800a3c72af77ae549c",
+    "fusion_branch": "gpt56sol/go-jspace-runtime-binding-20260824",
+    "new_binding_path": "the artefact/MicroEntity/hcu/grid10_jspace_runtime_binding_v1.py",
+    "new_test_path": "the artefact/MicroEntity/hcu/test_grid10_jspace_runtime_binding_v1.py"
+  },
+  "observed_source_gap": {
+    "classification": "CAUSAL_OUTPUT_TO_CELL_BINDING_GAP",
+    "current_inference_receipt_schema": "HCU_INFERENCE_RECEIPT/v3",
+    "current_grid_plan_schema": "ENTITYOS_HCU_GRID_PLAN/v2",
+    "finding": "InferenceReceipt/v3 binds the route-level model_lanes tuple and loader-bound output identity but does not bind one concrete output-producing model lane or GRID10 cell. A multi-lane route therefore cannot prove which cell produced a particular receipt output.",
+    "impact": "A J-Space/GWT training trace that assigns that output to one multi-lane GRID10 cell would overclaim causal provenance."
+  },
+  "hypothesis": "A minimal fail-closed bridge can safely create causally unambiguous J-Space runtime evidence from the existing v3 receipt only when the GRID10 plan and inference receipt each contain exactly one model lane/cell.",
+  "counterhypothesis": "The route-level model_lanes tuple in InferenceReceipt/v3 is sufficient to identify the output-producing cell even when multiple lanes are present.",
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "name": "MULTILANE_CROSS_CELL_OUTPUT_ASSIGNMENT_AMBIGUITY",
+    "type": "BOUNDED_SYNTHETIC_COMPONENT_DISCRIMINATOR",
+    "setup": "Construct one receipt information-shape with model_lanes=[ANALYZE,CRITIC] and one GRID10 shape with MODEL:ANALYZE at cell-02 and MODEL:CRITIC at cell-03; ask which cell is uniquely identified as output producer using only v3 lane-set information.",
+    "observed": {
+      "compatible_assignments": ["cell-02", "cell-03"],
+      "unique_assignment": false,
+      "proposed_bridge_cell_02": "REJECT:MULTI_LANE_GRID_PLAN_REQUIRES_LANE_BOUND_INFERENCE_RECEIPT",
+      "proposed_bridge_cell_03": "REJECT:MULTI_LANE_GRID_PLAN_REQUIRES_LANE_BOUND_INFERENCE_RECEIPT"
+    },
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_INFORMATION_SHAPE_SCOPE",
+    "scope_limit": "Synthetic component discriminator only. It is not exact EntityOS/HCU runtime execution, model execution, J-Space causality evidence, or whole-product acceptance."
+  },
+  "source_delta": {
+    "schema": "ENTITYOS_HCU_GRID10_JSPACE_RUNTIME_BINDING/v1",
+    "policy": "DERIVED_RUNTIME_EVIDENCE_ONLY_NOT_TRUTH_STATE_OR_EFFECT_AUTHORITY",
+    "admitted_case": "EXACTLY_ONE_GRID10_MODEL_CELL_PLUS_EXACTLY_ONE_INFERENCE_V3_MODEL_LANE",
+    "multi_lane_v3": "FAIL_CLOSED_UNTIL_CANONICAL_INFERENCE_RECEIPT_BINDS_CONCRETE_OUTPUT_PRODUCING_LANE_OR_CELL",
+    "bound_identities": [
+      "entity_generation",
+      "entry_event_sha256",
+      "entry_admission_sha256",
+      "route_decision_sha256",
+      "grid_plan_sha256",
+      "cell_id",
+      "model_lane",
+      "inference_receipt_sha256",
+      "model_call_id",
+      "output_ref",
+      "output_sha256",
+      "output_size",
+      "engine_identity_sha256",
+      "resolved_engine_identity",
+      "resolved_engine_class",
+      "resolved_engine_artifact_sha256",
+      "engine_admission_receipt_sha256",
+      "engine_load_loader_binding_sha256",
+      "engine_load_lease_sha256",
+      "engine_load_consumption_receipt_sha256",
+      "engine_load_loader_id"
+    ]
+  },
+  "regression_obligations": [
+    "single-lane binding deterministic and loader-bound",
+    "stale generation rejected",
+    "cross-route receipt rejected",
+    "tampered GRID10 plan digest rejected",
+    "tampered inference receipt digest rejected",
+    "multi-lane v3 output-to-cell assignment rejected"
+  ],
+  "execution_evidence": {
+    "new_exact_branch_regressions": "NOT_EXECUTED",
+    "github_workflow_for_test_commit": "NO_WORKFLOW_RUN_OBSERVED",
+    "synthetic_unusual_experiment": "EXECUTED_PASS_AS_DISCRIMINATOR",
+    "entityos_hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "safety_and_authority": {
+    "second_inference_producer_created": false,
+    "second_state_authority_created": false,
+    "second_effect_path_created": false,
+    "vps_or_self_hosted_test_used": false,
+    "production_host_test_used": false,
+    "together_general_inference_used": false,
+    "together_training_job_created": false,
+    "one_shot_training_authorization_consumed": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "next_exact_gate": "Execute the new focused regressions on an actually-started authorized isolated executor, then feed the binding identity into the selected J-Space training-trace path. For multi-lane GRID10, evolve the canonical single inference producer to a version that binds one concrete output-producing lane/cell before admitting causal training traces."
+}

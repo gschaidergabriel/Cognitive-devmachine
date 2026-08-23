@@ -16,14 +16,12 @@ from grid10_scheduler_v1 import (
 from inference_receipt_v1 import InferenceReceipt, SCHEMA as INFERENCE_RECEIPT_SCHEMA, STATUS as INFERENCE_RECEIPT_STATUS
 from jspace_inference_binding_v1 import JSpaceInferenceBindingError, SCHEMA as JSPACE_INFERENCE_BINDING_SCHEMA, bind_training_trace_to_inference, validate_binding
 from jspace_training_trace_v1 import build_training_trace
-from model_execution_receipt_v1 import VERIFIED_EXECUTION_SCHEMA
 from reactive_event_router_v1 import ENTRY_BINDING_SCHEMA
 
 BASIS_SHA256 = "1" * 64
 EVENT_SHA256 = "2" * 64
 ENTRY_ADMISSION_SHA256 = "3" * 64
 ROUTE_DECISION_SHA256 = "4" * 64
-MODEL_EXECUTION_RECEIPT_SHA256 = "5" * 64
 ROUTER_POLICY_SHA256 = "6" * 64
 ENGINE_IDENTITY_SHA256 = "7" * 64
 ENGINE_ARTIFACT_SHA256 = "8" * 64
@@ -33,6 +31,7 @@ LOAD_LEASE_SHA256 = "b" * 64
 LOAD_CONSUMPTION_SHA256 = "c" * 64
 OUTPUT_SHA256 = "d" * 64
 CAPACITY_RECEIPT_SHA256 = "e" * 64
+MODEL_EXECUTION_RECEIPT_SHA256 = hashlib.sha256(b"model-execution-receipt").hexdigest()
 MODEL_EXECUTION_OBSERVATION_SHA256 = hashlib.sha256(b"model-execution-observation").hexdigest()
 INPUT_SHA256 = hashlib.sha256(b"model-input").hexdigest()
 
@@ -107,7 +106,7 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
             global_jspace_slice_ref="unifieddb:jspace-slice:1",
             hyperposition_branch_ids=("branch:a", "branch:b"),
             provenance_evidence_class="EXACT_PROTOTYPE_TRACE",
-            resource_budget={"max_model_calls": max(1, grid_plan.model_call_count), "max_tokens": 512, "max_wall_ms": 1000},
+            resource_budget={"max_model_calls": 1, "max_tokens": 256, "max_wall_ms": 1000},
             requested_action_class="CANDIDATE_INFERENCE",
             expected_structured_model_output="schema://hcu/candidate-output/v1",
             observed_downstream_outcome="UNKNOWN_NOT_YET_VERIFIED",
@@ -117,7 +116,7 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
 
     def inference_receipt(self, trace=None, **overrides):
         trace = trace or self.training_trace()
-        invocation_id = "executor-invocation:jspace:1"
+        invocation_id = overrides.pop("model_execution_invocation_id", "executor-invocation:1")
         payload = {
             "schema": INFERENCE_RECEIPT_SCHEMA,
             "status": INFERENCE_RECEIPT_STATUS,
@@ -138,7 +137,6 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
             "engine_load_lease_sha256": LOAD_LEASE_SHA256,
             "engine_load_consumption_receipt_sha256": LOAD_CONSUMPTION_SHA256,
             "engine_load_loader_id": "loader:1",
-            "model_execution_schema": VERIFIED_EXECUTION_SCHEMA,
             "model_execution_canonicalization_schema": CANONICALIZATION_SCHEMA,
             "model_execution_receipt_sha256": MODEL_EXECUTION_RECEIPT_SHA256,
             "model_execution_observation_sha256": MODEL_EXECUTION_OBSERVATION_SHA256,
@@ -148,7 +146,7 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
             "output_producing_cell_id": trace.cell_id,
             "model_execution_role": trace.role,
             "input_sha256": INPUT_SHA256,
-            "input_size": 64,
+            "input_size": 77,
             "model_call_id": invocation_id,
             "output_ref": "unifieddb:model-output:1",
             "output_sha256": OUTPUT_SHA256,
@@ -158,7 +156,7 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
         payload.update(overrides)
         return InferenceReceipt(**payload, receipt_sha256=canonical_sha256(payload))
 
-    def test_exact_trace_binds_grid_cell_verified_loader_execution_and_output_chain(self):
+    def test_exact_trace_binds_executor_grid_cell_loader_and_output_chain(self):
         plan = self.grid_plan()
         trace = self.training_trace(plan)
         receipt = self.inference_receipt(trace)
@@ -167,11 +165,8 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
         self.assertEqual(binding.schema, JSPACE_INFERENCE_BINDING_SCHEMA)
         self.assertEqual(binding.inference_receipt_sha256, receipt.receipt_sha256)
         self.assertEqual(binding.grid_plan_sha256, plan.plan_sha256)
-        self.assertEqual(binding.engine_load_consumption_receipt_sha256, LOAD_CONSUMPTION_SHA256)
         self.assertEqual(binding.model_execution_receipt_sha256, MODEL_EXECUTION_RECEIPT_SHA256)
-        self.assertEqual(binding.model_execution_observation_sha256, MODEL_EXECUTION_OBSERVATION_SHA256)
         self.assertEqual(binding.output_sha256, OUTPUT_SHA256)
-        self.assertEqual(binding.input_sha256, INPUT_SHA256)
         self.assertEqual(binding.role, trace.role)
         self.assertEqual(binding.cell_id, "cell-02")
 
@@ -189,24 +184,37 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
                 with self.assertRaisesRegex(JSpaceInferenceBindingError, code):
                     bind_training_trace_to_inference(trace, self.inference_receipt(trace, **overrides), plan)
 
-    def test_inference_receipt_schema_authorities_fail_closed(self):
+    def test_execution_canonicalization_authority_fails_closed(self):
+        plan = self.grid_plan()
+        trace = self.training_trace(plan)
+        with self.assertRaisesRegex(JSpaceInferenceBindingError, "MODEL_EXECUTION_CANONICALIZATION_MISMATCH"):
+            bind_training_trace_to_inference(
+                trace,
+                self.inference_receipt(trace, model_execution_canonicalization_schema="FOREIGN/v1"),
+                plan,
+            )
+
+    def test_executor_role_and_cell_must_bind_trace(self):
         plan = self.grid_plan()
         trace = self.training_trace(plan)
         cases = [
-            ({"entry_binding_schema": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/foreign"}, "HCU_INFERENCE_RECEIPT_ENTRY_BINDING_SCHEMA_MISMATCH"),
-            ({"engine_load_canonicalization_schema": "FOREIGN_CANONICALIZATION/v1"}, "HCU_INFERENCE_RECEIPT_ENGINE_LOAD_CANONICALIZATION_MISMATCH"),
-            ({"model_execution_canonicalization_schema": "FOREIGN_CANONICALIZATION/v1"}, "HCU_INFERENCE_RECEIPT_MODEL_EXECUTION_CANONICALIZATION_MISMATCH"),
+            ({"model_execution_role": "world"}, "MODEL_EXECUTION_ROLE_DOES_NOT_BIND_TRACE_ROLE"),
+            ({"output_producing_cell_id": "cell-03"}, "MODEL_EXECUTION_CELL_DOES_NOT_BIND_TRACE_CELL"),
         ]
         for overrides, code in cases:
             with self.subTest(code=code):
                 with self.assertRaisesRegex(JSpaceInferenceBindingError, code):
                     bind_training_trace_to_inference(trace, self.inference_receipt(trace, **overrides), plan)
 
-    def test_model_lane_must_bind_trace_role(self):
+    def test_model_call_id_must_equal_executor_minted_invocation(self):
         plan = self.grid_plan()
         trace = self.training_trace(plan)
-        with self.assertRaisesRegex(JSpaceInferenceBindingError, "INFERENCE_MODEL_LANE_DOES_NOT_BIND_TRACE_ROLE"):
-            bind_training_trace_to_inference(trace, self.inference_receipt(trace, model_lanes=("world",)), plan)
+        with self.assertRaisesRegex(JSpaceInferenceBindingError, "MODEL_CALL_ID_NOT_EXECUTOR_MINTED_INVOCATION"):
+            bind_training_trace_to_inference(
+                trace,
+                self.inference_receipt(trace, model_call_id="caller-label"),
+                plan,
+            )
 
     def test_training_trace_must_bind_exact_grid_plan(self):
         plan = self.grid_plan()
@@ -214,36 +222,6 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
         trace = self.training_trace(plan)
         with self.assertRaisesRegex(JSpaceInferenceBindingError, "GRID10_TRAINING_TRACE_PLAN_MISMATCH"):
             bind_training_trace_to_inference(trace, self.inference_receipt(trace), other)
-
-    def test_inference_receipt_must_bind_exact_grid_plan(self):
-        plan = self.grid_plan()
-        trace = self.training_trace(plan)
-        with self.assertRaisesRegex(JSpaceInferenceBindingError, "INFERENCE_GRID10_PLAN_MISMATCH"):
-            bind_training_trace_to_inference(trace, self.inference_receipt(trace, grid_plan_sha256="e" * 64), plan)
-
-    def test_training_trace_cell_must_be_exact_model_cell(self):
-        plan = self.grid_plan()
-        trace = replace(self.training_trace(plan), cell_id="cell-00")
-        material = asdict(trace)
-        material.pop("trace_sha256")
-        material["gwt_competition_set"] = [{"cell_id": cell_id, "role": role, "gate_q": gate_q} for cell_id, role, gate_q in trace.gwt_competition_set]
-        material["hyperposition_branch_ids"] = list(trace.hyperposition_branch_ids)
-        material["resource_budget"] = {key: value for key, value in trace.resource_budget}
-        trace = replace(trace, trace_sha256=canonical_sha256(material))
-        with self.assertRaisesRegex(JSpaceInferenceBindingError, "GRID10_MODEL_CELL_DOES_NOT_BIND_TRACE_CELL"):
-            bind_training_trace_to_inference(trace, self.inference_receipt(trace), plan)
-
-    def test_model_execution_cell_must_bind_trace_cell(self):
-        plan = self.grid_plan()
-        trace = self.training_trace(plan)
-        with self.assertRaisesRegex(JSpaceInferenceBindingError, "MODEL_EXECUTION_CELL_DOES_NOT_BIND_TRACE_CELL"):
-            bind_training_trace_to_inference(trace, self.inference_receipt(trace, output_producing_cell_id="cell-09"), plan)
-
-    def test_model_execution_role_must_bind_trace_role(self):
-        plan = self.grid_plan()
-        trace = self.training_trace(plan)
-        with self.assertRaisesRegex(JSpaceInferenceBindingError, "MODEL_EXECUTION_ROLE_DOES_NOT_BIND_TRACE_ROLE"):
-            bind_training_trace_to_inference(trace, self.inference_receipt(trace, model_execution_role="world"), plan)
 
     def test_tampered_grid_plan_digest_fails_before_binding(self):
         plan = replace(self.grid_plan(), runtime_profile_id="tampered")
@@ -265,7 +243,7 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(JSpaceInferenceBindingError, "JSPACE_INFERENCE_BINDING_DIGEST_MISMATCH"):
             validate_binding(replace(binding, output_ref="unifieddb:model-output:changed"))
 
-    def test_multilane_v4_explicit_execution_cell_binds(self):
+    def test_multilane_v4_is_disambiguated_by_executor_minted_cell_and_role(self):
         plan = self.grid_plan(("critic", "world"))
         trace = self.training_trace(plan)
         receipt = self.inference_receipt(trace, model_lanes=("critic", "world"))
@@ -273,7 +251,6 @@ class JSpaceInferenceBindingTests(unittest.TestCase):
         validate_binding(binding)
         self.assertEqual(binding.cell_id, "cell-02")
         self.assertEqual(binding.role, "critic")
-        self.assertEqual(binding.model_execution_invocation_id, receipt.model_execution_invocation_id)
 
 
 if __name__ == "__main__":

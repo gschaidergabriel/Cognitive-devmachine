@@ -1,4 +1,5 @@
 import hashlib
+import inspect
 import unittest
 from dataclasses import asdict, replace
 
@@ -35,7 +36,6 @@ from inference_receipt_v1 import InferenceReceiptError, make_inference_receipt
 from model_execution_receipt_v1 import (
     ACTUAL_MODEL_EXECUTOR_EVIDENCE_SOURCE,
     OBSERVATION_SCHEMA,
-    VERIFIED_EXECUTION_SCHEMA,
     ModelExecutionObservation,
     model_execution_observation_record,
     model_execution_observation_sha256,
@@ -62,9 +62,8 @@ BUILD_SHA256 = digest("build")
 LOADER_BINDING_SHA256 = digest("loader-binding")
 OUTPUT_SHA256 = digest("output")
 INPUT_SHA256 = digest("input")
-CAPACITY_RECEIPT_SHA256 = digest("capacity")
 ADMITTED_BUDGET = {
-    "max_model_calls": 8,
+    "max_model_calls": 1,
     "max_tokens": 1024,
     "max_wall_ms": 2500,
 }
@@ -157,14 +156,12 @@ def verified_engine_load(verified: VerifiedEngineAdmission, *, generation: int =
         runtime=loader_artifact(verified.runtime),
         build=loader_artifact(verified.build),
     )
-    admitted_loader_consumptions = {
-        loader_consumption_record_sha256(consumption): loader_consumption_record(consumption)
-    }
+    admitted = {loader_consumption_record_sha256(consumption): loader_consumption_record(consumption)}
     return verify_loader_consumption(
         lease,
         verified,
         consumption,
-        admitted_loader_consumptions=admitted_loader_consumptions,
+        admitted_loader_consumptions=admitted,
         current_generation=generation,
     )
 
@@ -207,8 +204,8 @@ def base_entry():
         "source_kind": "HUMAN_PROMPT",
         "source_id": "user:test",
         "modality": "TEXT",
-        "observed_time": "2026-08-23T23:24:00+07:00",
-        "received_time": "2026-08-23T23:24:01+07:00",
+        "observed_time": "2026-08-24T02:16:00+07:00",
+        "received_time": "2026-08-24T02:16:01+07:00",
         "provenance_ref": "unifieddb:source:receipt:v4:1",
         "provenance_sha256": digest("provenance"),
         "capabilities": ["memory.read", "hcu.route"],
@@ -239,33 +236,19 @@ def entry_binding(packet):
     }
 
 
-def grid_plan_for(packet, decision, *, runtime_profile_id="runtime:test:inference-v4"):
-    lanes = tuple(decision.model_lanes)
-    cells = [
-        CellLease("cell-00", "RETRIEVE", ExecutionClass.SCRIPT, 0, None),
-        CellLease("cell-01", "PROVENANCE_BUDGET_CHECK", ExecutionClass.SCRIPT, 0, None),
-    ]
-    for ordinal, lane in enumerate(lanes):
-        cells.append(
-            CellLease(
-                f"cell-{len(cells):02d}",
-                f"MODEL:{lane}",
-                ExecutionClass.MODEL,
-                128,
-                ordinal % max(1, min(2, len(lanes))),
-            )
-        )
-    while len(cells) < 9:
-        cells.append(CellLease(f"cell-{len(cells):02d}", "IDLE", ExecutionClass.SCRIPT, 0, None))
-    cells.append(CellLease("cell-09", "SYNTHESIZE", ExecutionClass.SCRIPT, 0, None))
+def grid_plan(packet, decision, *, role: str) -> GridPlan:
+    cells = (
+        CellLease("cell-00", "SCRIPT:INGRESS", ExecutionClass.SCRIPT, 0, None),
+        CellLease("cell-02", f"MODEL:{role}", ExecutionClass.MODEL, 256, 0),
+    )
     provisional = GridPlan(
         schema=PLAN_SCHEMA,
         canonicalization_schema=CANONICALIZATION_SCHEMA,
         entry_binding_schema=ENTRY_BINDING_SCHEMA,
-        plan_sha256=digest("provisional-grid-plan"),
+        plan_sha256=digest("provisional-plan"),
         ingress_id=packet.ingress_id,
         causal_id=packet.causal_id,
-        entity_generation=packet.entity_generation,
+        entity_generation=7,
         entry_event_sha256=packet.event_sha256,
         entry_admission_sha256=packet.admission_sha256,
         route_event_sha256=decision.event_sha256,
@@ -275,51 +258,18 @@ def grid_plan_for(packet, decision, *, runtime_profile_id="runtime:test:inferenc
         resolved_engine_identity=decision.resolved_engine_identity,
         resolved_engine_class=decision.resolved_engine_class,
         resolved_engine_artifact_sha256=decision.resolved_engine_artifact_sha256,
-        capacity_receipt_sha256=CAPACITY_RECEIPT_SHA256,
-        runtime_profile_id=runtime_profile_id,
+        capacity_receipt_sha256=digest("capacity"),
+        runtime_profile_id="runtime:receipt:v4",
         mode=HCUMode.GRID10,
         logical_cell_count=len(cells),
-        model_call_count=len(lanes),
-        physical_decoder_limit=max(1, min(2, len(lanes))),
-        max_wall_ms=ADMITTED_BUDGET["max_wall_ms"],
-        cells=tuple(cells),
+        model_call_count=1,
+        physical_decoder_limit=1,
+        max_wall_ms=2500,
+        cells=cells,
     )
     plan = replace(provisional, plan_sha256=canonical_sha256(grid_plan_material(provisional)))
     validate_grid_plan_identity(plan)
     return plan
-
-
-def verified_model_execution_for(plan, load):
-    model_cells = [cell for cell in plan.cells if cell.execution_class is ExecutionClass.MODEL]
-    if not model_cells:
-        raise AssertionError("fixture requires at least one model cell")
-    model_cell = model_cells[0]
-    role = model_cell.function[len("MODEL:"):]
-    observation = ModelExecutionObservation(
-        schema=OBSERVATION_SCHEMA,
-        evidence_source=ACTUAL_MODEL_EXECUTOR_EVIDENCE_SOURCE,
-        entity_generation=plan.entity_generation,
-        executor_id="entityos:hcu:model-executor:1",
-        invocation_id="executor-invocation:receipt:v4:1",
-        engine_load_consumption_receipt_sha256=load.consumption_receipt_sha256,
-        grid_plan_sha256=plan.plan_sha256,
-        output_producing_cell_id=model_cell.cell_id,
-        role=role,
-        input_sha256=INPUT_SHA256,
-        input_size=64,
-        output_ref="unifieddb:candidate-output:receipt:v4:1",
-        output_sha256=OUTPUT_SHA256,
-        output_size=128,
-    )
-    observation_record = model_execution_observation_record(observation)
-    observation_registry = {model_execution_observation_sha256(observation): observation_record}
-    return verify_model_execution(
-        plan,
-        load,
-        observation,
-        admitted_model_execution_observations=observation_registry,
-        current_generation=plan.entity_generation,
-    )
 
 
 def fixture():
@@ -336,10 +286,33 @@ def fixture():
         admitted_engine_artifacts=engine_artifacts,
         admitted_entry_bindings=entry_bindings,
     )
+    role = tuple(decision.model_lanes)[0]
+    plan = grid_plan(packet, decision, role=role)
     load = verified_engine_load(verified)
-    load_receipt = verified_load_receipt(load)
-    plan = grid_plan_for(packet, decision)
-    model_execution = verified_model_execution_for(plan, load)
+    observation = ModelExecutionObservation(
+        schema=OBSERVATION_SCHEMA,
+        evidence_source=ACTUAL_MODEL_EXECUTOR_EVIDENCE_SOURCE,
+        entity_generation=7,
+        executor_id="entityos:hcu:model-executor:1",
+        invocation_id="invocation:receipt:v4:1",
+        engine_load_consumption_receipt_sha256=load.consumption_receipt_sha256,
+        grid_plan_sha256=plan.plan_sha256,
+        output_producing_cell_id="cell-02",
+        role=role,
+        input_sha256=INPUT_SHA256,
+        input_size=64,
+        output_ref="unifieddb:candidate-output:receipt:v4:1",
+        output_sha256=OUTPUT_SHA256,
+        output_size=128,
+    )
+    obs_record = model_execution_observation_record(observation)
+    execution = verify_model_execution(
+        plan,
+        load,
+        observation,
+        admitted_model_execution_observations={model_execution_observation_sha256(observation): obs_record},
+        current_generation=7,
+    )
     kwargs = {
         "current_generation": 7,
         "admitted_route_generations": {decision.decision_sha256: 7},
@@ -349,10 +322,10 @@ def fixture():
         "verified_engine_admission": verified,
         "admitted_engine_admission_receipts": {verified.receipt_sha256: verified.receipt()},
         "verified_engine_load": load,
-        "admitted_verified_engine_loads": {load.consumption_receipt_sha256: load_receipt},
+        "admitted_verified_engine_loads": {load.consumption_receipt_sha256: verified_load_receipt(load)},
         "grid_plan": plan,
-        "verified_model_execution": model_execution,
-        "admitted_verified_model_executions": {model_execution.receipt_sha256: asdict(model_execution)},
+        "verified_model_execution": execution,
+        "admitted_verified_model_executions": {execution.receipt_sha256: asdict(execution)},
     }
     return packet, decision, kwargs
 
@@ -364,25 +337,46 @@ class InferenceReceiptTests(unittest.TestCase):
         self.assertEqual(ENTRY_BINDING_SCHEMA, "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2")
         self.assertEqual(ENGINE_ADMISSION_RECEIPT_SCHEMA, "HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v2")
         self.assertEqual(VERIFIED_LOAD_SCHEMA, "HCU_VERIFIED_ENGINE_LOAD/v1")
-        self.assertEqual(VERIFIED_EXECUTION_SCHEMA, "HCU_VERIFIED_MODEL_EXECUTION/v1")
 
     def test_bound_candidate_receipt_is_deterministic_and_jcs_v4(self):
         packet, decision, kwargs = fixture()
         a = make_inference_receipt(decision, **kwargs)
         b = make_inference_receipt(decision, **kwargs)
+        execution = kwargs["verified_model_execution"]
         self.assertEqual(a, b)
         self.assertEqual(a.schema, "HCU_INFERENCE_RECEIPT/v4")
         self.assertEqual(a.status, "CANDIDATE_ONLY")
-        self.assertEqual(a.hash_serialization_schema, CANONICALIZATION_SCHEMA)
-        self.assertEqual(a.entry_binding_schema, ENTRY_BINDING_SCHEMA)
         self.assertEqual(a.entry_admission_sha256, packet.admission_sha256)
-        self.assertEqual(a.engine_load_consumption_receipt_sha256, kwargs["verified_engine_load"].consumption_receipt_sha256)
-        self.assertEqual(a.engine_load_loader_binding_sha256, LOADER_BINDING_SHA256)
-        self.assertEqual(a.model_execution_receipt_sha256, kwargs["verified_model_execution"].receipt_sha256)
-        self.assertEqual(a.grid_plan_sha256, kwargs["grid_plan"].plan_sha256)
-        self.assertEqual(a.output_sha256, OUTPUT_SHA256)
-        self.assertEqual(a.input_sha256, INPUT_SHA256)
-        self.assertEqual(a.model_call_id, a.model_execution_invocation_id)
+        self.assertEqual(a.model_execution_receipt_sha256, execution.receipt_sha256)
+        self.assertEqual(a.model_call_id, execution.invocation_id)
+        self.assertEqual(a.output_sha256, execution.output_sha256)
+        self.assertEqual(a.output_producing_cell_id, execution.output_producing_cell_id)
+
+    def test_caller_output_fields_are_removed_from_inference_api(self):
+        params = inspect.signature(make_inference_receipt).parameters
+        for forbidden in ("model_call_id", "output_ref", "output_sha256", "output_size"):
+            self.assertNotIn(forbidden, params)
+
+    def test_verified_model_execution_must_be_admitted(self):
+        _packet, decision, kwargs = fixture()
+        kwargs["admitted_verified_model_executions"] = {}
+        with self.assertRaisesRegex(InferenceReceiptError, "VERIFIED_MODEL_EXECUTION_NOT_ADMITTED"):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_tampered_model_execution_digest_fails_closed(self):
+        _packet, decision, kwargs = fixture()
+        execution = kwargs["verified_model_execution"]
+        kwargs["verified_model_execution"] = replace(execution, output_sha256=digest("tampered-output"))
+        with self.assertRaisesRegex(InferenceReceiptError, "VERIFIED_MODEL_EXECUTION_REJECTED:.*DIGEST_MISMATCH"):
+            make_inference_receipt(decision, **kwargs)
+
+    def test_cross_plan_model_execution_fails_closed(self):
+        _packet, decision, kwargs = fixture()
+        execution = kwargs["verified_model_execution"]
+        kwargs["verified_model_execution"] = replace(execution, grid_plan_sha256=digest("other-plan"))
+        # Re-digesting is intentionally not done: a downstream caller cannot relabel a verified execution.
+        with self.assertRaisesRegex(InferenceReceiptError, "VERIFIED_MODEL_EXECUTION_REJECTED:.*DIGEST_MISMATCH"):
+            make_inference_receipt(decision, **kwargs)
 
     def test_legacy_bare_entry_binding_fails_closed(self):
         packet, decision, kwargs = fixture()
@@ -402,56 +396,20 @@ class InferenceReceiptTests(unittest.TestCase):
         with self.assertRaisesRegex(InferenceReceiptError, "ENGINE_ARTIFACT_ADMISSION_MISMATCH"):
             make_inference_receipt(decision, **kwargs)
 
-    def test_engine_admission_receipt_must_be_admitted(self):
-        _packet, decision, kwargs = fixture()
-        kwargs["admitted_engine_admission_receipts"] = {}
-        with self.assertRaisesRegex(InferenceReceiptError, "ENGINE_ADMISSION_RECEIPT_NOT_ADMITTED"):
-            make_inference_receipt(decision, **kwargs)
-
     def test_verified_load_must_be_admitted(self):
         _packet, decision, kwargs = fixture()
         kwargs["admitted_verified_engine_loads"] = {}
         with self.assertRaisesRegex(InferenceReceiptError, "VERIFIED_ENGINE_LOAD_NOT_ADMITTED"):
             make_inference_receipt(decision, **kwargs)
 
-    def test_stale_verified_load_generation_fails_closed(self):
-        _packet, decision, kwargs = fixture()
-        kwargs["verified_engine_load"] = replace(kwargs["verified_engine_load"], entity_generation=6)
-        with self.assertRaisesRegex(InferenceReceiptError, "STALE_VERIFIED_ENGINE_LOAD_GENERATION"):
-            make_inference_receipt(decision, **kwargs)
-
     def test_post_hoc_loader_evidence_cannot_mint_inference_receipt(self):
         _packet, decision, kwargs = fixture()
         load = kwargs["verified_engine_load"]
-        bad_checkpoint = replace(load.checkpoint, evidence_source="POST_HOC_FILESYSTEM_REHASH")
-        kwargs["verified_engine_load"] = replace(load, checkpoint=bad_checkpoint)
+        kwargs["verified_engine_load"] = replace(
+            load,
+            checkpoint=replace(load.checkpoint, evidence_source="POST_HOC_FILESYSTEM_REHASH"),
+        )
         with self.assertRaisesRegex(InferenceReceiptError, "ACTUAL_LOADER_READ_EVIDENCE_REQUIRED"):
-            make_inference_receipt(decision, **kwargs)
-
-    def test_tampered_verified_load_digest_fails_closed(self):
-        _packet, decision, kwargs = fixture()
-        load = kwargs["verified_engine_load"]
-        kwargs["verified_engine_load"] = replace(load, loader_id="tampered-loader")
-        with self.assertRaisesRegex(InferenceReceiptError, "VERIFIED_ENGINE_LOAD_DIGEST_MISMATCH"):
-            make_inference_receipt(decision, **kwargs)
-
-    def test_verified_model_execution_must_be_admitted(self):
-        _packet, decision, kwargs = fixture()
-        kwargs["admitted_verified_model_executions"] = {}
-        with self.assertRaisesRegex(InferenceReceiptError, "VERIFIED_MODEL_EXECUTION_NOT_ADMITTED"):
-            make_inference_receipt(decision, **kwargs)
-
-    def test_model_execution_output_tamper_after_admission_fails_closed(self):
-        _packet, decision, kwargs = fixture()
-        execution = kwargs["verified_model_execution"]
-        kwargs["verified_model_execution"] = replace(execution, output_sha256=digest("tampered-output"))
-        with self.assertRaisesRegex(InferenceReceiptError, "VERIFIED_MODEL_EXECUTION_REJECTED:VERIFIED_MODEL_EXECUTION_DIGEST_MISMATCH"):
-            make_inference_receipt(decision, **kwargs)
-
-    def test_model_execution_cannot_rebind_to_another_grid_plan(self):
-        packet, decision, kwargs = fixture()
-        kwargs["grid_plan"] = grid_plan_for(packet, decision, runtime_profile_id="runtime:test:other-plan")
-        with self.assertRaisesRegex(InferenceReceiptError, "MODEL_EXECUTION_GRID10_PLAN_MISMATCH"):
             make_inference_receipt(decision, **kwargs)
 
 

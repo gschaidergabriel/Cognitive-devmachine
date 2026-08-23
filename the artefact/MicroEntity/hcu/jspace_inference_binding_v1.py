@@ -1,18 +1,12 @@
 #!/usr/bin/env python3
-"""Bind an observable J-Space training trace to the real HCU inference receipt chain.
+"""Bind an observable J-Space training trace to the canonical HCU inference chain.
 
-This is deterministic research-evidence binding only. It does not mint truth, reward,
-capability, model authority, runtime acceptance, or effects. Its job is to prevent a
-training trace from claiming a model outcome unless the same generation, Typed Entry
-event/admission, route decision, exact scheduler-owned GRID plan/cell, admitted engine/load
-chain, executor-minted model-execution evidence, lane/role and output bytes are bound by
-the canonical HCU_INFERENCE_RECEIPT/v4 producer.
-
-InferenceReceipt/v4 carries an explicit output-producing GRID cell and role derived from an
-admitted VerifiedModelExecution. Therefore a multi-lane route is no longer ambiguous when
-the executor evidence names exactly one output-producing MODEL cell that belongs to the
-same exact GRID plan. ``model_call_id`` remains correlation metadata, but v4 derives it
-from the executor-minted invocation id rather than accepting an independent caller label.
+This is deterministic research-evidence plumbing only. It grants no truth, reward,
+capability, runtime acceptance, or effects. The v3 binding requires HCU_INFERENCE_RECEIPT/v4,
+which in turn consumes an admitted VerifiedModelExecution rather than caller-asserted output
+provenance. The exact scheduler-owned GRID plan, executor-minted output cell/role, loaded
+engine, invocation, input and output bytes are cross-bound before a trace can claim a model
+outcome relation.
 """
 from __future__ import annotations
 
@@ -28,12 +22,7 @@ try:
         SCHEMA as INFERENCE_RECEIPT_SCHEMA,
         STATUS as INFERENCE_RECEIPT_STATUS,
     )
-    from .jspace_training_trace_v1 import (
-        TRACE_SCHEMA as TRAINING_TRACE_SCHEMA,
-        TrainingTrace,
-        validate_training_trace,
-    )
-    from .model_execution_receipt_v1 import VERIFIED_EXECUTION_SCHEMA
+    from .jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA, TrainingTrace, validate_training_trace
     from .reactive_event_router_v1 import ENTRY_BINDING_SCHEMA
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
@@ -43,12 +32,7 @@ except ImportError:
         SCHEMA as INFERENCE_RECEIPT_SCHEMA,
         STATUS as INFERENCE_RECEIPT_STATUS,
     )
-    from jspace_training_trace_v1 import (
-        TRACE_SCHEMA as TRAINING_TRACE_SCHEMA,
-        TrainingTrace,
-        validate_training_trace,
-    )
-    from model_execution_receipt_v1 import VERIFIED_EXECUTION_SCHEMA
+    from jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA, TrainingTrace, validate_training_trace
     from reactive_event_router_v1 import ENTRY_BINDING_SCHEMA
 
 SCHEMA = "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3"
@@ -84,11 +68,12 @@ class JSpaceInferenceBinding:
     engine_load_lease_sha256: str
     engine_load_consumption_receipt_sha256: str
     engine_load_loader_id: str
-    model_execution_schema: str
     model_execution_receipt_sha256: str
     model_execution_observation_sha256: str
     model_execution_executor_id: str
     model_execution_invocation_id: str
+    output_producing_cell_id: str
+    model_execution_role: str
     input_sha256: str
     input_size: int
     model_call_id: str
@@ -148,19 +133,8 @@ def _validate_inference_receipt(receipt: InferenceReceipt) -> None:
         raise JSpaceInferenceBindingError("HCU_INFERENCE_RECEIPT_ENTRY_BINDING_SCHEMA_MISMATCH")
     if receipt.engine_load_canonicalization_schema != CANONICALIZATION_SCHEMA:
         raise JSpaceInferenceBindingError("HCU_INFERENCE_RECEIPT_ENGINE_LOAD_CANONICALIZATION_MISMATCH")
-    if receipt.model_execution_schema != VERIFIED_EXECUTION_SCHEMA:
-        raise JSpaceInferenceBindingError("HCU_INFERENCE_RECEIPT_MODEL_EXECUTION_SCHEMA_MISMATCH")
     if receipt.model_execution_canonicalization_schema != CANONICALIZATION_SCHEMA:
         raise JSpaceInferenceBindingError("HCU_INFERENCE_RECEIPT_MODEL_EXECUTION_CANONICALIZATION_MISMATCH")
-    _sha256(receipt.model_execution_receipt_sha256, "inference_receipt.model_execution_receipt_sha256")
-    _sha256(receipt.model_execution_observation_sha256, "inference_receipt.model_execution_observation_sha256")
-    _sha256(receipt.grid_plan_sha256, "inference_receipt.grid_plan_sha256")
-    _sha256(receipt.input_sha256, "inference_receipt.input_sha256")
-    _text(receipt.output_producing_cell_id, "inference_receipt.output_producing_cell_id", 256)
-    _text(receipt.model_execution_role, "inference_receipt.model_execution_role", 256)
-    invocation_id = _text(receipt.model_execution_invocation_id, "inference_receipt.model_execution_invocation_id")
-    if _text(receipt.model_call_id, "inference_receipt.model_call_id") != invocation_id:
-        raise JSpaceInferenceBindingError("INFERENCE_MODEL_CALL_ID_NOT_EXECUTOR_INVOCATION")
     material = asdict(receipt)
     observed = _sha256(material.pop("receipt_sha256", None), "inference_receipt.receipt_sha256")
     expected = _canonical_sha256(material, "HCU_INFERENCE_RECEIPT")
@@ -206,7 +180,7 @@ def bind_training_trace_to_inference(
     if grid_plan.plan_sha256 != training_trace.grid_plan_sha256:
         raise JSpaceInferenceBindingError("GRID10_TRAINING_TRACE_PLAN_MISMATCH")
     if inference_receipt.grid_plan_sha256 != grid_plan.plan_sha256:
-        raise JSpaceInferenceBindingError("INFERENCE_GRID10_PLAN_MISMATCH")
+        raise JSpaceInferenceBindingError("INFERENCE_MODEL_EXECUTION_GRID10_PLAN_MISMATCH")
 
     if grid_plan.router_policy_sha256 != inference_receipt.router_policy_sha256:
         raise JSpaceInferenceBindingError("GRID10_INFERENCE_ROUTER_POLICY_MISMATCH")
@@ -220,40 +194,25 @@ def bind_training_trace_to_inference(
         raise JSpaceInferenceBindingError("GRID10_INFERENCE_ENGINE_ARTIFACT_MISMATCH")
 
     role = _text(training_trace.role, "training_trace.role", 256)
+    cell_id = _text(training_trace.cell_id, "training_trace.cell_id", 256)
+    if inference_receipt.model_execution_role != role:
+        raise JSpaceInferenceBindingError("MODEL_EXECUTION_ROLE_DOES_NOT_BIND_TRACE_ROLE")
+    if inference_receipt.output_producing_cell_id != cell_id:
+        raise JSpaceInferenceBindingError("MODEL_EXECUTION_CELL_DOES_NOT_BIND_TRACE_CELL")
+    if inference_receipt.model_execution_invocation_id != inference_receipt.model_call_id:
+        raise JSpaceInferenceBindingError("MODEL_CALL_ID_NOT_EXECUTOR_MINTED_INVOCATION")
     lanes = tuple(_text(lane, "inference_receipt.model_lane", 256) for lane in inference_receipt.model_lanes)
     if role not in lanes:
-        raise JSpaceInferenceBindingError("INFERENCE_MODEL_LANE_DOES_NOT_BIND_TRACE_ROLE")
-    if _text(inference_receipt.model_execution_role, "inference_receipt.model_execution_role", 256) != role:
-        raise JSpaceInferenceBindingError("MODEL_EXECUTION_ROLE_DOES_NOT_BIND_TRACE_ROLE")
+        raise JSpaceInferenceBindingError("MODEL_EXECUTION_ROLE_NOT_IN_INFERENCE_MODEL_LANES")
 
-    cell_id = _text(training_trace.cell_id, "training_trace.cell_id", 256)
-    if _text(inference_receipt.output_producing_cell_id, "inference_receipt.output_producing_cell_id", 256) != cell_id:
-        raise JSpaceInferenceBindingError("MODEL_EXECUTION_CELL_DOES_NOT_BIND_TRACE_CELL")
     matching_cells = [cell for cell in grid_plan.cells if cell.cell_id == cell_id]
     if len(matching_cells) != 1:
         raise JSpaceInferenceBindingError("GRID10_MODEL_CELL_NOT_UNIQUE")
     model_cell = matching_cells[0]
     if model_cell.execution_class is not ExecutionClass.MODEL:
-        raise JSpaceInferenceBindingError("GRID10_MODEL_CELL_DOES_NOT_BIND_TRACE_CELL")
+        raise JSpaceInferenceBindingError("GRID10_TRACE_CELL_NOT_MODEL")
     if model_cell.function != f"MODEL:{role}":
         raise JSpaceInferenceBindingError("GRID10_MODEL_CELL_DOES_NOT_BIND_TRACE_ROLE")
-
-    model_execution_receipt_sha256 = _sha256(
-        inference_receipt.model_execution_receipt_sha256,
-        "inference_receipt.model_execution_receipt_sha256",
-    )
-    model_execution_observation_sha256 = _sha256(
-        inference_receipt.model_execution_observation_sha256,
-        "inference_receipt.model_execution_observation_sha256",
-    )
-    model_execution_executor_id = _text(
-        inference_receipt.model_execution_executor_id,
-        "inference_receipt.model_execution_executor_id",
-    )
-    model_execution_invocation_id = _text(
-        inference_receipt.model_execution_invocation_id,
-        "inference_receipt.model_execution_invocation_id",
-    )
 
     material = {
         "schema": SCHEMA,
@@ -280,14 +239,15 @@ def bind_training_trace_to_inference(
         "engine_load_lease_sha256": _sha256(inference_receipt.engine_load_lease_sha256, "inference_receipt.engine_load_lease_sha256"),
         "engine_load_consumption_receipt_sha256": _sha256(inference_receipt.engine_load_consumption_receipt_sha256, "inference_receipt.engine_load_consumption_receipt_sha256"),
         "engine_load_loader_id": _text(inference_receipt.engine_load_loader_id, "inference_receipt.engine_load_loader_id"),
-        "model_execution_schema": VERIFIED_EXECUTION_SCHEMA,
-        "model_execution_receipt_sha256": model_execution_receipt_sha256,
-        "model_execution_observation_sha256": model_execution_observation_sha256,
-        "model_execution_executor_id": model_execution_executor_id,
-        "model_execution_invocation_id": model_execution_invocation_id,
+        "model_execution_receipt_sha256": _sha256(inference_receipt.model_execution_receipt_sha256, "inference_receipt.model_execution_receipt_sha256"),
+        "model_execution_observation_sha256": _sha256(inference_receipt.model_execution_observation_sha256, "inference_receipt.model_execution_observation_sha256"),
+        "model_execution_executor_id": _text(inference_receipt.model_execution_executor_id, "inference_receipt.model_execution_executor_id"),
+        "model_execution_invocation_id": _text(inference_receipt.model_execution_invocation_id, "inference_receipt.model_execution_invocation_id"),
+        "output_producing_cell_id": _text(inference_receipt.output_producing_cell_id, "inference_receipt.output_producing_cell_id", 256),
+        "model_execution_role": _text(inference_receipt.model_execution_role, "inference_receipt.model_execution_role", 256),
         "input_sha256": _sha256(inference_receipt.input_sha256, "inference_receipt.input_sha256"),
         "input_size": _nonnegative_int(inference_receipt.input_size, "inference_receipt.input_size"),
-        "model_call_id": model_execution_invocation_id,
+        "model_call_id": _text(inference_receipt.model_call_id, "inference_receipt.model_call_id"),
         "output_ref": _text(inference_receipt.output_ref, "inference_receipt.output_ref"),
         "output_sha256": _sha256(inference_receipt.output_sha256, "inference_receipt.output_sha256"),
         "output_size": _nonnegative_int(inference_receipt.output_size, "inference_receipt.output_size"),

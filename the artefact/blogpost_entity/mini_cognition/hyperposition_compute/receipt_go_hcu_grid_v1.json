@@ -42,5 +42,45 @@
   "vps_test_credit": 0,
   "together_used": false,
   "paid_activity": false,
-  "secrets_accessed": false
+  "secrets_accessed": false,
+  "github_pr_execution_observation": {
+    "head_observed": "7f6e18006df2592fe8490ce857f0156e4a57511b",
+    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT",
+    "runs": [
+      {
+        "id": 32619019058,
+        "name": "mini-cognition-qwen35-08b-pr",
+        "job_id": 97144193290,
+        "job": "deterministic-cognition-gates",
+        "conclusion": "failure",
+        "steps": null
+      },
+      {
+        "id": 32619019075,
+        "name": "claycog-08b-direct-admission",
+        "job_id": 97144193417,
+        "job": "direct-lane-admission",
+        "conclusion": "failure",
+        "steps": null
+      },
+      {
+        "id": 32619019069,
+        "name": "claycog-validator-pr",
+        "job_id": 97144193456,
+        "job": "strict-admission",
+        "conclusion": "failure",
+        "steps": null
+      },
+      {
+        "id": 32619019062,
+        "name": "Research Entity Identity Guard",
+        "job_id": 97144193308,
+        "job": "identity-guard",
+        "conclusion": "failure",
+        "steps": null
+      }
+    ],
+    "semantic_test_failure_credit": 0,
+    "runtime_credit": 0
+  }
 }

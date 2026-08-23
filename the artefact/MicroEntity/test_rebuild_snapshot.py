@@ -5,7 +5,6 @@ from pathlib import Path
 
 import rebuild_snapshot as rs
 
-
 class SnapshotTests(unittest.TestCase):
     def fixture(self):
         td = tempfile.TemporaryDirectory()
@@ -43,7 +42,6 @@ class SnapshotTests(unittest.TestCase):
         (root / "PACKAGE_MANIFEST.json").write_text(json.dumps(manifest))
         with self.assertRaisesRegex(rs.SnapshotError, "UNSAFE_MEMBER_PATH"):
             rs.rebuild(root, root / "poison.zip", None, None, None)
-
 
 if __name__ == "__main__":
     unittest.main()

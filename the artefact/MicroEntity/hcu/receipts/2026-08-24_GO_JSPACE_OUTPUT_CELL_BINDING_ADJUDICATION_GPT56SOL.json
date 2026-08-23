@@ -1,5 +1,5 @@
 {
-  "schema": "ENTITYOS_HCU_GO_JSPACE_OUTPUT_CELL_BINDING_ADJUDICATION/v4",
+  "schema": "ENTITYOS_HCU_GO_JSPACE_OUTPUT_CELL_BINDING_ADJUDICATION/v5",
   "date": "2026-08-24",
   "trigger": "go",
   "persistent_research_entity": "Clay",
@@ -11,14 +11,15 @@
     "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
     "mode": "FREE_ONLY",
     "together_general_inference": "FORBIDDEN",
-    "paid_or_unknown_provider_execution": "FORBIDDEN_FAIL_CLOSED_BEFORE_CREDENTIAL_OR_NETWORK_IO"
+    "paid_or_unknown_provider_execution": "FORBIDDEN_FAIL_CLOSED_BEFORE_CREDENTIAL_OR_NETWORK_IO",
+    "vercel_sandbox_cost_gate": "BLOCKED_UNTIL_EXPLICIT_ZERO_MONETARY_COST_INCLUDED_BUDGET_EVIDENCE_OR_NEWER_AUTHORITY"
   },
   "exact_source": {
-    "canonical_main_observed_before_final_rebase": "5ec96315ea1c87e28ba7087f29f3bbc56fc65a56",
+    "canonical_main_after_cost_gate_quarantine": "b5b6e72faea1fbd0056b6508f628c83f78d230e6",
     "retained_hcu_pr": 1263,
     "retained_hcu_head_rebased_onto": "ce1a0b8490f58d90918f8e5084a2c9112722db4f",
-    "retained_binding_blob": "b0cb69796214b1bcdd74117351440fe429cc268f",
-    "retained_test_blob": "1b2838c2539f979d1a42eaeb8d7af3719aaaff9e",
+    "retained_hcu_head_read_only_followup": "c032c73800152c0bf6a211d6976ca5c11a3d1896",
+    "retained_binding_blob_at_followup": "b0cb69796214b1bcdd74117351440fe429cc268f",
     "fusion_pr": 1396,
     "fusion_branch": "gpt56sol/go-fuse-jspace-inference-cell-binding-20260824",
     "fusion_code_commit": "224c4b22e588715918bad40e9787e91ac57fb6ef",
@@ -28,7 +29,7 @@
     "class": "OUTPUT_TO_GRID_CELL_CAUSAL_AMBIGUITY",
     "current_inference_receipt": "HCU_INFERENCE_RECEIPT/v3",
     "current_binding_before_repair": "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v1",
-    "exact_retained_behavior": "v1 validates receipt authorities and causal Entry/route identity, then accepts training_trace.role whenever it appears anywhere in inference_receipt.model_lanes. It does not validate an exact GridPlan or uniquely identify the output-producing model cell.",
+    "exact_retained_behavior": "v1 validates current receipt authorities and causal Entry/route identity, then accepts training_trace.role whenever it appears anywhere in inference_receipt.model_lanes. It does not validate an exact GridPlan or uniquely identify the output-producing model cell.",
     "dataset_gate_residual": "DatasetAdmission v2 admits GRID plan identity by hash/generation/Entry/route but not cell execution-class/function/output-producing lane, so it does not independently close this ambiguity.",
     "impact": "Multi-lane v3 output-to-cell attribution is not safe causal provenance for serious J-Space training rows."
   },
@@ -43,7 +44,7 @@
     "selected_path_modified_in_place": "the artefact/MicroEntity/hcu/jspace_inference_binding_v1.py",
     "schema": "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v2",
     "preserves_binding_dataclass_field_shape": true,
-    "preserves_newer_entry_binding_and_engine_load_canonicalization_fences": true,
+    "preserves_current_entry_binding_and_engine_load_canonicalization_fences": true,
     "requires_exact_grid_plan_object_and_jcs_digest": true,
     "crossbinds_generation_entry_route_router_policy_and_engine_identity": true,
     "requires_exact_model_cell_id_and_MODEL_role_function": true,
@@ -56,8 +57,10 @@
     "earlier_identity_guard_runs": [32656224988, 32656375961],
     "earlier_materialized_steps_each": [0, 0],
     "earlier_classification": "REPLICATED_EXECUTION_ADMISSION_FAILURE_BEFORE_TEST_STEPS",
-    "exact_final_rebased_regressions_executed": false,
-    "authorized_free_sandbox_started_for_final_candidate": false,
+    "canonical_main_quarantined_vercel_capsule_receipt": "research_entity/continuity/receipts/2026-08-24_GO_JSPACE_BINDER_STALE_AUTHORITY_QUARANTINE_GPT56SOL.json",
+    "quarantined_capsule_runtime_credit": 0,
+    "new_metered_or_unknown_cost_sandbox_after_cost_gate": false,
+    "exact_final_candidate_regressions_executed": false,
     "entityos_hcu_runtime_credit": 0,
     "jspace_model_runtime_credit": 0,
     "training_credit": 0,
@@ -68,5 +71,5 @@
     "canonical_readme_or_index_stale_overwrite": false,
     "fusion_rule": "If a newer retained implementation closes this exact ambiguity before merge, discard this candidate rather than duplicate authority."
   },
-  "next_exact_gate": "Run the rebased focused inference-binding tests together with the serious admitted-dataset regression capsule on an actually-started, exact-source, authorized FREE isolated executor; then fuse only if executable evidence supports it."
+  "next_exact_gate": "Do not start another metered or unknown-cost Vercel Sandbox run under current FREE_ONLY authority. Continue source/fusion/capsule convergence. Execute the focused inference-binding plus serious admitted-dataset capsule only after explicit zero-monetary-cost/included-budget evidence for an authorized isolated surface or a newer authority mode permits it."
 }

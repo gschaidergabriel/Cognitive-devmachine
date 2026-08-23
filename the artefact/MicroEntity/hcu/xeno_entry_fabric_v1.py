@@ -3,7 +3,7 @@
 
 Deterministic and non-cognitive. It binds immutable causal event identity separately
 from transport/admission receipt identity before any HCU/model work. It does not mint
-truth, permissions or effects.
+truth, permissions, compute budget or effects.
 """
 from __future__ import annotations
 
@@ -129,23 +129,38 @@ def _capabilities(value: Any, field: str = "capabilities") -> tuple[str, ...]:
     return tuple(sorted(normalized))
 
 
-def _budget(value: Any) -> tuple[tuple[str, int], ...]:
+def _budget(value: Any, field: str = "budget") -> tuple[tuple[str, int], ...]:
     if not isinstance(value, Mapping):
-        raise EntryFabricError("budget:MAPPING_REQUIRED")
+        raise EntryFabricError(f"{field}:MAPPING_REQUIRED")
     unknown = set(value) - BUDGET_FIELDS
     if unknown:
-        raise EntryFabricError(f"budget:UNKNOWN_FIELDS:{','.join(sorted(unknown))}")
+        raise EntryFabricError(f"{field}:UNKNOWN_FIELDS:{','.join(sorted(unknown))}")
     if set(value) != BUDGET_FIELDS:
-        raise EntryFabricError("budget:ALL_FIELDS_REQUIRED")
+        raise EntryFabricError(f"{field}:ALL_FIELDS_REQUIRED")
     normalized: dict[str, int] = {}
-    for field in sorted(BUDGET_FIELDS):
-        item = value[field]
+    for budget_field in sorted(BUDGET_FIELDS):
+        item = value[budget_field]
         if isinstance(item, bool) or not isinstance(item, int) or item < 0:
-            raise EntryFabricError(f"budget.{field}:NONNEGATIVE_INTEGER_REQUIRED")
+            raise EntryFabricError(f"{field}.{budget_field}:NONNEGATIVE_INTEGER_REQUIRED")
         if item > 9_007_199_254_740_991:
-            raise EntryFabricError(f"budget.{field}:IJSON_SAFE_INTEGER_REQUIRED")
-        normalized[field] = item
+            raise EntryFabricError(f"{field}.{budget_field}:IJSON_SAFE_INTEGER_REQUIRED")
+        normalized[budget_field] = item
     return tuple(normalized.items())
+
+
+def _admit_budget(
+    requested_budget: tuple[tuple[str, int], ...],
+    admitted_budget: Mapping[str, Any],
+) -> tuple[tuple[str, int], ...]:
+    """Allow Entry to narrow, never broaden, an externally supplied compute budget."""
+    authority_budget = dict(_budget(admitted_budget, "admitted_budget"))
+    requested = dict(requested_budget)
+    exceeded = sorted(
+        field for field in BUDGET_FIELDS if requested[field] > authority_budget[field]
+    )
+    if exceeded:
+        raise EntryFabricError(f"BUDGET_NOT_ADMITTED:{','.join(exceeded)}")
+    return requested_budget
 
 
 def _raw_json_pairs_no_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -208,7 +223,14 @@ def admit_entry(
     current_generation: int,
     expected_capability_binding_sha256: str,
     admitted_capabilities: Sequence[str],
+    admitted_budget: Mapping[str, Any],
 ) -> EntryPacket:
+    """Admit Typed Entry against externally supplied capability and compute-budget views.
+
+    `admitted_capabilities`, `expected_capability_binding_sha256`, and `admitted_budget`
+    are authority inputs; none may be derived from the untrusted Entry payload itself.
+    Entry claims may narrow those views but may not broaden them.
+    """
     if not isinstance(entry, Mapping):
         raise EntryFabricError("ENTRY_MAPPING_REQUIRED")
     unknown = set(entry) - ENTRY_FIELDS
@@ -247,7 +269,7 @@ def admit_entry(
     unauthorized = sorted(set(capabilities) - set(authority_capabilities))
     if unauthorized:
         raise EntryFabricError(f"CAPABILITY_NOT_ADMITTED:{','.join(unauthorized)}")
-    budget = _budget(entry.get("budget"))
+    budget = _admit_budget(_budget(entry.get("budget")), admitted_budget)
     parent_id = _text(entry.get("parent_id"), "parent_id", optional=True)
     stream_id = _text(entry.get("stream_id"), "stream_id", optional=True)
 
@@ -311,6 +333,7 @@ def admit_entry_json(
     current_generation: int,
     expected_capability_binding_sha256: str,
     admitted_capabilities: Sequence[str],
+    admitted_budget: Mapping[str, Any],
 ) -> EntryPacket:
     """Loss-preserving raw-ingress boundary followed by normal typed admission."""
     return admit_entry(
@@ -318,6 +341,7 @@ def admit_entry_json(
         current_generation=current_generation,
         expected_capability_binding_sha256=expected_capability_binding_sha256,
         admitted_capabilities=admitted_capabilities,
+        admitted_budget=admitted_budget,
     )
 
 

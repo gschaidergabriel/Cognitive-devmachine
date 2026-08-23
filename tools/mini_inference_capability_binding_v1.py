@@ -15,6 +15,7 @@ from typing import Any
 
 SCHEMA = "MINI_INFERENCE_CAPABILITY_BINDING/v1"
 BOUND_ROUTE_SCHEMA = "MINI_INFERENCE_BOUND_ROUTE/v1"
+CAPABILITY_EVIDENCE_SCHEMA = "MINI_INFERENCE_CAPABILITY_EVIDENCE/v1"
 PREPARE_DIGEST_FIELDS = (
     "zero_identity_digest", "grf_digest", "hyperposition_digest",
     "bundled_manifest_digest", "local_model_digest", "tokenizer_digest",
@@ -24,6 +25,7 @@ PREPARE_DIGEST_FIELDS = (
 EVIDENCE_KINDS = {"STATIC_CONSERVATIVE", "BUNDLED_MANIFEST", "RUNTIME_PROBE"}
 ENGINE_CLASSES = {"CLAUDE_CODE", "BUNDLED_LOCAL_08B", "ADAPTIVE_BACKEND"}
 JSPACE_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY", "COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY"}
+LOCAL_JSPACE_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}
 ENGINE_TO_UCF = {
     "CLAUDE_CODE": "claude_code",
     "BUNDLED_LOCAL_08B": "local_08b",
@@ -182,11 +184,57 @@ def resolve_from_profile(profile: Mapping[str, Any]) -> dict[str, Any]:
     return result
 
 
-def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], *, expected_generation: int) -> dict[str, Any]:
+def _validate_local_evidence(
+    evidence: Mapping[str, Any] | None,
+    *,
+    capability: Mapping[str, Any],
+    prepare: Mapping[str, Any],
+    expected_generation: int,
+) -> str:
+    _need(isinstance(evidence, Mapping), "LOCAL_CAPABILITY_EVIDENCE_REQUIRED")
+    _need(evidence.get("ok") is True, "LOCAL_CAPABILITY_EVIDENCE_NOT_OK")
+    _need(evidence.get("schema") == CAPABILITY_EVIDENCE_SCHEMA, "CAPABILITY_EVIDENCE_SCHEMA_MISMATCH")
+    _need(evidence.get("entity_generation") == expected_generation, "CAPABILITY_EVIDENCE_STALE_GENERATION")
+    _need(evidence.get("causal_turn_id") == prepare.get("causal_turn_id"), "CAPABILITY_EVIDENCE_TURN_DRIFT")
+    _need(evidence.get("turn_binding_digest") == prepare.get("turn_binding_digest"), "CAPABILITY_EVIDENCE_TURN_BINDING_DRIFT")
+    _need(evidence.get("boot_binding_digest") == prepare.get("boot_binding_digest"), "CAPABILITY_EVIDENCE_BOOT_BINDING_DRIFT")
+    _need(
+        evidence.get("capability_binding_digest") == capability.get("binding_digest"),
+        "CAPABILITY_EVIDENCE_BINDING_DRIFT",
+    )
+    _need(
+        evidence.get("capability_receipt_digest") == capability.get("capability_receipt_digest"),
+        "CAPABILITY_EVIDENCE_RECEIPT_DRIFT",
+    )
+    _need(
+        evidence.get("capability_evidence_kind") == capability.get("capability_evidence_kind"),
+        "CAPABILITY_EVIDENCE_KIND_DRIFT",
+    )
+    _need(evidence.get("direct_truth_authority") is False, "CAPABILITY_EVIDENCE_TRUTH_AUTHORITY_ESCALATION")
+    _need(evidence.get("direct_effect_authority") is False, "CAPABILITY_EVIDENCE_EFFECT_AUTHORITY_ESCALATION")
+    cognition = evidence.get("cognition")
+    _need(isinstance(cognition, Mapping), "CAPABILITY_EVIDENCE_COGNITION_REQUIRED")
+    for field in PREPARE_DIGEST_FIELDS:
+        _need(
+            cognition.get(field) == prepare.get(field),
+            "CAPABILITY_EVIDENCE_COGNITION_DRIFT:" + field,
+        )
+    return _digest(evidence.get("evidence_binding_digest"), "capability_evidence_binding_digest")
+
+
+def resolve_bound_route(
+    profile: Mapping[str, Any],
+    prepare: Mapping[str, Any],
+    *,
+    expected_generation: int,
+    capability_evidence: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     """Bind explicit capability routing to one exact canonical cognition prepare result.
 
     Cognition identities are not duplicated into profile configuration. They are taken only
     from the already-verified MiniUnifiedDB prepare material and folded into one route digest.
+    Local J-Space modes additionally require a resolved MiniUnifiedDB capability-evidence
+    binding; a syntactically valid receipt digest by itself never grants local capability.
     """
     _need(isinstance(prepare, Mapping) and prepare.get("ok") is True, "PREPARE_BINDING_REQUIRED")
     _need(type(expected_generation) is int and expected_generation >= 0, "EXPECTED_GENERATION_INVALID")
@@ -198,6 +246,15 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
     cognition = {field: _digest(prepare.get(field), f"prepare.{field}") for field in PREPARE_DIGEST_FIELDS}
 
     capability = resolve_from_profile(profile)
+    evidence_binding_digest: str | None = None
+    if capability["jspace_mode"] in LOCAL_JSPACE_MODES:
+        evidence_binding_digest = _validate_local_evidence(
+            capability_evidence,
+            capability=capability,
+            prepare=prepare,
+            expected_generation=expected_generation,
+        )
+
     material = {
         "schema": BOUND_ROUTE_SCHEMA,
         "entity_generation": expected_generation,
@@ -214,6 +271,8 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
         "jspace_mode": capability["jspace_mode"],
         "cognition": cognition,
     }
+    if evidence_binding_digest is not None:
+        material["capability_evidence_binding_digest"] = evidence_binding_digest
     route_digest = sha256_obj(material)
     return {
         "ok": True,
@@ -228,4 +287,16 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
     }
 
 
-__all__ = ["SCHEMA", "BOUND_ROUTE_SCHEMA", "PREPARE_DIGEST_FIELDS", "CapabilityBindingError", "compile_binding", "validate_binding", "resolve_from_profile", "resolve_bound_route", "sha256_obj"]
+__all__ = [
+    "SCHEMA",
+    "BOUND_ROUTE_SCHEMA",
+    "CAPABILITY_EVIDENCE_SCHEMA",
+    "PREPARE_DIGEST_FIELDS",
+    "LOCAL_JSPACE_MODES",
+    "CapabilityBindingError",
+    "compile_binding",
+    "validate_binding",
+    "resolve_from_profile",
+    "resolve_bound_route",
+    "sha256_obj",
+]

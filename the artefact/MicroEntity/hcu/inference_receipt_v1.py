@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """Deterministic downstream inference receipt producer for EntityOS/HCU.
 
-This module does not invoke a model and grants no truth/effect authority. It consumes the
-canonical HCU RouteDecision, then fail-closes unless the concrete Typed-Entry admission
-still binds to that causal event, the route decision is independently bound to the live
-entity generation, the exact engine artifact is still independently admitted, a verified
-engine-admission receipt binds the same engine bundle/generation, and a generation-fenced
-physical engine-load lease binds the bytes actually consumed by the admitted loader.
+This module invokes no model and grants no truth/effect authority. It consumes a canonical
+HCU RouteDecision and fails closed unless: the concrete Typed-Entry admission is bound to
+the same JCS causal event; the route is bound to the live generation; a verified JCS engine
+admission receipt binds the exact engine bundle; and a generation-fenced physical-load lease
+binds loader-consumed component identities to that same engine admission.
 
-The lease is evidence consumed here, not minted here. Until a real admitted loader produces
-that lease from the bytes it actually consumed, this path intentionally cannot mint an
-inference receipt and receives zero HCU runtime credit.
+The load lease remains evidence consumed here, not runtime truth minted here. Until an
+admitted real loader produces its evidence from the bytes actually consumed, this path has
+zero HCU runtime credit.
 """
 from __future__ import annotations
 
@@ -19,18 +18,29 @@ import json
 from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 
-from engine_admission_v1 import EngineArtifactLock, derive_engine_artifact_sha256
+try:
+    from .entry_canonicalization_v1 import CanonicalizationError, canonicalize
+except ImportError:
+    from entry_canonicalization_v1 import CanonicalizationError, canonicalize
+
+from engine_admission_v1 import (
+    ENGINE_ADMISSION_RECEIPT_SCHEMA,
+    LOCK_SCHEMA as ENGINE_ARTIFACT_LOCK_SCHEMA,
+    EngineArtifactLock,
+    derive_engine_artifact_sha256,
+)
+from physical_engine_lease_v1 import SCHEMA as ENGINE_LOAD_LEASE_SCHEMA
 from reactive_event_router_v1 import (
+    ENTRY_BINDING_SCHEMA,
     HASH_SERIALIZATION_SCHEMA,
+    ReactiveRoutingError,
     RouteDecision,
     assert_inference_echo,
+    resolve_admitted_entry_binding,
 )
 
-SCHEMA = "HCU_INFERENCE_RECEIPT/v1"
+SCHEMA = "HCU_INFERENCE_RECEIPT/v2"
 STATUS = "CANDIDATE_ONLY"
-ENGINE_ADMISSION_RECEIPT_SCHEMA = "HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v1"
-ENGINE_ARTIFACT_LOCK_SCHEMA = "HCU_ENGINE_ARTIFACT_LOCK/v1"
-ENGINE_LOAD_LEASE_SCHEMA = "HCU_PHYSICAL_ENGINE_LOAD_LEASE/v1"
 
 
 class InferenceReceiptError(ValueError):
@@ -42,6 +52,7 @@ class InferenceReceipt:
     schema: str
     status: str
     hash_serialization_schema: str
+    entry_binding_schema: str
     entity_generation: int
     entry_admission_sha256: str
     event_sha256: str
@@ -62,13 +73,10 @@ class InferenceReceipt:
 
 
 def _canonical(value: Any) -> bytes:
-    return json.dumps(
-        value,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-        allow_nan=False,
-    ).encode("utf-8")
+    try:
+        return canonicalize(value)
+    except CanonicalizationError as exc:
+        raise InferenceReceiptError(f"CANONICALIZATION_FAILED:{exc}") from exc
 
 
 def _sha256(value: Any, field: str) -> str:
@@ -141,11 +149,8 @@ def _verify_engine_admission_receipt(
     expected_engine_identity: str,
     expected_engine_class: str,
     expected_engine_artifact_sha256: str,
-) -> tuple[str, dict[str, str]]:
-    receipt_sha256 = _sha256(
-        engine_admission_receipt_sha256,
-        "engine_admission_receipt_sha256",
-    )
+) -> tuple[str, dict[str, str], str]:
+    receipt_sha256 = _sha256(engine_admission_receipt_sha256, "engine_admission_receipt_sha256")
     if not isinstance(admitted_engine_admission_receipts, Mapping):
         raise InferenceReceiptError("ADMITTED_ENGINE_ADMISSION_RECEIPT_REGISTRY_REQUIRED")
     receipt = admitted_engine_admission_receipts.get(receipt_sha256)
@@ -153,6 +158,7 @@ def _verify_engine_admission_receipt(
         raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_NOT_ADMITTED")
     required = {
         "schema",
+        "hash_serialization_schema",
         "entity_generation",
         "provider_alias",
         "engine_identity",
@@ -168,20 +174,16 @@ def _verify_engine_admission_receipt(
         raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_SCHEMA_MISMATCH")
     if receipt.get("schema") != ENGINE_ADMISSION_RECEIPT_SCHEMA:
         raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_SCHEMA_UNSUPPORTED")
-    receipt_generation = _nonnegative_int(
-        receipt.get("entity_generation"),
-        "engine_admission_receipt.entity_generation",
-    )
+    if receipt.get("hash_serialization_schema") != HASH_SERIALIZATION_SCHEMA:
+        raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_CANONICALIZATION_SCHEMA_UNSUPPORTED")
+    receipt_generation = _nonnegative_int(receipt.get("entity_generation"), "engine_admission_receipt.entity_generation")
     if receipt_generation != generation:
         raise InferenceReceiptError("STALE_ENGINE_ADMISSION_RECEIPT_GENERATION")
 
     provider_alias = _text(receipt.get("provider_alias"), "engine_admission_receipt.provider_alias").lower()
     engine_identity = _text(receipt.get("engine_identity"), "engine_admission_receipt.engine_identity").lower()
     engine_class = _text(receipt.get("engine_class"), "engine_admission_receipt.engine_class").upper()
-    artifact_sha256 = _sha256(
-        receipt.get("engine_artifact_sha256"),
-        "engine_admission_receipt.engine_artifact_sha256",
-    )
+    artifact_sha256 = _sha256(receipt.get("engine_artifact_sha256"), "engine_admission_receipt.engine_artifact_sha256")
     if engine_identity != expected_engine_identity:
         raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_IDENTITY_MISMATCH")
     if engine_class != expected_engine_class:
@@ -209,6 +211,7 @@ def _verify_engine_admission_receipt(
 
     material = {
         "schema": ENGINE_ADMISSION_RECEIPT_SCHEMA,
+        "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
         "entity_generation": receipt_generation,
         "provider_alias": provider_alias,
         "engine_identity": engine_identity,
@@ -219,10 +222,7 @@ def _verify_engine_admission_receipt(
         "build": build,
         "engine_artifact_sha256": artifact_sha256,
     }
-    observed_receipt_sha256 = _sha256(
-        receipt.get("receipt_sha256"),
-        "engine_admission_receipt.receipt_sha256",
-    )
+    observed_receipt_sha256 = _sha256(receipt.get("receipt_sha256"), "engine_admission_receipt.receipt_sha256")
     recomputed_receipt_sha256 = hashlib.sha256(_canonical(material)).hexdigest()
     if observed_receipt_sha256 != receipt_sha256 or recomputed_receipt_sha256 != receipt_sha256:
         raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_DIGEST_MISMATCH")
@@ -231,7 +231,7 @@ def _verify_engine_admission_receipt(
         "tokenizer_sha256": tokenizer["sha256"],
         "runtime_sha256": runtime["sha256"],
         "build_sha256": build["sha256"],
-    }
+    }, provider_alias
 
 
 def _verify_engine_load_lease(
@@ -239,33 +239,35 @@ def _verify_engine_load_lease(
     engine_load_lease_sha256: str,
     admitted_engine_load_leases: Mapping[str, Any],
     generation: int,
+    expected_provider_alias: str,
     expected_engine_identity: str,
     expected_engine_class: str,
     expected_engine_artifact_sha256: str,
     expected_engine_admission_receipt_sha256: str,
     expected_artifact_digests: Mapping[str, str],
 ) -> str:
-    """Verify loader-produced evidence without turning this consumer into a lease minter."""
     lease_sha256 = _sha256(engine_load_lease_sha256, "engine_load_lease_sha256")
     if not isinstance(admitted_engine_load_leases, Mapping):
         raise InferenceReceiptError("ADMITTED_ENGINE_LOAD_LEASE_REGISTRY_REQUIRED")
     lease = admitted_engine_load_leases.get(lease_sha256)
     if not isinstance(lease, Mapping):
         raise InferenceReceiptError("ENGINE_LOAD_LEASE_NOT_ADMITTED")
-
     required = {
         "schema",
+        "canonicalization_schema",
         "entity_generation",
+        "engine_admission_receipt_sha256",
+        "provider_alias",
         "engine_identity",
         "engine_class",
         "engine_artifact_sha256",
-        "engine_admission_receipt_sha256",
         "consumed_checkpoint_sha256",
         "consumed_tokenizer_sha256",
         "consumed_runtime_sha256",
         "consumed_build_sha256",
-        "loader_identity",
+        "loader_instance_id",
         "loader_runtime_sha256",
+        "artifact_boundary_receipt_sha256",
         "lease_id",
         "lease_sha256",
     }
@@ -273,24 +275,23 @@ def _verify_engine_load_lease(
         raise InferenceReceiptError("ENGINE_LOAD_LEASE_SCHEMA_MISMATCH")
     if lease.get("schema") != ENGINE_LOAD_LEASE_SCHEMA:
         raise InferenceReceiptError("ENGINE_LOAD_LEASE_SCHEMA_UNSUPPORTED")
+    if lease.get("canonicalization_schema") != HASH_SERIALIZATION_SCHEMA:
+        raise InferenceReceiptError("ENGINE_LOAD_LEASE_CANONICALIZATION_SCHEMA_UNSUPPORTED")
 
-    lease_generation = _nonnegative_int(
-        lease.get("entity_generation"),
-        "engine_load_lease.entity_generation",
-    )
+    lease_generation = _nonnegative_int(lease.get("entity_generation"), "engine_load_lease.entity_generation")
     if lease_generation != generation:
         raise InferenceReceiptError("STALE_ENGINE_LOAD_LEASE_GENERATION")
 
+    provider_alias = _text(lease.get("provider_alias"), "engine_load_lease.provider_alias").lower()
     engine_identity = _text(lease.get("engine_identity"), "engine_load_lease.engine_identity").lower()
     engine_class = _text(lease.get("engine_class"), "engine_load_lease.engine_class").upper()
-    engine_artifact_sha256 = _sha256(
-        lease.get("engine_artifact_sha256"),
-        "engine_load_lease.engine_artifact_sha256",
-    )
+    engine_artifact_sha256 = _sha256(lease.get("engine_artifact_sha256"), "engine_load_lease.engine_artifact_sha256")
     engine_admission_sha256 = _sha256(
         lease.get("engine_admission_receipt_sha256"),
         "engine_load_lease.engine_admission_receipt_sha256",
     )
+    if provider_alias != expected_provider_alias:
+        raise InferenceReceiptError("ENGINE_LOAD_LEASE_PROVIDER_MISMATCH")
     if engine_identity != expected_engine_identity:
         raise InferenceReceiptError("ENGINE_LOAD_LEASE_IDENTITY_MISMATCH")
     if engine_class != expected_engine_class:
@@ -301,48 +302,36 @@ def _verify_engine_load_lease(
         raise InferenceReceiptError("ENGINE_LOAD_LEASE_ADMISSION_RECEIPT_MISMATCH")
 
     consumed = {
-        "checkpoint_sha256": _sha256(
-            lease.get("consumed_checkpoint_sha256"),
-            "engine_load_lease.consumed_checkpoint_sha256",
-        ),
-        "tokenizer_sha256": _sha256(
-            lease.get("consumed_tokenizer_sha256"),
-            "engine_load_lease.consumed_tokenizer_sha256",
-        ),
-        "runtime_sha256": _sha256(
-            lease.get("consumed_runtime_sha256"),
-            "engine_load_lease.consumed_runtime_sha256",
-        ),
-        "build_sha256": _sha256(
-            lease.get("consumed_build_sha256"),
-            "engine_load_lease.consumed_build_sha256",
-        ),
+        "checkpoint_sha256": _sha256(lease.get("consumed_checkpoint_sha256"), "engine_load_lease.consumed_checkpoint_sha256"),
+        "tokenizer_sha256": _sha256(lease.get("consumed_tokenizer_sha256"), "engine_load_lease.consumed_tokenizer_sha256"),
+        "runtime_sha256": _sha256(lease.get("consumed_runtime_sha256"), "engine_load_lease.consumed_runtime_sha256"),
+        "build_sha256": _sha256(lease.get("consumed_build_sha256"), "engine_load_lease.consumed_build_sha256"),
     }
     for field in sorted(consumed):
         expected = _sha256(expected_artifact_digests.get(field), f"expected_artifact_digests.{field}")
         if consumed[field] != expected:
             raise InferenceReceiptError(f"ENGINE_LOAD_LEASE_CONSUMED_BYTES_MISMATCH:{field}")
 
-    loader_identity = _text(lease.get("loader_identity"), "engine_load_lease.loader_identity")
-    loader_runtime_sha256 = _sha256(
-        lease.get("loader_runtime_sha256"),
-        "engine_load_lease.loader_runtime_sha256",
-    )
-    lease_id = _text(lease.get("lease_id"), "engine_load_lease.lease_id")
     material = {
         "schema": ENGINE_LOAD_LEASE_SCHEMA,
+        "canonicalization_schema": HASH_SERIALIZATION_SCHEMA,
         "entity_generation": lease_generation,
+        "engine_admission_receipt_sha256": engine_admission_sha256,
+        "provider_alias": provider_alias,
         "engine_identity": engine_identity,
         "engine_class": engine_class,
         "engine_artifact_sha256": engine_artifact_sha256,
-        "engine_admission_receipt_sha256": engine_admission_sha256,
         "consumed_checkpoint_sha256": consumed["checkpoint_sha256"],
         "consumed_tokenizer_sha256": consumed["tokenizer_sha256"],
         "consumed_runtime_sha256": consumed["runtime_sha256"],
         "consumed_build_sha256": consumed["build_sha256"],
-        "loader_identity": loader_identity,
-        "loader_runtime_sha256": loader_runtime_sha256,
-        "lease_id": lease_id,
+        "loader_instance_id": _text(lease.get("loader_instance_id"), "engine_load_lease.loader_instance_id"),
+        "loader_runtime_sha256": _sha256(lease.get("loader_runtime_sha256"), "engine_load_lease.loader_runtime_sha256"),
+        "artifact_boundary_receipt_sha256": _sha256(
+            lease.get("artifact_boundary_receipt_sha256"),
+            "engine_load_lease.artifact_boundary_receipt_sha256",
+        ),
+        "lease_id": _text(lease.get("lease_id"), "engine_load_lease.lease_id"),
     }
     observed_lease_sha256 = _sha256(lease.get("lease_sha256"), "engine_load_lease.lease_sha256")
     recomputed_lease_sha256 = hashlib.sha256(_canonical(material)).hexdigest()
@@ -368,13 +357,7 @@ def make_inference_receipt(
     output_sha256: str,
     output_size: int,
 ) -> InferenceReceipt:
-    """Produce a candidate-only inference receipt from admitted route and loader evidence.
-
-    Authority/control-plane inputs remain separate from causal event data: decision->generation,
-    admission->causal-event, engine->artifact, verified-engine-receipt admission and physical
-    engine-load lease admission. A bare caller-constructed ``EngineAdmission`` or a pre-load
-    artifact hash cannot by itself mint a downstream inference receipt.
-    """
+    """Produce a candidate-only inference receipt from admitted route and loader evidence."""
     if not isinstance(decision, RouteDecision):
         raise InferenceReceiptError("ROUTE_DECISION_REQUIRED")
     if decision.status != "SELECTIVE_MODEL_ACTIVATION":
@@ -391,21 +374,16 @@ def make_inference_receipt(
     admission_sha256 = _sha256(entry_admission_sha256, "entry_admission_sha256")
     if decision.entry_admission_sha256 != admission_sha256:
         raise InferenceReceiptError("ROUTE_ENTRY_ADMISSION_IDENTITY_MISMATCH")
-    if not isinstance(admitted_entry_bindings, Mapping):
-        raise InferenceReceiptError("ADMITTED_ENTRY_BINDING_REGISTRY_REQUIRED")
-    admitted_event_sha256 = admitted_entry_bindings.get(admission_sha256)
-    if admitted_event_sha256 is None:
-        raise InferenceReceiptError("ENTRY_ADMISSION_NOT_ADMITTED")
-    admitted_event_sha256 = _sha256(admitted_event_sha256, "admitted_entry_event_sha256")
+    try:
+        admitted_event_sha256 = resolve_admitted_entry_binding(admitted_entry_bindings, admission_sha256)
+    except ReactiveRoutingError as exc:
+        raise InferenceReceiptError(str(exc)) from exc
     if admitted_event_sha256 != decision.event_sha256:
         raise InferenceReceiptError("ENTRY_EVENT_ROUTE_IDENTITY_MISMATCH")
 
     engine_id = _text(decision.resolved_engine_identity, "resolved_engine_identity")
     engine_class = _text(decision.resolved_engine_class, "resolved_engine_class")
-    engine_artifact_sha256 = _sha256(
-        decision.resolved_engine_artifact_sha256,
-        "resolved_engine_artifact_sha256",
-    )
+    engine_artifact_sha256 = _sha256(decision.resolved_engine_artifact_sha256, "resolved_engine_artifact_sha256")
     engine_identity_sha256 = _sha256(decision.engine_identity_sha256, "engine_identity_sha256")
     if not isinstance(admitted_engine_artifacts, Mapping):
         raise InferenceReceiptError("ADMITTED_ENGINE_ARTIFACT_REGISTRY_REQUIRED")
@@ -416,7 +394,7 @@ def make_inference_receipt(
     if current_engine_artifact != engine_artifact_sha256:
         raise InferenceReceiptError("ENGINE_ARTIFACT_ADMISSION_MISMATCH")
 
-    verified_engine_admission_receipt_sha256, admitted_artifact_digests = _verify_engine_admission_receipt(
+    verified_engine_admission_receipt_sha256, admitted_artifact_digests, provider_alias = _verify_engine_admission_receipt(
         engine_admission_receipt_sha256=engine_admission_receipt_sha256,
         admitted_engine_admission_receipts=admitted_engine_admission_receipts,
         generation=generation,
@@ -428,6 +406,7 @@ def make_inference_receipt(
         engine_load_lease_sha256=engine_load_lease_sha256,
         admitted_engine_load_leases=admitted_engine_load_leases,
         generation=generation,
+        expected_provider_alias=provider_alias,
         expected_engine_identity=engine_id,
         expected_engine_class=engine_class,
         expected_engine_artifact_sha256=engine_artifact_sha256,
@@ -444,6 +423,7 @@ def make_inference_receipt(
         "schema": SCHEMA,
         "status": STATUS,
         "hash_serialization_schema": decision.hash_serialization_schema,
+        "entry_binding_schema": ENTRY_BINDING_SCHEMA,
         "entity_generation": generation,
         "entry_admission_sha256": admission_sha256,
         "event_sha256": decision.event_sha256,
@@ -463,9 +443,6 @@ def make_inference_receipt(
     }
     receipt_sha256 = hashlib.sha256(_canonical(payload)).hexdigest()
     receipt = InferenceReceipt(**payload, receipt_sha256=receipt_sha256)
-
-    # Reuse the canonical route echo assertion rather than inventing a second route
-    # validation law. `asdict` contains a strict superset of the expected echo fields.
     assert_inference_echo(decision, asdict(receipt))
     return receipt
 
@@ -473,9 +450,4 @@ def make_inference_receipt(
 def receipt_json(receipt: InferenceReceipt) -> str:
     if not isinstance(receipt, InferenceReceipt):
         raise InferenceReceiptError("INFERENCE_RECEIPT_REQUIRED")
-    return json.dumps(
-        asdict(receipt),
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-    )
+    return json.dumps(asdict(receipt), sort_keys=True, separators=(",", ":"), ensure_ascii=False)

@@ -124,8 +124,17 @@ def admit_profile_runtime_payload(
         except (TypeError, ValueError, json.JSONDecodeError) as exc:
             raise ProfileRuntimeCognitiveFabricBindingError("ACTIVE_PROFILE_JSON_INVALID") from exc
         _need(isinstance(stored_profile, dict), "ACTIVE_PROFILE_OBJECT_REQUIRED")
+        normalizer = getattr(runtime, "_normalize_profile", None)
+        _need(callable(normalizer), "RUNTIME_PROFILE_NORMALIZER_REQUIRED")
+        try:
+            normalized_stored_profile = normalizer(stored_profile)
+        except Exception as exc:
+            raise ProfileRuntimeCognitiveFabricBindingError(
+                "ACTIVE_PROFILE_NORMALIZATION_FAILED:" + type(exc).__name__
+            ) from exc
+        _need(isinstance(normalized_stored_profile, dict), "NORMALIZED_ACTIVE_PROFILE_OBJECT_REQUIRED")
         _need(
-            _canonical_json(carried_profile) == _canonical_json(stored_profile),
+            _canonical_json(carried_profile) == _canonical_json(normalized_stored_profile),
             "RUNTIME_PROFILE_NOT_ACTIVE_MINIUNIFIEDDB_PROFILE",
         )
 
@@ -136,7 +145,7 @@ def admit_profile_runtime_payload(
             invocation=invocation,
             compiled=compiled,
             prompt=prompt,
-            profile=stored_profile,
+            profile=normalized_stored_profile,
             origin=BINDING_VERSION,
         )
         _need(type(result) is dict and result.get("ok") is True, "CANONICAL_ADMISSION_FAILED")

@@ -6,6 +6,19 @@ from typing import Any, Mapping
 
 from entry_canonicalization_v1 import CanonicalizationError, canonicalize
 
+try:
+    from .jspace_vector_control_v1 import (
+        JSpaceVectorControlError,
+        VectorControlPacket,
+        validate_packet,
+    )
+except ImportError:
+    from jspace_vector_control_v1 import (
+        JSpaceVectorControlError,
+        VectorControlPacket,
+        validate_packet,
+    )
+
 ADMISSION_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2"
 PROTOTYPE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3"
 TRANSITION_SCHEMA = "JSPACE_GWT_TRANSITION_TRACE/v1"
@@ -144,6 +157,48 @@ def _verify_grid_plan_binding(
             raise JSpaceDatasetAdmissionError(f"GRID_PLAN_CAUSAL_BINDING_MISMATCH:{field}")
 
 
+def _verify_vector_control_packet_binding(
+    admitted_vector_control_packets: Any,
+    *,
+    packet_sha256: str,
+    generation: int,
+    basis_id: str,
+    basis_sha256: str,
+    role: str,
+    control_condition: str,
+) -> None:
+    """Require an independently admitted canonical Vector-Control packet preimage.
+
+    Cross-trace digest equality proves only that several layers repeat the same digest. It
+    cannot prove that the digest identifies a real, canonical, semantically valid
+    ``JSPACE_VECTOR_CONTROL_ABI/v1`` packet. The caller-owned registry supplies that missing
+    preimage without creating a second vector or dataset authority.
+    """
+    registry = _mapping(admitted_vector_control_packets, "admitted_vector_control_packets")
+    packet = registry.get(packet_sha256)
+    if packet is None:
+        raise JSpaceDatasetAdmissionError("VECTOR_CONTROL_PACKET_NOT_ADMITTED")
+    if not isinstance(packet, VectorControlPacket):
+        raise JSpaceDatasetAdmissionError("VECTOR_CONTROL_PACKET_PREIMAGE_TYPE_INVALID")
+    observed_packet_sha = _sha256(packet.packet_sha256, "admitted_vector_control_packet.packet_sha256")
+    if observed_packet_sha != packet_sha256:
+        raise JSpaceDatasetAdmissionError("VECTOR_CONTROL_PACKET_IDENTITY_MISMATCH")
+    try:
+        validate_packet(packet)
+    except JSpaceVectorControlError as exc:
+        raise JSpaceDatasetAdmissionError(f"VECTOR_CONTROL_PACKET_REJECTED:{exc}") from exc
+    if packet.generation != generation:
+        raise JSpaceDatasetAdmissionError("VECTOR_CONTROL_PACKET_GENERATION_MISMATCH")
+    if packet.basis_id != basis_id:
+        raise JSpaceDatasetAdmissionError("VECTOR_CONTROL_PACKET_BASIS_ID_MISMATCH")
+    if packet.basis_sha256 != basis_sha256:
+        raise JSpaceDatasetAdmissionError("VECTOR_CONTROL_PACKET_BASIS_SHA256_MISMATCH")
+    if packet.role != role:
+        raise JSpaceDatasetAdmissionError("VECTOR_CONTROL_PACKET_ROLE_MISMATCH")
+    if packet.control_condition != control_condition:
+        raise JSpaceDatasetAdmissionError("VECTOR_CONTROL_PACKET_CONDITION_MISMATCH")
+
+
 def _verify_outcome_binding(
     receipt: Any,
     *,
@@ -193,14 +248,18 @@ def admit_for_training_dataset(
     admitted_transition_traces: Mapping[str, Mapping[str, Any]],
     admitted_prototype_traces: Mapping[str, Mapping[str, Any]],
     admitted_grid_plans: Mapping[str, Mapping[str, Any]],
+    admitted_vector_control_packets: Mapping[str, VectorControlPacket],
     admitted_outcome_receipts: Mapping[str, Any] | None = None,
 ) -> DatasetAdmission:
     """Fail-closed admission for one-shot-training dataset material.
 
-    This gate does not mint truth. It only proves that admitted training, live-transition,
+    This gate does not mint truth. It proves that admitted training, live-transition,
     prototype and GRID10 evidence refer to the same generation/cell/role/basis, exact Vector
-    Control packet/control condition, and Entry->Route->GRID10 identities. A raw standalone
-    prototype, self-consistent row, or shared but unadmitted GRID hash is insufficient.
+    Control packet/control condition, and Entry->Route->GRID10 identities. The shared Vector
+    Control digest must additionally resolve through a caller-owned registry to an exact
+    canonical packet preimage that passes the sole ``JSPACE_VECTOR_CONTROL_ABI/v1`` validator.
+    A raw standalone prototype, self-consistent row, digest-only vector label, or shared but
+    unadmitted GRID hash is insufficient.
     """
     training_trace = _mapping(training_trace, "training_trace")
     transition_trace = _mapping(transition_trace, "transition_trace")
@@ -305,6 +364,16 @@ def admit_for_training_dataset(
         raise JSpaceDatasetAdmissionError("TRAINING_VECTOR_ABI_UNSUPPORTED")
     if _text(transition_trace.get("jspace_vector_control_abi"), "transition_trace.jspace_vector_control_abi") != VECTOR_ABI:
         raise JSpaceDatasetAdmissionError("TRANSITION_VECTOR_ABI_UNSUPPORTED")
+
+    _verify_vector_control_packet_binding(
+        admitted_vector_control_packets,
+        packet_sha256=vector_control_packet_sha,
+        generation=generation,
+        basis_id=basis_id,
+        basis_sha256=basis_sha,
+        role=role,
+        control_condition=vector_control_condition,
+    )
 
     credit = _same(
         {

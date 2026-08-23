@@ -14,6 +14,7 @@ from reactive_event_router_v1 import route_event
 
 CAPABILITY_BINDING_SHA256 = "b" * 64
 ADMITTED_CAPABILITIES = ("memory.read", "hcu.route")
+ADMITTED_BUDGET = {"max_model_calls": 2, "max_tokens": 2048, "max_wall_ms": 5000}
 
 
 def base_entry():
@@ -45,6 +46,7 @@ def admit(entry):
         current_generation=7,
         expected_capability_binding_sha256=CAPABILITY_BINDING_SHA256,
         admitted_capabilities=ADMITTED_CAPABILITIES,
+        admitted_budget=ADMITTED_BUDGET,
     )
 
 
@@ -88,11 +90,24 @@ class TypedEntryCanonicalTests(unittest.TestCase):
 
         first_event = to_hcu_reactive_event(first, novelty=0.1)
         second_event = to_hcu_reactive_event(second, novelty=0.1)
-        self.assertEqual(first_event, second_event)
+        self.assertEqual(first_event["entry_event_sha256"], second_event["entry_event_sha256"])
+        self.assertNotEqual(first_event["entry_admission_sha256"], second_event["entry_admission_sha256"])
+        self.assertNotEqual(first_event["ingress_id"], second_event["ingress_id"])
         self.assertEqual(first_event["entry_canonicalization_schema"], CANONICALIZATION_SCHEMA)
-        first_route = route_event(first_event, current_generation=7)
-        second_route = route_event(second_event, current_generation=7)
+        self.assertEqual(second_event["entry_canonicalization_schema"], CANONICALIZATION_SCHEMA)
+
+        first_route = route_event(
+            first_event,
+            current_generation=7,
+            admitted_entry_bindings={first.admission_sha256: first.event_sha256},
+        )
+        second_route = route_event(
+            second_event,
+            current_generation=7,
+            admitted_entry_bindings={second.admission_sha256: second.event_sha256},
+        )
         self.assertEqual(first_route.event_sha256, second_route.event_sha256)
+        self.assertNotEqual(first_route.entry_admission_sha256, second_route.entry_admission_sha256)
         self.assertEqual(first_route.decision_sha256, second_route.decision_sha256)
 
     def test_equivalent_observed_timestamp_offsets_canonicalize_to_same_event(self):

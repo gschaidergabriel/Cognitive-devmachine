@@ -20,6 +20,15 @@ def _has_db_profile_reference(source: str) -> bool:
     )
 
 
+def _runtime_module():
+    sys.path.insert(0, str(TOOLS))
+    try:
+        return importlib.import_module("clay_profile_pipeline_runtime")
+    finally:
+        if sys.path and sys.path[0] == str(TOOLS):
+            sys.path.pop(0)
+
+
 def _legacy_db(path: Path, generation: int) -> None:
     db = sqlite3.connect(path)
     try:
@@ -55,6 +64,31 @@ def _canonical_generation(path: Path) -> int:
         db.close()
 
 
+def _canonical_row_count(path: Path) -> int | None:
+    db = sqlite3.connect(path)
+    try:
+        exists = db.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='entity_state'"
+        ).fetchone()
+        if exists is None:
+            return None
+        return int(db.execute("SELECT COUNT(*) FROM entity_state").fetchone()[0])
+    finally:
+        db.close()
+
+
+def _legacy_generation(path: Path) -> int:
+    db = sqlite3.connect(path)
+    try:
+        row = db.execute(
+            "SELECT generation FROM eos_pipeline_state WHERE singleton=1"
+        ).fetchone()
+        assert row is not None
+        return int(row[0])
+    finally:
+        db.close()
+
+
 def _legacy_generation_column(path: Path) -> bool:
     db = sqlite3.connect(path)
     try:
@@ -75,20 +109,16 @@ def test_future_reference_legacy_generation_migration_is_one_shot_or_fail_closed
        sole live authority.
 
     What is forbidden is silently resetting continuity to zero or continuing to let later
-    mirror tampering advance canonical generation.
+    mirror tampering advance canonical generation. If the runtime chooses the fail-closed
+    path, that failure is atomic: it must not mint a canonical authority row before
+    returning the migration-required error, and the legacy evidence must remain intact.
     """
 
     source = RUNTIME_PATH.read_text(encoding="utf-8")
     if not _has_db_profile_reference(source):
         return
 
-    sys.path.insert(0, str(TOOLS))
-    try:
-        runtime_module = importlib.import_module("clay_profile_pipeline_runtime")
-    finally:
-        if sys.path and sys.path[0] == str(TOOLS):
-            sys.path.pop(0)
-
+    runtime_module = _runtime_module()
     entity_db = tmp_path / "legacy_entity.db"
     _legacy_db(entity_db, generation=7)
     runtime = runtime_module.ProfilePipelineRuntime(root=tmp_path)
@@ -99,6 +129,13 @@ def test_future_reference_legacy_generation_migration_is_one_shot_or_fail_closed
         assert "LEGACY_GENERATION_MIGRATION_REQUIRED" in error, (
             "legacy-only generation may fail closed, but the failure must explicitly preserve "
             "the migration obligation rather than silently resetting or discarding continuity"
+        )
+        assert _canonical_row_count(entity_db) in (None, 0), (
+            "fail-closed legacy migration minted a canonical entity_state row before "
+            "migration/adjudication completed"
+        )
+        assert _legacy_generation(entity_db) == 7, (
+            "fail-closed legacy migration modified the historical generation evidence"
         )
         return
 
@@ -125,3 +162,23 @@ def test_future_reference_legacy_generation_migration_is_one_shot_or_fail_closed
         assert _canonical_generation(entity_db) == 7, (
             "post-migration legacy mirror tampering must never advance canonical generation"
         )
+
+
+def test_future_reference_truly_fresh_db_can_initialize_generation_zero(tmp_path) -> None:
+    """Legacy ambiguity handling must not accidentally classify a fresh DB as migration debt."""
+
+    source = RUNTIME_PATH.read_text(encoding="utf-8")
+    if not _has_db_profile_reference(source):
+        return
+
+    runtime_module = _runtime_module()
+    entity_db = tmp_path / "fresh_entity.db"
+    runtime = runtime_module.ProfilePipelineRuntime(root=tmp_path)
+
+    result = runtime.effect("pipeline_init", {"entity_db": str(entity_db)})
+    assert result.get("ok") is True, (
+        "a genuinely fresh DB with no legacy generation evidence must remain initializable"
+    )
+    assert _canonical_generation(entity_db) == 0, (
+        "fresh initialization must start from canonical generation zero"
+    )

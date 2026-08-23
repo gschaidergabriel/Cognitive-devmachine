@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_GO_MACROCYCLE_RECEIPT",
+  "recorded_at_local": "2026-08-23T23:57:00+07:00",
+  "persistent_research_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "owner_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json",
+  "current_main_observed_after_fusion": "481752a56f33b3b53ba029d991e50b4c53e6939f",
+  "track_a": {
+    "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+    "finding": "tools/assert_effective_program_authority.py on prior main still emitted retired CLAYVERSE_SINGLE_CONTAINER / CLAYVERSE_ARTIFACT labels despite delegating to the migrated EntityOS/HCU authority validator",
+    "repair": "PR 1381 binds wrapper program/stage/product/compute/schema output to the single current authority validator",
+    "merged_pr": 1381,
+    "merge_commit": "8c32dfb04756bb5c05ea75ef6fd4e4802b1cc063",
+    "wrapper_git_blob": "f640aecb158c347edebf9d7098ae04fe22548278",
+    "test_git_blob": "e4bd2d99eaed5687f73454bda9312ba98001e7b7",
+    "second_authority_path_created": false
+  },
+  "component_execution": {
+    "surface": "ChatGPT isolated tool container",
+    "python": "3.13.5",
+    "exact_wrapper_blob_reconstructed": true,
+    "exact_test_blob_reconstructed": true,
+    "validator_mode": "isolated authority-constant stub used only to test wrapper payload behavior; full repository validator not executed",
+    "py_compile": "PASS",
+    "focused_tests": "3/3 PASS",
+    "scope": "SOURCE_COMPONENT_MECHANISM_ONLY",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "macrocycle_count": 1,
+    "name": "AUTHORITY_CONSTANT_TRANSPLANT",
+    "hypothesis": "the repaired wrapper has no independent hard-coded product authority and will follow the sole imported validator constants",
+    "counterhypothesis": "retired or duplicate product identity remains embedded in wrapper output even if the upstream validator authority changes",
+    "intervention": "run the exact repaired wrapper blob against a synthetic validator exporting entirely different sentinel program/stage/product/compute/schema constants",
+    "observed": "wrapper output changed to all sentinel authority values while preserving assertion schema and zero-runtime-credit law",
+    "classification": "MECHANISM_SUPPORTED_SYNTHETIC_COMPONENT_ONLY",
+    "runtime_credit": 0
+  },
+  "track_b": {
+    "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "coordination": "NO_DUPLICATE_SOURCE_WRITE; main advanced during this macrocycle with canonicalization authority reconciliation",
+    "parallel_current_main_commit": "481752a56f33b3b53ba029d991e50b4c53e6939f",
+    "selected_current_canonicalization_authority": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
+    "retained_lane": "PR_1263_ONLY",
+    "current_source_state": "selected authority still not end-to-end wired through Entry event/admission, router policy/engine/route and inference receipt identities",
+    "hcu_runtime_credit_change": 0
+  },
+  "execution_surface_check": {
+    "vercel_connector_sandbox_exec_available": false,
+    "available_vercel_surface": "documentation/management only; no Sandbox create/start/exec primitive exposed to this organ",
+    "vps_testing_used": false,
+    "self_hosted_vps_testing_used": false,
+    "production_host_testing_used": false
+  },
+  "readme": {
+    "status": "NO_CHANGE",
+    "reason": "current README/frontier already describes canonicalization convergence and exact combined Entry+route+inference+GRID10 isolated execution; this macrocycle changed authority wrapper bytes and evidence receipt without needing duplicate README prose"
+  },
+  "evidence_boundary": {
+    "source_component_mechanism_supported": true,
+    "full_current_authority_validator_executed": false,
+    "combined_entry_route_inference_grid10_exact_runtime_executed": false,
+    "real_local_model_runtime_bound": false,
+    "jspace_causal_use_verified": false,
+    "entityos_hcu_whole_runtime_pass": false
+  },
+  "next_exact_gate": [
+    "wire ENTITYOS_HCU_TYPED_CANONICAL/v1 into new-version Typed Entry event and admission identity production on retained PR 1263",
+    "wire the same schema into router policy, EngineAdmission, route decision and inference receipt hashing/echo without rewriting historical hashes",
+    "reject mixed, unknown and downgrade canonicalizer schemas",
+    "wire HCU_REACTIVE_EVENT/v1 into GRID10 plan compilation while preserving externally admitted Entry budget and independent runtime-capacity authority",
+    "execute exact-current combined Entry+route+inference+canonicalizer+GRID10 regressions on an actually-started authorized isolated executor",
+    "only after that bind exact local checkpoint/tokenizer/runtime bytes and measured capacity receipt before runtime promotion"
+  ],
+  "security": {
+    "together_api_used": false,
+    "paid_fallback_used": false,
+    "final_model_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_runtime_credit": 0
+}

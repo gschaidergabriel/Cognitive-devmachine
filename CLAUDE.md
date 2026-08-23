@@ -12,13 +12,14 @@ This root file is a repository-organ routing shim, not canonical durable product
 
 1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
-4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
-6. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
-7. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
-8. `the artefact/README.md`
-9. task-relevant current or compatibility implementation files.
+3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json`
+4. `research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md`
+5. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
+6. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
+7. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
+8. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
+9. `the artefact/README.md`
+10. task-relevant current or compatibility implementation files.
 
 Newest explicit owner authority plus verified current `main` outranks cached/historical program material. If current files disagree, fail closed and reconcile one canonical path.
 
@@ -35,14 +36,13 @@ Do not bulk-rename hashes, receipts, ABI/API names, schemas, paths or stateful c
 
 ## `go`
 
-Exact `go` means maximum useful **EntityOS + HCU convergence**.
-
-Every `go` has two coupled tracks:
+Exact `go` means maximum useful **EntityOS + HCU convergence** across three coupled tracks:
 
 1. `ENTITYOS_EXECUTABLE_CONVERGENCE`
 2. `HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT`
+3. `GLOBAL_JSPACE_GWT_PROTOTYPE_AND_ONE_SHOT_08B_TRAINING_READINESS`
 
-If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` plus the next discriminator.
+If track 2 or 3 cannot safely advance, record the corresponding explicit NO_CHANGE reason and next discriminator. Do not create duplicate HCU, Entry, state, effect, recovery or training authorities to manufacture progress.
 
 For material work use:
 
@@ -80,14 +80,22 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 - EffectGate + EffectJournal remain the only admitted real/state-changing effect authority;
 - no second persistent identity, truth store, effect path or recovery ledger.
 
-## Execution and safety
+## Execution, Together and safety
 
 - current build/test/experiment/runtime credit comes only from authorized isolated sandbox execution unless newer owner authority changes this;
 - VPS/self-hosted/production-host testing is forbidden under current control;
-- Together API/service forbidden;
-- no paid fallback; final paid/model training requires explicit owner authorization;
+- General Together inference/fallback is forbidden.
+- recurring Together training is forbidden;
+- One owner-authorized ~0.8B J-Space/GWT fine-tune is admitted only after the functional prototype, exact instrumented traces, causal controls, `JSPACE_VECTOR_CONTROL_ABI/v1`, leak-resistant train/validation/holdout data, frozen exact base and pre-training evaluation, Together capability/support and price preflight gates pass;
+- the one-shot authorization is consumed only when the fine-tuning job is actually created and its non-secret job ID is receipted;
+- a second Together training job requires new explicit owner authorization;
+- the owner-held Together key is transient secret material and must never enter prompts, source, datasets, receipts, logs, OCI layers, model metadata or persistent state;
+- completed training alone is not EntityOS/HCU PASS;
+- no other paid fallback is authorized;
 - never expose or commit secrets;
 - source/component/historical PASS never implies broader EntityOS/HCU runtime acceptance;
 - preserve exact provenance, stale-generation, replay, privacy and effect boundaries.
 
-Current immediate frontier: positive fail-closed local/internal cognition-engine admission plus one causal HCU route identity binding immutable event identity, resolved engine identity/class, policy and routing result; then exact isolated execution and downstream receipt echo before promotion.
+## Current immediate frontier
+
+Converge one canonical Typed Entry causal identity -> HCU route -> generation-fenced loader-consumed engine identity -> inference receipt -> GRID10 path; obtain exact authorized isolated execution; then integrate and instrument Global J-Space/GWT so real causal traces can drive the one authorized ~0.8B specialization run without weakening state, effect, provenance, generation or recovery authority.

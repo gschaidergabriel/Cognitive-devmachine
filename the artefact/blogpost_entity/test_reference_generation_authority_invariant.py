@@ -28,9 +28,14 @@ def _body(source: str, node: ast.FunctionDef | None) -> str:
     return segment
 
 
+def _flat(value: str) -> str:
+    return re.sub(r"\s+", " ", value).strip()
+
+
 def _assert_reference_uses_native_generation_authority(source: str) -> None:
     tree = ast.parse(source)
     init = _function(tree, "_pipeline_init")
+    ensure = _function(tree, "_ensure_schema")
     state_read = _function(tree, "_pipeline_state_read")
     commit = _function(tree, "_pipeline_commit")
     assert init is not None
@@ -38,25 +43,33 @@ def _assert_reference_uses_native_generation_authority(source: str) -> None:
     assert commit is not None
 
     init_body = _body(source, init)
+    ensure_body = _body(source, ensure)
+    schema_body = init_body + "\n" + ensure_body
     read_body = _body(source, state_read)
     commit_body = _body(source, commit)
+    flat_schema = _flat(schema_body)
+    flat_read = _flat(read_body)
+    flat_commit = _flat(commit_body)
 
-    assert "CREATE TABLE IF NOT EXISTS entity_state" in init_body, (
-        "reference init has not adopted native MiniUnifiedDB entity_state"
+    assert "CREATE TABLE IF NOT EXISTS entity_state" in flat_schema, (
+        "reference init/schema helper has not adopted native MiniUnifiedDB entity_state"
     )
-    assert "SELECT generation FROM entity_state WHERE id=1" in read_body, (
+    assert "entity_state" in read_body and "generation" in read_body, (
         "reference state read must source the live generation from entity_state"
     )
-    assert "UPDATE entity_state SET generation" in commit_body, (
+    assert "eos_pipeline_state.generation" not in flat_read, (
+        "reference state read may not source live generation from the projection table"
+    )
+    assert "UPDATE entity_state SET generation" in flat_commit, (
         "reference commit must advance the native entity_state generation"
     )
-    assert "WHERE id=1 AND generation=?" in commit_body, (
+    assert "WHERE id=1 AND generation=?" in flat_commit, (
         "reference generation update must preserve stale-writer CAS semantics"
     )
 
     eos_state_ddl = re.search(
-        r"CREATE TABLE IF NOT EXISTS eos_pipeline_state\((.*?)\);",
-        init_body,
+        r"CREATE TABLE IF NOT EXISTS eos_pipeline_state\((.*?)\)",
+        schema_body,
         flags=re.S,
     )
     if eos_state_ddl is not None:
@@ -64,11 +77,11 @@ def _assert_reference_uses_native_generation_authority(source: str) -> None:
             "eos_pipeline_state may retain continuity/cursors but not a second generation authority"
         )
 
-    combined = read_body + commit_body
+    combined = flat_read + " " + flat_commit
     for forbidden in (
-        'SELECT * FROM eos_pipeline_state WHERE singleton=1',
-        'UPDATE eos_pipeline_state SET generation=',
-        'WHERE singleton=1 AND generation=?',
+        "SELECT * FROM eos_pipeline_state WHERE singleton=1",
+        "UPDATE eos_pipeline_state SET generation=",
+        "WHERE singleton=1 AND generation=?",
     ):
         assert forbidden not in combined, (
             "reference runtime still uses eos_pipeline_state as an independent generation/CAS authority: "
@@ -81,20 +94,21 @@ def _assert_bootstrap_cannot_promote_legacy_generation_mirror(source: str) -> No
 
     This guard is deliberately separate from the live read/commit checks above because a
     refactor can move schema/migration logic behind `_ensure_schema()` while `_pipeline_init`
-    merely calls that helper. A legacy mirror is allowed to be written from canonical state,
-    but it may not be read as an input that can advance `entity_state.generation`.
+    merely calls that helper. A legacy table may be structurally rebuilt, but its historical
+    generation value may not be read as input that can advance `entity_state.generation`.
     """
     tree = ast.parse(source)
     ensure = _function(tree, "_ensure_schema")
     if ensure is None:
         return
     ensure_body = _body(source, ensure)
-    assert "SELECT generation FROM eos_pipeline_state" not in ensure_body, (
+    flat_ensure = _flat(ensure_body)
+    assert "SELECT generation FROM eos_pipeline_state" not in flat_ensure, (
         "legacy eos_pipeline_state generation may not be read as bootstrap/migration authority"
     )
     assert not (
         "eos_pipeline_state" in ensure_body
-        and "UPDATE entity_state SET generation" in ensure_body
+        and "UPDATE entity_state SET generation" in flat_ensure
     ), "schema/bootstrap logic may not promote a legacy mirror into canonical generation"
 
 
@@ -116,7 +130,6 @@ def test_future_current_reference_must_reuse_one_generation_authority() -> None:
     `_pipeline_profile_read` appears, the new reference path may not carry forward the
     legacy eos_pipeline_state generation as a second live entity/CAS authority.
     """
-
     source = RUNTIME_PATH.read_text(encoding="utf-8")
     tree = ast.parse(source)
     if _function(tree, "_pipeline_profile_read") is None:
@@ -127,7 +140,6 @@ def test_future_current_reference_must_reuse_one_generation_authority() -> None:
 
 def test_reference_parity_cannot_turn_green_with_parallel_generation_authority() -> None:
     """Prevent Goodhart: effect/profile parity cannot hide a forked live generation."""
-
     contract = CONTRACT_PATH.read_text(encoding="utf-8")
     if '"status": "PARITY"' not in contract:
         return

@@ -118,3 +118,11 @@ The paragraph above records the tool-surface state observed during the authority
 The exact current empirical gate is therefore **`BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS`**, not generic `BLOCKED_ON_EXECUTION_SURFACE`. An owner-held scoped read-only GitHub token must enter only the retained one-shot path; exact Research/EntityOS identities must be verified; the credential must be cleared/proven absent after fetch; then exact-current regressions and the exact ClayVerse OCI build/startup can execute. Only after that may the remaining Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/optional-EntityOS/recovery/concurrency vector receive runtime evidence.
 
 This refinement grants **ZERO** whole-product runtime/OCI credit by itself. The merged focused consistency evidence for PR #1318 is **4/4 PASS** at helper/source-component scope only; the real owner-started token-bearing exact-source/full-suite/OCI run has not yet been observed.
+
+## 2026-08-23 `go` re-entry — controller semantic rebind before owner token
+
+Live inspection of retained controller PR #810 found the next narrower blocker: recent preview builds are failing closed in the controller source guard **before Sandbox/product execution**, while the start endpoint, provider/effect phases and retained phase/source guards have been rebound piecemeal to different Research identities. This is pre-runtime controller/source-admission failure, not a ClayVerse semantic TEST_FAIL.
+
+The work selector is therefore strengthened to: **freeze exact accepted current Research/manifest/retained-lane identity -> semantically rebind all retained #810 phases and guards once -> obtain READY preview for those exact controller bytes -> only then owner-start the scoped `GITHUB_READ_TOKEN` one-shot**. The guard also fences current product semantics: no specific API provider is mandatory unless explicitly admitted, EntityOS execution is conditional, and historical Mistral/custom-engine/headless paths receive no current product credit.
+
+No PR810 runtime bytes are changed by this control-plane delta, no secret is accessed, and whole ClayVerse runtime/OCI credit remains **ZERO**. The next real discriminator is a coherent exact controller closure reaching READY, followed by the owner-started private-source one-shot and only then exact-current regressions/OCI/full product acceptance.

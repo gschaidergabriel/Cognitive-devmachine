@@ -25,7 +25,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.6.2"
+VERSION = "clay-profile-pipeline-runtime/0.6.3"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -200,7 +200,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                 raise PipelineFault("DUPLICATE_SOURCE_KIND:" + kind)
             seen_kinds.add(kind)
             adapter = str(source.get("adapter", "")).strip()
-            if adapter in {"sqlite_query", "jsonl_cursor"}:
+            if adapter in {"sqlite_query", "jsonl_cursor", "json_snapshot"}:
                 namespace = source.get("source_namespace")
                 if not isinstance(namespace, str) or not namespace.strip():
                     raise PipelineFault("SOURCE_NAMESPACE_REQUIRED:" + kind)
@@ -796,7 +796,8 @@ class ProfilePipelineRuntime(clay.Runtime):
             if "~" in prefix:
                 raise PipelineFault("EVIDENCE_PREFIX_RESERVED_SEPARATOR")
             namespace = str(source.get("source_namespace", "")).strip()
-            source_tuple = _canonical_json([prefix, namespace]).encode("utf-8").hex()
+            source_kind = str(source.get("kind", "")).strip()
+            source_tuple = _canonical_json([prefix, namespace, source_kind]).encode("utf-8").hex()
             identity_prefix = prefix + "~" + source_tuple + "~"
             for row in source.get("rows", []):
                 source_id = row.get("source_id")

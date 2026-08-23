@@ -188,24 +188,34 @@ class ZeroUcfCapsuleChainTests(unittest.TestCase):
         }
         self.assertTrue(expected.issubset(set(errors)), errors)
 
-    def test_canonical_clay_inference_is_causally_fed_by_ucf_admission(self):
-        clay_path = ROOT / "the artefact" / "blogpost_entity" / "BLOGPOST_ENTITY.clay"
-        clay = clay_path.read_text(encoding="utf-8")
+    def test_canonical_clay_uses_two_phase_ucf_handoff(self):
+        clay = (ROOT / "the artefact" / "blogpost_entity" / "BLOGPOST_ENTITY.clay").read_text(encoding="utf-8")
         prompt_index = clay.index('phase("pipeline_build_prompt"')
         admit_index = clay.index('phase("pipeline_cognitive_fabric_admit"')
         inference_index = clay.index('effect("inference_generate"')
+        validate_index = clay.index('phase("pipeline_cognitive_fabric_validate"')
+        gate_index = clay.index('phase("pipeline_gate"')
+        commit_index = clay.index('phase("pipeline_commit"')
         self.assertLess(prompt_index, admit_index)
         self.assertLess(admit_index, inference_index)
+        self.assertLess(inference_index, validate_index)
+        self.assertLess(validate_index, gate_index)
+        self.assertLess(gate_index, commit_index)
         self.assertIn('map_set(infer,"inference",admitted.inference)', clay)
         self.assertIn('map_set(infer,"system",admitted.system)', clay)
         self.assertIn('map_set(infer,"user",admitted.user)', clay)
+        self.assertIn('map_set(infer,"zero_workspace_capsule_digest",admitted.zero_workspace_capsule_digest)', clay)
         self.assertIn('map_set(infer,"inference_packet_digest",admitted.inference_packet_digest)', clay)
-        self.assertIn('map_set(infer,"cognitive_fabric_receipt_digest",admitted.cognitive_fabric_receipt_digest)', clay)
+        self.assertNotIn('map_set(infer,"cognitive_fabric_receipt_digest"', clay)
+        self.assertNotIn('admitted.cognitive_fabric_receipt_digest', clay)
         self.assertNotIn('map_set(infer,"inference",profile.inference)', clay)
         self.assertNotIn('map_set(infer,"system",prompt.system)', clay)
         self.assertNotIn('map_set(infer,"user",prompt.user)', clay)
-        self.assertIn('map_set(gate_data,"cognitive_fabric",admitted)', clay)
-        self.assertIn('map_set(commit_data,"cognitive_fabric",admitted)', clay)
+        self.assertIn('map_set(gate_data,"cognitive_admission",admitted)', clay)
+        self.assertIn('map_set(gate_data,"cognitive_cycle",cognitive_cycle)', clay)
+        self.assertIn('map_set(commit_data,"cognitive_admission",admitted)', clay)
+        self.assertIn('map_set(commit_data,"cognitive_cycle",cognitive_cycle)', clay)
+        self.assertIn('map_set(result,"cognitive_fabric_receipt_digest",cognitive_cycle.cognitive_fabric_receipt_digest)', clay)
 
 
 if __name__ == "__main__":

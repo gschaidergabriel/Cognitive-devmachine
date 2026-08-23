@@ -1,6 +1,6 @@
 {
-  "schema_version": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v6",
-  "status": "RFC8785_ENTRY_AND_GRIDPLAN_SOURCE_WIRED_ROUTER_INFERENCE_PENDING",
+  "schema_version": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v7",
+  "status": "RFC8785_ENTRY_AND_GRIDPLAN_V2_WIRED_ROUTER_INFERENCE_PENDING",
   "date": "2026-08-23",
   "program": "ENTITYOS_HCU",
   "scope": "Typed Entry Fabric causal event/admission identity, HCU router policy/engine/route identity, GRID10 plan identity, and downstream inference receipt identity",
@@ -29,28 +29,30 @@
     "reference": "RFC 8785 JSON Canonicalization Scheme",
     "promotion_credit": 0,
     "runtime_credit": 0,
-    "wiring_state": "ENTRY_EVENT_ADMISSION_AND_GRIDPLAN_SOURCE_WIRED; ROUTER_ENGINE_ROUTE_AND_INFERENCE_PENDING"
+    "wiring_state": "ENTRY_EVENT_ADMISSION_V2_AND_GRIDPLAN_V2_SOURCE_WIRED; ROUTER_ENGINE_ROUTE_AND_INFERENCE_PENDING"
   },
   "current_implementation_split": {
     "typed_entry_event_admission": "RFC8785_JCS_IJSON/v1 directly via entry_canonicalization_v1.py under ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2 and ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2",
     "typed_entry_compatibility_import": "typed_entry_canonical_v1.py delegates to the same RFC8785_JCS_IJSON/v1 implementation and retains the historical CBOR schema name only as provenance metadata",
-    "grid10_plan_encoder": "RFC8785_JCS_IJSON/v1 through the typed_entry_canonical_v1 compatibility adapter; GridPlan still requires its identity schema/version migration to be explicit before promotion",
+    "grid10_plan_identity": "ENTITYOS_HCU_GRID_PLAN/v2 binds canonicalization_schema=RFC8785_JCS_IJSON/v1 and hashes the deterministic plan through the same selected implementation",
     "router_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
     "inference_receipt_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1 for receipt hash",
     "target_encoder": "RFC8785_JCS_IJSON/v1",
     "cross_language_current_end_to_end_identity_claim": false,
-    "law": "This is a partial source migration, not end-to-end acceptance. Router/engine/route and inference identity still block one-schema promotion. Existing historical CBOR and Python-json hashes are not reinterpreted."
+    "law": "This is a partial source migration, not end-to-end acceptance. Router/engine/route and inference identity still block one-schema promotion. Existing historical Entry v1/CBOR, GridPlan v1 and Python-json hashes are not reinterpreted."
   },
   "alternative_candidate_adjudication": {
     "hcu_causal_canonical_v1.py": "RESEARCH_PROVENANCE_AND_FALSIFIER_EVIDENCE_ONLY_NOT_CURRENT_SELECTED_AUTHORITY",
     "legacy_typed_entry_cbor": "HISTORICAL_SCHEMA_SCOPE_ONLY_AFTER_COMPATIBILITY_ADAPTER_MIGRATION; NEVER_REHASH_IN_PLACE",
+    "legacy_grid_plan_v1": "HISTORICAL_OR_DONOR_SCOPE_ONLY; NEW JCS PLAN HASHES USE ENTITYOS_HCU_GRID_PLAN/v2",
     "python_sort_keys_json": "LEGACY_IMPLEMENTATION_SCOPED_IDENTITY_PENDING_VERSIONED_ROUTER_AND_INFERENCE_MIGRATION",
-    "other_or_future_encoders": "REQUIRE_EXPLICIT_CURRENT_MAIN_AUTHORITY_AND_VERSIONED_MIGRATION_OR_EXPERIMENTAL_SCOPE; UNKNOWN_SCHEMA_FAILS_CLOSED",
+    "other_or_future_encoders": "REQUIRE_EXPLICIT_CURRENT_MAIN_AUTHORITY_AND VERSIONED MIGRATION OR EXPERIMENTAL SCOPE; UNKNOWN_SCHEMA_FAILS_CLOSED",
     "package_or_runtime_authority_for_alternatives": false
   },
   "causal_identity_boundary": {
     "entry_event_identity_schema": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2",
     "entry_admission_identity_schema": "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2",
+    "grid_plan_identity_schema": "ENTITYOS_HCU_GRID_PLAN/v2",
     "causal_event_excludes_routing_resolution_metadata": [
       "requested_internal_provider",
       "resolved_internal_engine",
@@ -82,13 +84,15 @@
       "deterministic routing result"
     ],
     "grid10_plan_identity_must_bind": [
-      "explicit new GridPlan identity schema/version",
+      "ENTITYOS_HCU_GRID_PLAN/v2",
       "RFC8785_JCS_IJSON/v1",
       "event_sha256",
-      "entry_admission_sha256 or its explicitly admitted relation when plan semantics are admission-specific",
+      "entry_admission_sha256",
+      "route_decision_sha256",
+      "router_policy_sha256",
+      "engine_identity_sha256",
       "generation",
       "mode",
-      "admitted Entry budget identity",
       "runtime-capacity receipt identity",
       "deterministic plan result"
     ],
@@ -114,15 +118,16 @@
     "donor_authority_override_of_main": "REJECT"
   },
   "bounded_source_delta": {
-    "typed_entry_adapter_blob": "fe617ed6a51b0ebed7ea08087f5c0768b530a544",
     "selected_jcs_blob": "ad52378f2bd2cfedea08ced6bb24759408caa237",
-    "parent_entry_blob": "8644b472e4310df718db99c84c58632eb5883d8a",
-    "parent_grid10_blob": "be7ad08b90cf69066cf626934746b2fcb7a71f5a",
-    "effect": "GRID10 and compatibility imports no longer retain an active CBOR encoder; Entry event/admission was already independently migrated to JCS/v2 on the refreshed retained parent",
+    "typed_entry_adapter_blob": "fe617ed6a51b0ebed7ea08087f5c0768b530a544",
+    "parent_entry_v2_blob": "8644b472e4310df718db99c84c58632eb5883d8a",
+    "grid10_v2_blob": "ec05d95ffaab0bb81ebf303bdaef466f1164a1a9",
+    "adapter_focus_test_blob": "ed8dbbfa2dffee8233ba96f4e24a34399564d599",
+    "grid10_test_blob": "693e5d3a36144a615f0af5e4fe9e73899b50581f",
+    "effect": "Entry event/admission was already independently JCS/v2 on the refreshed donor parent; this delta removes the remaining active CBOR compatibility/GRID10 encoder and introduces explicit JCS GridPlan v2 identity instead of silently changing v1 plan hashes",
     "runtime_credit": 0
   },
   "remaining_gates_before_source_promotion": [
-    "give GRID10 plan identity an explicit new versioned schema while retaining historical plan hashes at original scope",
     "wire RFC8785_JCS_IJSON/v1 into router policy, EngineAdmission identity and route identity under new versioned identities",
     "wire RFC8785_JCS_IJSON/v1 into downstream inference receipt hashing and echo under a new versioned receipt identity",
     "reject mixed, unknown and downgraded canonicalization versions fail closed across Entry Route GridPlan and Inference",
@@ -135,11 +140,12 @@
   "correction_history": {
     "superseded_typed_canonical_selection": "RETAINED_AS_APPEND_ONLY_RESEARCH_PROVENANCE_ONLY",
     "stale_parent_write_detected_and_not_promoted": true,
+    "gridplan_v1_silent_rehash_risk_detected_before_promotion": true,
     "new_unusual_experiment": false,
     "runtime_credit": 0
   },
   "promotion_credit": 0,
   "runtime_credit": 0,
   "whole_entityos_pass": false,
-  "note": "This delta closes one source split by making the compatibility/GRID10 encoder path converge on current-main RFC8785 authority. It does not claim router/inference migration, exact current integrated execution, loader attestation, HCU runtime acceptance or whole EntityOS PASS."
+  "note": "This delta closes the Entry/GRID10 source split while preserving versioned historical identity. Router and inference remain deliberately mixed-schema and block end-to-end promotion. No loader attestation, HCU runtime acceptance or whole EntityOS PASS is claimed."
 }

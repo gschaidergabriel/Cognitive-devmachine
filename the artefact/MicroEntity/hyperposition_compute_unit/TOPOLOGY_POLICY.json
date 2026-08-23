@@ -1,0 +1,30 @@
+{
+  "schema": "HCU_TOPOLOGY_POLICY/v1",
+  "policy": "ELASTIC_GRID",
+  "module_class": "~0.8B",
+  "default_mode": "SHARED_BASE_08B_CELL",
+  "goal": "maximize useful logical cells under measured memory/latency while keeping canonical turn/effect paths responsive",
+  "roles": [
+    {"role": "world_model_projector", "min_instances": 1, "max_fraction": 0.1, "priority": 90},
+    {"role": "strategic_goal_synthesizer", "min_instances": 1, "max_fraction": 0.1, "priority": 80},
+    {"role": "forward_simulation", "min_instances": 1, "max_fraction": 0.35, "priority": 50},
+    {"role": "counterfactual_simulation", "min_instances": 1, "max_fraction": 0.2, "priority": 55},
+    {"role": "zero_cognition_twin", "min_instances": 1, "max_fraction": 0.1, "priority": 75},
+    {"role": "hypothesis_critic", "min_instances": 1, "max_fraction": 0.1, "priority": 85},
+    {"role": "reducer_gwt_bridge", "min_instances": 1, "max_fraction": 0.05, "priority": 100}
+  ],
+  "io_roles": [{"role": "free_llm_feed", "mode": "IO_ONLY", "priority": 45}],
+  "scheduling": {
+    "cpu_lane_ceiling": 4,
+    "actual_parallelism": "MEASURED_AT_RUNTIME",
+    "time_slicing": true,
+    "long_simulation_checkpointing": true,
+    "backpressure": true,
+    "canonical_path_reserved": true
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "effects": "EffectGate",
+    "cell_output": "CANDIDATE_OR_SIMULATED_ONLY"
+  }
+}

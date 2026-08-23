@@ -241,15 +241,55 @@ def _verify_admitted_entry(
     return budget
 
 
+def _verify_capacity_authority(
+    capacity: RuntimeCapacity,
+    admitted_capacity_receipts: Mapping[str, Mapping[str, Any]],
+) -> None:
+    """Verify the capacity claim against external deterministic control-plane authority.
+
+    The scheduler never mints physical/logical capacity. A receipt is meaningful only if
+    an external authority binds that digest to the exact profile and numeric limits.
+    """
+    capacity.validate()
+    if not isinstance(admitted_capacity_receipts, Mapping):
+        raise GridScheduleError("ADMITTED_CAPACITY_RECEIPT_REGISTRY_REQUIRED")
+    admitted = admitted_capacity_receipts.get(capacity.capacity_receipt_sha256)
+    if not isinstance(admitted, Mapping):
+        raise GridScheduleError("CAPACITY_RECEIPT_NOT_ADMITTED")
+    required = {"profile_id", "max_logical_cells", "physical_decoder_limit"}
+    if set(admitted) != required:
+        raise GridScheduleError("ADMITTED_CAPACITY_RECEIPT_SCHEMA_MISMATCH")
+
+    profile_id = admitted.get("profile_id")
+    max_logical_cells = admitted.get("max_logical_cells")
+    physical_decoder_limit = admitted.get("physical_decoder_limit")
+    if not isinstance(profile_id, str) or not profile_id.strip():
+        raise GridScheduleError("ADMITTED_CAPACITY_PROFILE_ID_INVALID")
+    for field, value in (
+        ("MAX_LOGICAL_CELLS", max_logical_cells),
+        ("PHYSICAL_DECODER_LIMIT", physical_decoder_limit),
+    ):
+        if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+            raise GridScheduleError(f"ADMITTED_CAPACITY_{field}_INVALID")
+
+    if capacity.profile_id.strip() != profile_id.strip():
+        raise GridScheduleError("CAPACITY_PROFILE_ID_MISMATCH")
+    if capacity.max_logical_cells != max_logical_cells:
+        raise GridScheduleError("CAPACITY_MAX_LOGICAL_CELLS_MISMATCH")
+    if capacity.physical_decoder_limit != physical_decoder_limit:
+        raise GridScheduleError("CAPACITY_PHYSICAL_DECODER_LIMIT_MISMATCH")
+
+
 def compile_plan(
     packet: EntryPacket,
     *,
     mode: HCUMode,
     capacity: RuntimeCapacity,
     admitted_entry_bindings: Mapping[str, str],
+    admitted_capacity_receipts: Mapping[str, Mapping[str, Any]],
 ) -> GridPlan:
     budget = _verify_admitted_entry(packet, admitted_entry_bindings)
-    capacity.validate()
+    _verify_capacity_authority(capacity, admitted_capacity_receipts)
     if not isinstance(mode, HCUMode):
         raise GridScheduleError("HCU_MODE_REQUIRED")
     if mode is HCUMode.SCALEOUT:

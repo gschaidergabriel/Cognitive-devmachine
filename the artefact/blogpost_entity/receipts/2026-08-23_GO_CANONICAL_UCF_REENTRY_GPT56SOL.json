@@ -1,0 +1,107 @@
+{
+  "schema": "GO_CANONICAL_UCF_REENTRY_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "gpt56sol/go-mini-ucf-canonical-reentry-20260823-1149",
+  "base_main": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "source_head_before_receipt": "bc036f33eb656ca7cd744fc502eb55fb8c2d2602",
+  "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "execution_policy": "FREE_ONLY_SANDBOX_ONLY",
+  "problem": {
+    "prior_exact_source_blob": "66898a4980a51e17ba2717e97352403164b4bdf8",
+    "prior_sequence": [
+      "pipeline_init",
+      "pipeline_profile_read",
+      "pipeline_state_read",
+      "pipeline_collect",
+      "pipeline_compile",
+      "pipeline_build_prompt",
+      "inference_generate",
+      "pipeline_gate",
+      "pipeline_commit"
+    ],
+    "classification": "CANONICAL_PIPELINE_BYPASSED_UNIFIED_COGNITIVE_FABRIC_BEFORE_INFERENCE",
+    "existing_evidence": "the artefact/blogpost_entity/receipts/2026-08-23_GO_CANONICAL_UCF_PATH_LESION_GPT56SOL.json"
+  },
+  "delta": {
+    "canonical_pipeline": "pipeline_build_prompt -> pipeline_cognitive_fabric_admit -> inference_generate -> pipeline_gate -> pipeline_commit",
+    "inference_inputs": "admitted Cognitive Fabric envelope only",
+    "bound_digests": [
+      "inference_packet_digest",
+      "cognitive_fabric_receipt_digest"
+    ],
+    "reentry": [
+      "pipeline_gate",
+      "pipeline_commit",
+      "run_result"
+    ],
+    "reference_parity": "FAIL_CLOSED until ProfilePipelineRuntime implements executable pipeline_profile_read + pipeline_cognitive_fabric_admit + inference_generate bindings and removes legacy profile_load/provider_chat_json paths",
+    "native_profile_v2": "FAIL_CLOSED_UNTIL_EXACT_PARITY"
+  },
+  "donor_adjudication": {
+    "pull_request": 1152,
+    "classification": "BOUNDED_MECHANISM_DONOR_ONLY",
+    "reason_reusable_now": "PR 1152 was closed under the transient ClayVerse work-selection authority; current main 5aa6653 restores Mini Entity 4.5 authority. The mechanism is re-derived on current main rather than reviving or merging the stale branch.",
+    "reused_mechanism": "ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v1 -> existing UCF ancestry -> canonical pipeline admission",
+    "second_ucf_created": false
+  },
+  "exact_changed_blob_identities": {
+    "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay": "cad8de246ae237d2ef1b108349915c4747175977",
+    "the artefact/blogpost_entity/check_structured_contract_sync.py": "3916ea88cf1fc649a4a05dcdc4b9764159544a0a",
+    "the artefact/blogpost_entity/test_structured_contract_sync_guard.py": "e667242988a61af37caf435f13f8b1f1ac4e7e93",
+    "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json": "790b7d5fe56185a4beb04b745abba9c9bae66da3",
+    "the artefact/blogpost_entity/test_canonical_cognitive_fabric_path.py": "d30e68fc211ac7f6560735221a715ca010917233"
+  },
+  "focused_execution": {
+    "environment": "ChatGPT isolated Linux/Python analysis container",
+    "scope": "exact reconstructed Git blobs for canonical Clay source + canonical path test",
+    "blob_identity_verified": {
+      "clay_expected": "cad8de246ae237d2ef1b108349915c4747175977",
+      "clay_observed": "cad8de246ae237d2ef1b108349915c4747175977",
+      "test_expected": "d30e68fc211ac7f6560735221a715ca010917233",
+      "test_observed": "d30e68fc211ac7f6560735221a715ca010917233"
+    },
+    "command": "python -m unittest -v test_canonical_cognitive_fabric_path.py",
+    "exit_code": 0,
+    "tests": {
+      "canonical_path": "PASS",
+      "direct_prompt_to_inference_lesion": "FAIL_CLOSED_AS_EXPECTED",
+      "digest_decorated_raw_inference_bypass": "FAIL_CLOSED_AS_EXPECTED",
+      "count": "3/3"
+    },
+    "credit": "SOURCE_MECHANISM_ONLY"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "experiment_id": "DIGEST_DECORATED_RAW_INFERENCE_BYPASS_POISON",
+    "hypothesis": "Merely carrying valid-looking packet/fabric digest fields could conceal a raw profile/prompt bypass and fool source acceptance.",
+    "intervention": "Keep inference_packet_digest and cognitive_fabric_receipt_digest wiring intact while replacing admitted engine/system/user inputs with raw profile.inference + prompt.system + prompt.user.",
+    "result": "REJECTED_FAIL_CLOSED",
+    "meaning": "Digest decoration alone is insufficient; actual inference dataflow must originate from the admitted Cognitive Fabric envelope."
+  },
+  "runtime_credit": {
+    "whole_mini_entity": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "reference_runtime": 0,
+    "native_v2": 0
+  },
+  "next_exact_gate": {
+    "source": "Implement pipeline_cognitive_fabric_admit in the single canonical ProfilePipelineRuntime/reference-native path together with the already-required DB-resident profile_read and generic inference_generate convergence; do not create a second UCF/runtime/state path.",
+    "authority": "Bind admission to MiniUnifiedDB current generation/turn/workspace identity and the existing Zero capsule/InferencePacket/UCF ancestry validators; ABSTAINED/stale/missing evidence fails closed before inference.",
+    "execution": "Run exact branch/current-main fused bytes on an actually-started authorized isolated executor, then exact bundled-0.8B/J-Space/GWT/Claude-adapter evidence; no runtime promotion from this source receipt."
+  },
+  "safety": {
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "vps_or_production_testing": false,
+    "final_training_started": false
+  }
+}

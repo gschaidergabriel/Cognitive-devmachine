@@ -88,6 +88,16 @@ class ZeroUcfCapsuleChainTests(unittest.TestCase):
         self.assertTrue(ucf.validate(cycle)["ok"])
         self.assertEqual(strict.validate_zero_bindings(cycle, c, p), [])
 
+    def test_packet_id_cannot_be_self_consistently_rebound(self):
+        c = capsule()
+        p = packet_v1.compile_packet(c, target_engine_class="CLAUDE_CODE", jspace_mode="COMPILED_EXTERNAL")
+        p["packet_id"] = ALT
+        unsigned = dict(p)
+        unsigned.pop("packet_digest")
+        p["packet_digest"] = packet_v1.sha256_obj(unsigned)
+        with self.assertRaisesRegex(packet_v1.PacketError, "PACKET_ID_BINDING_MISMATCH"):
+            packet_v1.validate(p, c)
+
     def test_preexisting_ucf_false_green_arbitrary_packet_digest_is_closed(self):
         c = capsule()
         p = packet_v1.compile_packet(c, target_engine_class="CLAUDE_CODE", jspace_mode="COMPILED_EXTERNAL")

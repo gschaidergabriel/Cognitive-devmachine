@@ -37,6 +37,7 @@ class BundledCognitionManifestTests(unittest.TestCase):
         b = validate_manifest(copy.deepcopy(base_manifest()))
         self.assertEqual(a.integration_identity_sha256, b.integration_identity_sha256)
         self.assertEqual(64, len(a.integration_identity_sha256))
+        self.assertEqual(64, len(a.manifest_identity_sha256))
 
     def test_unusual_jspace_calibration_alias_poison(self):
         # Exactly one unusual discriminator for this go: same model bytes, different
@@ -78,10 +79,10 @@ class BundledCognitionManifestTests(unittest.TestCase):
         a = base_manifest()
         b = copy.deepcopy(a)
         b["provenance"] = {"kind": "TEST_FIXTURE", "source": "replica"}
-        self.assertEqual(
-            validate_manifest(a).integration_identity_sha256,
-            validate_manifest(b).integration_identity_sha256,
-        )
+        va = validate_manifest(a)
+        vb = validate_manifest(b)
+        self.assertEqual(va.integration_identity_sha256, vb.integration_identity_sha256)
+        self.assertNotEqual(va.manifest_identity_sha256, vb.manifest_identity_sha256)
 
     def test_optional_steering_digest_is_identity_bound_when_present(self):
         a = base_manifest()

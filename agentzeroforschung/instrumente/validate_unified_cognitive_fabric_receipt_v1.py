@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
-"""Fail-closed validator for UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1.
+"""Fail-closed validator for UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 rev2.
 
-This validates receipt shape and authority invariants only. A PASS does not create
-runtime/model/product credit; provenance still has to show that the receipt came
-from the exact admitted executable path.
+Revision 2 fixes a semantic alias in rev1: the local bundled J-Space/GWT fabric
+mode is independent from the selected inference engine's J-Space capability
+mode. In particular, Claude Code can remain COMPILED_EXTERNAL while the bundled
+0.8B reference fabric is locally observed or intervened.
+
+A PASS validates receipt structure and authority invariants only. It does not
+create AgentZero/Ubuntu, model-quality, J-Space calibration, Whole-GWT, Claude
+adapter, or whole-product runtime credit by itself.
 """
 
 from __future__ import annotations
@@ -16,15 +21,24 @@ from pathlib import Path
 from typing import Any
 
 RECEIPT_VERSION = "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1"
+CONTRACT_REVISION = 2
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 ENGINE_CLASSES = {"BUNDLED_08B", "CLAUDE_CODE", "ADAPTIVE_BACKEND", "NONE"}
-JSPACE_MODES = {
+FABRIC_JSPACE_MODES = {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY", "DISABLED"}
+ENGINE_JSPACE_MODES = {
     "FULL_LOCAL_LATENT",
     "LOCAL_OBSERVE_ONLY",
     "COMPILED_EXTERNAL",
     "PLAIN_COMPATIBILITY",
     "NONE",
+}
+CALIBRATION_STATUSES = {"MEASURED_EXACT_BUNDLE", "UNMEASURED_SOURCE_ONLY"}
+JLENS_ADMISSION_PHASES = {
+    "PASS_BOUNDED_JACOBIAN",
+    "PASS_WEIGHTED_FORWARD_HOOKS",
+    "PASS_LAYOUT_SOURCE_RUNTIME",
+    "NOT_RUN",
 }
 VALIDATION_DECISIONS = {"ACCEPT_CANDIDATE", "REJECT_CANDIDATE", "ABSTAIN", "ERROR"}
 
@@ -81,6 +95,8 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
 
     if _get(receipt, "receipt_version", errors) != RECEIPT_VERSION:
         errors.append("BAD_RECEIPT_VERSION")
+    if _get(receipt, "contract_revision", errors) != CONTRACT_REVISION:
+        errors.append("BAD_CONTRACT_REVISION")
 
     commit = _get(receipt, "source.commit", errors)
     tree = _get(receipt, "source.tree", errors)
@@ -106,6 +122,8 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
         "fabric.jspace_profile_digest",
         "fabric.workspace_policy_digest",
         "fabric.workspace_calibration_digest",
+        "upstream.boot_binding_receipt_digest",
+        "upstream.jlens_admission_receipt_digest",
         "workspace.digest_before",
         "workspace.digest_after",
         "inference.capability_profile_digest",
@@ -117,6 +135,37 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
     ):
         _digest(receipt, path, errors)
     lens_digest = _digest(receipt, "fabric.lens_profile_digest", errors, nullable=True)
+
+    exact_bytes = _bool(receipt, "bundled_core.exact_bytes_verified", errors)
+    fabric_mode = _get(receipt, "fabric.local_jspace_mode", errors)
+    fabric_activation = _bool(receipt, "fabric.local_activation_access", errors)
+    calibration_status = _get(receipt, "fabric.workspace_calibration_status", errors)
+    boot_validated = _bool(receipt, "upstream.boot_binding_validated", errors)
+    jlens_phase = _get(receipt, "upstream.jlens_admission_phase", errors)
+
+    if fabric_mode not in FABRIC_JSPACE_MODES:
+        errors.append("FABRIC_JSPACE_MODE_INVALID")
+    if calibration_status not in CALIBRATION_STATUSES:
+        errors.append("WORKSPACE_CALIBRATION_STATUS_INVALID")
+    if jlens_phase not in JLENS_ADMISSION_PHASES:
+        errors.append("JLENS_ADMISSION_PHASE_INVALID")
+
+    if fabric_mode in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}:
+        if exact_bytes is not True:
+            errors.append("ACTIVE_FABRIC_REQUIRES_EXACT_BUNDLE_BYTES")
+        if fabric_activation is not True:
+            errors.append("ACTIVE_FABRIC_REQUIRES_LOCAL_ACTIVATION_ACCESS")
+        if lens_digest is None:
+            errors.append("ACTIVE_FABRIC_REQUIRES_LENS_PROFILE")
+        if calibration_status != "MEASURED_EXACT_BUNDLE":
+            errors.append("ACTIVE_FABRIC_REQUIRES_MEASURED_EXACT_CALIBRATION")
+        if boot_validated is not True:
+            errors.append("ACTIVE_FABRIC_REQUIRES_VALIDATED_BOOT_BINDING")
+        if jlens_phase != "PASS_BOUNDED_JACOBIAN":
+            errors.append("ACTIVE_FABRIC_REQUIRES_BOUNDED_JACOBIAN_ADMISSION")
+    elif fabric_mode == "DISABLED":
+        if fabric_activation is True:
+            errors.append("DISABLED_FABRIC_CANNOT_CLAIM_ACTIVATION_ACCESS")
 
     candidates = _list(receipt, "workspace.gwt_candidates", errors)
     winners = _list(receipt, "workspace.gwt_winners", errors)
@@ -154,30 +203,30 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
             winner_ids.add(winner)
 
     engine = _get(receipt, "inference.engine_class", errors)
-    mode = _get(receipt, "inference.jspace_mode", errors)
+    engine_mode = _get(receipt, "inference.engine_jspace_mode", errors)
     _nonempty_string(receipt, "inference.adapter_version", errors)
-    local_activation = _bool(receipt, "inference.local_activation_access", errors)
+    engine_activation = _bool(receipt, "inference.engine_local_activation_access", errors)
     hidden_claim = _bool(receipt, "inference.external_hidden_state_claimed", errors)
     if engine not in ENGINE_CLASSES:
         errors.append("ENGINE_CLASS_INVALID")
-    if mode not in JSPACE_MODES:
-        errors.append("JSPACE_MODE_INVALID")
-    if engine == "NONE" and mode != "NONE":
+    if engine_mode not in ENGINE_JSPACE_MODES:
+        errors.append("ENGINE_JSPACE_MODE_INVALID")
+    if engine == "NONE" and engine_mode != "NONE":
         errors.append("NONE_ENGINE_REQUIRES_NONE_MODE")
-    if engine != "NONE" and mode == "NONE":
+    if engine != "NONE" and engine_mode == "NONE":
         errors.append("ACTIVE_ENGINE_CANNOT_USE_NONE_MODE")
 
-    if engine == "CLAUDE_CODE" and mode != "COMPILED_EXTERNAL":
+    if engine == "CLAUDE_CODE" and engine_mode != "COMPILED_EXTERNAL":
         errors.append("CLAUDE_MUST_BE_COMPILED_EXTERNAL")
-    if engine == "BUNDLED_08B" and mode not in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}:
-        errors.append("BUNDLED_CORE_MODE_INVALID")
-    if mode in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"} and lens_digest is None:
-        errors.append("LOCAL_JSPACE_REQUIRES_LENS_PROFILE")
-    if mode == "FULL_LOCAL_LATENT" and local_activation is not True:
-        errors.append("FULL_LOCAL_LATENT_REQUIRES_ACTIVATION_ACCESS")
-    if mode in {"COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY", "NONE"}:
-        if local_activation is True:
-            errors.append("EXTERNAL_MODE_CANNOT_CLAIM_LOCAL_ACTIVATION_ACCESS")
+    if engine == "BUNDLED_08B" and engine_mode not in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}:
+        errors.append("BUNDLED_CORE_ENGINE_MODE_INVALID")
+    if engine == "BUNDLED_08B" and fabric_mode in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"} and engine_mode != fabric_mode:
+        errors.append("BUNDLED_ENGINE_FABRIC_MODE_MISMATCH")
+    if engine_mode in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"} and engine_activation is not True:
+        errors.append("LOCAL_ENGINE_MODE_REQUIRES_ACTIVATION_ACCESS")
+    if engine_mode in {"COMPILED_EXTERNAL", "PLAIN_COMPATIBILITY", "NONE"}:
+        if engine_activation is True:
+            errors.append("EXTERNAL_ENGINE_MODE_CANNOT_CLAIM_ACTIVATION_ACCESS")
         if hidden_claim is not False:
             errors.append("EXTERNAL_HIDDEN_STATE_CLAIM_FORBIDDEN")
     if engine == "CLAUDE_CODE" and hidden_claim is not False:
@@ -192,8 +241,8 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
         if type(executed) is not bool:
             errors.append("TYPE_BOOL:fabric.intervention.executed")
         if executed is True:
-            if mode != "FULL_LOCAL_LATENT":
-                errors.append("INTERVENTION_REQUIRES_FULL_LOCAL_LATENT")
+            if fabric_mode != "FULL_LOCAL_LATENT":
+                errors.append("FABRIC_INTERVENTION_REQUIRES_FULL_LOCAL_LATENT")
             for key in ("implementation_digest", "calibration_digest"):
                 value = intervention.get(key)
                 if not (isinstance(value, str) and HEX64.fullmatch(value)):

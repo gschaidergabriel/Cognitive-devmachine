@@ -1,0 +1,57 @@
+{
+  "schema": "GO_MICROENTITY_SNAPSHOT_REBUILDER_RECEIPT/v1",
+  "date": "2026-08-23",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "base_main": "10c372e4cbf089756aee53bda56628743c068968",
+  "purpose": "Replace one-off runner-dependent ZIP repair logic with a deterministic repository-owned MicroEntity snapshot rebuilder while keeping the corrupted snapshot quarantined until exact binary materialization.",
+  "files": {
+    "rebuild_snapshot.py": {
+      "git_blob_sha": "eee0a16890c56eff58413ee0a88c621c85ccdc51",
+      "sha256": "c9b451fdc2bce254a67c718409097a5755c8349a7903ba8f7e05fd0b42fd05ce",
+      "size": 5769
+    },
+    "test_rebuild_snapshot.py": {
+      "git_blob_sha": "ddbafea611ff909b074a1c72ccba25c91ec650d8",
+      "sha256": "739398c7f2190a4450bbc2a2f3d28c12d1e3dc47e73f7b3e26163c0188b1ec2e",
+      "size": 1930
+    }
+  },
+  "execution": {
+    "surface": "AUTHORIZED_ISOLATED_CHATGPT_CONTAINER",
+    "python": "3.13.5",
+    "commands": [
+      "python3 -m py_compile rebuild_snapshot.py test_rebuild_snapshot.py",
+      "python3 -m unittest -v test_rebuild_snapshot.py"
+    ],
+    "tests": 3,
+    "failures": 0,
+    "errors": 0
+  },
+  "unusual_experiment": {
+    "id": "MICROENTITY_MANIFEST_TRAVERSAL_POISON",
+    "count_for_this_go": 1,
+    "counterhypothesis": "A manifest member can escape the MicroEntity package root and still be archived by the repair path.",
+    "intervention": "Append ../escape.txt to archive_members_required.",
+    "observed": "FAIL_CLOSED with UNSAFE_MEMBER_PATH before archive materialization.",
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_COMPONENT_SCOPE"
+  },
+  "verified_properties": [
+    "byte-identical deterministic rebuild for identical member bytes and manifest order",
+    "archive member order exactly equals archive_members_required order",
+    "CRC validation through ZipFile.testzip",
+    "archive SHA-256 and Git blob SHA calculation",
+    "atomic output replacement",
+    "path traversal and non-POSIX member rejection"
+  ],
+  "authority": {
+    "MiniUnifiedDB": "UNCHANGED_CANONICAL_DURABLE_AUTHORITY",
+    "EffectGate": "UNCHANGED_ONLY_REAL_EFFECT_AUTHORITY",
+    "HCU": "UNCHANGED_COMPUTE_SIMULATION_PROPOSAL_ORGAN",
+    "snapshot_rebuilder": "ARTIFACT_TOOL_ONLY_NOT_TRUTH_OR_EFFECT_AUTHORITY"
+  },
+  "package_state": "QUARANTINED_UNTIL_BINARY_REBUILT_AND_VERIFIED_FROM_CURRENT_MANIFEST",
+  "runtime_credit": 0,
+  "hcu_runtime_credit": 0,
+  "model_credit": 0,
+  "claim_class": "EXACT_BLOB_COMPONENT_MECHANISM_EVIDENCE_ONLY"
+}

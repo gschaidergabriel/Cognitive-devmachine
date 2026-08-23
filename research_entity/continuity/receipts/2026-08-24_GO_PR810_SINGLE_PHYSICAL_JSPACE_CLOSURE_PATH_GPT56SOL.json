@@ -1,0 +1,65 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "d32b808cb471327174a3f5f72b14aa5813607a01",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_commit_written": "89dbaa4e5868edb0f5cb5f50cd919c82452aa689",
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_commit_bound_by_current_contract": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "duplicate_executor_created": false,
+    "unusual_experiment_performed": false,
+    "unusual_experiment_count_added": 0,
+    "work_class": "DETERMINISTIC_SOURCE_CLOSURE_PATH_FUSION"
+  },
+  "observation": {
+    "current_donor_guard": "scripts/guard-hcu-jspace-v4-v3-current-donor-exact-blobs.mjs",
+    "guard_before_fix_blob": "b37c3a68e6718c3a16412fd57d5607ea2562bb70",
+    "guard_before_fix_closure_dir": "fixtures/hcu-capsules/jspace-execution-store-511d5689",
+    "guard_before_fix_target_existed": false,
+    "active_parallel_staging_dir": "fixtures/hcu-capsules/jspace-execution-store-5c59891b",
+    "active_staging_identity_policy": "DIRECTORY_LABEL_IS_HISTORICAL_ONLY; CURRENT_IDENTITY_COMES_FROM_SUCCESSOR_MANIFEST_PLUS_REBIND_CONTRACT_EXACT_GIT_BLOB_MAP",
+    "problem": "The current-donor guard targeted a second not-yet-existing physical closure directory while concurrent source fusion was already staging current donor bytes into the established closure directory. Leaving both paths would split convergence and make guard completion depend on duplicate copying rather than exact byte authority."
+  },
+  "hypothesis": "One physical deployment-carried staging path can safely span donor successors if exact current authority is derived from the current manifest/rebind contract and every file is Git-blob verified; a new directory per donor SHA adds no causal or safety information.",
+  "counterhypothesis": "A donor-SHA-specific directory is necessary for exactness and reusing the historical directory risks stale-byte promotion.",
+  "discriminator": "The guard never trusts directory naming: it requires current manifest/contract identity agreement, exact required-file-set equality, exact Git-blob equality for all 17 files, product-derived upstream trust objects, semantic J-Space revalidation, zero-credit boundaries and absence of the stale unjustified inference fixture. Therefore exactness is byte/contract-bound, not path-label-bound.",
+  "delta": {
+    "executor_commit": "89dbaa4e5868edb0f5cb5f50cd919c82452aa689",
+    "guard_after_fix_blob": "aeb4162d92c34ab97d2af9bc3a329052694c708c",
+    "guard_after_fix_closure_dir": "fixtures/hcu-capsules/jspace-execution-store-5c59891b",
+    "second_physical_closure_lane_created": false,
+    "source_rebind_required": true,
+    "runtime_credit_added": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_REMOVING_A_SPLIT_PHYSICAL_STAGING_TARGET_FROM_THE_SINGLE_RETAINED_EXECUTOR_LANE",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_KEEPING_TYPED_ENTRY_ROUTE_LOAD_GRID_MODEL_EXECUTION_ADMISSION_AND_JSPACE_PRODUCERS_IN_ONE_EXACT_BLOB_VERIFIED_CLOSURE_PATH",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_MAKING_VECTOR_CONTROL_GLOBAL_JSPACE_TRAINING_TRACE_AND_BINDING_V3_CONVERGE_UNDER_ONE_CURRENT_DONOR_GUARD_WITHOUT_DUPLICATE_CLOSURE_STORAGE"
+  },
+  "evidence_boundary": {
+    "source_write_observed": true,
+    "exact_guard_execution_observed": false,
+    "new_build_executed": false,
+    "new_sandbox_executed": false,
+    "current_external_execution_blocker": "VERCEL_HOBBY_BUILD_RATE_LIMIT",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_ADDITIONAL_CHANGE_REQUIRED",
+    "reason": "the artefact/README.md was already updated during this go macrocycle and current product/frontier wording remains correct; this delta removes a physical staging split without changing product authority or runtime credit."
+  },
+  "next_exact_action": "Continue staging only into the single established closure directory until the current-donor 17-file guard passes exact manifest/contract/blob equality; then atomically rebind the fixed route manifest/command/result assertions and remove SOURCE_REBIND_REQUIRED only in that same coherent change. Execute only when the FREE_ONLY Vercel Hobby build/function admission permits it."
+}

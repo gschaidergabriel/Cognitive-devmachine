@@ -14,13 +14,18 @@ import json
 from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 
+try:
+    from .entry_canonicalization_v1 import CanonicalizationError, canonicalize
+except ImportError:
+    from entry_canonicalization_v1 import CanonicalizationError, canonicalize
+
 from reactive_event_router_v1 import (
     HASH_SERIALIZATION_SCHEMA,
     RouteDecision,
     assert_inference_echo,
 )
 
-SCHEMA = "HCU_INFERENCE_RECEIPT/v1"
+SCHEMA = "HCU_INFERENCE_RECEIPT/v2"
 STATUS = "CANDIDATE_ONLY"
 
 
@@ -51,13 +56,10 @@ class InferenceReceipt:
 
 
 def _canonical(value: Any) -> bytes:
-    return json.dumps(
-        value,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-        allow_nan=False,
-    ).encode("utf-8")
+    try:
+        return canonicalize(value)
+    except CanonicalizationError as exc:
+        raise InferenceReceiptError(f"RECEIPT_CANONICALIZATION_FAILED:{exc}") from exc
 
 
 def _sha256(value: Any, field: str) -> str:

@@ -1,148 +1,274 @@
-# EntityOS Hyperposition Computational Unit (HCU)
+# MINI ENTITY HYPERPOSITION COMPUTATIONAL UNIT
 
-Status: **CURRENT ENTITYOS/HCU ARCHITECTURE CONTRACT — SOURCE CANDIDATE**
-Date: 2026-08-23
-Product: **EntityOS**
-Compute architecture: **HCU**
-Compatibility root: `the artefact/MicroEntity/hcu/`
-
-The `MicroEntity` path is retained for exact implementation/provenance compatibility only. It does not define a current Mini Entity product or a second runtime identity. Historical versions of this file remain available in Git history and receipts.
+Status: **OWNER-DIRECTED ARCHITECTURE CANDIDATE / SOURCE CONTRACT v2**  
+Date: 2026-08-23  
+Product: Mini Entity / EntityOS  
+Package root: `the artefact/MicroEntity/hcu/`
 
 ## 1. Objective
 
-HCU is the single integrated cognition/compute architecture inside EntityOS. It coordinates deterministic control, typed ingress, bounded logical cognition cells, Hyperposition/workspace coordination and measured execution capacity while preserving canonical truth and effect authority outside model-generated cognition.
+Build a permanent resource-adaptive **Hyperposition Computational Unit (HCU)** on the separate KVM4-class host. It coordinates many logical ~0.8B ClayCog modules as one virtual cognitive substrate while keeping MiniUnifiedDB canonical and EffectGate as the only real-effect authority.
 
-The active computer path is:
+Reference deployment target:
 
 ```text
-new data / event / prompt
-        |
-        v
-  TYPED ENTRY FABRIC
-        |
-        +--> immutable event identity
-        +--> concrete admission identity
-        +--> generation / provenance / capability / resource bindings
-        |
-        v
-canonical durable state/evidence
-        |
-  +-----+-----------------+
-  |                       |
-  v                       v
-deterministic          HCU accelerator
-control plane          shared-weight/vector/
-                       inference/J-Space cells
-  |                       |
-  +-----------+-----------+
-              v
- typed causal packet / Hyperposition / workspace
-              |
-      +-------+---------+----------+----------+
-      |                 |          |          |
-   GRID10            COGSIM10    WM_TEST   NESTED_SIM
-      |                 |          |          |
-      +-------+---------+----------+----------+
-              |
-           SCALEOUT
-              |
-      calibrated candidate
-              |
- effect translation -> EffectGate + EffectJournal
+KVM 4
+4 CPU cores
+16 GB RAM
+200 GB disk
+16 TB bandwidth
 ```
 
-## 2. Authority boundary
+The HCU is responsible for the heavy ongoing cognitive background load so Zero can remain thin and operational.
+
+## 2. Reactive world-model law
+
+The world model is **reactive, event-driven and script-first**.
+
+Default path:
 
 ```text
-EntityOS       = sole current product/system identity
-HCU            = sole integrated cognition/compute architecture
-UnifiedDB      = canonical durable state/evidence authority
-MiniUnifiedDB  = compatibility implementation surface where exact migration is incomplete
-EffectGate + EffectJournal = only real/state-changing effect authority
-HCU/J-Space/world-model/workspace/model output = candidate/projection/measurement only
-Hyperposition  = unresolved alternative holder, never truth by vote
+canonical state/effect/feed/timer event
+-> deterministic incremental scripts
+-> changed-region + contradiction + relevance detection
+-> selective module activation only when justified
+-> Hyperposition/Global-J-Space update
+-> falsification/calibration
+-> bounded high-specificity ClayCode projection
+-> Zero
+```
+
+Zero does not receive the bulk world model. It receives a minimum-sufficient decision capsule and can expand by receipt/handle only when needed.
+
+See `REACTIVE_WORLD_MODEL_CONTRACT.md` and `ZERO_CLAYCODE_PROJECTION_CONTRACT.json`.
+
+## 3. Authority boundary
+
+```text
+MiniUnifiedDB = canonical durable state/evidence/configuration authority
+EffectGate    = only admitted real-effect authority
+HCU           = scheduled cognition / world-model / simulation / proposal fabric
+Zero          = runtime identity/configuration and operational perspective
+LLMs          = candidate inference providers only
+Hyperposition = unresolved alternative/coupling field, never truth by vote
 ```
 
 Required laws:
 
-- `HCU != SECOND_ENTITY`
-- `HCU != SECOND_WORLD_TRUTH`
-- `HCU != EFFECT_AUTHORITY`
-- `MODEL_OUTPUT != CANONICAL_TRUTH`
-- `MAJORITY_VOTE != TRUTH`
-- `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`
-- unknown external effect outcomes remain unknown and are never blindly replayed.
+`HCU != SECOND_ENTITY`
 
-## 3. Typed Entry and causal identity
+`HCU != SECOND_WORLD_TRUTH`
 
-All new data converges toward one Typed Entry Fabric before HCU cognition.
+`HCU != EFFECT_AUTHORITY`
 
-A causal event has a replay-stable identity over immutable event semantics. A concrete admission has a separate identity because receive time, resource budget, capability snapshot or transport metadata can differ without redefining the underlying event.
+`MODULE_OUTPUT = CANDIDATE_OR_MEASUREMENT`
 
-Untrusted Entry content may request a capability or resource envelope, but it may only narrow independently admitted deterministic authority. It may never self-grant or broaden it.
+`MAJORITY_VOTE != TRUTH`
 
-HCU routing consumes event identity only through an admitted Entry binding. Concrete admission identity stays available downstream so a valid inference receipt cannot be replayed across a distinct admission.
+`WORLD_COVERAGE != WORLD_COMPLETENESS`
 
-## 4. Engine admission
+## 4. Cognitive independence
 
-Local/internal cognition is positive-admission only. Absence from an external-provider denylist is not engine authority.
+Canonical internal cognition must not depend on NVIDIA embeddings, Mistral, Groq or another external provider.
 
-Engine/provider/class/checkpoint/tokenizer/runtime identities come from deterministic control-plane evidence, not the causal event. Exact artifact bytes and measured runtime capacity are separate admission dimensions.
+The HCU local ~0.8B + Global J-Space world field replaces provider-specific embedding/prestage dependencies for the canonical cognitive path.
 
-The current retained donor lane is PR #1263. It contains candidate mechanisms for `EngineAdmission`, Typed Entry, routing, inference receipts and GRID10. Those mechanisms must be rebased/fused into current EntityOS/HCU authority; a competing router or admission path is forbidden.
+External engines may remain:
 
-## 5. HCU modes
+- research/build workers;
+- optional FREE_ONLY candidate feeds;
+- direct targeted fallback engines.
 
-### GRID10
+Claude Code is the preferred high-capability targeted candidate-inference path, but HCU boot, world-model continuity, semantic routing, retrieval and Zero projection must continue without it.
 
-Deterministic 10 logical-cell baseline. Ten logical cells do not imply ten resident models or ten simultaneous decoders. MODEL cells are bounded by separately admitted resource/capacity evidence.
+See `COGNITIVE_INDEPENDENCE_POLICY.json`.
 
-### COGSIM10
+## 5. GPU-like logical grid over bounded physical workers
 
-Request-scoped cognition simulation using temporary logical function slots for hypotheses, counterhypotheses, plans and critics. Outputs are candidates only.
+The HCU is not one full model process per logical module. It is many role/context cells over a small resident inference pool with shared immutable model bytes/page cache where the exact runtime proves this safe.
 
-### WM_TEST
+```text
+                 reactive scheduler
+                       |
+          deterministic script plane
+                       |
+          +------------+------------+
+          |                         |
+   resident ~0.8B A           resident ~0.8B B
+          |                         |
+   many logical HPU cells / contexts / branches
+          +------------+------------+
+                       |
+            Global J-Space fabric
+                       |
+           Hyperposition world field
+                       |
+             falsification gates
+                       |
+            ClayCode projection
+                       |
+                     Zero
+```
 
-Bounded noncanonical world/transition-model experiment. Predictions must be calibrated against later observations before stronger claims.
+No numeric module-count claim becomes runtime fact before exact measurement.
 
-### NESTED_SIM
+## 6. Reference logical lanes
 
-Selective higher-cost nested simulation. It is not permanent reality, a second entity or a truth authority.
+Initial planning topology remains 16 logical slots with adaptive ceiling 24:
 
-### SCALEOUT
+| Lane | Slots | Function |
+|---|---:|---|
+| world | 3 | changed-region causal update, temporal stitching, contradiction handling |
+| goal | 2 | goal candidates/progress only when goal pressure requires cognition |
+| simulation | 4 | forward/counterfactual/failure/recovery branches |
+| zero_model | 2 | observable Zero outcome surrogate |
+| hypothesis | 2 | hypothesis/counterhypothesis/discriminator generation |
+| critic | 2 | adversarial review, calibration, Goodhart/falsification |
+| provenance | 1 | source/receipt/identity checking |
 
-Logical-context scaling over shared physical workers. The benchmark ladder is `10 -> 32 -> 64 -> 128 -> 256 -> ~600`; physical decode concurrency is measured separately. The ~600 H100-class target remains a hypothesis until exact benchmark evidence exists.
+These are roles, not identities and not separate model ownership.
 
-## 6. Hyperposition and workspace
+## 7. Script plane before model plane
 
-Disagreement is preserved as typed alternatives with evidence, counterevidence, unresolved facets and discriminators. Collapse requires evidence or deterministic policy; recurrence, sampling count or provider consensus cannot mint truth.
+Scripts perform inexpensive deterministic maintenance first:
 
-Workspace/J-Space coupling is an empirical causal-interface hypothesis. Injected context, traces or self-report are not proof of model-internal causal use. Promotion requires discriminating intervention or model-specific evidence.
+- generation fencing;
+- canonical rebind;
+- temporal expiry/delta stitching;
+- provenance joins;
+- contradiction/falsifier indexes;
+- duplicate/correlation suppression;
+- incremental projection updates;
+- prediction-vs-outcome calibration;
+- changed-region and Zero-relevance scoring;
+- ClayCode packing.
 
-## 7. Scheduling and capacity
+`reactive_event_router_v1.py` is the first deterministic source mechanism for selective lane activation. Low-change events can remain script-only; contradictions, forecast/effect pressure or high uncertainty selectively activate only the required lanes.
 
-The efficient HCU design multiplexes many logical roles/contexts over a bounded physical worker pool rather than duplicating one full model per logical cell.
+## 8. World model as typed open-world overlay
 
-Historical `topology.kvm4.json` values remain planning data only. Current runtime capacity can be admitted only through exact, authorized isolated measurement bound to source/model/tokenizer/runtime identities. VPS, self-hosted and production-host testing are forbidden for current acceptance credit.
+The persistent world model maintains explicit coexisting classes:
 
-## 8. Effects and recovery
+```text
+past/accepted knowledge
+current observations and measurements
+hypotheses
+counterhypotheses
+counterevidence/falsifiers
+forecasts and alternative futures
+explicit unknown/undercovered regions
+```
 
-HCU emits candidates or typed effect requests. Real effects remain journaled and generation/provenance fenced through EffectGate + EffectJournal. A crash does not convert an uncertain effect into success and does not authorize blind replay.
+The HCU never flattens these classes into one confidence number or narrative. Every element is time/provenance/generation bound.
 
-No HCU component may create a second recovery ledger, second state authority or generic host execution bypass.
+The target is broad world coverage, not an impossible claim that the system knows the whole world.
 
-## 9. Canonicalization convergence
+## 9. Hyperpositional semantic compute
 
-Current HCU/Entry work contains historical or experimental encoder identities. Before heterogeneous/cross-language identity is promoted, EntityOS must select exactly one versioned current Entry+HCU canonical identity path and explicitly preserve older hashes as provenance rather than silently rewriting them.
+Each logical HPU cell is a bounded hyperpositional space using a fixed versioned ClayCode/GRF/native-~0.8B contract. The system intentionally permits field-like/higher-order interaction rather than forcing every intermediate state into a single deterministic symbolic chain.
 
-## 10. Acceptance frontier
+However emergence is useful only when measurable and controllable. The HCU therefore exposes:
 
-Source architecture alone grants zero EntityOS/HCU runtime credit. The next executable frontier is:
+- alternatives and compatibility/exclusion sets;
+- n-ary/higher-order relations;
+- semantic/active/coordination/physical topology identities;
+- coupling gain, delay, gating and timescale;
+- pairwise-reduction error;
+- lesion/rescue results;
+- PID/PEID-style synergy where feasible;
+- metastability/hysteresis/recurrence readouts;
+- explicit uncertainty/provenance.
 
-1. positive local engine/checkpoint/tokenizer/runtime admission from the real deterministic control plane;
-2. bind immutable causal event identity + concrete Entry admission identity + resolved engine identity into the current HCU route/inference receipt path;
-3. preserve capability/resource narrowing and generation fences;
-4. run exact combined Entry + route + inference-receipt + GRID10 regressions in an actually-started authorized isolated executor;
-5. then measure physical model fit, throughput, latency and scale separately from logical module count.
+See `HYPERPOSITIONAL_SEMANTIC_FIELD_MATH.md` and the repository's existing Hyperposition emergence/readout research.
 
-Together API and paid fallback remain forbidden. Final paid/model training requires explicit owner authorization.
+## 10. Global J-Space fabric
+
+Each local HPU module contributes a typed projection to one Global J-Space basis and receives only the role-relevant slice back.
+
+```text
+local 0.8B J-Space_m
+<-> module GWT_m
+<-> Global J-Space
+<-> world Hyperposition field
+<-> other HPU modules
+```
+
+Exact local ~0.8B latent geometry may be measured after checkpoint/tokenizer/runtime calibration.
+
+Claude Code remains `COMPILED_EXTERNAL` under current evidence: Global J-Space can compile a targeted vector/ClayCode/context projection for Claude and reintegrate its candidate result, but current public control surfaces do not establish direct access to Claude private residual activations. Direct hidden-state fusion is therefore a research target only if a future admitted interface actually exposes it.
+
+## 11. Long simulation and forecasts
+
+Simulation branches are resumable typed objects, not hidden chain-of-thought archives. They store state transitions, assumptions, interventions, predicted observations, falsifiers and uncertainty.
+
+Future branch ranking may decay with depth/time and incorporate evidence quality/stability, but scores are scheduling/calibration quantities until outcome calibration supports stronger interpretation.
+
+## 12. Zero behavioral surrogate
+
+The HCU may model how Zero behaves from observable inputs/actions/outcomes to improve context selection and planning. It must not claim private hidden-mind access.
+
+The objective is to predict which compact projection will let Zero act correctly with the least cognitive load.
+
+## 13. FREE_ONLY external feed
+
+External free models can add candidate evidence, counterhypotheses and research proposals, but do not participate as required inner cognition.
+
+Provider consensus/repetition does not mint truth. Paid fallback is forbidden under current FREE_ONLY control and Together execution remains forbidden.
+
+## 14. Capacity and physical scheduling
+
+Reference source targets remain planning-only:
+
+- logical slots: 16 target / 24 adaptive ceiling;
+- resident inference workers: 2 target;
+- physical decode concurrency: 2 default / 4 source ceiling;
+- reserve at least 2 GiB for OS/DB/scheduler;
+- soft Mini Entity RAM limit 12 GiB; hard 14 GiB.
+
+`capacity_guard_v1.py` prevents these source numbers from becoming runtime claims without exact admitted measurement.
+
+## 15. Persistence model
+
+Canonical records live in MiniUnifiedDB. Suggested classes include:
+
+```text
+hcu_observation
+hcu_measurement
+hcu_causal_edge
+hcu_hypothesis
+hcu_counterhypothesis
+hcu_counterevidence
+hcu_falsifier
+hcu_goal_candidate
+hcu_goal_progress
+hcu_simulation_branch
+hcu_forecast
+hcu_zero_behavior_model
+hcu_strategic_proposal
+hcu_projection_receipt
+hcu_calibration_receipt
+```
+
+Vectors/tensors, local field states, caches, ANN indexes, graph projections and suspended runtime contexts are rebuildable unless separately admitted as canonical typed records.
+
+## 16. Package law
+
+All non-secret HCU product source/config/tests/contracts/receipts and admitted privacy-filtered exports belong under `the artefact/MicroEntity/hcu/` and in `MICROENTITY_CURRENT.zip` whenever changed.
+
+## 17. Acceptance gates
+
+Before promoting the HCU substrate, require exact evidence for:
+
+- checkpoint/tokenizer/runtime identity and RAM/throughput scaling;
+- provider-free boot/world-model/retrieval/Zero projection;
+- script-first low-change path avoiding unnecessary model inference;
+- pairwise vs higher-order matched-budget discrimination;
+- edge/hyperedge lesions, topology shuffles, gain/delay sweeps and rescue;
+- deterministic replay under exact TopologyBasis;
+- Global J-Space re-entry and causal-use tests;
+- Zero decision quality vs projection size;
+- restart/recovery/generation fences;
+- no EffectGate bypass;
+- no hidden provider/embedding dependency.
+
+Until then, controllable-emergence, direct Claude J-Space fusion and target-VPS performance remain research/acceptance targets rather than established facts.

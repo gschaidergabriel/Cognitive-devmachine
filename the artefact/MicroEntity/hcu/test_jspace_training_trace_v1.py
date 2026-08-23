@@ -1,0 +1,276 @@
+import hashlib
+import unittest
+from dataclasses import asdict, replace
+
+from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
+from global_jspace_gwt_v1 import CellContribution, step
+from inference_receipt_v1 import InferenceReceipt, SCHEMA as INFERENCE_SCHEMA, STATUS as INFERENCE_STATUS
+from jspace_training_trace_v1 import (
+    JSpaceTrainingTraceError,
+    build_training_trace,
+    trace_dict,
+    validate_training_trace,
+)
+from jspace_vector_control_v1 import encode_vector
+from reactive_event_router_v1 import ENTRY_BINDING_SCHEMA
+
+
+BASIS_SHA256 = "1" * 64
+
+
+class JSpaceTrainingTraceTests(unittest.TestCase):
+    def prototype(self):
+        cells = [
+            CellContribution("world.0", "world", (0.8, 0.1, -0.2), 0.8, 0.1, 0.2, 0.2, 0.1),
+            CellContribution("critic.0", "critic", (-0.3, 0.9, 0.4), 0.2, 0.95, 0.7, 0.1, 0.1),
+        ]
+        return step(cells, generation=7, basis_id="basis:7", basis_sha256=BASIS_SHA256)
+
+    def packet(self, proto=None, **overrides):
+        proto = proto or self.prototype()
+        kwargs = dict(
+            basis_id=proto.basis_id,
+            basis_sha256=BASIS_SHA256,
+            generation=proto.generation,
+            role=proto.winner_role,
+            control_condition="BASELINE",
+        )
+        kwargs.update(overrides)
+        return encode_vector(proto.global_vector, **kwargs)
+
+    def inference_receipt(self, proto=None, **overrides):
+        proto = proto or self.prototype()
+        payload = dict(
+            schema=INFERENCE_SCHEMA,
+            status=INFERENCE_STATUS,
+            hash_serialization_schema=CANONICALIZATION_SCHEMA,
+            entry_binding_schema=ENTRY_BINDING_SCHEMA,
+            entity_generation=proto.generation,
+            entry_admission_sha256="3" * 64,
+            event_sha256="2" * 64,
+            decision_sha256="4" * 64,
+            router_policy_sha256="7" * 64,
+            engine_identity_sha256="8" * 64,
+            resolved_engine_identity="engine:local-test",
+            resolved_engine_class="LOCAL_TEST",
+            resolved_engine_artifact_sha256="9" * 64,
+            engine_admission_receipt_sha256="a" * 64,
+            engine_load_canonicalization_schema=CANONICALIZATION_SCHEMA,
+            engine_load_loader_binding_sha256="b" * 64,
+            engine_load_lease_sha256="c" * 64,
+            engine_load_consumption_receipt_sha256="d" * 64,
+            engine_load_loader_id="loader:test",
+            model_call_id="call:test",
+            output_ref="memory:test-output",
+            output_sha256="e" * 64,
+            output_size=42,
+            model_lanes=(proto.winner_role,),
+        )
+        payload.update(overrides)
+        receipt_sha256 = hashlib.sha256(canonicalize(payload)).hexdigest()
+        return InferenceReceipt(**payload, receipt_sha256=receipt_sha256)
+
+    @staticmethod
+    def admitted(receipt):
+        return {receipt.receipt_sha256: asdict(receipt)}
+
+    def build(self, *, proto=None, packet=None, **overrides):
+        proto = proto or self.prototype()
+        packet = packet or self.packet(proto)
+        kwargs = dict(
+            trace_id="trace:episode-1:step-1",
+            trace_family_id="episode:1",
+            entry_event_sha256="2" * 64,
+            entry_admission_sha256="3" * 64,
+            route_decision_sha256="4" * 64,
+            grid_plan_sha256="5" * 64,
+            jspace_input_vector_ref="unifieddb:jspace-input:1",
+            local_workspace_state_ref="unifieddb:workspace:1",
+            global_jspace_slice_ref="unifieddb:jspace-slice:1",
+            hyperposition_branch_ids=("branch:a", "branch:b"),
+            provenance_evidence_class="EXACT_PROTOTYPE_TRACE",
+            resource_budget={"max_model_calls": 1, "max_tokens": 256, "max_wall_ms": 1000},
+            requested_action_class="CANDIDATE_INFERENCE",
+            expected_structured_model_output="schema://hcu/candidate-output/v1",
+            observed_downstream_outcome="UNKNOWN_NOT_YET_VERIFIED",
+            falsifier_lesion_condition="BASELINE",
+            credit_label="UNKNOWN",
+        )
+        kwargs.update(overrides)
+        return build_training_trace(proto, packet, **kwargs)
+
+    def test_exact_prototype_and_vector_packet_bind_to_complete_trace(self):
+        trace = self.build()
+        validate_training_trace(trace)
+        material = trace_dict(trace)
+        mandatory = {
+            "schema_version", "trace_id", "trace_family_id", "generation",
+            "entry_event_sha256", "entry_admission_sha256", "route_decision_sha256",
+            "grid_plan_sha256", "cell_id", "role", "jspace_basis_id",
+            "jspace_input_vector_ref", "jspace_input_codec_version",
+            "local_workspace_state_ref", "gwt_competition_set", "gwt_broadcast_gate",
+            "global_jspace_slice_ref", "hyperposition_branch_ids",
+            "provenance_evidence_class", "resource_budget", "requested_action_class",
+            "expected_structured_model_output", "observed_downstream_outcome",
+            "falsifier_lesion_condition", "credit_label", "trace_sha256",
+        }
+        self.assertTrue(mandatory.issubset(material))
+        self.assertEqual(material["jspace_input_codec_version"], "JSPACE_VECTOR_CONTROL_ABI/v1")
+        self.assertEqual(material["credit_label"], "UNKNOWN")
+        self.assertEqual(len(trace.trace_sha256), 64)
+
+    def test_same_inputs_are_deterministic(self):
+        self.assertEqual(self.build(), self.build())
+
+    def test_vector_generation_basis_hash_and_role_must_match_prototype(self):
+        proto = self.prototype()
+        for packet, code in [
+            (self.packet(proto, generation=8), "VECTOR_CONTROL_GENERATION_MISMATCH"),
+            (self.packet(proto, basis_id="basis:other"), "VECTOR_CONTROL_BASIS_MISMATCH"),
+            (self.packet(proto, basis_sha256="7" * 64), "VECTOR_CONTROL_BASIS_SHA256_MISMATCH"),
+            (self.packet(proto, role="simulation"), "VECTOR_CONTROL_ROLE_MISMATCH"),
+        ]:
+            with self.assertRaisesRegex(JSpaceTrainingTraceError, code):
+                self.build(proto=proto, packet=packet)
+
+    def test_control_packet_transplant_with_same_metadata_fails_closed(self):
+        proto = self.prototype()
+        transplanted = encode_vector(
+            tuple(reversed(proto.global_vector)),
+            basis_id=proto.basis_id,
+            basis_sha256=proto.basis_sha256,
+            generation=proto.generation,
+            role=proto.winner_role,
+            control_condition=proto.control_condition,
+        )
+        self.assertNotEqual(transplanted.packet_sha256, proto.control_packet.packet_sha256)
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "VECTOR_CONTROL_PACKET_TRANSPLANT"):
+            self.build(proto=proto, packet=transplanted)
+
+    def test_control_condition_must_match_prototype(self):
+        proto = self.prototype()
+        wrong_condition = encode_vector(
+            proto.global_vector,
+            basis_id=proto.basis_id,
+            basis_sha256=proto.basis_sha256,
+            generation=proto.generation,
+            role=proto.winner_role,
+            control_condition="SIGN_FLIP",
+        )
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "VECTOR_CONTROL_CONDITION_MISMATCH"):
+            self.build(proto=proto, packet=wrong_condition)
+
+    def test_nonunknown_credit_rejects_bare_hash_transplant(self):
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "NONUNKNOWN_CREDIT_REQUIRES_ADMITTED_INFERENCE_RECEIPT"):
+            self.build(
+                credit_label="POSITIVE",
+                outcome_receipt_sha256="6" * 64,
+                provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
+            )
+
+    def test_nonunknown_credit_rejects_unadmitted_constructible_receipt(self):
+        receipt = self.inference_receipt()
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "INFERENCE_RECEIPT_NOT_ADMITTED"):
+            self.build(
+                credit_label="POSITIVE",
+                outcome_receipt=receipt,
+                admitted_inference_receipts={},
+                provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
+            )
+
+    def test_nonunknown_credit_accepts_matching_admitted_inference_receipt(self):
+        receipt = self.inference_receipt()
+        registry = self.admitted(receipt)
+        trace = self.build(
+            credit_label="POSITIVE",
+            outcome_receipt=receipt,
+            outcome_receipt_sha256=receipt.receipt_sha256,
+            admitted_inference_receipts=registry,
+            provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
+            observed_downstream_outcome="VERIFIED_TASK_SUCCESS",
+        )
+        validate_training_trace(trace, admitted_inference_receipts=registry)
+        self.assertEqual(trace.credit_label, "POSITIVE")
+        self.assertEqual(trace.outcome_receipt_sha256, receipt.receipt_sha256)
+
+    def test_nonunknown_credit_requires_registry_on_revalidation(self):
+        receipt = self.inference_receipt()
+        registry = self.admitted(receipt)
+        trace = self.build(
+            credit_label="POSITIVE",
+            outcome_receipt=receipt,
+            admitted_inference_receipts=registry,
+            provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
+        )
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "ADMITTED_INFERENCE_RECEIPT_REGISTRY_REQUIRED"):
+            validate_training_trace(trace)
+
+    def test_nonunknown_credit_requires_verified_outcome_provenance(self):
+        receipt = self.inference_receipt()
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_OUTCOME_PROVENANCE"):
+            self.build(
+                credit_label="POSITIVE",
+                outcome_receipt=receipt,
+                admitted_inference_receipts=self.admitted(receipt),
+            )
+
+    def test_outcome_receipt_causal_transplants_fail_closed(self):
+        proto = self.prototype()
+        cases = [
+            (self.inference_receipt(proto, entity_generation=8), "OUTCOME_RECEIPT_GENERATION_MISMATCH"),
+            (self.inference_receipt(proto, event_sha256="6" * 64), "OUTCOME_RECEIPT_EVENT_MISMATCH"),
+            (self.inference_receipt(proto, entry_admission_sha256="6" * 64), "OUTCOME_RECEIPT_ENTRY_ADMISSION_MISMATCH"),
+            (self.inference_receipt(proto, decision_sha256="6" * 64), "OUTCOME_RECEIPT_ROUTE_DECISION_MISMATCH"),
+            (self.inference_receipt(proto, model_lanes=("other-role",)), "OUTCOME_RECEIPT_ROLE_NOT_IN_MODEL_LANES"),
+        ]
+        for receipt, code in cases:
+            with self.subTest(code=code):
+                with self.assertRaisesRegex(JSpaceTrainingTraceError, code):
+                    self.build(
+                        proto=proto,
+                        credit_label="POSITIVE",
+                        outcome_receipt=receipt,
+                        admitted_inference_receipts=self.admitted(receipt),
+                        provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
+                    )
+
+    def test_outcome_receipt_digest_tamper_fails_closed(self):
+        receipt = replace(self.inference_receipt(), output_ref="tampered-after-hash")
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "INFERENCE_RECEIPT_DIGEST_MISMATCH"):
+            self.build(
+                credit_label="POSITIVE",
+                outcome_receipt=receipt,
+                admitted_inference_receipts=self.admitted(receipt),
+                provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
+            )
+
+    def test_outcome_receipt_sha_argument_must_match_verified_receipt(self):
+        receipt = self.inference_receipt()
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "OUTCOME_RECEIPT_SHA256_MISMATCH"):
+            self.build(
+                credit_label="POSITIVE",
+                outcome_receipt=receipt,
+                outcome_receipt_sha256="6" * 64,
+                admitted_inference_receipts=self.admitted(receipt),
+                provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
+            )
+
+    def test_trace_digest_tamper_fails_closed(self):
+        trace = self.build()
+        tampered = replace(trace, observed_downstream_outcome="CHANGED_AFTER_HASH")
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "TRAINING_TRACE_DIGEST_MISMATCH"):
+            validate_training_trace(tampered)
+
+    def test_placeholder_causal_receipt_is_rejected(self):
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "PLACEHOLDER_SHA256_FORBIDDEN"):
+            self.build(entry_event_sha256="0" * 64)
+
+    def test_trace_family_is_explicit_not_inferred_from_neighbor_rows(self):
+        a = self.build(trace_id="trace:a", trace_family_id="episode:A")
+        b = self.build(trace_id="trace:b", trace_family_id="episode:B")
+        self.assertNotEqual(a.trace_family_id, b.trace_family_id)
+        self.assertNotEqual(a.trace_sha256, b.trace_sha256)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,111 @@
+{
+  "schema": "GO_HCU_GRID10_LOGICAL_PHYSICAL_SEPARATION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "compatibility_path_note": "the artefact/MicroEntity/hcu remains a legacy-named retained implementation path only; it is not a second product or compute architecture",
+  "retained_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "basis_head_before_receipt": "c12f6ef69bd234d1673cd4ac54fd684ea35ddc22",
+    "coordination_law": "fused into the retained HCU/Typed-Entry lane; temporary parallel Entry candidates from this macrocycle are donor-only and are not promotion lanes"
+  },
+  "bounded_delta": {
+    "scheduler": "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py",
+    "scheduler_blob": "76c063cce77e9e0b62048217b78038baf2dd5454",
+    "tests": "the artefact/MicroEntity/hcu/test_grid10_scheduler_v1.py",
+    "tests_blob": "9a35332103403eef8ee580a92aa4c7775b7e988e",
+    "package_manifest_commit": "dc500e75f1898c866564b76678819a271d75cf84",
+    "hcu_data_index_commit": "228293387b52d849ea56c74902e493fd2ea81dbf",
+    "entry_budget_rebind_commit": "c2c24abfddbed14d67e604b5f80927a556bcf1e1"
+  },
+  "mechanism": {
+    "law": "logical_cell_count != model_call_count != physical_decode_limit",
+    "grid10": {
+      "logical_cells": 10,
+      "model_cells": 2,
+      "remaining_cells": "deterministic SCRIPT functions",
+      "physical_decoders": "bounded independently by a separately supplied RuntimeCapacity receipt"
+    },
+    "cogsim10": "10 logical cells with 4 MODEL cells; rejected when the admitted Entry max_model_calls budget is smaller than 4",
+    "wm_test": "10 logical cells with bounded MODEL transition/prediction roles; output remains noncanonical",
+    "nested_sim": "10 logical cells with higher model pressure; routing requires cheaper_modes_exhausted plus high dynamics/horizon/value-of-information",
+    "direct": "one deterministic SCRIPT cell; zero model calls is admitted",
+    "scaleout": "fail-closed in this scheduler; a separately admitted scale/runtime profile is required"
+  },
+  "authority_boundaries": {
+    "entry": "scheduler accepts the retained EntryPacket contract; Entry capabilities and compute budget are externally admitted upstream and may not be self-granted",
+    "capacity": "RuntimeCapacity is an out-of-band deterministic control-plane input; packet content cannot broaden logical or physical capacity",
+    "truth": "scheduler/model/world outputs do not mint canonical state or evidence",
+    "effects": "scheduler exposes no EffectGate bypass or direct effect authority",
+    "hardware_claim": "ten logical cells never imply ten resident models or ten simultaneous physical decodes"
+  },
+  "grf": {
+    "observed": [
+      "current EntityOS/HCU authority requires a reusable 10-cell baseline and strict separation of logical module count from physical decode concurrency",
+      "the retained Typed Entry Fabric independently admits capabilities and, during this go, was further hardened to independently admit compute budget",
+      "the retained PR had no dedicated GRID10 scheduler before this delta"
+    ],
+    "hypothesis": "a deterministic mixed SCRIPT/MODEL logical topology can provide the 10-cell cognitive-computer baseline while keeping model calls and physical decoder concurrency independently budgeted and receipt-bound",
+    "counterhypothesis": "GRID10 must imply ten model invocations or physical workers to be meaningful",
+    "cheapest_discriminator": "compile a ten-cell plan with only two MODEL cells and one physical decoder lane; separately reject COGSIM10 when its four model cells exceed the admitted Entry max_model_calls budget",
+    "fusion": "retain ten logical functional contexts while time-slicing only admitted model cells over the separately bounded physical decoder lanes"
+  },
+  "unusual_experiment": {
+    "macrocycle_global_count": 1,
+    "canonical_experiment": "same-route causal-alias stress",
+    "canonical_receipt": "hcu/receipts/2026-08-23_GO_CAUSAL_ROUTE_ALIAS_STRESS_GPT56SOL.json",
+    "canonical_result": "256 deliberately same-route events: legacy decision identity produced 255 aliases while event+engine+policy-bound identity produced 0 aliases; counterhypothesis rejected at mechanism scope",
+    "grid10_lane_new_unusual_experiment": false,
+    "toctou_diagnostic": "a separate early donor-Entry mutable-payload check occurred before global experiment coordination was resolved; it receives NO unusual-experiment credit and is retained only as non-promotional diagnostic/regression evidence",
+    "law": "no second unusual experiment is claimed for this user-triggered go"
+  },
+  "execution_evidence": {
+    "initial_scheduler_component_run": {
+      "environment": "isolated ChatGPT Linux/Python component environment",
+      "result": "10/10 PASS",
+      "scope_limit": "used an API-compatible EntryPacket stub before the retained Entry API advanced; not current integrated retained-PR runtime evidence"
+    },
+    "current_exact_retained_head": {
+      "head": "c12f6ef69bd234d1673cd4ac54fd684ea35ddc22",
+      "github_actions_run": 32652611761,
+      "job": 97226444793,
+      "conclusion": "failure",
+      "steps": [],
+      "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION_NOT_TEST_FAILURE",
+      "runtime_credit": 0
+    },
+    "vercel_connector": "documentation/deployment management only; no Sandbox start/exec action exposed to this organ",
+    "current_integrated_grid10_tests": "UNEXECUTED_AT_EXACT_CURRENT_ENTRY_API; source was re-bound to required admitted_budget argument after drift detection"
+  },
+  "adversarial_drift_finding": {
+    "finding": "ENTRY_API_DRIFT_DETECTED_DURING_GO",
+    "detail": "the retained Entry Fabric gained mandatory externally admitted compute-budget authority after the first GRID10 test integration; the GRID10 tests were stale until commit c2c24abfddbed14d67e604b5f80927a556bcf1e1 added admitted_budget",
+    "importance": "prevents a false green/source-coherence claim and preserves the rule that untrusted ingress cannot self-grant compute"
+  },
+  "evidence_credit": {
+    "source_delta": "SUPPORTED",
+    "scheduler_mechanism": "SUPPORTED_AT_SOURCE_COMPONENT_SCOPE",
+    "current_exact_integrated_test": "UNOBSERVED",
+    "real_local_08b_execution": "UNOBSERVED",
+    "target_hardware_capacity": "UNOBSERVED",
+    "world_model_quality": "UNOBSERVED",
+    "jspace_causal_use": "UNOBSERVED",
+    "entityos_runtime_acceptance": false,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "execute the exact settled PR head Entry canonicalizer + Entry Fabric + GRID10 scheduler + reactive router in an authorized isolated executor; then wire HCU_REACTIVE_EVENT/v1 into mode selection/plan compilation and bind the exact admitted local checkpoint/tokenizer/runtime plus measured capacity receipt to physical model leases",
+  "safety": {
+    "together": "FORBIDDEN_UNUSED",
+    "paid_fallback": false,
+    "paid_training": false,
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_host_testing": false,
+    "secrets_accessed": false
+  }
+}

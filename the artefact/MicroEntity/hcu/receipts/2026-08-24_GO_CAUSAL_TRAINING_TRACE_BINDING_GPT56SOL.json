@@ -1,0 +1,75 @@
+{
+  "schema": "ENTITYOS_HCU_GO_CAUSAL_TRAINING_TRACE_BINDING/v3",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "join": {
+    "research_main_initially_observed": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+    "research_main_free_only_reentry_observed": "fbc605b3d99328d71b72440b52ade09fd988ceeb",
+    "current_supervisor_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "single_retained_hcu_lane_preserved": true
+  },
+  "finding": {
+    "classification": "CAUSAL_PROVENANCE_ADMISSION_GAP",
+    "original_gap": "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1 can be self-consistent while its Entry/admission/route/GRID hash fields are only shape-validated and therefore do not by themselves prove ancestry through JSPACE_GWT_TRANSITION_TRACE/v1",
+    "risk": "a raw training trace could otherwise appear cryptographically valid without exact causal transition ancestry",
+    "counterhypothesis": "digest-shaped causal labels are sufficient because the training trace is only telemetry",
+    "counterhypothesis_result": "REJECTED_AT_SOURCE_SCOPE"
+  },
+  "fusion_resolution": {
+    "dataset_admission_gate": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "dataset_admission_schema": "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1",
+    "serious_dataset_compiler": "the artefact/MicroEntity/hcu/compile_admitted_jspace_training_dataset_v1.py",
+    "pipeline_schema": "ENTITYOS_HCU_ADMITTED_JSPACE_TRAINING_PIPELINE/v1",
+    "source_mechanism": "serious dataset compilation first requires exact admitted training, transition and prototype registries; cross-binds Entry event/admission, route, GRID, generation, cell/role, basis/vector-control and credited outcome identities; then requires J-Space inference binding to HCU_INFERENCE_RECEIPT/v3 loader/output identity before invoking the lower-level row compiler",
+    "raw_training_trace_training_eligible": false,
+    "source_gap_status": "CLOSED_BY_MANDATORY_HIGHER_LEVEL_ADMISSION_ORCHESTRATION_AT_SOURCE_SCOPE",
+    "runtime_status": "UNEXECUTED_AT_EXACT_CURRENT_AUTHORIZED_FREE_SANDBOX_SCOPE"
+  },
+  "durable_writes": {
+    "initial_guard_commit": "67b5013c5dfbc6c148eb79e9814a7c6c738a2357",
+    "free_only_rebind_commit": "8fc331cdf25b9ac030d75d890954a19db62c7d98",
+    "selected_pipeline_index_commit": "eb021a563506a2265434c699061376ee6cd259b9",
+    "current_index_schema_written_by_this_organ": "HCU_DATA_INDEX/v12"
+  },
+  "authority": {
+    "free_only": true,
+    "paid_together_preflight_or_job_creation_allowed_now": false,
+    "owner_paid_one_shot_directive_status": "PROVENANCE_ONLY_QUARANTINED_BY_CURRENT_FREE_ONLY_SUPERVISOR",
+    "owner_paid_one_shot_job_consumed": false,
+    "zero_cost_local_08b_experimentation": "ALLOWED_ONLY_AFTER_EXACT_FREE_EXECUTABLE_CAUSAL_AND_DATASET_GATES"
+  },
+  "coordination": {
+    "first_index_write_attempt": "REJECTED_409_STALE_BLOB_AFTER_PARALLEL_WORKER_ADVANCE",
+    "stale_overwrite_performed": false,
+    "parallel_worker_fusion_observed": true,
+    "source_gap_resolution_reused_parallel_candidate_instead_of_creating_second_pipeline": true
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "the retained macrocycle already records AUTHORITY_CONSTANT_TRANSPLANT as the single unusual experiment; this work is source inspection, adversarial review, fusion and fail-closed architecture selection"
+  },
+  "execution": {
+    "authorized_free_sandbox_started_by_this_organ": false,
+    "tests_executed_by_this_organ": false,
+    "runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "together_preflight_used": false,
+    "together_job_created": false,
+    "paid_or_unknown_provider_network_io_used": false,
+    "secrets_requested_or_persisted": false
+  },
+  "next_exact_gate": "Rebase/fuse the retained PR1263 source mechanisms onto exact current FREE_ONLY main, keep the serious admitted dataset pipeline mandatory, then obtain an actually-started exact-source authorized FREE isolated run covering Entry->route->verified loader/inference->GRID->J-Space transition->training trace->dataset admission->inference binding->family split/compiler. Capture function execution, Sandbox.create, exact source/tree identity, commands, exit codes/logs, result digest, cleanup and zero secret persistence before any runtime/training promotion."
+}

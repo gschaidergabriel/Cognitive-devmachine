@@ -1,0 +1,69 @@
+{
+  "schema": "GO_HCU_TYPED_CANONICAL_NUMERIC_TYPE_PARITY/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "macrocycle_id": "go_9f0c3d6a7b124e15b2e57c8d3f9a01c4",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "retained_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823"
+  },
+  "observed_problem": {
+    "canonicalization_schema": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
+    "pre_repair_source_blob": "7e1be2cead9e069d5192c6e430a2abba7de0412b",
+    "pre_repair_test_blob_observed": "22f9405d192879cb5a185793359da0f1c758e087",
+    "finding": "HOST_NUMERIC_TYPE_CAN_CHANGE_ADMISSION_AT_IJSON_SAFE_INTEGER_BOUNDARY",
+    "detail": "Pre-repair Python rejected int(2**53) but accepted float(2**53), while the retained independent Node reference rejects the same integer-valued Number outside Number.MAX_SAFE_INTEGER. The same mathematical value could therefore be admitted or rejected based only on host-language numeric type."
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "HOST_NUMERIC_TYPE_ALIAS_AT_IJSON_BOUNDARY",
+    "scope": "bounded canonicalization discriminator only",
+    "pre_repair_observation": {
+      "python_int_2pow53": "REJECT_INTEGER_OUTSIDE_IJSON_SAFE_RANGE",
+      "python_float_2pow53": "ACCEPT_TYPED_BINARY64_644340000000000000",
+      "node_reference_number_2pow53": "REJECT_INTEGER_OUTSIDE_IJSON_SAFE_RANGE"
+    },
+    "counterhypothesis_rejected": "Python int-versus-float representation is harmless because equal JSON/I-JSON numbers always share the same admission domain."
+  },
+  "repair": {
+    "law": "integer-valued binary64 values outside the I-JSON safe-integer range fail closed regardless of Python int/float representation",
+    "source_blob": "fe75658b68134303e51b723280d42104575eacd7",
+    "test_blob": "07ecaa3d5415f86f8e2c6ac999ba9f3d4aa14060",
+    "source_commit": "51687a81c58e9884e8d43507c22f87a07fe6070e",
+    "test_commit": "34905187290d61e046f50a50316f8b5670521ca0"
+  },
+  "isolated_component_evidence": {
+    "executor": "isolated ChatGPT Linux tool container",
+    "exact_git_blob_match": true,
+    "py_compile": "PASS",
+    "focused_unittest": "10/10 PASS",
+    "node_reference_cross_language_vectors": "PASS",
+    "unsafe_integer_valued_float_python_node_rejection_parity": "PASS",
+    "runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "stale_test_write": "A first test update using stale blob af143853208c92c24b0040ddf995a33f29eeb7b8 was rejected HTTP 409 and not forced.",
+    "fusion": "The test was re-fetched at blob 22f9405d192879cb5a185793359da0f1c758e087, preserving the parallel supplementary-plane Unicode vector before adding the numeric-type parity case.",
+    "second_canonicalizer_created": false,
+    "second_state_or_effect_authority_created": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current main README already selects canonicalization convergence as an active frontier and correctly withholds runtime promotion; this branch-local domain-parity repair does not change product authority or the next whole-path gate."
+  },
+  "evidence_boundary": "EXACT_BLOB_BOUNDED_COMPONENT_EVIDENCE_ONLY_NOT_ENTITYOS_HCU_RUNTIME_ACCEPTANCE",
+  "next_gate": "Wire the selected ENTITYOS_HCU_TYPED_CANONICAL/v1 schema end-to-end into new-version Typed Entry event/admission, router policy/EngineAdmission/route and inference receipt identities; reject mixed/unknown/downgrade schemas; then run the combined Entry+route+inference+GRID10 path on an actually-started authorized isolated executor.",
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_persisted": false
+  }
+}

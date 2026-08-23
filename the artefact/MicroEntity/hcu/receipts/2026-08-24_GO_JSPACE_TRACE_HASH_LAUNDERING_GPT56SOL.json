@@ -1,0 +1,63 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_main_observed_after_reentry": "9680ac11cfdb04c74f40648d328c5dccd5b28894",
+  "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+  "supervisor_mode": "FREE_ONLY",
+  "retained_hcu_pr": 1263,
+  "retained_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+  "branch_head_after_delta": "a25c4fa0c02d67912f4e96abb6c59f53f0f75ac6",
+  "source_delta": {
+    "validator_commit": "a5d679f68ad04894541b33839a7ac8cf857b86cd",
+    "validator_blob": "90132159d5846f470917caa210f09f9494ac2e80",
+    "test_commit": "a25c4fa0c02d67912f4e96abb6c59f53f0f75ac6",
+    "test_blob": "ef669bd3ba940925605111f646112b7a57cccb60",
+    "finding": "validate_transition_trace previously accepted any caller-constructed trace whose schema and recomputed digest matched, without rechecking builder-level semantic invariants.",
+    "repair": "The existing JSPACE_GWT_TRANSITION_TRACE/v1 validator now fail-closes on self-contained semantic invariants before digest admission, including causal digest fields, vector-ref/ABI/codec shape, competition/winner consistency, canonical resource budget, evidence class, control/lesion condition and credit label.",
+    "duplicate_authority_created": false
+  },
+  "regression": {
+    "scope": "LOCAL_ISOLATED_LOGIC_RECONSTRUCTION_ONLY_NOT_EXACT_BRANCH_RUNTIME",
+    "tests_run": 5,
+    "tests_passed": 5,
+    "cases": [
+      "canonical trace remains valid",
+      "rehashed SELF_ASSERTED evidence rejected",
+      "rehashed duplicate/noncanonical budget rejected",
+      "rehashed winner-selection mismatch rejected",
+      "rehashed unknown lesion condition rejected"
+    ],
+    "runtime_credit_delta": 0,
+    "reason_no_runtime_credit": "The current tool surface cannot materialize and execute the exact retained PR source through the admitted Vercel Sandbox controller; this local container run is mechanism-level regression evidence only."
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "name": "HASH_LAUNDERING_COUNTER_REALITY/v1",
+    "question": "Can semantic poison be made acceptable merely by recomputing a valid trace digest?",
+    "conditions": [
+      "SELF_ASSERTED evidence class",
+      "unknown SELF_REPORT_ONLY lesion condition",
+      "winner/selection mismatch",
+      "duplicate resource-budget keys"
+    ],
+    "old_hash_only_validator": "ACCEPTED_ALL_4_REHASHED_POISONS_IN_RECONSTRUCTED_COUNTER_REALITY",
+    "new_semantic_validator": "REJECTED_ALL_4_REHASHED_POISONS_IN_RECONSTRUCTED_COUNTER_REALITY",
+    "interpretation": "Digest identity alone is insufficient admission authority; semantic validation is a necessary separate gate.",
+    "claim_scope": "MECHANISM_SUPPORTED_NOT_EXACT_RUNTIME_VERIFIED"
+  },
+  "authority_reentry": {
+    "paid_one_shot_owner_directive_present": true,
+    "supervisor_8_61_quarantines_paid_one_shot": true,
+    "together_preflight_performed": false,
+    "together_credential_lookup_performed": false,
+    "together_job_created": false,
+    "training_credit": 0,
+    "paid_spend": 0
+  },
+  "execution_blocker": "The retained exact-source Vercel controller still requires an owner-held scoped read-only GitHub credential through its transient POST path; the current available tool surface exposes no callable Sandbox start/exec or arbitrary authenticated POST for that controller.",
+  "next_exact_gate": "Run the exact current Research main plus retained PR1263 head through an authorized FREE isolated Sandbox, execute the combined Entry->route->engine admission/load->inference->GRID10->J-Space/vector/trace regressions including the new semantic-poison tests, and bind source/tree/result identity plus credential nonpersistence in one receipt.",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

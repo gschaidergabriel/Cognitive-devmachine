@@ -1,0 +1,86 @@
+{
+  "schema": "ENTITYOS_HCU_ENGINE_ARTIFACT_TREE_MEMBERSHIP_RACE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "retained_lane": "PR_1263",
+  "main_observed_initially": "c87e5565cbb2766230b6a369be085a85b66e4aa8",
+  "main_observed_after_parallel_progress": "f6066c126b67699983842c0549378806d5f4c405",
+  "parallel_fusion": {
+    "main_commit": "e7afa8c1f9253250ae98a662480d98dac47da23c",
+    "relationship": "COMPLEMENTARY_NOT_DUPLICATE",
+    "note": "Main now explicitly requires loader-consumed-byte/physical-engine-lease evidence because pre-load hashing is not loader attestation. This receipt hardens the earlier pre-load directory digest itself against membership changes during hashing; it does not claim to solve loader attestation."
+  },
+  "finding": {
+    "mechanism": "DIRECTORY_MEMBERSHIP_TOCTOU_DURING_ENGINE_ARTIFACT_HASH",
+    "before_behavior": "digest_artifact_path enumerated directory members once, then hashed that frozen member list. A file added after enumeration was absent from the digest even though it existed before the function returned.",
+    "risk_scope": "A positive pre-load EngineAdmission could describe a tree that had already changed during hashing. This is source/control-plane integrity debt only; it is not evidence of a real model-loader exploit."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "ARTIFACT_TREE_MEMBER_ADD_DURING_HASH",
+    "environment": "isolated ChatGPT Linux/Python tool container",
+    "method": "deterministically inject a new regular artifact member after the initial os.walk member enumeration and before the first listed member is hashed",
+    "pre_fix_observation": {
+      "baseline_sha256": "e62807f5285447e71478b4a319f3afb53a93a514d5d42eb5038726a3c8e70185",
+      "raced_sha256": "e62807f5285447e71478b4a319f3afb53a93a514d5d42eb5038726a3c8e70185",
+      "final_tree_sha256": "2e098f5351fcc2b4141d3128749ddf845b6b0ac1667a81e3709dc9f83e0d3782",
+      "raced_equals_baseline": true,
+      "raced_equals_final": false,
+      "classification": "MECHANISM_SUPPORTED_EXACT_ALGORITHM_REPRODUCTION_NOT_FULL_BRANCH_RUNTIME"
+    }
+  },
+  "source_delta": {
+    "engine_admission_path": "the artefact/MicroEntity/hcu/engine_admission_v1.py",
+    "pre_fix_blob_sha": "2bdd29db99fadec989d1fb2a6b5a1e3b0e9d5cb1",
+    "post_fix_blob_sha": "ae4c1f5f15056b33e2ddb6cdf4964dc3514bf630",
+    "test_path": "the artefact/MicroEntity/hcu/test_engine_admission_v1.py",
+    "post_fix_test_blob_sha": "0ce6ab590a7bd329799e969554d8a15edcf0987e",
+    "mechanism": "enumerate regular tree membership through one helper before hashing, re-enumerate before return, and fail closed if relative member identity differs",
+    "error": "ARTIFACT_TREE_MEMBERSHIP_CHANGED_DURING_HASH"
+  },
+  "bounded_execution": {
+    "post_fix_source_git_blob_reproduced": "ae4c1f5f15056b33e2ddb6cdf4964dc3514bf630",
+    "post_fix_py_compile": "PASS",
+    "focused_membership_regression": "PASS",
+    "regression_error_observed": "ARTIFACT_TREE_MEMBERSHIP_CHANGED_DURING_HASH",
+    "router_dependency": "STUBBED_ONLY_FOR_FOCUSED_ENGINE_ADMISSION_COMPONENT_EXECUTION",
+    "credit": "EXACT_ENGINE_ADMISSION_SOURCE_BLOB_COMPONENT_EVIDENCE_ONLY"
+  },
+  "github_actions": {
+    "commit": "796730a24ccb730dde8982ad0fb6cc1fd94f7245",
+    "run_id": 32653541787,
+    "job_id": 97228688368,
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_SEMANTIC_TEST_CREDIT"
+  },
+  "limits": [
+    "The member-set recheck does not make a writable artifact tree immutable after digest_artifact_path returns.",
+    "It does not prove that the model loader later consumes the admitted bytes.",
+    "A generation-fenced physical engine lease or enforced read-only/content-addressed loader boundary plus downstream consumed-byte echo remains required for HCU runtime credit.",
+    "No real ~0.8B model checkpoint/tokenizer/runtime was loaded by this cycle.",
+    "No whole EntityOS/HCU runtime acceptance is claimed."
+  ],
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false,
+    "new_state_authority_added": false,
+    "new_effect_path_added": false
+  },
+  "outcome": {
+    "research_delta": "COMMITTED_TO_RETAINED_PR_1263",
+    "hcu_runtime_credit_change": 0,
+    "entityos_whole_runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_gate": "Retain this pre-load tree-membership fence while current main's loader-consumed-byte requirement is fused into the same HCU path; then run the exact retained engine-admission tests with the real router plus loader-lease/inference-echo integration in an actually-started authorized isolated executor before any runtime promotion."
+}

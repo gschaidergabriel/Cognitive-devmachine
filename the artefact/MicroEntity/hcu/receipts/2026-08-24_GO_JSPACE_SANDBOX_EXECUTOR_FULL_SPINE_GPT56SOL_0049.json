@@ -1,0 +1,85 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_SANDBOX_EXECUTOR_FULL_SPINE/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "research_main_observed": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+    "current_owner_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+    "one_shot_together_training_authorized": true,
+    "one_shot_together_training_consumed": false
+  },
+  "coordination": {
+    "retained_hcu_pr": 1263,
+    "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "single_hcu_lane_preserved": true,
+    "parallel_hcu_work_observed": true,
+    "new_duplicate_semantic_path_created": false
+  },
+  "finding": {
+    "classification": "EXECUTION_COVERAGE_LAG",
+    "detail": "The retained READY Vercel Sandbox batch had advanced to the single-authority Vector Control ABI and training trace, but the retained HCU lane had already added transition-GWT validation, inference binding, and dataset-admission gates that were not yet included in the executable Sandbox batch.",
+    "risk": "A later credential-bearing Sandbox run could report a partial J-Space source-component PASS while omitting the newest causal training-data admission spine."
+  },
+  "repair": {
+    "execution_repository": "gschaidergabriel/Dr.-Unterweger",
+    "execution_pr": 810,
+    "execution_branch": "clay/fusion-vcr-native-20260817",
+    "commit": "50af5765124cc15c61084d6a63cce7239031f7b8",
+    "batch_path": "mcp/vercel-sandbox-mcp/scripts/run-entityos-hcu-insandbox-batch.sh",
+    "added_required_sources": [
+      "jspace_gwt_prototype_v1.py",
+      "jspace_inference_binding_v1.py",
+      "jspace_dataset_admission_gate_v1.py"
+    ],
+    "added_regression_modules": [
+      "test_jspace_gwt_prototype_v1",
+      "test_jspace_gwt_trace_validation_v1",
+      "test_jspace_inference_binding_v1",
+      "test_jspace_dataset_admission_gate_v1"
+    ],
+    "preserved_existing_regressions": true,
+    "runtime_credit_from_source_change": 0
+  },
+  "vercel": {
+    "project": "dr-unterweger",
+    "deployment": "dpl_GinpbJA6DFBzS6kDnncT8YmZuaYg",
+    "deployment_commit": "50af5765124cc15c61084d6a63cce7239031f7b8",
+    "deployment_state_observed": "READY",
+    "build_guard": "EntityOSHCUCurrentExecutorGuard/v2",
+    "live_get_api_go_cycle_v2": "405_METHOD_NOT_ALLOWED_ALLOW_POST",
+    "credential_bearing_post_observed": false,
+    "sandbox_create_observed": false,
+    "sandbox_batch_executed": false,
+    "runtime_credit_change": 0
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_count": 0,
+    "reason": "The retained active macrocycle already records AUTHORITY_CONSTANT_TRANSPLANT as the single consumed unusual experiment; this change is deterministic execution-coverage fusion/regression only."
+  },
+  "training": {
+    "together_job_created": false,
+    "authorization_consumed": false,
+    "training_started": false,
+    "reason": "Exact authorized isolated execution and subsequent real loader/base-model/data gates remain prerequisites."
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "secret_requested_or_persisted": false
+  },
+  "evidence_boundary": {
+    "executor_source_delta": "COMMITTED",
+    "vercel_controller_deployment": "READY",
+    "live_post_ingress": "PRESENT_BUT_NOT_INVOKED",
+    "authorized_sandbox_execution": "BLOCKED_ON_OWNER_HELD_SCOPED_GITHUB_READ_TOKEN_PLUS_CREDENTIAL_BEARING_POST_CALLABILITY",
+    "entityos_hcu_runtime_acceptance": "UNVERIFIED",
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Invoke one owner-authorized credential-bearing POST on the READY PR810 /api/go-cycle-v2 endpoint; verify Sandbox.create, exact current research main plus retained HCU PR SHA/tree binding, post-fetch token nonpersistence, then collect the full combined Entry-route-engine-load-inference-GRID10 plus current J-Space training-spine regression result."
+}

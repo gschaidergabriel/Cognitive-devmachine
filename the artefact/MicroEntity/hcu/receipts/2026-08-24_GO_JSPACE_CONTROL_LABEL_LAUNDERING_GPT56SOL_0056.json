@@ -1,0 +1,68 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_CONTROL_LABEL_LAUNDERING/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "current_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "paid_provider_execution": "FORBIDDEN",
+    "together_preflight_or_job": false,
+    "training_credit_change": 0
+  },
+  "source_binding": {
+    "research_main_observed": "fbc605b3d99328d71b72440b52ade09fd988ceeb",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_head_observed": "47a408226d6f46cecf7c759415db149e286f2e2e",
+    "path": "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
+    "git_blob_sha": "d922425542b4a8ad7b2cd5521cf50be07ca83b02"
+  },
+  "finding": {
+    "classification": "CAUSAL_CONTROL_LABEL_LAUNDERING_SOURCE_FALSIFIER",
+    "observed": "The public step() accepts an arbitrary control_condition and forwards it into JSPACE_VECTOR_CONTROL_ABI/v1 packet production without implementing the named intervention. The only explicit producer-side intervention helper in this file is lesion(), which removes one contribution before labeling LESION.",
+    "counterexample": "A caller can invoke step() over unmodified baseline contributions with control_condition ROLE_SWAP, PERMUTED, NULL_VECTOR, SIGN_FLIP, or LESION and obtain a trace/packet carrying that control label even though the corresponding intervention was not performed by the producer.",
+    "risk": "Later trace and dataset validators can prove that the packet label matches the prototype trace, but that agreement alone cannot prove that the labeled causal intervention actually happened. Such rows could become mislabeled hard negatives or causal training examples.",
+    "scope": "SOURCE_MECHANISM_FINDING_ONLY_NO_EXECUTABLE_FAILURE_CREDIT"
+  },
+  "required_repair": {
+    "preferred_minimal_contract": "Public baseline step() must fail closed for every non-BASELINE control condition. Each admitted non-baseline condition must have an explicit intervention constructor that performs and records the actual perturbation before emitting that exact label.",
+    "test_obligations": [
+      "direct step(..., control_condition=<non-BASELINE>) fails closed unless that public API explicitly performs the named intervention",
+      "lesion() still changes the admitted contribution set and emits LESION",
+      "ROLE_SWAP cannot be emitted without an explicit role transformation",
+      "PERMUTED cannot be emitted without an explicit vector/basis-consistent permutation",
+      "NULL_VECTOR cannot be emitted without an actual zero-vector intervention",
+      "SIGN_FLIP cannot be emitted without an actual sign-flip intervention",
+      "training-trace admission must not infer intervention truth from matching label strings alone"
+    ],
+    "authority_rule": "Do not add a second J-Space producer or second control-label authority to repair this; harden the retained producer path."
+  },
+  "execution_surface": {
+    "latest_ready_vercel_probe_deployment_observed": "dpl_8RydxSGDscHEDFVi1YJbTW7Utgr5",
+    "latest_probe_commit_observed": "b723aaafc86f2f1b96e60bc600bdb57082b17572",
+    "tokenless_sandbox_probe_source_exists": true,
+    "probe_invocation_result": "VERCEL_PREVIEW_SSO_302_BEFORE_ENDPOINT",
+    "sandbox_create_observed_from_this_probe": false,
+    "entityos_hcu_runtime_credit_change": 0
+  },
+  "coordination": {
+    "durable_product_code_modified_by_this_receipt": false,
+    "reason_no_direct_producer_patch": "Retained PR1263 is rapidly moving and explicitly requires rebase/fusion onto current FREE_ONLY main before promotion; preserve one canonical producer and avoid stale overwrite while recording the exact falsifier/test obligation.",
+    "macrocycle_id": null,
+    "global_unusual_experiment_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "new_unusual_experiment_count_local": 0
+  },
+  "evidence_boundary": {
+    "source_finding": "SUPPORTED_AT_LISTED_BLOB",
+    "component_execution_for_this_specific_falsifier": "NOT_EXECUTED",
+    "model_specific_jspace_causality": "UNVERIFIED",
+    "entityos_hcu_whole_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "During the required PR1263-to-current-main fusion, harden the single retained Global J-Space producer so non-baseline control labels require explicit intervention semantics, add deterministic fail-closed regressions, then include those exact tests in the synchronized authorized FREE isolated execution batch."
+}

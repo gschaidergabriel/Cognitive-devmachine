@@ -1,0 +1,82 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_ABI_SINGLE_AUTHORITY/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "join": {
+    "research_main_observed": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "retained_hcu_head_before_repair": "938165c9b8e8b03b0383c5c821b48106f49b74c2",
+    "single_retained_hcu_lane_preserved": true
+  },
+  "authority": {
+    "current_owner_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+    "superseded_owner_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json",
+    "training_authority": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
+    "required_abi": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "one_shot_together_training_consumed": false
+  },
+  "finding": {
+    "classification": "SOURCE_ABI_AUTHORITY_SPLIT",
+    "canonical_runtime_trace_path": "jspace_training_trace_v1.py -> jspace_vector_control_v1.py",
+    "duplicate_path": "jspace_vector_control_abi_v1.py",
+    "fault": "two different modules claimed JSPACE_VECTOR_CONTROL_ABI/v1 while emitting incompatible packet bytes and APIs",
+    "risk": "training data and local HCU runtime could bind the same ABI name to different wire identities, invalidating reproducibility and allowing a hidden second control authority"
+  },
+  "counterhypothesis": {
+    "claim": "the second module is only harmless filename duplication",
+    "result": "REJECTED_AT_SOURCE_SCOPE",
+    "reason": "the duplicate module independently encoded and decoded a different envelope/q8-b64 packet while the prototype and training trace imported the RFC8785/JCS packet implementation"
+  },
+  "repair": {
+    "canonical_module": "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+    "compatibility_module": "the artefact/MicroEntity/hcu/jspace_vector_control_abi_v1.py",
+    "compatibility_module_commit": "ad1545fc9d1aa9519d9695c2ce8cba4dcf6ddb9e",
+    "compatibility_module_blob": "34c94801491f126ef6b46782d2e014c032f57839",
+    "regression_commit": "6f81846c892c13f79eee95c6bfeaee3e35f62125",
+    "regression_blob": "590c23bd90c7c68f85d5b317950fd77a907a0fa2",
+    "law": "one ABI schema name maps to one canonical packet type, canonicalization authority and wire identity",
+    "legacy_constructor": "FAIL_CLOSED_RETIRED",
+    "legacy_decoder": "FAIL_CLOSED_RETIRED"
+  },
+  "regression_obligations": [
+    "compatibility module reexports the exact canonical ABI/PACKET/CODEC/WIRE constants and packet type",
+    "encoding through compatibility import produces byte-identical canonical packet identity",
+    "compatibility parser accepts only the canonical packet text",
+    "retired incompatible constructor fails closed",
+    "retired incompatible decoder fails closed",
+    "existing canonical jspace_vector_control_v1 and jspace_training_trace_v1 tests remain green"
+  ],
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "shared retained PR coordination already records AUTHORITY_CONSTANT_TRANSPLANT as the one consumed unusual experiment for the active macrocycle; this repair is deterministic fusion/regression only"
+  },
+  "execution": {
+    "authorized_sandbox_started": false,
+    "connected_vercel_surface_has_direct_sandbox_create_or_runcommand": false,
+    "tests_executed_by_this_organ": false,
+    "runtime_credit_change": 0
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "together_job_created": false,
+    "one_shot_together_authorization_consumed": false,
+    "secrets_requested_or_persisted": false,
+    "second_abi_authority_created": false
+  },
+  "evidence_boundary": {
+    "source_mechanism_hardening": "COMMITTED",
+    "regression_source": "COMMITTED_UNEXECUTED",
+    "jspace_gwt_runtime_causality": "UNVERIFIED",
+    "entityos_hcu_whole_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Discover/use the highest-information authorized isolated execution surface callable by the worker; for the retained Vercel controller path this worker still lacks direct Sandbox create/runCommand and arbitrary credential-bearing POST callability. Execute exact-current HCU regressions including both J-Space vector-control compatibility and canonical trace tests when callable; only after executable PASS bind the real ~0.8B loader checkpoint/tokenizer/runtime and continue J-Space/GWT trace plus one-shot training readiness."
+}

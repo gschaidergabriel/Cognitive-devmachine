@@ -1,0 +1,65 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "product_authority": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed": "ca0076d54c64996bc028746f4ad9d084ede28676",
+  "donor_pr": 1263,
+  "donor_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+  "branch_head_before_receipt": "95990a562cf16fb5c09e7b3726e152834267892e",
+  "track_a": {
+    "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+    "delta": "fused versioned deterministic Typed Entry causal identity into the existing EntityOS/HCU donor path instead of creating a second router or state authority"
+  },
+  "track_b": {
+    "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "delta": "replay-stable causal event identity is separated from transport admission identity and encoded with ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1; HCU projection carries causal identity/canonicalization but omits transport-only ingress/admission fields"
+  },
+  "hypothesis": "A versioned deterministic CBOR subset at the Typed Entry boundary can make causal event hashing reproducible across independent implementations while keeping transport replay identity separate and leaving router/model outputs non-authoritative.",
+  "counterhypothesis": "Python sort_keys JSON is sufficient for causal Entry identity and a separate canonicalization profile adds unnecessary complexity.",
+  "discriminator": "compare canonical bytes from independent Python and Node encoders on an Entry-shaped corpus; replay the same observed event with changed ingress_id/received_time and require stable event identity plus changed admission identity.",
+  "external_primary_evidence": [
+    "RFC 8949 deterministic CBOR core requirements",
+    "RFC 8785 rationale for invariant canonical representation before cryptographic hashing"
+  ],
+  "exact_branch_blobs_executed_locally": {
+    "the artefact/MicroEntity/hcu/typed_entry_canonical_v1.py": "2bcd576003ac58cec07e026a5105bc0a0b3413bb",
+    "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py": "cdc0bc44edecbf4758bce0152cdab87f26a81efe"
+  },
+  "branch_test_source": {
+    "the artefact/MicroEntity/hcu/test_typed_entry_canonical_v1.py": "1cc073260bd0bcea0832e0c1087a151cf5b47600"
+  },
+  "isolated_component_execution": {
+    "surface": "ChatGPT isolated container",
+    "python": "3.13.5",
+    "node": "v22.16.0",
+    "pytest": "9.0.2",
+    "result": "8 passed in 0.05s",
+    "verified": [
+      "RFC8949 subset known vectors",
+      "deterministic encoded-key map ordering",
+      "float and unsafe integer fail-closed at Entry identity boundary",
+      "independent Node and Python byte parity on Entry-shaped corpus",
+      "transport replay changes admission but not causal event identity",
+      "equivalent RFC3339 offsets normalize to the same observed instant",
+      "payload digest change changes causal event identity"
+    ]
+  },
+  "coordination": {
+    "parallel_race_observed": true,
+    "stale_entry_write_rejected_by_github_409": true,
+    "resolution": "adopted the stronger concurrent replay-stable event/admission split, discarded duplicate rewrite, fused only the missing canonicalization mechanism into the existing PR lane"
+  },
+  "unusual_experiment_law": {
+    "additional_unusual_experiments_created_here": 0,
+    "note": "Parity/replay checks are deterministic regressions; no second unusual experiment was introduced after the shared go discriminator was consumed."
+  },
+  "evidence_boundary": "EXACT_ENTRY_AND_CANONICALIZER_COMPONENT_BYTES_EXECUTED_IN_ISOLATED_CONTAINER; CURRENT_PR_ROUTE_INTEGRATION_TEST_SOURCE_COMMITTED_BUT NOT CLAIMED_AS_VERCEL_SANDBOX_RUNTIME; NOT_08B_ENGINE_RUNTIME; NOT_JSPACE_CAUSALITY; NOT_ENTITYOS_WHOLE_RUNTIME_ACCEPTANCE",
+  "vercel_sandbox_exec_available_in_connected_surface": false,
+  "vps_or_self_hosted_testing": false,
+  "together_api": false,
+  "paid_execution_or_training": false,
+  "next_discriminator": "execute the focused Entry-Fabric + reactive-router + inference-echo suite on an authorized exact-source sandbox, then bind the real local ~0.8B checkpoint/tokenizer/runtime bytes to the positive HCU engine artifact registry before model activation receives runtime credit."
+}

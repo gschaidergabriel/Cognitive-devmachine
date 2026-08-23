@@ -1,0 +1,68 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_DATASET_ABI_ALIGNMENT_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_sha_observed": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+  "current_owner_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "retained_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "compiler_alignment_commit": "31cc606096c50b0d04909d2f772a8cfeeac325a5",
+    "coordinated_test_followup_commit": "0cc7fb4a067fd351add03e7b6025363fb2607dd9"
+  },
+  "finding": {
+    "classification": "TRAINING_LABEL_ABI_DRIFT_SOURCE_BUG_REPAIRED_ON_RETAINED_LANE",
+    "before": [
+      "bootstrap dataset emitted JCTL_GENERATION_MISMATCH for a stale-generation hard negative",
+      "bootstrap dataset emitted JCTL_BASIS_MISMATCH for a wrong-basis hard negative"
+    ],
+    "current_vector_abi_contract": [
+      "STALE_VECTOR_CONTROL_GENERATION",
+      "JSPACE_BASIS_ID_MISMATCH"
+    ],
+    "risk": "A one-shot specialist fine-tune trained on stale reject labels would learn control tokens that disagree with the admitted JSPACE_VECTOR_CONTROL_ABI/v1 consumer contract.",
+    "repair": "The retained compiler now emits the current ABI rejection labels; coordinated tests assert those labels and preserve control-condition, packet-identity, basis-digest and wire-digest cross-binding."
+  },
+  "unusual_experiment": {
+    "name": "REJECTION_REASON_API_DRIFT_POISON",
+    "count_for_this_macrocycle": 1,
+    "scope": "bounded source-contract discriminator; not runtime/model evidence",
+    "intervention": "Compare the hard-negative target labels emitted by the current bootstrap compiler with the exact failure vocabulary of JSPACE_VECTOR_CONTROL_ABI/v1.",
+    "prediction_if_aligned": "Dataset reject labels equal the admitted ABI consumer errors.",
+    "prediction_if_stale": "Dataset emits legacy JCTL_* labels absent from the admitted ABI.",
+    "observed": "Legacy JCTL_* labels were present and were replaced with current ABI labels.",
+    "result": "STALE_LABEL_PATH_REJECTED_AND_REPAIRED"
+  },
+  "coordination": {
+    "source_coherence_sibling_branch_observed": "gpt56sol/go-jspace-source-coherence-20260824-0039",
+    "duplicate_compiler_path_created": false,
+    "stale_test_write": "REJECTED_BY_GITHUB_409_AND_NOT_FORCED",
+    "followup": "A newer sibling commit supplied the needed test alignment, so no overwrite was attempted."
+  },
+  "execution_surface": {
+    "vercel_connector_sandbox_create_start_exec_callable": false,
+    "vercel_connector_surface_observed": "Sandbox documentation search only",
+    "chatgpt_tool_container_git_materialization": "BLOCKED_BEFORE_SOURCE_FETCH_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "github_workflow_runs_for_test_followup_commit": 0,
+    "vps_self_hosted_production_fallback_used": false,
+    "exact_runtime_credit": 0
+  },
+  "training_gate": {
+    "together_one_shot_owner_authorized": true,
+    "job_started_by_this_organ": false,
+    "job_consumed": false,
+    "reason": "Canonical main does not yet contain the retained J-Space slice; exact isolated integrated execution, real GRID10 traces, causal lesion/shuffle/rescue evidence, frozen dataset/base baseline, and Together support/price preflight remain required."
+  },
+  "evidence_class": "DURABLE_RETAINED_LANE_SOURCE_REPAIR_NO_RUNTIME_CREDIT",
+  "next_exact_gate": [
+    "Execute the dependency-complete retained J-Space/Vector-ABI/compiler tests on exact bound bytes in an authorized isolated sandbox.",
+    "Integrate the retained Global J-Space/GWT step into request-scoped GRID10 execution and emit real trace families with engine-load/inference outcomes.",
+    "Run lesion/shuffle/rescue controls and leak-resistant split checks before freezing the training dataset.",
+    "Do not create the one authorized Together fine-tuning job until every pre-training gate is evidenced."
+  ]
+}

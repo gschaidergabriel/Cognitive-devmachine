@@ -1,0 +1,65 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_mode": "FREE_ONLY_SUPERVISOR_8_61",
+  "research_main_observed": "fbc605b3d99328d71b72440b52ade09fd988ceeb",
+  "retained_hcu_pr": 1263,
+  "retained_hcu_pr_head_observed": "c34169bcc0cdf89e8ba6b48d01a52fa64404bfda",
+  "status": "SOURCE_LEVEL_CAUSAL_BINDING_GAP_RETAINED_FOR_REPAIR",
+  "runtime_credit_change": 0,
+  "training_credit_change": 0,
+  "provider_credit_change": 0,
+  "together": "FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE",
+  "observed": {
+    "training_trace": "jspace_training_trace_v1.py now validates digest-stable HCU_INFERENCE_RECEIPT/v3 for non-UNKNOWN credit and binds that receipt to generation, Entry event/admission, route decision and model role.",
+    "dataset_boundary": "compile_jspace_bootstrap_dataset_v1.py now requires an external admitted J-Space basis registry and validates packet generation/basis/role/control-condition plus trace identity.",
+    "remaining_gap": "grid_plan_sha256 is still accepted as an independent caller-supplied digest in the training trace. Neither the prototype J-Space basis identity nor the admitted-basis registry cryptographically commits to the Entry event/admission + route decision + GRID10 plan tuple. Therefore GRID10 plan identity remains outside the J-Space causal basis binding."
+  },
+  "counterhypothesis": "An upstream controller may always supply a correct grid_plan_sha256 together with a separately admitted basis, making the missing in-trace binding operationally harmless.",
+  "why_counterhypothesis_is_not_yet_sufficient": "The trace is explicitly used as exact causal training evidence and the dataset compiler can consume serialized traces. A basis registry of basis_id -> basis_sha256 proves basis admission but not its relation to the causal Entry/route/GRID10 tuple. Exact-scope training evidence should fail closed under plan/route relabelling rather than rely on an unstated upstream convention.",
+  "falsifier": {
+    "name": "GRID_PLAN_IDENTITY_TRANSPLANT",
+    "prediction_if_gap_exists": "A valid UNKNOWN-credit trace can be rebuilt with only grid_plan_sha256 changed, while keeping the same prototype step/vector-control packet and a recomputed outer trace_sha256; source inspection predicts no J-Space basis mismatch because current basis validation is independent of grid_plan_sha256.",
+    "prediction_if_gap_closed": "The builder or compiler rejects before dataset admission because the J-Space basis identity/digest no longer matches the causal Entry+route+GRID10 binding.",
+    "exact_current_source_execution": "NOT_EXECUTED_SANDBOX_ACTION_UNAVAILABLE_ON_THIS_WORKER"
+  },
+  "unusual_experiment_for_this_go": {
+    "count": 1,
+    "name": "CROSS_CELL_SOURCE_RECEIPT_ALIAS_TRANSPLANT_ON_SYNTHETIC_GUARD_PROTOTYPE",
+    "scope": "LOCAL_SYNTHETIC_CONTRACT_SIMULATION_ONLY_NOT_CURRENT_REPO_RUNTIME",
+    "result": "REJECTED_BY_EXACT_CELL_BINDING_IN_THE_SYNTHETIC_GUARD_PROTOTYPE",
+    "credit": "ZERO_RUNTIME_CREDIT"
+  },
+  "coordination": {
+    "stale_source_write_attempt": "REJECTED_BY_GITHUB_409",
+    "interpretation": "CORRECT_FAIL_CLOSED_COORDINATION_BEHAVIOR",
+    "action": "NO_OVERWRITE_OF_CONCURRENT_WORKER_DELTA",
+    "new_parallel_authority_created": false
+  },
+  "recommended_minimal_repair": {
+    "trace_schema": "BUMP_CURRENT_TRAINING_TRACE_SCHEMA_ON_SEMANTIC_CHANGE",
+    "binding_schema": "ENTITYOS_HCU_JSPACE_GRID_BINDING/v1",
+    "binding_material": [
+      "canonicalization_schema",
+      "entry_event_sha256",
+      "entry_admission_sha256",
+      "route_decision_sha256",
+      "grid_plan_sha256"
+    ],
+    "rule": "Derive the request-scoped J-Space basis identity/digest from the complete causal tuple; require prototype step, vector-control packet and dataset compiler to match that binding. This is a verification binding only and must not become a second Entry/router/GRID authority.",
+    "compiler_rule": "Recompute or verify the same causal binding at serialized dataset admission so a rehashed outer trace cannot relabel a valid prototype step onto a different GRID10 plan."
+  },
+  "execution_surface": {
+    "authorized_rule": "ISOLATED_SANDBOX_ONLY",
+    "vercel_connector_direct_sandbox_action_exposed": false,
+    "available_vercel_surface_observed": "DOCUMENTATION_SEARCH_ONLY_IN_THIS_SESSION",
+    "vps_self_hosted_production_substitution": "FORBIDDEN"
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_exact_step": "After the active PR1263 writer lane stabilizes, fuse the minimal causal grid-binding repair into the existing jspace_training_trace/dataset path, then run the exact current combined HCU regressions in an actually-started authorized FREE isolated sandbox."
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "HCU_ENGINE_ADMISSION_TRUST_SPLIT_EXACT_BLOB_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "candidate_pr": 1263,
+  "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+  "branch_head_observed_before_receipt_write": "f38d91e847496d9d132567b0db86e0b4f884bb56",
+  "fusion_source": {
+    "dependent_pr": 1368,
+    "classification": "DONOR_FUSION_CANDIDATE_NOT_SECOND_ROUTER",
+    "retained_parent": 1263
+  },
+  "exact_files_executed": {
+    "the artefact/MicroEntity/hcu/reactive_event_router_v1.py": {
+      "git_blob_sha1": "b890b6cf0210f7af42bf7e95d6b0652297087c91",
+      "bytes": 17365
+    },
+    "the artefact/MicroEntity/hcu/test_reactive_event_router_v1.py": {
+      "git_blob_sha1": "d1ea85a14e331c377ce738ff62b7a04c4bdeecb1",
+      "bytes": 16162
+    }
+  },
+  "source_delta": [
+    "HCU_REACTIVE_EVENT cannot carry reserved resolved-engine authority fields",
+    "EngineAdmission is a separate control-plane input from causal Entry data",
+    "requested provider must agree with separate EngineAdmission when both are present",
+    "model lanes require separate EngineAdmission",
+    "script-only lanes reject unnecessary EngineAdmission",
+    "positive admitted-engine artifact registry remains an independent exact-byte lock",
+    "route identity v3 binds event, policy, admitted engine identity and routing result",
+    "current Typed Entry admission/event replay binding and inference-echo fields are preserved"
+  ],
+  "execution": {
+    "surface": "isolated ChatGPT tool container",
+    "scope": "EXACT_GIT_BLOB_COMPONENT_REGRESSION_ONLY",
+    "commands": [
+      "python -m py_compile reactive_event_router_v1.py test_reactive_event_router_v1.py",
+      "python -m unittest -v test_reactive_event_router_v1.py"
+    ],
+    "blob_identity_check": "PASS: locally reconstructed Git blob SHA-1 values exactly matched current GitHub blobs b890b6cf... and d1ea85a1... before execution",
+    "py_compile": "PASS",
+    "tests": "27/27 PASS",
+    "exit_code": 0,
+    "environment_note": "Python process emitted unrelated artifact_tool spreadsheet warmup diagnostics to stderr; py_compile and unittest both returned exit code 0."
+  },
+  "verified_mechanisms": [
+    "causal event cannot self-mint resolved engine identity/class/artifact/engine digest",
+    "model activation without control-plane EngineAdmission fails closed",
+    "unknown provider/engine and engine-class mismatch fail closed",
+    "EngineAdmission artifact digest must match independent admitted artifact registry",
+    "requested provider vs EngineAdmission mismatch fails closed",
+    "provider-absent event can use a positive separate control-plane admission",
+    "script-only event rejects EngineAdmission",
+    "stale and malformed current generation fail closed",
+    "same event plus different admitted engine artifacts preserves event identity but changes engine/route identity",
+    "Typed Entry admission binding and concrete inference receipt echo remain enforced"
+  ],
+  "unusual_experiment": {
+    "performed": false,
+    "reason": "Shared go macrocycle unusual-experiment budget was already consumed; this was deterministic fusion regression only."
+  },
+  "github_workflow_observation": {
+    "head": "f38d91e847496d9d132567b0db86e0b4f884bb56",
+    "run_id": 32652556239,
+    "job_id": 97226308792,
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "failure",
+    "visible_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT"
+  },
+  "evidence_boundary": {
+    "source_mechanism": "SUPPORTED_AT_EXACT_BLOB_SCOPE",
+    "real_engine_admission_caller_binding": "UNVERIFIED",
+    "real_0_8b_checkpoint_tokenizer_runtime_binding": "UNVERIFIED",
+    "grid10_cogsim10_runtime": "UNVERIFIED",
+    "entityos_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_gate": "Bind EngineAdmission construction to the verified loaded local ~0.8B checkpoint/tokenizer/runtime identity in the actual EntityOS/HCU control-plane caller and inference receipt producer, then execute the combined Typed Entry/router/inference path on an authorized exact-source isolated runtime."
+}

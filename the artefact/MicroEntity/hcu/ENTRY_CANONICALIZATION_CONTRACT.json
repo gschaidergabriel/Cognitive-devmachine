@@ -1,0 +1,119 @@
+{
+  "schema_version": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v6",
+  "status": "JCS_SOURCE_SPINE_WIRED_EXACT_SANDBOX_RUNTIME_PENDING",
+  "date": "2026-08-23",
+  "program": "ENTITYOS_HCU",
+  "scope": "Typed Entry causal event/admission identity -> HCU route/engine identity -> verified engine admission/load evidence -> inference receipt -> GRID10 plan identity",
+  "authority_source": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "explicit_selection_commit": "5d99c6c37fc9dbecaa557f6091de06f703e9a412",
+    "append_only_authority_correction_commit": "847cce80b5c52f7d9ceb47c43acc3c184ad2c87d",
+    "current_main_reentry_observed": "88f729d5f6c95a2a2f698ca8b1ceed24f577d8a4",
+    "law": "RFC8785_JCS_IJSON/v1 is the current selected identity canonicalization authority. Historical hashes keep their original versioned scope and are never silently reinterpreted or rehashed in place."
+  },
+  "authority": {
+    "canonical_state_evidence": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB_CANONICAL_STATE_EVIDENCE_SUBSTRATE",
+    "effect_authority": "EffectGate/EffectJournal",
+    "canonicalization_is_truth_authority": false,
+    "canonicalization_is_permission_authority": false,
+    "canonicalization_is_engine_admission_authority": false,
+    "canonicalization_is_effect_authority": false,
+    "canonicalization_is_recovery_authority": false
+  },
+  "selected_source_authority": {
+    "canonicalization": "RFC8785_JCS_IJSON/v1",
+    "implementation": "entry_canonicalization_v1.py",
+    "tests": "test_entry_canonicalization_v1.py",
+    "reference": "RFC 8785 JSON Canonicalization Scheme",
+    "source_wiring_state": "WIRED_ACROSS_CURRENT_RETAINED_CAUSAL_COMPUTE_SPINE",
+    "runtime_credit": 0,
+    "promotion_credit": 0
+  },
+  "current_retained_source_spine": {
+    "typed_entry": {
+      "event_identity": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2",
+      "admission_identity": "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2",
+      "canonicalization": "RFC8785_JCS_IJSON/v1"
+    },
+    "entry_binding": {
+      "schema": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2",
+      "law": "bare legacy admission->event digest mappings fail closed"
+    },
+    "router": {
+      "route_identity": "HCU_CAUSAL_ROUTE_IDENTITY/v4",
+      "router_policy": "HCU_REACTIVE_ROUTER_POLICY/v2",
+      "engine_identity": "HCU_INTERNAL_ENGINE_IDENTITY/v2",
+      "canonicalization": "RFC8785_JCS_IJSON/v1"
+    },
+    "engine": {
+      "admission": "versioned JCS deterministic control-plane admission",
+      "load_boundary": "generation-fenced verified loader-consumption evidence",
+      "runtime_credit": 0
+    },
+    "inference": {
+      "canonical_file": "inference_receipt_v1.py",
+      "receipt_identity": "HCU_INFERENCE_RECEIPT/v3",
+      "canonicalization": "RFC8785_JCS_IJSON/v1",
+      "requires": [
+        "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2",
+        "exact verified engine admission",
+        "generation-fenced verified engine load evidence"
+      ]
+    },
+    "grid10": {
+      "plan_identity": "ENTITYOS_HCU_GRID_PLAN/v2",
+      "canonicalization": "RFC8785_JCS_IJSON/v1",
+      "entry_binding": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2",
+      "preserves_external_entry_budget_authority": true,
+      "preserves_external_runtime_capacity_authority": true,
+      "logical_cells_are_not_physical_decode_concurrency": true
+    }
+  },
+  "migration_law": {
+    "silent_hash_rewrite": false,
+    "legacy_hashes_remain_valid_only_at_original_schema_and_source_scope": true,
+    "mixed_canonicalizer_replay_without_schema_binding": "REJECT",
+    "canonicalizer_downgrade_or_unknown_version": "REJECT",
+    "bare_legacy_entry_binding": "REJECT",
+    "historical_cbor_typed_canonical_and_python_json_hashes": "PROVENANCE_OR_COUNTEREXAMPLE_SCOPE_ONLY_NOT_CURRENT_SELECTED_AUTHORITY"
+  },
+  "source_closure_evidence_boundary": {
+    "current_main_receipt": "research_entity/continuity/receipts/2026-08-23_GO_ENTITYOS_HCU_INFERENCE_V3_GRID10_JCS_REENTRY_GPT56SOL_2357.json",
+    "retained_donor_pr": 1263,
+    "source_or_component_evidence_is_runtime_pass": false,
+    "ready_executor_is_runtime_pass": false,
+    "whole_entityos_pass": false
+  },
+  "execution_frontier": {
+    "retained_executor": "Dr.-Unterweger PR810 current-main + PR1263 atomic Vercel Sandbox snapshot controller",
+    "controller_state": "READY_ZERO_SANDBOX_RUNTIME_CREDIT",
+    "hard_blocker": "owner-held scoped read-only GitHub credential plus callable authorized transient POST /api/go-cycle-v2 are not available to this worker",
+    "next_exact_gate": "actually start Vercel Sandbox and run exact-current combined JCS Typed Entry -> route -> verified engine admission/load -> inference v3 -> GRID10 v2 regressions with stale/downgrade/authority falsifiers",
+    "vps_self_hosted_production_substitute": "FORBIDDEN"
+  },
+  "post_execution_gates": [
+    "bind actual loader-consumed local ~0.8B checkpoint/tokenizer/runtime/build bytes and measured capacity",
+    "rebase/fuse settled retained source mechanisms onto current EntityOS/HCU main without duplicate authority",
+    "rebuild and digest-bind compatibility packaging after identity/runtime semantics settle",
+    "continue restart/recovery/effect/stale-writer acceptance",
+    "build instrumented Global J-Space/GWT prototype and causal trace/lesion evidence before any owner-authorized one-shot training"
+  ],
+  "owner_training_exception": {
+    "directive_commit": "672265ff8ab1aa282e6fc17293bba97dc659f604",
+    "scope": "ONE_BOUNDED_08B_JSPACE_GWT_TOGETHER_FINE_TUNE_ONLY",
+    "status": "READY_NOT_STARTED",
+    "consumed": false,
+    "note": "This exception is outside canonicalization authority and does not change state/effect/provenance/generation law. General Together inference or a second paid run is not authorized by it."
+  },
+  "correction": {
+    "supersedes_contract_v5_wiring_pending_description": true,
+    "reason": "current retained source advanced through inference v3 and GRID10 v2 JCS fusion while v5 still described pre-migration CBOR/Python-json producers",
+    "new_unusual_experiment": false,
+    "runtime_credit_change": 0
+  },
+  "runtime_credit": 0,
+  "promotion_credit": 0,
+  "whole_entityos_pass": false,
+  "note": "The JCS source identity spine is now structurally converged at retained-donor scope. Exact executable behavior remains unverified until the authorized current-head Vercel Sandbox run actually starts and passes."
+}

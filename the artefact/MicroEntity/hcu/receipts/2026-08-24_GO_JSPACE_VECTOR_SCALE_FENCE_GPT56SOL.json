@@ -1,0 +1,89 @@
+{
+  "schema": "ENTITYOS_HCU_GO_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "scope": "JSPACE_VECTOR_CONTROL_ABI/v1 scale-rational admission",
+  "authority_refresh": {
+    "supervisor_schema": "8.61",
+    "mode": "FREE_ONLY",
+    "paid_or_unknown_provider_boundary": "FAIL_CLOSED_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION"
+  },
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "SELF_CONSISTENT_EXTREME_SCALE_PACKET",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "hypothesis": "A packet with a recomputed valid digest can supply a semantically impossible but syntactically valid rational q8 scale and pass the current validator, causing decode overflow.",
+    "counterhypothesis": "Existing schema, q8 anchor and packet digest checks already imply safe finite-binary64 decode range.",
+    "discriminator": "Start from a valid packet for vector [1.0,-0.5], replace scale_numerator with 1e309 while retaining denominator 127, recompute the packet digest with the selected canonicalizer, then validate and decode.",
+    "observed_before_repair": "validator accepted the self-consistent packet; decode raised OverflowError: integer division result too large for a float",
+    "result": "HYPOTHESIS_SUPPORTED"
+  },
+  "repair": {
+    "canonical_file": "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+    "canonical_blob_sha": "48e87a9917958c773e8e33cf37bbfb9fb5c41a55",
+    "laws_added": [
+      "bound scale decimal text before arbitrary big-integer work",
+      "preserve packet digest identity fence before semantic scale interpretation",
+      "require canonical reduced rational representation",
+      "require 127*scale to decode to a positive finite binary64 anchor"
+    ],
+    "compatibility": "jspace_vector_control_abi_v1.py remains a fail-closed compatibility wrapper onto the single canonical implementation"
+  },
+  "bounded_component_execution": {
+    "surface": "isolated ChatGPT Linux tool container",
+    "runtime_acceptance_credit": false,
+    "executed_vector_blob_sha": "48e87a9917958c773e8e33cf37bbfb9fb5c41a55",
+    "blob_identity_match": true,
+    "python_compile": "PASS",
+    "regression_harness": "equivalent local harness over current ABI behaviors",
+    "tests_run": 9,
+    "tests_passed": 9,
+    "tests_failed": 0,
+    "covered": [
+      "deterministic q8 roundtrip",
+      "null vector",
+      "generation/basis/role/control fail-closed",
+      "sign-flip/permutation controls",
+      "ordinary digest tamper",
+      "self-consistent extreme-scale packet",
+      "binary64 minimum-subnormal and maximum-finite scale endpoints",
+      "non-reduced rational alias",
+      "nonfinite/inexact-number rejection"
+    ]
+  },
+  "execution_surface_discovery": {
+    "github": "RW callable",
+    "vercel_connector": "team/project/deployment/build-log/runtime-log/protected-fetch callable; no direct Sandbox.create/runCommand or arbitrary POST action exposed",
+    "retained_controller": "Dr.-Unterweger PR810 /api/go-cycle-v2 source uses Vercel Sandbox.create and detached exact-current batch",
+    "credential_boundary": "controller needs explicit owner-held scoped GitHub read token in transient POST; no such token was available to this worker and none was fabricated"
+  },
+  "vercel_batch": {
+    "direct_vector_abi_test_present": true,
+    "latest_observed_controller_mode": "FREE_ONLY_8.61",
+    "latest_observed_ready_deployment": "dpl_8RydxSGDscHEDFVi1YJbTW7Utgr5",
+    "latest_observed_ready_commit": "b723aaafc86f2f1b96e60bc600bdb57082b17572",
+    "sandbox_probe_source": "api/sandbox-probe.js uses tokenless GET -> Sandbox.create -> runCommand -> secret fence -> cleanup on the admitted preview branch",
+    "sandbox_probe_attempt": "GET through available Vercel protected-fetch surface",
+    "sandbox_probe_observed_result": "HTTP_302_SSO_REDIRECT_BEFORE_FUNCTION; fresh generated share URL remained intercepted",
+    "sandbox_probe_execution_credit": "NONE",
+    "runtime_execution_in_this_go": "BLOCKED_BY_PROTECTED_PREVIEW_INGRESS_AND_NO_CALLABLE_CREDENTIAL_BEARING_POST",
+    "whole_runtime_credit": false
+  },
+  "training": {
+    "target": "SPECIALIZED_LOCAL_APPROX_08B_HCU_MODEL",
+    "current_method": "ZERO_COST_LOCAL_EXPERIMENTATION_ONLY",
+    "owner_paid_one_shot_directive_present_as_provenance": true,
+    "owner_paid_one_shot_directive_status": "QUARANTINED_FOR_CURRENT_FREE_ONLY_SUPERVISOR",
+    "together_preflight_or_job_creation_allowed_now": false,
+    "job_created": false,
+    "owner_paid_one_shot_job_consumed": false,
+    "reason_not_launched": "Supervisor 8.61 is FREE_ONLY and forbids paid/unknown provider credential lookup, preflight, network I/O and job creation."
+  },
+  "evidence_boundary": "Source/component evidence is not EntityOS/HCU runtime PASS, model-loader PASS, J-Space causal-use proof, training PASS, or whole-product PASS.",
+  "next_exact_gate": "Repair or use an admitted protected-preview ingress that actually reaches the tokenless FREE sandbox probe, then start an exact-source authorized FREE isolated run through the retained PR810 controller when the explicit transient owner GitHub-read credential can be supplied; require current Research main + PR1263 binding, token nonpersistence, direct vector ABI + Global J-Space/GWT + Entry/route/load/inference/GRID10 regressions. Then bind a real local ~0.8B loader and use exact traces for zero-cost local dataset/baseline readiness. Do not preflight or launch Together in current FREE_ONLY mode."
+}

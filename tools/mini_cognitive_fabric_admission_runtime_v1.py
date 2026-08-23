@@ -145,7 +145,7 @@ def admit(
     _need(resolved.get("turn_binding_digest") == invocation["turn_binding_digest"], "INVOCATION_TURN_BINDING_MISMATCH")
     _need(resolved.get("entity_generation") == generation, "ACTIVE_PREPARE_GENERATION_MISMATCH")
 
-    route = capability.resolve_from_profile(profile)
+    route = capability.resolve_bound_route(profile, resolved, expected_generation=generation)
     _need(type(route) is dict and route.get("ok") is True, "CAPABILITY_RESOLUTION_FAILED")
 
     capsule = capsule_module.compile_workspace_capsule(
@@ -200,8 +200,9 @@ def admit(
         "jacobian_lens_digest": _digest(resolved.get("jacobian_lens_digest"), "jacobian_lens_digest"),
         "workspace_calibration_digest": _digest(resolved.get("workspace_calibration_digest"), "workspace_calibration_digest"),
         "local_model_digest": _digest(resolved.get("local_model_digest"), "local_model_digest"),
-        "capability_binding_digest": _digest(route.get("binding_digest"), "capability_binding_digest"),
+        "capability_binding_digest": _digest(route.get("capability_binding_digest"), "capability_binding_digest"),
         "capability_receipt_digest": _digest(route.get("capability_receipt_digest"), "capability_receipt_digest"),
+        "capability_route_digest": _digest(route.get("route_digest"), "capability_route_digest"),
         "target_engine_class": route["target_engine_class"],
         "ucf_engine_class": route["ucf_engine_class"],
         "jspace_mode": route["jspace_mode"],
@@ -222,7 +223,8 @@ def admit(
         "inference_packet_digest": inference_packet_digest,
         "cognitive_fabric_receipt_digest": receipt_digest,
         "workspace_capsule_digest": capsule["capsule_digest"],
-        "capability_binding_digest": route["binding_digest"],
+        "capability_binding_digest": route["capability_binding_digest"],
+        "capability_route_digest": route["route_digest"],
         "activation_digest": resolved["activation_digest"],
         "inference": inference,
         "system": system,

@@ -1,0 +1,65 @@
+{
+  "schema": "ENTITYOS_HCU_VERCEL_SANDBOX_INFRASTRUCTURE_PROBE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "local_cycle_label": "GO_0054",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "supervisor": "SUPERVISOR_STEERING_8_61",
+    "free_only": true,
+    "paid_fallback": false,
+    "together_execution_allowed": false
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "deployment_id": "dpl_9CMhQY7iBNBkbWZa6L77d3cvpSaS",
+    "deployment_source_commit": "feb404cc8640fe9359b9243d3dfe66171d3138d2",
+    "probe_source_commit_present_in_deployment": "33cdfd2aecf820c9b48e7d47376f126d0e831bfd",
+    "endpoint": "/api/sandbox-probe",
+    "probe_schema": "protected-preview-tokenless-vercel-sandbox-selftest/v1"
+  },
+  "execution": {
+    "http_status": 200,
+    "status": "VERCEL_SANDBOX_EXECUTION_VERIFIED",
+    "sandbox_id": "plum-invisible-rattlesnake-kh8QYG",
+    "sandbox_session_id": "sbx_hYBpbx4myTkpPPT6l1U6vY9fPSAc",
+    "exit_code": 0,
+    "system": "Linux",
+    "machine": "x86_64",
+    "python": "Python 3.13.1",
+    "probe_file_sha256": "77707d7ae00b238db00d1d983a78f73b357afd36fdf5268c6f89a49509308436",
+    "secret_fence": "PASS",
+    "stderr_empty": true,
+    "sandbox_cleaned_up": true,
+    "cleanup_error": null
+  },
+  "credential_boundary": {
+    "github_read_token_observed_in_sandbox": false,
+    "together_api_key_observed_in_sandbox": false,
+    "preview_access_token_persisted": false,
+    "note": "Temporary Vercel preview-access material used by the connector is intentionally not recorded in this receipt."
+  },
+  "full_regression_controller": {
+    "endpoint": "/api/go-cycle-v2",
+    "credential_bearing_post_observed_in_prior_hour": false,
+    "observed_requests": "GET probes returned HTTP 405; no POST log observed",
+    "exact_private_research_main_plus_pr1263_spine_executed": false,
+    "blocker": "Full controller still requires transient owner-held scoped read-only GitHub credential to fetch exact private Research main plus retained PR1263 snapshots."
+  },
+  "credit": {
+    "vercel_sandbox_infrastructure_execution": true,
+    "entityos_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  },
+  "finding": "Vercel Sandbox.create, runCommand, filesystem I/O, hashing, environment secret fence, and cleanup are empirically callable from the retained protected preview under FREE_ONLY authority. This removes execution-surface callability uncertainty but does not establish exact-source EntityOS/HCU behavior.",
+  "next_exact_discriminator": "Start /api/go-cycle-v2 with the transient owner-held scoped read-only GitHub credential so the controller can atomically bind, fetch, TOCTOU-recheck, and execute the exact current Research main plus retained PR1263 regression spine in disposable Vercel Sandbox.",
+  "evidence_class": "EXACT_VERCEL_SANDBOX_INFRASTRUCTURE_EXECUTION_ONLY"
+}

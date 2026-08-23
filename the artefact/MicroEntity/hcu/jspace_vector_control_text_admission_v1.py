@@ -49,7 +49,13 @@ def admit_packet_text(text: str) -> VectorControlPacket:
         raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_UTF8_REQUIRED") from exc
     if len(wire) > MAX_PACKET_TEXT_UTF8_BYTES:
         raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_UTF8_BUDGET_EXCEEDED")
-    return _parse_packet_text(text)
+    try:
+        return _parse_packet_text(text)
+    except RecursionError as exc:
+        # Deep but byte-bounded JSON can still exhaust the host decoder recursion budget.
+        # Normalize that implementation failure at the untrusted-ingress boundary instead of
+        # leaking a host exception or encouraging a second parser/wire format.
+        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_JSON_DEPTH_EXCEEDED") from exc
 
 
 __all__ = [

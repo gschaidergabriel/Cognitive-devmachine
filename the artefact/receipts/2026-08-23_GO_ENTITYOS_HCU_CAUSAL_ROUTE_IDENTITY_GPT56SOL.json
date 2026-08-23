@@ -1,0 +1,92 @@
+{
+  "schema": "GO_ENTITYOS_HCU_CAUSAL_ROUTE_IDENTITY/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "authority": {
+    "product": "EntityOS",
+    "integrated_cognition_compute_architecture": "HCU",
+    "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
+    "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY",
+    "clayverse_mini_frank": "HISTORICAL_OR_DONOR_PROVENANCE_ONLY"
+  },
+  "bound_main_before_work": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "branch": "gpt56sol/entityos-hcu-causal-route-identity-20260823",
+  "source_candidate_parent_head": "9b7f3882f24e973f49d22fead7cbfdbdf5158772",
+  "donor": {
+    "pr": 1263,
+    "head": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "classification": "DONOR_MECHANISM_ONLY_NOT_CURRENT_PRODUCT_AUTHORITY"
+  },
+  "finding": "HCU_ROUTE_DECISION_CAUSAL_ALIAS_PLUS_PROVIDER_DENYLIST_FAIL_OPEN",
+  "hypothesis": "one route identity formula binding causal event digest, positive internal engine identity, router policy digest and routing result removes the observed alias while replacing provider-name denylist authority with fail-closed engine admission",
+  "counterhypothesis": "binding only the derived route or only engine identity still permits distinct causal events to alias; provider-name deny/allow lists remain incomplete authority surfaces",
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "type": "MECHANISM_LEVEL_CAUSAL_ALIAS_FALSIFIER",
+    "input": "two materially different HCU_REACTIVE_EVENT/v1 events crossing the same thresholds and selecting the same lanes",
+    "observed_old_route_digest_a": "c8bdd7700f337eb1ec86c70178e2c892135f3f55967cf9ed8da7b5ddce62a482",
+    "observed_old_route_digest_b": "c8bdd7700f337eb1ec86c70178e2c892135f3f55967cf9ed8da7b5ddce62a482",
+    "collision": true,
+    "scope": "mechanism reproduction from donor route-digest formula; not whole donor runtime execution"
+  },
+  "delta": {
+    "source": "the artefact/EntityOS/hcu/reactive_event_router_v1.py",
+    "tests": "the artefact/EntityOS/hcu/test_reactive_event_router_v1.py",
+    "router_source_sha256": "0f22b754c1883a09f13ca9ecba4d3884fb37a5f5946bf4c61037192c8ead58b9",
+    "test_source_sha256": "78b51718771209523d8319aef9465b5beb03a1470842205291632f003bec5140",
+    "router_policy_sha256": "5e8c5f5b8f284cad1ca18139a5752c5356a0d81dc39fa0aef6958e5544fb3b9f",
+    "route_identity_formula": "SHA256(schema,event_sha256,router_policy_sha256,engine_class,engine_sha256,routing_result)",
+    "positive_engine_class": "HCU_LOCAL_BUNDLED_08B",
+    "provider_alias_policy": "REJECT_ANY_REQUESTED_INTERNAL_PROVIDER_FIELD_USE_POSITIVE_BOUND_ENGINE_IDENTITY",
+    "entry_fabric_gain": "typed causal event digest is now a first-class route identity input rather than an implicit unbound payload",
+    "effect_authority_change": false,
+    "canonical_truth_authority_change": false
+  },
+  "isolated_component_execution": {
+    "surface": "isolated tool container",
+    "network_used": false,
+    "secrets_used": false,
+    "together_used": false,
+    "commands": [
+      "python3 -m py_compile reactive_event_router_v1.py test_reactive_event_router_v1.py",
+      "python3 -m unittest -v"
+    ],
+    "tests": 10,
+    "passed": 10,
+    "failed": 0,
+    "result": "PASS_COMPONENT_ONLY"
+  },
+  "falsifiers_now_covered": [
+    "active model route without positive engine class -> REJECT",
+    "unknown engine class -> REJECT",
+    "malformed engine SHA-256 -> REJECT",
+    "any requested_internal_provider alias -> REJECT",
+    "stale generation -> REJECT",
+    "different causal events selecting same lanes -> distinct event and route digests",
+    "same event with different admitted engine digest -> distinct route digests",
+    "same exact event plus engine plus policy replay -> deterministic identical decision",
+    "script-only event carrying model-engine identity -> REJECT"
+  ],
+  "known_limits": [
+    "candidate is not yet wired into the current full EntityOS runtime path",
+    "bundled local 0.8B artifact bytes were not executed in this cycle",
+    "downstream inference receipt echo of event/route/engine identity is not yet implemented",
+    "runtime-local verification that resolved_engine_sha256 maps to the admitted bundled artifact remains a next gate",
+    "no whole EntityOS/HCU runtime credit is granted"
+  ],
+  "next_gate": [
+    "wire this single route identity contract into the canonical EntityOS/HCU inference admission path without a parallel provider authority",
+    "verify resolved_engine_sha256 against the exact bundled local HCU artifact before route admission",
+    "echo event_sha256, decision_sha256, engine_class and engine_sha256 in downstream inference receipts",
+    "run HCU_INTERNAL_PROVIDER_ADMISSION_RECEIPT/v1 on an exact authorized isolated EntityOS/HCU runtime start",
+    "retain PR 1263 only as donor evidence unless rebased to current EntityOS/HCU authority"
+  ],
+  "credit": {
+    "source_candidate": true,
+    "mechanism_supported": true,
+    "exact_full_runtime_verified": false,
+    "entityos_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  }
+}

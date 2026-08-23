@@ -32,6 +32,7 @@ def valid_receipt():
         },
         "jspace": {
             "jlens_upstream_commit": H40,
+            "jspace_profile_sha256": H64,
             "lens_file_sha256": H64,
             "lens_profile_sha256": H64,
             "fit_corpus_sha256": H64,
@@ -100,6 +101,13 @@ class BootBindingValidatorTests(unittest.TestCase):
     def test_valid_source_only_receipt_passes(self):
         cp = run_validator(valid_receipt())
         self.assertEqual(cp.returncode, 0, cp.stdout + cp.stderr)
+
+    def test_missing_jspace_profile_identity_fails_closed(self):
+        receipt = valid_receipt()
+        del receipt["jspace"]["jspace_profile_sha256"]
+        cp = run_validator(receipt)
+        self.assertNotEqual(cp.returncode, 0)
+        self.assertIn("MISSING_STRING:jspace_profile_sha256", cp.stdout)
 
     def test_poison_post_load_nonfinite_fails_closed(self):
         receipt = valid_receipt()

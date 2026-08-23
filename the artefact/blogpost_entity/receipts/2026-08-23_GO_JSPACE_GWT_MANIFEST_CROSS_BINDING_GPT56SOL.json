@@ -1,0 +1,94 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "control": {
+    "bootstrap_schema": "7.1",
+    "fresh_main_before_final_fusion": "d3703db7d0d665545bc25b06335c47f06ce4c62b",
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_call": false,
+    "together_preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "money_spent_usd": 0,
+    "coordinated_swarm_execution": "NO_ADMITTED_PROVIDER_CHILD_EXECUTION_SURFACE_EXPOSED_TO_THIS_ORGAN"
+  },
+  "coordination": {
+    "macrocycle_id": null,
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0,
+    "note": "No atomic user-turn experiment lease was exposed to this organ. No post-hoc macrocycle id was invented; all mutations are deterministic regressions."
+  },
+  "pr": 1059,
+  "adjudication": {
+    "rejected_initial_candidate": "second standalone bundled-manifest validator",
+    "reason": "Current main independently landed the canonical bundled manifest validator and the separate JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 validator. A second manifest authority would duplicate the canonical path and mix source identity with runtime measurement semantics.",
+    "retained_gap": "cross-binding between independently valid manifest and boot receipt identities"
+  },
+  "canonical_inputs_observed": {
+    "bundled_manifest_validator": {
+      "path": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py",
+      "git_blob": "4f4655f441b21601922ab18cb4ca4983ada77ce8"
+    },
+    "boot_receipt_validator_before_delta": {
+      "path": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
+      "git_blob": "5bfd29093eef183dde044a796a2e82fbc909a132"
+    },
+    "boot_receipt_tests_before_delta": {
+      "path": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py",
+      "git_blob": "796024571f515b3e5711abdac7bd6ce06eb25dd7"
+    }
+  },
+  "delta": {
+    "cross_validator": {
+      "path": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_manifest_cross_binding_v1.py",
+      "git_blob": "0850edbb4f1747e6ab091814aba27a60fab1cf78",
+      "sha256": "cb9222163cb8d86287173bf1dc9cf331fce19e4037ab645b4d8b6a75fbccb5cd"
+    },
+    "cross_tests": {
+      "path": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_manifest_cross_binding_v1.py",
+      "git_blob": "4a7db3d87484a2b9d382b8442d0007584f43ea52",
+      "sha256": "166b63c390a34694978ee52e67a679fc58818cffd22f7b8af4ede60e9e2f14c0"
+    },
+    "boot_validator_after_fusion": {
+      "git_blob": "38389175400f814dc9c129fa784d20c05d22fd6b",
+      "change": "require jspace.jspace_profile_sha256 while preserving the landed dirty-source and first-action provenance guards"
+    },
+    "boot_tests_after_fusion": {
+      "git_blob": "cb7e577a7bda0dbc01b59d2b498be30672cf3584",
+      "change": "add missing-jspace-profile fail-closed regression while preserving the landed provenance regressions"
+    }
+  },
+  "cross_binding_contract": [
+    "exact manifest file SHA-256 == bundled_core.manifest_sha256",
+    "engine_id and model_family match",
+    "checkpoint_digest == checkpoint_sha256",
+    "tokenizer_digest == tokenizer_sha256",
+    "jspace_profile_digest == jspace_profile_sha256",
+    "lens_profile_digest == lens_profile_sha256",
+    "workspace_calibration_digest == gwt.calibration_sha256",
+    "steering_calibration_digest == jspace.steering_calibration_sha256 when steering is present"
+  ],
+  "deterministic_regressions": {
+    "cross_binding_suite": "PASS_8_OF_8",
+    "boot_binding_suite_after_jspace_profile_fusion": "PASS_12_OF_12",
+    "rehash_manifest_with_stale_checkpoint_shadow": "REJECTED",
+    "missing_jspace_profile_in_boot_receipt": "REJECTED",
+    "prior_dirty_source_and_first_action_provenance_guards": "PRESERVED_GREEN"
+  },
+  "execution": {
+    "environment": "Linux 6.18.35 x86_64 / Python 3.13.5",
+    "py_compile": "PASS",
+    "evidence_class": "LOCAL_EXACT_SOURCE_MECHANISM_SUPPORTED"
+  },
+  "credits": {
+    "runtime": 0,
+    "model_quality": 0,
+    "jspace_runtime": 0,
+    "whole_gwt": 0,
+    "whole_product": 0
+  },
+  "next_gate": "At the next authorized exact Ubuntu start, produce an actual JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 carrying jspace_profile_sha256; validate the canonical bundled manifest and boot receipt independently; then cross-bind them on exact observed bytes before any bundled J-Space/GWT runtime credit."
+}

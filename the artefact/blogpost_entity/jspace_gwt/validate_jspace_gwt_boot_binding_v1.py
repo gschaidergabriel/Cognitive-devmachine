@@ -103,6 +103,7 @@ def validate(data: dict) -> None:
 
     jspace = req_obj(data, "jspace")
     req_sha(jspace, "jlens_upstream_commit", 40)
+    req_sha(jspace, "jspace_profile_sha256")
     req_sha(jspace, "lens_file_sha256")
     req_sha(jspace, "lens_profile_sha256")
     req_sha(jspace, "fit_corpus_sha256")

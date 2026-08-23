@@ -21,9 +21,11 @@ def binding() -> dict:
         "activation_provenance_refs": ["activation:7"], "turn_provenance_refs": ["turn:7"],
         "boot_provenance_refs": ["boot:7"], "required_zero_mode": "COGNITIVE_MODULE_ON",
         "zero_identity_digest": h("zero"), "grf_digest": h("grf"),
-        "hyperposition_digest": h("hyper"), "local_model_digest": h("model"),
+        "hyperposition_digest": h("hyper"), "bundled_manifest_digest": h("manifest"),
+        "local_model_digest": h("model"), "tokenizer_digest": h("tokenizer"),
         "jspace_profile_digest": h("jspace"), "jacobian_lens_digest": h("lens"),
-        "workspace_calibration_digest": h("calibration"), "policy_authority_digest": h("policy"),
+        "workspace_calibration_digest": h("calibration"),
+        "boot_source_lock_digest": h("source-lock"), "policy_authority_digest": h("policy"),
     }
 
 
@@ -49,12 +51,27 @@ def resolve_active(_db, **kwargs):
     return binding()
 
 
-def resolve_capability(_profile):
+def resolve_capability(_profile, prepare, *, expected_generation):
+    assert expected_generation == 7
+    assert prepare == binding()
     return {
-        "ok": True, "binding_digest": h("cap-binding"),
-        "capability_receipt_digest": h("cap-receipt"), "adapter_version": "adaptive/v1",
-        "target_engine_class": "ADAPTIVE_BACKEND", "ucf_engine_class": "adaptive_backend",
-        "jspace_mode": "COMPILED_EXTERNAL", "profile_id": "p", "profile_hash": h("profile"),
+        "ok": True,
+        "authority": "ROUTING_ONLY_BOUND_TO_CANONICAL_PREPARE",
+        "entity_generation": 7,
+        "causal_turn_id": "turn-7",
+        "turn_binding_digest": h("turn-binding"),
+        "boot_binding_digest": h("boot-binding"),
+        "workspace_digest": h("workspace"),
+        "profile_id": "p",
+        "profile_hash": h("profile"),
+        "capability_binding_digest": h("cap-binding"),
+        "capability_receipt_digest": h("cap-receipt"),
+        "route_digest": h("bound-route"),
+        "capability_evidence_kind": "STATIC_CONSERVATIVE",
+        "adapter_version": "adaptive/v1",
+        "target_engine_class": "ADAPTIVE_BACKEND",
+        "ucf_engine_class": "adaptive_backend",
+        "jspace_mode": "COMPILED_EXTERNAL",
     }
 
 
@@ -83,11 +100,14 @@ class AdmissionTests(unittest.TestCase):
         args.update(overrides)
         return admission.prepare_admission(**args)
 
-    def test_active_turn_plus_capability_binding_compiles_candidate_admission(self):
+    def test_active_turn_plus_bound_capability_route_compiles_candidate_admission(self):
         out = self.call()
         self.assertTrue(out["ok"])
         self.assertEqual(out["admission_receipt"]["activation_digest"], h("activation"))
         self.assertEqual(out["admission_receipt"]["capability_binding_digest"], h("cap-binding"))
+        self.assertEqual(out["admission_receipt"]["capability_receipt_digest"], h("cap-receipt"))
+        self.assertEqual(out["admission_receipt"]["capability_route_digest"], h("bound-route"))
+        self.assertEqual(out["capability_route_digest"], h("bound-route"))
         self.assertEqual(out["admission_receipt"]["authority"], "CANDIDATE_INFERENCE_ONLY")
         self.assertEqual(out["cognitive_fabric_receipt_digest"], admission.sha256_obj(out["admission_receipt"]))
 
@@ -116,12 +136,32 @@ class AdmissionTests(unittest.TestCase):
         with self.assertRaisesRegex(admission.AdmissionError, "INVOCATION_ACTIVE_TURN_MISMATCH"):
             self.call(invocation=inv)
 
-    def test_capability_profile_snapshot_drift_fails_closed(self):
-        bad = resolve_capability(profile()); bad["profile_hash"] = h("other-profile")
+    def test_bound_route_profile_snapshot_drift_fails_closed(self):
+        bad = resolve_capability(profile(), binding(), expected_generation=7)
+        bad["profile_hash"] = h("other-profile")
         with self.assertRaisesRegex(admission.AdmissionError, "CAPABILITY_PROFILE_HASH_DRIFT"):
-            self.call(resolve_capability=lambda _p: bad)
+            self.call(resolve_capability=lambda _p, _b, *, expected_generation: bad)
 
-    def test_post_admission_mutable_alias_poison_is_contained(self):
+    def test_bound_route_must_be_derived_from_same_active_turn(self):
+        bad = resolve_capability(profile(), binding(), expected_generation=7)
+        bad["turn_binding_digest"] = h("other-turn-binding")
+        with self.assertRaisesRegex(admission.AdmissionError, "CAPABILITY_ROUTE_TURN_BINDING_DRIFT"):
+            self.call(resolve_capability=lambda _p, _b, *, expected_generation: bad)
+
+    def test_bound_route_authority_escalation_fails_closed(self):
+        bad = resolve_capability(profile(), binding(), expected_generation=7)
+        bad["authority"] = "TRUTH_AND_EFFECTS"
+        with self.assertRaisesRegex(admission.AdmissionError, "CAPABILITY_BOUND_ROUTE_AUTHORITY_MISMATCH"):
+            self.call(resolve_capability=lambda _p, _b, *, expected_generation: bad)
+
+    def test_capability_route_identity_changes_admission_identity(self):
+        a = self.call()
+        altered = resolve_capability(profile(), binding(), expected_generation=7)
+        altered["route_digest"] = h("different-bound-route")
+        b = self.call(resolve_capability=lambda _p, _b, *, expected_generation: altered)
+        self.assertNotEqual(a["cognitive_fabric_receipt_digest"], b["cognitive_fabric_receipt_digest"])
+
+    def test_post_admission_mutable_alias_poison_is_contained_regression(self):
         p = profile()
         original = copy.deepcopy(p["inference"])
         out = self.call(profile=p)

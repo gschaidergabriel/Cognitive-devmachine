@@ -1,6 +1,6 @@
 import hashlib
 import unittest
-from dataclasses import replace
+from dataclasses import asdict, replace
 
 from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
 from global_jspace_gwt_v1 import CellContribution, step
@@ -69,6 +69,10 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
         payload.update(overrides)
         receipt_sha256 = hashlib.sha256(canonicalize(payload)).hexdigest()
         return InferenceReceipt(**payload, receipt_sha256=receipt_sha256)
+
+    @staticmethod
+    def admitted(receipt):
+        return {receipt.receipt_sha256: asdict(receipt)}
 
     def build(self, *, proto=None, packet=None, **overrides):
         proto = proto or self.prototype()
@@ -157,29 +161,58 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
             self.build(proto=proto, packet=wrong_condition)
 
     def test_nonunknown_credit_rejects_bare_hash_transplant(self):
-        with self.assertRaisesRegex(JSpaceTrainingTraceError, "NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_INFERENCE_RECEIPT"):
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "NONUNKNOWN_CREDIT_REQUIRES_ADMITTED_INFERENCE_RECEIPT"):
             self.build(
                 credit_label="POSITIVE",
                 outcome_receipt_sha256="6" * 64,
                 provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
             )
 
-    def test_nonunknown_credit_accepts_matching_verified_inference_receipt(self):
+    def test_nonunknown_credit_rejects_unadmitted_constructible_receipt(self):
         receipt = self.inference_receipt()
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "INFERENCE_RECEIPT_NOT_ADMITTED"):
+            self.build(
+                credit_label="POSITIVE",
+                outcome_receipt=receipt,
+                admitted_inference_receipts={},
+                provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
+            )
+
+    def test_nonunknown_credit_accepts_matching_admitted_inference_receipt(self):
+        receipt = self.inference_receipt()
+        registry = self.admitted(receipt)
         trace = self.build(
             credit_label="POSITIVE",
             outcome_receipt=receipt,
             outcome_receipt_sha256=receipt.receipt_sha256,
+            admitted_inference_receipts=registry,
             provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
             observed_downstream_outcome="VERIFIED_TASK_SUCCESS",
         )
+        validate_training_trace(trace, admitted_inference_receipts=registry)
         self.assertEqual(trace.credit_label, "POSITIVE")
         self.assertEqual(trace.outcome_receipt_sha256, receipt.receipt_sha256)
+
+    def test_nonunknown_credit_requires_registry_on_revalidation(self):
+        receipt = self.inference_receipt()
+        registry = self.admitted(receipt)
+        trace = self.build(
+            credit_label="POSITIVE",
+            outcome_receipt=receipt,
+            admitted_inference_receipts=registry,
+            provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
+        )
+        with self.assertRaisesRegex(JSpaceTrainingTraceError, "ADMITTED_INFERENCE_RECEIPT_REGISTRY_REQUIRED"):
+            validate_training_trace(trace)
 
     def test_nonunknown_credit_requires_verified_outcome_provenance(self):
         receipt = self.inference_receipt()
         with self.assertRaisesRegex(JSpaceTrainingTraceError, "NONUNKNOWN_CREDIT_REQUIRES_VERIFIED_OUTCOME_PROVENANCE"):
-            self.build(credit_label="POSITIVE", outcome_receipt=receipt)
+            self.build(
+                credit_label="POSITIVE",
+                outcome_receipt=receipt,
+                admitted_inference_receipts=self.admitted(receipt),
+            )
 
     def test_outcome_receipt_causal_transplants_fail_closed(self):
         proto = self.prototype()
@@ -197,6 +230,7 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
                         proto=proto,
                         credit_label="POSITIVE",
                         outcome_receipt=receipt,
+                        admitted_inference_receipts=self.admitted(receipt),
                         provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
                     )
 
@@ -206,6 +240,7 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
             self.build(
                 credit_label="POSITIVE",
                 outcome_receipt=receipt,
+                admitted_inference_receipts=self.admitted(receipt),
                 provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
             )
 
@@ -216,6 +251,7 @@ class JSpaceTrainingTraceTests(unittest.TestCase):
                 credit_label="POSITIVE",
                 outcome_receipt=receipt,
                 outcome_receipt_sha256="6" * 64,
+                admitted_inference_receipts=self.admitted(receipt),
                 provenance_evidence_class="EXACT_PROTOTYPE_TRACE_WITH_VERIFIED_OUTCOME",
             )
 

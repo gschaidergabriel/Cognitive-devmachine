@@ -81,7 +81,7 @@ class Capability:
     authority = "ROUTING_ONLY_BOUND_TO_CANONICAL_PREPARE"
 
     @classmethod
-    def resolve_bound_route(cls, profile, prepare, *, expected_generation):
+    def resolve_bound_route(cls, profile, prepare, *, expected_generation, db=None):
         snapshot = profile.get("_runtime_profile_snapshot")
         if not isinstance(snapshot, dict):
             raise ValueError("PROFILE_SNAPSHOT_MISSING")
@@ -224,8 +224,13 @@ class AdmissionTests(unittest.TestCase):
     def test_bound_route_turn_drift_fails_closed(self):
         class BadCapability(Capability):
             @classmethod
-            def resolve_bound_route(cls, profile, prepare, *, expected_generation):
-                out = super().resolve_bound_route(profile, prepare, expected_generation=expected_generation)
+            def resolve_bound_route(cls, profile, prepare, *, expected_generation, db=None):
+                out = super().resolve_bound_route(
+                    profile,
+                    prepare,
+                    expected_generation=expected_generation,
+                    db=db,
+                )
                 out["causal_turn_id"] = "other-turn"
                 return out
 

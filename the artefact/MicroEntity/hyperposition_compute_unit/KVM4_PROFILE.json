@@ -1,0 +1,32 @@
+{
+  "schema": "HCU_HARDWARE_PROFILE/v1",
+  "profile_id": "KVM4_4CPU_16GB_200GB_16TB",
+  "source": "owner screenshot 2026-08-23",
+  "deployment_target_only": true,
+  "runtime_credit": 0,
+  "hardware": {
+    "cpu_cores": 4,
+    "memory_gib": 16,
+    "disk_gib": 200,
+    "bandwidth_tib": 16,
+    "gpu": "NONE_ASSUMED"
+  },
+  "resource_policy": {
+    "memory_reserve_gib": 3.0,
+    "max_cpu_execution_lanes": 4,
+    "preferred_cell_mode": "SHARED_BASE_08B_CELL",
+    "full_resident_capacity_requires_measured_rss": true,
+    "shared_base_capacity_requires_measured_incremental_rss": true,
+    "disk_cold_slots_allowed": true
+  },
+  "planning_only_assumptions": {
+    "enabled": true,
+    "notes": "Used only for rough static planning. Never runtime/acceptance evidence.",
+    "approx_model_parameters": 800000000,
+    "candidate_quantization_bits_per_weight": 4.5,
+    "shared_base_dynamic_overhead_mib": 768,
+    "shared_cell_incremental_state_mib": 192,
+    "full_cell_runtime_overhead_mib": 384,
+    "full_cell_kv_state_mib": 256
+  }
+}

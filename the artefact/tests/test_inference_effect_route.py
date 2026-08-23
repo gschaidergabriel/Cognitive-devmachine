@@ -1,3 +1,6 @@
+import hashlib
+import json
+
 from clayverse.engine import ClayVerseEngine
 from clayverse.store import UnifiedDB
 
@@ -59,6 +62,24 @@ def test_unavailable_entityos_is_denied_and_causally_reentered(tmp_path):
         result = engine.ingest("g", "perform the requested action if admitted")
 
         assert inference.world["runtime_capabilities"] == ["state.noop"]
+        control = inference.world["workspace_control"]
+        assert control["episode_id"] == result["workspace"]["episode_id"]
+        assert control["turn_id"] == result["turn_id"]
+        assert control["generation"] == db.session_generation(result["session_id"])
+        assert control["salience"] == result["workspace"]["salience"]
+        assert control["alternatives"] == result["workspace"]["alternatives"]
+        assert control["truth_authority"] is False
+        assert control["effect_authority"] is False
+        digest_material = {key: value for key, value in control.items() if key != "control_digest"}
+        encoded = json.dumps(
+            digest_material,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        assert hashlib.sha256(encoded).hexdigest() == control["control_digest"]
+        assert result["workspace_control_digest"] == control["control_digest"]
+
         assert result["effect_id"]
         assert result["outcome"] == {
             "ok": False,

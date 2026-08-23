@@ -37,14 +37,16 @@
     "counterhypothesis": "The provider can safely enforce its own context or body limit after authentication; falsified locally because a request above the runtime envelope reached the authenticated opener, while the repaired boundary rejects it before even reading the runtime environment and still accepts an exact-limit payload."
   },
   "request_pre_serialization_bound": {
-    "checked_at": "2026-08-21",
-    "claim": "Validated request text and message structure are checked against an allocation-free lower bound before json.dumps materializes the JSON document. The bound counts the default ensure_ascii escape width of every Unicode scalar, including six-byte BMP escapes and twelve-byte non-BMP surrogate pairs. Requests that cannot fit the 2000000-byte envelope are rejected before serialization; the exact serialized UTF-8 byte check remains authoritative for requests that pass the preflight.",
+    "checked_at": "2026-08-24",
+    "claim": "Validated request text and message structure are checked against an allocation-free lower bound before json.dumps materializes the JSON document. The bound counts the default ensure_ascii escape width of every Unicode scalar, including the six-byte escape for non-printable ASCII DEL, six-byte BMP escapes and twelve-byte non-BMP surrogate pairs. Requests that cannot fit the 2000000-byte envelope are rejected before serialization; the exact serialized UTF-8 byte check remains authoritative for requests that pass the preflight.",
     "source": "https://docs.python.org/3/library/json.html#json.dumps",
     "executable_evidence": [
       "test_oversized_request_is_rejected_before_json_materialization",
-      "test_escaped_unicode_overflow_is_rejected_before_json_materialization"
+      "test_escaped_unicode_overflow_is_rejected_before_json_materialization",
+      "test_del_escape_overflow_is_rejected_before_json_materialization"
     ],
-    "counterhypothesis": "Counting Python characters is a sufficient pre-serialization lower bound; falsified locally because 166667 non-BMP scalars passed the character count while default json.dumps escaped each to a twelve-byte surrogate pair and materialized a request above the cap."
+    "internal_measurement": "The repaired scalar-width function matched json.dumps(ensure_ascii=True) for all 1112064 Unicode scalar values.",
+    "counterhypothesis": "Counting Python characters, or treating every ASCII code point as one output byte, is a sufficient pre-serialization lower bound; falsified locally because non-BMP scalars expand twelvefold and U+007F expands from one Python character to the six-byte escape \\u007f before the JSON document is allocated."
   },
   "request_pre_snapshot_cardinality_bound": {
     "max_messages": 62500,

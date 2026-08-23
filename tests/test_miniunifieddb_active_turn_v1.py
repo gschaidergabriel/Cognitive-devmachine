@@ -105,6 +105,39 @@ class ActiveTurnTests(unittest.TestCase):
         self.assertEqual(resolved["turn_binding_digest"], self.binding)
         self.assertEqual(resolved["activation_digest"], activated["activation_digest"])
 
+    def test_prepare_resolution_works_under_query_only(self):
+        activated = self.activate()
+        self.db.execute("PRAGMA query_only=ON")
+        resolved = active.resolve_active_prepare(
+            self.db,
+            entity_generation=3,
+            expected_activation_digest=activated["activation_digest"],
+            store_module=FakeStore,
+        )
+        self.assertEqual(resolved["causal_turn_id"], "turn-3-a")
+        self.assertEqual(resolved["task_text"], self.task)
+
+    def test_prepare_resolution_does_not_install_missing_schema(self):
+        db = sqlite3.connect(":memory:")
+        db.execute(
+            "CREATE TABLE entity_state(id INTEGER PRIMARY KEY,generation INTEGER NOT NULL)"
+        )
+        db.execute("INSERT INTO entity_state VALUES(1,3)")
+        db.execute(
+            """CREATE TABLE mini_cognition_turn_bindings(
+                 entity_generation INTEGER NOT NULL,
+                 causal_turn_id TEXT NOT NULL,
+                 binding_digest TEXT NOT NULL,
+                 task_sha256 TEXT NOT NULL,
+                 PRIMARY KEY(entity_generation,causal_turn_id))"""
+        )
+        with self.assertRaisesRegex(active.ActiveTurnError, "ACTIVE_TURN_SCHEMA_REQUIRED"):
+            active.resolve_active_prepare(db, entity_generation=3, store_module=FakeStore)
+        created = db.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='mini_cognition_active_turns'"
+        ).fetchone()
+        self.assertIsNone(created)
+
     def test_task_text_must_match_preexisting_bound_hash(self):
         with self.assertRaisesRegex(active.ActiveTurnError, "TURN_TASK_BINDING_MISMATCH"):
             active.activate_bound_turn(

@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "execution_mode": "FREE_ONLY",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "observed_main_before_receipt": "2454405f04ffdaca0e84b0f08586ebc33a5c5ae1",
+  "retained_hcu_lane": "gschaidergabriel/clay-global-research-entity#1263",
+  "observed_hcu_head_after_reentry": "711ef9a140fe7147f76b74097ef63f8f1d9d0cf5",
+  "retained_executor_lane": "gschaidergabriel/Dr.-Unterweger#810",
+  "observed_executor_head_after_reentry": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+  "coordination": {
+    "upstream_shared_macrocycle_identity": "UNAVAILABLE",
+    "atomic_unusual_experiment_claim": "NOT_ATTEMPTED",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable upstream request/macrocycle identity was available; the local trigger time surface did not supply a protocol-sufficient reproducible high-precision identity. Ordinary deterministic source review, fusion and regression-source work only.",
+    "new_unusual_experiments_executed": 0
+  },
+  "delta": {
+    "classification": "SOURCE_JSPACE_VECTOR_TEXT_JSON_DEPTH_FAIL_CLOSED_FENCE",
+    "finding": "The bounded untrusted J-Space Vector-Control text ingress limited characters and UTF-8 bytes before the canonical json parser, but byte/character bounds alone did not bound parser nesting failure. A deeply nested JSON document can remain below the 65536-character budget while Python json.loads raises RecursionError, which the canonical parser does not normalize.",
+    "counterhypothesis": "The existing character and UTF-8 byte ceilings alone are sufficient to guarantee deterministic domain-level rejection for every bounded untrusted JSON input.",
+    "discriminator": "A deterministic local Python-stdlib probe using approximately 10000 nested JSON arrays stayed below the configured text budget and produced RecursionError. This is host-language discriminator evidence only, not EntityOS/HCU runtime evidence.",
+    "repair_source_commit": "4f65f86b863b1c2079f931dc13534b7ac95a2828",
+    "regression_source_commit": "4a63727578540d27660614cb5bd2c13450f2a2b1",
+    "contract_sync_commit": "70ba265cebec55249a4c2937eba3827e31a70e95",
+    "source_path": "the artefact/MicroEntity/hcu/jspace_vector_control_text_admission_v1.py",
+    "test_path": "the artefact/MicroEntity/hcu/test_jspace_vector_control_text_admission_v1.py",
+    "contract_path": "the artefact/MicroEntity/hcu/JSPACE_VECTOR_CONTROL_TEXT_ADMISSION_CONTRACT.json",
+    "live_source_blob_observed": "6cb1c167ab1884a69353d9b117c77a9c07223a1f",
+    "live_test_blob_observed": "b588f817925eaeb7be72b4c0d89f317dd7e810c8",
+    "live_contract_blob_observed": "f6aa49fc3d0bfad184518a2abc1d6badabd29dc8",
+    "mechanism": "The existing untrusted-text admission wrapper now catches RecursionError from the sole canonical parser and deterministically raises JSpaceVectorControlError:VECTOR_CONTROL_TEXT_JSON_DEPTH_EXCEEDED. The wire format and canonical parser remain unchanged; no second parser, truth store, state authority or effect path is created.",
+    "regressions_encoded": [
+      "A mocked canonical-parser RecursionError must be normalized to VECTOR_CONTROL_TEXT_JSON_DEPTH_EXCEEDED.",
+      "A real approximately-10000-level nested JSON value below the current character ceiling must never leak a raw RecursionError through admit_packet_text."
+    ],
+    "ci_status": "NO_GITHUB_ACTIONS_WORKFLOW_RUN_OBSERVED_FOR_THE_RELEVANT_CURRENT_DONOR_HEAD_DURING_THIS_MACROCYCLE",
+    "runtime_evidence": "NONE_SOURCE_AND_DETERMINISTIC_REGRESSION_SOURCE_ONLY",
+    "parallel_fusion": "An initially created standalone DatasetAdmission vector-packet guard was removed after a parallel worker integrated the same packet-preimage admission invariant directly into the existing canonical DatasetAdmission gate. GitHub stale-write fences were respected; no force update or history rewrite was used.",
+    "readme": "NO_CHANGE_WITH_REASON: the artefact/README.md was under rapid concurrent append/update activity and the available contents write replaces the full file. An append-only canonical receipt was chosen to preserve the current README and avoid clobbering parallel deltas."
+  },
+  "executor_reentry": {
+    "exact_live_executor_head": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+    "exact_head_ready_deployment_observed": false,
+    "latest_observed_newer_rebind_previews": [
+      {
+        "executor_sha": "926c22dd57ef82447787e24c7412548c3ed2b890",
+        "deployment_state": "ERROR",
+        "failure_scope": "SOURCE_CLOSURE_BLOB_MISMATCH_BEFORE_RUNTIME"
+      },
+      {
+        "executor_sha": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+        "deployment_state": "ERROR",
+        "failure_scope": "DONOR_MANIFEST_CONTRACT_DRIFT_BEFORE_RUNTIME"
+      }
+    ],
+    "runtime_invocation": "NOT_PERFORMED_NO_EXACT_CURRENT_READY_DEPLOYMENT",
+    "credit": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "NO_CHANGE_WITH_REASON: the single executor lane was re-entered and predecessor build/source failures were classified, but no READY included-tier deployment exactly matching the live executor head was observed; stale or failed previews were not invoked or credited.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: hardened the reusable HCU JSPACE_VECTOR_CONTROL_ABI/v1 untrusted text-ingress boundary so bounded deeply nested JSON cannot leak a raw host recursion exception, while preserving the sole parser/wire/authority path.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: added deterministic fail-closed regression source and synchronized the Vector-Control text admission contract, reducing malformed/untrusted training-control ingress ambiguity without granting model-runtime or training credit."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Re-enter current main, PR1263 and PR810. If and only if an included-tier READY Vercel deployment exactly matches the then-current PR810 head, invoke the single fixed FREE_ONLY route after all source/manifest/cost guards and keep any result component-scoped. In the donor lane, continue binding validated Vector-Control packet identity through exact executor-consumed input evidence into admitted ModelExecution/Inference ancestry and leak-resistant causal-family training data; execute the new depth regression only on an admitted exact-source free surface when available."
+}

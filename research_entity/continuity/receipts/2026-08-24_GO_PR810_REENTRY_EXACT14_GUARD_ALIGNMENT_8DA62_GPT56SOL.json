@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "c5f8b95202e987b95aa52ea73575199eff1cff37",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "force_push_used": false,
+    "concurrent_write_409s_observed": 3,
+    "concurrent_write_policy": "REENTER_AND_FUSE_NEVER_FORCE",
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "executor_convergence": {
+    "current_head_observed": "8da62da2b43b58117e7b68097dc2f70e12a4d4e0",
+    "direct_commits_from_this_macrocycle": [
+      "f516753f5478ef52120336633ac8606999d30142",
+      "8d8c02dbc4640d16c440f205d1fd5a30f5227b01",
+      "3c81d2dc9b9e7f428416d7273a9e60cb8b85c028"
+    ],
+    "direct_deltas": [
+      "rebind sync checker aligned to the route's fail-closed contract.schema !== current-schema guard",
+      "promotion guard made successor-dynamic for the current contract/manifest/17-blob route instead of obsolete FILES/exactRouteMap implementation markers",
+      "exclusive EntityOS/HCU executor guard made successor-dynamic and bound to the active donor/promotion/permission guard chain"
+    ],
+    "parallel_fused_deltas_observed": [
+      "SOURCE_REBIND_REQUIRED now terminates after exact deployment-carried source verification as SOURCE_REBIND_VERIFIED_AWAITING_PROMOTION before the FREE_ONLY cost gate",
+      "READY permission semantics require source load and deployment verification outside the old quarantine block before cost admission",
+      "the executable route exposes an explicit 14-name regression set and derives EXPECTED_TEST_COUNT from it",
+      "the result predicate requires every declared test identity, exact Ran 14 summary, standalone OK, secret fence, fixed-command sentinel, and rejects FAILED/skipped=/expected failures=",
+      "the active promotion-contract-v2 guard now validates the same combined stdout+stderr exact-result semantics"
+    ]
+  },
+  "evidence": {
+    "exact_donor_blob_count": 17,
+    "exact_regression_identity_count": 14,
+    "source_rebind_contract_status": "SOURCE_REBIND_REQUIRED",
+    "source_rebind_terminal_before_cost_gate": true,
+    "exact_14_result_fence_present_in_route": true,
+    "active_promotion_guard_semantics_aligned_with_route": true,
+    "latest_vercel_status_for_exact_executor_head": "FAILURE_BUILD_RATE_LIMIT",
+    "latest_ready_preview_observed_commit": "2dfa1edcab41fba34282b34956716e7c222ee517",
+    "latest_ready_preview_is_exact_current_head": false,
+    "sandbox_runtime_observed": false,
+    "route_invocation_observed": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "together_preflight_or_credential_use": false
+  },
+  "interpretation": {
+    "source_level": "The previously conflicting successor route/promotion/permission checks have converged on one stronger fail-closed source model at the observed head. This removes several deterministic build-validator drifts but is not runtime evidence.",
+    "external_blocker": "Vercel Hobby build-rate limiting prevents an exact-current READY preview. This is infrastructure/admission evidence, not a product regression or scientific negative.",
+    "promotion_boundary": "SOURCE_REBIND_REQUIRED remains non-executable. A coherent SOURCE_REBOUND_READY transition must preserve source verification, immutable pre-rebind denial history, separate post-rebind permission, FREE_ONLY cost admission, and zero model/training credit before any exact-head invocation."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: three stale-validator/build-guard mismatches were repaired in the retained executor lane and later parallel changes were re-entered without force, leaving the observed current source path coherent up to the explicit SOURCE_REBOUND_READY gate.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the exact 17-blob Typed Entry -> route -> engine/load -> GRID10 -> atomic ModelExecution -> Inference/v4 closure remains the single retained source chain and is now guarded consistently across prebuild and exclusive build surfaces.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: all 14 declared ModelExecution/Inference-v4/JSpaceBinding-v3 regression identities are required on the executable result surface with hard-negative failure/skip fences; model and training credit remain zero."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current-facing executor and research-main surfaces are moving rapidly under parallel organs; append-only exact-head receipt avoids clobbering concurrent state."
+  },
+  "next_exact_gate": "Re-enter PR810 after parallel movement. If the source model remains coherent, perform one atomic successor-ready source transition only if it preserves exact 17-blob source verification outside the old quarantine block, sandbox_create_permitted_before_source_rebind=false as immutable history, source_rebind_complete=true, sandbox_create_permitted_after_source_rebind=true, the exact 14-result fence, and the FREE_ONLY cost gate before Sandbox.create. Then require a READY Vercel preview whose immutable Git SHA equals the then-current PR810 head before any route invocation. Do not upgrade, preflight Together, or mint runtime/model/training credit while build-rate limited."
+}

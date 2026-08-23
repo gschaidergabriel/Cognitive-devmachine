@@ -7,10 +7,13 @@ ENGINE_A_SHA256 = "a" * 64
 ENGINE_B_SHA256 = "b" * 64
 
 
-def base_event():
+def base_event(*, event_id="evt-1", causal_id="causal-1"):
     return {
         "schema": "HCU_REACTIVE_EVENT/v1",
         "entity_generation": 7,
+        "event_source": "xeno://test/reactive-router",
+        "event_id": event_id,
+        "causal_id": causal_id,
         "novelty": 0.05,
         "contradiction": 0.0,
         "uncertainty": 0.10,
@@ -21,9 +24,9 @@ def base_event():
     }
 
 
-def bind_local_engine(event, *, artifact_sha256=ENGINE_A_SHA256):
+def bind_local_engine(event, *, artifact_sha256=ENGINE_A_SHA256, provider="hcu"):
     event.update(
-        requested_internal_provider="hcu",
+        requested_internal_provider=provider,
         resolved_internal_engine="hcu_local_08b",
         resolved_internal_engine_class="LOCAL_SHARED_WEIGHT_08B",
         resolved_internal_engine_artifact_sha256=artifact_sha256,
@@ -38,6 +41,9 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertEqual(decision.model_lanes, ())
         self.assertFalse(decision.zero_projection)
         self.assertFalse(decision.external_provider_dependency)
+        self.assertEqual(decision.event_source, "xeno://test/reactive-router")
+        self.assertEqual(decision.event_id, "evt-1")
+        self.assertEqual(decision.causal_id, "causal-1")
         self.assertEqual(len(decision.event_sha256), 64)
         self.assertEqual(len(decision.router_policy_sha256), 64)
         self.assertIsNone(decision.resolved_engine_identity)
@@ -76,6 +82,20 @@ class ReactiveRouterTests(unittest.TestCase):
         e = base_event(); e["requested_internal_provider"] = "future-free-cloud"
         with self.assertRaisesRegex(ReactiveRoutingError, "UNKNOWN_OR_EXTERNAL_PROVIDER_FORBIDDEN"):
             route_event(e, current_generation=7)
+
+    def test_admitted_provider_alias_requires_matching_resolved_engine(self):
+        e = base_event(); e["requested_internal_provider"] = "local"
+        with self.assertRaisesRegex(ReactiveRoutingError, "REQUESTED_INTERNAL_PROVIDER_ENGINE_MISMATCH"):
+            route_event(e, current_generation=7)
+
+    def test_admitted_provider_aliases_converge_only_after_same_canonical_engine_resolution(self):
+        a_event = bind_local_engine(base_event(), provider="hcu"); a_event.update(novelty=0.8)
+        b_event = bind_local_engine(base_event(), provider="xeno"); b_event.update(novelty=0.8)
+        a = route_event(a_event, current_generation=7)
+        b = route_event(b_event, current_generation=7)
+        self.assertEqual(a.event_sha256, b.event_sha256)
+        self.assertEqual(a.engine_identity_sha256, b.engine_identity_sha256)
+        self.assertEqual(a.decision_sha256, b.decision_sha256)
 
     def test_model_activation_without_bound_engine_fails_closed(self):
         e = base_event(); e.update(novelty=0.8, zero_relevance=0.8)
@@ -132,6 +152,22 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertNotEqual(a.event_sha256, b.event_sha256)
         self.assertNotEqual(a.decision_sha256, b.decision_sha256)
 
+    def test_signal_identical_distinct_occurrences_do_not_alias(self):
+        a_event = bind_local_engine(base_event(event_id="evt-a", causal_id="causal-a")); a_event.update(novelty=0.8)
+        b_event = bind_local_engine(base_event(event_id="evt-b", causal_id="causal-b")); b_event.update(novelty=0.8)
+        a = route_event(a_event, current_generation=7)
+        b = route_event(b_event, current_generation=7)
+        self.assertEqual(a.model_lanes, b.model_lanes)
+        self.assertNotEqual(a.event_sha256, b.event_sha256)
+        self.assertNotEqual(a.decision_sha256, b.decision_sha256)
+
+    def test_missing_occurrence_identity_fails_closed(self):
+        for field, expected in (("event_source", "EVENT_SOURCE"), ("event_id", "EVENT_ID"), ("causal_id", "CAUSAL_ID")):
+            e = base_event(); del e[field]
+            with self.subTest(field=field):
+                with self.assertRaisesRegex(ReactiveRoutingError, expected):
+                    route_event(e, current_generation=7)
+
     def test_engine_binding_is_part_of_route_identity(self):
         e = bind_local_engine(base_event()); e.update(novelty=0.8, zero_relevance=0.8)
         decision = route_event(e, current_generation=7)
@@ -141,9 +177,8 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertEqual(len(decision.decision_sha256), 64)
 
     def test_same_causal_event_engine_artifact_flip_changes_route_identity_only(self):
-        # Unusual discriminator for this GO: hold event semantics and route topology fixed,
-        # perturb only exact engine bytes. Event identity must stay stable while the engine
-        # and route decision identities change.
+        # Existing unusual discriminator retained from the parent GO. This dependent
+        # repair adds deterministic occurrence/provider regressions only.
         a_event = bind_local_engine(base_event(), artifact_sha256=ENGINE_A_SHA256); a_event.update(novelty=0.8)
         b_event = bind_local_engine(base_event(), artifact_sha256=ENGINE_B_SHA256); b_event.update(novelty=0.8)
         a = route_event(a_event, current_generation=7)
@@ -153,18 +188,21 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertNotEqual(a.engine_identity_sha256, b.engine_identity_sha256)
         self.assertNotEqual(a.decision_sha256, b.decision_sha256)
 
-    def test_inference_receipt_must_echo_event_route_and_engine(self):
+    def test_inference_receipt_must_echo_occurrence_event_route_and_engine(self):
         e = bind_local_engine(base_event()); e.update(novelty=0.8)
         decision = route_event(e, current_generation=7)
         receipt = {
+            "event_source": decision.event_source,
+            "event_id": decision.event_id,
+            "causal_id": decision.causal_id,
             "event_sha256": decision.event_sha256,
             "decision_sha256": decision.decision_sha256,
             "engine_identity_sha256": decision.engine_identity_sha256,
             "resolved_engine_identity": decision.resolved_engine_identity,
         }
         assert_inference_echo(decision, receipt)
-        poisoned = dict(receipt); poisoned["event_sha256"] = "0" * 64
-        with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_EVENT_SHA256_MISMATCH"):
+        poisoned = dict(receipt); poisoned["causal_id"] = "causal-other"
+        with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_CAUSAL_ID_MISMATCH"):
             assert_inference_echo(decision, poisoned)
 
 

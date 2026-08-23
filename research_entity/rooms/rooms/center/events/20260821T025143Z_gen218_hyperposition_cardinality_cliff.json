@@ -1,0 +1,103 @@
+{
+  "schema": "clay.research_impulse/v1",
+  "event_id": "20260821T025143Z_gen218_hyperposition_cardinality_cliff",
+  "created_at": "2026-08-21T02:51:43Z",
+  "title": "Gen218 Hyperposition object-word conflation and evidence cardinality cliff",
+  "status": "HYPOTHESIS_ROUTED_EXECUTION_OPEN",
+  "routes": [
+    "clayresearch",
+    "frank",
+    "gwt",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness"
+  ],
+  "provenance": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "observed_head": "28db706142b1f6aa5646361cf3a6dda88b0b28c6",
+    "agentzero_export_commit": "f9813d0d74c14339eb5fafd64ea58baf39047093",
+    "agentzero_export_tree": "5d25fe487a0284510f7514369b02310e22b6f11a",
+    "source_short_unbound": "0e58337bc",
+    "source_file": "agentZero/code/produkt/hyperposition.py",
+    "source_blob": "86fb2f27e3886069dfc003638e86cf1b27024a15",
+    "test_receipt_file": "agentZero/tests/letzter-lauf.json",
+    "test_receipt_blob": "3ba9d9df206042f04ec167c7b6b6963c3e96eddb",
+    "related_supervisor_commit": "28db706142b1f6aa5646361cf3a6dda88b0b28c6",
+    "related_research_commit": "138d047eb75eaca14e771973e38d6fee604924ea"
+  },
+  "delta": [
+    "Hyperposition now falls back from missing relation_key/predicate to groups formed by one shared normalized content word.",
+    "A shared object word does not establish that two values are alternative values of the same predicate; path, hostname and owner statements about the same object may be conflated.",
+    "The fallback accepts a token only when it occurs in 2..3 entries. A fourth corroborating or distinct entry removes the entire inferred relation, creating a non-monotonic evidence-cardinality cliff.",
+    "Explicit relation_key/predicate remains the stronger path and is not implicated by this fallback defect.",
+    "Gen218 reports 780 green and 2 red; the new Auftrag rewrite red and persistent runtime-adapter red remain separate frontiers."
+  ],
+  "concepts": [
+    {
+      "name": "Object-Word Predicate Conflation",
+      "hypothesis": "Grouping on one shared long word merges different predicates about the same object into false alternatives.",
+      "counterhypothesis": "The length/frequency caps make the shared word specific enough that held-out false groupings remain negligible."
+    },
+    {
+      "name": "Evidence Cardinality Cliff",
+      "hypothesis": "For an inferred relation visible with 2 or 3 entries, adding a fourth entry makes the relation disappear because _GEGENSTAND_MAX_EINTRAEGE=3.",
+      "counterhypothesis": "Real retrieval windows never contain four entries sharing a specific token, so the branch is practically unreachable."
+    },
+    {
+      "name": "Hyperposition Reachability Substitution",
+      "hypothesis": "The fallback turns a previously unreachable mechanism into a visible but semantically noisier one; non-empty output alone is not correctness evidence.",
+      "counterhypothesis": "Downstream uncertainty labeling prevents false grouping from affecting answers or promotion."
+    }
+  ],
+  "falsifiers": [
+    {
+      "id": "HYPERPOSITION_RELATION_RECEIPT/v1",
+      "design": "On one exact source/tree, build a blinded matrix with explicit relation keys and fallback-only memories. Cross path/hostname/owner/status predicates for the same named object; include true alternative values of one predicate.",
+      "measures": [
+        "relation precision",
+        "relation recall",
+        "false alternative rate",
+        "downstream answer change",
+        "source_turn and provenance preservation"
+      ],
+      "acceptance": "No cross-predicate grouping; explicit-key arm remains stable; fallback precision and recall reported separately."
+    },
+    {
+      "id": "HYPERPOSITION_CARDINALITY_MONOTONICITY/v1",
+      "design": "For each true and false relation, add entries sequentially n=1..6 while holding all prior entries fixed and permute order.",
+      "measures": [
+        "relation presence",
+        "relation_id stability",
+        "facet membership",
+        "answer impact"
+      ],
+      "acceptance": "Adding corroborating evidence must not silently delete a previously emitted relation; any cap must truncate facets with an explicit receipt, not erase the relation."
+    },
+    {
+      "id": "CHANNEL_LESION_EXTENSION/v1",
+      "design": "Repeat the existing whole-GWT channel lesion with hyperposition off, explicit-only, fallback-only and full modes using opaque IDs and held-out questions.",
+      "measures": [
+        "answer correctness",
+        "citation support",
+        "broadcast provenance",
+        "false contradiction rate"
+      ],
+      "acceptance": "No causal credit from non-empty readouts or same-family aggregate probes; require paired held-out executable outcomes."
+    }
+  ],
+  "preserved_nulls": [
+    "No exact atomic source/test/export receipt exists.",
+    "No execution receipt exists for these falsifiers.",
+    "No causal evidence yet shows the Gen218 global-workspace default improves held-out outcomes independently.",
+    "No Hyperposition truth promotion or effect authority is granted.",
+    "BASE remains NOT_PASS; no training, promotion or Frank Harness mutation."
+  ],
+  "deduplication": [
+    "Auftrag immutability is already routed by the Gen218 supervisor receipt and is referenced, not duplicated.",
+    "Intent read/effect ontology is already routed by Gen213 research and is referenced, not duplicated.",
+    "Same-family exports, supervisor entries and this impulse share Goodman ancestry and are not independent replications."
+  ]
+}

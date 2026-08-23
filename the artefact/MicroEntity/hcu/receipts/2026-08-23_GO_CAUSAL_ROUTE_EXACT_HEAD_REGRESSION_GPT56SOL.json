@@ -1,0 +1,44 @@
+{
+  "schema_version": "HCU_EXACT_SOURCE_REGRESSION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU_XENO",
+  "candidate_pr": 1263,
+  "exact_source_commit": "beb62d9668f016050ddab2ca0597c8af34e5d7d6",
+  "source_files": {
+    "the artefact/MicroEntity/hcu/reactive_event_router_v1.py": {
+      "git_blob_sha1": "e62a73401618242b630e59847782cd1e4111b6d3",
+      "bytes": 11244
+    },
+    "the artefact/MicroEntity/hcu/test_reactive_event_router_v1.py": {
+      "git_blob_sha1": "03b92e3b14372ce9b2acc7f7630bd157777ea6d7",
+      "bytes": 8633
+    }
+  },
+  "execution": {
+    "surface": "isolated ChatGPT tool container",
+    "os": "Linux 6.18.35 x86_64 glibc 2.41",
+    "python": "CPython 3.13.5",
+    "commands": [
+      "python3 -m py_compile reactive_event_router_v1.py test_reactive_event_router_v1.py",
+      "python3 -m unittest -v test_reactive_event_router_v1.py"
+    ],
+    "py_compile": "PASS",
+    "unittest": "16/16 PASS",
+    "exit_code": 0,
+    "execution_mode": "REGRESSION_ONLY; no second new unusual experiment introduced"
+  },
+  "verified_mechanisms": [
+    "unknown/future internal provider labels fail closed",
+    "model activation requires positively admitted local engine identity/class/artifact digest",
+    "script-only routes reject unnecessary engine selection",
+    "causal event identity is separated from engine routing metadata",
+    "router policy digest enters causal route identity",
+    "engine artifact changes alter engine and route identity while preserving identical causal event identity",
+    "downstream inference receipt must echo event, route and engine identities",
+    "stale entity generations fail closed"
+  ],
+  "scope_limit": "Exact source-level Python mechanism regression only. No bundled real ~0.8B checkpoint/runtime, throughput, provider-free boot, Global J-Space causal-use, HCU runtime-fit, EntityOS runtime or whole-product acceptance credit.",
+  "promotion_credit": 0,
+  "acceptance": "MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED"
+}

@@ -19,7 +19,11 @@ fn phase(kind:String, entity_db:String, source_db:String, profile:Map, previous:
   return effect(kind,p)
 }
 
-fn run(entity_db:String, source_db:String, secret_file:String)->Map {
+fn run(entity_db:String, source_db:String, secret_file:String, cognition_invocation:Map)->Map {
+  // cognition_invocation is a bounded MINI_COGNITIVE_INVOCATION/v1 routing selector only.
+  // It may identify one already-bound MiniUnifiedDB causal turn; it cannot supply cognition,
+  // workspace, truth, effect or model authority of its own.
+
   // Boot the neutral MiniUnifiedDB before asking it for application/personality state.
   // A fresh database is therefore initialized by the executable itself and then fails
   // closed at profile read until an explicit profile has been imported/configured.
@@ -47,11 +51,13 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
 
   // PRE-INFERENCE ADMISSION: one candidate/provenance boundary only. This receipt is
   // MINI_ENTITY_COGNITIVE_FABRIC_ADMISSION/v1, not the final UCF runtime receipt.
+  // The bounded selector may only resolve already-bound same-generation MiniUnifiedDB material.
   // The implementation reuses the single ZERO_WORKSPACE_CAPSULE -> ZERO_INFERENCE_PACKET
   // -> Unified Cognitive Fabric ancestry and cannot mint truth/state/effect authority.
   let cognition_data = map_new()
   map_set(cognition_data,"compiled",compiled)
   map_set(cognition_data,"prompt",prompt)
+  map_set(cognition_data,"invocation",cognition_invocation)
   let admitted = phase("pipeline_cognitive_fabric_admit",entity_db,source_db,profile,previous,cognition_data)
   require admitted.ok
 

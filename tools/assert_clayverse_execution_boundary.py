@@ -29,7 +29,12 @@ def require(errors: list[str], condition: bool, code: str) -> None:
 
 
 def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]:
-    """Cross-bind retained Vercel continuity and current work-selection in both directions."""
+    """Cross-bind retained Vercel continuity and current work-selection in both directions.
+
+    Positive bridge evidence constrains PROGRAM_STATE. Conversely, if PROGRAM_STATE claims
+    this bridge/frontier, loss or degradation of required continuity evidence must fail closed.
+    This never grants source, OCI, or product runtime credit.
+    """
     errors: list[str] = []
     lower = vercel_execution.lower()
     bridge_proven = (
@@ -90,17 +95,23 @@ def validate(root: Path) -> dict:
         control = load_json(paths["control44"])
         steering = load_json(paths["steering844"])
     except (OSError, json.JSONDecodeError) as exc:
-        return {"schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2", "pass": False, "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"]}
+        return {
+            "schema": "CLAYVERSE_EXECUTION_BOUNDARY_CONSISTENCY/v2",
+            "pass": False,
+            "errors": [f"JSON_LOAD_ERROR:{type(exc).__name__}:{exc}"],
+        }
 
     sandbox_text = paths["sandbox_directive"].read_text(encoding="utf-8").lower()
     guest_text = paths["vps_guest_directive"].read_text(encoding="utf-8").lower()
 
+    # Newest owner authority: current executable work is isolated-sandbox-only.
     require(errors, "2026-08-23" in sandbox_text, "SANDBOX_DIRECTIVE_CURRENT_OWNER_DATE_MISSING")
     require(errors, "vps testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_VPS_BAN_MISSING")
     require(errors, "vps-hosted disposable kvm/vm/microvm/tcg guest testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_VPS_GUEST_BAN_MISSING")
     require(errors, "self-hosted vps test runners are **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_SELF_HOSTED_BAN_MISSING")
     require(errors, "production/deployment-host testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_PRODUCTION_BAN_MISSING")
 
+    # The older 2026-08-18 guest directive must stay historical and non-operative.
     require(errors, "**status:** **superseded**" in guest_text, "VPS_GUEST_DIRECTIVE_NOT_SUPERSEDED")
     require(errors, "superseded by the newer owner-directed clayverse bootstrap dated **2026-08-23**" in guest_text, "VPS_GUEST_DIRECTIVE_NEWER_AUTHORITY_MISSING")
     require(errors, "vps-hosted disposable kvm/vm/microvm/tcg guest testing is forbidden" in guest_text, "VPS_GUEST_DIRECTIVE_CURRENT_GUEST_BAN_MISSING")
@@ -120,6 +131,9 @@ def validate(root: Path) -> dict:
     require(errors, execution.get("production_host_testing_forbidden") is True, "PROGRAM_PRODUCTION_BAN_MISSING")
     require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(execution, sort_keys=True), "PROGRAM_STALE_VPS_DIRECTIVE_POINTER")
 
+    # The retained Vercel bridge is itself an authorized isolated sandbox path. If its
+    # continuity record is present, positive evidence must agree with PROGRAM_STATE; if
+    # PROGRAM_STATE selects it, the continuity record must exist and remain positive.
     vercel_path = root / VERCEL_EXECUTION_PATH
     stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
     program_claims_vercel = (

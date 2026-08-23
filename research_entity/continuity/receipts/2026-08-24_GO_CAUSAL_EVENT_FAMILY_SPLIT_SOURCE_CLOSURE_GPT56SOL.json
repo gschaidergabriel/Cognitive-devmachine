@@ -1,0 +1,102 @@
+{
+  "schema": "ENTITYOS_HCU_GO_CAUSAL_EVENT_FAMILY_SPLIT_SOURCE_CLOSURE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "474b241e526e201355a3cf99e028afd2553bcebb",
+    "schema": "8.63",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together_inference_training_preflight_key_lookup": "FORBIDDEN",
+    "vps_self_hosted_production_testing": "FORBIDDEN"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_exposed": false,
+    "available_exact_user_message_time_precision": "MINUTE_ONLY",
+    "atomic_timestamp_fallback_reproducible_under_current_protocol": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "work_class": "ORDINARY_SOURCE_REVIEW_FUSION_AND_DETERMINISTIC_REGRESSION_AUTHORING"
+  },
+  "retained_lanes": {
+    "hcu_donor": {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "pull_request": 1263,
+      "live_head_observed_after_delta": "962390a697ec74df10eb7ffbb310cc5e6a2eb6d1",
+      "state": "OPEN_DRAFT",
+      "this_delta_last_commit_is_ancestor_of_live_head": true
+    },
+    "execution_controller": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pull_request": 810,
+      "live_head_observed": "8822b9ff8c9c4156bac3a904e49352a839ef6cd0",
+      "state": "OPEN_DRAFT",
+      "runtime_invocation_by_this_organ": false
+    }
+  },
+  "observed_problem": {
+    "previous_receipt": "research_entity/continuity/receipts/2026-08-24_GO_CAUSAL_FAMILY_ID_FORK_GPT56SOL.json",
+    "classification": "PRE_ADMISSION_CAUSAL_FAMILY_ALIAS_LEAKAGE",
+    "mechanism": "The retained family splitter and bootstrap dataset compiler selected train/validation/holdout from caller-controlled trace_family_id, so independently constructed traces sharing one admitted replay-stable causal event could choose different aliases and cross dataset partitions before admission.",
+    "serious_training_path_impact": "compile_admitted_jspace_training_dataset_v1 delegates row placement to compile_jspace_bootstrap_dataset_v1, so label-based lower-level partitioning propagated into the admitted training path.",
+    "counterhypothesis": "Exact training-trace registry rebind plus DatasetAdmission cross-binding might already prevent leakage.",
+    "counterhypothesis_result": "REJECTED_AT_SOURCE_SCOPE: those fences prevent post-admission mutation/transplants but do not constrain independently constructed pre-admission trace_family_id aliases."
+  },
+  "source_delta": {
+    "family_split_commit": "54f42b20586c1aa4742df89af07d4c918faa2290",
+    "family_split_test_commit": "70a8fe870d1f8a9ec16f5c9157b227ed93161ddc",
+    "compiler_commit": "38d48c940aa93749263e1ab580b2c2e5e24acd63",
+    "compiler_test_commit": "5a7a7bdd2d0a20d2db67b0563333026710298d73",
+    "family_split_path": "the artefact/MicroEntity/hcu/jspace_dataset_family_split_v1.py",
+    "family_split_test_path": "the artefact/MicroEntity/hcu/test_jspace_dataset_family_split_v1.py",
+    "compiler_path": "the artefact/MicroEntity/hcu/compile_jspace_bootstrap_dataset_v1.py",
+    "compiler_test_path": "the artefact/MicroEntity/hcu/test_compile_jspace_bootstrap_dataset_v1.py",
+    "new_family_split_schema": "ENTITYOS_HCU_JSPACE_DATASET_FAMILY_SPLIT/v2",
+    "new_dataset_schema": "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v5",
+    "causal_family_schema": "ENTITYOS_HCU_CAUSAL_TRAINING_FAMILY/v1",
+    "split_unit": "REPLAY_STABLE_ENTRY_EVENT_IDENTITY",
+    "supplied_trace_family_id_role": "PROVENANCE_AUDIT_LABEL_ONLY_NOT_SPLIT_AUTHORITY",
+    "partition_function_authority": "REUSES_EXISTING_split_for_family_NO_SECOND_SPLIT_SERVICE",
+    "state_truth_effect_authority_change": "NONE"
+  },
+  "required_regression": {
+    "name": "SAME_CAUSAL_ANCESTRY_DIFFERENT_LABELS_ONE_SPLIT_OR_REJECT",
+    "authored": true,
+    "coverage": [
+      "family splitter: same entry_event_sha256 plus different supplied family labels occupies exactly one split",
+      "compiler: same replay-stable event plus different supplied family labels maps all emitted rows to one causal_family_id and one split",
+      "supplied labels remain visible as metadata/audit aliases",
+      "existing DatasetAdmission prototype/vector-control/control-condition cross-bindings are preserved"
+    ]
+  },
+  "verification": {
+    "github_actions_runs_observed_for_live_successor_head": 0,
+    "admitted_free_sandbox_run_by_this_organ": false,
+    "runtime_test_result": "NOT_OBSERVED",
+    "source_commit_ancestry_check": "PASS: 5a7a7bdd2d0a20d2db67b0563333026710298d73 is an ancestor of observed live donor 962390a697ec74df10eb7ffbb310cc5e6a2eb6d1",
+    "classification": "SOURCE_AND_REGRESSION_AUTHORED_NOT_RUNTIME_VERIFIED"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: serious dataset row placement now has one reusable causal-family partition contract rather than a caller-label partition boundary, reducing a concrete training/evaluation integrity fault in the retained implementation.",
+    "track_b_hcu_typed_entry_fabric_co_development": "ADVANCED: dataset family ownership now reuses replay-stable Typed Entry causal event identity and remains distinct from concrete admission/route/GRID/control-label identities; no second canonical state or split authority introduced.",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "ADVANCED: family-split v2 plus bootstrap dataset v5 and deterministic alias-leakage regressions close the documented pre-admission family-alias mechanism at source level while retaining supplied labels only as provenance."
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving parallel fusion surface on canonical main; safe connector writes require full-file replacement, so replacing a stale full snapshot would risk deleting concurrent canonical deltas. This append-only receipt preserves the exact delta for successor-dynamic README fusion rather than overwriting parallel work."
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Run the fixed family-split/compiler regressions only on an admitted exact-source FREE_ONLY execution surface when available, then explicitly rebind one immutable successor donor snapshot into the single retained PR810 executor only when source-safety or the next exact runtime discriminator justifies it. Preserve replay-stable event family ownership through admitted serious-dataset compilation, add deterministic hard-negative family tests, and separately require real zero-cost local approximately-0.8B loader/model-executor I/O before any J-Space model-runtime or training promotion.",
+  "acceptance": "IN_PROGRESS"
+}

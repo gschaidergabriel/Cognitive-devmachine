@@ -24,7 +24,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.3"
+VERSION = "clay-profile-pipeline-runtime/0.4"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -177,6 +177,22 @@ class ProfilePipelineRuntime(clay.Runtime):
 
     @staticmethod
     def _ensure_schema(db: sqlite3.Connection) -> None:
+        # Legacy reference generation is historical migration evidence, never an
+        # implicit bootstrap authority. Detect a legacy-only DB before creating the
+        # canonical entity_state row so continuity cannot be silently reset or adopted.
+        entity_state_preexisting = db.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='entity_state'"
+        ).fetchone() is not None
+        eos_state_preexisting = db.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='eos_pipeline_state'"
+        ).fetchone() is not None
+        if eos_state_preexisting and not entity_state_preexisting:
+            legacy_columns = {
+                str(row[1]) for row in db.execute("PRAGMA table_info(eos_pipeline_state)").fetchall()
+            }
+            if "generation" in legacy_columns:
+                raise PipelineFault("LEGACY_GENERATION_MIGRATION_REQUIRED")
+
         # Native profile/generation authority. These definitions intentionally match the
         # native MiniUnifiedDB contract rather than inventing a second profile table.
         db.execute(
@@ -202,12 +218,11 @@ class ProfilePipelineRuntime(clay.Runtime):
             (now, now),
         )
 
-        # Reference-only continuity/evidence bookkeeping. Generation is mirrored for old
-        # reference DB compatibility; entity_state.generation is the CAS authority.
+        # Reference-only continuity/evidence bookkeeping. There is intentionally no
+        # generation field here: entity_state.generation is the sole live CAS authority.
         db.execute(
             """CREATE TABLE IF NOT EXISTS eos_pipeline_state(
                  singleton INTEGER PRIMARY KEY CHECK(singleton=1),
-                 generation INTEGER NOT NULL DEFAULT 0,
                  continuity_json TEXT NOT NULL DEFAULT '{}',
                  canonical_json TEXT NOT NULL DEFAULT '{}',
                  canonical_hash TEXT NOT NULL DEFAULT '',
@@ -245,24 +260,6 @@ class ProfilePipelineRuntime(clay.Runtime):
                  source_count INTEGER NOT NULL,
                  canonical_hash TEXT NOT NULL)"""
         )
-
-        native_row = db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()
-        mirror_row = db.execute(
-            "SELECT generation FROM eos_pipeline_state WHERE singleton=1"
-        ).fetchone()
-        native_generation = int(native_row[0]) if native_row else 0
-        mirror_generation = int(mirror_row[0]) if mirror_row else 0
-        migrated_generation = max(native_generation, mirror_generation)
-        if native_generation != migrated_generation:
-            db.execute(
-                "UPDATE entity_state SET generation=?,updated_at=? WHERE id=1",
-                (migrated_generation, now),
-            )
-        if mirror_generation != migrated_generation:
-            db.execute(
-                "UPDATE eos_pipeline_state SET generation=? WHERE singleton=1",
-                (migrated_generation,),
-            )
 
     def import_profile(
         self,
@@ -355,8 +352,7 @@ class ProfilePipelineRuntime(clay.Runtime):
     def _pipeline_profile_read(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
             entity_db = str(p["entity_db"])
-            with self._db(entity_db) as db:
-                self._ensure_schema(db)
+            with self._read_only_db(entity_db) as db:
                 row = db.execute(
                     """SELECT e.active_profile,p.profile_id,p.profile_json,p.profile_sha256
                        FROM entity_state e
@@ -382,8 +378,7 @@ class ProfilePipelineRuntime(clay.Runtime):
 
     def _pipeline_state_read(self, p: dict[str, Any]) -> dict[str, Any]:
         try:
-            with self._db(str(p["entity_db"])) as db:
-                self._ensure_schema(db)
+            with self._read_only_db(str(p["entity_db"])) as db:
                 row = db.execute(
                     """SELECT e.generation,s.continuity_json,s.canonical_hash,s.cursors_json
                        FROM entity_state e
@@ -403,8 +398,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
     def _already_consumed(self, entity_db: str, kind: str, source_id: Any) -> bool:
-        with self._db(entity_db) as db:
-            self._ensure_schema(db)
+        with self._read_only_db(entity_db) as db:
             return db.execute(
                 "SELECT 1 FROM eos_pipeline_consumed WHERE source_kind=? AND source_id=?",
                 (kind, str(source_id)),
@@ -633,6 +627,7 @@ class ProfilePipelineRuntime(clay.Runtime):
         canonical = {
             "sources_health": collected["sensors"],
             "probes": collected["probes"],
+            "personality_state": metrics,
             "profile_notes": profile.get("profile_notes", {}),
             "epistemic_rule": "UNKNOWN != ZERO != ERROR != MEASURED",
         }
@@ -1051,11 +1046,9 @@ class ProfilePipelineRuntime(clay.Runtime):
 
         db = self._db(entity_db)
         try:
-            self._ensure_schema(db)
-            db.commit()
             db.execute("BEGIN IMMEDIATE")
             profile_row = db.execute(
-                """SELECT e.active_profile,p.profile_sha256
+                """SELECT e.active_profile,p.profile_json,p.profile_sha256
                    FROM entity_state e
                    JOIN profiles p ON p.profile_id=e.active_profile
                    WHERE e.id=1"""
@@ -1063,8 +1056,14 @@ class ProfilePipelineRuntime(clay.Runtime):
             if (
                 profile_row is None
                 or str(profile_row["active_profile"]) != str(snapshot.get("profile_id"))
-                or str(profile_row["profile_sha256"]) != str(snapshot.get("profile_hash"))
             ):
+                raise PipelineFault("PROFILE_SNAPSHOT_STALE")
+            current_profile_raw = str(profile_row["profile_json"])
+            current_stored_hash = str(profile_row["profile_sha256"])
+            current_computed_hash = _sha256_text(current_profile_raw)
+            if current_computed_hash != current_stored_hash:
+                raise PipelineFault("PROFILE_HASH_MISMATCH")
+            if current_stored_hash != str(snapshot.get("profile_hash")):
                 raise PipelineFault("PROFILE_SNAPSHOT_STALE")
 
             state_row = db.execute(
@@ -1117,22 +1116,20 @@ class ProfilePipelineRuntime(clay.Runtime):
             )
             if native_update.rowcount != 1:
                 raise PipelineFault("STALE_GENERATION_FINAL")
-            mirror_update = db.execute(
+            continuity_update = db.execute(
                 """UPDATE eos_pipeline_state
-                   SET generation=?,continuity_json=?,canonical_json=?,canonical_hash=?,cursors_json=?,updated_at=?
-                   WHERE singleton=1 AND generation=?""",
+                   SET continuity_json=?,canonical_json=?,canonical_hash=?,cursors_json=?,updated_at=?
+                   WHERE singleton=1""",
                 (
-                    generation,
                     json.dumps(continuity, ensure_ascii=False),
                     json.dumps(compiled["canonical"], ensure_ascii=False),
                     compiled["canonical_state_hash"],
                     json.dumps(collected["next_cursors"]),
                     now,
-                    previous["generation"],
                 ),
             )
-            if mirror_update.rowcount != 1:
-                raise PipelineFault("STALE_GENERATION_MIRROR")
+            if continuity_update.rowcount != 1:
+                raise PipelineFault("PIPELINE_STATE_MISSING")
             db.commit()
             return {"ok": True, "output_id": output_id, "generation": generation}
         except Exception as exc:

@@ -1,0 +1,72 @@
+{
+  "schema": "ZERO_UCF_LOCAL_OBSERVE_ACTIVATION_FENCE/v1",
+  "date": "2026-08-23",
+  "trigger": "zero",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": {
+    "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+    "supporting_architecture": "research_entity/global/ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md",
+    "base_main_sha": "cc3de1686ed6f60b6e4b23836372ad32ebef1dfc",
+    "main_observed_after_source_delta": "3a4fbfe83d90dff6829aeaaf3615cd24dd7565d0",
+    "branch": "zero/ucf-local-observe-activation-fence-20260823-1036",
+    "free_only": true
+  },
+  "observed": {
+    "validator_before_blob": "6c65001c6fde21b1d286410128bd7e13134c4571",
+    "test_before_blob": "a9629098884c74be37df6f945cf3ffcea89857f2",
+    "false_green": "The canonical UCF validator required a lens profile for LOCAL_OBSERVE_ONLY but required local_activation_access only for FULL_LOCAL_LATENT. Its own canonical valid fixture therefore represented LOCAL_OBSERVE_ONLY with local_activation_access=false while still carrying J-Space observation refs and MEASURED_SUPPORTED epistemic status.",
+    "risk": "A receipt could structurally claim measured local J-Space observation without the local activation access required to observe the hookable residual-stream substrate. That weakens the evidence boundary between measured latent telemetry and compiled/external compatibility modes.",
+    "parallel_overlap_check": "No open PR matching LOCAL_OBSERVE_ONLY activation-access fencing was found. Open UCF PRs #1132/#1133 address boot Claude enablement and boot generation ancestry instead."
+  },
+  "grf": {
+    "R0_OBSERVED": "LOCAL_OBSERVE_ONLY plus local_activation_access=false was admitted by source and used by the canonical valid fixture.",
+    "R1_INFERRED": "Observation-only should mean latent observation without steering, not absence of activation access. Without activation access, a local measured J-Space claim is unsupported.",
+    "R2_ALTERNATIVES": [
+      "leave LOCAL_OBSERVE_ONLY permissive and rely on provenance text",
+      "downgrade no-activation LOCAL_OBSERVE_ONLY to PLAIN_COMPATIBILITY",
+      "fail closed on both local J-Space modes without activation access"
+    ],
+    "R3_COUNTER_REALITY": "A local runtime might expose derived telemetry without direct tensor handles. Under the current owner architecture that still does not justify the existing local latent-mode claim unless the admitted capability surface is explicitly represented; silently using local_activation_access=false is ambiguous.",
+    "R4_DISCRIMINATOR": "Require activation access for both FULL_LOCAL_LATENT and LOCAL_OBSERVE_ONLY while leaving COMPILED_EXTERNAL/PLAIN_COMPATIBILITY activation-free.",
+    "R5_EMERGENT": "J-Space mode now encodes an observability boundary rather than merely a label plus lens digest.",
+    "R6_STATUS": "SOURCE_REPAIR_WRITTEN_RUNTIME_UNVERIFIED"
+  },
+  "delta": {
+    "validator_path": "tools/validate_unified_cognitive_fabric_receipt_v1.py",
+    "validator_after_blob": "215cfe378378d97d35488139e50652f7e4b94a58",
+    "test_path": "tests/test_unified_cognitive_fabric_receipt_v1.py",
+    "test_after_blob": "1829ec19a035b5c9c195ff599d935e346cc963e7",
+    "new_fail_closed_code": "LOCAL_JSPACE_REQUIRES_ACTIVATION_ACCESS",
+    "valid_fixture_change": "LOCAL_OBSERVE_ONLY now carries local_activation_access=true",
+    "regressions": [
+      "LOCAL_OBSERVE_ONLY with activation access false must fail closed",
+      "FULL_LOCAL_LATENT with activation access false must fail closed",
+      "LOCAL_OBSERVE_ONLY intervention-mode regression retains the distinct FULL_LOCAL_LATENT intervention requirement"
+    ]
+  },
+  "execution": {
+    "swarm": "GRF_CLAYCODE_PROMPT_INJECTION_UNAVAILABLE_ON_SURFACE_NO_ADMITTED_FREE_PROVIDER_EXECUTION_TOOL_EXPOSED",
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "exact_branch_test_execution": "UNOBSERVED_AT_RECEIPT_WRITE",
+    "runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "status": "NOT_CLAIMED_NO_SHARED_MACROCYCLE_ID",
+    "count": 0,
+    "note": "This is deterministic source falsification/repair, not a claimed unusual experiment."
+  },
+  "credit": {
+    "source_mechanism": "CANDIDATE",
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "claude_code_adapter_runtime_credit": 0,
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_gate": "Execute the exact branch validator regression on an actually-started admitted isolated runner; then on exact Qwen3.5-0.8B runtime evidence require both LOCAL_OBSERVE_ONLY and FULL_LOCAL_LATENT receipts to bind real activation access before any measured J-Space credit."
+}

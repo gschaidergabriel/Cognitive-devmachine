@@ -10,6 +10,7 @@ D3 = "3" * 64
 D4 = "4" * 64
 D5 = "5" * 64
 D6 = "6" * 64
+D7 = "7" * 64
 
 
 def base_manifest():
@@ -17,10 +18,10 @@ def base_manifest():
         "schema": "mini-entity-bundled-cognition-manifest/v1",
         "engine_id": "bundled-qwen35-08b",
         "model_family": "Qwen3.5-0.8B",
-        "checkpoint_digest": D0,
+        "checkpoint_digest": D6,
         "tokenizer_digest": D1,
         "quantization_runtime_identity": "gguf-q4_k_m+llama.cpp:test-fixture",
-        "runtime_digest": D6,
+        "runtime_digest": D7,
         "jspace_profile_digest": D2,
         "lens_profile_digest": D3,
         "workspace_calibration_digest": D4,
@@ -77,6 +78,12 @@ class BundledCognitionManifestTests(unittest.TestCase):
         data = base_manifest()
         data["checkpoint_digest"] = "ABC"
         with self.assertRaisesRegex(ManifestError, "LOWERCASE_SHA256_REQUIRED"):
+            validate_manifest(data)
+
+    def test_placeholder_digest_fails_closed(self):
+        data = base_manifest()
+        data["checkpoint_digest"] = D0
+        with self.assertRaisesRegex(ManifestError, "PLACEHOLDER_SHA256_FORBIDDEN"):
             validate_manifest(data)
 
     def test_unknown_semantic_field_fails_closed(self):

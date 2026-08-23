@@ -34,12 +34,12 @@ def urlopen(request, timeout):
 class ClaudeCodeInference:
     """Tool-less Claude Code cognition boundary for ClayVerse.
 
-    Cognition runs with all built-in tools and Claude auto-memory disabled, MCP
-    configuration fail-closed, no Claude session persistence, and an explicit
-    environment allowlist. HOME is retained so Claude subscription/OAuth
-    credentials remain usable. UnifiedDB / WorldAssembler remains the sole durable
-    ClayVerse state authority. Claude may return a schema-validated effect intent,
-    but only EffectGate can execute it.
+    Cognition runs with all built-in tools and Claude auto-memory disabled, user /
+    project / local setting sources excluded, MCP configuration fail-closed, no
+    Claude session persistence, and an explicit environment allowlist. HOME is
+    retained so Claude subscription/OAuth credentials remain usable. UnifiedDB /
+    WorldAssembler remains the sole durable ClayVerse state authority. Claude may
+    return a schema-validated effect intent, but only EffectGate can execute it.
     """
 
     ENV_ALLOWLIST = (
@@ -95,7 +95,8 @@ class ClaudeCodeInference:
         args = [
             self.binary, "-p", prompt, "--output-format", "json", "--json-schema", schema,
             "--max-turns", "1", "--permission-mode", "plan", "--tools", "",
-            "--strict-mcp-config", "--no-session-persistence", "--append-system-prompt", system,
+            "--strict-mcp-config", "--no-session-persistence", "--setting-sources", "",
+            "--append-system-prompt", system,
         ]
         with self._lock:
             try:

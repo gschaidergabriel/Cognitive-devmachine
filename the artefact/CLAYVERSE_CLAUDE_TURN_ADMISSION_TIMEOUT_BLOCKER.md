@@ -1,7 +1,7 @@
 # Claude UserPromptSubmit timeout — ClayVerse acceptance blocker
 
 **Status:** `BLOCKED_UPSTREAM_USERPROMPT_TIMEOUT_FAIL_OPEN`  
-**Observed main:** `209e780b1e41e7946823ecf447ee61f22972764d`  
+**Observed main:** `36e26e0d4233658cba259fcbeb6dc7cb6db7f6a2`  
 **Evidence class:** source + current upstream semantics; **not** exact ClayVerse runtime failure evidence.
 
 ## Why this blocks whole-product acceptance

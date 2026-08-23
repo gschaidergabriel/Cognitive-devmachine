@@ -338,6 +338,7 @@ def build_pre_inference_admission(
         profile,
         prepare,
         expected_generation=entity_generation,
+        semantic_binding=semantic_binding,
     )
     _need(type(route) is dict and route.get("ok") is True, "BOUND_ROUTE_RESOLUTION_FAILED")
     _need(

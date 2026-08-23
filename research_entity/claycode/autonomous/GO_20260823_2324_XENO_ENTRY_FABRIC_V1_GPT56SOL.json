@@ -1,0 +1,101 @@
+{
+  "schema_version": "XENO_GO_RECEIPT/v1",
+  "timestamp_local": "2026-08-23T23:24:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "active_program": "ENTITYOS_HCU_XENO",
+  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "base_main_sha": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "branch": "gpt56sol/xeno-entry-fabric-v1-20260823-2324",
+  "authority_refresh": {
+    "bootstrap_minimal": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "program_state": "research_entity/rooms/PROGRAM_STATE.json",
+    "owner_directive": "research_entity/global/XENO_GO_OWNER_DIRECTIVE.md",
+    "artifact_readme": "the artefact/README.md",
+    "xeno_readme": "the artefact/Xeno/README.md"
+  },
+  "tracks": {
+    "track_a_xeno_executable_convergence": "SOURCE_CANDIDATE_TYPED_FAIL_CLOSED_ENTRY_BINDER",
+    "track_b_xcu_entry_fabric": "ADVANCED_XENO_ENTRY_FABRIC_IMMUTABLE_PACKET_IDENTITY"
+  },
+  "observed_gap": "Current Xeno root declares typed Entry Fabric but had no executable current-facing binder. Existing draft HCU router PR 1263 has separate source-confirmed route identity gaps because routing decisions are not bound to immutable causal entry identity.",
+  "hypothesis": "A single deterministic pre-cognition EntryPacket binder that commits source/event identity, causal identity, generation, provenance, payload digest, permissions and resource budget will prevent causal aliasing and create one reusable ingress primitive across GRID10/COGSIM10/WM_TEST/NESTED_SIM/SCALEOUT.",
+  "counterhypothesis": "Hashing more fields can create false confidence if semantically equivalent representations diverge or if mutable payload bytes are embedded directly. The binder therefore canonicalizes timestamps/scope ordering and binds payload/provenance by explicit digest/reference rather than importing arbitrary mutable data into authority.",
+  "bounded_delta": {
+    "source": "the artefact/Xeno/entry_fabric_v1.py",
+    "tests": "the artefact/Xeno/test_entry_fabric_v1.py",
+    "source_sha256": "ea7141686a15641f1e3912a89aa96035578749f7779e7ec031aca76333249e68",
+    "tests_sha256": "211996cd7cada24a12b147959402c9c46b1a87495898915c76c9bfa2393b1d3c",
+    "source_commit": "b65e0139af1ae8898121d63af1fc6639f63c113d",
+    "tests_commit": "6324cf289097ccb0157ebaec6b7c6d87ede1364c"
+  },
+  "contract": {
+    "input_schema": "XENO_ENTRY/v1",
+    "output_schema": "XENO_ENTRY_PACKET/v1",
+    "binds": [
+      "event_id",
+      "source",
+      "event_type",
+      "causal_id",
+      "entity_generation",
+      "modality",
+      "observed_at",
+      "received_at",
+      "capability_scope",
+      "budget",
+      "payload_ref",
+      "payload_sha256",
+      "provenance_sha256",
+      "parent_id",
+      "stream_id",
+      "optional_trace_id_parent_span_id"
+    ],
+    "fail_closed": [
+      "unsupported schema",
+      "stale/invalid generation",
+      "missing or empty typed identity fields",
+      "invalid digest shapes",
+      "unknown budget keys",
+      "invalid/partial trace context",
+      "noncanonical values"
+    ],
+    "authority_nonclaims": [
+      "does not mint semantic truth",
+      "does not grant user rights",
+      "does not select a cognition engine",
+      "does not grant effect authority"
+    ]
+  },
+  "isolated_execution": {
+    "surface": "isolated ChatGPT container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "command": "python3 -m unittest -v test_entry_fabric_v1.py",
+    "result": "9/9 PASS",
+    "scope": "ENTRY_BINDER_COMPONENT_ONLY",
+    "whole_xeno_or_entityos_credit": 0
+  },
+  "unusual_experiment": {
+    "id": "XENO_ENTRY_IDENTITY_COLLISION_LESION_V1",
+    "count_for_this_go": 1,
+    "intervention": "Compare a semantically identical replay with normalized timezone/scope ordering against a same-source+event-id record whose payload digest is substituted.",
+    "prediction": "semantic replay => identical entry_sha256; payload substitution => different entry_sha256",
+    "observed": {
+      "semantic_replay_same_digest": true,
+      "payload_substitution_same_digest": false,
+      "base_digest": "c37f9bbee0bf6a0dc585b81946966160c869697da10763db70acb0e1de400618",
+      "replay_digest": "c37f9bbee0bf6a0dc585b81946966160c869697da10763db70acb0e1de400618",
+      "drift_digest": "fcd3780a8f47505cd37c70228d51172e4ff7dda435a7f1613a75bcbc5a3185ef"
+    },
+    "classification": "MECHANISM_SUPPORTED_NOT_PRODUCT_ACCEPTED"
+  },
+  "external_evidence": [
+    "CloudEvents 1.0: source + id identify distinct events; context metadata is separated from event data.",
+    "W3C Trace Context: stable trace/request identifiers are propagated independently of vendor-specific state."
+  ],
+  "next_discriminator": "Integrate XENO_ENTRY_PACKET/v1 entry_sha256 into the existing HCU reactive router route-decision identity together with positive LOCAL_INTERNAL engine identity; then prove same exact entry replay is deterministic while different entry or engine identities cannot alias.",
+  "acceptance": "IN_PROGRESS",
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

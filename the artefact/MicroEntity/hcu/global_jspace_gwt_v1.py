@@ -24,11 +24,11 @@ except ImportError:
         packet_bytes,
     )
 
-TRACE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3"
+TRACE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v4"
 TRACE_CANONICALIZATION_SCHEMA = CANONICALIZATION_SCHEMA
 MAX_DIM = 4096
 MAX_JCS_SAFE_INTEGER = 9_007_199_254_740_991
-HYPERPOSITION_MARGIN_Q = 750  # 0.075 on 0..10000 gate scale
+HYPERPOSITION_MARGIN_Q = 750
 
 
 class JSpaceError(ValueError):
@@ -76,7 +76,10 @@ def _q_unit(value: float) -> int:
 def _q_signed(value: float) -> int:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise JSpaceError("VECTOR_NUMBER_REQUIRED")
-    value = float(value)
+    try:
+        value = float(value)
+    except OverflowError as exc:
+        raise JSpaceError("VECTOR_FINITE_REQUIRED") from exc
     if not math.isfinite(value):
         raise JSpaceError("VECTOR_FINITE_REQUIRED")
     clipped = max(-1.0, min(1.0, value))
@@ -121,7 +124,6 @@ class CellContribution:
         return self
 
     def gate_q(self) -> int:
-        # Activation/broadcast scheduler signal only; never truth/confidence authority.
         weighted = (
             0.24 * self.novelty
             + 0.24 * self.contradiction
@@ -152,8 +154,6 @@ class JSpaceStep:
 
 
 def _trace_bytes(value: dict) -> bytes:
-    # Prototype evidence identity only, never canonical durable-state authority.
-    # Reuse the one selected HCU JCS canonicalizer; no local serializer authority.
     try:
         return canonicalize(value)
     except CanonicalizationError as exc:
@@ -161,8 +161,6 @@ def _trace_bytes(value: dict) -> bytes:
 
 
 def _global_vector(validated: Sequence[CellContribution], dim: int) -> tuple[float, ...]:
-    # Sort before summation so caller input ordering cannot alter packet identity through
-    # floating addition order. This is source determinism, not a truth/confidence rule.
     ordered = sorted(validated, key=lambda c: c.cell_id)
     weights = [1 + c.gate_q() for c in ordered]
     total_weight = sum(weights)
@@ -197,7 +195,6 @@ def step(
     hyper = tuple(c.cell_id for c in ranked if winner_gate_q - c.gate_q() <= HYPERPOSITION_MARGIN_Q)
     global_vector = _global_vector(validated, dim)
 
-    # One role-relevant Global J-Space return packet using the sole selected Vector Control ABI.
     packet = encode_vector(
         global_vector,
         basis_id=basis_id,
@@ -206,7 +203,6 @@ def step(
         role=winner.role,
         control_condition=control_condition,
     )
-    # Re-validate the packet through the same ABI consumer boundary before trace production.
     decode_vector(
         packet,
         current_generation=generation,
@@ -233,6 +229,7 @@ def step(
         "global_vector_q127": [_q_signed(v) for v in global_vector],
         "control_condition": packet.control_condition,
         "control_packet_schema": ABI_SCHEMA,
+        "control_packet_text": packet_text,
         "control_packet_identity_sha256": packet.packet_sha256,
         "control_packet_wire_sha256": packet_sha256,
         "contributions": [

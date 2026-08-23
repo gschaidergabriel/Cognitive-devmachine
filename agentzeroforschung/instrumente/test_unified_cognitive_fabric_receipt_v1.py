@@ -35,6 +35,7 @@ def valid_receipt() -> dict:
             "jspace_profile_digest": _h("7"),
             "lens_profile_digest": _h("8"),
             "workspace_policy_digest": _h("9"),
+            "workspace_calibration_digest": _h("a"),
             "intervention": {
                 "executed": False,
                 "implementation_digest": None,
@@ -42,8 +43,8 @@ def valid_receipt() -> dict:
             },
         },
         "workspace": {
-            "digest_before": _h("a"),
-            "digest_after": _h("b"),
+            "digest_before": _h("b"),
+            "digest_after": _h("c"),
             "gwt_candidates": [{"candidate_id": "c1"}],
             "gwt_winners": ["c1"],
             "jspace_observation_refs": ["j1"],
@@ -56,13 +57,17 @@ def valid_receipt() -> dict:
         "inference": {
             "engine_class": "CLAUDE_CODE",
             "jspace_mode": "COMPILED_EXTERNAL",
+            "adapter_version": "claude-code-candidate-v1",
+            "capability_profile_digest": _h("d"),
+            "adapter_contract_digest": _h("e"),
             "local_activation_access": False,
             "external_hidden_state_claimed": False,
-            "inference_packet_digest": _h("c"),
-            "candidate_result_digest": _h("d"),
+            "inference_packet_digest": _h("f"),
+            "candidate_result_digest": _h("0"),
         },
         "validation": {
             "decision": "REJECT_CANDIDATE",
+            "reconciliation_digest": _h("1"),
             "candidate_attempted_direct_state_mutation": False,
             "candidate_attempted_direct_effect": False,
             "canonical_state_write_committed": False,
@@ -78,7 +83,7 @@ def valid_receipt() -> dict:
             "stale_bundled_manifest": False,
             "stale_generation": False,
         },
-        "terminal_result_digest": _h("e"),
+        "terminal_result_digest": _h("2"),
     }
 
 
@@ -95,6 +100,16 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         )
         self.assertIn("FULL_LOCAL_LATENT_REQUIRES_ACTIVATION_ACCESS", validate_receipt(receipt))
 
+    def test_local_jspace_requires_exact_lens_profile(self) -> None:
+        receipt = valid_receipt()
+        receipt["inference"].update(
+            engine_class="BUNDLED_08B",
+            jspace_mode="LOCAL_OBSERVE_ONLY",
+            local_activation_access=False,
+        )
+        receipt["fabric"]["lens_profile_digest"] = None
+        self.assertIn("LOCAL_JSPACE_REQUIRES_LENS_PROFILE", validate_receipt(receipt))
+
     def test_calibrated_local_intervention_can_be_structurally_admitted(self) -> None:
         receipt = valid_receipt()
         receipt["inference"].update(
@@ -104,10 +119,18 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         )
         receipt["fabric"]["intervention"] = {
             "executed": True,
-            "implementation_digest": _h("f"),
-            "calibration_digest": _h("0"),
+            "implementation_digest": _h("3"),
+            "calibration_digest": _h("4"),
         }
         self.assertEqual(validate_receipt(receipt), [])
+
+    def test_direct_authority_attempt_cannot_be_accepted(self) -> None:
+        receipt = valid_receipt()
+        receipt["validation"].update(
+            decision="ACCEPT_CANDIDATE",
+            candidate_attempted_direct_state_mutation=True,
+        )
+        self.assertIn("DIRECT_AUTHORITY_ATTEMPT_ACCEPTED", validate_receipt(receipt))
 
     def test_authority_alias_poison_regression_v1(self) -> None:
         """Deterministic adversarial regression; not an unusual-experiment slot claim."""

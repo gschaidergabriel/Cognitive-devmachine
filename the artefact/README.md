@@ -21,12 +21,14 @@ Authority boundaries:
 - **Claude Code** is runtime cognition; it cannot own durable identity, canonical truth, memory, or effects.
 - **MicroClay** learns retrieval/entry-point accessibility only; it cannot mint truth or permissions.
 - **EffectGate + EffectJournal** own the admitted external/state-changing effect path.
-- **EntityOS** is an internal hardened execution/security/runtime substrate; it is not the product endpoint and never becomes a second authority.
+- **EntityOS** is an **optional** internal hardened execution/security/runtime substrate. Omission with EntityOS execution disabled does not by itself block whole-product PASS. If EntityOS is staged or enabled, its exact bytes and admission evidence remain mandatory for that candidate. It is never the product endpoint or a second authority.
 - No hidden second transcript, database, identity service, effect path, recovery ledger, or consciousness daemon is allowed.
 
 ## Container boundary
 
 The final product must converge into one exact OCI image built from this workspace. Final acceptance must bind exact source/image identity and the selected isolated runtime environment. Required hardening includes non-root execution, read-only root filesystem at admitted scope, dropped capabilities, `no-new-privileges`, bounded tmpfs, explicit persistent state/workspace volumes, runtime-injected secrets, and reproducible supply-chain evidence.
+
+The current Dockerfile still stages digest-bound EntityOS bytes and keeps execution disabled by default. That is a current candidate packaging choice, not a permanent ClayVerse product-authority requirement.
 
 A source candidate, component PASS, PR merge, CI definition, deployment READY state, historical receipt, or synthetic demo does not imply whole-product PASS.
 
@@ -58,7 +60,7 @@ Whole ClayVerse acceptance remains **IN_PROGRESS**. Required current gates inclu
 - UnifiedDB persistence/restart/recovery and one global generation;
 - MicroClay retrieval falsifiers and SHADOW-vs-baseline benchmark;
 - ClayGraph/Hyperposition/workspace fail-closed behavior;
-- effect-only MCP/EffectGate and admitted EntityOS round trip;
+- effect-only MCP/EffectGate, plus EntityOS effect round trip only when EntityOS is included/enabled;
 - crash/restart with no unsafe external replay;
 - dual-session collision/privacy/stale-generation controls;
 - supply-chain closure and exact deployment-runtime evidence.
@@ -82,3 +84,11 @@ Runtime credit remains **ZERO** for this delta because no exact authorized whole
 After the authority reconciliation merged, adversarial source review found a narrower false-green: top-level ClayVerse authority could remain valid while nested `PROGRAM_STATE.json` work-selection fields were changed back toward a retired program. The authority validator now also binds the current stage goal, primary dynamic target, current frontier and `go` contract to ClayVerse, with poison regressions for stale nested work selection.
 
 The post-merge frontier is now re-entered explicitly as exact-current ClayVerse authority/full-suite/OCI build-startup on an actually-started authorized isolated executor, followed by the Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/EntityOS/recovery path. This is source/control hardening only; whole-product runtime credit remains **ZERO** until that exact execution exists.
+
+## 2026-08-23 `go` re-entry — optional EntityOS authority fence
+
+Post-merge adversarial review found one more authority mismatch: `manifest.json` still made EntityOS `MANDATORY_IN_FINAL_ACCEPTED_IMAGE` and an unconditional whole-product PASS gate even though the current owner directive and canonical runtime path define EntityOS as an optional, separately admitted internal substrate.
+
+The bootstrap/directive/manifest/README now agree that EntityOS omission with execution disabled does not itself block ClayVerse acceptance. If EntityOS is staged or enabled, exact artifact identity, admission evidence and EffectGate/provenance rules remain mandatory. The current Dockerfile may still stage exact EntityOS bytes as a candidate packaging choice; staging does not mint permanent product authority.
+
+The authority validator is upgraded to v3 while retaining nested work-selector, root `CLAUDE.md`, swarm-quarantine and inherited 4.1/4.2/4.3 ancestry fences merged by parallel workers. Two additional poison regressions reject bootstrap or manifest drift back to mandatory EntityOS. Runtime credit remains **ZERO** until exact authorized isolated execution exists.

@@ -1,0 +1,111 @@
+{
+  "schema": "CLAY_GO_IMPLEMENTATION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "owner_authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "branch": "gpt56sol/go-mini-cognition-store-20260823-1511-r2",
+  "branch_base": "beea31cba0b78d26093cb12b567152737c08adb5",
+  "latest_main_observed_before_receipt": "596a70366ffa74c2d5259ecc64d8e8c2fd2672ba",
+  "main_drift_note": "main advanced only in parallel coordination/frontier receipts during this lane; no observed same-path cognition-store implementation was overwritten",
+  "problem": "The retained reference runtime has MiniUnifiedDB entity_state generation authority and a canonical UCF source path, but the next current implementation gate requires one MiniUnifiedDB-resident versioned cognition-object binding store before the real pre-inference UCF handler can bind ZERO/GRF/Hyperposition/J-Space/model-calibration identity without a second authority.",
+  "delta": {
+    "module": "tools/miniunifieddb_cognition_store.py",
+    "test": "tests/test_miniunifieddb_cognition_store.py",
+    "store_schema": "MINIUNIFIEDDB_COGNITION_BINDINGS/v1",
+    "object_schema": "MINIUNIFIEDDB_COGNITION_OBJECT/v1",
+    "snapshot_schema": "MINIUNIFIEDDB_COGNITION_BINDING_SNAPSHOT/v1",
+    "roles": [
+      "ZERO_IDENTITY",
+      "GRF",
+      "HYPERPOSITION",
+      "BUNDLED_COGNITION_MANIFEST",
+      "JSPACE_ADAPTER",
+      "WORKSPACE_CALIBRATION"
+    ],
+    "authority": "reuses existing MiniUnifiedDB entity_state.generation as the only CAS fence; creates no second identity, truth authority, effect path, or model-output authority",
+    "properties": [
+      "content-addressed immutable cognition-object envelopes",
+      "embedded secret-value rejection",
+      "typed role-to-object-kind admission",
+      "generation-fenced atomic active bindings",
+      "per-generation binding snapshot digest",
+      "bound-object digest revalidation on read",
+      "schema bootstrap can join the canonical runtime BEGIN IMMEDIATE transaction without committing it"
+    ]
+  },
+  "exact_bytes": {
+    "module_sha256": "668659d9ddc36352dd6922e1a635b00685c946772e23deb54c39302056f5c8a1",
+    "module_git_blob": "c956abdaa9e449404c352dc2f7fc3bd88e1cfa88",
+    "test_sha256": "04375a71b8286198b2332a41348e0dc0e8f024ebf4b1b908946d55682c78d985",
+    "test_git_blob": "14a43fed88d0ef4ab0a418344232583b2359656e"
+  },
+  "local_isolated_component_check": {
+    "environment": {
+      "python": "3.13.5",
+      "sqlite": "3.46.1",
+      "kernel": "Linux 6.18.35 x86_64"
+    },
+    "commands": [
+      "python3 -m py_compile tools/miniunifieddb_cognition_store.py tests/test_miniunifieddb_cognition_store.py",
+      "python3 -m unittest -v tests/test_miniunifieddb_cognition_store.py"
+    ],
+    "final_result": "PASS_6_OF_6",
+    "exit_code": 0,
+    "scope": "component regression only; not authorized product-runtime acceptance"
+  },
+  "negative_results_preserved": [
+    {
+      "stage": "first implementation",
+      "result": "1_PASS_4_ERROR",
+      "mechanism": "put_object left an implicit SQLite transaction open, causing activate_binding BEGIN IMMEDIATE to fail with cannot start a transaction within a transaction",
+      "repair": "mutating store APIs now own explicit transaction boundaries and fail typed on caller-owned active transactions"
+    },
+    {
+      "stage": "transaction-safe schema integration refinement",
+      "result": "1_FAILURE_5_ERRORS",
+      "mechanism": "the test fixture intentionally preserved the bootstrap transaction but then attempted post-bootstrap mutators before committing it; rollback expectation also incorrectly assumed pre-transaction DDL would disappear",
+      "repair": "fixture now models canonical bootstrap commit correctly; schema test separately proves init_schema does not commit the caller transaction"
+    }
+  ],
+  "regressions": [
+    "bootstrap transaction ownership preserved",
+    "object insertion idempotent",
+    "secret-bearing cognition object rejected",
+    "wrong role/object kind rejected",
+    "missing required binding rejected",
+    "single entity_generation advances on binding",
+    "freshly rehashed object with stale generation rejected without partial binding",
+    "tampered bound object rejected by digest recheck"
+  ],
+  "unusual_experiment": {
+    "count_added_by_this_lane": 0,
+    "classification": "NO_NEW_EXPERIMENT",
+    "reason": "current same-macrocycle adjudication on main already records the unusual experiment slot as consumed by AUTHORITY_ROUTING_CLAYVERSE_REACTIVATION_POISON; the stale-generation poison case here is regression-only"
+  },
+  "hcu": {
+    "delta": "NO_CHANGE_AVOID_DUPLICATION",
+    "reason": "parallel HCU capacity/scheduler lanes already exist; this lane did not create a competing scheduler or authority",
+    "runtime_credit": 0
+  },
+  "execution_surface": {
+    "vercel_sandbox_exec": "UNAVAILABLE_IN_EXPOSED_CONNECTOR_SURFACE",
+    "github_runner_runtime_acceptance": "NOT_CLAIMED",
+    "vps_test": "NOT_USED"
+  },
+  "credits": {
+    "source_candidate": true,
+    "component_regression": true,
+    "canonical_runtime_integration": false,
+    "ucf_runtime": 0,
+    "model_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_gwt_runtime": 0,
+    "claude_adapter_runtime": 0,
+    "hcu_runtime": 0,
+    "whole_product": 0
+  },
+  "next_exact_gate": "Fuse this store into the retained reference runtime pipeline_init, then implement one real pipeline_cognitive_fabric_admit/prepare handler that reads an exact required-role snapshot at the admitted entity_generation, compiles the existing ZERO_WORKSPACE_CAPSULE -> ZERO_INFERENCE_PACKET pre-admission object, runs inference, preserves the existing deterministic gate/CAS commit, and emits the final UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT only after terminal gate/commit state; missing/stale/unbound cognition objects must fail closed or typed-abstain before inference.",
+  "classification": "SOURCE_IMPLEMENTATION_PLUS_LOCAL_COMPONENT_REGRESSION_ONLY"
+}

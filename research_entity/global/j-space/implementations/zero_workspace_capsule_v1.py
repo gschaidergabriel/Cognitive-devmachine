@@ -34,6 +34,15 @@ UNAVAILABLE_REASONS = {
     "HYPERPOSITION_STATE_UNAVAILABLE",
     "WORKSPACE_ABSTAINED",
 }
+CAPSULE_KEYS = {
+    "schema", "compiler_version", "identity", "grf", "authority",
+    "entity_generation", "causal_turn_id", "task", "mode",
+    "zero_identity_digest", "grf_digest", "hyperposition_digest",
+    "local_model_digest", "jacobian_lens_digest", "workspace_digest",
+    "selected_workspace_slots", "contradiction_state", "provenance_refs",
+    "required_zero_mode", "abstention_reason", "capsule_digest",
+}
+TASK_KEYS = {"format", "text", "sha256", "structural_authority"}
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
 
@@ -186,6 +195,7 @@ def compile_abstention_capsule(
 
 def validate(doc: dict[str, Any]) -> dict[str, Any]:
     _need(isinstance(doc, dict), "capsule must be object")
+    _need(set(doc) == CAPSULE_KEYS, "capsule field set mismatch")
     _need(doc.get("schema") == SCHEMA, "schema mismatch")
     _need(doc.get("compiler_version") == COMPILER_VERSION, "compiler_version mismatch")
     _need(doc.get("identity") == {
@@ -206,6 +216,7 @@ def validate(doc: dict[str, Any]) -> dict[str, Any]:
     _nonempty(doc.get("causal_turn_id"), "causal_turn_id")
     task = doc.get("task")
     _need(isinstance(task, dict), "task missing")
+    _need(set(task) == TASK_KEYS, "task field set mismatch")
     _need(task.get("format") == "OPAQUE_USER_TASK_TEXT/v1", "task format mismatch")
     _need(task.get("structural_authority") == "NONE", "task structural authority forbidden")
     _need(isinstance(task.get("text"), str), "task text invalid")

@@ -24,8 +24,10 @@ from pathlib import Path
 from typing import Any, Callable
 
 import claycode_structured_backend as clay
+import miniunifieddb_cognition_bootstrap_v1 as cognition_bootstrap
+import profile_runtime_cognitive_fabric_binding_v1 as cognitive_fabric_binding
 
-VERSION = "clay-profile-pipeline-runtime/0.6.3"
+VERSION = "clay-profile-pipeline-runtime/0.6.4"
 PROFILE_SCHEMAS = {"clay-pipeline-profile/v1", "clay-pipeline-profile/v2"}
 _ADMITTED_API_INFERENCE_KINDS = {
     "openai_style_chat_json",
@@ -130,6 +132,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             "pipeline_collect",
             "pipeline_compile",
             "pipeline_build_prompt",
+            "pipeline_cognitive_fabric_admit",
             "inference_generate",
             "pipeline_gate",
             "pipeline_commit",
@@ -268,6 +271,7 @@ class ProfilePipelineRuntime(clay.Runtime):
             "pipeline_collect": self._pipeline_collect,
             "pipeline_compile": self._pipeline_compile,
             "pipeline_build_prompt": self._pipeline_build_prompt,
+            "pipeline_cognitive_fabric_admit": self._pipeline_cognitive_fabric_admit,
             "inference_generate": self._inference_generate,
             "pipeline_gate": self._pipeline_gate,
             "pipeline_commit": self._pipeline_commit,
@@ -294,6 +298,7 @@ class ProfilePipelineRuntime(clay.Runtime):
         """Own all schema/bootstrap writes before observational pipeline phases begin."""
         db = self._db(str(p["entity_db"]))
         try:
+            cognition_bootstrap.prepare_connection(db)
             db.execute("BEGIN IMMEDIATE")
             entity_table_preexisting = db.execute(
                 "SELECT 1 FROM sqlite_master WHERE type='table' AND name='entity_state'"
@@ -343,6 +348,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                    VALUES(1,0,NULL,?,?)""",
                 (now, now),
             )
+            cognition_bootstrap.install_cognition_schema(db)
 
             if eos_preexisting and "generation" in eos_columns:
                 db.execute(
@@ -851,6 +857,13 @@ class ProfilePipelineRuntime(clay.Runtime):
             default=str,
         )
         return {"ok": True, "system": system, "user": user}
+
+    def _pipeline_cognitive_fabric_admit(self, p: dict[str, Any]) -> dict[str, Any]:
+        """Delegate pre-inference admission to the single canonical read-only bridge."""
+        try:
+            return cognitive_fabric_binding.admit_profile_runtime_payload(self, p)
+        except Exception as exc:
+            return {"ok": False, "error_kind": type(exc).__name__, "error": str(exc)}
 
     def _keys(self, names: list[str], secret_file: str | None) -> list[str]:
         file_values: dict[str, str] = {}

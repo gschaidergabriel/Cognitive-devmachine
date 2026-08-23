@@ -17,6 +17,12 @@
     "promotion_blocked_by_this_receipt": false,
     "note": "The finding is documented as review evidence; repository policy/owner decides promotion."
   },
+  "post_branch_main_delta": {
+    "observed_main": "d357395b3e3b120df573b30b5d4cc6d40170dadd",
+    "merged_pr": 1272,
+    "finding": "Canonical BLOGPOST_ENTITY.clay now passes MINI_COGNITIVE_INVOCATION/v1 directly into pipeline_cognitive_fabric_admit.",
+    "fusion_response": "The selector is treated as a read-only integrity cross-check against the already-active MiniUnifiedDB turn. PREPARE must not allocate, bind or activate and must not bypass the active pointer by resolving the selector as an independent runtime authority."
+  },
   "delta": {
     "module": "tools/miniunifieddb_causal_turn_allocator_v1.py",
     "tests": "tests/test_miniunifieddb_causal_turn_allocator_v1.py",
@@ -26,7 +32,7 @@
     "second_turn_ledger_created": false,
     "truth_authority_change": "NONE",
     "effect_authority_change": "NONE",
-    "runtime_selector_fusion": "invocation selector may request activation only for an already allocated+bound turn; runtime PREPARE resolves the generation-bound active pointer, not a second selector path"
+    "runtime_selector_fusion": "invocation selector may request activation only for an already allocated+bound turn and may enter PREPARE only as a read-only cross-check; runtime PREPARE resolves the generation-bound active pointer as the sole lookup path"
   },
   "exact_source": {
     "tools/miniunifieddb_causal_turn_allocator_v1.py": {
@@ -40,9 +46,9 @@
       "bytes": 3817
     },
     "the artefact/blogpost_entity/jspace_gwt/MINI_ENTITY_CAUSAL_TURN_ALLOCATION_V1.md": {
-      "git_blob_sha1": "f31a370796454daa57ece0fbf7c94a7b8601c1f3",
-      "sha256": "b1218c537a569fa7c7717371aba7c90061f222154081988a9d1cc364d4946b9a",
-      "bytes": 4394
+      "git_blob_sha1": "babaaff93179cee2e255ed1fd959e1137594089e",
+      "sha256": "2758ee082d4f0751d3b16db404591ba51b2bd75d30320f56c2ffc7c0b5781361",
+      "bytes": 5232
     }
   },
   "bounded_isolated_component_evidence": {
@@ -55,7 +61,7 @@
     "tests_run": 6,
     "failures": 0,
     "errors": 0,
-    "result": "PASS_EXACT_AUTHORED_BYTES_COMPONENT_SCOPE",
+    "result": "PASS_EXACT_AUTHORED_ALLOCATOR_AND_TEST_BYTES_COMPONENT_SCOPE",
     "covered": [
       "schema requires existing canonical entity_state",
       "two identical contexts allocate distinct causal event ids",
@@ -63,7 +69,8 @@
       "invalid or unknown causal id fail-closed",
       "allocation rows reject update/delete",
       "caller-owned transaction rollback removes allocation"
-    ]
+    ],
+    "contract_note": "The later selector/active-pointer fusion edit is source-contract text only and does not add runtime execution credit."
   },
   "unusual_experiment": {
     "new_count": 0,
@@ -76,5 +83,5 @@
     "claude_adapter": 0,
     "hcu": 0
   },
-  "next_exact_gate": "Fuse allocator installation into the single caller-owned MiniUnifiedDB bootstrap transaction, allocate+bind+activate one turn atomically upstream, then implement the retained pipeline_cognitive_fabric_admit handler as active_turn.resolve_active_prepare -> cognition_store.resolve_prepare_binding -> ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v2. Exact integrated bytes must execute on an actually-started authorized isolated executor before runtime credit."
+  "next_exact_gate": "Fuse allocator installation into the single caller-owned MiniUnifiedDB bootstrap transaction; allocate+bind+activate one turn atomically upstream; then implement pipeline_cognitive_fabric_admit as read-only selector cross-check + active_turn.resolve_active_prepare -> cognition_store.resolve_prepare_binding -> ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v2. Exact integrated bytes must execute on an actually-started authorized isolated executor before runtime credit."
 }

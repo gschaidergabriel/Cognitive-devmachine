@@ -206,3 +206,15 @@ The retained executor is concurrently staging the admission-store and integrated
 Next exact gate: finish the same one-lane PR810 vendor closure from retained donor `57bc0acfc23bd58261746c7253529a79adc6c70a`, bind every required Git blob in one fixed manifest, remove `SOURCE_REBIND_REQUIRED` only in that coherent change, and execute only once the FREE_ONLY build/function admission surface is available.
 
 Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_JSPACE_TRANSITIVE_EXECUTOR_REBIND_CLOSURE_GPT56SOL.json`.
+
+## Current `go` delta — single executor rebind target authority
+
+`README=UPDATED_SINGLE_REBIND_TARGET_AUTHORITY`.
+
+PR810's quarantined binder route and `ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v2` previously duplicated the required successor Research-main and donor commit identities. Rapid parallel movement demonstrated that the two copies could diverge while remaining individually valid. Because the route's HTTP 409 response exposes those target identities to the next fusion worker, this was executable coordination-authority drift rather than harmless stale prose.
+
+Executor commit `d2bb2812345fe1d7fe7034a9222b0db6d9932249` makes the deployment-carried v2 rebind contract the single behavioral target authority while `SOURCE_REBIND_REQUIRED` remains active. The route now validates the contract's supervisor, FREE_ONLY mode, repository, retained donor/executor PR identities, exact Git-commit-shaped targets and zero-credit boundary, SHA-256 binds the contract bytes, and returns the contract's required main/donor target plus candidate chain. Missing, malformed or authority-incompatible contract data returns `SOURCE_REBIND_CONTRACT_INVALID` before cost admission or `Sandbox.create`.
+
+This delta does not remove the stale binder-v2 quarantine and does not execute a model, Function or Sandbox. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model-runtime and training credit remain `0`. The next exact gate remains one-lane fusion: vendor every v2-contract source/regression/transitive-fixture byte-identically from one immutable donor snapshot, bind every Git blob in the fixed route manifest, remove `SOURCE_REBIND_REQUIRED` only in that same coherent change, then execute only when the FREE_ONLY Vercel Hobby build and protected-function admission are actually available.
+
+Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_EXECUTOR_REBIND_SINGLE_TARGET_AUTHORITY_GPT56SOL.json`.

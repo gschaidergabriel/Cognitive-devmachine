@@ -108,8 +108,7 @@ def test_explicit_oauth_token_avoids_ambient_credential_copy(tmp_path, monkeypat
         "from pathlib import Path\n"
         "cfg=Path(os.environ['CLAUDE_CONFIG_DIR'])\n"
         f"Path({str(log)!r}).write_text(json.dumps({{"
-        "'oauth_present':bool(os.environ.get('CLAUDE_CODE_OAUTH_TOKEN')),
-"
+        "'oauth_present':bool(os.environ.get('CLAUDE_CODE_OAUTH_TOKEN'))," 
         "'cred_exists':(cfg/'.credentials.json').exists()"
         "}}))\n"
         "print(json.dumps({'structured_output':{'text':'ok','effect':None}}))\n"

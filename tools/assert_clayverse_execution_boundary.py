@@ -18,6 +18,12 @@ EXPECTED_EXECUTION_GATE = "BLOCKED_ON_EXACT_RETAINED_CONTROLLER_READY_REBIND_AND
 EXPECTED_VERCEL_BRIDGE = "SANDBOX_ADMISSION_PROVEN_RUNTIME_ONE_SHOT_TOKEN_INGRESS_IMPLEMENTED"
 EXPECTED_CONTROLLER_READY_BINDING = "EXACT_RETAINED_CONTROLLER_HEAD_READY_REQUIRED_BEFORE_TOKEN_POST"
 EXPECTED_CONTROLLER = "gschaidergabriel/Dr.-Unterweger#810"
+CURRENT_OWNER_DIRECTIVE = "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md"
+BRIDGE_CANONICAL_CLAUDE_MARKER = "normal interactive claude code"
+BRIDGE_ENTITYOS_CONDITIONAL_MARKER = "entityos execution remains conditional"
+BRIDGE_RETIRED_PROVIDER_MARKER = "historical mistral/custom-engine acceptance path"
+STALE_MANDATORY_PROVIDER_TEXT = "mistral is mandatory for this final test"
+STALE_RETIRED_PROBE_TEXT = "final_acceptance_probe.py::run_mistral_acceptance_probe"
 
 
 def load_json(path: Path):
@@ -31,12 +37,14 @@ def require(errors: list[str], condition: bool, code: str) -> None:
 
 
 def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]:
-    """Cross-bind retained Vercel continuity and current work-selection in both directions.
+    """Cross-bind retained Vercel continuity, current work selection, and product semantics.
 
-    Historical Sandbox admission and the one-shot token ingress prove the bridge exists, but
-    they do not prove that the *current retained controller head* is deployed READY. The
-    selected frontier therefore requires exact controller rebind/READY before the owner-held
-    token POST. This function never grants source, OCI, or product runtime credit.
+    Historical Sandbox admission and one-shot token ingress prove the bridge exists, but they
+    do not prove that the current retained controller head is deployed READY. Current work
+    selection therefore requires exact controller rebind/READY before the owner-held token POST.
+    The continuity record must also preserve current ClayVerse semantics: normal interactive
+    Claude Code is canonical cognition, retired Mistral/custom-engine paths remain retired, and
+    EntityOS execution remains conditional on explicit admission. This never grants runtime credit.
     """
     errors: list[str] = []
     lower = vercel_execution.lower()
@@ -62,6 +70,13 @@ def execution_frontier_errors(program: dict, vercel_execution: str) -> list[str]
         return errors
     if not bridge_proven:
         return errors
+
+    require(errors, CURRENT_OWNER_DIRECTIVE.lower() in lower, "VERCEL_BRIDGE_CURRENT_OWNER_DIRECTIVE_MISSING")
+    require(errors, BRIDGE_CANONICAL_CLAUDE_MARKER in lower, "VERCEL_BRIDGE_CANONICAL_CLAUDE_PATH_MISSING")
+    require(errors, BRIDGE_ENTITYOS_CONDITIONAL_MARKER in lower, "VERCEL_BRIDGE_ENTITYOS_CONDITIONALITY_MISSING")
+    require(errors, BRIDGE_RETIRED_PROVIDER_MARKER in lower, "VERCEL_BRIDGE_RETIRED_PROVIDER_TOMBSTONE_MISSING")
+    require(errors, STALE_MANDATORY_PROVIDER_TEXT not in lower, "VERCEL_BRIDGE_STALE_MANDATORY_PROVIDER")
+    require(errors, STALE_RETIRED_PROBE_TEXT not in lower, "VERCEL_BRIDGE_STALE_RETIRED_PROBE_AUTHORITY")
 
     require(errors, stage_gate == EXPECTED_EXECUTION_GATE, "PROGRAM_EXECUTION_FRONTIER_STALE_GENERIC_SURFACE_BLOCK")
     require(errors, execution.get("vercel_sandbox_bridge") == EXPECTED_VERCEL_BRIDGE, "PROGRAM_VERCEL_BRIDGE_STATE_MISSING")
@@ -110,14 +125,12 @@ def validate(root: Path) -> dict:
     sandbox_text = paths["sandbox_directive"].read_text(encoding="utf-8").lower()
     guest_text = paths["vps_guest_directive"].read_text(encoding="utf-8").lower()
 
-    # Newest owner authority: current executable work is isolated-sandbox-only.
     require(errors, "2026-08-23" in sandbox_text, "SANDBOX_DIRECTIVE_CURRENT_OWNER_DATE_MISSING")
     require(errors, "vps testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_VPS_BAN_MISSING")
     require(errors, "vps-hosted disposable kvm/vm/microvm/tcg guest testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_VPS_GUEST_BAN_MISSING")
     require(errors, "self-hosted vps test runners are **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_SELF_HOSTED_BAN_MISSING")
     require(errors, "production/deployment-host testing is **forbidden**" in sandbox_text, "SANDBOX_DIRECTIVE_PRODUCTION_BAN_MISSING")
 
-    # The older 2026-08-18 guest directive must stay historical and non-operative.
     require(errors, "**status:** **superseded**" in guest_text, "VPS_GUEST_DIRECTIVE_NOT_SUPERSEDED")
     require(errors, "superseded by the newer owner-directed clayverse bootstrap dated **2026-08-23**" in guest_text, "VPS_GUEST_DIRECTIVE_NEWER_AUTHORITY_MISSING")
     require(errors, "vps-hosted disposable kvm/vm/microvm/tcg guest testing is forbidden" in guest_text, "VPS_GUEST_DIRECTIVE_CURRENT_GUEST_BAN_MISSING")
@@ -137,9 +150,6 @@ def validate(root: Path) -> dict:
     require(errors, execution.get("production_host_testing_forbidden") is True, "PROGRAM_PRODUCTION_BAN_MISSING")
     require(errors, VPS_GUEST_DIRECTIVE not in json.dumps(execution, sort_keys=True), "PROGRAM_STALE_VPS_DIRECTIVE_POINTER")
 
-    # The retained Vercel bridge is an authorized isolated sandbox path. Historical
-    # admission proves the bridge, while exact current-controller READY remains a separate
-    # pre-token work-selection gate.
     vercel_path = root / VERCEL_EXECUTION_PATH
     stage_gate = ((program.get("stage_gates") or {}).get("CLAYVERSE_EXACT_OCI_ACCEPTANCE") or {}).get("status")
     program_claims_vercel = (

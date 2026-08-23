@@ -1,0 +1,72 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "98d24a84a10799646b220d11e32927c5ab49d4a4",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; AVAILABLE_CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "force_push_used": false
+  },
+  "observed_executor": {
+    "identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_before_guard_write": "efb404b5233642bbf166158b876133c002f1fd7b",
+    "guard_commit_written": "e0f137bf0d9e09a81006509ef139a1037d2b92df",
+    "head_reentered_after_parallel_write": "8d8c02dbc4640d16c440f205d1fd5a30f5227b01",
+    "guard_file": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-rebind-permission-semantics.mjs",
+    "guard_blob_after_write": "dd305d11cf9440bf9690f141ec02dfe86fc3289d"
+  },
+  "finding": {
+    "classification": "SOURCE_CONTROL_FLOW_AUTHORITY_GAP",
+    "observed_route_state": "SOURCE_REBIND_REQUIRED=true route verifies the deployment-carried 17-blob closure and then can continue to FREE_ONLY cost admission and Sandbox.create; successful source verification is therefore not a terminal quarantine in the route implementation.",
+    "observed_guard_gap": "The then-current rebind permission guard treated contract status SOURCE_REBIND_REQUIRED plus the true route flag as sufficient quarantine proof, without proving that the quarantine branch terminates before the cost/Sandbox path.",
+    "authority_conflict": "Canonical Research main 98d24a84 records route_unquarantined=false and requires successor-ready global-guard semantics followed by atomic contract+route promotion before execution, while a parallel PR810 body update describes SOURCE_REBIND_REQUIRED as a nonterminal pre-Sandbox verification gate. The canonical Research main/supervisor interpretation outranks PR body prose.",
+    "counterhypothesis": "Exact 17-blob verification under SOURCE_REBIND_REQUIRED is itself sufficient to constitute completed source rebind, so execution may proceed without a distinct SOURCE_REBOUND_READY promotion state.",
+    "falsifier": "Current canonical Research main explicitly records route_unquarantined=false and names atomic contract+route promotion as the remaining gate; therefore nonterminal SOURCE_REBIND_REQUIRED semantics are not admitted by the current canonical promotion contract."
+  },
+  "delta": {
+    "executor_commit": "e0f137bf0d9e09a81006509ef139a1037d2b92df",
+    "permission_guard_schema": "ENTITYOS_HCU_JSPACE_REBIND_PERMISSION_GUARD/v2",
+    "control_flow_check": "The guard now structurally locates the SOURCE_REBIND_REQUIRED block, its try/catch source-verification sequence, and the FREE_ONLY cost gate; while contract status remains SOURCE_REBIND_REQUIRED it requires an unconditional terminal 409 return after the verification catch and before the cost gate.",
+    "terminal_result_fence": "The required terminal response must state SOURCE_REBIND_VERIFIED_AWAITING_PROMOTION, sandbox_create_attempted=false, execution_credit=NONE, and zero whole-runtime/J-Space-model/training/whole-product credit.",
+    "expected_current_effect": "Because the current route has no such unconditional post-verification terminal return, the prebuild guard should fail closed until the route is made terminal while quarantined or the successor-ready contract+route promotion is performed coherently.",
+    "runtime_executed": false,
+    "runtime_credit_change": 0
+  },
+  "negative_evidence": {
+    "current_executor_combined_status": "VERCEL_FAILURE_BUILD_RATE_LIMIT_UPGRADE_PATH",
+    "classification": "INFRASTRUCTURE_QUOTA_ADMISSION_FAILURE_NOT_CODE_OR_HCU_RUNTIME_FAILURE",
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_consumption": false,
+    "exact_current_sandbox_invocation_observed": false,
+    "guard_runtime_execution_observed": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: an execution-controller state could no longer be declared quarantined solely from a true flag while control flow still reaches the executable Sandbox path; promotion/execution now has a source-structural fail-closed discriminator.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the exact producer-derived Typed Entry -> route -> engine/load -> GRID10 -> execution chain remains bound to one executor lane, and its FREE_ONLY transition boundary is now protected against flag-only semantic drift.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 component execution cannot obtain an admitted Sandbox path while the canonical source-promotion state is still quarantined; model/training credit remains zero."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "High-churn parallel executor work is still moving current-facing prose. This append-only exact-identity receipt records the new control-flow discriminator without overwriting the artefact README with a transient executor head."
+  },
+  "next_exact_gate": "Re-enter current PR810. Keep SOURCE_REBIND_REQUIRED terminal until the canonical successor-ready transition is complete. First finish the global executor guard successor-ready semantics; then atomically change contract+route to SOURCE_REBOUND_READY with source_rebind_complete=true and sandbox_create_permitted_after_source_rebind=true while retaining exact 17-blob, fixed-command, 14-test, credit-zero and FREE_ONLY cost-gate invariants. Only after an exact-current READY included-tier deployment exists may the deterministic component route be invoked; current Vercel build-rate-limit failure must not be bypassed or upgraded."
+}

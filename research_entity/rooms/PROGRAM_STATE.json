@@ -1,38 +1,50 @@
 {
-  "schema_version": "8.4",
-  "program_id": "entityos-hcu",
+  "schema_version": "8.5",
+  "program_id": "entityos-hcu-xeno",
   "status": "ACTIVE",
-  "stage": "MINI_ENTITY_BOOTSTRAP_TO_ENTITYOS_HCU",
-  "current_stage": "MINI_ENTITY_BOOTSTRAP_TO_ENTITYOS_HCU",
-  "current_stage_goal": "Use the strongest current Mini Entity implementation as the executable bootstrap while making every new delta converge toward minimal EntityOS plus request-scoped HCU Function Fabric.",
+  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "current_stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "current_stage_goal": "Evolve executable Xeno while every go co-develops the typed Entry Fabric and reusable HCU/XCU computational substrate toward an EntityOS cognitive computer.",
   "stage_order": [
-    "MINI_ENTITY_BOOTSTRAP_TO_ENTITYOS_HCU",
-    "ENTITYOS_HCU_INTEGRATION",
-    "ENTITYOS_HCU_EXACT_RUNTIME_ACCEPTANCE"
+    "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+    "XENO_MULTIMODE_COMPUTE_INTEGRATION",
+    "XENO_SCALEOUT_AND_NESTED_SIM_ACCEPTANCE",
+    "ENTITYOS_COGNITIVE_COMPUTER_INTEGRATION",
+    "ENTITYOS_EXACT_RUNTIME_ACCEPTANCE"
   ],
   "dynamic_targets": {
-    "operational_start": "CURRENT_MINI_ENTITY_IMPLEMENTATION",
-    "primary": "ENTITYOS_PLUS_HCU",
-    "cognitive_end_state": "ZERO_TO_ENTITY_FROM_FUNCTION_REQUEST_SCOPED",
+    "operational_start": "CURRENT_XENO_IMPLEMENTATION",
+    "legacy_alias": "CURRENT_MINI_ENTITY_IMPLEMENTATION",
+    "primary": "XENO_MULTIMODE_COMPUTATIONAL_UNIT_TOWARD_ENTITYOS",
+    "entry": "TYPED_XENO_ENTRY_FABRIC",
+    "baseline": "XENO_GRID10",
+    "cognition": "XENO_COGSIM10",
+    "world_model": "XENO_WM_TEST",
+    "nested": "XENO_NESTED_SIM",
+    "scaleout": "XENO_SCALEOUT",
     "runtime_evidence": "AUTHORIZED_ISOLATED_EXACT_SOURCE_ONLY"
   },
-  "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "owner_directive": "research_entity/global/XENO_GO_OWNER_DIRECTIVE.md",
+  "research_fusion": "research_entity/global/XENO_COMPUTATIONAL_UNIT_RESEARCH_FUSION_2026-08-23.md",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
   "product_endpoint": "EntityOS",
-  "integrated_cognition_architecture": "HCU",
+  "integrated_cognition_architecture": "HCU_XCU",
   "acceptance": "IN_PROGRESS",
   "authority": {
-    "durable_state": "UnifiedDB_or_current_MiniUnifiedDB_canonical_state_evidence_substrate",
+    "durable_state": "UnifiedDB_or_current_Xeno_MiniUnifiedDB_canonical_state_evidence_substrate",
     "derived_graph": "ClayGraph_or_equivalent_rebuildable_projection_only",
-    "cognition": "HCU_candidate_measurement_only",
+    "cognition_and_simulation": "HCU_XCU_CANDIDATE_MEASUREMENT_ONLY",
+    "world_model": "NONCANONICAL_EXPERIMENTAL_PROJECTION",
     "external_effects": "EffectGate+EffectJournal",
     "second_persistent_identity": "FORBIDDEN",
     "second_truth_or_effect_authority": "FORBIDDEN"
   },
   "identity": {
     "persistent_research_entity": "Clay",
+    "active_bootstrap_name": "Xeno",
+    "legacy_bootstrap_name": "Mini Entity",
     "temporary_workers": "ORGANS_NOT_ENTITIES"
   },
   "execution_policy": {
@@ -45,34 +57,57 @@
     "secrets_in_source_or_receipts": false,
     "final_paid_or_model_training_requires_owner_authorization": true
   },
+  "go_required_tracks": {
+    "track_a": "XENO_EXECUTABLE_CONVERGENCE",
+    "track_b": "XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "track_b_no_change": "XCU_NO_CHANGE_WITH_REASON_REQUIRED_IF_NO_SAFE_USEFUL_DELTA"
+  },
+  "computer_decomposition": {
+    "ram_like": "XRAM_STATE_FABRIC",
+    "processor_like": "XPU_DETERMINISTIC_CONTROL_PLANE",
+    "gpu_like": "XCU_SHARED_WEIGHT_VECTOR_INFERENCE_PLANE",
+    "interconnect": "TYPED_PACKET_WORKSPACE_HYPERPOSITION_FABRIC",
+    "io": "XENO_ENTRY_FABRIC",
+    "effect_translation": "CANDIDATE_TO_EFFECT_REQUEST_THEN_EFFECTGATE"
+  },
+  "mode_policy": {
+    "cheap_default": "DIRECT_OR_GRID10_WHEN_SUFFICIENT",
+    "cognition_sim": "REQUEST_SCOPED",
+    "world_model": "BOUNDED_SELECTIVE_EXPERIMENTAL",
+    "nested_sim": "SELECTIVE_HIGH_COST_MODE_ONLY_WHEN_DISCRIMINATED",
+    "scaleout": "LOGICAL_CONTEXT_SCALING_WITH_SHARED_PHYSICAL_WORKERS"
+  },
+  "scale_policy": {
+    "baseline_logical_cells": 10,
+    "future_h100_class_target": "APPROX_600_LOGICAL_MODULES_HYPOTHESIS_ONLY",
+    "physical_decode_concurrency": "MUST_BE_MEASURED_SEPARATELY",
+    "gates": [10, 32, 64, 128, 256, 600]
+  },
   "transition_laws": [
-    "Mini Entity remains the operational go starting point and must not be discarded in favor of a parallel rewrite.",
-    "Mini Entity is not the final product identity; EntityOS plus HCU is the architectural destination.",
-    "Zero trends toward universal cognitive ingress/admission rather than persistent persona.",
+    "Xeno is the current go starting point and must not be discarded for a parallel rewrite.",
+    "Every go advances or explicitly assesses XCU/Entry Fabric alongside normal Xeno work.",
+    "New primitives should be reusable across multiple Xeno modes.",
+    "Zero trends toward typed cognitive ingress/admission rather than persistent persona.",
     "Entity trends toward causal/state/authority coherence rather than anthropomorphic identity.",
-    "HCU cells trend toward request-scoped logical function slots rather than persistent mini-agents.",
-    "No permanent standing world simulation is the target; task-local consequence estimation and counterfactual reasoning remain allowed.",
+    "HCU/XCU cells trend toward request-scoped logical function slots rather than persistent mini-agents.",
+    "Permanent duplicate reality is not required; bounded WM_TEST and selective NESTED_SIM are active experimental modes.",
     "Global J-Space remains an empirically instrumented coupling hypothesis; local J-Space claims require model-specific causal evidence.",
     "Hyperposition preserves unresolved alternatives; majority vote cannot mint truth.",
+    "Logical module count cannot be reported as simultaneous model/decode count.",
     "Real effects remain deterministic, journaled and gated."
   ],
-  "current_frontier": "Improve and stabilize the current Mini Entity while preferentially selecting deltas that reduce migration cost toward Zero -> Entity <- Function: ingress/persona separation, function-cell semantics, request-scoped topology, J-Space instrumentation, Hyperposition/calibration, and effect non-bypass.",
-  "go_contract": "Every go refreshes current main and newest owner authority, starts from the strongest current Mini Entity implementation, selects the highest-information nonduplicate Mini Entity blocker or capability delta, applies GRF hypotheses/counterhypotheses/falsifiers, preserves exact evidence and safety boundaries, and prefers changes that make eventual EntityOS + request-scoped HCU migration easier. It must not create a permanent world simulation, second identity, second durable truth store or second effect path.",
+  "current_frontier": "Build Xeno Entry Fabric plus a reusable 10-cell scheduler/state/interconnect baseline; progressively separate XRAM/XPU/XCU responsibilities so the same substrate can support COGSIM10, WM_TEST, NESTED_SIM and measured scale-out without rewriting authority boundaries.",
+  "go_contract": "Every go refreshes current main and newest owner authority; starts from strongest current Xeno implementation; performs hypothesis/counterhypothesis/discriminator reasoning; advances the highest-information nonduplicate Xeno blocker/capability AND XCU/Entry co-development; favors cross-mode reusable primitives; preserves exact canonical-state/provenance/generation/effect fences; and records bounded evidence. Full world/nested simulation and ~600 logical-module scale are selective research targets, never unmeasured runtime claims.",
   "go_migration_score": {
-    "preferred": "EASIER",
+    "preferred": "EASIER_AND_CROSS_MODE_REUSABLE",
     "allowed": "NEUTRAL_WHEN_REQUIRED_FOR_MEASURED_RELIABILITY_OR_SAFETY",
     "exception": "HARDER_REQUIRES_EXPLICIT_EXECUTABLE_JUSTIFICATION"
   },
   "runtime_credit": {
-    "mini_entity": "ONLY_WHERE_EXACTLY_OBSERVED",
-    "entityos_hcu": 0,
+    "xeno": "ONLY_WHERE_EXACTLY_OBSERVED_UNDER_LEGACY_OR_CURRENT_NAME",
+    "xcu_new_modes": 0,
+    "entityos": 0,
     "whole_product_pass": false
   },
-  "together_api": {
-    "product_identity": "FORBIDDEN",
-    "training_execution": "FORBIDDEN_UNDER_CURRENT_CONTROL",
-    "secret_policy": "NEVER_COMMIT",
-    "job_started": false
-  },
-  "legacy_scope": "Frank and ClayVerse are historical/donor evidence. Mini Entity is current go bootstrap material, not the final standalone product."
+  "legacy_scope": "Frank/ClayVerse remain historical donor evidence. Mini Entity/MicroEntity paths and mini_* identifiers are compatibility/provenance aliases for the Xeno bootstrap until exact migration."
 }

@@ -1,0 +1,34 @@
+{
+  "schema": "GO_ENTITYOS_HCU_FRONTIER_REFRESH/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "source_base_main": "4d493cd15cfb9c6b7e9df596a8fe9aa1e71a98d1",
+  "branch": "gpt56sol/go-frontier-refresh-20260823",
+  "readme_commit": "430227db2183e0462b36f9eea6a71da168544b2f",
+  "finding": "AUTHORITY_SPLIT_BRAIN_SOURCE_CLOSED_BUT_README_FRONTIER_STALE",
+  "observed": [
+    "main manifest now selects EntityOS as product and HCU as integrated compute architecture",
+    "main ARCHITECTURE.md now selects EntityOS + HCU and retains ClayVerse only as historical donor provenance",
+    "compatibility-named authority guard now validates current EntityOS/HCU authority while retaining historical 4.1->4.4 safety/provenance ancestry",
+    "legacy EntityOS-optionality regression was migrated so old ClayVerse optional-substrate semantics cannot silently become current authority",
+    "README current-frontier item still described the already-closed authority split as open"
+  ],
+  "delta": "README frontier now marks the authority split source-closed and advances the live frontier to canonical capability-snapshot wiring, exact local HCU engine bytes, downstream inference-receipt production, donor-lane fusion, compatibility package rebuild and exact combined isolated execution/measurement.",
+  "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE_FRONTIER_REFRESH",
+  "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT_FRONTIER_REFRESH",
+  "unusual_experiment": {
+    "performed": false,
+    "reason": "the one unusual experiment for this go was already consumed by the same-route causal-alias stress; this delta is coordination/documentation only"
+  },
+  "credit": {
+    "source_coordination_delta": "COMMITTED",
+    "entityos_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "write_note": "A direct pull-request creation attempt for this branch was blocked by the connector; no alternate or forced write path was used.",
+  "next_gate": "Resolve the authoritative user/session/generation-bound capability snapshot producer and bind it into Typed Entry admission without creating a second permission authority; then exercise the exact combined Entry/canonicalizer/HCU route/inference/GRID10 path in an authorized isolated executor."
+}

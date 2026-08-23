@@ -63,6 +63,19 @@ class GlobalJSpaceGWTTests(unittest.TestCase):
         result = self.run_step(cells, generation=2)
         self.assertEqual(set(result.hyperposition_cells), {"a", "b"})
 
+    def test_out_of_coalition_cells_cannot_reverse_role_broadcast(self):
+        winner = CellContribution("winner", "world", (1.0,), 0.9, 0.9, 0.9, 0.9, 0.9, 0.9)
+        losers = [
+            CellContribution(f"loser.{index}", "critic", (-1.0,), 0.8, 0.8, 0.8, 0.8, 0.8, 0.8)
+            for index in range(6)
+        ]
+        result = self.run_step([winner, *losers], generation=3)
+        self.assertEqual(result.winner_cell_id, "winner")
+        self.assertEqual(result.hyperposition_cells, ("winner",))
+        self.assertEqual(result.trace["broadcast_contributor_cells"], ["winner"])
+        self.assertGreater(result.global_vector[0], 0.99)
+        self.assertEqual(len(result.trace["contributions"]), 7)
+
     def test_wrong_dimension_and_duplicate_cell_fail_closed(self):
         cells = self.cells()
         bad = cells + [CellContribution("bad", "world", (0.1, 0.2), 0, 0, 0, 0, 0)]

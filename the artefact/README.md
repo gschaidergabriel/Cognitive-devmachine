@@ -192,3 +192,17 @@ Five deterministic regression obligations are encoded for this mechanism: exact 
 In parallel, PR810 advanced toward the same v4/v3 source chain and vendored the exact model-execution producer rather than creating a second executor. The next exact gate is therefore fusion, not reinvention: carry the MiniUnifiedDB admission store plus its deterministic tests into the same fixed hash-bound PR810 dependency closure, preserve `SOURCE_REBIND_REQUIRED` until the closure is exact, execute it only on the admitted FREE_ONLY Sandbox when build/function admission permits, and then require the real zero-cost local executor I/O path to use that same atomic admission before J-Space model-runtime promotion.
 
 Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_MODEL_EXECUTION_MINIUNIFIEDDB_ATOMIC_ADMISSION_SOURCE_GPT56SOL.json`.
+
+## Current `go` delta — transitive J-Space executor closure
+
+`README=UPDATED_TRANSITIVE_JSPACE_EXECUTOR_REBIND_CLOSURE`.
+
+The current donor regression `test_execution_store_inference_jspace_chain_v1.py` makes the fixed executor's true dependency boundary larger than the direct `VerifiedModelExecution -> InferenceReceipt/v4 -> JSpaceBinding/v3` producer set. It constructs an observable Global J-Space/GWT step and `JSpace TrainingTrace/v1` before binding the trace to the inference receipt, so an exact-source execution capsule must also carry the exact `JSPACE_VECTOR_CONTROL_ABI/v1`, `global_jspace_gwt_v1.py` and `jspace_training_trace_v1.py` producer bytes. Omitting those dependencies would make an apparent J-Space closure rely on undeclared or substituted source.
+
+PR810's single rebind contract has therefore advanced to `ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v2`: its required exact source closure now spans Typed Entry, route, engine admission/load, scheduler-owned GRID10, MiniUnifiedDB atomic model-execution admission, `VerifiedModelExecution/v1`, `InferenceReceipt/v4`, Vector Control ABI, Global J-Space/GWT, TrainingTrace/v1 and `JSpaceBinding/v3`. The fixed regression target is the admission-store regression plus the integrated execution-store/inference/J-Space chain regression, with `test_model_execution_receipt_v1.py` and `test_inference_receipt_v1.py` retained as transitive fixtures.
+
+The retained executor is concurrently staging the admission-store and integrated chain-test bytes, but the currently executable positive route still binds an older `0e6ad...` model-execution/inference-v4 snapshot with route/engine-load/GRID test doubles. The historical binder route remains `SOURCE_REBIND_REQUIRED`. Vercel build status remains blocked by the Hobby build-rate limit, so no new build, test, Sandbox, model-runtime, J-Space-model or training credit is granted.
+
+Next exact gate: finish the same one-lane PR810 vendor closure from retained donor `57bc0acfc23bd58261746c7253529a79adc6c70a`, bind every required Git blob in one fixed manifest, remove `SOURCE_REBIND_REQUIRED` only in that coherent change, and execute only once the FREE_ONLY build/function admission surface is available.
+
+Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_JSPACE_TRANSITIVE_EXECUTOR_REBIND_CLOSURE_GPT56SOL.json`.

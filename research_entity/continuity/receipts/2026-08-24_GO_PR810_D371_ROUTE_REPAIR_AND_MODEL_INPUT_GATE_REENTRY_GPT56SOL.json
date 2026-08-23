@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_GO_REENTRY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "research_main_observed_before_write": "9eccbd7716cefe7af06b0bd86f38db707c010449",
+  "retained_lanes": {
+    "donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "live_donor_head_observed": "5a7a7bdd2d0a20d2db67b0563333026710298d73",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "live_executor_head_observed": "4b983e4e4cb566f2831f6ff4084a3e274e269ae2",
+    "executor_rebind_donor": "d371ccaca994f234a4cd127d48c3867cfe10ab56"
+  },
+  "executor_source_reentry": {
+    "previous_blocker": "CURRENT_EXECUTOR_ROUTE_CONTRACT_DONOR_IDENTITY_DRIFT_SOURCE_BLOCKER",
+    "repair_commit": "4b983e4e4cb566f2831f6ff4084a3e274e269ae2",
+    "repair": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js REQUIRED_DONOR_COMMIT changed from 511d568932bf47828679e3ca6ba05650f18d284d to d371ccaca994f234a4cd127d48c3867cfe10ab56 without weakening donor-equality guards.",
+    "source_blocker_status": "CLOSED_AT_OBSERVED_EXECUTOR_HEAD",
+    "vercel_status_at_observed_head": "failure",
+    "vercel_failure_class": "HOBBY_BUILD_RATE_LIMIT_UPGRADE_PATH_INFRASTRUCTURE_ADMISSION",
+    "exact_head_ready_deployment_observed": false,
+    "runtime_invocation_observed": false
+  },
+  "jspace_model_input_gate": {
+    "guard": "research_entity/claycode/HCU_JSPACE_MODEL_INPUT_CONTROL_CAUSALITY_GATE_V1.md",
+    "status": "DURABLE_ON_MAIN_AND_STILL_REQUIRED_AFTER_COMPONENT_RUNTIME_GATE",
+    "finding": "JSpaceBinding/v3 co-binds Vector-Control packet identity and executor input identity but does not prove that actual executor-consumed input bytes contain or are deterministically derived from the packet.",
+    "next_primitive": "HCU_MODEL_INPUT_CONTROL_BINDING/v1",
+    "promotion_boundary": "A future green executor component capsule remains insufficient for Vector-Control-consumption or model-internal J-Space causal credit until exact model-input bytes are bound to the packet or an explicitly versioned deterministic transform."
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "timestamp_fallback_sufficient": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0
+  },
+  "execution": {
+    "new_sandbox_or_deployment_triggered_by_this_organ": false,
+    "paid_upgrade_or_fallback": false,
+    "together_preflight_or_training": false,
+    "vps_self_hosted_or_production_test": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_REENTRY_CONFIRMS_SINGLE_PR810_ROUTE_DONOR_IDENTITY_REPAIR; NEXT_RUNTIME_GATE_STILL_BLOCKED_BY_FREE_ONLY_BUILD_ADMISSION",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_EXACT_DONOR_IDENTITY_COHERENCE_PLUS_DURABLE_MODEL_INPUT_CAUSAL_INTERCONNECT_REQUIREMENT",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_WITH_MODEL_INPUT_CONTROL_CAUSALITY_GATE; NO_MODEL_OR_TRAINING_CREDIT_GRANTED"
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md remains a concurrently moving shared surface; a stale whole-file write was already rejected with 409 and exact append-only receipts now preserve this macrocycle without overwriting parallel current-facing fusion."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Wait only for a naturally available included-tier exact-head READY PR810 preview; do not upgrade. If available, invoke the fixed FREE_ONLY exact-source capsule and keep any PASS component-scoped. Then converge HCU_MODEL_INPUT_CONTROL_BINDING/v1 in the single retained donor/executor lanes so exact executor-consumed input bytes are derivably bound to JSPACE_VECTOR_CONTROL_ABI/v1 plus generation, Entry, route, GRID10, cell/role and invocation identity before any J-Space model-runtime promotion."
+}

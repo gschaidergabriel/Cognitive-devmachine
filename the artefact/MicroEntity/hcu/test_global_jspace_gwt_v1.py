@@ -104,6 +104,21 @@ class GlobalJSpaceGWTTests(unittest.TestCase):
                 with self.assertRaisesRegex(JSpaceVectorControlError, code):
                     decode_vector(**{**common, **overrides})
 
+    def test_public_step_rejects_nonbaseline_control_label_laundering(self):
+        for condition in ("LESION", "ROLE_SWAP", "PERMUTED", "NULL_VECTOR", "SIGN_FLIP"):
+            with self.subTest(condition=condition):
+                with self.assertRaisesRegex(
+                    JSpaceError,
+                    "NONBASELINE_CONTROL_REQUIRES_EXPLICIT_INTERVENTION",
+                ):
+                    step(
+                        self.cells(),
+                        generation=11,
+                        basis_id=BASIS_ID,
+                        basis_sha256=BASIS_SHA256,
+                        control_condition=condition,
+                    )
+
     def test_lesion_changes_causal_field_and_can_change_winner(self):
         baseline = self.run_step()
         lesioned = lesion(
@@ -113,6 +128,8 @@ class GlobalJSpaceGWTTests(unittest.TestCase):
             basis_id=BASIS_ID,
             basis_sha256=BASIS_SHA256,
         )
+        self.assertEqual(lesioned.control_condition, "LESION")
+        self.assertEqual(lesioned.trace["control_condition"], "LESION")
         self.assertNotEqual(baseline.trace_sha256, lesioned.trace_sha256)
         self.assertNotEqual(baseline.control_packet_text, lesioned.control_packet_text)
         self.assertNotEqual(baseline.winner_cell_id, lesioned.winner_cell_id)

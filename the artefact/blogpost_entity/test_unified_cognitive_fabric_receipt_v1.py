@@ -60,6 +60,7 @@ def base_receipt():
         },
         "inference": {
             "engine_class": "LOCAL_08B",
+            "executed": True,
             "jspace_mode": "FULL_LOCAL_LATENT",
             "local_activation_access": True,
             "external_hidden_state_claimed": False,
@@ -90,6 +91,8 @@ def base_receipt():
         "boundary": {
             "free_only": True,
             "cost_class": "LOCAL",
+            "backend_admitted": True,
+            "policy_authority_digest": d("a"),
             "secret_lookup_count": 0,
             "network_attempt_count": 0,
             "first_action_origin": "zero:inference_scheduler",
@@ -109,6 +112,18 @@ def redigest(receipt):
     return receipt
 
 
+def block_backend(receipt, cost_class="SUBSCRIPTION"):
+    receipt["boundary"]["cost_class"] = cost_class
+    receipt["boundary"]["backend_admitted"] = False
+    receipt["inference"]["executed"] = False
+    receipt["inference"]["candidate_result_digest"] = None
+    receipt["inference"]["epistemic_status"] = "NOT_APPLICABLE"
+    receipt["validation"]["decision"] = "BLOCKED"
+    receipt["validation"]["canonical_write"] = False
+    receipt["terminal"]["status"] = "BLOCKED"
+    return receipt
+
+
 class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
     def test_valid_boot_binding_accepts_current_git_sha1_oids(self):
         receipt = base_receipt()
@@ -118,34 +133,47 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         self.assertEqual(len(result["source_tree"]), 40)
         self.assertEqual(result["epistemic_status"], "MEASURED_SUPPORTED")
         self.assertEqual(result["jspace_mode"], "FULL_LOCAL_LATENT")
+        self.assertTrue(result["backend_admitted"])
 
     def test_exact_identity_expectations_reject_stale_manifest(self):
         receipt = base_receipt()
         with self.assertRaisesRegex(ReceiptError, "STALE_BUNDLED_MANIFEST"):
             validate_receipt(receipt, expected_bundled_manifest_digest=d("0"))
 
-    def test_free_only_blocks_nonfree_external_touch_but_not_free_network(self):
-        for cost_class in ("PAID", "SUBSCRIPTION", "UNKNOWN"):
-            with self.subTest(cost_class=cost_class):
-                receipt = base_receipt()
-                receipt["boundary"]["cost_class"] = cost_class
-                receipt["boundary"]["network_attempt_count"] = 1
+    def test_free_only_nonfree_backend_must_be_blocked_before_secret_and_network(self):
+        receipt = base_receipt()
+        receipt["boundary"]["cost_class"] = "SUBSCRIPTION"
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "FREE_ONLY_NONFREE_BACKEND_ADMITTED"):
+            validate_receipt(receipt)
+
+        for key, error in (
+            ("secret_lookup_count", "FREE_ONLY_SECRET_TOUCH"),
+            ("network_attempt_count", "FREE_ONLY_NETWORK_TOUCH"),
+        ):
+            with self.subTest(key=key):
+                receipt = block_backend(base_receipt())
+                receipt["boundary"][key] = 1
                 redigest(receipt)
-                with self.assertRaisesRegex(ReceiptError, "FREE_ONLY_NETWORK_TOUCH"):
+                with self.assertRaisesRegex(ReceiptError, error):
                     validate_receipt(receipt)
 
+        receipt = block_backend(base_receipt())
+        redigest(receipt)
+        self.assertTrue(validate_receipt(receipt)["ok"])
+
+    def test_free_backend_may_use_network_under_free_only(self):
         receipt = base_receipt()
         receipt["boundary"]["cost_class"] = "FREE"
         receipt["boundary"]["network_attempt_count"] = 1
         redigest(receipt)
         self.assertTrue(validate_receipt(receipt)["ok"])
 
-    def test_free_only_nonfree_lane_blocks_secret_touch(self):
+    def test_inference_cannot_execute_without_backend_admission(self):
         receipt = base_receipt()
-        receipt["boundary"]["cost_class"] = "SUBSCRIPTION"
-        receipt["boundary"]["secret_lookup_count"] = 1
+        receipt["boundary"]["backend_admitted"] = False
         redigest(receipt)
-        with self.assertRaisesRegex(ReceiptError, "FREE_ONLY_SECRET_TOUCH"):
+        with self.assertRaisesRegex(ReceiptError, "INFERENCE_EXECUTED_WITHOUT_BACKEND_ADMISSION"):
             validate_receipt(receipt)
 
     def test_model_and_workspace_cannot_mint_authority(self):
@@ -173,6 +201,16 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         receipt["inference"].pop("epistemic_status")
         redigest(receipt)
         with self.assertRaisesRegex(ReceiptError, "EPISTEMIC_STATUS_REQUIRED"):
+            validate_receipt(receipt)
+
+    def test_nonexecuted_inference_cannot_carry_result_or_epistemic_credit(self):
+        receipt = base_receipt()
+        receipt["inference"]["executed"] = False
+        receipt["boundary"]["backend_admitted"] = False
+        receipt["validation"]["canonical_write"] = False
+        receipt["validation"]["decision"] = "BLOCKED"
+        redigest(receipt)
+        with self.assertRaisesRegex(ReceiptError, "NONEXECUTED_INFERENCE_RESULT_DIGEST_MUST_BE_NULL"):
             validate_receipt(receipt)
 
     def test_claude_must_be_compiled_external_without_hidden_state_claim(self):
@@ -274,18 +312,23 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         with self.assertRaisesRegex(ReceiptError, "UNSUPPORTED_EPISTEMIC_AUTHORITY"):
             validate_receipt(receipt)
 
-    def test_deterministic_only_requires_not_applicable_epistemic_status(self):
+    def test_deterministic_only_requires_no_model_execution_or_backend_admission(self):
         receipt = base_receipt()
         receipt["inference"]["engine_class"] = "DETERMINISTIC_ONLY"
         receipt["inference"]["jspace_mode"] = "NONE"
         receipt["inference"]["local_activation_access"] = False
         receipt["inference"]["candidate_result_digest"] = None
-        receipt["inference"]["epistemic_status"] = "MEASURED_SUPPORTED"
+        receipt["inference"]["epistemic_status"] = "NOT_APPLICABLE"
         receipt["validation"]["decision"] = "NO_INFERENCE"
         receipt["validation"]["canonical_write"] = False
+        receipt["boundary"]["backend_admitted"] = False
         redigest(receipt)
-        with self.assertRaisesRegex(ReceiptError, "DETERMINISTIC_ONLY_EPISTEMIC_STATUS_MUST_BE_NOT_APPLICABLE"):
+        with self.assertRaisesRegex(ReceiptError, "DETERMINISTIC_ONLY_MUST_NOT_EXECUTE_MODEL"):
             validate_receipt(receipt)
+
+        receipt["inference"]["executed"] = False
+        redigest(receipt)
+        self.assertTrue(validate_receipt(receipt)["ok"])
 
     def test_terminal_digest_detects_post_receipt_mutation(self):
         receipt = base_receipt()

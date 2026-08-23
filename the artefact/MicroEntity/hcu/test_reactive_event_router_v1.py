@@ -1,6 +1,11 @@
 import unittest
 
-from reactive_event_router_v1 import ReactiveRoutingError, assert_inference_echo, route_event
+from reactive_event_router_v1 import (
+    HASH_SERIALIZATION_SCHEMA,
+    ReactiveRoutingError,
+    assert_inference_echo,
+    route_event,
+)
 
 
 ENGINE_A_SHA256 = "a" * 64
@@ -50,6 +55,7 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertEqual(decision.model_lanes, ())
         self.assertFalse(decision.zero_projection)
         self.assertFalse(decision.external_provider_dependency)
+        self.assertEqual(decision.hash_serialization_schema, HASH_SERIALIZATION_SCHEMA)
         self.assertEqual(len(decision.event_sha256), 64)
         self.assertEqual(len(decision.router_policy_sha256), 64)
         self.assertIsNone(decision.resolved_engine_identity)
@@ -174,10 +180,11 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertNotEqual(a.engine_identity_sha256, b.engine_identity_sha256)
         self.assertNotEqual(a.decision_sha256, b.decision_sha256)
 
-    def test_inference_receipt_must_echo_event_route_and_exact_engine(self):
+    def test_inference_receipt_must_echo_event_route_exact_engine_and_serializer(self):
         e = bind_local_engine(base_event()); e.update(novelty=0.8)
         decision = route_model(e)
         receipt = {
+            "hash_serialization_schema": decision.hash_serialization_schema,
             "event_sha256": decision.event_sha256,
             "decision_sha256": decision.decision_sha256,
             "engine_identity_sha256": decision.engine_identity_sha256,
@@ -191,6 +198,9 @@ class ReactiveRouterTests(unittest.TestCase):
             assert_inference_echo(decision, poisoned)
         poisoned = dict(receipt); poisoned["resolved_engine_artifact_sha256"] = ENGINE_B_SHA256
         with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_RESOLVED_ENGINE_ARTIFACT_SHA256_MISMATCH"):
+            assert_inference_echo(decision, poisoned)
+        poisoned = dict(receipt); poisoned["hash_serialization_schema"] = "HCU_OTHER_SERIALIZER/v1"
+        with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_HASH_SERIALIZATION_SCHEMA_MISMATCH"):
             assert_inference_echo(decision, poisoned)
 
 

@@ -1,0 +1,78 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_OUTPUT_CELL_BINDER_FUSION/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "latest_main_observed_before_receipt_write": "575ec8065fa054e42524f5fe7508a1e00b95e9ed",
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "bounded_vercel_hobby_included_tier_fixed_capsules": "ADMITTED_WITH_FAIL_CLOSED_BILLING_QUOTA_PLAN_FENCES",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN"
+  },
+  "source_fusion": {
+    "retained_hcu_pr": 1263,
+    "retained_hcu_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "retained_hcu_head_after_fusion": "4639917eb348ac22a390643d3f69d982c06c8409",
+    "fused_pr": 1396,
+    "fused_pr_head": "75eade080a50f528bc106898ccac6139245d7281",
+    "fusion_merge_commit_on_retained_donor": "4639917eb348ac22a390643d3f69d982c06c8409",
+    "path": "the artefact/MicroEntity/hcu/jspace_inference_binding_v1.py",
+    "selected_schema_after_fusion": "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v2",
+    "promotion_to_main": false,
+    "duplicate_binding_authority_created": false
+  },
+  "problem_closed_at_source_scope": {
+    "old_gap": "HCU_INFERENCE_RECEIPT/v3 binds one output to a route-level model_lanes tuple but does not identify the output-producing lane/cell; membership alone is ambiguous for multi-lane GRID10.",
+    "repair": [
+      "require exact GridPlan and recompute its canonical digest",
+      "cross-bind generation, Entry event/admission, route decision, router policy and engine identity",
+      "bind training trace grid_plan_sha256 to the exact plan",
+      "require one inference v3 model lane equal to trace role",
+      "require one GRID10 MODEL cell equal to trace cell_id and MODEL:<role>",
+      "fail closed for multi-lane v3 or multi-model-cell GRID10 until the canonical inference producer emits explicit output-producing lane/cell identity"
+    ],
+    "claim_class": "SOURCE_MECHANISM_CANDIDATE_FUSION"
+  },
+  "execution_evidence_reentry": {
+    "jspace_family_split_component": "EXACT_CURRENT_COMPONENT_RUNTIME_PASS_6_OF_6_TWICE",
+    "entry_canonicalization_component": "EXACT_SHA_BOUND_COMPONENT_SANDBOX_PASS_7_OF_7_AT_ITS_BOUND_SOURCE_IDENTITY",
+    "binder_v2_exact_runtime": "UNOBSERVED",
+    "old_jspace_binder_vercel_run": "QUARANTINED_STALE_AUTHORITY_ZERO_ACCEPTANCE_CREDIT",
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "sandbox_coordination": {
+    "execution_repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_execution_pr": 810,
+    "coordination_comment_id": 5387796021,
+    "current_gap": "The retained Vercel execution lane has no fixed capsule bound to JSPACE_INFERENCE_BINDING/v2 or retained donor head 4639917eb348ac22a390643d3f69d982c06c8409.",
+    "forbidden_shortcuts": [
+      "do not resurrect the removed stale J-Space binder endpoint",
+      "do not widen the protected preview to generic caller-supplied commands",
+      "do not use Together or paid fallback",
+      "do not claim exact-current binder runtime from older capsule bytes"
+    ]
+  },
+  "next_exact_gate": [
+    "Refresh exact current Research main and retained PR1263 head before copying any capsule bytes.",
+    "Add one fixed manifest/hash-bound minimal dependency closure for the selected binding-v2 plus its focused regression to the single retained Vercel orchestration lane.",
+    "Bind every included source/test blob and digest to the exact retained donor identity; fail closed if the donor moves before execution.",
+    "Run only that allowlisted capsule on the admitted Hobby included-tier Sandbox surface, with byte verification inside Sandbox, result digest, secret fence and cleanup.",
+    "If passing, extend toward the minimum full Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure; still grant no model/training/whole-product credit from a binder component pass alone."
+  ],
+  "unusual_experiment": {
+    "local_count_added_by_this_organ": 0,
+    "global_same_macrocycle_uniqueness": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID",
+    "note": "No upstream macrocycle_id was supplied to this organ, so cross-organ unusual-experiment accounting is not inferred from timestamps or nearby go receipts. This organ performed deterministic authority refresh, source fusion and coordination only."
+  },
+  "result": "SOURCE_FUSION_COMMITTED_AND_EXACT_BINDER_V2_RUNTIME_GATE_BOUND"
+}

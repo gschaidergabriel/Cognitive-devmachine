@@ -15,6 +15,7 @@ import importlib.util
 import json
 import re
 import sqlite3
+import sys
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -65,12 +66,23 @@ class CognitiveAdmissionError(ValueError):
 
 
 def _load(path: Path, name: str):
-    spec = importlib.util.spec_from_file_location(name, path)
-    if spec is None or spec.loader is None:
-        raise CognitiveAdmissionError(f"IMPORT_SPEC_FAILED:{name}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+    parent = str(path.parent)
+    inserted = parent not in sys.path
+    if inserted:
+        sys.path.insert(0, parent)
+    try:
+        spec = importlib.util.spec_from_file_location(name, path)
+        if spec is None or spec.loader is None:
+            raise CognitiveAdmissionError(f"IMPORT_SPEC_FAILED:{name}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    finally:
+        if inserted:
+            try:
+                sys.path.remove(parent)
+            except ValueError:
+                pass
 
 
 capsule_v1 = _load(CAPSULE_PATH, "mini_cognitive_zero_capsule_v1")

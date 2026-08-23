@@ -7,14 +7,17 @@ payload identity before any HCU/model work. It does not mint truth, permissions 
 """
 from __future__ import annotations
 
-import hashlib
 import json
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import Any, Mapping, Sequence
 
+from typed_canonical_v1 import SCHEMA as CANONICALIZATION_SCHEMA
+from typed_canonical_v1 import CanonicalizationError, canonical_sha256
+
 ENTRY_SCHEMA = "XENO_ENTRY_PACKET/v1"
 HCU_EVENT_SCHEMA = "HCU_REACTIVE_EVENT/v1"
+ENTRY_ADMISSION_IDENTITY_DOMAIN = "ENTITYOS_HCU_ENTRY_ADMISSION/v2"
 
 SOURCE_KINDS = {
     "HUMAN_PROMPT",
@@ -55,6 +58,7 @@ class EntryFabricError(ValueError):
 @dataclass(frozen=True)
 class EntryPacket:
     schema: str
+    canonicalization_schema: str
     ingress_id: str
     causal_id: str
     entity_generation: int
@@ -75,16 +79,6 @@ class EntryPacket:
     admission_sha256: str
 
 
-def _canonical(value: Any) -> bytes:
-    return json.dumps(
-        value,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-        allow_nan=False,
-    ).encode("utf-8")
-
-
 def _text(value: Any, field: str, *, optional: bool = False) -> str | None:
     if value is None and optional:
         return None
@@ -93,6 +87,10 @@ def _text(value: Any, field: str, *, optional: bool = False) -> str | None:
     value = value.strip()
     if len(value) > 512:
         raise EntryFabricError(f"{field}:TOO_LONG")
+    try:
+        value.encode("utf-8", errors="strict")
+    except UnicodeEncodeError as exc:
+        raise EntryFabricError(f"{field}:VALID_UNICODE_REQUIRED") from exc
     return value
 
 
@@ -163,13 +161,7 @@ def admit_entry(
     expected_capability_binding_sha256: str,
     admitted_capabilities: Sequence[str],
 ) -> EntryPacket:
-    """Admit one typed ingress packet against an externally-authorized capability view.
-
-    `expected_capability_binding_sha256` and `admitted_capabilities` must come from the
-    deterministic authority/control plane for the current identity/generation. The entry
-    may narrow that set, but it cannot self-grant a capability or substitute another
-    capability-binding receipt.
-    """
+    """Admit one typed ingress packet against an externally-authorized capability view."""
     if not isinstance(entry, Mapping):
         raise EntryFabricError("ENTRY_MAPPING_REQUIRED")
     unknown = set(entry) - ENTRY_FIELDS
@@ -198,14 +190,8 @@ def admit_entry(
     assert received_time is not None
 
     provenance_sha256 = _sha256(entry.get("provenance_sha256"), "provenance_sha256")
-    capability_binding_sha256 = _sha256(
-        entry.get("capability_binding_sha256"),
-        "capability_binding_sha256",
-    )
-    expected_capability_binding_sha256 = _sha256(
-        expected_capability_binding_sha256,
-        "expected_capability_binding_sha256",
-    )
+    capability_binding_sha256 = _sha256(entry.get("capability_binding_sha256"), "capability_binding_sha256")
+    expected_capability_binding_sha256 = _sha256(expected_capability_binding_sha256, "expected_capability_binding_sha256")
     if capability_binding_sha256 != expected_capability_binding_sha256:
         raise EntryFabricError("CAPABILITY_BINDING_MISMATCH")
 
@@ -222,6 +208,7 @@ def admit_entry(
 
     normalized = {
         "schema": ENTRY_SCHEMA,
+        "canonicalization_schema": CANONICALIZATION_SCHEMA,
         "ingress_id": ingress_id,
         "causal_id": causal_id,
         "entity_generation": generation,
@@ -240,7 +227,10 @@ def admit_entry(
         "payload_ref": payload_ref,
         "payload_sha256": payload_sha256,
     }
-    admission_sha256 = hashlib.sha256(_canonical(normalized)).hexdigest()
+    try:
+        admission_sha256 = canonical_sha256(normalized, domain=ENTRY_ADMISSION_IDENTITY_DOMAIN)
+    except CanonicalizationError as exc:
+        raise EntryFabricError(f"ENTRY_CANONICALIZATION_FAILED:{exc}") from exc
     return EntryPacket(**normalized, admission_sha256=admission_sha256)
 
 
@@ -266,6 +256,8 @@ def to_hcu_reactive_event(
         value = float(value)
         if not 0.0 <= value <= 1.0:
             raise EntryFabricError(f"{field}:UNIT_INTERVAL_REQUIRED")
+        if value == 0.0:
+            value = 0.0
         return value
 
     if not isinstance(due_recheck, bool) or not isinstance(provenance_gap, bool):
@@ -273,6 +265,7 @@ def to_hcu_reactive_event(
 
     event: dict[str, Any] = {
         "schema": HCU_EVENT_SCHEMA,
+        "canonicalization_schema": packet.canonicalization_schema,
         "ingress_id": packet.ingress_id,
         "causal_id": packet.causal_id,
         "entry_admission_sha256": packet.admission_sha256,
@@ -292,9 +285,4 @@ def to_hcu_reactive_event(
 
 
 def packet_json(packet: EntryPacket) -> str:
-    return json.dumps(
-        asdict(packet),
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-    )
+    return json.dumps(asdict(packet), sort_keys=True, separators=(",", ":"), ensure_ascii=False)

@@ -1,86 +1,175 @@
-# the artefact — Multi-use Mini Entity pipeline all-in-one
+# the artefact — Multi-use Mini Entity / EntityOS integrated cognition
 
 `the artefact/` is the canonical product workspace for the current owner-directed Mini Entity program in `gschaidergabriel/clay-global-research-entity/main`.
 
-The previous ClayVerse single-container endpoint and the former 0.5B-primary campaign are superseded as active product/training targets. Their accepted mechanisms remain bounded historical evidence only where they strengthen the current Mini Entity.
+## 2026-08-23 owner-architecture refinement
+
+The current product shape is no longer correctly described as “generic pipeline + optional cognition checkpoint”. The latest owner architecture, bound by supervisor state as **OWNER_ARCHITECTURE_SOURCE_AUTHORITY**, requires one integrated EntityOS/Mini Entity/Zero cognition architecture with:
+
+- one application-neutral/inference-neutral `.clay` pipeline executable;
+- one SQLite MiniUnifiedDB as persistent truth/state/config/evidence authority;
+- one **bundled first-class generic approximately-0.8B cognition core** available without an external API;
+- one **fixed, versioned J-Space/GWT integration contract** around that bundled core;
+- one **first-class Claude Code targeted-inference adapter**;
+- one adaptive backend fabric for other local/remote inference engines;
+- `zero_blog` as a replaceable runtime preset, not executable/checkpoint identity.
+
+Important distinction:
+
+```text
+FIXED_INTEGRATION != IMMUTABLE_MODEL_BYTES_FOREVER
+MODEL_UPGRADE_REQUIRES_VERSIONED_MIGRATION
+MODEL_UPGRADE_MUST_NOT_RESET_MINIUNIFIEDDB
+```
+
+The bundled cognition core is mandatory product architecture, but its exact checkpoint/tokenizer/lens/workspace/steering calibration remains **unaccepted until measured on exact bytes/runtime**.
 
 ## Current authority
 
-Read current repository state before making consequential claims. At the 2026-08-22 re-entry represented by this README, the relevant authority chain is:
+Read current repository state before consequential claims. Current authority includes:
 
-1. `research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md` — current cognition/training owner directive;
-2. `research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md` — prior supporting architecture/safety directive where not superseded;
+1. `research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md` — current owner cognition/training directive;
+2. the 2026-08-23 owner-architecture refinements:
+   - `ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md`;
+   - `MINI_ENTITY_JSPACE_GWT_INSTRUMENTED_COGNITION.md`;
+   - `AGENT_ZERO_GWT_JSPACE_COUPLING.md`;
+   - `AGENT_ZERO_JSPACE_IDENTITY_GRF_INJECTION.md`;
+   - `ENTITYOS_FIXED_CLAUDE_CODE_ADAPTIVE_INFERENCE_INTEGRATION.md`;
 3. `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md` — base Mini Entity product directive;
-4. `research_entity/rooms/PROGRAM_STATE.json` — current program state;
-5. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json` — current execution-control policy for research/provider spend.
+4. `research_entity/rooms/PROGRAM_STATE.json` — program state; conflicting optional-core wording is stale relative to the owner-architecture refinement until synced;
+5. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json` — current execution-control policy.
 
-The product is **IN_PROGRESS**. Source presence, a green component test, generated corpus, fine-tuning job, checkpoint, quantized file, or inference demo never implies whole-product acceptance.
+The product remains **IN_PROGRESS**. Architecture text, source presence, a component PASS, generated corpus, provider catalog entry, fine-tuning job, checkpoint, quantized file or inference demo never implies whole-product acceptance.
 
-## Product target
+## Product architecture
 
-The release shape remains deliberately small and replaceable:
+```text
+ENTITYOS / MINI ENTITY
+├── MiniUnifiedDB
+│   └── canonical durable state/config/evidence authority
+├── ZERO
+│   └── runtime identity/configuration, not checkpoint identity
+├── Unified Cognitive Workspace Fabric
+│   ├── J-Space
+│   ├── GWT
+│   ├── Thalamus gating
+│   ├── EPQ telemetry
+│   ├── GRF R0..R6
+│   ├── Hyperposition
+│   ├── ClayCode
+│   └── omega
+├── bundled ~0.8B generic ClayCog reference core
+│   └── fixed versioned J-Space/GWT integration contract
+├── Inference Scheduler
+│   ├── first-class Claude Code adapter
+│   └── adaptive backend profiles
+└── deterministic truth/secret/effect/exactly-once/CAS/persistence gates
+```
 
-1. one application-neutral and inference-neutral native `.clay` pipeline executable (`mini_entity.clay`);
-2. one SQLite MiniUnifiedDB (`mini_entity.db`) as persistent state/config/evidence authority;
-3. one optional replaceable generic **approximately-1B ClayCode cognition checkpoint**.
-
-The current primary training base selected by owner directive is `Qwen/Qwen3.5-0.8B`.
-
-`zero_blog` is only the fully replaceable shipped preset. Zero, blogging, presentation language, personality, provider, model name, API choice, local runner choice, role, goal, audience and application semantics are runtime configuration/data — never executable or durable entity identity.
-
-## Architecture law
-
-### Native executable
-
-The executable owns generic machinery only:
-
-- evidence/source preprocessing;
-- canonical run/state envelope;
-- generic inference dispatch;
-- immutable truth/secret/admission gates;
-- exactly-once source consumption;
-- generation CAS;
-- atomic SQLite persistence;
-- deterministic effect/state authority boundaries.
-
-If a replaceable application, personality, provider, model, prompt, presentation label, or tool description can live in runtime configuration, hard-coding it into executable identity is a regression.
-
-### MiniUnifiedDB
-
-SQLite owns continuing state and runtime configuration. Switching application preset, inference backend, local weights, provider, prompt, role, goal or personality must not fork or reset entity continuity.
-
-Epistemic law:
+## Authority laws
 
 ```text
 UNKNOWN != ZERO != ERROR != MEASURED
 REPORTED != MEASURED
 MODEL_OUTPUT != CANONICAL_TRUTH
 MODEL_PROPOSAL != EFFECT_AUTHORITY
+INFERENCE_ENGINE != ENTITY_IDENTITY
+INFERENCE_ENGINE != DURABLE_MEMORY_AUTHORITY
+INFERENCE_ENGINE != DIRECT_EFFECT_AUTHORITY
 ```
 
-### Replaceable ~1B cognition
+MiniUnifiedDB remains the durable authority. The bundled 0.8B core, Claude Code and all other inference engines return candidate cognition only.
 
-The cognition checkpoint is inference data, not canonical identity/state/effect authority. It must remain reusable across applications and runtime identities.
+## Bundled ~0.8B cognition core
 
-Required learned machinery includes:
+The product MUST have one known local reference cognition path with a versioned manifest. The manifest must eventually bind at least:
+
+- model/checkpoint identity;
+- tokenizer identity;
+- quantization/runtime identity when applicable;
+- J-Space profile identity;
+- lens/profile identity;
+- workspace calibration identity;
+- optional steering calibration identity;
+- ClayCode/GRF/Hyperposition contract versions;
+- compatible EntityOS range;
+- provenance.
+
+The current owner-selected training base remains `Qwen/Qwen3.5-0.8B`, but a provider/training lane is only a checkpoint-production mechanism. It is not product identity.
+
+Required learned machinery remains generic:
 
 - ClayCode-only generated cognition;
-- GRF R0..R6 as typed reasoning field;
+- GRF R0..R6 typed reasoning field;
 - Hyperposition for unresolved alternatives;
-- typed `omega` function/tool/API candidates;
+- typed `omega` action candidates;
 - deterministic grammar/type/schema/authority/generation admission before effect eligibility;
-- computed semantic self/control state without confusing it with external fact;
-- UNKNOWN/ERROR/MEASURED epistemic separation;
+- UNKNOWN/ERROR/MEASURED separation;
 - stale-generation rejection and crash ambiguity preservation;
-- runtime-bound entity id, continuity, role, goal, personality, tool inventory and authorities.
+- runtime-bound entity id, role, goal, personality, tool inventory and authorities.
 
-`R_next = F` is an admission invariant, not neural infallibility.
+`R_next = F` remains an executable admission invariant, not neural infallibility.
+
+## J-Space/GWT contract
+
+The bundled core is the reference hookable latent substrate for the current architecture.
+
+Canonical product direction:
+
+```text
+canonical evidence/state
+-> typed projection
+-> bundled ~0.8B core
+<-> model-specific J-Space observer/map
+<-> GWT competition + bounded broadcast
+<-> Thalamus routing
+<-> EPQ telemetry
+<-> GRF + Hyperposition + ClayCode state
+-> InferencePacket candidate
+-> deterministic validation/write-back
+```
+
+No fixed layer, alpha, slot count, lens vector, workspace threshold or steering coefficient is canonical merely because the architecture document names the mechanism. All such values require exact checkpoint/tokenizer/runtime measurement and receipt binding.
+
+Current runtime credit for bundled-0.8B/J-Space/Whole-GWT remains zero at the latest source-only owner-architecture bind.
+
+## Claude Code integration
+
+Claude Code is a **first-class targeted high-capability inference engine**, not Zero and not a second state/effect authority.
+
+Required boundary:
+
+```text
+Unified J-Space/GWT workspace
+-> Inference Scheduler
+-> Zero control / InferencePacket compiler
+-> ClaudeCodeEngineAdapter
+-> Claude Code targeted inference
+-> typed candidate + provenance
+-> deterministic reconciliation
+-> MiniUnifiedDB / next workspace cycle
+```
+
+Claude Code cannot expose its private residual-stream activations through the ordinary public boundary, so direct latent J-Space measurement belongs to the bundled/local hookable model. Claude receives a compiled control projection and returns candidate inference.
+
+The frozen current runtime baseline still contains one unresolved Claude adapter red in `test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated`; the new architecture does not erase that failure.
+
+## Adaptive inference fabric
+
+Other backends are integrated through capability-driven profiles. Supported modes conceptually include:
+
+- `FULL_LOCAL_LATENT` — local hookable model with measured activation access;
+- `LOCAL_OBSERVE_ONLY` — activation observation without intervention;
+- `COMPILED_EXTERNAL` — closed/hosted engine receives compiled workspace context; no false hidden-state claim;
+- `PLAIN_COMPATIBILITY` — minimal completion/chat integration using only actually exposed capabilities.
+
+Switching external inference backend/model must never reset MiniUnifiedDB continuity.
 
 ## Canonical SFT v2 curriculum
 
-SFT v2 is the current canonical ClayCog curriculum unless a newer admitted corpus supersedes it.
+SFT v2 remains the current reusable ClayCog curriculum unless a newer admitted corpus supersedes it.
 
-Current generated corpus invariants:
+Current bounded corpus invariants:
 
 - total examples: 1,650;
 - train: 1,485 / 1,485 exact-unique;
@@ -91,120 +180,91 @@ Current generated corpus invariants:
 - train SHA-256: `3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93`;
 - validation SHA-256: `ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62`.
 
-The corpus is **model- and provider-neutral**. `corpus_manifest_v2.json` binds model/provider selection outside corpus identity through the campaign descriptor rather than embedding a Qwen/provider identity in the curriculum manifest.
+The corpus is model/provider-neutral. Runtime/application/personality/provider/model identity must not leak into reusable cognition weight identity.
 
-The current structural validator requires exact runtime identity/role/goal/personality bindings, exact top-level return semantics, and fail-closed omega admission. It also rejects reserved semantic identity slots that could smuggle fixed name/role/goal/personality/provider/model/checkpoint/job identity through alternate semantic calls.
+## Current FREE_ONLY boundary
 
-Relevant files:
+The current supervisor control state remains `FREE_ONLY=true`.
 
-- `blogpost_entity/mini_cognition/generate_sft_v2.py`
-- `blogpost_entity/mini_cognition/validate_corpus_v2.py`
-- `blogpost_entity/mini_cognition/validate_sft_v1.py`
-- `blogpost_entity/mini_cognition/claycode_syntax_v1.py`
-- `blogpost_entity/mini_cognition/corpus_manifest_v2.json`
+Therefore, even though the owner selected a Qwen3.5-0.8B training lane in principle, current policy forbids paid/subscription/unknown provider execution before secret lookup and before network I/O.
 
-## Qwen3.5-0.8B direct Full-FT lane
-
-The owner-selected campaign source path is a direct Full fine-tuning lane for `Qwen/Qwen3.5-0.8B`. The launcher is fail-closed around:
-
-- exact model identity;
-- exact SFT-v2 train/validation bytes;
-- canonical local generation + corpus validation;
-- machine-readable execution policy;
-- provider Full-FT support check;
-- server-side validation/price estimate before any billed create;
-- bounded budget;
-- deterministic campaign fingerprint;
-- explicit fingerprint-bound create confirmation;
-- duplicate-campaign scan;
-- durable exclusive create-intent ledger;
-- zero-retry billed create;
-- post-create training-identity verification;
-- UNKNOWN outcome after ambiguous create rather than blind retry.
-
-Together is neither product identity nor required inference backend.
-
-## Current FREE_ONLY execution boundary
-
-The current supervisor execution policy has `verified_updates.free_only=true`.
-
-Therefore the dormant Together 0.8B source lane is **not executable under the current control state**, even though the owner directive selects/permits that bounded campaign in principle. While FREE_ONLY remains true:
+While FREE_ONLY remains active:
 
 - no Together credential lookup;
-- no Together import/network execution;
-- no file upload;
-- no authenticated `model_limits` call;
-- no price-estimate request;
+- no provider network execution;
+- no upload;
+- no authenticated model-limits/price call;
 - no billed create;
-- no training spend.
+- no paid training;
+- no GLM/Sonnet paid fallback.
 
-The launcher must reject the paid provider before secret lookup and before network. Owner campaign authority does not override a stricter current execution-control gate.
+Historical paid execution remains append-only breach evidence and must not be rewritten as unobserved.
 
-If FREE_ONLY is later explicitly cleared by current authority, re-read exact source/policy and perform preflight-only provider admission before any separately authorized billed create.
+## Current host/runtime boundary
 
-## Latest exact local cognition evidence — 2026-08-22
+The Agent Zero/Ubuntu host is intentionally offline. Missing export cadence is therefore not a liveness failure.
 
-The exact cognition blobs at source `f807c0e86971be78da0054ff6a08406726c0aef3` were reconstructed in an isolated Linux runtime and Git-blob identity was verified before execution.
+Frozen durable baseline:
 
-Observed at that exact source:
+- generation: 276;
+- latest AgentZero export: `5e134f5f07ddebc0a1c182d04579e361bbbe82a8`;
+- receipt source-short: `bd016bba7`;
+- test family: 1486 green / 1 red;
+- sole red: `tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated`.
 
-- Python compile: PASS;
-- direct 0.8B launcher regression suite: 13 / 13 PASS;
-- real `generate_sft_v2.py -> validate_corpus_v2.py` chain: PASS;
-- full 1,650-row corpus regenerated with the canonical hashes above;
-- reserved semantic identity-slot validation remained green for the admitted corpus;
-- with machine-readable `free_only=true`, the launcher terminated at `FREE_ONLY_PROVIDER_REJECT` before secret lookup and before network;
-- Together provider call/upload/create/training/spend: none.
+On the next intentional host start, the first runtime gate is observation/binding, not speculative fault recovery.
 
-Durable receipt:
+Required first-start evidence now includes:
 
-`blogpost_entity/receipts/2026-08-22_GO_08B_EXACT_LOCAL_PREFLIGHT_RUNTIME_GPT56SOL.json`
+```text
+PRESTART_FROZEN_BASELINE
++ POSTSTART_OBSERVATION_RECEIPT/v1
++ JSPACE_GWT_BOOT_BINDING_RECEIPT/v1
+```
 
-The model-neutral SFT-v2 manifest was subsequently regenerated and merged with exact-blob evidence; the current materialized manifest no longer carries stale Qwen2.5 base identity.
+The new J-Space/GWT receipt must bind exact bundled-core checkpoint/tokenizer/runtime digests, J-Space/lens/workspace profiles, Zero/GRF projection identity, Claude adapter version/capabilities, first inference-engine choice and origin attribution for first actions before any runtime credit is granted.
 
-## Evaluation and promotion boundary
+## `go` delta — 2026-08-23
 
-The ~1B checkpoint is not promoted merely because the lane source, corpus, or local pre-provider path is green.
+This cycle found an authority-consistency failure:
 
-Promotion still requires the applicable current gates, including:
+- latest owner architecture: bundled ~0.8B core + fixed J-Space/GWT integration are mandatory;
+- prior `BOOTSTRAP_MINIMAL`, `PROGRAM_STATE`, README and visible status footer still described cognition as optional replaceable.
 
-- an actually admitted training result with exact checkpoint identity when execution policy permits it;
-- matched evaluation against the untuned base and a larger general model;
-- OOD/semantic evaluation that cannot be gamed by strings/comments/dead control flow;
-- failure/counterexample retention;
-- Q4_K_M quantization;
-- measured peak RSS below 1 GiB at context 2048;
-- real generic `local_exec` integration without MiniUnifiedDB reset or fixed application identity.
+Exactly one bounded unusual source experiment was used:
 
-Do not claim consciousness, AGI, mathematical correctness, superiority, successful Together training, `<1 GiB RAM`, or local integration from source structure alone.
+`OPTIONAL_CORE_BOOT_POISON`
 
-## Native Mini Entity frontier
+The same current repository state was interpreted through the stale boot/status surfaces and through the latest owner-architecture source. The two paths produced different product shapes, so source consistency failed.
 
-The native pipeline remains a separate whole-product acceptance frontier. Current cognition progress does not promote native runtime acceptance.
+Receipt:
 
-Native acceptance continues to require exact-current execution of the relevant neutrality, secret-isolation, profile-v2 semantic admission/parity, atomicity, generation-CAS and local inference contracts. Keep fail-closed guards in place where full profile parity is not yet implemented.
+`blogpost_entity/receipts/2026-08-23_GO_JSPACE_OWNER_ARCHITECTURE_BOOT_SYNC_GPT56SOL.json`
 
-## Structured reference effect-surface guard — 2026-08-22
+This is a source/control-plane finding only. It grants zero J-Space, GWT, Claude-adapter, trained-model or whole-product runtime credit.
 
-The canonical Clay run already requires `pipeline_profile_read` and `inference_generate`, while the Python structured reference runtime still exposes the legacy `profile_load` / `provider_chat_json` surface and is therefore **not converged**.
+## Remaining high-value frontier
 
-This `go` hardens `check_structured_contract_sync.py` to schema v2. Runtime support now counts only when Python AST evidence binds each required effect through all three executable layers: the `allowed_effects` admission set, the `effect()` dispatch, and the concrete handler method. Mentions in comments, docstrings or dead string literals do not count. Retained legacy effects in admission or dispatch keep the gate closed.
-
-One bounded source-level poison regression (`COMMENT_ONLY_EFFECT_SURFACE_POISON`) plus ordinary controls passed 3/3 under Python 3.13.5 in the current isolated ChatGPT container. This is **source/mechanism evidence only**: it does not implement the missing reference effects and gives zero exact product-runtime credit.
-
-The next implementation step remains a fresh-current-main convergence of DB-resident `pipeline_profile_read` plus generic `inference_generate`, preserving the recursive persisted-string leak gate and the newest staged-cognition/provenance owner contract, followed by exact authorized isolated execution.
+1. finish authority/state convergence so `PROGRAM_STATE.json` no longer calls bundled cognition optional;
+2. preserve the frozen one-red Claude adapter boundary until exact Ubuntu runtime resumes;
+3. implement/bind `BundledCognitionManifest` and `JSPACE_GWT_BOOT_BINDING_RECEIPT/v1` contracts without inventing calibration values;
+4. on next intentional host start, capture exact source/tree/dirty state and first-action provenance before autonomy claims;
+5. only after exact bundled checkpoint/runtime binding: measure candidate J-Space workspace layer/position band, GWT occupancy policy and EPQ/Thalamus telemetry;
+6. preserve MiniUnifiedDB truth authority and deterministic effect gates under every inference backend;
+7. keep provider/training path dormant while FREE_ONLY remains active.
 
 ## Evidence law
 
 Always distinguish:
 
 ```text
+OWNER_ARCHITECTURE_SOURCE_AUTHORITY
 SOURCE CANDIDATE
 MECHANISM SUPPORTED
 EXACT RUNTIME VERIFIED
 WHOLE PRODUCT ACCEPTED
 ```
 
-A hosted workflow that fails before visible steps supplies zero runtime test credit. A provider catalog or source-defined campaign supplies zero training credit. A historical receipt does not automatically generalize to a newer source head.
+Architecture authority decides what must be built. It does not prove that the implementation works.
 
-Current GitHub source/history/receipts are the durable coordination ledger; executable claims remain bound to exact observed source/artifact/environment evidence.
+A hosted workflow that fails before visible steps supplies zero runtime test credit. A provider catalog or source-defined campaign supplies zero training credit. A historical receipt does not generalize automatically to a newer source head. Exact executable claims remain bound to exact observed source/artifact/environment evidence.

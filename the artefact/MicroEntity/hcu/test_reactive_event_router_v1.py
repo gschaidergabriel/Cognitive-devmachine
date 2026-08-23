@@ -21,14 +21,23 @@ def base_event():
     }
 
 
-def bind_local_engine(event, *, artifact_sha256=ENGINE_A_SHA256):
+def bind_local_engine(event, *, provider="hcu", artifact_sha256=ENGINE_A_SHA256):
     event.update(
-        requested_internal_provider="hcu",
+        requested_internal_provider=provider,
         resolved_internal_engine="hcu_local_08b",
         resolved_internal_engine_class="LOCAL_SHARED_WEIGHT_08B",
         resolved_internal_engine_artifact_sha256=artifact_sha256,
     )
     return event
+
+
+def inference_receipt(decision):
+    return {
+        "event_sha256": decision.event_sha256,
+        "decision_sha256": decision.decision_sha256,
+        "engine_identity_sha256": decision.engine_identity_sha256,
+        "resolved_engine_identity": decision.resolved_engine_identity,
+    }
 
 
 class ReactiveRouterTests(unittest.TestCase):
@@ -92,6 +101,11 @@ class ReactiveRouterTests(unittest.TestCase):
         with self.assertRaisesRegex(ReactiveRoutingError, "RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256"):
             route_event(e, current_generation=7)
 
+    def test_malformed_engine_artifact_digest_fails_closed(self):
+        e = bind_local_engine(base_event(), artifact_sha256="A" * 64)
+        with self.assertRaisesRegex(ReactiveRoutingError, "LOWERCASE_SHA256_REQUIRED"):
+            route_event(e, current_generation=7)
+
     def test_unknown_engine_identity_fails_closed(self):
         e = base_event(); e.update(
             requested_internal_provider="hcu",
@@ -110,6 +124,11 @@ class ReactiveRouterTests(unittest.TestCase):
             resolved_internal_engine_artifact_sha256=ENGINE_A_SHA256,
         )
         with self.assertRaisesRegex(ReactiveRoutingError, "RESOLVED_INTERNAL_ENGINE_CLASS_MISMATCH"):
+            route_event(e, current_generation=7)
+
+    def test_script_only_event_must_not_select_internal_engine(self):
+        e = bind_local_engine(base_event())
+        with self.assertRaisesRegex(ReactiveRoutingError, "SCRIPT_ONLY_EVENT_MUST_NOT_SELECT_INTERNAL_ENGINE"):
             route_event(e, current_generation=7)
 
     def test_stale_generation_fails_closed(self):
@@ -141,9 +160,8 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertEqual(len(decision.decision_sha256), 64)
 
     def test_same_causal_event_engine_artifact_flip_changes_route_identity_only(self):
-        # Unusual discriminator for this GO: hold event semantics and route topology fixed,
-        # perturb only exact engine bytes. Event identity must stay stable while the engine
-        # and route decision identities change.
+        # Unusual discriminator already consumed upstream for this GO; retained here as
+        # the canonical regression of that measured mechanism.
         a_event = bind_local_engine(base_event(), artifact_sha256=ENGINE_A_SHA256); a_event.update(novelty=0.8)
         b_event = bind_local_engine(base_event(), artifact_sha256=ENGINE_B_SHA256); b_event.update(novelty=0.8)
         a = route_event(a_event, current_generation=7)
@@ -153,19 +171,46 @@ class ReactiveRouterTests(unittest.TestCase):
         self.assertNotEqual(a.engine_identity_sha256, b.engine_identity_sha256)
         self.assertNotEqual(a.decision_sha256, b.decision_sha256)
 
+    def test_provider_aliases_converge_after_engine_resolution(self):
+        a_event = bind_local_engine(base_event(), provider="hcu"); a_event.update(novelty=0.8)
+        b_event = bind_local_engine(base_event(), provider="local"); b_event.update(novelty=0.8)
+        a = route_event(a_event, current_generation=7)
+        b = route_event(b_event, current_generation=7)
+        self.assertEqual(a.event_sha256, b.event_sha256)
+        self.assertEqual(a.engine_identity_sha256, b.engine_identity_sha256)
+        self.assertEqual(a.decision_sha256, b.decision_sha256)
+
     def test_inference_receipt_must_echo_event_route_and_engine(self):
         e = bind_local_engine(base_event()); e.update(novelty=0.8)
         decision = route_event(e, current_generation=7)
-        receipt = {
-            "event_sha256": decision.event_sha256,
-            "decision_sha256": decision.decision_sha256,
-            "engine_identity_sha256": decision.engine_identity_sha256,
-            "resolved_engine_identity": decision.resolved_engine_identity,
-        }
+        receipt = inference_receipt(decision)
         assert_inference_echo(decision, receipt)
         poisoned = dict(receipt); poisoned["event_sha256"] = "0" * 64
         with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_EVENT_SHA256_MISMATCH"):
             assert_inference_echo(decision, poisoned)
+
+    def test_inference_receipt_rejects_engine_crossbind(self):
+        e = bind_local_engine(base_event()); e.update(novelty=0.8)
+        decision = route_event(e, current_generation=7)
+        poisoned = inference_receipt(decision)
+        poisoned["engine_identity_sha256"] = ENGINE_B_SHA256
+        with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_ENGINE_IDENTITY_SHA256_MISMATCH"):
+            assert_inference_echo(decision, poisoned)
+
+    def test_equal_lane_cross_event_inference_receipt_fails_closed(self):
+        # Deterministic regression only; no second unusual experiment is consumed here.
+        a_event = bind_local_engine(base_event()); a_event.update(novelty=0.80, zero_relevance=0.80)
+        b_event = bind_local_engine(base_event()); b_event.update(novelty=0.81, zero_relevance=0.80)
+        a = route_event(a_event, current_generation=7)
+        b = route_event(b_event, current_generation=7)
+        self.assertEqual(a.model_lanes, b.model_lanes)
+        with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_RECEIPT_EVENT_SHA256_MISMATCH"):
+            assert_inference_echo(b, inference_receipt(a))
+
+    def test_inference_echo_is_invalid_for_script_only_route(self):
+        decision = route_event(base_event(), current_generation=7)
+        with self.assertRaisesRegex(ReactiveRoutingError, "INFERENCE_ECHO_NOT_VALID_FOR_SCRIPT_ONLY_ROUTE"):
+            assert_inference_echo(decision, {})
 
 
 if __name__ == "__main__":

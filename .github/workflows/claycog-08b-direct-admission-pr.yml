@@ -28,6 +28,14 @@ jobs:
           echo "expected=$EXPECTED_SHA"
           echo "actual=$actual"
           test "$actual" = "$EXPECTED_SHA"
+      - name: Bind current official Together SDK payload contract
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'together==2.31.0'
+          python3 - <<'PY'
+          import together
+          print('together_sdk_version=' + getattr(together, '__version__', 'UNKNOWN'))
+          PY
       - name: Canonical SFT v2 regeneration and split gates
         run: |
           set -euo pipefail
@@ -42,5 +50,6 @@ jobs:
           python3 -m py_compile launch_together_qwen35_08b_v1.py test_launch_together_qwen35_08b_v1.py test_corpus_model_neutrality_v2.py
           python3 test_launch_together_qwen35_08b_v1.py
 
-# The model-identity amputation was the single unusual intervention for its user-triggered go.
-# This workflow only replays that intervention as a deterministic regression gate.
+# No provider secret, upload, price request or billed create is performed by this workflow.
+# Installed-SDK payload binding is deterministic regression around the already-consumed
+# Together create-contract discriminator, not another unusual experiment.

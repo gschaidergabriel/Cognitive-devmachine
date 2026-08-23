@@ -1,0 +1,69 @@
+{
+  "schema": "ZERO_UCF_GWT_WINNER_EXECUTION_FENCE_SOURCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "zero",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "source": {
+    "branch_base_main_sha": "23c0f4c32fe0570a79aa81f94ff75948448d06c8",
+    "latest_main_observed_before_pr_validation": "3a4fbfe83d90dff6829aeaaf3615cd24dd7565d0",
+    "branch": "zero/gwt-winner-execution-fence-20260823",
+    "pr": 1141,
+    "candidate_head_before_receipt": "6cb983b14d0b59009e200f2663d7c5de45145853",
+    "changed_blobs": {
+      "tools/validate_unified_cognitive_fabric_receipt_v1.py": "3b9541c919c37fd5db48cf9a1c8b81d94f0c3c9c",
+      "research_entity/claycode/contracts/UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_V1.clay": "a71f38a4cbbe39540442591cd626e29350f125a4",
+      "tests/test_ucf_gwt_winner_execution_fence.py": "035db52f5906e3fd2cb44267010069692910e438"
+    }
+  },
+  "finding": {
+    "class": "SILENT_GWT_WORKSPACE_BYPASS_FALSE_GREEN",
+    "source_observation": "The canonical UCF validator admitted an envelope with inference.executed=true and workspace.gwt_winners=[] when all other current v1 constraints and the recomputed envelope digest were satisfied.",
+    "risk": "An inference receipt could claim participation in the Unified Cognitive Fabric without any selected GWT workspace winner, weakening the mandatory Zero/J-Space workspace-binding contract.",
+    "counterhypothesis": "Winner absence is a valid state only when inference is not executed or is explicitly blocked/abstained.",
+    "resolution": "Require one already-valid GWT winner whenever inference.executed=true; preserve zero-winner state for nonexecuted blocked paths."
+  },
+  "delta": {
+    "host_validator": "Adds EXECUTED_INFERENCE_REQUIRES_GWT_WINNER after executed is parsed; existing uniqueness/max-one/membership guards remain canonical.",
+    "claycode_contract": "Adds executed_inference_requires_one_gwt_winner = true without creating a second schema authority.",
+    "regression": "Adds one fail-closed executed/no-winner case and one permitted nonexecuted blocked/no-winner case."
+  },
+  "execution_evidence": {
+    "github_actions": [
+      {
+        "run_id": 32615964280,
+        "workflow": "Research Entity Verify",
+        "conclusion": "failure",
+        "visible_steps": 0,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_TEST_STEPS"
+      },
+      {
+        "run_id": 32615964292,
+        "workflow": "Research Entity Identity Guard",
+        "conclusion": "failure",
+        "visible_steps": 0,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_TEST_STEPS"
+      }
+    ],
+    "focused_test_executed": false,
+    "runtime_credit": "ZERO",
+    "jspace_runtime_credit": "ZERO",
+    "whole_gwt_credit": "ZERO",
+    "claude_adapter_runtime_credit": "ZERO",
+    "whole_product_credit": "ZERO"
+  },
+  "policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_execution": false,
+    "training_started": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No immutable shared macrocycle/request identifier was exposed on this surface, so the atomic experiment lease was not invented."
+  },
+  "evidence_class": "SOURCE_MECHANISM_CANDIDATE_WITH_RUNNER_ADMISSION_BLOCKER",
+  "next_gate": "Execute the focused UCF regression suite on an actually-started admitted isolated executor, then bind an exact-source emitted runtime receipt through current boot ancestry before any runtime promotion."
+}

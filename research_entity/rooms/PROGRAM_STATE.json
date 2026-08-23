@@ -1,176 +1,98 @@
 {
-  "schema_version": "8.4",
-  "program_id": "mini-entity-pipeline-all-in-one",
+  "schema_version": "8.2",
+  "program_id": "clayverse-single-container",
   "status": "ACTIVE",
-  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
-  "current_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
-  "current_stage_goal": "Finish and empirically prove one persistent portable multi-use Mini Entity executed by EntityOS with MiniUnifiedDB authority, mandatory bundled approximately-0.8B cognition, Unified J-Space/GWT, first-class Claude Code targeted inference, adaptive engines, MicroEntity inspection/control, and a first-class parallel Hyperposition Computational Unit workstream.",
-  "stage_order": [
-    "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
-    "MINI_ENTITY_EXACT_RUNTIME_AND_MODEL_CALIBRATION",
-    "MINI_ENTITY_PORTABLE_PRODUCT_ACCEPTANCE"
-  ],
+  "stage": "CLAYVERSE_ARTIFACT",
+  "current_stage": "CLAYVERSE_ARTIFACT",
+  "current_stage_goal": "Converge and empirically validate the complete one-container ClayVerse product without creating a second durable authority.",
+  "stage_order": ["CLAYVERSE_ARTIFACT", "CLAYVERSE_EXACT_OCI_ACCEPTANCE", "CLAYVERSE_DEPLOYMENT_READINESS"],
   "dynamic_targets": {
-    "primary": "WHOLE_MINI_ENTITY_ENTITYOS_PRODUCT",
-    "parallel_hcu": "RESOURCE_ADAPTIVE_HYPERPOSITION_COMPUTATIONAL_UNIT",
+    "primary": "WHOLE_CLAYVERSE_OCI_PRODUCT",
     "runtime_evidence": "AUTHORIZED_ISOLATED_EXACT_SOURCE_ONLY",
-    "next": "single MiniUnifiedDB-bound Cognitive Fabric runtime integration: versioned cognition-object binding -> pre-inference Zero workspace capsule/InferencePacket admission -> inference -> deterministic gate/CAS -> final UCF runtime receipt/post-turn binding; then bundled-0.8B/J-Space/GWT/Claude exact evidence + HCU resource-adaptive world-model grid"
+    "next": "exact-current ClayVerse authority/full regression -> exact OCI build/runtime -> full product path acceptance"
   },
   "progress_semantics": {
     "bar_cells": 20,
-    "progress_percent": "UNRESOLVED_UNLESS_DERIVED_FROM_CURRENT_MINI_ENTITY_ACCEPTANCE_VECTOR"
+    "progress_percent": "UNRESOLVED_UNLESS_DERIVED_FROM_CURRENT_CLAYVERSE_ACCEPTANCE_VECTOR"
   },
   "stage_gates": {
-    "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT": {"status": "IN_PROGRESS"},
-    "MINI_ENTITY_EXACT_RUNTIME_AND_MODEL_CALIBRATION": {"status": "BLOCKED_ON_EXACT_EXECUTION_AND_MODEL_BYTES"},
-    "MINI_ENTITY_PORTABLE_PRODUCT_ACCEPTANCE": {"status": "NOT_YET_ADMITTED"}
+    "CLAYVERSE_ARTIFACT": {"status": "IN_PROGRESS"},
+    "CLAYVERSE_EXACT_OCI_ACCEPTANCE": {"status": "BLOCKED_ON_EXECUTION_SURFACE"},
+    "CLAYVERSE_DEPLOYMENT_READINESS": {"status": "NOT_YET_ADMITTED"}
   },
-  "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
-  "supporting_architecture": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
-  "supporting_zero_architecture": "research_entity/global/ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md",
-  "supporting_training_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
-  "hcu_architecture": "the artefact/MicroEntity/hcu/HCU_ARCHITECTURE.md",
-  "hcu_topology": "the artefact/MicroEntity/hcu/topology.kvm4.json",
-  "hcu_free_feed_contract": "the artefact/MicroEntity/hcu/FREE_LLM_FEED_CONTRACT.json",
-  "hcu_data_index": "the artefact/MicroEntity/hcu/HCU_DATA_INDEX.json",
+  "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
-  "canonical_workspace": "the artefact/blogpost_entity/",
-  "microentity_package_root": "the artefact/MicroEntity/",
-  "product_endpoint": "Mini Entity / EntityOS integrated cognitive architecture",
+  "canonical_workspace": "the artefact/",
+  "product_endpoint": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
   "acceptance": "IN_PROGRESS",
   "authority": {
-    "durable_state": "MiniUnifiedDB",
-    "runtime_identity_configuration": "Zero",
-    "bundled_local_cognition": "approximately-0.8B generic ClayCode cognition core",
-    "cognitive_fabric": "Unified J-Space/GWT + Thalamus + EPQ + GRF + Hyperposition + ClayCode + omega",
-    "targeted_high_capability_inference": "Claude Code first-class adapter",
-    "other_inference": "adaptive capability-profile fabric",
-    "hcu": "scheduled cognition/simulation/proposal fabric; not second durable truth or effect authority",
-    "effects": "EffectGate / deterministic EntityOS-Mini Entity authority gates only"
+    "durable_state": "UnifiedDB",
+    "derived_graph": "ClayGraph",
+    "runtime_cognition": "Claude Code",
+    "adaptive_retrieval": "MicroClay",
+    "external_effects": "EffectGate+EffectJournal",
+    "internal_execution_substrate": "EntityOS"
   },
   "identity": {
     "persistent_research_entity": "Clay",
     "legacy_canonical_research_entity_id": "frank-project-global-research-entity",
-    "mini_entity_count": 1,
-    "zero_role": "runtime identity/configuration only",
-    "hcu_role": "parallel compute/simulation organ inside same Mini Entity",
-    "model_switching": "must not reset MiniUnifiedDB state/history"
-  },
-  "hcu": {
-    "status": "FIRST_CLASS_PARALLEL_GO_WORKSTREAM_SOURCE_CONTRACT_RUNTIME_UNVERIFIED",
-    "reference_deployment_target": {
-      "plan": "KVM 4",
-      "cpu_cores": 4,
-      "memory_gb": 16,
-      "disk_gb": 200,
-      "bandwidth_tb": 16,
-      "classification": "DEPLOYMENT_RESOURCE_PROFILE_ONLY_NOT_ACCEPTANCE_TEST_EXCEPTION"
-    },
-    "grid_target": "as many useful logical approximately-0.8B cognition modules as measured host limits permit",
-    "implementation": "small resident shared-weight worker pool + many time-sliced logical contexts/roles + adaptive scheduler",
-    "reference_source_profile": {
-      "logical_slots": 16,
-      "adaptive_logical_ceiling": 24,
-      "resident_workers_target": 2,
-      "default_decode_concurrency": 2,
-      "hard_decode_concurrency": 4,
-      "soft_ram_budget_gib": 12,
-      "hard_ram_budget_gib": 14
-    },
-    "functions": [
-      "persistent causal world-model maintenance",
-      "dynamic goal-candidate generation and progress checking",
-      "long iterative forward/counterfactual simulation",
-      "Zero observable-behavior surrogate",
-      "improvement-hypothesis generation and critique",
-      "confidence-calibrated future branches",
-      "FREE_ONLY provenance-bound external candidate feed",
-      "strategic proposal feedback to Zero/EntityOS"
-    ],
-    "canonical_state": "MiniUnifiedDB",
-    "effect_authority": "EffectGate",
-    "runtime_credit": 0,
-    "capacity_claim": "UNRESOLVED_UNTIL_MEASURED_ON_ADMITTED_EQUIVALENT_RESOURCE_ENVELOPE"
+    "central_product_entity_count": 1,
+    "canonical_users": ["gabriel", "andreas"],
+    "rights": "equal",
+    "global_generation": "single shared live generation fenced across both canonical sessions"
   },
   "execution_policy": {
-    "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum+4.5-mini-entity-go-authority-addendum",
+    "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
     "free_only": true,
     "isolated_sandbox_only": true,
     "vps_testing_forbidden": true,
     "vps_disposable_independent_kernel_guest_testing_admitted": false,
     "self_hosted_vps_test_runners_forbidden": true,
     "production_host_testing_forbidden": true,
-    "hcu_reference_vps_is_deployment_target_only": true,
     "together_forbidden": true,
     "secrets_in_source_or_receipts": false,
     "final_paid_or_model_training_requires_owner_authorization": true
   },
   "whole_product_gates": [
     "exact_current_source_identity",
-    "canonical_clay_pipeline_reaches_unified_cognitive_fabric_before_inference_generate",
-    "MiniUnifiedDB_exactly_once_generation_CAS_atomic_persistence_and_recovery",
-    "bundled_08b_exact_checkpoint_tokenizer_runtime_manifest",
-    "exact_hookable_local_model_JSpace_adapter",
-    "Jacobian_lens_or_equivalent_measurement_bound_to_exact_bytes",
-    "empirical_JSpace_GWT_calibration_and_causal_ablation",
-    "GWT_single_winner_and_workspace_receipt_binding",
-    "Claude_Code_adapter_toolless_ephemeral_structured_env_isolated",
-    "Claude_candidate_validation_before_canonical_write",
-    "adaptive_engine_capability_profiles_and_fail_closed_modes",
-    "HCU_resource_adaptive_grid_and_scheduler",
-    "HCU_persistent_world_model_goals_simulation_zero_surrogate_and_feedback_authority_fences",
-    "HCU_FREE_ONLY_feed_provenance_rate_limit_and_candidate_only_contract",
-    "HCU_KVM4_equivalent_capacity_benchmark_vs_simpler_single_worker_baseline",
-    "HCU_restart_generation_fencing_and_effect_non_bypass",
-    "reference_native_profile_v2_parity",
-    "MicroEntity_dashboard_and_Cognitive_Module_toggle",
     "authorized_isolated_full_regression",
-    "portable_release_and_restart_recovery_without_state_reset"
+    "exact_oci_build_and_digest",
+    "startup_and_readiness",
+    "real_clerk_browser_websocket_pty",
+    "persistent_tmux_for_both_users",
+    "normal_interactive_claude_code",
+    "managed_turn_hooks",
+    "unifieddb_persistence_and_recovery",
+    "microclay_retrieval_and_promotion_fences",
+    "claygraph_hyperposition_workspace",
+    "effectgate_and_entityos_round_trip_when_admitted",
+    "restart_recovery_no_blind_effect_replay",
+    "dual_session_concurrency_and_stale_generation_fencing",
+    "supply_chain_acceptance"
   ],
   "runtime_credit": {
-    "whole_mini_entity": 0,
-    "bundled_08b": 0,
-    "jspace": 0,
-    "whole_gwt": 0,
-    "claude_adapter": 0,
-    "hcu": 0,
-    "note": "Owner/program authority and HCU source architecture are source-level only; no runtime/model/J-Space/GWT/Claude-adapter/HCU/whole-product credit is minted without exact admitted execution."
+    "whole_clayverse": 0,
+    "note": "ClayVerse authority reconciliation is merged at source level; runtime credit remains zero until exact authorized isolated runtime evidence is observed."
   },
-  "known_current_evidence": {
-    "canonical_clay_ucf_path": "SOURCE_BOUND_ON_MAIN_BLOB_cad8de246ae237d2ef1b108349915c4747175977_RUNTIME_UNVERIFIED",
-    "reference_runtime_ucf_handler": "MISSING_ALLOWED_EFFECT_DISPATCH_HANDLER_ON_OBSERVED_RUNTIME_BLOB_8ea8a2db0ac1068ae9221f0ab0426e7d8f7149a7",
-    "ucf_temporal_authority": "PRE_INFERENCE_ADMISSION_RECEIPT_AND_FINAL_POST_TURN_UCF_RUNTIME_RECEIPT_MUST_BE_DISTINCT",
-    "bundled_08b_owner_requirement": "SOURCE_BOUND_RUNTIME_UNVERIFIED",
-    "jspace_gwt_fixed_contract": "SOURCE_BOUND_RUNTIME_UNVERIFIED",
-    "claude_code_first_class_adapter": "SOURCE_BOUND_RUNTIME_UNVERIFIED",
-    "hcu_source_architecture": "COMMITTED_TO_MAIN_AT_201aed23e048f09abf67e262da3e23fa643c6956",
-    "hcu_runtime_capacity": "UNMEASURED",
-    "historical_frozen_runtime_baseline": "Gen276 1486 green / 1 red remains bounded historical evidence until fresh exact-source execution",
-    "historical_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
+  "superseded_program_snapshot": {
+    "git_blob_sha": "d2a7b849e7a8f7b38b28aca3ae1704bf447a367d",
+    "schema_version": "7.11",
+    "program_id": "mini-entity-pipeline-all-in-one",
+    "classification": "HISTORICAL_DONOR_EVIDENCE_NOT_CURRENT_WORK_SELECTION_AUTHORITY",
+    "note": "The exact detailed Mini Entity/J-Space/training/native/parity campaign state remains preserved in Git history and its original receipts; this active state intentionally does not duplicate it as current product authority."
   },
-  "hcu_package_law": {
-    "root": "the artefact/MicroEntity/hcu/",
-    "snapshot": "the artefact/MicroEntity/MICROENTITY_CURRENT.zip",
-    "include_non_secret_generated_hcu_files": true,
-    "include_non_secret_receipts": true,
-    "include_privacy_filtered_exports_when_generated": true,
-    "operational_state_authority": "MiniUnifiedDB",
-    "secrets_in_archive": false
-  },
-  "current_frontier": "implement one real pipeline_cognitive_fabric_admit handler in the retained reference runtime by binding versioned cognition objects from MiniUnifiedDB into the existing ZERO_WORKSPACE_CAPSULE -> ZERO_INFERENCE_PACKET pre-admission path, preserve one deterministic gate/CAS authority, emit the final UCF runtime receipt only after terminal gate/commit state, then obtain actually-started authorized isolated exact-source execution; in parallel convert the committed HCU source contract into exact KVM4-equivalent resource/capacity/scheduler evidence",
-  "go_contract": "Every exact go is a maximum-depth Mini Entity product-convergence macrocycle with a first-class parallel HCU pass: refresh current main/owner/control/parallel work; inject Mini Entity GRF+ClayCode and HCU context into every child; use admitted FREE_ONLY swarm concurrency when available; select the highest-information nonduplicate Mini Entity blocker; consider and when useful advance one nonduplicate HCU delta; falsify; build/repair; test; package; fuse; re-enter until useful current-turn work is exhausted.",
-  "zero_contract": "Every exact zero uses the same Mini Entity product boundary and FREE_ONLY child-go swarm, with deep focus on Zero + EntityOS + Unified J-Space/GWT causal coupling and provenance. HCU Zero modeling is observable-behavior prediction, not hidden-mind access.",
-  "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one persistent Mini Entity with Zero as runtime identity/configuration and HCU as a compute organ",
+  "compatibility_note": "Legacy Frank/Mini-Entity-specific progress and campaign readers may return UNKNOWN for retired active-state fields. Historical evidence remains addressable by the superseded snapshot blob and original receipts rather than silently becoming current ClayVerse truth.",
+  "current_frontier": "run exact-current ClayVerse authority/full-suite/OCI build-startup gates on an actually-started authorized isolated executor, then resume Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/EntityOS/recovery acceptance",
+  "go_contract": "Every go refreshes current main/newest owner authority and execution policy, selects the highest-information nonduplicate whole-ClayVerse blocker, falsifies before promotion, preserves one shared unusual-experiment lease law, persists bounded evidence, and advances the same one-container ClayVerse product until promoted, falsified, or execution-blocked.",
+  "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one persistent central ClayVerse entity",
   "together_api": {
     "product_identity": "FORBIDDEN",
+    "inference_requirement": "NONE",
     "training_execution": "FORBIDDEN_UNDER_CURRENT_CONTROL",
     "secret_policy": "NEVER_LOOK_UP_FOR_CURRENT_CONTROL; NEVER_COMMIT",
     "job_started": false
   },
-  "superseded_clayverse_state": {
-    "program_id": "clayverse-single-container",
-    "classification": "SUPERSEDED_FOR_CURRENT_GO_WORK_SELECTION_BY_LATER_OWNER_CORRECTION; DONOR_EVIDENCE_ONLY"
-  },
-  "legacy_scope": "ClayVerse/Frank/older top-level endpoint material is bounded donor evidence only unless it strengthens the active Mini Entity architecture."
+  "legacy_scope": "Prior Mini Entity/Blogpost/Frank/EntityOS-top-level paths remain historical bounded evidence only."
 }

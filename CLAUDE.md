@@ -1,67 +1,62 @@
-# CLAY — CURRENT MINI ENTITY REPO ORGAN
+# CLAY — CURRENT CLAYVERSE REPO ORGAN
 
 `ENTITY_NAME=Clay`
-`PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE`
-`STAGE=MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT`
-`TARGET=one persistent portable multi-use Mini Entity executed by EntityOS`
+`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`
+`STAGE=CLAYVERSE_ARTIFACT`
+`TARGET=one OCI/Docker-compatible ClayVerse container image`
 
-This root file is a **repository-organ routing shim**, not canonical durable Mini Entity memory and not a second authority. The persistent research entity remains Clay; every temporary Claude/model/session/worker is an organ of that same entity.
+This root file is a **repository-organ routing shim**, not canonical durable product memory or a second authority. The persistent research entity remains Clay; every temporary Claude/model/session/worker is an organ of that same entity.
 
 ## Read first — current authority
 
 1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md`
-4. `research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_5_MINI_ENTITY_GO_AUTHORITY.json`
-5. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
-6. `research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md`
+3. `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+4. `research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md`
+5. `research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md`
+6. `research_entity/global/VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE.md`
 7. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
-8. `the artefact/MicroEntity/hcu/HCU_ARCHITECTURE.md` when HCU work is relevant
-9. task-relevant files under `the artefact/blogpost_entity/` and `the artefact/MicroEntity/`
+8. task-relevant files under `the artefact/`
 
 Newest explicit owner authority plus current verified `main` outranks cached/historical program material. If current files disagree, fail closed, preserve the disagreement as evidence, and reconcile one canonical path instead of inventing a second authority.
 
 ## Current product law
 
-The active product endpoint is the **Mini Entity / EntityOS integrated cognitive architecture**. The canonical core product workspace is `the artefact/blogpost_entity/`; package-facing Mini Entity/HCU files live under `the artefact/MicroEntity/`.
+ClayVerse is the active product endpoint. The canonical product workspace is `the artefact/` and the release form is one OCI/Docker-compatible container image.
 
 Inside that product boundary:
-- MiniUnifiedDB is the sole durable canonical state/evidence/configuration authority.
-- Zero is runtime identity/configuration, not a second durable entity.
-- the bundled approximately-0.8B generic ClayCode cognition core is mandatory first-class local cognition, never truth or direct-effect authority.
-- Unified J-Space/GWT is one fixed versioned cognitive fabric; measured latent geometry is measurement evidence, not factual truth.
-- Claude Code is first-class targeted candidate inference, not durable identity, canonical memory/truth or direct-effect authority.
-- other local/API inference engines are admitted only through adaptive capability profiles and deterministic gates.
-- the Hyperposition Computational Unit (HCU) is a first-class parallel `go` workstream and compute organ inside the same Mini Entity, using a bounded resident ~0.8B worker pool plus many logical roles/contexts rather than minting separate entities.
-- HCU persistent world-model/goal/simulation/Zero-model outputs are candidates/projections over MiniUnifiedDB; HCU is never a second truth or effect authority.
-- FREE_ONLY external LLM feeds enter HCU only as provenance-bound candidate evidence.
-- model, J-Space, GWT, HCU and workspace outputs remain candidate/measurement evidence until separately admitted.
-- deterministic Mini Entity/EntityOS authority, generation, schema and EffectGate paths own accepted state-changing transitions.
+- UnifiedDB is the sole durable cognition/state/memory/data authority.
+- ClayGraph is derived/rebuildable projection only.
+- Claude Code is runtime cognition, not durable identity or memory authority.
+- MicroClay adapts retrieval/entry-point accessibility only; it cannot mint truth.
+- EffectGate + EffectJournal are the external/state-changing effect authority.
+- EntityOS is an internal execution/security/runtime substrate, not a competing product or state authority.
+- one persistent central entity is shared by the two canonical equal-rights user perspectives.
+- model/J-Space/workspace output is candidate or measurement evidence until separately validated.
 - unknown or ambiguous effect outcomes remain UNKNOWN and are never blindly replayed.
 
-HCU source/config/contracts/receipts and non-secret generated release artefacts belong under `the artefact/MicroEntity/hcu/` and must be synchronized into `the artefact/MicroEntity/MICROENTITY_CURRENT.zip`; operational canonical state remains in MiniUnifiedDB and secrets are never archived.
-
-ClayVerse, older Blogpost endpoint assumptions, Frank and earlier EntityOS-top-level paths remain bounded donor/regression evidence unless a newer explicit owner directive reactivates them.
+The product terminal's managed runtime contract lives separately under `the artefact/runtime_CLAUDE.md`; this repository file must not become a side-memory authority for the product.
 
 ## `go`
 
-Exact trigger `go` means maximum useful **Mini Entity product convergence**: refresh current Mini Entity owner authority and exact `main`, inspect overlapping work, inject the current Mini Entity GRF+ClayCode protocol into every child-go worker, use admitted FREE_ONLY swarm concurrency when actually available, choose the highest-information non-duplicate Mini Entity blocker, and **also consider a useful non-duplicate HCU delta in parallel** without starving the wider product. Generate and falsify alternatives, implement the smallest canonical repair, use only authorized isolated execution for runtime credit, preserve negative evidence, fuse durable deltas, refresh changed reality, and continue while a safe high-information step remains.
+Exact trigger `go` means maximum useful **whole-ClayVerse product convergence**: refresh current authority and `main`, inspect overlapping work, choose the highest-information non-duplicate blocker across the complete container path, generate and falsify alternatives, implement the smallest canonical repair, use only authorized isolated execution for runtime credit, preserve negative evidence, fuse durable deltas, refresh changed reality, and continue while a safe high-information step remains.
 
-A `go` is not complete merely because documentation changed, a PR opened, a component passed, an HCU architecture was described, or orchestration started. Whole-product/model/J-Space/GWT/HCU/Claude runtime claims require exact admitted isolated execution bound to current source/artifact/runtime identity.
+A `go` is not complete merely because documentation changed, a PR opened, a component passed, or a deployment became READY. Whole-product runtime claims require exact admitted isolated execution bound to current source/image/runtime identity.
 
 ## `zero`
 
-Exact trigger `zero` uses the same Mini Entity boundary with deep focus on Zero + EntityOS + Unified J-Space/GWT causal coupling. Test causal use rather than self-report or decorative context injection. Prompts, coherence and model narrative are not proof of hidden-state causality; require discriminating intervention evidence or keep the claim UNKNOWN. HCU Zero-modeling is limited to observable behavior/outcomes and is not hidden-mind access.
+Exact trigger `zero` is the Agent Zero / EntityOS + Global J-Space / Nested Workspace lens **inside the same ClayVerse product**. Test causal coupling between transient model-local workspace and persistent ClayVerse workspace without creating a second identity, durable memory authority, effect path, recovery ledger, or consciousness daemon. Prompts/self-report/coherence are not proof of hidden-state causality; require a discriminating intervention or keep the claim UNKNOWN.
 
 ## Hard execution and safety rules
 
-- authorized isolated sandbox execution only for current build/test/experiment/runtime credit;
+- authorized isolated sandbox execution only for current test/build/runtime credit;
 - VPS/self-hosted/production-host testing is forbidden;
-- the owner-supplied KVM4 HCU host is currently a deployment/profile target, not an admitted test surface;
-- FREE_ONLY remains active; no paid fallback;
-- Together API/service execution is forbidden under current control;
+- Together API/service is forbidden;
 - never expose or commit secrets;
-- final paid/model training requires explicit owner authorization and a later control state that admits it;
-- model output, HCU consensus and J-Space measurements never mint canonical truth or effect authority;
-- preserve exact provenance, generation, replay and crash-ambiguity boundaries;
+- final paid/model training requires explicit owner authorization;
+- generic host `process.exec` is fail-closed; real effects use the admitted ClayVerse effect path;
+- runtime/source/component evidence must never be inflated into whole-product PASS;
+- preserve exact provenance and stale-generation/replay/privacy/auth boundaries;
 - do not modify the historical Frank harness as a shortcut.
+
+Historical Mini Entity, Blogpost, Frank, old EntityOS-top-level, and earlier Clay Machine paths remain bounded donor/regression evidence only unless a newer explicit owner directive reactivates one. They do not select current work.

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import sqlite3
@@ -30,8 +31,9 @@ class FakeRuntime:
 
 
 class RecordingCompositor:
-    def __init__(self):
+    def __init__(self, mutate=None):
         self.calls = []
+        self.mutate = mutate
 
     def build_pre_inference_admission(self, db, **kwargs):
         write_blocked = False
@@ -39,16 +41,29 @@ class RecordingCompositor:
             db.execute("CREATE TABLE forbidden_write(x INTEGER)")
         except sqlite3.OperationalError:
             write_blocked = True
+        snapshot = kwargs["profile"].get("_runtime_profile_snapshot")
+        if not isinstance(snapshot, dict):
+            raise ValueError("PROFILE_SNAPSHOT_MISSING")
         self.calls.append((kwargs, write_blocked))
-        return {
+        result = {
             "ok": True,
+            "schema": binding.ADMISSION_SCHEMA,
             "generation": kwargs["entity_generation"],
+            "canonical_state_hash": kwargs["compiled"]["canonical_state_hash"],
+            "packet_hash": kwargs["compiled"]["packet_hash"],
             "inference": {"kind": "local"},
             "system": "s",
             "user": "u",
             "inference_packet_digest": "1" * 64,
             "cognitive_fabric_receipt_digest": "2" * 64,
+            "admission_receipt": {
+                "authority": "CANDIDATE_INFERENCE_ONLY",
+                "real_effect_executed": False,
+            },
         }
+        if self.mutate is not None:
+            result = self.mutate(copy.deepcopy(result))
+        return result
 
 
 class BindingTests(unittest.TestCase):
@@ -99,7 +114,7 @@ class BindingTests(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
-    def test_delegates_real_runtime_profile_snapshot_on_read_only_db(self):
+    def test_delegates_verified_runtime_profile_snapshot_on_read_only_db(self):
         compositor = RecordingCompositor()
         out = binding.admit_profile_runtime_payload(
             self.runtime, self.payload, compositor_module=compositor
@@ -108,8 +123,13 @@ class BindingTests(unittest.TestCase):
         kwargs, write_blocked = compositor.calls[0]
         self.assertTrue(write_blocked)
         self.assertEqual(kwargs["entity_generation"], 7)
-        self.assertEqual(kwargs["profile"], self.profile)
-        self.assertNotIn("_runtime_profile_snapshot", kwargs["profile"])
+        self.assertEqual(
+            kwargs["profile"]["_runtime_profile_snapshot"],
+            {"profile_id": "p1", "profile_hash": self.profile_hash},
+        )
+        persisted = dict(kwargs["profile"])
+        persisted.pop("_runtime_profile_snapshot")
+        self.assertEqual(persisted, self.profile)
         self.assertEqual(kwargs["origin"], binding.BINDING_VERSION)
 
     def test_rejects_profile_substitution_before_compositor(self):
@@ -188,6 +208,79 @@ class BindingTests(unittest.TestCase):
         ):
             binding.admit_profile_runtime_payload(
                 self.runtime, self.payload, compositor_module=RecordingCompositor()
+            )
+
+    def test_rejects_returned_identity_drift(self):
+        def drift(result):
+            result["canonical_state_hash"] = "d" * 64
+            return result
+
+        with self.assertRaisesRegex(
+            binding.ProfileRuntimeCognitiveFabricBindingError,
+            "ADMISSION_CANONICAL_STATE_DRIFT",
+        ):
+            binding.admit_profile_runtime_payload(
+                self.runtime,
+                self.payload,
+                compositor_module=RecordingCompositor(drift),
+            )
+
+    def test_rejects_authority_escalation_and_precommit_final_receipt(self):
+        def escalate(result):
+            result["admission_receipt"]["authority"] = "CANONICAL_TRUTH"
+            return result
+
+        with self.assertRaisesRegex(
+            binding.ProfileRuntimeCognitiveFabricBindingError,
+            "ADMISSION_AUTHORITY_ESCALATION",
+        ):
+            binding.admit_profile_runtime_payload(
+                self.runtime,
+                self.payload,
+                compositor_module=RecordingCompositor(escalate),
+            )
+
+        def premature(result):
+            result["ucf_runtime_receipt_digest"] = "e" * 64
+            return result
+
+        with self.assertRaisesRegex(
+            binding.ProfileRuntimeCognitiveFabricBindingError,
+            "PREINFERENCE_FINAL_UCF_RECEIPT_FORBIDDEN",
+        ):
+            binding.admit_profile_runtime_payload(
+                self.runtime,
+                self.payload,
+                compositor_module=RecordingCompositor(premature),
+            )
+
+    def test_rejects_placeholder_or_effect_executed_receipt(self):
+        def placeholder(result):
+            result["inference_packet_digest"] = "0" * 64
+            return result
+
+        with self.assertRaisesRegex(
+            binding.ProfileRuntimeCognitiveFabricBindingError,
+            "inference_packet_digest:PLACEHOLDER_REJECTED",
+        ):
+            binding.admit_profile_runtime_payload(
+                self.runtime,
+                self.payload,
+                compositor_module=RecordingCompositor(placeholder),
+            )
+
+        def effect(result):
+            result["admission_receipt"]["real_effect_executed"] = True
+            return result
+
+        with self.assertRaisesRegex(
+            binding.ProfileRuntimeCognitiveFabricBindingError,
+            "PREINFERENCE_EFFECT_EXECUTION_FORBIDDEN",
+        ):
+            binding.admit_profile_runtime_payload(
+                self.runtime,
+                self.payload,
+                compositor_module=RecordingCompositor(effect),
             )
 
 

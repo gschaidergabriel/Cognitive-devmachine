@@ -1,0 +1,90 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "branch_base": "06b2195ce72d4546a30d23cedaeeb6dc66a56417",
+  "concurrent_main_observed_after_component_execution": "90f649d7f23232c1eb677b9665e3646eb36b3dce",
+  "branch": "gpt56sol/go-ucf-semantic-version-binding-20260823-1649",
+  "pull_request": 1298,
+  "classification": "EXACT_GIT_BLOB_COMPONENT_EVIDENCE_RUNTIME_UNVERIFIED",
+  "finding": "The canonical pre-inference Cognitive Fabric admission identity previously bound boot object digests but did not prove which exact admitted object versions and payload/admission receipts were semantically consumed. The already-merged strict MiniUnifiedDB cognition resolver can make those semantics version-unambiguous, so the single canonical compositor can bind them without introducing a second state or fabric authority.",
+  "canonical_delta": {
+    "compositor": "tools/pipeline_cognitive_fabric_admission_v1.py",
+    "semantic_binding_schema": "MINI_ENTITY_COGNITION_SEMANTIC_BINDING/v1",
+    "rules": [
+      "resolve exact live-generation cognition semantics before capability routing and inference-packet compilation",
+      "require same generation, causal turn, turn binding, boot binding and workspace as active prepare",
+      "require each boot cognition field to resolve to its exact bound object digest",
+      "bind object_kind + object_version + object_digest + payload_digest + admission_receipt_digest",
+      "fold semantic_binding_digest into the existing candidate-only pre-inference admission receipt",
+      "semantic ambiguity or drift fails before capability routing/inference",
+      "MiniUnifiedDB remains sole durable state/evidence authority",
+      "EffectGate remains sole real-effect authority"
+    ]
+  },
+  "exact_git_blobs": {
+    "tools/pipeline_cognitive_fabric_admission_v1.py": "6d4f74a1416312a898eca618ac6334d8f18aba2d",
+    "tests/test_pipeline_cognitive_fabric_semantic_binding_v1.py": "b5b3eb2de0b5d91c7668a38ddebeecdb2bf7b239",
+    "tests/test_pipeline_cognitive_fabric_admission_v1.py": "5c25cc732da20338501cafc3af72069def0c1b78"
+  },
+  "isolated_component_execution": {
+    "surface": "ChatGPT isolated container",
+    "exact_git_blob_reconstruction": true,
+    "git_hash_object_verified": {
+      "compositor": "6d4f74a1416312a898eca618ac6334d8f18aba2d",
+      "focused_semantic_binding_test": "b5b3eb2de0b5d91c7668a38ddebeecdb2bf7b239",
+      "canonical_admission_regression_test": "5c25cc732da20338501cafc3af72069def0c1b78"
+    },
+    "py_compile": "PASS",
+    "command": "python3 -m unittest tests/test_pipeline_cognitive_fabric_admission_v1.py tests/test_pipeline_cognitive_fabric_semantic_binding_v1.py -v",
+    "result": "PASS_23_OF_23",
+    "elapsed_seconds_reported": 0.005,
+    "scope": "EXACT_BRANCH_COMPONENT_ONLY_NOT_INTEGRATED_MINI_ENTITY_RUNTIME"
+  },
+  "falsifiers": [
+    "exact cognition versions are present in semantic binding and admission receipt identity",
+    "changing an admitted object version changes semantic-binding and admission identities even when inference-packet identity is unchanged",
+    "semantic object digest drift fails closed",
+    "semantic turn-binding drift fails closed",
+    "ambiguous admitted object version fails before capability routing/inference"
+  ],
+  "github_runner_state": {
+    "research_entity_verify_run": 32632469167,
+    "research_entity_verify_job": 97177196820,
+    "research_entity_identity_guard_run": 32632469101,
+    "research_entity_identity_guard_job": 97177196520,
+    "observed_job_steps": [],
+    "classification": "EXECUTION_ADMISSION_OR_RUNNER_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION_NOT_TEST_FAILURE"
+  },
+  "parallel_fusion": {
+    "pr_1296": "MERGED: thin read-only ProfilePipelineRuntime -> canonical Cognitive Fabric compositor bridge",
+    "pr_1307": "MERGED_CONCURRENTLY: return-side fail-closed UCF admission postconditions fused into the same bridge",
+    "interaction": "This delta strengthens the single delegated canonical compositor used by that bridge; no second bridge/fabric is created.",
+    "hcu_pr_1295": "NO_CHANGE_NON_DUPLICATE: active Hyperposition Reality Field/package workstream remains owned there"
+  },
+  "execution_policy": {
+    "free_only": true,
+    "together_used": false,
+    "vps_or_self_hosted_test_used": false,
+    "paid_execution_or_training_used": false,
+    "vercel_sandbox_start_exec_surface_exposed_to_this_organ": false
+  },
+  "credit": {
+    "retained_integrated_runtime": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu_runtime": 0,
+    "whole_product": 0
+  },
+  "unusual_experiment": {
+    "count_here": 0,
+    "global_uniqueness": "UNRESOLVED_NO_SHARED_MACROCYCLE_ID",
+    "note": "The semantic-version identity change check is classified as a deterministic falsifier/regression, not a new unusual experiment."
+  },
+  "next_gate": "Fuse this exact component delta if current main has not independently changed the canonical compositor, then wire the already-merged read-only profile-runtime bridge into the retained ProfilePipelineRuntime pipeline_cognitive_fabric_admit effect/dispatch with the atomic cognition bootstrap; preserve inference binding to InferencePacket plus pre-admission receipt ancestry; implement or fuse the post-terminal finalizer; obtain actually-started exact-source authorized isolated integrated execution before any runtime/model/J-Space/GWT/Claude/HCU/product credit."
+}

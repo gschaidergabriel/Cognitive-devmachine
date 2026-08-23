@@ -18,7 +18,12 @@ CONTROL41 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json"
 CONTROL42 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json"
 CONTROL43 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_3_PROGRAM_AUTHORITY.json"
 CONTROL44 = "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json"
-STEERING844 = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_44.json"
+STEERING_CURRENT = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_48.json"
+# Compatibility name for consumers that imported the old symbol. It now resolves to
+# the current owner-reentry steering instead of silently pinning obsolete 8.44 bytes.
+STEERING844 = STEERING_CURRENT
+ALL_WORKER_PROTOCOL = "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
+ROOT_AGENTS = "AGENTS.md"
 ROOT_CLAUDE = "CLAUDE.md"
 LEGACY_BLOGPOST = "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md"
 LEGACY_LOCAL_INFERENCE = "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md"
@@ -53,14 +58,16 @@ def validate(root: Path) -> dict:
         "manifest": root / "the artefact/manifest.json",
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
+        "repo_agents": root / ROOT_AGENTS,
         "repo_claude": root / ROOT_CLAUDE,
+        "all_worker_protocol": root / ALL_WORKER_PROTOCOL,
         "legacy_blogpost": root / LEGACY_BLOGPOST,
         "legacy_local_inference": root / LEGACY_LOCAL_INFERENCE,
         "control41": root / CONTROL41,
         "control42": root / CONTROL42,
         "control43": root / CONTROL43,
         "control44": root / CONTROL44,
-        "steering844": root / STEERING844,
+        "steering_current": root / STEERING_CURRENT,
     }
     for name, path in paths.items():
         require(errors, path.is_file(), f"MISSING:{name}:{path.as_posix()}")
@@ -76,7 +83,7 @@ def validate(root: Path) -> dict:
         control42 = load_json(paths["control42"])
         control43 = load_json(paths["control43"])
         control44 = load_json(paths["control44"])
-        steering = load_json(paths["steering844"])
+        steering = load_json(paths["steering_current"])
     except (OSError, json.JSONDecodeError) as exc:
         return {
             "schema": "CLAYVERSE_AUTHORITY_CONSISTENCY/v2",
@@ -89,11 +96,13 @@ def validate(root: Path) -> dict:
     footer = paths["footer"].read_text(encoding="utf-8")
     architecture = paths["architecture"].read_text(encoding="utf-8")
     readme = paths["readme"].read_text(encoding="utf-8")
+    repo_agents = paths["repo_agents"].read_text(encoding="utf-8")
     repo_claude = paths["repo_claude"].read_text(encoding="utf-8")
+    all_worker_protocol = paths["all_worker_protocol"].read_text(encoding="utf-8")
     legacy_blogpost = paths["legacy_blogpost"].read_text(encoding="utf-8")
     legacy_local_inference = paths["legacy_local_inference"].read_text(encoding="utf-8")
 
-    # Preserve the canonical research-entity join/identity fences while changing product authority.
+    # Preserve canonical research-entity identity while binding the current product authority.
     require(errors, bootstrap.get("entity_id") == canonical.get("entity_id"), "BOOTSTRAP_CANONICAL_ENTITY_MISMATCH")
     require(errors, bootstrap.get("expected_entity_version") == canonical.get("entity_version"), "BOOTSTRAP_CANONICAL_VERSION_MISMATCH")
     require(errors, bootstrap.get("expected_revision") == canonical.get("revision"), "BOOTSTRAP_CANONICAL_REVISION_MISMATCH")
@@ -102,7 +111,6 @@ def validate(root: Path) -> dict:
     require(errors, "every substantive prompt_run_id" in str((bootstrap.get("per_turn") or {}).get("identity_injection", "")), "BOOTSTRAP_PER_TURN_IDENTITY_INJECTION_MISSING")
     invariants = "\n".join(str(x) for x in bootstrap.get("mandatory_invariants", []))
     require(errors, "every substantive prompt_run_id refreshes the Research Entity identity injection" in invariants, "BOOTSTRAP_IDENTITY_INVARIANT_MISSING")
-
     require(errors, bootstrap.get("active_program") == EXPECTED_PROGRAM, "BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH")
     require(errors, bootstrap.get("active_stage") == EXPECTED_STAGE, "BOOTSTRAP_STAGE_MISMATCH")
     require(errors, bootstrap.get("sole_owner_directive") == OWNER_DIRECTIVE, "BOOTSTRAP_OWNER_DIRECTIVE_MISMATCH")
@@ -110,6 +118,9 @@ def validate(root: Path) -> dict:
     require(errors, bootstrap.get("release_form") == EXPECTED_RELEASE, "BOOTSTRAP_RELEASE_FORM_MISMATCH")
     require(errors, bootstrap.get("together_api") == "FORBIDDEN", "BOOTSTRAP_TOGETHER_FENCE_MISSING")
     require(errors, bootstrap.get("vps_testing") == "FORBIDDEN", "BOOTSTRAP_VPS_TEST_FENCE_MISSING")
+    require(errors, bootstrap.get("all_worker_protocol") == ALL_WORKER_PROTOCOL, "BOOTSTRAP_ALL_WORKER_PROTOCOL_MISMATCH")
+    prompt_injection = str(bootstrap.get("go_prompt_injection", ""))
+    require(errors, "MANDATORY_TOP_OF_PROMPT_TRANSITIVE" in prompt_injection and "ClayVerse" in prompt_injection, "BOOTSTRAP_TRANSITIVE_PROMPT_INJECTION_MISSING")
 
     require(errors, program.get("program_id") == "clayverse-single-container", "PROGRAM_ID_MISMATCH")
     require(errors, program.get("stage") == EXPECTED_STAGE and program.get("current_stage") == EXPECTED_STAGE, "PROGRAM_STAGE_MISMATCH")
@@ -132,8 +143,7 @@ def validate(root: Path) -> dict:
     require(errors, manifest.get("release_form") == EXPECTED_RELEASE, "MANIFEST_RELEASE_FORM_MISMATCH")
     require(errors, manifest.get("canonical_workspace") == "the artefact/", "MANIFEST_WORKSPACE_MISMATCH")
 
-    # Do not trust 4.4's preservation claims by themselves. Bind the actual inherited
-    # 4.1 -> 4.2 -> 4.3 bytes and their safety-critical fields before accepting 4.4.
+    # Bind inherited 4.1 -> 4.2 -> 4.3 bytes before accepting the 4.4 ClayVerse override.
     require(errors, control41.get("schema_version") == "4.1", "CONTROL41_VERSION_MISMATCH")
     require(errors, control41.get("status") == "ACTIVE" and control41.get("mode") == "FREE_ONLY", "CONTROL41_FREE_ONLY_WEAKENED")
     cycle41 = control41.get("cycle_policy") or {}
@@ -196,10 +206,28 @@ def validate(root: Path) -> dict:
     require(errors, hard44.get("frank_harness_modification") == "FORBIDDEN", "CONTROL44_FRANK_HARNESS_FENCE_WEAKENED")
     require(errors, hard44.get("legacy_mini_entity_swarm_controller") == "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION", "CONTROL44_SWARM_QUARANTINE_WEAKENED")
 
-    require(errors, steering.get("program") == EXPECTED_PROGRAM and steering.get("stage") == EXPECTED_STAGE, "STEERING844_PROGRAM_STAGE_MISMATCH")
-    require(errors, steering.get("effective_control") == EXPECTED_EFFECTIVE_CONTROL, "STEERING844_CONTROL44_NOT_EFFECTIVE")
-    adjudication = steering.get("adjudication") or {}
-    require(errors, adjudication.get("free_only") is True and adjudication.get("together_forbidden") is True and adjudication.get("vps_testing") is False, "STEERING844_SAFETY_WEAKENED")
+    # Current steering is 8.48. Checking 8.44 alone was a false-green after owner re-entry.
+    require(errors, steering.get("schema_version") == "8.48", "STEERING_CURRENT_VERSION_MISMATCH")
+    require(errors, steering.get("status") == "CURRENT_OWNER_REENTRY_STEERING", "STEERING_CURRENT_STATUS_MISMATCH")
+    require(errors, steering.get("program") == EXPECTED_PROGRAM and steering.get("stage") == EXPECTED_STAGE, "STEERING_CURRENT_PROGRAM_STAGE_MISMATCH")
+    require(errors, steering.get("product_endpoint") == "ClayVerse", "STEERING_CURRENT_PRODUCT_MISMATCH")
+    require(errors, steering.get("release_form") == EXPECTED_RELEASE, "STEERING_CURRENT_RELEASE_MISMATCH")
+    require(errors, steering.get("owner_directive") == OWNER_DIRECTIVE, "STEERING_CURRENT_OWNER_DIRECTIVE_MISMATCH")
+    steering_authority = steering.get("authority_adjudication") or {}
+    require(errors, str(steering_authority.get("mini_entity_4_5", "")).startswith("SUPERSEDED_FOR_PROGRAM_PRODUCT_TRIGGER"), "STEERING_CURRENT_MINI_ENTITY_NOT_SUPERSEDED")
+    require(errors, steering_authority.get("durable_authority") == "UnifiedDB", "STEERING_CURRENT_DURABLE_AUTHORITY_MISMATCH")
+    require(errors, steering_authority.get("derived_projection") == "ClayGraph", "STEERING_CURRENT_GRAPH_AUTHORITY_MISMATCH")
+    require(errors, steering_authority.get("external_effect_authority") == "EffectGate+EffectJournal", "STEERING_CURRENT_EFFECT_AUTHORITY_MISMATCH")
+    steering_execution = steering.get("execution") or {}
+    require(errors, steering_execution.get("free_only") is True, "STEERING_CURRENT_FREE_ONLY_WEAKENED")
+    require(errors, steering_execution.get("authorized_isolated_sandbox_only") is True, "STEERING_CURRENT_ISOLATED_ONLY_WEAKENED")
+    require(errors, steering_execution.get("vps_testing") is False and steering_execution.get("self_hosted_vps_test_runners") is False and steering_execution.get("production_host_testing") is False, "STEERING_CURRENT_FORBIDDEN_TEST_SURFACE_REENABLED")
+    require(errors, steering_execution.get("together_allowed") is False, "STEERING_CURRENT_TOGETHER_WEAKENED")
+    require(errors, steering_execution.get("final_paid_or_model_training") == "OWNER_AUTHORIZATION_REQUIRED", "STEERING_CURRENT_TRAINING_AUTHORITY_WEAKENED")
+    require(errors, steering_execution.get("runtime_credit") == 0, "STEERING_CURRENT_RUNTIME_CREDIT_ESCALATION")
+    steering_rules = set(str(x) for x in steering.get("steering", []))
+    require(errors, "FAIL_CLOSED_IF_BOOTSTRAP_PROGRAM_ROOT_WORKER_SWARM_CONTROL_OR_OWNER_DIRECTIVE_SELECTS_MINI_ENTITY_OR_BLOGPOST_AS_CURRENT_PRODUCT" in steering_rules, "STEERING_CURRENT_TRANSITIVE_FAIL_CLOSED_RULE_MISSING")
+    require(errors, "RUN_THE_EXISTING_CLAYVERSE_AUTHORITY_CONSISTENCY_GUARD_BEFORE_PROMOTING_ANY_FUTURE_PRODUCT_ROUTING_CHANGE" in steering_rules, "STEERING_CURRENT_AUTHORITY_GUARD_RULE_MISSING")
 
     directive_upper = directive[:1200].upper()
     require(errors, "CURRENT OWNER DIRECTIVE" in directive_upper, "DIRECTIVE_NOT_CURRENT")
@@ -214,8 +242,14 @@ def validate(root: Path) -> dict:
     require(errors, "CLAYVERSE" in readme_head and "ONE OCI/DOCKER-COMPATIBLE" in readme_head, "README_RELEASE_MISMATCH")
     require(errors, not ("CLAYVERSE SINGLE-CONTAINER ENDPOINT" in readme_head and "SUPERSEDED" in readme_head), "README_CLAYVERSE_SUPERSEDED")
 
-    # Root CLAUDE.md is a high-leverage repository-organ routing surface. It must not
-    # silently reactivate a superseded Mini Entity/Blogpost program after convergence.
+    # Root agent/Claude surfaces are high-leverage repository-organ routing inputs.
+    agents_upper = repo_agents[:7000].upper()
+    require(errors, "AGENT BOOTSTRAP — CLAYVERSE" in agents_upper, "ROOT_AGENTS_PRODUCT_MISMATCH")
+    require(errors, "CURRENT PRODUCT ENDPOINT: **CLAYVERSE**" in agents_upper, "ROOT_AGENTS_ENDPOINT_MISMATCH")
+    require(errors, "AUTHORIZED ISOLATED SANDBOX EXECUTION ONLY" in agents_upper, "ROOT_AGENTS_ISOLATED_ONLY_MISSING")
+    require(errors, "TOGETHER API/SERVICE FORBIDDEN" in agents_upper, "ROOT_AGENTS_TOGETHER_FENCE_MISSING")
+    require(errors, "DONOR" in agents_upper and "MINI ENTITY" in agents_upper, "ROOT_AGENTS_MINI_ENTITY_DONOR_LAW_MISSING")
+
     repo_claude_head = repo_claude[:7000].upper()
     require(errors, "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`" in repo_claude_head, "ROOT_CLAUDE_PROGRAM_MISMATCH")
     require(errors, "`STAGE=CLAYVERSE_ARTIFACT`" in repo_claude_head, "ROOT_CLAUDE_STAGE_MISMATCH")
@@ -223,8 +257,21 @@ def validate(root: Path) -> dict:
     require(errors, "MINI_ENTITY_PIPELINE_ALL_IN_ONE" not in repo_claude_head, "ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE")
     require(errors, "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.MD" not in repo_claude_head, "ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE")
 
-    # Known superseded Mini Entity authority paths remain addressable only as historical
-    # compatibility redirects. Their old exact bytes stay available through Git blob anchors.
+    worker_upper = all_worker_protocol.upper()
+    require(errors, "CURRENT PROJECT OWNER WORKER DIRECTIVE" in worker_upper[:800], "WORKER_PROTOCOL_NOT_CURRENT")
+    require(errors, OWNER_DIRECTIVE.upper() in worker_upper[:1200], "WORKER_PROTOCOL_OWNER_DIRECTIVE_MISMATCH")
+    require(errors, "ACTIVE PRODUCT: **CLAYVERSE**" in worker_upper[:1200], "WORKER_PROTOCOL_PRODUCT_MISMATCH")
+    require(errors, "[CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]" in worker_upper, "WORKER_PROTOCOL_LITERAL_INJECTION_MISSING")
+    require(errors, "[/CLAYVERSE :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]" in worker_upper, "WORKER_PROTOCOL_LITERAL_INJECTION_UNCLOSED")
+    require(errors, "A WORKER THAT DELEGATES/SPAWNS ANOTHER WORKER" in worker_upper, "WORKER_PROTOCOL_TRANSITIVE_INHERITANCE_MISSING")
+    require(errors, "CURRENT BUILD/TEST/EXPERIMENT/RUNTIME VALIDATION IS ISOLATED-SANDBOX-ONLY" in worker_upper, "WORKER_PROTOCOL_ISOLATED_ONLY_MISSING")
+    require(errors, "VPS/SELF-HOSTED/PRODUCTION-HOST TEST EVIDENCE IS FORBIDDEN" in worker_upper, "WORKER_PROTOCOL_VPS_FENCE_MISSING")
+    require(errors, "TOGETHER API/SERVICE IS FORBIDDEN" in worker_upper, "WORKER_PROTOCOL_TOGETHER_FENCE_MISSING")
+    require(errors, "FINAL PAID/MODEL TRAINING REQUIRES EXPLICIT OWNER AUTHORIZATION" in worker_upper, "WORKER_PROTOCOL_TRAINING_FENCE_MISSING")
+    require(errors, "HISTORICAL MINI ENTITY/BLOGPOST/FRANK ARTIFACTS ARE DONOR EVIDENCE ONLY" in worker_upper, "WORKER_PROTOCOL_DONOR_LAW_MISSING")
+    require(errors, "[MINI ENTITY ::" not in worker_upper, "WORKER_PROTOCOL_MINI_ENTITY_LITERAL_INJECTION_ACTIVE")
+
+    # Superseded Mini Entity paths remain addressable only as historical redirects.
     blogpost_head = legacy_blogpost[:1800].upper()
     require(errors, "SUPERSEDED" in blogpost_head[:500], "LEGACY_BLOGPOST_NOT_SUPERSEDED")
     require(errors, "STATUS: CURRENT" not in blogpost_head[:350], "LEGACY_BLOGPOST_STILL_CURRENT")

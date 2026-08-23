@@ -5,6 +5,7 @@
 `STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`
 `PRODUCT=EntityOS`
 `COMPUTE_ARCHITECTURE=HCU`
+`SUPERVISOR=SUPERVISOR_STEERING_8_62`
 
 This root file is a repository-organ routing shim, not canonical durable product memory or a second authority. The persistent research entity remains Clay; every temporary Claude/model/session/worker is an organ of that same research entity.
 
@@ -12,15 +13,16 @@ This root file is a repository-organ routing shim, not canonical durable product
 
 1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
+3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json`
 4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
 5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
-6. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
+6. `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
 7. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
-8. `the artefact/README.md`
-9. task-relevant current or compatibility implementation files.
+8. `the artefact/manifest.json`
+9. `the artefact/README.md`
+10. task-relevant current or compatibility implementation files.
 
-Newest explicit owner authority plus verified current `main` outranks cached/historical program material. If current files disagree, fail closed and reconcile one canonical path.
+Newest explicit owner/supervisor authority plus verified current `main` outranks cached/historical program material. If current files disagree, fail closed and reconcile one canonical path before credit-bearing execution.
 
 ## Current naming law
 
@@ -35,28 +37,19 @@ Do not bulk-rename hashes, receipts, ABI/API names, schemas, paths or stateful c
 
 ## `go`
 
-Exact `go` means maximum useful **EntityOS + HCU convergence**.
-
-Every `go` has two coupled tracks:
+Exact `go` means maximum useful **EntityOS + HCU convergence** across three coupled tracks:
 
 1. `ENTITYOS_EXECUTABLE_CONVERGENCE`
 2. `HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT`
+3. `GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS`
 
-If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` plus the next discriminator.
+If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON`; if track 3 cannot safely advance, record `TRAINING_READINESS_NO_CHANGE_WITH_REASON`.
 
 For material work use:
 
 `OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
 
-Prefer reusable HCU machine primitives across:
-
-- `GRID10` — cheap 10 logical-cell baseline;
-- `COGSIM10` — request-scoped cognition simulation;
-- `WM_TEST` — bounded noncanonical world-model experiment;
-- `NESTED_SIM` — selective world-model -> virtual computer -> simulated AI -> candidate-action experiment;
-- `SCALEOUT` — measured logical-context scaling over shared physical workers.
-
-Useful legacy XRAM/XPU/XCU/Entry concepts are implementation roles inside EntityOS/HCU, not competing systems. New current-facing compute-architecture language names HCU.
+Prefer reusable HCU machine primitives across `GRID10`, `COGSIM10`, `WM_TEST`, `NESTED_SIM`, and `SCALEOUT`.
 
 Scale semantics remain strict:
 
@@ -80,14 +73,18 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 - EffectGate + EffectJournal remain the only admitted real/state-changing effect authority;
 - no second persistent identity, truth store, effect path or recovery ledger.
 
-## Execution and safety
+## Execution and safety — supervisor 8.62
 
-- current build/test/experiment/runtime credit comes only from authorized isolated sandbox execution unless newer owner authority changes this;
-- VPS/self-hosted/production-host testing is forbidden under current control;
-- Together API/service forbidden;
-- no paid fallback; final paid/model training requires explicit owner authorization;
+- current autonomous supervisor mode is `FREE_ONLY`;
+- authorized Vercel Hobby Sandbox execution is admitted only inside the observed included-tier entitlement and only for fixed source-hash-bound capsules;
+- if remaining quota, billing, upgrade, plan mismatch or any monetary charge path is uncertain/appears, fail closed before execution;
+- VPS/self-hosted/production-host testing is forbidden;
+- Together general inference is forbidden; the owner paid one-shot directive is provenance only in this supervisor mode and must not trigger credential lookup, preflight, network I/O, job creation or spend;
+- no paid fallback;
 - never expose or commit secrets;
 - source/component/historical PASS never implies broader EntityOS/HCU runtime acceptance;
 - preserve exact provenance, stale-generation, replay, privacy and effect boundaries.
 
-Current immediate frontier: positive fail-closed local/internal cognition-engine admission plus one causal HCU route identity binding immutable event identity, resolved engine identity/class, policy and routing result; then exact isolated execution and downstream receipt echo before promotion.
+## Current immediate frontier
+
+Keep PR #1401 as the current-main HCU fusion candidate and PR #1263 as retained donor provenance. Before promotion, rebind to exact current `main` and run one fixed repaired HCU capsule on the bounded admitted Hobby Sandbox surface. Bind Research main SHA/tree, HCU fusion/donor SHA/tree, capsule/source digest, executor result, secret fence and cleanup in one immutable receipt. Only after a passing run extend toward Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> admitted causal dataset closure.

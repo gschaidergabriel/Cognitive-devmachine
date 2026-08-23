@@ -263,9 +263,17 @@ class ProfilePipelineRuntime(clay.Runtime):
         db = self._db(str(p["entity_db"]))
         try:
             db.execute("BEGIN IMMEDIATE")
-            entity_preexisting = db.execute(
+            entity_table_preexisting = db.execute(
                 "SELECT 1 FROM sqlite_master WHERE type='table' AND name='entity_state'"
             ).fetchone() is not None
+            native_row_preexisting = False
+            if entity_table_preexisting:
+                try:
+                    native_row_preexisting = db.execute(
+                        "SELECT 1 FROM entity_state WHERE id=1"
+                    ).fetchone() is not None
+                except sqlite3.Error as exc:
+                    raise PipelineFault("ENTITY_STATE_SCHEMA_INVALID") from exc
             eos_preexisting = db.execute(
                 "SELECT 1 FROM sqlite_master WHERE type='table' AND name='eos_pipeline_state'"
             ).fetchone() is not None
@@ -273,10 +281,10 @@ class ProfilePipelineRuntime(clay.Runtime):
                 str(row[1]) for row in db.execute("PRAGMA table_info(eos_pipeline_state)").fetchall()
             } if eos_preexisting else set()
 
-            # A legacy-only nonzero generation is explicitly not imported as authority.
-            # Without an already-established native entity_state, such a database requires
-            # a separately admitted provenance-bound migration rather than silent max().
-            if not entity_preexisting and "generation" in eos_columns:
+            # A table shell is not native authority; the singleton row is. If no native
+            # singleton exists, a nonzero legacy generation requires an explicit,
+            # provenance-bound migration rather than a silent reset or max().
+            if not native_row_preexisting and "generation" in eos_columns:
                 legacy_row = db.execute(
                     "SELECT generation FROM eos_pipeline_state WHERE singleton=1"
                 ).fetchone()

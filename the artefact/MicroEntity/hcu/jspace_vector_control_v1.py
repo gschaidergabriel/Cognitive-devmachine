@@ -11,6 +11,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from fractions import Fraction
 import hashlib
+import json
 import math
 from typing import Any, Sequence
 
@@ -32,6 +33,24 @@ CONTROL_CONDITIONS = frozenset({
     "LESION",
 })
 MAX_DIMENSION = 4096
+_PACKET_FIELDS = frozenset({
+    "schema",
+    "abi_schema",
+    "canonicalization_schema",
+    "codec_schema",
+    "wire_format",
+    "basis_id",
+    "basis_sha256",
+    "generation",
+    "role",
+    "dimension",
+    "control_condition",
+    "source_vector_sha256",
+    "scale_numerator",
+    "scale_denominator",
+    "q8_values",
+    "packet_sha256",
+})
 
 
 class JSpaceVectorControlError(ValueError):
@@ -222,6 +241,8 @@ def validate_packet(packet: VectorControlPacket) -> None:
         scale_denominator = int(packet.scale_denominator)
     except (TypeError, ValueError) as exc:
         raise JSpaceVectorControlError("SCALE_RATIONAL_DECIMAL_STRINGS_REQUIRED") from exc
+    if str(scale_numerator) != packet.scale_numerator or str(scale_denominator) != packet.scale_denominator:
+        raise JSpaceVectorControlError("SCALE_RATIONAL_NONCANONICAL_DECIMAL_STRING")
     if scale_numerator < 0 or scale_denominator <= 0:
         raise JSpaceVectorControlError("SCALE_RATIONAL_INVALID")
     if scale_numerator == 0 and any(packet.q8_values):
@@ -281,3 +302,44 @@ def packet_bytes(packet: VectorControlPacket) -> bytes:
         return canonicalize(asdict(packet))
     except CanonicalizationError as exc:
         raise JSpaceVectorControlError(f"PACKET_WIRE_CANONICALIZATION_FAILED:{exc}") from exc
+
+
+def packet_text(packet: VectorControlPacket) -> str:
+    """Return the sole admitted text form: exact RFC8785/JCS UTF-8 packet bytes."""
+    return packet_bytes(packet).decode("utf-8", "strict")
+
+
+def parse_packet_text(text: str) -> VectorControlPacket:
+    """Parse only the exact canonical JCS text form; aliases/extra fields fail closed."""
+    if not isinstance(text, str) or not text:
+        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_REQUIRED")
+    try:
+        value = json.loads(text)
+    except (json.JSONDecodeError, ValueError) as exc:
+        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_JSON_INVALID") from exc
+    if not isinstance(value, dict) or set(value) != _PACKET_FIELDS:
+        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_SCHEMA_MISMATCH")
+    if not isinstance(value.get("q8_values"), list):
+        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_Q8_ARRAY_REQUIRED")
+    packet = VectorControlPacket(
+        schema=value.get("schema"),
+        abi_schema=value.get("abi_schema"),
+        canonicalization_schema=value.get("canonicalization_schema"),
+        codec_schema=value.get("codec_schema"),
+        wire_format=value.get("wire_format"),
+        basis_id=value.get("basis_id"),
+        basis_sha256=value.get("basis_sha256"),
+        generation=value.get("generation"),
+        role=value.get("role"),
+        dimension=value.get("dimension"),
+        control_condition=value.get("control_condition"),
+        source_vector_sha256=value.get("source_vector_sha256"),
+        scale_numerator=value.get("scale_numerator"),
+        scale_denominator=value.get("scale_denominator"),
+        q8_values=tuple(value.get("q8_values")),
+        packet_sha256=value.get("packet_sha256"),
+    )
+    validate_packet(packet)
+    if packet_text(packet) != text:
+        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_NONCANONICAL")
+    return packet

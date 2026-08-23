@@ -1,0 +1,99 @@
+{
+  "schema": "GO_LIVENESS_TRIANGULATION_RECEIPT/v1",
+  "macrocycle_id": "go-20260823T0819+07-gpt56sol-export-liveness",
+  "trigger": "go",
+  "organ": "gpt-5.6-sol",
+  "canonical_main_at_join": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+  "execution_policy": {
+    "free_only": true,
+    "provider_paid_network_used": false,
+    "runtime_restart_performed": false,
+    "product_state_mutated": false,
+    "vps_test_used": false,
+    "authorized_isolated_runtime_executed": false
+  },
+  "frontier": "AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1 missing; evidence producer stalled before further autonomous runtime claims or repair.",
+  "unusual_experiment": {
+    "slot": 1,
+    "id": "CROSS_STREAM_BREAKPOINT_TRIANGULATION",
+    "question": "Does the observed stall fit NO_NEW_STATE, or does synchronized cessation across two previously periodic export streams imply a shared liveness-path failure?",
+    "method": "Compare the recent Git commit cadence of AgentZero exports and EOS rating exports without invoking or restarting either producer.",
+    "observations": {
+      "agentzero": {
+        "cadence_seconds_nominal": 1800,
+        "recent_export_times_utc": [
+          "2026-08-22T18:06:43Z",
+          "2026-08-22T18:36:43Z",
+          "2026-08-22T19:06:44Z",
+          "2026-08-22T19:36:44Z",
+          "2026-08-22T20:06:44Z"
+        ],
+        "last_commit": "5e134f5f07ddebc0a1c182d04579e361bbbe82a8",
+        "generation_across_recent_samples": 276
+      },
+      "eos_rating": {
+        "cadence_seconds_nominal": 1800,
+        "recent_export_times_utc": [
+          "2026-08-22T18:25:04Z",
+          "2026-08-22T18:55:04Z",
+          "2026-08-22T19:25:04Z",
+          "2026-08-22T19:55:04Z",
+          "2026-08-22T20:25:04Z"
+        ],
+        "last_commit": "9452c6fe621bc2d8c6f8cf5eb3f9fb88fd91591d",
+        "rating_count_across_recent_samples": 12,
+        "latest_up_down": "7/5"
+      },
+      "cross_stream_offset_seconds_approx": 1100,
+      "later_matching_export_commits_observed": false
+    },
+    "hypotheses": [
+      {
+        "id": "H0_NO_NEW_STATE",
+        "prediction": "If producers suppress unchanged state, earlier repeated commits should cease when generation/rating state becomes stable.",
+        "result": "DISFAVORED",
+        "reason": "Both streams repeatedly committed unchanged generation/count before the breakpoint."
+      },
+      {
+        "id": "H1_SHARED_SCHEDULER_OR_HOST_PATH",
+        "prediction": "Two offset periodic streams can cease within one cadence window if a shared host/scheduler/dependency fails.",
+        "result": "RETAINED",
+        "reason": "Observed synchronized cessation is compatible, but host/timer state is not exposed here."
+      },
+      {
+        "id": "H2_SHARED_GIT_PUSH_OR_AUTH_PATH",
+        "prediction": "Both producers may execute locally but stop producing repository commits after a shared push/auth failure.",
+        "result": "RETAINED",
+        "reason": "Repository history alone cannot distinguish local run failure from push/auth failure."
+      },
+      {
+        "id": "H3_INDEPENDENT_UNIT_FAILURES",
+        "prediction": "Both units may independently fail close together by coincidence or shared upstream data dependency.",
+        "result": "RETAINED_LOW_PRIOR",
+        "reason": "Not falsified without unit/service evidence."
+      }
+    ],
+    "collapse": {
+      "strongest_supported_claim": "NO_NEW_STATE is not an adequate explanation for the missing commits; a liveness-path failure remains materially more plausible.",
+      "exact_failure_class": "UNKNOWN",
+      "forbidden_inference": "Do not infer TIMER_DISABLED, PROCESS_STUCK, DB_LOCKED, PUSH_FAILED, AUTH_FAILED, RUN_FAILED, or recovery safety without runtime observation."
+    }
+  },
+  "source_delta": {
+    "path": "tools/observe_autonomous_export_liveness.py",
+    "purpose": "Read-only collector for the supervisor-required AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1 fields.",
+    "properties": [
+      "systemctl show only",
+      "journal digest only; no raw journal persisted by default",
+      "git read-only inspection; no push/fetch/provider calls",
+      "SQLite read-only mode with timeout=0",
+      "disk and inode observation",
+      "conservative fail-closed classification",
+      "no restart, replay, service mutation, DB write, or product mutation"
+    ],
+    "runtime_credit": "ZERO_SOURCE_CANDIDATE_ONLY"
+  },
+  "next_exact_step": "Run tools/observe_autonomous_export_liveness.py on the authorized host/runtime that owns the two export units, bind exact unit names/repo/SQLite path, and persist its receipt before any restart or repair. If classification remains UNKNOWN, inspect the bound journal/run-id/push result rather than mutating state.",
+  "evidence_boundary": "GitHub-history observation + source tooling only. No current runtime execution credit and no claim that the product, AgentZero adapter, Mini Entity, or cognition checkpoint passed.",
+  "unusual_experiment_slots_consumed": 1
+}

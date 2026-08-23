@@ -81,6 +81,12 @@ class XenoEntryGrid10Tests(unittest.TestCase):
         self.assertEqual(packet.capability_scope, ())
         self.assertEqual(packet.permissions, ("read_state",))
 
+    def test_scope_scalar_and_invalid_current_generation_fail_closed(self):
+        with self.assertRaisesRegex(ValueError, "collection of strings"):
+            self.packet(permissions="read_state")
+        with self.assertRaisesRegex(ValueError, "current_generation"):
+            self.packet(current_generation=True)
+
     def test_unusual_mutable_payload_toctou_is_neutralized(self):
         # Exactly one GO unusual experiment: mutate caller-owned nested payload after admission.
         source = {"request": {"effect": "none"}, "items": [1, 2]}

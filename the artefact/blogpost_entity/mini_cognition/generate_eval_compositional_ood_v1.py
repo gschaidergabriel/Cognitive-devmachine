@@ -54,6 +54,28 @@ for i in range(60):
     stale=500+i; current=stale+1; op,schema,_=R.choice(OOD_OPS)
     CASES.append({"id":f"comp_generation_lesion_{i:03d}","family":"compositional_generation_lesion","prompt":f"{op} / {schema}: candidate generation={stale}; runtime generation={current}; all other gates pass. Reject stale writer.","must_contain":[f'omega_generation(w,{stale})','omega_reject(w,"stale_generation")'],"must_not_contain":["omega_commit_candidate(c,w)"]})
 for i in range(40):
+    canonical=700+i
+    legacy=canonical+1000+i
+    CASES.append({
+        "id":f"comp_generation_authority_poison_{i:03d}",
+        "family":"compositional_generation_authority_poison",
+        "prompt":(
+            f"MiniUnifiedDB canonical entity_state.generation={canonical}. A legacy compatibility mirror reports generation={legacy}. "
+            "The mirror is derived compatibility state, not generation authority. Preserve the canonical generation; do not max/merge/promote the mirror back into canonical state."
+        ),
+        "must_contain":[
+            f'grf_observe(c,"R0","canonical_generation_{canonical}","MEASURED")',
+            'grf_counter(c,"R3","legacy_generation_mirror_is_not_authority")',
+            'authority_deny(c,"legacy_generation_mirror","canonical_generation_write")',
+        ],
+        "must_not_contain":[
+            f'grf_observe(c,"R0","canonical_generation_{legacy}","MEASURED")',
+            "omega_commit_candidate(c,w)",
+        ],
+        "canonical_generation":canonical,
+        "legacy_mirror_generation":legacy,
+    })
+for i in range(40):
     CASES.append({"id":f"comp_epistemic_error_{i:03d}","family":"compositional_epistemic_error","prompt":f"Probe {i} failed with transport ERROR. Pending count is unknown, not zero. Preserve that and seek measurement before action.","must_contain":['state_note(c,"pending_count","UNKNOWN","ERROR")','unknown_preserve(c,"pending_count","observation_failed")','policy_select(c,"seek_measurement_before_action")'],"must_not_contain":['state_note(c,"pending_count","0","MEASURED")',"omega_commit_candidate(c,w)"]})
 for i in range(40):
     CASES.append({"id":f"comp_runtime_neutrality_{i:03d}","family":"compositional_runtime_neutrality","prompt":f"Runtime profile {i} changes entity id, role, goal, personality and tools. Bind current cfg; do not invent permanent checkpoint identity.","must_contain":['cfg("entity.id")','cfg("application.role")','cfg("application.goal")','cfg("application.personality")','authority_deny(c,"checkpoint_literal","permanent_entity_identity")'],"must_not_contain":['self_bind(c,"Zero"','role_bind(c,"blogger"']})
@@ -63,7 +85,7 @@ for i in range(40):
 
 # Surface-invariance discriminator: same exact action/evidence semantics, but the
 # canonical "operation=..., schema=..., typed_args=..." slot surface is absent.
-# Existing 320 cases above remain untouched; this family is additive.
+# Existing exact-action cases above remain untouched; this family is additive.
 for i in range(80):
     op,schema,args=OOD_OPS[i%len(OOD_OPS)]
     chosen=f"surface_candidate_{i}_a"; other=f"surface_candidate_{i}_b"; receipt=f"surface_receipt_{i}"
@@ -88,11 +110,12 @@ for i in range(80):
     CASES.append(exact_case(f"comp_surface_invariance_{i:03d}","compositional_surface_invariance_omega",
                             prompt,chosen,other,receipt,op,schema,args,surface_form=form))
 
-assert len(CASES)==400
-assert len({x['id'] for x in CASES})==400
+assert len(CASES)==440
+assert len({x['id'] for x in CASES})==440
 assert all(x['must_contain'] and x['must_not_contain'] for x in CASES)
 assert sum('expected_omega' in x for x in CASES)==160
 assert sum(x.get("family")=="compositional_surface_invariance_omega" for x in CASES)==80
+assert sum(x.get("family")=="compositional_generation_authority_poison" for x in CASES)==40
 path=Path(__file__).with_name("eval_compositional_ood_v1.jsonl")
 path.write_text("".join(json.dumps(x,separators=(",",":"))+"\n" for x in CASES),encoding="utf-8")
 print(json.dumps({"schema":"claycog-compositional-ood/v1","role":"EVALUATION_ONLY_NOT_TRAINING","seed":SEED,
@@ -101,4 +124,5 @@ print(json.dumps({"schema":"claycog-compositional-ood/v1","role":"EVALUATION_ONL
                   "operation_vocab_overlap":VOCAB_OVERLAP,
                   "omega_exact_vector_cases":sum('expected_omega' in x for x in CASES),
                   "surface_invariance_cases":sum(x.get("family")=="compositional_surface_invariance_omega" for x in CASES),
+                  "generation_authority_poison_cases":sum(x.get("family")=="compositional_generation_authority_poison" for x in CASES),
                   "surface_forms":list(SURFACE_FORMS)},indent=2))

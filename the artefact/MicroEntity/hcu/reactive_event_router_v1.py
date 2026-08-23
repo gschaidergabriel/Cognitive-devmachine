@@ -18,9 +18,13 @@ ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v2"
 ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v1"
 ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v1"
 
-# Internal cognition is admitted positively. Unknown/future provider or engine labels do
-# not become internal merely because they are absent from a denylist.
-ADMITTED_INTERNAL_PROVIDER_ALIASES = {"hcu", "local", "xeno"}
+# Provider labels are compatibility selectors only. Every admitted alias resolves to
+# one exact canonical local engine identity before it can influence cognition.
+ADMITTED_INTERNAL_PROVIDER_ALIASES = {
+    "hcu": "hcu_local_08b",
+    "local": "hcu_local_08b",
+    "xeno": "hcu_local_08b",
+}
 ADMITTED_INTERNAL_ENGINES = {
     "hcu_local_08b": "LOCAL_SHARED_WEIGHT_08B",
 }
@@ -39,7 +43,7 @@ SCRIPT_STAGES = (
 ROUTER_POLICY = {
     "schema": ROUTER_POLICY_SCHEMA,
     "scripts": SCRIPT_STAGES,
-    "admitted_internal_provider_aliases": tuple(sorted(ADMITTED_INTERNAL_PROVIDER_ALIASES)),
+    "admitted_internal_provider_aliases": tuple(sorted(ADMITTED_INTERNAL_PROVIDER_ALIASES.items())),
     "admitted_internal_engines": tuple(sorted(ADMITTED_INTERNAL_ENGINES.items())),
     "thresholds": {
         "world_novelty": 0.55,
@@ -68,6 +72,9 @@ class RouteDecision:
     zero_projection: bool
     zero_projection_format: str | None
     external_provider_dependency: bool
+    event_source: str
+    event_id: str
+    causal_id: str
     event_sha256: str
     router_policy_sha256: str
     resolved_engine_identity: str | None
@@ -104,6 +111,12 @@ def _bool(value: Any, field: str) -> bool:
     return value
 
 
+def _identity_text(value: Any, field: str) -> str:
+    if not isinstance(value, str) or not value or value != value.strip():
+        raise ReactiveRoutingError(f"{field}:NONEMPTY_CANONICAL_STRING_REQUIRED")
+    return value
+
+
 def _sha256_text(value: Any, field: str) -> str:
     if not isinstance(value, str):
         raise ReactiveRoutingError(f"{field}:LOWERCASE_SHA256_REQUIRED")
@@ -113,14 +126,16 @@ def _sha256_text(value: Any, field: str) -> str:
     return value
 
 
-def _validate_internal_provider(event: Mapping[str, Any]) -> None:
+def _resolve_internal_provider(event: Mapping[str, Any]) -> str | None:
     provider = event.get("requested_internal_provider")
     if provider is None:
-        return
+        return None
     if not isinstance(provider, str) or not provider.strip():
         raise ReactiveRoutingError("REQUESTED_INTERNAL_PROVIDER_STRING_REQUIRED")
-    if provider.strip().lower() not in ADMITTED_INTERNAL_PROVIDER_ALIASES:
+    resolved_engine = ADMITTED_INTERNAL_PROVIDER_ALIASES.get(provider.strip().lower())
+    if resolved_engine is None:
         raise ReactiveRoutingError("UNKNOWN_OR_EXTERNAL_PROVIDER_FORBIDDEN_AS_INTERNAL_COGNITIVE_DEPENDENCY")
+    return resolved_engine
 
 
 def _resolve_internal_engine(event: Mapping[str, Any]) -> tuple[str | None, str | None, str | None, str | None]:
@@ -153,9 +168,14 @@ def _resolve_internal_engine(event: Mapping[str, Any]) -> tuple[str | None, str 
     return identity, engine_class, artifact_sha256, engine_identity_sha256
 
 
-def _event_identity(event: Mapping[str, Any]) -> str:
-    # Engine/provider resolution is routing metadata, not the immutable causal event.
-    # Separating the two lets identical events be compared across admitted engines.
+def _event_identity(event: Mapping[str, Any]) -> tuple[str, str, str, str]:
+    # Event occurrence identity is explicit and separate from provider/engine resolution.
+    # This prevents two distinct but signal-identical occurrences from aliasing merely
+    # because their routing thresholds happen to collapse to the same result.
+    event_source = _identity_text(event.get("event_source"), "EVENT_SOURCE")
+    event_id = _identity_text(event.get("event_id"), "EVENT_ID")
+    causal_id = _identity_text(event.get("causal_id"), "CAUSAL_ID")
+
     payload = dict(event)
     for key in (
         "requested_internal_provider",
@@ -164,7 +184,7 @@ def _event_identity(event: Mapping[str, Any]) -> str:
         "resolved_internal_engine_artifact_sha256",
     ):
         payload.pop(key, None)
-    return _sha256_canonical(payload, "EVENT")
+    return _sha256_canonical(payload, "EVENT"), event_source, event_id, causal_id
 
 
 def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDecision:
@@ -176,13 +196,15 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
     if generation != current_generation:
         raise ReactiveRoutingError("STALE_ENTITY_GENERATION")
 
-    _validate_internal_provider(event)
+    requested_provider_engine = _resolve_internal_provider(event)
     (
         resolved_engine_identity,
         resolved_engine_class,
         resolved_engine_artifact_sha256,
         engine_identity_sha256,
     ) = _resolve_internal_engine(event)
+    if requested_provider_engine is not None and resolved_engine_identity != requested_provider_engine:
+        raise ReactiveRoutingError("REQUESTED_INTERNAL_PROVIDER_ENGINE_MISMATCH")
 
     novelty = _unit(event.get("novelty", 0.0), "novelty")
     contradiction = _unit(event.get("contradiction", 0.0), "contradiction")
@@ -219,7 +241,7 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         raise ReactiveRoutingError("SCRIPT_ONLY_EVENT_MUST_NOT_SELECT_INTERNAL_ENGINE")
 
     projection = zero_relevance >= 0.60 and bool(lanes)
-    event_sha256 = _event_identity(event)
+    event_sha256, event_source, event_id, causal_id = _event_identity(event)
     router_policy_sha256 = _sha256_canonical(ROUTER_POLICY, "ROUTER_POLICY")
     payload = {
         "schema": ROUTE_IDENTITY_SCHEMA,
@@ -241,6 +263,9 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         zero_projection=projection,
         zero_projection_format="ClayCode" if projection else None,
         external_provider_dependency=False,
+        event_source=event_source,
+        event_id=event_id,
+        causal_id=causal_id,
         event_sha256=event_sha256,
         router_policy_sha256=router_policy_sha256,
         resolved_engine_identity=resolved_engine_identity,
@@ -258,6 +283,9 @@ def assert_inference_echo(decision: RouteDecision, receipt: Mapping[str, Any]) -
     if not isinstance(receipt, Mapping):
         raise ReactiveRoutingError("INFERENCE_RECEIPT_MAPPING_REQUIRED")
     expected = {
+        "event_source": decision.event_source,
+        "event_id": decision.event_id,
+        "causal_id": decision.causal_id,
         "event_sha256": decision.event_sha256,
         "decision_sha256": decision.decision_sha256,
         "engine_identity_sha256": decision.engine_identity_sha256,

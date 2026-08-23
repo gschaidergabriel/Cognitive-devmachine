@@ -64,21 +64,27 @@ def _claude_boundary_probe(tmp_path, monkeypatch):
     """Run one deterministic fake-Claude boundary probe with test-local host state."""
     log = tmp_path / "args.json"
     fake = tmp_path / "claude"
-    home = tmp_path / "home"
-    home.mkdir()
+    host_home = tmp_path / "host-home"
+    host_home.mkdir()
     sentinel = tmp_path / "SHOULD_NOT_EXIST"
     observation = f"hello; touch {sentinel}"
     fake.write_text(
         "#!/usr/bin/env python3\n"
         "import json,os,sys\n"
-        f"open({str(log)!r},'w').write(json.dumps({{'args':sys.argv[1:],'env':dict(os.environ)}}))\n"
+        "home=os.environ['HOME']; config=os.environ['CLAUDE_CONFIG_DIR']; tmp=os.environ['TMPDIR']\n"
+        "open(os.path.join(home,'child-home-write'),'w').write('x')\n"
+        "open(os.path.join(config,'child-config-write'),'w').write('x')\n"
+        "open(os.path.join(tmp,'child-tmp-write'),'w').write('x')\n"
+        f"open({str(log)!r},'w').write(json.dumps({{'args':sys.argv[1:],'env':dict(os.environ),'cwd':os.getcwd()}}))\n"
         "print(json.dumps({'structured_output':{'text':'ok','effect':None}}))\n"
     )
     fake.chmod(fake.stat().st_mode | stat.S_IXUSR)
-    monkeypatch.setenv("HOME", str(home))
+    monkeypatch.setenv("HOME", str(host_home))
+    monkeypatch.setenv("TMPDIR", str(tmp_path / "host-tmp"))
     monkeypatch.setenv("CLERK_SECRET_KEY", "must-not-cross-cognition-boundary")
     monkeypatch.setenv("RANDOM_DATABASE_PASSWORD", "must-not-cross-either")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "allowed-auth")
+    monkeypatch.setenv("CLAUDE_CODE_OAUTH_TOKEN", "allowed-oauth")
     adapter = ClaudeCodeInference(binary=str(fake), cwd=str(tmp_path), timeout=5)
     out = adapter.reason({"shared": "state"}, observation)
     payload = json.loads(log.read_text())
@@ -86,7 +92,8 @@ def _claude_boundary_probe(tmp_path, monkeypatch):
         "out": out,
         "args": payload["args"],
         "env": payload["env"],
-        "home": home,
+        "cwd": payload["cwd"],
+        "host_home": host_home,
         "sentinel": sentinel,
         "observation": observation,
     }
@@ -108,13 +115,24 @@ def test_claude_code_adapter_ephemeral_receipt_v1(tmp_path, monkeypatch):
     probe = _claude_boundary_probe(tmp_path, monkeypatch)
     args = probe["args"]
     env = probe["env"]
+    runtime_home = Path(env["HOME"])
+    runtime_config = Path(env["CLAUDE_CONFIG_DIR"])
+    runtime_tmp = Path(env["TMPDIR"])
     assert "--bare" not in args
     assert args[args.index("--max-turns") + 1] == "1"
     assert "--no-session-persistence" in args
+    assert args[args.index("--setting-sources") + 1] == ""
     assert env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] == "1"
     assert env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] == "1"
     assert env["CLAUDE_CODE_DISABLE_CLAUDE_MDS"] == "1"
-    assert env["HOME"] == str(probe["home"])
+    assert runtime_home != probe["host_home"]
+    assert runtime_config.parent == runtime_home.parent
+    assert runtime_tmp.parent == runtime_home.parent
+    assert not runtime_home.exists()
+    assert not runtime_config.exists()
+    assert not runtime_tmp.exists()
+    assert probe["host_home"].exists()
+    assert list(probe["host_home"].iterdir()) == []
 
 
 def test_claude_code_adapter_structured_output_receipt_v1(tmp_path, monkeypatch):
@@ -131,7 +149,8 @@ def test_claude_code_adapter_env_isolation_receipt_v1(tmp_path, monkeypatch):
     probe = _claude_boundary_probe(tmp_path, monkeypatch)
     env = probe["env"]
     assert env["ANTHROPIC_API_KEY"] == "allowed-auth"
-    assert env["HOME"] == str(probe["home"])
+    assert env["CLAUDE_CODE_OAUTH_TOKEN"] == "allowed-oauth"
+    assert env["HOME"] != str(probe["host_home"])
     assert "CLERK_SECRET_KEY" not in env
     assert "RANDOM_DATABASE_PASSWORD" not in env
 

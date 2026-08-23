@@ -1,8 +1,7 @@
 """Xeno typed ingress boundary v1.
 
-Source candidate only. This module is deliberately deterministic and side-effect free:
-it binds new data to causal/generation/provenance/security/budget metadata before
-cognition, without granting truth or effect authority.
+Deterministic and side-effect free: bind new data to causal/generation/provenance,
+security and resource metadata before cognition. This layer owns neither truth nor effects.
 """
 from __future__ import annotations
 
@@ -86,7 +85,9 @@ def _canonical_time(value: str, field: str) -> tuple[datetime, str]:
 
 
 def _canonical_json(value: object) -> bytes:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+    return json.dumps(
+        value, sort_keys=True, separators=(",", ":"), ensure_ascii=True, allow_nan=False
+    ).encode("utf-8")
 
 
 def _digest(value: object) -> str:
@@ -175,12 +176,7 @@ class XenoIngressPacket:
 
 
 def admit_ingress(draft: XenoIngressDraft, *, current_generation: int) -> XenoIngressPacket:
-    """Admit one typed ingress packet or fail closed.
-
-    The ingress digest commits to the complete admitted event identity. Replaying the
-    same canonically represented event is deterministic; materially different events
-    cannot alias merely because downstream routing later chooses the same functions.
-    """
+    """Admit one typed ingress packet or fail closed."""
     if not isinstance(draft, XenoIngressDraft):
         raise AdmissionError("draft must be XenoIngressDraft")
     generation = _strict_int(draft.generation, "generation", 0, 2**63 - 1)
@@ -255,3 +251,36 @@ def admit_ingress(draft: XenoIngressDraft, *, current_generation: int) -> XenoIn
         resource_budget=budget,
         payload_ref=payload_ref,
     )
+
+
+def verify_ingress_packet(packet: XenoIngressPacket, *, current_generation: int) -> XenoIngressPacket:
+    """Re-admit packet material and require byte-semantic identity before downstream use.
+
+    This prevents callers from bypassing Entry admission by directly constructing the
+    frozen dataclass with a forged ingress_id, generation, budget or authority metadata.
+    """
+    if not isinstance(packet, XenoIngressPacket):
+        raise AdmissionError("packet must be XenoIngressPacket")
+    if packet.schema_id != SCHEMA_ID:
+        raise AdmissionError("unsupported ingress schema")
+    expected = admit_ingress(
+        XenoIngressDraft(
+            causal_id=packet.causal_id,
+            generation=packet.generation,
+            source=packet.source,
+            provenance=packet.provenance,
+            modality=packet.modality,
+            observed_at=packet.observed_at,
+            received_at=packet.received_at,
+            isolation_domain=packet.isolation_domain,
+            permissions=packet.permissions,
+            capability_scope=packet.capability_scope,
+            resource_budget=packet.resource_budget,
+            payload_ref=packet.payload_ref,
+            parent_or_stream_id=packet.parent_or_stream_id,
+        ),
+        current_generation=current_generation,
+    )
+    if packet != expected:
+        raise AdmissionError("ingress packet identity/material mismatch")
+    return packet

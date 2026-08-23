@@ -87,6 +87,12 @@ class AuthorityConsistencyTests(unittest.TestCase):
             "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md": "Program: ClayVerse single-container\nStage: CLAYVERSE_ARTIFACT\n",
             "the artefact/ARCHITECTURE.md": "ClayVerse is the product endpoint.\n",
             "the artefact/README.md": "# the artefact — ClayVerse single-container product\nThe active release endpoint is one OCI/Docker-compatible ClayVerse container image.\n",
+            mod.ROOT_CLAUDE: (
+                "# CLAY — CURRENT CLAYVERSE REPO ORGAN\n"
+                "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
+                "`STAGE=CLAYVERSE_ARTIFACT`\n"
+                "Read research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md first.\n"
+            ),
         }
         for rel, data in files.items():
             path = root / rel
@@ -147,6 +153,35 @@ class AuthorityConsistencyTests(unittest.TestCase):
         errors = mod.validate(root)["errors"]
         self.assertIn("DIRECTIVE_NOT_CURRENT", errors)
         self.assertIn("DIRECTIVE_MARKED_SUPERSEDED", errors)
+
+    def test_root_claude_mini_entity_program_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.ROOT_CLAUDE
+        path.write_text(
+            "# stale repo organ\n"
+            "`PROGRAM=MINI_ENTITY_PIPELINE_ALL_IN_ONE`\n"
+            "`STAGE=CLAYVERSE_ARTIFACT`\n"
+            "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n",
+            encoding="utf-8",
+        )
+        errors = mod.validate(root)["errors"]
+        self.assertIn("ROOT_CLAUDE_PROGRAM_MISMATCH", errors)
+        self.assertIn("ROOT_CLAUDE_MINI_ENTITY_PROGRAM_ACTIVE", errors)
+
+    def test_root_claude_stale_blogpost_directive_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / mod.ROOT_CLAUDE
+        path.write_text(
+            "# stale first-read redirect\n"
+            "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
+            "`STAGE=CLAYVERSE_ARTIFACT`\n"
+            "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md\n"
+            "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md\n",
+            encoding="utf-8",
+        )
+        self.assertIn("ROOT_CLAUDE_STALE_BLOGPOST_DIRECTIVE", mod.validate(root)["errors"])
 
 
 if __name__ == "__main__":

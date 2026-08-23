@@ -1,0 +1,47 @@
+{
+  "schema": "GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-23",
+  "macrocycle_trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "d8ff57c2edc4c9eecde99ce1f9b089702d71b1cf",
+  "owner_architecture_commit": "5f3c2a7cc9aeab8f851d38450fa50a3e1451d767",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "unusual_experiment": {
+    "id": "QWEN35_JLENS_STATIC_LAYOUT_CONTRACT",
+    "count_for_this_macrocycle": 1,
+    "question": "Does the exact public source structure already falsify a Jacobian-Lens adapter path for the owner-selected Qwen3.5-0.8B cognition substrate?",
+    "method": "Compare Anthropic Jacobian-Lens HFLensModel layout/forward requirements against current upstream Qwen3.5 text-decoder structure and the selected checkpoint config. No model weights were loaded and no provider/runtime execution occurred.",
+    "counterhypothesis": "Qwen3.5 hybrid linear/full attention or multimodal wrapping makes the reference Jacobian-Lens adapter structurally unusable before any runtime test.",
+    "result": "COUNTERHYPOTHESIS_NOT_ESTABLISHED_SOURCE_COMPATIBILITY_RETAINED_RUNTIME_UNVERIFIED"
+  },
+  "external_sources": {
+    "anthropic_jacobian_lens_repo": "anthropics/jacobian-lens",
+    "anthropic_jacobian_lens_revision": "581d398613e5602a5af361e1c34d3a92ea82ba8e",
+    "anthropic_hf_adapter_path": "jlens/hf.py",
+    "qwen_checkpoint": "Qwen/Qwen3.5-0.8B",
+    "qwen_observed_model_revision": "2b48083dfa97c3cbf0220cf1a5e6cffe0a511157",
+    "qwen_architecture": "Qwen3_5ForConditionalGeneration",
+    "qwen_model_type": "qwen3_5"
+  },
+  "observations": [
+    "Jacobian-Lens auto-layout includes model.language_model and requires residual layers, final norm, embeddings and top-level lm_head.",
+    "Qwen3.5 uses a hybrid 3:1 linear-attention/full-attention text stack rather than a homogeneous softmax-attention stack.",
+    "Qwen3.5 text model preserves a residual block stack and normal text-decoder embedding/norm structure, so hybrid attention does not source-level falsify hook-based residual observation.",
+    "The selected public 0.8B checkpoint is configured as Qwen3_5ForConditionalGeneration, so exact wrapper/layout behavior still requires executable verification.",
+    "Static structure cannot establish Jacobian backward stability, memory use, fit convergence, lens quality or a functional global workspace on Qwen3.5-0.8B."
+  ],
+  "delta": {
+    "binding_contract": "the artefact/blogpost_entity/mini_cognition/JSPACE_GWT_BINDING_V1.md",
+    "validator": "the artefact/blogpost_entity/mini_cognition/validate_jspace_gwt_binding_v1.py",
+    "regression": "the artefact/blogpost_entity/mini_cognition/test_validate_jspace_gwt_binding_v1.py",
+    "local_component_test": "8/8 PASS in isolated container before GitHub write"
+  },
+  "evidence_class": "BOUNDED_SOURCE_PLUS_LOCAL_COMPONENT_VALIDATOR",
+  "runtime_credit": 0,
+  "jspace_runtime_credit": 0,
+  "whole_gwt_credit": 0,
+  "provider_calls": 0,
+  "paid_execution": false,
+  "free_only_preserved": true,
+  "next_gate": "Run exact bound Qwen3.5-0.8B + tokenizer through current Jacobian-Lens from_hf, minimal apply, jacobian_for_prompt and small fit on an authorized isolated runtime; record exact model/tokenizer/runtime/lens/corpus digests and preserve any failure."
+}

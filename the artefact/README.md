@@ -145,6 +145,10 @@ Inputs may originate from humans, tools, external events, sensor/stream data, ca
 
 HCU route events and downstream inference receipts must ultimately re-enter through this fabric so event identity, generation, engine identity and causal provenance remain bound instead of becoming a side ledger.
 
+Entry admission must never convert caller-supplied capability claims into authority. Privileged capabilities require comparison against a separately trusted canonical capability/permission snapshot or verified resolver result; unknown/mismatched authority fails closed.
+
+Cross-language causal identity also needs one explicit byte contract. The current candidate `hcu_typed_canonical_v1.py` defines `ENTITYOS_HCU_TYPED_CANONICAL/v1`, a deliberately restricted versioned identity domain: safe integers, no floats, printable ASCII object keys, exact Unicode scalar values, fixed escapes, deterministic ordering and domain-separated SHA-256. It is a typed equivalent for HCU/Entry identity, not a claim of full RFC 8785 JCS implementation. Promotion requires independent second-language vectors and exact isolated execution.
+
 ## HCU reactive cognition
 
 The current HCU direction is script-first and selective:
@@ -161,9 +165,10 @@ Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 
 ## Current frontier
 
-1. finish control-plane authority convergence to EntityOS/HCU across current-facing workspace surfaces without destructive compatibility renames;
-2. re-enter `HCU_REACTIVE_EVENT/v1` and causal route receipts through the Typed Entry Fabric;
-3. define positive fail-closed local HCU engine capability admission bound to exact checkpoint/tokenizer/runtime identity;
-4. bind event identity + resolved engine identity/class + routing result into one causal route/inference receipt;
-5. rebase/fuse the strongest HCU implementation onto current `main`;
-6. obtain exact authorized-isolated runtime evidence before promotion.
+1. keep PR #1263 as the single retained Typed Entry/HCU routing lane; do not fork a second admission/router implementation;
+2. repair Typed Entry capability admission so caller claims are verified against a separately trusted canonical capability/permission authority before cognition;
+3. fuse the versioned `ENTITYOS_HCU_TYPED_CANONICAL/v1` byte contract into retained Entry/event/route/inference receipts, then verify it with an independent second-language implementation;
+4. bind the real admitted local HCU checkpoint/tokenizer/runtime bytes to positive engine capability identity;
+5. rebuild the compatibility package only from the exact settled retained source head;
+6. obtain exact authorized-isolated Entry/router/inference regressions and then GRID10/COGSIM10 evidence before promotion;
+7. keep WM_TEST/NESTED_SIM selective and noncanonical until cheaper modes plus measured discriminators justify them.

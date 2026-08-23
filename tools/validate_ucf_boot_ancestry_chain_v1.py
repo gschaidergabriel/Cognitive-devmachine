@@ -4,6 +4,11 @@
 This tool adds no receipt/state/truth authority. It first executes the current canonical
 UCF validator and the current canonical boot+manifest+source-lock validator, then checks
 that the UCF cycle actually descends from that admitted boot evidence.
+
+Runtime generation is deliberately cross-bound here rather than trusted from the UCF
+cycle's self-reported freshness booleans. For composed runtime credit the boot evidence
+must carry ``runtime.entity_generation`` as an independently observed non-negative
+integer and it must equal ``cycle.runtime.generation``.
 """
 from __future__ import annotations
 
@@ -80,6 +85,19 @@ def validate_chain(
         errors.append("BOOT_SOURCE_TREE_MISMATCH")
     if boot_source.get("dirty") is not False:
         errors.append("BOOT_SOURCE_DIRTY_FOR_CYCLE")
+
+    # The cycle cannot authenticate its own generation freshness by repeating a
+    # generation plus stale_generation=false. Cross-bind to boot-observed evidence.
+    cycle_runtime = cycle.get("runtime", {})
+    boot_runtime = boot_receipt.get("runtime")
+    if type(boot_runtime) is not dict:
+        errors.append("BOOT_ENTITY_GENERATION_MISSING")
+    else:
+        boot_generation = boot_runtime.get("entity_generation")
+        if type(boot_generation) is not int or boot_generation < 0:
+            errors.append("BOOT_ENTITY_GENERATION_INVALID")
+        elif cycle_runtime.get("generation") != boot_generation:
+            errors.append("BOOT_ENTITY_GENERATION_MISMATCH")
 
     identity = cycle.get("identity", {})
     boot_identity = boot_receipt.get("zero_grf", {})

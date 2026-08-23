@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
-"""Versioned cognition-object and turn-binding store inside MiniUnifiedDB.
+"""Fail-closed cognition-object and turn-binding store inside MiniUnifiedDB.
 
-This module adds no second state authority. It stores immutable cognition-object identities,
-explicit admissions, one generation-bound boot binding, and exact causal-turn bindings in
-the same SQLite MiniUnifiedDB used by the Mini Entity pipeline.
-
-It intentionally does not fabricate missing model/J-Space/boot identities. If an exact
-admitted object or current-generation binding is unavailable, callers must fail closed or
-typed-abstain before model inference.
+The store is a provenance/binding organ inside the existing MiniUnifiedDB SQLite
+authority. It creates no second truth, identity, effect, or recovery authority.
 """
 from __future__ import annotations
 
@@ -62,13 +57,16 @@ def _need(condition: bool, message: str) -> None:
 
 
 def canonical_json(value: Any) -> str:
-    return json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-        allow_nan=False,
-    )
+    try:
+        return json.dumps(
+            value,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+    except (TypeError, ValueError) as exc:
+        raise CognitionStoreError("NONCANONICAL_JSON") from exc
 
 
 def sha256_text(value: str) -> str:
@@ -81,7 +79,7 @@ def sha256_obj(value: Any) -> str:
 
 def _digest(value: Any, name: str) -> str:
     _need(type(value) is str and _HEX64.fullmatch(value) is not None, f"{name}:SHA256_REQUIRED")
-    _need(len(set(value)) > 1, f"{name}:PLACEHOLDER_REJECTED")
+    _need(value not in {"0" * 64, "f" * 64}, f"{name}:PLACEHOLDER_REJECTED")
     return value
 
 
@@ -90,11 +88,22 @@ def _text(value: Any, name: str) -> str:
     return value.strip()
 
 
-def _refs(value: Any, name: str) -> list[str]:
+def _refs(value: Any, name: str, *, nonempty: bool = False) -> list[str]:
     _need(type(value) is list, f"{name}:LIST_REQUIRED")
     refs = [_text(item, name) for item in value]
     _need(len(refs) == len(set(refs)), f"{name}:DUPLICATE")
+    if nonempty:
+        _need(bool(refs), f"{name}:NONEMPTY_REQUIRED")
     return refs
+
+
+def _json_list(raw: Any, name: str, *, nonempty: bool = False) -> list[str]:
+    _need(type(raw) is str, f"{name}:JSON_TEXT_REQUIRED")
+    try:
+        value = json.loads(raw)
+    except Exception as exc:
+        raise CognitionStoreError(f"{name}:MALFORMED_JSON") from exc
+    return _refs(value, name, nonempty=nonempty)
 
 
 def _utc_now() -> str:
@@ -113,9 +122,9 @@ def _current_generation(db: sqlite3.Connection) -> int:
 
 
 def install_schema(db: sqlite3.Connection) -> None:
-    """Install cognition tables after the canonical pipeline has created entity_state."""
+    """Install cognition tables without implicit transaction commits."""
     _current_generation(db)
-    db.executescript(
+    statements = (
         """
         CREATE TABLE IF NOT EXISTS mini_cognition_objects(
           object_kind TEXT NOT NULL,
@@ -127,8 +136,9 @@ def install_schema(db: sqlite3.Connection) -> None:
           provenance_refs_json TEXT NOT NULL,
           created_at TEXT NOT NULL,
           PRIMARY KEY(object_kind,object_version,object_digest)
-        );
-
+        )
+        """,
+        """
         CREATE TABLE IF NOT EXISTS mini_cognition_object_admissions(
           object_kind TEXT NOT NULL,
           object_version TEXT NOT NULL,
@@ -139,8 +149,9 @@ def install_schema(db: sqlite3.Connection) -> None:
           PRIMARY KEY(object_kind,object_version,object_digest,admitted_generation),
           FOREIGN KEY(object_kind,object_version,object_digest)
             REFERENCES mini_cognition_objects(object_kind,object_version,object_digest)
-        );
-
+        )
+        """,
+        """
         CREATE TABLE IF NOT EXISTS mini_cognition_boot_bindings(
           binding_digest TEXT PRIMARY KEY,
           schema TEXT NOT NULL,
@@ -159,8 +170,9 @@ def install_schema(db: sqlite3.Connection) -> None:
           provenance_refs_json TEXT NOT NULL,
           created_at TEXT NOT NULL,
           UNIQUE(entity_generation)
-        );
-
+        )
+        """,
+        """
         CREATE TABLE IF NOT EXISTS mini_cognition_turn_bindings(
           entity_generation INTEGER NOT NULL,
           causal_turn_id TEXT NOT NULL,
@@ -177,9 +189,11 @@ def install_schema(db: sqlite3.Connection) -> None:
           PRIMARY KEY(entity_generation,causal_turn_id),
           UNIQUE(binding_digest),
           FOREIGN KEY(boot_binding_digest) REFERENCES mini_cognition_boot_bindings(binding_digest)
-        );
-        """
+        )
+        """,
     )
+    for statement in statements:
+        db.execute(statement)
 
 
 def register_object(
@@ -192,18 +206,14 @@ def register_object(
     payload: Mapping[str, Any],
     provenance_refs: list[str],
 ) -> dict[str, Any]:
-    """Register immutable cognition-object metadata without admitting it for runtime use."""
     _current_generation(db)
     _need(object_kind in OBJECT_KINDS, "OBJECT_KIND_UNSUPPORTED")
     object_version = _text(object_version, "object_version")
     object_digest = _digest(object_digest, "object_digest")
     _need(digest_basis in DIGEST_BASES, "DIGEST_BASIS_UNSUPPORTED")
     _need(isinstance(payload, Mapping), "PAYLOAD_OBJECT_REQUIRED")
-    refs = _refs(provenance_refs, "provenance_refs")
-    _need(bool(refs), "PROVENANCE_REQUIRED")
-
-    payload_obj = dict(payload)
-    payload_json = canonical_json(payload_obj)
+    refs = _refs(provenance_refs, "provenance_refs", nonempty=True)
+    payload_json = canonical_json(dict(payload))
     payload_digest = sha256_text(payload_json)
     if digest_basis == "CANONICAL_JSON":
         _need(object_digest == payload_digest, "OBJECT_DIGEST_PAYLOAD_MISMATCH")
@@ -247,7 +257,6 @@ def admit_object(
     entity_generation: int,
     admission_receipt_digest: str,
 ) -> dict[str, Any]:
-    """Admit one already-registered object at the exact current entity generation."""
     live_generation = _current_generation(db)
     _need(type(entity_generation) is int and entity_generation >= 0, "GENERATION_INVALID")
     _need(entity_generation == live_generation, "STALE_GENERATION")
@@ -255,7 +264,6 @@ def admit_object(
     object_version = _text(object_version, "object_version")
     object_digest = _digest(object_digest, "object_digest")
     admission_receipt_digest = _digest(admission_receipt_digest, "admission_receipt_digest")
-
     exists = db.execute(
         """SELECT 1 FROM mini_cognition_objects
             WHERE object_kind=? AND object_version=? AND object_digest=?""",
@@ -271,7 +279,6 @@ def admit_object(
     if existing is not None:
         _need(existing[0] == admission_receipt_digest, "ADMISSION_RECEIPT_CONFLICT")
         return {"ok": True, "idempotent": True}
-
     db.execute(
         """INSERT INTO mini_cognition_object_admissions(
              object_kind,object_version,object_digest,admitted_generation,
@@ -295,21 +302,100 @@ def _require_admitted_digest(
     object_kind: str,
     object_digest: str,
     entity_generation: int,
-) -> None:
+) -> dict[str, Any]:
+    object_digest = _digest(object_digest, "object_digest")
     row = db.execute(
-        """SELECT o.object_version,MAX(a.admitted_generation)
+        """SELECT o.object_version,o.digest_basis,o.payload_json,o.payload_digest,
+                  o.provenance_refs_json,a.admitted_generation,a.admission_receipt_digest
              FROM mini_cognition_objects o
              JOIN mini_cognition_object_admissions a
                ON a.object_kind=o.object_kind
               AND a.object_version=o.object_version
               AND a.object_digest=o.object_digest
             WHERE o.object_kind=? AND o.object_digest=? AND a.admitted_generation<=?
-            GROUP BY o.object_version
-            ORDER BY MAX(a.admitted_generation) DESC, o.object_version DESC
+            ORDER BY a.admitted_generation DESC,o.object_version DESC
             LIMIT 1""",
         (object_kind, object_digest, entity_generation),
     ).fetchone()
     _need(row is not None, f"COGNITION_OBJECT_NOT_ADMITTED:{object_kind}")
+    object_version, digest_basis, payload_json, payload_digest, refs_json, admitted_generation, receipt = row
+    _text(object_version, "object_version")
+    _need(digest_basis in DIGEST_BASES, "DIGEST_BASIS_UNSUPPORTED")
+    _need(type(payload_json) is str, "OBJECT_PAYLOAD_JSON_INVALID")
+    _need(sha256_text(payload_json) == _digest(payload_digest, "payload_digest"), "OBJECT_PAYLOAD_DIGEST_MISMATCH")
+    if digest_basis == "CANONICAL_JSON":
+        _need(object_digest == payload_digest, "OBJECT_DIGEST_PAYLOAD_MISMATCH")
+    _json_list(refs_json, "object_provenance_refs", nonempty=True)
+    _need(type(admitted_generation) is int and 0 <= admitted_generation <= entity_generation, "OBJECT_ADMISSION_GENERATION_INVALID")
+    _digest(receipt, "admission_receipt_digest")
+    return {
+        "object_version": object_version,
+        "admitted_generation": admitted_generation,
+        "admission_receipt_digest": receipt,
+    }
+
+
+def _boot_material(row: sqlite3.Row | tuple[Any, ...]) -> dict[str, Any]:
+    (
+        binding_digest, schema, entity_generation, zero_identity_digest, grf_digest,
+        hyperposition_digest, bundled_manifest_digest, local_model_digest, tokenizer_digest,
+        jspace_profile_digest, jacobian_lens_digest, workspace_calibration_digest,
+        boot_source_lock_digest, policy_authority_digest, provenance_refs_json,
+    ) = tuple(row)
+    _need(schema == BOOT_BINDING_SCHEMA, "BOOT_BINDING_SCHEMA_MISMATCH")
+    _digest(binding_digest, "boot_binding_digest")
+    _need(type(entity_generation) is int and entity_generation >= 0, "BOOT_BINDING_GENERATION_INVALID")
+    fields = {
+        "zero_identity_digest": _digest(zero_identity_digest, "zero_identity_digest"),
+        "grf_digest": _digest(grf_digest, "grf_digest"),
+        "hyperposition_digest": _digest(hyperposition_digest, "hyperposition_digest"),
+        "bundled_manifest_digest": _digest(bundled_manifest_digest, "bundled_manifest_digest"),
+        "local_model_digest": _digest(local_model_digest, "local_model_digest"),
+        "tokenizer_digest": _digest(tokenizer_digest, "tokenizer_digest"),
+        "jspace_profile_digest": _digest(jspace_profile_digest, "jspace_profile_digest"),
+        "jacobian_lens_digest": _digest(jacobian_lens_digest, "jacobian_lens_digest"),
+        "workspace_calibration_digest": _digest(workspace_calibration_digest, "workspace_calibration_digest"),
+        "boot_source_lock_digest": _digest(boot_source_lock_digest, "boot_source_lock_digest"),
+        "policy_authority_digest": _digest(policy_authority_digest, "policy_authority_digest"),
+    }
+    refs = _json_list(provenance_refs_json, "boot_provenance_refs", nonempty=True)
+    material = {
+        "schema": BOOT_BINDING_SCHEMA,
+        "entity_generation": entity_generation,
+        **fields,
+        "provenance_refs": refs,
+    }
+    _need(binding_digest == sha256_obj(material), "BOOT_BINDING_DIGEST_MISMATCH")
+    return {"binding_digest": binding_digest, **material}
+
+
+def _load_boot_binding(
+    db: sqlite3.Connection,
+    *,
+    entity_generation: int,
+    binding_digest: str | None = None,
+) -> dict[str, Any]:
+    query = """SELECT binding_digest,schema,entity_generation,zero_identity_digest,grf_digest,
+                      hyperposition_digest,bundled_manifest_digest,local_model_digest,tokenizer_digest,
+                      jspace_profile_digest,jacobian_lens_digest,workspace_calibration_digest,
+                      boot_source_lock_digest,policy_authority_digest,provenance_refs_json
+                 FROM mini_cognition_boot_bindings WHERE entity_generation=?"""
+    params: list[Any] = [entity_generation]
+    if binding_digest is not None:
+        query += " AND binding_digest=?"
+        params.append(_digest(binding_digest, "boot_binding_digest"))
+    row = db.execute(query, tuple(params)).fetchone()
+    _need(row is not None, "BOOT_BINDING_UNAVAILABLE")
+    boot = _boot_material(row)
+    _need(boot["entity_generation"] == entity_generation, "BOOT_BINDING_STALE_GENERATION")
+    for field_name, object_kind in BOOT_FIELD_KINDS.items():
+        _require_admitted_digest(
+            db,
+            object_kind=object_kind,
+            object_digest=boot[field_name],
+            entity_generation=entity_generation,
+        )
+    return boot
 
 
 def admit_boot_binding(
@@ -329,23 +415,20 @@ def admit_boot_binding(
     policy_authority_digest: str,
     provenance_refs: list[str],
 ) -> dict[str, Any]:
-    """Create the sole exact cognition boot binding for the current entity generation."""
     live_generation = _current_generation(db)
     _need(type(entity_generation) is int and entity_generation >= 0, "GENERATION_INVALID")
     _need(entity_generation == live_generation, "STALE_GENERATION")
-    refs = _refs(provenance_refs, "provenance_refs")
-    _need(bool(refs), "PROVENANCE_REQUIRED")
-
+    refs = _refs(provenance_refs, "provenance_refs", nonempty=True)
+    supplied = locals()
     fields: dict[str, str] = {}
-    for field_name in BOOT_FIELD_KINDS:
-        fields[field_name] = _digest(locals()[field_name], field_name)
+    for field_name, object_kind in BOOT_FIELD_KINDS.items():
+        fields[field_name] = _digest(supplied[field_name], field_name)
         _require_admitted_digest(
             db,
-            object_kind=BOOT_FIELD_KINDS[field_name],
+            object_kind=object_kind,
             object_digest=fields[field_name],
             entity_generation=entity_generation,
         )
-
     material = {
         "schema": BOOT_BINDING_SCHEMA,
         "entity_generation": entity_generation,
@@ -353,16 +436,14 @@ def admit_boot_binding(
         "provenance_refs": refs,
     }
     binding_digest = sha256_obj(material)
-
     existing = db.execute(
-        """SELECT binding_digest FROM mini_cognition_boot_bindings
-            WHERE entity_generation=?""",
+        "SELECT binding_digest FROM mini_cognition_boot_bindings WHERE entity_generation=?",
         (entity_generation,),
     ).fetchone()
     if existing is not None:
         _need(existing[0] == binding_digest, "BOOT_BINDING_GENERATION_CONFLICT")
+        _load_boot_binding(db, entity_generation=entity_generation, binding_digest=binding_digest)
         return {"ok": True, "idempotent": True, "binding_digest": binding_digest}
-
     db.execute(
         """INSERT INTO mini_cognition_boot_bindings(
              binding_digest,schema,entity_generation,zero_identity_digest,grf_digest,
@@ -371,22 +452,12 @@ def admit_boot_binding(
              boot_source_lock_digest,policy_authority_digest,provenance_refs_json,created_at)
            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
         (
-            binding_digest,
-            BOOT_BINDING_SCHEMA,
-            entity_generation,
-            fields["zero_identity_digest"],
-            fields["grf_digest"],
-            fields["hyperposition_digest"],
-            fields["bundled_manifest_digest"],
-            fields["local_model_digest"],
-            fields["tokenizer_digest"],
-            fields["jspace_profile_digest"],
-            fields["jacobian_lens_digest"],
-            fields["workspace_calibration_digest"],
-            fields["boot_source_lock_digest"],
-            fields["policy_authority_digest"],
-            canonical_json(refs),
-            _utc_now(),
+            binding_digest, BOOT_BINDING_SCHEMA, entity_generation,
+            fields["zero_identity_digest"], fields["grf_digest"], fields["hyperposition_digest"],
+            fields["bundled_manifest_digest"], fields["local_model_digest"], fields["tokenizer_digest"],
+            fields["jspace_profile_digest"], fields["jacobian_lens_digest"],
+            fields["workspace_calibration_digest"], fields["boot_source_lock_digest"],
+            fields["policy_authority_digest"], canonical_json(refs), _utc_now(),
         ),
     )
     return {"ok": True, "idempotent": False, "binding_digest": binding_digest}
@@ -405,28 +476,18 @@ def bind_turn(
     provenance_refs: list[str],
     required_zero_mode: str,
 ) -> dict[str, Any]:
-    """Bind one causal turn to the admitted boot identity and exact workspace state."""
     live_generation = _current_generation(db)
     _need(type(entity_generation) is int and entity_generation >= 0, "GENERATION_INVALID")
     _need(entity_generation == live_generation, "STALE_GENERATION")
     causal_turn_id = _text(causal_turn_id, "causal_turn_id")
     boot_binding_digest = _digest(boot_binding_digest, "boot_binding_digest")
+    _load_boot_binding(db, entity_generation=entity_generation, binding_digest=boot_binding_digest)
     _need(type(task_text) is str, "TASK_TEXT_REQUIRED")
     workspace_digest = _digest(workspace_digest, "workspace_digest")
     slots = _refs(selected_workspace_slots, "selected_workspace_slots")
-    refs = _refs(provenance_refs, "provenance_refs")
-    _need(bool(refs), "PROVENANCE_REQUIRED")
+    refs = _refs(provenance_refs, "provenance_refs", nonempty=True)
     contradiction_state = _text(contradiction_state, "contradiction_state")
     required_zero_mode = _text(required_zero_mode, "required_zero_mode")
-
-    boot = db.execute(
-        """SELECT entity_generation FROM mini_cognition_boot_bindings
-            WHERE binding_digest=?""",
-        (boot_binding_digest,),
-    ).fetchone()
-    _need(boot is not None, "BOOT_BINDING_UNAVAILABLE")
-    _need(boot[0] == entity_generation, "BOOT_BINDING_STALE_GENERATION")
-
     material = {
         "schema": TURN_BINDING_SCHEMA,
         "entity_generation": entity_generation,
@@ -440,7 +501,6 @@ def bind_turn(
         "required_zero_mode": required_zero_mode,
     }
     binding_digest = sha256_obj(material)
-
     existing = db.execute(
         """SELECT binding_digest FROM mini_cognition_turn_bindings
             WHERE entity_generation=? AND causal_turn_id=?""",
@@ -449,7 +509,6 @@ def bind_turn(
     if existing is not None:
         _need(existing[0] == binding_digest, "TURN_BINDING_CONFLICT")
         return {"ok": True, "idempotent": True, "binding_digest": binding_digest}
-
     db.execute(
         """INSERT INTO mini_cognition_turn_bindings(
              entity_generation,causal_turn_id,binding_digest,schema,boot_binding_digest,
@@ -457,21 +516,73 @@ def bind_turn(
              provenance_refs_json,required_zero_mode,created_at)
            VALUES(?,?,?,?,?,?,?,?,?,?,?,?)""",
         (
-            entity_generation,
-            causal_turn_id,
-            binding_digest,
-            TURN_BINDING_SCHEMA,
-            boot_binding_digest,
-            material["task_sha256"],
-            workspace_digest,
-            canonical_json(slots),
-            contradiction_state,
-            canonical_json(refs),
-            required_zero_mode,
-            _utc_now(),
+            entity_generation, causal_turn_id, binding_digest, TURN_BINDING_SCHEMA,
+            boot_binding_digest, material["task_sha256"], workspace_digest,
+            canonical_json(slots), contradiction_state, canonical_json(refs),
+            required_zero_mode, _utc_now(),
         ),
     )
     return {"ok": True, "idempotent": False, "binding_digest": binding_digest}
+
+
+def _load_turn_binding(
+    db: sqlite3.Connection,
+    *,
+    entity_generation: int,
+    causal_turn_id: str,
+    task_text: str,
+) -> dict[str, Any]:
+    row = db.execute(
+        """SELECT entity_generation,causal_turn_id,binding_digest,schema,boot_binding_digest,
+                  task_sha256,workspace_digest,selected_workspace_slots_json,contradiction_state,
+                  provenance_refs_json,required_zero_mode
+             FROM mini_cognition_turn_bindings
+            WHERE entity_generation=? AND causal_turn_id=?""",
+        (entity_generation, causal_turn_id),
+    ).fetchone()
+    _need(row is not None, "TURN_BINDING_UNAVAILABLE")
+    (
+        row_generation, row_turn, binding_digest, schema, boot_binding_digest, task_sha256,
+        workspace_digest, slots_json, contradiction_state, refs_json, required_zero_mode,
+    ) = tuple(row)
+    _need(schema == TURN_BINDING_SCHEMA, "TURN_BINDING_SCHEMA_MISMATCH")
+    _need(row_generation == entity_generation, "TURN_BINDING_STALE_GENERATION")
+    _need(row_turn == causal_turn_id, "TURN_BINDING_ID_MISMATCH")
+    _digest(binding_digest, "turn_binding_digest")
+    boot_binding_digest = _digest(boot_binding_digest, "boot_binding_digest")
+    expected_task = hashlib.sha256(task_text.encode("utf-8")).hexdigest()
+    _need(_digest(task_sha256, "task_sha256") == expected_task, "TURN_TASK_BINDING_MISMATCH")
+    workspace_digest = _digest(workspace_digest, "workspace_digest")
+    slots = _json_list(slots_json, "selected_workspace_slots")
+    refs = _json_list(refs_json, "turn_provenance_refs", nonempty=True)
+    contradiction_state = _text(contradiction_state, "contradiction_state")
+    required_zero_mode = _text(required_zero_mode, "required_zero_mode")
+    material = {
+        "schema": TURN_BINDING_SCHEMA,
+        "entity_generation": row_generation,
+        "causal_turn_id": row_turn,
+        "boot_binding_digest": boot_binding_digest,
+        "task_sha256": task_sha256,
+        "workspace_digest": workspace_digest,
+        "selected_workspace_slots": slots,
+        "contradiction_state": contradiction_state,
+        "provenance_refs": refs,
+        "required_zero_mode": required_zero_mode,
+    }
+    _need(binding_digest == sha256_obj(material), "TURN_BINDING_DIGEST_MISMATCH")
+    boot = _load_boot_binding(
+        db, entity_generation=entity_generation, binding_digest=boot_binding_digest
+    )
+    return {
+        "turn_binding_digest": binding_digest,
+        "task_sha256": task_sha256,
+        "workspace_digest": workspace_digest,
+        "selected_workspace_slots": slots,
+        "contradiction_state": contradiction_state,
+        "turn_provenance_refs": refs,
+        "required_zero_mode": required_zero_mode,
+        "boot": boot,
+    }
 
 
 def resolve_prepare_binding(
@@ -481,61 +592,33 @@ def resolve_prepare_binding(
     causal_turn_id: str,
     task_text: str,
 ) -> dict[str, Any]:
-    """Resolve exact pre-inference binding material or fail closed."""
     live_generation = _current_generation(db)
     _need(type(entity_generation) is int and entity_generation >= 0, "GENERATION_INVALID")
     _need(entity_generation == live_generation, "STALE_GENERATION")
     causal_turn_id = _text(causal_turn_id, "causal_turn_id")
     _need(type(task_text) is str, "TASK_TEXT_REQUIRED")
-
-    turn = db.execute(
-        """SELECT binding_digest,boot_binding_digest,task_sha256,workspace_digest,
-                  selected_workspace_slots_json,contradiction_state,provenance_refs_json,
-                  required_zero_mode
-             FROM mini_cognition_turn_bindings
-            WHERE entity_generation=? AND causal_turn_id=?""",
-        (entity_generation, causal_turn_id),
-    ).fetchone()
-    _need(turn is not None, "TURN_BINDING_UNAVAILABLE")
-    expected_task = hashlib.sha256(task_text.encode("utf-8")).hexdigest()
-    _need(turn[2] == expected_task, "TURN_TASK_BINDING_MISMATCH")
-
-    boot = db.execute(
-        """SELECT binding_digest,zero_identity_digest,grf_digest,hyperposition_digest,
-                  bundled_manifest_digest,local_model_digest,tokenizer_digest,jspace_profile_digest,
-                  jacobian_lens_digest,workspace_calibration_digest,boot_source_lock_digest,
-                  policy_authority_digest,provenance_refs_json
-             FROM mini_cognition_boot_bindings
-            WHERE binding_digest=? AND entity_generation=?""",
-        (turn[1], entity_generation),
-    ).fetchone()
-    _need(boot is not None, "BOOT_BINDING_UNAVAILABLE")
-
+    turn = _load_turn_binding(
+        db,
+        entity_generation=entity_generation,
+        causal_turn_id=causal_turn_id,
+        task_text=task_text,
+    )
+    boot = turn["boot"]
     return {
         "ok": True,
         "schema": SCHEMA,
         "entity_generation": entity_generation,
         "causal_turn_id": causal_turn_id,
-        "turn_binding_digest": turn[0],
-        "boot_binding_digest": boot[0],
-        "task_sha256": turn[2],
-        "workspace_digest": turn[3],
-        "selected_workspace_slots": json.loads(turn[4]),
-        "contradiction_state": turn[5],
-        "turn_provenance_refs": json.loads(turn[6]),
-        "required_zero_mode": turn[7],
-        "zero_identity_digest": boot[1],
-        "grf_digest": boot[2],
-        "hyperposition_digest": boot[3],
-        "bundled_manifest_digest": boot[4],
-        "local_model_digest": boot[5],
-        "tokenizer_digest": boot[6],
-        "jspace_profile_digest": boot[7],
-        "jacobian_lens_digest": boot[8],
-        "workspace_calibration_digest": boot[9],
-        "boot_source_lock_digest": boot[10],
-        "policy_authority_digest": boot[11],
-        "boot_provenance_refs": json.loads(boot[12]),
+        "turn_binding_digest": turn["turn_binding_digest"],
+        "boot_binding_digest": boot["binding_digest"],
+        "task_sha256": turn["task_sha256"],
+        "workspace_digest": turn["workspace_digest"],
+        "selected_workspace_slots": turn["selected_workspace_slots"],
+        "contradiction_state": turn["contradiction_state"],
+        "turn_provenance_refs": turn["turn_provenance_refs"],
+        "required_zero_mode": turn["required_zero_mode"],
+        **{field: boot[field] for field in BOOT_FIELD_KINDS},
+        "boot_provenance_refs": boot["provenance_refs"],
         "authority": {
             "durable_state": "MiniUnifiedDB",
             "candidate_only": True,
@@ -543,3 +626,12 @@ def resolve_prepare_binding(
             "direct_effect_authority": False,
         },
     }
+
+
+__all__ = [
+    "SCHEMA", "BOOT_BINDING_SCHEMA", "TURN_BINDING_SCHEMA",
+    "OBJECT_KINDS", "DIGEST_BASES", "BOOT_FIELD_KINDS",
+    "CognitionStoreError", "canonical_json", "sha256_text", "sha256_obj",
+    "install_schema", "register_object", "admit_object", "admit_boot_binding",
+    "bind_turn", "resolve_prepare_binding",
+]

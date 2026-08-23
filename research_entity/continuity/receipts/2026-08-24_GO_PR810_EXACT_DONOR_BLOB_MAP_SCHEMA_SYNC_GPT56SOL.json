@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "61f634f54df7a18f458eeb9a2814132be8fde950",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_observed": "48d1bcb8357df0cf90d99133027f88ab67361a3f",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "51db450b02f9a97e93d1ad14f2bb5f53f8f47ed6",
+    "duplicate_executor_created": false,
+    "unusual_experiment_performed": false,
+    "unusual_experiment_count_added": 0,
+    "work_class": "DETERMINISTIC_SOURCE_IDENTITY_AND_CONTRACT_FUSION"
+  },
+  "observed_frontier": {
+    "executor_route_status": "SOURCE_REBIND_REQUIRED",
+    "current_rebind_contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v3",
+    "current_rebind_contract_blob": "7050f66961c9fd2f244cf045875ef18aebbd0748",
+    "route_accepts_current_contract_schema": true,
+    "successor_dynamic_contract_sync_checker": "ENTITYOS_HCU_JSPACE_REBIND_CONTRACT_SYNC_CHECK/v2",
+    "current_donor_entry_canonicalization_blob": "55f461a56ef08537238eeff91fe379da2adb20a1",
+    "current_donor_integrated_execution_store_jspace_test_blob": "a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4",
+    "current_donor_jspace_revalidation_test_blob": "d1747852272d06b917704c1ce1fd465c9dde900e"
+  },
+  "hypothesis": "The retained executor can avoid mixed-snapshot false closure if one current contract pins every required producer/regression/transitive fixture to exact donor Git blobs and the route/guard must agree with that contract before quarantine can be removed.",
+  "counterhypothesis": "Naming required files or pinning only the final J-Space subset is sufficient because transitive producer versions are semantically interchangeable.",
+  "discriminator": "Bind the complete current donor blob map, including the current Entry/JCS canonicalizer and concurrency/revalidation regressions, then require route-manifest equality and in-Sandbox rehash before any SOURCE_REBIND_REQUIRED removal. Exact-byte closure is cheaper and stronger than assuming semantic equivalence across mixed snapshots.",
+  "delta": {
+    "executor_exact_blob_map_commit": "7dad91a0c14dab0bd1f9ec809413f2f22e2e636b",
+    "executor_schema_alignment_commit": "69529b7a821661acdd54001eaa1d16dc32d28fbe",
+    "exact_blob_map_field": "exact_donor_git_blobs",
+    "route_manifest_equality_fence": "require_route_manifest_blob_map_equal_exact_donor_git_blobs=true",
+    "semantic_revalidation_fence": "require_jspace_binding_semantic_revalidation=true",
+    "current_parallel_refusion": "Contract subsequently refreshed to donor 48d1bcb8357df0cf90d99133027f88ab67361a3f and integrated-test blob a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4 without removing the exact blob map or quarantine.",
+    "single_lane_preserved": true
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_COMPLETE_EXACT_DONOR_BLOB_CONTRACT_AND_ROUTE_CONTRACT_SCHEMA_CONVERGENCE_WHILE_QUARANTINE_REMAINS_ACTIVE",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_BINDING_CURRENT_ENTRY_JCS_CANONICALIZER_PLUS_ATOMIC_MINIUNIFIEDDB_MODEL_INVOCATION_ADMISSION_IN_ONE_EXACT_IDENTITY_CLOSURE",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_BINDING_VECTOR_CONTROL_GWT_TRAINING_TRACE_JSPACE_V3_REVALIDATION_AND_CONCURRENT_SINGLE_WINNER_DOWNSTREAM_TRACE_REGRESSIONS_TO_EXACT_DONOR_IDENTITY"
+  },
+  "evidence": {
+    "source_contract_write_observed": true,
+    "source_identity_cross_checks_observed": true,
+    "new_ci_execution_observed": false,
+    "new_admitted_sandbox_execution_observed": false,
+    "current_external_execution_blocker": "VERCEL_HOBBY_BUILD_RATE_LIMIT_AS_REPORTED_BY_RETAINED_EXECUTOR_LANE",
+    "blocker_interpretation": "EXECUTION_ADMISSION_INFRASTRUCTURE_BLOCKER_NOT_PRODUCT_OR_REGRESSION_FAILURE",
+    "paid_provider_used": false,
+    "together_used": false,
+    "vps_or_self_hosted_testing_used": false
+  },
+  "credit": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Canonical README had just been refreshed to the same single immutable rebind-target frontier; this cycle strengthens executable source-identity enforcement without changing the product-level frontier."
+  },
+  "next_exact_gate": [
+    "Re-enter current Research main, PR1263 and PR810 because parallel fusion remains active.",
+    "Vendor every exact_donor_git_blobs entry byte-identically into one deployment-carried fixed-route closure; do not retain the historical 00d1d79c Entry canonicalizer in the promoted closure.",
+    "Make the fixed route manifest mechanically equal the contract exact_donor_git_blobs map and re-hash every carried byte before import/execution.",
+    "Remove SOURCE_REBIND_REQUIRED only atomically with that coherent closure and fixed deterministic command/result assertions.",
+    "Execute only when admitted FREE_ONLY Vercel Hobby build/function access is available; preserve secret fence, cleanup and exact source/result digests.",
+    "Grant no J-Space model-runtime or training credit until a real zero-cost local model executor uses the canonical MiniUnifiedDB atomic invocation admission path."
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": "XENO_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU_XENO",
+  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "base_main_sha": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+  "branch": "gpt56sol/go-xeno-entry-fabric-v1-20260823-2324",
+  "authority_refresh": {
+    "bootstrap_minimal": "schema 8.4; Xeno + XCU/Entry -> EntityOS",
+    "program_state": "schema 8.5; XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+    "owner_directive": "research_entity/global/XENO_GO_OWNER_DIRECTIVE.md"
+  },
+  "coordination": {
+    "open_hcu_donor_pr": 1263,
+    "hcu_donor_head": "cb48a9cacfa942316a5e036388d4a8433d405376",
+    "hcu_donor_mutated": false,
+    "reason": "PR 1263 source is coupled to a deterministic MICROENTITY_CURRENT.zip snapshot; this go avoided a text-only edit that would create package identity drift. The new current-facing Xeno root has no such binary-snapshot coupling."
+  },
+  "track_a_xeno_executable_delta": {
+    "status": "SOURCE_CANDIDATE",
+    "file": "the artefact/Xeno/entry_fabric_v1.py",
+    "git_blob": "4c4239c44c2b858f10ac47d2abd926b9693dbeb5",
+    "mechanisms": [
+      "typed deterministic ingress before cognition",
+      "exact generation fence",
+      "positive source and modality admission",
+      "provenance and payload digest binding",
+      "semantic event identity separated from admission identity",
+      "permission/capability claims carried but explicitly not granted",
+      "GRID10 resource-budget binding",
+      "unknown semantic fields fail closed"
+    ]
+  },
+  "track_b_xcu_entry_delta": {
+    "status": "SOURCE_CANDIDATE",
+    "entry_contract": "XENO_ENTRY_EVENT/v1 -> XENO_INGRESS_PACKET/v1",
+    "cross_mode_reuse": [
+      "XENO_GRID10",
+      "XENO_COGSIM10",
+      "XENO_WM_TEST",
+      "XENO_NESTED_SIM"
+    ],
+    "scaleout_note": "v1 deliberately fences max_logical_cells at the current 10-cell baseline; SCALEOUT requires a later explicitly versioned and measured budget policy rather than silently widening authority."
+  },
+  "tests_source": {
+    "file": "the artefact/Xeno/test_entry_fabric_v1.py",
+    "git_blob": "2b82af3e4f8e95c9cec50a8154c03c5a3315f5bc",
+    "case_count": 9,
+    "execution_status": "NOT_EXECUTED_NO_AUTHORIZED_ISOLATED_EXECUTOR_EXPOSED",
+    "runtime_credit": 0
+  },
+  "hypothesis": "A two-level identity contract, immutable semantic event_sha256 plus admission-specific ingress_id, prevents causal aliasing across routing-equivalent events while allowing policy/budget re-admission to remain auditable without making admission policy part of observed-event identity.",
+  "counterhypothesis": "One ingress digest over the complete packet is sufficient; separate event identity adds complexity without improving replay, routing or audit safety.",
+  "cheapest_discriminators": [
+    "same exact input replay must produce identical event_sha256 and ingress_id",
+    "same observed event with only admission budget changed must keep event_sha256 but change ingress_id",
+    "different observed payloads that could later select the same route class must not share event_sha256 or ingress_id"
+  ],
+  "unusual_experiment": {
+    "name": "SEMANTIC_ALIAS_CAUSAL_COLLISION",
+    "count_for_this_organ": 0,
+    "status": "SPECIFIED_NOT_EXECUTED",
+    "design": "Hold causal/generation/source/provenance/timestamps/admission envelope constant; change only semantically material payload magnitude while preserving the likely downstream route class. Falsifier: equal event_sha256 or ingress_id.",
+    "reason_not_executed": "No actually-started authorized isolated sandbox execution surface is exposed to this organ; source specification does not consume runtime experiment credit."
+  },
+  "authority_invariants": [
+    "Entry Fabric does not decide truth",
+    "Entry Fabric does not grant permissions or capabilities",
+    "Entry Fabric does not authorize effects",
+    "EffectGate remains the real-effect authority",
+    "canonical durable state remains outside model cognition",
+    "stale generation fails closed",
+    "unknown semantic input fields fail closed"
+  ],
+  "evidence_boundary": "SOURCE_CANDIDATE_UNEXECUTED. No test PASS, HCU/XCU runtime, J-Space causal-use, EntityOS runtime, scale performance or whole-product acceptance claim is made.",
+  "next_exact_gate": "Run the 9 focused Entry Fabric regressions on the exact branch in an actually-started authorized isolated executor; if green, wire event_sha256 into the retained HCU route-decision identity so downstream routing commits H(event identity + resolved engine identity + routing result), then run adjacent generation/replay/provenance regressions.",
+  "forbidden_or_owner_gated": {
+    "vps_testing": "NOT_USED_FORBIDDEN",
+    "self_hosted_or_production_testing": "NOT_USED_FORBIDDEN",
+    "together_api": "NOT_USED_FORBIDDEN",
+    "paid_or_model_training": "NOT_USED_OWNER_AUTHORIZATION_REQUIRED",
+    "secrets": "NONE_ACCESSED_OR_PERSISTED"
+  }
+}

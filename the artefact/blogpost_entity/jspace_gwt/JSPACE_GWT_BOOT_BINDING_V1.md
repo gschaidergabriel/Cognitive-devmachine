@@ -10,6 +10,7 @@ This contract operationalizes the owner-required `JSPACE_GWT_BOOT_BINDING_RECEIP
 ```claycode
 r0.observe(
   source(main_sha, tree_sha, dirty, dirty_diff_sha256?),
+  runtime(entity_generation),
   executor(UBUNTU, host_identity_sha256, kernel),
   bundled_core(manifest_version, manifest_sha256, checkpoint_sha256, tokenizer_sha256, runtime_sha256, quantization_runtime_identity?),
   jspace(jlens_upstream_commit, jspace_profile_sha256, lens_file_sha256, lens_profile_sha256, steering_calibration_sha256?, fit_corpus_sha256),
@@ -20,6 +21,7 @@ r0.observe(
 )
 
 r3.counter(
+  self_reported_cycle_generation_freshness,
   lens_serialization_nonfinite,
   lens_artifact_substitution_under_stable_profile,
   unfitted_position_readout,
@@ -37,6 +39,7 @@ r3.counter(
 )
 
 r4.discriminate(
+  require(type(entity_generation) == int && entity_generation >= 0),
   require(dirty == true -> sha256(dirty_diff_sha256)),
   require(unique(first_actions.action_id)),
   require(first_actions.origin in [ZERO, HOOK_TIMER, CLAUDE_CODE, PROXY_SANDBOX_CONTROLLER, OTHER]),
@@ -89,6 +92,14 @@ python validate_jspace_gwt_boot_binding_v1.py RECEIPT.json BUNDLED_MANIFEST.json
 ```
 
 This composition preserves `PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY`: a valid-looking J-Space/lens/workspace tuple from another calibration bundle cannot receive boot admission merely because every individual digest is syntactically valid.
+
+## Runtime generation provenance
+
+`runtime.entity_generation` is an observed boot fact, not a constant inferred from source bytes and not a value that a later UCF cycle may authenticate by repeating itself. The boot validator therefore requires a real non-negative integer and rejects booleans or missing values.
+
+When `UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1` is composed with this boot evidence, the UCF cycle's `runtime.generation` must equal this independently carried boot observation. A cycle that changes its generation and merely reports `freshness.stale_generation=false` remains structurally self-consistent but is not sufficient for runtime ancestry credit. The composed gate must fail closed on the mismatch.
+
+The generation observation does not create a second state authority. MiniUnifiedDB/global generation fencing remains authoritative; the receipt only carries evidence of the generation observed at the admitted boot boundary.
 
 ## Lens artifact identity versus lens profile identity
 

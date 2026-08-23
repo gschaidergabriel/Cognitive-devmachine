@@ -1,0 +1,71 @@
+{
+  "schema": "GO_SOURCE_MECHANISM_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main": "85cad37d96f92d00842704359eabc17aa001804d",
+  "branch": "go/claude-adapter-invocation-binding-v1-r2",
+  "parallel_reentry": {
+    "main_advanced_from_initial_base_by": 16,
+    "overlap_check": "PASS_NO_OVERLAP: compare 9ba37faa..85cad37d showed no changes to the three CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 contract/validator/test paths.",
+    "new_orthogonal_claude_evidence": "main additionally fused HOME-write and owner-identity prompt mismatch evidence; those findings increase the value of preserving atomic negative boundary evidence but do not replace this cross-run composition repair."
+  },
+  "finding": {
+    "classification": "CROSS_RUN_COMPOSITION_FALSE_GREEN_GAP",
+    "observed_contract_claim": "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 says all four boundary receipts are bound to one exact adapter run.",
+    "falsifier": "Before this delta, four child receipts could share source/tree, Claude binary/version, command/input and executor common identity while carrying different stdout/stderr digests; the validator did not cross-check those process outputs and the common object had no explicit invocation identifier.",
+    "risk": "Boundary observations from different invocations could be composed into one aggregate and receive CLAUDE_ADAPTER_BOUNDARY_ONLY credit even though the atomic-run premise was false."
+  },
+  "delta": {
+    "validator": "Require invocation_id in the canonical common object and require identical stdout_sha256/stderr_sha256 across all four boundary receipts.",
+    "tests": [
+      "missing invocation_id fails closed",
+      "cross-bound stdout digest mismatch fails closed",
+      "all prior strict and diagnostic negative-evidence regressions remain present"
+    ],
+    "contract": "Document one-invocation v1 semantics explicitly; future replay aggregation must be separately versioned rather than weakening v1."
+  },
+  "exact_git_blobs": {
+    "validator": "0b5624b80fde6ca9a4c155c89ac5ea07ae875dee",
+    "tests": "ff091019abbb220b956d2b6612096e344671a66a",
+    "contract": "c30147cddf95227b6e72c568658b6aff59ca2d2a"
+  },
+  "bounded_isolated_component_evidence": {
+    "executor": {
+      "surface": "isolated ChatGPT container",
+      "python": "3.13.5",
+      "kernel": "Linux 6.18.35 x86_64"
+    },
+    "blob_identity_check": "PASS: local git hash-object exactly matched the GitHub branch validator and test blob SHAs",
+    "py_compile": "PASS",
+    "unittest": "PASS 21/21",
+    "runtime_scope": "SOURCE_MECHANISM_ONLY"
+  },
+  "runtime_credit": {
+    "claude_adapter": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "whole_product": 0
+  },
+  "execution_constraints": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "vercel_sandbox_start_exec_surface_exposed": false,
+    "github_main_workflow_run_for_initial_base": false
+  },
+  "swarm": {
+    "status": "GRF_CLAYCODE_PROMPT_INJECTION_UNAVAILABLE_ON_SURFACE",
+    "reason": "No admitted child-model/provider execution surface with exposed FREE_ONLY credentials was available in this session; no child-go worker was falsely claimed."
+  },
+  "unusual_experiment": {
+    "consumed": false,
+    "reason": "No immutable shared macrocycle/request lease identity was exposed; the added poison cases are deterministic regressions, not a claimed unusual experiment."
+  },
+  "next_exact_gate": "On the next intentional authorized Ubuntu execution, generate one invocation_id before Claude process start, derive all four boundary observations from that invocation with identical stdout/stderr digests, run diagnostic validation, then strict validation only if aggregate PASS, followed by the full exact-source suite.",
+  "acceptance": "IN_PROGRESS"
+}

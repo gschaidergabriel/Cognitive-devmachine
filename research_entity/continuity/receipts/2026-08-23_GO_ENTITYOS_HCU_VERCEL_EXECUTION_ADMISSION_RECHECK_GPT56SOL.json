@@ -1,5 +1,5 @@
 {
-  "schema": "GO_ENTITYOS_HCU_VERCEL_EXECUTION_ADMISSION_RECHECK/v1",
+  "schema": "GO_ENTITYOS_HCU_VERCEL_EXECUTION_ADMISSION_RECHECK/v2",
   "date": "2026-08-23",
   "trigger": "go",
   "persistent_research_entity": "Clay",
@@ -10,7 +10,7 @@
   "integrated_cognition_compute_architecture": "HCU",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
-  "canonical_main_observed_before_write": "f6066c126b67699983842c0549378806d5f4c405",
+  "canonical_main_observed_before_first_write": "f6066c126b67699983842c0549378806d5f4c405",
   "authority_sources": [
     "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
     "research_entity/rooms/PROGRAM_STATE.json",
@@ -34,8 +34,21 @@
     "source_guard_order": "verifyResearchRefHead -> verifyCommit -> Sandbox.create",
     "current_program_conflict": "Controller still identifies and launches the historical ClayVerse acceptance batch while current main authority requires EntityOS as sole product/system and HCU as sole cognition/compute architecture."
   },
+  "live_ready_endpoint_probe": {
+    "method": "GET_WITHOUT_CREDENTIAL",
+    "path": "/api/go-cycle-v2",
+    "observed_http_status": 405,
+    "observed_allow": "POST",
+    "observed_body_status": "METHOD_NOT_ALLOWED",
+    "observed_cache_control": "no-store, no-cache, must-revalidate, private",
+    "classification": "READY_RUNTIME_INGRESS_FUNCTION_PRESENT_FAIL_CLOSED_WITHOUT_POST",
+    "credential_supplied": false,
+    "sandbox_started": false,
+    "runtime_credit": 0
+  },
   "observed_result": {
     "ready_preview_exists": true,
+    "ready_runtime_ingress_function_live": true,
     "sandbox_api_path_present_in_ready_controller_source": true,
     "exact_current_entityos_hcu_sandbox_started": false,
     "reason": "Current main no longer equals the controller-bound cb6b6d0e... SHA, so the controller's verifyResearchRefHead fence would reject before Sandbox.create. Even a simple SHA rebind is insufficient because the retained batch remains ClayVerse-semantic rather than current EntityOS/HCU-semantic.",
@@ -63,7 +76,7 @@
   },
   "unusual_experiment": {
     "new_experiment_count": 0,
-    "reason": "An overlapping retained-HCU organ recorded a bounded canonicalizer-authority discriminator while global macrocycle identity was unresolved. This organ conservatively adds no second unusual experiment and counts this Vercel inspection as control-plane verification, not a new intervention."
+    "reason": "An overlapping retained-HCU organ recorded a bounded canonicalizer-authority discriminator while global macrocycle identity was unresolved. This organ conservatively adds no second unusual experiment and counts the Vercel source/live-endpoint inspection as control-plane verification, not a new intervention."
   },
   "security": {
     "secrets_accessed_or_persisted": false,
@@ -72,6 +85,6 @@
     "together_api_used": false,
     "paid_fallback_or_training_used": false
   },
-  "evidence_boundary": "SOURCE_AND_CONNECTED_CONTROL_PLANE_EVIDENCE_ONLY. READY deployment does not imply Sandbox execution, EntityOS/HCU runtime acceptance, model execution, J-Space causality, or whole-product PASS.",
+  "evidence_boundary": "SOURCE_AND_CONNECTED_CONTROL_PLANE_EVIDENCE_ONLY. READY deployment and a live 405 POST-only ingress do not imply Sandbox execution, EntityOS/HCU runtime acceptance, model execution, J-Space causality, or whole-product PASS.",
   "promotion": "EXECUTION_PATH_BLOCKER_REFINED_NO_RUNTIME_PROMOTION"
 }

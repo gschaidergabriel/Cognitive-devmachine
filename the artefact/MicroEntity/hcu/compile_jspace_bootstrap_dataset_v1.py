@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Mapping
 
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
@@ -14,11 +14,12 @@ except ImportError:
     from jspace_training_trace_v1 import TRACE_SCHEMA
     from jspace_vector_control_v1 import ABI_SCHEMA, JSpaceVectorControlError, decode_vector, parse_packet_text
 
-DATASET_SCHEMA = "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3"
+DATASET_SCHEMA = "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v4"
 SYSTEM = (
     "You are a narrow EntityOS/HCU cognitive coprocessor. "
     "Follow JSPACE_VECTOR_CONTROL_ABI/v1, GWT/Hyperposition, generation/basis/role fences, "
     "and output only the requested compact JSON decision. "
+    "A basis is usable only when its id+digest is externally admitted; trace self-claims cannot grant basis authority. "
     "Model output is candidate/control behavior, never truth or EffectGate authority."
 )
 
@@ -83,7 +84,40 @@ def _sha256(value: Any, field: str) -> str:
     return value
 
 
-def _validate_trace(trace: dict[str, Any]) -> tuple[str, str]:
+def _normalize_admitted_bases(value: Mapping[str, str] | None) -> dict[str, str]:
+    """Normalize the deterministic external basis registry used by the dataset boundary.
+
+    The registry is caller/control-plane authority. A trace or control packet may reference a
+    basis, but neither may add to or broaden this registry.
+    """
+    if not isinstance(value, Mapping) or not value:
+        raise DatasetError("JSPACE_BASIS_ADMISSION_REQUIRED")
+    normalized: dict[str, str] = {}
+    for basis_id, basis_sha256 in value.items():
+        if not isinstance(basis_id, str) or not basis_id.strip():
+            raise DatasetError("ADMITTED_JSPACE_BASIS_ID_INVALID")
+        basis_id = basis_id.strip()
+        if basis_id in normalized:
+            raise DatasetError("ADMITTED_JSPACE_BASIS_ID_DUPLICATE")
+        normalized[basis_id] = _sha256(basis_sha256, "ADMITTED_JSPACE_BASIS_SHA256")
+    return normalized
+
+
+def _require_admitted_basis(*, basis_id: str, basis_sha256: str, admitted_bases: Mapping[str, str] | None) -> dict[str, str]:
+    normalized = _normalize_admitted_bases(admitted_bases)
+    expected = normalized.get(basis_id)
+    if expected is None:
+        raise DatasetError("JSPACE_BASIS_NOT_ADMITTED")
+    if expected != basis_sha256:
+        raise DatasetError("JSPACE_BASIS_ADMISSION_DIGEST_MISMATCH")
+    return normalized
+
+
+def _validate_trace(
+    trace: dict[str, Any],
+    *,
+    admitted_bases: Mapping[str, str] | None = None,
+) -> tuple[str, str]:
     if not isinstance(trace, dict) or trace.get("schema_version") != TRACE_SCHEMA:
         raise DatasetError("TRACE_SCHEMA_UNSUPPORTED")
     if trace.get("canonicalization_schema") != CANONICALIZATION_SCHEMA:
@@ -122,6 +156,12 @@ def _validate_trace(trace: dict[str, Any]) -> tuple[str, str]:
         "jspace_basis_sha256", "vector_control_packet_sha256", "prototype_trace_sha256", "trace_sha256",
     ):
         _sha256(trace[key], key)
+
+    _require_admitted_basis(
+        basis_id=trace["jspace_basis_id"],
+        basis_sha256=trace["jspace_basis_sha256"],
+        admitted_bases=admitted_bases,
+    )
 
     trace_sha256 = trace["trace_sha256"]
     if trace_sha256 != _canonical_sha256(_trace_material(trace), "TRAINING_TRACE"):
@@ -189,8 +229,12 @@ def _validate_trace(trace: dict[str, Any]) -> tuple[str, str]:
     return trace_sha256, _family_sha256(trace["trace_family_id"])
 
 
-def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
-    trace_sha256, _ = _validate_trace(trace)
+def derive_bootstrap_examples(
+    trace: dict[str, Any],
+    *,
+    admitted_bases: Mapping[str, str] | None = None,
+) -> list[dict[str, Any]]:
+    trace_sha256, _ = _validate_trace(trace, admitted_bases=admitted_bases)
     trace_family_id = trace["trace_family_id"]
     common = {
         "control_packet": trace["vector_control_packet_jcs_utf8"],
@@ -208,6 +252,7 @@ def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
         "hyperposition_branch_ids": trace["hyperposition_branch_ids"],
         "authority": "CANDIDATE_CONTROL_ONLY",
     }
+
     def row(kind: str, user: dict[str, Any], assistant: dict[str, Any]) -> dict[str, Any]:
         return _row(kind, user, assistant, trace_sha256=trace_sha256, trace_family_id=trace_family_id)
 
@@ -234,12 +279,17 @@ def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
     ]
 
 
-def compile_traces(traces: Iterable[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+def compile_traces(
+    traces: Iterable[dict[str, Any]],
+    *,
+    admitted_bases: Mapping[str, str] | None = None,
+) -> dict[str, list[dict[str, Any]]]:
+    normalized_bases = _normalize_admitted_bases(admitted_bases)
     out = {"train": [], "validation": [], "holdout": []}
     seen: set[str] = set()
     family_owner: dict[str, str] = {}
     for trace in traces:
-        trace_sha256, family_sha256 = _validate_trace(trace)
+        trace_sha256, family_sha256 = _validate_trace(trace, admitted_bases=normalized_bases)
         if trace_sha256 in seen:
             continue
         seen.add(trace_sha256)
@@ -248,15 +298,21 @@ def compile_traces(traces: Iterable[dict[str, Any]]) -> dict[str, list[dict[str,
         previous = family_owner.setdefault(family_id, split)
         if previous != split:
             raise DatasetError("TRACE_FAMILY_SPLIT_INCONSISTENT")
-        out[split].extend(derive_bootstrap_examples(trace))
+        out[split].extend(derive_bootstrap_examples(trace, admitted_bases=normalized_bases))
     if not seen:
         raise DatasetError("NO_TRACES")
     return out
 
 
-def compile_jsonl(input_path: Path, output_dir: Path) -> dict[str, Any]:
+def compile_jsonl(
+    input_path: Path,
+    output_dir: Path,
+    *,
+    admitted_bases: Mapping[str, str] | None = None,
+) -> dict[str, Any]:
     if not isinstance(input_path, Path) or not isinstance(output_dir, Path):
         raise DatasetError("PATH_TYPE_REQUIRED")
+    normalized_bases = _normalize_admitted_bases(admitted_bases)
     traces = []
     for lineno, line in enumerate(input_path.read_text(encoding="utf-8").splitlines(), start=1):
         if not line.strip():
@@ -266,13 +322,14 @@ def compile_jsonl(input_path: Path, output_dir: Path) -> dict[str, Any]:
         except json.JSONDecodeError as exc:
             raise DatasetError(f"JSONL_INVALID_LINE:{lineno}") from exc
 
-    compiled = compile_traces(traces)
+    compiled = compile_traces(traces, admitted_bases=normalized_bases)
     output_dir.mkdir(parents=True, exist_ok=True)
     receipt = {
         "schema": DATASET_SCHEMA,
         "trace_schema": TRACE_SCHEMA,
         "trace_canonicalization_schema": CANONICALIZATION_SCHEMA,
         "split_unit": "trace_family_id",
+        "admitted_basis_registry_sha256": _canonical_sha256(normalized_bases, "ADMITTED_JSPACE_BASIS_REGISTRY"),
         "input_trace_count": len(traces),
         "splits": {},
     }

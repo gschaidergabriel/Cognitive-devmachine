@@ -1,0 +1,61 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "authority_epoch": "8.63",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_canonical_main_before_write": "840e8655dadce85fe188caa1123c3d604eb42eca",
+  "coordination": {
+    "shared_macrocycle_identity": "UNAVAILABLE",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "note": "No reproducible shared immutable macrocycle/request identity was available. Work remained ordinary source review, deterministic fusion, repository coordination and execution-state inspection."
+  },
+  "track_a_entityos_executable_convergence": {
+    "status": "ADVANCED_SOURCE_CONVERGENCE",
+    "evidence": [
+      "Retained donor PR1263 remained the single HCU/Typed-Entry/J-Space lane.",
+      "Serious training orchestration now passes an external admitted_vector_control_packets registry into the existing DatasetAdmission path instead of relying on digest equality alone.",
+      "Retained executor remains gschaidergabriel/Dr.-Unterweger#810; latest observed live head during this macrocycle was 8822b9ff8c9c4156bac3a904e49352a839ef6cd0.",
+      "Latest Vercel deployment listing contained newer ERROR deployments for executor ancestors aa80683e8b3cbc0eb9b0fced784820005b0d55d6 and 926c22dd57ef82447787e24c7412548c3ed2b890, but no deployment matching the observed live executor head. No function/Sandbox invocation was performed."
+    ]
+  },
+  "track_b_hcu_typed_entry": {
+    "status": "ADVANCED_AND_FUSED",
+    "evidence": [
+      "At retained donor snapshot b28d0d3c98a1d6263297612ff7d4cf8c18e74506, jspace_dataset_admission_gate_v1.py blob a52a1d3bcafa408817d16ae33ed70ef5da50244b requires an independently admitted VectorControlPacket preimage.",
+      "The gate validates the canonical JSPACE_VECTOR_CONTROL_ABI/v1 packet and cross-binds packet identity, generation, basis id, basis digest, role and control condition.",
+      "A transient separate parent-guard implementation created during this macrocycle was removed after parallel work landed the stronger check directly in the existing DatasetAdmission authority. This avoids a second semantic authority."
+    ],
+    "coordination_cleanup_commits": [
+      "114dddd78ec5e3ad9325fb00a048f2932b14cdf4",
+      "3ef567aa691675be0fe9f41f2f31880d10cfc07c"
+    ]
+  },
+  "track_c_global_jspace_training_readiness": {
+    "status": "ADVANCED_SOURCE_TEST_READINESS",
+    "evidence": [
+      "DatasetAdmission regression fixtures now construct a real canonical vector packet rather than a fabricated repeated hash.",
+      "Negative regressions cover missing packet preimage, registry-key/packet identity mismatch, tampered packet bytes and generation/basis/role/control-condition mismatch.",
+      "This closes the observed digest-laundering class at source/test scope: repeated equal child hashes no longer establish serious dataset admission without an admitted canonical packet preimage."
+    ]
+  },
+  "hypothesis": "Cross-trace equality of vector-control packet SHA-256 values can launder an invented digest into serious training-data admission when no canonical packet preimage is independently admitted.",
+  "counterhypothesis": "TrainingTrace or inference-binding self-consistency may already make a separate packet-preimage admission unnecessary.",
+  "discriminator_result": "The earlier DatasetAdmission implementation only compared repeated digest strings. Parallel successor code added the missing external packet-preimage registry plus canonical packet validation directly to DatasetAdmission, supporting the hypothesis and making a separate guard redundant.",
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a high-contention successor-dynamic surface being updated concurrently by other go organs. Replacing the large moving file would risk overwriting newer deltas; this append-only receipt records the exact macrocycle delta instead."
+  },
+  "runtime_credit": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "execution_evidence_scope": "SOURCE_TEST_AND_COORDINATION_ONLY",
+  "next_exact_action": "Refresh live PR810 head and Vercel deployment metadata; when a naturally available included-tier deployment is READY at exactly that live executor SHA, invoke only the fixed FREE_ONLY source/hash-bound route and require exact source verification, secret fence, exact result fence, exit 0 and cleanup. Separately rebind a single immutable newer donor snapshot only when explicitly chosen; never project current PR1263 source/test improvements into the executor-pinned runtime snapshot."
+}

@@ -7,7 +7,11 @@ The Python reference runtime/tests may lag, but that lag must stay explicit and 
 never cause the canonical Clay contract to be rolled backward.
 
 Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
-unwired handler names do not count as runtime support.
+unwired handler names do not count as runtime support. Cognitive-Fabric convergence also
+requires a bounded executable semantic floor: MiniUnifiedDB read-only ancestry, canonical
+ZERO workspace-capsule -> InferencePacket composition, current generation/compiled/prompt
+identity use, non-placeholder packet/receipt identity construction, and no admission-time
+inference or commit call. This is still source/mechanism evidence, never runtime proof.
 """
 from __future__ import annotations
 
@@ -24,6 +28,19 @@ REQUIRED_EFFECTS = {
     "inference_generate": "_inference_generate",
 }
 LEGACY_EFFECTS = {"profile_load", "provider_chat_json"}
+FABRIC_REQUIRED_LITERAL_KEYS = {
+    "previous",
+    "data",
+    "compiled",
+    "prompt",
+    "generation",
+    "canonical_state_hash",
+    "packet_hash",
+    "inference_packet_digest",
+    "cognitive_fabric_receipt_digest",
+}
+FABRIC_FORBIDDEN_SELF_CALLS = {"_db", "_inference_generate", "_pipeline_commit"}
+FABRIC_DIGEST_CALL_NAMES = {"sha256", "_sha256_text", "canonical_digest", "sha256_obj"}
 
 
 def _class_node(tree: ast.AST, name: str) -> ast.ClassDef | None:
@@ -49,6 +66,144 @@ def _attribute_name(node: ast.AST) -> str | None:
     return None
 
 
+def _call_leaf_name(node: ast.AST) -> str | None:
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        return node.attr
+    return None
+
+
+def _self_calls(method: ast.AST) -> set[str]:
+    out: set[str] = set()
+    for node in ast.walk(method):
+        if isinstance(node, ast.Call):
+            name = _attribute_name(node.func)
+            if name:
+                out.add(name)
+    return out
+
+
+def _reachable_method_nodes(
+    methods: dict[str, ast.AST], start: str
+) -> dict[str, ast.AST]:
+    """Follow executable self.method(...) calls so helper decomposition still counts."""
+    reachable: dict[str, ast.AST] = {}
+    pending = [start]
+    while pending:
+        name = pending.pop()
+        if name in reachable or name not in methods:
+            continue
+        method = methods[name]
+        reachable[name] = method
+        pending.extend(sorted(_self_calls(method) & set(methods)))
+    return reachable
+
+
+def _literal_strings(nodes: list[ast.AST]) -> set[str]:
+    out: set[str] = set()
+    for root in nodes:
+        for node in ast.walk(root):
+            if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                out.add(node.value)
+    return out
+
+
+def _call_names(nodes: list[ast.AST]) -> set[str]:
+    out: set[str] = set()
+    for root in nodes:
+        for node in ast.walk(root):
+            if isinstance(node, ast.Call):
+                name = _call_leaf_name(node.func)
+                if name:
+                    out.add(name)
+    return out
+
+
+def _placeholder_digest_constructs(nodes: list[ast.AST]) -> list[str]:
+    """Reject obvious synthetic digest placeholders in executable handler/helper syntax."""
+    findings: list[str] = []
+    for root in nodes:
+        for node in ast.walk(root):
+            if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                value = node.value.lower()
+                if re.fullmatch(r"[0-9a-f]{64}", value) and len(set(value)) == 1:
+                    findings.append("literal:" + value[0])
+            elif isinstance(node, ast.BinOp) and isinstance(node.op, ast.Mult):
+                sides = ((node.left, node.right), (node.right, node.left))
+                for text_node, count_node in sides:
+                    if (
+                        isinstance(text_node, ast.Constant)
+                        and isinstance(text_node.value, str)
+                        and text_node.value.lower() in {"0", "f"}
+                        and isinstance(count_node, ast.Constant)
+                        and count_node.value == 64
+                    ):
+                        findings.append("repeat:" + text_node.value.lower())
+    return sorted(set(findings))
+
+
+def cognitive_fabric_handler_contract(methods: dict[str, ast.AST]) -> dict[str, Any]:
+    """Static semantic floor for the single canonical pre-inference UCF producer.
+
+    This deliberately does not claim semantic correctness. It only prevents the current
+    convergence guard from accepting a name-only/no-op/placeholder handler as equivalent
+    to the owner-required MiniUnifiedDB -> ZERO capsule -> InferencePacket ancestry.
+    """
+    start = "_pipeline_cognitive_fabric_admit"
+    reachable = _reachable_method_nodes(methods, start)
+    nodes = list(reachable.values())
+    if not nodes:
+        return {
+            "handler_found": False,
+            "reachable_methods": [],
+            "miniunifieddb_read_only": False,
+            "workspace_capsule_compiler": False,
+            "inference_packet_compiler": False,
+            "required_identity_keys": [],
+            "required_identity_keys_present": False,
+            "digest_construction": False,
+            "placeholder_digest_constructs": [],
+            "forbidden_self_calls": [],
+            "semantic_floor": False,
+        }
+
+    calls = _call_names(nodes)
+    self_calls = set().union(*(_self_calls(node) for node in nodes)) if nodes else set()
+    literals = _literal_strings(nodes)
+    required_keys_present = FABRIC_REQUIRED_LITERAL_KEYS.issubset(literals)
+    placeholders = _placeholder_digest_constructs(nodes)
+    forbidden = sorted(self_calls & FABRIC_FORBIDDEN_SELF_CALLS)
+    read_only = "_read_only_db" in self_calls
+    capsule = "compile_workspace_capsule" in calls
+    packet = "compile_packet" in calls
+    digest = bool(calls & FABRIC_DIGEST_CALL_NAMES)
+    semantic_floor = all(
+        [
+            read_only,
+            capsule,
+            packet,
+            required_keys_present,
+            digest,
+            not placeholders,
+            not forbidden,
+        ]
+    )
+    return {
+        "handler_found": True,
+        "reachable_methods": sorted(reachable),
+        "miniunifieddb_read_only": read_only,
+        "workspace_capsule_compiler": capsule,
+        "inference_packet_compiler": packet,
+        "required_identity_keys": sorted(FABRIC_REQUIRED_LITERAL_KEYS & literals),
+        "required_identity_keys_present": required_keys_present,
+        "digest_construction": digest,
+        "placeholder_digest_constructs": placeholders,
+        "forbidden_self_calls": forbidden,
+        "semantic_floor": semantic_floor,
+    }
+
+
 def runtime_effect_contract(runtime: str) -> dict[str, Any]:
     """Extract effect admission from executable Python syntax, never raw substrings."""
     try:
@@ -61,6 +216,7 @@ def runtime_effect_contract(runtime: str) -> dict[str, Any]:
             "dispatch": {},
             "handlers": [],
             "required_effect_bindings": {name: False for name in REQUIRED_EFFECTS},
+            "cognitive_fabric_handler": cognitive_fabric_handler_contract({}),
             "legacy_effects_absent": False,
             "converged": False,
         }
@@ -74,6 +230,7 @@ def runtime_effect_contract(runtime: str) -> dict[str, Any]:
             "dispatch": {},
             "handlers": [],
             "required_effect_bindings": {name: False for name in REQUIRED_EFFECTS},
+            "cognitive_fabric_handler": cognitive_fabric_handler_contract({}),
             "legacy_effects_absent": False,
             "converged": False,
         }
@@ -137,8 +294,9 @@ def runtime_effect_contract(runtime: str) -> dict[str, Any]:
         )
         for effect_name, handler_name in REQUIRED_EFFECTS.items()
     }
+    fabric_contract = cognitive_fabric_handler_contract(methods)
     legacy_absent = not ((allowed | set(dispatch)) & LEGACY_EFFECTS)
-    converged = all(bindings.values()) and legacy_absent
+    converged = all(bindings.values()) and fabric_contract["semantic_floor"] and legacy_absent
     return {
         "syntax_ok": True,
         "class_found": True,
@@ -146,6 +304,7 @@ def runtime_effect_contract(runtime: str) -> dict[str, Any]:
         "dispatch": dict(sorted(dispatch.items())),
         "handlers": sorted(handlers),
         "required_effect_bindings": bindings,
+        "cognitive_fabric_handler": fabric_contract,
         "legacy_effects_absent": legacy_absent,
         "converged": converged,
     }
@@ -254,13 +413,13 @@ def main() -> int:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v3",
+        "schema": "clay-structured-contract-sync/v4",
         "canonical_clay": clay_contract,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay DB-resident profile -> Cognitive Fabric admission -> inference_generate semantics are forward authority; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
+        "policy": "Canonical Clay DB-resident profile -> one MiniUnifiedDB-bound ZERO workspace-capsule -> InferencePacket Cognitive Fabric admission -> inference_generate path is forward authority; reference convergence requires executable effect binding plus the bounded handler semantic floor, never names/comments/no-op/placeholder stubs.",
         "errors": errors,
         "pass": not errors,
     }

@@ -1,0 +1,65 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "branch": "go-20260823-gpt56sol-claude-boot-enabled-fence",
+  "branch_base_main": "3b225a1b2d56b8bd489f0ed8310c0e6626df23bb",
+  "latest_main_observed_before_pr": "592b7826f5d474b59188d68dab3c74bbe862403c",
+  "problem": "Merged canonical UCF boot-ancestry gate #1111 cross-binds Claude adapter version and capability profile when a UCF cycle names engine_class=claude_code, but it did not require the exact admitted boot receipt to have claude_adapter.enabled=true. A structurally valid blocked Claude cycle could therefore descend from a boot that explicitly says the Claude adapter was disabled.",
+  "delta": {
+    "validator": {
+      "path": "tools/validate_ucf_boot_ancestry_chain_v1.py",
+      "git_blob": "a9d37ec8ff238981d8f5063d0425caa75a0a75c7",
+      "law": "engine_class=claude_code requires boot_receipt.claude_adapter.enabled is exactly true",
+      "error": "BOOT_CLAUDE_ADAPTER_DISABLED"
+    },
+    "tests": {
+      "path": "tests/test_ucf_boot_ancestry_chain_v1.py",
+      "git_blob": "43c7b127b784dad7ad0053484af441837ce9148f",
+      "cases": [
+        "matching Claude version/capability with boot enabled=false fails closed",
+        "matching Claude version/capability with boot enabled=true preserves valid ancestry"
+      ]
+    }
+  },
+  "evidence": {
+    "environment": {
+      "class": "isolated ChatGPT container",
+      "kernel": "Linux 6.18.35",
+      "machine": "x86_64",
+      "python": "3.13.5"
+    },
+    "exact_validator_blob_identity": "PASS:a9d37ec8ff238981d8f5063d0425caa75a0a75c7",
+    "validator_py_compile": "PASS",
+    "targeted_exact_validator_regressions": {
+      "disabled_boot_claude": "PASS_FAIL_CLOSED:BOOT_CLAUDE_ADAPTER_DISABLED",
+      "enabled_boot_claude": "PASS_ACCEPTED",
+      "count": "2_OF_2"
+    },
+    "full_branch_suite": "NOT_YET_EXECUTED_EXACT",
+    "evidence_class": "EXACT_CHANGED_VALIDATOR_BLOB_TARGETED_COMPONENT_REGRESSION"
+  },
+  "coordination": {
+    "duplicate_open_pr_found": false,
+    "canonical_main_path_changed_since_branch_base": false,
+    "unusual_experiment_count": 0,
+    "note": "No additional unusual experiment was consumed. These are deterministic fail-closed regressions after the macrocycle's already-consumed UCF ancestry discriminator."
+  },
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "training": false,
+    "money_spent_usd": 0
+  },
+  "credits": {
+    "claude_runtime": 0,
+    "bundled_08b_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_gwt": 0,
+    "whole_product": 0
+  },
+  "next_gate": "Run the exact PR head through an actually-started authorized isolated suite if available, then land the minimal ancestry fence if no regression appears. Real Claude runtime credit still separately requires exact admitted Ubuntu boot/runtime evidence."
+}

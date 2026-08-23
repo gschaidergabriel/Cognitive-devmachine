@@ -18,10 +18,10 @@ class TypedEntrySelectedCanonicalAdapterTests(unittest.TestCase):
         self.assertEqual(ADAPTER_SCHEMA, "ENTITYOS_HCU_ENTRY_CANONICAL_ADAPTER/v2")
         self.assertNotEqual(CANONICALIZATION_SCHEMA, LEGACY_CANONICALIZATION_SCHEMA)
 
-    def test_entry_shaped_values_are_byte_exact_with_selected_encoder(self):
+    def test_entry_v2_shaped_values_are_byte_exact_with_selected_encoder(self):
         values = [
             {
-                "schema": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v1",
+                "schema": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2",
                 "canonicalization_schema": CANONICALIZATION_SCHEMA,
                 "causal_id": "causal:adapter:κ",
                 "entity_generation": 7,
@@ -36,7 +36,7 @@ class TypedEntrySelectedCanonicalAdapterTests(unittest.TestCase):
                 "payload_sha256": "c" * 64,
             },
             {
-                "schema": "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v1",
+                "schema": "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2",
                 "canonicalization_schema": CANONICALIZATION_SCHEMA,
                 "event_sha256": "d" * 64,
                 "ingress_id": "ingress:test:1",

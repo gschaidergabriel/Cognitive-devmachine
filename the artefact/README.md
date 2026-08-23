@@ -100,3 +100,13 @@ A later merge reactivated `VPS_DISPOSABLE_GUEST_TEST_EXECUTION_DIRECTIVE.md`, an
 The current repair demotes the 2026-08-18 VPS guest directive to historical evidence, restores `SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md`, `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, Control 4.4 and supervisor steering to the newer strict law, and flips `assert_clayverse_execution_boundary.py` from protecting the stale guest exception to fail-closing any re-admission of VPS guest, self-hosted VPS or production-host execution.
 
 No executable tests are claimed for this repair because an actually-started authorized isolated sandbox start/exec surface is not exposed in the current tool session. Runtime credit remains **ZERO**. The single unusual experiment for the shared `go` was already consumed elsewhere by PR #1195; this repair does not consume or duplicate it.
+
+## 2026-08-23 `go` re-entry — Vercel execution frontier cross-bound
+
+The retained Vercel path is itself an authorized isolated-sandbox path. Its current continuity record says that disposable Sandbox creation has already been observed, `Sandbox.create` is not the blocker, and runtime one-shot `GITHUB_READ_TOKEN` ingress exists, while no real owner-started token-bearing exact-source run has yet earned source/full-suite/OCI/product runtime credit.
+
+The active `PROGRAM_STATE.json` still used the broader `BLOCKED_ON_EXECUTION_SURFACE` selector. This delta narrows that work selector to `BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS`, binds the selector to `research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md`, and extends the existing **sandbox-only** execution-boundary assertion rather than reopening any VPS/self-hosted/production execution lane.
+
+The cross-bind is bidirectional and fail-closed: positive Vercel continuity evidence requires the precise one-shot frontier in `PROGRAM_STATE`; if `PROGRAM_STATE` claims that bridge later while the required continuity markers disappear or degrade, validation fails with `VERCEL_EXECUTION_BRIDGE_EVIDENCE_MISSING_OR_DEGRADED`. Whole-product runtime credit remains zero throughout.
+
+No additional unusual experiment is consumed here. The shared `go` unusual-experiment slot is already recorded elsewhere by PR #1195; the stale-generic-frontier, degraded-continuity and false-runtime-credit cases in this lane are deterministic regression hardening only.

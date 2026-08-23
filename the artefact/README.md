@@ -1,128 +1,149 @@
-# the artefact — ClayVerse single-container product
+# the artefact — Xeno -> EntityOS cognitive computer
 
-`the artefact/` is the canonical product workspace for ClayVerse in `gschaidergabriel/clay-global-research-entity/main`.
+`the artefact/` is the canonical product/research workspace for the current **Xeno** bootstrap and its convergence toward **EntityOS + HCU/XCU**.
 
-Current owner directive: `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`.
+Current owner/work-selection authority:
 
-The active release endpoint is **one OCI/Docker-compatible ClayVerse container image**. Earlier Mini Entity / Blogpost endpoint wording is historical donor evidence only and must not override the current ClayVerse authority spine.
+- `research_entity/global/XENO_GO_OWNER_DIRECTIVE.md`
+- `research_entity/global/XENO_COMPUTATIONAL_UNIT_RESEARCH_FUSION_2026-08-23.md`
+- `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
 
-## Product law
+Current-facing Xeno root:
 
-ClayVerse is one persistent central entity with exactly two equal-rights user perspectives: `gabriel` and `andreas`.
+- `the artefact/Xeno/`
 
-Canonical runtime path:
+Historical `MicroEntity`, `Mini Entity`, `mini_*` and `MINI_*` paths/identifiers remain compatibility and provenance surfaces until exact migration. Git history preserves prior ClayVerse/Mini Entity authority states; they are not current work-selection authority.
 
-`Browser -> Clerk -> verified JWT -> authenticated WebSocket PTY -> user-bound persistent tmux -> normal interactive Claude Code -> managed UserPromptSubmit/Stop/StopFailure hooks -> UnifiedDB -> MicroClay/ClayGraph/Hyperposition/workspace context -> Claude reasoning -> effect-only MCP -> EffectGate -> optional admitted EntityOS -> verified outcome -> causal re-entry -> UnifiedDB`
+## Current architecture goal
 
-Authority boundaries:
+Xeno is incrementally built as a **multi-mode cognitive computational appliance** rather than a permanent swarm of agents.
 
-- **UnifiedDB** is the sole durable canonical state/world/memory/data/wiki/causal authority.
-- **ClayGraph** is derived and rebuildable only.
-- **Claude Code** is runtime cognition; it cannot own durable identity, canonical truth, memory, or effects.
-- **MicroClay** learns retrieval/entry-point accessibility only; it cannot mint truth or permissions.
-- **EffectGate + EffectJournal** own the admitted external/state-changing effect path.
-- **EntityOS** is an optional, separately admitted internal hardened execution/security/runtime substrate. It is not the product endpoint and never becomes a second authority. If EntityOS execution is disabled, its execution round trip is not an unconditional whole-product PASS requirement.
-- No hidden second transcript, database, identity service, effect path, recovery ledger, or consciousness daemon is allowed.
+```text
+new data / event / prompt
+          |
+          v
+   XENO ENTRY FABRIC
+          |
+          v
+   XRAM STATE FABRIC
+          |
+    +-----+------+
+    |            |
+    v            v
+ XPU CONTROL   XCU ACCELERATOR
+ deterministic  shared-weight/vector
+ scheduler      inference/function cells
+    |            |
+    +-----+------+
+          |
+ typed interconnect / workspace / Hyperposition
+          |
+  +-------+---------+----------+----------+
+  |                 |          |          |
+GRID10           COGSIM10    WM_TEST   NESTED_SIM
+  |                 |          |          |
+  +-------+---------+----------+----------+
+          |
+      SCALEOUT
+          |
+ calibrated ActionCandidate
+          |
+ Effect translator -> EffectGate -> reality
+```
 
-## Container boundary
+EntityOS is the eventual computer/runtime destination. The long-term decomposition is intentionally computer-like:
 
-The final product must converge into one exact OCI image built from this workspace. Final acceptance must bind exact source/image identity and the selected isolated runtime environment. Required hardening includes non-root execution, read-only root filesystem at admitted scope, dropped capabilities, `no-new-privileges`, bounded tmpfs, explicit persistent state/workspace volumes, runtime-injected secrets, and reproducible supply-chain evidence.
+- **XRAM** — canonical/hot/rebuildable/scratch/paged state tiers;
+- **XPU** — deterministic processor/control plane;
+- **XCU** — accelerator/vector/inference/J-Space plane;
+- **Interconnect** — typed causal packets, workspace and Hyperposition;
+- **Entry I/O** — typed ingress for all new data;
+- **Effect translation** — candidate to typed effect request, then EffectGate.
 
-A source candidate, component PASS, PR merge, CI definition, deployment READY state, historical receipt, or synthetic demo does not imply whole-product PASS.
+These names are architectural roles, not claims of custom silicon.
 
-## Canonical state and recovery
+## Mandatory `go` law
 
-The two canonical sessions share one global live entity generation. Restart/recovery must explicitly close or re-enter interrupted turns, fence stale writers, expire leases, rebuild ClayGraph from UnifiedDB, preserve checkpoints and uncertainty, and never blindly replay an ambiguous external effect.
+Every explicit `go` has two required coupled tracks:
 
-Unknown outcomes remain unknown until verified.
+1. **XENO_EXECUTABLE_CONVERGENCE** — improve the strongest real current Xeno implementation.
+2. **XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one Computational Unit or Entry primitive.
 
-## Memory, retrieval, and meta-learning
+If track 2 cannot safely advance, record `XCU_NO_CHANGE_WITH_REASON` and the next discriminator. It must not silently disappear from a `go` run.
 
-MicroClay is a persistent bounded retrieval/entry-point organ inside the same entity. It starts in SHADOW behind a deterministic safe baseline and may be promoted only through held-out/replay evidence with contamination, staleness, miss-rate, personalization, latency, causal utility, and authority leakage measured.
+Material architecture work uses:
 
-Meta-learning preserves reusable validated methods separately from factual evidence. Mandatory invariant:
+`OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
 
-`FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`
+Prefer primitives reusable across multiple Xeno modes.
 
-Methods suggest how to investigate; they never manufacture missing facts.
+## Xeno modes
 
-## Current acceptance frontier
+### `XENO_GRID10`
 
-Whole ClayVerse acceptance remains **IN_PROGRESS**. Required current gates include:
+Simple 10 logical-cell shared-worker baseline for scheduler tests, lesions, small parallel reasoning and exact compute-matched baselines.
 
-- exact current source identity and full authorized isolated regression;
-- exact OCI build + image digest + startup/readiness;
-- real Clerk JWT/browser/WebSocket PTY;
-- both persistent tmux sessions and normal interactive Claude Code;
-- managed prompt/Stop/StopFailure lifecycle bound to UnifiedDB;
-- UnifiedDB persistence/restart/recovery and one global generation;
-- MicroClay retrieval falsifiers and SHADOW-vs-baseline benchmark;
-- ClayGraph/Hyperposition/workspace fail-closed behavior;
-- effect-only MCP/EffectGate and EntityOS round trip only when EntityOS execution is explicitly admitted;
-- crash/restart with no unsafe external replay;
-- dual-session collision/privacy/stale-generation controls;
-- supply-chain closure and exact deployment-runtime evidence.
+### `XENO_COGSIM10`
+
+Request-scoped pure cognition simulation. A temporary 10-cell topology forms, explores hypotheses/counterhypotheses/plans/critics and emits only candidates. No simulated action has direct real effects.
+
+### `XENO_WM_TEST`
+
+Bounded experimental world/transition-model mode. Predictions are noncanonical and must be calibrated against later observations.
+
+### `XENO_NESTED_SIM`
+
+Selective high-cost mode:
+
+`observed state -> bounded world model -> virtual computer -> simulated AI cognition -> proposed action -> hypothesis/counterhypothesis comparison -> calibrated candidate -> EffectGate`
+
+It is not the default and does not create a second reality authority.
+
+### `XENO_SCALEOUT`
+
+Scale logical contexts over shared physical workers. Baseline gate sequence:
+
+`10 -> 32 -> 64 -> 128 -> 256 -> ~600 logical contexts`
+
+The ~600 H100-class target is a **research hypothesis only**. Logical module count is never reported as the same thing as resident model count or simultaneous decode streams.
+
+## Authority law
+
+- canonical durable state/evidence remains outside model-generated cognition and simulation;
+- world-model state is projection/candidate state;
+- HCU/XCU/J-Space/workspace outputs cannot mint canonical truth;
+- Hyperposition preserves unresolved alternatives; majority vote is not truth;
+- stale generation/provenance uncertainty fail closed;
+- unknown external effect outcome remains UNKNOWN until verified;
+- EffectGate + EffectJournal remain the real/state-changing effect authority;
+- no second persistent identity, truth store, effect path or recovery ledger is admitted.
+
+## Entry Fabric
+
+All new data paths should converge on a typed ingress packet binding before cognition:
+
+- ingress/causal identity;
+- generation;
+- source/provenance;
+- modality/type;
+- observed/received time;
+- permissions/capability scope;
+- parent/stream relation;
+- compute/resource budget;
+- payload reference.
+
+Inputs may originate from humans, tools, external events, sensor/stream data, canonical database changes or intrinsic system events.
+
+## Research fusion
+
+Current design is informed by external evidence on heterogeneous compute/memory/interconnect (NVIDIA DGX/Grace Hopper/Rubin), shared-weight inference scheduling and paged KV (vLLM/SGLang/TensorRT-LLM), dynamic compute allocation (Mixture-of-Depths), self-regulated planning, world-model planning, generated environments and generalist agents (DeepMind Genie/SIMA), conditional multi-agent/test-time scaling, and Global Workspace/J-Space research.
+
+The architecture treats these as evidence for mechanisms, not proof that Xeno already exhibits their claimed capacity. Runtime promotion requires exact executable evidence at the claimed scope.
 
 ## Execution policy
 
-Current build/test/experiment/runtime validation is **authorized-isolated-sandbox-only** under the newer 2026-08-23 owner bootstrap.
+Current testing remains authorized-isolated-sandbox-only unless a newer owner directive changes it. Together API is forbidden. Secrets do not enter source/receipts. Final paid/model training requires explicit owner authorization.
 
-VPS testing is forbidden. This includes the previously admitted 2026-08-18 VPS-hosted disposable KVM/VM/microVM/TCG guest lane. Self-hosted VPS test runners and production/deployment-host testing are also forbidden. A VPS may later be a deployment target only after explicit owner authorization.
+## Current frontier
 
-Together API/service is forbidden. Secrets never enter source or receipts. Final paid/model training requires explicit owner authorization.
-
-## 2026-08-23 `go` delta — authority reconciliation
-
-Observed `main` carried a split-brain authority state: `the artefact/manifest.json` and `ARCHITECTURE.md` named ClayVerse/one OCI image as the product, while `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, this README, the ClayVerse fast-bootstrap shim, and the visible status footer still declared Mini Entity/Blogpost current and ClayVerse superseded.
-
-This cycle reconciles those control-plane files to the current ClayVerse owner directive and adds `tools/validate_clayverse_authority_consistency.py` plus deterministic regressions so a future split cannot silently pass source admission.
-
-Runtime credit remains **ZERO** for this delta because no exact authorized whole-product sandbox start/exec surface was available through the connected Vercel tool. Local deterministic validator tests are source/mechanism evidence only.
-
-## 2026-08-23 `go` re-entry — nested work-selector fence
-
-After the authority reconciliation merged, adversarial source review found a narrower false-green: top-level ClayVerse authority could remain valid while nested `PROGRAM_STATE.json` work-selection fields were changed back toward a retired program. The authority validator now also binds the current stage goal, primary dynamic target, current frontier and `go` contract to ClayVerse, with poison regressions for stale nested work selection.
-
-The post-merge frontier is now re-entered explicitly as exact-current ClayVerse authority/full-suite/OCI build-startup on an actually-started authorized isolated executor, followed by the Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/EntityOS/recovery path. This is source/control hardening only; whole-product runtime credit remains **ZERO** until that exact execution exists.
-
-## 2026-08-23 `go` re-entry — transitive worker steering closed
-
-Adversarial source review found that the actively referenced all-worker directive still injected `[MINI ENTITY :: ...]` into child `go` prompts even after top-level ClayVerse authority had been restored. The canonical `main` worker directive is now retargeted to ClayVerse at Git blob `f3b47f0e1fe03c7ea1d202afeaa947655572f943`, preserving Clay identity, UnifiedDB/ClayGraph/effect boundaries, sandbox-only execution, Together prohibition and owner-gated paid/model training.
-
-A rebased cumulative source-gate candidate that also binds this worker pointer/marker into the existing authority validator was reconstructed exactly in an isolated Linux container: validator blob `44c4984198260e024a37c72d5ce5d26a4f7b737c`, test blob `d25b04fad74c32e74d6adac9e12caab2d39c2899`, `py_compile` PASS, **15/15** focused fail-closed tests PASS. Because `main` continued to receive parallel validator changes during this cycle, that validator extension is not being force-merged over newer work. The actual stale worker steering is closed on `main`; automatic regression binding remains a coordination/fusion item against the latest validator.
-
-Whole ClayVerse runtime/OCI credit remains **ZERO**. The empirical frontier remains an actually-started authorized isolated exact-current regression plus exact OCI build/startup with bound source SHA, image digest and runtime identity.
-
-## 2026-08-23 `go` re-entry — stale VPS guest authority removed
-
-A later merge reactivated `VPS_DISPOSABLE_GUEST_TEST_EXECUTION_DIRECTIVE.md`, an owner instruction dated 2026-08-18, and narrowed `vps_testing=FORBIDDEN` to direct-host-only while admitting VPS-hosted disposable guests. That conflicts with the newer 2026-08-23 owner bootstrap, which explicitly restores current build/test/experiment/runtime validation to authorized isolated sandboxes only and forbids VPS/self-hosted/production-host testing.
-
-The current repair demotes the 2026-08-18 VPS guest directive to historical evidence, restores `SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md`, `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, Control 4.4 and supervisor steering to the newer strict law, and flips `assert_clayverse_execution_boundary.py` from protecting the stale guest exception to fail-closing any re-admission of VPS guest, self-hosted VPS or production-host execution.
-
-No executable tests are claimed for this repair because an actually-started authorized isolated sandbox start/exec surface is not exposed in the current tool session. Runtime credit remains **ZERO**. The single unusual experiment for the shared `go` was already consumed elsewhere by PR #1195; this repair does not consume or duplicate it.
-
-## 2026-08-23 `go` re-entry — current owner authority restored without research rollback
-
-At the 16:49 +07 owner re-entry, current `main` had drifted again: `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, Control 4.5 and current worker routing selected Mini Entity as the top-level `go` product, while `the artefact/manifest.json`, this README and the newly supplied owner bootstrap still selected ClayVerse. The later Mini Entity line also accumulated substantial HCU/UCF/J-Space/MiniUnifiedDB/cognition research after the prior ClayVerse reconciliation.
-
-This cycle therefore does **not** rewind those later research commits. It restores only the ClayVerse program/work-selection spine from the last compatible source snapshots, rewrites the former Mini Entity owner/control paths as historical donor redirects, repairs the root agent/authority-resolution shims, and adds `SUPERVISOR_STEERING_8_48.json` so latest-steering selection also points back to ClayVerse. Later HCU/UCF/J-Space/MiniUnifiedDB mechanisms remain available for bounded fusion into the one ClayVerse UnifiedDB/EffectGate authority boundary.
-
-Exactly one unusual experiment was consumed: `AUTHORITY_ROLLBACK_POISON_REPLAY`. Replaying the actually observed Mini Entity routing tuple against the already-existing ClayVerse authority invariant classes produced the expected source-level fail-closed codes: `BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH`, `PROGRAM_ID_MISMATCH`, `PROGRAM_DYNAMIC_PRIMARY_MISMATCH`, and `CONTROL44_NOT_ACTIVE_FREE_ONLY`; the ClayVerse manifest endpoint itself remained consistent. This is **source/mechanism evidence only**.
-
-No executable Vercel Sandbox create/exec action is exposed through the current connected Vercel surface, so whole-product runtime/OCI credit remains **ZERO**. After this authority repair is merged, the next empirical gate is the existing ClayVerse authority consistency guard + exact-current full regression + exact OCI build/startup on an actually-started authorized isolated executor, followed by the full Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/EntityOS/recovery/concurrency acceptance path.
-
-## 2026-08-23 `go` re-entry — retained Vercel one-shot frontier
-
-The paragraph above records the tool-surface state observed during the authority-repair step, but it is no longer the best current work selector. Canonical continuity already records stronger bounded evidence: disposable Vercel Sandbox/Firecracker admission has been observed, `Sandbox.create` is not the blocker, and the retained controller implements runtime one-shot `GITHUB_READ_TOKEN` ingress for the narrow private-source fetch. PR #1318 fused that evidence into current `PROGRAM_STATE` and the existing execution-boundary guard without creating a second executor, state authority, effect path, or validator authority.
-
-The exact current empirical gate is therefore **`BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS`**, not generic `BLOCKED_ON_EXECUTION_SURFACE`. An owner-held scoped read-only GitHub token must enter only the retained one-shot path; exact Research/EntityOS identities must be verified; the credential must be cleared/proven absent after fetch; then exact-current regressions and the exact ClayVerse OCI build/startup can execute. Only after that may the remaining Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/optional-EntityOS/recovery/concurrency vector receive runtime evidence.
-
-This refinement grants **ZERO** whole-product runtime/OCI credit by itself. The merged focused consistency evidence for PR #1318 is **4/4 PASS** at helper/source-component scope only; the real owner-started token-bearing exact-source/full-suite/OCI run has not yet been observed.
-
-## 2026-08-23 `go` correction — exact retained controller READY precedes token ingress
-
-A fresh GitHub + Vercel control-plane check exposed one more precondition that the token-only selector collapsed. Retained controller PR #810 currently points at `24aec8164557f6020d1b76845a0a37b46a31a843`, while the Vercel deployment history after that commit contains no deployment bound to that exact SHA and therefore no exact-head READY instance to receive the owner-held one-shot safely. Historical READY previews remain useful topology evidence only.
-
-The current exact gate is therefore **`BLOCKED_ON_EXACT_RETAINED_CONTROLLER_READY_REBIND_AND_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS`**. Required order: rebind the single retained #810 controller once to exact current Research/admitted source identity -> obtain and attest READY for that exact retained controller head -> owner-start the one-shot POST with scoped read-only `GITHUB_READ_TOKEN` -> verify exact private Research/EntityOS identity and post-fetch credential absence -> run exact-current regressions -> build/capture/start the exact ClayVerse OCI digest -> continue the integrated acceptance vector.
-
-`PROGRAM_STATE` and the existing execution-boundary guard now fail closed on a token-only selector that omits controller READY binding. A six-case deterministic decision-helper reconstruction passed at mechanism scope, including poisoned token-only, wrong-controller, degraded-continuity and false-runtime-credit cases. Whole-product runtime/OCI credit remains **ZERO**; this is work-selection/control-plane hardening only.
+Build the **typed Xeno Entry Fabric** and a reusable **GRID10 scheduler/state/interconnect baseline**, then progressively separate XRAM/XPU/XCU responsibilities so COGSIM10, WM_TEST, NESTED_SIM and measured SCALEOUT reuse the same machine primitives rather than requiring architectural rewrites.

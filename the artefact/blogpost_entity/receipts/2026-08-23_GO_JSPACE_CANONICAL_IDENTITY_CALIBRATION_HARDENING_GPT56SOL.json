@@ -1,0 +1,58 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "fresh_main_base": "8ef31507b016ff059fef666388730abc1cbfcf16",
+  "coordination": {
+    "additional_unusual_experiment_performed": false,
+    "reason": "The shared J-Space frontier already consumed its unusual experiment; this is deterministic canonical-path hardening after adjudicating and discarding a duplicate validator lane.",
+    "abandoned_parallel_path": "gpt56sol/go-jspace-gwt-binding-r2-20260823",
+    "canonical_path_hardened": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py"
+  },
+  "delta": {
+    "boot_contract": "the artefact/blogpost_entity/jspace_gwt/JSPACE_GWT_BOOT_BINDING_V1.md",
+    "boot_validator": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
+    "boot_tests": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py",
+    "bundled_manifest_validator": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py",
+    "bundled_manifest_tests": "the artefact/blogpost_entity/mini_cognition/test_bundled_cognition_manifest_v1.py"
+  },
+  "mechanism": {
+    "placeholder_digest_guard": "all-zero and all-f SHA-40/SHA-256 placeholder identities fail closed",
+    "unmeasured_slot_guard": "UNMEASURED_SOURCE_ONLY requires slot_count=null",
+    "measured_slot_guard": "MEASURED_EXACT_BUNDLE requires integer slot_count>=1",
+    "epistemic_reason": "UNKNOWN != ZERO != MEASURED; an unmeasured workspace cannot bind a numeric slot count as if calibrated"
+  },
+  "exact_local_component_bytes_sha256": {
+    "JSPACE_GWT_BOOT_BINDING_V1.md": "d53114f2c21502256a3bc505a8e12a2bc5c01f6fad07f2cda15d403f314d9d87",
+    "validate_jspace_gwt_boot_binding_v1.py": "e334eae7ef553897a7ea101db43c7fbb943b27c89bd57b5720f3a4952f092684",
+    "test_validate_jspace_gwt_boot_binding_v1.py": "1484162a16b8a73635ae29d6d2097926fecc2758e70ca2f0f0fef7f905b3ef9c",
+    "bundled_cognition_manifest_v1.py": "113a996c95f5caa4a977dbb3d12ef577228632adddb1e894482f88d635ce5f5c",
+    "test_bundled_cognition_manifest_v1.py": "ba763fdfa829888ba09d4db46c39b0cea661d6dc32f5000eb952534c51988d86"
+  },
+  "component_execution": [
+    {
+      "command": "python -m unittest discover -s /tmp/clay_jspace_canonical/jspace_gwt -p 'test_*.py'",
+      "result": "PASS",
+      "tests": 8,
+      "failures": 0
+    },
+    {
+      "command": "cd /tmp/clay_jspace_canonical/mini_cognition && python -m unittest -v test_bundled_cognition_manifest_v1.py",
+      "result": "PASS",
+      "tests": 9,
+      "failures": 0
+    }
+  ],
+  "evidence_class": "BOUNDED_EXACT_LOCAL_COMPONENT_MECHANISM",
+  "runtime_credit": 0,
+  "bundled_08b_runtime_credit": 0,
+  "jspace_runtime_credit": 0,
+  "whole_gwt_production_credit": 0,
+  "provider_calls": 0,
+  "paid_execution": false,
+  "free_only_preserved": true,
+  "next_executable_gate": "On the next authorized exact Ubuntu start, produce JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 with real non-placeholder source/model/tokenizer/runtime/lens/policy/calibration identities; keep slot_count null until exact-bundle GWT calibration is measured."
+}

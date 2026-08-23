@@ -160,11 +160,7 @@ def validate_binding(doc: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def resolve_from_profile(profile: Mapping[str, Any]) -> dict[str, Any]:
-    """Resolve only an explicit binding from a verified runtime profile snapshot.
-
-    The caller must have obtained this profile through the canonical MiniUnifiedDB profile
-    read path. Model/provider/kind strings are intentionally ignored for capability routing.
-    """
+    """Resolve only an explicit binding from a verified runtime profile snapshot."""
     _need(isinstance(profile, Mapping), "PROFILE_OBJECT_REQUIRED")
     snapshot = profile.get("_runtime_profile_snapshot")
     _need(isinstance(snapshot, Mapping), "PROFILE_SNAPSHOT_MISSING")
@@ -182,12 +178,15 @@ def resolve_from_profile(profile: Mapping[str, Any]) -> dict[str, Any]:
     return result
 
 
-def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], *, expected_generation: int) -> dict[str, Any]:
-    """Bind explicit capability routing to one exact canonical cognition prepare result.
-
-    Cognition identities are not duplicated into profile configuration. They are taken only
-    from the already-verified MiniUnifiedDB prepare material and folded into one route digest.
-    """
+def resolve_bound_route(
+    profile: Mapping[str, Any],
+    prepare: Mapping[str, Any],
+    *,
+    expected_generation: int,
+    semantic_binding: Mapping[str, Any] | None = None,
+    evidence_module: Any | None = None,
+) -> dict[str, Any]:
+    """Bind capability routing to exact canonical prepare and admitted semantic evidence."""
     _need(isinstance(prepare, Mapping) and prepare.get("ok") is True, "PREPARE_BINDING_REQUIRED")
     _need(type(expected_generation) is int and expected_generation >= 0, "EXPECTED_GENERATION_INVALID")
     _need(prepare.get("entity_generation") == expected_generation, "STALE_GENERATION")
@@ -198,6 +197,40 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
     cognition = {field: _digest(prepare.get(field), f"prepare.{field}") for field in PREPARE_DIGEST_FIELDS}
 
     capability = resolve_from_profile(profile)
+    local_route = capability["jspace_mode"] in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}
+    evidence_binding_digest: str | None = None
+    evidence_resolution = "NONLOCAL_NO_LATENT_AUTHORITY"
+    if local_route:
+        _need(isinstance(semantic_binding, Mapping), "LOCAL_LATENT_SEMANTIC_BINDING_REQUIRED")
+        if evidence_module is None:
+            import mini_capability_evidence_resolution_v1 as evidence_module  # type: ignore[no-redef]
+        try:
+            evidence = evidence_module.resolve_capability_evidence(
+                prepare=prepare,
+                semantic_binding=semantic_binding,
+                capability=capability,
+                expected_generation=expected_generation,
+            )
+        except Exception as exc:
+            if isinstance(exc, CapabilityBindingError):
+                raise
+            raise CapabilityBindingError(
+                "CAPABILITY_EVIDENCE_RESOLUTION_FAILED:"
+                + type(exc).__name__
+                + ":"
+                + str(exc)
+            ) from exc
+        _need(isinstance(evidence, Mapping) and evidence.get("ok") is True, "CAPABILITY_EVIDENCE_RESOLUTION_REQUIRED")
+        _need(
+            evidence.get("authority") == "EVIDENCE_BINDING_ONLY_NO_TRUTH_STATE_EFFECT_AUTHORITY",
+            "CAPABILITY_EVIDENCE_AUTHORITY_ESCALATION",
+        )
+        evidence_binding_digest = _digest(
+            evidence.get("evidence_binding_digest"),
+            "capability_evidence_binding_digest",
+        )
+        evidence_resolution = _text(evidence.get("resolution"), "capability_evidence_resolution")
+
     material = {
         "schema": BOUND_ROUTE_SCHEMA,
         "entity_generation": expected_generation,
@@ -209,6 +242,8 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
         "profile_hash": capability["profile_hash"],
         "capability_binding_digest": capability["binding_digest"],
         "capability_receipt_digest": capability["capability_receipt_digest"],
+        "capability_evidence_binding_digest": evidence_binding_digest,
+        "capability_evidence_resolution": evidence_resolution,
         "target_engine_class": capability["target_engine_class"],
         "ucf_engine_class": capability["ucf_engine_class"],
         "jspace_mode": capability["jspace_mode"],
@@ -228,4 +263,7 @@ def resolve_bound_route(profile: Mapping[str, Any], prepare: Mapping[str, Any], 
     }
 
 
-__all__ = ["SCHEMA", "BOUND_ROUTE_SCHEMA", "PREPARE_DIGEST_FIELDS", "CapabilityBindingError", "compile_binding", "validate_binding", "resolve_from_profile", "resolve_bound_route", "sha256_obj"]
+__all__ = [
+    "SCHEMA", "BOUND_ROUTE_SCHEMA", "PREPARE_DIGEST_FIELDS", "CapabilityBindingError",
+    "compile_binding", "validate_binding", "resolve_from_profile", "resolve_bound_route", "sha256_obj",
+]

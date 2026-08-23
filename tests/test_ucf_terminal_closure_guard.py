@@ -11,7 +11,18 @@ from check_ucf_terminal_closure import evaluate  # noqa: E402
 
 
 class UcfTerminalClosureGuardTests(unittest.TestCase):
-    def test_current_one_phase_source_is_not_false_failed(self):
+    def test_current_canonical_source_preserves_committed_terminal_state(self):
+        source = (ROOT / "the artefact" / "blogpost_entity" / "BLOGPOST_ENTITY.clay").read_text(
+            encoding="utf-8"
+        )
+        report = evaluate(source)
+        self.assertTrue(report["pass"], report)
+        self.assertTrue(report["finalize_after_commit"], report)
+        self.assertFalse(report["fatal_post_commit_finalize"], report)
+        self.assertIn('map_set(result,"ucf_finalization",finalized)', source)
+        self.assertNotIn("require finalized.ok", source)
+
+    def test_one_phase_source_is_not_false_failed(self):
         source = 'let admitted = phase("pipeline_cognitive_fabric_admit",a,b,c,d,e)\n'
         self.assertTrue(evaluate(source)["pass"])
 

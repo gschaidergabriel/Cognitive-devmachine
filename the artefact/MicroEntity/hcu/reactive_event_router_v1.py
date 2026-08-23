@@ -14,6 +14,7 @@ from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 
 SCHEMA = "HCU_REACTIVE_EVENT/v1"
+ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v1"
 FORBIDDEN_INTERNAL_PROVIDERS = {"nvidia", "mistral", "groq", "openrouter", "together"}
 SCRIPT_STAGES = (
     "generation_check",
@@ -40,11 +41,20 @@ class RouteDecision:
     zero_projection: bool
     zero_projection_format: str | None
     external_provider_dependency: bool
+    event_sha256: str
     decision_sha256: str
 
 
 def _canonical(value: Any) -> bytes:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
+
+
+def _sha256_canonical(value: Any, field: str) -> str:
+    try:
+        encoded = _canonical(value)
+    except (TypeError, ValueError) as exc:
+        raise ReactiveRoutingError(f"{field}:CANONICALIZATION_FAILED") from exc
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _unit(value: Any, field: str) -> float:
@@ -106,7 +116,10 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         lanes.add("critic")
 
     projection = zero_relevance >= 0.60 and bool(lanes)
+    event_sha256 = _sha256_canonical(dict(event), "EVENT")
     payload = {
+        "schema": ROUTE_IDENTITY_SCHEMA,
+        "event_sha256": event_sha256,
         "scripts": SCRIPT_STAGES,
         "model_lanes": sorted(lanes),
         "zero_projection": projection,
@@ -114,7 +127,7 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         "external_provider_dependency": False,
         "generation": generation,
     }
-    digest = hashlib.sha256(_canonical(payload)).hexdigest()
+    digest = _sha256_canonical(payload, "ROUTE_DECISION")
     return RouteDecision(
         status="SCRIPT_ONLY" if not lanes else "SELECTIVE_MODEL_ACTIVATION",
         scripts=SCRIPT_STAGES,
@@ -122,6 +135,7 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         zero_projection=projection,
         zero_projection_format="ClayCode" if projection else None,
         external_provider_dependency=False,
+        event_sha256=event_sha256,
         decision_sha256=digest,
     )
 

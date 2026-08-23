@@ -1,0 +1,71 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXECUTOR_REPOSITORY_IDENTITY_QUALIFICATION/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "mode": "FREE_ONLY",
+    "main_observed_before_write": "5178ba493fc83dee7c35f400bc05ef7c86902ee1",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "observation": {
+    "current_research_repo_pr810": {
+      "qualified_ref": "gschaidergabriel/clay-global-research-entity#810",
+      "head": "7c49b41ceb14d65783b7d35c2939c4005565baa5",
+      "title": "cognition: close intrinsic vocabulary on canonical SFT v2 validator",
+      "role": "NOT_THE_RETAINED_VERCEL_EXECUTION_CONTROLLER"
+    },
+    "intended_retained_executor": {
+      "qualified_ref": "gschaidergabriel/Dr.-Unterweger#810",
+      "head": "08bfded09e75bced36764180ab1c11f15886d12d",
+      "title": "test(entityos-hcu): retained current-head Sandbox acceptance controller",
+      "role": "SINGLE_BOUNDED_VERCEL_SANDBOX_EXECUTION_CONTROLLER_LANE"
+    },
+    "failure_class": "REPOSITORY_LOCAL_PULL_REQUEST_NUMBER_AMBIGUITY_IN_CURRENT_FACING_COORDINATION_TEXT"
+  },
+  "hypothesis": "An unqualified PR number is not a stable executor identity across repositories and can make an organ fetch, rebind or reason about the wrong lane while remaining syntactically self-consistent.",
+  "counterhypothesis": "The token PR810 is harmless because all workers infer the intended repository from historical context.",
+  "discriminator": {
+    "type": "ORDINARY_READ_ONLY_CROSS_REPOSITORY_IDENTITY_CHECK",
+    "unusual_experiment": false,
+    "result": "COUNTERHYPOTHESIS_REJECTED",
+    "reason": "Both repositories contain an open PR #810 with different heads, titles and responsibilities; repository context is therefore necessary for unique resolution."
+  },
+  "delta": {
+    "identity_contract": "research_entity/continuity/RETAINED_EXECUTION_CONTROLLER_IDENTITY.json",
+    "validator": "tools/validate_retained_executor_identity.py",
+    "regression": "tests/test_retained_executor_identity.py",
+    "supervisor_inbox_updated": true,
+    "selection_rule": "Use gschaidergabriel/Dr.-Unterweger#810, plus exact head SHA at execution time; never select the executor from unqualified PR810.",
+    "new_executor_created": false,
+    "new_state_truth_effect_or_recovery_authority_created": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_UNAMBIGUOUS_SINGLE_EXECUTOR_SELECTION",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_BINDING_THE_HCU_RUNTIME_GATE_TO_THE_CORRECT_EXECUTOR_REPOSITORY_IDENTITY",
+    "track_c_jspace_gwt_training_readiness_free_only": "ADVANCED_BY_PREVENTING_JSPACE_V4_V3_GRID10_CAPSULE_REBIND_TO_THE_WRONG_PR810_LANE"
+  },
+  "coordination": {
+    "macrocycle_identity_available": false,
+    "atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed": false,
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT_BUT_ORDINARY_SOURCE_REVIEW_AND_GUARD_REPAIR_ALLOWED"
+  },
+  "evidence_boundary": {
+    "source_coordination_candidate": true,
+    "exact_free_sandbox_executed": false,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "After branch review/fusion, refresh current Research main, gschaidergabriel/clay-global-research-entity#1263 and gschaidergabriel/Dr.-Unterweger#810 heads; bind those exact identities into the single existing fixed FREE executor; then run the deterministic VerifiedModelExecution -> HCU_INFERENCE_RECEIPT/v4 -> ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3 plus GRID10 plan/cell closure when the included-tier Vercel admission path is actually callable."
+}

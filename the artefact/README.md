@@ -11,6 +11,7 @@ Current authority is resolved from verified current `main`, especially:
 - `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md`
 - `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
 - `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
+- `research_entity/continuity/RETAINED_EXECUTION_CONTROLLER_IDENTITY.json`
 
 Newest explicit owner/supervisor authority and exact executable evidence outrank cached or historical material.
 
@@ -165,16 +166,16 @@ Its admitted component scope recorded:
 - cleanup **PASS**;
 - result-log SHA-256 `2f3263d15ef397be77144194264ffdf72b78195a58c4d2dfa51fe51c8c835b24`.
 
-The retained PR810 executor has also advanced its detached source contract to the `VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> JSpaceBinding/v3` chain and started vendoring exact current producer bytes. Its fixed serverless route remains quarantined as `SOURCE_REBIND_REQUIRED`, and the latest build attempts were blocked or otherwise non-runtime at the relevant scope. The new MiniUnifiedDB invocation-admission source tests have no current CI/workflow execution evidence.
+The retained `gschaidergabriel/Dr.-Unterweger#810` executor has also advanced its detached source contract to the `VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> JSpaceBinding/v3` chain and started vendoring exact current producer bytes. Its fixed serverless route remains quarantined as `SOURCE_REBIND_REQUIRED`, and the latest build attempts were blocked or otherwise non-runtime at the relevant scope. The new MiniUnifiedDB invocation-admission source tests have no current CI/workflow execution evidence.
 
 These are bounded component/source facts only. Whole EntityOS/HCU runtime credit remains `0`; J-Space model runtime credit remains `0`; training credit remains `0`; whole-product PASS remains false. Same-family reruns are reproducibility evidence, not independent replication.
 
 ## Current frontier
 
 1. keep current-facing authority surfaces aligned to EntityOS + HCU + supervisor 8.63 FREE_ONLY plus the atomic unusual-experiment lease;
-2. keep PR1263 as the single retained HCU donor lane and PR810 as the single retained Sandbox execution-controller lane;
+2. keep `gschaidergabriel/clay-global-research-entity#1263` as the single retained HCU donor lane and `gschaidergabriel/Dr.-Unterweger#810` as the single retained Sandbox execution-controller lane; never select the executor from the repository-ambiguous short token `PR810`;
 3. converge the current exact source closure on **Typed Entry -> route -> verified engine admission -> verified actual-loader consumption -> GRID10/v2 -> actual model-executor observation -> canonical MiniUnifiedDB atomic invocation admission -> VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> JSpaceBinding/v3**;
-4. keep PR810 `SOURCE_REBIND_REQUIRED` fail-closed until that exact immutable dependency/test closure is carried and hash-bound in the same fixed route;
+4. keep `gschaidergabriel/Dr.-Unterweger#810` `SOURCE_REBIND_REQUIRED` fail-closed until that exact immutable dependency/test closure is carried and hash-bound in the same fixed route;
 5. execute deterministic admission-store/model-execution/inference/J-Space regressions only on the admitted FREE_ONLY exact-source Sandbox surface when build/function access admission is available;
 6. require the real zero-cost local model executor to emit/admit actual I/O through the same canonical MiniUnifiedDB atomic admission path before any J-Space model-runtime credit;
 7. continue through admitted causal DatasetAdmission/family split, `JSPACE_VECTOR_CONTROL_ABI/v1`, leak-resistant train/validation/holdout construction and deterministic hard negatives;
@@ -183,12 +184,16 @@ These are bounded component/source facts only. Whole EntityOS/HCU runtime credit
 
 ## Latest `go` README re-entry — 2026-08-24
 
-`README=UPDATED_ATOMIC_MODEL_INVOCATION_ADMISSION_SOURCE_FRONTIER`.
+`README=UPDATED_ATOMIC_MODEL_INVOCATION_ADMISSION_PLUS_EXECUTOR_REPOSITORY_IDENTITY_FRONTIER`.
 
-This macrocycle closed a specific **source-authority gap** without creating a competing store. `verify_model_execution` already required externally admitted actual-executor observations plus an invocation-to-observation binding, while the retained executor contract had begun fail-closing on a missing invocation-admission path. The retained PR1263 donor now supplies `HCU_MODEL_EXECUTION_ADMISSION_STORE/v1`: it reuses the existing canonical MiniUnifiedDB, acquires `BEGIN IMMEDIATE`, stores exact RFC8785/JCS observation bytes, binds one executor-scoped invocation key to exactly one observation digest, rejects divergent replay, and rolls back partial admission if verification fails.
+This macrocycle preserves the parallel **atomic model invocation admission** advance and closes a separate coordination ambiguity without creating a competing authority. `verify_model_execution` already required externally admitted actual-executor observations plus an invocation-to-observation binding, while the retained executor contract had begun fail-closing on a missing invocation-admission path. The retained PR1263 donor now supplies `HCU_MODEL_EXECUTION_ADMISSION_STORE/v1`: it reuses the existing canonical MiniUnifiedDB, acquires `BEGIN IMMEDIATE`, stores exact RFC8785/JCS observation bytes, binds one executor-scoped invocation key to exactly one observation digest, rejects divergent replay, and rolls back partial admission if verification fails.
 
-Five deterministic regression obligations are encoded for this mechanism: exact persistence before verification returns, idempotent exact replay, divergent replay rollback, stale-generation no-write, and concurrent divergent one-winner semantics. No CI/workflow or admitted Sandbox run has executed these new tests yet, so the mechanism remains **SOURCE_ONLY_UNEXECUTED** and adds zero whole-runtime/model/training credit.
+Five deterministic regression obligations are encoded for that mechanism: exact persistence before verification returns, idempotent exact replay, divergent replay rollback, stale-generation no-write, and concurrent divergent one-winner semantics. No CI/workflow or admitted Sandbox run has executed these new tests yet, so the mechanism remains **SOURCE_ONLY_UNEXECUTED** and adds zero whole-runtime/model/training credit.
 
-In parallel, PR810 advanced toward the same v4/v3 source chain and vendored the exact model-execution producer rather than creating a second executor. The next exact gate is therefore fusion, not reinvention: carry the MiniUnifiedDB admission store plus its deterministic tests into the same fixed hash-bound PR810 dependency closure, preserve `SOURCE_REBIND_REQUIRED` until the closure is exact, execute it only on the admitted FREE_ONLY Sandbox when build/function admission permits, and then require the real zero-cost local executor I/O path to use that same atomic admission before J-Space model-runtime promotion.
+The additional coordination finding is that `PR810` alone is not a stable executor identity because pull-request numbers are repository-local: `gschaidergabriel/clay-global-research-entity#810` is a different historical cognition/SFT validator, while the retained Vercel Sandbox controller is `gschaidergabriel/Dr.-Unterweger#810`. The candidate therefore adds `RETAINED_EXECUTION_CONTROLLER_IDENTITY.json` plus a fail-closed validator/regression and requires the fully-qualified repository+PR identity, with exact head SHA at execution time. This creates no new executor and adds zero runtime/model/training credit.
 
-Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_MODEL_EXECUTION_MINIUNIFIEDDB_ATOMIC_ADMISSION_SOURCE_GPT56SOL.json`.
+The next exact gate is fusion, not reinvention: carry the MiniUnifiedDB admission store plus its deterministic tests into the same fixed hash-bound `gschaidergabriel/Dr.-Unterweger#810` dependency closure, preserve `SOURCE_REBIND_REQUIRED` until the closure is exact, execute it only on the admitted FREE_ONLY Sandbox when build/function admission permits, and then require the real zero-cost local executor I/O path to use that same atomic admission before J-Space model-runtime promotion.
+
+Durable receipts:
+- `research_entity/continuity/receipts/2026-08-24_GO_MODEL_EXECUTION_MINIUNIFIEDDB_ATOMIC_ADMISSION_SOURCE_GPT56SOL.json`
+- `research_entity/continuity/receipts/2026-08-24_GO_EXECUTOR_REPOSITORY_IDENTITY_QUALIFICATION_GPT56SOL.json`

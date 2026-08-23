@@ -1,0 +1,68 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXECUTOR_IDENTITY_PR1415_PRESTEP_CI_BLOCK/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "mode": "FREE_ONLY"
+  },
+  "pull_request": {
+    "qualified_ref": "gschaidergabriel/clay-global-research-entity#1415",
+    "observed_head": "9c634291841e6a122db09ee61daea407a5972f97",
+    "base_main_observed": "61cc8ff449a7641fc0c6624f0f2bb81da1c8fd95",
+    "mergeable_observed": true,
+    "draft": true
+  },
+  "workflow_observations": [
+    {
+      "run_id": 32662206810,
+      "workflow": "Research Entity Identity Guard",
+      "job_id": 97249985511,
+      "job": "identity-guard",
+      "conclusion": "failure",
+      "steps": null
+    },
+    {
+      "run_id": 32662206777,
+      "workflow": "claycog-validator-pr",
+      "job_id": 97249985583,
+      "job": "strict-admission",
+      "conclusion": "failure",
+      "steps": null
+    },
+    {
+      "run_id": 32662206825,
+      "workflow": "Research Entity Verify",
+      "job_id": 97249985764,
+      "job": "verify",
+      "conclusion": "failure",
+      "steps": null
+    }
+  ],
+  "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT",
+  "interpretation": "All observed PR jobs failed before any visible workflow step materialized. This is runner/control-plane admission evidence, not semantic validator/test failure and not executable PASS evidence.",
+  "source_equivalent_regression": {
+    "focused_cases": 5,
+    "result": "5_OF_5_PASS",
+    "scope": "SOURCE_EQUIVALENT_LOCAL_DETERMINISTIC_ONLY",
+    "exact_github_branch_runtime_credit": false
+  },
+  "coordination": {
+    "new_unusual_experiment": false,
+    "atomic_unusual_experiment_lease_acquired": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_executor_created": false
+  },
+  "credit": {
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Keep PR1415 as a source/coordination candidate; after fusion use the fully-qualified gschaidergabriel/Dr.-Unterweger#810 retained executor, bound to exact current Research main and exact retained HCU donor head, for admitted FREE_ONLY v4/v3 model-execution/J-Space plus GRID10 causal-closure execution."
+}

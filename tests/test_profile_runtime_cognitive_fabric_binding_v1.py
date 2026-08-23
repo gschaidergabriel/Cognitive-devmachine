@@ -10,6 +10,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+import mini_inference_capability_binding_v1 as capability
 import profile_runtime_cognitive_fabric_binding_v1 as binding
 
 
@@ -39,7 +40,8 @@ class RecordingCompositor:
             db.execute("CREATE TABLE forbidden_write(x INTEGER)")
         except sqlite3.OperationalError:
             write_blocked = True
-        self.calls.append((kwargs, write_blocked))
+        resolved_capability = capability.resolve_from_profile(kwargs["profile"])
+        self.calls.append((kwargs, write_blocked, resolved_capability))
         return {
             "ok": True,
             "generation": kwargs["entity_generation"],
@@ -55,10 +57,22 @@ class BindingTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.db_path = Path(self.tmp.name) / "mini.db"
+        capability_binding = capability.compile_binding(
+            binding_id="p1-capability",
+            engine_class="ADAPTIVE_BACKEND",
+            jspace_mode="PLAIN_COMPATIBILITY",
+            local_activation_access=False,
+            external_hidden_state_claimed=False,
+            provider_observability_claim_supported=True,
+            adapter_version="test-adapter/v1",
+            capability_evidence_kind="STATIC_CONSERVATIVE",
+            capability_receipt_digest="e" * 64,
+            provenance_refs=["test:profile-capability"],
+        )
         self.profile = {
             "schema": "clay-pipeline-profile/v2",
             "profile_id": "p1",
-            "inference": {"kind": "local"},
+            "inference": {"kind": "local", "capability_binding": capability_binding},
             "personality": {"output_contract": {}},
             "sources": [],
             "state_metrics": [],
@@ -99,17 +113,23 @@ class BindingTests(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
-    def test_delegates_real_runtime_profile_snapshot_on_read_only_db(self):
+    def test_delegates_verified_runtime_profile_snapshot_on_read_only_db(self):
         compositor = RecordingCompositor()
         out = binding.admit_profile_runtime_payload(
             self.runtime, self.payload, compositor_module=compositor
         )
         self.assertTrue(out["ok"])
-        kwargs, write_blocked = compositor.calls[0]
+        kwargs, write_blocked, resolved = compositor.calls[0]
         self.assertTrue(write_blocked)
         self.assertEqual(kwargs["entity_generation"], 7)
-        self.assertEqual(kwargs["profile"], self.profile)
-        self.assertNotIn("_runtime_profile_snapshot", kwargs["profile"])
+        self.assertEqual(kwargs["profile"], self.payload["profile"])
+        self.assertEqual(
+            kwargs["profile"]["_runtime_profile_snapshot"],
+            {"profile_id": "p1", "profile_hash": self.profile_hash},
+        )
+        self.assertEqual(resolved["profile_id"], "p1")
+        self.assertEqual(resolved["profile_hash"], self.profile_hash)
+        self.assertEqual(resolved["target_engine_class"], "ADAPTIVE_BACKEND")
         self.assertEqual(kwargs["origin"], binding.BINDING_VERSION)
 
     def test_rejects_profile_substitution_before_compositor(self):

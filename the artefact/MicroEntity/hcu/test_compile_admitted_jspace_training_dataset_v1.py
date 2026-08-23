@@ -1,6 +1,5 @@
 import hashlib
 import unittest
-from dataclasses import asdict
 from unittest.mock import patch
 
 from compile_admitted_jspace_training_dataset_v1 import (
@@ -34,6 +33,9 @@ OUTPUT_SHA = "b1" * 32
 GENERATION = 73
 CELL_ID = "cell:critic:0"
 ROLE = "critic"
+BASIS_ID = "basis:test:admitted"
+BASIS_SHA = "c1" * 32
+ADMITTED_BASES = {BASIS_ID: BASIS_SHA}
 
 
 def _training_trace(**overrides):
@@ -70,8 +72,8 @@ def _admission(trace=None, **overrides):
         "grid_plan_sha256": trace["grid_plan_sha256"],
         "cell_id": trace["cell_id"],
         "role": trace["role"],
-        "jspace_basis_id": "basis:test:admitted",
-        "jspace_basis_sha256": "c1" * 32,
+        "jspace_basis_id": BASIS_ID,
+        "jspace_basis_sha256": BASIS_SHA,
         "credit_label": trace["credit_label"],
         "outcome_receipt_sha256": trace["outcome_receipt_sha256"],
     }
@@ -133,7 +135,7 @@ class AdmittedJSpaceTrainingDatasetTests(unittest.TestCase):
         with self.assertRaisesRegex(AdmittedTrainingDatasetError, "CAUSAL_BINDING:route_decision_sha256"):
             validate_pipeline_evidence(trace, admission, _binding(trace))
 
-    def test_compile_path_invokes_dataset_gate_and_annotates_real_inference_evidence(self):
+    def test_compile_path_invokes_dataset_gate_and_selected_basis_guard(self):
         trace = _training_trace()
         admission = _admission(trace)
         binding = _binding(trace)
@@ -155,9 +157,10 @@ class AdmittedJSpaceTrainingDatasetTests(unittest.TestCase):
                 admitted_transition_traces={TRANSITION_SHA: {}},
                 admitted_prototype_traces={PROTOTYPE_SHA: {}},
                 admitted_inference_bindings={TRACE_SHA: binding},
+                admitted_bases=ADMITTED_BASES,
             )
         gate.assert_called_once()
-        compiler.assert_called_once()
+        compiler.assert_called_once_with([dict(trace)], admitted_bases=ADMITTED_BASES)
         metadata = compiled["train"][0]["metadata"]
         self.assertEqual(metadata["pipeline_schema"], PIPELINE_SCHEMA)
         self.assertEqual(metadata["inference_receipt_sha256"], INFERENCE_SHA)
@@ -183,6 +186,7 @@ class AdmittedJSpaceTrainingDatasetTests(unittest.TestCase):
                     admitted_transition_traces={TRANSITION_SHA: {}},
                     admitted_prototype_traces={PROTOTYPE_SHA: {}},
                     admitted_inference_bindings={},
+                    admitted_bases=ADMITTED_BASES,
                 )
         compiler.assert_not_called()
 

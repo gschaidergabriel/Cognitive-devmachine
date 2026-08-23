@@ -1,0 +1,63 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "fresh_main_base": "8461c83a11cacf03c52a4aa950691e0ecdd7d865",
+  "coordination": {
+    "additional_unusual_experiment_performed": false,
+    "reason": "The shared J-Space macrocycle already consumed its unusual experiment; this is deterministic canonical-path hardening only.",
+    "superseded_pr": 1081,
+    "supersession_reason": "main atomically cross-bound boot receipt to the bundled cognition manifest/source lock; stale overlapping branch was closed instead of force-merging",
+    "canonical_path": "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 + mini-entity-bundled-cognition-manifest/v1 + BUNDLED_COGNITION_SOURCE_LOCK/v1"
+  },
+  "delta": {
+    "placeholder_identity_guard": "all-zero/all-f SHA-40/SHA-256 values fail closed in boot/source-lock validation and all-zero/all-f SHA-256 values fail closed in bundled cognition manifest validation",
+    "unmeasured_slot_guard": "UNMEASURED_SOURCE_ONLY requires slot_count=null",
+    "measured_slot_guard": "MEASURED_EXACT_BUNDLE requires integer slot_count>=1",
+    "cross_binding_preserved": true,
+    "dirty_source_provenance_preserved": true,
+    "first_action_provenance_preserved": true
+  },
+  "branch_blob_identity": {
+    "the artefact/blogpost_entity/jspace_gwt/JSPACE_GWT_BOOT_BINDING_V1.md": "3f786dc810291527192be30f839cf960dc8ad7ce",
+    "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py": "0a2dd5db58c9ebe10e67e863daba72ce26b3a125",
+    "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py": "0734a84b1d70f3b151f2752a17dd01c9a1dcbf26",
+    "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py": "a01f9c9a0685a10de2fcf234940a1ed9fabc8a51",
+    "the artefact/blogpost_entity/mini_cognition/test_bundled_cognition_manifest_v1.py": "fff33eceaaa5b619471b2234e5e6c40268f15f02"
+  },
+  "local_component_execution": [
+    {
+      "scope": "behaviorally equivalent local transcription of the branch boot/source-lock validator and tests",
+      "command": "cd /tmp/clay_jspace_canonical/jspace_gwt && python -m unittest -q test_validate_jspace_gwt_boot_binding_v1.py",
+      "result": "PASS",
+      "tests": 18,
+      "failures": 0
+    },
+    {
+      "scope": "local bundled cognition manifest validator bytes matching the proposed logic",
+      "command": "cd /tmp/clay_jspace_canonical/mini_cognition && python -m unittest -q test_bundled_cognition_manifest_v1.py",
+      "result": "PASS",
+      "tests": 9,
+      "failures": 0
+    }
+  ],
+  "component_total": {
+    "tests": 27,
+    "failures": 0,
+    "result": "PASS"
+  },
+  "execution_limit": "GitHub connector content could not be transported into the local container as exact branch bytes; therefore this receipt does not claim exact-branch executable credit. Exact branch execution remains a CI/authorized-runtime gate.",
+  "evidence_class": "BOUNDED_LOCAL_EQUIVALENT_COMPONENT_MECHANISM",
+  "runtime_credit": 0,
+  "exact_branch_execution_credit": 0,
+  "bundled_08b_runtime_credit": 0,
+  "jspace_runtime_credit": 0,
+  "whole_gwt_production_credit": 0,
+  "provider_calls": 0,
+  "paid_execution": false,
+  "free_only_preserved": true,
+  "next_gate": "Run the exact PR/head bytes in repository CI or the next authorized exact Ubuntu environment; at real boot require non-placeholder source/model/tokenizer/runtime/lens/policy/calibration identities and keep slot_count null until exact-bundle GWT calibration is measured."
+}

@@ -79,6 +79,8 @@ def req_sha(parent: dict, key: str, length: int = 64) -> str:
     regex = HEX64 if length == 64 else HEX40
     if regex.fullmatch(value) is None:
         fail(f"INVALID_SHA{length}:{key}")
+    if value in {"0" * length, "f" * length}:
+        fail(f"PLACEHOLDER_SHA{length}:{key}")
     return value
 
 
@@ -182,12 +184,17 @@ def validate(data: dict) -> None:
     gwt = req_obj(data, "gwt")
     req_sha(gwt, "workspace_policy_sha256")
     req_sha(gwt, "calibration_sha256")
-    req_int(gwt, "slot_count", minimum=1)
-    if req_str(gwt, "calibration_status") not in {
+    calibration_status = req_str(gwt, "calibration_status")
+    if calibration_status not in {
         "MEASURED_EXACT_BUNDLE",
         "UNMEASURED_SOURCE_ONLY",
     }:
         fail("INVALID_GWT_CALIBRATION_STATUS")
+    if calibration_status == "UNMEASURED_SOURCE_ONLY":
+        if gwt.get("slot_count") is not None:
+            fail("UNMEASURED_GWT_SLOT_COUNT_MUST_BE_NULL")
+    else:
+        req_int(gwt, "slot_count", minimum=1)
 
     zero = req_obj(data, "zero_grf")
     req_sha(zero, "zero_identity_sha256")

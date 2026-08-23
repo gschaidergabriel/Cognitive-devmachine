@@ -149,6 +149,8 @@ def _utc_iso(value: datetime, field_name: str) -> str:
 
 
 def _frozen_scope(values: Sequence[str] | set[str] | frozenset[str], field_name: str) -> tuple[str, ...]:
+    if isinstance(values, (str, bytes, bytearray)):
+        raise ValueError(f"{field_name} must be a collection of strings, not a scalar")
     out: set[str] = set()
     for value in values:
         if not isinstance(value, str) or not value.strip():
@@ -229,8 +231,11 @@ class EntryFabric:
             raise ValueError("causal_id must be a non-empty string")
         if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
             raise ValueError("generation must be a non-negative integer")
-        if current_generation is not None and generation != current_generation:
-            raise ValueError("stale generation")
+        if current_generation is not None:
+            if isinstance(current_generation, bool) or not isinstance(current_generation, int) or current_generation < 0:
+                raise ValueError("current_generation must be a non-negative integer")
+            if generation != current_generation:
+                raise ValueError("stale generation")
         if not isinstance(kind, IngressKind):
             raise ValueError("kind must be IngressKind")
         if not isinstance(modality, Modality):

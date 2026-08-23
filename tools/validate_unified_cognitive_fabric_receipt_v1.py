@@ -191,8 +191,10 @@ def validate(receipt: dict[str, Any]) -> dict[str, Any]:
     if _bool(inference, "candidate_only") is not True:
         raise ReceiptError("INFERENCE_RESULT_NOT_CANDIDATE_ONLY")
     capability_match = _bool(inference, "adapter_capability_match")
-    if engine_class == "claude_code" and not capability_match:
-        raise ReceiptError("CLAUDE_ADAPTER_CAPABILITY_MISMATCH")
+    if not capability_match:
+        if engine_class == "claude_code":
+            raise ReceiptError("CLAUDE_ADAPTER_CAPABILITY_MISMATCH")
+        raise ReceiptError("ADAPTER_CAPABILITY_MISMATCH")
 
     observability_supported = _bool(inference, "provider_observability_claim_supported")
     if not observability_supported:

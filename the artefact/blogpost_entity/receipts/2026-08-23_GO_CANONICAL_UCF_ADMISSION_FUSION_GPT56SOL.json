@@ -1,0 +1,73 @@
+{
+  "schema": "GO_CANONICAL_UCF_ADMISSION_FUSION_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "branch": "chatgpt/go-mini-ucf-admit-20260823-1150",
+  "pre_receipt_branch_head": "183ae2e021b754fd39012c783ee32db9c112cba7",
+  "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "execution_policy": "FREE_ONLY_AUTHORIZED_ISOLATED_SANDBOX_ONLY",
+  "observed_frontier": {
+    "prior_receipt": "the artefact/blogpost_entity/receipts/2026-08-23_GO_CANONICAL_UCF_PATH_LESION_GPT56SOL.json",
+    "canonical_source_blob_before": "66898a4980a51e17ba2717e97352403164b4bdf8",
+    "finding": "CANONICAL_PIPELINE_DIRECTLY_BYPASSED_UCF_BETWEEN_PIPELINE_BUILD_PROMPT_AND_INFERENCE_GENERATE"
+  },
+  "fusion": {
+    "donor": "closed PR #1152 bounded ZERO workspace-capsule/InferencePacket/UCF mechanism",
+    "donor_policy": "RE_DERIVED_ON_FRESH_CURRENT_MAIN_NOT_BRANCH_REVIVAL",
+    "canonical_source_blob_after": "e63688bcb4561a096c174b244791df0dcedc4d59",
+    "test_blob_after": "7a7989e017314da7186937df7a08861edfe5f42f",
+    "contract_sync_blob_after": "77df03ddf8bb504f9d9e9bd7de4e9c38b27a872b",
+    "changes": [
+      "insert exactly one pipeline_cognitive_fabric_admit phase after pipeline_build_prompt and before inference_generate",
+      "require admitted.ok before any inference execution",
+      "route inference backend/system/user only from the admitted Cognitive Fabric envelope rather than raw profile/prompt values",
+      "bind inference_packet_digest and cognitive_fabric_receipt_digest into inference request",
+      "propagate the admitted Cognitive Fabric envelope through pipeline_gate and pipeline_commit",
+      "return admitted inference kind and receipt identities in the canonical result",
+      "add static source regression that rejects restoration of the raw prompt/profile bypass",
+      "extend Clay/Python contract sync so pipeline_cognitive_fabric_admit requires an executable allowed-effect/dispatch/handler binding before reference convergence can be claimed"
+    ]
+  },
+  "authority_invariants": [
+    "MiniUnifiedDB remains canonical durable state/evidence/configuration authority",
+    "Zero remains runtime identity/configuration and is not a second durable entity",
+    "Cognitive Fabric/J-Space/GWT/model output remains candidate/measurement only",
+    "inference engines have no direct canonical truth or effect authority",
+    "no second UCF, state authority, effect path, or recovery ledger was created"
+  ],
+  "coordination": {
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The available immutable user-message metadata is minute-precision only (2026-08-23T11:50+07:00), which cannot form the protocol's whole-second canonical fallback trigger key.",
+    "unusual_experiment_count": 0,
+    "deterministic_regressions_allowed": true
+  },
+  "evidence": {
+    "classification": "SOURCE_DELTA_DURABLY_BOUND_RUNTIME_UNVERIFIED",
+    "source_review": "PASS_BY_EXACT_GITHUB_BLOB_AND_CALL_PATH_INSPECTION",
+    "authorized_isolated_execution_started": false,
+    "reason_no_execution_credit": "No executable authorized Vercel Sandbox start/exec surface is exposed in the current connector set; GitHub workflow evidence, if any, must be inspected after PR creation.",
+    "whole_mini_entity_runtime_credit_change": 0,
+    "bundled_08b_runtime_credit_change": 0,
+    "jspace_runtime_credit_change": 0,
+    "whole_gwt_runtime_credit_change": 0,
+    "claude_adapter_runtime_credit_change": 0
+  },
+  "next_exact_gate": {
+    "runtime": "Implement one canonical pipeline_cognitive_fabric_admit producer in the admitted current Mini Entity runtime, reusing the single UCF/InferencePacket authority chain and binding generation/workspace/packet identities.",
+    "reference": "Converge tools/clay_profile_pipeline_runtime.py to DB-resident profile + cognitive-fabric-admit + inference_generate without reintroducing legacy profile_load/provider_chat_json.",
+    "native": "Maintain fail-closed canonical profile-v2 admission until native UCF/pipeline parity exists.",
+    "execution": "Run exact changed source/runtime on an actually-started authorized isolated executor, then inspect model/J-Space/GWT/Claude-adapter gates separately."
+  },
+  "safety": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "vps_or_self_hosted_or_production_testing": false
+  }
+}

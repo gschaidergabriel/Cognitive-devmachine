@@ -42,6 +42,10 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 "program_id": "clayverse-single-container",
                 "stage": mod.EXPECTED_STAGE,
                 "current_stage": mod.EXPECTED_STAGE,
+                "current_stage_goal": "Converge the complete one-container ClayVerse product.",
+                "dynamic_targets": {"primary": mod.EXPECTED_DYNAMIC_PRIMARY},
+                "current_frontier": "Run the next exact-current ClayVerse acceptance gate.",
+                "go_contract": "Every go advances the same whole-ClayVerse product.",
                 "owner_directive": mod.OWNER_DIRECTIVE,
                 "product_endpoint": "ClayVerse",
                 "release_form": mod.EXPECTED_RELEASE,
@@ -144,6 +148,24 @@ class AuthorityConsistencyTests(unittest.TestCase):
         data["preserved_hard_rules"]["free_only"] = False
         path.write_text(json.dumps(data), encoding="utf-8")
         self.assertIn("CONTROL44_FREE_ONLY_WEAKENED", mod.validate(root)["errors"])
+
+    def test_nested_work_selector_poison_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "research_entity/rooms/PROGRAM_STATE.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["dynamic_targets"]["primary"] = "MINI_ENTITY_PIPELINE_ALL_IN_ONE"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("PROGRAM_DYNAMIC_PRIMARY_MISMATCH", mod.validate(root)["errors"])
+
+    def test_non_clayverse_frontier_fails_closed(self):
+        td, root = self.make_tree()
+        self.addCleanup(td.cleanup)
+        path = root / "research_entity/rooms/PROGRAM_STATE.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["current_frontier"] = "Continue Mini Entity work selection."
+        path.write_text(json.dumps(data), encoding="utf-8")
+        self.assertIn("PROGRAM_FRONTIER_NOT_CLAYVERSE", mod.validate(root)["errors"])
 
     def test_superseded_directive_fails_closed(self):
         td, root = self.make_tree()

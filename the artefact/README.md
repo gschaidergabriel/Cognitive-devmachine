@@ -1,42 +1,49 @@
-# the artefact — Xeno -> EntityOS cognitive computer
+# the artefact — EntityOS + HCU cognitive computer
 
-`the artefact/` is the canonical product/research workspace for the current **Xeno** bootstrap and its convergence toward **EntityOS + HCU/XCU**.
+`the artefact/` is the canonical product/research workspace for the current **EntityOS** system and its integrated **HCU** cognition/compute architecture.
 
-Current owner/work-selection authority:
+Current authority is resolved from verified current `main`, especially:
 
-- `research_entity/global/XENO_GO_OWNER_DIRECTIVE.md`
-- `research_entity/global/XENO_COMPUTATIONAL_UNIT_RESEARCH_FUSION_2026-08-23.md`
+- `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
+- `research_entity/rooms/PROGRAM_STATE.json`
 - `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
+- `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
+- `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
 
-Current-facing Xeno root:
+## Current naming law
 
-- `the artefact/Xeno/`
+- **EntityOS** = sole current product/system identity.
+- **HCU** = sole current integrated cognition/compute architecture.
+- `Xeno` = transitional implementation compatibility codename only.
+- `XCU` = transitional/research alias for HCU only.
+- `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*` = historical implementation/provenance surfaces where exact migration has not occurred.
+- ClayVerse and Frank = historical donor/provenance only unless explicitly re-admitted.
 
-Historical `MicroEntity`, `Mini Entity`, `mini_*` and `MINI_*` paths/identifiers remain compatibility and provenance surfaces until exact migration. Git history preserves prior ClayVerse/Mini Entity authority states; they are not current work-selection authority.
+Do not bulk-rename hashes, receipts, schemas, ABI/API names, persisted state or compatibility paths when that would break reproducibility. Useful mechanisms are fused into EntityOS/HCU rather than promoted as competing systems.
 
 ## Current architecture goal
 
-Xeno is incrementally built as a **multi-mode cognitive computational appliance** rather than a permanent swarm of agents.
+EntityOS is incrementally built as a **multi-mode cognitive computational system** with one integrated HCU rather than a permanent swarm of agents.
 
 ```text
 new data / event / prompt
           |
           v
-   XENO ENTRY FABRIC
+   TYPED ENTRY FABRIC
           |
           v
-   XRAM STATE FABRIC
+ canonical state/evidence
           |
     +-----+------+
     |            |
     v            v
- XPU CONTROL   XCU ACCELERATOR
- deterministic  shared-weight/vector
- scheduler      inference/function cells
+ deterministic   HCU accelerator plane
+ control plane   shared-weight/vector/
+                 inference/J-Space cells
     |            |
     +-----+------+
           |
- typed interconnect / workspace / Hyperposition
+ typed causal packet / workspace / Hyperposition fabric
           |
   +-------+---------+----------+----------+
   |                 |          |          |
@@ -48,50 +55,50 @@ GRID10           COGSIM10    WM_TEST   NESTED_SIM
           |
  calibrated ActionCandidate
           |
- Effect translator -> EffectGate -> reality
+ effect translation -> EffectGate/EffectJournal -> reality
 ```
 
-EntityOS is the eventual computer/runtime destination. The long-term decomposition is intentionally computer-like:
+Computer-like implementation roles may retain compatibility names while migration remains exact:
 
-- **XRAM** — canonical/hot/rebuildable/scratch/paged state tiers;
-- **XPU** — deterministic processor/control plane;
-- **XCU** — accelerator/vector/inference/J-Space plane;
+- **XRAM compatibility role** — canonical/hot/rebuildable/scratch/paged state tiers;
+- **XPU compatibility role** — deterministic processor/control plane;
+- **HCU accelerator plane** — shared-weight vector/inference/J-Space/function-cell compute; historical `XCU` names are aliases only;
 - **Interconnect** — typed causal packets, workspace and Hyperposition;
 - **Entry I/O** — typed ingress for all new data;
-- **Effect translation** — candidate to typed effect request, then EffectGate.
+- **Effect translation** — candidate to typed effect request, then EffectGate/EffectJournal.
 
-These names are architectural roles, not claims of custom silicon.
+These are software architecture roles, not claims of custom silicon.
 
 ## Mandatory `go` law
 
-Every explicit `go` has two required coupled tracks:
+Every explicit `go` has two coupled tracks:
 
-1. **XENO_EXECUTABLE_CONVERGENCE** — improve the strongest real current Xeno implementation.
-2. **XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one Computational Unit or Entry primitive.
+1. **ENTITYOS_EXECUTABLE_CONVERGENCE** — improve the strongest real current implementation toward EntityOS.
+2. **HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one HCU or typed Entry primitive.
 
-If track 2 cannot safely advance, record `XCU_NO_CHANGE_WITH_REASON` and the next discriminator. It must not silently disappear from a `go` run.
+If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` and the next discriminator.
 
 Material architecture work uses:
 
 `OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
 
-Prefer primitives reusable across multiple Xeno modes.
+Prefer primitives reusable across multiple HCU modes.
 
-## Xeno modes
+## HCU modes
 
-### `XENO_GRID10`
+### `GRID10`
 
-Simple 10 logical-cell shared-worker baseline for scheduler tests, lesions, small parallel reasoning and exact compute-matched baselines.
+Cheap 10 logical-cell shared-worker baseline for scheduler tests, lesions, small parallel reasoning and exact compute-matched baselines.
 
-### `XENO_COGSIM10`
+### `COGSIM10`
 
-Request-scoped pure cognition simulation. A temporary 10-cell topology forms, explores hypotheses/counterhypotheses/plans/critics and emits only candidates. No simulated action has direct real effects.
+Request-scoped cognition simulation. A temporary 10-cell topology explores hypotheses/counterhypotheses/plans/critics and emits only candidates. No simulated action has direct real effects.
 
-### `XENO_WM_TEST`
+### `WM_TEST`
 
 Bounded experimental world/transition-model mode. Predictions are noncanonical and must be calibrated against later observations.
 
-### `XENO_NESTED_SIM`
+### `NESTED_SIM`
 
 Selective high-cost mode:
 
@@ -99,9 +106,9 @@ Selective high-cost mode:
 
 It is not the default and does not create a second reality authority.
 
-### `XENO_SCALEOUT`
+### `SCALEOUT`
 
-Scale logical contexts over shared physical workers. Baseline gate sequence:
+Scale logical contexts over shared physical workers. Benchmark ladder:
 
 `10 -> 32 -> 64 -> 128 -> 256 -> ~600 logical contexts`
 
@@ -110,55 +117,53 @@ The ~600 H100-class target is a **research hypothesis only**. Logical module cou
 ## Authority law
 
 - canonical durable state/evidence remains outside model-generated cognition and simulation;
+- current compatibility MiniUnifiedDB/UnifiedDB surfaces may remain during exact migration;
 - world-model state is projection/candidate state;
-- HCU/XCU/J-Space/workspace outputs cannot mint canonical truth;
+- HCU/J-Space/workspace outputs cannot mint canonical truth;
 - Hyperposition preserves unresolved alternatives; majority vote is not truth;
+- `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`;
 - stale generation/provenance uncertainty fail closed;
 - unknown external effect outcome remains UNKNOWN until verified;
-- EffectGate + EffectJournal remain the real/state-changing effect authority;
+- EffectGate + EffectJournal remain the only real/state-changing effect authority;
 - no second persistent identity, truth store, effect path or recovery ledger is admitted.
 
-## Entry Fabric
+## Typed Entry Fabric
 
-All new data paths should converge on a typed ingress packet binding before cognition:
+All new data paths converge toward one typed ingress binding before cognition:
 
-- ingress/causal identity;
+- immutable ingress/causal identity;
 - generation;
 - source/provenance;
-- modality/type;
+- modality/type/schema;
 - observed/received time;
 - permissions/capability scope;
 - parent/stream relation;
 - compute/resource budget;
-- payload reference.
+- payload reference/digest.
 
 Inputs may originate from humans, tools, external events, sensor/stream data, canonical database changes or intrinsic system events.
 
-## Research fusion
+HCU route events and downstream inference receipts must ultimately re-enter through this fabric so event identity, generation, engine identity and causal provenance remain bound instead of becoming a side ledger.
 
-Current design is informed by external evidence on heterogeneous compute/memory/interconnect (NVIDIA DGX/Grace Hopper/Rubin), shared-weight inference scheduling and paged KV (vLLM/SGLang/TensorRT-LLM), dynamic compute allocation (Mixture-of-Depths), self-regulated planning, world-model planning, generated environments and generalist agents (DeepMind Genie/SIMA), conditional multi-agent/test-time scaling, and Global Workspace/J-Space research.
+## HCU reactive cognition
 
-The architecture treats these as evidence for mechanisms, not proof that Xeno already exhibits their claimed capacity. Runtime promotion requires exact executable evidence at the claimed scope.
+The current HCU direction is script-first and selective:
+
+`canonical event -> deterministic maintenance -> selective HCU lane activation -> Hyperposition/J-Space candidate computation -> bounded projection -> EntityOS decision path`.
+
+External providers are not admitted as required internal cognition. Exact local checkpoint/tokenizer/runtime identity is an acceptance gate, not an inferred fact. Until a positive local engine capability record exists, absence from an external-provider denylist is insufficient to prove internal engine admission.
 
 ## Execution policy
 
-Current testing remains authorized-isolated-sandbox-only unless a newer owner directive changes it. Together API is forbidden. Secrets do not enter source/receipts. Final paid/model training requires explicit owner authorization.
+Current build/test/experiment/runtime credit comes only from authorized isolated sandbox execution unless newer owner authority changes it. VPS/self-hosted/production-host testing is forbidden under current control. Together API and paid fallback are forbidden. Secrets do not enter source/receipts. Final paid/model training requires explicit owner authorization.
+
+Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 
 ## Current frontier
 
-Build the **typed Xeno Entry Fabric** and a reusable **GRID10 scheduler/state/interconnect baseline**, then progressively separate XRAM/XPU/XCU responsibilities so COGSIM10, WM_TEST, NESTED_SIM and measured SCALEOUT reuse the same machine primitives rather than requiring architectural rewrites.
-
-## Current `go` delta — 2026-08-23
-
-Draft PR **#1354** now carries the first executable-shaped Entry/GRID10 substrate on fresh `main@2178d9b0a062636231ff0e3c533417c2268a7a96`:
-
-- typed deterministic ingress admission in `Xeno/entry_fabric_v1.py`;
-- deterministic 10-logical-cell XPU planner over shared physical workers in `Xeno/grid10_scheduler_v1.py`;
-- causal route identity is bound to the admitted event identity, closing the source-level alias class where materially different events could otherwise select identical routing outputs;
-- exactly one unusual discriminator is encoded: `CAUSAL_ALIAS_POISON`;
-- candidate cells are explicitly non-effect `CANDIDATE_COMPUTE` only;
-- stale/future generation and resource-budget violations fail closed.
-
-Execution evidence remains **BLOCKED/PRE-STEP**: PR workflow run `32651779315`, job `97224412867`, concluded `failure` with `steps=[]`. This is `EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT`, not a semantic test failure. The unusual experiment and ordinary regressions are therefore still unexecuted at runtime scope.
-
-Fresh upstream vLLM documentation continues to support the architecture distinction between logical requests and shared cache/worker resources: scheduling is request/token-step based and prefix KV can be reused across requests. Xeno must additionally preserve isolation domains before any future cache/KV reuse; cache reuse can never weaken user/session/provenance boundaries.
+1. finish control-plane authority convergence to EntityOS/HCU across current-facing workspace surfaces without destructive compatibility renames;
+2. re-enter `HCU_REACTIVE_EVENT/v1` and causal route receipts through the Typed Entry Fabric;
+3. define positive fail-closed local HCU engine capability admission bound to exact checkpoint/tokenizer/runtime identity;
+4. bind event identity + resolved engine identity/class + routing result into one causal route/inference receipt;
+5. rebase/fuse the strongest HCU implementation onto current `main`;
+6. obtain exact authorized-isolated runtime evidence before promotion.

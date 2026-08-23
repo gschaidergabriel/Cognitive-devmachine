@@ -1,0 +1,68 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "d1a73dc3ee9c86fa5aac8480fd833a0b8efcdfe0",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed": "48d1bcb8357df0cf90d99133027f88ab67361a3f",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "7dad91a0c14dab0bd1f9ec809413f2f22e2e636b",
+    "duplicate_lane_created": false,
+    "unusual_experiment_performed": false,
+    "work_class": "DETERMINISTIC_SOURCE_IDENTITY_FALSIFIER"
+  },
+  "observed_exact_identity": {
+    "current_donor_entry_canonicalization_path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "current_donor_entry_canonicalization_git_blob": "55f461a56ef08537238eeff91fe379da2adb20a1",
+    "current_donor_entry_canonicalization_property": "MAX_CANONICAL_NESTING_DEPTH=256_AND_TYPED_MAX_NESTING_DEPTH_EXCEEDED_FAILURE",
+    "historical_pr810_fixed_route_entry_canonicalization_path": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/entry-canonicalization-2b7b06f4/entry_canonicalization_v1.py",
+    "historical_pr810_fixed_route_entry_canonicalization_git_blob": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "historical_fixture_missing_current_depth_bound": true,
+    "current_atomic_model_execution_store_git_blob": "0d1b1aa1f4c71f167b94374bc359d8dd2c07eed7",
+    "current_atomic_model_execution_store_test_git_blob": "19cca07584db3d4818ccb77b8c96ba7f127d7bd3",
+    "executor_staged_store_and_test_match_current_donor_bytes": true
+  },
+  "finding": {
+    "classification": "MIXED_CANONICALIZER_SNAPSHOT_FALSE_CLOSURE_FALSIFIER",
+    "observed": "The still-quarantined historical fixed PR810 binder route carries Entry/JCS canonicalizer blob 00d1d79c..., while the retained donor's current canonicalizer is blob 55f461a... and adds the bounded nesting invariant. The atomic model-execution admission store itself is already staged byte-identically to the current donor.",
+    "inference": "Removing SOURCE_REBIND_REQUIRED by adding only the atomic admission store would create a mixed source snapshot. That closure would not be exact-current even if the store regressions passed, because observation identity is computed through a stale JCS implementation upstream of the replay fence.",
+    "counterhypothesis": "A historical canonicalizer can be retained safely if its bytes are semantically equivalent for every admitted observation domain exercised by the closure.",
+    "discriminator": "The fixed-route promotion must bind the exact current donor canonicalizer blob together with the complete v2 rebind-contract dependency/test closure, or explicitly prove semantic equivalence over the entire admitted observation domain. Exact-byte rebind is the cheaper fail-closed discriminator and is already required by the contract.",
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_EXACT_BLOB_FALSIFIER_PREVENTING_FALSE_FIXED_ROUTE_PROMOTION",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_BINDING_ATOMIC_MODEL_EXECUTION_ADMISSION_TO_THE_CURRENT_TYPED_ENTRY_JCS_IDENTITY_AUTHORITY",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_PREVENTING_MIXED_SOURCE_IDENTITY_FROM_ENTERING_EXECUTION_STORE_TO_JSPACE_V3_TRACE_EVIDENCE"
+  },
+  "evidence_boundary": {
+    "source_identity_only": true,
+    "new_ci_execution_observed": false,
+    "new_admitted_sandbox_execution_observed": false,
+    "actual_model_executor_io_observed": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current README already requires one immutable exact-donor dependency/test closure before removing SOURCE_REBIND_REQUIRED. This receipt strengthens that frontier with exact conflicting canonicalizer blob identities without adding a different product-level frontier."
+  },
+  "next_exact_gate": [
+    "Re-enter current Research main, PR1263 head and Dr.-Unterweger PR810 head because parallel fusion is active.",
+    "Complete one immutable fixed-route fixture set from one corrected donor snapshot, including current Entry/JCS canonicalizer, atomic MiniUnifiedDB admission, VerifiedModelExecution/v1, InferenceReceipt/v4, Global J-Space/GWT, TrainingTrace/v1 and JSpaceBinding/v3 plus transitive tests.",
+    "Bind every carried Git blob and fixed command/result assertion before removing SOURCE_REBIND_REQUIRED.",
+    "Execute only on the admitted FREE_ONLY Sandbox surface once build/function admission is available; do not use paid fallback or Together.",
+    "Grant no model/J-Space runtime credit until real zero-cost local executor I/O uses the canonical MiniUnifiedDB atomic admission path."
+  ]
+}

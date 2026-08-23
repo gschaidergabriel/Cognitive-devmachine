@@ -123,12 +123,16 @@ def diagnose(doc):
     expected_credit = "CLAUDE_ADAPTER_BOUNDARY_ONLY" if aggregate == "PASS" else "ZERO"
     need(doc.get("runtime_credit") == expected_credit, "runtime_credit scope mismatch")
     need(doc.get("whole_product_credit") == 0, "whole product credit must remain zero")
+    promotion_eligible = aggregate == "PASS"
+    if "promotion_eligible" in doc:
+        need(isinstance(doc.get("promotion_eligible"), bool), "promotion_eligible invalid")
+        need(doc["promotion_eligible"] is promotion_eligible, "promotion_eligible contradicts boundary observations")
     return {
         "ok": True,
         "schema": SCHEMA,
         "common_identity_sha256": common_digest,
         "aggregate_status": aggregate,
-        "promotion_eligible": aggregate == "PASS",
+        "promotion_eligible": promotion_eligible,
         "failing_boundaries": failing,
         "violations": details,
     }

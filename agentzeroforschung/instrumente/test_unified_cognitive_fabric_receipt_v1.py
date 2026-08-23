@@ -14,15 +14,16 @@ def _h(char: str) -> str:
 def valid_receipt() -> dict:
     return {
         "receipt_version": "UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1",
+        "contract_revision": 2,
         "source": {
-            "commit": "d8ff57c2edc4c9eecde99ce1f9b089702d71b1cf",
+            "commit": "7ab0504f7815fe987bd6c4990395d232960aa538",
             "tree": "66a8ba9d0dd88669083dbc1fa1c900a73d6c5ce4",
             "dirty": False,
         },
         "runtime": {
             "entityos_version": "candidate",
             "mini_entity_version": "candidate",
-            "entity_generation": 276,
+            "entity_generation": 277,
         },
         "identity": {"zero_digest": _h("1"), "grf_digest": _h("2")},
         "bundled_core": {
@@ -30,21 +31,31 @@ def valid_receipt() -> dict:
             "checkpoint_digest": _h("4"),
             "tokenizer_digest": _h("5"),
             "runtime_digest": _h("6"),
+            "exact_bytes_verified": True,
         },
         "fabric": {
+            "local_jspace_mode": "LOCAL_OBSERVE_ONLY",
+            "local_activation_access": True,
             "jspace_profile_digest": _h("7"),
             "lens_profile_digest": _h("8"),
             "workspace_policy_digest": _h("9"),
             "workspace_calibration_digest": _h("a"),
+            "workspace_calibration_status": "MEASURED_EXACT_BUNDLE",
             "intervention": {
                 "executed": False,
                 "implementation_digest": None,
                 "calibration_digest": None,
             },
         },
+        "upstream": {
+            "boot_binding_receipt_digest": _h("b"),
+            "boot_binding_validated": True,
+            "jlens_admission_receipt_digest": _h("c"),
+            "jlens_admission_phase": "PASS_BOUNDED_JACOBIAN",
+        },
         "workspace": {
-            "digest_before": _h("b"),
-            "digest_after": _h("c"),
+            "digest_before": _h("d"),
+            "digest_after": _h("e"),
             "gwt_candidates": [{"candidate_id": "c1"}],
             "gwt_winners": ["c1"],
             "jspace_observation_refs": ["j1"],
@@ -56,18 +67,18 @@ def valid_receipt() -> dict:
         },
         "inference": {
             "engine_class": "CLAUDE_CODE",
-            "jspace_mode": "COMPILED_EXTERNAL",
+            "engine_jspace_mode": "COMPILED_EXTERNAL",
             "adapter_version": "claude-code-candidate-v1",
-            "capability_profile_digest": _h("d"),
-            "adapter_contract_digest": _h("e"),
-            "local_activation_access": False,
+            "capability_profile_digest": _h("f"),
+            "adapter_contract_digest": _h("0"),
+            "engine_local_activation_access": False,
             "external_hidden_state_claimed": False,
-            "inference_packet_digest": _h("f"),
-            "candidate_result_digest": _h("0"),
+            "inference_packet_digest": _h("1"),
+            "candidate_result_digest": _h("2"),
         },
         "validation": {
             "decision": "REJECT_CANDIDATE",
-            "reconciliation_digest": _h("1"),
+            "reconciliation_digest": _h("3"),
             "candidate_attempted_direct_state_mutation": False,
             "candidate_attempted_direct_effect": False,
             "canonical_state_write_committed": False,
@@ -83,46 +94,68 @@ def valid_receipt() -> dict:
             "stale_bundled_manifest": False,
             "stale_generation": False,
         },
-        "terminal_result_digest": _h("2"),
+        "terminal_result_digest": _h("4"),
     }
 
 
 class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
-    def test_valid_compiled_external_claude_receipt(self) -> None:
+    def test_valid_claude_compiled_external_with_local_observe_fabric(self) -> None:
         self.assertEqual(validate_receipt(valid_receipt()), [])
 
-    def test_full_local_latent_requires_real_activation_access(self) -> None:
+    def test_claude_compiled_external_with_local_full_latent_intervention_is_valid(self) -> None:
+        """Regression for rev1 alias bug: engine mode must not control fabric mode."""
         receipt = valid_receipt()
-        receipt["inference"].update(
-            engine_class="BUNDLED_08B",
-            jspace_mode="FULL_LOCAL_LATENT",
-            local_activation_access=False,
-        )
-        self.assertIn("FULL_LOCAL_LATENT_REQUIRES_ACTIVATION_ACCESS", validate_receipt(receipt))
+        receipt["fabric"].update(local_jspace_mode="FULL_LOCAL_LATENT")
+        receipt["fabric"]["intervention"] = {
+            "executed": True,
+            "implementation_digest": _h("5"),
+            "calibration_digest": _h("6"),
+        }
+        self.assertEqual(validate_receipt(receipt), [])
 
-    def test_local_jspace_requires_exact_lens_profile(self) -> None:
+    def test_active_fabric_requires_measured_exact_calibration(self) -> None:
         receipt = valid_receipt()
-        receipt["inference"].update(
-            engine_class="BUNDLED_08B",
-            jspace_mode="LOCAL_OBSERVE_ONLY",
-            local_activation_access=False,
+        receipt["fabric"]["workspace_calibration_status"] = "UNMEASURED_SOURCE_ONLY"
+        self.assertIn(
+            "ACTIVE_FABRIC_REQUIRES_MEASURED_EXACT_CALIBRATION",
+            validate_receipt(receipt),
         )
-        receipt["fabric"]["lens_profile_digest"] = None
-        self.assertIn("LOCAL_JSPACE_REQUIRES_LENS_PROFILE", validate_receipt(receipt))
 
-    def test_calibrated_local_intervention_can_be_structurally_admitted(self) -> None:
+    def test_active_fabric_requires_boot_and_bounded_jacobian_admission(self) -> None:
         receipt = valid_receipt()
+        receipt["upstream"]["boot_binding_validated"] = False
+        receipt["upstream"]["jlens_admission_phase"] = "PASS_WEIGHTED_FORWARD_HOOKS"
+        errors = validate_receipt(receipt)
+        self.assertIn("ACTIVE_FABRIC_REQUIRES_VALIDATED_BOOT_BINDING", errors)
+        self.assertIn("ACTIVE_FABRIC_REQUIRES_BOUNDED_JACOBIAN_ADMISSION", errors)
+
+    def test_bundled_engine_must_match_active_local_fabric_mode(self) -> None:
+        receipt = valid_receipt()
+        receipt["fabric"]["local_jspace_mode"] = "FULL_LOCAL_LATENT"
         receipt["inference"].update(
             engine_class="BUNDLED_08B",
-            jspace_mode="FULL_LOCAL_LATENT",
-            local_activation_access=True,
+            engine_jspace_mode="LOCAL_OBSERVE_ONLY",
+            engine_local_activation_access=True,
+        )
+        self.assertIn("BUNDLED_ENGINE_FABRIC_MODE_MISMATCH", validate_receipt(receipt))
+
+    def test_fabric_intervention_requires_local_full_latent_not_engine_mode(self) -> None:
+        receipt = valid_receipt()
+        receipt["fabric"]["local_jspace_mode"] = "LOCAL_OBSERVE_ONLY"
+        receipt["inference"].update(
+            engine_class="BUNDLED_08B",
+            engine_jspace_mode="LOCAL_OBSERVE_ONLY",
+            engine_local_activation_access=True,
         )
         receipt["fabric"]["intervention"] = {
             "executed": True,
-            "implementation_digest": _h("3"),
-            "calibration_digest": _h("4"),
+            "implementation_digest": _h("7"),
+            "calibration_digest": _h("8"),
         }
-        self.assertEqual(validate_receipt(receipt), [])
+        self.assertIn(
+            "FABRIC_INTERVENTION_REQUIRES_FULL_LOCAL_LATENT",
+            validate_receipt(receipt),
+        )
 
     def test_direct_authority_attempt_cannot_be_accepted(self) -> None:
         receipt = valid_receipt()
@@ -159,12 +192,16 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         poisons["stale_identity_accept"] = (r, "STALE_INPUT_ACCEPTED")
 
         r = copy.deepcopy(base)
+        r["fabric"]["local_jspace_mode"] = "LOCAL_OBSERVE_ONLY"
         r["fabric"]["intervention"] = {
             "executed": True,
             "implementation_digest": None,
             "calibration_digest": None,
         }
-        poisons["external_mode_intervention_spoof"] = (r, "INTERVENTION_REQUIRES_FULL_LOCAL_LATENT")
+        poisons["fabric_intervention_without_full_mode"] = (
+            r,
+            "FABRIC_INTERVENTION_REQUIRES_FULL_LOCAL_LATENT",
+        )
 
         r = copy.deepcopy(base)
         r["workspace"]["gwt_winners"] = ["ghost"]

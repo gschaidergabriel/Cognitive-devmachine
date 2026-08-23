@@ -1,0 +1,126 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "6c1c61d49fabc375a956b3468f0f0005d100891b",
+  "authority_evidence": {
+    "artifact_manifest_schema": "ENTITYOS_HCU_ARTIFACT_MANIFEST/v2",
+    "whole_entityos_hcu_runtime_credit_before": 0,
+    "hcu_full_runtime_credit_before": 0,
+    "jspace_model_runtime_credit_before": 0,
+    "training_credit_before": 0,
+    "newer_supervisor_than_8_63_observed": false
+  },
+  "retained_hcu_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "observed_live_head_after_writes": "57c5cb59254af1b9cfbc7bf2aff629f2f607ee74",
+    "source_commit": "0536486d63ff0467a0c135da9f4c491d7578672d",
+    "test_commit": "0a4949286e3799aaa81318c0a11d376c1a77c87c",
+    "ancestry_check": "CURRENT_DONOR_HEAD_AHEAD_BY_4_BEHIND_BY_0_FROM_TEST_COMMIT",
+    "source_blob_sha": "12af13f2960096acb8028ab4fbc095564e051527",
+    "test_blob_sha": "97e921e704fcb466bd42926c9f37cdb61c628566"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "observed_live_head": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+    "current_source_status": "SOURCE_REBOUND_READY_SOURCE_ONLY",
+    "exact_head_ready_deployment_observed": false,
+    "newest_observed_deployments": [
+      {
+        "deployment_id": "dpl_26pNV41EYrvFuWKRBFCHUPjQN2Xk",
+        "git_sha": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+        "state": "ERROR"
+      },
+      {
+        "deployment_id": "dpl_AUu1yY3ADYiCtecE7Q8rvhzZhqDh",
+        "git_sha": "926c22dd57ef82447787e24c7412548c3ed2b890",
+        "state": "ERROR"
+      }
+    ],
+    "latest_ready_seen": {
+      "deployment_id": "dpl_4uHujQxJjS8AmPMZiJXfZMgXYNEC",
+      "git_sha": "2dfa1edcab41fba34282b34956716e7c222ee517",
+      "state": "READY",
+      "is_current_executor_head": false
+    },
+    "runtime_invocation_this_macrocycle": false
+  },
+  "observation": {
+    "id": "JSPACE_VECTOR_CONTROL_EXECUTOR_INPUT_PARENT_TRUST_SPLIT",
+    "source_facts": [
+      "The admitted ModelExecution path already binds exact executor input_sha256 and input_size to an executor invocation in canonical MiniUnifiedDB.",
+      "The J-Space TrainingTrace independently binds JSPACE_VECTOR_CONTROL_ABI/v1 packet identity and control condition.",
+      "A parallel donor primitive HCU_MODEL_INPUT_CONTROL_BINDING/v1 now proves that one exact canonical Vector-Control packet occurs exactly once in exact executor-consumed input bytes and revalidates that byte identity.",
+      "That byte-level primitive accepts executor_id and invocation_id as parameters and therefore, by itself, does not prove that those labels correspond to the already atomically admitted ModelExecution parent row.",
+      "Serious causal training provenance therefore needs a trust-split join from the byte-level control binding to the previously admitted model-execution invocation and observation in the same canonical MiniUnifiedDB."
+    ],
+    "hypothesis": "Atomically admitting the byte-level ModelInputControlBinding against the exact existing ModelExecution invocation/observation rows closes the caller-label substitution gap without adding a second state authority.",
+    "counterhypothesis": "The byte-level binding alone is sufficient because its executor/invocation labels and input digest are already self-consistent.",
+    "discriminator": "Require existing canonical MiniUnifiedDB ModelExecution rows, semantically revalidate the stored observation bytes, cross-bind generation/GRID/cell/role/input identity, and reject missing, stale or divergent parent/binding cases.",
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_SOURCE_DESIGN_BOUNDARY; TRUST_SPLIT_STORE_ADDED; EXECUTION_NOT_CLAIMED"
+  },
+  "delta": {
+    "source_file": "the artefact/MicroEntity/hcu/model_input_control_admission_store_v1.py",
+    "store_schema": "HCU_MODEL_INPUT_CONTROL_ADMISSION_STORE/v1",
+    "admission_schema": "HCU_MODEL_INPUT_CONTROL_ADMISSION/v1",
+    "test_file": "the artefact/MicroEntity/hcu/test_model_input_control_admission_store_v1.py",
+    "effect": "Adds one fail-closed atomic admission layer inside the existing canonical MiniUnifiedDB. It requires an already admitted ModelExecution invocation/observation, revalidates canonical and semantic observation identity, binds generation, executor, invocation, GRID plan, cell, role and exact executor input SHA/size to the Vector-Control byte binding, and permits only one immutable control binding per invocation.",
+    "second_database_created": false,
+    "second_truth_or_effect_authority_created": false,
+    "tests_encoded": [
+      "exact admitted ModelExecution parent plus exact consumed input admits and replay is idempotent",
+      "missing ModelExecution parent fails before control tables are created",
+      "parent input digest mismatch fails closed and rolls back",
+      "same ModelExecution invocation cannot acquire a divergent control binding",
+      "stale generation fails before control write",
+      "semantically invalid parent observation cannot be laundered by a valid canonical hash"
+    ],
+    "test_execution_status": "NOT_EXECUTED_THIS_MACROCYCLE",
+    "workflow_runs_for_test_commit": "NONE_OBSERVED",
+    "evidence_scope": "SOURCE_AND_ENCODED_REGRESSION_ONLY"
+  },
+  "parallel_fusion": {
+    "family_split_fixture_write": "ABORTED_ON_GITHUB_409_AFTER_PARALLEL_ORGAN_LANDED_EQUIVALENT_FIX; NO_OVERWRITE",
+    "model_input_control_binding_create": "ABORTED_ON_CREATE_CONFLICT_AFTER_PARALLEL_ORGAN_CREATED_EQUIVALENT_BYTE_LEVEL_PRIMITIVE; EXISTING_SOURCE_REVIEWED_AND_REUSED",
+    "duplicate_semantic_authority_created": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_SOURCE_EXECUTION_EVIDENCE_CONVERGENCE_BY_BINDING_JSPACE_CONTROL_INPUT_TO_EXISTING_ATOMIC_MODEL_EXECUTION_PARENT; EXACT_CURRENT_EXECUTOR_RUNTIME_REMAINS_UNAVAILABLE",
+    "track_b_hcu_typed_entry": "ADVANCED_REUSABLE_HCU_MODEL_INPUT_CONTROL_ADMISSION_STORE_ON_CANONICAL_MINIUNIFIEDDB_WITH_GENERATION_PARENT_AND_REPLAY_FENCES",
+    "track_c_jspace_training_readiness": "ADVANCED_VECTOR_CONTROL_TO_ACTUAL_EXECUTOR_INPUT_CAUSAL_DATAFLOW_READINESS; SERIOUS TRAINING COMPILER_STILL_MUST_REQUIRE_EXACT_MODEL_INPUT_CONTROL_ADMISSION_AND_EXECUTED_EVIDENCE"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "timestamp_fallback_sufficient": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0
+  },
+  "execution": {
+    "paid_provider_used": false,
+    "together_preflight_or_training": false,
+    "vps_or_self_hosted_test": false,
+    "new_vercel_deployment_created_by_this_organ": false,
+    "sandbox_invocation_this_macrocycle": false,
+    "local_test_execution_claimed_as_runtime_evidence": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "README is a large current-facing whole-file surface under active parallel churn; the available GitHub write primitive replaces the full file and a blind rewrite could clobber newer parallel state. Exact append-only receipt and donor commits preserve this macrocycle without unsafe whole-file overwrite."
+  },
+  "credits_after_delta": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse HCU_MODEL_INPUT_CONTROL_ADMISSION/v1 into the serious compile_admitted_jspace_training_dataset_v1 path so dataset rows require both the exact admitted HCU_INFERENCE_RECEIPT/v4 parent and exact admitted ModelInputControl binding from the same ModelExecution invocation. Then extend the producer-derived integrated chain so the actual model-executor consumes bytes containing the exact JSPACE_VECTOR_CONTROL_ABI/v1 packet and atomically admits that binding. Execute only when an exact-source FREE_ONLY admitted surface is available; keep source/test/component evidence scoped and do not rebind PR810 implicitly across donor identities."
+}

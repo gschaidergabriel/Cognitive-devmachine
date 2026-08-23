@@ -1,0 +1,69 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-23T16:51:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "f303060b1ab79cd113f1308221a3e95f784eeab4",
+  "branch": "gpt56sol/go-clayverse-python-lock-transition-20260823-1651",
+  "classification": "PYTHON_HASH_LOCK_ATOMIC_TRANSITION_SOURCE_FENCE_RUNTIME_UNVERIFIED",
+  "observed": {
+    "current_product_authority": "ClayVerse one OCI/Docker-compatible container; Mini Entity/Blogpost current-work authority superseded and retained only as donor evidence",
+    "source_lock_open_gap": "Python requirements are version pinned but not yet installed with --require-hashes",
+    "dockerfile_current_install": "pip install --no-cache-dir -r requirements.txt",
+    "requirements_lock_materialized": false,
+    "generator_present": ".github/workflows/clayverse-python-lock-generator.yml derives exact digest-pinned product base, resolves twice, diffs locks, and downloads binary artifacts with --require-hashes",
+    "missing_transition_guard_on_base": "the artefact/tests/test_python_dependency_lock.py absent although named in generator workflow path filters",
+    "authorized_exact_executor_exposed": false
+  },
+  "delta": {
+    "test_path": "the artefact/tests/test_python_dependency_lock.py",
+    "test_blob": "762a56f9a587e97990a91915cafb1b642cacaefd",
+    "readme_updated": true,
+    "rules": [
+      "direct top-level requirements remain exact-version pinned before lock generation",
+      "before requirements.lock.txt exists, SOURCE_LOCK must keep the Python hash gap explicit and Dockerfile must not pretend --require-hashes enforcement",
+      "after requirements.lock.txt exists, it must contain sha256 hashes, Dockerfile must COPY/use it with --require-hashes, .dockerignore must admit it, and the stale SOURCE_LOCK gap must be retired atomically",
+      "the generator workflow must continue tracking requirements, lock, Dockerfile, SOURCE_LOCK and both lock-fence regression files",
+      "no unexecuted or guessed dependency-lock bytes are materialized by this go"
+    ]
+  },
+  "counterhypothesis": {
+    "claim": "a hash lock can be safely activated piecemeal because any missing wiring will be caught later during OCI build",
+    "status": "REJECTED_AS_SOURCE_POLICY",
+    "reason": "piecemeal activation can create false supply-chain closure states where a lock exists but is not consumed, hash enforcement is claimed without a lock, or SOURCE_LOCK falsely retires the gap"
+  },
+  "evidence": {
+    "source_write_observed": true,
+    "post_write_source_read_observed": true,
+    "actually_started_authorized_exact_test": false,
+    "exact_lock_generation": false,
+    "exact_dependency_install": false,
+    "exact_oci_build": false,
+    "startup_readiness": false,
+    "whole_clayverse_runtime_credit": 0,
+    "reason": "no authorized isolated sandbox create/start/exec surface is exposed in the current connected execution tooling"
+  },
+  "coordination": {
+    "semantic_cognition_donor": "parallel PR #1298 landed on main during this go, covering the earlier cognition semantic-version ancestry finding; no duplicate PR retained from this organ",
+    "stale_mini_entity_branch": "gpt56sol/go-runtime-cognition-spine-20260823-1651 remains unmerged donor-only after current owner authority re-entry to ClayVerse",
+    "open_overlapping_python_lock_pr": "none found at branch creation",
+    "unusual_experiment": {
+      "count_here": 0,
+      "note": "current README records the shared unusual-experiment lease already consumed by the owner-authority re-entry; this source fence does not create another unusual experiment"
+    }
+  },
+  "authority": {
+    "durable_state": "UnifiedDB only",
+    "derived_graph": "ClayGraph rebuildable only",
+    "runtime_cognition": "Claude Code",
+    "adaptive_retrieval": "MicroClay routing/accessibility only",
+    "effects": "EffectGate+EffectJournal only",
+    "entityos": "optional internal substrate only",
+    "together": "FORBIDDEN",
+    "paid_or_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "next_exact_gate": "on an actually-started authorized isolated executor, run current authority/full regressions and the existing Python lock generator inside the exact digest-pinned product base; materialize only the byte-identical verified requirements.lock.txt; atomically switch Dockerfile/.dockerignore/SOURCE_LOCK to --require-hashes; build the exact OCI image, capture image digest, start it and continue readiness plus Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/recovery acceptance",
+  "whole_product_acceptance": "IN_PROGRESS"
+}

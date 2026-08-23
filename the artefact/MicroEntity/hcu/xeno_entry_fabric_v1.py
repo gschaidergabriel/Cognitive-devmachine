@@ -272,8 +272,10 @@ def to_hcu_reactive_event(packet: EntryPacket, *, novelty: float = 0.0, contradi
 
     event: dict[str, Any] = {
         "schema": HCU_EVENT_SCHEMA,
+        "ingress_id": packet.ingress_id,
         "causal_id": packet.causal_id,
         "entry_event_sha256": packet.event_sha256,
+        "entry_admission_sha256": packet.admission_sha256,
         "entry_canonicalization_schema": CANONICALIZATION_SCHEMA,
         "entity_generation": packet.entity_generation,
         "novelty": unit(novelty, "novelty"),

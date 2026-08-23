@@ -1,0 +1,48 @@
+{
+  "schema": "ENTITYOS_HCU_GO_SOURCE_COHERENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_sha_observed": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+  "current_owner_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "finding": {
+    "classification": "SOURCE_COHERENCE_BLOCKER_NOT_RUNTIME_TEST_FAIL",
+    "owner_steering_claimed_prototype_path": "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
+    "main_path_fetch": "NOT_FOUND_AT_BOUND_MAIN",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_head_observed": "d195755c16f704996c0b84eb7fa0d5ff2a5913ef",
+    "retained_pr_prototype_blob_sha": "928c773a08158254335817c7d95d0c0a7011ceb3",
+    "retained_pr_trace_schema_observed": "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3",
+    "interpretation": "Current steering describes a J-Space implementation delta that is not yet present in canonical main. Treat prototype/test evidence as retained-lane component evidence until exact bytes and required dependencies are fused onto current main and executed there."
+  },
+  "execution_surface_discovery": {
+    "vercel_connector_sandbox_create_start_exec_callable": false,
+    "vercel_connector_observed_surface": "documentation search only for Sandbox-related discovery",
+    "vps_self_hosted_production_fallback_used": false,
+    "runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "name": "JSPACE_PROTOTYPE_LOCATION_SPLIT",
+    "count_for_this_macrocycle": 1,
+    "intervention": "Fetch the exact owner-steering prototype path at canonical main and at the retained HCU PR head.",
+    "prediction_if_main_integrated": "The same path resolves on canonical main.",
+    "prediction_if_lane_only": "Canonical main returns Not Found while retained HCU lane resolves exact source bytes.",
+    "observed": "Lane-only prediction observed.",
+    "result": "RETAINED_LANE_ONLY"
+  },
+  "training_gate": {
+    "together_one_shot_authorized": true,
+    "job_consumed": false,
+    "job_started_by_this_organ": false,
+    "reason_not_started": "Functional J-Space/GWT implementation is not yet canonically fused on main and exact real-trace/base/eval/preflight gates are not established by this run."
+  },
+  "next_exact_gate": [
+    "Rebase/adjudicate retained PR #1263 against current main and isolate the smallest dependency-complete J-Space/GWT + Vector Control ABI + trace/compiler slice.",
+    "Fuse that slice without creating a second Entry/router/canonicalization/inference authority.",
+    "Run exact bound source in an authorized isolated executor; source-only or retained-lane component evidence grants zero EntityOS/HCU runtime credit.",
+    "Only after real integrated traces, lesion/shuffle/rescue evidence, frozen ABI, leak-resistant splits, exact base identity and Together price/support preflight may the single authorized training job be created."
+  ]
+}

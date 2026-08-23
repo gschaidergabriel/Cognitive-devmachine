@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_TYPED_CANONICAL_REPAIR_RECEIPT",
+  "recorded_at_local": "2026-08-23T23:57:00+07:00",
+  "persistent_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_delta": "8c32dfb04756bb5c05ea75ef6fd4e4802b1cc063",
+  "stacked_parent_pr": 1263,
+  "stacked_parent_head": "b41afec49bd6384680d001395177c3f274b9be5e",
+  "work_branch": "gpt56sol/hcu-typed-canonical-safe-float-20260823",
+  "scope": "bounded donor repair for ENTITYOS_HCU_TYPED_CANONICAL/v1; no second canonicalizer authority and no runtime/model/effect authority",
+  "unusual_experiment": {
+    "macrocycle_count": 1,
+    "name": "UNSAFE_INTEGER_VALUED_FLOAT_CROSS_LANGUAGE_PARITY",
+    "old_source_blob": "7e1be2cead9e069d5192c6e430a2abba7de0412b",
+    "inputs": [9007199254740992.0, 1e20],
+    "python_observation": "ACCEPT",
+    "node_reference_observation": "REJECT:INTEGER_OUTSIDE_IJSON_SAFE_RANGE",
+    "result": "FALSIFIED_CROSS_LANGUAGE_ADMISSION_PARITY_FOR_UNSAFE_INTEGER_VALUED_BINARY64_FLOATS",
+    "semantic_test_failure": true,
+    "interpretation": "the prior 9/9 vector set undercovered the numeric boundary and cannot justify canonicalizer promotion"
+  },
+  "repair": {
+    "rule": "Python float inputs that are integer-valued and exceed +/- (2^53-1) now fail closed with INTEGER_OUTSIDE_IJSON_SAFE_RANGE, matching the embedded Node reference rule",
+    "source_blob": "f40f23166ad80633aac660bcdec31736eb3b0a8e",
+    "source_sha256": "2127820167e14978aac455ad6be24c452186c14a1d4af6a1f126d6ebd4eaacd1",
+    "test_blob": "482c7e6685e0e5ae7141cf342de095ab283153c2",
+    "test_sha256": "dcf0ca2b0c3749684d7b59ea852696e31e904ea01f0df3790e77dfd4a5a01443",
+    "old_hashes_rewritten": false,
+    "schema_version_changed": false,
+    "reason_schema_version_unchanged": "repair restores the documented/intended I-JSON-like admission domain and Node parity rather than redefining admitted canonical bytes"
+  },
+  "isolated_execution": {
+    "environment": "isolated ChatGPT tool container",
+    "python": "3.13.5",
+    "node": "22.16.0",
+    "kernel": "Linux 6.18.35 x86_64",
+    "py_compile": "PASS",
+    "focused_suite": "11/11 PASS",
+    "cross_language_existing_vectors": "PASS",
+    "cross_language_unsafe_integer_valued_rejection": "PASS",
+    "exact_written_blob_match": true,
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "evidence_boundary": {
+    "canonicalizer_component_mechanism_supported": true,
+    "integrated_entry_route_inference_grid10_verified": false,
+    "real_hcu_model_runtime_verified": false,
+    "entityos_hcu_whole_runtime_verified": false,
+    "whole_product_pass": false,
+    "vps_or_self_hosted_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_used": false
+  },
+  "readme": {
+    "status": "NO_CHANGE",
+    "reason": "stacked donor repair only; canonical product README remains owned by current main and promotion is explicitly blocked pending one chosen canonical identity path"
+  },
+  "next_discriminator": "run the stacked exact branch together with Typed Entry + route + inference receipt + GRID10, then decide whether ENTITYOS_HCU_TYPED_CANONICAL/v1 is the single admitted causal canonicalization schema or remains donor-only",
+  "migration_reuse_score": "EASIER_CROSS_MODE"
+}

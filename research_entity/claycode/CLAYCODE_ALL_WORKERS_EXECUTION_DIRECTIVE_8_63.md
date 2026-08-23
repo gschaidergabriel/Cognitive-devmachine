@@ -21,7 +21,8 @@ Before material work, refresh current `main` and read at least:
 5. this directive
 6. `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
 7. `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
-8. task-relevant current source/runtime evidence
+8. `research_entity/continuity/RETAINED_EXECUTION_CONTROLLER_IDENTITY.json`
+9. task-relevant current source/runtime evidence
 
 Newest explicit owner authority and exact current empirical evidence outrank cached prose, old branches, compatibility names and historical receipts.
 
@@ -96,15 +97,17 @@ Current bounded evidence includes component-only exact-source runtime evidence f
 
 Keep one canonical donor/executor path:
 
-- retained HCU donor: PR1263;
-- retained bounded execution controller: PR810;
+- retained HCU donor: `gschaidergabriel/clay-global-research-entity#1263`;
+- retained bounded execution controller: `gschaidergabriel/Dr.-Unterweger#810`;
+- resolve executor identity through `research_entity/continuity/RETAINED_EXECUTION_CONTROLLER_IDENTITY.json` and refresh/bind the exact executor head SHA for each attempted execution;
+- unqualified `PR810` is forbidden for current executor selection because PR numbers are repository-local;
 - do not create a duplicate router/canonicalizer/inference/J-Space/executor authority.
 
 Next high-value executable closure:
 
-`Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> admitted causal dataset`
+`Typed Entry -> route -> verified engine admission -> verified actual-loader consumption -> GRID10 -> actual model-executor observation -> canonical MiniUnifiedDB atomic invocation admission -> VerifiedModelExecution/v1 -> HCU_INFERENCE_RECEIPT/v4 -> ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3 -> admitted causal dataset/family split`
 
-In particular, execute the exact-current J-Space inference-binding v2 / GRID10 plan-cell causal binding in a fixed hash-bound FREE capsule before granting downstream runtime credit.
+In particular, rebind the fully-qualified retained executor to exact then-current Research `main` plus exact retained donor head and execute the current v4/v3 execution-bound J-Space chain with exact GRID10 plan/cell causal binding in a fixed hash-bound FREE capsule before granting downstream runtime credit.
 
 ## 7. Typed Entry / HCU causal identity
 
@@ -145,6 +148,7 @@ GO tracks: EntityOS executable convergence + HCU/Typed Entry + Global J-Space/GW
 Before any unusual experiment, acquire the canonical create-only atomic lease. Without a reproducible shared trigger identity/lease, run zero new unusual experiments.
 Together inference/training/preflight/key lookup/job creation and all paid fallback are forbidden in current mode.
 Use only authorized isolated FREE execution; Vercel Hobby only through fixed hash-bound bounded capsules with fail-closed billing/quota fences.
+Retained HCU donor: gschaidergabriel/clay-global-research-entity#1263. Retained execution controller: gschaidergabriel/Dr.-Unterweger#810. Never resolve current executor authority from unqualified PR810; refresh and bind the exact executor head SHA at execution time.
 Canonical state/evidence stays outside model cognition; EffectGate/EffectJournal own real effects.
 Refresh exact current main, avoid duplicate semantic/executor paths, preserve negative evidence, and re-enter after every durable write.
 [/CLAY :: ENTITYOS/HCU WORKER PROTOCOL 8.63]
@@ -163,6 +167,7 @@ Every material handoff states:
 - hypothesis/counterhypothesis/discriminator;
 - executed surface and measured result;
 - macrocycle identity + atomic claim/result, or explicit coordination-blocked status;
+- fully-qualified retained executor identity plus exact execution-attempt head SHA when executor work is involved;
 - measured vs inferred boundary;
 - current whole-runtime/model/training credit;
 - next exact executable gate.

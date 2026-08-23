@@ -54,6 +54,60 @@ class Active:
         return out
 
 
+class Semantic:
+    version_overrides = {}
+
+    @classmethod
+    def resolve_prepare_bundle(
+        cls,
+        db,
+        *,
+        entity_generation,
+        causal_turn_id,
+        task_text,
+        expected_turn_binding_digest=None,
+    ):
+        prepare = Active.resolve_active_prepare(db, entity_generation=entity_generation)
+        if causal_turn_id != prepare["causal_turn_id"]:
+            raise ValueError("SEMANTIC_TURN_MISMATCH")
+        if task_text != prepare["task_text"]:
+            raise ValueError("SEMANTIC_TASK_MISMATCH")
+        if expected_turn_binding_digest != prepare["turn_binding_digest"]:
+            raise ValueError("TURN_BINDING_DIGEST_MISMATCH")
+        objects = {}
+        for field in sut._COGNITION_OBJECT_FIELDS:
+            version = cls.version_overrides.get(field, "v1")
+            objects[field] = {
+                "object_kind": field.removesuffix("_digest").upper(),
+                "object_version": version,
+                "object_digest": prepare[field],
+                "digest_basis": "EXTERNAL_BYTES",
+                "payload": {"field": field, "semantic_marker": version + ":" + field},
+                "payload_digest": h("payload:" + version + ":" + field),
+                "provenance_refs": ["semantic:" + version + ":" + field],
+                "admission_receipt_digest": h("admit:" + version + ":" + field),
+                "admitted_generation": entity_generation,
+            }
+        return {
+            "ok": True,
+            "schema": "MINIUNIFIEDDB_COGNITION_SEMANTIC_RESOLUTION/v1",
+            "entity_generation": entity_generation,
+            "causal_turn_id": prepare["causal_turn_id"],
+            "turn_binding_digest": prepare["turn_binding_digest"],
+            "boot_binding_digest": prepare["boot_binding_digest"],
+            "task_sha256": prepare["task_sha256"],
+            "workspace_digest": prepare["workspace_digest"],
+            "objects": objects,
+            "authority": {
+                "durable_state": "MiniUnifiedDB",
+                "routing_only": True,
+                "candidate_configuration_only": True,
+                "direct_truth_authority": False,
+                "direct_effect_authority": False,
+            },
+        }
+
+
 class Capsule:
     @staticmethod
     def compile_workspace_capsule(**kw):
@@ -108,6 +162,7 @@ class Capability:
             "ucf_engine_class": "claude_code",
             "jspace_mode": binding["jspace_mode"],
             "route_digest": cls.route_digest,
+            "cognition": {field: prepare[field] for field in sut._COGNITION_OBJECT_FIELDS},
             "authority": cls.authority,
         }
 
@@ -175,6 +230,7 @@ class AdmissionTests(unittest.TestCase):
             expected_activation_digest=h("activation"),
             origin="go",
             active_turn_module=Active,
+            semantic_resolver_module=Semantic,
             capsule_module=Capsule,
             packet_module=Packet,
             capability_module=Capability,
@@ -194,6 +250,11 @@ class AdmissionTests(unittest.TestCase):
         self.assertEqual(out["jspace_mode"], "COMPILED_EXTERNAL")
         self.assertEqual(out["capability_route_digest"], h("bound-route"))
         self.assertEqual(out["capability_binding_digest"], h("capability-binding"))
+        self.assertRegex(out["cognition_semantic_binding_digest"], r"^[0-9a-f]{64}$")
+        self.assertEqual(
+            set(out["admission_receipt"]["cognition_object_versions"]),
+            set(sut._COGNITION_OBJECT_FIELDS),
+        )
         self.assertEqual(
             out["cognition_invocation_digest"],
             sut._sha256_obj({"schema": sut.INVOCATION_SCHEMA, **self.invocation()}),
@@ -213,6 +274,69 @@ class AdmissionTests(unittest.TestCase):
         b = self.call(capability_module=OtherCapability)
         self.assertNotEqual(a["capability_route_digest"], b["capability_route_digest"])
         self.assertNotEqual(a["cognitive_fabric_receipt_digest"], b["cognitive_fabric_receipt_digest"])
+
+    def test_semantic_version_changes_admission_identity(self):
+        class SemanticV2(Semantic):
+            version_overrides = {"jspace_profile_digest": "v2"}
+
+        a = self.call()
+        b = self.call(semantic_resolver_module=SemanticV2)
+        self.assertNotEqual(a["cognition_semantic_binding_digest"], b["cognition_semantic_binding_digest"])
+        self.assertNotEqual(a["cognitive_fabric_receipt_digest"], b["cognitive_fabric_receipt_digest"])
+        self.assertEqual(b["admission_receipt"]["cognition_object_versions"]["jspace_profile_digest"], "v2")
+
+    def test_semantic_resolver_ambiguity_fails_before_packet(self):
+        class AmbiguousSemantic(Semantic):
+            @classmethod
+            def resolve_prepare_bundle(cls, *args, **kwargs):
+                raise ValueError("COGNITION_OBJECT_VERSION_AMBIGUOUS:JSPACE_PROFILE")
+
+        with self.assertRaisesRegex(ValueError, "COGNITION_OBJECT_VERSION_AMBIGUOUS:JSPACE_PROFILE"):
+            self.call(semantic_resolver_module=AmbiguousSemantic)
+
+    def test_semantic_object_digest_drift_fails_closed(self):
+        class DriftSemantic(Semantic):
+            @classmethod
+            def resolve_prepare_bundle(cls, *args, **kwargs):
+                out = super().resolve_prepare_bundle(*args, **kwargs)
+                out["objects"]["policy_authority_digest"] = dict(
+                    out["objects"]["policy_authority_digest"]
+                )
+                out["objects"]["policy_authority_digest"]["object_digest"] = h("different-policy")
+                return out
+
+        with self.assertRaisesRegex(
+            sut.CognitiveFabricAdmissionError,
+            "SEMANTIC_OBJECT_DIGEST_DRIFT:policy_authority_digest",
+        ):
+            self.call(semantic_resolver_module=DriftSemantic)
+
+    def test_semantic_authority_escalation_fails_closed(self):
+        class BadSemantic(Semantic):
+            @classmethod
+            def resolve_prepare_bundle(cls, *args, **kwargs):
+                out = super().resolve_prepare_bundle(*args, **kwargs)
+                out["authority"] = dict(out["authority"])
+                out["authority"]["direct_truth_authority"] = True
+                return out
+
+        with self.assertRaisesRegex(sut.CognitiveFabricAdmissionError, "SEMANTIC_AUTHORITY_ESCALATION"):
+            self.call(semantic_resolver_module=BadSemantic)
+
+    def test_bound_route_cognition_drift_fails_closed(self):
+        class BadCapability(Capability):
+            @classmethod
+            def resolve_bound_route(cls, profile, prepare, *, expected_generation):
+                out = super().resolve_bound_route(profile, prepare, expected_generation=expected_generation)
+                out["cognition"] = dict(out["cognition"])
+                out["cognition"]["jspace_profile_digest"] = h("route-jspace-drift")
+                return out
+
+        with self.assertRaisesRegex(
+            sut.CognitiveFabricAdmissionError,
+            "BOUND_ROUTE_COGNITION_DRIFT:jspace_profile_digest",
+        ):
+            self.call(capability_module=BadCapability)
 
     def test_bound_route_authority_escalation_fails_closed(self):
         class BadCapability(Capability):

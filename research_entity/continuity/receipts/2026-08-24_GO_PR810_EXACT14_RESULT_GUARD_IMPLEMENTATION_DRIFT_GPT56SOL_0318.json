@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "c5f8b95202e987b95aa52ea73575199eff1cff37",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "observed_executor": {
+    "head": "bdd2572ced3a9709fdfbd2f458bd7d75aff11988",
+    "head_message": "fix(hcu): align exact result fence with active promotion guard",
+    "route": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js",
+    "route_git_blob": "49f4bb65cf47035ca5c7e87b0e1134fd3127a3aa",
+    "promotion_guard": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-v4-v3-promotion-contract-v2.mjs",
+    "promotion_guard_git_blob": "7ea689d6a0781a0aaab984c45f0aee0a60c8afd4",
+    "package_git_blob": "184a72d80c0d5d97b6e3b16ade2776d374a31f25",
+    "promotion_guard_is_active_prevercel_build": true
+  },
+  "finding": {
+    "classification": "SEMANTICALLY_EQUIVALENT_RESULT_FENCE_STATIC_GUARD_IMPLEMENTATION_DRIFT",
+    "observed": [
+      "The executable route retains the explicit 14-name EXPECTED_REGRESSION_TESTS set and derives EXPECTED_TEST_COUNT from that set.",
+      "The route at bdd2572 observes all 14 identities over combined stdout+stderr, observes the Ran 14 tests summary over combined output, requires a standalone trimmed OK line, and rejects FAILED, skipped= and expected failures=.",
+      "The active promotion-contract-v2 guard still requires implementation-specific source markers for stderr-only observation: (name) => stderr.includes(name), stderr.includes(`Ran ${EXPECTED_TEST_COUNT} tests in `), stderrLines.includes('OK'), plus stderr-only forbidden-summary checks.",
+      "package.json runs promotion-contract-v2 in prevercel-build, so this source-marker mismatch is on the active build path."
+    ],
+    "inference": "The route and guard now intend the same fail-closed exact-14 result semantics but the active static guard is coupled to an obsolete implementation spelling. At exact head bdd2572 the guard can reject a semantically stronger/equivalent route before any Sandbox runtime. This is a deterministic source/build blocker, not runtime evidence and not a product-logic failure.",
+    "counterhypothesis": "The combined-output implementation weakens the evidence boundary because unittest -v normally emits test progress to stderr.",
+    "counterhypothesis_assessment": "Not supported by the current stated acceptance contract: requiring exact names, exact count, standalone OK and forbidden summaries over the union of captured stdout+stderr preserves those declared observations even if stream placement changes. If stream identity itself is intended evidence, that must be made an explicit contract invariant rather than inferred from one implementation spelling."
+  },
+  "required_fix": {
+    "principle": "Guard semantic invariants, not incidental variable names or stream-specific source spelling unless stream identity is an explicit evidence requirement.",
+    "minimum": [
+      "Make promotion-contract-v2 accept the current exact-14 semantic predicate or make route and guard share one canonical result-fence definition.",
+      "Continue requiring every declared test identity, count derived from the 14-name set, Ran 14 tests summary, standalone OK, and rejection of FAILED/skipped=/expected failures=.",
+      "Keep SOURCE_REBIND_REQUIRED terminal before the FREE_ONLY cost gate until a distinct coherent SOURCE_REBOUND_READY transition.",
+      "Do not grant runtime/model/training credit from this source repair."
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: isolated the exact current active prebuild self-invalidation after the 14-result route hardening, preventing a false READY/promotion interpretation.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the exact retained 17-blob Typed Entry -> route -> engine/load -> GRID10 -> ModelExecution -> Inference/v4 closure remains bound to donor 511d5689; changing donor source here would duplicate PR1263 and invalidate the current executor rebind while the blocker is only executor guard syntax.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: current causal-family ownership/family-alias leakage and DatasetAdmission v2 vs splitter v1 drift are already durably identified and reserved to the single PR1263 donor lane; duplicating that repair would fork training-data authority. Exact J-Space/model/training credit remains zero."
+  },
+  "external_execution": {
+    "sandbox_runtime_executed_here": false,
+    "route_invoked_here": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "runtime_credit_change": 0
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Research main and PR810 are moving rapidly under parallel organs. This append-only exact-head receipt preserves the new discriminator without overwriting a moving current-facing artefact README snapshot."
+  },
+  "next_exact_gate": "Re-enter PR810 and require the active promotion-contract-v2 guard and executable route to recognize one identical exact-14 semantic result fence without implementation-spelling coupling. Then re-run the source/build guards. Only after the full guard stack is coherent may a distinct SOURCE_REBOUND_READY route+contract promotion be considered; future READY must still load and verify the exact 17 deployment-carried donor blobs before the FREE_ONLY cost gate."
+}

@@ -252,6 +252,7 @@ def build_pre_inference_admission(
         profile,
         prepare,
         expected_generation=entity_generation,
+        db=db,
     )
     _need(type(route) is dict and route.get("ok") is True, "BOUND_ROUTE_RESOLUTION_FAILED")
     _need(
@@ -270,6 +271,18 @@ def build_pre_inference_admission(
     jspace_mode = _text(route.get("jspace_mode"), "jspace_mode")
     capability_binding_digest = _digest(route.get("capability_binding_digest"), "capability_binding_digest")
     capability_receipt_digest = _digest(route.get("capability_receipt_digest"), "capability_receipt_digest")
+    local_mode = jspace_mode in {"FULL_LOCAL_LATENT", "LOCAL_OBSERVE_ONLY"}
+    capability_evidence_resolution_digest = route.get("capability_evidence_resolution_digest")
+    if local_mode:
+        capability_evidence_resolution_digest = _digest(
+            capability_evidence_resolution_digest,
+            "capability_evidence_resolution_digest",
+        )
+    else:
+        _need(
+            capability_evidence_resolution_digest is None,
+            "EXTERNAL_ROUTE_UNEXPECTED_LOCAL_CAPABILITY_EVIDENCE",
+        )
     profile_id = _text(route.get("profile_id"), "profile_id")
     profile_hash = _digest(route.get("profile_hash"), "profile_hash")
     inference = profile.get("inference")
@@ -339,6 +352,7 @@ def build_pre_inference_admission(
         "capability_route_digest": route_digest,
         "capability_binding_digest": capability_binding_digest,
         "capability_receipt_digest": capability_receipt_digest,
+        "capability_evidence_resolution_digest": capability_evidence_resolution_digest,
         "capability_evidence_kind": _text(route.get("capability_evidence_kind"), "capability_evidence_kind"),
         "adapter_version": _text(route.get("adapter_version"), "adapter_version"),
         "target_engine_class": target_engine_class,
@@ -363,6 +377,7 @@ def build_pre_inference_admission(
         "capability_route_digest": route_digest,
         "capability_binding_digest": capability_binding_digest,
         "capability_receipt_digest": capability_receipt_digest,
+        "capability_evidence_resolution_digest": capability_evidence_resolution_digest,
         "target_engine_class": target_engine_class,
         "ucf_engine_class": ucf_engine_class,
         "jspace_mode": jspace_mode,

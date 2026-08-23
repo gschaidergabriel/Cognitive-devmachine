@@ -1,0 +1,70 @@
+{
+  "schema": "CLAY_GO_COGNITIVE_ENGINE_ROUTE/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT source-integration organ",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "base_main": "0aa92485c97d35921362b1ab018d3adbca8b85e8",
+  "branch": "gpt56sol/go-cognitive-engine-route-v1-20260823-1539",
+  "classification": "SOURCE_ARCHITECTURE_DISCRIMINATOR_RUNTIME_UNVERIFIED",
+  "observed": {
+    "reference_runtime_blob": "8ea8a2db0ac1068ae9221f0ab0426e7d8f7149a7",
+    "reference_runtime_ucf_admit_allowed_effect": false,
+    "reference_runtime_ucf_finalize_allowed_effect": false,
+    "active_turn_prepare_supplies_cognition_ancestry": true,
+    "zero_inference_packet_v2_requires_explicit_target_engine_class": true,
+    "zero_inference_packet_v2_requires_explicit_jspace_mode": true,
+    "safe_to_infer_latent_capability_from_provider_or_model_name": false
+  },
+  "finding": "The missing reference-runtime Cognitive Fabric handler is not safe to implement by mapping provider/model names directly to target_engine_class or jspace_mode. The already-bound MiniUnifiedDB cognition turn supplies the exact workspace/model/J-Space ancestry, while ZERO_INFERENCE_PACKET/v2 still requires explicit engine/J-Space routing semantics. That route must be explicit DB-resident configuration and cross-bound to the cognition ancestry before packet compilation.",
+  "delta": {
+    "resolver": "tools/cognitive_engine_route_v1.py",
+    "resolver_blob": "d4347ac51235ac5807dc7ddc2b86bbee734304eb",
+    "tests": "tests/test_cognitive_engine_route_v1.py",
+    "tests_blob": "64deb70f2c5e9e2e7838aefcd39310388dc1240a",
+    "contract": "the artefact/blogpost_entity/jspace_gwt/COGNITIVE_ENGINE_ROUTE_V1.md",
+    "route_schema": "MINI_COGNITIVE_ENGINE_ROUTE_CONFIG/v1",
+    "authority_change": "NONE",
+    "second_state_store_created": false,
+    "second_effect_path_created": false,
+    "provider_name_capability_inference_allowed": false,
+    "profile_route_requires_exact_cognition_digest_match": true
+  },
+  "source_test_obligations": [
+    "exact local 0.8B route binds profile plus turn/boot/workspace ancestry",
+    "provider/model strings cannot substitute for explicit route configuration",
+    "J-Space profile digest drift fails closed",
+    "stale generation fails closed",
+    "Claude requires COMPILED_EXTERNAL",
+    "explicit Claude COMPILED_EXTERNAL route is structurally admitted",
+    "bundled local 0.8B cannot claim COMPILED_EXTERNAL"
+  ],
+  "execution": {
+    "authorized_isolated_exact_source_started": false,
+    "vercel_sandbox_start_exec_exposed": false,
+    "source_tests_executed_here": false,
+    "classification": "BLOCKED_EXECUTION_ADMISSION",
+    "runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "new_count_here": 0,
+    "reason": "Current concurrently-merged go work already records the PARTIAL_READMISSION_LAUNDERING unusual intervention in PR #1274; this lane performs source architecture/fail-closed test specification only and does not create a second intervention. Cross-organ immutable macrocycle lease remains unavailable on this surface."
+  },
+  "hcu_parallel": {
+    "decision": "NO_CHANGE_NON_DUPLICATION",
+    "reason": "Current main already contains the owner-directed HCU package/workstream and open HCU integration lane; this route delta does not alter HCU truth/effect authority or duplicate its package/runtime work.",
+    "runtime_capacity_credit": 0
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB only",
+    "runtime_identity_configuration": "Zero",
+    "routing_configuration": "existing DB-resident profile only",
+    "model_jspace_gwt_output": "CANDIDATE_OR_MEASUREMENT_ONLY",
+    "effects": "EffectGate only",
+    "together": "FORBIDDEN",
+    "paid_training": "OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "next_exact_gate": "Freshly rejoin current main, execute the route resolver tests in an actually-started authorized isolated sandbox, then compose resolve_active_prepare -> COGNITIVE_ENGINE_ROUTE/v1 -> ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v2 into the single retained pipeline_cognitive_fabric_admit handler without provider-name capability inference."
+}

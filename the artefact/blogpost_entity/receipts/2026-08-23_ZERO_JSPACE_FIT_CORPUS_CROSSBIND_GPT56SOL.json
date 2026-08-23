@@ -11,6 +11,7 @@
     "branch_base_main_sha": "23c0f4c32fe0570a79aa81f94ff75948448d06c8",
     "branch": "zero/jspace-fit-corpus-crossbind-20260823-1036",
     "pull_request": 1147,
+    "merge_commit": "1100467840e91233b1d45746259cbbff73efab26",
     "free_only": true
   },
   "observed": {
@@ -27,9 +28,10 @@
     },
     "pull_request": {
       "number": 1147,
-      "state": "OPEN",
+      "state": "MERGED",
       "draft": false,
-      "mergeable_after_recheck": true
+      "mergeable_before_merge": true,
+      "merge_commit": "1100467840e91233b1d45746259cbbff73efab26"
     }
   },
   "counterhypothesis": {
@@ -39,6 +41,7 @@
   },
   "delta": {
     "product_code_changed": true,
+    "merged_to_main": true,
     "second_state_or_truth_authority_created": false,
     "changes": [
       "add optional fit_corpus_digest to mini-entity-bundled-cognition-manifest/v1",
@@ -143,8 +146,8 @@
     "together_used": false
   },
   "next_gate": [
-    "Adjudicate/fuse this source hardening with the canonical boot-binding path and any compatible artifact-root provenance hardening without creating a second validator authority.",
     "On the next actually-started authorized exact Ubuntu runtime, bind the real fit-corpus artifact digest into the admitted bundled manifest/source lock and emit JSPACE_GWT_BOOT_BINDING_RECEIPT/v1.",
+    "Fuse compatible artifact-root provenance hardening from PR #1077 into the now-canonical manifest cross-binding path only after fresh-current-main adjudication; do not create a second validator authority.",
     "Then perform exact Qwen3.5-0.8B J-Lens/workspace calibration and causal ablation before granting any J-Space/GWT runtime credit."
   ],
   "acceptance": "IN_PROGRESS"

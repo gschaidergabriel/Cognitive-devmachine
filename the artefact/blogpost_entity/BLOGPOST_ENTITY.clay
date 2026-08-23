@@ -89,9 +89,11 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   let committed = phase("pipeline_commit",entity_db,source_db,profile,previous,commit_data)
   require committed.ok
 
-  // POST-TURN FINALIZATION: evidence only, never a second commit/effect authority.
-  // It cross-binds the exact admission, candidate, deterministic gate and observed
-  // MiniUnifiedDB outcome into UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1.
+  // POST-TURN FINALIZATION is evidence only and occurs after the irreversible canonical
+  // commit. It therefore cannot be a fatal outer-run requirement: a finalization failure
+  // means COMMITTED_FINALIZATION_FAILED/UNKNOWN, never NOT_COMMITTED. The finalizer must be
+  // idempotent and commit-aware; recovery may complete evidence closure without replaying
+  // inference, MiniUnifiedDB commit, or any real effect.
   let finalize_data = map_new()
   map_set(finalize_data,"admitted",admitted)
   map_set(finalize_data,"generated",generated)
@@ -100,7 +102,6 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(finalize_data,"compiled",compiled)
   map_set(finalize_data,"prompt",prompt)
   let finalized = phase("pipeline_cognitive_fabric_finalize",entity_db,source_db,profile,previous,finalize_data)
-  require finalized.ok
 
   let result = map_new()
   map_set(result,"ok",true)
@@ -113,6 +114,8 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(result,"packet_hash",compiled.packet_hash)
   map_set(result,"inference_packet_digest",admitted.inference_packet_digest)
   map_set(result,"cognitive_fabric_admission_receipt_digest",admitted.cognitive_fabric_receipt_digest)
-  map_set(result,"ucf_runtime_receipt_digest",finalized.ucf_runtime_receipt_digest)
+  // Preserve the exact finalization outcome as terminal evidence. Callers must inspect its
+  // typed ok/error state; absence of a final receipt cannot authorize a retry of committed work.
+  map_set(result,"ucf_finalization",finalized)
   return result
 }

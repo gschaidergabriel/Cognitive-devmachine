@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Deterministic script-first router for the HCU reactive world model.
 
-This source component does not perform model inference. It decides which bounded HCU
-lanes, if any, deserve model work and whether Zero should receive a compact ClayCode
-projection. External providers are explicitly excluded from the internal cognitive
-routing graph.
+This component does not perform model inference. It consumes only HCU events carrying
+a typed Entry-Fabric admission identity, decides which bounded HCU lanes deserve model
+work, and requires model routes to match an independently admitted local engine record.
+Event/provider fields alone never mint engine authority.
 """
 from __future__ import annotations
 
@@ -14,16 +14,14 @@ from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 
 SCHEMA = "HCU_REACTIVE_EVENT/v1"
-ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v2"
-ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v1"
-ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v1"
+ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v3"
+ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v2"
+ENGINE_IDENTITY_SCHEMA = "HCU_INTERNAL_ENGINE_IDENTITY/v2"
 # Exact implementation-scoped hash serialization profile. This is deliberately NOT a
 # claim of RFC 8785 JCS or heterogeneous Entry-Fabric canonicalization. Any future
 # cross-language profile must use a distinct versioned identity.
 HASH_SERIALIZATION_SCHEMA = "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1"
 
-# Internal cognition is admitted positively. Unknown/future provider or engine labels do
-# not become internal merely because they are absent from a denylist.
 ADMITTED_INTERNAL_PROVIDER_ALIASES = {"hcu", "local", "xeno"}
 ADMITTED_INTERNAL_ENGINES = {
     "hcu_local_08b": "LOCAL_SHARED_WEIGHT_08B",
@@ -31,6 +29,7 @@ ADMITTED_INTERNAL_ENGINES = {
 
 SCRIPT_STAGES = (
     "generation_check",
+    "entry_admission_rebind",
     "canonical_rebind",
     "temporal_delta",
     "provenance_join",
@@ -44,8 +43,19 @@ ROUTER_POLICY = {
     "schema": ROUTER_POLICY_SCHEMA,
     "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
     "scripts": SCRIPT_STAGES,
+    "entry_handshake": ("ingress_id", "causal_id", "entry_admission_sha256"),
     "admitted_internal_provider_aliases": tuple(sorted(ADMITTED_INTERNAL_PROVIDER_ALIASES)),
     "admitted_internal_engines": tuple(sorted(ADMITTED_INTERNAL_ENGINES.items())),
+    "model_route_engine_lock": (
+        "engine_id",
+        "engine_class",
+        "artifact_sha256",
+        "runtime_identity",
+        "checkpoint_identity",
+        "tokenizer_identity",
+        "network_required=false",
+        "secret_lookup_required=false",
+    ),
     "thresholds": {
         "world_novelty": 0.55,
         "world_contradiction": 0.35,
@@ -74,17 +84,29 @@ class RouteDecision:
     zero_projection_format: str | None
     external_provider_dependency: bool
     hash_serialization_schema: str
+    ingress_id: str
+    causal_id: str
+    entry_admission_sha256: str
     event_sha256: str
     router_policy_sha256: str
     resolved_engine_identity: str | None
     resolved_engine_class: str | None
     resolved_engine_artifact_sha256: str | None
+    resolved_engine_runtime_identity: str | None
+    resolved_engine_checkpoint_identity: str | None
+    resolved_engine_tokenizer_identity: str | None
     engine_identity_sha256: str | None
     decision_sha256: str
 
 
 def _canonical(value: Any) -> bytes:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
+    return json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+        allow_nan=False,
+    ).encode("utf-8")
 
 
 def _sha256_canonical(value: Any, field: str) -> str:
@@ -93,6 +115,12 @@ def _sha256_canonical(value: Any, field: str) -> str:
     except (TypeError, ValueError) as exc:
         raise ReactiveRoutingError(f"{field}:CANONICALIZATION_FAILED") from exc
     return hashlib.sha256(encoded).hexdigest()
+
+
+def _text(value: Any, field: str) -> str:
+    if not isinstance(value, str) or not value or value.strip() != value:
+        raise ReactiveRoutingError(f"{field}:NONEMPTY_CANONICAL_STRING_REQUIRED")
+    return value
 
 
 def _unit(value: Any, field: str) -> float:
@@ -119,6 +147,16 @@ def _sha256_text(value: Any, field: str) -> str:
     return value
 
 
+def _validate_entry_handshake(event: Mapping[str, Any]) -> tuple[str, str, str]:
+    ingress_id = _text(event.get("ingress_id"), "ingress_id")
+    causal_id = _text(event.get("causal_id"), "causal_id")
+    entry_admission_sha256 = _sha256_text(
+        event.get("entry_admission_sha256"),
+        "ENTRY_ADMISSION_SHA256",
+    )
+    return ingress_id, causal_id, entry_admission_sha256
+
+
 def _validate_internal_provider(event: Mapping[str, Any]) -> None:
     provider = event.get("requested_internal_provider")
     if provider is None:
@@ -126,22 +164,25 @@ def _validate_internal_provider(event: Mapping[str, Any]) -> None:
     if not isinstance(provider, str) or not provider.strip():
         raise ReactiveRoutingError("REQUESTED_INTERNAL_PROVIDER_STRING_REQUIRED")
     if provider.strip().lower() not in ADMITTED_INTERNAL_PROVIDER_ALIASES:
-        raise ReactiveRoutingError("UNKNOWN_OR_EXTERNAL_PROVIDER_FORBIDDEN_AS_INTERNAL_COGNITIVE_DEPENDENCY")
+        raise ReactiveRoutingError(
+            "UNKNOWN_OR_EXTERNAL_PROVIDER_FORBIDDEN_AS_INTERNAL_COGNITIVE_DEPENDENCY"
+        )
 
 
 def _resolve_internal_engine(
     event: Mapping[str, Any],
     admitted_engine_artifacts: Mapping[str, Any] | None,
-) -> tuple[str | None, str | None, str | None, str | None]:
+) -> tuple[str | None, str | None, str | None, str | None, str | None, str | None, str | None]:
     identity = event.get("resolved_internal_engine")
     engine_class = event.get("resolved_internal_engine_class")
     artifact_sha256 = event.get("resolved_internal_engine_artifact_sha256")
     if identity is None and engine_class is None and artifact_sha256 is None:
-        return None, None, None, None
+        return None, None, None, None, None, None, None
     if not isinstance(identity, str) or not identity.strip():
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_IDENTITY_REQUIRED")
     if not isinstance(engine_class, str) or not engine_class.strip():
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_CLASS_REQUIRED")
+
     identity = identity.strip().lower()
     engine_class = engine_class.strip().upper()
     admitted_class = ADMITTED_INTERNAL_ENGINES.get(identity)
@@ -149,21 +190,48 @@ def _resolve_internal_engine(
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_NOT_ADMITTED")
     if engine_class != admitted_class:
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_CLASS_MISMATCH")
-    artifact_sha256 = _sha256_text(artifact_sha256, "RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256")
+    artifact_sha256 = _sha256_text(
+        artifact_sha256,
+        "RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256",
+    )
 
-    # The event may report what bytes it thinks were resolved, but that claim is not
-    # authority. XPU/XRAM must separately supply the currently admitted artifact lock.
+    # Compatibility argument name retained, but values are now full trusted engine locks.
+    # An event-reported artifact digest or a bare digest map is not sufficient authority.
     if not isinstance(admitted_engine_artifacts, Mapping):
-        raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_ARTIFACT_REGISTRY_REQUIRED")
-    admitted_artifact_sha256 = admitted_engine_artifacts.get(identity)
-    if admitted_artifact_sha256 is None:
-        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_ARTIFACT_NOT_ADMITTED")
-    admitted_artifact_sha256 = _sha256_text(
-        admitted_artifact_sha256,
+        raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_REGISTRY_REQUIRED")
+    registry_entry = admitted_engine_artifacts.get(identity)
+    if not isinstance(registry_entry, Mapping):
+        raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_REGISTRY_ENTRY_REQUIRED")
+
+    registry_id = _text(registry_entry.get("engine_id"), "engine_registry.engine_id").lower()
+    registry_class = _text(registry_entry.get("engine_class"), "engine_registry.engine_class").upper()
+    registry_artifact_sha256 = _sha256_text(
+        registry_entry.get("artifact_sha256"),
         "ADMITTED_INTERNAL_ENGINE_ARTIFACT_SHA256",
     )
-    if artifact_sha256 != admitted_artifact_sha256:
+    if registry_id != identity:
+        raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_IDENTITY_MISMATCH")
+    if registry_class != engine_class:
+        raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_CLASS_MISMATCH")
+    if registry_artifact_sha256 != artifact_sha256:
         raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_ARTIFACT_SHA256_MISMATCH")
+
+    runtime_identity = _text(
+        registry_entry.get("runtime_identity"),
+        "engine_registry.runtime_identity",
+    )
+    checkpoint_identity = _text(
+        registry_entry.get("checkpoint_identity"),
+        "engine_registry.checkpoint_identity",
+    )
+    tokenizer_identity = _text(
+        registry_entry.get("tokenizer_identity"),
+        "engine_registry.tokenizer_identity",
+    )
+    if registry_entry.get("network_required") is not False:
+        raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_NETWORK_DEPENDENCY_FORBIDDEN")
+    if registry_entry.get("secret_lookup_required") is not False:
+        raise ReactiveRoutingError("ADMITTED_INTERNAL_ENGINE_SECRET_DEPENDENCY_FORBIDDEN")
 
     engine_identity_sha256 = _sha256_canonical(
         {
@@ -172,15 +240,28 @@ def _resolve_internal_engine(
             "resolved_engine_identity": identity,
             "resolved_engine_class": engine_class,
             "resolved_engine_artifact_sha256": artifact_sha256,
+            "runtime_identity": runtime_identity,
+            "checkpoint_identity": checkpoint_identity,
+            "tokenizer_identity": tokenizer_identity,
+            "network_required": False,
+            "secret_lookup_required": False,
         },
         "ENGINE_IDENTITY",
     )
-    return identity, engine_class, artifact_sha256, engine_identity_sha256
+    return (
+        identity,
+        engine_class,
+        artifact_sha256,
+        runtime_identity,
+        checkpoint_identity,
+        tokenizer_identity,
+        engine_identity_sha256,
+    )
 
 
 def _event_identity(event: Mapping[str, Any]) -> str:
     # Engine/provider resolution is routing metadata, not the immutable causal event.
-    # Separating the two lets identical events be compared across admitted engines.
+    # Entry admission identity remains part of the causal event.
     payload = dict(event)
     for key in (
         "requested_internal_provider",
@@ -212,11 +293,15 @@ def route_event(
     if generation != current_generation:
         raise ReactiveRoutingError("STALE_ENTITY_GENERATION")
 
+    ingress_id, causal_id, entry_admission_sha256 = _validate_entry_handshake(event)
     _validate_internal_provider(event)
     (
         resolved_engine_identity,
         resolved_engine_class,
         resolved_engine_artifact_sha256,
+        resolved_engine_runtime_identity,
+        resolved_engine_checkpoint_identity,
+        resolved_engine_tokenizer_identity,
         engine_identity_sha256,
     ) = _resolve_internal_engine(event, admitted_engine_artifacts)
 
@@ -242,13 +327,12 @@ def route_event(
     if event.get("provenance_gap") is True:
         lanes.add("provenance")
 
-    # Goal cognition is selective; a plain event cannot create a goal lane by default.
-    if event.get("goal_pressure") is not None and _unit(event["goal_pressure"], "goal_pressure") >= 0.70:
+    if event.get("goal_pressure") is not None and _unit(
+        event["goal_pressure"], "goal_pressure"
+    ) >= 0.70:
         lanes.add("goal")
         lanes.add("critic")
 
-    # A route that asks for model work must already carry a positively admitted exact
-    # internal engine identity/class/artifact digest. Script-only events require none.
     if lanes and resolved_engine_identity is None:
         raise ReactiveRoutingError("MODEL_ACTIVATION_REQUIRES_ADMITTED_INTERNAL_ENGINE")
     if not lanes and resolved_engine_identity is not None:
@@ -260,6 +344,9 @@ def route_event(
     payload = {
         "schema": ROUTE_IDENTITY_SCHEMA,
         "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
+        "ingress_id": ingress_id,
+        "causal_id": causal_id,
+        "entry_admission_sha256": entry_admission_sha256,
         "event_sha256": event_sha256,
         "router_policy_sha256": router_policy_sha256,
         "engine_identity_sha256": engine_identity_sha256,
@@ -279,30 +366,42 @@ def route_event(
         zero_projection_format="ClayCode" if projection else None,
         external_provider_dependency=False,
         hash_serialization_schema=HASH_SERIALIZATION_SCHEMA,
+        ingress_id=ingress_id,
+        causal_id=causal_id,
+        entry_admission_sha256=entry_admission_sha256,
         event_sha256=event_sha256,
         router_policy_sha256=router_policy_sha256,
         resolved_engine_identity=resolved_engine_identity,
         resolved_engine_class=resolved_engine_class,
         resolved_engine_artifact_sha256=resolved_engine_artifact_sha256,
+        resolved_engine_runtime_identity=resolved_engine_runtime_identity,
+        resolved_engine_checkpoint_identity=resolved_engine_checkpoint_identity,
+        resolved_engine_tokenizer_identity=resolved_engine_tokenizer_identity,
         engine_identity_sha256=engine_identity_sha256,
         decision_sha256=digest,
     )
 
 
 def assert_inference_echo(decision: RouteDecision, receipt: Mapping[str, Any]) -> None:
-    """Fail closed unless inference echoes the exact admitted event/route/engine tuple."""
+    """Fail closed unless inference echoes exact serializer/entry/event/route/engine identity."""
     if decision.status != "SELECTIVE_MODEL_ACTIVATION":
         raise ReactiveRoutingError("INFERENCE_ECHO_NOT_VALID_FOR_SCRIPT_ONLY_ROUTE")
     if not isinstance(receipt, Mapping):
         raise ReactiveRoutingError("INFERENCE_RECEIPT_MAPPING_REQUIRED")
     expected = {
         "hash_serialization_schema": decision.hash_serialization_schema,
+        "ingress_id": decision.ingress_id,
+        "causal_id": decision.causal_id,
+        "entry_admission_sha256": decision.entry_admission_sha256,
         "event_sha256": decision.event_sha256,
         "decision_sha256": decision.decision_sha256,
         "engine_identity_sha256": decision.engine_identity_sha256,
         "resolved_engine_identity": decision.resolved_engine_identity,
         "resolved_engine_class": decision.resolved_engine_class,
         "resolved_engine_artifact_sha256": decision.resolved_engine_artifact_sha256,
+        "resolved_engine_runtime_identity": decision.resolved_engine_runtime_identity,
+        "resolved_engine_checkpoint_identity": decision.resolved_engine_checkpoint_identity,
+        "resolved_engine_tokenizer_identity": decision.resolved_engine_tokenizer_identity,
     }
     for field, value in expected.items():
         if receipt.get(field) != value:
@@ -310,4 +409,9 @@ def assert_inference_echo(decision: RouteDecision, receipt: Mapping[str, Any]) -
 
 
 def decision_json(decision: RouteDecision) -> str:
-    return json.dumps(asdict(decision), sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return json.dumps(
+        asdict(decision),
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )

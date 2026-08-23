@@ -1,0 +1,84 @@
+{
+  "schema": "GO_UCF_SINGLE_AUTHORITY_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "macrocycle_id": "go-5f5233390b4a446591337d08c6b645d8",
+  "organ": "GPT-5.6 Sol",
+  "authority": {
+    "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+    "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+    "free_only": true,
+    "paid_provider_execution_authorized": false
+  },
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "base_branch": "main",
+    "base_commit": "29c3d939590e1103a3cd15fd52d162a95fde9784",
+    "candidate_branch": "go/ucf-single-authority-5f523339-r2",
+    "candidate_pre_receipt_head": "f03709af538fd095474175b7f0167793290de3b3",
+    "canonical_validator_blob": "28422ee5b99d9359813b09e1a487e1e820ff12c1",
+    "pre_fix_parallel_validator_blob": "1711ab5df00b47073941a2853e5903ac05ebd5a8",
+    "post_fix_compat_validator_blob": "debf8ba947f4e783a96a7d6276bd030bc158676b",
+    "pre_fix_parallel_test_blob": "9bcb464a1a0f5b7b6174a29c36d477a926642dee",
+    "post_fix_compat_test_blob": "ea252458bdb4da6559e2aedc7928458c1b30c952",
+    "post_fix_compat_doc_blob": "301df16888c91e1e96d71d1c3931564a2b37392a"
+  },
+  "r0_observed": {
+    "defect": "Two live validators used the exact same UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 name while requiring materially incompatible field layouts and semantics.",
+    "canonical_root_key": "schema",
+    "parallel_root_key": "receipt_version",
+    "canonical_validator": "tools/validate_unified_cognitive_fabric_receipt_v1.py",
+    "parallel_validator": "agentzeroforschung/instrumente/validate_unified_cognitive_fabric_receipt_v1.py",
+    "fresh_clay_law": "ONE_RUNTIME_RECEIPT_AUTHORITY = true"
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "DUAL_UCF_V1_AUTHORITY_DIVERGENCE",
+    "classification": "SOURCE_LEVEL_DISCRIMINATOR",
+    "counterhypothesis": "Repository-wide there is already only one semantic authority for UCF runtime receipt v1.",
+    "result": "REFUTED_AT_SOURCE"
+  },
+  "repair": {
+    "strategy": "Collapse semantic authority into tools/validate_unified_cognitive_fabric_receipt_v1.py; retain the historical instrument path only as a delegating compatibility I/O wrapper.",
+    "legacy_parallel_shape": "FAIL_CLOSED_SCHEMA_MISMATCH",
+    "silent_translation": false,
+    "second_schema_authority": false,
+    "adaptive_capability_main_hardening_inherited_by_delegation": true,
+    "files_changed": [
+      "agentzeroforschung/instrumente/validate_unified_cognitive_fabric_receipt_v1.py",
+      "agentzeroforschung/instrumente/test_unified_cognitive_fabric_receipt_v1.py",
+      "agentzeroforschung/instrumente/UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT_v1.md"
+    ]
+  },
+  "coordination": {
+    "open_prs_checked": [1085, 1086, 1087, 997],
+    "overlap_with_1085_1086_1087": false,
+    "main_advanced_during_work": true,
+    "branch_force_recropped_to_latest_observed_main": true,
+    "new_main_ucf_adaptive_capability_fence_preserved": true
+  },
+  "execution_evidence": {
+    "exact_candidate_branch_execution": "PENDING_PR_CI_OR_AUTHORIZED_EXACT_EXECUTOR",
+    "local_behavioral_transcription": "PASS_BOUNDED_NONEXACT",
+    "local_behavioral_result": "canonical valid accepted; old parallel v1 shape rejected; canonical error parity preserved",
+    "runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "claude_code_adapter_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "provider_and_secret_evidence": {
+    "free_provider_credentials_exposed_on_current_callable_surface": false,
+    "provider_network_calls": 0,
+    "secret_lookups": 0,
+    "paid_calls": 0,
+    "training_jobs": 0,
+    "together_used": false
+  },
+  "r6": {
+    "classification": "SOURCE_MECHANISM_REPAIR_CANDIDATE",
+    "acceptance": "IN_PROGRESS",
+    "next_gate": "Run exact PR-head canonical + compatibility UCF regressions in an actually-started admitted executor; if green, merge without restoring a second v1 semantic authority. Runtime/model/J-Space/GWT credit remains separately gated."
+  }
+}

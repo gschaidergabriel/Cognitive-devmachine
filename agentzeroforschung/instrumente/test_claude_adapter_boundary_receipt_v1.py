@@ -129,5 +129,33 @@ class TestReceipt(unittest.TestCase):
         self.assertEqual(result["violations"]["tool_less"], ["BASH_ENABLED"])
         self.assertEqual(result["violations"]["structured_output"], ["CANONICAL_WRITE_ATTEMPTED"])
 
+    def test_diagnostic_rejects_contradictory_true_promotion_claim_on_fail(self):
+        x = fixture()
+        x["boundaries"]["tool_less"]["tool_invocation_count"] = 1
+        mark_fail(x, "tool_less")
+        x["promotion_eligible"] = True
+        with self.assertRaisesRegex(ReceiptError, "promotion_eligible contradicts boundary observations"):
+            diagnose(x)
+
+    def test_strict_rejects_contradictory_false_promotion_claim_on_pass(self):
+        x = fixture()
+        x["promotion_eligible"] = False
+        with self.assertRaisesRegex(ReceiptError, "promotion_eligible contradicts boundary observations"):
+            validate(x)
+
+    def test_explicit_matching_promotion_claims_are_accepted(self):
+        clean = fixture()
+        clean["promotion_eligible"] = True
+        self.assertTrue(validate(clean)["ok"])
+        red = fixture()
+        red["boundaries"]["ephemeral"]["temporary_home_removed"] = False
+        mark_fail(red, "ephemeral")
+        red["promotion_eligible"] = False
+        result = diagnose(red)
+        self.assertFalse(result["promotion_eligible"])
+
+    def test_legacy_missing_promotion_claim_remains_valid(self):
+        self.assertTrue(validate(fixture())["ok"])
+
 if __name__ == "__main__":
     unittest.main()

@@ -413,7 +413,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                 db.execute(
                     """INSERT INTO eos_pipeline_state_v2(
                            singleton,continuity_json,canonical_json,canonical_hash,cursors_json,updated_at)
-                       SELECT singleton,continuity_json,canonical_json,canonical_hash,cursors_json,updated_at
+                       SELECT singleton,continuity_json,canonical_hash,cursors_json,updated_at
                        FROM eos_pipeline_state"""
                 )
                 db.execute("DROP TABLE eos_pipeline_state")
@@ -423,7 +423,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                     """CREATE TABLE IF NOT EXISTS eos_pipeline_state(
                          singleton INTEGER PRIMARY KEY CHECK(singleton=1),
                          continuity_json TEXT NOT NULL DEFAULT '{}',
-                         canonical_json TEXT NOT NULL DEFAULT '',
+                         canonical_json TEXT NOT NULL DEFAULT '{}',
                          canonical_hash TEXT NOT NULL DEFAULT '',
                          cursors_json TEXT NOT NULL DEFAULT '{}',
                          updated_at REAL NOT NULL DEFAULT 0)"""

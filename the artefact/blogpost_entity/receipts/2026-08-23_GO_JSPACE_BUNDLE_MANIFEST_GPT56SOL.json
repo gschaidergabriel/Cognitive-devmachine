@@ -1,0 +1,82 @@
+{
+  "schema_version": "go-jspace-bundle-manifest-receipt/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_identity": "UNRESOLVED_NO_SHARED_IMMUTABLE_UPSTREAM_ID",
+  "base_main": "d8ff57c2edc4c9eecde99ce1f9b089702d71b1cf",
+  "branch": "gpt56sol/go-jspace-bundle-manifest-20260823-0951",
+  "source_contract": {
+    "verifier": "the artefact/blogpost_entity/mini_cognition/jspace_bundle_manifest_v1.py",
+    "verifier_sha256": "3780c5a5f4857dc6e757aacda4f4a786f6fb450a2ed7b8a626e2b034d7dbe6c8",
+    "tests": "the artefact/blogpost_entity/mini_cognition/test_jspace_bundle_manifest_v1.py",
+    "tests_sha256": "4645420a7c830a77a9bfaaa43dac7fe9efd28a46e7a5264cc30f0b37e86a9182",
+    "manifest_schema": "BundledCognitionManifest/v1"
+  },
+  "grf": {
+    "R0_OBSERVE": [
+      "main binds the new J-Space/GWT + bundled approximately-0.8B cognition architecture as source-only with zero J-Space/runtime credit",
+      "the owner architecture requires exact checkpoint/tokenizer/lens/workspace calibration bindings and forbids fixed layer/slot constants unless measured",
+      "Anthropic jacobian-lens main stores model-specific d_model/source_layers/n_prompts and applies per-layer Jacobian matrices",
+      "Anthropic workspace experiments define a workspace band empirically rather than as one universal fixed layer",
+      "upstream canonical_digest remains an open PR, so this delta does not depend on an unmerged serialization-independent lens digest API"
+    ],
+    "R1_INFER": "A fixed first-class local cognition contract needs one fail-closed machine-readable bundle identity before J-Space/GWT can receive boot credit.",
+    "R2_GENERATE": [
+      "bind only checkpoint+tokenizer and infer lens/workspace settings at runtime",
+      "bind checkpoint+tokenizer+lens+workspace/runtime/provenance in one strict manifest",
+      "trust a future upstream canonical lens digest and defer local identity"
+    ],
+    "R3_COUNTER": "Strict whole-manifest identity may be overconstraining and cause calibration churn; however unbound calibration/lens substitution would let stale J-Space geometry inherit runtime credit.",
+    "R4_DISCRIMINATE": "CALIBRATION_DIGEST_SWAP",
+    "R5_EMERGENT": "Source-only architecture and measured boot admission must be separate states; no concept document, placeholder profile or silently changed calibration may acquire runtime credit.",
+    "R6_VERIFY": "bounded isolated local component execution: unittest 6/6 PASS; py_compile PASS"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "CALIBRATION_DIGEST_SWAP",
+    "intervention": "change only workspace_calibration_digest while retaining the previously admitted expected bundle identity",
+    "prediction_if_binding_is_sound": "new bundle identity differs and stale expected identity is rejected",
+    "observed": "PASS: identity changed and admit_boot raised STALE_OR_SUBSTITUTED_BUNDLE_IDENTITY",
+    "cross_organ_uniqueness": "UNRESOLVED_NO_SHARED_IMMUTABLE_UPSTREAM_ID"
+  },
+  "deterministic_tests": {
+    "command": "python -m unittest -v test_jspace_bundle_manifest_v1.py && python -m py_compile jspace_bundle_manifest_v1.py test_jspace_bundle_manifest_v1.py",
+    "result": "PASS",
+    "tests_run": 6,
+    "tests_passed": 6,
+    "failures": 0,
+    "checks": [
+      "MEASURED exact identity boot admission",
+      "SOURCE_ONLY cannot receive boot credit",
+      "lens source_layers sorted+unique",
+      "bool is rejected as integer dimension",
+      "unknown top-level semantic fields fail closed",
+      "workspace calibration substitution invalidates prior identity"
+    ],
+    "evidence_scope": "BOUNDED_ISOLATED_LOCAL_COMPONENT_MATCHED_TO_WRITTEN_SOURCE_CONTENT; NOT HOST/AGENTZERO RUNTIME; NOT WHOLE PRODUCT"
+  },
+  "external_primary_evidence": [
+    "https://github.com/anthropics/jacobian-lens/blob/main/jlens/lens.py",
+    "https://github.com/anthropics/jacobian-lens/blob/main/jlens/fitting.py",
+    "https://github.com/anthropics/jacobian-lens/blob/main/data/experiments/README.md",
+    "https://github.com/anthropics/jacobian-lens/pulls"
+  ],
+  "policy": {
+    "free_only": true,
+    "provider_execution": false,
+    "together_secret_lookup": false,
+    "together_network": false,
+    "paid_execution": false,
+    "money_spent_usd": 0
+  },
+  "nonclaims": [
+    "no exact bundled checkpoint/tokenizer has been admitted",
+    "no Jacobian lens has been fitted for the bundled checkpoint",
+    "no workspace band/layer/slot policy has been measured",
+    "no J-Space/GWT runtime PASS",
+    "no Claude Code adapter runtime repair/PASS",
+    "no Whole Mini Entity PASS"
+  ],
+  "next_executable_gate": "On the next authorized host/runtime start, produce JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 with exact checkpoint, tokenizer, runtime artifact, lens/profile, workspace calibration and source/tree identities; run this verifier in boot mode before granting J-Space/GWT runtime credit. Separately resolve the existing Claude Code adapter red rather than treating the new architecture document as superseding it."
+}

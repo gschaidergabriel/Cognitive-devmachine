@@ -1,0 +1,62 @@
+{
+  "schema": "GO_CLAUDE_ADAPTER_RECEIPT_TEMPORAL_COHERENCE/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main": "592b7826f5d474b59188d68dab3c74bbe862403c",
+  "status": "SOURCE_MECHANISM_HARDENED_RUNTIME_UNVERIFIED",
+  "scope": "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 common run temporal identity only",
+  "source_before": {
+    "validator_blob": "a6f68b7f4e7c9ccce2090c37e0e198d8ffe09fa8",
+    "tests_blob": "3ceb00c9cf6137efc2ca85229a9e46c8a6adb5db"
+  },
+  "source_after": {
+    "validator_blob": "7c6088ae9236982e77aa1fa6380c59ef7f869dbd",
+    "tests_blob": "01ace36358d5a1d00dc4d0f2735f77e120ff0ee7"
+  },
+  "prechange_replication": {
+    "exact_git_blob_identity": true,
+    "py_compile": "PASS",
+    "deterministic_regressions": "19/19 PASS",
+    "environment": "isolated ChatGPT Linux container / Python 3.13.5"
+  },
+  "unusual_experiment": {
+    "id": "TEMPORAL_INVERSION_RECEIPT_POISON",
+    "count_for_this_go": 1,
+    "intervention": "Set started_at one second after finished_at, recompute the common identity digest and all four child common_identity_sha256 bindings, leaving the receipt otherwise internally consistent.",
+    "prechange_observation": "ACCEPTED_FALSE_GREEN",
+    "prechange_result_common_identity_sha256": "839713d4fc3e42532a2649d9fc7297a1b5c80c0b6eac322cbc9793dd0f42abfb",
+    "falsified_assumption": "Cross-bound common identity hashing alone guarantees a temporally coherent single run."
+  },
+  "repair": [
+    "Parse started_at and finished_at as ISO-8601 timestamps.",
+    "Require timezone-aware UTC timestamps.",
+    "Require finished_at >= started_at before common identity earns validation.",
+    "Add invalid-timestamp and temporal-inversion deterministic regressions."
+  ],
+  "postchange_evidence": {
+    "py_compile": "PASS",
+    "deterministic_regressions": "21/21 PASS",
+    "temporal_inversion": "FAIL_CLOSED"
+  },
+  "parallel_coordination": {
+    "ephemerality_contract_mismatch_commit": "3b225a1b2d56b8bd489f0ed8310c0e6626df23bb",
+    "overlap": false,
+    "note": "This delta does not claim or repair product HOME/config ephemerality. That independent acceptance blocker remains open."
+  },
+  "execution_boundary": {
+    "github_actions_rerun": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS",
+    "github_actions_steps": null,
+    "local_claude_binary": "ABSENT",
+    "live_claude_invocation": false,
+    "claude_adapter_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "whole_product_credit": 0,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

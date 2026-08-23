@@ -3,10 +3,18 @@ import hashlib
 import json
 import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 SCHEMA = "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1"
 BOUNDARIES = ("tool_less", "ephemeral", "structured_output", "env_isolation")
+CANONICAL_ENV_ALLOWLIST = frozenset({
+    "PATH", "HOME", "LANG", "LC_ALL", "TMPDIR",
+    "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS",
+    "HTTP_PROXY", "HTTPS_PROXY",
+    "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
+    "DISABLE_AUTOUPDATER", "CLAUDE_CODE_SKIP_PROMPT_HISTORY",
+})
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
 
@@ -44,6 +52,15 @@ def validate_common(common):
         need(isinstance(ex.get(key), str) and ex[key].strip(), f"executor.{key} missing")
     need(isinstance(common.get("started_at"), str) and common["started_at"].strip(), "started_at missing")
     need(isinstance(common.get("finished_at"), str) and common["finished_at"].strip(), "finished_at missing")
+    try:
+        started = datetime.fromisoformat(common["started_at"].replace("Z", "+00:00"))
+        finished = datetime.fromisoformat(common["finished_at"].replace("Z", "+00:00"))
+    except ValueError:
+        fail("started_at/finished_at must be ISO-8601 timestamps")
+    need(started.tzinfo is not None and finished.tzinfo is not None, "started_at/finished_at must be timezone-aware")
+    need(started.utcoffset() == timezone.utc.utcoffset(started), "started_at must be UTC")
+    need(finished.utcoffset() == timezone.utc.utcoffset(finished), "finished_at must be UTC")
+    need(finished >= started, "finished_at precedes started_at")
     return canonical_sha256(common)
 
 def validate_boundary_shape(name, b, common_digest):
@@ -90,6 +107,7 @@ def boundary_violations(name, b):
         need(isinstance(observed, list) and all(isinstance(x, str) for x in observed), "observed_child_env_keys invalid")
         need(len(allowed) == len(set(allowed)), "allowed_env_keys duplicate")
         need(len(observed) == len(set(observed)), "observed_child_env_keys duplicate")
+        need(set(allowed).issubset(CANONICAL_ENV_ALLOWLIST), "allowed_env_keys exceed canonical Claude child policy")
         need(isinstance(b.get("forbidden_key_count"), int) and not isinstance(b.get("forbidden_key_count"), bool) and b["forbidden_key_count"] >= 0, "forbidden_key_count invalid")
         need(isinstance(b.get("secret_value_leak_count"), int) and not isinstance(b.get("secret_value_leak_count"), bool) and b["secret_value_leak_count"] >= 0, "secret_value_leak_count invalid")
         need(is_nonplaceholder_hex(b.get("environment_shape_sha256"), SHA256), "environment shape digest invalid")

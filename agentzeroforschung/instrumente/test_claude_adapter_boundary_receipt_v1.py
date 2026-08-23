@@ -57,6 +57,19 @@ class TestReceipt(unittest.TestCase):
     def test_common_tamper_rejected(self):
         self.assert_reject(lambda x: x["common"].__setitem__("claude_version", "tampered"))
 
+    def test_invalid_timestamp_rejected(self):
+        self.assert_reject(lambda x: x["common"].__setitem__("started_at", "not-a-timestamp"))
+
+    def test_temporal_inversion_rejected(self):
+        def mutate(x):
+            x["common"]["started_at"] = "2026-08-23T03:16:01Z"
+            x["common"]["finished_at"] = "2026-08-23T03:16:00Z"
+            cid = canonical_sha256(x["common"])
+            x["common_identity_sha256"] = cid
+            for boundary in x["boundaries"].values():
+                boundary["common_identity_sha256"] = cid
+        self.assert_reject(mutate)
+
     def test_missing_boundary_rejected(self):
         self.assert_reject(lambda x: x["boundaries"].pop("ephemeral"))
 
@@ -83,6 +96,12 @@ class TestReceipt(unittest.TestCase):
 
     def test_extra_env_key_rejected(self):
         self.assert_reject(lambda x: x["boundaries"]["env_isolation"].__setitem__("observed_child_env_keys", ["HOME", "AWS_SECRET_ACCESS_KEY"]))
+
+    def test_receipt_cannot_self_authorize_forbidden_env_key(self):
+        self.assert_reject(lambda x: (
+            x["boundaries"]["env_isolation"].__setitem__("allowed_env_keys", ["HOME", "PATH", "AWS_SECRET_ACCESS_KEY"]),
+            x["boundaries"]["env_isolation"].__setitem__("observed_child_env_keys", ["HOME", "PATH", "AWS_SECRET_ACCESS_KEY"]),
+        ))
 
     def test_secret_leak_rejected(self):
         self.assert_reject(lambda x: x["boundaries"]["env_isolation"].__setitem__("secret_value_leak_count", 1))

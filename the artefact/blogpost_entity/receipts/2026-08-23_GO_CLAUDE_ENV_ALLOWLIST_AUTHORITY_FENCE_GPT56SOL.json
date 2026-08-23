@@ -1,0 +1,92 @@
+{
+  "schema": "GO_CLAUDE_ENV_ALLOWLIST_AUTHORITY_FENCE/v1",
+  "trigger": "go",
+  "date_utc": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch_base_at_creation": "9ba37faa922fa2d801d88a9322cce9614f206d34",
+    "main_observed_after_parallel_reentry": "592b7826f5d474b59188d68dab3c74bbe862403c",
+    "work_branch": "go/claude-env-allowlist-authority-fence-v1",
+    "validator_pre_fix_git_blob": "a6f68b7f4e7c9ccce2090c37e0e198d8ffe09fa8",
+    "test_pre_fix_git_blob": "3ceb00c9cf6137efc2ca85229a9e46c8a6adb5db",
+    "validator_post_fix_git_blob": "81fadd3ca4da1352a0b33a48dad4b0f5d56b739f",
+    "test_post_fix_git_blob": "038998ec4d235cc0fd8047309481e4ec4d7fa66d",
+    "contract_post_fix_git_blob": "8eaca930063119b7975c601377cf526f13b78a52"
+  },
+  "r0_observed": {
+    "canonical_validator_before_fix": "agentzeroforschung/instrumente/validate_claude_adapter_boundary_receipt_v1.py",
+    "current_product_adapter_policy_source": "agentZero/code/produkt/adapters.py::ClaudeCodeInference.ENV_ALLOWLIST + _subprocess_env controls",
+    "gap": "ENV_ISOLATION_RECEIPT/v1 validated observed_child_env_keys as a subset of receipt-declared allowed_env_keys but did not independently constrain the declared allowlist to the canonical Claude child-process environment policy.",
+    "parallel_nonduplicate_evidence": "main concurrently merged a writable-HOME falsifier; HOME persistence and receipt self-authorization are separate boundary mechanisms."
+  },
+  "hypothesis": "A receipt can manufacture a false ENV_ISOLATION PASS by adding a forbidden ambient key to both allowed_env_keys and observed_child_env_keys while reporting zero forbidden/leak counters.",
+  "counterhypothesis": "The existing subset and forbidden/leak counters are sufficient to prevent a receipt from widening its own policy.",
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "id": "CLAUDE_ENV_ALLOWLIST_SELF_AUTHORIZATION_POISON",
+    "intervention": "Insert AWS_SECRET_ACCESS_KEY into both allowed_env_keys and observed_child_env_keys in an otherwise valid receipt while leaving forbidden_key_count=0 and secret_value_leak_count=0.",
+    "pre_fix_observation": "PASS_FALSE_GREEN",
+    "pre_fix_validator_result": "accepted as aggregate PASS",
+    "counterhypothesis_result": "REJECTED",
+    "scope": "bounded source/measurement-contract falsifier only; no Claude runtime invocation"
+  },
+  "repair": {
+    "mechanism": "Require receipt-declared allowed_env_keys to be a subset of the canonical Claude child-process environment policy before observed-key containment is evaluated.",
+    "canonical_policy_keys": [
+      "PATH",
+      "HOME",
+      "LANG",
+      "LC_ALL",
+      "TMPDIR",
+      "SSL_CERT_FILE",
+      "SSL_CERT_DIR",
+      "NODE_EXTRA_CA_CERTS",
+      "HTTP_PROXY",
+      "HTTPS_PROXY",
+      "ANTHROPIC_API_KEY",
+      "ANTHROPIC_AUTH_TOKEN",
+      "ANTHROPIC_BASE_URL",
+      "DISABLE_AUTOUPDATER",
+      "CLAUDE_CODE_SKIP_PROMPT_HISTORY"
+    ],
+    "policy_law": "RECEIPT_DECLARED_ALLOWLIST <= CANONICAL_CHILD_ENV_POLICY; receipt self-authorization is forbidden; widening requires an explicit versioned source/contract policy change.",
+    "schema_family": "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 retained; this closes an unintended false-green in existing semantics rather than creating a second receipt authority."
+  },
+  "bounded_execution": {
+    "executor": {
+      "python": "Python 3.13.5",
+      "os": "Linux 6.18.35 x86_64 GNU/Linux",
+      "git": "git version 2.47.3"
+    },
+    "py_compile": "PASS",
+    "unit_regressions": "20/20 PASS",
+    "post_fix_poison": "FAIL_CLOSED",
+    "evidence_class": "BOUNDED_EXACT_AUTHORED_BLOB_COMPONENT_MECHANISM",
+    "exact_authorized_ubuntu_claude_runtime": "UNOBSERVED"
+  },
+  "execution_controls": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "together_execution": false,
+    "vercel_sandbox_start_exec_surface_exposed": false,
+    "vps_or_self_hosted_test_execution": false,
+    "coordinated_free_provider_swarm_started": false,
+    "swarm_reason": "No admitted FREE_ONLY provider credential/execution surface was exposed to this organ; no child execution was fabricated."
+  },
+  "credit": {
+    "source_measurement_contract": "MECHANISM_SUPPORTED",
+    "claude_adapter_runtime": 0,
+    "bundled_08b_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_gwt": 0,
+    "whole_product": 0,
+    "acceptance": "IN_PROGRESS"
+  },
+  "next_exact_gate": "On one intentionally started clean authorized Ubuntu runtime, bind exact full source/tree/dirty state, Claude binary/version, command/input and executor identity; execute all four Claude adapter boundary nodes, diagnose and strictly validate the same common identity, then rerun the full suite. Preserve any measured FAIL with zero promotion credit."
+}

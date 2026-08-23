@@ -112,6 +112,8 @@ def test_claude_code_adapter_ephemeral_receipt_v1(tmp_path, monkeypatch):
     assert args[args.index("--max-turns") + 1] == "1"
     assert "--no-session-persistence" in args
     assert env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] == "1"
+    assert env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] == "1"
+    assert env["CLAUDE_CODE_DISABLE_CLAUDE_MDS"] == "1"
     assert env["HOME"] == str(probe["home"])
 
 

@@ -1,0 +1,77 @@
+{
+  "schema": "ENTITYOS_HCU_CANONICAL_CROSS_LANGUAGE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "global_unusual_experiment_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+  "organ": "GPT-5.6 Sol",
+  "program": "EntityOS + HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "candidate_pr": 1376,
+  "branch": "gpt56sol/go-entityos-hcu-entry-canonical-v1-20260823",
+  "canonicalization_schema": "ENTITYOS_TYPED_CANONICAL_JSON/v1",
+  "source": {
+    "path": "the artefact/hcu/typed_canonical_v1.py",
+    "git_blob": "0d591a679bf108057e0eee656fc1ee7ec4a06d2e",
+    "existing_test_path": "the artefact/hcu/test_typed_canonical_v1.py",
+    "existing_test_git_blob": "1bf09ba7e039e42ce02ffaa9a0a46f67f58c6306",
+    "independent_test_path": "the artefact/hcu/test_typed_canonical_crosslang_v1.py",
+    "independent_test_commit": "fbf2e17defdbb0c41c3489fbae65fa1a478f6455"
+  },
+  "adjudication": {
+    "compared_candidates": [1375, 1376],
+    "preferred_for_next_fusion": 1376,
+    "reason": [
+      "current-facing the artefact/hcu root",
+      "strict duplicate-key JSON parser",
+      "built-in dict/list identity domain",
+      "floats fail closed and fixed-point is explicit",
+      "independent second-language equality gate now exists"
+    ],
+    "pr1375_status": "OVERLAPPING_CANONICALIZATION_CANDIDATE_DO_NOT_FUSE_BOTH"
+  },
+  "external_primary_evidence": {
+    "reference": "RFC 8785 JSON Canonicalization Scheme",
+    "url": "https://www.rfc-editor.org/rfc/rfc8785.html",
+    "use": "supports the invariant-representation requirement for cryptographic JSON identity; this candidate is a narrower explicitly versioned typed equivalent and does not claim JCS conformance"
+  },
+  "independent_reference": {
+    "language": "JavaScript/Node.js",
+    "node_version": "v22.16.0",
+    "implementation_relationship": "independent reimplementation of the documented v1 contract; does not call Python canonicalizer",
+    "vectors": 5,
+    "coverage": [
+      "object insertion order",
+      "nested HCU-like event structures",
+      "control-character escaping",
+      "Unicode value preservation",
+      "I-JSON safe integer boundary"
+    ],
+    "byte_equality": "PASS_5_OF_5",
+    "sha256_equality": "PASS_5_OF_5"
+  },
+  "component_execution": {
+    "surface": "connected isolated ChatGPT container",
+    "commands": [
+      "python -m py_compile typed_canonical_v1.py test_typed_canonical_v1.py test_cross.py",
+      "python -m unittest -v test_typed_canonical_v1.py test_cross.py"
+    ],
+    "tests": 12,
+    "passed": 12,
+    "failed": 0,
+    "scope": "COMPONENT_MECHANISM_SUPPORTED_ONLY",
+    "entityos_hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "unusual_experiment": {
+    "added_by_this_delta": 0,
+    "reason": "Cross-language equality is ordinary required regression. The shared go unusual experiment had already been consumed earlier in the macrocycle."
+  },
+  "remaining_falsifiers": [
+    "canonicalizer is not yet wired into retained PR1263 Entry event/admission, engine, router-policy and route-decision hashes",
+    "identity-bearing HCU fractional measurements must be converted to explicit fixed-point integers before this no-float profile can own those hashes",
+    "PR1368 EngineAdmission trust-domain split must be fused into the single retained PR1263 lane",
+    "exact authorized-isolated retained-head execution remains unavailable/unobserved"
+  ],
+  "next_exact_step": "Retain one canonicalization authority (prefer PR1376 over overlapping PR1375), fuse PR1368 EngineAdmission separation and ENTITYOS_TYPED_CANONICAL_JSON/v1 into PR1263 without creating a second router, then rerun combined Entry/router/inference/cross-language regressions on the exact fused source head."
+}

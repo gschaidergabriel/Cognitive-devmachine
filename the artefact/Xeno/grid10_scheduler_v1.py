@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Deterministic XENO_GRID10 logical-cell scheduler baseline.
+"""Deterministic GRID10 logical-cell scheduler baseline for EntityOS/HCU.
 
-The scheduler consumes an already-admitted XenoIngressPacket and creates a bounded
-10-cell logical plan. It owns no truth, model weights, canonical state, or effect authority.
+The scheduler consumes an admitted Entry packet and creates a bounded 10-cell logical
+plan. It carries both replay-stable event identity and concrete admission identity.
+Logical cells are not claims of resident model copies or simultaneous decode streams.
 """
 from __future__ import annotations
 
@@ -13,7 +14,8 @@ from typing import Any, Sequence
 
 from entry_fabric_v1 import XenoIngressPacket
 
-MODE = "XENO_GRID10"
+MODE = "GRID10"
+COMPAT_MODE = "XENO_GRID10"
 CELL_COUNT = 10
 
 
@@ -33,11 +35,15 @@ class Grid10Cell:
 class Grid10Plan:
     schema: str
     plan_id: str
+    semantic_plan_sha256: str
     mode: str
+    event_sha256: str
+    admission_sha256: str
     ingress_id: str
     causal_id: str
     entity_generation: int
     active_cells: int
+    physical_decode_concurrency_claimed: int | None
     cells: tuple[Grid10Cell, ...]
 
 
@@ -80,13 +86,26 @@ def schedule_grid10(
         raise Grid10SchedulingError("INGRESS_LOGICAL_CELL_BUDGET_EXCEEDED")
 
     normalized = tuple(_function_name(value) for value in functions)
+    semantic_plan_payload = {
+        "schema": "ENTITYOS_HCU_GRID10_SEMANTIC_PLAN/v1",
+        "mode": MODE,
+        "event_sha256": packet.event_sha256,
+        "causal_id": packet.causal_id,
+        "entity_generation": packet.entity_generation,
+        "functions": list(normalized),
+        "logical_capacity": CELL_COUNT,
+    }
+    semantic_plan_sha256 = hashlib.sha256(_canonical(semantic_plan_payload)).hexdigest()
+
     cells: list[Grid10Cell] = []
     for index in range(CELL_COUNT):
         active = index < len(normalized)
         function = normalized[index] if active else "IDLE"
         task_payload = {
-            "mode": MODE,
-            "ingress_id": packet.ingress_id,
+            "schema": "ENTITYOS_HCU_GRID10_TASK/v1",
+            "semantic_plan_sha256": semantic_plan_sha256,
+            "event_sha256": packet.event_sha256,
+            "admission_sha256": packet.admission_sha256,
             "causal_id": packet.causal_id,
             "entity_generation": packet.entity_generation,
             "cell_index": index,
@@ -104,23 +123,30 @@ def schedule_grid10(
         )
 
     plan_payload = {
-        "schema": "XENO_GRID10_PLAN/v1",
+        "schema": "ENTITYOS_HCU_GRID10_PLAN/v1",
+        "semantic_plan_sha256": semantic_plan_sha256,
         "mode": MODE,
-        "ingress_id": packet.ingress_id,
+        "event_sha256": packet.event_sha256,
+        "admission_sha256": packet.admission_sha256,
         "causal_id": packet.causal_id,
         "entity_generation": packet.entity_generation,
         "active_cells": len(normalized),
+        "physical_decode_concurrency_claimed": None,
         "cells": [asdict(cell) for cell in cells],
     }
     plan_id = hashlib.sha256(_canonical(plan_payload)).hexdigest()
     return Grid10Plan(
-        schema="XENO_GRID10_PLAN/v1",
+        schema="ENTITYOS_HCU_GRID10_PLAN/v1",
         plan_id=plan_id,
+        semantic_plan_sha256=semantic_plan_sha256,
         mode=MODE,
+        event_sha256=packet.event_sha256,
+        admission_sha256=packet.admission_sha256,
         ingress_id=packet.ingress_id,
         causal_id=packet.causal_id,
         entity_generation=packet.entity_generation,
         active_cells=len(normalized),
+        physical_decode_concurrency_claimed=None,
         cells=tuple(cells),
     )
 

@@ -2,9 +2,9 @@
 """Thin read-only binding from ProfilePipelineRuntime payloads to the one canonical UCF compositor.
 
 This module intentionally owns no cognition semantics. It verifies that the profile carried
-by the Clay phase is byte-equivalent to the active MiniUnifiedDB profile, opens the canonical
-database read-only, and delegates pre-inference admission to
-tools/pipeline_cognitive_fabric_admission_v1.py.
+by the Clay phase is the exact active MiniUnifiedDB profile plus the runtime-owned snapshot
+metadata emitted by ``_pipeline_profile_read``, opens the canonical database read-only, and
+delegates pre-inference admission to tools/pipeline_cognitive_fabric_admission_v1.py.
 """
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ from typing import Any
 import pipeline_cognitive_fabric_admission_v1 as canonical_admission
 
 BINDING_VERSION = "profile-runtime-cognitive-fabric-binding/v1"
+_RUNTIME_PROFILE_SNAPSHOT = "_runtime_profile_snapshot"
 
 
 class ProfileRuntimeCognitiveFabricBindingError(ValueError):
@@ -44,6 +45,24 @@ def _sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def _split_runtime_profile(profile: Mapping[str, Any]) -> tuple[dict[str, Any], Mapping[str, Any]]:
+    """Separate persisted profile bytes from runtime-owned snapshot metadata.
+
+    ``ProfilePipelineRuntime._pipeline_profile_read`` adds exactly one ephemeral field after
+    validating the stored profile hash. Treating that field as persisted profile data would
+    make the real Clay path reject every legitimate loaded profile, while accepting profiles
+    without the snapshot would remove the intended read->admit continuity fence.
+    """
+    carried = dict(profile)
+    snapshot = carried.pop(_RUNTIME_PROFILE_SNAPSHOT, None)
+    _need(isinstance(snapshot, Mapping), "RUNTIME_PROFILE_SNAPSHOT_REQUIRED")
+    _need(
+        set(snapshot) == {"profile_id", "profile_hash"},
+        "RUNTIME_PROFILE_SNAPSHOT_FIELDS_MISMATCH",
+    )
+    return carried, snapshot
+
+
 def admit_profile_runtime_payload(
     runtime: Any,
     payload: Mapping[str, Any],
@@ -54,7 +73,8 @@ def admit_profile_runtime_payload(
 
     The MiniUnifiedDB handle is opened through ``runtime._read_only_db`` so this pre-inference
     bridge cannot itself mutate canonical state. The active profile is re-read from the same
-    database and must exactly match the profile carried by the Clay phase.
+    database. The carried profile body must equal the stored profile exactly, and its ephemeral
+    runtime snapshot must bind the same active profile id + persisted-byte hash.
     """
     _need(isinstance(payload, Mapping), "PAYLOAD_OBJECT_REQUIRED")
     entity_db = payload.get("entity_db")
@@ -70,6 +90,7 @@ def admit_profile_runtime_payload(
     _need(isinstance(compiled, Mapping), "COMPILED_OBJECT_REQUIRED")
     _need(isinstance(prompt, Mapping), "PROMPT_OBJECT_REQUIRED")
     _need(isinstance(invocation, Mapping), "INVOCATION_OBJECT_REQUIRED")
+    carried_profile, runtime_snapshot = _split_runtime_profile(profile)
 
     db = runtime._read_only_db(entity_db)
     try:
@@ -89,6 +110,14 @@ def admit_profile_runtime_payload(
         profile_json = str(row["profile_json"])
         profile_sha256 = str(row["profile_sha256"])
         _need(_sha256_text(profile_json) == profile_sha256, "ACTIVE_PROFILE_HASH_MISMATCH")
+        _need(
+            runtime_snapshot.get("profile_id") == active_profile,
+            "RUNTIME_PROFILE_SNAPSHOT_ID_MISMATCH",
+        )
+        _need(
+            runtime_snapshot.get("profile_hash") == profile_sha256,
+            "RUNTIME_PROFILE_SNAPSHOT_HASH_MISMATCH",
+        )
 
         try:
             stored_profile = json.loads(profile_json)
@@ -96,7 +125,7 @@ def admit_profile_runtime_payload(
             raise ProfileRuntimeCognitiveFabricBindingError("ACTIVE_PROFILE_JSON_INVALID") from exc
         _need(isinstance(stored_profile, dict), "ACTIVE_PROFILE_OBJECT_REQUIRED")
         _need(
-            _canonical_json(dict(profile)) == _canonical_json(stored_profile),
+            _canonical_json(carried_profile) == _canonical_json(stored_profile),
             "RUNTIME_PROFILE_NOT_ACTIVE_MINIUNIFIEDDB_PROFILE",
         )
 

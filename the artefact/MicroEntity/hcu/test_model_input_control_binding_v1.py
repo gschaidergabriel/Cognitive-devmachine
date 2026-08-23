@@ -89,6 +89,8 @@ class ModelInputControlBindingTests(unittest.TestCase):
             self.bind(consumed=consumed, executor_observed_input_sha256="6" * 64)
         with self.assertRaisesRegex(ModelInputControlBindingError, "EXECUTOR_OBSERVED_INPUT_SIZE_MISMATCH"):
             self.bind(consumed=consumed, executor_observed_input_size=len(consumed) + 1)
+        with self.assertRaisesRegex(ModelInputControlBindingError, "executor_observed_input_size:INTEGER_REQUIRED"):
+            self.bind(consumed=consumed, executor_observed_input_size=float(len(consumed)))
 
     def test_generation_and_role_are_bound_to_packet(self):
         with self.assertRaisesRegex(ModelInputControlBindingError, "VECTOR_CONTROL_GENERATION_MISMATCH"):
@@ -108,6 +110,13 @@ class ModelInputControlBindingTests(unittest.TestCase):
         binding = self.bind(consumed=consumed)
         forged = self.resign(replace(binding, vector_control_packet_sha256="7" * 64))
         with self.assertRaisesRegex(ModelInputControlBindingError, "VECTOR_CONTROL_PACKET_IDENTITY_MISMATCH"):
+            validate_model_input_control_binding(forged, consumed)
+
+    def test_self_consistent_outer_hash_cannot_launder_float_input_size(self):
+        consumed = self.input_bytes()
+        binding = self.bind(consumed=consumed)
+        forged = self.resign(replace(binding, input_size=float(len(consumed))))
+        with self.assertRaisesRegex(ModelInputControlBindingError, "input_size:INTEGER_REQUIRED"):
             validate_model_input_control_binding(forged, consumed)
 
     def test_binding_digest_tamper_fails_closed(self):

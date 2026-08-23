@@ -37,6 +37,7 @@ from model_execution_receipt_v1 import (
     ACTUAL_MODEL_EXECUTOR_EVIDENCE_SOURCE,
     OBSERVATION_SCHEMA,
     ModelExecutionObservation,
+    model_execution_invocation_binding_key,
     model_execution_observation_record,
     model_execution_observation_sha256,
     verify_model_execution,
@@ -306,11 +307,15 @@ def fixture():
         output_size=128,
     )
     obs_record = model_execution_observation_record(observation)
+    observation_sha256 = model_execution_observation_sha256(observation)
     execution = verify_model_execution(
         plan,
         load,
         observation,
-        admitted_model_execution_observations={model_execution_observation_sha256(observation): obs_record},
+        admitted_model_execution_observations={observation_sha256: obs_record},
+        admitted_model_execution_invocations={
+            model_execution_invocation_binding_key(observation): observation_sha256
+        },
         current_generation=7,
     )
     kwargs = {

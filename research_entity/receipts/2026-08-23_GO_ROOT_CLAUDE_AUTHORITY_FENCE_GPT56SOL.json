@@ -1,10 +1,12 @@
 {
-  "schema": "CLAYVERSE_GO_RECEIPT/v1",
+  "schema": "CLAYVERSE_GO_RECEIPT/v2",
   "date": "2026-08-23",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
   "base_main_sha": "0b80a8f5d1e5657787482eadfc4315db9cb75cd0",
+  "parallel_main_after_pr1170": "4a24d3202921d1fa72b8c76cb4852623eb489d7b",
   "branch": "go/clayverse-root-claude-authority-fence-20260823-1106",
+  "pull_request": 1171,
   "finding": {
     "class": "ACTIVE_WORKER_AUTHORITY_DRIFT",
     "path": "CLAUDE.md",
@@ -26,7 +28,25 @@
   "execution_evidence": {
     "authorized_isolated_sandbox_start_exec_exposed": false,
     "exact_branch_tests_executed": false,
-    "github_actions_exact_branch_credit": 0,
+    "github_actions": [
+      {
+        "run_id": 32617192636,
+        "name": "Research Entity Verify",
+        "conclusion": "failure",
+        "job": "verify",
+        "steps": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_TEST_FAILURE"
+      },
+      {
+        "run_id": 32617192652,
+        "name": "Research Entity Identity Guard",
+        "conclusion": "failure",
+        "job": "identity-guard",
+        "steps": null,
+        "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_TEST_FAILURE"
+      }
+    ],
+    "github_actions_exact_branch_runtime_credit": 0,
     "whole_clayverse_runtime_credit": 0,
     "classification": "SOURCE_CANDIDATE_UNTIL_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXECUTION"
   },

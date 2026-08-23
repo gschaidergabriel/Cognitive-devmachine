@@ -101,6 +101,14 @@ def _input_bytes(value: Any) -> bytes:
     return value
 
 
+def _declared_input_size(value: Any, field: str = "input_size") -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise ModelInputControlBindingError(f"{field}:INTEGER_REQUIRED")
+    if not 1 <= value <= MAX_INPUT_BYTES:
+        raise ModelInputControlBindingError(f"{field}:SIZE_OUT_OF_RANGE")
+    return value
+
+
 def _canonical_sha256(value: Any, field: str) -> str:
     try:
         raw = canonicalize(value)
@@ -166,9 +174,11 @@ def bind_direct_unique_packet_input(
     input_size = len(observed)
     if _sha256(executor_observed_input_sha256, "executor_observed_input_sha256") != input_sha256:
         raise ModelInputControlBindingError("EXECUTOR_OBSERVED_INPUT_SHA256_MISMATCH")
-    if isinstance(executor_observed_input_size, bool) or not isinstance(executor_observed_input_size, int):
-        raise ModelInputControlBindingError("executor_observed_input_size:INTEGER_REQUIRED")
-    if executor_observed_input_size != input_size:
+    observed_input_size = _declared_input_size(
+        executor_observed_input_size,
+        "executor_observed_input_size",
+    )
+    if observed_input_size != input_size:
         raise ModelInputControlBindingError("EXECUTOR_OBSERVED_INPUT_SIZE_MISMATCH")
 
     packet_offset = _unique_packet_offset(observed, wire)
@@ -244,6 +254,7 @@ def validate_model_input_control_binding(
     if binding.vector_control_abi != ABI_SCHEMA:
         raise ModelInputControlBindingError("VECTOR_CONTROL_ABI_MISMATCH")
 
+    declared_input_size = _declared_input_size(binding.input_size)
     try:
         packet = parse_packet_text(_text(binding.vector_control_packet_jcs_utf8, "vector_control_packet_jcs_utf8", 262144))
     except Exception as exc:
@@ -262,7 +273,7 @@ def validate_model_input_control_binding(
     observed = _input_bytes(consumed_input_bytes)
     if hashlib.sha256(observed).hexdigest() != binding.input_sha256:
         raise ModelInputControlBindingError("EXECUTOR_INPUT_SHA256_MISMATCH")
-    if len(observed) != binding.input_size:
+    if len(observed) != declared_input_size:
         raise ModelInputControlBindingError("EXECUTOR_INPUT_SIZE_MISMATCH")
     if isinstance(binding.packet_offset, bool) or not isinstance(binding.packet_offset, int) or binding.packet_offset < 0:
         raise ModelInputControlBindingError("packet_offset:NONNEGATIVE_INTEGER_REQUIRED")

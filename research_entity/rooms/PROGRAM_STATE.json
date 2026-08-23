@@ -1,50 +1,56 @@
 {
-  "schema_version": "8.2",
-  "program_id": "clayverse-single-container",
+  "schema_version": "8.3",
+  "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
-  "stage": "CLAYVERSE_ARTIFACT",
-  "current_stage": "CLAYVERSE_ARTIFACT",
-  "current_stage_goal": "Converge and empirically validate the complete one-container ClayVerse product without creating a second durable authority.",
-  "stage_order": ["CLAYVERSE_ARTIFACT", "CLAYVERSE_EXACT_OCI_ACCEPTANCE", "CLAYVERSE_DEPLOYMENT_READINESS"],
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "current_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "current_stage_goal": "Finish and empirically prove one persistent portable multi-use Mini Entity executed by EntityOS with MiniUnifiedDB authority, mandatory bundled approximately-0.8B cognition, Unified J-Space/GWT, first-class Claude Code targeted inference, adaptive engines and MicroEntity inspection/control.",
+  "stage_order": [
+    "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+    "MINI_ENTITY_EXACT_RUNTIME_AND_MODEL_CALIBRATION",
+    "MINI_ENTITY_PORTABLE_PRODUCT_ACCEPTANCE"
+  ],
   "dynamic_targets": {
-    "primary": "WHOLE_CLAYVERSE_OCI_PRODUCT",
+    "primary": "WHOLE_MINI_ENTITY_ENTITYOS_PRODUCT",
     "runtime_evidence": "AUTHORIZED_ISOLATED_EXACT_SOURCE_ONLY",
-    "next": "exact-current ClayVerse authority/full regression -> exact OCI build/runtime -> full product path acceptance"
+    "next": "canonical .clay/UCF causal path + MiniUnifiedDB authority + bundled-0.8B/J-Space/GWT/Claude adapter exact evidence"
   },
   "progress_semantics": {
     "bar_cells": 20,
-    "progress_percent": "UNRESOLVED_UNLESS_DERIVED_FROM_CURRENT_CLAYVERSE_ACCEPTANCE_VECTOR"
+    "progress_percent": "UNRESOLVED_UNLESS_DERIVED_FROM_CURRENT_MINI_ENTITY_ACCEPTANCE_VECTOR"
   },
   "stage_gates": {
-    "CLAYVERSE_ARTIFACT": {"status": "IN_PROGRESS"},
-    "CLAYVERSE_EXACT_OCI_ACCEPTANCE": {"status": "BLOCKED_ON_EXECUTION_SURFACE"},
-    "CLAYVERSE_DEPLOYMENT_READINESS": {"status": "NOT_YET_ADMITTED"}
+    "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT": {"status": "IN_PROGRESS"},
+    "MINI_ENTITY_EXACT_RUNTIME_AND_MODEL_CALIBRATION": {"status": "BLOCKED_ON_EXACT_EXECUTION_AND_MODEL_BYTES"},
+    "MINI_ENTITY_PORTABLE_PRODUCT_ACCEPTANCE": {"status": "NOT_YET_ADMITTED"}
   },
-  "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "supporting_architecture": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "supporting_zero_architecture": "research_entity/global/ENTITYOS_MINI_ENTITY_ZERO_UNIFIED_COGNITIVE_ARCHITECTURE.md",
+  "supporting_training_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
-  "canonical_workspace": "the artefact/",
-  "product_endpoint": "ClayVerse",
-  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "canonical_workspace": "the artefact/blogpost_entity/",
+  "product_endpoint": "Mini Entity / EntityOS integrated cognitive architecture",
   "acceptance": "IN_PROGRESS",
   "authority": {
-    "durable_state": "UnifiedDB",
-    "derived_graph": "ClayGraph",
-    "runtime_cognition": "Claude Code",
-    "adaptive_retrieval": "MicroClay",
-    "external_effects": "EffectGate+EffectJournal",
-    "internal_execution_substrate": "EntityOS"
+    "durable_state": "MiniUnifiedDB",
+    "runtime_identity_configuration": "Zero",
+    "bundled_local_cognition": "approximately-0.8B generic ClayCode cognition core",
+    "cognitive_fabric": "Unified J-Space/GWT + Thalamus + EPQ + GRF + Hyperposition + ClayCode + omega",
+    "targeted_high_capability_inference": "Claude Code first-class adapter",
+    "other_inference": "adaptive capability-profile fabric",
+    "effects": "deterministic EntityOS/Mini Entity authority gates; inference engines have no direct effect authority"
   },
   "identity": {
     "persistent_research_entity": "Clay",
     "legacy_canonical_research_entity_id": "frank-project-global-research-entity",
-    "central_product_entity_count": 1,
-    "canonical_users": ["gabriel", "andreas"],
-    "rights": "equal",
-    "global_generation": "single shared live generation fenced across both canonical sessions"
+    "mini_entity_count": 1,
+    "zero_role": "runtime identity/configuration only",
+    "model_switching": "must not reset MiniUnifiedDB state/history"
   },
   "execution_policy": {
-    "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum",
+    "effective_control": "4.1+4.2-execution-boundary-addendum+4.3-program-authority-addendum+4.4-clayverse-product-authority-addendum+4.5-mini-entity-go-authority-addendum",
     "free_only": true,
     "isolated_sandbox_only": true,
     "vps_testing_forbidden": true,
@@ -57,42 +63,49 @@
   },
   "whole_product_gates": [
     "exact_current_source_identity",
+    "canonical_clay_pipeline_reaches_unified_cognitive_fabric_before_inference_generate",
+    "MiniUnifiedDB_exactly_once_generation_CAS_atomic_persistence_and_recovery",
+    "bundled_08b_exact_checkpoint_tokenizer_runtime_manifest",
+    "exact_hookable_local_model_JSpace_adapter",
+    "Jacobian_lens_or_equivalent_measurement_bound_to_exact_bytes",
+    "empirical_JSpace_GWT_calibration_and_causal_ablation",
+    "GWT_single_winner_and_workspace_receipt_binding",
+    "Claude_Code_adapter_toolless_ephemeral_structured_env_isolated",
+    "Claude_candidate_validation_before_canonical_write",
+    "adaptive_engine_capability_profiles_and_fail_closed_modes",
+    "reference_native_profile_v2_parity",
+    "MicroEntity_dashboard_and_Cognitive_Module_toggle",
     "authorized_isolated_full_regression",
-    "exact_oci_build_and_digest",
-    "startup_and_readiness",
-    "real_clerk_browser_websocket_pty",
-    "persistent_tmux_for_both_users",
-    "normal_interactive_claude_code",
-    "managed_turn_hooks",
-    "unifieddb_persistence_and_recovery",
-    "microclay_retrieval_and_promotion_fences",
-    "claygraph_hyperposition_workspace",
-    "effectgate_and_entityos_round_trip_when_admitted",
-    "restart_recovery_no_blind_effect_replay",
-    "dual_session_concurrency_and_stale_generation_fencing",
-    "supply_chain_acceptance"
+    "portable_release_and_restart_recovery_without_state_reset"
   ],
   "runtime_credit": {
-    "whole_clayverse": 0,
-    "note": "ClayVerse authority reconciliation is merged at source level; runtime credit remains zero until exact authorized isolated runtime evidence is observed."
+    "whole_mini_entity": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "note": "Owner/program authority is source-level only; no runtime/model/J-Space/GWT/Claude-adapter/whole-product credit is minted without exact admitted execution."
   },
-  "superseded_program_snapshot": {
-    "git_blob_sha": "d2a7b849e7a8f7b38b28aca3ae1704bf447a367d",
-    "schema_version": "7.11",
-    "program_id": "mini-entity-pipeline-all-in-one",
-    "classification": "HISTORICAL_DONOR_EVIDENCE_NOT_CURRENT_WORK_SELECTION_AUTHORITY",
-    "note": "The exact detailed Mini Entity/J-Space/training/native/parity campaign state remains preserved in Git history and its original receipts; this active state intentionally does not duplicate it as current product authority."
+  "known_current_evidence": {
+    "bundled_08b_owner_requirement": "SOURCE_BOUND_RUNTIME_UNVERIFIED",
+    "jspace_gwt_fixed_contract": "SOURCE_BOUND_RUNTIME_UNVERIFIED",
+    "claude_code_first_class_adapter": "SOURCE_BOUND_RUNTIME_UNVERIFIED",
+    "historical_frozen_runtime_baseline": "Gen276 1486 green / 1 red remains bounded historical evidence until fresh exact-source execution",
+    "historical_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
   },
-  "compatibility_note": "Legacy Frank/Mini-Entity-specific progress and campaign readers may return UNKNOWN for retired active-state fields. Historical evidence remains addressable by the superseded snapshot blob and original receipts rather than silently becoming current ClayVerse truth.",
-  "current_frontier": "run exact-current ClayVerse authority/full-suite/OCI build-startup gates on an actually-started authorized isolated executor, then resume Clerk/PTY/Claude/UnifiedDB/MicroClay/EffectGate/EntityOS/recovery acceptance",
-  "go_contract": "Every go refreshes current main/newest owner authority and execution policy, selects the highest-information nonduplicate whole-ClayVerse blocker, falsifies before promotion, preserves one shared unusual-experiment lease law, persists bounded evidence, and advances the same one-container ClayVerse product until promoted, falsified, or execution-blocked.",
-  "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one persistent central ClayVerse entity",
+  "current_frontier": "bind the canonical .clay -> Unified Cognitive Fabric -> inference_generate path and MiniUnifiedDB authority, then obtain exact bundled-0.8B/J-Space/GWT/Claude-adapter execution evidence on an authorized isolated surface",
+  "go_contract": "Every exact go is a maximum-depth Mini Entity product-convergence macrocycle: refresh current main/owner/control/parallel work; inject Mini Entity GRF+ClayCode protocol into every child; use admitted FREE_ONLY swarm concurrency when available; select the highest-information nonduplicate Mini Entity blocker; falsify; build/repair; test; fuse; re-enter until useful current-turn work is exhausted.",
+  "zero_contract": "Every exact zero uses the same Mini Entity product boundary and FREE_ONLY child-go swarm, with deep focus on Zero + EntityOS + Unified J-Space/GWT causal coupling and provenance.",
+  "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one persistent Mini Entity with Zero as runtime identity/configuration",
   "together_api": {
     "product_identity": "FORBIDDEN",
-    "inference_requirement": "NONE",
     "training_execution": "FORBIDDEN_UNDER_CURRENT_CONTROL",
     "secret_policy": "NEVER_LOOK_UP_FOR_CURRENT_CONTROL; NEVER_COMMIT",
     "job_started": false
   },
-  "legacy_scope": "Prior Mini Entity/Blogpost/Frank/EntityOS-top-level paths remain historical bounded evidence only."
+  "superseded_clayverse_state": {
+    "program_id": "clayverse-single-container",
+    "classification": "SUPERSEDED_FOR_CURRENT_GO_WORK_SELECTION_BY_LATER_OWNER_CORRECTION; DONOR_EVIDENCE_ONLY"
+  },
+  "legacy_scope": "ClayVerse/Frank/older top-level endpoint material is bounded donor evidence only unless it strengthens the active Mini Entity architecture."
 }

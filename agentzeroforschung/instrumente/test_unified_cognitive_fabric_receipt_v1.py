@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
 import unittest
 
-from validate_unified_cognitive_fabric_receipt_v1 import validate_receipt
+from validate_unified_cognitive_fabric_receipt_v1 import validate_receipt, validate_receipt_chain
 
 
 def _h(char: str) -> str:
@@ -91,6 +93,46 @@ def valid_receipt() -> dict:
     }
 
 
+def valid_boot_binding() -> dict:
+    return {
+        "schema": "JSPACE_GWT_BOOT_BINDING_RECEIPT/v1",
+        "source": {
+            "main_sha": "d8ff57c2edc4c9eecde99ce1f9b089702d71b1cf",
+            "tree_sha": "66a8ba9d0dd88669083dbc1fa1c900a73d6c5ce4",
+        },
+        "bundled_core": {
+            "manifest_sha256": _h("3"),
+            "checkpoint_sha256": _h("4"),
+            "tokenizer_sha256": _h("5"),
+            "runtime_sha256": _h("6"),
+        },
+        "jspace": {"lens_profile_sha256": _h("8")},
+        "gwt": {
+            "workspace_policy_sha256": _h("9"),
+            "calibration_sha256": _h("a"),
+        },
+        "zero_grf": {
+            "zero_identity_sha256": _h("1"),
+            "grf_sha256": _h("2"),
+        },
+        "claude_adapter": {
+            "adapter_version": "claude-code-candidate-v1",
+            "capability_profile_sha256": _h("d"),
+        },
+    }
+
+
+def _boot_bytes(boot: dict) -> bytes:
+    return json.dumps(boot, sort_keys=True, separators=(",", ":")).encode("utf-8")
+
+
+def paired_receipt() -> tuple[dict, bytes]:
+    receipt = valid_receipt()
+    raw = _boot_bytes(valid_boot_binding())
+    receipt["provenance"]["boot_binding_receipt_digest"] = hashlib.sha256(raw).hexdigest()
+    return receipt, raw
+
+
 class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
     def test_valid_compiled_external_claude_receipt(self) -> None:
         self.assertEqual(validate_receipt(valid_receipt()), [])
@@ -107,6 +149,37 @@ class UnifiedCognitiveFabricReceiptTests(unittest.TestCase):
         receipt = valid_receipt()
         receipt["provenance"]["boot_binding_receipt_version"] = "JSPACE_GWT_BOOT_BINDING_RECEIPT/v0"
         self.assertIn("BOOT_BINDING_RECEIPT_VERSION_INVALID", validate_receipt(receipt))
+
+    def test_exact_boot_binding_chain_is_accepted(self) -> None:
+        receipt, raw = paired_receipt()
+        self.assertEqual(validate_receipt_chain(receipt, raw), [])
+
+    def test_boot_binding_byte_substitution_is_rejected(self) -> None:
+        receipt, raw = paired_receipt()
+        substituted = raw + b"\n"
+        self.assertIn("BOOT_BINDING_RECEIPT_DIGEST_MISMATCH", validate_receipt_chain(receipt, substituted))
+
+    def test_boot_runtime_identity_splice_is_rejected_even_with_matching_parent_digest(self) -> None:
+        receipt = valid_receipt()
+        boot = valid_boot_binding()
+        boot["bundled_core"]["checkpoint_sha256"] = _h("e")
+        raw = _boot_bytes(boot)
+        receipt["provenance"]["boot_binding_receipt_digest"] = hashlib.sha256(raw).hexdigest()
+        self.assertIn(
+            "BOOT_RUNTIME_IDENTITY_MISMATCH:bundled_core.checkpoint_digest",
+            validate_receipt_chain(receipt, raw),
+        )
+
+    def test_boot_binding_missing_cross_identity_is_rejected(self) -> None:
+        receipt = valid_receipt()
+        boot = valid_boot_binding()
+        del boot["gwt"]["calibration_sha256"]
+        raw = _boot_bytes(boot)
+        receipt["provenance"]["boot_binding_receipt_digest"] = hashlib.sha256(raw).hexdigest()
+        self.assertIn(
+            "BOOT_BINDING_MISSING:gwt.calibration_sha256",
+            validate_receipt_chain(receipt, raw),
+        )
 
     def test_full_local_latent_requires_real_activation_access(self) -> None:
         receipt = valid_receipt()

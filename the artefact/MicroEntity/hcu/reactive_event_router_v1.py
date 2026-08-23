@@ -15,7 +15,14 @@ from typing import Any, Mapping
 
 SCHEMA = "HCU_REACTIVE_EVENT/v1"
 ROUTE_IDENTITY_SCHEMA = "HCU_CAUSAL_ROUTE_IDENTITY/v1"
-FORBIDDEN_INTERNAL_PROVIDERS = {"nvidia", "mistral", "groq", "openrouter", "together"}
+
+# Internal cognition is admitted positively. Unknown/future provider or engine labels do
+# not become internal merely because they are absent from a denylist.
+ADMITTED_INTERNAL_PROVIDER_ALIASES = {"hcu", "local", "xeno"}
+ADMITTED_INTERNAL_ENGINES = {
+    "hcu_local_08b": "LOCAL_SHARED_WEIGHT_08B",
+}
+
 SCRIPT_STAGES = (
     "generation_check",
     "canonical_rebind",
@@ -42,6 +49,8 @@ class RouteDecision:
     zero_projection_format: str | None
     external_provider_dependency: bool
     event_sha256: str
+    resolved_engine_identity: str | None
+    resolved_engine_class: str | None
     decision_sha256: str
 
 
@@ -72,6 +81,35 @@ def _bool(value: Any, field: str) -> bool:
     return value
 
 
+def _validate_internal_provider(event: Mapping[str, Any]) -> None:
+    provider = event.get("requested_internal_provider")
+    if provider is None:
+        return
+    if not isinstance(provider, str) or not provider.strip():
+        raise ReactiveRoutingError("REQUESTED_INTERNAL_PROVIDER_STRING_REQUIRED")
+    if provider.strip().lower() not in ADMITTED_INTERNAL_PROVIDER_ALIASES:
+        raise ReactiveRoutingError("UNKNOWN_OR_EXTERNAL_PROVIDER_FORBIDDEN_AS_INTERNAL_COGNITIVE_DEPENDENCY")
+
+
+def _resolve_internal_engine(event: Mapping[str, Any]) -> tuple[str | None, str | None]:
+    identity = event.get("resolved_internal_engine")
+    engine_class = event.get("resolved_internal_engine_class")
+    if identity is None and engine_class is None:
+        return None, None
+    if not isinstance(identity, str) or not identity.strip():
+        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_IDENTITY_REQUIRED")
+    if not isinstance(engine_class, str) or not engine_class.strip():
+        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_CLASS_REQUIRED")
+    identity = identity.strip().lower()
+    engine_class = engine_class.strip().upper()
+    admitted_class = ADMITTED_INTERNAL_ENGINES.get(identity)
+    if admitted_class is None:
+        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_NOT_ADMITTED")
+    if engine_class != admitted_class:
+        raise ReactiveRoutingError("RESOLVED_INTERNAL_ENGINE_CLASS_MISMATCH")
+    return identity, engine_class
+
+
 def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDecision:
     if not isinstance(event, Mapping) or event.get("schema") != SCHEMA:
         raise ReactiveRoutingError("EVENT_SCHEMA_UNSUPPORTED")
@@ -81,12 +119,8 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
     if generation != current_generation:
         raise ReactiveRoutingError("STALE_ENTITY_GENERATION")
 
-    provider = event.get("requested_internal_provider")
-    if provider is not None:
-        if not isinstance(provider, str):
-            raise ReactiveRoutingError("REQUESTED_INTERNAL_PROVIDER_STRING_REQUIRED")
-        if provider.strip().lower() in FORBIDDEN_INTERNAL_PROVIDERS:
-            raise ReactiveRoutingError("EXTERNAL_PROVIDER_FORBIDDEN_AS_INTERNAL_COGNITIVE_DEPENDENCY")
+    _validate_internal_provider(event)
+    resolved_engine_identity, resolved_engine_class = _resolve_internal_engine(event)
 
     novelty = _unit(event.get("novelty", 0.0), "novelty")
     contradiction = _unit(event.get("contradiction", 0.0), "contradiction")
@@ -115,6 +149,11 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         lanes.add("goal")
         lanes.add("critic")
 
+    # A route that asks for model work must already carry a positively admitted exact
+    # internal engine identity/class. Script-only events require no model identity.
+    if lanes and resolved_engine_identity is None:
+        raise ReactiveRoutingError("MODEL_ACTIVATION_REQUIRES_ADMITTED_INTERNAL_ENGINE")
+
     projection = zero_relevance >= 0.60 and bool(lanes)
     event_sha256 = _sha256_canonical(dict(event), "EVENT")
     payload = {
@@ -126,6 +165,8 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         "zero_projection_format": "ClayCode" if projection else None,
         "external_provider_dependency": False,
         "generation": generation,
+        "resolved_engine_identity": resolved_engine_identity,
+        "resolved_engine_class": resolved_engine_class,
     }
     digest = _sha256_canonical(payload, "ROUTE_DECISION")
     return RouteDecision(
@@ -136,6 +177,8 @@ def route_event(event: Mapping[str, Any], *, current_generation: int) -> RouteDe
         zero_projection_format="ClayCode" if projection else None,
         external_provider_dependency=False,
         event_sha256=event_sha256,
+        resolved_engine_identity=resolved_engine_identity,
+        resolved_engine_class=resolved_engine_class,
         decision_sha256=digest,
     )
 

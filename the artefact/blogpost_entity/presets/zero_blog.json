@@ -107,10 +107,10 @@
     ]
   },
   "sources": [
-    {"kind": "architect_receipt", "adapter": "sqlite_query", "required_for_quiet": true, "db": "source", "query": "SELECT quittung_id AS source_id,ts,hypothese_text,zweig,reproduziert,befund,sicherer_rahmen,nicht_schlechter,kanarie_status,urteil,live_geschaltet,hinweis FROM eos_architekt_quittungen ORDER BY ts ASC LIMIT 240", "id_field": "source_id", "evidence_prefix": "receipt:"},
-    {"kind": "bug", "adapter": "sqlite_query", "required_for_quiet": true, "db": "source", "query": "SELECT bug_id AS source_id,ts,beschreibung,wo,status,befund FROM eos_bug_hypothesen ORDER BY ts ASC LIMIT 240", "id_field": "source_id", "evidence_prefix": "bug:"},
-    {"kind": "architect_log", "adapter": "jsonl_cursor", "required_for_quiet": true, "path": "/opt/entityos/the artefact/architekt/architekt-log.jsonl", "limit": 60, "evidence_prefix": "log:"},
-    {"kind": "intentions", "adapter": "json_snapshot", "required_for_quiet": false, "path": "/var/lib/clay/vorsaetze.json", "evidence_prefix": "snapshot:intentions"}
+    {"kind": "architect_receipt", "source_namespace": "entityos.architect_receipts", "adapter": "sqlite_query", "required_for_quiet": true, "db": "source", "query": "SELECT quittung_id AS source_id,ts,hypothese_text,zweig,reproduziert,befund,sicherer_rahmen,nicht_schlechter,kanarie_status,urteil,live_geschaltet,hinweis FROM eos_architekt_quittungen ORDER BY ts ASC LIMIT 240", "id_field": "source_id", "evidence_prefix": "receipt:"},
+    {"kind": "bug", "source_namespace": "entityos.bug_hypotheses", "adapter": "sqlite_query", "required_for_quiet": true, "db": "source", "query": "SELECT bug_id AS source_id,ts,beschreibung,wo,status,befund FROM eos_bug_hypothesen ORDER BY ts ASC LIMIT 240", "id_field": "source_id", "evidence_prefix": "bug:"},
+    {"kind": "architect_log", "source_namespace": "entityos.architect_log", "adapter": "jsonl_cursor", "required_for_quiet": true, "path": "/opt/entityos/the artefact/architekt/architekt-log.jsonl", "limit": 60, "evidence_prefix": "log:"},
+    {"kind": "intentions", "source_namespace": "entityos.intentions_snapshot", "adapter": "json_snapshot", "required_for_quiet": false, "path": "/var/lib/clay/vorsaetze.json", "evidence_prefix": "snapshot:intentions"}
   ],
   "canonical_probes": [
     {"name": "catalog", "adapter": "sqlite_catalog", "db": "source", "max_tables": 220, "evidence_ref": "canonical:catalog"},

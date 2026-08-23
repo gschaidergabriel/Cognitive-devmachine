@@ -47,6 +47,8 @@ def _number_bytes(value: int | float) -> bytes:
         if not math.isfinite(value):
             raise HCUCanonicalizationError("NONFINITE_NUMBER_FORBIDDEN")
         number = value
+        if number.is_integer() and abs(number) > _MAX_SAFE_INTEGER:
+            raise HCUCanonicalizationError("INTEGER_OUTSIDE_IJSON_SAFE_RANGE")
     else:
         raise HCUCanonicalizationError("NUMBER_REQUIRED")
     # Match JSON/JCS numeric equivalence for negative zero without depending on text rendering.

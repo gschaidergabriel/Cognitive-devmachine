@@ -1,0 +1,20 @@
+{
+  "schema": "JSPACE_VECTOR_CONTROL_TEXT_ADMISSION_CONTRACT/v1",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "abi_schema": "JSPACE_VECTOR_CONTROL_ABI/v1",
+  "wire_format": "RFC8785_JCS_JSON_UTF8",
+  "canonical_parser": "jspace_vector_control_v1.parse_packet_text",
+  "admission_helper": "jspace_vector_control_text_admission_v1.admit_packet_text",
+  "untrusted_text_ingress_rule": "BOUND_TEXT_BEFORE_JSON_PARSE_THEN_DELEGATE_TO_SOLE_CANONICAL_PARSER",
+  "max_packet_text_chars": 65536,
+  "max_packet_text_utf8_bytes": 262144,
+  "second_wire_format_created": false,
+  "second_truth_or_state_authority_created": false,
+  "effect_authority_change": false,
+  "model_runtime_credit": 0,
+  "training_credit": 0,
+  "whole_entityos_hcu_runtime_credit": 0,
+  "evidence_scope": "SOURCE_CANDIDATE_UNEXECUTED_UNTIL_EXACT_ADMITTED_REGRESSION",
+  "falsifier": "AN_UNTRUSTED_TEXT_INGRESS_PATH_CAN_REACH_THE_CANONICAL_VECTOR_CONTROL_JSON_PARSER_WITHOUT_AN_EQUIVALENT_PRE_PARSE_RESOURCE_BOUND"
+}

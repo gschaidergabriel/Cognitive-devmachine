@@ -32,6 +32,31 @@ def test_docker_build_cannot_self_authorize_arbitrary_entityos_digest():
     assert "sha256sum -c -" in dockerfile
 
 
+def test_runtime_cannot_redirect_entityos_path_or_digest_with_environment():
+    service = (ROOT / "clayverse" / "service.py").read_text(encoding="utf-8")
+    mcp_server = (ROOT / "clayverse" / "mcp_server.py").read_text(encoding="utf-8")
+    terminal_sessions = (ROOT / "clayverse" / "terminal_sessions.py").read_text(encoding="utf-8")
+    dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
+    compose = (ROOT / "compose.yaml").read_text(encoding="utf-8")
+    kata = (ROOT / "deployment" / "clayverse-kata-statefulset.template.yaml").read_text(encoding="utf-8")
+
+    assert '_ENTITYOS_PATH = "/opt/entityos/EntityOS"' in service
+    assert '_ENTITYOS_LOCK_PATH = "/opt/entityos/entityos.lock.json"' in service
+    assert 'os.environ.get("CLAYVERSE_ENTITYOS_PATH"' not in service
+    assert 'os.environ.get("CLAYVERSE_ENTITYOS_SHA256"' not in service
+    assert "from .service import _entityos_config" in mcp_server
+    assert 'os.environ.get("CLAYVERSE_ENTITYOS_PATH"' not in mcp_server
+    assert 'os.environ.get("CLAYVERSE_ENTITYOS_SHA256"' not in mcp_server
+    assert "CLAYVERSE_ENTITYOS_PATH" not in terminal_sessions
+    assert "CLAYVERSE_ENTITYOS_SHA256" not in terminal_sessions
+    assert "CLAYVERSE_ENTITYOS_PATH" not in dockerfile
+    assert "CLAYVERSE_ENTITYOS_SHA256" not in dockerfile
+    assert "CLAYVERSE_ENTITYOS_PATH" not in compose
+    assert "CLAYVERSE_ENTITYOS_PATH" not in kata
+    assert "CLAYVERSE_ENTITYOS_SHA256" not in kata
+    assert "entityos-sha256" not in kata
+
+
 def test_default_deny_build_context_admits_every_declared_non_tree_copy_input():
     dockerignore = (ROOT / ".dockerignore").read_text(encoding="utf-8")
     assert dockerignore.splitlines()[3] == "*"

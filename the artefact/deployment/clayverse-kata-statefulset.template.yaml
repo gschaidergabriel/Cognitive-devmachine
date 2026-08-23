@@ -109,14 +109,11 @@ spec:
             # in the baseline deployment. A separately reviewed deployment-specific
             # overlay may set this to 1 only after exact embedded-artifact admission
             # and effect-path evidence; this template must never opt in implicitly.
+            # Artifact path/digest identity is derived only from the immutable
+            # image-owned /opt/entityos/entityos.lock.json and cannot be redirected
+            # through deployment environment, Secret or ConfigMap values.
             - name: CLAYVERSE_ENABLE_ENTITYOS_EXEC
               value: "0"
-            - name: CLAYVERSE_ENTITYOS_PATH
-              value: /opt/entityos/EntityOS
-            # EntityOS artifact identity is image-authoritative. The image bakes
-            # CLAYVERSE_ENTITYOS_SHA256 only after Docker build-time verification
-            # against the tracked entityos.lock.json and the embedded bytes.
-            # Do not override that digest from a deployment Secret/config source.
             - name: CLAYVERSE_CLERK_MAP_JSON
               valueFrom:
                 secretKeyRef:

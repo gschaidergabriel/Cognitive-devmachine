@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import hashlib
+import json
+import sqlite3
+import tempfile
+import unittest
+from pathlib import Path
+
+import profile_runtime_cognitive_fabric_binding_v1 as binding
+
+
+def canonical_json(value):
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)
+
+
+class FakeRuntime:
+    def __init__(self, db_path: Path):
+        self.db_path = db_path
+
+    def _read_only_db(self, value: str):
+        assert value == str(self.db_path)
+        conn = sqlite3.connect(f"file:{self.db_path.as_posix()}?mode=ro", uri=True)
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA query_only=ON")
+        return conn
+
+
+class RecordingCompositor:
+    def __init__(self):
+        self.calls = []
+
+    def build_pre_inference_admission(self, db, **kwargs):
+        write_blocked = False
+        try:
+            db.execute("CREATE TABLE forbidden_write(x INTEGER)")
+        except sqlite3.OperationalError:
+            write_blocked = True
+        self.calls.append((kwargs, write_blocked))
+        return {
+            "ok": True,
+            "generation": kwargs["entity_generation"],
+            "inference": {"kind": "local"},
+            "system": "s",
+            "user": "u",
+            "inference_packet_digest": "1" * 64,
+            "cognitive_fabric_receipt_digest": "2" * 64,
+        }
+
+
+class BindingTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.db_path = Path(self.tmp.name) / "mini.db"
+        self.profile = {
+            "schema": "clay-pipeline-profile/v2",
+            "profile_id": "p1",
+            "inference": {"kind": "local"},
+            "personality": {"output_contract": {}},
+            "sources": [],
+            "state_metrics": [],
+            "gate": {},
+        }
+        raw = canonical_json(self.profile)
+        conn = sqlite3.connect(self.db_path)
+        conn.execute("CREATE TABLE entity_state(id INTEGER PRIMARY KEY,generation INTEGER,active_profile TEXT)")
+        conn.execute("CREATE TABLE profiles(profile_id TEXT PRIMARY KEY,profile_json TEXT,profile_sha256 TEXT)")
+        conn.execute("INSERT INTO entity_state VALUES(1,7,'p1')")
+        conn.execute("INSERT INTO profiles VALUES(?,?,?)", ("p1", raw, hashlib.sha256(raw.encode()).hexdigest()))
+        conn.commit()
+        conn.close()
+        self.runtime = FakeRuntime(self.db_path)
+        self.payload = {
+            "entity_db": str(self.db_path),
+            "profile": self.profile,
+            "data": {
+                "compiled": {"canonical_state_hash": "a" * 64, "packet_hash": "b" * 64},
+                "prompt": {"system": "s", "user": "{}"},
+                "invocation": {"expected_generation": 7, "causal_turn_id": "ct", "task_text": "t", "turn_binding_digest": "c" * 64},
+            },
+        }
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_delegates_exact_active_profile_on_read_only_db(self):
+        compositor = RecordingCompositor()
+        out = binding.admit_profile_runtime_payload(
+            self.runtime, self.payload, compositor_module=compositor
+        )
+        self.assertTrue(out["ok"])
+        kwargs, write_blocked = compositor.calls[0]
+        self.assertTrue(write_blocked)
+        self.assertEqual(kwargs["entity_generation"], 7)
+        self.assertEqual(kwargs["profile"], self.profile)
+        self.assertEqual(kwargs["origin"], binding.BINDING_VERSION)
+
+    def test_rejects_profile_substitution_before_compositor(self):
+        compositor = RecordingCompositor()
+        poisoned = dict(self.payload)
+        poisoned["profile"] = {**self.profile, "profile_id": "attacker"}
+        with self.assertRaisesRegex(
+            binding.ProfileRuntimeCognitiveFabricBindingError,
+            "RUNTIME_PROFILE_NOT_ACTIVE_MINIUNIFIEDDB_PROFILE",
+        ):
+            binding.admit_profile_runtime_payload(
+                self.runtime, poisoned, compositor_module=compositor
+            )
+        self.assertEqual(compositor.calls, [])
+
+    def test_rejects_corrupt_active_profile_hash(self):
+        conn = sqlite3.connect(self.db_path)
+        conn.execute("UPDATE profiles SET profile_sha256=?", ("0" * 64,))
+        conn.commit()
+        conn.close()
+        with self.assertRaisesRegex(
+            binding.ProfileRuntimeCognitiveFabricBindingError,
+            "ACTIVE_PROFILE_HASH_MISMATCH",
+        ):
+            binding.admit_profile_runtime_payload(
+                self.runtime, self.payload, compositor_module=RecordingCompositor()
+            )
+
+
+if __name__ == "__main__":
+    unittest.main()

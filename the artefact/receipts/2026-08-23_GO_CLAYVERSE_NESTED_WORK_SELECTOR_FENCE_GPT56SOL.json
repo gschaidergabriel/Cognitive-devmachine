@@ -1,0 +1,76 @@
+{
+  "schema": "CLAYVERSE_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "0b80a8f5d1e5657787482eadfc4315db9cb75cd0",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_CONTROL_HARDENING_ONLY",
+  "observed": {
+    "authority_reconciliation_merged": true,
+    "authority_reconciliation_merge_sha": "0b80a8f5d1e5657787482eadfc4315db9cb75cd0",
+    "exact_runtime_credit": 0,
+    "vercel_sandbox_start_exec_exposed": false,
+    "github_pr_runner_pre_step_failure_observed_on_prior_reconciliation": true
+  },
+  "unusual_experiment": {
+    "local_intervention_count": 1,
+    "id": "STALE_NESTED_WORK_SELECTOR_POISON",
+    "macrocycle_id": null,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "method": "adversarial source-level counterfactual against the merged authority validator",
+    "counterhypothesis": "top-level ClayVerse authority can remain coherent while a nested PROGRAM_STATE work selector silently redirects future work to a retired program",
+    "falsifier": "replace dynamic_targets.primary or current_frontier with Mini Entity selection while leaving every previously validated top-level authority field unchanged",
+    "result": "COUNTERHYPOTHESIS_RETAINED_AT_SOURCE_LEVEL_BEFORE_REPAIR",
+    "runtime_claim": "NONE"
+  },
+  "delta": {
+    "validator": {
+      "path": "tools/validate_clayverse_authority_consistency.py",
+      "blob_sha": "acc54612db0143d8d61d74e1902f55554538e185",
+      "new_bindings": [
+        "PROGRAM_STATE.current_stage_goal contains ClayVerse",
+        "PROGRAM_STATE.dynamic_targets.primary == WHOLE_CLAYVERSE_OCI_PRODUCT",
+        "PROGRAM_STATE.current_frontier contains ClayVerse",
+        "PROGRAM_STATE.go_contract contains ClayVerse"
+      ]
+    },
+    "tests": {
+      "path": "tests/test_validate_clayverse_authority_consistency.py",
+      "blob_sha": "88178dd72b6f624e6726228eaad34d067ad07ca0",
+      "new_regressions": [
+        "nested stale primary work selector fails closed",
+        "non-ClayVerse current frontier fails closed"
+      ]
+    },
+    "program_state": {
+      "path": "research_entity/rooms/PROGRAM_STATE.json",
+      "blob_sha": "e32125eee36f372258940acfd636b71c79acd934",
+      "change": "post-merge frontier re-entered onto exact-current ClayVerse isolated regression and OCI build/startup"
+    },
+    "readme": {
+      "path": "the artefact/README.md",
+      "blob_sha": "733cadfef556f7df621a64fae667a1ebdcc50a73",
+      "change": "recorded this go re-entry and exact evidence boundary"
+    }
+  },
+  "preserved": {
+    "unifieddb_sole_durable_authority": true,
+    "claygraph_derived_only": true,
+    "effectgate_external_effect_authority": true,
+    "entityos_second_authority": false,
+    "free_only": true,
+    "together_forbidden": true,
+    "vps_testing_forbidden": true,
+    "paid_or_model_training": false,
+    "secrets_accessed": false
+  },
+  "evidence_boundary": {
+    "source_candidate": true,
+    "exact_branch_test_execution_observed": false,
+    "exact_oci_build_observed": false,
+    "whole_clayverse_runtime_credit": 0,
+    "next_gate": "actually-started authorized isolated executor runs exact-current authority validator plus full ClayVerse suite, then exact OCI build/startup with image digest binding"
+  }
+}

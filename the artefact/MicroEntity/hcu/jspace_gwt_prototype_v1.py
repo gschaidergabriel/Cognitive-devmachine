@@ -19,6 +19,7 @@ try:
     from .jspace_vector_control_v1 import (
         ABI_SCHEMA,
         CODEC_SCHEMA,
+        CONTROL_CONDITIONS,
         VectorControlPacket,
         validate_packet,
     )
@@ -27,7 +28,7 @@ try:
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from grid10_scheduler_v1 import ExecutionClass, GridPlan, PLAN_SCHEMA
-    from jspace_vector_control_v1 import ABI_SCHEMA, CODEC_SCHEMA, VectorControlPacket, validate_packet
+    from jspace_vector_control_v1 import ABI_SCHEMA, CODEC_SCHEMA, CONTROL_CONDITIONS, VectorControlPacket, validate_packet
     from reactive_event_router_v1 import ENTRY_BINDING_SCHEMA, HASH_SERIALIZATION_SCHEMA, RouteDecision
     from xeno_entry_fabric_v1 import EntryPacket
 
@@ -311,6 +312,9 @@ def _bind_causal_path(
 
 def _resource_budget(value: Mapping[str, Any], *, plan: GridPlan, cell_id: str) -> tuple[tuple[str, int], ...]:
     value = _mapping(value, "resource_budget", max_bytes=2048)
+    required = {"max_model_calls", "max_tokens", "max_wall_ms"}
+    if set(value) == required:
+        raise JSpaceGWTError("RESOURCE_BUDGET_SCHEMA_MISMATCH")
     required = {"model_tokens", "wall_ms"}
     if set(value) != required:
         raise JSpaceGWTError("RESOURCE_BUDGET_SCHEMA_MISMATCH")
@@ -460,10 +464,127 @@ def trace_material(trace: JSpaceGWTTransitionTrace) -> dict[str, Any]:
     return material
 
 
+def _canonical_trace_text(value: Any, field: str, *, max_len: int = 1024) -> str:
+    normalized = _text(value, field, max_len=max_len)
+    if value != normalized:
+        raise JSpaceGWTError(f"{field}:NONCANONICAL_WHITESPACE")
+    return normalized
+
+
+def _validate_trace_competition(trace: JSpaceGWTTransitionTrace) -> None:
+    records = trace.gwt_competition_set
+    if not isinstance(records, tuple) or not 1 <= len(records) <= MAX_COMPETITORS:
+        raise JSpaceGWTError("GWT_COMPETITION_SET_INVALID")
+    seen: set[str] = set()
+    selected_ids: list[str] = []
+    previous_key: tuple[int, str] | None = None
+    selection_closed = False
+    for record in records:
+        if not isinstance(record, GWTCompetitionRecord):
+            raise JSpaceGWTError("GWT_COMPETITION_RECORD_REQUIRED")
+        candidate_id = _canonical_trace_text(record.candidate_id, "gwt_record.candidate_id")
+        _canonical_trace_text(record.role, "gwt_record.role")
+        score = _nonnegative_safe_int(record.score, "gwt_record.score")
+        if score > SCORE_DENOMINATOR:
+            raise JSpaceGWTError("GWT_COMPETITION_SCORE_OUT_OF_RANGE")
+        if not isinstance(record.selected, bool):
+            raise JSpaceGWTError("GWT_COMPETITION_SELECTED_BOOL_REQUIRED")
+        _canonical_trace_text(record.evidence_ref, "gwt_record.evidence_ref")
+        _sha256(record.evidence_sha256, "gwt_record.evidence_sha256")
+        if candidate_id in seen:
+            raise JSpaceGWTError("GWT_DUPLICATE_CANDIDATE_ID_FORBIDDEN")
+        seen.add(candidate_id)
+        key = (-score, candidate_id)
+        if previous_key is not None and key < previous_key:
+            raise JSpaceGWTError("GWT_COMPETITION_ORDER_INVALID")
+        previous_key = key
+        if record.selected:
+            if selection_closed:
+                raise JSpaceGWTError("GWT_SELECTED_RECORDS_MUST_BE_PREFIX")
+            selected_ids.append(candidate_id)
+        else:
+            selection_closed = True
+
+    winners = trace.gwt_winner_ids
+    if not isinstance(winners, tuple) or not 1 <= len(winners) <= 8:
+        raise JSpaceGWTError("GWT_WINNER_IDS_INVALID")
+    normalized_winners = tuple(_canonical_trace_text(value, "gwt_winner_id") for value in winners)
+    if len(set(normalized_winners)) != len(normalized_winners):
+        raise JSpaceGWTError("GWT_DUPLICATE_WINNER_ID_FORBIDDEN")
+    if normalized_winners != tuple(selected_ids):
+        raise JSpaceGWTError("GWT_WINNER_SELECTION_MISMATCH")
+    if not isinstance(trace.gwt_broadcast_gate, bool):
+        raise JSpaceGWTError("GWT_BROADCAST_GATE_BOOL_REQUIRED")
+
+
+def _validate_trace_resource_budget(value: Any) -> None:
+    if not isinstance(value, tuple) or len(value) != 2:
+        raise JSpaceGWTError("RESOURCE_BUDGET_CANONICAL_TUPLE_REQUIRED")
+    expected_keys = ("model_tokens", "wall_ms")
+    keys: list[str] = []
+    for item in value:
+        if not isinstance(item, tuple) or len(item) != 2:
+            raise JSpaceGWTError("RESOURCE_BUDGET_CANONICAL_PAIR_REQUIRED")
+        key, amount = item
+        key = _canonical_trace_text(key, "resource_budget.key", max_len=64)
+        keys.append(key)
+        _nonnegative_safe_int(amount, f"resource_budget.{key}")
+    if tuple(keys) != expected_keys:
+        raise JSpaceGWTError("RESOURCE_BUDGET_SCHEMA_MISMATCH")
+
+
 def validate_transition_trace(trace: JSpaceGWTTransitionTrace) -> None:
-    material = trace_material(trace)
+    """Fail closed on both semantic shape and digest identity of a persisted/training trace.
+
+    A matching hash proves identity only. It must not turn a caller-constructed invalid trace
+    into admitted training evidence. This validator therefore rechecks every self-contained
+    v1 invariant that can be established from the trace before accepting its digest.
+    """
+    if not isinstance(trace, JSpaceGWTTransitionTrace):
+        raise JSpaceGWTError("JSPACE_GWT_TRANSITION_TRACE_REQUIRED")
     if trace.schema_version != TRACE_SCHEMA:
         raise JSpaceGWTError("JSPACE_TRACE_SCHEMA_UNSUPPORTED")
+    _canonical_trace_text(trace.trace_id, "trace_id")
+    _nonnegative_safe_int(trace.generation, "generation")
+    _sha256(trace.entry_event_sha256, "entry_event_sha256")
+    _sha256(trace.entry_admission_sha256, "entry_admission_sha256")
+    _sha256(trace.route_decision_sha256, "route_decision_sha256")
+    _sha256(trace.grid_plan_sha256, "grid_plan_sha256")
+    _canonical_trace_text(trace.cell_id, "cell_id")
+    _canonical_trace_text(trace.role, "role")
+    _canonical_trace_text(trace.jspace_basis_id, "jspace_basis_id")
+    _sha256(trace.jspace_basis_sha256, "jspace_basis_sha256")
+    vector_ref = _canonical_trace_text(trace.jspace_input_vector_ref, "jspace_input_vector_ref")
+    if not vector_ref.startswith("sha256:"):
+        raise JSpaceGWTError("JSPACE_INPUT_VECTOR_REF_SHA256_REQUIRED")
+    _sha256(vector_ref[7:], "jspace_input_vector_ref.digest")
+    if trace.jspace_input_codec_version != CODEC_SCHEMA:
+        raise JSpaceGWTError("JSPACE_INPUT_CODEC_VERSION_UNSUPPORTED")
+    if trace.jspace_vector_control_abi != ABI_SCHEMA:
+        raise JSpaceGWTError("JSPACE_VECTOR_CONTROL_ABI_UNSUPPORTED")
+    _canonical_trace_text(trace.local_workspace_state_ref, "local_workspace_state_ref")
+    if trace.gwt_selector_schema != SELECTOR_SCHEMA:
+        raise JSpaceGWTError("GWT_SELECTOR_SCHEMA_UNSUPPORTED")
+    _sha256(trace.gwt_selection_sha256, "gwt_selection_sha256")
+    _validate_trace_competition(trace)
+    _canonical_trace_text(trace.global_jspace_slice_ref, "global_jspace_slice_ref")
+    if not isinstance(trace.hyperposition_branch_ids, tuple) or len(trace.hyperposition_branch_ids) > 32:
+        raise JSpaceGWTError("HYPERPOSITION_BRANCH_SEQUENCE_REQUIRED")
+    branches = tuple(_canonical_trace_text(value, "hyperposition_branch_id") for value in trace.hyperposition_branch_ids)
+    if len(branches) != len(set(branches)):
+        raise JSpaceGWTError("HYPERPOSITION_DUPLICATE_BRANCH_FORBIDDEN")
+    if trace.evidence_class not in EVIDENCE_CLASSES:
+        raise JSpaceGWTError("evidence_class:UNSUPPORTED")
+    _validate_trace_resource_budget(trace.resource_budget)
+    _canonical_trace_text(trace.requested_action_class, "requested_action_class")
+    _mapping(trace.expected_structured_model_output, "expected_structured_model_output")
+    _mapping(trace.observed_downstream_outcome, "observed_downstream_outcome")
+    if trace.falsifier_lesion_condition not in CONTROL_CONDITIONS:
+        raise JSpaceGWTError("falsifier_lesion_condition:UNSUPPORTED")
+    if trace.credit_label not in CREDIT_LABELS:
+        raise JSpaceGWTError("credit_label:UNSUPPORTED")
+
+    material = trace_material(trace)
     observed = _sha256(trace.trace_sha256, "trace_sha256")
     expected = _canonical_sha256(material, "JSPACE_GWT_TRANSITION_TRACE")
     if observed != expected:

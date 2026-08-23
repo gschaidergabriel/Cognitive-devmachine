@@ -19,8 +19,8 @@ except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
 
 ENTRY_SCHEMA = "XENO_ENTRY_PACKET/v1"  # compatibility wire name; product authority is EntityOS/HCU
-ENTRY_EVENT_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2"
-ENTRY_ADMISSION_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2"
+ENTRY_EVENT_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v3"
+ENTRY_ADMISSION_IDENTITY_SCHEMA = "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v3"
 HCU_EVENT_SCHEMA = "HCU_REACTIVE_EVENT/v1"
 
 SOURCE_KINDS = {
@@ -272,11 +272,13 @@ def admit_entry(
     parent_id = _text(entry.get("parent_id"), "parent_id", optional=True)
     stream_id = _text(entry.get("stream_id"), "stream_id", optional=True)
 
+    # Causal event identity is intentionally generation-independent. A recovery may
+    # re-admit the same immutable event under a new live generation without changing
+    # what event occurred. Generation remains an admission/control-plane fence below.
     event_identity = {
         "schema": ENTRY_EVENT_IDENTITY_SCHEMA,
         "canonicalization_schema": CANONICALIZATION_SCHEMA,
         "causal_id": causal_id,
-        "entity_generation": generation,
         "source_kind": source_kind,
         "source_id": source_id,
         "modality": modality,
@@ -293,6 +295,7 @@ def admit_entry(
             "schema": ENTRY_ADMISSION_IDENTITY_SCHEMA,
             "canonicalization_schema": CANONICALIZATION_SCHEMA,
             "event_sha256": event_sha256,
+            "entity_generation": generation,
             "ingress_id": ingress_id,
             "received_time": received_time,
             "capabilities": list(capabilities),

@@ -25,7 +25,10 @@ refresh exact current Research main + retained admitted lanes once
 def _rebind_precedes_owner_token(text: str) -> bool:
     lower = text.lower()
     rebind = lower.find("rebind retained")
-    owner = lower.find("owner-start", rebind + 1)
+    owner_start = lower.find("owner-start", rebind + 1)
+    owner_supplies = lower.find("owner supplies", rebind + 1)
+    owner_candidates = [index for index in (owner_start, owner_supplies) if index >= 0]
+    owner = min(owner_candidates) if owner_candidates else -1
     token = lower.find("github_read_token", owner + 1)
     return rebind >= 0 and owner > rebind and token > owner and "#810" in text
 
@@ -33,7 +36,7 @@ def _rebind_precedes_owner_token(text: str) -> bool:
 def current_program():
     return {
         "dynamic_targets": {
-            "next": "refresh exact current Research main -> rebind retained Vercel controller PR #810 -> owner-start retained one-shot with GITHUB_READ_TOKEN"
+            "next": "refresh exact current Research main -> rebind retained Vercel controller PR #810 -> owner supplies scoped GITHUB_READ_TOKEN through the exact-bound one-shot"
         },
         "stage_gates": {
             "CLAYVERSE_EXACT_OCI_ACCEPTANCE": {"status": EXPECTED_EXECUTION_GATE}
@@ -42,7 +45,7 @@ def current_program():
             "vercel_sandbox_bridge": EXPECTED_VERCEL_BRIDGE,
             "execution_frontier_binding": VERCEL_EXECUTION_PATH,
         },
-        "current_frontier": "refresh exact current Research main, rebind retained Vercel controller PR #810, then owner-start the retained Vercel Sandbox runtime POST with scoped GITHUB_READ_TOKEN for ClayVerse",
+        "current_frontier": "refresh exact current Research main, rebind retained Vercel controller PR #810, then owner supplies scoped GITHUB_READ_TOKEN through the exact-bound Vercel Sandbox runtime POST for ClayVerse",
         "runtime_credit": {"whole_clayverse": 0},
     }
 
@@ -82,5 +85,5 @@ def test_current_vercel_continuity_orders_rebind_before_owner_token():
 
 
 def test_owner_token_first_work_selector_is_rejected_by_order_fence():
-    stale = "owner-start the retained Vercel Sandbox runtime POST with scoped GITHUB_READ_TOKEN, then rebind retained #810 controller"
+    stale = "owner supplies scoped GITHUB_READ_TOKEN to retained Vercel Sandbox first, then rebind retained #810 controller"
     assert not _rebind_precedes_owner_token(stale)

@@ -1,0 +1,90 @@
+{
+  "schema": "GO_MINI_ENTITY_CANONICAL_UCF_CAUSAL_PATH_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "date": "2026-08-23",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "gpt56sol/go-mini-ucf-causal-path-20260823-1149",
+  "branch_base_main": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "active_stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "inference": "candidate_only",
+    "effects": "EntityOS/Mini Entity deterministic authority gates",
+    "no_second_ucf": true
+  },
+  "observed_pre_delta": {
+    "canonical_source": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "source_blob_sha": "66898a4980a51e17ba2717e97352403164b4bdf8",
+    "call_path": [
+      "pipeline_build_prompt",
+      "inference_generate"
+    ],
+    "finding": "CANONICAL_PIPELINE_BYPASSED_UNIFIED_COGNITIVE_FABRIC_BEFORE_INFERENCE",
+    "prior_receipt": "the artefact/blogpost_entity/receipts/2026-08-23_GO_CANONICAL_UCF_PATH_LESION_GPT56SOL.json"
+  },
+  "delta": {
+    "canonical_source_blob_sha": "cad8de246ae237d2ef1b108349915c4747175977",
+    "structured_guard_blob_sha": "6490a1ebf54a5833674d6dda7bb0ebb07e90445f",
+    "guard_test_blob_sha": "a5105d5e869905ee77b1a8fd7f40caae243de4bf",
+    "code_head_before_receipt": "cd4aa51651138a85e243965d0d6965864dddf64c",
+    "causal_path": [
+      "pipeline_build_prompt",
+      "pipeline_cognitive_fabric_admit",
+      "inference_generate"
+    ],
+    "inference_inputs": [
+      "admitted.inference",
+      "admitted.system",
+      "admitted.user",
+      "admitted.inference_packet_digest",
+      "admitted.cognitive_fabric_receipt_digest"
+    ],
+    "gate_and_commit_reentry": "cognitive_fabric admitted envelope is carried into pipeline_gate and pipeline_commit",
+    "result_receipt_surface": [
+      "inference_packet_digest",
+      "cognitive_fabric_receipt_digest"
+    ],
+    "static_contract": "exactly one UCF admission must be inside run() and ordered after prompt construction but before inference_generate; raw profile/prompt inference bypass is rejected"
+  },
+  "unusual_experiment": {
+    "status": "CONSUMED",
+    "count": 1,
+    "experiment_id": "UCF_ORDERING_BYPASS_POISON",
+    "hypothesis": "Presence of a UCF admission name plus admitted-envelope fields is sufficient to establish canonical causal cognition wiring.",
+    "counterhypothesis": "A source can contain the UCF admission and admitted-envelope fields while still invoking inference first, producing a presence-only false green.",
+    "intervention": "Construct a run() source where inference_generate consumes admitted-named fields but pipeline_cognitive_fabric_admit occurs only after inference.",
+    "required_result": "fail closed on ordered_prompt_ucf_inference=false",
+    "execution_status": "SOURCE_TEST_DEFINED_NOT_EXECUTED_ON_AUTHORIZED_ISOLATED_RUNNER"
+  },
+  "non_duplication": {
+    "donor": "closed PR #1152",
+    "decision": "reuse only its narrow canonical pipeline admission concept; do not revive its superseded branch or create a second UCF implementation",
+    "current_open_overlap_observed": false
+  },
+  "evidence_boundary": {
+    "claim": "SOURCE_CANDIDATE_AND_STATIC_GUARD_DELTA_ONLY",
+    "authorized_isolated_execution_observed": false,
+    "bundled_08b_runtime_credit_change": 0,
+    "jspace_runtime_credit_change": 0,
+    "whole_gwt_runtime_credit_change": 0,
+    "claude_adapter_runtime_credit_change": 0,
+    "whole_product_credit_change": 0
+  },
+  "next_exact_gate": [
+    "Implement pipeline_cognitive_fabric_admit in the admitted current Mini Entity runtime by reusing the existing ZERO_WORKSPACE_CAPSULE -> ZERO_INFERENCE_PACKET -> UCF authority chain.",
+    "Bind generation/turn/workspace/packet identities and MiniUnifiedDB provenance into that single producer path.",
+    "Execute the exact branch/source/runtime on an actually-started authorized isolated executor and preserve pre-step admission failure separately from semantic failure.",
+    "Only then evaluate bundled-0.8B/J-Space/GWT/Claude-adapter runtime credit."
+  ],
+  "safety": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "vps_or_production_testing": false
+  }
+}

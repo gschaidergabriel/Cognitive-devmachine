@@ -133,9 +133,10 @@ class Packet:
 class Capability:
     route_digest = h("bound-route")
     authority = "ROUTING_ONLY_BOUND_TO_CANONICAL_PREPARE"
+    last_semantic_binding = None
 
     @classmethod
-    def resolve_bound_route(cls, profile, prepare, *, expected_generation):
+    def resolve_bound_route(cls, profile, prepare, *, expected_generation, semantic_binding=None):
         snapshot = profile.get("_runtime_profile_snapshot")
         if not isinstance(snapshot, dict):
             raise ValueError("PROFILE_SNAPSHOT_MISSING")
@@ -144,6 +145,9 @@ class Capability:
             raise ValueError("INFERENCE_CAPABILITY_BINDING_REQUIRED")
         if prepare.get("entity_generation") != expected_generation:
             raise ValueError("STALE_GENERATION")
+        if not isinstance(semantic_binding, dict):
+            raise ValueError("SEMANTIC_BINDING_REQUIRED")
+        cls.last_semantic_binding = semantic_binding
         return {
             "ok": True,
             "schema": "MINI_INFERENCE_BOUND_ROUTE/v1",
@@ -257,6 +261,10 @@ class AdmissionTests(unittest.TestCase):
             out["semantic_binding_digest"],
             out["admission_receipt"]["semantic_binding_digest"],
         )
+        self.assertEqual(
+            Capability.last_semantic_binding["semantic_binding_digest"],
+            out["semantic_binding_digest"],
+        )
 
     def test_downstream_context_changes_packet_and_admission_identity(self):
         a = self.call(prompt=self.prompt(payload="USR-A"))
@@ -283,8 +291,13 @@ class AdmissionTests(unittest.TestCase):
     def test_bound_route_turn_drift_fails_closed(self):
         class BadCapability(Capability):
             @classmethod
-            def resolve_bound_route(cls, profile, prepare, *, expected_generation):
-                out = super().resolve_bound_route(profile, prepare, expected_generation=expected_generation)
+            def resolve_bound_route(cls, profile, prepare, *, expected_generation, semantic_binding=None):
+                out = super().resolve_bound_route(
+                    profile,
+                    prepare,
+                    expected_generation=expected_generation,
+                    semantic_binding=semantic_binding,
+                )
                 out["causal_turn_id"] = "other-turn"
                 return out
 

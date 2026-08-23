@@ -1,138 +1,53 @@
 {
-  "schema_version": "8.60",
-  "latest_cycle": "go-20260824-entityos-hcu-executable-frontier",
+  "schema_version": "8.61",
+  "latest_cycle": "go-20260824-entityos-hcu-free-only-control-reconciliation",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "control_sync_required_before_research_spend": false,
-  "authority": {
-    "entityos": "SOLE_CURRENT_PRODUCT_SYSTEM_IDENTITY",
-    "hcu": "SOLE_CURRENT_INTEGRATED_COGNITION_COMPUTE_ARCHITECTURE",
-    "xeno_xcu_microentity_clayverse_frank": "HISTORICAL_TRANSITIONAL_OR_DONOR_PROVENANCE_ONLY",
-    "sandbox_pass_seeking_directive": "CURRENT_OWNER_REQUIRED"
+  "latest_repo_head_inspected_before_write": "296e71172b9e6ee658a0b20771259c9f9cd51bb1",
+  "material_finding": "A new repository owner directive authorizes one paid Together ~0.8B J-Space/GWT fine-tune, but this autonomous supervisor is explicitly FREE_ONLY with no paid fallback. The latest executor preflight records no Sandbox run, no Together job, runtime_credit=0, jspace_model_runtime_credit=0, training_credit=0, and execution blocked before the credential-bearing Vercel POST. Therefore the paid one-shot directive is quarantined for this supervisor and must not trigger key lookup, network I/O, job creation, spend, provider credit or acceptance credit.",
+  "current_frontier": {
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_state": "OPEN_DRAFT_NOT_MERGED",
+    "sandbox_controller": "READY_SOURCE_PRESENT_BUT_NOT_EXECUTED",
+    "sandbox_run_observed": false,
+    "together_job_created": false,
+    "runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
   },
-  "latest_repo_head_inspected_before_write": "35c97f311a8aec009535613ac9f5c8813f679928",
-  "material_finding": "The selected RFC8785_JCS_IJSON/v1 path has advanced materially on the single retained PR1263 donor lane: Entry emits new v2 JCS event/admission identities, Router v4 requires a typed JCS admission binding, EngineAdmission uses versioned JCS receipt identities, and inference has advanced to HCU_INFERENCE_RECEIPT/v2 using the selected JCS canonicalizer plus the shared typed Entry-binding resolver. A physical engine-load lease source candidate now binds loader-consumed component identities and generation, but real loader consumption remains unobserved. The highest-information blocker is therefore exact combined execution and loader evidence, not further canonicalizer selection. Execution-surface discovery required by owner directive was performed: the current Vercel connector exposes deployment/project/build-log/runtime-log/protected-fetch operations but no direct Sandbox.create/runCommand/REST-cmd action; the retained Dr.-Unterweger#810 deployment is READY and its /api/go-cycle-v2 serverless function has a real 405 GET runtime log, but no POST is observed and no owner-held transient GITHUB_READ_TOKEN is available on this worker surface. GitHub Actions rerun is callable, but rerunning the existing HCU identity-guard job again failed before step execution with steps=[] and no log blob. The isolated local tool container is callable but network-closed and cannot resolve github.com, so it cannot self-fetch the private exact source without an inadmissible secret bridge.",
-  "source_candidate": {
-    "retained_pr": 1263,
-    "observed_head": "bfca7da1133d0ad8b84d8685312d730d1ce93210",
-    "merge_state": "DRAFT_DONOR_LANE_NOT_CANONICAL_PRODUCT_HEAD",
-    "promotion_credit": 0,
-    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
-    "entry_identity": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2_PLUS_ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2",
-    "router_identity": "HCU_CAUSAL_ROUTE_IDENTITY/v4",
-    "entry_binding": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2",
-    "engine_admission": "VERSIONED_JCS_CONTROL_PLANE_RECEIPT_PATH",
-    "inference_receipt": "HCU_INFERENCE_RECEIPT/v2_JCS_TYPED_BINDING_RESOLVER",
-    "physical_engine_lease": "SOURCE_CANDIDATE_LOADER_CONSUMED_BYTE_AND_GENERATION_BINDING",
-    "grid10": "DETERMINISTIC_BASELINE_REQUIRES_CURRENT_COMBINED_REGRESSION",
-    "remaining_source_semantic_gap": "FUSE_CURRENT_ENGINE_LOAD_LEASE_AND_GRID10_IDENTITIES_INTO_ONE_TESTED_ENTRY_TO_INFERENCE_CHAIN_WITHOUT_REINTERPRETING_HISTORICAL_HASHES"
-  },
-  "canonicalization_frontier": {
-    "selected_current_authority": "RFC8785_JCS_IJSON/v1",
-    "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
-    "authority_correction_commit": "847cce80b5c52f7d9ceb47c43acc3c184ad2c87d",
-    "selection_status": "SELECTED_AND_WIRED_ACROSS_ENTRY_ROUTER_ENGINE_AND_INFERENCE_SOURCE_CANDIDATES_AT_OBSERVED_DONOR_SCOPE",
-    "bounded_component_evidence": "EXACT_SELECTED_JCS_COMPONENT_REPLICATION_RECORDED_ON_MAIN_PLUS_V8_DIFFERENTIAL_REPLICATION; ZERO_WHOLE_RUNTIME_CREDIT",
-    "legacy_identity_law": "HISTORICAL_CBOR_TYPED_CANONICAL_AND_HOST_PYTHON_HASHES_KEEP_ORIGINAL_VERSIONED_SCOPE_ONLY",
-    "next": "EXACT_COMBINED_CURRENT_HEAD_EXECUTION_AND_GRID10_DOWNGRADE_REJECTION"
-  },
-  "engine_runtime_frontier": {
-    "preload_hashing": "NECESSARY_BUT_NOT_LOADER_ATTESTATION",
-    "physical_lease_candidate": "HCU_PHYSICAL_ENGINE_LOAD_LEASE_SOURCE_PATH_PRESENT_ON_RETAINED_LANE",
-    "runtime_credit_requirement": "REAL_ADMITTED_LOADER_CONSUMPTION_EVIDENCE_BOUND_TO_GENERATION_FENCED_PHYSICAL_ENGINE_LEASE_AND_DOWNSTREAM_INFERENCE_ECHO",
-    "real_loader_consumption_observed": false,
-    "real_local_model_observed": false,
-    "runtime_credit": 0
-  },
-  "execution_discovery": {
-    "owner_directive_commit": "35c97f311a8aec009535613ac9f5c8813f679928",
-    "vercel_platform_capability_known": [
-      "Sandbox.create",
-      "sandbox.runCommand",
-      "CLI sandbox run/exec",
-      "REST /v2/sandboxes/sessions/{sessionId}/cmd",
-      "snapshot/fork/lifecycle"
-    ],
-    "current_vercel_connector_callable": [
-      "project/deployment identity",
-      "build logs",
-      "runtime logs",
-      "protected deployment fetch",
-      "deployment operations"
-    ],
-    "current_vercel_connector_direct_sandbox_action_exposed": false,
-    "vercel_project": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
-    "vercel_team": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
-    "retained_controller_repo": "gschaidergabriel/Dr.-Unterweger",
-    "retained_controller_pr": 810,
-    "retained_controller_head": "84838e74335a638c15328d6f8f2c9222ab0635ae",
-    "ready_deployment": "dpl_FfJ4ZGgPnZxHVdrjYyfuwtLgEyhP",
-    "ready_deployment_status": "READY",
-    "serverless_ingress_observation": "GET /api/go-cycle-v2 -> 405 in runtime logs at 2026-08-23T17:03:58Z",
-    "post_observation": "NO_POST_LOG_FOUND_IN_LAST_2H_AT_DISCOVERY_TIME",
-    "controller_semantics": "STALE_CLAYVERSE_BATCH_REQUIRES_ATOMIC_ENTITYOS_HCU_REBIND_BEFORE_CREDENTIAL_BEARING_START",
-    "owner_held_github_read_token_available_to_this_worker": false,
-    "github_actions_callable": true,
-    "github_actions_rerun": {
-      "run_id": 32653717002,
-      "new_job_id": 97229916731,
-      "conclusion": "failure",
-      "steps": [],
-      "job_log_fetch": "404_BLOB_NOT_FOUND",
-      "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_NOT_SEMANTIC_TEST_FAILURE"
-    },
-    "isolated_tool_container_callable": true,
-    "isolated_tool_container_private_source_ingress": "BLOCKED_NETWORK_DNS_GITHUB_COM_UNRESOLVABLE_WITHOUT_SECRET_BRIDGE",
-    "runtime_credit_change": 0
-  },
-  "execution_admission": {
-    "preferred_surface": "VERCEL_SANDBOX",
-    "current_state": "BLOCKED_BEFORE_SANDBOX_CREATE_ON_THIS_WORKER_SURFACE",
-    "blockers": [
-      "retained controller still launches historical ClayVerse-semantic acceptance batch",
-      "current connector has no direct Sandbox create/exec action",
-      "credential-bearing controller POST requires an owner-held scoped read-only GitHub token not available to this worker"
-    ],
-    "semantic_test_failure": false,
-    "required": "ATOMically_REBIND_THE_SINGLE_EXISTING_DR_UNTERWEGER_PR810_CONTROLLER_TO_ONE_EXACT_CURRENT_ENTITYOS_HCU_RESEARCH_SNAPSHOT_AND_RETAINED_DONOR_ACCEPTANCE_BATCH_THEN_OWNER_START_THE_EXISTING_TRANSIENT_TOKEN_INGRESS; OR USE_A_NEWLY_EXPOSED_DIRECT_SANDBOX_ACTION_IF_CURRENT_SURFACE_CHANGES"
-  },
-  "evidence_law": [
-    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
-    "GOODMAN_ANCESTRY_COLLAPSE_ACTIVE",
-    "SOURCE_COMPONENT_PASS_DOES_NOT_CREATE_WHOLE_RUNTIME_CREDIT",
-    "OLDER_EXACT_BLOB_EXECUTION_DOES_NOT_TRANSFER_TO_A_CHANGED_CURRENT_BLOB",
-    "CAUSAL_EVENT_DATA_MUST_NOT_MINT_ENGINE_ADMISSION_AUTHORITY",
-    "PRELOAD_HASH_IS_NOT_LOADER_ATTESTATION",
-    "LOADER_CONSUMED_BYTES_REQUIRE_GENERATION_FENCED_PHYSICAL_ENGINE_LEASE_OR_ENFORCED_CONTENT_ADDRESSED_READ_ONLY_BOUNDARY",
-    "ENTRY_ROUTE_ENGINE_INFERENCE_AND_GRIDPLAN_MUST_SHARE_EXPLICIT_VERSIONED_CANONICALIZATION_AUTHORITY_FOR_NEW_IDENTITIES",
-    "HISTORICAL_HASHES_ARE_NOT_REINTERPRETED",
-    "A_RUNNER_FAILURE_WITH_ZERO_STEPS_IS_EXECUTION_ADMISSION_FAILURE_NOT_SEMANTIC_TEST_FAILURE",
-    "NO_RUNTIME_PASS_WITHOUT_ACTUALLY_STARTED_EXACT_SOURCE_ISOLATED_EXECUTION"
-  ],
   "free_only": {
     "enabled": true,
     "no_paid_fallback": true,
     "together_forbidden": true,
-    "secrets_never_committed_or_persisted": true,
-    "final_paid_or_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+    "paid_subscription_unknown_fail_closed": true,
+    "admission_boundary": "BEFORE_SECRET_OR_KEY_LOOKUP_AND_BEFORE_NETWORK_IO",
+    "historical_or_owner_paid_authorization_execution_credit": 0
   },
+  "evidence_law": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "GOODMAN_ANCESTRY_COLLAPSE_ACTIVE",
+    "SOURCE_OR_COMPONENT_PASS_DOES_NOT_CREATE_WHOLE_RUNTIME_CREDIT",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "NO_RUNTIME_PASS_WITHOUT_ACTUALLY_STARTED_EXACT_SOURCE_ISOLATED_EXECUTION",
+    "PAID_OWNER_PROSE_DOES_NOT_OVERRIDE_THIS_FREE_ONLY_SUPERVISOR_CONTRACT"
+  ],
   "next_focus": [
-    "KEEP_PR1263_AS_THE_SINGLE_DRAFT_HCU_ENTRY_DONOR_LANE_AND_ZERO_RUNTIME_CREDIT",
-    "VERIFY_CURRENT_GRID10_AND_INFERENCE_V2_CHAIN_AGAINST_THE_LATEST_DONOR_HEAD_WITH_TYPED_JCS_ENTRY_BINDINGS",
-    "FUSE_PHYSICAL_ENGINE_LEASE_EVIDENCE_INTO_THE_SAME_DOWNSTREAM_RECEIPT_CHAIN_WITHOUT_SECOND_ENGINE_AUTHORITY",
-    "SEMANTICALLY_REBIND_EXISTING_DR_UNTERWEGER_PR810_VERCEL_CONTROLLER_FROM_CLAYVERSE_TO_ONE_EXACT_ENTITYOS_HCU_SOURCE_AND_CURRENT_FOCUSED_ACCEPTANCE_BATCH",
-    "AFTER_REBIND_USE_OWNER_HELD_TRANSIENT_GITHUB_READ_TOKEN_INGRESS_OR_NEWLY_EXPOSED_DIRECT_SANDBOX_ACTION_TO_ACTUALLY_START_VERCEL_SANDBOX",
-    "RUN_EXACT_CURRENT_ENTRY_V2_ROUTE_V4_ENGINE_ADMISSION_PHYSICAL_LOAD_LEASE_INFERENCE_V2_GRID10_REGRESSIONS",
-    "BIND_REAL_LOCAL_APPROX_08B_CHECKPOINT_TOKENIZER_RUNTIME_BUILD_BYTES_TO_AN_ACTUAL_ADMITTED_LOADER_BEFORE_ANY_RUNTIME_PROMOTION",
-    "ONLY_AFTER_EXECUTABLE_EVIDENCE_REBASE_OR_FUSE_SETTLED_MECHANISMS_ONTO_CURRENT_MAIN_AND_REBUILD_COMPATIBILITY_PACKAGE"
+    "DO_NOT_CREATE_OR_PREFLIGHT_A_PAID_TOGETHER_JOB_AND_DO_NOT_CONSUME_TOGETHER_CREDENTIALS",
+    "KEEP_PR1263_AS_SINGLE_DRAFT_HCU_DONOR_LANE_WITH_ZERO_RUNTIME_CREDIT",
+    "USE_ONLY_AUTHORIZED_ISOLATED_FREE_EXECUTION_SURFACES",
+    "START_AN_EXACT_SOURCE_FREE_SANDBOX_RUN_WHEN_A_CALLABLE_NONPAID_EXECUTION_PATH_EXISTS",
+    "BIND_RESEARCH_MAIN_SHA_TREE_PR1263_SHA_TREE_EXECUTOR_RESULT_DIGEST_AND_CREDENTIAL_NONPERSISTENCE_IN_ONE_RECEIPT",
+    "CONTINUE_LOCAL_ZERO_COST_APPROX_08B_JSPACE_GWT_WORK_ONLY_AFTER_EXECUTABLE_EVIDENCE",
+    "DO_NOT_PROMOTE_ENTITYOS_OR_HCU_FROM_MODEL_CONSENSUS_OR_SOURCE_GUARDS_ALONE"
   ],
   "promotion_state": {
-    "base_release_gate": "NOT_PASS",
-    "new_base_wp_pass_from_this_cycle": false,
-    "canonical_semantics_promotion": false,
+    "entityos_whole_runtime_pass": false,
+    "hcu_runtime_credit_change": false,
     "provider_capability_change": false,
-    "hcu_runtime_credit_change": false
-  }
+    "canonical_semantics_promotion": false,
+    "training_credit": 0
+  },
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json"
 }

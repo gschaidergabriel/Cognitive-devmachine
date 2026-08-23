@@ -1,13 +1,31 @@
-// Unified Cognitive Fabric runtime receipt boundary.
+// Canonical Unified Cognitive Fabric runtime receipt boundary.
 // ClayCode semantic entry point; deterministic host/native validation owns admission.
 module clay.unified_cognitive_fabric_receipt_v1
 
+law ONE_RUNTIME_RECEIPT_AUTHORITY = true
+law runtime_receipt_must_bind_canonical_boot_binding = true
+law model_output_is_candidate_only = true
+law workspace_stability_is_not_factual_truth = true
+law latent_geometry_is_not_factual_truth = true
+law JSPACE_OBSERVED != JSPACE_INTERVENED
+law portable_architecture != portable_geometry
+law canonical_write_requires_measured_supported = true
+law effect_commit_requires_measured_supported = true
+law inference_execution_requires_backend_admission = true
+law stale_identity_blocks_admission_and_execution = true
+law provider_policy_authority_is_external_existing_supervisor_gate = true
+law receipt_does_not_mint_provider_policy = true
+law FREE_ONLY_nonfree_rejects_before_secret_or_network = true
+law FREE_backend_is_not_universal_no_network = true
+law receipt_envelope_is_digest_bound = true
+
 fn validate(receipt:Map)->Map {
   // The effect implementation MUST enforce the v1 invariants documented by the
-  // canonical validator: exact source/runtime bindings, one Zero/GRF/workspace
-  // identity, J-Space/GWT as cognition-only, candidate-only inference return,
-  // fail-closed stale/capability bindings, FREE_ONLY admission, and no direct
-  // candidate state/effect authority.
+  // canonical validator: exact source/runtime/boot bindings, one Zero/GRF/workspace
+  // identity, J-Space/GWT as cognition-only, observation/intervention separation,
+  // candidate-only inference, explicit epistemic status, fail-closed stale/capability
+  // bindings, upstream backend admission, FREE_ONLY cost-class admission, envelope
+  // integrity, and no direct candidate state/effect authority.
   let checked = effect("unified_cognitive_fabric_receipt_validate_v1", receipt)
   require checked.ok
   return checked
@@ -21,6 +39,9 @@ fn persist(receipt:Map)->Map {
   map_set(payload,"source_commit",checked.source_commit)
   map_set(payload,"generation",checked.generation)
   map_set(payload,"engine_class",checked.engine_class)
+  map_set(payload,"jspace_mode",checked.jspace_mode)
+  map_set(payload,"epistemic_status",checked.epistemic_status)
+  map_set(payload,"lane_cost_class",checked.lane_cost_class)
   // Persistence is receipt/evidence storage only. It is not canonical state/effect authority.
   return effect("research_receipt_persist",payload)
 }

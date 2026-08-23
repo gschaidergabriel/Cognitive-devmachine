@@ -7,60 +7,32 @@
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
   "repository": "gschaidergabriel/clay-global-research-entity",
   "base_main": "01ffde1159c8ac1e34308b7424f5fa5113f46d88",
-  "branch": "gpt56sol/go-cognitive-admission-fusion-current-20260823-1548",
-  "classification": "SOURCE_PLUS_EXACT_MODULE_COMPONENT_MECHANISM_EVIDENCE_ONLY",
-  "frontier": "single retained ProfilePipelineRuntime still lacks executable pipeline_cognitive_fabric_admit/finalize handlers",
-  "fusion": {
-    "supersedes_stale_composition_pr": 1287,
-    "does_not_revive_stale_compositor_pr": 1275,
-    "uses_landed_invocation_selector": true,
-    "uses_landed_active_prepare": true,
-    "uses_landed_bound_capability_route_pr": 1286,
-    "uses_zero_workspace_capsule_v1": true,
-    "uses_zero_inference_packet_v2": true,
-    "creates_second_routing_configuration": false,
-    "creates_second_turn_lookup_authority": false,
-    "creates_second_state_or_effect_authority": false
-  },
-  "delta": {
+  "historical_merge": "7daff2cae44c438cf9c9bd73d1308dbe7430318b",
+  "classification": "SUPERSEDED_COMPONENT_EVIDENCE_ONLY",
+  "status": "SUPERSEDED_BY_SINGLE_CANONICAL_PIPELINE_COMPOSITOR",
+  "historical_delta": {
     "module": "tools/mini_cognitive_fabric_admission_v1.py",
     "module_git_blob": "20a84623f6a048a57eb4b0c85fe2b84c787e7a46",
     "module_sha256": "69cf9eff5301442f0dfa7db220f3ff08d6b8263d03d74cee62adf867af74bd73",
     "test": "tests/test_mini_cognitive_fabric_admission_v1.py",
     "test_git_blob": "65231cb45f19116bdb562ae9bb515bd841743801",
-    "path": "MINI_COGNITIVE_INVOCATION/v1 -> resolve_active_prepare -> MINI_INFERENCE_BOUND_ROUTE/v1 -> ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v2 -> mini-entity-cognitive-fabric-admission/v1",
-    "candidate_only": true,
-    "final_ucf_receipt_emitted": false,
-    "real_effect_executed": false
+    "path": "MINI_COGNITIVE_INVOCATION/v1 -> resolve_active_prepare -> MINI_INFERENCE_BOUND_ROUTE/v1 -> ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v2 -> mini-entity-cognitive-fabric-admission/v1"
   },
-  "bounded_execution": {
+  "historical_bounded_execution": {
     "surface": "isolated ChatGPT Linux/Python component container",
     "exact_module_blob_reproduced": true,
     "py_compile": "PASS",
     "deterministic_regressions_run": 8,
     "deterministic_regressions_passed": 8,
-    "checks": [
-      "candidate-only exact path",
-      "selector turn mismatch fail-closed",
-      "selector authority-field smuggling fail-closed",
-      "bound-route turn mismatch fail-closed",
-      "active-prepare authority escalation fail-closed",
-      "prompt/compiled identity mismatch fail-closed",
-      "bound-route profile hash mismatch fail-closed",
-      "admitted inference deep-copy stability"
-    ],
-    "test_file_exact_execution_credit": false,
     "full_repository_runtime_credit": 0
   },
-  "unusual_experiment": {
-    "new_experiment_started": false,
-    "global_uniqueness": "UNRESOLVED_NO_SHARED_MACROCYCLE_ID",
-    "note": "this fusion lane used deterministic regressions only; it does not add another unusual intervention to parallel GO lanes"
-  },
-  "hcu_parallel": {
-    "decision": "NO_CHANGE_NON_DUPLICATE",
-    "reason": "HCU source/package lanes already exist; exact KVM4-equivalent runtime/capacity remains unverified on an admitted isolated execution surface",
-    "runtime_capacity_credit": 0
+  "supersession": {
+    "reason": "Parallel merge #1275 landed a stronger exact two-blob compositor with 18/18 bounded deterministic regressions and the same current selector/active-turn/bound-route/Zero ancestry. Keeping both modules would create duplicate pre-inference routing semantics.",
+    "canonical_module_retained": "tools/pipeline_cognitive_fabric_admission_v1.py",
+    "duplicate_module_removed": "tools/mini_cognitive_fabric_admission_v1.py",
+    "duplicate_test_removed": "tests/test_mini_cognitive_fabric_admission_v1.py",
+    "historical_evidence_retained": true,
+    "runtime_credit_from_historical_lane": 0
   },
   "authority": {
     "durable_state": "MiniUnifiedDB only",
@@ -69,17 +41,15 @@
     "bound_capability_route": "routing only bound to canonical prepare",
     "zero_jspace_gwt_model": "candidate_or_measurement_only"
   },
-  "credit": {
-    "source_mechanism": "SUPPORTED",
-    "reference_runtime": 0,
-    "bundled_08b_runtime": 0,
-    "jspace_runtime": 0,
-    "whole_gwt_runtime": 0,
-    "claude_adapter_runtime": 0,
-    "hcu_runtime_capacity": 0,
-    "whole_product": 0
+  "hcu_parallel": {
+    "decision": "NO_CHANGE_NON_DUPLICATE",
+    "runtime_capacity_credit": 0
   },
-  "next_gate": "Wire this one admission compositor into the retained ProfilePipelineRuntime pipeline_cognitive_fabric_admit effect, preserve the landed downstream identity guard and post-commit nonfatal finalization semantics, then obtain actually-started exact-source isolated integrated runtime execution.",
+  "unusual_experiment": {
+    "new_experiment_started": false,
+    "note": "deduplication is deterministic fusion, not a new unusual intervention"
+  },
+  "next_gate": "Use only tools/pipeline_cognitive_fabric_admission_v1.py when wiring the retained ProfilePipelineRuntime pipeline_cognitive_fabric_admit effect. Do not restore a second compositor. Exact integrated runtime credit still requires actually-started authorized isolated execution.",
   "forbidden_preserved": [
     "Together API",
     "VPS/self-hosted/production acceptance testing",

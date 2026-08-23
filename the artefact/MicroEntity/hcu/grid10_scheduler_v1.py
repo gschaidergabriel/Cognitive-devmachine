@@ -6,6 +6,11 @@ separately trusted runtime-capacity snapshot. It allocates logical function cell
 not choose HCU mode, engine identity, truth, permissions, compute authority, or effects.
 Logical cell population, model-call budget and physical decode concurrency remain
 separate quantities.
+
+GRID plan identity is versioned onto the selected EntityOS/HCU RFC8785/JCS canonicalizer
+and reuses the router's typed Entry-admission binding resolver. Historical bare
+admission->event maps or mixed canonicalization labels therefore fail closed rather than
+being silently reinterpreted as current identity.
 """
 from __future__ import annotations
 
@@ -15,13 +20,25 @@ from enum import Enum
 from typing import Any, Mapping
 
 try:
-    from .reactive_event_router_v1 import RouteDecision
-    from .typed_entry_canonical_v1 import CanonicalEncodingError, encode_canonical
+    from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from .reactive_event_router_v1 import (
+        HASH_SERIALIZATION_SCHEMA,
+        ReactiveRoutingError,
+        RouteDecision,
+        resolve_admitted_entry_binding,
+    )
     from .xeno_entry_fabric_v1 import EntryFabricError, EntryPacket, admit_entry
 except ImportError:
-    from reactive_event_router_v1 import RouteDecision
-    from typed_entry_canonical_v1 import CanonicalEncodingError, encode_canonical
+    from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from reactive_event_router_v1 import (
+        HASH_SERIALIZATION_SCHEMA,
+        ReactiveRoutingError,
+        RouteDecision,
+        resolve_admitted_entry_binding,
+    )
     from xeno_entry_fabric_v1 import EntryFabricError, EntryPacket, admit_entry
+
+GRID_PLAN_SCHEMA = "ENTITYOS_HCU_GRID_PLAN/v2"
 
 
 class GridScheduleError(ValueError):
@@ -70,6 +87,7 @@ class CellLease:
 @dataclass(frozen=True)
 class GridPlan:
     schema: str
+    canonicalization_schema: str
     plan_sha256: str
     ingress_id: str
     causal_id: str
@@ -110,31 +128,31 @@ def _nonempty(value: Any, field: str) -> str:
 
 def _verify_admitted_entry(
     packet: EntryPacket,
-    admitted_entry_bindings: Mapping[str, str],
+    admitted_entry_bindings: Mapping[str, Any],
     *,
     current_generation: int,
 ) -> dict[str, int]:
-    """Re-verify packet integrity plus prior external Entry admission.
-
-    `admitted_entry_bindings` is authority supplied by the deterministic control plane.
-    Re-admission below is only an integrity reconstruction; it never replaces that external
-    admission proof or mints capabilities/budget.
-    """
+    """Re-verify packet integrity plus the router's current typed Entry admission binding."""
     if not isinstance(packet, EntryPacket):
         raise GridScheduleError("ADMITTED_ENTRY_PACKET_REQUIRED")
     if isinstance(current_generation, bool) or not isinstance(current_generation, int) or current_generation < 0:
         raise GridScheduleError("CURRENT_GENERATION_INVALID")
     if packet.entity_generation != current_generation:
         raise GridScheduleError("STALE_ENTITY_GENERATION")
-    if not isinstance(admitted_entry_bindings, Mapping):
-        raise GridScheduleError("ADMITTED_ENTRY_BINDING_REGISTRY_REQUIRED")
+    if HASH_SERIALIZATION_SCHEMA != CANONICALIZATION_SCHEMA:
+        raise GridScheduleError("GRID_ROUTER_CANONICALIZATION_SCHEMA_MISMATCH")
 
-    expected_event_sha256 = admitted_entry_bindings.get(packet.admission_sha256)
-    if expected_event_sha256 is None:
-        raise GridScheduleError("ENTRY_ADMISSION_NOT_REGISTERED")
-    if expected_event_sha256 != packet.event_sha256:
-        raise GridScheduleError("ENTRY_EVENT_SHA256_MISMATCH")
+    try:
+        resolve_admitted_entry_binding(
+            admitted_entry_bindings,
+            packet.admission_sha256,
+            expected_event_sha256=packet.event_sha256,
+        )
+    except ReactiveRoutingError as exc:
+        raise GridScheduleError(str(exc)) from exc
 
+    # Re-admission is integrity reconstruction only. External authority is the typed
+    # admission binding above; this call does not create new capability/budget authority.
     try:
         rebuilt = admit_entry(
             {
@@ -219,6 +237,8 @@ def _verify_route_authority(packet: EntryPacket, decision: RouteDecision) -> tup
         raise GridScheduleError("GRID10_REQUIRES_SELECTIVE_MODEL_ROUTE")
     if decision.external_provider_dependency is not False:
         raise GridScheduleError("EXTERNAL_PROVIDER_DEPENDENCY_FORBIDDEN")
+    if decision.hash_serialization_schema != CANONICALIZATION_SCHEMA:
+        raise GridScheduleError("ROUTE_CANONICALIZATION_SCHEMA_MISMATCH")
 
     entry_event_sha256 = _sha256(packet.event_sha256, "entry_event_sha256")
     entry_admission_sha256 = _sha256(packet.admission_sha256, "entry_admission_sha256")
@@ -254,7 +274,7 @@ def compile_plan(
     mode: HCUMode,
     capacity: RuntimeCapacity,
     current_generation: int,
-    admitted_entry_bindings: Mapping[str, str],
+    admitted_entry_bindings: Mapping[str, Any],
     admitted_capacity_receipts: Mapping[str, Mapping[str, Any]],
 ) -> GridPlan:
     """Compile an execution plan only after canonical HCU routing is complete.
@@ -306,7 +326,8 @@ def compile_plan(
         raise GridScheduleError("GRID10_INTERNAL_CELL_COUNT_MISMATCH")
 
     canonical: dict[str, Any] = {
-        "schema": "ENTITYOS_HCU_GRID_PLAN/v1",
+        "schema": GRID_PLAN_SCHEMA,
+        "canonicalization_schema": CANONICALIZATION_SCHEMA,
         "ingress_id": packet.ingress_id,
         "causal_id": packet.causal_id,
         "entity_generation": packet.entity_generation,
@@ -338,12 +359,13 @@ def compile_plan(
         ],
     }
     try:
-        plan_sha256 = hashlib.sha256(encode_canonical(canonical)).hexdigest()
-    except CanonicalEncodingError as exc:
+        plan_sha256 = hashlib.sha256(canonicalize(canonical)).hexdigest()
+    except CanonicalizationError as exc:
         raise GridScheduleError(f"GRID_PLAN_CANONICALIZATION_FAILED:{exc}") from exc
 
     return GridPlan(
         schema=canonical["schema"],
+        canonicalization_schema=CANONICALIZATION_SCHEMA,
         plan_sha256=plan_sha256,
         ingress_id=packet.ingress_id,
         causal_id=packet.causal_id,

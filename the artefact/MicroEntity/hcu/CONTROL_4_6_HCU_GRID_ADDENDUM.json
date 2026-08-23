@@ -1,0 +1,43 @@
+{
+  "schema": "HCU_CONTROL_PACKAGE_MIRROR/v1",
+  "canonical_control": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_6_HCU_GRID_ADDENDUM.json",
+  "canonical_owner_addendum": "research_entity/global/MINI_ENTITY_HCU_GRID_OWNER_ADDENDUM.md",
+  "status": "PACKAGE_MIRROR_FOR_PORTABILITY",
+  "go_hcu_co_development_required": true,
+  "package_root": "the artefact/MicroEntity/hcu/",
+  "target_host": {
+    "plan": "KVM 4",
+    "vcpu": 4,
+    "memory_gb": 16,
+    "disk_gb": 200,
+    "bandwidth_tb": 16
+  },
+  "grid": {
+    "model_class": "approximately-0.8B",
+    "maximum_useful_logical_module_multiplicity": true,
+    "shared_or_mmap_physical_workers_preferred": true,
+    "sparse_activation": true,
+    "physical_concurrency_requires_measurement": true
+  },
+  "authority": {
+    "canonical_durable_state": "MiniUnifiedDB",
+    "runtime_identity": "Zero",
+    "hcu_is_second_entity": false,
+    "hcu_direct_effect_authority": false,
+    "simulation_is_truth": false
+  },
+  "free_fundus": {
+    "mode": "FREE_ONLY",
+    "candidate_only": true,
+    "paid_fallback": false,
+    "together_allowed": false,
+    "http_402": "HARD_STOP",
+    "http_429": "PROVIDER_WIDE_BACKOFF",
+    "secrets_in_package": false
+  },
+  "execution_boundary": {
+    "authorized_isolated_sandbox_only": true,
+    "vps_testing_allowed": false,
+    "target_vps_is_deployment_profile_only": true
+  }
+}

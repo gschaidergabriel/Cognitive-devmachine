@@ -165,10 +165,11 @@ Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
 
 ## Current frontier
 
-1. **close current authority split-brain without weakening inherited guards:** `the artefact/README.md` and current bootstrap/program/footer select EntityOS+HCU, while `the artefact/manifest.json` and the legacy `tools/validate_clayverse_authority_consistency.py` still encode ClayVerse product authority; migrate the guard and manifest coherently, preserving all safety/provenance checks rather than bulk-renaming them;
-2. finish the replay-stable **event identity vs admission identity** split and fuse the useful Typed Entry/GRID10 candidate into the retained HCU route lane without creating a second route authority;
-3. wire Typed Entry capability claims to the existing canonical permission/capability authority; exact source-component regression already proves self-grant rejection when a trusted capability snapshot/binding is supplied, but the real authority producer is not yet wired;
-4. bind the real admitted local HCU checkpoint/tokenizer/runtime bytes and capability record instead of trusting event-supplied model identity;
-5. bind the downstream inference receipt **producer** to the already-defined event/route/engine echo contract;
-6. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry semantics settle;
-7. run exact combined Entry + HCU route + inference-echo + GRID10 regressions on an actually-started authorized isolated executor, then measure GRID10/COGSIM10 cost utility before widening WM_TEST/NESTED_SIM.
+1. wire the retained HCU route's separate `EngineAdmission` to the **real deterministic EntityOS/HCU control-plane producer** and bind it to the actually loaded local checkpoint/tokenizer/runtime identity; an untrusted causal Entry event may request but may never mint engine authority;
+2. keep the replay-stable **event identity vs concrete admission identity** split and wire Typed Entry capability claims to the existing canonical deterministic capability authority rather than a test fixture or event self-claim;
+3. bind the downstream inference receipt **producer** to the already-defined serializer/event/Entry-admission/route/engine/class/artifact echo contract;
+4. converge the versioned Typed Entry canonicalization path to one accepted authority before making heterogeneous/cross-language hash-identity claims;
+5. run exact combined Entry + HCU route + inference-echo + GRID10 regressions on an actually-started authorized isolated executor, then measure GRID10/COGSIM10 cost utility before widening WM_TEST/NESTED_SIM;
+6. rebuild and digest-bind the stale `MICROENTITY_CURRENT.zip` compatibility snapshot only after route/Entry semantics settle.
+
+Completed authority migration note: current `the artefact/manifest.json` and the compatibility-named authority validator now select **EntityOS + HCU** while preserving historical ClayVerse controls only as immutable donor/safety ancestry. This source-level convergence does not create runtime acceptance.

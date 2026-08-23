@@ -49,14 +49,16 @@ class Store:
 
 class Capability:
     @staticmethod
-    def resolve_from_profile(profile):
+    def resolve_bound_route(profile, prepare, *, expected_generation):
+        assert prepare["entity_generation"] == expected_generation
         return {
             "ok": True,
             "target_engine_class": "ADAPTIVE_BACKEND",
             "ucf_engine_class": "adaptive_backend",
             "jspace_mode": "COMPILED_EXTERNAL",
-            "binding_digest": h("cap-binding"),
+            "capability_binding_digest": h("cap-binding"),
             "capability_receipt_digest": h("cap-receipt"),
+            "route_digest": h("bound-route"),
         }
 
 

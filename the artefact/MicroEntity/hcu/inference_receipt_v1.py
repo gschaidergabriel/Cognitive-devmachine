@@ -5,8 +5,12 @@ This module does not invoke a model and grants no truth/effect authority. It con
 canonical HCU RouteDecision, then fail-closes unless the concrete Typed-Entry admission
 still binds to that causal event, the route decision is independently bound to the live
 entity generation, the exact engine artifact is still independently admitted, a verified
-engine-admission receipt binds the same engine bundle/generation, and the runtime caller
-supplies a hash of the actual model-output bytes.
+engine-admission receipt binds the same engine bundle/generation, and a generation-fenced
+physical engine-load lease binds the bytes actually consumed by the admitted loader.
+
+The lease is evidence consumed here, not minted here. Until a real admitted loader produces
+that lease from the bytes it actually consumed, this path intentionally cannot mint an
+inference receipt and receives zero HCU runtime credit.
 """
 from __future__ import annotations
 
@@ -26,6 +30,7 @@ SCHEMA = "HCU_INFERENCE_RECEIPT/v1"
 STATUS = "CANDIDATE_ONLY"
 ENGINE_ADMISSION_RECEIPT_SCHEMA = "HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v1"
 ENGINE_ARTIFACT_LOCK_SCHEMA = "HCU_ENGINE_ARTIFACT_LOCK/v1"
+ENGINE_LOAD_LEASE_SCHEMA = "HCU_PHYSICAL_ENGINE_LOAD_LEASE/v1"
 
 
 class InferenceReceiptError(ValueError):
@@ -47,6 +52,7 @@ class InferenceReceipt:
     resolved_engine_class: str
     resolved_engine_artifact_sha256: str
     engine_admission_receipt_sha256: str
+    engine_load_lease_sha256: str
     model_call_id: str
     output_ref: str
     output_sha256: str
@@ -135,7 +141,7 @@ def _verify_engine_admission_receipt(
     expected_engine_identity: str,
     expected_engine_class: str,
     expected_engine_artifact_sha256: str,
-) -> str:
+) -> tuple[str, dict[str, str]]:
     receipt_sha256 = _sha256(
         engine_admission_receipt_sha256,
         "engine_admission_receipt_sha256",
@@ -220,7 +226,129 @@ def _verify_engine_admission_receipt(
     recomputed_receipt_sha256 = hashlib.sha256(_canonical(material)).hexdigest()
     if observed_receipt_sha256 != receipt_sha256 or recomputed_receipt_sha256 != receipt_sha256:
         raise InferenceReceiptError("ENGINE_ADMISSION_RECEIPT_DIGEST_MISMATCH")
-    return receipt_sha256
+    return receipt_sha256, {
+        "checkpoint_sha256": checkpoint["sha256"],
+        "tokenizer_sha256": tokenizer["sha256"],
+        "runtime_sha256": runtime["sha256"],
+        "build_sha256": build["sha256"],
+    }
+
+
+def _verify_engine_load_lease(
+    *,
+    engine_load_lease_sha256: str,
+    admitted_engine_load_leases: Mapping[str, Any],
+    generation: int,
+    expected_engine_identity: str,
+    expected_engine_class: str,
+    expected_engine_artifact_sha256: str,
+    expected_engine_admission_receipt_sha256: str,
+    expected_artifact_digests: Mapping[str, str],
+) -> str:
+    """Verify loader-produced evidence without turning this consumer into a lease minter."""
+    lease_sha256 = _sha256(engine_load_lease_sha256, "engine_load_lease_sha256")
+    if not isinstance(admitted_engine_load_leases, Mapping):
+        raise InferenceReceiptError("ADMITTED_ENGINE_LOAD_LEASE_REGISTRY_REQUIRED")
+    lease = admitted_engine_load_leases.get(lease_sha256)
+    if not isinstance(lease, Mapping):
+        raise InferenceReceiptError("ENGINE_LOAD_LEASE_NOT_ADMITTED")
+
+    required = {
+        "schema",
+        "entity_generation",
+        "engine_identity",
+        "engine_class",
+        "engine_artifact_sha256",
+        "engine_admission_receipt_sha256",
+        "consumed_checkpoint_sha256",
+        "consumed_tokenizer_sha256",
+        "consumed_runtime_sha256",
+        "consumed_build_sha256",
+        "loader_identity",
+        "loader_runtime_sha256",
+        "lease_id",
+        "lease_sha256",
+    }
+    if set(lease) != required:
+        raise InferenceReceiptError("ENGINE_LOAD_LEASE_SCHEMA_MISMATCH")
+    if lease.get("schema") != ENGINE_LOAD_LEASE_SCHEMA:
+        raise InferenceReceiptError("ENGINE_LOAD_LEASE_SCHEMA_UNSUPPORTED")
+
+    lease_generation = _nonnegative_int(
+        lease.get("entity_generation"),
+        "engine_load_lease.entity_generation",
+    )
+    if lease_generation != generation:
+        raise InferenceReceiptError("STALE_ENGINE_LOAD_LEASE_GENERATION")
+
+    engine_identity = _text(lease.get("engine_identity"), "engine_load_lease.engine_identity").lower()
+    engine_class = _text(lease.get("engine_class"), "engine_load_lease.engine_class").upper()
+    engine_artifact_sha256 = _sha256(
+        lease.get("engine_artifact_sha256"),
+        "engine_load_lease.engine_artifact_sha256",
+    )
+    engine_admission_sha256 = _sha256(
+        lease.get("engine_admission_receipt_sha256"),
+        "engine_load_lease.engine_admission_receipt_sha256",
+    )
+    if engine_identity != expected_engine_identity:
+        raise InferenceReceiptError("ENGINE_LOAD_LEASE_IDENTITY_MISMATCH")
+    if engine_class != expected_engine_class:
+        raise InferenceReceiptError("ENGINE_LOAD_LEASE_CLASS_MISMATCH")
+    if engine_artifact_sha256 != expected_engine_artifact_sha256:
+        raise InferenceReceiptError("ENGINE_LOAD_LEASE_ARTIFACT_MISMATCH")
+    if engine_admission_sha256 != expected_engine_admission_receipt_sha256:
+        raise InferenceReceiptError("ENGINE_LOAD_LEASE_ADMISSION_RECEIPT_MISMATCH")
+
+    consumed = {
+        "checkpoint_sha256": _sha256(
+            lease.get("consumed_checkpoint_sha256"),
+            "engine_load_lease.consumed_checkpoint_sha256",
+        ),
+        "tokenizer_sha256": _sha256(
+            lease.get("consumed_tokenizer_sha256"),
+            "engine_load_lease.consumed_tokenizer_sha256",
+        ),
+        "runtime_sha256": _sha256(
+            lease.get("consumed_runtime_sha256"),
+            "engine_load_lease.consumed_runtime_sha256",
+        ),
+        "build_sha256": _sha256(
+            lease.get("consumed_build_sha256"),
+            "engine_load_lease.consumed_build_sha256",
+        ),
+    }
+    for field in sorted(consumed):
+        expected = _sha256(expected_artifact_digests.get(field), f"expected_artifact_digests.{field}")
+        if consumed[field] != expected:
+            raise InferenceReceiptError(f"ENGINE_LOAD_LEASE_CONSUMED_BYTES_MISMATCH:{field}")
+
+    loader_identity = _text(lease.get("loader_identity"), "engine_load_lease.loader_identity")
+    loader_runtime_sha256 = _sha256(
+        lease.get("loader_runtime_sha256"),
+        "engine_load_lease.loader_runtime_sha256",
+    )
+    lease_id = _text(lease.get("lease_id"), "engine_load_lease.lease_id")
+    material = {
+        "schema": ENGINE_LOAD_LEASE_SCHEMA,
+        "entity_generation": lease_generation,
+        "engine_identity": engine_identity,
+        "engine_class": engine_class,
+        "engine_artifact_sha256": engine_artifact_sha256,
+        "engine_admission_receipt_sha256": engine_admission_sha256,
+        "consumed_checkpoint_sha256": consumed["checkpoint_sha256"],
+        "consumed_tokenizer_sha256": consumed["tokenizer_sha256"],
+        "consumed_runtime_sha256": consumed["runtime_sha256"],
+        "consumed_build_sha256": consumed["build_sha256"],
+        "loader_identity": loader_identity,
+        "loader_runtime_sha256": loader_runtime_sha256,
+        "lease_id": lease_id,
+    }
+    observed_lease_sha256 = _sha256(lease.get("lease_sha256"), "engine_load_lease.lease_sha256")
+    recomputed_lease_sha256 = hashlib.sha256(_canonical(material)).hexdigest()
+    if observed_lease_sha256 != lease_sha256 or recomputed_lease_sha256 != lease_sha256:
+        raise InferenceReceiptError("ENGINE_LOAD_LEASE_DIGEST_MISMATCH")
+    return lease_sha256
 
 
 def make_inference_receipt(
@@ -233,17 +361,19 @@ def make_inference_receipt(
     admitted_engine_artifacts: Mapping[str, Any],
     engine_admission_receipt_sha256: str,
     admitted_engine_admission_receipts: Mapping[str, Any],
+    engine_load_lease_sha256: str,
+    admitted_engine_load_leases: Mapping[str, Any],
     model_call_id: str,
     output_ref: str,
     output_sha256: str,
     output_size: int,
 ) -> InferenceReceipt:
-    """Produce a candidate-only inference receipt from already-admitted route evidence.
+    """Produce a candidate-only inference receipt from admitted route and loader evidence.
 
     Authority/control-plane inputs remain separate from causal event data: decision->generation,
-    admission->causal-event, engine->artifact, and verified-engine-receipt admission. The
-    verified engine receipt is recomputed and generation/bundle checked here so a bare
-    caller-constructed ``EngineAdmission`` cannot by itself mint a downstream inference receipt.
+    admission->causal-event, engine->artifact, verified-engine-receipt admission and physical
+    engine-load lease admission. A bare caller-constructed ``EngineAdmission`` or a pre-load
+    artifact hash cannot by itself mint a downstream inference receipt.
     """
     if not isinstance(decision, RouteDecision):
         raise InferenceReceiptError("ROUTE_DECISION_REQUIRED")
@@ -286,13 +416,23 @@ def make_inference_receipt(
     if current_engine_artifact != engine_artifact_sha256:
         raise InferenceReceiptError("ENGINE_ARTIFACT_ADMISSION_MISMATCH")
 
-    verified_engine_admission_receipt_sha256 = _verify_engine_admission_receipt(
+    verified_engine_admission_receipt_sha256, admitted_artifact_digests = _verify_engine_admission_receipt(
         engine_admission_receipt_sha256=engine_admission_receipt_sha256,
         admitted_engine_admission_receipts=admitted_engine_admission_receipts,
         generation=generation,
         expected_engine_identity=engine_id,
         expected_engine_class=engine_class,
         expected_engine_artifact_sha256=engine_artifact_sha256,
+    )
+    verified_engine_load_lease_sha256 = _verify_engine_load_lease(
+        engine_load_lease_sha256=engine_load_lease_sha256,
+        admitted_engine_load_leases=admitted_engine_load_leases,
+        generation=generation,
+        expected_engine_identity=engine_id,
+        expected_engine_class=engine_class,
+        expected_engine_artifact_sha256=engine_artifact_sha256,
+        expected_engine_admission_receipt_sha256=verified_engine_admission_receipt_sha256,
+        expected_artifact_digests=admitted_artifact_digests,
     )
 
     model_call_id = _text(model_call_id, "model_call_id")
@@ -314,6 +454,7 @@ def make_inference_receipt(
         "resolved_engine_class": engine_class,
         "resolved_engine_artifact_sha256": engine_artifact_sha256,
         "engine_admission_receipt_sha256": verified_engine_admission_receipt_sha256,
+        "engine_load_lease_sha256": verified_engine_load_lease_sha256,
         "model_call_id": model_call_id,
         "output_ref": output_ref,
         "output_sha256": output_sha256,

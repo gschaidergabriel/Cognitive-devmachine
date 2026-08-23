@@ -4,6 +4,9 @@
 This module is deterministic and non-cognitive. It binds identity, generation,
 provenance, modality, an externally-authorized capability snapshot, resource budget and
 payload identity before any HCU/model work. It does not mint truth, permissions or effects.
+
+The legacy filename/schema are compatibility surfaces only. New product/system authority
+is EntityOS; HCU is its integrated cognition/compute architecture.
 """
 from __future__ import annotations
 
@@ -76,6 +79,8 @@ class EntryPacket:
 
 
 def _canonical(value: Any) -> bytes:
+    # Current admission hash remains implementation-scoped Python canonicalization.
+    # ENTRY_CANONICALIZATION_CONTRACT.json explicitly withholds heterogeneous/JCS credit.
     return json.dumps(
         value,
         sort_keys=True,
@@ -156,6 +161,63 @@ def _budget(value: Any) -> tuple[tuple[str, int], ...]:
             raise EntryFabricError(f"budget.{field}:NONNEGATIVE_INTEGER_REQUIRED")
         normalized[field] = item
     return tuple(normalized.items())
+
+
+def _raw_json_pairs_no_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    """Build an object while refusing duplicate member names at every nesting level."""
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise EntryFabricError(f"RAW_JSON_DUPLICATE_PROPERTY:{key}")
+        result[key] = value
+    return result
+
+
+def _reject_nonfinite_json_constant(value: str) -> None:
+    # Python's json module otherwise accepts NaN/Infinity extensions that are not JSON/I-JSON.
+    raise EntryFabricError(f"RAW_JSON_NONFINITE_NUMBER_FORBIDDEN:{value}")
+
+
+def _reject_lone_surrogates(value: Any, path: str = "$") -> None:
+    """Reject Unicode surrogate code points before identity/admission is minted."""
+    if isinstance(value, str):
+        if any(0xD800 <= ord(ch) <= 0xDFFF for ch in value):
+            raise EntryFabricError(f"RAW_JSON_LONE_SURROGATE_FORBIDDEN:{path}")
+        return
+    if isinstance(value, Mapping):
+        for key, item in value.items():
+            _reject_lone_surrogates(key, f"{path}.<key>")
+            _reject_lone_surrogates(item, f"{path}.{key}")
+        return
+    if isinstance(value, list):
+        for index, item in enumerate(value):
+            _reject_lone_surrogates(item, f"{path}[{index}]")
+
+
+def parse_entry_json(raw: str | bytes | bytearray) -> Mapping[str, Any]:
+    """Parse raw JSON without allowing pre-admission key collapse.
+
+    This is the raw-ingress prerequisite required by ENTRY_CANONICALIZATION_CONTRACT.json.
+    It does not claim RFC 8785 canonicalization. It only ensures that duplicate object
+    members, non-JSON numeric constants and lone Unicode surrogates cannot disappear or
+    mutate before the typed Entry admission checks see them.
+    """
+    if not isinstance(raw, (str, bytes, bytearray)):
+        raise EntryFabricError("RAW_JSON_TEXT_OR_BYTES_REQUIRED")
+    try:
+        value = json.loads(
+            raw,
+            object_pairs_hook=_raw_json_pairs_no_duplicates,
+            parse_constant=_reject_nonfinite_json_constant,
+        )
+    except EntryFabricError:
+        raise
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        raise EntryFabricError("RAW_JSON_PARSE_FAILED") from exc
+    if not isinstance(value, Mapping):
+        raise EntryFabricError("ENTRY_MAPPING_REQUIRED")
+    _reject_lone_surrogates(value)
+    return value
 
 
 def admit_entry(
@@ -244,6 +306,22 @@ def admit_entry(
     }
     admission_sha256 = hashlib.sha256(_canonical(normalized)).hexdigest()
     return EntryPacket(**normalized, admission_sha256=admission_sha256)
+
+
+def admit_entry_json(
+    raw: str | bytes | bytearray,
+    *,
+    current_generation: int,
+    expected_capability_binding_sha256: str,
+    admitted_capabilities: Sequence[str],
+) -> EntryPacket:
+    """Raw-ingress convenience boundary: lossless rejection first, typed admission second."""
+    return admit_entry(
+        parse_entry_json(raw),
+        current_generation=current_generation,
+        expected_capability_binding_sha256=expected_capability_binding_sha256,
+        admitted_capabilities=admitted_capabilities,
+    )
 
 
 def to_hcu_reactive_event(

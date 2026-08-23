@@ -1,0 +1,51 @@
+{
+  "authority": {
+    "canonical_durable_state": "MiniUnifiedDB",
+    "effects": "EXISTING_MINI_ENTITY_ENTITYOS_EFFECT_GATES_ONLY",
+    "hcu_output": "CANDIDATE_ONLY",
+    "vps_acceptance_testing": "FORBIDDEN_UNTIL_EXPLICIT_OWNER_AUTHORIZATION"
+  },
+  "candidate_profiles": {
+    "balanced": {
+      "active_decode_slots": 2,
+      "logical_cells": 48,
+      "resident_cells": 8
+    },
+    "conservative": {
+      "active_decode_slots": 1,
+      "logical_cells": 24,
+      "resident_cells": 6
+    },
+    "dense": {
+      "active_decode_slots": 2,
+      "logical_cells": 64,
+      "resident_cells": 12
+    }
+  },
+  "free_teacher_feed": {
+    "free_only": true,
+    "output_authority": "CANDIDATE_DATA_ONLY",
+    "provider_global_429_backoff": true,
+    "quota_evasion_key_rotation": false,
+    "secrets_in_prompts_or_archive": false
+  },
+  "host_class": "KVM_4",
+  "owner_observed_plan": {
+    "auto_renewal": true,
+    "bandwidth_tb": 16,
+    "cpu_cores": 4,
+    "disk_gb": 200,
+    "expiration_date": "2026-09-19",
+    "memory_gib": 16
+  },
+  "planning_assumptions": {
+    "cpu_threads_per_active_decoder": 2,
+    "logical_cells_use_adapters_or_profiles_when_possible": true,
+    "os_coordinator_reserve_gib": 4.0,
+    "q4_cell_rss_budget_gib": 0.85,
+    "q4_cell_rss_budget_is": "CONSERVATIVE_PLANNING_ASSUMPTION_NOT_MEASUREMENT",
+    "shared_base_weights_preferred": true
+  },
+  "schema": "HCU_VPS_PROFILE/v1",
+  "status": "SOURCE_CANDIDATE_NOT_RUNTIME_VERIFIED"
+}

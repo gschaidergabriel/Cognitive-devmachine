@@ -60,12 +60,19 @@ def _nonempty_string(receipt: dict[str, Any], path: str, errors: list[str]) -> A
     return value
 
 
+def _is_placeholder_hex(value: str) -> bool:
+    return value == ("0" * len(value)) or value == ("f" * len(value))
+
+
 def _digest(receipt: dict[str, Any], path: str, errors: list[str], *, nullable: bool = False) -> Any:
     value = _get(receipt, path, errors)
     if value is None and nullable:
         return value
-    if value is not None and not (isinstance(value, str) and HEX64.fullmatch(value)):
-        errors.append(f"DIGEST_INVALID:{path}")
+    if value is not None:
+        if not (isinstance(value, str) and HEX64.fullmatch(value)):
+            errors.append(f"DIGEST_INVALID:{path}")
+        elif _is_placeholder_hex(value):
+            errors.append(f"DIGEST_PLACEHOLDER:{path}")
     return value
 
 
@@ -85,10 +92,16 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
     commit = _get(receipt, "source.commit", errors)
     tree = _get(receipt, "source.tree", errors)
     dirty = _bool(receipt, "source.dirty", errors)
-    if commit is not None and not (isinstance(commit, str) and HEX40.fullmatch(commit)):
-        errors.append("SOURCE_COMMIT_INVALID")
-    if tree is not None and not (isinstance(tree, str) and HEX40.fullmatch(tree)):
-        errors.append("SOURCE_TREE_INVALID")
+    if commit is not None:
+        if not (isinstance(commit, str) and HEX40.fullmatch(commit)):
+            errors.append("SOURCE_COMMIT_INVALID")
+        elif _is_placeholder_hex(commit):
+            errors.append("SOURCE_COMMIT_PLACEHOLDER")
+    if tree is not None:
+        if not (isinstance(tree, str) and HEX40.fullmatch(tree)):
+            errors.append("SOURCE_TREE_INVALID")
+        elif _is_placeholder_hex(tree):
+            errors.append("SOURCE_TREE_PLACEHOLDER")
     if dirty is not False:
         errors.append("SOURCE_NOT_CLEAN")
 
@@ -198,6 +211,8 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
                 value = intervention.get(key)
                 if not (isinstance(value, str) and HEX64.fullmatch(value)):
                     errors.append(f"INTERVENTION_{key.upper()}_REQUIRED")
+                elif _is_placeholder_hex(value):
+                    errors.append(f"INTERVENTION_{key.upper()}_PLACEHOLDER")
 
     decision = _get(receipt, "validation.decision", errors)
     if decision not in VALIDATION_DECISIONS:

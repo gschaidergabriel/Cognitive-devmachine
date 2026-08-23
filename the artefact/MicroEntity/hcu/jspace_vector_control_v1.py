@@ -175,8 +175,8 @@ def _scale_fraction(numerator_text: Any, denominator_text: Any) -> Fraction:
     """Parse the sole admitted finite-binary64 q8 scale representation.
 
     Packet hashes authenticate bytes, not semantic safety. A caller can construct and hash a
-    new packet, so the scale itself must be bounded, reduced and provably decodable to a
-    positive finite binary64 anchor before the packet earns admission.
+    new packet, so the scale itself must be bounded, reduced and provably derived from one
+    positive finite binary64 max-absolute anchor exactly as the canonical encoder emits it.
     """
     _validate_scale_text_syntax(numerator_text, denominator_text)
 
@@ -191,12 +191,20 @@ def _scale_fraction(numerator_text: Any, denominator_text: Any) -> Fraction:
     if scale.numerator != scale_numerator or scale.denominator != scale_denominator:
         raise JSpaceVectorControlError("SCALE_RATIONAL_NOT_REDUCED")
     if scale_numerator > 0:
+        anchor_fraction = scale * 127
         try:
-            anchor = float(scale * 127)
+            anchor = float(anchor_fraction)
         except OverflowError as exc:
             raise JSpaceVectorControlError("SCALE_RATIONAL_BINARY64_RANGE_REQUIRED") from exc
         if not math.isfinite(anchor) or anchor <= 0.0:
             raise JSpaceVectorControlError("SCALE_RATIONAL_BINARY64_RANGE_REQUIRED")
+        # The canonical encoder defines scale = Fraction.from_float(max_abs) / 127.
+        # Merely being finite after rounding to float is weaker: an attacker can mint a
+        # self-consistent packet around an arbitrary rational (for example 1/3), producing
+        # valid packet bytes that no finite-binary64 source vector can cause the encoder to
+        # emit. Require the exact encoder image so one ABI has one canonical scale language.
+        if Fraction.from_float(anchor) != anchor_fraction:
+            raise JSpaceVectorControlError("SCALE_RATIONAL_BINARY64_ANCHOR_EXACT_REQUIRED")
     return scale
 
 

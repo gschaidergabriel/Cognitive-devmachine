@@ -218,3 +218,17 @@ Executor commit `d2bb2812345fe1d7fe7034a9222b0db6d9932249` makes the deployment-
 This delta does not remove the stale binder-v2 quarantine and does not execute a model, Function or Sandbox. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model-runtime and training credit remain `0`. The next exact gate remains one-lane fusion: vendor every v2-contract source/regression/transitive-fixture byte-identically from one immutable donor snapshot, bind every Git blob in the fixed route manifest, remove `SOURCE_REBIND_REQUIRED` only in that same coherent change, then execute only when the FREE_ONLY Vercel Hobby build and protected-function admission are actually available.
 
 Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_EXECUTOR_REBIND_SINGLE_TARGET_AUTHORITY_GPT56SOL.json`.
+
+## Current `go` delta — atomic lease EntityOS/HCU boundary repair
+
+`README=UPDATED_ATOMIC_LEASE_ENTITYOS_HCU_BOUNDARY_REPAIR`.
+
+The CURRENT `GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md` still contained one stale product-boundary sentence that described convergence toward a ClayVerse OCI endpoint and referred to UnifiedDB as product authority. Commit `852f8f2d012fc193733787076e2030dbd0cb19fa` repaired only that boundary while preserving the canonical trigger-key, create-only lease, incident history and result semantics. The coordination protocol is now explicitly subordinate to the single current EntityOS product, HCU compute architecture, deterministic canonical state/evidence authority, and `EffectGate`/`EffectJournal`; UnifiedDB/MiniUnifiedDB are compatibility state/evidence substrates rather than competing product identities, and ClayVerse/Frank wording is historical donor/provenance only.
+
+No unusual experiment was run by this organ. No upstream shared immutable request/macrocycle identifier was exposed and the available user-message metadata had only minute precision, so the timestamp fallback cannot satisfy the CURRENT atomic-lease protocol. This organ therefore remained `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` for new unusual interventions and used only deterministic authority review/fusion.
+
+Re-entry also found the retained lanes continuing to advance without justifying a duplicate implementation: current main receipts strengthened PR810's exact transitive execution-store -> Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 source closure, while PR1263 added fail-closed J-Space v3 revalidation against digest-valid provenance transplants. The executor remains `SOURCE_REBIND_REQUIRED` and the observed Vercel Hobby build-rate/admission limitation remains infrastructure evidence, not a regression failure. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model runtime and training credit therefore remain zero.
+
+Next exact gate: re-enter the newest PR1263 and `gschaidergabriel/Dr.-Unterweger#810` heads, bind one immutable executor closure to the newest corrected donor bytes including current J-Space provenance-revalidation obligations, remove `SOURCE_REBIND_REQUIRED` only atomically with complete source/transitive-fixture/blob/command/result coherence, and execute only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission fence actually permits the fixed capsule.
+
+Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_ATOMIC_LEASE_ENTITYOS_HCU_BOUNDARY_REPAIR_GPT56SOL.json`.

@@ -1,0 +1,56 @@
+{
+  "schema": "go-reference-source-kind-shadow/v1",
+  "date_utc": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "macrocycle_trigger": "go",
+  "base_main": "d8ff57c2edc4c9eecde99ce1f9b089702d71b1cf",
+  "branch": "go-20260823-gpt56sol-source-kind-shadow-falsifier",
+  "experiment": {
+    "id": "SAME_KIND_DISTINCT_NAMESPACE_SHADOW",
+    "unusual_slot": 1,
+    "unusual_slot_total_allowed": 1,
+    "hypothesis": "source_namespace makes logical source identity independent enough that two distinct logical sources can safely share one presentation kind",
+    "counterhypothesis": "the converged reference workspace still keys sources and sensors by kind, so a second source with the same kind overwrites the first even though source_count/consumption identity can treat both as admitted",
+    "intervention": "declare two json_snapshot sources in one profile with kind=events, namespaces logical-A/logical-B, and distinct payload labels A/B",
+    "safe_outcomes": [
+      "profile/collection fails closed on duplicate kind",
+      "both logical source payloads remain independently visible through the collected canonical source workspace"
+    ],
+    "unsafe_outcome": "both inputs are admitted/counted but only one logical source remains visible because sources[kind] is overwritten"
+  },
+  "source_evidence": {
+    "retained_reference_pr": 997,
+    "retained_reference_head": "9af1933f48863e817f05b460818082cec25913ce",
+    "retained_runtime_blob_sha": "1fd3a1abd0adefdcf5a90fbb132150b4458e3af2",
+    "observed_mechanism": [
+      "_pipeline_collect initializes sources and sensors as dictionaries",
+      "each source derives source_namespace separately from kind",
+      "successful and failed source observations are assigned through sources[kind] and sensors[kind]",
+      "there is no duplicate-kind admission guard in the inspected retained runtime"
+    ],
+    "classification": "SOURCE_MECHANISM_FALSIFIED",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "delta": {
+    "test": "the artefact/blogpost_entity/test_reference_same_kind_source_shadow.py",
+    "test_semantics": "activation-gated; permits either explicit fail-closed duplicate-kind rejection or a future namespace-qualified representation preserving both sources; rejects silent last-writer shadowing"
+  },
+  "execution": {
+    "authorized_exact_runtime_started": false,
+    "github_actions_credit": 0,
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "money_spent_usd": 0,
+    "free_only_preserved": true
+  },
+  "next_gate": "Fuse this invariant into the retained reference-runtime repair lane after rebasing/adjudicating it onto current main; then run the activation-gated guard together with consumed-namespace migration, logical JSONL cursor identity, nonfinite truth, evidence-ref identity, generation/CAS and fault rollback tests on an actually-started authorized exact-source runner.",
+  "claims_not_made": [
+    "reference runtime PASS",
+    "native profile-v2 PASS",
+    "exact runtime evidence",
+    "model quality",
+    "training started",
+    "whole Mini Entity PASS"
+  ]
+}

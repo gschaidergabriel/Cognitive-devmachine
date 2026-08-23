@@ -1,5 +1,5 @@
 {
-  "schema_version": "HCU_DATA_INDEX/v3",
+  "schema_version": "HCU_DATA_INDEX/v4",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "compatibility_package_path": "MicroEntity/hcu/",
@@ -15,6 +15,8 @@
     "hcu/test_capacity_guard_v1.py",
     "hcu/jspace_vector_control_v1.py",
     "hcu/test_jspace_vector_control_v1.py",
+    "hcu/jspace_gwt_prototype_v1.py",
+    "hcu/test_jspace_gwt_prototype_v1.py",
     "hcu/receipts/2026-08-24_GO_JSPACE_VECTOR_CONTROL_ABI_V1_GPT56SOL_0040.json",
     "hcu/receipts/2026-08-23_GO_HCU_ENTITYOS_INTEGRATION_CONTRACT_GPT56SOL.json"
   ],
@@ -23,20 +25,34 @@
     "encoding": "DETERMINISTIC_Q8_TEXT_BYTE_PACKET",
     "status": "EXECUTABLE_COMPONENT_CANDIDATE",
     "authority": "TRANSPORT_AND_CONTROL_PACKET_ONLY_NOT_TRUTH_OR_EFFECT_AUTHORITY",
-    "required_fences": [
-      "basis_id",
-      "role",
-      "generation",
-      "payload_sha256",
-      "packet_sha256"
+    "required_fences": ["basis_id", "role", "generation", "payload_sha256", "packet_sha256"],
+    "training_role": "REPRODUCIBLE_FIRST_ABI_FOR_TOGETHER_CAUSALLM_SFT_AND_LOCAL_HCU_RUNTIME"
+  },
+  "global_jspace_gwt_prototype": {
+    "schema": "ENTITYOS_HCU_JSPACE_GWT_PROTOTYPE/v1",
+    "trace_schema": "ENTITYOS_HCU_JSPACE_GWT_TRACE/v1",
+    "status": "FUNCTIONAL_DETERMINISTIC_PROTOTYPE_COMPONENT",
+    "mechanisms": [
+      "bounded deterministic competition",
+      "broadcast coalition under explicit resource budget",
+      "q8 global J-Space slice through JSPACE_VECTOR_CONTROL_ABI/v1",
+      "Hyperposition branch preservation",
+      "trace-id and transition-id hashing",
+      "matched-budget EMPTY_BROADCAST lesion and exact rescue"
     ],
-    "training_role": "REPRODUCIBLE_FIRST_ABI_FOR_TOGETHER_CAUSALLM_SFT_AND_LOCAL_HCU_RUNTIME",
+    "trace_identity_inputs": [
+      "entry_event_sha256",
+      "entry_admission_sha256",
+      "route_decision_sha256",
+      "grid_plan_sha256",
+      "generation",
+      "basis_id"
+    ],
     "does_not_prove": [
-      "GLOBAL_JSPACE_CAUSALITY",
+      "MODEL_LOCAL_JSPACE_CAUSALITY",
       "DIRECT_HIDDEN_STATE_INJECTION",
-      "GWT_RUNTIME_BEHAVIOR",
-      "MODEL_INTEGRATION",
-      "WHOLE_ENTITYOS_HCU_PASS"
+      "TRAINED_MODEL_GWT_USE",
+      "ENTITYOS_HCU_WHOLE_RUNTIME_PASS"
     ]
   },
   "training_authority": {
@@ -60,5 +76,5 @@
     "include_credential_bearing_files": false
   },
   "source_base_head": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
-  "claim_class": "JSPACE_VECTOR_CONTROL_ABI_COMPONENT_CANDIDATE_WITH_BOUNDED_ISOLATED_EVIDENCE_NOT_MODEL_OR_WHOLE_RUNTIME_PASS"
+  "claim_class": "JSPACE_GWT_PROTOTYPE_PLUS_VECTOR_ABI_BOUNDED_COMPONENT_EVIDENCE_NOT_MODEL_OR_WHOLE_RUNTIME_PASS"
 }

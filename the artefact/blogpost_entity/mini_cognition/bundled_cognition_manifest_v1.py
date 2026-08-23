@@ -36,6 +36,7 @@ OPTIONAL_FIELDS = {
     "quantization_runtime_identity",
     "runtime_digest",
     "lens_artifact_digest",
+    "fit_corpus_digest",
     "steering_calibration_digest",
 }
 DIGEST_FIELDS = {
@@ -43,6 +44,7 @@ DIGEST_FIELDS = {
     "tokenizer_digest",
     "runtime_digest",
     "lens_artifact_digest",
+    "fit_corpus_digest",
     "jspace_profile_digest",
     "lens_profile_digest",
     "workspace_calibration_digest",
@@ -57,6 +59,7 @@ IDENTITY_FIELDS = (
     "quantization_runtime_identity",
     "runtime_digest",
     "lens_artifact_digest",
+    "fit_corpus_digest",
     "jspace_profile_digest",
     "lens_profile_digest",
     "workspace_calibration_digest",

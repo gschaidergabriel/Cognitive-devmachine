@@ -45,7 +45,7 @@ class ProfilePipelineCognitiveFabricRuntimeV064Tests(unittest.TestCase):
                 }
             self.assertTrue(expected.issubset(found))
 
-    def test_admission_uses_same_db_generation_and_canonical_compositor(self):
+    def test_admission_uses_single_canonical_read_only_binding(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             runtime = self.make_runtime(root)
@@ -62,41 +62,38 @@ class ProfilePipelineCognitiveFabricRuntimeV064Tests(unittest.TestCase):
                 "system": "system",
                 "user": "user",
             }
+            payload = {
+                "entity_db": "entity.db",
+                "source_db": "source.db",
+                "profile": {},
+                "previous": {"generation": 0},
+                "data": {
+                    "compiled": compiled,
+                    "prompt": {"system": "system", "user": "{}"},
+                    "invocation": {"selector": "bounded"},
+                },
+            }
             with mock.patch.object(
-                runtime_module.cognitive_fabric_admission,
-                "build_pre_inference_admission",
+                runtime_module.cognitive_fabric_binding,
+                "admit_profile_runtime_payload",
                 return_value=admitted,
-            ) as compositor:
-                result = runtime.effect(
-                    "pipeline_cognitive_fabric_admit",
-                    {
-                        "entity_db": "entity.db",
-                        "source_db": "source.db",
-                        "profile": {},
-                        "previous": {"generation": 0},
-                        "data": {
-                            "compiled": compiled,
-                            "prompt": {"system": "system", "user": "{}"},
-                            "invocation": {"selector": "bounded"},
-                        },
-                    },
-                )
+            ) as binding:
+                result = runtime.effect("pipeline_cognitive_fabric_admit", payload)
             self.assertTrue(result["ok"], result)
-            self.assertEqual(compositor.call_count, 1)
-            kwargs = compositor.call_args.kwargs
-            self.assertEqual(kwargs["entity_generation"], 0)
-            self.assertEqual(kwargs["compiled"], compiled)
-            self.assertEqual(kwargs["origin"], runtime_module.VERSION)
+            binding.assert_called_once_with(runtime, payload)
+            self.assertEqual(result["generation"], 0)
+            self.assertEqual(result["canonical_state_hash"], HEX_A)
+            self.assertEqual(result["packet_hash"], HEX_B)
 
-    def test_admission_rejects_stale_generation_before_compositor(self):
+    def test_admission_rejects_stale_generation_before_binding(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             runtime = self.make_runtime(root)
             self.assertTrue(runtime.effect("pipeline_init", {"entity_db": "entity.db"})["ok"])
             with mock.patch.object(
-                runtime_module.cognitive_fabric_admission,
-                "build_pre_inference_admission",
-            ) as compositor:
+                runtime_module.cognitive_fabric_binding,
+                "admit_profile_runtime_payload",
+            ) as binding:
                 result = runtime.effect(
                     "pipeline_cognitive_fabric_admit",
                     {
@@ -113,7 +110,7 @@ class ProfilePipelineCognitiveFabricRuntimeV064Tests(unittest.TestCase):
                 )
             self.assertFalse(result["ok"])
             self.assertIn("STALE_GENERATION", result["error"])
-            compositor.assert_not_called()
+            binding.assert_not_called()
 
     def test_inference_requires_and_propagates_admission_identities(self):
         with tempfile.TemporaryDirectory() as td:

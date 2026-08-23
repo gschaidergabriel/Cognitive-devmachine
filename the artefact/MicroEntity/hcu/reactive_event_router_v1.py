@@ -119,6 +119,12 @@ def _sha256_text(value: Any, field: str) -> str:
     return value
 
 
+def _nonempty_text(value: Any, field: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ReactiveRoutingError(f"{field}:NONEMPTY_STRING_REQUIRED")
+    return value.strip()
+
+
 def _validate_internal_provider(event: Mapping[str, Any]) -> None:
     provider = event.get("requested_internal_provider")
     if provider is None:
@@ -178,9 +184,48 @@ def _resolve_internal_engine(
     return identity, engine_class, artifact_sha256, engine_identity_sha256
 
 
-def _event_identity(event: Mapping[str, Any]) -> str:
+def _event_identity(
+    event: Mapping[str, Any],
+    admitted_entry_bindings: Mapping[str, Any] | None,
+) -> str:
+    """Resolve immutable causal event identity without trusting ingress claims.
+
+    Typed Entry projections carry separate replay-stable `entry_event_sha256` and
+    concrete `entry_admission_sha256`. For that path the router requires an independent
+    authority/control-plane binding of admission -> event identity. Transport identity,
+    permission/budget metadata and payload location therefore cannot redefine the causal
+    event, while a caller cannot simply self-assert an event digest.
+
+    Legacy/internal HCU events without Entry metadata retain the deterministic local
+    canonicalization path for compatibility.
+    """
+    has_entry_projection = any(
+        event.get(field) is not None
+        for field in ("ingress_id", "entry_event_sha256", "entry_admission_sha256")
+    )
+    if has_entry_projection:
+        _nonempty_text(event.get("ingress_id"), "INGRESS_ID")
+        _nonempty_text(event.get("causal_id"), "CAUSAL_ID")
+        event_sha256 = _sha256_text(event.get("entry_event_sha256"), "ENTRY_EVENT_SHA256")
+        admission_sha256 = _sha256_text(
+            event.get("entry_admission_sha256"),
+            "ENTRY_ADMISSION_SHA256",
+        )
+        if not isinstance(admitted_entry_bindings, Mapping):
+            raise ReactiveRoutingError("ADMITTED_ENTRY_BINDING_REGISTRY_REQUIRED")
+        admitted_event_sha256 = admitted_entry_bindings.get(admission_sha256)
+        if admitted_event_sha256 is None:
+            raise ReactiveRoutingError("ENTRY_ADMISSION_NOT_ADMITTED")
+        admitted_event_sha256 = _sha256_text(
+            admitted_event_sha256,
+            "ADMITTED_ENTRY_EVENT_SHA256",
+        )
+        if event_sha256 != admitted_event_sha256:
+            raise ReactiveRoutingError("ENTRY_EVENT_SHA256_MISMATCH")
+        return event_sha256
+
     # Engine/provider resolution is routing metadata, not the immutable causal event.
-    # Separating the two lets identical events be compared across admitted engines.
+    # Separating the two lets identical legacy/internal events be compared across engines.
     payload = dict(event)
     for key in (
         "requested_internal_provider",
@@ -203,6 +248,7 @@ def route_event(
     *,
     current_generation: int,
     admitted_engine_artifacts: Mapping[str, Any] | None = None,
+    admitted_entry_bindings: Mapping[str, Any] | None = None,
 ) -> RouteDecision:
     if not isinstance(event, Mapping) or event.get("schema") != SCHEMA:
         raise ReactiveRoutingError("EVENT_SCHEMA_UNSUPPORTED")
@@ -255,7 +301,7 @@ def route_event(
         raise ReactiveRoutingError("SCRIPT_ONLY_EVENT_MUST_NOT_SELECT_INTERNAL_ENGINE")
 
     projection = zero_relevance >= 0.60 and bool(lanes)
-    event_sha256 = _event_identity(event)
+    event_sha256 = _event_identity(event, admitted_entry_bindings)
     router_policy_sha256 = _sha256_canonical(ROUTER_POLICY, "ROUTER_POLICY")
     payload = {
         "schema": ROUTE_IDENTITY_SCHEMA,

@@ -281,6 +281,12 @@ def validate_manifest_binding(data: dict, manifest_path: Path, source_lock: dict
     if req_sha(core, "tokenizer_sha256") != manifest["tokenizer_digest"]:
         fail("BOOT_TOKENIZER_MISMATCH")
 
+    expected_runtime_digest = manifest.get("runtime_digest")
+    if expected_runtime_digest is None:
+        fail("BOOT_MANIFEST_RUNTIME_DIGEST_REQUIRED")
+    if req_sha(core, "runtime_sha256") != expected_runtime_digest:
+        fail("BOOT_RUNTIME_DIGEST_MISMATCH")
+
     expected_runtime_identity = manifest.get("quantization_runtime_identity")
     observed_runtime_identity = core.get("quantization_runtime_identity")
     if expected_runtime_identity is None:

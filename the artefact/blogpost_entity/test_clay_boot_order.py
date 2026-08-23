@@ -17,3 +17,27 @@ def test_neutral_db_initializes_before_db_resident_profile_read():
 def test_fresh_db_boot_does_not_require_application_profile_to_initialize_schema():
     init_call = 'phase("pipeline_init",entity_db,source_db,map_new(),map_new(),map_new())'
     assert init_call in SRC
+
+
+def test_cognitive_fabric_admission_is_on_canonical_path_before_inference():
+    prompt = SRC.index('phase("pipeline_build_prompt"')
+    admit = SRC.index('phase("pipeline_cognitive_fabric_admit"')
+    generate = SRC.index('effect("inference_generate"')
+
+    assert prompt < admit < generate
+    assert SRC.count('phase("pipeline_cognitive_fabric_admit"') == 1
+
+
+def test_inference_uses_only_admitted_fabric_envelope_not_raw_prompt_or_profile():
+    admit = SRC.index('phase("pipeline_cognitive_fabric_admit"')
+    generate = SRC.index('effect("inference_generate"')
+    inference_block = SRC[admit:generate]
+
+    assert 'map_set(infer,"inference",admitted.inference)' in inference_block
+    assert 'map_set(infer,"system",admitted.system)' in inference_block
+    assert 'map_set(infer,"user",admitted.user)' in inference_block
+    assert 'map_set(infer,"inference_packet_digest",admitted.inference_packet_digest)' in inference_block
+    assert 'map_set(infer,"cognitive_fabric_receipt_digest",admitted.cognitive_fabric_receipt_digest)' in inference_block
+    assert 'map_set(infer,"inference",profile.inference)' not in inference_block
+    assert 'map_set(infer,"system",prompt.system)' not in inference_block
+    assert 'map_set(infer,"user",prompt.user)' not in inference_block

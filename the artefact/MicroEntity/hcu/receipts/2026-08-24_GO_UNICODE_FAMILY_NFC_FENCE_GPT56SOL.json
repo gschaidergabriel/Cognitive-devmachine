@@ -1,0 +1,79 @@
+{
+  "schema": "CLAY_ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor_authority": "SUPERVISOR_STEERING_8_62_FREE_ONLY",
+  "canonical_main_observed": "a477fd5743b10d908dfd838f454e552249699b7c",
+  "retained_fusion_pr": 1401,
+  "retained_fusion_head_observed": "f50b1deb324447bbcea7bba860f998152c608bec",
+  "stacked_repair_pr": 1404,
+  "stacked_repair_head_before_receipt": "7f1221c0c691d8e388770cac329ee8f2563eacfa",
+  "unusual_experiment": {
+    "name": "UNICODE_CANONICAL_EQUIVALENCE_SPLIT_ALIAS",
+    "count": 1,
+    "hypothesis": "Canonically equivalent Unicode spellings of one trace_family_id can hash to different train/validation/holdout buckets because the family splitter hashes literal UTF-8 bytes without a normalization admission fence.",
+    "observed_counterexamples": [
+      "naive-with-diaeresis:NFC=train,NFD=validation",
+      "manana-with-tilde:NFC=holdout,NFD=train",
+      "creme-brulee:NFC=holdout,NFD=train",
+      "pokemon:NFC=holdout,NFD=validation",
+      "fiancee:NFC=train,NFD=holdout",
+      "nino:NFC=train,NFD=holdout"
+    ],
+    "classification": "MECHANISM_SUPPORTED_SOURCE_EQUIVALENT_ALGORITHM_REPRODUCTION_NOT_FULL_HCU_RUNTIME"
+  },
+  "counterhypothesis": {
+    "claim": "Upstream trace_family_id is already restricted to a canonical ASCII or normalized identifier form, so the alias is unreachable.",
+    "source_observation": "jspace_training_trace_v1.py accepts arbitrary nonempty stripped Unicode strings for trace_family_id; no normalization or ASCII grammar is enforced.",
+    "result": "REJECTED_AT_SOURCE_SCOPE"
+  },
+  "repair": {
+    "path": "the artefact/MicroEntity/hcu/jspace_dataset_family_split_v1.py",
+    "source_blob_sha": "169a336758b357bfcf1afa00a16b845fa1c1b285",
+    "policy": "REQUIRE_ALREADY_NFC_FAIL_CLOSED_NO_SILENT_NORMALIZATION",
+    "error": "trace_family_id:NFC_REQUIRED",
+    "rationale": "RFC8785/JCS preserves Unicode string data as-is; dataset split hardening must not silently rewrite an already-hashed/admitted trace identity.",
+    "second_authority_created": false
+  },
+  "regression": {
+    "new_test": "the artefact/MicroEntity/hcu/test_jspace_dataset_family_split_unicode_v1.py",
+    "source_equivalent_isolated_check": {
+      "six_previously_divergent_pairs": "NFC_ACCEPTED_NFD_REJECTED",
+      "ascii_10000_assignment_parity": true,
+      "ascii_distribution": {
+        "train": 7941,
+        "validation": 1042,
+        "holdout": 1017
+      }
+    },
+    "github_actions_run_observed": false,
+    "exact_new_patch_hobby_sandbox_run_observed": false
+  },
+  "execution_admission": {
+    "vercel_hobby_bounded_included_tier_sandbox": "ADMITTED_BY_SUPERVISOR_8_62",
+    "connected_vercel_sandbox_create_exec_action_exposed": false,
+    "direct_repository_clone_from_session_container": "BLOCKED_DNS_SOURCE_MATERIALIZATION",
+    "paid_fallback_used": false,
+    "together_used": false,
+    "vps_or_production_test_used": false
+  },
+  "credit": {
+    "component_source_hardening": "SUPPORTED",
+    "exact_new_patch_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_pass": false
+  },
+  "coordination": {
+    "pr1401_stale_against_current_main": true,
+    "repair_stacked_over_pr1401_not_main": true,
+    "merge_without_refusion_to_exact_main_forbidden": true
+  },
+  "next_exact_gate": "Re-fuse the retained HCU subtree plus this NFC family-id fence onto exact current FREE_ONLY main, then run one fixed source-hash-bound short Hobby Sandbox capsule over the minimum causal closure before any runtime promotion.",
+  "acceptance": "IN_PROGRESS"
+}

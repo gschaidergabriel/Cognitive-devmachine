@@ -1,0 +1,84 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "61f634f54df7a18f458eeb9a2814132be8fde950",
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_SHARED_IMMUTABLE_ID",
+    "timestamp_fallback": "INSUFFICIENT_MINUTE_PRECISION",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0
+  },
+  "observe": {
+    "retained_donor_pr": 1263,
+    "retained_executor_pr": 810,
+    "donor_before_delta": "5c59891b208d245b4b445772c70da5108447d794",
+    "executor_route_state": "SOURCE_REBIND_REQUIRED",
+    "execution_surface_state": "LATEST_OBSERVED_VERCEL_HOBBY_BUILD_RATE_LIMIT_BLOCKED",
+    "runtime_claim_boundary": "NO_NEW_ADMITTED_SANDBOX_OR_MODEL_EXECUTION_OBSERVED"
+  },
+  "hypothesis": "Atomic MiniUnifiedDB same-invocation uniqueness must propagate through the downstream causal chain; a DB-level one-winner result alone is insufficient if two divergent concurrent callers could nevertheless both construct InferenceReceipt/v4 or JSpaceBinding/v3 outside the transaction boundary.",
+  "counterhypothesis": "The existing standalone concurrent admission-store regression plus sequential divergent-chain regression may already imply downstream uniqueness, making a coupled concurrency-to-J-Space test redundant.",
+  "discriminator": "Run the two divergent observations concurrently against the same canonical MiniUnifiedDB invocation key and permit downstream InferenceReceipt/v4 plus validated JSpaceBinding/v3 construction only on the successful admit_and_verify_model_execution return path; assert exactly one downstream winner and one replay-divergence rejection.",
+  "source_delta": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "commit": "48d1bcb8357df0cf90d99133027f88ab67361a3f",
+    "file": "the artefact/MicroEntity/hcu/test_execution_store_inference_jspace_chain_v1.py",
+    "new_blob": "a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4",
+    "delta": "Adds concurrent divergent same-invocation regression proving exactly one atomic admission winner reaches InferenceReceipt/v4 and a semantically validated JSpaceBinding/v3; the losing observation must fail with MODEL_EXECUTION_INVOCATION_REPLAY_DIVERGENCE; persistent invocation and observation row counts remain one."
+  },
+  "executor_coordination_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "clay/fusion-vcr-native-20260817",
+    "commit": "f4c720c1f547d4415b2d95652c602a22b4124a6d",
+    "file": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-v4-v3-current-rebind-contract.json",
+    "new_blob": "7050f66961c9fd2f244cf045875ef18aebbd0748",
+    "status": "SOURCE_REBIND_REQUIRED",
+    "retained_donor_commit": "48d1bcb8357df0cf90d99133027f88ab67361a3f",
+    "required_test_blob": "a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4",
+    "strengthened_assertion": "Concurrent divergent same-invocation admission has exactly one winner and only that winner reaches InferenceReceipt/v4 plus a validated JSpaceBinding/v3."
+  },
+  "track_a_entityos_executable_convergence": {
+    "status": "ADVANCED_SOURCE_ONLY",
+    "delta": "The single retained executor now targets a stronger immutable donor contract without removing SOURCE_REBIND_REQUIRED."
+  },
+  "track_b_hcu_and_typed_entry_fabric": {
+    "status": "ADVANCED_SOURCE_ONLY",
+    "delta": "The canonical MiniUnifiedDB model-execution replay fence is now coupled to downstream HCU inference/J-Space uniqueness under concurrency. Typed Entry/route/GRID/load authority remains inherited from the exact chain and is not promoted by this source test."
+  },
+  "track_c_global_jspace_gwt_training_readiness_free_only": {
+    "status": "ADVANCED_SOURCE_ONLY",
+    "delta": "A concurrent replay race can no longer satisfy the declared training-trace/JSpaceBinding closure twice in the encoded regression; this strengthens trace-family provenance before DatasetAdmission/training use."
+  },
+  "evidence": {
+    "source_inspected": true,
+    "source_write_committed": true,
+    "executor_contract_write_committed": true,
+    "deterministic_regression_executed": false,
+    "admitted_vercel_sandbox_executed": false,
+    "actual_loader_io_observed": false,
+    "actual_model_executor_io_observed": false,
+    "jspace_model_runtime_observed": false,
+    "training_executed": false,
+    "classification": "SOURCE_ONLY_UNEXECUTED"
+  },
+  "negative_evidence": [
+    "An attempted executor-contract write first failed with HTTP 409 because a parallel worker changed the blob; no force overwrite was used.",
+    "Current Vercel Hobby build-rate-limit evidence is infrastructure/admission blocking, not a product regression result.",
+    "No shared immutable macrocycle identity was available for an unusual experiment; zero unusual interventions were run."
+  ],
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "In the single retained PR810 route, vendor the exact donor 48d1bcb8357df0cf90d99133027f88ab67361a3f source/regression/transitive closure, require the route manifest blob map to equal the rebind contract including test blob a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4, keep SOURCE_REBIND_REQUIRED until that same coherent change is complete, then execute only when the FREE_ONLY Vercel Hobby build/function admission surface permits and capture exact source/result/cleanup evidence."
+}

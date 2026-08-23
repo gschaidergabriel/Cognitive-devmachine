@@ -13,10 +13,10 @@
   "source": {
     "repository": "gschaidergabriel/clay-global-research-entity",
     "base_branch": "main",
-    "base_commit": "29c3d939590e1103a3cd15fd52d162a95fde9784",
+    "latest_main_fused_into_candidate": "9145289c461e7d0bff0cf3da6dd570037f374fe7",
+    "ancestry_fusion_commit": "3e2c7542db7b0c4bcf83243083d1307391a081cd",
     "candidate_branch": "go/ucf-single-authority-5f523339-r2",
-    "candidate_pre_receipt_head": "f03709af538fd095474175b7f0167793290de3b3",
-    "canonical_validator_blob": "28422ee5b99d9359813b09e1a487e1e820ff12c1",
+    "canonical_validator_blob_at_fusion": "28422ee5b99d9359813b09e1a487e1e820ff12c1",
     "pre_fix_parallel_validator_blob": "1711ab5df00b47073941a2853e5903ac05ebd5a8",
     "post_fix_compat_validator_blob": "debf8ba947f4e783a96a7d6276bd030bc158676b",
     "pre_fix_parallel_test_blob": "9bcb464a1a0f5b7b6174a29c36d477a926642dee",
@@ -53,14 +53,24 @@
   "coordination": {
     "open_prs_checked": [1085, 1086, 1087, 997],
     "overlap_with_1085_1086_1087": false,
-    "main_advanced_during_work": true,
-    "branch_force_recropped_to_latest_observed_main": true,
-    "new_main_ucf_adaptive_capability_fence_preserved": true
+    "main_advanced_repeatedly_during_work": true,
+    "merge_tree_strategy": "LATEST_MAIN_TREE_PLUS_ONLY_FOUR_UCF_CANDIDATE_BLOBS",
+    "candidate_behind_main_at_fusion": 0,
+    "candidate_pr": 1100,
+    "candidate_pr_mergeable_after_fusion": true
   },
   "execution_evidence": {
-    "exact_candidate_branch_execution": "PENDING_PR_CI_OR_AUTHORIZED_EXACT_EXECUTOR",
-    "local_behavioral_transcription": "PASS_BOUNDED_NONEXACT",
-    "local_behavioral_result": "canonical valid accepted; old parallel v1 shape rejected; canonical error parity preserved",
+    "exact_authored_blob_identity_check": "PASS",
+    "exact_compat_validator_git_blob": "debf8ba947f4e783a96a7d6276bd030bc158676b",
+    "exact_compat_test_git_blob": "ea252458bdb4da6559e2aedc7928458c1b30c952",
+    "exact_authored_blob_py_compile": "PASS",
+    "behavioral_local_transcription": "PASS_BOUNDED_NONEXACT",
+    "behavioral_local_result": "canonical valid accepted; old parallel v1 shape rejected; canonical error parity preserved",
+    "pr_head_ci_run_before_ancestry_fusion": 32615259211,
+    "pr_head_ci_job_before_ancestry_fusion": 97134835170,
+    "pr_head_ci_visible_steps": 0,
+    "pr_head_ci_classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT",
+    "exact_full_candidate_regression_execution": "PENDING_ACTUALLY_STARTED_ADMITTED_EXECUTOR",
     "runtime_credit": 0,
     "bundled_08b_runtime_credit": 0,
     "jspace_runtime_credit": 0,
@@ -77,8 +87,8 @@
     "together_used": false
   },
   "r6": {
-    "classification": "SOURCE_MECHANISM_REPAIR_CANDIDATE",
+    "classification": "SOURCE_MECHANISM_REPAIR_CANDIDATE_WITH_EXACT_AUTHORED_BLOB_COMPILE",
     "acceptance": "IN_PROGRESS",
-    "next_gate": "Run exact PR-head canonical + compatibility UCF regressions in an actually-started admitted executor; if green, merge without restoring a second v1 semantic authority. Runtime/model/J-Space/GWT credit remains separately gated."
+    "next_gate": "Run exact PR-head canonical + compatibility behavioral regressions in an actually-started admitted executor; if green, merge without restoring a second v1 semantic authority. Runtime/model/J-Space/GWT credit remains separately gated."
   }
 }

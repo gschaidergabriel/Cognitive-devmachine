@@ -54,12 +54,22 @@ def _clean_atom(value: str, field: str) -> str:
 
 
 def _clean_atoms(values: Iterable[str], field: str, *, required: bool = False) -> tuple[str, ...]:
+    if isinstance(values, (str, bytes)) or not isinstance(values, (tuple, list, set, frozenset)):
+        raise AdmissionError(f"{field} must be a collection of strings")
     cleaned = tuple(sorted({_clean_atom(v, field) for v in values}))
     if required and not cleaned:
         raise AdmissionError(f"{field} must not be empty")
     if len(cleaned) > 64:
         raise AdmissionError(f"{field} has too many entries")
     return cleaned
+
+
+def _strict_int(value: object, field: str, minimum: int, maximum: int) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise AdmissionError(f"{field} must be an integer")
+    if not minimum <= value <= maximum:
+        raise AdmissionError(f"{field} must be in [{minimum}, {maximum}]")
+    return value
 
 
 def _canonical_time(value: str, field: str) -> tuple[datetime, str]:
@@ -92,22 +102,12 @@ class ResourceBudget:
     memory_bytes: int = 0
 
     def normalized(self) -> "ResourceBudget":
-        if not 1 <= int(self.max_logical_cells) <= 600:
-            raise AdmissionError("max_logical_cells must be in [1, 600]")
-        if not 0 <= int(self.max_inference_calls) <= 600:
-            raise AdmissionError("max_inference_calls must be in [0, 600]")
-        if not 0 <= int(self.max_tokens) <= 10_000_000:
-            raise AdmissionError("max_tokens must be in [0, 10000000]")
-        if not 1 <= int(self.wall_ms) <= 3_600_000:
-            raise AdmissionError("wall_ms must be in [1, 3600000]")
-        if not 0 <= int(self.memory_bytes) <= 10**15:
-            raise AdmissionError("memory_bytes is out of range")
         return ResourceBudget(
-            max_logical_cells=int(self.max_logical_cells),
-            max_inference_calls=int(self.max_inference_calls),
-            max_tokens=int(self.max_tokens),
-            wall_ms=int(self.wall_ms),
-            memory_bytes=int(self.memory_bytes),
+            max_logical_cells=_strict_int(self.max_logical_cells, "max_logical_cells", 1, 600),
+            max_inference_calls=_strict_int(self.max_inference_calls, "max_inference_calls", 0, 600),
+            max_tokens=_strict_int(self.max_tokens, "max_tokens", 0, 10_000_000),
+            wall_ms=_strict_int(self.wall_ms, "wall_ms", 1, 3_600_000),
+            memory_bytes=_strict_int(self.memory_bytes, "memory_bytes", 0, 10**15),
         )
 
 
@@ -181,11 +181,12 @@ def admit_ingress(draft: XenoIngressDraft, *, current_generation: int) -> XenoIn
     same canonically represented event is deterministic; materially different events
     cannot alias merely because downstream routing later chooses the same functions.
     """
-    generation = int(draft.generation)
-    if generation != int(current_generation):
+    if not isinstance(draft, XenoIngressDraft):
+        raise AdmissionError("draft must be XenoIngressDraft")
+    generation = _strict_int(draft.generation, "generation", 0, 2**63 - 1)
+    current = _strict_int(current_generation, "current_generation", 0, 2**63 - 1)
+    if generation != current:
         raise AdmissionError("stale or future generation")
-    if generation < 0:
-        raise AdmissionError("generation must be non-negative")
 
     causal_id = _clean_atom(draft.causal_id, "causal_id")
     provenance = _clean_atoms(draft.provenance, "provenance", required=True)
@@ -208,9 +209,11 @@ def admit_ingress(draft: XenoIngressDraft, *, current_generation: int) -> XenoIn
     try:
         source = IngressSource(draft.source).value
         modality = Modality(draft.modality).value
-    except ValueError as exc:
+    except (TypeError, ValueError) as exc:
         raise AdmissionError("unknown source or modality") from exc
 
+    if not isinstance(draft.resource_budget, ResourceBudget):
+        raise AdmissionError("resource_budget must be ResourceBudget")
     budget = draft.resource_budget.normalized()
     material = {
         "schema_id": SCHEMA_ID,

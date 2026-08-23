@@ -1,0 +1,47 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "macrocycle_id": "go-20260823T0251Z-gpt56sol-raw-profile-hash",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_main_reentered": "7028a6f66ac0d61a09487f09caf1b2df417325f4",
+  "retained_repair_lane": "go-20260823-gpt56sol-reference-convergence-fresh",
+  "retained_lane_pre_delta_head": "7affab4dfaf3b67db3a4cc1f58b7d81a57293491",
+  "test_contract_commit": "3f35e76a2c76372d80f2e3acbf61ab086ad45501",
+  "execution_control": {
+    "free_only": true,
+    "provider_execution": false,
+    "secrets_accessed": false,
+    "network_provider_calls": 0,
+    "money_spent_usd": 0,
+    "vercel_sandbox_exec_surface_available": false
+  },
+  "unusual_experiment": {
+    "id": "RAW_PROFILE_HASH_CANONICALIZATION_DIVERGENCE",
+    "count_in_macrocycle": 1,
+    "status": "CONSUMED",
+    "hypothesis": "A verifier may parse and re-canonicalize profile_json before hashing without changing MiniUnifiedDB profile authority semantics.",
+    "counterhypothesis": "Native MiniUnifiedDB hashes exact persisted profile_json text bytes, so parse/re-canonicalize hashing diverges whenever semantically identical JSON has different whitespace or key order.",
+    "intervention": "Compare the canonical native active_profile_json hash boundary against the superseded structured donor's parse/re-canonicalize hash boundary, then inspect retained #997 profile-read ordering.",
+    "observed": {
+      "native_boundary": "sha256(exact persisted profile_json text bytes)",
+      "superseded_donor_boundary": "sha256(re-canonicalized parsed JSON object)",
+      "retained_997_boundary": "sha256(raw profile_json text before json.loads/normalization)"
+    },
+    "result": "COUNTERHYPOTHESIS_SUPPORTED_AND_RETAINED_LANE_MECHANISM_CORRECT",
+    "evidence_class": "EXACT_SOURCE_COMPARISON_NOT_RUNTIME_EXECUTION"
+  },
+  "delta": {
+    "file": "the artefact/blogpost_entity/test_reference_raw_profile_hash_bytes.py",
+    "contract": "Reference profile verification must accept a valid digest over deliberately noncanonical persisted JSON text and reject a semantically equivalent whitespace-byte mutation when profile_sha256 is unchanged.",
+    "implementation_authority": "Retained runtime lane #997 only; no second runtime implementation created.",
+    "experiment_reuse": "The two added tests are regression codification of the single consumed unusual experiment, not additional unusual experiments."
+  },
+  "runner": {
+    "exact_runtime_credit": 0,
+    "test_execution_credit": 0,
+    "note": "No authorized executable Vercel Sandbox surface is exposed in this session. GitHub runner status must be checked on the exact post-delta branch head; a run with no visible executed steps earns zero semantic test credit."
+  },
+  "claycode_grf": "grf_receipt(id=\"RAW_PROFILE_HASH_CANONICALIZATION_DIVERGENCE\",R0=[native(profile_hash=sha256(raw_profile_json_bytes)),donor(profile_hash=sha256(recanonicalized_json)),lane997(read_order=[raw,sha256,json_parse,normalize])],R1=[infer(canonicalization_can_change_artifact_identity)],R2=[candidate(raw_byte_hash),candidate(parsed_semantic_hash)],R3=[counter(same_json_meaning_different_bytes)],R4=[discriminate(noncanonical_whitespace_then_whitespace_mutation)],R5=[invariant(profile_sha256_binds_persisted_bytes_not_semantic_equivalence)],R6=[verify(source_mechanism=true,exact_runtime=false)]); omega_candidate(kind=\"retain_raw_byte_hash_and_regression_guard\",authority=\"SOURCE_ONLY\")",
+  "promotion": "NOT_PROMOTED",
+  "next_gate": "Continue source-addressing/provenance/cursor/nonfinite repairs on retained #997 and obtain actually-started exact-source authorized execution before reference/native parity credit."
+}

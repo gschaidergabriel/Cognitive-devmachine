@@ -10,7 +10,6 @@ import math
 from typing import Any, Mapping
 
 CANONICALIZATION_SCHEMA = "RFC8785_JCS_IJSON/v1"
-SAFE_INTEGER_MAX = (1 << 53) - 1
 
 
 class CanonicalizationError(ValueError):
@@ -93,12 +92,25 @@ def _fixed_from_repr(text: str) -> str:
 def _number(value: int | float) -> bytes:
     if isinstance(value, bool):
         raise CanonicalizationError("BOOLEAN_IS_NOT_NUMBER")
-    if isinstance(value, int):
-        if not -SAFE_INTEGER_MAX <= value <= SAFE_INTEGER_MAX:
-            raise CanonicalizationError("INTEGER_OUTSIDE_IJSON_SAFE_RANGE")
-        return str(value).encode("ascii")
 
-    value = float(value)
+    # JCS number serialization is defined over IEEE-754 binary64 values. Python's JSON
+    # object model distinguishes arbitrary-precision int from float, but the wire-level
+    # JSON number does not carry that host-language distinction. Accept integer values
+    # iff their exact mathematical value is representable as a finite binary64, then feed
+    # them through the same ECMAScript-compatible serialization path as floats. This
+    # preserves RFC 8785 Appendix-B cases such as 2^53 and 2^68 while rejecting integers
+    # (for example 2^53+1) that would require silent precision loss.
+    if isinstance(value, int):
+        try:
+            binary64 = float(value)
+        except OverflowError as exc:
+            raise CanonicalizationError("INTEGER_NOT_EXACT_BINARY64") from exc
+        if not math.isfinite(binary64) or int(binary64) != value:
+            raise CanonicalizationError("INTEGER_NOT_EXACT_BINARY64")
+        value = binary64
+    else:
+        value = float(value)
+
     if not math.isfinite(value):
         raise CanonicalizationError("FINITE_BINARY64_REQUIRED")
     if value == 0.0:

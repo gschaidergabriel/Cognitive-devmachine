@@ -4,11 +4,13 @@ Status: **SOURCE HARDENING CANDIDATE / RUNTIME UNVERIFIED**
 
 This guard layer hardens the already-canonical `tools/miniunifieddb_cognition_store_v1.py` tables. It creates **triggers only** and introduces no second database, table family, cognition store, truth authority, effect path, identity, or recovery ledger.
 
-## Observed gap
+## Observed gaps
+
+### 1. Generation check/write race
 
 The canonical store checks `entity_state.generation` in Python before inserting object admissions, boot bindings, and causal-turn bindings. The database schema does not independently repeat that live-generation check at INSERT time.
 
-Therefore a concurrency schedule exists in which:
+A concurrency schedule can therefore be:
 
 1. caller reads live generation `g`;
 2. another canonical writer advances `entity_state.generation` to `g+1` and commits;
@@ -16,7 +18,15 @@ Therefore a concurrency schedule exists in which:
 
 Application-side validation alone is insufficient to prove that step 3 cannot materialize stale cognition ancestry. The database must reject it at the write boundary.
 
-Current canonical store source also still resolves cognition-object admission with `admitted_generation <= entity_generation`. A repair PR for exact equality was closed unmerged. Therefore prior-generation admission can still satisfy the Python pre-check for a new boot generation unless the database write boundary independently requires exact-current-generation admission.
+### 2. Prior-generation admission reuse
+
+Current canonical store source still resolves cognition-object admission with `admitted_generation <= entity_generation`. A repair PR for exact equality was closed unmerged. Prior-generation admission can therefore satisfy the Python pre-check for a new boot generation unless the database write boundary independently requires exact-current-generation admission.
+
+### 3. Transaction-preserving bootstrap
+
+Current canonical `install_schema()` explicitly stays inside the caller's `BEGIN IMMEDIATE` transaction and forbids `executescript()` because Python's sqlite wrapper may commit before running it. A guard installer that used `executescript()` would split the same authority boundary it is supposed to strengthen.
+
+The v1 guard installer therefore uses individual `Connection.execute()` calls for each `CREATE TRIGGER` and never commits or rolls back the caller's transaction.
 
 ## Guard contract
 
@@ -27,7 +37,7 @@ Current canonical store source also still resolves cognition-object admission wi
 - turn-binding INSERT requires exact live generation, the canonical turn schema, and a boot binding from that same generation;
 - cognition objects, object admissions, boot bindings, and turn bindings reject direct UPDATE and DELETE after admission.
 
-The guard module refuses installation unless the existing canonical store tables and `entity_state` already exist. `guard_status()` verifies the expected trigger set and explicitly reports `creates_tables=false`.
+The guard module refuses installation unless the existing canonical store tables and `entity_state` already exist. `guard_status()` verifies the expected trigger set, reports `creates_tables=false`, and identifies the installer as transaction-preserving.
 
 ## Why append-only
 
@@ -37,17 +47,18 @@ Old admissions remain durable evidence but are not current-generation runtime au
 
 ## Regression obligations
 
-The source tests cover three distinct write-boundary classes:
+The source tests cover four distinct classes:
 
 1. post-check generation advance before a direct INSERT;
 2. direct SQL attempt to construct a new-generation boot binding from only prior-generation admissions;
-3. the current canonical `store.admit_boot_binding()` API path itself attempting the same prior-generation reuse while guards are installed.
+3. the current canonical `store.admit_boot_binding()` API attempting the same prior-generation reuse while guards are installed;
+4. `BEGIN IMMEDIATE -> store.install_schema -> guard.install_guards` remaining one transaction, with rollback removing both newly created cognition tables and triggers.
 
-The third case is important: the guard must close the current application-level `<=` gap even before that helper is separately simplified to exact equality.
+The third case makes the guard a real final enforcement boundary even while the application helper still contains `<=`. The fourth prevents a false security improvement that silently commits the bootstrap halfway through.
 
 ## Coordination boundary
 
-The persisted-row digest reconstruction/read-integrity repair is already merged into the canonical store and is not duplicated here. The earlier parallel exact-generation API repair was closed unmerged; this lane therefore owns the final database-level enforcement of that invariant without creating another store.
+The persisted-row digest reconstruction/read-integrity repair is already merged into the canonical store and is not duplicated here. The earlier parallel exact-generation API repair was closed unmerged; this lane owns the database-level enforcement of that invariant without creating another store.
 
 ## Authority
 
@@ -63,8 +74,8 @@ The guards cannot promote model/J-Space/GWT/HCU output to truth and cannot perfo
 
 ## Integration gate
 
-When the canonical cognition-store schema is installed in the retained `pipeline_init`/bootstrap path, install these guards immediately afterward in the same MiniUnifiedDB before any cognition object/admission/binding write is allowed.
+When the canonical cognition-store schema is installed in the retained `pipeline_init`/bootstrap path, install these guards immediately afterward in the **same transaction** and same MiniUnifiedDB before any cognition object/admission/binding write is allowed.
 
-Then execute the exact integrated source on an actually-started authorized isolated executor. Required falsifiers include a post-check generation advance before INSERT, direct stale boot/turn writes, prior-generation admission reuse through both direct SQL and the canonical store API, unadmitted boot-object injection, and direct UPDATE/DELETE mutation attempts.
+Then execute the exact integrated source on an actually-started authorized isolated executor. Required falsifiers include a post-check generation advance before INSERT, direct stale boot/turn writes, prior-generation admission reuse through both direct SQL and canonical store API, transaction rollback, unadmitted boot-object injection, and direct UPDATE/DELETE mutation attempts.
 
 Until that exact integration executes, this remains source hardening only and grants zero runtime/model/J-Space/GWT/Claude/HCU/whole-product credit.

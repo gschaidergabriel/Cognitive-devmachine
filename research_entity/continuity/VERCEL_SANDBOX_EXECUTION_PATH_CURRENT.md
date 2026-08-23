@@ -1,123 +1,143 @@
 # Vercel Sandbox execution path — CURRENT
 
-Status: **BRIDGE CONFIRMED / SANDBOX ADMISSION PROVEN / RUNTIME GITHUB TOKEN INGRESS IMPLEMENTED / OWNER ONE-SHOT REQUIRED**  
-Current product authority: `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`  
-Canonical product workspace: `main/the artefact/`
+Status: **ENTITYOS/HCU BRIDGE READY / SANDBOX ADMISSION PROVEN HISTORICALLY / CURRENT EXACT BATCH NOT STARTED / OWNER RUNTIME TOKEN POST REQUIRED**  
+Current product authority: newest explicit EntityOS + HCU owner steering, including `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_53.json` and `research_entity/continuity/BOOTSTRAP_MINIMAL.json`.  
+Canonical workspace: `gschaidergabriel/clay-global-research-entity/main/the artefact/`.
 
-## Authority boundary
+## Current authority boundary
 
-This file is an execution-frontier record below the current ClayVerse owner directive and current `the artefact/manifest.json`. If historical text in this file conflicts with those authorities, the ClayVerse directive/manifest wins and this file must be repaired rather than routing product work through a retired runtime.
+This record is execution-frontier evidence below the newest owner authority and current `the artefact/manifest.json`.
 
-Current canonical visible runtime is:
+Current law:
+- persistent research entity remains **Clay**;
+- current product/system identity is **EntityOS**;
+- current integrated cognition/compute architecture is **HCU**;
+- Xeno/XCU/Mini Entity/MicroEntity/ClayVerse/Frank names are compatibility or historical donor provenance unless explicitly re-admitted;
+- canonical durable state/evidence remains outside model-generated cognition and simulation;
+- model output, J-Space measurement, HCU output, workspace recurrence and world-model output cannot mint truth;
+- real/state-changing effects remain behind deterministic `EffectGate + EffectJournal` authority;
+- tests/builds/runtime validation remain authorized-isolated-sandbox-only; VPS/self-hosted/production-host substitutes are forbidden;
+- Together general inference/fallback and recurring training are forbidden;
+- **exactly one** owner-authorized approximately 0.8B Global-J-Space/GWT fine-tuning job is allowed until one job is actually created and receipted; a second job requires new explicit owner authorization.
 
-`Browser -> Clerk -> verified JWT -> authenticated WebSocket PTY -> persistent user-bound tmux -> normal interactive Claude Code -> managed UserPromptSubmit/Stop/StopFailure hooks -> UnifiedDB causal lifecycle -> retrieval/workspace -> candidate reasoning -> effect-only MCP/EffectGate -> optional separately admitted EntityOS -> verified outcome -> causal re-entry`.
+The previous ClayVerse whole-container/Clerk/PTY/Claude acceptance sequence in older revisions of this file is historical donor evidence only and is not the current execution frontier.
 
-The historical Mistral/custom-engine acceptance path and headless `claude -p` path are retired product runtimes. Current `the artefact/clayverse/final_acceptance_probe.py` is intentionally a fail-closed compatibility tombstone and MUST NOT be treated as final acceptance machinery. GLM remains only the separate token/API inference-only path described by the current manifest where that accepted profile requires it; it never replaces the canonical terminal/Claude Code path or gains state/effect authority.
+## Retained execution architecture
 
-## Current Vercel truth
-
-The authorized bridge has actually created disposable Vercel Sandbox Firecracker microVMs and executed commands inside them. `Sandbox.create` is not the blocker.
-
-Canonical staging project remains:
-- repository: `gschaidergabriel/Dr.-Unterweger`;
-- retained controller: draft PR **#810**;
+There is one retained Vercel Sandbox orchestration lane:
+- controller repository: `gschaidergabriel/Dr.-Unterweger`;
+- retained draft PR: **#810**;
+- controller branch: `clay/fusion-vcr-native-20260817`;
 - Vercel project: `dr-unterweger`;
-- project id: `prj_ifIgM9X7jqIQS8mNIGllImziePPG`.
+- Vercel project id: `prj_ifIgM9X7jqIQS8mNIGllImziePPG`;
+- runtime start endpoint: `POST /api/go-cycle-v2`;
+- retained HCU donor: Research PR **#1263**, branch `gpt56sol/hcu-reactive-worldmodel-substrate-20260823`.
 
-VPS/self-hosted/production-host testing remains forbidden. Together remains forbidden.
+The controller is infrastructure only. It is not a second product, state authority, effect authority, truth authority, recovery authority or HCU implementation.
 
-## Historical directly observed admission evidence
+## Current controller contract
 
-Previous retained runs reached `Sandbox.create=PASS_CREATED`, attested the guest kernel and then stopped before private-source staging because no `GITHUB_READ_TOKEN` was available to the build-triggered controller.
+The deployed controller resolves identities at POST time rather than hard-coding a rapidly stale Research snapshot:
 
-The bounded controller-v7 run on deployment `dpl_6jeexw8EZa48jApm4NhgfaLMJoM5` observed Sandbox admission plus guest kernel `Linux 6.18.40 x86_64`, then failed closed at `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`, with source/OCI runtime credit still zero and clean Sandbox stop.
+`owner/user scoped read-only GitHub token`
+`-> POST /api/go-cycle-v2`
+`-> resolve current Research refs/heads/main SHA + tree`
+`-> resolve current retained HCU PR #1263 head SHA + tree`
+`-> Sandbox.create(persistent=false)`
+`-> fetch those exact two private commit archives inside the disposable Sandbox`
+`-> verify commit/tree identities`
+`-> re-resolve both snapshots and fail closed if either moved during fetch`
+`-> clear token reference`
+`-> prove GITHUB_READ_TOKEN absent in a fresh Sandbox command`
+`-> launch detached exact-source EntityOS/HCU regression batch`.
 
-These are historical observations only. They do not imply that the token must be configured in Vercel Environment Variables and do not establish current-source or product-runtime PASS.
+The GitHub token is never a Vercel Environment Variable and must never be committed, printed, persisted in canonical state, receipts, model context, generated datasets, build metadata or images. Exact secret text is not evidence and must not be recorded.
 
-## Owner-corrected GitHub read-token ingress
+## Current batch gate
 
-A scoped read-only `GITHUB_READ_TOKEN` MAY be securely injected/forwarded into an authorized disposable Vercel Sandbox for the narrow private Research/EntityOS fetch step under `research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md`.
+The retained detached batch currently checks the computational-bootstrap spine against dynamically frozen current Research main + current PR #1263 donor bytes:
 
-Required controls:
-- never commit or print the token;
-- never persist it in UnifiedDB, ClayGraph, snapshots, receipts, generated locks, OCI layers or durable workspace/state;
-- use least privilege and bounded lifetime;
-- verify exact expected repository/commit/tree/blob/archive identity before provenance credit;
-- fail closed on substitution or identity uncertainty;
-- remove/unset the credential after the fetch where possible;
-- prove credential absence in a fresh process after fetch;
-- stop/clean the Sandbox after the bounded batch.
+1. current EntityOS/HCU owner/bootstrap/manifest authority;
+2. selected `RFC8785_JCS_IJSON/v1` canonicalization;
+3. Typed Entry admission;
+4. reactive HCU routing;
+5. engine admission;
+6. generation-fenced verified engine-load lease;
+7. `HCU_INFERENCE_RECEIPT/v3`;
+8. `ENTITYOS_HCU_GRID_PLAN/v2`;
+9. active canonicalizer/loader-chain downgrade fences;
+10. functional Global J-Space/GWT prototype;
+11. bootstrap J-Space dataset compiler.
 
-The user cannot couple this GitHub token to Vercel as a Preview environment secret. The retained controller therefore supports runtime one-shot ingress:
+A component batch PASS is only exact-source/component evidence. It does **not** establish:
+- actual local ~0.8B model-loader credit;
+- model-specific J-Space causal coupling;
+- target-hardware capacity;
+- Together training success;
+- EntityOS whole-product/runtime acceptance.
 
-`owner-held token -> HTTPS POST /api/go-cycle-v2 -> transient request/function memory -> exact private Research + EntityOS access proof -> Sandbox.create -> token only in one Sandbox.runCommand env for private fetch -> exact source identity verification -> command exits -> token reference cleared -> fresh-process secret-absence fence -> continue exact-source/OCI gates`.
+## Current observed Vercel truth — 2026-08-24
 
-The Preview build itself does not need the GitHub token. The token is not a Vercel Environment Variable, not committed, and must never enter Docker build args/context/image or ClayVerse runtime.
+Latest observed retained-controller deployment during the 00:39+07 `go` cycle:
+- deployment: `dpl_5L1PZpoG8oxHTiMp8XPuGEueAKSr`;
+- state: **READY**;
+- deployed PR810 commit: `a85d75fed192d9dd8cfbec49dedff9bfa6e0e520`;
+- commit purpose: include Global J-Space/GWT training prototype in the Sandbox batch.
 
-Observed architectural-unblock evidence:
-- deployment `dpl_6RSuuunC96JnmXeXN3Z9eYGTceE9` on commit `ba52934acff8bd620e1d968dfa437bf96dbf1a54` reached READY without a configured GitHub token;
-- the runtime ingress endpoint was deployed;
-- direct GET to `/api/go-cycle-v2` returned `405 Method Not Allowed`, `Allow: POST`, plus no-store/no-referrer/nosniff headers.
+Live runtime-log inspection for the preceding two hours found no credential-bearing `POST /api/go-cycle-v2`; only GET probes were observed, returning the expected POST-only 405 behavior. Therefore the exact current detached batch has **not** been observed starting and earns zero current runtime credit.
 
-No recorded owner-started token-bearing run through this ingress exists yet. Therefore current private-source/full-suite/OCI runtime credit remains zero.
+A connected GitHub Actions re-run path does not currently provide an exact-head substitute: no workflow run was associated with the refreshed retained HCU donor head at the observation point. Do not manufacture a second ingress merely to bypass the explicit retained controller.
 
-## Final test-of-tests — current ClayVerse form
+## Coordination finding from the same cycle
 
-The whole-product acceptance run must exercise the current product, not a retired inference wrapper:
+At retained donor head `d195755c16f704996c0b84eb7fa0d5ff2a5913ef`, `global_jspace_gwt_v1.py` required `basis_sha256`, while `test_global_jspace_gwt_v1.py` still exercised the previous pre-digest API and obsolete vector-control decode surface.
 
-`Vercel Sandbox Firecracker guest -> exact accepted ClayVerse OCI digest -> Clerk/browser/WebSocket PTY -> persistent tmux -> normal interactive Claude Code + managed hooks -> UnifiedDB/retrieval/workspace -> candidate reasoning -> EffectGate/optional admitted EntityOS -> causal outcome re-entry -> persistence/recovery -> full Sandbox/appliance destruction and recreation from the SAME image digest -> recovered canonical state under a new generation -> repeated canonical operation`.
+A direct repair attempt from another stale snapshot was correctly rejected by GitHub with 409 rather than overwriting parallel work. After refresh, retained donor head `bbad88fecdf82c750d9a260f0954467bb7bc04a4` contained the reconciled test contract and a bounded same-basis-id/different-basis-bytes discriminator. No duplicate HCU/J-Space path was created.
 
-The Vercel Sandbox Firecracker guest may serve as the independent guest-kernel outer envelope when its guest identity and the exact inner OCI digest are both attested. A second nested KVM/Kata guest is not required merely to satisfy that invariant. Separate Kata deployment hardening remains additional evidence.
+Treat these hashes as bounded observation receipts only. The controller intentionally resolves current identities again at POST time.
 
-Provider law for final acceptance:
-- canonical interactive cognition must prove normal Claude Code terminal login/runtime through the managed PTY/tmux surface;
-- any API provider retained by the exact accepted manifest/profile (currently the separate GLM inference-only path in the manifest) must be verified only at its bounded inference boundary, with transient secret handling and zero direct state/effect authority;
-- no historical Mistral acceptance probe, custom chat API or headless `claude -p` route receives product credit;
-- model completion alone is never reward, truth or effect authority.
+## Exact next execution sequence
 
-EntityOS execution remains conditional. If the accepted profile keeps `CLAYVERSE_ENABLE_ENTITYOS_EXEC=0`, exact staged identity verification is sufficient for that baseline; if execution is explicitly admitted, the exact embedded artifact and admitted EffectGate round-trip must also pass.
+The next accepted high-information discriminator is:
 
-## Next accepted execution sequence
+`owner/user performs one credential-bearing POST to the exact READY retained PR810 controller`
+`-> controller resolves and freezes then-current Research main + PR1263 SHA/tree`
+`-> actually create disposable Vercel Sandbox`
+`-> attest guest identity`
+`-> fetch exact private source with transient scoped read-only token`
+`-> verify source identities and re-check no movement`
+`-> prove token absence after fetch`
+`-> execute the current combined JCS -> Typed Entry -> route -> engine admission/load -> inference v3 -> GRID10 v2 -> Global J-Space/GWT -> dataset-compiler batch`
+`-> record exact PASS or exact semantic/pre-execution failure without inflating evidence scope`.
 
-At the next real owner-started one-shot run:
+If the exact current batch passes, continue immediately with the training-readiness spine rather than launching training prematurely:
 
-`refresh exact current Research main + retained admitted controller once`
-`-> rebind retained #810 controller to that exact source identity`
-`-> owner supplies scoped read-only GITHUB_READ_TOKEN through runtime POST/start panel, not Vercel Environment`
-`-> Sandbox.create`
-`-> attest Firecracker guest identity/kernel`
-`-> forward GitHub token only to one private-fetch command`
-`-> fetch exact private Research + required EntityOS artifact inside Sandbox`
-`-> verify exact Git/object/artifact identities`
-`-> prove GitHub token absence after fetch`
-`-> run exact-current ClayVerse full regressions, including OCI service import-closure guard`
-`-> build exact ClayVerse OCI`
-`-> capture immutable image digest plus APT/tmux/Claude/Python/supply-chain identities`
-`-> run the EXACT accepted ClayVerse digest inside the Firecracker guest`
-`-> enforce non-root/read-only-root/declared persistent+tmpfs write surfaces`
-`-> bring /healthz and full /readyz to intended states`
-`-> run real Clerk-authenticated WebSocket PTY sessions for both canonical users`
-`-> prove persistent tmux + normal interactive Claude Code + managed lifecycle hooks`
-`-> prove UnifiedDB authority, MicroClay/retrieval, ClayGraph/Hyperposition/workspace boundaries`
-`-> re-ingest candidate reasoning before any real effect authority`
-`-> execute a safe admitted EffectGate round-trip; include EntityOS only if explicitly admitted`
-`-> verify effect/outcome causal re-entry and stale-generation fencing`
-`-> verify one-entity/two-user persistence/concurrency/privacy contracts`
-`-> exercise Tier-1 recovery`
-`-> destroy/recreate the full Sandbox/appliance from the SAME image digest`
-`-> recover UnifiedDB/WAL/snapshot/EffectJournal under a new generation`
-`-> prove stale-result rejection and no blind effect replay`
-`-> repeat canonical authenticated cognition after recovery`
-`-> verify any manifest-retained API inference-only provider boundary without granting it terminal/state/effect authority`
-`-> WHOLE_CLAYVERSE_PASS only if the complete current acceptance vector is green`.
+`bind actual intended ~0.8B checkpoint + tokenizer + runtime + build bytes to positive EngineAdmission and loader-consumption evidence`
+`-> measure pre-training capability floor and capacity`
+`-> integrate Global J-Space/GWT into real request-scoped GRID10 inference`
+`-> emit real traces with generation/provenance/route/engine identities`
+`-> run causal lesion/shuffle/rescue and hard-negative controls`
+`-> freeze JSPACE_VECTOR_CONTROL_ABI/v1 against those traces`
+`-> compile leak-resistant train/validation/holdout data`
+`-> freeze exact base-model identity and pre-training evaluation`
+`-> Together supported-model/capability/price preflight`
+`-> only then create exactly one owner-authorized full fine-tuning job`
+`-> record non-secret job id and mark the one-shot consumed`
+`-> download/hash-bind trained weights + tokenizer`
+`-> integrate through the existing EngineAdmission/loader-lease path`
+`-> deep causal, recovery, effect-boundary, retained-capability and off-domain-interference evaluation`.
+
+A completed training job alone is not PASS. Specialization must improve the required J-Space/GWT/HCU/vector-control behavior while retaining minimum language/schema/logic/numeric/tool/safety/authority competence.
 
 ## Evidence law
 
-- Sandbox creation alone is not product PASS.
-- Runtime GitHub-token ingress alone is not product PASS.
-- Successful private Git fetch alone is not product PASS.
-- Successful OCI build alone is not product PASS.
-- A direct provider API call outside the canonical ClayVerse lifecycle is not product PASS.
-- Container liveness alone is not product PASS.
-- Source/component regressions and PR merges do not imply exact OCI/runtime acceptance.
-- Whole-product credit requires the integrated exact-digest current ClayVerse path and recovery/causal/security contracts actually to execute.
+- READY deployment != Sandbox run.
+- Sandbox creation != semantic PASS.
+- Source/component PASS != actual model-loader/J-Space causality.
+- J-Space trace coherence != truth or hidden-state proof.
+- Training dataset generation != training readiness unless exact trace/base/split gates hold.
+- Fine-tuning job completion != candidate acceptance.
+- Retrieval/workspace recurrence != canonical truth.
+- Unknown external effect outcomes remain UNKNOWN and are never blindly replayed.
+- `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
+- No second controller, identity, state, effect, truth, recovery or HCU authority may be introduced to bypass a blocker.

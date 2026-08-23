@@ -49,6 +49,11 @@ def _number_bytes(value: int | float) -> bytes:
         number = value
     else:
         raise HCUCanonicalizationError("NUMBER_REQUIRED")
+    # Host-language numeric type must not change the admitted I-JSON value domain.
+    # JavaScript has only Number here, so integer-valued binary64 values outside the
+    # safe integer range must reject in Python as floats just as they do in Node.
+    if number.is_integer() and abs(number) > _MAX_SAFE_INTEGER:
+        raise HCUCanonicalizationError("INTEGER_OUTSIDE_IJSON_SAFE_RANGE")
     # Match JSON/JCS numeric equivalence for negative zero without depending on text rendering.
     if number == 0.0:
         number = 0.0

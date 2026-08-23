@@ -1,9 +1,11 @@
 import importlib.util
+import json
 import pathlib
 import unittest
 
 
 MODULE_PATH = pathlib.Path(__file__).resolve().parents[1] / "hcu_typed_canonical_v1.py"
+VECTORS_PATH = pathlib.Path(__file__).resolve().with_name("hcu_typed_canonical_vectors_v1.json")
 SPEC = importlib.util.spec_from_file_location("hcu_typed_canonical_v1", MODULE_PATH)
 module = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
@@ -15,6 +17,14 @@ identity_sha256 = module.identity_sha256
 
 
 class TypedCanonicalV1Tests(unittest.TestCase):
+    def test_shared_cross_language_vectors(self):
+        vectors = json.loads(VECTORS_PATH.read_text(encoding="utf-8"))
+        self.assertEqual(vectors["canonical_schema"], "ENTITYOS_HCU_TYPED_CANONICAL/v1")
+        for vector in vectors["vectors"]:
+            with self.subTest(vector=vector["name"]):
+                self.assertEqual(canonical_bytes(vector["value"]).hex(), vector["canonical_hex"])
+                self.assertEqual(identity_sha256(vector["value"]), vector["identity_sha256"])
+
     def test_ascii_object_key_order_is_invariant(self):
         a = {"z": 1, "a": 2, "nested": {"b": True, "a": None}}
         b = {"nested": {"a": None, "b": True}, "a": 2, "z": 1}

@@ -15,8 +15,11 @@ try:
         ABI_SCHEMA,
         TRACE_CANONICALIZATION_SCHEMA,
         TRACE_SCHEMA,
-        JSpaceError,
-        VectorControlPacket,
+    )
+    from .jspace_vector_control_v1 import (
+        JSpaceVectorControlError,
+        packet_bytes,
+        parse_packet_text,
     )
 except ImportError:
     from entry_canonicalization_v1 import (
@@ -28,8 +31,11 @@ except ImportError:
         ABI_SCHEMA,
         TRACE_CANONICALIZATION_SCHEMA,
         TRACE_SCHEMA,
-        JSpaceError,
-        VectorControlPacket,
+    )
+    from jspace_vector_control_v1 import (
+        JSpaceVectorControlError,
+        packet_bytes,
+        parse_packet_text,
     )
 
 DATASET_SCHEMA = "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v2"
@@ -85,6 +91,14 @@ def _row(kind: str, user: dict[str, Any], assistant: dict[str, Any], trace_sha25
     }
 
 
+def _lower_sha256(value: Any, field: str) -> str:
+    if not isinstance(value, str) or len(value) != 64 or value.lower() != value:
+        raise DatasetError(f"{field}:LOWERCASE_SHA256_REQUIRED")
+    if any(ch not in "0123456789abcdef" for ch in value):
+        raise DatasetError(f"{field}:LOWERCASE_SHA256_REQUIRED")
+    return value
+
+
 def _validate_trace(trace: dict[str, Any]) -> str:
     if not isinstance(trace, dict) or trace.get("schema") != TRACE_SCHEMA:
         raise DatasetError("TRACE_SCHEMA_UNSUPPORTED")
@@ -96,13 +110,17 @@ def _validate_trace(trace: dict[str, Any]) -> str:
     required = (
         "generation",
         "basis_id",
+        "basis_sha256",
         "winner_cell_id",
         "winner_role",
         "winner_gate_q",
         "hyperposition_cells",
+        "control_condition",
         "control_packet_schema",
         "control_packet_text",
+        "control_packet_identity_sha256",
         "control_packet_sha256",
+        "control_packet_wire_sha256",
         "contributions",
         "authority",
     )
@@ -116,6 +134,7 @@ def _validate_trace(trace: dict[str, Any]) -> str:
 
     generation = trace["generation"]
     basis_id = trace["basis_id"]
+    basis_sha256 = _lower_sha256(trace["basis_sha256"], "TRACE_BASIS_SHA256")
     winner_role = trace["winner_role"]
     winner_cell_id = trace["winner_cell_id"]
     winner_gate_q = trace["winner_gate_q"]
@@ -131,19 +150,32 @@ def _validate_trace(trace: dict[str, Any]) -> str:
         raise DatasetError("TRACE_WINNER_GATE_Q_INVALID")
 
     try:
-        packet = VectorControlPacket.decode_text(
-            trace["control_packet_text"],
-            expected_basis_id=basis_id,
-            expected_role=winner_role,
-            expected_generation=generation,
-        )
-    except JSpaceError as exc:
+        packet = parse_packet_text(trace["control_packet_text"])
+    except JSpaceVectorControlError as exc:
         raise DatasetError(f"TRACE_CONTROL_PACKET_INVALID:{exc}") from exc
-    if packet.gate_q != winner_gate_q:
-        raise DatasetError("TRACE_CONTROL_PACKET_GATE_MISMATCH")
-    packet_sha = hashlib.sha256(packet.encode_bytes()).hexdigest()
-    if trace["control_packet_sha256"] != packet_sha:
-        raise DatasetError("TRACE_CONTROL_PACKET_SHA256_MISMATCH")
+    if packet.abi_schema != ABI_SCHEMA:
+        raise DatasetError("TRACE_CONTROL_PACKET_ABI_MISMATCH")
+    if packet.generation != generation:
+        raise DatasetError("TRACE_CONTROL_PACKET_GENERATION_MISMATCH")
+    if packet.basis_id != basis_id:
+        raise DatasetError("TRACE_CONTROL_PACKET_BASIS_ID_MISMATCH")
+    if packet.basis_sha256 != basis_sha256:
+        raise DatasetError("TRACE_CONTROL_PACKET_BASIS_SHA256_MISMATCH")
+    if packet.role != winner_role:
+        raise DatasetError("TRACE_CONTROL_PACKET_ROLE_MISMATCH")
+    if packet.control_condition != trace["control_condition"]:
+        raise DatasetError("TRACE_CONTROL_PACKET_CONDITION_MISMATCH")
+
+    identity_sha = _lower_sha256(
+        trace["control_packet_identity_sha256"],
+        "TRACE_CONTROL_PACKET_IDENTITY_SHA256",
+    )
+    if identity_sha != packet.packet_sha256:
+        raise DatasetError("TRACE_CONTROL_PACKET_IDENTITY_MISMATCH")
+    wire_sha = hashlib.sha256(packet_bytes(packet)).hexdigest()
+    for field in ("control_packet_sha256", "control_packet_wire_sha256"):
+        if _lower_sha256(trace[field], f"TRACE_{field.upper()}") != wire_sha:
+            raise DatasetError("TRACE_CONTROL_PACKET_WIRE_SHA256_MISMATCH")
 
     contributions = trace["contributions"]
     if not isinstance(contributions, list) or not contributions:
@@ -186,6 +218,7 @@ def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
     common = {
         "control_packet": trace["control_packet_text"],
         "expected_basis_id": trace["basis_id"],
+        "expected_basis_sha256": trace["basis_sha256"],
         "expected_role": trace["winner_role"],
         "expected_generation": trace["generation"],
     }
@@ -221,6 +254,7 @@ def derive_bootstrap_examples(trace: dict[str, Any]) -> list[dict[str, Any]]:
             {
                 "generation": trace["generation"],
                 "basis_id": trace["basis_id"],
+                "basis_sha256": trace["basis_sha256"],
                 "contributions": trace["contributions"],
             },
             {

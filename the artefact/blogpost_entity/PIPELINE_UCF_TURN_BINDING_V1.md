@@ -62,6 +62,6 @@ A rejected or blocked candidate must not increment generation or leave commit id
 
 ## Current source observation at creation
 
-Current `main@5aa665364894245c05513ea91c41e3304f3e7368` still has `BLOGPOST_ENTITY.clay` routing directly from `pipeline_build_prompt` to `inference_generate`, and the Python reference runtime still exposes the legacy effect surface. Therefore this contract is intentionally **ahead of runtime implementation** and mints zero runtime credit.
+Current `main@efec8ecff35c28cea6f7445a87aa65ddcc339cab` still has `BLOGPOST_ENTITY.clay` routing directly from `pipeline_build_prompt` to `inference_generate`, and the Python reference runtime still exposes the legacy effect surface. Therefore this contract is intentionally **ahead of runtime implementation** and mints zero runtime credit.
 
 The next implementation gate is to emit this binding from the canonical `.clay`/EntityOS path and enforce it before `pipeline_commit`, while preserving the already-current profile/generation/snapshot/hash authority guards.

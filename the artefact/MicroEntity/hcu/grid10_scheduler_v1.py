@@ -124,6 +124,168 @@ def _nonempty(value: Any, field: str) -> str:
     return value.strip()
 
 
+def _nonnegative_int(value: Any, field: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+        raise GridScheduleError(f"{field}:NONNEGATIVE_INTEGER_REQUIRED")
+    return value
+
+
+def _positive_int(value: Any, field: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise GridScheduleError(f"{field}:POSITIVE_INTEGER_REQUIRED")
+    return value
+
+
+def _cell_material(cell: CellLease, *, ordinal: int) -> dict[str, Any]:
+    if not isinstance(cell, CellLease):
+        raise GridScheduleError(f"grid_plan.cells[{ordinal}]:CELL_LEASE_REQUIRED")
+    cell_id = _nonempty(cell.cell_id, f"grid_plan.cells[{ordinal}].cell_id")
+    function = _nonempty(cell.function, f"grid_plan.cells[{ordinal}].function")
+    if not isinstance(cell.execution_class, ExecutionClass):
+        raise GridScheduleError(f"grid_plan.cells[{ordinal}].execution_class:EXECUTION_CLASS_REQUIRED")
+    token_budget = _nonnegative_int(cell.model_token_budget, f"grid_plan.cells[{ordinal}].model_token_budget")
+    decoder_lane = cell.physical_decoder_lane
+    if decoder_lane is not None:
+        decoder_lane = _nonnegative_int(decoder_lane, f"grid_plan.cells[{ordinal}].physical_decoder_lane")
+    return {
+        "cell_id": cell_id,
+        "function": function,
+        "execution_class": cell.execution_class.value,
+        "model_token_budget": token_budget,
+        "physical_decoder_lane": decoder_lane,
+    }
+
+
+def _grid_plan_material_from_fields(
+    *,
+    schema: str,
+    canonicalization_schema: str,
+    entry_binding_schema: str,
+    ingress_id: str,
+    causal_id: str,
+    entity_generation: int,
+    entry_event_sha256: str,
+    entry_admission_sha256: str,
+    route_event_sha256: str,
+    route_decision_sha256: str,
+    router_policy_sha256: str,
+    engine_identity_sha256: str,
+    resolved_engine_identity: str,
+    resolved_engine_class: str,
+    resolved_engine_artifact_sha256: str,
+    capacity_receipt_sha256: str,
+    runtime_profile_id: str,
+    mode: HCUMode,
+    logical_cell_count: int,
+    model_call_count: int,
+    physical_decoder_limit: int,
+    max_wall_ms: int,
+    cells: tuple[CellLease, ...] | list[CellLease],
+) -> dict[str, Any]:
+    """Single scheduler-owned canonical materialization for GRID plan identity.
+
+    Downstream consumers must call :func:`grid_plan_material` / :func:`validate_grid_plan_identity`
+    rather than reconstructing this dictionary. That keeps one hash authority for PLAN_SCHEMA.
+    """
+    if schema != PLAN_SCHEMA:
+        raise GridScheduleError("GRID10_PLAN_SCHEMA_UNSUPPORTED")
+    if canonicalization_schema != CANONICALIZATION_SCHEMA:
+        raise GridScheduleError("GRID10_PLAN_CANONICALIZATION_MISMATCH")
+    if entry_binding_schema != ENTRY_BINDING_SCHEMA:
+        raise GridScheduleError("GRID10_PLAN_ENTRY_BINDING_SCHEMA_MISMATCH")
+    if not isinstance(mode, HCUMode):
+        raise GridScheduleError("GRID10_PLAN_MODE_REQUIRED")
+    if isinstance(entity_generation, bool) or not isinstance(entity_generation, int) or entity_generation < 0:
+        raise GridScheduleError("GRID10_PLAN_GENERATION_INVALID")
+    logical_cell_count = _nonnegative_int(logical_cell_count, "grid_plan.logical_cell_count")
+    model_call_count = _nonnegative_int(model_call_count, "grid_plan.model_call_count")
+    physical_decoder_limit = _positive_int(physical_decoder_limit, "grid_plan.physical_decoder_limit")
+    max_wall_ms = _nonnegative_int(max_wall_ms, "grid_plan.max_wall_ms")
+    if not isinstance(cells, (tuple, list)):
+        raise GridScheduleError("GRID10_PLAN_CELLS_SEQUENCE_REQUIRED")
+
+    return {
+        "schema": PLAN_SCHEMA,
+        "canonicalization_schema": CANONICALIZATION_SCHEMA,
+        "entry_binding_schema": ENTRY_BINDING_SCHEMA,
+        "ingress_id": _nonempty(ingress_id, "grid_plan.ingress_id"),
+        "causal_id": _nonempty(causal_id, "grid_plan.causal_id"),
+        "entity_generation": entity_generation,
+        "entry_event_sha256": _sha256(entry_event_sha256, "grid_plan.entry_event_sha256"),
+        "entry_admission_sha256": _sha256(entry_admission_sha256, "grid_plan.entry_admission_sha256"),
+        "route_event_sha256": _sha256(route_event_sha256, "grid_plan.route_event_sha256"),
+        "route_decision_sha256": _sha256(route_decision_sha256, "grid_plan.route_decision_sha256"),
+        "router_policy_sha256": _sha256(router_policy_sha256, "grid_plan.router_policy_sha256"),
+        "engine_identity_sha256": _sha256(engine_identity_sha256, "grid_plan.engine_identity_sha256"),
+        "resolved_engine_identity": _nonempty(resolved_engine_identity, "grid_plan.resolved_engine_identity"),
+        "resolved_engine_class": _nonempty(resolved_engine_class, "grid_plan.resolved_engine_class"),
+        "resolved_engine_artifact_sha256": _sha256(
+            resolved_engine_artifact_sha256,
+            "grid_plan.resolved_engine_artifact_sha256",
+        ),
+        "capacity_receipt_sha256": _sha256(capacity_receipt_sha256, "grid_plan.capacity_receipt_sha256"),
+        "runtime_profile_id": _nonempty(runtime_profile_id, "grid_plan.runtime_profile_id"),
+        "mode": mode.value,
+        "logical_cell_count": logical_cell_count,
+        "model_call_count": model_call_count,
+        "physical_decoder_limit": physical_decoder_limit,
+        "max_wall_ms": max_wall_ms,
+        "cells": [_cell_material(cell, ordinal=ordinal) for ordinal, cell in enumerate(cells)],
+    }
+
+
+def grid_plan_material(plan: GridPlan) -> dict[str, Any]:
+    """Return the only canonical hash material admitted for ``GridPlan.plan_sha256``."""
+    if not isinstance(plan, GridPlan):
+        raise GridScheduleError("GRID10_PLAN_REQUIRED")
+    return _grid_plan_material_from_fields(
+        schema=plan.schema,
+        canonicalization_schema=plan.canonicalization_schema,
+        entry_binding_schema=plan.entry_binding_schema,
+        ingress_id=plan.ingress_id,
+        causal_id=plan.causal_id,
+        entity_generation=plan.entity_generation,
+        entry_event_sha256=plan.entry_event_sha256,
+        entry_admission_sha256=plan.entry_admission_sha256,
+        route_event_sha256=plan.route_event_sha256,
+        route_decision_sha256=plan.route_decision_sha256,
+        router_policy_sha256=plan.router_policy_sha256,
+        engine_identity_sha256=plan.engine_identity_sha256,
+        resolved_engine_identity=plan.resolved_engine_identity,
+        resolved_engine_class=plan.resolved_engine_class,
+        resolved_engine_artifact_sha256=plan.resolved_engine_artifact_sha256,
+        capacity_receipt_sha256=plan.capacity_receipt_sha256,
+        runtime_profile_id=plan.runtime_profile_id,
+        mode=plan.mode,
+        logical_cell_count=plan.logical_cell_count,
+        model_call_count=plan.model_call_count,
+        physical_decoder_limit=plan.physical_decoder_limit,
+        max_wall_ms=plan.max_wall_ms,
+        cells=plan.cells,
+    )
+
+
+def validate_grid_plan_identity(plan: GridPlan) -> str:
+    """Validate GRID10 structural invariants and its scheduler-owned JCS identity."""
+    material = grid_plan_material(plan)
+    observed = _sha256(plan.plan_sha256, "grid_plan.plan_sha256")
+    try:
+        expected = hashlib.sha256(canonicalize(material)).hexdigest()
+    except CanonicalizationError as exc:
+        raise GridScheduleError(f"GRID_PLAN_CANONICALIZATION_FAILED:{exc}") from exc
+    if observed != expected:
+        raise GridScheduleError("GRID10_PLAN_DIGEST_MISMATCH")
+    if plan.logical_cell_count != len(plan.cells):
+        raise GridScheduleError("GRID10_LOGICAL_CELL_COUNT_MISMATCH")
+    cell_ids = [cell.cell_id for cell in plan.cells]
+    if len(cell_ids) != len(set(cell_ids)):
+        raise GridScheduleError("GRID10_CELL_ID_DUPLICATE")
+    model_cells = [cell for cell in plan.cells if cell.execution_class is ExecutionClass.MODEL]
+    if plan.model_call_count != len(model_cells):
+        raise GridScheduleError("GRID10_MODEL_CALL_COUNT_MISMATCH")
+    return observed
+
+
 def _verify_admitted_entry(
     packet: EntryPacket,
     admitted_entry_bindings: Mapping[str, Any],
@@ -326,46 +488,37 @@ def compile_plan(
     if len(cells) != 10:
         raise GridScheduleError("GRID10_INTERNAL_CELL_COUNT_MISMATCH")
 
-    canonical: dict[str, Any] = {
-        "schema": PLAN_SCHEMA,
-        "canonicalization_schema": CANONICALIZATION_SCHEMA,
-        "entry_binding_schema": ENTRY_BINDING_SCHEMA,
-        "ingress_id": packet.ingress_id,
-        "causal_id": packet.causal_id,
-        "entity_generation": packet.entity_generation,
-        "entry_event_sha256": packet.event_sha256,
-        "entry_admission_sha256": packet.admission_sha256,
-        "route_event_sha256": decision.event_sha256,
-        "route_decision_sha256": decision.decision_sha256,
-        "router_policy_sha256": decision.router_policy_sha256,
-        "engine_identity_sha256": decision.engine_identity_sha256,
-        "resolved_engine_identity": decision.resolved_engine_identity,
-        "resolved_engine_class": decision.resolved_engine_class,
-        "resolved_engine_artifact_sha256": decision.resolved_engine_artifact_sha256,
-        "capacity_receipt_sha256": capacity.capacity_receipt_sha256,
-        "runtime_profile_id": capacity.profile_id.strip(),
-        "mode": mode.value,
-        "logical_cell_count": 10,
-        "model_call_count": model_count,
-        "physical_decoder_limit": effective_decoder_limit,
-        "max_wall_ms": budget["max_wall_ms"],
-        "cells": [
-            {
-                "cell_id": cell.cell_id,
-                "function": cell.function,
-                "execution_class": cell.execution_class.value,
-                "model_token_budget": cell.model_token_budget,
-                "physical_decoder_lane": cell.physical_decoder_lane,
-            }
-            for cell in cells
-        ],
-    }
+    canonical = _grid_plan_material_from_fields(
+        schema=PLAN_SCHEMA,
+        canonicalization_schema=CANONICALIZATION_SCHEMA,
+        entry_binding_schema=ENTRY_BINDING_SCHEMA,
+        ingress_id=packet.ingress_id,
+        causal_id=packet.causal_id,
+        entity_generation=packet.entity_generation,
+        entry_event_sha256=packet.event_sha256,
+        entry_admission_sha256=packet.admission_sha256,
+        route_event_sha256=decision.event_sha256,
+        route_decision_sha256=decision.decision_sha256,
+        router_policy_sha256=decision.router_policy_sha256,
+        engine_identity_sha256=decision.engine_identity_sha256,
+        resolved_engine_identity=decision.resolved_engine_identity,
+        resolved_engine_class=decision.resolved_engine_class,
+        resolved_engine_artifact_sha256=decision.resolved_engine_artifact_sha256,
+        capacity_receipt_sha256=capacity.capacity_receipt_sha256,
+        runtime_profile_id=capacity.profile_id.strip(),
+        mode=mode,
+        logical_cell_count=10,
+        model_call_count=model_count,
+        physical_decoder_limit=effective_decoder_limit,
+        max_wall_ms=budget["max_wall_ms"],
+        cells=cells,
+    )
     try:
         plan_sha256 = hashlib.sha256(canonicalize(canonical)).hexdigest()
     except CanonicalizationError as exc:
         raise GridScheduleError(f"GRID_PLAN_CANONICALIZATION_FAILED:{exc}") from exc
 
-    return GridPlan(
+    plan = GridPlan(
         schema=canonical["schema"],
         canonicalization_schema=CANONICALIZATION_SCHEMA,
         entry_binding_schema=ENTRY_BINDING_SCHEMA,
@@ -391,3 +544,5 @@ def compile_plan(
         max_wall_ms=budget["max_wall_ms"],
         cells=tuple(cells),
     )
+    validate_grid_plan_identity(plan)
+    return plan

@@ -1,0 +1,102 @@
+{
+  "schema_id": "XENO_GO_RECEIPT/v1",
+  "trigger": "go",
+  "trigger_time": "2026-08-23T23:23:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU_XENO",
+  "stage": "XENO_COMPUTATIONAL_UNIT_BOOTSTRAP",
+  "authority": {
+    "owner_directive": "research_entity/global/XENO_GO_OWNER_DIRECTIVE.md",
+    "program_state": "research_entity/rooms/PROGRAM_STATE.json",
+    "persistent_entity": "Clay",
+    "operational_start": "Xeno",
+    "product_endpoint": "EntityOS",
+    "canonical_state": "UnifiedDB_or_current_Xeno_MiniUnifiedDB_canonical_state_evidence_substrate",
+    "effect_authority": "EffectGate+EffectJournal"
+  },
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "base_main_sha": "2178d9b0a062636231ff0e3c533417c2268a7a96",
+    "branch": "gpt56sol/go-xeno-entry-fabric-v1-20260823-2323",
+    "files": {
+      "the artefact/Xeno/entry_fabric.py": {
+        "git_blob": "110a9137b76fb85cd589cefbdaae729657838e13"
+      },
+      "the artefact/Xeno/tests/test_entry_fabric.py": {
+        "git_blob": "7f6ed314c26e2ea4a4f227463e39287c3eb140cb"
+      }
+    }
+  },
+  "coordination": {
+    "observed_parallel_prs": [1231, 1263],
+    "nonduplicate_scope": "PR1231 carries internal HCU candidate/simulation packets; PR1263 carries a reactive HCU router. Neither supplies the current-facing typed Xeno ingress/admission/dispatch-generation primitive on main.",
+    "parallel_authority_created": false
+  },
+  "grf": {
+    "observed": "Current owner frontier explicitly requires typed Xeno Entry Fabric; current-facing Xeno source had architecture contract but no executable XenoIngressPacket implementation found on main.",
+    "hypothesis": "A strict deterministic ingress binding with one generation check at admission is sufficient for safe dispatch.",
+    "counterhypothesis": "An admitted packet can remain queued across an entity-generation rollover and become stale before cognition; admission-only self-consistency does not close this TOCTOU/replay gap.",
+    "cheapest_discriminator": "Admit generation-7 packet and receipt, change only live current generation to 8, compare naive admission-only self-consistency against a live dispatch fence.",
+    "fusion": "Bind producer event identity plus packet/receipt digests at admission and require a second live-generation + canonical-receipt check immediately before cognition dispatch. Durable replay state remains external in canonical state authority."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ENTRY_ADMISSION_TO_DISPATCH_GENERATION_TOCTOU",
+    "intervention": "Packet and receipt remain unchanged after live generation rolls from 7 to 8.",
+    "naive_counterfactual": "packet.generation == receipt.admitted_generation remains true",
+    "observed_mechanism": "validate_for_dispatch rejects the unchanged packet with StaleGenerationError against live generation 8",
+    "outcome": "COUNTERHYPOTHESIS_RETAINED_SECOND_GENERATION_FENCE_REQUIRED",
+    "note": "Other focused cases are deterministic regressions, not additional unusual experiments."
+  },
+  "external_mechanism_evidence": [
+    {
+      "source": "CloudEvents specification",
+      "use": "source plus producer event id informed deterministic replay/event identity; Xeno does not claim full CloudEvents conformance"
+    },
+    {
+      "source": "W3C Trace Context",
+      "use": "optional traceparent is correlation metadata only and does not replace Xeno causal_id/generation"
+    }
+  ],
+  "delta": {
+    "go_track_a": "Executable current-facing Xeno typed ingress/admission/dispatch source candidate",
+    "go_track_b": "Entry I/O primitive reusable by GRID10, COGSIM10, WM_TEST, NESTED_SIM and SCALEOUT",
+    "schemas": ["XENO_INGRESS_PACKET/v1", "XENO_ENTRY_ADMISSION/v1"],
+    "ingress_kinds": ["HUMAN_PROMPT", "EXTERNAL_EVENT", "TOOL_OUTCOME", "SENSOR_STREAM", "DATABASE_CHANGE", "SYSTEM_EVENT"],
+    "authority_change": "NONE",
+    "migration_reuse_score": "EASIER_CROSS_MODE"
+  },
+  "execution": {
+    "surface": "AUTHORIZED_ISOLATED_LOCAL_ANALYSIS_CONTAINER",
+    "python": "3.13.5",
+    "linux": "6.18.35 x86_64",
+    "exact_blob_binding": true,
+    "py_compile": "PASS",
+    "focused_tests": {
+      "passed": 9,
+      "failed": 0,
+      "result": "PASS"
+    },
+    "evidence_class": "EXACT_BLOB_BOUNDED_COMPONENT_MECHANISM",
+    "runtime_credit": {
+      "xeno_entry_component": "MECHANISM_SUPPORTED",
+      "grid10_scheduler": 0,
+      "xcu_inference": 0,
+      "jspace": 0,
+      "world_model": 0,
+      "entityos": 0,
+      "whole_product": 0
+    }
+  },
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_runner_testing": false,
+    "production_testing": false,
+    "together_used": false,
+    "paid_execution_or_training": false,
+    "secrets_accessed_or_persisted": false,
+    "direct_effect_path_added": false,
+    "second_durable_state_authority_added": false
+  },
+  "next_gate": "Wire one canonical state adapter plus XPU/GRID10 dispatcher so canonical replay receipt persistence and live-generation validation happen on the real ingress-to-cognition path; then run restart/replay/generation-rollover integration tests in exact authorized isolated execution."
+}

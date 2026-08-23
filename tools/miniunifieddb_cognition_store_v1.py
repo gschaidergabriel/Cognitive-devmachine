@@ -80,11 +80,14 @@ def _refs(value: Any, name: str) -> list[str]:
 
 
 def _json_refs(raw: Any, name: str) -> list[str]:
+    _need(type(raw) is str, f"{name}:JSON_TEXT_REQUIRED")
     try:
-        parsed = json.loads(str(raw))
+        parsed = json.loads(raw)
     except (TypeError, ValueError, json.JSONDecodeError) as exc:
         raise CognitionStoreError(f"{name}:JSON_INVALID") from exc
-    return _refs(parsed, name)
+    refs = _refs(parsed, name)
+    _need(raw == canonical_json(refs), f"{name}:NONCANONICAL_JSON")
+    return refs
 
 
 def _utc_now() -> str:

@@ -1,116 +1,73 @@
 # Vercel Sandbox execution path — CURRENT
 
-Status: **BRIDGE CONFIRMED / SANDBOX ADMISSION PROVEN / RUNTIME GITHUB TOKEN INGRESS IMPLEMENTED / FINAL TEST-OF-TESTS DEFINED**  
-Current owner corrections: 2026-08-17 23:03–23:35 +07:00
+Status: **BRIDGE MECHANISM CONFIRMED / SANDBOX ADMISSION PROVEN / RUNTIME ONE-SHOT TOKEN INGRESS IMPLEMENTED / PR810 SEMANTIC REBIND REQUIRED BEFORE CURRENT RUNTIME CREDIT**  
+Current owner authority: **2026-08-23 ClayVerse single-container**  
+Owner directive: `research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md`
+
+Machine-readable policy markers used by the current execution-boundary guard:
+
+- `NO_SPECIFIC_API_PROVIDER_MANDATORY_UNLESS_EXPLICITLY_ADMITTED`
+- `ENTITYOS_EXECUTION_CONDITIONAL_ON_EXPLICIT_ADMISSION`
+- `PR810_SEMANTIC_REBIND_REQUIRED_BEFORE_CURRENT_RUNTIME_CREDIT`
 
 ## Current truth
 
-The authorized bridge has actually created disposable Vercel Sandbox Firecracker microVMs and executed commands inside them. `Sandbox.create` is not the blocker.
+The authorized bridge has historically created disposable Vercel Sandbox Firecracker microVMs and executed commands inside them. `Sandbox.create is not the blocker`.
 
 Canonical staging project remains:
 - repository: `gschaidergabriel/Dr.-Unterweger`;
-- retained controller: draft PR **#810**;
+- retained controller lane: draft PR **#810**;
 - Vercel project: `dr-unterweger`;
 - project id: `prj_ifIgM9X7jqIQS8mNIGllImziePPG`.
 
+The active ClayVerse exact-OCI gate is currently blocked on the owner-started runtime one-shot ingress of a scoped read-only `GITHUB_READ_TOKEN`, not on generic Sandbox availability. Runtime credit remains zero until exact current source actually executes inside an admitted isolated Sandbox.
+
 VPS/self-hosted/production-host testing remains forbidden. Together remains forbidden.
 
-## Historical directly observed admission evidence
+## Important current semantic fence
 
-Previous retained runs reached `Sandbox.create=PASS_CREATED`, attested the guest kernel and then stopped before private-source staging because no `GITHUB_READ_TOKEN` was available to the build-triggered controller.
+The retained PR #810 controller is **infrastructure donor/current execution machinery, not current product semantics by itself**. Its presently retained source still binds older Research identities and an older fixed final-acceptance contract. It must not receive current ClayVerse acceptance credit by changing only a commit SHA.
 
-The latest such bounded run on controller v7 was deployment `dpl_6jeexw8EZa48jApm4NhgfaLMJoM5`: Sandbox admission passed, guest kernel `Linux 6.18.40 x86_64` was observed, then the run failed closed at `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`, with source/OCI runtime credit still zero and clean Sandbox stop.
+Before the next credential-bearing run, all relevant #810 phases and source guards must be rebound together to the then-current ClayVerse owner directive, manifest, source identity and acceptance vector. This includes the start/source phase, any explicitly admitted inference-provider phase, effect/recovery phase, recreate phase and the guards that cross-bind them.
 
-These remain valid historical observations only. They do not imply that the token must be configured in Vercel Environment Variables.
+Current product semantics are:
+- normal interactive Claude Code is the canonical visible runtime cognition path;
+- an API inference provider is used only when the accepted profile explicitly admits one; **no specific API provider is mandatory merely because an older controller used it**;
+- EntityOS is an internal execution/security/runtime substrate and execution is conditional on explicit admission; when EntityOS execution is disabled, an EntityOS effect round trip is not an unconditional whole-product requirement;
+- UnifiedDB remains canonical durable authority and EffectGate/EffectJournal remain the only admitted external/state-changing effect authority;
+- whole-product acceptance follows the exact current ClayVerse vector, never a historical frozen test script.
 
-## Owner correction — GitHub read token MAY enter the Sandbox
+## Historical directly observed bridge evidence
 
-The previous rule that `GITHUB_READ_TOKEN` must remain host-side and must never be forwarded into the disposable Sandbox is **SUPERSEDED**.
+Earlier retained runs reached `Sandbox.create=PASS_CREATED`, attested a Firecracker guest kernel and stopped cleanly before private-source staging when no GitHub read token was available. That is bounded historical evidence that the bridge mechanism can admit a Sandbox. It is not current Research/OCI runtime credit.
 
-A scoped read-only `GITHUB_READ_TOKEN` MAY be securely injected/forwarded into an authorized disposable Vercel Sandbox for the narrow private Research/EntityOS fetch step.
+A later READY preview proved that runtime token ingress can be deployed without coupling the GitHub token to Vercel Preview environment variables. A direct GET to `/api/go-cycle-v2` failed closed with method-not-allowed behavior. No recorded owner-started token-bearing exact-current run has yet established current source, OCI or whole-product behavior.
 
-Current directive:
-`research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md`.
+## Runtime token ingress
 
-Required controls remain:
-- never commit or print the token;
-- never persist it in UnifiedDB, ClayGraph, snapshots, receipts, generated locks, OCI layers or durable workspace/state;
-- use least privilege and bounded lifetime;
-- verify exact expected repository/commit/tree/blob/archive identity before provenance credit;
-- fail closed on substitution or identity uncertainty;
-- remove/unset the credential after the fetch where possible;
-- stop/clean the Sandbox after the bounded batch.
+The retained mechanism is:
 
-## Runtime token ingress — no Vercel secret coupling required
+`owner-held scoped read-only token -> HTTPS POST/start panel -> transient function memory -> exact private-source identity proof -> Sandbox.create -> token only in the bounded private-fetch command -> token cleared -> fresh-process secret-absence fence -> continue exact source/OCI gates`.
 
-The additional owner constraint is that the user cannot couple this GitHub token to Vercel as a Preview environment secret. The retained controller therefore now supports **runtime one-shot ingress** instead.
-
-Current mechanism in PR #810:
-
-`owner-held token -> HTTPS POST /api/go-cycle-v2 -> transient request/function memory -> exact private Research + EntityOS commit/tree access proof -> current v7 controller -> Sandbox.create -> token only in one Sandbox.runCommand env for private fetch -> exact source identity verification -> command exits -> token reference cleared -> fresh-process secret-absence fence -> continue source/OCI gates`.
-
-Important properties:
-- the Preview build itself no longer runs the private-source controller and no longer needs `GITHUB_READ_TOKEN`;
-- the token is not a Vercel Environment Variable;
-- the token is not committed;
-- the token is not passed to Docker build args/context/image or ClayVerse runtime;
-- the runtime endpoint accepts only POST and uses no-store/no-referrer/nosniff response policy;
-- the controller defensively redacts the exact submitted token from returned child stdout/stderr;
-- the branch also contains a password-style start panel that stores nothing in localStorage/cookies and clears the input immediately after constructing the request.
-
-Observed deployment evidence for the architectural unblock:
-- deployment `dpl_6RSuuunC96JnmXeXN3Z9eYGTceE9` on commit `ba52934acff8bd620e1d968dfa437bf96dbf1a54` reached **READY without any GitHub token configured** because `vercel-build` now performs only the exact retained source guard;
-- that READY closure includes the runtime ingress endpoint commit;
-- a direct GET to `/api/go-cycle-v2` returned `405 Method Not Allowed`, `Allow: POST`, and no-store/no-referrer/nosniff headers, proving the endpoint is deployed and fail-closed without an explicit start request.
-
-Therefore the structural blocker **"GITHUB_READ_TOKEN must be coupled to Vercel Preview environment" is removed**. A real token value has still not been supplied through this new ingress during recorded evidence, so prior source/OCI runtime credit remains zero until the explicit one-shot run happens.
-
-## Final test-of-tests — mandatory
-
-The final acceptance run is a real full-system test:
-
-`Vercel Sandbox Firecracker microVM -> Docker/OCI runtime -> exact accepted ClayVerse OCI digest -> runtime Vault/approved secret-store Mistral acquisition -> transient Mistral token injection -> full ClayVerse causal operation -> recovery -> full Sandbox/appliance destruction and recreation from the SAME image digest -> Vault secret reacquisition -> repeated real cognition`.
-
-The Vercel Sandbox microVM itself may serve as the independent guest-kernel outer envelope; a second nested KVM/Kata guest is not required merely to satisfy that invariant when the Sandbox guest identity and exact inner OCI digest are both attested. Separate Kata deployment hardening remains useful additional evidence.
-
-Mistral is mandatory for this final test as an inference provider only. Canonical Research now contains the final Mistral acceptance path (`the artefact/clayverse/final_acceptance_probe.py::run_mistral_acceptance_probe`) and final-only secret/model preflight hardening. The token must be acquired at runtime from the approved Vault/secret store, injected transiently, never persisted, and reacquired after full appliance/Sandbox recreation.
+The token must never be committed, printed, stored in UnifiedDB/ClayGraph/snapshots/receipts, passed into OCI build args/context/layers, or pasted into model/chat context. The assistant must not fabricate or solicit the token value in project chat. The owner-started ingress happens only through the admitted secure runtime surface.
 
 ## Next accepted execution sequence
 
-At the next real owner-started one-shot run:
+Immediately before the next real owner-started one-shot:
 
-`refresh exact current Research main + retained admitted lanes once`
-`-> rebind retained #810 controller once`
-`-> owner supplies scoped read-only GITHUB_READ_TOKEN through runtime POST/start panel, not Vercel Environment`
-`-> Sandbox.create`
-`-> attest Sandbox Firecracker guest identity/kernel`
-`-> forward GitHub token only to one private-fetch command`
-`-> fetch exact private Research + EntityOS inside Sandbox`
-`-> verify exact Git/object/artifact identities`
-`-> prove GitHub token absence after fetch`
-`-> reconstruct/attest accepted EntityOS`
-`-> full exact source regressions`
-`-> build exact ClayVerse OCI`
-`-> capture immutable image digest + APT/tmux/Claude/Python/supply-chain identities`
-`-> run the EXACT accepted ClayVerse digest inside the Firecracker guest`
-`-> enforce read-only root + declared persistent/tmpfs surfaces`
-`-> retrieve Mistral token from approved Vault/secret store`
-`-> inject Mistral token transiently into the running ClayVerse container`
-`-> enable only admitted network/auth paths`
-`-> bring /healthz and full /readyz to intended states`
-`-> run real authenticated cognition through UnifiedDB/retrieval/workspace/Mistral`
-`-> re-ingest model output before effect authority`
-`-> execute safe admitted EntityOS/EffectGate round-trip`
-`-> verify effect/outcome causal re-entry`
-`-> verify one-entity/two-user generation and persistence contracts`
-`-> exercise Tier-1 recovery`
-`-> destroy/recreate the full Sandbox/appliance from the SAME image digest`
-`-> recover UnifiedDB/WAL/snapshot/EffectJournal under a new generation`
-`-> reacquire Mistral secret from Vault, never from recovered ClayVerse state`
-`-> prove stale-result rejection and no blind effect replay`
-`-> repeat real Mistral cognition after recovery`
-`-> complete Clerk/WebSocket PTY + managed terminal + dual-user gates at admitted final scope`
-`-> WHOLE_CLAYVERSE_PASS only if the complete vector is green`.
+`refresh exact current Research main + current owner directive + manifest + active retained lanes`
+`-> semantically rebind all retained #810 phases and guards once to that exact current contract`
+`-> obtain a READY preview for those exact controller bytes`
+`-> owner starts the secure one-shot outside project chat with the scoped read-only GitHub token`
+`-> Sandbox.create + guest-kernel identity`
+`-> exact private Research/source identity verification`
+`-> prove token absence after fetch`
+`-> run exact-current ClayVerse regressions`
+`-> build exact ClayVerse OCI and capture immutable image digest/supply-chain identities`
+`-> start that exact image with the admitted hardening profile`
+`-> continue current Clerk/PTY/tmux/Claude/hooks/UnifiedDB/MicroClay/workspace/effect/recovery/concurrency gates`
+`-> invoke API-provider or EntityOS execution subpaths only when the exact accepted profile explicitly admits them`
+`-> WHOLE_CLAYVERSE_PASS only if the complete then-current vector is green`.
 
 ## Evidence law
 
@@ -118,6 +75,6 @@ At the next real owner-started one-shot run:
 - Runtime GitHub-token ingress alone is not product PASS.
 - Successful private Git fetch alone is not product PASS.
 - Successful OCI build alone is not product PASS.
-- A direct Mistral API call outside ClayVerse is not product PASS.
-- Container liveness alone is not product PASS.
-- Whole-product credit requires the integrated exact-digest path and recovery/causal/security contracts actually to execute.
+- Historical provider- or EntityOS-specific acceptance scripts do not override the current owner directive.
+- Controller source coherence or Vercel READY is not runtime evidence.
+- Whole-product credit requires the integrated exact-current path and recovery/causal/security contracts actually to execute.

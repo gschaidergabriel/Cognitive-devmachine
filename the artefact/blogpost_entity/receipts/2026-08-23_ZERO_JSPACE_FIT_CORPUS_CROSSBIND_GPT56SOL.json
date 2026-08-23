@@ -1,0 +1,115 @@
+{
+  "schema": "ZERO_JSPACE_FIT_CORPUS_CROSSBIND/v1",
+  "date": "2026-08-23",
+  "trigger": "zero",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": {
+    "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+    "program_state_schema": "7.11",
+    "branch_base_main_sha": "23c0f4c32fe0570a79aa81f94ff75948448d06c8",
+    "branch": "zero/jspace-fit-corpus-crossbind-20260823-1036",
+    "free_only": true
+  },
+  "observed": {
+    "canonical_boot_validator": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
+    "canonical_bundle_manifest_validator": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py",
+    "pre_fix_false_green": "jspace.fit_corpus_sha256 was syntactically required by the boot receipt but was not cross-bound to the bundled cognition manifest integration identity",
+    "consequence": "a structurally coherent boot receipt could relabel the lens fit corpus while retaining the same admitted bundle integration identity",
+    "parallel_overlap": "Open PR #1077 independently binds an actual fit_corpus artifact to the receipt digest, but does not bind fit corpus identity into the bundled cognition manifest integration identity; this delta is therefore non-duplicate and composes with that harder artifact-root path.",
+    "main_advanced_after_branch": {
+      "latest_observed_main_sha": "3a4fbfe83d90dff6829aeaaf3615cd24dd7565d0",
+      "commits_since_branch_base": 11,
+      "overlap_with_changed_jspace_manifest_paths": false,
+      "observed_scope": "Claude adapter boundaries and native-v2 evidence receipts only"
+    }
+  },
+  "counterhypothesis": {
+    "claim": "The fit corpus need not be bundle identity because lens_profile_digest or lens_file_sha256 already implies it.",
+    "resolution": "REJECT_AT_ADMISSION_CONTRACT_SCOPE",
+    "reason": "The canonical validators treat lens artifact/profile and fit corpus as separate receipt fields. Without an explicit cross-binding, the validator cannot prove that the claimed fit corpus belongs to the admitted calibration bundle. Implicit semantic assumptions are not an authority boundary."
+  },
+  "delta": {
+    "product_code_changed": true,
+    "second_state_or_truth_authority_created": false,
+    "changes": [
+      "add optional fit_corpus_digest to mini-entity-bundled-cognition-manifest/v1",
+      "include fit_corpus_digest in validated SHA-256 fields and stable integration identity",
+      "require JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 jspace.fit_corpus_sha256 to equal bundled manifest fit_corpus_digest",
+      "fail closed when the admitted manifest lacks fit_corpus_digest",
+      "add deterministic regressions for identity mutation, malformed digest, fit-corpus substitution and missing bundle binding"
+    ],
+    "files": {
+      "manifest_validator": {
+        "path": "the artefact/blogpost_entity/mini_cognition/bundled_cognition_manifest_v1.py",
+        "git_blob": "a8e6ca97fc16a9c8a6f40bf899c99c69b398a1b5"
+      },
+      "manifest_tests": {
+        "path": "the artefact/blogpost_entity/mini_cognition/test_bundled_cognition_manifest_v1.py",
+        "git_blob": "d825ddd10998d1c3cf4a2d5d5e4e539ea33b071e"
+      },
+      "boot_validator": {
+        "path": "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py",
+        "git_blob": "bf8f439a9be2bc762c8f54e6eaadfb500fbbc02d"
+      },
+      "boot_tests": {
+        "path": "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py",
+        "git_blob": "6fd450f90a6405d7e5c4a56b38d5b405efb72fa3"
+      }
+    }
+  },
+  "bounded_execution_evidence": {
+    "environment": "isolated ChatGPT Linux container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "exact_git_blob_identity_checked": true,
+    "manifest_validator_py_compile": "PASS",
+    "manifest_validator_tests": "14/14 PASS",
+    "boot_validator_py_compile": "PASS",
+    "boot_validator_tests": "24/24 PASS",
+    "poison_guards": [
+      "fit_corpus_digest mutation changes bundled integration identity",
+      "malformed fit_corpus_digest fails closed",
+      "boot receipt fit corpus mismatch fails BOOT_FIT_CORPUS_MISMATCH",
+      "missing manifest fit_corpus_digest fails BOOT_MANIFEST_FIT_CORPUS_DIGEST_REQUIRED"
+    ],
+    "evidence_class": "EXACT_CHANGED_GIT_BLOB_ISOLATED_COMPONENT_MECHANISM",
+    "runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "grf": {
+    "R0_OBSERVE": "Fit-corpus provenance existed in the boot receipt but not in the bundle integration identity.",
+    "R1_INFER": "The admission chain had a calibration-ancestry alias: receipt-local corpus identity could drift independently of the admitted bundle identity.",
+    "R2_GENERATE": [
+      "leave fit corpus receipt-local",
+      "derive it implicitly from lens profile",
+      "cross-bind it explicitly through the existing bundled manifest identity"
+    ],
+    "R3_COUNTER": "Explicit binding may appear redundant because a lens artifact is fitted from some corpus; however the validator cannot derive that provenance from opaque digest bytes.",
+    "R4_DISCRIMINATE": "Mutate only fit_corpus_sha256 while keeping all other admitted bundle fields stable; the canonical composed validator must reject.",
+    "R5_EMERGENT": "J-Space geometry portability requires calibration ancestry, not only checkpoint/lens artifact identity: PORTABLE_ARCHITECTURE != PORTABLE_GEOMETRY also implies CALIBRATION_CORPUS_IS_IDENTITY_BEARING_WHEN_CREDITED.",
+    "R6_VERIFY": "SOURCE_MECHANISM_HARDENED_COMPONENT_PASS_RUNTIME_UNVERIFIED"
+  },
+  "coordination": {
+    "macrocycle_id": null,
+    "unusual_experiment": {
+      "claimed": false,
+      "reason": "No immutable shared macrocycle/request lease identity was exposed; this zero used deterministic source falsification/regression only."
+    },
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "together_used": false
+  },
+  "next_gate": [
+    "Adjudicate/fuse this source hardening with the canonical boot-binding path and any compatible artifact-root provenance hardening without creating a second validator authority.",
+    "On the next actually-started authorized exact Ubuntu runtime, bind the real fit-corpus artifact digest into the admitted bundled manifest/source lock and emit JSPACE_GWT_BOOT_BINDING_RECEIPT/v1.",
+    "Then perform exact Qwen3.5-0.8B J-Lens/workspace calibration and causal ablation before granting any J-Space/GWT runtime credit."
+  ],
+  "acceptance": "IN_PROGRESS"
+}

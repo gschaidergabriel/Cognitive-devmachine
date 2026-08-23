@@ -7,9 +7,9 @@ projection.
 
 Route identity is deliberately causal rather than output-only: an admitted decision
 commits to the immutable input-event digest, the positively resolved local/internal
-cognition-engine identity, and the derived routing result. External or unresolved
-provider labels cannot acquire internal-cognition authority by merely not appearing on
-a denylist.
+cognition-engine identity, the semantic router-policy digest, and the derived routing
+result. External or unresolved provider labels cannot acquire internal-cognition
+authority by merely not appearing on a denylist.
 """
 from __future__ import annotations
 
@@ -20,6 +20,7 @@ from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 
 SCHEMA = "HCU_REACTIVE_EVENT/v1"
+ROUTER_POLICY_SCHEMA = "HCU_REACTIVE_ROUTER_POLICY/v2"
 KNOWN_EXTERNAL_PROVIDERS = {"nvidia", "mistral", "groq", "openrouter", "together", "claude_code"}
 ADMITTED_MODEL_ENGINE_CLASSES = {"BUNDLED_LOCAL_MODEL", "LOCAL_MODEL_RUNTIME"}
 ADMITTED_INTERNAL_PROVIDER_IDENTITIES = {"local", "internal"}
@@ -34,6 +35,27 @@ SCRIPT_STAGES = (
     "incremental_field_projection",
     "zero_relevance_score",
 )
+ROUTER_POLICY_DESCRIPTOR = {
+    "schema": ROUTER_POLICY_SCHEMA,
+    "event_schema": SCHEMA,
+    "script_stages": SCRIPT_STAGES,
+    "known_external_providers": sorted(KNOWN_EXTERNAL_PROVIDERS),
+    "admitted_model_engine_classes": sorted(ADMITTED_MODEL_ENGINE_CLASSES),
+    "admitted_internal_provider_identities": sorted(ADMITTED_INTERNAL_PROVIDER_IDENTITIES),
+    "thresholds": {
+        "world_novelty": 0.55,
+        "world_contradiction": 0.35,
+        "hypothesis_contradiction": 0.35,
+        "hypothesis_uncertainty": 0.60,
+        "simulation_forecast_need": 0.50,
+        "simulation_effect_pressure": 0.45,
+        "zero_model_effect_pressure": 0.45,
+        "zero_model_zero_relevance": 0.70,
+        "zero_projection_zero_relevance": 0.60,
+        "goal_pressure": 0.70,
+    },
+    "decision_identity_formula": "sha256(router_policy_sha256,event_sha256,requested_provider_identity,resolved_engine,routing_result)",
+}
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
@@ -58,6 +80,7 @@ class RouteDecision:
     zero_projection: bool
     zero_projection_format: str | None
     external_provider_dependency: bool
+    router_policy_sha256: str
     event_sha256: str
     requested_provider_identity: str | None
     engine_identity: str
@@ -78,6 +101,10 @@ def _canonical(value: Any) -> bytes:
         ).encode("utf-8")
     except (TypeError, ValueError) as exc:
         raise ReactiveRoutingError("CANONICAL_JSON_REQUIRED") from exc
+
+
+def router_policy_sha256() -> str:
+    return hashlib.sha256(_canonical(ROUTER_POLICY_DESCRIPTOR)).hexdigest()
 
 
 def _unit(value: Any, field: str) -> float:
@@ -189,6 +216,7 @@ def route_event(
     # Bind the exact admitted causal input before deriving routing output. Canonical JSON
     # guarantees mapping-order independence while preserving materially different events.
     event_sha256 = hashlib.sha256(_canonical(dict(event))).hexdigest()
+    policy_sha256 = router_policy_sha256()
 
     requested_provider = _optional_identifier(
         event.get("requested_internal_provider"),
@@ -251,6 +279,7 @@ def route_event(
         "generation": generation,
     }
     identity_payload = {
+        "router_policy_sha256": policy_sha256,
         "event_sha256": event_sha256,
         "requested_provider_identity": requested_provider,
         "resolved_engine": asdict(engine),
@@ -264,6 +293,7 @@ def route_event(
         zero_projection=projection,
         zero_projection_format="ClayCode" if projection else None,
         external_provider_dependency=False,
+        router_policy_sha256=policy_sha256,
         event_sha256=event_sha256,
         requested_provider_identity=requested_provider,
         engine_identity=engine.engine_identity,

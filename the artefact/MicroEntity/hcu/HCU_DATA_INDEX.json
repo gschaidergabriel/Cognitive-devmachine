@@ -1,5 +1,5 @@
 {
-  "schema_version": "HCU_DATA_INDEX/v1",
+  "schema_version": "HCU_DATA_INDEX/v2",
   "package": "MicroEntity",
   "hcu_root": "hcu/",
   "generated_release_artifacts": [
@@ -7,7 +7,14 @@
     "hcu/HCU_ARCHITECTURE.md",
     "hcu/topology.kvm4.json",
     "hcu/FREE_LLM_FEED_CONTRACT.json",
-    "hcu/HCU_DATA_INDEX.json"
+    "hcu/HCU_DATA_INDEX.json",
+    "hcu/capacity_plan.py",
+    "hcu/generated/HCU_CAPACITY_PLAN_KVM4.json",
+    "hcu/module_roles.json",
+    "hcu/protocol_schemas.json",
+    "hcu/data/README.md",
+    "hcu/receipts/README.md",
+    "hcu/receipts/2026-08-23_HCU_CAPACITY_PROTOCOL_FUSION_GPT56SOL.json"
   ],
   "runtime_data_authority": "MiniUnifiedDB",
   "archive_policy": {
@@ -15,8 +22,9 @@
     "include_non_secret_receipts": true,
     "include_privacy_filtered_data_exports_when_generated": true,
     "include_plaintext_secrets": false,
-    "include_credential_bearing_files": false
+    "include_credential_bearing_files": false,
+    "all_non_secret_hcu_regular_files_recursive": true
   },
-  "source_base_head": "5aa665364894245c05513ea91c41e3304f3e7368",
+  "source_base_head": "77582d2f78b4907f8f1249621ad2fe4725014ba7",
   "claim_class": "SOURCE_PACKAGE_CONTRACT_ONLY_NOT_RUNTIME_EVIDENCE"
 }

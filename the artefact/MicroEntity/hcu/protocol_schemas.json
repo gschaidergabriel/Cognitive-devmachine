@@ -1,0 +1,40 @@
+{
+  "schema_version": "HCU_PROTOCOL_SCHEMAS/v1",
+  "ModulePacket": {
+    "fields": [
+      "packet_id", "source_tile", "target_tile_or_broadcast", "payload_type",
+      "payload_digest", "causal_id", "turn_id", "generation", "epistemic_class"
+    ],
+    "epistemic_class": ["OBSERVED", "INFERRED", "GENERATED", "COUNTER_REALITY", "MEASURED", "UNKNOWN"]
+  },
+  "GoalCandidate": {
+    "fields": [
+      "goal_id", "source", "objective", "constraints", "priority_candidate",
+      "evidence_refs", "falsifiers", "generation", "status"
+    ],
+    "status": ["PROPOSED", "SIMULATING", "ADMITTED", "REJECTED", "DEFERRED", "STALE"],
+    "law": "GOAL_CANDIDATE_CANNOT_MINT_EFFECT_AUTHORITY"
+  },
+  "SimulationBranch": {
+    "fields": [
+      "branch_id", "parent_branch_id", "causal_anchor", "horizon_step", "assumptions",
+      "proposed_actions", "predicted_observations", "confidence", "confidence_calibration_id",
+      "falsifiers", "generation", "status"
+    ],
+    "law": "FUTURE_STATE_IS_PREDICTION_NOT_FACT"
+  },
+  "ZeroBehaviorPrediction": {
+    "fields": [
+      "prediction_id", "zero_profile_version", "visible_input_digest", "assumptions",
+      "predicted_action_class", "predicted_outcome_class", "confidence", "falsifier", "generation"
+    ],
+    "law": "ZERO_BEHAVIOR_MODEL_USES_OBSERVABLE_EVIDENCE_NOT_PRIVATE_HIDDEN_STATE"
+  },
+  "HypothesisPacket": {
+    "fields": [
+      "hypothesis_id", "claim", "counterhypothesis", "evidence_refs", "discriminator",
+      "expected_if_claim", "expected_if_counter", "confidence", "generation"
+    ],
+    "law": "HYPOTHESIS_PACKET_CANNOT_AUTO_PROMOTE_TRUTH_OR_PRODUCT_CHANGE"
+  }
+}

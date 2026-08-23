@@ -1,0 +1,75 @@
+{
+  "schema": "GO_CLAUDE_ADAPTER_BOUNDARY_DECOMPOSITION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "source": {
+    "construction_base_main": "64f51ef867255ae9231715acb1430076f7900129",
+    "branch": "go/claude-adapter-four-boundaries-20260823-1015",
+    "test_commit": "85ca08b61d6b38560003c8d42afb0b13131a4fa4",
+    "test_path": "the artefact/tests/test_claude_code_adapter_boundaries.py",
+    "test_git_blob": "d7e190b7e24c10065b914a1ac873f46357dd83d7",
+    "test_sha256": "8411d6e4d81d68989b2c30918b9e933517d2a29e6f3db0b167c4fc4b85f17276",
+    "canonical_adapter_path": "the artefact/clayverse/adapters.py",
+    "canonical_adapter_git_blob_observed_on_main": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507"
+  },
+  "observed_problem": {
+    "frozen_baseline": "1486 green / 1 red",
+    "repeated_red_test": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
+    "classification_before_delta": "FAILURE_MECHANISM_UNDERDETERMINED",
+    "reason": "one node id conflates tool-less, ephemeral, structured-output and environment-isolation mechanisms"
+  },
+  "delta": {
+    "product_bytes_changed": false,
+    "new_diagnostic_tests": [
+      "test_claude_code_adapter_toolless_boundary",
+      "test_claude_code_adapter_ephemeral_boundary",
+      "test_claude_code_adapter_structured_output_boundary",
+      "test_claude_code_adapter_environment_isolation_boundary"
+    ],
+    "authority_change": false,
+    "security_boundary_weakened": false
+  },
+  "bounded_local_component_evidence": {
+    "exact_visible_test_content_py_compile": "PASS",
+    "exact_visible_test_function_inventory": "PASS_4_EXPECTED_NODE_IDS",
+    "reconstructed_current_adapter_contract_probe": {
+      "toolless": "PASS",
+      "ephemeral": "PASS",
+      "structured_output": "PASS",
+      "environment_isolation": "PASS"
+    },
+    "scope": "MECHANISM_ONLY_NOT_EXACT_REPOSITORY_RUNTIME",
+    "limitation": "connected isolated container did not execute the exact repository checkout/import graph"
+  },
+  "github_execution": {
+    "workflow_run_id": 32615016551,
+    "workflow": "Research Entity Identity Guard",
+    "job_id": 97134180507,
+    "status": "completed",
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+  },
+  "evidence_boundary": {
+    "exact_branch_runtime_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_credit": 0,
+    "whole_product_acceptance": "IN_PROGRESS",
+    "persistent_red_root_cause": "UNRESOLVED"
+  },
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 0,
+    "id": null,
+    "coordination": "NO_ATOMIC_SHARED_MACROCYCLE_LEASE_PROVEN_ON_THIS_SURFACE"
+  },
+  "free_only": true,
+  "provider_secret_lookup": false,
+  "provider_network": false,
+  "paid_execution": false,
+  "next_exact_gate": "On the next intentional exact Ubuntu start, bind full commit+tree plus adapter/test blobs, Claude CLI/version and executor/environment identity; execute the four node ids independently; persist failing phase/signature; then rerun the full suite before classifying SOURCE_DEFECT vs TEST_STALE vs ENVIRONMENT_DRIFT vs FLAKE vs FIXED."
+}

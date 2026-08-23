@@ -9,6 +9,7 @@ from the exact admitted executable path.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -35,6 +36,15 @@ def _get(receipt: dict[str, Any], path: str, errors: list[str]) -> Any:
     for part in path.split("."):
         if not isinstance(current, dict) or part not in current:
             errors.append(f"MISSING:{path}")
+            return None
+        current = current[part]
+    return current
+
+
+def _lookup(data: dict[str, Any], path: str) -> Any:
+    current: Any = data
+    for part in path.split("."):
+        if not isinstance(current, dict) or part not in current:
             return None
         current = current[part]
     return current
@@ -242,22 +252,107 @@ def validate_receipt(receipt: dict[str, Any]) -> list[str]:
     return sorted(set(errors))
 
 
+def validate_receipt_chain(receipt: dict[str, Any], boot_binding_raw: bytes) -> list[str]:
+    """Verify the runtime receipt's immediate boot provenance without duplicating boot validation.
+
+    The canonical boot-binding validator must still validate the boot receipt itself.
+    This function only proves that the runtime receipt names those exact bytes and
+    that identity-bearing fields agree across the two admitted receipt layers.
+    """
+
+    errors = validate_receipt(receipt)
+    expected_digest = _lookup(receipt, "provenance.boot_binding_receipt_digest")
+    actual_digest = hashlib.sha256(boot_binding_raw).hexdigest()
+    if isinstance(expected_digest, str) and HEX64.fullmatch(expected_digest):
+        if actual_digest != expected_digest:
+            errors.append("BOOT_BINDING_RECEIPT_DIGEST_MISMATCH")
+
+    try:
+        boot_binding = json.loads(boot_binding_raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        errors.append("BOOT_BINDING_RECEIPT_READ_ERROR")
+        return sorted(set(errors))
+    if not isinstance(boot_binding, dict):
+        errors.append("BOOT_BINDING_RECEIPT_ROOT_NOT_OBJECT")
+        return sorted(set(errors))
+    if boot_binding.get("schema") != BOOT_BINDING_RECEIPT_VERSION:
+        errors.append("BOOT_BINDING_RECEIPT_SCHEMA_MISMATCH")
+
+    identity_pairs = (
+        ("source.commit", "source.main_sha"),
+        ("source.tree", "source.tree_sha"),
+        ("bundled_core.manifest_digest", "bundled_core.manifest_sha256"),
+        ("bundled_core.checkpoint_digest", "bundled_core.checkpoint_sha256"),
+        ("bundled_core.tokenizer_digest", "bundled_core.tokenizer_sha256"),
+        ("bundled_core.runtime_digest", "bundled_core.runtime_sha256"),
+        ("identity.zero_digest", "zero_grf.zero_identity_sha256"),
+        ("identity.grf_digest", "zero_grf.grf_sha256"),
+        ("fabric.workspace_policy_digest", "gwt.workspace_policy_sha256"),
+        ("fabric.workspace_calibration_digest", "gwt.calibration_sha256"),
+    )
+    for runtime_path, boot_path in identity_pairs:
+        runtime_value = _lookup(receipt, runtime_path)
+        boot_value = _lookup(boot_binding, boot_path)
+        if boot_value is None:
+            errors.append(f"BOOT_BINDING_MISSING:{boot_path}")
+        elif runtime_value != boot_value:
+            errors.append(f"BOOT_RUNTIME_IDENTITY_MISMATCH:{runtime_path}")
+
+    lens_value = _lookup(receipt, "fabric.lens_profile_digest")
+    if lens_value is not None:
+        boot_lens = _lookup(boot_binding, "jspace.lens_profile_sha256")
+        if boot_lens is None:
+            errors.append("BOOT_BINDING_MISSING:jspace.lens_profile_sha256")
+        elif lens_value != boot_lens:
+            errors.append("BOOT_RUNTIME_IDENTITY_MISMATCH:fabric.lens_profile_digest")
+
+    if _lookup(receipt, "inference.engine_class") == "CLAUDE_CODE":
+        claude_pairs = (
+            ("inference.adapter_version", "claude_adapter.adapter_version"),
+            ("inference.capability_profile_digest", "claude_adapter.capability_profile_sha256"),
+        )
+        for runtime_path, boot_path in claude_pairs:
+            runtime_value = _lookup(receipt, runtime_path)
+            boot_value = _lookup(boot_binding, boot_path)
+            if boot_value is None:
+                errors.append(f"BOOT_BINDING_MISSING:{boot_path}")
+            elif runtime_value != boot_value:
+                errors.append(f"BOOT_RUNTIME_IDENTITY_MISMATCH:{runtime_path}")
+
+    return sorted(set(errors))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("receipt", type=Path)
+    parser.add_argument(
+        "--boot-binding-receipt",
+        type=Path,
+        help="Exact JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 bytes to cross-bind for runtime-credit admission.",
+    )
     args = parser.parse_args(argv)
     try:
         raw = args.receipt.read_text(encoding="utf-8")
         receipt = json.loads(raw)
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        print(json.dumps({"ok": False, "errors": [f"RECEIPT_READ_ERROR:{exc.__class__.__name__}"]}, sort_keys=True))
+        print(json.dumps({"ok": False, "chain_verified": False, "errors": [f"RECEIPT_READ_ERROR:{exc.__class__.__name__}"]}, sort_keys=True))
         return 2
     if not isinstance(receipt, dict):
-        print(json.dumps({"ok": False, "errors": ["RECEIPT_ROOT_NOT_OBJECT"]}, sort_keys=True))
+        print(json.dumps({"ok": False, "chain_verified": False, "errors": ["RECEIPT_ROOT_NOT_OBJECT"]}, sort_keys=True))
         return 2
 
-    errors = validate_receipt(receipt)
-    print(json.dumps({"ok": not errors, "errors": errors}, sort_keys=True))
+    chain_verified = args.boot_binding_receipt is not None
+    if args.boot_binding_receipt is None:
+        errors = validate_receipt(receipt)
+    else:
+        try:
+            boot_binding_raw = args.boot_binding_receipt.read_bytes()
+        except OSError as exc:
+            print(json.dumps({"ok": False, "chain_verified": False, "errors": [f"BOOT_BINDING_RECEIPT_READ_ERROR:{exc.__class__.__name__}"]}, sort_keys=True))
+            return 2
+        errors = validate_receipt_chain(receipt, boot_binding_raw)
+
+    print(json.dumps({"ok": not errors, "chain_verified": chain_verified and not errors, "errors": errors}, sort_keys=True))
     return 0 if not errors else 2
 
 

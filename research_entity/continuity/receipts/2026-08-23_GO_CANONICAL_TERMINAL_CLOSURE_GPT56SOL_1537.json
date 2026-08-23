@@ -1,0 +1,73 @@
+{
+  "schema": "CLAY_GO_SOURCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated source-mechanism organ",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main_sha": "be65164ea5989940518e3073faec1afcf5c86066",
+  "branch": "gpt56sol/go-terminal-closure-fix-20260823-1537",
+  "observed_blocker": {
+    "path": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "mechanism": "canonical pipeline_commit was followed by pipeline_cognitive_fabric_finalize and fatal require finalized.ok",
+    "risk": "a durable committed turn could be reported as a failed outer run when only post-commit evidence finalization failed, making retry/recovery vulnerable to duplicate processing or effects",
+    "existing_guard": "tools/check_ucf_terminal_closure.py",
+    "guard_policy": "final UCF evidence stays post-terminal; post-commit finalization failure must not collapse a committed turn into an apparently uncommitted failure"
+  },
+  "selected_delta": {
+    "canonical_source": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "source_git_blob_after_first_commit": "1995f6ed5dbf2cdcc9a05afb1e78384c18553a29",
+    "mechanism": "remove fatal post-commit require, preserve finalization after commit, return explicit terminal evidence state",
+    "success_state": "COMMITTED_FINALIZED",
+    "failure_state": "COMMITTED_FINALIZATION_FAILED",
+    "failure_semantics": "durable commit remains successful; finalization debt is explicit and cannot authorize effect replay",
+    "regression": "tests/test_blogpost_entity_terminal_closure_v2.py"
+  },
+  "bounded_execution": {
+    "surface": "isolated ChatGPT Python component environment",
+    "clay_grammar_source": "tools/claycode_structured_backend.py grammar",
+    "candidate_clay_parse": "PASS",
+    "terminal_closure_discriminator": {
+      "has_two_phase_terminal": true,
+      "finalize_after_commit": true,
+      "fatal_post_commit_finalize": false,
+      "pass": true
+    },
+    "classification": "SOURCE_MECHANISM_COMPONENT_ONLY"
+  },
+  "coordination": {
+    "cognition_transaction_repair": "merged on main before this branch",
+    "exact_generation_cognition_fence": "merged on main at be65164ea5989940518e3073faec1afcf5c86066",
+    "active_turn_pointer": "merged PR #1262 and read-only resolution merged PR #1271",
+    "cognition_invocation_selector": "merged PR #1272; bounded caller routing/assertion input only. Runtime admission must resolve canonical same-generation MiniUnifiedDB active-turn material and may cross-check the selector, never treat caller fields as cognition authority or create a second lookup ledger.",
+    "hcu_parallel": "NO_CHANGE_NON_DUPLICATE; PR #1263 already owns the current reactive HCU source lane"
+  },
+  "unusual_experiment": {
+    "consumed_here": false,
+    "reason": "the current shared GO macrocycle already records MICROENTITY_ZIP_PREFIX_TRUNCATION_POISON; this lane uses deterministic source/regression work only"
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB only",
+    "real_effects": "EffectGate only",
+    "ucf_receipt": "evidence/provenance only",
+    "model_jspace_gwt_hcu": "candidate_or_measurement_only"
+  },
+  "credit": {
+    "source_terminal_closure": "SUPPORTED_CANDIDATE",
+    "reference_runtime": 0,
+    "bundled_08b": 0,
+    "jspace_gwt": 0,
+    "claude_adapter": 0,
+    "hcu_runtime": 0,
+    "whole_product": 0
+  },
+  "safety": {
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "vps_selfhosted_production_testing": false,
+    "training": false
+  },
+  "next_exact_gate": "Land this terminal-closure repair, then implement the single retained ProfilePipelineRuntime pre-inference handler by resolving the live generation-scoped MiniUnifiedDB active turn, cross-checking any bounded invocation selector, composing the existing ZERO_WORKSPACE_CAPSULE/v1 + ZERO_INFERENCE_PACKET/v2 admission chain, and preserving deterministic gate/CAS plus commit-aware post-turn UCF finalization. Exact integrated runtime credit still requires actually-started authorized isolated execution."
+}

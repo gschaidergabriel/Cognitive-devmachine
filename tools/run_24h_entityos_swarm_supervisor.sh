@@ -94,7 +94,9 @@ start_forge(){
 start_go_swarm_if_admitted(){
   [[ "${CLAY_FREE_ONLY_ATTESTED:-}" == "1" ]] || return 0
   has_admitted_provider_key || return 0
-  pgrep -f '[r]un_24h_entityos_swarm.py' >/dev/null 2>&1 && return 0
+  local x="$ROOT/tools/run_24h_entityos_swarm_authority_entry.py"
+  [[ -f "$x" ]] || return 0
+  pgrep -f '[r]un_24h_entityos_swarm_authority_entry.py' >/dev/null 2>&1 && return 0
   local now rem hours out
   now=$(date +%s); rem=$((DEADLINE-now)); (( rem>0 )) || return 0
   hours=$(python3 - <<PY
@@ -102,12 +104,12 @@ print(max(0.01,$rem/3600.0))
 PY
 )
   out="$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
-  nohup python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/swarm.pid"
+  nohup python3 "$x" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/swarm.pid"
 }
 
 stop_unadmitted_go_swarm(){
   if ! has_admitted_provider_key; then
-    pgrep -f '[r]un_24h_entityos_swarm.py' | while read -r pid; do kill "$pid" 2>/dev/null || true; done
+    pgrep -f '[r]un_24h_entityos_swarm_authority_entry.py' | while read -r pid; do kill "$pid" 2>/dev/null || true; done
   fi
 }
 
@@ -132,9 +134,9 @@ def local_health():
  try:
   with urllib.request.urlopen('http://127.0.0.1:8088/health',timeout=1.2) as r:return 200<=int(r.status)<300
  except Exception:return False
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v9','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'worker_authority_entry':'run_24h_entityos_swarm_authority_entry.py','go_swarm_running':running('run_24h_entityos_swarm_authority_entry.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'CURRENT_BOOTSTRAP_WORKER_AUTHORITY_REQUIRED; EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30
 done
-printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v8","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR.json"
+printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v9","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR.json"

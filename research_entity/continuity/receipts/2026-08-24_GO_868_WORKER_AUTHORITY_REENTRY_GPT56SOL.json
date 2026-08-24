@@ -1,0 +1,108 @@
+{
+  "schema": "CLAY_GO_WORKER_AUTHORITY_REENTRY_RECEIPT/v1",
+  "observed_at": "2026-08-24T11:34:30Z",
+  "trigger": "go",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "persistent_research_entity": "Clay",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "source_reentry": {
+    "initial_successor_base": "eb71bbdaff8b7b520119ea83c92c15320b334f86",
+    "exact_rebased_parent": "68bdd27550f69077c8d5a0ae8aa81e49f6c3513b",
+    "exact_rebased_head_before_receipt_refresh": "84ffd8b9348cea7a92e3c05f58dc58b5d20378c9",
+    "rebase_method": "NEW_TREE_FROM_CURRENT_MAIN_PLUS_EXACT_FIVE_DELTA_BLOBS",
+    "pr": 1440,
+    "pr_mergeable_after_rebase": true,
+    "changed_files": 5
+  },
+  "finding": {
+    "classification": "CURRENT_WORKER_AUTHORITY_POINTER_NOT_USED_BY_ACTIVE_SWARM_BASE",
+    "observed": [
+      "BOOTSTRAP_MINIMAL.all_worker_protocol points to research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_68.md",
+      "tools/run_free_go_swarm.py still selects the unversioned CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
+      "the unversioned directive still states supervisor 8.63-era current wording",
+      "the base swarm protocol parser/prompt still contains historical MINI ENTITY markers and a Mini Entity go-macrocycle prompt",
+      "tools/run_24h_entityos_swarm.py imports run_free_go_swarm as its base and delegates base.run, so the stale authority path is execution-relevant when external provider swarm execution is eventually admitted"
+    ],
+    "risk": "A restarted provider swarm could fail on obsolete protocol markers or steer workers with stale product/authority semantics even after canonical bootstrap advances."
+  },
+  "counterhypothesis": {
+    "claim": "The EntityOS driver overrides enough base state that the stale run_free_go_swarm worker authority is harmless.",
+    "result": "REJECTED_BY_SOURCE_CHAIN",
+    "reason": "The driver overrides roles/context/request behavior but still delegates to base.run, which calls base.load_protocol and base.worker_prompt. The new entrypoint patches those authority-sensitive functions before importing the driver."
+  },
+  "delta": {
+    "branch": "gpt56sol/go-868-worker-authority-reentry-current-20260824-1827",
+    "files": {
+      "tools/entityos_worker_authority.py": {
+        "blob_sha": "736d91cf385ff9aba6dc03a38fcd46c06f0a8e38",
+        "purpose": "Bootstrap-driven successor-dynamic, secret-blind, network-free worker-authority resolver with path/epoch/product/HCU/FREE_ONLY checks."
+      },
+      "tools/run_24h_entityos_swarm_authority_entry.py": {
+        "blob_sha": "c96a3e8b87812942eb93da3d042f9c3c1420fcab",
+        "purpose": "Fail-closed current-authority entrypoint that installs the resolver before importing the EntityOS/HCU driver."
+      },
+      "tests/test_entityos_worker_authority.py": {
+        "blob_sha": "2be9d0ca5363f32287c6d6e2f5b880f44648812c",
+        "purpose": "Deterministic regressions for versioned-current selection, path/epoch rejection, and Mini Entity prompt removal."
+      },
+      "tools/run_24h_entityos_swarm_supervisor.sh": {
+        "blob_sha": "80c6431a8401489bda8b8b39fb1ade785ad56d3c",
+        "purpose": "Preserves local Qwen/distillery/forge paths while routing external swarm start/stop/status through the current-authority entrypoint."
+      }
+    }
+  },
+  "evidence": {
+    "source_equivalent_no_network_unit_tests": {
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "scope": "MECHANISM_ONLY_NOT_EXACT_REPOSITORY_RUNTIME_CREDIT"
+    },
+    "github_actions_exact_rebased_head": {
+      "head": "84ffd8b9348cea7a92e3c05f58dc58b5d20378c9",
+      "research_entity_verify": {
+        "run_id": 32722485910,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_TEST_EXECUTION"
+      },
+      "research_entity_identity_guard": {
+        "run_id": 32722485753,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_TEST_EXECUTION"
+      },
+      "semantic_test_credit": 0
+    },
+    "provider_secret_lookup": false,
+    "provider_network_call": false,
+    "together_used": false,
+    "paid_execution": false,
+    "vps_bridge_health": "UNOBSERVED_CURRENT_ORGAN_TOOL_NOT_EXPOSED",
+    "vps_bridge_classification": "TOOL_VISIBILITY_NOT_PRODUCT_FAILURE"
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: active supervisor launch path now has a concrete successor-dynamic worker-authority entrypoint candidate instead of a stale unversioned Mini Entity worker protocol.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: current HCU/Typed Entry authority and three-track rules are injected from the canonical bootstrap-selected directive rather than frozen historical prompt text; no second state/effect authority introduced.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_CONTROL_PLANE_REENTRY: latest 8.68 local/J-Space/free-only policy is what future workers receive; parallel main also advanced local Qwen post-load identity and J-Space/admission receipts. J-Space model runtime and training credit remain zero."
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "lease_consumed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable upstream macrocycle/request identity was exposed to this organ. Work was ordinary source review, deterministic regression and fail-closed control-plane repair."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "provider_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute the exact current PR-head worker-authority regressions plus syntax/import checks on an authorized zero-cost local normal-user or clay-direct-dev surface; then re-enter current main and fuse if nonduplicate. Keep external LLM-provider traffic quarantined until FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 has exact-source executable PASS and a provider is positively FREE-admitted before secret/network access."
+}

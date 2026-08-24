@@ -1,0 +1,87 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed_before_write": "ad93ef044a6e000c74cefa900597990a59bc3b30",
+    "canonical_main_tree_observed": "3c0dbb78b897a874785ceab3a74535a24db00c68",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json",
+    "owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_donor_head_observed_before_write": "d058dae1ac8f61c8c1336e7fca39860e10dd8329",
+    "active_funnel_lane": "gschaidergabriel/clay-global-research-entity#1522",
+    "closed_unsafe_typed_ingress_donor": "gschaidergabriel/clay-global-research-entity#1512"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "reproducible_atomic_unusual_experiment_lease": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "vps_bridge_direct_roundtrip_surface_exposed_to_this_organ": false,
+    "vps_bridge_check": "NOT_EXECUTABLE_FROM_CURRENT_TOOL_SURFACE; NO BRIDGE HEALTH CREDIT CLAIMED",
+    "duplicate_lane_policy": "PR1522 retained for funnel conversion; no second implementation PR created"
+  },
+  "observed_runtime_funnel": {
+    "source": "main metrics commit ad93ef044a6e000c74cefa900597990a59bc3b30",
+    "free_swarm_tokens": 7302860,
+    "successful_historical_worker_outputs": 1001,
+    "machine_readable_deltas": 176,
+    "forge_ready_deltas": 105,
+    "forge_evaluations": 104,
+    "forge_accepted_deltas": 0,
+    "forge_candidate_states": {
+      "PATCH_REJECTED": 57,
+      "NEEDS_IMPLEMENTATION": 47,
+      "NEW": 71
+    },
+    "distillery_source_tokens": 11621,
+    "distillery_accepted_dataset_tokens": 0
+  },
+  "material_finding": "The conversion bottleneck has moved downstream. Delta production and forge-ready labeling increased materially, yet every completed Forge evaluation still fails before acceptance: 57 patches are rejected and 47 need implementation. Current worker prompting demands executable unified diffs but does not bind the model to exact target source bytes. Therefore stricter prompt syntax and rejection feedback alone can Goodhart the ready_for_forge label without improving patch applicability.",
+  "hypothesis": "Binding patch construction to exact current source identity (source commit plus per-target file digests and bounded source bytes), followed by deterministic git-apply-check preflight before ready_for_forge, will reduce patch transport failure and allow candidates to reach real validation more often than prompt-only ABI tightening.",
+  "counterhypothesis": "Malformed unified-diff syntax is the dominant cause, so prompt-only rejection feedback and stricter formatting in PR1522 will materially raise apply success even without exact target source context.",
+  "cheapest_high_information_discriminator": "Run the next exact-source cohort with two-stage TARGET_SELECTION -> SOURCE_CONTEXT_BINDING -> PATCH_CONSTRUCTION -> APPLY_CHECK_PRELIGHT and compare PATCH_REJECTED/NEEDS_IMPLEMENTATION transitions against the current 57/47/0-accepted baseline. Marking fewer candidates ready is not success unless ready candidates actually pass apply-check on bound bytes.",
+  "bounded_delta": {
+    "durable_review": "PR1522 comment 5396293610",
+    "required_transport_states": [
+      "TARGET_UNKNOWN",
+      "SOURCE_CONTEXT_BOUND",
+      "SOURCE_DRIFT",
+      "PATCH_PARSE_FAIL",
+      "PATCH_APPLY_CHECK_FAIL",
+      "EXECUTION_ADMISSION_FAIL",
+      "READY_FOR_FORGE"
+    ],
+    "required_binding": [
+      "source_commit",
+      "target_file_sha256_before",
+      "target_files",
+      "patch_sha256",
+      "test_command_digest",
+      "apply_check_result"
+    ],
+    "silent_patch_repair": "FORBIDDEN",
+    "source_drift": "FAIL_CLOSED_AND_REBIND"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: localized the zero-acceptance funnel to proposal->applicable-patch transport and durably specified exact-source binding plus apply-check preflight on the retained PR1522 lane.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_DESIGN_ONLY: source_commit + target-file digest + candidate/patch/test digests define a reusable typed provenance envelope for HCU/Entry candidate transport; no competing canonical truth authority created.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no exact local model/J-Space intervention execution surface was exercised in this organ; improving candidate transport is prerequisite plumbing only and grants zero model-specific J-Space or training credit."
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On PR1522, implement bounded two-stage exact-source context binding and deterministic apply-check preflight without unrestricted model-authored shell execution; then execute the no-network component cohort on an exposed authorized local/VPS sandbox surface and measure transition out of PATCH_REJECTED/NEEDS_IMPLEMENTATION.",
+  "acceptance": "IN_PROGRESS"
+}

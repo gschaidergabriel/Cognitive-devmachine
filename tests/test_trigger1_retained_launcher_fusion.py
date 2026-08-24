@@ -20,11 +20,31 @@ class Trigger1RetainedLauncherFusionTest(unittest.TestCase):
         self.assertIn("BLOCKED_EXACT_SOURCE_CHANGED_DURING_RUN", text)
         self.assertIn('rm -f "$INTERMEDIATE" "$DIRECT"', text)
 
+    def test_atomic_lease_is_rebound_to_measured_runtime_source_before_intervention(self):
+        text = LAUNCHER.read_text(encoding="utf-8")
+        self.assertIn("tools/trigger1_lease_source_binding_v1.py", text)
+        self.assertIn("TRIGGER1_LEASE_ADMITTED", text)
+        self.assertIn("TRIGGER1_CLAIM_SHA256", text)
+        self.assertIn("TRIGGER1_SOURCE_HEAD", text)
+        self.assertIn("TRIGGER1_SOURCE_TREE", text)
+        self.assertIn("BLOCKED_CANONICAL_ATOMIC_LEASE_ENV_MISSING", text)
+        self.assertIn("BLOCKED_ATOMIC_LEASE_SOURCE_BINDING", text)
+        self.assertLess(
+            text.index("tools/trigger1_lease_source_binding_v1.py"),
+            text.index("tools/trigger1_local_qwen06_intermediate.sh"),
+        )
+
+    def test_queued_github_action_without_current_lease_still_blocks_early(self):
+        text = LAUNCHER.read_text(encoding="utf-8")
+        self.assertIn("GITHUB_ACTIONS_TRIGGER1_REQUIRES_WORKFLOW_ATOMIC_LEASE_GATE", text)
+        self.assertIn("BLOCKED_CANONICAL_ATOMIC_LEASE_NOT_ADMITTED", text)
+
     def test_compatibility_output_is_explicit_not_a_second_science_lane(self):
         text = LAUNCHER.read_text(encoding="utf-8")
         self.assertIn("compatibility_entrypoint", text)
         self.assertIn("effective_executor", text)
         self.assertIn("promotion_bridge", text)
+        self.assertIn("lease_source_binding", text)
         self.assertIn("trigger1_local_activation_api_result.json", text)
 
 

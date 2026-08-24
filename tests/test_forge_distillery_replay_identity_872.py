@@ -111,6 +111,27 @@ class ReplayIdentity872Tests(unittest.TestCase):
         self.assertEqual(second["accepted_dataset_tokens_counter"], token_count)
         self.assertEqual(second["forge_execution_packets_total"], 1)
 
+    def test_delta_id_only_replay_is_duplicate(self):
+        self.write(accepted_row())
+        first = bridge.ingest(self.eval, self.db)
+        token_count = first["accepted_dataset_tokens_counter"]
+
+        # delta_id identifies the candidate/evaluation envelope, not a new measured
+        # execution. Re-keying only this field must therefore be replay-stable.
+        replay = accepted_row(
+            delta_id="d-replay-envelope-renamed",
+            evaluated_at="2026-08-24T16:31:59+00:00",
+        )
+        self.write(replay)
+        second = bridge.ingest(self.eval, self.db)
+
+        self.assertEqual(first["admitted"], 1)
+        self.assertEqual(second["admitted"], 0)
+        self.assertEqual(second["duplicates"], 1)
+        self.assertEqual(second["rejected"].get("REPLAY_IDENTITY_CONFLICT", 0), 0)
+        self.assertEqual(second["accepted_dataset_tokens_counter"], token_count)
+        self.assertEqual(second["forge_execution_packets_total"], 1)
+
     def test_same_execution_identity_with_mutated_measurement_fails_closed(self):
         self.write(accepted_row())
         first = bridge.ingest(self.eval, self.db)

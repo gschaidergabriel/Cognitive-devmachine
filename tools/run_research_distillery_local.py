@@ -101,7 +101,12 @@ def review_candidate(con:sqlite3.Connection,cid:str,reviewers:list[tuple[str,str
     x["thresholds"]={k:v for k,v in zip(("intrinsic","grf","fit","novelty"),thresholds)};x["score_gaps"]={k:v for k,v in zip(("intrinsic","grf","fit","novelty"),gaps)}
     ok=(not x["hard"] and all(s>=t for s,t in zip(scores,thresholds)))
     if ok:
-        con.execute("UPDATE candidates SET status='PROVISIONAL_ACCEPTED' WHERE id=?",(cid,));d.bump(con,"provisional_local_accept",1);con.commit();return True,x
+        con.execute("UPDATE candidates SET status='PROVISIONAL_ACCEPTED' WHERE id=?",(cid,))
+        d.bump(con,"provisional_local_accept",1)
+        x["canonical_dataset_commit_allowed"]=False
+        con.commit()
+        d.emit("knowledge_provisional_local_not_canonical",candidate=cid,review=x)
+        return False,x
     if not x["hard"] and sum(gaps)<=0.22:d.bump(con,"near_miss_candidates",1);x["near_miss"]=True
     else:d.bump(con,"clear_reject_candidates",1);x["near_miss"]=False
     con.commit();return False,x

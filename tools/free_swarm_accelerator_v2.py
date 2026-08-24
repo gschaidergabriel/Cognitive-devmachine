@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+"""Throughput accelerator for the Free Swarm.
+
+Goals:
+- remove slow 1->2->3 additive ramp on healthy providers;
+- avoid provider-wide stalls on ordinary 5xx/model faults;
+- exploit OpenRouter's explicitly free router without paid fallback;
+- maximize Groq prompt-cache reuse by moving dynamic state behind a stable prefix;
+- keep 429 economic/rate truth authoritative and never rotate keys to evade an org limit.
+"""
+from __future__ import annotations
+import asyncio, os, random, time
+from typing import Any
+
+
+def install(base:Any,opt:Any)->None:
+    # Add the explicitly zero-priced OpenRouter Free Models Router as a separate lane.
+    if not any(s.name=='openrouter' for s in base.PROVIDERS):
+        base.PROVIDERS=tuple(base.PROVIDERS)+(
+            base.ProviderSpec(
+                name='openrouter',endpoint='https://openrouter.ai/api/v1/chat/completions',
+                key_envs=('OPENROUTER_API_KEY',),keys_list_env='OPENROUTER_API_KEYS',
+                models_env='OPENROUTER_SWARM_MODELS',default_models=('openrouter/free',),
+                attestation_env='CLAY_OPENROUTER_FREE_ATTESTED',default_max_concurrency=8),
+        )
+    os.environ.setdefault('OPENROUTER_SWARM_MODELS','openrouter/free')
+    # Discovery uses an override for OpenRouter, so no catalog pricing ambiguity is introduced.
+    opt.CATALOGS.setdefault('openrouter','https://openrouter.ai/api/v1/models')
+    opt.PROVIDER_MODEL_CAP.setdefault('openrouter',1)
+
+    OldRuntime=base.ProviderRuntime
+    class FastRuntime(OldRuntime):
+        def __init__(self,spec,keys,models,max_concurrency):
+            super().__init__(spec,keys,models,max_concurrency)
+            initial={'groq':2,'mistral':6,'nvidia':16,'openrouter':2}.get(spec.name,2)
+            self.target_concurrency=min(self.max_concurrency,max(1,initial))
+            self._healthy_windows=0
+        async def on_success(self)->None:
+            async with self._condition:
+                self.successes+=1;self.success_streak+=1
+                self.rate_backoff=max(1.0,self.rate_backoff*0.75)
+                # Multiplicative-ish ramp: healthy NVIDIA can reach dozens of inflight
+                # requests in minutes rather than hours. 429 still immediately cuts it.
+                threshold=max(4,self.target_concurrency//2)
+                if self.success_streak>=threshold and self.target_concurrency<self.max_concurrency:
+                    step=max(1,self.target_concurrency//3)
+                    self.target_concurrency=min(self.max_concurrency,self.target_concurrency+step)
+                    self.success_streak=0;self._healthy_windows+=1
+                self._condition.notify_all()
+        async def on_429(self,retry_after:float)->None:
+            async with self._condition:
+                self.rate_limits+=1;self.success_streak=0
+                self.target_concurrency=max(1,int(self.target_concurrency*0.6))
+                delay=max(float(retry_after),self.rate_backoff)+random.uniform(0.1,0.8)
+                self.cooldown_until=max(self.cooldown_until,time.monotonic()+delay)
+                self.rate_backoff=min(900.0,max(2.0,self.rate_backoff*1.7))
+                self._condition.notify_all()
+        async def on_transient_error(self)->None:
+            async with self._condition:
+                # A single dead/overloaded model must not freeze every healthy NVIDIA model.
+                self.errors+=1;self.success_streak=0
+                if self.errors%4==0:
+                    self.target_concurrency=max(1,int(self.target_concurrency*0.85))
+                self._condition.notify_all()
+        def snapshot(self)->dict[str,Any]:
+            out=super().snapshot();out['accelerator']='v2';out['healthy_ramp_windows']=self._healthy_windows
+            return out
+    base.ProviderRuntime=FastRuntime
+
+    # Stable prefix first. Groq GPT-OSS prompt caching is automatic when prefixes match;
+    # dynamic serial/role/runtime state is deliberately moved to the tail.
+    def cache_friendly_prompt(protocol:str,role:str,task:str,state_context:str,serial:int)->str:
+        return f'''{protocol}
+
+ENTITYOS/HCU FREE-SWARM STATIC PRODUCTIVITY CONTRACT
+- Candidate/model output is never canonical authority.
+- Produce ONE executable architecture delta, falsifier, patch/test/benchmark, or explicit NO_DELTA.
+- Do not repeat supplied state except what is necessary to justify the delta.
+- Preserve the strongest counterhypothesis and cheapest discriminator.
+- End with DEUTSCHE_ZUSAMMENFASSUNG.
+- Then emit exactly two compact machine-readable lines:
+ARCHITECTURE_DELTA_JSON={{"delta_id":"worker-<serial>-short-name","hypothesis":"...","mechanism":"...","target_files":["..."],"patch_unified_diff":"","test_commands":["..."],"benchmark_command":"","metric":"...","expected_direction":"higher|lower|boolean","baseline_needed":true,"falsifier":"...","risk":"...","ready_for_forge":true}}
+OPEN_RESEARCH_QUESTIONS_JSON=["causally distinct unresolved question"]
+
+DYNAMIC WORK SHARD
+worker_serial={serial}
+worker_role={role}
+role_task={task}
+
+CURRENT RUNTIME / REPOSITORY / DISTILLED CONTEXT
+{state_context}
+'''
+    base.worker_prompt=cache_friendly_prompt
+
+    # Higher hard ceilings are merely ceilings. Runtime AIMD + shared quota gate +
+    # provider 429 truth decide actual concurrency.
+    rebuilt=[]
+    caps={'groq':12,'mistral':48,'nvidia':128,'openrouter':8}
+    for s in base.PROVIDERS:
+        cap=int(os.getenv(f'CLAY_{s.name.upper()}_MAX_CONCURRENCY',str(caps.get(s.name,s.default_max_concurrency))))
+        rebuilt.append(base.ProviderSpec(s.name,s.endpoint,s.key_envs,s.keys_list_env,s.models_env,s.default_models,s.attestation_env,cap))
+    base.PROVIDERS=tuple(rebuilt)

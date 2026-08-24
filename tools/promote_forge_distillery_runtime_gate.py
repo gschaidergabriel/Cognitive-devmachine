@@ -7,6 +7,11 @@ Instead it re-validates the nested evidence-qualified Forge evaluation from a PA
 and feeds exactly that one row through the existing Distillery admission code against the
 configured canonical Distillery SQLite database.
 
+Live promotion additionally requires the PASS receipt to be the clean tracked bytes of the
+canonical repository result path for its GitHub Actions run. A caller-supplied or locally
+fabricated PASS-shaped JSON is therefore insufficient even when all semantic fields look
+valid.
+
 The operation is idempotent by the existing evaluation digest. A first promotion must add
 exactly one packet and nonzero accepted-dataset tokens. An identical retry must add zero
 packets/tokens and report one duplicate. Existing prior promotion is accepted only when the
@@ -24,15 +29,21 @@ import json
 from pathlib import Path
 import re
 import sqlite3
+import subprocess
 import tempfile
 from typing import Any
 
 import ingest_forge_accepts_into_distillery as bridge
 from forge_evidence_credit_871 import evidence_reason
 
+ROOT = Path(__file__).resolve().parents[1]
+CANONICAL_RESULTS_REL = Path("research_entity/runtime/go871_forge_distillery_results")
+CANONICAL_SOURCE_SELECTION = "CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME"
+ALLOWED_WORKFLOW_EVENTS = {"push", "pull_request", "workflow_dispatch"}
 PASS_SCHEMA = "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2"
 PASS_STATUS = "PASS_EXACT_CURRENT_1_TO_1_TO_NONZERO_REPLAY_ZERO"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
+RUN_ID = re.compile(r"^[1-9][0-9]*$")
 
 
 class PromotionError(RuntimeError):
@@ -51,6 +62,77 @@ def load_json(path: Path) -> dict[str, Any]:
     return obj
 
 
+def _git_bytes(root: Path, *args: str) -> subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        ["git", "-C", str(root), *args],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+        timeout=30,
+    )
+
+
+def load_repository_bound_gate_receipt(
+    gate_result: Path,
+    expected_source_sha: str,
+    *,
+    root: Path = ROOT,
+) -> tuple[dict[str, Any], bytes]:
+    """Load only a clean tracked canonical runtime-result receipt.
+
+    Runtime PASS fields are evidence only when their bytes are repository-bound. This
+    loader deliberately rejects arbitrary copies, untracked files, dirty local edits and
+    receipts whose Actions/source metadata does not match the canonical result pathname.
+    """
+    expected_source_sha = expected_source_sha.strip().lower()
+    _require(bool(HEX40.fullmatch(expected_source_sha)), "EXPECTED_SOURCE_SHA_INVALID")
+    root = root.resolve()
+    results_root = (root / CANONICAL_RESULTS_REL).resolve()
+    try:
+        resolved = gate_result.resolve(strict=True)
+    except FileNotFoundError as exc:
+        raise PromotionError("GATE_RECEIPT_MISSING") from exc
+    try:
+        rel_result = resolved.relative_to(results_root)
+    except ValueError as exc:
+        raise PromotionError("GATE_RECEIPT_OUTSIDE_CANONICAL_RESULTS_ROOT") from exc
+    _require(len(rel_result.parts) == 1, "GATE_RECEIPT_NESTED_PATH_FORBIDDEN")
+    _require(rel_result.suffix == ".json", "GATE_RECEIPT_EXTENSION_INVALID")
+    run_id = rel_result.stem
+    _require(bool(RUN_ID.fullmatch(run_id)), "GATE_RECEIPT_RUN_ID_INVALID")
+
+    try:
+        rel_repo = resolved.relative_to(root).as_posix()
+    except ValueError as exc:
+        raise PromotionError("GATE_RECEIPT_OUTSIDE_REPOSITORY") from exc
+
+    tracked = _git_bytes(root, "ls-files", "--error-unmatch", "--", rel_repo)
+    _require(tracked.returncode == 0, "GATE_RECEIPT_NOT_TRACKED")
+    dirty = _git_bytes(root, "status", "--porcelain=v1", "--", rel_repo)
+    _require(dirty.returncode == 0, "GATE_RECEIPT_GIT_STATUS_FAILED")
+    _require(not dirty.stdout.strip(), "GATE_RECEIPT_DIRTY")
+    committed = _git_bytes(root, "show", f"HEAD:{rel_repo}")
+    _require(committed.returncode == 0, "GATE_RECEIPT_NOT_PRESENT_AT_HEAD")
+    raw = resolved.read_bytes()
+    _require(committed.stdout == raw, "GATE_RECEIPT_BYTES_NOT_BOUND_TO_HEAD")
+
+    try:
+        result = json.loads(raw.decode("utf-8"))
+    except Exception as exc:
+        raise PromotionError("GATE_RECEIPT_JSON_INVALID") from exc
+    _require(isinstance(result, dict), "GATE_RESULT_NOT_OBJECT")
+    _require(str(result.get("github_run_id") or "") == run_id, "GATE_RUN_ID_PATH_MISMATCH")
+    _require(result.get("github_event_name") in ALLOWED_WORKFLOW_EVENTS, "GATE_WORKFLOW_EVENT_INVALID")
+    _require(result.get("source_selection") == CANONICAL_SOURCE_SELECTION, "GATE_SOURCE_SELECTION_INVALID")
+    _require(result.get("execution_source_sha") == expected_source_sha, "EXECUTION_SOURCE_SHA_MISSING_OR_MISMATCH")
+    source_tree = result.get("source_tree")
+    execution_tree = result.get("execution_source_tree")
+    _require(isinstance(source_tree, str) and bool(HEX40.fullmatch(source_tree)), "GATE_SOURCE_TREE_INVALID")
+    _require(isinstance(execution_tree, str) and bool(HEX40.fullmatch(execution_tree)), "EXECUTION_SOURCE_TREE_INVALID")
+    _require(execution_tree == source_tree, "EXECUTION_SOURCE_TREE_MISMATCH")
+    return result, raw
+
+
 def validate_gate_result(result: dict[str, Any], expected_source_sha: str) -> dict[str, Any]:
     expected_source_sha = expected_source_sha.strip().lower()
     _require(bool(HEX40.fullmatch(expected_source_sha)), "EXPECTED_SOURCE_SHA_INVALID")
@@ -58,8 +140,7 @@ def validate_gate_result(result: dict[str, Any], expected_source_sha: str) -> di
     _require(result.get("pass") is True, "GATE_NOT_PASS")
     _require(result.get("status") == PASS_STATUS, "WRONG_GATE_PASS_STATUS")
     _require(result.get("source_sha") == expected_source_sha, "GATE_SOURCE_SHA_MISMATCH")
-    if result.get("execution_source_sha") is not None:
-        _require(result.get("execution_source_sha") == expected_source_sha, "EXECUTION_SOURCE_SHA_MISMATCH")
+    _require(result.get("execution_source_sha") == expected_source_sha, "EXECUTION_SOURCE_SHA_MISMATCH")
     _require(result.get("network_used") is False, "GATE_NETWORK_FENCE_MISSING")
     _require(int(result.get("provider_calls") or 0) == 0, "GATE_PROVIDER_CALLS_NONZERO")
     _require(int(result.get("paid_fallback_attempt_count") or 0) == 0, "GATE_PAID_FALLBACK_NONZERO")
@@ -136,10 +217,7 @@ def inspect_db(db: Path, evaluation_sha256: str) -> dict[str, Any]:
 
 
 def promote(gate_result: Path, expected_source_sha: str, distillery_db: Path) -> dict[str, Any]:
-    raw = gate_result.read_bytes()
-    result = json.loads(raw.decode("utf-8"))
-    if not isinstance(result, dict):
-        raise PromotionError("GATE_RESULT_NOT_OBJECT")
+    result, raw = load_repository_bound_gate_receipt(gate_result, expected_source_sha)
     evaluation = validate_gate_result(result, expected_source_sha)
     evaluation_sha = bridge.digest_json(evaluation)
     before = inspect_db(distillery_db, evaluation_sha)
@@ -180,6 +258,8 @@ def promote(gate_result: Path, expected_source_sha: str, distillery_db: Path) ->
         "outcome": outcome,
         "source_sha": expected_source_sha,
         "gate_result_sha256": hashlib.sha256(raw).hexdigest(),
+        "gate_receipt_repository_bound": True,
+        "gate_github_run_id": str(result.get("github_run_id")),
         "evaluation_sha256": evaluation_sha,
         "distillery_db": str(distillery_db),
         "before": before,

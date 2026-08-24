@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"zzzzzz6-status-6000-20260824T2104p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -e; echo HEAD=$(git rev-parse HEAD); echo ORIGIN=$(git rev-parse origin/main 2>/dev/null || true); latest=$(ls -td /artifacts/clay-entityos-swarm/active-fabric6000-v2-* 2>/dev/null | head -1); echo LATEST=$latest; cat \"$latest/status.json\" 2>/dev/null || true; echo PROCS; pgrep -af 'run_6000_free_swarm|run_free_evidence_forge|run_research_distillery_local|free swarm/evaluate.py' || true; echo RESOURCES; free -h; df -h /workspace /cache /artifacts"
+}

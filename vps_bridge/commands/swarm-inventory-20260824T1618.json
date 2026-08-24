@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "swarm-inventory-20260824T1618",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 60,
+  "command": "python3 - <<'PY'\nimport importlib.util, os, sys\np='/workspace/clay-global-research-entity/tools/run_free_go_swarm.py'\nspec=importlib.util.spec_from_file_location('swarm_mod',p)\nm=importlib.util.module_from_spec(spec); sys.modules['swarm_mod']=m; spec.loader.exec_module(m)\nprint('CLAY_FREE_ONLY_ATTESTED', m.truthy(os.getenv('CLAY_FREE_ONLY_ATTESTED')))\nfor s in m.PROVIDERS:\n    print(s.name, 'keys', len(m.collect_keys(s)), 'free_attested', m.truthy(os.getenv(s.attestation_env)), 'override_models', len(m.split_values(os.getenv(s.models_env))))\nPY"
+}

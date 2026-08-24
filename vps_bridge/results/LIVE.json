@@ -1,21 +1,21 @@
 {
   "schema": "CLAY_VPS_LIVE/v4",
-  "observed_at": "2026-08-24T10:38:42.582529+00:00",
+  "observed_at": "2026-08-24T10:39:49.631112+00:00",
   "sandbox": "clay-direct-dev",
   "host": {
     "uptime": {
       "rc": 0,
-      "out": " 10:38:41 up  5:45,  2 users,  load average: 0.24, 0.14, 0.10\n",
+      "out": " 10:39:48 up  5:46,  2 users,  load average: 0.18, 0.14, 0.10\n",
       "err": ""
     },
     "memory": {
       "rc": 0,
-      "out": "               total        used        free      shared  buff/cache   available\nMem:     16769044480  5592006656  6980046848     1695744  4553469952 11177037824\nSwap:              0           0           0\n",
+      "out": "               total        used        free      shared  buff/cache   available\nMem:     16769044480  5588385792  6981181440     1703936  4555964416 11180658688\nSwap:              0           0           0\n",
       "err": ""
     },
     "disk": {
       "rc": 0,
-      "out": "Filesystem        1B-blocks        Used    Available Use% Mounted on\n/dev/sda1      206900281344 37763190784 169120313344  19% /\n",
+      "out": "Filesystem        1B-blocks        Used    Available Use% Mounted on\n/dev/sda1      206900281344 37765214208 169118289920  19% /\n",
       "err": ""
     },
     "podman": {
@@ -24,10 +24,10 @@
       "err": "Error: cannot run top on container 877d9128ca5ac67d4b8c3cfd897f3da263c6cd747290a7b9909d119ddffd3ffc as it did not create a cgroup: this container does not have a cgroup\n"
     }
   },
-  "processes": "USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot         931  1.4  0.1  35756 28792 ?        SN   09:47   0:43 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60 --publish --publish-min-seconds 900\nroot        2886  0.1  0.2 625476 33484 ?        SNl  09:51   0:04 python3 /workspace/clay-global-research-entity/tools/run_24h_entityos_swarm.py --hours 24.0 --output-dir /artifacts/clay-entityos-swarm/active-20260824T095103Z\nroot         922  0.0  0.0      0     0 ?        ZN   09:47   0:01 [python3] <defunct>\nroot         460  0.0  0.0      0     0 ?        ZN   09:21   0:00 [bash] <defunct>\nroot           1  0.0  0.0   2696  1680 ?        Ss   08:32   0:00 sleep infinity\nroot         871  0.0  0.0      0     0 ?        ZN   09:45   0:00 [sleep] <defunct>\nroot         900  0.0  0.0      0     0 ?        ZN   09:46   0:00 [pkill] <defunct>\nroot       11482  0.0  0.0   4324  3532 ?        SN   10:38   0:00 bash -lc ps auxww --sort=-%cpu | head -80; echo '---'; free -h; echo '---'; df -h /workspace /cache\nroot       11488  0.0  0.0   7888  4040 ?        RN   10:38   0:00 ps auxww --sort=-%cpu\nroot       11489  0.0  0.0   2708  1544 ?        SN   10:38   0:00 head -80\n---\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.2Gi       6.5Gi       1.6Mi       4.2Gi        10Gi\nSwap:             0B          0B          0B\n---\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   36G  158G  19% /workspace\n/dev/sda1       193G   36G  158G  19% /cache\n",
+  "processes": "USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot         931  1.4  0.1  35756 28808 ?        SN   09:47   0:44 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60 --publish --publish-min-seconds 900\nroot        2886  0.1  0.2 625476 33492 ?        SNl  09:51   0:04 python3 /workspace/clay-global-research-entity/tools/run_24h_entityos_swarm.py --hours 24.0 --output-dir /artifacts/clay-entityos-swarm/active-20260824T095103Z\nroot         922  0.0  0.0      0     0 ?        ZN   09:47   0:01 [python3] <defunct>\nroot         460  0.0  0.0      0     0 ?        ZN   09:21   0:00 [bash] <defunct>\nroot           1  0.0  0.0   2696  1680 ?        Ss   08:32   0:00 sleep infinity\nroot         871  0.0  0.0      0     0 ?        ZN   09:45   0:00 [sleep] <defunct>\nroot         900  0.0  0.0      0     0 ?        ZN   09:46   0:00 [pkill] <defunct>\nroot       11662  0.0  0.0   4324  3620 ?        SN   10:39   0:00 bash -lc ps auxww --sort=-%cpu | head -80; echo '---'; free -h; echo '---'; df -h /workspace /cache\nroot       11668  0.0  0.0   7888  4068 ?        RN   10:39   0:00 ps auxww --sort=-%cpu\nroot       11669  0.0  0.0   2708  1644 ?        SN   10:39   0:00 head -80\n---\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.2Gi       6.5Gi       1.6Mi       4.2Gi        10Gi\nSwap:             0B          0B          0B\n---\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   36G  158G  19% /workspace\n/dev/sda1       193G   36G  158G  19% /cache\n",
   "workspace_git": {
-    "head": "21646016da98fbc361d70f7b1503130668a98cb2",
-    "status": "## main...origin/main\n M \"free swarm/LIVE_METRICS.json\"\n M \"free swarm/README.md\"\n"
+    "head": "99a9bf6485b02a1b56252ce9eff66630790397ad",
+    "status": "## main...origin/main\n"
   },
   "models": []
 }

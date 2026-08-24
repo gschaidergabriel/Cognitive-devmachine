@@ -117,13 +117,16 @@ def _lane_evidence_from_provenance(
         }
 
     if provider == "nvidia":
+        # Supervisor 8.70 requires provider-side free hosted-NIM/Developer
+        # entitlement evidence bound to the exact credential/account. Generic
+        # provider documentation, endpoint identity, key presence, or HTTP
+        # success is not credential-level economic proof.
         return {
-            "ok": True,
+            "ok": False,
+            "reason": "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_NOT_BOUND",
             "kind": record.get("evidence_kind"),
             "source": record.get("source"),
-            "endpoint_host": _host(endpoint),
-            "scope": record.get("scope"),
-            "assertion": "NVIDIA_HOSTED_NIM_PROTOTYPING_ROUTE_ONLY",
+            "required_proof": record.get("credential_plan_proof"),
         }
 
     if provider == "groq":

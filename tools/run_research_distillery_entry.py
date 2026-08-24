@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Stable entrypoint for run_research_distillery.py.
+"""Stable fail-closed entrypoint for run_research_distillery.py.
 
-Keeps the large distillery implementation isolated while providing a small,
-easily-audited admission fix for question rows. The underlying module is
-imported without executing its __main__ block, then the corrected function is
-installed before main() runs.
+Besides the bounded question-row repair, this entrypoint installs the canonical
+EntityOS/HCU FREE provider-admission boundary before the large distillery module
+can retrieve any credentialed-provider secret. Public unauthenticated research
+sources remain available; credentialed model/search providers are closed unless
+FREE_PROVIDER_ADMISSION.json explicitly admits that provider as FREE at the
+current supervisor epoch.
 """
 from __future__ import annotations
 
@@ -17,7 +19,35 @@ import sys
 TOOLS=Path(__file__).resolve().parent
 if str(TOOLS) not in sys.path:
     sys.path.insert(0,str(TOOLS))
+
+from free_provider_admission_gate import resolve as resolve_provider_admission
 import run_research_distillery as d
+
+_SECRET_PROVIDER = {
+    "OPENROUTER_API_KEY": "openrouter",
+    "NVIDIA_API_KEY": "nvidia",
+    "NVIDIA_NIM_API_KEY": "nvidia",
+    "MISTRAL_API_KEY": "mistral",
+    "GROQ_API_KEY": "groq",
+    "TAVILY_API_KEY": "tavily",
+    "EXA_API_KEY": "exa",
+}
+_ORIGINAL_SECRET = d.secret
+
+
+def admitted_secret(name: str) -> str:
+    provider = _SECRET_PROVIDER.get(name)
+    if provider is not None:
+        decision = resolve_provider_admission(provider)
+        if not decision.allowed:
+            return ""
+    return _ORIGINAL_SECRET(name)
+
+
+# This assignment happens before d.main(), so chat/catalog/reviewer/search
+# helpers resolve through the guarded secret function. Missing provider entries
+# (including OpenRouter/Tavily/Exa at authority 8.67) are UNKNOWN and closed.
+d.secret = admitted_secret
 
 
 def add_question(con: sqlite3.Connection, question: str, *, parent_id: str | None = None,

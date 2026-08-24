@@ -2598,11 +2598,21 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         )
 
         full = accepted | {"historical-latch-capacity"}
+        full_rows = MOD.inventory(env, payment_latches=full)
+        nvidia_row = next(
+            row for row in full_rows if row["provider_id"] == "nvidia"
+        )
+        self.assertFalse(
+            nvidia_row["payment_blocked_current_budget_epoch"]
+        )
+        self.assertTrue(nvidia_row["payment_latch_capacity_exhausted"])
         full_route = MOD.route(env, payment_latches=full)
         self.assertIsNone(full_route["selected"])
         self.assertEqual(
-            full_route["reason"], "payment_required_hard_stop_active"
+            full_route["reason"], "payment_latch_capacity_exhausted"
         )
+        self.assertEqual(full_route["payment_blocked_providers"], [])
+        self.assertTrue(full_route["payment_latch_capacity_exhausted"])
 
         opener_calls = []
 

@@ -39,6 +39,25 @@ def _holdout_rows() -> list[dict]:
     return rows
 
 
+def _derivation() -> dict:
+    sources = [
+        {"polarity": "positive", "prompt_sha256": "6" * 64},
+        {"polarity": "negative", "prompt_sha256": "7" * 64},
+    ]
+    prompt_hashes = sorted(row["prompt_sha256"] for row in sources)
+    return {
+        "sources": sources,
+        "directions": {"12": {"direction_sha256": "8" * 64}},
+        "label_independence": {
+            "schema": bridge.LABEL_INDEPENDENCE_SCHEMA,
+            "derivation_input_family_sha256": bridge.digest(prompt_hashes),
+            "evaluation_output_labels_resolved_before_derivation": False,
+            "uses_evaluation_output_labels": False,
+            "construction": "fixed semantic positive/negative intermediate activations only; output-label resolution occurs after derivation",
+        },
+    }
+
+
 def _result() -> dict:
     verdict = {
         "pass": True,
@@ -60,13 +79,7 @@ def _result() -> dict:
         "checkpoint_sha256": "4" * 64,
         "tokenizer_sha256": "5" * 64,
         "selected": {"selected": True, "layer": 12, "gain": 4.0},
-        "derivation": {
-            "sources": [
-                {"polarity": "positive", "prompt_sha256": "6" * 64},
-                {"polarity": "negative", "prompt_sha256": "7" * 64},
-            ],
-            "directions": {"12": {"direction_sha256": "8" * 64}},
-        },
+        "derivation": _derivation(),
         "calibration_rows": [{"seed": 1701, "prompt_sha256": "9" * 64}],
         "holdout_rows": _holdout_rows(),
         "verdict": verdict,
@@ -87,9 +100,11 @@ def _intermediate() -> dict:
 
 
 class IntermediateBridgeGateV4Tests(unittest.TestCase):
-    def test_bridge_candidate_survives_current_gate_v4(self):
+    def test_proven_upstream_label_independence_survives_bridge_and_gate_v4(self):
         candidate = bridge.build_direct_candidate(_result(), _intermediate())
-        self.assertIs(candidate["vector_derivation"]["uses_evaluation_output_labels"], False)
+        derivation = candidate["vector_derivation"]
+        self.assertIs(derivation["uses_evaluation_output_labels"], False)
+        self.assertEqual(64, len(derivation["label_independence_receipt_sha256"]))
 
         verdict = gate.adjudicate(candidate)
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
@@ -97,7 +112,25 @@ class IntermediateBridgeGateV4Tests(unittest.TestCase):
         self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertEqual([], verdict["scientific_independence_failures"])
 
-    def test_gate_v4_rejects_same_bridge_shape_if_label_independence_is_removed(self):
+    def test_missing_upstream_label_independence_receipt_blocks_at_bridge(self):
+        result = _result()
+        result["derivation"].pop("label_independence")
+        with self.assertRaisesRegex(bridge.BridgeError, "DERIVATION_LABEL_INDEPENDENCE_RECEIPT_REQUIRED"):
+            bridge.build_direct_candidate(result, _intermediate())
+
+    def test_true_upstream_label_use_blocks_at_bridge(self):
+        result = _result()
+        result["derivation"]["label_independence"]["uses_evaluation_output_labels"] = True
+        with self.assertRaisesRegex(bridge.BridgeError, "DERIVATION_MUST_PROVE_EVALUATION_LABEL_INDEPENDENCE"):
+            bridge.build_direct_candidate(result, _intermediate())
+
+    def test_mismatched_derivation_family_blocks_at_bridge(self):
+        result = _result()
+        result["derivation"]["label_independence"]["derivation_input_family_sha256"] = "0" * 64
+        with self.assertRaisesRegex(bridge.BridgeError, "DERIVATION_LABEL_INDEPENDENCE_FAMILY_MISMATCH"):
+            bridge.build_direct_candidate(result, _intermediate())
+
+    def test_gate_v4_still_rejects_direct_candidate_if_proven_field_is_removed_after_bridge(self):
         candidate = bridge.build_direct_candidate(_result(), _intermediate())
         candidate["vector_derivation"].pop("uses_evaluation_output_labels")
 

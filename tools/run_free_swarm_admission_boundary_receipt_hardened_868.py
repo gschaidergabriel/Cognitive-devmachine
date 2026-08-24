@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Successor hardening for FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1.
 
-This wrapper keeps the canonical v1 runner semantics while closing two source-evidence
+This wrapper keeps the canonical v1 runner semantics while closing source-evidence
 holes before the required exact-source runtime execution:
 
 1. bind both the base runner and this hardening wrapper into the source manifest;
 2. extend the child-process socket tripwire to DNS resolution via getaddrinfo() and
-   the connect_ex() path in addition to create_connection()/connect().
+   the connect_ex() path in addition to create_connection()/connect();
+3. execute a fail-closed discovery regression proving the supervisor-8.68 mandatory
+   blocked-case test methods are actually present in the canonical receipt suite.
 
 It still performs no external provider call and grants no provider/model/HCU/J-Space
 or training credit by source presence alone.
@@ -23,6 +25,8 @@ SELF_REL = "tools/run_free_swarm_admission_boundary_receipt_hardened_868.py"
 BASE_REL = "tools/run_free_swarm_admission_boundary_receipt.py"
 TEST_REL = "tests/test_free_swarm_receipt_runner_hardening_868.py"
 TEST_MODULE = "tests.test_free_swarm_receipt_runner_hardening_868"
+REQUIRED_CASES_TEST_REL = "tests/test_free_swarm_receipt_required_cases_868.py"
+REQUIRED_CASES_TEST_MODULE = "tests.test_free_swarm_receipt_required_cases_868"
 
 
 def _hardened_bootstrap_text() -> str:
@@ -69,13 +73,22 @@ def _install_hardening() -> None:
     if getattr(base, "_CLAY_868_RECEIPT_HARDENING_INSTALLED", False):
         return
 
-    base.TEST_MODULES = tuple(dict.fromkeys((*base.TEST_MODULES, TEST_MODULE)))
-    base.TEST_PATHS = tuple(dict.fromkeys((*base.TEST_PATHS, ROOT / TEST_REL)))
+    base.TEST_MODULES = tuple(dict.fromkeys((
+        *base.TEST_MODULES,
+        TEST_MODULE,
+        REQUIRED_CASES_TEST_MODULE,
+    )))
+    base.TEST_PATHS = tuple(dict.fromkeys((
+        *base.TEST_PATHS,
+        ROOT / TEST_REL,
+        ROOT / REQUIRED_CASES_TEST_REL,
+    )))
     base.SOURCE_PATHS = tuple(dict.fromkeys((
         *base.SOURCE_PATHS,
         BASE_REL,
         SELF_REL,
         TEST_REL,
+        REQUIRED_CASES_TEST_REL,
     )))
     base._bootstrap_text = _hardened_bootstrap_text
 
@@ -88,6 +101,7 @@ def _install_hardening() -> None:
         source["receipt_runner_hardening"] = {
             "authority_epoch": "8.68",
             "base_and_successor_manifest_bound": True,
+            "required_case_discovery_test": REQUIRED_CASES_TEST_REL,
             "bootstrap_tripwires": [
                 "socket.create_connection",
                 "socket.getaddrinfo",

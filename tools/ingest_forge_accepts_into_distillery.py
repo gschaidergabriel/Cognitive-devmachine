@@ -7,13 +7,15 @@ current dataset credit. Admission delegates the acceptance boundary to
 source identities plus CLAY_FORGE_EXECUTION_ADMISSION/v1, isolated execution backend,
 command admission and secret fences as current Forge evidence credit.
 
-Only measured fields enter packet_text. Model-authored hypothesis/falsifier remain
-candidate-only metadata. Distillery idempotence is bound to a replay-stable execution
-evidence identity rather than the byte digest of the full evaluation envelope, so a
-changed observation timestamp, candidate narration or candidate delta identifier cannot
-mint a second dataset packet. If the same execution identity reappears with conflicting
-measured evidence, admission fails closed instead of treating the mutation as a new
-observation.
+Only measured fields enter packet_text. Model-authored hypothesis/falsifier and volatile
+evaluation-envelope fields remain metadata only. Distillery idempotence is bound to a
+replay-stable execution evidence identity rather than the byte digest of the full evaluation
+envelope, so a changed observation timestamp, candidate narration or candidate delta
+identifier cannot mint a second dataset packet. The training-bearing packet preimage follows
+the same stable measured-evidence boundary, so fresh rebuilds of envelope-equivalent evidence
+also produce identical packet bytes and token counts. If the same execution identity reappears
+with conflicting measured evidence, admission fails closed instead of treating the mutation
+as a new observation.
 
 Legacy ingest rows predate the replay-identity columns. They cannot be safely backfilled
 from the reduced legacy table, so a new evaluation colliding on the available legacy
@@ -63,7 +65,12 @@ def admission_reason(row: Any) -> tuple[bool, str]:
 
 
 def measured_packet(row: dict) -> dict:
-    """Return dataset text containing measured evidence, never candidate narration."""
+    """Return replay-stable dataset text containing measured evidence only.
+
+    ``evaluated_at`` and ``delta_id`` are envelope/provenance metadata. They are excluded
+    from the training-bearing packet itself so independent rebuilds of the same measured
+    execution cannot diverge merely because a different observation envelope was seen first.
+    """
     execution_admission = row.get("execution_admission")
     return {
         "schema": "CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2",
@@ -71,7 +78,6 @@ def measured_packet(row: dict) -> dict:
         "evidence_qualification": "EVIDENCE_QUALIFIED_ACCEPT",
         "canonical_truth": False,
         "training_scope": "EXECUTION_EVIDENCE_ONLY_NOT_JSPACE_CAUSAL_CREDIT",
-        "delta_id": str(row.get("delta_id") or ""),
         "worker_sha": row["worker_sha"],
         "source_repo_head": row["source_repo_head"],
         "evaluation_repo_head": row["evaluation_repo_head"],
@@ -88,7 +94,6 @@ def measured_packet(row: dict) -> dict:
         "static_checks_failed": int(row["static_checks_failed"]),
         "benchmark_non_regression": True,
         "requires_rebase_to_evaluation_head": bool(row.get("requires_rebase_to_evaluation_head", False)),
-        "evaluated_at": str(row.get("evaluated_at") or ""),
     }
 
 
@@ -121,16 +126,12 @@ def execution_replay_identity(row: dict) -> dict:
 def measured_evidence_identity(row: dict) -> dict:
     """Return immutable measured evidence for conflict detection.
 
-    ``evaluated_at`` is observation metadata. ``delta_id`` and candidate narration are
-    envelope/candidate metadata rather than measured evidence, so none of them may turn
-    a semantic replay into a new measured-evidence identity.
+    The identity wraps exactly the replay-stable training-bearing packet shape, keeping
+    envelope/candidate metadata out of both dataset bytes and measured-evidence identity.
     """
-    packet = measured_packet(row)
-    packet.pop("evaluated_at", None)
-    packet.pop("delta_id", None)
     return {
         "schema": "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1",
-        "packet": packet,
+        "packet": measured_packet(row),
     }
 
 
@@ -253,6 +254,8 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
         "provider": row.get("provider"),
         "model": row.get("model"),
         "role": row.get("role"),
+        "forge_delta_id_observation_only": row.get("delta_id"),
+        "forge_evaluated_at_observation_only": row.get("evaluated_at"),
         "proposal_hypothesis_candidate_only": row.get("proposal_hypothesis"),
         "proposal_falsifier_candidate_only": row.get("falsifier"),
         "score_semantics": {

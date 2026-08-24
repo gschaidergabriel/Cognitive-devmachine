@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "observed_canonical_main_before_work": "16fcc38e31188322c953474b6b9e9db4bf8a170f",
+  "persistent_research_entity": "Clay",
+  "worker": "GPT-5.6 Sol organ",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "coordination": {
+    "shared_reproducible_macrocycle_identity_available": false,
+    "visible_user_trigger_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0
+  },
+  "observation": {
+    "file": "tools/trigger1_local_qwen06_midlayer_causal.sh",
+    "pre_repair_blob": "22158a450b9c96f9d74a1dc7c2f525316f76055b",
+    "finding": "When free disk is below 4000000 KiB, the cleanup glob RUNNER_TEMP/clay-trigger1-v2-* includes the workflow's current OUT_DIR, so the launcher can delete its own evidence-in-progress directory before disk_preflight.json and the blocked result are persisted.",
+    "classification": "DETERMINISTIC_RUNTIME_PREFLIGHT_EVIDENCE_BLOCKER_NOT_SCIENTIFIC_RESULT"
+  },
+  "hypothesis": "Excluding the canonical current OUT_DIR from bounded stale-run cleanup preserves current evidence while retaining cleanup of disposable siblings.",
+  "counterhypothesis": "The apparent self-delete may be harmless if OUT_DIR is never under the cleanup glob; rejected by the current self-hosted workflow, which explicitly creates RUNNER_TEMP/clay-trigger1-v2-${GITHUB_RUN_ID} and passes it to this launcher.",
+  "delta": {
+    "branch": "gpt56sol/go872-trigger1-preserve-outputdir-20260824",
+    "launcher_commit": "d3a5e02e2b629a2c8beedb48b06af1faa52e7450",
+    "test_commit": "568efc383da86216b33ca243b809340724aa5fec",
+    "launcher_blob": "43615073745b90f20fc900d37c8ac40a001f1003",
+    "test_blob": "26f9f100cd78aa01876ad62cef0a9af0f67921a9",
+    "changes": [
+      "canonicalize and bind OUT_DIR identity before cleanup",
+      "skip the active evidence directory even when it matches the stale-run glob",
+      "retain deletion of stale Trigger-1 sibling directories",
+      "fail closed if OUT_DIR identity changes during cleanup",
+      "persist current_output_preserved=true in disk preflight and low-disk blocked result",
+      "add executable low-disk regression using a fake df with 2500000 KiB available"
+    ]
+  },
+  "verification": {
+    "surface": "LOCAL_DETERMINISTIC_SOURCE_REGRESSION_ONLY",
+    "exact_git_blob_reconstruction": {
+      "launcher": "MATCH",
+      "test": "MATCH"
+    },
+    "command": "python3 -m unittest -v tests/test_trigger1_midlayer_low_disk_cleanup_872.py",
+    "tests": {
+      "passed": 1,
+      "failed": 0
+    },
+    "observed": [
+      "current output directory survives low-disk cleanup",
+      "evidence-in-progress file survives",
+      "stale V2 sibling is removed",
+      "stale legacy-Qwen sibling is removed",
+      "disk_preflight.json persists before/after observed free disk and current_output_preserved=true",
+      "blocked result persists BLOCKED_INSUFFICIENT_FREE_DISK_AFTER_BOUNDED_CLEANUP",
+      "zero_provider_billing=true",
+      "external_provider_credentials_read=false"
+    ],
+    "model_loaded": false,
+    "external_llm_provider_calls": 0,
+    "provider_credentials_read": false,
+    "runtime_credit_scope": "SOURCE_AND_DETERMINISTIC_PREFLIGHT_REGRESSION_ONLY"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_REMOVING_A_DETERMINISTIC_SELF_DELETION_BLOCKER_FROM_THE_RETAINED_LOCAL_RUNTIME_PATH",
+    "track_b_hcu_and_typed_entry": "ADVANCED_HCU_RUNTIME_EVIDENCE_BOUNDARY; NO_TYPED_ENTRY_SEMANTIC_CHANGE",
+    "track_c_jspace_gwt_training_readiness": "ADVANCED_BY_PRESERVING_EXACT_TRIGGER1_MIDLAYER_RUNTIME_RECEIPTS_UNDER_LOW_DISK; NO_JSPACE_MODEL_OR_TRAINING_CREDIT_MINTED"
+  },
+  "credit_after": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse the repair onto current main after re-entry/conflict check, then observe the already-authorized existing Trigger-1 dispatch terminal result; do not create a new unusual intervention without a canonical atomic lease."
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Emit an exact-source FREE Swarm admission-boundary execution receipt.
+'''Emit an exact-source FREE Swarm admission-boundary execution receipt.
 
 Executes the canonical admission-boundary unittest modules in a sanitized child
 process. Provider credentials are not inherited. A Python socket tripwire blocks
@@ -11,9 +11,13 @@ and the shared ``rae_secret_loader`` primitive so direct/legacy callers cannot
 inspect provider environment variables or repository secret stores before
 canonical typed FREE admission.
 
+The receipt separately records every unittest that actually starts and refuses
+promotion unless all supervisor-8.68 mandatory blocked-case methods are present
+in that execution record. A merely present test file cannot satisfy the gate.
+
 Component evidence only: this runner does not admit or call any external provider
 and cannot establish whole EntityOS/HCU, HCU, J-Space-model, or training credit.
-"""
+'''
 from __future__ import annotations
 
 import argparse
@@ -47,7 +51,17 @@ TEST_PATHS = (
 INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
 
+REQUIRED_BLOCKED_CASE_TEST_METHODS = (
+    "test_global_attestation_missing_has_zero_secret_and_network_access",
+    "test_unknown_paid_subscription_all_fail_before_secret_or_network",
+    "test_missing_provider_admission_file_fails_before_secret_or_network",
+    "test_authority_epoch_mismatch_fails_closed",
+    "test_unlisted_provider_fails_closed",
+    "test_malformed_admission_has_zero_secret_lookup_and_zero_network",
+)
+
 SOURCE_PATHS = (
+    "tools/run_free_swarm_admission_boundary_receipt.py",
     "tests/test_free_swarm_admission_boundary_867.py",
     "tests/test_free_swarm_admission_boundary_868_malformed.py",
     "tests/test_free_provider_admission_forgery_868.py",
@@ -161,11 +175,12 @@ import socket
 import sys
 import unittest
 
-log_path = Path(os.environ["CLAY_NETWORK_TRIPWIRE_LOG"])
+network_log_path = Path(os.environ["CLAY_NETWORK_TRIPWIRE_LOG"])
+test_log_path = Path(os.environ["CLAY_TEST_EXECUTION_LOG"])
 
 def record(kind, target):
     try:
-        with log_path.open("a", encoding="utf-8") as fh:
+        with network_log_path.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps({"kind": kind, "target": repr(target)}, separators=(",", ":")) + "\n")
     finally:
         raise RuntimeError("CLAY_BOUNDARY_NETWORK_TRIPWIRE")
@@ -176,15 +191,21 @@ def guarded_connect(self, address):
 def guarded_create_connection(address, *args, **kwargs):
     return record("socket.create_connection", address)
 
+class RecordingResult(unittest.TextTestResult):
+    def startTest(self, test):
+        with test_log_path.open("a", encoding="utf-8") as fh:
+            fh.write(test.id() + "\n")
+        super().startTest(test)
+
 socket.socket.connect = guarded_connect
 socket.create_connection = guarded_create_connection
 suite = unittest.defaultTestLoader.loadTestsFromNames(sys.argv[1:])
-result = unittest.TextTestRunner(verbosity=2).run(suite)
+result = unittest.TextTestRunner(verbosity=2, resultclass=RecordingResult).run(suite)
 raise SystemExit(0 if result.wasSuccessful() else 1)
 '''
 
 
-def _safe_child_env(temp_home: Path, network_log: Path) -> dict[str, str]:
+def _safe_child_env(temp_home: Path, network_log: Path, test_log: Path) -> dict[str, str]:
     env: dict[str, str] = {
         "PATH": os.environ.get("PATH", "/usr/bin:/bin"),
         "HOME": str(temp_home),
@@ -193,6 +214,7 @@ def _safe_child_env(temp_home: Path, network_log: Path) -> dict[str, str]:
         "PYTHONDONTWRITEBYTECODE": "1",
         "PYTHONNOUSERSITE": "1",
         "CLAY_NETWORK_TRIPWIRE_LOG": str(network_log),
+        "CLAY_TEST_EXECUTION_LOG": str(test_log),
     }
     env["PYTHONPATH"] = os.pathsep.join((str(ROOT), str(ROOT / "tools")))
     for name in PROVIDER_SECRET_NAMES:
@@ -211,6 +233,23 @@ def _network_attempts(path: Path) -> list[dict[str, Any]]:
             value = {"raw": line}
         rows.append(value if isinstance(value, dict) else {"value": value})
     return rows
+
+
+def _executed_tests(path: Path) -> list[str]:
+    if not path.exists():
+        return []
+    return [
+        line.strip()
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines()
+        if line.strip()
+    ]
+
+
+def _required_case_coverage(executed_tests: list[str]) -> dict[str, bool]:
+    return {
+        method: any(test_id.endswith("." + method) for test_id in executed_tests)
+        for method in REQUIRED_BLOCKED_CASE_TEST_METHODS
+    }
 
 
 def _write_receipt(path: Path | None, receipt: dict[str, Any]) -> None:
@@ -245,8 +284,9 @@ def main(argv: list[str] | None = None) -> int:
         temp = Path(td)
         bootstrap = temp / "boundary_bootstrap.py"
         network_log = temp / "network_tripwire.jsonl"
+        test_log = temp / "executed_tests.txt"
         bootstrap.write_text(_bootstrap_text(), encoding="utf-8")
-        env = _safe_child_env(temp, network_log)
+        env = _safe_child_env(temp, network_log, test_log)
         command = [sys.executable, str(bootstrap), *TEST_MODULES]
         proc = subprocess.run(
             command,
@@ -259,6 +299,7 @@ def main(argv: list[str] | None = None) -> int:
             timeout=120,
         )
         attempts = _network_attempts(network_log)
+        executed_tests = _executed_tests(test_log)
 
     finished = dt.datetime.now(dt.timezone.utc)
     combined = proc.stdout + "\n" + proc.stderr
@@ -266,7 +307,21 @@ def main(argv: list[str] | None = None) -> int:
     test_count = int(match.group(1)) if match else None
     unittest_ok = proc.returncode == 0 and re.search(r"(?:^|\n)OK(?:\s|\n|$)", combined) is not None
     sentinel_leaked = SENTINEL in combined
-    pass_boundary = bool(unittest_ok and not attempts and not sentinel_leaked and not dirty)
+    required_case_coverage = _required_case_coverage(executed_tests)
+    required_case_coverage_ok = all(required_case_coverage.values())
+    execution_log_consistent = (
+        test_count is not None
+        and test_count > 0
+        and len(executed_tests) == test_count
+    )
+    pass_boundary = bool(
+        unittest_ok
+        and execution_log_consistent
+        and required_case_coverage_ok
+        and not attempts
+        and not sentinel_leaked
+        and not dirty
+    )
 
     receipt = {
         "schema": "FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1",
@@ -297,6 +352,9 @@ def main(argv: list[str] | None = None) -> int:
             "bootstrap_sha256": _sha256_bytes(_bootstrap_text().encode("utf-8")),
             "exit_code": proc.returncode,
             "tests_reported": test_count,
+            "executed_test_count": len(executed_tests),
+            "executed_test_ids": executed_tests,
+            "execution_log_consistent": execution_log_consistent,
             "stdout_sha256": _sha256_bytes(proc.stdout.encode("utf-8")),
             "stderr_sha256": _sha256_bytes(proc.stderr.encode("utf-8")),
         },
@@ -310,6 +368,8 @@ def main(argv: list[str] | None = None) -> int:
             "malformed_admission_zero_assertions": "ENFORCED_BY_TEST_FREE_SWARM_ADMISSION_BOUNDARY_868_MALFORMED",
             "caller_forgery_non_authority_assertions": "ENFORCED_BY_TEST_FREE_PROVIDER_ADMISSION_FORGERY_868",
             "shared_secret_loader_pretouch_assertions": "ENFORCED_BY_TEST_RAE_SECRET_LOADER_PROVIDER_ADMISSION",
+            "required_blocked_case_tests_observed": required_case_coverage,
+            "required_blocked_case_coverage_ok": required_case_coverage_ok,
         },
         "result": {
             "unittest_ok": unittest_ok,

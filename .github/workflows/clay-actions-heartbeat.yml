@@ -111,16 +111,76 @@ jobs:
           persist-credentials: true
 
       - name: Guard source identity and storage headroom
+        id: preflight
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test -z "$(git status --porcelain=v1)"
+          observed_head="$(git rev-parse HEAD)"
+          dirty="$(git status --porcelain=v1)"
           avail_kib="$(df -Pk . | awk 'NR==2 {print $4}')"
-          test "$avail_kib" -ge 6291456
-          sha256sum tools/trigger1_local_qwen06_activation_api_execute.py
-          python3 --version
-          echo "CLAY_TRIGGER1_QWEN06_PREFLIGHT=PASS"
+          status='PASS'
+          if [[ "$observed_head" != "$GITHUB_SHA" ]]; then
+            status='BLOCKED_SOURCE_HEAD_MISMATCH'
+          elif [[ -n "$dirty" ]]; then
+            status='BLOCKED_SOURCE_DIRTY_AFTER_CHECKOUT'
+          elif [[ "$avail_kib" -lt 6291456 ]]; then
+            status='BLOCKED_INSUFFICIENT_FREE_DISK'
+          fi
+          preflight="${RUNNER_TEMP:-/tmp}/clay-trigger1-qwen06-preflight-${GITHUB_RUN_ID}.json"
+          STATUS="$status" OBSERVED_HEAD="$observed_head" AVAILABLE_KIB="$avail_kib" PREFLIGHT="$preflight" python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          payload={
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_PREFLIGHT/v1',
+              'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+              'github_sha':os.environ.get('GITHUB_SHA'),
+              'observed_head':os.environ['OBSERVED_HEAD'],
+              'source_dirty':bool(os.popen('git status --porcelain=v1').read().strip()),
+              'available_kib':int(os.environ['AVAILABLE_KIB']),
+              'required_kib':6291456,
+              'status':os.environ['STATUS'],
+              'canonical_credit_minted':False,
+              'whole_entityos_hcu_credit_minted':False,
+              'jspace_model_runtime_credit_minted':False,
+              'training_credit_minted':False,
+          }
+          Path(os.environ['PREFLIGHT']).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,sort_keys=True))
+          PY
+          echo "path=$preflight" >> "$GITHUB_OUTPUT"
+          if [[ "$status" == 'PASS' ]]; then
+            echo 'admitted=true' >> "$GITHUB_OUTPUT"
+            sha256sum tools/trigger1_local_qwen06_activation_api_execute.py
+            python3 --version
+            echo "CLAY_TRIGGER1_QWEN06_PREFLIGHT=PASS"
+          else
+            echo 'admitted=false' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Persist exact blocked preflight receipt
+        if: steps.preflight.outputs.admitted != 'true'
+        uses: actions/github-script@v7
+        env:
+          PREFLIGHT_PATH: ${{ steps.preflight.outputs.path }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync(process.env.PREFLIGHT_PATH, 'utf8');
+            const path = `research_entity/runtime/local_qwen06/actions/${context.runId}-preflight.json`;
+            await github.rest.repos.createOrUpdateFileContents({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path,
+              message: `evidence(trigger1): persist blocked Qwen06 preflight ${context.runId} [skip ci]`,
+              content: Buffer.from(body, 'utf8').toString('base64'),
+              branch: 'main'
+            });
+
+      - name: Fail closed when Qwen06 preflight is blocked
+        if: steps.preflight.outputs.admitted != 'true'
+        shell: bash
+        run: exit 1
 
       - name: Prepare isolated zero-cost Python runtime
         id: deps

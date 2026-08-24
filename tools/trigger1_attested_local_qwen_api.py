@@ -135,6 +135,7 @@ def _popen(args,*a,**kw):
   ["git","-C",root,"rev-parse","HEAD"],
   ["git","-C",root,"rev-parse","HEAD^{tree}"],
   ["git","-C",root,"status","--porcelain=v1"],
+  ["uname","-p"],
  )
  if seq in allowed:return _op(args,*a,**kw)
  _log("blocked_child_subprocess",argv0=(str(seq[0])[:120] if seq else type(args).__name__));raise RuntimeError("BLOCKED_CHILD_SUBPROCESS")
@@ -388,7 +389,7 @@ def main() -> int:
         "blocked_child_subprocess_attempts": blocked_child_subprocess_attempts,
         "removed_sensitive_env_names": removed,
         "offline_model_cache_required": True,
-        "network_policy": "PYTHON_SOCKET_LOOPBACK_ONLY_PLUS_CHILD_SUBPROCESS_DENY_EXCEPT_READONLY_GIT_IDENTITY",
+        "network_policy": "PYTHON_SOCKET_LOOPBACK_ONLY_PLUS_SUBPROCESS_POPEN_DENY_EXCEPT_READONLY_GIT_IDENTITY_AND_UNAME_P",
         "child_stdout_sha256": hashlib.sha256(proc.stdout.encode("utf-8")).hexdigest(),
         "child_stderr_sha256": hashlib.sha256(proc.stderr.encode("utf-8")).hexdigest(),
         "child_exit_code": proc.returncode,

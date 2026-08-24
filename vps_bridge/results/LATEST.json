@@ -1,20 +1,17 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "sync-detailed-analysis-v3-20260824T1900p0700",
-  "command_sha256": "ec8a0a88a1051edbab3fa883c3b7ea4d428ea3b13f39ba3f57d3027b957ae80a",
-  "started_at": "2026-08-24T11:48:53.368640+00:00",
-  "finished_at": "2026-08-24T11:48:55.176370+00:00",
+  "command_id": "test-detailed-analysis-v3-20260824T1901p0700",
+  "command_sha256": "91e74071e0083c6d3af6232a81f92d8e5f26a8521f4f083c80377f99f6759ae0",
+  "started_at": "2026-08-24T11:49:19.244259+00:00",
+  "finished_at": "2026-08-24T11:49:20.465157+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "canonical_sync",
-  "stdout_sha256": "4fcb5c0e1b4502579e32be3f185726352c682211e8ad27fce3a6446b077f0b1f",
+  "op": "exec",
+  "stdout_sha256": "e75b31af4590aa93a95c1f6fd65105fba0685e833adae936665b9b7cd3781ebc",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "deb159bbbf09d1e0b975cef99ccfcc88509f7c4c\n",
+  "stdout_tail": "{\"state\": \"LIVE\", \"collected\": 11621, \"accepted\": 0, \"yield\": 0.0, \"near_miss\": 0, \"system_analysis_rc\": 0}\n{\"runtime\": {\"supervisor\": \"RUNNING\", \"go_swarm\": \"STOPPED/QUARANTINED\", \"distillery\": \"RUNNING\", \"evidence_forge\": \"RUNNING\", \"dashboard\": \"RUNNING\", \"local_model\": \"NOT_READY\", \"provider_admission\": {\"schema\": \"ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1\", \"ok\": false, \"admitted_free_providers\": [], \"status\": \"PROVIDER_ADMISSION_AUTHORITY_EPOCH_MISMATCH\"}, \"policy\": \"EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE\"}, \"conversion\": {\"successful\": 414, \"delta\": 0, \"ready\": 0, \"questions\": 57, \"macrocycles\": 31, \"delta_rate\": 0.0, \"ready_rate\": 0.0, \"question_rate\": 0.13768115942028986, \"avg_cycle_delta_rate\": 0.0, \"avg_cycle_ready_rate\": 0.0}, \"go_feedback\": {\"receipts\": 0, \"cycles\": 0, \"coverage\": null, \"source_to_go\": 0.0, \"definition\": \"accepted dataset-token yield \u00d7 average distinct accepted-packet coverage delivered to GO macrocycles\"}, \"forge\": {\"discovery_queries\": 142, \"discovery_hits\": 705, \"evaluations\": 0, \"accepted_deltas\": 0}, \"costs\": {\"price_basis\": \"Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output\", \"free_swarm_sonnet5_equivalent_usd\": 11.03895, \"distillery_sonnet5_equivalent_usd\": 0.015470000000000001, \"measured_total_sonnet5_equivalent_usd\": 11.05442, \"verified_historical_savings_usd\": null, \"nominal_avoided_if_zero_cost_usd\": 11.05442, \"repo_output_only_proxy_usd\": 117.94336}}\n60:**Source \u2192 GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield \u00d7 average distinct accepted-packet coverage delivered to GO macrocycles`.\n62:Aus 414 erfolgreichen historischen GO-Workeroutputs \u00fcber **31 rekonstruierte 12-Rollen-Makrozyklen** enthalten 0 maschinenlesbare Deltas (0.000%) und 0 forge-ready Deltas (0.000%); \u00d8 pro Makrozyklus: Deltaquote 0.000%, forge-ready 0.000%.\n80:| **Evidence Forge** `run_free_evidence_forge.py` | Suche \u2192 Repo/Patch \u2192 Test/Benchmark \u2192 Evidenz | RUNNING | **142 Queries / 705 Hits**; 0 Evaluations; 0 akzeptierte Deltas |\n81:| **Local 4B lane** `local_research_model_server.sh` | providerunabh\u00e4ngige lokale Synthese/Vorfilterung | NOT_READY | Ready wird nur per Loopback-Health best\u00e4tigt; Build \u2260 Runtime-PASS |\n254:## 2. Historischer initialer Startstand \u2014 2026-08-24 (nicht aktueller Runtime-Stand)\n",
   "stderr_tail": "",
-  "meta": {
-    "head": "deb159bbbf09d1e0b975cef99ccfcc88509f7c4c",
-    "ref": "main"
-  },
+  "meta": {},
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

@@ -51,14 +51,16 @@ Obscure sources may pass. Famous sources may fail.
 
 ## Reviewer panel
 
-Target panel per candidate:
+Preferred panel per candidate:
 
 - one NVIDIA reviewer lane;
 - two distinct Mistral-family reviewer lanes.
 
-Direct Mistral FREE_ONLY credentials are preferred. When absent, Mistral-family routes exposed free through another authorized provider may fill the lanes only under their exact provider/model identity. Missing lanes remain explicitly underfilled; they are never fabricated.
+Direct Mistral FREE_ONLY credentials are preferred. When absent, Mistral-family routes exposed free through another authorized provider may fill the lanes only under their exact provider/model identity. Missing Mistral lanes are never fabricated or relabeled.
 
-Acceptance requires at least two independent reviewer votes including NVIDIA and at least one Mistral-family vote, no hard contradiction flag, and the configured intrinsic/GRF/project/novelty thresholds. The preferred full panel remains 1 NVIDIA + 2 Mistral-family lanes.
+A preferred-panel acceptance requires the configured intrinsic/GRF/project/novelty thresholds, no hard contradiction, and real reviewer votes.
+
+If the current FREE_ONLY runtime cannot expose two real Mistral-family reviewer routes, the research loop may use a **provisional fallback panel** consisting of one real NVIDIA reviewer plus two distinct zero-priced OpenRouter reviewer models. This is explicitly labeled `PROVISIONAL_NON_MISTRAL_FALLBACK`, uses stricter thresholds, remains candidate research only, and is eligible for later re-review when real Mistral lanes become available. A fallback model must never be called or counted as Mistral.
 
 ## Raw-data deletion and durable dataset
 
@@ -68,13 +70,13 @@ The SQLite dataset is stored under the persistent `/artifacts` mount so sandbox 
 
 ## GO integration
 
-Accepted packets are candidate research evidence, not canonical/effect authority. The main GO swarm reads a bounded set of accepted packets into `DISTILLED_RESEARCH_DATASET` on subsequent prompts. GO workers generate new open questions, closing the feedback loop.
+Accepted and explicitly provisional packets are candidate research evidence, not canonical/effect authority. The main GO swarm reads a bounded set of packets into `DISTILLED_RESEARCH_DATASET` on subsequent prompts. GO workers generate new open questions, closing the feedback loop.
 
 ## Shared FREE_ONLY limits
 
 The main Free Swarm and research distillery share `provider_budget.sqlite3`. It coordinates cross-process provider concurrency, minimum spacing and provider-wide cooldown observations. HTTP 429 / `Retry-After` update the shared provider state. Credentials are never rotated to evade organization/project limits. HTTP 402 remains a hard stop; no paid fallback is authorized.
 
-OpenRouter small-model selection requires live zero-priced prompt and completion pricing. Approximately 4B routes are preferred; if no zero-priced 4B route exists in the live catalog, the smallest/highest-utility zero-priced models may be used and must retain exact model identity.
+OpenRouter small-model selection requires live zero-priced prompt and completion pricing. Approximately 4B or 4B-active routes are preferred; if no zero-priced route in that class exists, the smallest/highest-utility zero-priced models may be used and must retain exact model identity.
 
 ## Dashboard metric
 

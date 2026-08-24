@@ -5,6 +5,11 @@ The provider admission file grants owner-authorized access to free contingents.
 This module is the narrower runtime gate required by supervisor epochs 8.70/8.71:
 a concrete credential fingerprint + endpoint + model/route must have zero-cost/free
 provider-side evidence before an autonomous network call is allowed.
+
+Positive execution bindings are also successor-bound to the canonical
+SUPERVISOR_INBOX and the exact steering bytes selected by that inbox. Admission and
+economic provenance therefore cannot remain a self-consistent stale executable
+island after supervisor revocation or epoch advance.
 """
 from __future__ import annotations
 
@@ -18,11 +23,13 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 PROVENANCE_PATH = ROOT / "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json"
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
+SUPERVISOR_INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 DEFAULT_ARTIFACTS = Path("/artifacts/clay-entityos-swarm")
 RECEIPT_SCHEMA = "FREE_LANE_EXECUTION_RECEIPT/v1"
 NVIDIA_ENTITLEMENT_SCHEMA = "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT/v1"
 ADMISSION_SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
 PROVENANCE_SCHEMA = "ENTITYOS_HCU_FREE_LANE_ECONOMIC_PROVENANCE/v1"
+_DENY_EXECUTION_MARKERS = ("QUARANTIN", "BLOCK", "FORBID", "DISABL", "REVOK")
 
 
 def _json_snapshot(path: Path) -> tuple[dict[str, Any], str]:
@@ -256,6 +263,61 @@ def lane_evidence(
     )
 
 
+def _current_supervisor_snapshot() -> dict[str, Any]:
+    """Resolve the canonical current supervisor and bind its exact bytes."""
+    inbox, inbox_digest = _json_snapshot(SUPERVISOR_INBOX_PATH)
+    epoch = str(inbox.get("schema_version") or "").strip()
+    steering_ref = inbox.get("steering")
+    if not epoch or not isinstance(steering_ref, str) or not steering_ref.strip():
+        raise ValueError("SUPERVISOR_IDENTITY_REQUIRED")
+    rel = Path(steering_ref)
+    if rel.is_absolute() or ".." in rel.parts:
+        raise ValueError("SUPERVISOR_STEERING_REF_INVALID")
+    repo_root = ROOT.resolve()
+    steering_path = (repo_root / rel).resolve()
+    try:
+        steering_path.relative_to(repo_root)
+    except ValueError as exc:
+        raise ValueError("SUPERVISOR_STEERING_REF_OUTSIDE_REPO") from exc
+    steering, steering_digest = _json_snapshot(steering_path)
+    if str(steering.get("schema_version") or "").strip() != epoch:
+        raise ValueError("SUPERVISOR_INBOX_STEERING_EPOCH_MISMATCH")
+    if (
+        steering.get("active_program") != "ENTITYOS_HCU"
+        or steering.get("product") != "EntityOS"
+        or steering.get("integrated_cognition_compute_architecture") != "HCU"
+    ):
+        raise ValueError("SUPERVISOR_PRODUCT_AUTHORITY_MISMATCH")
+    free_only = steering.get("free_only")
+    if not isinstance(free_only, dict) or free_only.get("enabled") is not True:
+        raise ValueError("SUPERVISOR_FREE_ONLY_REQUIRED")
+    if free_only.get("no_paid_fallback") is not True:
+        raise ValueError("SUPERVISOR_NO_PAID_FALLBACK_REQUIRED")
+    if free_only.get("together_forbidden") is not True:
+        raise ValueError("SUPERVISOR_TOGETHER_FENCE_REQUIRED")
+    owner_contingents = free_only.get("owner_authorized_free_contingents")
+    if not isinstance(owner_contingents, list):
+        raise ValueError("SUPERVISOR_OWNER_FREE_CONTINGENTS_REQUIRED")
+    normalized_contingents = tuple(
+        sorted({str(item).strip().lower() for item in owner_contingents if str(item).strip()})
+    )
+    execution_state = str(
+        free_only.get("execution_state")
+        or free_only.get("external_llm_provider_execution")
+        or "OWNER_AUTHORIZED_FREE_CONTINGENTS"
+    ).strip().upper()
+    if any(marker in execution_state for marker in _DENY_EXECUTION_MARKERS):
+        raise ValueError("SUPERVISOR_EXTERNAL_PROVIDER_EXECUTION_NOT_AUTHORIZED")
+    return {
+        "epoch": epoch,
+        "steering_ref": steering_ref,
+        "inbox_digest": inbox_digest,
+        "steering_digest": steering_digest,
+        "execution_state": execution_state,
+        "owner_authorized_free_contingents": normalized_contingents,
+    }
+
+
 def current_lane_binding(
     provider: str,
     credential_fingerprint: str,
@@ -266,22 +328,32 @@ def current_lane_binding(
 ) -> dict[str, Any]:
     """Return one exact pre-call authorization snapshot for a concrete lane."""
     try:
+        supervisor = _current_supervisor_snapshot()
         admission, admission_digest = _json_snapshot(ADMISSION_PATH)
         provenance, provenance_digest = _json_snapshot(PROVENANCE_PATH)
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
-        return {"ok": False, "reason": "FREE_LANE_AUTHORITY_SNAPSHOT_INVALID", "detail": type(exc).__name__}
+        return {
+            "ok": False,
+            "reason": "FREE_LANE_AUTHORITY_SNAPSHOT_INVALID",
+            "detail": str(exc) or type(exc).__name__,
+        }
 
     if admission.get("schema") != ADMISSION_SCHEMA or admission.get("mode") != "FREE_ONLY":
         return {"ok": False, "reason": "FREE_PROVIDER_ADMISSION_AUTHORITY_INVALID"}
     epoch = str(admission.get("authority_epoch") or "")
     if not epoch:
         return {"ok": False, "reason": "FREE_PROVIDER_ADMISSION_EPOCH_MISSING"}
+    if epoch != supervisor["epoch"]:
+        return {"ok": False, "reason": "FREE_LANE_SUPERVISOR_EPOCH_MISMATCH"}
     if provenance.get("schema") != PROVENANCE_SCHEMA or provenance.get("mode") != "FREE_ONLY":
         return {"ok": False, "reason": "ECONOMIC_PROVENANCE_AUTHORITY_INVALID"}
     if str(provenance.get("authority_epoch") or "") != epoch:
         return {"ok": False, "reason": "FREE_LANE_AUTHORITY_EPOCH_MISMATCH"}
 
-    provider_admission = ((admission.get("providers") or {}).get(provider) or {})
+    provider_name = provider.strip().lower()
+    if provider_name not in supervisor["owner_authorized_free_contingents"]:
+        return {"ok": False, "reason": "PROVIDER_NOT_AUTHORIZED_BY_CURRENT_SUPERVISOR"}
+    provider_admission = ((admission.get("providers") or {}).get(provider_name) or {})
     if provider_admission.get("admitted") is not True:
         return {"ok": False, "reason": "PROVIDER_NOT_CURRENTLY_ADMITTED"}
     if provider_admission.get("cost_class") != "FREE":
@@ -289,7 +361,7 @@ def current_lane_binding(
 
     evidence = _lane_evidence_from_provenance(
         provenance,
-        provider,
+        provider_name,
         credential_fingerprint,
         model_or_route,
         endpoint,
@@ -299,6 +371,9 @@ def current_lane_binding(
         return {
             "ok": False,
             "reason": evidence.get("reason") or "FREE_LANE_ECONOMIC_PROVENANCE_REQUIRED",
+            "supervisor_epoch": supervisor["epoch"],
+            "supervisor_inbox_digest": supervisor["inbox_digest"],
+            "supervisor_steering_digest": supervisor["steering_digest"],
             "admission_epoch": epoch,
             "admission_digest": admission_digest,
             "economic_provenance_digest": provenance_digest,
@@ -306,6 +381,11 @@ def current_lane_binding(
     return {
         "ok": True,
         "observed_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "supervisor_epoch": supervisor["epoch"],
+        "supervisor_steering_ref": supervisor["steering_ref"],
+        "supervisor_execution_state": supervisor["execution_state"],
+        "supervisor_inbox_digest": supervisor["inbox_digest"],
+        "supervisor_steering_digest": supervisor["steering_digest"],
         "admission_epoch": epoch,
         "admission_digest": admission_digest,
         "economic_provenance_digest": provenance_digest,
@@ -314,16 +394,20 @@ def current_lane_binding(
 
 
 def binding_still_current(binding: dict[str, Any]) -> bool:
-    """Re-read authority files and compare exact digests without granting authority."""
+    """Re-resolve current authority and compare every bound digest fail-closed."""
     if not binding.get("ok"):
         return False
     try:
+        supervisor = _current_supervisor_snapshot()
         _, admission_digest = _json_snapshot(ADMISSION_PATH)
         _, provenance_digest = _json_snapshot(PROVENANCE_PATH)
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
         return False
     return (
-        admission_digest == binding.get("admission_digest")
+        supervisor["epoch"] == binding.get("supervisor_epoch")
+        and supervisor["inbox_digest"] == binding.get("supervisor_inbox_digest")
+        and supervisor["steering_digest"] == binding.get("supervisor_steering_digest")
+        and admission_digest == binding.get("admission_digest")
         and provenance_digest == binding.get("economic_provenance_digest")
     )
 
@@ -366,6 +450,11 @@ def emit_execution_receipt(
         "credential_fingerprint": credential_fingerprint,
         "model_or_route": model_or_route,
         "endpoint_host": _host(endpoint),
+        "supervisor_epoch": binding.get("supervisor_epoch"),
+        "supervisor_steering_ref": binding.get("supervisor_steering_ref"),
+        "supervisor_execution_state": binding.get("supervisor_execution_state"),
+        "supervisor_inbox_digest": binding.get("supervisor_inbox_digest"),
+        "supervisor_steering_digest": binding.get("supervisor_steering_digest"),
         "typed_admission_epoch": binding.get("admission_epoch"),
         "typed_admission_digest": binding.get("admission_digest"),
         "economic_provenance_digest": binding.get("economic_provenance_digest"),

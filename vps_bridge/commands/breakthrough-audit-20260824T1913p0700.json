@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"breakthrough-audit-20260824T1913p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -euo pipefail; echo HEAD=$(git rev-parse HEAD); echo REMOTE=$(git ls-remote origin refs/heads/main | awk '{print $1}'); echo ---DISK---; df -h /workspace /cache /artifacts; echo ---PROCS---; ps -eo pid,etime,args | grep -E '[r]un_24h_entityos_swarm_supervisor|[r]un_research_distillery|[r]un_free_evidence_forge|[f]ree swarm/evaluate.py|[l]lama-server'; echo ---FORGE-FUNCS---; grep -nE '^def |^async def ' tools/run_free_evidence_forge.py | tail -35; echo ---FORGE-TAIL---; tail -220 tools/run_free_evidence_forge.py; echo ---FORGE-DB---; python3 - <<'PY'\nimport sqlite3, json, pathlib\np=pathlib.Path('/artifacts/clay-entityos-swarm/forge/forge.sqlite3')\ncon=sqlite3.connect(p); con.row_factory=sqlite3.Row\nfor t in ('candidates','discoveries','processed_questions','counters'):\n try:\n  n=con.execute(f'SELECT COUNT(*) FROM {t}').fetchone()[0]\n  print(t,n)\n except Exception as e: print(t,type(e).__name__,str(e))\nprint('github discoveries',con.execute(\"SELECT COUNT(*) FROM discoveries WHERE provider='github'\").fetchone()[0])\nprint('candidate states',con.execute('SELECT state,COUNT(*) FROM candidates GROUP BY state').fetchall())\nprint('sample github')\nfor r in con.execute(\"SELECT question,source_id,title,url,metadata_json FROM discoveries WHERE provider='github' LIMIT 8\"):\n print(dict(r))\nPY\necho ---LOCAL-MODEL---; curl -fsS --max-time 2 http://127.0.0.1:8088/health || true; echo; ps -eo pid,etime,args | grep -E '[c]make --build .*(llama|research)|[l]lama-server|[l]ocal_research_model_server' || true"
+}

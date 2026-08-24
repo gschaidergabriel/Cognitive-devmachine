@@ -1,0 +1,93 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXACT_HEAD_FUNCTION_RUNTIME_BOOT_OBSERVATION/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "12898bc075a43029be3be40ae4ee2af2937762fe",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_EXACT_DEPLOYMENT_RUNTIME_OBSERVATION"
+  },
+  "executor": {
+    "identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "exact_head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_state_observed": "READY",
+    "deployment_git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "deployment_git_sha_matches_head": true,
+    "lambda_runtime_stats": {
+      "nodejs_functions": 12
+    }
+  },
+  "runtime_log_observation": {
+    "source": "Vercel runtime logs scoped to exact deployment",
+    "timestamp_utc": "2026-08-24T04:01:43Z",
+    "request_path": "/api/sandbox-probe",
+    "http_status": 200,
+    "runtime_class": "serverless",
+    "cache": "MISS",
+    "function_invocation_observed": true,
+    "response_body_observed": false,
+    "query_string_observed_in_log": false,
+    "request_initiator_proven": false,
+    "log_payload_note": "The runtime log contained a Node DEP0169 url.parse deprecation warning but no application response body."
+  },
+  "exact_source_constraint": {
+    "source_path": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "source_blob_sha": "6630570d16a62f937a6512d682dfcb86ae8a4102",
+    "source_commit": "2da99e0458809988190c129b04cae913d1f15d92",
+    "current_research_supervisor_constant": "SUPERVISOR_STEERING_8_64",
+    "runtime_admission_case": "runtime-admission",
+    "runtime_admission_status": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "remaining_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_execution_admitted": false,
+    "source_path_reasoning": "At this exact source identity, preview-authority failure returns 403, unsupported case returns 400, the runtime-admission case returns 200 before the Sandbox gate, and all selftest/family-split paths reach the fail-closed Sandbox admission check before Sandbox.create. Because the exact admission source has remaining_sandbox_quota_directly_observed=false and runtime_gate=BLOCKED_QUOTA_UNOBSERVED, the observed 200 is source-constrained evidence of the pre-Sandbox runtime-admission branch rather than Sandbox execution.",
+    "inference_class": "SOURCE_CONSTRAINED_FROM_EXACT_DEPLOYED_CODE_PLUS_EXACT_RUNTIME_STATUS; RESPONSE_BODY_NOT_DIRECTLY_OBSERVED"
+  },
+  "result": {
+    "function_runtime_boot": "PASS_AT_EXACT_DEPLOYMENT_ROUTE_INVOCATION_SCOPE",
+    "supervisor_864_function_boot_alignment": "SUPPORTED_BY_EXACT_DEPLOYED_SOURCE",
+    "sandbox_create_performed": false,
+    "environment_capability_probe_executed": false,
+    "python_version_observed": false,
+    "sqlite3_observed": false,
+    "_sqlite3_observed": false,
+    "hcu_regression_executed": false,
+    "model_execution_observed": false,
+    "jspace_gwt_observed": false
+  },
+  "hypothesis": "After the supervisor-8.64 guard repair, the exact retained executor can boot a protected preview Function at the exact READY head even while the FREE_ONLY Sandbox quota gate remains closed.",
+  "counterhypothesis": "The READY deployment still has no executable Function-level evidence, or the observed 200 can be promoted to Sandbox/HCU/J-Space execution.",
+  "discriminator_result": "FIRST CLAUSE REJECTED AT FUNCTION-BOOT SCOPE: exact deployment runtime logs contain a 200 serverless request to /api/sandbox-probe. SECOND CLAUSE REJECTED: exact deployed source keeps remaining quota unobserved, sandboxExecutionAdmitted() false, and the 200 runtime-admission branch returns before Sandbox.create. No Python/SQLite/HCU/model/J-Space code is thereby executed.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact live executor progressed from READY-only/access-blocked evidence to exact deployment Function-runtime boot evidence under supervisor 8.64 while preserving the FREE_ONLY pre-Sandbox gate",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the newly observed 200 is pre-Sandbox Function boot only; no HCU/Typed Entry executable path ran and supervisor 8.64 forbids source-guard proliferation without executable counterevidence requiring a guard",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no Sandbox Python/SQLite environment, real model invocation, J-Space/GWT intervention, causal training trace, or training run was observed"
+  },
+  "credits": {
+    "exact_head_build_deployment_identity": "PASS",
+    "function_runtime_boot": "PASS_AT_DECLARED_PRE_SANDBOX_ROUTE_SCOPE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Re-enter current Research main and live PR1263/PR810 heads before any further execution claim.",
+    "Obtain a directly observed authoritative remaining included Vercel Sandbox quota/entitlement signal without inferring it from Hobby plan identity and without paid upgrade/fallback.",
+    "Only if FREE_ONLY admission genuinely opens, run the exact-head fixed environment capability probe and bind Python version, sqlite3/_sqlite3 availability, exact executor/source identity, secret fence, result digest, exit status and cleanup.",
+    "Only after environment PASS continue canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> inference receipt -> Global J-Space/GWT observation with admitted null/sign-flipped controls before granting model/J-Space credit."
+  ],
+  "evidence_boundary": "This receipt promotes exact-deployment Function-runtime boot only. It does not establish response-body contents, request initiator identity, Sandbox execution, Python/SQLite capability, HCU runtime, model execution, J-Space causality, training benefit, canonical-state/effect changes, or whole EntityOS/HCU acceptance."
+}

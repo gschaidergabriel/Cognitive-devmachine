@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"audit-v8-system-fields-20260824T1841p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -euo pipefail; echo ---SUPERVISOR---; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json 2>/dev/null || true; echo ---LOCAL-DISTILLERY-STATUS---; find /artifacts/clay-entityos-swarm -maxdepth 3 -type f \\( -iname '*local*status*.json' -o -iname '*research*status*.json' \\) -print -exec sh -c 'echo FILE=$1; head -c 5000 \"$1\"; echo' _ {} \\; echo ---PROCS---; ps -eo pid,etime,args | grep -E '[r]un_research_distillery|[r]un_free_evidence_forge|[l]lama-server|[f]ree swarm/evaluate.py'"
+}

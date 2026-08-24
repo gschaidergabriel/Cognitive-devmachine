@@ -2,8 +2,8 @@
 """Route/credential-level FREE_ONLY economic provenance for the autonomous swarm.
 
 The provider admission file grants owner-authorized access to free contingents.
-This module is the narrower runtime gate required by supervisor epoch 8.70: a
-concrete credential fingerprint + endpoint + model/route must have zero-cost/free
+This module is the narrower runtime gate required by current supervisor authority:
+a concrete credential fingerprint + endpoint + model/route must have zero-cost/free
 provider-side evidence before an autonomous network call is allowed.
 """
 from __future__ import annotations
@@ -46,6 +46,21 @@ def _int_header(headers: dict[str, Any], key: str) -> int | None:
         return None
 
 
+def _parse_utc(value: Any) -> dt.datetime | None:
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    if raw.endswith("Z"):
+        raw = raw[:-1] + "+00:00"
+    try:
+        parsed = dt.datetime.fromisoformat(raw)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return None
+    return parsed.astimezone(dt.timezone.utc)
+
+
 def _iter_worker_rows(artifacts: Path):
     if not artifacts.exists():
         return
@@ -66,6 +81,7 @@ def _iter_worker_rows(artifacts: Path):
 def _groq_historical_free_match(
     *, artifacts: Path, credential_fingerprint: str, model: str, required: dict[str, Any]
 ) -> dict[str, Any] | None:
+    """Return quota corroboration only; this function never establishes billing tier."""
     want_rpd = int(required.get("requests_per_day") or 0)
     want_tpm = int(required.get("tokens_per_minute") or 0)
     newest: dict[str, Any] | None = None
@@ -81,13 +97,64 @@ def _groq_historical_free_match(
         got_tpm = _int_header(headers, "x-ratelimit-limit-tokens")
         if got_rpd == want_rpd and got_tpm == want_tpm:
             newest = {
-                "kind": "SAME_CREDENTIAL_PROVIDER_RATE_HEADER_MATCH",
+                "kind": "SAME_CREDENTIAL_PROVIDER_RATE_HEADER_MATCH_QUOTA_ONLY",
                 "requests_per_day": got_rpd,
                 "tokens_per_minute": got_tpm,
                 "observed_worker_ts": row.get("ts"),
                 "observed_http_status": row.get("http_status"),
+                "economic_authority": False,
             }
     return newest
+
+
+def _groq_free_tier_binding(
+    record: dict[str, Any], credential_fingerprint: str, *, now: dt.datetime | None = None
+) -> tuple[dict[str, Any] | None, str | None]:
+    """Validate fresh provider-side Free-tier evidence for one exact fingerprint.
+
+    The governance record stores only fingerprints/receipt references, never the
+    credential itself or a plaintext account identifier. Rate headers are not
+    consulted here because project custom limits can alias the public Free table.
+    """
+    bindings = record.get("credential_free_tier_bindings")
+    if not isinstance(bindings, dict):
+        return None, "GROQ_FREE_TIER_BINDING_MAP_INVALID"
+    binding = bindings.get(credential_fingerprint)
+    if not isinstance(binding, dict):
+        return None, "GROQ_CREDENTIAL_FREE_TIER_NOT_BOUND"
+    if str(binding.get("tier") or "").upper() != "FREE":
+        return None, "GROQ_BOUND_TIER_NOT_FREE"
+    if binding.get("payg_enabled") is not False:
+        return None, "GROQ_BOUND_CREDENTIAL_PAYG_NOT_PROVEN_DISABLED"
+    account_fp = str(binding.get("provider_account_or_project_fingerprint") or "").strip()
+    if len(account_fp) < 8:
+        return None, "GROQ_ACCOUNT_PROJECT_BINDING_MISSING"
+    observation_ref = str(binding.get("provider_observation_ref") or "").strip()
+    if not observation_ref:
+        return None, "GROQ_PROVIDER_OBSERVATION_REF_MISSING"
+    observed_at = _parse_utc(binding.get("observed_at"))
+    if observed_at is None:
+        return None, "GROQ_FREE_TIER_OBSERVATION_TIME_INVALID"
+    try:
+        max_age = int(record.get("max_binding_age_seconds") or 0)
+    except (TypeError, ValueError):
+        max_age = 0
+    if max_age <= 0:
+        return None, "GROQ_FREE_TIER_BINDING_FRESHNESS_POLICY_INVALID"
+    current = (now or dt.datetime.now(dt.timezone.utc)).astimezone(dt.timezone.utc)
+    age_s = (current - observed_at).total_seconds()
+    if age_s < -300:
+        return None, "GROQ_FREE_TIER_OBSERVATION_FROM_FUTURE"
+    if age_s > max_age:
+        return None, "GROQ_FREE_TIER_OBSERVATION_STALE"
+    return {
+        "tier": "FREE",
+        "payg_enabled": False,
+        "provider_account_or_project_fingerprint": account_fp,
+        "provider_observation_ref": observation_ref,
+        "observed_at": observed_at.isoformat(),
+        "max_binding_age_seconds": max_age,
+    }, None
 
 
 def _lane_evidence_from_provenance(
@@ -119,7 +186,7 @@ def _lane_evidence_from_provenance(
     if provider == "nvidia":
         # NVIDIA documents free hosted NIM prototyping for Developer Program
         # members, but the public provider statement does not prove that an
-        # arbitrary credential belongs to that free entitlement.  A provider
+        # arbitrary credential belongs to that free entitlement. A provider
         # hostname plus an unbound fingerprint therefore cannot self-admit.
         bound = record.get("admitted_credential_fingerprints")
         if not isinstance(bound, list) or credential_fingerprint not in {
@@ -143,21 +210,25 @@ def _lane_evidence_from_provenance(
         required = ((record.get("free_plan_models") or {}).get(model_or_route) or {})
         if not required:
             return {"ok": False, "reason": "GROQ_MODEL_NOT_BOUND_TO_DOCUMENTED_FREE_LIMITS"}
-        match = _groq_historical_free_match(
+        account_binding, binding_error = _groq_free_tier_binding(record, credential_fingerprint)
+        if account_binding is None:
+            return {"ok": False, "reason": binding_error or "GROQ_CREDENTIAL_FREE_TIER_NOT_BOUND"}
+        quota_match = _groq_historical_free_match(
             artifacts=artifacts,
             credential_fingerprint=credential_fingerprint,
             model=model_or_route,
             required=required,
         )
-        if not match:
-            return {"ok": False, "reason": "GROQ_CREDENTIAL_FREE_PLAN_HEADERS_NOT_OBSERVED"}
+        if not quota_match:
+            return {"ok": False, "reason": "GROQ_FREE_TIER_QUOTA_CORROBORATION_NOT_OBSERVED"}
         return {
             "ok": True,
             "kind": record.get("evidence_kind"),
             "source": record.get("source"),
             "model": model_or_route,
-            "provider_observation": match,
-            "assertion": "SAME_CREDENTIAL_MATCHES_DOCUMENTED_GROQ_FREE_PLAN_LIMITS",
+            "provider_account_binding": account_binding,
+            "provider_quota_corroboration": quota_match,
+            "assertion": "BOUND_GROQ_FREE_TIER_ACCOUNT_PLUS_QUOTA_CORROBORATION",
         }
 
     if provider == "mistral":

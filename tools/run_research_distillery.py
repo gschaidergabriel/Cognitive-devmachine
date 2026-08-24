@@ -234,8 +234,8 @@ def add_question(con: sqlite3.Connection, question: str, *, parent_id: str | Non
     root = root_problem or q
     try:
         con.execute(
-            "INSERT INTO questions(id,parent_id,root_problem,question,depth,priority,status,created_at,source_worker_sha) VALUES(?,?,?,?,?,?, 'OPEN',?,?,?)",
-            (qid, parent_id, root, q, depth, float(priority), now_iso(), worker_sha, worker_sha),
+            "INSERT INTO questions(id,parent_id,root_problem,question,depth,priority,status,created_at,source_worker_sha) VALUES(?,?,?,?,?,?, 'OPEN',?,?)",
+            (qid, parent_id, root, q, depth, float(priority), now_iso(), worker_sha),
         )
     except sqlite3.IntegrityError:
         return False

@@ -1,0 +1,86 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date_local": "2026-08-25T01:06+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_successor": "75b120e9a94b3c5f4f627d9cda44d5128df15086",
+  "parallel_convergence": {
+    "atomic_concurrent_replay_core": "MERGED_AS_PR_1765",
+    "atomic_concurrent_replay_merge_sha": "67416a37ad2f745584e33c694fa765fb3f85588c",
+    "duplicate_core_work_from_this_organ": "DISCARDED_BY_REENTRY_AND_BRANCH_RESET",
+    "retained_nonduplicate_delta": "LIVE_PROMOTION_REPLAY_REBUILD_CONCURRENCY_PRECONDITION",
+    "second_distillery_authority_created": false
+  },
+  "observation": {
+    "main_atomic_replay_source_present": true,
+    "main_exact_main_concurrent_regression_carrier_present": true,
+    "live_promotion_workflow_before_successor_only_ran_promotion_guard": true,
+    "live_promotion_workflow_predecessor_blob_sha": "d8f5202bc29ecf2c998fbbd2f2b70244d5b67e63",
+    "terminal_exact_current_distillery_regression_receipt_observed": false,
+    "terminal_exact_current_live_witness_observed": false
+  },
+  "hypothesis": "The separate live-promotion workflow can reach its promotion stage without directly executing the replay-identity, rebuild-stability and concurrent-replay regressions that define the current canonical Distillery admission contract.",
+  "counterhypothesis": "The separate exact-main self-hosted regression carrier is sufficient coupling to guarantee the live-promotion workflow cannot promote when those invariants regress.",
+  "discriminator": {
+    "method": "Inspect exact-current .github/workflows/go871-forge-distillery-runtime-gate.yml after PR #1765 and after current-main reentry.",
+    "result": "Exact-current live-promotion workflow still invoked tests.test_forge_distillery_promotion_872 only. No direct replay/rebuild/concurrency guard was present, so explicit binding is a nonduplicate control-plane hardening."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
+      "status": "ADVANCED",
+      "delta": "Live Forge->Distillery promotion now requires promotion, replay-identity, rebuild-stability and concurrent-replay regression success before promotion can pass. Relevant replay regression source changes also retrigger the workflow."
+    },
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
+      "status": "ADVANCED",
+      "delta": "The canonical replay-stable and atomic causal-admission primitive already merged via #1765 is reused at the live-promotion boundary. No second state, ingest, identity or effect authority is introduced."
+    },
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": {
+      "status": "ADVANCED_AT_DATA_ADMISSION_BOUNDARY",
+      "delta": "Future persistent Distillery/J-Space training evidence cannot be promoted through this workflow without replay/rebuild/concurrency invariant success. No model intervention, provider execution or training occurred."
+    }
+  },
+  "writes": [
+    {
+      "commit": "08a4db63e92fa886159a3eb388a31d12938642b4",
+      "path": ".github/workflows/go871-forge-distillery-runtime-gate.yml",
+      "delta": "Bind replay identity, rebuild stability and concurrent replay regressions into the pre-promotion source guard and trigger paths."
+    },
+    {
+      "commit": "1d7de37f158255791f3d923a7c0d99d0fa819bc7",
+      "path": "the artefact/README.md",
+      "delta": "Synchronize the latest exact-runtime evidence frontier with the residual live-promotion control-plane gap and three-track effect."
+    }
+  ],
+  "coordination": {
+    "shared_immutable_macrocycle_id_available": false,
+    "available_user_turn_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed": false,
+    "provider_calls": 0,
+    "model_interventions": 0,
+    "together_calls": 0,
+    "paid_calls": 0
+  },
+  "evidence_boundary": {
+    "source_and_control_plane_delta_present_on_branch": true,
+    "runtime_execution_of_successor_observed": false,
+    "exact_current_live_promotion_pass_observed": false,
+    "scope": "SOURCE_CONTROL_PLANE_ONLY_UNTIL_EXACT_CURRENT_EXECUTION"
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse this nonduplicate workflow guard into exact-current main. Then observe the append-only exact-main Distillery regression receipt and the resulting live Forge->Distillery runtime result. Require one evidence-qualified ACCEPT -> exactly one persistent packet -> accepted_dataset_tokens > 0 -> timestamp/narration/delta-id semantic replay +0; same replay identity with changed measured evidence must fail closed as REPLAY_IDENTITY_CONFLICT.",
+  "epistemic_boundary": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+}

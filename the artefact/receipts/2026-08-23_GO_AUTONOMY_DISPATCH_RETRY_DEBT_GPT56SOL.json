@@ -1,0 +1,89 @@
+{
+  "schema": "CLAYVERSE_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_base_sha": "468a6dcad44b32cd640711a3df307d21f1978b53",
+  "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "workspace": "the artefact/",
+  "finding": {
+    "id": "AUTONOMY_DISPATCH_CONSUMED_ADMISSION_FAILURE_RETRY_BUDGET_BYPASS",
+    "classification": "MECHANISM_SUPPORTED_SYNTHETIC_STATE_MACHINE_ONLY",
+    "issue": 1325,
+    "summary": "A valid one-shot autonomy dispatch lease is consumed before autonomous turn admission. If admission or immediate post-admission context construction fails while the controller step remains ADMITTED, AutonomyPlanner later redispatches that same ADMITTED step without incrementing attempts, so deterministic failures can bypass the configured retry budget.",
+    "authority_impact": "bounded autonomy/recovery causal-lifecycle defect; no second state, identity, memory, truth or effect authority is introduced by the finding"
+  },
+  "exact_source": {
+    "the artefact/clayverse/autonomy_dispatch.py": "11280bd68bf9cf25a548756b6d74e8403776f08c",
+    "the artefact/clayverse/terminal_hooks.py": "a38d64eba47cc087e508b1b48f811848ef73fbc7",
+    "the artefact/clayverse/autonomy_planner.py": "6241f3084d6b288e647eac6f352dcfe8770ee078"
+  },
+  "causal_observation": [
+    "consume_dispatch_prompt validates the live one-shot lease and exact admitted goal-step, then deletes the lease",
+    "terminal_hooks.user_prompt performs _admit_dispatch_turn only after that consumption",
+    "the dispatch failure path can abort an active lifecycle but does not canonically fail the still-ADMITTED controller step",
+    "AutonomyPlanner.prepare_next returns an existing ADMITTED step unchanged, so another nonce can be reserved without retry accounting"
+  ],
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "DISPATCH_CONSUME_THEN_PRE_ADMISSION_FAULT",
+    "macrocycle_id": null,
+    "cross_organ_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "counter_reality": "Consume a valid dispatch nonce, then force failure before an autonomous active turn is successfully established.",
+    "current_semantics_after_100_cycles": {
+      "dispatches": 100,
+      "step_attempts": 1,
+      "step_status": "ADMITTED",
+      "goal_status": "ACTIVE",
+      "lease_present": false
+    },
+    "counterfactual_with_canonical_failure_reentry": {
+      "dispatches_until_blocked": 4,
+      "step_attempts": 4,
+      "step_status": "FAILED",
+      "goal_status": "BLOCKED"
+    },
+    "evidence_scope": "synthetic bounded state-machine discriminator derived from exact current source semantics; not exact ClayVerse runtime execution"
+  },
+  "repair_invariant": "After a valid dispatch token has been consumed, every admission/context failure before a successful autonomous canonical turn continuation must terminalize or requeue the exact bound goal-step through the existing AutonomyController state machine. If an exact matching autonomous active turn exists it is aborted first; unrelated human/other active turns are never preempted. If the same generation/goal/step is still ADMITTED it is failed through the canonical retry path. Stale or changed identity fails closed. Effects are never replayed.",
+  "source_candidate": {
+    "branch": "go/clayverse-autonomy-dispatch-retry-debt-20260823",
+    "draft_pr": 1336,
+    "head_commit": "527de75c6584bfe45bf9fe7e33134f7f85894bfa",
+    "terminal_hooks_blob": "5964ff7c59075a5ea0c2504792e173c08f3f7823",
+    "test_autonomy_hook_dispatch_blob": "cabb4eaab421b4d2857d2fefb09689f40a7570ce",
+    "mechanism": "user_prompt dispatch-exception handling now calls one compensation helper that optionally aborts only the exact matching autonomous active turn, then revalidates exact user/session/generation/goal/step and records failure through AutonomyController if the step is still ADMITTED",
+    "new_parallel_authority": false
+  },
+  "regression_obligations": [
+    "consumed nonce plus pre-active-turn admission failure fails the exact ADMITTED step",
+    "post-active-turn context failure performs lifecycle abort plus exact controller failure re-entry",
+    "repeated deterministic failures hit the existing retry budget and become BLOCKED",
+    "stale generation or changed goal/step cannot be compensated into another state",
+    "verified or pending effects are never replayed or reclassified by dispatch compensation",
+    "ordinary human prompt/preemption behavior remains unchanged"
+  ],
+  "regression_source_candidate": {
+    "added": true,
+    "executed_on_authorized_isolated_executor": false,
+    "coverage": [
+      "actual UserPromptSubmit wiring with forced pre-admission failure across the full existing retry budget",
+      "actual UserPromptSubmit wiring with forced post-admission context failure, active-turn abort, exact failure re-entry and zero effects"
+    ]
+  },
+  "execution_evidence": {
+    "authorized_exact_runtime_executed": false,
+    "whole_clayverse_runtime_credit": 0,
+    "reason": "No callable authorized Vercel Sandbox create/start/exec action is exposed to this organ; no forbidden fallback was used."
+  },
+  "safety": {
+    "vps_testing": "NOT_USED_FORBIDDEN",
+    "self_hosted_or_production_testing": "NOT_USED_FORBIDDEN",
+    "together_api": "NOT_USED_FORBIDDEN",
+    "paid_execution_or_training": "NOT_USED_OWNER_AUTHORIZATION_REQUIRED",
+    "secrets_persisted": false
+  },
+  "next_exact_gate": "Run the focused new autonomy-hook regressions plus adjacent autonomy/lifecycle suites against this exact branch on an actually-started authorized isolated executor; if green, rebase/fuse the smallest source delta into current main and continue exact-current full regression plus OCI build/startup acceptance."
+}

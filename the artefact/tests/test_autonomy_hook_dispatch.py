@@ -5,6 +5,7 @@ import json
 
 import pytest
 
+import clayverse.terminal_hooks as terminal_hooks
 from clayverse.autonomy import AUTONOMY_TURN_SOURCE, AutonomyController
 from clayverse.autonomy_dispatch import consume_dispatch_prompt, reserve_dispatch
 from clayverse.autonomy_planner import DECISION_SCHEMA, AutonomyPlanner
@@ -58,6 +59,22 @@ def _reserve_planning(db):
     return goal, prepared, dispatch, claimed
 
 
+def _hook_env(monkeypatch, tmp_path):
+    monkeypatch.setenv("CLAYVERSE_STATE_ROOT", str(tmp_path))
+    monkeypatch.setenv("CLAYVERSE_USER_ID", "gabriel")
+    monkeypatch.setenv("CLAYVERSE_SESSION_ID", "session:gabriel")
+
+
+def _reserve_existing_step(db, goal_id, step_id, instruction):
+    return reserve_dispatch(
+        db,
+        user_id="gabriel",
+        goal_id=goal_id,
+        step_id=step_id,
+        instruction=instruction,
+    )
+
+
 def test_dispatch_admission_records_system_instruction_not_terminal_nonce(db):
     goal, prepared, dispatch, claimed = _reserve_planning(db)
     lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
@@ -86,6 +103,94 @@ def test_dispatch_admission_records_system_instruction_not_terminal_nonce(db):
         "SELECT content FROM turns WHERE session_id='session:gabriel' AND role='user' ORDER BY ordinal"
     ).fetchall()
     assert [row["content"] for row in user_turns] == ["Advance this detached durable goal."]
+
+
+def test_consumed_dispatch_pre_admission_failure_hits_existing_retry_budget(
+    db, tmp_path, monkeypatch
+):
+    _hook_env(monkeypatch, tmp_path)
+    goal = _goal(db)
+    planner = AutonomyPlanner(db)
+    prepared = planner.prepare_next("gabriel")
+
+    def fail_before_admission(*_args, **_kwargs):
+        raise RuntimeError("forced pre-admission failure")
+
+    monkeypatch.setattr(terminal_hooks, "_admit_dispatch_turn", fail_before_admission)
+
+    for expected_attempts in (1, 2, 3, 4):
+        if expected_attempts > 1:
+            prepared = planner.prepare_next("gabriel")
+            assert prepared is not None
+        dispatch = _reserve_existing_step(
+            db,
+            goal["goal_id"],
+            prepared["step_id"],
+            prepared["prompt"],
+        )
+        with pytest.raises(RuntimeError, match="forced pre-admission failure"):
+            terminal_hooks.user_prompt(
+                {
+                    "hook_event_name": "UserPromptSubmit",
+                    "prompt": dispatch.terminal_prompt,
+                    "session_id": f"claude-retry-{expected_attempts}",
+                }
+            )
+        stored = AutonomyController(db).snapshot(user_id="gabriel")["goals"][0]
+        assert stored["current_step"]["step_id"] == prepared["step_id"]
+        assert stored["current_step"]["attempts"] == expected_attempts
+        assert stored["current_step"]["status"] == "FAILED"
+        assert stored["blocked_reason"] == "autonomy_dispatch_admission_failure"
+        assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 0
+
+    stored = AutonomyController(db).snapshot(user_id="gabriel")["goals"][0]
+    assert stored["status"] == "BLOCKED"
+    assert planner.prepare_next("gabriel") is None
+
+
+def test_consumed_dispatch_post_admission_failure_aborts_turn_then_fails_step(
+    db, tmp_path, monkeypatch
+):
+    _hook_env(monkeypatch, tmp_path)
+    goal = _goal(db)
+    prepared = AutonomyPlanner(db).prepare_next("gabriel")
+    dispatch = _reserve_existing_step(
+        db,
+        goal["goal_id"],
+        prepared["step_id"],
+        prepared["prompt"],
+    )
+
+    def fail_context(_result):
+        raise RuntimeError("forced post-admission context failure")
+
+    monkeypatch.setattr(terminal_hooks, "_bounded_hook_context", fail_context)
+    with pytest.raises(RuntimeError, match="forced post-admission context failure"):
+        terminal_hooks.user_prompt(
+            {
+                "hook_event_name": "UserPromptSubmit",
+                "prompt": dispatch.terminal_prompt,
+                "session_id": "claude-post-admission",
+            }
+        )
+
+    assert db.db.execute(
+        "SELECT COUNT(*) FROM active_turns WHERE session_id='session:gabriel'"
+    ).fetchone()[0] == 0
+    autonomous = db.db.execute(
+        "SELECT turn_id,provenance FROM turns WHERE session_id='session:gabriel' AND role='system' ORDER BY ordinal"
+    ).fetchall()
+    assert len(autonomous) == 2
+    assert json.loads(autonomous[0]["provenance"])["source"] == AUTONOMY_TURN_SOURCE
+    abort_provenance = json.loads(autonomous[1]["provenance"])
+    assert abort_provenance["source"] == "clayverse-autonomy:goal-step:failure"
+    assert abort_provenance["goal_id"] == goal["goal_id"]
+    assert abort_provenance["autonomy_step_id"] == prepared["step_id"]
+    stored = AutonomyController(db).snapshot(user_id="gabriel")["goals"][0]
+    assert stored["current_step"]["step_id"] == prepared["step_id"]
+    assert stored["current_step"]["status"] == "FAILED"
+    assert stored["blocked_reason"] == "autonomy_dispatch_admission_failure"
+    assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 0
 
 
 def test_reason_stop_compiles_exactly_one_next_effect_step(db):

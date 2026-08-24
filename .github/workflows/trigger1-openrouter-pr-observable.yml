@@ -12,7 +12,7 @@ permissions:
 jobs:
   execute-trigger1:
     if: github.event.pull_request.user.login == 'gschaidergabriel'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 12
     steps:
       - name: Checkout PR head

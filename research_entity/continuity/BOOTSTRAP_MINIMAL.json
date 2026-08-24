@@ -1,5 +1,5 @@
 {
-  "schema_version": "8.63",
+  "schema_version": "8.65",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
   "identity": {
@@ -10,7 +10,7 @@
   "active_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
   "product_endpoint": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json",
   "compatibility_names": {
     "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
     "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY",
@@ -30,7 +30,9 @@
     "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
     "current autonomous supervisor is FREE_ONLY: paid, subscription and unknown provider lanes fail closed before credential lookup or network I/O",
     "unusual experiments require the canonical atomic lease before intervention; without a reproducible shared trigger identity the unusual-experiment path is coordination-blocked",
-    "retained donor and execution-controller PR identities are repository-qualified; unqualified PR numbers never select execution authority"
+    "retained donor and execution-controller PR identities are repository-qualified; unqualified PR numbers never select execution authority",
+    "Function-runtime evidence at a no-Sandbox diagnostic scope does not imply Sandbox, HCU, model, J-Space, training or whole-product runtime credit",
+    "Hobby team/plan identity and cumulative per-session usage never substitute for a directly authoritative remaining included Sandbox quota signal"
   ],
   "go_required_tracks": [
     "ENTITYOS_EXECUTABLE_CONVERGENCE",
@@ -68,7 +70,23 @@
   "retained_hcu_donor_qualified": "gschaidergabriel/clay-global-research-entity#1263",
   "retained_execution_controller_qualified": "gschaidergabriel/Dr.-Unterweger#810",
   "unqualified_pr810_execution_selection": "FAIL_CLOSED",
-  "execution_surface": "AUTHORIZED_ISOLATED_FREE_SANDBOX_ONLY_IN_CURRENT_AUTONOMOUS_SUPERVISOR_MODE; VERCEL_HOBBY_INCLUDED_TIER_ADMITTED_ONLY_FOR_FIXED_HASH_BOUND_SHORT_CAPSULES_WITH_FAIL_CLOSED_BILLING_QUOTA_PLAN_FENCES",
+  "execution_surface": "AUTHORIZED_ISOLATED_FREE_SANDBOX_ONLY_IN_CURRENT_AUTONOMOUS_SUPERVISOR_MODE; VERCEL_HOBBY_INCLUDED_TIER_ADMITTED_ONLY_FOR_FIXED_HASH_BOUND_SHORT_CAPSULES_WITH FAIL_CLOSED_BILLING_QUOTA_PLAN_FENCES",
+  "runtime_first_evidence": {
+    "supervisor_epoch": "8.65",
+    "exact_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "exact_executor_head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "function_runtime_diagnostic": "PASS_EXACT_HEAD_HTTP_200_NO_SANDBOX_SCOPE",
+    "sandbox_create_observed": false,
+    "remaining_included_sandbox_quota_directly_observed": false,
+    "connected_read_only_surface_exposes_direct_remaining_quota": false,
+    "sandbox_execution_admitted": false,
+    "source_guard_proliferation": "PAUSED_UNLESS_EXECUTABLE_COUNTEREVIDENCE_REQUIRES_A_GUARD",
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
   "free_only": true,
   "paid_fallback": "FORBIDDEN",
   "together_api": "FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE; GENERAL_INFERENCE_FORBIDDEN; OWNER_PAID_ONE_SHOT_DIRECTIVE_QUARANTINED_WITH_ZERO_EXECUTION_CREDIT",
@@ -79,7 +97,7 @@
   "go_macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
   "go_unusual_experiment_atomic_lease_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
   "go_unusual_experiment_claim_rule": "CREATE_ONLY_CANONICAL_CLAIM_BEFORE_INTERVENTION_OR_COORDINATION_BLOCKED",
-  "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md",
+  "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_65.md",
   "legacy_all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
   "go": "ENTITYOS_HCU_MAXIMUM_PRODUCT_CONVERGENCE_MACROCYCLE",
   "zero": "ENTITYOS_HCU_ZERO_JSPACE_FUNCTION_FABRIC_LENS",
@@ -92,23 +110,19 @@
     "Can the claim be falsified with executable evidence?"
   ],
   "current_frontier": [
-    "keep all remaining control-plane entry points synchronized to EntityOS + HCU + supervisor 8.63 FREE_ONLY plus atomic unusual-experiment lease law and repository-qualified retained-lane identities",
-    "retain gschaidergabriel/clay-global-research-entity#1263 as the single HCU donor lane",
-    "retain gschaidergabriel/Dr.-Unterweger#810 as the single bounded execution-controller lane; unqualified PR810 selection fails closed",
-    "extend the single fixed hash-bound FREE Sandbox executor toward the exact-current J-Space inference-binding plus GRID10 plan/cell closure, resolving binding schema/version from the live retained executor contract rather than a frozen cache version string",
-    "continue the same single executor/capsule authority toward Typed Entry -> route -> VerifiedEngineAdmission -> verified actual-loader consumption -> GRID10/v2 -> actual model-executor observation -> canonical MiniUnifiedDB atomic invocation admission -> VerifiedModelExecution/v1 -> HCU_INFERENCE_RECEIPT/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> exact-current J-Space inference binding -> admitted causal dataset closure",
-    "bind causal event identity plus resolved engine identity into one HCU route decision identity",
-    "typed Entry Fabric for all new data",
-    "10-cell shared-worker HCU baseline",
-    "build and instrument Global J-Space/GWT with JSPACE_VECTOR_CONTROL_ABI/v1",
-    "derive leak-resistant training/validation/holdout data from exact prototype traces and deterministic hard negatives for zero-cost local experimentation",
+    "keep all remaining current-facing authority surfaces synchronized to EntityOS + HCU + supervisor 8.65 FREE_ONLY plus atomic unusual-experiment lease law and repository-qualified retained-lane identities",
+    "retain gschaidergabriel/clay-global-research-entity#1263 as the single HCU donor lane and refresh its live head before promotion",
+    "retain gschaidergabriel/Dr.-Unterweger#810 as the single bounded execution-controller lane and refresh its live head before execution; unqualified PR810 selection fails closed",
+    "preserve exact executor head 2da99e0458809988190c129b04cae913d1f15d92 Function-runtime HTTP 200 credit strictly at diagnostic no-Sandbox scope",
+    "obtain a directly authoritative read-only remaining included Vercel Sandbox quota signal without upgrade, billing mutation, plan inference, paid fallback, secret/key lookup preflight or Together/provider execution",
+    "do not invoke Sandbox while remaining included Sandbox quota is unobserved; Hobby plan identity and cumulative per-session usage are not quota evidence",
+    "only if FREE_ONLY Sandbox admission opens, execute one fixed exact-source environment capability probe binding executor/deployment SHA, Python runtime, sqlite3/_sqlite3, exact source identities, secret fence, result digest, exit status and cleanup",
+    "only after environment PASS continue the same executor authority through canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> InferenceReceipt -> Global J-Space/GWT observation -> admitted causal dataset closure",
+    "continue Typed Entry, JSPACE_VECTOR_CONTROL_ABI/v1, causal dataset/family-split and deterministic hard-negative readiness without creating a duplicate source authority",
     "bind an actual local ~0.8B checkpoint/tokenizer/runtime/build to loader-consumption evidence before model-runtime credit",
-    "request-scoped cognition simulation and bounded test world-model mode",
-    "model-specific empirical J-Space coupling",
-    "Hyperposition with evidence-based candidate reduction",
-    "measured scale-out without conflating logical cells with simultaneous decodes",
-    "strict EffectGate non-bypass and recovery/generation fencing",
-    "do not preflight or launch the paid Together lane in current FREE_ONLY supervisor mode"
+    "keep whole EntityOS/HCU, full-HCU, Sandbox environment, J-Space-model and training credit at zero until corresponding exact admitted execution evidence exists",
+    "do not preflight or launch Together or any paid/subscription/unknown lane in current FREE_ONLY mode",
+    "do not run a new unusual experiment without a successful canonical atomic lease"
   ],
   "legacy_scope": "Xeno/XCU remain compatibility or research aliases only. Mini Entity/MicroEntity/ClayVerse/Frank remain historical implementation or donor provenance unless explicitly re-admitted."
 }

@@ -7,54 +7,68 @@
   "mode": "FREE_ONLY",
   "trigger": "go",
   "organ": "GPT-5.6-Sol",
-  "canonical_main_observed_before_current_rebase": "fb19154fb1b00e8e2c68e24fc09a5d7e1e06bb92",
+  "canonical_main_tested_parent": "67416a37ad2f745584e33c694fa765fb3f85588c",
   "donor_branch": "gpt56sol/go873-delta-id-replay-identity-20260825",
-  "donor_base": "CURRENT_MAIN_AT_REBASE",
+  "donor_commit_exact_blob_tested": "9c23ec0c3670ed375bc6fc0cad6ad28719c6078d",
   "coordination_issue": 1741,
-  "superseded_or_closed_donor_pr": 1726,
   "finding": {
     "classification": "SOURCE_CONFIRMED_CURRENT_MAIN_IDENTITY_SCHEMA_UPGRADE_AMBIGUITY",
-    "statement": "Current main now correctly excludes delta_id and evaluated_at from Forge replay/training preimages and the current live promoter performs semantic replay plus measured-conflict checks. However, main changed those persisted hash preimages while retaining CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1, CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1 and CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2, and forge_execution_ingest has no marker that identifies the preimage semantics of already-persisted non-null digests. A changed-envelope semantic re-emission can therefore compute a new digest after upgrade and miss a historical row unless the old/new semantics boundary is explicit and fail-closed.",
+    "statement": "Canonical main already excludes delta_id/evaluated_at from replay and training-bearing preimages, performs semantic replay/measured-conflict live-promoter checks, and serializes concurrent replay admission with BEGIN IMMEDIATE. It still labels the changed persisted preimages as replay/v1, measured/v1 and packet/v2 and carries no per-row identity-semantics marker. Persisted pre-change rows can therefore hold non-null opaque digests produced by older preimages; a changed-envelope re-emission after software upgrade can compute a different digest and miss such a historical row unless old/new semantics are explicitly versioned and unresolved overlap fails closed.",
     "counterhypothesis": "Existing non-null replay/measured digests are sufficient to distinguish old and new semantics without a version/marker change.",
-    "counterhypothesis_disposition": "REJECTED_AT_SOURCE_CONTRACT_LEVEL: the digest is opaque and the schema labels are unchanged, so persisted rows cannot reveal which preimage semantics generated a historical digest without guessing."
-  },
-  "parallel_main_evidence": {
-    "rebuild_stable_component_receipt_commit": "fb19154fb1b00e8e2c68e24fc09a5d7e1e06bb92",
-    "exact_blob_component_py_compile": "PASS",
-    "exact_blob_component_tests": "10/10 PASS",
-    "scope": "EXACT_BLOB_COMPONENT_REGRESSION_ONLY",
-    "covers_this_upgrade_case": false,
-    "canonical_runtime_credit": 0
+    "counterhypothesis_disposition": "REJECTED: a digest is opaque, current schema labels are unchanged, and the legacy row does not retain enough preimage material to prove which historical semantics generated it."
   },
   "delta": {
-    "current_main_rebased_donor_commit_before_receipt_refresh": "667744c599a460775e3308d5ebc6547fc0a18b88",
     "source": "tools/ingest_forge_accepts_into_distillery.py",
-    "test": "tests/test_forge_distillery_identity_semantics_upgrade_873.py",
+    "upgrade_test": "tests/test_forge_distillery_identity_semantics_upgrade_873.py",
     "identity_versions": {
       "packet": "CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v3",
       "replay": "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v2",
       "measured": "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v2",
       "db_marker": "FORGE_REPLAY_V2_MEASURED_V2_PACKET_V3"
     },
+    "preserved_current_main_invariant": "BEGIN IMMEDIATE serializes replay lookup, conflict classification, packet insertion and counters before concurrent writers can both classify one replay as unseen.",
     "migration_semantics": [
-      "add nullable identity_semantics column without rewriting historical rows",
+      "add nullable identity_semantics without rewriting historical rows",
+      "new rows persist the exact identity-semantics marker and explicit schema labels",
       "exact full-evaluation replay of an older row remains safely DUPLICATE at bridge scope",
-      "older/unknown identity semantics colliding on retained worker/source/evaluation coordinates fail closed as LEGACY_REPLAY_IDENTITY_UNRESOLVED",
-      "new rows persist the exact identity semantics marker and explicit schema labels",
-      "current same-replay/same-measured remains DUPLICATE; same-replay/different-measured remains REPLAY_IDENTITY_CONFLICT",
-      "live promotion remains blocked rather than minting a new packet when an unresolved pre-upgrade overlap is encountered"
+      "older or unknown semantics colliding on retained worker/source/evaluation coordinates fail closed as LEGACY_REPLAY_IDENTITY_UNRESOLVED",
+      "same current replay plus same measured evidence remains DUPLICATE",
+      "same current replay plus changed measured evidence remains REPLAY_IDENTITY_CONFLICT",
+      "distinct execution identities remain separately admissible",
+      "all replay decisions remain inside the serialized SQLite write transaction"
     ]
   },
+  "evidence": {
+    "scope": "EXACT_BLOB_COMPONENT_REGRESSION_ONLY",
+    "git_blob_sha1": {
+      "tools/ingest_forge_accepts_into_distillery.py": "5f04dc0ac9e4f81fbc7c4605d885125825f3f7be",
+      "tools/forge_evidence_credit_871.py": "d99567577890d885c8d32840dfe4afc04cbaade1",
+      "tests/test_forge_distillery_replay_identity_873.py": "585e6c698b9821e2a98a36431090d7647a81a7da",
+      "tests/test_forge_distillery_concurrent_replay_873.py": "83a1b5e9019ec0e99ad10fa5660690b2746162a4",
+      "tests/test_forge_distillery_identity_semantics_upgrade_873.py": "2d1b9c31deeca3ea0c4baa49e033391bf5670156"
+    },
+    "blob_identity_check": "PASS_ALL_MATCH_GITHUB_GIT_BLOB_SHA1",
+    "py_compile": "PASS",
+    "unittest": "13/13 PASS",
+    "test_partition": {
+      "replay_identity": "6/6 PASS",
+      "concurrent_replay": "3/3 PASS",
+      "identity_semantics_upgrade": "4/4 PASS"
+    },
+    "canonical_compact_result_sha256": "4171fa81c848e2d7bcaa9de476bf6a47c96e7b9808c342487fb51e948c6bd5c2",
+    "local_regression_receipt": "research_entity/continuity/receipts/2026-08-25_GO873_REPLAY_VERSIONED_SERIALIZED_LOCAL_REGRESSION_GPT56SOL.json",
+    "nonsemantic_stderr": "TERM environment variable not set was emitted while py_compile still returned code 0; unittest returned code 0.",
+    "canonical_runtime_credit_granted": 0
+  },
   "go_tracks": {
-    "track_a": "ADVANCED_COMPONENT_EVIDENCE: replay-safe Distillery software-upgrade semantics prevent historical digest reinterpretation before live promotion; exact-blob upgrade regression is green.",
-    "track_b": "ADVANCED_COMPONENT_EVIDENCE: versioned causal/evidence identities make the Typed Entry/HCU provenance primitive migration-safe instead of silently reinterpreting opaque digests.",
-    "track_c": "ADVANCED_DATASET_SAFETY_COMPONENT_EVIDENCE: historical replay ambiguity fails closed before training-bearing packet admission; the parallel J-Space replay-identity architecture can reuse the same versioned preimage rule. No J-Space/model/training credit is minted."
+    "track_a": "ADVANCED_COMPONENT_EVIDENCE: executable Forge->Distillery convergence now has a tested versioned migration guard fused with current concurrent replay serialization.",
+    "track_b": "ADVANCED_COMPONENT_EVIDENCE: versioned causal/evidence identities plus serialized admission form a reusable Typed Entry/HCU provenance primitive across software upgrades and concurrent observations.",
+    "track_c": "ADVANCED_DATASET_SAFETY_COMPONENT_EVIDENCE: replay-equivalent training packets remain +0, conflicting measured evidence is fail-closed, and historical identity ambiguity cannot silently mint training-bearing rows; the same versioned-preimage law is reusable for J-Space trace admission. J-Space/model/training credit remains zero."
   },
   "coordination": {
     "duplicate_pr_created": false,
     "donor_branch_is_execution_lane": false,
-    "pr_1726_state": "CLOSED_AFTER_MAIN_FUSION",
-    "issue_1741_state_at_last_observation": "OPEN",
+    "issue_1741": "OPEN_AT_LAST_OBSERVATION",
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "unusual_interventions_executed": 0,
     "provider_or_model_execution": false,
@@ -62,19 +76,7 @@
   },
   "artifact_readme": {
     "status": "NO_CHANGE_WITH_REASON",
-    "reason": "the artefact/README.md is large, concurrently moving and still exposes stale 8.72 text; the available connector write primitive replaces the whole file. A full stale rewrite could clobber parallel main content, so this cycle records SYNC_PENDING rather than performing an unsafe whole-file replacement."
-  },
-  "evidence": {
-    "source_diff_reviewed_against_current_main": true,
-    "focused_upgrade_regression_definition_added": true,
-    "exact_upgrade_blob_identity": "PASS_ALL_THREE_MATCH_GITHUB_GIT_BLOB_SHA1",
-    "exact_upgrade_py_compile": "PASS",
-    "exact_upgrade_unittest": "4/4 PASS",
-    "local_regression_receipt": "research_entity/continuity/receipts/2026-08-25_GO873_REPLAY_IDENTITY_SCHEMA_UPGRADE_LOCAL_REGRESSION_GPT56SOL.json",
-    "canonical_compact_result_sha256": "7ab0e8813cf0140359fb6f16b018a0a8321e4180c5a260cf2c2ff98c0a702812",
-    "nonsemantic_stderr": "Python startup emitted an artifact_tool spreadsheet-runtime warmup TimeoutError, but py_compile and unittest both returned code 0; classified as unrelated infrastructure warning, not product/test failure.",
-    "scope": "EXACT_BLOB_COMPONENT_REGRESSION_ONLY",
-    "canonical_runtime_credit_granted": 0
+    "reason": "the artefact/README.md is large and concurrently moving while the available connector write primitive replaces the whole file; a stale whole-file rewrite risks clobbering parallel main content, so README fusion remains SYNC_PENDING."
   },
   "credits": {
     "provider_runtime_credit": 0,
@@ -84,5 +86,5 @@
     "training_credit": 0,
     "whole_product_pass": false
   },
-  "next_exact_gate": "Fuse the versioned identity/migration semantics onto refreshed current main without creating a second execution carrier. On an explicitly admitted zero-cost exact-current repository checkout, execute the integrated replay_identity_873 + rebuild_stable_packet_873 + identity_semantics_upgrade_873 + promotion_872 family together. Require pre-upgrade non-null digest rows with changed envelopes to fail closed, exact legacy full-evaluation replay to remain duplicate at bridge scope, current v2/v3 semantic replay to add zero, measured mutation to conflict, and live promotion to remain zero-delta or blocked under unresolved legacy overlap. Then re-enter issue #1741 and the current J-Space trace admission frontier."
+  "next_exact_gate": "Refresh current main; if this source delta is still nonduplicate, fuse the versioned identity-semantics migration without weakening current BEGIN IMMEDIATE concurrency serialization. Then execute the integrated replay_identity + concurrent_replay + rebuild_stable_packet + identity_semantics_upgrade + live_bridge + promotion suite on one explicitly admitted zero-cost exact-current checkout. Require one evidence-qualified ACCEPT -> exactly one persistent packet -> accepted_dataset_tokens > 0 -> semantic replay +0, measured mutation conflict, restart/reopen stability, concurrent replay atomicity, and unresolved pre-upgrade overlap fail-closed. Then re-enter issue #1741 and current J-Space trace-admission frontier."
 }

@@ -52,42 +52,73 @@ def all_better():
 
 
 class GateTests(unittest.TestCase):
-    def test_recursive_accepts_required_progress_and_no_regressions(self):
-        after = dict(BASE)
-        after.update(all_better())
-        result = MOD.evaluate(BASE, after, claycode_migration=False)
+    def test_recursive_accepts_cross_group_progress_without_regression(self):
+        result = MOD.evaluate(BASE, all_better(), claycode_migration=False)
         self.assertTrue(result["promotion_pass"])
+        self.assertGreaterEqual(len(result["improved_groups"]), 2)
 
-    def test_any_regression_rejects_recursive(self):
-        after = dict(BASE)
-        after.update(all_better())
+    def test_material_regression_rejects_recursive(self):
+        after = all_better()
         after["rss_mb"] = 950
         result = MOD.evaluate(BASE, after, claycode_migration=False)
         self.assertFalse(result["promotion_pass"])
         self.assertIn("rss_mb", result["regressions"])
 
-    def test_jspace_must_progress_in_recursive_mode(self):
-        after = dict(BASE)
-        after.update(all_better())
-        after["jspace_causal_gain_score"] = BASE["jspace_causal_gain_score"]
+    def test_hard_invariant_rejects_even_small_regression(self):
+        after = all_better()
+        after["authority_boundary_pass_rate"] = BASE["authority_boundary_pass_rate"] - 0.0001
         result = MOD.evaluate(BASE, after, claycode_migration=False)
         self.assertFalse(result["promotion_pass"])
-        self.assertIn("jspace_causal_gain_score", result["equal_metrics"])
+        self.assertIn("authority_boundary_pass_rate", result["regressions"])
 
-    def test_harness_regression_rejects_recursive(self):
-        after = dict(BASE)
-        after.update(all_better())
-        after["peer_link_pass_rate"] = .70
+    def test_tiny_metric_jitter_does_not_mint_progress(self):
+        after = {name: value for name, value in BASE.items()}
+        after["capability_pass_rate"] += 1e-6
+        after["throughput_tokens_s"] += 1e-6
         result = MOD.evaluate(BASE, after, claycode_migration=False)
         self.assertFalse(result["promotion_pass"])
-        self.assertIn("peer_link_pass_rate", result["regressions"])
+        self.assertEqual(result["improved_groups"], [])
+        self.assertIn("capability_pass_rate", result["stable_metrics"])
 
-    def test_claycode_migration_requires_every_metric_strictly_better(self):
+    def test_jspace_need_not_improve_on_unrelated_candidate_but_must_not_regress(self):
         after = dict(BASE)
-        after.update(all_better())
+        after["capability_pass_rate"] = .81
+        after["throughput_tokens_s"] = 22
+        result = MOD.evaluate(BASE, after, claycode_migration=False)
+        self.assertTrue(result["promotion_pass"])
+        self.assertIn("jspace_causal_gain_score", result["stable_metrics"])
+
+        after["jspace_causal_gain_score"] = .28
+        result = MOD.evaluate(BASE, after, claycode_migration=False)
+        self.assertFalse(result["promotion_pass"])
+        self.assertIn("jspace_causal_gain_score", result["regressions"])
+
+    def test_only_one_progress_group_is_insufficient(self):
+        after = dict(BASE)
+        after["capability_pass_rate"] = .81
+        after["task_quality_score"] = .71
+        result = MOD.evaluate(BASE, after, claycode_migration=False)
+        self.assertFalse(result["promotion_pass"])
+        self.assertEqual(result["improved_groups"], ["capability_quality"])
+
+    def test_claycode_migration_requires_claycode_plus_cross_group_progress(self):
+        after = dict(BASE)
+        after["claycode_fraction"] = .25
+        after["throughput_tokens_s"] = 22
         self.assertTrue(MOD.evaluate(BASE, after, claycode_migration=True)["promotion_pass"])
-        after["recovery_pass_rate"] = BASE["recovery_pass_rate"]
-        self.assertFalse(MOD.evaluate(BASE, after, claycode_migration=True)["promotion_pass"])
+
+        no_claycode = dict(BASE)
+        no_claycode["capability_pass_rate"] = .81
+        no_claycode["throughput_tokens_s"] = 22
+        self.assertFalse(MOD.evaluate(BASE, no_claycode, claycode_migration=True)["promotion_pass"])
+
+    def test_claycode_migration_allows_stable_unrelated_metrics(self):
+        after = dict(BASE)
+        after["claycode_fraction"] = .25
+        after["throughput_tokens_s"] = 22
+        result = MOD.evaluate(BASE, after, claycode_migration=True)
+        self.assertTrue(result["promotion_pass"])
+        self.assertIn("recovery_pass_rate", result["stable_metrics"])
 
 
 if __name__ == "__main__":

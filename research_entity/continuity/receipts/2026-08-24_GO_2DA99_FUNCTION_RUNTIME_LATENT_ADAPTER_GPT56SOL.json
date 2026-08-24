@@ -1,0 +1,101 @@
+{
+  "schema": "ENTITYOS_HCU_GO_FUNCTION_RUNTIME_AND_LATENT_ADAPTER_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_64.json",
+    "runtime_first": true,
+    "source_guard_proliferation": "PAUSED_UNLESS_EXECUTABLE_COUNTEREVIDENCE_REQUIRES_GUARD",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_SOURCE_REVIEW_FAIL_CLOSED_HARDENING_AND_EXACT_HEAD_RUNTIME_OBSERVATION"
+  },
+  "executor_reentry": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "head_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_state": "READY",
+    "deployment_git_sha_matches_head": true,
+    "predecessor_build_counterevidence": "cf40d46 exact-head build failed because the exclusive executor guard still required supervisor-8.63 FREE_ONLY admission markers while the active admission source had advanced to 8.64",
+    "repair_commit": "2da99e0458809988190c129b04cae913d1f15d92",
+    "repair_scope": "sync exclusive cost guard expectations to exact active supervisor-8.64 admission markers",
+    "build_after_repair": "PASS_TO_READY",
+    "source_guards_after_repair": "PASS_WITH_RUNTIME_CREDIT_ZERO"
+  },
+  "exact_head_function_runtime_observation": {
+    "source": "Vercel runtime logs scoped to dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "timestamp_utc": "2026-08-24T04:01:43Z",
+    "request_path": "/api/sandbox-probe",
+    "http_status": 200,
+    "runtime_class": "serverless",
+    "cache": "MISS",
+    "exact_deployed_route_source_commit": "2da99e0458809988190c129b04cae913d1f15d92",
+    "route_runtime_admission_branch": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "route_non_runtime_cases_when_quota_unobserved": "FAIL_CLOSED_412_BEFORE_SANDBOX_CREATE",
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_execution_admitted": false,
+    "response_body_observed": false,
+    "request_initiator_proven": false,
+    "bounded_inference": "Given exact deployed source plus static remaining_sandbox_quota_directly_observed=false, the observed 200 is consistent with the runtime-admission pre-Sandbox branch; any selftest/family-split path would return 412 before Sandbox.create. This promotes function-runtime execution evidence only.",
+    "sandbox_create_observed": false,
+    "python_sqlite_environment_probe_executed": false,
+    "hcu_component_executed": false,
+    "jspace_model_execution_observed": false,
+    "classification": "EXACT_HEAD_FUNCTION_RUNTIME_EXECUTION_OBSERVED; NO_SANDBOX_HCU_MODEL_OR_JSPACE_RUNTIME_CREDIT"
+  },
+  "free_only_quota_discriminator": {
+    "team_plan_observed": "hobby",
+    "team_plan_is_remaining_quota_evidence": false,
+    "vercel_documentation_search_result": "Documented Sandbox APIs expose per-sandbox/session cumulative usage metrics, but the searched official documentation did not surface an account-level remaining included Sandbox quota signal that would satisfy supervisor-8.64 direct remaining-quota admission.",
+    "current_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_create_authorized": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false
+  },
+  "retained_donor_delta": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "source_commit": "1f6ea09685e84edd1303024c4d2aca9afd9d4bde",
+    "test_commit": "ebd9a5b1fe22cfff28f401bd0c323072732a4a7b",
+    "current_head_observed": "ed6c5ff41ef36c6799cace067888896667953bc9",
+    "source_and_test_commits_are_ancestors_of_current_head": true,
+    "mechanism": "JSPACE_LATENT_BASIS_ADAPTER/v1",
+    "source_change": "Revalidate security-relevant top-level adapter authority fields independently of adapter digest; reject bool-as-int layer indices; preserve calibration/holdout split alias fence.",
+    "regression_change": "Add self-consistent rehashed malformed-metadata cases and bool layer-index rejection so recomputing adapter_sha256 cannot launder malformed authority metadata.",
+    "evidence_scope": "SOURCE_AND_REGRESSION_DEFINITION_ONLY_NO_CI_OR_MODEL_RUNTIME_CREDIT",
+    "supervisor_8_64_boundary": "Preserved as a bounded donor hardening delta; no additional source-guard proliferation is promoted from it after discovering runtime-first 8.64 authority."
+  },
+  "hypothesis": "The highest-information current blocker is no longer deployment identity or executor build syntax; exact-head serverless function execution exists, while Sandbox execution remains closed solely at the direct remaining-included-quota admission boundary.",
+  "counterhypothesis": "READY plus Hobby plan or function-runtime 200 is enough to infer remaining Sandbox quota and authorize Sandbox.create.",
+  "discriminator_result": "REJECTED. Exact admission source still records remaining_sandbox_quota_directly_observed=false and runtime_gate=BLOCKED_QUOTA_UNOBSERVED. Function-runtime 200 occurs on a no-Sandbox branch and cannot open the Sandbox gate.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: repaired exact-head 2da99e build is READY and exact deployment runtime logs now prove a serverless Function invocation at that same source identity; executable frontier is narrowed to direct FREE_ONLY Sandbox-quota admission plus downstream environment probe.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_SOURCE_ONLY: retained donor now fail-closes LatentBasisAdapter top-level authority metadata and bool layer indices, with self-consistent forged-digest regressions; no runtime credit and no further source-guard expansion under supervisor 8.64.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_ONLY: model-specific latent-basis transfer boundary is hardened for future JSPACE_VECTOR_CONTROL_ABI/v1 use, but no real local model invocation, hidden-state intervention, causal J-Space trace or training execution occurred."
+  },
+  "credits": {
+    "exact_head_executor_build_ready": true,
+    "exact_head_function_runtime_execution": "OBSERVED_AT_SERVERLESS_CONTROL_SCOPE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain an authoritative direct remaining included Vercel Sandbox quota signal without paid/upgrade/fallback assumptions. Only if that FREE_ONLY admission opens, execute the fixed exact-head Python/sqlite3/_sqlite3 Sandbox environment probe with exact source identity, secret fence, result digest and cleanup. After environment PASS, continue canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> inference receipt -> Global J-Space/GWT observation with admitted vector-control interventions.",
+  "evidence_boundary": "Function runtime execution is not Sandbox execution. Source/regression hardening is not model/J-Space causal evidence. READY/Hobby identity is not remaining-quota evidence. All whole EntityOS/HCU, HCU full, J-Space model and training credits remain zero."
+}

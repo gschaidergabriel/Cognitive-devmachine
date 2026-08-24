@@ -10,13 +10,18 @@
   "architecture": "HCU",
   "execution_mode": "FREE_ONLY",
   "canonical_main_observed_before_receipt_branch": "683f85d69d92beec257cf7119748b4ffd413cf06",
+  "canonical_main_reentered_before_expanded_regression": "93a8a042ba292b19d7e3a3007c1f7660372f0d52",
   "tested_source": {
-    "source_commit_lineage": "current main after 8835f7a7 delta_id replay hardening plus e4f1b7c5 replay-stable training packet successor",
+    "source_commit_lineage": "current main after 8835f7a7 delta_id replay hardening plus e4f1b7c5 replay-stable training packet successor and fused live/restart convergence",
     "tools/ingest_forge_accepts_into_distillery.py": "4b5af6d632d524c9768c76aeee0fefc245891040",
     "tools/forge_evidence_credit_871.py": "d99567577890d885c8d32840dfe4afc04cbaade1",
+    "tools/run_forge_distillery_bridge_loop.py": "cd60b388643b2ca647e647c457fb257ae3d8c6ca",
+    "tools/activate_6000_free_swarm.sh": "718f77d591721ba5d208172c995d9c0507fbf98a",
     "tests/test_forge_distillery_replay_identity_873.py": "585e6c698b9821e2a98a36431090d7647a81a7da",
     "tests/test_forge_distillery_replay_restart_873.py": "46bf99334fe8276e7454ca1b21a438de8c2dac25",
-    "identity_binding": "LOCAL_FILES_VERIFIED_BY_GIT_HASH_OBJECT_AGAINST_GITHUB_BLOB_IDS"
+    "tests/test_forge_distillery_rebuild_stable_packet_873.py": "235791f058c9df50374087d9007ec286d0b18620",
+    "tests/test_forge_distillery_live_bridge_871.py": "4afe1b467858dcaadf6e21ffc30191c4c9821654",
+    "identity_binding": "LOCAL_FILES_VERIFIED_BY_GIT_HASH_OBJECT_AGAINST_CURRENT_GITHUB_BLOB_IDS"
   },
   "execution": {
     "surface": "CHATGPT_CONTAINER_DETERMINISTIC_COMPONENT_EXECUTION",
@@ -25,12 +30,12 @@
     "together_execution": false,
     "python": "3.13.5",
     "sqlite": "3.46.1",
-    "compile_command": "python3 -m py_compile tools/ingest_forge_accepts_into_distillery.py tools/forge_evidence_credit_871.py tests/test_forge_distillery_replay_identity_873.py tests/test_forge_distillery_replay_restart_873.py",
-    "test_command": "python3 -m unittest -q tests.test_forge_distillery_replay_identity_873 tests.test_forge_distillery_replay_restart_873",
-    "tests_run": 7,
-    "tests_passed": 7,
+    "compile_command": "python3 -m py_compile tools/ingest_forge_accepts_into_distillery.py tools/forge_evidence_credit_871.py tools/run_forge_distillery_bridge_loop.py tests/test_forge_distillery_replay_identity_873.py tests/test_forge_distillery_replay_restart_873.py tests/test_forge_distillery_rebuild_stable_packet_873.py tests/test_forge_distillery_live_bridge_871.py",
+    "test_command": "python3 -m unittest -q tests.test_forge_distillery_replay_identity_873 tests.test_forge_distillery_replay_restart_873 tests.test_forge_distillery_rebuild_stable_packet_873 tests.test_forge_distillery_live_bridge_871",
+    "tests_run": 17,
+    "tests_passed": 17,
     "tests_failed": 0,
-    "duration_seconds": 1.469,
+    "duration_seconds": 2.850,
     "result": "PASS"
   },
   "verified_invariants": [
@@ -40,7 +45,10 @@
     "genuinely different execution identity remains separately admissible",
     "legacy replay ambiguity remains fail closed even when delta_id is re-keyed",
     "semantic replay remains zero-delta after a fresh process reopens the persisted SQLite database",
-    "current training-bearing measured_packet excludes volatile evaluated_at and delta_id from its preimage"
+    "fresh Distillery rebuilds from equivalent volatile envelopes emit identical training-bearing packet bytes and token counts",
+    "current measured_packet excludes evaluated_at and delta_id from the training preimage while retaining them as observation metadata",
+    "live bridge forwards duplicate accounting without double credit and persists bounded noncanonical status",
+    "live bridge source contains no provider network client and activation wiring compiles, starts, and terminates stale bridge instances deterministically"
   ],
   "github_runner_negative_evidence": {
     "pr_1743_head": "bbde87ff3d14380fc4706f2579e35912474b21b6",
@@ -50,16 +58,18 @@
     "classification": "RUNNER_OR_INFRASTRUCTURE_NEGATIVE_EVIDENCE_NOT_PRODUCT_LOGIC_NEGATIVE"
   },
   "go_tracks": {
-    "track_a": "ADVANCED: current Forge-to-Distillery replay primitive now has executed deterministic component regression in addition to merged source definition",
-    "track_b": "ADVANCED: stable measured-execution identity is verified against envelope-only delta_id mutation and legacy ambiguity",
-    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE: training-bearing packet preimage and semantic replay accounting are verified stable against volatile envelope fields; no model-specific J-Space or training credit minted"
+    "track_a": "ADVANCED: replay identity, restart persistence, rebuild stability and live bridge wiring all have exact-Git-blob deterministic component execution evidence",
+    "track_b": "ADVANCED: stable measured-execution identity is verified against envelope-only mutation, legacy ambiguity and live duplicate reconciliation",
+    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE: training-bearing packet rebuild identity and zero-delta replay accounting are verified stable; model-specific J-Space causal execution and training remain uncredited"
   },
   "coordination": {
     "unusual_experiment": "NOT_RUN",
     "unusual_interventions_executed": 0,
-    "classification": "ORDINARY_DETERMINISTIC_COMPONENT_REGRESSION"
+    "classification": "ORDINARY_DETERMINISTIC_COMPONENT_REGRESSION",
+    "parallel_main_component_receipt": "fb19154fb1b00e8e2c68e24fc09a5d7e1e06bb92",
+    "nonduplicate_value": "this execution additionally covers fresh-process restart/reopen and live-bridge wiring in the same exact-current blob set"
   },
-  "evidence_scope": "EXACT_GITHUB_BLOB_BOUND_CHATGPT_CONTAINER_COMPONENT_REGRESSION_ONLY_NOT_REPOSITORY_BOUND_SELFHOSTED_OR_WHOLE_ENTITYOS_RUNTIME",
+  "evidence_scope": "EXACT_GITHUB_BLOB_BOUND_CHATGPT_CONTAINER_COMPONENT_REGRESSION_ONLY_NOT_REPOSITORY_BOUND_REAL_SAFE_FORGE_ACCEPT_OR_WHOLE_ENTITYOS_RUNTIME",
   "credits": {
     "whole_entityos_hcu_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
@@ -68,5 +78,5 @@
     "training_credit": 0,
     "whole_product_pass": false
   },
-  "next_exact_gate": "Close the concurrent replay-admission transaction race and execute the repository-bound self-hosted/live Forge-to-Distillery witness requiring one evidence-qualified ACCEPT -> exactly one persistent packet -> accepted_dataset_tokens > 0 -> semantic replay +0, then keep model-specific J-Space causal promotion separately gated."
+  "next_exact_gate": "Observe or execute on an exposed authorized repository-bound zero-cost checkout one real evidence-qualified Safe-Forge ACCEPT -> exactly one persistent Distillery packet -> accepted_dataset_tokens > 0 -> timestamp/narration/delta-id semantic replay +0 -> measured-evidence conflict +0; independently close the concurrent replay-admission transaction race. Model-specific J-Space intervention remains atomic-lease gated."
 }

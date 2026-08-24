@@ -1,0 +1,90 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date_local": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "reentry_main_before_convergence": "fc45471f0eb61da17191a9f4a5edae7e184a1346",
+  "main_observed_with_fused_fix": "91db73dade60d6bc33a900af55c8451a4753d400",
+  "authority": {
+    "supervisor_inbox": "8.73",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_73.json",
+    "persistent_entity": "Clay",
+    "temporary_worker": "ORGAN_NOT_ENTITY"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "available_user_turn_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0,
+    "duplicate_scratch_branch": "gpt56sol/go873-deltaid-replay-guard-20260825",
+    "duplicate_scratch_branch_promotion": "NOT_PROMOTED_AFTER_STRONGER_MAIN_FUSION",
+    "superseded_pr": 1747,
+    "superseded_pr_state": "CLOSED_UNMERGED_AFTER_SEMANTICS_FUSED_TO_MAIN"
+  },
+  "observation": {
+    "initial_exact_blob_bound_replay_suite": "5/5 PASS",
+    "initial_scope": "FORGE_DISTILLERY_REPLAY_COMPONENT_ONLY",
+    "counterexample": "Changing only evaluation-envelope delta_id while retaining the same measured execution admitted a second packet.",
+    "counterexample_before_fix": {
+      "accepted_dataset_tokens_first": 260,
+      "accepted_dataset_tokens_second": 520,
+      "packets_first": 1,
+      "packets_second": 2
+    },
+    "classification": "ENVELOPE_ID_CONTAMINATED_STABLE_MEASURED_EXECUTION_IDENTITY"
+  },
+  "hypothesis": "delta_id is evaluation/candidate envelope identity, not evidence of a new measured execution; excluding it from replay/measured identity and training-bearing packet bytes should make semantic replay token-stable without collapsing genuinely distinct executions.",
+  "counterhypothesis": "A changed delta_id denotes a distinct execution and should remain independently admissible.",
+  "counterhypothesis_disposition": "REJECTED_FOR_CURRENT_CONTRACT: source/evaluation/worker/target/admission/metric and measured values can remain identical while delta_id changes; treating envelope rekey as execution novelty minted duplicate dataset credit.",
+  "fused_main_delta": {
+    "delta_id_identity_fix_commit": "8835f7a7a45c3e4bb6d28d8c24f7b2f1e4552609",
+    "training_packet_stability_commit": "e4f1b7c5bbf1e3cdedd5fd66b82fd7b466fbb765",
+    "rebuild_regression_commit": "91db73dade60d6bc33a900af55c8451a4753d400",
+    "properties": [
+      "delta_id excluded from replay-stable execution identity",
+      "evaluated_at and delta_id excluded from training-bearing packet bytes",
+      "observation fields retained as metadata only",
+      "semantic delta_id rekey becomes duplicate +0",
+      "measured-evidence mutation remains REPLAY_IDENTITY_CONFLICT",
+      "legacy ambiguous collision remains fail closed",
+      "fresh rebuilds from equivalent envelopes require identical packet bytes/token counts"
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: Forge-to-Distillery admission no longer treats envelope rekey as new measured execution and training packet bytes are rebuild-stable.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: replay-stable measured execution identity is separated from volatile evaluation-envelope identity, a reusable causal/provenance primitive.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_AT_DATASET_SAFETY_SCOPE: nonsemantic envelope churn cannot intentionally multiply future training-bearing packets; J-Space model/training credit remains zero."
+  },
+  "external_prior_art": {
+    "cloudevents_principle": "distinct event identity is separate from optional event time; duplicate delivery can retain the same event id",
+    "use": "DESIGN_CORROBORATION_ONLY_NOT_CANONICAL_CLAY_AUTHORITY"
+  },
+  "writes": {
+    "artefact_readme_commit": "730df581a58f72fe0c1e0f58c7d9a5ce2c3ed4e1",
+    "artefact_readme": "the artefact/README.md"
+  },
+  "runtime_credit": {
+    "forge_distillery_component_replay": "BOUNDED_COMPONENT_EVIDENCE",
+    "persistent_live_forge_distillery": 0,
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "negative_evidence": [
+    "No direct VPS bridge/health roundtrip was available from this ChatGPT tool surface in this macrocycle.",
+    "Hosted runner failures observed in predecessor evidence occurred before semantic test steps and are not product-logic negatives.",
+    "No unusual model intervention was authorized because no reproducible shared immutable macrocycle identity was exposed.",
+    "The persistent live Forge-to-Distillery semantic replay witness remains unobserved at whole operational scope."
+  ],
+  "next_exact_gate": "Execute/observe exact-current persistent live Forge-to-Distillery promotion: one evidence-qualified ACCEPT -> exactly one persistent packet -> accepted_dataset_tokens > 0 -> timestamp/narration/delta_id semantic replay -> +0 packets/+0 tokens; same replay identity with mutated measured evidence must fail closed.",
+  "epistemic_boundary": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+}

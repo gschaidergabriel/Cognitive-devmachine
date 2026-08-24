@@ -1,0 +1,73 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_final_reentry": "60fb7301bac7a04c9e56defe2c6fcf978cac5bc1",
+  "source_commits": [
+    "8835f7a7a45c3e4bb6d28d8c24f7b2f1e4552609",
+    "e4f1b7c5bbf1e3cdedd5fd66b82fd7b466fbb765",
+    "91db73dade60d6bc33a900af55c8451a4753d400"
+  ],
+  "material_finding": "Stable Forge replay/measured identity on main excluded delta_id and evaluated_at, but training-bearing CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2 still contained both envelope-only fields. Fresh Distillery rebuilds could therefore produce different packet_text/token bytes for the same measured execution despite one stable replay identity.",
+  "counterhypothesis": "Keeping evaluated_at or delta_id in packet_text might be necessary for provenance.",
+  "resolution": "Remove evaluated_at and delta_id only from training-bearing measured_packet; retain both as forge_evaluated_at_observation_only and forge_delta_id_observation_only metadata. Keep replay identity bound to measured execution and keep legacy ambiguous overlap fail-closed.",
+  "current_exact_blob_evidence": {
+    "tools/ingest_forge_accepts_into_distillery.py": "4b5af6d632d524c9768c76aeee0fefc245891040",
+    "tools/forge_evidence_credit_871.py": "d99567577890d885c8d32840dfe4afc04cbaade1",
+    "tests/test_forge_distillery_replay_identity_873.py": "585e6c698b9821e2a98a36431090d7647a81a7da",
+    "tests/test_forge_distillery_rebuild_stable_packet_873.py": "235791f058c9df50374087d9007ec286d0b18620"
+  },
+  "deterministic_component_replica": {
+    "surface": "ChatGPT isolated local container replica",
+    "blob_identity_check": "PASS_ALL_FOUR_MATCH_GITHUB_GIT_BLOB_SHA1",
+    "py_compile": "PASS",
+    "unittest_modules": [
+      "tests.test_forge_distillery_replay_identity_873",
+      "tests.test_forge_distillery_rebuild_stable_packet_873"
+    ],
+    "tests_passed": 10,
+    "tests_failed": 0,
+    "scope": "EXACT_BLOB_COMPONENT_REGRESSION_ONLY",
+    "canonical_runtime_credit": 0
+  },
+  "negative_evidence": {
+    "github_hosted_prior_runs": "FAILURE_WITH_ZERO_EXECUTED_STEPS",
+    "job_logs": "BLOBNOTFOUND_404",
+    "classification": "RUNNER_OR_WORKFLOW_INFRASTRUCTURE_NEGATIVE_EVIDENCE_NOT_SEMANTIC_PRODUCT_FAILURE"
+  },
+  "coordination": {
+    "closed_duplicate_or_superseded_lanes": [1726, 1742, 1747],
+    "pr_1747_action": "CLOSED_UNMERGED_AFTER_MAIN_FUSION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_MAIN_FORGE_DISTILLERY_REBUILD_STABLE_PACKET_SOURCE_AND_REGRESSION",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "ADVANCED_REPLAY_STABLE_CAUSAL_EVIDENCE_IDENTITY_AND_METADATA_SEPARATION",
+    "C_GLOBAL_JSPACE_GWT_TRAINING_READINESS_FREE_ONLY": "ADVANCED_DATASET_REBUILD_STABILITY_PLUS_PARALLEL_JSPACE_VECTOR_CONTROL_NAMESPACE_CONVERGENCE_NO_MODEL_EXECUTION"
+  },
+  "parallel_current_main_delta": {
+    "commit": "60fb7301bac7a04c9e56defe2c6fcf978cac5bc1",
+    "meaning": "JSPACE_VECTOR_CONTROL_ABI/v1 reserved for full causal control packet; historical partial descriptor/q8 codec namespaces quarantined",
+    "credit": "SOURCE_CONTROL_PLANE_ONLY"
+  },
+  "artifact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current GitHub connector exposes whole-file replacement but no safe incremental append/patch primitive for the large concurrently moving the artefact/README.md. A stale full-file rewrite would risk clobbering parallel current-main content; this receipt preserves the exact delta for successor-dynamic README fusion."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an explicitly admitted zero-cost exact-current repository checkout, execute py_compile plus replay_identity_873 + rebuild_stable_packet_873 + live_bridge_871; then prove one real evidence-qualified Safe-Forge ACCEPT -> exactly one persistent Distillery packet -> accepted_dataset_tokens positive -> timestamp/narration/delta-id semantic replay adds zero; preserve measured-evidence mutation conflict and distinct-execution admission.",
+  "evidence_boundary": "Main source and exact Git-blob component regression evidence only. No provider/model execution, J-Space causal result, training, whole-HCU or whole-EntityOS runtime acceptance is claimed."
+}

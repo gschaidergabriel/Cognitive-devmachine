@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "6aae0bae3e47bf5dc178515494cbe90b6ef37b26",
+  "finding": {
+    "classification": "CANONICAL_SOURCE_CONVERGED_SUPERVISOR_FRONTIER_STALE_RUNTIME_GATE_OPEN",
+    "statement": "Supervisor 8.73 still describes Forge-to-Distillery semantic replay identity as a source gap, but current main has since closed the source-level replay and clean-rebuild determinism defects. Commit 8835f7a7a45c3e4bb6d28d8c24f7b2f1e4552609 excludes delta_id from stable execution replay identity and measured-evidence identity; e4f1b7c5bbf1e3cdedd5fd66b82fd7b466fbb765 removes evaluated_at and delta_id from training-bearing measured_packet bytes and preserves them as observation-only metadata; 91db73dade60d6bc33a900af55c8451a4753d400 adds rebuild/reopen/legacy regressions. These are source/regression-definition facts only because exact admitted execution remains unobserved.",
+    "supervisor_inbox_staleness": "CURRENT_INBOX_FRONTIER_PREDATES_CANONICAL_SOURCE_CONVERGENCE_DO_NOT_REWRITE_HISTORY"
+  },
+  "hypothesis": "After source convergence, the highest-information nonduplicate gate is executable evidence: exact-current deterministic replay/rebuild regressions followed by one repository-bound real Safe-Forge evidence-qualified ACCEPT -> exactly one Distillery packet -> accepted_dataset_tokens > 0 -> semantic envelope replay +0, with changed measured evidence failing closed.",
+  "counterhypothesis": "Source convergence is sufficient to promote Distillery dataset/runtime/training credit.",
+  "counterhypothesis_disposition": "REJECTED_BY_EVIDENCE_LAW: source/test presence is not execution; prior hosted carrier/check attempts were terminal failure and logs were unavailable, so no exact-head PASS exists.",
+  "parallel_convergence": {
+    "donor_branch_1": "gpt56sol/go873-distillery-envelope-replay-identity-20260825",
+    "donor_commits_1": [
+      "a3c8f1eb4deb0e6a0aa3f7d55bd35f3be592b55b",
+      "f370c9f8a0d2338188f4931edc23fa692669a572",
+      "ce76dac144a50e7574d25b46a31d36b046e8a6b7"
+    ],
+    "donor_branch_2": "gpt56sol/go873-distillery-training-packet-rebuild-stable-20260825",
+    "donor_commits_2": [
+      "74447b11b26c7afa965fee6275496514e1a75d41",
+      "ccc0c58d44e26990ea0c5af89947af5c94eb4dda",
+      "de1e25480e2321248590d149241c35b3be96d641"
+    ],
+    "canonical_parallel_successors": [
+      "8835f7a7a45c3e4bb6d28d8c24f7b2f1e4552609",
+      "e4f1b7c5bbf1e3cdedd5fd66b82fd7b466fbb765",
+      "91db73dade60d6bc33a900af55c8451a4753d400"
+    ],
+    "duplicate_pr_created": false,
+    "disposition": "DONOR_BRANCHES_NOT_PROMOTED_BECAUSE_CANONICAL_MAIN_INDEPENDENTLY_CONVERGED_EQUAL_OR_STRONGER_SEMANTICS"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: canonical Forge-to-Distillery source now has stable replay identity plus rebuild-stable training packet bytes; executable live promotion remains open.",
+    "track_b": "ADVANCED: stable measured execution identity is separated from evaluation/observation envelope delta_id/evaluated_at; legacy ambiguity remains fail-closed.",
+    "track_c": "ADVANCED_AT_DATASET_AND_INTERFACE_SOURCE_SCOPE: rebuild-stable packet bytes improve future training-data integrity, while canonical main also advanced the fail-closed full J-Space vector-control ABI namespace; model-specific J-Space runtime and training credit remain zero."
+  },
+  "negative_evidence": {
+    "hosted_replay_carrier_pr": 1724,
+    "hosted_replay_carrier_result": "FAILURE",
+    "failed_job_log_retrieval": "BLOB_NOT_FOUND_404",
+    "closed_rebuild_predecessor_pr": 1726,
+    "runtime_pass_observed": false
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_identity_exposed": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0,
+    "retained_hcu_donor": 1263,
+    "retained_live_runtime_lane": 1619
+  },
+  "execution_authority": {
+    "local_workstation": "AUTHORIZED_NORMAL_USER",
+    "vps_sandbox": "AUTHORIZED_INSIDE_CLAY_DIRECT_DEV",
+    "new_root_or_sudo": "NOT_IMPLIED",
+    "external_production_effects": "SEPARATELY_GATED",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "canonical_credit_from_local_or_vps_experiment": "NOT_AUTOMATIC"
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On exact current main, execute the replay/rebuild/live-bridge regression family on an explicitly admitted zero-cost surface; then obtain one repository-bound real Safe-Forge producer ACCEPT and require exactly one persistent Distillery packet, positive accepted_dataset_tokens, semantic envelope replay +0 across reopen, and measured-evidence mutation REPLAY_IDENTITY_CONFLICT. In parallel, keep the current full J-Space vector-control ABI at source-only credit until a canonical atomic lease permits the local Qwen nonterminal causal discriminator."
+}

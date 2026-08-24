@@ -30,26 +30,51 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 12
     steps:
-      - name: Checkout exact evidence source
+      - name: Checkout canonical main at execution time
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Bind canonical execution source
+        id: source
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          SOURCE_SHA="$(git rev-parse HEAD)"
+          SOURCE_TREE="$(git rev-parse 'HEAD^{tree}')"
+          DIRTY="$(git status --porcelain=v1)"
+          test -n "$SOURCE_SHA"
+          test -n "$SOURCE_TREE"
+          test -z "$DIRTY"
+          echo "source_sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "source_tree=$SOURCE_TREE" >> "$GITHUB_OUTPUT"
+          printf '%s\n' "$SOURCE_SHA" > /tmp/clay-go872-execution-source-sha.txt
+          printf '%s\n' "$SOURCE_TREE" > /tmp/clay-go872-execution-source-tree.txt
+
       - name: Record sanitized host/live identity
         shell: bash
+        env:
+          EXECUTION_SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          EXECUTION_SOURCE_TREE: ${{ steps.source.outputs.source_tree }}
+          TRIGGER_PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           set -Eeuo pipefail
           mkdir -p /tmp/clay-go871-forge-distillery
           python3 - <<'PY' > /tmp/clay-go871-forge-distillery/host_probe.json
-          import json, subprocess
+          import json, os, subprocess
           from pathlib import Path
           live=Path('/workspace/clay-global-research-entity')
           def cmd(*args):
               p=subprocess.run(args,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False)
               return {'rc':p.returncode,'stdout':p.stdout.strip()[-1000:],'stderr':p.stderr.strip()[-1000:]}
           print(json.dumps({
-              'schema':'CLAY_GO872_SELFHOSTED_RUNTIME_PROBE/v1',
+              'schema':'CLAY_GO872_SELFHOSTED_RUNTIME_PROBE/v2',
+              'execution_source_sha':os.environ.get('EXECUTION_SOURCE_SHA'),
+              'execution_source_tree':os.environ.get('EXECUTION_SOURCE_TREE'),
+              'trigger_pr_base_sha':os.environ.get('TRIGGER_PR_BASE_SHA') or None,
+              'source_selection':'CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME',
               'live_repo_exists':(live/'.git').exists(),
               'live_head':cmd('git','-C',str(live),'rev-parse','HEAD') if (live/'.git').exists() else None,
               'live_status':cmd('git','-C',str(live),'status','--porcelain=v1') if (live/'.git').exists() else None,
@@ -64,7 +89,7 @@ jobs:
         id: gate
         shell: bash
         env:
-          SOURCE_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
+          SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
         run: |
           set +e
           python3 tools/run_go871_forge_distillery_runtime_gate.py \
@@ -75,9 +100,12 @@ jobs:
           echo "gate_rc=$rc" >> "$GITHUB_OUTPUT"
           exit 0
 
-      - name: Publish sanitized push result to main
-        if: always() && github.event_name != 'pull_request'
+      - name: Publish sanitized runtime result to main
+        if: always()
         uses: actions/github-script@v7
+        env:
+          EXECUTION_SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          EXECUTION_SOURCE_TREE: ${{ steps.source.outputs.source_tree }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -85,13 +113,23 @@ jobs:
             const p = '/tmp/clay-go871-forge-distillery/result.json';
             let body;
             if (fs.existsSync(p)) {
-              body = fs.readFileSync(p, 'utf8');
+              const parsed = JSON.parse(fs.readFileSync(p, 'utf8'));
+              parsed.github_run_id = String(context.runId);
+              parsed.github_event_name = context.eventName;
+              parsed.execution_source_sha = process.env.EXECUTION_SOURCE_SHA || null;
+              parsed.execution_source_tree = process.env.EXECUTION_SOURCE_TREE || null;
+              parsed.source_selection = 'CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME';
+              body = JSON.stringify(parsed, null, 2) + '\n';
             } else {
               body = JSON.stringify({
                 schema:'CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2',
                 status:'WORKFLOW_RESULT_MISSING',
                 pass:false,
-                github_run_id:context.runId,
+                github_run_id:String(context.runId),
+                github_event_name:context.eventName,
+                execution_source_sha:process.env.EXECUTION_SOURCE_SHA || null,
+                execution_source_tree:process.env.EXECUTION_SOURCE_TREE || null,
+                source_selection:'CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME',
                 whole_product_credit:0,
                 hcu_full_credit:0,
                 jspace_credit:0,
@@ -117,6 +155,8 @@ jobs:
             /tmp/clay-go871-forge-distillery/result.json
             /tmp/clay-go871-forge-distillery/host_probe.json
             /tmp/clay-go871-forge-distillery/stdout.log
+            /tmp/clay-go872-execution-source-sha.txt
+            /tmp/clay-go872-execution-source-tree.txt
           if-no-files-found: warn
           retention-days: 7
 

@@ -681,6 +681,8 @@ def _execute_chat_locked(
     )
     if type(attempt_nonce) is not str or not attempt_nonce:
         raise ValueError("attempt_nonce_must_be_nonempty_string")
+    if not _is_unicode_scalar_text(attempt_nonce):
+        raise ValueError("attempt_nonce_must_be_unicode_scalar_string")
 
     started = _passive_clock_value_or_none(now)
     if started is None:

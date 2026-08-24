@@ -12,12 +12,14 @@ canonical workflow: exact run id, event class, canonical-main source selection, 
 and source tree. The promoter records the SHA-256 of the exact pre-publication gate bytes;
 the later repository publication must preserve and verify the same binding.
 
-Idempotency is bound to the bridge's replay-stable execution identity, not to byte identity of
-the full evaluation envelope. A first promotion must add exactly one packet and nonzero
-accepted-dataset tokens. A timestamp/candidate-narration-only semantic replay must add zero
-packets/tokens even after the SQLite database has been closed and reopened. Reusing the same
+Idempotency is bound to the bridge's versioned replay-stable execution identity, not to byte
+identity of the full evaluation envelope. Existing databases are schema-migrated through the
+same bridge before replay-presence inspection, so historical ambiguous v1 hashes cannot make
+a previously admitted execution look absent after the replay-identity ABI advances to v2.
+A first promotion must add exactly one packet and nonzero accepted-dataset tokens. A
+semantic envelope replay must add zero packets/tokens after SQLite reopen. Reusing the same
 stable execution identity with changed measured evidence must fail closed as a replay-identity
-conflict. Existing prior promotion is accepted only when the same stable replay identity is
+conflict. Existing prior promotion is accepted only when the same v2 replay identity is
 already present with nonzero packet tokens and all replay/conflict guards remain zero-delta.
 
 No provider/network I/O occurs here. This tool grants no whole-product, HCU, J-Space,
@@ -155,12 +157,17 @@ def inspect_db(
             "db_exists": False,
             "evaluation_present": False,
             "replay_identity_present": False,
+            "replay_identity_column": None,
             "packet_id": None,
             "packet_tokens": 0,
             "accepted_dataset_tokens_counter": 0,
         }
     con = sqlite3.connect(db, timeout=30)
     try:
+        # Schema migration/backfill is part of deterministic inspection. It changes no
+        # packet/counter credit, but it prevents an old v1 hash from hiding an already
+        # admitted semantic execution when current code computes the v2 hash.
+        bridge.ensure_schema(con)
         tables = {row[0] for row in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         counter = 0
         if "counters" in tables:
@@ -169,23 +176,29 @@ def inspect_db(
 
         exact_row = None
         replay_row = None
+        replay_column = None
         if "forge_execution_ingest" in tables:
             exact_row = con.execute(
                 "SELECT packet_id, approx_tokens FROM forge_execution_ingest WHERE evaluation_sha256=?",
                 (evaluation_sha256,),
             ).fetchone()
             columns = {str(row[1]) for row in con.execute("PRAGMA table_info(forge_execution_ingest)")}
-            if replay_identity_sha256 and "execution_replay_identity_sha256" in columns:
-                replay_row = con.execute(
-                    "SELECT packet_id, approx_tokens FROM forge_execution_ingest "
-                    "WHERE execution_replay_identity_sha256=?",
-                    (replay_identity_sha256,),
-                ).fetchone()
+            if replay_identity_sha256:
+                if "execution_replay_identity_v2_sha256" in columns:
+                    replay_column = "execution_replay_identity_v2_sha256"
+                elif "execution_replay_identity_sha256" in columns:
+                    replay_column = "execution_replay_identity_sha256"
+                if replay_column:
+                    replay_row = con.execute(
+                        f"SELECT packet_id, approx_tokens FROM forge_execution_ingest WHERE {replay_column}=?",
+                        (replay_identity_sha256,),
+                    ).fetchone()
         selected = replay_row or exact_row
         return {
             "db_exists": True,
             "evaluation_present": exact_row is not None,
             "replay_identity_present": replay_row is not None if replay_identity_sha256 else exact_row is not None,
+            "replay_identity_column": replay_column,
             "packet_id": selected[0] if selected else None,
             "packet_tokens": int(selected[1]) if selected else 0,
             "accepted_dataset_tokens_counter": counter,
@@ -314,7 +327,9 @@ def promote(
         **context,
         "gate_result_sha256": hashlib.sha256(raw).hexdigest(),
         "evaluation_sha256": evaluation_sha,
+        "execution_replay_identity_schema": bridge.REPLAY_IDENTITY_SCHEMA,
         "execution_replay_identity_sha256": replay_identity_sha,
+        "measured_evidence_schema": bridge.MEASURED_EVIDENCE_SCHEMA,
         "measured_evidence_sha256": measured_evidence_sha,
         "distillery_db": str(distillery_db),
         "before": before,
@@ -327,6 +342,7 @@ def promote(
         "replay_token_delta": replay_tokens - first_tokens,
         "measured_conflict_token_delta": conflict_tokens - replay_tokens,
         "semantic_replay_db_reopen_proven": True,
+        "replay_abi_v2_migration_checked": True,
         "network_used": False,
         "provider_calls": 0,
         "paid_fallback_attempt_count": 0,

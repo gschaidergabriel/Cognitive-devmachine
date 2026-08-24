@@ -29,40 +29,44 @@ echo COMPILE_PASS
 echo '--- STOP EXACT LEGACY/FABRIC PROCESSES ---'
 python3 - <<'PY'
 import os,signal
-exact_suffixes={
- 'tools/run_24h_entityos_swarm_supervisor.sh',
- 'tools/run_24h_entityos_swarm.py',
- 'tools/run_6000_free_swarm_supervisor.sh',
- 'tools/run_6000_free_swarm_fast.py',
- 'free swarm/update_fabric_live.py',
-}
+suffixes={'tools/run_24h_entityos_swarm_supervisor.sh','tools/run_24h_entityos_swarm.py','tools/run_6000_free_swarm_supervisor.sh','tools/run_6000_free_swarm_fast.py','free swarm/update_fabric_live.py'}
 me=os.getpid(); parent=os.getppid()
 for name in os.listdir('/proc'):
  if not name.isdigit(): continue
  pid=int(name)
  if pid in {me,parent}: continue
- try: raw=open(f'/proc/{pid}/cmdline','rb').read().split(b'\0')
+ try: args=[x.decode('utf-8','replace') for x in open(f'/proc/{pid}/cmdline','rb').read().split(b'\0') if x]
  except OSError: continue
- args=[x.decode('utf-8','replace') for x in raw if x]
- if not args: continue
- if any(any(arg.endswith(s) for s in exact_suffixes) for arg in args[1:5]):
+ if any(any(arg.endswith(s) for s in suffixes) for arg in args[1:5]):
   try: os.kill(pid,signal.SIGTERM); print('TERM',pid,' '.join(args[:4]))
   except (ProcessLookupError,PermissionError): pass
 PY
-sleep 3
+sleep 4
+# Fabric workers can spend minutes draining in-flight HTTP after SIGTERM. For an
+# explicit operator restart, bound that drain so the replacement high-throughput
+# fabric is not blocked by the old PID.
+python3 - <<'PY'
+import os,signal
+suffixes={'tools/run_24h_entityos_swarm_supervisor.sh','tools/run_24h_entityos_swarm.py','tools/run_6000_free_swarm_fast.py','free swarm/update_fabric_live.py'}
+me=os.getpid(); parent=os.getppid()
+for name in os.listdir('/proc'):
+ if not name.isdigit(): continue
+ pid=int(name)
+ if pid in {me,parent}: continue
+ try: args=[x.decode('utf-8','replace') for x in open(f'/proc/{pid}/cmdline','rb').read().split(b'\0') if x]
+ except OSError: continue
+ if any(any(arg.endswith(s) for s in suffixes) for arg in args[1:5]):
+  try: os.kill(pid,signal.SIGKILL); print('KILL',pid,' '.join(args[:4]))
+  except (ProcessLookupError,PermissionError): pass
+PY
 
 echo '--- START CREDENTIAL-BLIND 6000 SUPERVISOR ---'
 export CLAY_LOGICAL_WORKERS="${CLAY_LOGICAL_WORKERS:-6000}"
 export CLAY_SWARM_HTTP_THREADS="${CLAY_SWARM_HTTP_THREADS:-512}"
-# Do not wrap the long-lived supervisor in the vault loader. The supervisor
-# starts local/non-provider children credential-blind and launches only the
-# dedicated external-provider fabric child through free_swarm_exec_with_vault.py.
 nohup bash tools/run_6000_free_swarm_supervisor.sh >"$STATE/supervisor6000.log" 2>&1 </dev/null &
 echo $! >"$STATE/supervisor6000.pid"
 echo "SUPERVISOR_PID=$!"
 
-# Independent read-only metrics observer. It writes only README/live-metric files;
-# the existing publisher remains responsible for GitHub publication.
 nohup python3 "free swarm/update_fabric_live.py" --repo "$ROOT" --artifacts "$STATE" --watch --interval-seconds 20 >"$STATE/fabric-dashboard.log" 2>&1 </dev/null &
 echo $! >"$STATE/fabric-dashboard.pid"
 

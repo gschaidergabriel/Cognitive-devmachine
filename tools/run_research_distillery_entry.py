@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""Stable entrypoint for run_research_distillery.py.
+"""Stable FREE_ONLY entrypoint for run_research_distillery.py.
 
-Provides small, auditable overrides for question admission, efficient free-model
-selection and fail-soft reviewer behavior. The preferred panel remains exactly
-1 NVIDIA + 2 Mistral-family reviewers. When current FREE_ONLY routes cannot
-supply two Mistral-family models, two independent zero-priced OpenRouter models
-may form a clearly marked PROVISIONAL fallback panel so research does not stall.
-Provisional packets remain candidate research and can be re-reviewed later.
+Provides auditable overrides for provider admission, question admission, model
+selection and reviewer behavior. The canonical EntityOS/HCU typed provider
+admission boundary is installed before any distillery LLM secret lookup or LLM
+provider network I/O. External provider traffic remains quarantined unless that
+exact provider is admitted=true with cost_class=FREE under current authority.
 """
 from __future__ import annotations
 
@@ -21,11 +20,47 @@ TOOLS=Path(__file__).resolve().parent
 if str(TOOLS) not in sys.path:
     sys.path.insert(0,str(TOOLS))
 import run_research_distillery as d
+from free_provider_admission import provider_is_admitted_free
+
+LLM_PROVIDERS=frozenset({"groq","mistral","nvidia","openrouter"})
+SECRET_PROVIDER={
+    "GROQ_API_KEY":"groq",
+    "MISTRAL_API_KEY":"mistral",
+    "NVIDIA_API_KEY":"nvidia",
+    "NVIDIA_NIM_API_KEY":"nvidia",
+    "NGC_API_KEY":"nvidia",
+    "OPENROUTER_API_KEY":"openrouter",
+}
 
 # Capture original implementations before monkeypatching. Calling d.select_reviewers
 # from the replacement after assignment would recurse into itself.
+_ORIGINAL_SECRET=d.secret
+_ORIGINAL_REQUEST_JSON=d.request_json
 _ORIGINAL_SELECT_REVIEWERS=d.select_reviewers
 _ORIGINAL_REVIEW=d.review_candidate
+
+
+def admitted_secret(name: str) -> str:
+    """Never touch an LLM credential source before canonical typed FREE admission."""
+    provider=SECRET_PROVIDER.get(name)
+    if provider is not None and not provider_is_admitted_free(provider):
+        return ""
+    return _ORIGINAL_SECRET(name)
+
+
+def admitted_request_json(provider: str, owner: str, url: str, *, key: str = "", payload: dict | None = None,
+                          headers: dict[str,str] | None = None, timeout: float = 90.0):
+    """Fail closed before socket/network for every selectable external LLM provider."""
+    if provider in LLM_PROVIDERS and not provider_is_admitted_free(provider):
+        return 412, {}, {"error":"PROVIDER_NOT_TYPED_FREE_ADMITTED"}
+    return _ORIGINAL_REQUEST_JSON(provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout)
+
+
+# Install these two boundaries before catalog/chat/reviewer code executes. The core
+# distillery's chat() eagerly constructs provider specs, so guarding d.secret is
+# essential: unadmitted providers return before get_secret() is invoked.
+d.secret=admitted_secret
+d.request_json=admitted_request_json
 
 
 def add_question(con: sqlite3.Connection, question: str, *, parent_id: str | None = None,
@@ -86,11 +121,16 @@ def select_small_models(catalog: list[dict]) -> list[str]:
 
 def select_reviewers(catalog: list[dict]) -> list[tuple[str,str,str]]:
     preferred=_ORIGINAL_SELECT_REVIEWERS(catalog)
+    # Defensive filter: the original selector may describe an unadmitted provider,
+    # but no such lane is permitted to survive into a review call.
+    preferred=[x for x in preferred if x[1] not in LLM_PROVIDERS or provider_is_admitted_free(x[1])]
     mistral=sum(1 for lane,provider,model in preferred if "mistral" in lane.lower() or "mistral" in model.lower())
     if mistral >= 2:
         return preferred[:3]
     nvidia=next((x for x in preferred if x[0]=="nvidia_reviewer"),None)
     out=[nvidia] if nvidia else []
+    if not provider_is_admitted_free("openrouter"):
+        return out
     small=select_small_models(catalog)
     used={x[2] for x in out}
     for model in small:
@@ -101,6 +141,7 @@ def select_reviewers(catalog: list[dict]) -> list[tuple[str,str,str]]:
 
 
 def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[str,str,str]]):
+    reviewers=[r for r in reviewers if r[1] not in LLM_PROVIDERS or provider_is_admitted_free(r[1])]
     accepted,agg=_ORIGINAL_REVIEW(con,cid,reviewers)
     if accepted:
         agg["panel_class"]="PREFERRED_NVIDIA_PLUS_MISTRAL"

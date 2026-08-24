@@ -1,20 +1,17 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "sync-supervisor-no-match-fix-20260824T1852p0700",
-  "command_sha256": "87bbf239aa0db0d0eb69571d9a1ee2322d42d6701f5accd4bfdcfbc2c18dd3c0",
-  "started_at": "2026-08-24T11:45:00.032731+00:00",
-  "finished_at": "2026-08-24T11:45:02.980494+00:00",
+  "command_id": "start-fixed-v8-supervisor-20260824T1853p0700",
+  "command_sha256": "f9957b3a5b41d19e72d60ebecca1568fd71c1bbe50c3852b3c9ccd133f07908b",
+  "started_at": "2026-08-24T11:45:28.466515+00:00",
+  "finished_at": "2026-08-24T11:45:36.767215+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "canonical_sync",
-  "stdout_sha256": "3c32c18651788f8e6b9f6de235616d5fe7015bb38ce0f40f4f4de7cec67ea9bb",
+  "op": "exec",
+  "stdout_sha256": "b9417f0841a2d7efe59c73ee7c233eda58c2e0623406c8c6d7495869f578576f",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "d87158d77e1736e4d83cb04b1122d70dae439371\n",
+  "stdout_tail": "SUP_PID=24477\n---SUPERVISOR---\n{\n  \"schema\": \"CLAY_ENTITYOS_SWARM_SUPERVISOR/v8\",\n  \"observed_at\": \"2026-08-24T11:45:29.505169+00:00\",\n  \"repo_root\": \"/workspace/clay-global-research-entity\",\n  \"remaining_seconds\": 86399,\n  \"provider_admission\": {\n    \"schema\": \"ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1\",\n    \"ok\": true,\n    \"authority_epoch\": \"8.68\",\n    \"steering\": \"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json\",\n    \"admitted_free_providers\": [],\n    \"providers\": {\n      \"groq\": {\n        \"admitted\": false,\n        \"cost_class\": \"UNKNOWN\",\n        \"evidence_ref\": \"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state\"\n      },\n      \"mistral\": {\n        \"admitted\": false,\n        \"cost_class\": \"UNKNOWN\",\n        \"evidence_ref\": \"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state\"\n      },\n      \"nvidia\": {\n        \"admitted\": false,\n        \"cost_class\": \"UNKNOWN\",\n        \"evidence_ref\": \"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state\"\n      },\n      \"openrouter\": {\n        \"admitted\": false,\n        \"cost_class\": \"UNKNOWN\",\n        \"evidence_ref\": \"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state\"\n      }\n    }\n  },\n  \"go_swarm_running\": false,\n  \"local_research_model_ready\": false,\n  \"distillery_running\": true,\n  \"forge_running\": true,\n  \"dashboard_running\": true,\n  \"policy\": \"EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE\"\n}\n---PROCS---\n  19807       17:33 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60\n  19835       17:02 [llama-server] <defunct>\n  19841       17:02 python3 /workspace/clay-global-research-entity/tools/run_research_distillery_local.py --hours 24 --sleep-seconds 3\n  19844       17:02 python3 /workspace/clay-global-research-entity/tools/run_free_evidence_forge.py --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20\n  22802       02:16 cmake --build /cache/xdg/clay-local-research-model/llama.cpp/build -j4 --target llama-server llama-cli\n  22803       02:16 /usr/bin/gmake -f Makefile -j4 llama-server llama-cli\n  22805       02:16 /usr/bin/gmake -s -f CMakeFiles/Makefile2 llama-server\n  22808       02:16 /usr/bin/gmake -s -f CMakeFiles/Makefile2 tools/server/CMakeFiles/llama-server.dir/all\n  24470       00:08 bash -lc set -euo pipefail; nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor-v8.log 2>&1 </dev/null & pid=$!; echo $pid >/artifacts/clay-entityos-swarm/supervisor.pid; sleep 8; kill -0 $pid; echo SUP_PID=$pid; echo ---SUPERVISOR---; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json; echo ---PROCS---; ps -eo pid,etime,args | grep -E '[r]un_24h_entityos_swarm_supervisor|[r]un_research_distillery|[r]un_free_evidence_forge|[f]ree swarm/evaluate.py|[l]lama-server'\n  24477       00:08 bash tools/run_24h_entityos_swarm_supervisor.sh\n",
   "stderr_tail": "",
-  "meta": {
-    "head": "d87158d77e1736e4d83cb04b1122d70dae439371",
-    "ref": "main"
-  },
+  "meta": {},
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

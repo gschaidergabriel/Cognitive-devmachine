@@ -1,6 +1,6 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.71",
+  "authority_epoch": "8.72",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
@@ -37,5 +37,5 @@
     "unknown_or_unbound_route": "FAIL_CLOSED",
     "paid_fallback_attempt_count": 0
   },
-  "note": "Epoch 8.71 binds the currently materialized NVIDIA Developer API credential fingerprint to NVIDIA's documented free hosted-NIM prototyping endpoint. Groq remains same-credential/model Free-limit-header bound; OpenRouter remains exact zero-price route only; Mistral remains fail-closed until provider-side Free-mode/PAYG-disabled evidence and an actual credential are available. No paid fallback is present."
+  "note": "Epoch 8.72 preserves the owner-authorized FREE provider contingents but does not grant runtime credit from provider labels alone. Every autonomous provider-model call remains fail-closed until concrete credential fingerprint, exact model/route and provider-side zero-cost provenance are bound at the shared pre-call boundary. NVIDIA still requires exact credential entitlement plus exact allowed hosted-NIM route; Groq remains same-credential/model Free-limit bound; OpenRouter remains exact zero-price route only; Mistral remains fail-closed until provider-side Free-mode/PAYG-disabled evidence and an actual credential are available. Local Qwen3-0.6B is the preferred provider-independent J-Space discriminator. No paid fallback is present."
 }

@@ -2,23 +2,114 @@
 """Supervisor-8.71 safe entrypoint for the FREE Evidence Forge.
 
 Installs deterministic model-command execution admission before the base Forge
-cycle can evaluate a worker-authored candidate. This wrapper is a convergence
-surface; it does not grant candidate output canonical truth or runtime promotion.
+cycle can evaluate a worker-authored candidate. The execution manifest is bound to
+the same exact ``repo_head_at_prompt`` source identity now enforced by the canonical
+Forge (#1544), never to a moving evaluation checkout. Candidate output remains
+noncanonical and no execution is admitted without the isolated backend.
 """
 from __future__ import annotations
 
 import asyncio
+import json
+from pathlib import Path
+from typing import Any
 
 import forge_execution_admission_871 as admission
 import run_free_evidence_forge as base
 
 _ORIGINAL_VALIDATE = base.validate_candidate
+_ORIGINAL_MANIFEST = admission.candidate_execution_manifest
 base.safe_command = admission.safe_command
 base.run_cmd = admission.run_cmd
 
 
-def validate_candidate(con, row):
-    return admission.validate_candidate_with_admission(base, _ORIGINAL_VALIDATE, con, row)
+def _source_bound_manifest(row: Any, proposal: dict[str, Any], cwd: Path) -> dict[str, Any]:
+    manifest = _ORIGINAL_MANIFEST(row, proposal, cwd)
+    evaluation_head = manifest.get("source_head")
+    evaluation_tree = manifest.get("source_tree")
+    try:
+        source_head = str(row["repo_head"] or "").strip().lower()
+    except Exception:
+        source_head = ""
+
+    manifest["evaluation_checkout_head"] = evaluation_head
+    manifest["evaluation_checkout_tree"] = evaluation_tree
+    manifest["source_scope"] = "EXACT_WORKER_PROMPT_HEAD"
+    manifest["source_head"] = source_head or None
+    manifest["source_tree"] = None
+    manifest["source_identity_admitted"] = False
+    manifest["source_identity_reason"] = "VALID_REPO_HEAD_AT_PROMPT_REQUIRED"
+
+    if not base.COMMIT_RE.fullmatch(source_head):
+        return manifest
+    rc, _, err = base._git_text(base.ROOT, "cat-file", "-e", source_head + "^{commit}")
+    if rc != 0:
+        manifest["source_identity_reason"] = "SOURCE_COMMIT_NOT_PRESENT:" + err[-500:]
+        return manifest
+    rc, tree, err = base._git_text(base.ROOT, "rev-parse", source_head + "^{tree}")
+    if rc != 0 or not tree:
+        manifest["source_identity_reason"] = "SOURCE_TREE_UNRESOLVED:" + err[-500:]
+        return manifest
+
+    manifest["source_tree"] = tree
+    manifest["source_identity_admitted"] = True
+    manifest["source_identity_reason"] = "EXACT_WORKER_SOURCE_BOUND"
+    return manifest
+
+
+# validate_candidate_with_admission resolves this global at call time, so the
+# successor-current manifest reuses the admission mechanism while taking source
+# identity from the canonical Forge row rather than inventing a second authority.
+admission.candidate_execution_manifest = _source_bound_manifest
+
+
+def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
+    try:
+        proposal = json.loads(row["proposal_json"])
+    except Exception:
+        proposal = None
+    if not isinstance(proposal, dict):
+        return {
+            "schema": "CLAY_FORGE_DELTA_EVALUATION/v1",
+            "delta_id": row["delta_id"],
+            "status": "execution_not_admitted",
+            "reason": "PROPOSAL_JSON_INVALID",
+            "evaluated_at": base.now(),
+        }
+
+    manifest = _source_bound_manifest(row, proposal, Path(base.ROOT))
+    record = {
+        "schema": "CLAY_FORGE_DELTA_EVALUATION/v1",
+        "delta_id": row["delta_id"],
+        "source_class": "free_swarm",
+        "provider": row["provider"],
+        "model": row["model"],
+        "role": row["role"],
+        "worker_sha": row["worker_sha"],
+        "source_repo_head": manifest.get("source_head"),
+        "source_scope": "EXACT_WORKER_PROMPT_HEAD",
+        "evaluated_at": base.now(),
+        "execution_admission": manifest,
+    }
+    if not manifest.get("source_identity_admitted"):
+        return {
+            **record,
+            "status": "source_identity_unbound"
+            if not base.COMMIT_RE.fullmatch(str(manifest.get("source_head") or ""))
+            else "source_identity_unavailable",
+            "reason": manifest.get("source_identity_reason"),
+        }
+    if not manifest.get("all_commands_admitted"):
+        return {**record, "status": "execution_not_admitted", "reason": "MODEL_COMMAND_POLICY_REJECTED"}
+    if not (manifest.get("backend") or {}).get("admitted"):
+        return {**record, "status": "execution_blocked_no_isolated_executor", "reason": "BUBBLEWRAP_REQUIRED"}
+
+    # Canonical Forge now checks out exactly row.repo_head before patch/application
+    # validation. Its run_cmd/safe_command globals have already been replaced by the
+    # isolated no-shell admission implementation above.
+    result = _ORIGINAL_VALIDATE(con, row)
+    result["execution_admission"] = manifest
+    return result
 
 
 base.validate_candidate = validate_candidate

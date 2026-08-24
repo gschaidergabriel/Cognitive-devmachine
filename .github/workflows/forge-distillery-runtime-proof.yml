@@ -1,0 +1,283 @@
+name: Forge Distillery exact-current runtime proof
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/forge-distillery-runtime-proof.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  forge-distillery-proof:
+    if: github.actor == 'gschaidergabriel'
+    runs-on: self-hosted
+    timeout-minutes: 12
+    steps:
+      - name: Checkout receipt source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Re-enter current Clay runtime and prove Forge to Distillery boundary
+        shell: bash
+        run: |
+          set -u
+          LIVE=/workspace/clay-global-research-entity
+          ART=/artifacts/clay-entityos-swarm
+          OUT=/tmp/clay-forge-distillery-proof-${GITHUB_RUN_ID}
+          mkdir -p "$OUT"
+          echo "OUT=$OUT" >> "$GITHUB_ENV"
+
+          # This discriminator is intentionally credential-blind and provider-network-free.
+          unset \
+            GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
+            MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY \
+            NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY \
+            OPENROUTER_API_KEY OPENROUTER_API_KEYS OPENROUTER2_API_KEY OPENROUTER3_API_KEY \
+            TOGETHER_API_KEY TOGETHER_API_KEYS || true
+          while IFS= read -r name; do
+            case "$name" in
+              GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*) unset "$name" || true ;;
+            esac
+          done < <(compgen -v)
+
+          status=EXECUTED
+          before_head=""
+          source_head=""
+          source_tree=""
+          if [[ ! -d "$LIVE/.git" ]]; then
+            status=BLOCKED_LIVE_REPO_NOT_FOUND
+          else
+            before_head="$(git -C "$LIVE" rev-parse HEAD 2>/dev/null || true)"
+            if ! git -C "$LIVE" fetch --quiet origin main >"$OUT/fetch.log" 2>&1; then
+              status=BLOCKED_LIVE_FETCH_FAILED
+            else
+              dirty="$(git -C "$LIVE" status --porcelain=v1 2>/dev/null || true)"
+              unknown_dirty="$(printf '%s\n' "$dirty" | grep -Ev '^[ MARC?]{2} (free swarm/(README.md|LIVE_METRICS.json|DISTILLERY_LIVE.json|FORGE_LIVE.json|SYSTEM_ANALYSIS_LIVE.json|FABRIC_6000_LIVE.json)|000_FREE_SWARM_LIVE_DASHBOARD.md)$' || true)"
+              if [[ -n "$unknown_dirty" ]]; then
+                status=BLOCKED_LIVE_CHECKOUT_DIRTY_NONGENERATED
+                printf '%s\n' "$unknown_dirty" > "$OUT/unknown-dirty.txt"
+              else
+                for p in \
+                  'free swarm/README.md' \
+                  'free swarm/LIVE_METRICS.json' \
+                  'free swarm/DISTILLERY_LIVE.json' \
+                  'free swarm/FORGE_LIVE.json' \
+                  'free swarm/SYSTEM_ANALYSIS_LIVE.json' \
+                  'free swarm/FABRIC_6000_LIVE.json' \
+                  '000_FREE_SWARM_LIVE_DASHBOARD.md'; do
+                  git -C "$LIVE" restore --worktree -- "$p" 2>/dev/null || true
+                done
+                if ! git -C "$LIVE" merge --ff-only origin/main >"$OUT/fast-forward.log" 2>&1; then
+                  status=BLOCKED_FAST_FORWARD_FAILED
+                else
+                  source_head="$(git -C "$LIVE" rev-parse HEAD 2>/dev/null || true)"
+                  source_tree="$(git -C "$LIVE" rev-parse 'HEAD^{tree}' 2>/dev/null || true)"
+                  git -C "$LIVE" status --porcelain=v1 > "$OUT/source-dirty-after.txt" 2>/dev/null || true
+                  if [[ -s "$OUT/source-dirty-after.txt" ]]; then
+                    status=BLOCKED_SOURCE_DIRTY_AFTER_REENTRY
+                  fi
+                fi
+              fi
+            fi
+          fi
+
+          printf '%s\n' "$before_head" > "$OUT/live-head-before.txt"
+          printf '%s\n' "$source_head" > "$OUT/source-head.txt"
+          printf '%s\n' "$source_tree" > "$OUT/source-tree.txt"
+
+          unit_rc=99
+          if [[ "$status" == EXECUTED ]]; then
+            cd "$LIVE"
+            sha256sum \
+              tools/forge_evidence_credit_871.py \
+              tools/ingest_forge_accepts_into_distillery.py \
+              tools/run_forge_distillery_bridge_loop.py \
+              > "$OUT/source-sha256.txt"
+            set +e
+            python3 -m unittest \
+              tests.test_forge_distillery_ingest_871 \
+              tests.test_forge_distillery_live_bridge_871 \
+              > "$OUT/unit.log" 2>&1
+            unit_rc=$?
+            set -e
+            if [[ $unit_rc -ne 0 ]]; then
+              status=BLOCKED_FOCUSED_REGRESSION_FAILED
+            fi
+          fi
+          printf '%s\n' "$unit_rc" > "$OUT/unit-rc.txt"
+
+          snapshot_db(){
+            local dest="$1"
+            DB="$ART/distillery/distillery.sqlite3" DEST="$dest" python3 - <<'PY'
+          import json, os, sqlite3
+          from pathlib import Path
+          db=Path(os.environ['DB']); dest=Path(os.environ['DEST'])
+          out={'db_exists':db.exists(),'accepted_dataset_tokens':0,'forge_evidence_qualified_packets':0,'forge_execution_ingest_rows':0}
+          if db.exists():
+              con=sqlite3.connect(db, timeout=10)
+              try:
+                  tables={r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+                  if 'counters' in tables:
+                      for key, field in [('accepted_dataset_tokens','accepted_dataset_tokens'),('forge_evidence_qualified_packets','forge_evidence_qualified_packets')]:
+                          row=con.execute('SELECT value FROM counters WHERE key=?',(key,)).fetchone()
+                          out[field]=int(row[0]) if row else 0
+                  if 'forge_execution_ingest' in tables:
+                      out['forge_execution_ingest_rows']=int(con.execute('SELECT COUNT(*) FROM forge_execution_ingest').fetchone()[0])
+              finally:
+                  con.close()
+          dest.write_text(json.dumps(out,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+          }
+
+          if [[ "$status" == EXECUTED ]]; then
+            EVAL="$ART/forge/architecture_delta_evaluations.jsonl"
+            DB="$ART/distillery/distillery.sqlite3"
+            if [[ ! -f "$EVAL" ]]; then
+              status=BLOCKED_FORGE_EVALUATIONS_MISSING
+            elif [[ ! -f "$DB" ]]; then
+              status=BLOCKED_DISTILLERY_DB_MISSING
+            else
+              snapshot_db "$OUT/before.json"
+              set +e
+              python3 "$LIVE/tools/run_forge_distillery_bridge_loop.py" --once \
+                --forge-evaluations "$EVAL" --distillery-db "$DB" \
+                --status-path "$OUT/bridge-first-status.json" \
+                > "$OUT/bridge-first.json" 2> "$OUT/bridge-first.err"
+              first_rc=$?
+              set -e
+              printf '%s\n' "$first_rc" > "$OUT/first-rc.txt"
+              snapshot_db "$OUT/after-first.json"
+              if [[ $first_rc -ne 0 ]]; then
+                status=BLOCKED_FIRST_RECONCILE_NONZERO
+              else
+                set +e
+                python3 "$LIVE/tools/run_forge_distillery_bridge_loop.py" --once \
+                  --forge-evaluations "$EVAL" --distillery-db "$DB" \
+                  --status-path "$OUT/bridge-replay-status.json" \
+                  > "$OUT/bridge-replay.json" 2> "$OUT/bridge-replay.err"
+                replay_rc=$?
+                set -e
+                printf '%s\n' "$replay_rc" > "$OUT/replay-rc.txt"
+                snapshot_db "$OUT/after-replay.json"
+                if [[ $replay_rc -ne 0 ]]; then
+                  status=BLOCKED_REPLAY_RECONCILE_NONZERO
+                fi
+              fi
+            fi
+          fi
+
+          STATUS="$status" SOURCE_HEAD="$source_head" SOURCE_TREE="$source_tree" BEFORE_HEAD="$before_head" OUT="$OUT" python3 - <<'PY'
+          import datetime, hashlib, json, os
+          from pathlib import Path
+          out=Path(os.environ['OUT'])
+          def load(name):
+              try:
+                  obj=json.loads((out/name).read_text(encoding='utf-8'))
+                  return obj if isinstance(obj,dict) else {}
+              except Exception:return {}
+          def text(name):
+              try:return (out/name).read_text(encoding='utf-8').strip()
+              except Exception:return ''
+          before=load('before.json'); first_db=load('after-first.json'); replay_db=load('after-replay.json')
+          first=load('bridge-first-status.json'); replay=load('bridge-replay-status.json')
+          status=os.environ['STATUS']
+          first_packet_delta=first_db.get('forge_evidence_qualified_packets',0)-before.get('forge_evidence_qualified_packets',0)
+          first_token_delta=first_db.get('accepted_dataset_tokens',0)-before.get('accepted_dataset_tokens',0)
+          replay_packet_delta=replay_db.get('forge_evidence_qualified_packets',first_db.get('forge_evidence_qualified_packets',0))-first_db.get('forge_evidence_qualified_packets',0)
+          replay_token_delta=replay_db.get('accepted_dataset_tokens',first_db.get('accepted_dataset_tokens',0))-first_db.get('accepted_dataset_tokens',0)
+          if status != 'EXECUTED':
+              verdict=status
+          elif first_packet_delta == 1 and first_token_delta > 0 and replay_packet_delta == 0 and replay_token_delta == 0:
+              verdict='PASS_NEW_EVIDENCE_QUALIFIED_ACCEPT_IDEMPOTENT'
+          elif first_db.get('forge_evidence_qualified_packets',0) > 0 and replay_packet_delta == 0 and replay_token_delta == 0:
+              verdict='PASS_EXISTING_EVIDENCE_QUALIFIED_STATE_IDEMPOTENT'
+          else:
+              verdict='NO_EVIDENCE_QUALIFIED_ACCEPT_AVAILABLE'
+          receipt={
+              'schema':'CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_PROOF/v1',
+              'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+              'status':status,
+              'verdict':verdict,
+              'live_head_before':os.environ.get('BEFORE_HEAD') or None,
+              'source_head':os.environ.get('SOURCE_HEAD') or None,
+              'source_tree':os.environ.get('SOURCE_TREE') or None,
+              'source_digests':text('source-sha256.txt').splitlines(),
+              'focused_regression_rc':int(text('unit-rc.txt') or 99),
+              'before':before,
+              'first_reconcile':first,
+              'after_first':first_db,
+              'replay_reconcile':replay,
+              'after_replay':replay_db,
+              'first_packet_delta':first_packet_delta,
+              'first_token_delta':first_token_delta,
+              'replay_packet_delta':replay_packet_delta,
+              'replay_token_delta':replay_token_delta,
+              'acceptance_target':'1 evidence-qualified Forge accept -> exactly 1 Distillery packet -> accepted dataset tokens > 0 -> identical replay +0',
+              'provider_network_io_by_proof':False,
+              'external_provider_credentials_read_by_proof':False,
+              'paid_fallback_attempt_count':0,
+              'together_used':False,
+              'canonical_truth_minted':False,
+              'jspace_model_credit_minted':False,
+              'training_credit_minted':False,
+              'whole_entityos_hcu_credit_minted':False,
+          }
+          raw=json.dumps(receipt,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()
+          receipt['receipt_sha256']=hashlib.sha256(raw).hexdigest()
+          (out/'receipt.json').write_text(json.dumps(receipt,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf-8')
+          print(json.dumps(receipt,ensure_ascii=False))
+          PY
+
+      - name: Publish bounded proof to main
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          OUT: ${{ env.OUT }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const out = process.env.OUT || `/tmp/clay-forge-distillery-proof-${context.runId}`;
+            const p = `${out}/receipt.json`;
+            let body;
+            if (fs.existsSync(p)) {
+              body = fs.readFileSync(p, 'utf8');
+            } else {
+              body = JSON.stringify({schema:'CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_PROOF/v1',github_run_id:String(context.runId),status:'WORKFLOW_RESULT_MISSING',verdict:'WORKFLOW_RESULT_MISSING',whole_entityos_hcu_credit_minted:false,jspace_model_credit_minted:false,training_credit_minted:false}, null, 2) + '\n';
+            }
+            const path = `research_entity/runtime/forge_distillery_results/${context.runId}.json`;
+            await github.rest.repos.createOrUpdateFileContents({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path,
+              message: `runtime: publish Forge Distillery proof ${context.runId}`,
+              content: Buffer.from(body, 'utf8').toString('base64'),
+              branch: 'main'
+            });
+
+      - name: Upload bounded diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-distillery-runtime-proof-${{ github.run_id }}
+          path: |
+            ${{ env.OUT }}/receipt.json
+            ${{ env.OUT }}/source-head.txt
+            ${{ env.OUT }}/source-tree.txt
+            ${{ env.OUT }}/source-sha256.txt
+            ${{ env.OUT }}/unit.log
+            ${{ env.OUT }}/before.json
+            ${{ env.OUT }}/bridge-first-status.json
+            ${{ env.OUT }}/after-first.json
+            ${{ env.OUT }}/bridge-replay-status.json
+            ${{ env.OUT }}/after-replay.json
+            ${{ env.OUT }}/fetch.log
+            ${{ env.OUT }}/fast-forward.log
+            ${{ env.OUT }}/unknown-dirty.txt
+          if-no-files-found: warn
+          retention-days: 7

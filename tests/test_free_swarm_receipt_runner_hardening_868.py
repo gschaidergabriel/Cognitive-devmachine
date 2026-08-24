@@ -11,10 +11,13 @@ class FreeSwarmReceiptRunnerHardening868Tests(unittest.TestCase):
         self.assertIn(hardened.BASE_REL, base.SOURCE_PATHS)
         self.assertIn(hardened.SELF_REL, base.SOURCE_PATHS)
         self.assertIn(hardened.TEST_REL, base.SOURCE_PATHS)
+        self.assertIn(hardened.INHERITED_ENV_TEST_REL, base.SOURCE_PATHS)
 
-    def test_hardening_test_is_in_execution_set(self) -> None:
+    def test_hardening_tests_are_in_execution_set(self) -> None:
         self.assertIn(hardened.TEST_MODULE, base.TEST_MODULES)
         self.assertIn(hardened.ROOT / hardened.TEST_REL, base.TEST_PATHS)
+        self.assertIn(hardened.INHERITED_ENV_TEST_MODULE, base.TEST_MODULES)
+        self.assertIn(hardened.ROOT / hardened.INHERITED_ENV_TEST_REL, base.TEST_PATHS)
 
     def test_bootstrap_trips_dns_and_connect_ex_paths(self) -> None:
         text = base._bootstrap_text()
@@ -29,6 +32,13 @@ class FreeSwarmReceiptRunnerHardening868Tests(unittest.TestCase):
         for marker in required:
             with self.subTest(marker=marker):
                 self.assertIn(marker, text)
+
+    def test_inherited_environment_fence_is_required_for_receipt_pass(self) -> None:
+        self.assertIn(
+            "tests.test_go_868_inherited_provider_secret_fence",
+            base.TEST_MODULES,
+        )
+        self.assertTrue(base._CLAY_868_RECEIPT_HARDENING_INSTALLED)
 
     def test_source_binding_is_not_runtime_credit(self) -> None:
         self.assertTrue(base._CLAY_868_RECEIPT_HARDENING_INSTALLED)

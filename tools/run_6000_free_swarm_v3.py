@@ -26,9 +26,11 @@ ACCELERATOR_BINDING = "FREE_SWARM_ACCELERATOR_V2_PRE_FABRIC"
 
 import run_6000_free_swarm as fabric  # noqa: E402
 from free_lane_provenance import lane_evidence, emit_execution_receipt  # noqa: E402
+from free_swarm_delta_ingress import parse_questions, parse_worker_delta  # noqa: E402
 
 _ORIGINAL_REQUEST = fabric.base.request_chat
 _ORIGINAL_NEXT_PAIR = fabric.FastProviderRuntime.next_key_model
+_ORIGINAL_SINK_APPEND = fabric.base.JsonlSink.append
 _RECEIPT_LOCK = threading.Lock()
 _EVIDENCE_CACHE: dict[tuple[str, str, str, str], dict[str, Any]] = {}
 _SOURCE = {
@@ -49,6 +51,69 @@ def _evidence(spec: fabric.base.ProviderSpec, key: str, model: str) -> dict[str,
             artifacts=fabric.ARTIFACT_ROOT,
         )
     return _EVIDENCE_CACHE[ck]
+
+
+async def ingress_aware_sink_append(self: fabric.base.JsonlSink, item: dict[str, Any]) -> None:
+    """Attach deterministic delta/question admission without promoting model text.
+
+    The historical raw ``text`` field remains intact for reproducibility. A valid
+    candidate is additionally materialized in a dedicated JSONL stream so the
+    worker->forge funnel no longer depends on repeated prose parsing.
+    """
+    row = dict(item)
+    text = row.get("text")
+    status = row.get("http_status")
+    candidate = None
+    questions: list[str] = []
+    if isinstance(text, str) and isinstance(status, int) and 200 <= status < 300:
+        ingress = parse_worker_delta(text)
+        questions = parse_questions(text)
+        row["delta_ingress"] = {
+            "schema": ingress["schema"],
+            "status": ingress["status"],
+            "valid": ingress["valid"],
+            "ready_for_forge": ingress["ready_for_forge"],
+            "reasons": ingress["reasons"],
+            "proposal_sha256": ingress.get("proposal_sha256"),
+            "question_count": len(questions),
+        }
+        if ingress.get("valid"):
+            candidate = {
+                "schema": "CLAY_ARCHITECTURE_DELTA_CANDIDATE/v1",
+                "ts": row.get("ts"),
+                "provider": row.get("provider"),
+                "model": row.get("model"),
+                "role": row.get("role"),
+                "worker_serial": row.get("worker_serial"),
+                "logical_worker_slot": row.get("logical_worker_slot"),
+                "repo_head_at_prompt": row.get("repo_head_at_prompt"),
+                "worker_text_sha256": row.get("text_sha256"),
+                "proposal_sha256": ingress.get("proposal_sha256"),
+                "ready_for_forge": ingress.get("ready_for_forge"),
+                "proposal": ingress.get("proposal"),
+            }
+
+    await _ORIGINAL_SINK_APPEND(self, row)
+
+    if candidate is not None:
+        async with self._lock:
+            path = self.output_dir / "architecture_deltas.jsonl"
+            with path.open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps(candidate, ensure_ascii=False, separators=(",", ":")) + "\n")
+                fh.flush()
+    if questions:
+        qrow = {
+            "schema": "CLAY_OPEN_RESEARCH_QUESTIONS/v1",
+            "ts": row.get("ts"),
+            "worker_serial": row.get("worker_serial"),
+            "worker_text_sha256": row.get("text_sha256"),
+            "questions": questions,
+        }
+        async with self._lock:
+            path = self.output_dir / "open_research_questions.jsonl"
+            with path.open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps(qrow, ensure_ascii=False, separators=(",", ":")) + "\n")
+                fh.flush()
 
 
 def gated_next_key_model(self: fabric.FastProviderRuntime):
@@ -121,6 +186,7 @@ def gated_request_chat(
 
 fabric.FastProviderRuntime.next_key_model = gated_next_key_model
 fabric.base.request_chat = gated_request_chat
+fabric.base.JsonlSink.append = ingress_aware_sink_append
 
 # Re-export the public scheduler surface used by the fast launcher.
 run = fabric.run

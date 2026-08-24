@@ -1,7 +1,7 @@
 {
   "schema": "ENTITYOS_HCU_FREE_LANE_ECONOMIC_PROVENANCE/v1",
   "observed_at": "2026-08-24",
-  "authority_epoch": "8.70",
+  "authority_epoch": "8.71",
   "mode": "FREE_ONLY",
   "rules": {
     "paid_fallback_attempt_count": 0,
@@ -20,10 +20,12 @@
     },
     "nvidia": {
       "allowed_endpoint_host": "integrate.api.nvidia.com",
-      "evidence_kind": "NVIDIA_HOSTED_NIM_DEVELOPER_FREE_PROTOTYPING",
+      "evidence_kind": "NVIDIA_CREDENTIAL_BOUND_HOSTED_NIM_DEVELOPER_FREE_PROTOTYPING",
       "source": "https://developer.nvidia.com/nim",
-      "provider_statement": "NVIDIA advertises free access to NVIDIA-hosted NIM API endpoints for prototyping through Developer Program access.",
-      "credential_plan_needed": false,
+      "provider_statement": "NVIDIA advertises free access to NVIDIA-hosted NIM API endpoints for prototyping through Developer Program access; the provider-wide statement does not prove entitlement for an arbitrary concrete credential.",
+      "credential_plan_needed": true,
+      "admitted_credential_fingerprints": [],
+      "credential_plan_proof": "Require the exact credential fingerprint to be bound to provider-side Developer Program/free hosted-NIM entitlement evidence before autonomous model network I/O. Keep the list empty until such evidence is observed and admitted.",
       "scope": "NVIDIA-hosted API Catalog/NIM prototyping endpoint only; no dedicated enterprise endpoint"
     },
     "groq": {

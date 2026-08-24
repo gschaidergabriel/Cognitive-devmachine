@@ -15,7 +15,7 @@ This root file is a repository-organ routing shim, not canonical durable product
 2. `research_entity/rooms/PROGRAM_STATE.json`
 3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json`
 4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md` — retained all-worker directive; any stale epoch-specific wording is subordinate to newer supervisor 8.65
+5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_65.md`
 6. `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
 7. `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
 8. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`

@@ -1,0 +1,85 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_HOBBY_NO_CHARGE_QUOTA_REFINEMENT_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "authority_reentry": {
+    "research_main_observed_before_write": "e6236fb8dd1b94e0704704d29ac388582f292df1",
+    "preceding_quota_gate_receipt_commit": "e6236fb8dd1b94e0704704d29ac388582f292df1",
+    "bootstrap_cache_is_noncanonical": true,
+    "remaining_quota_must_not_be_assumed_from_plan_identity": true
+  },
+  "retained_lanes": {
+    "donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed": "ff67cf4192e9fbb3ea8aee2819f2dbeddd576ee6",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "81ce20e53e080af228b62f642eb29360ac9cecf0"
+  },
+  "exact_head_preview": {
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_team_plan_observed_live": "hobby",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_98ALxQrZppsRQUqSxCZZyKxTMpy2",
+    "deployment_state_observed": "READY",
+    "deployment_git_sha": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "exact_executor_head_match": true,
+    "route": "/api/hcu-jspace-grid10-binding-capsule",
+    "route_source_verification_before_cost_gate": true,
+    "route_cost_gate_before_sandbox_create": true,
+    "route_cost_gate_is_static_admitted_constant": true
+  },
+  "provider_plan_evidence": {
+    "source_class": "CURRENT_OFFICIAL_PROVIDER_PRICING",
+    "source": "https://vercel.com/pricing",
+    "observed_claim": "A free Hobby account is limited to usage caps and cannot purchase additional usage.",
+    "interpretation": "The currently observed Hobby team has no automatic purchasable overage/on-demand usage path merely from exceeding the Hobby usage caps.",
+    "scope_limit": "This provider-plan evidence does not expose or prove the invocation-scoped remaining Vercel Sandbox quota for this team. It therefore does not satisfy supervisor 8.63's rule against assuming remaining quota from plan identity.",
+    "automatic_paid_fallback_observed": false,
+    "plan_upgrade_performed": false,
+    "paid_service_enabled_by_this_organ": false
+  },
+  "access_negative_evidence": {
+    "first_exact_route_fetch": "HTTP_302_VERCEL_SSO_REDIRECT_BEFORE_FUNCTION_RESULT",
+    "protection_bypass_followup": "HTTP_409_CONFLICT_FROM_CONNECTOR_ACCESS_LAYER",
+    "subsequent_protected_fetch": "HTTP_429_TOO_MANY_REQUESTS_FROM_CONNECTOR_ACCESS_LAYER",
+    "retry_after_rate_limit": false,
+    "function_result_observed": false,
+    "sandbox_create_observed": false,
+    "classification": "AUTH_AND_CONNECTOR_RATE_LIMIT_INFRASTRUCTURE_EVIDENCE_NOT_PRODUCT_RUNTIME_EVIDENCE"
+  },
+  "refined_execution_authority_finding": {
+    "no_charge_overage_path_for_observed_hobby_plan": "CORROBORATED_AT_PROVIDER_PLAN_CLASS",
+    "invocation_scoped_remaining_included_sandbox_quota": "UNOBSERVED",
+    "current_runtime_authorization": "BLOCKED_FAIL_CLOSED_ON_UNOBSERVED_REMAINING_QUOTA",
+    "static_cost_admission_sufficient_standalone": false,
+    "component_runtime_credit_added": false
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed_by_this_organ": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_EVIDENCE_BOUNDARY: exact-head READY executor remains identified; current provider evidence removes automatic paid-overage ambiguity for the observed Hobby plan, narrowing the execution blocker to invocation-scoped remaining Sandbox quota plus authenticated route reachability.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: PR1263 already contains the retained causal HCU/Typed-Entry/J-Space closure; changing semantic primitives would duplicate active donor work and would not resolve the remaining execution-authority gate.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: the fixed 17-blob/14-test route is source/build ready, but no admitted Function/Sandbox/model execution occurred, so J-Space model-runtime and training credit remain zero."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Parallel organs are actively moving current-facing whole-system surfaces; this append-only receipt records only the nonduplicate blocker refinement without overwriting fresher state."
+  },
+  "next_exact_gate": "Use a provider-supported read-only account/team usage surface to directly observe remaining included Vercel Sandbox quota for the exact Hobby team without changing plan/billing, or repair the retained executor cost admission so absence of invocation-scoped quota evidence returns false before Sandbox.create. After that, re-enter exact research main, PR1263, PR810 and deployment identity before any fixed-route invocation. Do not retry through the current connector while rate-limited; do not use Together, paid fallback, VPS/self-hosted/production execution, or a new unusual experiment."
+}

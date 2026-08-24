@@ -1,0 +1,86 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "trigger": "go",
+  "trigger_local_metadata": "2026-08-24T18:32+07:00_MINUTE_PRECISION_ONLY",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.68",
+  "mode": "FREE_ONLY",
+  "bootstrap_cache_observed_sha": "de6e4f9255cdab0b5463708a3f1c8d6ba5805fa8",
+  "bootstrap_cache_status": "STALE_REENTRY_SNAPSHOT_ONLY",
+  "initial_main_observed": "68bdd27550f69077c8d5a0ae8aa81e49f6c3513b",
+  "rebase_parent_main": "d87158d77e1736e4d83cb04b1122d70dae439371",
+  "latest_main_observed_before_receipt": "deb159bbbf09d1e0b975cef99ccfcc88509f7c4c",
+  "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+  "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+  "authority_sources": [
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_68.md",
+    "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md"
+  ],
+  "observed_current_defect": {
+    "root_CLAUDE_routes_supervisor": "8.65",
+    "authority_validator_hardcoded_supervisor": "8.52",
+    "classification": "CURRENT_FACING_SUCCESSOR_AUTHORITY_DRIFT"
+  },
+  "fusion": {
+    "existing_pr": 1454,
+    "branch": "gpt56sol/go-868-successor-validator-reentry-0eee",
+    "rebased_source_commit_before_receipt": "417adfb1e634c00f0af4d646a768fca37c421148",
+    "changed_source_files": [
+      "CLAUDE.md",
+      "tools/validate_clayverse_authority_consistency.py",
+      "tests/test_validate_clayverse_authority_consistency.py"
+    ],
+    "duplicate_pr_created": false,
+    "merged_to_main": false,
+    "reason_not_merged": "EXACT_HEAD_SEMANTIC_TESTS_DID_NOT_EXECUTE"
+  },
+  "ci_observation": [
+    {
+      "workflow": "Research Entity Identity Guard",
+      "run_id": 32723699982,
+      "job_id": 97420286022,
+      "conclusion": "failure",
+      "steps": null
+    },
+    {
+      "workflow": "Research Entity Verify",
+      "run_id": 32723700003,
+      "job_id": 97420286730,
+      "conclusion": "failure",
+      "steps": null
+    }
+  ],
+  "ci_classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_TEST_EXECUTION_ZERO_SEMANTIC_TEST_CREDIT",
+  "go_tracks": {
+    "track_a": "ADVANCED_EXISTING_AUTHORITY_FUSION_REBASED_ON_CURRENT_MAIN",
+    "track_b": "ADVANCED_SUCCESSOR_AUTHORITY_BINDS_TYPED_FREE_PROVIDER_ADMISSION",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+    "track_c_reason": "Current main concurrently advanced observation-first local J-Space/probe controls; this organ has no exposed owner-authorized local/clay-direct-dev bridge for exact model-specific execution, so adding another J-Space source lane would be duplicate and lower-information."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn identifier is exposed and available user-message metadata is minute precision only; canonical timestamp fallback requires at least whole-second immutable metadata."
+  },
+  "provider_activity": {
+    "secret_lookup_performed": false,
+    "external_provider_network_performed": false,
+    "together_used": false,
+    "paid_or_unknown_cost_execution": false
+  },
+  "runtime_credit": {
+    "free_swarm_provider_admission_runtime": 0,
+    "external_provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "full_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an exposed owner-authorized zero-cost local normal-user or clay-direct-dev surface, execute the exact live PR #1454 authority regression together with exact-current FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1; require real executed test steps, secret/network tripwire closure, exact source identity, then re-enter main before merge or runtime-credit promotion."
+}

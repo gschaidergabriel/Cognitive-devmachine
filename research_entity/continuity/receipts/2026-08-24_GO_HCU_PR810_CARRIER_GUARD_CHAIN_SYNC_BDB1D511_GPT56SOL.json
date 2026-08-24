@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_EXECUTOR_GUARD_SYNC_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "observed_research_main_before_write": "7598a7f5d4c10d3005bc5261c56506ae37c8df2e",
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "qualified_identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "repair_commit": "bdb1d5116ba3243841c263cc30eb6620e4da3f2c",
+    "repair_message": "fix(hcu): sync exclusive guard with carrier donor path guard"
+  },
+  "observed_predecessor_failure": {
+    "executor_commit": "588315b63f4f4255f6e73bd604cbc1789cbe12c9",
+    "deployment_id": "dpl_3brnpJBb1jq9mQE9yGuHx1ahVM6m",
+    "classification": "SOURCE_GUARD_SYNC_FAILURE_ONLY",
+    "error": "ENTITYOS_HCU_PREVERCEL_SUCCESSOR_GUARD_CHAIN_DRIFT",
+    "cause": "prevercel-build added guard-hcu-jspace-carrier-donor-path-identity.mjs while guard-entityos-hcu-current-executor.mjs still required and replayed the previous three-guard chain",
+    "sandbox_create_observed": false,
+    "runtime_credit_added": 0
+  },
+  "repair": {
+    "file": "mcp/vercel-sandbox-mcp/scripts/guard-entityos-hcu-current-executor.mjs",
+    "expected_prevercel_chain_now_includes": "scripts/guard-hcu-jspace-carrier-donor-path-identity.mjs",
+    "exclusive_guard_replays_carrier_donor_path_guard": true,
+    "carrier_guard_role": "bind manifest and source-carrier path prefixes to the immutable retained donor commit instead of permitting semantically stale carrier names to survive a donor rebind",
+    "unusual_experiment": false
+  },
+  "observed_repair_build": {
+    "deployment_id": "dpl_7u6VPVhzXpGTWmmDA2PochdG2DCq",
+    "deployment_git_sha": "bdb1d5116ba3243841c263cc30eb6620e4da3f2c",
+    "deployment_state_at_last_observation": "BUILDING",
+    "carrier_donor_path_identity": "PASS",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "manifest_carrier": "jspace-v4-v3-required-blobs-511d5689.json",
+    "source_carrier": "jspace-execution-store-511d5689",
+    "exact_blob_count": 17,
+    "manifest_contract_identity": "PASS",
+    "historical_carrier_immutability": "PASS",
+    "promotion_guard": "SOURCE_REBOUND_READY_SUCCESSOR_DYNAMIC_17_BLOB_EXACT_14_RESULT_FENCE_PASS",
+    "rebind_permission_guard": "SOURCE_REBOUND_READY_SOURCE_VERIFY_PERMISSION_FENCE_PASS",
+    "exclusive_executor_guard": "CURRENT_EXECUTOR_FREE_ONLY_JSPACE_V4_V3_SOURCE_REBOUND_READY_SUCCESSOR_DYNAMIC_GUARDED",
+    "source_guard_scope_only": true
+  },
+  "execution_boundary": {
+    "remaining_sandbox_quota_directly_observed": false,
+    "quota_assumption_performed": false,
+    "sandbox_runtime_admitted": false,
+    "function_or_sandbox_execution_claimed_from_build": false,
+    "entityos_hcu_whole_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_SOURCE_GUARD_COHERENCE: repaired the exact PR810 build blocker created by a new carrier-identity guard and observed the repaired exact commit pass the carrier, source-closure, promotion, permission and exclusive-executor source guards.",
+    "track_b_hcu_typed_entry": "ADVANCED_PROVENANCE_FENCE: the pinned 511d5689 17-blob Typed Entry->route->engine/load->GRID10->execution-store closure is now additionally guarded against carrier-path/donor-identity drift and replayed by the exclusive executor guard.",
+    "track_c_jspace_gwt_training_readiness": "ADVANCED_SOURCE_ONLY: exact 14-result J-Space promotion/result fences remain source-green at the repaired executor commit; no model/runtime/training credit is granted because no admitted Sandbox execution occurred and remaining included Sandbox quota is not directly observed."
+  },
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0
+  },
+  "next_exact_gate": "Keep PR810 pinned to immutable donor 511d5689 until a materially necessary explicit rebind. Observe remaining included Vercel Sandbox quota directly through an authorized read-only surface before reopening sandboxExecutionAdmitted; do not infer quota from Hobby plan identity. Once direct quota and protected Function access are both admitted, invoke only the fixed exact-source route and require 17 deployment-carried blob verification, exact 14-result fence, secret fence, exit 0 and cleanup before component runtime credit.",
+  "evidence_boundary": "This receipt records deterministic source/build-guard repair and observed build-log guard outputs only. It does not establish Function invocation, Sandbox execution, actual model-executor I/O, whole EntityOS/HCU runtime, J-Space model causality, training benefit or whole-product acceptance."
+}

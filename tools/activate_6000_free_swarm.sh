@@ -24,6 +24,9 @@ python3 -m py_compile \
   tools/run_6000_free_swarm_v3.py \
   tools/run_6000_free_swarm_v5.py \
   tools/run_6000_free_swarm_fast.py \
+  tools/forge_evidence_credit_871.py \
+  tools/ingest_forge_accepts_into_distillery.py \
+  tools/run_forge_distillery_bridge_loop.py \
   tools/run_24h_entityos_swarm.py \
   tools/run_free_go_swarm.py \
   "free swarm/update_fabric_live.py"
@@ -33,7 +36,14 @@ echo COMPILE_PASS
 echo '--- STOP EXACT LEGACY/FABRIC PROCESSES ---'
 python3 - <<'PY'
 import os,signal
-suffixes={'tools/run_24h_entityos_swarm_supervisor.sh','tools/run_24h_entityos_swarm.py','tools/run_6000_free_swarm_supervisor.sh','tools/run_6000_free_swarm_fast.py','free swarm/update_fabric_live.py'}
+suffixes={
+ 'tools/run_24h_entityos_swarm_supervisor.sh',
+ 'tools/run_24h_entityos_swarm.py',
+ 'tools/run_6000_free_swarm_supervisor.sh',
+ 'tools/run_6000_free_swarm_fast.py',
+ 'tools/run_forge_distillery_bridge_loop.py',
+ 'free swarm/update_fabric_live.py',
+}
 me=os.getpid(); parent=os.getppid()
 for name in os.listdir('/proc'):
  if not name.isdigit(): continue
@@ -51,7 +61,13 @@ sleep 4
 # fabric is not blocked by the old PID.
 python3 - <<'PY'
 import os,signal
-suffixes={'tools/run_24h_entityos_swarm_supervisor.sh','tools/run_24h_entityos_swarm.py','tools/run_6000_free_swarm_fast.py','free swarm/update_fabric_live.py'}
+suffixes={
+ 'tools/run_24h_entityos_swarm_supervisor.sh',
+ 'tools/run_24h_entityos_swarm.py',
+ 'tools/run_6000_free_swarm_fast.py',
+ 'tools/run_forge_distillery_bridge_loop.py',
+ 'free swarm/update_fabric_live.py',
+}
 me=os.getpid(); parent=os.getppid()
 for name in os.listdir('/proc'):
  if not name.isdigit(): continue
@@ -71,6 +87,16 @@ nohup bash tools/run_6000_free_swarm_supervisor.sh >"$STATE/supervisor6000.log" 
 echo $! >"$STATE/supervisor6000.pid"
 echo "SUPERVISOR_PID=$!"
 
+# Dataset reconciliation is deliberately separate from the provider-bearing
+# swarm child. It is credential-blind, network-free and delegates admission to
+# the exact current Forge evidence-credit discriminator.
+nohup python3 tools/run_forge_distillery_bridge_loop.py \
+  --sleep-seconds "${CLAY_FORGE_DISTILLERY_BRIDGE_SLEEP_SECONDS:-2}" \
+  --reconcile-seconds "${CLAY_FORGE_DISTILLERY_BRIDGE_RECONCILE_SECONDS:-15}" \
+  >"$STATE/forge-distillery-bridge.log" 2>&1 </dev/null &
+echo $! >"$STATE/forge-distillery-bridge.pid"
+echo "FORGE_DISTILLERY_BRIDGE_PID=$!"
+
 nohup python3 "free swarm/update_fabric_live.py" --repo "$ROOT" --artifacts "$STATE" --watch --interval-seconds 20 >"$STATE/fabric-dashboard.log" 2>&1 </dev/null &
 echo $! >"$STATE/fabric-dashboard.pid"
 
@@ -83,7 +109,10 @@ echo '--- CREDENTIAL POOL (SWARM CHILD RECEIPT ONLY) ---'
 cat "$STATE/CREDENTIAL_POOL.json" 2>/dev/null || true
 
 echo '--- PROCESSES ---'
-ps -eo pid,etime,%cpu,%mem,args | grep -E 'run_6000_free_swarm_supervisor|run_6000_free_swarm_fast|run_research_distillery|run_free_evidence_forge|free swarm/evaluate.py|update_fabric_live.py' | grep -v grep | head -60 || true
+ps -eo pid,etime,%cpu,%mem,args | grep -E 'run_6000_free_swarm_supervisor|run_6000_free_swarm_fast|run_forge_distillery_bridge_loop|run_research_distillery|run_free_evidence_forge|free swarm/evaluate.py|update_fabric_live.py' | grep -v grep | head -60 || true
+
+echo '--- FORGE→DISTILLERY EVIDENCE-QUALIFIED BRIDGE ---'
+cat "$STATE/distillery/forge_execution_ingest_status.json" 2>/dev/null || true
 
 echo '--- SUPERVISOR STATUS ---'
 cat "$STATE/SUPERVISOR_6000.json" 2>/dev/null || true

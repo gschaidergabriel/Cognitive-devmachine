@@ -5,10 +5,16 @@ set -Eeuo pipefail
 # It deliberately does not read provider credentials and remains usable while
 # external LLM provider traffic is quarantined.
 # Runtime identity is recorded after the server reports the loaded model via /props.
-CACHE_ROOT="${CLAY_LOCAL_MODEL_CACHE:-/cache/clay-local-research-model}"
+# Defaults are writable by the normal Linux development user; container/VPS paths
+# remain explicitly overrideable through CLAY_LOCAL_MODEL_CACHE/HF_HOME/state vars.
+USER_HOME="${HOME:?HOME is required for normal-user local model state}"
+XDG_CACHE_ROOT="${XDG_CACHE_HOME:-$USER_HOME/.cache}"
+XDG_STATE_ROOT="${XDG_STATE_HOME:-$USER_HOME/.local/state}"
+CACHE_ROOT="${CLAY_LOCAL_MODEL_CACHE:-$XDG_CACHE_ROOT/clay-local-research-model}"
 SRC="$CACHE_ROOT/llama.cpp"
 BUILD="$SRC/build"
-HF_HOME="${HF_HOME:-/cache/huggingface}"
+HF_HOME="${HF_HOME:-$XDG_CACHE_ROOT/huggingface}"
+STATE_ROOT="${CLAY_LOCAL_RESEARCH_STATE_DIR:-$XDG_STATE_ROOT/clay-entityos-swarm}"
 MODEL="${CLAY_LOCAL_RESEARCH_MODEL:-Qwen/Qwen3-4B-GGUF:Q4_K_M}"
 HOST="127.0.0.1"
 PORT="${CLAY_LOCAL_RESEARCH_PORT:-8088}"
@@ -16,10 +22,10 @@ THREADS="${CLAY_LOCAL_RESEARCH_THREADS:-4}"
 PARALLEL="${CLAY_LOCAL_RESEARCH_PARALLEL:-1}"
 CTX="${CLAY_LOCAL_RESEARCH_CTX:-8192}"
 READY_TIMEOUT="${CLAY_LOCAL_RESEARCH_READY_TIMEOUT:-3600}"
-LOG="/artifacts/clay-entityos-swarm/local-model.log"
-STATE="/artifacts/clay-entityos-swarm/local-model.json"
+LOG="$STATE_ROOT/local-model.log"
+STATE="$STATE_ROOT/local-model.json"
 PROPS_TMP="$STATE.props.$$"
-mkdir -p "$CACHE_ROOT" "$HF_HOME" "$(dirname "$LOG")"
+mkdir -p "$CACHE_ROOT" "$HF_HOME" "$STATE_ROOT"
 export HF_HOME
 
 health(){ curl -fsS --max-time 2 "http://$HOST:$PORT/health" >/dev/null 2>&1; }
@@ -41,6 +47,8 @@ write_state(){
   CLAY_BUILD_BIN="$BUILD/bin/llama-server" \
   CLAY_PROPS_PATH="$PROPS_TMP" \
   CLAY_STATE_PATH="$STATE.tmp" \
+  CLAY_CACHE_ROOT="$CACHE_ROOT" \
+  CLAY_STATE_ROOT="$STATE_ROOT" \
   python3 - <<'PY'
 from __future__ import annotations
 import datetime, hashlib, json, os
@@ -127,6 +135,8 @@ payload = {
     'threads': safe_int('CLAY_THREADS'),
     'parallel': safe_int('CLAY_PARALLEL'),
     'context': safe_int('CLAY_CTX'),
+    'cache_root': os.environ['CLAY_CACHE_ROOT'],
+    'state_root': os.environ['CLAY_STATE_ROOT'],
     'cost_class': 'LOCAL_ZERO_PROVIDER_BILLING',
     'identity_evidence_scope': 'POST_LOAD_SERVER_REPORTED_MODEL_PATH_PLUS_RUNTIME_BINARY_HASH_PREREQUISITE_ONLY',
     'loader_consumption_attestation': False,

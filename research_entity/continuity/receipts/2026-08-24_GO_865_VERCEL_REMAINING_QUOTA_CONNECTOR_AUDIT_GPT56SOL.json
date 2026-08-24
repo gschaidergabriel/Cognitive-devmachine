@@ -1,0 +1,73 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed": "6ad4d1bb1936a6c26ce036833e27c2a7ac11b1b4",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_observed_before_write": "e3dadf716007f4c8d11a1d21d781e8e991bfe96f",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "READ_ONLY_PROVIDER_CONNECTOR_CAPABILITY_AUDIT"
+  },
+  "observed_current_authority": {
+    "newest_admitted_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json",
+    "supervisor_mode": "FREE_ONLY",
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_execution_admitted": false
+  },
+  "parallel_reentry": {
+    "parallel_receipt": "research_entity/continuity/receipts/2026-08-24_GO_QUOTA_OBSERVABILITY_AND_PARALLEL_INFERENCE_V4_CLOSURE_GPT56SOL_1728.json",
+    "parallel_inference_v4_boundary_work": "ALREADY_CLOSED_AVOID_DUPLICATION",
+    "parallel_donor_head_after_receipt": "e3dadf716007f4c8d11a1d21d781e8e991bfe96f"
+  },
+  "material_findings": [
+    "The connected Vercel capability inventory currently exposes 24 actions covering documentation, teams, projects, deployments, logs, protected deployment fetches, agent-run observability, toolbar comments, deployment and domain operations. It exposes no read-only team/account Usage, billing-allotment, Sandbox remaining-quota, or included-usage-remaining action.",
+    "Searching the connected Vercel tool inventory specifically for 'sandbox' returns documentation search only; searching specifically for 'billing' returns documentation search only; searching for 'usage' returns Agent Run usage tools, not account/team Sandbox included-usage quota.",
+    "Current official Vercel Academy guidance states that Usage is a team-level surface and that on Hobby the Usage tab shows included allotments and how much of each has been used. This identifies a provider-authoritative observation surface, but that authenticated team Usage surface is not exposed by the connected Vercel actions available to this organ.",
+    "Plugin discovery for Vercel usage/billing/quota returned no installable alternative integration, so no connected-app path available in this session can directly observe the remaining included Sandbox quota.",
+    "Plan identity, cumulative sandbox duration/CPU usage, READY deployment status, serverless HTTP 200, and documentation-level included limits remain insufficient to open Sandbox.create under supervisor 8.65.",
+    "No Sandbox.create, provider credential lookup, billing mutation, paid fallback, Together action, deployment, or runtime invocation was performed."
+  ],
+  "hypothesis": "The FREE_ONLY Sandbox gate is blocked by an observability-surface gap rather than by known exhausted quota: the provider-authoritative team Usage UI can represent allotment and used quantity, but the current connected API/tool surface cannot read it.",
+  "counterhypothesis": "Existing connected Vercel project/deployment/Agent Run usage data is sufficient to infer remaining included Sandbox quota.",
+  "adjudication": "Rejected. The available usage-oriented connector actions are Agent Run observability, not team included-usage accounting; supervisor 8.65 explicitly forbids opening the gate from plan identity or indirect/cumulative usage inference.",
+  "bounded_delta": {
+    "type": "DURABLE_PROVIDER_OBSERVABILITY_SURFACE_CLOSURE_RECEIPT",
+    "source_semantics_changed": false,
+    "executor_changed": false,
+    "runtime_invocation_performed": false,
+    "sandbox_create_performed": false,
+    "paid_or_unknown_provider_action_performed": false,
+    "duplicate_inference_v4_source_work_avoided": true,
+    "new_information": "CURRENT_CONNECTED_SURFACE_CANNOT_DIRECTLY_READ_PROVIDER_TEAM_USAGE_ALLOTMENT_REMAINING"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: closed the currently available automated Vercel connector/plugin path as insufficient for the supervisor-required remaining-quota proof and narrowed the blocker to authenticated provider Team Usage observability or an equivalent future official read-only endpoint/tool.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: current donor already closed the InferenceReceipt/v4 rejection-boundary source gap in parallel; supervisor 8.65 pauses further source-guard proliferation and Sandbox runtime admission remains closed on quota observability.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: real local model/J-Space execution remains downstream of an admitted Sandbox environment probe; no paid lane, credential preflight, or source-only pseudo-credit is permitted."
+  },
+  "credits": {
+    "preexisting_exact_source_function_runtime_diagnostic": "PASS_AT_EXACT_BB7324_NO_SANDBOX_SCOPE_ONLY",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Directly observe the authenticated Vercel team Usage surface (or a future official connected read-only equivalent) that reports the Sandbox included allotment and current used/remaining quantity. Only an explicit positive remaining-included-quota observation may open FREE_ONLY Sandbox admission; otherwise Sandbox.create remains blocked. Re-enter current main, PR1263 and PR810 immediately before any subsequent execution attempt.",
+  "acceptance": "IN_PROGRESS"
+}

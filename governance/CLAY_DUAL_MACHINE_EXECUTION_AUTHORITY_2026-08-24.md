@@ -17,6 +17,35 @@ The user explicitly authorizes host-side changes that are necessary to repair, r
 
 Do not intentionally exhaust disk, RAM, process tables, or other host resources. Check free space before large downloads and clean obsolete models, caches, builds, snapshots, and scratch data when needed.
 
+## Continuous external-solution harvest loop
+
+External prior art is a first-class part of every serious `go` cycle rather than an occasional fallback.
+
+For any non-trivial blocker, performance problem, architecture question, missing capability, or unexplained experimental result, consult current external sources before committing to a substantial from-scratch solution. Search the public web, GitHub, and arXiv (plus other high-signal primary sources when useful) for existing implementations, papers, benchmarks, algorithms, failure reports, and competing approaches.
+
+Use a high-recall discovery policy: repositories or papers that are even plausibly relevant should be triaged rather than ignored. Candidate repositories may be cloned/downloaded into disposable sandbox research space, subject to the storage guardrail. Large or weak candidates should be shallow-cloned, sparsely checked out, archived, or deleted after triage rather than allowed to accumulate indefinitely. "Download everything interesting" means aggressively acquire and inspect plausible candidates while preserving enough disk/RAM headroom for the research system to keep functioning.
+
+The default solution-harvest pipeline is:
+
+1. define the concrete problem, baseline, metric, and failure signature;
+2. search web + GitHub + arXiv broadly and record candidate provenance;
+3. clone/download the most plausible repositories, code, models, artifacts, or papers into sandbox scratch space;
+4. dissect implementation structure, algorithms, data flow, assumptions, dependencies, tests, benchmarks, and known limitations;
+5. reproduce the original solution or the smallest faithful core needed to understand its principle;
+6. measure the original/reference implementation on a controlled baseline;
+7. form a causal hypothesis about which principle actually creates the gain;
+8. implement a minimal ClayCode-native or EntityOS/HCU-native version of that principle instead of blindly importing unnecessary architecture;
+9. run A/B tests, ablations, regression tests, resource measurements, and repeated trials against the original/reference baseline;
+10. iterate on the Clay implementation until it is measurably better on the chosen objective or delivers an explicitly valuable tradeoff without unacceptable regressions;
+11. integrate only after the improvement is measured and reproducible; even a marginal gain may qualify if it is real, repeatable, and does not create a worse system-level tradeoff;
+12. preserve receipts, benchmark data, provenance, and the reason for adoption/rejection so later `go` cycles can reuse the result.
+
+Do not treat popularity, benchmark claims, README assertions, stars, citations, or paper conclusions as proof. Reproduce and measure locally whenever practical. Prefer controlled experiments over reputation.
+
+When source code is reused directly, honor its license and preserve required attribution/provenance. When only the underlying idea/principle is useful, prefer an independent ClayCode-native implementation whose behavior is validated against the reference.
+
+The harvest loop is continuous: every `go` should spend some effort checking for newly relevant repositories/papers or unresolved candidate leads when doing so has plausible information value. Previously rejected candidates may be revisited when the architecture, metrics, or constraints change.
+
 ## Adversarial synthetic cognition laboratory
 
 The VPS sandbox is explicitly authorized for aggressive adversarial experiments on software model/agent instances, including experiments that would be ethically uncomfortable if applied to people. The purpose is empirical study of robustness, agency, self-models, memory, hidden-state dynamics, shutdown behavior, goal stability, deception, pressure responses, and causal cognition mechanisms.
@@ -61,4 +90,4 @@ Sandbox and local experiments are evidence/candidates only until admitted by the
 
 ## Operational objective
 
-On `go`: coordinate, execute, test, break/rebuild scratch environments when useful, compare alternatives, run ablations, deploy development artifacts, collect receipts/evidence, fix recurring infrastructure weaknesses, and keep iterating toward EntityOS + HCU without requiring the user to manually relay routine shell commands.
+On `go`: coordinate, execute, test, break/rebuild scratch environments when useful, continuously harvest external solutions, compare alternatives, run ablations, deploy development artifacts, collect receipts/evidence, fix recurring infrastructure weaknesses, and keep iterating toward EntityOS + HCU without requiring the user to manually relay routine shell commands.

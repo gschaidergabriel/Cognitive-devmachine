@@ -1,0 +1,176 @@
+{
+  "CLOUDFLARE_API_KEY": {
+    "configured": false,
+    "source": null
+  },
+  "DEEPSEEK_API_KEY": {
+    "configured": false,
+    "source": null
+  },
+  "E2B_API_KEY": {
+    "configured": true,
+    "source": "private_repo_store:API_TOKENS.env"
+  },
+  "EXA_API_KEY": {
+    "configured": true,
+    "source": "private_repo_store:API_TOKENS.env"
+  },
+  "GEMINI2_API_KEY": {
+    "configured": false,
+    "source": null
+  },
+  "GEMINI_API_KEY": {
+    "configured": false,
+    "source": null
+  },
+  "GLM_API_KEY": {
+    "configured": false,
+    "source": null
+  },
+  "GROQ_API_KEY": {
+    "configured": true,
+    "source": "private_repo_store:GROQ_API.env"
+  },
+  "HF_API_KEY": {
+    "configured": false,
+    "source": null
+  },
+  "HF_TOKEN": {
+    "configured": true,
+    "source": "private_repo_store:API_TOKENS.env"
+  },
+  "MISTRAL_API_KEY": {
+    "configured": false,
+    "source": null
+  },
+  "NEUROPEDIA_API_KEY": {
+    "configured": false,
+    "source": null
+  },
+  "NVIDIA_API_KEY": {
+    "configured": true,
+    "source": "private_repo_store:API_TOKENS.env"
+  },
+  "NVIDIA_NIM_API_KEY": {
+    "configured": false,
+    "source": null
+  },
+  "OPENALEX_API_KEY": {
+    "configured": true,
+    "source": "private_repo_store:API_TOKENS.env"
+  },
+  "OPENROUTER2_API_KEY": {
+    "configured": false,
+    "source": null
+  },
+  "OPENROUTER_API_KEY": {
+    "configured": true,
+    "source": "private_repo_store:API_TOKENS.env"
+  },
+  "RAPIDAPI_KEY": {
+    "configured": true,
+    "source": "private_repo_store:API_TOKENS.env"
+  },
+  "TAVILY_API_KEY": {
+    "configured": true,
+    "source": "private_repo_store:API_TOKENS.env"
+  }
+}
+--- shared quota ---
+{
+  "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+  "generated_at": "2026-08-24T11:03:51.120017+00:00",
+  "providers": {
+    "arxiv": {
+      "max_inflight": 1,
+      "active_leases": 0,
+      "min_interval_s": 3.1,
+      "cooldown_seconds": 0.0,
+      "total_requests": 4,
+      "total_success": 2,
+      "total_429": 0,
+      "total_errors": 0,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T10:45:36.625212+00:00"
+    },
+    "exa": {
+      "max_inflight": 2,
+      "active_leases": 0,
+      "min_interval_s": 0.5,
+      "cooldown_seconds": 0.0,
+      "total_requests": 2,
+      "total_success": 2,
+      "total_429": 0,
+      "total_errors": 0,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T10:45:46.265750+00:00"
+    },
+    "github": {
+      "max_inflight": 1,
+      "active_leases": 0,
+      "min_interval_s": 1.0,
+      "cooldown_seconds": 0.0,
+      "total_requests": 4,
+      "total_success": 4,
+      "total_429": 0,
+      "total_errors": 0,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T10:45:41.685718+00:00"
+    },
+    "groq": {
+      "max_inflight": 12,
+      "active_leases": 0,
+      "min_interval_s": 0.0,
+      "cooldown_seconds": 0.0,
+      "total_requests": 54,
+      "total_success": 36,
+      "total_429": 18,
+      "total_errors": 0,
+      "last_status": "429",
+      "last_observed_at": "2026-08-24T11:02:50.774774+00:00"
+    },
+    "nvidia": {
+      "max_inflight": 12,
+      "active_leases": 4,
+      "min_interval_s": 0.0,
+      "cooldown_seconds": 0.0,
+      "total_requests": 63,
+      "total_success": 21,
+      "total_429": 0,
+      "total_errors": 38,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T11:03:36.255962+00:00"
+    },
+    "openrouter": {
+      "max_inflight": 3,
+      "active_leases": 0,
+      "min_interval_s": 0.5,
+      "cooldown_seconds": 0.0,
+      "total_requests": 21,
+      "total_success": 18,
+      "total_429": 2,
+      "total_errors": 0,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T10:47:38.555050+00:00"
+    },
+    "tavily": {
+      "max_inflight": 2,
+      "active_leases": 0,
+      "min_interval_s": 0.5,
+      "cooldown_seconds": 0.0,
+      "total_requests": 6,
+      "total_success": 6,
+      "total_429": 0,
+      "total_errors": 0,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T10:45:43.721169+00:00"
+    }
+  }
+}
+--- disk ---
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       193G   36G  158G  19% /workspace
+/dev/sda1       193G   36G  158G  19% /cache
+/dev/sda1       193G   36G  158G  19% /artifacts
+--- processes ---
+  13311       19:42  0.1  0.2 python3 /workspace/clay-global-research-entity/tools/run_24h_entityos_swarm.py --hours 24.0 --output-dir /artifacts/clay-entityos-swarm/active-20260824T104408Z

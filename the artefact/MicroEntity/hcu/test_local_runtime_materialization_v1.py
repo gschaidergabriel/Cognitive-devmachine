@@ -2,13 +2,14 @@
 """Deterministic source regressions for local llama.cpp/Qwen materialization.
 
 These tests use tiny synthetic local files. Passing them grants no runtime/model/J-Space
-or training credit; it only proves the materialization gate fails closed around byte and
-path identity before any physical model invocation.
+or training credit; it only proves the materialization gate fails closed around byte,
+archive-membership and path identity before any physical model invocation.
 """
 from __future__ import annotations
 
 import hashlib
 from pathlib import Path
+import tarfile
 import tempfile
 import unittest
 
@@ -65,10 +66,7 @@ class LocalRuntimeMaterializationTests(unittest.TestCase):
     def fixture(self):
         temp = tempfile.TemporaryDirectory()
         root = Path(temp.name)
-        archive_bytes = b"attested-runtime-archive"
         model_bytes = b"tiny-gguf-fixture"
-        archive = root / "runtime.tar.gz"
-        archive.write_bytes(archive_bytes)
         model_path = root / "model.gguf"
         model_path.write_bytes(model_bytes)
         extracted = root / "extracted"
@@ -79,7 +77,13 @@ class LocalRuntimeMaterializationTests(unittest.TestCase):
         binary.chmod(0o755)
         (extracted / "lib/libggml.so").write_bytes(b"dep-a")
         (extracted / "lib/libllama.so").write_bytes(b"dep-b")
-        model, runtime = candidates(archive_bytes, model_bytes)
+
+        archive = root / "runtime.tar.gz"
+        with tarfile.open(archive, "w:gz") as tf:
+            tf.add(binary, arcname="release/bin/llama-cli")
+            tf.add(extracted / "lib/libggml.so", arcname="release/lib/libggml.so")
+            tf.add(extracted / "lib/libllama.so", arcname="release/lib/libllama.so")
+        model, runtime = candidates(archive.read_bytes(), model_bytes)
         return temp, root, archive, model_path, extracted, model, runtime
 
     def run_fixture(self, **changes):
@@ -90,7 +94,12 @@ class LocalRuntimeMaterializationTests(unittest.TestCase):
             runtime_archive_path=archive,
             extraction_root=extracted,
             runtime_binary_relative_path="bin/llama-cli",
+            runtime_binary_archive_member="release/bin/llama-cli",
             dependency_relative_paths=["lib/libllama.so", "lib/libggml.so"],
+            dependency_archive_members={
+                "lib/libllama.so": "release/lib/libllama.so",
+                "lib/libggml.so": "release/lib/libggml.so",
+            },
             model_path=model_path,
         )
         kwargs.update(changes)
@@ -105,14 +114,30 @@ class LocalRuntimeMaterializationTests(unittest.TestCase):
             self.assertEqual(first.receipt.materialization_sha256, second.receipt.materialization_sha256)
             self.assertEqual([item.relative_path for item in first.receipt.dependencies],
                              ["lib/libggml.so", "lib/libllama.so"])
+            self.assertEqual(first.receipt.runtime_binary.archive_member, "release/bin/llama-cli")
             self.assertEqual(first.receipt.model_byte_count, len(b"tiny-gguf-fixture"))
-            self.assertTrue(first.runtime_binary_path.is_file())
 
     def test_archive_digest_drift_fails_closed(self):
         temp, _root, kwargs = self.run_fixture()
         with temp:
             kwargs["runtime_archive_path"].write_bytes(b"mutated")
             with self.assertRaisesRegex(LocalRuntimeMaterializationError, "RUNTIME_ARCHIVE_SHA256_MISMATCH"):
+                verify_local_runtime_materialization(**kwargs)
+
+    def test_unrelated_extracted_binary_cannot_launder_valid_archive(self):
+        temp, _root, kwargs = self.run_fixture()
+        with temp:
+            binary = kwargs["extraction_root"] / "bin/llama-cli"
+            binary.write_bytes(b"different-but-executable")
+            binary.chmod(0o755)
+            with self.assertRaisesRegex(LocalRuntimeMaterializationError, "ARCHIVE_MEMBER_BYTE_MISMATCH"):
+                verify_local_runtime_materialization(**kwargs)
+
+    def test_unrelated_dependency_cannot_launder_valid_archive(self):
+        temp, _root, kwargs = self.run_fixture()
+        with temp:
+            (kwargs["extraction_root"] / "lib/libllama.so").write_bytes(b"different-dependency")
+            with self.assertRaisesRegex(LocalRuntimeMaterializationError, "ARCHIVE_MEMBER_BYTE_MISMATCH"):
                 verify_local_runtime_materialization(**kwargs)
 
     def test_model_digest_drift_fails_closed(self):
@@ -125,8 +150,7 @@ class LocalRuntimeMaterializationTests(unittest.TestCase):
     def test_non_executable_runtime_binary_fails_closed(self):
         temp, _root, kwargs = self.run_fixture()
         with temp:
-            binary = kwargs["extraction_root"] / "bin/llama-cli"
-            binary.chmod(0o644)
+            (kwargs["extraction_root"] / "bin/llama-cli").chmod(0o644)
             with self.assertRaisesRegex(LocalRuntimeMaterializationError, "EXECUTABLE_BIT_REQUIRED"):
                 verify_local_runtime_materialization(**kwargs)
 
@@ -146,7 +170,16 @@ class LocalRuntimeMaterializationTests(unittest.TestCase):
         temp, _root, kwargs = self.run_fixture()
         with temp:
             kwargs["dependency_relative_paths"] = ["../outside.so"]
+            kwargs["dependency_archive_members"] = {"../outside.so": "release/lib/outside.so"}
             with self.assertRaisesRegex(LocalRuntimeMaterializationError, "PATH_TRAVERSAL_FORBIDDEN"):
+                verify_local_runtime_materialization(**kwargs)
+
+    def test_dependency_archive_mapping_must_be_exact(self):
+        temp, _root, kwargs = self.run_fixture()
+        with temp:
+            kwargs["dependency_archive_members"] = {"lib/libllama.so": "release/lib/libllama.so"}
+            with self.assertRaisesRegex(LocalRuntimeMaterializationError,
+                                        "DEPENDENCY_ARCHIVE_MEMBER_KEYS_MUST_MATCH_DEPENDENCIES"):
                 verify_local_runtime_materialization(**kwargs)
 
     def test_duplicate_dependency_identity_fails_closed(self):

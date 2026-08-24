@@ -1,0 +1,47 @@
+{
+  "schema": "CLAY_GO_SOURCE_DELTA_RECEIPT/v1",
+  "created_at": "2026-08-24T21:57:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "go",
+  "authority_epoch": "8.72",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "base_main": "81cca48a12a78893ac3be4c5b08d96f85aa96df5",
+  "branch": "gpt56sol/go-872-intermediate-evidence-presence-20260824",
+  "source_commit": "5bcedf797325def3a84a5e5c62a76b97207e21c2",
+  "test_commit": "0dc0f1d69f2a55cf24aedb92894b8fc4617d0c34",
+  "finding": "The newly landed intermediate contrastive protocol documented wrong-layer and lesion/rescue evidence as required, but adjudicate_holdout initialized both checks to true and did not require either measurement to be present. A holdout with no such fields could therefore reach the causal-candidate verdict if the remaining matched controls passed.",
+  "repair": {
+    "wrong_layer_evidence_presence_required": true,
+    "lesion_rescue_evidence_presence_required": true,
+    "partial_lesion_rescue_pair_fails_closed": true,
+    "evidence_counts_exposed_in_verdict": true
+  },
+  "deterministic_validation": {
+    "unit_tests": "6/6 PASS",
+    "py_compile": "PASS",
+    "source_content_sha256": "9948c92da74cbbdd855491d0d5f370e691fb1cebb704c5ab6fff9d4d45f42814",
+    "test_content_sha256": "140f29c8d2cf593cd372f76b4fccdc3dcc5653772e109d8e7e9466dd18f8c80e"
+  },
+  "coordination": {
+    "unusual_experiment_executed": false,
+    "atomic_lease_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable reproducible macrocycle/request identity was exposed for this go; available user-message time had only minute precision.",
+    "runtime_workflow_triggered_by_this_delta": false
+  },
+  "evidence_scope": "SOURCE_AND_DETERMINISTIC_REGRESSION_ONLY",
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "tracks": {
+    "A": "Strengthens executable promotion-path correctness by closing a fail-open causal-evidence gate.",
+    "B": "Hardens the reusable HCU/J-Space causal-control primitive and preserves fail-closed evidence authority.",
+    "C": "Makes intermediate-layer representation traces safer for later leak-resistant dataset/training readiness without granting model credit."
+  }
+}

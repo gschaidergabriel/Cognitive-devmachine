@@ -8,6 +8,8 @@ disjoint holdout prompts, and emits a promotion-candidate file only when the
 directional effect survives the controls.
 
 This is intentionally provider-independent. No external LLM credential is read.
+Exact source identity is fail-closed before model loading: HEAD, tree and a digest
+of the full porcelain status are bound, and a dirty checkout is rejected.
 """
 from __future__ import annotations
 
@@ -74,9 +76,32 @@ def git_text(*args: str) -> str:
             timeout=5,
             check=False,
         )
-        return p.stdout.strip() or "UNKNOWN"
+        if p.returncode != 0:
+            return "UNKNOWN"
+        return p.stdout.strip()
     except Exception:
         return "UNKNOWN"
+
+
+def exact_source_identity() -> dict[str, Any]:
+    head = git_text("rev-parse", "HEAD")
+    tree = git_text("rev-parse", "HEAD^{tree}")
+    status = git_text("status", "--porcelain=v1", "--untracked-files=all")
+    if head == "UNKNOWN" or tree == "UNKNOWN" or status == "UNKNOWN":
+        raise RuntimeError("SOURCE_IDENTITY_UNRESOLVED")
+    try:
+        if len(head) != 40 or len(tree) != 40:
+            raise ValueError
+        int(head, 16)
+        int(tree, 16)
+    except ValueError as exc:
+        raise RuntimeError("SOURCE_IDENTITY_INVALID") from exc
+    return {
+        "repo_head": head,
+        "repo_tree": tree,
+        "repo_dirty": bool(status),
+        "repo_status_sha256": hashlib.sha256(status.encode("utf-8")).hexdigest(),
+    }
 
 
 def tensor_sha(tensor: Any) -> str:
@@ -401,9 +426,18 @@ def main() -> int:
     result_path = out / "trigger1_local_activation_api_result.json"
     candidate_path = out / "trigger1_direct_steering_candidate.json"
     started = dt.datetime.now(dt.timezone.utc).isoformat()
-    source = {"repo_head": git_text("rev-parse", "HEAD"), "repo_tree": git_text("rev-parse", "HEAD^{tree}")}
+    source: dict[str, Any] = {
+        "repo_head": "UNKNOWN",
+        "repo_tree": "UNKNOWN",
+        "repo_dirty": None,
+        "repo_status_sha256": None,
+    }
 
     try:
+        source = exact_source_identity()
+        if source["repo_dirty"] is not False:
+            raise RuntimeError("DIRTY_SOURCE_TREE_FAIL_CLOSED")
+
         torch, transformers, snapshot, tokenizer, model, device, checkpoint_sha, tokenizer_sha, weight_manifest = load_exact_runtime(Path(args.cache_dir))
         token_ids, token_labels = resolve_token_triplet(tokenizer)
         base_vector = unit_target_vector(torch, model, token_ids).to(device)
@@ -486,6 +520,9 @@ def main() -> int:
             "runtime_intervention_class": "LOCAL_PYTORCH_ACTIVATION_INTERVENTION",
             "source_identity": {
                 "repo_head": source["repo_head"],
+                "repo_tree": source["repo_tree"],
+                "repo_dirty": source["repo_dirty"],
+                "repo_status_sha256": source["repo_status_sha256"],
                 "runtime_build_sha256": runtime_build_sha,
                 "checkpoint_sha256": checkpoint_sha,
                 "tokenizer_sha256": tokenizer_sha,

@@ -1,0 +1,56 @@
+{
+  "schema": "CLAY_GO_SOURCE_DELTA_RECEIPT/v1",
+  "observed_date": "2026-08-24",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "organ": "GPT56SOL_CHATGPT_ORGAN",
+  "trigger": "go",
+  "observed_main_before_receipt_write": "989e1d712d4aee4d6c1722c55923ca0c4093575f",
+  "delta": {
+    "classification": "SOURCE_TEST_HARDENING_ONLY",
+    "source_commit": "da4898bcf955499dcefb9d7d03c7f6768db4f18e",
+    "source_path": "tests/test_free_swarm_socket_tripwire_868.py",
+    "receipt_runner_integration_commit": "7e69db0190878edf398996d0521657422c2a8a91",
+    "receipt_runner_path": "tools/run_free_swarm_admission_boundary_receipt.py",
+    "finding": "The pre-existing FREE admission boundary suite relied on concrete HTTP/wrapper mocks for network observation. A provider or catalog path using a different stdlib socket route could therefore evade the test instrumentation while violating the intended zero-network-before-admission invariant.",
+    "repair": "Add a wrapper-independent stdlib socket tripwire covering socket.create_connection, socket.getaddrinfo, socket.socket.connect and socket.socket.connect_ex, and exercise blocked UNKNOWN/PAID/SUBSCRIPTION base-controller cases, blocked catalog discovery and blocked OpenRouter distillery behavior without relying on the corresponding request-wrapper mocks.",
+    "integration": "The canonical FREE admission boundary receipt runner now binds both the original boundary suite and the socket-level suite into its source manifest, digests and child execution command."
+  },
+  "local_ephemeral_check": {
+    "kind": "PYTHON_SYNTAX_COMPILE_ONLY",
+    "result": "PASS",
+    "source_sha256": "b0d59738dec3342dd9589c474969eaae9596c65418463cad3f0ddf67f057ce9a",
+    "scope": "AUTHORING_SYNTAX_ONLY_NOT_CANONICAL_RUNTIME_EVIDENCE"
+  },
+  "execution": {
+    "external_llm_provider_calls_performed_by_this_organ": false,
+    "provider_credentials_consumed_by_this_organ": false,
+    "local_or_clay_direct_dev_bridge_exposed_to_this_organ": false,
+    "free_swarm_admission_boundary_receipt_executed_by_this_organ": false,
+    "reason": "No authorized local normal-user or clay-direct-dev shell/bridge executor is exposed in this ChatGPT tool surface. Tool absence is infrastructure status, not product failure.",
+    "required_next_runtime_gate": "Execute tools/run_free_swarm_admission_boundary_receipt.py on exact current source through an exposed authorized zero-cost local or clay-direct-dev executor and preserve exact source/environment/secret/network/result identities."
+  },
+  "external_research_fusion": {
+    "python_audit_hooks": "Useful observability layer but Python documentation explicitly says Python-level audit hooks are not a sandbox.",
+    "linux_network_namespace": "A separate Linux network namespace provides OS-level network-stack isolation where the authorized executor has the required capability.",
+    "recommended_runtime_defense_in_depth": "Keep application-level secret/socket counters and, where available without violating authority, add OS-level no-network isolation for blocked-case receipt execution."
+  },
+  "tracks": {
+    "track_a": "ADVANCED_SOURCE_CONTROL_PLANE_TEST_AND_RECEIPT_BINDING",
+    "track_b": "NO_DIRECT_DELTA_FROM_THIS_RECEIPT; PARALLEL_CANONICAL_HCU_LOCAL_MODEL_IDENTITY_WORK_ADVANCED_SEPARATELY",
+    "track_c": "NO_DIRECT_DELTA_FROM_THIS_RECEIPT; PARALLEL_CANONICAL_JSPACE_INTERVENTION_BACKEND_GATE_ADVANCED_SEPARATELY"
+  },
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "promotion": {
+    "free_swarm_provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "epistemic_boundary": "Source/test hardening and authoring-time syntax success do not establish FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 PASS. Runtime promotion remains blocked until exact-source execution is observed."
+}

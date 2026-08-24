@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Emit an exact-source FREE Swarm admission-boundary execution receipt.
 
-Executes the canonical admission-boundary unittest module in a sanitized child
+Executes the canonical admission-boundary unittest modules in a sanitized child
 process. Provider credentials are not inherited. A Python socket tripwire blocks
 and records any unmocked Python network connection attempt. The canonical tests
 retain their own per-case secret/network tripwire assertions.
+
+The suite also binds the shared ``rae_secret_loader`` primitive so direct/legacy
+callers cannot inspect provider environment variables or repository secret stores
+before canonical typed FREE admission.
 
 Component evidence only: this runner does not admit or call any external provider
 and cannot establish whole EntityOS/HCU, HCU, J-Space-model, or training credit.
@@ -28,10 +32,12 @@ ROOT = Path(__file__).resolve().parents[1]
 TEST_MODULES = (
     "tests.test_free_swarm_admission_boundary_867",
     "tests.test_free_swarm_socket_tripwire_868",
+    "tests.test_rae_secret_loader_provider_admission",
 )
 TEST_PATHS = (
     ROOT / "tests/test_free_swarm_admission_boundary_867.py",
     ROOT / "tests/test_free_swarm_socket_tripwire_868.py",
+    ROOT / "tests/test_rae_secret_loader_provider_admission.py",
 )
 INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
@@ -39,7 +45,9 @@ ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMIS
 SOURCE_PATHS = (
     "tests/test_free_swarm_admission_boundary_867.py",
     "tests/test_free_swarm_socket_tripwire_868.py",
+    "tests/test_rae_secret_loader_provider_admission.py",
     "tools/free_provider_admission.py",
+    "tools/rae_secret_loader.py",
     "tools/run_free_go_swarm.py",
     "tools/run_24h_entityos_swarm.py",
     "tools/run_research_distillery_entry.py",
@@ -289,6 +297,7 @@ def main(argv: list[str] | None = None) -> int:
             "python_socket_network_attempt_count": len(attempts),
             "python_socket_network_attempts": attempts,
             "per_case_secret_and_network_zero_assertions": "ENFORCED_BY_CANONICAL_TEST_SUITE",
+            "shared_secret_loader_pretouch_assertions": "ENFORCED_BY_TEST_RAE_SECRET_LOADER_PROVIDER_ADMISSION",
         },
         "result": {
             "unittest_ok": unittest_ok,

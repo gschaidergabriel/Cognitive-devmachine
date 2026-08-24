@@ -1,0 +1,261 @@
+STATUS
+ M "free swarm/LIVE_METRICS.json"
+ M "free swarm/README.md"
+?? "free swarm/FABRIC_6000_LIVE.json"
+DIFFSTAT
+ free swarm/LIVE_METRICS.json | 96 ++++++++++++++++++++++----------------------
+ free swarm/README.md         | 83 +++++++++++++++++++++++++++++---------
+ 2 files changed, 113 insertions(+), 66 deletions(-)
+README_DIFF
+diff --git a/free swarm/README.md b/free swarm/README.md
+index 6cc361fb1..5462b8a60 100644
+--- a/free swarm/README.md	
++++ b/free swarm/README.md	
+@@ -1,5 +1,52 @@
+ # Free Swarm — Messdashboard der Clay Research Entity
+ 
++<!-- FABRIC_6000_AUTO:BEGIN -->
++## AUTO — 6000er Free-Swarm Fabric — LIVE
++Aktualisiert: `2026-08-24T14:27:11.879332+00:00`
++
++**Wichtig:** `6000` sind gleichzeitig vorgehaltene logische Forschungsorgane. `actual model calls inflight` ist die reale externe Inference-Parallelität. Beide Zahlen werden getrennt gemessen.
++
++| Live-Kennzahl | Wert |
++|---|---:|
++| logische Forschungsorgane | **6,000** |
++| aktuell wartend | 5,982 |
++| **echte Model-Calls gleichzeitig aktiv** | **18** |
++| adaptives Inference-Ziel | 20 |
++| Zielauslastung | 90.0% |
++| Summe lokaler Hard-Ceilings | 400 |
++| erfolgreiche Calls dieses Fabric-Runs | 329 |
++| wirtschaftlich gebundene FREE_LANE receipts kumuliert | 2,349 |
++| Global Work-Stealing | JA |
++
++### Provider-Verteilung — real materialisiert vs. Katalog
++| Provider | Keys jetzt materialisiert | Katalog-Einträge (nur Inventar) | aktiv | Ziel | Hard max | Success | 429 | Fehler | Cooldown s |
++|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
++| `nvidia` | 1 | 3 | 18 | 18 | 256 | 326 | 7 | 269 | 0.0 |
++| `groq` | 1 | 3 | 0 | 1 | 128 | 3 | 1 | 0 | 1871.3 |
++| `openrouter` | 1 | 2 | 0 | 1 | 16 | 0 | 10 | 0 | 320.9 |
++| `mistral` | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0.0 |
++
++### Arbeitsteilung dieses Runs
++| Rolle | gestartete Aufgaben |
++|---|---:|
++| `ARCHITECT` | 53 |
++| `CLAYCODE_FORGE` | 53 |
++| `COGNITION` | 53 |
++| `EXPERIMENT_DESIGN` | 53 |
++| `EXTERNAL_HARVEST` | 53 |
++| `FALSIFIER` | 53 |
++| `HCU_CAUSAL` | 53 |
++| `MEMORY_JSPACE` | 53 |
++| `RUNTIME` | 53 |
++| `SECURITY` | 53 |
++| `REVIEWER` | 52 |
++| `SYNTHESIZER` | 52 |
++
++Provider-Zuteilungen seit Run-Start: `groq`=4, `nvidia`=620, `openrouter`=10.
++
++Katalogzahlen sind **keine** Behauptung, dass diese Schlüssel aktuell vorhanden oder nutzbar sind. Nur `CREDENTIAL_POOL.json` zählt als materialisierte Runtime-Kapazität.
++<!-- FABRIC_6000_AUTO:END -->
++
+ <!-- EVIDENCE_FORGE_AUTO:BEGIN -->
+ ## AUTO — Evidence Forge / dritter autonomer Swarm
+ Aktualisiert: `2026-08-24T14:13:38.870119+00:00`
+@@ -205,26 +252,26 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen
+ 
+ <!-- FREE_SWARM_AUTO:BEGIN -->
+ ## AUTO — Live-Auswertung
+-Aktualisiert: `2026-08-24T14:13:58.923512+00:00`
++Aktualisiert: `2026-08-24T14:26:43.828663+00:00`
+ 
+ | Kennzahl | Wert |
+ |---|---:|
+-| Worker-Records | 7691 |
+-| Ø gleichzeitig laufende Free-Worker | 6.062 |
++| Worker-Records | 8291 |
++| Ø gleichzeitig laufende Free-Worker | 6.446 |
+ | Peak Free-Worker | 136 |
+-| Free-Swarm Input-Tokens | 6604545 |
+-| Free-Swarm Output-Tokens | 1578120 |
+-| Free-Swarm Total-Tokens | 8182665 |
+-| Usage-exakte Worker-Records | 1128 |
++| Free-Swarm Input-Tokens | 8422315 |
++| Free-Swarm Output-Tokens | 2082208 |
++| Free-Swarm Total-Tokens | 10504523 |
++| Usage-exakte Worker-Records | 1448 |
+ | Evident akzeptierte Architektur-Deltas | 1 |
+-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 11906541 |
+-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $119.07 |
++| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 11919160 |
++| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $119.19 |
+ 
+ ### Modelle
+ | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
+ |---|---|---:|---:|---:|---:|---:|---:|
+-| nvidia | `nvidia/nemotron-3-super-120b-a12b` | 487 | 125 | 3 | 760801 | 201150 | 961951 |
+-| nvidia | `nvidia/nemotron-3-ultra-550b-a55b` | 472 | 75 | 3 | 466179 | 120570 | 586749 |
++| nvidia | `nvidia/nemotron-3-super-120b-a12b` | 680 | 308 | 7 | 1801712 | 493941 | 2295653 |
++| nvidia | `nvidia/nemotron-3-ultra-550b-a55b` | 664 | 209 | 5 | 1228280 | 329167 | 1557447 |
+ | nvidia | `nvidia/nemotron-3.5-lightning-30b-a3b` | 425 | 71 | 0 | 448462 | 118400 | 566862 |
+ | nvidia | `nvidia/ising-calibration-1.5-31b` | 423 | 69 | 0 | 438535 | 58573 | 497108 |
+ | nvidia | `openai/gpt-oss-20b` | 422 | 68 | 0 | 372013 | 112050 | 484063 |
+@@ -236,11 +283,11 @@ Aktualisiert: `2026-08-24T14:13:58.923512+00:00`
+ | nvidia | `nvidia/llama-3.3-nemotron-super-49b-v1` | 428 | 59 | 0 | 318232 | 56593 | 374825 |
+ | nvidia | `meta/llama-3.2-90b-vision-instruct` | 425 | 59 | 0 | 317884 | 41664 | 359548 |
+ | nvidia | `nvidia/nemotron-nano-12b-v2-vl` | 420 | 55 | 0 | 341519 | 44763 | 386282 |
+-| openrouter | `openrouter/free` | 134 | 52 | 22 | 306274 | 84120 | 390394 |
++| openrouter | `openrouter/free` | 144 | 52 | 32 | 306274 | 84120 | 390394 |
+ | nvidia | `nvidia/llama-3.3-nemotron-super-49b-v1.5` | 422 | 52 | 0 | 274588 | 73485 | 348073 |
+-| groq | `openai/gpt-oss-120b` | 168 | 32 | 18 | 185484 | 31700 | 217184 |
+-| groq | `openai/gpt-oss-20b` | 161 | 29 | 16 | 166083 | 28700 | 194783 |
+-| groq | `qwen/qwen3.6-27b` | 157 | 25 | 15 | 146568 | 24800 | 171368 |
++| groq | `openai/gpt-oss-120b` | 170 | 33 | 19 | 190277 | 32600 | 222877 |
++| groq | `openai/gpt-oss-20b` | 162 | 30 | 16 | 170888 | 29600 | 200488 |
++| groq | `qwen/qwen3.6-27b` | 158 | 26 | 15 | 151728 | 25700 | 177428 |
+ | nvidia | `openai/gpt-oss-120b` | 414 | 15 | 0 | 82352 | 25193 | 107545 |
+ | nvidia | `deepseek-ai/deepseek-v4-flash-0731` | 392 | 11 | 0 | 67409 | 14571 | 81980 |
+ | nvidia | `mistralai/mistral-nemotron` | 56 | 6 | 0 | 35501 | 4871 | 40372 |
+@@ -264,7 +311,7 @@ Aktualisiert: `2026-08-24T14:13:58.923512+00:00`
+ | nvidia | `nvidia/llama-3.1-nemotron-ultra-253b-v1` | 4 | 0 | 0 | 0 | 0 | 0 |
+ | nvidia | `nvidia/llama3-chatqa-1.5-70b` | 2 | 0 | 0 | 0 | 0 | 0 |
+ | nvidia | `nvidia/nemotron-4-340b-instruct` | 5 | 0 | 0 | 0 | 0 | 0 |
+-| nvidia | `nvidia/nemotron-mini-4b-instruct` | 64 | 0 | 10 | 0 | 0 | 0 |
++| nvidia | `nvidia/nemotron-mini-4b-instruct` | 265 | 0 | 11 | 0 | 0 | 0 |
+ | nvidia | `nvidia/nemotron-nano-3-30b-a3b` | 2 | 0 | 0 | 0 | 0 | 0 |
+ | nvidia | `nvidia/nemotron-parse` | 18 | 0 | 0 | 0 | 0 | 0 |
+ | nvidia | `nvidia/neva-22b` | 2 | 0 | 0 | 0 | 0 | 0 |
+@@ -284,8 +331,8 @@ Innovativstes Modell: **nvidia / nvidia/nemotron-3-super-120b-a12b** — Innovat
+ | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
+ 
+ ### Research-Entity-Output / Sonnet-Kostenproxy
+-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9831 Textdateien / 47626163 Zeichen ≈ **11906541 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$119.07** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
++API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9836 Textdateien / 47676641 Zeichen ≈ **11919160 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
++Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$119.19** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+ <!-- FREE_SWARM_AUTO:END -->
+ 
+ 
+METRICS_DIFF
+diff --git a/free swarm/LIVE_METRICS.json b/free swarm/LIVE_METRICS.json
+index 006b3c822..e242b8b74 100644
+--- a/free swarm/LIVE_METRICS.json	
++++ b/free swarm/LIVE_METRICS.json	
+@@ -1,38 +1,38 @@
+ {
+   "schema": "CLAY_FREE_SWARM_METRICS/v1",
+-  "generated_at": "2026-08-24T14:13:58.923512+00:00",
++  "generated_at": "2026-08-24T14:26:43.828663+00:00",
+   "workers": {
+-    "worker_records": 7691,
+-    "worker_files": 9,
+-    "average_concurrency": 6.061803160444325,
++    "worker_records": 8291,
++    "worker_files": 10,
++    "average_concurrency": 6.445514347029179,
+     "peak_concurrency": 136,
+-    "observed_seconds": 15549.053723,
+-    "exact_usage_rows": 1128,
+-    "input_tokens": 6604545,
+-    "output_tokens": 1578120,
+-    "total_tokens": 8182665,
++    "observed_seconds": 16752.827189,
++    "exact_usage_rows": 1448,
++    "input_tokens": 8422315,
++    "output_tokens": 2082208,
++    "total_tokens": 10504523,
+     "models": [
+       {
+         "provider": "nvidia",
+         "model": "nvidia/nemotron-3-super-120b-a12b",
+-        "requests": 487,
+-        "success": 125,
+-        "rate_limits": 3,
+-        "errors": 359,
+-        "input_tokens": 760801,
+-        "output_tokens": 201150,
+-        "total_tokens": 961951
++        "requests": 680,
++        "success": 308,
++        "rate_limits": 7,
++        "errors": 365,
++        "input_tokens": 1801712,
++        "output_tokens": 493941,
++        "total_tokens": 2295653
+       },
+       {
+         "provider": "nvidia",
+         "model": "nvidia/nemotron-3-ultra-550b-a55b",
+-        "requests": 472,
+-        "success": 75,
+-        "rate_limits": 3,
+-        "errors": 394,
+-        "input_tokens": 466179,
+-        "output_tokens": 120570,
+-        "total_tokens": 586749
++        "requests": 664,
++        "success": 209,
++        "rate_limits": 5,
++        "errors": 450,
++        "input_tokens": 1228280,
++        "output_tokens": 329167,
++        "total_tokens": 1557447
+       },
+       {
+         "provider": "nvidia",
+@@ -158,9 +158,9 @@
+       {
+         "provider": "openrouter",
+         "model": "openrouter/free",
+-        "requests": 134,
++        "requests": 144,
+         "success": 52,
+-        "rate_limits": 22,
++        "rate_limits": 32,
+         "errors": 60,
+         "input_tokens": 306274,
+         "output_tokens": 84120,
+@@ -180,35 +180,35 @@
+       {
+         "provider": "groq",
+         "model": "openai/gpt-oss-120b",
+-        "requests": 168,
+-        "success": 32,
+-        "rate_limits": 18,
++        "requests": 170,
++        "success": 33,
++        "rate_limits": 19,
+         "errors": 118,
+-        "input_tokens": 185484,
+-        "output_tokens": 31700,
+-        "total_tokens": 217184
++        "input_tokens": 190277,
++        "output_tokens": 32600,
++        "total_tokens": 222877
+       },
+       {
+         "provider": "groq",
+         "model": "openai/gpt-oss-20b",
+-        "requests": 161,
+-        "success": 29,
++        "requests": 162,
++        "success": 30,
+         "rate_limits": 16,
+         "errors": 116,
+-        "input_tokens": 166083,
+-        "output_tokens": 28700,
+-        "total_tokens": 194783
++        "input_tokens": 170888,
++        "output_tokens": 29600,
++        "total_tokens": 200488
+       },
+       {
+         "provider": "groq",
+         "model": "qwen/qwen3.6-27b",
+-        "requests": 157,
+-        "success": 25,
++        "requests": 158,
++        "success": 26,
+         "rate_limits": 15,

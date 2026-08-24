@@ -2709,6 +2709,62 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         )
         self.assertIn("published-during-validation", latches)
 
+    def test_execute_snapshots_latches_before_element_validation(self):
+        class SuccessResponse:
+            status = 200
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":"stop","message":'
+                    b'{"role":"assistant","content":"ok"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        latches = {"historical-a", "historical-b"}
+        mutation_count = 0
+
+        def mutate_during_any(iterable):
+            nonlocal mutation_count
+            iterator = iter(iterable)
+            first = next(iterator, False)
+            frame = getattr(iterator, "gi_frame", None)
+            if (
+                mutation_count == 0
+                and frame is not None
+                and "latch" in frame.f_locals
+            ):
+                mutation_count += 1
+                latches.add("published-during-execution-validation")
+            return bool(first) or builtins.any(iterator)
+
+        MOD.any = mutate_during_any
+        try:
+            result = MOD.execute_chat(
+                VALID_MESSAGES,
+                model="mock",
+                environ=env,
+                opener=lambda *args, **kwargs: SuccessResponse(),
+                now=iter((68.25, 68.26)).__next__,
+                payment_latches=latches,
+            )
+        finally:
+            del MOD.any
+
+        self.assertEqual(result["content"], "ok")
+        self.assertEqual(mutation_count, 1)
+        self.assertIn("published-during-execution-validation", latches)
+
     def test_active_payment_latch_element_is_rejected_before_execution(self):
         leaked_text = "payment-latch-element-equality-must-not-run"
 

@@ -71,11 +71,13 @@ The current source provides:
 - explicit zero external LLM credential dependency and zero paid-provider billing by experiment design;
 - fail-closed promotion rules that reject terminal output-head/readout shortcuts as J-Space mechanism credit.
 
-The earlier final-norm/`lm_head`-coupled fastpath remains useful only as a technical readout-steering positive control. Current `main` now carries the stronger nonterminal discriminator: a middle-layer residual intervention with downstream transformer computation, an independently derived `INPUT_EMBEDDING_CONTRAST_A_VS_BC` probe basis, and an explicit ban on terminal output-projection shortcut credit. `.github/workflows/trigger1-v2-internal-layer-selfhosted.yml` binds exact current source/tree, the local runtime result, promotion candidate/gate, runner identity and a bounded receipt while minting no canonical, whole-product or training credit.
+**Forschungsrun 1 found and removed a hard scientific confound.** The earlier final-norm/`lm_head`-coupled fastpath constructs the steering direction from the same terminal output geometry that is scored, so it is retained only as a technical readout-steering positive control. The promotion gate now fails closed for terminal `lm_head`/output-head/final-norm shortcuts.
 
-Owner dispatch **#1640** is the current internal-layer execution request. It requires the six matched controls, fixed seeds, disjoint calibration/holdout, exact runtime/model/tokenizer/intervention receipts, zero external LLM credential dependency and zero paid fallback. A separate exact-current local-Qwen runtime-proof workflow was re-triggered at commit `9fd8a697d9b39fc6710da500dbeb19ffc2b2162a`; until either lane produces a repository-bound terminal receipt, workflow/source/dispatch existence alone grants no model/J-Space/runtime promotion.
+The fused current discriminator is `tools/trigger1_local_qwen06_midlayer_causal_execute.py` launched by `tools/trigger1_local_qwen06_midlayer_causal.sh`. It uses a fixed nonterminal middle decoder layer, derives its steering basis from contrastive **internal activations rather than output-head rows**, preserves substantive downstream transformer computation, selects gain only on calibration data, freezes that gain before disjoint holdout, and requires paired specificity against SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM and PERMUTED_SAME_NORM controls. The launcher additionally performs bounded cleanup of disposable Trigger-1/pip cache material before failing closed on insufficient storage.
 
-This `go` also preserved the low-disk fail-closed evidence regression on the same lane. `tests/test_trigger1_local_qwen_runtime_preflight_872.py` locks both source binding and valid JSON receipt shape. Source/regression evidence is not model runtime evidence.
+A single owner-only issue dispatcher, `.github/workflows/trigger1-v2-local-fastpath-selfhosted.yml`, is the retained Self-Hosted Linux/X64 Trigger-1 execution lane. Duplicate terminal and tied-embedding runtime workflows were retired after fusion. Owner dispatch **#1643** targets exact-current `main` and the fused midlayer discriminator. Until it produces a repository-bound terminal receipt, source/workflow/dispatch existence alone grants no model/J-Space/runtime promotion.
+
+Source/regression evidence is not model runtime evidence. A positive midlayer result can become a model-specific internal-intervention promotion candidate only at its exact bound scope; it still does not mint canonical EntityOS/HCU, full J-Space-model or training credit by itself.
 
 ## Evidence credit
 
@@ -89,7 +91,7 @@ Current bounded credit remains conservative:
 - Distillery accepted Forge packets/tokens in the last published live snapshot: **0 / 0**;
 - Forge->Distillery exact-current runtime credit: **0 pending terminal receipt**;
 - provider runtime credit: **0 unless exact current authority/receipt promotes only its exact scope**;
-- local Qwen3-0.6B hidden-state/runtime J-Space promotion: **0 pending terminal receipt**;
+- local Qwen3-0.6B hidden-state/runtime J-Space promotion: **0 pending terminal midlayer receipt**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
 - J-Space model-runtime credit: **0**;
@@ -103,8 +105,8 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 1. Observe a terminal self-hosted runtime-reconciliation receipt on current authority and exact source identity.
 2. Observe the exact-current Forge -> Distillery successor witness: qualified Forge accept = 1 -> exactly one Distillery packet -> `accepted_dataset_tokens > 0` -> replay delta = 0.
 3. If the Forge witness fails, repair the **measured** isolated-executor/bridge blocker only; do not weaken evidence admission.
-4. Observe owner dispatch #1640 and persist the nonterminal internal-layer Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
-5. Require all six matched controls plus disjoint holdout; require independent vector derivation and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
+4. Observe owner dispatch #1643 and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
+5. Require all six matched controls plus disjoint holdout; require activation-derived nonterminal vector construction and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
 6. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
 7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
 8. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.

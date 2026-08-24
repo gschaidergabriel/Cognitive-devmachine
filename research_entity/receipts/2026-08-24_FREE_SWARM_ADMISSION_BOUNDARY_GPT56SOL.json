@@ -14,7 +14,7 @@
     "pass": true,
     "required": "secret_lookup_count=0 AND network_attempt_count=0"
   },
-  "note": "Local component evidence only. No provider network call was made and no paid/provider execution credit is claimed.",
+  "note": "Local component evidence only; no provider network call or paid execution.",
   "observed_environment": "CHATGPT_LOCAL_CONTAINER_COMPONENT_TEST",
   "positive_control": {"case":"free_positive","keys_returned":1,"network_attempt_count":0,"secret_lookup_count":2},
   "provider_runtime_credit": 0,
@@ -24,8 +24,8 @@
   "source_sha256": {
     "tools/free_swarm_provider_admission.py": "ae76096d3f47163092e5c46c5031dedf86d1b908c01b4eb847ca087b83e70192",
     "tools/run_24h_entityos_swarm_supervisor.sh": "cdf00f35b71a7a8bd38c9b45539cdfc8992a5165a2a8ad5edb09fd50dbdf407b",
-    "tools/run_free_go_swarm.py": "033c6b098f98e828328139f2cf2e8ae9ef3b62d354cd810fe6ac731d46aa9a38",
-    "tools/test_free_swarm_admission_boundary.py": "0b586d3bae913bd5bd27b97b5e6ab392151bbab2273d94933f050b4d68b6ba29"
+    "tools/run_free_go_swarm.py": "7fada7ad3b8843a2901302343e89564e36f6f806bab7449b664dff03a3bf3c08",
+    "tools/test_free_swarm_admission_boundary.py": "b60b460a6241666177ad547ea3ade7e9e59a56907bf15be8812f28289b318c81"
   },
   "training_credit": 0,
   "whole_entityos_runtime_credit": 0,

@@ -351,7 +351,12 @@ def make_transition_trace(
     max_slots: int = DEFAULT_MAX_SLOTS,
     broadcast_threshold: int = DEFAULT_BROADCAST_THRESHOLD,
 ) -> JSpaceGWTTransitionTrace:
-    """Emit one immutable observable transition trace for later causal evaluation/training."""
+    """Emit one immutable observable transition trace for later causal evaluation/training.
+
+    Transition trace v1 intentionally fixes selector parameters to the declared v1 defaults.
+    The trace schema does not persist alternative selector parameters, so accepting custom
+    values here would create an unreconstructable selector digest after deserialization.
+    """
     trace_id = _text(trace_id, "trace_id")
     role = _text(role, "role")
     cell_id = _text(cell_id, "cell_id")
@@ -375,11 +380,13 @@ def make_transition_trace(
         raise JSpaceGWTError("HYPERPOSITION_DUPLICATE_BRANCH_FORBIDDEN")
     if len(branches) > 32:
         raise JSpaceGWTError("HYPERPOSITION_BRANCH_COUNT_EXCEEDED")
+    if max_slots != DEFAULT_MAX_SLOTS or broadcast_threshold != DEFAULT_BROADCAST_THRESHOLD:
+        raise JSpaceGWTError("GWT_TRACE_V1_SELECTOR_PARAMETERS_FIXED")
 
     selection = select_gwt(
         competitors,
-        max_slots=max_slots,
-        broadcast_threshold=broadcast_threshold,
+        max_slots=DEFAULT_MAX_SLOTS,
+        broadcast_threshold=DEFAULT_BROADCAST_THRESHOLD,
     )
     budget = _resource_budget(resource_budget, plan=plan, cell_id=cell_id)
     expected_output = _mapping(expected_structured_model_output, "expected_structured_model_output")
@@ -517,6 +524,44 @@ def _validate_trace_competition(trace: JSpaceGWTTransitionTrace) -> None:
         raise JSpaceGWTError("GWT_BROADCAST_GATE_BOOL_REQUIRED")
 
 
+def _validate_trace_selector(trace: JSpaceGWTTransitionTrace) -> None:
+    """Reconstruct the complete v1 selector preimage from persisted trace material.
+
+    v1 has no fields for custom selector parameters, therefore DEFAULT_MAX_SLOTS and
+    DEFAULT_BROADCAST_THRESHOLD are part of the trace contract. Any old self-consistent v1
+    trace produced with custom selector parameters is intentionally rejected: its selector
+    identity cannot be independently reconstructed from its persisted preimage.
+    """
+    _validate_trace_competition(trace)
+    records = trace.gwt_competition_set
+    expected_count = min(DEFAULT_MAX_SLOTS, len(records))
+    selected_count = sum(1 for record in records if record.selected)
+    if selected_count != expected_count:
+        raise JSpaceGWTError("GWT_SELECTOR_MAX_SLOTS_MISMATCH")
+
+    expected_winners = tuple(record.candidate_id for record in records[:expected_count])
+    if trace.gwt_winner_ids != expected_winners:
+        raise JSpaceGWTError("GWT_SELECTOR_WINNER_PREFIX_MISMATCH")
+
+    expected_gate = records[0].score >= DEFAULT_BROADCAST_THRESHOLD
+    if trace.gwt_broadcast_gate != expected_gate:
+        raise JSpaceGWTError("GWT_BROADCAST_GATE_THRESHOLD_MISMATCH")
+
+    material = {
+        "schema": SELECTOR_SCHEMA,
+        "canonicalization_schema": CANONICALIZATION_SCHEMA,
+        "max_slots": DEFAULT_MAX_SLOTS,
+        "broadcast_threshold": DEFAULT_BROADCAST_THRESHOLD,
+        "competition_set": [asdict(record) for record in records],
+        "winner_ids": list(trace.gwt_winner_ids),
+        "broadcast_gate": trace.gwt_broadcast_gate,
+    }
+    expected_selection_sha256 = _canonical_sha256(material, "GWT_SELECTION")
+    observed_selection_sha256 = _sha256(trace.gwt_selection_sha256, "gwt_selection_sha256")
+    if observed_selection_sha256 != expected_selection_sha256:
+        raise JSpaceGWTError("GWT_SELECTION_DIGEST_MISMATCH")
+
+
 def _validate_trace_resource_budget(value: Any) -> None:
     if not isinstance(value, tuple) or len(value) != 2:
         raise JSpaceGWTError("RESOURCE_BUDGET_CANONICAL_TUPLE_REQUIRED")
@@ -565,8 +610,7 @@ def validate_transition_trace(trace: JSpaceGWTTransitionTrace) -> None:
     _canonical_trace_text(trace.local_workspace_state_ref, "local_workspace_state_ref")
     if trace.gwt_selector_schema != SELECTOR_SCHEMA:
         raise JSpaceGWTError("GWT_SELECTOR_SCHEMA_UNSUPPORTED")
-    _sha256(trace.gwt_selection_sha256, "gwt_selection_sha256")
-    _validate_trace_competition(trace)
+    _validate_trace_selector(trace)
     _canonical_trace_text(trace.global_jspace_slice_ref, "global_jspace_slice_ref")
     if not isinstance(trace.hyperposition_branch_ids, tuple) or len(trace.hyperposition_branch_ids) > 32:
         raise JSpaceGWTError("HYPERPOSITION_BRANCH_SEQUENCE_REQUIRED")

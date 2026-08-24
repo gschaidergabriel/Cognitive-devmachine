@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Deterministic FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1.
 
-This is a mechanism test only. It never classifies a real provider as FREE, never
-reads a real provider credential, and never opens a real provider socket. The
-production driver remains bound to its fixed canonical admission path; this harness
-injects a temporary synthetic admission file only by replacing the driver's imported
-admission function inside the test process.
+Mechanism test only: no real provider credential is read and no real provider socket is
+opened. The harness exercises the production pre-key wrapper and the production pre-network
+driver using synthetic local tripwires and a synthetic typed admission file.
 """
 from __future__ import annotations
 
@@ -18,7 +16,9 @@ import tempfile
 from typing import Iterator
 
 import free_provider_admission as admission
-import run_24h_entityos_swarm as driver
+import run_24h_entityos_swarm_entry as entry
+
+driver = entry.driver
 
 
 class ExpectedNetworkTripwire(RuntimeError):
@@ -38,6 +38,11 @@ def environment_snapshot() -> Iterator[None]:
     finally:
         os.environ.clear()
         os.environ.update(before)
+
+
+@contextmanager
+def no_quota_side_effect(*_args, **_kwargs):
+    yield "synthetic-local-quota-slot"
 
 
 def free_item(provider: str) -> dict:
@@ -86,7 +91,7 @@ def write_doc(root: Path, payload: dict, name: str) -> Path:
 
 
 def groq_spec():
-    return next(spec for spec in driver.base.PROVIDERS if spec.name == "groq")
+    return next(spec for spec in driver.ALL_PROVIDER_SPECS if spec.name == "groq")
 
 
 def run_case(
@@ -98,9 +103,12 @@ def run_case(
 ) -> dict:
     counters = {"secret_lookup_count": 0, "network_attempt_count": 0}
     spec = groq_spec()
-    real_collector = driver._ORIGINAL_COLLECT_KEYS
+    real_collector = entry._ORIGINAL_COLLECT_KEYS
+    real_entry_require = entry.require_provider_admitted
+    real_driver_require = driver.require_provider_admitted
     real_request = driver._ORIGINAL_REQUEST_CHAT
-    real_require = driver.require_provider_admitted
+    real_quota_slot = driver.quota_slot
+    real_quota_observe = driver.quota_observe
 
     if payload is None:
         path = root / f"{name}-missing.json"
@@ -115,12 +123,15 @@ def run_case(
         counters["network_attempt_count"] += 1
         raise ExpectedNetworkTripwire("LOCAL_SOCKET_TRIPWIRE_REACHED")
 
-    def bound_require(provider: str) -> None:
+    def bound_require(provider: str, **_kwargs) -> None:
         admission.require_provider_admitted(provider, path=path)
 
-    driver._ORIGINAL_COLLECT_KEYS = secret_tripwire
-    driver._ORIGINAL_REQUEST_CHAT = network_tripwire
+    entry._ORIGINAL_COLLECT_KEYS = secret_tripwire
+    entry.require_provider_admitted = bound_require
     driver.require_provider_admitted = bound_require
+    driver._ORIGINAL_REQUEST_CHAT = network_tripwire
+    driver.quota_slot = no_quota_side_effect
+    driver.quota_observe = lambda *_args, **_kwargs: None
     try:
         keys = driver.base.collect_keys(spec)
         secret_allowed = bool(keys)
@@ -161,9 +172,12 @@ def run_case(
             "pass": passed,
         }
     finally:
-        driver._ORIGINAL_COLLECT_KEYS = real_collector
+        entry._ORIGINAL_COLLECT_KEYS = real_collector
+        entry.require_provider_admitted = real_entry_require
+        driver.require_provider_admitted = real_driver_require
         driver._ORIGINAL_REQUEST_CHAT = real_request
-        driver.require_provider_admitted = real_require
+        driver.quota_slot = real_quota_slot
+        driver.quota_observe = real_quota_observe
 
 
 def main() -> int:
@@ -262,7 +276,7 @@ def main() -> int:
         "real_provider_network_attempts": 0,
         "synthetic_positive_case_only": True,
         "synthetic_positive_case_does_not_classify_real_provider_free": True,
-        "production_admission_path_overridden": False,
+        "production_prekey_entry_exercised": True,
         "test_process_function_injection_only": True,
         "tripwires": {
             "secret": "LOCAL_POST_ADMISSION_COLLECTOR_TRIPWIRE",

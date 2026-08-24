@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "gpt56sol-869-live-quarantine-containment-001",
+  "command_sha256": "2d06d95f10d765538d8d0ca3672d60f9a4482e66eeacaf7b19f67dd4432e16bc",
+  "started_at": "2026-08-24T12:46:29.727463+00:00",
+  "finished_at": "2026-08-24T12:46:29.881527+00:00",
+  "status": "FAIL",
+  "exit_code": 143,
+  "op": "exec",
+  "stdout_sha256": "4bd64eaf719b1ea83150d46e7a8a6b2d1039f88927123c7b98a26dd9d9c39499",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "--- BEFORE ---\n19841 python3 /workspace/clay-global-research-entity/tools/run_research_distillery_local.py --hours 24 --sleep-seconds 3\n19844 python3 /workspace/clay-global-research-entity/tools/run_free_evidence_forge.py --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20\n31463 python3 /workspace/clay-global-research-entity/tools/run_24h_entityos_swarm.py --hours 23.16111111111111 --output-dir /artifacts/clay-entityos-swarm/active-20260824T123548Z\n31997 bash -lc set -euo pipefail; echo '--- BEFORE ---'; pgrep -af 'run_24h_entityos_swarm_supervisor.sh|run_24h_entityos_swarm.py|run_free_evidence_forge.py|run_free_go_swarm.py|groq_inference.py|mistral_inference.py|nvidia_nim.py|openrouter_inference.py|huggingface_inference.py|run_research_distillery_local.py' || true; pkill -TERM -f '[r]un_24h_entityos_swarm_supervisor.sh' || true; pkill -TERM -f '[r]un_24h_entityos_swarm.py' || true; pkill -TERM -f '[r]un_free_go_swarm.py' || true; pkill -TERM -f '[r]un_free_evidence_forge.py' || true; pkill -TERM -f '[g]roq_inference.py' || true; pkill -TERM -f '[m]istral_inference.py' || true; pkill -TERM -f '[n]vidia_nim.py' || true; pkill -TERM -f '[o]penrouter_inference.py' || true; pkill -TERM -f '[h]uggingface_inference.py' || true; sleep 3; echo '--- AFTER ---'; pgrep -af 'run_24h_entityos_swarm_supervisor.sh|run_24h_entityos_swarm.py|run_free_evidence_forge.py|run_free_go_swarm.py|groq_inference.py|mistral_inference.py|nvidia_nim.py|openrouter_inference.py|huggingface_inference.py|run_research_distillery_local.py' || true; echo '--- SECRET VARIABLE NAMES ONLY ---'; python3 -c \"import os; print('\\n'.join(sorted(k for k in os.environ if any(x in k for x in ('GROQ','MISTRAL','NVIDIA','NGC','OPENROUTER','HUGGINGFACE','HF_TOKEN','TOGETHER','E2B_API_KEY')))))\"; echo '--- GIT ---'; git rev-parse HEAD; git status --short --branch\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

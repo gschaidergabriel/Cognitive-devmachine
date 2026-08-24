@@ -4,7 +4,9 @@
 Imports the canonical typed-admission distillery entrypoint and adds one strictly
 loopback model lane. External provider secret/network boundaries remain unchanged.
 The local same-model reviewer panel is explicitly correlated/provisional and uses
-stricter thresholds; it cannot masquerade as NVIDIA+Mistral independent evidence.
+stricter thresholds; it cannot masquerade as independent evidence. A source-
+entailment pass is telemetry only for this correlated lane and never upgrades it
+to canonical acceptance.
 """
 from __future__ import annotations
 
@@ -20,7 +22,7 @@ import urllib.request
 TOOLS=Path(__file__).resolve().parent
 if str(TOOLS) not in sys.path:sys.path.insert(0,str(TOOLS))
 import run_research_distillery as d
-import run_research_distillery_entry as e  # installs canonical external-provider gates first
+import run_research_distillery_entry as e
 
 LOCAL_BASE=os.getenv("CLAY_LOCAL_RESEARCH_BASE","http://127.0.0.1:8088")
 LOCAL_LOGICAL_ID="local/Qwen3-4B-GGUF-Q4_K_M"
@@ -28,9 +30,6 @@ _PREV_CHAT=d.chat
 _PREV_SMALL=d.select_small_models
 _PREV_REVIEWERS=d.select_reviewers
 _PREV_REVIEW=d.review_candidate
-
-# Enables the FREE_ONLY loop but does not admit any external provider. External
-# secret/socket access remains gated by run_research_distillery_entry.py.
 os.environ.setdefault("CLAY_FREE_ONLY_ATTESTED","1")
 
 
@@ -101,7 +100,15 @@ def review_candidate(con:sqlite3.Connection,cid:str,reviewers:list[tuple[str,str
     x["thresholds"]={k:v for k,v in zip(("intrinsic","grf","fit","novelty"),thresholds)};x["score_gaps"]={k:v for k,v in zip(("intrinsic","grf","fit","novelty"),gaps)}
     ok=(not x["hard"] and all(s>=t for s,t in zip(scores,thresholds)))
     if ok:
-        con.execute("UPDATE candidates SET status='PROVISIONAL_ACCEPTED' WHERE id=?",(cid,));d.bump(con,"provisional_local_accept",1);con.commit();return True,x
+        evidence_ok,gate=e.review_evidence_gate(con,cid,reviewers,threshold=0.90)
+        x["evidence_gate"]=gate
+        x["canonical_acceptance"]=False
+        if evidence_ok:
+            con.execute("UPDATE candidates SET status='PROVISIONAL_EVIDENCE_SUPPORTED' WHERE id=?",(cid,));d.bump(con,"provisional_local_evidence_supported",1);con.commit()
+            d.emit("knowledge_local_provisional_evidence_supported",candidate=cid,review=x)
+        else:
+            con.execute("UPDATE candidates SET status='EVIDENCE_REJECTED' WHERE id=?",(cid,));d.bump(con,"evidence_rejected_candidates",1);con.commit()
+        return False,x
     if not x["hard"] and sum(gaps)<=0.22:d.bump(con,"near_miss_candidates",1);x["near_miss"]=True
     else:d.bump(con,"clear_reject_candidates",1);x["near_miss"]=False
     con.commit();return False,x

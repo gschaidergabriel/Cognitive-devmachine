@@ -2,9 +2,9 @@
 """Stable FREE_ONLY entrypoint for run_research_distillery.py.
 
 Adds typed provider boundaries, efficient free-model selection, fail-soft reviewer
-fallback, and explicit near-miss/underfill instrumentation. Thresholds are not
-silently weakened: near misses are telemetry so a zero-yield pipeline is
-explainable rather than opaque.
+fallback, explicit near-miss/underfill instrumentation, deterministic exact-source
+Forge->Distillery evidence admission, and source-entailment review before research
+hypotheses enter the dataset. Thresholds are never silently weakened.
 """
 from __future__ import annotations
 
@@ -19,6 +19,8 @@ TOOLS=Path(__file__).resolve().parent
 if str(TOOLS) not in sys.path:
     sys.path.insert(0,str(TOOLS))
 import run_research_distillery as d
+import distillery_forge_bridge as forge_bridge
+import distillery_evidence_review as evidence_review
 from free_provider_admission import provider_is_admitted_free
 
 LLM_PROVIDERS=frozenset({"groq","mistral","nvidia","openrouter"})
@@ -33,6 +35,9 @@ _ORIGINAL_SECRET=d.secret
 _ORIGINAL_REQUEST_JSON=d.request_json
 _ORIGINAL_SELECT_REVIEWERS=d.select_reviewers
 _ORIGINAL_REVIEW=d.review_candidate
+_ORIGINAL_METRICS=d.metrics
+_ORIGINAL_WRITE_STATUS=d.write_status
+_ORIGINAL_COMPRESS=d.compress_and_commit
 
 
 def admitted_secret(name: str) -> str:
@@ -120,6 +125,24 @@ def _bump(con: sqlite3.Connection,key: str,n: int=1) -> None:
     except Exception:pass
 
 
+def review_evidence_gate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[str,str,str]], *, threshold: float):
+    return evidence_review.review_evidence_gate(
+        con,cid,reviewers,chat=d.chat,parse_json_object=d.parse_json_object,
+        usage_values=d.usage_values,bump=d.bump,emit=d.emit,now_iso=d.now_iso,threshold=threshold,
+    )
+
+
+def _evidence_accept_or_reject(con: sqlite3.Connection, cid: str, reviewers: list[tuple[str,str,str]], agg: dict, *, threshold: float):
+    passed,gate=review_evidence_gate(con,cid,reviewers,threshold=threshold)
+    agg=dict(agg or {}); agg["evidence_gate"]=gate
+    if not passed:
+        con.execute("UPDATE candidates SET status='EVIDENCE_REJECTED' WHERE id=?",(cid,)); _bump(con,"evidence_rejected_candidates"); con.commit()
+        d.emit("knowledge_evidence_rejected",candidate=cid,evidence_gate=gate)
+        return False,agg
+    _bump(con,"evidence_supported_candidates"); con.commit()
+    return True,agg
+
+
 def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[str,str,str]]):
     reviewers=[r for r in reviewers if r[1] not in LLM_PROVIDERS or provider_is_admitted_free(r[1])]
     accepted,agg=_ORIGINAL_REVIEW(con,cid,reviewers)
@@ -128,7 +151,8 @@ def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[st
         if provider=="mistral" or "mistral" in lane.lower() or "mistral" in model.lower()
     )
     if accepted and requested_mistral>=2:
-        agg=dict(agg or {}); agg["panel_class"]="PREFERRED_NVIDIA_PLUS_MISTRAL"; return True,agg
+        agg=dict(agg or {}); agg["panel_class"]="PREFERRED_NVIDIA_PLUS_MISTRAL"
+        return _evidence_accept_or_reject(con,cid,reviewers,agg,threshold=0.72)
     rows=con.execute("SELECT lane,provider,model,intrinsic_consistency,grf_compatibility,project_fit,novelty,hard_contradiction FROM review_votes WHERE candidate_id=?",(cid,)).fetchall()
     latest={str(r[0]):r for r in rows}; votes=list(latest.values())
     if len(votes)<3:
@@ -155,13 +179,15 @@ def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[st
     provisional["score_gaps"]={"intrinsic":gaps[0],"grf":gaps[1],"fit":gaps[2],"novelty":gaps[3]}
     if ok:
         if actual_mistral>=2:
-            con.execute("UPDATE candidates SET status='ACCEPTED' WHERE id=?",(cid,)); _bump(con,"review_pass"); con.commit(); return True,provisional
+            evidence_ok,provisional=_evidence_accept_or_reject(con,cid,reviewers,provisional,threshold=0.72)
+            if evidence_ok:
+                con.execute("UPDATE candidates SET status='ACCEPTED' WHERE id=?",(cid,)); _bump(con,"review_pass"); con.commit(); return True,provisional
+            return False,provisional
         con.execute("UPDATE candidates SET status='PROVISIONAL_ACCEPTED' WHERE id=?",(cid,))
         _bump(con,"review_provisional_pass"); con.commit()
         provisional["canonical_acceptance"]=False
         d.emit("knowledge_provisional_accept",candidate=cid,review=provisional)
         return False,provisional
-    # Near miss = structurally sound, no hard contradiction, and total threshold gap small.
     if not provisional["hard"] and sum(gaps)<=0.22:
         _bump(con,"near_miss_candidates"); con.commit(); provisional["near_miss"]=True
         d.emit("knowledge_near_miss",candidate=cid,review=provisional)
@@ -171,10 +197,55 @@ def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[st
     return False,provisional
 
 
+def compress_and_commit(con: sqlite3.Connection,cid: str,agg: dict,small_models: list[str]):
+    gate=(agg or {}).get("evidence_gate") if isinstance(agg,dict) else None
+    if not isinstance(gate,dict) or gate.get("passed") is not True:
+        con.execute("UPDATE candidates SET status='EVIDENCE_REJECTED' WHERE id=?",(cid,)); con.commit()
+        d.emit("knowledge_commit_blocked_without_evidence_gate",candidate=cid)
+        return None
+    ok,snapshot,cited_ids,reason=evidence_review.snapshot_cited_evidence(con,cid)
+    if not ok:
+        con.execute("UPDATE candidates SET status='EVIDENCE_REJECTED' WHERE id=?",(cid,)); con.commit()
+        d.emit("knowledge_commit_evidence_snapshot_failed",candidate=cid,reason=reason)
+        return None
+    kid=_ORIGINAL_COMPRESS(con,cid,agg,small_models)
+    if kid:
+        evidence_review.restore_cited_evidence_and_label(con,kid,snapshot,cited_ids,gate)
+        d.emit("knowledge_hypothesis_committed",candidate=cid,knowledge_packet=kid,fact_credit=0,evidence_retained=True)
+    return kid
+
+
+def metrics(con: sqlite3.Connection,reviewers:list[tuple[str,str,str]],small_models:list[str]) -> dict:
+    data=_ORIGINAL_METRICS(con,reviewers,small_models)
+    forge_packets=d.counter(con,"forge_evidence_packets")
+    forge_tokens=d.counter(con,"forge_evidence_tokens")
+    total=int(data.get("accepted_dataset_tokens") or 0)
+    data["forge_evidence_packets"]=forge_packets
+    data["forge_evidence_tokens"]=forge_tokens
+    data["reviewed_research_hypothesis_tokens"]=max(0,total-forge_tokens)
+    data["dataset_epistemic_boundary"]="NONCANONICAL; FORGE COMPONENT EVIDENCE AND REVIEWED RESEARCH NEVER MINT CANONICAL FACTS"
+    return data
+
+
+def write_status(con: sqlite3.Connection,reviewers:list[tuple[str,str,str]],small_models:list[str]) -> None:
+    forge_bridge.ingest_forge_acceptances(
+        con,
+        d.WORKER_ROOT/"forge"/"architecture_delta_evaluations.jsonl",
+        now_iso=d.now_iso,
+        approx_tokens=d.approx_tokens,
+        bump=d.bump,
+        emit=d.emit,
+    )
+    _ORIGINAL_WRITE_STATUS(con,reviewers,small_models)
+
+
 d.add_question=add_question
 d.select_small_models=select_small_models
 d.select_reviewers=select_reviewers
 d.review_candidate=review_candidate
+d.compress_and_commit=compress_and_commit
+d.metrics=metrics
+d.write_status=write_status
 
 if __name__=="__main__":
     raise SystemExit(d.main())

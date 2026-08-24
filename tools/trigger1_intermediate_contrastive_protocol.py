@@ -182,17 +182,53 @@ def adjudicate_holdout(rows: Iterable[Mapping[str, Any]], *, selected_layer: int
     label_maps = {str(r.get("label_map_id")) for r in frozen if r.get("label_map_id") is not None}
     if len(label_maps) < 2:
         return {"pass": False, "classification": "LABEL_REMAP_HOLDOUT_REQUIRED"}
+
     by_case: dict[tuple[str,str], dict[str,float]] = {}
+    wrong_layer_seen: set[tuple[str, str]] = set()
+    lesion_rescue_seen: set[tuple[str, str]] = set()
     wrong_layer_ok = True
     lesion_rescue_ok = True
+    malformed_causal_evidence = False
+
     for r in frozen:
         key = (str(r["case_id"]), str(r["label_map_id"]))
         if str(r.get("control")) in REQUIRED_CONTROLS:
             by_case.setdefault(key, {})[str(r["control"])] = _finite(r["target_score"], "target_score")
+
         if r.get("wrong_layer_delta") is not None:
+            wrong_layer_seen.add(key)
             wrong_layer_ok = wrong_layer_ok and _finite(r["wrong_layer_delta"], "wrong_layer_delta") <= 0
-        if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
-            lesion_rescue_ok = lesion_rescue_ok and _finite(r["lesion_delta"], "lesion_delta") <= 0 and _finite(r["rescue_delta"], "rescue_delta") > 0
+
+        lesion_present = r.get("lesion_delta") is not None
+        rescue_present = r.get("rescue_delta") is not None
+        if lesion_present != rescue_present:
+            malformed_causal_evidence = True
+        elif lesion_present and rescue_present:
+            lesion_rescue_seen.add(key)
+            lesion_rescue_ok = (
+                lesion_rescue_ok
+                and _finite(r["lesion_delta"], "lesion_delta") <= 0
+                and _finite(r["rescue_delta"], "rescue_delta") > 0
+            )
+
+    expected_cases = set(by_case)
+    missing_wrong_layer = sorted(expected_cases - wrong_layer_seen)
+    missing_lesion_rescue = sorted(expected_cases - lesion_rescue_seen)
+    if malformed_causal_evidence:
+        return {"pass": False, "classification": "MALFORMED_LESION_RESCUE_EVIDENCE"}
+    if missing_wrong_layer:
+        return {
+            "pass": False,
+            "classification": "WRONG_LAYER_EVIDENCE_REQUIRED_PER_HOLDOUT_CASE",
+            "missing_case_count": len(missing_wrong_layer),
+        }
+    if missing_lesion_rescue:
+        return {
+            "pass": False,
+            "classification": "LESION_RESCUE_EVIDENCE_REQUIRED_PER_HOLDOUT_CASE",
+            "missing_case_count": len(missing_lesion_rescue),
+        }
+
     margins = []
     null_drifts = []
     for vals in by_case.values():

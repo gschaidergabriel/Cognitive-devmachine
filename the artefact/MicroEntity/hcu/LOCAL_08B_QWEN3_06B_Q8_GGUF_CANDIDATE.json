@@ -37,14 +37,16 @@
     "family": "llama.cpp",
     "upstream_qwen_documentation_observed": true,
     "documented_selector": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+    "runtime_distribution_candidate_file": "LOCAL_RUNTIME_LLAMA_CPP_B10566_UBUNTU_X64_CANDIDATE.json",
+    "runtime_distribution_authority": "DELEGATED_TO_RUNTIME_CANDIDATE_FILE",
     "runtime_source_repository": "ggml-org/llama.cpp",
-    "observed_source_tag": "b10516",
-    "exact_runtime_source_commit": "b95502ba9aa0eb73a2f4fc8878d7fbe6a847a0b9",
+    "observed_build_tag": "b10566",
+    "exact_runtime_source_commit": "bb4caa7540188872173c44d161602d9271386413",
     "qwen3_architecture_symbol_observed_at_exact_source": "LLM_ARCH_QWEN3",
     "exact_runtime_binary_sha256": null,
     "exact_build_sha256": null,
-    "source_identity_status": "PINNED_SOURCE_ONLY_NO_BINARY_OR_BUILD_CREDIT",
-    "status": "BLOCKED_BINARY_BUILD_AND_ACTUAL_EXECUTION_IDENTITY_NOT_PINNED"
+    "source_identity_status": "PINNED_ATTESTED_DISTRIBUTION_SOURCE_ONLY_NO_LOCAL_BINARY_OR_BUILD_CREDIT",
+    "status": "BLOCKED_LOCAL_MATERIALIZATION_EXTRACTED_BINARY_BUILD_AND_ACTUAL_EXECUTION_IDENTITY"
   },
   "loader_consumption_target": {
     "current_primitive": "loader_consumption_witness_v1.py",
@@ -55,18 +57,18 @@
     "status": "BLOCKED_NO_ACTUAL_LOADER_EXECUTION"
   },
   "required_promotion_chain": [
-    "download_or_otherwise_materialize exact artifact bytes on an authorized zero-cost local surface",
-    "verify exact artifact SHA-256 and byte count before admission",
-    "pin exact runtime binary and build identities for the already source-pinned llama.cpp runtime",
+    "materialize the exact attested runtime archive and exact Qwen3 model artifact on an authorized zero-cost local surface",
+    "verify local runtime archive and model SHA-256/byte identities before admission",
+    "extract deterministically and pin the exact executable, required shared-library set and derived runtime/build identity",
     "bind the actual pathname/fd-consuming loader implementation rather than a synthetic callback",
-    "witness loader consumption of the exact sealed artifact bytes",
+    "witness loader consumption of the exact sealed model artifact bytes",
     "admit loader consumption through the existing canonical registry/lease path",
     "observe one actual model-executor invocation",
     "admit ModelExecution atomically through canonical MiniUnifiedDB",
     "bind inference receipt and J-Space trace to that exact execution identity"
   ],
   "credit_boundary": {
-    "runtime_source_identity_credit": "SOURCE_ONLY",
+    "runtime_source_identity_credit": "SOURCE_DISTRIBUTION_IDENTITY_ONLY",
     "checkpoint_runtime_credit": 0,
     "loader_runtime_credit": 0,
     "model_runtime_credit": 0,
@@ -75,5 +77,5 @@
     "whole_entityos_hcu_runtime_credit": 0,
     "whole_product_pass": false
   },
-  "epistemic_note": "This file selects and pins source-level candidates only. FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT. Exact upstream artifact metadata plus an exact llama.cpp source commit with Qwen3 architecture support do not prove local artifact presence, compiled-binary identity, build identity, loader consumption, inference, causality, or training benefit."
+  "epistemic_note": "This file selects and pairs source-level candidates only. FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT. The current runtime relationship delegates to the stronger b10566 attested-distribution candidate instead of maintaining a competing older source pin. Exact upstream artifact/source metadata and Qwen3 architecture support do not prove local archive/model presence, extracted-binary identity, build identity, host compatibility, loader consumption, inference, causality, or training benefit."
 }

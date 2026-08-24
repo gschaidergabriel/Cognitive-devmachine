@@ -17,6 +17,9 @@ on:
       - 'tests/test_forge_execution_admission_871.py'
       - 'tests/test_forge_disposable_worktree_872.py'
       - 'tests/test_forge_distillery_promotion_872.py'
+      - 'tests/test_forge_distillery_replay_identity_873.py'
+      - 'tests/test_forge_distillery_rebuild_stable_packet_873.py'
+      - 'tests/test_forge_distillery_concurrent_replay_873.py'
   workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -87,12 +90,16 @@ jobs:
           },indent=2))
           PY
 
-      - name: Run promotion fail-closed source guards
+      - name: Run promotion and replay fail-closed source guards
         id: promotion_guard
         shell: bash
         run: |
           set +e
-          python3 -m unittest -q tests.test_forge_distillery_promotion_872 \
+          python3 -m unittest -q \
+            tests.test_forge_distillery_promotion_872 \
+            tests.test_forge_distillery_replay_identity_873 \
+            tests.test_forge_distillery_rebuild_stable_packet_873 \
+            tests.test_forge_distillery_concurrent_replay_873 \
             > /tmp/clay-go871-forge-distillery/promotion_guard.log 2>&1
           rc=$?
           echo "guard_rc=$rc" >> "$GITHUB_OUTPUT"

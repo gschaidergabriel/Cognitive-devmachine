@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""24h FREE_ONLY Mini Entity `go` swarm controller.
+"""24h FREE_ONLY EntityOS/HCU `go` swarm controller.
 
-Pure stdlib, OpenAI-compatible HTTP endpoints. It consumes only API keys provided
-through environment variables and requires an explicit FREE_ONLY attestation.
-It never upgrades billing, never retries HTTP 402, and treats HTTP 429 as a
-provider-wide cooldown rather than rotating keys to evade a rate limit.
+Pure stdlib, OpenAI-compatible HTTP endpoints. Provider credentials are read only
+after canonical typed provider admission establishes cost_class=FREE. Environment
+attestations remain secondary compatibility assertions and cannot self-admit a
+provider. The controller never upgrades billing, never retries HTTP 402, and
+treats HTTP 429 as a provider-wide cooldown rather than rotating keys to evade a
+rate limit.
 """
 from __future__ import annotations
 
@@ -25,6 +27,12 @@ import time
 from typing import Any
 import urllib.error
 import urllib.request
+
+from free_provider_admission import (
+    ProviderAdmissionError,
+    load_provider_admission,
+    provider_is_admitted_free,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTOCOL_PATH = ROOT / "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
@@ -120,7 +128,10 @@ def unique(values: list[str]) -> list[str]:
     return out
 
 
-def collect_keys(spec: ProviderSpec) -> list[str]:
+def collect_keys(spec: ProviderSpec, admission: dict[str, Any] | None = None) -> list[str]:
+    """Read provider key environment variables only after typed FREE admission."""
+    if not provider_is_admitted_free(spec.name, admission):
+        return []
     keys = split_values(os.getenv(spec.keys_list_env))
     for name in spec.key_envs:
         if os.getenv(name):
@@ -485,8 +496,14 @@ async def status_loop(runtimes: list[ProviderRuntime], sink: JsonlSink,
 
 
 async def run(args: argparse.Namespace) -> int:
+    try:
+        admission = load_provider_admission()
+    except ProviderAdmissionError as exc:
+        print(f"Refusing to start before secret lookup/network: typed provider admission invalid: {exc}", file=sys.stderr)
+        return 5
+
     if not truthy(os.getenv("CLAY_FREE_ONLY_ATTESTED")):
-        print("Refusing to start: set CLAY_FREE_ONLY_ATTESTED=1 only after confirming every configured key is restricted to free/included usage and cannot create billable overage.", file=sys.stderr)
+        print("Refusing to start before secret lookup/network: CLAY_FREE_ONLY_ATTESTED compatibility assertion is missing.", file=sys.stderr)
         return 3
 
     protocol = load_protocol()
@@ -495,11 +512,14 @@ async def run(args: argparse.Namespace) -> int:
     sink = JsonlSink(output_dir)
     runtimes: list[ProviderRuntime] = []
     for spec in PROVIDERS:
-        keys = collect_keys(spec)
-        if not keys:
+        if not provider_is_admitted_free(spec.name, admission):
+            print(f"Skipping {spec.name}: canonical typed admission is not FREE+admitted", file=sys.stderr)
             continue
         if not truthy(os.getenv(spec.attestation_env)):
-            print(f"Skipping {spec.name}: {spec.attestation_env}=1 not set", file=sys.stderr)
+            print(f"Skipping {spec.name}: secondary compatibility assertion {spec.attestation_env}=1 not set", file=sys.stderr)
+            continue
+        keys = collect_keys(spec, admission)
+        if not keys:
             continue
         models = split_values(os.getenv(spec.models_env)) or list(spec.default_models)
         cap_env = f"CLAY_{spec.name.upper()}_MAX_CONCURRENCY"
@@ -509,7 +529,7 @@ async def run(args: argparse.Namespace) -> int:
             cap = spec.default_max_concurrency
         runtimes.append(ProviderRuntime(spec, keys, unique(models), cap))
     if not runtimes:
-        print("No FREE_ONLY-attested provider keys are configured. Nothing to run.", file=sys.stderr)
+        print("No canonically FREE-admitted provider with compatible attestation and credentials is configured. Nothing to run.", file=sys.stderr)
         return 4
 
     duration_s = max(1.0, args.hours * 3600.0)
@@ -522,16 +542,18 @@ async def run(args: argparse.Namespace) -> int:
         except NotImplementedError:
             pass
 
-    manifest = {"schema": "CLAY_FREE_GO_SWARM_RUN/v1", "run_id": run_id,
+    manifest = {"schema": "CLAY_FREE_GO_SWARM_RUN/v2", "run_id": run_id,
         "started_at": dt.datetime.now(dt.timezone.utc).isoformat(), "duration_hours": args.hours,
         "deadline_monotonic_seconds": duration_s, "free_only": True,
+        "provider_admission_epoch": admission.get("authority_epoch"),
         "repo_head": git_text("rev-parse", "HEAD"),
         "protocol_sha256": hashlib.sha256(protocol.encode("utf-8")).hexdigest(),
         "providers": {rt.spec.name: {"key_fingerprints": [key_fingerprint(k) for k in rt.keys],
             "models": rt.models, "max_concurrency": rt.max_concurrency} for rt in runtimes},
-        "invariants": ["NO_SECRETS_IN_LOGS", "FREE_ONLY_ATTESTATION_REQUIRED",
-            "HTTP_402_HARD_STOP_KEY", "HTTP_429_PROVIDER_WIDE_COOLDOWN_NO_KEY_ROTATION_BYPASS",
-            "AIMD_CONCURRENCY", "GRF_CLAYCODE_PROTOCOL_INJECTED_AT_TOP_OF_EVERY_WORKER_PROMPT",
+        "invariants": ["NO_SECRETS_IN_LOGS", "TYPED_FREE_PROVIDER_ADMISSION_BEFORE_SECRET_LOOKUP_AND_NETWORK",
+            "ENV_ATTESTATION_CANNOT_SELF_ADMIT_PROVIDER", "HTTP_402_HARD_STOP_KEY",
+            "HTTP_429_PROVIDER_WIDE_COOLDOWN_NO_KEY_ROTATION_BYPASS", "AIMD_CONCURRENCY",
+            "GRF_CLAYCODE_PROTOCOL_INJECTED_AT_TOP_OF_EVERY_WORKER_PROMPT",
             "MODEL_OUTPUT_IS_CANDIDATE_NOT_CANONICAL_TRUTH_OR_EFFECT_AUTHORITY"]}
     (output_dir / "run_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({"run_id": run_id, "output_dir": str(output_dir), "providers": list(manifest["providers"])}, ensure_ascii=False))
@@ -566,7 +588,7 @@ async def run(args: argparse.Namespace) -> int:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run a 24h adaptive FREE_ONLY Mini Entity go swarm")
+    parser = argparse.ArgumentParser(description="Run a 24h adaptive FREE_ONLY EntityOS/HCU go swarm")
     parser.add_argument("--hours", type=float, default=24.0, help="wall-clock run duration (default: 24)")
     parser.add_argument("--max-tokens", type=int, default=1800, help="maximum completion tokens per worker")
     parser.add_argument("--context-chars", type=int, default=18000, help="bounded current repo context per worker")

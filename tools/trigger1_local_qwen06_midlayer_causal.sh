@@ -4,6 +4,9 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+# Compatibility launcher retained because the self-hosted workflow already calls this
+# path. The scientific execution is delegated to the stronger intermediate protocol
+# through trigger1_midlayer_v3_pipeline.py; this file is no longer a direct executor.
 unset \
   GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
   MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY \
@@ -42,12 +45,14 @@ if [[ "$AFTER_KB" -lt 3000000 ]]; then
   python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" "$BEFORE_KB" "$AFTER_KB" <<'PY'
 import json, pathlib, sys
 pathlib.Path(sys.argv[1]).write_text(json.dumps({
-  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
+  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1',
   'status':'BLOCKED_INSUFFICIENT_FREE_DISK_AFTER_BOUNDED_CLEANUP',
   'available_kb_before':int(sys.argv[2]),
   'available_kb_after':int(sys.argv[3]),
   'zero_provider_billing':True,
   'external_provider_credentials_read':False,
+  'provider_network_calls':0,
+  'credit_scope':'NONE',
   'next_action':'RECLAIM_ADDITIONAL_SANDBOX_CACHE_OR_STORAGE_WITHIN_OWNER_AUTHORITY'
 }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
 PY
@@ -80,17 +85,20 @@ if ! has_runtime "$PYTHON"; then
   python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" <<'PY'
 import json, pathlib, sys
 pathlib.Path(sys.argv[1]).write_text(json.dumps({
-  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
-  'status':'BLOCKED_LOCAL_MIDLAYER_FASTPATH',
+  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1',
+  'status':'BLOCKED_LOCAL_INTERMEDIATE',
   'reason':'PYTORCH_TRANSFORMERS_NORMAL_USER_RUNTIME_UNAVAILABLE_AFTER_BOOTSTRAP',
   'zero_provider_billing':True,
   'external_provider_credentials_read':False,
-  'next_action':'REPAIR_NOW_OR_ROUTE_AROUND_CURRENT_LOCAL_MIDLAYER_BLOCKER'
+  'provider_network_calls':0,
+  'credit_scope':'NONE',
+  'next_action':'REPAIR_NOW_OR_ROUTE_AROUND_CURRENT_LOCAL_INTERMEDIATE_BLOCKER'
 }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
 PY
   exit 3
 fi
 
-exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_midlayer_causal_execute.py" \
+export PYTHONPATH="$ROOT/tools${PYTHONPATH:+:$PYTHONPATH}"
+exec "$PYTHON" "$ROOT/tools/trigger1_midlayer_v3_pipeline.py" \
   --output-dir "$OUT_DIR" \
-  --cache-dir "$HF_HOME"
+  --repo-root "$ROOT"

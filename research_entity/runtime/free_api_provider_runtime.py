@@ -207,13 +207,33 @@ def _passive_payment_latches(
     return payment_latches
 
 
+def _payment_latch_snapshot(
+    payment_latches: set[str] | None,
+) -> set[str]:
+    """Return one bounded passive copy for an inventory state claim."""
+    if payment_latches is None:
+        payment_latches = PROCESS_PAYMENT_LATCHES
+    if type(payment_latches) is not set:
+        raise ValueError("payment_latches_must_be_set")
+    if len(payment_latches) > MAX_PAYMENT_LATCH_ENTRIES:
+        raise ValueError("payment_latches_too_large")
+    snapshot = payment_latches.copy()
+    # Recheck the copied boundary in case the mutable source changed after
+    # its passive cardinality preflight but before the bounded copy.
+    if len(snapshot) > MAX_PAYMENT_LATCH_ENTRIES:
+        raise ValueError("payment_latches_too_large")
+    if any(type(latch) is not str for latch in snapshot):
+        raise ValueError("payment_latches_must_contain_strings")
+    return snapshot
+
+
 def inventory(
     environ: dict[str, str] | None = None,
     *,
     payment_latches: set[str] | None = None,
 ) -> list[dict]:
     env = _snapshot_runtime_environment(environ)
-    latches = _passive_payment_latches(payment_latches).copy()
+    latches = _payment_latch_snapshot(payment_latches)
     # Inventory and route are one state claim. Use one bounded exact-set
     # snapshot so a later latch publication cannot mix two state instants
     # across capacity and per-provider membership fields.

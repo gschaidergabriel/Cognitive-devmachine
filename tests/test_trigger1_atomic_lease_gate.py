@@ -53,6 +53,13 @@ class Trigger1AtomicLeaseGateTests(unittest.TestCase):
         self.assertEqual(self.run_gate("trigger_key: ts_20260824T1506Z__p_abc\n")["reason"], "TRIGGER_KEY_NONCANONICAL")
         self.assertEqual(self.run_gate(f"trigger_key: {RID}\ntrigger_key: {RID}\n")["reason"], "ISSUE_BODY_REQUIRES_EXACTLY_ONE_TRIGGER_KEY")
 
+    def test_impossible_canonical_timestamp_rejected(self):
+        impossible = "ts_20261340T256199999999Z__p_" + PAYLOAD_SHA
+        self.assertEqual(
+            self.run_gate(f"trigger_key: {impossible}\n")["reason"],
+            "TRIGGER_KEY_NONCANONICAL",
+        )
+
     def test_missing_claim(self):
         self.assertEqual(self.run_gate()["reason"], "CANONICAL_ATOMIC_CLAIM_MISSING")
 
@@ -89,6 +96,19 @@ class Trigger1AtomicLeaseGateTests(unittest.TestCase):
             self.run_gate(f"trigger_key: {TS}\n")["reason"],
             "EXPERIMENT_BUDGET_RACE_VIOLATION",
         )
+
+    def test_malformed_legacy_filename_alias_blocks_canonical_timestamp_claim(self):
+        self.put(claim(TS))
+        legacy_key = "20260817T133500+0700_" + PAYLOAD_SHA[:16]
+        (self.root / f"{legacy_key}.json").write_text("not-json\n", encoding="utf-8")
+        r = self.run_gate(f"trigger_key: {TS}\n")
+        self.assertEqual(r["reason"], "EXPERIMENT_BUDGET_RACE_VIOLATION")
+        self.assertEqual(len(r["semantic_duplicate_claims"]), 1)
+
+    def test_malformed_unrelated_filename_does_not_block(self):
+        self.put(claim(TS))
+        (self.root / "corrupt-unrelated.json").write_text("not-json\n", encoding="utf-8")
+        self.assertTrue(self.run_gate(f"trigger_key: {TS}\n")["pass"])
 
     def test_legacy_alias_requires_same_payload_and_time_bucket(self):
         self.put(claim(TS))

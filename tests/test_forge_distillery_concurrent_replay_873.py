@@ -32,6 +32,16 @@ class ConcurrentReplayAdmission873Tests(unittest.TestCase):
             path.write_text(bridge.canonical_json(row) + "\n", encoding="utf-8")
             eval_paths.append(path)
 
+        # Isolate the discriminator to replay admission rather than first-use schema
+        # creation. Production schema migration is covered separately; here both
+        # writers begin against the same already-initialized WAL database.
+        setup_con = sqlite3.connect(self.db)
+        try:
+            bridge.ensure_schema(setup_con)
+            setup_con.commit()
+        finally:
+            setup_con.close()
+
         results = [None] * len(rows)
         errors = []
         missing_write_intent = []

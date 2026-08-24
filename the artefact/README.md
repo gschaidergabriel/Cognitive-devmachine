@@ -111,6 +111,16 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
 8. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
 
+## GO 8.72 delta — Trigger-1 low-disk evidence preservation
+
+The 23:33 +07 `go` re-entry found a deterministic preflight blocker in the retained local midlayer launcher: the low-disk cleanup glob `RUNNER_TEMP/clay-trigger1-v2-*` also matched the **current** workflow output directory (`clay-trigger1-v2-${GITHUB_RUN_ID}`), so the launcher could delete its own evidence-in-progress before persisting `disk_preflight.json` or a blocked result.
+
+The repair on `gpt56sol/go872-trigger1-preserve-outputdir-20260824` binds the canonical current output-directory identity before cleanup, excludes that exact directory while still deleting stale Trigger-1 siblings, fails closed if output identity changes, and records `current_output_preserved=true` in both preflight and low-disk blocked receipts. Exact branch blobs were reconstructed and executed locally with a deterministic fake-`df` low-disk condition: **1/1 regression PASS**; current output and evidence survived, stale siblings were removed, no model was loaded and no provider call/credential read occurred.
+
+This is **source + deterministic preflight regression evidence only**. It mints zero whole EntityOS/HCU, HCU-full, J-Space-model or training credit. The current `go` had no reproducible shared macrocycle/request identity beyond minute precision, so **zero new unusual interventions** were dispatched; the next gate is fusion onto re-entered current `main`, then observation of the already-existing Trigger-1 terminal run rather than creating a duplicate experiment.
+
+Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_TRIGGER1_OUTPUTDIR_PRESERVATION_GPT56SOL_2333.json`.
+
 ## Evidence discipline and reentry
 
 For every material claim distinguish direct observation, source-derived claim, inference, generated hypothesis, counterhypothesis, intervention/test and verified scope. Negative evidence is first-class. Auth/rate/quota/runner failure is not automatically product/science failure. A component PASS is not whole-product PASS.

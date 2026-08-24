@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"inspect-vps-host-free-key-sources-20260824T2057",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":120,
+  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'set -e; echo HOST_KEY_SOURCES; for f in /etc/clayverse/freie-zugaenge.env /etc/clayverse/keys.env /etc/entityos/tresor/api.env /etc/entityos/tresor/zugaenge.env; do if [ -r \"$f\" ]; then echo PRESENT:$f; sed -n \"s/^export[[:space:]]\\+//; s/=.*$//p\" \"$f\" | grep -E \"^(GROQ|MISTRAL|NVIDIA|NGC|OPENROUTER|GEMINI|DEEPSEEK|CLOUDFLARE|HF|GLM|NEUROPEDIA).*\" | sort -u || true; else echo ABSENT:$f; fi; done; echo TRESOR_FILES; find /etc/entityos/tresor -maxdepth 2 -type f -printf \"%p\\n\" 2>/dev/null | head -80 || true; echo SANDBOX_ARTIFACT_SECRET; stat -c \"%U:%G %a %s %n\" /srv/claylab/artifacts/.clay_provider.env 2>/dev/null || true'"
+}

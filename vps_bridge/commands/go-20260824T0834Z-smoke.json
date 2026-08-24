@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "go-20260824T0834Z-smoke",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -euo pipefail; echo BRIDGE_EXEC_OK; date -u +%FT%TZ; id; uname -a; python3 --version; git --version; sqlite3 --version; printf 'bridge-write-ok\\n' > /workspace/.chatgpt_bridge_probe; sha256sum /workspace/.chatgpt_bridge_probe; test -r /workspace/clay-global-research-entity/.git/HEAD && git -C /workspace/clay-global-research-entity rev-parse HEAD || true; curl -fsSI https://github.com | head -n 1",
+  "timeout_seconds": 300
+}

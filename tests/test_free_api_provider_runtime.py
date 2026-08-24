@@ -2570,6 +2570,53 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "process-latch-membership-must-not-run", repr(caught.exception)
         )
 
+    def test_payment_latch_cardinality_is_bounded_before_network(self):
+        class Response:
+            status = 200
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":"stop","message":'
+                    b'{"role":"assistant","content":"ok"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        accepted = {f"historical-latch-{index}" for index in range(1_024)}
+        self.assertEqual(
+            MOD.route(env, payment_latches=accepted)["selected"], "nvidia"
+        )
+
+        opener_calls = []
+
+        def opener(*args, **kwargs):
+            opener_calls.append("open")
+            return Response()
+
+        oversized = accepted | {"historical-latch-overflow"}
+        with self.assertRaisesRegex(
+            ValueError, "payment_latches_too_large"
+        ):
+            MOD.execute_chat(
+                VALID_MESSAGES,
+                model="mock",
+                environ=env,
+                opener=opener,
+                now=iter((68.15, 68.16)).__next__,
+                payment_latches=oversized,
+            )
+        self.assertEqual(opener_calls, [])
+
     def test_active_payment_latch_element_is_rejected_before_execution(self):
         leaked_text = "payment-latch-element-equality-must-not-run"
 

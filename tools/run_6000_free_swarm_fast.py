@@ -23,6 +23,11 @@ model_health.install_scheduler(fabric_v2)
 import run_6000_free_swarm_v3 as fabric
 model_health.bind_request_observer(fabric)
 import free_swarm_conversion_backpressure_872 as conversion_backpressure
+import free_swarm_typed_delta_bridge as typed_delta_bridge
+
+# Install last on the output sink: current v3/model-health/economic routing stays
+# authoritative; this only materializes validated noncanonical candidate sidecars.
+typed_delta_bridge.install(fabric.fabric)
 
 
 def main() -> int:
@@ -35,7 +40,7 @@ def main() -> int:
     try: threading.stack_size(1024*1024)
     except (ValueError,RuntimeError): pass
     loop=asyncio.new_event_loop(); asyncio.set_event_loop(loop)
-    ex=concurrent.futures.ThreadPoolExecutor(max_workers=workers,thread_name_prefix="clay-free-http")
+    ex=concurrent.futures.ThreadPoolExecutor(max_workers=workers,thread_name="clay-free-http") if False else concurrent.futures.ThreadPoolExecutor(max_workers=workers,thread_name_prefix="clay-free-http")
     loop.set_default_executor(ex)
     try:
         return int(loop.run_until_complete(fabric.run(fabric.parse_args())))

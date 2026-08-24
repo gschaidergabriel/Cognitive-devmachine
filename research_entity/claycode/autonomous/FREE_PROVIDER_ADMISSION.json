@@ -1,6 +1,6 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.70",
+  "authority_epoch": "8.71",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
@@ -31,11 +31,11 @@
   "runtime_provider_credit": 0,
   "execution_state": "OWNER_FREE_CONTINGENTS_ADMITTED_PROVIDER_LEVEL; EVERY_AUTONOMOUS_CALL_REQUIRES_FREE_LANE_EXECUTION_RECEIPT_V1_ROUTE_CREDENTIAL_PREFLIGHT",
   "route_level_gate": {
-    "implementation": "tools/free_lane_provenance.py",
+    "implementation": "tools/free_lane_provenance.py + tools/run_6000_free_swarm_v3.py exact fingerprint gate",
     "receipt_schema": "FREE_LANE_EXECUTION_RECEIPT/v1",
     "economic_provenance": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json",
     "unknown_or_unbound_route": "FAIL_CLOSED",
     "paid_fallback_attempt_count": 0
   },
-  "note": "Epoch 8.70 preserves the owner's authorization of free contingents while narrowing autonomous execution to concrete credential+route lanes with provider-side zero-cost/free-entitlement evidence. Provider-level admission alone is not runtime cost proof. Mistral remains provider-level admitted but concrete calls fail closed until Free-mode/PAYG-disabled provider-side evidence is bound. Historical pre-binding traffic remains append-only and is not relabeled FREE."
+  "note": "Epoch 8.71 binds the currently materialized NVIDIA Developer API credential fingerprint to NVIDIA's documented free hosted-NIM prototyping endpoint. Groq remains same-credential/model Free-limit-header bound; OpenRouter remains exact zero-price route only; Mistral remains fail-closed until provider-side Free-mode/PAYG-disabled evidence and an actual credential are available. No paid fallback is present."
 }

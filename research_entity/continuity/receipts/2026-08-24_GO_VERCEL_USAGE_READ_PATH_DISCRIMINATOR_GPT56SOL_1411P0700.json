@@ -1,0 +1,76 @@
+{
+  "schema": "ENTITYOS_HCU_GO_READ_PATH_DISCRIMINATOR/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "observed_main_before_write": "01042eea1b95b0ad3f69755d14f9cdc9837ad536",
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "reproducible_atomic_trigger_key_available": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "work_class": "ORDINARY_READ_ONLY_DOCUMENTATION_AND_CONNECTED_PROVIDER_STATE_DISCRIMINATION"
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "8d50b28dbf530ede0f3f4c45316bcee48e38a930",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "2da99e0458809988190c129b04cae913d1f15d92"
+  },
+  "exact_provider_state": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_state": "READY",
+    "deployment_git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "project_read_surface_fields": "project/deployment metadata only; no remaining included Sandbox quota value exposed",
+    "sandbox_create_attempted": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "provider_credential_preflight_attempted": false
+  },
+  "new_documentation_discriminator": {
+    "official_cli_read_path": "vercel usage --format json",
+    "official_cli_semantics": "machine-readable billing usage and costs for the current billing period",
+    "official_focus_billing_read_model": "FOCUS billing charges expose consumed quantity/unit and billed/effective cost by service",
+    "official_sandbox_object_usage": "per-sandbox cumulative totalDurationMs, totalActiveCpuDurationMs, ingress and egress are observable on Sandbox objects",
+    "critical_boundary": "per-sandbox cumulative usage, READY deployment state and Hobby/team/plan identity are not direct remaining included account-level Sandbox quota authority",
+    "connected_vercel_tool_exposes_usage_cli_or_focus_billing_read": false,
+    "installable_alternate_plugin_found_for_vercel_usage_billing_quota": false
+  },
+  "hypothesis": "The current connected Vercel surface already exposes an authoritative account-level billing/quota read sufficient to open the FREE_ONLY Sandbox gate.",
+  "counterhypothesis": "The authoritative read exists in Vercel product surfaces such as machine-readable billing usage, but the currently connected tool surface does not expose it; therefore the gate must remain closed rather than infer quota from plan, deployment or cumulative Sandbox usage.",
+  "discriminator_result": "COUNTERHYPOTHESIS_SUPPORTED",
+  "go_tracks": {
+    "track_a": {
+      "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "status": "ADVANCED",
+      "delta": "The quota blocker is narrowed from a generic missing provider signal to a specific official read-class: machine-readable current-period billing usage (vercel usage --format json) or an equivalent direct authoritative billing/quota read. The exact current connector does not expose that class, so Sandbox.create remains fail-closed without scope inflation."
+    },
+    "track_b": {
+      "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Supervisor 8.65 is runtime-first and pauses source-guard proliferation absent executable counterevidence. The fixed Python/sqlite3/_sqlite3 environment probe remains downstream of the closed FREE_ONLY quota gate; no higher-information admitted HCU runtime action is available on the current connected surface."
+    },
+    "track_c": {
+      "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "Real local model/J-Space causal execution remains downstream of the blocked Sandbox environment gate. Paid Together/provider preflight and paid fallback remain forbidden; no model-specific trace or training evidence was created."
+    }
+  },
+  "credits_after": {
+    "function_runtime_diagnostic_no_sandbox_scope": "PASS_PREEXISTING_EXACT_HEAD_HTTP_200",
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Acquire the output of an already-authorized read-only Vercel billing/usage surface that directly identifies current-period Sandbox allowance/remaining included capacity and no-charge status, preferably machine-readable current-period usage. Do not create credentials, inspect secrets, infer quota from plan identity, mutate billing, upgrade, invoke Sandbox.create, or use a paid fallback. Only if direct authority proves sufficient included quota may the single retained exact-head executor run the fixed Python/sqlite3/_sqlite3 capability probe.",
+  "acceptance": "IN_PROGRESS"
+}

@@ -225,8 +225,10 @@ def _payment_latch_snapshot(
     return snapshot
 
 
-def _publish_payment_latch(payment_latches: set[str], latch_key: str) -> bool:
-    """Publish one latch without letting mutable caller state suppress a receipt."""
+def _try_publish_payment_latch(
+    payment_latches: set[str], latch_key: str
+) -> bool:
+    """Attempt one bounded publication against already selected storage."""
     try:
         before = _payment_latch_snapshot(payment_latches)
         if latch_key in before:
@@ -244,6 +246,19 @@ def _publish_payment_latch(payment_latches: set[str], latch_key: str) -> bool:
         return False
 
 
+def _publish_payment_latch(
+    payment_latches: set[str], latch_key: str
+) -> tuple[bool, bool]:
+    """Publish to caller storage or retain a process-local hard-stop fallback."""
+    if _try_publish_payment_latch(payment_latches, latch_key):
+        return True, False
+    fallback_active = bool(
+        payment_latches is not PROCESS_PAYMENT_LATCHES
+        and _try_publish_payment_latch(PROCESS_PAYMENT_LATCHES, latch_key)
+    )
+    return fallback_active, True
+
+
 def inventory(
     environ: dict[str, str] | None = None,
     *,
@@ -251,6 +266,14 @@ def inventory(
 ) -> list[dict]:
     env = _snapshot_runtime_environment(environ)
     latches = _payment_latch_snapshot(payment_latches)
+    if (
+        payment_latches is not None
+        and payment_latches is not PROCESS_PAYMENT_LATCHES
+    ):
+        # Failed writes to caller-owned storage are retained in the process
+        # fallback.  Merge only bounded, validated copies so later caller
+        # repair cannot erase an already observed current-epoch HTTP 402.
+        latches.update(_payment_latch_snapshot(PROCESS_PAYMENT_LATCHES))
     # Inventory and route are one state claim. Use one bounded exact-set
     # snapshot so a later latch publication cannot mix two state instants
     # across capacity and per-provider membership fields.
@@ -845,6 +868,7 @@ def _execute_chat_locked(
     retryable = False
     finished = None
     payment_latch_active = False
+    payment_latch_publication_failed = False
 
     try:
         try:
@@ -884,7 +908,10 @@ def _execute_chat_locked(
                             cooldown_seconds = 0
                             retryable = False
                         elif status == PAYMENT_REQUIRED_STATUS:
-                            payment_latch_active = _publish_payment_latch(
+                            (
+                                payment_latch_active,
+                                payment_latch_publication_failed,
+                            ) = _publish_payment_latch(
                                 latches, _payment_latch_key(selected, env)
                             )
                             outcome = "payment_required_hard_stop"
@@ -965,7 +992,10 @@ def _execute_chat_locked(
         elif candidate_status == PAYMENT_REQUIRED_STATUS:
             status = candidate_status
             lifecycle.append("EXECUTED")
-            payment_latch_active = _publish_payment_latch(
+            (
+                payment_latch_active,
+                payment_latch_publication_failed,
+            ) = _publish_payment_latch(
                 latches, _payment_latch_key(selected, env)
             )
             outcome = "payment_required_hard_stop"
@@ -1065,8 +1095,8 @@ def _execute_chat_locked(
         "retryable": retryable,
         "cooldown_seconds": cooldown_seconds,
         "payment_latch_active": payment_latch_active,
-        "payment_latch_publication_failed": bool(
-            status == PAYMENT_REQUIRED_STATUS and not payment_latch_active
+        "payment_latch_publication_failed": (
+            payment_latch_publication_failed
         ),
         "duration_ms": _bounded_duration_ms(started, finished),
         "secret_exposed": False,

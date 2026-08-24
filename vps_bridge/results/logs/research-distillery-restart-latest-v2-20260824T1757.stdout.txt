@@ -1,0 +1,226 @@
+DISTILLERY_PID=13868
+--- process ---
+root       13860  0.0  0.0   4840  4172 ?        SN   10:47   0:00 bash -lc set -e; python3 - <<'PY' import os,signal me=os.getpid() for name in os.listdir('/proc'):     if not name.isdigit(): continue     try:         raw=open(f'/proc/{name}/cmdline','rb').read().split(b'\0')         args=[x.decode('utf-8','replace') for x in raw if x]     except Exception: continue     if int(name)!=me and any(a.endswith('tools/run_research_distillery_entry.py') for a in args[:4]):         try: os.kill(int(name),signal.SIGTERM)         except ProcessLookupError: pass PY sleep 2; export CLAY_FREE_ONLY_ATTESTED=1; nohup python3 tools/run_research_distillery_entry.py --hours 24 --sleep-seconds 3 >/artifacts/clay-entityos-swarm/distillery.log 2>&1 </dev/null & echo DISTILLERY_PID=$!; sleep 40; echo '--- process ---'; ps auxww | grep '[r]un_research_distillery_entry.py' | head -5; echo '--- status ---'; cat /artifacts/clay-entityos-swarm/distillery/STATUS.json; echo '--- events tail ---'; tail -20 /artifacts/clay-entityos-swarm/distillery/events.jsonl 2>/dev/null || true; echo '--- shared budget ---'; python3 tools/free_swarm_quota.py
+--- status ---
+{
+  "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
+  "generated_at": "2026-08-24T10:45:46.426788+00:00",
+  "collected_source_tokens": 11621,
+  "accepted_dataset_tokens": 0,
+  "dataset_yield": 0.0,
+  "compression_factor": null,
+  "collected_chunks": 48,
+  "accepted_packets": 0,
+  "rejected_candidates": 0,
+  "questions": {
+    "CYCLIC": 2,
+    "OPEN": 17
+  },
+  "source_metadata_rows": {
+    "web_search_chunk": 8
+  },
+  "small_models": [
+    "nvidia/nemotron-3-nano-30b-a3b:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "nvidia/nemotron-nano-12b-v2-vl:free",
+    "nvidia/nemotron-nano-9b-v2:free",
+    "google/gemma-4-26b-a4b-it:free",
+    "google/gemma-4-31b-it:free"
+  ],
+  "reviewers": [
+    {
+      "lane": "nvidia_reviewer",
+      "provider": "nvidia",
+      "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+    }
+  ],
+  "model_input_tokens": 460,
+  "model_output_tokens": 1455,
+  "shared_provider_budget": {
+    "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+    "generated_at": "2026-08-24T10:45:46.427195+00:00",
+    "providers": {
+      "arxiv": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 3.1,
+        "cooldown_seconds": 0.0,
+        "total_requests": 4,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:36.625212+00:00"
+      },
+      "exa": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 2,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:46.265750+00:00"
+      },
+      "github": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 4,
+        "total_success": 4,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:41.685718+00:00"
+      },
+      "groq": {
+        "max_inflight": 12,
+        "active_leases": 0,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 6,
+        "total_success": 4,
+        "total_429": 2,
+        "total_errors": 0,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T10:44:59.913236+00:00"
+      },
+      "nvidia": {
+        "max_inflight": 12,
+        "active_leases": 1,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 10,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 7,
+        "last_status": "404",
+        "last_observed_at": "2026-08-24T10:44:54.503068+00:00"
+      },
+      "openrouter": {
+        "max_inflight": 3,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 9.998284339904785,
+        "total_requests": 15,
+        "total_success": 13,
+        "total_429": 2,
+        "total_errors": 0,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T10:45:46.425571+00:00"
+      },
+      "tavily": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 6,
+        "total_success": 6,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:43.721169+00:00"
+      }
+    }
+  },
+  "db_bytes": 90112
+}
+--- events tail ---
+{"ts":"2026-08-24T10:39:37.899699+00:00","event":"distillery_start","small_models":["nvidia/nemotron-3-nano-30b-a3b:free","nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free","nvidia/nemotron-3-super-120b-a12b:free","nvidia/nemotron-3-ultra-550b-a55b:free","nvidia/nemotron-nano-12b-v2-vl:free","nvidia/nemotron-nano-9b-v2:free","google/gemma-4-26b-a4b-it:free","google/gemma-4-31b-it:free"],"reviewers":[["nvidia_reviewer","nvidia","nvidia/llama-3.3-nemotron-super-49b-v1"]]}
+{"ts":"2026-08-24T10:44:08.671801+00:00","event":"distillery_start","small_models":["nvidia/nemotron-3-nano-30b-a3b:free","nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free","nvidia/nemotron-3-super-120b-a12b:free","nvidia/nemotron-3-ultra-550b-a55b:free","nvidia/nemotron-nano-12b-v2-vl:free","nvidia/nemotron-nano-9b-v2:free","google/gemma-4-26b-a4b-it:free","google/gemma-4-31b-it:free"],"reviewers":[["nvidia_reviewer","nvidia","nvidia/llama-3.3-nemotron-super-49b-v1"]]}
+--- shared budget ---
+{
+  "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+  "generated_at": "2026-08-24T10:48:18.473193+00:00",
+  "providers": {
+    "arxiv": {
+      "max_inflight": 1,
+      "active_leases": 0,
+      "min_interval_s": 3.1,
+      "cooldown_seconds": 0.0,
+      "total_requests": 4,
+      "total_success": 2,
+      "total_429": 0,
+      "total_errors": 0,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T10:45:36.625212+00:00"
+    },
+    "exa": {
+      "max_inflight": 2,
+      "active_leases": 0,
+      "min_interval_s": 0.5,
+      "cooldown_seconds": 0.0,
+      "total_requests": 2,
+      "total_success": 2,
+      "total_429": 0,
+      "total_errors": 0,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T10:45:46.265750+00:00"
+    },
+    "github": {
+      "max_inflight": 1,
+      "active_leases": 0,
+      "min_interval_s": 1.0,
+      "cooldown_seconds": 0.0,
+      "total_requests": 4,
+      "total_success": 4,
+      "total_429": 0,
+      "total_errors": 0,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T10:45:41.685718+00:00"
+    },
+    "groq": {
+      "max_inflight": 12,
+      "active_leases": 0,
+      "min_interval_s": 0.0,
+      "cooldown_seconds": 22.975582122802734,
+      "total_requests": 15,
+      "total_success": 9,
+      "total_429": 6,
+      "total_errors": 0,
+      "last_status": "429",
+      "last_observed_at": "2026-08-24T10:47:58.449067+00:00"
+    },
+    "nvidia": {
+      "max_inflight": 12,
+      "active_leases": 1,
+      "min_interval_s": 0.0,
+      "cooldown_seconds": 0.0,
+      "total_requests": 11,
+      "total_success": 2,
+      "total_429": 0,
+      "total_errors": 8,
+      "last_status": "GATE_TIMEOUT",
+      "last_observed_at": "2026-08-24T10:48:00.680064+00:00"
+    },
+    "openrouter": {
+      "max_inflight": 3,
+      "active_leases": 1,
+      "min_interval_s": 0.5,
+      "cooldown_seconds": 0.0,
+      "total_requests": 21,
+      "total_success": 18,
+      "total_429": 2,
+      "total_errors": 0,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T10:47:38.555050+00:00"
+    },
+    "tavily": {
+      "max_inflight": 2,
+      "active_leases": 0,
+      "min_interval_s": 0.5,
+      "cooldown_seconds": 0.0,
+      "total_requests": 6,
+      "total_success": 6,
+      "total_429": 0,
+      "total_errors": 0,
+      "last_status": "200",
+      "last_observed_at": "2026-08-24T10:45:43.721169+00:00"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Hugging Face Inference Providers adapter for FRANK/RAE.
+"""Hugging Face Inference Providers adapter for EntityOS/HCU research.
 
-Uses the current OpenAI-compatible Hugging Face router. The canonical credential is
-HF_TOKEN. The adapter supports model discovery and chat-completion calls while keeping
-credential values out of output/logs.
+The adapter is fail-closed under the canonical typed FREE provider authority. It must
+not read HF_TOKEN or attempt provider network I/O unless Hugging Face is explicitly
+admitted with cost_class=FREE at the current supervisor epoch.
 
 Model/provider results are external model-runtime evidence, not scientific verification
 by themselves.
@@ -22,20 +22,30 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
+from free_provider_admission import ProviderAdmissionError, provider_is_admitted_free  # noqa: E402
 from rae_secret_loader import get_secret, secret_source  # noqa: E402
 
 BASE = "https://router.huggingface.co/v1"
 DEFAULT_TIMEOUT = 60
 MAX_RETRIES = 4
+PROVIDER = "huggingface"
+
+
+def _require_typed_free_admission() -> None:
+    if not provider_is_admitted_free(PROVIDER):
+        raise ProviderAdmissionError("PROVIDER_NETWORK_REQUIRES_TYPED_FREE_ADMISSION:huggingface")
 
 
 def _headers() -> dict[str, str]:
+    # Admission must precede credential lookup. The canonical provider admission module
+    # itself never reads provider secrets or performs provider network I/O.
+    _require_typed_free_admission()
     token = get_secret("HF_TOKEN")
     return {
         "Authorization": f"Bearer {token}",
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "FRANK-RAE/8.8 Hugging Face Inference Providers adapter",
+        "User-Agent": "EntityOS-HCU/8.68 Hugging Face Inference Providers adapter",
     }
 
 
@@ -107,8 +117,9 @@ def chat(model: str, prompt: str, *, max_tokens: int = 128, temperature: float =
 
 
 def smoke_test() -> dict:
-    # Model listing verifies router reachability and token authorization without spending
-    # an inference request/credit.
+    # Model listing is provider network I/O, so it is intentionally behind the same
+    # typed FREE admission gate as inference. No "free" claim can be inferred from a
+    # successful catalog request.
     data = list_models(limit=1)
     if not data.get("models"):
         raise RuntimeError("Hugging Face smoke test returned no available models")

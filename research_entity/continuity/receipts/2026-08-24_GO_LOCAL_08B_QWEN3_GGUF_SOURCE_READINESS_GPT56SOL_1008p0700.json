@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_MODEL_READINESS_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "research_main_observed_before_receipt": "e626a7c4b190eaf30a1118e1e9a73cbfcaec5c98",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "work_classification": "ORDINARY_SOURCE_RESEARCH_AND_DETERMINISTIC_REGRESSION_AUTHORING"
+  },
+  "retained_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "live_head_observed_after_writes": "a8efd287af3d65db152749bf0704ed4d3e6696b3",
+    "candidate_lock_commit": "b5a08a0c232d8a94bc3cf09c867dbebb369a27d5",
+    "single_file_regression_commit": "52c5ee8d262ec126b50e488e71b3e767b803c6dd",
+    "candidate_commits_confirmed_ancestor_of_live_head": true
+  },
+  "source_research": {
+    "publisher": "Qwen",
+    "repository": "Qwen/Qwen3-0.6B-GGUF",
+    "artifact": "Qwen3-0.6B-Q8_0.gguf",
+    "upstream_file_change_commit": "1eaf4d9657fe65ad10a51eab76a8db5b363bddaa",
+    "artifact_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "artifact_byte_count": 639446688,
+    "xet_hash": "18d608d38b934c86fc3f3a050157b2d4df8d12330de6d13af3ba201edd0e6539",
+    "license_observed": "apache-2.0",
+    "qwen_documented_local_runtime_family": "llama.cpp",
+    "qwen_documented_selector": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+    "classification": "SOURCE_DIRECT_WEB_NOT_LOCAL_RUNTIME_EVIDENCE"
+  },
+  "implemented_delta": {
+    "candidate_lock": "the artefact/MicroEntity/hcu/LOCAL_08B_QWEN3_06B_Q8_GGUF_CANDIDATE.json",
+    "candidate_status": "CANDIDATE_ONLY_NO_RUNTIME_CREDIT",
+    "regression": "the artefact/MicroEntity/hcu/test_engine_admission_single_file_gguf_v1.py",
+    "regression_purpose": "prove at deterministic source-test scope that one immutable GGUF container can occupy both checkpoint and embedded-tokenizer container roles in the existing EngineArtifactPaths contract without inventing a second tokenizer artifact identity",
+    "single_file_checkpoint_tokenizer_role_alias": true,
+    "runtime_source_commit_pinned": false,
+    "runtime_binary_sha256_pinned": false,
+    "runtime_build_sha256_pinned": false,
+    "actual_model_bytes_materialized_by_this_organ": false,
+    "actual_loader_executed_by_this_organ": false
+  },
+  "test_evidence": {
+    "new_regression_authored": true,
+    "new_regression_executed": false,
+    "classification": "SOURCE_TEST_UNEXECUTED",
+    "reason": "No currently admitted deterministic execution surface available to this organ was used for donor unit tests. Local/container execution would not count as EntityOS/HCU runtime evidence and no unauthorized GitHub/VPS/self-hosted/paid runner was used."
+  },
+  "hypothesis": "A compact official Qwen3 0.6B Q8_0 GGUF gives the current approximately-0.8B HCU lane a concrete immutable model-byte target compatible with a pathname-oriented local llama.cpp loader, while preserving exact provenance and zero paid-provider dependence.",
+  "counterhypothesis": "Pinning a model artifact without an exact runtime/build and actual loader-consumption path could create false readiness or encourage source metadata to be misreported as model runtime evidence.",
+  "resolution": "The candidate file is explicitly non-promoted and leaves runtime source/binary/build plus loader-consumption fields null. The next promotion requires exact runtime/build identity, actual artifact materialization, sealed/path-bound loader consumption, canonical ModelExecution admission and observed inference.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_CROSS_TRACK_READINESS: the executable path now has one exact source-level local model artifact target instead of an unspecified approximately-0.8B placeholder; no executable/runtime PASS is claimed.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_SOURCE_LEVEL: existing EngineAdmission is given an explicit single-file GGUF role-mapping regression and the retained loader-consumption witness can target path/fd based loaders; regression remains unexecuted.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_READINESS_ONLY: one exact zero-cost local model candidate is pinned for future real J-Space/GWT execution traces, while exact runtime/build, real model execution and training remain blocked/uncredited."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving whole-system surface under parallel workers; append-only receipt plus retained donor commits preserve this bounded source delta without overwriting fresher state."
+  },
+  "next_exact_gate": "Pin one exact llama.cpp runtime source plus exact local binary/build identity on an authorized zero-cost local surface; materialize Qwen3-0.6B-Q8_0.gguf and verify SHA-256 9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031 and byte_count 639446688; execute the already-bound pathname/fd loader under loader-consumption witness; then require canonical loader registry/lease and MiniUnifiedDB ModelExecution admission before any model/J-Space runtime credit. Preserve the Vercel runtime capsule as BLOCKED_QUOTA_UNOBSERVED until remaining included quota is directly observed."
+}

@@ -1,0 +1,83 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_EXECUTOR_REPAIR_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "authority_reentry": {
+    "research_main_observed_before_write": "e6236fb8dd1b94e0704704d29ac388582f292df1",
+    "preceding_quota_authority_receipt": "research_entity/continuity/receipts/2026-08-24_GO_HCU_JSPACE_EXACT_HEAD_READY_QUOTA_GATE_GPT56SOL_0955p0700.json",
+    "preceding_gate": "DO_NOT_INVOKE_WHILE_REMAINING_INCLUDED_SANDBOX_QUOTA_IS_UNOBSERVED"
+  },
+  "retained_executor": {
+    "identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "head_observed": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "parent": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "commit_message": "guard(hcu): fail closed on unobserved Sandbox quota",
+    "changed_file": "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js"
+  },
+  "executor_repair": {
+    "surface_class_status_preserved": "ADMITTED",
+    "remaining_sandbox_quota_directly_observed": false,
+    "remaining_quota_assumption_forbidden": true,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "runtime_gate_reason": "SUPERVISOR_8_63_REQUIRES_DIRECT_REMAINING_INCLUDED_QUOTA_OBSERVATION_BEFORE_SANDBOX_CREATE",
+    "sandbox_execution_admitted_requires": [
+      "SANDBOX_COST_ADMISSION.status == ADMITTED",
+      "remaining_sandbox_quota_directly_observed == true",
+      "runtime_gate == OPEN_DIRECT_QUOTA_OBSERVED"
+    ],
+    "effect": "ABSENCE_OF_DIRECT_REMAINING_QUOTA_EVIDENCE_NOW_RETURNS_FALSE_BEFORE_SANDBOX_CREATE",
+    "runtime_credit_added": false
+  },
+  "vercel_build_evidence": {
+    "team_plan_observed": "hobby",
+    "project": "dr-unterweger",
+    "deployment_id": "dpl_EtVgJ96pobVv3zqh9jozAKHgfNWa",
+    "deployment_state": "READY",
+    "deployment_git_sha": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "exact_executor_head_match": true,
+    "build_scope_only": true,
+    "function_invocation_observed": false,
+    "sandbox_create_observed": false
+  },
+  "quota_observation_surface": {
+    "connected_vercel_project_and_deployment_metadata_available": true,
+    "connected_vercel_runtime_and_build_logs_available": true,
+    "connected_vercel_direct_remaining_sandbox_quota_action_available": false,
+    "remaining_included_sandbox_quota_observed": false,
+    "conclusion": "RUNTIME_GATE_MUST_REMAIN_BLOCKED_QUOTA_UNOBSERVED"
+  },
+  "hypothesis": "The unsafe gap was not HCU semantics but an execution-authority gate that treated admitted Hobby surface class as sufficient for Sandbox execution.",
+  "counterhypothesis": "Plan identity or a READY exact-head deployment is enough to infer remaining included Sandbox quota and safely permit Sandbox.create.",
+  "discriminator": "Inspect the then-current executor cost-admission implementation, exact-head Vercel build identity, and connected Vercel quota-observation capabilities.",
+  "result": "COUNTERHYPOTHESIS_REJECTED_AND_EXECUTOR_GATE_REPAIRED_FAIL_CLOSED",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the single retained executor now enforces the current FREE_ONLY quota authority before Sandbox.create and the repair has an exact-head READY Vercel build.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BOUNDARY: the fixed Typed Entry->route->engine/load->GRID10->execution-store->Inference/v4->J-Space/v3 capsule keeps its exact source semantics while its execution admission is now fail-closed under unresolved quota; no duplicate HCU implementation was created.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: the J-Space/GWT capsule remains source/build-ready but cannot be admissibly executed while remaining included Sandbox quota is unobserved; no model I/O or training evidence exists."
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id_available": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "work_class": "ORDINARY_SOURCE_BUILD_REENTRY_AND_EXECUTION_AUTHORITY_FUSION"
+  },
+  "credits": {
+    "component_runtime_credit_added": false,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving whole-system surface under parallel writes; this append-only receipt records the exact nonduplicate source/build authority delta without overwriting fresher state."
+  },
+  "next_exact_gate": "Directly observe invocation-scoped remaining included Vercel Sandbox quota and a no-charge/no-upgrade/no-billing path on an admitted surface. Only then change the single executor gate from BLOCKED_QUOTA_UNOBSERVED to an evidence-bound open state, re-enter current main/PR1263/PR810/deployment identities, and invoke only the fixed 17-blob/14-test FREE_ONLY capsule. If direct quota evidence remains unavailable, do not invoke and grant zero runtime credit.",
+  "evidence_boundary": "This receipt establishes source/build/execution-authority convergence only. READY is not Function invocation; no Sandbox, model, J-Space model-runtime, training or whole-product PASS is claimed."
+}

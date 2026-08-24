@@ -11,6 +11,38 @@ bridge = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(bridge)
 
 
+def execution_admission(source_head="a" * 40, evaluation_head="c" * 40, **overrides):
+    admission = {
+        "schema": "CLAY_FORGE_EXECUTION_ADMISSION/v1",
+        "source_scope": "EXACT_WORKER_PROMPT_HEAD",
+        "source_identity_admitted": True,
+        "source_head": source_head,
+        "source_tree": "e" * 40,
+        "evaluation_checkout_head": evaluation_head,
+        "evaluation_checkout_tree": "f" * 40,
+        "all_commands_admitted": True,
+        "decisions": [
+            {
+                "admitted": True,
+                "reason": "ALLOWLISTED_PYTEST",
+                "argv": ["pytest", "-q", "tests/test_example.py"],
+                "execution_class": "TEST",
+            }
+        ],
+        "backend": {
+            "admitted": True,
+            "backend": "bubblewrap_unshare_all",
+            "reason": "OK",
+            "network_namespace": "ISOLATED",
+            "secret_environment_inherited": False,
+            "host_secret_paths_exposed": False,
+        },
+        "candidate_is_canonical_truth": False,
+    }
+    admission.update(overrides)
+    return admission
+
+
 def accepted_row(**overrides):
     row = {
         "schema": "CLAY_FORGE_DELTA_EVALUATION/v1",
@@ -39,6 +71,7 @@ def accepted_row(**overrides):
         "requires_rebase_to_evaluation_head": True,
         "proposal_hypothesis": "candidate narration must not become measured packet text",
         "falsifier": "candidate falsifier also remains metadata-only",
+        "execution_admission": execution_admission(),
     }
     row.update(overrides)
     return row
@@ -57,7 +90,7 @@ class BridgeTests(unittest.TestCase):
     def write_rows(self, *rows):
         self.eval.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
 
-    def test_exact_accepted_evaluation_becomes_one_packet(self):
+    def test_exact_isolated_accepted_evaluation_becomes_one_packet(self):
         self.write_rows(accepted_row())
         out = bridge.ingest(self.eval, self.db)
         self.assertEqual(out["admitted"], 1)
@@ -70,6 +103,7 @@ class BridgeTests(unittest.TestCase):
         self.assertNotIn("candidate falsifier", packet_text)
         self.assertIn("proposal_hypothesis_candidate_only", meta)
         self.assertIn("EXECUTION_EVIDENCE_ONLY_NOT_JSPACE_CAUSAL_CREDIT", packet_text)
+        self.assertIn("execution_admission_sha256", packet_text)
 
     def test_idempotent_duplicate_does_not_double_count(self):
         self.write_rows(accepted_row())
@@ -79,6 +113,42 @@ class BridgeTests(unittest.TestCase):
         self.assertEqual(second["admitted"], 0)
         self.assertEqual(second["duplicates"], 1)
         self.assertEqual(first["accepted_dataset_tokens_counter"], second["accepted_dataset_tokens_counter"])
+
+    def test_legacy_accept_without_execution_admission_is_rejected(self):
+        row = accepted_row()
+        row.pop("execution_admission")
+        self.write_rows(row)
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EXECUTION_ADMISSION_MISSING"), 1)
+
+    def test_execution_evaluation_head_mismatch_is_rejected(self):
+        self.write_rows(accepted_row(execution_admission=execution_admission(evaluation_head="9" * 40)))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EXECUTION_EVALUATION_HEAD_MISMATCH"), 1)
+
+    def test_execution_source_head_mismatch_is_rejected(self):
+        self.write_rows(accepted_row(execution_admission=execution_admission(source_head="9" * 40)))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EXECUTION_SOURCE_HEAD_MISMATCH"), 1)
+
+    def test_nonisolated_backend_is_rejected(self):
+        admission = execution_admission()
+        admission["backend"]["network_namespace"] = "HOST"
+        self.write_rows(accepted_row(execution_admission=admission))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("ISOLATION_NOT_PROVEN"), 1)
+
+    def test_rejected_command_decision_is_rejected(self):
+        admission = execution_admission()
+        admission["decisions"][0]["admitted"] = False
+        self.write_rows(accepted_row(execution_admission=admission))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EXECUTION_COMMAND_DECISION_REJECTED"), 1)
 
     def test_nonaccepted_is_rejected(self):
         self.write_rows(accepted_row(status="validated_not_better"))
@@ -90,25 +160,25 @@ class BridgeTests(unittest.TestCase):
         self.write_rows(accepted_row(source_repo_head=None))
         out = bridge.ingest(self.eval, self.db)
         self.assertEqual(out["admitted"], 0)
-        self.assertEqual(out["rejected"].get("SOURCE_HEAD_INVALID"), 1)
+        self.assertEqual(out["rejected"].get("SOURCE_HEAD_UNBOUND"), 1)
 
     def test_failed_negative_control_fails_closed(self):
         self.write_rows(accepted_row(negative_tests_failed=1))
         out = bridge.ingest(self.eval, self.db)
         self.assertEqual(out["admitted"], 0)
-        self.assertEqual(out["rejected"].get("NEGATIVE_TESTS_FAILED_NONZERO_OR_INVALID"), 1)
+        self.assertEqual(out["rejected"].get("NOT_NOMINAL_ACCEPT"), 1)
 
     def test_no_positive_improvement_fails_closed(self):
         self.write_rows(accepted_row(relative_improvement_pct=0.0))
         out = bridge.ingest(self.eval, self.db)
         self.assertEqual(out["admitted"], 0)
-        self.assertEqual(out["rejected"].get("NO_POSITIVE_IMPROVEMENT"), 1)
+        self.assertEqual(out["rejected"].get("NOT_NOMINAL_ACCEPT"), 1)
 
     def test_path_escape_in_target_identity_fails_closed(self):
         self.write_rows(accepted_row(target_blob_identities={"../secret": "d" * 40}))
         out = bridge.ingest(self.eval, self.db)
         self.assertEqual(out["admitted"], 0)
-        self.assertEqual(out["rejected"].get("TARGET_BLOBS_INVALID"), 1)
+        self.assertEqual(out["rejected"].get("TARGET_BLOBS_UNBOUND"), 1)
 
     def test_invalid_json_is_counted_and_does_not_abort(self):
         self.eval.write_text("not-json\n" + json.dumps(accepted_row()) + "\n", encoding="utf-8")

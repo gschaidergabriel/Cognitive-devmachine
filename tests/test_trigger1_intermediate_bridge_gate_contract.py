@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from pathlib import Path
 import sys
 import unittest
@@ -22,6 +23,7 @@ def passing_inputs() -> tuple[dict, dict]:
         {"prompt_sha256": "1" * 64, "seed": 1701},
         {"prompt_sha256": "2" * 64, "seed": 1702},
     ]
+    derivation_prompt_hashes = ["5" * 64, "6" * 64]
     holdout = []
     for label_map_id, positive_label, negative_label, prompt_sha in (
         ("MAP_AB", "A", "B", "3" * 64),
@@ -64,10 +66,17 @@ def passing_inputs() -> tuple[dict, dict]:
         "selected": {"selected": True, "layer": 12, "gain": 4.0},
         "derivation": {
             "sources": [
-                {"prompt_sha256": "5" * 64},
-                {"prompt_sha256": "6" * 64},
+                {"prompt_sha256": derivation_prompt_hashes[0]},
+                {"prompt_sha256": derivation_prompt_hashes[1]},
             ],
             "directions": {"12": {"direction_sha256": ALT64}},
+            "label_independence": {
+                "schema": bridge.LABEL_INDEPENDENCE_SCHEMA,
+                "derivation_input_family_sha256": bridge.digest(derivation_prompt_hashes),
+                "evaluation_output_labels_resolved_before_derivation": False,
+                "uses_evaluation_output_labels": False,
+                "construction": "fixed semantic anchors before output-label resolution",
+            },
         },
         "calibration_rows": calibration,
         "holdout_rows": holdout,
@@ -87,11 +96,15 @@ def passing_inputs() -> tuple[dict, dict]:
 
 
 class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
-    def test_bridge_binds_label_independence_and_reaches_gate_v4_goal_candidate(self):
+    def test_bridge_requires_upstream_label_independence_and_reaches_gate_v4(self):
         result, intermediate = passing_inputs()
         direct = bridge.build_direct_candidate(result, intermediate)
 
         self.assertIs(False, direct["vector_derivation"]["uses_evaluation_output_labels"])
+        self.assertEqual(
+            bridge.digest(result["derivation"]["label_independence"]),
+            direct["vector_derivation"]["label_independence_receipt_sha256"],
+        )
         self.assertIs(True, direct["holdout"]["label_mapping_counterbalanced"])
 
         verdict = gate.adjudicate(direct)
@@ -103,6 +116,44 @@ class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
         self.assertFalse(verdict["whole_entityos_hcu_credit"])
         self.assertFalse(verdict["jspace_model_runtime_credit"])
         self.assertFalse(verdict["training_credit"])
+
+    def test_missing_label_independence_receipt_blocks(self):
+        result, intermediate = passing_inputs()
+        del result["derivation"]["label_independence"]
+        with self.assertRaisesRegex(
+            bridge.BridgeError,
+            "DERIVATION_LABEL_INDEPENDENCE_RECEIPT_REQUIRED",
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_true_uses_evaluation_output_labels_blocks(self):
+        result, intermediate = passing_inputs()
+        result["derivation"]["label_independence"]["uses_evaluation_output_labels"] = True
+        with self.assertRaisesRegex(
+            bridge.BridgeError,
+            "DERIVATION_MUST_NOT_USE_EVALUATION_OUTPUT_LABELS",
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_label_resolution_before_derivation_blocks(self):
+        result, intermediate = passing_inputs()
+        result["derivation"]["label_independence"][
+            "evaluation_output_labels_resolved_before_derivation"
+        ] = True
+        with self.assertRaisesRegex(
+            bridge.BridgeError,
+            "DERIVATION_MUST_PRECEDE_EVALUATION_LABEL_RESOLUTION",
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_label_independence_family_mismatch_blocks(self):
+        result, intermediate = passing_inputs()
+        result["derivation"]["label_independence"]["derivation_input_family_sha256"] = HEX64
+        with self.assertRaisesRegex(
+            bridge.BridgeError,
+            "DERIVATION_LABEL_INDEPENDENCE_FAMILY_MISMATCH",
+        ):
+            bridge.build_direct_candidate(result, intermediate)
 
 
 if __name__ == "__main__":

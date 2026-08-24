@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "read-v8-supervisor-failure-20260824T1849p0700",
+  "command_sha256": "f4e21aeba778cc832e62584396fa3658ea20275215ac272db22be4bf4a64b858",
+  "started_at": "2026-08-24T11:43:51.855212+00:00",
+  "finished_at": "2026-08-24T11:43:52.154661+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "b275a53454858c2019c2d04d46456da13346639466eb661e625af4d02f3596fb",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "---LOG---\n---PID---\n22592\n---PS---\n  19807       1 SN   python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60\n  19841       1 SN   python3 /workspace/clay-global-research-entity/tools/run_research_distillery_local.py --hours 24 --sleep-seconds 3\n  19844       1 SNl  python3 /workspace/clay-global-research-entity/tools/run_free_evidence_forge.py --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

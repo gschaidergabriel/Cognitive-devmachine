@@ -9,7 +9,12 @@ on:
       - 'tools/run_go871_forge_distillery_runtime_gate.py'
       - 'tools/ingest_forge_accepts_into_distillery.py'
       - 'tools/forge_evidence_credit_871.py'
+      - 'tools/run_free_evidence_forge.py'
+      - 'tools/run_free_evidence_forge_safe_871.py'
+      - 'tools/forge_execution_admission_871.py'
       - 'runtime_checks/test_forge_distillery_requires_execution_admission_871.py'
+      - 'tests/test_forge_execution_admission_871.py'
+      - 'tests/test_forge_disposable_worktree_872.py'
   workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened]

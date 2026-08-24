@@ -1,0 +1,69 @@
+{
+  "schema": "CLAY_LOCAL_EXACT_BLOB_COMPONENT_REGRESSION/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "surface": "ChatGPT isolated local container replica",
+  "donor_branch": "gpt56sol/go873-delta-id-replay-identity-20260825",
+  "donor_commit_tested": "9c23ec0c3670ed375bc6fc0cad6ad28719c6078d",
+  "donor_parent_canonical_main": "67416a37ad2f745584e33c694fa765fb3f85588c",
+  "git_blob_sha1": {
+    "tools/ingest_forge_accepts_into_distillery.py": "5f04dc0ac9e4f81fbc7c4605d885125825f3f7be",
+    "tools/forge_evidence_credit_871.py": "d99567577890d885c8d32840dfe4afc04cbaade1",
+    "tests/test_forge_distillery_replay_identity_873.py": "585e6c698b9821e2a98a36431090d7647a81a7da",
+    "tests/test_forge_distillery_concurrent_replay_873.py": "83a1b5e9019ec0e99ad10fa5660690b2746162a4",
+    "tests/test_forge_distillery_identity_semantics_upgrade_873.py": "2d1b9c31deeca3ea0c4baa49e033391bf5670156"
+  },
+  "blob_identity_check": "PASS_ALL_MATCH_GITHUB_GIT_BLOB_SHA1",
+  "py_compile": {
+    "returncode": 0,
+    "status": "PASS"
+  },
+  "unittest": {
+    "modules": [
+      "tests.test_forge_distillery_replay_identity_873",
+      "tests.test_forge_distillery_concurrent_replay_873",
+      "tests.test_forge_distillery_identity_semantics_upgrade_873"
+    ],
+    "returncode": 0,
+    "tests_passed": 13,
+    "tests_failed": 0,
+    "elapsed_seconds_observed": 0.215,
+    "status": "PASS"
+  },
+  "covered_invariants": [
+    "timestamp/candidate-narration replay is duplicate and token-stable",
+    "delta_id-only envelope rekey is duplicate and token-stable",
+    "same replay identity with changed measured evidence fails closed as REPLAY_IDENTITY_CONFLICT",
+    "distinct execution identities remain separately admissible",
+    "legacy null-replay rows fail closed instead of minting packets",
+    "new identity preimages are explicitly versioned as packet/v3 replay/v2 measured/v2",
+    "new rows persist FORGE_REPLAY_V2_MEASURED_V2_PACKET_V3 identity semantics",
+    "pre-upgrade rows with non-null opaque old digests block changed-envelope semantic re-emission as LEGACY_REPLAY_IDENTITY_UNRESOLVED",
+    "exact pre-upgrade full-evaluation replay remains safely duplicate at bridge scope",
+    "BEGIN IMMEDIATE write intent precedes concurrent replay lookup",
+    "two same semantic replays race to exactly one admission plus one duplicate",
+    "concurrent measured conflict yields exactly one admission plus one conflict",
+    "concurrent distinct execution identities remain independently admissible"
+  ],
+  "nonsemantic_stderr": {
+    "classification": "TERMINAL_ENVIRONMENT_CLEAR_WARNING",
+    "message": "TERM environment variable not set during py_compile process startup",
+    "compile_returncode": 0,
+    "unittest_returncode": 0
+  },
+  "scope": "EXACT_BLOB_COMPONENT_REGRESSION_ONLY",
+  "provider_calls": 0,
+  "model_execution": false,
+  "unusual_experiment": false,
+  "canonical_runtime_credit": 0,
+  "whole_entityos_hcu_runtime_credit": 0,
+  "hcu_full_credit": 0,
+  "jspace_model_credit": 0,
+  "training_credit": 0,
+  "canonical_compact_result_sha256": "4171fa81c848e2d7bcaa9de476bf6a47c96e7b9808c342487fb51e948c6bd5c2"
+}

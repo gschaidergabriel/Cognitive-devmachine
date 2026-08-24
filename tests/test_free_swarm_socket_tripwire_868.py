@@ -169,6 +169,10 @@ class FreeProviderSocketBoundaryTests(unittest.TestCase):
         self.assertEqual(body.get("error"), "PROVIDER_NOT_TYPED_FREE_ADMITTED")
         self.assertEqual(tripwire.attempts, [])
 
+    def test_unclassified_distillery_secret_is_loader_blind(self) -> None:
+        with mock.patch.object(distillery_entry, "_ORIGINAL_SECRET", side_effect=AssertionError("secret loader reached")):
+            self.assertEqual(distillery_entry.admitted_secret("FUTURE_LLM_API_KEY"), "")
+
     def test_unclassified_distillery_provider_has_zero_socket_activity(self) -> None:
         with SocketTripwire() as tripwire, \
              mock.patch.object(distillery_entry, "_ORIGINAL_REQUEST_JSON", side_effect=AssertionError("network wrapper reached")):

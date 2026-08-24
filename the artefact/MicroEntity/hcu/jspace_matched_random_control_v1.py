@@ -77,12 +77,19 @@ def _seed(value: Any) -> int:
 def _finite(value: Any, field: str) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise MatchedRandomControlError(f"{field}:FINITE_BINARY64_REQUIRED")
-    try:
+    if isinstance(value, int):
+        try:
+            number = float(value)
+        except OverflowError as exc:
+            raise MatchedRandomControlError(f"{field}:FINITE_BINARY64_REQUIRED") from exc
+        if not math.isfinite(number):
+            raise MatchedRandomControlError(f"{field}:FINITE_BINARY64_REQUIRED")
+        if int(number) != value:
+            raise MatchedRandomControlError(f"{field}:EXACT_BINARY64_REQUIRED")
+    else:
         number = float(value)
-    except (OverflowError, ValueError) as exc:
-        raise MatchedRandomControlError(f"{field}:FINITE_BINARY64_REQUIRED") from exc
-    if not math.isfinite(number):
-        raise MatchedRandomControlError(f"{field}:FINITE_BINARY64_REQUIRED")
+        if not math.isfinite(number):
+            raise MatchedRandomControlError(f"{field}:FINITE_BINARY64_REQUIRED")
     return 0.0 if number == 0.0 else number
 
 

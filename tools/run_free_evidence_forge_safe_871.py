@@ -21,6 +21,11 @@ from typing import Any
 
 import forge_execution_admission_871 as admission
 import run_free_evidence_forge as base
+import free_swarm_typed_forge_ingress_872 as typed_ingress
+
+# Install only the candidate-ingestion callback on the real current Forge module.
+# This preserves module-global monkeypatch semantics used by all safe-executor gates.
+typed_ingress.install(base)
 
 _ORIGINAL_VALIDATE = base.validate_candidate
 _ORIGINAL_MANIFEST = admission.candidate_execution_manifest

@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"start-fixed-v8-supervisor-20260824T1853p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -euo pipefail; nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor-v8.log 2>&1 </dev/null & pid=$!; echo $pid >/artifacts/clay-entityos-swarm/supervisor.pid; sleep 8; kill -0 $pid; echo SUP_PID=$pid; echo ---SUPERVISOR---; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json; echo ---PROCS---; ps -eo pid,etime,args | grep -E '[r]un_24h_entityos_swarm_supervisor|[r]un_research_distillery|[r]un_free_evidence_forge|[f]ree swarm/evaluate.py|[l]lama-server'"
+}

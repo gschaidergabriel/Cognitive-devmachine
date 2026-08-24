@@ -1,0 +1,72 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.68",
+  "trigger": "go",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "join": {
+    "initial_main": "e5dacda36ae719d95bbb0be70a09605e69ab3609",
+    "reentered_main": "7e69db0190878edf398996d0521657422c2a8a91",
+    "branch": "gpt56sol/go-868-local-loopback-fence-20260824-1822",
+    "branch_base": "e5dacda36ae719d95bbb0be70a09605e69ab3609"
+  },
+  "r0_observed": [
+    "main@e5dacda added tools/run_research_distillery_local.py and described the lane as strictly loopback",
+    "CLAY_LOCAL_RESEARCH_BASE was consumed without endpoint validation",
+    "urllib.request.urlopen followed ambient proxy/redirect behavior for local health/model/chat calls",
+    "main re-entry at 7e69db0 still contained that local endpoint behavior unchanged",
+    "parallel main work advanced the external FREE_SWARM admission receipt runner; this branch does not duplicate that authority or runner"
+  ],
+  "defect": {
+    "class": "LOCAL_LANE_EXTERNAL_NETWORK_ESCAPE",
+    "mechanisms": [
+      "environment base URL could select a non-loopback host",
+      "hostname resolution could reintroduce non-loopback resolver state",
+      "ambient urllib proxy configuration could move nominal loopback traffic through a proxy",
+      "HTTP redirect following could leave loopback after the initial request"
+    ]
+  },
+  "delta": [
+    "add tools/local_loopback_endpoint.py as a transport-only guard, explicitly not a provider/capability authority",
+    "require numeric HTTP loopback IP; reject hostnames, non-loopback IPs, userinfo, path, query, fragment and malformed ports",
+    "disable ambient proxies and HTTP redirects for the local-model opener",
+    "wire local health, model catalog and chat calls through the guarded opener",
+    "add deterministic regressions for IPv4/IPv6 admission, hostname/non-loopback rejection, URL-smuggling rejection and redirect escape"
+  ],
+  "deterministic_evidence": {
+    "environment": "isolated ChatGPT container; not canonical Clay local workstation or clay-direct-dev runtime",
+    "scope": "SOURCE_COMPONENT_ONLY",
+    "exact_written_helper_sha256": "910d035f45c09c0dfa9367b71279f5d20d8f4286b5d75d980a08118f5b53a12c",
+    "exact_written_test_sha256": "c11d63e027e6a82ce4f5866b1cb19e2aac0758b754004d1eb65533bf90dbe89d",
+    "tests": "4/4 PASS",
+    "py_compile": "PASS",
+    "external_provider_calls": 0,
+    "provider_secret_lookups": 0,
+    "paid_execution": false,
+    "together_touched": false,
+    "negative_infrastructure_evidence": "initial raw.githubusercontent.com materialization attempt failed DNS in ChatGPT container; not classified as product failure"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: closes an executable-convergence escape in the newly landed local zero-provider-billing distillery lane",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: retained HCU/Typed Entry donor #1263 owns the canonical HCU causal path; this available organ lacks the authorized local/clay-direct-dev bridge needed for its next exact InferenceReceipt/v4 execution gate, so no duplicate HCU implementation was created",
+    "track_c": "ADVANCED: the zero-provider-billing local model lane is now fail-closed against env/proxy/redirect escape, strengthening local model/J-Space research readiness without granting model or training credit"
+  },
+  "unusual_experiment": {
+    "used": false,
+    "reason": "source review plus deterministic regression only; no new unusual intervention"
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "external_provider_admission_frontier": "parallel main work now binds the FREE_SWARM admission receipt runner to both current tripwire suites; executable authorized-surface PASS remains a separate gate",
+    "readme_sync": "SYNC_PENDING_CURRENT_MAIN_MOVED_16_COMMITS_DURING_BRANCH_WORK; stale README overwrite intentionally avoided"
+  },
+  "next_exact_action": "execute this branch regression plus the current FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 on an authorized normal-user local or clay-direct-dev surface; then re-enter current main and fuse only if the loopback fence remains nonduplicate"
+}

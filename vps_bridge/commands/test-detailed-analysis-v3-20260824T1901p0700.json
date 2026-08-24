@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"test-detailed-analysis-v3-20260824T1901p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -euo pipefail; python3 'free swarm/evaluate.py' --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm >/tmp/eval-v3.out; python3 'free swarm/update_distillery_readme.py' --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm; python3 - <<'PY'\nimport json\nx=json.load(open('free swarm/SYSTEM_ANALYSIS_LIVE.json'))\nprint(json.dumps({'runtime':x['runtime'],'conversion':x['conversion'],'go_feedback':x['go_feedback'],'forge':{k:x['evidence_forge'].get(k) for k in ('discovery_queries','discovery_hits','evaluations','accepted_deltas')},'costs':x['costs']},ensure_ascii=False))\nPY\ngrep -nE 'Source → GO Pass-through|12-Rollen-Makrozyklen|Evidence Forge.*Queries|Local 4B lane|Historischer initialer Startstand' 'free swarm/README.md' | head -20"
+}

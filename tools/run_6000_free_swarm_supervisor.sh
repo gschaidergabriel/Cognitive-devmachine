@@ -187,8 +187,15 @@ start_distillery(){
 }
 
 start_forge(){
-  local x="$ROOT/tools/run_free_evidence_forge.py"; [[ -f "$x" ]] || return 0
-  pgrep -f '[r]un_free_evidence_forge.py' >/dev/null 2>&1 || nohup python3 "$x" --hours 24 --sleep-seconds 2 --questions-per-cycle 32 --discovery-parallel 24 --candidates-per-cycle 48 --local-parallel 12 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
+  local x="$ROOT/tools/run_free_evidence_forge_safe_871.py"; [[ -f "$x" ]] || return 0
+  # Exactly one Forge authority: retire any legacy base entrypoint before starting
+  # the Supervisor-8.72 safe wrapper. The safe wrapper imports the base module but
+  # is the only admitted long-running process because it installs execution/source
+  # admission before the first candidate can be evaluated.
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f "$ROOT/tools/[r]un_free_evidence_forge.py" || true)
+  pgrep -f '[r]un_free_evidence_forge_safe_871.py' >/dev/null 2>&1 || nohup python3 "$x" --hours 24 --sleep-seconds 2 --questions-per-cycle 32 --discovery-parallel 24 --candidates-per-cycle 48 --local-parallel 12 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
 }
 
 refresh_root_results(){
@@ -307,7 +314,9 @@ print(json.dumps({
  'fabric_admission_binding':admission_binding,
  'fabric_running':running('run_6000_free_swarm_fast.py'),
  'distillery_running':running('run_research_distillery_local.py'),
- 'forge_running':running('run_free_evidence_forge.py'),
+ 'forge_running':running('run_free_evidence_forge_safe_871.py'),
+ 'forge_entrypoint':'tools/run_free_evidence_forge_safe_871.py',
+ 'legacy_base_forge_running':running('/tools/run_free_evidence_forge.py'),
  'dashboard_running':running('free swarm/evaluate.py.*--watch'),
  'local_model_ready':health(),
  'fabric':fabric,
@@ -318,4 +327,3 @@ PY
   mv "$STATE_DIR/SUPERVISOR_6000.json.tmp" "$STATE_DIR/SUPERVISOR_6000.json"
   sleep 15
 done
-printf '{"schema":"CLAY_6000_SWARM_SUPERVISOR/v4","state":"EXPIRED","provider_credential_scope":"SWARM_CHILD_ONLY"}\n' >"$STATE_DIR/SUPERVISOR_6000.json"

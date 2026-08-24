@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"force-start-v8-supervisor-20260824T1848p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -euo pipefail; nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor-v8.log 2>&1 </dev/null & newpid=$!; echo $newpid >/artifacts/clay-entityos-swarm/supervisor.pid; sleep 8; kill -0 $newpid; echo SUP_PID=$newpid; ps -p $newpid -o pid,ppid,stat,etime,args; echo ---SUPERVISOR---; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json; echo ---LOG---; tail -60 /artifacts/clay-entityos-swarm/supervisor-v8.log || true"
+}

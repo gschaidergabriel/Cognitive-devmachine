@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"research-distillery-mistral-probe-20260824T1745",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "command":"set -e; export CLAY_FREE_ONLY_ATTESTED=1; python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools')\nimport run_research_distillery as d\nmodels=['mistralai/mistral-large-2-instruct','mistralai/mistral-large','mistralai/mistral-nemotron','mistralai/mixtral-8x22b-v0.1','nv-mistralai/mistral-nemo-12b-instruct','mistralai/codestral-22b-instruct-v0.1']\nfor m in models:\n    ok,text,usage,state=d.chat('nvidia',m,'Reply only OK',max_tokens=8,temperature=0.0)\n    print(m,'PASS' if ok else state,usage if ok else '')\nPY",
+  "timeout_seconds":300
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "ENTITYOS_HCU_GO_SOURCE_FUSION_RECEIPT/v1",
+  "authority_epoch": "8.70",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "source_base": "3fdfcd705564c87d27b5ba9567755bf7f639cc0f",
+  "branch": "gpt56sol/go-870-fuse-6000-revocation-20260824",
+  "donor_pr": 1473,
+  "donor_head": "9701cd6f3a847ecc7ad19c267fd762a6689a7945",
+  "finding": "After #1468 closed the exact pre-call route/credential FREE-lane TOCTOU boundary on main, the 6000-worker shell supervisor still retained a distinct parent-environment and child-lifecycle revocation gap. PR #1473 contained a nonduplicate source repair but was no longer mergeable after main advanced, so its mechanism was re-entered and ported onto the exact current #1468 main base instead of merging stale authority wholesale.",
+  "delta": [
+    "sanitize unadmitted provider credential variables by name before and after secret loading",
+    "do not reopen mixed-provider secret bundles unless all represented providers are currently typed FREE-admitted",
+    "bind the running 6000 child to the exact validated provider-admission snapshot digest",
+    "stop/reconcile the child when admission binding changes or becomes invalid",
+    "rebuild sanitized provider environment immediately before spawn and abort if authority moves during preparation",
+    "retain the independent 8.70 current_lane_binding pre-network gate merged by #1468"
+  ],
+  "evidence": {
+    "branch_compare": "2 commits ahead of 3fdfcd705564c87d27b5ba9567755bf7f639cc0f at pre-receipt checkpoint; only supervisor shell plus focused test changed",
+    "donor_regression": "PR #1473 reports 6/6 local synthetic/source PASS plus bash -n PASS at donor head",
+    "current_branch_regression": "NOT_EXECUTED_BY_THIS_ORGAN; no admitted repository runtime bridge is exposed in this ChatGPT session",
+    "adaptation": "focused test now searches for current_lane_binding() before Request/urlopen to match #1468 rather than the superseded provider-only gate"
+  },
+  "evidence_scope": "SOURCE_FUSION_WITH_DONOR_TEST_PROVENANCE_ONLY",
+  "runtime_credit": {
+    "free_swarm_provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "negative_evidence": {
+    "clay_direct_dev_bridge_exposed_to_this_organ": false,
+    "external_provider_calls_by_this_organ": 0,
+    "provider_secret_values_read_by_this_organ": 0,
+    "paid_or_subscription_execution": 0,
+    "together_execution": 0,
+    "unusual_experiment": 0
+  },
+  "coordination": {
+    "unusual_experiment_state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared reproducible immutable macrocycle/request identity suitable for the canonical create-only lease was exposed; this cycle used ordinary source review/fusion only."
+  },
+  "next_exact_gate": "Run bash -n and tests/test_free_swarm_supervisor_revocation_870.py at the exact successor branch head on an admitted repository/runtime surface; then merge only if current main has not independently absorbed an equivalent 6000 supervisor revocation repair."
+}

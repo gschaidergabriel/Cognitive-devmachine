@@ -29,14 +29,17 @@ def rows(
         "PERMUTED_SAME_NORM": 0.2,
     }
     out: list[dict] = []
-    for map_id, positive, negative in (("MAP_AB", "A", "B"), ("MAP_BA", "B", "A")):
-        for case_id in ("h1", "h2"):
+    for map_index, (map_id, positive, negative) in enumerate((("MAP_AB", "A", "B"), ("MAP_BA", "B", "A"))):
+        for case_index, case_id in enumerate(("h1", "h2")):
+            prompt_sha = (("a" if case_index == 0 else "b") if map_index == 0 else ("c" if case_index == 0 else "d")) * 64
             for control in protocol.REQUIRED_CONTROLS:
                 row = {
                     "split": "holdout",
                     "layer": 12,
                     "gain": 4.0,
                     "case_id": case_id,
+                    "prompt_sha256": prompt_sha,
+                    "seed": 2700 + case_index,
                     "label_map_id": map_id,
                     "positive_label": positive,
                     "negative_label": negative,

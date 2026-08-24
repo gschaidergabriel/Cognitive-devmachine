@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Launch exactly ten distinct Trigger-1 J-Space research experiments in parallel.
 
-All children inherit the same FREE credential pool and the same cross-process
-provider-budget SQLite database. The shared quota gate remains authoritative;
-parallelism therefore increases research diversity without bypassing provider
-limits or rotating credentials around rate limits.
+The orchestrator is credential-blind. Each external-provider lane is materialized
+through the repository vault wrapper only in the child that performs provider
+work. All children share one cross-process provider-budget SQLite database, so
+parallel research diversity cannot bypass provider limits or cooldowns.
 """
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 import uuid
@@ -22,6 +23,8 @@ import uuid
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ARTIFACT_ROOT = Path("/artifacts/clay-entityos-trigger1")
 DEFAULT_BUDGET_DB = Path("/artifacts/clay-entityos-swarm/provider_budget.sqlite3")
+VAULT_EXEC = ROOT / "tools/free_swarm_exec_with_vault.py"
+LANE_EXEC = ROOT / "tools/run_trigger1_jspace_lane.py"
 
 EXPERIMENTS = (
     ("runtime_surface", "Find or implement the shortest actually instrumentable FREE model execution surface. Distinguish hosted text inference from real hidden-state/native-cvec intervention and produce an executable discriminator."),
@@ -36,6 +39,8 @@ EXPERIMENTS = (
     ("receipt_chain_and_delta_forge", "Bind exact model/checkpoint/tokenizer/runtime/build/source-packet/adapter/local-vector/native-cvec or hook/execution identities. Convert positive or negative evidence into the smallest executable repo delta and falsifier."),
 )
 
+_SECRET_NAME = re.compile(r"^(?:GROQ|MISTRAL|NVIDIA|NGC|OPENROUTER|TOGETHER).*KEY.*$")
+
 
 def git_text(*args: str) -> str:
     try:
@@ -43,6 +48,13 @@ def git_text(*args: str) -> str:
         return p.stdout.strip() or "UNKNOWN"
     except Exception:
         return "UNKNOWN"
+
+
+def scrub_parent_provider_secrets() -> None:
+    """Keep the Trigger-1 orchestration process credential-blind."""
+    for name in list(os.environ):
+        if _SECRET_NAME.match(name):
+            os.environ.pop(name, None)
 
 
 def parse_args() -> argparse.Namespace:
@@ -61,7 +73,8 @@ async def run_child(batch_id: str, lane_index: int, name: str, focus: str, lane_
     lane_dir = batch_dir / f"{lane_index:02d}_{name}_{lane_id[:12]}"
     lane_dir.mkdir(parents=True, exist_ok=False)
     cmd = [
-        sys.executable, str(ROOT / "tools/run_trigger1_jspace_lane.py"),
+        sys.executable, str(VAULT_EXEC),
+        sys.executable, str(LANE_EXEC),
         "--batch-id", batch_id,
         "--lane-index", str(lane_index),
         "--experiment-id", lane_id,
@@ -75,9 +88,12 @@ async def run_child(batch_id: str, lane_index: int, name: str, focus: str, lane_
         "--drain-seconds", str(args.drain_seconds),
         "--output-dir", str(lane_dir),
     ]
+    child_env = dict(common_env)
+    child_env["CLAY_TRIGGER1_EXPERIMENT_ID"] = lane_id
+    child_env["CLAY_PROVIDER_CREDENTIAL_SCOPE"] = "SWARM_CHILD_ONLY/v1"
     log_path = lane_dir / "launcher.log"
     with log_path.open("wb") as log:
-        proc = await asyncio.create_subprocess_exec(*cmd, cwd=str(ROOT), env=common_env, stdout=log, stderr=asyncio.subprocess.STDOUT)
+        proc = await asyncio.create_subprocess_exec(*cmd, cwd=str(ROOT), env=child_env, stdout=log, stderr=asyncio.subprocess.STDOUT)
         rc = await proc.wait()
     return {
         "lane_index": lane_index,
@@ -95,6 +111,13 @@ async def amain() -> int:
         raise SystemExit("Trigger-1 contract requires exactly ten unique experiment lanes")
     if args.minutes <= 0 or args.logical_workers_per_lane <= 0:
         raise SystemExit("minutes and logical-workers-per-lane must be positive")
+    if not VAULT_EXEC.is_file() or not LANE_EXEC.is_file():
+        raise SystemExit("Trigger-1 vault or lane executable missing")
+
+    # Do this before constructing child environments. The vault wrapper, not this
+    # orchestration process, is the only code allowed to materialize candidate
+    # provider credentials for each external-provider lane.
+    scrub_parent_provider_secrets()
 
     head = git_text("rev-parse", "HEAD")
     tree = git_text("rev-parse", "HEAD^{tree}")
@@ -116,6 +139,7 @@ async def amain() -> int:
     common_env["CLAY_FREE_PROVIDER_BUDGET_DB"] = str(budget_db)
     common_env["CLAY_TRIGGER1_BATCH_ID"] = batch_id
     common_env["CLAY_TRIGGER1_RESEARCH_CONTINGENT"] = "OWNER_AUTHORIZED_FREE_ONLY"
+    common_env["CLAY_PROVIDER_CREDENTIAL_SCOPE"] = "SWARM_CHILD_ONLY/v1"
 
     lane_rows = []
     for idx, (name, focus) in enumerate(EXPERIMENTS):
@@ -137,7 +161,9 @@ async def amain() -> int:
         "minutes": args.minutes,
         "max_tokens_per_model_call": args.max_tokens,
         "free_only": True,
-        "vault_credentials_inherited_not_logged": True,
+        "orchestrator_credential_scope": "BLIND",
+        "provider_lane_credential_scope": "SWARM_CHILD_ONLY/v1",
+        "vault_credentials_child_only_and_not_logged": True,
         "shared_provider_budget_db": str(budget_db),
         "shared_quota_gate_required": True,
         "credential_rotation_to_evade_limits": False,
@@ -147,9 +173,9 @@ async def amain() -> int:
     }
     (batch_dir / "batch_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    # Create all subprocesses as independent tasks before awaiting results: the
-    # experiment lanes therefore overlap in wall-clock time while sharing the one
-    # provider quota database.
+    # Create all subprocess tasks before awaiting results: ten distinct hypotheses
+    # overlap in wall-clock time while each provider-capable process is vault-
+    # isolated and all calls share the one provider quota database.
     tasks = [
         asyncio.create_task(run_child(batch_id, row["lane_index"], row["experiment_name"], row["focus"], row["experiment_id"], args, batch_dir, common_env))
         for row in lane_rows

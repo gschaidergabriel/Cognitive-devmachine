@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOLS = ROOT / "tools"
@@ -87,9 +88,61 @@ class ProviderAdmissionV1Tests(unittest.TestCase):
             payload = admission.load_provider_admission(
                 admission_path, supervisor_inbox_path=inbox_path, root=root
             )
-            self.assertTrue(admission.provider_is_admitted_free("groq", payload))
+            self.assertTrue(
+                admission._provider_is_admitted_free_from_validated_payload("groq", payload)
+            )
         finally:
             td.cleanup()
+
+    def test_caller_supplied_admission_cannot_self_grant(self):
+        canonical = {
+            "providers": {
+                provider: {
+                    "admitted": False,
+                    "cost_class": "UNKNOWN",
+                    "evidence_ref": "canonical:unknown",
+                }
+                for provider in admission.ALLOWED_PROVIDERS
+            }
+        }
+        forged = {
+            "providers": {
+                provider: {
+                    "admitted": provider == "groq",
+                    "cost_class": "FREE" if provider == "groq" else "UNKNOWN",
+                    "evidence_ref": "caller:self-grant",
+                }
+                for provider in admission.ALLOWED_PROVIDERS
+            }
+        }
+        with mock.patch.object(admission, "load_provider_admission", return_value=canonical) as loader:
+            self.assertFalse(admission.provider_is_admitted_free("groq", forged))
+        loader.assert_called_once_with()
+
+    def test_caller_supplied_admission_cannot_forge_provider_set(self):
+        canonical = {
+            "providers": {
+                provider: {
+                    "admitted": False,
+                    "cost_class": "UNKNOWN",
+                    "evidence_ref": "canonical:unknown",
+                }
+                for provider in admission.ALLOWED_PROVIDERS
+            }
+        }
+        forged = {
+            "providers": {
+                provider: {
+                    "admitted": True,
+                    "cost_class": "FREE",
+                    "evidence_ref": "caller:self-grant",
+                }
+                for provider in admission.ALLOWED_PROVIDERS
+            }
+        }
+        with mock.patch.object(admission, "load_provider_admission", return_value=canonical) as loader:
+            self.assertEqual(admission.admitted_provider_names(forged), ())
+        loader.assert_called_once_with()
 
     def test_stale_provider_admission_epoch_fails_closed(self):
         td, root, admission_path, inbox_path = self.make_repo(admission_epoch="8.66")

@@ -102,36 +102,37 @@ def _groq_historical_free_match(
 
 
 def _nvidia_entitlement_receipt(
-    *, record: dict[str, Any], credential_fingerprint: str, endpoint: str
+    *,
+    record: dict[str, Any],
+    credential_fingerprint: str,
+    model_or_route: str,
+    endpoint: str,
 ) -> dict[str, Any] | None:
-    """Validate one digest-bound NVIDIA credential entitlement record.
+    """Validate one canonical credential-bound NVIDIA free-entitlement record.
 
-    The exact fingerprint must be admitted by authority and must have a matching
-    provider-side evidence record. Provider identity, key presence, endpoint
-    authentication or a documentation URL alone cannot create the receipt.
+    The economic-provenance authority must bind the exact non-secret credential
+    fingerprint to provider-side entitlement evidence. The evidence itself is
+    digest-bound and the requested model must be explicitly listed. This keeps a
+    provider-global NIM statement, key presence, or HTTP success from self-admitting
+    a concrete credential/model lane.
     """
-    admitted = record.get("admitted_credential_fingerprints")
-    if not isinstance(admitted, list) or credential_fingerprint not in {
-        str(item).strip() for item in admitted if str(item).strip()
-    }:
-        return None
-
-    rows = record.get("credential_entitlement_evidence")
+    rows = record.get("credential_entitlements")
     if not isinstance(rows, dict):
         return None
     bound = rows.get(credential_fingerprint)
     if not isinstance(bound, dict):
         return None
+    if bound.get("provider_side_zero_cost_confirmed") is not True:
+        return None
 
     observed_at = bound.get("entitlement_observed_at")
-    precision = bound.get("entitlement_observed_at_precision")
     evidence = bound.get(
         "provider_side_developer_program_or_free_hosted_nim_entitlement_evidence"
     )
     evidence_digest = bound.get("entitlement_evidence_digest")
+    allowed_models = bound.get("allowed_models")
+
     if not isinstance(observed_at, str) or not observed_at.strip():
-        return None
-    if not isinstance(precision, str) or not precision.strip():
         return None
     if not isinstance(evidence, dict) or not evidence:
         return None
@@ -143,9 +144,14 @@ def _nvidia_entitlement_receipt(
         return None
     if _canonical_json_digest(evidence) != evidence_digest.lower():
         return None
+    if not isinstance(allowed_models, list) or not allowed_models:
+        return None
+    normalized_models = [str(model).strip() for model in allowed_models if str(model).strip()]
+    if model_or_route not in set(normalized_models):
+        return None
 
     endpoint_host = _host(endpoint)
-    if endpoint_host != str(record.get("allowed_endpoint_host") or ""):
+    if endpoint_host != "integrate.api.nvidia.com":
         return None
 
     return {
@@ -155,8 +161,9 @@ def _nvidia_entitlement_receipt(
         "endpoint_host": endpoint_host,
         "provider_side_developer_program_or_free_hosted_nim_entitlement_evidence": evidence,
         "entitlement_observed_at": observed_at,
-        "entitlement_observed_at_precision": precision,
         "entitlement_evidence_digest": evidence_digest.lower(),
+        "allowed_models": normalized_models,
+        "model_or_route": model_or_route,
     }
 
 
@@ -187,15 +194,16 @@ def _lane_evidence_from_provenance(
         }
 
     if provider == "nvidia":
-        entitlement = _nvidia_entitlement_receipt(
+        receipt = _nvidia_entitlement_receipt(
             record=record,
             credential_fingerprint=credential_fingerprint,
+            model_or_route=model_or_route,
             endpoint=endpoint,
         )
-        if entitlement is None:
+        if receipt is None:
             return {
                 "ok": False,
-                "reason": "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_EVIDENCE_NOT_BOUND",
+                "reason": "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT_NOT_BOUND",
             }
         return {
             "ok": True,
@@ -203,9 +211,8 @@ def _lane_evidence_from_provenance(
             "source": record.get("source"),
             "endpoint_host": _host(endpoint),
             "scope": record.get("scope"),
-            "credential_entitlement_receipt": entitlement,
-            "model_or_route": model_or_route,
-            "assertion": "BOUND_CREDENTIAL_NVIDIA_DEVELOPER_FREE_NIM_PROTOTYPING_WITH_DIGESTED_EVIDENCE",
+            "credential_entitlement_receipt": receipt,
+            "assertion": "EXACT_NVIDIA_CREDENTIAL_MODEL_FREE_ENTITLEMENT_BOUND",
         }
 
     if provider == "groq":

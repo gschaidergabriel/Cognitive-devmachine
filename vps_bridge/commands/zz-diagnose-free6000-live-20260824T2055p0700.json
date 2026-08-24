@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "zz-diagnose-free6000-live-20260824T2055p0700",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 30,
+  "command": "set -euo pipefail; echo PROCS; pgrep -af run_6000_free_swarm || true; echo DIRS; ls -td /artifacts/clay-entityos-swarm/active-fabric6000-v2-* 2>/dev/null | head -5; echo STATUS_MTIME; stat -c '%y %s %n' /artifacts/clay-entityos-swarm/active-fabric6000-v2-*/status.json 2>/dev/null | tail -10; echo LOG; tail -n 40 /artifacts/clay-entityos-swarm/swarm6000.log 2>/dev/null || true"
+}

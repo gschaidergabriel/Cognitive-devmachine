@@ -1,0 +1,72 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "observed_research_main_before_write": "d1583b7777a9f077ca9e7b3efdfdd13b497e83df",
+  "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+  "executor_branch": "clay/fusion-vcr-native-20260817",
+  "executor_commit": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+  "executor_deployment_id": "dpl_EN62ggtQnuEcjuvtJNathL3D9Tkf",
+  "executor_deployment_state": "READY",
+  "source_repair": {
+    "problem": "A prior executor commit added 21 stdout PASS requirements to hcu-jspace-grid10-positive.js without changing the executed Python regression harness to emit those markers, making a future admitted component run fail deterministically despite a green source build.",
+    "repair": "Rebound hcu-jspace-grid10-positive.js to the last evidence-consistent blob a3b02d1483b28fad9be6f46fcd693c41ec19d00e, removing only the unproduced marker requirements while preserving exact-source, secret-fence, 6-of-6, provenance and zero-credit checks.",
+    "repair_commit": "bb7324d2a21ffc143c241c652a31524c5be4c9d8"
+  },
+  "build_evidence": {
+    "exclusive_executor_guard": "PASS",
+    "jspace_carrier_donor_path_identity": "PASS",
+    "jspace_current_producer_derived_donor_closure": "PASS",
+    "manifest_contract_identity": "PASS",
+    "promotion_guard": "PASS",
+    "rebind_permission_guard": "PASS",
+    "source_guard_only": true,
+    "runtime_credit": 0
+  },
+  "function_runtime_evidence": {
+    "http_status": 200,
+    "probe_status": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "schema": "ENTITYOS_HCU_RUNTIME_ADMISSION_PROBE/v1",
+    "supervisor": "SUPERVISOR_STEERING_8_65",
+    "controller_commit_sha": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "vercel_env": "preview",
+    "node_version": "v24.18.0",
+    "node_arch": "x64",
+    "node_platform": "linux",
+    "execution_credit": "RUNTIME_DIAGNOSTIC_ONLY",
+    "remaining_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_execution_admitted": false,
+    "sandbox_create_performed": false,
+    "credential_lookup_performed": false,
+    "external_source_network_performed": false
+  },
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: removed a deterministic false-runtime-failure introduced by unproduced marker checks, obtained READY exact-head deployment, and observed HTTP 200 exact-head no-Sandbox runtime diagnostic under supervisor 8.65.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the reusable HCU/J-Space source guards and source-rebound closure pass; the next higher-information HCU environment/runtime discriminator remains blocked before Sandbox.create because directly authoritative remaining included Sandbox quota is still unobserved.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: model-specific J-Space/GWT runtime and training-readiness promotion remain downstream of the blocked FREE_ONLY Sandbox environment gate; no paid/provider preflight or substitute source-only credit is admitted."
+  },
+  "credits_after": {
+    "function_runtime_diagnostic_exact_head": "PASS_AT_DECLARED_NO_SANDBOX_SCOPE",
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Obtain a directly authoritative read-only Vercel team Usage/allotment signal proving remaining included Sandbox capacity. Only then may the retained exact-head fixed Python/sqlite3/_sqlite3 environment probe cross Sandbox.create; after environment PASS, proceed to real local model execution and model-specific Global J-Space/GWT causal evidence.",
+  "acceptance": "IN_PROGRESS"
+}

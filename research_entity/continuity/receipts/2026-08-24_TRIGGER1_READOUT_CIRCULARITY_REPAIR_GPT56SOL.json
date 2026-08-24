@@ -1,0 +1,46 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "1",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_observed": "SUPERVISOR_STEERING_8_72",
+  "canonical_main_observed_before_branch": "5a664b024452106b55ffa9bee97598d0e8ebd19f",
+  "branch": "chatgpt/trigger1-latent-basis-v2-20260824-2147",
+  "finding": {
+    "classification": "SCIENTIFIC_IDENTIFICATION_CONFOUND",
+    "old_local_fastpath_scope": "PLUMBING_POSITIVE_CONTROL_ONLY_UNTIL_REPAIRED",
+    "observed_mechanism": "The initial local PyTorch fastpath constructs d = lm_head[A] - 0.5*(lm_head[B]+lm_head[C]), normalizes d, injects it at model.model.norm output for the last token, and measures target_score = logit[A] - 0.5*(logit[B]+logit[C]).",
+    "algebraic_reason": "Because the LM head is linear after the final norm hook, target_score(h + g*d/||d||) - target_score(h) = g*||d|| exactly. SIGN_FLIP produces the exact negative shift. An orthogonal control is constructed to have zero dot product with d. Therefore the central directional criterion is coupled to the construction and does not by itself identify a model-internal J-Space causal feature.",
+    "counterhypothesis": "The old path still proves that the hook consumes a vector and that the loopback API can carry an exact intervention receipt. It can remain useful as mechanism/plumbing evidence, but not as sufficient owner-goal scientific promotion evidence."
+  },
+  "repair": {
+    "executor": "tools/trigger1_local_qwen06_activation_api_execute_v2.py",
+    "promotion_gate": "tools/trigger1_jspace_promotion_gate_v3.py",
+    "orchestrator": "tools/trigger1_jspace_research.sh",
+    "launcher": "tools/trigger1_local_qwen06_activation_api.sh",
+    "regression": "tests/test_trigger1_jspace_promotion_gate_v3.py",
+    "basis_derivation": "DISJOINT_HIDDEN_ACTIVATION_CONTRAST",
+    "basis_source": "six fixed source prompts disjoint from calibration and holdout",
+    "activation_site": "mid-decoder-layer output, last token",
+    "downstream_requirement": "at least one transformer block remains after intervention",
+    "readout_target_weights_used": false,
+    "direct_readout_algebraically_forced": false,
+    "source_identity_upgrade": "repo head + tree + tracked dirty-state digest + executor/helper digests"
+  },
+  "evidence_scope": {
+    "mathematical_identity": "VERIFIED_BY_LINEAR_ALGEBRA",
+    "source_review": "OBSERVED",
+    "source_delta": "WRITTEN_ON_BRANCH",
+    "regression_source": "WRITTEN_NOT_EXECUTED_HERE",
+    "local_qwen_runtime": "NOT_OBSERVED_IN_THIS_CHATGPT_TOOL_SURFACE",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0
+  },
+  "acceptance_law": "A future local PASS is promotable only if exact clean tracked source, exact runtime/model/tokenizer identities, disjoint hidden-activation basis, post-intervention transformer depth, six matched controls, disjoint calibration/holdout, fixed seeds and reproducible directional holdout effect all pass the V3 gate.",
+  "next_exact_action": "Re-enter newest main/authority, transplant or rebase this branch if needed, then execute bash tools/trigger1_jspace_research.sh from an exact clean checkout on an authorized zero-cost Ubuntu surface. Preserve a scientific negative if the V2 latent basis fails; do not fall back to the old final-readout algebraic construction for owner-goal credit."
+}

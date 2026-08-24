@@ -8,6 +8,7 @@ provider-side evidence before an autonomous network call is allowed.
 """
 from __future__ import annotations
 
+import datetime as dt
 import hashlib
 import json
 from pathlib import Path
@@ -66,6 +67,7 @@ def _iter_worker_rows(artifacts: Path):
 def _groq_historical_free_match(
     *, artifacts: Path, credential_fingerprint: str, model: str, required: dict[str, Any]
 ) -> dict[str, Any] | None:
+    """Return matching Groq rate telemetry only; never use it as billing authority."""
     want_rpd = int(required.get("requests_per_day") or 0)
     want_tpm = int(required.get("tokens_per_minute") or 0)
     newest: dict[str, Any] | None = None
@@ -81,13 +83,74 @@ def _groq_historical_free_match(
         got_tpm = _int_header(headers, "x-ratelimit-limit-tokens")
         if got_rpd == want_rpd and got_tpm == want_tpm:
             newest = {
-                "kind": "SAME_CREDENTIAL_PROVIDER_RATE_HEADER_MATCH",
+                "kind": "SAME_CREDENTIAL_RATE_HEADER_MATCH_CORROBORATING_ONLY",
                 "requests_per_day": got_rpd,
                 "tokens_per_minute": got_tpm,
                 "observed_worker_ts": row.get("ts"),
                 "observed_http_status": row.get("http_status"),
             }
     return newest
+
+
+def _parse_utc(value: Any) -> dt.datetime | None:
+    if not isinstance(value, str) or not value.strip():
+        return None
+    text = value.strip()
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        parsed = dt.datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return None
+    return parsed.astimezone(dt.timezone.utc)
+
+
+def _groq_bound_free_tier(
+    *, record: dict[str, Any], credential_fingerprint: str, model_or_route: str
+) -> dict[str, Any] | None:
+    """Require fresh provider-side Free-tier evidence bound to the exact Groq key.
+
+    Rate-limit headers are deliberately insufficient: Groq documents organization-
+    specific exceptions and permits projects to set limits below the organization
+    ceiling, so a paid project can present Free-like RPD/TPM values.
+    """
+    rows = record.get("credential_entitlements")
+    if not isinstance(rows, dict):
+        return None
+    bound = rows.get(credential_fingerprint)
+    if not isinstance(bound, dict):
+        return None
+    if bound.get("provider_side_free_tier_confirmed") is not True:
+        return None
+    if str(bound.get("tier") or "").upper() != "FREE":
+        return None
+    evidence_ref = bound.get("evidence_ref")
+    if not isinstance(evidence_ref, str) or not evidence_ref.strip():
+        return None
+    observed_at = _parse_utc(bound.get("observed_at"))
+    valid_until = _parse_utc(bound.get("valid_until"))
+    if observed_at is None or valid_until is None or valid_until <= observed_at:
+        return None
+    max_age_s = int(record.get("max_entitlement_age_seconds") or 0)
+    if max_age_s <= 0 or (valid_until - observed_at).total_seconds() > max_age_s:
+        return None
+    now = dt.datetime.now(dt.timezone.utc)
+    if now < observed_at or now >= valid_until:
+        return None
+    allowed_models = bound.get("allowed_models")
+    if not isinstance(allowed_models, list) or model_or_route not in set(allowed_models):
+        return None
+    return {
+        "kind": "EXACT_GROQ_CREDENTIAL_PROVIDER_SIDE_FREE_TIER_BINDING",
+        "evidence_ref": evidence_ref,
+        "observed_at": observed_at.isoformat(),
+        "valid_until": valid_until.isoformat(),
+        "tier": "FREE",
+        "account_scope": bound.get("account_scope"),
+        "model_or_route": model_or_route,
+    }
 
 
 def lane_evidence(
@@ -130,21 +193,27 @@ def lane_evidence(
         required = ((record.get("free_plan_models") or {}).get(model_or_route) or {})
         if not required:
             return {"ok": False, "reason": "GROQ_MODEL_NOT_BOUND_TO_DOCUMENTED_FREE_LIMITS"}
-        match = _groq_historical_free_match(
+        bound = _groq_bound_free_tier(
+            record=record,
+            credential_fingerprint=credential_fingerprint,
+            model_or_route=model_or_route,
+        )
+        if not bound:
+            return {"ok": False, "reason": "GROQ_CREDENTIAL_FREE_TIER_NOT_BOUND"}
+        corroborating = _groq_historical_free_match(
             artifacts=artifacts,
             credential_fingerprint=credential_fingerprint,
             model=model_or_route,
             required=required,
         )
-        if not match:
-            return {"ok": False, "reason": "GROQ_CREDENTIAL_FREE_PLAN_HEADERS_NOT_OBSERVED"}
         return {
             "ok": True,
             "kind": record.get("evidence_kind"),
             "source": record.get("source"),
             "model": model_or_route,
-            "provider_observation": match,
-            "assertion": "SAME_CREDENTIAL_MATCHES_DOCUMENTED_GROQ_FREE_PLAN_LIMITS",
+            "credential_binding": bound,
+            "rate_limit_telemetry": corroborating,
+            "assertion": "EXACT_GROQ_CREDENTIAL_BOUND_TO_FRESH_PROVIDER_SIDE_FREE_TIER",
         }
 
     if provider == "mistral":
@@ -183,8 +252,6 @@ def emit_execution_receipt(
     source_commit_and_tree: dict[str, str],
     artifacts: Path = DEFAULT_ARTIFACTS,
 ) -> dict[str, Any]:
-    import datetime as dt
-
     receipt = {
         "schema": RECEIPT_SCHEMA,
         "observed_at": dt.datetime.now(dt.timezone.utc).isoformat(),

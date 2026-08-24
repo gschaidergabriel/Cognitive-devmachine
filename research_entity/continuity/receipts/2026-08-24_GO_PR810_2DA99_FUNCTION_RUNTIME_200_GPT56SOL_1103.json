@@ -1,0 +1,98 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXACT_HEAD_FUNCTION_RUNTIME_DIAGNOSTIC_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "18a4ef3acea2ca78de72bca87f595d7569a8e6e9",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_EXACT_HEAD_RUNTIME_LOG_REENTRY_AND_FIXED_SOURCE_BINDING"
+  },
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_state": "READY",
+    "deployment_git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "exact_head_match": true
+  },
+  "runtime_observation": {
+    "observed_time_utc": "2026-08-24T04:01:43Z",
+    "route": "/api/sandbox-probe",
+    "http_status": 200,
+    "runtime_class": "serverless",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "branch": "clay/fusion-vcr-native-20260817",
+    "runtime_log_warning": "Node DEP0169 url.parse deprecation warning only",
+    "response_body_observed": false
+  },
+  "fixed_source_binding": {
+    "file": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "blob_sha": "6630570d16a62f937a6512d682dfcb86ae8a4102",
+    "static_sandbox_module_import": "import { Sandbox } from '@vercel/sandbox';",
+    "runtime_admission_case": "runtime-admission",
+    "runtime_admission_http_status": 200,
+    "runtime_admission_declared_status": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "runtime_admission_returns_before_cost_gate": true,
+    "runtime_admission_sandbox_create_performed": false,
+    "runtime_admission_execution_credit": "FUNCTION_RUNTIME_DIAGNOSTIC_ONLY",
+    "selftest_sqlite_probe_prepared_but_not_executed": true
+  },
+  "admission_boundary": {
+    "remaining_included_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_execution_admitted": false,
+    "sandbox_create_authorized": false,
+    "sandbox_create_observed": false,
+    "python_sqlite_sandbox_probe_executed": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_or_provider_preflight_attempted": false
+  },
+  "interpretation": {
+    "directly_observed": "The exact-head READY deployment executed /api/sandbox-probe in the Vercel serverless runtime and returned HTTP 200.",
+    "source_bound_inference": "At this exact source identity, with the fail-closed Sandbox admission statically blocked, the 200 branch is the runtime-admission diagnostic. The module-level @vercel/sandbox import necessarily resolved before handler execution; the runtime-admission branch returns before sandboxExecutionAdmitted/Sandbox.create.",
+    "promoted_credit": "EXACT_HEAD_FUNCTION_RUNTIME_BOOT_AND_SANDBOX_MODULE_LOAD_DIAGNOSTIC_ONLY",
+    "not_promoted": [
+      "Sandbox.create execution",
+      "Python/sqlite3/_sqlite3 environment execution",
+      "HCU component runtime",
+      "real model execution",
+      "J-Space/GWT model causality",
+      "training",
+      "whole EntityOS/HCU acceptance"
+    ]
+  },
+  "counterhypothesis": "The READY deployment could still fail before entering the function or fail loading @vercel/sandbox even though build guards pass.",
+  "discriminator_result": "REJECTED_AT_FUNCTION_BOOT_SCOPE: exact deployment runtime logs contain HTTP 200 for /api/sandbox-probe, and the deployed route statically imports @vercel/sandbox before its only fail-closed-cost-compatible 200 diagnostic return.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: successor guard repair reached exact-head READY plus exact-head serverless Function 200; function boot/module-load blocker is closed. The next execution gate is direct remaining included Sandbox quota observation before any Sandbox.create.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: no Sandbox was created and no HCU/Typed Entry regression ran; source-only HCU churn is not justified by this diagnostic.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no real model invocation, loader-consumption evidence, J-Space/GWT intervention, causal model trace, or training run occurred."
+  },
+  "credits": {
+    "exact_head_deployment_build": "READY_AT_2DA99E",
+    "exact_head_function_runtime_diagnostic": 1,
+    "sandbox_execution": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Obtain a directly observed authoritative remaining included Vercel Sandbox quota signal without paid upgrade, paid fallback, Together/provider preflight, or inference from Hobby plan identity.",
+    "Only if the existing FREE_ONLY gate can be legitimately opened, execute the exact-head selftest and require Python identity, sqlite3/_sqlite3 imports, source/executor identity, secret fence, digest/exit status, and cleanup.",
+    "After environment PASS, execute the retained real local model invocation -> canonical ModelExecution admission -> inference receipt -> Global J-Space/GWT observation path with admitted null/sign-flipped controls before any model/J-Space credit."
+  ],
+  "evidence_boundary": "This receipt supersedes the immediately preceding current-head-function=0 observation only at Function runtime diagnostic scope. It grants no Sandbox, HCU, model/J-Space, training, canonical semantics, effect authority, or whole-product credit."
+}

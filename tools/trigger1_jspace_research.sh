@@ -22,10 +22,9 @@ while IFS= read -r name; do
   esac
 done < <(compgen -v)
 
-# V2 convergence law: first attempt the provider-independent exact local API path.
-# A provider credential, entitlement, rate limit, route identity or unsupported hosted
-# parameter can therefore never terminate Trigger-1 while local normal-user execution
-# remains possible.
+# Trigger-1 first attempts the provider-independent exact local API path. The local
+# PyTorch path is promoted only through the V3 scientific gate, which rejects a
+# final-readout/LM-head-derived vector as circular plumbing evidence.
 if [[ "${CLAY_TRIGGER1_LOCAL_FASTPATH:-1}" != "0" ]]; then
   if [[ -d /artifacts && -w /artifacts ]]; then
     TRIGGER1_ROOT="${CLAY_TRIGGER1_ARTIFACT_ROOT:-/artifacts/clay-entityos-trigger1}"
@@ -45,7 +44,7 @@ if [[ "${CLAY_TRIGGER1_LOCAL_FASTPATH:-1}" != "0" ]]; then
   export CLAY_TRIGGER1_LOCAL_FASTPATH_RESULT="$LOCAL_DIR/trigger1_local_activation_api_result.json"
   candidate="$LOCAL_DIR/trigger1_direct_steering_candidate.json"
   if [[ $local_rc -eq 0 && -s "$candidate" ]]; then
-    python3 "$ROOT/tools/trigger1_jspace_promotion_gate.py" --candidate "$candidate" \
+    python3 "$ROOT/tools/trigger1_jspace_promotion_gate_v3.py" --candidate "$candidate" \
       >"$LOCAL_DIR/promotion_gate.json"
     if python3 - "$LOCAL_DIR/promotion_gate.json" <<'PY'
 import json, pathlib, sys
@@ -59,6 +58,6 @@ PY
   fi
 fi
 
-# Local path did not yet satisfy the unchanged scientific gate. Continue immediately
-# with research/repair slots; do not wait for the blocked dependency or ask the user.
+# Local path did not yet satisfy the unchanged scientific goal. Continue immediately
+# with research/repair slots; do not wait for a blocked dependency or ask the user.
 exec python3 tools/run_trigger1_jspace_10x.py "$@"

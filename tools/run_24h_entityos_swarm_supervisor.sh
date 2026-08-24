@@ -146,6 +146,37 @@ PY
   mv "${SWARM_ADMISSION_BINDING_FILE}.tmp" "$SWARM_ADMISSION_BINDING_FILE"
 }
 
+terminate_go_swarm_processes(){
+  local pid alive round
+  local -a pids=()
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && pids+=("$pid")
+  done < <(pgrep -f '[r]un_24h_entityos_swarm.py' || true)
+  ((${#pids[@]})) || return 0
+
+  for pid in "${pids[@]}"; do kill -TERM "$pid" 2>/dev/null || true; done
+  for round in {1..20}; do
+    alive=0
+    for pid in "${pids[@]}"; do
+      command kill -0 "$pid" 2>/dev/null && alive=1 || true
+    done
+    if (( alive == 0 )); then
+      for pid in "${pids[@]}"; do wait "$pid" 2>/dev/null || true; done
+      return 0
+    fi
+    sleep 0.05
+  done
+
+  for pid in "${pids[@]}"; do
+    command kill -0 "$pid" 2>/dev/null && kill -KILL "$pid" 2>/dev/null || true
+  done
+  for pid in "${pids[@]}"; do wait "$pid" 2>/dev/null || true; done
+  for pid in "${pids[@]}"; do
+    command kill -0 "$pid" 2>/dev/null && return 1 || true
+  done
+  return 0
+}
+
 stop_unadmitted_go_swarm(){
   # A child inherits provider credentials at spawn and cannot be sanitized later by
   # unsetting the supervisor's environment. Therefore any validated admission drift
@@ -166,13 +197,11 @@ stop_unadmitted_go_swarm(){
     must_stop=1
   fi
 
-  # With `set -e -o pipefail`, a bare `pgrep | while` aborts the whole supervisor
-  # when there is correctly nothing to stop. Process substitution plus `|| true`
-  # makes the zero-match case a normal steady state instead of a supervisor crash.
   if (( must_stop )); then
-    while IFS= read -r pid; do
-      [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
-    done < <(pgrep -f '[r]un_24h_entityos_swarm.py' || true)
+    # Revocation is not complete merely because SIGTERM was sent. Do not permit the
+    # loop to proceed toward a replacement child until all stale external-provider
+    # swarm PIDs are observed dead (with bounded SIGKILL escalation).
+    terminate_go_swarm_processes
     rm -f "$SWARM_ADMISSION_BINDING_FILE" "${SWARM_ADMISSION_BINDING_FILE}.tmp"
   fi
 }
@@ -199,7 +228,7 @@ def local_health():
  try:
   with urllib.request.urlopen('http://127.0.0.1:8088/health',timeout=1.2) as r:return 200<=int(r.status)<300
  except Exception:return False
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; REVOCATION_REQUIRES_CONFIRMED_STALE_CHILD_TERMINATION; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30

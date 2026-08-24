@@ -112,6 +112,18 @@
     "executable_evidence": "test_concurrent_attempt_waits_for_payment_hard_stop_result",
     "counterhypothesis": "Independent preflight checks are sufficient for concurrent attempts; falsified locally because a second attempt reached the network while the first payment response was pending, before the shared hard-stop latch could be published."
   },
+  "bounded_payment_latch_state": {
+    "max_entries": 1024,
+    "checked_at": "2026-08-24",
+    "claim": "Payment-latch storage is limited to 1024 exact built-in string entries. Cardinality is checked immediately after the exact-set boundary and before element iteration, inventory membership, credential use or network access. The numeric limit is a local FRANK process-state budget, not a Python or protocol standard.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#len",
+      "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset",
+      "https://cwe.mitre.org/data/definitions/400.html"
+    ],
+    "executable_evidence": "test_payment_latch_cardinality_is_bounded_before_network",
+    "counterhypothesis": "Exact built-in sets and strings sufficiently bound passive latch state; falsified locally because 1025 historical entries passed full element validation and reached authenticated routing without any cardinality policy. The repaired boundary accepts exactly 1024 and rejects the next entry before the opener."
+  },
   "passive_payment_latch_container_boundary": {
     "checked_at": "2026-08-24",
     "claim": "Every payment-latch storage path, including the process-global default and caller injection, must be an exact built-in set before capability inventory, routing or authenticated execution; set subclasses cannot execute overridden membership or mutation behavior around a received HTTP 402.",

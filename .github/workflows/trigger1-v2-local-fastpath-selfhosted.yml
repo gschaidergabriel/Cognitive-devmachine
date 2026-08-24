@@ -79,6 +79,7 @@ jobs:
           python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate
           python3 -m unittest -v tests.test_trigger1_intermediate_promotion_bridge
           python3 -m unittest -v tests.test_trigger1_experiment_result_classify
+          python3 -m unittest -v tests.test_trigger1_lease_receipt_binding_workflow
 
       - name: Execute fused internal-layer causal discriminator
         id: experiment
@@ -137,7 +138,7 @@ jobs:
             python3 - "$out/trigger1_local_activation_api_result.json" <<'PY'
           import json, pathlib, sys
           pathlib.Path(sys.argv[1]).write_text(json.dumps({
-              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1',
               'status':'BLOCKED_PROVIDER_CREDENTIAL_FENCE',
               'zero_provider_billing':True,
               'provider_credential_fence_status':'BLOCKED',
@@ -162,7 +163,7 @@ jobs:
             python3 - "$out/trigger1_local_activation_api_result.json" "$rc" <<'PY'
           import json, pathlib, sys
           pathlib.Path(sys.argv[1]).write_text(json.dumps({
-              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1',
               'status':'BLOCKED_BEFORE_RESULT',
               'process_exit_code':int(sys.argv[2]),
               'zero_provider_billing':True,
@@ -219,6 +220,13 @@ jobs:
               'provider_credential_fence':fence,
               'source_claim_external_provider_credentials_read':result.get('external_provider_credentials_read'),
               'source_claim_promoted_without_fence':False,
+              'atomic_lease':{
+                  'trigger_key':os.environ.get('TRIGGER1_TRIGGER_KEY'),
+                  'claim_path':os.environ.get('TRIGGER1_CLAIM_PATH'),
+                  'claim_sha256':os.environ.get('TRIGGER1_CLAIM_SHA256'),
+                  'claimant_organ':os.environ.get('TRIGGER1_CLAIMANT_ORGAN'),
+                  'experiment_name':os.environ.get('TRIGGER1_EXPERIMENT_NAME'),
+              },
               'github_actions':{
                   'run_id':os.environ.get('GITHUB_RUN_ID'),
                   'run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
@@ -257,7 +265,7 @@ jobs:
           git fetch --quiet origin main
           if git cat-file -e "origin/main:${claim_result}" 2>/dev/null || [[ -e "$claim_result" ]]; then exit 0; fi
           python3 - "$claim_result" "$EXPERIMENT_DIR" "$EXPERIMENT_RC" "$runtime_receipt" <<'PY'
-          import json, os, pathlib, sys
+          import hashlib, json, os, pathlib, sys
           sys.path.insert(0, str(pathlib.Path.cwd() / 'tools'))
           import trigger1_experiment_result_classify as experiment_classify
           out=pathlib.Path(sys.argv[1]); exp=pathlib.Path(sys.argv[2]) if sys.argv[2] else None
@@ -273,6 +281,25 @@ jobs:
                   except Exception: gate={}
           classification=experiment_classify.classify(result, gate, rc)
           promotion_summary=experiment_classify.evidence_summary(gate)
+          receipt_path=pathlib.Path(sys.argv[4])
+          runtime_receipt_present=receipt_path.is_file()
+          runtime_receipt_sha256=hashlib.sha256(receipt_path.read_bytes()).hexdigest() if runtime_receipt_present else None
+          runtime_receipt_lease_matches=False
+          if runtime_receipt_present:
+              try:
+                  runtime_receipt_obj=json.loads(receipt_path.read_text(encoding='utf-8'))
+                  lease=runtime_receipt_obj.get('atomic_lease') if isinstance(runtime_receipt_obj,dict) else None
+                  runtime_receipt_lease_matches=isinstance(lease,dict) and all([
+                      lease.get('trigger_key') == os.environ.get('TRIGGER1_TRIGGER_KEY'),
+                      lease.get('claim_path') == os.environ.get('TRIGGER1_CLAIM_PATH'),
+                      lease.get('claim_sha256') == os.environ.get('TRIGGER1_CLAIM_SHA256'),
+                      lease.get('claimant_organ') == os.environ.get('TRIGGER1_CLAIMANT_ORGAN'),
+                      lease.get('experiment_name') == os.environ.get('TRIGGER1_EXPERIMENT_NAME'),
+                  ])
+              except Exception:
+                  runtime_receipt_lease_matches=False
+          if classification == 'PASS' and not runtime_receipt_lease_matches:
+              classification='BLOCKED'
           payload={
               'schema':'clay-go-experiment-result/v1',
               'trigger_key':os.environ['TRIGGER1_TRIGGER_KEY'],
@@ -292,10 +319,13 @@ jobs:
                   'runtime_verdict':result.get('verdict'),
                   'promotion_gate':gate,
                   'promotion_summary':promotion_summary,
+                  'runtime_receipt_lease_matches_claim':runtime_receipt_lease_matches,
               },
               'classification':classification,
               'whole_product_evidence_established':False,
               'runtime_receipt_path':sys.argv[4],
+              'runtime_receipt_present_in_checkout':runtime_receipt_present,
+              'runtime_receipt_sha256':runtime_receipt_sha256,
           }
           out.parent.mkdir(parents=True,exist_ok=True)
           out.write_text(json.dumps(payload,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf-8')
@@ -303,7 +333,7 @@ jobs:
           git config user.name 'clay-trigger1-v2-runner'
           git config user.email 'clay-trigger1-v2-runner@users.noreply.github.com'
           git add "$claim_result"
-          git commit -m "evidence(trigger1): close leased V2 midlayer run ${GITHUB_RUN_ID} [skip ci]"
+          git commit -m "evidence(trigger1): close leased V2 intermediate run ${GITHUB_RUN_ID} [skip ci]"
           for attempt in 1 2 3 4 5 6; do
             git pull --rebase origin main && git push origin HEAD:main && exit 0
             sleep $((attempt * 3))

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "bootstrap-smoke-20260824T1542",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "command": "set -euo pipefail; echo LOCAL_BRIDGE_EXEC_OK; date -u +%FT%TZ; id; uname -a; python3 --version; git --version; tmux -V; printf 'HOME=%s\\n' \"$HOME\"; printf 'SSH_CLIENT='; ssh -V 2>&1 | head -1; if timeout 25 ssh -o BatchMode=yes -o ConnectTimeout=10 -J root@100.71.48.1 root@72.61.19.188 'printf VPS_SSH_BRIDGE_OK' 2>/tmp/clay-local-vps-ssh.err; then echo; echo LOCAL_TO_VPS_SSH=PASS; else rc=$?; echo LOCAL_TO_VPS_SSH=NOT_YET_VERIFIED rc=$rc; cat /tmp/clay-local-vps-ssh.err || true; fi",
+  "timeout_seconds": 60
+}

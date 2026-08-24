@@ -30,12 +30,15 @@ import tempfile
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+HARDENING_TEST_MODULE = "tests.test_free_swarm_receipt_runner_hardening_868"
+HARDENING_TEST_PATH = ROOT / "tests/test_free_swarm_receipt_runner_hardening_868.py"
 TEST_MODULES = (
     "tests.test_free_swarm_admission_boundary_867",
     "tests.test_free_swarm_admission_boundary_868_malformed",
     "tests.test_free_provider_admission_forgery_868",
     "tests.test_free_swarm_socket_tripwire_868",
     "tests.test_rae_secret_loader_provider_admission",
+    HARDENING_TEST_MODULE,
 )
 TEST_PATHS = (
     ROOT / "tests/test_free_swarm_admission_boundary_867.py",
@@ -43,6 +46,7 @@ TEST_PATHS = (
     ROOT / "tests/test_free_provider_admission_forgery_868.py",
     ROOT / "tests/test_free_swarm_socket_tripwire_868.py",
     ROOT / "tests/test_rae_secret_loader_provider_admission.py",
+    HARDENING_TEST_PATH,
 )
 INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
@@ -53,12 +57,15 @@ SOURCE_PATHS = (
     "tests/test_free_provider_admission_forgery_868.py",
     "tests/test_free_swarm_socket_tripwire_868.py",
     "tests/test_rae_secret_loader_provider_admission.py",
+    "tests/test_free_swarm_receipt_runner_hardening_868.py",
     "tools/free_provider_admission.py",
     "tools/rae_secret_loader.py",
     "tools/run_free_go_swarm.py",
     "tools/run_24h_entityos_swarm.py",
     "tools/run_research_distillery_entry.py",
     "tools/run_24h_entityos_swarm_supervisor.sh",
+    "tools/run_free_swarm_admission_boundary_receipt.py",
+    "tools/run_free_swarm_admission_boundary_receipt_hardened_868.py",
     "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
     "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
 )
@@ -351,6 +358,7 @@ def main(argv: list[str] | None = None) -> int:
             "caller_forgery_non_authority_assertions": "ENFORCED_BY_TEST_FREE_PROVIDER_ADMISSION_FORGERY_868",
             "shared_secret_loader_pretouch_assertions": "ENFORCED_BY_TEST_RAE_SECRET_LOADER_PROVIDER_ADMISSION",
             "source_toc_tou_guard": "HEAD_CLEAN_TREE_AND_MANIFEST_MUST_MATCH_BEFORE_AND_AFTER_EXECUTION",
+            "canonical_runner_self_binding": "BASE_WRAPPER_AND_HARDENING_TEST_ARE_IN_SOURCE_MANIFEST_AND_TEST_SET",
         },
         "result": {
             "unittest_ok": unittest_ok,

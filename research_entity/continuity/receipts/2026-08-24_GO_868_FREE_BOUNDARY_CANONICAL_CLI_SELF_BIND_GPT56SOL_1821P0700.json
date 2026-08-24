@@ -1,0 +1,32 @@
+{
+  "schema": "ENTITYOS_HCU_GO_FOLLOWUP_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.68",
+  "mode": "FREE_ONLY",
+  "predecessor_receipt": "research_entity/continuity/receipts/2026-08-24_GO_868_EXACT_SOURCE_STABILITY_GPT56SOL_1821P0700.json",
+  "material_delta": {
+    "commit": "6528f9eb3792d3ac2f1a765d3fa4fa05a846243f",
+    "message": "security: self-bind canonical FREE boundary receipt runner",
+    "finding": "The 8.68 DNS/connect_ex hardening existed as a successor wrapper, but the canonical base CLI could be invoked directly without importing that wrapper; therefore wrapper-only self-binding was not sufficient for the named canonical runtime command.",
+    "closure": "The canonical base runner now includes the hardening regression module in TEST_MODULES/TEST_PATHS and binds the base runner, successor wrapper and hardening test in SOURCE_PATHS. The base bootstrap already contains DNS, create_connection, connect and connect_ex tripwires, while the start/end HEAD/tree/manifest stability fence remains intact.",
+    "scope": "SOURCE_AND_TEST_BINDING_ONLY",
+    "runtime_pass_claimed": false
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "parallel_changes_reentered_instead_of_overwritten": true
+  },
+  "credits": {
+    "free_swarm_provider_admission_runtime_credit": 0,
+    "external_provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Execute the canonical base CLI on a clean exact checkout through an exposed authorized local normal-user or clay-direct-dev bridge, writing output outside the checkout; require boundary_pass=true, zero network attempts, zero secret pre-touch, and stable pre/post HEAD/tree/manifest before any provider lane is reconsidered. Then execute the live PR1263 InferenceReceipt/v4 rejection-boundary suite at its exact head."
+}

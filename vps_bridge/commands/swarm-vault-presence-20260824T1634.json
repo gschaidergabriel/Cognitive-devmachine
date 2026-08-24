@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "swarm-vault-presence-20260824T1634",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail; set -a; for f in /workspace/research_entity/private/API_TOKENS.env /workspace/research_entity/private/GROQ_API.env; do [ ! -f \"$f\" ] || . \"$f\"; done; set +a; python3 - <<'PY'\nimport os,re\nfor p,names in [('groq',['GROQ_API_KEY','GROQ2_API_KEY','GROQ3_API_KEY']),('mistral',['MISTRAL_API_KEY','MISTRAL2_API_KEY','MISTRAL3_API_KEY']),('nvidia',['NVIDIA_API_KEY','NVIDIA_NIM_API_KEY','NVIDIA2_API_KEY','NVIDIA3_API_KEY','NGC_API_KEY']),('github',['GH_TOKEN','GITHUB_TOKEN'])]:\n vals=[]\n for name in names:\n  v=os.getenv(name,'').strip()\n  if v: vals.append(name)\n print(p,'present_count',len(vals),'names',','.join(vals) if vals else '-')\nPY"
+}

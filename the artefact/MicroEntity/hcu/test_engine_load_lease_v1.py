@@ -1,7 +1,15 @@
 import hashlib
 import unittest
 
-from engine_admission_v1 import ArtifactDigest, VerifiedEngineAdmission
+from entry_canonicalization_v1 import canonicalize
+from engine_admission_v1 import (
+    ArtifactDigest,
+    ENGINE_ADMISSION_RECEIPT_SCHEMA,
+    LOCK_SCHEMA,
+    EngineArtifactLock,
+    VerifiedEngineAdmission,
+    derive_engine_artifact_sha256,
+)
 from engine_load_lease_v1 import (
     ACTUAL_LOADER_EVIDENCE_SOURCE,
     CONSUMPTION_SCHEMA,
@@ -13,25 +21,56 @@ from engine_load_lease_v1 import (
     loader_consumption_record_sha256,
     verify_loader_consumption,
 )
-from reactive_event_router_v1 import EngineAdmission
+from reactive_event_router_v1 import EngineAdmission, HASH_SERIALIZATION_SCHEMA
 
 LOADER_BINDING = "9" * 64
 
 
-def digest(ch, size=10):
-    return ArtifactDigest("FILE_SHA256", ch * 64, 1, size)
+def digest(seed, size=10):
+    return ArtifactDigest("FILE_SHA256", hashlib.sha256(seed.encode()).hexdigest(), 1, size)
 
 
 def verified(generation=7, suffix=""):
-    engine_artifact = hashlib.sha256(("engine" + suffix).encode()).hexdigest()
-    receipt = hashlib.sha256(("receipt" + suffix).encode()).hexdigest()
+    checkpoint = digest("checkpoint" + suffix, 100)
+    tokenizer = digest("tokenizer" + suffix, 20)
+    runtime = digest("runtime" + suffix, 30)
+    build = digest("build" + suffix, 40)
+    lock = EngineArtifactLock(
+        LOCK_SCHEMA,
+        "local",
+        "hcu_local_08b",
+        "LOCAL_SHARED_WEIGHT_08B",
+        checkpoint.sha256,
+        tokenizer.sha256,
+        runtime.sha256,
+        build.sha256,
+        "0" * 64,
+    )
+    engine_artifact = derive_engine_artifact_sha256(lock)
+    admission = EngineAdmission(
+        "local", "hcu_local_08b", "LOCAL_SHARED_WEIGHT_08B", engine_artifact
+    )
+    receipt_material = {
+        "schema": ENGINE_ADMISSION_RECEIPT_SCHEMA,
+        "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
+        "entity_generation": generation,
+        "provider_alias": admission.provider_alias,
+        "engine_identity": admission.engine_identity,
+        "engine_class": admission.engine_class,
+        "checkpoint": checkpoint.__dict__,
+        "tokenizer": tokenizer.__dict__,
+        "runtime": runtime.__dict__,
+        "build": build.__dict__,
+        "engine_artifact_sha256": engine_artifact,
+    }
+    receipt = hashlib.sha256(canonicalize(receipt_material)).hexdigest()
     return VerifiedEngineAdmission(
         generation,
-        EngineAdmission("local", "hcu_local_08b", "LOCAL_SHARED_WEIGHT_08B", engine_artifact),
-        digest("a", 100),
-        digest("b", 20),
-        digest("c", 30),
-        digest("d", 40),
+        admission,
+        checkpoint,
+        tokenizer,
+        runtime,
+        build,
         engine_artifact,
         receipt,
     )
@@ -94,6 +133,57 @@ class EngineLoadLeaseTests(unittest.TestCase):
                 current_generation=8,
             )
 
+    def test_forged_dataclass_engine_bundle_digest_fails_closed(self):
+        v = verified()
+        forged_artifact = "1" * 64
+        forged = VerifiedEngineAdmission(
+            v.entity_generation,
+            EngineAdmission(
+                v.admission.provider_alias,
+                v.admission.engine_identity,
+                v.admission.engine_class,
+                forged_artifact,
+            ),
+            v.checkpoint,
+            v.tokenizer,
+            v.runtime,
+            v.build,
+            forged_artifact,
+            v.receipt_sha256,
+        )
+        with self.assertRaisesRegex(EngineLoadLeaseError, "ENGINE_ARTIFACT_BUNDLE_DIGEST_MISMATCH"):
+            self.issue(forged)
+
+    def test_forged_dataclass_receipt_digest_fails_closed(self):
+        v = verified()
+        forged = VerifiedEngineAdmission(
+            v.entity_generation,
+            v.admission,
+            v.checkpoint,
+            v.tokenizer,
+            v.runtime,
+            v.build,
+            v.engine_artifact_sha256,
+            "2" * 64,
+        )
+        with self.assertRaisesRegex(EngineLoadLeaseError, "ENGINE_ADMISSION_RECEIPT_DIGEST_MISMATCH"):
+            self.issue(forged)
+
+    def test_component_digest_kind_outside_producer_contract_fails_closed(self):
+        v = verified()
+        forged = VerifiedEngineAdmission(
+            v.entity_generation,
+            v.admission,
+            ArtifactDigest("SYNTHETIC_SHA256", v.checkpoint.sha256, 1, v.checkpoint.byte_count),
+            v.tokenizer,
+            v.runtime,
+            v.build,
+            v.engine_artifact_sha256,
+            v.receipt_sha256,
+        )
+        with self.assertRaisesRegex(EngineLoadLeaseError, "checkpoint:ARTIFACT_DIGEST_KIND_UNSUPPORTED"):
+            self.issue(forged)
+
     def test_exact_actual_loader_consumption_verifies_only_after_external_admission(self):
         v = verified()
         lease = self.issue(v)
@@ -107,7 +197,7 @@ class EngineLoadLeaseTests(unittest.TestCase):
         )
 
     def test_counterfeit_actual_loader_label_without_external_admission_fails_closed(self):
-        """Unusual falsifier: exact bytes + ACTUAL_LOADER_READ_PATH cannot self-admit."""
+        """Existing falsifier: exact bytes + ACTUAL_LOADER_READ_PATH cannot self-admit."""
         v = verified()
         lease = self.issue(v)
         forged = consumed(v)

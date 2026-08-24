@@ -29,6 +29,7 @@ PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_REQUEST_BYTES = 2_000_000
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_OUTPUT_TOKENS = 4_096
+MAX_ATTEMPT_NONCE_CHARACTERS = 128
 # The smallest valid message under the current default JSON representation is
 # {"role": "user", "content": "x"}, which occupies 32 bytes even before its
 # array separator or the outer request envelope.
@@ -683,6 +684,8 @@ def _execute_chat_locked(
         raise ValueError("attempt_nonce_must_be_nonempty_string")
     if not _is_unicode_scalar_text(attempt_nonce):
         raise ValueError("attempt_nonce_must_be_unicode_scalar_string")
+    if len(attempt_nonce) > MAX_ATTEMPT_NONCE_CHARACTERS:
+        raise ValueError("attempt_nonce_too_large")
 
     started = _passive_clock_value_or_none(now)
     if started is None:

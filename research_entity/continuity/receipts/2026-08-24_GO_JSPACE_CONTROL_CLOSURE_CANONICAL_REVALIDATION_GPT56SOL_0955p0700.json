@@ -1,0 +1,111 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "persistent_research_entity": "Clay",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "research_main_observed_before_receipt": "325ebf75821888319fa9ac965f7fb650dac397ae"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "parallel_movement_observed": true,
+    "blind_overwrite_after_conflict": false
+  },
+  "observation": {
+    "id": "SELF_CONSISTENT_MODEL_INPUT_CONTROL_CLOSURE_LAUNDERING",
+    "scope": "SOURCE_AND_TRAINING_PROMOTION_BOUNDARY",
+    "finding": "ENTITYOS_HCU_JSPACE_MODEL_INPUT_CONTROL_CLOSURE/v1 cross-binds exact producer objects at creation time, but its serialized validate_closure path only checked schema/field shape plus a recomputed closure digest. A caller can therefore construct a different internally self-consistent closure and recompute closure_sha256 without proving that the claimed control_admission_sha256/control_binding_sha256 exists in canonical MiniUnifiedDB.",
+    "downstream_relevance": "The concurrently introduced ENTITYOS_HCU_JSPACE_TRAINING_CONTROL_DELIVERY_GATE/v1 and current serious training compiler consume closure objects as external registry evidence. The gate cross-binds public trace/inference identities but does not independently prove canonical existence of the closure's ModelInputControlAdmission parent, so a forged-but-rehashed control_admission_sha256 remains a real source-boundary risk until canonical parent revalidation is part of promotion.",
+    "counterhypothesis": "Creation-time cross-binding plus self-authenticating closure digest and downstream trace/inference field equality are sufficient.",
+    "counterhypothesis_result": "REJECTED_AT_SERIALIZED_SOURCE_BOUNDARY",
+    "reason": "Digest validity proves integrity of the supplied record, not provenance or existence of its claimed canonical parent admission."
+  },
+  "delta": {
+    "single_donor_lane_only": true,
+    "new_database_created": false,
+    "new_truth_authority_created": false,
+    "new_effect_path_created": false,
+    "new_model_executor_created": false,
+    "writes": [
+      {
+        "commit": "1573c3e26089dd452ea757c636b5d6cb2be0b3ab",
+        "path": "the artefact/MicroEntity/hcu/model_input_control_admission_read_v1.py",
+        "purpose": "read-only verifier over existing canonical MiniUnifiedDB control-admission tables; missing admission rejects instead of inserting"
+      },
+      {
+        "commit": "0173be0e8064b80f1bda12ca24edfa8972963a5a",
+        "path": "the artefact/MicroEntity/hcu/jspace_model_input_control_closure_revalidation_v1.py",
+        "purpose": "reconstruct closure only from already-admitted control evidence plus exact input/GRID/inference/J-Space sources and require full record equality"
+      },
+      {
+        "commit": "86f3f015c8ecd3296affe8974bc0721f601ff6dc",
+        "path": "the artefact/MicroEntity/hcu/test_jspace_model_input_control_closure_revalidation_v1.py",
+        "purpose": "encode positive canonical revalidation, recomputed packet-digest laundering rejection, recomputed control-admission-digest laundering rejection, and no-mint-on-missing-admission regression"
+      }
+    ],
+    "superseded_intermediate": {
+      "commit": "b3898357f4713b32a76706ace795a57e8d18cfe2",
+      "reason": "initial revalidator incorrectly reused the admission/write path and could mint missing evidence during validation; superseded by the read-only guard before promotion"
+    }
+  },
+  "scientific_method": {
+    "hypothesis": "Serialized closure identity can be laundered because outer digest validation is weaker than source revalidation.",
+    "counterhypothesis": "Downstream field equality makes canonical-parent revalidation redundant.",
+    "cheap_discriminator": "Change only control_admission_sha256 while preserving all public trace/inference/J-Space cross-bound fields, recompute closure_sha256, and compare digest-only validation with canonical-source reconstruction.",
+    "encoded_expected_result": "digest-only closure validation accepts the internally consistent record; canonical-source reconstruction rejects SOURCE_MISMATCH",
+    "additional_falsifier": "Delete canonical control-admission rows and verify revalidation fails while row counts remain zero."
+  },
+  "execution_evidence": {
+    "github_source_writes_observed": true,
+    "github_workflow_run_for_final_test_commit_observed": false,
+    "deterministic_regressions_executed_by_this_organ": false,
+    "local_clone_attempt": "BLOCKED_DNS_GITHUB_UNRESOLVABLE_IN_LOCAL_CONTAINER",
+    "local_clone_failure_class": "INFRASTRUCTURE_TRANSPORT_NOT_PRODUCT_NEGATIVE_EVIDENCE",
+    "vercel_sandbox_invoked_by_this_organ": false,
+    "together_preflight_or_execution": false,
+    "vps_or_self_hosted_test": false,
+    "paid_fallback": false,
+    "evidence_class": "SOURCE_AND_REGRESSION_OBLIGATION_CODE_ONLY_UNEXECUTED"
+  },
+  "current_runtime_reentry_from_canonical_main": {
+    "executor_exact_head_function_access": "OBSERVED_IN_CANONICAL_RECEIPT_AT_EXACT_HEAD",
+    "sandbox_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_create_credit": 0,
+    "note": "Current main records exact-head protected Function access and a fail-closed HTTP 412 before Sandbox.create because remaining included quota is not directly observed. This organ did not project that pre-Sandbox guard result into component/runtime/model/training PASS."
+  },
+  "three_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_INTEGRITY: downstream closure evidence can now be reconstructed against already-existing canonical control admission instead of trusting a self-consistent serialized closure alone.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_CANONICAL_BOUNDARY: added a read-only MiniUnifiedDB control-admission guard that preserves generation, Entry/route/GRID/model-execution/input identity and cannot create evidence as a side effect of validation.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_WITH_REMAINING_GATE: identified and guarded the canonical-source laundering boundary for control-delivery evidence; however the offline serious training compiler still lacks a canonical DB-backed/source-admission resolver and must not treat a raw closure registry as sufficient causal-intervention promotion evidence."
+  },
+  "epistemic_boundary": {
+    "source_fix_present": true,
+    "source_regressions_encoded": true,
+    "source_regressions_executed": false,
+    "canonical_parent_runtime_revalidation_observed": false,
+    "byte_level_control_delivery_runtime_observed": false,
+    "hidden_state_causal_use": "UNKNOWN",
+    "model_benefit": "UNKNOWN",
+    "training_benefit": "UNKNOWN",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving current-facing whole-system surface under concurrent writes; append-only receipt preserves this exact bounded delta without overwriting fresher state"
+  },
+  "next_exact_gate": "Do not invent a caller-asserted 'revalidated' boolean or second authority. Re-enter live donor/compiler state and design one canonical parent-admission/export boundary that lets compile_admitted_jspace_training_dataset_v1.py verify that each non-BASELINE closure's ModelInputControlAdmission already existed in canonical MiniUnifiedDB, while preserving the compiler's single path. Then execute the exact read-only/no-mint/laundering regressions on an admitted FREE_ONLY exact-source surface when remaining included quota is directly observable. Until then, non-BASELINE causal-intervention training promotion remains SOURCE_NOT_FULLY_CLOSED and all model/training credits remain zero."
+}

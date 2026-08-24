@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """Epoch-8.70 economic gate for the global work-stealing Free Swarm.
 
-Imports the v2 scheduler, but prevents reservation/network I/O for any concrete
-credential+route lacking provider-side zero-cost/free-entitlement evidence. Every
-executed provider request emits FREE_LANE_EXECUTION_RECEIPT/v1.
+The cache/throughput accelerator is installed *before* importing the v2 fabric so
+its ProviderRuntime base class and worker-prompt wrapper are inherited by the
+6000-worker scheduler. The route-level economic gate then prevents reservation /
+network I/O for any concrete credential+route lacking provider-side zero-cost or
+free-entitlement evidence. Every executed provider request emits
+FREE_LANE_EXECUTION_RECEIPT/v1.
 """
 from __future__ import annotations
 
@@ -12,8 +15,17 @@ import json
 import threading
 from typing import Any
 
-import run_6000_free_swarm as fabric
-from free_lane_provenance import lane_evidence, emit_execution_receipt
+# Import order is execution-relevant. Installing after run_6000_free_swarm would
+# leave its FastProviderRuntime subclass and _PREV_PROMPT bound to the old base.
+import run_free_go_swarm as _base
+import run_24h_entityos_swarm as _opt
+from free_swarm_accelerator_v2 import install as _install_accelerator
+
+_install_accelerator(_base, _opt)
+ACCELERATOR_BINDING = "FREE_SWARM_ACCELERATOR_V2_PRE_FABRIC"
+
+import run_6000_free_swarm as fabric  # noqa: E402
+from free_lane_provenance import lane_evidence, emit_execution_receipt  # noqa: E402
 
 _ORIGINAL_REQUEST = fabric.base.request_chat
 _ORIGINAL_NEXT_PAIR = fabric.FastProviderRuntime.next_key_model

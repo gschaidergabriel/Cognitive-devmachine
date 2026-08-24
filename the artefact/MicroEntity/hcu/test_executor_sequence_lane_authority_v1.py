@@ -52,50 +52,71 @@ class ExecutorSequenceLaneAuthorityTests(unittest.TestCase):
         input_binding, consumed = self.helper.input_binding(packet, plan, invocation=invocation)
         return packet, plan, input_binding, consumed
 
+    def authorize(self, packet, plan, input_binding, consumed, *, session_id="session:a", user_id="user:a"):
+        return authorize_executor_sequence_lane(
+            packet,
+            plan,
+            input_binding,
+            consumed,
+            canonical_db=self.db,
+            user_id=user_id,
+            session_id=session_id,
+            trusted_source_id=self.helper.source_id,
+        )
+
     def test_canonical_session_stream_authorizes_exact_lane(self):
         packet, plan, input_binding, consumed = self.sources()
         authority = self.authority()
-        authorized = authorize_executor_sequence_lane(
-            packet, plan, input_binding, consumed, authority
-        )
+        authorized = self.authorize(packet, plan, input_binding, consumed)
         self.assertEqual(authorized.stream_authority_binding_sha256, authority.binding_sha256)
         self.assertEqual(
             validate_authorized_executor_sequence_lane(
-                authorized, packet, plan, input_binding, consumed, authority
+                authorized,
+                packet,
+                plan,
+                input_binding,
+                consumed,
+                canonical_db=self.db,
+                user_id="user:a",
+                session_id="session:a",
+                trusted_source_id=self.helper.source_id,
             ),
             authorized.authorization_sha256,
         )
 
     def test_attacker_chosen_hash_bound_stream_without_canonical_authority_fails(self):
         packet, plan, input_binding, consumed = self.sources(stream="thread:attacker")
-        authority = self.authority()
         with self.assertRaisesRegex(
             AuthorizedExecutorSequenceLaneError,
             "STREAM_AUTHORITY_REJECTED:EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE",
         ):
-            authorize_executor_sequence_lane(
-                packet, plan, input_binding, consumed, authority
-            )
+            self.authorize(packet, plan, input_binding, consumed)
 
     def test_other_canonical_session_authority_cannot_be_transplanted(self):
         packet, plan, input_binding, consumed = self.sources()
-        other = self.authority(session_id="session:b", user_id="user:b")
         with self.assertRaisesRegex(
             AuthorizedExecutorSequenceLaneError,
-            "STREAM_AUTHORITY_REJECTED:EXECUTOR_SEQUENCE_STREAM_AUTHORITY_SOURCE_ID_MISMATCH|"
             "STREAM_AUTHORITY_REJECTED:EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE",
         ):
-            authorize_executor_sequence_lane(packet, plan, input_binding, consumed, other)
+            self.authorize(
+                packet,
+                plan,
+                input_binding,
+                consumed,
+                session_id="session:b",
+                user_id="user:b",
+            )
 
-    def test_stale_canonical_session_generation_fails_before_view_is_created(self):
+    def test_stale_canonical_session_generation_fails_during_promotion(self):
+        packet, plan, input_binding, consumed = self.sources()
         self.db.live["session:a"] = 8
         with self.assertRaisesRegex(
-            StreamAuthorityError,
-            "CANONICAL_SESSION_GENERATION_NOT_LIVE",
+            AuthorizedExecutorSequenceLaneError,
+            "STREAM_AUTHORITY_REJECTED:CANONICAL_SESSION_GENERATION_NOT_LIVE",
         ):
-            self.authority()
+            self.authorize(packet, plan, input_binding, consumed)
 
-    def test_digest_valid_authority_relabel_is_rejected(self):
+    def test_digest_valid_authority_relabel_is_rejected_by_pure_validator(self):
         packet, _plan, _input_binding, _consumed = self.sources()
         authority = self.authority()
         forged = replace(authority, stream_id="thread:forged")
@@ -116,9 +137,8 @@ class ExecutorSequenceLaneAuthorityTests(unittest.TestCase):
     def test_distinct_events_in_same_canonical_session_share_lane_but_not_authorization(self):
         a = self.sources(causal="event:1", ingress="ingress:1", invocation="invocation:1")
         b = self.sources(causal="event:2", ingress="ingress:2", invocation="invocation:2")
-        authority = self.authority()
-        aa = authorize_executor_sequence_lane(*a, authority)
-        bb = authorize_executor_sequence_lane(*b, authority)
+        aa = self.authorize(*a)
+        bb = self.authorize(*b)
         self.assertEqual(aa.sequence_lane_sha256, bb.sequence_lane_sha256)
         self.assertNotEqual(aa.lane_binding_sha256, bb.lane_binding_sha256)
         self.assertNotEqual(aa.authorization_sha256, bb.authorization_sha256)
@@ -126,13 +146,29 @@ class ExecutorSequenceLaneAuthorityTests(unittest.TestCase):
     def test_unsupported_source_kind_cannot_use_human_session_authority(self):
         packet, plan, input_binding, consumed = self.sources()
         forged = replace(packet, source_kind="EXTERNAL_EVENT")
-        authority = self.authority()
         with self.assertRaisesRegex(
             AuthorizedExecutorSequenceLaneError,
             "STREAM_AUTHORITY_REJECTED:EXECUTOR_SEQUENCE_STREAM_AUTHORITY_SOURCE_KIND_MISMATCH",
         ):
-            authorize_executor_sequence_lane(
-                forged, plan, input_binding, consumed, authority
+            self.authorize(forged, plan, input_binding, consumed)
+
+    def test_authorization_revalidation_rejects_other_canonical_session(self):
+        packet, plan, input_binding, consumed = self.sources()
+        authorized = self.authorize(packet, plan, input_binding, consumed)
+        with self.assertRaisesRegex(
+            AuthorizedExecutorSequenceLaneError,
+            "STREAM_AUTHORITY_REJECTED:EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE",
+        ):
+            validate_authorized_executor_sequence_lane(
+                authorized,
+                packet,
+                plan,
+                input_binding,
+                consumed,
+                canonical_db=self.db,
+                user_id="user:b",
+                session_id="session:b",
+                trusted_source_id=self.helper.source_id,
             )
 
 

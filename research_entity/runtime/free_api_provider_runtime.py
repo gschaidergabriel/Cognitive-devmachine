@@ -213,7 +213,10 @@ def inventory(
     payment_latches: set[str] | None = None,
 ) -> list[dict]:
     env = _snapshot_runtime_environment(environ)
-    latches = _passive_payment_latches(payment_latches)
+    latches = _passive_payment_latches(payment_latches).copy()
+    # Inventory and route are one state claim. Use one bounded exact-set
+    # snapshot so a later latch publication cannot mix two state instants
+    # across capacity and per-provider membership fields.
     latch_capacity_exhausted = (
         len(latches) >= MAX_PAYMENT_LATCH_ENTRIES
     )

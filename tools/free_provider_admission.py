@@ -108,23 +108,41 @@ def load_provider_admission(
     return payload
 
 
-def provider_is_admitted_free(provider: str, admission: dict[str, Any] | None = None) -> bool:
-    if provider not in ALLOWED_PROVIDERS:
-        return False
+def _provider_record_is_admitted_free(payload: dict[str, Any], provider: str) -> bool:
+    """Inspect a payload that has already passed ``load_provider_admission`` validation."""
     try:
-        payload = admission if admission is not None else load_provider_admission()
         record = payload["providers"][provider]
-    except (ProviderAdmissionError, KeyError, TypeError):
+    except (KeyError, TypeError):
         return False
     return record.get("admitted") is True and record.get("cost_class") == "FREE"
 
 
-def admitted_provider_names(admission: dict[str, Any] | None = None) -> tuple[str, ...]:
+def provider_is_admitted_free(provider: str, admission: dict[str, Any] | None = None) -> bool:
+    """Resolve FREE admission only from canonical control-plane state.
+
+    ``admission`` is retained for caller compatibility but deliberately ignored. A
+    caller-supplied dictionary is untrusted input and must never self-grant provider
+    authority. Callers that already hold a validated payload should keep inspection
+    internal to this module rather than treating that payload as a capability token.
+    """
+    del admission
+    if provider not in ALLOWED_PROVIDERS:
+        return False
     try:
-        payload = admission if admission is not None else load_provider_admission()
+        payload = load_provider_admission()
+    except ProviderAdmissionError:
+        return False
+    return _provider_record_is_admitted_free(payload, provider)
+
+
+def admitted_provider_names(admission: dict[str, Any] | None = None) -> tuple[str, ...]:
+    """Return canonically admitted FREE providers; caller payloads are never authority."""
+    del admission
+    try:
+        payload = load_provider_admission()
     except ProviderAdmissionError:
         return ()
-    return tuple(sorted(name for name in ALLOWED_PROVIDERS if provider_is_admitted_free(name, payload)))
+    return tuple(sorted(name for name in ALLOWED_PROVIDERS if _provider_record_is_admitted_free(payload, name)))
 
 
 def admission_snapshot() -> dict[str, Any]:
@@ -143,7 +161,10 @@ def admission_snapshot() -> dict[str, Any]:
         "ok": True,
         "authority_epoch": epoch,
         "steering": steering_ref,
-        "admitted_free_providers": list(admitted_provider_names(payload)),
+        "admitted_free_providers": [
+            name for name in sorted(ALLOWED_PROVIDERS)
+            if _provider_record_is_admitted_free(payload, name)
+        ],
         "providers": {
             name: {
                 "admitted": bool(payload["providers"][name]["admitted"]),

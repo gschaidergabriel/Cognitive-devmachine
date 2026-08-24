@@ -5,8 +5,8 @@
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "latest_repo_head_inspected_before_write": "b58446a2a57162734ff13aa26df140c33c91f162",
-  "material_finding": "The retained executor gschaidergabriel/Dr.-Unterweger#810 at exact head 2da99e0458809988190c129b04cae913d1f15d92 is READY and Vercel provider runtime logs show an HTTP 200 serverless invocation at that exact deployed source. Exact source control flow and the receipt constrain this to FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE. Remaining included Sandbox quota is still not directly observed, so Sandbox.create remains fail-closed. No Python/sqlite3/_sqlite3, HCU, local model, J-Space/GWT, training, canonical-semantics, or whole-product runtime credit is created.",
+  "latest_repo_head_inspected_before_write": "9635e35312506063a695884c8a1a5a649bf76ba6",
+  "material_finding": "The retained executor gschaidergabriel/Dr.-Unterweger#810 at exact head 2da99e0458809988190c129b04cae913d1f15d92 has provider-observed HTTP 200 serverless function-runtime evidence at diagnostic no-Sandbox scope only. Separately, user-supplied external VPS lab results now show the packaged Xeno/HCU compatibility lab executing 57/57 unit tests PASS and 47 PASS / 0 FAIL / 3 SKIP fast discriminators on Ubuntu with Python 3.12.3 and SQLite 3.45.1. This supports generic host compatibility of the reference primitives but creates no current admitted VPS, Vercel Sandbox, HCU, model, J-Space/GWT, training, canonical-semantics, or whole-product runtime credit.",
   "current_frontier": {
     "retained_hcu_repository": "gschaidergabriel/clay-global-research-entity",
     "retained_hcu_pr": 1263,
@@ -25,6 +25,19 @@
     "jspace_model_runtime_credit": 0,
     "training_credit": 0
   },
+  "external_user_supplied_evidence": {
+    "classification": "POSITIVE_EXTERNAL_VPS_LAB_EVIDENCE_SCOPE_LIMITED",
+    "receipt": "research_entity/continuity/receipts/2026-08-24_USER_SUPPLIED_XENO_VPS_FIRST_RESULTS_ANALYSIS_GPT56SOL_1416.json",
+    "raw_output": "research_entity/continuity/external_evidence/2026-08-24_USER_SUPPLIED_XENO_VPS_TEST_OUTPUT_1416.txt",
+    "raw_output_sha256": "6bcb6ca71ddf8ee041cb9b5b833c8d9c00ab849b39ddbb411665ad6e8637e5f1",
+    "unit_tests": "57_PASS_0_FAIL",
+    "fast_discriminators": "47_PASS_0_FAIL_3_SKIP",
+    "skip_reason": "CANONICAL_PRIVATE_REPOSITORY_NOT_CLONED_ON_TARGET_SO_REPO_CONTRACT_AUTHORITY_SNAPSHOT_SOURCE_SYMBOL_MATRIX_NOT_EXECUTED",
+    "environment": "4_CPU; 16769044480_MEMORY_BYTES; PYTHON_3.12.3; SQLITE_3.45.1; KERNEL_6.8.0-138-generic",
+    "strongest_research_use": "ENVIRONMENT_AND_REGRESSION_PRIOR_FOR_REFERENCE_HCU_PRIMITIVES",
+    "forbidden_promotion": "DO_NOT_MINT_CURRENT_ADMITTED_VPS_SANDBOX_HCU_MODEL_JSPACE_TRAINING_OR_WHOLE_PRODUCT_RUNTIME_CREDIT",
+    "model_runtime": "ZERO; NO_MODEL_ARTIFACT_FOUND; END_TO_END_PATH_WAS_STUB_ONLY"
+  },
   "free_only": {
     "enabled": true,
     "no_paid_fallback": true,
@@ -32,22 +45,29 @@
     "paid_subscription_unknown_fail_closed": true,
     "admission_boundary": "BEFORE_SECRET_OR_KEY_LOOKUP_AND_BEFORE_NETWORK_IO",
     "remaining_quota_or_plan_inference_must_not_open_sandbox_gate": true,
-    "fail_closed_on_quota_billing_upgrade_plan_mismatch_or_charge_path": true
+    "fail_closed_on_quota_billing_upgrade_plan_mismatch_or_charge_path": true,
+    "autonomous_vps_testing_forbidden": true
   },
   "evidence_law": [
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
     "FUNCTION_RUNTIME_BOOT_IS_NOT_SANDBOX_OR_HCU_RUNTIME",
     "SOURCE_OR_COMPONENT_PASS_DOES_NOT_CREATE_WHOLE_RUNTIME_CREDIT",
+    "USER_SUPPLIED_EXTERNAL_VPS_LAB_PASS_IS_NOT_CURRENT_ADMITTED_VPS_OR_HCU_RUNTIME_CREDIT",
+    "REFERENCE_JSPACE_VECTOR_CONTROLS_ARE_NOT_MODEL_HIDDEN_STATE_CAUSALITY",
+    "LOGICAL_GRID_PLAN_SCALE_IS_NOT_PHYSICAL_MODEL_CONCURRENCY_OR_SCALE_ACCEPTANCE",
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
     "EXECUTION_CONTROLLER_IDENTITY_MUST_BE_REPOSITORY_QUALIFIED",
-    "HISTORICAL_RECEIPTS_ARE_APPEND_ONLY"
+    "HISTORICAL_AND_EXTERNAL_RECEIPTS_ARE_APPEND_ONLY"
   ],
   "next_focus": [
     "REENTER_CURRENT_MAIN_HCU_DONOR_AND_EXECUTOR_HEADS_BEFORE_ACTION",
+    "USE_USER_SUPPLIED_VPS_RESULTS_AS_ENVIRONMENT_REGRESSION_PRIOR_NOT_AS_RUNTIME_AUTHORITY",
     "PRESERVE_EXACT_HEAD_FUNCTION_RUNTIME_DIAGNOSTIC_CREDIT_WITHOUT_SCOPE_INFLATION",
     "OBTAIN_DIRECT_READ_ONLY_REMAINING_INCLUDED_VERCEL_SANDBOX_QUOTA_AUTHORITY_WITHOUT_UPGRADE_BILLING_MUTATION_PLAN_INFERENCE_OR_PROVIDER_CREDENTIAL_PREFLIGHT",
     "ONLY_IF_FREE_ONLY_SANDBOX_ADMISSION_OPENS_RUN_ONE_FIXED_EXACT_SOURCE_PYTHON_SQLITE3__SQLITE3_ENVIRONMENT_PROBE_WITH_SECRET_FENCE_RESULT_DIGEST_EXIT_AND_CLEANUP",
+    "TARGET_PYTHON312_SQLITE_CAPABILITY_REPRODUCTION_AS_A_CONCRETE_ENVIRONMENT_PRIOR_WHILE_REMAINING_SOURCE_AND_MODEL_IDENTITY_EXACT",
     "ONLY_AFTER_ENVIRONMENT_PASS_CONTINUE_CANONICAL_PREDECESSOR_PREINVOCATION_CONTROL_REAL_LOCAL_MODEL_MODELEXECUTION_INFERENCERECEIPT_JSPACE_GWT_CAUSAL_CHAIN",
+    "DO_NOT_AUTONOMOUSLY_RERUN_VPS_TESTS_UNDER_SUPERVISOR_8_65",
     "DO_NOT_PREFLIGHT_OR_LAUNCH_TOGETHER_OR_ANY_PAID_SUBSCRIPTION_UNKNOWN_LANE"
   ],
   "promotion_state": {
@@ -57,5 +77,6 @@
     "training_credit": 0
   },
   "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json",
-  "latest_runtime_receipt": "research_entity/continuity/receipts/2026-08-24_GO_PR810_2DA99_FUNCTION_RUNTIME_LOG_DELTA_GPT56SOL_1104.json"
+  "latest_runtime_receipt": "research_entity/continuity/receipts/2026-08-24_GO_PR810_2DA99_FUNCTION_RUNTIME_LOG_DELTA_GPT56SOL_1104.json",
+  "latest_external_evidence_receipt": "research_entity/continuity/receipts/2026-08-24_USER_SUPPLIED_XENO_VPS_FIRST_RESULTS_ANALYSIS_GPT56SOL_1416.json"
 }

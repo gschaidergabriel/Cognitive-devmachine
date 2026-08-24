@@ -1,0 +1,76 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_before_delta": "052b861f1930167e232ad3e57f2a2d9eeeb325d2",
+    "canonical_main_after_source_and_tests": "ad8ddde86086a370461231203f848dfae9af891c",
+    "current_probe_source": "tools/hcu_jspace_local_activation_probe.py",
+    "current_probe_schema": "ENTITYOS_HCU_JSPACE_LOCAL_ACTIVATION_PROBE/v2"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_trigger_metadata_available_to_this_organ": "MINUTE_LEVEL_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "DETERMINISTIC_SOURCE_VALIDATION_AND_CREDIT_FENCE"
+  },
+  "observation": {
+    "current_main_advanced_during_cycle": true,
+    "observed_probe_delta": "Current main added an offline observation-first/intervention probe. Observation mode performs no hidden-state modification; intervention mode requires the canonical atomic experiment lease and emits clean/corrupted/target/sham/off-target evidence plus a technical clean off-target reference.",
+    "probe_self_limit": "The raw probe explicitly records loader_consumption_attestation=false and promotion.status=UNASSESSED_CANDIDATE_ONLY, because post-load parameter values are not exact loader-consumption evidence and no predeclared causal acceptance thresholds are evaluated.",
+    "gap": "Without a dedicated fail-closed validator, a downstream consumer could accidentally treat the raw intervention-shaped envelope or derived local IDs as stronger causal/canonical evidence than the probe itself claims."
+  },
+  "hypothesis": "A machine-checkable raw-probe evidence fence will prevent accidental J-Space causal-credit laundering while preserving the observation-first executable path.",
+  "counterhypothesis": "The probe's narrative promotion field and zero-credit fields are sufficient without an independent validator.",
+  "discriminator": "Validate both observation and intervention envelopes and poison the envelope with network touches, loader self-attestation, credit inflation, causal promotion, hidden-state modification in observation mode, missing control family, wrong target patch binding and missing intervention lease.",
+  "delta": {
+    "validator": {
+      "path": "tools/validate_hcu_jspace_local_activation_probe_v2.py",
+      "commit": "e4c2a573cf332c76efffbcd342de0e68fa63164b",
+      "behavior": [
+        "requires exact product/program/FREE_ONLY_LOCAL_OFFLINE classification",
+        "requires network_attempt_count=0",
+        "rejects raw-probe loader_consumption_attestation=true",
+        "forces all product/HCU/J-Space/training credits to zero",
+        "forces promotion.status=UNASSESSED_CANDIDATE_ONLY",
+        "observation mode requires a single unmodified named-activation observation with no intervention metrics",
+        "intervention mode requires validated atomic lease plus exact five core conditions and one technical off-target clean reference",
+        "target patch must bind to clean activation; sham must bind to corrupted activation; off-target patch must bind to its clean reference",
+        "derived local model-execution and J-Space trace IDs may not claim canonical identity"
+      ]
+    },
+    "tests": {
+      "path": "tests/test_hcu_jspace_local_activation_probe_v2.py",
+      "commit": "ad8ddde86086a370461231203f848dfae9af891c",
+      "deterministic_local_sanity": "10/10 PASS in the ChatGPT tool container",
+      "evidence_scope": "SOURCE_TEST_SANITY_ONLY_NOT_ENTITYOS_HCU_RUNTIME_EVIDENCE"
+    }
+  },
+  "external_solution_harvest": {
+    "nnsight": "Current NNsight documentation describes model.trace as a single forward-pass context that permits reading and modifying intermediate activations; local PyTorch models are supported.",
+    "transformerlens": "Current TransformerLens activation-patching documentation uses clean/corrupted runs, replacement of a corrupted activation with the clean activation, and an output metric to measure the counterfactual effect.",
+    "adoption": "Only the causal-control principle is adopted; no external hosted inference/provider path was used."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the new executable local probe now has a deterministic raw-evidence validator path that rejects stronger claims than the probe actually supports.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: causal event/admission/route/inference binding and local derived-ID noncanonicality are enforced at the J-Space raw receipt boundary without creating a second state/effect authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED: observation/intervention envelopes are now machine-fenced against network use, loader-attestation inflation, missing controls, patch-binding errors and premature causal/model/training promotion."
+  },
+  "credits": {
+    "free_swarm_provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an exposed authorized zero-cost local normal-user or clay-direct-dev surface, run the current observation-mode probe against the smallest already-available compatible local HF/PyTorch model, validate the emitted v2 envelope with tools/validate_hcu_jspace_local_activation_probe_v2.py, then bind a separate exact loader-consumption witness before any causal intervention promotion. Do not execute intervention mode without a reproducible canonical atomic lease.",
+  "acceptance": "IN_PROGRESS"
+}

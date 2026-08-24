@@ -2,11 +2,9 @@
 """Stable entrypoint for run_research_distillery.py.
 
 Provides small, auditable overrides for question admission, efficient free-model
-selection and fail-soft reviewer behavior. The preferred panel remains exactly
-1 NVIDIA + 2 Mistral-family reviewers. When current FREE_ONLY routes cannot
-supply two Mistral-family models, two independent zero-priced OpenRouter models
-may form a clearly marked PROVISIONAL fallback panel so research does not stall.
-Provisional packets remain candidate research and can be re-reviewed later.
+selection, fail-soft reviewer behavior, and canonical typed FREE provider gating.
+Provider secrets and credential-bearing provider network calls remain downstream
+of the same EntityOS/HCU admission authority as the Free Swarm.
 """
 from __future__ import annotations
 
@@ -21,11 +19,46 @@ TOOLS=Path(__file__).resolve().parent
 if str(TOOLS) not in sys.path:
     sys.path.insert(0,str(TOOLS))
 import run_research_distillery as d
+from free_provider_admission import provider_is_admitted_free
 
-# Capture original implementations before monkeypatching. Calling d.select_reviewers
-# from the replacement after assignment would recurse into itself.
+# Capture original implementations before monkeypatching.
 _ORIGINAL_SELECT_REVIEWERS=d.select_reviewers
 _ORIGINAL_REVIEW=d.review_candidate
+_ORIGINAL_SECRET=d.secret
+_ORIGINAL_REQUEST_JSON=d.request_json
+
+SECRET_PROVIDER={
+    "GROQ_API_KEY":"groq",
+    "MISTRAL_API_KEY":"mistral",
+    "NVIDIA_API_KEY":"nvidia",
+    "NVIDIA_NIM_API_KEY":"nvidia",
+    "OPENROUTER_API_KEY":"openrouter",
+    "TAVILY_API_KEY":"tavily",
+    "EXA_API_KEY":"exa",
+}
+PROTECTED_PROVIDER_NETWORK=frozenset(SECRET_PROVIDER.values())
+
+
+def _provider_admitted(provider: str) -> bool:
+    return provider_is_admitted_free(provider)
+
+
+def typed_secret(name: str) -> str:
+    provider=SECRET_PROVIDER.get(name)
+    if provider is None or not _provider_admitted(provider):
+        return ""
+    return _ORIGINAL_SECRET(name)
+
+
+def typed_request_json(provider: str, owner: str, url: str, **kwargs):
+    if provider in PROTECTED_PROVIDER_NETWORK and not _provider_admitted(provider):
+        return 412,{}, {"error":"TYPED_FREE_PROVIDER_ADMISSION_REQUIRED","provider":provider,"authority":"ENTITYOS_HCU_CONTROL_PLANE"}
+    return _ORIGINAL_REQUEST_JSON(provider,owner,url,**kwargs)
+
+# Install before main() can materialize a credential or open a protected socket.
+# Public unauthenticated research sources such as arXiv/GitHub remain available.
+d.secret=typed_secret
+d.request_json=typed_request_json
 
 
 def add_question(con: sqlite3.Connection, question: str, *, parent_id: str | None = None,
@@ -134,10 +167,10 @@ def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[st
     return False,provisional
 
 
-d.add_question = add_question
-d.select_small_models = select_small_models
-d.select_reviewers = select_reviewers
-d.review_candidate = review_candidate
+d.add_question=add_question
+d.select_small_models=select_small_models
+d.select_reviewers=select_reviewers
+d.review_candidate=review_candidate
 
 if __name__ == "__main__":
     raise SystemExit(d.main())

@@ -16,6 +16,7 @@ if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
 import free_provider_admission as admission_mod
+import free_lane_provenance as lane_prov
 import run_free_go_swarm as base
 import run_24h_entityos_swarm as entityos_driver
 import run_research_distillery_entry as distillery_entry
@@ -261,9 +262,17 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
         self.assertEqual(secret_reads, 0)
         self.assertEqual(network, 0)
 
-    def test_openrouter_is_in_typed_authority_and_currently_blocked(self) -> None:
+    def test_openrouter_provider_admission_does_not_self_admit_unknown_route(self) -> None:
         self.assertIn("openrouter", admission_mod.ALLOWED_PROVIDERS)
-        self.assertFalse(admission_mod.provider_is_admitted_free("openrouter"))
+        self.assertTrue(admission_mod.provider_is_admitted_free("openrouter"))
+        evidence = lane_prov.lane_evidence(
+            "openrouter",
+            "TEST_CREDENTIAL_FINGERPRINT",
+            "not-an-admitted-free-route",
+            "https://openrouter.ai/api/v1",
+        )
+        self.assertFalse(evidence.get("ok"))
+        self.assertEqual(evidence.get("reason"), "OPENROUTER_ROUTE_NOT_EXPLICIT_ZERO_PRICE")
 
     def test_collect_keys_ignores_caller_forged_admission(self) -> None:
         with tempfile.TemporaryDirectory() as td:
@@ -361,7 +370,10 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
     def test_supervisor_sources_only_through_admission_gated_entrypoint(self) -> None:
         text = (ROOT / "tools/run_24h_entityos_swarm_supervisor.sh").read_text(encoding="utf-8")
         self.assertNotIn("load_all_secret_sources", text)
-        self.assertIn("typed_admission_compat_flags\nload_admitted_secret_sources", text)
+        loop = text[text.index("while (( $(date +%s) < DEADLINE )); do"):]
+        self.assertIn("typed_admission_compat_flags", loop)
+        self.assertIn("load_admitted_secret_sources", loop)
+        self.assertLess(loop.index("typed_admission_compat_flags"), loop.index("load_admitted_secret_sources"))
         self.assertIn("provider_admitted groq", text)
         self.assertIn("run_research_distillery_", text)
         self.assertIn("start_local_model", text)

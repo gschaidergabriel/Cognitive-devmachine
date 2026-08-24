@@ -20,8 +20,7 @@
     },
     "nvidia": {
       "allowed_endpoint_host": "integrate.api.nvidia.com",
-      "admitted_credential_fingerprints": ["e498d9744e"],
-      "evidence_kind": "EXACT_DEVELOPER_API_CREDENTIAL_PLUS_FREE_HOSTED_NIM_ENDPOINT",
+      "evidence_kind": "NVIDIA_HOSTED_NIM_DEVELOPER_FREE_PROTOTYPING",
       "sources": [
         "https://developer.nvidia.com/nim",
         "https://docs.api.nvidia.com/nim/docs/run-anywhere",
@@ -29,11 +28,11 @@
         "https://build.nvidia.com/explore"
       ],
       "source": "https://docs.api.nvidia.com/nim/re/docs/api-quickstart",
-      "provider_statement": "NVIDIA states that Developer Program members get free access to NVIDIA-hosted NIM API endpoints for prototyping; the API Catalog quickstart creates the Developer API key through that Developer Program access flow; build.nvidia.com labels these as free serverless APIs for development.",
-      "credential_binding_observation": "The exact credential fingerprint listed here was materialized by the sandbox credential inventory and authenticated successfully against integrate.api.nvidia.com hosted NIM routes. No other NVIDIA credential fingerprint is admitted by this record.",
+      "provider_statement": "NVIDIA states that Developer Program members get free access to NVIDIA-hosted NIM API endpoints for prototyping; public provider documentation does not prove entitlement for an arbitrary concrete credential.",
       "credential_plan_needed": true,
-      "credential_plan_proof": "Exact fingerprint allow-list + NVIDIA Developer Program API-key issuance path + free hosted-NIM endpoint host. Any different credential fingerprint fails closed.",
-      "default": "FAIL_CLOSED_FOR_UNLISTED_CREDENTIAL",
+      "credential_plan_proof": "The exact credential fingerprint must have provider-side Developer Program/free hosted-NIM entitlement evidence, an observation timestamp, an evidence digest, and an explicit allowed_models list before autonomous FREE_ONLY model network execution.",
+      "credential_entitlements": {},
+      "default": "FAIL_CLOSED_UNTIL_CREDENTIAL_ENTITLEMENT_RECEIPT_BOUND",
       "scope": "NVIDIA-hosted API Catalog/NIM prototyping endpoint only; no dedicated enterprise endpoint"
     },
     "groq": {

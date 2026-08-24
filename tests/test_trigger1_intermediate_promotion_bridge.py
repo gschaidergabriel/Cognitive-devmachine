@@ -45,6 +45,7 @@ def _holdout_rows(seed: int = 2718) -> list[dict]:
 
 
 def valid_result(*, calibration_seed: int = 1701, holdout_seed: int = 2718) -> dict:
+    derivation_input_family = bridge.digest([DERIVATION_PROMPT64])
     return {
         "schema": bridge.INTERMEDIATE_SCHEMA,
         "status": "PASS",
@@ -59,6 +60,13 @@ def valid_result(*, calibration_seed: int = 1701, holdout_seed: int = 2718) -> d
         "derivation": {
             "sources": [{"prompt_sha256": DERIVATION_PROMPT64}],
             "directions": {"12": {"direction_sha256": DIR64}},
+            "label_independence": {
+                "schema": bridge.LABEL_INDEPENDENCE_SCHEMA,
+                "derivation_input_family_sha256": derivation_input_family,
+                "evaluation_output_labels_resolved_before_derivation": False,
+                "uses_evaluation_output_labels": False,
+                "construction": "fixture semantic residual derivation before evaluation labels",
+            },
         },
         "calibration_rows": [
             {
@@ -94,12 +102,31 @@ def valid_intermediate() -> dict:
 
 class Trigger1IntermediatePromotionBridgeTests(unittest.TestCase):
     def test_bridge_candidate_reaches_v4_scientific_independence_and_goal_gate(self):
-        candidate = bridge.build_direct_candidate(valid_result(), valid_intermediate())
+        result = valid_result()
+        candidate = bridge.build_direct_candidate(result, valid_intermediate())
 
         self.assertFalse(candidate["vector_derivation"]["uses_output_head_weights"])
         self.assertFalse(candidate["vector_derivation"]["uses_holdout_data"])
         self.assertFalse(candidate["vector_derivation"]["uses_evaluation_output_labels"])
         self.assertTrue(candidate["holdout"]["label_mapping_counterbalanced"])
+
+        intervention = candidate["intervention"]
+        self.assertEqual(intervention["source_packet_schema"], bridge.SEMANTIC_INTENT_SCHEMA)
+        self.assertEqual(intervention["reserved_wire_abi_schema"], bridge.RESERVED_WIRE_ABI_SCHEMA)
+        self.assertNotEqual(bridge.SEMANTIC_INTENT_SCHEMA, bridge.RESERVED_WIRE_ABI_SCHEMA)
+
+        semantic_material = {
+            "schema": bridge.SEMANTIC_INTENT_SCHEMA,
+            "model": result["model"],
+            "revision": result["model_revision"],
+            "derivation_family_id": result["derivation"]["label_independence"]["derivation_input_family_sha256"],
+            "selected_layer": 12,
+            "selected_gain": 4.0,
+            "metric_definition": bridge.METRIC_DEFINITION,
+        }
+        self.assertEqual(intervention["source_packet_sha256"], bridge.digest(semantic_material))
+        legacy_collision_material = {**semantic_material, "schema": bridge.RESERVED_WIRE_ABI_SCHEMA}
+        self.assertNotEqual(intervention["source_packet_sha256"], bridge.digest(legacy_collision_material))
 
         verdict = gate.adjudicate(candidate)
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])

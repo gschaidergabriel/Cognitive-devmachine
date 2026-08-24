@@ -23,9 +23,8 @@ while IFS= read -r name; do
 done < <(compgen -v)
 
 # V2 convergence law: first attempt the provider-independent exact local API path.
-# A provider credential, entitlement, rate limit, route identity or unsupported hosted
-# parameter can therefore never terminate Trigger-1 while local normal-user execution
-# remains possible.
+# Supervisor 8.72 additionally requires the exact source tree + dirty state + bound
+# executor/gate bytes to remain stable across the observed local runtime.
 if [[ "${CLAY_TRIGGER1_LOCAL_FASTPATH:-1}" != "0" ]]; then
   if [[ -d /artifacts && -w /artifacts ]]; then
     TRIGGER1_ROOT="${CLAY_TRIGGER1_ARTIFACT_ROOT:-/artifacts/clay-entityos-trigger1}"
@@ -36,17 +35,35 @@ if [[ "${CLAY_TRIGGER1_LOCAL_FASTPATH:-1}" != "0" ]]; then
   LOCAL_DIR="$TRIGGER1_ROOT/local-fastpath-$(date -u +%Y%m%dT%H%M%SZ)-$$"
   mkdir -p "$LOCAL_DIR"
 
+  source_pre="$LOCAL_DIR/source_pre.json"
   set +e
-  bash "$ROOT/tools/trigger1_local_qwen06_activation_api.sh" "$LOCAL_DIR" \
-    >"$LOCAL_DIR/launcher.log" 2>&1
-  local_rc=$?
+  python3 "$ROOT/tools/trigger1_source_bound_promotion.py" --write-pre "$source_pre" \
+    >"$LOCAL_DIR/source_pre.log" 2>&1
+  source_pre_rc=$?
   set -e
+
+  local_rc=97
+  if [[ $source_pre_rc -eq 0 ]]; then
+    set +e
+    bash "$ROOT/tools/trigger1_local_qwen06_activation_api.sh" "$LOCAL_DIR" \
+      >"$LOCAL_DIR/launcher.log" 2>&1
+    local_rc=$?
+    set -e
+  else
+    printf '%s\n' \
+      'Trigger-1 local fastpath not executed: exact source snapshot was dirty or unavailable; source-bound promotion would be invalid.' \
+      >"$LOCAL_DIR/launcher.log"
+  fi
 
   export CLAY_TRIGGER1_LOCAL_FASTPATH_RESULT="$LOCAL_DIR/trigger1_local_activation_api_result.json"
   candidate="$LOCAL_DIR/trigger1_direct_steering_candidate.json"
-  if [[ $local_rc -eq 0 && -s "$candidate" ]]; then
-    python3 "$ROOT/tools/trigger1_jspace_promotion_gate.py" --candidate "$candidate" \
+  if [[ $local_rc -eq 0 && -s "$candidate" && -s "$CLAY_TRIGGER1_LOCAL_FASTPATH_RESULT" ]]; then
+    python3 "$ROOT/tools/trigger1_source_bound_promotion.py" \
+      --candidate "$candidate" \
+      --result "$CLAY_TRIGGER1_LOCAL_FASTPATH_RESULT" \
+      --pre-source "$source_pre" \
       >"$LOCAL_DIR/promotion_gate.json"
+    export CLAY_TRIGGER1_SOURCE_BOUND_PROMOTION_RESULT="$LOCAL_DIR/promotion_gate.json"
     if python3 - "$LOCAL_DIR/promotion_gate.json" <<'PY'
 import json, pathlib, sys
 obj=json.loads(pathlib.Path(sys.argv[1]).read_text())

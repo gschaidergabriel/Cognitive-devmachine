@@ -40,9 +40,16 @@ def parse_trigger_key(issue_body: str) -> str:
     if len(matches) != 1:
         raise ValueError("ISSUE_BODY_REQUIRES_EXACTLY_ONE_TRIGGER_KEY")
     key = matches[0]
-    if not (RID_RE.fullmatch(key) or TS_RE.fullmatch(key)):
-        raise ValueError("TRIGGER_KEY_NONCANONICAL")
-    return key
+    if RID_RE.fullmatch(key):
+        return key
+    ts = TS_RE.fullmatch(key)
+    if ts:
+        try:
+            datetime.strptime(ts.group(1), "%Y%m%dT%H%M%S%fZ")
+        except ValueError as exc:
+            raise ValueError("TRIGGER_KEY_NONCANONICAL") from exc
+        return key
+    raise ValueError("TRIGGER_KEY_NONCANONICAL")
 
 
 def _digest_alias(a: str, b: str) -> bool:
@@ -81,10 +88,13 @@ def _legacy_semantic_alias(candidate_key: str, canonical_key: str) -> bool:
         offset_minutes = int(off_h) * 60 + int(off_m)
         if sign == "-":
             offset_minutes = -offset_minutes
-        local = datetime(
-            int(year), int(month), int(day), int(hour), int(minute_value),
-            tzinfo=timezone(timedelta(minutes=offset_minutes)),
-        )
+        try:
+            local = datetime(
+                int(year), int(month), int(day), int(hour), int(minute_value),
+                tzinfo=timezone(timedelta(minutes=offset_minutes)),
+            )
+        except ValueError:
+            return False
         legacy_utc = local.astimezone(timezone.utc)
         same_minute = canonical_time.replace(second=0, microsecond=0) == legacy_utc.replace(second=0, microsecond=0)
         return same_minute and _digest_alias(digest, canonical_payload_sha)
@@ -95,13 +105,32 @@ def _legacy_semantic_alias(candidate_key: str, canonical_key: str) -> bool:
         offset_minutes = int(off_h) * 60 + int(off_m)
         if sign == "-":
             offset_minutes = -offset_minutes
-        naive = datetime.strptime(stamp, "%Y%m%dT%H%M%S")
-        legacy = naive.replace(tzinfo=timezone(timedelta(minutes=offset_minutes))).astimezone(timezone.utc)
+        try:
+            naive = datetime.strptime(stamp, "%Y%m%dT%H%M%S")
+            legacy = naive.replace(tzinfo=timezone(timedelta(minutes=offset_minutes))).astimezone(timezone.utc)
+        except ValueError:
+            return False
         return canonical_time.replace(microsecond=0) == legacy.replace(microsecond=0) and _digest_alias(
             digest, canonical_payload_sha
         )
 
     return False
+
+
+def _candidate_trigger_key(path: Path) -> str:
+    """Recover a race-fence identity even when historical JSON is damaged.
+
+    Legacy claim filenames themselves encoded the trigger identity. A malformed sibling
+    must therefore not silently disappear from the post-claim migration/race scan.
+    """
+    try:
+        candidate = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return path.stem
+    if not isinstance(candidate, dict):
+        return path.stem
+    candidate_key = candidate.get("trigger_key")
+    return candidate_key if isinstance(candidate_key, str) and candidate_key else path.stem
 
 
 def validate_claim(*, issue_body: str, claims_root: Path, expected_experiment: str = EXPECTED_EXPERIMENT) -> dict[str, Any]:
@@ -144,13 +173,7 @@ def validate_claim(*, issue_body: str, claims_root: Path, expected_experiment: s
     for sibling in claims_root.glob("*.json") if claims_root.is_dir() else []:
         if sibling == claim_path or sibling.name.endswith(".result.json"):
             continue
-        try:
-            candidate = json.loads(sibling.read_text(encoding="utf-8"))
-        except Exception:
-            continue
-        if not isinstance(candidate, dict):
-            continue
-        candidate_key = str(candidate.get("trigger_key") or "")
+        candidate_key = _candidate_trigger_key(sibling)
         if candidate_key == trigger_key or _legacy_semantic_alias(candidate_key, trigger_key):
             duplicates.append(str(sibling))
     if duplicates:

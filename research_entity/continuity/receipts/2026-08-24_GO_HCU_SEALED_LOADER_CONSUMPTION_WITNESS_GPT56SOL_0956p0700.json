@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_LOADER_CONSUMPTION_WITNESS_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "authority_reentry": {
+    "research_main_observed_before_write": "1638c428bacbd6ed1a25c3b42b92f9318ade1f54",
+    "bootstrap_cache_is_noncanonical": true,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_live_head_observed": "31c9e42603e62f1bca45dce977e98620665a3529",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_live_head_observed": "588315b63f4f4255f6e73bd604cbc1789cbe12c9"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed_by_this_organ": 0,
+    "work_classification": "ORDINARY_SOURCE_DESIGN_PLUS_DETERMINISTIC_REGRESSION"
+  },
+  "hypothesis": "A loader-consumption label plus pre-load digest is insufficient evidence that the loader actually received the exact admitted bytes. A producer-side immutable byte handoff can close that source-level evidence gap before any model-runtime promotion.",
+  "counterhypothesis": "A sealed-byte adapter could still be cosmetic if the real model loader ignores the supplied byte argument or if the downstream registry accepts a caller-forged witness. Therefore this primitive is source/test evidence only and requires binding to a real loader implementation plus canonical external admission before runtime credit.",
+  "delta": {
+    "donor_source_commit": "0c2e652f592eabe6ca0200fe76fa09fda9d03db5",
+    "donor_test_commit": "16a24bc7fbe50155b76cf618d116b98791e6a581",
+    "source_path": "the artefact/MicroEntity/hcu/loader_consumption_witness_v1.py",
+    "test_path": "the artefact/MicroEntity/hcu/test_loader_consumption_witness_v1.py",
+    "witness_schema": "HCU_LOADER_CONSUMPTION_WITNESS/v1",
+    "evidence_class": "SEALED_MEMFD_EXACT_BYTES_CALLBACK/v1",
+    "mechanism": [
+      "create anonymous Linux memfd with MFD_ALLOW_SEALING",
+      "write an exact payload snapshot",
+      "apply F_SEAL_WRITE + F_SEAL_GROW + F_SEAL_SHRINK + F_SEAL_SEAL",
+      "read and SHA-256 verify exact sealed bytes",
+      "supply those bytes to one explicitly bound loader callable",
+      "re-read seals and digest after the loader returns",
+      "emit candidate witness material for downstream canonical loader-consumption admission"
+    ],
+    "authority_boundary": "WITNESS_IS_CANDIDATE_EVIDENCE_ONLY; IT DOES_NOT_MINT_CANONICAL_STATE, MODEL_EXECUTION, JSPACE_CAUSALITY, OR TRAINING_CREDIT"
+  },
+  "deterministic_local_regression": {
+    "surface": "LOCAL_CONTAINER_SOURCE_TEST_ONLY_NOT_AUTHORIZED_ENTITYOS_HCU_RUNTIME_EVIDENCE",
+    "command": "python3 -m unittest -v",
+    "tests_observed": 5,
+    "tests_passed": 5,
+    "status": "PASS",
+    "obligations": [
+      "exact sealed bytes are supplied to the bound loader",
+      "mutable caller input is snapshotted before load",
+      "kernel rejects post-seal write",
+      "invalid loader-binding digest fails before loader call",
+      "loader exception produces no false witness"
+    ],
+    "runtime_credit_added": 0
+  },
+  "external_mechanism_basis": {
+    "python_fcntl": "Python 3.13 documents F_ADD_SEALS/F_GET_SEALS and F_SEAL_* for os.memfd_create-backed descriptors.",
+    "python_os": "Python 3.13 documents os.memfd_create and MFD_ALLOW_SEALING on supported Linux platforms.",
+    "linux_memfd": "Linux memfd_create provides an anonymous memory-backed file and sealing controls that can prevent writes/grow/shrink and further seal changes."
+  },
+  "current_execution_boundary": {
+    "exact_head_ready_build_evidence_exists": true,
+    "function_or_sandbox_execution_observed": false,
+    "blocking_reason": "SUPERVISOR_8_63_REQUIRES_DIRECT_INVOCATION_SCOPED_FREE_ONLY_QUOTA_NO_CHARGE_NO_UPGRADE_NO_BILLING_EVIDENCE; STATIC_ADMISSION_OR_READY_BUILD_IS_INSUFFICIENT",
+    "paid_or_unknown_execution_attempted": false,
+    "together_attempted": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_CONVERGENCE_ONLY: preserve the exact-head READY executor/build evidence but do not invoke while invocation-scoped FREE_ONLY cost/quota authority remains unresolved; no runtime promotion.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: added one reusable loader-consumption witness primitive that can bind exact checkpoint/tokenizer/runtime/build byte handoff to a real loader adapter without becoming a second state authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_PRECONDITION_ONLY: the source-level path toward verified actual-loader consumption is stronger, but no real ~0.8B loader/model execution or J-Space causal use was observed; training readiness receives no runtime/model/training credit."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_DIRECT_REWRITE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving whole-system surface under concurrent main writes; this append-only receipt plus donor commits preserve the exact macrocycle delta without overwriting fresher parallel state."
+  },
+  "next_exact_gate": "Bind HCU_LOADER_CONSUMPTION_WITNESS/v1 to one real zero-cost local approximately-0.8B checkpoint/tokenizer/runtime/build loader implementation so the loader must consume the witnessed bytes; admit the resulting observation through the existing canonical loader-consumption registry and MiniUnifiedDB model-execution path; then execute only on an authorized FREE_ONLY surface after invocation-scoped quota/no-charge authority is directly observed. Preserve zero model/J-Space/training credit until exact execution evidence exists."
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "reentry_main_initial": "16fcc38e31188322c953474b6b9e9db4bf8a170f",
+  "reentry_main_before_receipt": "264629c9984a83efb13f9aebd697c046ab72021f",
+  "track_a": {
+    "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+    "status": "ADVANCED_SOURCE_AND_RUNTIME_REQUEST_PENDING_EXECUTOR",
+    "deltas": [
+      "closed the Trigger1 atomic-lease migration race where differently formatted historical timestamp/payload claims could coexist with a new canonical ts_* claim",
+      "extended the race fence to legacy minute-local, optional go__, compact-second and shortened >=12-hex payload-digest aliases with UTC normalization",
+      "fail closed on aliasing historical filenames even when the legacy JSON payload is damaged or unparsable",
+      "expanded live Forge-to-Distillery source guards to prove first promotion, immediate replay, second-process idempotency and nested evidence qualification",
+      "fixed live promotion baseline accounting so preexisting accepted_dataset_tokens are read even before forge_execution_ingest exists and cannot be misreported as new Forge token delta",
+      "created PR #1695 to trigger exactly one current GO872 Forge live-Distillery workflow revision; workflow run 32752712899/job 97513139567 was observed queued"
+    ],
+    "commits": [
+      "eebc5b37a90050a2a531910f7e656b05978cfc81",
+      "edd1dbb652c6d47f55a5cb02a746264c23f20e06",
+      "bef622e80a67417ab967ddd3892fa5fff64deedc",
+      "9caa7ec7f53df96efcbbdcb7803c7ae4aa0f13e0",
+      "6bcb23e1abd19b5313a5b314fc265a2e2d67a960",
+      "4eceacbbd8cbc03c1389e65a3035c4111e4a19c9",
+      "c9e663354b6253946c860dfbad3c5745a098499e"
+    ],
+    "runtime_request": {
+      "pr": 1695,
+      "run_id": 32752712899,
+      "job_id": 97513139567,
+      "observed_status": "queued",
+      "old_pre_live_promotion_run_id": 32742535392,
+      "old_run_observed_status": "queued"
+    },
+    "live_funnel_observed": {
+      "forge_accepted_deltas": 1,
+      "distillery_accepted_packets": 0,
+      "distillery_accepted_dataset_tokens": 0
+    },
+    "runtime_credit_delta": 0
+  },
+  "track_b": {
+    "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "status": "ADVANCED_COORDINATION_PROVENANCE_BOUNDARY",
+    "delta": "Atomic unusual-experiment admission now preserves semantic identity across historical key migrations and damaged legacy evidence instead of reopening a second intervention budget. This strengthens HCU causal provenance/coordination without creating another canonical state or effect authority.",
+    "hcu_full_runtime_credit_delta": 0
+  },
+  "track_c": {
+    "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+    "status": "ADVANCED_CONTROL_PLANE_ONLY",
+    "delta": "The retained current intermediate Qwen3-0.6B lane remains the model-specific frontier; atomic lease admission around that lane was hardened. Parallel current-main work additionally strengthened label-independence/metric-modality source gates, but this organ executed no new model intervention.",
+    "new_unusual_experiments": 0,
+    "jspace_model_runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable macrocycle/request identifier is exposed to this organ and the available user-message timestamp has minute precision only; canonical timestamp fallback therefore cannot be derived reproducibly.",
+    "superseded_pr": 1674,
+    "superseded_pr_action": "closed without merge after main advanced during creation; narrow fix was re-entered and committed blob-bound to current main instead of force-updating stale work",
+    "runtime_queue_classification": "EXECUTION_SURFACE_NEGATIVE_EVIDENCE_NOT_PRODUCT_FAILURE"
+  },
+  "source_equivalent_sanity": {
+    "lease_alias_cases": 5,
+    "expected_alias_true": 3,
+    "expected_alias_false": 2,
+    "result": "MATCHED_EXPECTATIONS",
+    "scope": "LOGIC_SANITY_ONLY_NOT_ENTITYOS_HCU_RUNTIME_CREDIT"
+  },
+  "credits_after": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Consume only a repository-bound terminal result from the current Forge live-promotion workflow revision. Require promotion guards PASS, disposable exact-current gate PASS, live_distillery_promotion.status=PASS, exactly one new live packet with positive accepted_dataset_tokens delta on first promotion, immediate identical replay +0 packets/+0 tokens, and exact execution source identity. If the self-hosted job remains queued, preserve zero runtime credit and treat runner availability as infrastructure state. Keep the Qwen unusual intervention blocked until a canonical atomic lease exists."
+}

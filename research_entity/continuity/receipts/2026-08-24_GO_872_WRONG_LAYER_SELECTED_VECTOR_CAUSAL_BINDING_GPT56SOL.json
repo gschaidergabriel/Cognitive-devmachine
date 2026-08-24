@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "rebase_main": "53176b01f4103574b70787d695c5c7c505db2e75"
+  },
+  "coordination": {
+    "shared_immutable_request_id_exposed_to_this_organ": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "repair_pr": "gschaidergabriel/clay-global-research-entity#1664"
+  },
+  "observation": {
+    "path": "tools/trigger1_local_qwen06_intermediate_execute.py",
+    "main_blob_before_repair": "873112cdf3d790cf3987ca6b5bbcf9dd80160b5e",
+    "declared_wrong_layer_semantics": "same selected vector at a different predeclared layer must not outperform selected-layer +VECTOR",
+    "observed_executor_semantics": "wrong-layer request changed layer only; RuntimeState selected self.directions[layer], so vector provenance changed with intervention site",
+    "causal_confound": "intervention site and vector provenance changed together"
+  },
+  "hypothesis": "A clean wrong-layer localization control must move the already-selected vector to another intervention site while keeping vector bytes fixed.",
+  "counterhypothesis": "Using each alternate layer's own derived vector remains useful as a separately named alternate-layer-vector benchmark.",
+  "delta": {
+    "branch": "go872-fix-wrong-layer-selected-vector-gpt56sol",
+    "source_commit": "7dab2f30f0106686828980c7a4c330c7c7486e6c",
+    "source_new_blob": "f74ee7f297cab284ae0ca90858d1982ffa91c01e",
+    "changes": [
+      "separate intervention layer from vector_layer provenance",
+      "bind wrong-layer request to layer=wrong_layer and vector_layer=selected_layer",
+      "require returned provenance identities to match",
+      "require wrong-layer applied-vector SHA to equal selected-layer +VECTOR SHA",
+      "persist wrong-layer vector provenance and same-vector boolean",
+      "preserve current label-independence evidence added by parallel main"
+    ]
+  },
+  "evidence": {
+    "scope": "SOURCE_AND_REGRESSION_DEFINITION_ONLY",
+    "runtime_model_execution_observed": false,
+    "focused_test_execution_observed": false,
+    "external_provider_credentials_read": false,
+    "paid_or_unknown_provider_execution": false,
+    "together_used": false
+  },
+  "three_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_SOURCE_EVIDENCE_CONVERGENCE",
+    "track_b_hcu_and_typed_entry": "ADVANCED_HCU_VECTOR_PROVENANCE",
+    "track_c_global_jspace_gwt_training_readiness": "ADVANCED_CAUSAL_DISCRIMINATOR"
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Fuse PR #1664 into current main, run focused plus existing intermediate/promotion regressions on exact bytes, then only under a valid canonical atomic lease run the zero-cost local causal Qwen envelope and require identical selected-vector SHA at selected and wrong layers."
+}

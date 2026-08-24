@@ -1,0 +1,61 @@
+{
+  "schema_version": "8.76",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "classification": "METRICS_FRESHNESS_GATE_NOT_IMPLEMENTED_IN_PUBLISHER__DISTILLERY_REPLAY_V2_STILL_OPEN",
+  "authority": {
+    "free_only": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "paid_subscription_unknown_fail_closed": true,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false
+  },
+  "material_new_finding": {
+    "status": "EXECUTED_STALENESS_PERSISTS_AFTER_8_75",
+    "finding": "After Supervisor 8.75, autonomous metrics refresh commits continued through 2026-08-24T20:31Z and the live dashboard advanced to 30,746,025 Free-Swarm tokens, 144 Forge evaluations and 1 nominal Forge ACCEPTED delta, while free swarm/GO_COLLECTIVE_METRICS.json remains frozen at generated_at=2026-08-24T13:58:54Z, authority_epoch=8.71, 7,302,860 tokens and forge_accepted_deltas=0. The current test_go_collective_metrics_v1.py contains no freshness, authority-epoch, out-of-order-writer or stale-supersession regression. Therefore the 8.75 freshness law exists only as supervisor policy; it is not yet implemented/executed in the publisher path.",
+    "credit": "METROLOGY_BLOCKER_WITH_IMPLEMENTATION_GAP"
+  },
+  "required_change": {
+    "rule": "Do not add a second metrics authority. Extend the existing go_collective_metrics publisher/consumer path so freshness is computed from the canonical input snapshot and fails closed before publication.",
+    "must_add_tests": [
+      "newer live input than aggregate => aggregate STALE/UNMEASURED",
+      "authority_epoch mismatch => HISTORICAL or fail-closed",
+      "older writer finishing after newer writer cannot regress latest",
+      "same bounded inputs rerun => identical result digest",
+      "Forge/Distillery/Swarm fields must share one bounded snapshot identity"
+    ],
+    "required_receipt": "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1"
+  },
+  "primary_existing_blocker": {
+    "id": "DISTILLERY_REPLAY_IDENTITY_NAMESPACE_MIGRATION",
+    "status": "OPEN",
+    "active_successor": "PR #1771",
+    "head": "289b3144a06d0eaa8901b92cc023ef75893b8ba4",
+    "rule": "No live Distillery/dataset/training credit until exact-current DISTILLERY_REPLAY_ID_MIGRATION_RECEIPT/v1 passes."
+  },
+  "execution_order": [
+    "IMPLEMENT_FRESHNESS_FAIL_CLOSED_IN_EXISTING_GO_COLLECTIVE_METRICS_PATH",
+    "EXECUTE_FRESHNESS_REGRESSIONS_AND_EMIT_COLLECTIVE_METRICS_FRESHNESS_RECEIPT_V1",
+    "KEEP_PR1771_REPLAY_V2_MIGRATION_BLOCKING_DATASET_CREDIT",
+    "EXECUTE_PR1771_EXACT_CURRENT_MIGRATION_RECEIPT",
+    "THEN_PROVE_ONE_EVIDENCE_QUALIFIED_FORGE_ACCEPT_TO_EXACTLY_ONE_DISTILLERY_PACKET_TO_ACCEPTED_DATASET_TOKENS_GT_ZERO_TO_SEMANTIC_REPLAY_PLUS_ZERO",
+    "KEEP_LOCAL_QWEN_JSPACE_RUNTIME_SEPARATE_AND_ZERO_COST",
+    "KEEP_FREE_ONLY_FAIL_CLOSED_FOR_ALL_EXTERNAL_LANES"
+  ],
+  "goodman_law": [
+    "stale dashboard/aggregate copies are one evidence family, not independent evidence",
+    "token volume and nominal ACCEPTED labels do not mint utility or semantic credit",
+    "model consensus and shared orchestration ancestry cannot promote EntityOS/HCU, dataset, BASE or canonical semantics"
+  ],
+  "promotion_state": {
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "jspace_model_runtime_pass": false,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false,
+    "provider_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

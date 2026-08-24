@@ -7,6 +7,10 @@ bubblewrap --unshare-all, then drives the exact current Distillery bridge with (
 nominal ACCEPT lacking execution admission and (b) one evidence-qualified ACCEPT twice.
 Acceptance requires nominal rejection plus exactly one new packet, nonzero dataset
 tokens, and zero replay token delta.
+
+The host/source probe remains read-only. Only the witness-owned disposable current and
+ablated clones are writable in their isolated /work bind so py_compile/unittest may
+create ordinary scratch artifacts without exposing any additional host path.
 """
 from __future__ import annotations
 
@@ -57,7 +61,7 @@ def minimal_env() -> dict[str, str]:
     }
 
 
-def bwrap_prefix(cwd: Path) -> list[str] | None:
+def bwrap_prefix(cwd: Path, *, writable_workdir: bool = False) -> list[str] | None:
     bwrap = shutil.which("bwrap")
     if not bwrap:
         return None
@@ -68,14 +72,17 @@ def bwrap_prefix(cwd: Path) -> list[str] | None:
     for host in ("/usr", "/bin", "/lib", "/lib64", "/usr/local"):
         if Path(host).exists():
             prefix += ["--ro-bind", host, host]
-    prefix += ["--ro-bind", str(cwd.resolve()), "/work", "--chdir", "/work"]
+    work_bind = "--bind" if writable_workdir else "--ro-bind"
+    prefix += [work_bind, str(cwd.resolve()), "/work", "--chdir", "/work"]
     for key, value in minimal_env().items():
         prefix += ["--setenv", key, value]
     return prefix + ["--"]
 
 
 def backend_status(cwd: Path) -> dict[str, Any]:
-    prefix = bwrap_prefix(cwd)
+    # Admission probe is deliberately read-only. Writable scope is enabled only
+    # by run_isolated for witness-owned disposable clones.
+    prefix = bwrap_prefix(cwd, writable_workdir=False)
     if prefix is None:
         return {
             "schema": "CLAY_FORGE_EXECUTION_ADMISSION/v1",
@@ -99,11 +106,17 @@ def backend_status(cwd: Path) -> dict[str, Any]:
         "network_namespace": "ISOLATED" if ok else "UNAVAILABLE",
         "secret_environment_inherited": False,
         "host_secret_paths_exposed": False,
+        "probe_workdir_writable": False,
+        "witness_disposable_workdir_writable": True,
     }
 
 
 def run_isolated(cwd: Path, command: list[str], timeout: int = 120) -> dict[str, Any]:
-    prefix = bwrap_prefix(cwd)
+    # cwd is always one of the witness-owned clones created under tempfile.mkdtemp
+    # in main(). Making only /work writable is required for py_compile/unittest
+    # scratch output; all other host binds remain read-only/hidden and networking
+    # remains unshared.
+    prefix = bwrap_prefix(cwd, writable_workdir=True)
     if prefix is None:
         return {"rc": 126, "elapsed_s": 0.0, "stdout": "", "stderr": "NO_BUBBLEWRAP"}
     started = time.monotonic()
@@ -198,6 +211,7 @@ def main() -> int:
         "hcu_full_credit": 0,
         "jspace_credit": 0,
         "training_credit": 0,
+        "witness_write_scope": "DISPOSABLE_CURRENT_AND_ABLATED_CLONES_ONLY",
     }
     tmp: Path | None = None
     try:

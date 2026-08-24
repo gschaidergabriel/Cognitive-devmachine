@@ -13,7 +13,18 @@ def load():
     m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m); return m
 
 
-def holdout_rows(m, *, include_wrong=True, include_lesion=True, counterbalanced=True, nuisance_sign=1.0):
+def holdout_rows(
+    m,
+    *,
+    include_wrong=True,
+    include_lesion=True,
+    counterbalanced=True,
+    nuisance_sign=1.0,
+    wrong_vector_source_layer=8,
+    wrong_vector_sha='a'*64,
+    selected_vector_sha='a'*64,
+    wrong_specificity_margin=0.1,
+):
     scores={
         'BASELINE':0.0,
         '+VECTOR':3.0,
@@ -31,9 +42,17 @@ def holdout_rows(m, *, include_wrong=True, include_lesion=True, counterbalanced=
                     'split':'holdout','layer':8,'gain':2.0,'case_id':case,
                     'label_map_id':label_map,'positive_label':pos,'negative_label':neg,
                     'control':control,'target_score':scores[control],
+                    'applied_vector_sha256':selected_vector_sha if control=='+VECTOR' else ('0'*64),
                 }
-                if include_wrong: row['wrong_layer_delta']=-0.1
-                if include_lesion:
+                if include_wrong and control=='+VECTOR':
+                    row.update({
+                        'wrong_layer':12,
+                        'wrong_layer_vector_source_layer':wrong_vector_source_layer,
+                        'wrong_layer_applied_vector_sha256':wrong_vector_sha,
+                        'wrong_layer_specificity_margin':wrong_specificity_margin,
+                        'wrong_layer_delta':-wrong_specificity_margin,
+                    })
+                if include_lesion and control=='+VECTOR':
                     row['lesion_delta']=-0.2; row['rescue_delta']=0.5
                 rows.append(row)
     return rows
@@ -71,7 +90,9 @@ class ProtocolTests(unittest.TestCase):
         self.assertTrue(selected['selected']); self.assertEqual(8,selected['layer'])
         out=self.m.adjudicate_holdout(holdout_rows(self.m),selected_layer=8,selected_gain=2.0)
         self.assertTrue(out['pass']); self.assertTrue(out['counterbalanced_label_mapping'])
-        self.assertTrue(out['wrong_layer_evidence_complete']); self.assertTrue(out['lesion_rescue_evidence_complete'])
+        self.assertTrue(out['wrong_layer_evidence_complete']); self.assertTrue(out['wrong_layer_same_vector_complete'])
+        self.assertTrue(out['wrong_layer_same_vector_ok']); self.assertTrue(out['lesion_rescue_evidence_complete'])
+        self.assertGreater(out['min_wrong_layer_specificity_margin'],0)
 
     def test_holdout_requires_label_remap(self):
         rows=holdout_rows(self.m)
@@ -86,6 +107,19 @@ class ProtocolTests(unittest.TestCase):
     def test_holdout_requires_wrong_layer_evidence_for_every_case(self):
         out=self.m.adjudicate_holdout(holdout_rows(self.m,include_wrong=False),selected_layer=8,selected_gain=2.0)
         self.assertFalse(out['pass']); self.assertEqual('WRONG_LAYER_EVIDENCE_REQUIRED',out['classification'])
+
+    def test_holdout_requires_same_selected_vector_source_layer(self):
+        out=self.m.adjudicate_holdout(holdout_rows(self.m,wrong_vector_source_layer=12),selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass']); self.assertEqual('WRONG_LAYER_SAME_SELECTED_VECTOR_EVIDENCE_REQUIRED',out['classification'])
+
+    def test_holdout_requires_same_applied_vector_hash(self):
+        out=self.m.adjudicate_holdout(holdout_rows(self.m,wrong_vector_sha='b'*64),selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass']); self.assertEqual('WRONG_LAYER_SAME_SELECTED_VECTOR_EVIDENCE_REQUIRED',out['classification'])
+
+    def test_holdout_rejects_wrong_layer_tie(self):
+        out=self.m.adjudicate_holdout(holdout_rows(self.m,wrong_specificity_margin=0.0),selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass']); self.assertFalse(out['wrong_layer_ok'])
+        self.assertEqual(0.0,out['min_wrong_layer_specificity_margin'])
 
     def test_holdout_requires_lesion_rescue_evidence_for_every_case(self):
         out=self.m.adjudicate_holdout(holdout_rows(self.m,include_lesion=False),selected_layer=8,selected_gain=2.0)

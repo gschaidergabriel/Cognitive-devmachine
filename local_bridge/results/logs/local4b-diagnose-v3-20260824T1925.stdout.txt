@@ -1,0 +1,87 @@
+HEALTH
+
+BOOTLOG
+MODELLOG
+STATE
+{
+  "schema": "CLAY_LOCAL_RESEARCH_MODEL/v1",
+  "observed_at": "2026-08-24T11:32:09.959338+00:00",
+  "state": "STARTING",
+  "backend": "llama.cpp",
+  "backend_commit": "7584430716ee229751771ed0d6bbcb780d105eeb",
+  "model": "Qwen/Qwen3-4B-GGUF:Q4_K_M",
+  "listen": "127.0.0.1:8088",
+  "threads": 4,
+  "parallel": 1,
+  "context": 8192,
+  "cost_class": "LOCAL_ZERO_PROVIDER_BILLING"
+}
+PROCS
+    PID     ELAPSED %CPU %MEM COMMAND
+      1    03:52:12  0.0  0.0 sleep infinity
+    460    03:03:50  0.0  0.0 [bash] <defunct>
+    871    02:39:49  0.0  0.0 [sleep] <defunct>
+    900    02:39:05  0.0  0.0 [pkill] <defunct>
+    922    02:37:44  0.0  0.0 [python3] <defunct>
+    931    02:37:43  0.5  0.0 [python3] <defunct>
+   2886    02:34:07  0.0  0.0 [python3] <defunct>
+  13311    01:41:02  0.0  0.0 [python3] <defunct>
+  13321    01:41:02  0.0  0.0 [python3] <defunct>
+  13754    01:38:02  0.0  0.0 [pkill] <defunct>
+  16530    01:19:26  0.0  0.0 [ssh] <defunct>
+  19669    01:01:16  0.0  0.0 [xargs] <defunct>
+  19766       57:49  0.0  0.0 [xargs] <defunct>
+  19789       57:07  0.0  0.0 [bash] <defunct>
+  19790       57:07  0.0  0.0 [sleep] <defunct>
+  19807       57:07  1.4  0.1 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60
+  19835       56:36  0.0  0.0 [llama-server] <defunct>
+  19841       56:36  0.7  0.2 python3 /workspace/clay-global-research-entity/tools/run_research_distillery_local.py --hours 24 --sleep-seconds 3
+  19844       56:36  0.6  0.4 python3 /workspace/clay-global-research-entity/tools/run_free_evidence_forge.py --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20
+  22618       41:55  0.0  0.0 [bash] <defunct>
+  24477       39:41  0.0  0.0 bash tools/run_24h_entityos_swarm_supervisor.sh
+  29051       09:13  0.0  0.0 [ssh] <defunct>
+  30189       00:09  0.0  0.0 sleep 30
+  30194       00:00  0.0  0.0 bash
+  30199       00:00  0.0  0.0 ps -eo pid,etime,%cpu,%mem,args
+  30200       00:00  0.0  0.0 head -80
+FILES
+15776467 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-gemma-4.gguf
+15776467 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-gemma-4.gguf
+10874545 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-command-r.gguf
+10874545 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-command-r.gguf
+7818140 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-llama-bpe.gguf
+7818140 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-llama-bpe.gguf
+6821877 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-nomic-bert-moe.gguf
+6821877 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-nomic-bert-moe.gguf
+5928682 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-qwen35.gguf
+5928682 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-qwen35.gguf
+5928681 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-qwen2.gguf
+5928681 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-qwen2.gguf
+4825676 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-aquila.gguf
+4825676 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-aquila.gguf
+3970167 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-deepseek-llm.gguf
+3970167 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-deepseek-llm.gguf
+2287728 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-falcon.gguf
+2287728 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-falcon.gguf
+1771431 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-gpt-neox.gguf
+1771431 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-gpt-neox.gguf
+1771393 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-mpt.gguf
+1771393 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-mpt.gguf
+1766807 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-gpt-2.gguf
+1766807 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-gpt-2.gguf
+1720710 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-refact.gguf
+1720710 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-refact.gguf
+1719346 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-starcoder.gguf
+1719346 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-starcoder.gguf
+1340998 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-baichuan.gguf
+1340998 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-baichuan.gguf
+1156067 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-deepseek-coder.gguf
+1156067 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-deepseek-coder.gguf
+726019 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-phi-3.gguf
+726019 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-phi-3.gguf
+723869 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-llama-spm.gguf
+723869 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-llama-spm.gguf
+627549 /cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-bert-bge.gguf
+627549 /cache/clay-local-research-model/llama.cpp/models/ggml-vocab-bert-bge.gguf
+17920 /cache/xdg/clay-local-research-model/llama.cpp/build/bin/llama-server
+17920 /cache/clay-local-research-model/llama.cpp/build/bin/llama-server

@@ -1,0 +1,58 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "source_base_main": "0b3495aed89a86b3b626642aa202367862d0b489",
+  "branch": "gpt56sol/go-872-trigger1-legacy-lease-race-fence-20260824-2334",
+  "finding": "The newly merged Trigger1 V2 atomic lease gate scans sibling claims using literal trigger_key equality only. The current GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires a post-claim migration/race fence that also rejects legacy or noncanonical encodings of the same immutable request identity, or the same exact timestamp plus payload digest. Historical repository claims contain such dashed-local-time and compact-short-digest forms, so exact string equality leaves a reachable false-admission class.",
+  "counterhypothesis": "Canonical trigger-key validation alone is sufficient because historical noncanonical claims cannot equal the new canonical claim path.",
+  "adjudication": "Rejected. The protocol explicitly says different string formatting of the same timestamp/payload identity does not create a different macrocycle, and historical claim records demonstrate those variants exist.",
+  "donor": {
+    "pull_request": "gschaidergabriel/clay-global-research-entity#1461",
+    "use": "PORT_ONLY_RECOGNIZED_LEGACY_TIMESTAMP_AND_DIGEST_PREFIX_RACE_FENCE_INTO_CANONICAL_TRIGGER1_GATE",
+    "second_guard_created": false
+  },
+  "delta": [
+    "Normalize canonical timestamp trigger identities to UTC microsecond form.",
+    "Recognize historical dashed local-time claim keys and compact offset claim keys.",
+    "Treat historical 12-64 hex payload suffixes as semantic-race prefixes only, never as canonical identity.",
+    "Reject same normalized timestamp plus matching payload digest/prefix with EXPERIMENT_BUDGET_RACE_VIOLATION.",
+    "Use a legacy filename stem as the race-fence identity when a sibling claim JSON is malformed, so corrupted legacy evidence cannot silently reopen the experiment slot.",
+    "Add positive and negative deterministic regression definitions for full-digest, short-digest, malformed-file and unrelated-timestamp cases."
+  ],
+  "coordination": {
+    "shared_immutable_request_or_turn_id_exposed": false,
+    "available_user_message_timestamp": "2026-08-24T23:34+07:00",
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "evidence_scope": "SOURCE_CONTROL_PLANE_AND_REGRESSION_DEFINITION_ONLY_PENDING_EXACT_HEAD_EXECUTION",
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_FAIL_CLOSED_PRE_INTERVENTION_COORDINATION_REPAIR",
+    "track_b": "ADVANCED_AT_TYPED_CAUSAL_PROVENANCE_AND_MACROCYCLE_IDENTITY_BOUNDARY",
+    "track_c": "ADVANCED_AT_SAFE_JSPACE_EXECUTION_READINESS_WITH_ZERO_MODEL_INTERVENTIONS"
+  },
+  "provider_and_effect_safety": {
+    "provider_secret_lookup_performed": false,
+    "external_llm_provider_network_performed": false,
+    "together_used": false,
+    "paid_or_unknown_cost_execution_performed": false,
+    "new_production_effect_performed": false
+  },
+  "next_exact_gate": "Execute tests.test_trigger1_atomic_lease_gate plus the current Trigger1 promotion-gate regression on this exact successor head. Fuse only if current, nonduplicate and green. Do not dispatch the unusual midlayer intervention without an already-created valid canonical claim for the exact experiment schema."
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "observed_main_before_write": "643f1cf04575ce1830f8fcf0148c6d2fb14555db",
+  "execution_mode": "FREE_ONLY",
+  "scope": "TRIGGER1_JSPACE_PROMOTION_EVIDENCE_ADMISSION_SOURCE_REVIEW_ONLY",
+  "coordination": {
+    "shared_reproducible_macrocycle_identity_available": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0
+  },
+  "observations": [
+    {
+      "level": "R0_SOURCE_OBSERVED",
+      "path": "tools/trigger1_local_qwen06_intermediate_execute.py",
+      "blob_sha": "9fe03e61f579062d81a0244c8d8cf4e18d8ae348",
+      "finding": "The current executor separates intervention layer from vector_layer, applies the selected-layer vector at the wrong layer, requires wrong-layer applied_vector_sha256 to equal selected-layer +VECTOR, and writes wrong_layer_vector_source_layer, wrong_layer_same_selected_vector and wrong_layer_receipt_sha256 into +VECTOR holdout rows."
+    },
+    {
+      "level": "R0_SOURCE_OBSERVED",
+      "path": "tools/trigger1_intermediate_promotion_bridge.py",
+      "blob_sha": "bac54beb966f8def9ce1d12707f27abb81d97d2b",
+      "finding": "The current promotion bridge checks +VECTOR hook_calls and selected-layer applied_vector_sha256, then accepts wrong-layer evidence from verdict.wrong_layer_evidence_complete/wrong_layer_ok. It does not independently require wrong_layer_same_selected_vector, wrong_layer_vector_source_layer, wrong_layer_receipt_sha256, or a wrong-layer receipt family before emitting a direct steering candidate."
+    }
+  ],
+  "hypothesis": "Executor-local same-vector localization provenance can be lost at the promotion boundary because the bridge trusts summary verdict booleans instead of re-admitting the newly available wrong-layer provenance fields.",
+  "counterhypothesis": "Exact source/execution attestation plus the upstream protocol PASS may make tampering operationally difficult, but that does not make the bridge's evidence shape self-contained or fail-closed at its own admission boundary.",
+  "falsifier": "Show an exact-current bridge path that independently verifies the wrong-layer vector source layer, same-selected-vector equality and bound wrong-layer runtime receipt family before direct-candidate emission, or show a stronger canonical downstream admission that cryptographically binds and revalidates those exact fields.",
+  "recommended_minimal_delta": [
+    "On every selected-layer +VECTOR holdout row, require wrong_layer_same_selected_vector is true.",
+    "Require wrong_layer_vector_source_layer equals the frozen selected layer and wrong_layer differs from the selected intervention layer.",
+    "Require a valid wrong_layer_receipt_sha256 for every holdout case and bind the resulting receipt family into the emitted direct candidate/analysis receipt.",
+    "Add a deterministic negative regression where verdict booleans remain PASS-shaped but same-vector wrong-layer provenance is absent or mismatched; the bridge must reject it.",
+    "Do not create a second bridge or scientific lane; harden the retained bridge in place."
+  ],
+  "local_counterexample_execution": {
+    "attempted": true,
+    "result": "NOT_EXECUTED_TOOL_CAPACITY",
+    "reason": "The local Python analysis surface returned TooManyActiveSessionsError before executing the reproducer.",
+    "epistemic_effect": "No executable counterexample credit is claimed; the gap remains source-observed and the proposed regression remains the next discriminator."
+  },
+  "runtime_credit_added": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "effect_or_provider_io": {
+    "model_intervention_executed": false,
+    "external_provider_model_network_io": false,
+    "provider_credentials_read": false,
+    "paid_or_together_execution": false,
+    "canonical_effect_executed": false
+  },
+  "next_exact_action": "Re-enter current main, check for overlapping bridge-provenance work, then add one deterministic negative bridge regression and the minimal in-place provenance admission only if still nonduplicate."
+}

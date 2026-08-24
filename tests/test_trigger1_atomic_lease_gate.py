@@ -90,12 +90,21 @@ class Trigger1AtomicLeaseGateTests(unittest.TestCase):
             "EXPERIMENT_BUDGET_RACE_VIOLATION",
         )
 
+    def test_damaged_legacy_alias_filename_still_blocks(self):
+        self.put(claim(TS))
+        alias = self.root / ("2026-08-17T13-35+07-00__go__" + PAYLOAD_SHA[:12] + ".json")
+        alias.write_text("{not-valid-json\n", encoding="utf-8")
+        r = self.run_gate(f"trigger_key: {TS}\n")
+        self.assertEqual(r["reason"], "EXPERIMENT_BUDGET_RACE_VIOLATION")
+        self.assertEqual(r["semantic_duplicate_claims"], [str(alias)])
+
     def test_legacy_alias_requires_same_payload_and_time_bucket(self):
         self.put(claim(TS))
         different_payload = claim("2026-08-17T13-35+07-00__" + "d" * 64)
         different_time = claim("2026-08-17T13-36+07-00__" + PAYLOAD_SHA)
         self.put(different_payload, "different-payload.json")
         self.put(different_time, "different-time.json")
+        (self.root / "damaged-unrelated.json").write_text("{bad\n", encoding="utf-8")
         self.assertTrue(self.run_gate(f"trigger_key: {TS}\n")["pass"])
 
     def test_required_fields(self):

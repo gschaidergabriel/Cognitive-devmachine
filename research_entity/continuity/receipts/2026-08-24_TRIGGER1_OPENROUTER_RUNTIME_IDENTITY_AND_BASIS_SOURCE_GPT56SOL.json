@@ -1,0 +1,110 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_DELTA_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "1",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "7db29cb2a7b514793a421b93ec6b158cb39b440e",
+  "owner_directive": "research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json",
+  "research_goal": "Advance direct reproducible vector-based control of an admitted FREE API model through Global J-Space without confusing nominal model identity, output-logit control, provider routing, or local mechanism evidence with hidden-state/runtime causal credit.",
+  "runtime_execution": {
+    "provider_model_network_requests_by_this_organ": 0,
+    "provider_credentials_read_by_this_organ": false,
+    "together_used": false,
+    "paid_or_unknown_cost_execution": false,
+    "classification": "SOURCE_AND_EXTERNAL_PRIMARY_RESEARCH_ONLY_NO_RUNTIME_CREDIT"
+  },
+  "repo_observations": {
+    "exact_free_qwen_route": "qwen/qwen3-0.6b-04-28:free",
+    "route_authority_commit_observed": "7df4c908f8dbf1da713ad1ea8d382c85b25d444c",
+    "hosted_logit_control_tool": "tools/trigger1_openrouter_logit_bias_control.py",
+    "hosted_logit_control_current_behavior": [
+      "Binds a concrete FREE Qwen3-0.6B OpenRouter model slug to route-specific zero-price evidence.",
+      "Binds upstream weights repository/revision and tokenizer.json digest in the request identity.",
+      "Uses provider.require_parameters=true and provider.allow_fallbacks=false.",
+      "Correctly scopes any success to OUTPUT_LOGIT_VECTOR_CONTROL_COMPONENT_ONLY rather than hidden-state/J-Space steering."
+    ],
+    "new_gap": "The current request identity does not bind the concrete upstream OpenRouter provider endpoint/variant or quantization actually serving the call, and the normal request path does not require OpenRouter router metadata. A concrete model slug therefore does not by itself prove invariant runtime identity across matched controls."
+  },
+  "external_primary_source_observations": [
+    {
+      "source": "https://openrouter.ai/docs/guides/routing/provider-selection",
+      "classification": "SOURCE_DIRECT",
+      "finding": "OpenRouter routes a model across eligible providers by default; callers can constrain provider order/only, disable fallbacks, require supported parameters, and filter quantization. Provider choice is therefore a material runtime variable distinct from the model slug."
+    },
+    {
+      "source": "https://openrouter.ai/docs/guides/features/router-metadata",
+      "classification": "SOURCE_DIRECT",
+      "finding": "OpenRouter supports X-OpenRouter-Metadata: enabled, returning openrouter_metadata that exposes routing decisions, retries/fallback behavior and other router actions. This is a direct measurement surface for the missing runtime-route identity."
+    },
+    {
+      "source": "https://openrouter.ai/qwen/qwen3-0.6b-04-28:free",
+      "classification": "SOURCE_DIRECT",
+      "finding": "The Qwen3-0.6B concrete :free model slug is published at zero prompt/completion price. This proves route price identity, not exact upstream execution bytes or hidden-state intervention support."
+    },
+    {
+      "source": "https://arxiv.org/abs/2607.25270",
+      "classification": "SOURCE_DIRECT",
+      "finding": "Activation-source selection materially changes activation-steering effectiveness. Execution-boundary states and tail subtraction are reported as stronger/stabler steering-signal sources in the studied settings, making source-selection a causal calibration variable rather than a fixed implementation detail."
+    }
+  ],
+  "hypothesis": {
+    "runtime_identity": "Matched Trigger-1 controls can be confounded when the concrete upstream provider endpoint, quantization, or runtime path differs between calls even if the OpenRouter model slug, prompt, seed and logit vector are fixed.",
+    "basis_source": "For the hidden-state/cvec lane, basis vectors derived from execution-boundary activations with tail subtraction may produce a more directional and stable holdout effect than vectors derived from unlocalized prompt/continuation activations."
+  },
+  "counterhypotheses": [
+    "The concrete Qwen3-0.6B :free slug may currently resolve to only one invariant upstream endpoint/quantization, in which case explicit provider/runtime binding adds observability but does not change measured variance.",
+    "Execution-boundary source selection may not transfer to the exact Qwen3-0.6B/llama.cpp Trigger-1 setting; apparent gains could be task- or architecture-specific and must be tested on calibration then frozen before holdout."
+  ],
+  "highest_information_discriminators": {
+    "openrouter_runtime_identity": [
+      "Enable X-OpenRouter-Metadata for Trigger-1 hosted-control calls.",
+      "Persist a canonical digest plus nonsecret provider/endpoint/route/quantization fields from openrouter_metadata into the execution receipt.",
+      "When an exact eligible provider endpoint is known, set provider.only (or exact order) and allow_fallbacks=false; bind an explicit quantization filter where the provider publishes one.",
+      "Require the same observed provider endpoint/variant, quantization class and system_fingerprint across BASELINE, +VECTOR, SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM and PERMUTED_SAME_NORM before attributing a fixed-seed output-logit effect to the vector.",
+      "If any required runtime identity field is absent or changes, classify the batch as RUNTIME_IDENTITY_UNRESOLVED and mint zero causal steering promotion credit."
+    ],
+    "basis_source_calibration": [
+      "On the first admitted local instrumentable Qwen3-0.6B runtime, construct at least two basis-source candidates on calibration only: current/default activation source and execution-boundary plus tail-subtraction source.",
+      "Use identical downstream layer/gain/control families when comparing source candidates so source selection is the only intended changed variable.",
+      "Freeze source method, selected layer/range and gain before disjoint holdout; reject any holdout-informed source re-selection.",
+      "Promote only if the chosen source improves directional effect without increasing NULL/orthogonal/permuted off-target effects and survives fixed-seed disjoint holdout."
+    ]
+  },
+  "ten_lane_delta": {
+    "runtime_surface": "ADVANCED: exact FREE Qwen route exists, but exact upstream provider/quantization/runtime identity remains unbound; router metadata is the cheapest direct discriminator.",
+    "adapter_identity": "ADVANCED: activation-source selection becomes an explicit calibration-only identity component; source method must be frozen and receipt-bound before holdout.",
+    "layer_localization": "UNCHANGED: still calibration-only and frozen before holdout.",
+    "gain_calibration": "UNCHANGED: still calibration-only and frozen before holdout.",
+    "sign_flip_control": "UNCHANGED_REQUIRED_CONTROL.",
+    "null_control": "UNCHANGED_REQUIRED_CONTROL.",
+    "orthogonal_control": "UNCHANGED_REQUIRED_CONTROL.",
+    "permuted_control": "UNCHANGED_REQUIRED_CONTROL.",
+    "seed_holdout_reproduction": "HARDENED: require stable observed runtime-route identity across the entire matched-control family in addition to fixed seeds and disjoint holdout.",
+    "receipt_chain_and_delta_forge": "ADVANCED_SPEC: receipt should bind OpenRouter routing metadata digest and nonsecret runtime-route identity before any output-logit causal attribution."
+  },
+  "epistemic_boundaries": [
+    "A concrete OpenRouter model slug plus an upstream Hugging Face revision does not prove that the hosted runtime consumed those exact bytes.",
+    "provider routing metadata can identify routing behavior but still does not attest exact model weight bytes unless the provider supplies that evidence.",
+    "Hosted logit_bias is output-logit control, not hidden-state/cvec steering.",
+    "Local llama.cpp/PyTorch activation intervention remains mechanism evidence only until exact runtime identity, matched controls and disjoint holdout pass.",
+    "The activation-source-selection paper is a transferable hypothesis source, not proof that the method improves Trigger-1 on Qwen3-0.6B."
+  ],
+  "credits_after": {
+    "external_provider_trigger1_runtime": 0,
+    "direct_free_api_model_vector_steering": 0,
+    "mechanism_runtime_vector_steering": 0,
+    "output_logit_vector_control_runtime": 0,
+    "jspace_model_runtime": 0,
+    "hcu_full_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Fuse OpenRouter router-metadata/runtime-route identity binding into the bounded Trigger-1 Qwen3 hosted-control executor, then run the six matched controls only on an admitted exact FREE lane. In parallel, on the first admitted local instrumentable Qwen3-0.6B runtime, compare default versus execution-boundary+tail-subtraction basis sourcing on calibration only and freeze the winner before holdout.",
+  "acceptance": "IN_PROGRESS"
+}

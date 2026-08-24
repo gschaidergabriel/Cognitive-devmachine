@@ -103,6 +103,14 @@ Every exact `go` advances or explicitly no-changes:
 
 No new unusual experiment was performed. The current user trigger lacks an exposed shared immutable high-precision macrocycle identity sufficient to justify inventing a lease key, so unusual-intervention work remains fail-closed.
 
+### Latest post-load local-model identity delta
+
+Commit `966ba598cdbba1642ab005ef3343b294cde2a8c7` upgrades `tools/local_research_model_server.sh` from pre-start `STARTING` metadata only to a post-load identity record. After the local `llama-server` becomes healthy, the launcher now queries the documented `/props` endpoint, records `build_info` and the running server's `model_path`, hashes the started server executable and hashes the server-reported GGUF path. Already-running servers are explicitly marked identity-partial because this launcher did not start their process.
+
+This is **not** loader-consumption attestation. The emitted `CLAY_LOCAL_RESEARCH_MODEL/v2` state says `loader_consumption_attestation=false`, keeps `jspace_intervention_capable=false`, and preserves whole-EntityOS/HCU, J-Space-model and training credit at zero. The durable bounded receipt is `research_entity/continuity/receipts/2026-08-24_GO_LOCAL_MODEL_POSTLOAD_IDENTITY_GPT56SOL.json`.
+
+This advances a reusable HCU/J-Space identity prerequisite without creating a second truth authority: downstream experiments can now bind a specific runtime binary and post-load model file identity before attempting the stricter loader-consumption and activation-intervention gates.
+
 ## Current evidence credit
 
 Existing bounded evidence remains limited to component/runtime scopes already admitted by canonical receipts, including Entry canonicalization, J-Space family split and the exact PR810 no-Sandbox function-runtime diagnostic.
@@ -125,10 +133,12 @@ A source file, source test, deployment, receipt, model agreement or same-family 
 3. execute `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` on exact current source using an authorized exposed zero-cost local or `clay-direct-dev` bridge;
 4. prove zero secret lookup and zero network attempts for every blocked provider-admission case, including malformed admission;
 5. execute live donor InferenceReceipt/v4 rejection-boundary tests before any executor rebind;
-6. treat the local Qwen3-4B/`llama.cpp` server as local-inference-only until the J-Space intervention backend gate is satisfied;
-7. execute the smallest model-specific causal family: clean, corrupted, target intervention, sham control and off-target control with exact activation-site and output identities;
-8. only after exact component PASS continue real model invocation -> ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT trace;
-9. continue J-Space vector-control ABI, deterministic hard negatives, leak-resistant family splits and zero-cost local approximately-0.8B readiness without paid/provider execution;
-10. preserve whole-product/model/training credit at zero until corresponding exact admitted evidence exists.
+6. verify `CLAY_LOCAL_RESEARCH_MODEL/v2` reaches `READY_IDENTITY_OBSERVED` with a process-bound server executable hash and non-null post-load GGUF hash on an authorized exposed local/VPS sandbox;
+7. keep loader-consumed bytes UNKNOWN until separately attested; do not promote the post-load hash into loader evidence;
+8. treat the local Qwen3-4B/`llama.cpp` server as local-inference-only until the J-Space intervention backend gate is satisfied;
+9. execute the smallest model-specific causal family: clean, corrupted, target intervention, sham control and off-target control with exact activation-site and output identities;
+10. only after exact component PASS continue real model invocation -> ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT trace;
+11. continue J-Space vector-control ABI, deterministic hard negatives, leak-resistant family splits and zero-cost local approximately-0.8B readiness without paid/provider execution;
+12. preserve whole-product/model/training credit at zero until corresponding exact admitted evidence exists.
 
 Historical README revisions and receipts remain Git provenance only and do not override current authority.

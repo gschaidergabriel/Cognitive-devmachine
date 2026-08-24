@@ -33,7 +33,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate
+          python3 -m unittest -v \
+            tests.test_trigger1_jspace_promotion_gate \
+            tests.test_trigger1_midlayer_candidate_v3_bind
 
       - name: Execute fused nonterminal midlayer causal discriminator
         id: experiment
@@ -67,6 +69,20 @@ jobs:
           PY
           }
 
+      - name: Truth-bind promotion-v3 evidence when candidate is present
+        shell: bash
+        env:
+          EXPERIMENT_DIR: ${{ steps.experiment.outputs.experiment_dir }}
+        run: |
+          set -euo pipefail
+          candidate="$EXPERIMENT_DIR/trigger1_direct_steering_candidate.json"
+          result="$EXPERIMENT_DIR/trigger1_local_activation_api_result.json"
+          if [[ -s "$candidate" ]]; then
+            python3 tools/trigger1_midlayer_candidate_v3_bind.py \
+              --result "$result" \
+              --candidate "$candidate"
+          fi
+
       - name: Adjudicate local candidate when present
         id: gate
         shell: bash
@@ -79,7 +95,7 @@ jobs:
           if [[ -s "$candidate" ]]; then
             python3 tools/trigger1_jspace_promotion_gate.py --candidate "$candidate" > "$gate"
           else
-            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2","owner_trigger1_goal_credit_candidate":false,"mechanism_runtime_vector_credit_candidate":false,"failures":["NO_LOCAL_PROMOTION_CANDIDATE"]}' > "$gate"
+            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v3","owner_trigger1_goal_credit_candidate":false,"mechanism_runtime_vector_credit_candidate":false,"failures":["NO_LOCAL_PROMOTION_CANDIDATE"]}' > "$gate"
           fi
 
       - name: Persist sanitized exact-source result

@@ -1,0 +1,57 @@
+{
+  "schema": "ENTITYOS_HCU_GO_DELTA_RECEIPT/v1",
+  "observed_local_time": "2026-08-24T20:38+07:00",
+  "authority_epoch": "8.70",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_observed_before_delta": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+  "retained_donor_pr": 1263,
+  "donor_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+  "source_commits": [
+    "dffb1d408f53d90cc8a7d5997c15334f1d5d9c5a",
+    "e0b0315b3c062514db461de8bfb8bdbf806658d9"
+  ],
+  "source_blobs": {
+    "the artefact/MicroEntity/hcu/engine_load_lease_v1.py": "4663ed086c9d8a9b828d9cd725cefc1cc3345873",
+    "the artefact/MicroEntity/hcu/test_engine_load_lease_v1.py": "135b0a55620ac512f4465debb0be00c7ba21a318"
+  },
+  "problem": {
+    "issue": 1393,
+    "finding": "VerifiedEngineAdmission is a public constructible dataclass. The loader lease boundary previously accepted syntactically valid unrelated engine-artifact and admission-receipt SHA-256 identities without recomputing the upstream bundle and receipt identities.",
+    "counterhypothesis": "Dataclass type membership could be treated as trusted-by-construction.",
+    "counterhypothesis_result": "REJECTED_AT_SOURCE_BOUNDARY: the type is constructible by ordinary callers and therefore is not an unforgeable capability."
+  },
+  "delta": [
+    "Revalidate provider alias, engine identity and engine class against the existing admitted internal-engine authority.",
+    "Require component ArtifactDigest kinds/counts to remain inside the producer contract.",
+    "Reconstruct EngineArtifactLock material from the four component digests and recompute derive_engine_artifact_sha256().",
+    "Require the recomputed HCU_ENGINE_ARTIFACT_BUNDLE/v2 digest to equal both embedded and outer engine-artifact identities.",
+    "Reconstruct HCU_VERIFIED_ENGINE_ADMISSION_RECEIPT/v2 with the current HASH_SERIALIZATION_SCHEMA and RFC8785/JCS binding and recompute its digest before lease issuance or consumption verification.",
+    "Replace old synthetic loader fixtures with self-consistent bundle/receipt identities and add fail-closed regressions for forged bundle hash, forged receipt hash and unsupported component-digest kind."
+  ],
+  "evidence": {
+    "class": "SOURCE_PLUS_LOCAL_SYNTHETIC_LOGIC_CHECK_ONLY",
+    "github_ci_for_exact_head": "NOT_OBSERVED",
+    "github_combined_status_for_e0b0315": "NO_STATUSES",
+    "local_repository_clone": "BLOCKED_DNS_NO_GITHUB_NETWORK_IN_CONTAINER",
+    "synthetic_logic_check": "PASS_FOR_VALID_RECEIPT_FORGED_BUNDLE_FORGED_RECEIPT",
+    "runtime_model_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_credit": 0
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_identity": "UNAVAILABLE",
+    "available_user_trigger_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: loader lease can no longer treat a freely forged VerifiedEngineAdmission object as upstream identity proof.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: HCU engine admission -> loader causal/provenance boundary is deterministically rebound to existing engine-admission schemas.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_PREREQUISITE_ONLY: exact engine/checkpoint/runtime identity is strengthened for future model-specific J-Space traces; no J-Space causal/model/training credit is claimed."
+  },
+  "next_exact_gate": "Execute test_engine_load_lease_v1.py and relevant engine-admission/inference-receipt regressions at this exact donor head on an admitted zero-cost execution surface; only then close issue 1393 or promote component execution evidence."
+}

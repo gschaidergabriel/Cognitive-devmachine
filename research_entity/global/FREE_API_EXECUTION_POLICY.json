@@ -567,6 +567,16 @@
     "executable_evidence": "test_credential_cannot_change_between_authorization_and_request",
     "counterhypothesis": "Reading the shared environment repeatedly is safe because request construction immediately follows routing; falsified locally when a deterministic post-authorization mutation replaced the credential that was actually sent."
   },
+  "capability_receipt_snapshot_consistency": {
+    "checked_at": "2026-08-24",
+    "claim": "A capability receipt snapshots recognized process-environment inputs once, computes one inventory and derives its route directly from those same rows. Inventory and route therefore describe one capability state rather than two observation times.",
+    "sources": [
+      "https://docs.python.org/3/library/os.html#os.environ",
+      "https://cwe.mitre.org/data/definitions/367.html"
+    ],
+    "executable_evidence": "test_capability_receipt_uses_one_environment_snapshot",
+    "counterhypothesis": "Two immediate environment snapshots are equivalent for a capability receipt; falsified locally when the first snapshot observed a configured provider while the second did not, yielding configured=true in inventory and selected=null in the same receipt."
+  },
   "environment_snapshot_exception_redaction": {
     "checked_at": "2026-08-20",
     "claim": "Failures from a runtime-environment adapter are collapsed to a constant fail-closed error outside the active exception handler; arbitrary adapter text is neither displayed nor retained as __context__ or __cause__, and network access remains impossible.",
@@ -695,6 +705,7 @@
     "Each plain-text message contains exactly role and content; extension fields such as tool_calls are rejected before routing, credential use or network access and require a typed adapter.",
     "Caller-owned mutable messages are copied before validation; routing and concurrent mutations cannot change the validated request snapshot that is serialized.",
     "Each execution snapshots only recognized runtime environment fields before routing; the credential and cost-policy inputs authorized for an attempt are the same values used to construct its request.",
+    "Each capability receipt uses one recognized environment snapshot and derives route directly from its inventory rows; configured capability evidence and selected route cannot represent different observation times.",
     "Runtime-environment adapter failures collapse to one constant error outside the active handler; arbitrary adapter exception text is not displayed or retained, and no credential or network boundary is crossed.",
     "Recognized runtime-environment values are exact built-in strings; polymorphic string subclasses fail closed before their methods can execute in capability inventory, routing, attestation or credential handling.",
     "Recognized host-policy values are bounded in the runtime-environment snapshot before normalization, hashing, URL parsing or splitting; oversized values fail closed, while bearer credentials retain their separate 8192-character validation boundary.",

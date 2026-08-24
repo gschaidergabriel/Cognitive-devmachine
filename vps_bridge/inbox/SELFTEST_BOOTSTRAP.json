@@ -1,0 +1,14 @@
+{
+  "schema": "CLAY_VPS_TASK/v1",
+  "task_id": "SELFTEST_BOOTSTRAP",
+  "base_ref": "main",
+  "command": "set -euo pipefail\necho BRIDGE_CONTAINER_OK\npython3 --version\ngit --version\ncurl --version | head -n1\nmkdir -p /cache/bridge-selftest\nwebfetch https://raw.githubusercontent.com/git/git/master/README.md /cache/bridge-selftest/git-readme.md\ntest -s /cache/bridge-selftest/git-readme.md\npython3 - <<'PY'\nimport hashlib, json, os, pathlib, platform\np=pathlib.Path('/cache/bridge-selftest/git-readme.md')\nout={\n 'schema':'CLAY_VPS_BRIDGE_SELFTEST/v1',\n 'pass':True,\n 'python':platform.python_version(),\n 'kernel':platform.release(),\n 'cpu_count':os.cpu_count(),\n 'download_path':str(p),\n 'download_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),\n 'download_bytes':p.stat().st_size,\n 'workspace':os.getcwd(),\n}\nprint(json.dumps(out,sort_keys=True))\nPY\necho BRIDGE_SELFTEST_PASS",
+  "timeout_sec": 600,
+  "cpus": 2,
+  "memory": "4g",
+  "pids_limit": 1024,
+  "min_free_gb": 20,
+  "network": true,
+  "commit_changes": false,
+  "commit_on_failure": false
+}

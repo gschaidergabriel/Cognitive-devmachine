@@ -1,0 +1,439 @@
+SUPERVISOR
+{
+  "schema": "CLAY_6000_SWARM_SUPERVISOR/v4",
+  "observed_at": "2026-08-24T14:11:36.323282+00:00",
+  "remaining_seconds": 86115,
+  "logical_workers_requested": 6000,
+  "http_thread_pool": 512,
+  "provider_admission": {
+    "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
+    "ok": true,
+    "authority_epoch": "8.71",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json",
+    "admitted_free_providers": [
+      "groq",
+      "mistral",
+      "nvidia",
+      "openrouter"
+    ],
+    "providers": {
+      "groq": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#groq"
+      },
+      "mistral": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#mistral"
+      },
+      "nvidia": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#nvidia"
+      },
+      "openrouter": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#openrouter"
+      }
+    }
+  },
+  "provider_credential_scope": "SWARM_CHILD_ONLY",
+  "fabric_admission_binding": "OK:5d2a9dcebc4bd832a95e8619659345abb5bc7ed5a973f0f0a0365a9f32641714",
+  "fabric_running": true,
+  "distillery_running": true,
+  "forge_running": true,
+  "dashboard_running": true,
+  "local_model_ready": false,
+  "fabric": {
+    "schema": "CLAY_6000_FREE_SWARM_STATUS/v2",
+    "updated_at": "2026-08-24T14:06:44.573573+00:00",
+    "remaining_seconds": 85987,
+    "logical_workers_configured": 6000,
+    "logical_workers_waiting": 5975,
+    "logical_workers_inflight": 25,
+    "actual_model_calls_inflight": 25,
+    "actual_call_tasks_alive": 25,
+    "adaptive_provider_target_inflight": 10,
+    "provider_hard_ceiling_sum": 400,
+    "target_utilization": 2.5,
+    "work_stealing": true,
+    "provider_assignments": {
+      "nvidia": 96,
+      "groq": 1,
+      "openrouter": 6
+    },
+    "role_assignments": {
+      "ARCHITECT": 9,
+      "FALSIFIER": 9,
+      "CLAYCODE_FORGE": 9,
+      "HCU_CAUSAL": 9,
+      "COGNITION": 9,
+      "MEMORY_JSPACE": 9,
+      "RUNTIME": 9,
+      "EXTERNAL_HARVEST": 8,
+      "EXPERIMENT_DESIGN": 8,
+      "SECURITY": 8,
+      "REVIEWER": 8,
+      "SYNTHESIZER": 8
+    },
+    "successful_calls": 26,
+    "providers": {
+      "groq": {
+        "keys_total": 1,
+        "keys_enabled": 1,
+        "models_enabled": [
+          "openai/gpt-oss-120b",
+          "qwen/qwen3.6-27b",
+          "openai/gpt-oss-20b"
+        ],
+        "target_concurrency": 1,
+        "max_concurrency": 128,
+        "active": 1,
+        "cooldown_seconds": 0.0,
+        "requests": 1,
+        "successes": 0,
+        "rate_limits": 0,
+        "errors": 0,
+        "accelerator": "v2",
+        "healthy_ramp_windows": 0
+      },
+      "nvidia": {
+        "keys_total": 1,
+        "keys_enabled": 1,
+        "models_enabled": [
+          "nvidia/nemotron-3-super-120b-a12b",
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-mini-4b-instruct"
+        ],
+        "target_concurrency": 8,
+        "max_concurrency": 256,
+        "active": 23,
+        "cooldown_seconds": 0.0,
+        "requests": 96,
+        "successes": 26,
+        "rate_limits": 7,
+        "errors": 40,
+        "accelerator": "v2",
+        "healthy_ramp_windows": 0
+      },
+      "openrouter": {
+        "keys_total": 1,
+        "keys_enabled": 1,
+        "models_enabled": [
+          "openrouter/free"
+        ],
+        "target_concurrency": 1,
+        "max_concurrency": 16,
+        "active": 1,
+        "cooldown_seconds": 0.0,
+        "requests": 6,
+        "successes": 0,
+        "rate_limits": 4,
+        "errors": 1,
+        "accelerator": "v2",
+        "healthy_ramp_windows": 0
+      }
+    },
+    "shared_quota": {
+      "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+      "generated_at": "2026-08-24T14:06:44.574473+00:00",
+      "providers": {
+        "arxiv": {
+          "max_inflight": 1,
+          "active_leases": 0,
+          "min_interval_s": 3.1,
+          "cooldown_seconds": 0.0,
+          "total_requests": 4,
+          "total_success": 2,
+          "total_429": 0,
+          "total_errors": 0,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T10:45:36.625212+00:00"
+        },
+        "crossref": {
+          "max_inflight": 1,
+          "active_leases": 0,
+          "min_interval_s": 1.0,
+          "cooldown_seconds": 0.0,
+          "total_requests": 360,
+          "total_success": 356,
+          "total_429": 4,
+          "total_errors": 0,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T14:03:22.064502+00:00"
+        },
+        "exa": {
+          "max_inflight": 2,
+          "active_leases": 0,
+          "min_interval_s": 0.5,
+          "cooldown_seconds": 0.0,
+          "total_requests": 2,
+          "total_success": 2,
+          "total_429": 0,
+          "total_errors": 0,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T10:45:46.265750+00:00"
+        },
+        "github": {
+          "max_inflight": 1,
+          "active_leases": 0,
+          "min_interval_s": 1.0,
+          "cooldown_seconds": 0.0,
+          "total_requests": 364,
+          "total_success": 322,
+          "total_429": 0,
+          "total_errors": 42,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T14:03:21.885570+00:00"
+        },
+        "groq": {
+          "max_inflight": 128,
+          "active_leases": 0,
+          "min_interval_s": 0.0,
+          "cooldown_seconds": 630.3478999137878,
+          "total_requests": 83,
+          "total_success": 54,
+          "total_429": 29,
+          "total_errors": 13,
+          "last_status": "GATE_TIMEOUT",
+          "last_observed_at": "2026-08-24T14:04:27.269106+00:00"
+        },
+        "huggingface_hub": {
+          "max_inflight": 4,
+          "active_leases": 0,
+          "min_interval_s": 0.25,
+          "cooldown_seconds": 0.0,
+          "total_requests": 360,
+          "total_success": 360,
+          "total_429": 0,
+          "total_errors": 0,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T14:03:21.054775+00:00"
+        },
+        "nvidia": {
+          "max_inflight": 256,
+          "active_leases": 23,
+          "min_interval_s": 0.0,
+          "cooldown_seconds": 0.0,
+          "total_requests": 1113,
+          "total_success": 783,
+          "total_429": 17,
+          "total_errors": 290,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T14:06:43.795469+00:00"
+        },
+        "openalex": {
+          "max_inflight": 2,
+          "active_leases": 0,
+          "min_interval_s": 0.25,
+          "cooldown_seconds": 0.0,
+          "total_requests": 360,
+          "total_success": 9,
+          "total_429": 0,
+          "total_errors": 351,
+          "last_status": "400",
+          "last_observed_at": "2026-08-24T14:03:21.478667+00:00"
+        },
+        "openrouter": {
+          "max_inflight": 16,
+          "active_leases": 0,
+          "min_interval_s": 0.5,
+          "cooldown_seconds": 1.2324371337890625,
+          "total_requests": 95,
+          "total_success": 70,
+          "total_429": 24,
+          "total_errors": 0,
+          "last_status": "429",
+          "last_observed_at": "2026-08-24T14:06:35.807269+00:00"
+        },
+        "semantic_scholar": {
+          "max_inflight": 1,
+          "active_leases": 0,
+          "min_interval_s": 1.0,
+          "cooldown_seconds": 0.0,
+          "total_requests": 238,
+          "total_success": 9,
+          "total_429": 229,
+          "total_errors": 122,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T14:03:31.410623+00:00"
+        },
+        "tavily": {
+          "max_inflight": 2,
+          "active_leases": 0,
+          "min_interval_s": 0.5,
+          "cooldown_seconds": 0.0,
+          "total_requests": 6,
+          "total_success": 6,
+          "total_429": 0,
+          "total_errors": 0,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T10:45:43.721169+00:00"
+        }
+      }
+    },
+    "meaning": "6000=logical research organs in one global queue; actual HTTP inference concurrency is work-stolen across every healthy admitted FREE provider"
+  },
+  "shared_quota": {
+    "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+    "generated_at": "2026-08-24T14:11:36.368582+00:00",
+    "providers": {
+      "arxiv": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 3.1,
+        "cooldown_seconds": 0.0,
+        "total_requests": 4,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:36.625212+00:00"
+      },
+      "crossref": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 383,
+        "total_success": 379,
+        "total_429": 4,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T14:11:32.917721+00:00"
+      },
+      "exa": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 2,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:46.265750+00:00"
+      },
+      "github": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 387,
+        "total_success": 341,
+        "total_429": 0,
+        "total_errors": 46,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T14:11:33.312384+00:00"
+      },
+      "groq": {
+        "max_inflight": 128,
+        "active_leases": 0,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 338.5537509918213,
+        "total_requests": 83,
+        "total_success": 54,
+        "total_429": 29,
+        "total_errors": 13,
+        "last_status": "GATE_TIMEOUT",
+        "last_observed_at": "2026-08-24T14:04:27.269106+00:00"
+      },
+      "huggingface_hub": {
+        "max_inflight": 4,
+        "active_leases": 0,
+        "min_interval_s": 0.25,
+        "cooldown_seconds": 0.0,
+        "total_requests": 383,
+        "total_success": 383,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T14:11:33.456767+00:00"
+      },
+      "nvidia": {
+        "max_inflight": 256,
+        "active_leases": 0,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 1113,
+        "total_success": 787,
+        "total_429": 17,
+        "total_errors": 290,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T14:06:50.927053+00:00"
+      },
+      "openalex": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.25,
+        "cooldown_seconds": 0.0,
+        "total_requests": 383,
+        "total_success": 9,
+        "total_429": 0,
+        "total_errors": 374,
+        "last_status": "400",
+        "last_observed_at": "2026-08-24T14:11:31.897195+00:00"
+      },
+      "openrouter": {
+        "max_inflight": 16,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 96,
+        "total_success": 70,
+        "total_429": 25,
+        "total_errors": 0,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T14:06:45.998452+00:00"
+      },
+      "semantic_scholar": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 9.428472518920898,
+        "total_requests": 251,
+        "total_success": 11,
+        "total_429": 240,
+        "total_errors": 126,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T14:11:35.797115+00:00"
+      },
+      "tavily": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 6,
+        "total_success": 6,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:43.721169+00:00"
+      }
+    }
+  },
+  "revocation_policy": "CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; RESTART_CHILD_ON_ADMISSION_OR_ECONOMIC_PROVENANCE_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_ROUTE_CREDENTIAL_AUTHORITY_BEFORE_NETWORK"
+}
+SLOG
+WLOG
+{"schema": "CLAY_6000_SWARM_DISCOVERY/v2", "logical_workers": 6000, "scheduler": "GLOBAL_WORK_STEALING_V2", "providers": {"groq": {"source": "static_defaults_no_catalog_economic_provenance", "keys": 1, "models": ["openai/gpt-oss-120b", "qwen/qwen3.6-27b", "openai/gpt-oss-20b"], "catalog_network_attempted": false, "route_binding_deferred_to_current_lane_binding": true}, "mistral": {"source": "static_defaults_no_catalog_economic_provenance", "keys": 0, "models": ["mistral-small-latest"], "catalog_network_attempted": false, "route_binding_deferred_to_current_lane_binding": true}, "nvidia": {"source": "static_defaults_no_catalog_economic_provenance", "keys": 1, "models": ["nvidia/nemotron-3-super-120b-a12b", "nvidia/nemotron-3-ultra-550b-a55b", "nvidia/nemotron-mini-4b-instruct"], "catalog_network_attempted": false, "route_binding_deferred_to_current_lane_binding": true}, "openrouter": {"source": "environment_override", "keys": 1, "models": ["openrouter/free"], "catalog_network_attempted": false, "route_binding_deferred_to_current_lane_binding": true}}}
+Traceback (most recent call last):
+  File "/workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py", line 35, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py", line 27, in main
+    return int(loop.run_until_complete(fabric.run(fabric.parse_args())))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_6000_free_swarm.py", line 461, in run
+    protocol = base.load_protocol()
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_free_go_swarm.py", line 198, in load_protocol
+    raise RuntimeError(f"mandatory GRF/ClayCode protocol block missing from {PROTOCOL_PATH}")
+RuntimeError: mandatory GRF/ClayCode protocol block missing from /workspace/clay-global-research-entity/research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md
+PROVENANCE_DIGEST_CHECK
+e498d9744e True 3

@@ -90,6 +90,8 @@ ENTITYOS/HCU FREE-SWARM STATIC PRODUCTIVITY CONTRACT
 - `ready_for_forge=true` is a fail-closed contract: `target_files`, `patch_unified_diff`, and `test_commands` must all be non-empty and mutually consistent, and `falsifier` must be concrete.
 - If an executable patch is not actually supplied, keep `ready_for_forge=false`; never label an empty patch as Forge-ready.
 - For a Forge-ready candidate, `patch_unified_diff` must contain an actual applicable unified diff for the listed target files, not prose or a placeholder.
+- For Forge-ready diffs, use exact `--- a/<path>` and `+++ b/<path>` headers (or `/dev/null` only for create/delete), real `@@ -old,count +new,count @@` hunks, and body lines beginning with space/+/-. Hunk counts must match the emitted lines.
+- Encode patch newlines inside the one-line JSON value as `\\n` escapes. Never wrap the machine-readable JSON in Markdown fences and never use ellipses/pseudo-diff placeholders in a Forge-ready patch.
 - End with DEUTSCHE_ZUSAMMENFASSUNG.
 - Then emit exactly two compact machine-readable lines. The skeleton below is deliberately NOT Forge-ready; fill the executable fields first and only then switch `ready_for_forge` to true:
 ARCHITECTURE_DELTA_JSON={{"delta_id":"worker-<serial>-short-name","hypothesis":"...","mechanism":"...","target_files":[],"patch_unified_diff":"","test_commands":[],"benchmark_command":"","metric":"...","expected_direction":"higher|lower|boolean","baseline_needed":true,"falsifier":"...","risk":"...","ready_for_forge":false}}

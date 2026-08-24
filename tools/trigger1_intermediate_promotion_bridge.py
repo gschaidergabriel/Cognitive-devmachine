@@ -150,6 +150,10 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
         set(map(str, cal_seeds)).isdisjoint(set(map(str, hold_seeds))),
         "CALIBRATION_HOLDOUT_SEEDS_MUST_BE_DISJOINT",
     )
+    _require(
+        set(cal_prompt_hashes).isdisjoint(set(hold_prompt_hashes)),
+        "CALIBRATION_HOLDOUT_PROMPTS_MUST_BE_DISJOINT",
+    )
 
     label_pairs = {(row.get("positive_label"), row.get("negative_label")) for row in holdout}
     _require(("A", "B") in label_pairs and ("B", "A") in label_pairs, "COUNTERBALANCED_LABEL_MAPPING_REQUIRED")

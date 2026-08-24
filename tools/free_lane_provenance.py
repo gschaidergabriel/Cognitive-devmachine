@@ -117,11 +117,11 @@ def _lane_evidence_from_provenance(
         }
 
     if provider == "nvidia":
-        # NVIDIA documents free hosted NIM prototyping for Developer Program
-        # members, but the public provider statement does not prove that an
-        # arbitrary credential belongs to that free entitlement.  A provider
-        # hostname plus an unbound fingerprint therefore cannot self-admit.
-        bound = record.get("admitted_credential_fingerprints")
+        # Canonical economic provenance uses allowed_credential_fingerprints.
+        # The exact fingerprint must be present there; provider-global docs,
+        # endpoint identity, credential presence, or successful HTTP status are
+        # insufficient on their own.
+        bound = record.get("allowed_credential_fingerprints")
         if not isinstance(bound, list) or credential_fingerprint not in {
             str(item).strip() for item in bound if str(item).strip()
         }:
@@ -129,10 +129,14 @@ def _lane_evidence_from_provenance(
                 "ok": False,
                 "reason": "NVIDIA_CREDENTIAL_DEVELOPER_FREE_ENTITLEMENT_NOT_BOUND",
             }
+        sources = record.get("sources")
+        if not isinstance(sources, list):
+            single_source = record.get("source")
+            sources = [single_source] if single_source else []
         return {
             "ok": True,
             "kind": record.get("evidence_kind"),
-            "source": record.get("source"),
+            "sources": sources,
             "endpoint_host": _host(endpoint),
             "scope": record.get("scope"),
             "credential_fingerprint": credential_fingerprint,

@@ -40,6 +40,18 @@ The exact-current successor witness in `tools/run_go871_forge_distillery_runtime
 
 Runtime-request PR **#1619** remains open and requests execution-time selection of canonical `main`. No repository-bound terminal Forge -> Distillery result was found on current `main` during this re-entry, so no Forge operational runtime PASS is claimed.
 
+### GO 23:44 witness-to-live promotion delta
+
+Source inspection exposed a remaining conversion gap: the exact-current successor witness proved the `1 -> 1 -> >0 -> replay +0` contract against a disposable temporary Distillery database, so a successful witness could still leave the persistent live Distillery counters unchanged.
+
+Current `main` now contains `tools/promote_forge_distillery_runtime_gate.py`. It accepts only a PASS receipt with the exact source identity and intact no-network/no-provider/no-paid fences, re-validates the nested Forge evaluation through the existing evidence discriminator, and routes exactly that one evaluation through the existing `ingest_forge_accepts_into_distillery` authority into the configured live Distillery database. It creates no second Forge ledger, truth store, effect path or model authority.
+
+The retained workflow `.github/workflows/go871-forge-distillery-runtime-gate.yml` now requires three successful stages: fail-closed promotion guards, the disposable exact-current witness, and live promotion. A first live promotion must add exactly one packet and a positive `accepted_dataset_tokens` delta; the immediate identical replay must add zero packets and zero tokens with one duplicate. An already-promoted identical evaluation is accepted only as an idempotent replay with zero token delta. The sanitized repository-bound runtime result includes `live_distillery_promotion` evidence and the workflow fails unless all three stages return success.
+
+Commits: `04f11b64e637da256b2d5a95323b40fa80be5545`, `b56767eadce2f12fe05b39176a4eef4f7a80c821`, `9b4a4166cc3d179415c6ed4962c9a7c27c66b825`. Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_FORGE_LIVE_DISTILLERY_PROMOTION_GPT56SOL_2344P0700.json`.
+
+The previously known run **32742535392** / job **97480167751** was observed queued and predates this live-promotion workflow wiring. It cannot by itself prove the new persistent-promotion step. No repository-bound result containing `live_distillery_promotion` has yet been observed, so runtime credit remains zero until the current workflow revision actually executes and persists a terminal receipt.
+
 ## Provider-independent local Qwen3-0.6B J-Space discriminator
 
 Supervisor 8.72 prioritizes the zero-provider-billing local Qwen3-0.6B path as the highest-information model-specific J-Space discriminator.
@@ -102,8 +114,8 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 
 ## Current blockers / next exact gates
 
-1. Observe a terminal repository-bound result for the open Forge -> Distillery runtime request **#1619**; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
-2. If that witness fails, repair the measured isolated-executor/bridge blocker only; never weaken evidence admission.
+1. Execute the **current** Forge -> Distillery workflow revision containing live promotion on canonical `main`; require disposable gate PASS plus `live_distillery_promotion.status=PASS`, exactly one new packet and positive token delta on first promotion, then replay delta 0. The older queued run 32742535392 is insufficient for this new scope.
+2. If that witness or live promotion fails, repair only the measured isolated-executor/bridge/promotion blocker; never weaken evidence admission.
 3. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
 4. On the lease-admitted Qwen run, persist the fused nonterminal midlayer exact-source runtime receipt and classify runner/preflight/dependency/model failure explicitly.
 5. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.

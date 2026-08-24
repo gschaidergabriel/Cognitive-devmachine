@@ -216,7 +216,11 @@ def _scientific_independence_evidence(candidate: dict[str, Any]) -> tuple[bool, 
         failures.append("HOLDOUT_EVALUATION_INDEPENDENCE_REQUIRED")
     if not _sha256(holdout.get("metric_definition_sha256")):
         failures.append("HOLDOUT_METRIC_DEFINITION_RECEIPT_REQUIRED")
-    if holdout.get("metric_uses_output_tokens") is True and holdout.get("label_mapping_counterbalanced") is not True:
+
+    metric_uses_output_tokens = holdout.get("metric_uses_output_tokens")
+    if not isinstance(metric_uses_output_tokens, bool):
+        failures.append("HOLDOUT_METRIC_MODALITY_UNKNOWN")
+    elif metric_uses_output_tokens and holdout.get("label_mapping_counterbalanced") is not True:
         failures.append("TOKEN_OUTPUT_METRIC_REQUIRES_COUNTERBALANCED_LABEL_MAPPING")
 
     return not failures, failures

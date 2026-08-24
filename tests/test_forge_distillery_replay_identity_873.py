@@ -114,6 +114,26 @@ class ReplayIdentity873Tests(unittest.TestCase):
         self.assertEqual(second["accepted_dataset_tokens_counter"], token_count)
         self.assertEqual(second["forge_execution_packets_total"], 1)
 
+    def test_delta_id_only_replay_is_duplicate(self):
+        self.write(accepted_row(delta_id="d-envelope-1"))
+        first = bridge.ingest(self.eval, self.db)
+        token_count = first["accepted_dataset_tokens_counter"]
+
+        replay = accepted_row(
+            delta_id="d-envelope-2",
+            evaluated_at="2026-08-24T16:31:45+00:00",
+            proposal_hypothesis="different candidate envelope",
+            falsifier="different candidate envelope falsifier",
+        )
+        self.write(replay)
+        second = bridge.ingest(self.eval, self.db)
+
+        self.assertEqual(first["admitted"], 1)
+        self.assertEqual(second["admitted"], 0)
+        self.assertEqual(second["duplicates"], 1)
+        self.assertEqual(second["accepted_dataset_tokens_counter"], token_count)
+        self.assertEqual(second["forge_execution_packets_total"], 1)
+
     def test_same_execution_identity_with_mutated_measurement_fails_closed(self):
         self.write(accepted_row())
         first = bridge.ingest(self.eval, self.db)
@@ -184,7 +204,9 @@ class ReplayIdentity873Tests(unittest.TestCase):
         con.commit()
         con.close()
 
-        self.write(row)
+        replay = dict(row)
+        replay["delta_id"] = "d-envelope-renamed-after-legacy-ingest"
+        self.write(replay)
         out = bridge.ingest(self.eval, self.db)
         self.assertEqual(out["admitted"], 0)
         self.assertEqual(out["duplicates"], 0)

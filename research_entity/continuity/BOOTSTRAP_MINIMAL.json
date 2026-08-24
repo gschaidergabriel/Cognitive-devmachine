@@ -1,5 +1,5 @@
 {
-  "schema_version": "8.68",
+  "schema_version": "8.70",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
   "identity": {"persistent_research_entity": "Clay", "temporary_worker": "ORGAN_NOT_ENTITY"},
@@ -8,8 +8,8 @@
   "product_endpoint": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
   "owner_authority_pointer": "CLAY_EXECUTION_AUTHORITY.md",
-  "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+  "active_owner_authority": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_70.json",
   "compatibility_names": {
     "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
     "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY",
@@ -27,14 +27,14 @@
     "unknown external effect outcome remains unknown and is never blindly replayed",
     "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
     "FREE_ONLY paid, subscription and unknown-cost provider lanes fail closed before credential/key lookup and provider network I/O",
-    "external LLM provider execution requires canonical typed provider admission with admitted=true and cost_class=FREE before provider secret lookup or provider network I/O",
-    "environment FREE attestations, credential presence, :free route suffixes, catalog pricing fields and HTTP success/402/429 cannot self-admit a provider",
-    "historical successful unadmitted provider traffic cannot be relabeled FREE after the fact",
-    "all external LLM-provider worker/catalog/chat/synthesis/reviewer traffic is quarantined until exact-source executable FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 PASS",
+    "owner-authorized free provider contingents require concrete credential plus route plus provider-side zero-cost provenance before each autonomous provider call",
+    "provider-level FREE labels, credential presence, route naming and HTTP status cannot self-prove zero-cost execution",
+    "historical pre-admission or pre-route-binding provider traffic cannot be relabeled FREE after the fact",
+    "Together, paid fallback, upgrades and credit purchases remain forbidden",
     "zero-monetary-cost execution inside authorized clay-direct-dev VPS sandbox and normal-user local Linux development is permitted under active owner authority",
     "local root/sudo, unrelated VPS-host changes and new external production effects are not implied by local/VPS sandbox development authority",
     "unusual experiments require the canonical atomic lease before intervention; without a reproducible shared trigger identity the unusual-experiment path is coordination-blocked",
-    "retained donor and execution-controller PR identities are repository-qualified; unqualified PR numbers never select execution authority"
+    "retained donor and execution-controller PR identities are repository-qualified and successor-dynamic; exact observed heads belong in immutable evidence, not mutable current-frontier authority"
   ],
   "go_required_tracks": [
     "ENTITYOS_EXECUTABLE_CONVERGENCE",
@@ -66,7 +66,7 @@
   "retained_hcu_donor_qualified": "gschaidergabriel/clay-global-research-entity#1263",
   "retained_execution_controller_qualified": "gschaidergabriel/Dr.-Unterweger#810",
   "unqualified_pr810_execution_selection": "FAIL_CLOSED",
-  "execution_surface": "FREE_ONLY; ZERO_COST_LOCAL_NORMAL_USER_AND_CLAY_DIRECT_DEV_VPS_SANDBOX_ALLOWED_WITH RESOURCE_PROVENANCE_SECRET_AND_CLEANUP_GUARDS; EXTERNAL_LLM_PROVIDER_TRAFFIC_QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS; PAID_SUBSCRIPTION_UNKNOWN_COST FAIL_CLOSED",
+  "execution_surface": "FREE_ONLY; ZERO_COST_LOCAL_NORMAL_USER_AND_CLAY_DIRECT_DEV_VPS_SANDBOX_ALLOWED_WITH_RESOURCE_PROVENANCE_SECRET_AND_CLEANUP_GUARDS; OWNER_AUTHORIZED_FREE_CONTINGENTS_REQUIRE_CREDENTIAL_ROUTE_ZERO_COST_PROVENANCE_AND_FREE_LANE_EXECUTION_RECEIPT_V1; PAID_SUBSCRIPTION_UNKNOWN_COST_FAIL_CLOSED",
   "free_provider_admission": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
   "free_provider_allowlist_current": ["groq", "mistral", "nvidia", "openrouter"],
   "free_only": true,
@@ -80,16 +80,15 @@
   "go": "ENTITYOS_HCU_MAXIMUM_PRODUCT_CONVERGENCE_MACROCYCLE",
   "zero": "ENTITYOS_HCU_ZERO_JSPACE_FUNCTION_FABRIC_LENS",
   "current_frontier": [
-    "supervisor 8.68 upgrades the former source-only admission-ordering gap to an executed unadmitted external-provider control breach; monetary spend is not proven",
-    "observed historical metrics include 3 Groq requests, 8 NVIDIA requests and 8 OpenRouter requests with successful calls; these remain append-only unadmitted history and receive zero provider runtime credit",
-    "canonical FREE_PROVIDER_ADMISSION now covers Groq, Mistral, NVIDIA and OpenRouter, all currently UNKNOWN+not-admitted, and external LLM-provider traffic is quarantined",
-    "base swarm controller, model catalog driver, shell supervisor and stable research-distillery entrypoint contain typed admission gates before relevant provider secret/network paths; deterministic tripwire tests cover OpenRouter and blocked cost classes",
-    "execute FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 on exact current source using secret and socket tripwires; blocked cases require secret_lookup_count=0 and network_attempt_count=0 for missing/malformed admission, UNKNOWN, PAID, SUBSCRIPTION, authority mismatch and unlisted provider",
-    "only after executable boundary PASS and direct positive FREE classification may one external provider lane be restarted at a time with bound execution receipt",
-    "retained donor gschaidergabriel/clay-global-research-entity#1263 head 0b205544fa262afeb714a697f29d3c891551c424 still requires exact execution of InferenceReceipt/v4 rejection-boundary tests before executor rebind",
-    "retained executor gschaidergabriel/Dr.-Unterweger#810 head bb7324d2a21ffc143c241c652a31524c5be4c9d8 retains bounded no-Sandbox function-runtime diagnostic credit only",
-    "continue zero-cost local HCU/J-Space causal instrumentation while provider network is quarantined; after exact component PASS continue actual local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT intervention/control trace",
-    "strict EffectGate non-bypass, causal identity, generation and recovery fencing remain mandatory"
+    "supervisor 8.70 preserves owner-authorized free contingents for Groq, Mistral, NVIDIA and OpenRouter while requiring per-credential per-route economic provenance before autonomous calls or provider runtime credit",
+    "main includes the shared pre-call TOCTOU repair that binds typed admission and economic provenance immediately before provider network I/O; source/component evidence does not grant provider runtime credit",
+    "emit FREE_LANE_EXECUTION_RECEIPT/v1 for each concrete free lane with credential fingerprint, exact route/model, admission digest, provider-side free entitlement or zero-price evidence, usage, HTTP status and paid_fallback_attempt_count=0",
+    "Mistral concrete calls remain fail-closed until provider-side Free-mode and PAYG-disabled evidence is bound; OpenRouter is restricted to explicit zero-price free routes; Groq and NVIDIA require their declared provider-side free evidence",
+    "retained donor gschaidergabriel/clay-global-research-entity#1263 is successor-dynamic; refresh its live head immediately before use and preserve exact observed donor SHAs only in immutable receipts or historical evidence",
+    "retained executor gschaidergabriel/Dr.-Unterweger#810 is successor-dynamic; refresh its live head independently before rebind or runtime claims and preserve exact observed executor SHAs only in immutable receipts or historical evidence",
+    "continue zero-cost local HCU/Typed Entry and J-Space causal instrumentation; next model-specific path is local observation then leased clean/corrupted/target/sham/off-target intervention with exact model/runtime/loader/trace binding",
+    "strict EffectGate non-bypass, causal identity, generation and recovery fencing remain mandatory",
+    "whole EntityOS/HCU, full HCU, provider runtime, J-Space model and training credit remain zero until corresponding exact admitted execution evidence exists"
   ],
   "legacy_scope": "Xeno/XCU remain compatibility or research aliases only. Mini Entity/MicroEntity/ClayVerse/Frank remain historical implementation or donor provenance unless explicitly re-admitted."
 }

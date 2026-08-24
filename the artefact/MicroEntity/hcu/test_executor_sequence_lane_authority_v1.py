@@ -1,12 +1,11 @@
 import sqlite3
 import unittest
-from dataclasses import replace
 
 import test_executor_sequence_lane_binding_v1 as lane_fixture
-from control_plane_stream_authority_v1 import (
-    StreamAuthorityError,
-    snapshot_human_prompt_stream_authority,
-    validate_entry_stream_authority,
+from entry_stream_authority_store_v1 import (
+    admit_entry_stream_authority,
+    build_stream_authority_decision,
+    decision_record,
 )
 from executor_sequence_lane_authority_v1 import (
     AuthorizedExecutorSequenceLaneError,
@@ -19,122 +18,109 @@ class CanonicalDBFixture:
     def __init__(self):
         self.db = sqlite3.connect(":memory:")
         self.db.row_factory = sqlite3.Row
+        self.db.execute("PRAGMA foreign_keys=ON")
         self.db.execute(
-            "CREATE TABLE sessions (session_id TEXT PRIMARY KEY, user_id TEXT NOT NULL, generation INTEGER NOT NULL)"
+            "CREATE TABLE entity_state (id INTEGER PRIMARY KEY, generation INTEGER NOT NULL)"
         )
-        self.db.executemany(
-            "INSERT INTO sessions(session_id,user_id,generation) VALUES(?,?,?)",
-            (("session:a", "user:a", 7), ("session:b", "user:b", 7)),
-        )
-        self.live = {"session:a": 7, "session:b": 7}
-
-    def assert_live_generation(self, session_id, generation):
-        if self.live.get(session_id) != generation:
-            raise RuntimeError("stale generation")
+        self.db.execute("INSERT INTO entity_state(id,generation) VALUES(1,7)")
+        self.db.commit()
 
 
 class ExecutorSequenceLaneAuthorityTests(unittest.TestCase):
+    generation = 7
+
     def setUp(self):
-        self.db = CanonicalDBFixture()
+        self.canonical = CanonicalDBFixture()
         self.helper = lane_fixture.ExecutorSequenceLaneBindingTests(methodName="runTest")
 
-    def authority(self, *, session_id="session:a", user_id="user:a"):
-        return snapshot_human_prompt_stream_authority(
-            self.db,
-            user_id=user_id,
-            session_id=session_id,
-            trusted_source_id=self.helper.source_id,
-        )
-
-    def sources(self, *, stream="session:a", causal="event:1", ingress="ingress:1", invocation="invocation:1"):
+    def sources(self, *, stream="stream:alpha", causal="event:1", ingress="ingress:1", invocation="invocation:1"):
         packet = self.helper.entry(causal=causal, ingress=ingress, stream=stream)
         plan = self.helper.plan(packet, route_label=f"route:{causal}")
         input_binding, consumed = self.helper.input_binding(packet, plan, invocation=invocation)
         return packet, plan, input_binding, consumed
 
-    def authorize(self, packet, plan, input_binding, consumed, *, session_id="session:a", user_id="user:a"):
+    def admit_stream(self, stream="stream:alpha", *, decision_id=None):
+        decision = build_stream_authority_decision(
+            generation=self.generation,
+            authority_namespace="test:canonical-ingress",
+            authority_decision_id=decision_id or f"decision:{stream}",
+            source_kind="HUMAN_PROMPT",
+            source_id=self.helper.source_id,
+            stream_id=stream,
+        )
+        admission = admit_entry_stream_authority(
+            self.canonical.db,
+            decision,
+            admitted_stream_authority_decisions={
+                decision.decision_sha256: decision_record(decision)
+            },
+            current_generation=self.generation,
+        )
+        return decision, admission
+
+    def authorize(self, packet, plan, input_binding, consumed, *, generation=7):
         return authorize_executor_sequence_lane(
+            self.canonical.db,
             packet,
             plan,
             input_binding,
             consumed,
-            canonical_db=self.db,
-            user_id=user_id,
-            session_id=session_id,
-            trusted_source_id=self.helper.source_id,
+            current_generation=generation,
         )
 
-    def test_canonical_session_stream_authorizes_exact_lane(self):
+    def test_exact_canonical_stream_admission_authorizes_lane(self):
+        _decision, admission = self.admit_stream()
         packet, plan, input_binding, consumed = self.sources()
-        authority = self.authority()
         authorized = self.authorize(packet, plan, input_binding, consumed)
-        self.assertEqual(authorized.stream_authority_binding_sha256, authority.binding_sha256)
+        self.assertEqual(
+            authorized.stream_authority_admission_sha256,
+            admission.admission_sha256,
+        )
         self.assertEqual(
             validate_authorized_executor_sequence_lane(
                 authorized,
+                self.canonical.db,
                 packet,
                 plan,
                 input_binding,
                 consumed,
-                canonical_db=self.db,
-                user_id="user:a",
-                session_id="session:a",
-                trusted_source_id=self.helper.source_id,
+                current_generation=self.generation,
             ),
             authorized.authorization_sha256,
         )
 
-    def test_attacker_chosen_hash_bound_stream_without_canonical_authority_fails(self):
-        packet, plan, input_binding, consumed = self.sources(stream="thread:attacker")
+    def test_hash_bound_stream_without_external_canonical_admission_is_projection_only(self):
+        packet, plan, input_binding, consumed = self.sources(stream="stream:attacker")
+        raw = self.helper.bind(stream="stream:attacker")[-1]
+        self.assertEqual(raw.stream_id, "stream:attacker")
         with self.assertRaisesRegex(
             AuthorizedExecutorSequenceLaneError,
-            "STREAM_AUTHORITY_REJECTED:EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE",
+            "EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE",
         ):
             self.authorize(packet, plan, input_binding, consumed)
 
-    def test_other_canonical_session_authority_cannot_be_transplanted(self):
-        packet, plan, input_binding, consumed = self.sources()
+    def test_other_admitted_stream_cannot_authorize_packet(self):
+        self.admit_stream("stream:other")
+        packet, plan, input_binding, consumed = self.sources(stream="stream:alpha")
         with self.assertRaisesRegex(
             AuthorizedExecutorSequenceLaneError,
-            "STREAM_AUTHORITY_REJECTED:EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE",
-        ):
-            self.authorize(
-                packet,
-                plan,
-                input_binding,
-                consumed,
-                session_id="session:b",
-                user_id="user:b",
-            )
-
-    def test_stale_canonical_session_generation_fails_during_promotion(self):
-        packet, plan, input_binding, consumed = self.sources()
-        self.db.live["session:a"] = 8
-        with self.assertRaisesRegex(
-            AuthorizedExecutorSequenceLaneError,
-            "STREAM_AUTHORITY_REJECTED:CANONICAL_SESSION_GENERATION_NOT_LIVE",
+            "EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE",
         ):
             self.authorize(packet, plan, input_binding, consumed)
 
-    def test_digest_valid_authority_relabel_is_rejected_by_pure_validator(self):
-        packet, _plan, _input_binding, _consumed = self.sources()
-        authority = self.authority()
-        forged = replace(authority, stream_id="thread:forged")
+    def test_stale_entity_generation_fails_closed_on_authority_read(self):
+        self.admit_stream()
+        packet, plan, input_binding, consumed = self.sources()
+        self.canonical.db.execute("UPDATE entity_state SET generation=8 WHERE id=1")
+        self.canonical.db.commit()
         with self.assertRaisesRegex(
-            StreamAuthorityError,
-            "STREAM_AUTHORITY_BINDING_DIGEST_MISMATCH",
+            AuthorizedExecutorSequenceLaneError,
+            "EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE:STALE_STREAM_AUTHORITY_READ_GENERATION",
         ):
-            validate_entry_stream_authority(packet, forged)
+            self.authorize(packet, plan, input_binding, consumed)
 
-    def test_generation_change_rebinds_stream_authority(self):
-        before = self.authority()
-        self.db.db.execute("UPDATE sessions SET generation=8 WHERE session_id='session:a'")
-        self.db.live["session:a"] = 8
-        after = self.authority()
-        self.assertNotEqual(before.binding_sha256, after.binding_sha256)
-        self.assertEqual(after.entity_generation, 8)
-
-    def test_distinct_events_in_same_canonical_session_share_lane_but_not_authorization(self):
+    def test_distinct_events_in_one_admitted_stream_share_lane_but_not_authorization(self):
+        self.admit_stream()
         a = self.sources(causal="event:1", ingress="ingress:1", invocation="invocation:1")
         b = self.sources(causal="event:2", ingress="ingress:2", invocation="invocation:2")
         aa = self.authorize(*a)
@@ -143,33 +129,46 @@ class ExecutorSequenceLaneAuthorityTests(unittest.TestCase):
         self.assertNotEqual(aa.lane_binding_sha256, bb.lane_binding_sha256)
         self.assertNotEqual(aa.authorization_sha256, bb.authorization_sha256)
 
-    def test_unsupported_source_kind_cannot_use_human_session_authority(self):
-        packet, plan, input_binding, consumed = self.sources()
-        forged = replace(packet, source_kind="EXTERNAL_EVENT")
-        with self.assertRaisesRegex(
-            AuthorizedExecutorSequenceLaneError,
-            "STREAM_AUTHORITY_REJECTED:EXECUTOR_SEQUENCE_STREAM_AUTHORITY_SOURCE_KIND_MISMATCH",
-        ):
-            self.authorize(forged, plan, input_binding, consumed)
+    def test_different_independently_admitted_streams_partition_lanes(self):
+        self.admit_stream("stream:alpha")
+        self.admit_stream("stream:beta")
+        a = self.sources(stream="stream:alpha", causal="event:1", ingress="ingress:1")
+        b = self.sources(stream="stream:beta", causal="event:2", ingress="ingress:2")
+        aa = self.authorize(*a)
+        bb = self.authorize(*b)
+        self.assertNotEqual(aa.sequence_lane_sha256, bb.sequence_lane_sha256)
+        self.assertNotEqual(
+            aa.stream_authority_admission_sha256,
+            bb.stream_authority_admission_sha256,
+        )
 
-    def test_authorization_revalidation_rejects_other_canonical_session(self):
+    def test_authorization_revalidation_fails_after_canonical_authority_row_removed(self):
+        self.admit_stream()
         packet, plan, input_binding, consumed = self.sources()
         authorized = self.authorize(packet, plan, input_binding, consumed)
+        self.canonical.db.execute("DELETE FROM hcu_entry_stream_authority_admissions")
+        self.canonical.db.commit()
         with self.assertRaisesRegex(
             AuthorizedExecutorSequenceLaneError,
-            "STREAM_AUTHORITY_REJECTED:EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE",
+            "EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE",
         ):
             validate_authorized_executor_sequence_lane(
                 authorized,
+                self.canonical.db,
                 packet,
                 plan,
                 input_binding,
                 consumed,
-                canonical_db=self.db,
-                user_id="user:b",
-                session_id="session:b",
-                trusted_source_id=self.helper.source_id,
+                current_generation=self.generation,
             )
+
+    def test_authorized_lane_binds_external_decision_identity(self):
+        decision, admission = self.admit_stream(decision_id="decision:trusted-42")
+        packet, plan, input_binding, consumed = self.sources()
+        authorized = self.authorize(packet, plan, input_binding, consumed)
+        self.assertEqual(authorized.stream_authority_decision_sha256, decision.decision_sha256)
+        self.assertEqual(authorized.stream_authority_admission_sha256, admission.admission_sha256)
+        self.assertEqual(authorized.stream_authority_decision_id, "decision:trusted-42")
 
 
 if __name__ == "__main__":

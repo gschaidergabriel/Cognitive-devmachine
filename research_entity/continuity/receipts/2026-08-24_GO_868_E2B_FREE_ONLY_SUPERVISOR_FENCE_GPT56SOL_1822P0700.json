@@ -1,0 +1,86 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "authority_epoch": "8.68",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_rebase": "eb71bbdaff8b7b520119ea83c92c15320b334f86",
+  "branch": "gpt56sol/go-868-e2b-free-only-fence-20260824-1822",
+  "coordination": {
+    "shared_immutable_macrocycle_id": "UNAVAILABLE_TO_THIS_ORGAN",
+    "available_user_trigger_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "intervention_executed": false
+  },
+  "vps_bridge": {
+    "direct_bridge_tool_exposed_to_this_organ": false,
+    "health_check_result": "UNAVAILABLE_NOT_PRODUCT_FAILURE"
+  },
+  "observed": [
+    {
+      "source": "tools/run_24h_entityos_swarm_supervisor.sh@eb71bbdaff8b7b520119ea83c92c15320b334f86",
+      "fact": "supervisor v8 preserved a persistent Evidence Forge start with --e2b-parallel 20 and no zero-job E2B fence"
+    },
+    {
+      "source": "tools/run_free_evidence_forge.py@6426d1ff7d8b03129d0e73c4127e0e63a678fa17",
+      "fact": "e2b_reproduce reads E2B_API_KEY and may invoke e2b.Sandbox.create when a credential is present and the sandbox-seconds budget is not exhausted"
+    },
+    {
+      "source": "tools/free_swarm_quota.py@6426d1ff7d8b03129d0e73c4127e0e63a678fa17",
+      "fact": "the E2B quota gate constrains concurrency/cooldown and records observations but does not establish typed cost_class=FREE admission before credential lookup or Sandbox.create"
+    },
+    {
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+      "fact": "FREE_ONLY remains active; paid/subscription/unknown monetary execution remains fail-closed and successful historical provider execution cannot self-prove FREE status"
+    },
+    {
+      "source": "main@eb71bbdaff8b7b520119ea83c92c15320b334f86",
+      "fact": "parallel work added an exact-source FREE admission boundary receipt runner for the LLM-provider admission gap; that work does not itself type-admit E2B external sandbox execution"
+    }
+  ],
+  "hypothesis": "A present E2B credential plus quota budget can open an external sandbox execution path without canonical pre-call evidence that the exact execution class cannot create monetary charge or overage.",
+  "counterhypothesis": "The configured E2B account may in practice be fully covered by non-chargeable free credits, but credential presence, a Hobby/concurrency claim, sandbox-seconds budgeting, or provider success/failure is not current canonical pre-call FREE admission evidence.",
+  "discriminator": "Contain the active supervisor path at zero E2B jobs before credential lookup/network execution, preserve loopback/local/public forge work, and require a later explicit typed FREE admission boundary before any E2B re-enable.",
+  "writes": [
+    {
+      "commit": "13693bea973a06d293c3a519be6e03bd671a6824",
+      "path": "tools/run_24h_entityos_swarm_supervisor.sh",
+      "delta": "preserve supervisor v8 and local-model path; stop pre-existing forge processes lacking --e2b-jobs-per-cycle 0; restart forge with zero E2B jobs; expose quarantine in status policy"
+    },
+    {
+      "commit": "ce7ac7de8648513318ded9aa9b825d6a4c0e1146",
+      "path": "tests/test_supervisor_e2b_free_only_fence_868.py",
+      "delta": "regression for zero E2B job budget, stop-before-start ordering, current forge selection behavior, and visible quarantine policy"
+    }
+  ],
+  "go_tracks": {
+    "track_a": {
+      "state": "ADVANCED",
+      "label": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "delta": "active persistent supervisor external-compute path is fail-closed for E2B until typed FREE admission exists; current local loopback model path is preserved"
+    },
+    "track_b": {
+      "state": "HCU_NO_CHANGE_WITH_REASON",
+      "label": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+      "reason": "No new HCU/Typed Entry primitive was added because the highest-information exact-current blocker was an execution-authority fence and the retained HCU donor already contains overlapping primitives; source-guard proliferation is intentionally avoided.",
+      "next_discriminator": "Execute the retained donor InferenceReceipt/v4 rejection-boundary tests at exact live donor identity on an exposed authorized normal-user local or clay-direct-dev surface."
+    },
+    "track_c": {
+      "state": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "label": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+      "reason": "Main now exposes a local loopback research-model bootstrap, but this organ has no direct local/VPS bridge runtime tool to observe exact invocation/ModelExecution/J-Space receipts. E2B external sandbox execution remains unadmitted and is fenced rather than used as substitute evidence.",
+      "next_discriminator": "Observe on an authorized exposed local or clay-direct-dev surface: real local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT control/intervention trace."
+    }
+  },
+  "evidence_scope": "SOURCE_CONTROL_PLANE_CONTAINMENT_PLUS_STATIC_REGRESSION_SOURCE_ONLY",
+  "runtime_credit_added": 0,
+  "entityos_hcu_whole_runtime_credit": 0,
+  "hcu_full_runtime_credit": 0,
+  "jspace_model_runtime_credit": 0,
+  "training_credit": 0,
+  "whole_product_pass": false,
+  "remaining_gap": "run_free_evidence_forge.py standalone defaults still permit E2B jobs when invoked outside the patched supervisor; a generic typed external-compute FREE admission boundary is not yet implemented."
+}

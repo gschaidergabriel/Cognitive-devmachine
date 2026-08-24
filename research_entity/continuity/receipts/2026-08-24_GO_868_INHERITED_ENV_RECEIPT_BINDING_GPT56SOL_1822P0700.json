@@ -1,0 +1,66 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "authority_epoch": "8.68",
+  "trigger": "go",
+  "trigger_observed_local": "2026-08-24T18:22+07:00",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "base_main": "e4c2a573cf332c76efffbcd342de0e68fa63164b",
+  "branch": "gpt56sol/go-868-bind-inherited-fence-receipt-20260824-1822",
+  "source_commits": {
+    "receipt_wrapper_binding": "9b801b251219794cd1855f196825c19fc88cd12c",
+    "wrapper_regression": "bf56762e7da29a8d6af3ca7412dd067d0fae8499"
+  },
+  "problem": "The canonical FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 source manifest already included the supervisor, but the successor hardening wrapper did not execute the newly merged supervisor inherited-provider-environment fence regression. A future exact receipt could therefore prove provider secret/network boundaries without making the inherited child-environment fence a required test result.",
+  "delta": {
+    "wrapper": "tools/run_free_swarm_admission_boundary_receipt_hardened_868.py",
+    "bound_test": "tests/test_go_868_inherited_provider_secret_fence.py",
+    "properties": [
+      "bound test is appended to the exact child TEST_MODULES execution set",
+      "bound test path is appended to TEST_PATHS",
+      "bound test source is appended to SOURCE_PATHS and therefore source-manifest hashed",
+      "receipt hardening metadata declares inherited_provider_environment_fence_required_for_pass=true",
+      "receipt fences record the enforcing regression name",
+      "existing DNS/connect/connect_ex/create_connection socket tripwires are preserved"
+    ]
+  },
+  "regression": {
+    "file": "tests/test_free_swarm_receipt_runner_hardening_868.py",
+    "new_assertions": [
+      "inherited-env regression source is manifest-bound",
+      "inherited-env regression module is in execution set",
+      "inherited-env regression path is in TEST_PATHS"
+    ]
+  },
+  "mechanism_check": {
+    "environment": "CHATGPT_CONTAINER_ISOLATED_SOURCE_EQUIVALENT_FRAGMENT",
+    "result": "BINDING_MECHANISM_PASS",
+    "scope": "WRAPPER_BINDING_MECHANISM_ONLY",
+    "exact_git_branch_runtime": false,
+    "provider_runtime_credit": 0
+  },
+  "coordination": {
+    "parallel_main_reentry_after_branch_base": "1a25fc0bab8ebca24ffa26fe6ea7596cabe0e691",
+    "parallel_files_overlap_wrapper_or_wrapper_test": false,
+    "shared_immutable_high_precision_macrocycle_id_exposed": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_EXACT_RECEIPT_CLOSURE_SOURCE",
+    "track_b": "ADVANCED_TYPED_PROVIDER_CAPABILITY_BOUNDARY_TO_CHILD_ENVIRONMENT_EVIDENCE",
+    "track_c": "ADVANCED_BY_PARALLEL_CURRENT_MAIN_JSPACE_PROBE_V2; NO_DUPLICATE_ORGAN_LOCAL_RUNTIME"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an exposed authorized zero-cost local normal-user or clay-direct-dev surface, run python tools/run_free_swarm_admission_boundary_receipt_hardened_868.py --output <receipt-outside-checkout>.json from a clean exact-current checkout. PASS must include all canonical blocked-provider cases, zero secret/network tripwires, stable pre/post source identity, and the bound supervisor inherited-provider-environment fence regression."
+}

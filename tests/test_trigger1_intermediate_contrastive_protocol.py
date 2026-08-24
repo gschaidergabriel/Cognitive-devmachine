@@ -32,8 +32,15 @@ def holdout_rows(m, *, include_wrong=True, include_lesion=True, counterbalanced=
                     'label_map_id':label_map,'positive_label':pos,'negative_label':neg,
                     'control':control,'target_score':scores[control],
                 }
-                if include_wrong: row['wrong_layer_delta']=-0.1
-                if include_lesion:
+                if include_wrong and control=='+VECTOR':
+                    row.update({
+                        'wrong_layer':12,
+                        'wrong_layer_vector_source_layer':8,
+                        'wrong_layer_same_selected_vector':True,
+                        'wrong_layer_delta':-0.1,
+                        'wrong_layer_receipt_sha256':'b'*64,
+                    })
+                if include_lesion and control=='+VECTOR':
                     row['lesion_delta']=-0.2; row['rescue_delta']=0.5
                 rows.append(row)
     return rows
@@ -71,7 +78,8 @@ class ProtocolTests(unittest.TestCase):
         self.assertTrue(selected['selected']); self.assertEqual(8,selected['layer'])
         out=self.m.adjudicate_holdout(holdout_rows(self.m),selected_layer=8,selected_gain=2.0)
         self.assertTrue(out['pass']); self.assertTrue(out['counterbalanced_label_mapping'])
-        self.assertTrue(out['wrong_layer_evidence_complete']); self.assertTrue(out['lesion_rescue_evidence_complete'])
+        self.assertTrue(out['wrong_layer_evidence_complete']); self.assertTrue(out['wrong_layer_selected_vector_provenance'])
+        self.assertTrue(out['lesion_rescue_evidence_complete'])
 
     def test_holdout_requires_label_remap(self):
         rows=holdout_rows(self.m)
@@ -86,6 +94,34 @@ class ProtocolTests(unittest.TestCase):
     def test_holdout_requires_wrong_layer_evidence_for_every_case(self):
         out=self.m.adjudicate_holdout(holdout_rows(self.m,include_wrong=False),selected_layer=8,selected_gain=2.0)
         self.assertFalse(out['pass']); self.assertEqual('WRONG_LAYER_EVIDENCE_REQUIRED',out['classification'])
+
+    def test_wrong_layer_must_reuse_selected_vector_source_layer(self):
+        rows=holdout_rows(self.m)
+        for row in rows:
+            if row['control']=='+VECTOR': row['wrong_layer_vector_source_layer']=12
+        out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass']); self.assertEqual('WRONG_LAYER_SELECTED_VECTOR_PROVENANCE_REQUIRED',out['classification'])
+
+    def test_wrong_layer_must_actually_be_a_different_layer(self):
+        rows=holdout_rows(self.m)
+        for row in rows:
+            if row['control']=='+VECTOR': row['wrong_layer']=8
+        out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass']); self.assertEqual('WRONG_LAYER_SELECTED_VECTOR_PROVENANCE_REQUIRED',out['classification'])
+
+    def test_wrong_layer_requires_same_selected_vector_attestation(self):
+        rows=holdout_rows(self.m)
+        for row in rows:
+            if row['control']=='+VECTOR': row['wrong_layer_same_selected_vector']=False
+        out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass']); self.assertEqual('WRONG_LAYER_SELECTED_VECTOR_PROVENANCE_REQUIRED',out['classification'])
+
+    def test_wrong_layer_receipt_sha_is_required(self):
+        rows=holdout_rows(self.m)
+        for row in rows:
+            if row['control']=='+VECTOR': row['wrong_layer_receipt_sha256']='invalid'
+        out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass']); self.assertEqual('WRONG_LAYER_SELECTED_VECTOR_PROVENANCE_REQUIRED',out['classification'])
 
     def test_holdout_requires_lesion_rescue_evidence_for_every_case(self):
         out=self.m.adjudicate_holdout(holdout_rows(self.m,include_lesion=False),selected_layer=8,selected_gain=2.0)

@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""Deterministically admit measured Forge ACCEPTED evaluations into Distillery.
+"""Admit evidence-qualified Forge ACCEPTED evaluations into Distillery.
 
-This bridge closes the executable-delta -> Forge -> Distillery conversion edge without
-promoting model-authored hypotheses to fact. Only measured fields from an exact-source
-Forge evaluation are admitted into packet_text. Proposal text remains metadata-only.
-
-The destination remains the existing Distillery SQLite database; this module does not
-create a second truth/effect authority and performs no network or external effect.
+The historical evaluation ledger is append-only. A nominal ACCEPTED label cannot create
+dataset tokens. Admission reuses the canonical Supervisor-8.71 evidence-credit guard and
+adds downstream binding to the exact evaluation checkout plus per-command decisions.
+Only measured execution fields enter packet_text; model-authored narration stays metadata.
 """
 from __future__ import annotations
 
@@ -21,12 +19,13 @@ import re
 import sqlite3
 from typing import Any
 
+from forge_evidence_credit_871 import evidence_reason
+
 ARTIFACT_ROOT = Path(os.getenv("CLAY_SWARM_ARTIFACT_ROOT", "/artifacts/clay-entityos-swarm"))
 DEFAULT_FORGE_EVAL = Path(os.getenv("CLAY_FORGE_EVAL_PATH", str(ARTIFACT_ROOT / "forge/architecture_delta_evaluations.jsonl")))
 DEFAULT_DISTILLERY_DB = Path(os.getenv("CLAY_RESEARCH_DISTILLERY_DB", str(ARTIFACT_ROOT / "distillery/distillery.sqlite3")))
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
-HEX64 = re.compile(r"^[0-9a-f]{64}$")
-HEX40_64 = re.compile(r"^[0-9a-f]{40,64}$")
+EXECUTION_ADMISSION_SCHEMA = "CLAY_FORGE_EXECUTION_ADMISSION/v1"
 
 
 def now_iso() -> str:
@@ -45,74 +44,38 @@ def digest_json(obj: Any) -> str:
     return hashlib.sha256(canonical_json(obj).encode("utf-8")).hexdigest()
 
 
-def _int_at_least(obj: dict, key: str, minimum: int) -> bool:
-    value = obj.get(key)
-    return isinstance(value, int) and not isinstance(value, bool) and value >= minimum
-
-
-def _int_eq_zero(obj: dict, key: str) -> bool:
-    value = obj.get(key)
-    return isinstance(value, int) and not isinstance(value, bool) and value == 0
-
-
-def _positive_number(value: Any) -> bool:
-    return isinstance(value, (int, float)) and not isinstance(value, bool) and float(value) > 0.0
-
-
-def _safe_target_blobs(value: Any) -> bool:
-    if not isinstance(value, dict) or not value:
-        return False
-    for path, blob in value.items():
-        if not isinstance(path, str) or not path.strip():
-            return False
-        p = Path(path)
-        if p.is_absolute() or ".." in p.parts or str(p).startswith(".git"):
-            return False
-        if blob != "NEW_OR_MISSING_AT_SOURCE" and not (isinstance(blob, str) and HEX40_64.fullmatch(blob)):
-            return False
-    return True
-
-
 def admission_reason(row: Any) -> tuple[bool, str]:
     if not isinstance(row, dict):
         return False, "NOT_OBJECT"
-    if row.get("schema") != "CLAY_FORGE_DELTA_EVALUATION/v1":
-        return False, "WRONG_SCHEMA"
-    if row.get("status") != "accepted":
+    if str(row.get("status") or "").lower() != "accepted":
         return False, "NOT_ACCEPTED"
-    if row.get("source_scope") != "EXACT_WORKER_PROMPT_HEAD":
-        return False, "SOURCE_SCOPE_NOT_EXACT"
-    source_head = row.get("source_repo_head")
-    eval_head = row.get("evaluation_repo_head")
-    worker_sha = row.get("worker_sha")
-    if not (isinstance(source_head, str) and HEX40.fullmatch(source_head)):
-        return False, "SOURCE_HEAD_INVALID"
-    if not (isinstance(eval_head, str) and HEX40.fullmatch(eval_head)):
-        return False, "EVALUATION_HEAD_INVALID"
-    if not (isinstance(worker_sha, str) and HEX64.fullmatch(worker_sha)):
-        return False, "WORKER_SHA_INVALID"
-    if not _safe_target_blobs(row.get("target_blob_identities")):
-        return False, "TARGET_BLOBS_INVALID"
-    if not _int_at_least(row, "reproducible_runs", 2):
-        return False, "REPRODUCIBILITY_TOO_LOW"
-    for key in ("tests_failed", "negative_tests_failed", "static_checks_failed"):
-        if not _int_eq_zero(row, key):
-            return False, key.upper() + "_NONZERO_OR_INVALID"
-    if row.get("benchmark_non_regression") is not True:
-        return False, "BENCHMARK_REGRESSION_OR_UNKNOWN"
-    if not _positive_number(row.get("relative_improvement_pct")):
-        return False, "NO_POSITIVE_IMPROVEMENT"
-    if not _int_at_least(row, "tests_passed", 1):
-        return False, "NO_PASSING_TESTS"
-    return True, "ACCEPTED_EXACT_EXECUTION_EVIDENCE"
+
+    ok, reason = evidence_reason(row)
+    if not ok:
+        return False, reason
+
+    admission = row.get("execution_admission")
+    if not isinstance(admission, dict) or admission.get("schema") != EXECUTION_ADMISSION_SCHEMA:
+        return False, "EXECUTION_ADMISSION_MISSING"
+
+    evaluation_head = row.get("evaluation_repo_head")
+    checkout_head = admission.get("evaluation_checkout_head")
+    if not (isinstance(checkout_head, str) and HEX40.fullmatch(checkout_head)):
+        return False, "EXECUTION_EVALUATION_HEAD_UNBOUND"
+    if checkout_head != evaluation_head:
+        return False, "EXECUTION_EVALUATION_HEAD_MISMATCH"
+
+    decisions = admission.get("decisions")
+    if not isinstance(decisions, list) or not decisions:
+        return False, "EXECUTION_COMMAND_DECISIONS_MISSING"
+    if any(not isinstance(decision, dict) or decision.get("admitted") is not True for decision in decisions):
+        return False, "EXECUTION_COMMAND_DECISION_REJECTED"
+
+    return True, "ACCEPTED_EXACT_ISOLATED_EXECUTION_EVIDENCE"
 
 
-def measured_packet(row: dict) -> dict:
-    """Return training text fields containing only measured Forge evidence.
-
-    proposal_hypothesis/falsifier are deliberately excluded. They remain candidate
-    narration and cannot be upgraded by being adjacent to an accepted evaluation.
-    """
+def measured_packet(row: dict[str, Any]) -> dict[str, Any]:
+    admission = row["execution_admission"]
     return {
         "schema": "CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v1",
         "evidence_class": "FORGE_MEASURED_EXECUTION",
@@ -122,6 +85,8 @@ def measured_packet(row: dict) -> dict:
         "worker_sha": row["worker_sha"],
         "source_repo_head": row["source_repo_head"],
         "evaluation_repo_head": row["evaluation_repo_head"],
+        "execution_admission_schema": admission["schema"],
+        "execution_admission_sha256": digest_json(admission),
         "target_blob_identities": row["target_blob_identities"],
         "metric": str(row.get("metric") or ""),
         "relative_improvement_pct": float(row["relative_improvement_pct"]),
@@ -182,22 +147,27 @@ def bump(con: sqlite3.Connection, key: str, delta: int) -> None:
     )
 
 
-def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None]:
+def admit_one(con: sqlite3.Connection, row: dict[str, Any]) -> tuple[bool, str, str | None]:
     ok, reason = admission_reason(row)
     if not ok:
         return False, reason, None
-    eval_sha = digest_json(row)
-    if con.execute("SELECT 1 FROM forge_execution_ingest WHERE evaluation_sha256=?", (eval_sha,)).fetchone():
+
+    evaluation_sha = digest_json(row)
+    if con.execute(
+        "SELECT 1 FROM forge_execution_ingest WHERE evaluation_sha256=?",
+        (evaluation_sha,),
+    ).fetchone():
         return False, "DUPLICATE", None
 
     packet = measured_packet(row)
     text = canonical_json(packet)
-    tok = approx_tokens(text)
-    packet_id = "kf-" + eval_sha[:18]
-    question_id = "forge-" + eval_sha[:16]
+    tokens = approx_tokens(text)
+    packet_id = "kf-" + evaluation_sha[:18]
+    question_id = "forge-" + evaluation_sha[:16]
     metadata = {
         "packet_class": "FORGE_EXECUTION_EVIDENCE",
-        "forge_evaluation_sha256": eval_sha,
+        "forge_evaluation_sha256": evaluation_sha,
+        "execution_admission_sha256": packet["execution_admission_sha256"],
         "source_class": row.get("source_class"),
         "provider": row.get("provider"),
         "model": row.get("model"),
@@ -205,7 +175,7 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
         "proposal_hypothesis_candidate_only": row.get("proposal_hypothesis"),
         "proposal_falsifier_candidate_only": row.get("falsifier"),
         "score_semantics": {
-            "intrinsic_score": "1.0 = exact accepted measured execution packet passed deterministic admission",
+            "intrinsic_score": "1.0 = exact evidence-qualified isolated execution packet passed deterministic admission",
             "grf_score": "0.0 = not measured by Forge; unknown rather than promoted",
             "project_fit": "1.0 = executable EntityOS/HCU delta evidence",
             "novelty_score": "0.0 = not measured by Forge; unknown rather than promoted",
@@ -220,14 +190,14 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
         (
             packet_id,
             question_id,
-            "Measured executable delta evidence from Evidence Forge",
+            "Measured evidence-qualified executable delta from Evidence Forge",
             text,
             canonical_json(metadata),
             1.0,
             0.0,
             1.0,
             0.0,
-            tok,
+            tokens,
             now_iso(),
         ),
     )
@@ -235,24 +205,24 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
         "INSERT INTO forge_execution_ingest(evaluation_sha256,packet_id,delta_id,worker_sha,source_repo_head,evaluation_repo_head,admitted_at,approx_tokens) "
         "VALUES(?,?,?,?,?,?,?,?)",
         (
-            eval_sha,
+            evaluation_sha,
             packet_id,
             str(row.get("delta_id") or ""),
             row["worker_sha"],
             row["source_repo_head"],
             row["evaluation_repo_head"],
             now_iso(),
-            tok,
+            tokens,
         ),
     )
-    bump(con, "accepted_dataset_tokens", tok)
+    bump(con, "accepted_dataset_tokens", tokens)
     bump(con, "accepted_packets", 1)
     bump(con, "forge_execution_packets", 1)
     return True, reason, packet_id
 
 
-def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dict:
-    summary = {
+def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dict[str, Any]:
+    summary: dict[str, Any] = {
         "schema": "CLAY_FORGE_TO_DISTILLERY_INGEST_RESULT/v1",
         "forge_eval_path": str(forge_eval_path),
         "distillery_db": str(distillery_db),
@@ -265,6 +235,7 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
     if not forge_eval_path.exists():
         summary["rejected"]["FORGE_EVAL_MISSING"] = 1
         return summary
+
     distillery_db.parent.mkdir(parents=True, exist_ok=True)
     con = sqlite3.connect(distillery_db, timeout=30)
     try:
@@ -280,6 +251,7 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
             except Exception:
                 summary["rejected"]["INVALID_JSON"] = summary["rejected"].get("INVALID_JSON", 0) + 1
                 continue
+
             admitted, reason, packet_id = admit_one(con, row)
             if admitted:
                 summary["admitted"] += 1
@@ -288,14 +260,15 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
                 summary["duplicates"] += 1
             else:
                 summary["rejected"][reason] = summary["rejected"].get(reason, 0) + 1
+
         con.commit()
         row = con.execute("SELECT COALESCE(SUM(approx_tokens),0),COUNT(*) FROM knowledge_packets").fetchone()
         summary["knowledge_packet_tokens_total"] = int(row[0] or 0)
         summary["knowledge_packets_total"] = int(row[1] or 0)
-        c = con.execute("SELECT value FROM counters WHERE key='accepted_dataset_tokens'").fetchone()
-        summary["accepted_dataset_tokens_counter"] = int(c[0]) if c else 0
-        f = con.execute("SELECT COUNT(*) FROM forge_execution_ingest").fetchone()
-        summary["forge_execution_packets_total"] = int(f[0] or 0)
+        counter = con.execute("SELECT value FROM counters WHERE key='accepted_dataset_tokens'").fetchone()
+        summary["accepted_dataset_tokens_counter"] = int(counter[0]) if counter else 0
+        forge_packets = con.execute("SELECT COUNT(*) FROM forge_execution_ingest").fetchone()
+        summary["forge_execution_packets_total"] = int(forge_packets[0] or 0)
     finally:
         con.close()
     return summary

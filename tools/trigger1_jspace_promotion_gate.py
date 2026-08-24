@@ -8,7 +8,8 @@ scientific-independence and disjoint-holdout evidence is present.
 
 Hosted prompt/completion traffic alone can never satisfy a positive verdict.
 A vector can establish low-level mechanism evidence without establishing the owner
-Trigger-1 goal when its construction leaks the evaluated output readout.
+Trigger-1 goal when its construction leaks the evaluated output readout or the exact
+output-label identities used by the evaluation.
 """
 from __future__ import annotations
 
@@ -20,7 +21,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 CANDIDATE_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
-VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v3"
+VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4"
 REQUIRED_CONTROLS = (
     "BASELINE",
     "+VECTOR",
@@ -184,7 +185,7 @@ def _identity_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
 
 
 def _scientific_independence_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
-    """Guard Trigger-1 goal credit against output-readout target leakage."""
+    """Guard Trigger-1 goal credit against output-readout and label-identity leakage."""
     failures: list[str] = []
     derivation = candidate.get("vector_derivation")
     holdout = candidate.get("holdout")
@@ -199,6 +200,8 @@ def _scientific_independence_evidence(candidate: dict[str, Any]) -> tuple[bool, 
         failures.append("OUTPUT_HEAD_DERIVED_VECTOR_CANNOT_SATISFY_JSPACE_GOAL")
     if derivation.get("uses_holdout_data") is not False:
         failures.append("VECTOR_DERIVATION_MUST_NOT_USE_HOLDOUT_DATA")
+    if derivation.get("uses_evaluation_output_labels") is not False:
+        failures.append("VECTOR_DERIVATION_MUST_NOT_USE_EVALUATION_OUTPUT_LABELS")
     if not _nonempty(derivation.get("derivation_family_id")):
         failures.append("VECTOR_DERIVATION_FAMILY_ID_REQUIRED")
     if not _sha256(derivation.get("derivation_receipt_sha256")):
@@ -322,8 +325,8 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
             "declared matched-control/split checks. Trigger-1 goal PASS additionally requires an exact "
             "zero-cost API boundary, a non-terminal intervention site with downstream model computation, "
             "and scientific independence: the steering direction may not be constructed from the exact "
-            "output-head/readout weights used by the evaluation, may not use holdout data, and token-output "
-            "metrics require counterbalanced label mapping."
+            "output-head/readout weights or evaluation output-label identities, may not use holdout data, "
+            "and token-output metrics require counterbalanced label mapping."
         ),
     }
 
@@ -374,7 +377,7 @@ def scan_batch(batch_dir: Path) -> dict[str, Any]:
     verdicts = [adjudicate_file(path) for path in paths]
     goal = any(item.get("owner_trigger1_goal_credit_candidate") is True for item in verdicts)
     return {
-        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v3",
+        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v4",
         "candidate_files_seen": len(paths),
         "mechanism_runtime_vector_credit_candidate": any(
             item.get("mechanism_runtime_vector_credit_candidate") is True for item in verdicts

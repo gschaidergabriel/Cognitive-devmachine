@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"reinstall-free-swarm-distillery-publisher-20260824T1748",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":300,
+  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'set -Eeuo pipefail; cd /tmp/clay-vps-control-bootstrap; runuser -u claylab -- env HOME=/srv/claylab GIT_SSH_COMMAND=\"ssh -i /srv/claylab/.ssh/chatgpt_vps_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/srv/claylab/.ssh/known_hosts\" git fetch origin chatgpt-vps-control; runuser -u claylab -- git reset --hard origin/chatgpt-vps-control; bash vps_bridge/bootstrap/install_free_swarm_publisher.sh'"
+}

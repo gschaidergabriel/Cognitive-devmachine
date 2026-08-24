@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """Qwen3-0.6B intermediate-layer contrastive Trigger-1 experiment.
 
-This is the stronger causal discriminator after the final-norm readout positive
-control. The steering direction is derived only from calibration-set residual
-activations at predeclared intermediate decoder layers. No lm_head/output-embedding
-row is used to construct the candidate direction.
-
-Layer/gain are frozen on calibration before disjoint holdout. Holdout includes the
-six matched controls, label remapping, wrong-layer intervention, and lesion/rescue.
+The steering direction is derived only from calibration-set residual activations at
+predeclared intermediate decoder layers. No lm_head/output-embedding row is used.
+Layer/gain are frozen on separate semantic calibration cases before a disjoint
+semantic holdout. Holdout includes both stance polarities, counterbalanced labels,
+six matched controls, wrong-layer intervention, and lesion/rescue.
 No external provider credential is read and the API boundary is loopback-only.
 """
 from __future__ import annotations
@@ -32,13 +30,13 @@ from trigger1_intermediate_contrastive_protocol import (
     control_vectors, digest, select_layer_gain,
 )
 
-SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1"
-CANDIDATE_SCHEMA = "CLAY_TRIGGER1_INTERMEDIATE_JSPACE_CAUSAL_CANDIDATE/v1"
+SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v2"
+CANDIDATE_SCHEMA = "CLAY_TRIGGER1_INTERMEDIATE_JSPACE_CAUSAL_CANDIDATE/v2"
 CANDIDATE_LAYERS = (6, 12, 18, 24)
 CALIBRATION_GAINS = (1.0, 4.0, 12.0)
-CALIBRATION_SEED = 1701
-HOLDOUT_SEEDS = (2718, 3141)
 
+# These prompts are used only to derive the representation direction. The semantic
+# calibration/holdout cases below are separate prompt families.
 CONTRASTIVE_POSITIVE = (
     "/no_think\nThe speaker wholeheartedly approves of the proposal and wants it adopted.",
     "/no_think\nThe writer strongly supports the plan and welcomes its success.",
@@ -51,14 +49,34 @@ CONTRASTIVE_NEGATIVE = (
     "/no_think\nThe person is clearly against the idea and condemns it.",
     "/no_think\nThe stance expressed here is emphatic disapproval and opposition.",
 )
-CALIBRATION_PROMPT = (
-    "/no_think\nA hidden speaker will choose a stance. Mapping: A means APPROVE; B means DISAPPROVE. "
-    "Output exactly A or B, with no other text."
+
+# Layer/gain selection must now succeed on real semantic inputs, not a symbol-only
+# instruction. Holdout uses a disjoint domain/family and the opposite polarity too.
+CALIBRATION_CASES = (
+    (1701, "positive", "The municipal review board strongly supports the safety proposal and recommends approval."),
+    (1702, "negative", "The municipal review board strongly opposes the safety proposal and recommends rejection."),
 )
-HOLDOUT_PROMPTS = (
-    "/no_think\nChoose the hidden speaker's stance using only the two mapped symbols. Output one symbol only.",
-    "/no_think\nA latent stance must be expressed as exactly one mapped option. Return only that option.",
+HOLDOUT_CASES = (
+    (2718, "positive", "The neighborhood committee enthusiastically endorses the new accessibility plan and wants it adopted."),
+    (3141, "negative", "The faculty panel firmly rejects the proposed scheduling policy and urges that it be abandoned."),
 )
+CALIBRATION_FAMILY = "trigger1-semantic-calibration-municipal-v1"
+HOLDOUT_FAMILY = "trigger1-semantic-holdout-cross-domain-v1"
+LABEL_MAPS = (
+    ("MAP_AB", "A", "B", "A=APPROVE; B=DISAPPROVE"),
+    ("MAP_BA", "B", "A", "A=DISAPPROVE; B=APPROVE"),
+)
+
+
+def _semantic_prompt(stimulus: str, mapping: str) -> str:
+    return (
+        "/no_think\nStatement: " + stimulus + "\nMapping: " + mapping
+        + "\nClassify the stance expressed in the statement. Output exactly one mapped symbol and nothing else."
+    )
+
+
+def _stimulus_sha(stimulus: str) -> str:
+    return hashlib.sha256(stimulus.encode("utf-8")).hexdigest()
 
 
 def _single_token_pair(tokenizer: Any) -> dict[str, int]:
@@ -88,7 +106,8 @@ def _capture_layers(torch: Any, tokenizer: Any, model: Any, device: Any, prompt:
         with torch.no_grad():
             model(**inputs)
     finally:
-        for h in handles: h.remove()
+        for h in handles:
+            h.remove()
     if set(captured) != set(layers):
         raise RuntimeError("INTERMEDIATE_LAYER_CAPTURE_INCOMPLETE")
     return captured
@@ -106,7 +125,8 @@ def derive_directions(torch: Any, tokenizer: Any, model: Any, device: Any) -> tu
                 "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
                 "activation_sha256": {str(k): tensor_sha(v) for k, v in rows.items()},
             })
-            for layer, value in rows.items(): sink[layer].append(value[0].tolist())
+            for layer, value in rows.items():
+                sink[layer].append(value[0].tolist())
     directions: dict[int, Any] = {}
     direction_receipts = {}
     for layer in CANDIDATE_LAYERS:
@@ -114,7 +134,7 @@ def derive_directions(torch: Any, tokenizer: Any, model: Any, device: Any) -> tu
         tensor = torch.tensor(d, dtype=torch.float32, device=device)
         directions[layer] = tensor
         direction_receipts[str(layer)] = {
-            "construction": "mean(calibration_positive_residual)-mean(calibration_negative_residual); unit_normalized",
+            "construction": "mean(derivation_positive_residual)-mean(derivation_negative_residual); unit_normalized",
             "direction_sha256": tensor_sha(tensor),
             "positive_activation_family_sha256": digest(pos[layer]),
             "negative_activation_family_sha256": digest(neg[layer]),
@@ -138,8 +158,10 @@ class RuntimeState:
         positive_label = str(payload.get("positive_label") or "A")
         negative_label = str(payload.get("negative_label") or "B")
         mode = str(payload.get("mode") or "control")
-        if layer not in self.directions: raise ValueError("UNKNOWN_LAYER")
-        if control not in REQUIRED_CONTROLS and mode == "control": raise ValueError("UNKNOWN_CONTROL")
+        if layer not in self.directions:
+            raise ValueError("UNKNOWN_LAYER")
+        if control not in REQUIRED_CONTROLS and mode == "control":
+            raise ValueError("UNKNOWN_CONTROL")
         if positive_label not in self.token_ids or negative_label not in self.token_ids or positive_label == negative_label:
             raise ValueError("LABEL_MAP_INVALID")
 
@@ -167,28 +189,40 @@ class RuntimeState:
             elif control != "BASELINE":
                 hidden[:, -1, :] = hidden[:, -1, :] + vector.to(dtype=hidden.dtype)
             post_sha = tensor_sha(hidden[:, -1, :].detach().float())
-            if isinstance(output, tuple): return (hidden, *output[1:])
+            if isinstance(output, tuple):
+                return (hidden, *output[1:])
             return hidden
 
         with self.lock:
             self.torch.manual_seed(seed)
-            if self.torch.cuda.is_available(): self.torch.cuda.manual_seed_all(seed)
+            if self.torch.cuda.is_available():
+                self.torch.cuda.manual_seed_all(seed)
             inputs = self.tokenizer(prompt, return_tensors="pt")
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
             handle = self.model.model.layers[layer].register_forward_hook(hook)
             try:
-                with self.torch.no_grad(): logits = self.model(**inputs).logits[0, -1].float().detach().cpu()
-            finally: handle.remove()
+                with self.torch.no_grad():
+                    logits = self.model(**inputs).logits[0, -1].float().detach().cpu()
+            finally:
+                handle.remove()
             self.invocations += 1
 
         pos = float(logits[self.token_ids[positive_label]])
         neg = float(logits[self.token_ids[negative_label]])
         material = {
-            "invocation": self.invocations, "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
-            "layer": layer, "gain": gain, "control": control, "mode": mode, "seed": seed,
-            "positive_label": positive_label, "negative_label": negative_label,
-            "target_score": pos-neg, "hook_calls": hook_calls,
-            "pre_activation_sha256": pre_sha, "post_activation_sha256": post_sha,
+            "invocation": self.invocations,
+            "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
+            "layer": layer,
+            "gain": gain,
+            "control": control,
+            "mode": mode,
+            "seed": seed,
+            "positive_label": positive_label,
+            "negative_label": negative_label,
+            "target_score": pos-neg,
+            "hook_calls": hook_calls,
+            "pre_activation_sha256": pre_sha,
+            "post_activation_sha256": post_sha,
             "applied_vector_sha256": applied_sha,
         }
         return {**material, "runtime_receipt_sha256": canonical_sha(material), "runtime_observed_intervention": hook_calls > 0}
@@ -196,55 +230,84 @@ class RuntimeState:
 
 def make_handler(state: RuntimeState):
     class Handler(BaseHTTPRequestHandler):
-        def log_message(self, _format: str, *_args: Any) -> None: return
+        def log_message(self, _format: str, *_args: Any) -> None:
+            return
         def do_POST(self) -> None:
-            if self.path != "/v1/jspace/intermediate": self.send_response(404); self.end_headers(); return
+            if self.path != "/v1/jspace/intermediate":
+                self.send_response(404); self.end_headers(); return
             try:
-                n=int(self.headers.get("Content-Length","0")); payload=json.loads(self.rfile.read(n).decode())
+                n=int(self.headers.get("Content-Length","0"))
+                payload=json.loads(self.rfile.read(n).decode())
                 obj=state.infer(payload); raw=json.dumps(obj,sort_keys=True).encode(); self.send_response(200)
             except Exception as exc:
                 raw=json.dumps({"error":f"{type(exc).__name__}:{str(exc)[:500]}"}).encode(); self.send_response(400)
-            self.send_header("Content-Type","application/json"); self.send_header("Content-Length",str(len(raw))); self.end_headers(); self.wfile.write(raw)
+            self.send_header("Content-Type","application/json")
+            self.send_header("Content-Length",str(len(raw)))
+            self.end_headers(); self.wfile.write(raw)
     return Handler
 
 
 def post(endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
     req=urllib.request.Request(endpoint,data=json.dumps(payload,separators=(",",":")).encode(),headers={"Content-Type":"application/json"},method="POST")
-    with urllib.request.urlopen(req,timeout=120) as resp: obj=json.loads(resp.read().decode())
-    if not isinstance(obj,dict) or obj.get("error"): raise RuntimeError(f"LOCAL_API_ERROR:{obj}")
+    with urllib.request.urlopen(req,timeout=120) as resp:
+        obj=json.loads(resp.read().decode())
+    if not isinstance(obj,dict) or obj.get("error"):
+        raise RuntimeError(f"LOCAL_API_ERROR:{obj}")
     return obj
 
 
+def _semantic_meta(seed: int, polarity: str, stimulus: str, family: str) -> dict[str, Any]:
+    return {
+        "case_id": f"semantic-{seed}-{polarity}",
+        "stimulus_polarity": polarity,
+        "stimulus_family_id": family,
+        "stimulus_sha256": _stimulus_sha(stimulus),
+    }
+
+
 def main() -> int:
-    ap=argparse.ArgumentParser(); ap.add_argument("--output-dir",required=True); ap.add_argument("--cache-dir",default=os.getenv("HF_HOME") or str(Path.home()/".cache/huggingface")); args=ap.parse_args()
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--output-dir",required=True)
+    ap.add_argument("--cache-dir",default=os.getenv("HF_HOME") or str(Path.home()/".cache/huggingface"))
+    args=ap.parse_args()
     out=Path(args.output_dir); out.mkdir(parents=True,exist_ok=True)
-    result_path=out/"trigger1_intermediate_result.json"; candidate_path=out/"trigger1_intermediate_candidate.json"
-    started=dt.datetime.now(dt.timezone.utc).isoformat(); source={"repo_head":git_text("rev-parse","HEAD"),"repo_tree":git_text("rev-parse","HEAD^{tree}")}
+    result_path=out/"trigger1_intermediate_result.json"
+    candidate_path=out/"trigger1_intermediate_candidate.json"
+    started=dt.datetime.now(dt.timezone.utc).isoformat()
+    source={"repo_head":git_text("rev-parse","HEAD"),"repo_tree":git_text("rev-parse","HEAD^{tree}")}
     try:
         torch,transformers,snapshot,tokenizer,model,device,checkpoint_sha,tokenizer_sha,weight_manifest=load_exact_runtime(Path(args.cache_dir))
-        if int(getattr(model.config,"num_hidden_layers",0)) <= max(CANDIDATE_LAYERS): raise RuntimeError("MODEL_LAYER_COUNT_TOO_SMALL")
+        if int(getattr(model.config,"num_hidden_layers",0)) <= max(CANDIDATE_LAYERS):
+            raise RuntimeError("MODEL_LAYER_COUNT_TOO_SMALL")
         token_ids=_single_token_pair(tokenizer)
         directions,derivation=derive_directions(torch,tokenizer,model,device)
-        runtime=runtime_manifest(torch,transformers,model); runtime_build_sha=canonical_sha(runtime)
+        runtime=runtime_manifest(torch,transformers,model)
+        runtime_build_sha=canonical_sha(runtime)
         state=RuntimeState(torch,tokenizer,model,device,directions,token_ids)
-        server=ThreadingHTTPServer(("127.0.0.1",0),make_handler(state)); thread=threading.Thread(target=server.serve_forever,daemon=True); thread.start()
+        server=ThreadingHTTPServer(("127.0.0.1",0),make_handler(state))
+        thread=threading.Thread(target=server.serve_forever,daemon=True); thread.start()
         endpoint=f"http://127.0.0.1:{server.server_port}/v1/jspace/intermediate"
 
         calibration=[]
         for layer in CANDIDATE_LAYERS:
             for gain in CALIBRATION_GAINS:
-                for control in REQUIRED_CONTROLS:
-                    row=post(endpoint,{"prompt":CALIBRATION_PROMPT,"layer":layer,"gain":gain,"control":control,"seed":CALIBRATION_SEED,"positive_label":"A","negative_label":"B"})
-                    calibration.append({**row,"split":"calibration","case_id":"cal-stance-map-ab"})
+                for seed,polarity,stimulus in CALIBRATION_CASES:
+                    mapping="A=APPROVE; B=DISAPPROVE"
+                    full=_semantic_prompt(stimulus,mapping)
+                    meta=_semantic_meta(seed,polarity,stimulus,CALIBRATION_FAMILY)
+                    for control in REQUIRED_CONTROLS:
+                        row=post(endpoint,{"prompt":full,"layer":layer,"gain":gain,"control":control,"seed":seed,"positive_label":"A","negative_label":"B"})
+                        calibration.append({**row,"split":"calibration",**meta})
         selected=select_layer_gain(calibration)
+
         holdout=[]
         if selected.get("selected"):
             layer=int(selected["layer"]); gain=float(selected["gain"])
             wrong_layer=min(CANDIDATE_LAYERS,key=lambda x:(abs(x-layer) if x!=layer else 10**9,x))
-            for seed,prompt in zip(HOLDOUT_SEEDS,HOLDOUT_PROMPTS):
-                for label_map_id,pos_label,neg_label,mapping in (("MAP_AB","A","B","A=APPROVE; B=DISAPPROVE"),("MAP_BA","B","A","A=DISAPPROVE; B=APPROVE")):
-                    full=f"{prompt}\nMapping: {mapping}"
-                    case_id=f"hold-{seed}"
+            for seed,polarity,stimulus in HOLDOUT_CASES:
+                meta=_semantic_meta(seed,polarity,stimulus,HOLDOUT_FAMILY)
+                for label_map_id,pos_label,neg_label,mapping in LABEL_MAPS:
+                    full=_semantic_prompt(stimulus,mapping)
                     rows_case={}
                     for control in REQUIRED_CONTROLS:
                         row=post(endpoint,{"prompt":full,"layer":layer,"gain":gain,"control":control,"seed":seed,"positive_label":pos_label,"negative_label":neg_label})
@@ -258,36 +321,80 @@ def main() -> int:
                     rescue_delta=rescue_row["target_score"]-lesion_row["target_score"]
                     for control,row in rows_case.items():
                         extra={}
-                        if control=="+VECTOR": extra={"wrong_layer":wrong_layer,"wrong_layer_delta":wrong_delta,"lesion_delta":lesion_delta,"rescue_delta":rescue_delta,"wrong_layer_receipt_sha256":wrong["runtime_receipt_sha256"],"lesion_receipt_sha256":lesion_row["runtime_receipt_sha256"],"rescue_receipt_sha256":rescue_row["runtime_receipt_sha256"]}
-                        holdout.append({**row,"split":"holdout","case_id":case_id,"label_map_id":label_map_id,**extra})
-        verdict=adjudicate_holdout(holdout,selected_layer=int(selected.get("layer",-1)),selected_gain=float(selected.get("gain",-1))) if selected.get("selected") else {"pass":False,"classification":"NO_LAYER_GAIN_SELECTED"}
+                        if control=="+VECTOR":
+                            extra={
+                                "wrong_layer":wrong_layer,
+                                "wrong_layer_delta":wrong_delta,
+                                "lesion_delta":lesion_delta,
+                                "rescue_delta":rescue_delta,
+                                "wrong_layer_receipt_sha256":wrong["runtime_receipt_sha256"],
+                                "lesion_receipt_sha256":lesion_row["runtime_receipt_sha256"],
+                                "rescue_receipt_sha256":rescue_row["runtime_receipt_sha256"],
+                            }
+                        holdout.append({**row,"split":"holdout","label_map_id":label_map_id,**meta,**extra})
+
+        verdict=adjudicate_holdout(
+            holdout,
+            selected_layer=int(selected.get("layer",-1)),
+            selected_gain=float(selected.get("gain",-1)),
+        ) if selected.get("selected") else {"pass":False,"classification":"NO_LAYER_GAIN_SELECTED","selection":selected}
         server.shutdown(); server.server_close()
 
+        semantic_evidence={
+            "derivation_family_sha256":digest({"positive":CONTRASTIVE_POSITIVE,"negative":CONTRASTIVE_NEGATIVE}),
+            "calibration_family":CALIBRATION_FAMILY,
+            "calibration_stimulus_sha256":[_stimulus_sha(x[2]) for x in CALIBRATION_CASES],
+            "holdout_family":HOLDOUT_FAMILY,
+            "holdout_stimulus_sha256":[_stimulus_sha(x[2]) for x in HOLDOUT_CASES],
+            "holdout_polarities":sorted({x[1] for x in HOLDOUT_CASES}),
+            "counterbalanced_label_maps":[x[0] for x in LABEL_MAPS],
+            "baseline_semantic_discrimination_required":True,
+        }
         candidate={
             "schema":CANDIDATE_SCHEMA,"credit_scope":CREDIT_SCOPE,"source_identity":source,
             "model":MODEL_ID,"model_revision":MODEL_REVISION,"checkpoint_sha256":checkpoint_sha,"tokenizer_sha256":tokenizer_sha,
-            "runtime_build_sha256":runtime_build_sha,"activation_source":"CALIBRATION_INTERMEDIATE_RESIDUAL_CONTRASTS_ONLY_NO_LM_HEAD_ROWS",
-            "selected_layer":selected.get("layer"),"selected_gain":selected.get("gain"),"direction_sha256":derivation.get("directions",{}).get(str(selected.get("layer")),{}).get("direction_sha256"),
+            "runtime_build_sha256":runtime_build_sha,
+            "activation_source":"DERIVATION_INTERMEDIATE_RESIDUAL_CONTRASTS_ONLY_NO_LM_HEAD_ROWS",
+            "selected_layer":selected.get("layer"),"selected_gain":selected.get("gain"),
+            "direction_sha256":derivation.get("directions",{}).get(str(selected.get("layer")),{}).get("direction_sha256"),
             "api_loopback_only":True,"zero_provider_billing":True,"external_provider_credentials_read":False,
             "matched_controls":list(REQUIRED_CONTROLS),"label_remap":True,"wrong_layer":True,"lesion_rescue":True,
+            "semantic_transfer_evidence":semantic_evidence,
             "calibration_family_sha256":digest(calibration),"holdout_family_sha256":digest(holdout),"verdict":verdict,
         }
         result={
-            "schema":SCHEMA,"status":"PASS" if verdict.get("pass") else "SCIENTIFIC_NEGATIVE","started_at":started,"finished_at":dt.datetime.now(dt.timezone.utc).isoformat(),
-            "source":source,"model":MODEL_ID,"model_revision":MODEL_REVISION,"snapshot_path":str(snapshot),"checkpoint_weight_manifest":weight_manifest,
-            "checkpoint_sha256":checkpoint_sha,"tokenizer_sha256":tokenizer_sha,"runtime_manifest":runtime,"runtime_build_sha256":runtime_build_sha,
-            "device":str(device),"token_ids":token_ids,"candidate_layers":list(CANDIDATE_LAYERS),"calibration_gains":list(CALIBRATION_GAINS),
-            "derivation":derivation,"calibration_rows":calibration,"selected":selected,"holdout_rows":holdout,"verdict":verdict,
-            "api_endpoint":endpoint,"api_loopback_only":True,"zero_provider_billing":True,"external_provider_credentials_read":False,"provider_network_calls":0,
+            "schema":SCHEMA,"status":"PASS" if verdict.get("pass") else "SCIENTIFIC_NEGATIVE",
+            "started_at":started,"finished_at":dt.datetime.now(dt.timezone.utc).isoformat(),
+            "source":source,"model":MODEL_ID,"model_revision":MODEL_REVISION,"snapshot_path":str(snapshot),
+            "checkpoint_weight_manifest":weight_manifest,"checkpoint_sha256":checkpoint_sha,"tokenizer_sha256":tokenizer_sha,
+            "runtime_manifest":runtime,"runtime_build_sha256":runtime_build_sha,"device":str(device),"token_ids":token_ids,
+            "candidate_layers":list(CANDIDATE_LAYERS),"calibration_gains":list(CALIBRATION_GAINS),
+            "derivation":derivation,"semantic_transfer_evidence":semantic_evidence,
+            "calibration_rows":calibration,"selected":selected,"holdout_rows":holdout,"verdict":verdict,
+            "api_endpoint":endpoint,"api_loopback_only":True,"zero_provider_billing":True,
+            "external_provider_credentials_read":False,"provider_network_calls":0,
             "credit_scope":CREDIT_SCOPE,"promotion_candidate_written":bool(verdict.get("pass")),
         }
-        result["result_sha256"]=canonical_sha(result); result_path.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+        result["result_sha256"]=canonical_sha(result)
+        result_path.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
         if verdict.get("pass"):
-            candidate["candidate_sha256"]=canonical_sha(candidate); candidate_path.write_text(json.dumps(candidate,indent=2,sort_keys=True,ensure_ascii=False)+"\n"); return 0
-        if candidate_path.exists(): candidate_path.unlink()
+            candidate["candidate_sha256"]=canonical_sha(candidate)
+            candidate_path.write_text(json.dumps(candidate,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+            return 0
+        if candidate_path.exists():
+            candidate_path.unlink()
         return 2
     except Exception as exc:
-        blocked={"schema":SCHEMA,"status":"BLOCKED_LOCAL_INTERMEDIATE","started_at":started,"finished_at":dt.datetime.now(dt.timezone.utc).isoformat(),"source":source,"reason":f"{type(exc).__name__}:{str(exc)[:1200]}","external_provider_credentials_read":False,"zero_provider_billing":True,"provider_network_calls":0,"credit_scope":"NONE"}
-        blocked["result_sha256"]=canonical_sha(blocked); result_path.write_text(json.dumps(blocked,indent=2,sort_keys=True)+"\n"); return 3
+        blocked={
+            "schema":SCHEMA,"status":"BLOCKED_LOCAL_INTERMEDIATE","started_at":started,
+            "finished_at":dt.datetime.now(dt.timezone.utc).isoformat(),"source":source,
+            "reason":f"{type(exc).__name__}:{str(exc)[:1200]}","external_provider_credentials_read":False,
+            "zero_provider_billing":True,"provider_network_calls":0,"credit_scope":"NONE",
+        }
+        blocked["result_sha256"]=canonical_sha(blocked)
+        result_path.write_text(json.dumps(blocked,indent=2,sort_keys=True)+"\n")
+        return 3
 
-if __name__=="__main__": raise SystemExit(main())
+
+if __name__=="__main__":
+    raise SystemExit(main())

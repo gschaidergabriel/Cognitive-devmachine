@@ -2,7 +2,7 @@
 
 <!-- EVIDENCE_FORGE_AUTO:BEGIN -->
 ## AUTO — Evidence Forge / dritter autonomer Swarm
-Aktualisiert: `2026-08-24T12:13:05.883113+00:00`
+Aktualisiert: `2026-08-24T12:28:10.399787+00:00`
 
 Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur-Evidenz**. Der Forge nutzt primär andere Kapazitäten als die LLM-Swarms: OpenAlex, Crossref, Semantic Scholar, Hugging Face Hub, GitHub, lokale Disposable-Clones und — innerhalb eines harten Free-Credit-Budgets — parallele E2B-Sandboxes.
 
@@ -54,7 +54,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-24T12:13:16.835858+00:00`
+Aktualisiert: `2026-08-24T12:28:21.556774+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -106,7 +106,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-24T12:13:16.980512+00:00`
+Aktualisiert: `2026-08-24T12:28:21.725156+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -145,16 +145,16 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- Welche minimalen Code‑Changes im HCU‑Typed‑Entry‑Fabric ermöglichen die Validierung von Admission‑Receipt‑Zuständen ohne zusätzliche Runtime‑Overhead?
-- Welche arXiv‑ oder GitHub‑Quellen dokumentieren bewährte Praxis für Zero‑Secret‑Lookup‑Admission‑Gateways in dezentralen Swarm‑Systemen?
-- How to formalize Hyperposition counterevidence in J-Space
-- Deterministic admission criteria for Groq/NVIDIA
-- Local sandbox API surface proofs for EffectGate
-- How can the EntityOS/HCU system balance the need for advanced capabilities with the requirement for FREE_ONLY provider admission?
-- What are the potential limitations and risks associated with relying on FREE_ONLY provider admission?
-- Can the system's development and effectiveness be improved through the use of alternative provider admission models or strategies?
-- Wie lässt sich die Typed Entry Fabric‑Logik so skalieren, dass mehr als 10 logische Module ohne Signifikanzverlust laufen?
-- Welche Optimierungen im J‑Space‑Bereich reduzieren die Latenz unter 30 ms bei 5 M Tokens?
+- Wie kann die Unsicherheit im System reduziert werden?
+- Wie kann die Wirksamkeit des Tests verbessert werden, um die Ergebnisse zu bestätigen?
+- Wie kann die Sicherheit von EAP effektiv gewährleistet werden?
+- Welche externen Lösungen für effiziente, sichere Provider-Admission existieren?
+- Wie kann die Typsicherheit in der Entry Fabric weiter verbessert werden?
+- How can we balance security and development speed in the context of the FREE_ONLY law?
+- What are the potential consequences of not following the FREE_ONLY law?
+- How can we improve the security of the repository and supervisor inbox?
+- Wie kann die kanonische Lease für das go‑Makrocycle eindeutig identifiziert und sicherstellt werden, ohne dass vorherige Provider‑Zulassung impliziert wird?
+- Welche konkreten Log‑Indikatoren (secret_lookup, network_attempt) belegen, dass vor der FREE‑Provider‑Zulassung kein Zugriff auf geheime Ressourcen erfolgte?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
@@ -186,7 +186,7 @@ Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $1
 | Free-Swarm Usage | 2,605,050 input + 582,885 output | **$11.04** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
 | zusammen, gemessener LLM-Tokenmix | — | **$11.05** |
-| persistenter Repo-Korpus, Output-only Proxy | 11,808,712 Proxy-Tokens | **$118.09** |
+| persistenter Repo-Korpus, Output-only Proxy | 11,808,733 Proxy-Tokens | **$118.09** |
 
 **Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $11.05. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
@@ -199,7 +199,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-24T12:13:15.972969+00:00`
+Aktualisiert: `2026-08-24T12:28:20.667107+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -211,7 +211,7 @@ Aktualisiert: `2026-08-24T12:13:15.972969+00:00`
 | Free-Swarm Total-Tokens | 3187935 |
 | Usage-exakte Worker-Records | 414 |
 | Evident akzeptierte Architektur-Deltas | 0 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 11808712 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 11808733 |
 | Sonnet-5 Output-only Äquivalent des Repo-Proxys | $118.09 |
 
 ### Modelle
@@ -276,7 +276,7 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9789 Textdateien / 47234848 Zeichen ≈ **11808712 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9789 Textdateien / 47234932 Zeichen ≈ **11808733 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
 Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$118.09** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 

@@ -26,7 +26,6 @@ load_secret_file(){ local f="$1"; [[ -r "$f" ]] || return 0; set +x; set -a; sou
 all_llm_providers_admitted(){ provider_admitted groq && provider_admitted mistral && provider_admitted nvidia && provider_admitted openrouter; }
 
 load_admitted_secret_sources(){
-  # Mixed stores are only read when every LLM provider they may contain is already typed FREE.
   if all_llm_providers_admitted; then
     load_secret_file /run/secrets/clay_provider.env
     load_secret_file /artifacts/.clay_provider.env
@@ -66,6 +65,14 @@ has_admitted_provider_key(){
   return 1
 }
 
+start_local_model(){
+  curl -fsS --max-time 2 http://127.0.0.1:8088/health >/dev/null 2>&1 && return 0
+  pgrep -f '[l]ocal_research_model_server.sh' >/dev/null 2>&1 && return 0
+  [[ -x "$ROOT/tools/local_research_model_server.sh" ]] || chmod +x "$ROOT/tools/local_research_model_server.sh" 2>/dev/null || true
+  [[ -f "$ROOT/tools/local_research_model_server.sh" ]] || return 0
+  nohup bash "$ROOT/tools/local_research_model_server.sh" >"$STATE_DIR/local-model-bootstrap.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/local-model-bootstrap.pid"
+}
+
 start_dashboard(){
   local x="$ROOT/free swarm/evaluate.py"; [[ -f "$x" ]] || return 0
   pgrep -f '[f]ree swarm/evaluate.py.*--watch' >/dev/null 2>&1 || {
@@ -73,8 +80,8 @@ start_dashboard(){
 }
 
 start_distillery(){
-  local x="$ROOT/tools/run_research_distillery_entry.py"; [[ -f "$x" ]] || return 0
-  pgrep -f '[r]un_research_distillery_entry.py' >/dev/null 2>&1 || {
+  local x="$ROOT/tools/run_research_distillery_local.py"; [[ -f "$x" ]] || x="$ROOT/tools/run_research_distillery_entry.py"
+  pgrep -f '[r]un_research_distillery_(local|entry).py' >/dev/null 2>&1 || {
     nohup python3 "$x" --hours 24 --sleep-seconds 3 >"$STATE_DIR/distillery.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/distillery.pid"; }
 }
 
@@ -99,7 +106,6 @@ PY
 }
 
 stop_unadmitted_go_swarm(){
-  # If authority changes to quarantine while an old worker process survives, terminate it.
   if ! has_admitted_provider_key; then
     pgrep -f '[r]un_24h_entityos_swarm.py' | while read -r pid; do kill "$pid" 2>/dev/null || true; done
   fi
@@ -109,6 +115,7 @@ while (( $(date +%s) < DEADLINE )); do
   typed_admission_compat_flags
   load_admitted_secret_sources
   eval "$(normalize_provider_pool)"
+  start_local_model
   start_dashboard
   start_distillery
   start_forge
@@ -116,14 +123,18 @@ while (( $(date +%s) < DEADLINE )); do
   start_go_swarm_if_admitted
   NOW=$(date +%s); REMAINING=$((DEADLINE-NOW))
   python3 - <<PY >"$STATE_DIR/SUPERVISOR.json.tmp"
-import datetime,json,os,subprocess
+import datetime,json,os,subprocess,urllib.request
 from free_provider_admission import admission_snapshot
 snap=admission_snapshot()
 def running(pattern):
  p=subprocess.run(['pgrep','-f',pattern],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True);return bool(p.stdout.strip())
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v7','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'distillery_running':running('run_research_distillery_entry.py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; PUBLIC/LOCAL FORGE CONTINUES DURING QUARANTINE'},indent=2))
+def local_health():
+ try:
+  with urllib.request.urlopen('http://127.0.0.1:8088/health',timeout=1.2) as r:return 200<=int(r.status)<300
+ except Exception:return False
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30
 done
-printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v7","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR.json"
+printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v8","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR.json"

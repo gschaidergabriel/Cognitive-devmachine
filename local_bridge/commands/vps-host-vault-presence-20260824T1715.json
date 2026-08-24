@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"vps-host-vault-presence-20260824T1715",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":120,
+  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'set -euo pipefail; for p in /etc/entityos/tresor /etc/clayverse/freie-zugaenge.env /etc/clayverse/keys.env /etc/clayverse/github-token.env; do if [ -e \"$p\" ]; then if [ -r \"$p\" ]; then r=yes; else r=no; fi; if [ -d \"$p\" ]; then echo \"$p exists=yes readable=$r type=dir\"; find \"$p\" -maxdepth 1 -type f -printf \"  %f size=%s mode=%m\\n\" | sort; else echo \"$p exists=yes readable=$r type=file size=$(stat -c %s \"$p\") mode=$(stat -c %a \"$p\")\"; fi; else echo \"$p exists=no\"; fi; done'"
+}

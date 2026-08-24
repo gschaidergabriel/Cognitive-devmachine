@@ -77,9 +77,12 @@ ENTITYOS/HCU FREE-SWARM STATIC PRODUCTIVITY CONTRACT
 - Produce ONE executable architecture delta, falsifier, patch/test/benchmark, or explicit NO_DELTA.
 - Do not repeat supplied state except what is necessary to justify the delta.
 - Preserve the strongest counterhypothesis and cheapest discriminator.
+- `ready_for_forge=true` is a fail-closed contract: `target_files`, `patch_unified_diff`, and `test_commands` must all be non-empty and mutually consistent, and `falsifier` must be concrete.
+- If an executable patch is not actually supplied, keep `ready_for_forge=false`; never label an empty patch as Forge-ready.
+- For a Forge-ready candidate, `patch_unified_diff` must contain an actual applicable unified diff for the listed target files, not prose or a placeholder.
 - End with DEUTSCHE_ZUSAMMENFASSUNG.
-- Then emit exactly two compact machine-readable lines:
-ARCHITECTURE_DELTA_JSON={{"delta_id":"worker-<serial>-short-name","hypothesis":"...","mechanism":"...","target_files":["..."],"patch_unified_diff":"","test_commands":["..."],"benchmark_command":"","metric":"...","expected_direction":"higher|lower|boolean","baseline_needed":true,"falsifier":"...","risk":"...","ready_for_forge":true}}
+- Then emit exactly two compact machine-readable lines. The skeleton below is deliberately NOT Forge-ready; fill the executable fields first and only then switch `ready_for_forge` to true:
+ARCHITECTURE_DELTA_JSON={{"delta_id":"worker-<serial>-short-name","hypothesis":"...","mechanism":"...","target_files":[],"patch_unified_diff":"","test_commands":[],"benchmark_command":"","metric":"...","expected_direction":"higher|lower|boolean","baseline_needed":true,"falsifier":"...","risk":"...","ready_for_forge":false}}
 OPEN_RESEARCH_QUESTIONS_JSON=["causally distinct unresolved question"]
 
 DYNAMIC WORK SHARD

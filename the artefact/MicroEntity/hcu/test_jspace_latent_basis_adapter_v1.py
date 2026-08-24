@@ -2,6 +2,7 @@ import math
 import unittest
 from dataclasses import replace
 
+import jspace_latent_basis_adapter_v1 as latent_adapter
 from jspace_latent_basis_adapter_v1 import (
     JSpaceLatentBasisAdapterError,
     adapt_control_packet,
@@ -46,6 +47,16 @@ class JSpaceLatentBasisAdapterTests(unittest.TestCase):
             control_condition="BASELINE",
         )
 
+    @staticmethod
+    def rehash(adapter):
+        return replace(
+            adapter,
+            adapter_sha256=latent_adapter._canonical_sha(
+                latent_adapter._adapter_material(adapter),
+                "TEST_FORGED_LATENT_BASIS_ADAPTER",
+            ),
+        )
+
     def test_shared_semantic_packet_becomes_distinct_local_packet_and_cvec(self):
         adapter = self.adapter()
         local_packet, receipt = adapt_control_packet(self.source_packet(), adapter, current_generation=7)
@@ -77,6 +88,45 @@ class JSpaceLatentBasisAdapterTests(unittest.TestCase):
         forged = replace(adapter, checkpoint_sha256="9" * 64)
         with self.assertRaisesRegex(JSpaceLatentBasisAdapterError, "LATENT_BASIS_ADAPTER_DIGEST_MISMATCH"):
             validate_latent_basis_adapter(forged)
+
+    def test_self_consistent_digest_cannot_launder_malformed_top_level_authority_fields(self):
+        adapter = self.adapter()
+        cases = (
+            ("checkpoint_sha256", "not-a-sha", "checkpoint_sha256:LOWERCASE_NONPLACEHOLDER_SHA256_REQUIRED"),
+            ("tokenizer_container_sha256", "not-a-sha", "tokenizer_container_sha256:LOWERCASE_NONPLACEHOLDER_SHA256_REQUIRED"),
+            ("runtime_source_commit", "not-a-commit", "runtime_source_commit:LOWERCASE_NONPLACEHOLDER_GIT_SHA1_REQUIRED"),
+            ("runtime_build_sha256", "not-a-sha", "runtime_build_sha256:LOWERCASE_NONPLACEHOLDER_SHA256_REQUIRED"),
+            ("source_jspace_basis_sha256", "not-a-sha", "source_jspace_basis_sha256:LOWERCASE_NONPLACEHOLDER_SHA256_REQUIRED"),
+            ("local_basis_id", " local:model:latent:v1 ", "local_basis_id:NONCANONICAL_TEXT"),
+            ("role", " critic ", "role:NONCANONICAL_TEXT"),
+        )
+        for field, value, message in cases:
+            with self.subTest(field=field):
+                forged = replace(adapter, **{field: value})
+                forged = self.rehash(forged)
+                with self.assertRaisesRegex(JSpaceLatentBasisAdapterError, message):
+                    validate_latent_basis_adapter(forged)
+
+    def test_bool_layer_index_is_not_integer_authority(self):
+        with self.assertRaisesRegex(JSpaceLatentBasisAdapterError, "il_start:INTEGER_REQUIRED"):
+            build_latent_basis_adapter(
+                (("intent:a", "a" * 64, (1.0, 0.0, 0.0)),),
+                source_jspace_basis_id="global:jspace:semantic:v1",
+                source_jspace_basis_sha256="1" * 64,
+                local_basis_id="local:model:latent:v1",
+                checkpoint_sha256="2" * 64,
+                tokenizer_container_sha256="3" * 64,
+                runtime_source_commit="4" * 40,
+                runtime_build_sha256="5" * 64,
+                role="critic",
+                n_embd=3,
+                n_layer=4,
+                il_start=True,
+                il_end=2,
+                calibration_dataset_sha256="6" * 64,
+                calibration_split_sha256="7" * 64,
+                holdout_split_sha256="8" * 64,
+            )
 
     def test_source_packet_from_wrong_global_basis_fails_closed(self):
         adapter = self.adapter()

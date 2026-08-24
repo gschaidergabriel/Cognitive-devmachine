@@ -90,6 +90,44 @@ def _groq_historical_free_match(
     return newest
 
 
+def _bound_credential_entitlement(
+    *, record: dict[str, Any], credential_fingerprint: str, model_or_route: str
+) -> dict[str, Any] | None:
+    """Return one exact provider-side zero-cost credential/model binding.
+
+    Provider-wide free-access statements are deliberately insufficient for a
+    credential that could otherwise reach paid capacity. Positive admission
+    requires the exact credential fingerprint, auditable provider-side evidence,
+    and an explicit model/route allowlist containing the requested model.
+    """
+    rows = record.get("credential_entitlements")
+    if not isinstance(rows, dict):
+        return None
+    bound = rows.get(credential_fingerprint)
+    if not isinstance(bound, dict):
+        return None
+    if bound.get("provider_side_zero_cost_confirmed") is not True:
+        return None
+    evidence_ref = bound.get("evidence_ref")
+    observed_at = bound.get("observed_at")
+    allowed_models = bound.get("allowed_models")
+    if not isinstance(evidence_ref, str) or not evidence_ref.strip():
+        return None
+    if not isinstance(observed_at, str) or not observed_at.strip():
+        return None
+    if not isinstance(allowed_models, list) or not allowed_models:
+        return None
+    if model_or_route not in {str(model) for model in allowed_models}:
+        return None
+    return {
+        "kind": "EXACT_CREDENTIAL_PROVIDER_SIDE_ZERO_COST_BINDING",
+        "evidence_ref": evidence_ref,
+        "observed_at": observed_at,
+        "account_scope": bound.get("account_scope"),
+        "model_or_route": model_or_route,
+    }
+
+
 def _lane_evidence_from_provenance(
     prov: dict[str, Any],
     provider: str,
@@ -117,13 +155,21 @@ def _lane_evidence_from_provenance(
         }
 
     if provider == "nvidia":
+        bound = _bound_credential_entitlement(
+            record=record,
+            credential_fingerprint=credential_fingerprint,
+            model_or_route=model_or_route,
+        )
+        if not bound:
+            return {"ok": False, "reason": "NVIDIA_CREDENTIAL_OR_MODEL_FREE_ENTITLEMENT_NOT_BOUND"}
         return {
             "ok": True,
             "kind": record.get("evidence_kind"),
             "source": record.get("source"),
             "endpoint_host": _host(endpoint),
             "scope": record.get("scope"),
-            "assertion": "NVIDIA_HOSTED_NIM_PROTOTYPING_ROUTE_ONLY",
+            "credential_binding": bound,
+            "assertion": "EXACT_NVIDIA_CREDENTIAL_AND_MODEL_BOUND_TO_PROVIDER_SIDE_FREE_NIM_ENTITLEMENT",
         }
 
     if provider == "groq":

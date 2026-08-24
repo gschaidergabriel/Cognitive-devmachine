@@ -1,0 +1,36 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT_ERRATUM/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "amends": "research_entity/continuity/receipts/2026-08-24_GO_868_SUCCESSOR_AUTHORITY_GUARD_GPT56SOL_1822P0700.json",
+  "reason": "The primary receipt truthfully recorded zero workflow runs before PR reopen. Reopening the exact-head PR subsequently created two GitHub Actions runs, so later evidence supersedes that pre-reopen observation for execution classification.",
+  "exact_pr_head_observed": "922ed827adaedb511c64e1c3a22851c8ff1131f6",
+  "workflow_evidence": [
+    {
+      "run_id": 32722653824,
+      "workflow": "Research Entity Verify",
+      "conclusion": "failure",
+      "job_id": 97417165750,
+      "job": "verify",
+      "executed_steps": 0,
+      "job_log_fetch": "404_BLOB_NOT_FOUND"
+    },
+    {
+      "run_id": 32722653732,
+      "workflow": "Research Entity Identity Guard",
+      "conclusion": "failure",
+      "job_id": 97417164340,
+      "job": "identity-guard",
+      "executed_steps": 0
+    }
+  ],
+  "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_TEST_EXECUTION",
+  "exact_branch_test_execution_observed": false,
+  "test_failure_observed": false,
+  "product_failure_observed": false,
+  "runtime_credit_added": 0,
+  "merge_promotion": "NOT_JUSTIFIED_FROM_THIS_CI_EVIDENCE",
+  "next_exact_action": "Execute exact PR head on an owner-authorized exposed zero-cost local normal-user or clay-direct-dev surface, or obtain a GitHub runner that executes nonzero test steps, then bind exact source/environment/results before promotion."
+}

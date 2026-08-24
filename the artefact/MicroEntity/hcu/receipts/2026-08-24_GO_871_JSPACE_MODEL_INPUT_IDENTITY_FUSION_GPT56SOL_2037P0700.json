@@ -1,0 +1,78 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed": "dc11f6d697a9f8abfaa15fd6359af473345cf591",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_before_receipt": "d058dae1ac8f61c8c1336e7fca39860e10dd8329",
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "user_trigger_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "problem": "The five-condition J-Space causal family could bind stable input_variant_id labels while failing to bind the exact model input content actually consumed. That allowed prompt/token/template drift to masquerade as an intervention effect.",
+  "parallel_fusion": {
+    "race_observed": true,
+    "initial_local_delta_commit": "0aca0023fb43117b4f57b84d081516febab3c70f",
+    "initial_delta_problem": "introduced model_input_content_* naming before observing a parallel orchestrator-v2 update",
+    "parallel_orchestrator_choice": "reuse canonical VerifiedModelExecution.input_sha256 lineage as model_input_sha256",
+    "conflicting_second_write_rejected_by_github": "HTTP_409_STALE_BLOB",
+    "resolution": "re-entered donor head and fused both layers onto the single existing model_input_sha256 authority instead of creating a second input authority"
+  },
+  "source_delta": {
+    "identity_gate_fusion_commit": "db5b5128106cb9b34f5a2d93e3cecd1040ada938",
+    "orchestrator_regression_commit": "1e112e86a8c02a0252dcb72ebd239f15827bf252",
+    "identity_gate_regression_commit": "bc65fb94e67fa4273e6b54592e924c2764d08dc9",
+    "identity_gate_schema": "ENTITYOS_HCU_JSPACE_CAUSAL_FAMILY_IDENTITY_GATE/v2",
+    "orchestrator_schema": "ENTITYOS_HCU_JSPACE_CAUSAL_FAMILY_ORCHESTRATOR/v2",
+    "plan_schema": "ENTITYOS_HCU_JSPACE_CAUSAL_FAMILY_PLAN/v2",
+    "canonical_model_input_field": "model_input_sha256",
+    "clean_corrupted_content_must_differ": true,
+    "target_sham_offtarget_must_bind_corrupted_base_content": true,
+    "executor_content_substitution_rejected": true,
+    "model_input_hash_participates_in_trial_digest": true,
+    "clean_corrupted_hashes_participate_in_family_digest": true,
+    "second_model_input_authority_created": false
+  },
+  "tests_added_or_updated": [
+    "the artefact/MicroEntity/hcu/test_jspace_causal_family_identity_gate_v1.py",
+    "the artefact/MicroEntity/hcu/test_jspace_causal_family_orchestrator_v1.py"
+  ],
+  "negative_cases": [
+    "target plan input hash differs from corrupted baseline -> reject before executor",
+    "clean and corrupted baseline content hashes collide -> reject",
+    "intervention control input_variant_id does not match corrupted baseline -> reject",
+    "executor returns a different model_input_sha256 than planned -> reject",
+    "valid model_input_sha256 mutation changes trial and family identity"
+  ],
+  "evidence": {
+    "source_inspection": true,
+    "exact_head_test_execution_observed": false,
+    "github_actions_run_observed_for_final_head": false,
+    "provider_network_call": false,
+    "credential_lookup": false,
+    "paid_or_unknown_cost_execution": false,
+    "together_used": false,
+    "local_model_execution": false,
+    "classification": "SOURCE_AND_REGRESSION_READINESS_ONLY"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "jspace_causal": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "track_c": "ADVANCED: exact consumed model-input content is now source-bound through the canonical model execution input identity across plan, executor return, trial digest and causal-family identity.",
+  "next_exact_gate": "Execute the two focused causal-family regressions at the exact retained-donor head on an admitted zero-cost normal-user or clay-direct-dev surface; then bind one exact ~0.8B local intervention-capable backend and run BASELINE_CLEAN + BASELINE_CORRUPTED + INTERVENTION_TARGET + SHAM_CONTROL + OFF_TARGET_CONTROL without granting causal credit unless the declared effect survives the controls.",
+  "acceptance": "IN_PROGRESS"
+}

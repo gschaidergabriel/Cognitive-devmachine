@@ -32,45 +32,54 @@ class NvidiaCredentialBinding870Tests(unittest.TestCase):
     def setUp(self) -> None:
         self.artifacts_ctx = tempfile.TemporaryDirectory()
         self.artifacts = Path(self.artifacts_ctx.name)
-        self.provider_evidence = {
-            "sources": [
-                "https://developer.nvidia.com/nim",
-                "https://docs.api.nvidia.com/nim/re/docs/api-quickstart",
-                "https://build.nvidia.com/explore",
-            ],
-            "provider_statement": "Developer Program members get free hosted NIM prototyping access.",
-            "credential_binding_observation": "Exact non-secret fingerprint came from the admitted Developer API credential inventory.",
-            "scope": "NVIDIA-hosted NIM prototyping endpoint only",
-        }
-        self.base = {
-            "providers": {
-                "nvidia": {
-                    "allowed_endpoint_host": "integrate.api.nvidia.com",
-                    "evidence_kind": "EXACT_DEVELOPER_API_CREDENTIAL_PLUS_FREE_HOSTED_NIM_ENDPOINT",
-                    "source": "https://docs.api.nvidia.com/nim/re/docs/api-quickstart",
-                    "scope": "NVIDIA-hosted API Catalog/NIM prototyping endpoint only",
-                    "admitted_credential_fingerprints": ["fp-test"],
-                    "credential_entitlement_evidence": {
-                        "fp-test": {
-                            "entitlement_observed_at": "2026-08-24",
-                            "entitlement_observed_at_precision": "day",
-                            "provider_side_developer_program_or_free_hosted_nim_entitlement_evidence": self.provider_evidence,
-                            "entitlement_evidence_digest": digest(self.provider_evidence),
-                        }
-                    },
-                }
-            }
+        self.base_record = {
+            "allowed_endpoint_host": "integrate.api.nvidia.com",
+            "evidence_kind": "NVIDIA_HOSTED_NIM_DEVELOPER_FREE_PROTOTYPING",
+            "source": "https://developer.nvidia.com/nim",
+            "scope": "NVIDIA-hosted API Catalog/NIM prototyping endpoint only",
+            "credential_plan_needed": True,
+            "credential_entitlements": {},
         }
 
     def tearDown(self) -> None:
         self.artifacts_ctx.cleanup()
 
+    def provenance(self, entitlements: dict | None = None) -> dict:
+        return {
+            "providers": {
+                "nvidia": {
+                    **self.base_record,
+                    "credential_entitlements": entitlements or {},
+                }
+            }
+        }
+
+    def entitlement(
+        self,
+        *,
+        model: str = "nvidia/test-model",
+        confirmed: bool = True,
+        evidence: dict | None = None,
+    ) -> dict:
+        provider_evidence = evidence or {
+            "evidence_ref": "provider-admin:developer-program-membership",
+            "account_scope": "developer-program",
+            "free_hosted_nim_prototyping": True,
+        }
+        return {
+            "provider_side_zero_cost_confirmed": confirmed,
+            "entitlement_observed_at": "2026-08-24T13:50:00Z",
+            "provider_side_developer_program_or_free_hosted_nim_entitlement_evidence": provider_evidence,
+            "entitlement_evidence_digest": digest(provider_evidence),
+            "allowed_models": [model],
+        }
+
     def evidence(
         self,
         provenance: dict,
         fingerprint: str = "fp-test",
-        endpoint: str = "https://integrate.api.nvidia.com/v1/chat/completions",
         model: str = "nvidia/test-model",
+        endpoint: str = "https://integrate.api.nvidia.com/v1/chat/completions",
     ) -> dict:
         return _lane_evidence_from_provenance(
             provenance,
@@ -81,70 +90,74 @@ class NvidiaCredentialBinding870Tests(unittest.TestCase):
             artifacts=self.artifacts,
         )
 
-    def test_exact_bound_credential_with_digest_evidence_authorizes(self) -> None:
-        result = self.evidence(self.base)
-        self.assertTrue(result["ok"])
+    def test_unbound_credential_fails_closed(self) -> None:
+        result = self.evidence(self.provenance())
+        self.assertFalse(result["ok"])
         self.assertEqual(
-            result["assertion"],
-            "BOUND_CREDENTIAL_NVIDIA_DEVELOPER_FREE_NIM_PROTOTYPING_WITH_DIGESTED_EVIDENCE",
+            result["reason"],
+            "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT_NOT_BOUND",
         )
+
+    def test_legacy_fingerprint_allowlist_no_longer_grants_entitlement(self) -> None:
+        provenance = self.provenance()
+        provenance["providers"]["nvidia"]["admitted_credential_fingerprints"] = ["fp-test"]
+        self.assertFalse(self.evidence(provenance)["ok"])
+
+    def test_different_credential_entitlement_does_not_authorize(self) -> None:
+        provenance = self.provenance({"fp-other": self.entitlement()})
+        self.assertFalse(self.evidence(provenance, "fp-test")["ok"])
+
+    def test_exact_credential_and_model_entitlement_authorizes(self) -> None:
+        provenance = self.provenance({"fp-test": self.entitlement()})
+        result = self.evidence(provenance)
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["assertion"], "EXACT_NVIDIA_CREDENTIAL_MODEL_FREE_ENTITLEMENT_BOUND")
         receipt = result["credential_entitlement_receipt"]
         self.assertEqual(receipt["schema"], NVIDIA_ENTITLEMENT_SCHEMA)
         self.assertEqual(receipt["credential_fingerprint"], "fp-test")
         self.assertEqual(receipt["provider"], "nvidia")
         self.assertEqual(receipt["endpoint_host"], "integrate.api.nvidia.com")
-        self.assertEqual(receipt["entitlement_evidence_digest"], digest(self.provider_evidence))
-        self.assertEqual(result["model_or_route"], "nvidia/test-model")
-
-    def test_unlisted_credential_fails_closed(self) -> None:
-        result = self.evidence(self.base, fingerprint="fp-other")
-        self.assertFalse(result["ok"])
+        self.assertEqual(receipt["model_or_route"], "nvidia/test-model")
         self.assertEqual(
-            result["reason"],
-            "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_EVIDENCE_NOT_BOUND",
+            receipt["entitlement_evidence_digest"],
+            self.entitlement()["entitlement_evidence_digest"],
         )
 
-    def test_fingerprint_allowlist_alone_is_not_entitlement_proof(self) -> None:
-        provenance = json.loads(json.dumps(self.base))
-        provenance["providers"]["nvidia"]["credential_entitlement_evidence"] = {}
-        self.assertFalse(self.evidence(provenance)["ok"])
+    def test_exact_credential_cannot_expand_to_unlisted_model(self) -> None:
+        provenance = self.provenance({"fp-test": self.entitlement(model="nvidia/model-a")})
+        self.assertFalse(self.evidence(provenance, model="nvidia/model-b")["ok"])
 
-    def test_entitlement_record_without_allowlist_cannot_self_admit(self) -> None:
-        provenance = json.loads(json.dumps(self.base))
-        provenance["providers"]["nvidia"]["admitted_credential_fingerprints"] = []
-        self.assertFalse(self.evidence(provenance)["ok"])
+    def test_missing_or_false_provider_side_confirmation_fails(self) -> None:
+        for row in (
+            self.entitlement(confirmed=False),
+            {k: v for k, v in self.entitlement().items() if k != "provider_side_zero_cost_confirmed"},
+        ):
+            with self.subTest(row=row):
+                self.assertFalse(self.evidence(self.provenance({"fp-test": row}))["ok"])
 
-    def test_other_credential_evidence_cannot_authorize(self) -> None:
-        provenance = json.loads(json.dumps(self.base))
-        row = provenance["providers"]["nvidia"]["credential_entitlement_evidence"].pop("fp-test")
-        provenance["providers"]["nvidia"]["credential_entitlement_evidence"]["fp-other"] = row
-        self.assertFalse(self.evidence(provenance)["ok"])
-
-    def test_tampered_provider_evidence_digest_fails_closed(self) -> None:
-        provenance = json.loads(json.dumps(self.base))
-        evidence = provenance["providers"]["nvidia"]["credential_entitlement_evidence"]["fp-test"][
-            "provider_side_developer_program_or_free_hosted_nim_entitlement_evidence"
-        ]
-        evidence["scope"] = "changed-after-digest"
-        self.assertFalse(self.evidence(provenance)["ok"])
-
-    def test_missing_required_entitlement_fields_fail_closed(self) -> None:
-        for field in (
+    def test_missing_evidence_or_observation_fails(self) -> None:
+        required = (
             "entitlement_observed_at",
-            "entitlement_observed_at_precision",
             "provider_side_developer_program_or_free_hosted_nim_entitlement_evidence",
             "entitlement_evidence_digest",
-        ):
-            provenance = json.loads(json.dumps(self.base))
-            del provenance["providers"]["nvidia"]["credential_entitlement_evidence"]["fp-test"][field]
-            with self.subTest(field=field):
-                self.assertFalse(self.evidence(provenance)["ok"])
-
-    def test_wrong_endpoint_still_fails_even_for_bound_credential(self) -> None:
-        result = self.evidence(
-            self.base,
-            endpoint="https://example.invalid/v1/chat/completions",
+            "allowed_models",
         )
+        for field in required:
+            row = self.entitlement()
+            del row[field]
+            with self.subTest(field=field):
+                self.assertFalse(self.evidence(self.provenance({"fp-test": row}))["ok"])
+
+    def test_tampered_entitlement_evidence_digest_fails(self) -> None:
+        row = self.entitlement()
+        row["provider_side_developer_program_or_free_hosted_nim_entitlement_evidence"][
+            "account_scope"
+        ] = "changed-after-digest"
+        self.assertFalse(self.evidence(self.provenance({"fp-test": row}))["ok"])
+
+    def test_wrong_endpoint_still_fails_for_bound_entitlement(self) -> None:
+        provenance = self.provenance({"fp-test": self.entitlement()})
+        result = self.evidence(provenance, endpoint="https://example.invalid/v1/chat/completions")
         self.assertFalse(result["ok"])
         self.assertEqual(result["reason"], "ENDPOINT_NOT_ZERO_COST_BOUND")
 

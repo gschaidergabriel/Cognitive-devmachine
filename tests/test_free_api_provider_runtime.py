@@ -2846,14 +2846,20 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 raise AssertionError("HTTP 402 body must not be read")
 
-        env = {
+        base_env = {
             "NVIDIA_API_KEY": "secret",
             "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
-        latch_key = MOD._payment_latch_key("nvidia", env)
         for transport in ("response", "http_error"):
             with self.subTest(transport=transport):
+                env = {
+                    **base_env,
+                    "FRANK_FREE_ONLY_BUDGET_EPOCH": (
+                        f"post-network-corruption-{transport}"
+                    ),
+                }
+                latch_key = MOD._payment_latch_key("nvidia", env)
                 latches = set()
 
                 def opener(request, timeout):
@@ -2885,6 +2891,72 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     ValueError, "payment_latches_must_contain_strings"
                 ):
                     MOD.route(env, payment_latches=latches)
+
+    def test_failed_latch_publication_uses_process_fallback(self):
+        class ActiveLatchKey(str):
+            __hash__ = str.__hash__
+
+            def __eq__(self, other):
+                raise LookupError("external-latch-corrupted")
+
+        class PaymentResponse:
+            status = 402
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                raise AssertionError("HTTP 402 body must not be read")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+            "FRANK_FREE_ONLY_BUDGET_EPOCH": "fallback-hard-stop-epoch",
+        }
+        latches = set()
+        latch_key = MOD._payment_latch_key("nvidia", env)
+        original_process_latches = set(MOD.PROCESS_PAYMENT_LATCHES)
+        MOD.PROCESS_PAYMENT_LATCHES.clear()
+        try:
+            def corrupting_opener(*args, **kwargs):
+                latches.add(ActiveLatchKey(latch_key))
+                return PaymentResponse()
+
+            first = MOD.execute_chat(
+                VALID_MESSAGES,
+                model="mock",
+                environ=env,
+                opener=corrupting_opener,
+                now=iter((68.4, 68.41)).__next__,
+                payment_latches=latches,
+            )
+            self.assertTrue(
+                first["receipt"]["payment_latch_publication_failed"]
+            )
+
+            latches.clear()
+            second_opener_calls = []
+            with self.assertRaisesRegex(
+                RuntimeError, "payment_required_hard_stop_active"
+            ):
+                MOD.execute_chat(
+                    VALID_MESSAGES,
+                    model="mock",
+                    environ=env,
+                    opener=lambda *args, **kwargs: (
+                        second_opener_calls.append("open") or PaymentResponse()
+                    ),
+                    payment_latches=latches,
+                )
+            self.assertEqual(second_opener_calls, [])
+        finally:
+            MOD.PROCESS_PAYMENT_LATCHES.clear()
+            MOD.PROCESS_PAYMENT_LATCHES.update(original_process_latches)
 
     def test_unreachable_provider_has_no_http_status_or_executed_state(self):
         def opener(request, timeout):

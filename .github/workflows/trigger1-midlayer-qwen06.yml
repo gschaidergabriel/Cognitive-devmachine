@@ -1,0 +1,158 @@
+name: Trigger1 Midlayer Qwen06 Causal Discriminator
+
+on:
+  push:
+    branches:
+      - chatgpt/trigger1-midlayer-fused-20260824-2154
+    paths:
+      - 'research_entity/continuity/requests/2026-08-24_TRIGGER1_MIDLAYER_RUNTIME_REQUEST_GPT56SOL.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: trigger1-midlayer-qwen06-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  trigger1-midlayer-qwen06:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity'
+    runs-on: self-hosted
+    timeout-minutes: 60
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Guard exact clean source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git status --porcelain=v1)"
+          sha256sum \
+            tools/trigger1_local_qwen06_activation_api_execute_v2.py \
+            tools/trigger1_jspace_promotion_gate_v3.py \
+            tools/trigger1_local_qwen06_activation_api_execute.py \
+            tools/trigger1_jspace_promotion_gate.py
+          python3 -m unittest tests.test_trigger1_jspace_promotion_gate_v3
+
+      - name: Execute disjoint-basis midlayer experiment
+        id: experiment
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="${RUNNER_TEMP:-/tmp}/clay-trigger1-midlayer-${GITHUB_RUN_ID}"
+          rm -rf "$OUT"
+          mkdir -p "$OUT"
+          set +e
+          env -u OPENAI_API_KEY -u ANTHROPIC_API_KEY -u NVIDIA_API_KEY -u OPENROUTER_API_KEY \
+              -u GROQ_API_KEY -u MISTRAL_API_KEY -u TOGETHER_API_KEY -u HF_TOKEN \
+              bash tools/trigger1_local_qwen06_activation_api.sh "$OUT"
+          rc=$?
+          set -e
+          test -f "$OUT/trigger1_local_activation_api_result.json"
+          echo "out=$OUT" >> "$GITHUB_OUTPUT"
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          cat "$OUT/trigger1_local_activation_api_result.json"
+
+      - name: Apply V3 scientific promotion gate
+        id: gate
+        if: steps.experiment.outputs.rc == '0'
+        shell: bash
+        env:
+          OUT: ${{ steps.experiment.outputs.out }}
+        run: |
+          set -euo pipefail
+          test -s "$OUT/trigger1_direct_steering_candidate.json"
+          python3 tools/trigger1_jspace_promotion_gate_v3.py \
+            --candidate "$OUT/trigger1_direct_steering_candidate.json" \
+            > "$OUT/promotion_gate_v3.json"
+          cat "$OUT/promotion_gate_v3.json"
+
+      - name: Persist exact bounded runtime receipt
+        if: always() && steps.experiment.outputs.out != ''
+        shell: bash
+        env:
+          OUT: ${{ steps.experiment.outputs.out }}
+          EXPERIMENT_RC: ${{ steps.experiment.outputs.rc }}
+        run: |
+          set -euo pipefail
+          DEST='research_entity/runtime/local_qwen06/midlayer'
+          mkdir -p "$DEST"
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, platform, subprocess
+          from datetime import datetime, timezone
+          out=pathlib.Path(os.environ['OUT'])
+          result=json.loads((out/'trigger1_local_activation_api_result.json').read_text())
+          candidate_path=out/'trigger1_direct_steering_candidate.json'
+          gate_path=out/'promotion_gate_v3.json'
+          candidate=json.loads(candidate_path.read_text()) if candidate_path.exists() else None
+          gate=json.loads(gate_path.read_text()) if gate_path.exists() else None
+          def sha(path):
+              return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
+          def git(*args):
+              return subprocess.check_output(['git',*args],text=True).strip()
+          receipt={
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_SELFHOSTED_RECEIPT/v1',
+              'evidence_class':'REAL_SELF_HOSTED_LOCAL_QWEN06_MIDLAYER_HIDDEN_STATE_RUNTIME',
+              'created_at':datetime.now(timezone.utc).isoformat(),
+              'github_repository':os.environ.get('GITHUB_REPOSITORY'),
+              'github_sha':os.environ.get('GITHUB_SHA'),
+              'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+              'github_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
+              'runner_name':os.environ.get('RUNNER_NAME'),
+              'runner_os':os.environ.get('RUNNER_OS'),
+              'runner_arch':os.environ.get('RUNNER_ARCH'),
+              'platform':platform.platform(),
+              'repo_head_observed':git('rev-parse','HEAD'),
+              'repo_tree_observed':git('rev-parse','HEAD^{tree}'),
+              'repo_dirty_before_persist':bool(git('status','--porcelain=v1')),
+              'executor_path':'tools/trigger1_local_qwen06_activation_api_execute_v2.py',
+              'executor_sha256':sha('tools/trigger1_local_qwen06_activation_api_execute_v2.py'),
+              'promotion_gate_path':'tools/trigger1_jspace_promotion_gate_v3.py',
+              'promotion_gate_sha256':sha('tools/trigger1_jspace_promotion_gate_v3.py'),
+              'base_executor_sha256':sha('tools/trigger1_local_qwen06_activation_api_execute.py'),
+              'base_gate_sha256':sha('tools/trigger1_jspace_promotion_gate.py'),
+              'workflow_path':'.github/workflows/trigger1-midlayer-qwen06.yml',
+              'workflow_sha256':sha('.github/workflows/trigger1-midlayer-qwen06.yml'),
+              'experiment_exit_code':int(os.environ['EXPERIMENT_RC']),
+              'external_llm_credentials_explicitly_unset':['OPENAI_API_KEY','ANTHROPIC_API_KEY','NVIDIA_API_KEY','OPENROUTER_API_KEY','GROQ_API_KEY','MISTRAL_API_KEY','TOGETHER_API_KEY','HF_TOKEN'],
+              'zero_paid_provider_calls_by_experiment_design':True,
+              'result':result,
+              'promotion_candidate':candidate,
+              'promotion_gate_v3':gate,
+              'scope_guard':'This receipt can support only the exact Trigger-1 midlayer vector-control candidate at the bound source/runtime/model identities. It never mints canonical truth, whole EntityOS/HCU, full HCU, J-Space model-runtime, or training credit.'
+          }
+          material=json.dumps(receipt,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()
+          receipt['receipt_sha256']=hashlib.sha256(material).hexdigest()
+          dest=pathlib.Path('research_entity/runtime/local_qwen06/midlayer')
+          run_id=os.environ['GITHUB_RUN_ID']
+          text=json.dumps(receipt,indent=2,sort_keys=True,ensure_ascii=False)+'\n'
+          (dest/f'{run_id}.json').write_text(text)
+          (dest/'LATEST.json').write_text(text)
+          print(json.dumps({'experiment_status':result.get('status'),'goal_candidate':bool(gate and gate.get('owner_trigger1_goal_credit_candidate')),'receipt_sha256':receipt['receipt_sha256']},sort_keys=True))
+          PY
+          git config user.name 'clay-trigger1-midlayer-runner'
+          git config user.email 'clay-trigger1-midlayer-runner@users.noreply.github.com'
+          git add "$DEST"
+          git commit -m "evidence(trigger1): midlayer Qwen06 runtime ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:${GITHUB_REF_NAME}" && break
+            test "$attempt" -lt 6 || exit 1
+            sleep $((attempt * 3))
+          done
+
+      - name: Classify experiment transport outcome
+        if: always()
+        shell: bash
+        env:
+          EXPERIMENT_RC: ${{ steps.experiment.outputs.rc }}
+        run: |
+          case "${EXPERIMENT_RC:-3}" in
+            0|2) exit 0 ;;
+            *) exit 1 ;;
+          esac

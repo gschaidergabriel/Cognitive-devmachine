@@ -56,9 +56,11 @@ Until #1647 yields a repository-bound exact-source receipt, local Qwen3-0.6B mod
 
 ## Typed Entry / HCU authority convergence
 
-`BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json` and `SUPERVISOR_INBOX.json` are required to resolve one successor-dynamic authority surface. This GO observed `BOOTSTRAP_MINIMAL.json` still on 8.71 while `PROGRAM_STATE` and `SUPERVISOR_INBOX` selected 8.72. The minimal bootstrap was synchronized to **8.72** and now points at `SUPERVISOR_STEERING_8_72.json`.
+`BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json` and `SUPERVISOR_INBOX.json` are required to resolve one successor-dynamic authority surface. This GO observed `BOOTSTRAP_MINIMAL.json` still on 8.71 while `PROGRAM_STATE` and `SUPERVISOR_INBOX` selected 8.72. Parallel current-main work synchronized the minimal bootstrap to **8.72** and it now points at `SUPERVISOR_STEERING_8_72.json`.
 
-This is a control-plane/Typed-Entry-adjacent convergence delta: it removes a stale authority island without creating a second truth/effect/admission authority. It grants no executable HCU/model credit.
+A second re-entry at canonical `main` `7931d55709168af0fc42f84b541ca5fa53976183` found one remaining current-facing stale island: `the artefact/manifest.json` still pointed at **Supervisor 8.68** in `authority_correction`, `execution_policy.active_supervisor_epoch`, `coordination_authority.supervisor` and its mutable frontier, even though current Bootstrap, Program State and Supervisor Inbox were on 8.72. The existing successor-aware authority validator already fails closed on this condition.
+
+This GO therefore narrows its durable delta to the remaining manifest closure only: synchronize the manifest to **8.72**, preserve historical component/runtime receipts unchanged, keep the current concrete FREE credential/model/route provenance law fail-closed, and keep all provider/whole-HCU/J-Space/training credits at zero. No second truth/effect/admission authority is introduced.
 
 Retained donor lane **#1263** remains the single HCU / Typed Entry / Global J-Space donor lane. Its engine/loader work is source/donor evidence until exact admitted execution binds loader consumption, inference receipt and downstream causal traces.
 

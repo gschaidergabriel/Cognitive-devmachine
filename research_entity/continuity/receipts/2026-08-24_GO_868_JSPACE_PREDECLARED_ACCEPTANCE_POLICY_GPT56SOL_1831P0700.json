@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "observed_at_local": "2026-08-24T18:31:00+07:00",
+  "authority_epoch": "8.68",
+  "mode": "FREE_ONLY",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "trigger": "go",
+  "canonical_main_at_branch_reentry": "a4c4987e4dd0ad64a37611f38759de51b1ab2a64",
+  "branch": "gpt56sol/go-868-jspace-local-intervention-receipt-20260824-1831",
+  "branch_head_before_receipt": "cb274cad430f2d586e0f8862118741aa83d0fc90",
+  "delta": {
+    "class": "JSPACE_PREDECLARED_ACCEPTANCE_POLICY_FUSION_SOURCE_ONLY",
+    "source": {
+      "path": "tools/assess_hcu_jspace_local_activation_probe_v2.py",
+      "git_blob_sha1": "5f0fe449d5decde8ae91601f1e93aa780aeb9dc2",
+      "sha256_local_exact_content": "327535d485378af959a7d5abbc45b00de9927ac8cc72ff197b00c230e0737c3e"
+    },
+    "tests": {
+      "path": "tests/test_assess_hcu_jspace_local_activation_probe_v2.py",
+      "git_blob_sha1": "9c623ddbf104e29fb09885b3162fe21ac7ebd63f",
+      "sha256_local_exact_content": "846f6409f1693f116d2e79b1202f5012978a6493d606d76679a11d574c7256c7"
+    },
+    "mechanism": [
+      "reuse existing ENTITYOS_HCU_JSPACE_LOCAL_ACTIVATION_PROBE/v2 and its canonical raw validator instead of creating a competing probe authority",
+      "require exact acceptance-policy bytes to exist at a Git commit that is an ancestor of or equal to the raw probe source_git_head",
+      "bind policy to authority epoch, exact probe source digest, layer, target/off-target positions, clean/corrupted token-sequence digests, target/off-target token ids, intervention family, sham family, off-target family and numerical thresholds",
+      "recompute raw metrics and reject derived-metric laundering",
+      "evaluate target effect, corruption effect, sham specificity and two off-target specificity gates",
+      "never promote effect-pattern PASS into J-Space causal-control or runtime credit while loader consumption and canonical ModelExecution/InferenceReceipt binding remain unverified"
+    ]
+  },
+  "local_mechanism_check": {
+    "command": "python -m unittest -v tests.test_assess_hcu_jspace_local_activation_probe_v2",
+    "result": "9/9 PASS",
+    "scope": "DISPOSABLE_LOCAL_SCRATCH_MECHANISM_ONLY",
+    "important_boundary": "the scratch import used a minimal raw-validator stand-in; the committed fixture is shaped for the exact current raw validator, but exact canonical-checkout integration execution was not observed",
+    "non_clay_infrastructure_noise": "artifact_tool spreadsheet warmup emitted an unrelated startup error; unittest exit status was 0"
+  },
+  "coordination": {
+    "parallel_overlap_observed": true,
+    "action": "abandoned the first standalone intervention-receipt schema and force-reentered the branch onto current main after raw probe v2 landed",
+    "semantic_duplicate_created": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "no shared immutable reproducible macrocycle identity / create-only lease was available to this organ"
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_LEVEL_BY_REUSING_CURRENT_RAW_PROBE_AND_ADDING_EXECUTABLE_PREDECLARATION_GATE",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_HCU_CAUSAL_EVIDENCE_BOUNDARY_WITH_SUCCESSOR_SAFE_POLICY_IDENTITY_AND_FAIL_CLOSED_METRIC_BINDING",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_SOURCE_LEVEL_WITH_POSTHOC_THRESHOLD_AND_SCOPE_LAUNDERING_FENCE; NO_MODEL_RUNTIME_OR_TRAINING_CREDIT"
+  },
+  "credits": {
+    "external_provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "jspace_causal_control": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "on an authorized zero-cost local or clay-direct-dev surface, predeclare and commit one exact acceptance policy before a future lease-backed intervention, then execute the current raw probe v2, validate it, assess it against that ancestor-bound policy, and separately bind verified loader consumption plus canonical ModelExecution/InferenceReceipt before any causal promotion"
+}

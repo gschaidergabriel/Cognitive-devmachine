@@ -1,12 +1,12 @@
 {
-  "schema_version": "8.74",
-  "latest_cycle": "go-20260825-distillery-replay-v2-migration-gate",
+  "schema_version": "8.75",
+  "latest_cycle": "go-20260825-metrics-freshness-and-distillery-replay-v2",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "latest_repo_head_inspected_before_write": "8fdd5a07bc493a2f4d8c2a9775c88e61c3ad513a",
-  "material_finding": "The Forge->Distillery semantic replay identity is now exact-Git-blob component-executed and reproducible: 17/17 current regression tests pass, and the concurrent duplicate discriminator yields one durable package/evidence row while divergent measured evidence on the same execution identity fails closed. However, the identity semantics changed while persisted historical rows were minted under the prior v1 namespace. Reusing v1 across the semantic change can remint old executions after upgrade. PR #1771 is the current non-duplicative successor that fuses replay-v2 migration with the existing BEGIN IMMEDIATE atomic admission path. Live Distillery/dataset/training credit remains blocked until exact-current migration execution closes this boundary.",
+  "latest_repo_head_inspected_before_write": "f81994992e592b88cb0288458dd4512ed240d308",
+  "material_finding": "The Distillery replay-v2 migration remains the primary live-data credit gate, but a new metrology split is now executable in repository state: the current live dashboard at 2026-08-24T19:46Z reports 1 Forge ACCEPTED delta and 21,438,010 Free-Swarm tokens, while free swarm/GO_COLLECTIVE_METRICS.json still contains a 2026-08-24T13:58:54Z authority_epoch=8.71 snapshot with 7,302,860 tokens and forge_accepted_deltas=0. Stale aggregate metrics must fail closed as STALE/UNMEASURED and must not overwrite or supersede newer canonical input surfaces.",
   "execution_authority": {
     "root_pointer": "CLAY_EXECUTION_AUTHORITY.md",
     "vps_sandbox": "AUTHORIZED_INSIDE_CLAY_DIRECT_DEV",
@@ -19,6 +19,9 @@
     "forge_distillery_replay_identity": "EXACT_BLOB_COMPONENT_EXECUTED_17_OF_17_AND_CONCURRENT_DEDUPE_EXECUTED",
     "forge_distillery_replay_v1_to_v2_migration": "OPEN_PR1771_EXACT_CURRENT_EXECUTION_REQUIRED",
     "forge_distillery_live_promotion": "BLOCKED_BY_REPLAY_NAMESPACE_MIGRATION",
+    "collective_metrics_freshness": "STALE_SPLIT_EXECUTABLE_LIVE_DASHBOARD_NEWER_THAN_GO_COLLECTIVE_METRICS",
+    "forge_live_dashboard_accepted_deltas": 1,
+    "distillery_live_dashboard_accepted_dataset_tokens": 0,
     "selfhosted_health_observer": "TERMINAL_RESULT_UNOBSERVED",
     "local_qwen_hidden_state_fastpath": "SOURCE_READY_RUNTIME_UNOBSERVED",
     "local_qwen_nonterminal_causal_discriminator": "SOURCE_ADVANCED_ATOMIC_LEASE_REQUIRED_BEFORE_UNUSUAL_EXECUTION",
@@ -48,6 +51,8 @@
     "EXACT_BLOB_REPRODUCIBILITY_WITHIN_ONE_IMPLEMENTATION_FAMILY_IS_NOT_INDEPENDENT_GOODMAN_REPLICATION",
     "REPLAY_IDENTITY_SEMANTIC_CHANGE_REQUIRES_VERSIONED_MIGRATION_OR_FAIL_CLOSED_COMPATIBILITY",
     "HISTORICAL_V1_ROWS_MUST_NOT_BE_REWRITTEN_AS_IF_MINTED_UNDER_V2",
+    "STALE_METRICS_MUST_NOT_SUPERSEDE_NEWER_CANONICAL_INPUT_SURFACES",
+    "METRICS_AUTHORITY_EPOCH_MISMATCH_MUST_BE_EXPLICITLY_HISTORICAL_OR_FAIL_CLOSED",
     "DISTILLERY_DATASET_CREDIT_REQUIRES_STABLE_EXECUTION_IDENTITY_MIGRATION_SAFETY_AND_SEMANTIC_REPLAY_ZERO_DELTA",
     "LOCAL_ZERO_COST_RUNTIME_DOES_NOT_AUTOMATICALLY_MINT_CANONICAL_SEMANTICS",
     "PROVIDER_GLOBAL_FREE_STATEMENT_IS_NOT_CONCRETE_CREDENTIAL_ENTITLEMENT_PROOF",
@@ -59,7 +64,8 @@
   "next_focus": [
     "EXECUTE_PR1771_OR_NON_DUPLICATIVE_FUSED_SUCCESSOR_ON_EXACT_CURRENT_SOURCE",
     "CLOSE_DISTILLERY_REPLAY_ID_MIGRATION_RECEIPT_V1_WITH_FROZEN_PRECHANGE_V1_FIXTURE",
-    "REQUIRE_MIGRATION_IDEMPOTENCE_AND_ROLLBACK_WITHOUT_PARTIAL_V2_STATE",
+    "CLOSE_COLLECTIVE_METRICS_FRESHNESS_RECEIPT_V1_WITHOUT_CREATING_A_SECOND_METRICS_AUTHORITY",
+    "REQUIRE_STALE_OR_OUT_OF_ORDER_METRICS_WRITERS_TO_FAIL_CLOSED",
     "REQUIRE_VOLATILE_ENVELOPE_ONLY_REPLAY_TO_MINT_ZERO_PACKETS_AND_ZERO_ACCEPTED_DATASET_TOKENS",
     "REQUIRE_SAME_SOURCE_EXECUTION_ID_WITH_MUTATED_MEASURED_EVIDENCE_TO_FAIL_CLOSED_AS_CONFLICT",
     "REQUIRE_GENUINELY_NEW_EXECUTION_TO_REMAIN_SEPARATELY_ADMISSIBLE",
@@ -82,5 +88,5 @@
     "provider_runtime_credit": 0,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_74.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_75.json"
 }

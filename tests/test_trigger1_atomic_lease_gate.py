@@ -9,12 +9,14 @@ from tools.trigger1_atomic_lease_gate import EXPECTED_EXPERIMENT, validate_claim
 
 RID = "rid_" + "a" * 64
 HEAD = "b" * 40
+PAYLOAD_SHA = "4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33"
+TS = f"ts_20260817T063500000000Z__p_{PAYLOAD_SHA}"
 
 
-def claim() -> dict:
+def claim(trigger_key: str = RID) -> dict:
     return {
         "schema": "clay-go-experiment-claim/v1",
-        "trigger_key": RID,
+        "trigger_key": trigger_key,
         "trigger": "go",
         "experiment_name": EXPECTED_EXPERIMENT,
         "claimant_organ": "gpt56sol",
@@ -67,6 +69,41 @@ class Trigger1AtomicLeaseGateTests(unittest.TestCase):
     def test_duplicate_claim(self):
         self.put(claim()); self.put(claim(), "legacy_duplicate.json")
         self.assertEqual(self.run_gate()["reason"], "EXPERIMENT_BUDGET_RACE_VIOLATION")
+
+    def test_legacy_dashed_full_digest_semantic_duplicate(self):
+        self.put(claim(TS))
+        legacy = claim(f"2026-08-17T13-35+07-00__{PAYLOAD_SHA}")
+        legacy["claimed_at"] = "2026-08-17T13:35:00+07:00"
+        self.put(legacy)
+        r = self.run_gate(f"trigger_key: {TS}\n")
+        self.assertFalse(r["pass"])
+        self.assertEqual(r["reason"], "EXPERIMENT_BUDGET_RACE_VIOLATION")
+
+    def test_legacy_compact_short_digest_semantic_duplicate(self):
+        self.put(claim(TS))
+        legacy_key = f"20260817T133500+0700_{PAYLOAD_SHA[:16]}"
+        legacy = claim(legacy_key)
+        legacy["claimed_at"] = "2026-08-17T13:35:00+07:00"
+        self.put(legacy)
+        r = self.run_gate(f"trigger_key: {TS}\n")
+        self.assertFalse(r["pass"])
+        self.assertEqual(r["reason"], "EXPERIMENT_BUDGET_RACE_VIOLATION")
+
+    def test_legacy_filename_only_duplicate_fails_closed(self):
+        self.put(claim(TS))
+        legacy_key = f"20260817T133500+0700_{PAYLOAD_SHA[:16]}"
+        (self.root / f"{legacy_key}.json").write_text("not-json\n", encoding="utf-8")
+        r = self.run_gate(f"trigger_key: {TS}\n")
+        self.assertFalse(r["pass"])
+        self.assertEqual(r["reason"], "EXPERIMENT_BUDGET_RACE_VIOLATION")
+
+    def test_unrelated_legacy_timestamp_does_not_block(self):
+        self.put(claim(TS))
+        legacy = claim(f"2026-08-17T13-36+07-00__{PAYLOAD_SHA}")
+        legacy["claimed_at"] = "2026-08-17T13:36:00+07:00"
+        self.put(legacy)
+        r = self.run_gate(f"trigger_key: {TS}\n")
+        self.assertTrue(r["pass"])
 
     def test_required_fields(self):
         for field, value, reason in [

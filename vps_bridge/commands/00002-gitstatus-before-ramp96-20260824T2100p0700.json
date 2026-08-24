@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"00002-gitstatus-before-ramp96-20260824T2100p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":60,
+  "command":"set -e; git status --short --branch; git rev-parse HEAD; echo FABRIC; pgrep -af run_6000_free_swarm_fast.py || true; cat /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135526Z/status.json 2>/dev/null || true"
+}

@@ -1,0 +1,92 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "successor_branch_base_main": "71557ce6f5b30cd6573d71317ee2d5e1fd6d4526",
+    "branch": "gpt56sol/go-868-jspace-lease-race-fence-20260824-1831-r2",
+    "prior_stale_work_branch_merge_base": "63474237a708dacd6339553c18cd337a206a2595",
+    "prior_branch_was_behind_main_by_commits_when_abandoned": 14,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "coordination": {
+    "shared_immutable_request_or_turn_id_exposed": false,
+    "immutable_user_message_timestamp_precision_exposed": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "SOURCE_CONTROL_PLANE_REPAIR_AND_DETERMINISTIC_REGRESSION"
+  },
+  "observed_gap": {
+    "source": "tools/hcu_jspace_local_activation_probe.py",
+    "material_finding": "The local intervention probe validates a supplied claim record but does not itself enforce the GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL post-claim semantic-duplicate/migration race inspection before hidden-state intervention. The parallel raw v2 receipt validator validates lease_file_validated and the intervention envelope but likewise does not establish this semantic-duplicate fence.",
+    "protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+    "reachable_historical_evidence": "Repository history contains legacy/noncanonical claim trigger-key spellings from earlier experiment-budget race incidents."
+  },
+  "hypothesis": "A canonical-form claim plus a legacy/noncanonical semantic duplicate can reach the raw model intervention because the current probe checks the claim file but not the required sibling-claim semantic race fence.",
+  "counterhypothesis": "The raw v2 receipt validator already closes this boundary because it requires lease_file_validated=true.",
+  "adjudication": "Rejected. lease_file_validated proves only the raw probe's claim-file validation result. The current validator does not inspect canonical trigger-key syntax or sibling semantic duplicates, while the atomic lease protocol requires that post-claim inspection before intervention.",
+  "delta": {
+    "guard": "tools/hcu_jspace_guarded_activation_probe.py",
+    "guard_blob_sha": "f66b259f469ca1dd81c5a00872f4c9358fa4999f",
+    "test": "tests/test_hcu_jspace_guarded_activation_probe_868.py",
+    "test_blob_sha": "14b834ef153bd6c096d3ec6b2aa145464ca11a4f",
+    "contract": "research_entity/claycode/HCU_JSPACE_ACTIVATION_LEASE_RUNTIME_FENCE_V1.md",
+    "semantics": [
+      "require canonical rid_<64hex> or canonical ts_<utc-microsecond-stamp>__p_<64hex> trigger key before intervention",
+      "inspect sibling claims before intervention",
+      "normalize recognized historical timestamp formats to UTC",
+      "treat recognized historical short payload hashes only as semantic-race prefixes",
+      "reject recognized semantic duplicates as EXPERIMENT_BUDGET_RACE_VIOLATION",
+      "reject pre-existing result file",
+      "bind guard source hash, underlying probe source hash and exact Git HEAD into emitted candidate receipt",
+      "do not claim reconstruction of create-only transaction history from file presence"
+    ],
+    "raw_probe_without_guard_classification": "NOT_ADMISSIBLE_AS_NEW_UNUSUAL_EXPERIMENT_EXECUTION_RECEIPT_UNDER_FENCE_V1"
+  },
+  "deterministic_evidence": {
+    "class": "NONCANONICAL_CHATGPT_CONTAINER_COMPONENT_MECHANISM_ONLY",
+    "tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "covered": [
+      "canonical rid trigger-key acceptance",
+      "canonical timestamp trigger-key acceptance",
+      "legacy dashed timestamp rejection as canonical",
+      "full-hash legacy semantic duplicate detection",
+      "short-hash compact legacy semantic duplicate detection",
+      "unrelated timestamp negative control"
+    ],
+    "authorized_local_or_clay_direct_dev_exact_checkout_execution_observed": false,
+    "bridge_tool_visibility": "UNOBSERVED_TOOL_VISIBILITY",
+    "runtime_credit_granted": false
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the existing local J-Space intervention path gains a fail-closed execution ingress for the current atomic lease protocol rather than accepting a valid-looking claim file as sufficient intervention authority.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_AT_CONTROL_INTERCONNECT_BOUNDARY: the guard preserves exact current HCU/Entry/effect authorities while binding experiment coordination identity to the model-intervention ingress; no second truth/effect/claim authority is created.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_AT_SAFE_EXECUTION_READINESS: the already-landed local PyTorch observation/intervention probe remains the selected mechanism, while future hidden-state intervention is fenced against legacy lease races. No model intervention was run in this macrocycle."
+  },
+  "provider_and_effect_safety": {
+    "provider_secret_lookup_performed": false,
+    "external_llm_provider_network_performed": false,
+    "together_used": false,
+    "paid_or_unknown_cost_execution_performed": false,
+    "new_production_effect_performed": false
+  },
+  "credits": {
+    "external_provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Run the guard regression and the observation-only raw v2 probe on an exposed authorized zero-cost normal-user local or clay-direct-dev exact checkout. For any future --mode intervention, first acquire a reproducible canonical create-only atomic lease, pass this semantic duplicate fence, then run the five-condition family and validate the combined guarded receipt. Preserve loader-consumption as UNKNOWN until independently attested.",
+  "acceptance": "IN_PROGRESS"
+}

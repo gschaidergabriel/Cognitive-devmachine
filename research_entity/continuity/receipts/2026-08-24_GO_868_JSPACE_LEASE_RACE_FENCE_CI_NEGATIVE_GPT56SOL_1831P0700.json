@@ -1,0 +1,61 @@
+{
+  "schema": "ENTITYOS_HCU_CI_NEGATIVE_EVIDENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "pr": "gschaidergabriel/clay-global-research-entity#1461",
+  "observed_pr_head": "8be7a0f21773f94dbe7213f2dd3d15ddc205b761",
+  "observed_base_main_at_pr_creation": "d87158d77e1736e4d83cb04b1122d70dae439371",
+  "workflow_observations": [
+    {
+      "run_id": 32723532385,
+      "workflow": "Research Entity Identity Guard",
+      "job_id": 97419793343,
+      "conclusion": "failure",
+      "steps_exposed": 0,
+      "job_log_fetch": "BlobNotFound",
+      "duration_class": "APPROX_3_SECONDS_FROM_RUN_METADATA"
+    },
+    {
+      "run_id": 32723532401,
+      "workflow": "Research Entity Verify",
+      "job_id": 97419794225,
+      "conclusion": "failure",
+      "steps_exposed": 0,
+      "job_log_fetch": "NOT_DIAGNOSTICALLY_AVAILABLE_IN_CURRENT_CONNECTOR_OBSERVATION",
+      "duration_class": "APPROX_3_SECONDS_FROM_RUN_METADATA"
+    }
+  ],
+  "diff_scope_observed": {
+    "changed_files": 5,
+    "identity_guard_files_modified": false,
+    "new_files": [
+      "tools/hcu_jspace_guarded_activation_probe.py",
+      "tests/test_hcu_jspace_guarded_activation_probe_868.py",
+      "research_entity/claycode/HCU_JSPACE_ACTIVATION_LEASE_RUNTIME_FENCE_V1.md",
+      "research_entity/continuity/receipts/2026-08-24_GO_868_JSPACE_ACTIVATION_LEASE_RACE_FENCE_GPT56SOL_1831P0700.json"
+    ],
+    "modified_current_facing_file": "the artefact/README.md"
+  },
+  "classification": "CI_FAILURE_UNDIAGNOSED_FAIL_CLOSED",
+  "interpretation": "The workflow conclusions are real negative evidence, but the available job/step/log surfaces do not identify a failing command or assertion. Therefore the failures are not promoted to a product/source regression and are not dismissed as infrastructure noise. The PR remains draft and unmerged pending diagnosable CI or an authorized exact-checkout discriminator.",
+  "actions": {
+    "merge_performed": false,
+    "pr_remains_draft": true,
+    "unusual_experiment_performed": false,
+    "provider_network_performed": false,
+    "paid_or_unknown_cost_execution_performed": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain a diagnosable rerun/job log or execute the focused guard regression on an exposed authorized zero-cost exact checkout. Do not merge #1461 while required CI remains red/undiagnosed."
+}

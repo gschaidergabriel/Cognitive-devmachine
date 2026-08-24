@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Deterministic execution admission for model-authored Evidence Forge commands.
 
-This module is intentionally not an authority for canonical truth. It narrows the
+This module is intentionally not an authority for canonical truth.  It narrows the
 local disposable-clone execution surface used by run_free_evidence_forge.py.
 Worker-authored command strings are treated as untrusted data and are admitted only
 as a small argv grammar, executed without a shell, without inherited credentials,
@@ -29,6 +29,7 @@ SAFE_TOKEN_RE = re.compile(r"^[A-Za-z0-9_./:+,=@%~-]+$")
 MAX_COMMAND_BYTES = 4096
 MAX_ARGC = 64
 MAX_ARG_BYTES = 768
+COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 
 
 @dataclass(frozen=True)
@@ -49,7 +50,6 @@ def sha256_text(value: str) -> str:
 def _path_token_safe(token: str) -> bool:
     if token.startswith("/") or token.startswith("~"):
         return False
-    # Options may smuggle an absolute/parent path after '=' (e.g. --rootdir=/run).
     values = [token]
     if "=" in token:
         values.append(token.split("=", 1)[1])
@@ -137,7 +137,6 @@ def safe_command(command: str) -> bool:
 
 
 def _minimal_env() -> dict[str, str]:
-    # Do not inherit os.environ: model-authored test code receives no provider credentials.
     return {
         "PATH": "/usr/local/bin:/usr/bin:/bin",
         "HOME": "/tmp",
@@ -146,6 +145,10 @@ def _minimal_env() -> dict[str, str]:
         "PYTHONDONTWRITEBYTECODE": "1",
         "PYTHONNOUSERSITE": "1",
         "NO_PROXY": "*",
+        "TMPDIR": "/tmp",
+        "CARGO_TARGET_DIR": "/tmp/cargo-target",
+        "GOCACHE": "/tmp/go-cache",
+        "GOTMPDIR": "/tmp/go-tmp",
     }
 
 
@@ -166,7 +169,7 @@ def _bubblewrap_prefix(cwd: Path) -> list[str] | None:
     for host in ("/usr", "/bin", "/lib", "/lib64", "/usr/local"):
         if Path(host).exists():
             prefix += ["--ro-bind", host, host]
-    prefix += ["--bind", str(cwd), "/work", "--chdir", "/work"]
+    prefix += ["--ro-bind", str(cwd), "/work", "--chdir", "/work"]
     for key, value in _minimal_env().items():
         prefix += ["--setenv", key, value]
     return prefix + ["--"]
@@ -184,9 +187,6 @@ def execution_backend_status(cwd: Path) -> dict[str, Any]:
             "secret_environment_inherited": False,
             "host_secret_paths_exposed": False,
         }
-    # Presence is not capability. Probe the exact isolation shape with a fixed,
-    # non-model-authored command so kernel/user-namespace denial is infrastructure
-    # negative evidence rather than a candidate/test failure.
     try:
         probe = subprocess.run(
             prefix + ["/usr/bin/true"],
@@ -216,7 +216,6 @@ def execution_backend_status(cwd: Path) -> dict[str, Any]:
 def _limit_child(timeout: int) -> None:
     cpu = max(2, min(int(timeout) + 2, 180))
     resource.setrlimit(resource.RLIMIT_CPU, (cpu, cpu))
-    # Deliberately bounded but large enough for normal unit tests.
     mem = 2 * 1024**3
     resource.setrlimit(resource.RLIMIT_AS, (mem, mem))
     resource.setrlimit(resource.RLIMIT_FSIZE, (128 * 1024**2, 128 * 1024**2))
@@ -274,7 +273,7 @@ def run_cmd(cwd: Path, command: str, timeout: int = 120) -> dict[str, Any]:
             "stderr": "TIMEOUT",
             "execution_admission": decision.to_dict(),
         }
-    except Exception as exc:  # fail closed; infrastructure failure is not a candidate negative.
+    except Exception as exc:
         return {
             "rc": 125,
             "elapsed_s": time.monotonic() - started,
@@ -293,17 +292,22 @@ def candidate_execution_manifest(row: Any, proposal: dict[str, Any], cwd: Path) 
     if isinstance(bench, str) and bench.strip():
         commands.append(bench)
     decisions = [admit_command(cmd).to_dict() for cmd in commands]
+    worker_source_head = str(row["repo_head"] or "").strip().lower() if "repo_head" in row.keys() else ""
+    source_identity_bound = bool(COMMIT_RE.fullmatch(worker_source_head))
+    evaluation_head = "UNKNOWN"
+    worker_source_tree = "UNKNOWN"
     try:
-        head = subprocess.run(
+        evaluation_head = subprocess.run(
             ["git", "rev-parse", "HEAD"], cwd=str(cwd), env=_minimal_env(), text=True,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=10, check=True,
         ).stdout.strip()
-        tree = subprocess.run(
-            ["git", "rev-parse", "HEAD^{tree}"], cwd=str(cwd), env=_minimal_env(), text=True,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=10, check=True,
-        ).stdout.strip()
+        if source_identity_bound:
+            worker_source_tree = subprocess.run(
+                ["git", "rev-parse", f"{worker_source_head}^{{tree}}"], cwd=str(cwd), env=_minimal_env(), text=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=10, check=True,
+            ).stdout.strip()
     except Exception:
-        head = tree = "UNKNOWN"
+        pass
     proposal_raw = json.dumps(proposal, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
     return {
         "schema": POLICY_SCHEMA,
@@ -311,8 +315,10 @@ def candidate_execution_manifest(row: Any, proposal: dict[str, Any], cwd: Path) 
         "proposal_sha256": sha256_text(proposal_raw),
         "patch_sha256": sha256_text(patch),
         "commands_sha256": sha256_text(json.dumps(commands, ensure_ascii=False, separators=(",", ":"))),
-        "source_head": head,
-        "source_tree": tree,
+        "worker_source_head": worker_source_head or None,
+        "worker_source_tree": worker_source_tree if worker_source_tree != "UNKNOWN" else None,
+        "evaluation_head": evaluation_head if evaluation_head != "UNKNOWN" else None,
+        "source_identity_bound": source_identity_bound,
         "decisions": decisions,
         "all_commands_admitted": all(bool(d["admitted"]) for d in decisions),
         "backend": execution_backend_status(cwd),
@@ -334,6 +340,8 @@ def validate_candidate_with_admission(base: Any, original_validate: Any, con: An
         "evaluated_at": base.now(),
         "execution_admission": manifest,
     }
+    if not manifest["source_identity_bound"]:
+        return {**base_record, "status": "source_identity_unbound", "reason": "valid repo_head_at_prompt required before execution admission"}
     if not manifest["all_commands_admitted"]:
         return {**base_record, "status": "execution_not_admitted", "reason": "MODEL_COMMAND_POLICY_REJECTED"}
     if not manifest["backend"]["admitted"]:

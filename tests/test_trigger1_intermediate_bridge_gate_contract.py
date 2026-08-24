@@ -39,7 +39,13 @@ def passing_inputs() -> tuple[dict, dict]:
                 "hook_calls": 1,
             }
             if control == "+VECTOR":
-                row["applied_vector_sha256"] = ALT64
+                row.update({
+                    "applied_vector_sha256": ALT64,
+                    "wrong_layer": 18,
+                    "wrong_layer_vector_source_layer": 12,
+                    "wrong_layer_applied_vector_sha256": ALT64,
+                    "wrong_layer_specificity_margin": 0.25,
+                })
             holdout.append(row)
 
     verdict = {
@@ -48,6 +54,9 @@ def passing_inputs() -> tuple[dict, dict]:
         "counterbalanced_label_mapping": True,
         "wrong_layer_evidence_complete": True,
         "wrong_layer_ok": True,
+        "wrong_layer_same_vector_complete": True,
+        "wrong_layer_same_vector_ok": True,
+        "min_wrong_layer_specificity_margin": 0.25,
         "lesion_rescue_evidence_complete": True,
         "lesion_rescue_ok": True,
     }
@@ -87,12 +96,14 @@ def passing_inputs() -> tuple[dict, dict]:
 
 
 class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
-    def test_bridge_binds_label_independence_and_reaches_gate_v4_goal_candidate(self):
+    def test_bridge_binds_label_independence_and_reaches_gate_goal_candidate(self):
         result, intermediate = passing_inputs()
         direct = bridge.build_direct_candidate(result, intermediate)
 
         self.assertIs(False, direct["vector_derivation"]["uses_evaluation_output_labels"])
         self.assertIs(True, direct["holdout"]["label_mapping_counterbalanced"])
+        self.assertIs(True, direct["holdout"]["wrong_layer_same_selected_vector"])
+        self.assertGreater(direct["holdout"]["min_wrong_layer_specificity_margin"], 0)
 
         verdict = gate.adjudicate(direct)
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
@@ -103,6 +114,23 @@ class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
         self.assertFalse(verdict["whole_entityos_hcu_credit"])
         self.assertFalse(verdict["jspace_model_runtime_credit"])
         self.assertFalse(verdict["training_credit"])
+
+    def test_bridge_rejects_wrong_layer_vector_hash_change(self):
+        result, intermediate = passing_inputs()
+        for row in result["holdout_rows"]:
+            if row["control"] == "+VECTOR":
+                row["wrong_layer_applied_vector_sha256"] = "d" * 64
+        with self.assertRaisesRegex(bridge.BridgeError, "WRONG_LAYER_EXACT_SAME_VECTOR_REQUIRED"):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_bridge_rejects_wrong_layer_tie(self):
+        result, intermediate = passing_inputs()
+        for row in result["holdout_rows"]:
+            if row["control"] == "+VECTOR":
+                row["wrong_layer_specificity_margin"] = 0.0
+        result["verdict"]["min_wrong_layer_specificity_margin"] = 0.0
+        with self.assertRaisesRegex(bridge.BridgeError, "WRONG_LAYER_STRICT_SPECIFICITY_MARGIN_REQUIRED"):
+            bridge.build_direct_candidate(result, intermediate)
 
 
 if __name__ == "__main__":

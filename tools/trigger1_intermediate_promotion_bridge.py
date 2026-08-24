@@ -7,6 +7,10 @@ and lesion/rescue.  The global Trigger-1 promotion gate owns API/runtime/evidenc
 admission.  This bridge does not reinterpret a scientific negative.  It only emits the
 canonical direct-steering candidate when the intermediate protocol already passed and
 its result proves the gate-v4 scientific-independence fields.
+
+The bridge emits a semantic intervention-intent identity, not the deterministic q8 wire
+codec retained in PR #1263.  Those two representations are deliberately schema-distinct
+so ``JSPACE_VECTOR_CONTROL_ABI/v1`` can denote exactly one packet language.
 """
 from __future__ import annotations
 
@@ -20,6 +24,8 @@ INTERMEDIATE_SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1"
 INTERMEDIATE_CANDIDATE_SCHEMA = "CLAY_TRIGGER1_INTERMEDIATE_JSPACE_CAUSAL_CANDIDATE/v1"
 DIRECT_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
 LABEL_INDEPENDENCE_SCHEMA = "TRIGGER1_VECTOR_DERIVATION_LABEL_INDEPENDENCE/v1"
+SEMANTIC_INTENT_SCHEMA = "JSPACE_VECTOR_CONTROL_SEMANTIC_INTENT/v1"
+RESERVED_WIRE_ABI_SCHEMA = "JSPACE_VECTOR_CONTROL_ABI/v1"
 REQUIRED_CONTROLS = (
     "BASELINE",
     "+VECTOR",
@@ -183,15 +189,16 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
     analysis_receipt = digest({"verdict": verdict, "runtime_receipts": hold_receipts})
     cal_family = digest({"prompt_sha256": cal_prompt_hashes, "seeds": cal_seeds})
     hold_family = digest({"prompt_sha256": hold_prompt_hashes, "seeds": hold_seeds, "label_maps": sorted(str(x) for x in label_map_ids)})
-    source_packet_sha = digest({
-        "schema": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    semantic_intent = {
+        "schema": SEMANTIC_INTENT_SCHEMA,
         "model": result.get("model"),
         "revision": result.get("model_revision"),
         "derivation_family_id": derivation_family_id,
         "selected_layer": layer,
         "selected_gain": float(gain),
         "metric_definition": METRIC_DEFINITION,
-    })
+    }
+    source_packet_sha = digest(semantic_intent)
     adapter_sha = digest({
         "schema": "JSPACE_INTERMEDIATE_CAUSAL_ADAPTER/v1",
         "activation_site": f"model.model.layers[{layer}]:output:last_token",
@@ -223,6 +230,8 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "invocation_id": invocation_id,
             "activation_site": f"model.model.layers[{layer}]:output:last_token",
             "terminal_output_projection_shortcut": False,
+            "source_packet_schema": SEMANTIC_INTENT_SCHEMA,
+            "reserved_wire_abi_schema": RESERVED_WIRE_ABI_SCHEMA,
             "source_packet_sha256": source_packet_sha,
             "adapter_sha256": adapter_sha,
             "local_vector_sha256": local_vector_sha,

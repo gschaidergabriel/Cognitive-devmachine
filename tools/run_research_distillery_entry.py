@@ -4,8 +4,8 @@
 Provides auditable overrides for provider admission, question admission, model
 selection and reviewer behavior. The canonical EntityOS/HCU typed provider
 admission boundary is installed before any distillery LLM secret lookup or LLM
-provider network I/O. External provider traffic remains quarantined unless that
-exact provider is admitted=true with cost_class=FREE under current authority.
+provider network I/O. External credentialed provider traffic remains quarantined
+unless its execution class is admitted by the current typed FREE authority.
 """
 from __future__ import annotations
 
@@ -31,6 +31,11 @@ SECRET_PROVIDER={
     "NGC_API_KEY":"nvidia",
     "OPENROUTER_API_KEY":"openrouter",
 }
+# Credentialed search providers are useful research donors but are not represented
+# in the current typed provider-admission authority. Under FREE_ONLY they therefore
+# fail closed until a successor authority explicitly classifies their execution class.
+UNTYPED_CREDENTIALED_SECRETS=frozenset({"TAVILY_API_KEY","EXA_API_KEY"})
+UNTYPED_CREDENTIALED_PROVIDERS=frozenset({"tavily","exa"})
 
 # Capture original implementations before monkeypatching. Calling d.select_reviewers
 # from the replacement after assignment would recurse into itself.
@@ -41,18 +46,25 @@ _ORIGINAL_REVIEW=d.review_candidate
 
 
 def admitted_secret(name: str) -> str:
-    """Never touch an LLM credential source before canonical typed FREE admission."""
+    """Never touch a credential source before its current FREE authority is known."""
     provider=SECRET_PROVIDER.get(name)
-    if provider is not None and not provider_is_admitted_free(provider):
+    if provider is not None:
+        if not provider_is_admitted_free(provider):
+            return ""
+        return _ORIGINAL_SECRET(name)
+    if name in UNTYPED_CREDENTIALED_SECRETS:
         return ""
     return _ORIGINAL_SECRET(name)
 
 
 def admitted_request_json(provider: str, owner: str, url: str, *, key: str = "", payload: dict | None = None,
                           headers: dict[str,str] | None = None, timeout: float = 90.0):
-    """Fail closed before socket/network for every selectable external LLM provider."""
-    if provider in LLM_PROVIDERS and not provider_is_admitted_free(provider):
+    """Fail closed before socket/network for credentialed provider execution paths."""
+    normalized=str(provider).strip().lower()
+    if normalized in LLM_PROVIDERS and not provider_is_admitted_free(normalized):
         return 412, {}, {"error":"PROVIDER_NOT_TYPED_FREE_ADMITTED"}
+    if normalized in UNTYPED_CREDENTIALED_PROVIDERS:
+        return 412, {}, {"error":"PROVIDER_NOT_IN_TYPED_FREE_ADMISSION_AUTHORITY"}
     return _ORIGINAL_REQUEST_JSON(provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout)
 
 

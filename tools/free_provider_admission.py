@@ -4,19 +4,27 @@
 This module intentionally reads only canonical repository control-plane files. It does
 not inspect API-key environment variables, provider responses, billing endpoints, or
 credential files. Those surfaces are downstream of admission.
+
+Authority is successor-dynamic: the current checkout's newest committed
+SUPERVISOR_STEERING_<major>_<minor>.json controls the admission epoch. A stale
+bootstrap or inbox cannot keep provider traffic enabled after a newer supervisor lands.
 """
 from __future__ import annotations
 
 import argparse
 import json
 from pathlib import Path
+import re
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
-SUPERVISOR_INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+SUPERVISOR_DIR = ROOT / "research_entity/claycode/autonomous"
 SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
-ALLOWED_PROVIDERS = frozenset({"groq", "mistral", "nvidia"})
+ALLOWED_PROVIDERS = frozenset({"groq", "mistral", "nvidia", "openrouter"})
+SUPERVISOR_NAME_RE = re.compile(r"^SUPERVISOR_STEERING_(\d+)_(\d+)\.json$")
+LOWER_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+FREE_EVIDENCE_CLAIM = "ZERO_MONETARY_COST_NO_OVERAGE_FOR_BOUND_EXECUTION_CLASS"
 
 
 class ProviderAdmissionError(RuntimeError):
@@ -33,43 +41,90 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
     return payload
 
 
-def _resolve_current_supervisor(*, inbox_path: Path | None = None, root: Path | None = None) -> tuple[str, str]:
-    """Resolve the successor-dynamic supervisor from the current inbox, not a lagging cache."""
-    repo_root = (root or ROOT).resolve()
-    inbox = _read_json(inbox_path or SUPERVISOR_INBOX_PATH, "SUPERVISOR_INBOX")
-    epoch = str(inbox.get("schema_version") or "").strip()
-    steering_ref = inbox.get("steering")
-    if not epoch:
-        raise ProviderAdmissionError("SUPERVISOR_EPOCH_REQUIRED")
-    if not isinstance(steering_ref, str) or not steering_ref.strip():
-        raise ProviderAdmissionError("SUPERVISOR_STEERING_REF_REQUIRED")
-    rel = Path(steering_ref)
-    if rel.is_absolute() or ".." in rel.parts:
-        raise ProviderAdmissionError("SUPERVISOR_STEERING_REF_INVALID")
-    steering_path = (repo_root / rel).resolve()
+def _steering_ref(path: Path, repo_root: Path) -> str:
     try:
-        steering_path.relative_to(repo_root)
-    except ValueError as exc:
-        raise ProviderAdmissionError("SUPERVISOR_STEERING_REF_OUTSIDE_REPO") from exc
-    steering = _read_json(steering_path, "SUPERVISOR_STEERING")
-    if str(steering.get("schema_version") or "").strip() != epoch:
-        raise ProviderAdmissionError("SUPERVISOR_INBOX_STEERING_EPOCH_MISMATCH")
-    if steering.get("active_program") != "ENTITYOS_HCU" or steering.get("product") != "EntityOS" or steering.get("integrated_cognition_compute_architecture") != "HCU":
-        raise ProviderAdmissionError("SUPERVISOR_PRODUCT_AUTHORITY_MISMATCH")
-    return epoch, steering_ref
+        return str(path.resolve().relative_to(repo_root.resolve())).replace("\\", "/")
+    except ValueError:
+        # Test fixtures may live outside the repository. This is deterministic test
+        # identity only and is never used as production canonical provenance.
+        return path.name
 
 
-def load_provider_admission(
-    path: Path | None = None,
+def resolve_current_supervisor(
     *,
-    supervisor_inbox_path: Path | None = None,
+    supervisor_dir: Path | None = None,
+    root: Path | None = None,
+) -> tuple[str, str]:
+    """Resolve the newest supervisor file from the current checkout and verify it.
+
+    Ordering comes from filenames before reading contents. A malformed newer steering
+    file is therefore fail-closed rather than silently skipped in favor of an older one.
+    """
+    repo_root = (root or ROOT).resolve()
+    directory = supervisor_dir or (repo_root / "research_entity/claycode/autonomous")
+    try:
+        paths = list(directory.iterdir())
+    except OSError as exc:
+        raise ProviderAdmissionError(f"SUPERVISOR_DIR_UNAVAILABLE:{exc.__class__.__name__}") from exc
+
+    candidates: list[tuple[tuple[int, int], Path]] = []
+    for path in paths:
+        match = SUPERVISOR_NAME_RE.fullmatch(path.name)
+        if match:
+            candidates.append(((int(match.group(1)), int(match.group(2))), path))
+    if not candidates:
+        raise ProviderAdmissionError("SUPERVISOR_STEERING_NOT_FOUND")
+
+    newest_version = max(version for version, _ in candidates)
+    newest = [path for version, path in candidates if version == newest_version]
+    if len(newest) != 1:
+        raise ProviderAdmissionError("SUPERVISOR_STEERING_VERSION_AMBIGUOUS")
+
+    path = newest[0]
+    steering = _read_json(path, "SUPERVISOR_STEERING")
+    epoch = f"{newest_version[0]}.{newest_version[1]}"
+    if str(steering.get("schema_version") or "").strip() != epoch:
+        raise ProviderAdmissionError("SUPERVISOR_STEERING_FILENAME_EPOCH_MISMATCH")
+    if steering.get("active_program") != "ENTITYOS_HCU":
+        raise ProviderAdmissionError("SUPERVISOR_STEERING_PROGRAM_AUTHORITY_MISMATCH")
+    if steering.get("product") != "EntityOS":
+        raise ProviderAdmissionError("SUPERVISOR_STEERING_PRODUCT_AUTHORITY_MISMATCH")
+    if steering.get("integrated_cognition_compute_architecture") != "HCU":
+        raise ProviderAdmissionError("SUPERVISOR_STEERING_COMPUTE_AUTHORITY_MISMATCH")
+    return epoch, _steering_ref(path, repo_root)
+
+
+def _validate_free_evidence(provider: str, record: dict[str, Any]) -> None:
+    evidence = record.get("free_evidence")
+    if not isinstance(evidence, dict):
+        raise ProviderAdmissionError(f"PROVIDER_ADMISSION_FREE_EVIDENCE_OBJECT_REQUIRED:{provider}")
+    if evidence.get("claim") != FREE_EVIDENCE_CLAIM:
+        raise ProviderAdmissionError(f"PROVIDER_ADMISSION_FREE_EVIDENCE_CLAIM_INVALID:{provider}")
+    if evidence.get("provider") != provider:
+        raise ProviderAdmissionError(f"PROVIDER_ADMISSION_FREE_EVIDENCE_PROVIDER_MISMATCH:{provider}")
+    execution_class = evidence.get("execution_class")
+    if not isinstance(execution_class, str) or not execution_class.strip():
+        raise ProviderAdmissionError(f"PROVIDER_ADMISSION_FREE_EXECUTION_CLASS_REQUIRED:{provider}")
+    checked_at = evidence.get("checked_at")
+    if not isinstance(checked_at, str) or not checked_at.strip():
+        raise ProviderAdmissionError(f"PROVIDER_ADMISSION_FREE_CHECKED_AT_REQUIRED:{provider}")
+    evidence_ref = evidence.get("evidence_ref")
+    if not isinstance(evidence_ref, str) or not evidence_ref.strip():
+        raise ProviderAdmissionError(f"PROVIDER_ADMISSION_FREE_EVIDENCE_REF_REQUIRED:{provider}")
+    if evidence_ref != record.get("evidence_ref"):
+        raise ProviderAdmissionError(f"PROVIDER_ADMISSION_FREE_EVIDENCE_REF_MISMATCH:{provider}")
+    digest = evidence.get("evidence_sha256")
+    if not isinstance(digest, str) or not LOWER_SHA256_RE.fullmatch(digest):
+        raise ProviderAdmissionError(f"PROVIDER_ADMISSION_FREE_EVIDENCE_SHA256_REQUIRED:{provider}")
+
+
+def validate_provider_admission(
+    payload: dict[str, Any],
+    *,
+    supervisor_dir: Path | None = None,
     root: Path | None = None,
 ) -> dict[str, Any]:
-    """Load canonical admission without touching any provider secret or network surface."""
-    repo_root = (root or ROOT).resolve()
-    target = path or (repo_root / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json")
-    epoch, _ = _resolve_current_supervisor(inbox_path=supervisor_inbox_path, root=repo_root)
-    payload = _read_json(target, "PROVIDER_ADMISSION")
+    epoch, steering_ref = resolve_current_supervisor(supervisor_dir=supervisor_dir, root=root)
 
     if payload.get("schema") != SCHEMA:
         raise ProviderAdmissionError("PROVIDER_ADMISSION_SCHEMA_UNSUPPORTED")
@@ -83,6 +138,9 @@ def load_provider_admission(
     admission_epoch = str(payload.get("authority_epoch") or "").strip()
     if not admission_epoch or admission_epoch != epoch:
         raise ProviderAdmissionError("PROVIDER_ADMISSION_AUTHORITY_EPOCH_MISMATCH")
+    admission_steering = str(payload.get("supervisor_steering") or "").strip()
+    if not admission_steering or admission_steering != steering_ref:
+        raise ProviderAdmissionError("PROVIDER_ADMISSION_SUPERVISOR_STEERING_MISMATCH")
 
     providers = payload.get("providers")
     if not isinstance(providers, dict):
@@ -105,31 +163,87 @@ def load_provider_admission(
         evidence_ref = record.get("evidence_ref")
         if not isinstance(evidence_ref, str) or not evidence_ref.strip():
             raise ProviderAdmissionError(f"PROVIDER_ADMISSION_EVIDENCE_REQUIRED:{name}")
+        if cost_class == "FREE":
+            _validate_free_evidence(name, record)
     return payload
 
 
-def provider_is_admitted_free(provider: str, admission: dict[str, Any] | None = None) -> bool:
+def load_provider_admission(
+    path: Path | None = None,
+    *,
+    supervisor_dir: Path | None = None,
+    root: Path | None = None,
+) -> dict[str, Any]:
+    """Load canonical admission without touching any provider secret or network surface."""
+    repo_root = (root or ROOT).resolve()
+    target = path or (repo_root / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json")
+    payload = _read_json(target, "PROVIDER_ADMISSION")
+    return validate_provider_admission(payload, supervisor_dir=supervisor_dir, root=repo_root)
+
+
+def provider_is_admitted_free(
+    provider: str,
+    admission: dict[str, Any] | None = None,
+    *,
+    supervisor_dir: Path | None = None,
+    root: Path | None = None,
+) -> bool:
+    provider = str(provider).strip().lower()
     if provider not in ALLOWED_PROVIDERS:
         return False
     try:
-        payload = admission if admission is not None else load_provider_admission()
+        payload = (
+            load_provider_admission(supervisor_dir=supervisor_dir, root=root)
+            if admission is None
+            else validate_provider_admission(admission, supervisor_dir=supervisor_dir, root=root)
+        )
         record = payload["providers"][provider]
     except (ProviderAdmissionError, KeyError, TypeError):
         return False
     return record.get("admitted") is True and record.get("cost_class") == "FREE"
 
 
-def admitted_provider_names(admission: dict[str, Any] | None = None) -> tuple[str, ...]:
+def require_provider_admitted_free(
+    provider: str,
+    admission: dict[str, Any] | None = None,
+    *,
+    supervisor_dir: Path | None = None,
+    root: Path | None = None,
+) -> None:
+    provider = str(provider).strip().lower()
+    if not provider_is_admitted_free(
+        provider, admission, supervisor_dir=supervisor_dir, root=root
+    ):
+        raise ProviderAdmissionError(f"PROVIDER_NOT_CANONICALLY_ADMITTED_FREE:{provider or 'EMPTY'}")
+
+
+def admitted_provider_names(
+    admission: dict[str, Any] | None = None,
+    *,
+    supervisor_dir: Path | None = None,
+    root: Path | None = None,
+) -> tuple[str, ...]:
     try:
-        payload = admission if admission is not None else load_provider_admission()
+        payload = (
+            load_provider_admission(supervisor_dir=supervisor_dir, root=root)
+            if admission is None
+            else validate_provider_admission(admission, supervisor_dir=supervisor_dir, root=root)
+        )
     except ProviderAdmissionError:
         return ()
-    return tuple(sorted(name for name in ALLOWED_PROVIDERS if provider_is_admitted_free(name, payload)))
+    return tuple(
+        sorted(
+            name
+            for name in ALLOWED_PROVIDERS
+            if payload["providers"][name].get("admitted") is True
+            and payload["providers"][name].get("cost_class") == "FREE"
+        )
+    )
 
 
 def admission_snapshot() -> dict[str, Any]:
     try:
-        epoch, steering_ref = _resolve_current_supervisor()
+        epoch, steering_ref = resolve_current_supervisor()
         payload = load_provider_admission()
     except ProviderAdmissionError as exc:
         return {

@@ -62,6 +62,31 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "nvidia",
         )
 
+    def test_oversized_bearer_credential_is_blocked_before_header_and_network(self):
+        opener_calls = []
+
+        def opener(*args, **kwargs):
+            opener_calls.append("open")
+            raise AssertionError("oversized credential reached opener")
+
+        env = {
+            "NVIDIA_API_KEY": "A" * 8_193,
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        self.assertIsNone(MOD.route(env)["selected"])
+        with self.assertRaisesRegex(
+            RuntimeError, "no_configured_zero_cost_provider"
+        ):
+            MOD.execute_chat(
+                VALID_MESSAGES, model="mock", environ=env, opener=opener,
+            )
+        self.assertEqual(opener_calls, [])
+        self.assertEqual(
+            MOD.route({"NVIDIA_API_KEY": "A" * 8_192})["selected"],
+            "nvidia",
+        )
+
     def test_environment_snapshot_failure_is_redacted_and_fail_closed(self):
         leaked_text = "credential-value-must-not-escape"
 

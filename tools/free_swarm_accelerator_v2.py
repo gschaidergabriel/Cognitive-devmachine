@@ -6,7 +6,8 @@ Goals:
 - avoid provider-wide stalls on ordinary 5xx/model faults;
 - exploit OpenRouter's explicitly free router without paid fallback;
 - maximize Groq prompt-cache reuse by moving dynamic state behind a stable prefix;
-- keep 429 economic/rate truth authoritative and never rotate keys to evade an org limit.
+- keep 429 economic/rate truth authoritative and never rotate keys to evade an org limit;
+- convert model tokens into forge-executable deltas instead of false-ready placeholders.
 """
 from __future__ import annotations
 import asyncio, os, random, time
@@ -77,9 +78,12 @@ ENTITYOS/HCU FREE-SWARM STATIC PRODUCTIVITY CONTRACT
 - Produce ONE executable architecture delta, falsifier, patch/test/benchmark, or explicit NO_DELTA.
 - Do not repeat supplied state except what is necessary to justify the delta.
 - Preserve the strongest counterhypothesis and cheapest discriminator.
+- ready_for_forge=true is STRICT: patch_unified_diff MUST be a non-empty git-applicable unified diff, target_files MUST list every touched path, and test_commands MUST contain at least one safe executable check for that patch.
+- A proposal with an empty patch is DESIGN-ONLY and MUST set ready_for_forge=false; do not label a placeholder as forge-ready.
+- Prefer patches whose tests distinguish baseline from patched behavior, because the Evidence Forge accepts only reproducible measured improvement, not merely a green unchanged baseline.
 - End with DEUTSCHE_ZUSAMMENFASSUNG.
-- Then emit exactly two compact machine-readable lines:
-ARCHITECTURE_DELTA_JSON={{"delta_id":"worker-<serial>-short-name","hypothesis":"...","mechanism":"...","target_files":["..."],"patch_unified_diff":"","test_commands":["..."],"benchmark_command":"","metric":"...","expected_direction":"higher|lower|boolean","baseline_needed":true,"falsifier":"...","risk":"...","ready_for_forge":true}}
+- Then emit exactly two compact machine-readable lines. Fill the fields with the actual delta. The schema example below is NOT permission to leave placeholders while setting ready_for_forge=true:
+ARCHITECTURE_DELTA_JSON={{"delta_id":"worker-<serial>-short-name","hypothesis":"...","mechanism":"...","target_files":[],"patch_unified_diff":"","test_commands":[],"negative_test_commands":[],"benchmark_command":"","metric":"...","expected_direction":"higher|lower|boolean","baseline_needed":true,"falsifier":"...","risk":"...","ready_for_forge":false}}
 OPEN_RESEARCH_QUESTIONS_JSON=["causally distinct unresolved question"]
 
 DYNAMIC WORK SHARD

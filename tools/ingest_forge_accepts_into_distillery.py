@@ -11,8 +11,11 @@ Only measured fields enter packet_text. Model-authored hypothesis/falsifier rema
 candidate-only metadata. Distillery idempotence is bound to a replay-stable execution
 evidence identity rather than the byte digest of the full evaluation envelope, so a
 changed observation timestamp or candidate narration cannot mint a second dataset
-packet. If the same execution identity reappears with conflicting measured evidence,
-admission fails closed instead of treating the mutation as a new observation.
+packet. The replay key also projects execution admission onto execution-relevant
+fields: candidate/proposal hashes are retained as full-envelope provenance but cannot
+re-key the same measured execution merely because proposal narration changed. If the
+same execution identity reappears with conflicting measured evidence, admission fails
+closed instead of treating the mutation as a new observation.
 
 Legacy ingest rows predate the replay-identity columns. They cannot be safely backfilled
 from the reduced legacy table, so a new evaluation colliding on the available legacy
@@ -61,9 +64,44 @@ def admission_reason(row: Any) -> tuple[bool, str]:
     return evidence_reason(row)
 
 
+def replay_stable_execution_admission(admission: Any) -> dict[str, Any]:
+    """Project admission onto execution semantics, excluding candidate narration.
+
+    ``candidate_hash`` and ``proposal_sha256`` are useful full-envelope provenance,
+    but the canonical Forge producer derives them from the whole proposal JSON. That
+    JSON includes hypothesis/falsifier narration. Hashing the entire admission object
+    would therefore smuggle candidate-only narration back into an otherwise stable
+    replay key. Keep exact source/patch/commands/decisions/backend fences instead.
+    """
+    if not isinstance(admission, dict):
+        return {
+            "schema": "CLAY_FORGE_EXECUTION_ADMISSION_REPLAY_PROJECTION/v1",
+            "invalid_admission": True,
+        }
+    return {
+        "schema": "CLAY_FORGE_EXECUTION_ADMISSION_REPLAY_PROJECTION/v1",
+        "admission_schema": admission.get("schema"),
+        "patch_sha256": admission.get("patch_sha256"),
+        "commands_sha256": admission.get("commands_sha256"),
+        "source_scope": admission.get("source_scope"),
+        "source_head": admission.get("source_head"),
+        "source_tree": admission.get("source_tree"),
+        "evaluation_checkout_head": admission.get("evaluation_checkout_head"),
+        "evaluation_checkout_tree": admission.get("evaluation_checkout_tree"),
+        "source_identity_admitted": admission.get("source_identity_admitted"),
+        "candidate_execution_workdir_scope": admission.get("candidate_execution_workdir_scope"),
+        "candidate_worktree_writable": admission.get("candidate_worktree_writable"),
+        "decisions": admission.get("decisions"),
+        "all_commands_admitted": admission.get("all_commands_admitted"),
+        "backend": admission.get("backend"),
+        "candidate_is_canonical_truth": admission.get("candidate_is_canonical_truth"),
+    }
+
+
 def measured_packet(row: dict) -> dict:
     """Return dataset text containing measured evidence, never candidate narration."""
     execution_admission = row.get("execution_admission")
+    stable_admission = replay_stable_execution_admission(execution_admission)
     return {
         "schema": "CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2",
         "evidence_class": "FORGE_EVIDENCE_QUALIFIED_EXECUTION",
@@ -75,7 +113,7 @@ def measured_packet(row: dict) -> dict:
         "source_repo_head": row["source_repo_head"],
         "evaluation_repo_head": row["evaluation_repo_head"],
         "target_blob_identities": row["target_blob_identities"],
-        "execution_admission_sha256": digest_json(execution_admission),
+        "execution_admission_sha256": digest_json(stable_admission),
         "metric": str(row.get("metric") or ""),
         "relative_improvement_pct": float(row["relative_improvement_pct"]),
         "reproducible_runs": int(row["reproducible_runs"]),
@@ -95,9 +133,10 @@ def execution_replay_identity(row: dict) -> dict:
     """Bind one replay-stable Forge execution/evaluation family.
 
     Volatile observation time and model-authored narration are intentionally excluded.
-    The identity keeps source/candidate/provenance, target bytes, admitted execution
-    surface and the metric definition, so a timestamp-only replay cannot become a new
-    Distillery event while a genuinely different source/model/metric remains distinct.
+    The identity keeps source/worker/provenance, target bytes, admitted execution
+    semantics and the metric definition, so a timestamp/narration-only replay cannot
+    become a new Distillery event while a genuinely different source/model/metric or
+    executable patch/command surface remains distinct.
     """
     return {
         "schema": "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1",
@@ -110,7 +149,9 @@ def execution_replay_identity(row: dict) -> dict:
         "source_repo_head": row["source_repo_head"],
         "evaluation_repo_head": row["evaluation_repo_head"],
         "target_blob_identities": row["target_blob_identities"],
-        "execution_admission_sha256": digest_json(row.get("execution_admission")),
+        "execution_admission_sha256": digest_json(
+            replay_stable_execution_admission(row.get("execution_admission"))
+        ),
         "metric": str(row.get("metric") or ""),
         "requires_rebase_to_evaluation_head": bool(row.get("requires_rebase_to_evaluation_head", False)),
     }
@@ -119,9 +160,9 @@ def execution_replay_identity(row: dict) -> dict:
 def measured_evidence_identity(row: dict) -> dict:
     """Return immutable measured evidence for conflict detection.
 
-    ``evaluated_at`` is observation metadata, not evidence. Candidate hypothesis and
-    falsifier are not part of ``measured_packet`` and therefore cannot change this
-    digest either.
+    ``evaluated_at`` is observation metadata, not evidence. Candidate hypothesis,
+    falsifier, candidate hash and full-proposal hash cannot change this digest unless
+    an execution-relevant admission field or measured result also changes.
     """
     packet = measured_packet(row)
     packet.pop("evaluated_at", None)
@@ -245,6 +286,8 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
         "forge_execution_replay_identity_sha256": replay_sha,
         "forge_measured_evidence_sha256": measured_sha,
         "execution_admission_sha256": packet["execution_admission_sha256"],
+        "execution_admission_full_sha256": digest_json(row.get("execution_admission")),
+        "execution_admission_replay_projection_schema": "CLAY_FORGE_EXECUTION_ADMISSION_REPLAY_PROJECTION/v1",
         "evidence_qualification": reason,
         "source_class": row.get("source_class"),
         "provider": row.get("provider"),
@@ -308,7 +351,7 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
     summary = {
         "schema": "CLAY_FORGE_TO_DISTILLERY_INGEST_RESULT/v2",
         "acceptance_semantics": "EVIDENCE_QUALIFIED_ONLY",
-        "replay_semantics": "STABLE_EXECUTION_IDENTITY_WITH_MEASURED_CONFLICT_AND_LEGACY_UNKNOWN_REJECTION",
+        "replay_semantics": "STABLE_EXECUTION_IDENTITY_WITH_ADMISSION_PROJECTION_MEASURED_CONFLICT_AND_LEGACY_UNKNOWN_REJECTION",
         "forge_eval_path": str(forge_eval_path),
         "distillery_db": str(distillery_db),
         "seen": 0,

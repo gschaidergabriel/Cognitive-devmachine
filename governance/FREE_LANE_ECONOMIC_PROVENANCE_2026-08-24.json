@@ -1,0 +1,51 @@
+{
+  "schema": "ENTITYOS_HCU_FREE_LANE_ECONOMIC_PROVENANCE/v1",
+  "observed_at": "2026-08-24",
+  "authority_epoch": "8.70",
+  "mode": "FREE_ONLY",
+  "rules": {
+    "paid_fallback_attempt_count": 0,
+    "unknown_route": "FAIL_CLOSED",
+    "together": "FORBIDDEN",
+    "provider_label_alone_is_not_cost_proof": true
+  },
+  "providers": {
+    "openrouter": {
+      "allowed_endpoint_host": "openrouter.ai",
+      "allowed_routes": ["openrouter/free"],
+      "evidence_kind": "EXACT_ROUTE_ZERO_PRICE",
+      "source": "https://openrouter.ai/openrouter/free/",
+      "provider_statement": "The Free Models Router openrouter/free has zero prompt and completion token pricing.",
+      "credential_plan_needed": false
+    },
+    "nvidia": {
+      "allowed_endpoint_host": "integrate.api.nvidia.com",
+      "evidence_kind": "NVIDIA_HOSTED_NIM_DEVELOPER_FREE_PROTOTYPING",
+      "source": "https://developer.nvidia.com/nim",
+      "provider_statement": "NVIDIA advertises free access to NVIDIA-hosted NIM API endpoints for prototyping through Developer Program access.",
+      "credential_plan_needed": false,
+      "scope": "NVIDIA-hosted API Catalog/NIM prototyping endpoint only; no dedicated enterprise endpoint"
+    },
+    "groq": {
+      "allowed_endpoint_host": "api.groq.com",
+      "evidence_kind": "CREDENTIAL_FINGERPRINT_PLUS_PROVIDER_RATE_HEADER_MATCH",
+      "source": "https://console.groq.com/docs/rate-limits",
+      "free_plan_models": {
+        "openai/gpt-oss-120b": {"requests_per_day": 1000, "tokens_per_minute": 8000},
+        "openai/gpt-oss-20b": {"requests_per_day": 1000, "tokens_per_minute": 8000},
+        "qwen/qwen3.6-27b": {"requests_per_day": 1000, "tokens_per_minute": 8000}
+      },
+      "credential_plan_needed": true,
+      "credential_plan_proof": "A historical or live response for the same credential fingerprint and exact model must expose x-ratelimit-limit-requests and x-ratelimit-limit-tokens matching the documented Free Plan limits."
+    },
+    "mistral": {
+      "allowed_endpoint_host": "api.mistral.ai",
+      "evidence_kind": "PROVIDER_SIDE_FREE_MODE_REQUIRED",
+      "source": "https://docs.mistral.ai/admin/billing-usage/subscriptions",
+      "provider_statement": "Mistral Free mode includes API usage; API keys themselves are not plan-scoped and can also use pay-as-you-go settings.",
+      "credential_plan_needed": true,
+      "credential_plan_proof": "Require provider-side Free-mode/pay-as-you-go-disabled evidence bound to the organization/workspace before autonomous calls. Ordinary key presence or HTTP 402 is insufficient.",
+      "default": "FAIL_CLOSED_UNTIL_BOUND"
+    }
+  }
+}

@@ -19,6 +19,15 @@ done < <(compgen -v)
 OUT_DIR="${1:?usage: trigger1_local_qwen06_midlayer_causal.sh OUTPUT_DIR}"
 mkdir -p "$OUT_DIR"
 
+canonical_path(){
+  python3 - "$1" <<'PY'
+from pathlib import Path
+import sys
+print(Path(sys.argv[1]).resolve(strict=False))
+PY
+}
+OUT_DIR_CANONICAL="$(canonical_path "$OUT_DIR")"
+
 USER_HOME="${HOME:?HOME is required}"
 CACHE_ROOT="${CLAY_TRIGGER1_LOCAL_CACHE:-${XDG_CACHE_HOME:-$USER_HOME/.cache}/clay-trigger1-local}"
 VENV="$CACHE_ROOT/venv"
@@ -31,13 +40,28 @@ available_kb(){ df -Pk "$CACHE_ROOT" | awk 'NR==2 {print $4}'; }
 BEFORE_KB="$(available_kb)"
 if [[ "$BEFORE_KB" -lt 4000000 ]]; then
   # Bounded cleanup only: disposable Trigger-1 temp dirs, incomplete venv, pip cache.
-  rm -rf "${RUNNER_TEMP:-/tmp}"/clay-trigger1-v2-* \
-         "${RUNNER_TEMP:-/tmp}"/clay-trigger1-qwen06-* \
-         "$VENV.tmp" 2>/dev/null || true
+  # The current run output is evidence-in-progress and must never be deleted by its
+  # own low-disk cleanup, even when OUT_DIR is inside RUNNER_TEMP/clay-trigger1-v2-*.
+  for candidate in \
+    "${RUNNER_TEMP:-/tmp}"/clay-trigger1-v2-* \
+    "${RUNNER_TEMP:-/tmp}"/clay-trigger1-qwen06-*; do
+    [[ -e "$candidate" ]] || continue
+    candidate_canonical="$(canonical_path "$candidate")"
+    if [[ "$candidate_canonical" == "$OUT_DIR_CANONICAL" ]]; then
+      continue
+    fi
+    rm -rf -- "$candidate" 2>/dev/null || true
+  done
+  rm -rf "$VENV.tmp" 2>/dev/null || true
   rm -rf "$USER_HOME/.cache/pip" 2>/dev/null || true
 fi
+mkdir -p "$OUT_DIR"
+if [[ "$(canonical_path "$OUT_DIR")" != "$OUT_DIR_CANONICAL" ]]; then
+  echo "BLOCKED_OUTPUT_DIR_IDENTITY_CHANGED_DURING_CLEANUP" >&2
+  exit 3
+fi
 AFTER_KB="$(available_kb)"
-printf '{"available_kb_before":%s,"available_kb_after":%s}\n' "$BEFORE_KB" "$AFTER_KB" > "$OUT_DIR/disk_preflight.json"
+printf '{"available_kb_before":%s,"available_kb_after":%s,"current_output_preserved":true}\n' "$BEFORE_KB" "$AFTER_KB" > "$OUT_DIR/disk_preflight.json"
 if [[ "$AFTER_KB" -lt 3000000 ]]; then
   python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" "$BEFORE_KB" "$AFTER_KB" <<'PY'
 import json, pathlib, sys
@@ -46,6 +70,7 @@ pathlib.Path(sys.argv[1]).write_text(json.dumps({
   'status':'BLOCKED_INSUFFICIENT_FREE_DISK_AFTER_BOUNDED_CLEANUP',
   'available_kb_before':int(sys.argv[2]),
   'available_kb_after':int(sys.argv[3]),
+  'current_output_preserved':True,
   'zero_provider_billing':True,
   'external_provider_credentials_read':False,
   'next_action':'RECLAIM_ADDITIONAL_SANDBOX_CACHE_OR_STORAGE_WITHIN_OWNER_AUTHORITY'

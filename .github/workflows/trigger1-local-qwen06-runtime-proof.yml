@@ -48,8 +48,13 @@ jobs:
           SOURCE_TREE="$(git rev-parse 'HEAD^{tree}')"
           printf '%s\n' "$SOURCE_HEAD" > "$OUT/source-head.txt"
           printf '%s\n' "$SOURCE_TREE" > "$OUT/source-tree.txt"
-          git status --porcelain=v1 > "$OUT/source-dirty.txt"
-          if [[ -s "$OUT/source-dirty.txt" ]]; then
+          git status --porcelain=v1 --untracked-files=all > "$OUT/source-dirty-before.txt"
+          SOURCE_DIRTY_BEFORE_SHA="$(sha256sum "$OUT/source-dirty-before.txt" | awk '{print $1}')"
+          SOURCE_DIRTY_BEFORE_COUNT="$(grep -cve '^$' "$OUT/source-dirty-before.txt" || true)"
+          EXECUTOR_SHA_BEFORE="$(sha256sum tools/trigger1_local_qwen06_activation_api_execute.py | awk '{print $1}')"
+          LAUNCHER_SHA_BEFORE="$(sha256sum tools/trigger1_local_qwen06_activation_api.sh | awk '{print $1}')"
+          PROMOTION_GATE_SHA_BEFORE="$(sha256sum tools/trigger1_jspace_promotion_gate.py | awk '{print $1}')"
+          if [[ -s "$OUT/source-dirty-before.txt" ]]; then
             printf '{"status":"BLOCKED_SOURCE_DIRTY_AFTER_REENTRY"}\n' > "$OUT/preflight.json"
             exit 0
           fi
@@ -66,6 +71,144 @@ jobs:
           RUN_RC=$?
           set -e
           printf '%s\n' "$RUN_RC" > "$OUT/runtime-rc.txt"
+
+          SOURCE_HEAD_AFTER="$(git rev-parse HEAD)"
+          SOURCE_TREE_AFTER="$(git rev-parse 'HEAD^{tree}')"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/source-dirty-after.txt"
+          SOURCE_DIRTY_AFTER_SHA="$(sha256sum "$OUT/source-dirty-after.txt" | awk '{print $1}')"
+          SOURCE_DIRTY_AFTER_COUNT="$(grep -cve '^$' "$OUT/source-dirty-after.txt" || true)"
+          EXECUTOR_SHA_AFTER="$(sha256sum tools/trigger1_local_qwen06_activation_api_execute.py | awk '{print $1}')"
+          LAUNCHER_SHA_AFTER="$(sha256sum tools/trigger1_local_qwen06_activation_api.sh | awk '{print $1}')"
+          PROMOTION_GATE_SHA_AFTER="$(sha256sum tools/trigger1_jspace_promotion_gate.py | awk '{print $1}')"
+
+          SOURCE_HEAD="$SOURCE_HEAD" SOURCE_TREE="$SOURCE_TREE" \
+          SOURCE_HEAD_AFTER="$SOURCE_HEAD_AFTER" SOURCE_TREE_AFTER="$SOURCE_TREE_AFTER" \
+          SOURCE_DIRTY_BEFORE_SHA="$SOURCE_DIRTY_BEFORE_SHA" SOURCE_DIRTY_AFTER_SHA="$SOURCE_DIRTY_AFTER_SHA" \
+          SOURCE_DIRTY_BEFORE_COUNT="$SOURCE_DIRTY_BEFORE_COUNT" SOURCE_DIRTY_AFTER_COUNT="$SOURCE_DIRTY_AFTER_COUNT" \
+          EXECUTOR_SHA_BEFORE="$EXECUTOR_SHA_BEFORE" EXECUTOR_SHA_AFTER="$EXECUTOR_SHA_AFTER" \
+          LAUNCHER_SHA_BEFORE="$LAUNCHER_SHA_BEFORE" LAUNCHER_SHA_AFTER="$LAUNCHER_SHA_AFTER" \
+          PROMOTION_GATE_SHA_BEFORE="$PROMOTION_GATE_SHA_BEFORE" PROMOTION_GATE_SHA_AFTER="$PROMOTION_GATE_SHA_AFTER" \
+          RUN_RC="$RUN_RC" OUT="$OUT" python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+
+          out=Path(os.environ['OUT'])
+          result_path=out/'runtime/trigger1_local_activation_api_result.json'
+          candidate_path=out/'runtime/trigger1_direct_steering_candidate.json'
+
+          def load(path):
+              try:
+                  obj=json.loads(Path(path).read_text(encoding='utf-8'))
+                  return obj if isinstance(obj,dict) else {}
+              except Exception:
+                  return {}
+
+          def file_sha(path):
+              p=Path(path)
+              if not p.is_file():
+                  return None
+              return hashlib.sha256(p.read_bytes()).hexdigest()
+
+          def canonical_sha(obj):
+              raw=json.dumps(obj,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()
+              return hashlib.sha256(raw).hexdigest()
+
+          result=load(result_path)
+          runtime=result.get('runtime_manifest') if isinstance(result.get('runtime_manifest'),dict) else {}
+          source=result.get('source') if isinstance(result.get('source'),dict) else {}
+          before_count=int(os.environ['SOURCE_DIRTY_BEFORE_COUNT'])
+          after_count=int(os.environ['SOURCE_DIRTY_AFTER_COUNT'])
+          checks={
+              'pre_source_clean': before_count == 0,
+              'post_source_clean': after_count == 0,
+              'head_stable': os.environ['SOURCE_HEAD'] == os.environ['SOURCE_HEAD_AFTER'],
+              'tree_stable': os.environ['SOURCE_TREE'] == os.environ['SOURCE_TREE_AFTER'],
+              'executor_bytes_stable': os.environ['EXECUTOR_SHA_BEFORE'] == os.environ['EXECUTOR_SHA_AFTER'],
+              'launcher_bytes_stable': os.environ['LAUNCHER_SHA_BEFORE'] == os.environ['LAUNCHER_SHA_AFTER'],
+              'promotion_gate_bytes_stable': os.environ['PROMOTION_GATE_SHA_BEFORE'] == os.environ['PROMOTION_GATE_SHA_AFTER'],
+              'result_head_matches': source.get('repo_head') == os.environ['SOURCE_HEAD'],
+              'result_tree_matches': source.get('repo_tree') == os.environ['SOURCE_TREE'],
+              'loopback_only': result.get('api_loopback_only') is True and str(result.get('api_endpoint') or '').startswith('http://127.0.0.1:'),
+              'zero_provider_billing': result.get('zero_provider_billing') is True,
+              'no_external_provider_credentials_read': result.get('external_provider_credentials_read') is False,
+              'runtime_result_present': result_path.is_file(),
+              'python_bound': bool(runtime.get('python_executable_sha256')),
+              'torch_bound': bool(runtime.get('torch_module_sha256')),
+              'transformers_bound': bool(runtime.get('transformers_module_sha256')),
+              'checkpoint_bound': bool(result.get('checkpoint_sha256')),
+              'tokenizer_bound': bool(result.get('tokenizer_sha256')),
+          }
+          binding={
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_BOUND_RUNTIME_EXECUTION_RECEIPT/v1',
+              'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+              'source':{
+                  'repo_head':os.environ['SOURCE_HEAD'],
+                  'repo_tree':os.environ['SOURCE_TREE'],
+                  'dirty_before_sha256':os.environ['SOURCE_DIRTY_BEFORE_SHA'],
+                  'dirty_after_sha256':os.environ['SOURCE_DIRTY_AFTER_SHA'],
+                  'dirty_before_count':before_count,
+                  'dirty_after_count':after_count,
+                  'executor_sha256':os.environ['EXECUTOR_SHA_BEFORE'],
+                  'launcher_sha256':os.environ['LAUNCHER_SHA_BEFORE'],
+                  'promotion_gate_sha256':os.environ['PROMOTION_GATE_SHA_BEFORE'],
+              },
+              'runtime':{
+                  'python_version':runtime.get('python_version'),
+                  'python_executable':runtime.get('python_executable'),
+                  'python_executable_sha256':runtime.get('python_executable_sha256'),
+                  'torch_version':runtime.get('torch_version'),
+                  'torch_module_sha256':runtime.get('torch_module_sha256'),
+                  'transformers_version':runtime.get('transformers_version'),
+                  'transformers_module_sha256':runtime.get('transformers_module_sha256'),
+                  'runtime_build_sha256':result.get('runtime_build_sha256'),
+              },
+              'model':{
+                  'model':result.get('model'),
+                  'model_revision':result.get('model_revision'),
+                  'checkpoint_sha256':result.get('checkpoint_sha256'),
+                  'tokenizer_sha256':result.get('tokenizer_sha256'),
+              },
+              'transport':{
+                  'api_endpoint':result.get('api_endpoint'),
+                  'api_loopback_only':result.get('api_loopback_only'),
+                  'zero_provider_billing':result.get('zero_provider_billing'),
+                  'external_provider_credentials_read':result.get('external_provider_credentials_read'),
+              },
+              'runtime_exit_code':int(os.environ['RUN_RC']),
+              'runtime_status':result.get('status'),
+              'runtime_result_declared_sha256':result.get('result_sha256'),
+              'runtime_result_file_sha256':file_sha(result_path),
+              'inner_candidate_file_sha256':file_sha(candidate_path),
+              'checks':checks,
+              'binding_pass':all(checks.values()),
+              'canonical_credit_minted':False,
+              'whole_entityos_hcu_credit_minted':False,
+              'training_credit_minted':False,
+          }
+          binding_sha=canonical_sha(binding)
+          binding['receipt_sha256']=binding_sha
+          (out/'runtime-binding.json').write_text(json.dumps(binding,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf-8')
+
+          if binding['binding_pass'] and candidate_path.is_file():
+              cand=load(candidate_path)
+              identity=cand.setdefault('source_identity',{})
+              identity.update({
+                  'repo_tree':os.environ['SOURCE_TREE'],
+                  'repo_dirty_before_sha256':os.environ['SOURCE_DIRTY_BEFORE_SHA'],
+                  'repo_dirty_after_sha256':os.environ['SOURCE_DIRTY_AFTER_SHA'],
+                  'repo_dirty_before_count':before_count,
+                  'repo_dirty_after_count':after_count,
+                  'executor_sha256':os.environ['EXECUTOR_SHA_BEFORE'],
+                  'launcher_sha256':os.environ['LAUNCHER_SHA_BEFORE'],
+                  'promotion_gate_sha256':os.environ['PROMOTION_GATE_SHA_BEFORE'],
+                  'bound_runtime_execution_receipt_sha256':binding_sha,
+              })
+              target=cand.setdefault('target',{})
+              target['local_runtime_execution_receipt_sha256']=binding_sha
+              candidate_path.write_text(json.dumps(cand,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf-8')
+          elif candidate_path.exists():
+              candidate_path.unlink()
+          PY
 
           if [[ -s "$OUT/runtime/trigger1_direct_steering_candidate.json" ]]; then
             set +e
@@ -91,8 +234,9 @@ jobs:
           cand=load(out/'runtime/trigger1_direct_steering_candidate.json')
           gate=load(out/'promotion-gate.json')
           preflight=load(out/'preflight.json')
+          binding=load(out/'runtime-binding.json')
           receipt={
-              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_SELFHOSTED_RUNTIME_PROOF/v1',
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_SELFHOSTED_RUNTIME_PROOF/v2',
               'github_run_id':os.environ.get('GITHUB_RUN_ID'),
               'source_head':os.environ['SOURCE_HEAD'],
               'source_tree':os.environ['SOURCE_TREE'],
@@ -111,6 +255,7 @@ jobs:
               'api_loopback_only':result.get('api_loopback_only'),
               'zero_provider_billing':result.get('zero_provider_billing'),
               'external_provider_credentials_read':result.get('external_provider_credentials_read'),
+              'runtime_binding':binding or None,
               'candidate_controls':cand.get('controls'),
               'candidate_intervention':cand.get('intervention'),
               'candidate_holdout':cand.get('holdout'),
@@ -141,7 +286,7 @@ jobs:
               body = fs.readFileSync(p, 'utf8');
             } else {
               body = JSON.stringify({
-                schema:'CLAY_TRIGGER1_LOCAL_QWEN06_SELFHOSTED_RUNTIME_PROOF/v1',
+                schema:'CLAY_TRIGGER1_LOCAL_QWEN06_SELFHOSTED_RUNTIME_PROOF/v2',
                 github_run_id:String(context.runId),
                 runtime_status:'WORKFLOW_RESULT_MISSING',
                 canonical_credit_minted:false,
@@ -166,11 +311,13 @@ jobs:
           name: trigger1-local-qwen06-${{ github.run_id }}
           path: |
             ${{ env.OUT }}/receipt.json
+            ${{ env.OUT }}/runtime-binding.json
             ${{ env.OUT }}/preflight.json
             ${{ env.OUT }}/disk.json
             ${{ env.OUT }}/source-head.txt
             ${{ env.OUT }}/source-tree.txt
-            ${{ env.OUT }}/source-dirty.txt
+            ${{ env.OUT }}/source-dirty-before.txt
+            ${{ env.OUT }}/source-dirty-after.txt
             ${{ env.OUT }}/runtime-rc.txt
             ${{ env.OUT }}/gate-rc.txt
             ${{ env.OUT }}/promotion-gate.json

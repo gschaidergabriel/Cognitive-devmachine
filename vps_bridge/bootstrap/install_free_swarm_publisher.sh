@@ -53,12 +53,16 @@ render_all() {
   python3 "$PUB/free swarm/evaluate.py" --repo "$PUB" --artifacts "$ART" >/dev/null
   [[ ! -f "$PUB/free swarm/update_distillery_readme.py" ]] || python3 "$PUB/free swarm/update_distillery_readme.py" --repo "$PUB" --artifacts "$ART" >/dev/null
   [[ ! -f "$PUB/free swarm/update_forge_readme.py" ]] || python3 "$PUB/free swarm/update_forge_readme.py" --repo "$PUB" --artifacts "$ART" >/dev/null
+  # Root mirror: make the complete detailed dashboard visible immediately in the
+  # repository root instead of requiring users to discover the nested folder.
+  cp "$PUB/free swarm/README.md" "$PUB/000_FREE_SWARM_LIVE_DASHBOARD.md"
 }
 
 stage_all() {
-  git -C "$PUB" add -- "free swarm/README.md" "free swarm/LIVE_METRICS.json" "free swarm/architecture_delta_evaluations.jsonl"
+  git -C "$PUB" add -- "000_FREE_SWARM_LIVE_DASHBOARD.md" "free swarm/README.md" "free swarm/LIVE_METRICS.json" "free swarm/architecture_delta_evaluations.jsonl"
   [[ ! -f "$PUB/free swarm/DISTILLERY_LIVE.json" ]] || git -C "$PUB" add -- "free swarm/DISTILLERY_LIVE.json"
   [[ ! -f "$PUB/free swarm/FORGE_LIVE.json" ]] || git -C "$PUB" add -- "free swarm/FORGE_LIVE.json"
+  [[ ! -f "$PUB/free swarm/SYSTEM_ANALYSIS_LIVE.json" ]] || git -C "$PUB" add -- "free swarm/SYSTEM_ANALYSIS_LIVE.json"
 }
 
 refresh_once() {
@@ -68,14 +72,14 @@ refresh_once() {
   render_all
   stage_all
   git -C "$PUB" diff --cached --quiet && return 0
-  git -C "$PUB" commit -m "metrics: autonomous Free Swarm + distillery + forge refresh"
+  git -C "$PUB" commit -m "metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh"
   if ! git -C "$PUB" push origin HEAD:main; then
     git -C "$PUB" fetch origin main --prune
     git -C "$PUB" reset --hard origin/main
     render_all
     stage_all
     git -C "$PUB" diff --cached --quiet && return 0
-    git -C "$PUB" commit -m "metrics: autonomous Free Swarm + distillery + forge refresh"
+    git -C "$PUB" commit -m "metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh"
     git -C "$PUB" push origin HEAD:main
   fi
 }

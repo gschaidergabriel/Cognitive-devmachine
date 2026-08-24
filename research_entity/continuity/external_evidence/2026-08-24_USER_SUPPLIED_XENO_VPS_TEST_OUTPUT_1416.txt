@@ -1,0 +1,123 @@
+test_digest_changes (test_core.CanonicalTests.test_digest_changes) ... ok
+test_float_rejected (test_core.CanonicalTests.test_float_rejected) ... ok
+test_key_order (test_core.CanonicalTests.test_key_order) ... ok
+test_non_string_key_rejected (test_core.CanonicalTests.test_non_string_key_rejected) ... ok
+test_unicode_stable (test_core.CanonicalTests.test_unicode_stable) ... ok
+test_deterministic_split (test_core.DatasetTests.test_deterministic_split) ... ok
+test_family_no_leak (test_core.DatasetTests.test_family_no_leak) ... ok
+test_hard_negative (test_core.DatasetTests.test_hard_negative) ... ok
+test_hard_negative_kind (test_core.DatasetTests.test_hard_negative_kind) ... ok
+test_leak_detect (test_core.DatasetTests.test_leak_detect) ... ok
+test_idempotent (test_core.EffectTests.test_idempotent) ... ok
+test_rejected_may_replay (test_core.EffectTests.test_rejected_may_replay) ... ok
+test_unknown_no_replay (test_core.EffectTests.test_unknown_no_replay) ... ok
+test_admit (test_core.EntryTests.test_admit) ... ok
+test_negative_generation (test_core.EntryTests.test_negative_generation) ... ok
+test_payload_digest (test_core.EntryTests.test_payload_digest) ... ok
+test_self_grant_rejected (test_core.EntryTests.test_self_grant_rejected) ... ok
+test_at_least_40 (test_core.ExperimentTests.test_at_least_40) ... ok
+test_critical_fast (test_core.ExperimentTests.test_critical_fast) ... ok
+test_unique (test_core.ExperimentTests.test_unique) ... ok
+test_deterministic (test_core.GridTests.test_deterministic) ... ok
+test_grid10 (test_core.GridTests.test_grid10) ... ok
+test_scale (test_core.GridTests.test_scale) ... ok
+test_worker_bound (test_core.GridTests.test_worker_bound) ... ok
+test_evidence_required (test_core.HyperpositionTests.test_evidence_required) ... ok
+test_resolved_margin (test_core.HyperpositionTests.test_resolved_margin) ... ok
+test_unresolved_margin (test_core.HyperpositionTests.test_unresolved_margin) ... ok
+test_admission_distinct (test_core.IdentityTests.test_admission_distinct) ... ok
+test_event_stable (test_core.IdentityTests.test_event_stable) ... ok
+test_route_engine_bound (test_core.IdentityTests.test_route_engine_bound) ... ok
+test_route_policy_bound (test_core.IdentityTests.test_route_policy_bound) ... ok
+test_aggregate (test_core.JSpaceTests.test_aggregate) ... ok
+test_cosine_opposite (test_core.JSpaceTests.test_cosine_opposite) ... ok
+test_cosine_same (test_core.JSpaceTests.test_cosine_same) ... ok
+test_empty_reject (test_core.JSpaceTests.test_empty_reject) ... ok
+test_lesion (test_core.JSpaceTests.test_lesion) ... ok
+test_shape (test_core.JSpaceTests.test_shape) ... ok
+test_shape_reject (test_core.JSpaceTests.test_shape_reject) ... ok
+test_signflip (test_core.JSpaceTests.test_signflip) ... ok
+test_consume_and_verify (test_core.LoaderTests.test_consume_and_verify) ... ok
+test_missing_rejected (test_core.LoaderTests.test_missing_rejected) ... ok
+test_mutation_rejected (test_core.LoaderTests.test_mutation_rejected) ... ok
+test_stub_pipeline (test_core.PipelineTests.test_stub_pipeline) ... ok
+test_parent_bound (test_core.ReceiptTests.test_parent_bound) ... ok
+test_tamper (test_core.ReceiptTests.test_tamper) ... ok
+test_verify (test_core.ReceiptTests.test_verify) ... ok
+test_atomic_admit (test_core.StoreTests.test_atomic_admit) ... ok
+test_duplicate_admit (test_core.StoreTests.test_duplicate_admit) ... ok
+test_duplicate_invocation (test_core.StoreTests.test_duplicate_invocation) ... ok
+test_digest_op (test_core.UnitExecutableTests.test_digest_op) ... ok
+test_grid_op (test_core.UnitExecutableTests.test_grid_op) ... ok
+test_stub_op_zero_model_credit (test_core.UnitExecutableTests.test_stub_op_zero_model_credit) ... ok
+test_claude_guard (test_package_contract.PackageContract.test_claude_guard) ... ok
+test_no_secret_file (test_package_contract.PackageContract.test_no_secret_file) ... ok
+test_reentry_is_cache (test_package_contract.PackageContract.test_reentry_is_cache) ... ok
+test_scripts_exist (test_package_contract.PackageContract.test_scripts_exist) ... ok
+test_server_target (test_package_contract.PackageContract.test_server_target) ... ok
+
+----------------------------------------------------------------------
+Ran 57 tests in 0.112s
+
+OK
+{
+  "schema": "XENO_HCU_EXPERIMENT_RUN/v1",
+  "profile": "fast",
+  "experiment_count": 50,
+  "pass": 47,
+  "fail": 0,
+  "skip": 3,
+  "runtime_credit_scope": "LAB_DISCRIMINATORS_ONLY",
+  "results": [
+    {"name":"cpu_parallelism","status":"PASS","metrics":{"workers":4,"hash_rounds":120000,"seconds":0.0471},"note":null},
+    {"name":"memory_copy","status":"PASS","metrics":{"MiB":32.0,"MiB_s":2575.0},"note":null},
+    {"name":"disk_fsync","status":"PASS","metrics":{"MiB":2,"seconds":0.0043,"MiB_s":462.3},"note":null},
+    {"name":"sqlite_wal","status":"PASS","metrics":{"journal_mode":"wal","rows":500,"rows_s":318761.3},"note":null},
+    {"name":"sqlite_contention","status":"PASS","metrics":{"threads":4,"rows":200},"note":null},
+    {"name":"canonical_hash","status":"PASS","metrics":{"iterations":2000,"ops_s":226224.9,"digest":"a8908fc5a6733d1bf123f7f618eac9de069361e0fb7d205476a91ea08c0700d0"},"note":null},
+    {"name":"causal_replay","status":"PASS","metrics":{"event_id":"evt_1078980d2a0fc7c0448fe339f0a52d954760c58a","distinct_admissions":true},"note":null},
+    {"name":"capability_fence","status":"PASS","metrics":{"rejected":true},"note":null},
+    {"name":"generation_fence","status":"PASS","metrics":{"negative_generation_rejected":true},"note":null},
+    {"name":"route_determinism","status":"PASS","metrics":{"stable":true,"engine_change_changes_route":true},"note":null},
+    {"name":"loader_attestation","status":"PASS","metrics":{"mutation_rejected":true,"lease_id":"lease_4c9dcc1edf31487633197fc4a848c078"},"note":null},
+    {"name":"lease_staleness","status":"PASS","metrics":{"stale_rejected":true},"note":null},
+    {"name":"grid10_determinism","status":"PASS","metrics":{"plan_id":"grid_83ae150325cd26dfc630fe72943d79e1","logical_cells":10,"physical_workers":4},"note":null},
+    {"name":"grid_scale_ladder","status":"PASS","metrics":{"plans":[{"logical":10,"physical":4,"plan_id":"grid_83ae150325cd26dfc630fe72943d79e1"},{"logical":32,"physical":4,"plan_id":"grid_6a425faa99b70270b9050620093d94c6"},{"logical":64,"physical":4,"plan_id":"grid_11b015cc99adeed7ba766ee0a1bc69e8"},{"logical":128,"physical":4,"plan_id":"grid_70a369aee9afa7be3c19b93b7338ecea"},{"logical":256,"physical":4,"plan_id":"grid_edddabc40ce4aada04e55a846c721829"}]},"note":null},
+    {"name":"physical_concurrency","status":"PASS","metrics":{"logical_cells":128,"physical_workers":4,"conflated":false},"note":null},
+    {"name":"shared_memory","status":"PASS","metrics":{"bytes":1048576,"seconds":0.0016,"digest":"bf63d8a95fcc2e64619813aae35fdcbe871fdd9264caa3f365eb3aed0f679129"},"note":null},
+    {"name":"serialization_throughput","status":"PASS","metrics":{"objects":1000,"MiB_s":16.7},"note":null},
+    {"name":"vector_abi","status":"PASS","metrics":{"vector_id":"vec_1ed633f948e932e028a8c38cf59a8819","shape_reject":true},"note":null},
+    {"name":"jspace_cosine","status":"PASS","metrics":{"same":1.0,"opposite":-1.0},"note":null},
+    {"name":"jspace_lesion","status":"PASS","metrics":{"base":[150,250,350],"lesioned":[150,50,350]},"note":null},
+    {"name":"jspace_shuffle","status":"PASS","metrics":{"permutation_invariant":true,"note":"Useful negative control for an order-independent aggregator; recurrence claims need richer controls."},"note":null},
+    {"name":"jspace_signflip","status":"PASS","metrics":{"cosine_after_signflip":-1.0},"note":null},
+    {"name":"hyperposition","status":"PASS","metrics":{"unresolved_preserved":true,"evidence_can_resolve":true},"note":null},
+    {"name":"family_split","status":"PASS","metrics":{"rows":300,"counts":{"train":267,"validation":18,"holdout":15}},"note":null},
+    {"name":"hard_negative","status":"PASS","metrics":{"deterministic":true,"distinct_kinds":true},"note":null},
+    {"name":"effect_idempotency","status":"PASS","metrics":{"duplicate_blocked":true},"note":null},
+    {"name":"effect_unknown","status":"PASS","metrics":{"unknown_auto_replay":false},"note":null},
+    {"name":"crash_recovery","status":"PASS","metrics":{"pending_survives_reopen":true,"blind_replay":false},"note":null},
+    {"name":"receipt_chain","status":"PASS","metrics":{"tamper_detected":true},"note":null},
+    {"name":"end_to_end_causal_stub","status":"PASS","metrics":{"route_id":"route_25467fc9c0fc759c1330c62e803f98514b4a353d","grid_plan":"grid_7a8878b3e2cacd6694fcff1ff033d513","final_receipt":"1d53b0a776dd4cac44fe693c47d0d0a8f697d050f5864d4ea49f51748c9e8d05","model_runtime_credit":0},"note":"Stub closes lab causality only; no real-model credit."},
+    {"name":"model_artifact_discovery","status":"PASS","metrics":{"searched":["/opt/models","/root/.cache/huggingface"],"found_count":0,"examples":[]},"note":"Discovery only; no model runtime credit."},
+    {"name":"checkpoint_mmap","status":"PASS","metrics":{"bytes":2097152,"mmap_digest_matches_loader":true},"note":null},
+    {"name":"resource_guard","status":"PASS","metrics":{"cpu_count":4,"memory_bytes":16769044480,"disk_free_bytes":171155423232,"python":"3.12.3","kernel":"6.8.0-138-generic","sqlite":"3.45.1"},"note":null},
+    {"name":"repo_contract_probe","status":"SKIP","metrics":{},"note":"repo not found at /root/xeno_kit/xeno_hcu_claude_vps_kit_2026-08-24/workspace/clay-global-research-entity"},
+    {"name":"authority_snapshot","status":"SKIP","metrics":{},"note":"missing /root/xeno_kit/xeno_hcu_claude_vps_kit_2026-08-24/workspace/clay-global-research-entity/research_entity/continuity/BOOTSTRAP_MINIMAL.json"},
+    {"name":"source_symbol_matrix","status":"SKIP","metrics":{},"note":"canonical repo not cloned"},
+    {"name":"sqlite_backup","status":"PASS","metrics":{"rows_restored":100},"note":null},
+    {"name":"event_duplicate","status":"PASS","metrics":{"one_causal_event":true,"admissions":10},"note":null},
+    {"name":"provenance_tamper","status":"PASS","metrics":{"source_change_changes_digest":true},"note":null},
+    {"name":"performance_budget","status":"PASS","metrics":{"baseline_cells":10,"recommended_physical_workers":4,"nominal_bytes_per_logical_cell":1676904448,"warning":"logical allocation is not resident model allocation"},"note":null},
+    {"name":"sqlite_atomic_invocation","status":"PASS","metrics":{"duplicate_invocation_rejected":true},"note":null},
+    {"name":"generation_store_guard","status":"PASS","metrics":{"current_generation":5,"stale_generation":4,"must_fail_closed":true},"note":null},
+    {"name":"route_engine_binding","status":"PASS","metrics":{"engine_identity_bound":true},"note":null},
+    {"name":"jspace_recurrence","status":"PASS","metrics":{"steps":5,"states":[[110,50,20],[120,50,15],[130,50,10],[140,50,5],[150,50,0]],"claim":"observable deterministic recurrence only"},"note":null},
+    {"name":"vector_rescue","status":"PASS","metrics":{"lesion_then_rescue_exact":true},"note":null},
+    {"name":"ingress_digest_tamper","status":"PASS","metrics":{"tamper_changes_payload_digest":true},"note":null},
+    {"name":"workspace_budget","status":"PASS","metrics":{"memory_bytes":16769044480,"reserve_35pct":5869165568,"usable_lab_bytes":10899878912},"note":null},
+    {"name":"effect_generation_binding","status":"PASS","metrics":{"generation_changes_effect_identity":true},"note":null},
+    {"name":"route_policy_binding","status":"PASS","metrics":{"policy_identity_bound":true},"note":null},
+    {"name":"receipt_parent_binding","status":"PASS","metrics":{"parent_digest_changes_child":true},"note":null}
+  ]
+}

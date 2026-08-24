@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"restart-free-swarm-distillery-publisher-20260824T1751",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":180,
+  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'set -e; U=$(id -u claylab); runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$U systemctl --user restart clay-free-swarm-publisher.service; sleep 12; echo ACTIVE=$(runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$U systemctl --user is-active clay-free-swarm-publisher.service); runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$U journalctl --user -u clay-free-swarm-publisher.service --since=-2min --no-pager | tail -80'"
+}

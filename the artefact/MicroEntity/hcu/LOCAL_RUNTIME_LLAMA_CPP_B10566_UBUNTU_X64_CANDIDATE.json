@@ -4,7 +4,7 @@
   "date": "2026-08-24",
   "product": "EntityOS",
   "architecture": "HCU",
-  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "supervisor": "SUCCESSOR_DYNAMIC_RESOLVE_FROM_CANONICAL_MAIN",
   "mode": "FREE_ONLY",
   "purpose": "Pin one exact upstream-attested zero-cost local llama.cpp runtime distribution candidate for the Qwen3-0.6B GGUF HCU lane. This does not claim the archive is locally present, extracted, executable, compatible with the eventual host, or used for model inference.",
   "runtime_family": "llama.cpp",
@@ -32,6 +32,15 @@
     "host_compatibility_observed": false,
     "status": "BLOCKED_LOCAL_MATERIALIZATION_AND_EXTRACTED_RUNTIME_IDENTITY"
   },
+  "materialization_target": {
+    "producer": "local_runtime_materialization_v1.py",
+    "schema": "HCU_LOCAL_RUNTIME_MATERIALIZATION/v1",
+    "required_relation": "EXACT_CANDIDATE_ARCHIVE_SHA256_PLUS_UNIQUE_REGULAR_ARCHIVE_MEMBER_BYTE_IDENTITY_FOR_RUNTIME_BINARY_AND_EACH_DECLARED_DEPENDENCY_PLUS_EXACT_GGUF_SHA256_AND_BYTE_COUNT",
+    "anti_laundering_rule": "A valid candidate archive co-located with unrelated extracted binary or dependency bytes is rejected.",
+    "actual_materialization_sha256": null,
+    "actual_runtime_build_sha256": null,
+    "status": "SOURCE_GATE_PRESENT_EXECUTION_UNOBSERVED"
+  },
   "model_pairing": {
     "candidate_file": "LOCAL_08B_QWEN3_06B_Q8_GGUF_CANDIDATE.json",
     "model_repository": "Qwen/Qwen3-0.6B-GGUF",
@@ -51,9 +60,9 @@
   },
   "promotion_requirements": [
     "materialize this exact archive on an authorized zero-cost local surface",
-    "verify local archive SHA-256 equals the upstream attested archive SHA-256",
-    "extract with a deterministic manifest and hash the exact executable plus required shared libraries",
-    "derive one runtime/build identity from exact extracted bytes rather than from tag text",
+    "run HCU_LOCAL_RUNTIME_MATERIALIZATION/v1 against the exact candidate archive, extracted runtime binary, explicit shared-library set and exact GGUF bytes",
+    "require every extracted runtime binary/dependency identity to byte-match one unique regular member of the exact candidate archive; archive co-location alone is not evidence",
+    "derive one runtime/build identity from exact archive-member-bound extracted bytes rather than from tag text",
     "materialize and verify the exact Qwen3-0.6B-Q8_0 GGUF candidate",
     "invoke the exact pathname/fd-consuming loader under loader-consumption witness",
     "prove the callback completes any credited model load before its sealed memfd closes",
@@ -71,5 +80,5 @@
     "whole_entityos_hcu_runtime_credit": 0,
     "whole_product_pass": false
   },
-  "epistemic_note": "An upstream build attestation authenticates the declared release subject/source relationship at upstream distribution scope. It does not prove local download integrity, extraction identity, loader consumption, host compatibility, inference, J-Space causality, or training benefit."
+  "epistemic_note": "An upstream build attestation authenticates the declared release subject/source relationship at upstream distribution scope. The materialization gate can later prove exact local archive/member/GGUF byte identity, but source presence alone does not prove those bytes exist on an authorized host. Neither source identity nor materialization alone proves loader consumption, host compatibility, inference, J-Space causality, or training benefit."
 }

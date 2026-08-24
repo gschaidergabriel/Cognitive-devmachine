@@ -16,14 +16,12 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y --no-install-recommends \
   ca-certificates curl git gh jq python3 podman uidmap slirp4netns fuse-overlayfs \
-  git-lfs rsync procps
+  git-lfs rsync procps util-linux
 
 if ! id "$USER_NAME" >/dev/null 2>&1; then
   useradd --create-home --shell /bin/bash "$USER_NAME"
 fi
 
-# Ensure rootless user-namespace ranges exist. New Ubuntu users normally get these
-# automatically; only add a private range if the system did not create one.
 if ! grep -q "^${USER_NAME}:" /etc/subuid; then
   usermod --add-subuids 200000-265535 "$USER_NAME"
 fi
@@ -36,10 +34,16 @@ install -d -o "$USER_NAME" -g "$USER_NAME" -m 0750 \
   "$ROOT/models" "$ROOT/tools" "$ROOT/logs" "$ROOT/state"
 install -d -o root -g "$USER_NAME" -m 0750 /etc/clay-gpt
 
-# Acquire an already-authorized local GitHub CLI token without printing it.
+run_claybot() {
+  runuser -u "$USER_NAME" -- env HOME="/home/$USER_NAME" "$@"
+}
+
 TOKEN="${GH_TOKEN:-}"
-if [[ -z "$TOKEN" ]] && command -v gh >/dev/null 2>&1; then
+if [[ -z "$TOKEN" ]]; then
   TOKEN="$(gh auth token 2>/dev/null || true)"
+fi
+if [[ -z "$TOKEN" && -n "${SUDO_USER:-}" && "${SUDO_USER}" != root ]]; then
+  TOKEN="$(runuser -u "$SUDO_USER" -- gh auth token 2>/dev/null || true)"
 fi
 if [[ -z "$TOKEN" ]]; then
   cat >&2 <<'EOF'
@@ -66,44 +70,34 @@ chown root:"$USER_NAME" /etc/clay-gpt/bridge.env
 chmod 0640 /etc/clay-gpt/bridge.env
 unset TOKEN
 
-# Git identity for host-side result commits and task branches.
-sudo -u "$USER_NAME" -H git config --global user.name "Clay VPS Bridge"
-sudo -u "$USER_NAME" -H git config --global user.email "clay-vps-bridge@localhost"
-sudo -u "$USER_NAME" -H git config --global init.defaultBranch main
-sudo -u "$USER_NAME" -H git config --global credential.helper '!gh auth git-credential'
+run_claybot git config --global user.name "Clay VPS Bridge"
+run_claybot git config --global user.email "clay-vps-bridge@localhost"
+run_claybot git config --global init.defaultBranch main
+run_claybot git config --global credential.helper '!gh auth git-credential'
 
-# Clone/update the control checkout with the token present only in host process env.
 set -a
 source /etc/clay-gpt/bridge.env
 set +a
+
 if [[ ! -d "$ROOT/control/.git" ]]; then
   rm -rf "$ROOT/control"
-  sudo -u "$USER_NAME" -H env GH_TOKEN="$GH_TOKEN" \
+  run_claybot env GH_TOKEN="$GH_TOKEN" \
     git clone --branch "$CONTROL_BRANCH" --single-branch "$REPO_URL" "$ROOT/control"
 else
-  sudo -u "$USER_NAME" -H env GH_TOKEN="$GH_TOKEN" \
-    git -C "$ROOT/control" fetch origin "$CONTROL_BRANCH"
-  sudo -u "$USER_NAME" -H env GH_TOKEN="$GH_TOKEN" \
-    git -C "$ROOT/control" checkout "$CONTROL_BRANCH"
-  sudo -u "$USER_NAME" -H env GH_TOKEN="$GH_TOKEN" \
-    git -C "$ROOT/control" reset --hard "origin/$CONTROL_BRANCH"
+  run_claybot env GH_TOKEN="$GH_TOKEN" git -C "$ROOT/control" fetch origin "$CONTROL_BRANCH"
+  run_claybot env GH_TOKEN="$GH_TOKEN" git -C "$ROOT/control" checkout "$CONTROL_BRANCH"
+  run_claybot env GH_TOKEN="$GH_TOKEN" git -C "$ROOT/control" reset --hard "origin/$CONTROL_BRANCH"
 fi
 
-# Separate canonical clone. Task containers never receive the token; only host git does.
 if [[ ! -d "$ROOT/repo/.git" ]]; then
   rm -rf "$ROOT/repo"
-  sudo -u "$USER_NAME" -H env GH_TOKEN="$GH_TOKEN" \
-    git clone "$REPO_URL" "$ROOT/repo"
+  run_claybot env GH_TOKEN="$GH_TOKEN" git clone "$REPO_URL" "$ROOT/repo"
 else
-  sudo -u "$USER_NAME" -H env GH_TOKEN="$GH_TOKEN" \
-    git -C "$ROOT/repo" fetch origin --prune
+  run_claybot env GH_TOKEN="$GH_TOKEN" git -C "$ROOT/repo" fetch origin --prune
 fi
 
 chmod 0755 "$ROOT/control/vps_bridge/bin/webfetch" "$ROOT/control/vps_bridge/bin/hffetch"
 chmod 0755 "$ROOT/control/vps_bridge/bridge_runner.py"
-
-# Rootless Podman requires a runtime dir owned by claybot. systemd creates it below.
-USER_UID="$(id -u "$USER_NAME")"
 
 cat > "/etc/systemd/system/$SERVICE" <<EOF
 [Unit]
@@ -125,13 +119,10 @@ ExecStart=/usr/bin/python3 ${ROOT}/control/vps_bridge/bridge_runner.py
 Restart=always
 RestartSec=5
 TimeoutStopSec=30
-NoNewPrivileges=true
 PrivateTmp=true
 ProtectKernelTunables=true
 ProtectKernelModules=true
 ProtectControlGroups=true
-RestrictSUIDSGID=true
-LockPersonality=true
 
 [Install]
 WantedBy=multi-user.target
@@ -139,14 +130,11 @@ EOF
 
 systemctl daemon-reload
 systemctl enable --now "$SERVICE"
-
-# Give first image build time to start, then show exact state.
 sleep 3
-systemctl --no-pager --full status "$SERVICE" || true
 
 if ! systemctl is-active --quiet "$SERVICE"; then
   echo "BRIDGE_SERVICE_FAILED" >&2
-  journalctl -u "$SERVICE" -n 120 --no-pager >&2 || true
+  journalctl -u "$SERVICE" -n 160 --no-pager >&2 || true
   exit 20
 fi
 
@@ -158,6 +146,6 @@ control_branch=${CONTROL_BRANCH}
 selftest_inbox=vps_bridge/inbox/SELFTEST_BOOTSTRAP.json
 selftest_expected_outbox=vps_bridge/outbox/SELFTEST_BOOTSTRAP.json
 
-The first Podman image build can take several minutes. Watch with:
+The first rootless Podman image build can take several minutes. Watch with:
   sudo journalctl -u ${SERVICE} -f
 EOF

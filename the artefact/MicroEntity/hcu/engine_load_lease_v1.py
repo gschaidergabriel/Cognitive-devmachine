@@ -10,6 +10,10 @@ credit until the real loader is instrumented to emit the consumed-byte evidence 
 The raw loader observation is not self-authorizing: verification additionally requires the
 exact normalized observation to exist in an externally admitted loader-consumption registry.
 Merely setting ``evidence_source=ACTUAL_LOADER_READ_PATH`` is therefore insufficient.
+
+A ``VerifiedEngineAdmission`` is also not trusted merely because it is an instance of the
+public dataclass. The loader boundary deterministically re-derives the engine-artifact bundle
+and the upstream admission receipt before issuing or accepting a lease.
 """
 from __future__ import annotations
 
@@ -18,7 +22,20 @@ import hashlib
 from typing import Any, Mapping
 
 from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
-from engine_admission_v1 import ArtifactDigest, VerifiedEngineAdmission
+from engine_admission_v1 import (
+    ArtifactDigest,
+    ENGINE_ADMISSION_RECEIPT_SCHEMA,
+    LOCK_SCHEMA,
+    EngineArtifactLock,
+    VerifiedEngineAdmission,
+    derive_engine_artifact_sha256,
+)
+from reactive_event_router_v1 import (
+    ADMITTED_INTERNAL_ENGINES,
+    ADMITTED_INTERNAL_PROVIDER_ALIASES,
+    EngineAdmission,
+    HASH_SERIALIZATION_SCHEMA,
+)
 
 LEASE_SCHEMA = "HCU_ENGINE_LOAD_LEASE/v1"
 CONSUMPTION_SCHEMA = "HCU_ENGINE_LOAD_CONSUMPTION/v1"
@@ -149,20 +166,97 @@ def _canonical_sha256(value: Any, field: str) -> str:
 
 
 def _verified_admission(value: Any, *, current_generation: int) -> VerifiedEngineAdmission:
+    """Re-verify the complete upstream admission identity at the loader trust boundary.
+
+    ``VerifiedEngineAdmission`` is deliberately a plain immutable data object, not an
+    unforgeable capability. Therefore type membership and syntactically valid SHA-256 values
+    are insufficient. This function rebinds the current engine identity/class, component
+    digests, engine-artifact bundle digest and exact JCS admission receipt digest.
+    """
     if not isinstance(value, VerifiedEngineAdmission):
         raise EngineLoadLeaseError("VERIFIED_ENGINE_ADMISSION_REQUIRED")
     current_generation = _generation(current_generation, "current_generation")
     admission_generation = _generation(value.entity_generation, "engine_admission.entity_generation")
     if admission_generation != current_generation:
         raise EngineLoadLeaseError("STALE_ENTITY_GENERATION")
-    _sha256(value.receipt_sha256, "engine_admission.receipt_sha256")
-    _sha256(value.engine_artifact_sha256, "engine_admission.engine_artifact_sha256")
-    _text(value.admission.engine_identity, "engine_admission.engine_identity")
-    _text(value.admission.engine_class, "engine_admission.engine_class")
-    if value.admission.engine_artifact_sha256 != value.engine_artifact_sha256:
+    if HASH_SERIALIZATION_SCHEMA != CANONICALIZATION_SCHEMA:
+        raise EngineLoadLeaseError("ENGINE_ADMISSION_CANONICALIZATION_SCHEMA_MISMATCH")
+    if not isinstance(value.admission, EngineAdmission):
+        raise EngineLoadLeaseError("ENGINE_ADMISSION_TYPE_REQUIRED")
+
+    provider_alias = _text(value.admission.provider_alias, "engine_admission.provider_alias").lower()
+    engine_identity = _text(value.admission.engine_identity, "engine_admission.engine_identity").lower()
+    engine_class = _text(value.admission.engine_class, "engine_admission.engine_class").upper()
+    if (
+        value.admission.provider_alias != provider_alias
+        or value.admission.engine_identity != engine_identity
+        or value.admission.engine_class != engine_class
+    ):
+        raise EngineLoadLeaseError("ENGINE_ADMISSION_IDENTITY_NOT_CANONICAL")
+    if provider_alias not in ADMITTED_INTERNAL_PROVIDER_ALIASES:
+        raise EngineLoadLeaseError("ENGINE_PROVIDER_NOT_ADMITTED")
+    admitted_class = ADMITTED_INTERNAL_ENGINES.get(engine_identity)
+    if admitted_class is None:
+        raise EngineLoadLeaseError("ENGINE_IDENTITY_NOT_ADMITTED")
+    if engine_class != admitted_class:
+        raise EngineLoadLeaseError("ENGINE_CLASS_MISMATCH")
+
+    materials: dict[str, dict[str, Any]] = {}
+    for name, artifact in (
+        ("checkpoint", value.checkpoint),
+        ("tokenizer", value.tokenizer),
+        ("runtime", value.runtime),
+        ("build", value.build),
+    ):
+        material = _artifact_material(artifact)
+        if material["kind"] not in {"FILE_SHA256", "TREE_SHA256_V1"}:
+            raise EngineLoadLeaseError(f"{name}:ARTIFACT_DIGEST_KIND_UNSUPPORTED")
+        if material["kind"] == "FILE_SHA256" and material["file_count"] != 1:
+            raise EngineLoadLeaseError(f"{name}:FILE_DIGEST_COUNT_MISMATCH")
+        if material["kind"] == "TREE_SHA256_V1" and material["file_count"] < 1:
+            raise EngineLoadLeaseError(f"{name}:TREE_DIGEST_EMPTY")
+        materials[name] = material
+
+    engine_artifact_sha256 = _sha256(
+        value.engine_artifact_sha256, "engine_admission.engine_artifact_sha256"
+    )
+    embedded_artifact_sha256 = _sha256(
+        value.admission.engine_artifact_sha256,
+        "engine_admission.admission.engine_artifact_sha256",
+    )
+    if embedded_artifact_sha256 != engine_artifact_sha256:
         raise EngineLoadLeaseError("ENGINE_ADMISSION_ARTIFACT_IDENTITY_MISMATCH")
-    for artifact in (value.checkpoint, value.tokenizer, value.runtime, value.build):
-        _artifact_material(artifact)
+
+    lock = EngineArtifactLock(
+        schema=LOCK_SCHEMA,
+        provider_alias=provider_alias,
+        engine_identity=engine_identity,
+        engine_class=engine_class,
+        checkpoint_sha256=materials["checkpoint"]["sha256"],
+        tokenizer_sha256=materials["tokenizer"]["sha256"],
+        runtime_sha256=materials["runtime"]["sha256"],
+        build_sha256=materials["build"]["sha256"],
+        engine_artifact_sha256=engine_artifact_sha256,
+    )
+    if derive_engine_artifact_sha256(lock) != engine_artifact_sha256:
+        raise EngineLoadLeaseError("ENGINE_ARTIFACT_BUNDLE_DIGEST_MISMATCH")
+
+    receipt_sha256 = _sha256(value.receipt_sha256, "engine_admission.receipt_sha256")
+    receipt_material = {
+        "schema": ENGINE_ADMISSION_RECEIPT_SCHEMA,
+        "hash_serialization_schema": HASH_SERIALIZATION_SCHEMA,
+        "entity_generation": admission_generation,
+        "provider_alias": provider_alias,
+        "engine_identity": engine_identity,
+        "engine_class": engine_class,
+        "checkpoint": materials["checkpoint"],
+        "tokenizer": materials["tokenizer"],
+        "runtime": materials["runtime"],
+        "build": materials["build"],
+        "engine_artifact_sha256": engine_artifact_sha256,
+    }
+    if _canonical_sha256(receipt_material, "ENGINE_ADMISSION_RECEIPT") != receipt_sha256:
+        raise EngineLoadLeaseError("ENGINE_ADMISSION_RECEIPT_DIGEST_MISMATCH")
     return value
 
 

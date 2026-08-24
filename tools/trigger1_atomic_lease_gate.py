@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Fail-closed canonical atomic-lease admission for Trigger1 V2.
+"""Fail-closed canonical atomic-lease admission for the strongest Trigger1 lane.
 
 This coordination gate does not acquire a lease and does not run an intervention. It
 only verifies that the dispatch references an already-created canonical claim for the
-current Trigger1 V2 midlayer causal experiment.
+current strongest local Qwen3-0.6B intermediate contrastive experiment.
 """
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ TS_RE = re.compile(r"^ts_[0-9]{8}T[0-9]{12}Z__p_[0-9a-f]{64}$")
 HEAD_RE = re.compile(r"^[0-9a-f]{40}$")
 BODY_KEY_RE = re.compile(r"(?m)^trigger_key:\s*(\S+)\s*$")
 CLAIM_SCHEMA = "clay-go-experiment-claim/v1"
-EXPECTED_EXPERIMENT = "CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1"
+EXPECTED_EXPERIMENT = "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1"
 
 
 def _nonempty(value: Any) -> bool:

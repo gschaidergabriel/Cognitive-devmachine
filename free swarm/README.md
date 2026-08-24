@@ -2,41 +2,68 @@
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-24T09:53:04.067786+00:00`
+Aktualisiert: `2026-08-24T10:08:08.786988+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
-| Worker-Records | 103 |
-| Ø gleichzeitig laufende Free-Worker | 1.040 |
-| Peak Free-Worker | 4 |
-| Free-Swarm Input-Tokens | 66497 |
-| Free-Swarm Output-Tokens | 13774 |
-| Free-Swarm Total-Tokens | 80271 |
-| Usage-exakte Worker-Records | 10 |
+| Worker-Records | 195 |
+| Ø gleichzeitig laufende Free-Worker | 2.465 |
+| Peak Free-Worker | 5 |
+| Free-Swarm Input-Tokens | 386769 |
+| Free-Swarm Output-Tokens | 82196 |
+| Free-Swarm Total-Tokens | 468965 |
+| Usage-exakte Worker-Records | 58 |
 | Evident akzeptierte Architektur-Deltas | 0 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 11669606 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $116.70 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 11671090 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $116.71 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
 |---|---|---:|---:|---:|---:|---:|---:|
-| groq | `openai/gpt-oss-120b` | 32 | 3 | 2 | 19341 | 3000 | 22341 |
-| nvidia | `nvidia/llama-3.3-nemotron-super-49b-v1.5` | 1 | 1 | 0 | 6163 | 1800 | 7963 |
-| nvidia | `nvidia/nemotron-3-super-120b-a12b` | 1 | 1 | 0 | 7319 | 1800 | 9119 |
-| nvidia | `nvidia/nemotron-3-ultra-550b-a55b` | 2 | 1 | 0 | 7298 | 1800 | 9098 |
-| nvidia | `nvidia/nemotron-3.5-lightning-30b-a3b` | 1 | 1 | 0 | 7301 | 1800 | 9101 |
-| nvidia | `openai/gpt-oss-120b` | 1 | 1 | 0 | 6453 | 1800 | 8253 |
-| groq | `openai/gpt-oss-20b` | 29 | 1 | 1 | 6451 | 1000 | 7451 |
-| nvidia | `nvidia/llama-3.3-nemotron-super-49b-v1` | 1 | 1 | 0 | 6171 | 774 | 6945 |
-| groq | `qwen/qwen3.6-27b` | 27 | 0 | 0 | 0 | 0 | 0 |
-| nvidia | `ai21labs/jamba-1.5-large-instruct` | 1 | 0 | 0 | 0 | 0 | 0 |
-| nvidia | `ibm/granite-34b-code-instruct` | 1 | 0 | 0 | 0 | 0 | 0 |
-| nvidia | `mistralai/mistral-large` | 1 | 0 | 0 | 0 | 0 | 0 |
-| nvidia | `mistralai/mistral-large-2-instruct` | 1 | 0 | 0 | 0 | 0 | 0 |
-| nvidia | `nvidia/llama-3.1-nemotron-70b-instruct` | 1 | 0 | 0 | 0 | 0 | 0 |
-| nvidia | `nvidia/llama-3.1-nemotron-ultra-253b-v1` | 1 | 0 | 0 | 0 | 0 | 0 |
-| nvidia | `nvidia/nemotron-4-340b-instruct` | 1 | 0 | 0 | 0 | 0 | 0 |
-| nvidia | `writer/palmyra-creative-122b` | 1 | 0 | 0 | 0 | 0 | 0 |
+| groq | `openai/gpt-oss-120b` | 39 | 8 | 4 | 51619 | 8000 | 59619 |
+| groq | `openai/gpt-oss-20b` | 38 | 6 | 5 | 38722 | 6000 | 44722 |
+| groq | `qwen/qwen3.6-27b` | 38 | 6 | 5 | 39239 | 6000 | 45239 |
+| nvidia | `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | 4 | 4 | 0 | 29286 | 14259 | 43545 |
+| nvidia | `nvidia/llama-3.3-nemotron-super-49b-v1` | 4 | 4 | 0 | 24686 | 3568 | 28254 |
+| nvidia | `meta/muse-glimmer-30b` | 3 | 3 | 0 | 19260 | 5400 | 24660 |
+| nvidia | `nvidia/nemotron-3-super-120b-a12b` | 3 | 3 | 0 | 21961 | 5400 | 27361 |
+| nvidia | `nvidia/nemotron-3.5-lightning-30b-a3b` | 3 | 3 | 0 | 21951 | 5400 | 27351 |
+| nvidia | `nvidia/ising-calibration-1.5-31b` | 3 | 3 | 0 | 22016 | 5205 | 27221 |
+| nvidia | `meta/llama-3.2-90b-vision-instruct` | 3 | 3 | 0 | 18578 | 2621 | 21199 |
+| nvidia | `nvidia/nemotron-3-ultra-550b-a55b` | 3 | 2 | 0 | 14617 | 3600 | 18217 |
+| nvidia | `openai/gpt-oss-120b` | 3 | 2 | 0 | 12901 | 3600 | 16501 |
+| nvidia | `openai/gpt-oss-20b` | 2 | 2 | 0 | 12894 | 3600 | 16494 |
+| nvidia | `nvidia/llama-3.3-nemotron-super-49b-v1.5` | 3 | 2 | 0 | 12330 | 3133 | 15463 |
+| nvidia | `nvidia/nemotron-nano-12b-v2-vl` | 2 | 2 | 0 | 14210 | 1839 | 16049 |
+| nvidia | `meta/llama-3.1-70b-instruct` | 2 | 2 | 0 | 12376 | 1415 | 13791 |
+| nvidia | `meta/llama-3.3-70b-instruct` | 3 | 2 | 0 | 12804 | 1356 | 14160 |
+| nvidia | `nvidia/nemotron-3-nano-30b-a3b` | 1 | 1 | 0 | 7319 | 1800 | 9119 |
+| nvidia | `ai21labs/jamba-1.5-large-instruct` | 3 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `bigcode/starcoder2-15b` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `databricks/dbrx-instruct` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `deepseek-ai/deepseek-v4-flash-0731` | 2 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `google/gemma-3-12b-it` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `google/gemma-4-31b-it` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `ibm/granite-34b-code-instruct` | 2 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `meta/codellama-70b` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `meta/llama2-70b` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `microsoft/phi-3-vision-128k-instruct` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `microsoft/phi-3.5-moe-instruct` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `mistralai/codestral-22b-instruct-v0.1` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `mistralai/mistral-large` | 3 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `mistralai/mistral-large-2-instruct` | 2 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `mistralai/mixtral-8x22b-v0.1` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `nvidia/llama-3.1-nemotron-51b-instruct` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `nvidia/llama-3.1-nemotron-70b-instruct` | 2 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `nvidia/llama-3.1-nemotron-ultra-253b-v1` | 3 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `nvidia/llama3-chatqa-1.5-70b` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `nvidia/nemotron-4-340b-instruct` | 2 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `nvidia/nemotron-nano-3-30b-a3b` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `nvidia/nemotron-parse` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `nvidia/neva-22b` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `writer/palmyra-creative-122b` | 2 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `writer/palmyra-med-70b` | 1 | 0 | 0 | 0 | 0 | 0 |
+| nvidia | `writer/palmyra-med-70b-32k` | 1 | 0 | 0 | 0 | 0 | 0 |
 
 ### Evidenz-Ranking
 Bestes Modell: **NO EVIDENCE YET**
@@ -49,8 +76,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9727 Textdateien / 46678423 Zeichen ≈ **11669606 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$116.70** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9727 Textdateien / 46684360 Zeichen ≈ **11671090 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$116.71** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

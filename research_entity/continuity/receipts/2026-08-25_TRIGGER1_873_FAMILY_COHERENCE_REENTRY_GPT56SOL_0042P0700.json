@@ -1,0 +1,88 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "1",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "owner_trigger1_directive": "research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_CONVERGENCE_V2.json",
+    "trigger1_contract": "research_entity/continuity/TRIGGER_ONE_JSPACE_STEERING_CONTRACT.md",
+    "supervisor": "8.73",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "observed_main_before_receipt": "e5bcba1e8055a386dc2d7c1317b1ea8374bf06de"
+  },
+  "owner_goal": "DIRECT_REPRODUCIBLE_GLOBAL_JSPACE_VECTOR_CONTROL_ON_EXACT_ZERO_COST_MODEL_RUNTIME_WITH_API_BOUNDARY",
+  "canonical_progress_observed": {
+    "family_identity_cardinality_merge": "2210fc5f08ce8ae8ece3aff2b717cba2caca6cce",
+    "retained_family_pr": 1733,
+    "donor_pr_1732": "CLOSED_SUPERSEDED_DONOR_FUSED",
+    "reported_deterministic_regression_scope": "27/27 PASS exact-written-byte protocol/family regressions",
+    "credit_scope": "SOURCE_AND_DETERMINISTIC_REGRESSION_ONLY"
+  },
+  "new_findings": [
+    {
+      "issue": 1737,
+      "classification": "RESIDUAL_FAIL_OPEN_SELECTION_BY_OMISSION",
+      "finding": "select_layer_gain still skips incomplete exact-identity calibration families. A split/missing case can disappear while another complete positive case selects the layer/gain.",
+      "required_falsifier": "one complete positive calibration case plus one identity-split incomplete case must make the layer/gain ineligible rather than silently dropping the incomplete family",
+      "donor_source_commit": "f9c656f8aaf4f449061090bf6fb28f3a96dcbf0f",
+      "donor_test_commit": "20dbe0310926d62c2af56862fae7ca3f61fbaea9"
+    },
+    {
+      "issue": 1736,
+      "classification": "NEW_DERIVATION_COHERENCE_DISCRIMINATOR",
+      "finding": "The current Qwen3-0.6B intermediate executor forms one aggregate mean positive-minus-negative direction but does not establish that the individual semantic contrast pairs form a coherent residual-space direction.",
+      "next_measurement": "per-layer paired contrast vectors, pairwise cosine matrix and leave-one-pair-out alignment; persist min/mean/dispersion without holdout access; predeclare any hard threshold before model execution",
+      "external_basis": [
+        "Turner et al. 2023 arXiv:2308.10248 activation addition",
+        "Braun et al. 2025 arXiv:2505.22637 steering reliability and activation-difference cosine coherence"
+      ],
+      "qwen_specific_fact_established": false
+    },
+    {
+      "issue": 1735,
+      "classification": "AUTHORITY_COORDINATION_MISMATCH",
+      "finding": "Owner Trigger-1 V2 explicitly exempts literal trigger 1 from the separate GO atomic lease, while Supervisor 8.73 still requests canonical atomic coordination for unusual model intervention and the current self-hosted implementation specifically requires a claim with trigger == go.",
+      "repair_law": "do not fake a GO identity; if 8.73 coordination remains required, use a Trigger-1-specific owner-compatible coordination identity while preserving exact-source, credential, zero-cost, six-control and promotion fences"
+    }
+  ],
+  "ten_slot_synthesis": [
+    "local runtime/model materialization remains source-ready but runtime-unobserved by this organ",
+    "intermediate contrastive vector construction remains the primary scientific path",
+    "layer/gain calibration gained a residual fail-closed cardinality discriminator via issue 1737",
+    "six matched controls now have exact family identity/cardinality merge evidence at tested scope",
+    "wrong-layer same-selected-vector provenance/locality and lesion/rescue remain required",
+    "calibration/holdout prompt/seed separation and derivation label-independence remain promotion fences",
+    "runtime/model/tokenizer/applied-vector identity chain remains required and runtime-unobserved",
+    "loopback API remains the preferred zero-provider-billing API boundary",
+    "external providers remain secondary typed FREE lanes; Together/paid/unknown remain forbidden",
+    "new highest-information pre-runtime science discriminator is derivation-vector coherence plus the existing semantic-transfer/OOD holdout issue 1715"
+  ],
+  "execution": {
+    "new_qwen_model_intervention_executed_by_this_organ": false,
+    "reason": "No connected authorized normal-user or clay-direct-dev shell is exposed to this organ; the GitHub self-hosted path has the Trigger-1-vs-GO coordination mismatch tracked in issue 1735.",
+    "provider_calls": 0,
+    "together_used": false,
+    "paid_or_unknown_execution": false
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_actions": [
+    "Fuse issue 1737 onto exact current main and execute the strengthened family-cardinality regression; do not silently drop any incomplete calibration family.",
+    "Resolve issue 1735 without fabricating a GO identity: owner-compatible Trigger-1 coordination must coexist with Supervisor 8.73's atomic-coordination requirement.",
+    "On the first admitted connected local/clay-direct-dev surface, execute the strongest Qwen3-0.6B intermediate six-control loopback path at exact source/model/runtime identity.",
+    "Add issue 1736 derivation-coherence measurements and retain issue 1715 semantic-transfer/OOD holdout before any stronger semantic J-Space interpretation."
+  ],
+  "evidence_boundary": "Canonical source/regression convergence, exact-current source audit, literature-motivated research design and append-only coordination evidence only. No new model-runtime, J-Space-model, HCU-full, training, whole-product or canonical-semantics credit."
+}

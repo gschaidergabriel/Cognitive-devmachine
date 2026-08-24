@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_GO_872_TRIGGER1_ATOMIC_LEASE_SUCCESSOR/v1",
+  "created_at": "2026-08-24T23:32:00+07:00",
+  "persistent_research_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_main_observed_before_write": "16fcc38e31188322c953474b6b9e9db4bf8a170f",
+    "owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md"
+  },
+  "coordination": {
+    "upstream_shared_request_id_exposed": false,
+    "available_user_message_timestamp_precision": "minute",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0
+  },
+  "observed": [
+    "Current main Trigger1 owner-only issue workflow can enter the fused Qwen3-0.6B midlayer intervention without first proving a canonical go atomic lease.",
+    "Open PR 1656 adds a lease gate but is 21 commits behind the observed main and its semantic-duplicate scan only catches sibling claims whose JSON trigger_key exactly equals the canonical trigger key.",
+    "The canonical GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL explicitly requires legacy/noncanonical semantic duplicate detection, including historical alternate timestamp/hash encodings.",
+    "Historical repository claims contain exactly such alternate timestamp/full-hash/short-hash encodings.",
+    "Current Trigger1 promotion gate schema is CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4 while the main self-hosted workflow fallback still emits v2 when no candidate exists."
+  ],
+  "hypothesis": "A successor-current pre-intervention gate that binds the canonical claim, rejects existing results, rejects exact and known legacy semantic duplicate identities, proves claim-main ancestry and records a create-once result sidecar will close a real coordination/evidence gap without modifying the scientific intervention itself.",
+  "counterhypothesis": "Because the issue workflow has a single concurrency group and the original claimant is expected to perform duplicate inspection, additional semantic duplicate detection may appear redundant. It remains valuable as a fail-closed migration/race fence required by the canonical protocol and protects the execution bridge from stale historical claim encodings.",
+  "delta": {
+    "branch": "go-20260824-trigger1-lease-successor-gpt56sol-2332",
+    "files": [
+      "tools/trigger1_atomic_lease_gate.py",
+      "tests/test_trigger1_atomic_lease_gate.py",
+      ".github/workflows/trigger1-v2-local-fastpath-selfhosted.yml"
+    ],
+    "behavior": [
+      "require canonical rid_ or ts_ trigger key and existing clay-go-experiment-claim/v1 before intervention",
+      "reject existing claim result before intervention",
+      "reject direct duplicate claims",
+      "reject historical timestamp/timezone full-hash and shortened-hash semantic duplicates when claimed_at resolves to the same canonical instant",
+      "reject shortened RID digest legacy identities",
+      "require clean executed source and claim-main ancestry",
+      "bind lease identity into the sanitized runtime receipt",
+      "create an append-only claim result sidecar after execution/blocking",
+      "align no-candidate fallback with CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4"
+    ]
+  },
+  "evidence": {
+    "original_pr1656_focused_unit_suite_reproduced": "7/7 PASS",
+    "successor_semantic_duplicate_focused_mechanism_suite": "PASS",
+    "github_pr_ci_semantic_credit": 0,
+    "model_execution_observed": false,
+    "qwen_intervention_executed": false,
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "together_calls": 0
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: retained Trigger1 execution lane now has a successor-current atomic coordination gate instead of an unleased owner issue path on the branch",
+    "track_b_hcu_typed_entry": "ADVANCED: source-head/tree, claim digest, claimant, experiment and canonical-main ancestry are bound into the HCU model-execution admission envelope without creating a second truth/effect authority",
+    "track_c_global_jspace_gwt_free_only": "ADVANCED: the provider-independent midlayer Qwen discriminator is made lease-gated and v4-promotion-schema consistent while no model/J-Space credit is minted without runtime evidence"
+  },
+  "credit_boundary": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Validate the exact successor branch tests and workflow diff, fuse it current/nonduplicate into main, close superseded PR 1656, then on a future go with a valid canonical atomic claim execute the fused nonterminal Qwen3-0.6B discriminator on an authorized zero-cost Ubuntu surface and require a repository-bound claim result plus runtime receipt before any bounded runtime promotion."
+}

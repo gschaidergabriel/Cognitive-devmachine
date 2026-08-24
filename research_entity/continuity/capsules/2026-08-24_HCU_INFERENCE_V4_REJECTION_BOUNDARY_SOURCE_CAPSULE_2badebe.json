@@ -1,0 +1,104 @@
+{
+  "schema": "ENTITYOS_HCU_EXACT_SOURCE_TEST_CAPSULE/v1",
+  "date": "2026-08-24",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch_preparation": "8.66",
+  "mode": "FREE_ONLY",
+  "scope": "SOURCE_IDENTITY_AND_FUTURE_EXECUTION_PREPARATION_ONLY",
+  "runtime_credit": 0,
+  "whole_product_pass": false,
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "retained_pr": 1263,
+    "donor_commit": "2badebe78db868c56ef39f0a32d198282cffcd88",
+    "test_origin_commit": "0b205544fa262afeb714a697f29d3c891551c424",
+    "working_directory": "the artefact/MicroEntity/hcu",
+    "fixed_command": "python3 -m unittest -v test_inference_v4_rejection_boundaries_v1.py",
+    "expected_top_level_test_methods": 10
+  },
+  "exact_transitive_python_source_closure": [
+    {
+      "path": "the artefact/MicroEntity/hcu/test_inference_v4_rejection_boundaries_v1.py",
+      "git_blob_sha1": "73cc8eedadc4a79b77b3d0710cf9d547b3179b0d"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+      "git_blob_sha1": "55f461a56ef08537238eeff91fe379da2adb20a1"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py",
+      "git_blob_sha1": "6e45ea1104be36cfe4db94c084f6fe3082406ada"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/inference_receipt_v1.py",
+      "git_blob_sha1": "24817c87d9098878d4dd73d9a81258b56fa7bfce"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/model_execution_admission_store_v1.py",
+      "git_blob_sha1": "0d1b1aa1f4c71f167b94374bc359d8dd2c07eed7"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/model_execution_receipt_v1.py",
+      "git_blob_sha1": "d80000ebd3092cb374d3e388edd464af1afcc834"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/test_inference_receipt_v1.py",
+      "git_blob_sha1": "6166f3f9b203a50779d330cfea32124b65fa0c3a"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/test_model_execution_admission_store_v1.py",
+      "git_blob_sha1": "29257876878f7fc4fe5e155db6ef69a5e2dc1b02"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/test_model_execution_receipt_v1.py",
+      "git_blob_sha1": "fb03419f4f52003994b6d6f4148cb84ad754f651"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
+      "git_blob_sha1": "7b317f7c3f53c55fc8beb318b35c315dcc5b0625"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+      "git_blob_sha1": "7dc71dbb3388a5c2df280cdd4080c6ea3f5f6278"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/engine_admission_v1.py",
+      "git_blob_sha1": "5dfe2896af4ede67d22fddbf5f7d8ef94c2e4d9b"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/engine_load_lease_v1.py",
+      "git_blob_sha1": "8fc3d0291b23267015956c1201e1eddfbd46db74"
+    }
+  ],
+  "closure_basis": "Static import closure observed from the exact donor files above. Standard-library imports are excluded. No claim is made that unrelated optional HCU modules are part of this fixed test command.",
+  "required_runtime_receipt_fields": [
+    "donor commit and tree identity",
+    "clean/dirty working-tree state",
+    "all capsule path-to-git-blob identities reverified before execution",
+    "Ubuntu/kernel identity where applicable",
+    "python3 executable and version",
+    "sqlite3 module version plus _sqlite3 import capability",
+    "secret fence",
+    "resource guard",
+    "fixed command",
+    "stdout",
+    "stderr",
+    "exit status",
+    "result log SHA-256",
+    "cleanup status"
+  ],
+  "acceptance": {
+    "pre_execution": "PREPARED_NOT_EXECUTED",
+    "positive_runtime_condition": "Exact source closure revalidated and fixed command exits 0 with all ten top-level unittest methods passing on an owner-authorized zero-cost local normal-user or clay-direct-dev execution surface.",
+    "negative_boundary": "Infrastructure/auth/bridge/quota failure is not product logic failure. Any source/blob mismatch invalidates this capsule snapshot and requires successor regeneration rather than silent projection."
+  },
+  "credits": {
+    "source_capsule_prepared": true,
+    "source_tests_executed_by_this_capsule": false,
+    "model_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_entityos_hcu_runtime": 0
+  }
+}

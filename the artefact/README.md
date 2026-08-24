@@ -75,7 +75,7 @@ The current source provides:
 
 The fused current discriminator is `tools/trigger1_local_qwen06_midlayer_causal_execute.py` launched by `tools/trigger1_local_qwen06_midlayer_causal.sh`. It uses a fixed nonterminal middle decoder layer, derives its steering basis from contrastive **internal activations rather than output-head rows**, preserves substantive downstream transformer computation, selects gain only on calibration data, freezes that gain before disjoint holdout, and requires paired specificity against SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM and PERMUTED_SAME_NORM controls. The launcher additionally performs bounded cleanup of disposable Trigger-1/pip cache material before failing closed on insufficient storage.
 
-A single owner-only issue dispatcher, `.github/workflows/trigger1-v2-local-fastpath-selfhosted.yml`, is the retained Self-Hosted Linux/X64 Trigger-1 execution lane. Duplicate terminal and tied-embedding runtime workflows were retired after fusion. Owner dispatch **#1643** targets exact-current `main` and the fused midlayer discriminator. Until it produces a repository-bound terminal receipt, source/workflow/dispatch existence alone grants no model/J-Space/runtime promotion.
+A single owner-only issue dispatcher, `.github/workflows/trigger1-v2-local-fastpath-selfhosted.yml`, is the retained Self-Hosted Linux/X64 Trigger-1 execution lane. Duplicate terminal and tied-embedding runtime workflows were retired after fusion. Owner dispatch **#1647** targets exact-current `main` and the fused midlayer discriminator. Until it produces a repository-bound terminal receipt, source/workflow/dispatch existence alone grants no model/J-Space/runtime promotion.
 
 Source/regression evidence is not model runtime evidence. A positive midlayer result can become a model-specific internal-intervention promotion candidate only at its exact bound scope; it still does not mint canonical EntityOS/HCU, full J-Space-model or training credit by itself.
 
@@ -105,7 +105,7 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 1. Observe a terminal self-hosted runtime-reconciliation receipt on current authority and exact source identity.
 2. Observe the exact-current Forge -> Distillery successor witness: qualified Forge accept = 1 -> exactly one Distillery packet -> `accepted_dataset_tokens > 0` -> replay delta = 0.
 3. If the Forge witness fails, repair the **measured** isolated-executor/bridge blocker only; do not weaken evidence admission.
-4. Observe owner dispatch #1643 and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
+4. Observe owner dispatch #1647 and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
 5. Require all six matched controls plus disjoint holdout; require activation-derived nonterminal vector construction and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
 6. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
 7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.

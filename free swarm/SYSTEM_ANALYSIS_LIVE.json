@@ -1,13 +1,13 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-24T18:45:50.277413+00:00",
+  "generated_at": "2026-08-24T19:00:55.726990+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
     "distillery": "RUNNING",
     "evidence_forge": "RUNNING",
     "dashboard": "RUNNING",
-    "local_model": "NOT_READY",
+    "local_model": "BUILDING/BOOTSTRAPPING",
     "provider_admission": {
       "admitted_free_providers": [
         "groq",
@@ -45,16 +45,16 @@
     "policy": "FREE_ONLY; CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; CURRENT_CANONICAL_PROVIDER_ADMISSION; NO_PAID_FALLBACK; TOGETHER_FORBIDDEN"
   },
   "conversion": {
-    "successful": 2802,
-    "delta": 364,
+    "successful": 2848,
+    "delta": 366,
     "ready": 144,
-    "questions": 606,
-    "macrocycles": 115,
-    "delta_rate": 0.1299072091363312,
-    "ready_rate": 0.05139186295503212,
-    "question_rate": 0.21627408993576017,
-    "avg_cycle_delta_rate": 0.11574217130163726,
-    "avg_cycle_ready_rate": 0.025567452459644445
+    "questions": 610,
+    "macrocycles": 120,
+    "delta_rate": 0.12851123595505617,
+    "ready_rate": 0.05056179775280899,
+    "question_rate": 0.21418539325842698,
+    "avg_cycle_delta_rate": 0.11187917679033167,
+    "avg_cycle_ready_rate": 0.024502141940492595
   },
   "go_feedback": {
     "receipts": 0,
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-24T18:45:48.381267+00:00",
+    "generated_at": "2026-08-24T19:00:52.459359+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -74,7 +74,7 @@
     "accepted_packets": 0,
     "rejected_candidates": 0,
     "questions": {
-      "CYCLIC": 701,
+      "CYCLIC": 703,
       "OPEN": 21
     },
     "source_metadata_rows": {
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-24T18:45:48.381859+00:00",
+      "generated_at": "2026-08-24T19:00:52.459914+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -105,12 +105,12 @@
           "active_leases": 0,
           "min_interval_s": 1.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 705,
-          "total_success": 700,
+          "total_requests": 708,
+          "total_success": 703,
           "total_429": 5,
           "total_errors": 0,
           "last_status": "200",
-          "last_observed_at": "2026-08-24T18:45:11.539326+00:00"
+          "last_observed_at": "2026-08-24T18:53:04.144990+00:00"
         },
         "exa": {
           "max_inflight": 2,
@@ -129,18 +129,18 @@
           "active_leases": 0,
           "min_interval_s": 1.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 709,
-          "total_success": 638,
+          "total_requests": 712,
+          "total_success": 640,
           "total_429": 0,
-          "total_errors": 71,
+          "total_errors": 72,
           "last_status": "200",
-          "last_observed_at": "2026-08-24T18:45:11.297395+00:00"
+          "last_observed_at": "2026-08-24T18:53:10.127686+00:00"
         },
         "groq": {
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 1091.180736064911,
+          "cooldown_seconds": 187.1026873588562,
           "total_requests": 113,
           "total_success": 75,
           "total_429": 38,
@@ -153,60 +153,60 @@
           "active_leases": 0,
           "min_interval_s": 0.25,
           "cooldown_seconds": 0.0,
-          "total_requests": 705,
-          "total_success": 705,
+          "total_requests": 708,
+          "total_success": 708,
           "total_429": 0,
           "total_errors": 0,
           "last_status": "200",
-          "last_observed_at": "2026-08-24T18:45:10.526960+00:00"
+          "last_observed_at": "2026-08-24T18:53:03.901003+00:00"
         },
         "nvidia": {
           "max_inflight": 256,
-          "active_leases": 2,
+          "active_leases": 1,
           "min_interval_s": 0.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 3521,
-          "total_success": 2468,
-          "total_429": 162,
+          "total_requests": 3575,
+          "total_success": 2514,
+          "total_429": 171,
           "total_errors": 854,
           "last_status": "200",
-          "last_observed_at": "2026-08-24T18:45:38.897018+00:00"
+          "last_observed_at": "2026-08-24T19:00:50.305327+00:00"
         },
         "openalex": {
           "max_inflight": 2,
           "active_leases": 0,
           "min_interval_s": 0.25,
           "cooldown_seconds": 0.0,
-          "total_requests": 705,
+          "total_requests": 708,
           "total_success": 12,
           "total_429": 0,
-          "total_errors": 693,
+          "total_errors": 696,
           "last_status": "400",
-          "last_observed_at": "2026-08-24T18:45:10.871651+00:00"
+          "last_observed_at": "2026-08-24T18:53:04.452853+00:00"
         },
         "openrouter": {
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 139,
+          "total_requests": 140,
           "total_success": 70,
-          "total_429": 68,
+          "total_429": 69,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-24T18:36:50.598248+00:00"
+          "last_observed_at": "2026-08-24T18:51:51.657159+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
           "active_leases": 0,
           "min_interval_s": 1.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 516,
-          "total_success": 21,
-          "total_429": 495,
+          "total_requests": 519,
+          "total_success": 22,
+          "total_429": 497,
           "total_errors": 187,
           "last_status": "429",
-          "last_observed_at": "2026-08-24T18:45:21.018332+00:00"
+          "last_observed_at": "2026-08-24T18:53:04.198596+00:00"
         },
         "tavily": {
           "max_inflight": 2,
@@ -222,39 +222,39 @@
         }
       }
     },
-    "db_bytes": 692224,
+    "db_bytes": 700416,
     "top_questions": [
-      "Can a lightweight tracing wrapper be integrated into the HCU inference pipeline without exceeding free provider runtime credit limits?",
-      "Does the added tracing affect the deterministic behavior of J‑Space/GWT inference, potentially invalidating causal trace analysis?",
-      "What is the minimal set of event identities that must be captured to satisfy the FREE_ONLY constraints while still providing useful instrumentation?",
-      "What is the optimal token bucket parameters for cooldown backpressure?",
-      "How do mixed provider workloads affect HCU's global j-space coherence?",
-      "Can we predict provider cooldown patterns using recent call history?",
-      "exact-source isolation: how to enforce immutable source snapshot across container restarts?",
-      "exact-source isolation: what level of OS‑level isolation (PID, network, mount) is required for PASS?",
-      "exact-source isolation: can a hybrid approach combine read‑only source with dynamic code generation while preserving exact‑source semantics?",
-      "Wie kann die Genauigkeit der Überprüfung der Admission-Boundary verbessert werden?"
+      "How to achieve deterministic nonce generation without compromising cryptographic security in high-throughput registry systems?",
+      "Does provider-level circuit-breaking (zero assignment during cooldown) increase tail latency for logical workers that could have been served by a recovering provider?",
+      "Causally distinct unresolved question: How do multi-tier decay parameters interact with entropy minimization constraints in the J-Space/GWT prototype when preserving counterevidence across modality boundaries?",
+      "What is the minimal probe payload that reliably triggers provider-side free-tier path without incurring billable tokens or side effects?",
+      "causally distinct unresolved question",
+      "What is the actual source layout of the HCU runtime provider router, credential binding, and receipt emission modules? (EXACT_SOURCE_CAPSULE was NOT_SELECTED_FOR_THIS_SHARD)",
+      "What is the optimal mmap chunk size for memory‑mapped model loading across heterogeneous storage back‑ends and hardware configurations?",
+      "Wie kann die Kosten-Übernahme-Rate (CTR) für verschiedene Engine-Anfragen im FREE-ONLY-Modus optimiert werden?",
+      "What is the optimal balance between forgetting granularity and provenance graph resolution?",
+      "Can cryptographic hashes at forgetting boundaries sufficiently capture semantic data transformations?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-24T18:45:49.716167+00:00",
+    "generated_at": "2026-08-24T19:00:54.623067+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
-      "NEW": 220,
+      "NEW": 222,
       "PATCH_REJECTED": 77,
       "VALIDATED_NOT_BETTER": 1
     },
     "discovery_sources": {
-      "crossref": 3490,
+      "crossref": 3505,
       "github": 21,
       "openalex": 20,
       "semantic_scholar": 11
     },
-    "discovery_queries": 703,
-    "discovery_hits": 3542,
+    "discovery_queries": 706,
+    "discovery_hits": 3557,
     "evaluations": 144,
     "accepted_deltas": 1,
     "e2b_jobs": 0,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-24T18:45:49.716765+00:00",
+      "generated_at": "2026-08-24T19:00:54.623543+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -282,12 +282,12 @@
           "active_leases": 0,
           "min_interval_s": 1.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 705,
-          "total_success": 700,
+          "total_requests": 708,
+          "total_success": 703,
           "total_429": 5,
           "total_errors": 0,
           "last_status": "200",
-          "last_observed_at": "2026-08-24T18:45:11.539326+00:00"
+          "last_observed_at": "2026-08-24T18:53:04.144990+00:00"
         },
         "exa": {
           "max_inflight": 2,
@@ -306,18 +306,18 @@
           "active_leases": 0,
           "min_interval_s": 1.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 709,
-          "total_success": 638,
+          "total_requests": 712,
+          "total_success": 640,
           "total_429": 0,
-          "total_errors": 71,
+          "total_errors": 72,
           "last_status": "200",
-          "last_observed_at": "2026-08-24T18:45:11.297395+00:00"
+          "last_observed_at": "2026-08-24T18:53:10.127686+00:00"
         },
         "groq": {
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 1089.8458607196808,
+          "cooldown_seconds": 184.93903732299805,
           "total_requests": 113,
           "total_success": 75,
           "total_429": 38,
@@ -330,60 +330,60 @@
           "active_leases": 0,
           "min_interval_s": 0.25,
           "cooldown_seconds": 0.0,
-          "total_requests": 705,
-          "total_success": 705,
+          "total_requests": 708,
+          "total_success": 708,
           "total_429": 0,
           "total_errors": 0,
           "last_status": "200",
-          "last_observed_at": "2026-08-24T18:45:10.526960+00:00"
+          "last_observed_at": "2026-08-24T18:53:03.901003+00:00"
         },
         "nvidia": {
           "max_inflight": 256,
-          "active_leases": 2,
+          "active_leases": 1,
           "min_interval_s": 0.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 3521,
-          "total_success": 2468,
-          "total_429": 162,
+          "total_requests": 3575,
+          "total_success": 2514,
+          "total_429": 171,
           "total_errors": 854,
           "last_status": "200",
-          "last_observed_at": "2026-08-24T18:45:38.897018+00:00"
+          "last_observed_at": "2026-08-24T19:00:50.305327+00:00"
         },
         "openalex": {
           "max_inflight": 2,
           "active_leases": 0,
           "min_interval_s": 0.25,
           "cooldown_seconds": 0.0,
-          "total_requests": 705,
+          "total_requests": 708,
           "total_success": 12,
           "total_429": 0,
-          "total_errors": 693,
+          "total_errors": 696,
           "last_status": "400",
-          "last_observed_at": "2026-08-24T18:45:10.871651+00:00"
+          "last_observed_at": "2026-08-24T18:53:04.452853+00:00"
         },
         "openrouter": {
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 139,
+          "total_requests": 140,
           "total_success": 70,
-          "total_429": 68,
+          "total_429": 69,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-24T18:36:50.598248+00:00"
+          "last_observed_at": "2026-08-24T18:51:51.657159+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
           "active_leases": 0,
           "min_interval_s": 1.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 516,
-          "total_success": 21,
-          "total_429": 495,
+          "total_requests": 519,
+          "total_success": 22,
+          "total_429": 497,
           "total_errors": 187,
           "last_status": "429",
-          "last_observed_at": "2026-08-24T18:45:21.018332+00:00"
+          "last_observed_at": "2026-08-24T18:53:04.198596+00:00"
         },
         "tavily": {
           "max_inflight": 2,
@@ -403,11 +403,11 @@
   },
   "costs": {
     "price_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output",
-    "free_swarm_sonnet5_equivalent_usd": 74.171478,
+    "free_swarm_sonnet5_equivalent_usd": 75.407528,
     "distillery_sonnet5_equivalent_usd": 0.015470000000000001,
-    "measured_total_sonnet5_equivalent_usd": 74.18694799999999,
+    "measured_total_sonnet5_equivalent_usd": 75.42299799999999,
     "verified_historical_savings_usd": null,
-    "nominal_avoided_if_zero_cost_usd": 74.18694799999999,
-    "repo_output_only_proxy_usd": 121.56593
+    "nominal_avoided_if_zero_cost_usd": 75.42299799999999,
+    "repo_output_only_proxy_usd": 121.57698
   }
 }

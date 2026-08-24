@@ -1,0 +1,172 @@
+{
+  "schema": "CLAY_TRIGGER1_JSPACE_10LANE_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "started_at_utc": "2026-08-24T14:15:24.045928+00:00",
+  "organ": "ChatGPT / GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "trigger": "1",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_batch": "0a10027a16ed03895b96e34ed23375793257c2a1",
+  "canonical_tree_observed_before_batch": "0f4e358e879131b041f5e3fe7d843a97b540169c",
+  "owner_directive": "research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json",
+  "contract": "research_entity/continuity/TRIGGER_ONE_JSPACE_STEERING_CONTRACT.md",
+  "batch_identity": {
+    "identity_algorithm": "same material shape as tools/run_trigger1_jspace_10x.py",
+    "nonce": "113995166a1b459bad945912e8252576",
+    "contract_sha256": "0f16def10198645b76524447a4b765931e45086627081fb27c6bf40c6358a8c0",
+    "batch_id": "trigger1_790d39a9333721121d50faddce6f4f37ab5b10972b6629b103fbe66f9bea4cf4",
+    "important_boundary": "This receipt instantiates the ten research lane identities for this ChatGPT tool-surface attempt, but the repository launcher process itself was not callable from the connected execution surfaces. It must not be represented as a successful tools/run_trigger1_jspace_10x.py provider-runtime launch."
+  },
+  "execution_surface_adjudication": {
+    "official_launcher_entrypoint": "bash tools/trigger1_jspace_research.sh",
+    "official_launcher_invoked": false,
+    "provider_model_network_requests_by_this_organ": 0,
+    "provider_credentials_read_by_this_organ": false,
+    "together_or_paid_execution": false,
+    "container_git_clone_attempt": "FAILED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "github_actions_new_workflow_dispatch_available_to_connected_tool": false,
+    "matching_existing_trigger1_pr_workflow_run_available_for_rerun": false,
+    "vercel_connected_surface_direct_sandbox_shell_available": false,
+    "current_retained_vercel_gate": "SANDBOX_CREATE_BLOCKED_BEFORE_CREATE_BECAUSE_DIRECT_AUTHORITATIVE_REMAINING_INCLUDED_SANDBOX_QUOTA_IS_UNOBSERVED",
+    "classification": "TOOL_SURFACE_AND_FREE_EXECUTION_GATE_BLOCKED_NOT_MODEL_OR_PRODUCT_FAILURE",
+    "runtime_credit_added": 0
+  },
+  "external_primary_source_observations": [
+    {
+      "source": "https://github.com/ggml-org/llama.cpp/blob/master/tools/cli/README.md",
+      "observed": "Current llama.cpp CLI documents --control-vector-scaled and --control-vector-layer-range, providing signed-scale and layer-range intervention controls."
+    },
+    {
+      "source": "https://github.com/ggml-org/llama.cpp/blob/master/tools/cvector-generator/README.md",
+      "observed": "Current llama.cpp includes a cvector-generator and an example that applies a generated control vector to a selected layer range."
+    },
+    {
+      "source": "https://github.com/ggml-org/llama.cpp/blob/master/src/llama-adapter.cpp",
+      "observed": "Current llama.cpp has an activation-level cvec application implementation with model embedding-dimension checks and explicit layer-range state."
+    },
+    {
+      "source": "https://console.groq.com/docs/api-reference",
+      "observed": "Groq currently documents logit_bias as not supported by its models; this hosted surface therefore does not provide even token-logit vector bias through that field, much less hidden-state cvec control."
+    },
+    {
+      "source": "https://openrouter.ai/docs/api/api-reference/chat/send-chat-completion-request",
+      "observed": "OpenRouter documents logit_bias as token-logit bias. This is a token-output distribution control surface, not evidence of model-internal layer activation injection and therefore does not satisfy the Trigger-1 latent/cvec success law by itself."
+    }
+  ],
+  "lanes": [
+    {
+      "lane_index": 0,
+      "experiment_name": "runtime_surface",
+      "experiment_id": "9e34330b27d47c37e116d6d814c36d6903d4df9d72e9751b71e02c449209b68f",
+      "status": "EXECUTION_BLOCKED_SURFACE_IDENTIFIED",
+      "observed": "The shortest genuine intervention path remains an exact-source local llama.cpp/libllama cvec backend. Hosted text completion is insufficient; OpenRouter logit_bias is token-logit control, while Groq documents logit_bias as unsupported. The connected Vercel path cannot currently pass the FREE_ONLY Sandbox-create gate.",
+      "next_discriminator": "On the first admitted zero-cost normal-user local or clay-direct-dev runtime, run exact Qwen3-0.6B bytes with the pinned llama.cpp build and emit executor-owned pre-decode cvec application evidence."
+    },
+    {
+      "lane_index": 1,
+      "experiment_name": "adapter_identity",
+      "experiment_id": "3c19e276d438b009c6344fa5680915db58fbf395fcd5f5de4056010e68dc284e",
+      "status": "SOURCE_BRIDGE_PRESENT_IDENTITY_CLOSURE_INCOMPLETE",
+      "observed": "The retained donor bridge binds J-Space packet, basis, role, checkpoint SHA-256, llama.cpp source commit, model dimensions, layer range, strength and exact F32LE cvec digest. Its LlamaCppCVecBinding does not itself bind exact tokenizer identity or executor binary/build digest, both required by the Trigger-1 success law.",
+      "next_discriminator": "Extend the runtime-side application observation, not merely the caller bridge, to bind tokenizer artifact and exact compiled binary/build identity together with the cvec binding."
+    },
+    {
+      "lane_index": 2,
+      "experiment_name": "layer_localization",
+      "experiment_id": "63c2f518711695b04e96e483e1ad93ebcd5453ebd56059d7ad519a991041644f",
+      "status": "MECHANISM_AVAILABLE_PROTOCOL_ENFORCEMENT_MISSING",
+      "observed": "llama.cpp and the donor cvec bridge both expose an explicit layer range. Trigger-1 source currently describes calibration-only localization in prompts/contracts, but the launcher does not itself enforce or freeze a calibration split and selected range before holdout.",
+      "next_discriminator": "Add a deterministic calibration-selection receipt that freezes il_start/il_end before any holdout invocation and rejects post-holdout mutation."
+    },
+    {
+      "lane_index": 3,
+      "experiment_name": "gain_calibration",
+      "experiment_id": "3a7c3cadb6050eeb75b07b6cf36b159fb1e199f06f3bf45be16e4d9e524ede4f",
+      "status": "MECHANISM_AVAILABLE_PROTOCOL_ENFORCEMENT_MISSING",
+      "observed": "llama.cpp exposes scaled control vectors and the donor bridge hash-binds signed strength. No executable Trigger-1 source was found that freezes gain from calibration only and rejects later holdout-informed tuning.",
+      "next_discriminator": "Use a bounded signed alpha grid on calibration only, persist one immutable selected strength plus criterion, then reject any holdout run whose strength identity differs."
+    },
+    {
+      "lane_index": 4,
+      "experiment_name": "sign_flip_control",
+      "experiment_id": "4cc95008c989c44f23df5d6621cc1bede755c498b40edc16fcdd462559fbf309",
+      "status": "REPRESENTABLE_NOT_EXECUTED",
+      "observed": "JSPACE_VECTOR_CONTROL_ABI/v1 admits SIGN_FLIP and the cvec bridge admits signed strength, so directionality can be represented without a new mechanism. No exact model invocation was available in this tool surface.",
+      "next_discriminator": "Run +VECTOR and SIGN_FLIP at identical checkpoint/tokenizer/build/prompt/seed/layer/gain magnitude and require opposite-direction target effect on holdout."
+    },
+    {
+      "lane_index": 5,
+      "experiment_name": "null_control",
+      "experiment_id": "a4a7bbcc73a0820561b0f9b0fb5ef3ae6bb34e9435726d23daa7436a79009025",
+      "status": "REPRESENTABLE_NOT_EXECUTED",
+      "observed": "JSPACE_VECTOR_CONTROL_ABI/v1 admits NULL_VECTOR and the bridge can produce zero cvec bytes. The exact baseline-vs-zero-cvec drift bound has not been measured at an admitted model runtime.",
+      "next_discriminator": "Compare no-cvec BASELINE with an explicitly applied all-zero cvec under identical invocation identity and fail the steering attribution if drift exceeds the predetermined deterministic/nondeterministic tolerance."
+    },
+    {
+      "lane_index": 6,
+      "experiment_name": "orthogonal_control",
+      "experiment_id": "59e597cadd342df004936d1ce39991b53e482fa280ed55dbe7aa638ab66c9b1f",
+      "status": "CANONICAL_ABI_BLOCKER_FOUND",
+      "observed": "The owner/Trigger-1 contract requires ORTHOGONAL_SAME_NORM, but the current retained JSPACE_VECTOR_CONTROL_ABI/v1 CONTROL_CONDITIONS set does not admit an orthogonal condition. Therefore the required matched control cannot currently receive a valid canonical packet identity under the mandated ABI.",
+      "next_discriminator": "Successor-safely extend the Trigger-1 ABI/control condition language to represent ORTHOGONAL_SAME_NORM, add deterministic same-norm construction plus fail-closed orthogonality/norm tests, and preserve old packet identity semantics."
+    },
+    {
+      "lane_index": 7,
+      "experiment_name": "permuted_control",
+      "experiment_id": "4e7834a5c66616e01c1ca1c0fe30f4d71b28bd7718aa89d63221fde0577e6b69",
+      "status": "SEMANTIC_LABEL_GAP_FOUND",
+      "observed": "The current ABI admits PERMUTED, while the owner success law names PERMUTED_SAME_NORM. A coordinate permutation preserves Euclidean norm mathematically, but the canonical packet currently does not state or independently verify the same-norm control invariant under the owner label.",
+      "next_discriminator": "Bind the exact permutation map/seed and verify norm preservation before encoding; make the owner-required condition identity explicit or document a successor-safe canonical equivalence without weakening the contract."
+    },
+    {
+      "lane_index": 8,
+      "experiment_name": "seed_holdout_reproduction",
+      "experiment_id": "e399b4bcdef54b54152ff9edd115749ef8819f85d826a78283198b51cf3cda9b",
+      "status": "PROMPT_REQUIREMENT_NOT_YET_EXECUTABLE_GATE",
+      "observed": "The Trigger-1 lane prompt requires fixed seeds and a disjoint holdout, but current launcher/lane source does not itself materialize or enforce a frozen calibration/holdout identity. Prompt compliance is not sufficient for a reproducible causal acceptance gate.",
+      "next_discriminator": "Reuse the existing deterministic family-split discipline to create a Trigger-1 experiment-plan artifact that hash-binds calibration families, holdout families, seeds, selected layer range and selected gain before evaluation."
+    },
+    {
+      "lane_index": 9,
+      "experiment_name": "receipt_chain_and_delta_forge",
+      "experiment_id": "f11ed66d68bc271037e8301d6e7ae1c23cb1b27c89ce23aedb51b8d6d50913ab",
+      "status": "PREDECODE_APPLICATION_IDENTITY_EDGE_MISSING",
+      "observed": "The donor separately binds executor input packet bytes and deterministic llama.cpp cvec bytes, but the reviewed causal closure does not yet carry an executor-owned observation proving that the exact cvec binding was actually active on the exact model context immediately before decode and then linked to ModelExecution/InferenceReceipt/J-Space.",
+      "next_discriminator": "Add one executor-owned LLAMA_CPP_CVEC_PREDECODE_APPLICATION_OBSERVATION/v1 binding invocation/context, checkpoint, tokenizer, runtime/build, cvec binding SHA, raw cvec SHA, layer range and signed strength before decode; carry its digest into ModelExecution/InferenceReceipt/J-Space."
+    }
+  ],
+  "cross_lane_adjudication": {
+    "strongest_path": "Global J-Space -> JSPACE_VECTOR_CONTROL_ABI -> model-specific adapter -> exact llama.cpp cvec bytes -> executor-owned pre-decode cvec application observation -> model execution -> InferenceReceipt -> J-Space successor observation",
+    "primary_runtime_blocker": "No connected execution surface can currently perform the admitted zero-cost instrumentable model run: the retained Vercel Sandbox gate is closed before Sandbox.create and this ChatGPT container has no repository/network bridge suitable for authoritative model-runtime evidence.",
+    "primary_source_blocker": "ORTHOGONAL_SAME_NORM is required by owner authority but not representable by the current ABI condition set.",
+    "secondary_source_blockers": [
+      "PERMUTED_SAME_NORM owner label/invariant is not exactly represented by the current PERMUTED ABI condition",
+      "cvec bridge identity lacks tokenizer/exact binary build in the same runtime-owned application observation",
+      "pre-decode actual-application identity is not yet linked into ModelExecution/InferenceReceipt/J-Space",
+      "calibration/holdout split, frozen layer/gain and fixed seed requirements are still primarily prompt/contract requirements rather than a deterministic executable experiment-plan gate"
+    ],
+    "hosted_api_counterroute": "Token-level logit_bias is not equivalent to hidden-state/layer cvec control. It may be a useful separate output-distribution control experiment, but it cannot satisfy the current Trigger-1 direct latent-steering success law.",
+    "recommended_work_order": [
+      "1. Repair canonical representation of ORTHOGONAL_SAME_NORM and exact permuted same-norm control identity on the retained donor lane.",
+      "2. Add executor-owned pre-decode cvec application observation with tokenizer/runtime-build identity and downstream receipt linkage.",
+      "3. Add deterministic experiment-plan freeze for calibration/holdout families, seeds, selected layer range and selected gain.",
+      "4. At the first admitted zero-cost instrumentable runtime, execute BASELINE, +VECTOR, SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM and PERMUTED_SAME_NORM under the frozen plan.",
+      "5. Promote only if holdout directional effect reproduces and native-hook/application receipts prove intervention consumption."
+    ]
+  },
+  "credits_after_batch": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "direct_vector_steering": 0,
+    "whole_product_pass": false
+  },
+  "acceptance": "PARTIAL_EXECUTION_TOOL_SURFACE_BLOCKED_TEN_LANE_RESEARCH_DELTA_CREATED",
+  "next_exact_action": "Patch the retained HCU donor lane so the mandatory orthogonal/permuted same-norm control family has exact canonical identities and add the executor-owned pre-decode cvec application observation; then execute the frozen six-condition family at the first admitted zero-cost instrumentable runtime."
+}

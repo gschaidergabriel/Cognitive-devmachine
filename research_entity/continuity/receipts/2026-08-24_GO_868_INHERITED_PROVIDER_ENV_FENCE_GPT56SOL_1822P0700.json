@@ -1,0 +1,117 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "authority_epoch": "8.68",
+  "trigger": "go",
+  "trigger_observed_local": "2026-08-24T18:22+07:00",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "canonical_main_reentered_before_successor_write": "8f7c6db9e215a31004b399f19aed3289b1af061b",
+  "successor_branch": "gpt56sol/go-868-inherited-secret-fence-r2-20260824-1822",
+  "source_commits": {
+    "supervisor_delta": "9ee02fe4dda9640bda77d69814b21f759714f509",
+    "regression_test": "732b36c63dd355eefd757940784cdb03da78e324"
+  },
+  "observed": {
+    "supervisor_868_classification": "EXECUTED_UNADMITTED_EXTERNAL_PROVIDER_CONTROL_BREACH_WITHOUT_PROVEN_SPEND",
+    "external_llm_provider_execution": "QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS",
+    "typed_provider_state": {
+      "groq": "UNKNOWN_NOT_ADMITTED",
+      "mistral": "UNKNOWN_NOT_ADMITTED",
+      "nvidia": "UNKNOWN_NOT_ADMITTED",
+      "openrouter": "UNKNOWN_NOT_ADMITTED"
+    },
+    "current_main_supervisor_child_processes": [
+      "local_research_model_server",
+      "dashboard",
+      "research_distillery_local_or_entry",
+      "free_evidence_forge",
+      "external_go_swarm_only_if_admitted"
+    ],
+    "pre_delta_gap": "The current supervisor derived provider admission before explicit secret-file loading and provider network, but already-inherited provider credential environment variables were not removed before spawning child processes. Child environment inheritance therefore left a residual secret-exposure path even while provider execution was quarantined.",
+    "bridge_tool_exposed_to_this_organ": false,
+    "bridge_health_checked": false,
+    "bridge_status_classification": "TOOL_NOT_EXPOSED_TO_CURRENT_ORGAN_NOT_PRODUCT_FAILURE"
+  },
+  "hypothesis": "Removing only credential variable names belonging to non-admitted external LLM providers before every child spawn closes inherited-environment exposure without weakening the canonical typed admission authority or expanding blocked secret values.",
+  "counterhypothesis": "Downstream provider gates are sufficient because children cannot execute unadmitted provider requests. Rejected as a complete secret-boundary argument: downstream network denial does not prevent an unrelated child process from inheriting credential material it has no need or authority to possess.",
+  "delta": {
+    "file": "tools/run_24h_entityos_swarm_supervisor.sh",
+    "mechanism": "clear_unadmitted_provider_secret_env",
+    "properties": [
+      "queries canonical free_provider_admission.py by provider",
+      "fails closed on nonzero/malformed/not-admitted provider result",
+      "unsets Groq/Mistral/NVIDIA/OpenRouter credential variables by name",
+      "uses compgen -v only to enumerate suffixed variable names",
+      "does not expand blocked credential values to decide removal",
+      "runs before local-model/dashboard/distillery/forge/swarm child starts",
+      "does not add a second provider authority or secret store"
+    ]
+  },
+  "test_candidate": {
+    "file": "tests/test_go_868_inherited_provider_secret_fence.py",
+    "coverage": [
+      "all four current external LLM providers have negative-admission clearing branches",
+      "fixed and suffixed credential variable families are present",
+      "fence ordering precedes every child-start function in the supervisor loop",
+      "fence source contains no printenv/env-pipe/indirect-expansion/source operation",
+      "bash -n supervisor syntax check"
+    ],
+    "executed_at_exact_branch_identity": false,
+    "runtime_credit": 0
+  },
+  "external_solution_harvest": {
+    "classification": "DESIGN_CORROBORATION_ONLY",
+    "sources": [
+      {
+        "name": "OWASP Secrets Management Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+        "principle": "least privilege and limiting secret visibility; environment variables are broadly process-accessible and can leak"
+      },
+      {
+        "name": "OWASP Authorization Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "principle": "grant only minimum resources and authorizations required"
+      }
+    ],
+    "canonical_authority_override": false
+  },
+  "coordination": {
+    "shared_immutable_high_precision_macrocycle_id_exposed": false,
+    "trigger_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed": false,
+    "parallel_main_changes_detected": true,
+    "stale_first_branch_not_promoted": "gpt56sol/go-868-inherited-secret-fence-20260824-1822",
+    "reentry_action": "Rebuilt only the unique inherited-secret fence on current main after parallel 8.68 README/manifest/provider/J-Space work landed."
+  },
+  "go_tracks": {
+    "track_a": {
+      "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "state": "ADVANCED_SOURCE_CANDIDATE",
+      "delta": "Residual inherited external-LLM credential propagation is fenced before child execution."
+    },
+    "track_b": {
+      "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+      "state": "ADVANCED_TYPED_CAPABILITY_BOUNDARY",
+      "delta": "The existing canonical typed provider-admission decision now controls inherited credential visibility as well as explicit lookup/network boundaries."
+    },
+    "track_c": {
+      "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+      "state": "ADVANCED_IN_SHARED_CURRENT_MAIN_SOURCE_CONTRACT_NO_ORGAN_LOCAL_RUNTIME",
+      "evidence": "research_entity/claycode/HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1.md",
+      "boundary": "Current main defines exact activation-site/intervention/sham/off-target requirements; this organ does not duplicate that source lane and no exposed local/VPS bridge exists here for the next causal execution."
+    }
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Run the current FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 plus this inherited-environment fence regression at exact successor source on an exposed authorized zero-cost local normal-user or clay-direct-dev surface; blocked cases must prove no secret lookup/network and spawned child environments must contain no credential variables for non-admitted external LLM providers. Separately execute the smallest model-specific J-Space clean/corrupted/target/sham/off-target intervention family defined by HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1.md before any J-Space model-runtime promotion."
+}

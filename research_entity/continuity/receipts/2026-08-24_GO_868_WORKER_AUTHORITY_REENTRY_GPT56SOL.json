@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_GO_WORKER_AUTHORITY_REENTRY_RECEIPT/v1",
-  "observed_at": "2026-08-24T11:31:00Z",
+  "observed_at": "2026-08-24T11:34:30Z",
   "trigger": "go",
   "authority_epoch": "8.68",
   "program": "ENTITYOS_HCU",
@@ -9,12 +9,14 @@
   "mode": "FREE_ONLY",
   "persistent_research_entity": "Clay",
   "organ": "ChatGPT GPT-5.6 Sol",
-  "source_base": "eb71bbdaff8b7b520119ea83c92c15320b334f86",
-  "latest_main_observed_after_delta": "0b897c8b87500ffe89f113be1162f784612b29bf",
-  "latest_main_nonoverlap": {
-    "commits_ahead_of_source_base": 10,
-    "changed_files_overlap_with_this_delta": false,
-    "note": "Later main changes were admission receipts/metrics/artefact README and did not modify the four worker-authority delta paths."
+  "source_reentry": {
+    "initial_successor_base": "eb71bbdaff8b7b520119ea83c92c15320b334f86",
+    "exact_rebased_parent": "68bdd27550f69077c8d5a0ae8aa81e49f6c3513b",
+    "exact_rebased_head_before_receipt_refresh": "84ffd8b9348cea7a92e3c05f58dc58b5d20378c9",
+    "rebase_method": "NEW_TREE_FROM_CURRENT_MAIN_PLUS_EXACT_FIVE_DELTA_BLOBS",
+    "pr": 1440,
+    "pr_mergeable_after_rebase": true,
+    "changed_files": 5
   },
   "finding": {
     "classification": "CURRENT_WORKER_AUTHORITY_POINTER_NOT_USED_BY_ACTIVE_SWARM_BASE",
@@ -34,7 +36,6 @@
   },
   "delta": {
     "branch": "gpt56sol/go-868-worker-authority-reentry-current-20260824-1827",
-    "head_before_receipt": "b2421d27ece43a75277730aae5ac96f47c56b43b",
     "files": {
       "tools/entityos_worker_authority.py": {
         "blob_sha": "736d91cf385ff9aba6dc03a38fcd46c06f0a8e38",
@@ -45,6 +46,7 @@
         "purpose": "Fail-closed current-authority entrypoint that installs the resolver before importing the EntityOS/HCU driver."
       },
       "tests/test_entityos_worker_authority.py": {
+        "blob_sha": "2be9d0ca5363f32287c6d6e2f5b880f44648812c",
         "purpose": "Deterministic regressions for versioned-current selection, path/epoch rejection, and Mini Entity prompt removal."
       },
       "tools/run_24h_entityos_swarm_supervisor.sh": {
@@ -59,6 +61,22 @@
       "passed": 3,
       "failed": 0,
       "scope": "MECHANISM_ONLY_NOT_EXACT_REPOSITORY_RUNTIME_CREDIT"
+    },
+    "github_actions_exact_rebased_head": {
+      "head": "84ffd8b9348cea7a92e3c05f58dc58b5d20378c9",
+      "research_entity_verify": {
+        "run_id": 32722485910,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_TEST_EXECUTION"
+      },
+      "research_entity_identity_guard": {
+        "run_id": 32722485753,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_TEST_EXECUTION"
+      },
+      "semantic_test_credit": 0
     },
     "provider_secret_lookup": false,
     "provider_network_call": false,
@@ -86,5 +104,5 @@
     "training": 0,
     "whole_product_pass": false
   },
-  "next_exact_gate": "Execute the exact branch worker-authority regressions plus syntax/import checks on an authorized zero-cost local normal-user or clay-direct-dev surface; then re-enter current main, fuse if nonduplicate, and keep external LLM-provider traffic quarantined until FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 itself has executable exact-source PASS and a provider is positively FREE-admitted."
+  "next_exact_gate": "Execute the exact current PR-head worker-authority regressions plus syntax/import checks on an authorized zero-cost local normal-user or clay-direct-dev surface; then re-enter current main and fuse if nonduplicate. Keep external LLM-provider traffic quarantined until FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 has exact-source executable PASS and a provider is positively FREE-admitted before secret/network access."
 }

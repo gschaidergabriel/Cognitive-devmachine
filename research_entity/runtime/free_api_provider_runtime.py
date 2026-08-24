@@ -29,6 +29,7 @@ PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_REQUEST_BYTES = 2_000_000
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_OUTPUT_TOKENS = 4_096
+MAX_BEARER_TOKEN_CHARACTERS = 8_192
 MAX_ATTEMPT_NONCE_CHARACTERS = 128
 # The smallest valid message under the current default JSON representation is
 # {"role": "user", "content": "x"}, which occupies 32 bytes even before its
@@ -150,7 +151,7 @@ def _configured_key_name(
 
 def _is_valid_bearer_token(value) -> bool:
     """Validate RFC 6750 b64token syntax before header construction."""
-    if not isinstance(value, str):
+    if type(value) is not str or len(value) > MAX_BEARER_TOKEN_CHARACTERS:
         return False
     token = value.rstrip("=")
     return bool(token) and all(

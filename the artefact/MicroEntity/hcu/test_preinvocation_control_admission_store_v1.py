@@ -22,6 +22,14 @@ from jspace_inference_binding_v1 import (
     validate_binding as validate_jspace_binding,
 )
 from jspace_training_trace_v1 import TRACE_SCHEMA, build_training_trace
+from model_execution_receipt_v1 import (
+    ACTUAL_MODEL_EXECUTOR_EVIDENCE_SOURCE,
+    OBSERVATION_SCHEMA,
+    ModelExecutionObservation,
+    model_execution_invocation_binding_key,
+    model_execution_observation_record,
+    model_execution_observation_sha256,
+)
 from model_input_control_binding_v1 import bind_direct_unique_packet_input
 from jspace_vector_control_v1 import packet_bytes
 from preinvocation_control_admission_store_v1 import (
@@ -48,6 +56,26 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
         self.db.execute("PRAGMA foreign_keys=ON")
         self.db.execute("CREATE TABLE entity_state(id INTEGER PRIMARY KEY, generation INTEGER NOT NULL)")
         self.db.execute("INSERT INTO entity_state(id,generation) VALUES(1,?)", (GENERATION,))
+        self.db.execute(
+            """CREATE TABLE hcu_model_execution_observations(
+              observation_sha256 TEXT PRIMARY KEY,
+              observation_jcs BLOB NOT NULL,
+              entity_generation INTEGER NOT NULL,
+              executor_id TEXT NOT NULL,
+              invocation_id TEXT NOT NULL
+            )"""
+        )
+        self.db.execute(
+            """CREATE TABLE hcu_model_execution_invocations(
+              invocation_binding_key TEXT PRIMARY KEY,
+              executor_id TEXT NOT NULL,
+              invocation_id TEXT NOT NULL,
+              entity_generation INTEGER NOT NULL,
+              observation_sha256 TEXT NOT NULL,
+              FOREIGN KEY(observation_sha256)
+                REFERENCES hcu_model_execution_observations(observation_sha256)
+            )"""
+        )
         self.db.commit()
 
     def tearDown(self):
@@ -83,7 +111,77 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
         )
         return proto, trace
 
-    def predecessor_binding(self, trace, *, invocation_id="invocation:episode-1:step-0"):
+    def _rehash_binding(self, binding, **changes):
+        updated = replace(binding, **changes)
+        material = asdict(updated)
+        material.pop("binding_sha256", None)
+        updated = replace(
+            updated,
+            binding_sha256=hashlib.sha256(canonicalize(material)).hexdigest(),
+        )
+        validate_jspace_binding(updated)
+        return updated
+
+    def _canonical_predecessor_observation(self, binding):
+        return ModelExecutionObservation(
+            schema=OBSERVATION_SCHEMA,
+            evidence_source=ACTUAL_MODEL_EXECUTOR_EVIDENCE_SOURCE,
+            entity_generation=binding.generation,
+            executor_id=binding.model_execution_executor_id,
+            invocation_id=binding.model_execution_invocation_id,
+            engine_load_consumption_receipt_sha256=binding.engine_load_consumption_receipt_sha256,
+            grid_plan_sha256=binding.grid_plan_sha256,
+            output_producing_cell_id=binding.output_producing_cell_id,
+            role=binding.model_execution_role,
+            input_sha256=binding.input_sha256,
+            input_size=binding.input_size,
+            output_ref=binding.output_ref,
+            output_sha256=binding.output_sha256,
+            output_size=binding.output_size,
+        )
+
+    def _admit_canonical_predecessor(self, binding):
+        observation = self._canonical_predecessor_observation(binding)
+        observation_sha256 = model_execution_observation_sha256(observation)
+        binding = self._rehash_binding(
+            binding,
+            model_execution_observation_sha256=observation_sha256,
+        )
+        observation_jcs = canonicalize(model_execution_observation_record(observation))
+        self.db.execute(
+            "INSERT OR IGNORE INTO hcu_model_execution_observations "
+            "(observation_sha256,observation_jcs,entity_generation,executor_id,invocation_id) "
+            "VALUES(?,?,?,?,?)",
+            (
+                observation_sha256,
+                observation_jcs,
+                observation.entity_generation,
+                observation.executor_id,
+                observation.invocation_id,
+            ),
+        )
+        self.db.execute(
+            "INSERT OR IGNORE INTO hcu_model_execution_invocations "
+            "(invocation_binding_key,executor_id,invocation_id,entity_generation,observation_sha256) "
+            "VALUES(?,?,?,?,?)",
+            (
+                model_execution_invocation_binding_key(observation),
+                observation.executor_id,
+                observation.invocation_id,
+                observation.entity_generation,
+                observation_sha256,
+            ),
+        )
+        self.db.commit()
+        return binding
+
+    def predecessor_binding(
+        self,
+        trace,
+        *,
+        invocation_id="invocation:episode-1:step-0",
+        admit_canonical_parent=True,
+    ):
         material = {
             "schema": JSPACE_BINDING_SCHEMA,
             "canonicalization_schema": CANONICALIZATION_SCHEMA,
@@ -125,6 +223,13 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
         binding_sha = hashlib.sha256(canonicalize(material)).hexdigest()
         binding = JSpaceInferenceBinding(**material, binding_sha256=binding_sha)
         validate_jspace_binding(binding)
+        observation = self._canonical_predecessor_observation(binding)
+        binding = self._rehash_binding(
+            binding,
+            model_execution_observation_sha256=model_execution_observation_sha256(observation),
+        )
+        if admit_canonical_parent:
+            binding = self._admit_canonical_predecessor(binding)
         return binding
 
     def controlled_plan(self):
@@ -227,6 +332,32 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
             1,
         )
 
+    def test_self_consistent_predecessor_without_canonical_execution_fails_zero_write(self):
+        proto, trace = self.predecessor_trace()
+        predecessor_binding = self.predecessor_binding(trace, admit_canonical_parent=False)
+        plan = self.controlled_plan()
+        input_binding, consumed = self.controlled_input(proto, plan)
+        with self.assertRaisesRegex(
+            PreInvocationControlAdmissionError,
+            "PREDECESSOR_CANONICAL_EXECUTION_REJECTED:"
+            "PREDECESSOR_MODEL_EXECUTION_OBSERVATION_NOT_UNIQUELY_ADMITTED",
+        ):
+            prepare_preinvocation_control(
+                self.db,
+                trace,
+                predecessor_binding,
+                input_binding,
+                consumed,
+                plan,
+                current_generation=GENERATION,
+            )
+        self.assertIsNone(
+            self.db.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' "
+                "AND name='hcu_preinvocation_control_preparations'"
+            ).fetchone()
+        )
+
     def test_same_invocation_posthoc_control_is_rejected(self):
         proto, trace = self.predecessor_trace()
         plan = self.controlled_plan()
@@ -252,17 +383,14 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
     def test_existing_controlled_model_execution_admission_blocks_posthoc_preparation(self):
         _, trace, predecessor_binding, plan, input_binding, consumed = self.sources()
         self.db.execute(
-            """CREATE TABLE hcu_model_execution_invocations(
-              invocation_binding_key TEXT PRIMARY KEY,
-              executor_id TEXT NOT NULL,
-              invocation_id TEXT NOT NULL,
-              entity_generation INTEGER NOT NULL,
-              observation_sha256 TEXT NOT NULL
-            )"""
-        )
-        self.db.execute(
             "INSERT INTO hcu_model_execution_invocations VALUES(?,?,?,?,?)",
-            (h(50), input_binding.executor_id, input_binding.invocation_id, GENERATION, h(51)),
+            (
+                h(50),
+                input_binding.executor_id,
+                input_binding.invocation_id,
+                GENERATION,
+                predecessor_binding.model_execution_observation_sha256,
+            ),
         )
         self.db.commit()
         with self.assertRaisesRegex(

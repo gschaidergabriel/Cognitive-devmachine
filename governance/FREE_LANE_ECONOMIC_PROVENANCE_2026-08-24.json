@@ -20,7 +20,7 @@
     },
     "nvidia": {
       "allowed_endpoint_host": "integrate.api.nvidia.com",
-      "allowed_credential_fingerprints": ["e498d9744e"],
+      "admitted_credential_fingerprints": ["e498d9744e"],
       "evidence_kind": "EXACT_DEVELOPER_API_CREDENTIAL_PLUS_FREE_HOSTED_NIM_ENDPOINT",
       "sources": [
         "https://developer.nvidia.com/nim",
@@ -28,6 +28,7 @@
         "https://docs.api.nvidia.com/nim/re/docs/api-quickstart",
         "https://build.nvidia.com/explore"
       ],
+      "source": "https://docs.api.nvidia.com/nim/re/docs/api-quickstart",
       "provider_statement": "NVIDIA states that Developer Program members get free access to NVIDIA-hosted NIM API endpoints for prototyping; the API Catalog quickstart creates the Developer API key through that Developer Program access flow; build.nvidia.com labels these as free serverless APIs for development.",
       "credential_binding_observation": "The exact credential fingerprint listed here was materialized by the sandbox credential inventory and authenticated successfully against integrate.api.nvidia.com hosted NIM routes. No other NVIDIA credential fingerprint is admitted by this record.",
       "credential_plan_needed": true,

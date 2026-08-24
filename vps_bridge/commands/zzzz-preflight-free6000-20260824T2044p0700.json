@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"zzzz-preflight-free6000-20260824T2044p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -e; echo HEAD; git rev-parse HEAD; echo SUPERVISOR; cat /artifacts/clay-entityos-swarm/SUPERVISOR_6000.json; echo CREDENTIALS; cat /artifacts/clay-entityos-swarm/CREDENTIAL_POOL.json; echo DISK; df -h /workspace /cache /artifacts; echo MEMORY; free -h; echo NETWORK; curl -fsSI --max-time 10 https://api.github.com | head -n 1"
+}

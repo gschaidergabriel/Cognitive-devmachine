@@ -1,0 +1,58 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "observed_canonical_main_at_reentry": "4a35a94ced6cea74533cb2ab57c8c461ff70bd70",
+  "newest_admitted_supervisor": "8.72",
+  "supervisor_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
+  "mode": "FREE_ONLY",
+  "coordination": {
+    "upstream_immutable_macrocycle_id_available": false,
+    "user_message_timestamp_precision": "minute",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires a shared immutable request/turn id or at least whole-second immutable user-message timestamp; only minute precision is available to this organ.",
+    "unusual_experiments_executed": 0
+  },
+  "hypothesis": "The current local Qwen3-0.6B fastpath has a material evidence-binding gap because the promotion path does not prove clean worktree state, exact launcher/executor/Python identity, Torch/Transformers identity, pinned model/checkpoint/tokenizer and loopback endpoint in one recomputable runtime binding.",
+  "counterhypothesis": "The existing local_runtime_execution_receipt_sha256 plus runtime_build_sha256 may already be sufficient because the underlying result separately records most component identities.",
+  "discriminator": "Add an ordinary deterministic fail-closed wrapper that snapshots clean source identity before and after the existing executor, recomputes the existing local runtime receipt from raw result rows, cross-binds runtime/model/endpoint identities, and emits one bounded receipt without executing the scientific intervention in this macrocycle.",
+  "writes": [
+    {
+      "path": "tools/trigger1_local_qwen06_bound_execute.py",
+      "commit": "e3b365bb0d8d64a1c84aeac1dab367787b6db779",
+      "purpose": "clean-worktree exact-source launcher plus recomputable one-receipt runtime binder"
+    },
+    {
+      "path": "tests/test_trigger1_local_qwen06_bound_execute.py",
+      "commit": "3044ec184c8c782d755854ce6025bd6c925a1340",
+      "purpose": "positive binding and fail-closed negative regressions"
+    }
+  ],
+  "tests": {
+    "surface": "ephemeral local deterministic Python/unit-test surface",
+    "command": "python -m unittest -v tests/test_trigger1_local_qwen06_bound_execute.py",
+    "result": "7/7 PASS",
+    "scope": "SOURCE_AND_DETERMINISTIC_BINDING_REGRESSION_ONLY",
+    "qwen_model_loaded": false,
+    "scientific_vector_intervention_executed": false,
+    "runtime_acceptance_credit": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact-source local Qwen executor can now be launched through a clean-worktree before/after attestation wrapper and sealed into one recomputable binding receipt.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: reusable HCU/J-Space evidence primitive cross-binds source/runtime/model/transport identities and rejects drift/tamper fail-closed.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: next authorized zero-cost Qwen hidden-state intervention can produce a stronger causal promotion candidate while preserving calibration/holdout and zero-credit boundaries. No model experiment ran in this go because the atomic unusual-experiment identity is unavailable."
+  },
+  "credit_boundary": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On a macrocycle with a valid canonical atomic unusual-experiment lease, run tools/trigger1_local_qwen06_bound_execute.py from exact current clean source on an authorized zero-cost Ubuntu surface with output outside the repo; require BOUND_PROMOTION_CANDIDATE plus base promotion-gate success before any bounded J-Space runtime-credit review.",
+  "evidence_boundary": "This receipt records source engineering and deterministic unit evidence only. It does not claim the Qwen model was loaded, that a hidden-state intervention occurred, or that EntityOS/HCU/J-Space/training passed."
+}

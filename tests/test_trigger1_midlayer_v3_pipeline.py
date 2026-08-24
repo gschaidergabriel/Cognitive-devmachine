@@ -67,6 +67,16 @@ def write_intermediate(out: Path, *, status: str) -> None:
 
 
 class Trigger1MidlayerV3PipelineTests(unittest.TestCase):
+    def test_compat_launcher_routes_v3_pipeline_not_legacy_executor(self):
+        launcher = (ROOT / "tools/trigger1_local_qwen06_midlayer_causal.sh").read_text(encoding="utf-8")
+        self.assertIn("trigger1_midlayer_v3_pipeline.py", launcher)
+        self.assertNotIn("trigger1_local_qwen06_midlayer_causal_execute.py", launcher)
+        paths = p.pipeline_paths(ROOT)
+        self.assertEqual("trigger1_local_qwen06_intermediate.sh", paths["launcher"].name)
+        self.assertEqual("trigger1_intermediate_promotion_bridge.py", paths["bridge"].name)
+        self.assertEqual("trigger1_jspace_promotion_gate.py", paths["gate"].name)
+        self.assertEqual("trigger1_local_qwen06_midlayer_causal.sh", paths["workflow_launcher"].name)
+
     def test_positive_path_requires_intermediate_then_bridge_then_gate(self):
         with tempfile.TemporaryDirectory() as td:
             out = Path(td)

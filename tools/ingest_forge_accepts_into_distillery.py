@@ -19,7 +19,13 @@ import os
 from pathlib import Path
 import re
 import sqlite3
+import sys
 from typing import Any
+
+TOOLS = Path(__file__).resolve().parent
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+from forge_evidence_credit_871 import evidence_reason as evidence_credit_reason  # noqa: E402
 
 ARTIFACT_ROOT = Path(os.getenv("CLAY_SWARM_ARTIFACT_ROOT", "/artifacts/clay-entityos-swarm"))
 DEFAULT_FORGE_EVAL = Path(os.getenv("CLAY_FORGE_EVAL_PATH", str(ARTIFACT_ROOT / "forge/architecture_delta_evaluations.jsonl")))
@@ -104,6 +110,15 @@ def admission_reason(row: Any) -> tuple[bool, str]:
         return False, "NO_POSITIVE_IMPROVEMENT"
     if not _int_at_least(row, "tests_passed", 1):
         return False, "NO_PASSING_TESTS"
+
+    # Supervisor 8.71 now distinguishes historical/nominal ACCEPTED rows from
+    # evidence-qualified acceptance. Distillery must never be a weaker promotion
+    # boundary than the current Forge evidence-credit audit. Preserve the detailed
+    # bridge diagnostics above, then require the centralized current qualification
+    # immediately before packet admission.
+    qualified, reason = evidence_credit_reason(row)
+    if not qualified:
+        return False, "EVIDENCE_" + reason
     return True, "ACCEPTED_EXACT_EXECUTION_EVIDENCE"
 
 

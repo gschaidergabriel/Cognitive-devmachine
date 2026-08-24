@@ -1,0 +1,74 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.72",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed_for_final_rebase": "e8b416bce376dbd988af3a73d6e6fd07b7b1ef9a",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_execution_controller": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_id_available_to_this_organ": false,
+    "new_unusual_experiments_run": 0,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "ordinary_work": "SOURCE_REVIEW_PROVENANCE_REPAIR_REGRESSION_FUSION",
+    "superseded_conflicting_pr": 1703
+  },
+  "observed_problem": {
+    "workflow": ".github/workflows/trigger1-v2-local-fastpath-selfhosted.yml",
+    "current_launcher_pre_post_git_source_identity": true,
+    "workflow_receipt_pre_fix_head_binding": "GITHUB_SHA_EVENT_CONTEXT",
+    "counterexample": "issue-event SHA can differ from the actual moving-main checkout executed by the self-hosted runner",
+    "existing_issue": 1603,
+    "runtime_result_observed_by_this_organ": false
+  },
+  "fusion": {
+    "reused_canonical_primitive": "tools/git_source_identity_v1.py",
+    "primitive_schema": "CLAY_GIT_SOURCE_IDENTITY/v1",
+    "current_source_attestation_delegates_to_same_primitive": true,
+    "branch": "gpt56sol/go-872-trigger1-git-source-identity-v4-20260824",
+    "reason": "Main advanced repeatedly during this macrocycle. The final branch was cut from the newest observed main after confirming the workflow gap remained, preserving concurrent stronger-intermediate/attestation work rather than merging a stale island."
+  },
+  "bounded_delta": {
+    "integration_test_commit": "3d898bf8fd7ca08038721c0d45b70b413971fe42",
+    "workflow_commit": "e9af56e428e39ff423973f12393e4d1dc072aea3",
+    "readme_commit": "80115b848ad19b027b70c7079b5a20b1e955ed72",
+    "changes": [
+      "pre-intervention source binding now uses CLAY_GIT_SOURCE_IDENTITY/v1 with require-clean",
+      "actual checkout HEAD/tree plus source_identity_sha256 and byte-sensitive dirty_state_sha256 are exported from one reusable manifest",
+      "sanitized runtime receipt head_sha denotes executed checkout HEAD instead of issue-event GITHUB_SHA",
+      "dispatch_event_sha is preserved separately as event provenance",
+      "promotion-capable result without source identity fails closed",
+      "source result HEAD/tree mismatch against executed checkout fails closed",
+      "canonical unusual-experiment result carries the same source and dirty-state digests",
+      "focused workflow regression locks event/executed source separation",
+      "the artefact/README.md records the final fused evidence boundary"
+    ]
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the retained executable evidence lane can identify the source actually executed rather than an issue-event context SHA.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_AT_EVIDENCE_BOUNDARY: reusable HCU/model source provenance is fused with the current CLAY_GIT_SOURCE_IDENTITY/v1 primitive; no duplicate Typed Entry or truth authority was created.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: future lease-admitted strongest-intermediate Qwen evidence fails closed on event/checkout source drift before J-Space promotion. No runtime/model/training credit is minted by this source delta."
+  },
+  "verification": {
+    "source_inspection": "COMPLETED",
+    "focused_regression_added": "tests/test_trigger1_workflow_git_source_identity_v1.py",
+    "tests_executed_by_this_organ": false,
+    "reason": "No repository code-execution surface was invoked by this organ; source/test presence is not represented as executable PASS."
+  },
+  "credits_added": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Merge the narrow current-head workflow integration if conflict-free; then only after a canonical create-only atomic claim exists for a reproducible macrocycle allow one successor Trigger1 dispatch and require its terminal receipt to carry executed checkout source identity and the complete strongest-intermediate scientific controls."
+}

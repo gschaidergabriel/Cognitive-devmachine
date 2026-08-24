@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""Epoch-8.70 economic gate for the global work-stealing Free Swarm.
+"""Epoch-8.71 economic gate for the global work-stealing Free Swarm.
 
-Imports the v2 scheduler, but prevents reservation/network I/O for any concrete
-credential+route lacking provider-side zero-cost/free-entitlement evidence. Every
-executed provider request emits FREE_LANE_EXECUTION_RECEIPT/v1.
+The cache/productivity accelerator is installed before the v2 scheduler fabric is
+imported so its worker prompt and ProviderRuntime are actually captured by the
+6000-worker layer. Concrete provider requests still require provider-side
+zero-cost/free-entitlement evidence and emit FREE_LANE_EXECUTION_RECEIPT/v1.
 
 The v2 scheduler historically performed authenticated provider model-catalog
-network discovery before the per-lane gate ran. Epoch 8.70 does not establish
-catalog-endpoint zero-cost provenance, so this wrapper also replaces that
-pre-route discovery with a network-free environment/static-default resolver.
+network discovery before the per-lane gate ran. Current FREE_ONLY authority does
+not establish catalog-endpoint zero-cost provenance, so this wrapper also replaces
+that pre-route discovery with a network-free environment/static-default resolver.
 """
 from __future__ import annotations
 
@@ -18,8 +19,18 @@ import os
 import threading
 from typing import Any
 
-import run_6000_free_swarm as fabric
-from free_lane_provenance import (
+# Import order is a causal invariant. run_6000_free_swarm captures the base
+# ProviderRuntime and worker_prompt at import time; installing afterward leaves
+# the accelerator dead while appearing configured.
+import run_free_go_swarm as _base
+import run_24h_entityos_swarm as _opt
+from free_swarm_accelerator_v2 import install as _install_accelerator
+
+_install_accelerator(_base, _opt)
+ACCELERATOR_BINDING = "FREE_SWARM_ACCELERATOR_V2_PRE_FABRIC"
+
+import run_6000_free_swarm as fabric  # noqa: E402
+from free_lane_provenance import (  # noqa: E402
     binding_still_current,
     current_lane_binding,
     emit_execution_receipt,
@@ -41,7 +52,7 @@ def route_safe_discover_and_export(timeout: float) -> dict[str, dict]:
 
     Provider-level admission authorizes only the owner's free contingent; it is
     not economic proof for an arbitrary authenticated catalog request. Current
-    epoch-8.70 economic provenance binds concrete inference routes, not catalog
+    FREE_ONLY economic provenance binds concrete inference routes, not catalog
     endpoints. Therefore the active 6000-worker path may use an explicit local
     model override or the controller's static defaults, while final credential +
     route admission remains the responsibility of ``current_lane_binding``.

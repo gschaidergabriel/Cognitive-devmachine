@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "provider-counts-20260824T1619",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60,
+  "command": "python3 - <<'PY'\nimport os\nproviders={'groq':['GROQ_API_KEY'],'mistral':['MISTRAL_API_KEY'],'nvidia':['NVIDIA_API_KEY','NGC_API_KEY']}\nfor p,bases in providers.items():\n    names=set()\n    for base in bases:\n        if os.getenv(base): names.add(base)\n        for k,v in os.environ.items():\n            if k.startswith(base+'_') and v.strip(): names.add(k)\n    listname=p.upper()+'_API_KEYS'\n    if os.getenv(listname):\n        n=sum(1 for x in os.environ[listname].replace(';',',').replace('\\n',',').split(',') if x.strip())\n    else: n=0\n    print(p,'named_envs',len(names),'list_entries',n)\nPY"
+}

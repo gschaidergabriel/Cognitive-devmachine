@@ -55,7 +55,7 @@ if ! has_runtime "$PYTHON"; then
   python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" <<'PY'
 import json, pathlib, sys
 pathlib.Path(sys.argv[1]).write_text(json.dumps({
-  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_ACTIVATION_API_EXPERIMENT/v1',
+  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_ACTIVATION_API_EXPERIMENT/v2',
   'status':'BLOCKED_LOCAL_FASTPATH',
   'reason':'PYTORCH_TRANSFORMERS_NORMAL_USER_RUNTIME_UNAVAILABLE_AFTER_BOOTSTRAP',
   'zero_provider_billing':True,
@@ -66,6 +66,6 @@ PY
   exit 3
 fi
 
-exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_activation_api_execute.py" \
+exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_activation_api_execute_v2.py" \
   --output-dir "$OUT_DIR" \
   --cache-dir "$HF_HOME"

@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "opt-routing-preflight-20260824T2125p0700",
+  "command_sha256": "c7e3995468f1ff6a26695e39eab5b4edeeff9f86a63e1def9a3f3d3147c8e18c",
+  "started_at": "2026-08-24T14:26:45.332037+00:00",
+  "finished_at": "2026-08-24T14:26:45.667397+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "4703a800e716419b1c6fd23e65e5570e32817a01096a6ce9b2b19716ca05cc97",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "PRECHECK\ncff3d205c138cbe02f4847efe6ad7b02296aa5c0\n M \"free swarm/LIVE_METRICS.json\"\n M \"free swarm/README.md\"\n?? \"free swarm/FABRIC_6000_LIVE.json\"\nRESOURCES\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.5Gi       5.1Gi       1.8Mi       5.3Gi        10Gi\nSwap:             0B          0B          0B\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   37G  157G  19% /workspace\n/dev/sda1       193G   37G  157G  19% /cache\n/dev/sda1       193G   37G  157G  19% /artifacts\nSWARM\n210437 python3 /workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py --logical-workers 6000 --hours 23.850555555555555 --output-dir /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T141549Z\nNETWORK\nHTTP 200\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

@@ -1,0 +1,139 @@
+HEAD=35111436aad7b1fdb35046f630268e7d914e5c8e
+{"admitted_free_providers":[],"authority_epoch":"8.68","ok":true,"providers":{"groq":{"admitted":false,"cost_class":"UNKNOWN","evidence_ref":"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"},"mistral":{"admitted":false,"cost_class":"UNKNOWN","evidence_ref":"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"},"nvidia":{"admitted":false,"cost_class":"UNKNOWN","evidence_ref":"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"},"openrouter":{"admitted":false,"cost_class":"UNKNOWN","evidence_ref":"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"}},"schema":"ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1","steering":"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json"}
+---PROCESSES---
+  13311       37:26  0.1  0.3 python3 /workspace/clay-global-research-entity/tools/run_24h_entityos_swarm.py --hours 24.0 --output-dir /artifacts/clay-entityos-swarm/active-20260824T104408Z
+---DISTILLERY---
+{
+  "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
+  "generated_at": "2026-08-24T10:45:46.426788+00:00",
+  "collected_source_tokens": 11621,
+  "accepted_dataset_tokens": 0,
+  "dataset_yield": 0.0,
+  "compression_factor": null,
+  "collected_chunks": 48,
+  "accepted_packets": 0,
+  "rejected_candidates": 0,
+  "questions": {
+    "CYCLIC": 2,
+    "OPEN": 17
+  },
+  "source_metadata_rows": {
+    "web_search_chunk": 8
+  },
+  "small_models": [
+    "nvidia/nemotron-3-nano-30b-a3b:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "nvidia/nemotron-nano-12b-v2-vl:free",
+    "nvidia/nemotron-nano-9b-v2:free",
+    "google/gemma-4-26b-a4b-it:free",
+    "google/gemma-4-31b-it:free"
+  ],
+  "reviewers": [
+    {
+      "lane": "nvidia_reviewer",
+      "provider": "nvidia",
+      "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+    }
+  ],
+  "model_input_tokens": 460,
+  "model_output_tokens": 1455,
+  "shared_provider_budget": {
+    "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+    "generated_at": "2026-08-24T10:45:46.427195+00:00",
+    "providers": {
+      "arxiv": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 3.1,
+        "cooldown_seconds": 0.0,
+        "total_requests": 4,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:36.625212+00:00"
+      },
+      "exa": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 2,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:46.265750+00:00"
+      },
+      "github": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 4,
+        "total_success": 4,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:41.685718+00:00"
+      },
+      "groq": {
+        "max_inflight": 12,
+        "active_leases": 0,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 6,
+        "total_success": 4,
+        "total_429": 2,
+        "total_errors": 0,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T10:44:59.913236+00:00"
+      },
+      "nvidia": {
+        "max_inflight": 12,
+        "active_leases": 1,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 10,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 7,
+        "last_status": "404",
+        "last_observed_at": "2026-08-24T10:44:54.503068+00:00"
+      },
+      "openrouter": {
+        "max_inflight": 3,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 9.998284339904785,
+        "total_requests": 15,
+        "total_success": 13,
+        "total_429": 2,
+        "total_errors": 0,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T10:45:46.425571+00:00"
+      },
+      "tavily": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 6,
+        "total_success": 6,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:43.721169+00:00"
+      }
+    }
+  },
+  "db_bytes": 90112
+}
+---FORGE---
+---DISK---
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       193G   36G  158G  19% /workspace
+/dev/sda1       193G   36G  158G  19% /cache
+/dev/sda1       193G   36G  158G  19% /artifacts

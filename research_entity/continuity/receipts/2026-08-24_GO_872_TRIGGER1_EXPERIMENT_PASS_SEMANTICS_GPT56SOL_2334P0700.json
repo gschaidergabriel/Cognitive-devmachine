@@ -1,0 +1,86 @@
+{
+  "authority_epoch": "8.72",
+  "canonical_main_reentry_observed_before_write": "6bcb23e1abd19b5313a5b314fc265a2e2d67a960",
+  "compute_architecture": "HCU",
+  "coordination": {
+    "coordination_bug_issue": 1681,
+    "dispatch_note": "Current workflow predicate was concurrently aligned to the internal-layer title; #1640 remains source/coordination-blocked because its body does not supply an admitted canonical trigger_key, so no intervention is authorized by this receipt.",
+    "reason": "No shared immutable request/turn identifier was exposed to this organ and the available user-message timestamp is minute-precision only, so the current GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL forbids deriving a new unusual-experiment lease key.",
+    "retained_execution_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_trigger1_dispatch_issue": 1640,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "counterhypothesis": "Mechanism-level vector intervention success is sufficient to classify the named Trigger-1 experiment PASS because lower-level evidence is still valuable.",
+  "credit_boundary": {
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "provider_runtime": 0,
+    "training": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "whole_product_pass": false
+  },
+  "discriminator": "Make top-level PASS require the current promotion-gate schema plus mechanism runtime evidence, scientific independence, and owner Trigger-1 goal success; preserve the lower-level booleans separately in the result receipt.",
+  "execution": {
+    "bridge_visibility": "NO_EXPOSED_LOCAL_OR_VPS_TERMINAL_BRIDGE_TOOL_IN_THIS_SESSION",
+    "external_llm_provider_calls_by_this_organ": 0,
+    "live_vps_bridge_health_observed_by_this_organ": false,
+    "new_unusual_experiments_by_this_organ": 0,
+    "paid_actions_by_this_organ": 0,
+    "provider_secret_or_key_lookups_by_this_organ": 0,
+    "together_actions_by_this_organ": 0
+  },
+  "go_tracks": {
+    "track_a": {
+      "delta": "The retained executable self-hosted lane can no longer report a mechanism-only result as full Trigger-1 experiment PASS.",
+      "status": "ADVANCED"
+    },
+    "track_b": {
+      "delta": "A reusable typed/fail-closed evidence classifier now preserves mechanism vs scientific-independence vs owner-goal layers instead of collapsing them.",
+      "status": "ADVANCED"
+    },
+    "track_c": {
+      "delta": "Global J-Space/GWT readiness now keeps model-intervention evidence distinct from scientifically independent goal evidence; the next model discriminator should remove A/B/C label-identity leakage and use counterbalanced semantic holdout/off-target controls before owner-goal promotion.",
+      "status": "ADVANCED"
+    }
+  },
+  "material_finding": "The retained Trigger-1 self-hosted workflow classified the canonical unusual-experiment result PASS when only mechanism_runtime_vector_credit_candidate was true. The current promotion gate intentionally distinguishes mechanism runtime evidence from scientific independence and the owner Trigger-1 goal. Therefore mechanism-only success could be recorded as an overbroad top-level experiment PASS even while owner_trigger1_goal_credit_candidate was false.",
+  "mode": "FREE_ONLY",
+  "next_exact_action": "Keep #1640 fail-closed until an already-valid canonical atomic lease supplies its exact trigger_key. Then observe the self-hosted receipt. If mechanism evidence is positive but owner-goal evidence remains false, redesign the activation basis/evaluation with semantically independent counterbalanced label mapping and off-target controls rather than weakening the promotion gate.",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "product": "EntityOS",
+  "program": "ENTITYOS_HCU",
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "scientific_boundary": {
+    "current_midlayer_basis_uses_abc_label_identity": true,
+    "current_promotion_gate_requires_no_evaluation_output_label_use": true,
+    "interpretation": "A future model run may still establish bounded mechanism evidence, but full Trigger-1 goal promotion must remain fail-closed until scientifically independent derivation/evaluation evidence such as counterbalanced semantic label mapping is present."
+  },
+  "timestamp_local": "2026-08-24T23:34+07:00",
+  "trigger": "go",
+  "validation": {
+    "old_mechanism_only_pass_branch_absent": true,
+    "python_compile": "PASS",
+    "runtime_credit_minted": false,
+    "surface": "LOCAL_CONTAINER_STATIC_UNIT_ONLY_NOT_ENTITYOS_RUNTIME_EVIDENCE",
+    "unit_tests": "7/7 PASS",
+    "yaml_parse": "PASS"
+  },
+  "writes": [
+    {
+      "commit": "b5e08a47c7585d4fc2d94249d60a442bd48d0d60",
+      "delta": "Adds a reusable fail-closed PASS/FAIL/BLOCKED classifier. PASS requires current v4 gate plus mechanism, scientific-independence and owner-goal booleans; evidence_summary preserves partial evidence.",
+      "path": "tools/trigger1_experiment_result_classify.py"
+    },
+    {
+      "commit": "bf498f0b72d2e8629db61780b62800b0532266c7",
+      "delta": "Seven regressions cover blocked/missing/nonzero/scientific-negative/mechanism-only/stale-schema/full-goal cases.",
+      "path": "tests/test_trigger1_experiment_result_classify.py"
+    },
+    {
+      "commit": "84d9cb7c16435701c34fb284c1f5d0aed50d3515",
+      "delta": "Runs the new regressions, emits current v4 no-candidate fallback, delegates leased-result classification to the fail-closed helper, and persists mechanism/scientific/owner promotion_summary separately.",
+      "path": ".github/workflows/trigger1-v2-local-fastpath-selfhosted.yml"
+    }
+  ]
+}

@@ -9,8 +9,18 @@ mkdir -p "$STATE_DIR"
 START="$(date +%s)"
 DEADLINE="${CLAY_SWARM_DEADLINE_EPOCH:-$((START + 24*3600))}"
 ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
+SWARM_ADMISSION_DIGEST_FILE="$STATE_DIR/swarm.provider-admission.sha256"
 
 provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
+
+# This is a supervisor-local process-capability fingerprint, not a canonical product
+# identity. `free_provider_admission.py --json` resolves successor-dynamic canonical
+# admission without secret lookup; hashing its sorted compact snapshot lets the
+# supervisor detect partial revocation (A revoked while B remains admitted) as well
+# as authority/evidence drift for an already-running credential-bearing child.
+current_provider_admission_digest(){
+  python3 "$ADMISSION_TOOL" --json 2>/dev/null | sha256sum | awk '{print $1}'
+}
 
 # Child processes inherit the supervisor environment. Remove credentials belonging
 # to any external LLM provider that is not canonically typed FREE-admitted before
@@ -116,41 +126,115 @@ start_forge(){
     nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/forge.pid"; }
 }
 
+write_provider_revocation_receipt(){
+  local reason="$1" previous_digest="$2" current_digest="$3" pids_csv="$4"
+  CLAY_REVOCATION_REASON="$reason" \
+  CLAY_PREVIOUS_ADMISSION_DIGEST="$previous_digest" \
+  CLAY_CURRENT_ADMISSION_DIGEST="$current_digest" \
+  CLAY_REVOKED_SWARM_PIDS="$pids_csv" \
+  python3 - <<'PY' >"$STATE_DIR/FREE_ONLY_PROVIDER_REVOCATION_RECEIPT.json.tmp"
+import datetime,json,os
+pids=[]
+for raw in os.environ.get('CLAY_REVOKED_SWARM_PIDS','').split(','):
+    try:pids.append(int(raw))
+    except ValueError:pass
+print(json.dumps({
+    'schema':'FREE_ONLY_PROVIDER_REVOCATION_RECEIPT/v1',
+    'observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'reason':os.environ.get('CLAY_REVOCATION_REASON','UNKNOWN'),
+    'previous_process_admission_digest':os.environ.get('CLAY_PREVIOUS_ADMISSION_DIGEST',''),
+    'current_process_admission_digest':os.environ.get('CLAY_CURRENT_ADMISSION_DIGEST',''),
+    'terminated_swarm_pids':pids,
+    'credential_values_observed':False,
+    'action':'TERMINATE_STALE_CREDENTIAL_BEARING_SWARM_BEFORE_RESTART',
+    'network_tripwire_scope':'SOURCE_GATE_ONLY_NOT_RUNTIME_MEASURED',
+},sort_keys=True,separators=(',',':')))
+PY
+  mv "$STATE_DIR/FREE_ONLY_PROVIDER_REVOCATION_RECEIPT.json.tmp" "$STATE_DIR/FREE_ONLY_PROVIDER_REVOCATION_RECEIPT.json"
+}
+
+terminate_go_swarm(){
+  local reason="$1" previous_digest="$2" current_digest="$3" pid pids_csv="" any
+  local pids=()
+  while IFS= read -r pid; do [[ -n "$pid" ]] && pids+=("$pid"); done < <(pgrep -f '[r]un_24h_entityos_swarm.py' || true)
+  if (( ${#pids[@]} == 0 )); then
+    rm -f "$SWARM_ADMISSION_DIGEST_FILE"
+    return 0
+  fi
+  for pid in "${pids[@]}"; do
+    [[ -z "$pids_csv" ]] || pids_csv+=","; pids_csv+="$pid"
+    kill -TERM "$pid" 2>/dev/null || true
+  done
+  # Give cooperative async workers a bounded chance to exit, then fail closed.
+  for _ in {1..20}; do
+    any=0
+    for pid in "${pids[@]}"; do kill -0 "$pid" 2>/dev/null && any=1 || true; done
+    (( any )) || break
+    sleep 0.05
+  done
+  for pid in "${pids[@]}"; do kill -KILL "$pid" 2>/dev/null || true; done
+  write_provider_revocation_receipt "$reason" "$previous_digest" "$current_digest" "$pids_csv"
+  rm -f "$SWARM_ADMISSION_DIGEST_FILE"
+}
+
+# Reconcile the exact admission snapshot that existed when the credential-bearing
+# swarm was spawned. Missing provenance is fail-closed: a pre-v9/foreign child is
+# terminated once and may be restarted only from the freshly sanitized environment.
+# A partial revocation therefore cannot be masked by a different provider remaining
+# FREE-admitted and credentialed.
+stop_unadmitted_go_swarm(){
+  local current_digest="" previous_digest=""
+  current_digest="$(current_provider_admission_digest)" || current_digest=""
+  [[ -r "$SWARM_ADMISSION_DIGEST_FILE" ]] && read -r previous_digest <"$SWARM_ADMISSION_DIGEST_FILE" || true
+  if ! has_admitted_provider_key; then
+    terminate_go_swarm "NO_CURRENT_ADMITTED_PROVIDER_CREDENTIAL" "$previous_digest" "$current_digest"
+    return 0
+  fi
+  if [[ -z "$current_digest" ]]; then
+    terminate_go_swarm "CURRENT_PROVIDER_ADMISSION_UNAVAILABLE" "$previous_digest" "$current_digest"
+    return 0
+  fi
+  if pgrep -f '[r]un_24h_entityos_swarm.py' >/dev/null 2>&1 && [[ "$previous_digest" != "$current_digest" ]]; then
+    terminate_go_swarm "PROVIDER_ADMISSION_CHANGED_OR_SPAWN_PROVENANCE_UNKNOWN" "$previous_digest" "$current_digest"
+  fi
+}
+
 start_go_swarm_if_admitted(){
   [[ "${CLAY_FREE_ONLY_ATTESTED:-}" == "1" ]] || return 0
   has_admitted_provider_key || return 0
   pgrep -f '[r]un_24h_entityos_swarm.py' >/dev/null 2>&1 && return 0
-  local now rem hours out
+  local now rem hours out admission_digest post_spawn_digest pid
+  admission_digest="$(current_provider_admission_digest)" || return 0
+  [[ "$admission_digest" =~ ^[0-9a-f]{64}$ ]] || return 0
   now=$(date +%s); rem=$((DEADLINE-now)); (( rem>0 )) || return 0
   hours=$(python3 - <<PY
 print(max(0.01,$rem/3600.0))
 PY
 )
   out="$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
-  nohup python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/swarm.pid"
-}
-
-stop_unadmitted_go_swarm(){
-  # With `set -e -o pipefail`, a bare `pgrep | while` aborts the whole supervisor
-  # when there is correctly nothing to stop. Process substitution plus `|| true`
-  # makes the zero-match case a normal steady state instead of a supervisor crash.
-  if ! has_admitted_provider_key; then
-    while IFS= read -r pid; do
-      [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
-    done < <(pgrep -f '[r]un_24h_entityos_swarm.py' || true)
+  nohup python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm.log" 2>&1 </dev/null & pid=$!
+  printf '%s\n' "$pid" >"$STATE_DIR/swarm.pid"
+  printf '%s\n' "$admission_digest" >"$SWARM_ADMISSION_DIGEST_FILE"
+  # Close the spawn race: if canonical admission moved while the process was being
+  # created, do not leave the new child alive until the next 30s reconciliation.
+  post_spawn_digest="$(current_provider_admission_digest)" || post_spawn_digest=""
+  if [[ "$post_spawn_digest" != "$admission_digest" ]]; then
+    terminate_go_swarm "PROVIDER_ADMISSION_CHANGED_DURING_SPAWN" "$admission_digest" "$post_spawn_digest"
   fi
 }
 
 while (( $(date +%s) < DEADLINE )); do
   clear_unadmitted_provider_secret_env
   typed_admission_compat_flags
+  # Revoke stale inherited capabilities before loading any newly admitted secret
+  # material or starting another child in this reconciliation cycle.
+  stop_unadmitted_go_swarm
   load_admitted_secret_sources
   eval "$(normalize_provider_pool)"
   start_local_model
   start_dashboard
   start_distillery
   start_forge
-  stop_unadmitted_go_swarm
   start_go_swarm_if_admitted
   NOW=$(date +%s); REMAINING=$((DEADLINE-NOW))
   python3 - <<PY >"$STATE_DIR/SUPERVISOR.json.tmp"
@@ -163,9 +247,9 @@ def local_health():
  try:
   with urllib.request.urlopen('http://127.0.0.1:8088/health',timeout=1.2) as r:return 200<=int(r.status)<300
  except Exception:return False
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v9','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME; CREDENTIAL_BEARING_SWARM_RESTARTED_ON_ANY_ADMISSION_SNAPSHOT_DRIFT; LIVE_PER_REQUEST_ADMISSION_RECHECK_REMAINS_REQUIRED; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30
 done
-printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v8","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR.json"
+printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v9","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR.json"

@@ -17,6 +17,19 @@ HEX64 = "a" * 64
 HEAD40 = "b" * 40
 
 
+def independent_metric_evidence() -> dict:
+    return {
+        "schema": gate.METRIC_INDEPENDENCE_SCHEMA,
+        "independent": True,
+        "vector_estimation_family_id": "calibration-hidden-contrast-v1",
+        "evaluation_metric_family_id": "semantic-holdout-behavior-v1",
+        "proof_sha256": HEX64,
+        "uses_evaluation_head_weights": False,
+        "uses_holdout_labels_for_vector_construction": False,
+        "coupling_class": "INDEPENDENT_LATENT_ESTIMATE",
+    }
+
+
 def valid_candidate() -> dict:
     controls = {
         name: {"runtime_receipt_sha256": HEX64}
@@ -53,6 +66,7 @@ def valid_candidate() -> dict:
             "strongest_counterexample_recorded": True,
             "analysis_receipt_sha256": HEX64,
         },
+        "metric_independence": independent_metric_evidence(),
         "transport": {"hosted_prompt_only": False},
         "target": {
             "relation": gate.LEGACY_OWNER_API_TARGET_CLASS,
@@ -88,6 +102,7 @@ class Trigger1PromotionGateTests(unittest.TestCase):
     def test_exact_instrumented_free_external_api_candidate_can_reach_both_candidate_verdicts(self):
         verdict = gate.adjudicate(valid_candidate())
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertTrue(verdict["metric_independence_established"])
         self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertTrue(verdict["owner_trigger1_direct_free_api_model_credit_candidate"])
         self.assertFalse(verdict["canonical_credit_minted"])
@@ -97,6 +112,47 @@ class Trigger1PromotionGateTests(unittest.TestCase):
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
         self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertEqual([], verdict["owner_target_failures"])
+
+    def test_missing_metric_independence_is_actuator_only(self):
+        candidate = valid_local_api_candidate()
+        del candidate["metric_independence"]
+        verdict = gate.adjudicate(candidate)
+        self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertTrue(verdict["actuator_runtime_vector_credit_candidate"])
+        self.assertFalse(verdict["metric_independence_established"])
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn("METRIC_INDEPENDENCE_EVIDENCE_REQUIRED", verdict["owner_target_failures"])
+
+    def test_output_head_metric_coupled_vector_is_actuator_only(self):
+        candidate = valid_local_api_candidate()
+        candidate["runtime_intervention_class"] = "LOCAL_PYTORCH_ACTIVATION_INTERVENTION"
+        candidate["metric_independence"] = {
+            "schema": gate.METRIC_INDEPENDENCE_SCHEMA,
+            "independent": False,
+            "vector_estimation_family_id": "abc-output-head-logit-contrast",
+            "evaluation_metric_family_id": "abc-output-head-logit-contrast",
+            "proof_sha256": HEX64,
+            "uses_evaluation_head_weights": True,
+            "uses_holdout_labels_for_vector_construction": True,
+            "coupling_class": "OUTPUT_HEAD_TARGET_GRADIENT",
+        }
+        verdict = gate.adjudicate(candidate)
+        self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertTrue(verdict["actuator_runtime_vector_credit_candidate"])
+        self.assertFalse(verdict["metric_independence_established"])
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn(
+            "METRIC_COUPLED_ACTUATOR_SENTINEL_ONLY:OUTPUT_HEAD_TARGET_GRADIENT",
+            verdict["owner_target_failures"],
+        )
+        self.assertIn(
+            "VECTOR_CONSTRUCTION_AND_EVALUATION_METRIC_MUST_DIFFER",
+            verdict["owner_target_failures"],
+        )
+        self.assertIn(
+            "EVALUATION_HEAD_WEIGHTS_CANNOT_DEFINE_PROMOTED_VECTOR",
+            verdict["owner_target_failures"],
+        )
 
     def test_hosted_prompt_only_fails_closed(self):
         candidate = valid_candidate()
@@ -169,6 +225,7 @@ class Trigger1PromotionGateTests(unittest.TestCase):
             result = gate.scan_batch(Path(tmp))
         self.assertEqual(result["candidate_files_seen"], 1)
         self.assertTrue(result["mechanism_runtime_vector_credit_candidate"])
+        self.assertTrue(result["metric_independence_established"])
         self.assertTrue(result["owner_trigger1_goal_credit_candidate"])
         self.assertTrue(result["owner_trigger1_direct_free_api_model_credit_candidate"])
 

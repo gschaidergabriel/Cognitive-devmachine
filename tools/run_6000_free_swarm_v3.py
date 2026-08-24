@@ -1,25 +1,43 @@
 #!/usr/bin/env python3
-"""Epoch-8.70 economic gate for the global work-stealing Free Swarm.
+"""Epoch-8.71 economic gate for the global work-stealing Free Swarm.
 
-Imports the v2 scheduler, but prevents reservation/network I/O for any concrete
-credential+route lacking provider-side zero-cost/free-entitlement evidence. Every
-executed provider request emits FREE_LANE_EXECUTION_RECEIPT/v1.
+The cache/productivity accelerator is installed before the v2 scheduler fabric is
+imported so its worker prompt and ProviderRuntime are actually captured by the
+6000-worker layer. Concrete provider requests still require provider-side
+zero-cost/free-entitlement evidence and emit FREE_LANE_EXECUTION_RECEIPT/v1.
 
 The v2 scheduler historically performed authenticated provider model-catalog
-network discovery before the per-lane gate ran. Epoch 8.70 does not establish
-catalog-endpoint zero-cost provenance, so this wrapper also replaces that
-pre-route discovery with a network-free environment/static-default resolver.
+network discovery before the per-lane gate ran. Current FREE_ONLY authority does
+not establish catalog-endpoint zero-cost provenance, so this wrapper also replaces
+that pre-route discovery with a network-free environment/static-default resolver.
+
+Forge-ready workers additionally receive one small exact-source capsule selected
+from their shard. The capsule binds the current file digest and a bounded excerpt;
+model output remains noncanonical and MUST stay design-only when the supplied
+source is insufficient to construct an applicable patch.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 import os
+from pathlib import Path
+import re
 import threading
 from typing import Any
 
-import run_6000_free_swarm as fabric
-from free_lane_provenance import (
+# Import order is a causal invariant. run_6000_free_swarm captures the base
+# ProviderRuntime and worker_prompt at import time; installing afterward leaves
+# the accelerator dead while appearing configured.
+import run_free_go_swarm as _base
+import run_24h_entityos_swarm as _opt
+from free_swarm_accelerator_v2 import install as _install_accelerator
+
+_install_accelerator(_base, _opt)
+ACCELERATOR_BINDING = "FREE_SWARM_ACCELERATOR_V2_PRE_FABRIC"
+
+import run_6000_free_swarm as fabric  # noqa: E402
+from free_lane_provenance import (  # noqa: E402
     binding_still_current,
     current_lane_binding,
     emit_execution_receipt,
@@ -28,12 +46,97 @@ from free_lane_provenance import (
 
 _ORIGINAL_REQUEST = fabric.base.request_chat
 _ORIGINAL_NEXT_PAIR = fabric.FastProviderRuntime.next_key_model
+_ORIGINAL_WORKER_PROMPT = fabric.base.worker_prompt
 _RECEIPT_LOCK = threading.Lock()
 _EVIDENCE_CACHE: dict[tuple[str, str, str, str], dict[str, Any]] = {}
+_ROOT = Path(__file__).resolve().parents[1]
 _SOURCE = {
     "commit": fabric.base.git_text("rev-parse", "HEAD"),
     "tree": fabric.base.git_text("rev-parse", "HEAD^{tree}"),
 }
+
+# One source capsule per worker keeps context bounded while turning the most
+# conversion-critical shards from blind patch synthesis into exact-byte work.
+# Selection is deterministic and does not grant any authority to the source map.
+_SOURCE_RULES: tuple[tuple[tuple[str, ...], str, str], ...] = (
+    (("forge candidate conversion", "patch synthesis", "benchmark non-regression", "test survival over go cycles"),
+     "tools/run_free_evidence_forge.py", "def validate_candidate"),
+    (("distillery yield", "knowledge packet reinjection", "research queue closure", "open-question decomposition"),
+     "tools/run_research_distillery.py", "panel_ok="),
+    (("j-space causal provenance", "j-space intervention controls", "global-workspace routing", "attention/broadcast sparsity", "cognition ablations", "counterfactual state intervention"),
+     "tools/hcu_jspace_local_activation_probe.py", "def validate_atomic_claim"),
+)
+
+
+def _source_capsule_for_prompt(prompt: str, limit: int = 9000) -> str:
+    low = prompt.lower()
+    selected: tuple[str, str] | None = None
+    for needles, rel, anchor in _SOURCE_RULES:
+        if any(needle in low for needle in needles):
+            selected = (rel, anchor)
+            break
+    if selected is None:
+        return (
+            "\n\nEXACT_SOURCE_CAPSULE\n"
+            "status=NOT_SELECTED_FOR_THIS_SHARD\n"
+            "For code changes, ready_for_forge MUST remain false unless exact target bytes are otherwise present in the supplied context.\n"
+        )
+
+    rel, anchor = selected
+    path = (_ROOT / rel).resolve()
+    try:
+        path.relative_to(_ROOT)
+        raw = path.read_bytes()
+        text = raw.decode("utf-8", errors="replace")
+    except (OSError, ValueError):
+        return (
+            "\n\nEXACT_SOURCE_CAPSULE\n"
+            f"status=UNAVAILABLE path={rel}\n"
+            "ready_for_forge MUST remain false for this source target.\n"
+        )
+
+    digest = hashlib.sha256(raw).hexdigest()
+    idx = text.find(anchor)
+    if idx >= 0:
+        start = max(0, idx - limit // 3)
+        end = min(len(text), start + limit)
+        excerpt = text[start:end]
+        excerpt_start = start
+        excerpt_end = end
+    elif len(text) <= limit:
+        excerpt = text
+        excerpt_start = 0
+        excerpt_end = len(text)
+    else:
+        half = max(1, (limit - len("\n...[EXCERPT_GAP]...\n")) // 2)
+        excerpt = text[:half] + "\n...[EXCERPT_GAP]...\n" + text[-half:]
+        excerpt_start = 0
+        excerpt_end = len(text)
+
+    return (
+        "\n\nEXACT_SOURCE_CAPSULE\n"
+        "status=BOUND_EXCERPT_ONLY\n"
+        f"repo_head={_SOURCE['commit']}\n"
+        f"repo_tree={_SOURCE['tree']}\n"
+        f"path={rel}\n"
+        f"full_file_sha256={digest}\n"
+        f"excerpt_char_range={excerpt_start}:{excerpt_end}\n"
+        "Rules:\n"
+        "- This is source evidence, not canonical truth authority.\n"
+        "- ready_for_forge=true only if every modified hunk is grounded in visible exact source context and target_files names only supplied exact-source paths.\n"
+        "- If the needed function/lines are outside this excerpt, emit a design-only candidate with ready_for_forge=false instead of guessing.\n"
+        "- Preserve current FREE_ONLY/effect/state authority; never weaken a fail-closed gate merely to make a test pass.\n"
+        "--- BEGIN EXACT SOURCE EXCERPT ---\n"
+        f"{excerpt}\n"
+        "--- END EXACT SOURCE EXCERPT ---\n"
+    )
+
+
+def source_grounded_worker_prompt(
+    protocol: str, role: str, task: str, state_context: str, serial: int
+) -> str:
+    prompt = _ORIGINAL_WORKER_PROMPT(protocol, role, task, state_context, serial)
+    return prompt + _source_capsule_for_prompt(prompt)
 
 
 def route_safe_discover_and_export(timeout: float) -> dict[str, dict]:
@@ -41,7 +144,7 @@ def route_safe_discover_and_export(timeout: float) -> dict[str, dict]:
 
     Provider-level admission authorizes only the owner's free contingent; it is
     not economic proof for an arbitrary authenticated catalog request. Current
-    epoch-8.70 economic provenance binds concrete inference routes, not catalog
+    FREE_ONLY economic provenance binds concrete inference routes, not catalog
     endpoints. Therefore the active 6000-worker path may use an explicit local
     model override or the controller's static defaults, while final credential +
     route admission remains the responsibility of ``current_lane_binding``.
@@ -218,6 +321,7 @@ def gated_request_chat(
 fabric.opt.discover_and_export = route_safe_discover_and_export
 fabric.FastProviderRuntime.next_key_model = gated_next_key_model
 fabric.base.request_chat = gated_request_chat
+fabric.base.worker_prompt = source_grounded_worker_prompt
 
 run = fabric.run
 parse_args = fabric.parse_args

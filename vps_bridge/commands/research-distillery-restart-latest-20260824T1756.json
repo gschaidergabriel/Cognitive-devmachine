@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"research-distillery-restart-latest-20260824T1756",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "command":"set -e; pkill -f '[r]un_research_distillery_entry.py' 2>/dev/null || true; sleep 2; export CLAY_FREE_ONLY_ATTESTED=1; nohup python3 tools/run_research_distillery_entry.py --hours 24 --sleep-seconds 3 >/artifacts/clay-entityos-swarm/distillery.log 2>&1 </dev/null & echo DISTILLERY_PID=$!; sleep 35; echo '--- process ---'; ps auxww | grep '[r]un_research_distillery_entry.py' | head -5; echo '--- status ---'; cat /artifacts/clay-entityos-swarm/distillery/STATUS.json; echo '--- events tail ---'; tail -20 /artifacts/clay-entityos-swarm/distillery/events.jsonl 2>/dev/null || true; echo '--- shared budget ---'; python3 tools/free_swarm_quota.py",
+  "timeout_seconds":300
+}

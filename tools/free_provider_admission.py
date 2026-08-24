@@ -14,7 +14,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
-BOOTSTRAP_PATH = ROOT / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
+SUPERVISOR_INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
 ALLOWED_PROVIDERS = frozenset({"groq", "mistral", "nvidia"})
 
@@ -33,10 +33,42 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
     return payload
 
 
-def load_provider_admission(path: Path | None = None, *, bootstrap_path: Path | None = None) -> dict[str, Any]:
+def _resolve_current_supervisor(*, inbox_path: Path | None = None, root: Path | None = None) -> tuple[str, str]:
+    """Resolve the successor-dynamic supervisor from the current inbox, not a lagging cache."""
+    repo_root = (root or ROOT).resolve()
+    inbox = _read_json(inbox_path or SUPERVISOR_INBOX_PATH, "SUPERVISOR_INBOX")
+    epoch = str(inbox.get("schema_version") or "").strip()
+    steering_ref = inbox.get("steering")
+    if not epoch:
+        raise ProviderAdmissionError("SUPERVISOR_EPOCH_REQUIRED")
+    if not isinstance(steering_ref, str) or not steering_ref.strip():
+        raise ProviderAdmissionError("SUPERVISOR_STEERING_REF_REQUIRED")
+    rel = Path(steering_ref)
+    if rel.is_absolute() or ".." in rel.parts:
+        raise ProviderAdmissionError("SUPERVISOR_STEERING_REF_INVALID")
+    steering_path = (repo_root / rel).resolve()
+    try:
+        steering_path.relative_to(repo_root)
+    except ValueError as exc:
+        raise ProviderAdmissionError("SUPERVISOR_STEERING_REF_OUTSIDE_REPO") from exc
+    steering = _read_json(steering_path, "SUPERVISOR_STEERING")
+    if str(steering.get("schema_version") or "").strip() != epoch:
+        raise ProviderAdmissionError("SUPERVISOR_INBOX_STEERING_EPOCH_MISMATCH")
+    if steering.get("active_program") != "ENTITYOS_HCU" or steering.get("product") != "EntityOS" or steering.get("integrated_cognition_compute_architecture") != "HCU":
+        raise ProviderAdmissionError("SUPERVISOR_PRODUCT_AUTHORITY_MISMATCH")
+    return epoch, steering_ref
+
+
+def load_provider_admission(
+    path: Path | None = None,
+    *,
+    supervisor_inbox_path: Path | None = None,
+    root: Path | None = None,
+) -> dict[str, Any]:
     """Load canonical admission without touching any provider secret or network surface."""
-    target = path or ADMISSION_PATH
-    bootstrap = _read_json(bootstrap_path or BOOTSTRAP_PATH, "BOOTSTRAP")
+    repo_root = (root or ROOT).resolve()
+    target = path or (repo_root / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json")
+    epoch, _ = _resolve_current_supervisor(inbox_path=supervisor_inbox_path, root=repo_root)
     payload = _read_json(target, "PROVIDER_ADMISSION")
 
     if payload.get("schema") != SCHEMA:
@@ -48,9 +80,8 @@ def load_provider_admission(path: Path | None = None, *, bootstrap_path: Path | 
     if payload.get("source") != "ENTITYOS_HCU_CONTROL_PLANE":
         raise ProviderAdmissionError("PROVIDER_ADMISSION_CONTROL_PLANE_SOURCE_REQUIRED")
 
-    epoch = str(payload.get("authority_epoch") or "")
-    bootstrap_epoch = str(bootstrap.get("schema_version") or "")
-    if not epoch or epoch != bootstrap_epoch:
+    admission_epoch = str(payload.get("authority_epoch") or "").strip()
+    if not admission_epoch or admission_epoch != epoch:
         raise ProviderAdmissionError("PROVIDER_ADMISSION_AUTHORITY_EPOCH_MISMATCH")
 
     providers = payload.get("providers")
@@ -98,6 +129,7 @@ def admitted_provider_names(admission: dict[str, Any] | None = None) -> tuple[st
 
 def admission_snapshot() -> dict[str, Any]:
     try:
+        epoch, steering_ref = _resolve_current_supervisor()
         payload = load_provider_admission()
     except ProviderAdmissionError as exc:
         return {
@@ -109,7 +141,8 @@ def admission_snapshot() -> dict[str, Any]:
     return {
         "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
         "ok": True,
-        "authority_epoch": payload["authority_epoch"],
+        "authority_epoch": epoch,
+        "steering": steering_ref,
         "admitted_free_providers": list(admitted_provider_names(payload)),
         "providers": {
             name: {

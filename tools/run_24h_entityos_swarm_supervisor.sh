@@ -3,11 +3,21 @@ set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
-
 STATE_DIR="/artifacts/clay-entityos-swarm"
 mkdir -p "$STATE_DIR"
 START="$(date +%s)"
 DEADLINE="$((START + 24*3600))"
+ADMISSION_FILE="${CLAY_PROVIDER_ADMISSION_FILE:-$STATE_DIR/provider_admission.json}"
+
+# Supervisor 8.67: typed FREE admission MUST resolve before any provider secret
+# file is sourced, any provider key env is read, or any provider network I/O.
+admit_provider_pool() {
+  local exports
+  if ! exports="$(python3 "$ROOT/tools/provider_admission_v1.py" --file "$ADMISSION_FILE" --emit-shell)"; then
+    return 1
+  fi
+  eval "$exports"
+}
 
 load_secret_file() {
   local f="$1"
@@ -17,7 +27,8 @@ load_secret_file() {
   set -a; source "$f"; set +a
 }
 
-load_all_secret_sources() {
+load_all_secret_sources_after_admission() {
+  [[ "${CLAY_TYPED_PROVIDER_ADMISSION_VERIFIED:-}" == "1" ]] || return 78
   load_secret_file /run/secrets/clay_provider.env
   load_secret_file /artifacts/.clay_provider.env
   load_secret_file /cache/clay_provider.env
@@ -48,15 +59,7 @@ PY
 }
 
 has_provider_key() {
-  [[ -n "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}" ]]
-}
-
-attest_free_only() {
-  has_provider_key || return 0
-  export CLAY_FREE_ONLY_ATTESTED="${CLAY_FREE_ONLY_ATTESTED:-1}"
-  [[ -z "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}" ]] || export CLAY_GROQ_FREE_ATTESTED="${CLAY_GROQ_FREE_ATTESTED:-1}"
-  [[ -z "${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}" ]] || export CLAY_MISTRAL_FREE_ATTESTED="${CLAY_MISTRAL_FREE_ATTESTED:-1}"
-  [[ -z "${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}" ]] || export CLAY_NVIDIA_FREE_ATTESTED="${CLAY_NVIDIA_FREE_ATTESTED:-1}"
+  [[ -n "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}${OPENROUTER_API_KEY:-}" ]]
 }
 
 start_dashboard() {
@@ -81,18 +84,17 @@ start_distillery() {
   fi
 }
 
-load_all_secret_sources
-# shellcheck disable=SC2046
-eval "$(normalize_provider_pool)"
-attest_free_only
-start_dashboard
-start_distillery
-
 while (( $(date +%s) < DEADLINE )); do
-  load_all_secret_sources
+  if ! admit_provider_pool; then
+    printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v5","state":"WAITING_FOR_TYPED_FREE_PROVIDER_ADMISSION","secret_lookup_count":0,"network_attempt_count":0}\n' > "$STATE_DIR/SUPERVISOR.json"
+    sleep 60
+    continue
+  fi
+
+  load_all_secret_sources_after_admission
   # shellcheck disable=SC2046
   eval "$(normalize_provider_pool)"
-  attest_free_only
+  start_dashboard
   start_distillery
 
   NOW="$(date +%s)"
@@ -119,15 +121,15 @@ counts={
  'mistral': nset(*split('MISTRAL_API_KEYS'),os.getenv('MISTRAL_API_KEY')),
  'nvidia': nset(*split('NVIDIA_API_KEYS'),os.getenv('NVIDIA_API_KEY'),os.getenv('NGC_API_KEY'),os.getenv('NVIDIA_NIM_API_KEY')),
 }
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v4','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'free_only_attested':str(os.getenv('CLAY_FREE_ONLY_ATTESTED','')).lower() in ('1','true','yes','on','attested'),'provider_credentials_present':providers,'provider_credential_counts':counts,'dashboard_watch':True,'research_distillery':True},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v5','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'typed_provider_admission_verified':True,'admission_set_id':os.getenv('CLAY_PROVIDER_ADMISSION_SET_ID',''),'provider_credentials_present':providers,'provider_credential_counts':counts,'dashboard_watch':True,'research_distillery':True},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
 
-  if [[ "${CLAY_FREE_ONLY_ATTESTED:-}" =~ ^(1|true|TRUE|yes|YES|on|ON|attested)$ ]] && has_provider_key; then
+  if has_provider_key; then
     exec python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$HOURS" --output-dir "$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
   fi
 
   sleep 60
 done
 
-printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v4","state":"EXPIRED_WITHOUT_USABLE_FREE_ONLY_CREDENTIALS"}\n' > "$STATE_DIR/SUPERVISOR.json"
+printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v5","state":"EXPIRED_WITHOUT_TYPED_FREE_PROVIDER_ADMISSION"}\n' > "$STATE_DIR/SUPERVISOR.json"

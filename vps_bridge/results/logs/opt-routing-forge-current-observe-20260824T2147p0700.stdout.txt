@@ -1,0 +1,184 @@
+EVALS 141
+STATUSES {'patch_rejected': 74, 'needs_implementation': 65, 'accepted': 1, 'validated_not_better': 1}
+SOURCE_SCOPE {'None': 141}
+EXACT_EVALS 0 EXACT_ACCEPTED 0
+LAST needs_implementation None nvidia nvidia/nemotron-3-ultra-550b-a55b None missing/safety-invalid patch, targets, or tests
+LAST patch_rejected None nvidia nvidia/nemotron-3-super-120b-a12b None error: No valid patches in input (allow with "--allow-empty")
+
+LAST needs_implementation None nvidia nvidia/nemotron-3-ultra-550b-a55b None missing/safety-invalid patch, targets, or tests
+LAST needs_implementation None nvidia nvidia/nemotron-3-super-120b-a12b None missing/safety-invalid patch, targets, or tests
+LAST patch_rejected None nvidia nvidia/nemotron-3-super-120b-a12b None error: patch with only garbage at line 5
+
+LAST patch_rejected None nvidia nvidia/nemotron-3-super-120b-a12b None error: No valid patches in input (allow with "--allow-empty")
+
+LAST patch_rejected None nvidia nvidia/nemotron-3-super-120b-a12b None error: corrupt patch at line 11
+
+LAST needs_implementation None nvidia nvidia/nemotron-3-super-120b-a12b None missing/safety-invalid patch, targets, or tests
+FORGE_STATUS
+{
+  "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
+  "generated_at": "2026-08-24T14:47:13.526888+00:00",
+  "candidate_states": {
+    "ACCEPTED": 1,
+    "NEEDS_IMPLEMENTATION": 65,
+    "NEW": 159,
+    "PATCH_REJECTED": 74,
+    "VALIDATED_NOT_BETTER": 1
+  },
+  "discovery_sources": {
+    "crossref": 2725,
+    "github": 21,
+    "openalex": 20,
+    "semantic_scholar": 11
+  },
+  "discovery_queries": 550,
+  "discovery_hits": 2777,
+  "evaluations": 141,
+  "accepted_deltas": 1,
+  "e2b_jobs": 0,
+  "e2b_pass": 0,
+  "e2b_sandbox_seconds": 0.0,
+  "peak_parallel_tasks": 0,
+  "shared_provider_budget": {
+    "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+    "generated_at": "2026-08-24T14:47:13.527463+00:00",
+    "providers": {
+      "arxiv": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 3.1,
+        "cooldown_seconds": 0.0,
+        "total_requests": 4,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:36.625212+00:00"
+      },
+      "crossref": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 552,
+        "total_success": 547,
+        "total_429": 5,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T14:47:06.904572+00:00"
+      },
+      "exa": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 2,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:46.265750+00:00"
+      },
+      "github": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 556,
+        "total_success": 498,
+        "total_429": 0,
+        "total_errors": 58,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T14:47:13.513929+00:00"
+      },
+      "groq": {
+        "max_inflight": 128,
+        "active_leases": 0,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 665.5295462608337,
+        "total_requests": 87,
+        "total_success": 57,
+        "total_429": 30,
+        "total_errors": 18,
+        "last_status": "GATE_TIMEOUT",
+        "last_observed_at": "2026-08-24T14:46:10.050609+00:00"
+      },
+      "huggingface_hub": {
+        "max_inflight": 4,
+        "active_leases": 0,
+        "min_interval_s": 0.25,
+        "cooldown_seconds": 0.0,
+        "total_requests": 552,
+        "total_success": 552,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T14:47:05.371382+00:00"
+      },
+      "nvidia": {
+        "max_inflight": 256,
+        "active_leases": 21,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 8.596057891845703,
+        "total_requests": 2538,
+        "total_success": 1663,
+        "total_429": 42,
+        "total_errors": 777,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T14:47:12.123702+00:00"
+      },
+      "openalex": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.25,
+        "cooldown_seconds": 0.0,
+        "total_requests": 552,
+        "total_success": 11,
+        "total_429": 0,
+        "total_errors": 541,
+        "last_status": "400",
+        "last_observed_at": "2026-08-24T14:47:06.043804+00:00"
+      },
+      "openrouter": {
+        "max_inflight": 16,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 122,
+        "total_success": 70,
+        "total_429": 51,
+        "total_errors": 0,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T14:44:28.749169+00:00"
+      },
+      "semantic_scholar": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 2.1500442028045654,
+        "total_requests": 364,
+        "total_success": 14,
+        "total_429": 350,
+        "total_errors": 186,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T14:47:05.677612+00:00"
+      },
+      "tavily": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 6,
+        "total_success": 6,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:43.721169+00:00"
+      }
+    }
+  },
+  "db_bytes": 4096000
+}
+
+PROCS
+251791 python3 /workspace/clay-global-research-entity/tools/run_free_evidence_forge.py --hours 24 --sleep-seconds 2 --questions-per-cycle 32 --discovery-parallel 24 --candidates-per-cycle 48 --local-parallel 12 --e2b-parallel 20

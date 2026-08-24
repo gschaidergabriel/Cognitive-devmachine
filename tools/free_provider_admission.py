@@ -4,6 +4,9 @@
 This module intentionally reads only canonical repository control-plane files. It does
 not inspect API-key environment variables, provider responses, billing endpoints, or
 credential files. Those surfaces are downstream of admission.
+
+The admission document is bound to the active Supervisor inbox, not to a compatibility
+bootstrap cache. A stale bootstrap must not silently become provider-admission authority.
 """
 from __future__ import annotations
 
@@ -14,7 +17,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
-BOOTSTRAP_PATH = ROOT / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
+SUPERVISOR_INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
 ALLOWED_PROVIDERS = frozenset({"groq", "mistral", "nvidia"})
 
@@ -33,10 +36,38 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
     return payload
 
 
-def load_provider_admission(path: Path | None = None, *, bootstrap_path: Path | None = None) -> dict[str, Any]:
+def active_supervisor_binding(path: Path | None = None) -> tuple[str, str]:
+    """Return the current admitted supervisor epoch and steering path.
+
+    The inbox is a current-facing authority surface. It must itself identify the active
+    EntityOS/HCU program and a concrete steering file. Missing or ambiguous authority
+    fails closed before provider admission is evaluated.
+    """
+    inbox = _read_json(path or SUPERVISOR_INBOX_PATH, "SUPERVISOR_INBOX")
+    if inbox.get("active_program") != "ENTITYOS_HCU":
+        raise ProviderAdmissionError("SUPERVISOR_INBOX_PROGRAM_AUTHORITY_MISMATCH")
+    if inbox.get("product") != "EntityOS":
+        raise ProviderAdmissionError("SUPERVISOR_INBOX_PRODUCT_AUTHORITY_MISMATCH")
+    if inbox.get("integrated_cognition_compute_architecture") != "HCU":
+        raise ProviderAdmissionError("SUPERVISOR_INBOX_COMPUTE_AUTHORITY_MISMATCH")
+
+    epoch = str(inbox.get("schema_version") or "").strip()
+    steering = str(inbox.get("steering") or "").strip()
+    if not epoch:
+        raise ProviderAdmissionError("SUPERVISOR_INBOX_EPOCH_REQUIRED")
+    if not steering:
+        raise ProviderAdmissionError("SUPERVISOR_INBOX_STEERING_REQUIRED")
+    return epoch, steering
+
+
+def load_provider_admission(
+    path: Path | None = None,
+    *,
+    supervisor_inbox_path: Path | None = None,
+) -> dict[str, Any]:
     """Load canonical admission without touching any provider secret or network surface."""
     target = path or ADMISSION_PATH
-    bootstrap = _read_json(bootstrap_path or BOOTSTRAP_PATH, "BOOTSTRAP")
+    authority_epoch, steering = active_supervisor_binding(supervisor_inbox_path)
     payload = _read_json(target, "PROVIDER_ADMISSION")
 
     if payload.get("schema") != SCHEMA:
@@ -48,10 +79,12 @@ def load_provider_admission(path: Path | None = None, *, bootstrap_path: Path | 
     if payload.get("source") != "ENTITYOS_HCU_CONTROL_PLANE":
         raise ProviderAdmissionError("PROVIDER_ADMISSION_CONTROL_PLANE_SOURCE_REQUIRED")
 
-    epoch = str(payload.get("authority_epoch") or "")
-    bootstrap_epoch = str(bootstrap.get("schema_version") or "")
-    if not epoch or epoch != bootstrap_epoch:
+    epoch = str(payload.get("authority_epoch") or "").strip()
+    if not epoch or epoch != authority_epoch:
         raise ProviderAdmissionError("PROVIDER_ADMISSION_AUTHORITY_EPOCH_MISMATCH")
+    payload_steering = str(payload.get("supervisor_steering") or "").strip()
+    if not payload_steering or payload_steering != steering:
+        raise ProviderAdmissionError("PROVIDER_ADMISSION_SUPERVISOR_STEERING_MISMATCH")
 
     providers = payload.get("providers")
     if not isinstance(providers, dict):
@@ -110,6 +143,7 @@ def admission_snapshot() -> dict[str, Any]:
         "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
         "ok": True,
         "authority_epoch": payload["authority_epoch"],
+        "supervisor_steering": payload["supervisor_steering"],
         "admitted_free_providers": list(admitted_provider_names(payload)),
         "providers": {
             name: {

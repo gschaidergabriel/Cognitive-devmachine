@@ -1,0 +1,100 @@
+{
+  "schema": "CLAY_GO_BOUNDED_EXECUTION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "research_main_at_receipt_branch_base": "2be809ed5f3d070131b9e94c5b8de5449332019c",
+    "unusual_experiment_atomic_lease": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+    "unusual_experiment_status_for_this_organ": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "note": "No reproducible shared trigger identity was available to this organ; no new unusual intervention was admitted. An earlier local rollback-poison regression performed before the 8.63 lease law was observed receives zero unusual-experiment credit."
+  },
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "negative_deployment": {
+      "deployment_commit": "e1ed979735b7553454e81699a260cf8106efdbc8",
+      "deployment_id": "dpl_DpoubGTYLKQdgYfT8dnSV6QPNB5c",
+      "deployment_state_observed": "READY",
+      "route": "/api/hcu-jspace-binding-v2-capsule",
+      "runtime_log_observation": {
+        "timestamp_utc": "2026-08-23T18:55:03Z",
+        "http_status": 500,
+        "function_invocation_observed": true
+      }
+    },
+    "positive_candidate_deployment": {
+      "deployment_commit": "9897846add13c3a8b4d71875925d049f9885da17",
+      "deployment_id": "dpl_8fS5K3uz5ssLrR2cq8g9KgixsqsJ",
+      "deployment_state_observed": "READY",
+      "route": "/api/hcu-jspace-grid10-positive",
+      "capsule_id": "HCU_JSPACE_GRID10_POSITIVE_ACCEPTANCE/v2",
+      "guard_contract_aligned": true,
+      "function_runtime_log_observed_by_this_organ": false,
+      "runtime_result": "UNOBSERVED"
+    }
+  },
+  "exact_source_discriminator": {
+    "capsule_id_at_negative_deployment": "HCU_JSPACE_INFERENCE_BINDING_V2_EXACT_GRID10_PLAN_CELL_CAPSULE/v2",
+    "route_expected_test_git_blob_sha": "c3ff3386576dcbad3e08fe890152c7da70140f02",
+    "actual_test_file_git_blob_sha_at_same_deployment_commit": "2a9cba2c9d25ecc40acc7f891c4b44de9b529456",
+    "route_stage_before_sandbox_create": "FIXTURE_IDENTITY",
+    "route_failure_contract_on_blob_mismatch": "CAPSULE_DEPLOYMENT_BLOB_MISMATCH",
+    "classification": "PRE_SANDBOX_EXACT_FIXTURE_IDENTITY_FAILURE",
+    "inference": "Because the handler compares the actual fixture Git blob against the embedded expected blob before Sandbox.create and these exact values differ at deployment commit e1ed979735b7553454e81699a260cf8106efdbc8, the observed HTTP 500 is explained by the fail-closed fixture-identity path. No Sandbox execution credit is granted for this invocation."
+  },
+  "sandbox_execution_credit": {
+    "sandbox_create_proven_for_e1ed_invocation": false,
+    "fixed_regression_command_proven_executed_for_e1ed_invocation": false,
+    "jspace_binder_v2_grid10_component_runtime_credit_from_e1ed": false,
+    "positive_v2_runtime_credit_from_9897846": false,
+    "full_hcu_dependency_graph_credit": false,
+    "entityos_hcu_whole_runtime_credit": false,
+    "jspace_model_runtime_credit": false,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "repair_and_positive_candidates_source_only": {
+    "v3_binder_grid10_observed_executor_commit": "8be11b8555e7cf1bf8fe63da343c8f49e8d01237",
+    "v3_capsule_id": "HCU_JSPACE_INFERENCE_BINDING_V2_EXACT_GRID10_PLAN_CELL_CAPSULE/v3",
+    "v3_expected_test_git_blob_sha": "2a9cba2c9d25ecc40acc7f891c4b44de9b529456",
+    "v3_deterministic_marker_target": "BINDER_V2_DETERMINISTIC_REGRESSIONS=6_OF_6_PASS",
+    "v3_model_call_grid_cell_fail_closed_marker": "BINDER_V2_MODEL_CALL_GRID_CELL_FAIL_CLOSED=PASS",
+    "positive_capsule_observed_executor_commit": "9897846add13c3a8b4d71875925d049f9885da17",
+    "positive_capsule_id": "HCU_JSPACE_GRID10_POSITIVE_ACCEPTANCE/v2",
+    "positive_guard_markers": [
+      "SCHEDULER_OWNED_GRID10_IDENTITY=PASS",
+      "JSPACE_BINDING_V2_POSITIVE_PATH=PASS",
+      "GRID10_PLAN_CELL_ROLE_CLOSURE=PASS",
+      "MODEL_CALL_ID_NON_AUTHORITY=PASS",
+      "NEGATIVE_FENCES=3/3_PASS"
+    ],
+    "status": "SOURCE_AND_BUILD_CANDIDATE_ONLY_NOT_RUNTIME_CREDIT",
+    "note": "The negative e1ed fixture identity mismatch was repaired in later source. The positive v2 capsule and matching guard built READY at commit 9897846, but no successful function execution/result was observed by this organ."
+  },
+  "client_access_observation": {
+    "after_ready_attempts": [
+      "e1ed deployment URL GET intercepted by Vercel SSO with HTTP 302 after the independently observed function 500",
+      "generated preview share URLs still intercepted by Vercel SSO with HTTP 302",
+      "branch-alias bypass request later returned 429 while attempting to create protection bypass",
+      "9897846 positive-capsule deployment GET intercepted by Vercel SSO with HTTP 302 before the Function; runtime log query showed no invocation for this attempt"
+    ],
+    "classification": "CLIENT_PREVIEW_INVOCATION_ADMISSION_BLOCKED_FOR_THIS_ORGAN",
+    "note": "These client-side SSO/429 observations do not reclassify the earlier e1ed function 500 and do not prove a current positive-v2 runtime result."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "NEGATIVE_EVIDENCE_BOUND_AND_BUILD_PATH_RECOVERED: exact pre-Sandbox fixture identity drift was found in retained PR810 executor; later positive v2 guard/capsule source reached READY without creating a duplicate executor.",
+    "track_b_hcu_typed_entry": "SOURCE_BUILD_ADVANCE: exact GRID10 scheduler-owned plan/cell identity plus J-Space binder v2 positive/fail-closed markers are now represented in one bounded positive capsule; exact Sandbox runtime acceptance remains unobserved.",
+    "track_c_jspace_training_readiness": "NO_RUNTIME_PROMOTION: causal GRID10/J-Space component closure is not yet runtime-accepted by this organ; no model/runtime/training credit and no paid lane entered."
+  },
+  "next_discriminator": "Obtain one admitted invocation of deployment 9897846 (or a newer exactly source-bound successor) for /api/hcu-jspace-grid10-positive that reaches the Function and Sandbox, then capture HTTP 200, exact manifest/result digests, Sandbox identity, exit code 0, positive markers, 3/3 negative fences, secret fence and cleanup. The current blocker for this organ is Vercel Protected Preview invocation admission, not build readiness and not a demonstrated HCU semantic failure.",
+  "paid_or_together_activity": false,
+  "secrets_recorded": false
+}

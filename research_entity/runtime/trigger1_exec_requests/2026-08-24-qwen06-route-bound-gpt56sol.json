@@ -1,0 +1,27 @@
+{
+  "schema": "CLAY_TRIGGER1_EXEC_REQUEST/v1",
+  "date": "2026-08-24",
+  "trigger": "1",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "mode": "FREE_ONLY",
+  "model": "qwen/qwen3-0.6b-04-28:free",
+  "executor": "tools/trigger1_openrouter_qwen06_route_bound_execute.py",
+  "purpose": "Execute the existing six-control Qwen3-0.6B hosted output-logit vector discriminator while observing and fail-closing on OpenRouter selected-route and execution-runtime identity.",
+  "required_runtime_identity": [
+    "X-OpenRouter-Metadata enabled",
+    "attempt == 1",
+    "exactly one selected endpoint",
+    "requested model equals admitted exact FREE route",
+    "is_byok == false",
+    "empty material router pipeline",
+    "non-empty system_fingerprint",
+    "one invariant execution_runtime_identity_sha256 across calibration and holdout",
+    "one invariant selected route across six-control holdout"
+  ],
+  "controls": ["BASELINE", "+VECTOR", "SIGN_FLIP", "NULL_VECTOR", "ORTHOGONAL_SAME_NORM", "PERMUTED_SAME_NORM"],
+  "free_only": true,
+  "paid_fallback": false,
+  "together": false,
+  "credit_scope": "DIRECT_HOSTED_OUTPUT_LOGIT_VECTOR_CONTROL_COMPONENT_ONLY",
+  "explicit_non_credit": ["HIDDEN_STATE_CVEC", "JSPACE_MODEL_RUNTIME", "WHOLE_HCU", "WHOLE_ENTITYOS", "TRAINING"]
+}

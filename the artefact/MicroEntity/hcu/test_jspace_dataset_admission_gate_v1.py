@@ -31,9 +31,14 @@ def transition_sha(transition):
     return hashlib.sha256(canonicalize(material)).hexdigest()
 
 
+def training_sha(training):
+    material = deepcopy(dict(training))
+    material.pop("trace_sha256", None)
+    return hashlib.sha256(canonicalize(material)).hexdigest()
+
+
 class GateTests(unittest.TestCase):
     def fixtures(self):
-        training_sha = h("b")
         control_packet = encode_vector(
             (0.25, -0.5, 1.0),
             basis_id="basis:7",
@@ -73,7 +78,7 @@ class GateTests(unittest.TestCase):
         transition["trace_sha256"] = transition_sha(transition)
         training = {
             "schema_version": "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1",
-            "trace_sha256": training_sha,
+            "canonicalization_schema": CANONICALIZATION_SCHEMA,
             "prototype_trace_sha256": prototype_digest,
             "generation": 7,
             "entry_event_sha256": h("1"),
@@ -90,6 +95,7 @@ class GateTests(unittest.TestCase):
             "credit_label": "UNKNOWN",
             "outcome_receipt_sha256": None,
         }
+        training["trace_sha256"] = training_sha(training)
         grid_plan = {
             "schema": "ENTITYOS_HCU_GRID_PLAN/v2",
             "plan_sha256": h("4"),
@@ -99,7 +105,7 @@ class GateTests(unittest.TestCase):
             "route_decision_sha256": h("3"),
         }
         regs = {
-            "admitted_training_traces": {training_sha: training},
+            "admitted_training_traces": {training["trace_sha256"]: training},
             "admitted_transition_traces": {transition["trace_sha256"]: transition},
             "admitted_prototype_traces": {prototype_digest: prototype},
             "admitted_grid_plans": {h("4"): grid_plan},
@@ -129,6 +135,16 @@ class GateTests(unittest.TestCase):
         regs["admitted_transition_traces"][transition["trace_sha256"]] = transition
         return transition, regs
 
+    def register_training(self, regs, training):
+        training = deepcopy(training)
+        old_sha = training.get("trace_sha256")
+        training["trace_sha256"] = training_sha(training)
+        regs = deepcopy(regs)
+        if old_sha is not None:
+            regs["admitted_training_traces"].pop(old_sha, None)
+        regs["admitted_training_traces"][training["trace_sha256"]] = training
+        return training, regs
+
     def rebind_packet(self, prototype, transition, training, regs, packet):
         prototype = deepcopy(prototype)
         transition = deepcopy(transition)
@@ -141,8 +157,8 @@ class GateTests(unittest.TestCase):
         transition, regs = self.register_transition(regs, transition)
         training["prototype_trace_sha256"] = rebound_prototype_sha
         training["vector_control_packet_sha256"] = packet_sha
+        training, regs = self.register_training(regs, training)
         regs["admitted_prototype_traces"] = {rebound_prototype_sha: prototype}
-        regs["admitted_training_traces"][training["trace_sha256"]] = training
         regs["admitted_vector_control_packets"] = {packet_sha: packet}
         return prototype, transition, training, regs
 
@@ -198,6 +214,18 @@ class GateTests(unittest.TestCase):
         poisoned["admitted_transition_traces"] = {forged_key: forged_transition}
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "TRANSITION_TRACE_IDENTITY_MISMATCH"):
             self.admit(transition=forged_transition, training=training, regs=poisoned)
+
+    def test_training_registry_key_must_match_canonical_trace_material(self):
+        _, transition, training, regs = self.fixtures()
+        exact = training["trace_sha256"]
+        first = "0" if exact[0] != "0" else "1"
+        forged_key = first + exact[1:]
+        forged_training = deepcopy(training)
+        forged_training["trace_sha256"] = forged_key
+        poisoned = deepcopy(regs)
+        poisoned["admitted_training_traces"] = {forged_key: forged_training}
+        with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "TRAINING_TRACE_IDENTITY_MISMATCH"):
+            self.admit(transition=transition, training=forged_training, regs=poisoned)
 
     def test_transition_declared_canonicalization_schema_must_match_selected_authority(self):
         _, transition, training, regs = self.fixtures()
@@ -442,7 +470,9 @@ class GateTests(unittest.TestCase):
         exact = self.bound_outcome(unknown, transition, credit="UNKNOWN")
         exact_sha = receipt_sha(exact)
         unknown["outcome_receipt_sha256"] = exact_sha
-        regs["admitted_training_traces"][unknown["trace_sha256"]] = unknown
+        unknown, regs = self.register_training(regs, unknown)
+        exact["training_trace_sha256"] = unknown["trace_sha256"]
+        self.assertEqual(receipt_sha(exact), exact_sha)
         admission = self.admit(
             transition=transition,
             training=unknown,
@@ -482,7 +512,9 @@ class GateTests(unittest.TestCase):
         exact = self.bound_outcome(credited, credited_transition)
         exact_sha = receipt_sha(exact)
         credited["outcome_receipt_sha256"] = exact_sha
-        regs["admitted_training_traces"][credited["trace_sha256"]] = credited
+        credited, regs = self.register_training(regs, credited)
+        exact["training_trace_sha256"] = credited["trace_sha256"]
+        self.assertEqual(receipt_sha(exact), exact_sha)
         admission = self.admit(
             transition=credited_transition,
             training=credited,

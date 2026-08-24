@@ -5,6 +5,8 @@ Imports the canonical typed-admission distillery entrypoint and adds one strictl
 loopback model lane. External provider secret/network boundaries remain unchanged.
 The local same-model reviewer panel is explicitly correlated/provisional and uses
 stricter thresholds; it cannot masquerade as NVIDIA+Mistral independent evidence.
+Local availability is re-evaluated each cycle so a model that becomes healthy after
+Distillery startup can enter the noncanonical research lane without a process restart.
 """
 from __future__ import annotations
 
@@ -24,10 +26,17 @@ import run_research_distillery_entry as e  # installs canonical external-provide
 
 LOCAL_BASE=os.getenv("CLAY_LOCAL_RESEARCH_BASE","http://127.0.0.1:8088")
 LOCAL_LOGICAL_ID="local/Qwen3-4B-GGUF-Q4_K_M"
+LOCAL_REVIEWERS=(
+    ("local_reviewer_logic","local",LOCAL_LOGICAL_ID),
+    ("local_reviewer_grf","local",LOCAL_LOGICAL_ID),
+    ("local_reviewer_falsifier","local",LOCAL_LOGICAL_ID),
+)
 _PREV_CHAT=d.chat
 _PREV_SMALL=d.select_small_models
 _PREV_REVIEWERS=d.select_reviewers
 _PREV_REVIEW=d.review_candidate
+_PREV_ONE_CYCLE=d.one_cycle
+_PREV_WRITE_STATUS=d.write_status
 
 # Enables the FREE_ONLY loop but does not admit any external provider. External
 # secret/socket access remains gated by run_research_distillery_entry.py.
@@ -83,9 +92,38 @@ def select_small_models(catalog:list[dict])->list[str]:
 def select_reviewers(catalog:list[dict])->list[tuple[str,str,str]]:
     out=_PREV_REVIEWERS(catalog)
     if out:return out
-    if local_health():
-        return [("local_reviewer_logic","local",LOCAL_LOGICAL_ID),("local_reviewer_grf","local",LOCAL_LOGICAL_ID),("local_reviewer_falsifier","local",LOCAL_LOGICAL_ID)]
+    if local_health():return list(LOCAL_REVIEWERS)
     return []
+
+
+def refresh_local_lanes(small_models:list[str],reviewers:list[tuple[str,str,str]])->tuple[list[str],list[tuple[str,str,str]]]:
+    """Project current loopback health into the per-cycle research lane set.
+
+    This is availability only, never provider/canonical authority. Existing external
+    reviewer panels are preserved; a correlated local panel is used only when no
+    external reviewer panel is present. A failed health check removes stale local
+    lanes so a dead loopback model is not treated as available.
+    """
+    small=list(dict.fromkeys(str(m) for m in small_models if str(m)))
+    rev=[tuple(r) for r in reviewers if isinstance(r,(tuple,list)) and len(r)==3]
+    healthy=local_health()
+    if healthy:
+        if LOCAL_LOGICAL_ID not in small:small.insert(0,LOCAL_LOGICAL_ID)
+        if not rev:rev=list(LOCAL_REVIEWERS)
+    else:
+        small=[m for m in small if m!=LOCAL_LOGICAL_ID]
+        rev=[r for r in rev if str(r[1])!="local" and not str(r[2]).startswith("local/")]
+    return small[:8],rev[:3]
+
+
+def dynamic_one_cycle(con:sqlite3.Connection,small_models:list[str],reviewers:list[tuple[str,str,str]])->bool:
+    live_small,live_reviewers=refresh_local_lanes(small_models,reviewers)
+    return _PREV_ONE_CYCLE(con,live_small,live_reviewers)
+
+
+def dynamic_write_status(con:sqlite3.Connection,reviewers:list[tuple[str,str,str]],small_models:list[str])->None:
+    live_small,live_reviewers=refresh_local_lanes(small_models,reviewers)
+    return _PREV_WRITE_STATUS(con,live_reviewers,live_small)
 
 
 def review_candidate(con:sqlite3.Connection,cid:str,reviewers:list[tuple[str,str,str]]):
@@ -116,5 +154,8 @@ d.chat=chat
 d.select_small_models=select_small_models
 d.select_reviewers=select_reviewers
 d.review_candidate=review_candidate
+d.one_cycle=dynamic_one_cycle
+d.write_status=dynamic_write_status
+d.LOCAL_LANE_REFRESH_BINDING="LOCAL_HEALTH_REEVALUATED_EACH_CYCLE_V1"
 
 if __name__=="__main__":raise SystemExit(d.main())

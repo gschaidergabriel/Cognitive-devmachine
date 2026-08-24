@@ -11,6 +11,7 @@ Required stronger discriminator:
 - layer/gain selected only on calibration rows;
 - disjoint holdout;
 - six matched controls plus explicit wrong-layer and lesion/rescue evidence;
+- wrong-layer effect must be strictly weaker than the selected-layer effect; a tie is not localization evidence;
 - counterbalanced label-remap holdout families so output-token identity cannot explain transfer;
 - nuisance controls are scored by absolute effect magnitude, not only target-positive drift.
 """
@@ -244,7 +245,7 @@ def adjudicate_holdout(
             wrong_layer_seen.add(key)
             wrong_layer_ok = wrong_layer_ok and _finite(
                 r["wrong_layer_delta"], "wrong_layer_delta"
-            ) <= 0
+            ) < 0
         if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
             lesion_rescue_seen.add(key)
             lesion_rescue_ok = (

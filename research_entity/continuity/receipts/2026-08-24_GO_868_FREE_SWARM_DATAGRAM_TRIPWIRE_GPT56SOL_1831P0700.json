@@ -49,18 +49,29 @@
     "runtime_credit_minted": 0
   },
   "evidence": {
-    "scope": "SOURCE_REVIEW_AND_GITHUB_WRITE_ONLY_NOT_EXACT_SOURCE_RUNTIME",
+    "scope": "SOURCE_REVIEW_PLUS_NONCANONICAL_DATAGRAM_TRIPWIRE_MECHANISM_TEST_NOT_EXACT_SOURCE_RUNTIME",
     "source_inspection": "PASS",
-    "runtime_execution": "NOT_PERFORMED_NO_EXPOSED_LOCAL_OR_CLAY_DIRECT_DEV_SHELL_BRIDGE",
+    "noncanonical_mechanism_test": {
+      "surface": "CHATGPT_LOCAL_TOOL_CONTAINER_NONCANONICAL_COMPONENT_ONLY",
+      "result": "PASS",
+      "observed_blocked_paths": [
+        "socket.sendto",
+        "socket.sendmsg"
+      ],
+      "exception": "CLAY_BOUNDARY_NETWORK_TRIPWIRE",
+      "actual_external_network_required": false,
+      "promotion_credit": 0
+    },
+    "exact_source_boundary_runtime_execution": "NOT_PERFORMED_NO_EXPOSED_AUTHORIZED_NORMAL_USER_OR_CLAY_DIRECT_DEV_SHELL_BRIDGE",
     "negative_evidence": [
       "no external provider call was made",
       "no provider credential was read",
-      "no exact-source boundary receipt PASS was observed",
+      "no exact-source FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 PASS was observed",
       "no whole EntityOS/HCU, HCU, J-Space-model or training runtime evidence was produced"
     ]
   },
   "tracks": {
-    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_ONLY: expanded the canonical hardened FREE Swarm receipt runner's outer Python network fence to direct datagram egress primitives before the pending exact-source executable discriminator.",
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_ONLY: expanded the canonical hardened FREE Swarm receipt runner's outer Python network fence to direct datagram egress primitives before the pending exact-source executable discriminator; a noncanonical mechanism test observed both new paths fail closed.",
     "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: retained HCU donor and parallel current-main J-Space identity/control work already cover the reusable HCU/Typed Entry frontier; creating another overlapping HCU lane would violate nonduplication. The next higher-information discriminator is exact execution of the current donor rejection/identity boundary on an authorized exposed zero-cost surface.",
     "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no model-intervention-capable local/VPS shell surface is exposed to this organ, while parallel current work already defines diagnostic-vs-causal-control and exact tensor/runtime identity gates. Additional source narration is lower-information than one exact local named-activation observation followed by matched causal controls only if observation identity closes."
   },

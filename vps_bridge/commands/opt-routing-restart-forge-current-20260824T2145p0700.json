@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"opt-routing-restart-forge-current-20260824T2145p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -e; old=$(pgrep -f '[r]un_free_evidence_forge.py' | tr '\\n' ' ' || true); echo OLD=$old; for p in $old; do kill -KILL \"$p\" || true; done; for i in $(seq 1 30); do sleep 1; new=$(pgrep -f '[r]un_free_evidence_forge.py' | tr '\\n' ' ' || true); if [ -n \"$new\" ] && [ \"$new\" != \"$old\" ]; then echo NEW=$new; echo HEAD=$(git rev-parse HEAD); sleep 4; cat /artifacts/clay-entityos-swarm/forge/STATUS.json 2>/dev/null || true; exit 0; fi; done; echo FORGE_RESTART_TIMEOUT; exit 2"
+}

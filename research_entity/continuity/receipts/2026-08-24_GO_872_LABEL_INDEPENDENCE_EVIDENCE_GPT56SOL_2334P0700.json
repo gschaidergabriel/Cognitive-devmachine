@@ -1,0 +1,68 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "canonical_main_at_branch_reentry": "1becb77bee28b908ce7a8b48fed09cb92d0beffc"
+  },
+  "coordination": {
+    "shared_immutable_request_id_exposed_to_this_organ": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0
+  },
+  "observed": {
+    "issue": 1657,
+    "issue_classification": "TRIGGER1_BRIDGE_GATE_SCHEMA_SEMANTIC_MISMATCH",
+    "promotion_gate_requires_uses_evaluation_output_labels_false": true,
+    "downstream_fix_commit": "d86b46df836e037437a61d34d674461046535772",
+    "downstream_bridge_now_hardcodes_uses_evaluation_output_labels_false": true,
+    "intermediate_executor_derivation_receipt_emits_upstream_field": false,
+    "intermediate_executor_derivation_inputs": "semantic approve/disapprove activation anchors",
+    "model_intervention_executed_in_this_macrocycle": false
+  },
+  "finding": "The current promotion bridge no longer omits uses_evaluation_output_labels, but the value is asserted downstream instead of being proven by the upstream derivation receipt. The current strong executor is source-plausibly independent because its contrastive vector is constructed from semantic approve/disapprove anchors and derive_directions does not consume output-label arguments, but source plausibility must not be promoted into runtime evidence by metadata assertion.",
+  "counterhypothesis": "Because the fixed executor source visibly derives from semantic anchors without lm_head/output-label arguments, a hardcoded false in the bridge is sufficient evidence.",
+  "counterhypothesis_rejection": "The promotion boundary is receipt/evidence based and must remain valid under future executor/source evolution. A downstream constant can remain false even if upstream derivation later changes, producing a silent stale-evidence false positive.",
+  "required_repair": [
+    "Emit a versioned upstream vector-derivation receipt containing uses_evaluation_output_labels and binding the evaluated label set plus derivation prompt-family identity.",
+    "Require uses_evaluation_output_labels == false in the bridge before emitting a direct steering candidate.",
+    "Copy the proven upstream value into vector_derivation instead of hardcoding it downstream.",
+    "Regression: proven false may pass bridge and promotion gate; missing blocks; true blocks/no owner-goal credit."
+  ],
+  "three_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_FAIL_CLOSED_PROMOTION_BOUNDARY",
+      "delta": "Prevent a source-plausible but unproven derivation property from being treated as executable promotion evidence."
+    },
+    "track_b_hcu_and_typed_entry": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "No new HCU or Typed Entry implementation is justified in this macrocycle; current main already contains the relevant nonterminal vector primitive and the highest-information nonduplicate blocker is its evidence ABI at the J-Space promotion boundary.",
+      "next_discriminator": "After the derivation receipt is repaired, bind its identity into the existing model-execution/Typed Entry causal chain rather than adding a parallel ingress or truth authority."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "ADVANCED_EVIDENCE_ABI_DISCRIMINATOR",
+      "delta": "Narrowed issue #1657 to downstream assertion without upstream derivation evidence and specified a falsifiable receipt-level repair; zero new unusual experiment."
+    }
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "durable_coordination_write": {
+    "issue_1657_comment_id": 5398378979
+  },
+  "next_exact_action": "Implement the upstream derivation-evidence field and bridge fail-closed requirement with false/missing/true regressions on fresh main; do not dispatch the model intervention without a canonical atomic lease.",
+  "evidence_boundary": "Source inspection, exact repository identities, issue coordination, and this receipt only. No model runtime, J-Space model, training, HCU-full, provider, or whole-product credit is minted."
+}

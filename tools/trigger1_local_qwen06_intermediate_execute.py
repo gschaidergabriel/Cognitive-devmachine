@@ -75,6 +75,31 @@ def _layer_output_tensor(output: Any):
     return output[0] if isinstance(output, tuple) else output
 
 
+def _wrong_layer_request(
+    *,
+    prompt: str,
+    selected_layer: int,
+    wrong_layer: int,
+    gain: float,
+    seed: int,
+    positive_label: str,
+    negative_label: str,
+) -> dict[str, Any]:
+    """Bind the selected vector to a different intervention layer for localization control."""
+    if selected_layer == wrong_layer:
+        raise ValueError("WRONG_LAYER_MUST_DIFFER_FROM_SELECTED_LAYER")
+    return {
+        "prompt": prompt,
+        "layer": int(wrong_layer),
+        "vector_layer": int(selected_layer),
+        "gain": float(gain),
+        "control": "+VECTOR",
+        "seed": int(seed),
+        "positive_label": positive_label,
+        "negative_label": negative_label,
+    }
+
+
 def _capture_layers(torch: Any, tokenizer: Any, model: Any, device: Any, prompt: str, layers: tuple[int, ...]) -> dict[int, Any]:
     captured: dict[int, Any] = {}
     handles = []
@@ -145,6 +170,7 @@ class RuntimeState:
     def infer(self, payload: dict[str, Any]) -> dict[str, Any]:
         prompt = str(payload["prompt"])
         layer = int(payload["layer"])
+        vector_layer = int(payload.get("vector_layer", layer))
         gain = float(payload["gain"])
         control = str(payload["control"])
         seed = int(payload["seed"])
@@ -152,11 +178,12 @@ class RuntimeState:
         negative_label = str(payload.get("negative_label") or "B")
         mode = str(payload.get("mode") or "control")
         if layer not in self.directions: raise ValueError("UNKNOWN_LAYER")
+        if vector_layer not in self.directions: raise ValueError("UNKNOWN_VECTOR_LAYER")
         if control not in REQUIRED_CONTROLS and mode == "control": raise ValueError("UNKNOWN_CONTROL")
         if positive_label not in self.token_ids or negative_label not in self.token_ids or positive_label == negative_label:
             raise ValueError("LABEL_MAP_INVALID")
 
-        direction = self.directions[layer]
+        direction = self.directions[vector_layer]
         family_py = control_vectors(direction.detach().float().cpu().tolist(), gain)
         vector = self.torch.tensor(family_py.get(control, family_py["BASELINE"]), dtype=self.torch.float32, device=self.device)
         applied_sha = tensor_sha(vector)
@@ -198,7 +225,7 @@ class RuntimeState:
         neg = float(logits[self.token_ids[negative_label]])
         material = {
             "invocation": self.invocations, "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
-            "layer": layer, "gain": gain, "control": control, "mode": mode, "seed": seed,
+            "layer": layer, "vector_layer": vector_layer, "gain": gain, "control": control, "mode": mode, "seed": seed,
             "positive_label": positive_label, "negative_label": negative_label,
             "target_score": pos-neg, "hook_calls": hook_calls,
             "pre_activation_sha256": pre_sha, "post_activation_sha256": post_sha,
@@ -262,7 +289,11 @@ def main() -> int:
                     for control in REQUIRED_CONTROLS:
                         row=post(endpoint,{"prompt":full,"layer":layer,"gain":gain,"control":control,"seed":seed,"positive_label":pos_label,"negative_label":neg_label})
                         rows_case[control]=row
-                    wrong=post(endpoint,{"prompt":full,"layer":wrong_layer,"gain":gain,"control":"+VECTOR","seed":seed,"positive_label":pos_label,"negative_label":neg_label})
+                    wrong=post(endpoint,_wrong_layer_request(prompt=full,selected_layer=layer,wrong_layer=wrong_layer,gain=gain,seed=seed,positive_label=pos_label,negative_label=neg_label))
+                    if wrong.get("vector_layer") != layer or wrong.get("layer") != wrong_layer:
+                        raise RuntimeError("WRONG_LAYER_SELECTED_VECTOR_BINDING_MISMATCH")
+                    if wrong.get("applied_vector_sha256") != rows_case["+VECTOR"].get("applied_vector_sha256"):
+                        raise RuntimeError("WRONG_LAYER_SELECTED_VECTOR_SHA_MISMATCH")
                     lesion_row=post(endpoint,{"prompt":full,"layer":layer,"gain":gain,"control":"BASELINE","mode":"lesion","seed":seed,"positive_label":pos_label,"negative_label":neg_label})
                     rescue_row=post(endpoint,{"prompt":full,"layer":layer,"gain":gain,"control":"BASELINE","mode":"rescue","seed":seed,"positive_label":pos_label,"negative_label":neg_label})
                     plus_delta=rows_case["+VECTOR"]["target_score"]-rows_case["BASELINE"]["target_score"]
@@ -271,7 +302,7 @@ def main() -> int:
                     rescue_delta=rescue_row["target_score"]-lesion_row["target_score"]
                     for control,row in rows_case.items():
                         extra={}
-                        if control=="+VECTOR": extra={"wrong_layer":wrong_layer,"wrong_layer_delta":wrong_delta,"lesion_delta":lesion_delta,"rescue_delta":rescue_delta,"wrong_layer_receipt_sha256":wrong["runtime_receipt_sha256"],"lesion_receipt_sha256":lesion_row["runtime_receipt_sha256"],"rescue_receipt_sha256":rescue_row["runtime_receipt_sha256"]}
+                        if control=="+VECTOR": extra={"wrong_layer":wrong_layer,"wrong_layer_vector_source_layer":wrong["vector_layer"],"wrong_layer_same_selected_vector":wrong["applied_vector_sha256"]==row["applied_vector_sha256"],"wrong_layer_delta":wrong_delta,"lesion_delta":lesion_delta,"rescue_delta":rescue_delta,"wrong_layer_receipt_sha256":wrong["runtime_receipt_sha256"],"lesion_receipt_sha256":lesion_row["runtime_receipt_sha256"],"rescue_receipt_sha256":rescue_row["runtime_receipt_sha256"]}
                         holdout.append({**row,"split":"holdout","case_id":case_id,"label_map_id":label_map_id,**extra})
         verdict=adjudicate_holdout(holdout,selected_layer=int(selected.get("layer",-1)),selected_gain=float(selected.get("gain",-1))) if selected.get("selected") else {"pass":False,"classification":"NO_LAYER_GAIN_SELECTED"}
         server.shutdown(); server.server_close()

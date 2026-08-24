@@ -1,0 +1,47 @@
+{
+  "schema": "CLAY_GO_872_THREE_TRACK_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "3d81250a0e51984a9835786038e2757c54b76de0",
+  "mode": "FREE_ONLY",
+  "finding": {
+    "class": "EVIDENCE_PROVENANCE_GAP",
+    "observed": "The current exact-current Forge-to-Distillery runtime gate hand-constructs a CLAY_FORGE_DELTA_EVALUATION/v1 plus CLAY_FORGE_EXECUTION_ADMISSION/v1 and then asks evidence_reason() to qualify it. This proves the Distillery admission contract and its ablation, but does not prove that run_free_evidence_forge_safe_871 actually produced the ACCEPT.",
+    "counterhypothesis": "The hand-constructed evaluation is sufficient because the gate only intends to test the bridge contract, not producer-origin closure.",
+    "resolution": "The published frontier explicitly requires one evidence-qualified Forge ACCEPT before one Distillery packet. Therefore producer origin is material to the claimed acceptance scope and must be observed rather than synthesized by the witness."
+  },
+  "delta": {
+    "branch": "gpt56sol/go872-real-forge-producer-witness-20260824-2332",
+    "runtime_gate": "tools/run_go871_forge_distillery_runtime_gate.py",
+    "producer_helper": "tools/run_go872_forge_single_candidate.py",
+    "candidate_check": "tests/forge_runtime_witness_check_872.py",
+    "candidate_fixture": "tests/fixtures/forge_runtime_witness_872.txt",
+    "mechanism": "A deterministic noncanonical fixture candidate is evaluated by the actual current safe Forge validator. Baseline must fail, the patched candidate must pass twice under the existing bubblewrap admission path, and only the resulting producer-generated evaluation may feed the Distillery 1->1->nonzero->replay-zero witness.",
+    "network_provider_calls_intended": 0,
+    "paid_fallback_intended": 0
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_SOURCE_BOUNDARY: Forge->Distillery acceptance witness now requires real Safe-Forge producer origin rather than a synthesized evaluation envelope.",
+    "track_b_hcu_typed_entry": "ADVANCED_PROVENANCE_INVARIANT: execution evidence is required to preserve producer/source/admission identity instead of treating a structurally self-consistent packet as sufficient provenance.",
+    "track_c_global_jspace_gwt": "NO_NEW_MODEL_RUNTIME_CREDIT: parallel current main advanced exact local Qwen intermediate source identity; this organ performed no new unusual model intervention and grants zero J-Space/training credit. The stricter Forge producer boundary improves downstream training-trace evidence quality only."
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_identity_exposed_to_this_organ": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "existing_forge_runtime_request_pr": 1619,
+    "existing_forge_runtime_run": 32742535392,
+    "existing_forge_runtime_run_state_observed": "QUEUED_NO_STEPS"
+  },
+  "evidence": {
+    "source_review": true,
+    "runtime_observed_for_new_delta": false,
+    "component_pass_claimed": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Review/fuse this bounded producer-origin repair onto current main, then let the retained owner-only self-hosted Forge-Distillery workflow execute exact-current source. PASS requires actual Safe-Forge producer ACCEPT -> exactly one Distillery packet -> accepted_dataset_tokens > 0 -> identical replay adds zero packets/tokens."
+}

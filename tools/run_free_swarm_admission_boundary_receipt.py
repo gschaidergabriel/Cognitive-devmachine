@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Emit an exact-source FREE Swarm admission-boundary execution receipt.
+'''Emit an exact-source FREE Swarm admission-boundary execution receipt.
 
-Executes the canonical admission-boundary unittest module in a sanitized child
+Executes the canonical admission-boundary unittest modules in a sanitized child
 process. Provider credentials are not inherited. A Python socket tripwire blocks
 and records any unmocked Python network connection attempt. The canonical tests
 retain their own per-case secret/network tripwire assertions.
 
 Component evidence only: this runner does not admit or call any external provider
 and cannot establish whole EntityOS/HCU, HCU, J-Space-model, or training credit.
-"""
+'''
 from __future__ import annotations
 
 import argparse
@@ -25,13 +25,29 @@ import tempfile
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-TEST_MODULE = "tests.test_free_swarm_admission_boundary_867"
-TEST_PATH = ROOT / "tests/test_free_swarm_admission_boundary_867.py"
+TEST_MODULES = (
+    "tests.test_free_swarm_admission_boundary_867",
+    "tests.test_free_swarm_admission_boundary_868_malformed",
+)
+TEST_PATHS = (
+    ROOT / "tests/test_free_swarm_admission_boundary_867.py",
+    ROOT / "tests/test_free_swarm_admission_boundary_868_malformed.py",
+)
 INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
 
+REQUIRED_BLOCKED_CASE_TEST_METHODS = (
+    "test_global_attestation_missing_has_zero_secret_and_network_access",
+    "test_unknown_paid_subscription_all_fail_before_secret_or_network",
+    "test_missing_provider_admission_file_fails_before_secret_or_network",
+    "test_authority_epoch_mismatch_fails_closed",
+    "test_unlisted_provider_fails_closed",
+    "test_malformed_admission_has_zero_secret_lookup_and_zero_network",
+)
+
 SOURCE_PATHS = (
     "tests/test_free_swarm_admission_boundary_867.py",
+    "tests/test_free_swarm_admission_boundary_868_malformed.py",
     "tools/free_provider_admission.py",
     "tools/run_free_go_swarm.py",
     "tools/run_24h_entityos_swarm.py",
@@ -156,7 +172,9 @@ def guarded_create_connection(address, *args, **kwargs):
 
 socket.socket.connect = guarded_connect
 socket.create_connection = guarded_create_connection
-suite = unittest.defaultTestLoader.loadTestsFromName(sys.argv[1])
+suite = unittest.TestSuite()
+for module_name in sys.argv[1:]:
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromName(module_name))
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 raise SystemExit(0 if result.wasSuccessful() else 1)
 '''
@@ -191,6 +209,13 @@ def _network_attempts(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def _required_test_coverage(combined_output: str) -> dict[str, bool]:
+    return {
+        method: method in combined_output
+        for method in REQUIRED_BLOCKED_CASE_TEST_METHODS
+    }
+
+
 def _write_receipt(path: Path | None, receipt: dict[str, Any]) -> None:
     text = json.dumps(receipt, sort_keys=True, indent=2, ensure_ascii=False) + "\n"
     if path is None:
@@ -223,7 +248,7 @@ def main(argv: list[str] | None = None) -> int:
         network_log = temp / "network_tripwire.jsonl"
         bootstrap.write_text(_bootstrap_text(), encoding="utf-8")
         env = _safe_child_env(temp, network_log)
-        command = [sys.executable, str(bootstrap), TEST_MODULE]
+        command = [sys.executable, str(bootstrap), *TEST_MODULES]
         proc = subprocess.run(
             command,
             cwd=ROOT,
@@ -242,7 +267,17 @@ def main(argv: list[str] | None = None) -> int:
     test_count = int(match.group(1)) if match else None
     unittest_ok = proc.returncode == 0 and re.search(r"(?:^|\n)OK(?:\s|\n|$)", combined) is not None
     sentinel_leaked = SENTINEL in combined
-    pass_boundary = bool(unittest_ok and not attempts and not sentinel_leaked and not dirty)
+    required_test_coverage = _required_test_coverage(combined)
+    required_test_coverage_ok = all(required_test_coverage.values())
+    nonvacuous_suite = test_count is not None and test_count > 0
+    pass_boundary = bool(
+        unittest_ok
+        and nonvacuous_suite
+        and required_test_coverage_ok
+        and not attempts
+        and not sentinel_leaked
+        and not dirty
+    )
 
     receipt = {
         "schema": "FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1",
@@ -258,8 +293,11 @@ def main(argv: list[str] | None = None) -> int:
             "clean_tracked_tree": not dirty,
             "manifest": source_manifest,
             "manifest_sha256": source_manifest_sha256,
-            "test_module": TEST_MODULE,
-            "test_sha256": _sha256_file(TEST_PATH),
+            "test_modules": list(TEST_MODULES),
+            "test_files": [
+                {"path": str(path.relative_to(ROOT)), "sha256": _sha256_file(path)}
+                for path in TEST_PATHS
+            ],
         },
         "execution": {
             "started_at": started.isoformat(),
@@ -268,10 +306,11 @@ def main(argv: list[str] | None = None) -> int:
             "python": sys.version.split()[0],
             "python_executable": sys.executable,
             "platform": platform.platform(),
-            "command": [sys.executable, "<temp>/boundary_bootstrap.py", TEST_MODULE],
+            "command": [sys.executable, "<temp>/boundary_bootstrap.py", *TEST_MODULES],
             "bootstrap_sha256": _sha256_bytes(_bootstrap_text().encode("utf-8")),
             "exit_code": proc.returncode,
             "tests_reported": test_count,
+            "nonvacuous_suite": nonvacuous_suite,
             "stdout_sha256": _sha256_bytes(proc.stdout.encode("utf-8")),
             "stderr_sha256": _sha256_bytes(proc.stderr.encode("utf-8")),
         },
@@ -282,6 +321,8 @@ def main(argv: list[str] | None = None) -> int:
             "python_socket_network_attempt_count": len(attempts),
             "python_socket_network_attempts": attempts,
             "per_case_secret_and_network_zero_assertions": "ENFORCED_BY_CANONICAL_TEST_SUITE",
+            "required_blocked_case_tests_observed": required_test_coverage,
+            "required_blocked_case_coverage_ok": required_test_coverage_ok,
         },
         "result": {
             "unittest_ok": unittest_ok,

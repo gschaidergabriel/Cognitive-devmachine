@@ -1,0 +1,126 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "forschungsbefehl_1",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_branch": "7d265254eb08dd3501bc3de3925fe62dd7265a49",
+  "branch": "trigger1/free-route-catalog-audit-gpt56sol-2100",
+  "user_goal": "Execute Forschungsbefehl 1 and advance the highest-information nonduplicate Global J-Space/vector-control discriminator.",
+  "authority": {
+    "owner_directive": "research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json",
+    "trigger_literal": "1",
+    "parallel_lanes": 10,
+    "positive_claim_boundary": "Actual model/runtime consumption plus exact identity, matched controls, disjoint holdout and reproducibility are required; prompt-only influence is insufficient."
+  },
+  "reentry": {
+    "prior_cycle_receipt": "research_entity/continuity/receipts/2026-08-24_TRIGGER1_JSPACE_RESEARCH_CYCLE1_GPT56SOL.json",
+    "prior_hosted_discriminator_receipt": "research_entity/continuity/receipts/2026-08-24_TRIGGER1_JSPACE_HOSTED_LOGIT_VECTOR_DISCRIMINATOR_GPT56SOL.json",
+    "existing_control_builder": "tools/trigger1_openrouter_logit_bias_control.py",
+    "nonduplication": "This delta does not recreate the matched-control request builder. It closes the next pre-I/O problem: deterministic discovery/rejection of exact FREE routes from a captured OpenRouter catalog."
+  },
+  "hypothesis": {
+    "id": "H4_EXACT_FREE_HOSTED_LOGIT_ROUTE_EXISTS_AND_CAN_BE_PREVALIDATED",
+    "statement": "A current exact OpenRouter FREE model route can satisfy zero prompt/completion price, explicit logit_bias/logprobs/seed support, public model-artifact identity, exact tokenizer binding and canonical economic admission simultaneously.",
+    "counterhypothesis": "Current FREE variants split the required properties; a route may be free but omit logit_bias, or support logit_bias only on a paid variant, while the dynamic free router remains identity-ambiguous.",
+    "falsifier": "A captured current OpenRouter catalog plus canonical economic provenance and an exact tokenizer binding yields at least one READY route under the fail-closed audit."
+  },
+  "current_external_evidence": [
+    {
+      "source": "https://openrouter.ai/api/v1/models",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "openai/gpt-oss-20b:free has prompt/completion price 0 and public Hugging Face identity, but its current supported_parameters omit logit_bias; the paid openai/gpt-oss-20b route lists logit_bias and nonzero pricing."
+    },
+    {
+      "source": "https://openrouter.ai/api/v1/models",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "nvidia/nemotron-nano-9b-v2:free has prompt/completion price 0 and public Hugging Face identity, but its current supported_parameters omit logit_bias and logprobs."
+    },
+    {
+      "source": "https://openrouter.ai/api/v1/models",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "inclusionai/ling-3.0-tiny:free is a current zero-price model with public Hugging Face identity and seed/logprobs, but its current supported_parameters omit logit_bias."
+    },
+    {
+      "source": "https://openrouter.ai/docs/guides/routing/provider-selection",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "require_parameters can exclude providers that do not support all request parameters and allow_fallbacks controls fallback behavior; these routing controls do not themselves create model/tokenizer identity."
+    }
+  ],
+  "canonical_economic_boundary": {
+    "path": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json",
+    "observed_openrouter_allowed_routes": ["openrouter/free"],
+    "finding": "Canonical economic provenance currently admits only the dynamic openrouter/free route, so no exact model-specific OpenRouter route is execution-ready even if a catalog candidate otherwise supports the requested parameters."
+  },
+  "targeted_route_audit": [
+    {
+      "model": "openai/gpt-oss-20b:free",
+      "zero_price": true,
+      "public_model_artifact_identity": true,
+      "logit_bias_supported": false,
+      "economic_exact_route_admitted": false,
+      "status": "BLOCKED"
+    },
+    {
+      "model": "nvidia/nemotron-nano-9b-v2:free",
+      "zero_price": true,
+      "public_model_artifact_identity": true,
+      "logit_bias_supported": false,
+      "economic_exact_route_admitted": false,
+      "status": "BLOCKED"
+    },
+    {
+      "model": "inclusionai/ling-3.0-tiny:free",
+      "zero_price": true,
+      "public_model_artifact_identity": true,
+      "logit_bias_supported": false,
+      "economic_exact_route_admitted": false,
+      "status": "BLOCKED"
+    }
+  ],
+  "scope_warning": "The external candidate audit is targeted, not an exhaustive proof that no current FREE catalog route can ever qualify. The new deterministic catalog auditor exists specifically to make future full-catalog snapshots exhaustive and reproducible without provider model I/O.",
+  "writes": [
+    {
+      "path": "tools/trigger1_openrouter_free_route_audit.py",
+      "commit": "c4a99bea8f6ad618dee30f8c26a34fffa367ddbd",
+      "scope": "Network-free captured-catalog audit. READY requires exact non-dynamic model id, exact zero prompt/completion price, logit_bias+logprobs+seed support, exact tokenizer id+SHA256, and exact-route economic admission."
+    },
+    {
+      "path": "tests/test_trigger1_openrouter_free_route_audit.py",
+      "commit": "8db2a84372bca310be8aed1e144c76f4da7ed9d3",
+      "scope": "Seven fail-closed unit regressions covering zero-price without logit_bias, paid route, dynamic router, missing economic admission, missing tokenizer binding, candidate filtering and the complete READY positive fixture."
+    }
+  ],
+  "verification": {
+    "local_precommit_unit_tests": {
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "scope": "SOURCE_UNIT_FUNCTIONAL_EQUIVALENCE_ONLY",
+      "canonical_runtime_credit": false
+    },
+    "provider_model_network_io": false,
+    "credential_read": false,
+    "paid_or_together_use": false,
+    "real_model_vector_intervention": false
+  },
+  "scientific_result": {
+    "status": "ROUTE_DISCOVERY_GATE_IMPLEMENTED_CURRENT_TARGETED_CANDIDATES_BLOCKED",
+    "adjudication": "COUNTERHYPOTHESIS_SUPPORTED_FOR_AUDITED_CURRENT_ROUTES",
+    "meaning": "The hosted output-logit lane is not currently execution-ready from the audited routes. FREE status alone is insufficient, and parameter support on a paid sibling route cannot be transferred to the FREE variant.",
+    "next_exact_action": "Feed a fresh full OpenRouter model-catalog snapshot into the new network-free auditor. If no READY route exists under exact economic and tokenizer bindings, keep hosted output-logit steering blocked and execute the primary local Qwen3-0.6B residual/cvec control-family T1 on an authorized zero-cost intervention-capable runtime."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "hosted_output_logit_vector_runtime": 0,
+    "route_preflight_runtime": 0
+  },
+  "acceptance": "SOURCE_DELTA_READY_FOR_REVIEW"
+}

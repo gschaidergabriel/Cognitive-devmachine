@@ -10,10 +10,15 @@ noncanonical and no execution is admitted without the isolated backend.
 Model-authored commands may write only inside the disposable Forge worktree. The
 rest of the host remains hidden by bubblewrap; this narrow writable bind is required
 for ordinary test/build artifacts such as ``__pycache__`` and compiler outputs.
+
+Supervisor-8.72 funnel rule: ready NEW candidates are evaluated before optional
+external discovery. Discovery is preserved, but it may no longer hold an already
+ready local Forge queue behind rate limits or remote latency.
 """
 from __future__ import annotations
 
 import asyncio
+import copy
 import json
 from pathlib import Path
 from typing import Any
@@ -25,6 +30,8 @@ _ORIGINAL_VALIDATE = base.validate_candidate
 _ORIGINAL_MANIFEST = admission.candidate_execution_manifest
 _ORIGINAL_BWRAP_PREFIX = admission._bubblewrap_prefix
 _ORIGINAL_ADMISSION_RUN_CMD = admission.run_cmd
+_ORIGINAL_CYCLE = base.cycle
+_ORIGINAL_METRICS = base.metrics
 base.safe_command = admission.safe_command
 
 
@@ -166,6 +173,82 @@ def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
 
 
 base.validate_candidate = validate_candidate
+
+
+def _ready_new_rows(con: Any, limit: int) -> list[Any]:
+    if limit <= 0:
+        return []
+    return con.execute(
+        "SELECT * FROM candidates WHERE ready=1 AND state='NEW' ORDER BY ingested_at LIMIT ?",
+        (limit,),
+    ).fetchall()
+
+
+async def _evaluate_ready_backlog(con: Any, args: Any) -> int:
+    """Drain one bounded local batch before any optional remote discovery work."""
+    rows = _ready_new_rows(con, int(args.candidates_per_cycle))
+    if not rows:
+        return 0
+    local_sem = asyncio.Semaphore(max(1, int(args.local_parallel)))
+
+    async def val(row: Any) -> Any:
+        async with local_sem:
+            return await asyncio.to_thread(validate_candidate, con, row)
+
+    vals = await asyncio.gather(*(val(row) for row in rows), return_exceptions=True)
+    for row, res in zip(rows, vals):
+        if isinstance(res, dict):
+            base.append_jsonl(base.EVAL_PATH, res)
+            con.execute(
+                "UPDATE candidates SET state=?,evaluated_at=?,last_reason=? WHERE candidate_hash=?",
+                (
+                    str(res.get("status") or "EVALUATED").upper(),
+                    base.now(),
+                    str(res.get("reason") or "")[:1000],
+                    row["candidate_hash"],
+                ),
+            )
+            base.bump(con, "evaluations", 1)
+            base.bump(con, "accepted_deltas", int(res.get("status") == "accepted"))
+        else:
+            con.execute(
+                "UPDATE candidates SET state='FORGE_ERROR',evaluated_at=?,last_reason=? WHERE candidate_hash=?",
+                (base.now(), type(res).__name__, row["candidate_hash"]),
+            )
+    con.commit()
+    return len(rows)
+
+
+async def _backlog_first_cycle(con: Any, args: Any) -> int:
+    """Evaluate ready work first; preserve discovery as a non-blocking second phase."""
+    # Pull newly emitted worker deltas into the candidate DB before measuring/draining
+    # the backlog. The base cycle may call this again; ingestion is identity-deduped.
+    base.ingest_worker_candidates(con)
+    evaluated = await _evaluate_ready_backlog(con, args)
+    if not evaluated:
+        return await _ORIGINAL_CYCLE(con, args)
+
+    # The base cycle still performs question discovery and public-donor reproduction,
+    # but must not evaluate the same candidate batch twice in this cycle.
+    discovery_args = copy.copy(args)
+    discovery_args.candidates_per_cycle = 0
+    downstream = await _ORIGINAL_CYCLE(con, discovery_args)
+    return evaluated + int(downstream or 0)
+
+
+def _metrics_with_queue(con: Any, peak_parallel: int = 0) -> dict[str, Any]:
+    out = _ORIGINAL_METRICS(con, peak_parallel)
+    row = con.execute(
+        "SELECT COUNT(*), MIN(ingested_at) FROM candidates WHERE ready=1 AND state='NEW'"
+    ).fetchone()
+    out["ready_new_backlog"] = int(row[0] or 0) if row else 0
+    out["oldest_ready_new_ingested_at"] = row[1] if row else None
+    out["candidate_evaluation_order"] = "READY_NEW_BEFORE_OPTIONAL_DISCOVERY"
+    return out
+
+
+base.cycle = _backlog_first_cycle
+base.metrics = _metrics_with_queue
 
 
 def main() -> int:

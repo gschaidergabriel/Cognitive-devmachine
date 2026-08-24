@@ -1,0 +1,118 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "implementation_codename": "Xeno",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "branch_base": "4426225e3906fec9f64c1c93ded137316e20b1ee",
+    "latest_canonical_main_observed_before_receipt": "12881fd55c1819fdd9ad4d8660d1fec7a1d16273",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json",
+    "supervisor_inbox_schema": "8.71",
+    "xeno_owner_priority": "BUILD_FIRST_RUNNABLE_XENO_V1_THEN_RECURSIVE_IMPROVEMENT",
+    "retained_hcu_donor_pr": 1263
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_or_request_id": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_run": 0,
+    "duplicate_lane_closed": {
+      "pr": 1491,
+      "reason": "PR1473 landed canonical 6000-supervisor revocation repair on main; successor duplicate was closed rather than maintained."
+    }
+  },
+  "durable_delta": {
+    "branch": "gpt56sol/go-871-xeno-runtime-spine-20260824",
+    "pr": 1524,
+    "source_commit": "3fc40e3824c69bb5ef5aa48c2826f156e786de36",
+    "test_definition_commit": "fbdf037d174d361b73857f16127df03465a5360f",
+    "source_path": "tools/xeno_runtime_v1.py",
+    "test_path": "tests/test_xeno_runtime_v1.py",
+    "scope": "XENO_V1_RUNTIME_AND_PRESTAGE_SOURCE_SPINE",
+    "runtime_path": "raw Typed Entry -> canonical xeno_entry_fabric_v1 admission -> validated XENO_HARNESS_CONFIG/v1 -> optional PRESTAGE -> CORE -> typed non-authoritative ActionCandidate -> existing EffectGate required",
+    "authority_reuse": [
+      "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+      "tools/xeno_harness_config.py",
+      "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py"
+    ],
+    "fail_closed_properties": [
+      "payload bytes must match admitted payload digest before any engine call",
+      "Entry model-call budget is checked before model invocation",
+      "token and wall budgets reject overrun candidates",
+      "PRESTAGE output remains candidate context with canonical_truth=false",
+      "secret_ref is confined to adapter profile and absent from model request/runtime trace/public result",
+      "adapter output containing forbidden secret fields is rejected",
+      "all outputs remain canonical_truth=false and effect_authority=false with requires_effect_gate=true",
+      "deterministic no-model path performs zero engine calls"
+    ],
+    "trace_readiness": "stage trace binds ENTRY_ADMITTED -> optional PRESTAGE_RESULT -> CORE_RESULT -> ACTION_CANDIDATE with deterministic canonical hashes; this is runtime trace plumbing only and grants no Global J-Space causal credit"
+  },
+  "tests": {
+    "defined": 9,
+    "focused_cases": [
+      "core-only bypass",
+      "PRESTAGE to CORE typed context",
+      "secret separation",
+      "payload digest mismatch before engine call",
+      "model-call budget rejection before engine call",
+      "token budget overrun rejection",
+      "deterministic no-model zero-call mode",
+      "plaintext-secret harness rejection",
+      "adapter secret-field smuggling rejection"
+    ],
+    "exact_branch_test_execution_by_this_organ": false,
+    "github_workflows": [
+      {
+        "run_id": 32735924731,
+        "name": "Research Entity Verify",
+        "conclusion": "failure",
+        "job_id": 97458572476,
+        "steps": null,
+        "classification": "PRE_STEP_OR_RUNNER_FAILURE_NO_TEST_EXECUTION_CREDIT"
+      },
+      {
+        "run_id": 32735924466,
+        "name": "Research Entity Identity Guard",
+        "conclusion": "failure",
+        "job_id": 97458571641,
+        "steps": null,
+        "classification": "PRE_STEP_OR_RUNNER_FAILURE_NO_TEST_EXECUTION_CREDIT"
+      }
+    ],
+    "test_credit": 0
+  },
+  "parallel_main_reentry": {
+    "nvidia_entitlement": "main@12881fd55c1819fdd9ad4d8660d1fec7a1d16273 now fails NVIDIA closed until exact model-scoped credential free-entitlement evidence is bound; this organ did not duplicate PR1518",
+    "main_changes_since_branch_base_touch_runtime_dependencies": false,
+    "comparison_note": "21 successor commits changed provider/swarm/metrics/trigger1 surfaces but not xeno_runtime_v1 dependencies xeno_entry_fabric_v1 or xeno_harness_config"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE: added the first thin Xeno v1 request orchestration spine over canonical Entry/harness authorities; V1_RUNTIME is not PASS because exact execution and verified engine/loader/model/effect-chain integration remain open.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_SOURCE: runtime consumes existing canonical Typed Entry admission/event/admission identity and preserves deterministic candidate/effect boundaries; no competing ingress or truth store created.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_TRACE_READINESS_ONLY: stage-level causal/result hashes now connect admitted Entry, PRESTAGE, CORE and ActionCandidate for later J-Space instrumentation; model-specific causal intervention evidence and training credit remain zero. Existing exact Qwen3-0.6B/llama.cpp donor readiness is not promoted by this source change."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "xeno_runtime_component": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "negative_evidence": {
+    "clay_direct_dev_bridge_exposed_in_this_chat": false,
+    "provider_credentials_read": 0,
+    "external_provider_model_calls": 0,
+    "paid_or_subscription_execution": 0,
+    "together_execution_or_preflight": 0,
+    "github_ci_steps_executed_for_source_test_commit": 0
+  },
+  "next_exact_gate": "Execute tests/test_xeno_runtime_v1.py at exact PR1524 head on an authorized zero-cost normal-user or clay-direct-dev checkout; if it passes and no equivalent runtime spine has landed, re-enter current main and fuse. Then replace the generic engine-runner trust seam with the retained HCU donor's verified engine-admission -> loader-consumption -> model-execution/inference receipt chain before claiming V1_RUNTIME component PASS; instrument the resulting exact stage identities into the existing Global J-Space causal trace path without minting causal credit from source structure alone.",
+  "acceptance": "IN_PROGRESS"
+}

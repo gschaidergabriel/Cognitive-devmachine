@@ -1,0 +1,170 @@
+name: EntityOS runtime reconcile 8.71
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/runtime-reconcile-871-selfhosted.yml'
+      - 'free swarm/update_root_results.py'
+      - 'tools/run_6000_free_swarm_supervisor.sh'
+      - 'tools/activate_6000_free_swarm.sh'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reconcile-runtime:
+    if: github.actor == 'gschaidergabriel'
+    runs-on: self-hosted
+    timeout-minutes: 12
+    steps:
+      - name: Checkout current main for evidence tooling
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Fast-forward live checkout and restart bounded runtime
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          LIVE=/workspace/clay-global-research-entity
+          ART=/artifacts/clay-entityos-swarm
+          OUT=/tmp/clay-runtime-reconcile-871
+          mkdir -p "$OUT" "$ART"
+
+          python3 - <<'PY' > "$OUT/preflight.json"
+          import json, os, subprocess
+          from pathlib import Path
+          live=Path('/workspace/clay-global-research-entity')
+          art=Path('/artifacts/clay-entityos-swarm')
+          def cmd(*args):
+              p=subprocess.run(args,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False)
+              return {'rc':p.returncode,'stdout':p.stdout[-2000:],'stderr':p.stderr[-2000:]}
+          print(json.dumps({
+              'schema':'CLAY_RUNTIME_RECONCILE_SELFHOSTED_PREFLIGHT/v1',
+              'live_repo_exists':(live/'.git').exists(),
+              'artifacts_exists':art.exists(),
+              'live_head':cmd('git','-C',str(live),'rev-parse','HEAD') if (live/'.git').exists() else None,
+              'live_status':cmd('git','-C',str(live),'status','--porcelain=v1') if (live/'.git').exists() else None,
+              'provider_secret_values_inspected':False,
+              'paid_fallback_attempt_count':0,
+              'together_used':False,
+          },indent=2))
+          PY
+
+          if [[ ! -d "$LIVE/.git" ]]; then
+            printf '%s\n' '{"schema":"CLAY_RUNTIME_RECONCILE_SELFHOSTED_RESULT/v1","status":"BLOCKED_LIVE_REPO_NOT_FOUND","runtime_credit":0}' > "$OUT/result.json"
+            exit 0
+          fi
+
+          git -C "$LIVE" fetch --quiet origin main
+          before="$(git -C "$LIVE" rev-parse HEAD)"
+          target="$(git -C "$LIVE" rev-parse origin/main)"
+          dirty="$(git -C "$LIVE" status --porcelain=v1)"
+          if [[ -n "$dirty" ]]; then
+            # Runtime dashboards are reproducible from /artifacts; never erase any
+            # other operator/developer edits in order to force a deployment.
+            unknown_dirty="$(printf '%s\n' "$dirty" | grep -Ev '^[ MARC?]{2} (free swarm/(README.md|LIVE_METRICS.json|DISTILLERY_LIVE.json|FORGE_LIVE.json|SYSTEM_ANALYSIS_LIVE.json|FABRIC_6000_LIVE.json)|000_FREE_SWARM_LIVE_DASHBOARD.md)$' || true)"
+            if [[ -n "$unknown_dirty" ]]; then
+              python3 - <<PY > "$OUT/result.json"
+          import json
+          print(json.dumps({'schema':'CLAY_RUNTIME_RECONCILE_SELFHOSTED_RESULT/v1','status':'BLOCKED_LIVE_CHECKOUT_DIRTY_NONGENERATED','before':'$before','target':'$target','runtime_credit':0},indent=2))
+          PY
+              exit 0
+            fi
+            git -C "$LIVE" restore --worktree -- \
+              'free swarm/README.md' \
+              'free swarm/LIVE_METRICS.json' \
+              'free swarm/DISTILLERY_LIVE.json' \
+              'free swarm/FORGE_LIVE.json' \
+              'free swarm/SYSTEM_ANALYSIS_LIVE.json' \
+              'free swarm/FABRIC_6000_LIVE.json' \
+              '000_FREE_SWARM_LIVE_DASHBOARD.md' 2>/dev/null || true
+          fi
+
+          if ! git -C "$LIVE" merge --ff-only origin/main >"$OUT/fast_forward.log" 2>&1; then
+            python3 - <<PY > "$OUT/result.json"
+          import json
+          print(json.dumps({'schema':'CLAY_RUNTIME_RECONCILE_SELFHOSTED_RESULT/v1','status':'BLOCKED_FAST_FORWARD_FAILED','before':'$before','target':'$target','runtime_credit':0},indent=2))
+          PY
+            exit 0
+          fi
+          after="$(git -C "$LIVE" rev-parse HEAD)"
+
+          python3 "$LIVE/tools/free_provider_admission.py" --json > "$OUT/admission.json"
+          bash "$LIVE/tools/activate_6000_free_swarm.sh" > "$OUT/activate.log" 2>&1
+
+          # Execute the reconciliation hook explicitly after the fresh supervisor
+          # launch as well as relying on the supervisor's own 15-second loop.
+          python3 "$LIVE/free swarm/update_root_results.py" \
+            --repo "$LIVE" --artifacts "$ART" > "$OUT/reconcile-first.log" 2>&1 || true
+          sleep 20
+          python3 "$LIVE/free swarm/update_root_results.py" \
+            --repo "$LIVE" --artifacts "$ART" > "$OUT/reconcile-second.log" 2>&1 || true
+
+          cp "$ART/RUNTIME_RECONCILIATION.json" "$OUT/runtime_reconciliation.json" 2>/dev/null || true
+          cp "$ART/SUPERVISOR_6000.json" "$OUT/supervisor_6000.json" 2>/dev/null || true
+          cp "$ART/SUPERVISOR.json" "$OUT/supervisor_compat.json" 2>/dev/null || true
+          cp "$ART/local-model.json" "$OUT/local_model.json" 2>/dev/null || true
+          cp "$LIVE/free swarm/SYSTEM_ANALYSIS_LIVE.json" "$OUT/system_analysis.json" 2>/dev/null || true
+
+          LIVE_BEFORE="$before" LIVE_AFTER="$after" LIVE_TARGET="$target" python3 - <<'PY' > "$OUT/result.json"
+          import json, os
+          from pathlib import Path
+          out=Path('/tmp/clay-runtime-reconcile-871')
+          def load(name):
+              try:
+                  x=json.loads((out/name).read_text()); return x if isinstance(x,dict) else {}
+              except Exception:return {}
+          rec=load('runtime_reconciliation.json')
+          sysa=load('system_analysis.json')
+          rt=sysa.get('runtime') or rec.get('runtime') or {}
+          auth=rt.get('authority_alignment') or {}
+          print(json.dumps({
+              'schema':'CLAY_RUNTIME_RECONCILE_SELFHOSTED_RESULT/v1',
+              'status':'EXECUTED',
+              'live_head_before':os.environ.get('LIVE_BEFORE'),
+              'live_head_after':os.environ.get('LIVE_AFTER'),
+              'origin_main_target':os.environ.get('LIVE_TARGET'),
+              'supervisor':rt.get('supervisor'),
+              'go_swarm':rt.get('go_swarm'),
+              'local_model':rt.get('local_model'),
+              'authority_alignment':auth,
+              'provider_admission':rt.get('provider_admission'),
+              'actions':rec.get('actions'),
+              'provider_secret_values_inspected':False,
+              'paid_fallback_attempt_count':0,
+              'together_used':False,
+              'runtime_credit':0,
+              'credit_note':'Operational recovery evidence only. Provider/HCU/J-Space/training credit still requires exact execution receipts.',
+          },indent=2))
+          PY
+
+      - name: Show sanitized result
+        if: always()
+        shell: bash
+        run: |
+          cat /tmp/clay-runtime-reconcile-871/result.json 2>/dev/null || true
+
+      - name: Upload sanitized recovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: entityos-runtime-reconcile-871
+          path: |
+            /tmp/clay-runtime-reconcile-871/preflight.json
+            /tmp/clay-runtime-reconcile-871/result.json
+            /tmp/clay-runtime-reconcile-871/admission.json
+            /tmp/clay-runtime-reconcile-871/runtime_reconciliation.json
+            /tmp/clay-runtime-reconcile-871/supervisor_6000.json
+            /tmp/clay-runtime-reconcile-871/supervisor_compat.json
+            /tmp/clay-runtime-reconcile-871/local_model.json
+            /tmp/clay-runtime-reconcile-871/system_analysis.json
+            /tmp/clay-runtime-reconcile-871/fast_forward.log
+            /tmp/clay-runtime-reconcile-871/activate.log
+            /tmp/clay-runtime-reconcile-871/reconcile-first.log
+            /tmp/clay-runtime-reconcile-871/reconcile-second.log
+          if-no-files-found: warn
+          retention-days: 7

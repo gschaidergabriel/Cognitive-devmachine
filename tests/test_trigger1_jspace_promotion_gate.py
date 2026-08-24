@@ -55,7 +55,7 @@ def valid_candidate() -> dict:
         },
         "transport": {"hosted_prompt_only": False},
         "target": {
-            "relation": gate.OWNER_API_TARGET_CLASS,
+            "relation": gate.LEGACY_OWNER_API_TARGET_CLASS,
             "typed_free_lane_admitted": True,
             "free_lane_execution_receipt_sha256": HEX64,
             "provider": "example-free-provider",
@@ -64,12 +64,39 @@ def valid_candidate() -> dict:
     }
 
 
+def valid_local_api_candidate() -> dict:
+    candidate = valid_candidate()
+    candidate["runtime_intervention_class"] = "LOCAL_LLAMA_CPP_CVEC_APPLIED"
+    candidate["transport"] = {
+        "hosted_prompt_only": False,
+        "api_served": True,
+        "loopback_only": True,
+        "endpoint": "http://127.0.0.1:8089/v1/chat/completions",
+    }
+    candidate["target"] = {
+        "relation": gate.OWNER_API_TARGET_CLASS,
+        "execution_surface": gate.LOCAL_API_SURFACE,
+        "zero_provider_billing": True,
+        "local_runtime_execution_receipt_sha256": HEX64,
+        "provider": "local",
+        "model_or_route": "Qwen/Qwen3-0.6B-GGUF@exact",
+    }
+    return candidate
+
+
 class Trigger1PromotionGateTests(unittest.TestCase):
-    def test_exact_instrumented_free_api_candidate_can_reach_both_candidate_verdicts(self):
+    def test_exact_instrumented_free_external_api_candidate_can_reach_both_candidate_verdicts(self):
         verdict = gate.adjudicate(valid_candidate())
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertTrue(verdict["owner_trigger1_direct_free_api_model_credit_candidate"])
         self.assertFalse(verdict["canonical_credit_minted"])
+
+    def test_exact_zero_cost_loopback_api_cvec_candidate_can_reach_goal(self):
+        verdict = gate.adjudicate(valid_local_api_candidate())
+        self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertEqual([], verdict["owner_target_failures"])
 
     def test_hosted_prompt_only_fails_closed(self):
         candidate = valid_candidate()
@@ -77,22 +104,40 @@ class Trigger1PromotionGateTests(unittest.TestCase):
         candidate["runtime_intervention_class"] = "HOSTED_TEXT_API"
         verdict = gate.adjudicate(candidate)
         self.assertFalse(verdict["mechanism_runtime_vector_credit_candidate"])
-        self.assertFalse(verdict["owner_trigger1_direct_free_api_model_credit_candidate"])
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertIn("HOSTED_PROMPT_ONLY_CANNOT_PROVE_VECTOR_STEERING", verdict["failures"])
 
-    def test_local_cvec_can_be_mechanism_candidate_but_not_literal_api_target(self):
+    def test_local_cvec_without_api_boundary_is_mechanism_only(self):
         candidate = valid_candidate()
         candidate["runtime_intervention_class"] = "LOCAL_LLAMA_CPP_CVEC_APPLIED"
         candidate["target"] = {
-            "relation": "LOCAL_CHECKPOINT_SURROGATE",
-            "typed_free_lane_admitted": False,
+            "relation": gate.OWNER_API_TARGET_CLASS,
+            "execution_surface": gate.LOCAL_API_SURFACE,
+            "zero_provider_billing": True,
+            "local_runtime_execution_receipt_sha256": HEX64,
             "provider": "local",
-            "model_or_route": "same-family-local-checkpoint",
+            "model_or_route": "Qwen/Qwen3-0.6B-GGUF@exact",
         }
+        candidate["transport"] = {"hosted_prompt_only": False, "api_served": False}
         verdict = gate.adjudicate(candidate)
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
-        self.assertFalse(verdict["owner_trigger1_direct_free_api_model_credit_candidate"])
-        self.assertIn("EXACT_ADMITTED_FREE_API_MODEL_RUNTIME_REQUIRED", verdict["owner_target_failures"])
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn("API_SERVED_RUNTIME_REQUIRED", verdict["owner_target_failures"])
+        self.assertIn("LOCAL_API_LOOPBACK_ONLY_REQUIRED", verdict["owner_target_failures"])
+
+    def test_local_api_requires_zero_provider_billing(self):
+        candidate = valid_local_api_candidate()
+        candidate["target"]["zero_provider_billing"] = False
+        verdict = gate.adjudicate(candidate)
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn("LOCAL_ZERO_PROVIDER_BILLING_REQUIRED", verdict["owner_target_failures"])
+
+    def test_local_api_requires_loopback_endpoint(self):
+        candidate = valid_local_api_candidate()
+        candidate["transport"]["endpoint"] = "https://example.com/v1/chat/completions"
+        verdict = gate.adjudicate(candidate)
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn("LOCAL_API_LOOPBACK_ENDPOINT_REQUIRED", verdict["owner_target_failures"])
 
     def test_calibration_holdout_overlap_fails_mechanism(self):
         candidate = valid_candidate()
@@ -113,17 +158,18 @@ class Trigger1PromotionGateTests(unittest.TestCase):
             result = gate.scan_batch(Path(tmp))
         self.assertEqual(result["candidate_files_seen"], 0)
         self.assertFalse(result["mechanism_runtime_vector_credit_candidate"])
-        self.assertFalse(result["owner_trigger1_direct_free_api_model_credit_candidate"])
+        self.assertFalse(result["owner_trigger1_goal_credit_candidate"])
         self.assertFalse(result["canonical_credit_minted"])
 
-    def test_batch_scan_reads_candidate_files(self):
+    def test_batch_scan_reads_local_api_candidate_files(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "lane" / "trigger1_direct_steering_candidate.json"
             path.parent.mkdir()
-            path.write_text(json.dumps(valid_candidate()), encoding="utf-8")
+            path.write_text(json.dumps(valid_local_api_candidate()), encoding="utf-8")
             result = gate.scan_batch(Path(tmp))
         self.assertEqual(result["candidate_files_seen"], 1)
         self.assertTrue(result["mechanism_runtime_vector_credit_candidate"])
+        self.assertTrue(result["owner_trigger1_goal_credit_candidate"])
         self.assertTrue(result["owner_trigger1_direct_free_api_model_credit_candidate"])
 
 

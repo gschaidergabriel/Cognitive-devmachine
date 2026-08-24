@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"free-swarm-vault-presence-20260824T1653",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -euo pipefail; echo repo=$(git rev-parse --show-toplevel); echo head=$(git rev-parse HEAD); find research_entity/private -maxdepth 1 -type f -printf '%f size=%s\\n' 2>/dev/null || true; set -a; for f in research_entity/private/API_TOKENS.env research_entity/private/GROQ_API.env; do [ ! -r \"$f\" ] || . \"$f\"; done; set +a; python3 - <<'PY'\nimport os\ngroups={'groq':['GROQ_API_KEY','GROQ2_API_KEY','GROQ3_API_KEY'],'mistral':['MISTRAL_API_KEY','MISTRAL2_API_KEY','MISTRAL3_API_KEY'],'nvidia':['NVIDIA_API_KEY','NVIDIA_NIM_API_KEY','NVIDIA2_API_KEY','NVIDIA3_API_KEY','NGC_API_KEY'],'github':['GH_TOKEN','GITHUB_TOKEN']}\nfor g,names in groups.items():\n p=[n for n in names if os.getenv(n,'').strip()]\n print(g,'count',len(p),'names',','.join(p) if p else '-')\nPY"
+}

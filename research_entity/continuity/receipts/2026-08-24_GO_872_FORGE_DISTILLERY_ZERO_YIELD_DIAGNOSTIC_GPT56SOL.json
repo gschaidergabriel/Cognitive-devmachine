@@ -1,0 +1,87 @@
+{
+  "schema": "CLAY_GO_872_FORGE_DISTILLERY_ZERO_YIELD_DIAGNOSTIC_RECEIPT/v3",
+  "created_at_local": "2026-08-24T23:33:00+07:00",
+  "reentered_at_local": "2026-08-24T23:55:00+07:00",
+  "persistent_research_entity": "Clay",
+  "organ": "OpenAI_GPT_5_6_Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.72",
+  "authority_mode": "OWNER_ORDERED_DUAL_MACHINE_EXECUTION_FREE_ONLY",
+  "rebased_main": "813d6bac4a04d1cf2df4f4507288c6aa17f3b2fe",
+  "branch": "go872/forge-distillery-zero-yield-diagnostic-gpt56sol",
+  "coordination": {
+    "shared_reproducible_macrocycle_identity_available": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0
+  },
+  "observed_problem": {
+    "free_swarm_tokens_latest_observed_committed_frontier": 13587261,
+    "machine_readable_delta_records_latest_observed_committed_frontier": 292,
+    "forge_live_nominal_accepted_deltas_latest_observed": 1,
+    "distillery_live_accepted_packets_latest_observed": 0,
+    "distillery_live_accepted_dataset_tokens_latest_observed": 0,
+    "distillery_live_generated_at_utc": "2026-08-24T16:45:00.844172+00:00",
+    "interpretation": "The published live zero-yield snapshot is real at its exact identity. Current source guarantees nonempty evidence-qualified Forge ingest contributes positive approximate tokens, so one nominal ACCEPT plus zero live tokens is not evidence of a token arithmetic defect."
+  },
+  "parallel_reentry": {
+    "promotion_source": "tools/promote_forge_distillery_runtime_gate.py",
+    "promotion_semantics": "Consumes only a passing exact-current runtime witness, revalidates nested evidence-qualified Forge evaluation, writes through the existing Distillery ingest authority, and requires idempotent replay.",
+    "promotion_terminal_runtime_observed_by_this_organ": false,
+    "selfhosted_observer_path": "research_entity/runtime/selfhosted_health/OBSERVER_LATEST.json",
+    "selfhosted_observer_present_at_main_4eceacbbd8cbc03c1389e65a3035c4111e4a19c9": false,
+    "latest_relevant_main_deltas": [
+      "fix(forge): preserve preexisting Distillery token baseline",
+      "test(distillery): lock replay-stable Forge identity semantics"
+    ],
+    "diagnostic_nonduplication": "Mutation/promotion tests prove the guarded write path. This delta is a read-only state/provenance discriminator for live zero-yield and ledger divergence; it creates no second runtime, promotion, state, truth or effect authority."
+  },
+  "new_discriminator_insight": {
+    "finding": "Global Distillery accepted packet/token counters may contain preexisting non-Forge data. Therefore global accepted_dataset_tokens > 0 is not Forge provenance evidence.",
+    "repair": "Diagnostic v2 infers Forge provenance only from forge_execution_ingest rows and Forge-specific counters, while treating global counters as lower-bound consistency checks against the Forge-specific subset.",
+    "counterfactual_locked": "A nominal unqualified Forge ACCEPT plus 200 unrelated preexisting Distillery tokens remains NOMINAL_ACCEPT_NOT_EVIDENCE_QUALIFIED, not provenance drift."
+  },
+  "delta": {
+    "tool": "tools/diagnose_forge_distillery_zero_yield_872.py",
+    "tool_git_blob": "032bfabc4b4b144bdb27b03f9b51a71272688686",
+    "tool_sha256_source_equivalent_local_bytes": "a7a9a7bfd923609489f36f65c86ab3674303bd22806a59f46996b5d659ecc02e",
+    "test": "tests/test_diagnose_forge_distillery_zero_yield_872.py",
+    "test_git_blob": "7644d92ac40aa90ff87b2bf4800b2845e487412c",
+    "test_sha256_source_equivalent_local_bytes": "c91513afb9f11caf8716020a9d50c5c428076deb3f5a89016c9e24d1cc56a1cd",
+    "semantics": "READ_ONLY; imports canonical forge_evidence_credit_871.audit; never mutates Forge or Distillery; global baselines are not misused as Forge provenance; no second admission/truth/effect/promotion authority"
+  },
+  "deterministic_test_evidence": {
+    "execution_surface": "ChatGPT isolated local container",
+    "source_equivalence_scope": "NEW_DIAGNOSTIC_AND_TEST_BYTES_WITH_SOURCE_EQUIVALENT_CANONICAL_FORGE_AUDIT_FIXTURE",
+    "python_compile": "PASS",
+    "unittest": "9_OF_9_PASS",
+    "cases": [
+      "NOMINAL_ACCEPT_NOT_EVIDENCE_QUALIFIED",
+      "UNRELATED_GLOBAL_BASELINE_DOES_NOT_FAKE_FORGE_PROVENANCE",
+      "FORGE_LEDGER_DB_PROVENANCE_UNBOUND",
+      "EVIDENCE_QUALIFIED_ACCEPT_NOT_INGESTED",
+      "EVIDENCE_QUALIFIED_ACCEPT_PARTIALLY_INGESTED",
+      "FORGE_TO_DISTILLERY_DATASET_GATE_OPEN_WITH_PREEXISTING_BASELINE",
+      "TOKEN_LEDGER_INCONSISTENT",
+      "FORGE_PACKET_LEDGER_INCONSISTENT",
+      "QUALIFIED_ACCEPT_DB_MISSING"
+    ],
+    "runtime_credit_scope": "DETERMINISTIC_DIAGNOSTIC_COMPONENT_ONLY",
+    "nonproject_environment_note": "A spreadsheet runtime warmup emitted a timeout warning during Python startup; compile and unittest both returned exit code 0, so this is tool-environment noise rather than project evidence."
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_ENTITYOS_EXECUTABLE_CONVERGENCE_BY_ADDING_A_BASELINE_SAFE_READ_ONLY_LIVE_LEDGER_DISCRIMINATOR_AROUND_THE_EXISTING_RUNTIME_AND_PROMOTION_PATH",
+    "track_b": "ADVANCED_HCU_TYPED_ENTRY_EVIDENCE_PROVENANCE_DISCIPLINE_WITH_FORGE_SPECIFIC_CAUSAL_SUBSET_ACCOUNTING_AND_NO_NEW_AUTHORITY",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: NO_SHARED_REPRODUCIBLE_ATOMIC_LEASE_IDENTITY_AND_NO_TERMINAL_MODEL_SPECIFIC_QWEN_RECEIPT; ZERO_NEW_UNUSUAL_INTERVENTIONS"
+  },
+  "credits": {
+    "canonical_truth": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Run the read-only diagnostic against the exact live Forge evaluation ledger and persistent Distillery SQLite on an authorized local/clay-direct-dev surface. Consume the repository-bound self-hosted health observer when present. Then execute the current Forge live-promotion workflow only if the execution transport is actually available; require exact-current disposable witness PASS plus one live Forge packet with positive token delta and identical replay +0. Do not weaken evidence admission or infer self-hosted health from queued status alone."
+}

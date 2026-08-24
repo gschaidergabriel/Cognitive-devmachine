@@ -6,6 +6,10 @@ cycle can evaluate a worker-authored candidate. The execution manifest is bound 
 the same exact ``repo_head_at_prompt`` source identity now enforced by the canonical
 Forge (#1544), never to a moving evaluation checkout. Candidate output remains
 noncanonical and no execution is admitted without the isolated backend.
+
+Model-authored commands may write only inside the disposable Forge worktree. The
+rest of the host remains hidden by bubblewrap; this narrow writable bind is required
+for ordinary test/build artifacts such as ``__pycache__`` and compiler outputs.
 """
 from __future__ import annotations
 
@@ -19,8 +23,51 @@ import run_free_evidence_forge as base
 
 _ORIGINAL_VALIDATE = base.validate_candidate
 _ORIGINAL_MANIFEST = admission.candidate_execution_manifest
+_ORIGINAL_BWRAP_PREFIX = admission._bubblewrap_prefix
+_ORIGINAL_ADMISSION_RUN_CMD = admission.run_cmd
 base.safe_command = admission.safe_command
-base.run_cmd = admission.run_cmd
+
+
+def _is_disposable_forge_workdir(cwd: Path) -> bool:
+    try:
+        forge_root = Path(base.FORGE_ROOT).resolve()
+        resolved = cwd.resolve()
+        resolved.relative_to(forge_root)
+        return resolved != forge_root
+    except (OSError, ValueError):
+        return False
+
+
+def _writable_disposable_bwrap_prefix(cwd: Path) -> list[str] | None:
+    prefix = _ORIGINAL_BWRAP_PREFIX(cwd)
+    if prefix is None or not _is_disposable_forge_workdir(cwd):
+        return prefix
+    host = str(cwd.resolve())
+    for i in range(len(prefix) - 2):
+        if prefix[i:i + 3] == ["--ro-bind", host, "/work"]:
+            prefix[i] = "--bind"
+            return prefix
+    # If the donor namespace layout changes, do not guess which host path should
+    # become writable. Refuse execution until the invariant is reviewed.
+    return None
+
+
+admission._bubblewrap_prefix = _writable_disposable_bwrap_prefix
+
+
+def _run_cmd_disposable_only(cwd: Path, command: str, timeout: int = 120) -> dict[str, Any]:
+    if not _is_disposable_forge_workdir(cwd):
+        return {
+            "rc": 126,
+            "elapsed_s": 0.0,
+            "stdout": "",
+            "stderr": "FORGE_EXECUTION_BLOCKED:WORKDIR_OUTSIDE_DISPOSABLE_FORGE_ROOT",
+            "execution_admission": admission.admit_command(command).to_dict(),
+        }
+    return _ORIGINAL_ADMISSION_RUN_CMD(cwd, command, timeout)
+
+
+base.run_cmd = _run_cmd_disposable_only
 
 
 def _source_bound_manifest(row: Any, proposal: dict[str, Any], cwd: Path) -> dict[str, Any]:
@@ -39,6 +86,8 @@ def _source_bound_manifest(row: Any, proposal: dict[str, Any], cwd: Path) -> dic
     manifest["source_tree"] = None
     manifest["source_identity_admitted"] = False
     manifest["source_identity_reason"] = "VALID_REPO_HEAD_AT_PROMPT_REQUIRED"
+    manifest["candidate_execution_workdir_scope"] = "DISPOSABLE_FORGE_ROOT_CHILD_ONLY"
+    manifest["candidate_worktree_writable"] = True
 
     if not base.COMMIT_RE.fullmatch(source_head):
         return manifest

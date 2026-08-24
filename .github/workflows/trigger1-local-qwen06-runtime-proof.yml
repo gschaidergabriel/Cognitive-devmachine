@@ -1,7 +1,8 @@
 name: Trigger1 local Qwen3-0.6B runtime proof
 
 # Explicit Trigger-1 research run requested 2026-08-24T21:42+07:00; execute exact-current local zero-cost proof.
-# Retriggered by the same go macrocycle after Supervisor 8.72 re-entry; no provider/paid lane added.
+# Supervisor 8.72 re-entry: route promotion-bearing evidence away from the terminal
+# output-head positive control and into the activation-derived nonterminal mid-layer lane.
 on:
   push:
     branches: [main]
@@ -62,8 +63,10 @@ jobs:
             exit 0
           fi
 
+          # Promotion-bearing runtime route: activation-derived internal mid-layer executor.
+          # The terminal final-norm/lm_head path remains only a technical positive control.
           set +e
-          bash tools/trigger1_local_qwen06_activation_api.sh "$OUT/runtime" >"$OUT/launcher.log" 2>&1
+          bash tools/trigger1_local_qwen06_internal_layer_api.sh "$OUT/runtime" >"$OUT/launcher.log" 2>&1
           RUN_RC=$?
           set -e
           printf '%s\n' "$RUN_RC" > "$OUT/runtime-rc.txt"
@@ -98,7 +101,11 @@ jobs:
               'source_head':os.environ['SOURCE_HEAD'],
               'source_tree':os.environ['SOURCE_TREE'],
               'runtime_exit_code':int(os.environ['RUN_RC']),
+              'runtime_route':'ACTIVATION_DERIVED_NONTERMINAL_MIDLAYER',
+              'launcher':'tools/trigger1_local_qwen06_internal_layer_api.sh',
+              'executor':'tools/trigger1_local_qwen06_midlayer_causal_execute.py',
               'preflight':preflight or None,
+              'runtime_schema':result.get('schema'),
               'runtime_status':result.get('status'),
               'runtime_result_sha256':result.get('result_sha256'),
               'model':result.get('model'),
@@ -144,6 +151,7 @@ jobs:
               body = JSON.stringify({
                 schema:'CLAY_TRIGGER1_LOCAL_QWEN06_SELFHOSTED_RUNTIME_PROOF/v1',
                 github_run_id:String(context.runId),
+                runtime_route:'ACTIVATION_DERIVED_NONTERMINAL_MIDLAYER',
                 runtime_status:'WORKFLOW_RESULT_MISSING',
                 canonical_credit_minted:false,
                 whole_entityos_hcu_credit_minted:false,

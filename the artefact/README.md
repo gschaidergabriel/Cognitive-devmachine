@@ -26,6 +26,8 @@ The historical/live nominal `accepted` row is not evidence-qualified under the c
 
 Current `main` contains the evidence-qualified Forge -> Distillery path. `tools/ingest_forge_accepts_into_distillery.py` delegates admission to the shared Forge evidence discriminator and requires `CLAY_FORGE_EXECUTION_ADMISSION/v1`, including exact source/evaluation/worker/target identities, complete command admission, isolated execution/network namespace and secret fences. A nominal `status=accepted` is insufficient.
 
+This GO found a second, narrower replay boundary: the bridge's prior deduplication key was the SHA-256 of the complete Forge evaluation envelope. Because `evaluated_at` is volatile and candidate hypothesis/falsifier text is explicitly non-measured metadata, the same evidence-bearing execution could be re-emitted with different envelope bytes and be treated as a new packet. The current GO branch therefore introduces `CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1` plus `CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1`: timestamp/narration-only replay is a duplicate, while the same stable execution identity with conflicting measured evidence fails closed as `REPLAY_IDENTITY_CONFLICT`. This is source/regression-definition evidence only until exact-head execution.
+
 The exact-current successor witness in `tools/run_go871_forge_distillery_runtime_gate.py` requires:
 
 1. exact source commit/tree/blob binding;
@@ -37,6 +39,8 @@ The exact-current successor witness in `tools/run_go871_forge_distillery_runtime
 7. exactly one new Distillery packet;
 8. `accepted_dataset_tokens > 0`;
 9. identical replay adds zero packets/tokens.
+
+The stronger successor acceptance requirement is now to preserve that byte-identical replay gate and additionally mutate only volatile timestamp/candidate narration while keeping the stable execution/measured evidence fixed; this semantic replay must also add exactly zero packets/tokens.
 
 Runtime-request PR **#1619** is the retained exact-current request lane. Its workflow run **32742535392** / job **97480167751** was still **queued** at this re-entry, with no repository-bound terminal result. The workflow checks out canonical `main` at runner execution time, so queued execution does not gain credit merely from request age or source presence. No Forge operational runtime PASS is claimed until the terminal receipt exists.
 
@@ -60,6 +64,8 @@ Until #1647 yields a repository-bound exact-source receipt, local Qwen3-0.6B mod
 
 This is a control-plane/Typed-Entry-adjacent convergence delta: it removes a stale authority island without creating a second truth/effect/admission authority. It grants no executable HCU/model credit.
 
+The Forge -> Distillery replay hardening is also reusable Typed causal-boundary work: it explicitly separates a stable evidence-bearing execution identity from volatile observation-envelope identity, preserving replay semantics without creating a competing truth store or effect authority.
+
 Retained donor lane **#1263** remains the single HCU / Typed Entry / Global J-Space donor lane. Its engine/loader work is source/donor evidence until exact admitted execution binds loader consumption, inference receipt and downstream causal traces.
 
 ## Evidence credit
@@ -82,13 +88,15 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 
 ## Current blockers / next exact gates
 
-1. Observe terminal run **32742535392** for PR #1619; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
-2. If that witness fails, repair the measured isolated-executor/bridge blocker only; never weaken evidence admission.
-3. Observe the retained Trigger-1 V2 dispatch **#1647** and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify runner/preflight/dependency/model failure explicitly.
-4. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.
-5. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
-6. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
-7. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
+1. Execute the new replay-identity regression plus existing Forge -> Distillery ingest/live-bridge regressions on the exact GO branch head; fuse only if current `main` remains nonduplicate.
+2. Observe terminal run **32742535392** for PR #1619; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
+3. After replay hardening lands, strengthen the exact-current witness with a timestamp/narration-only semantic replay and require an additional packet/token delta of exactly zero.
+4. If either witness fails, repair the measured isolated-executor/bridge blocker only; never weaken evidence admission.
+5. Observe the retained Trigger-1 V2 dispatch **#1647** and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify runner/preflight/dependency/model failure explicitly.
+6. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.
+7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
+8. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
+9. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
 
 ## Evidence discipline and reentry
 

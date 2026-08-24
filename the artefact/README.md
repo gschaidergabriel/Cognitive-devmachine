@@ -8,20 +8,9 @@ This README is a **current-facing orientation surface**, not independent authori
 
 Observed supervisor epoch during this update: **8.71**. Current autonomous mode: **FREE_ONLY**.
 
-Resolve authority from:
+Resolve current authority from `research_entity/continuity/BOOTSTRAP_MINIMAL.json`, `research_entity/rooms/PROGRAM_STATE.json`, `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`, newest admitted `SUPERVISOR_STEERING_*`, current all-worker directive, `CLAY_EXECUTION_AUTHORITY.md`, owner execution authority, macrocycle/atomic-lease protocols, and exact current source/runtime evidence.
 
-- `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
-- `research_entity/rooms/PROGRAM_STATE.json`
-- `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-- `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json`
-- current `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE*.md`
-- `CLAY_EXECUTION_AUTHORITY.md`
-- `governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md`
-- `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
-- `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
-- exact current source/tests/receipts/runtime evidence.
-
-Persistent research entity = **Clay**. Temporary ChatGPT/model/session/worker instances are organs, not new persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU are compatibility/research aliases only. Mini Entity/MicroEntity, ClayVerse and Frank remain historical implementation/donor provenance unless newer authority explicitly re-admits a mechanism.
+Persistent research entity = **Clay**. Temporary model/session/worker instances are organs, not new persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU are compatibility/research aliases only; Mini Entity/MicroEntity, ClayVerse and Frank remain historical donor/provenance names unless newer authority explicitly re-admits a mechanism.
 
 ## Deterministic authority boundary
 
@@ -41,13 +30,13 @@ Pre-load hashing is not loader-consumption attestation. Logical cell count is no
 
 FREE_ONLY remains active. Current owner authority permits zero-cost development/testing on normal-user local Linux and the authorized `clay-direct-dev` VPS sandbox, plus bounded bridge/container/runtime administration required to keep that sandbox usable.
 
-This does **not** imply new local root/sudo authority, unrelated production-host changes, new external production effects, paid/subscription/unknown-cost execution, upgrades/credit purchases, or Together execution. Canonical credit from local/VPS experiments is never automatic; exact source/artifact/runtime identity and bounded receipts remain mandatory.
+This does **not** imply new local root/sudo authority, unrelated production-host changes, new external production effects, paid/subscription/unknown-cost execution, upgrades/credit purchases, or Together execution. Exact source/artifact/runtime identity and bounded receipts remain mandatory before any promotion.
 
-Provider-level FREE labels are insufficient economic proof. Concrete credential/model/route provenance remains fail-closed. OpenRouter is restricted to explicit current zero-price/free routes; Groq requires exact credential/model free-limit evidence; NVIDIA requires exact credential entitlement plus exact allowed hosted route; Mistral remains fail-closed until provider-side Free/PAYG-disabled evidence is bound. Together and all paid fallback remain forbidden.
+Provider-level FREE labels are insufficient economic proof. Concrete credential/model/route provenance remains fail-closed. Together and all paid fallback remain forbidden.
 
 ## Runtime reentry warning
 
-The latest committed Free Swarm dashboard reentry used by this `go` was generated at `2026-08-24T14:14:00.324896Z` and reported:
+Latest committed dashboard evidence used by this `go` was generated at `2026-08-24T14:29:05.964772Z` and still reported:
 
 - `supervisor = STOPPED/QUARANTINED`;
 - `go_swarm = RUNNING`;
@@ -55,12 +44,12 @@ The latest committed Free Swarm dashboard reentry used by this `go` was generate
 - `evidence_forge = RUNNING`;
 - embedded provider-admission authority epoch `8.69` while canonical source authority is `8.71`.
 
-Therefore that runtime snapshot is **not successor-aligned** to current source authority and cannot establish exact-current provider or whole-product runtime credit. Runtime must be re-entered/restarted on current source through an exposed authorized bridge before promotion claims.
+Therefore that runtime snapshot is **not successor-aligned** to current source authority and cannot establish exact-current provider or whole-product runtime credit. Runtime must be re-entered/restarted on current source through an exposed authorized zero-cost bridge before promotion claims.
 
 ## Retained convergence lanes
 
 - HCU / Typed Entry / J-Space donor: `gschaidergabriel/clay-global-research-entity#1263` — single retained donor/source lane, not a second product/state/effect authority.
-- bounded execution controller: `gschaidergabriel/Dr.-Unterweger#810` — execution infrastructure only; its historical authority wording must not override current 8.71 authority.
+- bounded execution controller: `gschaidergabriel/Dr.-Unterweger#810` — execution infrastructure only; historical authority wording never overrides current authority.
 
 Prefer fusion into the strongest current implementation. Do not create duplicate semantic authorities.
 
@@ -82,10 +71,10 @@ No new unusual experiment ran in this macrocycle because this organ has no repro
 
 ### Observed conversion frontier
 
-Earlier runtime evidence showed a hard zero-yield funnel. The latest committed snapshot used here has moved to:
+The latest committed runtime snapshot used here has:
 
-- 1128 successful worker outputs;
-- 215 machine-readable architecture deltas;
+- 1515 successful worker outputs;
+- 262 machine-readable architecture deltas;
 - 141 Forge-ready candidates;
 - 141 Forge evaluations;
 - **1 Forge `ACCEPTED`**;
@@ -94,39 +83,41 @@ Earlier runtime evidence showed a hard zero-yield funnel. The latest committed s
 - 1 `VALIDATED_NOT_BETTER`;
 - Distillery: 11,621 collected source tokens, **0 accepted dataset tokens**, **0 accepted packets**.
 
-The first Forge acceptance predates the Forge source-identity merge by about three seconds, so it must not be credited to that merge. It is temporally compatible with earlier worker source grounding but exact causality remains unproven. The strong counterhypothesis remains that malformed/guessed patch synthesis dominates the 74 patch rejections.
+Raw worker/delta volume has continued rising while accepted yield has not. The first Forge acceptance predates the later Forge source-identity merge by about three seconds, so it must not be credited to that merge. Exact causality remains unresolved; malformed/guessed patch synthesis remains a strong counterhypothesis because `PATCH_REJECTED` is still dominant among evaluated failures.
 
-### Track A — advanced: Forge ACCEPTED -> Distillery admission
+### Track A — advanced: Forge ACCEPTED -> Distillery path is now source-wired
 
-Source inspection found a structural missing edge: Forge reads Distillery questions and emits accepted evaluation records, while Distillery independently ingests worker questions and creates reviewed knowledge packets. No deterministic path admitted a measured Forge `ACCEPTED` evaluation into the Distillery dataset.
+Two source deltas are fused on `main`:
 
-Current branch adds `tools/ingest_forge_accepts_into_distillery.py` and `tests/test_forge_distillery_ingest_871.py`.
+1. PR **#1555** adds `tools/ingest_forge_accepts_into_distillery.py` plus deterministic regression coverage. It admits only exact-source `CLAY_FORGE_DELTA_EVALUATION/v1` records that are truly `accepted`, source/evaluation-head bound, worker-digest bound, target-blob bound, reproducible, zero-failure on positive/negative/static controls, benchmark-nonregressing and positively improved. Admission is idempotent and writes into the **existing Distillery SQLite database**, never a second truth store.
+2. PR **#1558** wires that bridge into `tools/run_24h_entityos_swarm_supervisor.sh` after Forge and Distillery startup, isolates bridge failure from the independent services, atomically records the latest bridge result and surfaces it in `SUPERVISOR.json`.
 
-The bridge admits only `CLAY_FORGE_DELTA_EVALUATION/v1` rows that are `accepted`, exact-worker-source scoped, source/evaluation-head bound, worker-digest bound, target-blob bound, reproducible, zero-failure on positive/negative/static controls, benchmark-nonregressing and positively improved. Admission is idempotent by evaluation digest. It writes into the **existing Distillery SQLite database**, never a second truth store.
+A source-equivalent disposable logic check for the admission boundary reported **8/8 PASS** plus Python compilation PASS. GitHub's standard Verify/Identity Guard PR jobs for these deltas failed before exposing steps; that is infrastructure/guard negative evidence, not a semantic code PASS or FAIL.
 
-A source-equivalent disposable logic check reported **8/8 PASS** plus Python compilation PASS. This is source/component logic evidence only; the live runtime has not yet executed this bridge on successor-aligned 8.71 bytes.
+The live successor-aligned bridge witness is still **not observed**. The committed 14:29 runtime snapshot predates the supervisor wiring and remains authority-stale.
 
 ### Track B — advanced: typed/provenance conversion boundary
 
-The bridge adds a fail-closed provenance envelope across worker digest, exact producer/evaluation commits, target blob identities, reproducibility and measured control outcomes. It does not create canonical truth or a new effect authority.
+The bridge carries a fail-closed provenance envelope across worker digest, exact producer/evaluation commits, target blob identities, reproducibility and measured control outcomes. It does not create canonical truth or a new effect authority.
 
 ### Track C — advanced: training-data infrastructure only
 
-The Distillery packet text contains **measured Forge execution evidence only**. Model-authored proposal hypothesis/falsifier remain metadata explicitly marked candidate-only. Packets state `canonical_truth=false`, `jspace_causal_credit=0` and `training_credit=0`.
+Distillery packet text contains **measured Forge execution evidence only**. Model-authored proposal hypothesis/falsifier remain metadata explicitly marked candidate-only. Forge-derived packets state `canonical_truth=false`, `jspace_causal_credit=0` and `training_credit=0`.
 
-This advances dataset infrastructure for future HCU/J-Space learning without silently upgrading generated narration into fact. It grants **zero** model-specific J-Space causal credit and **zero** training credit.
+This advances dataset delivery infrastructure for future HCU/J-Space learning without silently upgrading generated narration into fact. It grants **zero** model-specific J-Space causal credit and **zero** training credit.
 
-Durable receipt:
+Durable receipts:
 
 - `research_entity/continuity/receipts/2026-08-24_GO_871_FORGE_DISTILLERY_ADMISSION_GPT56SOL.json`
+- `research_entity/continuity/receipts/2026-08-24_GO_871_FORGE_DISTILLERY_SUPERVISOR_WIRING_GPT56SOL.json`
 
 ## Current evidence credit
 
 Do not inflate source/component evidence into whole-system credit.
 
 - Forge accepted component deltas observed: `1` in the latest committed runtime snapshot used by this `go`;
-- Forge->Distillery bridge live-runtime credit: `0` until successor-aligned execution;
-- external-provider runtime credit: `0` unless exact-current admitted receipts promote a bounded route;
+- Forge->Distillery source admission/wiring: fused on `main`;
+- Forge->Distillery live-runtime credit: `0` until successor-aligned execution;
 - whole EntityOS/HCU runtime credit: `0`;
 - full HCU runtime credit: `0`;
 - J-Space model-runtime credit: `0`;
@@ -139,9 +130,9 @@ A source file, source test, deployment, receipt, model agreement, token count, s
 
 Refresh `main` before using this list. Highest-value next gates are:
 
-1. **Successor-align the live Free Swarm/Forge/Distillery runtime to current 8.71 source** through an exposed authorized zero-cost bridge.
-2. **Wire and execute the Forge->Distillery bridge** against the first exact-source accepted Forge evaluation. Acceptance witness: exactly one new Distillery packet, nonzero `accepted_dataset_tokens`, and duplicate replay adds zero packets/tokens.
-3. Measure a bounded post-restart Forge batch after current source-grounding/source-identity deltas and partition failures into source-identity, patch syntax/apply, test failure, validated-not-better and accepted.
+1. **Successor-align the live Free Swarm/Forge/Distillery supervisor to current 8.71 source** through an exposed authorized zero-cost runtime bridge.
+2. **Execute the already-wired Forge->Distillery bridge** on the first exact-source accepted Forge evaluation. Acceptance witness: `forge_distillery_bridge` appears in `SUPERVISOR.json`, exactly one new Distillery packet is created, `accepted_dataset_tokens > 0`, and duplicate replay adds zero packets/tokens.
+3. Measure a bounded post-restart Forge batch and partition failures into source-identity, patch syntax/apply, test failure, validated-not-better and accepted.
 4. If `PATCH_REJECTED` remains dominant, improve source-bound synthesis/repair rather than weakening application or acceptance gates.
 5. Continue one canonical Typed Entry -> loader -> model execution -> InferenceReceipt -> model-specific J-Space causal chain.
 6. Keep all provider routes fail-closed to exact FREE economic provenance and exact-current execution receipts; no paid/Together fallback.

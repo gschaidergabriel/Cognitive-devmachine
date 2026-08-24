@@ -152,7 +152,11 @@ start_go_swarm_if_admitted(){
   [[ "${CLAY_FREE_ONLY_ATTESTED:-}" == "1" ]] || return 0
   has_admitted_provider_key || return 0
   pgrep -f '[r]un_24h_entityos_swarm.py' >/dev/null 2>&1 && return 0
-  local now rem hours out admission_binding child_pid
+  local now rem hours out admission_binding child_pid swarm_entry
+  swarm_entry="$ROOT/tools/run_24h_entityos_swarm_backpressured.py"
+  # Supervisor 8.72 conversion-before-scale invariant: if the bounded wrapper is
+  # absent, fail closed instead of silently spawning the raw-throughput path.
+  [[ -f "$swarm_entry" ]] || return 0
   admission_binding="$(current_provider_admission_binding)" || return 0
   now=$(date +%s); rem=$((DEADLINE-now)); (( rem>0 )) || return 0
   hours=$(python3 - <<PY
@@ -160,7 +164,7 @@ print(max(0.01,$rem/3600.0))
 PY
 )
   out="$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
-  nohup python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm.log" 2>&1 </dev/null &
+  nohup python3 "$swarm_entry" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm.log" 2>&1 </dev/null &
   child_pid=$!
   printf '%s\n' "$child_pid" >"$STATE_DIR/swarm.pid"
   printf '%s\n' "$admission_binding" >"${SWARM_ADMISSION_BINDING_FILE}.tmp"
@@ -225,7 +229,7 @@ def load_json(path):
  try:
   with open(path,'r',encoding='utf-8') as f:return json.load(f)
  except Exception:return None
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge_safe.py'),'forge_distillery_bridge':load_json('$FORGE_DISTILLERY_STATUS'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; SAFE_FORGE_REQUIRES_NO_SHELL_SECRET_FREE_ISOLATED_EXECUTOR; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge_safe.py'),'forge_distillery_bridge':load_json('$FORGE_DISTILLERY_STATUS'),'conversion_backpressure':load_json('$STATE_DIR/control/conversion_backpressure.json'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; CONVERSION_BEFORE_SCALE_BACKPRESSURE_REQUIRED; SAFE_FORGE_REQUIRES_NO_SHELL_SECRET_FREE_ISOLATED_EXECUTOR; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30

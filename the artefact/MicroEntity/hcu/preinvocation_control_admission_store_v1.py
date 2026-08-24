@@ -11,10 +11,16 @@ executor/invocation may exist.
 
 Positive preparation therefore proves only:
 
-    prior JSpaceInferenceBinding / TrainingTrace packet
+    canonically admitted predecessor ModelExecution
+      -> prior JSpaceInferenceBinding / TrainingTrace packet
       -> exact ModelInputControlBinding bytes for a distinct invocation
       -> committed pre-invocation preparation row
       -> no ModelExecution admission for that invocation existed at commit time.
+
+The predecessor ModelExecution check and controlled-invocation absence check execute under
+the same ``BEGIN IMMEDIATE`` MiniUnifiedDB writer transaction as the preparation write.
+A self-consistent J-Space binding therefore cannot manufacture a predecessor parent that is
+missing from canonical state.
 
 It does NOT prove that a physical model call had not already happened outside the admitted
 executor path, does NOT prove hidden-state use or counterfactual influence, and grants no
@@ -49,6 +55,10 @@ try:
         ModelInputControlBindingError,
         validate_model_input_control_binding,
     )
+    from .preinvocation_canonical_predecessor_guard_v1 import (
+        PreInvocationCanonicalPredecessorError,
+        require_canonical_predecessor_execution,
+    )
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
     from grid10_scheduler_v1 import ExecutionClass, GridPlan, GridScheduleError, validate_grid_plan_identity
@@ -67,6 +77,10 @@ except ImportError:
         ModelInputControlBinding,
         ModelInputControlBindingError,
         validate_model_input_control_binding,
+    )
+    from preinvocation_canonical_predecessor_guard_v1 import (
+        PreInvocationCanonicalPredecessorError,
+        require_canonical_predecessor_execution,
     )
 
 STORE_SCHEMA = "HCU_PREINVOCATION_CONTROL_ADMISSION_STORE/v1"
@@ -350,9 +364,10 @@ def prepare_preinvocation_control(
 ) -> PreInvocationControlPreparation:
     """Commit predecessor control evidence before controlled ModelExecution admission exists.
 
-    The caller must invoke this on the real executor path before the physical model call to
-    earn later temporal-control credit. This function itself can only prove database-admission
-    ordering relative to the canonical ModelExecution store.
+    The canonical predecessor ModelExecution and controlled-invocation absence are checked
+    under the same writer transaction as the preparation. The caller must still invoke this
+    on the real executor path before the physical model call to earn later temporal-control
+    credit. This function itself proves database-admission ordering only.
     """
     _need(isinstance(db, sqlite3.Connection), "SQLITE_CONNECTION_REQUIRED")
     _need(not db.in_transaction, "CALLER_TRANSACTION_FORBIDDEN")
@@ -442,6 +457,21 @@ def prepare_preinvocation_control(
         db.execute("BEGIN IMMEDIATE")
         live_generation = _current_generation(db)
         _need(live_generation == current_generation, "STALE_PREINVOCATION_CONTROL_GENERATION")
+        try:
+            predecessor_observation_sha256 = require_canonical_predecessor_execution(
+                db,
+                predecessor_jspace_binding,
+                current_generation=current_generation,
+            )
+        except PreInvocationCanonicalPredecessorError as exc:
+            raise PreInvocationControlAdmissionError(
+                f"PREDECESSOR_CANONICAL_EXECUTION_REJECTED:{exc}"
+            ) from exc
+        _need(
+            predecessor_observation_sha256
+            == predecessor_jspace_binding.model_execution_observation_sha256,
+            "PREDECESSOR_CANONICAL_EXECUTION_OBSERVATION_MISMATCH",
+        )
         _need(
             not _controlled_execution_already_admitted(
                 db,

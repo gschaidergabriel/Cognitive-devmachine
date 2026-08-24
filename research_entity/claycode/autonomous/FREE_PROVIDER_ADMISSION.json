@@ -1,34 +1,41 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.69",
+  "authority_epoch": "8.70",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "source": "ENTITYOS_HCU_CONTROL_PLANE",
-  "default_policy": "OWNER_ATTESTED_FREE_CONTINGENTS_ONLY; NO_PAID_FALLBACK; HTTP_402_HARD_STOP; PROVIDER_WIDE_RATE_LIMITS_RESPECTED",
+  "default_policy": "OWNER_AUTHORIZED_FREE_CONTINGENTS_PLUS_CONCRETE_ROUTE_CREDENTIAL_ZERO_COST_PROVENANCE; NO_PAID_FALLBACK; HTTP_402_HARD_STOP; PROVIDER_WIDE_RATE_LIMITS_RESPECTED",
   "providers": {
     "groq": {
       "admitted": true,
       "cost_class": "FREE",
-      "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#groq"
     },
     "mistral": {
       "admitted": true,
       "cost_class": "FREE",
-      "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#mistral"
     },
     "nvidia": {
       "admitted": true,
       "cost_class": "FREE",
-      "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#nvidia"
     },
     "openrouter": {
       "admitted": true,
       "cost_class": "FREE",
-      "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#openrouter"
     }
   },
   "runtime_provider_credit": 0,
-  "execution_state": "FREE_SWARM_PROVIDER_LANES_ADMITTED_FOR_OWNER_ATTESTED_FREE_CONTINGENTS_ONLY",
-  "note": "Owner explicitly authorized the available free contingents/free tokens for Groq, Mistral, NVIDIA and OpenRouter. Admission permits FREE_ONLY execution; it does not prove credential presence and does not mint product/HCU runtime credit. Paid fallback/upgrades/credit purchases remain forbidden. 402 hard-stops the affected credential/lane and 429 is handled as provider-wide cooldown without key-rotation bypass."
+  "execution_state": "OWNER_FREE_CONTINGENTS_ADMITTED_PROVIDER_LEVEL; EVERY_AUTONOMOUS_CALL_REQUIRES_FREE_LANE_EXECUTION_RECEIPT_V1_ROUTE_CREDENTIAL_PREFLIGHT",
+  "route_level_gate": {
+    "implementation": "tools/free_lane_provenance.py",
+    "receipt_schema": "FREE_LANE_EXECUTION_RECEIPT/v1",
+    "economic_provenance": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json",
+    "unknown_or_unbound_route": "FAIL_CLOSED",
+    "paid_fallback_attempt_count": 0
+  },
+  "note": "Epoch 8.70 preserves the owner's authorization of free contingents while narrowing autonomous execution to concrete credential+route lanes with provider-side zero-cost/free-entitlement evidence. Provider-level admission alone is not runtime cost proof. Mistral remains provider-level admitted but concrete calls fail closed until Free-mode/PAYG-disabled provider-side evidence is bound. Historical pre-binding traffic remains append-only and is not relabeled FREE."
 }

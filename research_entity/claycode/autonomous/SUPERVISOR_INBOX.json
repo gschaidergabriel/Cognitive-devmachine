@@ -1,12 +1,12 @@
 {
-  "schema_version": "8.73",
-  "latest_cycle": "go-20260824-forge-distillery-replay-stable-identity",
+  "schema_version": "8.74",
+  "latest_cycle": "go-20260825-distillery-replay-v2-migration-gate",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "latest_repo_head_inspected_before_write": "c663a7592ba3af3e4184235fbc739cbf98f80818",
-  "material_finding": "The current Forge->Distillery path proves byte-identical replay idempotency at component-test scope, but PR #1687 identifies a replay-identity gap: the same measured execution can be re-emitted with volatile evaluated_at/candidate narration and receive a different full evaluation digest, potentially minting duplicate Distillery packets and dataset tokens. No exact-head execution of the replay-stable successor and no repository-bound live Distillery terminal result were observed. Dataset/training credit therefore remains blocked until replay identity is derived from stable measured execution evidence and the semantic-replay +0 invariant is executed.",
+  "latest_repo_head_inspected_before_write": "8fdd5a07bc493a2f4d8c2a9775c88e61c3ad513a",
+  "material_finding": "The Forge->Distillery semantic replay identity is now exact-Git-blob component-executed and reproducible: 17/17 current regression tests pass, and the concurrent duplicate discriminator yields one durable package/evidence row while divergent measured evidence on the same execution identity fails closed. However, the identity semantics changed while persisted historical rows were minted under the prior v1 namespace. Reusing v1 across the semantic change can remint old executions after upgrade. PR #1771 is the current non-duplicative successor that fuses replay-v2 migration with the existing BEGIN IMMEDIATE atomic admission path. Live Distillery/dataset/training credit remains blocked until exact-current migration execution closes this boundary.",
   "execution_authority": {
     "root_pointer": "CLAY_EXECUTION_AUTHORITY.md",
     "vps_sandbox": "AUTHORIZED_INSIDE_CLAY_DIRECT_DEV",
@@ -16,9 +16,10 @@
     "canonical_credit_from_local_or_vps_experiment": "NOT_AUTOMATIC"
   },
   "current_frontier": {
-    "forge_distillery_replay_identity": "SOURCE_CONFIRMED_GAP_SUCCESSOR_REGRESSION_DEFINED_RUNTIME_UNOBSERVED",
-    "forge_distillery_live_promotion": "COMPONENT_IDEMPOTENCY_TEST_PRESENT_REPOSITORY_BOUND_TERMINAL_RESULT_UNOBSERVED",
-    "selfhosted_health_observer": "SOURCE_MERGED_TERMINAL_RESULT_UNOBSERVED",
+    "forge_distillery_replay_identity": "EXACT_BLOB_COMPONENT_EXECUTED_17_OF_17_AND_CONCURRENT_DEDUPE_EXECUTED",
+    "forge_distillery_replay_v1_to_v2_migration": "OPEN_PR1771_EXACT_CURRENT_EXECUTION_REQUIRED",
+    "forge_distillery_live_promotion": "BLOCKED_BY_REPLAY_NAMESPACE_MIGRATION",
+    "selfhosted_health_observer": "TERMINAL_RESULT_UNOBSERVED",
     "local_qwen_hidden_state_fastpath": "SOURCE_READY_RUNTIME_UNOBSERVED",
     "local_qwen_nonterminal_causal_discriminator": "SOURCE_ADVANCED_ATOMIC_LEASE_REQUIRED_BEFORE_UNUSUAL_EXECUTION",
     "nvidia_credential_entitlement": "OPEN_SECONDARY_GATE",
@@ -44,8 +45,10 @@
   "evidence_law": [
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
     "SOURCE_TEST_PRESENCE_IS_NOT_TEST_EXECUTION",
-    "BYTE_IDENTICAL_REPLAY_IS_NOT_SUFFICIENT_IF_VOLATILE_ENVELOPE_FIELDS_CAN_REKEY_THE_SAME_MEASURED_EXECUTION",
-    "DISTILLERY_DATASET_CREDIT_REQUIRES_STABLE_EXECUTION_IDENTITY_AND_SEMANTIC_REPLAY_ZERO_DELTA",
+    "EXACT_BLOB_REPRODUCIBILITY_WITHIN_ONE_IMPLEMENTATION_FAMILY_IS_NOT_INDEPENDENT_GOODMAN_REPLICATION",
+    "REPLAY_IDENTITY_SEMANTIC_CHANGE_REQUIRES_VERSIONED_MIGRATION_OR_FAIL_CLOSED_COMPATIBILITY",
+    "HISTORICAL_V1_ROWS_MUST_NOT_BE_REWRITTEN_AS_IF_MINTED_UNDER_V2",
+    "DISTILLERY_DATASET_CREDIT_REQUIRES_STABLE_EXECUTION_IDENTITY_MIGRATION_SAFETY_AND_SEMANTIC_REPLAY_ZERO_DELTA",
     "LOCAL_ZERO_COST_RUNTIME_DOES_NOT_AUTOMATICALLY_MINT_CANONICAL_SEMANTICS",
     "PROVIDER_GLOBAL_FREE_STATEMENT_IS_NOT_CONCRETE_CREDENTIAL_ENTITLEMENT_PROOF",
     "NO_POSTHOC_RELABELING_OF_HISTORICAL_PROVIDER_EXECUTION",
@@ -54,19 +57,21 @@
     "HISTORICAL_RECEIPTS_ARE_APPEND_ONLY"
   ],
   "next_focus": [
-    "EXECUTE_PR1687_OR_NON_DUPLICATIVE_FUSED_SUCCESSOR_ON_EXACT_CURRENT_SOURCE",
-    "REQUIRE_TIMESTAMP_AND_CANDIDATE_NARRATION_ONLY_REPLAY_TO_MINT_ZERO_NEW_PACKETS_AND_ZERO_DATASET_TOKENS",
-    "REQUIRE_SAME_STABLE_EXECUTION_IDENTITY_WITH_MUTATED_MEASURED_EVIDENCE_TO_FAIL_CLOSED_AS_REPLAY_IDENTITY_CONFLICT",
-    "REQUIRE_GENUINELY_DIFFERENT_EXECUTION_IDENTITY_TO_REMAIN_SEPARATELY_ADMISSIBLE",
-    "OBSERVE_REPOSITORY_BOUND_SELFHOSTED_HEALTH_AND_FORGE_LIVE_PROMOTION_TERMINAL_RESULTS",
-    "THEN_PROVE_ONE_EVIDENCE_QUALIFIED_ACCEPT_TO_EXACTLY_ONE_PACKET_TO_ACCEPTED_DATASET_TOKENS_GT_ZERO_TO_SEMANTIC_REPLAY_PLUS_ZERO",
-    "KEEP_LOCAL_QWEN06_NONTERMINAL_SIX_CONTROL_JSPACE_DISCRIMINATOR_READY_BUT_ATOMIC_LEASE_GATED",
+    "EXECUTE_PR1771_OR_NON_DUPLICATIVE_FUSED_SUCCESSOR_ON_EXACT_CURRENT_SOURCE",
+    "CLOSE_DISTILLERY_REPLAY_ID_MIGRATION_RECEIPT_V1_WITH_FROZEN_PRECHANGE_V1_FIXTURE",
+    "REQUIRE_MIGRATION_IDEMPOTENCE_AND_ROLLBACK_WITHOUT_PARTIAL_V2_STATE",
+    "REQUIRE_VOLATILE_ENVELOPE_ONLY_REPLAY_TO_MINT_ZERO_PACKETS_AND_ZERO_ACCEPTED_DATASET_TOKENS",
+    "REQUIRE_SAME_SOURCE_EXECUTION_ID_WITH_MUTATED_MEASURED_EVIDENCE_TO_FAIL_CLOSED_AS_CONFLICT",
+    "REQUIRE_GENUINELY_NEW_EXECUTION_TO_REMAIN_SEPARATELY_ADMISSIBLE",
+    "REQUIRE_CONCURRENT_EQUIVALENT_REPLAY_TO_REMAIN_EXACTLY_ONE_DURABLE_PACKET_AND_EVIDENCE_ROW",
+    "THEN_PROVE_ONE_EVIDENCE_QUALIFIED_FORGE_ACCEPT_TO_EXACTLY_ONE_DISTILLERY_PACKET_TO_ACCEPTED_DATASET_TOKENS_GT_ZERO_TO_SEMANTIC_REPLAY_PLUS_ZERO",
+    "KEEP_LOCAL_QWEN06_NONTERMINAL_SIX_CONTROL_JSPACE_DISCRIMINATOR_READY_BUT_SEPARATE_AND_ZERO_COST",
     "KEEP_NVIDIA_CREDENTIAL_ENTITLEMENT_OPEN_BUT_SECONDARY",
     "KEEP_MISTRAL_FAIL_CLOSED_UNTIL_PROVIDER_SIDE_FREE_MODE_IS_BOUND",
     "KEEP_OPENROUTER_ON_EXPLICIT_ZERO_PRICE_ROUTES_ONLY",
     "KEEP_GROQ_CREDENTIAL_AND_MODEL_FREE_LIMIT_MATCH_FAIL_CLOSED",
     "KEEP_TOGETHER_PAID_SUBSCRIPTION_UNKNOWN_AND_ALL_PAID_FALLBACKS_FORBIDDEN",
-    "DO_NOT_MINT_WHOLE_ENTITYOS_HCU_BASE_CANONICAL_OR_TRAINING_PASS_FROM_SOURCE_PRESENCE_SWARM_CONSENSUS_TOKEN_VOLUME_OR_SAME_FAMILY_REPLAY"
+    "DO_NOT_MINT_WHOLE_ENTITYOS_HCU_BASE_CANONICAL_OR_TRAINING_PASS_FROM_COMPONENT_REPLAY_MODEL_CONSENSUS_TOKEN_VOLUME_OR_SHARED_ANCESTRY"
   ],
   "promotion_state": {
     "entityos_whole_runtime_pass": false,
@@ -77,5 +82,5 @@
     "provider_runtime_credit": 0,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_73.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_74.json"
 }

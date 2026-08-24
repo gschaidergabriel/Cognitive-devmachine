@@ -3,8 +3,9 @@
 
 The underlying controller owns credential collection, AIMD concurrency,
 provider-wide 429 cooldown, 402 hard-stop behavior and receipt logging. This
-driver adds live model discovery, EntityOS/HCU roles, and provider-specific
-request budgets derived from measured runtime limits.
+driver adds live model discovery, EntityOS/HCU roles, measured provider budgets,
+a cross-process quota gate shared with the research distillery, and a live
+knowledge/question bridge between GO workers and the distilled research dataset.
 """
 from __future__ import annotations
 
@@ -14,12 +15,15 @@ import json
 import os
 from pathlib import Path
 import re
+import sqlite3
 import urllib.error
 import urllib.request
 
 import run_free_go_swarm as base
+from free_swarm_quota import slot as quota_slot, observe as quota_observe
 
 ROOT = Path(__file__).resolve().parents[1]
+DISTILLERY_DB = Path(os.getenv("CLAY_RESEARCH_DISTILLERY_DB", "/artifacts/clay-entityos-swarm/distillery/distillery.sqlite3"))
 base.OWNER_DIRECTIVE_PATH = ROOT / "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md"
 base.DEFAULT_ROLES = [
     ("ARCHITECT", "Advance EntityOS/HCU architecture with one high-information, measurable delta and a strongest counterarchitecture."),
@@ -51,11 +55,9 @@ UNKNOWN_HIGH_VALUE = (
 )
 
 # Runtime evidence on 2026-08-24 showed Groq Free has an 8K TPM ceiling for
-# the selected GPT-OSS/Qwen models. The generic 1800-token completion request
-# pushed total requested tokens to ~8.2K. Cap completion budget so requests are
-# admitted instead of wasting calls on HTTP 413. Other providers keep the
-# larger research budget unless their runtime evidence says otherwise.
+# the selected GPT-OSS/Qwen models. Cap completion budget to avoid HTTP 413.
 _ORIGINAL_REQUEST_CHAT = base.request_chat
+
 
 def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout):
     if spec.name == "groq":
@@ -64,17 +66,82 @@ def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout)
         max_tokens = min(int(max_tokens), int(os.getenv("CLAY_MISTRAL_MAX_TOKENS", "1600")))
     elif spec.name == "nvidia":
         max_tokens = min(int(max_tokens), int(os.getenv("CLAY_NVIDIA_MAX_TOKENS", "1800")))
-    return _ORIGINAL_REQUEST_CHAT(spec, key, model, prompt, max_tokens, timeout)
+    owner = f"go-swarm:{model}"
+    try:
+        with quota_slot(spec.name, owner, timeout_s=min(float(timeout), 90.0), lease_s=max(240.0, float(timeout) + 45.0)):
+            status, headers, payload = _ORIGINAL_REQUEST_CHAT(spec, key, model, prompt, max_tokens, timeout)
+        quota_observe(spec.name, owner, status, headers)
+        return status, headers, payload
+    except TimeoutError:
+        quota_observe(spec.name, owner, "GATE_TIMEOUT", {})
+        return 503, {}, {"error": {"message": "shared provider gate timeout", "type": "local_quota_gate"}}
+
 
 base.request_chat = provider_bounded_request_chat
 
+# Accepted compressed packets become live GO context. This is candidate research
+# context only; it cannot mint canonical/effect authority.
+_ORIGINAL_BUILD_STATE_CONTEXT = base.build_state_context
 
-def fetch_catalog(url: str, key: str, timeout: float) -> list[dict]:
-    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+
+def distilled_context(max_chars: int) -> str:
+    if not DISTILLERY_DB.exists() or max_chars <= 0:
+        return "DISTILLED_KNOWLEDGE=NONE_YET"
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            payload = json.loads(resp.read().decode("utf-8", errors="replace"))
-    except (urllib.error.URLError, json.JSONDecodeError, TimeoutError):
+        con = sqlite3.connect(DISTILLERY_DB, timeout=2)
+        rows = con.execute(
+            "SELECT id,question_id,packet_text,intrinsic_score,grf_score,project_fit,novelty_score,created_at "
+            "FROM knowledge_packets ORDER BY (intrinsic_score+grf_score+project_fit+novelty_score) DESC, created_at DESC LIMIT 24"
+        ).fetchall()
+        con.close()
+    except Exception as exc:
+        return f"DISTILLED_KNOWLEDGE=UNAVAILABLE:{type(exc).__name__}"
+    payload = [{"packet_id":r[0],"question_id":r[1],"packet":r[2],"intrinsic":r[3],"grf":r[4],"fit":r[5],"novelty":r[6],"created_at":r[7]} for r in rows]
+    return json.dumps({"authority":"candidate_research_only","packets":payload},ensure_ascii=False,separators=(",",":"))[:max_chars]
+
+
+def enriched_state_context(max_chars: int) -> str:
+    base_chars = max(4000, int(max_chars * 0.72))
+    dist_chars = max(1000, max_chars - base_chars)
+    base_text = _ORIGINAL_BUILD_STATE_CONTEXT(base_chars)
+    return (base_text + "\nDISTILLED_RESEARCH_DATASET\n" + distilled_context(dist_chars))[:max_chars]
+
+
+base.build_state_context = enriched_state_context
+
+# GO workers explicitly emit future research questions. The distillery ingests
+# these and recursively decomposes them; old-format outputs are also mined.
+_ORIGINAL_WORKER_PROMPT = base.worker_prompt
+
+
+def question_emitting_worker_prompt(protocol: str, role: str, task: str, state_context: str, serial: int) -> str:
+    return _ORIGINAL_WORKER_PROMPT(protocol, role, task, state_context, serial) + """
+
+RESEARCH-QUEUE CONTRACT
+After your normal result and DEUTSCHE_ZUSAMMENFASSUNG, add exactly one machine-readable line:
+OPEN_RESEARCH_QUESTIONS_JSON=["question 1","question 2","question 3"]
+Questions must target unresolved assumptions, unrealized concepts, fundamental architecture uncertainties, or cheap discriminators. Prefer questions that would benefit from arXiv/GitHub/Reddit/web evidence. Do not repeat a question already answered by the supplied distilled dataset unless you identify a genuinely different causal approach.
+"""
+
+
+base.worker_prompt = question_emitting_worker_prompt
+
+
+def fetch_catalog(provider: str, url: str, key: str, timeout: float) -> list[dict]:
+    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json", "User-Agent":"clay-entityos-swarm/2.0"})
+    owner=f"go-swarm:catalog:{provider}"
+    try:
+        with quota_slot(provider,owner,timeout_s=min(timeout,60.0),lease_s=120.0):
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                payload = json.loads(resp.read().decode("utf-8", errors="replace"))
+                headers={k.lower():v for k,v in resp.headers.items()}
+        quota_observe(provider,owner,200,headers)
+    except urllib.error.HTTPError as exc:
+        headers={k.lower():v for k,v in exc.headers.items()} if exc.headers else {}
+        quota_observe(provider,owner,int(exc.code),headers)
+        return []
+    except Exception:
+        quota_observe(provider,owner,"CATALOG_ERROR",{})
         return []
     rows = payload.get("data", []) if isinstance(payload, dict) else []
     return [x if isinstance(x, dict) else {"id": str(x)} for x in rows]
@@ -106,7 +173,6 @@ def choose_models(provider: str, rows: list[dict]) -> list[str]:
         score = b or 0.0
         if any(x in low for x in ("ultra", "large", "reasoning", "deepseek", "120b", "405b", "550b")): score += 120.0
         if any(x in low for x in ("nemotron", "magistral", "devstral", "codestral", "coder", "instruct")): score += 60.0
-        # Prefer model IDs already proven callable in this sandbox/account.
         if model_id == "nvidia/llama-3.3-nemotron-super-49b-v1": score += 500.0
         ranked.append((score, model_id))
     ranked.sort(key=lambda x: (-x[0], x[1]))
@@ -124,7 +190,7 @@ def discover_and_export(timeout: float) -> dict[str, dict]:
         if not keys:
             report[spec.name] = {"source": "no_keys", "keys": 0, "models": []}
             continue
-        rows = fetch_catalog(CATALOGS[spec.name], keys[0], timeout)
+        rows = fetch_catalog(spec.name, CATALOGS[spec.name], keys[0], timeout)
         selected = choose_models(spec.name, rows)
         if selected:
             os.environ[spec.models_env] = ",".join(selected)
@@ -136,7 +202,7 @@ def discover_and_export(timeout: float) -> dict[str, dict]:
 
 async def main(args: argparse.Namespace) -> int:
     report = discover_and_export(args.timeout)
-    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v2", "providers": report}, ensure_ascii=False), flush=True)
+    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v3", "providers": report, "distillery_context": DISTILLERY_DB.exists(), "shared_quota_gate": True}, ensure_ascii=False), flush=True)
     if args.inventory_only:
         return 0
     out = args.output_dir or f"/artifacts/clay-entityos-swarm/{__import__('datetime').datetime.now(__import__('datetime').timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"

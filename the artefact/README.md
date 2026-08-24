@@ -96,6 +96,16 @@ The retained launcher was changed to delegate to that stronger protocol and brid
 
 No new unusual experiment was executed in this macrocycle because no reproducible shared immutable macrocycle/request identity was available beyond minute-level conversation timing. This is a durable source/control-plane/J-Space-readiness delta only and mints zero model-runtime, J-Space-model, HCU-full, training or whole-product credit.
 
+### GO 23:34 same-vector wrong-layer evidence repair
+
+Re-entry of the newly fused strongest-intermediate path found a causal-evidence mismatch. The promotion bridge defined the wrong-layer discriminator as **the same selected vector at a different predeclared layer**, but the executor previously changed `layer` and then selected `self.directions[layer]`; the wrong-layer run therefore used that other layer's separately derived vector. A scalar `wrong_layer_delta` could consequently be promoted under stronger semantics than were actually measured.
+
+The repair separates `layer` (intervention site) from `direction_layer` (vector source) in every runtime receipt. Normal runs default both identities to the same layer; the wrong-layer control explicitly sets `layer=<different predeclared layer>` and `direction_layer=<frozen selected layer>`. The result binds `wrong_layer_direction_layer`, `wrong_layer_applied_vector_sha256` and the wrong-layer runtime receipt into each +VECTOR holdout case.
+
+`tools/trigger1_intermediate_promotion_bridge.py` now fails closed unless every promoted wrong-layer case proves: the intervention layer differs from the selected layer, the direction source equals the selected layer, the wrong-layer applied-vector SHA is valid, and that SHA is **exactly identical** to the selected +VECTOR applied-vector SHA. `tests/test_trigger1_intermediate_bridge_gate_contract.py` includes positive same-vector coverage plus negative regressions for a changed wrong-layer vector and a wrong-layer-derived direction.
+
+This repair is source/evidence-ABI hardening only. It does not execute a new hidden-state intervention and mints zero model-runtime, J-Space-model, HCU-full, training, whole-product or canonical-semantics credit. No new unusual experiment was run because this organ still lacks a shared reproducible immutable macrocycle/request identity for the canonical create-only lease.
+
 Until a lease-admitted successor dispatch yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
 
 ## Typed Entry / HCU authority convergence
@@ -106,7 +116,7 @@ This is a control-plane/Typed-Entry-adjacent convergence delta: it removes stale
 
 Retained donor lane **#1263** remains the single HCU / Typed Entry / Global J-Space donor lane. Its engine/loader work is source/donor evidence until exact admitted execution binds loader consumption, inference receipt and downstream causal traces.
 
-For this `go`, no additional nonduplicate Typed Entry primitive was written because the highest-information safe blocker was the retained Trigger-1 routing mismatch and concurrent work had already synchronized the 8.72 current-facing authority mirrors. Track B therefore records `HCU_NO_CHANGE_WITH_REASON` at executable-HCU scope instead of manufacturing a duplicate Entry lane.
+This `go` advances a reusable HCU causal-evidence primitive without forking Typed Entry: intervention-site identity and vector-source identity are now separately represented and cross-bound at promotion. That distinction is reusable beyond Trigger-1 wherever the HCU needs to distinguish **where** a control was applied from **which latent direction** was applied.
 
 ## Evidence credit
 
@@ -132,7 +142,7 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 2. If that witness or live promotion fails, repair only the measured isolated-executor/bridge/promotion blocker; never weaken evidence admission.
 3. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
 4. On the lease-admitted Qwen run, persist the strongest-intermediate exact-source runtime receipt and classify runner/preflight/dependency/model failure explicitly.
-5. Require all six matched controls, derivation/holdout disjointness, counterbalanced label mapping, wrong-layer and lesion/rescue; reject terminal final-norm/`lm_head`/output-projection and evaluation-label-derived shortcuts as J-Space goal credit.
+5. Require all six matched controls, derivation/holdout disjointness, counterbalanced label mapping, **same-selected-vector wrong-layer identity**, and lesion/rescue; reject terminal final-norm/`lm_head`/output-projection and evaluation-label-derived shortcuts as J-Space goal credit.
 6. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
 7. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
 8. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.

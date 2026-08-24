@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"opt-routing-install-test-20260824T2133p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":300,
+  "command":"set -e; git fetch origin main; git checkout origin/main -- tools/free_swarm_model_health_v1.py tools/run_6000_free_swarm_fast.py tests/test_free_swarm_model_health_v1.py tools/run_6000_free_swarm.py tools/run_6000_free_swarm_v3.py tools/free_swarm_accelerator_v2.py tools/run_free_go_swarm.py; echo SOURCE_HEAD=$(git rev-parse origin/main); python3 -m py_compile tools/free_swarm_model_health_v1.py tools/run_6000_free_swarm_fast.py tools/run_6000_free_swarm.py tools/run_6000_free_swarm_v3.py; python3 -m unittest tests.test_free_swarm_model_health_v1 -v; PYTHONPATH=tools python3 - <<'PY'\nimport run_6000_free_swarm_fast as fast\nimport run_6000_free_swarm_v3 as v3\nimport free_swarm_model_health_v1 as mh\nprint('GATE_WRAPPER', v3.fabric.FastProviderRuntime.next_key_model.__name__)\nprint('WEIGHTED_INNER', v3._ORIGINAL_NEXT_PAIR.__name__)\nprint('REQUEST_OBSERVER', v3.fabric.base.request_chat.__name__)\nprint('HEALTH_MODELS', len(mh.health_snapshot()['models']))\nassert v3.fabric.FastProviderRuntime.next_key_model.__name__ == 'gated_next_key_model'\nassert v3._ORIGINAL_NEXT_PAIR.__name__ == 'next_key_model'\nassert getattr(v3.fabric.base.request_chat, '_model_health_v1_observer', False)\nprint('MODEL_HEALTH_BINDING_OK')\nPY"
+}

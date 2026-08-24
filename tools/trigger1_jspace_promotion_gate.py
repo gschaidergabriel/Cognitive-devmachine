@@ -8,7 +8,8 @@ and disjoint-holdout evidence is present.
 
 Hosted prompt/completion traffic alone can never satisfy a positive verdict.
 Terminal output-projection shortcuts are valid technical positive controls but cannot
-satisfy J-Space mechanism or Trigger-1 promotion credit.
+satisfy J-Space mechanism or Trigger-1 promotion credit. Exact local PyTorch candidates
+must also carry a clean repository-tree/status attestation.
 """
 from __future__ import annotations
 
@@ -20,7 +21,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 CANDIDATE_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
-VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2"
+VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v3"
 REQUIRED_CONTROLS = (
     "BASELINE",
     "+VECTOR",
@@ -58,6 +59,16 @@ def _sha256(value: Any) -> bool:
     return True
 
 
+def _git_sha(value: Any) -> bool:
+    if not isinstance(value, str) or len(value) != 40:
+        return False
+    try:
+        int(value, 16)
+    except ValueError:
+        return False
+    return True
+
+
 def _nonempty(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
@@ -73,27 +84,17 @@ def _loopback_url(value: Any) -> bool:
 
 
 def _causal_site_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
-    """Reject intervention sites that are only terminal output-projection shortcuts.
-
-    A perturbation applied at the final normalized hidden state or output head can alter
-    logits without any downstream transformer computation. Such a run is useful as a
-    harness/actuator positive control, but it cannot establish an internal J-Space causal
-    mechanism and therefore cannot satisfy Trigger-1 promotion.
-    """
     failures: list[str] = []
     intervention = candidate.get("intervention")
     if not isinstance(intervention, dict):
         return False, ["INTERVENTION_IDENTITY_REQUIRED"]
-
     site = intervention.get("activation_site")
     if not _nonempty(site):
         return False, ["ACTIVATION_SITE_REQUIRED"]
-
     normalized = str(site).strip().lower().replace(" ", "")
     declared_shortcut = intervention.get("terminal_output_projection_shortcut")
     if declared_shortcut is True or any(marker in normalized for marker in TERMINAL_OUTPUT_SITE_MARKERS):
         failures.append("TERMINAL_OUTPUT_PROJECTION_SHORTCUT_NOT_JSPACE_CAUSAL_EVIDENCE")
-
     return not failures, failures
 
 
@@ -117,14 +118,12 @@ def _split_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     holdout = candidate.get("holdout")
     if not isinstance(calibration, dict) or not isinstance(holdout, dict):
         return False, ["CALIBRATION_AND_HOLDOUT_REQUIRED"]
-
     cal_family = calibration.get("family_id")
     hold_family = holdout.get("family_id")
     if not _nonempty(cal_family) or not _nonempty(hold_family):
         failures.append("SPLIT_FAMILY_IDENTITIES_REQUIRED")
     elif cal_family == hold_family:
         failures.append("CALIBRATION_HOLDOUT_FAMILY_MUST_DIFFER")
-
     cal_seeds = calibration.get("seeds")
     hold_seeds = holdout.get("seeds")
     if not isinstance(cal_seeds, list) or not cal_seeds:
@@ -135,14 +134,12 @@ def _split_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
         hold_seeds = []
     if set(map(str, cal_seeds)) & set(map(str, hold_seeds)):
         failures.append("CALIBRATION_HOLDOUT_SEEDS_MUST_BE_DISJOINT")
-
     if holdout.get("reproducible_directional_effect") is not True:
         failures.append("REPRODUCIBLE_DIRECTIONAL_HOLDOUT_EFFECT_REQUIRED")
     if holdout.get("strongest_counterexample_recorded") is not True:
         failures.append("STRONGEST_COUNTEREXAMPLE_REQUIRED")
     if not _sha256(holdout.get("analysis_receipt_sha256")):
         failures.append("HOLDOUT_ANALYSIS_RECEIPT_REQUIRED")
-
     return not failures, failures
 
 
@@ -156,20 +153,11 @@ def _identity_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     if not isinstance(intervention, dict):
         failures.append("INTERVENTION_IDENTITY_REQUIRED")
         intervention = {}
-
-    head = identity.get("repo_head")
-    if not isinstance(head, str) or len(head) != 40:
+    if not _git_sha(identity.get("repo_head")):
         failures.append("EXACT_REPO_HEAD_REQUIRED")
-    else:
-        try:
-            int(head, 16)
-        except ValueError:
-            failures.append("EXACT_REPO_HEAD_REQUIRED")
-
     for key in ("runtime_build_sha256", "checkpoint_sha256", "tokenizer_sha256"):
         if not _sha256(identity.get(key)):
             failures.append(f"IDENTITY_SHA256_REQUIRED:{key}")
-
     if intervention.get("runtime_observed") is not True:
         failures.append("RUNTIME_OBSERVED_INTERVENTION_REQUIRED")
     if not _nonempty(intervention.get("invocation_id")):
@@ -192,6 +180,22 @@ def _identity_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     return not failures, failures
 
 
+def _exact_local_pytorch_source_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
+    if candidate.get("runtime_intervention_class") != "LOCAL_PYTORCH_ACTIVATION_INTERVENTION":
+        return True, []
+    identity = candidate.get("source_identity")
+    if not isinstance(identity, dict):
+        return False, ["LOCAL_PYTORCH_CLEAN_SOURCE_IDENTITY_REQUIRED"]
+    failures: list[str] = []
+    if not _git_sha(identity.get("repo_tree")):
+        failures.append("LOCAL_PYTORCH_EXACT_REPO_TREE_REQUIRED")
+    if identity.get("repo_dirty") is not False:
+        failures.append("LOCAL_PYTORCH_DIRTY_SOURCE_FAIL_CLOSED")
+    if not _sha256(identity.get("repo_status_sha256")):
+        failures.append("LOCAL_PYTORCH_REPO_STATUS_SHA256_REQUIRED")
+    return not failures, failures
+
+
 def _owner_target_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     failures: list[str] = []
     target = candidate.get("target")
@@ -200,21 +204,16 @@ def _owner_target_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
         return False, ["OWNER_API_TARGET_EVIDENCE_REQUIRED"]
     if not isinstance(transport, dict):
         transport = {}
-
     relation = target.get("relation")
     if relation not in {OWNER_API_TARGET_CLASS, LEGACY_OWNER_API_TARGET_CLASS}:
         failures.append("ZERO_COST_API_SERVED_MODEL_RUNTIME_REQUIRED")
-
     if not _nonempty(target.get("provider")) or not _nonempty(target.get("model_or_route")):
         failures.append("EXACT_PROVIDER_AND_MODEL_ROUTE_REQUIRED")
-
     surface = target.get("execution_surface")
     if surface is None and relation == LEGACY_OWNER_API_TARGET_CLASS:
         surface = EXTERNAL_API_SURFACE
-
     if transport.get("api_served") is not True and relation != LEGACY_OWNER_API_TARGET_CLASS:
         failures.append("API_SERVED_RUNTIME_REQUIRED")
-
     if surface == LOCAL_API_SURFACE:
         if target.get("zero_provider_billing") is not True:
             failures.append("LOCAL_ZERO_PROVIDER_BILLING_REQUIRED")
@@ -233,7 +232,6 @@ def _owner_target_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
             failures.append("FREE_LANE_EXECUTION_RECEIPT_REQUIRED")
     else:
         failures.append("API_EXECUTION_SURFACE_REQUIRED")
-
     return not failures, failures
 
 
@@ -241,11 +239,9 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
     failures: list[str] = []
     if candidate.get("schema") != CANDIDATE_SCHEMA:
         failures.append("CANDIDATE_SCHEMA_INVALID")
-
     runtime_class = candidate.get("runtime_intervention_class")
     if runtime_class not in INSTRUMENTED_RUNTIME_CLASSES:
         failures.append("INSTRUMENTED_RUNTIME_CLASS_REQUIRED")
-
     transport = candidate.get("transport")
     if not isinstance(transport, dict):
         failures.append("TRANSPORT_EVIDENCE_REQUIRED")
@@ -254,10 +250,12 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         failures.append("HOSTED_PROMPT_ONLY_CANNOT_PROVE_VECTOR_STEERING")
 
     identity_ok, identity_failures = _identity_evidence(candidate)
+    local_source_ok, local_source_failures = _exact_local_pytorch_source_evidence(candidate)
     controls_ok, control_failures = _control_receipts(candidate.get("controls"))
     split_ok, split_failures = _split_evidence(candidate)
     site_ok, site_failures = _causal_site_evidence(candidate)
     failures.extend(identity_failures)
+    failures.extend(local_source_failures)
     failures.extend(control_failures)
     failures.extend(split_failures)
     failures.extend(site_failures)
@@ -267,14 +265,13 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         and runtime_class in INSTRUMENTED_RUNTIME_CLASSES
         and transport.get("hosted_prompt_only") is False
         and identity_ok
+        and local_source_ok
         and controls_ok
         and split_ok
         and site_ok
     )
-
     owner_target_ok, target_failures = _owner_target_evidence(candidate)
     owner_target_pass = mechanism_pass and owner_target_ok
-
     return {
         "schema": VERDICT_SCHEMA,
         "mechanism_runtime_vector_credit_candidate": bool(mechanism_pass),
@@ -289,9 +286,9 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "evidence_boundary": (
             "PASS means promotion-candidate evidence only. The runtime may be an admitted FREE external API "
             "or an exact zero-provider-billing loopback API. Scientific requirements are identical: actual "
-            "internal-vector consumption, exact identities, six matched controls, disjoint holdout, and a "
-            "non-terminal intervention site with downstream model computation. Terminal output-projection "
-            "shortcuts remain technical positive controls only."
+            "internal-vector consumption, exact identities, six matched controls, disjoint holdout, a clean "
+            "attested local source tree when using PyTorch, and a non-terminal intervention site with downstream "
+            "model computation. Terminal output-projection shortcuts remain technical positive controls only."
         ),
     }
 
@@ -338,7 +335,7 @@ def scan_batch(batch_dir: Path) -> dict[str, Any]:
     verdicts = [adjudicate_file(path) for path in paths]
     goal = any(item.get("owner_trigger1_goal_credit_candidate") is True for item in verdicts)
     return {
-        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v2",
+        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v3",
         "candidate_files_seen": len(paths),
         "mechanism_runtime_vector_credit_candidate": any(
             item.get("mechanism_runtime_vector_credit_candidate") is True for item in verdicts
@@ -356,11 +353,7 @@ def main() -> int:
     group.add_argument("--candidate")
     group.add_argument("--batch-dir")
     args = parser.parse_args()
-
-    if args.candidate:
-        result = adjudicate_file(Path(args.candidate))
-    else:
-        result = scan_batch(Path(args.batch_dir))
+    result = adjudicate_file(Path(args.candidate)) if args.candidate else scan_batch(Path(args.batch_dir))
     print(json.dumps(result, sort_keys=True, ensure_ascii=False))
     return 0
 

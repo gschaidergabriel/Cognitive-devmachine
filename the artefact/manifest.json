@@ -8,7 +8,7 @@
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
   "persistent_research_entity": "Clay",
   "temporary_worker_role": "ORGAN_NOT_ENTITY",
   "canonical_state_authority": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB_CANONICAL_STATE_EVIDENCE_SUBSTRATE",
@@ -23,7 +23,13 @@
     "capability_claims": "UNTRUSTED_INPUT_MAY_NARROW_BUT_NEVER_SELF_GRANT_OR_BROADEN_CANONICAL_AUTHORITY",
     "event_vs_admission_identity": "REPLAY_STABLE_CAUSAL_EVENT_IDENTITY_MUST_REMAIN_DISTINCT_FROM_TRANSPORT_ADMISSION_IDENTITY"
   },
-  "hcu_modes": ["GRID10", "COGSIM10", "WM_TEST", "NESTED_SIM", "SCALEOUT"],
+  "hcu_modes": [
+    "GRID10",
+    "COGSIM10",
+    "WM_TEST",
+    "NESTED_SIM",
+    "SCALEOUT"
+  ],
   "computer_decomposition": {
     "state": "XRAM_STATE_FABRIC_COMPATIBILITY_TERM",
     "control": "XPU_DETERMINISTIC_CONTROL_PLANE_COMPATIBILITY_TERM",
@@ -34,7 +40,14 @@
   },
   "scale_policy": {
     "baseline_logical_cells": 10,
-    "benchmark_ladder": [10, 32, 64, 128, 256, 600],
+    "benchmark_ladder": [
+      10,
+      32,
+      64,
+      128,
+      256,
+      600
+    ],
     "future_h100_class_target": "APPROX_600_LOGICAL_MODULES_HYPOTHESIS_ONLY",
     "physical_decode_concurrency": "MUST_BE_MEASURED_SEPARATELY"
   },
@@ -45,29 +58,37 @@
   "execution_policy": {
     "free_only_default": true,
     "active_supervisor_free_only": true,
-    "active_supervisor_epoch": "8.68",
+    "active_supervisor_epoch": "8.72",
     "authorized_zero_cost_local_normal_user_execution": true,
     "authorized_clay_direct_dev_vps_sandbox_execution": true,
     "dual_machine_coordination_allowed_when_useful": true,
     "local_root_or_sudo_new_authority_implied": false,
     "unrelated_vps_host_changes_allowed": false,
     "new_external_production_effects_separately_gated": true,
+    "local_qwen_provider_independent_path_authorized": true,
     "external_provider_admission_file": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
-    "external_provider_admission_rule": "ADMITTED_TRUE_AND_COST_CLASS_FREE_REQUIRED_BEFORE_PROVIDER_SECRET_LOOKUP_OR_PROVIDER_NETWORK_IO",
-    "external_llm_provider_execution": "QUARANTINED_UNTIL_FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT_V1_EXACT_SOURCE_PASS",
+    "free_lane_economic_provenance_file": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json",
+    "owner_authorized_free_contingents": [
+      "groq",
+      "mistral",
+      "nvidia",
+      "openrouter"
+    ],
+    "external_provider_admission_rule": "TYPED_ADMISSION_PLUS_CONCRETE_CREDENTIAL_MODEL_ROUTE_PROVIDER_SIDE_ZERO_COST_EVIDENCE_REQUIRED_BEFORE_PROVIDER_MODEL_NETWORK_IO",
+    "external_llm_provider_execution": "OWNER_AUTHORIZED_FREE_CONTINGENTS_ONLY_AFTER_CONCRETE_CREDENTIAL_MODEL_ROUTE_ZERO_COST_PROVENANCE; LOCAL_PROVIDER_INDEPENDENT_QWEN_PATH_PREFERRED",
     "historical_unadmitted_provider_execution_credit": 0,
     "provider_environment_attestation_is_authority": false,
-    "unknown_or_unlisted_provider": "FAIL_CLOSED_BEFORE_SECRET_OR_NETWORK",
+    "unknown_or_unlisted_provider": "FAIL_CLOSED_BEFORE_PROVIDER_MODEL_NETWORK_IO_OR_PAID_EFFECT",
     "vercel_hobby_bounded_included_tier_fixed_capsules": true,
     "remaining_vercel_sandbox_quota_assumed": false,
     "remaining_vercel_sandbox_quota_directly_observed": false,
     "connected_read_only_surface_exposes_direct_remaining_sandbox_quota": false,
-    "current_vercel_sandbox_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED_BEFORE_SANDBOX_CREATE",
+    "current_vercel_sandbox_runtime_gate": "FAIL_CLOSED_IF_QUOTA_BILLING_OR_PLAN_PROVENANCE_IS_UNOBSERVED",
     "function_runtime_diagnostic_scope": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
     "production_host_testing_forbidden": true,
     "together_general_inference_and_fallback_forbidden": true,
-    "current_supervisor_together_training": "FORBIDDEN_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION",
-    "paid_or_unknown_provider_admission_boundary": "FAIL_CLOSED_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION",
+    "current_supervisor_together_training": "FORBIDDEN",
+    "paid_or_unknown_provider_admission_boundary": "FAIL_CLOSED_BEFORE_PROVIDER_MODEL_NETWORK_IO_OR_PAID_EFFECT",
     "other_paid_fallback": false,
     "future_paid_training": "REQUIRES_A_FUTURE_AUTHORITY_MODE_THAT_EXPLICITLY_ADMITS_PAID_EXECUTION; CURRENT_FREE_ONLY_ORGAN_MUST_NOT_SPEND",
     "go_macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
@@ -129,7 +150,7 @@
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
   },
   "coordination_authority": {
-    "supervisor": "8.68",
+    "supervisor": "8.72",
     "atomic_lease_required_before_unusual_intervention": true,
     "no_reproducible_trigger_identity": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "no_id_receipts": "LEGACY_MACROCYCLE_ID_UNRESOLVED_NO_POST_HOC_GROUPING",
@@ -150,17 +171,13 @@
     "policy": "prior ClayVerse-specific container/web/Clerk/Claude/MicroClay fields and acceptance gates remain available through Git provenance as donor evidence only; none are current EntityOS acceptance obligations unless explicitly re-admitted under current authority"
   },
   "current_frontier": [
-    "keep all current-facing authority surfaces aligned to EntityOS + HCU + SUPERVISOR_STEERING_8_68 FREE_ONLY plus atomic unusual-experiment lease law and repository-qualified retained-lane identities",
-    "preserve historical successful Groq/NVIDIA/OpenRouter traffic as append-only unadmitted execution evidence with zero provider runtime credit; monetary spend remains unproven",
-    "keep all current external LLM-provider worker/catalog/chat/synthesis/reviewer traffic quarantined until exact-source FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 PASS",
-    "canonical FREE provider admission covers Groq, Mistral, NVIDIA and OpenRouter; all remain UNKNOWN/not-admitted until direct pre-call FREE evidence exists",
-    "caller-supplied provider admission dictionaries cannot self-grant FREE authority after source hardening at 961a2fc10b0ecdb0a7285f280a78443129c4c196 with dedicated regression source at e3fbeafa95d449e2d42b2af3c425cc5701888403; no runtime credit is implied",
-    "execute the current provider-admission boundary tests on an exposed authorized zero-cost local normal-user or clay-direct-dev surface with secret/socket tripwires and exact source/environment/result identities",
+    "supervisor 8.72 is the current SUPERVISOR_INBOX-selected steering authority; current-facing manifest authority pointers and execution fences are synchronized to that epoch",
+    "provider-independent local Qwen3-0.6B nonterminal midlayer causal execution is the preferred J-Space discriminator; source identity and promotion-gate wiring are present, but no repository-bound terminal model-runtime receipt is yet observed",
+    "current Forge-to-Distillery source includes evidence-qualified admission and fail-closed runtime-gate promotion; require terminal witness 1 exact ACCEPTED -> exactly 1 Distillery packet -> accepted_dataset_tokens > 0 -> identical replay +0 before runtime credit",
+    "owner-authorized external free contingents are Groq, Mistral, NVIDIA and OpenRouter only, each requiring concrete credential/model/route provider-side zero-cost provenance before provider model network I/O; local provider-independent Qwen remains preferred for the current science discriminator",
     "keep gschaidergabriel/clay-global-research-entity#1263 as the single HCU donor lane and gschaidergabriel/Dr.-Unterweger#810 as the single bounded execution-controller lane",
-    "execute live donor InferenceReceipt/v4 rejection-boundary tests before any executor rebind; no source/runtime credit transfers automatically across heads",
-    "after exact component PASS continue the retained causal chain through Typed Entry -> route -> verified engine/load -> GRID10 -> real local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT -> TrainingTrace -> admitted causal dataset",
-    "continue JSPACE_VECTOR_CONTROL_ABI/v1, deterministic hard negatives, leak-resistant family-level splits and zero-cost local approximately-0.8B readiness while provider traffic is quarantined",
+    "continue Typed Entry -> verified engine/load -> GRID10 -> actual model execution -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT -> TrainingTrace -> admitted causal dataset",
     "do not run a new unusual experiment without a successful canonical atomic lease",
-    "keep whole EntityOS/HCU, full-HCU, J-Space-model and training credit at zero until corresponding exact admitted execution evidence exists"
+    "whole EntityOS/HCU, full-HCU, provider-runtime, J-Space-model and training credit remain zero until corresponding exact admitted executable evidence exists"
   ]
 }

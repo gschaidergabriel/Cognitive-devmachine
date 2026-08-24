@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_AUTHENTICATED_FUNCTION_GATE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_reentry": {
+    "research_main_observed_before_write": "9b995c8475ff5b12574225cc76cd242e9a7a64e1",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "new_unusual_interventions_run": 0
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_live_head_observed_during_cycle": "da10a81cbd8a38f93cf79a1bb568dae27751cd36",
+    "bounded_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_exact_head": "b7bd0076ccce593767c86ff0e026a09a8e88b67f"
+  },
+  "deployment": {
+    "id": "dpl_EtVgJ96pobVv3zqh9jozAKHgfNWa",
+    "git_sha": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "state": "READY",
+    "route": "/api/hcu-jspace-grid10-binding-capsule",
+    "access_method": "VERCEL_CONNECTOR_AUTHENTICATED_FETCH_EXISTING_PREVIEW_ONLY",
+    "new_deployment_created": false,
+    "plan_or_billing_changed": false
+  },
+  "observed_function_result": {
+    "function_response_observed": true,
+    "http_status": 412,
+    "status": "FREE_ONLY_SANDBOX_COST_ADMISSION_REQUIRED",
+    "surface_class_status": "ADMITTED",
+    "expected_plan": "hobby",
+    "remaining_sandbox_quota_directly_observed": false,
+    "remaining_quota_assumption_forbidden": true,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "runtime_gate_reason": "SUPERVISOR_8_63_REQUIRES_DIRECT_REMAINING_INCLUDED_QUOTA_OBSERVATION_BEFORE_SANDBOX_CREATE",
+    "quota_assumption_performed": false,
+    "credential_lookup_performed": false,
+    "external_source_network_performed": false,
+    "sandbox_create_performed": false,
+    "execution_credit": "NONE",
+    "entityos_hcu_runtime_credit": false,
+    "jspace_model_runtime_credit": false,
+    "training_credit": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  },
+  "hypothesis": "The exact-head executor repair turns the former protected-route/SSO uncertainty into a deterministic pre-Sandbox FREE_ONLY quota gate when the Function is reached through an already-authorized connector.",
+  "counterhypothesis": "Authenticated access may still fail before the Function, or the Function may incorrectly proceed toward Sandbox.create despite unobserved remaining included quota.",
+  "discriminator": "Use only connector-authenticated fetch against the already-existing exact-head READY preview route; require a real Function response and require the repaired guard to stop before Sandbox.create when remaining included quota is unobserved.",
+  "observed_result": "Hypothesis supported at the pre-Sandbox guard scope. The Function was reached and returned HTTP 412 BLOCKED_QUOTA_UNOBSERVED; no Sandbox was created. This closes the prior AUTH_TRANSPORT_BLOCK as the current primary blocker and promotes the next blocker to direct remaining included Sandbox quota observation only.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact-head protected Function invocation is now directly observed and the executor fail-closed quota gate executed at exact identity; the runtime frontier is narrowed from auth transport plus quota ambiguity to quota observation only.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BOUNDARY_VALIDATION: the single retained executor reaches the HCU/J-Space capsule Function while preserving pre-Sandbox FREE_ONLY authority; no second state/effect/executor authority and no unknown-cost execution was introduced.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: the J-Space/GRID10 fixed capsule did not enter Sandbox execution because quota remained unobserved; model/J-Space/training runtime credit therefore remains zero. Separately, donor head source work added producer-derived control-consumption binding but explicitly grants no temporal or model-causal credit."
+  },
+  "epistemic_boundary": {
+    "protected_function_access": "OBSERVED_PASS",
+    "free_only_pre_sandbox_fail_closed_gate": "OBSERVED_PASS_AT_EXACT_EXECUTOR_HEAD",
+    "sandbox_execution": "NOT_RUN_BLOCKED_QUOTA_UNOBSERVED",
+    "component_runtime_pass": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving whole-system surface under parallel writes; this append-only exact runtime-gate receipt preserves the cycle delta without overwriting fresher current-facing state."
+  },
+  "next_exact_action": "Directly observe remaining included Vercel Sandbox quota through an admitted non-charging account/provider surface. If such direct observation is unavailable, preserve BLOCKED_QUOTA_UNOBSERVED and do not attempt Sandbox.create. If positive remaining included quota is directly observed, re-enter current main, PR1263, PR810 and deployment SHA before invoking only the fixed exact-source FREE_ONLY capsule. No Together, paid fallback, VPS/self-hosted/production execution, credential preflight, or new unusual experiment is authorized."
+}

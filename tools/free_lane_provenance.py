@@ -117,13 +117,17 @@ def lane_evidence(
         }
 
     if provider == "nvidia":
+        # Supervisor 8.70 requires the free hosted-NIM/Developer entitlement to
+        # be bound to the exact credential/account. Generic NIM documentation,
+        # endpoint identity, key presence, or successful HTTP status is not
+        # credential-level economic proof. Until such provider-side evidence is
+        # represented and verified, autonomous FREE_ONLY NVIDIA calls fail closed.
         return {
-            "ok": True,
+            "ok": False,
+            "reason": "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_NOT_BOUND",
             "kind": record.get("evidence_kind"),
             "source": record.get("source"),
-            "endpoint_host": _host(endpoint),
-            "scope": record.get("scope"),
-            "assertion": "NVIDIA_HOSTED_NIM_PROTOTYPING_ROUTE_ONLY",
+            "required_proof": record.get("credential_plan_proof"),
         }
 
     if provider == "groq":

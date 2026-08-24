@@ -1,0 +1,84 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "created_at": "2026-08-25T01:16:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch": "8.73",
+  "execution_mode": "FREE_ONLY",
+  "observed_canonical_main_before_receipt": "fbc53ba5af6634f9e6832f156e776b99a2655a7e",
+  "authority": {
+    "supervisor_inbox_schema": "8.73",
+    "owner_execution_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "local_normal_user_authorized": true,
+    "clay_direct_dev_vps_sandbox_authorized": true,
+    "paid_subscription_unknown_fail_closed": true,
+    "together_forbidden": true
+  },
+  "observations": [
+    "Canonical main advanced during this macrocycle; the uploaded 8.63 bootstrap was used only as a noncanonical reentry cache.",
+    "Commit e4f1b7c5bbf1e3cdedd5fd66b82fd7b466fbb765 makes the Distillery training packet replay-stable by excluding evaluated_at and delta_id from measured packet bytes while retaining them as observation metadata.",
+    "Current main execution_replay_identity excludes evaluated_at, candidate narration and delta_id; ambiguous legacy overlap cannot be escaped by re-keying delta_id.",
+    "Commit 91db73dade60d6bc33a900af55c8451a4753d400 adds rebuild, reopen and legacy-rekey regressions for the replay-stability invariant.",
+    "Canonical main concurrently advanced the Global J-Space/vector-control ABI and fail-closed trace validation; these are source/contract advances only until exact execution evidence exists.",
+    "PR #1742 was closed as a duplicate after the stronger replay successor converged in parallel; PR #1726 is also closed after the replay semantics landed on main.",
+    "Hosted Actions attempts observed earlier in the macrocycle terminated before semantic test steps, so they mint no test/runtime credit.",
+    "research_entity/runtime/selfhosted_health/OBSERVER_LATEST.json was not present at the final health read; bridge/runner health therefore remains UNRESOLVED rather than healthy or failed.",
+    "Commit fbc53ba5af6634f9e6832f156e776b99a2655a7e adds an exact-main self-hosted Linux/X64 Distillery regression carrier with source-SHA binding and no provider/model/credential path.",
+    "No workflow run for fbc53ba5af6634f9e6832f156e776b99a2655a7e had been observed at the final immediate read, so executable regression PASS remains unobserved."
+  ],
+  "hypothesis": "Stable measured-execution identity separated from volatile envelope fields will prevent replay-equivalent Forge evidence from minting different Distillery training bytes/tokens across fresh rebuilds while preserving conflict detection for changed measured evidence.",
+  "counterhypothesis": "Removing envelope identifiers could collapse genuinely distinct measured executions or lose necessary provenance.",
+  "discriminator": "The canonical source retains worker/source/evaluation heads, target blobs, execution-admission digest, provider/model/role and metric in execution identity; evaluated_at and delta_id remain metadata. Execute the exact-main replay/rebuild/live-bridge regression family on the self-hosted runner, then require the live witness: one evidence-qualified ACCEPT -> exactly one packet -> accepted_dataset_tokens > 0 -> semantic replay +0; same stable identity with changed measured evidence must fail closed.",
+  "external_solution_harvest": {
+    "source_class": "OFFICIAL_PROVIDER_DOCUMENTATION_NONCANONICAL_DESIGN_CORROBORATION",
+    "finding": "AWS Powertools idempotency guidance recommends deriving idempotency keys from a stable payload subset when volatile request fields change, and separately validating materially changed payload fields. This corroborates, but does not prove, the Clay replay-key plus measured-evidence-conflict design."
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_request_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "atomic_claim_created_by_this_organ": false
+  },
+  "tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_CANONICAL_MAIN_REPLAY_STABLE_DISTILLERY_AND_SELFHOSTED_EXECUTION_CARRIER",
+      "runtime_credit_delta": 0
+    },
+    "track_b_hcu_and_typed_entry_fabric": {
+      "status": "ADVANCED_REPLAY_STABLE_CAUSAL_EVIDENCE_BOUNDARY_AND_CANONICAL_JSPACE_VECTOR_CONTROL_ABI_CONVERGENCE",
+      "runtime_credit_delta": 0
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "ADVANCED_DATASET_REBUILD_STABILITY_AND_JSPACE_TRACE_VECTOR_CONTROL_CONTRACTS_NO_MODEL_RUNTIME_CREDIT",
+      "training_credit_delta": 0
+    }
+  },
+  "writes": [
+    "canonical main contains e4f1b7c5bbf1e3cdedd5fd66b82fd7b466fbb765",
+    "canonical main contains 91db73dade60d6bc33a900af55c8451a4753d400",
+    "canonical main contains current J-Space/vector-control ABI convergence through fbc53ba5af6634f9e6832f156e776b99a2655a7e ancestry",
+    ".github/workflows/go873-distillery-selfhosted-main-regression.yml at fbc53ba5af6634f9e6832f156e776b99a2655a7e",
+    "PR #1742 closed duplicate provenance",
+    "PR #1726 closed converged provenance"
+  ],
+  "artifact_readme": {
+    "status": "SYNC_PENDING",
+    "reason": "the artefact/README.md is concurrently moving and this connector provides full-file replacement rather than a safe incremental patch primitive; overwriting a partially retrieved or stale README would risk clobbering newer authority/evidence. This append-only receipt preserves the exact delta for successor-dynamic README fusion."
+  },
+  "credits_after": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Observe the repository-bound self-hosted exact-main workflow for fbc53ba5af6634f9e6832f156e776b99a2655a7e. If it executes all semantic steps successfully, preserve that exact component evidence and then run/observe the live Forge->Distillery 1 ACCEPT -> 1 packet -> positive accepted_dataset_tokens -> semantic replay +0 witness. Keep Qwen/J-Space unusual intervention blocked until canonical atomic lease coordination is reproducible.",
+  "evidence_boundary": "Canonical source and regression contracts advanced, plus a self-hosted execution carrier was committed. No terminal self-hosted regression result, live Distillery funnel result, model execution, J-Space causal runtime acceptance, training acceptance, full HCU runtime acceptance or whole EntityOS PASS is claimed."
+}

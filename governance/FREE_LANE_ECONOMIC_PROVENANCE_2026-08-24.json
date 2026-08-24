@@ -20,20 +20,45 @@
     },
     "nvidia": {
       "allowed_endpoint_host": "integrate.api.nvidia.com",
-      "admitted_credential_fingerprints": ["e498d9744e"],
-      "evidence_kind": "EXACT_DEVELOPER_API_CREDENTIAL_PLUS_FREE_HOSTED_NIM_ENDPOINT",
+      "credential_entitlements": {
+        "e498d9744e": {
+          "provider_side_zero_cost_confirmed": true,
+          "entitlement_observed_at": "2026-08-24T14:06:09Z",
+          "provider_side_developer_program_or_free_hosted_nim_entitlement_evidence": {
+            "provider": "NVIDIA",
+            "credential_fingerprint": "e498d9744e",
+            "authenticated_api_catalog_status": 200,
+            "authenticated_catalog_model_count": 102,
+            "endpoint_host": "integrate.api.nvidia.com",
+            "developer_program_free_access_source": "https://developer.nvidia.com/nim",
+            "developer_program_free_access_statement": "Get free access to NIM API endpoints for unlimited prototyping; NVIDIA Developer Program membership enables NVIDIA-hosted NIM APIs for development and testing.",
+            "public_api_endpoints_permission_source": "https://docs.nvidia.com/ngc/latest/ngc-catalog-user-guide.html",
+            "public_api_endpoints_permission_statement": "NVIDIA Public API Endpoints grants a personal key permission to access NVIDIA NIM inference endpoints listed in the NVIDIA API Catalog.",
+            "api_key_setup_source": "https://docs.nvidia.com/rag/latest/api-key.html",
+            "api_key_setup_statement": "NVIDIA instructs users to select NGC Catalog and Public API Endpoints when generating the personal key used to access API Catalog-hosted NIM models.",
+            "runtime_observation": "Exact credential fingerprint authenticated the NVIDIA hosted API catalog and returned 102 model records; secret value not persisted in evidence.",
+            "scope": "NVIDIA-hosted API Catalog/NIM prototyping only; no dedicated enterprise endpoint; no paid fallback"
+          },
+          "entitlement_evidence_digest": "21583790ce0b8a157a25b4066c1e410b6734200f60544dd8179ca596e38e7d89",
+          "allowed_models": [
+            "nvidia/nemotron-3-super-120b-a12b",
+            "nvidia/nemotron-3-ultra-550b-a55b",
+            "nvidia/nemotron-mini-4b-instruct"
+          ]
+        }
+      },
+      "evidence_kind": "EXACT_CREDENTIAL_AUTHENTICATED_CATALOG_PLUS_PROVIDER_FREE_PROGRAM_SCOPE",
       "sources": [
         "https://developer.nvidia.com/nim",
-        "https://docs.api.nvidia.com/nim/docs/run-anywhere",
-        "https://docs.api.nvidia.com/nim/re/docs/api-quickstart",
+        "https://docs.nvidia.com/ngc/latest/ngc-catalog-user-guide.html",
+        "https://docs.nvidia.com/rag/latest/api-key.html",
         "https://build.nvidia.com/explore"
       ],
-      "source": "https://docs.api.nvidia.com/nim/re/docs/api-quickstart",
-      "provider_statement": "NVIDIA states that Developer Program members get free access to NVIDIA-hosted NIM API endpoints for prototyping; the API Catalog quickstart creates the Developer API key through that Developer Program access flow; build.nvidia.com labels these as free serverless APIs for development.",
-      "credential_binding_observation": "The exact credential fingerprint listed here was materialized by the sandbox credential inventory and authenticated successfully against integrate.api.nvidia.com hosted NIM routes. No other NVIDIA credential fingerprint is admitted by this record.",
+      "source": "https://developer.nvidia.com/nim",
+      "provider_statement": "NVIDIA states that Developer Program members get free access to NVIDIA-hosted NIM API endpoints for unlimited prototyping; Public API Endpoints permission grants a key access to NIM inference endpoints in the API Catalog.",
       "credential_plan_needed": true,
-      "credential_plan_proof": "Exact fingerprint allow-list + NVIDIA Developer Program API-key issuance path + free hosted-NIM endpoint host. Any different credential fingerprint fails closed.",
-      "default": "FAIL_CLOSED_FOR_UNLISTED_CREDENTIAL",
+      "credential_plan_proof": "The exact non-secret credential fingerprint is bound to an authenticated NVIDIA-hosted API Catalog observation plus NVIDIA's provider documentation that these hosted NIM endpoints are free for Developer Program prototyping; the evidence is digest-bound and only explicitly listed models are admitted.",
+      "default": "FAIL_CLOSED_UNTIL_CREDENTIAL_ENTITLEMENT_RECEIPT_BOUND",
       "scope": "NVIDIA-hosted API Catalog/NIM prototyping endpoint only; no dedicated enterprise endpoint"
     },
     "groq": {

@@ -55,6 +55,7 @@ from rae_secret_loader import get_secret  # noqa: E402
 USER_AGENT = "ClayEvidenceForge/1.0 research entity; noncanonical candidate evidence"
 SAFE_ENV = {"PATH": os.getenv("PATH", ""), "HOME": "/tmp", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONDONTWRITEBYTECODE": "1"}
 FORBIDDEN_COMMAND_FRAGMENTS = ("sudo ", "systemctl ", "shutdown", "reboot", "mkfs", "dd if=", "> /dev/", "rm -rf /", "podman ", "docker ")
+COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 
 
 def now() -> str:
@@ -106,6 +107,14 @@ def connect() -> sqlite3.Connection:
         CREATE TABLE IF NOT EXISTS processed_questions(question_hash TEXT PRIMARY KEY, processed_at TEXT NOT NULL);
         """
     )
+    # Source identity is an additive migration because the long-lived Forge DB
+    # predates repo_head_at_prompt. Never reinterpret a candidate against a
+    # moving checkout when its exact producer head is already present in the
+    # append-only worker receipt.
+    columns = {str(row[1]) for row in con.execute("PRAGMA table_info(candidates)")}
+    if "repo_head" not in columns:
+        con.execute("ALTER TABLE candidates ADD COLUMN repo_head TEXT")
+        con.commit()
     return con
 
 
@@ -155,14 +164,20 @@ def ingest_worker_candidates(con: sqlite3.Connection, max_lines_per_file: int = 
             obj=balanced_json_after(text,"ARCHITECTURE_DELTA_JSON=")
             if not isinstance(obj,dict):continue
             worker_sha=str(r.get("text_sha256") or sha(text))
+            repo_head=str(r.get("repo_head_at_prompt") or "").strip().lower()
+            if not COMMIT_RE.fullmatch(repo_head):repo_head=""
             raw=json.dumps(obj,sort_keys=True,ensure_ascii=False,separators=(",",":"))
             ch=sha(worker_sha+raw)
             ready=bool(obj.get("ready_for_forge"))
             try:
-                con.execute("INSERT INTO candidates(candidate_hash,delta_id,provider,model,role,worker_sha,proposal_json,ready,state,ingested_at) VALUES(?,?,?,?,?,?,?,?,?,?)",
-                    (ch,str(obj.get("delta_id") or ch[:16]),str(r.get("provider") or ""),str(r.get("model") or ""),str(r.get("role") or ""),worker_sha,raw,int(ready),"NEW",now()))
+                con.execute("INSERT INTO candidates(candidate_hash,delta_id,provider,model,role,worker_sha,repo_head,proposal_json,ready,state,ingested_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                    (ch,str(obj.get("delta_id") or ch[:16]),str(r.get("provider") or ""),str(r.get("model") or ""),str(r.get("role") or ""),worker_sha,repo_head,raw,int(ready),"NEW",now()))
                 added+=1
-            except sqlite3.IntegrityError:pass
+            except sqlite3.IntegrityError:
+                # Backfill old rows from their original append-only worker receipt
+                # without overwriting an already bound source identity.
+                if repo_head:
+                    con.execute("UPDATE candidates SET repo_head=? WHERE candidate_hash=? AND (repo_head IS NULL OR repo_head='')",(repo_head,ch))
     con.commit(); bump(con,"candidates_ingested",added); con.commit(); return added
 
 
@@ -319,6 +334,32 @@ def patch_paths_safe(patch: str, targets: list[str]) -> bool:
     return True
 
 
+def _git_text(cwd: Path, *args: str, timeout: int = 30) -> tuple[int, str, str]:
+    try:
+        p=subprocess.run(["git",*args],cwd=cwd,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=timeout)
+        return p.returncode,p.stdout.strip(),p.stderr.strip()
+    except Exception as exc:
+        return 125,"",f"{type(exc).__name__}:{exc}"
+
+
+def _checkout_exact_source(dest: Path, source_head: str) -> tuple[bool, str]:
+    rc,_,err=_git_text(dest,"cat-file","-e",source_head+"^{commit}")
+    if rc!=0:return False,"SOURCE_COMMIT_NOT_PRESENT:"+err[-500:]
+    rc,out,err=_git_text(dest,"checkout","--quiet","--detach",source_head)
+    if rc!=0:return False,"SOURCE_CHECKOUT_FAILED:"+err[-500:]
+    rc,got,err=_git_text(dest,"rev-parse","HEAD")
+    if rc!=0 or got!=source_head:return False,"SOURCE_CHECKOUT_IDENTITY_MISMATCH:"+(got or err)[-500:]
+    return True,""
+
+
+def _target_blob_identities(repo: Path, source_head: str, targets: list[str]) -> dict[str,str]:
+    out={}
+    for target in targets:
+        rc,blob,_=_git_text(repo,"rev-parse",f"{source_head}:{target}")
+        out[target]=blob if rc==0 and re.fullmatch(r"[0-9a-f]{40,64}",blob or "") else "NEW_OR_MISSING_AT_SOURCE"
+    return out
+
+
 def validate_candidate(con: sqlite3.Connection, row: sqlite3.Row) -> dict:
     obj=json.loads(row["proposal_json"]); patch=str(obj.get("patch_unified_diff") or "")
     targets=[str(x) for x in obj.get("target_files",[]) if isinstance(x,str)]
@@ -326,7 +367,16 @@ def validate_candidate(con: sqlite3.Connection, row: sqlite3.Row) -> dict:
     negatives=[str(x) for x in obj.get("negative_test_commands",[]) if isinstance(x,str) and safe_command(str(x))][:3]
     bench=str(obj.get("benchmark_command") or "")
     if bench and not safe_command(bench):bench=""
-    base_record={"schema":"CLAY_FORGE_DELTA_EVALUATION/v1","delta_id":row["delta_id"],"source_class":"free_swarm","provider":row["provider"],"model":row["model"],"role":row["role"],"worker_sha":row["worker_sha"],"evaluated_at":now()}
+    source_head=str(row["repo_head"] or "").strip().lower() if "repo_head" in row.keys() else ""
+    current_head=_git_text(ROOT,"rev-parse","HEAD")[1]
+    base_record={
+        "schema":"CLAY_FORGE_DELTA_EVALUATION/v1","delta_id":row["delta_id"],"source_class":"free_swarm",
+        "provider":row["provider"],"model":row["model"],"role":row["role"],"worker_sha":row["worker_sha"],
+        "source_repo_head":source_head or None,"evaluation_repo_head":current_head or None,
+        "source_scope":"EXACT_WORKER_PROMPT_HEAD","evaluated_at":now(),
+    }
+    if not COMMIT_RE.fullmatch(source_head):
+        return {**base_record,"status":"source_identity_unbound","reason":"valid repo_head_at_prompt required before patch validation"}
     if not patch or not targets or not tests or not patch_paths_safe(patch,targets):
         return {**base_record,"status":"needs_implementation","reason":"missing/safety-invalid patch, targets, or tests"}
     tmp=Path(tempfile.mkdtemp(prefix="clay-forge-",dir=FORGE_ROOT))
@@ -335,8 +385,11 @@ def validate_candidate(con: sqlite3.Connection, row: sqlite3.Row) -> dict:
         for dest in (baseline,patched):
             p=subprocess.run(["git","clone","--quiet","--no-hardlinks","--local",str(ROOT),str(dest)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=90)
             if p.returncode!=0:return {**base_record,"status":"forge_error","reason":"local clone failed"}
+            ok,reason=_checkout_exact_source(dest,source_head)
+            if not ok:return {**base_record,"status":"source_identity_unavailable","reason":reason}
+        target_blobs=_target_blob_identities(baseline,source_head,targets)
         ap=subprocess.run(["git","apply","--whitespace=nowarn","-"],cwd=patched,input=patch,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=30)
-        if ap.returncode!=0:return {**base_record,"status":"patch_rejected","reason":ap.stderr[-1000:]}
+        if ap.returncode!=0:return {**base_record,"status":"patch_rejected","reason":ap.stderr[-1000:],"target_blob_identities":target_blobs}
         baseline_runs=[]; patch_runs=[]
         # Two runs make flaky "one lucky pass" less likely and satisfy reproducibility bookkeeping.
         for _ in range(2):
@@ -366,7 +419,15 @@ def validate_candidate(con: sqlite3.Connection, row: sqlite3.Row) -> dict:
         neg_pass=sum(int(x["rc"]==0) for x in neg_results); neg_fail=len(neg_results)-neg_pass
         static_pass=sum(int(x["rc"]==0) for x in static_results); static_fail=len(static_results)-static_pass
         accepted=(tests_failed==0 and neg_fail==0 and static_fail==0 and benchmark_non_regression and improvement>0)
-        return {**base_record,"status":"accepted" if accepted else "validated_not_better","metric":metric,"relative_improvement_pct":improvement,"reproducible_runs":2,"tests_passed":tests_passed,"tests_failed":tests_failed,"negative_tests_passed":neg_pass,"negative_tests_failed":neg_fail,"static_checks_passed":static_pass,"static_checks_failed":static_fail,"benchmark_non_regression":benchmark_non_regression,"survived_go_cycles":0,"reverted":False,"baseline_test_passes":base_pass,"patched_test_passes":patch_pass,"test_count_per_run":len(tests),"benchmark_runs":len(bench_patch),"proposal_hypothesis":obj.get("hypothesis"),"falsifier":obj.get("falsifier")}
+        return {
+            **base_record,"status":"accepted" if accepted else "validated_not_better","metric":metric,
+            "relative_improvement_pct":improvement,"reproducible_runs":2,"tests_passed":tests_passed,"tests_failed":tests_failed,
+            "negative_tests_passed":neg_pass,"negative_tests_failed":neg_fail,"static_checks_passed":static_pass,"static_checks_failed":static_fail,
+            "benchmark_non_regression":benchmark_non_regression,"survived_go_cycles":0,"reverted":False,"baseline_test_passes":base_pass,
+            "patched_test_passes":patch_pass,"test_count_per_run":len(tests),"benchmark_runs":len(bench_patch),
+            "proposal_hypothesis":obj.get("hypothesis"),"falsifier":obj.get("falsifier"),"target_blob_identities":target_blobs,
+            "requires_rebase_to_evaluation_head":bool(current_head and current_head!=source_head),
+        }
     finally:
         shutil.rmtree(tmp,ignore_errors=True)
 

@@ -1,31 +1,49 @@
-# GO Collective Recursive-Improvement Metrics — live baseline
+# GO Collective Recursive-Improvement Metrics — live state
 
-Generated: `2026-08-24T11:59:40Z`  
-Authority observed: `8.69`  
-Generation class: `BOOTSTRAP_BASELINE_SOURCE_DERIVED_NOT_AGGREGATOR_RUNTIME`
+Generated: `2026-08-24T13:58:54Z`  
+Authority observed: `8.71`  
+Source head observed before JSON write: `ad93ef044a6e000c74cefa900597990a59bc3b30`  
+Macrocycle identity: `MACROCYCLE_ID_UNRESOLVED`  
+Generation class: `SOURCE_DERIVED_END_OF_GO_SNAPSHOT_NOT_AGGREGATOR_RUNTIME`
 
-The first full per-worker table will be generated from the `/artifacts` worker records by `free swarm/go_collective_metrics.py` on an authorized artifact-bearing local or `clay-direct-dev` surface. The connected GitHub surface currently exposes the persisted aggregate dashboard but not the runtime worker JSONL tree, so individual worker rows are not invented here.
+No shared immutable request/macrocycle id or artifact-bearing per-worker tree is exposed on the connected GitHub surface. Parallel worker records are therefore **not** silently grouped into one independent evidence family, and missing metrics remain `UNKNOWN` rather than being inferred from worker count, token volume, PR count, or model agreement.
 
-## Aggregate baseline
+## Aggregate
 
-| Metric | Current | Evidence status |
-|---|---:|---|
-| Free-Swarm worker records | 709 | observed persisted live metrics |
-| exact-usage rows | 414 | observed |
-| exact total tokens | 3,187,935 | observed |
-| accepted architecture deltas | 0 / 1 adjudication records | observed current ledger |
-| Token Quality Efficiency / 1k tokens | 0.000000 | verified-utility baseline only; not a claim that all tokens were useless |
-| Code Quality Score / 100 | UNKNOWN | no accepted delta has enough evidence coverage |
-| Verified Innovation Score / 100 | UNKNOWN | no accepted verified innovation delta |
-| performance index | UNKNOWN | no matched benchmark family in new worker schema yet |
-| p95 information-transfer latency | UNKNOWN | downstream consumption acknowledgement not yet instrumented |
-| Capability / Information-Latency Ratio | UNKNOWN | requires both raw constituents |
-| HCU_TARGET_100_GO forecast | **43.05%** | **UNCALIBRATED** model forecast, not completion percentage or canonical fact |
-| HCU forecast uncertainty | **20–65%** | intentionally wide bootstrap interval |
+| Metric | Current | Previous persisted baseline | Evidence status |
+|---|---:|---:|---|
+| Free-Swarm worker records | 7,430 | 709 | observed persisted live metrics; not independent-evidence count |
+| exact-usage rows | 1,001 | 414 | observed |
+| exact total tokens | 7,302,860 | 3,187,935 | +4,114,925 / +129.078% |
+| Forge discovery hits | 1,768 | — | observed discovery only |
+| Forge evaluations | 104 | — | observed evaluation attempts |
+| Forge accepted deltas | **0** | 0 | verified-utility gate remains empty |
+| Distillery collected source tokens | 11,621 | — | observed collection only |
+| Distillery collected chunks | 48 | — | observed collection only |
+| Distillery accepted dataset tokens | **0** | 0 | no training-readiness utility credit |
+| Token Quality Efficiency / 1k tokens | **0.000000** | 0.000000 | exact tokens known; verified accepted utility remains 0 |
+| Code Quality Score / 100 | **UNKNOWN** | UNKNOWN | evidence coverage <60%; exact-head tests unavailable |
+| Verified Innovation Score / 100 | **UNKNOWN** | UNKNOWN | candidate source novelty is not verified measured effect |
+| performance index | **UNKNOWN** | UNKNOWN | no accepted fixed benchmark-family delta |
+| p95 information-transfer latency | **UNKNOWN** | UNKNOWN | downstream-consumption acknowledgement not instrumented |
+| Capability / Information-Latency Ratio | **UNKNOWN** | UNKNOWN | both raw constituents required |
+| HCU_TARGET_100_GO forecast | **43.05%** | 43.05% | held; no runtime milestone resolved |
+| HCU forecast uncertainty | **20–65%** | 20–65% | intentionally wide, uncalibrated |
 
-## HCU forecast vector
+## Source/test convergence observed since the previous snapshot
 
-| Milestone family | bootstrap p |
+These are durable engineering deltas, **not verified utility promotions** and not one canonically grouped macrocycle evidence family:
+
+- current `main` contains the Distillery `add_question()` INSERT cardinality repair;
+- retained HCU donor #1263 now binds causal-family `model_input_sha256` in v2 plan/trial/family identity and rejects corrupted-base input drift;
+- current `main` contains structured NVIDIA credential-entitlement source hardening;
+- current `main` binds Xeno active-build workers successor-dynamically to current FREE provider admission.
+
+Runtime/provider/HCU/J-Space/training/whole-product credit added by this measurement: **0**.
+
+## HCU forecast vector — held, uncalibrated
+
+| Milestone family | p |
 |---|---:|
 | authority / truth / effect invariants | 90% |
 | Typed Entry + causal identity | 75% |
@@ -40,23 +58,32 @@ The first full per-worker table will be generated from the `/artifacts` worker r
 | performance/latency/scale | 20% |
 | integration + independent reproducibility | 40% |
 
-## Mandatory worker table from next `go`
+No binary milestone resolved with admitted runtime evidence, so Brier score/log loss remain unavailable and the forecast is not moved merely because source coverage improved.
+
+## Per-worker table
 
 | worker | tokens | TQE | CQS | VIS | performance index | p95 info latency | CILR | evidence lineage | HCU forecast contribution | status |
 |---|---:|---:|---:|---:|---:|---:|---:|---|---:|---|
-| pending artifact-bearing aggregator run | — | — | — | — | — | — | — | — | — | PENDING |
+| artifact-bearing worker table unavailable on connected GitHub surface | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | unresolved | UNKNOWN | `MACROCYCLE_ID_UNRESOLVED` |
 
-## Anti-Goodhart / Goodman-lineage protections
+The canonical artifact-bearing aggregator remains responsible for real per-worker rows. Self-reported scores are not substituted.
+
+## Anti-Goodhart / Goodman-lineage audit
+
+**Warning:** cumulative exact token volume increased by 4,114,925 (+129.078%) while Forge accepted deltas and Distillery accepted dataset tokens remain zero. More worker/token volume is therefore **not** the next optimization target.
 
 - no single scalar is the optimization target;
-- use Pareto improvement plus hard correctness/provenance/security/effect gates;
-- raw measurements are append-only; derived metrics are recomputable;
 - shared model/source/prompt/orchestration ancestry is collapsed as correlated evidence;
-- high-scoring changes require counter-metrics/holdout or random audit where practical;
-- metric weights freeze for 10 macrocycles; definition changes shadow-run for 3 cycles;
-- a score is allowed to decrease after stronger measurement or counterevidence;
-- latency cannot be improved by skipping validation;
-- token efficiency cannot be improved by deleting required evidence;
-- HCU confidence is forecast and must be calibrated against resolved outcomes using Brier/log loss.
+- provider request success is not runtime credit unless exact current FREE-lane receipts bind it;
+- source/test presence is not test execution;
+- code-quality and innovation scores stay UNKNOWN when evidence coverage is insufficient;
+- latency cannot be improved by skipping validation/provenance;
+- HCU confidence is a forecast, not completion percentage or target score.
 
-The goal is slow recursive improvement of the actual EntityOS/HCU system, not monotonic cosmetic score growth.
+## Next Pareto bottleneck set
+
+1. execute exact-current regressions on an admitted artifact-bearing local/`clay-direct-dev` surface and bind exact source identity;
+2. instrument `evidence_emitted_at -> first_downstream_consumed_at` acknowledgements so information latency becomes measurable;
+3. convert source/test candidates into reproducible accepted deltas before scaling worker/token volume further.
+
+This is intentionally a stricter measurement state. A flat or lower score after stronger evidence requirements is valid recursive improvement.

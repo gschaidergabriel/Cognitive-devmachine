@@ -31,9 +31,10 @@ all_llm_providers_admitted(){
   provider_admitted openrouter
 }
 
-# A long-lived supervisor must not retain a provider capability after canonical
-# revocation. Operate on variable names only: blocked secret values are never
-# expanded merely to decide which variables must be removed.
+# Historical/provider-specific helper retained for focused admission regression
+# tests. The live supervisor path below no longer calls it to prepare its own
+# environment: provider credentials are materialized only inside the dedicated
+# Free-Swarm child process.
 clear_unadmitted_provider_secret_env(){
   local name
   if ! provider_admitted groq; then
@@ -54,11 +55,29 @@ clear_unadmitted_provider_secret_env(){
   fi
 }
 
+# Stronger control-plane fence: the long-lived supervisor and its local
+# model/dashboard/distillery/forge children never retain external LLM secrets,
+# even for currently admitted providers. Values are never expanded or logged.
+clear_all_provider_secret_env(){
+  local name
+  unset \
+    GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
+    MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY \
+    NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY \
+    OPENROUTER_API_KEY OPENROUTER_API_KEYS OPENROUTER2_API_KEY OPENROUTER3_API_KEY \
+    TOGETHER_API_KEY TOGETHER_API_KEYS || true
+  while IFS= read -r name; do
+    case "$name" in
+      GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*) unset "$name" || true ;;
+    esac
+  done < <(compgen -v)
+}
+
 load_admitted_secrets(){
-  # Shared bundles may contain credentials for multiple providers. They are
-  # therefore opened only when every provider represented by this supervisor is
-  # currently typed FREE-admitted. Provider-specific files remain individually
-  # admission-gated.
+  # Kept as a deterministic compatibility helper for tests/forensics. Shared
+  # bundles may contain multiple providers and are only opened under complete
+  # provider-level admission. The active supervisor runtime does NOT invoke this
+  # helper; the isolated swarm child uses free_swarm_exec_with_vault.py instead.
   if all_llm_providers_admitted; then
     load_secret_file /run/secrets/clay_provider.env
     load_secret_file /artifacts/.clay_provider.env
@@ -99,36 +118,42 @@ for target,names in families.items():
 PY
 }
 
-# Bind each external-provider child to the exact current canonical admission
-# snapshot. The digest contains authority/admission metadata only, never secrets.
+# Bind each external-provider child to the exact canonical provider admission,
+# economic-provenance bytes and this credential-scope contract. The extra fields
+# deliberately make a child created by the older broad-parent environment fail
+# reconciliation on supervisor re-entry without exposing any secret value.
 admission_capability_digest(){
 python3 - <<'PY_INNER'
 import hashlib,json
+from pathlib import Path
 from free_provider_admission import admission_snapshot, load_provider_admission, ProviderAdmissionError
 snap=admission_snapshot()
 try:
  admission=load_provider_admission()
 except ProviderAdmissionError:
  admission=None
+try:
+ economic_sha=hashlib.sha256(Path('governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json').read_bytes()).hexdigest()
+except OSError:
+ economic_sha=None
 material={
  "snapshot":snap,
  "validated_admission":admission,
+ "economic_provenance_sha256":economic_sha,
+ "credential_scope":"SWARM_CHILD_ONLY/v1",
 }
 raw=json.dumps(material,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode("utf-8")
-prefix="OK" if bool(snap.get("ok")) and admission is not None else "INVALID"
+prefix="OK" if bool(snap.get("ok")) and admission is not None and economic_sha else "INVALID"
 print(prefix+":"+hashlib.sha256(raw).hexdigest())
 PY_INNER
 }
 
 prepare_provider_environment(){
-  # Sanitize before any secret-file read, derive compatibility flags only from
-  # canonical admission, then sanitize once more after loading as defense in
-  # depth against stale inherited variables.
-  clear_unadmitted_provider_secret_env
+  # Control-plane preparation only. Provider credentials are deliberately absent
+  # from this process; compatibility flags derive from canonical typed admission
+  # and the swarm child obtains candidate keys through the isolated vault loader.
+  clear_all_provider_secret_env
   compat_flags
-  load_admitted_secrets
-  clear_unadmitted_provider_secret_env
-  eval "$(normalize_provider_pool)"
 }
 
 raise_shared_quota_ceiling(){
@@ -199,17 +224,19 @@ reconcile_6000_admission(){
 
 start_6000(){
   pgrep -f '[r]un_6000_free_swarm_fast.py' >/dev/null 2>&1 && return 0
-  local before after post now rem hours out pid tmp
+  local before after post now rem hours out pid tmp vault_exec
   before="$(admission_capability_digest)"
   [[ "$before" == OK:* ]] || return 0
 
-  # Rebuild the parent capability environment immediately before spawn. If
-  # canonical admission moves during preparation, abort this spawn and let the
-  # next reconciliation cycle retry from the new state.
+  # Rebuild a credential-blind control environment immediately before spawn. If
+  # canonical admission/economic provenance moves during preparation, abort and
+  # let the next reconciliation cycle retry from the new state.
   prepare_provider_environment
   after="$(admission_capability_digest)"
   [[ "$after" == "$before" && "$after" == OK:* ]] || return 0
   [[ "${CLAY_FREE_ONLY_ATTESTED:-}" == "1" ]] || return 0
+  vault_exec="$ROOT/tools/free_swarm_exec_with_vault.py"
+  [[ -f "$vault_exec" ]] || return 0
 
   now=$(date +%s); rem=$((DEADLINE-now)); (( rem>0 )) || return 0
   hours=$(python3 - <<PY
@@ -218,16 +245,16 @@ PY
 )
   out="$STATE_DIR/active-fabric6000-v2-$(date -u +%Y%m%dT%H%M%SZ)"
   export CLAY_SWARM_HTTP_THREADS="$HTTP_THREADS"
-  nohup python3 "$ROOT/tools/run_6000_free_swarm_fast.py" --logical-workers "$LOGICAL_WORKERS" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm6000.log" 2>&1 </dev/null &
+  nohup python3 "$vault_exec" python3 "$ROOT/tools/run_6000_free_swarm_fast.py" --logical-workers "$LOGICAL_WORKERS" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm6000.log" 2>&1 </dev/null &
   pid=$!
   echo "$pid" >"$STATE_DIR/swarm6000.pid"
   tmp="$ADMISSION_BINDING_FILE.tmp"
   printf '%s\n' "$after" >"$tmp"
   mv "$tmp" "$ADMISSION_BINDING_FILE"
 
-  # Close the spawn race: current request_chat() independently revalidates
-  # admission before provider network I/O, and the supervisor also removes this
-  # child immediately if authority moved between spawn and binding publication.
+  # Close the spawn race. The request path independently revalidates concrete
+  # route/credential economic authority before provider network I/O; this control
+  # plane also removes the child if its admission/provenance binding moved.
   post="$(admission_capability_digest)"
   if [[ "$post" != "$after" || "$post" == INVALID:* ]]; then
     kill "$pid" 2>/dev/null || true
@@ -270,12 +297,13 @@ fabric=latest_fabric()
 try: admission_binding=Path('$ADMISSION_BINDING_FILE').read_text().strip()
 except OSError: admission_binding=None
 print(json.dumps({
- 'schema':'CLAY_6000_SWARM_SUPERVISOR/v3',
+ 'schema':'CLAY_6000_SWARM_SUPERVISOR/v4',
  'observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
  'remaining_seconds':$REMAINING,
  'logical_workers_requested':int('$LOGICAL_WORKERS'),
  'http_thread_pool':int('$HTTP_THREADS'),
  'provider_admission':admission_snapshot(),
+ 'provider_credential_scope':'SWARM_CHILD_ONLY',
  'fabric_admission_binding':admission_binding,
  'fabric_running':running('run_6000_free_swarm_fast.py'),
  'distillery_running':running('run_research_distillery_local.py'),
@@ -284,10 +312,10 @@ print(json.dumps({
  'local_model_ready':health(),
  'fabric':fabric,
  'shared_quota':snapshot(),
- 'revocation_policy':'SANITIZE_LONG_LIVED_PARENT_AND_RESTART_CHILD_ON_EXACT_ADMISSION_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_TYPED_ADMISSION_BEFORE_NETWORK'
+ 'revocation_policy':'CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; RESTART_CHILD_ON_ADMISSION_OR_ECONOMIC_PROVENANCE_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_ROUTE_CREDENTIAL_AUTHORITY_BEFORE_NETWORK'
 },indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR_6000.json.tmp" "$STATE_DIR/SUPERVISOR_6000.json"
   sleep 15
 done
-printf '{"schema":"CLAY_6000_SWARM_SUPERVISOR/v3","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR_6000.json"
+printf '{"schema":"CLAY_6000_SWARM_SUPERVISOR/v4","state":"EXPIRED","provider_credential_scope":"SWARM_CHILD_ONLY"}\n' >"$STATE_DIR/SUPERVISOR_6000.json"

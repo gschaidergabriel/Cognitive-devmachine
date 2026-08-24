@@ -21,51 +21,65 @@ python3 -m py_compile \
   tools/run_6000_free_swarm_v3.py \
   tools/run_6000_free_swarm_fast.py \
   tools/run_24h_entityos_swarm.py \
-  tools/run_free_go_swarm.py
+  tools/run_free_go_swarm.py \
+  "free swarm/update_fabric_live.py"
 bash -n tools/run_6000_free_swarm_supervisor.sh
 echo COMPILE_PASS
 
 echo '--- STOP EXACT LEGACY/FABRIC PROCESSES ---'
 python3 - <<'PY'
 import os,signal
-exact_suffixes={
- 'tools/run_24h_entityos_swarm_supervisor.sh',
- 'tools/run_24h_entityos_swarm.py',
- 'tools/run_6000_free_swarm_supervisor.sh',
- 'tools/run_6000_free_swarm_fast.py',
-}
+suffixes={'tools/run_24h_entityos_swarm_supervisor.sh','tools/run_24h_entityos_swarm.py','tools/run_6000_free_swarm_supervisor.sh','tools/run_6000_free_swarm_fast.py','free swarm/update_fabric_live.py'}
 me=os.getpid(); parent=os.getppid()
 for name in os.listdir('/proc'):
  if not name.isdigit(): continue
  pid=int(name)
  if pid in {me,parent}: continue
- try: raw=open(f'/proc/{pid}/cmdline','rb').read().split(b'\0')
+ try: args=[x.decode('utf-8','replace') for x in open(f'/proc/{pid}/cmdline','rb').read().split(b'\0') if x]
  except OSError: continue
- args=[x.decode('utf-8','replace') for x in raw if x]
- if not args: continue
- if any(any(arg.endswith(s) for s in exact_suffixes) for arg in args[1:4]):
+ if any(any(arg.endswith(s) for s in suffixes) for arg in args[1:5]):
   try: os.kill(pid,signal.SIGTERM); print('TERM',pid,' '.join(args[:4]))
   except (ProcessLookupError,PermissionError): pass
 PY
-sleep 3
+sleep 4
+# Fabric workers can spend minutes draining in-flight HTTP after SIGTERM. For an
+# explicit operator restart, bound that drain so the replacement high-throughput
+# fabric is not blocked by the old PID.
+python3 - <<'PY'
+import os,signal
+suffixes={'tools/run_24h_entityos_swarm_supervisor.sh','tools/run_24h_entityos_swarm.py','tools/run_6000_free_swarm_fast.py','free swarm/update_fabric_live.py'}
+me=os.getpid(); parent=os.getppid()
+for name in os.listdir('/proc'):
+ if not name.isdigit(): continue
+ pid=int(name)
+ if pid in {me,parent}: continue
+ try: args=[x.decode('utf-8','replace') for x in open(f'/proc/{pid}/cmdline','rb').read().split(b'\0') if x]
+ except OSError: continue
+ if any(any(arg.endswith(s) for s in suffixes) for arg in args[1:5]):
+  try: os.kill(pid,signal.SIGKILL); print('KILL',pid,' '.join(args[:4]))
+  except (ProcessLookupError,PermissionError): pass
+PY
 
-echo '--- START 6000 SUPERVISOR WITH ALL DISCOVERABLE FREE CREDENTIALS ---'
+echo '--- START CREDENTIAL-BLIND 6000 SUPERVISOR ---'
 export CLAY_LOGICAL_WORKERS="${CLAY_LOGICAL_WORKERS:-6000}"
 export CLAY_SWARM_HTTP_THREADS="${CLAY_SWARM_HTTP_THREADS:-512}"
-nohup python3 tools/free_swarm_exec_with_vault.py bash tools/run_6000_free_swarm_supervisor.sh >"$STATE/supervisor6000.log" 2>&1 </dev/null &
+nohup bash tools/run_6000_free_swarm_supervisor.sh >"$STATE/supervisor6000.log" 2>&1 </dev/null &
 echo $! >"$STATE/supervisor6000.pid"
 echo "SUPERVISOR_PID=$!"
+
+nohup python3 "free swarm/update_fabric_live.py" --repo "$ROOT" --artifacts "$STATE" --watch --interval-seconds 20 >"$STATE/fabric-dashboard.log" 2>&1 </dev/null &
+echo $! >"$STATE/fabric-dashboard.pid"
 
 for _ in $(seq 1 30); do
   sleep 2
   if [[ -s "$STATE/SUPERVISOR_6000.json" ]] && grep -q '"fabric_running": true' "$STATE/SUPERVISOR_6000.json"; then break; fi
 done
 
-echo '--- CREDENTIAL POOL ---'
+echo '--- CREDENTIAL POOL (SWARM CHILD RECEIPT ONLY) ---'
 cat "$STATE/CREDENTIAL_POOL.json" 2>/dev/null || true
 
 echo '--- PROCESSES ---'
-ps -eo pid,etime,%cpu,%mem,args | grep -E 'run_6000_free_swarm_supervisor|run_6000_free_swarm_fast|run_research_distillery|run_free_evidence_forge|free swarm/evaluate.py' | grep -v grep | head -60 || true
+ps -eo pid,etime,%cpu,%mem,args | grep -E 'run_6000_free_swarm_supervisor|run_6000_free_swarm_fast|run_research_distillery|run_free_evidence_forge|free swarm/evaluate.py|update_fabric_live.py' | grep -v grep | head -60 || true
 
 echo '--- SUPERVISOR STATUS ---'
 cat "$STATE/SUPERVISOR_6000.json" 2>/dev/null || true

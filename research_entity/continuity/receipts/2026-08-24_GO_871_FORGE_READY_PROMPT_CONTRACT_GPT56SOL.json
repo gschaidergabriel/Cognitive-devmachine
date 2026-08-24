@@ -1,0 +1,55 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.71",
+  "mode": "FREE_ONLY",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "trigger": "go",
+  "canonical_main_at_rebase": "022434054b45e1ea403f8582be204a24dd51b50f",
+  "branch": "gpt56sol/go-871-forge-ready-prompt-contract",
+  "source_head_before_receipt": "ce58b8a5b3b8ad5ae85d784701083df4d46145f6",
+  "finding": {
+    "classification": "SOURCE_LEVEL_CONVERSION_FUNNEL_CONTRACT_DEFECT",
+    "observed_prompt_source": "tools/free_swarm_accelerator_v2.py",
+    "observed_forge_source": "tools/run_free_evidence_forge.py",
+    "mechanism": "The active accelerator prompt advertised ready_for_forge=true in the same machine-readable skeleton that set patch_unified_diff to an empty string. Evidence Forge admits ready=true candidates for evaluation but returns needs_implementation when patch, target files or tests are absent/safety-invalid. The prompt therefore supplied a contradictory exemplar at exactly the worker-to-Forge boundary.",
+    "causal_status": "PLAUSIBLE_DIRECT_SOURCE_MECHANISM_NOT_RUNTIME_CAUSAL_PROOF",
+    "supervisor_context": {
+      "latest_reported_swarm_tokens": 5001744,
+      "latest_reported_machine_readable_delta_records": 68,
+      "latest_reported_forge_accepted_deltas": 0,
+      "latest_reported_distillery_accepted_dataset_tokens": 0
+    }
+  },
+  "delta": [
+    "make the machine-readable skeleton explicitly ready_for_forge=false while executable fields are empty",
+    "state that ready_for_forge=true requires non-empty mutually consistent target_files, an actual applicable unified diff, non-empty test_commands and a concrete falsifier",
+    "forbid labeling an empty patch as Forge-ready",
+    "add a focused deterministic source/mechanism regression for the prompt contract"
+  ],
+  "coordination": {
+    "overlap_pr": 1512,
+    "overlap_resolution": "COMPLEMENTARY_ONLY",
+    "reason": "PR1512 adds typed delta ingress and v3 wiring; this branch changes only the upstream accelerator prompt contract plus a dedicated regression and does not duplicate typed ingress semantics.",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed": false
+  },
+  "evidence": {
+    "source_review": "PASS",
+    "exact_checkout_test_execution_by_this_organ": false,
+    "reason": "No authorized local/clay-direct-dev shell connector is exposed in this ChatGPT session; prior container GitHub clone failed before source fetch on DNS.",
+    "scope": "SOURCE_AND_MECHANISM_ONLY"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "jspace_causal_control": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Run the focused prompt-contract regression on an exact current checkout, then measure the post-change VALID_READY/needs_implementation/accepted Forge conversion distribution; promotion requires observed funnel improvement rather than token volume."
+}

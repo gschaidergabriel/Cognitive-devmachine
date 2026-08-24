@@ -191,12 +191,32 @@ def read_bounded(path: Path, limit: int) -> str:
 
 
 def load_protocol() -> str:
+    """Resolve the current machine-readable worker authority first.
+
+    The unversioned all-workers file became a successor-dynamic pointer at 8.71,
+    so requiring an old embedded MINI ENTITY marker there incorrectly killed the
+    live 6000-worker fabric. Reuse the current-authority resolver shared with Xeno;
+    retain marker extraction only as a historical compatibility fallback.
+    """
+    live_error: Exception | None = None
+    try:
+        from xeno_current_authority_protocol import build_protocol
+        protocol = build_protocol(ROOT)
+        if PROTOCOL_BEGIN in protocol and PROTOCOL_END in protocol:
+            return protocol
+        live_error = RuntimeError("current authority builder returned no protocol envelope")
+    except Exception as exc:
+        live_error = exc
+
     text = PROTOCOL_PATH.read_text(encoding="utf-8")
     start = text.find(PROTOCOL_BEGIN)
     end = text.find(PROTOCOL_END, start)
-    if start < 0 or end < 0:
-        raise RuntimeError(f"mandatory GRF/ClayCode protocol block missing from {PROTOCOL_PATH}")
-    return text[start : end + len(PROTOCOL_END)]
+    if start >= 0 and end >= 0:
+        return text[start : end + len(PROTOCOL_END)]
+    raise RuntimeError(
+        "current worker authority resolution failed and historical protocol block is absent: "
+        f"{type(live_error).__name__}:{live_error}"
+    )
 
 
 def build_state_context(max_chars: int) -> str:
@@ -233,16 +253,17 @@ def request_chat(spec: ProviderSpec, key: str, model: str, prompt: str,
         "max_tokens": max_tokens, "temperature": 0.7, "stream": False,
     }
     req = urllib.request.Request(
-        spec.endpoint, data=json.dumps(body).encode("utf-8"), method="POST",
-        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json",
-                 "User-Agent": "clay-mini-entity-free-go-swarm/1.0"},
+        spec.endpoint,
+        data=json.dumps(body).encode("utf-8"),
+        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json", "User-Agent":"clay-entityos-swarm/3.0"},
+        method="POST",
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             raw = resp.read().decode("utf-8", errors="replace")
             headers = {k.lower(): v for k, v in resp.headers.items()}
             try:
-                parsed: dict[str, Any] | str = json.loads(raw)
+                parsed = json.loads(raw)
             except json.JSONDecodeError:
                 parsed = raw
             return int(resp.status), headers, parsed
@@ -391,129 +412,105 @@ class ProviderRuntime:
         }
 
 
-def worker_prompt(protocol: str, role: str, task: str, state_context: str, serial: int) -> str:
-    return f"""{protocol}
-
-module clay.swarm.go.worker
-let trigger = "go"
-let worker_serial = {serial}
-let worker_role = "{role}"
-
-TASK-SPECIFIC INSTRUCTION
-You are one research/build worker in a continuous FREE_ONLY Mini Entity `go` macrocycle.
-{task}
-
-Use the repository-state snapshot below only as reported context. It is not measured runtime truth merely because it is present. Identify stale/UNKNOWN claims explicitly.
-
-REPOSITORY_STATE_SNAPSHOT
-{state_context}
-
-OUTPUT CONTRACT
-1. Put the substantive result first in ClayCode/GRF form (R0..R6, Hyperposition and omega where applicable).
-2. Do not invent tool execution, measurements, repository writes, provider capabilities, or PASS states.
-3. Give concrete patches/tests/contracts as ClayCode-first artifacts when supportable; host-language snippets are allowed only where interoperability requires them.
-4. Preserve strongest counterhypothesis and the cheapest next discriminator.
-5. End with a short section exactly titled `DEUTSCHE_ZUSAMMENFASSUNG` containing concise German: Ergebnis; Messstatus/Evidenzklasse; stärkster Gegenpunkt; nächster ausführbarer Schritt.
-"""
-
-
-async def worker_loop(runtime: ProviderRuntime, slot: int, protocol: str, sink: JsonlSink,
-                      deadline: float, args: argparse.Namespace, serial_counter: list[int],
-                      stop_event: asyncio.Event) -> None:
+async def worker_loop(runtime: ProviderRuntime, worker_id: int, protocol: str, sink: JsonlSink,
+                      deadline: float, args: argparse.Namespace, serial_counter: list[int], stop_event: asyncio.Event) -> None:
     while not stop_event.is_set() and time.monotonic() < deadline:
+        if not await runtime.acquire(deadline):
+            break
         pair = runtime.next_key_model()
         if pair is None:
-            return
+            await runtime.release()
+            break
         key, model = pair
-        if not await runtime.acquire(deadline):
-            return
+        serial_counter[0] += 1
+        serial = serial_counter[0]
+        role, task = DEFAULT_ROLES[(serial - 1) % len(DEFAULT_ROLES)]
+        prompt = worker_prompt(protocol, role, task, build_state_context(args.context_chars), serial)
+        started = time.time()
+        runtime.requests += 1
+        common: dict[str, Any] = {
+            "schema":"CLAY_FREE_GO_SWARM_WORKER/v1", "ts":dt.datetime.now(dt.timezone.utc).isoformat(),
+            "provider":runtime.spec.name, "model":model, "key_fp":key_fingerprint(key), "role":role,
+            "worker_id":worker_id, "worker_serial":serial, "repo_head_at_prompt":git_text("rev-parse","HEAD"),
+        }
         try:
-            serial_counter[0] += 1
-            serial = serial_counter[0]
-            role, task = DEFAULT_ROLES[(serial - 1) % len(DEFAULT_ROLES)]
-            prompt = worker_prompt(protocol, role, task, build_state_context(args.context_chars), serial)
-            started = time.time()
-            runtime.requests += 1
             try:
                 status, headers, payload = await asyncio.to_thread(
-                    request_chat, runtime.spec, key, model, prompt, args.max_tokens, args.timeout)
+                    request_chat, runtime.spec, key, model, prompt, args.max_tokens, args.timeout
+                )
             except Exception as exc:
                 await runtime.on_transient_error()
-                await sink.append({"schema": "CLAY_FREE_GO_SWARM_WORKER/v1",
-                    "ts": dt.datetime.now(dt.timezone.utc).isoformat(), "provider": runtime.spec.name,
-                    "model": model, "key_fp": key_fingerprint(key), "role": role,
-                    "worker_serial": serial, "http_status": "NETWORK_EXCEPTION",
-                    "error": f"{exc.__class__.__name__}:{str(exc)[:300]}",
-                    "elapsed_s": round(time.time() - started, 3)})
+                common.update({"http_status":"NETWORK_EXCEPTION","error":f"{exc.__class__.__name__}:{str(exc)[:300]}","elapsed_s":round(time.time()-started,3)})
+                await sink.append(common)
                 continue
-
-            common = {"schema": "CLAY_FREE_GO_SWARM_WORKER/v1",
-                "ts": dt.datetime.now(dt.timezone.utc).isoformat(), "provider": runtime.spec.name,
-                "model": model, "key_fp": key_fingerprint(key), "role": role,
-                "worker_serial": serial, "http_status": status,
-                "elapsed_s": round(time.time() - started, 3), "usage": usage_from(payload),
-                "rate": {k: v for k, v in headers.items() if k.startswith("x-ratelimit-") or k == "retry-after"},
-                "repo_head_at_prompt": git_text("rev-parse", "HEAD")}
-
+            common.update({"http_status":status,"elapsed_s":round(time.time()-started,3),"usage":usage_from(payload),
+                           "rate":{k:v for k,v in headers.items() if k.startswith("x-ratelimit-") or k=="retry-after"}})
             if 200 <= status < 300:
-                text = extract_text(payload)
-                common["text"] = text
+                text = extract_text(payload); common["text"] = text
                 common["text_sha256"] = hashlib.sha256(text.encode("utf-8")).hexdigest()
-                common["conformance"] = {"protocol_injected": prompt.startswith(PROTOCOL_BEGIN),
-                                          "german_summary_marker": "DEUTSCHE_ZUSAMMENFASSUNG" in text}
-                await sink.append(common)
-                await runtime.on_success()
-                continue
+                common["conformance"] = {
+                    "protocol_injected": prompt.startswith(PROTOCOL_BEGIN),
+                    "german_summary_marker":"DEUTSCHE_ZUSAMMENFASSUNG" in text,
+                    "grf_marker":"GRF" in text,
+                }
+                await sink.append(common); await runtime.on_success(); continue
             if status == 402:
-                common["classification"] = "PAYMENT_REQUIRED_HARD_STOP_KEY"
-                common["error_body"] = payload
-                await sink.append(common)
-                await runtime.disable_key(key)
-                continue
-            if status in (401, 403):
-                common["classification"] = "AUTH_OR_ENTITLEMENT_BLOCKED_KEY"
-                common["error_body"] = payload
-                await sink.append(common)
-                await runtime.disable_key(key)
-                continue
+                common["classification"]="PAYMENT_REQUIRED_HARD_STOP_KEY"; common["error_body"]=payload
+                await sink.append(common); await runtime.disable_key(key); continue
+            if status in (401,403):
+                common["classification"]="AUTH_OR_ENTITLEMENT_BLOCKED_KEY"; common["error_body"]=payload
+                await sink.append(common); await runtime.disable_key(key); continue
             if status == 404:
-                common["classification"] = "MODEL_OR_ENDPOINT_UNAVAILABLE"
-                common["error_body"] = payload
-                await sink.append(common)
-                await runtime.disable_model(model)
-                continue
+                common["classification"]="MODEL_OR_ENDPOINT_UNAVAILABLE"; common["error_body"]=payload
+                await sink.append(common); await runtime.disable_model(model); continue
             if status == 429:
-                retry_after = parse_retry_after(headers, min(900.0, runtime.rate_backoff))
-                common["classification"] = "RATE_LIMIT_PROVIDER_COOLDOWN"
-                common["retry_after_s"] = retry_after
-                common["error_body"] = payload
-                await sink.append(common)
-                await runtime.on_429(retry_after)
-                continue
+                retry_after=parse_retry_after(headers,min(900.0,runtime.rate_backoff))
+                common["classification"]="RATE_LIMIT_PROVIDER_COOLDOWN"; common["retry_after_s"]=retry_after; common["error_body"]=payload
+                await sink.append(common); await runtime.on_429(retry_after); continue
             if 500 <= status < 600:
-                common["classification"] = "PROVIDER_TRANSIENT_ERROR"
-                common["error_body"] = payload
-                await sink.append(common)
-                await runtime.on_transient_error()
-                continue
-            common["classification"] = "NONRETRYABLE_REQUEST_ERROR"
-            common["error_body"] = payload
-            await sink.append(common)
-            runtime.errors += 1
-            await asyncio.sleep(min(30.0, 1.0 + random.random() * 4.0))
+                common["classification"]="PROVIDER_TRANSIENT_ERROR"; common["error_body"]=payload
+                await sink.append(common); await runtime.on_transient_error(); continue
+            common["classification"]="NONRETRYABLE_REQUEST_ERROR"; common["error_body"]=payload
+            runtime.errors += 1; await sink.append(common)
         finally:
             await runtime.release()
 
 
-async def status_loop(runtimes: list[ProviderRuntime], sink: JsonlSink,
-                      deadline: float, stop_event: asyncio.Event) -> None:
+def worker_prompt(protocol: str, role: str, task: str, state_context: str, serial: int) -> str:
+    return f"""{protocol}
+
+You are temporary Clay research organ #{serial}. You are not a new persistent entity.
+Current product: EntityOS. Current integrated cognition/compute architecture: HCU.
+Role: {role}
+Role task: {task}
+
+RULES FOR THIS RUN
+- Work on EntityOS/HCU only. Xeno/XCU names may appear only as transitional aliases where exact history requires them.
+- Use supplied repository/runtime facts as evidence, not permission to invent unobserved PASS states.
+- Follow current FREE_ONLY authority exactly. Never suggest paid fallback or Together.
+- No plaintext credentials, access tokens, private keys, refresh tokens, passwords, or session material in output.
+- Model/J-Space/world-model output is candidate/projection evidence only, never canonical state/effect authority.
+- Prefer one concrete architecture delta, falsifier, patch, benchmark, or experiment over broad advice.
+- If external research would resolve the blocker, name exact sources/repos/papers/tools and the discriminating experiment.
+- Preserve contradictions and strongest counterhypothesis; do not average them away.
+- End with a concise section named DEUTSCHE_ZUSAMMENFASSUNG containing: Befund, Gegenhypothese, naechster Test, erwartetes messbares Delta.
+
+CURRENT STATE CONTEXT
+{state_context}
+"""
+
+
+async def status_loop(runtimes: list[ProviderRuntime], sink: JsonlSink, deadline: float,
+                      stop_event: asyncio.Event, run_id: str) -> None:
     while not stop_event.is_set() and time.monotonic() < deadline:
-        await sink.status({"schema": "CLAY_FREE_GO_SWARM_STATUS/v1",
-            "updated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-            "remaining_seconds": max(0, int(deadline - time.monotonic())),
-            "providers": {rt.spec.name: rt.snapshot() for rt in runtimes}})
+        await sink.status({
+            "schema":"CLAY_FREE_GO_SWARM_STATUS/v1", "run_id":run_id,
+            "updated_at":dt.datetime.now(dt.timezone.utc).isoformat(),
+            "remaining_seconds":max(0,int(deadline-time.monotonic())),
+            "providers":{rt.spec.name:rt.snapshot() for rt in runtimes},
+        })
         try:
-            await asyncio.wait_for(stop_event.wait(), timeout=15.0)
+            await asyncio.wait_for(stop_event.wait(),timeout=5.0)
         except asyncio.TimeoutError:
             pass
 
@@ -522,107 +519,63 @@ async def run(args: argparse.Namespace) -> int:
     try:
         admission = load_provider_admission()
     except ProviderAdmissionError as exc:
-        print(f"Refusing to start before secret lookup/network: typed provider admission invalid: {exc}", file=sys.stderr)
+        print(f"typed provider admission invalid: {exc}", file=sys.stderr)
         return 5
-
     if not truthy(os.getenv("CLAY_FREE_ONLY_ATTESTED")):
-        print("Refusing to start before secret lookup/network: CLAY_FREE_ONLY_ATTESTED compatibility assertion is missing.", file=sys.stderr)
+        print("CLAY_FREE_ONLY_ATTESTED compatibility assertion missing; refusing external provider calls",file=sys.stderr)
         return 3
-
     protocol = load_protocol()
-    run_id = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    output_dir = Path(args.output_dir).expanduser() if args.output_dir else Path.home() / ".local/state/clay-free-go-swarm" / run_id
-    sink = JsonlSink(output_dir)
     runtimes: list[ProviderRuntime] = []
     for spec in PROVIDERS:
         if not provider_is_admitted_free(spec.name, admission):
-            print(f"Skipping {spec.name}: canonical typed admission is not FREE+admitted", file=sys.stderr)
             continue
         if not truthy(os.getenv(spec.attestation_env)):
-            print(f"Skipping {spec.name}: secondary compatibility assertion {spec.attestation_env}=1 not set", file=sys.stderr)
             continue
-        keys = collect_keys(spec, admission)
+        keys=collect_keys(spec,admission)
         if not keys:
             continue
-        models = split_values(os.getenv(spec.models_env)) or list(spec.default_models)
-        cap_env = f"CLAY_{spec.name.upper()}_MAX_CONCURRENCY"
-        try:
-            cap = int(os.getenv(cap_env, str(spec.default_max_concurrency)))
-        except ValueError:
-            cap = spec.default_max_concurrency
-        runtimes.append(ProviderRuntime(spec, keys, unique(models), cap))
+        models=split_values(os.getenv(spec.models_env)) or list(spec.default_models)
+        cap=int(os.getenv(f"CLAY_{spec.name.upper()}_MAX_CONCURRENCY",str(spec.default_max_concurrency)))
+        runtimes.append(ProviderRuntime(spec,keys,unique(models),cap))
     if not runtimes:
-        print("No canonically FREE-admitted provider with compatible attestation and credentials is configured. Nothing to run.", file=sys.stderr)
-        return 4
-
-    duration_s = max(1.0, args.hours * 3600.0)
-    deadline = time.monotonic() + duration_s
-    stop_event = asyncio.Event()
-    loop = asyncio.get_running_loop()
-    for sig in (signal.SIGINT, signal.SIGTERM):
-        try:
-            loop.add_signal_handler(sig, stop_event.set)
-        except NotImplementedError:
-            pass
-
-    manifest = {"schema": "CLAY_FREE_GO_SWARM_RUN/v2", "run_id": run_id,
-        "started_at": dt.datetime.now(dt.timezone.utc).isoformat(), "duration_hours": args.hours,
-        "deadline_monotonic_seconds": duration_s, "free_only": True,
-        "provider_admission_epoch": admission.get("authority_epoch"),
-        "repo_head": git_text("rev-parse", "HEAD"),
-        "protocol_sha256": hashlib.sha256(protocol.encode("utf-8")).hexdigest(),
-        "providers": {rt.spec.name: {"key_fingerprints": [key_fingerprint(k) for k in rt.keys],
-            "models": rt.models, "max_concurrency": rt.max_concurrency} for rt in runtimes},
-        "invariants": ["NO_SECRETS_IN_LOGS", "TYPED_FREE_PROVIDER_ADMISSION_BEFORE_SECRET_LOOKUP_AND_NETWORK",
-            "ENV_ATTESTATION_CANNOT_SELF_ADMIT_PROVIDER", "HTTP_402_HARD_STOP_KEY",
-            "HTTP_429_PROVIDER_WIDE_COOLDOWN_NO_KEY_ROTATION_BYPASS", "AIMD_CONCURRENCY",
-            "GRF_CLAYCODE_PROTOCOL_INJECTED_AT_TOP_OF_EVERY_WORKER_PROMPT",
-            "MODEL_OUTPUT_IS_CANDIDATE_NOT_CANONICAL_TRUTH_OR_EFFECT_AUTHORITY"]}
-    (output_dir / "run_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(json.dumps({"run_id": run_id, "output_dir": str(output_dir), "providers": list(manifest["providers"])}, ensure_ascii=False))
-
-    serial_counter = [0]
-    tasks: list[asyncio.Task[Any]] = []
-    for runtime in runtimes:
-        for slot in range(runtime.max_concurrency):
-            tasks.append(asyncio.create_task(worker_loop(runtime, slot, protocol, sink, deadline, args, serial_counter, stop_event)))
-    tasks.append(asyncio.create_task(status_loop(runtimes, sink, deadline, stop_event)))
-    sleep_task = asyncio.create_task(asyncio.sleep(duration_s))
-    stop_task = asyncio.create_task(stop_event.wait())
-    _, pending = await asyncio.wait({sleep_task, stop_task}, return_when=asyncio.FIRST_COMPLETED)
-    stop_event.set()
-    for task in pending:
-        task.cancel()
-    try:
-        await asyncio.wait_for(asyncio.gather(*tasks, return_exceptions=True), timeout=args.drain_seconds)
+        print("no provider runtime available",file=sys.stderr); return 4
+    run_id=dt.datetime.now(dt.timezone.utc).strftime("go-%Y%m%dT%H%M%SZ")
+    out=Path(args.output_dir) if args.output_dir else Path("/artifacts/clay-entityos-swarm")/run_id
+    sink=JsonlSink(out); duration_s=max(1.0,args.hours*3600.0); deadline=time.monotonic()+duration_s
+    stop_event=asyncio.Event(); loop=asyncio.get_running_loop()
+    for sig in (signal.SIGINT,signal.SIGTERM):
+        try:loop.add_signal_handler(sig,stop_event.set)
+        except NotImplementedError:pass
+    manifest={
+        "schema":"CLAY_FREE_GO_SWARM_RUN/v1","run_id":run_id,"started_at":dt.datetime.now(dt.timezone.utc).isoformat(),
+        "duration_hours":args.hours,"free_only":True,"provider_admission_epoch":admission.get("authority_epoch"),
+        "repo_head":git_text("rev-parse","HEAD"),"repo_status":git_text("status","--short"),
+        "protocol_sha256":hashlib.sha256(protocol.encode()).hexdigest(),
+        "providers":{rt.spec.name:{"key_fingerprints":[key_fingerprint(k) for k in rt.keys],"models":rt.models,"max_concurrency":rt.max_concurrency} for rt in runtimes},
+        "invariants":["EntityOS only","HCU only","FREE_ONLY","typed provider admission","no paid fallback","429 provider-wide cooldown","402 hard stop key","candidate outputs noncanonical"]
+    }
+    out.mkdir(parents=True,exist_ok=True); (out/"run_manifest.json").write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+    workers=[]
+    for rt in runtimes:
+        for i in range(rt.max_concurrency):workers.append(asyncio.create_task(worker_loop(rt,i,protocol,sink,deadline,args,[0],stop_event)))
+    status_task=asyncio.create_task(status_loop(runtimes,sink,deadline,stop_event,run_id))
+    sleep_task=asyncio.create_task(asyncio.sleep(duration_s)); stop_task=asyncio.create_task(stop_event.wait())
+    _, pending=await asyncio.wait({sleep_task,stop_task},return_when=asyncio.FIRST_COMPLETED); stop_event.set()
+    for task in pending:task.cancel()
+    try:await asyncio.wait_for(asyncio.gather(*workers,status_task,return_exceptions=True),timeout=args.drain_seconds)
     except asyncio.TimeoutError:
-        for task in tasks:
-            task.cancel()
-        await asyncio.gather(*tasks, return_exceptions=True)
-
-    final = {"schema": "CLAY_FREE_GO_SWARM_FINAL/v1", "run_id": run_id,
-        "finished_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-        "workers_started": serial_counter[0],
-        "providers": {rt.spec.name: rt.snapshot() for rt in runtimes}}
-    await sink.status(final)
-    (output_dir / "final.json").write_text(json.dumps(final, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(json.dumps(final, ensure_ascii=False))
-    return 0
+        for task in workers:task.cancel()
+        status_task.cancel(); await asyncio.gather(*workers,status_task,return_exceptions=True)
+    final={"schema":"CLAY_FREE_GO_SWARM_FINAL/v1","run_id":run_id,"finished_at":dt.datetime.now(dt.timezone.utc).isoformat(),"providers":{rt.spec.name:rt.snapshot() for rt in runtimes}}
+    await sink.status(final); (out/"final.json").write_text(json.dumps(final,indent=2,ensure_ascii=False)+"\n",encoding="utf-8"); print(json.dumps(final,ensure_ascii=False)); return 0
 
 
-def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run a 24h adaptive FREE_ONLY EntityOS/HCU go swarm")
-    parser.add_argument("--hours", type=float, default=24.0, help="wall-clock run duration (default: 24)")
-    parser.add_argument("--max-tokens", type=int, default=1800, help="maximum completion tokens per worker")
-    parser.add_argument("--context-chars", type=int, default=18000, help="bounded current repo context per worker")
-    parser.add_argument("--timeout", type=float, default=180.0, help="HTTP request timeout in seconds")
-    parser.add_argument("--drain-seconds", type=float, default=240.0, help="graceful drain bound after deadline/signal")
-    parser.add_argument("--output-dir", default="", help="receipt directory (default: ~/.local/state/clay-free-go-swarm/<run>)")
-    return parser.parse_args(argv)
+def parse_args() -> argparse.Namespace:
+    p=argparse.ArgumentParser(description="Run the FREE_ONLY EntityOS/HCU go swarm")
+    p.add_argument("--hours",type=float,default=24.0); p.add_argument("--max-tokens",type=int,default=1800)
+    p.add_argument("--context-chars",type=int,default=18000); p.add_argument("--timeout",type=float,default=180.0)
+    p.add_argument("--drain-seconds",type=float,default=240.0); p.add_argument("--output-dir",default="")
+    return p.parse_args()
 
 
-if __name__ == "__main__":
-    try:
-        raise SystemExit(asyncio.run(run(parse_args())))
-    except KeyboardInterrupt:
-        raise SystemExit(130)
+if __name__ == "__main__": raise SystemExit(asyncio.run(run(parse_args())))

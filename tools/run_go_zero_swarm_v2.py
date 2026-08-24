@@ -9,7 +9,8 @@ provider boundary.
 
 It deliberately does not create another provider authority. Provider-level typed
 admission remains enforced by ``run_free_go_swarm.py``; this module adds the
-narrower economic provenance required by supervisor 8.70 before network I/O.
+narrower economic provenance required by supervisor 8.70 before network I/O and
+selects the versioned 8.70 worker-injection profile for this trigger path.
 """
 from __future__ import annotations
 
@@ -24,7 +25,9 @@ from typing import Any
 import run_go_zero_swarm as fabric
 from free_lane_provenance import emit_execution_receipt, lane_evidence
 
+ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT_ROOT = Path(os.getenv("CLAY_FREE_SWARM_ARTIFACTS", "/artifacts/clay-entityos-swarm"))
+PROTOCOL_870 = ROOT / "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_70.md"
 _ORIGINAL_REQUEST = fabric.BASE.request_chat
 _ORIGINAL_NEXT_PAIR = fabric.BASE.ProviderRuntime.next_key_model
 _RECEIPT_LOCK = threading.Lock()
@@ -33,6 +36,11 @@ _SOURCE = {
     "commit": fabric.BASE.git_text("rev-parse", "HEAD"),
     "tree": fabric.BASE.git_text("rev-parse", "HEAD^{tree}"),
 }
+
+# The legacy base module defaults to the unversioned compatibility directive.
+# Bind this trigger invocation to the current versioned runtime injection profile
+# without rewriting historical directives or receipts.
+fabric.BASE.PROTOCOL_PATH = PROTOCOL_870
 
 
 def _evidence(spec: fabric.BASE.ProviderSpec, key: str, model: str) -> dict[str, Any]:

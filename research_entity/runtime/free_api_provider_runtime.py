@@ -352,6 +352,23 @@ def _enforce_pre_serialization_request_bound(
             raise ValueError("provider_request_too_large")
 
 
+def _enforce_pre_lock_text_size_lower_bound(messages, model) -> None:
+    """Reject proven oversize from passive scalar lengths before locking."""
+    total_characters = len(model) if type(model) is str else 0
+    if total_characters > MAX_PROVIDER_REQUEST_BYTES:
+        raise ValueError("provider_request_too_large")
+    if type(messages) is not list:
+        return
+    for message in messages:
+        if type(message) is not dict:
+            continue
+        for value in message.values():
+            if type(value) is str:
+                total_characters += len(value)
+                if total_characters > MAX_PROVIDER_REQUEST_BYTES:
+                    raise ValueError("provider_request_too_large")
+
+
 def _enforce_pre_snapshot_message_bound(messages) -> None:
     """Reject structurally impossible requests before copying caller data."""
     # Only exact lists have passive built-in len behavior at this boundary.
@@ -649,6 +666,7 @@ def execute_chat(
 ) -> dict:
     """Serialize authorization through receipt so payment latches are atomic."""
     _enforce_pre_snapshot_message_bound(messages)
+    _enforce_pre_lock_text_size_lower_bound(messages, model)
     acquired = PROCESS_EXECUTION_LOCK.acquire(
         timeout=EXECUTION_LOCK_TIMEOUT_SECONDS
     )

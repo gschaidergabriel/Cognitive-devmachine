@@ -67,6 +67,7 @@ PY
   exit 3
 fi
 
-exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_intermediate_api_execute.py" \
+exec "$PYTHON" "$ROOT/tools/trigger1_attested_local_qwen_api.py" \
+  --mode intermediate \
   --output-dir "$OUT_DIR" \
   --cache-dir "$HF_HOME"

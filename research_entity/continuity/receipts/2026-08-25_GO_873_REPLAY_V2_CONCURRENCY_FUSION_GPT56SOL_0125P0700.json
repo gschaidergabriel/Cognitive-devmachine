@@ -1,0 +1,60 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "67416a37ad2f745584e33c694fa765fb3f85588c",
+  "finding": {
+    "classification": "NON_DUPLICATE_MIGRATION_GAP_WITH_CONCURRENT_SUCCESSOR_CONSTRAINT",
+    "statement": "Open PR #1767 identifies a real v1-to-v2 replay-identity migration gap: historical non-null v1 digests can bypass the NULL-only legacy fence after replay preimage semantics changed. Canonical main subsequently added serialized SQLite write-intent admission (#1765), so the migration repair must be successor-fused without regressing concurrency atomicity.",
+    "impact": "A naive merge/rebase could either preserve duplicate dataset mint across schema migration or reintroduce concurrent double-admission/race behavior."
+  },
+  "observed_current_main_delta": {
+    "commit": "67416a37ad2f745584e33c694fa765fb3f85588c",
+    "concurrency_contract": [
+      "BEGIN IMMEDIATE before replay lookup",
+      "same semantic replay concurrently => exactly one admission plus one duplicate",
+      "same replay identity with changed measured evidence => exactly one admission plus one REPLAY_IDENTITY_CONFLICT",
+      "distinct execution identities concurrently => independently admissible"
+    ]
+  },
+  "open_donor": {
+    "pr": 1767,
+    "head": "dffa30bcdfd955e5755893da124ac1a8eccc477e",
+    "mergeable_observed": false,
+    "unique_delta": "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v2 + CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v2 + additive v2 columns/index + fail-closed pre-v2 overlap",
+    "unsafe_as_is": "PR head predates canonical main concurrency serialization and uses SELECT/admit before serialized BEGIN IMMEDIATE write intent."
+  },
+  "durable_action": {
+    "pr_comment_id": 5399563041,
+    "instruction": "Successor/rebase must preserve both v2 migration semantics and current-main serialized concurrency admission; do not resolve conflicts by restoring SELECT-before-write behavior."
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: executable Distillery convergence now has an explicit successor-fusion contract preventing migration safety from regressing concurrent admission atomicity.",
+    "track_b": "ADVANCED: reusable replay/evidence identity migration is constrained to coexist with one deterministic serialized admission authority.",
+    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE: prevents schema-version churn and concurrency races from multiplying future J-Space/training examples; model-specific J-Space/training runtime credit remains zero."
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0,
+    "provider_or_model_network_io": false,
+    "paid_or_together_execution": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current-facing README was already concurrently advanced during GO873 and direct replacement would risk clobbering newer parallel state; this append-only receipt plus PR coordination comment preserve the exact delta safely."
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Create or rebase a successor of PR #1767 onto exact current main, preserve BEGIN IMMEDIATE admission serialization and concurrent replay regression, add the v2 migration regression to the same exact-main evidence carrier, then observe repository-bound deterministic execution before live Forge-to-Distillery promotion."
+}

@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"00000-inspect-new-fabric-run-20260824T2054p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":90,
+  "command":"set -e; echo RUNS; ls -ltd /artifacts/clay-entityos-swarm/active-fabric6000-v2-* | head -5; echo NEWSTATUS; cat /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z/status.json 2>/dev/null || true; echo LOG; tail -120 /artifacts/clay-entityos-swarm/swarm6000.log; echo PROCS; pgrep -af run_6000_free_swarm_fast.py || true"
+}

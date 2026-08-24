@@ -3,14 +3,15 @@
 
 No provider/model network execution occurs. The gate checks one exact source commit,
 proves the integrated evidence-admission boundary against a deterministic ablation in
-bubblewrap --unshare-all, then drives the exact current Distillery bridge with (a) a
-nominal ACCEPT lacking execution admission and (b) one evidence-qualified ACCEPT twice.
-Acceptance requires nominal rejection plus exactly one new packet, nonzero dataset
-tokens, and zero replay token delta.
+bubblewrap --unshare-all, obtains one ACCEPT from the real current safe Forge producer,
+then drives the exact current Distillery bridge with (a) a nominal ACCEPT lacking
+execution admission and (b) that producer-generated evidence-qualified ACCEPT twice.
+Acceptance requires producer ACCEPT, nominal rejection, exactly one new packet,
+nonzero dataset tokens, and zero replay token delta.
 
-The host/source probe remains read-only. Only the witness-owned disposable current and
-ablated clones are writable in their isolated /work bind so py_compile/unittest may
-create ordinary scratch artifacts without exposing any additional host path.
+The host/source probe remains read-only. Candidate execution is delegated to the
+current safe Forge validator, whose model-authored commands are bubblewrap-isolated
+and may write only inside its witness-owned disposable Forge scratch children.
 """
 from __future__ import annotations
 
@@ -28,6 +29,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = Path("tools/ingest_forge_accepts_into_distillery.py")
+FORGE_PRODUCER = Path("tools/run_go872_forge_single_candidate.py")
+SAFE_FORGE = Path("tools/run_free_evidence_forge_safe_871.py")
 TEST = "runtime_checks.test_forge_distillery_requires_execution_admission_871"
 COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 
@@ -186,6 +189,41 @@ def bridge_once(root: Path, eval_path: Path, db: Path) -> dict[str, Any]:
     return parse_json_stdout(p.stdout)
 
 
+def produce_forge_evaluation(
+    root: Path,
+    source_sha: str,
+    output_path: Path,
+    artifact_root: Path,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    env = minimal_env()
+    env["CLAY_SWARM_ARTIFACT_ROOT"] = str(artifact_root)
+    started = time.monotonic()
+    p = subprocess.run(
+        ["python3", str(root / FORGE_PRODUCER), "--source-sha", source_sha, "--output", str(output_path)],
+        cwd=root, env=env, text=True,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=300,
+    )
+    producer = {
+        "rc": p.returncode,
+        "elapsed_s": time.monotonic() - started,
+        "stdout": p.stdout[-3000:],
+        "stderr": p.stderr[-3000:],
+        "producer_path": str(FORGE_PRODUCER),
+        "safe_forge_path": str(SAFE_FORGE),
+        "artifact_root_scope": "WITNESS_OWNED_DISPOSABLE",
+    }
+    if p.returncode:
+        raise RuntimeError("SAFE_FORGE_PRODUCER_FAILED:" + p.stderr[-800:] + p.stdout[-800:])
+    rows = [
+        json.loads(line)
+        for line in output_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    if len(rows) != 1 or not isinstance(rows[0], dict):
+        raise RuntimeError("SAFE_FORGE_PRODUCER_RESULT_CARDINALITY")
+    return rows[0], producer
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--source-sha", required=True)
@@ -194,7 +232,7 @@ def main() -> int:
     source_sha = args.source_sha.strip().lower()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     result: dict[str, Any] = {
-        "schema": "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2",
+        "schema": "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v3",
         "authority_epoch": "8.72",
         "mode": "FREE_ONLY",
         "source_sha": source_sha,
@@ -205,7 +243,8 @@ def main() -> int:
         "hcu_full_credit": 0,
         "jspace_credit": 0,
         "training_credit": 0,
-        "witness_write_scope": "DISPOSABLE_CURRENT_AND_ABLATED_CLONES_ONLY",
+        "witness_write_scope": "DISPOSABLE_CURRENT_ABLATED_AND_FORGE_SCRATCH_ONLY",
+        "forge_accept_origin_required": "REAL_SAFE_FORGE_VALIDATOR",
     }
     tmp: Path | None = None
     try:
@@ -217,11 +256,15 @@ def main() -> int:
         rc, tree, err = git(ROOT, "rev-parse", source_sha + "^{tree}")
         if rc or not tree:
             raise RuntimeError("SOURCE_TREE_UNAVAILABLE:" + err[-300:])
-        rc, target_blob, err = git(ROOT, "rev-parse", f"{source_sha}:{TARGET}")
-        if rc or not re.fullmatch(r"[0-9a-f]{40,64}", target_blob):
-            raise RuntimeError("TARGET_BLOB_UNAVAILABLE:" + err[-300:])
 
-        tmp = Path(tempfile.mkdtemp(prefix="clay-forge-distillery-v2-"))
+        blob_ids: dict[str, str] = {}
+        for material in (TARGET, FORGE_PRODUCER, SAFE_FORGE):
+            rc, blob, err = git(ROOT, "rev-parse", f"{source_sha}:{material}")
+            if rc or not re.fullmatch(r"[0-9a-f]{40,64}", blob):
+                raise RuntimeError(f"MATERIAL_BLOB_UNAVAILABLE:{material}:{err[-300:]}")
+            blob_ids[str(material)] = blob
+
+        tmp = Path(tempfile.mkdtemp(prefix="clay-forge-distillery-v3-"))
         current = tmp / "current"
         ablated = tmp / "ablated"
         clone_exact(source_sha, current)
@@ -243,59 +286,12 @@ def main() -> int:
         ablated_pass = sum(x["rc"] == 0 for x in ablated_runs)
         improvement = 100.0 * (current_pass - ablated_pass) / 2.0
 
-        worker_sha = hashlib.sha256(
-            ("forge-distillery-v2:" + source_sha + ":" + target_blob + ":" + ablated_sha).encode()
-        ).hexdigest()
-        decision = {
-            "admitted": True,
-            "reason": "WITNESS_FIXED_ALLOWLISTED_UNIT_COMMAND",
-            "argv": command,
-            "class": "TEST_OR_STATIC",
-        }
-        admission = {
-            "schema": "CLAY_FORGE_EXECUTION_ADMISSION/v1",
-            "source_scope": "EXACT_WORKER_PROMPT_HEAD",
-            "source_identity_admitted": True,
-            "source_head": source_sha,
-            "source_tree": tree,
-            "evaluation_checkout_head": source_sha,
-            "evaluation_checkout_tree": tree,
-            "decisions": [decision],
-            "all_commands_admitted": True,
-            "candidate_is_canonical_truth": False,
-            "command": "python3 -m unittest -q " + TEST,
-            "backend": backend,
-        }
-        evaluation = {
-            "schema": "CLAY_FORGE_DELTA_EVALUATION/v1",
-            "delta_id": "integrated-forge-distillery-evidence-admission-v2",
-            "source_class": "exact_current_runtime_successor_gate",
-            "provider": "local_deterministic",
-            "model": "none",
-            "role": "RUNTIME",
-            "worker_sha": worker_sha,
-            "source_repo_head": source_sha,
-            "evaluation_repo_head": source_sha,
-            "source_scope": "EXACT_WORKER_PROMPT_HEAD",
-            "evaluated_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
-            "status": "accepted" if current_pass == 2 and ablated_pass == 0 and static["rc"] == 0 and improvement > 0 else "validated_not_better",
-            "metric": "execution_admission_causal_regression_pass_rate",
-            "relative_improvement_pct": improvement,
-            "reproducible_runs": 2,
-            "tests_passed": current_pass,
-            "tests_failed": 2 - current_pass,
-            "negative_tests_passed": 1,
-            "negative_tests_failed": 0,
-            "static_checks_passed": int(static["rc"] == 0),
-            "static_checks_failed": int(static["rc"] != 0),
-            "benchmark_non_regression": True,
-            "reverted": False,
-            "target_blob_identities": {str(TARGET): target_blob},
-            "requires_rebase_to_evaluation_head": False,
-            "execution_admission": admission,
-            "proposal_hypothesis": "Integrated Distillery admission causally depends on the shared Forge evidence-qualified execution discriminator.",
-            "falsifier": "If the exact current source does not outperform the nominal-only ablation on the admission regression, integrated causal credit fails.",
-        }
+        qualified_path = tmp / "qualified.jsonl"
+        forge_artifacts = tmp / "forge-artifacts"
+        evaluation, producer = produce_forge_evaluation(
+            current, source_sha, qualified_path, forge_artifacts
+        )
+        producer_accept = str(evaluation.get("status", "")).lower() == "accepted"
         qualified, qualification_reason = evidence_reason(evaluation)
 
         nominal = dict(evaluation)
@@ -306,8 +302,6 @@ def main() -> int:
         nominal_db = tmp / "nominal.sqlite3"
         nominal_result = bridge_once(current, nominal_path, nominal_db)
 
-        qualified_path = tmp / "qualified.jsonl"
-        qualified_path.write_text(json.dumps(evaluation, sort_keys=True) + "\n", encoding="utf-8")
         qualified_db = tmp / "qualified.sqlite3"
         first = bridge_once(current, qualified_path, qualified_db)
         replay = bridge_once(current, qualified_path, qualified_db)
@@ -317,7 +311,7 @@ def main() -> int:
         nominal_rejected = int(nominal_result.get("admitted") or 0) == 0
         gate_pass = (
             current_pass == 2 and ablated_pass == 0 and static["rc"] == 0 and
-            qualified and evaluation["status"] == "accepted" and nominal_rejected and
+            producer_accept and qualified and nominal_rejected and
             int(first.get("admitted") or 0) == 1 and
             int(first.get("forge_execution_packets_total") or 0) == 1 and token1 > 0 and
             int(replay.get("admitted") or 0) == 0 and int(replay.get("duplicates") or 0) == 1 and
@@ -326,7 +320,7 @@ def main() -> int:
 
         result.update({
             "source_tree": tree,
-            "target_blob": target_blob,
+            "material_blobs": blob_ids,
             "ablation_source_sha256": ablated_sha,
             "current_runs": current_runs,
             "ablated_runs": ablated_runs,
@@ -334,15 +328,18 @@ def main() -> int:
             "ablated_passes": ablated_pass,
             "relative_improvement_pct": improvement,
             "static_check": static,
+            "forge_producer": producer,
             "forge_evaluation": evaluation,
+            "forge_producer_accept_observed": producer_accept,
             "evidence_qualified": qualified,
             "evidence_reason": qualification_reason,
             "nominal_negative_control": nominal_result,
             "distillery_first": first,
             "distillery_replay": replay,
             "acceptance_witness": {
+                "safe_forge_producer_accept": int(producer_accept),
                 "nominal_without_execution_admission_rejected": nominal_rejected,
-                "exact_evidence_qualified_accept": int(qualified and evaluation["status"] == "accepted"),
+                "exact_evidence_qualified_accept": int(qualified and producer_accept),
                 "first_new_distillery_packets": int(first.get("admitted") or 0),
                 "accepted_dataset_tokens_after_first": token1,
                 "replay_new_packets": int(replay.get("admitted") or 0),
@@ -351,7 +348,7 @@ def main() -> int:
                 "token_delta_on_replay": token2 - token1,
             },
             "pass": gate_pass,
-            "status": "PASS_EXACT_CURRENT_1_TO_1_TO_NONZERO_REPLAY_ZERO" if gate_pass else "FAIL_RUNTIME_GATE",
+            "status": "PASS_REAL_FORGE_1_TO_1_TO_NONZERO_REPLAY_ZERO" if gate_pass else "FAIL_RUNTIME_GATE",
         })
         return 0 if gate_pass else 1
     except Exception as exc:

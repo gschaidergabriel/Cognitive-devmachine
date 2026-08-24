@@ -1,0 +1,66 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.72",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed_before_write": "8b6f695f12ba3577165e76d53e138077d56892d3",
+    "supervisor_inbox_selected": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_execution_controller": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "new_unusual_experiments_run": 0,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_NEW_UNUSUAL_EXPERIMENT_FROM_THIS_ORGAN",
+    "ordinary_work_class": "SOURCE_PROVENANCE_REPAIR_REGRESSION_AND_ARTIFACT_FUSION"
+  },
+  "observed": {
+    "trigger1_workflow_before_repair_blob": "c09b3da162fb62bc4ee068dd443ec055737626ef",
+    "workflow_checkout": "ref=main",
+    "workflow_pre_intervention_source_binding": "TRIGGER1_SOURCE_HEAD=git rev-parse HEAD; TRIGGER1_SOURCE_TREE=git rev-parse HEAD^{tree}; dirty checkout rejected",
+    "runtime_receipt_pre_repair_head_binding": "github_actions.head_sha=GITHUB_SHA",
+    "open_issue": 1603,
+    "open_issue_finding": "dispatch/event SHA can differ from executed checkout SHA when moving main is checked out after issue dispatch",
+    "runtime_result_observed": false
+  },
+  "hypothesis": "A future Trigger1 result can be scientifically valid yet receive false exact-source provenance if the runtime receipt binds dispatch-event GITHUB_SHA instead of the actually executed checkout SHA.",
+  "counterhypothesis": "GITHUB_SHA and the post-dispatch checkout of main are always identical for issue-triggered runs.",
+  "adjudication": "The workflow explicitly checks out moving main and separately captures git rev-parse HEAD. Therefore equality is not guaranteed by workflow semantics; the executed checkout identity must be authoritative and the dispatch SHA retained only as event provenance.",
+  "bounded_delta": {
+    "branch": "gpt56sol/go-872-trigger1-executed-source-receipt-20260824",
+    "workflow_commit": "6689f23352e2a8ffcf68b1b552cac920bac99b88",
+    "artifact_readme_commit": "61c24a4b7b57a6c86fca8a4aa33c352866d52e05",
+    "changes": [
+      "runtime receipt head_sha now binds TRIGGER1_SOURCE_HEAD from the actual checkout",
+      "executed tree SHA and clean-source status are persisted",
+      "dispatch_event_sha is preserved separately rather than masquerading as executed source",
+      "real source results fail closed if their repo_head or repo_tree disagree with the workflow-bound checkout",
+      "focused static regression prevents reintroduction of GITHUB_SHA as head_sha",
+      "the artefact/README.md records the new evidence boundary and next gate"
+    ]
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact executable evidence can no longer claim an event-context SHA as the executed Trigger1 checkout identity on the repaired lane.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: reusable HCU model-execution provenance is strengthened by explicit executed head/tree/clean-state binding before downstream model/J-Space evidence is admitted.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: future model-specific J-Space receipts on the retained Trigger1 lane are fail-closed against checkout/event source-identity drift; no model runtime or training credit is minted by this source repair."
+  },
+  "tests": {
+    "source_regression_added": "tests/test_trigger1_workflow_executed_source_identity.py",
+    "executed_in_this_organ": false,
+    "reason": "No repository execution surface was invoked by this organ; source/regression presence is not runtime or test-execution evidence."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Review/merge the source-provenance repair; then, only under a canonical atomic lease, allow a future Trigger1 run to persist a terminal receipt whose executed head/tree matches the source result and whose dispatch-event SHA is recorded separately."
+}

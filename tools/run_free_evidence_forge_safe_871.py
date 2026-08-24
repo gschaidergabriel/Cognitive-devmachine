@@ -5,6 +5,11 @@ Installs deterministic model-command execution admission before the base Forge c
 evaluate a worker-authored candidate. Source identity remains the canonical Forge
 row's exact repo_head_at_prompt. Candidate output is noncanonical; no execution is
 admitted without the isolated backend.
+
+After each Forge cycle, the already-canonical Forge->Distillery bridge is invoked.
+That bridge independently requires the same execution-admission manifest, so legacy
+or nominal ACCEPTED rows cannot create dataset tokens merely because they coexist in
+the append-only evaluation log.
 """
 from __future__ import annotations
 
@@ -14,9 +19,11 @@ from pathlib import Path
 from typing import Any
 
 import forge_execution_admission_871 as admission
+import ingest_forge_accepts_into_distillery as distillery_bridge
 import run_free_evidence_forge as base
 
 _ORIGINAL_VALIDATE = base.validate_candidate
+_ORIGINAL_CYCLE = base.cycle
 base.safe_command = admission.safe_command
 base.run_cmd = admission.run_cmd
 
@@ -94,7 +101,30 @@ def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
     return result
 
 
+async def safe_cycle(con: Any, args: Any) -> int:
+    work = await _ORIGINAL_CYCLE(con, args)
+    try:
+        summary = await asyncio.to_thread(
+            distillery_bridge.ingest,
+            distillery_bridge.DEFAULT_FORGE_EVAL,
+            distillery_bridge.DEFAULT_DISTILLERY_DB,
+        )
+        base.append_jsonl(
+            base.FORGE_ROOT / "distillery_ingest.jsonl",
+            {"ts": base.now(), **summary},
+        )
+    except Exception as exc:
+        # A downstream dataset-write failure must remain explicit but cannot rewrite
+        # the append-only Forge evaluation outcome. The next cycle retries idempotently.
+        base.append_jsonl(
+            base.FORGE_ROOT / "distillery_ingest_errors.jsonl",
+            {"ts": base.now(), "error": f"{type(exc).__name__}:{str(exc)[:1000]}"},
+        )
+    return work
+
+
 base.validate_candidate = validate_candidate
+base.cycle = safe_cycle
 
 
 def main() -> int:

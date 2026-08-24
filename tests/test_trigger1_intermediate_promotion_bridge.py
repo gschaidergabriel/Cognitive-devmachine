@@ -59,6 +59,12 @@ def valid_result(*, calibration_seed: int = 1701, holdout_seed: int = 2718) -> d
         "derivation": {
             "sources": [{"prompt_sha256": DERIVATION_PROMPT64}],
             "directions": {"12": {"direction_sha256": DIR64}},
+            "label_independence": {
+                "schema": bridge.LABEL_INDEPENDENCE_SCHEMA,
+                "uses_evaluation_output_labels": False,
+                "evaluation_output_labels_resolved_before_derivation": False,
+                "derivation_input_family_sha256": bridge.digest([DERIVATION_PROMPT64]),
+            },
         },
         "calibration_rows": [
             {
@@ -116,6 +122,15 @@ class Trigger1IntermediatePromotionBridgeTests(unittest.TestCase):
                 valid_result(calibration_seed=2718, holdout_seed=2718),
                 valid_intermediate(),
             )
+
+    def test_calibration_holdout_prompt_overlap_fails_closed_with_disjoint_seeds(self):
+        result = valid_result(calibration_seed=1701, holdout_seed=2718)
+        result["calibration_rows"][0]["prompt_sha256"] = HOLD_AB_PROMPT64
+        with self.assertRaisesRegex(
+            bridge.BridgeError,
+            "CALIBRATION_HOLDOUT_PROMPTS_MUST_BE_DISJOINT",
+        ):
+            bridge.build_direct_candidate(result, valid_intermediate())
 
 
 if __name__ == "__main__":

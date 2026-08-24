@@ -1,0 +1,72 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "research_main_observed": "9680ac11cfdb04c74f40648d328c5dccd5b28894",
+  "current_supervisor": {
+    "schema": "8.61",
+    "mode": "FREE_ONLY",
+    "together_general_inference": "FORBIDDEN",
+    "paid_one_shot_owner_directive": "QUARANTINED_IN_CURRENT_SUPERVISOR_MODE",
+    "paid_preflight_or_credential_consumption_allowed": false
+  },
+  "retained_hcu_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "observed_head_sha": "9e0108de7bc8a22f5f4893cff99e154c78146894",
+    "draft": true,
+    "single_retained_lane": true
+  },
+  "parallel_progress_observed": [
+    "Global J-Space producer/compiler source-coherence repair advanced on retained PR1263",
+    "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v1 landed and now binds training trace to HCU_INFERENCE_RECEIPT/v3 engine/load/output ancestry",
+    "dataset admission regressions now bind verified causal outcome receipts across episode identity"
+  ],
+  "source_finding": {
+    "classification": "JSPACE_MODEL_CALL_GRID_ROLE_UNBOUND",
+    "status": "SOURCE_CONFIRMED_NO_RUNTIME_CREDIT",
+    "binding_file": "the artefact/MicroEntity/hcu/jspace_inference_binding_v1.py",
+    "binding_blob_sha": "6ba74b9313893fc7e6af42753622bc22febc0597",
+    "inference_receipt_test_file": "the artefact/MicroEntity/hcu/test_inference_receipt_v1.py",
+    "inference_receipt_test_blob_sha": "d46641af94ed64f00fcddc6645d0ea4af413167e",
+    "observation": "The new J-Space inference binding requires training_trace.role to be a member of inference_receipt.model_lanes, but HCU_INFERENCE_RECEIPT/v3 carries the full route lane tuple and does not structurally bind model_call_id/output bytes to one exact GRID plan/cell/model lane. On a multi-lane route, set membership alone cannot prove that the concrete output came from the training trace's exact cell/role.",
+    "required_invariant": "MODEL_CALL_IDENTITY -> exact GRID_PLAN_SHA256 + GRID_CELL_ID + MODEL_LANE_OR_ROLE + generation + route + admitted engine/load ancestry + output bytes",
+    "preferred_repair": "Strengthen the single canonical inference/model-call boundary or add one subordinate typed model-call receipt consumed by it; do not create a second inference authority. J-Space binding must use exact equality to the concrete cell/role lineage, not membership in the route lane set.",
+    "deterministic_regression_obligation": "For one multi-lane route, an inference receipt produced for lane/cell A must fail closed when rebound to a training trace for admitted lane/cell B; exact same lane/cell replay remains deterministic."
+  },
+  "coordination": {
+    "pr1263_comment_id": 5387543812,
+    "duplicate_hcu_path_created": false,
+    "new_pr_created_for_this_finding": false,
+    "go_receipt_lane": 1394
+  },
+  "unusual_experiment": {
+    "consumed_by_this_finding": false,
+    "global_current_go_slot_already_consumed_by": "JSPACE_PROTOTYPE_LOCATION_SPLIT",
+    "note": "This finding is source inspection plus deterministic regression obligation only."
+  },
+  "execution_evidence": {
+    "authorized_isolated_runtime_run_for_this_finding": false,
+    "github_workflow_runs_observed_for_examined_hcu_head": 0,
+    "runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_step": "Fuse exact model-call -> GRID plan/cell/role identity into the retained PR1263 inference chain, then execute the exact current Research main + PR1263 bytes on an actually-started authorized isolated FREE sandbox and require the multi-lane cross-role transplant regression to fail closed.",
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_host_testing": false,
+    "together_preflight": false,
+    "credential_lookup": false,
+    "provider_network_execution": false,
+    "paid_action": false,
+    "false_pass_claimed": false
+  }
+}

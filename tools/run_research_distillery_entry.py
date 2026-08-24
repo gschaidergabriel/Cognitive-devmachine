@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 """Stable FREE_ONLY entrypoint for run_research_distillery.py.
 
-Adds typed provider boundaries, efficient free-model selection, fail-soft reviewer
-fallback, and explicit near-miss/underfill instrumentation. Thresholds are not
-silently weakened: near misses are telemetry so a zero-yield pipeline is
-explainable rather than opaque.
+Adds typed provider boundaries, route/credential economic provenance, efficient
+free-model selection, fail-soft reviewer fallback, and explicit near-miss/
+underfill instrumentation. Thresholds are not silently weakened: near misses are
+telemetry so a zero-yield pipeline is explainable rather than opaque.
 """
 from __future__ import annotations
 
 import hashlib
+import json
 from pathlib import Path
 import re
 import sqlite3
 import statistics
+import subprocess
 import sys
 
 TOOLS=Path(__file__).resolve().parent
@@ -20,6 +22,7 @@ if str(TOOLS) not in sys.path:
     sys.path.insert(0,str(TOOLS))
 import run_research_distillery as d
 from free_provider_admission import provider_is_admitted_free
+from free_lane_provenance import lane_evidence, emit_execution_receipt
 
 LLM_PROVIDERS=frozenset({"groq","mistral","nvidia","openrouter"})
 SECRET_PROVIDER={
@@ -28,11 +31,47 @@ SECRET_PROVIDER={
 }
 UNTYPED_CREDENTIALED_SECRETS=frozenset({"TAVILY_API_KEY","EXA_API_KEY"})
 UNTYPED_CREDENTIALED_PROVIDERS=frozenset({"tavily","exa"})
+OPENROUTER_CATALOG_URL="https://openrouter.ai/api/v1/models"
 
 _ORIGINAL_SECRET=d.secret
 _ORIGINAL_REQUEST_JSON=d.request_json
 _ORIGINAL_SELECT_REVIEWERS=d.select_reviewers
 _ORIGINAL_REVIEW=d.review_candidate
+
+
+def _git_text(*args: str) -> str:
+    try:
+        proc=subprocess.run(
+            ["git","-C",str(d.ROOT),*args],
+            text=True,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,
+            timeout=5,check=False,
+        )
+        return proc.stdout.strip() or "UNKNOWN"
+    except Exception:
+        return "UNKNOWN"
+
+
+_SOURCE={"commit":_git_text("rev-parse","HEAD"),"tree":_git_text("rev-parse","HEAD^{tree}")}
+
+
+def _key_fingerprint(key: str) -> str:
+    return hashlib.sha256(key.encode("utf-8")).hexdigest()[:10]
+
+
+def _request_id(headers: dict[str,str], body) -> str | None:
+    for name in ("x-request-id","request-id","x-groq-request-id","cf-ray"):
+        if headers.get(name):return str(headers[name])
+        if headers.get(name.title()):return str(headers[name.title()])
+    if isinstance(body,dict):
+        for name in ("id","request_id"):
+            if body.get(name):return str(body[name])
+    return None
+
+
+def _result_digest(body) -> str:
+    return hashlib.sha256(
+        json.dumps(body,sort_keys=True,ensure_ascii=False,default=str).encode("utf-8")
+    ).hexdigest()
 
 
 def admitted_secret(name: str) -> str:
@@ -51,6 +90,49 @@ def admitted_request_json(provider: str, owner: str, url: str, *, key: str = "",
         return 412, {}, {"error":"PROVIDER_NOT_TYPED_FREE_ADMITTED"}
     if normalized in UNTYPED_CREDENTIALED_PROVIDERS:
         return 412, {}, {"error":"PROVIDER_NOT_IN_TYPED_FREE_ADMISSION_AUTHORITY"}
+
+    if normalized in LLM_PROVIDERS:
+        # The OpenRouter model catalog is metadata/control-plane discovery, not a
+        # model execution. All inference POSTs must carry an exact model/route and
+        # pass the same credential+route economic provenance gate as GO-v3.
+        if payload is None:
+            if normalized=="openrouter" and url.rstrip("/")==OPENROUTER_CATALOG_URL:
+                return _ORIGINAL_REQUEST_JSON(provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout)
+            return 412, {}, {"error":"NON_INFERENCE_LLM_ENDPOINT_NOT_ALLOWLISTED"}
+        model=str(payload.get("model") or "").strip() if isinstance(payload,dict) else ""
+        if not key or not model:
+            return 412, {}, {"error":"FREE_LANE_CREDENTIAL_AND_MODEL_REQUIRED"}
+        evidence=lane_evidence(
+            normalized,_key_fingerprint(key),model,url,artifacts=d.WORKER_ROOT
+        )
+        if not evidence.get("ok"):
+            d.emit(
+                "free_lane_economic_block",
+                provider=normalized,model=model,reason=evidence.get("reason"),
+            )
+            return 460, {}, {
+                "error":"FREE_LANE_ECONOMIC_PROVENANCE_REQUIRED",
+                "provider":normalized,"model":model,"reason":evidence.get("reason"),
+            }
+        status,out_headers,body=_ORIGINAL_REQUEST_JSON(
+            provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout
+        )
+        usage=body.get("usage") if isinstance(body,dict) and isinstance(body.get("usage"),dict) else {}
+        emit_execution_receipt(
+            provider=normalized,
+            credential_fingerprint=_key_fingerprint(key),
+            model_or_route=model,
+            endpoint=url,
+            evidence=evidence,
+            request_id=_request_id(out_headers,body),
+            usage=usage,
+            http_status=status,
+            result_digest=_result_digest(body),
+            source_commit_and_tree=_SOURCE,
+            artifacts=d.WORKER_ROOT,
+        )
+        return status,out_headers,body
+
     return _ORIGINAL_REQUEST_JSON(provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout)
 
 
@@ -84,6 +166,10 @@ def _size_hint(model_id: str) -> float | None:
 
 
 def select_small_models(catalog: list[dict]) -> list[str]:
+    # `openrouter/free` is the canonical explicit zero-price route under 8.70.
+    # Keep it available even when the catalog's individual free models cannot be
+    # economically proven at the credential+route boundary.
+    out=["openrouter/free"] if provider_is_admitted_free("openrouter") else []
     ranked=[]
     for card in catalog:
         mid=str(card.get("id") or ""); low=mid.lower()
@@ -93,7 +179,7 @@ def select_small_models(catalog: list[dict]) -> list[str]:
         rank=(0 if size is not None and abs(size-4.0)<0.6 else 1 if size is not None else 2,
               abs(size-4.0) if size is not None else 999.0,size or 999.0,mid)
         ranked.append((rank,mid))
-    ranked.sort(key=lambda x:x[0]); out=[]
+    ranked.sort(key=lambda x:x[0])
     for _,m in ranked:
         if m not in out:out.append(m)
     return out[:8]

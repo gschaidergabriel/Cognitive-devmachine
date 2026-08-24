@@ -178,7 +178,7 @@ def _family_key(row: Mapping[str, Any], *, holdout: bool) -> tuple[Any, ...]:
         or positive == negative
     ):
         raise IntermediateProtocolError("FAMILY_LABEL_IDENTITY_REQUIRED")
-    base: tuple[Any, ...] = (case_id, prompt_sha256, seed, positive, negative)
+    base: tuple[Any, ...] = (case_id, str(prompt_sha256).lower(), seed, positive, negative)
     if not holdout:
         return base
     label_map_id = row.get("label_map_id")
@@ -316,16 +316,45 @@ def adjudicate_holdout(
                 }
             family[control] = _finite(r["target_score"], "target_score")
 
-        # Auxiliary causal evidence belongs to the canonical +VECTOR observation.
-        # Metadata placed on another control must not satisfy the family gate.
+        # Auxiliary causal evidence belongs only to the canonical +VECTOR observation.
+        wrong_aux_fields = (
+            "wrong_layer_delta",
+            "wrong_layer",
+            "wrong_layer_vector_source_layer",
+            "wrong_layer_same_selected_vector",
+            "wrong_layer_receipt_sha256",
+        )
+        has_wrong_aux = any(r.get(field) is not None for field in wrong_aux_fields)
+        has_lesion = r.get("lesion_delta") is not None
+        has_rescue = r.get("rescue_delta") is not None
+        if control != "+VECTOR" and (has_wrong_aux or has_lesion or has_rescue):
+            return {
+                "pass": False,
+                "classification": "AUXILIARY_CAUSAL_EVIDENCE_MUST_BIND_PLUS_VECTOR_ROW",
+                "family": list(key),
+                "control": control,
+            }
         if control != "+VECTOR":
             continue
+        if has_lesion != has_rescue:
+            return {
+                "pass": False,
+                "classification": "LESION_RESCUE_PAIR_REQUIRED",
+                "family": list(key),
+            }
 
-        if r.get("wrong_layer_delta") is not None:
+        if has_wrong_aux:
             wrong_layer_seen.add(key)
-            wrong_layer_ok = wrong_layer_ok and _finite(
-                r["wrong_layer_delta"], "wrong_layer_delta"
-            ) < 0
+            wrong_layer_delta = r.get("wrong_layer_delta")
+            if wrong_layer_delta is None:
+                wrong_layer_provenance_failures.append({
+                    "case": list(key),
+                    "reason": "WRONG_LAYER_DELTA_REQUIRED",
+                })
+            else:
+                wrong_layer_ok = wrong_layer_ok and _finite(
+                    wrong_layer_delta, "wrong_layer_delta"
+                ) < 0
             wrong_layer = r.get("wrong_layer")
             vector_source_layer = r.get("wrong_layer_vector_source_layer")
             same_selected_vector = r.get("wrong_layer_same_selected_vector")
@@ -348,7 +377,7 @@ def adjudicate_holdout(
                     "wrong_layer_same_selected_vector": same_selected_vector,
                     "wrong_layer_receipt_sha256": receipt_sha,
                 })
-        if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
+        if has_lesion and has_rescue:
             lesion_rescue_seen.add(key)
             lesion_rescue_ok = (
                 lesion_rescue_ok

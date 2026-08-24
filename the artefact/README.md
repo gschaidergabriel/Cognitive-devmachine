@@ -111,6 +111,18 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
 8. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
 
+## GO 2026-08-24 23:32 +07 reentry delta
+
+Exact reentry observed canonical `main` at `16fcc38e31188322c953474b6b9e9db4bf8a170f` and inbox-selected supervisor **8.72**. `research_entity/continuity/BOOTSTRAP_MINIMAL.json` was still self-presenting as 8.71 and pointing at `SUPERVISOR_STEERING_8_71.json`, while `PROGRAM_STATE.json`, `SUPERVISOR_INBOX.json` and this product surface were already 8.72. The current GO branch repairs that current-facing bootstrap drift without creating a second authority.
+
+The exact Forge -> Distillery runtime carrier PR #1619 has a real workflow run, `32742535392`, with `exact-runtime-gate` still **queued**. The separate Identity Guard run failed before exposing any steps (`steps=null`), so that failure is classified as runner/control-plane admission negative evidence, not a semantic Forge/Distillery failure. No terminal runtime receipt has been observed and no runtime credit is minted.
+
+- Track A — **ADVANCED:** minimal-bootstrap authority and frontier are synchronized to 8.72 on the current GO branch.
+- Track B — **HCU_NO_CHANGE_WITH_REASON:** the retained Typed Entry/HCU causal source path is already present and the strongest unresolved discriminator is executable evidence, not another parallel source authority. No duplicate HCU/Entry implementation is introduced.
+- Track C — **TRAINING_READINESS_NO_CHANGE_WITH_REASON:** the fused nonterminal Qwen3-0.6B midlayer discriminator and six-control promotion gate are already source-ready; the missing evidence is the repository-bound terminal runtime result. A second source experiment would be lower-information and could violate shared unusual-experiment coordination.
+
+No new unusual experiment was run: this organ has no shared reproducible immutable macrocycle identity suitable for the canonical create-only lease. Together/paid/provider execution was not used. Whole EntityOS/HCU, HCU-full, provider-runtime, model-specific J-Space and training credit remain zero.
+
 ## Evidence discipline and reentry
 
 For every material claim distinguish direct observation, source-derived claim, inference, generated hypothesis, counterhypothesis, intervention/test and verified scope. Negative evidence is first-class. Auth/rate/quota/runner failure is not automatically product/science failure. A component PASS is not whole-product PASS.

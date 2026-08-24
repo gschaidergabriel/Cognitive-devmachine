@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Fail-closed bridge from the strongest intermediate Trigger-1 result to gate-v3.
+"""Fail-closed bridge from the strongest intermediate Trigger-1 result to gate-v4.
 
 The intermediate executor owns the scientific discriminator: calibration-only residual
 contrast directions, six controls, counterbalanced label remaps, wrong-layer evidence,
 and lesion/rescue.  The global Trigger-1 promotion gate owns API/runtime/evidence-shape
 admission.  This bridge does not reinterpret a scientific negative.  It only emits the
 canonical direct-steering candidate when the intermediate protocol already passed and
-its result proves the gate-v3 scientific-independence fields.
+its result proves the gate-v4 scientific-independence fields.
 """
 from __future__ import annotations
 
@@ -130,7 +130,10 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
     _require(set(derivation_prompt_hashes).isdisjoint(set(hold_prompt_hashes)), "DERIVATION_HOLDOUT_PROMPTS_MUST_BE_DISJOINT")
     cal_seeds = _unique_nonempty(calibration, "seed")
     hold_seeds = _unique_nonempty(holdout, "seed")
-    _require(set(map(str, cal_seeds)).isdisjoint(set(map(str, hold_seeds)), "CALIBRATION_HOLDOUT_SEEDS_MUST_BE_DISJOINT")
+    _require(
+        set(map(str, cal_seeds)).isdisjoint(set(map(str, hold_seeds))),
+        "CALIBRATION_HOLDOUT_SEEDS_MUST_BE_DISJOINT",
+    )
 
     label_pairs = {(row.get("positive_label"), row.get("negative_label")) for row in holdout}
     _require(("A", "B") in label_pairs and ("B", "A") in label_pairs, "COUNTERBALANCED_LABEL_MAPPING_REQUIRED")

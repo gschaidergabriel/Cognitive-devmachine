@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "successor_port_base_main": "1a7143fd70d270557e74959f5507bf7d7bd8828c",
+  "supersedes_branch": "fix/trigger1-v2-atomic-lease-gate-gpt56sol-20260824",
+  "finding": "The Trigger1 V2 owner-issue dispatcher can initiate the local Qwen3-0.6B hidden-state/vector intervention without validating the canonical per-go atomic unusual-experiment lease. Owner issue authorship and title are dispatch authentication, not unusual-experiment lease ownership.",
+  "classification": "UNUSUAL_EXPERIMENT_DISPATCH_BYPASSES_CANONICAL_ATOMIC_LEASE",
+  "counterhypothesis": "The issue dispatch could be treated as sufficient owner authorization for the intervention. Rejected under current go semantics because GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md requires the successful canonical claimant, not merely the issue author, to initiate the unusual intervention and requires fail-closed coordination when the shared trigger identity cannot be reproduced.",
+  "delta": [
+    "Add tools/trigger1_atomic_lease_gate.py as a deterministic pre-intervention validator of canonical rid_/ts_ trigger keys and claim schema/fields.",
+    "Reject missing claims, noncanonical trigger keys, wrong experiment ownership, pre-existing result records and semantic duplicate claims.",
+    "Require the claim observed_canonical_main to exist and be an ancestor of the exact clean source executed by the self-hosted workflow.",
+    "Bind trigger key, claim path/digest, claimant and exact source head/tree into the bounded runtime receipt.",
+    "Persist a bounded experiment result path on the normal completed execution path without minting canonical, whole-product or training credit.",
+    "Add focused fail-closed unit regressions for the lease validator."
+  ],
+  "files": [
+    "tools/trigger1_atomic_lease_gate.py",
+    "tests/test_trigger1_atomic_lease_gate.py",
+    ".github/workflows/trigger1-v2-local-fastpath-selfhosted.yml"
+  ],
+  "coordination": {
+    "shared_immutable_request_id_exposed_to_this_organ": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed_by_this_organ": 0
+  },
+  "execution": {
+    "provider_model_network_calls": 0,
+    "paid_fallback_attempts": 0,
+    "together_calls": 0,
+    "qwen_hidden_state_intervention_executed": false,
+    "source_tests_executed_on_exact_branch_head": false,
+    "evidence_scope": "SOURCE_CONTROL_PLANE_ONLY_PENDING_EXACT_HEAD_TEST_EXECUTION"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_EXECUTION_GOVERNANCE_FAIL_CLOSED_BEFORE_TRIGGER1_INTERVENTION",
+    "track_b": "ADVANCED_HCU_PROVENANCE_BINDING_OF_CLAIM_TO_EXECUTED_SOURCE",
+    "track_c": "ADVANCED_JSPACE_EXPERIMENT_READINESS_WITHOUT_BYPASSING_ATOMIC_LEASE"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "parallel_state": {
+    "forge_distillery_run_id": 32740971303,
+    "forge_distillery_job_id": 97475070339,
+    "forge_distillery_status_at_last_observation": "queued",
+    "forge_runtime_credit_from_queued_state": 0
+  },
+  "next_exact_gate": "Execute the lease-validator plus existing Trigger1 promotion regressions on the exact successor PR head. If green and still nonduplicate, fuse the lease fence. A later Trigger1 V2 intervention may execute only for an already-created canonical claim whose exact trigger identity is reproducible and whose result does not yet exist."
+}

@@ -3,10 +3,15 @@
 
 The intermediate executor owns the scientific discriminator: calibration-only residual
 contrast directions, six controls, counterbalanced label remaps, wrong-layer evidence,
-and lesion/rescue.  The global Trigger-1 promotion gate owns API/runtime/evidence-shape
-admission.  This bridge does not reinterpret a scientific negative.  It only emits the
-canonical direct-steering candidate when the intermediate protocol already passed and
-its result proves the gate-v4 scientific-independence fields.
+and lesion/rescue. The global Trigger-1 promotion gate owns API/runtime/evidence-shape
+admission.
+
+This bridge independently recomputes calibration selection and holdout adjudication from
+the raw recorded rows before producing a direct-steering candidate. Stored PASS verdicts,
+selected layer/gain fields, and intermediate-candidate mirrors are evidence inputs, not
+authority. It also requires the upstream versioned label-independence receipt rather than
+asserting evaluation-label independence downstream. Self-consistent forged/stale evidence
+must fail closed.
 """
 from __future__ import annotations
 
@@ -16,18 +21,17 @@ import json
 from pathlib import Path
 from typing import Any
 
+from trigger1_intermediate_contrastive_protocol import (
+    CREDIT_SCOPE,
+    REQUIRED_CONTROLS,
+    adjudicate_holdout,
+    select_layer_gain,
+)
+
 INTERMEDIATE_SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1"
 INTERMEDIATE_CANDIDATE_SCHEMA = "CLAY_TRIGGER1_INTERMEDIATE_JSPACE_CAUSAL_CANDIDATE/v1"
 DIRECT_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
 LABEL_INDEPENDENCE_SCHEMA = "TRIGGER1_VECTOR_DERIVATION_LABEL_INDEPENDENCE/v1"
-REQUIRED_CONTROLS = (
-    "BASELINE",
-    "+VECTOR",
-    "SIGN_FLIP",
-    "NULL_VECTOR",
-    "ORTHOGONAL_SAME_NORM",
-    "PERMUTED_SAME_NORM",
-)
 METRIC_DEFINITION = {
     "schema": "TRIGGER1_COUNTERBALANCED_OUTPUT_METRIC/v1",
     "score": "logit(positive_label)-logit(negative_label)",
@@ -83,14 +87,46 @@ def _receipt_family(rows: list[dict[str, Any]], control: str) -> str:
     return digest(receipts)
 
 
+def _candidate_self_hash(candidate: dict[str, Any]) -> str:
+    material = dict(candidate)
+    material.pop("candidate_sha256", None)
+    return digest(material)
+
+
+def _recompute_protocol(
+    calibration: list[dict[str, Any]],
+    holdout: list[dict[str, Any]],
+    selected: dict[str, Any],
+    stored_verdict: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    recomputed_selected = select_layer_gain(calibration)
+    _require(recomputed_selected.get("selected") is True, "CALIBRATION_RECOMPUTE_DID_NOT_SELECT")
+    _require(recomputed_selected == selected, "CALIBRATION_SELECTION_RECOMPUTE_MISMATCH")
+
+    layer = recomputed_selected.get("layer")
+    gain = recomputed_selected.get("gain")
+    _require(isinstance(layer, int) and layer >= 0, "SELECTED_LAYER_REQUIRED")
+    _require(isinstance(gain, (int, float)) and not isinstance(gain, bool), "SELECTED_GAIN_REQUIRED")
+
+    recomputed_verdict = adjudicate_holdout(
+        holdout,
+        selected_layer=layer,
+        selected_gain=float(gain),
+    )
+    _require(recomputed_verdict == stored_verdict, "HOLDOUT_VERDICT_RECOMPUTE_MISMATCH")
+    _require(recomputed_verdict.get("pass") is True, "INTERMEDIATE_PROTOCOL_PASS_REQUIRED")
+    return recomputed_selected, recomputed_verdict
+
+
 def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any]) -> dict[str, Any]:
     _require(result.get("schema") == INTERMEDIATE_SCHEMA, "INTERMEDIATE_RESULT_SCHEMA_INVALID")
     _require(intermediate.get("schema") == INTERMEDIATE_CANDIDATE_SCHEMA, "INTERMEDIATE_CANDIDATE_SCHEMA_INVALID")
     _require(result.get("status") == "PASS", "INTERMEDIATE_RESULT_PASS_REQUIRED")
-    verdict = result.get("verdict")
-    _require(isinstance(verdict, dict) and verdict.get("pass") is True, "INTERMEDIATE_PROTOCOL_PASS_REQUIRED")
-    _require(intermediate.get("verdict", {}).get("pass") is True, "INTERMEDIATE_CANDIDATE_PASS_REQUIRED")
-    _require(result.get("credit_scope") == "INTERMEDIATE_REPRESENTATION_CAUSAL_CANDIDATE_ONLY", "INTERMEDIATE_CREDIT_SCOPE_REQUIRED")
+    _require(result.get("credit_scope") == CREDIT_SCOPE, "INTERMEDIATE_CREDIT_SCOPE_REQUIRED")
+    _require(intermediate.get("credit_scope") == CREDIT_SCOPE, "INTERMEDIATE_CANDIDATE_CREDIT_SCOPE_REQUIRED")
+
+    stored_verdict = result.get("verdict")
+    _require(isinstance(stored_verdict, dict) and stored_verdict.get("pass") is True, "INTERMEDIATE_PROTOCOL_PASS_REQUIRED")
 
     source = result.get("source")
     _require(isinstance(source, dict), "SOURCE_IDENTITY_REQUIRED")
@@ -103,24 +139,64 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
     for key in ("runtime_build_sha256", "checkpoint_sha256", "tokenizer_sha256"):
         _require(_sha(result.get(key)), f"IDENTITY_SHA256_REQUIRED:{key}")
 
+    calibration = _rows(result, "calibration_rows")
+    holdout = _rows(result, "holdout_rows")
     selected = result.get("selected")
     _require(isinstance(selected, dict) and selected.get("selected") is True, "FROZEN_LAYER_GAIN_REQUIRED")
-    layer = selected.get("layer")
-    gain = selected.get("gain")
-    _require(isinstance(layer, int) and layer >= 0, "SELECTED_LAYER_REQUIRED")
-    _require(isinstance(gain, (int, float)) and not isinstance(gain, bool), "SELECTED_GAIN_REQUIRED")
+    selected, verdict = _recompute_protocol(calibration, holdout, selected, stored_verdict)
+    layer = int(selected["layer"])
+    gain = float(selected["gain"])
+
+    candidate_verdict = intermediate.get("verdict")
+    _require(isinstance(candidate_verdict, dict), "INTERMEDIATE_CANDIDATE_VERDICT_REQUIRED")
+    _require(candidate_verdict == verdict, "INTERMEDIATE_CANDIDATE_VERDICT_MISMATCH")
+    _require(intermediate.get("source_identity") == source, "INTERMEDIATE_CANDIDATE_SOURCE_IDENTITY_MISMATCH")
+    for key in ("model", "model_revision", "checkpoint_sha256", "tokenizer_sha256", "runtime_build_sha256"):
+        _require(intermediate.get(key) == result.get(key), f"INTERMEDIATE_CANDIDATE_IDENTITY_MISMATCH:{key}")
+    _require(intermediate.get("selected_layer") == layer, "INTERMEDIATE_CANDIDATE_LAYER_MISMATCH")
+    try:
+        candidate_gain = float(intermediate.get("selected_gain"))
+    except (TypeError, ValueError) as exc:
+        raise BridgeError("INTERMEDIATE_CANDIDATE_GAIN_MISMATCH") from exc
+    _require(candidate_gain == gain, "INTERMEDIATE_CANDIDATE_GAIN_MISMATCH")
+    claimed_candidate_sha = intermediate.get("candidate_sha256")
+    if claimed_candidate_sha is not None:
+        _require(_sha(claimed_candidate_sha), "INTERMEDIATE_CANDIDATE_SHA256_INVALID")
+        _require(claimed_candidate_sha == _candidate_self_hash(intermediate), "INTERMEDIATE_CANDIDATE_SHA256_MISMATCH")
 
     derivation = result.get("derivation")
     _require(isinstance(derivation, dict), "DERIVATION_RECEIPT_REQUIRED")
     source_rows = derivation.get("sources")
     directions = derivation.get("directions")
     _require(isinstance(source_rows, list) and bool(source_rows), "DERIVATION_SOURCES_REQUIRED")
+    _require(all(isinstance(row, dict) for row in source_rows), "DERIVATION_SOURCE_OBJECT_ROWS_REQUIRED")
     _require(isinstance(directions, dict), "DERIVATION_DIRECTIONS_REQUIRED")
     direction = directions.get(str(layer))
     _require(isinstance(direction, dict) and _sha(direction.get("direction_sha256")), "SELECTED_DIRECTION_SHA256_REQUIRED")
     local_vector_sha = direction["direction_sha256"]
-    derivation_prompt_hashes = sorted({row.get("prompt_sha256") for row in source_rows if isinstance(row, dict)})
+    _require(intermediate.get("direction_sha256") == local_vector_sha, "INTERMEDIATE_CANDIDATE_DIRECTION_MISMATCH")
+
+    derivation_prompt_hashes = sorted({row.get("prompt_sha256") for row in source_rows})
     _require(derivation_prompt_hashes and all(_sha(value) for value in derivation_prompt_hashes), "DERIVATION_PROMPT_IDENTITIES_REQUIRED")
+    _require(all(row.get("polarity") in {"positive", "negative"} for row in source_rows), "DERIVATION_POLARITY_RECEIPTS_REQUIRED")
+    _require(
+        all(
+            not any(
+                key in row
+                for key in (
+                    "positive_label",
+                    "negative_label",
+                    "label_map_id",
+                    "token_id",
+                    "token_ids",
+                    "output_label",
+                    "output_token",
+                )
+            )
+            for row in source_rows
+        ),
+        "DERIVATION_EVALUATION_LABEL_METADATA_FORBIDDEN",
+    )
 
     label_independence = derivation.get("label_independence")
     _require(isinstance(label_independence, dict), "DERIVATION_LABEL_INDEPENDENCE_RECEIPT_REQUIRED")
@@ -130,17 +206,14 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
         label_independence.get("evaluation_output_labels_resolved_before_derivation") is False,
         "DERIVATION_MUST_PRECEDE_EVALUATION_LABEL_RESOLUTION",
     )
-    expected_input_family = digest(derivation_prompt_hashes)
+    derivation_family_id = digest(derivation_prompt_hashes)
     _require(
-        label_independence.get("derivation_input_family_sha256") == expected_input_family,
+        label_independence.get("derivation_input_family_sha256") == derivation_family_id,
         "DERIVATION_LABEL_INDEPENDENCE_FAMILY_MISMATCH",
     )
     label_independence_receipt_sha = digest(label_independence)
-    derivation_family_id = expected_input_family
     derivation_receipt_sha = digest(derivation)
 
-    calibration = _rows(result, "calibration_rows")
-    holdout = _rows(result, "holdout_rows")
     cal_prompt_hashes = _unique_nonempty(calibration, "prompt_sha256")
     hold_prompt_hashes = _unique_nonempty(holdout, "prompt_sha256")
     _require(set(derivation_prompt_hashes).isdisjoint(set(hold_prompt_hashes)), "DERIVATION_HOLDOUT_PROMPTS_MUST_BE_DISJOINT")
@@ -169,10 +242,12 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
     hold_receipts = [row.get("runtime_receipt_sha256") for row in holdout]
     _require(all(_sha(value) for value in hold_receipts), "HOLDOUT_RUNTIME_RECEIPTS_REQUIRED")
 
-    # The strongest protocol's PASS itself proves these controls were present for each case.
     _require(verdict.get("counterbalanced_label_mapping") is True, "PROTOCOL_COUNTERBALANCE_PASS_REQUIRED")
     _require(verdict.get("wrong_layer_evidence_complete") is True and verdict.get("wrong_layer_ok") is True, "PROTOCOL_WRONG_LAYER_PASS_REQUIRED")
     _require(verdict.get("lesion_rescue_evidence_complete") is True and verdict.get("lesion_rescue_ok") is True, "PROTOCOL_LESION_RESCUE_PASS_REQUIRED")
+
+    _require(intermediate.get("calibration_family_sha256") == digest(calibration), "INTERMEDIATE_CALIBRATION_FAMILY_MISMATCH")
+    _require(intermediate.get("holdout_family_sha256") == digest(holdout), "INTERMEDIATE_HOLDOUT_FAMILY_MISMATCH")
 
     endpoint = result.get("api_endpoint")
     _require(isinstance(endpoint, str) and endpoint.startswith(("http://127.0.0.1:", "http://localhost:")), "LOOPBACK_ENDPOINT_REQUIRED")
@@ -193,7 +268,7 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
         "revision": result.get("model_revision"),
         "derivation_family_id": derivation_family_id,
         "selected_layer": layer,
-        "selected_gain": float(gain),
+        "selected_gain": gain,
         "metric_definition": METRIC_DEFINITION,
     })
     adapter_sha = digest({
@@ -232,15 +307,12 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "local_vector_sha256": local_vector_sha,
             "applied_vector_sha256": applied_vector_sha,
             "runtime_intervention_receipt_sha256": intervention_receipt,
-            "gain": float(gain),
+            "gain": gain,
             "layer_start": layer,
             "layer_end": layer,
         },
         "controls": controls,
-        "calibration": {
-            "family_id": cal_family,
-            "seeds": cal_seeds,
-        },
+        "calibration": {"family_id": cal_family, "seeds": cal_seeds},
         "holdout": {
             "family_id": hold_family,
             "seeds": hold_seeds,
@@ -279,6 +351,8 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "candidate_sha256": intermediate.get("candidate_sha256") or digest(intermediate),
             "credit_scope": result.get("credit_scope"),
             "classification": verdict.get("classification"),
+            "raw_selection_recomputed": True,
+            "raw_holdout_verdict_recomputed": True,
             "counterbalanced_label_mapping": True,
             "wrong_layer": True,
             "lesion_rescue": True,

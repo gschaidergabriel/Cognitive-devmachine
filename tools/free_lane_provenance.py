@@ -2,8 +2,8 @@
 """Route/credential-level FREE_ONLY economic provenance for the autonomous swarm.
 
 The provider admission file grants owner-authorized access to free contingents.
-This module is the narrower runtime gate required by supervisor epoch 8.70: a
-concrete credential fingerprint + endpoint + model/route must have zero-cost/free
+This module is the narrower runtime gate required by supervisor epoch 8.70+:
+a concrete credential fingerprint + endpoint + model/route must have zero-cost/free
 provider-side evidence before an autonomous network call is allowed.
 """
 from __future__ import annotations
@@ -15,9 +15,12 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+from nvidia_free_entitlement import resolve_nvidia_free_entitlement
+
 ROOT = Path(__file__).resolve().parents[1]
 PROVENANCE_PATH = ROOT / "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json"
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
+NVIDIA_ENTITLEMENT_PATH = ROOT / "research_entity/claycode/autonomous/NVIDIA_CREDENTIAL_FREE_ENTITLEMENTS.json"
 DEFAULT_ARTIFACTS = Path("/artifacts/clay-entityos-swarm")
 RECEIPT_SCHEMA = "FREE_LANE_EXECUTION_RECEIPT/v1"
 ADMISSION_SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
@@ -98,6 +101,8 @@ def _lane_evidence_from_provenance(
     endpoint: str,
     *,
     artifacts: Path,
+    typed_admission_epoch: str | None = None,
+    typed_admission_digest: str | None = None,
 ) -> dict[str, Any]:
     record = ((prov.get("providers") or {}).get(provider) or {})
     if not record:
@@ -117,27 +122,25 @@ def _lane_evidence_from_provenance(
         }
 
     if provider == "nvidia":
-        # NVIDIA documents free hosted NIM prototyping for Developer Program
-        # members, but the public provider statement does not prove that an
-        # arbitrary credential belongs to that free entitlement.  A provider
-        # hostname plus an unbound fingerprint therefore cannot self-admit.
-        bound = record.get("admitted_credential_fingerprints")
-        if not isinstance(bound, list) or credential_fingerprint not in {
-            str(item).strip() for item in bound if str(item).strip()
-        }:
+        if not typed_admission_epoch or not typed_admission_digest:
             return {
                 "ok": False,
-                "reason": "NVIDIA_CREDENTIAL_DEVELOPER_FREE_ENTITLEMENT_NOT_BOUND",
+                "reason": "NVIDIA_ENTITLEMENT_REQUIRES_TYPED_ADMISSION_BINDING",
             }
-        return {
-            "ok": True,
-            "kind": record.get("evidence_kind"),
-            "source": record.get("source"),
-            "endpoint_host": _host(endpoint),
-            "scope": record.get("scope"),
-            "credential_fingerprint": credential_fingerprint,
-            "assertion": "BOUND_CREDENTIAL_NVIDIA_DEVELOPER_FREE_NIM_PROTOTYPING_ONLY",
-        }
+        entitlement = resolve_nvidia_free_entitlement(
+            credential_fingerprint=credential_fingerprint,
+            endpoint_host=_host(endpoint),
+            typed_admission_epoch=typed_admission_epoch,
+            typed_admission_digest=typed_admission_digest,
+            receipt_set_path=NVIDIA_ENTITLEMENT_PATH,
+        )
+        if not entitlement.get("ok"):
+            return {
+                "ok": False,
+                "reason": entitlement.get("reason")
+                or "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_NOT_BOUND",
+            }
+        return entitlement
 
     if provider == "groq":
         required = ((record.get("free_plan_models") or {}).get(model_or_route) or {})
@@ -174,9 +177,20 @@ def lane_evidence(
     *,
     artifacts: Path = DEFAULT_ARTIFACTS,
 ) -> dict[str, Any]:
-    prov, _ = _json_snapshot(PROVENANCE_PATH)
+    try:
+        admission, admission_digest = _json_snapshot(ADMISSION_PATH)
+        prov, _ = _json_snapshot(PROVENANCE_PATH)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
+        return {"ok": False, "reason": "FREE_LANE_AUTHORITY_SNAPSHOT_INVALID", "detail": type(exc).__name__}
+    if admission.get("schema") != ADMISSION_SCHEMA or admission.get("mode") != "FREE_ONLY":
+        return {"ok": False, "reason": "FREE_PROVIDER_ADMISSION_AUTHORITY_INVALID"}
+    epoch = str(admission.get("authority_epoch") or "")
+    if not epoch:
+        return {"ok": False, "reason": "FREE_PROVIDER_ADMISSION_EPOCH_MISSING"}
     if prov.get("schema") != PROVENANCE_SCHEMA or prov.get("mode") != "FREE_ONLY":
         return {"ok": False, "reason": "ECONOMIC_PROVENANCE_AUTHORITY_INVALID"}
+    if str(prov.get("authority_epoch") or "") != epoch:
+        return {"ok": False, "reason": "FREE_LANE_AUTHORITY_EPOCH_MISMATCH"}
     return _lane_evidence_from_provenance(
         prov,
         provider,
@@ -184,6 +198,8 @@ def lane_evidence(
         model_or_route,
         endpoint,
         artifacts=artifacts,
+        typed_admission_epoch=epoch,
+        typed_admission_digest=admission_digest,
     )
 
 
@@ -225,6 +241,8 @@ def current_lane_binding(
         model_or_route,
         endpoint,
         artifacts=artifacts,
+        typed_admission_epoch=epoch,
+        typed_admission_digest=admission_digest,
     )
     if not evidence.get("ok"):
         return {
@@ -267,9 +285,15 @@ def lane_is_zero_cost(
     *,
     artifacts: Path = DEFAULT_ARTIFACTS,
 ) -> bool:
-    return bool(lane_evidence(
-        provider, credential_fingerprint, model_or_route, endpoint, artifacts=artifacts
-    ).get("ok"))
+    return bool(
+        lane_evidence(
+            provider,
+            credential_fingerprint,
+            model_or_route,
+            endpoint,
+            artifacts=artifacts,
+        ).get("ok")
+    )
 
 
 def emit_execution_receipt(

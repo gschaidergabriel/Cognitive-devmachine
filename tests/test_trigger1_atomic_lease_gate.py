@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 import tempfile
@@ -9,12 +10,14 @@ from tools.trigger1_atomic_lease_gate import EXPECTED_EXPERIMENT, validate_claim
 
 RID = "rid_" + "a" * 64
 HEAD = "b" * 40
+PAYLOAD_SHA256 = hashlib.sha256(b"go").hexdigest()
+TS = f"ts_20260824T150600000000Z__p_{PAYLOAD_SHA256}"
 
 
-def claim() -> dict:
+def claim(trigger_key: str = RID) -> dict:
     return {
         "schema": "clay-go-experiment-claim/v1",
-        "trigger_key": RID,
+        "trigger_key": trigger_key,
         "trigger": "go",
         "experiment_name": EXPECTED_EXPERIMENT,
         "claimant_organ": "gpt56sol",
@@ -67,6 +70,35 @@ class Trigger1AtomicLeaseGateTests(unittest.TestCase):
     def test_duplicate_claim(self):
         self.put(claim()); self.put(claim(), "legacy_duplicate.json")
         self.assertEqual(self.run_gate()["reason"], "EXPERIMENT_BUDGET_RACE_VIOLATION")
+
+    def test_legacy_offset_timestamp_and_short_payload_claim_is_semantic_duplicate(self):
+        self.put(claim(TS))
+        legacy = claim(f"20260824T220600+0700_{PAYLOAD_SHA256[:16]}")
+        self.put(legacy, "legacy_offset_claim.json")
+        r = self.run_gate(f"trigger_key: {TS}\n")
+        self.assertEqual(r["reason"], "EXPERIMENT_BUDGET_RACE_VIOLATION")
+        self.assertEqual(1, len(r["semantic_duplicate_claims"]))
+
+    def test_short_canonicalish_payload_claim_is_semantic_duplicate(self):
+        self.put(claim(TS))
+        legacy = claim(f"ts_20260824T150600000000Z__p_{PAYLOAD_SHA256[:16]}")
+        self.put(legacy, "legacy_short_claim.json")
+        self.assertEqual(
+            self.run_gate(f"trigger_key: {TS}\n")["reason"],
+            "EXPERIMENT_BUDGET_RACE_VIOLATION",
+        )
+
+    def test_nonclaim_correction_does_not_consume_slot(self):
+        self.put(claim())
+        self.put(
+            {
+                "schema": "clay-go-experiment-claim-correction/v1",
+                "trigger_key": RID,
+                "trigger": "go",
+            },
+            "append_only_correction.json",
+        )
+        self.assertTrue(self.run_gate()["pass"])
 
     def test_required_fields(self):
         for field, value, reason in [

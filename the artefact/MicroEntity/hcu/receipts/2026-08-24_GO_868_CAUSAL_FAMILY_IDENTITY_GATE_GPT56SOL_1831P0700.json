@@ -1,0 +1,77 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "canonical_main_reentry": "63474237a708dacd6339553c18cd337a206a2595",
+  "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+  "donor_head_observed_before_receipt": "bc5919cf0f38641d62f56318113ad357700a8c01",
+  "finding": "The current 8.68 local J-Space intervention gate requires a five-condition clean/corrupted/target/sham/off-target causal family with exact model/runtime/loader/activation/trace identity. The retained donor had a steering-search causal-credit fence but no dedicated fail-closed primitive that prevents one execution, inference receipt, trace, output, or intervention receipt from being relabeled across the minimum control family.",
+  "delta": {
+    "source": "the artefact/MicroEntity/hcu/jspace_causal_family_identity_gate_v1.py",
+    "source_git_blob_sha": "807b0783a259723842ab88b614f3ad8da0ce0608",
+    "source_write_commit": "9cb6d9f9eca2e4920a33096cd2095a99dd67390d",
+    "test": "the artefact/MicroEntity/hcu/test_jspace_causal_family_identity_gate_v1.py",
+    "test_git_blob_sha": "48284ab59286fd98c9ac7ca83279d8eea9019995",
+    "test_write_commit": "d57c0dd1492057d4cb09a10b2fe1a876797b9609",
+    "schema": "ENTITYOS_HCU_JSPACE_CAUSAL_FAMILY_IDENTITY_GATE/v1",
+    "evidence_class": "CAUSAL_FAMILY_IDENTITY_COMPLETE_NOT_JSPACE_CAUSAL_PASS",
+    "jspace_causal_credit": false,
+    "required_conditions": [
+      "BASELINE_CLEAN",
+      "BASELINE_CORRUPTED",
+      "INTERVENTION_TARGET",
+      "SHAM_CONTROL",
+      "OFF_TARGET_CONTROL"
+    ],
+    "cross_control_shared_identity": [
+      "family_id",
+      "generation",
+      "checkpoint_sha256",
+      "tokenizer_sha256",
+      "runtime_build_sha256",
+      "loader_consumption_sha256",
+      "activation_site_id"
+    ],
+    "cross_control_relabeling_forbidden": [
+      "model_execution_sha256",
+      "inference_receipt_sha256",
+      "trace_sha256",
+      "output_sha256",
+      "intervention_sha256 for intervention-bearing controls"
+    ]
+  },
+  "deterministic_mechanism_evidence": {
+    "scope": "SOURCE_EQUIVALENT_LOCAL_REGRESSION_ONLY_NOT_EXACT_REPOSITORY_RUNTIME",
+    "tests_passed": 7,
+    "tests_total": 7,
+    "source_equivalent_content_sha256": "ae4adbf77291993aa8253641afb6bb3ae2fb01d76bae3a13f859cdb5d18794a1",
+    "test_equivalent_content_sha256": "60b80ec499855da48c86e631f6a45c995268c803a71119f39e07ea5944436edf",
+    "network_used": false,
+    "provider_secret_read": false,
+    "paid_execution": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_SOURCE_LEVEL: retained HCU donor now has a machine-checkable family identity/provenance gate for the next local intervention execution path; no second executor or product authority introduced",
+    "track_b_hcu_typed_entry": "ADVANCED: control-family evidence is cross-bound to generation plus exact model/runtime/loader/activation identity and refuses execution/trace/output relabeling; canonical state/effect/vector-wire authority is unchanged",
+    "track_c_global_jspace_gwt_free_only": "ADVANCED: the full 8.68 five-control family can be identity-complete without self-promoting to J-Space causal credit, making the next real local causal run auditable"
+  },
+  "counterhypothesis": "Five named controls can appear complete while one underlying execution/trace/output is copied and relabeled into several conditions. The new gate directly rejects that laundering class but does not prove the interventions were physically consumed or that a target-specific causal effect exists.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable upstream macrocycle/request identity with protocol-sufficient reproducibility was exposed to this organ; deterministic source regression is ordinary work and not an unusual intervention."
+  },
+  "credit": {
+    "external_provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an authorized zero-cost normal-user local or clay-direct-dev surface, execute the exact retained donor tests and an actual intervention-capable backend. Produce five distinct control executions with verified loader consumption and bind each ModelExecution/InferenceReceipt/trace/output into this family identity gate; then evaluate predeclared target and off-target metrics. Keep MATCHED_RANDOM ABI promotion separate until the single canonical JSPACE_VECTOR_CONTROL_ABI/v1 and all downstream consumers are successor-fused and regression-covered."
+}

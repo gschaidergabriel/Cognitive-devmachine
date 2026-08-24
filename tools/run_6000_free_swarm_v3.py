@@ -13,7 +13,12 @@ import threading
 from typing import Any
 
 import run_6000_free_swarm as fabric
-from free_lane_provenance import lane_evidence, emit_execution_receipt
+from free_lane_provenance import (
+    binding_still_current,
+    current_lane_binding,
+    emit_execution_receipt,
+    lane_evidence,
+)
 
 _ORIGINAL_REQUEST = fabric.base.request_chat
 _ORIGINAL_NEXT_PAIR = fabric.FastProviderRuntime.next_key_model
@@ -26,6 +31,7 @@ _SOURCE = {
 
 
 def _evidence(spec: fabric.base.ProviderSpec, key: str, model: str) -> dict[str, Any]:
+    """Cheap reservation filter only; network authorization is always re-read fresh."""
     fp = fabric.base.key_fingerprint(key)
     ck = (spec.name, fp, model, spec.endpoint)
     if ck not in _EVIDENCE_CACHE:
@@ -40,8 +46,6 @@ def _evidence(spec: fabric.base.ProviderSpec, key: str, model: str) -> dict[str,
 
 
 def gated_next_key_model(self: fabric.FastProviderRuntime):
-    # Explore at most the cartesian product once. Invalid pairs never reach the
-    # provider boundary and therefore cannot consume paid/unknown capacity.
     attempts = max(1, len(self.keys) * len(self.models))
     for _ in range(attempts):
         pair = _ORIGINAL_NEXT_PAIR(self)
@@ -72,20 +76,36 @@ def gated_request_chat(
     max_tokens: int,
     timeout: float,
 ):
-    evidence = _evidence(spec, key, model)
-    if not evidence.get("ok"):
-        # This path should normally be unreachable because reservation is gated.
-        # It remains a second independent boundary immediately before network I/O.
+    fp = fabric.base.key_fingerprint(key)
+    binding = current_lane_binding(
+        spec.name,
+        fp,
+        model,
+        spec.endpoint,
+        artifacts=fabric.ARTIFACT_ROOT,
+    )
+    if not binding.get("ok"):
         return 460, {}, {
-            "error": "FREE_LANE_ECONOMIC_PROVENANCE_REQUIRED",
+            "error": "FREE_LANE_CURRENT_BINDING_REQUIRED",
             "provider": spec.name,
             "model": model,
-            "reason": evidence.get("reason"),
+            "reason": binding.get("reason"),
+        }
+
+    # Final fail-closed digest check immediately before the provider call. This
+    # prevents a cached reservation decision from surviving a current authority
+    # or economic-provenance update.
+    if not binding_still_current(binding):
+        return 460, {}, {
+            "error": "FREE_LANE_BINDING_CHANGED_BEFORE_NETWORK",
+            "provider": spec.name,
+            "model": model,
         }
 
     status, headers, payload = _ORIGINAL_REQUEST(
         spec, key, model, prompt, max_tokens, timeout
     )
+    stable_after_call = binding_still_current(binding)
     usage = fabric.base.usage_from(payload)
     digest = hashlib.sha256(
         json.dumps(payload, sort_keys=True, ensure_ascii=False, default=str).encode("utf-8")
@@ -93,15 +113,16 @@ def gated_request_chat(
     with _RECEIPT_LOCK:
         emit_execution_receipt(
             provider=spec.name,
-            credential_fingerprint=fabric.base.key_fingerprint(key),
+            credential_fingerprint=fp,
             model_or_route=model,
             endpoint=spec.endpoint,
-            evidence=evidence,
+            binding=binding,
             request_id=_request_id(headers, payload),
             usage=usage,
             http_status=status,
             result_digest=digest,
             source_commit_and_tree=_SOURCE,
+            binding_stable_after_call=stable_after_call,
             artifacts=fabric.ARTIFACT_ROOT,
         )
     return status, headers, payload
@@ -110,7 +131,6 @@ def gated_request_chat(
 fabric.FastProviderRuntime.next_key_model = gated_next_key_model
 fabric.base.request_chat = gated_request_chat
 
-# Re-export the public scheduler surface used by the fast launcher.
 run = fabric.run
 parse_args = fabric.parse_args
 

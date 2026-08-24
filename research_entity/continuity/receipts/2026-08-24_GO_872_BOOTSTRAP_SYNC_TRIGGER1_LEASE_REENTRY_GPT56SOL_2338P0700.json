@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "observed_main_before_parallel_move": "16fcc38e31188322c953474b6b9e9db4bf8a170f",
+    "parallel_successor_main": "8b6f695f12ba3577165e76d53e138077d56892d3",
+    "authority_sync_commit": "0b3495aed89a86b3b626642aa202367862d0b489",
+    "supervisor_inbox_epoch": "8.72",
+    "program_state_epoch": "8.72"
+  },
+  "observed": [
+    "BOOTSTRAP_MINIMAL.json was stale at supervisor 8.71 while SUPERVISOR_INBOX.json and PROGRAM_STATE.json selected 8.72.",
+    "The first stale-base write attempt was rejected with HTTP 409 after main advanced, so no concurrent state was overwritten.",
+    "The authority bootstrap was then re-entered and synchronized to 8.72 on exact successor main.",
+    "The latest committed efficiency funnel observed in PROGRAM_STATE is 13587261 Free-Swarm tokens, 292 machine-readable deltas, 1 nominal Forge ACCEPT and 0 accepted Distillery dataset tokens.",
+    "Forge-to-Distillery workflow run 32742535392 remains queued with no executed steps and no terminal repository-bound receipt; this is runner/control-plane pending state, not product PASS or FAIL.",
+    "Parallel main commit 8b6f695f12ba3577165e76d53e138077d56892d3 added a fail-closed canonical atomic-lease validator and result closure around Trigger1 V2 without changing the current midlayer causal experiment semantics.",
+    "Owner dispatch issue 1643 was opened before that lease fence and its body contains no trigger_key. Under current source it therefore cannot establish current unusual-experiment admission without a pre-existing canonical claim; no duplicate dispatch was created."
+  ],
+  "hypothesis": "The highest-value current work is to preserve exact authority/reentry correctness and wait for already-requested self-hosted runtime gates rather than amplify duplicate runtime requests or raw swarm volume.",
+  "counterhypothesis": "Creating another Forge request or Trigger1 issue could appear to increase execution probability, but it would duplicate an already queued deterministic gate and, for Trigger1, would violate the current atomic-lease boundary without a reproducible canonical claim.",
+  "discriminator": "Observe terminal repository-bound results from the already-retained execution lanes; only repair a measured runtime blocker after a terminal result or explicit runner/control-plane failure is observed.",
+  "coordination": {
+    "shared_immutable_macrocycle_or_request_id_exposed_to_this_organ": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "duplicate_runtime_requests_created": 0
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: current-facing BOOTSTRAP_MINIMAL authority and frontier synchronized from stale 8.71 to inbox-selected 8.72; concurrent-main conflict handled fail-closed by reentry.",
+    "track_b": "ADVANCED_BY_FUSION: current main's Trigger1 lease gate binds canonical claim digest, observed-main ancestry, exact source identity and result closure; the 8.72 minimal bootstrap now exposes this current control boundary without creating a second state/effect authority.",
+    "track_c": "ADVANCED_AT_CONTROL_PLANE_READINESS: Trigger1 V2 is now atomically lease-gated and result-closing; model/J-Space runtime remains unobserved and issue 1643 cannot be promoted as current executable admission without a canonical trigger_key claim."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Observe queued Forge-Distillery run 32742535392. Require nominal-unqualified reject -> exactly 1 evidence-qualified ACCEPT -> exactly 1 new Distillery packet -> accepted_dataset_tokens > 0 -> identical replay adds 0. Separately do not re-dispatch Trigger1 V2 until a canonical atomic claim exists for the exact current experiment and its trigger_key is bound into the owner issue body."
+}

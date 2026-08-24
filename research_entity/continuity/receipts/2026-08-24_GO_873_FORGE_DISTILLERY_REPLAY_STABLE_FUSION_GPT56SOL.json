@@ -1,0 +1,54 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_observed_before_fusion": "d99f0cb78576f2ca78d2576b3b7327bf324a6b8f",
+  "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_73.json",
+  "donor_pr": 1687,
+  "branch": "gpt56sol/go-873-forge-replay-stable-fusion-20260824",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_DATASET_REPLAY_IDENTITY_GAP_RUNTIME_UNEXECUTED",
+    "statement": "Full Forge evaluation-envelope SHA is not a replay-stable causal identity because evaluated_at and candidate narration may change without a new measured execution. Byte-identical replay idempotency is therefore insufficient for Distillery dataset credit."
+  },
+  "fusion": {
+    "single_ingest_authority_preserved": "tools/ingest_forge_accepts_into_distillery.py",
+    "replay_identity_schema": "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1",
+    "measured_evidence_identity_schema": "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1",
+    "database_change": "ADDITIVE_NULLABLE_COLUMNS_PLUS_PARTIAL_UNIQUE_REPLAY_IDENTITY_INDEX",
+    "semantic_replay_rule": "TIMESTAMP_OR_CANDIDATE_NARRATION_ONLY_CHANGE => DUPLICATE_AND_ZERO_PACKET_TOKEN_DELTA",
+    "conflict_rule": "SAME_STABLE_EXECUTION_IDENTITY_PLUS_CHANGED_MEASURED_EVIDENCE => REPLAY_IDENTITY_CONFLICT",
+    "independent_execution_rule": "GENUINELY_DIFFERENT_EXECUTION_IDENTITY_REMAINS_SEPARATELY_ADMISSIBLE"
+  },
+  "regression": {
+    "test": "tests/test_forge_distillery_replay_identity_873.py",
+    "workflow": ".github/workflows/go873-forge-distillery-replay-regression.yml",
+    "requires_db_reopen_semantic_replay_zero_delta": true,
+    "test_execution_observed_by_this_organ_at_receipt_write": false
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_id_available": false,
+    "new_unusual_experiments_run": 0,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "retained_hcu_donor": 1263,
+    "retained_forge_runtime_lane": 1619
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: strengthens executable Forge-to-Distillery conversion against semantic replay packet/token inflation",
+    "track_b": "ADVANCED: adds a reusable stable execution-evidence identity boundary while retaining the single canonical ingest authority",
+    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE: prevents nonsemantic replay from inflating future J-Space/training datasets; no model or training credit is minted"
+  },
+  "credit_boundary": {
+    "source_plus_regression_definition_only_until_execution": true,
+    "entityos_whole_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute the focused replay-stable regression on the exact fused head. If green and current-main nonduplicate, merge; then require the persistent Forge live-promotion witness to prove one qualified ACCEPT -> one packet -> positive accepted_dataset_tokens -> timestamp/narration semantic replay +0."
+}

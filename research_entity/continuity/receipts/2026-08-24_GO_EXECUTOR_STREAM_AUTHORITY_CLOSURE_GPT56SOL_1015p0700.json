@@ -1,0 +1,129 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_SOURCE_FUSION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "8.63",
+    "mode": "FREE_ONLY",
+    "research_main_observed_before_receipt": "c36d5da3c47eb185610923537e9e72e2fabcd28e",
+    "canonical_temporal_gate": "research_entity/claycode/HCU_JSPACE_CONTROL_TEMPORAL_CAUSALITY_GATE_V1.md"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "work_classification": "ORDINARY_SOURCE_REVIEW_FUSION_AND_DETERMINISTIC_REGRESSION_AUTHORING"
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_live_head_observed_after_writes": "185c45bc009be6164b5515702036bd886e1bfd56",
+    "bounded_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_live_head_observed": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "executor_exact_head_ready_build": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+    "executor_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "function_invocation_observed_at_current_executor_head": false,
+    "sandbox_create_observed_at_current_executor_head": false
+  },
+  "research_observation": {
+    "initial_lane_donor_commits": [
+      "cc968ce440b6a1c1c40ffa6fd66e4dfa73abfefc",
+      "cfbd80c280045120c1aa217cb89545325cc0d5c2"
+    ],
+    "initial_lane_result": "USEFUL_DETERMINISTIC_GROUPING_DISCRIMINATOR_BUT_NOT_STREAM_AUTHORITY",
+    "counterevidence_receipt": "research_entity/continuity/receipts/2026-08-24_GO_JSPACE_STREAM_LANE_AUTHORITY_GAP_GPT56SOL.json",
+    "counterevidence": "Typed Entry event hashing makes stream_id replay-stable but does not independently prove that the original stream label was admitted by transport/control-plane authority.",
+    "parallel_successor_lane": "the artefact/MicroEntity/hcu/executor_sequence_lane_v1.py",
+    "parallel_successor_lane_status": "DETERMINISTIC_LANE_BINDING_ONLY_UNTIL_STREAM_AUTHORITY_CLOSED",
+    "hypothesis": "A deterministic lane becomes suitable input to the temporal causality gate only when the stream identity is independently admitted outside the Entry packet and the exact canonical admission is re-read before positive lane-authority closure.",
+    "counterhypothesis": "Hash-binding stream_id into Entry event identity is sufficient sequence-lane authority by itself.",
+    "discriminator": "Separate stream integrity from stream authority: require an exact externally admitted control-plane decision, persist it inside the existing canonical MiniUnifiedDB, then re-read and cross-bind that admission to the existing executor sequence-lane binding.",
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_SOURCE_TRUST_BOUNDARY_AND_REPAIR_PRIMITIVES_ADDED"
+  },
+  "implemented_delta": {
+    "stream_authority_store": {
+      "commit": "28441cd23f37ad04f3602031dae2c3cbf010d59f",
+      "path": "the artefact/MicroEntity/hcu/entry_stream_authority_store_v1.py",
+      "schemas": [
+        "HCU_ENTRY_STREAM_AUTHORITY_DECISION/v1",
+        "HCU_ENTRY_STREAM_AUTHORITY_ADMISSION/v1",
+        "HCU_ENTRY_STREAM_AUTHORITY_STORE/v1"
+      ],
+      "properties": [
+        "building a StreamAuthorityDecision grants zero authority",
+        "the exact decision digest and canonical record must already exist in an external admitted-decision registry before any DB/table write",
+        "admission reuses the caller-supplied canonical MiniUnifiedDB and current entity generation",
+        "BEGIN IMMEDIATE serializes the authority write",
+        "same generation/source_kind/source_id/stream_id admits at most one immutable decision",
+        "readback revalidates canonical stored decision/admission bytes and semantic cross-binds",
+        "missing canonical admission fails as EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE"
+      ]
+    },
+    "stream_authority_regression": {
+      "commit": "2a67ffdc42aab921c29ad31e503301022a0883ec",
+      "path": "the artefact/MicroEntity/hcu/test_entry_stream_authority_store_v1.py",
+      "encoded_negatives": [
+        "attacker-chosen self-consistent stream without external admission fails before table write",
+        "external registry content mismatch fails",
+        "divergent decision for same stream scope fails",
+        "stale generation rolls back",
+        "stored canonical-byte tamper fails readback",
+        "missing stream authority fails closed",
+        "foreign-key-disabled canonical-store write is rejected"
+      ]
+    },
+    "lane_authority_closure": {
+      "commit": "fca375978815320790384a3cd0ba31c780391f3a",
+      "path": "the artefact/MicroEntity/hcu/executor_sequence_lane_authority_closure_v1.py",
+      "schema": "HCU_EXECUTOR_SEQUENCE_LANE_AUTHORITY_CLOSURE/v1",
+      "effect": "Composes the existing executor sequence-lane binding with independently admitted stream authority re-read from canonical MiniUnifiedDB. It creates no second lane/store/order/truth/effect authority and grants no adjacency or runtime credit."
+    },
+    "lane_authority_closure_regression": {
+      "commit": "185c45bc009be6164b5515702036bd886e1bfd56",
+      "path": "the artefact/MicroEntity/hcu/test_executor_sequence_lane_authority_closure_v1.py",
+      "encoded_negatives": [
+        "hash-valid lane with unadmitted stream cannot close",
+        "same stream text under another source cannot reuse authority",
+        "outer closure tamper fails",
+        "lane transplant to another executor cannot reuse closure",
+        "canonical stream-authority DB tamper breaks closure revalidation"
+      ]
+    }
+  },
+  "parallel_fusion": {
+    "canonical_temporal_gate_observed": true,
+    "parallel_preinvocation_ordering_observed": true,
+    "parallel_executor_sequence_lane_observed": true,
+    "duplicate_ordering_store_created": false,
+    "duplicate_lane_authority_created": false,
+    "fusion_rule": "Treat the new stream-authority store and lane-authority closure as subordinate evidence required by the single canonical temporal causality path, not as a replacement temporal authority. Preserve any stricter parallel successor and retire duplicate donor mechanics when fusion occurs."
+  },
+  "test_evidence": {
+    "new_regression_source_authored": true,
+    "new_regressions_executed_on_admitted_exact_source_surface": false,
+    "github_actions_run_observed_for_new_commits": false,
+    "classification": "SOURCE_AND_ENCODED_REGRESSION_ONLY",
+    "runtime_credit_added": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_CURRENT_PARALLEL_EXECUTOR_CONVERGENCE: exact PR810 head 6a15601183f9bb61d445368e4d239e90a47b300c has a READY build with quota anti-regression guards, but remaining included Sandbox quota is not directly observed; runtime remains BLOCKED_QUOTA_UNOBSERVED and no Function/Sandbox invocation credit exists.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: implemented independent external stream-authority admission in canonical MiniUnifiedDB plus subordinate sequence-lane authority closure, separating replay-stable Entry integrity from control-plane stream authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_LEVEL: recurrent t->t+1 evidence can now require an independently admitted same-stream lane before temporal promotion. Full recurrent control remains unproven until this closure is fused with predecessor JSpaceInferenceBinding/TrainingTrace packet ancestry, canonical pre-invocation ordering, exact successor ModelInputControlBinding, then successor VerifiedModelExecution -> InferenceReceipt -> J-Space closure. Hidden-state causal use and training credit remain zero."
+  },
+  "credits_after_delta": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving shared whole-system surface under concurrent writes; append-only receipt plus retained donor commits preserve this bounded source delta without unsafe whole-file overwrite."
+  },
+  "next_exact_gate": "In retained PR1263, fuse HCU_EXECUTOR_SEQUENCE_LANE_AUTHORITY_CLOSURE/v1 into the single canonical HCU_JSPACE_CONTROL_TEMPORAL_CAUSALITY_GATE_V1 path together with the existing canonical pre-invocation ordering and predecessor JSpaceInferenceBinding/v3. Add one integrated source regression that rejects cross-stream predecessor/control pairing, attacker-chosen unadmitted stream labels, post-hoc same-invocation packet rebinding, wrong predecessor trace/packet ancestry and successor input mutation. After successor execution, require exact VerifiedModelExecution -> HCU_INFERENCE_RECEIPT/v4 -> JSpaceBinding/v3 closure. Execute only when an admitted exact-source FREE_ONLY surface is open; keep PR810 BLOCKED_QUOTA_UNOBSERVED until remaining included quota plus no-charge/no-upgrade/no-billing-path authority is directly observed."
+}

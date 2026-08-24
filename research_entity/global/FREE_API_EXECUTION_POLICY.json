@@ -145,6 +145,17 @@
     "internal_measurement": "A synchronized writer inserted the selected provider latch after capacity evaluation but before its membership test. Before repair, the same inventory mixed the earlier capacity state with the later blocked state; after repair, all rows represent the pre-write copy.",
     "counterhypothesis": "Deriving route from one list of inventory rows is sufficient even when those rows read a live mutable latch set; falsified because a write during row construction changed membership evidence inside that single list."
   },
+  "payment_latch_validation_snapshot": {
+    "checked_at": "2026-08-24",
+    "claim": "Capability inventory copies bounded exact-set payment-latch storage before iterating or validating its elements. Pre-copy and post-copy cardinality checks bound the snapshot, and later publications cannot resize the iterator or suppress the inventory receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://cwe.mitre.org/data/definitions/367.html"
+    ],
+    "executable_evidence": "test_inventory_snapshots_latches_before_element_validation",
+    "internal_measurement": "A deterministic mutation after the first live-set element was consumed previously raised RuntimeError: Set changed size during iteration and suppressed capability inventory. After repair, validation completes against the bounded copy while the publication remains visible only to later inventories.",
+    "counterhypothesis": "Validating every element of the live exact set before copying is equivalent to validating the copy; falsified because a concurrent publication can resize the live iterator between those operations."
+  },
   "passive_payment_latch_container_boundary": {
     "checked_at": "2026-08-24",
     "claim": "Every payment-latch storage path, including the process-global default and caller injection, must be an exact built-in set before capability inventory, routing or authenticated execution; set subclasses cannot execute overridden membership or mutation behavior around a received HTTP 402.",

@@ -46,6 +46,67 @@ jobs:
           set -u
           out="${RUNNER_TEMP}/clay-trigger1-v2-${GITHUB_RUN_ID}"
           mkdir -p "$out"
+
+          # Provider-independent local-model execution: external LLM-provider
+          # credentials must not be inherited by the child process. Hugging Face
+          # is used only for the public pinned checkpoint with implicit token use off.
+          unset \
+            OPENAI_API_KEY OPENAI_API_KEYS \
+            ANTHROPIC_API_KEY ANTHROPIC_API_KEYS \
+            GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
+            MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY \
+            NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY \
+            OPENROUTER_API_KEY OPENROUTER_API_KEYS OPENROUTER2_API_KEY OPENROUTER3_API_KEY \
+            TOGETHER_API_KEY TOGETHER_API_KEYS \
+            HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true
+          while IFS= read -r name; do
+            case "$name" in
+              OPENAI*KEY*|ANTHROPIC*KEY*|GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*) unset "$name" || true ;;
+            esac
+          done < <(compgen -v)
+          export HF_HUB_DISABLE_IMPLICIT_TOKEN=1
+          export HF_TOKEN_PATH="$out/no-hf-token"
+          rm -f "$HF_TOKEN_PATH"
+
+          residual=""
+          while IFS= read -r name; do
+            case "$name" in
+              OPENAI*KEY*|ANTHROPIC*KEY*|GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*|HF_TOKEN|HUGGING_FACE_HUB_TOKEN|HUGGINGFACE_HUB_TOKEN)
+                residual="${residual}${name}"$'\n'
+                ;;
+            esac
+          done < <(compgen -v)
+
+          if [[ -n "$residual" ]]; then
+            RESIDUAL="$residual" python3 - "$out/provider-credential-fence.json" <<'PY'
+          import json, os, pathlib, sys
+          names=sorted({x for x in os.environ.get('RESIDUAL','').splitlines() if x})
+          pathlib.Path(sys.argv[1]).write_text(json.dumps({
+              'schema':'CLAY_TRIGGER1_PROVIDER_CREDENTIAL_FENCE/v1',
+              'status':'BLOCKED_PROVIDER_CREDENTIAL_ENV_REMAINS',
+              'provider_environment_credential_names_after_scrub':names,
+              'secret_values_recorded':False,
+              'hf_implicit_token_disabled':True,
+          }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+          PY
+            python3 - "$out/trigger1_local_activation_api_result.json" <<'PY'
+          import json, pathlib, sys
+          pathlib.Path(sys.argv[1]).write_text(json.dumps({
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
+              'status':'BLOCKED_PROVIDER_CREDENTIAL_FENCE',
+              'zero_provider_billing':True,
+              'provider_credential_fence_status':'BLOCKED',
+              'terminal_output_projection_shortcut':False,
+              'next_action':'REPAIR_NOW_OR_ROUTE_AROUND'
+          }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+          PY
+            echo "experiment_rc=41" >> "$GITHUB_OUTPUT"
+            echo "experiment_dir=$out" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          printf '%s\n' '{"schema":"CLAY_TRIGGER1_PROVIDER_CREDENTIAL_FENCE/v1","status":"PASS","provider_environment_credential_names_after_scrub":[],"secret_values_recorded":false,"hf_implicit_token_disabled":true}' > "$out/provider-credential-fence.json"
+
           set +e
           bash tools/trigger1_local_qwen06_midlayer_causal.sh "$out" >"$out/launcher.log" 2>&1
           rc=$?
@@ -60,7 +121,7 @@ jobs:
               'status':'BLOCKED_BEFORE_RESULT',
               'process_exit_code':int(sys.argv[2]),
               'zero_provider_billing':True,
-              'external_provider_credentials_read':False,
+              'provider_credential_fence_status':'PASS',
               'terminal_output_projection_shortcut':False,
               'next_action':'REPAIR_NOW_OR_ROUTE_AROUND'
           }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
@@ -94,10 +155,14 @@ jobs:
           outdir="research_entity/runtime/tool_results"
           mkdir -p "$outdir"
           target="$outdir/trigger1-v2-local-fastpath-issue${issue}-run${run}.json"
-          python3 - "$EXPERIMENT_DIR/trigger1_local_activation_api_result.json" "$EXPERIMENT_DIR/promotion_gate.json" "$target" "$EXPERIMENT_RC" <<'PY'
+          python3 - "$EXPERIMENT_DIR/trigger1_local_activation_api_result.json" "$EXPERIMENT_DIR/promotion_gate.json" "$target" "$EXPERIMENT_RC" "$EXPERIMENT_DIR/provider-credential-fence.json" <<'PY'
           import json, os, pathlib, sys
           result=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
           gate=json.loads(pathlib.Path(sys.argv[2]).read_text(encoding='utf-8'))
+          try:
+              fence=json.loads(pathlib.Path(sys.argv[5]).read_text(encoding='utf-8'))
+          except Exception:
+              fence={'schema':'CLAY_TRIGGER1_PROVIDER_CREDENTIAL_FENCE/v1','status':'MISSING'}
           runtime=result.get('runtime_manifest') if isinstance(result.get('runtime_manifest'),dict) else {}
           runtime.pop('python_executable',None)
           result.pop('snapshot_path',None)
@@ -106,6 +171,9 @@ jobs:
               'schema':'CLAY_TRIGGER1_V2_SELFHOSTED_RUNTIME_RECEIPT/v1',
               'source_result':result,
               'promotion_gate':gate,
+              'provider_credential_fence':fence,
+              'source_claim_external_provider_credentials_read':result.get('external_provider_credentials_read'),
+              'source_claim_promoted_without_fence':False,
               'github_actions':{
                   'run_id':os.environ.get('GITHUB_RUN_ID'),
                   'run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),

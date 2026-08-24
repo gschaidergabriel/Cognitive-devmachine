@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import sqlite3
 import sys
 import tempfile
 import unittest
@@ -117,6 +118,23 @@ class PromotionSourceGuards872(unittest.TestCase):
         evaluation["execution_admission"]["all_commands_admitted"] = False
         with self.assertRaises(promotion.PromotionError):
             promotion.validate_gate_result(passing_gate(evaluation), SOURCE)
+
+    def test_inspect_db_preserves_existing_counter_before_first_forge_table(self):
+        with tempfile.TemporaryDirectory() as td:
+            db = Path(td) / "distillery.sqlite3"
+            con = sqlite3.connect(db)
+            try:
+                con.execute("CREATE TABLE counters(key TEXT PRIMARY KEY, value INTEGER NOT NULL DEFAULT 0)")
+                con.execute("INSERT INTO counters(key,value) VALUES('accepted_dataset_tokens', 1234)")
+                con.commit()
+            finally:
+                con.close()
+
+            observed = promotion.inspect_db(db, "c" * 64)
+            self.assertTrue(observed["db_exists"])
+            self.assertFalse(observed["evaluation_present"])
+            self.assertEqual(observed["packet_tokens"], 0)
+            self.assertEqual(observed["accepted_dataset_tokens_counter"], 1234)
 
     def test_live_first_promotion_then_immediate_replay_is_idempotent(self):
         with tempfile.TemporaryDirectory() as td:

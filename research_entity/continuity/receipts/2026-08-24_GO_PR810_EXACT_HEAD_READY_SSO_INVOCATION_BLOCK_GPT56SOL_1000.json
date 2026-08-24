@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "525cff00ef6639c46269ca506b04216dafd4db1d",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; AVAILABLE_USER_MESSAGE_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "paid_upgrade_or_fallback_attempted": false,
+    "together_preflight_or_credential_lookup_attempted": false
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "264ffe2213cff72006bd99e04acbb65e7a04885c",
+    "bounded_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "bounded_executor_head_observed": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "executor_pinned_donor_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "executor_source_state": "SOURCE_REBOUND_READY_SOURCE_ONLY"
+  },
+  "observation": {
+    "classification": "EXACT_CURRENT_EXECUTOR_READY_BUT_AUTHENTICATED_FUNCTION_INVOCATION_BLOCKED",
+    "vercel_team": "gabriel-gschaiders-projects",
+    "vercel_plan": "hobby",
+    "vercel_project": "dr-unterweger",
+    "deployment_id": "dpl_98ALxQrZppsRQUqSxCZZyKxTMpy2",
+    "deployment_state_observed": "READY",
+    "deployment_github_commit_sha": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "deployment_matches_executor_head_at_observation": true,
+    "fixed_route": "/api/hcu-jspace-grid10-binding-capsule",
+    "route_source_contract": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+    "route_source_closure": "17 exact deployment-carried donor Git blobs",
+    "route_fixed_command": "python3 -m unittest -v test_model_execution_admission_store_v1.py test_execution_store_inference_jspace_chain_v1.py test_jspace_inference_binding_revalidation_v3.py",
+    "route_expected_test_count": 14,
+    "first_route_fetch_http_status": 302,
+    "first_route_fetch_classification": "VERCEL_DEPLOYMENT_PROTECTION_SSO_REDIRECT_BEFORE_FUNCTION_INVOCATION",
+    "temporary_preview_share_access_generated": true,
+    "share_access_route_fetch_http_status": 302,
+    "share_access_route_fetch_classification": "CONNECTOR_FETCH_REMAINED_AT_SSO_REDIRECT; NO FUNCTION_RESULT_OBSERVED",
+    "runtime_logs_for_exact_deployment": "NONE_OBSERVED_AFTER_ATTEMPTS",
+    "sandbox_create_observed": false,
+    "fixed_regression_command_observed": false,
+    "component_pass_observed": false
+  },
+  "hypothesis": {
+    "primary": "Once an exact-head READY preview exists, the existing fixed FREE_ONLY route can close the 17-blob/14-test producer-derived component gate without a source rebind.",
+    "counterhypothesis": "READY deployment state alone is insufficient because deployment protection or execution admission may prevent the function and Sandbox from being reached even when source identity is exact.",
+    "discriminator": "Invoke only the fixed protected preview route at the exact matching deployment identity and require an actual function JSON result plus runtime evidence; SSO/auth redirect is not runtime evidence.",
+    "observed_discriminator_result": "COUNTERHYPOTHESIS_SUPPORTED_AT_ACCESS_LAYER: exact-head READY was achieved, but available connector invocation stopped at HTTP 302 SSO and produced no runtime logs."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the previous exact-head deployment-availability blocker changed from unavailable to an observed READY deployment exactly matching gschaidergabriel/Dr.-Unterweger#810 head 81ce20e5; the next blocker is now authenticated function invocation, not build freshness.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the retained executor already carries a source/guard-coherent 17-blob Typed Entry -> route -> engine/load -> GRID10 -> ModelExecution -> InferenceReceipt/v4 -> Global J-Space/GWT -> TrainingTrace -> JSpaceBinding/v3 closure. Adding HCU source before executing this exact pinned discriminator would increase identity churn and reduce information gain.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: exact-head READY exists, but no function/Sandbox/test result was observed because deployment protection intercepted the request. Real local ~0.8B executor I/O is still unobserved; J-Space model/training credit remains zero."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The durable append-only receipt captures a fast-moving deployment-state transition without rewriting the high-churn README. Current-facing authority remains supervisor 8.63 FREE_ONLY; no semantic architecture promotion occurred."
+  },
+  "next_exact_gate": "Use an authenticated preview-fetch surface that actually reaches the exact deployment dpl_98ALxQrZppsRQUqSxCZZyKxTMpy2 (or a successor READY deployment only if it exactly matches the then-current gschaidergabriel/Dr.-Unterweger#810 head). Invoke only /api/hcu-jspace-grid10-binding-capsule. Require the route's pre-cost 17-blob verification, FREE_ONLY admission, in-Sandbox SHA-256 rehash, secret fence, all 14 declared unittest identities and summary/OK fence, exit 0, result digest and cleanup. Do not treat HTTP 302/SSO, READY state or source inspection as component execution. Do not upgrade, spend, preflight Together, or grant model/training/whole-product credit."
+}

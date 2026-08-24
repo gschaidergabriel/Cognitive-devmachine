@@ -26,56 +26,53 @@ class ProviderSecretAdmissionTests(unittest.TestCase):
         raise AssertionError("repository secret store touched before admission")
 
     def test_blocked_optional_provider_secret_returns_none_before_any_secret_lookup(self):
-        with mock.patch.object(loader, "_provider_secret_is_admitted", return_value=False), \
-             mock.patch.object(loader.os, "environ", BombEnvironment()), \
-             mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
-            self.assertIsNone(loader.get_secret("OPENROUTER_API_KEY", required=False))
-            self.assertIsNone(loader.get_secret("NVIDIA_API_KEY", required=False))
+        names = ("OPENROUTER_API_KEY", "NVIDIA_API_KEY", "GROQ_API_KEYS", "GROQ2_API_KEY", "MISTRAL_API_KEY_1", "MISTRAL_API_KEY_32", "NVIDIA2_API_KEY", "OPENROUTER_API_KEYS", "HF_TOKEN", "HUGGINGFACE_API_KEY", "TOGETHER_API_KEY")
+        with mock.patch.object(loader, "_provider_secret_is_admitted", return_value=False), mock.patch.object(loader.os, "environ", BombEnvironment()), mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
+            for name in names:
+                with self.subTest(name=name):
+                    self.assertIsNone(loader.get_secret(name, required=False))
 
     def test_blocked_required_provider_secret_raises_before_any_secret_lookup(self):
-        with mock.patch.object(loader, "_provider_secret_is_admitted", return_value=False), \
-             mock.patch.object(loader.os, "environ", BombEnvironment()), \
-             mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
-            with self.assertRaisesRegex(loader.SecretError, "denied before lookup"):
-                loader.get_secret("GROQ_API_KEY", required=True)
+        names = ("GROQ_API_KEY", "GROQ3_API_KEY", "MISTRAL2_API_KEY", "MISTRAL_API_KEY_17", "NVIDIA_API_KEYS", "NVIDIA3_API_KEY", "OPENROUTER_API_KEY_2", "HF_TOKEN", "HUGGINGFACE_API_KEY", "TOGETHER_API_KEY")
+        with mock.patch.object(loader, "_provider_secret_is_admitted", return_value=False), mock.patch.object(loader.os, "environ", BombEnvironment()), mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
+            for name in names:
+                with self.subTest(name=name):
+                    with self.assertRaisesRegex(loader.SecretError, "denied before lookup"):
+                        loader.get_secret(name, required=True)
 
     def test_blocked_provider_secret_source_reports_absent_without_lookup(self):
-        with mock.patch.object(loader, "_provider_secret_is_admitted", return_value=False), \
-             mock.patch.object(loader.os, "environ", BombEnvironment()), \
-             mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
-            self.assertIsNone(loader.secret_source("MISTRAL_API_KEY"))
+        names = ("MISTRAL_API_KEY", "MISTRAL_API_KEY_9", "NVIDIA_NIM_API_KEY", "NGC_API_KEY", "HF_TOKEN", "TOGETHER_API_KEY")
+        with mock.patch.object(loader, "_provider_secret_is_admitted", return_value=False), mock.patch.object(loader.os, "environ", BombEnvironment()), mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
+            for name in names:
+                with self.subTest(name=name):
+                    self.assertIsNone(loader.secret_source(name))
 
-    def test_admitted_provider_may_read_environment_after_admission(self):
+    def test_admitted_provider_may_read_environment_after_boundary(self):
         env = {"OPENROUTER_API_KEY": "synthetic-test-value"}
-        with mock.patch.object(loader, "_provider_secret_is_admitted", return_value=True), \
-             mock.patch.object(loader.os, "environ", env), \
-             mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
-            self.assertEqual(
-                loader.get_secret("OPENROUTER_API_KEY", required=True),
-                "synthetic-test-value",
-            )
+        with mock.patch.object(loader, "_provider_secret_is_admitted", return_value=True), mock.patch.object(loader.os, "environ", env), mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
+            self.assertEqual(loader.get_secret("OPENROUTER_API_KEY", required=True), "synthetic-test-value")
 
     def test_non_provider_secret_behavior_is_unchanged(self):
         env = {"TAVILY_API_KEY": "synthetic-non-llm-value"}
-        with mock.patch.object(loader.os, "environ", env), \
-             mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
-            self.assertEqual(
-                loader.get_secret("TAVILY_API_KEY", required=True),
-                "synthetic-non-llm-value",
-            )
+        with mock.patch.object(loader.os, "environ", env), mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
+            self.assertEqual(loader.get_secret("TAVILY_API_KEY", required=True), "synthetic-non-llm-value")
 
-    def test_all_current_llm_provider_secret_names_are_mapped(self):
-        self.assertEqual(
-            loader.PROVIDER_SECRET_NAMES,
-            {
-                "GROQ_API_KEY": "groq",
-                "MISTRAL_API_KEY": "mistral",
-                "NVIDIA_API_KEY": "nvidia",
-                "NVIDIA_NIM_API_KEY": "nvidia",
-                "NGC_API_KEY": "nvidia",
-                "OPENROUTER_API_KEY": "openrouter",
-            },
-        )
+    def test_all_current_llm_provider_secret_aliases_are_mapped(self):
+        expected = {
+            "GROQ_API_KEY": "groq", "GROQ_API_KEYS": "groq", "GROQ2_API_KEY": "groq", "GROQ3_API_KEY": "groq", "GROQ_API_KEY_7": "groq",
+            "MISTRAL_API_KEY": "mistral", "MISTRAL_API_KEYS": "mistral", "MISTRAL2_API_KEY": "mistral", "MISTRAL3_API_KEY": "mistral", "MISTRAL_API_KEY_1": "mistral", "MISTRAL_API_KEY_32": "mistral",
+            "NVIDIA_API_KEY": "nvidia", "NVIDIA_API_KEYS": "nvidia", "NVIDIA_NIM_API_KEY": "nvidia", "NGC_API_KEY": "nvidia", "NVIDIA2_API_KEY": "nvidia", "NVIDIA3_API_KEY": "nvidia", "NVIDIA_API_KEY_4": "nvidia",
+            "OPENROUTER_API_KEY": "openrouter", "OPENROUTER_API_KEYS": "openrouter", "OPENROUTER_API_KEY_3": "openrouter",
+            "HF_TOKEN": "huggingface", "HUGGINGFACE_API_KEY": "huggingface", "TOGETHER_API_KEY": "together",
+        }
+        for name, provider in expected.items():
+            with self.subTest(name=name):
+                self.assertEqual(loader.provider_for_secret_name(name), provider)
+
+    def test_general_provider_configuration_is_not_misclassified_as_secret(self):
+        for name in ("MISTRAL_KEY_POOL", "MISTRAL_API_BASE", "NVIDIA_API_BASE", "OPENROUTER_API_BASE"):
+            with self.subTest(name=name):
+                self.assertIsNone(loader.provider_for_secret_name(name))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"check-vps-bridge-queue-20260824T1749",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":120,
+  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'set -e; U=$(id -u claylab); echo SERVICE=$(runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$U systemctl --user is-active clay-vps-git-bridge.service 2>/dev/null || true); echo ---claylab---; ls -la /srv/claylab | head -40; echo ---service---; runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$U systemctl --user --no-pager -l status clay-vps-git-bridge.service 2>/dev/null | head -50 || true; echo ---daemonlog---; tail -80 /srv/claylab/state/bridge-daemon.log 2>/dev/null || true'"
+}

@@ -27,6 +27,9 @@ class SyntheticExecutor:
         effect = dot * alpha if layer_id == self.target_layer else 0.0
         base = 0.10 + seed * 0.001
         vector_sha = applied_vector_sha256(vector)
+        pre = _sha(f"pre:{layer_id}:{seed}")
+        # A correct zero-vector control is an exact physical no-op at the selected activation.
+        post = pre if all(value == 0.0 for value in vector) else _sha(f"post:{layer_id}:{seed}:{alpha}:{vector_sha}")
         receipt = HookReceipt(
             HOOK_RECEIPT_SCHEMA,
             "synthetic:v1",
@@ -35,8 +38,8 @@ class SyntheticExecutor:
             seed,
             alpha,
             vector_sha,
-            _sha(f"pre:{layer_id}:{seed}"),
-            _sha(f"post:{layer_id}:{seed}:{alpha}:{vector_sha}"),
+            pre,
+            post,
         )
         return SteeringObservation(f"{base + effect:.9f}", receipt)
 
@@ -109,6 +112,42 @@ class ActivationSteeringSearchTests(unittest.TestCase):
                 alphas=(-1.0, 1.0),
                 seeds=(1,),
                 score_fn=score,
+            )
+
+    def test_rejects_zero_vector_control_that_changes_activation(self):
+        class BadZeroExecutor(SyntheticExecutor):
+            def run(self, prompt, *, layer_id, vector, alpha, seed):
+                observation = super().run(prompt, layer_id=layer_id, vector=vector, alpha=alpha, seed=seed)
+                if observation.hook_receipt is None or not all(value == 0.0 for value in vector):
+                    return observation
+                receipt = observation.hook_receipt
+                return SteeringObservation(
+                    observation.output_text,
+                    HookReceipt(
+                        receipt.schema,
+                        receipt.executor_id,
+                        receipt.invocation_id,
+                        receipt.layer_id,
+                        receipt.seed,
+                        receipt.alpha,
+                        receipt.applied_vector_sha256,
+                        receipt.pre_activation_sha256,
+                        _sha("unexpected-zero-vector-mutation"),
+                    ),
+                )
+
+        with self.assertRaisesRegex(ActivationSteeringError, "ZERO_VECTOR_CONTROL_CHANGED_ACTIVATION"):
+            search_activation_steering(
+                BadZeroExecutor(),
+                "probe",
+                (1.0, 0.0),
+                vector_control_packet_sha256="1" * 64,
+                layer_ids=("L3",),
+                alphas=(-1.0, 1.0),
+                seeds=(1,),
+                score_fn=score,
+                min_delta=0.1,
+                min_directional_gap=0.1,
             )
 
 

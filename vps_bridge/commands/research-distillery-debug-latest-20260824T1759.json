@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"research-distillery-debug-latest-20260824T1759",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "command":"set -e; echo HEAD=$(git rev-parse HEAD); python3 -m py_compile tools/run_research_distillery.py tools/run_research_distillery_entry.py; echo COMPILE_PASS; echo '--- processes ---'; ps auxww | grep '[r]un_research_distillery' || true; echo '--- log ---'; tail -120 /artifacts/clay-entityos-swarm/distillery.log 2>/dev/null || true; echo '--- status mtime ---'; stat -c '%y %s %n' /artifacts/clay-entityos-swarm/distillery/STATUS.json 2>/dev/null || true",
+  "timeout_seconds":120
+}

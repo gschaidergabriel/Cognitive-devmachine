@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "go-20260824T0834Z-smoke",
-  "command_sha256": "8926613c245bf422730f8d036b7eaa3f57c6c3ce12b93718c2ea2f1fd4fa6b80",
-  "started_at": "2026-08-24T08:33:45.712268+00:00",
-  "finished_at": "2026-08-24T08:33:45.968607+00:00",
+  "command_id": "swarm-sync-main-20260824T1615",
+  "command_sha256": "1bb51f43effb990ca4722710cc109b6373f50b2e8e3ff6fe4162b1589027fd28",
+  "started_at": "2026-08-24T09:16:53.128886+00:00",
+  "finished_at": "2026-08-24T09:16:55.132520+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "d022cbe7aed0d9535d90f7aed68ea1dbea31dd95f59f3dae93ce7cb7cf9509c3",
+  "op": "canonical_sync",
+  "stdout_sha256": "1c8e793bc0257655cf573ca6cbf10b63a822cf7d71c09fa4518e0fd25193b829",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "BRIDGE_EXEC_OK\n2026-08-24T08:33:45Z\nuid=0(root) gid=0(root) groups=0(root)\nLinux 877d9128ca5a 6.8.0-138-generic #138-Ubuntu SMP PREEMPT_DYNAMIC Fri Jul 31 22:41:49 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\nPython 3.12.3\ngit version 2.43.0\n3.45.1 2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1 (64-bit)\n945b1b7498bfb892aa88edb184c12060b246155eeafa3842e84a2fca512a8ffd  /workspace/.chatgpt_bridge_probe\ne2cd34374e42174709ea170c31736cd486b949a4\nHTTP/2 200 \r\n",
+  "stdout_tail": "96c0f66fa6e3f03ecf4e4193f76a963f1177be61\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "96c0f66fa6e3f03ecf4e4193f76a963f1177be61",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

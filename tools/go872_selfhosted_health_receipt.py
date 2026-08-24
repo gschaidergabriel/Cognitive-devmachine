@@ -19,6 +19,10 @@ from typing import Any
 
 SCHEMA = "CLAY_GO872_SELFHOSTED_HEALTH_RECEIPT/v1"
 QWEN_MIN_AVAILABLE_KB = 3_000_000
+QWEN_CURRENT_LAUNCHER = "trigger1_local_qwen06_intermediate.sh"
+QWEN_CURRENT_EXECUTOR = "trigger1_local_qwen06_intermediate_execute.py"
+QWEN_COMPAT_MIDLAYER_LAUNCHER = "trigger1_local_qwen06_midlayer_causal.sh"
+QWEN_COMPAT_MIDLAYER_EXECUTOR = "trigger1_local_qwen06_midlayer_causal_execute.py"
 PROVIDER_ENV_PREFIXES = (
     "OPENAI", "ANTHROPIC", "GROQ", "MISTRAL", "NVIDIA", "NGC",
     "OPENROUTER", "TOGETHER",
@@ -65,9 +69,16 @@ def build_receipt(repo: Path, output: Path) -> dict[str, Any]:
     runner_os = os.environ.get("RUNNER_OS") or platform.system()
     runner_arch = os.environ.get("RUNNER_ARCH") or platform.machine()
     runner_name = os.environ.get("RUNNER_NAME") or "unknown"
-    qwen_launcher = repo / "tools" / "trigger1_local_qwen06_midlayer_causal.sh"
-    qwen_executor = repo / "tools" / "trigger1_local_qwen06_midlayer_causal_execute.py"
+
+    # Readiness is bound to the current strongest source lane. The older midlayer
+    # path remains visible only as compatibility diagnostics and cannot by itself
+    # make the current Qwen frontier ready.
+    qwen_launcher = repo / "tools" / QWEN_CURRENT_LAUNCHER
+    qwen_executor = repo / "tools" / QWEN_CURRENT_EXECUTOR
+    qwen_compat_launcher = repo / "tools" / QWEN_COMPAT_MIDLAYER_LAUNCHER
+    qwen_compat_executor = repo / "tools" / QWEN_COMPAT_MIDLAYER_EXECUTOR
     forge_gate = repo / "tools" / "run_go871_forge_distillery_runtime_gate.py"
+
     git_ok = sha_rc == 0 and tree_rc == 0 and status_rc == 0 and bool(source_sha) and bool(source_tree)
     source_clean = status_rc == 0 and dirty_text == ""
     linux_x64 = runner_os.lower() == "linux" and runner_arch.lower() in {"x64", "x86_64", "amd64"}
@@ -122,8 +133,16 @@ def build_receipt(repo: Path, output: Path) -> dict[str, Any]:
             "bwrap_present": bool(bwrap_path),
         },
         "frontier_sources": {
+            "qwen_current_lane": "INTERMEDIATE_CONTRASTIVE",
+            "qwen_current_launcher": QWEN_CURRENT_LAUNCHER,
+            "qwen_current_executor": QWEN_CURRENT_EXECUTOR,
+            # Compatibility aliases now intentionally refer to the current lane.
             "qwen_launcher_present": qwen_launcher.is_file(),
             "qwen_executor_present": qwen_executor.is_file(),
+            "qwen_current_launcher_present": qwen_launcher.is_file(),
+            "qwen_current_executor_present": qwen_executor.is_file(),
+            "qwen_compat_midlayer_launcher_present": qwen_compat_launcher.is_file(),
+            "qwen_compat_midlayer_executor_present": qwen_compat_executor.is_file(),
             "forge_gate_present": forge_gate.is_file(),
         },
         "credential_fence_observation": {
@@ -133,6 +152,7 @@ def build_receipt(repo: Path, output: Path) -> dict[str, Any]:
         },
         "readiness": {
             "bridge_health_pass": bridge_health_pass,
+            "qwen_current_source_ready": qwen_source_ready,
             "qwen_preflight_ready": qwen_preflight_ready,
             "forge_preflight_ready": forge_preflight_ready,
             "current_frontier_any_lane_ready": qwen_preflight_ready or forge_preflight_ready,
@@ -144,7 +164,7 @@ def build_receipt(repo: Path, output: Path) -> dict[str, Any]:
             "jspace_model_credit": 0,
             "training_credit": 0,
         },
-        "scope_guard": "This receipt proves only exact-source self-hosted health/readiness observations. It does not prove Forge->Distillery success, model execution, J-Space causality, training readiness, or whole-product PASS.",
+        "scope_guard": "This receipt proves only exact-source self-hosted health/readiness observations for the current intermediate Qwen frontier and Forge gate. It does not prove Forge->Distillery success, model execution, J-Space causality, training readiness, or whole-product PASS.",
     }
     output.write_text(json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
     return payload

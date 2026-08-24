@@ -97,6 +97,23 @@ def load_provider_admission(
         evidence_ref = record.get("evidence_ref")
         if not isinstance(evidence_ref, str) or not evidence_ref.strip():
             raise ProviderAdmissionError(f"PROVIDER_ADMISSION_EVIDENCE_REQUIRED:{name}")
+        if record.get("admitted") is True:
+            # A repository toggle is not account evidence. Positive admission must
+            # bind the exact provider account/execution class to a durable receipt
+            # proving that monetary overage cannot occur. Public free-tier docs,
+            # credential presence, HTTP status, or an env attestation are insufficient.
+            if record.get("account_scope_verified") is not True:
+                raise ProviderAdmissionError(f"PROVIDER_ADMISSION_ACCOUNT_SCOPE_UNVERIFIED:{name}")
+            if record.get("billable_overage_possible") is not False:
+                raise ProviderAdmissionError(f"PROVIDER_ADMISSION_BILLABLE_OVERAGE_NOT_FALSE:{name}")
+            if record.get("evidence_kind") != "ACCOUNT_SPECIFIC_NONBILLABLE_EXECUTION_EVIDENCE":
+                raise ProviderAdmissionError(f"PROVIDER_ADMISSION_EVIDENCE_KIND_INVALID:{name}")
+            if not evidence_ref.startswith("research_entity/continuity/receipts/"):
+                raise ProviderAdmissionError(f"PROVIDER_ADMISSION_RECEIPT_REF_REQUIRED:{name}")
+            if not isinstance(record.get("account_scope_id"), str) or not record["account_scope_id"].strip():
+                raise ProviderAdmissionError(f"PROVIDER_ADMISSION_ACCOUNT_SCOPE_ID_REQUIRED:{name}")
+            if not isinstance(record.get("verified_at"), str) or not record["verified_at"].strip():
+                raise ProviderAdmissionError(f"PROVIDER_ADMISSION_VERIFIED_AT_REQUIRED:{name}")
     return payload
 
 

@@ -142,3 +142,11 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 For every material claim distinguish direct observation, source-derived claim, inference, generated hypothesis, counterhypothesis, intervention/test and verified scope. Negative evidence is first-class. Auth/rate/quota/runner failure is not automatically product/science failure. A component PASS is not whole-product PASS.
 
 Before substantive continuation: refresh verified `main`; resolve newest owner/supervisor authority; inspect overlapping work; preserve exact source/runtime identities; execute the cheapest high-information discriminator; persist bounded evidence; and re-enter `main` after every material write.
+
+## GO 23:34 lease-parser fail-closed delta
+
+During re-entry, parallel `main` independently absorbed the broad legacy timestamp/digest semantic-alias fence, so two broader candidate PRs were closed instead of duplicated. Adversarial review of that fused gate found two residual parser boundaries: a regex-shaped but calendar-impossible canonical `ts_…__p_…` key could pass `parse_trigger_key`, and malformed/non-object legacy sibling JSON was skipped even when its historical filename encoded the same lease identity.
+
+The bounded successor validates canonical timestamp calendar semantics at admission, recovers a legacy trigger identity from the sibling filename when JSON cannot supply one, and rejects invalid legacy date/offset forms deterministically rather than allowing an exception to become ambiguous evidence. Exact reconstructed Git blobs `8e2f023fdc05b9f7fbcdea8f12c7e3265ff26d22` and `74a371cbb6b4db4533bbd787ab9dd7c688529330` passed Python compilation and **13/13** focused unit regressions in a noncanonical ChatGPT container. That evidence is component-mechanism only.
+
+No new unusual experiment was executed because this user turn exposes no reproducible shared immutable request id and only minute-level timestamp precision: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`. Track A advances the single retained pre-intervention gate; Track C advances J-Space execution readiness; Track B records `HCU_NO_CHANGE_WITH_REASON` because concurrent current-main work already advanced HCU/J-Space routing and adding a second Entry/HCU primitive here would be duplicate work. Whole EntityOS/HCU, HCU-full, J-Space-model and training credit remain zero.

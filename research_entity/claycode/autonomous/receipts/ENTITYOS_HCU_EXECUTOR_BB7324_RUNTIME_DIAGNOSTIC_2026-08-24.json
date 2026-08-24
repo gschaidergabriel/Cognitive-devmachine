@@ -1,0 +1,83 @@
+{
+  "schema": "ENTITYOS_HCU_EXECUTOR_RUNTIME_DIAGNOSTIC_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "supervisor": "SUPERVISOR_STEERING_8_65",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "reentry": {
+    "canonical_main_observed_before_write": "9635e35312506063a695884c8a1a5a649bf76ba6",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_observed": "36f70c0a775ded531b0581d43a24815dee140304"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "EXACT_HEAD_FUNCTION_RUNTIME_DIAGNOSTIC_AND_NEGATIVE_EVIDENCE_PRESERVATION"
+  },
+  "exact_deployment": {
+    "deployment_id": "dpl_EN62ggtQnuEcjuvtJNathL3D9Tkf",
+    "deployment_state": "READY",
+    "deployment_git_sha": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "deployment_branch": "clay/fusion-vcr-native-20260817",
+    "runtime_log_observation": {
+      "method": "GET",
+      "path": "/api/hcu-runtime-admission-probe",
+      "http_status": 200,
+      "source": "VERCEL_SERVERLESS_RUNTIME_LOG",
+      "observed_at_utc": "2026-08-24T07:24:05Z"
+    }
+  },
+  "source_binding": {
+    "route_path": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "route_blob_sha": "2ef15017f78542a24206056c6666d56f8897dfd3",
+    "route_research_supervisor": "SUPERVISOR_STEERING_8_65",
+    "runtime_probe_status": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "runtime_probe_execution_credit": "FUNCTION_RUNTIME_DIAGNOSTIC_ONLY",
+    "runtime_probe_reports_sandbox_create_performed": false,
+    "runtime_probe_reports_credential_lookup_performed": false,
+    "runtime_probe_reports_external_source_network_performed": false,
+    "runtime_probe_reports_entityos_hcu_runtime_credit": false,
+    "runtime_probe_reports_jspace_model_runtime_credit": false,
+    "runtime_probe_reports_training_credit": 0,
+    "runtime_probe_reports_whole_product_pass": false
+  },
+  "free_only_gate": {
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_execution_admitted": false,
+    "sandbox_create_performed": false,
+    "quota_inferred_from_hobby_plan": false,
+    "paid_or_unknown_provider_action_performed": false,
+    "together_preflight_or_execution_performed": false
+  },
+  "material_finding": "The live retained executor head bb7324d2a21ffc143c241c652a31524c5be4c9d8 has an exact Git-SHA-matched READY Vercel deployment and an observed HTTP 200 serverless invocation of the supervisor-8.65 runtime-admission probe. The route is explicitly no-Sandbox and reports FUNCTION_RUNTIME_DIAGNOSTIC_ONLY, so this promotes only exact-head function-runtime diagnostic evidence. It does not observe remaining included Sandbox quota and does not promote Sandbox, HCU, local-model, J-Space/GWT, training, or whole-product runtime credit.",
+  "preceding_negative_evidence": {
+    "authority_marker_build_drift": "PRESERVED_HISTORICALLY",
+    "unproduced_inference_v4_pass_marker_drift": "REPAIRED_AT_CURRENT_EXECUTOR_HEAD",
+    "repair_commit": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "repair_semantics": "removed unproduced inference-v4 PASS marker requirements rather than fabricating PASS evidence"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact-current retained executor function boot is now observed at bb7324/dpl_EN62 with HTTP 200 after fail-closed guard/producer coherence repair.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: no Sandbox execution is admitted because directly authoritative remaining included Sandbox quota is still unobserved; no duplicate HCU source/guard path was added.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: the exact-current runtime observation is function boot only; real local-model/J-Space evidence still requires an admitted Sandbox environment path and no paid/provider preflight was performed."
+  },
+  "credits": {
+    "exact_head_function_runtime_diagnostic": "PASS_AT_DECLARED_NO_SANDBOX_SCOPE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain a directly authoritative read-only remaining included Vercel Sandbox quota signal without billing mutation, upgrade, plan inference, paid fallback, or provider credential preflight. Only if that FREE_ONLY gate opens may the exact-current fixed environment probe execute; after environment PASS, proceed to the real local-model -> ModelExecution -> inference -> Global J-Space/GWT causal path.",
+  "acceptance": "IN_PROGRESS"
+}

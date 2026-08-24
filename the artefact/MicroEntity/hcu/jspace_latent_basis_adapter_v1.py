@@ -219,6 +219,11 @@ def build_latent_basis_adapter(
     _need(n_layer >= 2 and isinstance(il_start, int) and isinstance(il_end, int), "LAYER_RANGE_INVALID")
     _need(1 <= il_start <= il_end < n_layer, "LAYER_RANGE_INVALID")
 
+    calibration_dataset_sha = _sha(calibration_dataset_sha256, "calibration_dataset_sha256")
+    calibration_split_sha = _sha(calibration_split_sha256, "calibration_split_sha256")
+    holdout_split_sha = _sha(holdout_split_sha256, "holdout_split_sha256")
+    _need(calibration_split_sha != holdout_split_sha, "CALIBRATION_HOLDOUT_SPLIT_ALIAS")
+
     axes = []
     seen = set()
     for index, item in enumerate(axis_directions):
@@ -245,9 +250,9 @@ def build_latent_basis_adapter(
         "n_layer": n_layer,
         "il_start": il_start,
         "il_end": il_end,
-        "calibration_dataset_sha256": _sha(calibration_dataset_sha256, "calibration_dataset_sha256"),
-        "calibration_split_sha256": _sha(calibration_split_sha256, "calibration_split_sha256"),
-        "holdout_split_sha256": _sha(holdout_split_sha256, "holdout_split_sha256"),
+        "calibration_dataset_sha256": calibration_dataset_sha,
+        "calibration_split_sha256": calibration_split_sha,
+        "holdout_split_sha256": holdout_split_sha,
         "axes": [
             {
                 "axis_id": axis.axis_id,
@@ -284,6 +289,9 @@ def build_latent_basis_adapter(
 def validate_latent_basis_adapter(adapter: LatentBasisAdapter) -> None:
     _need(isinstance(adapter, LatentBasisAdapter), "LATENT_BASIS_ADAPTER_REQUIRED")
     _need(adapter.schema == ADAPTER_SCHEMA, "LATENT_BASIS_ADAPTER_SCHEMA_UNSUPPORTED")
+    calibration_split_sha = _sha(adapter.calibration_split_sha256, "calibration_split_sha256")
+    holdout_split_sha = _sha(adapter.holdout_split_sha256, "holdout_split_sha256")
+    _need(calibration_split_sha != holdout_split_sha, "CALIBRATION_HOLDOUT_SPLIT_ALIAS")
     _need(1 <= len(adapter.axes) <= MAX_AXES, "AXIS_COUNT_OUT_OF_RANGE")
     seen = set()
     for axis in adapter.axes:

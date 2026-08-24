@@ -1,0 +1,87 @@
+{
+  "schema": "CLAY_GO_HCU_SOURCE_FUSION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor": "8.63",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_work": "9e4c21cb4834deab74d6374a70f31a18f1c08853",
+  "canonical_main_reentry_after_writes": "c136a2112d5043250e2c8ca7d1b0f5c3b14e5cf6",
+  "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+  "retained_donor_source_commits": [
+    "824ab601ab1a119124058f08ec1f8ef0e39e43dc",
+    "26722f6015d01d6a1b05e14fb20f16b4833ef6a1"
+  ],
+  "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "classification": "NO_SHARED_REPRODUCIBLE_MACROCYCLE_ID_OBSERVED",
+    "unusual_experiment": "NOT_ATTEMPTED_ORDINARY_DETERMINISTIC_SOURCE_FUSION",
+    "atomic_lease": "NOT_REQUIRED_FOR_ACTIONS_TAKEN",
+    "legacy_parallel_receipts_grouped_post_hoc": false
+  },
+  "observation": {
+    "current_dataset_admission_outcome_identity": "FULL_RFC8785_JCS_RECEIPT_SHA256",
+    "training_trace_hash_includes": "outcome_receipt_sha256",
+    "outcome_receipt_binding_requires": "training_trace_sha256",
+    "constructibility_defect": "FULL_RECEIPT_KEY_AND_TRAINING_TRACE_HASH_FORM_A_CYCLIC_DEPENDENCY_IF_NONUNKNOWN_OUTCOME_IS_CONSTRUCTED_FROM_REAL_PREIMAGES",
+    "existing_unit_fixture_risk": "PREFILLED_PLACEHOLDER_TRACE_HASHES_CAN_HIDE_THE_CONSTRUCTIBILITY_DEFECT"
+  },
+  "hypothesis": "A separate deterministic content key that excludes exactly the late-bound training_trace_sha256 back-reference makes the outcome/training identity graph constructible without weakening final causal admission.",
+  "counterhypothesis": "The existing full-receipt digest could remain constructible if a currently unobserved producer protocol derives both hashes without a cycle.",
+  "discriminator": "Construct provisional outcome content, derive one content key, bind that key into the TrainingTrace hash, then finalize the receipt with the resulting training_trace_sha256 and require the content key to remain stable while every causal/credit field remains bound.",
+  "writes": [
+    {
+      "commit": "824ab601ab1a119124058f08ec1f8ef0e39e43dc",
+      "path": "the artefact/MicroEntity/hcu/outcome_receipt_content_key_v1.py",
+      "delta": "Adds ENTITYOS_HCU_JSPACE_OUTCOME_RECEIPT_CONTENT_KEY/v1 as deterministic identity plumbing only; no second dataset/truth/state/effect authority."
+    },
+    {
+      "commit": "26722f6015d01d6a1b05e14fb20f16b4833ef6a1",
+      "path": "the artefact/MicroEntity/hcu/test_outcome_receipt_content_key_v1.py",
+      "delta": "Adds constructive DAG and fail-closed field-binding regression source."
+    }
+  ],
+  "development_evidence": {
+    "local_logic_regression": "7_OF_7_PASS",
+    "local_scope": "DETERMINISTIC_HELPER_LOGIC_ONLY",
+    "exact_repo_canonicalizer_runtime": "NOT_EXECUTED_ON_ADMITTED_FREE_SANDBOX_IN_THIS_MACROCYCLE",
+    "runtime_credit_added": 0
+  },
+  "parallel_reentry": {
+    "our_test_commit_is_ancestor_of_observed_donor_head": true,
+    "observed_donor_head_after_parallel_movement": "9101bb9236f0f389ac1fe55dc54c013be8218c5d",
+    "commits_ahead_of_our_test_commit_at_observation": 6,
+    "canonical_gate_currently_uses_content_key": false,
+    "handling": "PRESERVE_HELPER_AS_DONOR_PRIMITIVE_AND_DO_NOT_CREATE_A_SECOND_ADMISSION_PATH"
+  },
+  "track_a": {
+    "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+    "delta": "The single retained donor now contains an explicit constructible outcome-identity primitive instead of leaving the causal training closure dependent on a cyclic full-receipt key. Canonical gate fusion remains pending and runtime credit remains zero."
+  },
+  "track_b": {
+    "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "delta": "Added fail-closed deterministic provenance identity plumbing reusable by the HCU dataset path; it preserves the single canonical admission authority."
+  },
+  "track_c": {
+    "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+    "delta": "Removed one source-level constructibility blocker for outcome-labelled J-Space training traces. Final gate integration and exact FREE execution remain required before serious training readiness promotion."
+  },
+  "runtime_reentry": {
+    "latest_canonical_main_runtime_gate": "EXACT_HEAD_READY_DEPLOYMENT_OBSERVED_FOR_A_PRIOR_EXECUTOR_HEAD_BUT_AUTH_BLOCKED_HTTP_302_VERCEL_SSO_BEFORE_FUNCTION_OBSERVATION",
+    "live_executor_head_observed_after_that_gate": "588315b63f4f4255f6e73bd604cbc1789cbe12c9",
+    "prior_ready_deployment_projectable_to_live_executor_head": false,
+    "sandbox_execution_observed": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse outcome_receipt_content_key_v1 into the existing jspace_dataset_admission_gate_v1 and its existing compiler/tests so the single canonical path uses the acyclic key while still verifying the finalized receipt training_trace_sha256 plus causal fields; then execute the exact source regression only on an admitted fixed FREE sandbox surface."
+}

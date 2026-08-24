@@ -4,7 +4,7 @@ import hashlib
 from dataclasses import dataclass
 from typing import Any, Mapping
 
-from entry_canonicalization_v1 import CanonicalizationError, canonicalize
+from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
 
 try:
     from .jspace_vector_control_v1 import (
@@ -113,13 +113,36 @@ def _verify_prototype_trace_identity(trace: Any, claimed_sha256: str) -> None:
     """Bind the prototype registry content key to the exact canonical prototype bytes.
 
     A registry lookup by a string named ``prototype_trace_sha256`` is not cryptographic
-    provenance unless the key is re-derived from the admitted trace preimage.  This check is
+    provenance unless the key is re-derived from the admitted trace preimage. This check is
     deliberately local to the existing dataset-admission authority; it creates no second
     trace store or serializer authority.
     """
     observed = _canonical_mapping_sha256(trace, "admitted_prototype_trace")
     if observed != claimed_sha256:
         raise JSpaceDatasetAdmissionError("PROTOTYPE_TRACE_IDENTITY_MISMATCH")
+
+
+def _canonical_transition_sha256(trace: Any) -> str:
+    """Recreate the transition producer's exact RFC8785/JCS trace material identity.
+
+    ``JSpaceGWTTransitionTrace.trace_sha256`` is defined over ``trace_material(trace)``:
+    the trace digest itself is excluded and the selected HCU canonicalization schema is
+    inserted. DatasetAdmission receives plain mappings rather than the producer dataclass,
+    so it must reproduce that same material rule before treating a registry key as causal
+    provenance.
+    """
+    material = dict(_mapping(trace, "admitted_transition_trace"))
+    material.pop("trace_sha256", None)
+    declared_schema = material.get("canonicalization_schema")
+    if declared_schema is not None and declared_schema != CANONICALIZATION_SCHEMA:
+        raise JSpaceDatasetAdmissionError("TRANSITION_TRACE_CANONICALIZATION_SCHEMA_MISMATCH")
+    material["canonicalization_schema"] = CANONICALIZATION_SCHEMA
+    return _canonical_mapping_sha256(material, "admitted_transition_trace.material")
+
+
+def _verify_transition_trace_identity(trace: Any, claimed_sha256: str) -> None:
+    if _canonical_transition_sha256(trace) != claimed_sha256:
+        raise JSpaceDatasetAdmissionError("TRANSITION_TRACE_IDENTITY_MISMATCH")
 
 
 def _canonical_receipt_sha256(receipt: Any) -> str:
@@ -278,11 +301,13 @@ def admit_for_training_dataset(
 
     This gate does not mint truth. It proves that admitted training, live-transition,
     prototype and GRID10 evidence refer to the same generation/cell/role/basis, exact Vector
-    Control packet/control condition, and Entry->Route->GRID10 identities. The shared Vector
-    Control digest must additionally resolve through a caller-owned registry to an exact
-    canonical packet preimage that passes the sole ``JSPACE_VECTOR_CONTROL_ABI/v1`` validator.
-    A raw standalone prototype, self-consistent row, digest-only vector label, or shared but
-    unadmitted GRID hash is insufficient.
+    Control packet/control condition, and Entry->Route->GRID10 identities. The transition
+    and prototype ancestry keys must additionally resolve to the exact RFC8785/JCS content
+    identities they claim. The shared Vector Control digest must resolve through a caller-owned
+    registry to an exact canonical packet preimage that passes the sole
+    ``JSPACE_VECTOR_CONTROL_ABI/v1`` validator. A raw standalone prototype, self-consistent
+    row, digest-only vector label, shared but unadmitted GRID hash, or content-false registry
+    alias is insufficient.
     """
     training_trace = _mapping(training_trace, "training_trace")
     transition_trace = _mapping(transition_trace, "transition_trace")
@@ -298,6 +323,7 @@ def admit_for_training_dataset(
 
     _registry_exact(admitted_training_traces, training_sha, training_trace, "admitted_training_traces")
     _registry_exact(admitted_transition_traces, transition_sha, transition_trace, "admitted_transition_traces")
+    _verify_transition_trace_identity(transition_trace, transition_sha)
     prototype_trace = _mapping(admitted_prototype_traces, "admitted_prototype_traces").get(prototype_sha)
     if not isinstance(prototype_trace, Mapping):
         raise JSpaceDatasetAdmissionError("admitted_prototype_traces:TRACE_NOT_ADMITTED")

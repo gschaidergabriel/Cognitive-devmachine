@@ -2,10 +2,11 @@
 """Supervisor-8.71/8.72 safe entrypoint for the FREE Evidence Forge.
 
 Installs deterministic model-command execution admission before the base Forge
-cycle can evaluate a worker-authored candidate. The execution manifest is bound to
-the same exact ``repo_head_at_prompt`` source identity now enforced by the canonical
-Forge (#1544), never to a moving evaluation checkout. Candidate output remains
-noncanonical and no execution is admitted without the isolated backend.
+cycle can evaluate a worker-authored candidate. The execution manifest binds both
+the exact ``repo_head_at_prompt`` worker source and the observed evaluation checkout;
+post-admission evaluation-head drift is downgraded instead of receiving evidence
+credit. Candidate output remains noncanonical and no execution is admitted without
+the isolated backend.
 
 Model-authored commands may write only inside the disposable Forge worktree. The
 rest of the host remains hidden by bubblewrap; this narrow writable bind is required
@@ -76,15 +77,14 @@ base.run_cmd = _run_cmd_disposable_only
 
 def _source_bound_manifest(row: Any, proposal: dict[str, Any], cwd: Path) -> dict[str, Any]:
     manifest = _ORIGINAL_MANIFEST(row, proposal, cwd)
-    evaluation_head = manifest.get("source_head")
-    evaluation_tree = manifest.get("source_tree")
+    evaluation_head = str(manifest.get("evaluation_head") or "").strip().lower()
     try:
         source_head = str(row["repo_head"] or "").strip().lower()
     except Exception:
         source_head = ""
 
-    manifest["evaluation_checkout_head"] = evaluation_head
-    manifest["evaluation_checkout_tree"] = evaluation_tree
+    manifest["evaluation_checkout_head"] = evaluation_head or None
+    manifest["evaluation_checkout_tree"] = None
     manifest["source_scope"] = "EXACT_WORKER_PROMPT_HEAD"
     manifest["source_head"] = source_head or None
     manifest["source_tree"] = None
@@ -95,6 +95,10 @@ def _source_bound_manifest(row: Any, proposal: dict[str, Any], cwd: Path) -> dic
 
     if not base.COMMIT_RE.fullmatch(source_head):
         return manifest
+    if not base.COMMIT_RE.fullmatch(evaluation_head):
+        manifest["source_identity_reason"] = "VALID_EVALUATION_HEAD_REQUIRED"
+        return manifest
+
     rc, _, err = base._git_text(base.ROOT, "cat-file", "-e", source_head + "^{commit}")
     if rc != 0:
         manifest["source_identity_reason"] = "SOURCE_COMMIT_NOT_PRESENT:" + err[-500:]
@@ -103,10 +107,15 @@ def _source_bound_manifest(row: Any, proposal: dict[str, Any], cwd: Path) -> dic
     if rc != 0 or not tree:
         manifest["source_identity_reason"] = "SOURCE_TREE_UNRESOLVED:" + err[-500:]
         return manifest
+    rc, evaluation_tree, err = base._git_text(base.ROOT, "rev-parse", evaluation_head + "^{tree}")
+    if rc != 0 or not evaluation_tree:
+        manifest["source_identity_reason"] = "EVALUATION_TREE_UNRESOLVED:" + err[-500:]
+        return manifest
 
     manifest["source_tree"] = tree
+    manifest["evaluation_checkout_tree"] = evaluation_tree
     manifest["source_identity_admitted"] = True
-    manifest["source_identity_reason"] = "EXACT_WORKER_SOURCE_BOUND"
+    manifest["source_identity_reason"] = "EXACT_WORKER_AND_EVALUATION_SOURCE_BOUND"
     return manifest
 
 
@@ -140,6 +149,7 @@ def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
         "role": row["role"],
         "worker_sha": row["worker_sha"],
         "source_repo_head": manifest.get("source_head"),
+        "evaluation_repo_head": manifest.get("evaluation_checkout_head"),
         "source_scope": "EXACT_WORKER_PROMPT_HEAD",
         "evaluated_at": base.now(),
         "execution_admission": manifest,
@@ -160,7 +170,16 @@ def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
     # Canonical Forge checks out exactly row.repo_head before patch/application
     # validation. Its run_cmd/safe_command globals are narrowed to the isolated,
     # no-shell admission implementation with a writable disposable worktree only.
+    # If the base validator observes a different evaluation checkout after admission,
+    # preserve the measurement but fail closed for evidence-qualified ACCEPT credit.
     result = _ORIGINAL_VALIDATE(con, row)
+    if result.get("evaluation_repo_head") != manifest.get("evaluation_checkout_head"):
+        return {
+            **result,
+            "status": "evaluation_identity_drift",
+            "reason": "EVALUATION_HEAD_CHANGED_AFTER_EXECUTION_ADMISSION",
+            "execution_admission": manifest,
+        }
     result["execution_admission"] = manifest
     return result
 

@@ -12,6 +12,33 @@ def load():
     assert spec and spec.loader
     m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m); return m
 
+
+def holdout_rows(m, *, include_wrong=True, include_lesion=True, counterbalanced=True, nuisance_sign=1.0):
+    scores={
+        'BASELINE':0.0,
+        '+VECTOR':3.0,
+        'SIGN_FLIP':-3.0,
+        'NULL_VECTOR':0.0,
+        'ORTHOGONAL_SAME_NORM':0.1*nuisance_sign,
+        'PERMUTED_SAME_NORM':0.2*nuisance_sign,
+    }
+    mappings=[('A_POS','A','B'),('B_POS','B','A' if counterbalanced else 'C')]
+    rows=[]
+    for label_map,pos,neg in mappings:
+        for case in ['h1','h2']:
+            for control in m.REQUIRED_CONTROLS:
+                row={
+                    'split':'holdout','layer':8,'gain':2.0,'case_id':case,
+                    'label_map_id':label_map,'positive_label':pos,'negative_label':neg,
+                    'control':control,'target_score':scores[control],
+                }
+                if include_wrong: row['wrong_layer_delta']=-0.1
+                if include_lesion:
+                    row['lesion_delta']=-0.2; row['rescue_delta']=0.5
+                rows.append(row)
+    return rows
+
+
 class ProtocolTests(unittest.TestCase):
     def setUp(self): self.m=load()
 
@@ -34,27 +61,42 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual((0.0,4.0,0.0),les)
         self.assertEqual((2.0,4.0,0.0),res)
 
-    def test_calibration_selection_and_holdout_label_remap(self):
-        controls=self.m.REQUIRED_CONTROLS
-        cal=[]
+    def test_calibration_selection_and_strict_holdout(self):
         scores={'BASELINE':0.0,'+VECTOR':3.0,'SIGN_FLIP':-3.0,'NULL_VECTOR':0.0,'ORTHOGONAL_SAME_NORM':0.1,'PERMUTED_SAME_NORM':0.2}
+        cal=[]
         for case in ['c1','c2']:
-            for control in controls:
+            for control in self.m.REQUIRED_CONTROLS:
                 cal.append({'split':'calibration','layer':8,'gain':2.0,'case_id':case,'control':control,'target_score':scores[control]})
         selected=self.m.select_layer_gain(cal)
         self.assertTrue(selected['selected']); self.assertEqual(8,selected['layer'])
-        hold=[]
-        for label_map in ['A_POS','B_POS']:
-            for case in ['h1','h2']:
-                for control in controls:
-                    hold.append({'split':'holdout','layer':8,'gain':2.0,'case_id':case,'label_map_id':label_map,'control':control,'target_score':scores[control],'wrong_layer_delta':-0.1,'lesion_delta':-0.2,'rescue_delta':0.5})
-        out=self.m.adjudicate_holdout(hold,selected_layer=8,selected_gain=2.0)
-        self.assertTrue(out['pass']); self.assertEqual(2,out['label_map_count'])
+        out=self.m.adjudicate_holdout(holdout_rows(self.m),selected_layer=8,selected_gain=2.0)
+        self.assertTrue(out['pass']); self.assertTrue(out['counterbalanced_label_mapping'])
+        self.assertTrue(out['wrong_layer_evidence_complete']); self.assertTrue(out['lesion_rescue_evidence_complete'])
 
     def test_holdout_requires_label_remap(self):
-        scores={'BASELINE':0.0,'+VECTOR':2.0,'SIGN_FLIP':-2.0,'NULL_VECTOR':0.0,'ORTHOGONAL_SAME_NORM':0.0,'PERMUTED_SAME_NORM':0.0}
-        rows=[{'split':'holdout','layer':4,'gain':1.0,'case_id':'h1','label_map_id':'one','control':c,'target_score':scores[c]} for c in self.m.REQUIRED_CONTROLS]
-        out=self.m.adjudicate_holdout(rows,selected_layer=4,selected_gain=1.0)
+        rows=holdout_rows(self.m)
+        for row in rows: row['label_map_id']='one'
+        out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
         self.assertFalse(out['pass']); self.assertEqual('LABEL_REMAP_HOLDOUT_REQUIRED',out['classification'])
+
+    def test_holdout_requires_actual_counterbalanced_mapping(self):
+        out=self.m.adjudicate_holdout(holdout_rows(self.m,counterbalanced=False),selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass']); self.assertEqual('COUNTERBALANCED_LABEL_MAPPING_REQUIRED',out['classification'])
+
+    def test_holdout_requires_wrong_layer_evidence_for_every_case(self):
+        out=self.m.adjudicate_holdout(holdout_rows(self.m,include_wrong=False),selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass']); self.assertEqual('WRONG_LAYER_EVIDENCE_REQUIRED',out['classification'])
+
+    def test_holdout_requires_lesion_rescue_evidence_for_every_case(self):
+        out=self.m.adjudicate_holdout(holdout_rows(self.m,include_lesion=False),selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass']); self.assertEqual('LESION_RESCUE_EVIDENCE_REQUIRED',out['classification'])
+
+    def test_negative_same_norm_nuisance_is_penalized_by_magnitude(self):
+        rows=holdout_rows(self.m,nuisance_sign=-1.0)
+        for row in rows:
+            if row['control']=='ORTHOGONAL_SAME_NORM': row['target_score']=-4.0
+        out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass'])
+        self.assertLessEqual(out['worst_directional_specificity_margin'],0)
 
 if __name__=='__main__': unittest.main()

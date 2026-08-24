@@ -20,10 +20,17 @@ import json
 import os
 from pathlib import Path
 import statistics
+import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from typing import Any
+
+TOOLS = Path(__file__).resolve().parents[1] / "tools"
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+from forge_evidence_credit_871 import evidence_reason, nominal_accept  # noqa: E402
 
 AUTO_BEGIN = "<!-- FREE_SWARM_AUTO:BEGIN -->"
 AUTO_END = "<!-- FREE_SWARM_AUTO:END -->"
@@ -127,17 +134,9 @@ def worker_metrics(artifact_root: Path) -> dict[str, Any]:
 
 
 def accepted_delta(row: dict[str, Any]) -> bool:
-    if row.get("record_type") == "schema_marker":
-        return False
-    if str(row.get("status", "")).lower() not in {"accepted", "pass", "integrated", "verified"}:
-        return False
-    try:
-        improvement = float(row.get("relative_improvement_pct"))
-        runs = int(row.get("reproducible_runs", 0))
-        tf = int(row.get("tests_failed", 0)) + int(row.get("negative_tests_failed", 0)) + int(row.get("static_checks_failed", 0))
-    except Exception:
-        return False
-    return improvement > 0 and runs >= 2 and tf == 0 and bool(row.get("benchmark_non_regression", False)) and not bool(row.get("reverted", False))
+    """Current evidence-qualified Forge acceptance; historical nominal rows stay separate."""
+    ok, _ = evidence_reason(row)
+    return ok
 
 
 def code_quality(row: dict[str, Any]) -> float | None:
@@ -157,7 +156,9 @@ def code_quality(row: dict[str, Any]) -> float | None:
 
 def delta_metrics(ledger: Path) -> dict[str, Any]:
     rows = list(iter_jsonl([ledger])) if ledger.exists() else []
-    accepted = [r for r in rows if accepted_delta(r)]
+    nominal = [r for r in rows if nominal_accept(r)]
+    accepted = [r for r in nominal if accepted_delta(r)]
+    qualification_reasons = collections.Counter(evidence_reason(r)[1] for r in nominal)
     by_model: dict[tuple[str, str], list[dict[str, Any]]] = collections.defaultdict(list)
     by_class: dict[str, list[dict[str, Any]]] = collections.defaultdict(list)
     for r in accepted:
@@ -178,7 +179,17 @@ def delta_metrics(ledger: Path) -> dict[str, Any]:
         cqs=[x for x in (code_quality(r) for r in rs) if x is not None]
         imps=[float(r["relative_improvement_pct"]) for r in rs]
         class_scores[cls]={"accepted_deltas":len(rs),"code_quality":statistics.fmean(cqs) if cqs else None,"mean_improvement_pct":statistics.fmean(imps) if imps else None}
-    return {"records":len(rows),"accepted":len(accepted),"model_scores":model_scores,"best_model":best[0] if best else None,"innovation_leader":innovative[0] if innovative else None,"source_classes":class_scores}
+    return {
+        "records":len(rows),
+        "accepted":len(accepted),
+        "nominal_accepted":len(nominal),
+        "legacy_or_unqualified_accepted":len(nominal)-len(accepted),
+        "qualification_reasons":dict(sorted(qualification_reasons.items())),
+        "model_scores":model_scores,
+        "best_model":best[0] if best else None,
+        "innovation_leader":innovative[0] if innovative else None,
+        "source_classes":class_scores,
+    }
 
 
 def corpus_proxy(repo: Path) -> dict[str, Any]:
@@ -212,7 +223,7 @@ def auto_markdown(metrics: dict[str, Any]) -> str:
     w=metrics["workers"]; d=metrics["deltas"]; c=metrics["corpus"]
     best=d.get("best_model"); innov=d.get("innovation_leader")
     lines=[AUTO_BEGIN,"## AUTO — Live-Auswertung",f"Aktualisiert: `{metrics['generated_at']}`",""]
-    lines += ["| Kennzahl | Wert |","|---|---:|",f"| Worker-Records | {w['worker_records']} |",f"| Ø gleichzeitig laufende Free-Worker | {w['average_concurrency']:.3f} |",f"| Peak Free-Worker | {w['peak_concurrency']} |",f"| Free-Swarm Input-Tokens | {w['input_tokens']} |",f"| Free-Swarm Output-Tokens | {w['output_tokens']} |",f"| Free-Swarm Total-Tokens | {w['total_tokens']} |",f"| Usage-exakte Worker-Records | {w['exact_usage_rows']} |",f"| Evident akzeptierte Architektur-Deltas | {d['accepted']} |",f"| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | {c['approx_tokens_4chars']} |",f"| Sonnet-5 Output-only Äquivalent des Repo-Proxys | ${c['output_only_equivalent_usd']:.2f} |",""]
+    lines += ["| Kennzahl | Wert |","|---|---:|",f"| Worker-Records | {w['worker_records']} |",f"| Ø gleichzeitig laufende Free-Worker | {w['average_concurrency']:.3f} |",f"| Peak Free-Worker | {w['peak_concurrency']} |",f"| Free-Swarm Input-Tokens | {w['input_tokens']} |",f"| Free-Swarm Output-Tokens | {w['output_tokens']} |",f"| Free-Swarm Total-Tokens | {w['total_tokens']} |",f"| Usage-exakte Worker-Records | {w['exact_usage_rows']} |",f"| Evident akzeptierte Architektur-Deltas | {d['accepted']} |",f"| Nominal/historisch akzeptierte Architektur-Deltas | {d['nominal_accepted']} |",f"| Legacy/unqualifizierte nominale Accepts | {d['legacy_or_unqualified_accepted']} |",f"| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | {c['approx_tokens_4chars']} |",f"| Sonnet-5 Output-only Äquivalent des Repo-Proxys | ${c['output_only_equivalent_usd']:.2f} |",""]
     lines += ["### Modelle","| Provider | Modell | Requests | Success | 429 | Input | Output | Total |","|---|---|---:|---:|---:|---:|---:|---:|"]
     if w["models"]:
         for m in w["models"]:
@@ -285,7 +296,7 @@ def main() -> int:
     p=argparse.ArgumentParser(); p.add_argument("--repo",default="/workspace"); p.add_argument("--artifacts",default="/artifacts/clay-entityos-swarm"); p.add_argument("--watch",action="store_true"); p.add_argument("--interval-seconds",type=int,default=60); p.add_argument("--hours",type=float,default=24); p.add_argument("--publish",action="store_true"); p.add_argument("--publish-min-seconds",type=int,default=900); p.add_argument("--github-repo",default="gschaidergabriel/clay-global-research-entity"); p.add_argument("--branch",default="main"); args=p.parse_args()
     deadline=time.monotonic()+args.hours*3600
     while True:
-        m=evaluate(args); print(json.dumps({"generated_at":m["generated_at"],"workers":m["workers"]["worker_records"],"output_tokens":m["workers"]["output_tokens"],"accepted_deltas":m["deltas"]["accepted"]}),flush=True)
+        m=evaluate(args); print(json.dumps({"generated_at":m["generated_at"],"workers":m["workers"]["worker_records"],"output_tokens":m["workers"]["output_tokens"],"accepted_deltas":m["deltas"]["accepted"],"nominal_accepted_deltas":m["deltas"]["nominal_accepted"]}),flush=True)
         if not args.watch or time.monotonic()>=deadline: return 0
         time.sleep(max(5,args.interval_seconds))
 

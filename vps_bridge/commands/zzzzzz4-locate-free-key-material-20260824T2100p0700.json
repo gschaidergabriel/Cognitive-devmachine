@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"zzzzzz4-locate-free-key-material-20260824T2100p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -e; echo PRIVATE_FILES; find research_entity/private vault secrets -type f 2>/dev/null | sort | head -200 || true; echo KEY_NAME_HITS; for n in GROQ2_API_KEY GROQ3_API_KEY MISTRAL_API_KEY MISTRAL2_API_KEY MISTRAL3_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY OPENROUTER2_API_KEY GEMINI_API_KEY GEMINI2_API_KEY CLOUDFLARE_API_KEY DEEPSEEK_API_KEY HF_TOKEN GLM_API_KEY NEUROPEDIA_API_KEY; do hits=$(grep -RIl --exclude-dir=.git --exclude='*.md' --exclude='*.jsonl' -- \"$n=\" . 2>/dev/null | head -20 | paste -sd, -); echo \"$n:${hits:-NONE}\"; done"
+}

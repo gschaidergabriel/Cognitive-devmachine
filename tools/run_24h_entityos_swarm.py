@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """EntityOS/HCU driver for the existing FREE_ONLY adaptive go swarm.
 
-The underlying controller (`run_free_go_swarm.py`) owns credential collection,
-AIMD concurrency, provider-wide 429 cooldown, 402 hard-stop behavior and receipt
-logging. This driver adds live model-catalog discovery and current EntityOS/HCU
-research roles, then runs for 24 hours by default inside the VPS sandbox.
+The underlying controller owns credential collection, AIMD concurrency,
+provider-wide 429 cooldown, 402 hard-stop behavior and receipt logging. This
+driver adds live model discovery, EntityOS/HCU roles, and provider-specific
+request budgets derived from measured runtime limits.
 """
 from __future__ import annotations
 
@@ -14,7 +14,6 @@ import json
 import os
 from pathlib import Path
 import re
-import sys
 import urllib.error
 import urllib.request
 
@@ -51,6 +50,24 @@ UNKNOWN_HIGH_VALUE = (
     "devstral", "nemotron", "deepseek", "reasoning", "instruct", "coder",
 )
 
+# Runtime evidence on 2026-08-24 showed Groq Free has an 8K TPM ceiling for
+# the selected GPT-OSS/Qwen models. The generic 1800-token completion request
+# pushed total requested tokens to ~8.2K. Cap completion budget so requests are
+# admitted instead of wasting calls on HTTP 413. Other providers keep the
+# larger research budget unless their runtime evidence says otherwise.
+_ORIGINAL_REQUEST_CHAT = base.request_chat
+
+def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout):
+    if spec.name == "groq":
+        max_tokens = min(int(max_tokens), int(os.getenv("CLAY_GROQ_MAX_TOKENS", "1000")))
+    elif spec.name == "mistral":
+        max_tokens = min(int(max_tokens), int(os.getenv("CLAY_MISTRAL_MAX_TOKENS", "1600")))
+    elif spec.name == "nvidia":
+        max_tokens = min(int(max_tokens), int(os.getenv("CLAY_NVIDIA_MAX_TOKENS", "1800")))
+    return _ORIGINAL_REQUEST_CHAT(spec, key, model, prompt, max_tokens, timeout)
+
+base.request_chat = provider_bounded_request_chat
+
 
 def fetch_catalog(url: str, key: str, timeout: float) -> list[dict]:
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
@@ -66,10 +83,8 @@ def fetch_catalog(url: str, key: str, timeout: float) -> list[dict]:
 def explicit_billions(model_id: str) -> float | None:
     vals: list[float] = []
     for raw in re.findall(r"(?i)(\d+(?:\.\d+)?)\s*b(?:\b|[-_])", model_id):
-        try:
-            vals.append(float(raw))
-        except ValueError:
-            pass
+        try: vals.append(float(raw))
+        except ValueError: pass
     return max(vals) if vals else None
 
 
@@ -84,17 +99,15 @@ def choose_models(provider: str, rows: list[dict]) -> list[str]:
         if isinstance(capabilities, dict) and capabilities.get("completion_chat") is False:
             continue
         b = explicit_billions(model_id)
-        # Parameter count is only one signal. Explicit models below 12B are skipped;
-        # unknown-size flagship/reasoning/coding families are kept for empirical use.
         if b is not None and b < 12.0:
             continue
         if b is None and not any(x in low for x in UNKNOWN_HIGH_VALUE):
             continue
         score = b or 0.0
-        if any(x in low for x in ("ultra", "large", "reasoning", "deepseek", "120b", "405b", "550b")):
-            score += 120.0
-        if any(x in low for x in ("nemotron", "magistral", "devstral", "codestral", "coder", "instruct")):
-            score += 60.0
+        if any(x in low for x in ("ultra", "large", "reasoning", "deepseek", "120b", "405b", "550b")): score += 120.0
+        if any(x in low for x in ("nemotron", "magistral", "devstral", "codestral", "coder", "instruct")): score += 60.0
+        # Prefer model IDs already proven callable in this sandbox/account.
+        if model_id == "nvidia/llama-3.3-nemotron-super-49b-v1": score += 500.0
         ranked.append((score, model_id))
     ranked.sort(key=lambda x: (-x[0], x[1]))
     return base.unique([mid for _, mid in ranked])
@@ -123,18 +136,11 @@ def discover_and_export(timeout: float) -> dict[str, dict]:
 
 async def main(args: argparse.Namespace) -> int:
     report = discover_and_export(args.timeout)
-    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v1", "providers": report}, ensure_ascii=False))
+    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v2", "providers": report}, ensure_ascii=False), flush=True)
     if args.inventory_only:
         return 0
     out = args.output_dir or f"/artifacts/clay-entityos-swarm/{__import__('datetime').datetime.now(__import__('datetime').timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
-    base_args = argparse.Namespace(
-        hours=args.hours,
-        max_tokens=args.max_tokens,
-        context_chars=args.context_chars,
-        timeout=args.timeout,
-        drain_seconds=args.drain_seconds,
-        output_dir=out,
-    )
+    base_args = argparse.Namespace(hours=args.hours, max_tokens=args.max_tokens, context_chars=args.context_chars, timeout=args.timeout, drain_seconds=args.drain_seconds, output_dir=out)
     return await base.run(base_args)
 
 

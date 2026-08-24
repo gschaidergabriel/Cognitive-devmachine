@@ -363,8 +363,15 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
         self.assertNotIn("load_all_secret_sources", text)
         self.assertIn("typed_admission_compat_flags\nload_admitted_secret_sources", text)
         self.assertIn("provider_admitted groq", text)
-        self.assertIn("run_research_distillery_entry.py", text)
-        self.assertIn("EXPIRED_WITHOUT_CANONICALLY_FREE_ADMITTED_PROVIDER", text)
+        self.assertIn("run_research_distillery_", text)
+        self.assertIn("start_local_model", text)
+        self.assertIn("start_forge", text)
+        self.assertIn("stop_unadmitted_go_swarm", text)
+        self.assertIn("start_go_swarm_if_admitted", text)
+        self.assertIn("EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED", text)
+        self.assertIn("LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE", text)
+        self.assertNotIn("EXPIRED_WITHOUT_CANONICALLY_FREE_ADMITTED_PROVIDER", text)
+        self.assertIn('"state":"EXPIRED"', text)
 
 
 if __name__ == "__main__":

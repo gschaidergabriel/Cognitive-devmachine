@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"inspect-worker-samples-20260824T1806p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"python3 - <<'PY'\nimport json,glob,collections,os\nrows=[]\nfor f in sorted(glob.glob('/artifacts/clay-entityos-swarm/**/workers.jsonl',recursive=True)):\n  for line in open(f,encoding='utf-8',errors='replace'):\n    try:r=json.loads(line)\n    except:continue\n    if isinstance(r.get('http_status'),int) and 200<=r['http_status']<300 and r.get('text'):\n      rows.append(r)\nprint('SUCCESS_ROWS',len(rows))\n# stratified: newest unique model+role, capped 12\nseen=set(); out=[]\nfor r in reversed(rows):\n  k=(r.get('model'),r.get('role'))\n  if k in seen: continue\n  seen.add(k); out.append(r)\n  if len(out)>=12: break\nfor i,r in enumerate(out,1):\n  text=r.get('text','')\n  print('\\n### SAMPLE',i)\n  print('provider=',r.get('provider'),'model=',r.get('model'),'role=',r.get('role'),'tokens=',r.get('usage'))\n  print('has_questions_json=', 'OPEN_RESEARCH_QUESTIONS_JSON' in text, 'chars=',len(text))\n  print(text[:1800].replace('\\x00',' '))\nprint('\\nROLE_COUNTS')\nprint(json.dumps(collections.Counter(r.get('role') for r in rows),indent=2))\nprint('MODEL_SUCCESS_COUNTS')\nprint(json.dumps(collections.Counter(r.get('model') for r in rows).most_common(30),indent=2))\nPY"
+}

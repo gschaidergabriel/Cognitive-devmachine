@@ -134,6 +134,14 @@ class FamilyIdentityCardinalityTests(unittest.TestCase):
         self.assertFalse(out["pass"])
         self.assertEqual("INCOMPLETE_MATCHED_CONTROL_FAMILY", out["classification"])
 
+    def test_partial_lesion_rescue_pair_fails_closed(self) -> None:
+        rows = holdout()
+        plus = next(r for r in rows if r["label_map_id"] == "MAP_AB" and r["control"] == "+VECTOR")
+        plus.pop("rescue_delta")
+        out = protocol.adjudicate_holdout(rows, selected_layer=12, selected_gain=4.0)
+        self.assertFalse(out["pass"])
+        self.assertEqual("LESION_RESCUE_PAIR_REQUIRED", out["classification"])
+
     def test_auxiliary_evidence_on_baseline_does_not_satisfy_plus_vector_gate(self) -> None:
         rows = holdout()
         for map_id in ("MAP_AB", "MAP_BA"):
@@ -146,7 +154,7 @@ class FamilyIdentityCardinalityTests(unittest.TestCase):
                 base[field] = plus.pop(field)
         out = protocol.adjudicate_holdout(rows, selected_layer=12, selected_gain=4.0)
         self.assertFalse(out["pass"])
-        self.assertEqual("WRONG_LAYER_EVIDENCE_REQUIRED", out["classification"])
+        self.assertEqual("AUXILIARY_CAUSAL_EVIDENCE_MUST_BIND_PLUS_VECTOR_ROW", out["classification"])
 
 
 if __name__ == "__main__":

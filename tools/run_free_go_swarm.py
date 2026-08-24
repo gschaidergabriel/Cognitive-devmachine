@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""24h FREE_ONLY Mini Entity `go` swarm controller.
+"""24h FREE_ONLY EntityOS/HCU `go` swarm controller.
 
-Pure stdlib, OpenAI-compatible HTTP endpoints. It consumes only API keys provided
-through environment variables and requires an explicit FREE_ONLY attestation.
-It never upgrades billing, never retries HTTP 402, and treats HTTP 429 as a
-provider-wide cooldown rather than rotating keys to evade a rate limit.
+Pure stdlib, OpenAI-compatible HTTP endpoints. Provider credentials and provider
+network I/O are reachable only after an exact typed provider admission from the
+canonical supervisor control surface resolves cost_class=FREE at the current
+authority epoch. PAID, SUBSCRIPTION, UNKNOWN, missing, malformed and stale
+admissions fail closed before provider-key lookup and before provider network
+I/O. HTTP 402 is a hard stop and 429 is provider-wide cooldown, never a key-
+rotation bypass.
 """
 from __future__ import annotations
 
@@ -25,6 +28,8 @@ import time
 from typing import Any
 import urllib.error
 import urllib.request
+
+from free_swarm_admission_gate import load_policy, resolve_provider_admission
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTOCOL_PATH = ROOT / "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
@@ -86,7 +91,7 @@ PROVIDERS = (
     ProviderSpec(
         name="nvidia",
         endpoint="https://integrate.api.nvidia.com/v1/chat/completions",
-        key_envs=("NVIDIA_API_KEY", "NGC_API_KEY"),
+        key_envs=("NVIDIA_API_KEY", "NGC_API_KEY", "NVIDIA_NIM_API_KEY"),
         keys_list_env="NVIDIA_API_KEYS",
         models_env="NVIDIA_SWARM_MODELS",
         default_models=(
@@ -121,6 +126,10 @@ def unique(values: list[str]) -> list[str]:
 
 
 def collect_keys(spec: ProviderSpec) -> list[str]:
+    """Read provider secrets only after current typed FREE admission succeeds."""
+    decision = resolve_provider_admission(spec.name, SUPERVISOR_PATH)
+    if not decision.allowed:
+        return []
     keys = split_values(os.getenv(spec.keys_list_env))
     for name in spec.key_envs:
         if os.getenv(name):
@@ -194,6 +203,18 @@ def parse_retry_after(headers: dict[str, str], fallback: float) -> float:
 
 def request_chat(spec: ProviderSpec, key: str, model: str, prompt: str,
                  max_tokens: int, timeout: float) -> tuple[int, dict[str, str], dict[str, Any] | str]:
+    """Re-check typed FREE admission immediately before provider network I/O."""
+    decision = resolve_provider_admission(spec.name, SUPERVISOR_PATH)
+    if not decision.allowed:
+        return 0, {}, {
+            "classification": "PROVIDER_ADMISSION_REVOKED_FAIL_CLOSED",
+            "provider": spec.name,
+            "reason": decision.reason,
+            "cost_class": decision.cost_class,
+            "admission_id": decision.admission_id,
+            "authority_epoch": decision.authority_epoch,
+            "policy_epoch": decision.policy_epoch,
+        }
     body: dict[str, Any] = {
         "model": model, "messages": [{"role": "user", "content": prompt}],
         "max_tokens": max_tokens, "temperature": 0.7, "stream": False,
@@ -201,7 +222,7 @@ def request_chat(spec: ProviderSpec, key: str, model: str, prompt: str,
     req = urllib.request.Request(
         spec.endpoint, data=json.dumps(body).encode("utf-8"), method="POST",
         headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json",
-                 "User-Agent": "clay-mini-entity-free-go-swarm/1.0"},
+                 "User-Agent": "clay-entityos-hcu-free-go-swarm/2.0"},
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
@@ -421,6 +442,12 @@ async def worker_loop(runtime: ProviderRuntime, slot: int, protocol: str, sink: 
                 "rate": {k: v for k, v in headers.items() if k.startswith("x-ratelimit-") or k == "retry-after"},
                 "repo_head_at_prompt": git_text("rev-parse", "HEAD")}
 
+            if status == 0 and isinstance(payload, dict) and payload.get("classification") == "PROVIDER_ADMISSION_REVOKED_FAIL_CLOSED":
+                common["classification"] = "PROVIDER_ADMISSION_REVOKED_FAIL_CLOSED"
+                common["error_body"] = payload
+                await sink.append(common)
+                stop_event.set()
+                continue
             if 200 <= status < 300:
                 text = extract_text(payload)
                 common["text"] = text
@@ -485,8 +512,13 @@ async def status_loop(runtimes: list[ProviderRuntime], sink: JsonlSink,
 
 
 async def run(args: argparse.Namespace) -> int:
-    if not truthy(os.getenv("CLAY_FREE_ONLY_ATTESTED")):
-        print("Refusing to start: set CLAY_FREE_ONLY_ATTESTED=1 only after confirming every configured key is restricted to free/included usage and cannot create billable overage.", file=sys.stderr)
+    policy = load_policy(SUPERVISOR_PATH)
+    free_only = policy.get("free_only") if isinstance(policy, dict) else None
+    if not isinstance(free_only, dict) or free_only.get("enabled") is not True:
+        print("Refusing to start: canonical supervisor FREE_ONLY control is missing or not exact true.", file=sys.stderr)
+        return 3
+    if free_only.get("provider_execution_requires_typed_explicit_free_classification") is not True:
+        print("Refusing to start: typed provider FREE admission is not required by canonical supervisor control.", file=sys.stderr)
         return 3
 
     protocol = load_protocol()
@@ -494,12 +526,15 @@ async def run(args: argparse.Namespace) -> int:
     output_dir = Path(args.output_dir).expanduser() if args.output_dir else Path.home() / ".local/state/clay-free-go-swarm" / run_id
     sink = JsonlSink(output_dir)
     runtimes: list[ProviderRuntime] = []
+    admissions: dict[str, dict[str, Any]] = {}
     for spec in PROVIDERS:
+        decision = resolve_provider_admission(spec.name, SUPERVISOR_PATH)
+        admissions[spec.name] = dataclasses.asdict(decision)
+        if not decision.allowed:
+            print(f"Skipping {spec.name}: {decision.reason}", file=sys.stderr)
+            continue
         keys = collect_keys(spec)
         if not keys:
-            continue
-        if not truthy(os.getenv(spec.attestation_env)):
-            print(f"Skipping {spec.name}: {spec.attestation_env}=1 not set", file=sys.stderr)
             continue
         models = split_values(os.getenv(spec.models_env)) or list(spec.default_models)
         cap_env = f"CLAY_{spec.name.upper()}_MAX_CONCURRENCY"
@@ -509,7 +544,7 @@ async def run(args: argparse.Namespace) -> int:
             cap = spec.default_max_concurrency
         runtimes.append(ProviderRuntime(spec, keys, unique(models), cap))
     if not runtimes:
-        print("No FREE_ONLY-attested provider keys are configured. Nothing to run.", file=sys.stderr)
+        print("No provider has both exact typed FREE admission and configured credentials. Nothing to run.", file=sys.stderr)
         return 4
 
     duration_s = max(1.0, args.hours * 3600.0)
@@ -522,16 +557,18 @@ async def run(args: argparse.Namespace) -> int:
         except NotImplementedError:
             pass
 
-    manifest = {"schema": "CLAY_FREE_GO_SWARM_RUN/v1", "run_id": run_id,
+    manifest = {"schema": "CLAY_FREE_GO_SWARM_RUN/v2", "run_id": run_id,
         "started_at": dt.datetime.now(dt.timezone.utc).isoformat(), "duration_hours": args.hours,
         "deadline_monotonic_seconds": duration_s, "free_only": True,
         "repo_head": git_text("rev-parse", "HEAD"),
         "protocol_sha256": hashlib.sha256(protocol.encode("utf-8")).hexdigest(),
+        "provider_admissions": admissions,
         "providers": {rt.spec.name: {"key_fingerprints": [key_fingerprint(k) for k in rt.keys],
             "models": rt.models, "max_concurrency": rt.max_concurrency} for rt in runtimes},
-        "invariants": ["NO_SECRETS_IN_LOGS", "FREE_ONLY_ATTESTATION_REQUIRED",
-            "HTTP_402_HARD_STOP_KEY", "HTTP_429_PROVIDER_WIDE_COOLDOWN_NO_KEY_ROTATION_BYPASS",
-            "AIMD_CONCURRENCY", "GRF_CLAYCODE_PROTOCOL_INJECTED_AT_TOP_OF_EVERY_WORKER_PROMPT",
+        "invariants": ["NO_SECRETS_IN_LOGS", "TYPED_COST_CLASS_FREE_ADMISSION_BEFORE_SECRET_LOOKUP_AND_NETWORK",
+            "STALE_OR_MISSING_ADMISSION_FAILS_CLOSED", "HTTP_402_HARD_STOP_KEY",
+            "HTTP_429_PROVIDER_WIDE_COOLDOWN_NO_KEY_ROTATION_BYPASS", "AIMD_CONCURRENCY",
+            "GRF_CLAYCODE_PROTOCOL_INJECTED_AT_TOP_OF_EVERY_WORKER_PROMPT",
             "MODEL_OUTPUT_IS_CANDIDATE_NOT_CANONICAL_TRUTH_OR_EFFECT_AUTHORITY"]}
     (output_dir / "run_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({"run_id": run_id, "output_dir": str(output_dir), "providers": list(manifest["providers"])}, ensure_ascii=False))
@@ -555,7 +592,7 @@ async def run(args: argparse.Namespace) -> int:
             task.cancel()
         await asyncio.gather(*tasks, return_exceptions=True)
 
-    final = {"schema": "CLAY_FREE_GO_SWARM_FINAL/v1", "run_id": run_id,
+    final = {"schema": "CLAY_FREE_GO_SWARM_FINAL/v2", "run_id": run_id,
         "finished_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "workers_started": serial_counter[0],
         "providers": {rt.spec.name: rt.snapshot() for rt in runtimes}}
@@ -566,7 +603,7 @@ async def run(args: argparse.Namespace) -> int:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run a 24h adaptive FREE_ONLY Mini Entity go swarm")
+    parser = argparse.ArgumentParser(description="Run a 24h adaptive FREE_ONLY EntityOS/HCU go swarm")
     parser.add_argument("--hours", type=float, default=24.0, help="wall-clock run duration (default: 24)")
     parser.add_argument("--max-tokens", type=int, default=1800, help="maximum completion tokens per worker")
     parser.add_argument("--context-chars", type=int, default=18000, help="bounded current repo context per worker")

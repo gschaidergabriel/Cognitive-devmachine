@@ -1,0 +1,78 @@
+SUP6000
+SUPOLD
+{
+  "schema": "CLAY_ENTITYOS_SWARM_SUPERVISOR/v8",
+  "observed_at": "2026-08-24T12:35:48.169390+00:00",
+  "repo_root": "/workspace/clay-global-research-entity",
+  "remaining_seconds": 83380,
+  "provider_admission": {
+    "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
+    "ok": true,
+    "authority_epoch": "8.69",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_69.json",
+    "admitted_free_providers": [
+      "groq",
+      "mistral",
+      "nvidia",
+      "openrouter"
+    ],
+    "providers": {
+      "groq": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+      },
+      "mistral": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+      },
+      "nvidia": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+      },
+      "openrouter": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+      }
+    }
+  },
+  "go_swarm_running": true,
+  "local_research_model_ready": false,
+  "distillery_running": true,
+  "forge_running": true,
+  "dashboard_running": true,
+  "policy": "EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE"
+}
+PROCS
+    PID     ELAPSED %CPU %MEM COMMAND
+      1    04:10:49  0.0  0.0 sleep infinity
+    460    03:22:28  0.0  0.0 [bash] <defunct>
+    871    02:58:26  0.0  0.0 [sleep] <defunct>
+    900    02:57:42  0.0  0.0 [pkill] <defunct>
+    922    02:56:21  0.0  0.0 [python3] <defunct>
+    931    02:56:21  0.4  0.0 [python3] <defunct>
+   2886    02:52:45  0.0  0.0 [python3] <defunct>
+  13311    01:59:39  0.0  0.0 [python3] <defunct>
+  13321    01:59:39  0.0  0.0 [python3] <defunct>
+  13754    01:56:40  0.0  0.0 [pkill] <defunct>
+  16530    01:38:03  0.0  0.0 [ssh] <defunct>
+  19669    01:19:53  0.0  0.0 [xargs] <defunct>
+  19766    01:16:27  0.0  0.0 [xargs] <defunct>
+  19789    01:15:45  0.0  0.0 [bash] <defunct>
+  19790    01:15:45  0.0  0.0 [sleep] <defunct>
+  19807    01:15:44  1.4  0.1 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60
+  19835    01:15:14  0.0  0.0 [llama-server] <defunct>
+  19841    01:15:14  0.7  0.2 python3 /workspace/clay-global-research-entity/tools/run_research_distillery_local.py --hours 24 --sleep-seconds 3
+  19844    01:15:14  0.5  0.4 python3 /workspace/clay-global-research-entity/tools/run_free_evidence_forge.py --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20
+  22618    01:00:33  0.0  0.0 [bash] <defunct>
+  24477       58:19  0.0  0.0 [bash] <defunct>
+  29051       27:50  0.0  0.0 [ssh] <defunct>
+  31463       08:00  0.1  0.2 python3 /workspace/clay-global-research-entity/tools/run_24h_entityos_swarm.py --hours 23.16111111111111 --output-dir /artifacts/clay-entityos-swarm/active-20260824T123548Z
+  31471       08:00  0.0  0.0 [sleep] <defunct>
+  31566       07:36  0.0  0.0 [xargs] <defunct>
+  31866       00:00  0.0  0.0 ps -eo pid,etime,pcpu,pmem,args
+LATEST
+/artifacts/clay-entityos-swarm/active-20260824T123548Z

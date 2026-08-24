@@ -5,7 +5,10 @@ set -Eeuo pipefail
 # Execution performs no runtime/model download and reads no provider credentials.
 # Both local runtime and GGUF bytes must be explicitly SHA-256 admitted before launch,
 # then the started process + server-reported model path are cross-checked after readiness.
-CACHE_ROOT="${CLAY_LOCAL_MODEL_CACHE:-/cache/clay-local-research-model}"
+USER_HOME="${HOME:?HOME is required for normal-user local model state}"
+XDG_CACHE_ROOT="${XDG_CACHE_HOME:-$USER_HOME/.cache}"
+XDG_STATE_ROOT="${XDG_STATE_HOME:-$USER_HOME/.local/state}"
+CACHE_ROOT="${CLAY_LOCAL_MODEL_CACHE:-$XDG_CACHE_ROOT/clay-local-research-model}"
 RUNTIME_BIN="${CLAY_LLAMA_SERVER_BIN:-$CACHE_ROOT/llama.cpp/build/bin/llama-server}"
 RUNTIME_SHA256="${CLAY_LLAMA_SERVER_SHA256:-}"
 MODEL_FILE="${CLAY_LOCAL_MODEL_FILE:-}"
@@ -16,9 +19,9 @@ THREADS="${CLAY_LOCAL_RESEARCH_THREADS:-4}"
 PARALLEL="${CLAY_LOCAL_RESEARCH_PARALLEL:-1}"
 CTX="${CLAY_LOCAL_RESEARCH_CTX:-8192}"
 READY_TIMEOUT="${CLAY_LOCAL_RESEARCH_READY_TIMEOUT:-3600}"
-ARTIFACT_ROOT="${CLAY_LOCAL_RESEARCH_ARTIFACT_ROOT:-/artifacts/clay-entityos-swarm}"
-LOG="$ARTIFACT_ROOT/local-model.log"
-STATE="$ARTIFACT_ROOT/local-model.json"
+STATE_ROOT="${CLAY_LOCAL_RESEARCH_STATE_DIR:-$XDG_STATE_ROOT/clay-entityos-swarm}"
+LOG="$STATE_ROOT/local-model.log"
+STATE="$STATE_ROOT/local-model.json"
 PROPS_TMP="$STATE.props.$$"
 
 fail(){ printf 'LOCAL_RESEARCH_MODEL_IDENTITY_GATE:%s\n' "$1" >&2; exit 64; }
@@ -40,7 +43,7 @@ MODEL_SHA256="${MODEL_SHA256,,}"
 [[ "${OBSERVED_RUNTIME_SHA256,,}" == "$RUNTIME_SHA256" ]] || fail "RUNTIME_SHA256_MISMATCH"
 [[ "${OBSERVED_MODEL_SHA256,,}" == "$MODEL_SHA256" ]] || fail "MODEL_SHA256_MISMATCH"
 
-mkdir -p "$ARTIFACT_ROOT"
+mkdir -p "$STATE_ROOT"
 health(){ curl -fsS --max-time 2 "http://$HOST:$PORT/health" >/dev/null 2>&1; }
 fetch_props(){ curl -fsS --max-time 5 "http://$HOST:$PORT/props" >"$PROPS_TMP"; }
 
@@ -67,6 +70,8 @@ write_state(){
   CLAY_CTX="$CTX" \
   CLAY_PROPS_PATH="$PROPS_TMP" \
   CLAY_STATE_PATH="$STATE.tmp" \
+  CLAY_CACHE_ROOT="$CACHE_ROOT" \
+  CLAY_STATE_ROOT="$STATE_ROOT" \
   python3 - <<'PY'
 from __future__ import annotations
 import datetime, hashlib, json, os
@@ -178,6 +183,8 @@ payload = {
     'threads': safe_int('CLAY_THREADS'),
     'parallel': safe_int('CLAY_PARALLEL'),
     'context': safe_int('CLAY_CTX'),
+    'cache_root': os.environ['CLAY_CACHE_ROOT'],
+    'state_root': os.environ['CLAY_STATE_ROOT'],
     'cost_class': 'LOCAL_ZERO_PROVIDER_BILLING',
     'remote_download_performed_by_execution_path': False,
     'provider_secret_lookup_performed_by_execution_path': False,

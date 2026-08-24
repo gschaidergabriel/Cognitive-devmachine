@@ -15,9 +15,12 @@ cannot mint a second dataset packet or alter training-bearing packet bytes for t
 measured evidence. If the same execution identity reappears with conflicting measured
 evidence, admission fails closed instead of treating the mutation as a new observation.
 
-Legacy ingest rows predate the replay-identity columns. They cannot be safely backfilled
-from the reduced legacy table, so a new evaluation colliding on the available legacy
-execution coordinates fails closed until the historical row is explicitly reconciled.
+Replay identity v2 explicitly versions the current replay-stable semantics. Earlier v1
+code existed with two different hash preimages under the same schema string: an older
+variant included ``delta_id`` (and its measured packet still carried envelope fields),
+while the later replay-stable v1 excluded them. Existing rows are therefore matched
+against both exact historical v1 variants before a v2 admission can mint a new packet.
+Rows predating replay hashes remain conservatively unresolved.
 
 The destination is the existing Distillery SQLite database; this module performs no
 provider/network I/O and creates no second truth/effect path.
@@ -39,6 +42,11 @@ from forge_evidence_credit_871 import evidence_reason
 ARTIFACT_ROOT = Path(os.getenv("CLAY_SWARM_ARTIFACT_ROOT", "/artifacts/clay-entityos-swarm"))
 DEFAULT_FORGE_EVAL = Path(os.getenv("CLAY_FORGE_EVAL_PATH", str(ARTIFACT_ROOT / "forge/architecture_delta_evaluations.jsonl")))
 DEFAULT_DISTILLERY_DB = Path(os.getenv("CLAY_RESEARCH_DISTILLERY_DB", str(ARTIFACT_ROOT / "distillery/distillery.sqlite3")))
+
+REPLAY_IDENTITY_V1 = "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1"
+REPLAY_IDENTITY_V2 = "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v2"
+MEASURED_IDENTITY_V1 = "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1"
+MEASURED_IDENTITY_V2 = "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v2"
 
 
 def now_iso() -> str:
@@ -96,18 +104,8 @@ def measured_packet(row: dict) -> dict:
     }
 
 
-def execution_replay_identity(row: dict) -> dict:
-    """Bind one replay-stable measured Forge execution/evaluation family.
-
-    Volatile observation time, model-authored narration and ``delta_id`` are
-    intentionally excluded. ``delta_id`` names a candidate/evaluation envelope; it is
-    not proof of a new measured execution. The identity keeps source/provenance,
-    target bytes, admitted execution surface and metric definition, so envelope-only
-    replay cannot become a new Distillery event while genuinely different execution
-    evidence remains distinct.
-    """
+def _replay_identity_fields(row: dict) -> dict:
     return {
-        "schema": "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1",
         "source_class": str(row.get("source_class") or ""),
         "provider": str(row.get("provider") or ""),
         "model": str(row.get("model") or ""),
@@ -122,17 +120,54 @@ def execution_replay_identity(row: dict) -> dict:
     }
 
 
-def measured_evidence_identity(row: dict) -> dict:
-    """Return immutable measured evidence for conflict detection.
+def execution_replay_identity_v1_current(row: dict) -> dict:
+    """Exact replay-stable v1 preimage used immediately before v2 migration."""
+    return {"schema": REPLAY_IDENTITY_V1, **_replay_identity_fields(row)}
 
-    Observation time, ``delta_id``, and candidate narration are absent from
-    ``measured_packet`` itself, so conflict identity and training-bearing packet share
-    one stable measured-evidence preimage.
-    """
+
+def execution_replay_identity_v1_legacy(row: dict) -> dict:
+    """Exact older v1 preimage that incorrectly included the envelope ``delta_id``."""
     return {
-        "schema": "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1",
-        "packet": measured_packet(row),
+        "schema": REPLAY_IDENTITY_V1,
+        "delta_id": str(row.get("delta_id") or ""),
+        **_replay_identity_fields(row),
     }
+
+
+def execution_replay_identity(row: dict) -> dict:
+    """Bind one replay-stable v2 measured Forge execution/evaluation family.
+
+    Volatile observation time, model-authored narration and ``delta_id`` are
+    intentionally excluded. ``delta_id`` names a candidate/evaluation envelope; it is
+    not proof of a new measured execution. The v2 schema name freezes this exact
+    semantic contract instead of silently changing a v1 hash preimage again.
+    """
+    return {"schema": REPLAY_IDENTITY_V2, **_replay_identity_fields(row)}
+
+
+def _legacy_measured_packet_v1(row: dict) -> dict:
+    """Reconstruct the older training packet shape solely for persisted-v1 matching."""
+    packet = measured_packet(row)
+    packet["delta_id"] = str(row.get("delta_id") or "")
+    packet["evaluated_at"] = str(row.get("evaluated_at") or "")
+    return packet
+
+
+def measured_evidence_identity_v1_legacy(row: dict) -> dict:
+    """Exact older v1 measured preimage: delta_id included, evaluated_at excluded."""
+    packet = _legacy_measured_packet_v1(row)
+    packet.pop("evaluated_at", None)
+    return {"schema": MEASURED_IDENTITY_V1, "packet": packet}
+
+
+def measured_evidence_identity_v1_current(row: dict) -> dict:
+    """Exact replay-stable v1 measured preimage used immediately before v2."""
+    return {"schema": MEASURED_IDENTITY_V1, "packet": measured_packet(row)}
+
+
+def measured_evidence_identity(row: dict) -> dict:
+    """Return immutable versioned v2 measured evidence for conflict detection."""
+    return {"schema": MEASURED_IDENTITY_V2, "packet": measured_packet(row)}
 
 
 def ensure_schema(con: sqlite3.Connection) -> None:
@@ -160,7 +195,9 @@ def ensure_schema(con: sqlite3.Connection) -> None:
         CREATE TABLE IF NOT EXISTS forge_execution_ingest(
           evaluation_sha256 TEXT PRIMARY KEY,
           execution_replay_identity_sha256 TEXT,
+          execution_replay_identity_schema TEXT,
           measured_evidence_sha256 TEXT,
+          measured_evidence_identity_schema TEXT,
           packet_id TEXT NOT NULL UNIQUE,
           delta_id TEXT,
           worker_sha TEXT NOT NULL,
@@ -174,8 +211,12 @@ def ensure_schema(con: sqlite3.Connection) -> None:
     columns = {str(row[1]) for row in con.execute("PRAGMA table_info(forge_execution_ingest)")}
     if "execution_replay_identity_sha256" not in columns:
         con.execute("ALTER TABLE forge_execution_ingest ADD COLUMN execution_replay_identity_sha256 TEXT")
+    if "execution_replay_identity_schema" not in columns:
+        con.execute("ALTER TABLE forge_execution_ingest ADD COLUMN execution_replay_identity_schema TEXT")
     if "measured_evidence_sha256" not in columns:
         con.execute("ALTER TABLE forge_execution_ingest ADD COLUMN measured_evidence_sha256 TEXT")
+    if "measured_evidence_identity_schema" not in columns:
+        con.execute("ALTER TABLE forge_execution_ingest ADD COLUMN measured_evidence_identity_schema TEXT")
     con.execute(
         "CREATE UNIQUE INDEX IF NOT EXISTS forge_execution_ingest_replay_identity_uq "
         "ON forge_execution_ingest(execution_replay_identity_sha256) "
@@ -192,14 +233,7 @@ def bump(con: sqlite3.Connection, key: str, delta: int) -> None:
 
 
 def _legacy_replay_collision(con: sqlite3.Connection, row: dict) -> bool:
-    """Conservatively fence a possible replay against a pre-v1 ingest row.
-
-    Legacy rows retain only coarse execution coordinates. They do not retain enough
-    evidence to derive the new replay/measured digests without guessing. ``delta_id``
-    is deliberately not used as a legacy discriminator because it is envelope identity,
-    not proof of a distinct measured execution. Ambiguous legacy overlap is therefore
-    UNKNOWN rather than admissible.
-    """
+    """Fence rows that predate replay hashes; their causal identity is unrecoverable."""
     return con.execute(
         "SELECT 1 FROM forge_execution_ingest "
         "WHERE execution_replay_identity_sha256 IS NULL "
@@ -210,6 +244,54 @@ def _legacy_replay_collision(con: sqlite3.Connection, row: dict) -> bool:
             row["evaluation_repo_head"],
         ),
     ).fetchone() is not None
+
+
+def _classify_stored_v1_replay(con: sqlite3.Connection, row: dict) -> str | None:
+    """Recover duplicate/conflict semantics across both historical v1 preimages.
+
+    Old databases have no trustworthy schema-revision column. We therefore compare the
+    persisted hash against both exact v1 algorithms. For the older delta-bound variant,
+    the stored historical delta_id is substituted before recomputing the old hashes.
+    No row is rewritten; a matching replay is classified only as DUPLICATE or conflict.
+    """
+    candidates = con.execute(
+        "SELECT execution_replay_identity_sha256, measured_evidence_sha256, delta_id "
+        "FROM forge_execution_ingest "
+        "WHERE execution_replay_identity_sha256 IS NOT NULL "
+        "AND COALESCE(execution_replay_identity_schema, ?) != ? "
+        "AND worker_sha=? AND source_repo_head=? AND evaluation_repo_head=?",
+        (
+            REPLAY_IDENTITY_V1,
+            REPLAY_IDENTITY_V2,
+            row["worker_sha"],
+            row["source_repo_head"],
+            row["evaluation_repo_head"],
+        ),
+    ).fetchall()
+
+    current_v1_replay = digest_json(execution_replay_identity_v1_current(row))
+    current_v1_measured = digest_json(measured_evidence_identity_v1_current(row))
+
+    for stored_replay, stored_measured, stored_delta_id in candidates:
+        stored_replay = str(stored_replay or "")
+        stored_measured = str(stored_measured or "")
+
+        if stored_replay == current_v1_replay:
+            if not stored_measured or stored_measured == current_v1_measured:
+                return "DUPLICATE"
+            return "REPLAY_IDENTITY_CONFLICT"
+
+        historical = dict(row)
+        historical["delta_id"] = str(stored_delta_id or "")
+        legacy_v1_replay = digest_json(execution_replay_identity_v1_legacy(historical))
+        if stored_replay != legacy_v1_replay:
+            continue
+        legacy_v1_measured = digest_json(measured_evidence_identity_v1_legacy(historical))
+        if not stored_measured or stored_measured == legacy_v1_measured:
+            return "DUPLICATE"
+        return "REPLAY_IDENTITY_CONFLICT"
+
+    return None
 
 
 def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None]:
@@ -233,20 +315,24 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
             return False, "DUPLICATE", None
         return False, "REPLAY_IDENTITY_CONFLICT", None
 
+    v1_result = _classify_stored_v1_replay(con, row)
+    if v1_result is not None:
+        return False, v1_result, None
+
     if _legacy_replay_collision(con, row):
         return False, "LEGACY_REPLAY_IDENTITY_UNRESOLVED", None
 
     packet = measured_packet(row)
     text = canonical_json(packet)
     tok = approx_tokens(text)
-    # Durable packet identity follows the stable execution identity, not volatile
-    # full-evaluation bytes. Full envelope identity is retained as metadata only.
     packet_id = "kf-" + replay_sha[:18]
     question_id = "forge-" + replay_sha[:16]
     metadata = {
         "packet_class": "FORGE_EVIDENCE_QUALIFIED_EXECUTION",
         "forge_evaluation_sha256": eval_sha,
+        "forge_execution_replay_identity_schema": REPLAY_IDENTITY_V2,
         "forge_execution_replay_identity_sha256": replay_sha,
+        "forge_measured_evidence_identity_schema": MEASURED_IDENTITY_V2,
         "forge_measured_evidence_sha256": measured_sha,
         "execution_admission_sha256": packet["execution_admission_sha256"],
         "evidence_qualification": reason,
@@ -287,13 +373,16 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
     )
     con.execute(
         "INSERT INTO forge_execution_ingest("
-        "evaluation_sha256,execution_replay_identity_sha256,measured_evidence_sha256,"
-        "packet_id,delta_id,worker_sha,source_repo_head,evaluation_repo_head,admitted_at,approx_tokens"
-        ") VALUES(?,?,?,?,?,?,?,?,?,?)",
+        "evaluation_sha256,execution_replay_identity_sha256,execution_replay_identity_schema,"
+        "measured_evidence_sha256,measured_evidence_identity_schema,packet_id,delta_id,"
+        "worker_sha,source_repo_head,evaluation_repo_head,admitted_at,approx_tokens"
+        ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
         (
             eval_sha,
             replay_sha,
+            REPLAY_IDENTITY_V2,
             measured_sha,
+            MEASURED_IDENTITY_V2,
             packet_id,
             str(row.get("delta_id") or ""),
             row["worker_sha"],
@@ -314,7 +403,7 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
     summary = {
         "schema": "CLAY_FORGE_TO_DISTILLERY_INGEST_RESULT/v2",
         "acceptance_semantics": "EVIDENCE_QUALIFIED_ONLY",
-        "replay_semantics": "STABLE_EXECUTION_IDENTITY_WITH_MEASURED_CONFLICT_AND_LEGACY_UNKNOWN_REJECTION",
+        "replay_semantics": "VERSIONED_REPLAY_IDENTITY_V2_WITH_DUAL_V1_COMPATIBILITY_AND_LEGACY_UNKNOWN_REJECTION",
         "forge_eval_path": str(forge_eval_path),
         "distillery_db": str(distillery_db),
         "seen": 0,

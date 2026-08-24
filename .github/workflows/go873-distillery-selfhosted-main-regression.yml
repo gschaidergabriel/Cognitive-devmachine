@@ -9,6 +9,7 @@ on:
       - "tools/promote_forge_distillery_runtime_gate.py"
       - "tests/test_forge_distillery_replay_identity_873.py"
       - "tests/test_forge_distillery_concurrent_replay_873.py"
+      - "tests/test_forge_distillery_replay_identity_v2_migration_873.py"
       - "tests/test_forge_distillery_rebuild_stable_packet_873.py"
       - "tests/test_forge_distillery_live_bridge_871.py"
       - "tests/test_forge_distillery_promotion_872.py"
@@ -46,13 +47,16 @@ jobs:
           test -z "$(git status --porcelain=v1)"
       - name: Compile Distillery bridge and live promoter
         id: compile
-        run: python3 -m py_compile tools/ingest_forge_accepts_into_distillery.py tools/forge_evidence_credit_871.py tools/promote_forge_distillery_runtime_gate.py
+        run: python3 -m py_compile tools/ingest_forge_accepts_into_distillery.py tools/forge_evidence_credit_871.py tools/promote_forge_distillery_runtime_gate.py tests/test_forge_distillery_replay_identity_v2_migration_873.py
       - name: Replay identity regression
         id: replay_identity
         run: python3 -m unittest -v tests.test_forge_distillery_replay_identity_873
       - name: Concurrent replay atomicity regression
         id: concurrent_replay
         run: python3 -m unittest -v tests.test_forge_distillery_concurrent_replay_873
+      - name: Replay v1-to-v2 migration regression
+        id: replay_v2_migration
+        run: python3 -m unittest -v tests.test_forge_distillery_replay_identity_v2_migration_873
       - name: Fresh rebuild packet stability regression
         id: rebuild_stability
         run: python3 -m unittest -v tests.test_forge_distillery_rebuild_stable_packet_873
@@ -75,6 +79,7 @@ jobs:
           COMPILE_OUTCOME: ${{ steps.compile.outcome }}
           REPLAY_IDENTITY_OUTCOME: ${{ steps.replay_identity.outcome }}
           CONCURRENT_REPLAY_OUTCOME: ${{ steps.concurrent_replay.outcome }}
+          REPLAY_V2_MIGRATION_OUTCOME: ${{ steps.replay_v2_migration.outcome }}
           REBUILD_STABILITY_OUTCOME: ${{ steps.rebuild_stability.outcome }}
           LIVE_BRIDGE_OUTCOME: ${{ steps.live_bridge.outcome }}
           PROMOTION_GUARDS_OUTCOME: ${{ steps.promotion_guards.outcome }}
@@ -100,6 +105,7 @@ jobs:
               "compile": os.environ.get("COMPILE_OUTCOME", "unknown"),
               "replay_identity": os.environ.get("REPLAY_IDENTITY_OUTCOME", "unknown"),
               "concurrent_replay": os.environ.get("CONCURRENT_REPLAY_OUTCOME", "unknown"),
+              "replay_v2_migration": os.environ.get("REPLAY_V2_MIGRATION_OUTCOME", "unknown"),
               "rebuild_stability": os.environ.get("REBUILD_STABILITY_OUTCOME", "unknown"),
               "live_bridge": os.environ.get("LIVE_BRIDGE_OUTCOME", "unknown"),
               "promotion_guards": os.environ.get("PROMOTION_GUARDS_OUTCOME", "unknown"),
@@ -131,7 +137,7 @@ jobs:
                   if all_success
                   else "EXACT_MAIN_DETERMINISTIC_REGRESSION_NONPASS"
               ),
-              "evidence_scope": "FORGE_DISTILLERY_REPLAY_CONCURRENCY_REBUILD_LIVE_PROMOTER_REGRESSION_ONLY",
+              "evidence_scope": "FORGE_DISTILLERY_REPLAY_CONCURRENCY_V2_MIGRATION_REBUILD_LIVE_PROMOTER_REGRESSION_ONLY",
               "real_safe_forge_accept_observed": False,
               "repository_bound_live_accepted_dataset_tokens_gt_zero_observed": False,
               "credit": {

@@ -1,0 +1,36 @@
+{
+  "schema": "ENTITYOS_HCU_PROVIDER_ADMISSION/v1",
+  "authority_epoch": "8.67",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "default_cost_class": "UNKNOWN",
+  "authority_source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json",
+  "policy": "Provider secret lookup and provider network I/O are forbidden unless this typed control-plane object explicitly admits that provider with cost_class=FREE. Environment attestation flags alone never grant admission.",
+  "providers": {
+    "groq": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "admission_id": null,
+      "secret_lookup_allowed": false,
+      "network_io_allowed": false,
+      "evidence": "NO_DIRECT_TYPED_FREE_CLASSIFICATION_ADMITTED_AT_THIS_SNAPSHOT"
+    },
+    "mistral": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "admission_id": null,
+      "secret_lookup_allowed": false,
+      "network_io_allowed": false,
+      "evidence": "NO_DIRECT_TYPED_FREE_CLASSIFICATION_ADMITTED_AT_THIS_SNAPSHOT"
+    },
+    "nvidia": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "admission_id": null,
+      "secret_lookup_allowed": false,
+      "network_io_allowed": false,
+      "evidence": "NO_DIRECT_TYPED_FREE_CLASSIFICATION_ADMITTED_AT_THIS_SNAPSHOT"
+    }
+  }
+}

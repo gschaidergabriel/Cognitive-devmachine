@@ -26,6 +26,13 @@ on:
 permissions:
   contents: write
 
+# One witness lane, one current intent. A queued self-hosted run has no job timeout until
+# a runner starts it, so superseded queued/in-progress requests must not accumulate.
+# Every actual execution still checks out canonical main at runner execution time below.
+concurrency:
+  group: go872-forge-distillery-exact-current-witness
+  cancel-in-progress: true
+
 jobs:
   exact-runtime-gate:
     if: github.actor == 'gschaidergabriel'

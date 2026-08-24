@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import sqlite3
 import sys
 import tempfile
 import unittest
@@ -118,6 +119,22 @@ class PromotionSourceGuards872(unittest.TestCase):
         with self.assertRaises(promotion.PromotionError):
             promotion.validate_gate_result(passing_gate(evaluation), SOURCE)
 
+    def test_inspect_db_preserves_counter_before_forge_schema_exists(self):
+        with tempfile.TemporaryDirectory() as td:
+            db = Path(td) / "distillery.sqlite3"
+            con = sqlite3.connect(db)
+            try:
+                con.execute("CREATE TABLE counters(key TEXT PRIMARY KEY, value INTEGER NOT NULL DEFAULT 0)")
+                con.execute("INSERT INTO counters(key,value) VALUES('accepted_dataset_tokens',123)")
+                con.commit()
+            finally:
+                con.close()
+
+            snap = promotion.inspect_db(db, "f" * 64)
+            self.assertTrue(snap["db_exists"])
+            self.assertFalse(snap["evaluation_present"])
+            self.assertEqual(snap["accepted_dataset_tokens_counter"], 123)
+
     def test_live_first_promotion_then_immediate_replay_is_idempotent(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
@@ -137,6 +154,28 @@ class PromotionSourceGuards872(unittest.TestCase):
             self.assertEqual(out["replay_token_delta"], 0)
             self.assertTrue(out["after"]["evaluation_present"])
             self.assertGreater(out["after"]["packet_tokens"], 0)
+
+    def test_first_delta_excludes_preexisting_non_forge_dataset_tokens(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            gate_path = root / "gate.json"
+            db = root / "distillery.sqlite3"
+            gate_path.write_text(json.dumps(passing_gate()) + "\n", encoding="utf-8")
+            con = sqlite3.connect(db)
+            try:
+                con.execute("CREATE TABLE counters(key TEXT PRIMARY KEY, value INTEGER NOT NULL DEFAULT 0)")
+                con.execute("INSERT INTO counters(key,value) VALUES('accepted_dataset_tokens',123)")
+                con.commit()
+            finally:
+                con.close()
+
+            out = promotion.promote(gate_path, SOURCE, db)
+
+            self.assertEqual(out["before"]["accepted_dataset_tokens_counter"], 123)
+            self.assertEqual(out["outcome"], "PROMOTED_NEW_PACKET")
+            self.assertGreater(out["first_token_delta"], 0)
+            self.assertEqual(out["first_token_delta"], out["after"]["packet_tokens"])
+            self.assertEqual(out["replay_token_delta"], 0)
 
     def test_restarting_same_promotion_is_still_zero_delta(self):
         with tempfile.TemporaryDirectory() as td:

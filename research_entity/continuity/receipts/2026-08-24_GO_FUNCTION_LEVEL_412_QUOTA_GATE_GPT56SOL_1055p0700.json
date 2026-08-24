@@ -1,0 +1,71 @@
+{
+  "schema": "ENTITYOS_HCU_GO_FUNCTION_LEVEL_QUOTA_GATE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.64",
+  "canonical_main_observed_before_write": "d2fe65e996041b271364ec41c9014674c1bf7bbf",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_EXACT_SOURCE_RUNTIME_ACCEPTANCE_REENTRY"
+  },
+  "immutable_executor_snapshot": {
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "git_sha": "fb844d8bea0d6de3f304d3aa48114b735e0d0613",
+    "deployment_id": "dpl_4dE6aHNYPqNZmrBd5U1WfboFX9Qk",
+    "deployment_state": "READY",
+    "deployment_git_sha_matches_snapshot": true,
+    "route": "/api/hcu-jspace-binding-v2-capsule",
+    "route_source_blob_sha": "4fc38065edf607e8fb0d8a22841dbf34fa13b0b8",
+    "free_only_admission_blob_sha": "de6007fe152c3114e03d0578866a83355ef157a7"
+  },
+  "runtime_observation": {
+    "vercel_runtime_log_time_utc": "2026-08-24T03:55:50Z",
+    "request": "GET /api/hcu-jspace-binding-v2-capsule",
+    "http_status": 412,
+    "runtime_source": "serverless",
+    "function_level_request_observed": true,
+    "sandbox_create_observed": false,
+    "hcu_regression_observed": false
+  },
+  "source_causal_interpretation": {
+    "preview_branch_authority_precedes_cost_gate": true,
+    "free_only_cost_gate_precedes_fixture_read_and_sandbox_create": true,
+    "admission_remaining_sandbox_quota_directly_observed": false,
+    "admission_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_execution_admitted": false,
+    "deny_unadmitted_status": 412,
+    "bounded_conclusion": "AT_THIS_IMMUTABLE_EXECUTOR_SNAPSHOT_A_FUNCTION_LEVEL_REQUEST_REACHED_THE_FAIL_CLOSED_FREE_ONLY_COST_GATE; NO_SANDBOX_CREATE_OR_HCU_EXECUTION_IS_CREDITED"
+  },
+  "successor_boundary": {
+    "executor_branch_moved_after_snapshot": true,
+    "do_not_project_this_function_result_to_newer_executor_heads": true,
+    "current_live_head_must_be_refreshed_before_next_invocation": true
+  },
+  "hypothesis": "The protected-preview transport is not an absolute blocker: at least one exact fb844d8 deployment request reached the deployed serverless function, which then failed closed at the quota-admission boundary.",
+  "counterhypothesis": "The 412 may be treated as Sandbox/HCU execution evidence or projected to successor executor heads.",
+  "discriminator_result": "REJECTED_FOR_HIGHER_CREDIT: exact route order and admission source place 412 before fixture execution and Sandbox.create; the executor branch subsequently moved, so the observation is immutable predecessor function-level evidence only.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: function-level execution is now observed at immutable executor snapshot fb844d8 and the active runtime blocker is narrowed to direct remaining included Sandbox quota admission before Sandbox.create; successor heads require fresh exact-head evidence",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "HCU_NO_CHANGE_WITH_REASON: supervisor 8.64 pauses source-only guard proliferation and the 412 occurred before HCU/Typed Entry regression execution",
+    "C_GLOBAL_JSPACE_GWT_AND_FREE_LOCAL_08B_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no real model/J-Space execution or causal trace occurred; donor latent-basis/vector-control source progress remains source-only and model/training credit stays zero"
+  },
+  "credits": {
+    "function_level_executor_evidence": "PASS_AT_IMMUTABLE_FB844D8_SNAPSHOT_ONLY",
+    "sandbox_execution": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Directly observe authoritative remaining included Vercel Sandbox quota without paid transition; then refresh the live PR810 head and exact matching READY deployment and run the fixed environment capability probe before any HCU/J-Space capsule.",
+  "evidence_boundary": "This receipt promotes only exact immutable Function-level fail-closed execution evidence. It does not promote Sandbox execution, HCU runtime, J-Space model causality, training, canonical semantics or whole-product acceptance."
+}

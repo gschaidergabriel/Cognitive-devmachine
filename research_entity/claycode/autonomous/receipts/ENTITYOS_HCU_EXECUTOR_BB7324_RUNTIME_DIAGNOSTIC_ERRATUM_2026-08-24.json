@@ -1,0 +1,69 @@
+{
+  "schema": "ENTITYOS_HCU_EXECUTOR_RUNTIME_DIAGNOSTIC_ERRATUM/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "supervisor": "SUPERVISOR_STEERING_8_65",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "a39e6bab7b63d92bfe4e7b913c434adbd42bde55",
+  "corrects_receipt": "research_entity/claycode/autonomous/receipts/ENTITYOS_HCU_EXECUTOR_BB7324_RUNTIME_DIAGNOSTIC_2026-08-24.json",
+  "correction_class": "SOURCE_BINDING_PATH_AND_BLOB_ERRATUM",
+  "historical_receipt_preserved": true,
+  "observed_runtime_event": {
+    "executor_sha": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "deployment_id": "dpl_EN62ggtQnuEcjuvtJNathL3D9Tkf",
+    "deployment_state": "READY",
+    "method": "GET",
+    "request_path": "/api/hcu-runtime-admission-probe",
+    "http_status": 200,
+    "observed_at_utc": "2026-08-24T07:24:05Z"
+  },
+  "incorrect_source_binding_in_original_receipt": {
+    "route_path": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "route_blob_sha": "2ef15017f78542a24206056c6666d56f8897dfd3",
+    "reason": "The provider runtime event was logged for /api/hcu-runtime-admission-probe, so sandbox-probe.js is not the exact handler path for that observed request."
+  },
+  "correct_exact_source_binding": {
+    "route_path": "mcp/vercel-sandbox-mcp/api/hcu-runtime-admission-probe.js",
+    "route_blob_sha": "d763668e808660948335f3adbca0a065d8444881",
+    "executor_sha": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "supervisor": "SUPERVISOR_STEERING_8_65",
+    "default_probe_when_query_absent": "runtime",
+    "runtime_success_http_status": 200,
+    "runtime_success_status": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "execution_credit_declared": "RUNTIME_DIAGNOSTIC_ONLY",
+    "sandbox_create_performed": false,
+    "credential_lookup_performed": false,
+    "external_source_network_performed": false,
+    "entityos_hcu_whole_runtime_credit": false,
+    "hcu_full_runtime_credit": false,
+    "jspace_model_runtime_credit": false,
+    "training_credit": false,
+    "whole_product_pass": false
+  },
+  "independent_note": {
+    "sandbox_probe_route_exists_at_same_executor_sha": true,
+    "sandbox_probe_blob_sha": "2ef15017f78542a24206056c6666d56f8897dfd3",
+    "sandbox_probe_has_no_sandbox_runtime_admission_case": true,
+    "law": "Similarity of route semantics cannot substitute for exact request-to-handler source binding."
+  },
+  "credit_effect": {
+    "exact_head_function_runtime_diagnostic": "PRESERVED_AFTER_CORRECT_HANDLER_REBIND",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "new_unusual_experiments_executed": 0,
+    "classification": "ORDINARY_APPEND_ONLY_EVIDENCE_CORRECTION"
+  },
+  "next_exact_gate": "Keep Sandbox.create closed until a directly authoritative read-only remaining included Vercel Sandbox quota/no-charge signal is observed. Re-enter live executor and exact deployment identity before any later runtime promotion.",
+  "acceptance": "IN_PROGRESS"
+}

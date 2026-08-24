@@ -119,6 +119,16 @@ class ConversionBackpressure872(unittest.TestCase):
         self.assertEqual(24, chosen)
         self.assertEqual("24", env["CLAY_NVIDIA_MAX_CONCURRENCY"])
 
+    def test_fast_launcher_does_not_re_raise_lower_operator_thread_limit(self):
+        source = (ROOT / "tools" / "run_6000_free_swarm_fast.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            'workers=max(1,min(1024,int(os.getenv("CLAY_SWARM_HTTP_THREADS","512"))))',
+            source,
+        )
+        self.assertNotIn("workers=max(64", source)
+
 
 if __name__ == "__main__":
     unittest.main()

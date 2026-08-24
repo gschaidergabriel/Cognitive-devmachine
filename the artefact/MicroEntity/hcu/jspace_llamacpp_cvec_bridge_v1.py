@@ -9,8 +9,14 @@ inference, prove hidden-state efficacy, create canonical truth, or authorize eff
 Pinned zero-cost candidate targeted by the convenience constructor:
 - Qwen/Qwen3-0.6B-GGUF, Q8_0
 - checkpoint SHA-256 9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031
-- llama.cpp source b95502ba9aa0eb73a2f4fc8878d7fbe6a847a0b9
+- llama.cpp b10566 source bb4caa7540188872173c44d161602d9271386413
 - Qwen3-0.6B: n_embd=1024, n_layer=28
+
+Source-compatibility revalidation before moving the bridge from predecessor source
+``b95502ba9aa0eb73a2f4fc8878d7fbe6a847a0b9`` to b10566 established that the exact
+``src/llama-adapter.cpp`` and ``src/models/qwen3.cpp`` Git blobs are unchanged and that
+``llm_graph_context::build_cvec`` remains the same ``cvec->apply_to(ctx0, cur, il)``
+operation. This is source-level compatibility evidence only, not runtime or causal credit.
 
 At the pinned llama.cpp source identity, control-vector storage has no layer-0 tensor;
 ``llama_adapter_cvec::apply`` consumes layer-major chunks using
@@ -37,7 +43,7 @@ LAYOUT_SCHEMA = "LLAMA_CPP_CVEC_LAYER_MAJOR_F32LE_NO_LAYER0/v1"
 LLAMA_API = "llama_set_adapter_cvec"
 
 QWEN3_06B_CHECKPOINT_SHA256 = "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031"
-QWEN3_06B_LLAMA_CPP_SOURCE_COMMIT = "b95502ba9aa0eb73a2f4fc8878d7fbe6a847a0b9"
+QWEN3_06B_LLAMA_CPP_SOURCE_COMMIT = "bb4caa7540188872173c44d161602d9271386413"
 QWEN3_06B_N_EMBD = 1024
 QWEN3_06B_N_LAYER = 28
 MAX_ABS_STRENGTH = 64.0

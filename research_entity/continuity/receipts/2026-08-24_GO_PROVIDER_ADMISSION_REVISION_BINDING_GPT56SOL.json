@@ -1,0 +1,62 @@
+{
+  "schema": "CLAY_GO_PROVIDER_ADMISSION_REVISION_BINDING_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch_observed": "8.68",
+  "base_main_sha": "9f716bd69c3121428172a7eb7f9681396d4c90db",
+  "finding": "Epoch-only provider-admission provenance is insufficient to identify an exact policy decision when canonical admission content can change within one authority epoch. A start-bound semantic admission digest combined with mandatory live canonical revalidation preserves exact provenance without weakening revocation.",
+  "counterhypothesis": "Freezing a previously validated admission snapshot would improve reproducibility but could let a previously FREE provider continue after revocation. The binding therefore never acts as authority and never replaces the live canonical admission read.",
+  "delta": {
+    "binding_source": "tools/free_provider_admission_binding.py",
+    "binding_source_blob_sha": "b30dba288f746709a044af5e1d9d8196b1f9429e",
+    "binding_schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_BINDING/v1",
+    "digest_domain": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_SEMANTIC_SHA256/v1",
+    "canonicalization": "SORTED_COMPACT_UTF8_JSON_NO_NAN/v1",
+    "test_source": "tests/test_free_provider_admission_binding_868.py",
+    "test_source_blob_sha": "d6666f57723e128861ef117a64955752c129a81d",
+    "properties": [
+      "semantic digest stable across JSON object key order",
+      "same-epoch admission mutation changes digest",
+      "current canonical admission is reloaded during require_current_provider_admission_binding",
+      "same-epoch mutation fails closed",
+      "caller-provided expected binding is a narrowing constraint and cannot self-grant authority"
+    ]
+  },
+  "test_evidence": {
+    "environment": "ChatGPT isolated local scratch; exact candidate binding/test logic with a compatibility stub exposing only the canonical loader interface",
+    "tests": "5/5 PASS",
+    "scope": "NONCANONICAL_COMPONENT_LOGIC_ONLY",
+    "canonical_repo_runtime_observed": false,
+    "entityos_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "provider_runtime_credit": 0
+  },
+  "external_solution_harvest": {
+    "opa_principle": "decision logs bind policy decisions to a concrete bundle revision",
+    "opa_reference": "https://www.openpolicyagent.org/docs/management-decision-logs",
+    "slsa_principle": "reproducible provenance binds an invocation to exact identities/digests",
+    "slsa_reference": "https://slsa.dev/spec/v1.1/provenance"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_identity_available": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "parallel_main_changes_observed": [
+      "961a2fc10b0ecdb0a7285f280a78443129c4c196 caller-forged admission fix",
+      "d71b61da7c0b444f2fe4608cdae01f118c53ba6c local J-Space intervention backend gate",
+      "024763b9666e39f45dae18d36c7153a2fee6cf88 local model post-load identity delta",
+      "9f716bd69c3121428172a7eb7f9681396d4c90db canonical FREE admission receipt coverage convergence"
+    ]
+  },
+  "go_tracks": {
+    "A": "ENTITYOS_EXECUTABLE_CONVERGENCE: exact provider-admission revision identity primitive added as a non-authoritative prerequisite for reproducible future FREE provider execution receipts",
+    "B": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT: deterministic authority-binding primitive distinguishes policy epoch from exact admission content and fails closed on same-epoch mutation",
+    "C": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS: no duplicate J-Space implementation added; current main already advanced the local intervention backend gate and post-load model identity during this macrocycle reentry; next discriminator remains exact local activation intervention evidence"
+  },
+  "acceptance": "SOURCE_BINDING_PRIMITIVE_ONLY_RUNTIME_INTEGRATION_PENDING",
+  "next_exact_action": "Integrate current_provider_admission_binding at provider-run start, persist the binding in the run/execution receipt, and call require_current_provider_admission_binding immediately before provider secret lookup and provider network I/O; abort/restart if the digest changes. Add the binding regression to the canonical FREE admission receipt runner, then execute FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 on an authorized zero-cost local or clay-direct-dev surface."
+}

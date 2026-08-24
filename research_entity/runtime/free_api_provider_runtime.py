@@ -35,6 +35,7 @@ MAX_ATTEMPT_NONCE_CHARACTERS = 128
 # array separator or the outer request envelope.
 MAX_TEXT_CHAT_MESSAGES = MAX_PROVIDER_REQUEST_BYTES // 32
 MAX_PROVIDER_COOLDOWN_SECONDS = 86_400
+MAX_RETRY_AFTER_CHARACTERS = 128
 MAX_RECEIPT_DURATION_MS = MAX_PROVIDER_COOLDOWN_SECONDS * 1000
 EXECUTION_LOCK_TIMEOUT_SECONDS = 35
 TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
@@ -359,6 +360,11 @@ def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
     # Header values are foreign adapter data.  A str subclass can override
     # strip() and must not run code after an HTTP status was already received.
     if type(value) is not str:
+        return default
+    # RFC 9110 permits only delay-seconds or an HTTP-date. Reject an impossible
+    # envelope before normalization or date parsing so already-received 429
+    # evidence does not trigger unbounded work on foreign adapter metadata.
+    if len(value) > MAX_RETRY_AFTER_CHARACTERS:
         return default
     value = value.strip()
     if value and all("0" <= character <= "9" for character in value):

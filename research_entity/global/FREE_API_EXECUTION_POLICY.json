@@ -193,6 +193,20 @@
     "uncertainty": "The fallback is process-local and does not survive restart. Durable UnifiedDB-backed publication and an accepted Ubuntu live receipt remain required before claiming restart-level enforcement.",
     "counterhypothesis": "Failing closed only while malformed caller storage remains present is equivalent to a current-epoch hard stop; falsified because the caller could clear the malformed element and immediately regain routing eligibility."
   },
+  "successful_payment_latch_process_mirror": {
+    "checked_at": "2026-08-25",
+    "claim": "Every HTTP 402 latch safely published to caller-owned storage is also retained under the exact provider and budget-epoch key in the bounded process-local store. Inventories merge validated snapshots of both stores, so clearing an otherwise valid external set cannot authorize a same-process replay.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required",
+      "https://docs.python.org/3/library/stdtypes.html#set.add",
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://cwe.mitre.org/data/definitions/362.html"
+    ],
+    "executable_evidence": "test_successful_external_latch_cannot_be_cleared_for_replay",
+    "internal_measurement": "After a successful HTTP 402 publication to an exact caller-owned set, clearing that set previously allowed a second authenticated request in the same budget epoch. With process mirroring, the second attempt fails before opener access even though the external set is empty.",
+    "uncertainty": "The mirror is process-local and does not survive restart. Durable UnifiedDB-backed publication and an accepted Ubuntu live receipt remain required before claiming restart-level enforcement.",
+    "counterhypothesis": "A successful caller-owned latch write can be trusted for the lifetime of the execution process; falsified because the caller can clear the mutable set and immediately restore routing eligibility unless the observed HTTP 402 is independently mirrored."
+  },
   "passive_payment_latch_container_boundary": {
     "checked_at": "2026-08-24",
     "claim": "Every payment-latch storage path, including the process-global default and caller injection, must be an exact built-in set before capability inventory, routing or authenticated execution; set subclasses cannot execute overridden membership or mutation behavior around a received HTTP 402.",

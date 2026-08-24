@@ -16,21 +16,29 @@ if str(TOOLS) not in sys.path:
 import free_lane_provenance as provenance
 
 
-class FreeLaneBinding870Tests(unittest.TestCase):
+class FreeLaneBindingSuccessorTests(unittest.TestCase):
+    EPOCH = "8.71"
+
     def setUp(self) -> None:
         self.tmp = tempfile.TemporaryDirectory()
         root = Path(self.tmp.name)
+        self.root = root
         self.artifacts = root / "artifacts"
         self.admission = root / "FREE_PROVIDER_ADMISSION.json"
         self.economic = root / "FREE_LANE_ECONOMIC_PROVENANCE.json"
+        self.supervisor_dir = root / "research_entity/claycode/autonomous"
+        self.supervisor_dir.mkdir(parents=True)
+        self.inbox = self.supervisor_dir / "SUPERVISOR_INBOX.json"
+        self.steering = self.supervisor_dir / f"SUPERVISOR_STEERING_{self.EPOCH.replace('.', '_')}.json"
         self.admission.write_text(
             json.dumps(
                 {
                     "schema": provenance.ADMISSION_SCHEMA,
-                    "authority_epoch": "8.70",
+                    "authority_epoch": self.EPOCH,
                     "mode": "FREE_ONLY",
                     "providers": {
-                        "openrouter": {"admitted": True, "cost_class": "FREE"}
+                        "openrouter": {"admitted": True, "cost_class": "FREE"},
+                        "nvidia": {"admitted": True, "cost_class": "FREE"},
                     },
                 }
             ),
@@ -40,7 +48,7 @@ class FreeLaneBinding870Tests(unittest.TestCase):
             json.dumps(
                 {
                     "schema": provenance.PROVENANCE_SCHEMA,
-                    "authority_epoch": "8.70",
+                    "authority_epoch": self.EPOCH,
                     "mode": "FREE_ONLY",
                     "providers": {
                         "openrouter": {
@@ -48,33 +56,90 @@ class FreeLaneBinding870Tests(unittest.TestCase):
                             "allowed_routes": ["openrouter/free"],
                             "evidence_kind": "EXACT_ROUTE_ZERO_PRICE",
                             "source": "fixture",
-                        }
+                        },
+                        "nvidia": {
+                            "allowed_endpoint_host": "integrate.api.nvidia.com",
+                            "allowed_credential_fingerprints": ["nvidia-bound-fp"],
+                            "evidence_kind": "EXACT_DEVELOPER_API_CREDENTIAL_PLUS_FREE_HOSTED_NIM_ENDPOINT",
+                            "sources": ["fixture"],
+                            "scope": "fixture hosted NIM only",
+                        },
                     },
                 }
             ),
             encoding="utf-8",
         )
+        self.inbox.write_text(
+            json.dumps(
+                {
+                    "schema_version": self.EPOCH,
+                    "steering": f"research_entity/claycode/autonomous/{self.steering.name}",
+                }
+            ),
+            encoding="utf-8",
+        )
+        self._write_steering()
+        self.old_root = provenance.ROOT
         self.old_admission_path = provenance.ADMISSION_PATH
         self.old_provenance_path = provenance.PROVENANCE_PATH
+        self.old_inbox_path = provenance.SUPERVISOR_INBOX_PATH
+        provenance.ROOT = root
         provenance.ADMISSION_PATH = self.admission
         provenance.PROVENANCE_PATH = self.economic
+        provenance.SUPERVISOR_INBOX_PATH = self.inbox
 
     def tearDown(self) -> None:
+        provenance.ROOT = self.old_root
         provenance.ADMISSION_PATH = self.old_admission_path
         provenance.PROVENANCE_PATH = self.old_provenance_path
-        sys.modules.pop("run_6000_free_swarm_v3_870_test", None)
+        provenance.SUPERVISOR_INBOX_PATH = self.old_inbox_path
+        sys.modules.pop("run_6000_free_swarm_v3_successor_test", None)
         sys.modules.pop("run_6000_free_swarm", None)
         self.tmp.cleanup()
 
-    def _endpoint(self) -> str:
+    def _write_steering(
+        self,
+        *,
+        epoch: str | None = None,
+        execution_state: str | None = None,
+        contingents: list[str] | None = None,
+    ) -> None:
+        free_only = {
+            "enabled": True,
+            "no_paid_fallback": True,
+            "owner_authorized_free_contingents": contingents
+            if contingents is not None
+            else ["openrouter", "nvidia"],
+        }
+        if execution_state is not None:
+            free_only["execution_state"] = execution_state
+        self.steering.write_text(
+            json.dumps(
+                {
+                    "schema_version": epoch or self.EPOCH,
+                    "active_program": "ENTITYOS_HCU",
+                    "product": "EntityOS",
+                    "integrated_cognition_compute_architecture": "HCU",
+                    "free_only": free_only,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    @staticmethod
+    def _openrouter_endpoint() -> str:
         return "https://openrouter.ai/api/v1/chat/completions"
+
+    @staticmethod
+    def _nvidia_endpoint() -> str:
+        return "https://integrate.api.nvidia.com/v1/chat/completions"
 
     def _binding(self) -> dict:
         return provenance.current_lane_binding(
             "openrouter",
             "fp",
             "openrouter/free",
-            self._endpoint(),
+            self._openrouter_endpoint(),
             artifacts=self.artifacts,
         )
 
@@ -115,7 +180,7 @@ class FreeLaneBinding870Tests(unittest.TestCase):
         sys.modules["run_6000_free_swarm"] = fabric
 
         spec = importlib.util.spec_from_file_location(
-            "run_6000_free_swarm_v3_870_test", TOOLS / "run_6000_free_swarm_v3.py"
+            "run_6000_free_swarm_v3_successor_test", TOOLS / "run_6000_free_swarm_v3.py"
         )
         assert spec is not None and spec.loader is not None
         module = importlib.util.module_from_spec(spec)
@@ -130,16 +195,118 @@ class FreeLaneBinding870Tests(unittest.TestCase):
         self.assertFalse(binding["ok"])
         self.assertEqual(binding["reason"], "PROVIDER_NOT_CURRENTLY_ADMITTED")
 
-    def test_receipt_keeps_exact_pre_call_admission_digest(self) -> None:
+    def test_current_binding_rejects_supervisor_epoch_advance_with_stale_lane_files(self) -> None:
+        self.assertTrue(self._binding()["ok"])
+        newer_epoch = "8.72"
+        newer = self.supervisor_dir / "SUPERVISOR_STEERING_8_72.json"
+        newer.write_text(
+            json.dumps(
+                {
+                    "schema_version": newer_epoch,
+                    "active_program": "ENTITYOS_HCU",
+                    "product": "EntityOS",
+                    "integrated_cognition_compute_architecture": "HCU",
+                    "free_only": {
+                        "enabled": True,
+                        "no_paid_fallback": True,
+                        "owner_authorized_free_contingents": ["openrouter"],
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
+        self.inbox.write_text(
+            json.dumps(
+                {
+                    "schema_version": newer_epoch,
+                    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
+                }
+            ),
+            encoding="utf-8",
+        )
+        binding = self._binding()
+        self.assertFalse(binding["ok"])
+        self.assertEqual(binding["reason"], "FREE_LANE_SUPERVISOR_EPOCH_MISMATCH")
+
+    def test_current_binding_rejects_explicit_supervisor_runtime_quarantine(self) -> None:
+        self.assertTrue(self._binding()["ok"])
+        self._write_steering(execution_state="RUNTIME_QUARANTINED")
+        binding = self._binding()
+        self.assertFalse(binding["ok"])
+        self.assertEqual(binding["reason"], "FREE_LANE_AUTHORITY_SNAPSHOT_INVALID")
+        self.assertIn("SUPERVISOR_EXTERNAL_PROVIDER_EXECUTION_NOT_AUTHORIZED", binding["detail"])
+
+    def test_current_binding_rejects_provider_removed_from_supervisor_contingents(self) -> None:
+        self.assertTrue(self._binding()["ok"])
+        self._write_steering(contingents=["nvidia"])
+        binding = self._binding()
+        self.assertFalse(binding["ok"])
+        self.assertEqual(binding["reason"], "PROVIDER_NOT_AUTHORIZED_BY_CURRENT_SUPERVISOR")
+
+    def test_binding_still_current_rejects_supervisor_mutation(self) -> None:
         binding = self._binding()
         self.assertTrue(binding["ok"])
-        expected_digest = binding["admission_digest"]
+        self._write_steering(contingents=["openrouter", "nvidia", "groq"])
+        self.assertFalse(provenance.binding_still_current(binding))
+
+    def test_nvidia_exact_bound_fingerprint_passes(self) -> None:
+        binding = provenance.current_lane_binding(
+            "nvidia",
+            "nvidia-bound-fp",
+            "fixture/model",
+            self._nvidia_endpoint(),
+            artifacts=self.artifacts,
+        )
+        self.assertTrue(binding["ok"])
+        self.assertEqual(
+            binding["evidence"]["credential_fingerprint"], "nvidia-bound-fp"
+        )
+
+    def test_nvidia_unbound_fingerprint_fails_closed(self) -> None:
+        binding = provenance.current_lane_binding(
+            "nvidia",
+            "arbitrary-new-fp",
+            "fixture/model",
+            self._nvidia_endpoint(),
+            artifacts=self.artifacts,
+        )
+        self.assertFalse(binding["ok"])
+        self.assertEqual(
+            binding["reason"],
+            "NVIDIA_CREDENTIAL_DEVELOPER_FREE_ENTITLEMENT_NOT_BOUND",
+        )
+
+    def test_nvidia_legacy_wrong_field_name_does_not_self_admit(self) -> None:
+        obj = json.loads(self.economic.read_text(encoding="utf-8"))
+        nvidia = obj["providers"]["nvidia"]
+        nvidia.pop("allowed_credential_fingerprints")
+        nvidia["admitted_credential_fingerprints"] = ["nvidia-bound-fp"]
+        self.economic.write_text(json.dumps(obj), encoding="utf-8")
+        binding = provenance.current_lane_binding(
+            "nvidia",
+            "nvidia-bound-fp",
+            "fixture/model",
+            self._nvidia_endpoint(),
+            artifacts=self.artifacts,
+        )
+        self.assertFalse(binding["ok"])
+        self.assertEqual(
+            binding["reason"],
+            "NVIDIA_CREDENTIAL_DEVELOPER_FREE_ENTITLEMENT_NOT_BOUND",
+        )
+
+    def test_receipt_keeps_exact_pre_call_authority_digests(self) -> None:
+        binding = self._binding()
+        self.assertTrue(binding["ok"])
+        expected_admission = binding["admission_digest"]
+        expected_inbox = binding["supervisor_inbox_digest"]
+        expected_steering = binding["supervisor_steering_digest"]
         self._revoke_openrouter()
         receipt = provenance.emit_execution_receipt(
             provider="openrouter",
             credential_fingerprint="fp",
             model_or_route="openrouter/free",
-            endpoint=self._endpoint(),
+            endpoint=self._openrouter_endpoint(),
             binding=binding,
             request_id="request-1",
             usage={},
@@ -149,7 +316,10 @@ class FreeLaneBinding870Tests(unittest.TestCase):
             binding_stable_after_call=False,
             artifacts=self.artifacts,
         )
-        self.assertEqual(receipt["typed_admission_digest"], expected_digest)
+        self.assertEqual(receipt["typed_admission_digest"], expected_admission)
+        self.assertEqual(receipt["supervisor_inbox_digest"], expected_inbox)
+        self.assertEqual(receipt["supervisor_steering_digest"], expected_steering)
+        self.assertEqual(receipt["supervisor_epoch"], self.EPOCH)
         self.assertFalse(receipt["binding_stable_after_call"])
 
     def test_cached_reservation_cannot_survive_revocation(self) -> None:
@@ -169,6 +339,23 @@ class FreeLaneBinding870Tests(unittest.TestCase):
         self.assertEqual(called, [])
         self.assertEqual(payload["reason"], "PROVIDER_NOT_CURRENTLY_ADMITTED")
 
+    def test_cached_reservation_cannot_survive_supervisor_quarantine(self) -> None:
+        called = []
+
+        def request(*_args):
+            called.append(True)
+            return 200, {}, {}
+
+        module, spec_type = self._load_v3(request)
+        self.assertTrue(module._evidence(spec_type(), "secret", "openrouter/free")["ok"])
+        self._write_steering(execution_state="RUNTIME_QUARANTINED")
+        status, _, payload = module.gated_request_chat(
+            spec_type(), "secret", "openrouter/free", "prompt", 32, 1.0
+        )
+        self.assertEqual(status, 460)
+        self.assertEqual(called, [])
+        self.assertEqual(payload["reason"], "FREE_LANE_AUTHORITY_SNAPSHOT_INVALID")
+
     def test_mid_call_authority_change_is_visible_in_receipt(self) -> None:
         def request(*_args):
             self._revoke_openrouter()
@@ -187,7 +374,8 @@ class FreeLaneBinding870Tests(unittest.TestCase):
             encoding="utf-8"
         ).strip().splitlines()
         receipt = json.loads(rows[-1])
-        self.assertEqual(receipt["typed_admission_epoch"], "8.70")
+        self.assertEqual(receipt["typed_admission_epoch"], self.EPOCH)
+        self.assertEqual(receipt["supervisor_epoch"], self.EPOCH)
         self.assertFalse(receipt["binding_stable_after_call"])
 
 

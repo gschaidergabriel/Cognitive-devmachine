@@ -1,0 +1,69 @@
+{
+  "schema": "CLAY_GO_872_SOURCE_DELTA_RECEIPT/v1",
+  "trigger": "go",
+  "observed_user_time": "2026-08-24T23:33+07:00",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_before_write": "16fcc38e31188322c953474b6b9e9db4bf8a170f",
+    "canonical_main_advanced_during_work": true,
+    "final_write_mode": "CONTENTS_API_EXACT_BLOB_SHA_NO_FORCE"
+  },
+  "observation": {
+    "promotion_gate_schema": "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4",
+    "defect": "holdout.metric_uses_output_tokens was only guarded when value was literal true; omitted or non-boolean values could bypass the output-token modality declaration and therefore bypass the counterbalance requirement",
+    "overlap": "PR #1653 contained the same invariant idea against an older v3 base but was non-mergeable against current v4; only the narrow invariant was ported"
+  },
+  "hypothesis": "Requiring metric_uses_output_tokens to be an explicit boolean closes a metadata omission/type-confusion fail-open without weakening legitimate counterbalanced token-metric promotion.",
+  "counterhypothesis": "The stricter type requirement could reject valid non-token metrics that omit the field; current scientific-independence semantics require an explicit modality declaration, so omission is intentionally invalid at goal-credit scope.",
+  "delta": {
+    "source": "tools/trigger1_jspace_promotion_gate.py",
+    "tests": "tests/test_trigger1_jspace_metric_modality_v4.py",
+    "failure_code": "HOLDOUT_METRIC_OUTPUT_TOKEN_MODALITY_REQUIRED",
+    "negative_cases": [
+      "metric_uses_output_tokens missing",
+      "metric_uses_output_tokens non-boolean"
+    ],
+    "positive_case": "metric_uses_output_tokens=true plus label_mapping_counterbalanced=true remains eligible when all other evidence is valid"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_PREVENTING_MALFORMED_JSPACE_EVIDENCE_FROM_REACHING_GOAL_CREDIT_FLOW",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_TYPED_FAIL_CLOSED_EVIDENCE_ADMISSION_FOR_HOLDOUT_METRIC_MODALITY",
+    "track_c_jspace_training_readiness": "ADVANCED_DIRECTLY_BY_CLOSING_OUTPUT_METRIC_MODALITY_AND_COUNTERBALANCE_BYPASS_IN_PROMOTION_GATE_V4"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_id_available": false,
+    "user_timestamp_precision": "minute_only",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "execution": {
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "together_calls": 0,
+    "model_interventions": 0,
+    "runtime_credit_claimed": false,
+    "evidence_scope": "SOURCE_AND_REGRESSION_DEFINITION_ONLY_PENDING_EXACT_HEAD_TEST_EXECUTION"
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "parallel_frontier": {
+    "forge_distillery": "latest authority state observed 1 nominal Forge accept and 0 Distillery accepted dataset tokens; terminal exact-current witness remains required",
+    "local_qwen_midlayer": "current issue-dispatch workflow requires canonical atomic lease before intervention; no lease-admitted model runtime was executed by this organ"
+  },
+  "next_exact_actions": [
+    "execute the focused v4 regression plus existing trigger1 promotion-gate regression on exact current source",
+    "observe repository-bound Forge->Distillery terminal witness before granting operational runtime credit",
+    "do not execute Qwen unusual intervention without canonical create-only lease for exact reproducible macrocycle identity"
+  ]
+}

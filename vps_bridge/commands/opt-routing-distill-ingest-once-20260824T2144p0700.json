@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"opt-routing-distill-ingest-once-20260824T2144p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -e; echo FIRST; python3 tools/ingest_forge_accepts_into_distillery.py; echo SECOND_IDEMPOTENCE; python3 tools/ingest_forge_accepts_into_distillery.py; echo COUNTERS; python3 - <<'PY'\nimport sqlite3,pathlib\np=pathlib.Path('/artifacts/clay-entityos-swarm/distillery/distillery.sqlite3'); c=sqlite3.connect(p)\nfor k in ('accepted_dataset_tokens','accepted_packets','forge_execution_packets'):\n r=c.execute('select value from counters where key=?',(k,)).fetchone(); print(k, r[0] if r else 0)\ntry: print('forge_execution_ingest',c.execute('select count(*) from forge_execution_ingest').fetchone()[0])\nexcept Exception as e: print('forge_execution_ingest_err',type(e).__name__,e)\nc.close()\nPY"
+}

@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 # Host-side, narrowly scoped publisher for sandbox-generated Free Swarm metrics.
 # This is sandbox/bridge administration: it never executes research workloads
-# on the host and only pushes free swarm/README.md + LIVE_METRICS.json to main.
+# on the host and only pushes free swarm dashboard metrics to main.
 
 [[ ${EUID:-$(id -u)} -eq 0 ]] || { echo 'root required for one-time service install' >&2; exit 2; }
 
@@ -55,19 +55,26 @@ refresh_once() {
   git -C "$PUB" checkout -B main origin/main
   git -C "$PUB" reset --hard origin/main
   python3 "$PUB/free swarm/evaluate.py" --repo "$PUB" --artifacts "$ART" >/dev/null
+  if [[ -f "$PUB/free swarm/update_distillery_readme.py" ]]; then
+    python3 "$PUB/free swarm/update_distillery_readme.py" --repo "$PUB" --artifacts "$ART" >/dev/null
+  fi
   git -C "$PUB" add -- "free swarm/README.md" "free swarm/LIVE_METRICS.json"
+  [[ ! -f "$PUB/free swarm/DISTILLERY_LIVE.json" ]] || git -C "$PUB" add -- "free swarm/DISTILLERY_LIVE.json"
   if git -C "$PUB" diff --cached --quiet; then
     return 0
   fi
-  git -C "$PUB" commit -m "metrics: autonomous Free Swarm refresh"
+  git -C "$PUB" commit -m "metrics: autonomous Free Swarm + distillery refresh"
   if ! git -C "$PUB" push origin HEAD:main; then
-    # One deterministic retry against current main; evaluator recomputes after reset.
     git -C "$PUB" fetch origin main --prune
     git -C "$PUB" reset --hard origin/main
     python3 "$PUB/free swarm/evaluate.py" --repo "$PUB" --artifacts "$ART" >/dev/null
+    if [[ -f "$PUB/free swarm/update_distillery_readme.py" ]]; then
+      python3 "$PUB/free swarm/update_distillery_readme.py" --repo "$PUB" --artifacts "$ART" >/dev/null
+    fi
     git -C "$PUB" add -- "free swarm/README.md" "free swarm/LIVE_METRICS.json"
+    [[ ! -f "$PUB/free swarm/DISTILLERY_LIVE.json" ]] || git -C "$PUB" add -- "free swarm/DISTILLERY_LIVE.json"
     git -C "$PUB" diff --cached --quiet && return 0
-    git -C "$PUB" commit -m "metrics: autonomous Free Swarm refresh"
+    git -C "$PUB" commit -m "metrics: autonomous Free Swarm + distillery refresh"
     git -C "$PUB" push origin HEAD:main
   fi
 }

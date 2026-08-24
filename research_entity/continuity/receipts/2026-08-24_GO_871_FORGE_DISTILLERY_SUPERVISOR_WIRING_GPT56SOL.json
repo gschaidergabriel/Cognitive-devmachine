@@ -1,0 +1,53 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.71",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_branch": "c684271bfa992264046cec78b658200582ab0480",
+  "predecessor_merge": "13e40b7097eda02113cd0f438fa6960ffae02f39",
+  "predecessor_pr": 1555,
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "atomic_unusual_experiment_claim": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "overlap_search": "No open PR implementing Forge-to-Distillery supervisor bridge wiring was found immediately before this branch."
+  },
+  "delta": {
+    "supervisor": "tools/run_24h_entityos_swarm_supervisor.sh",
+    "test": "tests/test_forge_distillery_supervisor_wiring_871.py",
+    "behavior": [
+      "runs the deterministic Forge-to-Distillery admission tool only after Distillery and Forge have been started",
+      "uses the existing /artifacts/clay-entityos-swarm/forge/architecture_delta_evaluations.jsonl and Distillery SQLite paths",
+      "treats bridge failure as bounded negative evidence and does not abort independent Forge/Distillery supervisor operation",
+      "atomically publishes the latest bridge result to forge-distillery-ingest.json",
+      "surfaces the latest bridge result in SUPERVISOR.json",
+      "introduces no provider network call, paid route or new truth/effect authority"
+    ]
+  },
+  "evidence_scope": {
+    "source_inspection": "PRESENT",
+    "wiring_regression_source": "PRESENT",
+    "exact_branch_test_execution": "NOT_OBSERVED_AT_RECEIPT_WRITE",
+    "successor_aligned_live_supervisor_execution": "NOT_OBSERVED",
+    "forge_to_distillery_live_component_credit": 0
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_SOURCE_WIRING",
+    "track_b_hcu_and_typed_entry": "ADVANCED_FAIL_CLOSED_PROVENANCE_PIPELINE",
+    "track_c_global_jspace_gwt_training_readiness": "ADVANCED_DATASET_DELIVERY_INFRASTRUCTURE_ONLY"
+  },
+  "credits": {
+    "forge_component_acceptance_count_observed": 1,
+    "distillery_live_bridge_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Run the successor-current supervisor on an authorized zero-cost runtime, require forge_distillery_bridge in SUPERVISOR.json, and when an exact accepted evaluation exists verify exactly one new packet plus nonzero accepted_dataset_tokens with duplicate replay producing zero additional tokens."
+}

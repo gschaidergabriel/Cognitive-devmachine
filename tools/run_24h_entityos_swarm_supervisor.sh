@@ -10,6 +10,7 @@ START="$(date +%s)"
 DEADLINE="${CLAY_SWARM_DEADLINE_EPOCH:-$((START + 24*3600))}"
 ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
 SWARM_ADMISSION_BINDING_FILE="$STATE_DIR/swarm-admission-binding.sha256"
+FORGE_DISTILLERY_STATUS="$STATE_DIR/forge-distillery-ingest.json"
 
 provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
 
@@ -127,6 +128,21 @@ start_forge(){
     nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/forge.pid"; }
 }
 
+run_forge_distillery_bridge(){
+  local x="$ROOT/tools/ingest_forge_accepts_into_distillery.py"
+  local evaluations="$STATE_DIR/forge/architecture_delta_evaluations.jsonl"
+  local db="$STATE_DIR/distillery/distillery.sqlite3"
+  local tmp="${FORGE_DISTILLERY_STATUS}.tmp"
+  [[ -f "$x" && -f "$evaluations" && -f "$db" ]] || return 0
+  # Bridge failure is evidence, not a reason to kill independent Forge/Distillery
+  # processes. The tool itself fails closed on non-exact/non-accepted evaluations.
+  if python3 "$x" --forge-evaluations "$evaluations" --distillery-db "$db" >"$tmp" 2>"$STATE_DIR/forge-distillery-ingest.err"; then
+    mv "$tmp" "$FORGE_DISTILLERY_STATUS"
+  else
+    rm -f "$tmp"
+  fi
+}
+
 start_go_swarm_if_admitted(){
   [[ "${CLAY_FREE_ONLY_ATTESTED:-}" == "1" ]] || return 0
   has_admitted_provider_key || return 0
@@ -186,6 +202,7 @@ while (( $(date +%s) < DEADLINE )); do
   start_dashboard
   start_distillery
   start_forge
+  run_forge_distillery_bridge
   stop_unadmitted_go_swarm
   start_go_swarm_if_admitted
   NOW=$(date +%s); REMAINING=$((DEADLINE-NOW))
@@ -199,7 +216,11 @@ def local_health():
  try:
   with urllib.request.urlopen('http://127.0.0.1:8088/health',timeout=1.2) as r:return 200<=int(r.status)<300
  except Exception:return False
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
+def load_json(path):
+ try:
+  with open(path,'r',encoding='utf-8') as f:return json.load(f)
+ except Exception:return None
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'forge_distillery_bridge':load_json('$FORGE_DISTILLERY_STATUS'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30

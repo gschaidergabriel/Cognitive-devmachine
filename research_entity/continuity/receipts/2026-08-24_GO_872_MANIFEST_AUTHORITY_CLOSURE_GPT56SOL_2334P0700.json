@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_GO_MANIFEST_AUTHORITY_CLOSURE_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "persistent_research_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry_chain": [
+    {
+      "canonical_main": "f7fa8212e633f88b590cb9bb6968505b59eaef7d",
+      "finding": "BOOTSTRAP_8_71_AND_MANIFEST_8_68_WHILE_INBOX_PROGRAM_8_72"
+    },
+    {
+      "canonical_main": "7931d55709168af0fc42f84b541ca5fa53976183",
+      "finding": "PARALLEL_MAIN_FIXED_BOOTSTRAP_TO_8_72_BUT_MANIFEST_REMAINED_8_68"
+    }
+  ],
+  "current_source_observation": {
+    "bootstrap_schema_version": "8.72",
+    "bootstrap_authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
+    "manifest_authority_correction_before": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "manifest_active_supervisor_epoch_before": "8.68",
+    "manifest_coordination_supervisor_before": "8.68"
+  },
+  "bounded_delta": {
+    "manifest_authority_correction_after": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
+    "manifest_active_supervisor_epoch_after": "8.72",
+    "manifest_coordination_supervisor_after": "8.72",
+    "provider_policy": "CURRENT_FREE_ONLY_CONCRETE_CREDENTIAL_MODEL_ROUTE_ZERO_COST_PROVENANCE_FAIL_CLOSED",
+    "historical_receipts_rewritten": false,
+    "second_truth_effect_or_admission_authority_created": false
+  },
+  "existing_guard": {
+    "path": "tools/validate_clayverse_authority_consistency.py",
+    "successor_dynamic": true,
+    "expected_repaired_fail_closed_conditions": [
+      "MANIFEST_AUTHORITY_POINTER_MISMATCH",
+      "MANIFEST_AUTHORITY_EPOCH_DRIFT"
+    ],
+    "exact_head_execution_observed": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_REMAINING_CURRENT_FACING_AUTHORITY_CLOSURE",
+    "track_b": "ADVANCED_TYPED_ENTRY_HCU_AUTHORITY_EPOCH_CONSISTENCY",
+    "track_c": "ADVANCED_JSPACE_TRAINING_READINESS_BOUNDARY_WITH_ZERO_RUNTIME_PROMOTION"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_identity_available": false,
+    "user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "runtime_credit": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "evidence_scope": "CURRENT_SOURCE_AUTHORITY_RECONCILIATION_ONLY",
+  "next_exact_gate": "Execute the successor-aware authority validator on the exact rebased PR head; if green and current, fuse, re-enter main, then continue the retained Forge-to-Distillery terminal witness and local Qwen nonterminal J-Space runtime path without running any unleased unusual intervention."
+}

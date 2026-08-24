@@ -5,8 +5,9 @@ The gate coordinates concurrency and provider-wide cooldowns in one SQLite file
 shared by the main Free Swarm and the research distillery. It does not rotate
 credentials to evade provider limits and it never upgrades billing.
 
-This is deliberately a coarse admission layer. Provider response headers and
-HTTP 429 remain the source of truth for actual dynamic quotas.
+External LLM-provider leases are subordinate to canonical typed FREE admission.
+Search/research transports remain quota-coordinated but are not silently promoted
+into the LLM provider authority.
 """
 from __future__ import annotations
 
@@ -20,7 +21,10 @@ import time
 import uuid
 from typing import Iterator
 
+from free_provider_admission import require_provider_admitted_free
+
 DB_PATH = Path(os.getenv("CLAY_FREE_PROVIDER_BUDGET_DB", "/artifacts/clay-entityos-swarm/provider_budget.sqlite3"))
+LLM_PROVIDERS = frozenset({"groq", "mistral", "nvidia", "openrouter"})
 DEFAULTS = {
     "groq": (12, 0.0),
     "mistral": (6, 0.0),
@@ -85,7 +89,15 @@ def ensure_provider(provider: str) -> None:
         )
 
 
+def _require_llm_admission(provider: str) -> None:
+    if provider in LLM_PROVIDERS:
+        require_provider_admitted_free(provider)
+
+
 def acquire(provider: str, owner: str, timeout_s: float = 60.0, lease_s: float = 300.0) -> str:
+    # This runs before a quota lease is minted and before the caller can proceed to
+    # provider network I/O. UNKNOWN/PAID/SUBSCRIPTION/stale authority fails closed.
+    _require_llm_admission(provider)
     ensure_provider(provider)
     deadline = time.monotonic() + max(0.5, timeout_s)
     while time.monotonic() < deadline:

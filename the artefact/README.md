@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor observed in this macrocycle: **8.73**. Mode: **FREE_ONLY**. Re-entry source head before this status write: `91db73dade60d6bc33a900af55c8451a4753d400`.
+Newest inbox-selected supervisor observed in this macrocycle: **8.73**. Mode: **FREE_ONLY**. Re-entry source head before this status write: `6773bbcf20455b7b4d0a4a84880f997b7b4815f3`.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not new persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU are compatibility/research aliases only.
 
@@ -32,9 +32,11 @@ Parallel work converged the fix directly onto canonical `main` rather than prese
 
 - `8835f7a7a45c3e4bb6d28d8c24f7b2f1e4552609` — removes envelope-only `delta_id` from replay/measured execution identity and strengthens replay/legacy guards;
 - `e4f1b7c5bbf1e3cdedd5fd66b82fd7b466fbb765` — removes volatile `evaluated_at` and `delta_id` from training-bearing packet bytes, while retaining them as observation-only metadata;
-- `91db73dade60d6bc33a900af55c8451a4753d400` — adds rebuild/reopen regression coverage for stable packet bytes, `delta_id` rekey duplicate `+0`, and legacy collision fail-closed behavior.
+- `91db73dade60d6bc33a900af55c8451a4753d400` — adds rebuild/reopen regression coverage for stable packet bytes, `delta_id` rekey duplicate `+0`, and legacy collision fail-closed behavior;
+- `83a120454107b57aee4813559a6f6961ec477213` — fuses the live promoter semantic-replay/reopen and measured-conflict fail-closed closure;
+- `7f473bc29966f39c12e29c805b3945baab695a96` — binds those live semantic regressions into the exact-main self-hosted gate.
 
-The superseded successor PR #1747 was correctly closed unmerged after these semantics landed on `main`; no second ingestion/truth/effect authority was created.
+Superseded duplicate/successor lanes were closed rather than promoted once equal-or-stronger semantics landed on `main`; no second ingestion/truth/effect authority was created.
 
 Current replay contract:
 
@@ -47,17 +49,38 @@ Current replay contract:
 
 This is a reusable HCU/Typed-Entry-adjacent causal identity primitive: replay-stable event/execution identity is separated from volatile transport/evaluation-envelope identity. It also improves future J-Space/GWT dataset safety by preventing nonsemantic envelope churn from multiplying training examples.
 
+## GO 8.73 — exact-main execution observability delta
+
+`6773bbcf20455b7b4d0a4a84880f997b7b4815f3` closes a separate evidence-control-plane gap in `.github/workflows/go873-distillery-selfhosted-main-regression.yml`.
+
+The self-hosted regression gate now:
+
+- binds the exact triggering `main` SHA and a clean checkout before tests;
+- executes compile, replay-identity, rebuild-stability, existing live-bridge, promotion-guard, and live semantic replay/measured-conflict regressions;
+- runs an `if: always()` persistence step so both PASS and NONPASS become first-class evidence;
+- writes one append-only repository-bound receipt per run attempt at `research_entity/runtime/distillery_selfhosted/run-<run_id>-attempt-<attempt>.json`;
+- records exact triggering head, GitHub run/attempt identity, runner identity fields, and each step outcome;
+- classifies only `EXACT_MAIN_DETERMINISTIC_REGRESSION_PASS` versus `EXACT_MAIN_DETERMINISTIC_REGRESSION_NONPASS`;
+- explicitly records `real_safe_forge_accept_observed=false` and `repository_bound_live_accepted_dataset_tokens_gt_zero_observed=false` because regression execution alone is not the real Safe-Forge witness;
+- grants zero whole EntityOS/HCU, full HCU, J-Space-model, training, or whole-product credit.
+
+The append-only receipt path is outside the workflow's path trigger, so evidence persistence does not recursively trigger the gate. The workflow token is used only for this bounded repository evidence write; source checkout remains exact-trigger-head and credential persistence is disabled there.
+
+At the last direct read in this macrocycle, **no `CLAY_GO873_DISTILLERY_SELFHOSTED_REGRESSION_RECEIPT/v1` file had materialized yet**. Therefore runner claim, test execution, and terminal result remain unobserved. Workflow/source presence is not runtime evidence.
+
 ## J-Space / GWT track
 
 Current `main` also contains the 8.73 J-Space architecture convergence work: `JSPACE_TRACE_ABI/v1`, `JSPACE_VECTOR_CONTROL_ABI/v1`, model-specific adapter boundaries, and a latent-packet translation direction. These remain architecture/source contracts, not evidence that models share a native latent geometry or that model-specific J-Space causality has been established.
 
 The strongest model-science gate remains the local Qwen3-0.6B nonterminal six-control discriminator. It is still subject to the canonical unusual-experiment atomic lease. This user turn exposes no shared immutable macrocycle/request ID beyond minute-precision conversation timing, so no new unusual intervention is authorized in this macrocycle: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
 
+`TRAINING_READINESS_NO_CHANGE_WITH_REASON`: the current model-specific J-Space intervention cannot be executed without a canonical atomic lease, and the full vector-control/trace ABI source work has already converged on `main`; creating another source-only J-Space lane would be duplicate work. The next model-specific discriminator remains the leased local Qwen3-0.6B nonterminal six-control intervention after reproducible shared macrocycle identity exists.
+
 ## Evidence credit
 
 Conservative credit remains:
 
-- Forge/Distillery replay-stability: source + deterministic component/regression evidence only;
+- Forge/Distillery replay-stability: source + deterministic component/regression-definition evidence; exact self-hosted terminal receipt not yet observed in this macrocycle;
 - persistent live Forge -> Distillery promotion witness: **not yet promoted to whole operational runtime acceptance**;
 - provider runtime credit: **0**;
 - whole EntityOS/HCU runtime credit: **0**;
@@ -70,12 +93,13 @@ A source file, test definition, workflow, provider HTTP response, token count, m
 
 ## Current blockers / next exact gates
 
-1. Run/observe the exact-current **persistent live** Forge -> Distillery witness and require one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> timestamp/narration/`delta_id` semantic replay -> exactly **+0 packets / +0 tokens**.
-2. Require same stable replay identity with changed measured evidence to fail closed in that executable live witness, not only in component tests.
-3. Keep one canonical Distillery admission authority; do not reopen superseded #1747 or this macrocycle's unpromoted duplicate scratch branch.
-4. Continue Typed Entry -> verified loader consumption -> actual model execution -> InferenceReceipt -> model-specific J-Space causal trace through the retained HCU donor lane #1263.
-5. Only when a reproducible shared macrocycle identity and create-only atomic claim exist may the local Qwen3-0.6B nonterminal six-control intervention proceed.
-6. Keep external provider routes secondary and fail closed unless exact FREE economic provenance is bound. No paid/Together fallback.
+1. Observe a newly persisted `CLAY_GO873_DISTILLERY_SELFHOSTED_REGRESSION_RECEIPT/v1` for the exact-current self-hosted gate and require all scoped regression step outcomes to be `success`; classify any NONPASS or missing receipt narrowly rather than as a product/science failure.
+2. Then run/observe the exact-current **persistent live** Forge -> Distillery witness and require one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> timestamp/narration/`delta_id` semantic replay -> exactly **+0 packets / +0 tokens**.
+3. Require same stable replay identity with changed measured evidence to fail closed in that executable live witness, not only in deterministic regressions.
+4. Keep one canonical Distillery admission authority; do not reopen superseded replay/rebuild lanes.
+5. Continue Typed Entry -> verified loader consumption -> actual model execution -> InferenceReceipt -> model-specific J-Space causal trace through the retained HCU donor lane #1263.
+6. Only when a reproducible shared macrocycle identity and create-only atomic claim exist may the local Qwen3-0.6B nonterminal six-control intervention proceed.
+7. Keep external provider routes secondary and fail closed unless exact FREE economic provenance is bound. No paid/Together fallback.
 
 ## Evidence discipline and reentry
 

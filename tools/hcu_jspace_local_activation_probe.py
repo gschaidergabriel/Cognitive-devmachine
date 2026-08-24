@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
-"""Offline-only model-specific activation intervention probe for EntityOS/HCU.
+"""Offline local observation/intervention probe for EntityOS/HCU Global J-Space.
 
-This bridges HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1.md to a minimal local
-Hugging Face/PyTorch experiment. It grants NO canonical, whole-HCU, J-Space-model,
-or training credit by itself. Its record is candidate runtime evidence requiring
-canonical admission/review.
+`observation` is the cheap first discriminator: one model forward pass, one named layer
+and position, activation/output digests, exact local source/runtime bindings, no hidden
+state modification. `intervention` runs the clean/corrupted/target/sham/off-target causal
+family and therefore requires the canonical create-only `go` unusual-experiment claim.
 
-The intervention is unusual research. Execution therefore requires the canonical
-create-only `go` atomic claim for the exact experiment and claimant. A claim whose
-result already exists is rejected here rather than silently treated as a new run.
-
-No model download is permitted: --model must be a local directory and all Hugging
-Face/Transformers offline flags are forced before model libraries are imported.
+Neither mode grants canonical, whole-HCU, J-Space-model, training, or whole-product
+credit by itself. Emitted records are bounded candidate evidence requiring canonical
+admission/review. No model download is permitted: --model must be a local directory and
+Hugging Face/Transformers offline flags are forced before model libraries are imported.
 """
 from __future__ import annotations
 
@@ -27,15 +25,15 @@ import subprocess
 import sys
 from typing import Any
 
-# Fail closed before importing model libraries.
 os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["TRANSFORMERS_OFFLINE"] = "1"
 os.environ["HF_DATASETS_OFFLINE"] = "1"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-SCHEMA = "ENTITYOS_HCU_JSPACE_LOCAL_ACTIVATION_PROBE/v1"
-CLASSIFICATION = "LOCAL_MODEL_SPECIFIC_CAUSAL_CANDIDATE_EVIDENCE_ONLY"
+SCHEMA = "ENTITYOS_HCU_JSPACE_LOCAL_ACTIVATION_PROBE/v2"
 CLAIM_SCHEMA = "clay-go-experiment-claim/v1"
+OBSERVATION_CLASS = "LOCAL_MODEL_SPECIFIC_OBSERVATION_CANDIDATE_EVIDENCE_ONLY"
+INTERVENTION_CLASS = "LOCAL_MODEL_SPECIFIC_CAUSAL_CANDIDATE_EVIDENCE_ONLY"
 
 
 class ProbeRejected(RuntimeError):
@@ -160,7 +158,6 @@ def validate_atomic_claim(
     result_path = claims_dir / f"{trigger_key}.result.json"
     if result_path.exists():
         raise ProbeRejected("ATOMIC_CLAIM_RESULT_ALREADY_EXISTS_REPLICATION_REQUIRES_SEPARATE_CLASSIFICATION")
-
     return {
         "trigger_key": trigger_key,
         "claim_path": claim_path.relative_to(root).as_posix(),
@@ -198,7 +195,6 @@ def tree_identity(root: Path) -> dict[str, Any]:
 def tensor_digest(tensor: Any) -> str:
     import torch
 
-    # Canonical float32 CPU encoding makes the measurement digest device-independent.
     data = tensor.detach().to(device="cpu", dtype=torch.float32).contiguous()
     return hashlib.sha256(data.numpy().tobytes(order="C")).hexdigest()
 
@@ -310,13 +306,28 @@ def token_id(tokenizer: Any, text: str, label: str) -> int:
     return int(ids[-1])
 
 
+def require_intervention_arguments(args: argparse.Namespace) -> None:
+    required = {
+        "corrupted": args.corrupted,
+        "target_text": args.target_text,
+        "off_target_text": args.off_target_text,
+        "atomic_lease_claim": args.atomic_lease_claim,
+        "claimant_organ": args.claimant_organ,
+        "experiment_name": args.experiment_name,
+    }
+    missing = [name for name, value in required.items() if not str(value or "").strip()]
+    if missing:
+        raise ProbeRejected("INTERVENTION_ARGUMENTS_REQUIRED:" + ",".join(sorted(missing)))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--mode", choices=("observation", "intervention"), default="observation")
     parser.add_argument("--model", required=True, help="Local HF-compatible model snapshot directory")
     parser.add_argument("--clean", required=True)
-    parser.add_argument("--corrupted", required=True)
-    parser.add_argument("--target-text", required=True, help="Metric token/text; final encoded token is used")
-    parser.add_argument("--off-target-text", required=True, help="Unrelated metric token/text")
+    parser.add_argument("--corrupted")
+    parser.add_argument("--target-text", help="Intervention metric token/text; final encoded token is used")
+    parser.add_argument("--off-target-text", help="Intervention unrelated metric token/text")
     parser.add_argument("--layer", type=int, required=True)
     parser.add_argument("--position", type=int, default=-1)
     parser.add_argument("--off-target-position", type=int)
@@ -326,29 +337,34 @@ def main() -> int:
     parser.add_argument("--admission-id", required=True)
     parser.add_argument("--route-id", required=True)
     parser.add_argument("--inference-receipt-id", required=True)
-    parser.add_argument("--atomic-lease-claim", required=True)
-    parser.add_argument("--claimant-organ", required=True)
-    parser.add_argument("--experiment-name", required=True)
+    parser.add_argument("--atomic-lease-claim")
+    parser.add_argument("--claimant-organ")
+    parser.add_argument("--experiment-name")
     parser.add_argument("--output")
     args = parser.parse_args()
 
-    ids = (
-        args.generation,
-        args.causal_event_id,
-        args.admission_id,
-        args.route_id,
-        args.inference_receipt_id,
-        args.claimant_organ,
-        args.experiment_name,
-    )
-    if any(not str(value).strip() for value in ids):
-        raise SystemExit("required causal/lease identifiers must be non-empty")
+    causal_values = (args.generation, args.causal_event_id, args.admission_id, args.route_id, args.inference_receipt_id)
+    if any(not str(value).strip() for value in causal_values):
+        raise SystemExit("required causal identifiers must be non-empty")
+    if args.mode == "intervention":
+        require_intervention_arguments(args)
 
     observed_at = dt.datetime.now(dt.timezone.utc).isoformat()
     root = git_root()
     head = git_head(root)
     authority = resolve_current_authority(root)
-    lease = validate_atomic_claim(root, args.atomic_lease_claim, args.claimant_organ, args.experiment_name)
+    if args.mode == "intervention":
+        lease: dict[str, Any] = validate_atomic_claim(
+            root,
+            args.atomic_lease_claim,
+            args.claimant_organ,
+            args.experiment_name,
+        )
+    else:
+        lease = {
+            "status": "NOT_REQUIRED_OBSERVATION_ONLY_NO_HIDDEN_STATE_MODIFICATION",
+            "unusual_intervention_performed": False,
+        }
     model_path = Path(args.model).expanduser().resolve()
     source_identity = tree_identity(model_path)
     network = NetworkFence()
@@ -356,7 +372,8 @@ def main() -> int:
     receipt: dict[str, Any] = {
         "schema": SCHEMA,
         "observed_at": observed_at,
-        "classification": CLASSIFICATION,
+        "probe_mode": args.mode,
+        "classification": OBSERVATION_CLASS if args.mode == "observation" else INTERVENTION_CLASS,
         "program": "ENTITYOS_HCU",
         "product": "EntityOS",
         "architecture": "HCU",
@@ -418,25 +435,30 @@ def main() -> int:
             layer = layers[layer_index]
 
             clean_inputs = tokenizer(args.clean, return_tensors="pt", add_special_tokens=True)
-            corrupt_inputs = tokenizer(args.corrupted, return_tensors="pt", add_special_tokens=True)
             clean_ids = clean_inputs["input_ids"]
-            corrupt_ids = corrupt_inputs["input_ids"]
-            if clean_ids.shape != corrupt_ids.shape:
-                raise ProbeRejected(
-                    f"CLEAN_CORRUPTED_TOKEN_SHAPE_MISMATCH:{tuple(clean_ids.shape)}:{tuple(corrupt_ids.shape)}"
-                )
             seq_len = int(clean_ids.shape[1])
             patch_pos = normalize_position(args.position, seq_len)
-            off_pos = (
-                normalize_position(args.off_target_position, seq_len)
-                if args.off_target_position is not None
-                else (patch_pos - 1 if patch_pos > 0 else patch_pos + 1)
-            )
-            if off_pos == patch_pos or off_pos < 0 or off_pos >= seq_len:
-                raise ProbeRejected("DISTINCT_OFF_TARGET_POSITION_REQUIRED")
 
-            target_id = token_id(tokenizer, args.target_text, "TARGET")
-            off_target_id = token_id(tokenizer, args.off_target_text, "OFF_TARGET")
+            target_id: int | None = None
+            off_target_id: int | None = None
+            corrupt_inputs: Any | None = None
+            off_pos: int | None = None
+            if args.mode == "intervention":
+                corrupt_inputs = tokenizer(args.corrupted, return_tensors="pt", add_special_tokens=True)
+                corrupt_ids = corrupt_inputs["input_ids"]
+                if clean_ids.shape != corrupt_ids.shape:
+                    raise ProbeRejected(
+                        f"CLEAN_CORRUPTED_TOKEN_SHAPE_MISMATCH:{tuple(clean_ids.shape)}:{tuple(corrupt_ids.shape)}"
+                    )
+                off_pos = (
+                    normalize_position(args.off_target_position, seq_len)
+                    if args.off_target_position is not None
+                    else (patch_pos - 1 if patch_pos > 0 else patch_pos + 1)
+                )
+                if off_pos == patch_pos or off_pos < 0 or off_pos >= seq_len:
+                    raise ProbeRejected("DISTINCT_OFF_TARGET_POSITION_REQUIRED")
+                target_id = token_id(tokenizer, args.target_text, "TARGET")
+                off_target_id = token_id(tokenizer, args.off_target_text, "OFF_TARGET")
 
             def to_device(inputs: Any) -> dict[str, Any]:
                 return {k: v.to(device) for k, v in inputs.items()}
@@ -479,77 +501,78 @@ def main() -> int:
                     f"{args.generation}|{args.causal_event_id}|{args.admission_id}|"
                     f"{args.route_id}|{args.inference_receipt_id}|{label}"
                 )
-                record = {
+                record: dict[str, Any] = {
                     "condition": label,
-                    "model_execution_id_derived_local": hashlib.sha256(
-                        execution_material.encode("utf-8")
-                    ).hexdigest(),
+                    "model_execution_id_derived_local": hashlib.sha256(execution_material.encode("utf-8")).hexdigest(),
                     "jspace_trace_id_derived_local": hashlib.sha256(
                         f"{execution_material}|{layer_index}|{observation_position}".encode("utf-8")
                     ).hexdigest(),
                     "derived_ids_are_canonical": False,
                     "layer": layer_index,
                     "activation_site": f"decoder_layer:{layer_index}:position:{observation_position}",
-                    "activation_before_sha256": capture["activation_before_sha256"],
-                    "activation_after_sha256": capture["activation_after_sha256"],
+                    "activation_before_sha256_float32": capture["activation_before_sha256"],
+                    "activation_after_sha256_float32": capture["activation_after_sha256"],
                     "activation_shape": capture["activation_shape"],
                     "activation_dtype": capture["activation_dtype"],
                     "final_logits_sha256_float32": tensor_digest(logits),
-                    "target_token_id": target_id,
-                    "target_logit": float(logits[0, target_id].item()),
-                    "off_target_token_id": off_target_id,
-                    "off_target_logit": float(logits[0, off_target_id].item()),
                     "field_classification": "OBSERVED_RUNTIME_MEASUREMENT_WITH_DERIVED_LOCAL_IDS",
                 }
+                if target_id is not None and off_target_id is not None:
+                    record.update(
+                        {
+                            "target_token_id": target_id,
+                            "target_logit": float(logits[0, target_id].item()),
+                            "off_target_token_id": off_target_id,
+                            "off_target_logit": float(logits[0, off_target_id].item()),
+                        }
+                    )
                 return record, capture["reference_vector"]
 
             clean_record, clean_reference = run_condition(
-                "BASELINE_CLEAN", to_device(clean_inputs), observation_position=patch_pos
-            )
-            corrupt_record, corrupt_reference = run_condition(
-                "BASELINE_CORRUPTED", to_device(corrupt_inputs), observation_position=patch_pos
-            )
-            clean_off_record, clean_off_reference = run_condition(
-                "BASELINE_CLEAN_OFF_TARGET_REFERENCE",
+                "OBSERVATION_BASELINE_CLEAN" if args.mode == "observation" else "BASELINE_CLEAN",
                 to_device(clean_inputs),
-                observation_position=off_pos,
-            )
-            target_record, _ = run_condition(
-                "INTERVENTION_TARGET",
-                to_device(corrupt_inputs),
                 observation_position=patch_pos,
-                reference=clean_reference,
-            )
-            sham_record, _ = run_condition(
-                "SHAM_CONTROL",
-                to_device(corrupt_inputs),
-                observation_position=patch_pos,
-                reference=corrupt_reference,
-            )
-            off_record, _ = run_condition(
-                "OFF_TARGET_CONTROL",
-                to_device(corrupt_inputs),
-                observation_position=off_pos,
-                reference=clean_off_reference,
             )
 
-            receipt.update(
-                {
-                    "runtime": {
-                        "python": platform.python_version(),
-                        "torch": torch.__version__,
-                        "transformers": transformers.__version__,
-                        "device": device,
-                        "model_class": type(model).__name__,
-                        "tokenizer_class": type(tokenizer).__name__,
-                        "layers": len(layers),
-                    },
-                    "post_load_identity": in_memory_parameter_identity(model),
-                    "probe": {
-                        "layer": layer_index,
-                        "target_position": patch_pos,
+            probe_payload: dict[str, Any] = {
+                "layer": layer_index,
+                "target_position": patch_pos,
+                "clean_token_ids_sha256": integer_tensor_digest(clean_ids),
+                "conditions": [clean_record],
+            }
+
+            if args.mode == "intervention":
+                assert corrupt_inputs is not None and off_pos is not None
+                corrupt_ids = corrupt_inputs["input_ids"]
+                corrupt_record, corrupt_reference = run_condition(
+                    "BASELINE_CORRUPTED", to_device(corrupt_inputs), observation_position=patch_pos
+                )
+                clean_off_record, clean_off_reference = run_condition(
+                    "BASELINE_CLEAN_OFF_TARGET_REFERENCE",
+                    to_device(clean_inputs),
+                    observation_position=off_pos,
+                )
+                target_record, _ = run_condition(
+                    "INTERVENTION_TARGET",
+                    to_device(corrupt_inputs),
+                    observation_position=patch_pos,
+                    reference=clean_reference,
+                )
+                sham_record, _ = run_condition(
+                    "SHAM_CONTROL",
+                    to_device(corrupt_inputs),
+                    observation_position=patch_pos,
+                    reference=corrupt_reference,
+                )
+                off_record, _ = run_condition(
+                    "OFF_TARGET_CONTROL",
+                    to_device(corrupt_inputs),
+                    observation_position=off_pos,
+                    reference=clean_off_reference,
+                )
+                probe_payload.update(
+                    {
                         "off_target_position": off_pos,
-                        "clean_token_ids_sha256": integer_tensor_digest(clean_ids),
                         "corrupted_token_ids_sha256": integer_tensor_digest(corrupt_ids),
                         "conditions": [
                             clean_record,
@@ -565,17 +588,36 @@ def main() -> int:
                             "off_target_patch_effect_on_target_logit": off_record["target_logit"] - corrupt_record["target_logit"],
                             "target_patch_effect_on_off_target_logit": target_record["off_target_logit"] - corrupt_record["off_target_logit"],
                         },
+                    }
+                )
+
+            receipt.update(
+                {
+                    "runtime": {
+                        "python": platform.python_version(),
+                        "torch": torch.__version__,
+                        "transformers": transformers.__version__,
+                        "device": device,
+                        "model_class": type(model).__name__,
+                        "tokenizer_class": type(tokenizer).__name__,
+                        "layers": len(layers),
                     },
+                    "post_load_identity": in_memory_parameter_identity(model),
+                    "probe": probe_payload,
                     "promotion": {
                         "status": "UNASSESSED_CANDIDATE_ONLY",
-                        "reason": "No predeclared effect/off-target threshold, exact loader-consumption attestation, or canonical evidence admission is evaluated by this probe.",
+                        "reason": (
+                            "Observation mode does not modify hidden state and establishes no causal promotion."
+                            if args.mode == "observation"
+                            else "No predeclared effect/off-target threshold, exact loader-consumption attestation, or canonical evidence admission is evaluated by this probe."
+                        ),
                     },
                 }
             )
     except ProbeRejected as exc:
         receipt["failure"] = {"class": "PROBE_REJECTED_FAIL_CLOSED", "detail": str(exc)}
         receipt["promotion"] = {"status": "REJECTED_NO_CREDIT"}
-    except Exception as exc:  # Runtime/dependency failure is not scientific negative evidence.
+    except Exception as exc:
         receipt["failure"] = {
             "class": "RUNTIME_OR_DEPENDENCY_FAILURE_NOT_SCIENTIFIC_NEGATIVE",
             "type": type(exc).__name__,

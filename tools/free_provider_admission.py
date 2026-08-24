@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Typed FREE_ONLY provider admission resolved before secrets or provider network I/O.
-
-This module intentionally reads only canonical repository control-plane files. It does
-not inspect API-key environment variables, provider responses, billing endpoints, or
-credential files. Those surfaces are downstream of admission.
-"""
+"""Typed FREE_ONLY provider admission resolved before secrets or provider network I/O."""
 from __future__ import annotations
 
 import argparse
@@ -16,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
 SUPERVISOR_INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
-ALLOWED_PROVIDERS = frozenset({"groq", "mistral", "nvidia", "openrouter"})
+ALLOWED_PROVIDERS = frozenset({"groq", "huggingface", "mistral", "nvidia", "openrouter"})
 
 
 class ProviderAdmissionError(RuntimeError):
@@ -34,7 +29,6 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
 
 
 def _resolve_current_supervisor(*, inbox_path: Path | None = None, root: Path | None = None) -> tuple[str, str]:
-    """Resolve the successor-dynamic supervisor from the current inbox, not a lagging cache."""
     repo_root = (root or ROOT).resolve()
     inbox = _read_json(inbox_path or SUPERVISOR_INBOX_PATH, "SUPERVISOR_INBOX")
     epoch = str(inbox.get("schema_version") or "").strip()
@@ -59,18 +53,11 @@ def _resolve_current_supervisor(*, inbox_path: Path | None = None, root: Path | 
     return epoch, steering_ref
 
 
-def load_provider_admission(
-    path: Path | None = None,
-    *,
-    supervisor_inbox_path: Path | None = None,
-    root: Path | None = None,
-) -> dict[str, Any]:
-    """Load canonical admission without touching any provider secret or network surface."""
+def load_provider_admission(path: Path | None = None, *, supervisor_inbox_path: Path | None = None, root: Path | None = None) -> dict[str, Any]:
     repo_root = (root or ROOT).resolve()
     target = path or (repo_root / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json")
     epoch, _ = _resolve_current_supervisor(inbox_path=supervisor_inbox_path, root=repo_root)
     payload = _read_json(target, "PROVIDER_ADMISSION")
-
     if payload.get("schema") != SCHEMA:
         raise ProviderAdmissionError("PROVIDER_ADMISSION_SCHEMA_UNSUPPORTED")
     if payload.get("mode") != "FREE_ONLY":
@@ -79,18 +66,21 @@ def load_provider_admission(
         raise ProviderAdmissionError("PROVIDER_ADMISSION_PRODUCT_AUTHORITY_MISMATCH")
     if payload.get("source") != "ENTITYOS_HCU_CONTROL_PLANE":
         raise ProviderAdmissionError("PROVIDER_ADMISSION_CONTROL_PLANE_SOURCE_REQUIRED")
-
     admission_epoch = str(payload.get("authority_epoch") or "").strip()
     if not admission_epoch or admission_epoch != epoch:
         raise ProviderAdmissionError("PROVIDER_ADMISSION_AUTHORITY_EPOCH_MISMATCH")
-
+    quarantine = payload.get("runtime_quarantine")
+    if quarantine is not None:
+        if not isinstance(quarantine, dict):
+            raise ProviderAdmissionError("PROVIDER_ADMISSION_RUNTIME_QUARANTINE_OBJECT_REQUIRED")
+        if str(quarantine.get("epoch") or "") != epoch:
+            raise ProviderAdmissionError("PROVIDER_ADMISSION_RUNTIME_QUARANTINE_EPOCH_MISMATCH")
     providers = payload.get("providers")
     if not isinstance(providers, dict):
         raise ProviderAdmissionError("PROVIDER_ADMISSION_PROVIDERS_OBJECT_REQUIRED")
     unknown_names = set(providers) - ALLOWED_PROVIDERS
     if unknown_names:
         raise ProviderAdmissionError("PROVIDER_ADMISSION_UNKNOWN_PROVIDER")
-
     for name in ALLOWED_PROVIDERS:
         record = providers.get(name)
         if not isinstance(record, dict):
@@ -109,7 +99,6 @@ def load_provider_admission(
 
 
 def _provider_record_is_admitted_free(payload: dict[str, Any], provider: str) -> bool:
-    """Inspect a payload that has already passed ``load_provider_admission`` validation."""
     try:
         record = payload["providers"][provider]
     except (KeyError, TypeError):
@@ -118,13 +107,6 @@ def _provider_record_is_admitted_free(payload: dict[str, Any], provider: str) ->
 
 
 def provider_is_admitted_free(provider: str, admission: dict[str, Any] | None = None) -> bool:
-    """Resolve FREE admission only from canonical control-plane state.
-
-    ``admission`` is retained for caller compatibility but deliberately ignored. A
-    caller-supplied dictionary is untrusted input and must never self-grant provider
-    authority. Callers that already hold a validated payload should keep inspection
-    internal to this module rather than treating that payload as a capability token.
-    """
     del admission
     if provider not in ALLOWED_PROVIDERS:
         return False
@@ -136,7 +118,6 @@ def provider_is_admitted_free(provider: str, admission: dict[str, Any] | None = 
 
 
 def admitted_provider_names(admission: dict[str, Any] | None = None) -> tuple[str, ...]:
-    """Return canonically admitted FREE providers; caller payloads are never authority."""
     del admission
     try:
         payload = load_provider_admission()
@@ -150,29 +131,15 @@ def admission_snapshot() -> dict[str, Any]:
         epoch, steering_ref = _resolve_current_supervisor()
         payload = load_provider_admission()
     except ProviderAdmissionError as exc:
-        return {
-            "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
-            "ok": False,
-            "admitted_free_providers": [],
-            "status": str(exc),
-        }
+        return {"schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1", "ok": False, "admitted_free_providers": [], "status": str(exc)}
     return {
         "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
         "ok": True,
         "authority_epoch": epoch,
         "steering": steering_ref,
-        "admitted_free_providers": [
-            name for name in sorted(ALLOWED_PROVIDERS)
-            if _provider_record_is_admitted_free(payload, name)
-        ],
-        "providers": {
-            name: {
-                "admitted": bool(payload["providers"][name]["admitted"]),
-                "cost_class": payload["providers"][name]["cost_class"],
-                "evidence_ref": payload["providers"][name]["evidence_ref"],
-            }
-            for name in sorted(ALLOWED_PROVIDERS)
-        },
+        "runtime_quarantine": payload.get("runtime_quarantine"),
+        "admitted_free_providers": [name for name in sorted(ALLOWED_PROVIDERS) if _provider_record_is_admitted_free(payload, name)],
+        "providers": {name: {"admitted": bool(payload["providers"][name]["admitted"]), "cost_class": payload["providers"][name]["cost_class"], "evidence_ref": payload["providers"][name]["evidence_ref"]} for name in sorted(ALLOWED_PROVIDERS)},
     }
 
 

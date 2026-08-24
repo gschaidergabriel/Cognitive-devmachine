@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
-"""Credential loader for FRANK/RAE external tools.
+"""Credential loader for EntityOS/HCU external tools.
 
-Lookup priority for non-provider secrets:
+Non-provider secret lookup priority:
 1. process environment
 2. designated private repository credential stores
 
-External LLM-provider credentials are different: the canonical EntityOS/HCU typed
-FREE provider admission must allow the provider *before* this module inspects the
-process environment or repository credential stores for that provider. This gives
-legacy/direct callers the same fail-closed pre-secret boundary as the guarded swarm
-and distillery entrypoints.
-
-The loader never prints secret values. Runtime secret managers can inject process
-environment variables and therefore automatically take priority over repo fallbacks
-only after the provider has been admitted FREE.
+External LLM credentials are different: the successor-dynamic provider-call boundary
+must allow the provider before this module inspects environment or repository secret
+stores. This makes direct/legacy callers fail closed during runtime quarantine as well
+as when typed FREE admission is absent.
 """
 from __future__ import annotations
 
@@ -26,40 +21,60 @@ from typing import Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 PRIVATE_DIR = ROOT / "research_entity" / "private"
-PRIVATE_STORES = [
-    PRIVATE_DIR / "API_TOKENS.env",
-    PRIVATE_DIR / "GROQ_API.env",
-]
+PRIVATE_STORES = [PRIVATE_DIR / "API_TOKENS.env", PRIVATE_DIR / "GROQ_API.env"]
 NAME_RE = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
-# Credential-name -> canonical typed provider identity.  Keep this deliberately
-# narrow: non-LLM tool credentials are not silently reclassified as LLM providers.
 PROVIDER_SECRET_NAMES = {
     "GROQ_API_KEY": "groq",
+    "GROQ_API_KEYS": "groq",
+    "GROQ2_API_KEY": "groq",
+    "GROQ3_API_KEY": "groq",
     "MISTRAL_API_KEY": "mistral",
+    "MISTRAL_API_KEYS": "mistral",
+    "MISTRAL2_API_KEY": "mistral",
+    "MISTRAL3_API_KEY": "mistral",
     "NVIDIA_API_KEY": "nvidia",
+    "NVIDIA_API_KEYS": "nvidia",
     "NVIDIA_NIM_API_KEY": "nvidia",
     "NGC_API_KEY": "nvidia",
+    "NVIDIA2_API_KEY": "nvidia",
+    "NVIDIA3_API_KEY": "nvidia",
     "OPENROUTER_API_KEY": "openrouter",
+    "OPENROUTER_API_KEYS": "openrouter",
+    "HF_TOKEN": "huggingface",
+    "HUGGINGFACE_API_KEY": "huggingface",
+    "TOGETHER_API_KEY": "together",
 }
+PROVIDER_SECRET_PATTERNS = (
+    (re.compile(r"^GROQ_API_KEY_[0-9]+$"), "groq"),
+    (re.compile(r"^MISTRAL_API_KEY_[0-9]+$"), "mistral"),
+    (re.compile(r"^NVIDIA_API_KEY_[0-9]+$"), "nvidia"),
+    (re.compile(r"^OPENROUTER_API_KEY_[0-9]+$"), "openrouter"),
+)
 
 
 class SecretError(RuntimeError):
     pass
 
 
-def _provider_secret_is_admitted(name: str) -> bool:
-    """Resolve admission without touching the credential value itself.
-
-    Import is intentionally lazy so generic non-provider secret use stays independent
-    of the EntityOS/HCU admission module. Any admission-resolution failure is a denial.
-    """
+def provider_for_secret_name(name: str) -> str | None:
     provider = PROVIDER_SECRET_NAMES.get(name)
+    if provider is not None:
+        return provider
+    for pattern, candidate in PROVIDER_SECRET_PATTERNS:
+        if pattern.fullmatch(name):
+            return candidate
+    return None
+
+
+def _provider_secret_is_admitted(name: str) -> bool:
+    """Resolve current execution permission without touching the credential value."""
+    provider = provider_for_secret_name(name)
     if provider is None:
         return True
     try:
-        from free_provider_admission import provider_is_admitted_free
-        return bool(provider_is_admitted_free(provider))
+        from provider_call_boundary import provider_call_is_allowed
+        return bool(provider_call_is_allowed(provider))
     except Exception:
         return False
 
@@ -97,10 +112,10 @@ def _repo_secrets() -> tuple[dict[str, str], dict[str, str]]:
 def get_secret(name: str, *, required: bool = True) -> str | None:
     if not NAME_RE.fullmatch(name):
         raise SecretError(f"Invalid credential name: {name!r}")
-    provider = PROVIDER_SECRET_NAMES.get(name)
+    provider = provider_for_secret_name(name)
     if provider is not None and not _provider_secret_is_admitted(name):
         if required:
-            raise SecretError(f"Provider credential denied before lookup by typed FREE admission: {provider}")
+            raise SecretError(f"Provider credential denied before lookup by current provider-call boundary: {provider}")
         return None
     env_value = os.environ.get(name)
     if env_value:
@@ -117,7 +132,7 @@ def get_secret(name: str, *, required: bool = True) -> str | None:
 def secret_source(name: str) -> str | None:
     if not NAME_RE.fullmatch(name):
         raise SecretError(f"Invalid credential name: {name!r}")
-    if name in PROVIDER_SECRET_NAMES and not _provider_secret_is_admitted(name):
+    if provider_for_secret_name(name) is not None and not _provider_secret_is_admitted(name):
         return None
     if os.environ.get(name):
         return "process_environment"
@@ -131,20 +146,21 @@ def status(names: Iterable[str]) -> dict[str, dict[str, object]]:
     result: dict[str, dict[str, object]] = {}
     for name in names:
         source = secret_source(name)
-        provider = PROVIDER_SECRET_NAMES.get(name)
+        provider = provider_for_secret_name(name)
+        allowed = _provider_secret_is_admitted(name) if provider is not None else None
         result[name] = {
             "configured": source is not None,
             "source": source,
             "provider": provider,
-            "typed_free_admission_required": provider is not None,
-            "typed_free_admitted": _provider_secret_is_admitted(name) if provider is not None else None,
+            "provider_call_boundary_required": provider is not None,
+            "provider_call_allowed": allowed,
         }
     return result
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Check FRANK/RAE credential availability without revealing values")
-    ap.add_argument("names", nargs="+", help="credential variable names")
+    ap = argparse.ArgumentParser(description="Check credential availability without revealing values")
+    ap.add_argument("names", nargs="+")
     args = ap.parse_args()
     print(json.dumps(status(args.names), indent=2, sort_keys=True))
 

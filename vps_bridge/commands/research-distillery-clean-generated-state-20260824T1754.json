@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"research-distillery-clean-generated-state-20260824T1754",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "command":"set -e; pkill -f '[f]ree swarm/evaluate.py.*--watch' 2>/dev/null || true; pkill -f '[r]un_research_distillery_entry.py' 2>/dev/null || true; sleep 2; echo '--- before ---'; git status --short; git checkout -- 'free swarm/README.md' 'free swarm/LIVE_METRICS.json' 2>/dev/null || true; if git status --porcelain -- 'free swarm/DISTILLERY_LIVE.json' | grep -q '^??'; then rm -f 'free swarm/DISTILLERY_LIVE.json'; fi; echo '--- after generated cleanup ---'; git status --short",
+  "timeout_seconds":120
+}

@@ -1,0 +1,81 @@
+{
+  "schema_version": "ENTITYOS_HCU_08B_TRAINING_BASE_PREFLIGHT/v2",
+  "status": "FREE_RESEARCH_CANDIDATE_ONLY_TRAINING_QUARANTINED",
+  "date": "2026-08-24",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "current_supervisor_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+  "owner_training_directive": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
+  "authority_resolution": "OWNER_ONE_SHOT_EXISTS_BUT_IS_QUARANTINED_FOR_THE_ACTIVE_FREE_ONLY_AUTONOMOUS_SUPERVISOR",
+  "one_shot_training_consumed": false,
+  "active_supervisor_policy": {
+    "free_only": true,
+    "paid_fallback": "FORBIDDEN",
+    "together_training": "FORBIDDEN_IN_THIS_SUPERVISOR_MODE",
+    "together_general_inference": "FORBIDDEN",
+    "paid_job_preflight": "FORBIDDEN",
+    "credential_or_key_lookup_for_paid_provider": "FORBIDDEN",
+    "provider_network_io_for_paid_job": "FORBIDDEN"
+  },
+  "candidate": {
+    "huggingface_repo": "Qwen/Qwen3-0.6B-Base",
+    "observed_main_revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+    "model_class": "Qwen3ForCausalLM",
+    "training_stage": "PRETRAINING_BASE",
+    "parameter_count": "0.6B",
+    "non_embedding_parameter_count": "0.44B",
+    "layers": 28,
+    "hidden_size": 1024,
+    "attention_heads": 16,
+    "kv_heads": 8,
+    "context_length": 32768,
+    "tensor_type": "BF16",
+    "model_safetensors_sha256": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba",
+    "tokenizer_sha256": null,
+    "tokenizer_hash_status": "UNRESOLVED_FREE_RESEARCH_IDENTITY_GAP"
+  },
+  "selection_reason": [
+    "The owner specialization intent targets a narrow HCU/J-Space cognitive compute component rather than preservation of an inherited assistant personality.",
+    "The Base checkpoint is a CausalLM pretraining checkpoint and is therefore a cleaner research candidate than silently inheriting a separate instruction/chat tuning as semantic authority.",
+    "Public upstream metadata makes the checkpoint concrete enough for zero-cost architecture and identity research without creating provider or training credit.",
+    "The candidate is not promoted and no paid training action is executable under the active FREE_ONLY supervisor."
+  ],
+  "public_upstream_observations": {
+    "together_model_page_preexisting_observation": "PUBLIC_INFORMATION_ONLY_ZERO_PROVIDER_OR_TRAINING_CREDIT",
+    "together_cli_docs_preexisting_observation": "PUBLIC_INFORMATION_ONLY_ZERO_PROVIDER_OR_TRAINING_CREDIT",
+    "current_paid_support_or_price_preflight": "NOT_ALLOWED_UNDER_ACTIVE_FREE_ONLY_SUPERVISOR"
+  },
+  "primary_sources": [
+    "https://huggingface.co/Qwen/Qwen3-0.6B-Base",
+    "https://huggingface.co/Qwen/Qwen3-0.6B-Base/commit/da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+    "https://huggingface.co/Qwen/Qwen3-0.6B-Base/blob/main/model.safetensors",
+    "https://www.together.ai/models/qwen3-0-6b-base",
+    "https://docs.together.ai/reference/cli/finetune"
+  ],
+  "free_only_next_gates": [
+    "actually-started authorized isolated FREE exact-source execution",
+    "real request-scoped Entry route GridPlan engine lease inference outcome identities",
+    "functional Global J-Space/GWT prototype integrated with GRID10",
+    "causal lesion shuffle rescue evidence",
+    "JSPACE_VECTOR_CONTROL_ABI/v1 freeze",
+    "bind tokenizer SHA256 and exact repository tree identity using zero-cost evidence",
+    "freeze a zero-cost pre-training baseline on the selected revision if local/free runtime becomes executable"
+  ],
+  "deferred_until_supervisor_policy_changes": [
+    "Together exact model/revision paid-job preflight",
+    "Together price estimate for job launch",
+    "TOGETHER_API_KEY lookup or use",
+    "dataset upload to Together",
+    "fine-tuning job creation",
+    "any paid training spend"
+  ],
+  "fail_closed": [
+    "Do not substitute Qwen/Qwen3-0.6B or another checkpoint silently.",
+    "Do not treat this base-model candidate as a training authorization.",
+    "Do not perform paid-provider preflight, credential lookup, upload or job creation under the active FREE_ONLY supervisor.",
+    "Do not create training labels from synthetic-only or prose-only J-Space claims.",
+    "Do not grant runtime, provider, model or acceptance credit from public model pages or source research."
+  ],
+  "claim_class": "FREE_SOURCE_WEB_MODEL_CANDIDATE_ZERO_RUNTIME_PROVIDER_AND_TRAINING_CREDIT"
+}

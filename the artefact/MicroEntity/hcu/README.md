@@ -12,6 +12,7 @@ Current authority:
 - UnifiedDB, or the current compatibility MiniUnifiedDB substrate while exact migration remains incomplete, is the canonical durable state/evidence authority.
 - EffectGate + EffectJournal are the only admitted real/state-changing effect authority.
 - HCU, J-Space, world-model, workspace and model outputs are candidate/projection/measurement only and cannot mint canonical truth.
+- The active autonomous supervisor is currently **FREE_ONLY** under `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json`; paid, subscription and unknown-provider lanes fail closed before secret/key lookup and network I/O.
 
 The current integration contract is `ENTITYOS_HCU_INTEGRATION_CONTRACT.json`. It supersedes historical Mini Entity product/workstream wording in older receipts and Git history without rewriting those historical identities.
 
@@ -41,7 +42,31 @@ Required invariants:
 
 ## Retained donor lane
 
-Draft PR #1263 is the retained HCU donor/integration lane for the richer Typed Entry + EngineAdmission + router + inference-receipt + GRID10 mechanisms. It is donor evidence, not a second product head, and must be rebased/fused into current EntityOS/HCU authority rather than duplicated.
+Draft PR #1263 is the retained HCU donor/integration lane for the richer Typed Entry + EngineAdmission + router + inference-receipt + GRID10 + Global J-Space/GWT mechanisms. It is donor evidence, not a second product head, and must be rebased/fused into current EntityOS/HCU authority rather than duplicated.
+
+## Global J-Space/GWT and ~0.8B specialization research
+
+An owner directive dated 2026-08-24 records a latent authorization for exactly one first serious Together fine-tuning job. **That paid authorization is quarantined for the currently active FREE_ONLY autonomous supervisor by newer steering 8.61.** In this supervisor mode:
+
+- Together general inference is forbidden;
+- Together training is forbidden;
+- paid-job support/price preflight is not an active work item;
+- credential/key lookup, dataset upload, job creation and spend are forbidden;
+- the dormant owner authorization creates zero provider, model, runtime, training or acceptance credit.
+
+Free/local research may still prepare the architecture without consuming or exercising the paid authorization. The current safe sequence is:
+
+```text
+actually-started authorized isolated FREE exact-source execution
+-> request-scoped Entry -> route -> verified engine load -> inference -> GRID10
+-> functional Global J-Space/GWT prototype on that same causal path
+-> exact observable traces + causal lesion/shuffle/rescue controls
+-> JSPACE_VECTOR_CONTROL_ABI/v1 freeze
+-> zero-cost checkpoint/tokenizer identity binding and frozen local/free baseline when executable
+-> stop at the FREE_ONLY boundary
+```
+
+`TRAINING_BASE_PREFLIGHT_08B.json` records `Qwen/Qwen3-0.6B-Base` only as a **free research base candidate** with an observed model-weight identity. It is not training-ready, not provider-admitted and not a training authorization. Tokenizer identity remains unresolved.
 
 ## Files
 
@@ -50,6 +75,7 @@ Draft PR #1263 is the retained HCU donor/integration lane for the richer Typed E
 - `topology.kvm4.json` — historical/planning capacity profile only; numeric values are not runtime facts.
 - `FREE_LLM_FEED_CONTRACT.json` — bounded FREE_ONLY candidate-feed contract where still compatible with current authority.
 - `HCU_DATA_INDEX.json` — current compatibility-subtree data/package index.
+- `TRAINING_BASE_PREFLIGHT_08B.json` — bounded free research base-model candidate; paid training is quarantined under current supervisor steering.
 - `capacity_guard_v1.py` — fail-closed capacity-admission donor primitive.
 - `test_capacity_guard_v1.py` — deterministic capacity poison regressions.
 - `receipts/` — bounded non-secret evidence receipts.
@@ -58,6 +84,8 @@ Draft PR #1263 is the retained HCU donor/integration lane for the richer Typed E
 
 Current build/test/experiment/runtime credit comes only from `AUTHORIZED_ISOLATED_SANDBOX_ONLY`. VPS, self-hosted and production-host testing are forbidden under current control. A KVM/VPS profile is a deployment/planning target only until separately authorized; it cannot provide current acceptance credit.
 
-Together API and paid fallback are forbidden. Final paid/model training requires explicit owner authorization. Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance.
+Vercel Sandbox is an admitted target execution surface, but platform capability is not the same as the callable tool surface available to a given worker. A worker must discover the execution actions actually exposed before declaring an executable gate blocked. The current connected worker surface exposes Vercel read/documentation/fetch tooling but no callable `Sandbox.create`, `runCommand`, `exec`, or arbitrary credential-bearing POST action.
 
-Current runtime credit remains zero until the exact current EntityOS/HCU path is actually executed and bound to exact source, model/checkpoint/tokenizer/runtime, capacity, causal/admission and effect identities.
+Under current supervisor steering 8.61 the active autonomous path is FREE_ONLY. Paid Together execution and paid-provider preflight are therefore forbidden here even though a separate owner directive records a dormant one-shot authorization. No secret should be requested or consumed to cross that boundary.
+
+Source/component/historical PASS does not imply EntityOS/HCU runtime acceptance. Current runtime credit remains zero until the exact current EntityOS/HCU path is actually executed and bound to exact source, model/checkpoint/tokenizer/runtime, capacity, causal/admission and effect identities.

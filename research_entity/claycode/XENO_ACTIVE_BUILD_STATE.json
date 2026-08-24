@@ -1,0 +1,59 @@
+{
+  "schema": "XENO_ACTIVE_BUILD_STATE/v1",
+  "mode": "ACTIVE_BUILD_THEN_RECURSIVE_IMPROVEMENT",
+  "implementation_codename": "Xeno",
+  "product_identity": "EntityOS",
+  "integrated_compute_architecture": "HCU",
+  "current_phase": "XENO_V1_ACTIVE_BUILD",
+  "target_core_class": "APPROX_0_8B_FINE_TUNED",
+  "preferred_current_exact_base_candidate": "Qwen/Qwen3.5-0.8B",
+  "exact_base_identity_required_before_training": true,
+  "recursive_until_superseded": true,
+  "architecture_prose_is_progress": false,
+  "forge_ready_requires": [
+    "target_files",
+    "nonempty_patch_unified_diff",
+    "test_commands",
+    "falsifier",
+    "before_after_metric_plan"
+  ],
+  "v1_gates": [
+    "V1_RUNTIME",
+    "V1_08B_ENGINE",
+    "V1_JSPACE_GWT",
+    "V1_DATASET",
+    "V1_TRAINING",
+    "V1_INTEGRATION",
+    "V1_ACCEPTANCE"
+  ],
+  "recursive_promotion": {
+    "gate": "tools/xeno_build_gate.py",
+    "normal_rule": "NO_PROTECTED_REGRESSION_AND_REQUIRED_CORE_PROGRESS",
+    "claycode_migration_rule": "STRICT_DIRECTIONAL_IMPROVEMENT_ON_ENTIRE_FROZEN_METRIC_VECTOR",
+    "reject_on_missing_metric": true,
+    "reject_on_nonfinite_metric": true
+  },
+  "protected_metric_vector": [
+    "capability_pass_rate",
+    "task_quality_score",
+    "p50_latency_ms",
+    "p95_latency_ms",
+    "throughput_tokens_s",
+    "rss_mb",
+    "recovery_pass_rate",
+    "authority_boundary_pass_rate",
+    "token_efficiency_score",
+    "claycode_fraction"
+  ],
+  "required_recursive_progress": [
+    "capability_pass_rate",
+    "task_quality_score",
+    "p50_latency_ms",
+    "throughput_tokens_s",
+    "claycode_fraction"
+  ],
+  "training_execution_rule": "BUILD_AND_VALIDATE_ALL_ZERO_COST_PREREQUISITES_NOW; CREATE_OR_PAY_FOR_A_TRAINING_JOB_ONLY_IF_NEWEST_CURRENT_AUTHORITY_EXPLICITLY_ADMITS_THAT_EXACT_LANE",
+  "v1_acceptance_marker": "/artifacts/clay-entityos-swarm/xeno/XENO_V1_ACCEPTED.json",
+  "post_v1_transition": "AUTOMATIC_TO_RECURSIVE_IMPROVEMENT_WHEN_BOUND_XENO_V1_ACCEPTANCE_MARKER_PASSES",
+  "stop_condition": "NEWER_EXPLICIT_OWNER_INSTRUCTION"
+}

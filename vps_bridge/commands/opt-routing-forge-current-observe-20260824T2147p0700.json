@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"opt-routing-forge-current-observe-20260824T2147p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -e; sleep 25; python3 - <<'PY'\nimport json,pathlib,collections\nr=pathlib.Path('/artifacts/clay-entityos-swarm'); p=r/'forge/architecture_delta_evaluations.jsonl'\nrows=[]\nfor line in p.open(errors='replace'):\n try:o=json.loads(line)\n except:continue\n rows.append(o)\nprint('EVALS',len(rows))\nprint('STATUSES',dict(collections.Counter(str(x.get('status')) for x in rows)))\nprint('SOURCE_SCOPE',dict(collections.Counter(str(x.get('source_scope')) for x in rows)))\nexact=[x for x in rows if x.get('source_scope')=='EXACT_WORKER_PROMPT_HEAD']\nprint('EXACT_EVALS',len(exact),'EXACT_ACCEPTED',sum(x.get('status')=='accepted' for x in exact))\nfor x in rows[-8:]: print('LAST',x.get('status'),x.get('source_scope'),x.get('provider'),x.get('model'),x.get('source_repo_head'),x.get('reason'))\nprint('FORGE_STATUS'); print((r/'forge/STATUS.json').read_text() if (r/'forge/STATUS.json').exists() else '{}')\nPY\necho PROCS; pgrep -af '[r]un_free_evidence_forge.py' || true"
+}

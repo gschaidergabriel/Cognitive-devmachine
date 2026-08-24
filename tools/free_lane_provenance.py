@@ -143,6 +143,24 @@ def _nvidia_entitlement_receipt(
         return None
     if not isinstance(evidence, dict) or not evidence:
         return None
+
+    endpoint_host = _host(endpoint)
+    if endpoint_host != "integrate.api.nvidia.com":
+        return None
+
+    # A digest proves evidence integrity, not who the evidence is about. Require
+    # the nested provider evidence to name the same concrete credential/provider/
+    # endpoint as the outer entitlement and requested lane before FREE_ONLY use.
+    evidence_provider = str(evidence.get("provider") or "").strip().lower()
+    evidence_fingerprint = str(evidence.get("credential_fingerprint") or "").strip()
+    evidence_endpoint_host = str(evidence.get("endpoint_host") or "").strip().lower()
+    if evidence_provider != "nvidia":
+        return None
+    if evidence_fingerprint != credential_fingerprint:
+        return None
+    if evidence_endpoint_host != endpoint_host:
+        return None
+
     if not isinstance(evidence_digest, str) or len(evidence_digest) != 64:
         return None
     try:
@@ -155,10 +173,6 @@ def _nvidia_entitlement_receipt(
         return None
     normalized_models = [str(model).strip() for model in allowed_models if str(model).strip()]
     if model_or_route not in set(normalized_models):
-        return None
-
-    endpoint_host = _host(endpoint)
-    if endpoint_host != "integrate.api.nvidia.com":
         return None
 
     return {

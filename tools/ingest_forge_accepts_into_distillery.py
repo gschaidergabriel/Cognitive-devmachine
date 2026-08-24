@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-"""Deterministically admit measured Forge ACCEPTED evaluations into Distillery.
+"""Admit only evidence-qualified Forge ACCEPTED evaluations into Distillery.
 
-This bridge closes the executable-delta -> Forge -> Distillery conversion edge without
-promoting model-authored hypotheses to fact. Only measured fields from an exact-source
-Forge evaluation are admitted into packet_text. Proposal text remains metadata-only.
+Historical/nominal Forge acceptance remains append-only but is not sufficient for
+current Supervisor-8.71 dataset credit. Admission delegates the acceptance boundary
+to ``forge_evidence_credit_871.evidence_reason`` so Distillery requires the same
+exact source identities plus CLAY_FORGE_EXECUTION_ADMISSION/v1, isolated execution
+backend, command admission and secret fences as current Forge evidence credit.
 
-The destination remains the existing Distillery SQLite database; this module does not
-create a second truth/effect authority and performs no network or external effect.
+Only measured fields enter packet_text. Model-authored hypothesis/falsifier remain
+candidate-only metadata. The destination is the existing Distillery SQLite database;
+this module performs no provider/network I/O and creates no second truth/effect path.
 """
 from __future__ import annotations
 
@@ -17,16 +20,14 @@ import json
 import math
 import os
 from pathlib import Path
-import re
 import sqlite3
 from typing import Any
+
+from forge_evidence_credit_871 import evidence_reason
 
 ARTIFACT_ROOT = Path(os.getenv("CLAY_SWARM_ARTIFACT_ROOT", "/artifacts/clay-entityos-swarm"))
 DEFAULT_FORGE_EVAL = Path(os.getenv("CLAY_FORGE_EVAL_PATH", str(ARTIFACT_ROOT / "forge/architecture_delta_evaluations.jsonl")))
 DEFAULT_DISTILLERY_DB = Path(os.getenv("CLAY_RESEARCH_DISTILLERY_DB", str(ARTIFACT_ROOT / "distillery/distillery.sqlite3")))
-HEX40 = re.compile(r"^[0-9a-f]{40}$")
-HEX64 = re.compile(r"^[0-9a-f]{64}$")
-HEX40_64 = re.compile(r"^[0-9a-f]{40,64}$")
 
 
 def now_iso() -> str:
@@ -45,77 +46,18 @@ def digest_json(obj: Any) -> str:
     return hashlib.sha256(canonical_json(obj).encode("utf-8")).hexdigest()
 
 
-def _int_at_least(obj: dict, key: str, minimum: int) -> bool:
-    value = obj.get(key)
-    return isinstance(value, int) and not isinstance(value, bool) and value >= minimum
-
-
-def _int_eq_zero(obj: dict, key: str) -> bool:
-    value = obj.get(key)
-    return isinstance(value, int) and not isinstance(value, bool) and value == 0
-
-
-def _positive_number(value: Any) -> bool:
-    return isinstance(value, (int, float)) and not isinstance(value, bool) and float(value) > 0.0
-
-
-def _safe_target_blobs(value: Any) -> bool:
-    if not isinstance(value, dict) or not value:
-        return False
-    for path, blob in value.items():
-        if not isinstance(path, str) or not path.strip():
-            return False
-        p = Path(path)
-        if p.is_absolute() or ".." in p.parts or str(p).startswith(".git"):
-            return False
-        if blob != "NEW_OR_MISSING_AT_SOURCE" and not (isinstance(blob, str) and HEX40_64.fullmatch(blob)):
-            return False
-    return True
-
-
 def admission_reason(row: Any) -> tuple[bool, str]:
-    if not isinstance(row, dict):
-        return False, "NOT_OBJECT"
-    if row.get("schema") != "CLAY_FORGE_DELTA_EVALUATION/v1":
-        return False, "WRONG_SCHEMA"
-    if row.get("status") != "accepted":
-        return False, "NOT_ACCEPTED"
-    if row.get("source_scope") != "EXACT_WORKER_PROMPT_HEAD":
-        return False, "SOURCE_SCOPE_NOT_EXACT"
-    source_head = row.get("source_repo_head")
-    eval_head = row.get("evaluation_repo_head")
-    worker_sha = row.get("worker_sha")
-    if not (isinstance(source_head, str) and HEX40.fullmatch(source_head)):
-        return False, "SOURCE_HEAD_INVALID"
-    if not (isinstance(eval_head, str) and HEX40.fullmatch(eval_head)):
-        return False, "EVALUATION_HEAD_INVALID"
-    if not (isinstance(worker_sha, str) and HEX64.fullmatch(worker_sha)):
-        return False, "WORKER_SHA_INVALID"
-    if not _safe_target_blobs(row.get("target_blob_identities")):
-        return False, "TARGET_BLOBS_INVALID"
-    if not _int_at_least(row, "reproducible_runs", 2):
-        return False, "REPRODUCIBILITY_TOO_LOW"
-    for key in ("tests_failed", "negative_tests_failed", "static_checks_failed"):
-        if not _int_eq_zero(row, key):
-            return False, key.upper() + "_NONZERO_OR_INVALID"
-    if row.get("benchmark_non_regression") is not True:
-        return False, "BENCHMARK_REGRESSION_OR_UNKNOWN"
-    if not _positive_number(row.get("relative_improvement_pct")):
-        return False, "NO_POSITIVE_IMPROVEMENT"
-    if not _int_at_least(row, "tests_passed", 1):
-        return False, "NO_PASSING_TESTS"
-    return True, "ACCEPTED_EXACT_EXECUTION_EVIDENCE"
+    """Use the single current Forge evidence-credit discriminator."""
+    return evidence_reason(row)
 
 
 def measured_packet(row: dict) -> dict:
-    """Return training text fields containing only measured Forge evidence.
-
-    proposal_hypothesis/falsifier are deliberately excluded. They remain candidate
-    narration and cannot be upgraded by being adjacent to an accepted evaluation.
-    """
+    """Return dataset text containing measured evidence, never candidate narration."""
+    execution_admission = row.get("execution_admission")
     return {
-        "schema": "CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v1",
-        "evidence_class": "FORGE_MEASURED_EXECUTION",
+        "schema": "CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2",
+        "evidence_class": "FORGE_EVIDENCE_QUALIFIED_EXECUTION",
+        "evidence_qualification": "EVIDENCE_QUALIFIED_ACCEPT",
         "canonical_truth": False,
         "training_scope": "EXECUTION_EVIDENCE_ONLY_NOT_JSPACE_CAUSAL_CREDIT",
         "delta_id": str(row.get("delta_id") or ""),
@@ -123,6 +65,7 @@ def measured_packet(row: dict) -> dict:
         "source_repo_head": row["source_repo_head"],
         "evaluation_repo_head": row["evaluation_repo_head"],
         "target_blob_identities": row["target_blob_identities"],
+        "execution_admission_sha256": digest_json(execution_admission),
         "metric": str(row.get("metric") or ""),
         "relative_improvement_pct": float(row["relative_improvement_pct"]),
         "reproducible_runs": int(row["reproducible_runs"]),
@@ -196,8 +139,10 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
     packet_id = "kf-" + eval_sha[:18]
     question_id = "forge-" + eval_sha[:16]
     metadata = {
-        "packet_class": "FORGE_EXECUTION_EVIDENCE",
+        "packet_class": "FORGE_EVIDENCE_QUALIFIED_EXECUTION",
         "forge_evaluation_sha256": eval_sha,
+        "execution_admission_sha256": packet["execution_admission_sha256"],
+        "evidence_qualification": reason,
         "source_class": row.get("source_class"),
         "provider": row.get("provider"),
         "model": row.get("model"),
@@ -205,7 +150,7 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
         "proposal_hypothesis_candidate_only": row.get("proposal_hypothesis"),
         "proposal_falsifier_candidate_only": row.get("falsifier"),
         "score_semantics": {
-            "intrinsic_score": "1.0 = exact accepted measured execution packet passed deterministic admission",
+            "intrinsic_score": "1.0 = evidence-qualified isolated measured execution passed deterministic admission",
             "grf_score": "0.0 = not measured by Forge; unknown rather than promoted",
             "project_fit": "1.0 = executable EntityOS/HCU delta evidence",
             "novelty_score": "0.0 = not measured by Forge; unknown rather than promoted",
@@ -220,7 +165,7 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
         (
             packet_id,
             question_id,
-            "Measured executable delta evidence from Evidence Forge",
+            "Evidence-qualified executable delta evidence from Evidence Forge",
             text,
             canonical_json(metadata),
             1.0,
@@ -248,12 +193,14 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
     bump(con, "accepted_dataset_tokens", tok)
     bump(con, "accepted_packets", 1)
     bump(con, "forge_execution_packets", 1)
+    bump(con, "forge_evidence_qualified_packets", 1)
     return True, reason, packet_id
 
 
 def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dict:
     summary = {
-        "schema": "CLAY_FORGE_TO_DISTILLERY_INGEST_RESULT/v1",
+        "schema": "CLAY_FORGE_TO_DISTILLERY_INGEST_RESULT/v2",
+        "acceptance_semantics": "EVIDENCE_QUALIFIED_ONLY",
         "forge_eval_path": str(forge_eval_path),
         "distillery_db": str(distillery_db),
         "seen": 0,
@@ -296,6 +243,8 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
         summary["accepted_dataset_tokens_counter"] = int(c[0]) if c else 0
         f = con.execute("SELECT COUNT(*) FROM forge_execution_ingest").fetchone()
         summary["forge_execution_packets_total"] = int(f[0] or 0)
+        q = con.execute("SELECT value FROM counters WHERE key='forge_evidence_qualified_packets'").fetchone()
+        summary["forge_evidence_qualified_packets_counter"] = int(q[0]) if q else 0
     finally:
         con.close()
     return summary

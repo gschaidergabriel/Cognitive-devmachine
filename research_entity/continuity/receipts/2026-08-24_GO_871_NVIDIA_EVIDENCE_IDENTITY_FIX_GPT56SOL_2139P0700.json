@@ -1,0 +1,84 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "observed_at_local": "2026-08-24T21:39:00+07:00",
+  "trigger": "go-continuation",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "authority_epoch": "8.71",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_at_rebase": "da6e7cf4f3c2024bda880a4edea7402a8147332b",
+  "branch": "gpt56sol/go-871-nvidia-evidence-fingerprint-negative",
+  "pull_request": 1557,
+  "implementation_commits_after_rebase": [
+    "b8b3924126eb409d4b1463c78b559f303d8a0da2",
+    "755a7d0c32ee25eb1acc014cf40c91cf82163068"
+  ],
+  "observed": {
+    "source_path": "tools/free_lane_provenance.py",
+    "pre_fix_source_blob_sha": "c6f44ba59152e1bd84addf45dd6585683c8090de",
+    "test_path": "tests/test_free_lane_nvidia_credential_binding_870.py",
+    "pre_fix_test_blob_sha": "00ae0a5c0dc54d8856e5c06338043943b5bde3f1",
+    "main_still_vulnerable_at_reentry": true,
+    "finding": "The pre-fix NVIDIA entitlement validator selected the outer entitlement row by requested credential fingerprint and verified a digest over nested provider evidence, but did not bind nested evidence subject identity to the same concrete credential/provider/endpoint. Digest-valid evidence for another fingerprint could therefore be transplanted beneath the requested outer key."
+  },
+  "implemented_fix": {
+    "nested_provider_required": "nvidia",
+    "nested_credential_fingerprint_must_equal_requested": true,
+    "nested_endpoint_host_must_equal_requested": true,
+    "requested_endpoint_host_required": "integrate.api.nvidia.com",
+    "existing_digest_validation_preserved": true,
+    "existing_exact_model_allowlist_preserved": true,
+    "existing_outer_credential_entitlement_lookup_preserved": true,
+    "paid_or_unknown_fallback_added": false
+  },
+  "regression_delta": {
+    "positive_control": "exact credential + NVIDIA + hosted-NIM endpoint + exact model remains admissible",
+    "negative_controls": [
+      "digest-valid nested evidence for fp-other transplanted under fp-test fails closed",
+      "digest-valid nested evidence with provider OTHER fails closed",
+      "digest-valid nested evidence with endpoint_host example.invalid fails closed",
+      "legacy outer fingerprint allowlist remains insufficient",
+      "wrong requested endpoint remains fail closed",
+      "unlisted model remains fail closed",
+      "post-digest evidence mutation remains fail closed"
+    ]
+  },
+  "isolated_mechanism_check": {
+    "scope": "RECONSTRUCTED_EXACT_VALIDATOR_LOGIC_NOT_REPOSITORY_RUNTIME",
+    "positive_exact_identity": "PASS",
+    "transplanted_fingerprint": "REJECTED",
+    "transplanted_provider": "REJECTED",
+    "transplanted_endpoint_host": "REJECTED",
+    "canonical_governance_entitlement_evidence_digest_recomputed": "21583790ce0b8a157a25b4066c1e410b6734200f60544dd8179ca596e38e7d89",
+    "canonical_digest_matches_governance": true
+  },
+  "go_tracks": {
+    "track_a": {
+      "status": "ADVANCED",
+      "delta": "Closed a concrete FREE_ONLY provider-call authorization subject-identity gap on current source."
+    },
+    "track_b": {
+      "status": "ADVANCED",
+      "delta": "Typed provider/economic admission now requires inner and outer credential/provider/endpoint identity closure before NVIDIA FREE_ONLY use."
+    },
+    "track_c": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "This fix hardens provider economic identity and does not constitute model-specific Global J-Space/GWT activation/intervention evidence.",
+      "next_discriminator": "Exact checkpoint/tokenizer/runtime/build + verified loader consumption + named activation site through JSPACE_VECTOR_CONTROL_ABI/v1 with clean/corrupted/target/sham/off-target controls on an admitted zero-cost executor."
+    }
+  },
+  "coordination": {
+    "same_pr_lane_rebased_instead_of_duplicate_pr": true,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared reproducible immutable macrocycle/request identity is exposed; this work is ordinary deterministic source/regression repair."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_action": "Execute the focused NVIDIA regression and current FREE boundary receipt suite on an admitted exact-source zero-cost executor; if green, fuse PR 1557 after one final current-main reentry."
+}

@@ -1,12 +1,12 @@
 {
-  "schema_version": "8.71",
-  "latest_cycle": "go-20260824-free-lane-nvidia-credential-binding",
+  "schema_version": "8.72",
+  "latest_cycle": "go-20260824-local-qwen-provider-independent-jspace",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "latest_repo_head_inspected_before_write": "fbec9b8abb13f9da3c38f00bb788b24f9ceb3632",
-  "material_finding": "PR1468 materially improves FREE_ONLY by binding admission/economic provenance at the exact pre-call state and revalidating before network I/O. OpenRouter is exact-zero-route bound, Groq is credential/model rate-header bound, and Mistral is fail-closed. NVIDIA is still too coarse: any credential fingerprint can pass from the provider-global Developer Program/NIM free-prototyping statement, without proof that the concrete credential is covered by that entitlement. Exact post-PR1468 runtime receipt evidence is also not yet repository-bound; dashboard request counters straddle the merge and do not establish execution on the fixed bytes.",
+  "latest_repo_head_inspected_before_write": "da6e7cf4f3c2024bda880a4edea7402a8147332b",
+  "material_finding": "Current main adds a provider-independent local Qwen3-0.6B loopback API fastpath for direct hidden-state/vector intervention. The path pins model revision and tokenizer digest, requires exact local runtime evidence, six matched controls and calibration/holdout separation, while explicitly withholding canonical and whole-product credit. This is now the highest-information FREE_ONLY HCU/J-Space discriminator. Forge execution is also source-hardened to argv-only, secret-free, bubblewrap-gated admission, while the new self-hosted 8.71 reconciliation proof has not yet produced a repository-bound terminal result.",
   "execution_authority": {
     "root_pointer": "CLAY_EXECUTION_AUTHORITY.md",
     "vps_sandbox": "AUTHORIZED_INSIDE_CLAY_DIRECT_DEV",
@@ -16,12 +16,13 @@
     "canonical_credit_from_local_or_vps_experiment": "NOT_AUTOMATIC"
   },
   "current_frontier": {
-    "free_swarm_execution_state": "FREE_CONTINGENTS_AUTHORIZED_WITH_ROUTE_BINDING; NVIDIA_CREDENTIAL_ENTITLEMENT_PENDING",
-    "latest_free_swarm_tokens": 5001744,
-    "latest_machine_readable_delta_records": 68,
-    "latest_forge_accepted_deltas": 0,
-    "latest_distillery_accepted_dataset_tokens": 0,
-    "pre_call_binding_fix_commit": "3fdfcd705564c87d27b5ba9567755bf7f639cc0f",
+    "local_qwen_hidden_state_fastpath": "SOURCE_READY_RUNTIME_UNOBSERVED",
+    "local_qwen_fastpath_commit": "da6e7cf4f3c2024bda880a4edea7402a8147332b",
+    "local_qwen_promotion_gate_commit": "e2e2a44799be28ea4b1256d953faecee7f3fad01",
+    "forge_isolated_executor": "SOURCE_MECHANISM_PRESENT_RUNTIME_UNOBSERVED",
+    "forge_isolated_executor_commit": "beacf2983623524baae73ef5c757f40a220d8101",
+    "runtime_reconciliation_proof": "WORKFLOW_PRESENT_TERMINAL_RESULT_NOT_YET_REPOSITORY_BOUND",
+    "nvidia_credential_entitlement": "OPEN_SECONDARY_GATE",
     "free_swarm_provider_runtime_credit": 0,
     "entityos_whole_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
@@ -31,43 +32,47 @@
   "free_only": {
     "enabled": true,
     "owner_authorized_free_contingents": ["groq", "mistral", "nvidia", "openrouter"],
+    "local_zero_provider_billing_qwen_path_authorized": true,
     "no_paid_fallback": true,
     "together_forbidden": true,
     "paid_subscription_unknown_fail_closed": true,
     "provider_level_admission_is_not_runtime_cost_proof": true,
-    "credential_and_route_cost_provenance_required": true,
-    "nvidia_exact_credential_entitlement_required": true,
+    "credential_and_route_cost_provenance_required_for_external_lanes": true,
+    "nvidia_exact_credential_entitlement_required_before_nvidia_credit": true,
     "unknown_or_unlisted_route_fail_closed": true,
     "paid_upgrade_or_credit_purchase_forbidden": true
   },
   "evidence_law": [
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
     "SOURCE_TEST_PRESENCE_IS_NOT_TEST_EXECUTION",
+    "LOCAL_ZERO_COST_RUNTIME_DOES_NOT_AUTOMATICALLY_MINT_CANONICAL_SEMANTICS",
     "PROVIDER_GLOBAL_FREE_STATEMENT_IS_NOT_CONCRETE_CREDENTIAL_ENTITLEMENT_PROOF",
-    "DASHBOARD_COUNTER_INTERVAL_STRADDLING_A_SOURCE_MERGE_IS_NOT_EXACT_SOURCE_RUNTIME_PROOF",
     "NO_POSTHOC_RELABELING_OF_HISTORICAL_PROVIDER_EXECUTION",
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
     "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_AND_ORCHESTRATION_ANCESTRY",
     "HISTORICAL_RECEIPTS_ARE_APPEND_ONLY"
   ],
   "next_focus": [
-    "BIND_NVIDIA_CREDENTIAL_FINGERPRINT_TO_PROVIDER_SIDE_DEVELOPER_PROGRAM_OR_FREE_HOSTED_NIM_ENTITLEMENT",
-    "EXECUTE_CURRENT_SOURCE_FREE_LANE_BOUNDARY_SUITE_AND_BIND_RUNTIME_COMPONENT_RECEIPT",
-    "NEGATIVE_CONTROL_UNBOUND_NVIDIA_CREDENTIAL_FAILS_BEFORE_PROVIDER_MODEL_NETWORK_IO",
+    "EXECUTE_EXACT_CURRENT_SOURCE_LOCAL_QWEN06_LOOPBACK_HIDDEN_STATE_EXPERIMENT_ON_AUTHORIZED_ZERO_COST_UBUNTU_SURFACE",
+    "BIND_SOURCE_TREE_DIRTY_STATE_EXECUTOR_PYTHON_TORCH_TRANSFORMERS_CHECKPOINT_TOKENIZER_LOCAL_ENDPOINT_AND_RESULT_DIGEST",
+    "VERIFY_ZERO_EXTERNAL_LLM_CREDENTIAL_LOOKUPS_AND_ZERO_PAID_PROVIDER_CALLS",
+    "RUN_SIX_MATCHED_CONTROLS_WITH_DISJOINT_CALIBRATION_AND_HOLDOUT",
+    "OBSERVE_TERMINAL_RESULT_OF_CURRENT_SELF_HOSTED_RUNTIME_RECONCILIATION_BEFORE_FORGE_OR_OPERATIONAL_RUNTIME_CREDIT",
+    "KEEP_NVIDIA_CREDENTIAL_ENTITLEMENT_OPEN_BUT_SECONDARY",
     "KEEP_MISTRAL_FAIL_CLOSED_UNTIL_PROVIDER_SIDE_FREE_MODE_IS_BOUND",
     "KEEP_OPENROUTER_ON_EXPLICIT_ZERO_PRICE_ROUTES_ONLY",
     "KEEP_GROQ_CREDENTIAL_AND_MODEL_FREE_LIMIT_MATCH_FAIL_CLOSED",
     "KEEP_TOGETHER_PAID_SUBSCRIPTION_UNKNOWN_AND_ALL_PAID_FALLBACKS_FORBIDDEN",
-    "IMPROVE_EXECUTABLE_DELTA_FORGE_CONVERSION_BEFORE_TREATING_WORKER_COUNT_OR_TOKEN_VOLUME_AS_PROGRESS",
-    "DO_NOT_MINT_WHOLE_ENTITYOS_HCU_BASE_OR_CANONICAL_PASS_FROM_SWARM_CONSENSUS_OR_TOKEN_VOLUME"
+    "DO_NOT_MINT_WHOLE_ENTITYOS_HCU_BASE_OR_CANONICAL_PASS_FROM_SOURCE_PRESENCE_SWARM_CONSENSUS_OR_TOKEN_VOLUME"
   ],
   "promotion_state": {
     "entityos_whole_runtime_pass": false,
     "hcu_full_runtime_pass": false,
+    "jspace_model_runtime_pass": false,
     "canonical_semantics_promotion": false,
     "base_work_package_promotion": false,
     "provider_runtime_credit": 0,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json"
 }

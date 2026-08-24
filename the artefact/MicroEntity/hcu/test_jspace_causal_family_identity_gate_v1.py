@@ -19,6 +19,7 @@ def trial(condition, index):
         condition=condition,
         family_id="holdout:family:17",
         input_variant_id="clean" if condition == "BASELINE_CLEAN" else "corrupted",
+        model_input_sha256=h("5") if condition == "BASELINE_CLEAN" else h("6"),
         generation=7,
         checkpoint_sha256=h("1"),
         tokenizer_sha256=h("2"),
@@ -47,6 +48,8 @@ class CausalFamilyIdentityGateTests(unittest.TestCase):
         self.assertEqual(result.evidence_class, EVIDENCE_CLASS)
         self.assertFalse(result.jspace_causal_credit)
         self.assertEqual(result.present_conditions, REQUIRED_CONDITIONS)
+        self.assertEqual(result.clean_model_input_sha256, h("5"))
+        self.assertEqual(result.corrupted_model_input_sha256, h("6"))
         self.assertEqual(len(result.trial_identity_sha256), 5)
         self.assertEqual(len(result.family_identity_sha256), 64)
 
@@ -63,6 +66,30 @@ class CausalFamilyIdentityGateTests(unittest.TestCase):
         trials[2] = replace(trials[2], checkpoint_sha256=h("9"))
         with self.assertRaisesRegex(CausalFamilyIdentityError, "checkpoint_sha256:CROSS_CONTROL_MISMATCH"):
             validate_causal_family_identity(trials)
+
+    def test_consumed_model_input_topology_fails_closed(self):
+        trials = list(family())
+        trials[2] = replace(trials[2], model_input_sha256=h("7"))
+        with self.assertRaisesRegex(CausalFamilyIdentityError, "INTERVENTION_BASE_MODEL_INPUT_MISMATCH"):
+            validate_causal_family_identity(trials)
+
+        trials = list(family())
+        trials[1] = replace(trials[1], model_input_sha256=h("5"))
+        with self.assertRaisesRegex(CausalFamilyIdentityError, "BASELINE_CLEAN_CORRUPTED_REUSE_FORBIDDEN"):
+            validate_causal_family_identity(trials)
+
+        trials = list(family())
+        trials[4] = replace(trials[4], input_variant_id="clean")
+        with self.assertRaisesRegex(CausalFamilyIdentityError, "INTERVENTION_BASE_INPUT_VARIANT_MISMATCH"):
+            validate_causal_family_identity(trials)
+
+    def test_model_input_content_changes_trial_and_family_identity(self):
+        original = validate_causal_family_identity(family())
+        changed = list(family())
+        changed[0] = replace(changed[0], model_input_sha256=h("7"))
+        updated = validate_causal_family_identity(changed)
+        self.assertNotEqual(original.trial_identity_sha256[0], updated.trial_identity_sha256[0])
+        self.assertNotEqual(original.family_identity_sha256, updated.family_identity_sha256)
 
     def test_execution_trace_or_output_relabeling_fails(self):
         for field in (

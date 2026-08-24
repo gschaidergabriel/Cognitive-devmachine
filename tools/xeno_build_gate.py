@@ -29,6 +29,13 @@ METRICS: dict[str, int] = {
     "authority_boundary_pass_rate": +1,
     "token_efficiency_score": +1,
     "claycode_fraction": +1,
+    "engine_swap_pass_rate": +1,
+    "two_slot_harness_pass_rate": +1,
+    "prestage_pipeline_pass_rate": +1,
+    "grid10_pass_rate": +1,
+    "peer_link_pass_rate": +1,
+    "dashboard_config_pass_rate": +1,
+    "jspace_causal_gain_score": +1,
 }
 
 REQUIRED_PROGRESS = {
@@ -37,6 +44,7 @@ REQUIRED_PROGRESS = {
     "p50_latency_ms",
     "throughput_tokens_s",
     "claycode_fraction",
+    "jspace_causal_gain_score",
 }
 
 

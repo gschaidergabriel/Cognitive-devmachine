@@ -1,0 +1,53 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "persistent_entity": "Clay",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_final_rebase": "60fb7301bac7a04c9e56defe2c6fcf978cac5bc1",
+  "pr": 1751,
+  "pr_head_before_receipt": "3fea00b47086cf00a4ad29d9fa89af2355bc4080",
+  "issue": 1741,
+  "material_finding": "Canonical main now carries replay-stable Forge execution identity, delta_id-envelope replay protection, restart persistence regression, rebuild-stable training packet bytes, and J-Space vector-control ABI work. The remaining source gap is the live promotion authority, which still independently witnesses byte-identical evaluation replay rather than timestamp/candidate-narration semantic replay.",
+  "bounded_delta": "PR #1751 modifies only the existing live promoter plus one focused regression. It keys persisted promotion state by execution_replay_identity_sha256, exercises timestamp/narration-only replay across SQLite reopen, requires zero packet/token delta, exercises same-replay measured-evidence conflict as REPLAY_IDENTITY_CONFLICT with zero delta, and retains full evaluation digest as provenance.",
+  "hypothesis": "Propagating the already-canonical replay-stable execution identity through the existing live promoter closes the end-to-end semantic replay invariant without creating a second ingest, dataset, truth, or effect authority.",
+  "counterhypothesis": "The lower Distillery bridge replay invariant is sufficient even if the live promotion witness only exercises byte-identical retries.",
+  "discriminator": "The live promotion regression must prove first qualified promotion -> one packet and positive tokens; timestamp/narration-only replay -> duplicate and +0; same replay identity with changed measured evidence -> REPLAY_IDENTITY_CONFLICT and +0; and a later semantically changed gate envelope -> ALREADY_PROMOTED_IDEMPOTENT by stable execution identity.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_PR1751_LIVE_PROMOTION_SEMANTIC_REPLAY_AUTHORITY_DELTA",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "ADVANCED_BY_REPLAY_STABLE_CAUSAL_EXECUTION_IDENTITY_PROPAGATION_THROUGH_DATASET_PROMOTION_BOUNDARY",
+    "C_GLOBAL_JSPACE_GWT_TRAINING_READINESS_FREE_ONLY": "ADVANCED_DATASET_INFLATION_FENCE_PLUS_CANONICAL_JSPACE_VECTOR_CONTROL_ABI_PARALLEL_FUSION; NO_MODEL_OR_TRAINING_CREDIT"
+  },
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "shared_reproducible_trigger_identity_available": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions": 0
+  },
+  "execution": {
+    "semantic_regression_runtime_observed": false,
+    "reason": "No admitted zero-cost exact-head execution result was available in this connector turn; prior hosted replay carrier failed before recorded steps and is not product-negative evidence.",
+    "provider_calls": 0,
+    "paid_fallback_attempt_count": 0,
+    "together_calls": 0
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artifact_readme": {
+    "status": "SYNC_PENDING",
+    "reason": "Canonical main was moving concurrently across multiple organs; no safe incremental README patch primitive was used because replacing a concurrently moving full README would risk clobbering unrelated current state. This receipt preserves the exact bounded delta instead."
+  },
+  "next_exact_gate": "Execute PR #1751 focused semantic replay promotion regression together with current replay/restart/rebuild-stability regressions on an admitted zero-cost exact-source surface. If green and still nonduplicate after refreshing main, fuse #1751 and then require the repository-bound live witness 1 qualified ACCEPT -> 1 packet -> positive accepted_dataset_tokens -> timestamp/narration semantic replay +0 before granting any bounded Distillery execution credit.",
+  "evidence_boundary": "SOURCE_PLUS_REGRESSION_DEFINITION_AND_DURABLE_PR_ONLY; no semantic runtime PASS, provider/model runtime, J-Space model causality, training, whole-HCU, or whole-EntityOS credit claimed."
+}

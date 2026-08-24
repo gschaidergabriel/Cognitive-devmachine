@@ -20,6 +20,9 @@ python3 -m py_compile \
   tools/run_6000_free_swarm.py \
   tools/run_6000_free_swarm_v3.py \
   tools/run_6000_free_swarm_fast.py \
+  tools/forge_execution_admission_871.py \
+  tools/run_free_evidence_forge_safe_871.py \
+  tools/run_free_evidence_forge_safe.py \
   tools/forge_evidence_credit_871.py \
   tools/ingest_forge_accepts_into_distillery.py \
   tools/run_forge_distillery_bridge_loop.py \
@@ -37,6 +40,8 @@ suffixes={
  'tools/run_24h_entityos_swarm.py',
  'tools/run_6000_free_swarm_supervisor.sh',
  'tools/run_6000_free_swarm_fast.py',
+ 'tools/run_free_evidence_forge.py',
+ 'tools/run_free_evidence_forge_safe.py',
  'tools/run_forge_distillery_bridge_loop.py',
  'free swarm/update_fabric_live.py',
 }
@@ -61,6 +66,8 @@ suffixes={
  'tools/run_24h_entityos_swarm_supervisor.sh',
  'tools/run_24h_entityos_swarm.py',
  'tools/run_6000_free_swarm_fast.py',
+ 'tools/run_free_evidence_forge.py',
+ 'tools/run_free_evidence_forge_safe.py',
  'tools/run_forge_distillery_bridge_loop.py',
  'free swarm/update_fabric_live.py',
 }

@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_GO_RUNTIME_REENTRY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor": "8.63",
+  "mode": "FREE_ONLY",
+  "authority_observed_main_before_receipt": "665bb218e328be1097035ac24432f908e34e7165",
+  "coordination": {
+    "shared_immutable_macrocycle_id_available": false,
+    "atomic_unusual_experiment_claim_attempted": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "work_class": "ORDINARY_SOURCE_RUNTIME_REENTRY_AND_NEGATIVE_EVIDENCE_REVIEW"
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_live_head_observed": "ff67cf4192e9fbb3ea8aee2819f2dbeddd576ee6",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_live_head_observed": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1"
+  },
+  "vercel": {
+    "team_plan_observed": "hobby",
+    "project": "dr-unterweger",
+    "deployment_window_pages_observed": 2,
+    "exact_executor_head_ready_deployment_observed": false,
+    "latest_observed_failed_rebind_deployment": "dpl_26pNV41EYrvFuWKRBFCHUPjQN2Xk",
+    "latest_observed_failed_rebind_commit": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+    "latest_observed_failed_rebind_error": "JSPACE_V4_V3_CURRENT_SUCCESSOR_DONOR_DRIFT:manifest=d371ccaca994f234a4cd127d48c3867cfe10ab56;contract=511d568932bf47828679e3ca6ba05650f18d284d",
+    "failure_scope": "BUILD_GUARD_PRE_SANDBOX_EXECUTION",
+    "sandbox_invoked_by_this_organ": false,
+    "paid_upgrade_or_fallback_used": false
+  },
+  "source_reentry": {
+    "failed_rebind_commit_is_ancestor_of_current_executor_head": true,
+    "current_executor_head_commits_after_failed_rebind": 7,
+    "current_executor_head_reestablishes_511d_named_closure": true,
+    "current_executor_latest_commit_message": "guard(hcu): bind route donor to rebind contract",
+    "current_executor_latest_guard_effect": "ROUTE_REQUIRED_DONOR_COMMIT_MUST_EQUAL_REBIND_CONTRACT_RETAINED_DONOR_COMMIT"
+  },
+  "hypothesis": "The next useful runtime promotion requires one exact-head deployment whose route, manifest and rebind contract all bind the same immutable donor identity before Sandbox cost admission.",
+  "counterhypothesis": "A READY predecessor deployment or a source-level guard PASS could be treated as sufficient evidence for the current executor head.",
+  "discriminator": "Compare live PR810 head against current Vercel deployment Git SHAs and inspect the newest relevant failed build guard.",
+  "result": "COUNTERHYPOTHESIS_REJECTED_AT_CURRENT_EVIDENCE_SCOPE",
+  "track_a": {
+    "status": "ADVANCED_BY_RUNTIME_REENTRY_NEGATIVE_EVIDENCE",
+    "delta": "False promotion path closed: no predecessor READY deployment may be projected onto current PR810 head; current blocker is exact-head deployment availability plus exact donor closure."
+  },
+  "track_b": {
+    "status": "ADVANCED_BY_CAUSAL_IDENTITY_GUARD_EVIDENCE",
+    "delta": "Observed current executor guard binds route donor identity to the single rebind contract; prior donor-drift build failed closed before Sandbox execution."
+  },
+  "track_c": {
+    "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+    "reason": "No exact current-head admitted Sandbox execution and no real local ~0.8B model-executor I/O evidence; therefore J-Space model-runtime and training readiness cannot be promoted.",
+    "next_discriminator": "When an exact current-head included-tier READY deployment naturally exists, invoke only the fixed FREE_ONLY capsule; separately bind real zero-cost local model loader/executor I/O before model-runtime credit."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "evidence_boundary": [
+    "Deployment metadata and build logs are direct platform evidence for build/deployment scope only.",
+    "A build-guard failure before Sandbox creation is not a product-logic runtime failure.",
+    "A source guard is not runtime execution evidence.",
+    "No component or whole-product credit is created by this receipt."
+  ],
+  "next_exact_action": "Re-enter live PR810 head and Vercel deployment metadata; if and only if an included-tier READY deployment matches that exact Git SHA and all FREE_ONLY fences remain satisfied, invoke the fixed source/hash-bound capsule and preserve component-scoped credit only."
+}

@@ -5,8 +5,9 @@ This wrapper keeps the canonical v1 runner semantics while closing source-eviden
 holes before the required exact-source runtime execution:
 
 1. bind both the base runner and this hardening wrapper into the source manifest;
-2. extend the child-process socket tripwire to DNS resolution via getaddrinfo() and
-   the connect_ex() path in addition to create_connection()/connect();
+2. extend the child-process socket tripwire to DNS resolution via getaddrinfo(),
+   connect_ex(), and unconnected datagram egress via sendto()/sendmsg() in addition
+   to create_connection()/connect();
 3. bind and execute the supervisor inherited-provider-environment fence regression,
    so the receipt cannot PASS without checking that the non-admitted credential
    clearing fence precedes every supervisor child-start path.
@@ -60,10 +61,21 @@ def guarded_getaddrinfo(*args, **kwargs):
     target = args[:2] if args else kwargs
     return record("socket.getaddrinfo", target)
 
+def guarded_sendto(self, data, *args, **kwargs):
+    target = args[-1] if args else kwargs.get("address")
+    return record("socket.sendto", target)
+
+def guarded_sendmsg(self, buffers, *args, **kwargs):
+    target = args[-1] if args else kwargs.get("address")
+    return record("socket.sendmsg", target)
+
 socket.socket.connect = guarded_connect
 socket.socket.connect_ex = guarded_connect_ex
 socket.create_connection = guarded_create_connection
 socket.getaddrinfo = guarded_getaddrinfo
+socket.socket.sendto = guarded_sendto
+if hasattr(socket.socket, "sendmsg"):
+    socket.socket.sendmsg = guarded_sendmsg
 suite = unittest.defaultTestLoader.loadTestsFromNames(sys.argv[1:])
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 raise SystemExit(0 if result.wasSuccessful() else 1)
@@ -107,6 +119,8 @@ def _install_hardening() -> None:
                 "socket.getaddrinfo",
                 "socket.socket.connect",
                 "socket.socket.connect_ex",
+                "socket.socket.sendto",
+                "socket.socket.sendmsg_if_available",
             ],
             "inherited_provider_environment_fence_test": INHERITED_ENV_TEST_REL,
             "inherited_provider_environment_fence_required_for_pass": True,

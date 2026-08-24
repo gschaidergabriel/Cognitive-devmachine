@@ -169,6 +169,20 @@ class FreeProviderSocketBoundaryTests(unittest.TestCase):
         self.assertEqual(body.get("error"), "PROVIDER_NOT_TYPED_FREE_ADMITTED")
         self.assertEqual(tripwire.attempts, [])
 
+    def test_unclassified_distillery_provider_has_zero_socket_activity(self) -> None:
+        with SocketTripwire() as tripwire, \
+             mock.patch.object(distillery_entry, "_ORIGINAL_REQUEST_JSON", side_effect=AssertionError("network wrapper reached")):
+            status, _, body = distillery_entry.admitted_request_json(
+                "future-llm-provider",
+                "test",
+                "https://invalid.example/v1/chat/completions",
+                key="fake-secret-that-must-not-be-used",
+                payload={"model": "future-model"},
+            )
+        self.assertEqual(status, 412)
+        self.assertEqual(body.get("error"), "PROVIDER_NOT_EXPLICITLY_CLASSIFIED")
+        self.assertEqual(tripwire.attempts, [])
+
 
 if __name__ == "__main__":
     unittest.main()

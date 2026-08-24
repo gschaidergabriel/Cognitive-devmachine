@@ -5,7 +5,7 @@
 `STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`
 `PRODUCT=EntityOS`
 `COMPUTE_ARCHITECTURE=HCU`
-`AUTONOMOUS_SUPERVISOR=SUPERVISOR_STEERING_8_65`
+`AUTONOMOUS_SUPERVISOR=SUPERVISOR_INBOX_DYNAMIC`
 
 This root file is a repository-organ routing shim, not canonical durable product memory or a second authority. The persistent research entity remains Clay; every temporary Claude/model/session/worker is an organ of that same research entity.
 
@@ -13,16 +13,17 @@ This root file is a repository-organ routing shim, not canonical durable product
 
 1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json`
-4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_65.md`
+3. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
+4. `research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json`
+5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
 6. `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
 7. `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
 8. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
-9. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
-10. `the artefact/manifest.json`
-11. `the artefact/README.md`
-12. task-relevant current or compatibility implementation files.
+9. `research_entity/continuity/TRIGGER_ONE_JSPACE_STEERING_CONTRACT.md`
+10. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
+11. `the artefact/manifest.json`
+12. `the artefact/README.md`
+13. task-relevant current or compatibility implementation files.
 
 Newest explicit owner authority plus the newest admitted supervisor and verified current `main` outrank cached/historical program material. If current files disagree, do not average them: resolve the newest admitted authority, fail closed on execution/spend/effect ambiguity, and repair lower current-facing surfaces without rewriting historical receipts. Never infer current authority from an old receipt, old branch, path name or compatibility filename.
 
@@ -69,6 +70,28 @@ Scale semantics remain strict:
 
 The baseline is 10 logical cells. `10 -> 32 -> 64 -> 128 -> 256 -> ~600` is a benchmark ladder; ~600 on H100-class hardware remains hypothesis only until exact model/quantization/KV/HBM/throughput/latency/recovery evidence exists.
 
+## `1`
+
+Exact user trigger `1` starts the dedicated **intensive Global J-Space vector-steering research branch** defined by `research_entity/continuity/TRIGGER_ONE_JSPACE_STEERING_CONTRACT.md` and the current explicit owner directive.
+
+Its primary objective is to reach direct reproducible vector-based control of an admitted FREE API model through:
+
+`Global J-Space/control intent -> JSPACE_VECTOR_CONTROL_ABI/v1 -> model/version/layer-specific JSPACE_LATENT_BASIS_ADAPTER/v1 -> model-specific local vector -> instrumentable runtime/native cvec or equivalent consumed intervention -> exact receipts`.
+
+Every `1` run:
+
+- launches exactly **10 causally distinct experiment lanes in parallel** using `bash tools/trigger1_jspace_research.sh` where that execution surface is available;
+- gives this research branch an owner-authorized bounded contingent from the existing FREE token pool;
+- shares the repository cross-process provider quota gate across all ten lanes;
+- requires every lane to create an executable discriminator/delta or an exact blocker;
+- calibrates layer/gain only on calibration data and evaluates disjoint holdout with BASELINE, +VECTOR, SIGN_FLIP, exact NULL_VECTOR, orthogonal same-norm and permuted same-norm controls across fixed seeds;
+- never treats prompting, model consensus, source-only tests or process success as proof of direct model steering;
+- requires exact model/checkpoint/tokenizer/runtime/build/adapter/source-packet/local-vector/native-hook-or-cvec identities and reproducible execution receipts for a positive steering claim.
+
+`1` is intentionally distinct from `go`: its ten-lane owner-authorized research batch does not consume or redefine the single unusual-experiment lease of a `go` macrocycle.
+
+Economic boundaries remain FREE_ONLY: Together is forbidden; PAID/SUBSCRIPTION/UNKNOWN routes and paid fallback/upgrades/credit purchase are forbidden; secret values are never logged or committed; credential rotation may not evade provider limits; concrete credential+route FREE provenance and pre-network revalidation remain mandatory.
+
 ## `zero`
 
 Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric, J-Space/Global Workspace, Hyperposition, cognition simulation and causal interventions inside the same EntityOS/HCU path. It may not create a second identity, durable state authority, effect path, recovery ledger or consciousness daemon.
@@ -85,19 +108,13 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 - EffectGate + EffectJournal remain the only admitted real/state-changing effect authority;
 - no second persistent identity, truth store, effect path or recovery ledger.
 
-## Execution and safety — supervisor 8.65
+## Execution and safety — dynamic supervisor
 
-- autonomous mode is `FREE_ONLY`;
-- exact executor `gschaidergabriel/Dr.-Unterweger#810` head `2da99e0458809988190c129b04cae913d1f15d92` has provider-observed HTTP 200 serverless **function-runtime** evidence only on the declared no-Sandbox diagnostic path;
-- that observation does **not** prove `Sandbox.create`, Python/sqlite3/_sqlite3 capability inside Sandbox, HCU/Typed Entry execution, local-model execution, J-Space/GWT causality, training, canonical semantics, or whole EntityOS/HCU runtime;
-- remaining included Vercel Sandbox quota has not been directly observed, therefore the active Sandbox runtime gate is `BLOCKED_QUOTA_UNOBSERVED_BEFORE_SANDBOX_CREATE`;
-- Hobby/team/plan identity and cumulative per-sandbox usage are not remaining-account-quota authority and must not open the gate by inference;
-- only a directly authoritative read-only remaining-included-Sandbox-quota signal may open the FREE_ONLY gate, without upgrade, billing mutation, paid fallback, plan inference or provider credential preflight;
-- only after that gate opens may one fixed exact-source environment probe bind executor/deployment SHA, Python/runtime identity, `sqlite3/_sqlite3`, source identities, secret fence, result digest, exit status and cleanup;
-- source-guard proliferation is paused unless new executable counterevidence requires a guard;
-- VPS/self-hosted/production-host testing is forbidden under current control;
-- Together general inference, Together training/preflight/key lookup/job creation and all paid/subscription/unknown provider fallback are forbidden in the current FREE_ONLY supervisor mode;
-- the historical owner paid one-shot directive remains quarantined provenance and grants zero execution/training credit here;
+- autonomous mode is `FREE_ONLY` unless a newer explicit owner directive changes it;
+- resolve current execution truth from `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`, not this routing shim's historical prose;
+- external FREE provider execution requires the current typed provider admission plus credential/model/route economic provenance and immediate pre-network revalidation;
+- provider-global FREE statements, key presence, model labels, successful HTTP responses or historical traffic cannot self-admit a concrete lane;
+- Together general inference/training/preflight/key lookup and all paid/subscription/unknown provider fallback remain forbidden under the current owner directive;
 - never expose or commit secrets;
 - source/component/historical PASS never implies broader EntityOS/HCU runtime acceptance;
 - preserve exact provenance, stale-generation, replay, privacy and effect boundaries.
@@ -109,12 +126,6 @@ Retained source and executor lanes are repository-qualified and successor-dynami
 - HCU/Typed Entry/J-Space donor: `gschaidergabriel/clay-global-research-entity#1263`;
 - bounded execution controller: `gschaidergabriel/Dr.-Unterweger#810`.
 
-Current bounded evidence includes prior component-only Entry canonicalization and J-Space dataset-family-split execution plus supervisor-8.65 exact-head Function-runtime HTTP 200 evidence at **no-Sandbox diagnostic scope**. Sandbox environment runtime credit remains zero. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model-runtime and training credit remain zero; whole-product PASS remains false.
+Current runtime/economic truth is dynamic and must be refreshed from canonical `main`, the current supervisor inbox and exact execution receipts before a material claim. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model-runtime and training credit remain zero unless newer exact executable evidence explicitly promotes them.
 
-Immediate highest-information gate: obtain a **directly authoritative read-only remaining included Vercel Sandbox quota signal**. Do not substitute Hobby plan identity, cumulative sandbox usage, deployment READY state, source inspection, model consensus or inferred quota.
-
-Only if that FREE_ONLY gate opens, continue the single retained exact-source executor through:
-
-`environment capability -> canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> InferenceReceipt -> Global J-Space/GWT observation`
-
-with admitted vector-control interventions and exact causal identities. Continue `JSPACE_VECTOR_CONTROL_ABI/v1`, causal DatasetAdmission/family split, deterministic hard negatives and leak-resistant zero-cost local ~0.8B readiness without paid training, but do not grant model/J-Space/training credit from source-only progress.
+The Trigger-1 frontier is narrower and empirical: find/construct a genuinely instrumentable FREE model lane, bind the Global J-Space vector through the exact model-specific adapter into the consumed runtime intervention, then survive matched sign/null/orthogonal/permuted controls and disjoint holdout. Until that happens, report executable deltas/blockers rather than direct-steering success.

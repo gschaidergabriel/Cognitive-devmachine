@@ -12,6 +12,36 @@ ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
 
 provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
 
+
+# Resolve canonical admission before touching provider-secret values. Blocked
+# credentials are removed by variable name only, so local model/distillery/forge
+# children cannot inherit an unadmitted provider capability accidentally.
+clear_unadmitted_provider_secret_env(){
+  local name
+  if ! provider_admitted groq; then
+    unset GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY || true
+  fi
+  if ! provider_admitted mistral; then
+    unset MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY || true
+  fi
+  if ! provider_admitted nvidia; then
+    unset NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY || true
+  fi
+  if ! provider_admitted openrouter; then
+    unset OPENROUTER_API_KEY || true
+  fi
+  # Tavily/Exa are not members of the current typed FREE provider authority.
+  unset TAVILY_API_KEY EXA_API_KEY || true
+  while IFS= read -r name; do
+    case "$name" in
+      GROQ_API_KEY_*) provider_admitted groq || unset "$name" || true ;;
+      MISTRAL_API_KEY_*) provider_admitted mistral || unset "$name" || true ;;
+      NVIDIA_API_KEY_*) provider_admitted nvidia || unset "$name" || true ;;
+      OPENROUTER_API_KEY_*) provider_admitted openrouter || unset "$name" || true ;;
+    esac
+  done < <(compgen -v)
+}
+
 typed_admission_compat_flags(){
   unset CLAY_FREE_ONLY_ATTESTED CLAY_GROQ_FREE_ATTESTED CLAY_MISTRAL_FREE_ATTESTED CLAY_NVIDIA_FREE_ATTESTED || true
   local any=0
@@ -21,36 +51,6 @@ typed_admission_compat_flags(){
   if provider_admitted openrouter; then any=1; fi
   (( any )) && export CLAY_FREE_ONLY_ATTESTED=1 || true
 }
-
-unset_provider_family(){
-  local provider="$1"; shift
-  local name prefix
-  provider_admitted "$provider" && return 0
-  for name in "$@"; do unset "$name" || true; done
-  case "$provider" in
-    groq) prefix="GROQ_API_KEY_" ;;
-    mistral) prefix="MISTRAL_API_KEY_" ;;
-    nvidia) prefix="NVIDIA_API_KEY_" ;;
-    *) prefix="" ;;
-  esac
-  if [[ -n "$prefix" ]]; then
-    while IFS= read -r name; do
-      [[ "$name" == "$prefix"* ]] && unset "$name" || true
-    done < <(compgen -v)
-  fi
-}
-
-# Resolve canonical admission before touching provider-secret values. Blocked
-# credentials are removed by variable name only, so local model/distillery/forge
-# children cannot inherit an unadmitted provider capability accidentally.
-clear_unadmitted_provider_secret_env(){
-  unset_provider_family groq GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY
-  unset_provider_family mistral MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY
-  unset_provider_family nvidia NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY
-  unset_provider_family openrouter OPENROUTER_API_KEY
-  unset TAVILY_API_KEY EXA_API_KEY || true
-}
-
 provider_secret_name_allowed(){
   local provider="$1" name="$2"
   case "$provider:$name" in

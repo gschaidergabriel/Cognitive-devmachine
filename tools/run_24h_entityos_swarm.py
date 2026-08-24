@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""EntityOS/HCU driver for the existing FREE_ONLY adaptive go swarm.
+"""EntityOS/HCU driver for the FREE_ONLY adaptive go swarm.
 
-The underlying controller owns credential collection, AIMD concurrency,
-provider-wide 429 cooldown, 402 hard-stop behavior and receipt logging. This
-driver adds live model discovery, EntityOS/HCU roles, and provider-specific
-request budgets derived from measured runtime limits.
+The underlying controller owns typed FREE provider admission, credential
+collection, AIMD concurrency, provider-wide 429 cooldown, 402 hard-stop
+behavior and receipt logging. This driver adds live model discovery,
+EntityOS/HCU roles, and provider-specific request budgets. Catalog I/O is
+independently re-gated immediately before the provider network call.
 """
 from __future__ import annotations
 
@@ -57,6 +58,7 @@ UNKNOWN_HIGH_VALUE = (
 # larger research budget unless their runtime evidence says otherwise.
 _ORIGINAL_REQUEST_CHAT = base.request_chat
 
+
 def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout):
     if spec.name == "groq":
         max_tokens = min(int(max_tokens), int(os.getenv("CLAY_GROQ_MAX_TOKENS", "1000")))
@@ -66,25 +68,39 @@ def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout)
         max_tokens = min(int(max_tokens), int(os.getenv("CLAY_NVIDIA_MAX_TOKENS", "1800")))
     return _ORIGINAL_REQUEST_CHAT(spec, key, model, prompt, max_tokens, timeout)
 
+
 base.request_chat = provider_bounded_request_chat
 
 
-def fetch_catalog(url: str, key: str, timeout: float) -> list[dict]:
+def fetch_catalog(provider: str, url: str, key: str, timeout: float) -> tuple[list[dict], dict]:
+    decision = base.resolve_provider_admission(provider, base.SUPERVISOR_PATH)
+    if not decision.allowed:
+        return [], {
+            "classification": "CATALOG_ADMISSION_REVOKED_FAIL_CLOSED",
+            "reason": decision.reason,
+            "cost_class": decision.cost_class,
+            "admission_id": decision.admission_id,
+        }
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             payload = json.loads(resp.read().decode("utf-8", errors="replace"))
     except (urllib.error.URLError, json.JSONDecodeError, TimeoutError):
-        return []
+        return [], {"classification": "CATALOG_UNAVAILABLE_AFTER_FREE_ADMISSION"}
     rows = payload.get("data", []) if isinstance(payload, dict) else []
-    return [x if isinstance(x, dict) else {"id": str(x)} for x in rows]
+    return [x if isinstance(x, dict) else {"id": str(x)} for x in rows], {
+        "classification": "CATALOG_OBSERVED_AFTER_EXACT_FREE_ADMISSION",
+        "admission_id": decision.admission_id,
+    }
 
 
 def explicit_billions(model_id: str) -> float | None:
     vals: list[float] = []
     for raw in re.findall(r"(?i)(\d+(?:\.\d+)?)\s*b(?:\b|[-_])", model_id):
-        try: vals.append(float(raw))
-        except ValueError: pass
+        try:
+            vals.append(float(raw))
+        except ValueError:
+            pass
     return max(vals) if vals else None
 
 
@@ -104,10 +120,12 @@ def choose_models(provider: str, rows: list[dict]) -> list[str]:
         if b is None and not any(x in low for x in UNKNOWN_HIGH_VALUE):
             continue
         score = b or 0.0
-        if any(x in low for x in ("ultra", "large", "reasoning", "deepseek", "120b", "405b", "550b")): score += 120.0
-        if any(x in low for x in ("nemotron", "magistral", "devstral", "codestral", "coder", "instruct")): score += 60.0
-        # Prefer model IDs already proven callable in this sandbox/account.
-        if model_id == "nvidia/llama-3.3-nemotron-super-49b-v1": score += 500.0
+        if any(x in low for x in ("ultra", "large", "reasoning", "deepseek", "120b", "405b", "550b")):
+            score += 120.0
+        if any(x in low for x in ("nemotron", "magistral", "devstral", "codestral", "coder", "instruct")):
+            score += 60.0
+        if model_id == "nvidia/llama-3.3-nemotron-super-49b-v1":
+            score += 500.0
         ranked.append((score, model_id))
     ranked.sort(key=lambda x: (-x[0], x[1]))
     return base.unique([mid for _, mid in ranked])
@@ -116,31 +134,80 @@ def choose_models(provider: str, rows: list[dict]) -> list[str]:
 def discover_and_export(timeout: float) -> dict[str, dict]:
     report: dict[str, dict] = {}
     for spec in base.PROVIDERS:
+        decision = base.resolve_provider_admission(spec.name, base.SUPERVISOR_PATH)
+        if not decision.allowed:
+            report[spec.name] = {
+                "source": "admission_blocked",
+                "cost_class": decision.cost_class,
+                "reason": decision.reason,
+                "admission_id": decision.admission_id,
+                "keys": "UNREAD_DUE_TO_ADMISSION",
+                "models": [],
+            }
+            continue
         keys = base.collect_keys(spec)
         override = base.split_values(os.getenv(spec.models_env))
         if override:
-            report[spec.name] = {"source": "environment_override", "keys": len(keys), "models": override}
+            report[spec.name] = {
+                "source": "environment_override_after_free_admission",
+                "admission_id": decision.admission_id,
+                "keys": len(keys),
+                "models": override,
+            }
             continue
         if not keys:
-            report[spec.name] = {"source": "no_keys", "keys": 0, "models": []}
+            report[spec.name] = {
+                "source": "no_keys_after_free_admission",
+                "admission_id": decision.admission_id,
+                "keys": 0,
+                "models": [],
+            }
             continue
-        rows = fetch_catalog(CATALOGS[spec.name], keys[0], timeout)
+        rows, catalog_evidence = fetch_catalog(spec.name, CATALOGS[spec.name], keys[0], timeout)
+        if catalog_evidence.get("classification") == "CATALOG_ADMISSION_REVOKED_FAIL_CLOSED":
+            report[spec.name] = {
+                "source": "admission_revoked_before_catalog",
+                "admission_id": catalog_evidence.get("admission_id", ""),
+                "reason": catalog_evidence.get("reason", "UNKNOWN"),
+                "keys": len(keys),
+                "models": [],
+            }
+            continue
         selected = choose_models(spec.name, rows)
         if selected:
             os.environ[spec.models_env] = ",".join(selected)
-            report[spec.name] = {"source": "live_catalog", "keys": len(keys), "catalog": len(rows), "models": selected}
+            report[spec.name] = {
+                "source": "live_catalog_after_free_admission",
+                "admission_id": decision.admission_id,
+                "keys": len(keys),
+                "catalog": len(rows),
+                "models": selected,
+            }
         else:
-            report[spec.name] = {"source": "controller_fallback", "keys": len(keys), "catalog": len(rows), "models": list(spec.default_models)}
+            report[spec.name] = {
+                "source": "controller_fallback_after_free_admission",
+                "admission_id": decision.admission_id,
+                "keys": len(keys),
+                "catalog": len(rows),
+                "models": list(spec.default_models),
+            }
     return report
 
 
 async def main(args: argparse.Namespace) -> int:
     report = discover_and_export(args.timeout)
-    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v2", "providers": report}, ensure_ascii=False), flush=True)
+    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v3", "providers": report}, ensure_ascii=False), flush=True)
     if args.inventory_only:
         return 0
     out = args.output_dir or f"/artifacts/clay-entityos-swarm/{__import__('datetime').datetime.now(__import__('datetime').timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
-    base_args = argparse.Namespace(hours=args.hours, max_tokens=args.max_tokens, context_chars=args.context_chars, timeout=args.timeout, drain_seconds=args.drain_seconds, output_dir=out)
+    base_args = argparse.Namespace(
+        hours=args.hours,
+        max_tokens=args.max_tokens,
+        context_chars=args.context_chars,
+        timeout=args.timeout,
+        drain_seconds=args.drain_seconds,
+        output_dir=out,
+    )
     return await base.run(base_args)
 
 

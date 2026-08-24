@@ -28,6 +28,7 @@ SECRET_PROVIDER={
 }
 UNTYPED_CREDENTIALED_SECRETS=frozenset({"TAVILY_API_KEY","EXA_API_KEY"})
 UNTYPED_CREDENTIALED_PROVIDERS=frozenset({"tavily","exa"})
+PUBLIC_NONCREDENTIALED_PROVIDERS=frozenset({"github"})
 
 _ORIGINAL_SECRET=d.secret
 _ORIGINAL_REQUEST_JSON=d.request_json
@@ -47,10 +48,14 @@ def admitted_secret(name: str) -> str:
 def admitted_request_json(provider: str, owner: str, url: str, *, key: str = "", payload: dict | None = None,
                           headers: dict[str,str] | None = None, timeout: float = 90.0):
     normalized=str(provider).strip().lower()
-    if normalized in LLM_PROVIDERS and not provider_is_admitted_free(normalized):
-        return 412, {}, {"error":"PROVIDER_NOT_TYPED_FREE_ADMITTED"}
+    if normalized in LLM_PROVIDERS:
+        if not provider_is_admitted_free(normalized):
+            return 412, {}, {"error":"PROVIDER_NOT_TYPED_FREE_ADMITTED"}
+        return _ORIGINAL_REQUEST_JSON(provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout)
     if normalized in UNTYPED_CREDENTIALED_PROVIDERS:
         return 412, {}, {"error":"PROVIDER_NOT_IN_TYPED_FREE_ADMISSION_AUTHORITY"}
+    if normalized not in PUBLIC_NONCREDENTIALED_PROVIDERS:
+        return 412, {}, {"error":"PROVIDER_NOT_EXPLICITLY_CLASSIFIED"}
     return _ORIGINAL_REQUEST_JSON(provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout)
 
 
@@ -115,7 +120,7 @@ def select_reviewers(catalog: list[dict]) -> list[tuple[str,str,str]]:
     return out
 
 
-def _bump(con: sqlite3.Connection,key: str,n: int=1) -> None:
+def _bump(con: sqlite3.Connection,key:str,n:int=1) -> None:
     try:d.bump(con,key,n)
     except Exception:pass
 

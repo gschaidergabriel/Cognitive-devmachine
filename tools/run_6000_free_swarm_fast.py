@@ -14,6 +14,11 @@ import run_24h_entityos_swarm as opt
 import free_swarm_accelerator_v2 as accelerator
 accelerator.install(base, opt)
 import run_6000_free_swarm_v3 as fabric
+import free_swarm_typed_delta_bridge as typed_delta_bridge
+
+# v3 owns current source-grounding/economic policy. Add only the typed candidate
+# handoff after that module has completed its current-authority installation.
+typed_delta_bridge.install(fabric.fabric)
 
 
 def main() -> int:

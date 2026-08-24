@@ -1,0 +1,47 @@
+{
+  "schema": "ENTITYOS_HCU_GO_TYPED_FORGE_CONSUMER_SUCCESSOR_RECEIPT/v1",
+  "created_at": "2026-08-24T14:09:00Z",
+  "trigger": "go",
+  "authority_epoch": "8.71",
+  "mode": "FREE_ONLY",
+  "base_main": "caed18dbfce5646ff39ffc88cda9bed3a1c04575",
+  "preserved_parallel_delta": "PR1538 source-grounded Forge/J-Space worker context is retained unchanged",
+  "scope": "SOURCE_COMPONENT_ONLY",
+  "observed_funnel": {
+    "supervisor_snapshot_swarm_tokens": 5001744,
+    "supervisor_snapshot_machine_readable_deltas": 68,
+    "supervisor_snapshot_forge_accepted": 0,
+    "pr1538_observation_forge_evaluations": 104,
+    "pr1538_observation_patch_rejected": 57,
+    "pr1538_observation_needs_implementation": 47
+  },
+  "new_delta": {
+    "producer_bridge": "tools/free_swarm_typed_delta_bridge.py",
+    "producer_install_point": "tools/run_6000_free_swarm_fast.py after current v3 installation",
+    "typed_ingress_schema": "CLAY_ARCHITECTURE_DELTA_INGRESS/v2",
+    "typed_candidate_schema": "CLAY_ARCHITECTURE_DELTA_CANDIDATE/v2",
+    "forge_frontend": "tools/run_free_evidence_forge.py",
+    "legacy_backend_copy": "tools/run_free_evidence_forge_legacy.py",
+    "invariants": [
+      "exact unified-diff path set must equal declared target_files",
+      "typed candidate proposal SHA-256 is reverified by Forge",
+      "ready_for_forge must match the proposal value",
+      "current rows carrying delta_ingress never fall back to model-prose reparsing",
+      "historical rows without typed metadata retain legacy compatibility",
+      "candidate evidence remains noncanonical and cannot mint state/effects"
+    ]
+  },
+  "local_evidence": {
+    "parser_tests": "9/9 PASS",
+    "py_compile": "PASS for parser, typed bridge, Forge frontend and test definitions",
+    "credit": "LOCAL_SOURCE_COMPONENT_ONLY"
+  },
+  "artifact_readme": "NO_CHANGE_WITH_REASON: current README/manifest authority mirrors are stale at 8.68 while main is moving rapidly; this organ does not overwrite the large current-facing surface from a branch until successor-authority sync is fused",
+  "go_tracks": {
+    "A": "closes typed worker-to-Forge consumer edge",
+    "B": "adds deterministic typed candidate/provenance boundary",
+    "C": "lets source-grounded HCU/J-Space candidate deltas reach Forge without model/training credit"
+  },
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "credits": {"whole_entityos_hcu":0,"hcu_full":0,"jspace_model":0,"training":0}
+}

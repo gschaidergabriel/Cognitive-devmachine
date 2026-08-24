@@ -1,0 +1,50 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.71",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry_main": "f2c9d528969b0212d97d90c73557155c1ebfa7fb",
+  "classification": "FORGE_DISTILLERY_CONTRACT_INTEGRATION_FIXTURE_ALIGNMENT",
+  "parallel_convergence": {
+    "distillery_central_guard_delegation": "MERGED_INDEPENDENTLY_AS_1570",
+    "safe_wrapper_evaluation_head_binding": "MERGED_INDEPENDENTLY_ON_MAIN",
+    "runtime_witness_evaluation_and_decision_binding": "MERGED_INDEPENDENTLY_ON_MAIN",
+    "central_credit_checkout_and_decision_binding": "MERGED_INDEPENDENTLY_ON_MAIN",
+    "targeted_872_regression": "PRESENT_ON_MAIN",
+    "fusion_rule": "DO_NOT_DUPLICATE_SOLVED_SOURCE; REPAIR_ONLY_STALE_DISTILLERY_CONTRACT_FIXTURE_AND_NEGATIVE_CONTROLS"
+  },
+  "observed_defect": "After the central evidence-credit guard advanced, tests/test_forge_distillery_ingest_871.py still constructs its supposed positive evidence-qualified row without execution_admission.evaluation_checkout_head and without individual decisions. Under the current canonical guard that row is correctly rejected, so the older integration fixture no longer represents a valid positive witness and its positive/idempotency/invalid-json tests become semantically stale.",
+  "counterhypothesis": "The stale fixture is test-only and does not change production Distillery behavior. That is true, but leaving it stale either causes false CI failures or pressures future workers to weaken the production guard to satisfy an obsolete test, so aligning the fixture is a product-convergence safety delta.",
+  "delta": [
+    "Add evaluation_checkout_head matching evaluation_repo_head to the Distillery positive execution-admission fixture.",
+    "Add a nonempty admitted command decision to the positive fixture.",
+    "Add Distillery-level negative regressions for evaluator-head mismatch, empty decisions and a rejected individual decision.",
+    "Preserve the stronger production guard and independently-landed runtime witness unchanged."
+  ],
+  "evidence": {
+    "scope": "SOURCE_INTEGRATION_REGRESSION_ALIGNMENT_ONLY",
+    "exact_branch_runtime_executed_by_this_organ": false,
+    "provider_network_calls_by_this_organ": 0,
+    "paid_or_together_calls_by_this_organ": 0,
+    "unusual_experiments": 0,
+    "coordination": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT_SHARED_REPRODUCIBLE_TRIGGER_ID_NOT_EXPOSED"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_PREVENTS_STALE_INTEGRATION_TEST_FROM_CONTRADICTING_CURRENT_FAIL_CLOSED_FORGE_TO_DISTILLERY_CONTRACT",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "ADVANCED_PROVENANCE_CONTRACT_REGRESSION_COVERAGE_AT_DATASET_ADMISSION_BOUNDARY",
+    "C_GLOBAL_JSPACE_GWT_FREE_ONLY_READINESS": "ADVANCED_DATASET_ADMISSION_TEST_FIDELITY_ONLY; MODEL_SPECIFIC_JSPACE_AND_TRAINING_CREDIT_REMAIN_ZERO"
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Run tests/test_forge_evidence_credit_eval_binding_872.py plus tests/test_forge_distillery_ingest_871.py and the integrated exact-current Forge-to-Distillery runtime witness on an authorized zero-cost runtime. Then require historical nominal ACCEPT -> +0; one exact-source/evaluator/command/isolation-qualified ACCEPT -> exactly one Distillery packet and accepted_dataset_tokens > 0; identical replay -> +0."
+}

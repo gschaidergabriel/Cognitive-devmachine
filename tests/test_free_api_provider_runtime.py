@@ -1788,6 +1788,45 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("VERIFIED", receipt["lifecycle"])
                 self.assertNotIn("DONE", receipt["lifecycle"])
 
+    def test_impossible_retry_after_skips_parser_and_preserves_429_receipt(self):
+        class Response:
+            status = 429
+            headers = {"Retry-After": "x" * 129}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b"{}"
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        parser_calls = []
+        original_parser = MOD.parsedate_to_datetime
+
+        def parser_must_not_run(value):
+            parser_calls.append(value)
+            raise AssertionError("impossible Retry-After reached date parser")
+
+        MOD.parsedate_to_datetime = parser_must_not_run
+        try:
+            result = MOD.execute_chat(
+                VALID_MESSAGES, model="mock", environ=env,
+                opener=lambda *args, **kwargs: Response(),
+                now=iter((100.0, 100.01)).__next__,
+            )
+        finally:
+            MOD.parsedate_to_datetime = original_parser
+
+        receipt = result["receipt"]
+        self.assertEqual(parser_calls, [])
+        self.assertEqual(receipt["status"], 429)
+        self.assertEqual(receipt["outcome"], "rate_limited")
+        self.assertEqual(receipt["cooldown_seconds"], 60)
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+
     def test_retry_after_header_access_failure_preserves_rate_limit_receipt(self):
         class BrokenHeaders:
             def get(self, name, default=None):

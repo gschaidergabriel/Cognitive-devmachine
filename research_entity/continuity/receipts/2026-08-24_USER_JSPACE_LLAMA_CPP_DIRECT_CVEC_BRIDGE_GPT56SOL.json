@@ -1,0 +1,113 @@
+{
+  "schema": "CLAY_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "user_vector_jspace_direct_control_experiment",
+  "authority_epoch": "8.63",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "fe4a6d3ed057d2940be0872482c0a43154e0bfd8",
+  "user_goal": "Try to steer model instances directly with J-Space vectors rather than only prompt/text control, repeating safely until a causal path works.",
+  "coordination": {
+    "shared_immutable_macrocycle_or_request_id": null,
+    "exact_message_timestamp_precision_available": "minute_only",
+    "new_unusual_intervention_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "ordinary_source_research_and_nonruntime_bridge_work_performed": true
+  },
+  "provider_execution_reentry": {
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "exact_head_ready_vercel_deployment": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+    "deployment_access_observation": "VERCEL_SSO_REDIRECT_BEFORE_FUNCTION_RESULT",
+    "runtime_logs_for_attempt": "NONE_OBSERVED",
+    "sandbox_cost_gate_at_exact_executor_head": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_create_performed": false,
+    "provider_credentials_looked_up": false,
+    "paid_provider_or_together_used": false,
+    "runtime_credit_added": 0
+  },
+  "research_observation": {
+    "primary_result": "THE_PINNED_LLAMA_CPP_QWEN3_PATH_HAS_A_REAL_CONTROL_VECTOR_ACTIVATION_HOOK",
+    "pinned_llama_cpp_source_commit": "b95502ba9aa0eb73a2f4fc8878d7fbe6a847a0b9",
+    "exact_source_facts": [
+      "Pinned include/llama.h exposes llama_set_adapter_cvec(ctx, data, len, n_embd, il_start, il_end).",
+      "Pinned src/llama-adapter.cpp stores no control tensor for layer 0, copies layer-major float32 chunks using off=n_embd*(il-1) for layers 1..n_layer-1, and applies only the selected layer range.",
+      "Pinned src/models/qwen3.cpp classifies Qwen3-0.6B as n_layer=28 and n_embd=1024 and applies build_cvec(cur, il) to the residual layer output before it becomes the next layer input.",
+      "Therefore llama.cpp control-vector application on this exact Qwen3 source is an activation-level intervention path, unlike ordinary remote chat/completion API prompt steering."
+    ],
+    "epistemic_boundary": "Presence of the hook and a deterministic buffer bridge does not prove that an actual model was loaded, that the control vector was applied at runtime, that output changed, that a hidden-state causal effect exists, or that the intervention is beneficial."
+  },
+  "donor_delta": {
+    "retained_lane": "gschaidergabriel/clay-global-research-entity#1263",
+    "live_head_observed_after_parallel_reentry": "748ea294d1c0e135554cd021b2289be14162a2d6",
+    "source_file": "the artefact/MicroEntity/hcu/jspace_llamacpp_cvec_bridge_v1.py",
+    "test_file": "the artefact/MicroEntity/hcu/test_jspace_llamacpp_cvec_bridge_v1.py",
+    "source_commits_by_this_organ": [
+      "e4331773c02ec39cf5ef664c71280c59f9f48ef8",
+      "475d1473cc56f6cfb7da3656ece3652d9ef7e4b6"
+    ],
+    "test_commits_by_this_organ": [
+      "fcde8d1ff023733c79772513b90f1e159592a19d",
+      "85c9fd047b02da852e2296d77d64fab4aa4e3bb4"
+    ],
+    "bridge_schema": "ENTITYOS_HCU_JSPACE_LLAMA_CPP_CVEC_BINDING/v1",
+    "layout_schema": "LLAMA_CPP_CVEC_LAYER_MAJOR_F32LE_NO_LAYER0/v1",
+    "target_api": "llama_set_adapter_cvec",
+    "pinned_candidate": {
+      "model": "Qwen/Qwen3-0.6B-GGUF Q8_0",
+      "checkpoint_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+      "llama_cpp_source_commit": "b95502ba9aa0eb73a2f4fc8878d7fbe6a847a0b9",
+      "n_embd": 1024,
+      "n_layer": 28
+    },
+    "bridge_properties": [
+      "Revalidates the existing JSPACE_VECTOR_CONTROL_ABI/v1 packet before conversion.",
+      "Requires vector dimension to equal model n_embd; never pads, truncates or invents a projection.",
+      "Builds exact little-endian IEEE-754 float32 layer-major bytes for layers 1..n_layer-1 and zeroes non-selected layer chunks.",
+      "Binds packet, generation, condition, basis, role, checkpoint SHA, llama.cpp source commit, layer range, strength, float/byte counts and exact control-buffer SHA-256.",
+      "Recomputes semantic buffer bytes during validation so a caller-minted self-consistent digest cannot launder an invalid layer layout or modified strength.",
+      "Rejects stale generation/basis/role, dimension mismatch, invalid layer ranges, binary32 overflow, raw mutation and binding mutation."
+    ],
+    "test_status": "REGRESSION_SOURCE_WRITTEN_NOT_EXECUTED_AT_AUTHORIZED_RUNTIME",
+    "source_presence_reverified_on_live_donor_head": true
+  },
+  "hypothesis": "Applying the admitted J-Space vector through llama_set_adapter_cvec to selected Qwen3 layers will cause a reproducible change in logits/output relative to an otherwise identical null-vector baseline.",
+  "counterhypothesis": "The buffer can be correctly delivered and applied yet have no reproducible causal effect on the measured logits/output for the chosen vector, strength, layer window and task.",
+  "next_exact_discriminator": {
+    "runtime_requirements": [
+      "canonical atomic unusual-experiment lease",
+      "directly observed zero-cost execution surface",
+      "exact Qwen3-0.6B checkpoint bytes and SHA-256",
+      "exact llama.cpp binary/build identity derived from the pinned source",
+      "verified loader consumption before inference",
+      "same prompt, seed and decoding configuration across conditions",
+      "pre-invocation application of the exact bridge buffer through llama_set_adapter_cvec"
+    ],
+    "paired_conditions": [
+      "NULL/zero vector baseline",
+      "positive admitted J-Space vector",
+      "sign-flipped vector as directionality control"
+    ],
+    "measurements": [
+      "exact input and invocation identity",
+      "applied cvec buffer SHA-256 and layer range",
+      "token logits or deterministic output delta",
+      "successor ModelExecution/InferenceReceipt/J-Space trace identity"
+    ],
+    "promotion_rule": "Only an observed exact runtime intervention can add model/J-Space causal credit; source presence and delivery alone remain insufficient."
+  },
+  "credits_after_delta": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current-facing README and donor/main were moving concurrently; this append-only receipt preserves the exact source and evidence delta without clobbering parallel work."
+  },
+  "acceptance": "SOURCE_BRIDGE_COMPLETE_RUNTIME_DISCRIMINATOR_BLOCKED"
+}

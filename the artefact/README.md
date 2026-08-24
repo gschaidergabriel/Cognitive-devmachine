@@ -67,7 +67,7 @@ Environment flags, credential presence, `:free` route suffixes, catalog pricing 
 ## Retained convergence lanes
 
 - HCU/Typed Entry/J-Space donor: `gschaidergabriel/clay-global-research-entity#1263`
-  - live head observed in this `go`: `2badebe78db868c56ef39f0a32d198282cffcd88`
+  - live head observed in final reentry of this `go`: `ca3c55708f040b450279ad94050af4b414fa954f`
   - open draft, not merged;
   - donor/source lane only; no automatic runtime credit transfer.
 - bounded execution controller: `gschaidergabriel/Dr.-Unterweger#810`

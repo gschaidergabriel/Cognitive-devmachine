@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Refresh the Research Distillery section in free swarm/README.md."""
+"""Refresh the Research Distillery section in free swarm/README.md.
+
+After the Distillery block this updater also invokes update_system_analysis.py so
+the autonomous publisher cannot refresh compact metrics while dropping the
+script-by-script, GO-flow and Sonnet-cost analysis.
+"""
 from __future__ import annotations
 
 import argparse
@@ -7,6 +12,8 @@ import datetime as dt
 import json
 from pathlib import Path
 import sqlite3
+import subprocess
+import sys
 
 BEGIN="<!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->"
 END="<!-- RESEARCH_DISTILLERY_AUTO:END -->"
@@ -76,8 +83,13 @@ def replace(readme:Path,block:str)->None:
 
 def main()->int:
     ap=argparse.ArgumentParser(); ap.add_argument("--repo",default="/workspace/clay-global-research-entity"); ap.add_argument("--artifacts",default="/artifacts/clay-entityos-swarm"); args=ap.parse_args()
-    repo=Path(args.repo); metrics=load(Path(args.artifacts)/"distillery/distillery.sqlite3")
+    repo=Path(args.repo); artifacts=Path(args.artifacts); metrics=load(artifacts/"distillery/distillery.sqlite3")
     replace(repo/"free swarm/README.md",md(metrics)); (repo/"free swarm/DISTILLERY_LIVE.json").write_text(json.dumps(metrics,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
-    print(json.dumps({"state":metrics["state"],"collected":metrics["collected_source_tokens"],"accepted":metrics["accepted_dataset_tokens"],"yield":metrics["dataset_yield"],"near_miss":metrics.get("counters",{}).get("near_miss_candidates",0)})); return 0
+    analysis=repo/"free swarm/update_system_analysis.py"
+    analysis_rc=None
+    if analysis.exists():
+        proc=subprocess.run([sys.executable,str(analysis),"--repo",str(repo),"--artifacts",str(artifacts)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=120,check=False)
+        analysis_rc=proc.returncode
+    print(json.dumps({"state":metrics["state"],"collected":metrics["collected_source_tokens"],"accepted":metrics["accepted_dataset_tokens"],"yield":metrics["dataset_yield"],"near_miss":metrics.get("counters",{}).get("near_miss_candidates",0),"system_analysis_rc":analysis_rc})); return 0
 
 if __name__=="__main__":raise SystemExit(main())

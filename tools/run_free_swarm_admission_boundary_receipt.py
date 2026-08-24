@@ -3,7 +3,7 @@
 
 Executes the canonical admission-boundary unittest modules in a sanitized child
 process. Provider credentials are not inherited. A Python socket tripwire blocks
-and records any unmocked Python network connection attempt. The canonical tests
+and records any unmocked Python DNS or connection attempt. The canonical tests
 retain their own per-case secret/network tripwire assertions.
 
 The suite also binds malformed canonical admission, caller-forged FREE payloads,
@@ -178,11 +178,19 @@ def record(kind, target):
 def guarded_connect(self, address):
     return record("socket.connect", address)
 
+def guarded_connect_ex(self, address):
+    return record("socket.connect_ex", address)
+
 def guarded_create_connection(address, *args, **kwargs):
     return record("socket.create_connection", address)
 
+def guarded_getaddrinfo(host, port, *args, **kwargs):
+    return record("socket.getaddrinfo", (host, port))
+
 socket.socket.connect = guarded_connect
+socket.socket.connect_ex = guarded_connect_ex
 socket.create_connection = guarded_create_connection
+socket.getaddrinfo = guarded_getaddrinfo
 suite = unittest.defaultTestLoader.loadTestsFromNames(sys.argv[1:])
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 raise SystemExit(0 if result.wasSuccessful() else 1)
@@ -332,6 +340,12 @@ def main(argv: list[str] | None = None) -> int:
             "secret_sentinel_leaked_to_output": sentinel_leaked,
             "python_socket_network_attempt_count": len(attempts),
             "python_socket_network_attempts": attempts,
+            "python_socket_tripwire_covers": [
+                "socket.getaddrinfo",
+                "socket.create_connection",
+                "socket.socket.connect",
+                "socket.socket.connect_ex",
+            ],
             "per_case_secret_and_network_zero_assertions": "ENFORCED_BY_CANONICAL_TEST_SUITE",
             "malformed_admission_zero_assertions": "ENFORCED_BY_TEST_FREE_SWARM_ADMISSION_BOUNDARY_868_MALFORMED",
             "caller_forgery_non_authority_assertions": "ENFORCED_BY_TEST_FREE_PROVIDER_ADMISSION_FORGERY_868",

@@ -15,6 +15,11 @@ cannot mint a second dataset packet or alter training-bearing packet bytes for t
 measured evidence. If the same execution identity reappears with conflicting measured
 evidence, admission fails closed instead of treating the mutation as a new observation.
 
+Replay lookup, conflict classification, packet insertion and token-counter mutation are
+serialized as one per-evaluation SQLite write transaction. Write intent is acquired
+before replay lookup so concurrent observations of one execution cannot both classify
+it as unseen and race at the replay-identity unique-index boundary.
+
 Legacy ingest rows predate the replay-identity columns. They cannot be safely backfilled
 from the reduced legacy table, so a new evaluation colliding on the available legacy
 execution coordinates fails closed until the historical row is explicitly reconciled.
@@ -330,6 +335,8 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
     con = sqlite3.connect(distillery_db, timeout=30)
     try:
         ensure_schema(con)
+        # Close any schema/index transaction before row-level write-intent admission.
+        con.commit()
         for line in forge_eval_path.read_text(encoding="utf-8", errors="replace").splitlines():
             if limit and summary["seen"] >= limit:
                 break
@@ -341,7 +348,18 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
             except Exception:
                 summary["rejected"]["INVALID_JSON"] = summary["rejected"].get("INVALID_JSON", 0) + 1
                 continue
-            admitted, reason, packet_id = admit_one(con, row)
+
+            # Serialize replay lookup, conflict classification, packet insertion and all
+            # related counters as one admission transaction. The existing unique replay
+            # index remains defense in depth rather than the primary race classifier.
+            con.execute("BEGIN IMMEDIATE")
+            try:
+                admitted, reason, packet_id = admit_one(con, row)
+                con.commit()
+            except Exception:
+                con.rollback()
+                raise
+
             if admitted:
                 summary["admitted"] += 1
                 summary["packet_ids"].append(packet_id)
@@ -349,7 +367,7 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
                 summary["duplicates"] += 1
             else:
                 summary["rejected"][reason] = summary["rejected"].get(reason, 0) + 1
-        con.commit()
+
         row = con.execute("SELECT COALESCE(SUM(approx_tokens),0),COUNT(*) FROM knowledge_packets").fetchone()
         summary["knowledge_packet_tokens_total"] = int(row[0] or 0)
         summary["knowledge_packets_total"] = int(row[1] or 0)

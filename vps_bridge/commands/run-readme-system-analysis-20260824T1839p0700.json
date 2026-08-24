@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"run-readme-system-analysis-20260824T1839p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -euo pipefail; echo HEAD=$(git rev-parse HEAD); python3 'free swarm/update_distillery_readme.py' --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm; echo ---SYSTEM---; python3 - <<'PY'\nimport json\np='free swarm/SYSTEM_ANALYSIS_LIVE.json'\nx=json.load(open(p))\nprint(json.dumps({'generated_at':x.get('generated_at'),'runtime':x.get('runtime'),'free_swarm':x.get('free_swarm'),'go_feedback':x.get('go_feedback'),'costs':x.get('costs'),'distillery':{k:x.get('distillery',{}).get(k) for k in ('collected_source_tokens','accepted_dataset_tokens','dataset_yield','accepted_packets')},'forge':x.get('evidence_forge')},ensure_ascii=False))\nPY\necho ---README-MARKERS---; grep -nE 'SYSTEM_ANALYSIS_AUTO|Source → GO Pass-through|Sonnet-5 API-Äquivalent|Was `go` auslöst|Script-by-Script' 'free swarm/README.md' | head -30"
+}

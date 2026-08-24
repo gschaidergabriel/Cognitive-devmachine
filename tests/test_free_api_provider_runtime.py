@@ -744,6 +744,50 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             captured["authorization"], "Bearer authorized-secret"
         )
 
+    def test_nonce_callback_latch_change_is_rechecked_before_network(self):
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+            "FRANK_FREE_ONLY_BUDGET_EPOCH": "nonce-latch-epoch",
+        }
+        latches = set()
+        opener_calls = []
+
+        class Response:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"finish_reason":"stop",'
+                    b'"message":{"role":"assistant","content":"ok"}}]}'
+                )
+
+        def mutate_latch_after_authorization():
+            latches.add(MOD._payment_latch_key("nvidia", env))
+            return "fixed-attempt-nonce"
+
+        with self.assertRaisesRegex(
+            RuntimeError, "payment_required_hard_stop_active"
+        ):
+            MOD.execute_chat(
+                VALID_MESSAGES,
+                model="mock",
+                environ=env,
+                opener=lambda *args, **kwargs: (
+                    opener_calls.append("open") or Response()
+                ),
+                nonce_factory=mutate_latch_after_authorization,
+                payment_latches=latches,
+            )
+        self.assertEqual(opener_calls, [])
+
     def test_invalid_text_request_schema_is_blocked_before_network(self):
         called = False
 

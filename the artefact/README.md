@@ -20,7 +20,7 @@ Pre-load hashing is not loader-consumption attestation. Logical cell count is no
 
 ## Live Free-Swarm / Forge / Distillery frontier
 
-The latest committed funnel observed during this GO re-entry records **13,587,261 Free-Swarm tokens**, **292 machine-readable delta records**, **1 nominal Forge ACCEPT**, and **0 Distillery accepted dataset tokens**. Raw worker/token volume therefore remains secondary to executable evidence conversion.
+The latest committed funnel observed during the 8.72 re-entry records **13,587,261 Free-Swarm tokens**, **292 machine-readable delta records**, **1 nominal Forge ACCEPT**, and **0 Distillery accepted dataset tokens**. Raw worker/token volume therefore remains secondary to executable evidence conversion.
 
 The historical/live nominal `accepted` row is not evidence-qualified under the current exact execution-admission contract and correctly mints zero Distillery packets/tokens.
 
@@ -38,7 +38,7 @@ The exact-current successor witness in `tools/run_go871_forge_distillery_runtime
 8. `accepted_dataset_tokens > 0`;
 9. identical replay adds zero packets/tokens.
 
-Runtime-request PR **#1619** is the retained exact-current request lane. Its workflow run **32742535392** / job **97480167751** was still **queued** at this re-entry, with no repository-bound terminal result. The workflow checks out canonical `main` at runner execution time, so queued execution does not gain credit merely from request age or source presence. No Forge operational runtime PASS is claimed until the terminal receipt exists.
+Runtime-request PR **#1619** remains open and requests execution-time selection of canonical `main`. No repository-bound terminal Forge -> Distillery result was found on current `main` during this re-entry, so no Forge operational runtime PASS is claimed.
 
 ## Provider-independent local Qwen3-0.6B J-Space discriminator
 
@@ -50,15 +50,23 @@ The fused current discriminator is `tools/trigger1_local_qwen06_midlayer_causal_
 
 `BASELINE + +VECTOR + SIGN_FLIP + NULL_VECTOR + ORTHOGONAL_SAME_NORM + PERMUTED_SAME_NORM`
 
-The retained owner-only self-hosted dispatcher is `.github/workflows/trigger1-v2-local-fastpath-selfhosted.yml`. During this GO re-entry the redundant open dispatch issues **#1608, #1609, #1627, #1634 and #1643** were closed as duplicates. **#1647** is retained as the single current Trigger-1 V2 dispatch request. Closing duplicates is coordination cleanup only; it does not cancel already-created workflow runs and grants no runtime/science credit.
+The retained owner-only execution definition is `.github/workflows/trigger1-v2-local-fastpath-selfhosted.yml`. Current `main` now requires `tools/trigger1_atomic_lease_gate.py` to validate a canonical atomic claim and source ancestry **before** the midlayer intervention step. A dispatch issue without exactly one canonical `trigger_key:` binding is therefore inert by design.
 
-Until #1647 yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
+The earlier dispatch **#1647** was closed after re-entry because its body contained no canonical trigger key and therefore cannot satisfy the current lease gate. It remains provenance only. No successor unusual experiment may be dispatched until an already-created canonical claim can be referenced reproducibly for the exact user-triggered macrocycle.
+
+### GO 23:33 source/regression delta
+
+The stale `tests/test_trigger1_local_qwen_runtime_preflight_872.py` still referenced the retired `.github/workflows/trigger1-local-qwen06-runtime-proof.yml`. That regression was rebound to the retained midlayer launcher and current self-hosted workflow, including assertions for bounded low-disk negative evidence, sanitized terminal receipt persistence, and atomic-lease ordering before intervention. The fix was merged through PR **#1665**; obsolete PR **#1620**, which targeted the former heartbeat-hosted Qwen lane, was closed as superseded.
+
+This is source/control-plane hardening only. It grants zero model-runtime, J-Space-model, HCU-full, training, whole-product or canonical-semantics credit.
+
+Until a lease-admitted successor dispatch yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
 
 ## Typed Entry / HCU authority convergence
 
-`BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json` and `SUPERVISOR_INBOX.json` are required to resolve one successor-dynamic authority surface. This GO observed `BOOTSTRAP_MINIMAL.json` still on 8.71 while `PROGRAM_STATE` and `SUPERVISOR_INBOX` selected 8.72. The minimal bootstrap was synchronized to **8.72** and now points at `SUPERVISOR_STEERING_8_72.json`.
+`BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json` and `SUPERVISOR_INBOX.json` are required to resolve one successor-dynamic authority surface. This GO lineage observed `BOOTSTRAP_MINIMAL.json` lagging behind `PROGRAM_STATE` and `SUPERVISOR_INBOX`; the current minimal bootstrap has since been synchronized to **8.72** and points at `SUPERVISOR_STEERING_8_72.json`.
 
-This is a control-plane/Typed-Entry-adjacent convergence delta: it removes a stale authority island without creating a second truth/effect/admission authority. It grants no executable HCU/model credit.
+This is a control-plane/Typed-Entry-adjacent convergence delta: it removes stale authority islands without creating a second truth/effect/admission authority. It grants no executable HCU/model credit.
 
 Retained donor lane **#1263** remains the single HCU / Typed Entry / Global J-Space donor lane. Its engine/loader work is source/donor evidence until exact admitted execution binds loader consumption, inference receipt and downstream causal traces.
 
@@ -71,7 +79,7 @@ Current bounded credit remains conservative:
 - Distillery accepted Forge packets/tokens in the last published live snapshot: **0 / 0**;
 - Forge -> Distillery exact-current runtime credit: **0 pending terminal receipt**;
 - provider runtime credit: **0 unless exact current authority/receipt promotes only its exact scope**;
-- local Qwen3-0.6B midlayer J-Space runtime promotion: **0 pending terminal receipt**;
+- local Qwen3-0.6B midlayer J-Space runtime promotion: **0 pending lease-admitted terminal receipt**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
 - J-Space model-runtime credit: **0**;
@@ -82,13 +90,14 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 
 ## Current blockers / next exact gates
 
-1. Observe terminal run **32742535392** for PR #1619; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
+1. Observe a terminal repository-bound result for the open Forge -> Distillery runtime request **#1619**; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
 2. If that witness fails, repair the measured isolated-executor/bridge blocker only; never weaken evidence admission.
-3. Observe the retained Trigger-1 V2 dispatch **#1647** and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify runner/preflight/dependency/model failure explicitly.
-4. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.
-5. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
-6. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
-7. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
+3. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
+4. On the lease-admitted Qwen run, persist the fused nonterminal midlayer exact-source runtime receipt and classify runner/preflight/dependency/model failure explicitly.
+5. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.
+6. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
+7. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
+8. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
 
 ## Evidence discipline and reentry
 

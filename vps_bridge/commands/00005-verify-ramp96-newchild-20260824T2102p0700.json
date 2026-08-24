@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"00005-verify-ramp96-newchild-20260824T2102p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -e; sleep 25; echo PROCS; pgrep -af run_6000_free_swarm || true; echo RUNS; ls -ltd /artifacts/clay-entityos-swarm/active-fabric6000-v2-* | head -5; echo SUP; cat /artifacts/clay-entityos-swarm/SUPERVISOR_6000.json; echo MEM; free -h"
+}

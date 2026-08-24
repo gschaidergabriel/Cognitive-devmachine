@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"opt-routing-backup-generated-before-sync-20260824T2134p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -e; d=/artifacts/clay-entityos-swarm/pre-sync-generated-20260824T1434Z; mkdir -p \"$d\"; cp -a 'free swarm/LIVE_METRICS.json' \"$d/LIVE_METRICS.json\" 2>/dev/null || true; cp -a 'free swarm/README.md' \"$d/README.md\" 2>/dev/null || true; cp -a 'free swarm/FABRIC_6000_LIVE.json' \"$d/FABRIC_6000_LIVE.json\" 2>/dev/null || true; echo BACKUP=$d; ls -lh \"$d\"; echo STATUS; git status --short"
+}

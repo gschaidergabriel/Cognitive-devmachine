@@ -7,7 +7,8 @@
     "paid_fallback_attempt_count": 0,
     "unknown_route": "FAIL_CLOSED",
     "together": "FORBIDDEN",
-    "provider_label_alone_is_not_cost_proof": true
+    "provider_label_alone_is_not_cost_proof": true,
+    "rate_limit_header_match_is_not_account_tier_proof": true
   },
   "providers": {
     "openrouter": {
@@ -28,15 +29,13 @@
     },
     "groq": {
       "allowed_endpoint_host": "api.groq.com",
-      "evidence_kind": "CREDENTIAL_FINGERPRINT_PLUS_PROVIDER_RATE_HEADER_MATCH",
-      "source": "https://console.groq.com/docs/rate-limits",
-      "free_plan_models": {
-        "openai/gpt-oss-120b": {"requests_per_day": 1000, "tokens_per_minute": 8000},
-        "openai/gpt-oss-20b": {"requests_per_day": 1000, "tokens_per_minute": 8000},
-        "qwen/qwen3.6-27b": {"requests_per_day": 1000, "tokens_per_minute": 8000}
-      },
+      "evidence_kind": "PROVIDER_SIDE_FREE_TIER_REQUIRED",
+      "source": "https://console.groq.com/docs/billing-faqs",
+      "supporting_source": "https://console.groq.com/docs/rate-limits",
+      "provider_statement": "Groq distinguishes the Free tier from Developer tier. Developer tier is pay-as-you-go and can incur token charges; rate-limit headers describe limits but do not by themselves attest the account billing tier.",
       "credential_plan_needed": true,
-      "credential_plan_proof": "A historical or live response for the same credential fingerprint and exact model must expose x-ratelimit-limit-requests and x-ratelimit-limit-tokens matching the documented Free Plan limits."
+      "credential_plan_proof": "Require provider-side evidence bound to the credential organization/account that the active tier is Free before autonomous FREE_ONLY execution. Historical or live rate-limit header matching is supporting telemetry only and cannot self-admit zero-cost status.",
+      "default": "FAIL_CLOSED_UNTIL_BOUND"
     },
     "mistral": {
       "allowed_endpoint_host": "api.mistral.ai",

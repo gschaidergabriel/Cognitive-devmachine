@@ -1,0 +1,71 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "authority_epoch": "8.70",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_base_observed": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+  "branch": "gpt56sol/go-870-groq-free-tier-provenance-20260824",
+  "branch_head_before_receipt": "43bfb91c10c98eb18e926585d2b1818e7a8414bc",
+  "classification": "SOURCE_COMPONENT_GROQ_ECONOMIC_PROVENANCE_FALSE_POSITIVE_CLOSED",
+  "finding": "Groq Free-like RPD/TPM response headers are not sufficient economic provenance for FREE_ONLY execution. Groq documents organization-specific rate-limit exceptions and permits projects to set custom limits at or below organization ceilings, so a paid Developer-tier project can present limits equal to documented Free-plan limits. The previous exact-header match could therefore self-consistently authorize a paid-capable credential.",
+  "counterhypothesis": "Matching documented Free-plan x-ratelimit headers uniquely identifies a Groq Free-tier credential.",
+  "counterhypothesis_result": "REJECTED_AT_SOURCE_AND_PROVIDER_DOCUMENTATION_SCOPE",
+  "delta": [
+    "Groq rate-header matches are retained only as corroborating telemetry, never billing authority.",
+    "Groq autonomous FREE_ONLY admission now requires fresh provider-side Free-tier evidence bound to the exact credential fingerprint and exact allowed model set.",
+    "The entitlement binding requires tier=FREE, evidence_ref, observed_at, valid_until, a bounded maximum entitlement age, and exact allowed_models.",
+    "Current canonical credential_entitlements remains empty, so Groq fails closed until real provider-side Free-tier evidence is bound; no credential is guessed or post-hoc relabeled.",
+    "OpenRouter, NVIDIA and Mistral semantics are intentionally not reimplemented in this delta; NVIDIA and pre-call binding have active overlapping PRs #1467 and #1468."
+  ],
+  "provider_sources": [
+    "https://console.groq.com/docs/billing-faqs",
+    "https://console.groq.com/docs/rate-limits",
+    "https://console.groq.com/docs/projects"
+  ],
+  "deterministic_supporting_execution": {
+    "surface": "isolated ChatGPT local container reconstruction",
+    "provider_network_calls": 0,
+    "provider_secret_lookups": 0,
+    "paid_execution": false,
+    "together": false,
+    "py_compile": "PASS",
+    "focused_tests": "5/5 PASS",
+    "source_sha256": "a7a1639cc5d091a5fe11bdeb439041586ee5f2c8675fb77490e5ae6502a2abcc",
+    "test_sha256": "28edc6ea1084f93b9ef5215bf2e94670987c61fd32aaf7006a73c372e394b804",
+    "scope": "SOURCE_COMPONENT_ONLY_NOT_CANONICAL_PROVIDER_RUNTIME"
+  },
+  "test_cases": [
+    "Free-like rate headers alone fail closed.",
+    "Exact fresh provider-side Free-tier binding admits the exact credential/model.",
+    "Developer-tier binding remains rejected even with Free-like headers.",
+    "Expired Free-tier evidence fails closed.",
+    "Credential entitlement cannot expand to an unbound model."
+  ],
+  "coordination": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263@450cf903a957a84a9505f16ee26f1ff4b1b5e1f1",
+    "overlapping_provider_prs": [
+      "gschaidergabriel/clay-global-research-entity#1467:NVIDIA credential entitlement",
+      "gschaidergabriel/clay-global-research-entity#1468:exact pre-call authority binding"
+    ],
+    "groq_duplicate_pr_found": false,
+    "clay_direct_dev_bridge_health": "UNOBSERVED_NO_CLAY_DIRECT_DEV_EXEC_PRIMITIVE_EXPOSED_TO_THIS_CHAT",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_SHARED_REPRODUCIBLE_MACROCYCLE_ID; ZERO NEW UNUSUAL EXPERIMENTS"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: closes a concrete FREE_ONLY false-positive in the executable 6000-worker provider gate at source/component scope.",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: retained HCU/Typed Entry donor #1263 owns this causal path; no exposed clay-direct-dev execution primitive was available and a duplicate HCU implementation would reduce convergence.",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: provider economics hardening does not itself establish Global J-Space/GWT or local ~0.8B model evidence; retained #1263 remains the higher-value nonduplicate model-specific causal lane pending exact execution."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse with #1467/#1468 without weakening their NVIDIA/pre-call revalidation semantics, bind real current Groq provider-side Free-tier evidence to each allowed credential/model or keep Groq idle, then execute the combined no-network false-positive suite on an authorized exact-source local/clay-direct-dev surface before any Groq restart."
+}

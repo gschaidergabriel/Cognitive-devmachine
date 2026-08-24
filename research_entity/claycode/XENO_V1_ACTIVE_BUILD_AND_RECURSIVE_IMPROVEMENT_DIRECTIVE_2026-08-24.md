@@ -1,70 +1,95 @@
-# Xeno v1 active-build and recursive-improvement directive
+# Xeno v1 active-build and infinite recursive-improvement directive
 
-Status: **OWNER EXECUTION PRIORITY FOR `go`**  
+Status: **OWNER EXECUTION PRIORITY FOR EVERY `go` UNTIL SUPERSEDED**  
 Date: 2026-08-24  
 Product identity: **EntityOS**  
 Integrated cognition/compute architecture: **HCU**  
 Implementation codename: **Xeno**
 
-This directive changes the optimization target of `go`: architecture synthesis is no longer the primary output. The architecture/concept phase is mature enough that `go` must converge on the first finished, runnable Xeno implementation with an integrated specialized ~0.8B cognitive core, then keep improving it recursively until a newer explicit owner instruction supersedes this directive.
+This directive changes the optimization target of `go`: architecture synthesis is no longer the primary output. `go` must converge on the first finished runnable Xeno with a specialized fine-tuned ~0.8B cognitive core and complete harness, then keep recursively improving the accepted Xeno on every future `go` until a newer explicit owner instruction supersedes this directive.
+
+There is no terminal `done forever` state. Xeno v1 is only the first accepted baseline.
 
 Xeno remains an implementation codename inside EntityOS/HCU. It does not create a second canonical truth authority, effect authority, product identity or persistent entity.
 
 ## Phase A — build Xeno v1
 
-Every `go` should preferentially consume unresolved work from this gate chain:
+Every `go` preferentially consumes unresolved work from this gate chain:
 
-1. `V1_RUNTIME` — one runnable end-to-end slice exists: Typed Entry -> canonical state/route -> admitted engine -> ~0.8B inference -> structured result -> receipt/effect boundary.
-2. `V1_08B_ENGINE` — exact base checkpoint/revision/tokenizer/runtime/loader identity is bound; current preferred candidate is `Qwen/Qwen3.5-0.8B` unless exact evidence forces another ~0.8B-class choice.
-3. `V1_JSPACE_GWT` — the concrete Global J-Space/GWT control path, `JSPACE_VECTOR_CONTROL_ABI/v1`, trace instrumentation and matched lesion/sham/off-target controls are executable.
-4. `V1_DATASET` — deterministic trace -> family-split train/validation/holdout compiler exists with hard negatives, sidecar provenance and leakage checks.
-5. `V1_TRAINING` — pre-train baseline is frozen; one specialized fine-tuned ~0.8B candidate exists and is hash-bound. Training execution must obey the newest current monetary/provider authority; no paid job is implied merely by this build directive.
-6. `V1_INTEGRATION` — the fine-tuned candidate is integrated behind the same engine/state/effect/recovery boundaries as the base model and can be swapped without canonical-state reset.
-7. `V1_ACCEPTANCE` — the exact candidate passes the frozen capability, quality, latency, throughput, RSS, recovery, authority-boundary, token-efficiency, J-Space causal and packaging/startup acceptance suite.
+1. `V1_RUNTIME` — runnable end-to-end Typed Entry -> state/route -> selected core -> structured result -> receipt/effect boundary.
+2. `V1_08B_ENGINE` — exact ~0.8B checkpoint/revision/tokenizer/runtime/loader identity; preferred current candidate `Qwen/Qwen3.5-0.8B` unless exact evidence changes it.
+3. `V1_ENGINE_SWAP` — bundled ~0.8B can be switched OFF and an arbitrary admitted external/local LLM profile can become `CORE` without canonical-state reset.
+4. `V1_TWO_SLOT_HARNESS` — at most two persisted external engine slots, credentials stored behind opaque secret refs only.
+5. `V1_PRESTAGE` — dashboard-selectable distinct `CORE` and optional `PRESTAGE`; PRESTAGE can be switched ON/OFF and roles can be swapped safely.
+6. `V1_DASHBOARD` — local dashboard controls internal core, slot1/slot2, roles, prestage toggle, health/capabilities, GRID10, peer links and J-Space status without secret leakage.
+7. `V1_PEER_LINK` — robust versioned `XENO_PEER_LINK/v1` with causal/generation/replay/capability fencing and restart/disconnect handling.
+8. `V1_GRID10` — exact ten logical-cell baseline works as a composable topology over shared physical engines; theoretical/component correctness must be executable and falsifiable before broader claims.
+9. `V1_JSPACE_GWT` — concrete Global J-Space/GWT path, vector-control ABI, causal traces and matched lesion/sham/off-target/rescue controls are executable; closed APIs never receive fake latent-access claims.
+10. `V1_DATASET` — deterministic causal trace -> family-split train/validation/holdout compiler with hard negatives, sidecar provenance and leakage tests.
+11. `V1_TRAINING` — frozen pre-train baseline plus one specialized fine-tuned ~0.8B candidate, hash-bound under the newest exact monetary/provider authority.
+12. `V1_INTEGRATION` — fine-tuned candidate integrated behind the same engine/state/effect/recovery boundaries and swappable without canonical-state reset.
+13. `V1_RECOVERY_EFFECT_AUTHORITY` — engine/prestage/peer failures preserve deterministic state/recovery/effect laws.
+14. `V1_ACCEPTANCE_METRICS` — full frozen metric vector and package/startup acceptance PASS.
 
-A prose-only architecture answer does not advance a gate unless it removes a precise executable blocker. The preferred worker artifact is a minimal source patch plus tests and a benchmark/falsifier. `ready_for_forge=true` requires a non-empty unified diff, target files and executable test commands.
+Detailed harness acceptance: `the artefact/Xeno/XENO_HARNESS_V1_ACCEPTANCE_CONTRACT.md`.
 
-## Phase B — recursive improvement after Xeno v1
+A prose-only architecture answer does not advance a gate unless it removes a precise executable blocker. `ready_for_forge=true` requires a non-empty unified diff, target files, executable tests, falsifier and before/after metric plan.
 
-When a bound `XENO_V1_ACCEPTANCE/v1` PASS exists, `go` automatically changes from `XENO_V1_ACTIVE_BUILD` to `RECURSIVE_IMPROVEMENT`. It must not stop merely because v1 exists.
+## Phase B — infinite recursive improvement after Xeno v1
 
-The recursive objective is multi-dimensional and adversarial to Goodhart collapse:
+When a bound `XENO_V1_ACCEPTANCE/v1` PASS exists, the same `go` objective automatically changes to `INFINITE_RECURSIVE_IMPROVEMENT`.
 
-- improve capability coverage and task quality;
-- reduce end-to-end p50 latency and protect/reduce p95 latency;
-- increase useful throughput;
-- reduce/protect resident memory;
-- improve/protect crash/recovery and exactly-once behavior;
-- improve/protect authority-boundary correctness;
-- improve token efficiency / useful-result-per-token;
-- increase the fraction of the Xeno module represented in ClayCode;
-- preserve exact state/effect/provenance/generation fences.
+Every later `go` must again execute:
+
+`measure accepted Xeno -> select highest-information implementation delta -> patch -> positive/negative/recovery tests -> benchmark full vector -> deterministic compare -> promote or reject/rework -> update baseline -> repeat on the next go`
+
+This continues without an internal iteration limit until a newer explicit owner instruction changes the objective.
+
+## Recursive objective
+
+Recursion must continually improve the whole Xeno system rather than one vanity metric:
+
+- capability coverage and task quality;
+- p50 latency down, p95 protected/improved;
+- useful throughput up;
+- RSS protected/reduced;
+- crash/recovery and exactly-once behavior protected/improved;
+- state/effect/authority-boundary correctness protected/improved;
+- token efficiency improved;
+- ClayCode fraction increased;
+- engine switching protected/improved;
+- two-slot harness protected/improved;
+- prestage pipeline protected/improved;
+- GRID10 protected/improved;
+- Xeno peer-link protected/improved;
+- dashboard configuration correctness protected/improved;
+- **Global J-Space causal gain improved continuously**.
 
 Token count, logical-worker count, consensus, architecture elegance, benchmark cherry-picking or a single improved metric never constitutes recursive progress.
 
 ## Promotion law
 
-The deterministic comparison gate is `tools/xeno_build_gate.py`.
+Deterministic comparison gate: `tools/xeno_build_gate.py`.
 
 For a normal recursive candidate:
 
 - every protected metric must be present and finite;
-- **no protected metric may regress**;
-- `capability_pass_rate`, `task_quality_score`, `p50_latency_ms`, `throughput_tokens_s` and `claycode_fraction` must all improve in their intended directions;
+- no protected metric may regress;
+- capability, quality, p50 latency, throughput, ClayCode fraction and J-Space causal gain must all improve in their intended directions;
 - otherwise reject/rework/revert the candidate.
 
-For any **ClayCode migration** candidate, the rule is deliberately stricter:
+For a **ClayCode migration** candidate the rule is stricter:
 
 - compare the same frozen before/after metric vector;
-- every tracked metric must improve in its intended direction;
+- **every tracked metric must strictly improve** in its intended direction;
 - equality on even one tracked metric is insufficient for promotion of that migration step;
-- if the ClayCode conversion is semantically prettier but not globally better by the measurements, do not promote it.
+- a cleaner/prettier rewrite with no whole-vector gain is rejected.
 
-This makes ClayCode conversion an empirical optimization process rather than a rewrite campaign.
+ClayCode conversion is therefore an empirical optimization process, not a rewrite campaign.
 
-## Frozen metric vector
+## Frozen protected metric vector
 
-The initial mandatory vector is:
+Initial mandatory vector:
 
 - `capability_pass_rate` — higher;
 - `task_quality_score` — higher;
@@ -75,30 +100,27 @@ The initial mandatory vector is:
 - `recovery_pass_rate` — higher;
 - `authority_boundary_pass_rate` — higher;
 - `token_efficiency_score` — higher;
-- `claycode_fraction` — higher.
+- `claycode_fraction` — higher;
+- `engine_swap_pass_rate` — higher;
+- `two_slot_harness_pass_rate` — higher;
+- `prestage_pipeline_pass_rate` — higher;
+- `grid10_pass_rate` — higher;
+- `peer_link_pass_rate` — higher;
+- `dashboard_config_pass_rate` — higher;
+- `jspace_causal_gain_score` — higher.
 
-A future owner/supervisor may add metrics, but a candidate cannot silently remove a difficult metric from the comparison set.
-
-## Worker allocation law
-
-The active Xeno fabric should bias work toward implementation rather than open-ended architecture search. Roles include end-to-end integration, ~0.8B engine/runtime, J-Space/GWT, dataset compiler, train/eval, Typed Entry, state/effect/recovery, ClayCode migration, performance/latency, capability, falsification and recursive improvement.
-
-Workers must prefer the currently closest-to-shipping path and avoid parallel substitute frameworks unless a falsifier proves the current path untenable.
-
-Research remains useful only when it feeds a concrete implementation decision, test, benchmark, dataset transformation or counterexample back into the build loop.
+A newer authority may add metrics, but a candidate cannot silently remove a difficult metric from the comparison set.
 
 ## Fine-tuning authority boundary
 
-The target remains a **fine-tuned specialized ~0.8B core**. This directive authorizes building toward that target; it does not itself authorize an unbounded paid service, recurring retraining or paid fallback.
+The target remains a **fine-tuned specialized ~0.8B core**. Build every zero-cost prerequisite now. Actual paid/provider training-job creation must resolve newest owner/supervisor authority at execution time. If the current authority forbids that exact monetary lane, fail closed only at that boundary while continuing exact base binding, J-Space/GWT traces, vector ABI, dataset compiler, hard negatives, splits, baseline, training launcher interface, evaluation harness and integration seam.
 
-At any moment, actual training-job creation must resolve the newest owner/supervisor authority. If the current mode forbids a paid/provider training lane, `go` must still complete every zero-cost prerequisite it can: exact base binding, prototype traces, vector ABI, dataset compiler, hard negatives, splits, baseline, training launcher interface, evaluation harness and integration seam. It then fails closed exactly at the monetary execution boundary rather than reverting to architecture-only work.
+If/when the exact fine-tuning lane is explicitly admitted, create only the authorized run(s), bind the resulting model identity and immediately continue integration/evaluation/recursive improvement.
 
-If/when the exact fine-tuning lane is explicitly admitted, create only the authorized run(s), bind the resulting model identity and immediately continue integration/evaluation.
+## Global J-Space standing priority
 
-## Recursive stop condition
+Global J-Space is permanently a first-class research and engineering target inside this recursive loop. It must be improved through model-specific causal measurement, stronger control codecs, GWT calibration, role/cell re-entry, cross-turn persistence, external-core compilation, cross-Xeno projection, collapse detection and overhead reduction. Self-report, coherence, model agreement or shared ancestry cannot mint J-Space causal credit.
 
-There is no terminal `done` state after Xeno v1. The default state becomes:
+## Stop condition
 
-`measure -> hypothesize -> patch -> test -> benchmark -> compare full metric vector -> promote/reject -> ClayCode migrate where strictly dominant -> remeasure -> repeat`
-
-This continues until a newer explicit owner instruction changes the objective.
+Only a **newer explicit owner instruction** changes/stops this objective. Xeno v1 acceptance, a successful training run, a benchmark plateau or a high confidence score does not stop recursive development by itself.

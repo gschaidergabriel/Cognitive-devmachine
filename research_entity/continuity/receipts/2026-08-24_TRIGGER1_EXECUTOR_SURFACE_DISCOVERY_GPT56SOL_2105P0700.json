@@ -1,0 +1,120 @@
+{
+  "schema": "CLAY_TRIGGER1_EXECUTOR_SURFACE_DISCOVERY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "forschungsbefehl_1",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_branch": "6fc9c1fea5f5a3de289af1cf245108c703a302b1",
+  "prior_trigger1_cycle_receipt_commit": "d5fbedd21a4e6a86c14e31bd4dc03055b3c7a81f",
+  "purpose": "Close the current Trigger-1 execution-surface ambiguity without fabricating model-runtime credit, then bind the highest-information real intervention gate to current external source evidence.",
+  "session_surface_discovery": {
+    "vercel_team_plan": "hobby",
+    "vercel_project": "dr-unterweger",
+    "vercel_project_source_repo": "gschaidergabriel/Dr.-Unterweger",
+    "latest_observed_production_deployment_id": "dpl_EvnHPoHPxQdz4UT65bY26uEVzc9F",
+    "latest_observed_production_source_commit": "81ac217a8135fd5204c427be0673aab4555f40e7",
+    "latest_observed_production_commit_message": "bridge: probe Clay VPS KVM sandbox health",
+    "connector_exposed_vercel_actions": [
+      "list/get projects",
+      "list/get deployments",
+      "deployment build logs",
+      "runtime logs/errors",
+      "protected deployment fetch/access",
+      "deploy current project",
+      "documentation search"
+    ],
+    "direct_vercel_sandbox_create_action_exposed": false,
+    "direct_vercel_sandbox_run_command_action_exposed": false,
+    "execution_conclusion": "The current ChatGPT Vercel connector cannot directly execute the repository Trigger-1 launcher or a model intervention inside Vercel Sandbox. The visible production deployment is tied by commit metadata to a VPS/KVM probe path; current Supervisor 8.71 forbids substituting VPS/self-hosted/production execution for the required admitted FREE sandbox/local research surface."
+  },
+  "external_source_refresh": [
+    {
+      "source": "https://arxiv.org/abs/2308.10248",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Activation Addition modifies intermediate activations during inference using activation-difference steering vectors, so a genuine Trigger-1 success must evidence an internal consumed intervention rather than prompt text alone."
+    },
+    {
+      "source": "https://arxiv.org/abs/2312.06681",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Contrastive Activation Addition applies positive or negative coefficients to residual-stream steering vectors, supporting signed directionality controls."
+    },
+    {
+      "source": "https://arxiv.org/abs/2608.08829",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Per-instance activation-steering results published 2026-08-09 report that useful intervention layers vary by input and that over-steering can degrade outputs; calibration must therefore remain separate from holdout evaluation."
+    },
+    {
+      "source": "https://github.com/ggml-org/llama.cpp/blob/master/tools/cvector-generator/README.md",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Current llama.cpp exposes control-vector generation and runtime application with --control-vector-scaled and --control-vector-layer-range, including CPU-only generation examples."
+    },
+    {
+      "source": "https://github.com/ggml-org/llama.cpp/blob/master/src/llama-adapter.cpp",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Current llama.cpp source validates control-vector embedding width against model n_embd and copies layer-major float data into per-layer control tensors before applying the selected layer range."
+    },
+    {
+      "source": "https://github.com/TransformerLensOrg/TransformerLens/blob/main/transformer_lens/supported_models.py",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "TransformerLens current supported-model list includes Qwen/Qwen3-0.6B and Qwen/Qwen3-0.6B-Base, preserving Qwen3-0.6B as a low-friction instrumentation baseline."
+    },
+    {
+      "source": "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Qwen3.5-0.8B currently exposes hidden_size=1024, num_hidden_layers=24 and a repeating three linear-attention plus one full-attention layer pattern, so model-specific adapter identity must include layer type as well as layer index."
+    }
+  ],
+  "hypothesis": {
+    "id": "H_TRIGGER1_EXECUTOR_SURFACE",
+    "statement": "The fastest defensible Trigger-1 causal result remains an exact Qwen3-0.6B control-vector intervention on a genuinely callable zero-cost local or Vercel Sandbox surface, because both TransformerLens and llama.cpp provide current intervention-capable paths while the present ChatGPT connector does not expose Sandbox command execution.",
+    "prediction": "Once a callable admitted sandbox/local surface is exposed, a bounded Qwen3-0.6B T1 control family can measure actual consumed-vector effects without modifying provider billing or using VPS/production execution.",
+    "counterhypothesis": "A currently deployed Vercel controller endpoint may already expose an admitted Sandbox execution bridge even though the connector lacks direct Sandbox actions.",
+    "falsifier": "A source- and quota-bound protected Vercel endpoint that is verified under current 8.71 authority to create/exec an included-tier Sandbox without VPS/self-hosted/production substitution would falsify the connector-surface blocker and should become the next executor."
+  },
+  "next_exact_discriminator": {
+    "priority": 1,
+    "test": "T1_QWEN3_06B_VECTOR_CONSUMPTION_CONTROL_FAMILY",
+    "required_executor": "authorized zero-cost local/clay-direct-dev or directly callable Vercel Sandbox with fail-closed included-tier quota/cost proof",
+    "forbidden_substitutes": [
+      "VPS",
+      "self-hosted runner",
+      "production-host model test",
+      "Together",
+      "paid/subscription/unknown-cost provider",
+      "prompt-only hosted text steering"
+    ],
+    "conditions": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM"
+    ],
+    "calibration_holdout_rule": "Choose layer/range and alpha on calibration only, freeze them, then evaluate disjoint prompts/seeds on holdout.",
+    "positive_credit_boundary": "MODEL_SPECIFIC_JSPACE_CAUSAL_COMPONENT_ONLY after exact consumed-intervention and matched-control receipts; no Whole-EntityOS/HCU or training promotion."
+  },
+  "execution": {
+    "trigger1_launcher_executed_from_this_chat": false,
+    "real_model_intervention_executed": false,
+    "provider_credential_read": false,
+    "provider_model_call": false,
+    "paid_or_together_use": false,
+    "vps_or_production_model_test": false,
+    "reason": "No direct Sandbox create/exec action is exposed on the connected Vercel surface; the visible production deployment metadata points to a VPS/KVM probe path, which is not an admitted substitute under current authority."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "full_hcu": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "research_delta": "Trigger-1 execution is narrowed from a generic 'no shell bridge' statement to an exact current-surface blocker: the connected Vercel Hobby account and project are observable, but this ChatGPT connector exposes no direct Sandbox create/exec action, and the visible production bridge is VPS-oriented and therefore forbidden as a substitute. Current primary sources continue to support Qwen3-0.6B + llama.cpp/TransformerLens as the first causal intervention candidate and require layer/gain calibration plus signed/null/orthogonal/permuted controls.",
+  "acceptance": "SOURCE_AND_EXECUTOR_SURFACE_DISCOVERY_COMPLETE_RUNTIME_INTERVENTION_BLOCKED"
+}

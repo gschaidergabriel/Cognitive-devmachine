@@ -1,0 +1,101 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "authority_epoch": "8.68",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_at_branch": "eb71bbdaff8b7b520119ea83c92c15320b334f86",
+  "branch": "gpt56sol/go-868-receipt-malformed-coverage-eb71bb-1822",
+  "finding": "The newly added exact-source FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 runner on main executed only tests.test_free_swarm_admission_boundary_867. Supervisor 8.68 and the current all-worker directive require missing/malformed admission, UNKNOWN, PAID, SUBSCRIPTION, authority mismatch and unlisted-provider cases to prove zero secret lookup and zero network attempts. The dedicated 8.68 malformed-admission regression existed on main but was not included in the runner test module, source manifest, or boundary-pass coverage condition. A green receipt could therefore omit a mandatory 8.68 discriminator.",
+  "classification": "EXACT_SOURCE_RECEIPT_FALSE_GREEN_COVERAGE_GAP",
+  "hypothesis": "Binding both canonical admission-boundary modules and requiring named mandatory blocked-case tests to be observed in verbose unittest output prevents the receipt from passing if required 8.68 coverage is accidentally omitted while preserving source-hash and network-tripwire evidence.",
+  "counterhypothesis": "The separate malformed regression is sufficient because it exists in the repository and may be run independently.",
+  "counterhypothesis_assessment": "Rejected for FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 promotion. Supervisor 8.68 requires one exact-source executable boundary receipt; test-file presence or a separate unbound run cannot prove that the promoted receipt covered malformed admission.",
+  "delta": {
+    "runner_commit": "f7f9a1e91d84ea8f24465905b5d7cb5ef2f7115f",
+    "runner_blob": "6265cd71597473232121df26de8be91408757eeb",
+    "guard_test_commit": "868830049c3a5324dfcf7a9c2a89417898a82264",
+    "files": [
+      "tools/run_free_swarm_admission_boundary_receipt.py",
+      "tests/test_free_swarm_admission_boundary_receipt_runner_868.py"
+    ],
+    "changes": [
+      "execute both tests.test_free_swarm_admission_boundary_867 and tests.test_free_swarm_admission_boundary_868_malformed in one sanitized child suite",
+      "bind both test files into the source manifest/test-file digest surface",
+      "require a non-vacuous unittest count",
+      "require verbose evidence for missing/global-attestation, UNKNOWN/PAID/SUBSCRIPTION, missing admission file, authority mismatch, unlisted provider and malformed admission test methods",
+      "make boundary_pass depend on required blocked-case coverage in addition to unittest OK, clean tree, zero socket tripwire attempts and zero sentinel leakage",
+      "add source regression that fails if malformed module/source/required-case coverage is dropped"
+    ]
+  },
+  "source_validation": {
+    "runner_candidate_python_syntax_compile": "PASS_IN_CHATGPT_LOCAL_CONSTRUCTION_ONLY",
+    "exact_branch_test_execution": "NOT_OBSERVED",
+    "exact_branch_runtime_credit": 0,
+    "reason": "No executable local workstation or clay-direct-dev bridge is exposed in this ChatGPT session. Generic ChatGPT container execution is not canonical Clay runtime evidence."
+  },
+  "external_solution_harvest": [
+    {
+      "source": "https://theupdateframework.io/docs/metadata/",
+      "principle": "snapshot metadata binds a consistent repository view rather than permitting metadata from different repository times to be combined",
+      "application": "corroborates exact-source multi-file manifest closure; external design input only"
+    },
+    {
+      "source": "https://theupdateframework.io/docs/security/",
+      "principle": "rollback/freeze resistance requires clients to reject obsolete or stale metadata views",
+      "application": "corroborates fail-closed successor-current authority/coverage checks; external design input only"
+    },
+    {
+      "source": "https://slsa.dev/spec/v1.2/provenance",
+      "principle": "provenance is verifiable information tying an artifact to where, when and how it was produced",
+      "application": "corroborates receipt binding to exact source/test identities; external design input only"
+    }
+  ],
+  "coordination": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_head_observed": "2badebe78db868c56ef39f0a32d198282cffcd88",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "provider_preio_fusion_pr": "gschaidergabriel/clay-global-research-entity#1427",
+    "provider_preio_fusion_file_overlap": false,
+    "shared_reproducible_macrocycle_identity_available": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "go_tracks": {
+    "track_a": {
+      "status": "ADVANCED",
+      "delta": "Exact-source provider-admission receipt is hardened against a false-green omission of mandatory supervisor-8.68 malformed/blocked cases."
+    },
+    "track_b": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Provider admission is the highest-information current control-plane blocker, retained PR1263 remains the single HCU/Typed Entry/J-Space donor lane, and no executable authorized local/VPS bridge is exposed. Duplicating HCU source would be lower-information than executing the retained donor tests.",
+      "next_discriminator": "Execute the live donor InferenceReceipt/v4 rejection-boundary suite on an exposed authorized zero-cost local or clay-direct-dev surface with exact source/environment/result identities."
+    },
+    "track_c": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "Current main already advanced the model-specific local J-Space intervention backend contract in parallel. This organ avoided a duplicate source lane; no exposed local/VPS bridge is available to execute clean/corrupted/target/sham/off-target model-specific traces.",
+      "next_discriminator": "Execute a bound zero-cost local clean/corrupted pair plus target intervention, sham control and off-target control with exact model/tokenizer/runtime/loader/InferenceReceipt identities."
+    }
+  },
+  "execution": {
+    "external_llm_provider_calls": 0,
+    "provider_secret_lookups": 0,
+    "together_calls": 0,
+    "paid_execution": 0,
+    "training_runs": 0,
+    "unusual_interventions": 0
+  },
+  "runtime_credit": {
+    "provider_admission_runtime_credit_added": 0,
+    "external_provider_runtime_credit_added": 0,
+    "entityos_hcu_whole_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Re-enter current main. If no equivalent fix landed, open this bounded source PR. Then run tools/run_free_swarm_admission_boundary_receipt.py from a clean exact-current checkout on an exposed authorized zero-cost local or clay-direct-dev surface and admit only a receipt with boundary_pass=true, required_blocked_case_coverage_ok=true, zero network attempts and no secret sentinel leakage."
+}

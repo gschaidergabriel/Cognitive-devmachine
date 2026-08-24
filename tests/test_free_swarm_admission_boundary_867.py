@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import importlib
 import json
 import os
 from pathlib import Path
@@ -25,35 +24,48 @@ SECRET_ENV_NAMES = {
     "GROQ_API_KEY", "GROQ_API_KEYS", "GROQ2_API_KEY", "GROQ3_API_KEY",
     "MISTRAL_API_KEY", "MISTRAL_API_KEYS", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY",
     "NVIDIA_API_KEY", "NVIDIA_API_KEYS", "NVIDIA_NIM_API_KEY", "NGC_API_KEY",
-    "NVIDIA2_API_KEY", "NVIDIA3_API_KEY",
+    "NVIDIA2_API_KEY", "NVIDIA3_API_KEY", "OPENROUTER_API_KEY", "TAVILY_API_KEY", "EXA_API_KEY",
 }
 
 
-def _bootstrap(path: Path, epoch: str = "8.67") -> Path:
-    target = path / "bootstrap.json"
-    target.write_text(json.dumps({"schema_version": epoch}), encoding="utf-8")
-    return target
-
-
-def _admission(path: Path, cost_class: str, admitted: bool, epoch: str = "8.67") -> Path:
-    target = path / "admission.json"
-    providers = {
-        name: {
-            "admitted": admitted,
-            "cost_class": cost_class,
-            "evidence_ref": f"test:{name}:{cost_class}",
-        }
-        for name in ("groq", "mistral", "nvidia")
-    }
-    target.write_text(json.dumps({
+def _admission_dict(cost_class: str, admitted: bool, epoch: str = "8.67") -> dict:
+    return {
         "schema": admission_mod.SCHEMA,
         "authority_epoch": epoch,
         "mode": "FREE_ONLY",
         "product": "EntityOS",
         "compute_architecture": "HCU",
         "source": "ENTITYOS_HCU_CONTROL_PLANE",
-        "providers": providers,
+        "providers": {
+            name: {
+                "admitted": admitted,
+                "cost_class": cost_class,
+                "evidence_ref": f"test:{name}:{cost_class}",
+            }
+            for name in admission_mod.ALLOWED_PROVIDERS
+        },
+    }
+
+
+def _authority_tree(root: Path, epoch: str = "8.67") -> Path:
+    auto = root / "research_entity/claycode/autonomous"
+    auto.mkdir(parents=True, exist_ok=True)
+    steering_rel = f"research_entity/claycode/autonomous/SUPERVISOR_STEERING_{epoch.replace('.', '_')}.json"
+    steering = root / steering_rel
+    steering.write_text(json.dumps({
+        "schema_version": epoch,
+        "active_program": "ENTITYOS_HCU",
+        "product": "EntityOS",
+        "integrated_cognition_compute_architecture": "HCU",
     }), encoding="utf-8")
+    inbox = auto / "SUPERVISOR_INBOX.json"
+    inbox.write_text(json.dumps({"schema_version": epoch, "steering": steering_rel}), encoding="utf-8")
+    return inbox
+
+
+def _admission_file(root: Path, cost_class: str, admitted: bool, epoch: str = "8.67") -> Path:
+    target = root / "admission.json"
+    target.write_text(json.dumps(_admission_dict(cost_class, admitted, epoch)), encoding="utf-8")
     return target
 
 
@@ -69,7 +81,7 @@ def _args(output_dir: str) -> argparse.Namespace:
 
 
 class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
-    def _run_with_tripwires(self, admission_path: Path, bootstrap_path: Path, *, global_attested: bool) -> tuple[int, int, int]:
+    def _run_with_tripwires(self, admission: dict | Exception, *, global_attested: bool) -> tuple[int, int, int]:
         secret_reads = 0
         network_attempts = 0
         original_getenv = os.getenv
@@ -87,9 +99,9 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
             raise AssertionError("network attempted before FREE admission")
 
         env = {"CLAY_FREE_ONLY_ATTESTED": "1"} if global_attested else {}
+        loader = mock.Mock(side_effect=admission) if isinstance(admission, Exception) else mock.Mock(return_value=admission)
         with tempfile.TemporaryDirectory() as out, \
-             mock.patch.object(admission_mod, "ADMISSION_PATH", admission_path), \
-             mock.patch.object(admission_mod, "BOOTSTRAP_PATH", bootstrap_path), \
+             mock.patch.object(base, "load_provider_admission", loader), \
              mock.patch.object(base, "load_protocol", return_value=base.PROTOCOL_BEGIN + "\n" + base.PROTOCOL_END), \
              mock.patch.object(base.os, "getenv", side_effect=guarded_getenv), \
              mock.patch.object(base, "request_chat", side_effect=network_tripwire), \
@@ -99,32 +111,25 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
         return code, secret_reads, network_attempts
 
     def test_global_attestation_missing_has_zero_secret_and_network_access(self) -> None:
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            adm = _admission(root, "FREE", True)
-            boot = _bootstrap(root)
-            code, secret_reads, network = self._run_with_tripwires(adm, boot, global_attested=False)
+        code, secret_reads, network = self._run_with_tripwires(_admission_dict("FREE", True), global_attested=False)
         self.assertEqual(code, 3)
         self.assertEqual(secret_reads, 0)
         self.assertEqual(network, 0)
 
     def test_unknown_paid_subscription_all_fail_before_secret_or_network(self) -> None:
         for cost_class in ("UNKNOWN", "PAID", "SUBSCRIPTION"):
-            with self.subTest(cost_class=cost_class), tempfile.TemporaryDirectory() as td:
-                root = Path(td)
-                adm = _admission(root, cost_class, False)
-                boot = _bootstrap(root)
-                code, secret_reads, network = self._run_with_tripwires(adm, boot, global_attested=True)
+            with self.subTest(cost_class=cost_class):
+                code, secret_reads, network = self._run_with_tripwires(
+                    _admission_dict(cost_class, False), global_attested=True)
                 self.assertEqual(code, 4)
                 self.assertEqual(secret_reads, 0)
                 self.assertEqual(network, 0)
 
-    def test_missing_provider_admission_file_fails_before_secret_or_network(self) -> None:
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            missing = root / "missing.json"
-            boot = _bootstrap(root)
-            code, secret_reads, network = self._run_with_tripwires(missing, boot, global_attested=True)
+    def test_missing_provider_admission_fails_before_secret_or_network(self) -> None:
+        code, secret_reads, network = self._run_with_tripwires(
+            admission_mod.ProviderAdmissionError("PROVIDER_ADMISSION_UNAVAILABLE_OR_INVALID"),
+            global_attested=True,
+        )
         self.assertEqual(code, 5)
         self.assertEqual(secret_reads, 0)
         self.assertEqual(network, 0)
@@ -132,46 +137,52 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
     def test_nonfree_record_cannot_self_admit(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            adm = _admission(root, "PAID", True)
-            boot = _bootstrap(root)
+            inbox = _authority_tree(root)
+            adm = _admission_file(root, "PAID", True)
             with self.assertRaises(admission_mod.ProviderAdmissionError):
-                admission_mod.load_provider_admission(adm, bootstrap_path=boot)
+                admission_mod.load_provider_admission(adm, supervisor_inbox_path=inbox, root=root)
 
     def test_authority_epoch_mismatch_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            adm = _admission(root, "FREE", True, epoch="8.67")
-            boot = _bootstrap(root, epoch="8.68")
+            inbox = _authority_tree(root, epoch="8.68")
+            adm = _admission_file(root, "FREE", True, epoch="8.67")
             with self.assertRaisesRegex(admission_mod.ProviderAdmissionError, "AUTHORITY_EPOCH_MISMATCH"):
-                admission_mod.load_provider_admission(adm, bootstrap_path=boot)
+                admission_mod.load_provider_admission(adm, supervisor_inbox_path=inbox, root=root)
+
+    def test_all_credential_bearing_distillery_services_are_typed(self) -> None:
+        self.assertTrue({"openrouter", "tavily", "exa"}.issubset(admission_mod.ALLOWED_PROVIDERS))
+        current = admission_mod.load_provider_admission()
+        for provider in ("openrouter", "tavily", "exa"):
+            self.assertFalse(admission_mod.provider_is_admitted_free(provider, current))
+            self.assertEqual(current["providers"][provider]["cost_class"], "UNKNOWN")
 
     def test_collect_keys_does_not_read_key_env_when_provider_not_admitted(self) -> None:
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            adm = _admission(root, "UNKNOWN", False)
-            boot = _bootstrap(root)
-            with mock.patch.object(admission_mod, "ADMISSION_PATH", adm), \
-                 mock.patch.object(admission_mod, "BOOTSTRAP_PATH", boot), \
-                 mock.patch.object(base.os, "getenv", side_effect=AssertionError("key env read")):
-                self.assertEqual(base.collect_keys(base.PROVIDERS[0]), [])
+        blocked = _admission_dict("UNKNOWN", False)
+        with mock.patch.object(base.os, "getenv", side_effect=AssertionError("key env read")):
+            self.assertEqual(base.collect_keys(base.PROVIDERS[0], blocked), [])
 
     def test_catalog_discovery_does_not_collect_keys_or_touch_network_when_blocked(self) -> None:
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            adm = _admission(root, "UNKNOWN", False)
-            boot = _bootstrap(root)
-            with mock.patch.object(admission_mod, "ADMISSION_PATH", adm), \
-                 mock.patch.object(admission_mod, "BOOTSTRAP_PATH", boot), \
-                 mock.patch.dict(os.environ, {"CLAY_FREE_ONLY_ATTESTED": "1"}, clear=True), \
-                 mock.patch.object(base, "collect_keys", side_effect=AssertionError("secret collection called")), \
-                 mock.patch.object(entityos_driver, "fetch_catalog", side_effect=AssertionError("network catalog called")):
-                report = entityos_driver.discover_and_export(0.1)
+        blocked = _admission_dict("UNKNOWN", False)
+        with mock.patch.object(base, "load_provider_admission", return_value=blocked), \
+             mock.patch.dict(os.environ, {"CLAY_FREE_ONLY_ATTESTED": "1"}, clear=True), \
+             mock.patch.object(base, "collect_keys", side_effect=AssertionError("secret collection called")), \
+             mock.patch.object(entityos_driver, "fetch_catalog", side_effect=AssertionError("network catalog called")):
+            report = entityos_driver.discover_and_export(0.1)
         self.assertTrue(report)
         self.assertTrue(all(v["source"] == "typed_admission_blocked" for v in report.values()))
 
-    def test_supervisor_sources_only_through_admission_gated_entrypoint(self) -> None:
+    def test_supervisor_never_sources_mixed_provider_secret_files(self) -> None:
         text = (ROOT / "tools/run_24h_entityos_swarm_supervisor.sh").read_text(encoding="utf-8")
         self.assertNotIn("load_all_secret_sources", text)
+        for forbidden in (
+            "/run/secrets/clay_provider.env",
+            "/artifacts/.clay_provider.env",
+            "/cache/clay_provider.env",
+            '"$ROOT/.clay_provider.env"',
+            '"$ROOT/research_entity/private/API_TOKENS.env"',
+        ):
+            self.assertNotIn(forbidden, text)
         self.assertIn("typed_admission_compat_flags\nload_admitted_secret_sources", text)
         self.assertIn("provider_admitted groq", text)
         self.assertIn("run_research_distillery_entry.py", text)

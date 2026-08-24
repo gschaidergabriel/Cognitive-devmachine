@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "zzzzzz10-tail-6000-start-20260824T2113p0700",
-  "command_sha256": "3e715c92c4de36aa5ca9259a3f9d167a8a3b469a50c78fffa1321e6129b49e29",
-  "started_at": "2026-08-24T14:12:28.368290+00:00",
-  "finished_at": "2026-08-24T14:12:28.503124+00:00",
+  "command_id": "zzzzzz11-sync-protocol-fix-20260824T2115p0700",
+  "command_sha256": "327b90a5b4b6cb9f033200b9e55ae06761c5e7c1a9b0893dffe6440df8c518d9",
+  "started_at": "2026-08-24T14:15:42.221289+00:00",
+  "finished_at": "2026-08-24T14:15:44.277962+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "a4ec0142122fb20f934783e7e78f4afbd51dbee974a1a9efe2edec9215b5ae2a",
+  "op": "canonical_sync",
+  "stdout_sha256": "5a57accc6618da10e5d543b4b67462728cbf7511b1dda38c02723ecc70dd1ed0",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "PIDS\nWLOG\n{\"schema\": \"CLAY_6000_SWARM_DISCOVERY/v2\", \"logical_workers\": 6000, \"scheduler\": \"GLOBAL_WORK_STEALING_V2\", \"providers\": {\"groq\": {\"source\": \"static_defaults_no_catalog_economic_provenance\", \"keys\": 1, \"models\": [\"openai/gpt-oss-120b\", \"qwen/qwen3.6-27b\", \"openai/gpt-oss-20b\"], \"catalog_network_attempted\": false, \"route_binding_deferred_to_current_lane_binding\": true}, \"mistral\": {\"source\": \"static_defaults_no_catalog_economic_provenance\", \"keys\": 0, \"models\": [\"mistral-small-latest\"], \"catalog_network_attempted\": false, \"route_binding_deferred_to_current_lane_binding\": true}, \"nvidia\": {\"source\": \"static_defaults_no_catalog_economic_provenance\", \"keys\": 1, \"models\": [\"nvidia/nemotron-3-super-120b-a12b\", \"nvidia/nemotron-3-ultra-550b-a55b\", \"nvidia/nemotron-mini-4b-instruct\"], \"catalog_network_attempted\": false, \"route_binding_deferred_to_current_lane_binding\": true}, \"openrouter\": {\"source\": \"environment_override\", \"keys\": 1, \"models\": [\"openrouter/free\"], \"catalog_network_attempted\": false, \"route_binding_deferred_to_current_lane_binding\": true}}}\nTraceback (most recent call last):\n  File \"/workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py\", line 35, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py\", line 27, in main\n    return int(loop.run_until_complete(fabric.run(fabric.parse_args())))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/asyncio/base_events.py\", line 687, in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_6000_free_swarm.py\", line 461, in run\n    protocol = base.load_protocol()\n               ^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_free_go_swarm.py\", line 198, in load_protocol\n    raise RuntimeError(f\"mandatory GRF/ClayCode protocol block missing from {PROTOCOL_PATH}\")\nRuntimeError: mandatory GRF/ClayCode protocol block missing from /workspace/clay-global-research-entity/research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md\nSLOG\nRUN_DIRS\ndrwxr-xr-x 2 root root 4096 Aug 24 14:06 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T140548Z\ndrwxr-xr-x 2 root root 4096 Aug 24 14:05 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T140250Z\ndrwxr-xr-x 2 root root 4096 Aug 24 14:02 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135526Z\ndrwxr-xr-x 2 root root 4096 Aug 24 13:55 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z\ndrwxr-xr-x 2 root root 4096 Aug 24 13:49 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T134045Z\n",
+  "stdout_tail": "cff3d205c138cbe02f4847efe6ad7b02296aa5c0\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "cff3d205c138cbe02f4847efe6ad7b02296aa5c0",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

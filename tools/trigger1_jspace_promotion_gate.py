@@ -6,7 +6,11 @@ an exact admitted FREE external API runtime or by an exact zero-provider-billing
 loopback API runtime, provided the same internal-vector, identity, matched-control
 and disjoint-holdout evidence is present.
 
-Hosted prompt/completion traffic alone can never satisfy a positive verdict.
+Hosted prompt/completion traffic alone can never satisfy a positive verdict. A local
+PyTorch activation intervention may establish mechanism-level vector-consumption
+evidence without establishing the Trigger-1 scientific goal: goal promotion also
+requires explicit evidence that vector construction and evaluation are not the same
+readout-aligned algebraic objective.
 """
 from __future__ import annotations
 
@@ -18,7 +22,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 CANDIDATE_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
-VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2"
+VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v3"
 REQUIRED_CONTROLS = (
     "BASELINE",
     "+VECTOR",
@@ -37,6 +41,7 @@ OWNER_API_TARGET_CLASS = "ZERO_COST_API_SERVED_MODEL_RUNTIME"
 LEGACY_OWNER_API_TARGET_CLASS = "EXACT_ADMITTED_FREE_API_MODEL_RUNTIME"
 LOCAL_API_SURFACE = "LOCAL_LOOPBACK_API"
 EXTERNAL_API_SURFACE = "FREE_EXTERNAL_API"
+LOCAL_PYTORCH_RUNTIME_CLASS = "LOCAL_PYTORCH_ACTIVATION_INTERVENTION"
 
 
 def _sha256(value: Any) -> bool:
@@ -158,6 +163,37 @@ def _identity_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     return not failures, failures
 
 
+def _scientific_independence_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
+    """Keep mechanism evidence while rejecting algebraically self-confirming goal claims.
+
+    The current local PyTorch fastpath constructs v from the same lm_head contrast that
+    defines its score and injects v at final-norm output immediately before lm_head.
+    In that geometry, the expected +v/-v/null/orthogonal score ordering follows from
+    the readout algebra itself. Such a run can prove that the hook consumed a vector,
+    but it cannot by itself prove a nontrivial J-Space causal direction.
+
+    Other runtime classes keep their existing gate behavior. Local PyTorch candidates
+    must positively bind an independent scientific discriminator before goal credit.
+    """
+    if candidate.get("runtime_intervention_class") != LOCAL_PYTORCH_RUNTIME_CLASS:
+        return True, []
+
+    evidence = candidate.get("scientific_independence")
+    if not isinstance(evidence, dict):
+        return False, ["CAUSAL_INDEPENDENCE_EVIDENCE_REQUIRED_FOR_LOCAL_PYTORCH"]
+
+    failures: list[str] = []
+    if evidence.get("vector_construction_evaluation_independent") is not True:
+        failures.append("VECTOR_CONSTRUCTION_MUST_BE_INDEPENDENT_OF_EVALUATION_READOUT")
+    if evidence.get("holdout_target_independent_of_vector_construction") is not True:
+        failures.append("INDEPENDENT_HOLDOUT_TARGET_REQUIRED")
+    if evidence.get("readout_algebraically_forces_directional_metric") is not False:
+        failures.append("READOUT_ALIGNED_TAUTOLOGY_NOT_EXCLUDED")
+    if not _sha256(evidence.get("evidence_receipt_sha256")):
+        failures.append("CAUSAL_INDEPENDENCE_RECEIPT_REQUIRED")
+    return not failures, failures
+
+
 def _owner_target_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     failures: list[str] = []
     target = candidate.get("target")
@@ -236,11 +272,14 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
     )
 
     owner_target_ok, target_failures = _owner_target_evidence(candidate)
-    owner_target_pass = mechanism_pass and owner_target_ok
+    scientific_ok, scientific_failures = _scientific_independence_evidence(candidate)
+    owner_target_failures = [*target_failures, *scientific_failures]
+    owner_target_pass = mechanism_pass and owner_target_ok and scientific_ok
 
     return {
         "schema": VERDICT_SCHEMA,
         "mechanism_runtime_vector_credit_candidate": bool(mechanism_pass),
+        "scientific_independence_pass": bool(scientific_ok),
         "owner_trigger1_goal_credit_candidate": bool(owner_target_pass),
         "owner_trigger1_direct_free_api_model_credit_candidate": bool(owner_target_pass),
         "canonical_credit_minted": False,
@@ -248,12 +287,33 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "jspace_model_runtime_credit": False,
         "training_credit": False,
         "failures": sorted(set(failures)),
-        "owner_target_failures": sorted(set(target_failures)),
+        "scientific_independence_failures": sorted(set(scientific_failures)),
+        "owner_target_failures": sorted(set(owner_target_failures)),
         "evidence_boundary": (
-            "PASS means promotion-candidate evidence only. The runtime may be an admitted FREE external API "
-            "or an exact zero-provider-billing loopback API. Scientific requirements are identical: actual "
-            "internal-vector consumption, exact identities, six matched controls and disjoint holdout."
+            "Mechanism PASS can establish that an instrumented runtime consumed the vector. Trigger-1 goal "
+            "PASS additionally requires a non-self-confirming scientific discriminator. For local PyTorch "
+            "interventions, a vector derived from the same readout contrast used as the evaluation metric "
+            "cannot receive goal credit merely because +vector/sign-flip/null/orthogonal controls behave as "
+            "that linear geometry predicts. Canonical, whole-product, J-Space-model and training credit remain false."
         ),
+    }
+
+
+def _invalid_verdict(failure: str) -> dict[str, Any]:
+    return {
+        "schema": VERDICT_SCHEMA,
+        "mechanism_runtime_vector_credit_candidate": False,
+        "scientific_independence_pass": False,
+        "owner_trigger1_goal_credit_candidate": False,
+        "owner_trigger1_direct_free_api_model_credit_candidate": False,
+        "canonical_credit_minted": False,
+        "whole_entityos_hcu_credit": False,
+        "jspace_model_runtime_credit": False,
+        "training_credit": False,
+        "failures": [failure],
+        "scientific_independence_failures": [],
+        "owner_target_failures": [],
+        "evidence_boundary": "Invalid candidate files fail closed.",
     }
 
 
@@ -261,33 +321,9 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
     try:
         candidate = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        return {
-            "schema": VERDICT_SCHEMA,
-            "mechanism_runtime_vector_credit_candidate": False,
-            "owner_trigger1_goal_credit_candidate": False,
-            "owner_trigger1_direct_free_api_model_credit_candidate": False,
-            "canonical_credit_minted": False,
-            "whole_entityos_hcu_credit": False,
-            "jspace_model_runtime_credit": False,
-            "training_credit": False,
-            "failures": [f"CANDIDATE_FILE_INVALID:{type(exc).__name__}"],
-            "owner_target_failures": [],
-            "evidence_boundary": "Invalid candidate files fail closed.",
-        }
+        return _invalid_verdict(f"CANDIDATE_FILE_INVALID:{type(exc).__name__}")
     if not isinstance(candidate, dict):
-        return {
-            "schema": VERDICT_SCHEMA,
-            "mechanism_runtime_vector_credit_candidate": False,
-            "owner_trigger1_goal_credit_candidate": False,
-            "owner_trigger1_direct_free_api_model_credit_candidate": False,
-            "canonical_credit_minted": False,
-            "whole_entityos_hcu_credit": False,
-            "jspace_model_runtime_credit": False,
-            "training_credit": False,
-            "failures": ["CANDIDATE_OBJECT_REQUIRED"],
-            "owner_target_failures": [],
-            "evidence_boundary": "Invalid candidate files fail closed.",
-        }
+        return _invalid_verdict("CANDIDATE_OBJECT_REQUIRED")
     verdict = adjudicate(candidate)
     verdict["candidate_path"] = str(path)
     verdict["candidate_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
@@ -299,7 +335,7 @@ def scan_batch(batch_dir: Path) -> dict[str, Any]:
     verdicts = [adjudicate_file(path) for path in paths]
     goal = any(item.get("owner_trigger1_goal_credit_candidate") is True for item in verdicts)
     return {
-        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v2",
+        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v3",
         "candidate_files_seen": len(paths),
         "mechanism_runtime_vector_credit_candidate": any(
             item.get("mechanism_runtime_vector_credit_candidate") is True for item in verdicts

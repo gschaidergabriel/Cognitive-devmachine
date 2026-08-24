@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "1",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.73",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "observed_main_before_receipt": "2210fc5f08ce8ae8ece3aff2b717cba2caca6cce"
+  },
+  "observed": {
+    "canonical_trigger1_entrypoint": "tools/trigger1_jspace_research.sh",
+    "canonical_fastpath": "tools/trigger1_local_qwen06_midlayer_causal.sh -> tools/trigger1_local_qwen06_intermediate.sh -> tools/trigger1_local_qwen06_intermediate_execute.py -> tools/trigger1_intermediate_promotion_bridge.py -> tools/trigger1_jspace_promotion_gate.py",
+    "terminal_lm_head_shortcut_is_canonical_fastpath": false,
+    "prompt_independence_guard_merged_commit": "44f62ca99607efcf019ca54484d9566eb0e0a3e2",
+    "control_family_identity_cardinality_merged_commit": "2210fc5f08ce8ae8ece3aff2b717cba2caca6cce",
+    "focused_family_regressions_reported": "27/27 PASS",
+    "model_intervention_executed_by_this_organ": false,
+    "provider_execution_by_this_organ": false,
+    "together_used": false,
+    "paid_execution_used": false
+  },
+  "scientific_closure": {
+    "calibration_holdout_prompt_overlap": "FAIL_CLOSED",
+    "calibration_holdout_seed_overlap": "FAIL_CLOSED",
+    "derivation_holdout_prompt_overlap": "FAIL_CLOSED",
+    "derivation_label_independence_receipt": "REQUIRED",
+    "matched_control_family_identity": "case_id+prompt_sha256+seed+positive_label+negative_label(+label_map_id for holdout)",
+    "duplicate_control_rows": "FAIL_CLOSED",
+    "mixed_prompt_seed_label_family_assembly": "FAIL_CLOSED",
+    "auxiliary_wrong_layer_or_lesion_rescue_on_non_plus_vector": "FAIL_CLOSED",
+    "partial_lesion_rescue_pair": "FAIL_CLOSED",
+    "wrong_layer_selected_vector_provenance": "REQUIRED",
+    "wrong_layer_locality": "STRICT_NEGATIVE_DELTA_REQUIRED",
+    "terminal_output_projection_shortcut": "NOT_ELIGIBLE_FOR_TRIGGER1_JSPACE_GOAL_CREDIT"
+  },
+  "coordination": {
+    "stale_prompt_independence_pr_1730": "CLOSED_UNMERGED_AFTER_EXACT_CURRENT_SUCCESSOR_FUSION",
+    "prompt_independence_successor_pr_1734": "MERGED",
+    "family_identity_pr_1733": "MERGED",
+    "family_identity_duplicate_pr_1732": "CLOSED_SUPERSEDED",
+    "new_unusual_experiment_dispatched_by_this_organ": false,
+    "reason_no_model_dispatch": "The retained GitHub self-hosted Trigger-1 workflow itself requires a canonical atomic claim before intervention, and no already-admitted reproducible claim for this exact invocation was established by this organ."
+  },
+  "negative_evidence": {
+    "pull_request_ci": "Research Entity Verify and Identity Guard repeatedly terminated without executable job steps/log evidence on Trigger-1 hardening PRs, including previously merged work; classified as pre-execution infrastructure/workflow failure rather than a scientific or source regression result.",
+    "runtime_result": "NO_NEW_QWEN_RUNTIME_RESULT_OBSERVED"
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "current_frontier": "Execute the strongest intermediate Qwen3-0.6B discriminator on exact current source through an authorized zero-cost normal-user/loopback surface or an already-admitted canonical-lease self-hosted lane; require exact source/model/runtime/vector-consumption receipts, six matched controls, counterbalanced labels, disjoint calibration/holdout, wrong-layer localization, lesion/rescue, promotion bridge and gate-v4. Do not substitute the terminal lm_head/final-norm positive control.",
+  "evidence_boundary": "Durable GitHub source/control-plane convergence plus focused deterministic regression evidence only. No new model intervention, J-Space model runtime, training, HCU-full, whole-product or canonical semantics credit is minted by this receipt."
+}

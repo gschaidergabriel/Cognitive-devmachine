@@ -117,13 +117,26 @@ def _lane_evidence_from_provenance(
         }
 
     if provider == "nvidia":
+        # NVIDIA documents free hosted NIM prototyping for Developer Program
+        # members, but the public provider statement does not prove that an
+        # arbitrary credential belongs to that free entitlement.  A provider
+        # hostname plus an unbound fingerprint therefore cannot self-admit.
+        bound = record.get("admitted_credential_fingerprints")
+        if not isinstance(bound, list) or credential_fingerprint not in {
+            str(item).strip() for item in bound if str(item).strip()
+        }:
+            return {
+                "ok": False,
+                "reason": "NVIDIA_CREDENTIAL_DEVELOPER_FREE_ENTITLEMENT_NOT_BOUND",
+            }
         return {
             "ok": True,
             "kind": record.get("evidence_kind"),
             "source": record.get("source"),
             "endpoint_host": _host(endpoint),
             "scope": record.get("scope"),
-            "assertion": "NVIDIA_HOSTED_NIM_PROTOTYPING_ROUTE_ONLY",
+            "credential_fingerprint": credential_fingerprint,
+            "assertion": "BOUND_CREDENTIAL_NVIDIA_DEVELOPER_FREE_NIM_PROTOTYPING_ONLY",
         }
 
     if provider == "groq":

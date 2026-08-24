@@ -27,6 +27,11 @@ class AuthorityConsistencyV4Tests(unittest.TestCase):
                 "product_endpoint": mod.CURRENT_PRODUCT,
                 "integrated_cognition_compute_architecture": mod.CURRENT_COMPUTE_ARCHITECTURE,
                 "authority_correction": AUTHORITY,
+                "mandatory_invariants": [
+                    "EntityOS is the sole current product/system identity",
+                    "HCU is the sole current integrated cognition/compute architecture",
+                    "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
+                ],
                 "free_only": True,
                 "paid_fallback": "FORBIDDEN",
                 "together_api": "FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE",
@@ -42,6 +47,10 @@ class AuthorityConsistencyV4Tests(unittest.TestCase):
                 "product": mod.CURRENT_PRODUCT,
                 "integrated_cognition_compute_architecture": mod.CURRENT_COMPUTE_ARCHITECTURE,
                 "authority_correction": AUTHORITY,
+                "identity": {
+                    "persistent_research_entity": "Clay",
+                    "temporary_workers": "ORGANS_NOT_ENTITIES",
+                },
                 "authority": {
                     "external_effects": "EffectGate+EffectJournal",
                     "second_persistent_identity": "FORBIDDEN",
@@ -96,8 +105,13 @@ class AuthorityConsistencyV4Tests(unittest.TestCase):
                 "product_endpoint": mod.CURRENT_PRODUCT,
                 "integrated_cognition_compute_architecture": mod.CURRENT_COMPUTE_ARCHITECTURE,
                 "stage": mod.CURRENT_STAGE,
+                "canonical_workspace": "the artefact/",
                 "authority_correction": AUTHORITY,
                 "effect_authority": "EffectGate+EffectJournal",
+                "legacy_donor": {
+                    "prior_product": "ClayVerse",
+                    "scope": "HISTORICAL_DONOR_PROVENANCE_ONLY",
+                },
                 "execution_policy": {
                     "free_only_default": True,
                     "active_supervisor_free_only": True,
@@ -121,34 +135,102 @@ class AuthorityConsistencyV4Tests(unittest.TestCase):
                 "schema_version": "4.1",
                 "status": "ACTIVE",
                 "mode": "FREE_ONLY",
-                "cycle_policy": {"paid_fallback": False, "automatic_subscription_upgrade": False},
-                "authority_rules": ["model_output_is_candidate_not_truth"],
+                "cycle_policy": {
+                    "paid_fallback": False,
+                    "automatic_subscription_upgrade": False,
+                    "vps_testing": "FORBIDDEN",
+                },
+                "authority_rules": [
+                    "model_output_is_candidate_not_truth",
+                    "autonomous_cycle_may_not_modify_FRANK_harness",
+                ],
             },
             mod.CONTROL42: {
+                "schema_version": "4.2-execution-boundary-addendum",
+                "status": "ACTIVE",
+                "mode": "FREE_ONLY",
                 "base_control_path": mod.CONTROL41,
                 "base_control_blob_sha": "pending",
-                "preserved_hard_rules": {"free_only": True, "paid_fallback": False, "together_forbidden": True},
+                "execution_routing": {
+                    "direct_vps_host_candidate_execution": "FORBIDDEN",
+                    "persistent_self_hosted_candidate_execution": "FORBIDDEN",
+                    "production_host_testing": "FORBIDDEN",
+                },
+                "preserved_hard_rules": {
+                    "free_only": True,
+                    "paid_fallback": False,
+                    "together_forbidden": True,
+                    "frank_harness_modification": "FORBIDDEN",
+                },
             },
             mod.CONTROL43: {
+                "schema_version": "4.3-program-authority-addendum",
+                "status": "ACTIVE",
+                "mode": "FREE_ONLY",
+                "base_control_path": mod.CONTROL41,
                 "base_control_blob_sha": "pending",
                 "execution_boundary_addendum_path": mod.CONTROL42,
                 "execution_boundary_addendum_blob_sha": "pending",
-                "preserved_hard_rules": {"free_only": True, "paid_fallback": False, "together_forbidden_under_current_control": True},
+                "preserved_hard_rules": {
+                    "free_only": True,
+                    "paid_fallback": False,
+                    "together_forbidden_under_current_control": True,
+                    "model_output_is_candidate_not_truth": True,
+                    "runtime_credit_requires_exact_admitted_execution": True,
+                    "frank_harness_modification": "FORBIDDEN",
+                },
             },
             mod.CONTROL44: {
+                "schema_version": "4.4-clayverse-product-authority-addendum",
+                "status": "ACTIVE",
+                "mode": "FREE_ONLY",
+                "base_control_path": mod.CONTROL41,
+                "execution_boundary_addendum_path": mod.CONTROL42,
                 "prior_program_authority_addendum_path": mod.CONTROL43,
                 "prior_program_authority_addendum_blob_sha": "pending",
+                "composition_order": [
+                    "4.1",
+                    "4.2-execution-boundary-addendum",
+                    "4.3-program-authority-addendum",
+                    "4.4-clayverse-product-authority-addendum",
+                ],
                 "effective_control_version": mod.LEGACY_EXPECTED_CONTROL,
-                "preserved_hard_rules": {"free_only": True, "paid_fallback": False, "together_forbidden": True},
+                "program_identity_override": {
+                    "active_program": "CLAYVERSE_SINGLE_CONTAINER",
+                    "target_stage": "CLAYVERSE_ARTIFACT",
+                    "product_endpoint": "ClayVerse",
+                },
+                "preserved_hard_rules": {
+                    "free_only": True,
+                    "paid_fallback": False,
+                    "together_forbidden": True,
+                    "vps_testing": False,
+                    "runtime_credit_requires_exact_admitted_isolated_execution": True,
+                    "model_output_is_candidate_not_truth": True,
+                    "frank_harness_modification": "FORBIDDEN",
+                },
             },
         }
         text = {
-            "the artefact/ARCHITECTURE.md": "# EntityOS + HCU architecture\nEntityOS current product; HCU compute architecture.\n",
+            "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md": (
+                "Program: EntityOS + HCU\n"
+                "Stage: ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP\n"
+                "Product: EntityOS\n"
+                "Compute architecture: HCU\n"
+            ),
+            "the artefact/ARCHITECTURE.md": (
+                "# EntityOS + HCU architecture\n"
+                "EntityOS is the sole current product/system. HCU is the integrated cognition/compute architecture.\n"
+            ),
             "the artefact/README.md": "# the artefact — EntityOS + HCU\n",
             mod.ROOT_CLAUDE: (
                 "# CLAY — CURRENT ENTITYOS / HCU REPO ORGAN\n"
-                "AUTONOMOUS_SUPERVISOR=RESOLVE_FROM_SUPERVISOR_INBOX\n"
-                "Read research_entity/claycode/autonomous/SUPERVISOR_INBOX.json, resolve its steering pointer, and fail closed on split authority.\n"
+                "`PROGRAM=ENTITYOS_HCU`\n"
+                "`STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`\n"
+                "`PRODUCT=EntityOS`\n"
+                "`COMPUTE_ARCHITECTURE=HCU`\n"
+                "`AUTONOMOUS_SUPERVISOR=RESOLVE_FROM_SUPERVISOR_INBOX`\n"
+                "Read research_entity/claycode/autonomous/SUPERVISOR_INBOX.json and resolve its steering pointer.\n"
             ),
         }
         for rel, data in files.items():
@@ -238,7 +320,14 @@ class AuthorityConsistencyV4Tests(unittest.TestCase):
     def test_root_fixed_minor_pin_is_forbidden(self):
         td, root = self.make_tree(); self.addCleanup(td.cleanup)
         path = root / mod.ROOT_CLAUDE
-        path.write_text("AUTONOMOUS_SUPERVISOR=SUPERVISOR_STEERING_8_68\nSUPERVISOR_INBOX.json resolve steering\n")
+        path.write_text(
+            "`PROGRAM=ENTITYOS_HCU`\n"
+            "`STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`\n"
+            "`PRODUCT=EntityOS`\n"
+            "`COMPUTE_ARCHITECTURE=HCU`\n"
+            "AUTONOMOUS_SUPERVISOR=SUPERVISOR_STEERING_8_68\n"
+            "SUPERVISOR_INBOX.json resolve steering\n"
+        )
         self.assertIn("ROOT_CLAUDE_FIXED_SUPERVISOR_PIN_FORBIDDEN", mod.validate(root)["errors"])
 
     def test_legacy_paid_fallback_weakening_still_fails(self):
@@ -249,6 +338,23 @@ class AuthorityConsistencyV4Tests(unittest.TestCase):
         errors = mod.validate(root)["errors"]
         self.assertIn("CONTROL41_PAID_FALLBACK_WEAKENED", errors)
         self.assertIn("CONTROL42_BASE_BLOB_MISMATCH", errors)
+        self.assertIn("CONTROL43_BASE_BLOB_MISMATCH", errors)
+
+    def test_legacy_direct_vps_boundary_weakening_still_fails(self):
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL42
+        data = json.loads(path.read_text()); data["execution_routing"]["direct_vps_host_candidate_execution"] = "ALLOWED"
+        path.write_text(json.dumps(data, sort_keys=True))
+        errors = mod.validate(root)["errors"]
+        self.assertIn("CONTROL42_DIRECT_VPS_FENCE_WEAKENED", errors)
+        self.assertIn("CONTROL43_EXEC_BLOB_MISMATCH", errors)
+
+    def test_legacy_frank_harness_fence_still_fails_closed(self):
+        td, root = self.make_tree(); self.addCleanup(td.cleanup)
+        path = root / mod.CONTROL44
+        data = json.loads(path.read_text()); data["preserved_hard_rules"]["frank_harness_modification"] = "ALLOWED"
+        path.write_text(json.dumps(data, sort_keys=True))
+        self.assertIn("CONTROL44_FRANK_HARNESS_FENCE_WEAKENED", mod.validate(root)["errors"])
 
 
 if __name__ == "__main__":

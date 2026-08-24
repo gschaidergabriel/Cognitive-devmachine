@@ -42,7 +42,10 @@ def admitted_secret(name: str) -> str:
         if not provider_is_admitted_free(provider): return ""
         return _ORIGINAL_SECRET(name)
     if name in UNTYPED_CREDENTIALED_SECRETS:return ""
-    return _ORIGINAL_SECRET(name)
+    # This wrapper is the provider-secret boundary for the distillery. Any new
+    # secret class must be explicitly classified here before the underlying
+    # loader is allowed to materialize its value.
+    return ""
 
 
 def admitted_request_json(provider: str, owner: str, url: str, *, key: str = "", payload: dict | None = None,

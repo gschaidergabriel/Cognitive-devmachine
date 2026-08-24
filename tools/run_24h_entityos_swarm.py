@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""EntityOS/HCU driver for the existing FREE_ONLY adaptive go swarm.
+"""EntityOS/HCU driver for the adaptive go swarm.
 
-The underlying controller owns credential collection, AIMD concurrency,
-provider-wide 429 cooldown, 402 hard-stop behavior and receipt logging. This
-driver adds live model discovery, EntityOS/HCU roles, and provider-specific
-request budgets derived from measured runtime limits.
+Provider credentials and provider network I/O are reachable only after a typed
+EntityOS/HCU provider-admission decision with cost_class=FREE. Environment
+attestation flags alone never admit a provider.
 """
 from __future__ import annotations
 
@@ -17,6 +16,7 @@ import re
 import urllib.error
 import urllib.request
 
+import free_provider_admission_v1 as admission
 import run_free_go_swarm as base
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,21 +50,60 @@ UNKNOWN_HIGH_VALUE = (
     "devstral", "nemotron", "deepseek", "reasoning", "instruct", "coder",
 )
 
-# Runtime evidence on 2026-08-24 showed Groq Free has an 8K TPM ceiling for
-# the selected GPT-OSS/Qwen models. The generic 1800-token completion request
-# pushed total requested tokens to ~8.2K. Cap completion budget so requests are
-# admitted instead of wasting calls on HTTP 413. Other providers keep the
-# larger research budget unless their runtime evidence says otherwise.
+BOUNDARY_AUDIT = {"secret_lookup_count": 0, "network_attempt_count": 0}
+_ORIGINAL_COLLECT_KEYS = base.collect_keys
 _ORIGINAL_REQUEST_CHAT = base.request_chat
 
+
+def reset_boundary_audit() -> None:
+    BOUNDARY_AUDIT["secret_lookup_count"] = 0
+    BOUNDARY_AUDIT["network_attempt_count"] = 0
+
+
+def typed_provider_decision(provider: str) -> dict:
+    return admission.provider_decision(provider)
+
+
+def admitted_collect_keys(spec) -> list[str]:
+    """Read provider key variables only after explicit typed FREE admission."""
+    decision = typed_provider_decision(spec.name)
+    if not decision["admitted"]:
+        return []
+    BOUNDARY_AUDIT["secret_lookup_count"] += 1
+    return _ORIGINAL_COLLECT_KEYS(spec)
+
+
+base.collect_keys = admitted_collect_keys
+
+
+def sync_attestation_from_typed_admission() -> list[str]:
+    """Derive legacy boolean compatibility flags from typed admission, never vice versa."""
+    admitted = admission.free_providers()
+    if admitted:
+        os.environ["CLAY_FREE_ONLY_ATTESTED"] = "1"
+    else:
+        os.environ.pop("CLAY_FREE_ONLY_ATTESTED", None)
+    for spec in base.PROVIDERS:
+        if spec.name in admitted:
+            os.environ[spec.attestation_env] = "1"
+        else:
+            os.environ.pop(spec.attestation_env, None)
+    return admitted
+
+
 def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout):
+    decision = typed_provider_decision(spec.name)
+    if not decision["admitted"]:
+        raise RuntimeError(f"PROVIDER_ADMISSION_REVOKED_BEFORE_NETWORK:{spec.name}:{decision['reason']}")
     if spec.name == "groq":
         max_tokens = min(int(max_tokens), int(os.getenv("CLAY_GROQ_MAX_TOKENS", "1000")))
     elif spec.name == "mistral":
         max_tokens = min(int(max_tokens), int(os.getenv("CLAY_MISTRAL_MAX_TOKENS", "1600")))
     elif spec.name == "nvidia":
         max_tokens = min(int(max_tokens), int(os.getenv("CLAY_NVIDIA_MAX_TOKENS", "1800")))
+    BOUNDARY_AUDIT["network_attempt_count"] += 1
     return _ORIGINAL_REQUEST_CHAT(spec, key, model, prompt, max_tokens, timeout)
+
 
 base.request_chat = provider_bounded_request_chat
 
@@ -83,8 +122,10 @@ def fetch_catalog(url: str, key: str, timeout: float) -> list[dict]:
 def explicit_billions(model_id: str) -> float | None:
     vals: list[float] = []
     for raw in re.findall(r"(?i)(\d+(?:\.\d+)?)\s*b(?:\b|[-_])", model_id):
-        try: vals.append(float(raw))
-        except ValueError: pass
+        try:
+            vals.append(float(raw))
+        except ValueError:
+            pass
     return max(vals) if vals else None
 
 
@@ -104,43 +145,95 @@ def choose_models(provider: str, rows: list[dict]) -> list[str]:
         if b is None and not any(x in low for x in UNKNOWN_HIGH_VALUE):
             continue
         score = b or 0.0
-        if any(x in low for x in ("ultra", "large", "reasoning", "deepseek", "120b", "405b", "550b")): score += 120.0
-        if any(x in low for x in ("nemotron", "magistral", "devstral", "codestral", "coder", "instruct")): score += 60.0
-        # Prefer model IDs already proven callable in this sandbox/account.
-        if model_id == "nvidia/llama-3.3-nemotron-super-49b-v1": score += 500.0
+        if any(x in low for x in ("ultra", "large", "reasoning", "deepseek", "120b", "405b", "550b")):
+            score += 120.0
+        if any(x in low for x in ("nemotron", "magistral", "devstral", "codestral", "coder", "instruct")):
+            score += 60.0
+        if model_id == "nvidia/llama-3.3-nemotron-super-49b-v1":
+            score += 500.0
         ranked.append((score, model_id))
     ranked.sort(key=lambda x: (-x[0], x[1]))
     return base.unique([mid for _, mid in ranked])
 
 
 def discover_and_export(timeout: float) -> dict[str, dict]:
+    """Catalog discovery is impossible until typed FREE admission has passed."""
     report: dict[str, dict] = {}
     for spec in base.PROVIDERS:
+        decision = typed_provider_decision(spec.name)
+        if not decision["admitted"]:
+            report[spec.name] = {
+                "source": "typed_admission_blocked",
+                "cost_class": decision["cost_class"],
+                "reason": decision["reason"],
+                "keys": "NOT_READ",
+                "models": [],
+                "secret_lookup_count": 0,
+                "network_attempt_count": 0,
+            }
+            continue
         keys = base.collect_keys(spec)
         override = base.split_values(os.getenv(spec.models_env))
         if override:
-            report[spec.name] = {"source": "environment_override", "keys": len(keys), "models": override}
+            report[spec.name] = {
+                "source": "environment_override",
+                "cost_class": "FREE",
+                "keys": len(keys),
+                "models": override,
+            }
             continue
         if not keys:
-            report[spec.name] = {"source": "no_keys", "keys": 0, "models": []}
+            report[spec.name] = {
+                "source": "no_keys",
+                "cost_class": "FREE",
+                "keys": 0,
+                "models": [],
+            }
             continue
+        BOUNDARY_AUDIT["network_attempt_count"] += 1
         rows = fetch_catalog(CATALOGS[spec.name], keys[0], timeout)
         selected = choose_models(spec.name, rows)
         if selected:
             os.environ[spec.models_env] = ",".join(selected)
-            report[spec.name] = {"source": "live_catalog", "keys": len(keys), "catalog": len(rows), "models": selected}
+            report[spec.name] = {
+                "source": "live_catalog",
+                "cost_class": "FREE",
+                "keys": len(keys),
+                "catalog": len(rows),
+                "models": selected,
+            }
         else:
-            report[spec.name] = {"source": "controller_fallback", "keys": len(keys), "catalog": len(rows), "models": list(spec.default_models)}
+            report[spec.name] = {
+                "source": "controller_fallback",
+                "cost_class": "FREE",
+                "keys": len(keys),
+                "catalog": len(rows),
+                "models": list(spec.default_models),
+            }
     return report
 
 
 async def main(args: argparse.Namespace) -> int:
+    reset_boundary_audit()
+    admitted = sync_attestation_from_typed_admission()
     report = discover_and_export(args.timeout)
-    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v2", "providers": report}, ensure_ascii=False), flush=True)
+    print(json.dumps({
+        "schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v3",
+        "typed_free_providers": admitted,
+        "boundary_audit": dict(BOUNDARY_AUDIT),
+        "providers": report,
+    }, ensure_ascii=False), flush=True)
     if args.inventory_only:
         return 0
     out = args.output_dir or f"/artifacts/clay-entityos-swarm/{__import__('datetime').datetime.now(__import__('datetime').timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
-    base_args = argparse.Namespace(hours=args.hours, max_tokens=args.max_tokens, context_chars=args.context_chars, timeout=args.timeout, drain_seconds=args.drain_seconds, output_dir=out)
+    base_args = argparse.Namespace(
+        hours=args.hours,
+        max_tokens=args.max_tokens,
+        context_chars=args.context_chars,
+        timeout=args.timeout,
+        drain_seconds=args.drain_seconds,
+        output_dir=out,
+    )
     return await base.run(base_args)
 
 

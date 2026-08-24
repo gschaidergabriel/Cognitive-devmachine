@@ -105,7 +105,7 @@ class MatchedPermutedSteeringTests(unittest.TestCase):
         self.assertEqual(a.packet.scale_numerator, packet.scale_numerator)
         self.assertEqual(a.packet.scale_denominator, packet.scale_denominator)
 
-    def test_directional_effect_survives_permuted_null(self):
+    def test_directional_effect_survives_permuted_null_without_minting_causality(self):
         result = search_activation_steering_with_permuted_nulls(
             SyntheticExecutor(mode="directional"),
             "probe",
@@ -124,6 +124,9 @@ class MatchedPermutedSteeringTests(unittest.TestCase):
             min_permuted_gap=0.5,
         )
         self.assertTrue(result.base.success)
+        self.assertFalse(result.jspace_causal_credit)
+        self.assertIn("SHAM_CONTROL", result.remaining_causal_controls)
+        self.assertIn("OFF_TARGET_CONTROL", result.remaining_causal_controls)
         self.assertTrue(result.success)
         self.assertGreaterEqual(result.directional_vs_permuted_gap, 0.5)
 
@@ -146,6 +149,7 @@ class MatchedPermutedSteeringTests(unittest.TestCase):
             min_permuted_gap=0.1,
         )
         self.assertTrue(result.base.success)
+        self.assertFalse(result.jspace_causal_credit)
         self.assertFalse(result.success)
         self.assertAlmostEqual(result.directional_vs_permuted_gap, 0.0)
 

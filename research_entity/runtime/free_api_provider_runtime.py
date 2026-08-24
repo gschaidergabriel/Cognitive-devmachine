@@ -214,6 +214,9 @@ def inventory(
 ) -> list[dict]:
     env = _snapshot_runtime_environment(environ)
     latches = _passive_payment_latches(payment_latches)
+    latch_capacity_exhausted = (
+        len(latches) >= MAX_PAYMENT_LATCH_ENTRIES
+    )
     attested = _attested_zero_cost_providers(env)
     rows = []
     for spec in PROVIDERS:
@@ -226,7 +229,10 @@ def inventory(
         eligible_before_latch = bool(
             key_name and zero_cost_evidence and ZERO_COST_ONLY
         )
-        payment_blocked = _payment_latch_key(spec.provider_id, env) in latches
+        payment_blocked = bool(
+            latch_capacity_exhausted
+            or _payment_latch_key(spec.provider_id, env) in latches
+        )
         row = asdict(spec)
         row["key_names"] = list(spec.key_names)
         row.update(
@@ -238,6 +244,9 @@ def inventory(
                 "zero_cost_evidence": zero_cost_evidence,
                 "budget_epoch_id": _budget_epoch_id(env),
                 "payment_blocked_current_budget_epoch": payment_blocked,
+                "payment_latch_capacity_exhausted": (
+                    latch_capacity_exhausted
+                ),
                 "eligible_before_payment_latch": eligible_before_latch,
                 "eligible": bool(eligible_before_latch and not payment_blocked),
             }

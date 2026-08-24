@@ -1,0 +1,70 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor_mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "0486b10088ffae5e5f0da9372a64074cb3771300",
+  "retained_hcu_lane": "gschaidergabriel/clay-global-research-entity#1263",
+  "retained_hcu_head_observed_before_receipt": "93023165f3fca67c93394f7b17de2cba1a9f8165",
+  "retained_executor_lane": "gschaidergabriel/Dr.-Unterweger#810",
+  "retained_executor_head_observed_before_receipt": "6a15601183f9bb61d445368e4d239e90a47b300c",
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "ordinary_work_class": "SOURCE_REVIEW_REGRESSION_FUSION",
+    "parallel_write_safety": "CREATE_UPDATE_RACES_FAILED_CLOSED_WITH_422_OR_409_AND_WERE_REENTERED_BEFORE_RETRY"
+  },
+  "observe": {
+    "problem": "The selected outcome receipt originally used a full canonical receipt digest while the same receipt carried training_trace_sha256 and the TrainingTrace carried outcome_receipt_sha256, creating a constructive hash cycle. A new acyclic content-key primitive existed on the retained donor lane but DatasetAdmission still verified the old full-receipt digest.",
+    "source_primitive": "the artefact/MicroEntity/hcu/outcome_receipt_content_key_v1.py",
+    "dataset_gate": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "executor_safety": "PR810 exact current source remains BLOCKED_QUOTA_UNOBSERVED; no Sandbox.create was authorized or attempted."
+  },
+  "hypothesis": "Using the selected acyclic outcome content key at the existing single DatasetAdmission boundary, while separately revalidating the final training_trace_sha256 back-reference, removes the cycle without weakening causal provenance or creating a second authority.",
+  "counterhypothesis": "Keeping the full canonical receipt digest would provide stronger byte identity and should remain the training pointer.",
+  "discriminator": "Full-receipt identity is not constructively available because OutcomeReceipt(full bytes) depends on TrainingTrace SHA while TrainingTrace depends on the outcome pointer. The selected content key excludes only that late back-reference, binds all other admitted outcome-family fields, rejects extra/missing fields, and DatasetAdmission separately requires the exact final training-trace back-reference plus its existing transition/generation/Entry/route/GRID10/cell/role/credit cross-bindings.",
+  "delta": {
+    "source_commit": "e03a65806ae6588400d5d771df2f4d6d2cda1d53",
+    "source_blob": "2320d6beeec56aef1f3fd6e673df1bd7b9f597b2",
+    "test_commit": "b05ae7fb54878b46ce19ef94555406f6238e0ba1",
+    "test_blob": "249e4dbf7d574478bed208d5f70f6a63bdb7ddb4",
+    "repair": "DatasetAdmission now resolves outcome_receipt_sha256 through ENTITYOS_HCU_JSPACE_OUTCOME_RECEIPT_CONTENT_KEY/v1 and separately revalidates expected_training_trace_sha256 before existing causal outcome binding.",
+    "regression": "DatasetAdmission tests now use the selected acyclic content key and explicitly reject substituting the full canonical receipt digest.",
+    "duplicate_authority_created": false,
+    "parallel_lane_created": false
+  },
+  "verification": {
+    "source_commit_reinspection": "PASS",
+    "test_commit_reinspection": "PASS",
+    "successor_donor_head_preserves_source_blob": true,
+    "successor_donor_head_preserves_test_blob": true,
+    "github_actions_runs_for_test_commit": 0,
+    "authorized_free_sandbox_execution": "NOT_RUN",
+    "reason_not_run": "The retained executor currently records remaining_sandbox_quota_directly_observed=false and runtime_gate=BLOCKED_QUOTA_UNOBSERVED. Supervisor 8.63 forbids inferring remaining included quota from Hobby plan identity.",
+    "claim_scope": "SOURCE_AND_REGRESSION_CONVERGENCE_ONLY_NO_RUNTIME_CREDIT"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_FAIL_CLOSED_EXECUTOR_SAFETY_AND_PRESERVED_SINGLE_EXECUTOR; no runtime invocation while direct free quota is unobserved.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_CAUSAL_DATASET_IDENTITY; acyclic outcome identity is now fused into the existing single DatasetAdmission path.",
+    "C_GLOBAL_JSPACE_GWT_AND_FREE_ONLY_08B_READINESS": "ADVANCED_TRAINING_DATA_PROVENANCE; constructive OutcomeReceipt-to-TrainingTrace ancestry is now possible without accepting a full-digest alias or dropping the final training back-reference."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current main and retained lanes are moving rapidly under parallel organs; this source/test-only delta is recorded append-only rather than overwriting a moving current-facing README without runtime promotion."
+  },
+  "next_exact_gate": "First require directly observed remaining included Sandbox quota before any PR810 invocation. Then execute an exact-source deterministic regression at admitted scope and, only after an explicit immutable donor rebind, extend the single executor to the newer DatasetAdmission/content-key semantics. J-Space model-runtime credit still separately requires a real zero-cost local approximately-0.8B loader/model-executor I/O boundary with verified loader consumption and canonical MiniUnifiedDB ModelExecution admission.",
+  "acceptance": "IN_PROGRESS"
+}

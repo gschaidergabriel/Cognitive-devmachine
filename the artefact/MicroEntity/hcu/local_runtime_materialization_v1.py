@@ -5,6 +5,11 @@ Closes only the local byte-identity gap between pinned llama.cpp/Qwen source
 candidates and later loader/executor evidence. It does not download, execute,
 load or infer with a model, and grants no runtime, J-Space, training, truth or
 effect credit.
+
+A positive receipt requires the extracted runtime executable and every declared
+shared dependency to byte-match one unique regular member of the exact candidate
+release archive. Merely co-locating a valid archive with unrelated extracted
+files is therefore not sufficient evidence.
 """
 from __future__ import annotations
 
@@ -12,8 +17,9 @@ from dataclasses import asdict, dataclass
 import hashlib
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import stat
+import tarfile
 from typing import Any, Mapping, Sequence
 
 try:
@@ -36,6 +42,7 @@ class LocalRuntimeMaterializationError(ValueError):
 @dataclass(frozen=True)
 class LocalFileIdentity:
     relative_path: str
+    archive_member: str
     sha256: str
     byte_count: int
 
@@ -192,24 +199,55 @@ def _regular_file(path: Path, field: str, *, executable: bool = False) -> Path:
         raise LocalRuntimeMaterializationError(f"{field}:RESOLVE_FAILED:{exc.__class__.__name__}") from exc
 
 
-def _hash_file(path: Path, field: str) -> tuple[str, int]:
+def _hash_stream(handle: Any, field: str) -> tuple[str, int]:
     digest = hashlib.sha256()
     count = 0
-    try:
-        with path.open("rb") as handle:
-            while True:
-                chunk = handle.read(1024 * 1024)
-                if not chunk:
-                    break
-                digest.update(chunk)
-                count += len(chunk)
-                _need(count <= MAX_SAFE_INTEGER, f"{field}:BYTE_COUNT_EXCEEDS_IJSON_SAFE_INTEGER")
-    except OSError as exc:
-        raise LocalRuntimeMaterializationError(f"{field}:READ_FAILED:{exc.__class__.__name__}") from exc
+    while True:
+        chunk = handle.read(1024 * 1024)
+        if not chunk:
+            break
+        digest.update(chunk)
+        count += len(chunk)
+        _need(count <= MAX_SAFE_INTEGER, f"{field}:BYTE_COUNT_EXCEEDS_IJSON_SAFE_INTEGER")
     return digest.hexdigest(), count
 
 
-def _relative_file(root: Path, relative: str, field: str, *, executable: bool = False) -> tuple[Path, LocalFileIdentity]:
+def _hash_file(path: Path, field: str) -> tuple[str, int]:
+    try:
+        with path.open("rb") as handle:
+            return _hash_stream(handle, field)
+    except OSError as exc:
+        raise LocalRuntimeMaterializationError(f"{field}:READ_FAILED:{exc.__class__.__name__}") from exc
+
+
+def _archive_member_name(value: Any, field: str) -> str:
+    raw = _text(value, field, 4096)
+    path = PurePosixPath(raw)
+    _need(not path.is_absolute(), f"{field}:RELATIVE_PATH_REQUIRED")
+    _need(".." not in path.parts and "." not in path.parts, f"{field}:PATH_TRAVERSAL_FORBIDDEN")
+    _need(path.as_posix() == raw, f"{field}:NONCANONICAL_POSIX_PATH")
+    return raw
+
+
+def _hash_unique_archive_member(archive: tarfile.TarFile, member_name: str, field: str) -> tuple[str, int]:
+    member_name = _archive_member_name(member_name, field)
+    matches = [member for member in archive.getmembers() if member.name == member_name]
+    _need(len(matches) == 1, f"{field}:UNIQUE_ARCHIVE_MEMBER_REQUIRED")
+    member = matches[0]
+    _need(member.isfile() and not member.issym() and not member.islnk(), f"{field}:REGULAR_ARCHIVE_MEMBER_REQUIRED")
+    _need(0 <= member.size <= MAX_SAFE_INTEGER, f"{field}:IJSON_SAFE_MEMBER_SIZE_REQUIRED")
+    handle = archive.extractfile(member)
+    _need(handle is not None, f"{field}:ARCHIVE_MEMBER_READ_REQUIRED")
+    try:
+        observed_sha, observed_size = _hash_stream(handle, field)
+    finally:
+        handle.close()
+    _need(observed_size == member.size, f"{field}:ARCHIVE_MEMBER_SIZE_DRIFT")
+    return observed_sha, observed_size
+
+
+def _relative_file(root: Path, relative: str, archive: tarfile.TarFile, archive_member: str,
+                   field: str, *, executable: bool = False) -> tuple[Path, LocalFileIdentity]:
     rel = Path(_text(relative, field, 4096))
     _need(not rel.is_absolute(), f"{field}:RELATIVE_PATH_REQUIRED")
     _need(".." not in rel.parts and "." not in rel.parts, f"{field}:PATH_TRAVERSAL_FORBIDDEN")
@@ -221,8 +259,12 @@ def _relative_file(root: Path, relative: str, field: str, *, executable: bool = 
         raise LocalRuntimeMaterializationError(f"{field}:OUTSIDE_EXTRACTION_ROOT") from exc
     canonical_rel = actual_rel.as_posix()
     _need(canonical_rel == rel.as_posix(), f"{field}:RESOLVED_PATH_ALIAS_FORBIDDEN")
-    sha, size = _hash_file(target, field)
-    return target, LocalFileIdentity(relative_path=canonical_rel, sha256=sha, byte_count=size)
+    local_sha, local_size = _hash_file(target, field)
+    member_name = _archive_member_name(archive_member, f"{field}.archive_member")
+    member_sha, member_size = _hash_unique_archive_member(archive, member_name, f"{field}.archive_member")
+    _need(local_sha == member_sha and local_size == member_size, f"{field}:ARCHIVE_MEMBER_BYTE_MISMATCH")
+    return target, LocalFileIdentity(relative_path=canonical_rel, archive_member=member_name,
+                                     sha256=local_sha, byte_count=local_size)
 
 
 def _receipt_material(receipt: LocalRuntimeMaterializationReceipt) -> dict[str, Any]:
@@ -233,9 +275,10 @@ def _receipt_material(receipt: LocalRuntimeMaterializationReceipt) -> dict[str, 
 
 def verify_local_runtime_materialization(*, model_candidate: Mapping[str, Any], runtime_candidate: Mapping[str, Any],
                                          runtime_archive_path: Path, extraction_root: Path,
-                                         runtime_binary_relative_path: str, dependency_relative_paths: Sequence[str],
-                                         model_path: Path) -> MaterializedRuntime:
-    """Hash and bind exact local candidate bytes without executing them."""
+                                         runtime_binary_relative_path: str, runtime_binary_archive_member: str,
+                                         dependency_relative_paths: Sequence[str],
+                                         dependency_archive_members: Mapping[str, str], model_path: Path) -> MaterializedRuntime:
+    """Hash and archive-bind exact local candidate bytes without executing them."""
     contract = _candidate_contracts(model_candidate, runtime_candidate)
 
     archive = _regular_file(Path(runtime_archive_path), "runtime_archive_path")
@@ -256,15 +299,31 @@ def verify_local_runtime_materialization(*, model_candidate: Mapping[str, Any], 
     _need(not stat.S_ISLNK(root_stat.st_mode), "extraction_root:SYMLINK_FORBIDDEN")
     root = root.resolve(strict=True)
 
-    binary_path, binary_id = _relative_file(root, runtime_binary_relative_path,
-                                             "runtime_binary_relative_path", executable=True)
     _need(isinstance(dependency_relative_paths, Sequence) and not isinstance(dependency_relative_paths, (str, bytes)),
           "dependency_relative_paths:SEQUENCE_REQUIRED")
     normalized = [_text(value, "dependency_relative_path", 4096) for value in dependency_relative_paths]
     _need(len(normalized) == len(set(normalized)), "DEPENDENCY_RELATIVE_PATH_DUPLICATE")
     _need(runtime_binary_relative_path not in set(normalized), "RUNTIME_BINARY_MUST_NOT_REPEAT_AS_DEPENDENCY")
+    _need(isinstance(dependency_archive_members, Mapping), "dependency_archive_members:OBJECT_REQUIRED")
+    _need(set(dependency_archive_members) == set(normalized), "DEPENDENCY_ARCHIVE_MEMBER_KEYS_MUST_MATCH_DEPENDENCIES")
 
-    observed = [_relative_file(root, relative, "dependency_relative_path") for relative in normalized]
+    try:
+        archive_handle = tarfile.open(archive, mode="r:*")
+    except (OSError, tarfile.TarError) as exc:
+        raise LocalRuntimeMaterializationError(f"RUNTIME_ARCHIVE_TAR_READ_FAILED:{exc.__class__.__name__}") from exc
+    try:
+        binary_path, binary_id = _relative_file(
+            root, runtime_binary_relative_path, archive_handle, runtime_binary_archive_member,
+            "runtime_binary_relative_path", executable=True,
+        )
+        observed = [
+            _relative_file(root, relative, archive_handle, dependency_archive_members[relative],
+                           "dependency_relative_path")
+            for relative in normalized
+        ]
+    finally:
+        archive_handle.close()
+
     observed.sort(key=lambda item: item[1].relative_path)
     dependency_ids = tuple(item[1] for item in observed)
     dependency_paths = tuple(item[0] for item in observed)
@@ -321,7 +380,9 @@ def verify_local_runtime_materialization_from_candidate_files(*, model_candidate
                                                                 runtime_archive_path: Path,
                                                                 extraction_root: Path,
                                                                 runtime_binary_relative_path: str,
+                                                                runtime_binary_archive_member: str,
                                                                 dependency_relative_paths: Sequence[str],
+                                                                dependency_archive_members: Mapping[str, str],
                                                                 model_path: Path) -> MaterializedRuntime:
     return verify_local_runtime_materialization(
         model_candidate=_read_candidate(Path(model_candidate_path), "model_candidate_path"),
@@ -329,6 +390,8 @@ def verify_local_runtime_materialization_from_candidate_files(*, model_candidate
         runtime_archive_path=runtime_archive_path,
         extraction_root=extraction_root,
         runtime_binary_relative_path=runtime_binary_relative_path,
+        runtime_binary_archive_member=runtime_binary_archive_member,
         dependency_relative_paths=dependency_relative_paths,
+        dependency_archive_members=dependency_archive_members,
         model_path=model_path,
     )

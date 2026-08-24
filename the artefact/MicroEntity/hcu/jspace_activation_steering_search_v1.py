@@ -107,7 +107,15 @@ def applied_vector_sha256(vector: Sequence[float]) -> str:
     return hashlib.sha256(canonicalize(list(normalized))).hexdigest()
 
 
-def _check_receipt(receipt: HookReceipt | None, *, layer_id: str, seed: int, alpha: float, vector_sha256: str) -> None:
+def _check_receipt(
+    receipt: HookReceipt | None,
+    *,
+    layer_id: str,
+    seed: int,
+    alpha: float,
+    vector_sha256: str,
+    require_activation_change: bool = True,
+) -> None:
     if not isinstance(receipt, HookReceipt):
         raise ActivationSteeringError("EXECUTOR_HOOK_RECEIPT_REQUIRED")
     if receipt.schema != HOOK_RECEIPT_SCHEMA:
@@ -118,8 +126,14 @@ def _check_receipt(receipt: HookReceipt | None, *, layer_id: str, seed: int, alp
         raise ActivationSteeringError("EXECUTOR_APPLIED_VECTOR_MISMATCH")
     for value, field in ((receipt.pre_activation_sha256, "pre_activation_sha256"), (receipt.post_activation_sha256, "post_activation_sha256")):
         _sha(value, field)
-    if receipt.pre_activation_sha256 == receipt.post_activation_sha256 and alpha != 0.0:
-        raise ActivationSteeringError("EXECUTOR_ACTIVATION_UNCHANGED")
+    if require_activation_change:
+        if alpha != 0.0 and receipt.pre_activation_sha256 == receipt.post_activation_sha256:
+            raise ActivationSteeringError("EXECUTOR_ACTIVATION_UNCHANGED")
+    elif receipt.pre_activation_sha256 != receipt.post_activation_sha256:
+        # An exact zero-vector control must be a physical no-op at the target activation.
+        # Allowing a changed post hash here would make implementation drift look like a
+        # harmless zero control and weaken the causal discriminator.
+        raise ActivationSteeringError("ZERO_VECTOR_CONTROL_CHANGED_ACTIVATION")
 
 
 def _score(value: float) -> float:
@@ -189,7 +203,14 @@ def search_activation_steering(
             scores = []
             for seed in seed_values:
                 observation = executor.run(prompt, layer_id=layer, vector=vector, alpha=alpha, seed=seed)
-                _check_receipt(observation.hook_receipt, layer_id=layer, seed=seed, alpha=alpha, vector_sha256=vector_sha)
+                _check_receipt(
+                    observation.hook_receipt,
+                    layer_id=layer,
+                    seed=seed,
+                    alpha=alpha,
+                    vector_sha256=vector_sha,
+                    require_activation_change=True,
+                )
                 scores.append(_score(score_fn(observation)))
             deltas = tuple(score - base for score, base in zip(scores, baseline_scores))
             candidate = Candidate(layer, alpha, tuple(scores), deltas, fmean(scores), fmean(deltas))
@@ -204,7 +225,14 @@ def search_activation_steering(
     zero_scores = []
     for seed in seed_values:
         observation = executor.run(prompt, layer_id=best.layer_id, vector=zero_vector, alpha=best.alpha, seed=seed)
-        _check_receipt(observation.hook_receipt, layer_id=best.layer_id, seed=seed, alpha=best.alpha, vector_sha256=zero_sha)
+        _check_receipt(
+            observation.hook_receipt,
+            layer_id=best.layer_id,
+            seed=seed,
+            alpha=best.alpha,
+            vector_sha256=zero_sha,
+            require_activation_change=False,
+        )
         zero_scores.append(_score(score_fn(observation)))
     zero_delta = fmean(score - base for score, base in zip(zero_scores, baseline_scores))
 

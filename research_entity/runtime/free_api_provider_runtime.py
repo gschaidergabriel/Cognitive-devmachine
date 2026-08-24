@@ -49,7 +49,17 @@ MAX_RECEIPT_DURATION_MS = MAX_PROVIDER_COOLDOWN_SECONDS * 1000
 EXECUTION_LOCK_TIMEOUT_SECONDS = 35
 TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
 TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
-TEXT_RESPONSE_CHOICE_FIELDS = frozenset({"finish_reason", "message"})
+TEXT_RESPONSE_CHOICE_REQUIRED_FIELDS = frozenset({"finish_reason", "message"})
+TEXT_RESPONSE_CHOICE_FIELDS = frozenset(
+    {
+        "finish_reason",
+        "index",
+        "logprobs",
+        "message",
+        "stop_reason",
+        "token_ids",
+    }
+)
 TEXT_RESPONSE_MESSAGE_FIELDS = frozenset({"role", "content"})
 BEARER_TOKEN_CHARACTERS = frozenset(
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~+/"
@@ -981,10 +991,23 @@ def _execute_chat_locked(
             choice = choices[0]
             if not isinstance(choice, dict):
                 raise ValueError("response_choice_must_be_object")
-            if set(choice) != TEXT_RESPONSE_CHOICE_FIELDS:
+            choice_fields = set(choice)
+            if (
+                not TEXT_RESPONSE_CHOICE_REQUIRED_FIELDS.issubset(choice_fields)
+                or not choice_fields.issubset(TEXT_RESPONSE_CHOICE_FIELDS)
+            ):
                 raise ValueError(
                     "response_choice_fields_not_supported_by_text_adapter"
                 )
+            if "index" in choice and (
+                type(choice["index"]) is not int or choice["index"] != 0
+            ):
+                raise ValueError("response_choice_index_not_supported")
+            for metadata_field in ("logprobs", "stop_reason", "token_ids"):
+                if choice.get(metadata_field) is not None:
+                    raise ValueError(
+                        "response_choice_metadata_not_supported_by_text_adapter"
+                    )
             finish_reason = choice.get("finish_reason")
             if finish_reason == "length":
                 raise ProviderOutputTruncated

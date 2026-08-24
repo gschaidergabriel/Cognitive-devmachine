@@ -96,6 +96,12 @@ The retained launcher was changed to delegate to that stronger protocol and brid
 
 No new unusual experiment was executed in this macrocycle because no reproducible shared immutable macrocycle/request identity was available beyond minute-level conversation timing. This is a durable source/control-plane/J-Space-readiness delta only and mints zero model-runtime, J-Space-model, HCU-full, training or whole-product credit.
 
+### GO 23:48 executed-source receipt identity delta
+
+The compatibility launcher now protects the delegated scientific process with pre/post `CLAY_GIT_SOURCE_IDENTITY/v1`, but the outer retained workflow still wrote issue-event `GITHUB_SHA` into the sanitized receipt as `head_sha`. Because that workflow checks out moving `main` at runner execution time, event SHA is not guaranteed to equal the actually executed checkout.
+
+The receipt path is therefore fused with the same reusable Git-source identity primitive before intervention. The workflow exports actual checkout HEAD/tree, `source_identity_sha256` and byte-sensitive `dirty_state_sha256`; records the executed checkout as `head_sha`; retains `dispatch_event_sha` only as event provenance; and fails closed if a promotion-capable source result omits or disagrees with the executed source identity. A focused integration regression locks this separation. This is source/provenance hardening only until merged and exercised; it mints zero model-runtime, J-Space-model, HCU-full, training or whole-product credit.
+
 Until a lease-admitted successor dispatch yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
 
 ## Typed Entry / HCU authority convergence
@@ -106,7 +112,7 @@ This is a control-plane/Typed-Entry-adjacent convergence delta: it removes stale
 
 Retained donor lane **#1263** remains the single HCU / Typed Entry / Global J-Space donor lane. Its engine/loader work is source/donor evidence until exact admitted execution binds loader consumption, inference receipt and downstream causal traces.
 
-For this `go`, no additional nonduplicate Typed Entry primitive was written because the highest-information safe blocker was the retained Trigger-1 routing mismatch and concurrent work had already synchronized the 8.72 current-facing authority mirrors. Track B therefore records `HCU_NO_CHANGE_WITH_REASON` at executable-HCU scope instead of manufacturing a duplicate Entry lane.
+For this `go`, no additional nonduplicate Typed Entry primitive was written because the highest-information safe blocker was the retained Trigger-1 receipt provenance mismatch and concurrent work had already synchronized the 8.72 current-facing authority mirrors. Track B advances by integrating the reusable source-identity primitive at the HCU/model evidence boundary rather than creating a duplicate Entry implementation lane.
 
 ## Evidence credit
 

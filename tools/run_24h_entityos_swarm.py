@@ -6,6 +6,7 @@ Optimization goals:
 - feed workers live sandbox truth ahead of repository snapshots;
 - prefer models that have actually succeeded and stop re-probing dead catalog entries;
 - emit machine-readable research questions *and* architecture-delta candidates;
+- feed bounded Forge rejection evidence back into source-bound repair workers;
 - keep the shared provider quota gate as the single cross-process concurrency view.
 """
 from __future__ import annotations
@@ -30,6 +31,7 @@ from free_lane_provenance import (
     emit_execution_receipt,
     lane_evidence,
 )
+from free_swarm_forge_repair import current_repair_packets, repair_suffix
 from free_swarm_quota import slot as quota_slot, observe as quota_observe
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -245,6 +247,7 @@ base.build_state_context = enriched_state_context
 
 def optimized_worker_prompt(protocol: str, role: str, task: str, state_context: str, serial: int) -> str:
     original = _ORIGINAL_WORKER_PROMPT(protocol, role, task, state_context, serial)
+    original += repair_suffix(serial, current_repair_packets())
     return original + """
 
 PRODUCTIVITY CONTRACT — MANDATORY
@@ -262,6 +265,7 @@ Set ready_for_forge=false when the proposal is not executable yet. Questions mus
 
 
 base.worker_prompt = optimized_worker_prompt
+base.FORGE_REPAIR_BINDING = "SOURCE_BOUND_BACKLOG_REPAIR_V2"
 
 
 def fetch_catalog(provider: str, url: str, key: str, timeout: float) -> list[dict]:
@@ -352,7 +356,7 @@ def discover_and_export(timeout: float) -> dict[str, dict]:
 
 async def main(args: argparse.Namespace) -> int:
     report=discover_and_export(args.timeout)
-    print(json.dumps({"schema":"CLAY_ENTITYOS_SWARM_DISCOVERY/v5","providers":report,"distillery_context":DISTILLERY_DB.exists(),"live_runtime_context":True,"shared_quota_gate":True,"typed_provider_admission":True,"exact_free_lane_binding":True,"credentialed_catalog_network":False},ensure_ascii=False),flush=True)
+    print(json.dumps({"schema":"CLAY_ENTITYOS_SWARM_DISCOVERY/v5","providers":report,"distillery_context":DISTILLERY_DB.exists(),"live_runtime_context":True,"shared_quota_gate":True,"typed_provider_admission":True,"exact_free_lane_binding":True,"credentialed_catalog_network":False,"forge_repair_binding":"SOURCE_BOUND_BACKLOG_REPAIR_V2"},ensure_ascii=False),flush=True)
     if args.inventory_only:return 0
     out=args.output_dir or f"/artifacts/clay-entityos-swarm/{__import__('datetime').datetime.now(__import__('datetime').timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
     base_args=argparse.Namespace(hours=args.hours,max_tokens=args.max_tokens,context_chars=args.context_chars,timeout=args.timeout,drain_seconds=args.drain_seconds,output_dir=out)

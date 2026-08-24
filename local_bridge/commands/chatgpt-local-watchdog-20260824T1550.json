@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-local-watchdog-20260824T1550",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; mkdir -p ~/.local/bin ~/.config/systemd/user; printf '%s\\n' '#!/usr/bin/env bash' 'set -euo pipefail' 'if ! systemctl --user is-active --quiet clay-local-bridge.service; then' '  systemctl --user restart clay-local-bridge.service' 'fi' > ~/.local/bin/clay-local-bridge-watchdog.sh; chmod 755 ~/.local/bin/clay-local-bridge-watchdog.sh; printf '%s\\n' '[Unit]' 'Description=Clay local bridge self-heal check' '' '[Service]' 'Type=oneshot' 'ExecStart=%h/.local/bin/clay-local-bridge-watchdog.sh' > ~/.config/systemd/user/clay-local-bridge-watchdog.service; printf '%s\\n' '[Unit]' 'Description=Run Clay local bridge self-heal check every minute' '' '[Timer]' 'OnBootSec=1min' 'OnUnitActiveSec=1min' 'AccuracySec=10s' 'Persistent=true' '' '[Install]' 'WantedBy=timers.target' > ~/.config/systemd/user/clay-local-bridge-watchdog.timer; systemctl --user daemon-reload; systemctl --user enable --now clay-local-bridge-watchdog.timer; systemctl --user is-active clay-local-bridge.service; systemctl --user is-active clay-local-bridge-watchdog.timer; systemctl --user list-timers clay-local-bridge-watchdog.timer --no-pager; echo LOCAL_BRIDGE_WATCHDOG_OK"
+}

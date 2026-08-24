@@ -1,0 +1,27 @@
+{
+  "schema": "ENTITYOS_HCU_DISTILLERY_QUESTION_INSERT_SOURCE_RECEIPT/v1",
+  "authority_epoch": "8.70",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "issue": 1472,
+  "organ": "GPT-5.6 Sol",
+  "base_main": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+  "branch": "gpt56sol/fix-distillery-question-insert-1472",
+  "source_fix_commit": "4764d6fa16555a39aef983f2e34c35f1f3bbfab7",
+  "finding": "run_research_distillery.add_question inserted into 9 named columns using 10 VALUES entries and 9 bound parameters, causing sqlite3.OperationalError before duplicate handling and potentially during seed() on fresh startup.",
+  "delta": "Change the INSERT to six placeholders + literal OPEN + two placeholders and remove the duplicate worker_sha binding.",
+  "evidence": {
+    "exact_commit_diff": "ONLY_TWO_LINES_CHANGED_IN_ADD_QUESTION",
+    "isolated_sqlite_repaired_statement": "PASS",
+    "regression_added": "tests/test_research_distillery_question_insert_870.py",
+    "regression_intent": "create current schema, seed all seed questions, add worker-derived question, verify status/created_at/source_worker_sha and last_touched NULL"
+  },
+  "evidence_scope": "SOURCE_PLUS_ISOLATED_SQLITE_MECHANISM_ONLY",
+  "external_provider_calls": 0,
+  "secret_reads": 0,
+  "paid_execution": 0,
+  "together_execution": 0,
+  "runtime_credit": 0,
+  "whole_entityos_hcu_credit": 0,
+  "next_gate": "Execute the exact branch regression in a repository checkout/runtime and then allow normal Distillery startup to prove the repaired current source reaches the loop without OperationalError."
+}

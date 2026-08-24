@@ -1,0 +1,31 @@
+SUP_PID=922
+    PID     ELAPSED CMD
+    922       00:10 python3 /workspace/clay-global-research-entity/tools/run_24h_entityos_swarm.py --hours 24.0 --output-dir /artifacts/clay-entityos-swarm/active-20260824T094726Z
+--- supervisor ---
+{
+  "schema": "CLAY_ENTITYOS_SWARM_SUPERVISOR/v3",
+  "observed_at": "2026-08-24T09:47:26.647451+00:00",
+  "repo_root": "/workspace/clay-global-research-entity",
+  "remaining_seconds": 86400,
+  "free_only_attested": true,
+  "provider_credentials_present": {
+    "groq": true,
+    "mistral": false,
+    "nvidia": true
+  },
+  "provider_credential_counts": {
+    "groq": 1,
+    "mistral": 0,
+    "nvidia": 1
+  },
+  "dashboard_watch": true
+}
+--- processes ---
+root         922  1.9  0.1 180548 28920 ?        SNl  09:47   0:00 python3 /workspace/clay-global-research-entity/tools/run_24h_entityos_swarm.py --hours 24.0 --output-dir /artifacts/clay-entityos-swarm/active-20260824T094726Z
+root         931  8.6  0.1  32680 25144 ?        SN   09:47   0:00 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60 --publish --publish-min-seconds 900
+--- log ---
+--- dashboard ---
+{"generated_at": "2026-08-24T09:47:26.652319+00:00", "workers": 0, "output_tokens": 0, "accepted_deltas": 0}
+--- disk ---
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       193G   36G  158G  19% /artifacts

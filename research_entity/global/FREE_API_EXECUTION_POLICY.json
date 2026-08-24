@@ -207,6 +207,18 @@
     "uncertainty": "The mirror is process-local and does not survive restart. Durable UnifiedDB-backed publication and an accepted Ubuntu live receipt remain required before claiming restart-level enforcement.",
     "counterhypothesis": "A successful caller-owned latch write can be trusted for the lifetime of the execution process; falsified because the caller can clear the mutable set and immediately restore routing eligibility unless the observed HTTP 402 is independently mirrored."
   },
+  "post_cleanup_payment_latch_publication": {
+    "checked_at": "2026-08-25",
+    "claim": "On the regular-response HTTP 402 path, latch publication occurs only after the foreign response context has completed its __exit__ cleanup. The receipt therefore cannot claim an active payment hard stop that response cleanup subsequently erased before returning control to FRANK.",
+    "sources": [
+      "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required",
+      "https://cwe.mitre.org/data/definitions/362.html"
+    ],
+    "executable_evidence": "test_response_cleanup_cannot_erase_payment_hard_stop",
+    "internal_measurement": "A deterministic response __exit__ cleared both caller-owned and process-local latch sets after the suite had published HTTP 402. Before repair, the first receipt still reported payment_latch_active=true while a second same-epoch request reached the opener. After repair, publication follows __exit__ and attempt two fails before network access.",
+    "counterhypothesis": "Serializing the with suite through the execution lock makes latch publication inside that suite final; falsified because foreign __exit__ runs after the suite and can mutate shared latch storage before the with statement returns."
+  },
   "passive_payment_latch_container_boundary": {
     "checked_at": "2026-08-24",
     "claim": "Every payment-latch storage path, including the process-global default and caller injection, must be an exact built-in set before capability inventory, routing or authenticated execution; set subclasses cannot execute overridden membership or mutation behavior around a received HTTP 402.",

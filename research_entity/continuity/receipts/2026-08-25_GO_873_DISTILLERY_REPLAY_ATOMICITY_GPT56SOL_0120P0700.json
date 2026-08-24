@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "mode": "FREE_ONLY",
+  "bootstrap_cache_used_as_noncanonical_reentry_only": true,
+  "branch_base_main": "683f85d69d92beec257cf7119748b4ffd413cf06",
+  "latest_canonical_main_observed_before_receipt_write": "93a8a042ba292b19d7e3a3007c1f7660372f0d52",
+  "branch": "gpt56sol/go873-distillery-replay-atomic-20260825",
+  "source_commit": "dfcef25d9791cd50f61b9417bf58a06be18ca37e",
+  "regression_commit": "db6287621c35dddc7a84e925eec7380b5c9f3233",
+  "issue": 1758,
+  "material_finding": "Current Forge->Distillery replay semantics are stable across volatile envelope fields, but the canonical bridge still performs replay lookup before acquiring explicit SQLite write intent. Concurrent ingestors can therefore both observe absence and race at the UNIQUE replay-identity index, leaking an IntegrityError instead of deterministic DUPLICATE/conflict semantics.",
+  "counterhypothesis": "The UNIQUE replay-identity index alone is sufficient because SQLite will serialize the later INSERTs without changing externally visible semantics.",
+  "discriminator_already_on_main": {
+    "commit": "9ce8221be615858dbb2607a47b496578c3cc8c64",
+    "scope": "GENERIC_SQLITE_TRANSACTION_SEMANTICS_ONLY",
+    "finding": "SELECT-before-write can race into one INSERT plus one integrity error; BEGIN IMMEDIATE before lookup serializes the competing writers so the later observer can resolve as duplicate."
+  },
+  "candidate_delta": {
+    "source_blob_after_patch": "2025339b12a6b1a2368cf48170c483315a747e44",
+    "test_blob": "2cdd7360159a3b442b7377d4d792c519781c171e",
+    "behavior": [
+      "commit schema setup before replay-admission units",
+      "BEGIN IMMEDIATE per valid evaluation row before admit_one replay lookup",
+      "commit after the bounded replay-admission unit",
+      "rollback and re-raise any exception",
+      "preserve one existing Distillery truth/data path and existing DUPLICATE/REPLAY_IDENTITY_CONFLICT/LEGACY_REPLAY_IDENTITY_UNRESOLVED semantics"
+    ]
+  },
+  "regression_definition": {
+    "path": "tests/test_forge_distillery_replay_concurrency_873.py",
+    "assertions": [
+      "connection is already in_transaction at admit_one entry",
+      "second SQLite connection cannot BEGIN IMMEDIATE while replay admission is in progress",
+      "ingest result classifies the synthetic probe as DUPLICATE without admission",
+      "write intent is released after the ingest unit commits"
+    ]
+  },
+  "parallel_reentry": {
+    "main_live_semantic_replay_closed": true,
+    "main_training_packet_rebuild_stable": true,
+    "main_jspace_full_vector_control_namespace_present": true,
+    "artifact_readme_synced_to_supervisor_8_73": true,
+    "selfhosted_health_observer_terminal_result": "UNOBSERVED_NOT_DOWN"
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_REPLAY_ADMISSION_ATOMICITY_SOURCE_CANDIDATE_PLUS_MAIN_LIVE_REPLAY_CONVERGENCE",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "ADVANCED_REPLAY_STABLE_CAUSAL_EVIDENCE_BOUNDARY_WITH_ATOMIC_PERSISTENT_ADMISSION_CANDIDATE",
+    "C_GLOBAL_JSPACE_GWT_TRAINING_READINESS_FREE_ONLY": "ADVANCED_DATASET_REPLAY_RACE_SAFETY_PLUS_MAIN_FULL_VECTOR_CONTROL_ABI_SOURCE_GATE_NO_MODEL_EXECUTION"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_request_id_available": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions": 0,
+    "duplicate_concurrency_repair_pr_observed_before_branch": false
+  },
+  "execution_boundary": {
+    "pr_opened": false,
+    "reason": "Opening a PR can trigger private GitHub hosted Actions; remaining hosted quota/cost provenance is not established under FREE_ONLY, so unknown-cost hosted execution was not deliberately triggered.",
+    "source_and_regression_definition_only": true,
+    "branch_head_executed_on_authorized_local_or_vps_surface": false
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Rebase/port this two-file atomicity candidate onto refreshed current main if still nonduplicate; execute py_compile plus the concurrency regression and existing replay/rebuild/live-semantic-replay suite on an explicitly admitted zero-cost local normal-user or clay-direct-dev checkout. Only after exact-head green execution should the patch be fused. Then require the repository-bound persistent live 1 qualified ACCEPT -> 1 packet -> positive accepted_dataset_tokens -> semantic replay +0 -> measured-evidence conflict +0 witness.",
+  "evidence_boundary": "Durable source candidate + regression definition + issue/receipt only. No exact-head branch execution, no direct VPS health observation, no provider/model execution, no J-Space causal runtime result, no training, no full HCU or whole EntityOS runtime acceptance."
+}

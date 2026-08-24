@@ -1,0 +1,95 @@
+{
+  "schema": "CLAYVERSE_GO_ENTITYOS_IMAGE_AUTHORITY_REJOIN/v1",
+  "timestamp_local": "2026-08-23T17:14:04+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "trigger": "go",
+  "classification": "SOURCE_CANDIDATE_MECHANISM_HARDENING_ZERO_RUNTIME_CREDIT",
+  "owner_authority": {
+    "program": "CLAYVERSE_SINGLE_CONTAINER",
+    "stage": "CLAYVERSE_ARTIFACT",
+    "workspace": "the artefact/",
+    "durable_authority": "UnifiedDB",
+    "effect_authority": "EffectGate+EffectJournal",
+    "entityos_role": "optional internal execution/security/runtime substrate"
+  },
+  "fresh_rejoin": {
+    "pull_request": 1332,
+    "branch": "gpt56sol/go-entityos-image-authority-rejoin-20260823-1710",
+    "rebound_parent": "468a6dcad44b32cd640711a3df307d21f1978b53",
+    "source_code_head": "22932ce21549b6f70e00df2dbdaecfeaff41dfb6",
+    "superseded_donor_pr": 1188,
+    "superseded_donor_head": "d2b053d29eaa6e26a4dfefe6f75c9f2753a1e11d"
+  },
+  "observed_defect": "Runtime/deployment environment could select CLAYVERSE_ENTITYOS_PATH and CLAYVERSE_ENTITYOS_SHA256 independently of the image-owned embedded EntityOS artifact, creating a second artifact-identity authority.",
+  "source_delta": {
+    "runtime_identity": "fixed /opt/entityos/EntityOS plus image-owned /opt/entityos/entityos.lock.json",
+    "lock_validation": [
+      "O_NOFOLLOW/O_CLOEXEC open where supported",
+      "regular-file fstat requirement",
+      "bounded 64KiB lock size/read",
+      "exact lock schema",
+      "lowercase SHA-256 shape",
+      "positive expected size",
+      "verified executable digest and size"
+    ],
+    "mcp": "reuses service image-owned admission; no independent path/digest env authority",
+    "terminal": "propagates only CLAYVERSE_ENABLE_ENTITYOS_EXEC",
+    "docker_compose_kata": "runtime path/digest selectors removed; Docker build-time ENTITYOS_SHA256 remains a byte/lock cross-check only",
+    "baseline_execution": "CLAYVERSE_ENABLE_ENTITYOS_EXEC remains 0 in Docker, Compose and Kata baseline"
+  },
+  "parallel_race_adjudication": {
+    "observed_merge": "PR #1320 merged while the first rejoin candidate was being constructed",
+    "first_candidate_issue": "older donor Kata value would have reintroduced CLAYVERSE_ENABLE_ENTITYOS_EXEC=1",
+    "first_candidate_promotion_credit": 0,
+    "repair": "rebuilt one-commit candidate on 468a6dca and fused image-owned identity with #1320 baseline-disabled execution invariant",
+    "current_pr_mergeable_after_rebind": true
+  },
+  "changed_scope": {
+    "runtime_deployment_files": 6,
+    "entityos_authority_regression_files": 4,
+    "receipt_files": 1,
+    "product_code_commit": "22932ce21549b6f70e00df2dbdaecfeaff41dfb6"
+  },
+  "exact_github_workflow_observation_on_product_code_head": {
+    "research_entity_identity_guard": {
+      "run_id": 32633154357,
+      "job_id": 97178877305,
+      "conclusion": "failure",
+      "steps": null
+    },
+    "clayverse_python_lock_generator": {
+      "run_id": 32633154469,
+      "job_id": 97178877742,
+      "conclusion": "failure",
+      "steps": null
+    },
+    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_ZERO_TEST_CREDIT",
+    "semantic_test_failure_claimed": false
+  },
+  "execution_frontier": {
+    "state": "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS",
+    "retained_path": "owner-started POST /api/go-cycle-v2 -> scoped read-only GitHub token -> disposable authorized Vercel Sandbox -> exact private source verification -> credential clearing -> exact regressions -> exact OCI build/digest/startup",
+    "connected_chatgpt_vercel_surface": "inspection/GET available; arbitrary credential-bearing POST not exposed",
+    "whole_clayverse_runtime_credit": 0
+  },
+  "experiment_accounting": {
+    "shared_macrocycle_experiment": "AUTHORITY_ROLLBACK_POISON_REPLAY",
+    "shared_macrocycle_count": 1,
+    "this_lane_additional_unusual_experiments": 0,
+    "adversarial_artifact_regressions": "ordinary deterministic regressions"
+  },
+  "coordination": {
+    "pr_1188": "CLOSED_SUPERSEDED_BY_1332",
+    "pr_646": "BOUNDED_OVERLAPPING_DONOR_EVIDENCE_NOT_PROMOTED_AS_SECOND_PATH"
+  },
+  "nonclaims": [
+    "No exact-current pytest/full-suite PASS is claimed.",
+    "No OCI image build/digest/startup was observed for this candidate.",
+    "No Clerk/PTTY/Claude/UnifiedDB/MicroClay/EffectGate/EntityOS live acceptance was observed.",
+    "No whole-product PASS is claimed.",
+    "No secret was accessed, requested, logged or persisted.",
+    "No VPS/self-hosted/production-host test was used.",
+    "Together API was not used.",
+    "No owner-gated paid/final training was attempted."
+  ]
+}

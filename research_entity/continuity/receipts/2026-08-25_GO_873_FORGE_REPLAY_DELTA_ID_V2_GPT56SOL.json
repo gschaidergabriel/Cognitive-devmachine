@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date_local": "2026-08-25",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "canonical_main_observed_before_branch": "fc45471f0eb61da17191a9f4a5edae7e184a1346",
+  "branch": "gpt56sol/go873-distillery-replay-v2-20260825",
+  "finding": {
+    "classification": "SOURCE_OBSERVED_REPLAY_IDENTITY_ENVELOPE_LEAK",
+    "statement": "The just-fused CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1 still included delta_id even though delta_id identifies the evaluation/candidate envelope rather than measured execution. A same-execution re-emission could therefore change only delta_id and obtain a different replay key. The existing 8.73 regression covered timestamp and candidate narration mutations but not delta_id-only replay.",
+    "supervisor_alignment": "SUPERVISOR_STEERING_8_73 requires replay identity to derive from stable measured execution evidence and requires semantic replay to mint zero packets/tokens."
+  },
+  "hypothesis": "A replay-v2 identity that excludes delta_id, while preserving a v1 provenance hash and backfilling v2 from persisted packet evidence, closes envelope-only replay without losing upgrade safety.",
+  "counterhypothesis": "delta_id is part of execution identity and therefore must remain in the replay key.",
+  "counterhypothesis_disposition": "REJECTED_AT_SOURCE_SEMANTICS: delta_id is carried in the evaluation packet as envelope provenance, while stable execution identity is already independently bound by source/evaluation heads, worker, targets, provider/model/role, execution-admission digest and metric identity.",
+  "delta": {
+    "source_path": "tools/ingest_forge_accepts_into_distillery.py",
+    "source_commit": "1b00f989d025c0c3dfdfb4bd4fc8b80160f66bbf",
+    "source_blob_sha1": "33eae9fcdcca03f5be6b46bacfb8390297a614bd",
+    "test_path": "tests/test_forge_distillery_replay_identity_delta_id_v2_873.py",
+    "test_commit": "8d1637442fa7c786e01276acde39a47c6f9d7005",
+    "replay_schema": "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v2",
+    "changes": [
+      "exclude delta_id from replay-v2 identity",
+      "exclude delta_id from measured-evidence conflict identity",
+      "retain historical v1 hash for provenance",
+      "add execution_replay_identity_v2_sha256 with unique partial index",
+      "backfill v1 rows from persisted knowledge packet and metadata evidence",
+      "fail closed with REPLAY_IDENTITY_V2_MIGRATION_CONFLICT if historical v1 rows collapse to duplicate v2 identities",
+      "fail closed on unresolved legacy rows using execution coordinates without allowing delta_id as an escape hatch",
+      "derive durable packet id from replay-v2 identity"
+    ]
+  },
+  "deterministic_validation": {
+    "source_blob_local_git_hash_matches_github_blob": true,
+    "source_blob_sha1": "33eae9fcdcca03f5be6b46bacfb8390297a614bd",
+    "py_compile": "PASS",
+    "focused_local_harness": "4/4 PASS",
+    "focused_cases": [
+      "delta_id-only same-execution replay -> DUPLICATE and token stable",
+      "same replay-v2 identity plus mutated measured evidence -> REPLAY_IDENTITY_CONFLICT",
+      "v1 row with persisted packet evidence -> v2 backfill before replay decision",
+      "unresolved pre-v1 row cannot evade fail-closed fencing by changing delta_id"
+    ],
+    "boundary": "DETERMINISTIC_SOURCE_MECHANISM_VALIDATION_ONLY; local harness used a stub admission discriminator and is not repository-bound EntityOS/HCU runtime evidence"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: closes a dataset-token replay inflation path in the executable Forge-to-Distillery convergence path",
+    "track_b": "ADVANCED: strengthens reusable causal identity separation between stable execution evidence and volatile/evaluation envelope identity",
+    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE: prevents delta-id churn from inflating future J-Space/GWT training data; no model/J-Space/training credit minted"
+  },
+  "coordination": {
+    "open_overlap_search": "No open Forge/Distillery delta_id replay hardening lane found; retained HCU donor #1263 is non-overlapping.",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared reproducible immutable macrocycle/request identity was available for canonical create-only lease derivation in this organ.",
+    "unusual_interventions_executed": 0
+  },
+  "execution": {
+    "provider_or_model_call": false,
+    "paid_or_together_call": false,
+    "external_production_effect": false,
+    "github_durable_write": true
+  },
+  "credit_boundary": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Run the current repository regression suite for replay-v2 on an admitted zero-cost exact-source surface, then fuse only if current main remains nonduplicate; after fusion, require the live Forge-to-Distillery witness to test delta_id/timestamp/narration semantic replay +0, not byte-identical replay only."
+}

@@ -1,0 +1,81 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_at_final_fusion": "2b107cd5b14df037237719b501aea0696c1bae51",
+  "branch": "gpt56sol/go-871-groq-free-tier-provenance-fusion-20260824",
+  "branch_head_before_receipt": "8484615c397cf3a6a811a220287d179a4fae7668",
+  "pull_request": 1507,
+  "supersedes_pull_request": 1483,
+  "classification": "CURRENT_AUTHORITY_SOURCE_CONTROL_PLANE_GROQ_FREE_TIER_FALSE_POSITIVE_REPAIR",
+  "finding": "Supervisor 8.71 still inherited the Groq rule that a same-credential/model match to documented Free-plan rate-limit headers is sufficient FREE_ONLY economic provenance. Groq documentation says exact limits are organization-specific and may have exceptions, while Projects can set custom limits equal to or below organization ceilings. Therefore a paid Developer-tier project can present Free-like RPD/TPM values and the header equality is not unique proof of zero monetary cost.",
+  "counterhypothesis": "Matching documented Free-plan Groq rate headers uniquely proves the concrete credential/project is on the Free tier.",
+  "counterhypothesis_result": "REJECTED_AT_PRIMARY_PROVIDER_DOCUMENTATION_AND_CONTROL_PLANE_SOURCE_SCOPE",
+  "preserved_successor_controls": [
+    "PR1468 exact admission/economic-provenance snapshot binding immediately before network I/O",
+    "binding_still_current exact digest revalidation",
+    "Supervisor 8.71 NVIDIA exact admitted credential fingerprint provenance",
+    "OpenRouter explicit zero-price route restriction",
+    "Mistral fail-closed pending provider-side Free-mode binding"
+  ],
+  "delta": [
+    "Groq rate-limit matches are telemetry only and cannot authorize billing class.",
+    "Groq requires fresh exact provider-side tier=FREE evidence bound to credential fingerprint and exact allowed model set.",
+    "The binding requires evidence_ref, observed_at, valid_until, bounded evidence lifetime, account scope and exact model membership.",
+    "Canonical Groq credential_entitlements remains empty, so current autonomous Groq execution fails closed until real provider-side Free-tier evidence is bound.",
+    "The stricter Groq rule is consumed by current_lane_binding(), preserving the pre-network digest-bound authorization path."
+  ],
+  "primary_provider_sources": [
+    "https://console.groq.com/docs/billing-faqs",
+    "https://console.groq.com/docs/rate-limits",
+    "https://console.groq.com/docs/projects"
+  ],
+  "exact_git_blobs": {
+    "tools/free_lane_provenance.py": "b3cd899804f8142c5f9e280e43c851a6321ef93c",
+    "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json": "fe733d02f9e02a61d0fd20754ec2efaee7162951",
+    "tests/test_free_lane_groq_plan_provenance_870.py": "2b74a9e3f44ddb131e9aebc0ddccc14970b63b81"
+  },
+  "regression_obligations": [
+    "Free-like rate headers alone fail closed.",
+    "current_lane_binding rejects headers-only before provider model network I/O and retains authority digests.",
+    "Fresh exact provider-side Free-tier binding admits only its credential/model.",
+    "Developer-tier evidence is rejected even with Free-like headers.",
+    "Expired Free-tier evidence is rejected.",
+    "Entitlement cannot expand to an unbound model."
+  ],
+  "execution_evidence": {
+    "exact_branch_test_run_observed": false,
+    "github_status_checks_observed": 0,
+    "clay_direct_dev_exec_primitive_exposed_to_this_chat": false,
+    "vercel_sandbox_exec_primitive_exposed_to_this_chat": false,
+    "provider_network_calls_by_this_organ": 0,
+    "provider_secret_lookups_by_this_organ": 0,
+    "paid_execution_by_this_organ": false,
+    "together_used": false,
+    "scope": "SOURCE_CONTROL_PLANE_CANDIDATE_UNTIL_EXACT_EXECUTION"
+  },
+  "coordination": {
+    "old_pr_1483": "CLOSED_SUPERSEDED_TO_AVOID_REGRESSING_8_71_SUCCESSOR_CONTROLS",
+    "pr_1507_mergeable_after_successor_fusion": true,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_SHARED_REPRODUCIBLE_MACROCYCLE_ID; ZERO_NEW_UNUSUAL_EXPERIMENTS"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: successor-current FREE_ONLY Groq economic-provenance false positive closed at source/control-plane scope without weakening PR1468 or NVIDIA 8.71 controls.",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: retained #1263 and newly merged #1497 own the HCU/Typed Entry/J-Space causal implementation frontier; duplicating that lane would reduce convergence, and exact HCU execution is not exposed here.",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: this macrocycle hardened provider economics but produced no model-specific causal J-Space/GWT or local ~0.8B runtime evidence; the successor-safe J-Space assessment gate merged independently on main and remains zero-credit until exact model execution."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute PR1507 exact bytes plus current FREE-lane/NVIDIA/pre-call binding regressions on an authorized local or clay-direct-dev execution surface. If green, bind real current Groq provider-side Free-tier evidence to each exact credential/model or keep Groq idle; only then consider one exact FREE_LANE_EXECUTION_RECEIPT/v1 provider run."
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "zz-free6000-live-sample-20260824T2043p0700",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; cat /artifacts/clay-entityos-swarm/SUPERVISOR_6000.json; echo CREDENTIAL_POOL; cat /artifacts/clay-entityos-swarm/CREDENTIAL_POOL.json; echo RECENT; tail -n 8 /artifacts/clay-entityos-swarm/swarm6000.log"
+}

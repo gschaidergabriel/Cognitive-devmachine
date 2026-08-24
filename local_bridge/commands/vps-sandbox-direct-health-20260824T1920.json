@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"vps-sandbox-direct-health-20260824T1920",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":120,
+  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'set -e; uid=$(id -u claylab); echo HOST_OK; runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid podman ps --format \"{{.Names}} {{.Status}}\"; runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid podman exec clay-direct-dev bash -lc \"echo SANDBOX_OK; id; df -h /workspace /cache /artifacts; ps -eo pid,etime,args | grep -E \\\"[r]un_24h_entityos_swarm_supervisor|[r]un_research_distillery|[r]un_free_evidence_forge|[f]ree swarm/evaluate.py\\\"\"'"
+}

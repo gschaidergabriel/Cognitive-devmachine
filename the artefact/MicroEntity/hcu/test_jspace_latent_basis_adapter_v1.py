@@ -111,6 +111,33 @@ class JSpaceLatentBasisAdapterTests(unittest.TestCase):
                 holdout_split_sha256="8" * 64,
             )
 
+    def test_calibration_and_holdout_split_alias_fails_closed(self):
+        with self.assertRaisesRegex(JSpaceLatentBasisAdapterError, "CALIBRATION_HOLDOUT_SPLIT_ALIAS"):
+            build_latent_basis_adapter(
+                (("intent:a", "a" * 64, (1.0, 0.0, 0.0)),),
+                source_jspace_basis_id="global:jspace:semantic:v1",
+                source_jspace_basis_sha256="1" * 64,
+                local_basis_id="local:model:latent:v1",
+                checkpoint_sha256="2" * 64,
+                tokenizer_container_sha256="3" * 64,
+                runtime_source_commit="4" * 40,
+                runtime_build_sha256="5" * 64,
+                role="critic",
+                n_embd=3,
+                n_layer=4,
+                il_start=1,
+                il_end=2,
+                calibration_dataset_sha256="6" * 64,
+                calibration_split_sha256="7" * 64,
+                holdout_split_sha256="7" * 64,
+            )
+
+    def test_deserialized_split_alias_fails_before_digest_credit(self):
+        adapter = self.adapter()
+        forged = replace(adapter, holdout_split_sha256=adapter.calibration_split_sha256)
+        with self.assertRaisesRegex(JSpaceLatentBasisAdapterError, "CALIBRATION_HOLDOUT_SPLIT_ALIAS"):
+            validate_latent_basis_adapter(forged)
+
 
 if __name__ == "__main__":
     unittest.main()

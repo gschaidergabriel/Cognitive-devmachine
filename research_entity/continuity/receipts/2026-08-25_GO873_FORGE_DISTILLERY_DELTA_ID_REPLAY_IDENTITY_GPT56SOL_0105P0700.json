@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "base_main": "48544809f6dc4f9cea28c460313cd1ca8641de76",
+  "reentry": {
+    "main_moved_during_preparation": true,
+    "distillery_source_blob_rechecked": "316a2e63b329a2b1c7523c3a5b918349a12dd82f",
+    "distillery_source_semantics_unchanged": true,
+    "parallel_deltas": [
+      "5fbf7aa1: concurrent replay-admission research gate; orthogonal transaction-serialization requirement",
+      "48544809: machine-readable J-Space trace ABI v1 contract; complementary Track-C instrumentation"
+    ]
+  },
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_PARTIAL_FUSION_REPLAY_IDENTITY_REGRESSION",
+    "statement": "Current main contains replay-stable Forge->Distillery hardening but still includes delta_id in execution replay identity and measured evidence identity. Closed donor PR #1687 explicitly excludes delta_id because it names a candidate/evaluation envelope, not a new measured execution; its delta_id-only replay regression was not retained by the fused main test suite.",
+    "risk": "Re-emitting the same measured execution with a fresh delta_id can change replay/measured digests and may mint a second Distillery packet/token increment without new measured evidence."
+  },
+  "hypothesis": "Exclude delta_id from replay and measured-evidence identity while preserving it as envelope/packet metadata.",
+  "counterhypothesis": "delta_id is itself a causal execution identifier.",
+  "counterhypothesis_disposition": "REJECTED_AT_CURRENT_CONTRACT_LEVEL: execution provenance is separately bound by worker/source/evaluation heads, targets, execution admission, provider/model/role and metric; donor semantics classify delta_id as candidate/evaluation envelope identity.",
+  "delta": {
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_delta_id_replay_874.py",
+    "changes": [
+      "remove delta_id from CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1",
+      "remove delta_id from CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1",
+      "retain delta_id in measured packet/envelope metadata",
+      "add direct identity and end-to-end token-stability regression for delta_id-only rekey"
+    ]
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_SCOPE: closes candidate-envelope replay inflation hole in Forge->Distillery admission",
+    "track_b": "ADVANCED: separates envelope identity from measured causal execution identity as a reusable Typed Entry/HCU invariant",
+    "track_c": "ADVANCED_DATASET_SAFETY_SCOPE: protects J-Space/GWT trace dataset accounting from envelope-only relabeling; complements current J-Space trace ABI v1 work"
+  },
+  "coordination": {
+    "open_duplicate_lane_found": false,
+    "retained_hcu_donor": "#1263",
+    "donor_replay_semantics": "closed unmerged #1687",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "runtime_observation": {
+    "existing_forge_distillery_run": 32742535392,
+    "state": "QUEUED",
+    "terminal_result_observed": false,
+    "scope_note": "older probe head; cannot establish this source delta"
+  },
+  "evidence_scope": "SOURCE_PLUS_REGRESSION_DEFINITION_ONLY_UNTIL_EXACT_SOURCE_EXECUTION",
+  "provider_runtime_credit": 0,
+  "entityos_hcu_whole_runtime_credit": 0,
+  "hcu_full_runtime_credit": 0,
+  "jspace_model_runtime_credit": 0,
+  "training_credit": 0,
+  "whole_product_pass": false,
+  "next_exact_gate": "Execute delta_id replay regression + existing replay suite on admitted exact-source zero-cost execution, then fuse with the concurrent transaction-serialization gate and require live 1 ACCEPT -> 1 packet -> tokens > 0 -> timestamp/narration/delta_id replay +0."
+}

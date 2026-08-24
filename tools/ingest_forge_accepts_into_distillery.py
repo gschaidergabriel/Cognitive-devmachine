@@ -10,9 +10,10 @@ command admission and secret fences as current Forge evidence credit.
 Only measured fields enter packet_text. Model-authored hypothesis/falsifier remain
 candidate-only metadata. Distillery idempotence is bound to a replay-stable execution
 evidence identity rather than the byte digest of the full evaluation envelope, so a
-changed observation timestamp or candidate narration cannot mint a second dataset
-packet. If the same execution identity reappears with conflicting measured evidence,
-admission fails closed instead of treating the mutation as a new observation.
+changed observation timestamp, candidate narration, or candidate ``delta_id`` cannot
+mint a second dataset packet. If the same execution identity reappears with conflicting
+measured evidence, admission fails closed instead of treating the mutation as a new
+observation.
 
 Legacy ingest rows predate the replay-identity columns. They cannot be safely backfilled
 from the reduced legacy table, so a new evaluation colliding on the available legacy
@@ -92,16 +93,17 @@ def measured_packet(row: dict) -> dict:
 
 
 def execution_replay_identity(row: dict) -> dict:
-    """Bind one replay-stable Forge execution/evaluation family.
+    """Bind one replay-stable measured Forge execution/evaluation family.
 
-    Volatile observation time and model-authored narration are intentionally excluded.
-    The identity keeps source/candidate/provenance, target bytes, admitted execution
-    surface and the metric definition, so a timestamp-only replay cannot become a new
-    Distillery event while a genuinely different source/model/metric remains distinct.
+    Volatile observation time, model-authored narration, and ``delta_id`` are
+    intentionally excluded. ``delta_id`` names a candidate/evaluation envelope; it is
+    not proof of a new measured execution. The identity keeps source/provenance,
+    target bytes, admitted execution surface and metric definition, so envelope-only
+    replay cannot become a new Distillery event while a genuinely different measured
+    execution remains distinct.
     """
     return {
         "schema": "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1",
-        "delta_id": str(row.get("delta_id") or ""),
         "source_class": str(row.get("source_class") or ""),
         "provider": str(row.get("provider") or ""),
         "model": str(row.get("model") or ""),
@@ -119,12 +121,13 @@ def execution_replay_identity(row: dict) -> dict:
 def measured_evidence_identity(row: dict) -> dict:
     """Return immutable measured evidence for conflict detection.
 
-    ``evaluated_at`` is observation metadata, not evidence. Candidate hypothesis and
-    falsifier are not part of ``measured_packet`` and therefore cannot change this
-    digest either.
+    ``evaluated_at`` is observation metadata. ``delta_id`` and candidate narration are
+envelope/candidate metadata rather than measured evidence, so none of them may turn a
+semantic replay into a new measurement identity.
     """
     packet = measured_packet(row)
     packet.pop("evaluated_at", None)
+    packet.pop("delta_id", None)
     return {
         "schema": "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1",
         "packet": packet,

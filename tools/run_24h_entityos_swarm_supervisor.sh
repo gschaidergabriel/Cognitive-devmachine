@@ -10,6 +10,8 @@ START="$(date +%s)"
 DEADLINE="${CLAY_SWARM_DEADLINE_EPOCH:-$((START + 24*3600))}"
 ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
 SWARM_ADMISSION_BINDING_FILE="$STATE_DIR/swarm-admission-binding.sha256"
+FORGE_ENTRYPOINT="$ROOT/tools/run_free_evidence_forge_safe_871.py"
+[[ -f "$FORGE_ENTRYPOINT" ]] || FORGE_ENTRYPOINT="$ROOT/tools/run_free_evidence_forge.py"
 
 provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
 
@@ -121,9 +123,30 @@ start_distillery(){
     nohup python3 "$x" --hours 24 --sleep-seconds 3 >"$STATE_DIR/distillery.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/distillery.pid"; }
 }
 
+stop_legacy_forge_for_safe_entrypoint(){
+  [[ "$FORGE_ENTRYPOINT" == *run_free_evidence_forge_safe_871.py ]] || return 0
+  local pid child i
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] || continue
+    while IFS= read -r child; do [[ -n "$child" ]] && kill -TERM "$child" 2>/dev/null || true; done < <(pgrep -P "$pid" || true)
+    kill -TERM "$pid" 2>/dev/null || true
+    for i in 1 2 3 4 5 6 7 8 9 10; do
+      kill -0 "$pid" 2>/dev/null || break
+      sleep 0.2
+    done
+    if kill -0 "$pid" 2>/dev/null; then
+      while IFS= read -r child; do [[ -n "$child" ]] && kill -KILL "$child" 2>/dev/null || true; done < <(pgrep -P "$pid" || true)
+      kill -KILL "$pid" 2>/dev/null || true
+    fi
+  done < <(pgrep -f '[r]un_free_evidence_forge\.py' || true)
+}
+
 start_forge(){
-  local x="$ROOT/tools/run_free_evidence_forge.py"; [[ -f "$x" ]] || return 0
-  pgrep -f '[r]un_free_evidence_forge.py' >/dev/null 2>&1 || {
+  local x="$FORGE_ENTRYPOINT"; [[ -f "$x" ]] || return 0
+  if [[ "$x" == *run_free_evidence_forge_safe_871.py ]]; then
+    stop_legacy_forge_for_safe_entrypoint
+  fi
+  pgrep -f '[r]un_free_evidence_forge(_safe_871)?\.py' >/dev/null 2>&1 || {
     nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/forge.pid"; }
 }
 
@@ -199,7 +222,7 @@ def local_health():
  try:
   with urllib.request.urlopen('http://127.0.0.1:8088/health',timeout=1.2) as r:return 200<=int(r.status)<300
  except Exception:return False
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running(r'run_free_evidence_forge(_safe_871)?\.py'),'forge_safe_entrypoint':os.path.basename('$FORGE_ENTRYPOINT')=='run_free_evidence_forge_safe_871.py','dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; FORGE_MODEL_COMMANDS_REQUIRE_SAFE_871_ISOLATED_EXECUTION_ADMISSION; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30

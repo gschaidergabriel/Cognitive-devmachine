@@ -8,7 +8,7 @@
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_70.json",
   "persistent_research_entity": "Clay",
   "temporary_worker_role": "ORGAN_NOT_ENTITY",
   "canonical_state_authority": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB_CANONICAL_STATE_EVIDENCE_SUBSTRATE",
@@ -45,7 +45,7 @@
   "execution_policy": {
     "free_only_default": true,
     "active_supervisor_free_only": true,
-    "active_supervisor_epoch": "8.68",
+    "active_supervisor_epoch": "8.70",
     "authorized_zero_cost_local_normal_user_execution": true,
     "authorized_clay_direct_dev_vps_sandbox_execution": true,
     "dual_machine_coordination_allowed_when_useful": true,
@@ -53,11 +53,13 @@
     "unrelated_vps_host_changes_allowed": false,
     "new_external_production_effects_separately_gated": true,
     "external_provider_admission_file": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
-    "external_provider_admission_rule": "ADMITTED_TRUE_AND_COST_CLASS_FREE_REQUIRED_BEFORE_PROVIDER_SECRET_LOOKUP_OR_PROVIDER_NETWORK_IO",
-    "external_llm_provider_execution": "QUARANTINED_UNTIL_FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT_V1_EXACT_SOURCE_PASS",
-    "historical_unadmitted_provider_execution_credit": 0,
+    "external_provider_admission_rule": "OWNER_AUTHORIZED_PROVIDER_CONTINGENT_PLUS_TYPED_ADMISSION_PLUS_CREDENTIAL_FINGERPRINT_PLUS_EXACT_ROUTE_PLUS_PROVIDER_SIDE_ZERO_COST_PROVENANCE_REQUIRED_AT_SHARED_PRECALL_BOUNDARY",
+    "external_llm_provider_execution": "OWNER_AUTHORIZED_FREE_CONTINGENTS_ONLY_WITH_FREE_LANE_EXECUTION_RECEIPT_V1_AND_PER_LANE_ZERO_COST_PROVENANCE",
+    "provider_level_free_is_runtime_cost_proof": false,
+    "historical_unadmitted_or_prebinding_provider_execution_credit": 0,
     "provider_environment_attestation_is_authority": false,
-    "unknown_or_unlisted_provider": "FAIL_CLOSED_BEFORE_SECRET_OR_NETWORK",
+    "unknown_or_unlisted_or_unbound_route": "FAIL_CLOSED_BEFORE_SECRET_OR_PROVIDER_NETWORK",
+    "free_lane_execution_receipt": "FREE_LANE_EXECUTION_RECEIPT/v1",
     "vercel_hobby_bounded_included_tier_fixed_capsules": true,
     "remaining_vercel_sandbox_quota_assumed": false,
     "remaining_vercel_sandbox_quota_directly_observed": false,
@@ -68,6 +70,7 @@
     "together_general_inference_and_fallback_forbidden": true,
     "current_supervisor_together_training": "FORBIDDEN_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION",
     "paid_or_unknown_provider_admission_boundary": "FAIL_CLOSED_BEFORE_CREDENTIAL_KEY_LOOKUP_PREFLIGHT_NETWORK_IO_OR_JOB_CREATION",
+    "paid_upgrade_or_credit_purchase": false,
     "other_paid_fallback": false,
     "future_paid_training": "REQUIRES_A_FUTURE_AUTHORITY_MODE_THAT_EXPLICITLY_ADMITS_PAID_EXECUTION; CURRENT_FREE_ONLY_ORGAN_MUST_NOT_SPEND",
     "go_macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
@@ -129,13 +132,13 @@
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
   },
   "coordination_authority": {
-    "supervisor": "8.68",
+    "supervisor": "8.70",
     "atomic_lease_required_before_unusual_intervention": true,
     "no_reproducible_trigger_identity": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "no_id_receipts": "LEGACY_MACROCYCLE_ID_UNRESOLVED_NO_POST_HOC_GROUPING",
     "ordinary_regression_source_review_authority_fusion_and_exact_source_acceptance": "ALLOWED",
     "source_guard_proliferation": "PAUSED_UNLESS_NEW_EXECUTABLE_COUNTEREVIDENCE_REQUIRES_A_GUARD",
-    "retained_lane_identity_rule": "REPOSITORY_QUALIFIED_PR_IDENTITY_REQUIRED_FOR_DONOR_AND_EXECUTOR_SELECTION"
+    "retained_lane_identity_rule": "REPOSITORY_QUALIFIED_SUCCESSOR_DYNAMIC_PR_IDENTITY_REQUIRED_FOR_DONOR_AND_EXECUTOR_SELECTION"
   },
   "compatibility_names": {
     "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
@@ -150,17 +153,15 @@
     "policy": "prior ClayVerse-specific container/web/Clerk/Claude/MicroClay fields and acceptance gates remain available through Git provenance as donor evidence only; none are current EntityOS acceptance obligations unless explicitly re-admitted under current authority"
   },
   "current_frontier": [
-    "keep all current-facing authority surfaces aligned to EntityOS + HCU + SUPERVISOR_STEERING_8_68 FREE_ONLY plus atomic unusual-experiment lease law and repository-qualified retained-lane identities",
-    "preserve historical successful Groq/NVIDIA/OpenRouter traffic as append-only unadmitted execution evidence with zero provider runtime credit; monetary spend remains unproven",
-    "keep all current external LLM-provider worker/catalog/chat/synthesis/reviewer traffic quarantined until exact-source FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 PASS",
-    "canonical FREE provider admission covers Groq, Mistral, NVIDIA and OpenRouter; all remain UNKNOWN/not-admitted until direct pre-call FREE evidence exists",
-    "caller-supplied provider admission dictionaries cannot self-grant FREE authority after source hardening at 961a2fc10b0ecdb0a7285f280a78443129c4c196 with dedicated regression source at e3fbeafa95d449e2d42b2af3c425cc5701888403; no runtime credit is implied",
-    "execute the current provider-admission boundary tests on an exposed authorized zero-cost local normal-user or clay-direct-dev surface with secret/socket tripwires and exact source/environment/result identities",
-    "keep gschaidergabriel/clay-global-research-entity#1263 as the single HCU donor lane and gschaidergabriel/Dr.-Unterweger#810 as the single bounded execution-controller lane",
+    "keep all current-facing authority mirrors aligned to SUPERVISOR_STEERING_8_70 and the active owner free-contingent directive while preserving deterministic state/effect authority",
+    "provider-level FREE is not runtime cost proof; each autonomous provider call requires concrete credential fingerprint, exact route/model and provider-side zero-cost/free-entitlement provenance at the shared pre-call boundary",
+    "main includes the route/credential pre-call TOCTOU repair but provider runtime credit remains zero until exact FREE_LANE_EXECUTION_RECEIPT/v1 evidence exists",
+    "Mistral concrete provider calls fail closed until Free-mode/PAYG-disabled evidence is bound; OpenRouter is restricted to explicit zero-price free routes; Groq/NVIDIA require their declared free-plan/entitlement evidence",
+    "keep gschaidergabriel/clay-global-research-entity#1263 as the single successor-dynamic HCU donor lane and gschaidergabriel/Dr.-Unterweger#810 as the single successor-dynamic bounded execution-controller lane; refresh each live head before use",
     "execute live donor InferenceReceipt/v4 rejection-boundary tests before any executor rebind; no source/runtime credit transfers automatically across heads",
-    "after exact component PASS continue the retained causal chain through Typed Entry -> route -> verified engine/load -> GRID10 -> real local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT -> TrainingTrace -> admitted causal dataset",
-    "continue JSPACE_VECTOR_CONTROL_ABI/v1, deterministic hard negatives, leak-resistant family-level splits and zero-cost local approximately-0.8B readiness while provider traffic is quarantined",
+    "continue the retained causal chain through Typed Entry -> route -> verified engine/load -> GRID10 -> real local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT -> TrainingTrace -> admitted causal dataset",
+    "continue JSPACE_VECTOR_CONTROL_ABI/v1, deterministic hard negatives, leak-resistant family-level splits and zero-cost local approximately-0.8B readiness",
     "do not run a new unusual experiment without a successful canonical atomic lease",
-    "keep whole EntityOS/HCU, full-HCU, J-Space-model and training credit at zero until corresponding exact admitted execution evidence exists"
+    "keep provider runtime, whole EntityOS/HCU, full-HCU, J-Space-model and training credit at zero until corresponding exact admitted execution evidence exists"
   ]
 }

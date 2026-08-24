@@ -1,31 +1,59 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-24T12:28:21.725156+00:00",
+  "generated_at": "2026-08-24T12:43:26.804777+00:00",
   "runtime": {
-    "supervisor": "RUNNING",
-    "go_swarm": "STOPPED/QUARANTINED",
+    "supervisor": "STOPPED/QUARANTINED",
+    "go_swarm": "RUNNING",
     "distillery": "RUNNING",
     "evidence_forge": "RUNNING",
     "dashboard": "RUNNING",
     "local_model": "NOT_READY",
     "provider_admission": {
       "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
-      "ok": false,
-      "admitted_free_providers": [],
-      "status": "PROVIDER_ADMISSION_AUTHORITY_EPOCH_MISMATCH"
+      "ok": true,
+      "authority_epoch": "8.69",
+      "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_69.json",
+      "admitted_free_providers": [
+        "groq",
+        "mistral",
+        "nvidia",
+        "openrouter"
+      ],
+      "providers": {
+        "groq": {
+          "admitted": true,
+          "cost_class": "FREE",
+          "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+        },
+        "mistral": {
+          "admitted": true,
+          "cost_class": "FREE",
+          "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+        },
+        "nvidia": {
+          "admitted": true,
+          "cost_class": "FREE",
+          "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+        },
+        "openrouter": {
+          "admitted": true,
+          "cost_class": "FREE",
+          "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
+        }
+      }
     },
     "policy": "EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE"
   },
   "conversion": {
-    "successful": 414,
-    "delta": 0,
+    "successful": 422,
+    "delta": 1,
     "ready": 0,
-    "questions": 57,
+    "questions": 58,
     "macrocycles": 31,
-    "delta_rate": 0.0,
+    "delta_rate": 0.002369668246445498,
     "ready_rate": 0.0,
-    "question_rate": 0.13768115942028986,
-    "avg_cycle_delta_rate": 0.0,
+    "question_rate": 0.13744075829383887,
+    "avg_cycle_delta_rate": 0.0015360983102918587,
     "avg_cycle_ready_rate": 0.0
   },
   "go_feedback": {
@@ -37,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-24T12:28:18.726203+00:00",
+    "generated_at": "2026-08-24T12:43:25.473715+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -46,7 +74,7 @@
     "accepted_packets": 0,
     "rejected_candidates": 0,
     "questions": {
-      "CYCLIC": 132,
+      "CYCLIC": 135,
       "OPEN": 21
     },
     "source_metadata_rows": {
@@ -58,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-24T12:28:18.726836+00:00",
+      "generated_at": "2026-08-24T12:43:25.474383+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -112,13 +140,13 @@
           "max_inflight": 12,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 0.0,
-          "total_requests": 66,
-          "total_success": 44,
-          "total_429": 22,
+          "cooldown_seconds": 2580.9794709682465,
+          "total_requests": 75,
+          "total_success": 49,
+          "total_429": 26,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-24T11:15:47.924569+00:00"
+          "last_observed_at": "2026-08-24T12:42:52.453928+00:00"
         },
         "huggingface_hub": {
           "max_inflight": 4,
@@ -134,15 +162,15 @@
         },
         "nvidia": {
           "max_inflight": 12,
-          "active_leases": 0,
+          "active_leases": 2,
           "min_interval_s": 0.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 186,
-          "total_success": 117,
+          "total_requests": 194,
+          "total_success": 122,
           "total_429": 0,
-          "total_errors": 69,
-          "last_status": "GATE_TIMEOUT",
-          "last_observed_at": "2026-08-24T11:27:15.727400+00:00"
+          "total_errors": 70,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T12:43:24.088281+00:00"
         },
         "openalex": {
           "max_inflight": 2,
@@ -196,23 +224,25 @@
     },
     "db_bytes": 229376,
     "top_questions": [
-      "Wie kann die Unsicherheit im System reduziert werden?",
-      "Wie kann die Wirksamkeit des Tests verbessert werden, um die Ergebnisse zu bestätigen?",
-      "Wie kann die Sicherheit von EAP effektiv gewährleistet werden?",
-      "Welche externen Lösungen für effiziente, sichere Provider-Admission existieren?",
-      "Wie kann die Typsicherheit in der Entry Fabric weiter verbessert werden?",
-      "How can we balance security and development speed in the context of the FREE_ONLY law?",
-      "What are the potential consequences of not following the FREE_ONLY law?",
-      "How can we improve the security of the repository and supervisor inbox?",
-      "Wie kann die kanonische Lease für das go‑Makrocycle eindeutig identifiziert und sicherstellt werden, ohne dass vorherige Provider‑Zulassung impliziert wird?",
-      "Welche konkreten Log‑Indikatoren (secret_lookup, network_attempt) belegen, dass vor der FREE‑Provider‑Zulassung kein Zugriff auf geheime Ressourcen erfolgte?"
+      "Inwiefern lässt sich die aktuelle Implementierung des HCU‑Typed‑Entry‑Fabric‑Koordinationsmechanismus von der Provider‑Admission‑Logik unabhängig machen, um die FREE_ONLY‑Regeln zuverlässig durchzusetzen?",
+      "Wie wirkt sich die Implementierung von JIT-Compilierung auf die Gesamtsystemleistung aus?",
+      "Gibt es offene Quellen- oder Forschungsprojekte, die ähnliche Optimierungsansätze für VM-Memory-Management verfolgen?",
+      "Welche Auswirkungen können die vorgeschlagenen Änderungen auf die Sicherheit von EntityOS/HCU haben?",
+      "How can the system prove zero secret lookups and zero network attempts for missing/malformed/unknown/paid/subscription/authority mismatch and unlisted providers?",
+      "What are the implications of the control breach on the system's security and reliability?",
+      "How can the system ensure that the external provider traffic is properly admitted and executed?",
+      "Wie kann die Typed‑Free‑Admission für OpenRouter (und andere externe LLM‑Provider) im HCU‑Framework implementiert werden, ohne die aktuelle Quarantäne zu verletzen?",
+      "Welcher minimalen Beweis‑Mechanismus garantiert, dass bei der Ausführung von FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 keine impliziten Netzwerk‑ oder Geheim‑Lookup‑Calls entstehen?",
+      "Welche komprimierten Gegenbeweise (z. B. protokollierte Request‑IDs) können die Verletzung der FREE‑Swarm‑Zulassung nachweislich ausschließen?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-24T12:28:10.399787+00:00",
-    "candidate_states": {},
+    "generated_at": "2026-08-24T12:43:15.096039+00:00",
+    "candidate_states": {
+      "NEW": 1
+    },
     "discovery_sources": {
       "crossref": 700,
       "openalex": 5
@@ -227,7 +257,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-24T12:28:10.400286+00:00",
+      "generated_at": "2026-08-24T12:43:15.096512+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -281,13 +311,13 @@
           "max_inflight": 12,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 0.0,
-          "total_requests": 66,
-          "total_success": 44,
-          "total_429": 22,
+          "cooldown_seconds": 2591.357349872589,
+          "total_requests": 75,
+          "total_success": 49,
+          "total_429": 26,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-24T11:15:47.924569+00:00"
+          "last_observed_at": "2026-08-24T12:42:52.453928+00:00"
         },
         "huggingface_hub": {
           "max_inflight": 4,
@@ -306,12 +336,12 @@
           "active_leases": 0,
           "min_interval_s": 0.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 186,
-          "total_success": 117,
+          "total_requests": 191,
+          "total_success": 121,
           "total_429": 0,
-          "total_errors": 69,
+          "total_errors": 70,
           "last_status": "GATE_TIMEOUT",
-          "last_observed_at": "2026-08-24T11:27:15.727400+00:00"
+          "last_observed_at": "2026-08-24T12:43:10.295240+00:00"
         },
         "openalex": {
           "max_inflight": 2,
@@ -367,11 +397,11 @@
   },
   "costs": {
     "price_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output",
-    "free_swarm_sonnet5_equivalent_usd": 11.03895,
+    "free_swarm_sonnet5_equivalent_usd": 11.218475999999999,
     "distillery_sonnet5_equivalent_usd": 0.015470000000000001,
-    "measured_total_sonnet5_equivalent_usd": 11.05442,
+    "measured_total_sonnet5_equivalent_usd": 11.233946,
     "verified_historical_savings_usd": null,
-    "nominal_avoided_if_zero_cost_usd": 11.05442,
-    "repo_output_only_proxy_usd": 118.08733
+    "nominal_avoided_if_zero_cost_usd": 11.233946,
+    "repo_output_only_proxy_usd": 118.14713
   }
 }

@@ -152,23 +152,49 @@ Reject this backend selection for the first experiment if any of these is observ
 
 If direct NNsight/PyTorch fails only on memory/throughput rather than intervention semantics, then evaluate the local `nnsight` vLLM runtime as the next candidate instead of weakening the causal gate.
 
+## Existing exact-target donor: Qwen3.5-0.8B + `jlens`
+
+Current repository donor code already contains an offline-first exact-target gate at:
+
+`the artefact/blogpost_entity/mini_cognition/check_qwen35_jlens_admission.py`
+
+It targets `Qwen/Qwen3.5-0.8B`, validates the text configuration/layout, can record weighted forward activations across the residual stack through `jlens.ActivationRecorder`, and has a bounded `jacobian_for_prompt` phase. This is valuable and should be reused rather than replaced.
+
+Capability classification from source inspection only:
+
+- layout phase -> `SOURCE_LAYOUT_COMPATIBILITY_CANDIDATE`;
+- weighted forward hooks -> candidate precursor to `JSPACE_OBSERVATION_CAPABLE` after exact runtime/model/tokenizer/load identities are bound;
+- bounded Jacobian -> `JSPACE_LOCAL_SENSITIVITY_MEASUREMENT_CANDIDATE`;
+- target/sham activation manipulation -> **NOT PRESENT IN THE CURRENT DONOR SCRIPT**;
+- `JSPACE_INTERVENTION_CAPABLE` -> **NOT ESTABLISHED**.
+
+Therefore the preferred fusion is:
+
+1. keep the existing Qwen3.5-0.8B `jlens` lane for exact-target layout/forward/Jacobian observation and sensitivity evidence;
+2. add NNsight on the same exact local PyTorch model/checkpoint for target/sham activation manipulation;
+3. bind both measurements to one canonical event/admission/route/model-execution/InferenceReceipt identity family where feasible;
+4. use Qwen3-0.6B or another smaller model only as a mechanism-debug fallback if exact Qwen3.5-0.8B resource/compatibility constraints block the first instrumented run; smaller-model success must not be promoted into exact 0.8B model credit.
+
+The official Qwen3.5-0.8B Transformers checkpoint is an exact-size target candidate, but NNsight compatibility with that concrete multimodal/composite architecture remains `UNKNOWN` until locally executed. Do not infer it from generic PyTorch support alone.
+
 ## Next exact discriminator
 
 On an exposed authorized zero-cost local normal-user or `clay-direct-dev` execution surface:
 
 1. re-enter exact current main and authority;
-2. choose the smallest already-available HuggingFace/PyTorch model compatible with the intended Qwen/J-Space path;
-3. install/use NNsight only inside the authorized local/sandbox environment;
-4. run a deterministic observation-only trace at one named residual-stream/equivalent activation site;
-5. if that succeeds, execute the five-run clean/corrupted/target/sham/off-target family;
-6. emit the bounded exact-identity receipt and re-enter main before any promotion.
+2. prefer exact `Qwen/Qwen3.5-0.8B` when its local checkpoint is already present or can be obtained through an authorized zero-monetary-cost path;
+3. execute/reuse the offline-first `jlens` layout -> forward gates to establish exact-target structural/activation observation evidence without claiming intervention credit;
+4. install/use NNsight only inside the authorized local/sandbox environment and attempt an observation-only trace on the same exact loaded model;
+5. bind the first named residual-stream/equivalent activation site to exact input/token/output and runtime identities;
+6. if that succeeds, execute the five-run clean/corrupted/target/sham/off-target family;
+7. emit the bounded exact-identity receipt and re-enter main before any promotion.
 
 This discriminator is ordinary deterministic research/acceptance work. A genuinely novel/unusual intervention remains subject to the canonical `go` atomic lease protocol.
 
 ## Track effect
 
-- Track A — `ENTITYOS_EXECUTABLE_CONVERGENCE`: advanced by separating the stable local inference service from the higher-risk instrumentable causal research backend rather than overloading one runtime with incompatible evidence semantics.
+- Track A — `ENTITYOS_EXECUTABLE_CONVERGENCE`: advanced by separating the stable local inference service from the higher-risk instrumentable causal research backend rather than overloading one runtime with incompatible evidence semantics, while reusing the exact-target Qwen3.5 `jlens` donor instead of inventing a parallel observation lane.
 - Track B — `HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT`: advanced at HCU interface-contract level through explicit backend capability classes and exact causal identity/receipt requirements.
-- Track C — `GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS`: advanced at source/research-contract level by selecting the cheapest executable intervention mechanism and defining its falsifiers and five-run acceptance family.
+- Track C — `GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS`: advanced at source/research-contract level by fusing the existing Qwen3.5-0.8B Jacobian/activation-observation donor with NNsight as the missing manipulation backend and defining falsifiers plus the five-run acceptance family.
 
 Runtime credits remain zero until exact admitted execution evidence exists.

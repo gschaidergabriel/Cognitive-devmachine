@@ -1,0 +1,65 @@
+{
+  "schema": "ENTITYOS_HCU_GO_SOURCE_REVIEW_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "observed_main_before_write": "a2c3b87a286b02ebf5af68a68db88ee5b0ab1bc2",
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "3373a1209d6d600f96124b40437f46af15debe1a",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "2da99e0458809988190c129b04cae913d1f15d92"
+  },
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "SOURCE_REVIEW_AND_DEDUPLICATION_ONLY"
+  },
+  "runtime_reentry": {
+    "current_supervisor": "SUPERVISOR_STEERING_8_65",
+    "remaining_included_sandbox_quota_directly_observed": false,
+    "sandbox_execution_admitted": false,
+    "sandbox_create_performed": false,
+    "provider_credential_preflight_performed": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "current_runtime_blocker": "AUTHENTICATED_READ_ONLY_VERCEL_TEAM_USAGE_ALLOTMENT_SIGNAL_UNAVAILABLE_ON_CONNECTED_SURFACE",
+    "duplicate_runtime_blocker_write_avoided": true
+  },
+  "source_review": {
+    "dataset_gate": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "dataset_gate_observation": "_verify_grid_plan_binding accepts an external admitted_grid_plans mapping keyed by grid_plan_sha256 and validates a six-field normalized receipt carrying schema, plan_sha256, generation, Entry event/admission and route decision identity; it does not reconstruct or validate the scheduler-owned full GridPlan preimage.",
+    "scheduler": "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py",
+    "scheduler_observation": "GridPlan.plan_sha256 is defined by the scheduler as SHA-256 over RFC8785/JCS canonicalized full scheduler-owned GridPlan material, and validate_grid_plan_identity is the existing sole producer-side validation authority.",
+    "test": "the artefact/MicroEntity/hcu/test_jspace_dataset_admission_gate_v1.py",
+    "test_observation": "The positive DatasetAdmission fixture still uses an arbitrary repeated-hex h('4') as grid_plan_sha256 plus a synthetic six-field plan receipt rather than a scheduler-produced GridPlan preimage.",
+    "live_head_revalidation": "The donor advanced from 2a0eec9232d050f61edfcf667b2c629ef006add9 to 3373a1209d6d600f96124b40437f46af15debe1a only by adding a Vercel Usage receipt; the reviewed HCU source was unchanged across that step.",
+    "candidate_failure_class": "GRID_PLAN_REGISTRY_CONTENT_KEY_LAUNDERING_POTENTIAL",
+    "hypothesis": "If downstream DatasetAdmission treats grid_plan_sha256 as cryptographic scheduler ancestry, accepting only a caller-owned normalized receipt permits a syntactically self-consistent registry key to stand in for an unproven scheduler GridPlan preimage.",
+    "counterhypothesis": "admitted_grid_plans may intentionally be a separately trusted deterministic control-plane receipt registry whose membership is sufficient authority, making full scheduler-preimage validation redundant at DatasetAdmission.",
+    "adjudication": "OPEN_SOURCE_REVIEW_CANDIDATE_ONLY. The producer semantics make the stronger preimage-binding interpretation plausible, but supervisor 8.65 explicitly pauses source-guard proliferation unless executable counterevidence requires a guard. No source mutation, schema promotion or runtime credit is justified in this macrocycle.",
+    "recommended_future_discriminator": "After the runtime-first Sandbox gate opens or equivalent exact executable evidence becomes available, execute one exact-source negative control that supplies a registry-admitted synthetic six-field plan receipt whose claimed plan_sha256 has no valid scheduler GridPlan preimage. If DatasetAdmission accepts it in the integrated causal path and that digest is promoted as scheduler ancestry, then rebind the existing admission boundary to the scheduler-owned validate_grid_plan_identity authority rather than adding a second hash authority."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_REENTRY_AND_DEDUPLICATION: current main and exact retained executor/deployment blocker were re-verified; the already-fused 8.65 Vercel Usage access-gap finding was not duplicated, and Sandbox.create remained fail-closed.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: a new GRID10 causal-ancestry preimage candidate was source-reviewed and recorded, but supervisor 8.65 pauses source-guard proliferation until executable counterevidence warrants a guard.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: the candidate affects potential training ancestry quality, but no dataset/schema/model promotion is allowed from source review alone; model-specific J-Space execution remains downstream of the closed FREE_ONLY Sandbox gate."
+  },
+  "credits_after": {
+    "function_runtime_diagnostic_no_sandbox_scope": "PASS_PREEXISTING_EXACT_HEAD_HTTP_200",
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Obtain an authenticated read-only Vercel team Usage/allotment value. Only if it directly proves sufficient included Sandbox capacity without charge/upgrade may the retained PR810 exact-head fixed Python/sqlite3/_sqlite3 environment probe execute. Preserve the GRID10 preimage finding as a deferred source-review candidate until executable counterevidence can discriminate it.",
+  "acceptance": "IN_PROGRESS"
+}

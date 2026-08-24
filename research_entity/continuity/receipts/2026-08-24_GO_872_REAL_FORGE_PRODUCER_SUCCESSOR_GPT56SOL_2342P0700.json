@@ -1,0 +1,70 @@
+{
+  "schema": "CLAY_GO_872_THREE_TRACK_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_reentered_before_successor": "60f90b0385cb35bbf4b2c29ce2bf50fd5738429c",
+  "mode": "FREE_ONLY",
+  "material_finding": {
+    "class": "PROMOTION_CRITICAL_PRODUCER_PROVENANCE_GAP",
+    "observed": "The v2 exact-current Forge-to-Distillery witness synthesizes its positive Forge evaluation/admission envelope instead of observing run_free_evidence_forge_safe_871 produce it. Main subsequently added live promotion of the nested gate evaluation into the canonical Distillery SQLite database, making producer origin promotion-critical.",
+    "counterhypothesis": "A structurally evidence-qualified nested evaluation is enough because promotion re-runs evidence_reason().",
+    "counterevidence": "evidence_reason() validates packet structure, identities, command/backend fences and counts but does not authenticate that the real Safe-Forge producer emitted the evaluation. The v2 witness itself supplies those fields.",
+    "decision": "Fail closed: live promotion must require a v3 witness that executed the exact current Safe-Forge producer path and observed its ACCEPT."
+  },
+  "delta": {
+    "branch": "gpt56sol/go872-real-forge-producer-successor-20260824-2342",
+    "producer_helper": "tools/run_go872_forge_single_candidate.py",
+    "runtime_gate": "tools/run_go871_forge_distillery_runtime_gate.py",
+    "live_promotion": "tools/promote_forge_distillery_runtime_gate.py",
+    "promotion_guard": "tests/test_forge_distillery_promotion_872.py",
+    "candidate_check": "tests/forge_runtime_witness_check_872.py",
+    "candidate_fixture": "tests/fixtures/forge_runtime_witness_872.txt",
+    "artifact_readme": "the artefact/README.md",
+    "new_gate_schema": "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v3",
+    "new_gate_pass": "PASS_REAL_FORGE_1_TO_1_TO_NONZERO_REPLAY_ZERO",
+    "new_live_promotion_schema": "CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v2"
+  },
+  "acceptance_contract": [
+    "exact source commit/tree/material blob identity",
+    "bubblewrap network/secret isolation",
+    "current admission-regression pass and nominal-only ablation fail",
+    "deterministic exact-source candidate evaluated by run_free_evidence_forge_safe_871.validate_candidate",
+    "real Safe-Forge producer status accepted",
+    "evidence_reason returns EVIDENCE_QUALIFIED_ACCEPT on that producer result",
+    "nominal copy without execution_admission rejected",
+    "first disposable Distillery admission exactly one packet with accepted_dataset_tokens > 0",
+    "identical disposable replay adds zero packets/tokens and reports one duplicate",
+    "live promotion rejects legacy v2/synthetic PASS shapes and requires real-producer origin markers",
+    "live promotion is idempotent by evaluation digest"
+  ],
+  "go_tracks": {
+    "track_a": "ADVANCED: executable Forge->Distillery live-promotion boundary now requires real Safe-Forge producer origin before dataset token mutation.",
+    "track_b": "ADVANCED: provenance/typed-admission semantics are tightened so a self-consistent packet cannot substitute for observed producer lineage at a durable dataset boundary.",
+    "track_c": "TRAINING_READINESS_ADVANCED_WITHOUT_EXPERIMENT: future training evidence cannot inherit Forge execution credit from a synthetic gate packet; no model/J-Space intervention or training was run."
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_identity_exposed": false,
+    "visible_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "evidence": {
+    "source_inspection": true,
+    "durable_source_write": true,
+    "runtime_for_successor_observed": false,
+    "syntax_or_unit_execution_observed_by_this_organ": false,
+    "reason_runtime_unobserved": "No exposed local/VPS shell execution action was available to this organ; GitHub self-hosted execution is asynchronous/queued and source presence is not runtime evidence.",
+    "provider_network_calls_by_this_organ": 0,
+    "paid_fallback_attempts_by_this_organ": 0
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse the successor only after current-main overlap review, then execute the owner-only exact-current self-hosted gate. PASS requires observed real Safe-Forge ACCEPT -> exactly one live Distillery packet -> positive accepted_dataset_tokens delta -> identical replay +0, with the repository-bound v3 receipt and v2 live-promotion receipt preserved."
+}

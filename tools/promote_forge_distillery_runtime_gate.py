@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
 """Promote one passing exact-current Forge->Distillery runtime witness into live Distillery.
 
-This is a deterministic, provider-independent successor to the disposable runtime gate.
-It does not weaken Forge evidence admission and does not append a second Forge ledger.
-Instead it re-validates the nested evidence-qualified Forge evaluation from a PASS receipt
-and feeds exactly that one row through the existing Distillery admission code against the
-configured canonical Distillery SQLite database.
+This deterministic, provider-independent successor accepts only a gate receipt that
+observed the real current Safe-Forge validator produce the evidence-qualified ACCEPT.
+It then re-validates that nested evaluation and feeds exactly that one row through the
+existing Distillery admission code against the configured canonical Distillery DB.
 
-The operation is idempotent by the existing evaluation digest. A first promotion must add
-exactly one packet and nonzero accepted-dataset tokens. An identical retry must add zero
-packets/tokens and report one duplicate. Existing prior promotion is accepted only when the
-same digest is already present with nonzero packet tokens and the retry remains +0.
-
-No provider/network I/O occurs here. This tool grants no whole-product, HCU, J-Space,
-canonical-semantics or training credit; it only closes the measured Forge->Distillery
-execution-evidence path at its exact source identity.
+The operation is idempotent by the existing evaluation digest. No provider/network I/O
+occurs here. This grants no whole-product, HCU, J-Space, canonical-semantics or training
+credit; it only closes the measured Forge-producer -> Distillery execution-evidence path
+at its exact source identity.
 """
 from __future__ import annotations
 
@@ -30,8 +25,9 @@ from typing import Any
 import ingest_forge_accepts_into_distillery as bridge
 from forge_evidence_credit_871 import evidence_reason
 
-PASS_SCHEMA = "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2"
-PASS_STATUS = "PASS_EXACT_CURRENT_1_TO_1_TO_NONZERO_REPLAY_ZERO"
+PASS_SCHEMA = "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v3"
+PASS_STATUS = "PASS_REAL_FORGE_1_TO_1_TO_NONZERO_REPLAY_ZERO"
+EXPECTED_PRODUCER = "run_free_evidence_forge_safe_871.validate_candidate"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 
 
@@ -63,9 +59,19 @@ def validate_gate_result(result: dict[str, Any], expected_source_sha: str) -> di
     _require(result.get("network_used") is False, "GATE_NETWORK_FENCE_MISSING")
     _require(int(result.get("provider_calls") or 0) == 0, "GATE_PROVIDER_CALLS_NONZERO")
     _require(int(result.get("paid_fallback_attempt_count") or 0) == 0, "GATE_PAID_FALLBACK_NONZERO")
+    _require(result.get("forge_accept_origin_required") == "REAL_SAFE_FORGE_VALIDATOR", "FORGE_PRODUCER_ORIGIN_POLICY_MISSING")
+    _require(result.get("forge_producer_accept_observed") is True, "REAL_SAFE_FORGE_ACCEPT_NOT_OBSERVED")
+
+    producer = result.get("forge_producer")
+    _require(isinstance(producer, dict), "FORGE_PRODUCER_RECEIPT_MISSING")
+    _require(int(producer.get("rc") or 0) == 0, "FORGE_PRODUCER_PROCESS_NOT_PASS")
+    _require(producer.get("producer_path") == "tools/run_go872_forge_single_candidate.py", "FORGE_PRODUCER_PATH_MISMATCH")
+    _require(producer.get("safe_forge_path") == "tools/run_free_evidence_forge_safe_871.py", "SAFE_FORGE_PATH_MISMATCH")
+    _require(producer.get("artifact_root_scope") == "WITNESS_OWNED_DISPOSABLE", "FORGE_PRODUCER_SCRATCH_SCOPE_MISMATCH")
 
     witness = result.get("acceptance_witness")
     _require(isinstance(witness, dict), "ACCEPTANCE_WITNESS_MISSING")
+    _require(int(witness.get("safe_forge_producer_accept") or 0) == 1, "SAFE_FORGE_PRODUCER_ACCEPT_NOT_ONE")
     _require(witness.get("nominal_without_execution_admission_rejected") is True, "NOMINAL_NEGATIVE_CONTROL_NOT_REJECTED")
     _require(int(witness.get("exact_evidence_qualified_accept") or 0) == 1, "QUALIFIED_ACCEPT_NOT_EXACTLY_ONE")
     _require(int(witness.get("first_new_distillery_packets") or 0) == 1, "DISPOSABLE_FIRST_PACKET_NOT_ONE")
@@ -91,6 +97,9 @@ def validate_gate_result(result: dict[str, Any], expected_source_sha: str) -> di
     _require(evaluation.get("source_repo_head") == expected_source_sha, "FORGE_SOURCE_HEAD_MISMATCH")
     _require(evaluation.get("evaluation_repo_head") == expected_source_sha, "FORGE_EVALUATION_HEAD_MISMATCH")
     _require(str(evaluation.get("status", "")).lower() == "accepted", "FORGE_EVALUATION_NOT_ACCEPTED")
+    _require(evaluation.get("witness_producer") == EXPECTED_PRODUCER, "FORGE_EVALUATION_PRODUCER_MARKER_MISMATCH")
+    _require(int(evaluation.get("witness_external_provider_calls") or 0) == 0, "FORGE_EVALUATION_PROVIDER_CALLS_NONZERO")
+    _require(int(evaluation.get("witness_paid_fallback_attempt_count") or 0) == 0, "FORGE_EVALUATION_PAID_FALLBACK_NONZERO")
     qualified, reason = evidence_reason(evaluation)
     _require(qualified and reason == "EVIDENCE_QUALIFIED_ACCEPT", "FORGE_EVIDENCE_NOT_QUALIFIED:" + reason)
     return evaluation
@@ -98,39 +107,18 @@ def validate_gate_result(result: dict[str, Any], expected_source_sha: str) -> di
 
 def inspect_db(db: Path, evaluation_sha256: str) -> dict[str, Any]:
     if not db.exists():
-        return {
-            "db_exists": False,
-            "evaluation_present": False,
-            "packet_id": None,
-            "packet_tokens": 0,
-            "accepted_dataset_tokens_counter": 0,
-        }
+        return {"db_exists": False, "evaluation_present": False, "packet_id": None, "packet_tokens": 0, "accepted_dataset_tokens_counter": 0}
     con = sqlite3.connect(db, timeout=30)
     try:
         tables = {row[0] for row in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         if "forge_execution_ingest" not in tables:
-            return {
-                "db_exists": True,
-                "evaluation_present": False,
-                "packet_id": None,
-                "packet_tokens": 0,
-                "accepted_dataset_tokens_counter": 0,
-            }
-        row = con.execute(
-            "SELECT packet_id, approx_tokens FROM forge_execution_ingest WHERE evaluation_sha256=?",
-            (evaluation_sha256,),
-        ).fetchone()
+            return {"db_exists": True, "evaluation_present": False, "packet_id": None, "packet_tokens": 0, "accepted_dataset_tokens_counter": 0}
+        row = con.execute("SELECT packet_id, approx_tokens FROM forge_execution_ingest WHERE evaluation_sha256=?", (evaluation_sha256,)).fetchone()
         counter = 0
         if "counters" in tables:
             c = con.execute("SELECT value FROM counters WHERE key='accepted_dataset_tokens'").fetchone()
             counter = int(c[0]) if c else 0
-        return {
-            "db_exists": True,
-            "evaluation_present": row is not None,
-            "packet_id": row[0] if row else None,
-            "packet_tokens": int(row[1]) if row else 0,
-            "accepted_dataset_tokens_counter": counter,
-        }
+        return {"db_exists": True, "evaluation_present": row is not None, "packet_id": row[0] if row else None, "packet_tokens": int(row[1]) if row else 0, "accepted_dataset_tokens_counter": counter}
     finally:
         con.close()
 
@@ -175,10 +163,11 @@ def promote(gate_result: Path, expected_source_sha: str, distillery_db: Path) ->
     _require(int(after.get("accepted_dataset_tokens_counter") or 0) == replay_tokens, "LIVE_COUNTER_POSTCHECK_MISMATCH")
 
     return {
-        "schema": "CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v1",
+        "schema": "CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v2",
         "status": "PASS",
         "outcome": outcome,
         "source_sha": expected_source_sha,
+        "producer_origin": "REAL_SAFE_FORGE_VALIDATOR",
         "gate_result_sha256": hashlib.sha256(raw).hexdigest(),
         "evaluation_sha256": evaluation_sha,
         "distillery_db": str(distillery_db),
@@ -212,7 +201,7 @@ def main() -> int:
         rc = 0
     except Exception as exc:
         out = {
-            "schema": "CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v1",
+            "schema": "CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v2",
             "status": "BLOCKED",
             "reason": f"{type(exc).__name__}:{str(exc)[:1000]}",
             "source_sha": args.expected_source_sha.strip().lower(),

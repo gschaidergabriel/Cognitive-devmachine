@@ -139,13 +139,15 @@ stop_legacy_forge_for_safe_entrypoint(){
       while IFS= read -r child; do [[ -n "$child" ]] && kill -KILL "$child" 2>/dev/null || true; done < <(pgrep -P "$pid" || true)
       kill -KILL "$pid" 2>/dev/null || true
     fi
-  done < <(pgrep -f '[r]un_free_evidence_forge\.py' || true)
+  done < <(pgrep -f '[r]un_free_evidence_forge[.]py' || true)
 }
 
 start_forge(){
   local x="$FORGE_ENTRYPOINT"; [[ -f "$x" ]] || return 0
-  [[ "$x" == *run_free_evidence_forge_safe_871.py ]] && stop_legacy_forge_for_safe_entrypoint
-  pgrep -f '[r]un_free_evidence_forge(_safe_871)?\.py' >/dev/null 2>&1 || {
+  if [[ "$x" == *run_free_evidence_forge_safe_871.py ]]; then
+    stop_legacy_forge_for_safe_entrypoint
+  fi
+  pgrep -f '[r]un_free_evidence_forge(_safe_871)?[.]py' >/dev/null 2>&1 || {
     nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/forge.pid"; }
 }
 
@@ -241,7 +243,7 @@ def load_json(path):
  try:
   with open(path,'r',encoding='utf-8') as f:return json.load(f)
  except Exception:return None
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running(r'run_free_evidence_forge(_safe_871)?\.py'),'forge_safe_entrypoint':os.path.basename('$FORGE_ENTRYPOINT')=='run_free_evidence_forge_safe_871.py','forge_distillery_bridge':load_json('$FORGE_DISTILLERY_STATUS'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; FORGE_MODEL_COMMANDS_REQUIRE_SAFE_871_ISOLATED_EXECUTION_ADMISSION; FORGE_ACCEPTS_BRIDGE_TO_DISTILLERY_FAILS_CLOSED; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running(r'run_free_evidence_forge(_safe_871)?[.]py'),'forge_safe_entrypoint':os.path.basename('$FORGE_ENTRYPOINT')=='run_free_evidence_forge_safe_871.py','forge_distillery_bridge':load_json('$FORGE_DISTILLERY_STATUS'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; FORGE_MODEL_COMMANDS_REQUIRE_SAFE_871_ISOLATED_EXECUTION_ADMISSION; FORGE_ACCEPTS_BRIDGE_TO_DISTILLERY_FAILS_CLOSED; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30

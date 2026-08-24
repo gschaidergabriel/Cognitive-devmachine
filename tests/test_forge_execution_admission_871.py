@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 import sys
@@ -13,6 +14,7 @@ if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
 import forge_execution_admission_871 as f
+import run_free_evidence_forge_safe_871 as safe
 
 
 class ForgeExecutionAdmission871(unittest.TestCase):
@@ -103,6 +105,64 @@ class ForgeExecutionAdmission871(unittest.TestCase):
             result = f.run_cmd(Path("/tmp/work"), "pytest -q tests/test_demo.py", 5)
         self.assertEqual(result["rc"], 126)
         self.assertIn("NO_ISOLATED_EXECUTOR", result["stderr"])
+
+    def test_execution_manifest_uses_worker_source_not_moving_checkout(self):
+        source_head = "1" * 40
+        source_tree = "2" * 40
+        row = {"repo_head": source_head, "candidate_hash": "c" * 64}
+        proposal = {"test_commands": ["pytest -q tests/test_x.py"]}
+        moving = {
+            "schema": f.POLICY_SCHEMA,
+            "source_head": "a" * 40,
+            "source_tree": "b" * 40,
+            "all_commands_admitted": True,
+            "backend": {"admitted": False},
+        }
+
+        def git_text(_cwd, *args, **_kwargs):
+            if args[:2] == ("cat-file", "-e"):
+                return 0, "", ""
+            if args[0] == "rev-parse" and args[1] == source_head + "^{tree}":
+                return 0, source_tree, ""
+            raise AssertionError(args)
+
+        with (
+            mock.patch.object(safe, "_ORIGINAL_MANIFEST", return_value=moving.copy()),
+            mock.patch.object(safe.base, "_git_text", side_effect=git_text),
+        ):
+            manifest = safe._source_bound_manifest(row, proposal, ROOT)
+
+        self.assertTrue(manifest["source_identity_admitted"])
+        self.assertEqual(source_head, manifest["source_head"])
+        self.assertEqual(source_tree, manifest["source_tree"])
+        self.assertEqual("a" * 40, manifest["evaluation_checkout_head"])
+        self.assertEqual("EXACT_WORKER_PROMPT_HEAD", manifest["source_scope"])
+
+    def test_unbound_worker_source_blocks_before_original_validation(self):
+        row = {
+            "repo_head": "",
+            "candidate_hash": "c" * 64,
+            "delta_id": "d1",
+            "provider": "test",
+            "model": "m",
+            "role": "HCU_CAUSAL",
+            "worker_sha": "w" * 64,
+            "proposal_json": json.dumps({"test_commands": ["pytest -q tests/test_x.py"]}),
+        }
+        manifest = {
+            "schema": f.POLICY_SCHEMA,
+            "source_head": "a" * 40,
+            "source_tree": "b" * 40,
+            "all_commands_admitted": True,
+            "backend": {"admitted": True},
+        }
+        with (
+            mock.patch.object(safe, "_ORIGINAL_MANIFEST", return_value=manifest),
+            mock.patch.object(safe, "_ORIGINAL_VALIDATE", side_effect=AssertionError("must not execute")),
+        ):
+            got = safe.validate_candidate(None, row)
+        self.assertEqual("source_identity_unbound", got["status"])
+        self.assertFalse(got["execution_admission"]["source_identity_admitted"])
 
 
 if __name__ == "__main__":

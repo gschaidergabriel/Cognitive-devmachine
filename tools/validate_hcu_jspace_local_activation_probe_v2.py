@@ -7,6 +7,7 @@ attestation and predeclared acceptance thresholds and must remain UNASSESSED_CAN
 """
 from __future__ import annotations
 
+import datetime as dt
 import json
 import math
 import re
@@ -16,6 +17,8 @@ from typing import Any
 SCHEMA = "ENTITYOS_HCU_JSPACE_LOCAL_ACTIVATION_PROBE/v2"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
+RID_TRIGGER_KEY_RE = re.compile(r"^rid_[0-9a-f]{64}$")
+TS_TRIGGER_KEY_RE = re.compile(r"^ts_([0-9]{8}T[0-9]{12}Z)__p_([0-9a-f]{64})$")
 CORE_INTERVENTION_CONDITIONS = {
     "BASELINE_CLEAN",
     "BASELINE_CORRUPTED",
@@ -79,6 +82,22 @@ def _finite_number(parent: dict[str, Any], key: str) -> float:
     return float(value)
 
 
+def _canonical_trigger_key(trigger_key: str) -> str:
+    if RID_TRIGGER_KEY_RE.fullmatch(trigger_key):
+        return "IMMUTABLE_REQUEST_ID"
+    match = TS_TRIGGER_KEY_RE.fullmatch(trigger_key)
+    if match is None:
+        raise ProbeReceiptError("INTERVENTION_TRIGGER_KEY_NONCANONICAL")
+    timestamp = match.group(1)
+    try:
+        parsed = dt.datetime.strptime(timestamp, "%Y%m%dT%H%M%S%fZ")
+    except ValueError as exc:
+        raise ProbeReceiptError("INTERVENTION_TRIGGER_KEY_TIMESTAMP_INVALID") from exc
+    if parsed.strftime("%Y%m%dT%H%M%S%fZ") != timestamp:
+        raise ProbeReceiptError("INTERVENTION_TRIGGER_KEY_TIMESTAMP_NONCANONICAL")
+    return "TIMESTAMP_PLUS_PAYLOAD_DIGEST"
+
+
 def _condition_map(probe: dict[str, Any]) -> dict[str, dict[str, Any]]:
     rows = _list(probe, "conditions", nonempty=True)
     result: dict[str, dict[str, Any]] = {}
@@ -112,7 +131,11 @@ def validate(receipt: dict[str, Any]) -> dict[str, Any]:
         raise ProbeReceiptError("ROOT_OBJECT_REQUIRED")
     if receipt.get("schema") != SCHEMA:
         raise ProbeReceiptError("SCHEMA_MISMATCH")
-    if receipt.get("program") != "ENTITYOS_HCU" or receipt.get("product") != "EntityOS" or receipt.get("architecture") != "HCU":
+    if (
+        receipt.get("program") != "ENTITYOS_HCU"
+        or receipt.get("product") != "EntityOS"
+        or receipt.get("architecture") != "HCU"
+    ):
         raise ProbeReceiptError("PRODUCT_AUTHORITY_MISMATCH")
     if receipt.get("mode") != "FREE_ONLY_LOCAL_OFFLINE":
         raise ProbeReceiptError("EXECUTION_MODE_MISMATCH")
@@ -199,13 +222,28 @@ def validate(receipt: dict[str, Any]) -> dict[str, Any]:
     else:
         if lease.get("lease_file_validated") is not True:
             raise ProbeReceiptError("INTERVENTION_ATOMIC_LEASE_NOT_VALIDATED")
-        for key in ("trigger_key", "claim_path", "claim_sha256", "claimant_organ", "experiment_name", "intervention_contract"):
+        trigger_key = _text(lease, "trigger_key")
+        trigger_key_identity = _text(lease, "trigger_key_identity")
+        expected_trigger_key_identity = _canonical_trigger_key(trigger_key)
+        if trigger_key_identity != expected_trigger_key_identity:
+            raise ProbeReceiptError("INTERVENTION_TRIGGER_KEY_IDENTITY_MISMATCH")
+        expected_claim_path = f"research_entity/continuity/go_experiment_claims/{trigger_key}.json"
+        if _text(lease, "claim_path") != expected_claim_path:
+            raise ProbeReceiptError("INTERVENTION_CLAIM_PATH_MISMATCH")
+        _hex(lease, "claim_sha256")
+        for key in ("claimant_organ", "experiment_name", "intervention_contract"):
             _text(lease, key)
+        if lease.get("create_only_semantics_reverified_by_probe") is not False:
+            raise ProbeReceiptError("INTERVENTION_CREATE_ONLY_EVIDENCE_BOUNDARY_INVALID")
+        if lease.get("semantic_duplicate_race_scan_reverified_by_probe") is not False:
+            raise ProbeReceiptError("INTERVENTION_SEMANTIC_RACE_EVIDENCE_BOUNDARY_INVALID")
         required = CORE_INTERVENTION_CONDITIONS | {TECHNICAL_INTERVENTION_CONDITION}
         if set(conditions) != required:
             missing = sorted(required - set(conditions))
             extra = sorted(set(conditions) - required)
-            raise ProbeReceiptError(f"INTERVENTION_CONDITION_SET_INVALID:missing={missing}:extra={extra}")
+            raise ProbeReceiptError(
+                f"INTERVENTION_CONDITION_SET_INVALID:missing={missing}:extra={extra}"
+            )
         _int(probe, "off_target_position")
         _hex(probe, "corrupted_token_ids_sha256")
         metrics = _obj(probe, "derived_metrics")

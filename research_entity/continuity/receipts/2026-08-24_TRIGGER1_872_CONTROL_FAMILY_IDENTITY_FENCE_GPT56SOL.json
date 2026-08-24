@@ -1,0 +1,118 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_DELTA/v1",
+  "date_utc": "2026-08-24",
+  "trigger": "1",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "canonical_main_observed": "caa4f8a4801b0bdb9e220eb7359176b6a531f72e"
+  },
+  "coordination": {
+    "shared_immutable_request_or_macrocycle_id_exposed": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_model_interventions_executed": 0,
+    "bounded_noncanonical_work": "DETERMINISTIC_SOURCE_EQUIVALENT_DUPLICATE_ROW_REPRODUCTION_ONLY"
+  },
+  "ten_lane_audit": [
+    {
+      "lane": 1,
+      "topic": "authority_execution_and_lease",
+      "result": "Supervisor 8.72 FREE_ONLY is current; no shared reproducible Trigger-1 lease identity is exposed, so no new Qwen intervention was launched."
+    },
+    {
+      "lane": 2,
+      "topic": "upstream_label_independence",
+      "result": "Current main bridge already requires versioned upstream label-independence evidence and propagates the proven false value; issue 1685 is source-subsumed by current main."
+    },
+    {
+      "lane": 3,
+      "topic": "calibration_holdout_family_leakage",
+      "result": "Open PR 1718 already addresses calibration-versus-holdout prompt leakage; no duplicate implementation lane created."
+    },
+    {
+      "lane": 4,
+      "topic": "raw_verdict_recomputation",
+      "result": "Open PR 1680 recomputes selection and holdout verdict from raw rows and binds candidate mirrors; complementary but not sufficient for ambiguous raw-row families."
+    },
+    {
+      "lane": 5,
+      "topic": "duplicate_control_overwrite",
+      "result": "NEW FAIL-OPEN: select_layer_gain and adjudicate_holdout overwrite duplicate control rows in dict assignment, making list order authoritative over contradictory raw evidence."
+    },
+    {
+      "lane": 6,
+      "topic": "split_matched_family_identity",
+      "result": "NEW FAIL-OPEN: case_id-only or case_id+label_map grouping can merge controls from different prompt, seed, or label identities into one apparent matched family."
+    },
+    {
+      "lane": 7,
+      "topic": "auxiliary_causal_evidence_binding",
+      "result": "NEW HARDENING: wrong-layer and lesion/rescue metadata was not required to live on the canonical +VECTOR row; branch now fails closed on misbinding."
+    },
+    {
+      "lane": 8,
+      "topic": "six_control_vector_specificity",
+      "result": "The six-control family remains retained; directional specificity already subtracts maximum same-norm nuisance magnitude and null drift is separately bounded."
+    },
+    {
+      "lane": 9,
+      "topic": "model_runtime_identity",
+      "result": "Exact Qwen3-0.6B runtime/model evidence remains unobserved in repository-bound terminal execution; this source delta grants zero model-runtime credit."
+    },
+    {
+      "lane": 10,
+      "topic": "promotion_training_credit_boundary",
+      "result": "No direct J-Space, training, full-HCU or whole-product credit is promoted from this deterministic source audit; candidate evidence remains noncanonical."
+    }
+  ],
+  "hypothesis": "Raw-evidence recomputation can only be fail-closed if every matched control family has a unique nuisance identity and exactly one row per required control.",
+  "counterhypothesis": "Recomputing from the full raw list is sufficient because any duplicate or mixed rows remain visible in the receipt.",
+  "discriminator": {
+    "type": "DETERMINISTIC_SOURCE_EQUIVALENT_REPRODUCTION",
+    "construction": "One calibration case contains a failing +VECTOR observation followed by a second passing +VECTOR observation with the same case/layer/gain/control identity.",
+    "observed_result": "The current dict-overwrite algorithm reduces to the later row and yields positive calibration margin 2.0.",
+    "interpretation": "Contradictory raw evidence can be converted to a positive selection solely by row order; therefore the current raw-family reduction is fail-open."
+  },
+  "durable_delta": {
+    "issue": 1729,
+    "branch": "trigger1-control-family-identity-fence",
+    "commits": [
+      "66d1077a87051305d2bb7cae8b0f68ecb06e172c",
+      "369f894fbe09cf1a4a00ecf7c65f1b9a54c974a5"
+    ],
+    "source_changes": [
+      "Bind calibration matched-control family to case_id + prompt_sha256 + seed + positive_label + negative_label.",
+      "Bind holdout family to the same identity plus label_map_id.",
+      "Reject duplicate required-control rows instead of overwriting by list order.",
+      "Reject wrong-layer or lesion/rescue evidence attached to any control other than +VECTOR.",
+      "Reject partial lesion/rescue pairs.",
+      "Add adversarial regressions for duplicate controls, split prompt, split seed and auxiliary evidence misbinding."
+    ]
+  },
+  "validation": {
+    "exact_branch_step_executed_test_pass_observed": false,
+    "local_model_execution_observed": false,
+    "reason": "No admitted exact-branch execution surface was available to this organ in this turn; do not fabricate PASS. PR checks will be observed after publication if available."
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "This Trigger-1 branch is a narrow fail-closed research delta while canonical main and the artefact README are moving under parallel workers; avoid overwriting current-facing product status from a side branch."
+  },
+  "credits_after_cycle": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Open a focused PR, observe step-executed regression evidence if GitHub Actions actually allocates a runner, then successor-reenter current main and fuse with PR 1680/1718 without weakening their raw-recompute or prompt-leakage guards.",
+  "evidence_boundary": "Source audit + deterministic non-model reproduction + regression-definition evidence only. No model intervention or scientific J-Space runtime PASS."
+}

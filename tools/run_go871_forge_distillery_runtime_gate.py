@@ -80,8 +80,6 @@ def bwrap_prefix(cwd: Path, *, writable_workdir: bool = False) -> list[str] | No
 
 
 def backend_status(cwd: Path) -> dict[str, Any]:
-    # Admission probe is deliberately read-only. Writable scope is enabled only
-    # by run_isolated for witness-owned disposable clones.
     prefix = bwrap_prefix(cwd, writable_workdir=False)
     if prefix is None:
         return {
@@ -112,10 +110,6 @@ def backend_status(cwd: Path) -> dict[str, Any]:
 
 
 def run_isolated(cwd: Path, command: list[str], timeout: int = 120) -> dict[str, Any]:
-    # cwd is always one of the witness-owned clones created under tempfile.mkdtemp
-    # in main(). Making only /work writable is required for py_compile/unittest
-    # scratch output; all other host binds remain read-only/hidden and networking
-    # remains unshared.
     prefix = bwrap_prefix(cwd, writable_workdir=True)
     if prefix is None:
         return {"rc": 126, "elapsed_s": 0.0, "stdout": "", "stderr": "NO_BUBBLEWRAP"}
@@ -252,12 +246,21 @@ def main() -> int:
         worker_sha = hashlib.sha256(
             ("forge-distillery-v2:" + source_sha + ":" + target_blob + ":" + ablated_sha).encode()
         ).hexdigest()
+        decision = {
+            "admitted": True,
+            "reason": "WITNESS_FIXED_ALLOWLISTED_UNIT_COMMAND",
+            "argv": command,
+            "class": "TEST_OR_STATIC",
+        }
         admission = {
             "schema": "CLAY_FORGE_EXECUTION_ADMISSION/v1",
             "source_scope": "EXACT_WORKER_PROMPT_HEAD",
             "source_identity_admitted": True,
             "source_head": source_sha,
             "source_tree": tree,
+            "evaluation_checkout_head": source_sha,
+            "evaluation_checkout_tree": tree,
+            "decisions": [decision],
             "all_commands_admitted": True,
             "candidate_is_canonical_truth": False,
             "command": "python3 -m unittest -q " + TEST,

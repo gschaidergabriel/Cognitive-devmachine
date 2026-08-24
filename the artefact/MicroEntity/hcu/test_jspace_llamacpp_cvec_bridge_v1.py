@@ -14,7 +14,7 @@ from jspace_llamacpp_cvec_bridge_v1 import (
     build_qwen3_06b_candidate_cvec,
     validate_llamacpp_cvec_binding,
 )
-from jspace_vector_control_v1 import encode_vector
+from jspace_vector_control_v1 import JSpaceVectorControlError, encode_vector
 
 
 class LlamaCppCVecBridgeTests(unittest.TestCase):
@@ -90,20 +90,26 @@ class LlamaCppCVecBridgeTests(unittest.TestCase):
             self._build(il_end=5)
 
     def test_stale_generation_fails_closed(self):
-        with self.assertRaises(Exception):
+        with self.assertRaisesRegex(JSpaceVectorControlError, "STALE_VECTOR_CONTROL_GENERATION"):
             self._build(current_generation=8)
 
-    def test_raw_mutation_fails_closed(self):
+    def test_raw_mutation_fails_closed_before_digest_only_credit(self):
         raw, binding = self._build()
         tampered = bytearray(raw)
         tampered[20] ^= 1
-        with self.assertRaisesRegex(LlamaCppCVecBridgeError, "CVEC_BUFFER_DIGEST_MISMATCH"):
+        with self.assertRaisesRegex(LlamaCppCVecBridgeError, "CVEC_BUFFER_SEMANTIC_REVALIDATION_MISMATCH"):
             validate_llamacpp_cvec_binding(binding, bytes(tampered), self.packet)
 
-    def test_binding_mutation_fails_closed(self):
+    def test_binding_strength_mutation_recomputes_expected_bytes(self):
         raw, binding = self._build()
         tampered = replace(binding, strength=3.0)
-        with self.assertRaisesRegex(LlamaCppCVecBridgeError, "LLAMA_CPP_CVEC_BINDING_DIGEST_MISMATCH"):
+        with self.assertRaisesRegex(LlamaCppCVecBridgeError, "CVEC_BUFFER_SEMANTIC_REVALIDATION_MISMATCH"):
+            validate_llamacpp_cvec_binding(tampered, raw, self.packet)
+
+    def test_self_consistent_invalid_layer_range_still_fails_semantics(self):
+        raw, binding = self._build()
+        tampered = replace(binding, il_start=0)
+        with self.assertRaisesRegex(LlamaCppCVecBridgeError, "layer_range"):
             validate_llamacpp_cvec_binding(tampered, raw, self.packet)
 
     def test_packet_identity_mutation_fails_closed(self):

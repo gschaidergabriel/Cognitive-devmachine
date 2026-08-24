@@ -198,6 +198,7 @@ def open_questions(limit: int = 16) -> list[str]:
         ]
     return out[:limit]
 
+
 def secret(name: str) -> str:
     try:return str(get_secret(name,required=False) or "").strip()
     except Exception:return ""

@@ -14,6 +14,7 @@ import trigger1_jspace_promotion_gate as gate
 
 HEX64 = "a" * 64
 ALT64 = "c" * 64
+WRONG64 = "9" * 64
 HEAD40 = "b" * 40
 
 
@@ -39,7 +40,15 @@ def passing_inputs() -> tuple[dict, dict]:
                 "hook_calls": 1,
             }
             if control == "+VECTOR":
-                row["applied_vector_sha256"] = ALT64
+                row.update(
+                    {
+                        "applied_vector_sha256": ALT64,
+                        "wrong_layer": 6,
+                        "wrong_layer_vector_source_layer": 12,
+                        "wrong_layer_same_selected_vector": True,
+                        "wrong_layer_receipt_sha256": WRONG64,
+                    }
+                )
             holdout.append(row)
 
     verdict = {
@@ -91,6 +100,10 @@ def passing_inputs() -> tuple[dict, dict]:
         "candidate_sha256": HEX64,
     }
     return result, intermediate
+
+
+def plus_rows(result: dict) -> list[dict]:
+    return [row for row in result["holdout_rows"] if row["control"] == "+VECTOR"]
 
 
 class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
@@ -147,6 +160,38 @@ class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
         ] = True
         with self.assertRaisesRegex(
             bridge.BridgeError, "DERIVATION_MUST_PRECEDE_EVALUATION_LABEL_RESOLUTION"
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_wrong_layer_must_differ_from_selected_layer(self):
+        result, intermediate = passing_inputs()
+        plus_rows(result)[0]["wrong_layer"] = 12
+        with self.assertRaisesRegex(
+            bridge.BridgeError, "WRONG_LAYER_MUST_DIFFER_FROM_SELECTED_LAYER"
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_wrong_layer_vector_source_must_be_selected_layer(self):
+        result, intermediate = passing_inputs()
+        plus_rows(result)[0]["wrong_layer_vector_source_layer"] = 6
+        with self.assertRaisesRegex(
+            bridge.BridgeError, "WRONG_LAYER_SELECTED_VECTOR_SOURCE_MISMATCH"
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_wrong_layer_selected_vector_identity_must_be_proven(self):
+        result, intermediate = passing_inputs()
+        plus_rows(result)[0]["wrong_layer_same_selected_vector"] = False
+        with self.assertRaisesRegex(
+            bridge.BridgeError, "WRONG_LAYER_SELECTED_VECTOR_IDENTITY_REQUIRED"
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_wrong_layer_runtime_receipt_is_required(self):
+        result, intermediate = passing_inputs()
+        plus_rows(result)[0]["wrong_layer_receipt_sha256"] = "missing"
+        with self.assertRaisesRegex(
+            bridge.BridgeError, "WRONG_LAYER_RUNTIME_RECEIPT_REQUIRED"
         ):
             bridge.build_direct_candidate(result, intermediate)
 

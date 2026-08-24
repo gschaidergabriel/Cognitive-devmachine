@@ -33,12 +33,24 @@ class Trigger1SourceExecutionEnvelopeTests(unittest.TestCase):
                 return ""
             raise AssertionError(args)
 
-        with mock.patch.object(attest, "_git", side_effect=fake_git):
+        with mock.patch.object(attest, "_git", side_effect=fake_git), mock.patch.object(
+            attest, "source_identity",
+            return_value={
+                "schema": "CLAY_GIT_SOURCE_IDENTITY/v1",
+                "repo_head": HEAD40,
+                "repo_tree": TREE40,
+                "dirty_state": {"dirty": False},
+                "dirty_state_sha256": HEX64,
+                "source_identity_sha256": HEX64,
+            },
+        ):
             identity = attest.exact_source_identity(ROOT)
         self.assertEqual(HEAD40, identity["repo_head"])
         self.assertEqual(TREE40, identity["repo_tree"])
         self.assertFalse(identity["repo_dirty"])
         self.assertEqual(hashlib.sha256(b"").hexdigest(), identity["repo_status_sha256"])
+        self.assertEqual(HEX64, identity["repo_dirty_state_sha256"])
+        self.assertEqual(HEX64, identity["source_identity_sha256"])
 
     def test_require_clean_source_rejects_dirty_checkout(self):
         dirty = {
@@ -46,17 +58,23 @@ class Trigger1SourceExecutionEnvelopeTests(unittest.TestCase):
             "repo_tree": TREE40,
             "repo_dirty": True,
             "repo_status_sha256": HEX64,
+            "repo_dirty_state_sha256": HEX64,
+            "source_identity_sha256": HEX64,
+            "source_identity_schema": "CLAY_GIT_SOURCE_IDENTITY/v1",
         }
         with mock.patch.object(attest, "exact_source_identity", return_value=dirty):
             with self.assertRaisesRegex(RuntimeError, "DIRTY_SOURCE_TREE_FAIL_CLOSED"):
                 attest.require_clean_source(ROOT)
 
-    def test_candidate_receipt_is_wrapped_with_source_executor_and_result_identity(self):
+    def test_candidate_receipt_is_wrapped_with_source_executor_envelope_and_result_identity(self):
         source = {
             "repo_head": HEAD40,
             "repo_tree": TREE40,
             "repo_dirty": False,
             "repo_status_sha256": hashlib.sha256(b"").hexdigest(),
+            "repo_dirty_state_sha256": HEX64,
+            "source_identity_sha256": HEX64,
+            "source_identity_schema": "CLAY_GIT_SOURCE_IDENTITY/v1",
         }
         candidate = {
             "source_identity": {
@@ -72,6 +90,7 @@ class Trigger1SourceExecutionEnvelopeTests(unittest.TestCase):
             "source": {"repo_head": HEAD40, "repo_tree": TREE40},
             "result_sha256": HEX64,
         }
+        executor = ROOT / "tools" / "trigger1_local_qwen06_intermediate_api_execute.py"
         with tempfile.TemporaryDirectory() as tmp:
             candidate_path = Path(tmp) / "trigger1_direct_steering_candidate.json"
             result_path = Path(tmp) / "trigger1_local_activation_api_result.json"
@@ -82,11 +101,16 @@ class Trigger1SourceExecutionEnvelopeTests(unittest.TestCase):
                 result_path,
                 "intermediate",
                 source,
-                ROOT / "tools" / "trigger1_local_qwen06_intermediate_api_execute.py",
+                executor,
             )
             rebound = json.loads(candidate_path.read_text(encoding="utf-8"))
             binding = json.loads((Path(tmp) / "trigger1_source_execution_binding.json").read_text(encoding="utf-8"))
         self.assertEqual(source, {k: rebound["source_identity"][k] for k in source})
+        self.assertEqual(envelope.BINDING_SCHEMA, binding["schema"])
+        self.assertEqual(envelope.sha256_file(executor), binding["executor_sha256"])
+        self.assertEqual(envelope.sha256_file(Path(envelope.__file__).resolve()), binding["envelope_sha256"])
+        self.assertEqual(binding["executor_sha256"], rebound["source_identity"]["executor_sha256"])
+        self.assertEqual(binding["envelope_sha256"], rebound["source_identity"]["source_execution_envelope_sha256"])
         self.assertEqual(HEX64, rebound["target"]["executor_local_runtime_receipt_sha256"])
         self.assertEqual(binding_sha, rebound["target"]["local_runtime_execution_receipt_sha256"])
         self.assertEqual(binding_sha, rebound["target"]["source_execution_binding_sha256"])

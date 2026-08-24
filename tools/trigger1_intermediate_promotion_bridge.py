@@ -19,6 +19,7 @@ from typing import Any
 INTERMEDIATE_SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1"
 INTERMEDIATE_CANDIDATE_SCHEMA = "CLAY_TRIGGER1_INTERMEDIATE_JSPACE_CAUSAL_CANDIDATE/v1"
 DIRECT_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
+LABEL_INDEPENDENCE_SCHEMA = "TRIGGER1_VECTOR_DERIVATION_LABEL_INDEPENDENCE/v1"
 REQUIRED_CONTROLS = (
     "BASELINE",
     "+VECTOR",
@@ -120,7 +121,22 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
     local_vector_sha = direction["direction_sha256"]
     derivation_prompt_hashes = sorted({row.get("prompt_sha256") for row in source_rows if isinstance(row, dict)})
     _require(derivation_prompt_hashes and all(_sha(value) for value in derivation_prompt_hashes), "DERIVATION_PROMPT_IDENTITIES_REQUIRED")
-    derivation_family_id = digest(derivation_prompt_hashes)
+
+    label_independence = derivation.get("label_independence")
+    _require(isinstance(label_independence, dict), "DERIVATION_LABEL_INDEPENDENCE_RECEIPT_REQUIRED")
+    _require(label_independence.get("schema") == LABEL_INDEPENDENCE_SCHEMA, "DERIVATION_LABEL_INDEPENDENCE_SCHEMA_INVALID")
+    _require(label_independence.get("uses_evaluation_output_labels") is False, "DERIVATION_MUST_PROVE_EVALUATION_LABEL_INDEPENDENCE")
+    _require(
+        label_independence.get("evaluation_output_labels_resolved_before_derivation") is False,
+        "DERIVATION_MUST_PRECEDE_EVALUATION_LABEL_RESOLUTION",
+    )
+    expected_input_family = digest(derivation_prompt_hashes)
+    _require(
+        label_independence.get("derivation_input_family_sha256") == expected_input_family,
+        "DERIVATION_LABEL_INDEPENDENCE_FAMILY_MISMATCH",
+    )
+    label_independence_receipt_sha = digest(label_independence)
+    derivation_family_id = expected_input_family
     derivation_receipt_sha = digest(derivation)
 
     calibration = _rows(result, "calibration_rows")
@@ -236,7 +252,8 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "method": "CALIBRATION_ONLY_INTERMEDIATE_RESIDUAL_CONTRAST",
             "uses_output_head_weights": False,
             "uses_holdout_data": False,
-            "uses_evaluation_output_labels": False,
+            "uses_evaluation_output_labels": label_independence["uses_evaluation_output_labels"],
+            "label_independence_receipt_sha256": label_independence_receipt_sha,
             "derivation_family_id": derivation_family_id,
             "derivation_receipt_sha256": derivation_receipt_sha,
         },

@@ -34,6 +34,7 @@ from trigger1_intermediate_contrastive_protocol import (
 
 SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1"
 CANDIDATE_SCHEMA = "CLAY_TRIGGER1_INTERMEDIATE_JSPACE_CAUSAL_CANDIDATE/v1"
+LABEL_INDEPENDENCE_SCHEMA = "TRIGGER1_VECTOR_DERIVATION_LABEL_INDEPENDENCE/v1"
 CANDIDATE_LAYERS = (6, 12, 18, 24)
 CALIBRATION_GAINS = (1.0, 4.0, 12.0)
 CALIBRATION_SEED = 1701
@@ -119,7 +120,19 @@ def derive_directions(torch: Any, tokenizer: Any, model: Any, device: Any) -> tu
             "positive_activation_family_sha256": digest(pos[layer]),
             "negative_activation_family_sha256": digest(neg[layer]),
         }
-    return directions, {"sources": source_receipts, "directions": direction_receipts}
+    derivation_prompt_hashes = sorted(row["prompt_sha256"] for row in source_receipts)
+    label_independence = {
+        "schema": LABEL_INDEPENDENCE_SCHEMA,
+        "derivation_input_family_sha256": digest(derivation_prompt_hashes),
+        "evaluation_output_labels_resolved_before_derivation": False,
+        "uses_evaluation_output_labels": False,
+        "construction": "fixed semantic positive/negative intermediate activations only; output-label resolution occurs after derivation",
+    }
+    return directions, {
+        "sources": source_receipts,
+        "directions": direction_receipts,
+        "label_independence": label_independence,
+    }
 
 
 class RuntimeState:
@@ -223,8 +236,8 @@ def main() -> int:
     try:
         torch,transformers,snapshot,tokenizer,model,device,checkpoint_sha,tokenizer_sha,weight_manifest=load_exact_runtime(Path(args.cache_dir))
         if int(getattr(model.config,"num_hidden_layers",0)) <= max(CANDIDATE_LAYERS): raise RuntimeError("MODEL_LAYER_COUNT_TOO_SMALL")
-        token_ids=_single_token_pair(tokenizer)
         directions,derivation=derive_directions(torch,tokenizer,model,device)
+        token_ids=_single_token_pair(tokenizer)
         runtime=runtime_manifest(torch,transformers,model); runtime_build_sha=canonical_sha(runtime)
         state=RuntimeState(torch,tokenizer,model,device,directions,token_ids)
         server=ThreadingHTTPServer(("127.0.0.1",0),make_handler(state)); thread=threading.Thread(target=server.serve_forever,daemon=True); thread.start()

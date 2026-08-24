@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
-"""Source-attested envelope for the two fixed local Trigger-1 Qwen runtimes.
+"""Source-attested envelope for the two fixed legacy local Trigger-1 Qwen runtimes.
 
 The wrapper is intentionally not a generic command runner. It can execute only the
-terminal positive-control or the non-terminal intermediate Qwen discriminator. It
-requires the same clean Git identity before and after execution and, if a promotion
-candidate is emitted, replaces its local runtime receipt with a receipt that binds
-the original executor receipt to source, executor, Python and result identities.
+terminal positive-control or the legacy non-terminal intermediate discriminator. The
+stronger causal intermediate path remains owned by the single retained midlayer
+compatibility launcher and promotion bridge; this module must not become a second
+causal execution lane.
+
+For its two retained modes, the wrapper requires the same clean canonical Git identity
+before and after execution and, if a promotion candidate is emitted, replaces its local
+runtime receipt with a receipt binding source, envelope, executor, Python and result
+identities. Candidate source_identity is enriched with the exact source identity and
+executor digest so promotion never has to trust only an outer receipt for those fields.
 """
 from __future__ import annotations
 
@@ -24,7 +30,7 @@ MODES = {
     "terminal": ROOT / "tools" / "trigger1_local_qwen06_activation_api_execute.py",
     "intermediate": ROOT / "tools" / "trigger1_local_qwen06_intermediate_api_execute.py",
 }
-BINDING_SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN_SOURCE_EXECUTION_BINDING/v1"
+BINDING_SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN_SOURCE_EXECUTION_BINDING/v2"
 
 
 def canonical_sha(value: Any) -> str:
@@ -75,10 +81,13 @@ def bind_candidate(
     except ValueError as exc:
         raise RuntimeError("ORIGINAL_LOCAL_RUNTIME_RECEIPT_REQUIRED") from exc
 
+    envelope = Path(__file__).resolve()
     binding = {
         "schema": BINDING_SCHEMA,
         "mode": mode,
         "source_identity": source,
+        "envelope_path": str(envelope.relative_to(ROOT)),
+        "envelope_sha256": sha256_file(envelope),
         "executor_path": str(executor.relative_to(ROOT)),
         "executor_sha256": sha256_file(executor),
         "python_executable": sys.executable,
@@ -92,6 +101,8 @@ def bind_candidate(
     binding["binding_sha256"] = binding_sha
 
     identity.update(source)
+    identity["executor_sha256"] = binding["executor_sha256"]
+    identity["source_execution_envelope_sha256"] = binding["envelope_sha256"]
     target["executor_local_runtime_receipt_sha256"] = original_runtime_receipt
     target["source_execution_binding_sha256"] = binding_sha
     target["local_runtime_execution_receipt_sha256"] = binding_sha

@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "reentry_main_initial": "16fcc38e31188322c953474b6b9e9db4bf8a170f",
+  "reentry_main_before_receipt": "bebb02656eed92c710040ba0ebe439bdb4f891e6",
+  "authority": {
+    "program_state": "8.72",
+    "supervisor_inbox_selected": "SUPERVISOR_STEERING_8_72",
+    "artefact_manifest_current_epoch": "8.72",
+    "free_only": true
+  },
+  "track_a": {
+    "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+    "status": "ADVANCED_SOURCE_RUNTIME_PROMOTION_GATE_PENDING_TERMINAL_EXECUTION",
+    "finding": "The exact-current Forge->Distillery successor witness proved its chain only against disposable temporary Distillery state. That design could leave the persistent live Distillery counters at zero even after a successful disposable witness.",
+    "delta": [
+      "created tools/promote_forge_distillery_runtime_gate.py to revalidate a PASS receipt and its nested evidence-qualified Forge evaluation against the existing shared evidence discriminator",
+      "promotion writes through the existing ingest_forge_accepts_into_distillery authority into the configured existing Distillery SQLite database; it creates no second Forge ledger, truth store or effect path",
+      "first live promotion must add exactly one packet and a positive accepted_dataset_tokens delta; immediate identical replay must add zero packets and zero tokens with one duplicate",
+      "already-promoted identical evidence is accepted only as idempotent replay with zero token delta",
+      "updated the retained self-hosted Forge runtime workflow so guard PASS + disposable gate PASS + live promotion PASS are all required for terminal success and the sanitized repository-bound result embeds live_distillery_promotion evidence"
+    ],
+    "commits": [
+      "04f11b64e637da256b2d5a95323b40fa80be5545",
+      "b56767eadce2f12fe05b39176a4eef4f7a80c821",
+      "9b4a4166cc3d179415c6ed4962c9a7c27c66b825"
+    ],
+    "known_old_runtime_request": {
+      "pr": 1619,
+      "run_id": 32742535392,
+      "job_id": 97480167751,
+      "observed_status": "queued",
+      "scope_note": "This request predates the live-promotion workflow wiring and cannot by itself prove the new persistent promotion step."
+    },
+    "terminal_result_for_new_workflow_revision_observed": false,
+    "runtime_credit_delta": 0
+  },
+  "track_b": {
+    "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "status": "HCU_NO_CHANGE_WITH_REASON",
+    "reason": "Retained donor PR #1263 already owns the HCU/Typed Entry/loader causal lane; creating another implementation authority would duplicate current work while exact admitted execution remains pending.",
+    "authority_convergence": "A parallel current-main update synchronized the artefact manifest to supervisor 8.72 after this organ correctly received a 409 conflict and declined to overwrite concurrent work.",
+    "hcu_runtime_credit_delta": 0
+  },
+  "track_c": {
+    "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+    "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+    "reason": "The retained provider-independent Qwen3-0.6B nonterminal midlayer discriminator is already the strongest current lane. No lease-admitted terminal model-specific receipt exists, and this macrocycle exposes no reproducible shared immutable trigger identity for a new unusual intervention.",
+    "new_unusual_experiments": 0,
+    "jspace_model_runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No reproducible shared immutable macrocycle/request identity was exposed to this organ; minute-level conversational timestamp is insufficient for canonical atomic lease identity.",
+    "parallel_write_handling": "FAIL_CLOSED_AND_REENTERED",
+    "manifest_conflict": "409 observed; refreshed current file instead of blind overwrite; current manifest was already synchronized to 8.72 by parallel work."
+  },
+  "negative_evidence": [
+    "No repository-bound terminal result containing live_distillery_promotion was found after the source wiring.",
+    "Known run 32742535392 remains an older queued request and is not runtime evidence for the new promotion revision.",
+    "A connector safety moderation block on an initially larger test-file write was tooling negative evidence, not a project/runtime failure; a smaller fail-closed guard test file was then committed without weakening admission semantics."
+  ],
+  "credits_after": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Execute the current self-hosted Forge workflow revision containing live promotion on canonical main and accept only a repository-bound terminal result where disposable gate PASS and live_distillery_promotion.status=PASS; require one new packet with accepted_dataset_tokens increase on first promotion and immediate replay token delta 0. Independently keep Qwen3-0.6B J-Space work blocked until a canonical atomic lease and exact terminal model-specific receipt exist."
+}

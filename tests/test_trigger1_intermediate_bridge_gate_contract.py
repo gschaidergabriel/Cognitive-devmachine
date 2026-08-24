@@ -51,6 +51,7 @@ def passing_inputs() -> tuple[dict, dict]:
         "lesion_rescue_evidence_complete": True,
         "lesion_rescue_ok": True,
     }
+    derivation_prompt_hashes = ["5" * 64, "6" * 64]
     result = {
         "schema": bridge.INTERMEDIATE_SCHEMA,
         "status": "PASS",
@@ -64,10 +65,16 @@ def passing_inputs() -> tuple[dict, dict]:
         "selected": {"selected": True, "layer": 12, "gain": 4.0},
         "derivation": {
             "sources": [
-                {"prompt_sha256": "5" * 64},
-                {"prompt_sha256": "6" * 64},
+                {"prompt_sha256": derivation_prompt_hashes[0]},
+                {"prompt_sha256": derivation_prompt_hashes[1]},
             ],
             "directions": {"12": {"direction_sha256": ALT64}},
+            "label_independence": {
+                "schema": bridge.LABEL_INDEPENDENCE_SCHEMA,
+                "uses_evaluation_output_labels": False,
+                "evaluation_output_labels_resolved_before_derivation": False,
+                "derivation_input_family_sha256": bridge.digest(sorted(derivation_prompt_hashes)),
+            },
         },
         "calibration_rows": calibration,
         "holdout_rows": holdout,
@@ -92,7 +99,12 @@ class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
         direct = bridge.build_direct_candidate(result, intermediate)
 
         self.assertIs(False, direct["vector_derivation"]["uses_evaluation_output_labels"])
+        self.assertEqual(
+            bridge.digest(result["derivation"]["label_independence"]),
+            direct["vector_derivation"]["label_independence_receipt_sha256"],
+        )
         self.assertIs(True, direct["holdout"]["label_mapping_counterbalanced"])
+        self.assertIs(True, direct["holdout"]["metric_uses_output_tokens"])
 
         verdict = gate.adjudicate(direct)
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])

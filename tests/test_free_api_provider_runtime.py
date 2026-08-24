@@ -2883,7 +2883,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     receipt["outcome"], "payment_required_hard_stop"
                 )
                 self.assertEqual(receipt["status"], 402)
-                self.assertFalse(receipt["payment_latch_active"])
+                self.assertTrue(receipt["payment_latch_active"])
                 self.assertTrue(receipt["payment_latch_publication_failed"])
                 self.assertNotIn(leaked_text, repr(result))
 

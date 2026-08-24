@@ -643,6 +643,16 @@
     ],
     "counterhypothesis": "A nonempty content string plus terminal finish reason is sufficient proof of a complete text response; falsified because both a response carrying tool_calls and a response without assistant authorship reached success/VERIFIED/DONE."
   },
+  "closed_text_response_choice_schema": {
+    "checked_at": "2026-08-25",
+    "claim": "FRANK v0.1's non-streaming plain-text adapter accepts a choice object only when its fields are exactly finish_reason and message; unknown or missing choice fields preserve EXECUTED evidence but cannot reach VERIFIED or DONE.",
+    "source": "https://docs.nvidia.com/nim/vision-language-models/1.5.0/api-reference.html",
+    "external_evidence": "NVIDIA's OpenAI-compatible response examples can include choice metadata such as index, logprobs and stop_reason in addition to message and finish_reason. The exact two-field profile is therefore a local FRANK adapter policy, not a general provider-schema claim.",
+    "internal_measurement": "A status-200 response carrying an unrecognized choice extension previously returned success and reached VERIFIED and DONE even though the adapter neither typed nor preserved the extension.",
+    "executable_evidence": "test_response_choice_extensions_cannot_reach_verified_state",
+    "counterhypothesis": "Unknown choice metadata is harmless to ignore; falsified for FRANK's verification claim because an unmodeled extension reached success, VERIFIED and DONE without typed handling or provenance.",
+    "uncertainty": "This strict v0.1 profile can reject otherwise valid NVIDIA/OpenAI-compatible responses until each additional field has explicit typed handling and verification semantics."
+  },
   "pending_http_results": {
     "checked_at": "2026-08-13",
     "claim": "For NVIDIA Chat Completions, HTTP 200 is fulfilled while HTTP 202 is pending and requires requestId polling; a 202 response cannot reach VERIFIED/DONE or trigger a blind replay of the original request.",

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Deterministic execution admission for model-authored Evidence Forge commands.
 
-This module is intentionally not an authority for canonical truth.  It narrows the
+This module is intentionally not an authority for canonical truth. It narrows the
 local disposable-clone execution surface used by run_free_evidence_forge.py.
 Worker-authored command strings are treated as untrusted data and are admitted only
 as a small argv grammar, executed without a shell, without inherited credentials,
@@ -19,6 +19,7 @@ import resource
 import shlex
 import shutil
 import subprocess
+import tempfile
 import time
 from typing import Any
 
@@ -169,39 +170,46 @@ def _bubblewrap_prefix(cwd: Path) -> list[str] | None:
     for host in ("/usr", "/bin", "/lib", "/lib64", "/usr/local"):
         if Path(host).exists():
             prefix += ["--ro-bind", host, host]
-    prefix += ["--ro-bind", str(cwd), "/work", "--chdir", "/work"]
+    # `cwd` is always a disposable baseline/patched clone during model-authored
+    # execution. It must be writable for py_compile/test caches/temp artifacts.
+    # No host /run, /artifacts, /home, provider secret path or repository root is
+    # bound unless that path itself is the caller-created disposable clone.
+    prefix += ["--bind", str(cwd), "/work", "--chdir", "/work"]
     for key, value in _minimal_env().items():
         prefix += ["--setenv", key, value]
     return prefix + ["--"]
 
 
-def execution_backend_status(cwd: Path) -> dict[str, Any]:
-    prefix = _bubblewrap_prefix(cwd)
-    if prefix is None:
-        return {
-            "schema": POLICY_SCHEMA,
-            "admitted": False,
-            "backend": None,
-            "reason": "BUBBLEWRAP_NOT_FOUND",
-            "network_namespace": "UNAVAILABLE",
-            "secret_environment_inherited": False,
-            "host_secret_paths_exposed": False,
-        }
-    try:
-        probe = subprocess.run(
-            prefix + ["/usr/bin/true"],
-            cwd=str(cwd),
-            env=_minimal_env(),
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=5,
-        )
-        functional = probe.returncode == 0
-        reason = "OK" if functional else f"BUBBLEWRAP_PROBE_RC_{probe.returncode}"
-    except Exception as exc:
-        functional = False
-        reason = f"BUBBLEWRAP_PROBE_{type(exc).__name__}"
+def execution_backend_status(_cwd: Path) -> dict[str, Any]:
+    # Probe namespace availability against an empty temporary directory, never the
+    # live repository root. Actual candidate execution later binds only its clone.
+    with tempfile.TemporaryDirectory(prefix="clay-forge-bwrap-probe-") as td:
+        prefix = _bubblewrap_prefix(Path(td))
+        if prefix is None:
+            return {
+                "schema": POLICY_SCHEMA,
+                "admitted": False,
+                "backend": None,
+                "reason": "BUBBLEWRAP_NOT_FOUND",
+                "network_namespace": "UNAVAILABLE",
+                "secret_environment_inherited": False,
+                "host_secret_paths_exposed": False,
+            }
+        try:
+            probe = subprocess.run(
+                prefix + ["/usr/bin/true"],
+                cwd=td,
+                env=_minimal_env(),
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=5,
+            )
+            functional = probe.returncode == 0
+            reason = "OK" if functional else f"BUBBLEWRAP_PROBE_RC_{probe.returncode}"
+        except Exception as exc:
+            functional = False
+            reason = f"BUBBLEWRAP_PROBE_{type(exc).__name__}"
     return {
         "schema": POLICY_SCHEMA,
         "admitted": functional,
@@ -320,7 +328,7 @@ def candidate_execution_manifest(row: Any, proposal: dict[str, Any], cwd: Path) 
         "evaluation_head": evaluation_head if evaluation_head != "UNKNOWN" else None,
         "source_identity_bound": source_identity_bound,
         "decisions": decisions,
-        "all_commands_admitted": all(bool(d["admitted"]) for d in decisions),
+        "all_commands_admitted": bool(decisions) and all(bool(d["admitted"]) for d in decisions),
         "backend": execution_backend_status(cwd),
         "candidate_is_canonical_truth": False,
     }

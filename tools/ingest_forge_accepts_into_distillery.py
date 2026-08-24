@@ -15,6 +15,11 @@ cannot mint a second dataset packet or alter training-bearing packet bytes for t
 measured evidence. If the same execution identity reappears with conflicting measured
 evidence, admission fails closed instead of treating the mutation as a new observation.
 
+Concurrent admission is serialized before replay lookup with a SQLite IMMEDIATE write
+transaction. Replay lookup, measured-evidence conflict classification, packet creation
+and token counters therefore share one atomic admission boundary; the unique replay
+index remains defense in depth rather than the primary concurrency classifier.
+
 Legacy ingest rows predate the replay-identity columns. They cannot be safely backfilled
 from the reduced legacy table, so a new evaluation colliding on the available legacy
 execution coordinates fails closed until the historical row is explicitly reconciled.
@@ -310,11 +315,32 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
     return True, reason, packet_id
 
 
+def admit_one_serialized(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None]:
+    """Atomically classify and admit one evidence-qualified Forge execution.
+
+    SQLite's default deferred transaction can let concurrent writers both observe the
+    same pre-insert replay state before one loses the unique-index race. Acquire write
+    intent first so every later writer classifies replay/conflict against committed
+    predecessor state. A lock timeout remains a fail-closed infrastructure outcome.
+    """
+    if con.in_transaction:
+        raise RuntimeError("ATOMIC_ADMISSION_REQUIRES_NO_ACTIVE_TRANSACTION")
+    try:
+        con.execute("BEGIN IMMEDIATE")
+        result = admit_one(con, row)
+        con.commit()
+        return result
+    except Exception:
+        if con.in_transaction:
+            con.rollback()
+        raise
+
+
 def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dict:
     summary = {
         "schema": "CLAY_FORGE_TO_DISTILLERY_INGEST_RESULT/v2",
         "acceptance_semantics": "EVIDENCE_QUALIFIED_ONLY",
-        "replay_semantics": "STABLE_EXECUTION_IDENTITY_WITH_MEASURED_CONFLICT_AND_LEGACY_UNKNOWN_REJECTION",
+        "replay_semantics": "STABLE_EXECUTION_IDENTITY_WITH_MEASURED_CONFLICT_LEGACY_UNKNOWN_AND_SERIALIZED_WRITE_INTENT",
         "forge_eval_path": str(forge_eval_path),
         "distillery_db": str(distillery_db),
         "seen": 0,
@@ -330,6 +356,9 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
     con = sqlite3.connect(distillery_db, timeout=30)
     try:
         ensure_schema(con)
+        # Schema migration/DDL may have started a transaction. Every evidence row must
+        # enter the serialized admission helper from a clean transaction boundary.
+        con.commit()
         for line in forge_eval_path.read_text(encoding="utf-8", errors="replace").splitlines():
             if limit and summary["seen"] >= limit:
                 break
@@ -341,7 +370,7 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
             except Exception:
                 summary["rejected"]["INVALID_JSON"] = summary["rejected"].get("INVALID_JSON", 0) + 1
                 continue
-            admitted, reason, packet_id = admit_one(con, row)
+            admitted, reason, packet_id = admit_one_serialized(con, row)
             if admitted:
                 summary["admitted"] += 1
                 summary["packet_ids"].append(packet_id)
@@ -349,7 +378,6 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
                 summary["duplicates"] += 1
             else:
                 summary["rejected"][reason] = summary["rejected"].get(reason, 0) + 1
-        con.commit()
         row = con.execute("SELECT COALESCE(SUM(approx_tokens),0),COUNT(*) FROM knowledge_packets").fetchone()
         summary["knowledge_packet_tokens_total"] = int(row[0] or 0)
         summary["knowledge_packets_total"] = int(row[1] or 0)

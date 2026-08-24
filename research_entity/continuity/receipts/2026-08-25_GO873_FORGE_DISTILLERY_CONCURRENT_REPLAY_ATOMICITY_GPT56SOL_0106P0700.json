@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date_local": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "observed_canonical_main_before_branch": "5fbf7aa1a9a5bb4089166ac787f291122a192b3c",
+  "authority_reentry": {
+    "supervisor_inbox_schema": "8.73",
+    "supervisor_steering": "SUPERVISOR_STEERING_8_73",
+    "owner_dual_machine_execution_authority_active": true,
+    "uploaded_bootstrap_classification": "NONCANONICAL_REENTRY_CACHE"
+  },
+  "vps_selfhosted_health_check": {
+    "direct_vps_shell_connector_available_to_this_organ": false,
+    "repository_bound_observer_expected_path": "research_entity/runtime/selfhosted_health/OBSERVER_LATEST.json",
+    "observer_latest_observed": false,
+    "classification": "TERMINAL_SELFHOSTED_HEALTH_UNKNOWN_NOT_PRODUCT_FAILURE",
+    "historical_last_known_forge_job": "QUEUED_NO_STEPS",
+    "repair_action_this_organ": "NO_HOST_MUTATION_WITHOUT_DIRECT_BRIDGE; PRESERVE_MERGED_HEALTH_OBSERVER_AND_ROUTE_NEXT EXECUTION THROUGH REPOSITORY_BOUND SELFHOSTED GATE"
+  },
+  "observed_gap": {
+    "source_path": "tools/ingest_forge_accepts_into_distillery.py",
+    "pre_delta_shape": "REPLAY_LOOKUP_THEN_INSERT_WITHOUT_WRITE_INTENT_SERIALIZATION",
+    "failure_mode": "TWO CONCURRENT SAME-REPLAY WRITERS MAY BOTH OBSERVE ABSENCE; UNIQUE INDEX PREVENTS DUPLICATE ROW BUT LOSER MAY SURFACE SQLITE INTEGRITY FAILURE INSTEAD OF DECLARED DUPLICATE/CONFLICT",
+    "duplicate_durable_packet_observed": false,
+    "scope": "FAIL_CLOSED_CONCURRENT_ADMISSION_CLASSIFICATION_AND_AVAILABILITY"
+  },
+  "external_prior_art": {
+    "source": "SQLite official transaction/isolation documentation",
+    "finding": "Default deferred transactions may upgrade after an initial read; BEGIN IMMEDIATE establishes write intent before the read/decision path and serializes writers, subject to SQLite busy handling.",
+    "design_consequence": "Acquire BEGIN IMMEDIATE before replay lookup, retain unique replay index as defense in depth."
+  },
+  "writes": [
+    {
+      "commit": "2ce4b0d6b17b4aeb849a99f4a0ddbba3ae3106a2",
+      "path": "tools/ingest_forge_accepts_into_distillery.py",
+      "delta": "Added admit_one_serialized using BEGIN IMMEDIATE before replay lookup with commit/rollback; canonical ingest now routes each admitted row through this atomic boundary."
+    },
+    {
+      "commit": "8c09c94bf89d9da48fc735f84f4258691c94f754",
+      "path": "tests/test_forge_distillery_concurrent_replay_873.py",
+      "delta": "Added deterministic two-connection/thread regressions for same-replay concurrent duplicate classification, concurrent measured-evidence conflict, and restart/reopen semantic replay stability."
+    }
+  ],
+  "acceptance_contract": [
+    "concurrent same replay identity => exactly one admission plus one clean DUPLICATE",
+    "replay duplicate adds zero accepted packets and zero accepted_dataset_tokens beyond the first admission",
+    "concurrent same replay identity with changed measured evidence => exactly one admission plus one clean REPLAY_IDENTITY_CONFLICT",
+    "conflict adds zero packet/token increment beyond the first admission",
+    "restart/reopen preserves semantic replay classification",
+    "unique replay index remains defense in depth",
+    "genuinely distinct execution identities remain separately admissible under existing regression"
+  ],
+  "test_execution": {
+    "new_concurrent_regression_executed_by_this_organ": false,
+    "reason": "ChatGPT local container could not resolve github.com and no direct VPS/local shell bridge is exposed in this session; source definition is not upgraded to execution evidence.",
+    "container_transport_failure_classification": "DNS_OR_TRANSPORT_FAILURE_NOT_ENTITYOS_LOGIC_NEGATIVE"
+  },
+  "macrocycle_identity": {
+    "shared_immutable_macrocycle_id_available": false,
+    "available_user_turn_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_executed": false,
+    "atomic_claim_created": false
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
+      "status": "ADVANCED_SOURCE",
+      "delta": "Closed the known concurrent replay lookup/write race at the canonical Forge-to-Distillery admission boundary by serializing replay classification and packet/counter mutation."
+    },
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
+      "status": "ADVANCED",
+      "delta": "Promoted a reusable causal-ingress invariant: stable replay lookup, measured-evidence conflict classification, packet creation and accounting must share one atomic write-intent transaction."
+    },
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": {
+      "status": "ADVANCED_DATASET_READINESS",
+      "delta": "Prevented parallel semantic replay from degrading future J-Space trace dataset accounting into ambiguous IntegrityError behavior; no model intervention or model/training credit was minted."
+    }
+  },
+  "credits_after_source_delta": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute the focused sequential + concurrent replay regressions on exact branch/current source. If green, fuse to main; the source-path merge automatically triggers the existing self-hosted Forge-Distillery exact-current runtime gate. Require repository-bound terminal evidence for one evidence-qualified ACCEPT -> exactly one packet -> accepted_dataset_tokens > 0 -> semantic replay +0, while the concurrent same-replay path yields one clean DUPLICATE and mutated measured evidence yields REPLAY_IDENTITY_CONFLICT. Keep local Qwen nonterminal J-Space intervention atomic-lease gated.",
+  "epistemic_boundary": "SOURCE_DELTA_AND_TEST_DEFINITION_ONLY; FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+}

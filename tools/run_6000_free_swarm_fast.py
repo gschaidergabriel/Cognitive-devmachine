@@ -23,6 +23,12 @@ model_health.install_scheduler(fabric_v2)
 import run_6000_free_swarm_v3 as fabric
 model_health.bind_request_observer(fabric)
 
+# Typed candidate materialization is deliberately installed last. It observes only
+# rows that already passed the current v3/model-health/economic route stack and does
+# not replace any provider, source-grounding, truth, or effect authority.
+import free_swarm_typed_delta_bridge as typed_delta_bridge
+typed_delta_bridge.install(fabric.fabric)
+
 
 def main() -> int:
     workers=max(64,min(1024,int(os.getenv("CLAY_SWARM_HTTP_THREADS","512"))))

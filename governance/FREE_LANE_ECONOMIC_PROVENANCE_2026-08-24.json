@@ -37,15 +37,22 @@
     },
     "groq": {
       "allowed_endpoint_host": "api.groq.com",
-      "evidence_kind": "CREDENTIAL_FINGERPRINT_PLUS_PROVIDER_RATE_HEADER_MATCH",
-      "source": "https://console.groq.com/docs/rate-limits",
+      "evidence_kind": "EXACT_CREDENTIAL_PROVIDER_SIDE_FREE_TIER_BINDING",
+      "source": "https://console.groq.com/docs/billing-faqs",
+      "corroborating_rate_limit_source": "https://console.groq.com/docs/rate-limits",
+      "rate_limit_false_positive_source": "https://console.groq.com/docs/projects",
+      "provider_statement": "Groq Free and Developer are economically distinct tiers. Developer is pay-as-you-go, while Projects may set custom rate limits at or below organization ceilings. Therefore Free-like RPD/TPM response headers are quota telemetry and cannot uniquely prove that a concrete credential/project is zero-cost.",
       "free_plan_models": {
         "openai/gpt-oss-120b": {"requests_per_day": 1000, "tokens_per_minute": 8000},
         "openai/gpt-oss-20b": {"requests_per_day": 1000, "tokens_per_minute": 8000},
         "qwen/qwen3.6-27b": {"requests_per_day": 1000, "tokens_per_minute": 8000}
       },
       "credential_plan_needed": true,
-      "credential_plan_proof": "A historical or live response for the same credential fingerprint and exact model must expose x-ratelimit-limit-requests and x-ratelimit-limit-tokens matching the documented Free Plan limits."
+      "credential_plan_proof": "Require fresh provider-side evidence that the exact credential fingerprint belongs to a Groq account/project currently on tier=FREE with pay-as-you-go disabled, bound to a non-secret account/project scope and exact allowed model set. Matching documented Free-plan headers are corroborating telemetry only and never economic authority.",
+      "credential_entitlements": {},
+      "max_entitlement_age_seconds": 3600,
+      "rate_headers_role": "CORROBORATING_QUOTA_ONLY_NOT_ECONOMIC_PROOF",
+      "default": "FAIL_CLOSED_UNTIL_FRESH_EXACT_CREDENTIAL_FREE_TIER_BINDING"
     },
     "mistral": {
       "allowed_endpoint_host": "api.mistral.ai",

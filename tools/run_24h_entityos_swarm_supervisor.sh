@@ -12,6 +12,36 @@ ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
 
 provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
 
+# Revocation must remove inherited provider credentials before any new child process
+# can inherit them. Admission is checked without reading secret values; admitted
+# providers keep already-present environment values while revoked/untyped providers
+# are scrubbed by variable name only.
+clear_unadmitted_provider_secret_env(){
+  local name
+  if ! provider_admitted groq; then
+    unset GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY || true
+  fi
+  if ! provider_admitted mistral; then
+    unset MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY || true
+  fi
+  if ! provider_admitted nvidia; then
+    unset NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY || true
+  fi
+  if ! provider_admitted openrouter; then
+    unset OPENROUTER_API_KEY || true
+  fi
+  # Tavily/Exa are not members of the current typed FREE provider authority.
+  unset TAVILY_API_KEY EXA_API_KEY || true
+  while IFS= read -r name; do
+    case "$name" in
+      GROQ_API_KEY_*) provider_admitted groq || unset "$name" || true ;;
+      MISTRAL_API_KEY_*) provider_admitted mistral || unset "$name" || true ;;
+      NVIDIA_API_KEY_*) provider_admitted nvidia || unset "$name" || true ;;
+      OPENROUTER_API_KEY_*) provider_admitted openrouter || unset "$name" || true ;;
+    esac
+  done < <(compgen -v)
+}
+
 typed_admission_compat_flags(){
   unset CLAY_FREE_ONLY_ATTESTED CLAY_GROQ_FREE_ATTESTED CLAY_MISTRAL_FREE_ATTESTED CLAY_NVIDIA_FREE_ATTESTED || true
   local any=0
@@ -112,6 +142,7 @@ stop_unadmitted_go_swarm(){
 }
 
 while (( $(date +%s) < DEADLINE )); do
+  clear_unadmitted_provider_secret_env
   typed_admission_compat_flags
   load_admitted_secret_sources
   eval "$(normalize_provider_pool)"

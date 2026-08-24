@@ -29,6 +29,49 @@ jobs:
           clean: true
           persist-credentials: true
 
+      - name: Require canonical go atomic lease and bind source
+        shell: bash
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+          lease_result="${RUNNER_TEMP}/trigger1-lease-${GITHUB_RUN_ID}.json"
+          python3 tools/trigger1_atomic_lease_gate.py --issue-body "$ISSUE_BODY" --output "$lease_result"
+          SOURCE_HEAD="$(git rev-parse HEAD)"
+          SOURCE_TREE="$(git rev-parse 'HEAD^{tree}')"
+          SOURCE_DIRTY=false
+          [[ -n "$(git status --porcelain=v1)" ]] && SOURCE_DIRTY=true
+          claim_main="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["observed_canonical_main"])' "$lease_result")"
+          python3 - "$lease_result" "$GITHUB_ENV" "$SOURCE_HEAD" "$SOURCE_TREE" "$SOURCE_DIRTY" <<'PY'
+          import json, pathlib, sys
+          r=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
+          values={
+              'TRIGGER1_TRIGGER_KEY':r['trigger_key'],
+              'TRIGGER1_CLAIM_PATH':r['claim_path'],
+              'TRIGGER1_CLAIM_SHA256':r['claim_sha256'],
+              'TRIGGER1_CLAIM_OBSERVED_MAIN':r['observed_canonical_main'],
+              'TRIGGER1_CLAIMANT_ORGAN':str(r['claimant_organ']),
+              'TRIGGER1_EXPERIMENT_NAME':r['experiment_name'],
+              'TRIGGER1_SOURCE_HEAD':sys.argv[3],
+              'TRIGGER1_SOURCE_TREE':sys.argv[4],
+              'TRIGGER1_SOURCE_DIRTY':sys.argv[5],
+              'TRIGGER1_LEASE_ADMITTED':'true',
+          }
+          with pathlib.Path(sys.argv[2]).open('a',encoding='utf-8') as f:
+              for k,v in values.items():
+                  if '\n' in v or '\r' in v: raise SystemExit('UNSAFE_ENV_VALUE')
+                  f.write(f'{k}={v}\n')
+          PY
+          [[ "$SOURCE_DIRTY" == false ]] || { echo 'BLOCKED_SOURCE_DIRTY_BEFORE_INTERVENTION' >&2; exit 2; }
+          git cat-file -e "$claim_main^{commit}"
+          git merge-base --is-ancestor "$claim_main" "$SOURCE_HEAD" || { echo 'BLOCKED_CLAIM_MAIN_NOT_ANCESTOR_OF_EXECUTED_SOURCE' >&2; exit 2; }
+
+      - name: Verify atomic lease gate implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_trigger1_atomic_lease_gate
+
       - name: Verify Trigger1 V2 promotion gate
         shell: bash
         run: |
@@ -191,6 +234,78 @@ jobs:
           git config user.email 'clay-trigger1-v2-runner@users.noreply.github.com'
           git add "$target"
           git commit -m "evidence(trigger1): persist V2 local vector run ${run} [skip ci]" || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1
+
+      - name: Finalize canonical unusual-experiment lease result
+        if: always()
+        shell: bash
+        env:
+          EXPERIMENT_DIR: ${{ steps.experiment.outputs.experiment_dir }}
+          EXPERIMENT_RC: ${{ steps.experiment.outputs.experiment_rc }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          [[ "${TRIGGER1_LEASE_ADMITTED:-}" == true ]] || exit 0
+          claim_result="research_entity/continuity/go_experiment_claims/${TRIGGER1_TRIGGER_KEY}.result.json"
+          runtime_receipt="research_entity/runtime/tool_results/trigger1-v2-local-fastpath-issue${{ github.event.issue.number }}-run${GITHUB_RUN_ID}.json"
+          git fetch --quiet origin main
+          if git cat-file -e "origin/main:${claim_result}" 2>/dev/null || [[ -e "$claim_result" ]]; then exit 0; fi
+          python3 - "$claim_result" "$EXPERIMENT_DIR" "$EXPERIMENT_RC" "$runtime_receipt" <<'PY'
+          import json, os, pathlib, sys
+          out=pathlib.Path(sys.argv[1]); exp=pathlib.Path(sys.argv[2]) if sys.argv[2] else None
+          rc=int(sys.argv[3]) if sys.argv[3] else None
+          result={}; gate={}
+          if exp:
+              rp=exp/'trigger1_local_activation_api_result.json'; gp=exp/'promotion_gate.json'
+              if rp.is_file():
+                  try: result=json.loads(rp.read_text(encoding='utf-8'))
+                  except Exception: result={}
+              if gp.is_file():
+                  try: gate=json.loads(gp.read_text(encoding='utf-8'))
+                  except Exception: gate={}
+          status=str(result.get('status') or '')
+          if not result or status.startswith('BLOCKED') or rc is None:
+              classification='BLOCKED'
+          elif rc != 0:
+              classification='FAIL'
+          elif gate.get('mechanism_runtime_vector_credit_candidate') is True:
+              classification='PASS'
+          else:
+              classification='FAIL'
+          payload={
+              'schema':'clay-go-experiment-result/v1',
+              'trigger_key':os.environ['TRIGGER1_TRIGGER_KEY'],
+              'claim_path':os.environ['TRIGGER1_CLAIM_PATH'],
+              'claim_sha256':os.environ['TRIGGER1_CLAIM_SHA256'],
+              'experiment_name':os.environ['TRIGGER1_EXPERIMENT_NAME'],
+              'intervention_identity':result.get('result_sha256'),
+              'source_identity':{
+                  'head':os.environ['TRIGGER1_SOURCE_HEAD'],
+                  'tree':os.environ['TRIGGER1_SOURCE_TREE'],
+                  'dirty':os.environ.get('TRIGGER1_SOURCE_DIRTY') == 'true',
+              },
+              'execution_surface':'SELF_HOSTED_LINUX_X64_ZERO_PROVIDER_BILLING',
+              'observed_result':{
+                  'workflow_job_status':os.environ.get('JOB_STATUS'),
+                  'runtime_status':result.get('status'),
+                  'runtime_verdict':result.get('verdict'),
+                  'promotion_gate':gate,
+              },
+              'classification':classification,
+              'whole_product_evidence_established':False,
+              'runtime_receipt_path':sys.argv[4],
+          }
+          out.parent.mkdir(parents=True,exist_ok=True)
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf-8')
+          PY
+          git config user.name 'clay-trigger1-v2-runner'
+          git config user.email 'clay-trigger1-v2-runner@users.noreply.github.com'
+          git add "$claim_result"
+          git commit -m "evidence(trigger1): close leased V2 midlayer run ${GITHUB_RUN_ID} [skip ci]"
           for attempt in 1 2 3 4 5 6; do
             git pull --rebase origin main && git push origin HEAD:main && exit 0
             sleep $((attempt * 3))

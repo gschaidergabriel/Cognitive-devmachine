@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_REENTRY_RECEIPT/v1",
+  "created_at": "2026-08-24T23:53:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.72",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_delta": "d99f0cb78576f2ca78d2576b3b7327bf324a6b8f",
+  "retained_hcu_donor": {
+    "pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "head_observed": "35d3cda9f98e69c3eac3905658e48e8154bb2c57",
+    "wire_source": "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+    "abi_schema": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "packet_schema": "JSPACE_VECTOR_CONTROL_PACKET/v1",
+    "codec_schema": "JSPACE_Q8_SYMMETRIC_RATIONAL/v1",
+    "wire_class": "RFC8785_JCS_JSON_UTF8_SYMMETRIC_Q8_PACKET"
+  },
+  "finding": {
+    "classification": "JSPACE_VECTOR_CONTROL_ABI_SCHEMA_COLLISION",
+    "current_effective_main_path": "tools/trigger1_intermediate_promotion_bridge.py",
+    "fault": "The effective Trigger-1 bridge used JSPACE_VECTOR_CONTROL_ABI/v1 as the schema string of a semantic experiment-intent hash material containing model, revision, derivation family, selected layer/gain and metric definition, while retained donor #1263 defines the same ABI name as a deterministic RFC8785/JCS symmetric-q8 packet with generation/basis/role/dimension/scale/q8/digest fields.",
+    "risk": "A later donor fusion could bind two incompatible byte languages to one ABI identity, invalidating packet reproducibility and creating a hidden second vector-control authority.",
+    "counterhypothesis": "The shared schema name could intentionally denote an abstract semantic intent independent of concrete packet bytes.",
+    "counterhypothesis_adjudication": "REJECTED_FOR_CURRENT_FUSION: retained donor #1263 explicitly treats JSPACE_VECTOR_CONTROL_ABI/v1 as one deterministic packet/wire authority and already fails closed on an older incompatible duplicate wire. Current semantic metadata therefore must not claim the same packet ABI identity."
+  },
+  "delta": {
+    "branch": "gpt56sol/go872-jspace-intent-abi-split-20260824-2353",
+    "semantic_schema": "JSPACE_VECTOR_CONTROL_SEMANTIC_INTENT/v1",
+    "reserved_wire_abi_schema": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "bridge_change": "Hash semantic intervention intent under a schema-distinct identity and explicitly record both semantic source_packet_schema and reserved_wire_abi_schema in the direct-steering candidate.",
+    "promotion_gate_semantics_changed": false,
+    "q8_wire_imported_or_reimplemented": false,
+    "second_vector_wire_created": false,
+    "test_fixture_repair": "The existing bridge test fixture was stale relative to the already-current label-independence guard; it now supplies the required derivation label-independence receipt and locks the semantic-vs-wire schema split."
+  },
+  "verification": {
+    "branch_diff_files": [
+      "tools/trigger1_intermediate_promotion_bridge.py",
+      "tests/test_trigger1_intermediate_promotion_bridge.py"
+    ],
+    "branch_diff_file_count_before_receipt": 2,
+    "local_static_test_attempt": "INFRASTRUCTURE_BLOCKED_NO_GITHUB_DNS_IN_LOCAL_CONTAINER",
+    "test_execution_status": "UNEXECUTED_PENDING_NORMAL_GITHUB_PR_CI",
+    "runtime_credit_from_source_or_test_definition": 0
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_PRESERVING_ONE_UNAMBIGUOUS_CURRENT_JSPACE_CONTROL_IDENTITY_BOUNDARY_FOR_FUTURE_ENTITYOS_EXECUTION_FUSION",
+    "track_b": "ADVANCED_BY_SPLITTING_SEMANTIC_INTENT_FROM_RETAINED_HCU_Q8_WIRE_ABI_WITHOUT_CREATING_A_SECOND_TYPED_ENTRY_OR_HCU_AUTHORITY",
+    "track_c": "ADVANCED_BY_REMOVING_A_TRAINING_TRACE_AND_MODEL_INPUT_IDENTITY_COLLISION_BEFORE_ANY_MODEL_SPECIFIC_JSPACE_PROMOTION"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_request_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "atomic_claim_created_by_this_organ": false,
+    "new_unusual_interventions_executed": 0
+  },
+  "execution": {
+    "external_provider_calls": 0,
+    "together_calls": 0,
+    "paid_execution": 0,
+    "model_execution": 0,
+    "entityos_hcu_runtime_invocation": 0
+  },
+  "credits_after": {
+    "provider_runtime": 0,
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Open the normal PR, consume ordinary CI/regression evidence if produced, re-enter newest main for overlap, and merge only if the schema split remains nonduplicate and successor-clean. After fusion, preserve JSPACE_VECTOR_CONTROL_ABI/v1 exclusively for the retained deterministic q8 wire and use an explicit adapter when the donor wire is later ported into the model-input path."
+}

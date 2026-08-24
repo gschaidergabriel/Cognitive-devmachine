@@ -67,10 +67,11 @@ jobs:
           set -e
           printf '%s\n' "$RUN_RC" > "$OUT/runtime-rc.txt"
 
-          if [[ -s "$OUT/runtime/trigger1_direct_steering_candidate.json" ]]; then
+          if [[ -s "$OUT/runtime/trigger1_direct_steering_candidate.json" && -s "$OUT/runtime/trigger1_local_activation_api_result.json" ]]; then
             set +e
-            python3 tools/trigger1_jspace_promotion_gate.py \
+            python3 tools/trigger1_jspace_runtime_result_gate.py \
               --candidate "$OUT/runtime/trigger1_direct_steering_candidate.json" \
+              --result "$OUT/runtime/trigger1_local_activation_api_result.json" \
               > "$OUT/promotion-gate.json" 2> "$OUT/promotion-gate.err"
             GATE_RC=$?
             set -e
@@ -114,6 +115,7 @@ jobs:
               'candidate_controls':cand.get('controls'),
               'candidate_intervention':cand.get('intervention'),
               'candidate_holdout':cand.get('holdout'),
+              'runtime_result_binding_pass':gate.get('runtime_result_binding_pass'),
               'promotion_gate':gate or None,
               'canonical_credit_minted':False,
               'whole_entityos_hcu_credit_minted':False,

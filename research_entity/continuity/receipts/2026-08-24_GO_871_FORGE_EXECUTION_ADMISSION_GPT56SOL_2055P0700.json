@@ -1,0 +1,52 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch_observed": "8.71",
+  "branch_base_main": "968473111bca71936e3f668ff42e38cddb8ba905",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "finding": "The current Evidence Forge executes model-authored test/negative/benchmark command strings via bash -lc and inherited os.environ. This makes ready_for_forge insufficient as executable admission and blocks safe worker-to-Forge conversion.",
+  "delta": {
+    "policy": "CLAY_FORGE_EXECUTION_ADMISSION/v1",
+    "files": [
+      "tools/forge_execution_admission_871.py",
+      "tools/run_free_evidence_forge_safe_871.py",
+      "tests/test_forge_execution_admission_871.py"
+    ],
+    "properties": [
+      "model-authored commands parsed to argv without a shell",
+      "python -c, executable bash, shell metacharacters, option-value absolute paths, parent path escape and unknown executables fail closed",
+      "child environment is constructed from a secret-free allowlist rather than os.environ",
+      "execution requires a functionally probed bubblewrap --unshare-all namespace and otherwise returns execution_blocked_no_isolated_executor",
+      "host /run, /artifacts and /home are not bound into the test sandbox",
+      "candidate, proposal, patch, command-set, source-head and source-tree identities are preserved in the execution manifest",
+      "candidate validity is distinct from execution admission",
+      "bubblewrap presence without functional namespace support is infrastructure negative evidence, not candidate failure"
+    ]
+  },
+  "evidence": {
+    "isolated_chatgpt_container_unit_tests": "8/8 PASS",
+    "isolated_chatgpt_container_py_compile": "PASS",
+    "bubblewrap_real_execution": "NOT_AVAILABLE_IN_CHATGPT_CONTAINER",
+    "scope": "SOURCE_MECHANISM_ONLY",
+    "exact_authorized_local_or_clay_direct_dev_run": "NOT_OBSERVED_TOOL_VISIBILITY",
+    "github_actions": "RUNNER_CONTROL_PLANE_FAILURE_BEFORE_VISIBLE_STEPS; NO_SEMANTIC_TEST_CREDIT",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "counterhypothesis": "The existing command blacklist plus disposable local clones may be operationally sufficient because clones are temporary. Rejected as an execution authority: bash -lc and inherited environment allow worker-authored code to exercise ambient host capabilities unrelated to clone disposal.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_MECHANISM",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_TYPED_EXECUTION_ADMISSION_BOUNDARY",
+    "C_GLOBAL_JSPACE_GWT_FREE_ONLY_READINESS": "ADVANCED_INDIRECTLY_BY_MAKING_FUTURE_JSPACE_DELTA_EVALUATION_FAIL_CLOSED"
+  },
+  "unusual_experiment": "NONE; no reproducible shared immutable go macrocycle identity/create-only lease was exposed",
+  "readme_sync": "PENDING_SUCCESSOR_CURRENT_FUSION; historical README is not rewritten blindly while main is moving rapidly",
+  "next_exact_gate": "Wire the safe Forge entrypoint into the active supervisor only after exact-current reentry, then execute its regression plus one known-safe candidate and the blocked-command negative suite on an authorized normal-user local or clay-direct-dev surface. Only after executable evidence should the typed delta-ingress donor be reintroduced and conversion measured."
+}

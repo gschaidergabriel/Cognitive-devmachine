@@ -20,7 +20,7 @@ def claim() -> dict:
         "claimant_organ": "gpt56sol",
         "claimed_at": "2026-08-24T15:06:00Z",
         "observed_canonical_main": HEAD,
-        "intervention_contract": {"mode": "bounded_midlayer_causal"},
+        "intervention_contract": {"mode": "strongest_intermediate_contrastive"},
         "status": "CLAIMED",
     }
 
@@ -40,6 +40,9 @@ class Trigger1AtomicLeaseGateTests(unittest.TestCase):
     def run_gate(self, body: str | None = None):
         return validate_claim(issue_body=body or f"trigger_key: {RID}\n", claims_root=self.root)
 
+    def test_expected_experiment_is_strongest_intermediate_identity(self):
+        self.assertEqual("CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1", EXPECTED_EXPERIMENT)
+
     def test_valid_claim(self):
         self.put(claim())
         r = self.run_gate()
@@ -53,6 +56,11 @@ class Trigger1AtomicLeaseGateTests(unittest.TestCase):
 
     def test_missing_claim(self):
         self.assertEqual(self.run_gate()["reason"], "CANONICAL_ATOMIC_CLAIM_MISSING")
+
+    def test_legacy_midlayer_experiment_is_rejected(self):
+        c = claim(); c["experiment_name"] = "CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1"
+        self.put(c)
+        self.assertEqual(self.run_gate()["reason"], "CLAIM_EXPERIMENT_MISMATCH")
 
     def test_wrong_experiment(self):
         c = claim(); c["experiment_name"] = "OLDER_TRIGGER1_EXPERIMENT"

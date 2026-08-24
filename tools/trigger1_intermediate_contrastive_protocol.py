@@ -11,8 +11,12 @@ Required stronger discriminator:
 - layer/gain selected only on calibration rows;
 - disjoint holdout;
 - six matched controls plus explicit wrong-layer and lesion/rescue evidence;
+- wrong-layer localization must reuse the selected causal vector;
+- selected-site effect magnitude must exceed wrong-site effect magnitude, so a
+  large opposite-sign off-layer effect cannot pass a one-sided signed test;
 - counterbalanced label-remap holdout families so output-token identity cannot explain transfer;
-- nuisance controls are scored by absolute effect magnitude, not only target-positive drift.
+- nuisance controls are scored by absolute effect magnitude, not only target-positive drift;
+- lesion must reduce the mapped target and rescue must recover to baseline or beyond.
 """
 from __future__ import annotations
 
@@ -231,8 +235,11 @@ def adjudicate_holdout(
     by_case: dict[tuple[str, str], dict[str, float]] = {}
     wrong_layer_seen: set[tuple[str, str]] = set()
     lesion_rescue_seen: set[tuple[str, str]] = set()
-    wrong_layer_ok = True
-    lesion_rescue_ok = True
+    wrong_layer_deltas: dict[tuple[str, str], float] = {}
+    wrong_layer_source_layers: dict[tuple[str, str], int] = {}
+    wrong_layer_same_vector: dict[tuple[str, str], bool] = {}
+    lesion_deltas: dict[tuple[str, str], float] = {}
+    rescue_deltas: dict[tuple[str, str], float] = {}
 
     for r in frozen:
         key = (str(r["case_id"]), str(r["label_map_id"]))
@@ -242,16 +249,14 @@ def adjudicate_holdout(
             )
         if r.get("wrong_layer_delta") is not None:
             wrong_layer_seen.add(key)
-            wrong_layer_ok = wrong_layer_ok and _finite(
-                r["wrong_layer_delta"], "wrong_layer_delta"
-            ) <= 0
+            wrong_layer_deltas[key] = _finite(r["wrong_layer_delta"], "wrong_layer_delta")
+            source_layer = r.get("wrong_layer_vector_source_layer")
+            wrong_layer_source_layers[key] = int(source_layer) if isinstance(source_layer, int) and not isinstance(source_layer, bool) else -1
+            wrong_layer_same_vector[key] = r.get("wrong_layer_same_selected_vector") is True
         if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
             lesion_rescue_seen.add(key)
-            lesion_rescue_ok = (
-                lesion_rescue_ok
-                and _finite(r["lesion_delta"], "lesion_delta") <= 0
-                and _finite(r["rescue_delta"], "rescue_delta") > 0
-            )
+            lesion_deltas[key] = _finite(r["lesion_delta"], "lesion_delta")
+            rescue_deltas[key] = _finite(r["rescue_delta"], "rescue_delta")
 
     case_keys = set(by_case)
     if not case_keys:
@@ -269,14 +274,30 @@ def adjudicate_holdout(
             "cases_missing_lesion_rescue": sorted(case_keys - lesion_rescue_seen),
         }
 
+    wrong_layer_provenance_ok = all(
+        wrong_layer_same_vector.get(key) is True
+        and wrong_layer_source_layers.get(key) == int(selected_layer)
+        for key in case_keys
+    )
+    if not wrong_layer_provenance_ok:
+        return {
+            "pass": False,
+            "classification": "WRONG_LAYER_SELECTED_VECTOR_PROVENANCE_REQUIRED",
+            "wrong_layer_vector_source_layers": sorted(set(wrong_layer_source_layers.values())),
+        }
+
     margins = []
     null_drifts = []
     nuisance_effects = []
-    for vals in by_case.values():
+    wrong_layer_specificity_margins = []
+    rescue_vs_baseline = []
+    lesion_rescue_ok = True
+    for key, vals in by_case.items():
         if not all(k in vals for k in REQUIRED_CONTROLS):
             return {"pass": False, "classification": "INCOMPLETE_MATCHED_CONTROL_FAMILY"}
+        plus_effect = vals["+VECTOR"] - vals["BASELINE"]
         directional = min(
-            vals["+VECTOR"] - vals["BASELINE"],
+            plus_effect,
             vals["BASELINE"] - vals["SIGN_FLIP"],
         )
         nuisance = max(
@@ -287,6 +308,27 @@ def adjudicate_holdout(
         nuisance_effects.append(nuisance)
         null_drifts.append(abs(vals["NULL_VECTOR"] - vals["BASELINE"]))
 
+        # Executor records wrong_layer_delta = wrong_effect - selected_plus_effect.
+        # Recover the actual wrong-site effect before comparing magnitudes.
+        wrong_effect = plus_effect + wrong_layer_deltas[key]
+        wrong_layer_specificity_margins.append(abs(plus_effect) - abs(wrong_effect))
+
+        # lesion_delta = lesion-baseline; rescue_delta = rescue-lesion.
+        # Their sum is rescue-baseline and therefore tests actual recovery.
+        recovered = lesion_deltas[key] + rescue_deltas[key]
+        rescue_vs_baseline.append(recovered)
+        lesion_rescue_ok = bool(
+            lesion_rescue_ok
+            and lesion_deltas[key] < 0
+            and rescue_deltas[key] > 0
+            and recovered >= 0
+        )
+
+    wrong_layer_ok = bool(
+        wrong_layer_specificity_margins
+        and min(wrong_layer_specificity_margins) > 0
+        and wrong_layer_provenance_ok
+    )
     passed = bool(
         margins
         and min(margins) > 0
@@ -309,7 +351,10 @@ def adjudicate_holdout(
         "max_same_norm_nuisance_effect": max(nuisance_effects) if nuisance_effects else None,
         "max_null_drift": max(null_drifts) if null_drifts else None,
         "wrong_layer_evidence_complete": wrong_layer_seen == case_keys,
+        "wrong_layer_selected_vector_provenance": wrong_layer_provenance_ok,
+        "worst_wrong_layer_specificity_margin": min(wrong_layer_specificity_margins) if wrong_layer_specificity_margins else None,
         "lesion_rescue_evidence_complete": lesion_rescue_seen == case_keys,
+        "min_rescue_vs_baseline": min(rescue_vs_baseline) if rescue_vs_baseline else None,
         "wrong_layer_ok": wrong_layer_ok,
         "lesion_rescue_ok": lesion_rescue_ok,
         "credit_scope": CREDIT_SCOPE,

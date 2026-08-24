@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
-"""Authority-bearing wrapper for deterministic executor sequence-lane bindings.
+"""Authority-bearing executor sequence-lane projection over the canonical stream store.
 
-``executor_sequence_lane_binding_v1`` remains useful as an integrity/grouping primitive, but a
-hash-bound Entry stream label is not by itself control-plane stream authority. This module is
-the promotion boundary: it derives the stream authority view itself from the existing canonical
-session/generation substrate rather than accepting a caller-constructed authority object.
+``executor_sequence_lane_binding_v1`` proves an exact Entry/GRID10/model-input grouping path,
+but the Entry's hash-bound ``stream_id`` is not authority by itself. Positive stream authority
+comes only from ``entry_stream_authority_store_v1``: an external deterministic decision must
+already have been admitted and atomically persisted into the caller's canonical MiniUnifiedDB.
 
-The first deliberately narrow authority class is HUMAN_PROMPT, where canonical session_id is
-the cross-event stream identity. Other source classes remain fail-closed until they have an
-independent deterministic transport/control-plane stream authority.
-
-Even an authorized lane does NOT assign t/t+1 positions, prove temporal adjacency, execute a
-model, establish hidden-state causality, or grant runtime/training credit. Actual adjacency
-must later be atomically assigned/admitted at the real executor boundary in canonical state.
+This module is a read-only consumer of that single authority. It creates no stream store and no
+temporal-order authority. A positive result means the exact lane and exact canonical stream
+authority admission agree. It still does NOT assign sequence positions, prove t->t+1 adjacency,
+execute a model, prove hidden-state causal use, mint truth/effects, or grant runtime/training
+credit. Actual adjacency remains a later atomic executor-boundary admission in canonical state.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 import hashlib
+import sqlite3
 from typing import Any
 
 try:
-    from .control_plane_stream_authority_v1 import (
-        SCHEMA as STREAM_AUTHORITY_SCHEMA,
-        StreamAuthorityError,
-        snapshot_human_prompt_stream_authority,
-        validate_entry_stream_authority,
-    )
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from .entry_stream_authority_store_v1 import (
+        ADMISSION_SCHEMA as STREAM_AUTHORITY_ADMISSION_SCHEMA,
+        EntryStreamAuthorityAdmission,
+        EntryStreamAuthorityError,
+        read_entry_stream_authority_admission,
+        validate_entry_stream_authority_admission,
+    )
     from .executor_sequence_lane_binding_v1 import (
         BINDING_SCHEMA as LANE_BINDING_SCHEMA,
         ExecutorSequenceLaneBinding,
@@ -38,13 +38,14 @@ try:
     from .model_input_control_binding_v1 import ModelInputControlBinding
     from .xeno_entry_fabric_v1 import EntryPacket
 except ImportError:
-    from control_plane_stream_authority_v1 import (
-        SCHEMA as STREAM_AUTHORITY_SCHEMA,
-        StreamAuthorityError,
-        snapshot_human_prompt_stream_authority,
-        validate_entry_stream_authority,
-    )
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
+    from entry_stream_authority_store_v1 import (
+        ADMISSION_SCHEMA as STREAM_AUTHORITY_ADMISSION_SCHEMA,
+        EntryStreamAuthorityAdmission,
+        EntryStreamAuthorityError,
+        read_entry_stream_authority_admission,
+        validate_entry_stream_authority_admission,
+    )
     from executor_sequence_lane_binding_v1 import (
         BINDING_SCHEMA as LANE_BINDING_SCHEMA,
         ExecutorSequenceLaneBinding,
@@ -56,7 +57,8 @@ except ImportError:
     from xeno_entry_fabric_v1 import EntryPacket
 
 
-SCHEMA = "HCU_AUTHORIZED_EXECUTOR_SEQUENCE_LANE/v1"
+SCHEMA = "HCU_AUTHORIZED_EXECUTOR_SEQUENCE_LANE/v2"
+MAX_SAFE_INTEGER = 9_007_199_254_740_991
 
 
 class AuthorizedExecutorSequenceLaneError(ValueError):
@@ -68,35 +70,52 @@ class AuthorizedExecutorSequenceLane:
     schema: str
     canonicalization_schema: str
     lane_binding_schema: str
-    stream_authority_schema: str
+    stream_authority_admission_schema: str
     entity_generation: int
     executor_id: str
     invocation_id: str
     sequence_lane_sha256: str
     lane_binding_sha256: str
-    stream_authority_binding_sha256: str
+    stream_authority_admission_sha256: str
+    stream_authority_decision_sha256: str
+    stream_authority_namespace: str
+    stream_authority_decision_id: str
     entry_event_sha256: str
     entry_admission_sha256: str
     grid_plan_sha256: str
     authorization_sha256: str
 
 
+def _need(condition: bool, message: str) -> None:
+    if not condition:
+        raise AuthorizedExecutorSequenceLaneError(message)
+
+
 def _sha256(value: Any, field: str) -> str:
-    if not isinstance(value, str):
-        raise AuthorizedExecutorSequenceLaneError(f"{field}:STRING_REQUIRED")
-    if (
-        len(value) != 64
-        or value.lower() != value
-        or any(ch not in "0123456789abcdef" for ch in value)
-        or value in {"0" * 64, "f" * 64}
-    ):
-        raise AuthorizedExecutorSequenceLaneError(f"{field}:LOWERCASE_NONPLACEHOLDER_SHA256_REQUIRED")
+    _need(isinstance(value, str), f"{field}:STRING_REQUIRED")
+    _need(
+        len(value) == 64
+        and value.lower() == value
+        and all(ch in "0123456789abcdef" for ch in value)
+        and value not in {"0" * 64, "f" * 64},
+        f"{field}:LOWERCASE_NONPLACEHOLDER_SHA256_REQUIRED",
+    )
     return value
 
 
-def _text(value: Any, field: str) -> str:
-    if not isinstance(value, str) or not value.strip() or value != value.strip():
-        raise AuthorizedExecutorSequenceLaneError(f"{field}:CANONICAL_NONEMPTY_STRING_REQUIRED")
+def _text(value: Any, field: str, max_len: int = 512) -> str:
+    _need(isinstance(value, str) and bool(value.strip()), f"{field}:NONEMPTY_STRING_REQUIRED")
+    normalized = value.strip()
+    _need(value == normalized, f"{field}:NONCANONICAL_TEXT")
+    _need(len(normalized) <= max_len, f"{field}:TOO_LONG")
+    return normalized
+
+
+def _generation(value: Any) -> int:
+    _need(
+        type(value) is int and 0 <= value <= MAX_SAFE_INTEGER,
+        "entity_generation:IJSON_SAFE_NONNEGATIVE_INTEGER_REQUIRED",
+    )
     return value
 
 
@@ -107,23 +126,75 @@ def _canonical_sha256(value: Any, field: str) -> str:
         raise AuthorizedExecutorSequenceLaneError(f"{field}:CANONICALIZATION_FAILED:{exc}") from exc
 
 
+def _read_authority(
+    db: sqlite3.Connection,
+    packet: EntryPacket,
+    *,
+    current_generation: int,
+) -> EntryStreamAuthorityAdmission:
+    _need(isinstance(db, sqlite3.Connection), "CANONICAL_SQLITE_CONNECTION_REQUIRED")
+    _need(isinstance(packet, EntryPacket), "ENTRY_PACKET_REQUIRED")
+    generation = _generation(current_generation)
+    _need(packet.entity_generation == generation, "ENTRY_STREAM_AUTHORITY_GENERATION_MISMATCH")
+    _need(packet.stream_id is not None, "EXECUTOR_SEQUENCE_STREAM_ID_REQUIRED")
+    try:
+        admission = read_entry_stream_authority_admission(
+            db,
+            current_generation=generation,
+            source_kind=packet.source_kind,
+            source_id=packet.source_id,
+            stream_id=packet.stream_id,
+        )
+        validate_entry_stream_authority_admission(admission)
+    except EntryStreamAuthorityError as exc:
+        raise AuthorizedExecutorSequenceLaneError(
+            f"EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE:{exc}"
+        ) from exc
+    for left, right, code in (
+        (admission.generation, packet.entity_generation, "ENTRY_STREAM_AUTHORITY_GENERATION_MISMATCH"),
+        (admission.source_kind, packet.source_kind, "ENTRY_STREAM_AUTHORITY_SOURCE_KIND_MISMATCH"),
+        (admission.source_id, packet.source_id, "ENTRY_STREAM_AUTHORITY_SOURCE_ID_MISMATCH"),
+        (admission.stream_id, packet.stream_id, "ENTRY_STREAM_AUTHORITY_STREAM_ID_MISMATCH"),
+    ):
+        _need(left == right, code)
+    return admission
+
+
 def _material(
     lane: ExecutorSequenceLaneBinding,
-    authority_binding_sha256: str,
+    admission: EntryStreamAuthorityAdmission,
 ) -> dict[str, Any]:
+    _need(lane.generation == admission.generation, "LANE_STREAM_AUTHORITY_GENERATION_MISMATCH")
+    _need(lane.source_kind == admission.source_kind, "LANE_STREAM_AUTHORITY_SOURCE_KIND_MISMATCH")
+    _need(lane.source_id == admission.source_id, "LANE_STREAM_AUTHORITY_SOURCE_ID_MISMATCH")
+    _need(lane.stream_id == admission.stream_id, "LANE_STREAM_AUTHORITY_STREAM_ID_MISMATCH")
     return {
         "schema": SCHEMA,
         "canonicalization_schema": CANONICALIZATION_SCHEMA,
         "lane_binding_schema": LANE_BINDING_SCHEMA,
-        "stream_authority_schema": STREAM_AUTHORITY_SCHEMA,
-        "entity_generation": lane.generation,
-        "executor_id": _text(lane.executor_id, "lane.executor_id"),
-        "invocation_id": _text(lane.invocation_id, "lane.invocation_id"),
+        "stream_authority_admission_schema": STREAM_AUTHORITY_ADMISSION_SCHEMA,
+        "entity_generation": _generation(lane.generation),
+        "executor_id": _text(lane.executor_id, "lane.executor_id", 256),
+        "invocation_id": _text(lane.invocation_id, "lane.invocation_id", 256),
         "sequence_lane_sha256": _sha256(lane.sequence_lane_sha256, "lane.sequence_lane_sha256"),
         "lane_binding_sha256": _sha256(lane.binding_sha256, "lane.binding_sha256"),
-        "stream_authority_binding_sha256": _sha256(
-            authority_binding_sha256,
-            "stream_authority_binding_sha256",
+        "stream_authority_admission_sha256": _sha256(
+            admission.admission_sha256,
+            "stream_authority_admission_sha256",
+        ),
+        "stream_authority_decision_sha256": _sha256(
+            admission.decision_sha256,
+            "stream_authority_decision_sha256",
+        ),
+        "stream_authority_namespace": _text(
+            admission.authority_namespace,
+            "stream_authority_namespace",
+            256,
+        ),
+        "stream_authority_decision_id": _text(
+            admission.authority_decision_id,
+            "stream_authority_decision_id",
+            512,
         ),
         "entry_event_sha256": _sha256(lane.entry_event_sha256, "lane.entry_event_sha256"),
         "entry_admission_sha256": _sha256(
@@ -134,52 +205,22 @@ def _material(
     }
 
 
-def _derive_and_validate_authority(
-    packet: EntryPacket,
-    canonical_db: Any,
-    *,
-    user_id: str,
-    session_id: str,
-    trusted_source_id: str,
-) -> str:
-    """Read canonical session state inside promotion; caller cannot inject an authority view."""
-    try:
-        view = snapshot_human_prompt_stream_authority(
-            canonical_db,
-            user_id=user_id,
-            session_id=session_id,
-            trusted_source_id=trusted_source_id,
-        )
-        return validate_entry_stream_authority(packet, view)
-    except StreamAuthorityError as exc:
-        raise AuthorizedExecutorSequenceLaneError(f"STREAM_AUTHORITY_REJECTED:{exc}") from exc
-
-
 def authorize_executor_sequence_lane(
+    db: sqlite3.Connection,
     packet: EntryPacket,
     grid_plan: GridPlan,
     input_binding: ModelInputControlBinding,
     consumed_input_bytes: bytes,
     *,
-    canonical_db: Any,
-    user_id: str,
-    session_id: str,
-    trusted_source_id: str,
+    current_generation: int,
 ) -> AuthorizedExecutorSequenceLane:
-    """Promote a lane only after fresh canonical stream-authority derivation and validation."""
-    authority_binding_sha256 = _derive_and_validate_authority(
-        packet,
-        canonical_db,
-        user_id=user_id,
-        session_id=session_id,
-        trusted_source_id=trusted_source_id,
-    )
+    """Read canonical stream authority, then bind it to the exact executor lane parents."""
     try:
         lane = bind_executor_sequence_lane(packet, grid_plan, input_binding, consumed_input_bytes)
     except ExecutorSequenceLaneBindingError as exc:
         raise AuthorizedExecutorSequenceLaneError(f"SEQUENCE_LANE_BINDING_REJECTED:{exc}") from exc
-
-    material = _material(lane, authority_binding_sha256)
+    admission = _read_authority(db, packet, current_generation=current_generation)
+    material = _material(lane, admission)
     return AuthorizedExecutorSequenceLane(
         **material,
         authorization_sha256=_canonical_sha256(material, "AUTHORIZED_EXECUTOR_SEQUENCE_LANE"),
@@ -188,31 +229,35 @@ def authorize_executor_sequence_lane(
 
 def validate_authorized_executor_sequence_lane(
     authorized: AuthorizedExecutorSequenceLane,
+    db: sqlite3.Connection,
     packet: EntryPacket,
     grid_plan: GridPlan,
     input_binding: ModelInputControlBinding,
     consumed_input_bytes: bytes,
     *,
-    canonical_db: Any,
-    user_id: str,
-    session_id: str,
-    trusted_source_id: str,
+    current_generation: int,
 ) -> str:
-    """Re-read canonical authority and re-derive exact lane parents; outer hash is insufficient."""
-    if not isinstance(authorized, AuthorizedExecutorSequenceLane):
-        raise AuthorizedExecutorSequenceLaneError("AUTHORIZED_EXECUTOR_SEQUENCE_LANE_REQUIRED")
+    """Re-read canonical stream authority and re-derive exact lane parents."""
+    _need(isinstance(authorized, AuthorizedExecutorSequenceLane), "AUTHORIZED_EXECUTOR_SEQUENCE_LANE_REQUIRED")
     expected = authorize_executor_sequence_lane(
+        db,
         packet,
         grid_plan,
         input_binding,
         consumed_input_bytes,
-        canonical_db=canonical_db,
-        user_id=user_id,
-        session_id=session_id,
-        trusted_source_id=trusted_source_id,
+        current_generation=current_generation,
     )
-    if authorized != expected:
-        raise AuthorizedExecutorSequenceLaneError(
-            "AUTHORIZED_EXECUTOR_SEQUENCE_LANE_SOURCE_REVALIDATION_MISMATCH"
-        )
+    _need(
+        authorized == expected,
+        "AUTHORIZED_EXECUTOR_SEQUENCE_LANE_SOURCE_REVALIDATION_MISMATCH",
+    )
     return expected.authorization_sha256
+
+
+__all__ = [
+    "SCHEMA",
+    "AuthorizedExecutorSequenceLaneError",
+    "AuthorizedExecutorSequenceLane",
+    "authorize_executor_sequence_lane",
+    "validate_authorized_executor_sequence_lane",
+]

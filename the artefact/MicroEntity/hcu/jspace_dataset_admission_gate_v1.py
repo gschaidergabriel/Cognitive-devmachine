@@ -19,6 +19,17 @@ except ImportError:
         validate_packet,
     )
 
+try:
+    from .outcome_receipt_content_key_v1 import (
+        OutcomeReceiptContentKeyError,
+        verify_outcome_receipt_content_key,
+    )
+except ImportError:
+    from outcome_receipt_content_key_v1 import (
+        OutcomeReceiptContentKeyError,
+        verify_outcome_receipt_content_key,
+    )
+
 ADMISSION_SCHEMA = "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2"
 PROTOTYPE_SCHEMA = "ENTITYOS_HCU_GLOBAL_JSPACE_GWT_TRACE/v3"
 TRANSITION_SCHEMA = "JSPACE_GWT_TRANSITION_TRACE/v1"
@@ -145,19 +156,31 @@ def _verify_transition_trace_identity(trace: Any, claimed_sha256: str) -> None:
         raise JSpaceDatasetAdmissionError("TRANSITION_TRACE_IDENTITY_MISMATCH")
 
 
-def _canonical_receipt_sha256(receipt: Any) -> str:
-    """Bind an outcome receipt key to the exact admitted RFC8785/JCS receipt bytes."""
+def _verify_outcome_receipt_identity(
+    receipt: Any,
+    claimed_sha256: str,
+    *,
+    expected_training_trace_sha256: str,
+) -> None:
+    """Verify the acyclic outcome content key plus its late training-trace back-reference.
+
+    The training trace stores a content key that excludes exactly the late
+    ``training_trace_sha256`` field. The final admitted receipt must still bind the exact
+    training digest here. This removes the impossible full-receipt/training hash cycle without
+    weakening the existing causal checks or creating a second dataset authority.
+    """
     receipt = _mapping(receipt, "admitted_outcome_receipt")
     try:
-        canonical = canonicalize(dict(receipt))
-    except (CanonicalizationError, TypeError, ValueError) as exc:
-        raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_CANONICALIZATION_FAILED") from exc
-    return hashlib.sha256(canonical).hexdigest()
-
-
-def _verify_outcome_receipt_identity(receipt: Any, claimed_sha256: str) -> None:
-    if _canonical_receipt_sha256(receipt) != claimed_sha256:
-        raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_IDENTITY_MISMATCH")
+        verify_outcome_receipt_content_key(
+            receipt,
+            claimed_sha256,
+            expected_training_trace_sha256=expected_training_trace_sha256,
+        )
+    except OutcomeReceiptContentKeyError as exc:
+        code = str(exc)
+        if code == "OUTCOME_TRAINING_TRACE_MISMATCH":
+            raise JSpaceDatasetAdmissionError(code) from exc
+        raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_IDENTITY_MISMATCH") from exc
 
 
 def _same(values: Mapping[str, Any], field: str) -> Any:
@@ -305,9 +328,10 @@ def admit_for_training_dataset(
     and prototype ancestry keys must additionally resolve to the exact RFC8785/JCS content
     identities they claim. The shared Vector Control digest must resolve through a caller-owned
     registry to an exact canonical packet preimage that passes the sole
-    ``JSPACE_VECTOR_CONTROL_ABI/v1`` validator. A raw standalone prototype, self-consistent
-    row, digest-only vector label, shared but unadmitted GRID hash, or content-false registry
-    alias is insufficient.
+    ``JSPACE_VECTOR_CONTROL_ABI/v1`` validator. Outcome identity uses the selected acyclic
+    content key and separately revalidates the final training-trace back-reference. A raw
+    standalone prototype, self-consistent row, digest-only vector label, shared but unadmitted
+    GRID hash, content-false registry alias, or unbound outcome receipt is insufficient.
     """
     training_trace = _mapping(training_trace, "training_trace")
     transition_trace = _mapping(transition_trace, "transition_trace")
@@ -441,7 +465,11 @@ def admit_for_training_dataset(
         receipt = outcome_registry.get(outcome)
         if receipt is None:
             raise JSpaceDatasetAdmissionError("OUTCOME_RECEIPT_NOT_ADMITTED")
-        _verify_outcome_receipt_identity(receipt, outcome)
+        _verify_outcome_receipt_identity(
+            receipt,
+            outcome,
+            expected_training_trace_sha256=training_sha,
+        )
         _verify_outcome_binding(
             receipt,
             training_sha=training_sha,

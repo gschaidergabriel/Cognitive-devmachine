@@ -71,17 +71,29 @@ start_dashboard() {
   fi
 }
 
+start_distillery() {
+  local runner="$ROOT/tools/run_research_distillery.py"
+  [[ -f "$runner" ]] || return 0
+  if ! pgrep -f '[r]un_research_distillery.py' >/dev/null 2>&1; then
+    nohup python3 "$runner" --hours 24 --sleep-seconds 3 \
+      >"$STATE_DIR/distillery.log" 2>&1 </dev/null &
+    echo "$!" > "$STATE_DIR/distillery.pid"
+  fi
+}
+
 load_all_secret_sources
 # shellcheck disable=SC2046
 eval "$(normalize_provider_pool)"
 attest_free_only
 start_dashboard
+start_distillery
 
 while (( $(date +%s) < DEADLINE )); do
   load_all_secret_sources
   # shellcheck disable=SC2046
   eval "$(normalize_provider_pool)"
   attest_free_only
+  start_distillery
 
   NOW="$(date +%s)"
   REMAINING="$((DEADLINE - NOW))"
@@ -98,13 +110,16 @@ providers={
  'groq': bool(os.getenv('GROQ_API_KEY') or split('GROQ_API_KEYS')),
  'mistral': bool(os.getenv('MISTRAL_API_KEY') or split('MISTRAL_API_KEYS')),
  'nvidia': bool(os.getenv('NVIDIA_API_KEY') or split('NVIDIA_API_KEYS') or os.getenv('NGC_API_KEY') or os.getenv('NVIDIA_NIM_API_KEY')),
+ 'openrouter': bool(os.getenv('OPENROUTER_API_KEY')),
+ 'tavily': bool(os.getenv('TAVILY_API_KEY')),
+ 'exa': bool(os.getenv('EXA_API_KEY')),
 }
 counts={
  'groq': nset(*split('GROQ_API_KEYS'),os.getenv('GROQ_API_KEY')),
  'mistral': nset(*split('MISTRAL_API_KEYS'),os.getenv('MISTRAL_API_KEY')),
  'nvidia': nset(*split('NVIDIA_API_KEYS'),os.getenv('NVIDIA_API_KEY'),os.getenv('NGC_API_KEY'),os.getenv('NVIDIA_NIM_API_KEY')),
 }
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v3','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'free_only_attested':str(os.getenv('CLAY_FREE_ONLY_ATTESTED','')).lower() in ('1','true','yes','on','attested'),'provider_credentials_present':providers,'provider_credential_counts':counts,'dashboard_watch':True},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v4','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'free_only_attested':str(os.getenv('CLAY_FREE_ONLY_ATTESTED','')).lower() in ('1','true','yes','on','attested'),'provider_credentials_present':providers,'provider_credential_counts':counts,'dashboard_watch':True,'research_distillery':True},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
 
@@ -115,4 +130,4 @@ PY
   sleep 60
 done
 
-printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v3","state":"EXPIRED_WITHOUT_USABLE_FREE_ONLY_CREDENTIALS"}\n' > "$STATE_DIR/SUPERVISOR.json"
+printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v4","state":"EXPIRED_WITHOUT_USABLE_FREE_ONLY_CREDENTIALS"}\n' > "$STATE_DIR/SUPERVISOR.json"

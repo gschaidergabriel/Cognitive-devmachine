@@ -10,7 +10,9 @@ holes before the required exact-source runtime execution:
    to create_connection()/connect();
 3. bind and execute the supervisor inherited-provider-environment fence regression,
    so the receipt cannot PASS without checking that the non-admitted credential
-   clearing fence precedes every supervisor child-start path.
+   clearing fence precedes every supervisor child-start path;
+4. execute a fail-closed discovery regression proving the supervisor-8.68 mandatory
+   blocked-case test methods remain present in the canonical receipt suite.
 
 It still performs no external provider call and grants no provider/model/HCU/J-Space
 or training credit by source presence alone.
@@ -29,6 +31,8 @@ TEST_REL = "tests/test_free_swarm_receipt_runner_hardening_868.py"
 TEST_MODULE = "tests.test_free_swarm_receipt_runner_hardening_868"
 INHERITED_ENV_TEST_REL = "tests/test_go_868_inherited_provider_secret_fence.py"
 INHERITED_ENV_TEST_MODULE = "tests.test_go_868_inherited_provider_secret_fence"
+REQUIRED_CASES_TEST_REL = "tests/test_free_swarm_receipt_required_cases_868.py"
+REQUIRED_CASES_TEST_MODULE = "tests.test_free_swarm_receipt_required_cases_868"
 
 
 def _hardened_bootstrap_text() -> str:
@@ -90,11 +94,13 @@ def _install_hardening() -> None:
         *base.TEST_MODULES,
         TEST_MODULE,
         INHERITED_ENV_TEST_MODULE,
+        REQUIRED_CASES_TEST_MODULE,
     )))
     base.TEST_PATHS = tuple(dict.fromkeys((
         *base.TEST_PATHS,
         ROOT / TEST_REL,
         ROOT / INHERITED_ENV_TEST_REL,
+        ROOT / REQUIRED_CASES_TEST_REL,
     )))
     base.SOURCE_PATHS = tuple(dict.fromkeys((
         *base.SOURCE_PATHS,
@@ -102,6 +108,7 @@ def _install_hardening() -> None:
         SELF_REL,
         TEST_REL,
         INHERITED_ENV_TEST_REL,
+        REQUIRED_CASES_TEST_REL,
     )))
     base._bootstrap_text = _hardened_bootstrap_text
 
@@ -114,6 +121,8 @@ def _install_hardening() -> None:
         source["receipt_runner_hardening"] = {
             "authority_epoch": "8.68",
             "base_and_successor_manifest_bound": True,
+            "required_case_discovery_test": REQUIRED_CASES_TEST_REL,
+            "required_case_discovery_required_for_pass": True,
             "bootstrap_tripwires": [
                 "socket.create_connection",
                 "socket.getaddrinfo",
@@ -128,6 +137,9 @@ def _install_hardening() -> None:
         fences = receipt.setdefault("fences", {})
         fences["supervisor_inherited_provider_environment_fence"] = (
             "ENFORCED_BY_TEST_GO_868_INHERITED_PROVIDER_SECRET_FENCE"
+        )
+        fences["supervisor_868_required_blocked_cases"] = (
+            "ENFORCED_BY_TEST_FREE_SWARM_RECEIPT_REQUIRED_CASES_868"
         )
         original_write_receipt(path, receipt)
 

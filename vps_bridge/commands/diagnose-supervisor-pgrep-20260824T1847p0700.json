@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"diagnose-supervisor-pgrep-20260824T1847p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":60,
+  "command":"echo PIDFILE=$(cat /artifacts/clay-entityos-swarm/supervisor.pid 2>/dev/null || true); echo ---PGREP---; pgrep -af 'run_24h_entityos_swarm_supervisor.sh' || true; echo ---PS---; ps -eo pid,ppid,stat,etime,args | grep -E '[r]un_24h_entityos_swarm_supervisor.sh|^ *2886 ' || true; echo ---LOG---; tail -80 /artifacts/clay-entityos-swarm/supervisor-v8.log 2>/dev/null || true"
+}

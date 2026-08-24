@@ -1,0 +1,57 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "mode": "FREE_ONLY",
+  "source_base_main": "1becb77bee28b908ce7a8b48fed09cb92d0beffc",
+  "finding": "The merged Trigger1 atomic-lease gate claimed a semantic duplicate/race fence but only compared candidate.trigger_key for exact equality. GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires a migration/race fence for legacy or noncanonical claims encoding the same timestamp plus literal-trigger payload identity. Historical claim evidence contains such legacy offset/short-digest encodings.",
+  "counterhypothesis": "Exact trigger-key equality is sufficient because all current claims are canonical.",
+  "counterhypothesis_result": "REJECTED_BY_PROTOCOL_AND_HISTORICAL_PROVENANCE",
+  "delta": [
+    "Normalize legacy YYYYMMDDTHHMMSS+HHMM timestamp keys to canonical UTC whole-second form for migration-fence comparison.",
+    "Require the candidate literal trigger payload to hash to the canonical payload SHA-256 before treating a legacy timestamp key as semantically equivalent.",
+    "Recognize shortened legacy payload-digest prefixes only when timestamp and full canonical payload digest agree.",
+    "Restrict semantic-duplicate candidates to clay-go-experiment-claim/v1 so append-only correction/audit sidecars do not falsely consume the experiment slot.",
+    "Preserve exact rid_ behavior because the unhashed immutable request identifier is intentionally not persisted and broader equivalence cannot be proven safely."
+  ],
+  "writes": {
+    "branch": "fix/go872-trigger1-semantic-race-fence-current-gpt56sol-20260824",
+    "source_commit": "4c1b4bf894ee39c0a7e451a06af041147cf7b714",
+    "test_commit": "efb99ac594572219c74afa3d4e7ad58e21488672",
+    "source_path": "tools/trigger1_atomic_lease_gate.py",
+    "source_blob_sha": "ae75b65d6c1ac89019a10b7d7de5c8007be1509a",
+    "test_path": "tests/test_trigger1_atomic_lease_gate.py",
+    "test_blob_sha": "139815960e2513771d03a4fce82eb7647b81dfb1"
+  },
+  "evidence": {
+    "classification": "SOURCE_REVIEW_PLUS_SOURCE_EQUIVALENT_DETERMINISTIC_UNIT_REPRODUCTION",
+    "focused_tests": "10/10 PASS",
+    "exact_branch_head_ci_execution": false,
+    "runtime_credit_minted": false
+  },
+  "coordination": {
+    "shared_immutable_request_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_FAIL_CLOSED_DUPLICATE_INTERVENTION_DISPATCH_FENCE",
+    "track_b": "ADVANCED_BY_CANONICAL_CAUSAL_TRIGGER_IDENTITY_MIGRATION_FENCE",
+    "track_c": "ADVANCED_BY_SAFER_JSPACE_EXPERIMENT_COORDINATION_WITHOUT_MODEL_OR_TRAINING_PROMOTION"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "supersedes_stale_pr": 1676,
+  "next_exact_gate": "Open a successor-current PR against current main, verify mergeability and nonduplication, then run exact-head focused atomic-lease and Trigger1 promotion regressions on a step-executing zero-cost test surface. No unusual intervention is authorized by this source delta."
+}

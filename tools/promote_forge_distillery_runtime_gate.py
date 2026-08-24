@@ -1,29 +1,31 @@
 #!/usr/bin/env python3
-"""Promote one passing exact-current Forge->Distillery runtime witness into live Distillery.
+"""Promote one passing exact-current Forge->Distillery witness into live Distillery.
 
 This is a deterministic, provider-independent successor to the disposable runtime gate.
-It does not weaken Forge evidence admission and does not append a second Forge ledger.
-Instead it re-validates the nested evidence-qualified Forge evaluation from a PASS witness
-and feeds exactly that one row through the existing Distillery admission code against the
-configured canonical Distillery SQLite database.
+It re-validates the nested evidence-qualified Forge evaluation and feeds exactly that
+measured execution through the existing Distillery admission authority.
+
+Supervisor 8.73 requires live promotion idempotence to follow the bridge's replay-stable
+execution identity, not the volatile full evaluation envelope. Therefore this promoter
+proves three cases against the configured Distillery DB:
+
+1. first qualified execution -> one packet and positive accepted-dataset-token delta;
+2. timestamp/candidate-narration-only semantic replay -> duplicate and +0 tokens;
+3. same replay identity with changed measured evidence -> REPLAY_IDENTITY_CONFLICT +0.
+
+The full evaluation digest remains provenance only. DB inspection prefers the bridge's
+CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1 and preserves the measured-evidence digest so an
+envelope-only change cannot masquerade as a new live promotion.
 
 The live effect is additionally bound to the GitHub Actions execution context that owns the
 canonical workflow: exact run id, event class, canonical-main source selection, source SHA
-and source tree. The promoter records the SHA-256 of the exact pre-publication gate bytes;
-the later repository publication must preserve and verify the same binding.
-
-The operation is idempotent by the existing evaluation digest. A first promotion must add
-exactly one packet and nonzero accepted-dataset tokens. An identical retry must add zero
-packets/tokens and report one duplicate. Existing prior promotion is accepted only when the
-same digest is already present with nonzero packet tokens and the retry remains +0.
-
-No provider/network I/O occurs here. This tool grants no whole-product, HCU, J-Space,
-canonical-semantics or training credit; it only closes the measured Forge->Distillery
-execution-evidence path at its exact source and workflow identity.
+and source tree. No provider/network I/O occurs here. This tool grants no whole-product,
+HCU, J-Space, canonical-semantics or training credit.
 """
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import os
@@ -142,11 +144,45 @@ def validate_github_actions_environment(*, github_run_id: str, github_event_name
     _require(os.environ.get("GITHUB_EVENT_NAME") == str(github_event_name), "GITHUB_EVENT_ENV_MISMATCH")
 
 
-def inspect_db(db: Path, evaluation_sha256: str) -> dict[str, Any]:
+def replay_identity_sha256(evaluation: dict[str, Any]) -> str:
+    return bridge.digest_json(bridge.execution_replay_identity(evaluation))
+
+
+def measured_evidence_sha256(evaluation: dict[str, Any]) -> str:
+    return bridge.digest_json(bridge.measured_evidence_identity(evaluation))
+
+
+def semantic_replay_evaluation(evaluation: dict[str, Any]) -> dict[str, Any]:
+    """Change only volatile/candidate envelope fields, never measured execution evidence."""
+    replay = copy.deepcopy(evaluation)
+    replay["evaluated_at"] = "2026-08-25T00:00:01+00:00"
+    replay["proposal_hypothesis"] = "semantic replay envelope mutation; candidate only"
+    replay["falsifier"] = "semantic replay envelope falsifier mutation; candidate only"
+    return replay
+
+
+def measured_conflict_evaluation(evaluation: dict[str, Any]) -> dict[str, Any]:
+    """Keep stable replay identity while changing one admissible measured field."""
+    conflict = copy.deepcopy(evaluation)
+    conflict["tests_passed"] = int(conflict["tests_passed"]) + 1
+    conflict["evaluated_at"] = "2026-08-25T00:00:02+00:00"
+    return conflict
+
+
+def inspect_db(
+    db: Path,
+    *,
+    evaluation_sha256: str,
+    execution_replay_identity_sha256: str,
+) -> dict[str, Any]:
     if not db.exists():
         return {
             "db_exists": False,
             "evaluation_present": False,
+            "replay_identity_present": False,
+            "persisted_evaluation_sha256": None,
+            "persisted_execution_replay_identity_sha256": None,
+            "persisted_measured_evidence_sha256": None,
             "packet_id": None,
             "packet_tokens": 0,
             "accepted_dataset_tokens_counter": 0,
@@ -160,20 +196,47 @@ def inspect_db(db: Path, evaluation_sha256: str) -> dict[str, Any]:
             counter = int(c[0]) if c else 0
 
         row = None
+        evaluation_present = False
+        replay_present = False
         if "forge_execution_ingest" in tables:
-            row = con.execute(
-                "SELECT packet_id, approx_tokens FROM forge_execution_ingest WHERE evaluation_sha256=?",
+            columns = {str(r[1]) for r in con.execute("PRAGMA table_info(forge_execution_ingest)")}
+            evaluation_present = con.execute(
+                "SELECT 1 FROM forge_execution_ingest WHERE evaluation_sha256=? LIMIT 1",
                 (evaluation_sha256,),
-            ).fetchone()
+            ).fetchone() is not None
+            if "execution_replay_identity_sha256" in columns:
+                row = con.execute(
+                    "SELECT evaluation_sha256, execution_replay_identity_sha256, "
+                    "measured_evidence_sha256, packet_id, approx_tokens "
+                    "FROM forge_execution_ingest WHERE execution_replay_identity_sha256=? LIMIT 1",
+                    (execution_replay_identity_sha256,),
+                ).fetchone()
+                replay_present = row is not None
+            elif evaluation_present:
+                legacy = con.execute(
+                    "SELECT evaluation_sha256, packet_id, approx_tokens "
+                    "FROM forge_execution_ingest WHERE evaluation_sha256=? LIMIT 1",
+                    (evaluation_sha256,),
+                ).fetchone()
+                if legacy:
+                    row = (legacy[0], None, None, legacy[1], legacy[2])
         return {
             "db_exists": True,
-            "evaluation_present": row is not None,
-            "packet_id": row[0] if row else None,
-            "packet_tokens": int(row[1]) if row else 0,
+            "evaluation_present": evaluation_present,
+            "replay_identity_present": replay_present,
+            "persisted_evaluation_sha256": row[0] if row else None,
+            "persisted_execution_replay_identity_sha256": row[1] if row else None,
+            "persisted_measured_evidence_sha256": row[2] if row else None,
+            "packet_id": row[3] if row else None,
+            "packet_tokens": int(row[4]) if row else 0,
             "accepted_dataset_tokens_counter": counter,
         }
     finally:
         con.close()
+
+
+def _write_one(path: Path, evaluation: dict[str, Any]) -> None:
+    path.write_text(json.dumps(evaluation, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def promote(
@@ -199,20 +262,51 @@ def promote(
         github_event_name=github_event_name,
         source_selection=source_selection,
     )
+
     evaluation_sha = bridge.digest_json(evaluation)
-    before = inspect_db(distillery_db, evaluation_sha)
+    replay_sha = replay_identity_sha256(evaluation)
+    measured_sha = measured_evidence_sha256(evaluation)
+    before = inspect_db(
+        distillery_db,
+        evaluation_sha256=evaluation_sha,
+        execution_replay_identity_sha256=replay_sha,
+    )
+
+    semantic_replay = semantic_replay_evaluation(evaluation)
+    semantic_eval_sha = bridge.digest_json(semantic_replay)
+    semantic_replay_sha = replay_identity_sha256(semantic_replay)
+    semantic_measured_sha = measured_evidence_sha256(semantic_replay)
+    _require(semantic_eval_sha != evaluation_sha, "SEMANTIC_REPLAY_FULL_ENVELOPE_NOT_CHANGED")
+    _require(semantic_replay_sha == replay_sha, "SEMANTIC_REPLAY_IDENTITY_CHANGED")
+    _require(semantic_measured_sha == measured_sha, "SEMANTIC_REPLAY_MEASURED_EVIDENCE_CHANGED")
+
+    conflict = measured_conflict_evaluation(evaluation)
+    conflict_replay_sha = replay_identity_sha256(conflict)
+    conflict_measured_sha = measured_evidence_sha256(conflict)
+    _require(conflict_replay_sha == replay_sha, "CONFLICT_PROBE_REPLAY_IDENTITY_CHANGED")
+    _require(conflict_measured_sha != measured_sha, "CONFLICT_PROBE_MEASURED_EVIDENCE_UNCHANGED")
+    conflict_qualified, conflict_reason = evidence_reason(conflict)
+    _require(conflict_qualified and conflict_reason == "EVIDENCE_QUALIFIED_ACCEPT", "CONFLICT_PROBE_NOT_EVIDENCE_QUALIFIED")
 
     with tempfile.TemporaryDirectory(prefix="clay-forge-distillery-promote-") as td:
         one_row = Path(td) / "qualified.jsonl"
-        one_row.write_text(json.dumps(evaluation, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
+        _write_one(one_row, evaluation)
         first = bridge.ingest(one_row, distillery_db)
+        _write_one(one_row, semantic_replay)
         replay = bridge.ingest(one_row, distillery_db)
+        _write_one(one_row, conflict)
+        conflict_result = bridge.ingest(one_row, distillery_db)
 
-    after = inspect_db(distillery_db, evaluation_sha)
+    after = inspect_db(
+        distillery_db,
+        evaluation_sha256=evaluation_sha,
+        execution_replay_identity_sha256=replay_sha,
+    )
     before_tokens = int(before.get("accepted_dataset_tokens_counter") or 0)
     first_tokens = int(first.get("accepted_dataset_tokens_counter") or 0)
     replay_tokens = int(replay.get("accepted_dataset_tokens_counter") or 0)
-    was_present = bool(before.get("evaluation_present"))
+    conflict_tokens = int(conflict_result.get("accepted_dataset_tokens_counter") or 0)
+    was_present = bool(before.get("replay_identity_present"))
 
     if was_present:
         _require(int(first.get("admitted") or 0) == 0, "EXISTING_PROMOTION_REINGEST_ADMITTED")
@@ -225,12 +319,20 @@ def promote(
         _require(first_tokens > before_tokens, "LIVE_FIRST_PROMOTION_TOKEN_DELTA_NOT_POSITIVE")
         outcome = "PROMOTED_NEW_PACKET"
 
-    _require(int(replay.get("admitted") or 0) == 0, "LIVE_REPLAY_ADDED_PACKET")
-    _require(int(replay.get("duplicates") or 0) == 1, "LIVE_REPLAY_DUPLICATE_NOT_ONE")
-    _require(replay_tokens == first_tokens, "LIVE_REPLAY_TOKEN_DELTA_NONZERO")
-    _require(bool(after.get("evaluation_present")), "LIVE_EVALUATION_NOT_PERSISTED")
+    _require(int(replay.get("admitted") or 0) == 0, "LIVE_SEMANTIC_REPLAY_ADDED_PACKET")
+    _require(int(replay.get("duplicates") or 0) == 1, "LIVE_SEMANTIC_REPLAY_DUPLICATE_NOT_ONE")
+    _require(replay_tokens == first_tokens, "LIVE_SEMANTIC_REPLAY_TOKEN_DELTA_NONZERO")
+
+    _require(int(conflict_result.get("admitted") or 0) == 0, "LIVE_CONFLICT_PROBE_ADMITTED")
+    _require(int(conflict_result.get("duplicates") or 0) == 0, "LIVE_CONFLICT_PROBE_MISCLASSIFIED_DUPLICATE")
+    _require(int(conflict_result.get("rejected", {}).get("REPLAY_IDENTITY_CONFLICT") or 0) == 1, "LIVE_CONFLICT_PROBE_NOT_REJECTED")
+    _require(conflict_tokens == replay_tokens, "LIVE_CONFLICT_PROBE_TOKEN_DELTA_NONZERO")
+
+    _require(bool(after.get("replay_identity_present")), "LIVE_REPLAY_IDENTITY_NOT_PERSISTED")
+    _require(after.get("persisted_execution_replay_identity_sha256") == replay_sha, "LIVE_REPLAY_IDENTITY_POSTCHECK_MISMATCH")
+    _require(after.get("persisted_measured_evidence_sha256") == measured_sha, "LIVE_MEASURED_EVIDENCE_POSTCHECK_MISMATCH")
     _require(int(after.get("packet_tokens") or 0) > 0, "LIVE_PACKET_TOKENS_NOT_POSITIVE")
-    _require(int(after.get("accepted_dataset_tokens_counter") or 0) == replay_tokens, "LIVE_COUNTER_POSTCHECK_MISMATCH")
+    _require(int(after.get("accepted_dataset_tokens_counter") or 0) == conflict_tokens, "LIVE_COUNTER_POSTCHECK_MISMATCH")
 
     return {
         "schema": "CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v1",
@@ -240,13 +342,24 @@ def promote(
         **context,
         "gate_result_sha256": hashlib.sha256(raw).hexdigest(),
         "evaluation_sha256": evaluation_sha,
+        "execution_replay_identity_sha256": replay_sha,
+        "measured_evidence_sha256": measured_sha,
+        "semantic_replay_evaluation_sha256": semantic_eval_sha,
+        "semantic_replay_execution_identity_sha256": semantic_replay_sha,
+        "semantic_replay_measured_evidence_sha256": semantic_measured_sha,
+        "conflict_probe_execution_identity_sha256": conflict_replay_sha,
+        "conflict_probe_measured_evidence_sha256": conflict_measured_sha,
         "distillery_db": str(distillery_db),
         "before": before,
         "first": first,
         "replay": replay,
+        "semantic_replay": replay,
+        "conflict_probe": conflict_result,
         "after": after,
         "first_token_delta": first_tokens - before_tokens,
         "replay_token_delta": replay_tokens - first_tokens,
+        "semantic_replay_token_delta": replay_tokens - first_tokens,
+        "conflict_token_delta": conflict_tokens - replay_tokens,
         "network_used": False,
         "provider_calls": 0,
         "paid_fallback_attempt_count": 0,

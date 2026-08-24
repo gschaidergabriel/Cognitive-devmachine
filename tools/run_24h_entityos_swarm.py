@@ -6,6 +6,11 @@ provider-wide 429 cooldown, 402 hard-stop behavior and receipt logging. This
 driver adds live model discovery, EntityOS/HCU roles, measured provider budgets,
 a cross-process quota gate shared with the research distillery, and a live
 knowledge/question bridge between GO workers and the distilled research dataset.
+
+FREE_ONLY admission is enforced before provider-key collection and revalidated at
+the final deterministic boundary before catalog/chat network I/O. The admitted
+provider set is repository-bound and supervisor-epoch-bound; environment flags are
+downstream compatibility only.
 """
 from __future__ import annotations
 
@@ -21,9 +26,17 @@ import urllib.request
 
 import run_free_go_swarm as base
 from free_swarm_quota import slot as quota_slot, observe as quota_observe
+from free_provider_admission import (
+    CANONICAL_ADMISSION,
+    ProviderAdmissionError,
+    admitted_providers_from_path,
+    require_provider_admitted,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 DISTILLERY_DB = Path(os.getenv("CLAY_RESEARCH_DISTILLERY_DB", "/artifacts/clay-entityos-swarm/distillery/distillery.sqlite3"))
+ADMISSION_FILE_DEFAULT = CANONICAL_ADMISSION
+ALL_PROVIDER_SPECS = tuple(base.PROVIDERS)
 base.OWNER_DIRECTIVE_PATH = ROOT / "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md"
 base.DEFAULT_ROLES = [
     ("ARCHITECT", "Advance EntityOS/HCU architecture with one high-information, measurable delta and a strongest counterarchitecture."),
@@ -54,12 +67,32 @@ UNKNOWN_HIGH_VALUE = (
     "devstral", "nemotron", "deepseek", "reasoning", "instruct", "coder",
 )
 
+
+def require_typed_free_admission() -> tuple[str, ...]:
+    """Bind the legacy controller to the exact currently admitted FREE provider subset."""
+    admitted = admitted_providers_from_path(ADMISSION_FILE_DEFAULT)
+    admitted_set = set(admitted)
+    base.PROVIDERS = tuple(spec for spec in ALL_PROVIDER_SPECS if spec.name in admitted_set)
+    if not base.PROVIDERS:
+        raise ProviderAdmissionError("no_provider_admitted")
+
+    os.environ["CLAY_FREE_ONLY_ATTESTED"] = "1"
+    for spec in ALL_PROVIDER_SPECS:
+        if spec.name in admitted_set:
+            os.environ[spec.attestation_env] = "1"
+        else:
+            os.environ.pop(spec.attestation_env, None)
+    return admitted
+
+
 # Runtime evidence on 2026-08-24 showed Groq Free has an 8K TPM ceiling for
 # the selected GPT-OSS/Qwen models. Cap completion budget to avoid HTTP 413.
 _ORIGINAL_REQUEST_CHAT = base.request_chat
 
 
 def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout):
+    # Last deterministic admission check before provider chat network I/O.
+    require_provider_admitted(spec.name, path=ADMISSION_FILE_DEFAULT)
     if spec.name == "groq":
         max_tokens = min(int(max_tokens), int(os.getenv("CLAY_GROQ_MAX_TOKENS", "1000")))
     elif spec.name == "mistral":
@@ -128,6 +161,8 @@ base.worker_prompt = question_emitting_worker_prompt
 
 
 def fetch_catalog(provider: str, url: str, key: str, timeout: float) -> list[dict]:
+    # Revalidate at the last deterministic boundary before catalog network I/O.
+    require_provider_admitted(provider, path=ADMISSION_FILE_DEFAULT)
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json", "User-Agent":"clay-entityos-swarm/2.0"})
     owner=f"go-swarm:catalog:{provider}"
     try:
@@ -201,8 +236,20 @@ def discover_and_export(timeout: float) -> dict[str, dict]:
 
 
 async def main(args: argparse.Namespace) -> int:
+    try:
+        admitted = require_typed_free_admission()
+    except (ProviderAdmissionError, ValueError, RuntimeError, OSError) as exc:
+        print(json.dumps({
+            "schema": "CLAY_ENTITYOS_SWARM_ADMISSION_DENY/v2",
+            "allowed": False,
+            "reason": str(exc),
+            "secret_lookup_count": 0,
+            "network_attempt_count": 0,
+        }, sort_keys=True), flush=True)
+        return 3
+
     report = discover_and_export(args.timeout)
-    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v3", "providers": report, "distillery_context": DISTILLERY_DB.exists(), "shared_quota_gate": True}, ensure_ascii=False), flush=True)
+    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v4", "typed_provider_admission":"PASS_PROVIDER_SCOPED_FREE", "admitted_providers":admitted, "providers": report, "distillery_context": DISTILLERY_DB.exists(), "shared_quota_gate": True}, ensure_ascii=False), flush=True)
     if args.inventory_only:
         return 0
     out = args.output_dir or f"/artifacts/clay-entityos-swarm/{__import__('datetime').datetime.now(__import__('datetime').timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"

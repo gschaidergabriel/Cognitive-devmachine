@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
 """Strict source-revalidated adapter for serious EntityOS/HCU J-Space training data.
 
-The retained ``compile_admitted_jspace_training_dataset_v1`` path now requires a
-``JSpaceModelInputControlClosure`` for non-BASELINE intervention traces.  A closure is
-self-authenticating, however, and its digest alone does not prove that the closure was
-reconstructed from canonical MiniUnifiedDB model-execution/control-admission evidence.
+The retained ``compile_admitted_jspace_training_dataset_v1`` path verifies dataset admission,
+an exact admitted InferenceReceipt parent and non-BASELINE model-input-control delivery. Those
+checks are necessary but a persisted ``JSpaceInferenceBinding`` and a persisted control
+closure are still self-authenticating envelopes: digest consistency alone cannot prove they
+were reconstructed from the canonical producer objects.
 
-This adapter closes that remaining parent-evidence boundary without creating another truth,
-effect, inference, or dataset authority.  Any closure admitted to the existing compiler is
-first revalidated by ``revalidate_closure_against_canonical_sources`` and, critically, the
-control binding must already exist in the caller-supplied canonical MiniUnifiedDB.  The
-adapter never uses source revalidation to bootstrap a missing control admission merely so a
-training row can pass.
+This adapter closes both rehydration boundaries by delegating to the existing single source
+validators before any row can reach the retained compiler:
 
-BASELINE traces remain compatible with the existing compiler and need no intervention-
-delivery closure.  Positive passage proves exact observable source/identity closure only; it
-does not prove hidden-state causal use, model benefit, reward truth, runtime acceptance, or
+* ``revalidate_binding_against_sources`` rebuilds JSpaceInferenceBinding/v3 from the exact
+  TrainingTrace, HCU InferenceReceipt/v4 and scheduler-owned GridPlan.
+* ``revalidate_closure_against_canonical_sources`` rebuilds any supplied model-input-control
+  closure from an already-admitted canonical MiniUnifiedDB control binding, exact consumed
+  bytes, the same GridPlan/InferenceReceipt, and the revalidated J-Space binding.
+
+No validator semantics are copied here and no missing canonical admission is minted by the
+training path. BASELINE traces require binding-source rehydration but need no intervention-
+delivery closure. Positive passage proves observable source/identity closure only; it does
+not prove hidden-state causal use, model benefit, reward truth, runtime acceptance, or
 training benefit.
 """
 from __future__ import annotations
@@ -31,12 +35,14 @@ try:
     )
     from .grid10_scheduler_v1 import GridPlan
     from .inference_receipt_v1 import InferenceReceipt
-    from .jspace_inference_binding_v1 import JSpaceInferenceBinding
+    from .jspace_inference_binding_revalidation_v1 import revalidate_binding_against_sources
+    from .jspace_inference_binding_v1 import JSpaceInferenceBinding, JSpaceInferenceBindingError
     from .jspace_model_input_control_closure_revalidation_v1 import (
         JSpaceModelInputControlClosureRevalidationError,
         revalidate_closure_against_canonical_sources,
     )
     from .jspace_model_input_control_closure_v1 import JSpaceModelInputControlClosure
+    from .jspace_training_trace_v1 import JSpaceTrainingTraceError, TrainingTrace, trace_dict
     from .model_input_control_binding_v1 import ModelInputControlBinding
 except ImportError:
     from compile_admitted_jspace_training_dataset_v1 import (
@@ -45,15 +51,17 @@ except ImportError:
     )
     from grid10_scheduler_v1 import GridPlan
     from inference_receipt_v1 import InferenceReceipt
-    from jspace_inference_binding_v1 import JSpaceInferenceBinding
+    from jspace_inference_binding_revalidation_v1 import revalidate_binding_against_sources
+    from jspace_inference_binding_v1 import JSpaceInferenceBinding, JSpaceInferenceBindingError
     from jspace_model_input_control_closure_revalidation_v1 import (
         JSpaceModelInputControlClosureRevalidationError,
         revalidate_closure_against_canonical_sources,
     )
     from jspace_model_input_control_closure_v1 import JSpaceModelInputControlClosure
+    from jspace_training_trace_v1 import JSpaceTrainingTraceError, TrainingTrace, trace_dict
     from model_input_control_binding_v1 import ModelInputControlBinding
 
-SCHEMA = "ENTITYOS_HCU_SOURCE_REVALIDATED_JSPACE_TRAINING_PIPELINE/v1"
+SCHEMA = "ENTITYOS_HCU_SOURCE_REVALIDATED_JSPACE_TRAINING_PIPELINE/v2"
 BASELINE_CONTROL_CONDITION = "BASELINE"
 MAX_SAFE_INTEGER = 9_007_199_254_740_991
 
@@ -63,14 +71,21 @@ class SourceRevalidatedTrainingDatasetError(ValueError):
 
 
 @dataclass(frozen=True)
+class InferenceBindingSourceBundle:
+    """Exact producer objects required to rederive one persisted J-Space binding."""
+
+    training_trace: TrainingTrace
+    inference_receipt: InferenceReceipt
+    grid_plan: GridPlan
+
+
+@dataclass(frozen=True)
 class ModelInputControlClosureSourceBundle:
-    """Exact source objects required to rederive one admitted control closure."""
+    """Exact additional source objects required to rederive one control closure."""
 
     closure: JSpaceModelInputControlClosure
     control_binding: ModelInputControlBinding
     consumed_input_bytes: bytes
-    grid_plan: GridPlan
-    inference_receipt: InferenceReceipt
 
 
 def _mapping(value: Any, field: str) -> Mapping[str, Any]:
@@ -111,45 +126,19 @@ def _control_condition(trace: Mapping[str, Any]) -> str:
     return normalized
 
 
-def _require_existing_control_admission(
-    db: sqlite3.Connection,
-    binding: ModelInputControlBinding,
+def _require_exact_trace_source(
+    serialized_trace: Mapping[str, Any],
+    source_trace: TrainingTrace,
 ) -> None:
-    """Require source admission to predate training compilation.
-
-    ``revalidate_closure_against_canonical_sources`` intentionally reuses the canonical
-    admission-store operation because exact replay is idempotent.  Without this predecessor
-    check, however, a training compiler could accidentally create a missing control admission
-    while trying to validate its own evidence.  Training promotion must consume prior
-    canonical evidence, not manufacture that prerequisite.
-    """
-    if not isinstance(db, sqlite3.Connection):
-        raise SourceRevalidatedTrainingDatasetError("CANONICAL_MINIUNIFIEDDB_CONNECTION_REQUIRED")
-    if not isinstance(binding, ModelInputControlBinding):
-        raise SourceRevalidatedTrainingDatasetError("MODEL_INPUT_CONTROL_BINDING_REQUIRED")
-    binding_sha = _sha256(binding.binding_sha256, "control_binding.binding_sha256")
+    """Bind caller-visible compiler bytes to the exact rehydration source object."""
     try:
-        row = db.execute(
-            "SELECT binding_sha256 FROM hcu_model_input_control_bindings WHERE binding_sha256=?",
-            (binding_sha,),
-        ).fetchone()
-        invocation = db.execute(
-            "SELECT binding_sha256 FROM hcu_model_input_control_invocations "
-            "WHERE executor_id=? AND invocation_id=?",
-            (binding.executor_id, binding.invocation_id),
-        ).fetchone()
-    except sqlite3.Error as exc:
+        observed = trace_dict(source_trace)
+    except JSpaceTrainingTraceError as exc:
         raise SourceRevalidatedTrainingDatasetError(
-            "MODEL_INPUT_CONTROL_ADMISSION_STORE_REQUIRED_BEFORE_TRAINING"
+            f"TRAINING_TRACE_SOURCE_REVALIDATION_FAILED:{exc}"
         ) from exc
-    if row is None or row[0] != binding_sha:
-        raise SourceRevalidatedTrainingDatasetError(
-            "MODEL_INPUT_CONTROL_BINDING_NOT_PREVIOUSLY_ADMITTED"
-        )
-    if invocation is None or invocation[0] != binding_sha:
-        raise SourceRevalidatedTrainingDatasetError(
-            "MODEL_INPUT_CONTROL_INVOCATION_NOT_PREVIOUSLY_ADMITTED"
-        )
+    if observed != dict(serialized_trace):
+        raise SourceRevalidatedTrainingDatasetError("TRAINING_TRACE_SOURCE_BYTES_MISMATCH")
 
 
 def compile_source_revalidated_records(
@@ -157,6 +146,7 @@ def compile_source_revalidated_records(
     *,
     canonical_db: sqlite3.Connection,
     current_generation: int,
+    inference_binding_source_bundles: Mapping[str, InferenceBindingSourceBundle],
     model_input_control_source_bundles: Mapping[str, ModelInputControlClosureSourceBundle],
     admitted_training_traces: Mapping[str, Mapping[str, Any]],
     admitted_transition_traces: Mapping[str, Mapping[str, Any]],
@@ -168,18 +158,26 @@ def compile_source_revalidated_records(
     admitted_bases: Mapping[str, str],
     admitted_outcome_receipts: Mapping[str, Any] | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Compile with canonical-source revalidation for every used control closure.
+    """Compile only after exact-source rehydration of every persisted J-Space binding.
 
-    ``model_input_control_source_bundles`` is keyed by the exact J-Space inference-binding
-    SHA-256.  The raw bundle is never forwarded as admission evidence.  Only the freshly
-    reconstructed closure returned by the canonical-source revalidator can reach the retained
-    serious-training compiler.
+    Both source-bundle registries are keyed by the exact J-Space inference-binding SHA-256.
+    Every trace, including BASELINE, requires an ``InferenceBindingSourceBundle``. A
+    non-BASELINE trace additionally requires a ``ModelInputControlClosureSourceBundle``.
+    Raw source bundles are never forwarded as admission evidence: only a closure freshly
+    returned by the canonical-source revalidator can reach the retained serious compiler.
     """
     materialized = list(records)
     generation = _generation(current_generation)
-    bundles = _mapping(model_input_control_source_bundles, "model_input_control_source_bundles")
+    inference_sources = _mapping(
+        inference_binding_source_bundles,
+        "inference_binding_source_bundles",
+    )
+    control_sources = _mapping(
+        model_input_control_source_bundles,
+        "model_input_control_source_bundles",
+    )
     bindings = _mapping(admitted_inference_bindings, "admitted_inference_bindings")
-    revalidated: dict[str, JSpaceModelInputControlClosure] = {}
+    revalidated_closures: dict[str, JSpaceModelInputControlClosure] = {}
 
     for record in materialized:
         if not isinstance(record, tuple) or len(record) != 2:
@@ -189,34 +187,49 @@ def compile_source_revalidated_records(
         condition = _control_condition(trace)
         binding = bindings.get(trace_sha)
         if not isinstance(binding, JSpaceInferenceBinding):
-            # Preserve a fail-closed error at this stricter boundary rather than attempting
-            # source revalidation without the admitted child identity.
             raise SourceRevalidatedTrainingDatasetError(
                 "INFERENCE_BINDING_NOT_ADMITTED_FOR_TRAINING_TRACE"
             )
         binding_sha = _sha256(binding.binding_sha256, "inference_binding.binding_sha256")
-        bundle = bundles.get(binding_sha)
 
-        if bundle is None:
+        inference_source = inference_sources.get(binding_sha)
+        if not isinstance(inference_source, InferenceBindingSourceBundle):
+            raise SourceRevalidatedTrainingDatasetError(
+                "INFERENCE_BINDING_SOURCE_BUNDLE_REQUIRED"
+            )
+        _require_exact_trace_source(trace, inference_source.training_trace)
+        try:
+            revalidate_binding_against_sources(
+                binding,
+                inference_source.training_trace,
+                inference_source.inference_receipt,
+                inference_source.grid_plan,
+            )
+        except JSpaceInferenceBindingError as exc:
+            raise SourceRevalidatedTrainingDatasetError(
+                f"JSPACE_INFERENCE_BINDING_SOURCE_REVALIDATION_FAILED:{exc}"
+            ) from exc
+
+        control_source = control_sources.get(binding_sha)
+        if control_source is None:
             if condition == BASELINE_CONTROL_CONDITION:
                 continue
             raise SourceRevalidatedTrainingDatasetError(
-                "CANONICAL_SOURCE_BUNDLE_REQUIRED_FOR_NON_BASELINE_TRAINING"
+                "CANONICAL_CONTROL_SOURCE_BUNDLE_REQUIRED_FOR_NON_BASELINE_TRAINING"
             )
-        if not isinstance(bundle, ModelInputControlClosureSourceBundle):
+        if not isinstance(control_source, ModelInputControlClosureSourceBundle):
             raise SourceRevalidatedTrainingDatasetError(
                 "MODEL_INPUT_CONTROL_CLOSURE_SOURCE_BUNDLE_REQUIRED"
             )
 
-        _require_existing_control_admission(canonical_db, bundle.control_binding)
         try:
             canonical_closure = revalidate_closure_against_canonical_sources(
                 canonical_db,
-                bundle.closure,
-                bundle.control_binding,
-                bundle.consumed_input_bytes,
-                bundle.grid_plan,
-                bundle.inference_receipt,
+                control_source.closure,
+                control_source.control_binding,
+                control_source.consumed_input_bytes,
+                inference_source.grid_plan,
+                inference_source.inference_receipt,
                 binding,
                 current_generation=generation,
             )
@@ -224,7 +237,7 @@ def compile_source_revalidated_records(
             raise SourceRevalidatedTrainingDatasetError(
                 f"MODEL_INPUT_CONTROL_CLOSURE_SOURCE_REVALIDATION_FAILED:{exc}"
             ) from exc
-        revalidated[binding_sha] = canonical_closure
+        revalidated_closures[binding_sha] = canonical_closure
 
     try:
         return compile_admitted_records(
@@ -238,7 +251,7 @@ def compile_source_revalidated_records(
             admitted_inference_receipts=admitted_inference_receipts,
             admitted_bases=admitted_bases,
             admitted_outcome_receipts=admitted_outcome_receipts,
-            admitted_model_input_control_closures=revalidated,
+            admitted_model_input_control_closures=revalidated_closures,
         )
     except AdmittedTrainingDatasetError as exc:
         raise SourceRevalidatedTrainingDatasetError(
@@ -248,6 +261,7 @@ def compile_source_revalidated_records(
 
 __all__ = [
     "SCHEMA",
+    "InferenceBindingSourceBundle",
     "ModelInputControlClosureSourceBundle",
     "SourceRevalidatedTrainingDatasetError",
     "compile_source_revalidated_records",

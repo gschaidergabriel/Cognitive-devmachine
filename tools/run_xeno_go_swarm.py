@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Canonical Xeno implementation-codename GO entrypoint for EntityOS/HCU.
 
-This launcher resolves the current supervisor dynamically, validates the three-track
-EntityOS/HCU contract, requires the Xeno active-build controls, and then transfers
-execution to the implementation-focused 6000-logical-worker fabric. It never reads
-provider secrets during preflight and does not create a competing product identity.
+This launcher resolves the current supervisor dynamically, validates the current
+EntityOS/HCU authority plus Xeno's active-build/infinite-recursion contracts, and
+then transfers execution to the implementation-focused 6000-logical-worker fabric.
+It never reads provider secrets during preflight and does not create a competing
+product or truth authority.
 """
 from __future__ import annotations
 
@@ -20,6 +21,8 @@ SUPERVISOR_INBOX = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.
 WORKER_PROTOCOL = ROOT / "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
 BUILD_DIRECTIVE = ROOT / "research_entity/claycode/XENO_V1_ACTIVE_BUILD_AND_RECURSIVE_IMPROVEMENT_DIRECTIVE_2026-08-24.md"
 BUILD_STATE = ROOT / "research_entity/claycode/XENO_ACTIVE_BUILD_STATE.json"
+HARNESS_CONTRACT = ROOT / "the artefact/Xeno/XENO_HARNESS_V1_ACCEPTANCE_CONTRACT.md"
+HARNESS_VALIDATOR = ROOT / "tools/xeno_harness_config.py"
 CONTROLLER = ROOT / "tools/run_xeno_active_build_swarm.py"
 PROMOTION_GATE = ROOT / "tools/xeno_build_gate.py"
 
@@ -85,15 +88,24 @@ def preflight() -> dict:
     require((authority.get("free_only") or {}).get("no_paid_fallback") is True, "AUTHORITY_NO_PAID_FALLBACK_MISSING")
 
     require(BUILD_DIRECTIVE.exists(), "XENO_BUILD_DIRECTIVE_MISSING")
-    require(build_state.get("mode") == "ACTIVE_BUILD_THEN_RECURSIVE_IMPROVEMENT", "XENO_BUILD_MODE_MISMATCH")
+    require(HARNESS_CONTRACT.exists(), "XENO_HARNESS_CONTRACT_MISSING")
+    require(build_state.get("mode") == "ACTIVE_BUILD_THEN_INFINITE_RECURSIVE_IMPROVEMENT", "XENO_BUILD_MODE_MISMATCH")
     require(build_state.get("implementation_codename") == "Xeno", "XENO_CODENAME_MISMATCH")
     require(build_state.get("target_core_class") == "APPROX_0_8B_FINE_TUNED", "XENO_08B_TARGET_MISSING")
-    require(build_state.get("recursive_until_superseded") is True, "XENO_RECURSION_NOT_ARMED")
+    require(build_state.get("recursive_on_every_go_until_superseded") is True, "XENO_PER_GO_RECURSION_NOT_ARMED")
+    require(build_state.get("terminal_done_state_after_v1") is False, "XENO_TERMINAL_DONE_STATE_FORBIDDEN")
+    harness = build_state.get("harness_requirements") or {}
+    require(harness.get("internal_08b_switchable") is True, "XENO_INTERNAL_08B_SWITCH_MISSING")
+    require(harness.get("external_llm_slots_max") == 2, "XENO_TWO_SLOT_LIMIT_MISSING")
+    require(harness.get("prestage_switchable") is True, "XENO_PRESTAGE_SWITCH_MISSING")
+    require(harness.get("grid10_logical_cells") == 10, "XENO_GRID10_REQUIREMENT_MISSING")
+    require(harness.get("xeno_peer_link_required") == "XENO_PEER_LINK/v1", "XENO_PEER_LINK_REQUIREMENT_MISSING")
 
     for path, code in (
         (WORKER_PROTOCOL, "WORKER_PROTOCOL_MISSING"),
         (CONTROLLER, "XENO_CONTROLLER_MISSING"),
         (PROMOTION_GATE, "XENO_PROMOTION_GATE_MISSING"),
+        (HARNESS_VALIDATOR, "XENO_HARNESS_VALIDATOR_MISSING"),
     ):
         require(path.exists(), code)
     worker_text = WORKER_PROTOCOL.read_text(encoding="utf-8")
@@ -108,6 +120,9 @@ def preflight() -> dict:
         "supervisor": str(authority_path.relative_to(ROOT)),
         "supervisor_epoch": authority.get("schema_version"),
         "build_mode": build_state.get("mode"),
+        "recursive_each_go": True,
+        "terminal_done_state_after_v1": False,
+        "harness_contract": str(HARNESS_CONTRACT.relative_to(ROOT)),
     }
 
 

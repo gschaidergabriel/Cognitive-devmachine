@@ -32,7 +32,7 @@ from typing import Any
 
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
-    from .grid10_scheduler_v1 import GridPlan, GridScheduleError, validate_grid_plan_identity
+    from .grid10_scheduler_v1 import ExecutionClass, GridPlan, GridScheduleError, validate_grid_plan_identity
     from .jspace_inference_binding_v1 import (
         JSpaceInferenceBinding,
         JSpaceInferenceBindingError,
@@ -51,7 +51,7 @@ try:
     )
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
-    from grid10_scheduler_v1 import GridPlan, GridScheduleError, validate_grid_plan_identity
+    from grid10_scheduler_v1 import ExecutionClass, GridPlan, GridScheduleError, validate_grid_plan_identity
     from jspace_inference_binding_v1 import (
         JSpaceInferenceBinding,
         JSpaceInferenceBindingError,
@@ -331,6 +331,10 @@ def _validate_sources(
 
     matching_cells = [cell for cell in controlled_grid_plan.cells if cell.cell_id == input_binding.cell_id]
     _need(len(matching_cells) == 1, "CONTROLLED_GRID_CELL_NOT_UNIQUE")
+    _need(
+        matching_cells[0].execution_class is ExecutionClass.MODEL,
+        "CONTROLLED_GRID_CELL_NOT_MODEL_EXECUTION",
+    )
     _need(matching_cells[0].function == f"MODEL:{input_binding.role}", "CONTROLLED_GRID_CELL_ROLE_MISMATCH")
 
 

@@ -8,6 +8,7 @@ provider-side evidence before an autonomous network call is allowed.
 """
 from __future__ import annotations
 
+import datetime as dt
 import hashlib
 import json
 from pathlib import Path
@@ -19,17 +20,16 @@ PROVENANCE_PATH = ROOT / "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.js
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
 DEFAULT_ARTIFACTS = Path("/artifacts/clay-entityos-swarm")
 RECEIPT_SCHEMA = "FREE_LANE_EXECUTION_RECEIPT/v1"
+ADMISSION_SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
+PROVENANCE_SCHEMA = "ENTITYOS_HCU_FREE_LANE_ECONOMIC_PROVENANCE/v1"
 
 
-def _json(path: Path) -> dict[str, Any]:
-    obj = json.loads(path.read_text(encoding="utf-8"))
+def _json_snapshot(path: Path) -> tuple[dict[str, Any], str]:
+    raw = path.read_bytes()
+    obj = json.loads(raw.decode("utf-8"))
     if not isinstance(obj, dict):
         raise ValueError(f"object required: {path}")
-    return obj
-
-
-def _sha(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return obj, hashlib.sha256(raw).hexdigest()
 
 
 def _host(endpoint: str) -> str:
@@ -90,15 +90,15 @@ def _groq_historical_free_match(
     return newest
 
 
-def lane_evidence(
+def _lane_evidence_from_provenance(
+    prov: dict[str, Any],
     provider: str,
     credential_fingerprint: str,
     model_or_route: str,
     endpoint: str,
     *,
-    artifacts: Path = DEFAULT_ARTIFACTS,
+    artifacts: Path,
 ) -> dict[str, Any]:
-    prov = _json(PROVENANCE_PATH)
     record = ((prov.get("providers") or {}).get(provider) or {})
     if not record:
         return {"ok": False, "reason": "PROVIDER_NOT_IN_ECONOMIC_PROVENANCE"}
@@ -148,12 +148,102 @@ def lane_evidence(
         }
 
     if provider == "mistral":
-        # Ordinary Mistral API keys are explicitly not plan-scoped. Until the
-        # organization/workspace's Free mode and disabled PAYG are bound from a
-        # provider-side admin surface, autonomous execution fails closed.
         return {"ok": False, "reason": "MISTRAL_PROVIDER_SIDE_FREE_MODE_NOT_BOUND"}
 
     return {"ok": False, "reason": "UNKNOWN_PROVIDER"}
+
+
+def lane_evidence(
+    provider: str,
+    credential_fingerprint: str,
+    model_or_route: str,
+    endpoint: str,
+    *,
+    artifacts: Path = DEFAULT_ARTIFACTS,
+) -> dict[str, Any]:
+    prov, _ = _json_snapshot(PROVENANCE_PATH)
+    if prov.get("schema") != PROVENANCE_SCHEMA or prov.get("mode") != "FREE_ONLY":
+        return {"ok": False, "reason": "ECONOMIC_PROVENANCE_AUTHORITY_INVALID"}
+    return _lane_evidence_from_provenance(
+        prov,
+        provider,
+        credential_fingerprint,
+        model_or_route,
+        endpoint,
+        artifacts=artifacts,
+    )
+
+
+def current_lane_binding(
+    provider: str,
+    credential_fingerprint: str,
+    model_or_route: str,
+    endpoint: str,
+    *,
+    artifacts: Path = DEFAULT_ARTIFACTS,
+) -> dict[str, Any]:
+    """Return one exact pre-call authorization snapshot for a concrete lane."""
+    try:
+        admission, admission_digest = _json_snapshot(ADMISSION_PATH)
+        provenance, provenance_digest = _json_snapshot(PROVENANCE_PATH)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
+        return {"ok": False, "reason": "FREE_LANE_AUTHORITY_SNAPSHOT_INVALID", "detail": type(exc).__name__}
+
+    if admission.get("schema") != ADMISSION_SCHEMA or admission.get("mode") != "FREE_ONLY":
+        return {"ok": False, "reason": "FREE_PROVIDER_ADMISSION_AUTHORITY_INVALID"}
+    epoch = str(admission.get("authority_epoch") or "")
+    if not epoch:
+        return {"ok": False, "reason": "FREE_PROVIDER_ADMISSION_EPOCH_MISSING"}
+    if provenance.get("schema") != PROVENANCE_SCHEMA or provenance.get("mode") != "FREE_ONLY":
+        return {"ok": False, "reason": "ECONOMIC_PROVENANCE_AUTHORITY_INVALID"}
+    if str(provenance.get("authority_epoch") or "") != epoch:
+        return {"ok": False, "reason": "FREE_LANE_AUTHORITY_EPOCH_MISMATCH"}
+
+    provider_admission = ((admission.get("providers") or {}).get(provider) or {})
+    if provider_admission.get("admitted") is not True:
+        return {"ok": False, "reason": "PROVIDER_NOT_CURRENTLY_ADMITTED"}
+    if provider_admission.get("cost_class") != "FREE":
+        return {"ok": False, "reason": "PROVIDER_COST_CLASS_NOT_FREE"}
+
+    evidence = _lane_evidence_from_provenance(
+        provenance,
+        provider,
+        credential_fingerprint,
+        model_or_route,
+        endpoint,
+        artifacts=artifacts,
+    )
+    if not evidence.get("ok"):
+        return {
+            "ok": False,
+            "reason": evidence.get("reason") or "FREE_LANE_ECONOMIC_PROVENANCE_REQUIRED",
+            "admission_epoch": epoch,
+            "admission_digest": admission_digest,
+            "economic_provenance_digest": provenance_digest,
+        }
+    return {
+        "ok": True,
+        "observed_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "admission_epoch": epoch,
+        "admission_digest": admission_digest,
+        "economic_provenance_digest": provenance_digest,
+        "evidence": evidence,
+    }
+
+
+def binding_still_current(binding: dict[str, Any]) -> bool:
+    """Re-read authority files and compare exact digests without granting authority."""
+    if not binding.get("ok"):
+        return False
+    try:
+        _, admission_digest = _json_snapshot(ADMISSION_PATH)
+        _, provenance_digest = _json_snapshot(PROVENANCE_PATH)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        return False
+    return (
+        admission_digest == binding.get("admission_digest")
+        and provenance_digest == binding.get("economic_provenance_digest")
+    )
 
 
 def lane_is_zero_cost(
@@ -175,16 +265,17 @@ def emit_execution_receipt(
     credential_fingerprint: str,
     model_or_route: str,
     endpoint: str,
-    evidence: dict[str, Any],
+    binding: dict[str, Any],
     request_id: str | None,
     usage: dict[str, Any],
     http_status: int | str,
     result_digest: str,
     source_commit_and_tree: dict[str, str],
+    binding_stable_after_call: bool,
     artifacts: Path = DEFAULT_ARTIFACTS,
 ) -> dict[str, Any]:
-    import datetime as dt
-
+    if not binding.get("ok"):
+        raise ValueError("successful pre-call lane binding required")
     receipt = {
         "schema": RECEIPT_SCHEMA,
         "observed_at": dt.datetime.now(dt.timezone.utc).isoformat(),
@@ -193,9 +284,12 @@ def emit_execution_receipt(
         "credential_fingerprint": credential_fingerprint,
         "model_or_route": model_or_route,
         "endpoint_host": _host(endpoint),
-        "typed_admission_epoch": str(_json(ADMISSION_PATH).get("authority_epoch")),
-        "typed_admission_digest": _sha(ADMISSION_PATH),
-        "provider_side_free_entitlement_or_zero_price_evidence": evidence,
+        "typed_admission_epoch": binding.get("admission_epoch"),
+        "typed_admission_digest": binding.get("admission_digest"),
+        "economic_provenance_digest": binding.get("economic_provenance_digest"),
+        "pre_call_binding_observed_at": binding.get("observed_at"),
+        "provider_side_free_entitlement_or_zero_price_evidence": binding.get("evidence"),
+        "binding_stable_after_call": bool(binding_stable_after_call),
         "request_id": request_id,
         "input_output_usage": usage,
         "http_status": http_status,

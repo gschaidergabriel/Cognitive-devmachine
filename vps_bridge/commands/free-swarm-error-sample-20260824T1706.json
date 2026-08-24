@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"free-swarm-error-sample-20260824T1706",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -euo pipefail; d=$(find /artifacts/clay-entityos-swarm -maxdepth 1 -type d -name 'active-*' | sort | tail -1); python3 - \"$d/workers.jsonl\" <<'PY'\nimport json,sys,collections,pathlib\np=pathlib.Path(sys.argv[1]); seen=set(); n=0\nfor line in p.open(errors='replace'):\n try:r=json.loads(line)\n except:continue\n key=(r.get('provider'),r.get('model'),r.get('http_status'),r.get('classification'))\n if key in seen:continue\n seen.add(key); n+=1\n body=r.get('error_body')\n print('---',key)\n if isinstance(body,dict): print(json.dumps(body,ensure_ascii=False)[:1800])\n else: print(str(body)[:1800])\n if n>=12:break\nPY"
+}

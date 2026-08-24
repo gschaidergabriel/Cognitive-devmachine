@@ -76,6 +76,32 @@ class ModelExecutionAdmissionStoreTests(unittest.TestCase):
         )
         db.close()
 
+    def test_exact_replay_after_connection_reopen_is_idempotent(self):
+        plan = grid_plan()
+        load = verified_load(plan)
+        obs = observation(plan, load)
+
+        db = open_db(self.db_path)
+        first = admit_and_verify_model_execution(
+            db, plan, load, obs, current_generation=plan.entity_generation
+        )
+        db.close()
+
+        reopened = open_db(self.db_path)
+        second = admit_and_verify_model_execution(
+            reopened, plan, load, obs, current_generation=plan.entity_generation
+        )
+        self.assertEqual(first.receipt_sha256, second.receipt_sha256)
+        self.assertEqual(
+            reopened.execute("SELECT COUNT(*) FROM hcu_model_execution_observations").fetchone()[0],
+            1,
+        )
+        self.assertEqual(
+            reopened.execute("SELECT COUNT(*) FROM hcu_model_execution_invocations").fetchone()[0],
+            1,
+        )
+        reopened.close()
+
     def test_same_invocation_with_different_output_rolls_back_without_rebinding(self):
         db = open_db(self.db_path)
         plan = grid_plan()

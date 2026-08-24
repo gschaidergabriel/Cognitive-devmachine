@@ -103,6 +103,7 @@ class Trigger1MidlayerCandidateV3BindTests(unittest.TestCase):
         bound = binder.bind_candidate(result(), candidate())
         self.assertFalse(bound["vector_derivation"]["uses_output_head_weights"])
         self.assertFalse(bound["vector_derivation"]["uses_holdout_data"])
+        self.assertTrue(bound["vector_derivation"]["uses_evaluation_output_labels"])
         self.assertTrue(bound["holdout"]["evaluation_independent_of_vector_derivation"])
         self.assertTrue(bound["holdout"]["metric_uses_output_tokens"])
         self.assertFalse(bound["holdout"]["label_mapping_counterbalanced"])
@@ -111,10 +112,12 @@ class Trigger1MidlayerCandidateV3BindTests(unittest.TestCase):
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
         self.assertFalse(verdict["scientifically_independent_vector_candidate"])
         self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
-        self.assertEqual(
-            ["TOKEN_OUTPUT_METRIC_REQUIRES_COUNTERBALANCED_LABEL_MAPPING"],
-            verdict["scientific_independence_failures"],
-        )
+        failures = set(verdict["scientific_independence_failures"])
+        self.assertIn("TOKEN_OUTPUT_METRIC_REQUIRES_COUNTERBALANCED_LABEL_MAPPING", failures)
+        # Promotion-gate v4 adds the stronger label-identity independence law. Keep
+        # this regression successor-compatible while the branch may still contain v3.
+        if getattr(gate, "VERDICT_SCHEMA", "").endswith("/v4"):
+            self.assertIn("VECTOR_DERIVATION_MUST_NOT_USE_EVALUATION_OUTPUT_LABELS", failures)
 
     def test_derivation_holdout_prompt_overlap_fails_closed(self):
         observed = result()
@@ -132,6 +135,13 @@ class Trigger1MidlayerCandidateV3BindTests(unittest.TestCase):
         observed = result()
         observed["terminal_output_projection_shortcut"] = True
         with self.assertRaisesRegex(binder.TruthBindingError, "NONTERMINAL_INTERVENTION_REQUIRED"):
+            binder.bind_candidate(observed, candidate())
+
+    def test_missing_current_label_identity_coupling_does_not_get_invented(self):
+        observed = result()
+        for row, label in zip(observed["basis_receipts"], ("X", "Y", "Z")):
+            row["label"] = label
+        with self.assertRaisesRegex(binder.TruthBindingError, "EXPECTED_CURRENT_LABEL_IDENTITY_COUPLING_NOT_OBSERVED"):
             binder.bind_candidate(observed, candidate())
 
 

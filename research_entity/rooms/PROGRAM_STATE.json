@@ -43,13 +43,14 @@
     "sandbox_bridge_container_runtime_administration_allowed": true,
     "new_external_production_effects_separately_gated": true,
     "external_provider_admission_file": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
-    "external_provider_admission_rule": "OWNER_AUTHORIZED_PROVIDER_CONTINGENT_PLUS_TYPED_ADMISSION_PLUS_CREDENTIAL_FINGERPRINT_PLUS_EXACT_ROUTE_PLUS_PROVIDER_SIDE_ZERO_COST_PROVENANCE_REQUIRED_AT_SHARED_PRECALL_BOUNDARY",
+    "external_provider_admission_rule": "OWNER_AUTHORIZED_PROVIDER_CONTINGENT_PLUS_TYPED_ADMISSION_PLUS_CREDENTIAL_FINGERPRINT_PLUS_EXACT_ROUTE_MODEL_PLUS_PROVIDER_SIDE_ZERO_COST_PROVENANCE_REQUIRED_AT_SHARED_PRECALL_BOUNDARY",
     "environment_attestation_is_authority": false,
     "provider_level_free_is_runtime_cost_proof": false,
     "provider_global_free_statement_is_concrete_credential_entitlement_proof": false,
     "nvidia_exact_credential_entitlement_required": true,
+    "nvidia_model_scope_required": true,
     "unknown_paid_subscription_or_unbound_route": "FAIL_CLOSED_BEFORE_SECRET_LOOKUP_AND_PROVIDER_NETWORK_IO",
-    "current_provider_execution_state": "FREE_CONTINGENTS_AUTHORIZED_WITH_ROUTE_BINDING; NVIDIA_EXACT_CREDENTIAL_RUNTIME_ACCEPTANCE_PENDING",
+    "current_provider_execution_state": "FREE_CONTINGENTS_AUTHORIZED_WITH_ROUTE_BINDING; NVIDIA_FAIL_CLOSED_UNTIL_EXACT_CREDENTIAL_MODEL_ENTITLEMENT_BOUND",
     "current_provider_runtime_credit": 0,
     "free_lane_execution_receipt": "FREE_LANE_EXECUTION_RECEIPT/v1",
     "nvidia_credential_entitlement_receipt": "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT/v1",
@@ -83,7 +84,7 @@
     "accelerator_like": "HCU_SHARED_WEIGHT_VECTOR_INFERENCE_JSPACE_PLANE",
     "interconnect": "TYPED_CAUSAL_PACKET_WORKSPACE_HYPERPOSITION_FABRIC",
     "io": "TYPED_ENTRY_FABRIC",
-    "effect_translation": "CANDIDATE_TO_EFFECT_REQUEST_THEN_EFFECTGATE"
+    "effect_translation": "CANDIDATE_TO_TYPED_EFFECT_REQUEST_THEN_EFFECTGATE"
   },
   "mode_policy": {
     "baseline": "GRID10",
@@ -113,8 +114,9 @@
     "HCU is the only current integrated cognition/compute architecture.",
     "Global J-Space remains an empirical model-specific causal hypothesis.",
     "Current autonomous execution is FREE_ONLY.",
-    "Owner-authorized free provider contingents require per-credential per-route provider-side zero-cost provenance at the shared provider-call boundary.",
+    "Owner-authorized free provider contingents require per-credential per-route/model provider-side zero-cost provenance at the shared provider-call boundary.",
     "Provider-global free statements and provider-level FREE labels are not concrete credential runtime cost proof.",
+    "NVIDIA fails closed until the exact credential fingerprint has provider-side entitlement evidence and an explicit allowed-model list containing the requested model.",
     "Historical pre-admission or pre-route-binding traffic remains append-only history and receives zero provider runtime credit.",
     "Together and paid/subscription/unknown/unbound routes remain forbidden.",
     "Zero-cost local normal-user Linux and clay-direct-dev VPS sandbox development/testing remain authorized under active owner authority.",
@@ -123,7 +125,7 @@
     "Logical module count cannot be reported as simultaneous model/decode count.",
     "Real effects remain deterministic, journaled and gated."
   ],
-  "current_frontier": "Supervisor 8.71 keeps provider runtime credit at zero until exact post-PR1468 runtime/component receipt evidence exists. Current source contains an NVIDIA admitted credential-fingerprint allow-list and hosted-NIM endpoint binding, but supervisor-required negative control for an unbound fingerprint and positive exact-source receipt still must execute before runtime promotion; dashboard counters spanning source merges are not exact-source evidence. Mistral remains concrete-call fail-closed until provider-side Free-mode/PAYG-disabled evidence is bound; OpenRouter stays explicit-zero-route only; Groq requires same-credential/model free-limit evidence. Retained donor gschaidergabriel/clay-global-research-entity#1263 is successor-dynamic: refresh its live head immediately before use and preserve exact observed donor SHAs only in immutable receipts or historical evidence. Retained executor gschaidergabriel/Dr.-Unterweger#810 is successor-dynamic: refresh its live head independently before rebind/runtime claims and preserve exact observed executor SHAs only in immutable receipts or historical evidence. Continue zero-cost local HCU/Typed Entry and J-Space causal instrumentation; next model-specific path is exact local observation followed only under a valid atomic lease by clean/corrupted/target/sham/off-target intervention. Whole EntityOS/HCU, full HCU, provider runtime, J-Space model and training credit remain zero.",
+  "current_frontier": "Supervisor 8.71 keeps provider runtime credit at zero until exact post-PR1468 runtime/component receipt evidence exists. Current main 12881fd55c1819fdd9ad4d8660d1fec7a1d16273 strengthens NVIDIA to fail closed: canonical credential_entitlements is empty until a non-secret fingerprint is bound to provider-side free entitlement evidence, digest/timestamp and an explicit allowed-model list containing the requested model. The FREE_PROVIDER_ADMISSION note must not claim a bound NVIDIA credential while that entitlement map is empty. Dashboard counters spanning source merges are not exact-source evidence. Mistral remains concrete-call fail-closed until provider-side Free-mode/PAYG-disabled evidence is bound; OpenRouter stays explicit-zero-route only; Groq requires same-credential/model free-limit evidence. Retained donor gschaidergabriel/clay-global-research-entity#1263 is successor-dynamic: refresh its live head immediately before use and preserve exact observed donor SHAs only in immutable receipts or historical evidence. Retained executor gschaidergabriel/Dr.-Unterweger#810 is successor-dynamic: refresh its live head independently before rebind/runtime claims and preserve exact observed executor SHAs only in immutable receipts or historical evidence. Continue zero-cost local HCU/Typed Entry and J-Space causal instrumentation; next model-specific path is exact local observation followed only under a valid atomic lease by clean/corrupted/target/sham/off-target intervention. Whole EntityOS/HCU, full HCU, provider runtime, J-Space model and training credit remain zero.",
   "go_contract": "Every go refreshes current main/newest owner and supervisor authority; checks the clay-direct-dev bridge/sandbox first when an actual bridge tool is exposed; fixes the highest-information nonduplicate executable/control blocker; advances or explicitly no-changes HCU/Entry and Global-J-Space/GWT free-only readiness; requires concrete free-lane provenance before autonomous provider calls; requires canonical atomic lease before unusual intervention; and never inflates source/component evidence into broader runtime PASS.",
   "runtime_credit": {
     "component_runtime_credit": ["JSPACE_FAMILY_SPLIT_ONLY", "ENTRY_CANONICALIZATION_MANIFEST_BOUND_V2_ONLY", "FUNCTION_RUNTIME_DIAGNOSTIC_EXACT_EXECUTOR_NO_SANDBOX_SCOPE_ONLY"],

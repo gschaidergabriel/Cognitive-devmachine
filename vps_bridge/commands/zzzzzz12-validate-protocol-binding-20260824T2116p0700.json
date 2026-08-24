@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"zzzzzz12-validate-protocol-binding-20260824T2116p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -e; python3 -m py_compile tools/run_free_go_swarm.py tools/xeno_current_authority_protocol.py tools/free_lane_provenance.py tools/run_6000_free_swarm.py tools/run_6000_free_swarm_v3.py tools/run_6000_free_swarm_fast.py; PYTHONPATH=tools python3 -c \"import run_free_go_swarm as b; p=b.load_protocol(); print('PROTOCOL_OK',len(p),p.startswith(b.PROTOCOL_BEGIN),p.endswith(b.PROTOCOL_END))\"; export CLAY_FREE_ONLY_ATTESTED=1 CLAY_GROQ_FREE_ATTESTED=1 CLAY_MISTRAL_FREE_ATTESTED=1 CLAY_NVIDIA_FREE_ATTESTED=1 CLAY_OPENROUTER_FREE_ATTESTED=1 NVIDIA_SWARM_MODELS='nvidia/nemotron-3-super-120b-a12b,nvidia/nemotron-3-ultra-550b-a55b,nvidia/nemotron-mini-4b-instruct' OPENROUTER_SWARM_MODELS='openrouter/free'; python3 tools/free_swarm_exec_with_vault.py python3 tools/audit_free_lane_bindings.py; echo PIDS; pgrep -af '[r]un_6000_free_swarm_fast.py' || true"
+}

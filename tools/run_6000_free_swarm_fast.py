@@ -6,15 +6,21 @@ import concurrent.futures
 import os
 import threading
 
-# Install throughput behavior *before* importing the 6000 fabric so its
-# FastProviderRuntime inherits transient-error isolation and its shard prompt wraps
-# the stable cache-friendly prefix. v5 preserves v4/v3 economic/high-fanout
-# authority and adds the two-stage exact-source patch-conversion path.
+# Install throughput behavior and successor model-health routing before importing
+# the gated fabric. v5 then adds two-stage exact-source patch conversion while v3
+# remains the exact economic route authority. The post-import observer wraps that
+# gate; it never replaces it.
 import run_free_go_swarm as base
 import run_24h_entityos_swarm as opt
 import free_swarm_accelerator_v2 as accelerator
 accelerator.install(base, opt)
+
+import run_6000_free_swarm as fabric_v2
+import free_swarm_model_health_v1 as model_health
+model_health.install_scheduler(fabric_v2)
+
 import run_6000_free_swarm_v5 as fabric
+model_health.bind_request_observer(fabric)
 
 
 def main() -> int:

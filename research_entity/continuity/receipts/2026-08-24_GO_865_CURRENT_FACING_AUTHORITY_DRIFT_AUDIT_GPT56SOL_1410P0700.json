@@ -1,0 +1,97 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed": "7aaff2ce3adfedbfad53432a4427b3b0abe5925f",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_observed_before_write": "1b292960fea4e3391e320eed89dca26e91001cfc",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "2da99e0458809988190c129b04cae913d1f15d92"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "CURRENT_FACING_AUTHORITY_SURFACE_AUDIT_AND_FUSION_RECEIPT"
+  },
+  "observed_current_authority": {
+    "newest_admitted_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json",
+    "supervisor_mode": "FREE_ONLY",
+    "supervisor_inbox_schema_version": "8.65",
+    "runtime_first": true,
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_execution_admitted": false
+  },
+  "material_finding": "Current main contains a successor-authority split: newest admitted steering and SUPERVISOR_INBOX are 8.65, while multiple current-facing bootstrap/program/artifact/status surfaces still identify 8.63 as current authority. Newest steering wins by authority order, so the stale surfaces cannot downgrade or replace 8.65; however they are a reentry hazard and should be successor-synchronized without weakening the 8.65 runtime-first FREE_ONLY gate.",
+  "stale_current_facing_surfaces": [
+    {
+      "path": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+      "blob_sha": "2d4a4c3ff85530bd2eae00870c5f90a7bc3ce63e",
+      "observed_stale_fields": [
+        "schema_version=8.63",
+        "authority_correction=research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+        "all_worker_protocol=research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md"
+      ]
+    },
+    {
+      "path": "research_entity/rooms/PROGRAM_STATE.json",
+      "blob_sha": "fe25faf7706164e9eca40bd2faefa96abb16b493",
+      "observed_stale_fields": [
+        "schema_version=8.63",
+        "authority_correction=research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+        "current_frontier text still names Supervisor 8.63"
+      ]
+    },
+    {
+      "path": "the artefact/manifest.json",
+      "blob_sha": "3f48ff31565d28038a7ba74a4c82af18831a32ef",
+      "observed_stale_fields": [
+        "authority_correction=research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+        "coordination_authority.supervisor=8.63",
+        "current_frontier text still names Supervisor 8.63"
+      ]
+    },
+    {
+      "path": "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md",
+      "blob_sha": "c95586e5a8c99fa54688a904bb9e99b37fb469e8",
+      "observed_stale_fields": [
+        "training authority note still identifies SUPERVISOR_STEERING_8_63.json as current"
+      ]
+    }
+  ],
+  "hypothesis": "Successor authority advanced to 8.65 faster than all current-facing reentry surfaces were synchronized, creating stale-island risk for new organs that read a subset of the stack.",
+  "counterhypothesis": "The 8.63 references are intentionally frozen historical provenance and therefore harmless.",
+  "adjudication": "These files explicitly present themselves as current bootstrap/program/artifact/status surfaces rather than immutable historical receipts, while SUPERVISOR_INBOX and the newest steering explicitly identify 8.65 as current. Therefore the mismatch is a current-facing reentry hazard, not merely historical provenance. No lower surface is allowed to override 8.65.",
+  "bounded_delta": {
+    "type": "DURABLE_DRIFT_AUDIT_ON_RETAINED_DONOR_LANE",
+    "source_semantics_changed": false,
+    "executor_changed": false,
+    "runtime_invocation_performed": false,
+    "paid_or_unknown_provider_action_performed": false,
+    "recommended_fusion": "Successor-synchronize the four current-facing surfaces to newest admitted supervisor 8.65 using dynamic/newest-authority wording where practical, while preserving historical 8.63 files and receipts as provenance and preserving the runtime-first FREE_ONLY quota gate."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: removed ambiguity in work selection by durably identifying the exact 8.65-vs-8.63 current-facing authority split and its affected blobs; no competing executor or product authority created.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: supervisor 8.65 pauses source-guard proliferation and the higher-information HCU runtime gate remains blocked on directly observed included Sandbox quota; no duplicate HCU source path was added.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: model/J-Space runtime and training credit remain gated behind admitted Sandbox environment execution; no paid lane, provider preflight, or source-only pseudo-credit was created."
+  },
+  "credits": {
+    "exact_source_function_runtime_diagnostic": "PREEXISTING_PASS_AT_NO_SANDBOX_SCOPE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse the stale current-facing authority surfaces to successor 8.65/current-newest semantics without touching historical receipts, then independently obtain a directly authoritative read-only remaining included Vercel Sandbox quota signal. Only if that FREE_ONLY gate opens may the exact PR810 environment probe run.",
+  "acceptance": "IN_PROGRESS"
+}

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import unittest
 
 import run_free_swarm_admission_boundary_receipt as base
@@ -37,12 +38,36 @@ class FreeSwarmReceiptRunnerHardening868Tests(unittest.TestCase):
             with self.subTest(marker=marker):
                 self.assertIn(marker, text)
 
+    def test_bootstrap_blocks_arbitrary_child_process_escape(self) -> None:
+        text = base._bootstrap_text()
+        required = (
+            'subprocess.Popen = guarded_popen',
+            'os.system = guarded_process_call',
+            'os.popen = guarded_process_call',
+            'record("process.Popen", command)',
+            'record("process.os", target)',
+            'record("process.exec", target)',
+            'allowed = ("bash", "-n", str(supervisor_path))',
+            'if command == allowed and not kwargs.get("shell", False)',
+            '"posix_spawn", "posix_spawnp"',
+        )
+        for marker in required:
+            with self.subTest(marker=marker):
+                self.assertIn(marker, text)
+
     def test_inherited_environment_fence_is_required_for_receipt_pass(self) -> None:
         self.assertIn(
             "tests.test_go_868_inherited_provider_secret_fence",
             base.TEST_MODULES,
         )
         self.assertTrue(base._CLAY_868_RECEIPT_HARDENING_INSTALLED)
+
+    def test_process_egress_receipt_metadata_is_fail_closed(self) -> None:
+        self.assertTrue(base._CLAY_868_RECEIPT_HARDENING_INSTALLED)
+        text = inspect.getsource(hardened._install_hardening)
+        self.assertIn('"process_allowlist"', text)
+        self.assertIn('"python_process_egress_attempt_count"', text)
+        self.assertIn('"arbitrary_child_process_egress"', text)
 
     def test_source_binding_is_not_runtime_credit(self) -> None:
         self.assertTrue(base._CLAY_868_RECEIPT_HARDENING_INSTALLED)

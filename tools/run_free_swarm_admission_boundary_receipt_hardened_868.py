@@ -10,7 +10,11 @@ holes before the required exact-source runtime execution:
    to create_connection()/connect();
 3. bind and execute the supervisor inherited-provider-environment fence regression,
    so the receipt cannot PASS without checking that the non-admitted credential
-   clearing fence precedes every supervisor child-start path.
+   clearing fence precedes every supervisor child-start path;
+4. fail closed on arbitrary child-process escape from the boundary-test process.
+   The only admitted subprocess is ``bash -n`` against the exact supervisor shell
+   source, because that syntax check is non-executing and is itself part of the
+   canonical inherited-environment regression.
 
 It still performs no external provider call and grants no provider/model/HCU/J-Space
 or training credit by source presence alone.
@@ -36,38 +40,74 @@ def _hardened_bootstrap_text() -> str:
 import os
 from pathlib import Path
 import socket
+import subprocess
 import sys
 import unittest
 
 log_path = Path(os.environ["CLAY_NETWORK_TRIPWIRE_LOG"])
+root = Path.cwd().resolve()
+supervisor_path = (root / "tools/run_24h_entityos_swarm_supervisor.sh").resolve()
+_original_popen = subprocess.Popen
+
 
 def record(kind, target):
     try:
         with log_path.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps({"kind": kind, "target": repr(target)}, separators=(",", ":")) + "\n")
     finally:
-        raise RuntimeError("CLAY_BOUNDARY_NETWORK_TRIPWIRE")
+        raise RuntimeError("CLAY_BOUNDARY_EGRESS_TRIPWIRE")
+
 
 def guarded_connect(self, address):
     return record("socket.connect", address)
 
+
 def guarded_connect_ex(self, address):
     return record("socket.connect_ex", address)
 
+
 def guarded_create_connection(address, *args, **kwargs):
     return record("socket.create_connection", address)
+
 
 def guarded_getaddrinfo(*args, **kwargs):
     target = args[:2] if args else kwargs
     return record("socket.getaddrinfo", target)
 
+
 def guarded_sendto(self, data, *args, **kwargs):
     target = args[-1] if args else kwargs.get("address")
     return record("socket.sendto", target)
 
+
 def guarded_sendmsg(self, buffers, *args, **kwargs):
     target = args[-1] if args else kwargs.get("address")
     return record("socket.sendmsg", target)
+
+
+def _normalized_command(args):
+    if isinstance(args, (list, tuple)):
+        return tuple(str(part) for part in args)
+    return (str(args),)
+
+
+def guarded_popen(args, *pargs, **kwargs):
+    command = _normalized_command(args)
+    allowed = ("bash", "-n", str(supervisor_path))
+    if command == allowed and not kwargs.get("shell", False):
+        return _original_popen(args, *pargs, **kwargs)
+    return record("process.Popen", command)
+
+
+def guarded_process_call(*args, **kwargs):
+    target = args if args else kwargs
+    return record("process.os", target)
+
+
+def guarded_exec_call(*args, **kwargs):
+    target = args if args else kwargs
+    return record("process.exec", target)
+
 
 socket.socket.connect = guarded_connect
 socket.socket.connect_ex = guarded_connect_ex
@@ -76,6 +116,13 @@ socket.getaddrinfo = guarded_getaddrinfo
 socket.socket.sendto = guarded_sendto
 if hasattr(socket.socket, "sendmsg"):
     socket.socket.sendmsg = guarded_sendmsg
+subprocess.Popen = guarded_popen
+os.system = guarded_process_call
+os.popen = guarded_process_call
+for _name in ("execl", "execle", "execlp", "execlpe", "execv", "execve", "execvp", "execvpe", "posix_spawn", "posix_spawnp"):
+    if hasattr(os, _name):
+        setattr(os, _name, guarded_exec_call)
+
 suite = unittest.defaultTestLoader.loadTestsFromNames(sys.argv[1:])
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 raise SystemExit(0 if result.wasSuccessful() else 1)
@@ -121,13 +168,35 @@ def _install_hardening() -> None:
                 "socket.socket.connect_ex",
                 "socket.socket.sendto",
                 "socket.socket.sendmsg_if_available",
+                "subprocess.Popen_except_exact_bash_n_supervisor_syntax_check",
+                "os.system",
+                "os.popen",
+                "os.exec_family",
+                "os.posix_spawn_family_if_available",
+            ],
+            "process_allowlist": [
+                "bash -n <repo>/tools/run_24h_entityos_swarm_supervisor.sh",
             ],
             "inherited_provider_environment_fence_test": INHERITED_ENV_TEST_REL,
             "inherited_provider_environment_fence_required_for_pass": True,
         }
         fences = receipt.setdefault("fences", {})
+        attempts = list(fences.get("python_socket_network_attempts") or [])
+        process_attempts = [
+            item for item in attempts
+            if isinstance(item, dict) and str(item.get("kind") or "").startswith("process.")
+        ]
+        socket_attempts = [item for item in attempts if item not in process_attempts]
+        fences["boundary_tripwire_attempt_count_total"] = len(attempts)
+        fences["python_process_egress_attempt_count"] = len(process_attempts)
+        fences["python_process_egress_attempts"] = process_attempts
+        fences["python_socket_network_attempt_count"] = len(socket_attempts)
+        fences["python_socket_network_attempts"] = socket_attempts
         fences["supervisor_inherited_provider_environment_fence"] = (
             "ENFORCED_BY_TEST_GO_868_INHERITED_PROVIDER_SECRET_FENCE"
+        )
+        fences["arbitrary_child_process_egress"] = (
+            "FAIL_CLOSED_EXCEPT_EXACT_NONEXECUTING_BASH_N_SUPERVISOR_SYNTAX_CHECK"
         )
         original_write_receipt(path, receipt)
 

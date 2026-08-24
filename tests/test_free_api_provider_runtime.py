@@ -431,6 +431,31 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         self.assertEqual(lock_calls, [])
 
+    def test_wide_message_object_is_rejected_before_execution_lock(self):
+        lock_calls = []
+        original_lock = MOD.PROCESS_EXECUTION_LOCK
+        message = {"role": "user", "content": "x"}
+        message.update({f"extra_{index}": "x" for index in range(10_000)})
+
+        class TrackingLock:
+            def acquire(self, timeout):
+                lock_calls.append("acquire")
+                return True
+
+            def release(self):
+                lock_calls.append("release")
+
+        MOD.PROCESS_EXECUTION_LOCK = TrackingLock()
+        try:
+            with self.assertRaisesRegex(
+                ValueError, "message_fields_not_supported_by_text_adapter"
+            ):
+                MOD.execute_chat([message], model="x", environ={})
+        finally:
+            MOD.PROCESS_EXECUTION_LOCK = original_lock
+
+        self.assertEqual(lock_calls, [])
+
     def test_message_count_mutation_is_rechecked_before_snapshot(self):
         snapshot_completed = []
         original_lock = MOD.PROCESS_EXECUTION_LOCK

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Fail-closed evidence gate for Trigger-1 direct J-Space/vector-steering claims.
 
-This gate does not mint canonical truth. It separates:
-1) mechanism runtime vector-intervention evidence; from
-2) the stricter owner Trigger-1 target: direct vector control of the exact admitted
-   FREE API-model runtime.
+Trigger-1 V2 is goal-bound rather than provider-bound. The full target may be met by
+an exact admitted FREE external API runtime or by an exact zero-provider-billing
+loopback API runtime, provided the same internal-vector, identity, matched-control
+and disjoint-holdout evidence is present.
 
-Hosted prompt/completion traffic alone can never satisfy either positive verdict.
+Hosted prompt/completion traffic alone can never satisfy a positive verdict.
 """
 from __future__ import annotations
 
@@ -15,9 +15,10 @@ import hashlib
 import json
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 CANDIDATE_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
-VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v1"
+VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2"
 REQUIRED_CONTROLS = (
     "BASELINE",
     "+VECTOR",
@@ -32,7 +33,10 @@ INSTRUMENTED_RUNTIME_CLASSES = {
     "PROVIDER_RUNTIME_INTERNAL_VECTOR_INTERVENTION",
     "OTHER_RUNTIME_OBSERVED_INTERNAL_INTERVENTION",
 }
-OWNER_API_TARGET_CLASS = "EXACT_ADMITTED_FREE_API_MODEL_RUNTIME"
+OWNER_API_TARGET_CLASS = "ZERO_COST_API_SERVED_MODEL_RUNTIME"
+LEGACY_OWNER_API_TARGET_CLASS = "EXACT_ADMITTED_FREE_API_MODEL_RUNTIME"
+LOCAL_API_SURFACE = "LOCAL_LOOPBACK_API"
+EXTERNAL_API_SURFACE = "FREE_EXTERNAL_API"
 
 
 def _sha256(value: Any) -> bool:
@@ -47,6 +51,16 @@ def _sha256(value: Any) -> bool:
 
 def _nonempty(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
+
+
+def _loopback_url(value: Any) -> bool:
+    if not _nonempty(value):
+        return False
+    try:
+        parsed = urlparse(str(value))
+    except Exception:
+        return False
+    return parsed.scheme in {"http", "https"} and parsed.hostname in {"127.0.0.1", "localhost", "::1"}
 
 
 def _control_receipts(controls: Any) -> tuple[bool, list[str]]:
@@ -144,6 +158,51 @@ def _identity_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     return not failures, failures
 
 
+def _owner_target_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
+    failures: list[str] = []
+    target = candidate.get("target")
+    transport = candidate.get("transport")
+    if not isinstance(target, dict):
+        return False, ["OWNER_API_TARGET_EVIDENCE_REQUIRED"]
+    if not isinstance(transport, dict):
+        transport = {}
+
+    relation = target.get("relation")
+    if relation not in {OWNER_API_TARGET_CLASS, LEGACY_OWNER_API_TARGET_CLASS}:
+        failures.append("ZERO_COST_API_SERVED_MODEL_RUNTIME_REQUIRED")
+
+    if not _nonempty(target.get("provider")) or not _nonempty(target.get("model_or_route")):
+        failures.append("EXACT_PROVIDER_AND_MODEL_ROUTE_REQUIRED")
+
+    surface = target.get("execution_surface")
+    if surface is None and relation == LEGACY_OWNER_API_TARGET_CLASS:
+        surface = EXTERNAL_API_SURFACE
+
+    if transport.get("api_served") is not True and relation != LEGACY_OWNER_API_TARGET_CLASS:
+        failures.append("API_SERVED_RUNTIME_REQUIRED")
+
+    if surface == LOCAL_API_SURFACE:
+        if target.get("zero_provider_billing") is not True:
+            failures.append("LOCAL_ZERO_PROVIDER_BILLING_REQUIRED")
+        if target.get("provider") != "local":
+            failures.append("LOCAL_API_PROVIDER_MUST_BE_LOCAL")
+        if not _sha256(target.get("local_runtime_execution_receipt_sha256")):
+            failures.append("LOCAL_RUNTIME_EXECUTION_RECEIPT_REQUIRED")
+        if transport.get("loopback_only") is not True:
+            failures.append("LOCAL_API_LOOPBACK_ONLY_REQUIRED")
+        if not _loopback_url(transport.get("endpoint")):
+            failures.append("LOCAL_API_LOOPBACK_ENDPOINT_REQUIRED")
+    elif surface == EXTERNAL_API_SURFACE:
+        if target.get("typed_free_lane_admitted") is not True:
+            failures.append("TYPED_FREE_LANE_ADMISSION_REQUIRED")
+        if not _sha256(target.get("free_lane_execution_receipt_sha256")):
+            failures.append("FREE_LANE_EXECUTION_RECEIPT_REQUIRED")
+    else:
+        failures.append("API_EXECUTION_SURFACE_REQUIRED")
+
+    return not failures, failures
+
+
 def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
     failures: list[str] = []
     if candidate.get("schema") != CANDIDATE_SCHEMA:
@@ -176,25 +235,13 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         and split_ok
     )
 
-    target = candidate.get("target")
-    target_failures: list[str] = []
-    if not isinstance(target, dict):
-        target_failures.append("OWNER_API_TARGET_EVIDENCE_REQUIRED")
-        target = {}
-    if target.get("relation") != OWNER_API_TARGET_CLASS:
-        target_failures.append("EXACT_ADMITTED_FREE_API_MODEL_RUNTIME_REQUIRED")
-    if target.get("typed_free_lane_admitted") is not True:
-        target_failures.append("TYPED_FREE_LANE_ADMISSION_REQUIRED")
-    if not _sha256(target.get("free_lane_execution_receipt_sha256")):
-        target_failures.append("FREE_LANE_EXECUTION_RECEIPT_REQUIRED")
-    if not _nonempty(target.get("provider")) or not _nonempty(target.get("model_or_route")):
-        target_failures.append("EXACT_PROVIDER_AND_MODEL_ROUTE_REQUIRED")
-
-    owner_target_pass = mechanism_pass and not target_failures
+    owner_target_ok, target_failures = _owner_target_evidence(candidate)
+    owner_target_pass = mechanism_pass and owner_target_ok
 
     return {
         "schema": VERDICT_SCHEMA,
         "mechanism_runtime_vector_credit_candidate": bool(mechanism_pass),
+        "owner_trigger1_goal_credit_candidate": bool(owner_target_pass),
         "owner_trigger1_direct_free_api_model_credit_candidate": bool(owner_target_pass),
         "canonical_credit_minted": False,
         "whole_entityos_hcu_credit": False,
@@ -203,9 +250,9 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "failures": sorted(set(failures)),
         "owner_target_failures": sorted(set(target_failures)),
         "evidence_boundary": (
-            "PASS means promotion-candidate evidence only. Canonical admission/review remains required; "
-            "hosted prompt/completion behavior, model agreement, token volume, or local surrogate steering "
-            "cannot satisfy the literal owner API-model target."
+            "PASS means promotion-candidate evidence only. The runtime may be an admitted FREE external API "
+            "or an exact zero-provider-billing loopback API. Scientific requirements are identical: actual "
+            "internal-vector consumption, exact identities, six matched controls and disjoint holdout."
         ),
     }
 
@@ -217,6 +264,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
         return {
             "schema": VERDICT_SCHEMA,
             "mechanism_runtime_vector_credit_candidate": False,
+            "owner_trigger1_goal_credit_candidate": False,
             "owner_trigger1_direct_free_api_model_credit_candidate": False,
             "canonical_credit_minted": False,
             "whole_entityos_hcu_credit": False,
@@ -230,6 +278,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
         return {
             "schema": VERDICT_SCHEMA,
             "mechanism_runtime_vector_credit_candidate": False,
+            "owner_trigger1_goal_credit_candidate": False,
             "owner_trigger1_direct_free_api_model_credit_candidate": False,
             "canonical_credit_minted": False,
             "whole_entityos_hcu_credit": False,
@@ -248,16 +297,15 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
 def scan_batch(batch_dir: Path) -> dict[str, Any]:
     paths = sorted(batch_dir.glob("**/trigger1_direct_steering_candidate.json"))
     verdicts = [adjudicate_file(path) for path in paths]
+    goal = any(item.get("owner_trigger1_goal_credit_candidate") is True for item in verdicts)
     return {
-        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v1",
+        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v2",
         "candidate_files_seen": len(paths),
         "mechanism_runtime_vector_credit_candidate": any(
             item.get("mechanism_runtime_vector_credit_candidate") is True for item in verdicts
         ),
-        "owner_trigger1_direct_free_api_model_credit_candidate": any(
-            item.get("owner_trigger1_direct_free_api_model_credit_candidate") is True
-            for item in verdicts
-        ),
+        "owner_trigger1_goal_credit_candidate": goal,
+        "owner_trigger1_direct_free_api_model_credit_candidate": goal,
         "canonical_credit_minted": False,
         "verdicts": verdicts,
     }

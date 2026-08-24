@@ -1,0 +1,96 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_donor_head_observed": "8a15d063ff5101079863c3878044e5143d7c128c",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "fusion_pr": "gschaidergabriel/clay-global-research-entity#1455",
+    "fusion_branch": "gpt56sol/go-868-required-cases-f2a776-1822"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "CURRENT_SOURCE_FUSION_AND_FAIL_CLOSED_REGRESSION_DISCOVERY_GUARD"
+  },
+  "observation": {
+    "current_main_hardened_runner_present": true,
+    "current_main_required_case_discovery_test_present_before_delta": false,
+    "historical_donor_pr": 1455,
+    "historical_donor_mergeable_before_rebuild": false,
+    "required_supervisor_cases_confirmed_in_current_sources": [
+      "global attestation missing -> zero secret/network",
+      "UNKNOWN/PAID/SUBSCRIPTION -> zero secret/network",
+      "missing provider admission file -> fail closed",
+      "authority epoch mismatch -> fail closed",
+      "unlisted provider -> fail closed",
+      "malformed admission -> zero secret/network"
+    ]
+  },
+  "hypothesis": "The hardened FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 can drift to a false-green coverage set if a supervisor-required negative test is renamed, removed or ceases to be discovered while the remaining suite still passes.",
+  "counterhypothesis": "The base runner's static TEST_MODULES list is sufficient because the required methods currently exist.",
+  "adjudication": "Static module inclusion proves only module presence, not persistence/discovery of the supervisor-mandated negative cases. A small discovery regression is a cheaper fail-closed guard and does not duplicate provider admission authority.",
+  "bounded_delta": {
+    "reused_existing_pr_instead_of_creating_duplicate": true,
+    "branch_force_rebased_to_current_main": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+    "files": [
+      "tests/test_free_swarm_receipt_required_cases_868.py",
+      "tools/run_free_swarm_admission_boundary_receipt_hardened_868.py"
+    ],
+    "required_case_test_bound_into_test_modules": true,
+    "required_case_test_bound_into_test_paths": true,
+    "required_case_test_bound_into_source_manifest": true,
+    "receipt_metadata_declares_required_case_discovery": true,
+    "preserved_current_hardening": [
+      "DNS tripwire",
+      "connect/connect_ex tripwires",
+      "sendto/sendmsg datagram tripwires",
+      "inherited provider environment fence",
+      "source TOCTOU binding"
+    ]
+  },
+  "source_evidence": {
+    "base_main": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+    "pre_receipt_branch_head": "beb8b94f6b25d6087c312453db6219e762b3bd6f",
+    "compare_status": "ahead",
+    "ahead_by": 2,
+    "behind_by": 0,
+    "changed_files_before_receipt": 2,
+    "network_or_provider_execution_performed": false,
+    "credential_lookup_performed": false,
+    "paid_or_unknown_cost_execution_performed": false,
+    "together_used": false
+  },
+  "execution_evidence": {
+    "exact_authorized_local_or_clay_direct_dev_runtime_exposed_to_this_organ": false,
+    "github_workflow_semantic_test_credit": 0,
+    "free_swarm_admission_boundary_runtime_credit": 0,
+    "classification": "SOURCE_CONTROL_PLANE_FUSION_ONLY"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: rebuilt the existing stale #1455 donor on exact current main and added a fail-closed required-case discovery guard to the hardened FREE admission receipt without replacing newer tripwire/inherited-env hardening.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: retained #1263 remains the single HCU/Typed Entry donor lane; its higher-information next gate is exact InferenceReceipt/v4/model-specific execution on an exposed authorized local/clay-direct-dev surface, which this organ does not have.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: local/model-specific J-Space causal promotion still requires actual zero-cost local model execution plus clean/corrupted/target/sham/off-target controls; no duplicate source-only J-Space path was added."
+  },
+  "credits": {
+    "external_provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an exposed authorized zero-cost normal-user local or clay-direct-dev exact checkout, execute tools/run_free_swarm_admission_boundary_receipt_hardened_868.py from a clean tree and require the discovery guard plus all secret/socket tripwires to pass; then re-enter current main and fuse #1455 only if authority and overlap remain unchanged.",
+  "acceptance": "IN_PROGRESS"
+}

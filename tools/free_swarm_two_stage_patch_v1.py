@@ -284,9 +284,12 @@ def install(v3: Any) -> None:
         if proposal is None:
             return status1, headers1, payload1
         targets = proposal.get("target_files")
-        if not isinstance(targets, list) or not targets or len(targets) > MAX_TARGETS:
+        if (
+            not isinstance(targets, list) or not targets or len(targets) > MAX_TARGETS
+            or any(not isinstance(x, str) for x in targets)
+        ):
             return status1, headers1, payload1
-        normalized = [str(x) for x in targets]
+        normalized = list(targets)
         hydrated = _rehydrate(repo, source_commit, source_tree, normalized)
         if hydrated is None:
             _emit("CONTEXT_REHYDRATION_BLOCKED", source_commit=source_commit, targets=normalized)
@@ -296,8 +299,11 @@ def install(v3: Any) -> None:
         prompt2 = _stage2_prompt(text1, proposal, source_commit, source_tree, contexts)
         status2, headers2, payload2 = current(spec, key, model, prompt2, max_tokens, timeout)
         if not isinstance(status2, int) or not (200 <= status2 < 300):
+            # Provider truth from the second real request must remain visible to
+            # the scheduler. Hiding a 429/402/403/5xx behind Stage-1 success would
+            # defeat AIMD, hard-stop and entitlement semantics.
             _emit("STAGE2_REQUEST_FAILED", source_commit=source_commit, targets=normalized, status=status2)
-            return status1, headers1, _merge_usage(payload2, payload1)
+            return status2, headers2, _merge_usage(payload1, payload2)
         text2 = _extract_text(payload2)
         parsed = ingress.parse_worker_delta(text2, repo_head_at_prompt=source_commit)
         final = parsed.get("proposal") if isinstance(parsed, dict) else None

@@ -5,6 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 STATE_DIR="/artifacts/clay-entityos-swarm"
+ADMISSION_TOOL="$ROOT/tools/free_swarm_provider_admission.py"
 mkdir -p "$STATE_DIR"
 START="$(date +%s)"
 DEADLINE="$((START + 24*3600))"
@@ -17,24 +18,39 @@ load_secret_file() {
   set -a; source "$f"; set +a
 }
 
-load_all_secret_sources() {
-  load_secret_file /run/secrets/clay_provider.env
-  load_secret_file /artifacts/.clay_provider.env
-  load_secret_file /cache/clay_provider.env
-  load_secret_file "$ROOT/.clay_provider.env"
-  load_secret_file "$ROOT/research_entity/private/API_TOKENS.env"
-  load_secret_file "$ROOT/research_entity/private/GROQ_API.env"
+refresh_typed_free_admission() {
+  local exports
+  if ! exports="$(python3 "$ADMISSION_TOOL" shell-exports)"; then
+    export CLAY_FREE_ONLY_ATTESTED=0
+    export CLAY_GROQ_FREE_ATTESTED=0
+    export CLAY_MISTRAL_FREE_ATTESTED=0
+    export CLAY_NVIDIA_FREE_ATTESTED=0
+    return 1
+  fi
+  # free_swarm_provider_admission.py emits only fixed CLAY_* 0/1 assignments.
+  eval "$exports"
+}
+
+load_admitted_secret_sources() {
+  local provider source
+  while IFS=$'\t' read -r provider source; do
+    [[ -n "$provider" && -n "$source" ]] || continue
+    load_secret_file "$source"
+  done < <(python3 "$ADMISSION_TOOL" secret-sources)
 }
 
 normalize_provider_pool() {
   python3 - <<'PY'
 import os, shlex
+truthy=lambda x:(x or '').strip().lower() in {'1','true','yes','on','attested'}
 families={
- 'GROQ_API_KEYS':['GROQ_API_KEY','GROQ2_API_KEY','GROQ3_API_KEY'],
- 'MISTRAL_API_KEYS':['MISTRAL_API_KEY','MISTRAL2_API_KEY','MISTRAL3_API_KEY'],
- 'NVIDIA_API_KEYS':['NVIDIA_API_KEY','NVIDIA_NIM_API_KEY','NVIDIA2_API_KEY','NVIDIA3_API_KEY','NGC_API_KEY'],
+ 'groq':('CLAY_GROQ_FREE_ATTESTED','GROQ_API_KEYS',['GROQ_API_KEY','GROQ2_API_KEY','GROQ3_API_KEY']),
+ 'mistral':('CLAY_MISTRAL_FREE_ATTESTED','MISTRAL_API_KEYS',['MISTRAL_API_KEY','MISTRAL2_API_KEY','MISTRAL3_API_KEY']),
+ 'nvidia':('CLAY_NVIDIA_FREE_ATTESTED','NVIDIA_API_KEYS',['NVIDIA_API_KEY','NVIDIA_NIM_API_KEY','NVIDIA2_API_KEY','NVIDIA3_API_KEY','NGC_API_KEY']),
 }
-for target,names in families.items():
+for _provider,(gate,target,names) in families.items():
+    if not truthy(os.getenv(gate)):
+        continue
     vals=[]
     for n in names:
         v=os.getenv(n,'').strip()
@@ -42,21 +58,22 @@ for target,names in families.items():
     for v in [x.strip() for x in os.getenv(target,'').replace(';',',').split(',') if x.strip()]:
         if v not in vals: vals.append(v)
     if vals: print('export %s=%s' % (target, shlex.quote(','.join(vals))))
-if not os.getenv('NVIDIA_API_KEY') and os.getenv('NVIDIA_NIM_API_KEY'):
+if truthy(os.getenv('CLAY_NVIDIA_FREE_ATTESTED')) and not os.getenv('NVIDIA_API_KEY') and os.getenv('NVIDIA_NIM_API_KEY'):
     print('export NVIDIA_API_KEY='+shlex.quote(os.environ['NVIDIA_NIM_API_KEY']))
 PY
 }
 
 has_provider_key() {
-  [[ -n "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}" ]]
-}
-
-attest_free_only() {
-  has_provider_key || return 0
-  export CLAY_FREE_ONLY_ATTESTED="${CLAY_FREE_ONLY_ATTESTED:-1}"
-  [[ -z "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}" ]] || export CLAY_GROQ_FREE_ATTESTED="${CLAY_GROQ_FREE_ATTESTED:-1}"
-  [[ -z "${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}" ]] || export CLAY_MISTRAL_FREE_ATTESTED="${CLAY_MISTRAL_FREE_ATTESTED:-1}"
-  [[ -z "${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}" ]] || export CLAY_NVIDIA_FREE_ATTESTED="${CLAY_NVIDIA_FREE_ATTESTED:-1}"
+  if [[ "${CLAY_GROQ_FREE_ATTESTED:-0}" == "1" ]]; then
+    [[ -n "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}" ]] && return 0
+  fi
+  if [[ "${CLAY_MISTRAL_FREE_ATTESTED:-0}" == "1" ]]; then
+    [[ -n "${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}" ]] && return 0
+  fi
+  if [[ "${CLAY_NVIDIA_FREE_ATTESTED:-0}" == "1" ]]; then
+    [[ -n "${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}" ]] && return 0
+  fi
+  return 1
 }
 
 start_dashboard() {
@@ -71,17 +88,21 @@ start_dashboard() {
   fi
 }
 
-load_all_secret_sources
-# shellcheck disable=SC2046
-eval "$(normalize_provider_pool)"
-attest_free_only
+refresh_typed_free_admission || true
+if [[ "${CLAY_FREE_ONLY_ATTESTED:-0}" == "1" ]]; then
+  load_admitted_secret_sources
+  # shellcheck disable=SC2046
+  eval "$(normalize_provider_pool)"
+fi
 start_dashboard
 
 while (( $(date +%s) < DEADLINE )); do
-  load_all_secret_sources
-  # shellcheck disable=SC2046
-  eval "$(normalize_provider_pool)"
-  attest_free_only
+  refresh_typed_free_admission || true
+  if [[ "${CLAY_FREE_ONLY_ATTESTED:-0}" == "1" ]]; then
+    load_admitted_secret_sources
+    # shellcheck disable=SC2046
+    eval "$(normalize_provider_pool)"
+  fi
 
   NOW="$(date +%s)"
   REMAINING="$((DEADLINE - NOW))"
@@ -92,27 +113,41 @@ PY
 
   python3 - <<PY > "$STATE_DIR/SUPERVISOR.json.tmp"
 import json,os,datetime
+truthy=lambda x:(x or '').strip().lower() in ('1','true','yes','on','attested')
 split=lambda x:[v.strip() for v in os.getenv(x,'').replace(';',',').split(',') if v.strip()]
+def admitted(name): return truthy(os.getenv(f'CLAY_{name.upper()}_FREE_ATTESTED'))
 def nset(*vals): return len(set(v for v in vals if v))
-providers={
- 'groq': bool(os.getenv('GROQ_API_KEY') or split('GROQ_API_KEYS')),
- 'mistral': bool(os.getenv('MISTRAL_API_KEY') or split('MISTRAL_API_KEYS')),
- 'nvidia': bool(os.getenv('NVIDIA_API_KEY') or split('NVIDIA_API_KEYS') or os.getenv('NGC_API_KEY') or os.getenv('NVIDIA_NIM_API_KEY')),
-}
-counts={
- 'groq': nset(*split('GROQ_API_KEYS'),os.getenv('GROQ_API_KEY')),
- 'mistral': nset(*split('MISTRAL_API_KEYS'),os.getenv('MISTRAL_API_KEY')),
- 'nvidia': nset(*split('NVIDIA_API_KEYS'),os.getenv('NVIDIA_API_KEY'),os.getenv('NGC_API_KEY'),os.getenv('NVIDIA_NIM_API_KEY')),
-}
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v3','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'free_only_attested':str(os.getenv('CLAY_FREE_ONLY_ATTESTED','')).lower() in ('1','true','yes','on','attested'),'provider_credentials_present':providers,'provider_credential_counts':counts,'dashboard_watch':True},indent=2))
+providers={'groq':False,'mistral':False,'nvidia':False}
+counts={'groq':0,'mistral':0,'nvidia':0}
+if admitted('groq'):
+    providers['groq']=bool(os.getenv('GROQ_API_KEY') or split('GROQ_API_KEYS'))
+    counts['groq']=nset(*split('GROQ_API_KEYS'),os.getenv('GROQ_API_KEY'))
+if admitted('mistral'):
+    providers['mistral']=bool(os.getenv('MISTRAL_API_KEY') or split('MISTRAL_API_KEYS'))
+    counts['mistral']=nset(*split('MISTRAL_API_KEYS'),os.getenv('MISTRAL_API_KEY'))
+if admitted('nvidia'):
+    providers['nvidia']=bool(os.getenv('NVIDIA_API_KEY') or split('NVIDIA_API_KEYS') or os.getenv('NGC_API_KEY') or os.getenv('NVIDIA_NIM_API_KEY'))
+    counts['nvidia']=nset(*split('NVIDIA_API_KEYS'),os.getenv('NVIDIA_API_KEY'),os.getenv('NGC_API_KEY'),os.getenv('NVIDIA_NIM_API_KEY'))
+print(json.dumps({
+ 'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v4',
+ 'observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'repo_root':os.getcwd(),
+ 'remaining_seconds':$REMAINING,
+ 'typed_free_admission':{p:admitted(p) for p in ('groq','mistral','nvidia')},
+ 'free_only_attested':truthy(os.getenv('CLAY_FREE_ONLY_ATTESTED')),
+ 'provider_credentials_present':providers,
+ 'provider_credential_counts':counts,
+ 'provider_runtime_credit':0,
+ 'dashboard_watch':True
+},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
 
-  if [[ "${CLAY_FREE_ONLY_ATTESTED:-}" =~ ^(1|true|TRUE|yes|YES|on|ON|attested)$ ]] && has_provider_key; then
+  if [[ "${CLAY_FREE_ONLY_ATTESTED:-0}" == "1" ]] && has_provider_key; then
     exec python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$HOURS" --output-dir "$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
   fi
 
   sleep 60
 done
 
-printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v3","state":"EXPIRED_WITHOUT_USABLE_FREE_ONLY_CREDENTIALS"}\n' > "$STATE_DIR/SUPERVISOR.json"
+printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v4","state":"EXPIRED_WITHOUT_TYPED_FREE_PROVIDER_AND_USABLE_CREDENTIALS","provider_runtime_credit":0}\n' > "$STATE_DIR/SUPERVISOR.json"

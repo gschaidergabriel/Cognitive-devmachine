@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"free-swarm-live-check-20260824T1704",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -euo pipefail; d=$(find /artifacts/clay-entityos-swarm -maxdepth 1 -type d -name 'active-*' | sort | tail -1); echo RUN_DIR=$d; [ -n \"$d\" ] || exit 0; echo '--- files ---'; find \"$d\" -maxdepth 1 -type f -printf '%f size=%s\\n' | sort; echo '--- status ---'; cat \"$d/status.json\" 2>/dev/null || true; echo '--- worker counts ---'; python3 - \"$d/workers.jsonl\" <<'PY'\nimport json,sys,collections,pathlib\np=pathlib.Path(sys.argv[1]); rows=[]\nif p.exists():\n for line in p.open(errors='replace'):\n  try: rows.append(json.loads(line))\n  except: pass\nprint('records',len(rows))\nprint('providers',dict(collections.Counter(str(r.get('provider')) for r in rows)))\nprint('models',dict(collections.Counter(str(r.get('model')) for r in rows)))\nprint('statuses',dict(collections.Counter(str(r.get('http_status')) for r in rows)))\nprint('output_tokens',sum(int((r.get('usage') or {}).get('output_tokens',(r.get('usage') or {}).get('completion_tokens',0)) or 0) for r in rows))\nPY"
+}

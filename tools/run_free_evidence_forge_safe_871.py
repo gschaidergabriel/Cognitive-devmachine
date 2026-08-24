@@ -93,6 +93,11 @@ def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
         and base.COMMIT_RE.fullmatch(source_head)
         and source_tree
     )
+    # Current Supervisor-8.71 evidence qualification consumes these canonical field
+    # names. Keep donor worker_* fields as provenance aliases but bind both to the
+    # same exact source identity so no second interpretation is introduced.
+    manifest["source_head"] = source_head or None
+    manifest["source_tree"] = source_tree or None
     manifest["source_identity_admitted"] = source_admitted
     manifest["source_scope"] = "EXACT_WORKER_PROMPT_HEAD"
     manifest["candidate_execution_workdir_scope"] = "DISPOSABLE_FORGE_ROOT_CHILD_ONLY"

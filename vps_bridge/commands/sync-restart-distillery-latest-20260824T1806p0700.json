@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"sync-restart-distillery-latest-20260824T1806p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -e; git fetch origin main --prune; if [ -n \"$(git status --porcelain --untracked-files=no)\" ]; then echo DIRTY_TRACKED; git status --short; exit 12; fi; git checkout main; git reset --hard origin/main; echo HEAD=$(git rev-parse HEAD); python3 -m py_compile tools/run_research_distillery.py tools/run_research_distillery_entry.py tools/run_24h_entityos_swarm.py tools/free_swarm_quota.py; python3 - <<'PY'\nimport os,signal\nme=os.getpid()\nfor n in os.listdir('/proc'):\n if not n.isdigit() or int(n)==me: continue\n try: args=[x.decode('utf-8','replace') for x in open('/proc/'+n+'/cmdline','rb').read().split(b'\\0') if x]\n except: continue\n if any(a.endswith('tools/run_research_distillery_entry.py') for a in args[:5]):\n  try: os.kill(int(n),signal.SIGTERM)\n  except ProcessLookupError: pass\nPY\nsleep 1; export CLAY_FREE_ONLY_ATTESTED=1; nohup python3 tools/run_research_distillery_entry.py --hours 24 --sleep-seconds 3 >/artifacts/clay-entityos-swarm/distillery.log 2>&1 </dev/null & echo PID=$!; sleep 20; ps -eo pid,etime,%cpu,%mem,args | grep '[r]un_research_distillery_entry.py' | head -5; echo ---STATUS---; cat /artifacts/clay-entityos-swarm/distillery/STATUS.json 2>/dev/null || true; echo ---LOG---; tail -60 /artifacts/clay-entityos-swarm/distillery.log 2>/dev/null || true"
+}

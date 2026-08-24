@@ -23,7 +23,10 @@
       "evidence_kind": "NVIDIA_HOSTED_NIM_DEVELOPER_FREE_PROTOTYPING",
       "source": "https://developer.nvidia.com/nim",
       "provider_statement": "NVIDIA advertises free access to NVIDIA-hosted NIM API endpoints for prototyping through Developer Program access.",
-      "credential_plan_needed": false,
+      "credential_plan_needed": true,
+      "credential_plan_proof": "Require an exact credential fingerprint to be bound to provider-side Developer Program/free hosted-NIM entitlement evidence before autonomous FREE_ONLY execution. Provider-wide NIM availability plus endpoint identity alone is insufficient.",
+      "credential_entitlements": {},
+      "default": "FAIL_CLOSED_UNTIL_EXACT_CREDENTIAL_ENTITLEMENT_BOUND",
       "scope": "NVIDIA-hosted API Catalog/NIM prototyping endpoint only; no dedicated enterprise endpoint"
     },
     "groq": {

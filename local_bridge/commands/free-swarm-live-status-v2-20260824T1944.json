@@ -1,8 +1,0 @@
-{
-  "schema": "CLAY_LOCAL_COMMAND/v1",
-  "command_id": "free-swarm-live-status-v2-20260824T1944",
-  "op": "exec",
-  "cwd": "/home/ai-core-node",
-  "timeout_seconds": 120,
-  "command": "ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'cd /tmp; uid=$(id -u claylab); echo SUP6000; runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid podman exec clay-direct-dev cat /artifacts/clay-entityos-swarm/SUPERVISOR_6000.json 2>/dev/null || true; echo SUPOLD; runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid podman exec clay-direct-dev cat /artifacts/clay-entityos-swarm/SUPERVISOR.json 2>/dev/null || true; echo PROCS; runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid podman exec clay-direct-dev ps -eo pid,etime,pcpu,pmem,args; echo LATEST; runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid podman exec clay-direct-dev sh -c \"ls -td /artifacts/clay-entityos-swarm/active-* 2>/dev/null | head -1\"'"
-}

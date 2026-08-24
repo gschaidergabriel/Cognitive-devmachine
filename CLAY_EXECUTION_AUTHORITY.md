@@ -8,6 +8,10 @@ External solution discovery/reproduction/adaptation is defined operationally in:
 
 `governance/CLAY_EXTERNAL_SOLUTION_HARVEST_LOOP.md`
 
+Mandatory end-of-`go` collective recursive-improvement measurement is defined in:
+
+`governance/CLAY_GO_COLLECTIVE_RECURSIVE_IMPROVEMENT_METRICS_2026-08-24.md`
+
 All ChatGPT/local/VPS development lanes should read these files before coordinated `go` execution. Together they define:
 
 - VPS sandbox freedom and mandatory preflight/repair
@@ -21,4 +25,8 @@ All ChatGPT/local/VPS development lanes should read these files before coordinat
 - mandatory web/GitHub/arXiv solution search for non-trivial problems
 - high-recall repository/paper acquisition and dissection
 - reproduce -> measure -> causal-principle extraction -> ClayCode-native reimplementation -> A/B/ablation -> measured integration
+- permanent end-of-`go` worker metric collection and lineage-collapsed evaluation
+- token-quality efficiency, code-quality, verified-innovation and capability/information-latency metrics
+- calibrated HCU architecture-attainment forecasting
+- Pareto selection plus hard anti-Goodhart/Goodman-lineage-collapse protections
 - canonical evidence boundary

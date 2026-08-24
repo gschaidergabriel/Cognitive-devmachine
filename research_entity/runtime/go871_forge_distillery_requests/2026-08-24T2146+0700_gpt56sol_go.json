@@ -1,0 +1,29 @@
+{
+  "schema": "CLAY_GO871_FORGE_DISTILLERY_RUNTIME_REQUEST/v1",
+  "requested_at": "2026-08-24T21:46:00+07:00",
+  "request_origin": "chatgpt_gpt56sol_go_macrocycle",
+  "authority_epoch_observed": "8.72",
+  "mode": "FREE_ONLY",
+  "source_repo": "gschaidergabriel/clay-global-research-entity",
+  "source_branch": "main",
+  "source_sha": "4a35a94ced6cea74533cb2ab57c8c461ff70bd70",
+  "gate": "CLAY_GO871_FORGE_DISTILLERY_RUNTIME_GATE/v1",
+  "execution_class": "DETERMINISTIC_EXACT_SOURCE_RUNTIME_ACCEPTANCE",
+  "unusual_experiment": false,
+  "provider_network_execution_requested": false,
+  "provider_secret_access_requested": false,
+  "paid_fallback_requested": false,
+  "acceptance": [
+    "exactly_one_evidence_qualified_forge_accept",
+    "exactly_one_new_distillery_packet",
+    "accepted_dataset_tokens_gt_zero",
+    "identical_replay_adds_zero_packets_and_zero_tokens"
+  ],
+  "credit_boundary": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "note": "This request exists only to trigger the already-landed owner-only self-hosted exact-source Forge-to-Distillery witness. Source presence alone is not runtime evidence."
+}

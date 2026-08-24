@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "swarm-supervisor-health-20260824T1624",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; P=$(cat /artifacts/clay-entityos-swarm/supervisor.pid); kill -0 $P; ps -o pid,etime,cmd -p $P; echo '---'; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json; echo '---'; stat -c '%y %s %n' /artifacts/clay-entityos-swarm/SUPERVISOR.json"
+}

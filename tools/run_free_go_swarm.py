@@ -128,17 +128,38 @@ def unique(values: list[str]) -> list[str]:
     return out
 
 
+def provider_execution_admitted(spec: ProviderSpec) -> bool:
+    """Resolve every direct base-controller execution gate without reading secrets."""
+    return (
+        truthy(os.getenv("CLAY_FREE_ONLY_ATTESTED"))
+        and truthy(os.getenv(spec.attestation_env))
+        and provider_is_admitted_free(spec.name)
+    )
+
+
 def collect_keys(spec: ProviderSpec, admission: dict[str, Any] | None = None) -> list[str]:
-    """Read provider key environment variables only after typed FREE admission."""
-    if not provider_is_admitted_free(spec.name, admission):
+    """Read provider credentials only after canonical typed FREE admission.
+
+    ``admission`` is retained for caller compatibility but is deliberately not an
+    authority input: a caller-supplied dictionary must never self-grant access to
+    credential values. Environment names are scanned without materializing all
+    environment values, so admitting one provider cannot read another provider's
+    blocked credential as a side effect.
+    """
+    del admission
+    if not provider_execution_admitted(spec):
         return []
     keys = split_values(os.getenv(spec.keys_list_env))
     for name in spec.key_envs:
-        if os.getenv(name):
-            keys.append(os.environ[name].strip())
+        value = os.getenv(name)
+        if value:
+            keys.append(value.strip())
     prefixes = tuple(name + "_" for name in spec.key_envs)
-    for env_name, value in os.environ.items():
-        if any(env_name.startswith(prefix) for prefix in prefixes) and value.strip():
+    for env_name in os.environ:
+        if not any(env_name.startswith(prefix) for prefix in prefixes):
+            continue
+        value = os.environ[env_name]
+        if value.strip():
             keys.append(value.strip())
     return unique(keys)
 
@@ -205,6 +226,8 @@ def parse_retry_after(headers: dict[str, str], fallback: float) -> float:
 
 def request_chat(spec: ProviderSpec, key: str, model: str, prompt: str,
                  max_tokens: int, timeout: float) -> tuple[int, dict[str, str], dict[str, Any] | str]:
+    if not provider_execution_admitted(spec):
+        raise ProviderAdmissionError(f"PROVIDER_NETWORK_REQUIRES_TYPED_FREE_ADMISSION:{spec.name}")
     body: dict[str, Any] = {
         "model": model, "messages": [{"role": "user", "content": prompt}],
         "max_tokens": max_tokens, "temperature": 0.7, "stream": False,

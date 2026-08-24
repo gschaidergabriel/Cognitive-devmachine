@@ -131,8 +131,13 @@ PY
 }
 
 stop_unadmitted_go_swarm(){
+  # With `set -e -o pipefail`, a bare `pgrep | while` aborts the whole supervisor
+  # when there is correctly nothing to stop. Process substitution plus `|| true`
+  # makes the zero-match case a normal steady state instead of a supervisor crash.
   if ! has_admitted_provider_key; then
-    pgrep -f '[r]un_24h_entityos_swarm.py' | while read -r pid; do kill "$pid" 2>/dev/null || true; done
+    while IFS= read -r pid; do
+      [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+    done < <(pgrep -f '[r]un_24h_entityos_swarm.py' || true)
   fi
 }
 

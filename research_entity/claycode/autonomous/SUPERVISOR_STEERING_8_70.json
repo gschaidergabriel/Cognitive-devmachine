@@ -1,0 +1,73 @@
+{
+  "schema_version": "8.70",
+  "cycle": "go-20260824-owner-free-admission-route-binding",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "latest_repo_head_inspected_before_write": "ea9568b69166c3a85eaec9f99115b18edf029a8c",
+  "finding": "Owner authority at epoch 8.69 legitimately re-admits only the available free contingents/free tokens for Groq, Mistral, NVIDIA and OpenRouter, superseding the prior runtime quarantine for future admitted traffic while preserving all pre-admission traffic as append-only unadmitted history. Official provider documentation confirms that free access exists for these providers, but provider-level identity alone is too coarse to prove that a concrete credential/model/route invocation is zero-cost because Groq and Mistral also expose paid tiers and OpenRouter exposes both free and paid routes. The running 6000-worker fabric currently gates on provider-level cost_class=FREE and credential presence; therefore FREE_ONLY requires credential/route-level economic binding before provider runtime credit or unrestricted lane scaling.",
+  "classification": "OWNER_FREE_ADMISSION_VALID_BUT_RUNTIME_COST_PROVENANCE_TOO_COARSE",
+  "evidence": {
+    "owner_admission_commit": "4418718304209368634d5c7c8250612f09da4d9d",
+    "owner_admission_path": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md",
+    "typed_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "swarm_supervisor_commit": "5013d36a84cd83cd38d267fc93b253175307e918",
+    "latest_metrics_commit": "ea9568b69166c3a85eaec9f99115b18edf029a8c",
+    "latest_free_swarm_tokens": 3240266,
+    "latest_machine_readable_delta_records": 1,
+    "latest_forge_accepted_deltas": 0,
+    "latest_distillery_accepted_dataset_tokens": 0,
+    "official_economic_sources": {
+      "groq": "https://console.groq.com/docs/billing-faqs",
+      "mistral": "https://docs.mistral.ai/admin/billing-usage/usage-limits",
+      "nvidia": "https://developer.nvidia.com/nim",
+      "openrouter": "https://openrouter.ai/pricing"
+    },
+    "historical_unadmitted_execution_must_remain_append_only": true
+  },
+  "required_next_cycle": [
+    "Do not roll back the owner's epoch-8.69 authorization of free contingents. Instead narrow FREE_ONLY admission from provider identity to the concrete credential plus model/route plus current free-entitlement evidence actually used for each request.",
+    "Add FREE_LANE_EXECUTION_RECEIPT/v1 at the shared provider-call boundary. It must bind provider, credential fingerprint, account/tier or entitlement evidence when observable, exact model/route, admission epoch/digest, request id, usage tokens, HTTP status, and a zero-cost/free-route assertion derived from provider-side evidence rather than model consensus.",
+    "For OpenRouter, allow only routes whose current provider-side pricing is zero, such as explicit free variants/free router; a generic OpenRouter key must never authorize paid routes. For Groq/Mistral, a provider name plus key is insufficient if the account can be paid; bind observable Free-tier plan/limits or fail closed for autonomous FREE_ONLY execution. For NVIDIA, bind Developer-Program/free NIM entitlement or equivalent provider-side free-access evidence.",
+    "HTTP 402 remains a hard stop but is not a sufficient economic safety mechanism: a paid-tier credential can accrue charges without first returning 402.",
+    "Preserve all pre-owner-admission and pre-route-binding provider calls as historical evidence with their original admission status; do not relabel them FREE post hoc.",
+    "Keep Together and every PAID/SUBSCRIPTION/UNKNOWN route forbidden. No paid fallback, upgrade, credit purchase, or billing activation is authorized.",
+    "Do not mint Whole-EntityOS, Whole-HCU, BASE, canonical-semantics, provider-quality or independent Goodman credit from token volume, model agreement, logical-worker count or provider success alone.",
+    "Treat the current efficiency funnel as a blocker for scaling quality claims: 3.24M measured swarm tokens currently yield 1 machine-readable delta, 0 forge-accepted deltas and 0 accepted distillery dataset tokens. Optimize conversion to executable/reproduced deltas before interpreting higher logical-worker counts as progress."
+  ],
+  "new_required_receipts": {
+    "FREE_LANE_EXECUTION_RECEIPT/v1": {
+      "must_bind": [
+        "source_commit_and_tree",
+        "provider",
+        "credential_fingerprint",
+        "model_or_route",
+        "typed_admission_epoch_and_digest",
+        "provider_side_free_entitlement_or_zero_price_evidence",
+        "request_id",
+        "input_output_usage",
+        "http_status",
+        "paid_fallback_attempt_count",
+        "result_digest"
+      ],
+      "pass_condition": "The exact request is executable evidence for use of an owner-authorized free contingent with paid_fallback_attempt_count=0. Provider-level FREE labels alone do not satisfy this receipt."
+    }
+  },
+  "free_only": {
+    "enabled": true,
+    "owner_authorized_free_contingents": ["groq", "mistral", "nvidia", "openrouter"],
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "unknown_or_unlisted_route": "FAIL_CLOSED",
+    "provider_level_admission_is_not_runtime_cost_proof": true,
+    "execution_state": "FREE_CONTINGENTS_AUTHORIZED_PENDING_PER_LANE_COST_PROVENANCE"
+  },
+  "promotion": {
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false,
+    "provider_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

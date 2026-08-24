@@ -12,6 +12,12 @@ Canonical durable state/evidence remains deterministic and outside model-generat
 
 Current owner authority permits zero-cost development/testing on normal-user local Linux and the authorized `clay-direct-dev` VPS sandbox. Paid/subscription/unknown-cost execution, upgrades/credit purchases, Together and paid fallback remain forbidden. Provider labels alone are not economic proof; concrete credential/model/route provenance remains fail-closed. Local/VPS component execution does not automatically mint canonical, whole-product, HCU-full, J-Space-model or training credit.
 
+### Latest `go` source delta — 23:33 +07
+
+Exact-current re-entry found a fail-open in `CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4`: `holdout.metric_uses_output_tokens` only triggered counterbalance enforcement when the value was literal `true`, so missing or non-boolean values could evade an explicit holdout metric-modality declaration. The current successor requires this field to be boolean; missing/non-boolean values fail closed with `HOLDOUT_METRIC_OUTPUT_TOKEN_MODALITY_REQUIRED`, while legitimate token-output metrics still require `label_mapping_counterbalanced=true`.
+
+The stale/nonmergeable PR #1653 carried the same invariant idea against an older v3 base. This `go` ports only that narrow invariant onto current v4 and adds focused regressions for missing, non-boolean and valid counterbalanced cases. Evidence scope is source/regression-definition only pending exact-head test execution. No provider/model intervention, paid call, Together call or unusual experiment was executed; all runtime/model/training/whole-product credits remain unchanged.
+
 ## Target causal path
 
 `Typed Entry -> route -> VerifiedEngineAdmission -> verified loader consumption -> GRID10 -> real model execution -> canonical ModelExecution -> InferenceReceipt -> Global J-Space/GWT -> TrainingTrace -> admitted causal dataset`
@@ -82,13 +88,14 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 
 ## Current blockers / next exact gates
 
-1. Observe terminal run **32742535392** for PR #1619; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
-2. If that witness fails, repair the measured isolated-executor/bridge blocker only; never weaken evidence admission.
-3. Observe the retained Trigger-1 V2 dispatch **#1647** and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify runner/preflight/dependency/model failure explicitly.
-4. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.
-5. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
-6. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
-7. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
+1. Execute the new v4 metric-modality regression plus the existing Trigger-1 promotion-gate regression on the exact successor head; fuse only if current and green.
+2. Observe terminal run **32742535392** for PR #1619; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
+3. If that witness fails, repair the measured isolated-executor/bridge blocker only; never weaken evidence admission.
+4. Observe the retained Trigger-1 V2 dispatch **#1647** and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify runner/preflight/dependency/model failure explicitly.
+5. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.
+6. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
+7. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
+8. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
 
 ## Evidence discipline and reentry
 

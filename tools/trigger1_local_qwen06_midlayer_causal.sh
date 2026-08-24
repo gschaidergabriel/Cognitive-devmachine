@@ -91,6 +91,10 @@ PY
   exit 3
 fi
 
-exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_midlayer_causal_execute.py" \
+# Keep this compatibility launcher as the single lease-gated entrypoint, but route
+# its model execution through the strongest current intermediate discriminator:
+# calibration-only residual derivation, counterbalanced label maps, wrong-layer,
+# lesion/rescue, six matched controls, and promotion-gate-v4 bridge evidence.
+exec "$PYTHON" "$ROOT/tools/trigger1_strongest_intermediate_bridge_execute.py" \
   --output-dir "$OUT_DIR" \
   --cache-dir "$HF_HOME"

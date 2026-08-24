@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "zz-diagnose-free6000-live-20260824T2055p0700",
+  "command_sha256": "f7375a299a2d611897f908bf01cb2ac6d48640ad283f47f7cd639ee25bc167ef",
+  "started_at": "2026-08-24T13:54:48.651136+00:00",
+  "finished_at": "2026-08-24T13:54:48.790188+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "e547f9f74cb82e3566df7a912eb3088060442bab7b1305ea4e81641e5f9814e1",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "PROCS\n192607 bash tools/run_6000_free_swarm_supervisor.sh\n192705 python3 /workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py --logical-workers 6000 --hours 23.999444444444446 --output-dir /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z\n194854 bash -lc set -euo pipefail; echo PROCS; pgrep -af run_6000_free_swarm || true; echo DIRS; ls -td /artifacts/clay-entityos-swarm/active-fabric6000-v2-* 2>/dev/null | head -5; echo STATUS_MTIME; stat -c '%y %s %n' /artifacts/clay-entityos-swarm/active-fabric6000-v2-*/status.json 2>/dev/null | tail -10; echo LOG; tail -n 40 /artifacts/clay-entityos-swarm/swarm6000.log 2>/dev/null || true\nDIRS\n/artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z\n/artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T134045Z\nSTATUS_MTIME\n2026-08-24 13:49:11.980307918 +0000 6464 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T134045Z/status.json\n2026-08-24 13:52:17.965621593 +0000 6997 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z/status.json\nLOG\n{\"schema\": \"CLAY_6000_SWARM_DISCOVERY/v2\", \"logical_workers\": 6000, \"scheduler\": \"GLOBAL_WORK_STEALING_V2\", \"providers\": {\"groq\": {\"source\": \"controller_fallback\", \"keys\": 1, \"catalog\": 0, \"models\": [\"openai/gpt-oss-120b\", \"qwen/qwen3.6-27b\", \"openai/gpt-oss-20b\"]}, \"mistral\": {\"source\": \"no_keys_after_free_admission\", \"keys\": 0, \"models\": []}, \"nvidia\": {\"source\": \"live_catalog_empirical_filter\", \"keys\": 1, \"catalog\": 102, \"models\": [\"mistralai/mistral-nemotron\", \"nvidia/nemotron-3-super-120b-a12b\", \"nvidia/nemotron-3.5-lightning-30b-a3b\", \"nvidia/llama-3.3-nemotron-super-49b-v1\", \"nvidia/nemotron-3-ultra-550b-a55b\", \"nvidia/ising-calibration-1.5-31b\", \"openai/gpt-oss-20b\", \"nvidia/nemotron-3-nano-30b-a3b\", \"meta/muse-glimmer-30b\", \"nvidia/nemotron-3-nano-omni-30b-a3b-reasoning\", \"meta/llama-3.1-70b-instruct\", \"meta/llama-3.3-70b-instruct\", \"meta/llama-3.2-90b-vision-instruct\", \"nvidia/nemotron-nano-12b-v2-vl\", \"nvidia/llama-3.3-nemotron-super-49b-v1.5\", \"openai/gpt-oss-120b\"]}, \"openrouter\": {\"source\": \"environment_override\", \"keys\": 1, \"models\": [\"openrouter/free\"]}}}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

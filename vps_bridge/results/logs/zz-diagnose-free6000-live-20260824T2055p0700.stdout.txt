@@ -1,0 +1,12 @@
+PROCS
+192607 bash tools/run_6000_free_swarm_supervisor.sh
+192705 python3 /workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py --logical-workers 6000 --hours 23.999444444444446 --output-dir /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z
+194854 bash -lc set -euo pipefail; echo PROCS; pgrep -af run_6000_free_swarm || true; echo DIRS; ls -td /artifacts/clay-entityos-swarm/active-fabric6000-v2-* 2>/dev/null | head -5; echo STATUS_MTIME; stat -c '%y %s %n' /artifacts/clay-entityos-swarm/active-fabric6000-v2-*/status.json 2>/dev/null | tail -10; echo LOG; tail -n 40 /artifacts/clay-entityos-swarm/swarm6000.log 2>/dev/null || true
+DIRS
+/artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z
+/artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T134045Z
+STATUS_MTIME
+2026-08-24 13:49:11.980307918 +0000 6464 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T134045Z/status.json
+2026-08-24 13:52:17.965621593 +0000 6997 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z/status.json
+LOG
+{"schema": "CLAY_6000_SWARM_DISCOVERY/v2", "logical_workers": 6000, "scheduler": "GLOBAL_WORK_STEALING_V2", "providers": {"groq": {"source": "controller_fallback", "keys": 1, "catalog": 0, "models": ["openai/gpt-oss-120b", "qwen/qwen3.6-27b", "openai/gpt-oss-20b"]}, "mistral": {"source": "no_keys_after_free_admission", "keys": 0, "models": []}, "nvidia": {"source": "live_catalog_empirical_filter", "keys": 1, "catalog": 102, "models": ["mistralai/mistral-nemotron", "nvidia/nemotron-3-super-120b-a12b", "nvidia/nemotron-3.5-lightning-30b-a3b", "nvidia/llama-3.3-nemotron-super-49b-v1", "nvidia/nemotron-3-ultra-550b-a55b", "nvidia/ising-calibration-1.5-31b", "openai/gpt-oss-20b", "nvidia/nemotron-3-nano-30b-a3b", "meta/muse-glimmer-30b", "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning", "meta/llama-3.1-70b-instruct", "meta/llama-3.3-70b-instruct", "meta/llama-3.2-90b-vision-instruct", "nvidia/nemotron-nano-12b-v2-vl", "nvidia/llama-3.3-nemotron-super-49b-v1.5", "openai/gpt-oss-120b"]}, "openrouter": {"source": "environment_override", "keys": 1, "models": ["openrouter/free"]}}}

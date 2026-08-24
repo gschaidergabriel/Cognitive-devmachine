@@ -29,6 +29,7 @@ SECRET_ENV_NAMES = {
     "NVIDIA2_API_KEY", "NVIDIA3_API_KEY", "OPENROUTER_API_KEY",
 }
 PROVIDERS = ("groq", "mistral", "nvidia", "openrouter")
+CANONICAL_ADMISSION_REL = Path("research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json")
 
 
 def _authority(root: Path, epoch: str = "8.68") -> Path:
@@ -47,7 +48,9 @@ def _authority(root: Path, epoch: str = "8.68") -> Path:
 
 
 def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.68") -> Path:
-    target = root / "admission.json"
+    # Match load_provider_admission()'s production default resolution exactly.
+    target = root / CANONICAL_ADMISSION_REL
+    target.parent.mkdir(parents=True, exist_ok=True)
     providers = {
         name: {"admitted": admitted, "cost_class": cost_class, "evidence_ref": f"test:{name}:{cost_class}"}
         for name in PROVIDERS
@@ -134,6 +137,14 @@ class FreeProviderSocketBoundaryTests(unittest.TestCase):
                  mock.patch.dict(os.environ, {"CLAY_FREE_ONLY_ATTESTED": "1"}, clear=True):
                 code = asyncio.run(base.run(_args(out)))
             return code, secret_reads, len(tripwire.attempts)
+
+    def test_fixture_path_matches_production_default_resolution(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            target = _admission(root, "UNKNOWN", False)
+            self.assertEqual(target, root / CANONICAL_ADMISSION_REL)
+            self.assertTrue(target.is_file())
+            self.assertFalse((root / "admission.json").exists())
 
     def test_unknown_paid_subscription_have_zero_secret_reads_and_zero_socket_activity(self) -> None:
         for cost_class in ("UNKNOWN", "PAID", "SUBSCRIPTION"):

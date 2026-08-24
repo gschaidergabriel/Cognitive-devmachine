@@ -6,6 +6,11 @@ evaluate worker-authored candidates. Candidate output remains noncanonical. No
 model-authored command is executed without exact worker-source identity, an
 allowlisted argv form, a secret-free child environment, and a functional isolated
 bubblewrap backend.
+
+The only writable host bind exposed to model-authored commands is the disposable
+Forge worktree itself. This is required for ordinary test/build artifacts such as
+``__pycache__`` while preserving network isolation and keeping host /home, /run and
+other /artifacts paths outside the namespace.
 """
 from __future__ import annotations
 
@@ -18,8 +23,49 @@ import forge_execution_admission_871 as admission
 import run_free_evidence_forge as base
 
 _ORIGINAL_VALIDATE = base.validate_candidate
+_ORIGINAL_BWRAP_PREFIX = admission._bubblewrap_prefix
+_ORIGINAL_ADMISSION_RUN_CMD = admission.run_cmd
+
+
+def _is_disposable_forge_workdir(cwd: Path) -> bool:
+    try:
+        cwd.resolve().relative_to(Path(base.FORGE_ROOT).resolve())
+        return cwd.resolve() != Path(base.FORGE_ROOT).resolve()
+    except (OSError, ValueError):
+        return False
+
+
+def _writable_disposable_bwrap_prefix(cwd: Path) -> list[str] | None:
+    prefix = _ORIGINAL_BWRAP_PREFIX(cwd)
+    if prefix is None or not _is_disposable_forge_workdir(cwd):
+        return prefix
+    host = str(cwd.resolve())
+    for i in range(len(prefix) - 2):
+        if prefix[i:i + 3] == ["--ro-bind", host, "/work"]:
+            prefix[i] = "--bind"
+            return prefix
+    # The writable-worktree invariant is explicit. If the donor prefix changes and
+    # the exact bind cannot be identified, fail closed rather than guessing.
+    return None
+
+
+admission._bubblewrap_prefix = _writable_disposable_bwrap_prefix
+
+
+def run_cmd(cwd: Path, command: str, timeout: int = 120) -> dict[str, Any]:
+    if not _is_disposable_forge_workdir(cwd):
+        return {
+            "rc": 126,
+            "elapsed_s": 0.0,
+            "stdout": "",
+            "stderr": "FORGE_EXECUTION_BLOCKED:WORKDIR_OUTSIDE_DISPOSABLE_FORGE_ROOT",
+            "execution_admission": admission.admit_command(command).to_dict(),
+        }
+    return _ORIGINAL_ADMISSION_RUN_CMD(cwd, command, timeout)
+
+
 base.safe_command = admission.safe_command
-base.run_cmd = admission.run_cmd
+base.run_cmd = run_cmd
 
 
 def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
@@ -36,6 +82,9 @@ def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
             "evaluated_at": base.now(),
         }
 
+    # Manifest construction runs only the isolated-backend probe against the repo
+    # root. Untrusted candidate commands are not invoked here; those are separately
+    # confined by run_cmd() to a child of FORGE_ROOT.
     manifest = admission.candidate_execution_manifest(row, proposal, Path(base.ROOT))
     source_head = str(manifest.get("worker_source_head") or "")
     source_tree = str(manifest.get("worker_source_tree") or "")
@@ -46,6 +95,9 @@ def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
     )
     manifest["source_identity_admitted"] = source_admitted
     manifest["source_scope"] = "EXACT_WORKER_PROMPT_HEAD"
+    manifest["candidate_execution_workdir_scope"] = "DISPOSABLE_FORGE_ROOT_CHILD_ONLY"
+    manifest["candidate_worktree_writable"] = True
+    manifest["host_home_run_other_artifacts_exposed"] = False
 
     record = {
         "schema": "CLAY_FORGE_DELTA_EVALUATION/v1",

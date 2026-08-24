@@ -54,6 +54,22 @@ class Trigger1SourceAttestationRealGitTests(unittest.TestCase):
         finally:
             td.cleanup()
 
+    def test_same_porcelain_shape_different_bytes_get_distinct_exact_identity(self):
+        td, root = self.make_repo()
+        try:
+            tracked = root / "tracked.txt"
+            tracked.write_text("version-two\n", encoding="utf-8")
+            first = exact_source_identity(root)
+            tracked.write_text("version-six\n", encoding="utf-8")
+            second = exact_source_identity(root)
+            # Both worktrees report the same path/status shape, which is why the
+            # compatibility Porcelain digest alone cannot be the evidence identity.
+            self.assertEqual(first["repo_status_sha256"], second["repo_status_sha256"])
+            self.assertNotEqual(first["repo_dirty_state_sha256"], second["repo_dirty_state_sha256"])
+            self.assertNotEqual(first["source_identity_sha256"], second["source_identity_sha256"])
+        finally:
+            td.cleanup()
+
     def test_real_staged_modification_fails_closed(self):
         td, root = self.make_repo()
         try:

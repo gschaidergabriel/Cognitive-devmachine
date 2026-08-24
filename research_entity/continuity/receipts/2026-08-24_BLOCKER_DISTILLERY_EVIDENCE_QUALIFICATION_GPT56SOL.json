@@ -1,0 +1,45 @@
+{
+  "schema": "CLAY_BLOCKER_REPAIR_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "other",
+  "authority_epoch_observed": "8.71",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "canonical_main_at_branch_creation": "bcbd779348eb3a3536292852cca0f9026dd10456",
+  "branch": "gpt56sol/blocker-distillery-evidence-qualified-871-20260824",
+  "observed_blocker": {
+    "forge_live": "one nominal ACCEPTED delta observed in current committed live snapshot",
+    "distillery_live": "zero accepted dataset tokens and zero accepted packets",
+    "authority_gap": "Supervisor-8.71 forge_evidence_credit_871 distinguishes nominal acceptance from evidence-qualified acceptance, but the Forge-to-Distillery bridge did not consume that evidence qualification",
+    "risk": "a nominal legacy ACCEPTED row could be admitted to Distillery by a weaker downstream boundary if it passed the bridge's older exact-source/test checks"
+  },
+  "delta": {
+    "bridge": "tools/ingest_forge_accepts_into_distillery.py",
+    "central_gate": "tools/forge_evidence_credit_871.py:evidence_reason",
+    "tests": "tests/test_forge_distillery_ingest_871.py",
+    "properties": [
+      "existing detailed bridge rejection taxonomy is preserved",
+      "current centralized evidence qualification is required immediately before packet admission",
+      "nominal accepted rows without CLAY_FORGE_EXECUTION_ADMISSION/v1 fail closed",
+      "execution source-head mismatch fails closed",
+      "evidence-qualified exact execution still produces one idempotent measured packet",
+      "proposal narration remains metadata-only and receives no canonical/J-Space/training credit"
+    ]
+  },
+  "evidence": {
+    "scope": "SOURCE_INTEGRATION_ONLY_PENDING_EXACT_HEAD_EXECUTION",
+    "github_writes": "COMMITTED_TO_BRANCH",
+    "exact_head_runtime": "NOT_YET_OBSERVED",
+    "provider_call": "NONE",
+    "unusual_experiment": "NONE",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "counterhypothesis": "Distillery zero-yield may be entirely correct because the only nominal Forge accept is legacy/unqualified. This repair intentionally preserves zero yield in that case; the desired positive transition requires a new evidence-qualified accept from the safe Forge path rather than weakening admission.",
+  "next_exact_gate": "Run exact-head bridge and evidence-credit regressions. After both PRs are fused, observe whether the legacy nominal accept is rejected with an evidence reason and whether the first new evidence-qualified Forge accept produces accepted_packets>0 and accepted_dataset_tokens>0."
+}

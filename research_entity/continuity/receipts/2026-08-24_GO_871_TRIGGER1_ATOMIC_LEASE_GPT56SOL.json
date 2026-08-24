@@ -1,0 +1,47 @@
+{
+  "schema": "ENTITYOS_HCU_GO_871_TRIGGER1_ATOMIC_LEASE_SOURCE_RECEIPT/v1",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main": "9ed91ca30a257effe9272d32ed3d243d3282aeb5",
+  "branch": "gpt56sol/go-871-trigger1-atomic-lease-guard",
+  "finding": "The newly added Trigger-1 ten-lane J-Space launcher described ten parallel research experiments but did not require the canonical shared atomic unusual-experiment lease before launching children. Under the current GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL, the ten matched lanes may only execute as one bounded intervention contract after one exact create-only claim; absent a reproducible claim they must fail closed.",
+  "delta": [
+    "add tools/go_experiment_lease_guard.py to validate an already-created canonical rid_/timestamp-fallback claim without creating or repairing authority",
+    "bind tools/run_trigger1_jspace_10x.py to one exact TRIGGER1_JSPACE_10X intervention contract before artifact creation or child launch",
+    "support --print-intervention-contract so a claimant can derive the exact contract before the atomic create-only lease write",
+    "require exact intervention-contract equality and reject a terminal result file before launch",
+    "record the trigger key, claim path, claimant, claim time and observed canonical main in the batch manifest",
+    "classify the ten lanes as matched sub-studies of one already-leased unusual experiment rather than ten independent budgets"
+  ],
+  "synthetic_guard_evidence": {
+    "result": "8/8 PASS",
+    "cases": [
+      "canonical rid_ claim accepted",
+      "canonical second-precision timestamp fallback claim accepted",
+      "minute-precision/noncanonical timestamp key rejected",
+      "missing canonical claim rejected",
+      "intervention contract mismatch rejected",
+      "wrong experiment name rejected",
+      "existing terminal result rejects reuse",
+      "claim internal trigger identity mismatch rejected"
+    ]
+  },
+  "evidence_scope": "SOURCE_PLUS_SYNTHETIC_LEASE_GUARD_ONLY",
+  "external_provider_calls": 0,
+  "provider_secret_reads": 0,
+  "jspace_interventions_executed": 0,
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_SHARED_IMMUTABLE_MACROCYCLE_ID_ZERO_NEW_UNUSUAL_EXPERIMENTS",
+  "provider_runtime_credit": 0,
+  "whole_entityos_hcu_credit": 0,
+  "hcu_full_credit": 0,
+  "jspace_model_credit": 0,
+  "training_credit": 0,
+  "track_a": "ADVANCED_EXECUTION_COORDINATION_FAIL_CLOSED_BOUNDARY",
+  "track_b": "ADVANCED_REUSABLE_TYPED_EXPERIMENT_ADMISSION_PRIMITIVE",
+  "track_c": "ADVANCED_JSPACE_EXPERIMENT_READINESS_BY_BINDING_TRIGGER1_TO_ONE_CANONICAL_ATOMIC_LEASE; DIRECT_MODEL_STEERING_CREDIT_REMAINS_ZERO",
+  "next_gate": "Run the focused lease regression on exact source. For any future Trigger-1 execution, first acquire the canonical create-only claim for the exact printed intervention contract using the shared immutable go identity; if identity is unavailable, do not launch the batch. Separately, causal J-Space promotion still requires an actually instrumentable model runtime consuming a bound vector plus matched controls and exact execution receipts."
+}

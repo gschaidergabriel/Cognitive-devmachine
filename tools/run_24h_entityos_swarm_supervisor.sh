@@ -8,61 +8,109 @@ STATE_DIR="/artifacts/clay-entityos-swarm"
 mkdir -p "$STATE_DIR"
 START="$(date +%s)"
 DEADLINE="$((START + 24*3600))"
+GATE="$ROOT/tools/free_swarm_admission_gate.py"
+POLICY="$ROOT/research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 
-load_secret_file() {
-  local f="$1"
-  [[ -r "$f" ]] || return 0
-  set +x
-  # shellcheck disable=SC1090
-  set -a; source "$f"; set +a
+# No provider key value is read by this supervisor until the canonical typed
+# admission gate resolves that exact provider to cost_class=FREE.
+provider_is_admitted() {
+  python3 "$GATE" --policy "$POLICY" --provider "$1" >/dev/null 2>&1
 }
 
-load_all_secret_sources() {
-  load_secret_file /run/secrets/clay_provider.env
-  load_secret_file /artifacts/.clay_provider.env
-  load_secret_file /cache/clay_provider.env
-  load_secret_file "$ROOT/.clay_provider.env"
-  load_secret_file "$ROOT/research_entity/private/API_TOKENS.env"
-  load_secret_file "$ROOT/research_entity/private/GROQ_API.env"
+# Drop inherited provider secrets at every control-loop boundary. `unset`
+# removes named variables without reading their values. A later provider may
+# regain credentials only after a fresh exact typed FREE admission.
+clear_provider_secret_env() {
+  local name
+  for name in \
+    GROQ_API_KEY GROQ_API_KEYS MISTRAL_API_KEY MISTRAL_API_KEYS \
+    NVIDIA_API_KEY NVIDIA_API_KEYS NGC_API_KEY NVIDIA_NIM_API_KEY; do
+    unset "$name" || true
+  done
+  while IFS='=' read -r name _; do
+    case "$name" in
+      GROQ_API_KEY_*|MISTRAL_API_KEY_*|NVIDIA_API_KEY_*) unset "$name" || true ;;
+    esac
+  done < <(env)
 }
 
-normalize_provider_pool() {
-  python3 - <<'PY'
-import os, shlex
-families={
- 'GROQ_API_KEYS':['GROQ_API_KEY','GROQ2_API_KEY','GROQ3_API_KEY'],
- 'MISTRAL_API_KEYS':['MISTRAL_API_KEY','MISTRAL2_API_KEY','MISTRAL3_API_KEY'],
- 'NVIDIA_API_KEYS':['NVIDIA_API_KEY','NVIDIA_NIM_API_KEY','NVIDIA2_API_KEY','NVIDIA3_API_KEY','NGC_API_KEY'],
-}
-for target,names in families.items():
-    vals=[]
-    for n in names:
-        v=os.getenv(n,'').strip()
-        if v and v not in vals: vals.append(v)
-    for v in [x.strip() for x in os.getenv(target,'').replace(';',',').split(',') if x.strip()]:
-        if v not in vals: vals.append(v)
-    if vals: print('export %s=%s' % (target, shlex.quote(','.join(vals))))
-if not os.getenv('NVIDIA_API_KEY') and os.getenv('NVIDIA_NIM_API_KEY'):
-    print('export NVIDIA_API_KEY='+shlex.quote(os.environ['NVIDIA_NIM_API_KEY']))
-PY
+provider_name_allowed() {
+  local provider="$1" name="$2"
+  case "$provider:$name" in
+    groq:GROQ_API_KEY|groq:GROQ_API_KEYS|groq:GROQ_API_KEY_*) return 0 ;;
+    mistral:MISTRAL_API_KEY|mistral:MISTRAL_API_KEYS|mistral:MISTRAL_API_KEY_*) return 0 ;;
+    nvidia:NVIDIA_API_KEY|nvidia:NVIDIA_API_KEYS|nvidia:NVIDIA_API_KEY_*|nvidia:NGC_API_KEY|nvidia:NVIDIA_NIM_API_KEY) return 0 ;;
+    *) return 1 ;;
+  esac
 }
 
-has_provider_key() {
-  [[ -n "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}" ]]
+# Provider secret files are provider-scoped by contract. Generic/mixed secret
+# bundles are intentionally not loaded: they cannot prove that blocked-provider
+# secrets remain unread. The parser accepts KEY=VALUE dotenv lines only and
+# never evals/sources shell code.
+load_provider_secret_file() {
+  local provider="$1" f="$2" raw name value
+  [[ -n "$f" && -r "$f" ]] || return 0
+  while IFS= read -r raw || [[ -n "$raw" ]]; do
+    raw="${raw%$'\r'}"
+    [[ -z "$raw" || "$raw" == \#* ]] && continue
+    [[ "$raw" == export\ * ]] && raw="${raw#export }"
+    [[ "$raw" == *=* ]] || continue
+    name="${raw%%=*}"
+    value="${raw#*=}"
+    [[ "$name" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || continue
+    provider_name_allowed "$provider" "$name" || continue
+    if [[ ${#value} -ge 2 ]]; then
+      if [[ "$value" == \"*\" && "$value" == *\" ]]; then
+        value="${value:1:${#value}-2}"
+      elif [[ "$value" == \'*\' && "$value" == *\' ]]; then
+        value="${value:1:${#value}-2}"
+      fi
+    fi
+    export "$name=$value"
+  done < "$f"
 }
 
-attest_free_only() {
-  has_provider_key || return 0
-  export CLAY_FREE_ONLY_ATTESTED="${CLAY_FREE_ONLY_ATTESTED:-1}"
-  [[ -z "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}" ]] || export CLAY_GROQ_FREE_ATTESTED="${CLAY_GROQ_FREE_ATTESTED:-1}"
-  [[ -z "${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}" ]] || export CLAY_MISTRAL_FREE_ATTESTED="${CLAY_MISTRAL_FREE_ATTESTED:-1}"
-  [[ -z "${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}" ]] || export CLAY_NVIDIA_FREE_ATTESTED="${CLAY_NVIDIA_FREE_ATTESTED:-1}"
+load_admitted_provider_secrets() {
+  local provider="$1" override=""
+  provider_is_admitted "$provider" || return 0
+  case "$provider" in
+    groq)
+      override="${CLAY_GROQ_SECRET_FILE:-}"
+      load_provider_secret_file groq "$override"
+      load_provider_secret_file groq /run/secrets/clay_groq.env
+      load_provider_secret_file groq /artifacts/.clay_groq.env
+      load_provider_secret_file groq /cache/clay_groq.env
+      load_provider_secret_file groq "$ROOT/.clay_groq.env"
+      load_provider_secret_file groq "$ROOT/research_entity/private/GROQ_API.env"
+      ;;
+    mistral)
+      override="${CLAY_MISTRAL_SECRET_FILE:-}"
+      load_provider_secret_file mistral "$override"
+      load_provider_secret_file mistral /run/secrets/clay_mistral.env
+      load_provider_secret_file mistral /artifacts/.clay_mistral.env
+      load_provider_secret_file mistral /cache/clay_mistral.env
+      load_provider_secret_file mistral "$ROOT/.clay_mistral.env"
+      load_provider_secret_file mistral "$ROOT/research_entity/private/MISTRAL_API.env"
+      ;;
+    nvidia)
+      override="${CLAY_NVIDIA_SECRET_FILE:-}"
+      load_provider_secret_file nvidia "$override"
+      load_provider_secret_file nvidia /run/secrets/clay_nvidia.env
+      load_provider_secret_file nvidia /artifacts/.clay_nvidia.env
+      load_provider_secret_file nvidia /cache/clay_nvidia.env
+      load_provider_secret_file nvidia "$ROOT/.clay_nvidia.env"
+      load_provider_secret_file nvidia "$ROOT/research_entity/private/NVIDIA_API.env"
+      ;;
+  esac
 }
 
 start_dashboard() {
   local evaluator="$ROOT/free swarm/evaluate.py"
   [[ -f "$evaluator" ]] || return 0
   if ! pgrep -f '[f]ree swarm/evaluate.py.*--watch' >/dev/null 2>&1; then
+    # Start before admitted provider secrets are loaded so the dashboard does
+    # not inherit credentials from this supervisor process.
     nohup python3 "$evaluator" \
       --repo "$ROOT" --artifacts "$STATE_DIR" \
       --watch --hours 24 --interval-seconds 60 --publish --publish-min-seconds 900 \
@@ -71,48 +119,76 @@ start_dashboard() {
   fi
 }
 
-load_all_secret_sources
-# shellcheck disable=SC2046
-eval "$(normalize_provider_pool)"
-attest_free_only
+write_supervisor_state() {
+  local remaining="$1"
+  python3 - "$POLICY" "$remaining" <<'PY' > "$STATE_DIR/SUPERVISOR.json.tmp"
+import datetime, json, pathlib, sys
+policy_path=pathlib.Path(sys.argv[1])
+remaining=int(sys.argv[2])
+try:
+    policy=json.loads(policy_path.read_text(encoding='utf-8'))
+except Exception:
+    policy={}
+free=policy.get('free_only') if isinstance(policy,dict) else None
+admissions=free.get('provider_admissions') if isinstance(free,dict) else None
+summary={}
+for provider in ('groq','mistral','nvidia'):
+    item=admissions.get(provider) if isinstance(admissions,dict) else None
+    if isinstance(item,dict):
+        summary[provider]={
+            'cost_class':str(item.get('cost_class','UNKNOWN')).upper(),
+            'admission_id':str(item.get('admission_id','')),
+            'authority_epoch':str(item.get('authority_epoch','')),
+            'secret_lookup_allowed':item.get('secret_lookup_allowed') is True,
+            'network_allowed':item.get('network_allowed') is True,
+        }
+    else:
+        summary[provider]={'cost_class':'UNKNOWN','admission_id':'','authority_epoch':'','secret_lookup_allowed':False,'network_allowed':False}
+print(json.dumps({
+    'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v4',
+    'observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'remaining_seconds':remaining,
+    'policy_epoch':str(policy.get('schema_version','')) if isinstance(policy,dict) else '',
+    'provider_admissions':summary,
+    'provider_credentials':'UNREAD_UNLESS_EXACT_PROVIDER_ADMISSION_IS_FREE',
+    'provider_network':'BLOCKED_UNLESS_EXACT_PROVIDER_ADMISSION_IS_FREE',
+    'dashboard_watch':True,
+},indent=2,sort_keys=True))
+PY
+  mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
+}
+
 start_dashboard
 
 while (( $(date +%s) < DEADLINE )); do
-  load_all_secret_sources
-  # shellcheck disable=SC2046
-  eval "$(normalize_provider_pool)"
-  attest_free_only
+  clear_provider_secret_env
+  load_admitted_provider_secrets groq
+  load_admitted_provider_secrets mistral
+  load_admitted_provider_secrets nvidia
 
   NOW="$(date +%s)"
   REMAINING="$((DEADLINE - NOW))"
-  HOURS="$(python3 - <<PY
+  write_supervisor_state "$REMAINING"
+
+  if python3 "$GATE" --policy "$POLICY" --list-admitted | grep -q '"providers": \[[^]]'; then
+    HOURS="$(python3 - <<PY
 print(max(0.01, $REMAINING/3600.0))
 PY
 )"
-
-  python3 - <<PY > "$STATE_DIR/SUPERVISOR.json.tmp"
-import json,os,datetime
-split=lambda x:[v.strip() for v in os.getenv(x,'').replace(';',',').split(',') if v.strip()]
-def nset(*vals): return len(set(v for v in vals if v))
-providers={
- 'groq': bool(os.getenv('GROQ_API_KEY') or split('GROQ_API_KEYS')),
- 'mistral': bool(os.getenv('MISTRAL_API_KEY') or split('MISTRAL_API_KEYS')),
- 'nvidia': bool(os.getenv('NVIDIA_API_KEY') or split('NVIDIA_API_KEYS') or os.getenv('NGC_API_KEY') or os.getenv('NVIDIA_NIM_API_KEY')),
-}
-counts={
- 'groq': nset(*split('GROQ_API_KEYS'),os.getenv('GROQ_API_KEY')),
- 'mistral': nset(*split('MISTRAL_API_KEYS'),os.getenv('MISTRAL_API_KEY')),
- 'nvidia': nset(*split('NVIDIA_API_KEYS'),os.getenv('NVIDIA_API_KEY'),os.getenv('NGC_API_KEY'),os.getenv('NVIDIA_NIM_API_KEY')),
-}
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v3','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'free_only_attested':str(os.getenv('CLAY_FREE_ONLY_ATTESTED','')).lower() in ('1','true','yes','on','attested'),'provider_credentials_present':providers,'provider_credential_counts':counts,'dashboard_watch':True},indent=2))
-PY
-  mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
-
-  if [[ "${CLAY_FREE_ONLY_ATTESTED:-}" =~ ^(1|true|TRUE|yes|YES|on|ON|attested)$ ]] && has_provider_key; then
-    exec python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$HOURS" --output-dir "$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
+    set +e
+    python3 "$ROOT/tools/run_24h_entityos_swarm.py" \
+      --hours "$HOURS" \
+      --output-dir "$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
+    RC=$?
+    set -e
+    case "$RC" in
+      0) exit 0 ;;
+      4) ;; # Exact FREE admission exists but no provider credentials are currently present.
+      *) printf 'swarm driver exited rc=%s; fail-closed supervisor will retry after policy/credential refresh\n' "$RC" >&2 ;;
+    esac
   fi
 
   sleep 60
 done
 
-printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v3","state":"EXPIRED_WITHOUT_USABLE_FREE_ONLY_CREDENTIALS"}\n' > "$STATE_DIR/SUPERVISOR.json"
+printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v4","state":"EXPIRED_WITHOUT_EXECUTABLE_TYPED_FREE_PROVIDER_ADMISSION"}\n' > "$STATE_DIR/SUPERVISOR.json"

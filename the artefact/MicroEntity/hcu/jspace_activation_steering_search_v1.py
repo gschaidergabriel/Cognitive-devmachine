@@ -5,10 +5,16 @@ The harness assumes a validated JSPACE_VECTOR_CONTROL_ABI/v1 packet has already 
 into the vector passed here. It can only claim a bounded *steering-search* result when the
 executor returns a hook receipt that binds the exact applied vector, layer, alpha and seed.
 
-Important supervisor-8.68 evidence boundary: this module does not implement the full causal
-family required for J-Space intervention promotion (clean + corrupted + target + sham +
-off-target controls). Therefore even ``SearchResult.success`` is explicitly search-level only
-and can never mint J-Space causal/model-runtime credit by itself.
+Important evidence boundary: this module does not implement the full causal family required
+for J-Space intervention promotion (clean + corrupted + target + sham + off-target controls).
+Therefore even ``SearchResult.success`` is explicitly search-level only and can never mint
+J-Space causal/model-runtime credit by itself.
+
+The search-level discriminator includes sign-paired steering, a physical zero-vector no-op,
+and caller-supplied equal-L2-norm random-direction controls. The latter distinguish a
+specific steering direction from the counterhypothesis that any same-magnitude activation
+perturbation produces the observed score change. They do not automatically promote to the
+full canonical SHAM_CONTROL required by the J-Space causal gate.
 """
 from __future__ import annotations
 
@@ -33,9 +39,7 @@ REQUIRED_CAUSAL_CONTROLS = (
     "SHAM_CONTROL",
     "OFF_TARGET_CONTROL",
 )
-# This v1 search has a baseline, directional target intervention, sign control and physical
-# zero-vector control. Those are useful discriminators, but they are not substitutes for the
-# three missing controls below under the current HCU J-Space intervention gate.
+# These search controls improve specificity but remain below the canonical causal family.
 MISSING_CAUSAL_CONTROLS = (
     "BASELINE_CORRUPTED",
     "SHAM_CONTROL",
@@ -90,6 +94,15 @@ class Candidate:
 
 
 @dataclass(frozen=True)
+class RandomDirectionControl:
+    applied_vector_sha256: str
+    scores: tuple[float, ...]
+    deltas: tuple[float, ...]
+    mean_score: float
+    mean_delta: float
+
+
+@dataclass(frozen=True)
 class SearchResult:
     schema: str
     evidence_class: str
@@ -103,8 +116,12 @@ class SearchResult:
     best: Candidate
     sign_control: Candidate
     zero_control_mean_delta: float
+    random_direction_controls: tuple[RandomDirectionControl, ...]
+    random_control_max_abs_mean_delta: float | None
+    random_specificity_gap: float | None
     min_delta: float
     min_directional_gap: float
+    min_random_specificity_gap: float
     max_zero_drift: float
     success: bool
 
@@ -122,6 +139,10 @@ def _finite(value: float, field: str) -> float:
     if not math.isfinite(value):
         raise ActivationSteeringError(f"{field}:FINITE_NUMBER_REQUIRED")
     return value
+
+
+def _l2_norm(vector: Sequence[float]) -> float:
+    return math.sqrt(sum(value * value for value in vector))
 
 
 def applied_vector_sha256(vector: Sequence[float]) -> str:
@@ -155,13 +176,42 @@ def _check_receipt(
             raise ActivationSteeringError("EXECUTOR_ACTIVATION_UNCHANGED")
     elif receipt.pre_activation_sha256 != receipt.post_activation_sha256:
         # An exact zero-vector control must be a physical no-op at the target activation.
-        # Allowing a changed post hash here would make implementation drift look like a
-        # harmless zero control and weaken the causal discriminator.
         raise ActivationSteeringError("ZERO_VECTOR_CONTROL_CHANGED_ACTIVATION")
 
 
 def _score(value: float) -> float:
     return _finite(value, "score")
+
+
+def _normalize_random_controls(
+    decoded_vector: tuple[float, ...],
+    random_control_vectors: Sequence[Sequence[float]],
+    *,
+    norm_tolerance: float,
+) -> tuple[tuple[float, ...], ...]:
+    target_norm = _l2_norm(decoded_vector)
+    if target_norm == 0.0:
+        raise ActivationSteeringError("decoded_vector:NONZERO_NORM_REQUIRED")
+    controls = []
+    seen = set()
+    neg_target = tuple(-value for value in decoded_vector)
+    allowed_error = max(1.0, target_norm) * norm_tolerance
+    for control_index, raw in enumerate(random_control_vectors):
+        if isinstance(raw, (str, bytes, bytearray)) or not isinstance(raw, Sequence):
+            raise ActivationSteeringError(f"random_control_vectors[{control_index}]:SEQUENCE_REQUIRED")
+        control = tuple(_finite(value, f"random_control_vectors[{control_index}][{index}]") for index, value in enumerate(raw))
+        if len(control) != len(decoded_vector):
+            raise ActivationSteeringError("random_control_vectors:DIMENSION_MISMATCH")
+        if control == decoded_vector or control == neg_target:
+            raise ActivationSteeringError("random_control_vectors:TARGET_OR_SIGN_ALIAS_FORBIDDEN")
+        if abs(_l2_norm(control) - target_norm) > allowed_error:
+            raise ActivationSteeringError("random_control_vectors:EQUAL_L2_NORM_REQUIRED")
+        digest = applied_vector_sha256(control)
+        if digest in seen:
+            raise ActivationSteeringError("random_control_vectors:UNIQUE_REQUIRED")
+        seen.add(digest)
+        controls.append(control)
+    return tuple(controls)
 
 
 def search_activation_steering(
@@ -174,18 +224,22 @@ def search_activation_steering(
     alphas: Sequence[float],
     seeds: Sequence[int],
     score_fn: Callable[[SteeringObservation], float],
+    random_control_vectors: Sequence[Sequence[float]] = (),
     min_delta: float = 0.1,
     min_directional_gap: float = 0.1,
+    min_random_specificity_gap: float = 0.1,
     max_zero_drift: float = 1e-9,
+    random_norm_tolerance: float = 1e-9,
 ) -> SearchResult:
-    """Search layer/alpha coordinates with sign + zero controls.
+    """Search layer/alpha coordinates with sign, zero, and equal-norm random controls.
 
     ``success`` means the bounded steering-search criteria passed. It deliberately does not
     mean J-Space causality. Current causal promotion separately requires the full clean /
     corrupted / target / sham / off-target family and exact model/runtime/loader/trace binding.
 
-    This is intentionally bounded. A caller wanting broader search must explicitly provide a
-    larger finite grid while remaining below MAX_TRIALS.
+    At least one equal-L2-norm random-direction control is required for ``success``. Omitting
+    random controls remains callable for compatibility but fails closed to ``success=False``.
+    This is intentionally bounded; broader searches must remain below ``MAX_TRIALS``.
     """
     if not isinstance(prompt, str) or not prompt:
         raise ActivationSteeringError("prompt:NONEMPTY_STRING_REQUIRED")
@@ -207,14 +261,25 @@ def search_activation_steering(
         raise ActivationSteeringError("seeds:UNIQUE_REQUIRED")
     if any(-alpha not in alpha_values for alpha in alpha_values):
         raise ActivationSteeringError("alphas:SIGN_PAIRED_GRID_REQUIRED")
-    trials = len(seed_values) * (1 + len(layers) * len(alpha_values) + 1)
+
+    random_norm_tolerance = _finite(random_norm_tolerance, "random_norm_tolerance")
+    if random_norm_tolerance < 0:
+        raise ActivationSteeringError("random_norm_tolerance:NONNEGATIVE_REQUIRED")
+    random_vectors = _normalize_random_controls(
+        vector,
+        random_control_vectors,
+        norm_tolerance=random_norm_tolerance,
+    ) if random_control_vectors else ()
+
+    trials = len(seed_values) * (1 + len(layers) * len(alpha_values) + 1 + len(random_vectors))
     if trials > MAX_TRIALS:
         raise ActivationSteeringError("SEARCH_TRIAL_BUDGET_EXCEEDED")
 
     min_delta = _finite(min_delta, "min_delta")
     min_directional_gap = _finite(min_directional_gap, "min_directional_gap")
+    min_random_specificity_gap = _finite(min_random_specificity_gap, "min_random_specificity_gap")
     max_zero_drift = _finite(max_zero_drift, "max_zero_drift")
-    if min_delta < 0 or min_directional_gap < 0 or max_zero_drift < 0:
+    if min_delta < 0 or min_directional_gap < 0 or min_random_specificity_gap < 0 or max_zero_drift < 0:
         raise ActivationSteeringError("thresholds:NONNEGATIVE_REQUIRED")
 
     baseline_scores = []
@@ -264,10 +329,47 @@ def search_activation_steering(
         zero_scores.append(_score(score_fn(observation)))
     zero_delta = fmean(score - base for score, base in zip(zero_scores, baseline_scores))
 
+    random_controls = []
+    for control in random_vectors:
+        control_sha = applied_vector_sha256(control)
+        scores = []
+        for seed in seed_values:
+            observation = executor.run(prompt, layer_id=best.layer_id, vector=control, alpha=best.alpha, seed=seed)
+            _check_receipt(
+                observation.hook_receipt,
+                layer_id=best.layer_id,
+                seed=seed,
+                alpha=best.alpha,
+                vector_sha256=control_sha,
+                require_activation_change=True,
+            )
+            scores.append(_score(score_fn(observation)))
+        deltas = tuple(score - base for score, base in zip(scores, baseline_scores))
+        random_controls.append(
+            RandomDirectionControl(
+                control_sha,
+                tuple(scores),
+                deltas,
+                fmean(scores),
+                fmean(deltas),
+            )
+        )
+
     directional_gap = best.mean_delta - sign_control.mean_delta
+    random_max_abs_delta = (
+        max(abs(control.mean_delta) for control in random_controls)
+        if random_controls else None
+    )
+    random_specificity_gap = (
+        best.mean_delta - random_max_abs_delta
+        if random_max_abs_delta is not None else None
+    )
     success = (
-        best.mean_delta >= min_delta
+        bool(random_controls)
+        and best.mean_delta >= min_delta
         and directional_gap >= min_directional_gap
+        and random_specificity_gap is not None
+        and random_specificity_gap >= min_random_specificity_gap
         and abs(zero_delta) <= max_zero_drift
     )
     return SearchResult(
@@ -283,8 +385,12 @@ def search_activation_steering(
         best=best,
         sign_control=sign_control,
         zero_control_mean_delta=zero_delta,
+        random_direction_controls=tuple(random_controls),
+        random_control_max_abs_mean_delta=random_max_abs_delta,
+        random_specificity_gap=random_specificity_gap,
         min_delta=min_delta,
         min_directional_gap=min_directional_gap,
+        min_random_specificity_gap=min_random_specificity_gap,
         max_zero_drift=max_zero_drift,
         success=success,
     )

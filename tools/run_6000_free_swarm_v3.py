@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
-"""Epoch-8.70 economic gate for the global work-stealing Free Swarm.
+"""Successor-current FREE_ONLY 6000-worker swarm with typed delta ingress.
 
-Imports the v2 scheduler, but prevents reservation/network I/O for any concrete
-credential+route lacking provider-side zero-cost/free-entitlement evidence. Every
-executed provider request emits FREE_LANE_EXECUTION_RECEIPT/v1.
+This wrapper preserves the Supervisor-8.71 economic boundary while closing the
+worker->Forge conversion gap:
 
-The v2 scheduler historically performed authenticated provider model-catalog
-network discovery before the per-lane gate ran. Epoch 8.70 does not establish
-catalog-endpoint zero-cost provenance, so this wrapper also replaces that
-pre-route discovery with a network-free environment/static-default resolver.
+* cache/productivity prompt acceleration is installed before the v2 fabric captures
+  worker_prompt/runtime classes;
+* authenticated provider model-catalog discovery stays disabled because the current
+  authority does not establish a zero-cost catalog-network lane;
+* each concrete provider request still requires a current credential+route free-lane
+  binding immediately before model network I/O and emits FREE_LANE_EXECUTION_RECEIPT/v1;
+* successful model text remains noncanonical, while explicitly marked architecture
+  deltas are deterministically validated and materialized as candidate evidence for
+  the downstream Forge.
 """
 from __future__ import annotations
 
@@ -18,16 +22,28 @@ import os
 import threading
 from typing import Any
 
-import run_6000_free_swarm as fabric
-from free_lane_provenance import (
+# Import order is an executable invariant. The accelerator must patch the shared
+# base/optimizer modules before run_6000_free_swarm captures subclasses and prompt
+# functions; installing it afterwards leaves the 6000-worker fabric on the old path.
+import run_free_go_swarm as _base
+import run_24h_entityos_swarm as _opt
+from free_swarm_accelerator_v2 import install as _install_accelerator
+
+_install_accelerator(_base, _opt)
+ACCELERATOR_BINDING = "FREE_SWARM_ACCELERATOR_V2_PRE_FABRIC"
+
+import run_6000_free_swarm as fabric  # noqa: E402
+from free_lane_provenance import (  # noqa: E402
     binding_still_current,
     current_lane_binding,
     emit_execution_receipt,
     lane_evidence,
 )
+from free_swarm_delta_ingress import parse_questions, parse_worker_delta  # noqa: E402
 
 _ORIGINAL_REQUEST = fabric.base.request_chat
 _ORIGINAL_NEXT_PAIR = fabric.FastProviderRuntime.next_key_model
+_ORIGINAL_SINK_APPEND = fabric.base.JsonlSink.append
 _RECEIPT_LOCK = threading.Lock()
 _EVIDENCE_CACHE: dict[tuple[str, str, str, str], dict[str, Any]] = {}
 _SOURCE = {
@@ -41,10 +57,10 @@ def route_safe_discover_and_export(timeout: float) -> dict[str, dict]:
 
     Provider-level admission authorizes only the owner's free contingent; it is
     not economic proof for an arbitrary authenticated catalog request. Current
-    epoch-8.70 economic provenance binds concrete inference routes, not catalog
-    endpoints. Therefore the active 6000-worker path may use an explicit local
-    model override or the controller's static defaults, while final credential +
-    route admission remains the responsibility of ``current_lane_binding``.
+    economic provenance binds concrete inference routes, not catalog endpoints.
+    Therefore the active 6000-worker path may use an explicit local model override
+    or the controller's static defaults, while final credential+route admission is
+    still enforced by ``current_lane_binding`` immediately before model network I/O.
 
     ``timeout`` is retained for API compatibility with the v2 scheduler.
     """
@@ -127,6 +143,70 @@ def _evidence(spec: fabric.base.ProviderSpec, key: str, model: str) -> dict[str,
             artifacts=fabric.ARTIFACT_ROOT,
         )
     return _EVIDENCE_CACHE[ck]
+
+
+async def ingress_aware_sink_append(self: fabric.base.JsonlSink, item: dict[str, Any]) -> None:
+    """Attach deterministic candidate admission without promoting model text.
+
+    Raw worker ``text`` remains intact. Valid candidates and bounded research
+    questions are additionally written to dedicated append-only JSONL streams so
+    conversion quality is directly measurable and replay does not depend on prose
+    interpretation.
+    """
+    row = dict(item)
+    text = row.get("text")
+    status = row.get("http_status")
+    candidate = None
+    questions: list[str] = []
+    if isinstance(text, str) and isinstance(status, int) and 200 <= status < 300:
+        ingress = parse_worker_delta(text)
+        questions = parse_questions(text)
+        row["delta_ingress"] = {
+            "schema": ingress["schema"],
+            "status": ingress["status"],
+            "valid": ingress["valid"],
+            "ready_for_forge": ingress["ready_for_forge"],
+            "reasons": ingress["reasons"],
+            "proposal_sha256": ingress.get("proposal_sha256"),
+            "question_count": len(questions),
+        }
+        if ingress.get("valid"):
+            candidate = {
+                "schema": "CLAY_ARCHITECTURE_DELTA_CANDIDATE/v1",
+                "ts": row.get("ts"),
+                "provider": row.get("provider"),
+                "model": row.get("model"),
+                "role": row.get("role"),
+                "worker_serial": row.get("worker_serial"),
+                "logical_worker_slot": row.get("logical_worker_slot"),
+                "repo_head_at_prompt": row.get("repo_head_at_prompt"),
+                "worker_text_sha256": row.get("text_sha256"),
+                "proposal_sha256": ingress.get("proposal_sha256"),
+                "ready_for_forge": ingress.get("ready_for_forge"),
+                "proposal": ingress.get("proposal"),
+            }
+
+    await _ORIGINAL_SINK_APPEND(self, row)
+
+    if candidate is not None:
+        async with self._lock:
+            path = self.output_dir / "architecture_deltas.jsonl"
+            with path.open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps(candidate, ensure_ascii=False, separators=(",", ":")) + "\n")
+                fh.flush()
+    if questions:
+        qrow = {
+            "schema": "CLAY_OPEN_RESEARCH_QUESTIONS/v1",
+            "ts": row.get("ts"),
+            "worker_serial": row.get("worker_serial"),
+            "worker_text_sha256": row.get("text_sha256"),
+            "questions": questions,
+        }
+        async with self._lock:
+            path = self.output_dir / "open_research_questions.jsonl"
+            with path.open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps(qrow, ensure_ascii=False, separators=(",", ":")) + "\n")
+                fh.flush()
 
 
 def gated_next_key_model(self: fabric.FastProviderRuntime):
@@ -212,12 +292,12 @@ def gated_request_chat(
     return status, headers, payload
 
 
-# The v2 fabric invokes opt.discover_and_export() at the start of run(). Replace
-# it before exporting run so the active v3 launcher cannot perform authenticated
-# catalog I/O outside the route/credential economic boundary.
+# Install all successor-current runtime hooks only after the imported fabric has
+# been built from the already-accelerated base modules.
 fabric.opt.discover_and_export = route_safe_discover_and_export
 fabric.FastProviderRuntime.next_key_model = gated_next_key_model
 fabric.base.request_chat = gated_request_chat
+fabric.base.JsonlSink.append = ingress_aware_sink_append
 
 run = fabric.run
 parse_args = fabric.parse_args

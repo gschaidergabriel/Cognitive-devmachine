@@ -361,6 +361,34 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         self.assertEqual(serialization_calls, [])
 
+    def test_oversized_text_lower_bound_is_rejected_before_execution_lock(self):
+        lock_calls = []
+        original_lock = MOD.PROCESS_EXECUTION_LOCK
+
+        class TrackingLock:
+            def acquire(self, timeout):
+                lock_calls.append("acquire")
+                return True
+
+            def release(self):
+                lock_calls.append("release")
+
+        MOD.PROCESS_EXECUTION_LOCK = TrackingLock()
+        try:
+            with self.assertRaisesRegex(ValueError, "provider_request_too_large"):
+                MOD.execute_chat(
+                    [{
+                        "role": "user",
+                        "content": "x" * MOD.MAX_PROVIDER_REQUEST_BYTES,
+                    }],
+                    model="mock",
+                    environ={},
+                )
+        finally:
+            MOD.PROCESS_EXECUTION_LOCK = original_lock
+
+        self.assertEqual(lock_calls, [])
+
     def test_escaped_unicode_overflow_is_rejected_before_json_materialization(self):
         serialization_calls = []
         original_dumps = MOD.json.dumps

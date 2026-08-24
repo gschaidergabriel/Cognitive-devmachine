@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"research-distillery-compile-inventory-20260824T1738",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "command":"set -e; python3 -m py_compile tools/free_swarm_quota.py tools/run_research_distillery.py tools/run_24h_entityos_swarm.py 'free swarm/update_distillery_readme.py'; echo COMPILE_PASS; export CLAY_FREE_ONLY_ATTESTED=1; python3 tools/run_research_distillery.py --inventory-only; echo '--- disk ---'; df -h /artifacts /cache",
+  "timeout_seconds":300
+}

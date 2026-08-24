@@ -6,7 +6,7 @@ This README is a **current-facing orientation surface**, not independent authori
 
 ## Current authority — 2026-08-24
 
-Observed supervisor epoch during this update: **8.71**. Current autonomous mode: **FREE_ONLY**.
+Observed supervisor epoch during this update: **8.72**. Current autonomous mode: **FREE_ONLY**.
 
 Resolve current authority from `research_entity/continuity/BOOTSTRAP_MINIMAL.json`, `research_entity/rooms/PROGRAM_STATE.json`, `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`, newest admitted `SUPERVISOR_STEERING_*`, current all-worker directive, `CLAY_EXECUTION_AUTHORITY.md`, owner execution authority, macrocycle/atomic-lease protocols, and exact current source/runtime evidence.
 
@@ -26,7 +26,7 @@ Target causal chain:
 
 Pre-load hashing is not loader-consumption attestation. Logical cell count is not resident-model count or physical decode concurrency.
 
-## Execution law — supervisor 8.71 / owner authority
+## Execution law — supervisor 8.72 / owner authority
 
 FREE_ONLY remains active. Current owner authority permits zero-cost development/testing on normal-user local Linux and the authorized `clay-direct-dev` VPS sandbox, plus bounded bridge/container/runtime administration required to keep that sandbox usable.
 
@@ -36,7 +36,7 @@ Provider-level FREE labels are insufficient economic proof. Concrete credential/
 
 ## Runtime reentry warning
 
-Recent committed dashboard evidence remained successor-stale: the live supervisor/runtime evidence used an older provider-admission authority than canonical source authority 8.71. Current `main` has continued adding runtime-reconciliation proof infrastructure, but source/control-plane presence is not a live runtime witness. Provider, whole-product, HCU, J-Space and training credits therefore remain unpromoted until exact-current execution evidence exists.
+Recent committed dashboard evidence remained successor-stale: the live supervisor/runtime evidence used an older provider-admission authority than canonical source authority 8.72. Current `main` has continued adding runtime-reconciliation proof infrastructure plus a provider-independent local Qwen3-0.6B loopback path, but source/control-plane presence is not a live runtime witness. Provider, whole-product, HCU, J-Space and training credits therefore remain unpromoted until exact-current execution evidence exists.
 
 ## Retained convergence lanes
 
@@ -73,7 +73,7 @@ The Forge->Distillery measured-execution bridge remains a separate deterministic
 
 Observed source defect: the synthesizer received bounded source chunks, but epistemic reviewers were asked to judge candidate JSON without those source bytes. Acceptance used panel quality scores without a source-entailment predicate, and accepted source text was then erased. A source hash proves byte identity; it does not prove that a generated claim is supported by those bytes.
 
-Successor branch `go-871-distillery-evidence-entailment-successor-gpt56sol` ports the repair onto current 8.71 semantics. `tools/run_research_distillery_entry.py` now fails closed before reviewer transport when candidate citations are missing/out-of-boundary, cited text is unavailable, or the exact text no longer matches its stored SHA-256. Reviewers receive only the candidate-cited bounded chunks inside an explicit **UNTRUSTED QUOTED DATA** boundary and must return `evidence_support`, `supported_source_ids`, and `unsupported_claims`.
+Successor PR **#1574** ports the repair onto current 8.72 semantics. `tools/run_research_distillery_entry.py` now fails closed before reviewer transport when candidate citations are missing/out-of-boundary, cited text is unavailable, or the exact text no longer matches its stored SHA-256. Reviewers receive only the candidate-cited bounded chunks inside an explicit **UNTRUSTED QUOTED DATA** boundary and must return `evidence_support`, `supported_source_ids`, and `unsupported_claims`.
 
 Canonical research-packet admission requires the existing preferred-panel quality boundary **plus** source entailment: median evidence support >= 0.80, at least one valid cited support id, zero unsupported material claims, zero reviewer-supported ids outside the cited set, and zero hard contradiction.
 
@@ -115,13 +115,13 @@ A source file, source test, deployment, receipt, model agreement, token count, s
 
 Refresh `main` before using this list. Highest-value next gates are:
 
-1. Fuse the successor Distillery entailment repair only if current-main mergeability remains clean and no duplicate implementation has landed.
+1. Fuse PR #1574 only if current-main mergeability remains clean and no duplicate implementation has landed.
 2. Execute the exact current Distillery entailment + provisional-fence regressions on an authorized zero-cost repository checkout. Negative witness: a high-plausibility unsupported candidate adds **zero** accepted dataset tokens.
-3. Successor-align the live Free Swarm/Forge/Distillery supervisor to current 8.71 source using the current reconciliation proof path.
-4. Execute the already-wired Forge->Distillery bridge on an exact-source accepted Forge evaluation. Positive witness: exactly one measured-execution packet, nonzero accepted dataset tokens, duplicate replay adds zero packets/tokens, and no J-Space/training/canonical truth promotion.
-5. Measure a bounded post-restart Forge batch and partition failures into source identity, patch syntax/apply, test failure, validated-not-better and accepted.
-6. If `PATCH_REJECTED` remains dominant, improve source-bound synthesis/repair rather than weakening application or acceptance gates.
-7. Continue one canonical Typed Entry -> loader -> model execution -> InferenceReceipt -> model-specific J-Space causal chain.
+3. Execute the exact-current provider-independent local Qwen3-0.6B loopback hidden-state/vector discriminator under supervisor 8.72, binding full source-tree/runtime/model/tokenizer identity and all matched controls; source presence alone grants zero J-Space/HCU credit.
+4. Observe terminal evidence from the current runtime-reconciliation path before minting Forge/operational runtime credit.
+5. Execute the already-wired Forge->Distillery bridge on an exact-source accepted Forge evaluation. Positive witness: exactly one measured-execution packet, nonzero accepted dataset tokens, duplicate replay adds zero packets/tokens, and no J-Space/training/canonical truth promotion.
+6. Measure a bounded post-restart Forge batch and partition failures into source identity, patch syntax/apply, test failure, validated-not-better and accepted.
+7. If `PATCH_REJECTED` remains dominant, improve source-bound synthesis/repair rather than weakening application or acceptance gates.
 8. Keep all provider routes fail-closed to exact FREE economic provenance and exact-current execution receipts; no paid/Together fallback.
 9. Build leak-resistant training data only from admitted measured/causal evidence; no training promotion from generated narration.
 

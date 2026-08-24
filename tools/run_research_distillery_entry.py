@@ -2,9 +2,8 @@
 """Stable FREE_ONLY entrypoint for run_research_distillery.py.
 
 Adds typed provider boundaries, efficient free-model selection, fail-soft reviewer
-fallback, explicit near-miss/underfill instrumentation, deterministic exact-source
-Forge->Distillery evidence admission, and source-entailment review before research
-hypotheses enter the dataset. Thresholds are never silently weakened.
+fallback, explicit near-miss/underfill instrumentation, and source-entailment review
+before research hypotheses enter the dataset. Thresholds are never silently weakened.
 """
 from __future__ import annotations
 
@@ -19,7 +18,6 @@ TOOLS=Path(__file__).resolve().parent
 if str(TOOLS) not in sys.path:
     sys.path.insert(0,str(TOOLS))
 import run_research_distillery as d
-import distillery_forge_bridge as forge_bridge
 import distillery_evidence_review as evidence_review
 from free_provider_admission import provider_is_admitted_free
 
@@ -35,8 +33,6 @@ _ORIGINAL_SECRET=d.secret
 _ORIGINAL_REQUEST_JSON=d.request_json
 _ORIGINAL_SELECT_REVIEWERS=d.select_reviewers
 _ORIGINAL_REVIEW=d.review_candidate
-_ORIGINAL_METRICS=d.metrics
-_ORIGINAL_WRITE_STATUS=d.write_status
 _ORIGINAL_COMPRESS=d.compress_and_commit
 
 
@@ -215,37 +211,11 @@ def compress_and_commit(con: sqlite3.Connection,cid: str,agg: dict,small_models:
     return kid
 
 
-def metrics(con: sqlite3.Connection,reviewers:list[tuple[str,str,str]],small_models:list[str]) -> dict:
-    data=_ORIGINAL_METRICS(con,reviewers,small_models)
-    forge_packets=d.counter(con,"forge_evidence_packets")
-    forge_tokens=d.counter(con,"forge_evidence_tokens")
-    total=int(data.get("accepted_dataset_tokens") or 0)
-    data["forge_evidence_packets"]=forge_packets
-    data["forge_evidence_tokens"]=forge_tokens
-    data["reviewed_research_hypothesis_tokens"]=max(0,total-forge_tokens)
-    data["dataset_epistemic_boundary"]="NONCANONICAL; FORGE COMPONENT EVIDENCE AND REVIEWED RESEARCH NEVER MINT CANONICAL FACTS"
-    return data
-
-
-def write_status(con: sqlite3.Connection,reviewers:list[tuple[str,str,str]],small_models:list[str]) -> None:
-    forge_bridge.ingest_forge_acceptances(
-        con,
-        d.WORKER_ROOT/"forge"/"architecture_delta_evaluations.jsonl",
-        now_iso=d.now_iso,
-        approx_tokens=d.approx_tokens,
-        bump=d.bump,
-        emit=d.emit,
-    )
-    _ORIGINAL_WRITE_STATUS(con,reviewers,small_models)
-
-
 d.add_question=add_question
 d.select_small_models=select_small_models
 d.select_reviewers=select_reviewers
 d.review_candidate=review_candidate
 d.compress_and_commit=compress_and_commit
-d.metrics=metrics
-d.write_status=write_status
 
 if __name__=="__main__":
     raise SystemExit(d.main())

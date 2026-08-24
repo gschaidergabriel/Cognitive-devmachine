@@ -72,6 +72,16 @@ This is **source + deterministic preflight regression evidence only**. It mints 
 
 Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_TRIGGER1_OUTPUTDIR_PRESERVATION_GPT56SOL_2333.json`.
 
+### GO 23:33 same-vector wrong-layer causal binding delta
+
+The stronger causal intermediate path was fused into the source-attested local Qwen envelope on current `main`, but its declared wrong-layer localization control still changed **two** variables at once: the intervention layer and the layer-specific derived vector. `RuntimeState.infer()` selected `self.directions[layer]`, so a request sent to `wrong_layer` automatically substituted the alternate layer's vector even though the promotion bridge defines the control as the **same selected vector at a different layer**.
+
+PR **#1664** was rebased onto current `main@53176b01f4103574b70787d695c5c7c505db2e75` and reduced to a current-source donor repair. It separates intervention `layer` from `vector_layer`, defaults existing calls to `vector_layer=layer`, binds the wrong-layer call to `vector_layer=selected_layer`, and fails closed unless the wrong-layer applied-vector SHA exactly equals the selected-layer `+VECTOR` SHA. The runtime receipt now exposes both identities, and the holdout records `wrong_layer_vector_source_layer` plus `wrong_layer_same_selected_vector`.
+
+This preserves the parallel 8.72 label-independence additions already on `main` and changes the localization discriminator from a two-variable comparison to the declared one-variable intervention. A focused regression was added, but exact test/model execution has not been observed by this organ. No unusual experiment, provider call, paid route or Together call was performed, so model/J-Space/HCU/training credits remain zero.
+
+Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_WRONG_LAYER_SELECTED_VECTOR_CAUSAL_BINDING_GPT56SOL.json`.
+
 Until a lease-admitted successor dispatch yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
 
 ## Typed Entry / HCU authority convergence
@@ -80,7 +90,7 @@ Until a lease-admitted successor dispatch yields a repository-bound exact-source
 
 This is a control-plane/Typed-Entry-adjacent convergence delta: it removes stale authority islands without creating a second truth/effect/admission authority. It grants no executable HCU/model credit.
 
-Retained donor lane **#1263** remains the single HCU / Typed Entry / Global J-Space donor lane. Its engine/loader work is source/donor evidence until exact admitted execution binds loader consumption, inference receipt and downstream causal traces.
+Retained donor lane **#1263** remains the single HCU / Typed Entry / Global J-Space donor lane. Its engine/loader work is source/donor evidence until exact admitted execution binds loader consumption, inference receipt and downstream causal traces. PR **#1664** is a narrow causal-control donor repair, not a second HCU authority.
 
 ## Evidence credit
 
@@ -92,6 +102,7 @@ Current bounded credit remains conservative:
 - Forge -> Distillery exact-current runtime credit: **0 pending terminal receipt**;
 - provider runtime credit: **0 unless exact current authority/receipt promotes only its exact scope**;
 - local Qwen3-0.6B midlayer J-Space runtime promotion: **0 pending lease-admitted terminal receipt**;
+- same-vector wrong-layer causal repair: **source/regression definition only; runtime credit 0**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
 - J-Space model-runtime credit: **0**;
@@ -104,9 +115,9 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 
 1. Observe a terminal repository-bound result for the open Forge -> Distillery runtime request **#1619**; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
 2. If that witness fails, repair the measured isolated-executor/bridge blocker only; never weaken evidence admission.
-3. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
-4. On the lease-admitted Qwen run, persist the fused nonterminal midlayer exact-source runtime receipt and classify runner/preflight/dependency/model failure explicitly.
-5. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.
+3. Fuse PR **#1664** if current `main` still lacks the `layer`/`vector_layer` split, then execute its focused regression plus existing intermediate protocol and promotion-gate regressions on the exact fused bytes.
+4. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
+5. On the lease-admitted causal Qwen run, require identical selected-vector SHA at selected and wrong layers, all six matched controls, counterbalanced label mappings, lesion/rescue, disjoint holdout, activation-derived nonterminal construction and exact source/runtime identity.
 6. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
 7. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
 8. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.

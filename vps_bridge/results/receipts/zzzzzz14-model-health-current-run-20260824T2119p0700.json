@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "zzzzzz14-model-health-current-run-20260824T2119p0700",
+  "command_sha256": "9b401c6d2bfcc02b75a33aee1f201aefc83230612fc8ce22629865881cc273ec",
+  "started_at": "2026-08-24T14:17:56.523600+00:00",
+  "finished_at": "2026-08-24T14:17:56.700350+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "500a50f93bd1e84e2f366fd10eb668d8cb4de098b4a444c7db30aa87320aab5f",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "RUN /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T141549Z\n('groq', 'openai/gpt-oss-120b') {\"429\": 1, \"ok\": 1, \"total\": 2} tokens 5693 avg_s 40.27 delta 0\n('groq', 'openai/gpt-oss-20b') {\"ok\": 1, \"total\": 1} tokens 5705 avg_s 1.67 delta 1\n('groq', 'qwen/qwen3.6-27b') {\"ok\": 1, \"total\": 1} tokens 6060 avg_s 2.46 delta 0\n('nvidia', 'nvidia/nemotron-3-super-120b-a12b') {\"429\": 4, \"5xx\": 2, \"ok\": 41, \"total\": 47} tokens 298063 avg_s 23.12 delta 6\n('nvidia', 'nvidia/nemotron-3-ultra-550b-a55b') {\"429\": 2, \"5xx\": 13, \"ok\": 28, \"total\": 43} tokens 203348 avg_s 44.02 delta 18\n('nvidia', 'nvidia/nemotron-mini-4b-instruct') {\"400\": 52, \"429\": 1, \"total\": 53} tokens 0 avg_s 4.6 delta 0\n('openrouter', 'openrouter/free') {\"429\": 6, \"total\": 6} tokens 0 avg_s 1.84 delta 0\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

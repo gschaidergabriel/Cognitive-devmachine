@@ -1,0 +1,109 @@
+{
+  "schema": "CLAY_GO_HCU_JSPACE_CONTROL_CONSUMPTION_SOURCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "observed_canonical_main_before_write": "e54f0a2701208cca3314034c098e33dde850dd18",
+  "retained_donor": {
+    "qualified_lane": "gschaidergabriel/clay-global-research-entity#1263",
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "observed_live_head_after_parallel_fusion": "73f0fc3a5ebe9df7616caae47123bbc43a63c023",
+    "implementation_commit": "da10a81cbd8a38f93cf79a1bb568dae27751cd36",
+    "test_commit": "047c2f137bebf8dd2d9b139d434cd79f193397bb",
+    "implementation_file": "the artefact/MicroEntity/hcu/jspace_control_consumption_binding_v1.py",
+    "test_file": "the artefact/MicroEntity/hcu/test_jspace_control_consumption_binding_v1.py"
+  },
+  "delta": {
+    "schema": "HCU_JSPACE_CONTROL_CONSUMPTION_BINDING/v1",
+    "purpose": "Bind one validated TrainingTrace-produced JSPACE_VECTOR_CONTROL packet to the exact ModelInputControlBinding and executor-observed input bytes for one invocation without caller-supplied temporal labels.",
+    "cross_bound_fields": [
+      "generation",
+      "entry_event_sha256",
+      "entry_admission_sha256",
+      "route_decision_sha256",
+      "grid_plan_sha256",
+      "cell_id",
+      "role",
+      "jspace_basis_id",
+      "jspace_basis_sha256",
+      "vector_control_packet_sha256",
+      "vector_control_packet_jcs_utf8",
+      "vector_control_condition"
+    ],
+    "downstream_bound_fields": [
+      "model_input_control_binding_sha256",
+      "executor_id",
+      "invocation_id",
+      "input_sha256",
+      "input_size",
+      "packet_offset"
+    ],
+    "source_revalidation": "RECONSTRUCT_EXACT_BINDING_FROM_VALIDATED_TRAINING_TRACE_PLUS_VALIDATED_MODEL_INPUT_BINDING_PLUS_EXACT_CONSUMED_INPUT_BYTES",
+    "explicit_nonclaims": [
+      "NO_TEMPORAL_ORDER_CLAIM",
+      "NO_SUCCESSOR_STEP_CLAIM",
+      "NO_HIDDEN_STATE_USE_CLAIM",
+      "NO_COUNTERFACTUAL_EFFECT_CLAIM",
+      "NO_MODEL_RUNTIME_SUCCESS_CLAIM",
+      "NO_REWARD_OR_TRUTH_AUTHORITY",
+      "NO_EFFECTGATE_AUTHORITY"
+    ]
+  },
+  "hypothesis": "A producer-derived trace-to-executor-input consumption edge is useful causal provenance, while caller-labelled temporal step indices would overclaim evidence not produced by the current runtime.",
+  "counterhypothesis": "TrainingTrace and ModelInputControlBinding validation are individually sufficient and an additional cross-binding adds only redundant structure.",
+  "discriminator": "Require the combined primitive to reject cross-source causal-envelope transplants, packet transplants, post-binding input mutation, digest tamper and self-consistent source relabeling while accepting the exact matched sources deterministically.",
+  "test_source_obligations": {
+    "declared_test_count": 7,
+    "cases": [
+      "exact deterministic source binding",
+      "causal-envelope transplant rejection",
+      "same-metadata different-control-packet rejection",
+      "exact packet-wire protection",
+      "post-binding executor-input mutation rejection",
+      "binding digest tamper rejection",
+      "self-consistent source invocation relabel rejection"
+    ],
+    "organ_local_python_syntax_compile": "PASS_SOURCE_SYNTAX_ONLY",
+    "github_ci_or_workflow_observed_for_test_commit": false,
+    "authorized_exact_source_component_runtime_execution": false,
+    "component_runtime_pass": false
+  },
+  "runtime_reentry": {
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "exact_head_ready_deployment": "dpl_EtVgJ96pobVv3zqh9jozAKHgfNWa",
+    "function_gate_current_primary_blocker": "BLOCKED_QUOTA_UNOBSERVED",
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_create_performed_for_this_delta": false,
+    "no_paid_or_unknown_cost_execution_attempted": true
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_CAUSAL_CLOSURE: retained donor now has a non-temporal producer-derived J-Space control consumption edge; executor runtime remains blocked before Sandbox by unobserved included quota.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the new binding cross-binds Entry event/admission, route, GRID10, cell/role/basis and exact executor-input identities without creating a second state or effect authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_READINESS_ONLY: exact Vector-Control packet consumption can now be source-revalidated against the TrainingTrace and executor input; no model-causality or training credit is granted until real admitted runtime traces exist."
+  },
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_run": 0,
+    "work_class": "ORDINARY_SOURCE_CONVERGENCE_AND_DETERMINISTIC_TEST_SPECIFICATION"
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving whole-system surface under parallel writes; this append-only receipt plus retained donor commits preserve this nonduplicate delta without overwriting fresher current-facing state."
+  },
+  "next_exact_action": "Do not run the fixed Sandbox capsule until remaining included Vercel Sandbox quota is directly observed through an admitted non-charging surface. In parallel, keep the producer-derived control-consumption binding in the single retained PR1263 lane and include its exact source/test bytes in a future executor rebind only after the currently pinned 511d5689 capsule discriminator is resolved or a materially necessary source-safety rebind is explicitly chosen."
+}

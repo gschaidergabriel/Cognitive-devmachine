@@ -1,5 +1,6 @@
 name: Trigger1 local Qwen3-0.6B runtime proof
 
+# Explicit Trigger-1 research run requested 2026-08-24T21:42+07:00; execute exact-current local zero-cost proof.
 on:
   push:
     branches: [main]
@@ -56,7 +57,7 @@ jobs:
           avail_kb="$(df -Pk "${HOME:?}" | awk 'NR==2 {print $4}')"
           printf '{"available_kb":%s}\n' "$avail_kb" > "$OUT/disk.json"
           if [[ "$avail_kb" -lt 5000000 ]]; then
-            printf '{"status":"BLOCKED_INSUFFICIENT_FREE_DISK","available_kb":%s}\n' "$avail_kb" > "$OUT/preflight.json"
+            printf '{"status":"BLOCKED_INSUFFICIENT_FREE_DISK","available_kb":%s}\n' "$OUT/preflight.json"
             exit 0
           fi
 

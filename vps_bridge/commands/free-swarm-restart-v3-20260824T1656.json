@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"free-swarm-restart-v3-20260824T1656",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -euo pipefail; python3 -m py_compile 'free swarm/evaluate.py' tools/run_free_go_swarm.py tools/run_24h_entityos_swarm.py; bash -n tools/run_24h_entityos_swarm_supervisor.sh; python3 'free swarm/evaluate.py' --repo \"$PWD\" --artifacts /artifacts/clay-entityos-swarm >/artifacts/clay-entityos-swarm/evaluator-smoke.log; pkill -f '[r]un_24h_entityos_swarm_supervisor.sh' || true; pkill -f '[r]un_24h_entityos_swarm.py' || true; pkill -f '[f]ree swarm/evaluate.py.*--watch' || true; nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor.log 2>&1 </dev/null & echo $! >/artifacts/clay-entityos-swarm/supervisor.pid; sleep 8; echo SUP_PID=$(cat /artifacts/clay-entityos-swarm/supervisor.pid); ps -p $(cat /artifacts/clay-entityos-swarm/supervisor.pid) -o pid,etime,cmd || true; echo '--- supervisor ---'; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json 2>/dev/null || true; echo '--- processes ---'; pgrep -af 'run_24h_entityos_swarm|run_free_go_swarm|free swarm/evaluate.py' || true; echo '--- log ---'; tail -60 /artifacts/clay-entityos-swarm/supervisor.log 2>/dev/null || true; echo '--- dashboard ---'; tail -20 /artifacts/clay-entityos-swarm/dashboard.log 2>/dev/null || true; echo '--- disk ---'; df -h /artifacts"
+}

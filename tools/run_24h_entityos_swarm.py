@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""EntityOS/HCU driver for the existing FREE_ONLY adaptive go swarm.
+"""EntityOS/HCU driver for the FREE_ONLY adaptive go swarm.
 
-The underlying controller owns credential collection, AIMD concurrency,
-provider-wide 429 cooldown, 402 hard-stop behavior and receipt logging. This
-driver adds live model discovery, EntityOS/HCU roles, measured provider budgets,
-a cross-process quota gate shared with the research distillery, and a live
-knowledge/question bridge between GO workers and the distilled research dataset.
+The underlying controller owns typed provider admission, credential collection,
+AIMD concurrency, provider-wide 429 cooldown, 402 hard-stop behavior and receipt
+logging. This driver adds live model discovery only after the same canonical
+FREE admission boundary, EntityOS/HCU roles, measured provider budgets, a shared
+quota gate and a live bridge to the distilled research dataset.
 """
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ import os
 from pathlib import Path
 import re
 import sqlite3
+import sys
 import urllib.error
 import urllib.request
 
@@ -54,12 +55,12 @@ UNKNOWN_HIGH_VALUE = (
     "devstral", "nemotron", "deepseek", "reasoning", "instruct", "coder",
 )
 
-# Runtime evidence on 2026-08-24 showed Groq Free has an 8K TPM ceiling for
-# the selected GPT-OSS/Qwen models. Cap completion budget to avoid HTTP 413.
 _ORIGINAL_REQUEST_CHAT = base.request_chat
 
 
 def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout):
+    if not base.provider_is_admitted_free(spec.name):
+        return 412, {}, {"error": {"message": "typed FREE provider admission required", "type": "provider_admission"}}
     if spec.name == "groq":
         max_tokens = min(int(max_tokens), int(os.getenv("CLAY_GROQ_MAX_TOKENS", "1000")))
     elif spec.name == "mistral":
@@ -79,8 +80,6 @@ def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout)
 
 base.request_chat = provider_bounded_request_chat
 
-# Accepted compressed packets become live GO context. This is candidate research
-# context only; it cannot mint canonical/effect authority.
 _ORIGINAL_BUILD_STATE_CONTEXT = base.build_state_context
 
 
@@ -109,8 +108,6 @@ def enriched_state_context(max_chars: int) -> str:
 
 base.build_state_context = enriched_state_context
 
-# GO workers explicitly emit future research questions. The distillery ingests
-# these and recursively decomposes them; old-format outputs are also mined.
 _ORIGINAL_WORKER_PROMPT = base.worker_prompt
 
 
@@ -128,7 +125,9 @@ base.worker_prompt = question_emitting_worker_prompt
 
 
 def fetch_catalog(provider: str, url: str, key: str, timeout: float) -> list[dict]:
-    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json", "User-Agent":"clay-entityos-swarm/2.0"})
+    if not base.provider_is_admitted_free(provider):
+        return []
+    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json", "User-Agent":"clay-entityos-swarm/3.0"})
     owner=f"go-swarm:catalog:{provider}"
     try:
         with quota_slot(provider,owner,timeout_s=min(timeout,60.0),lease_s=120.0):
@@ -150,8 +149,10 @@ def fetch_catalog(provider: str, url: str, key: str, timeout: float) -> list[dic
 def explicit_billions(model_id: str) -> float | None:
     vals: list[float] = []
     for raw in re.findall(r"(?i)(\d+(?:\.\d+)?)\s*b(?:\b|[-_])", model_id):
-        try: vals.append(float(raw))
-        except ValueError: pass
+        try:
+            vals.append(float(raw))
+        except ValueError:
+            pass
     return max(vals) if vals else None
 
 
@@ -171,9 +172,12 @@ def choose_models(provider: str, rows: list[dict]) -> list[str]:
         if b is None and not any(x in low for x in UNKNOWN_HIGH_VALUE):
             continue
         score = b or 0.0
-        if any(x in low for x in ("ultra", "large", "reasoning", "deepseek", "120b", "405b", "550b")): score += 120.0
-        if any(x in low for x in ("nemotron", "magistral", "devstral", "codestral", "coder", "instruct")): score += 60.0
-        if model_id == "nvidia/llama-3.3-nemotron-super-49b-v1": score += 500.0
+        if any(x in low for x in ("ultra", "large", "reasoning", "deepseek", "120b", "405b", "550b")):
+            score += 120.0
+        if any(x in low for x in ("nemotron", "magistral", "devstral", "codestral", "coder", "instruct")):
+            score += 60.0
+        if model_id == "nvidia/llama-3.3-nemotron-super-49b-v1":
+            score += 500.0
         ranked.append((score, model_id))
     ranked.sort(key=lambda x: (-x[0], x[1]))
     return base.unique([mid for _, mid in ranked])
@@ -181,14 +185,28 @@ def choose_models(provider: str, rows: list[dict]) -> list[str]:
 
 def discover_and_export(timeout: float) -> dict[str, dict]:
     report: dict[str, dict] = {}
+    try:
+        admission = base.load_provider_admission()
+    except base.ProviderAdmissionError as exc:
+        return {spec.name: {"source": "typed_admission_invalid", "keys": 0, "models": [], "status": str(exc)} for spec in base.PROVIDERS}
+
+    if not base.truthy(os.getenv("CLAY_FREE_ONLY_ATTESTED")):
+        return {spec.name: {"source": "global_compat_attestation_missing", "keys": 0, "models": []} for spec in base.PROVIDERS}
+
     for spec in base.PROVIDERS:
-        keys = base.collect_keys(spec)
+        if not base.provider_is_admitted_free(spec.name, admission):
+            report[spec.name] = {"source": "typed_admission_blocked", "keys": 0, "models": []}
+            continue
+        if not base.truthy(os.getenv(spec.attestation_env)):
+            report[spec.name] = {"source": "provider_compat_attestation_missing", "keys": 0, "models": []}
+            continue
+        keys = base.collect_keys(spec, admission)
         override = base.split_values(os.getenv(spec.models_env))
         if override:
             report[spec.name] = {"source": "environment_override", "keys": len(keys), "models": override}
             continue
         if not keys:
-            report[spec.name] = {"source": "no_keys", "keys": 0, "models": []}
+            report[spec.name] = {"source": "no_keys_after_free_admission", "keys": 0, "models": []}
             continue
         rows = fetch_catalog(spec.name, CATALOGS[spec.name], keys[0], timeout)
         selected = choose_models(spec.name, rows)
@@ -202,7 +220,7 @@ def discover_and_export(timeout: float) -> dict[str, dict]:
 
 async def main(args: argparse.Namespace) -> int:
     report = discover_and_export(args.timeout)
-    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v3", "providers": report, "distillery_context": DISTILLERY_DB.exists(), "shared_quota_gate": True}, ensure_ascii=False), flush=True)
+    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v4", "providers": report, "distillery_context": DISTILLERY_DB.exists(), "shared_quota_gate": True, "typed_provider_admission": True}, ensure_ascii=False), flush=True)
     if args.inventory_only:
         return 0
     out = args.output_dir or f"/artifacts/clay-entityos-swarm/{__import__('datetime').datetime.now(__import__('datetime').timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"

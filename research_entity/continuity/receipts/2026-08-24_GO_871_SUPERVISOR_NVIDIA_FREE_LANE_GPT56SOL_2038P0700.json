@@ -1,0 +1,106 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed_before_current_lane": "6ba01dea5e0978248cb3a856fdec6ade73ef4081",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json",
+    "retained_hcu_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "current_lane_branch": "gpt56sol/go-871-supervisor-nvidia-free-lane-20260824",
+    "current_lane_head_before_receipt": "59c3299a1cb51a70d874816fa5eaafc16d20d1aa"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "CURRENT_AUTHORITY_SECURITY_CONVERGENCE_AND_DETERMINISTIC_REGRESSION_SOURCE_DELTA",
+    "duplicate_avoidance": "Open PR search found no current lane for supervisor-bound free-lane authority or the NVIDIA allowed_credential_fingerprints runtime-schema mismatch; PR1263 and PR1464 remain the HCU/J-Space donor/acceptance lanes and were not duplicated."
+  },
+  "observations": [
+    {
+      "level": "R0_SOURCE_OBSERVED",
+      "finding": "Current main free_lane_provenance.current_lane_binding snapshots only FREE_PROVIDER_ADMISSION and FREE_LANE_ECONOMIC_PROVENANCE. It does not bind SUPERVISOR_INBOX or the exact steering selected by that inbox. Therefore a self-consistent stale lane pair can remain executable after a supervisor epoch advance or revocation until lower surfaces are synchronized."
+    },
+    {
+      "level": "R0_SOURCE_OBSERVED",
+      "finding": "Supervisor 8.71 economic provenance stores the exact NVIDIA allow-list under allowed_credential_fingerprints, while current main runtime code reads admitted_credential_fingerprints. The positive NVIDIA credential-bound lane therefore fails closed even when the canonical 8.71 provenance contains an allowed fingerprint."
+    },
+    {
+      "level": "R0_SOURCE_OBSERVED",
+      "finding": "The current v2 discovery path still deserves separate review because provider catalog discovery can occur before the v3 per-lane model-call gate; this macrocycle does not claim that broader secret/catalog ordering is closed."
+    }
+  ],
+  "hypothesis": "Binding current SUPERVISOR_INBOX + exact steering digests together with admission + economic-provenance digests, while reading the canonical NVIDIA allow-list field, closes the observed stale-authority and positive-control schema defects without weakening FREE_ONLY fail-closed behavior.",
+  "counterhypothesis": "Admission/provenance epoch synchronization alone is sufficient because lower authority surfaces always advance atomically with supervisor authority.",
+  "counterhypothesis_status": "FALSIFIED_BY_THIS_MACROCYCLE_REENTRY: main advanced from supervisor 8.70 to 8.71 while the previously inspected lane implementation still lacked supervisor binding, demonstrating that authority surfaces can move independently during active development.",
+  "bounded_delta": {
+    "files": [
+      "tools/free_lane_provenance.py",
+      "tests/test_free_lane_binding_870.py"
+    ],
+    "mechanisms": [
+      "resolve SUPERVISOR_INBOX successor-dynamically and validate exact steering identity/product/FREE_ONLY/no-paid-fallback/owner-free-contingents",
+      "bind supervisor inbox + steering SHA-256 digests into every positive lane binding and FREE_LANE_EXECUTION_RECEIPT/v1",
+      "revalidate supervisor + admission + economic-provenance digests before/after provider calls via binding_still_current",
+      "fail closed on explicit supervisor quarantine/block/forbid/disable/revoke execution markers",
+      "read NVIDIA canonical allowed_credential_fingerprints exactly and reject every unlisted fingerprint",
+      "preserve Mistral fail-closed, OpenRouter zero-price-route and Groq credential/model evidence semantics"
+    ],
+    "source_commits": [
+      "2b79f78713c948e4046e7a39b9d8e755b0b984bc",
+      "59c3299a1cb51a70d874816fa5eaafc16d20d1aa"
+    ]
+  },
+  "tests_added_or_extended": [
+    "provider revocation remains fail-closed",
+    "future supervisor epoch with stale admission/provenance fails closed",
+    "explicit supervisor runtime quarantine fails closed before request",
+    "provider removed from supervisor owner-free contingents fails closed",
+    "post-binding supervisor mutation invalidates binding_still_current",
+    "exact NVIDIA allowed fingerprint has a positive source-path control",
+    "arbitrary NVIDIA fingerprint fails closed",
+    "legacy/wrong NVIDIA admitted_credential_fingerprints alias cannot self-admit",
+    "receipts preserve exact supervisor/admission/provenance digests",
+    "cached reservation cannot survive supervisor quarantine",
+    "mid-call authority mutation is visible as binding_stable_after_call=false"
+  ],
+  "evidence": {
+    "github_write": "OBSERVED",
+    "branch_diff": "SOURCE_ONLY",
+    "github_ci_status_at_pre_receipt_check": "NO_STATUSES_OBSERVED",
+    "authorized_local_or_clay_direct_dev_executor_exposed_to_this_chat": false,
+    "exact_current_source_runtime_test_execution": false,
+    "provider_network_execution_by_this_organ": false,
+    "provider_secret_lookup_by_this_organ": false,
+    "paid_or_unknown_cost_execution": false
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: current FREE_LANE_EXECUTION_RECEIPT/v1 pre-call authority is successor-bound in source and the 8.71 NVIDIA credential schema mismatch is repaired on one nonduplicate branch.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the external typed ingress/provider execution boundary now preserves the same successor-dynamic authority/provenance discipline required by EntityOS/HCU causal packets; no second state/effect authority was created.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: PR1263 remains the retained HCU/J-Space donor and PR1464 already owns predeclared J-Space intervention acceptance. No shared reproducible macrocycle lease exists for a new hidden-state intervention, and no exact local/VPS executor is exposed to this ChatGPT organ; duplicating those lanes would reduce information gain. Provider/model/J-Space/training credit remains zero."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "unresolved": [
+    "Run the exact branch/current-main focused boundary suite on an authorized zero-cost local or clay-direct-dev checkout and capture exact source/runtime receipt evidence.",
+    "Re-enter current main before merge because authority is moving rapidly.",
+    "Review/fence the v2 live catalog discovery path so no provider network catalog request can precede the same concrete lane economic boundary.",
+    "Do not promote NVIDIA/provider runtime credit until exact post-fix FREE_LANE_EXECUTION_RECEIPT/v1 evidence exists."
+  ],
+  "next_exact_action": "Open one PR from the successor-bound 8.71 branch, inspect CI/current-main movement, and re-fuse rather than merging if a newer supervisor or overlapping canonical fix appears.",
+  "acceptance": "IN_PROGRESS"
+}

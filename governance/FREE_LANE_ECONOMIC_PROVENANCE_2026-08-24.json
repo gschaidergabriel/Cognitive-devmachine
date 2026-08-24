@@ -38,15 +38,20 @@
     },
     "groq": {
       "allowed_endpoint_host": "api.groq.com",
-      "evidence_kind": "CREDENTIAL_FINGERPRINT_PLUS_PROVIDER_RATE_HEADER_MATCH",
-      "source": "https://console.groq.com/docs/rate-limits",
+      "evidence_kind": "CREDENTIAL_FINGERPRINT_PLUS_PROVIDER_SIDE_FREE_TIER_BINDING",
+      "source": "https://console.groq.com/docs/billing-faqs",
+      "corroborating_rate_limit_source": "https://console.groq.com/docs/rate-limits",
+      "rate_limit_false_positive_source": "https://console.groq.com/docs/projects",
       "free_plan_models": {
         "openai/gpt-oss-120b": {"requests_per_day": 1000, "tokens_per_minute": 8000},
         "openai/gpt-oss-20b": {"requests_per_day": 1000, "tokens_per_minute": 8000},
         "qwen/qwen3.6-27b": {"requests_per_day": 1000, "tokens_per_minute": 8000}
       },
       "credential_plan_needed": true,
-      "credential_plan_proof": "A historical or live response for the same credential fingerprint and exact model must expose x-ratelimit-limit-requests and x-ratelimit-limit-tokens matching the documented Free Plan limits."
+      "credential_plan_proof": "Require fresh provider-side evidence that the exact credential fingerprint belongs to a Groq Organization/Project currently on the Free tier, bound to the exact allowed model set. Rate-limit headers are corroborating telemetry only: Groq documents account-specific exceptions and permits paid projects to set custom limits at or below organization ceilings, so Free-like RPD/TPM values cannot prove zero-cost status.",
+      "credential_entitlements": {},
+      "max_entitlement_age_seconds": 3600,
+      "default": "FAIL_CLOSED_UNTIL_FRESH_EXACT_CREDENTIAL_FREE_TIER_BINDING"
     },
     "mistral": {
       "allowed_endpoint_host": "api.mistral.ai",

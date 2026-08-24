@@ -1,0 +1,96 @@
+{
+  "schema": "ENTITYOS_HCU_GO_LOCAL_RUNTIME_MATERIALIZATION_ARCHIVE_BINDING/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.68",
+  "mode": "FREE_ONLY",
+  "canonical_main_reentered_before_receipt": "052b861f1930167e232ad3e57f2a2d9eeeb325d2",
+  "authority_source": "research_entity/continuity/BOOTSTRAP_MINIMAL.json -> research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+  "coordination": {
+    "shared_immutable_macrocycle_or_request_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_claim": "NOT_ATTEMPTED_FAIL_CLOSED",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments": 0
+  },
+  "retained_lane": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "head_before_receipt": "bc5919cf0f38641d62f56318113ad357700a8c01",
+    "competing_materialization_implementation_found_before_write": false
+  },
+  "observe": {
+    "existing_candidate": "LOCAL_RUNTIME_LLAMA_CPP_B10566_UBUNTU_X64_CANDIDATE.json pins an upstream-attested llama.cpp b10566 ubuntu-x64 archive and the paired Qwen3-0.6B-Q8_0 GGUF, but local archive, extracted runtime/build identity and host execution remain unobserved.",
+    "existing_loader_primitive": "loader_consumption_witness_v1.py can witness a later exact sealed artifact handoff, but it does not establish that an extracted llama.cpp executable/shared-library set came from the pinned release archive.",
+    "gap": "A valid pinned release archive could be co-located with unrelated extracted executable/dependency bytes unless archive-member provenance is checked explicitly."
+  },
+  "hypothesis": "Binding the exact locally hashed archive to one unique regular archive member for the runtime executable and every declared dependency, and requiring byte equality between each archive member and extracted file, closes the archive-co-location provenance-laundering gap before loader/executor admission.",
+  "counterhypothesis": "Matching the release archive digest plus independently hashing an extracted directory is sufficient provenance even when the extracted bytes are not demonstrated to originate from that archive.",
+  "counterhypothesis_result": "REJECTED_BY_DETERMINISTIC_NEGATIVE_REGRESSION: a correct archive paired with a mutated extracted binary or dependency is rejected with ARCHIVE_MEMBER_BYTE_MISMATCH.",
+  "source_delta": {
+    "module": "the artefact/MicroEntity/hcu/local_runtime_materialization_v1.py",
+    "schema": "HCU_LOCAL_RUNTIME_MATERIALIZATION/v1",
+    "final_module_commit": "aba7af9f50b99bb371b2a09ff8378e042bd84166",
+    "module_blob_sha1": "0ab2373482ac2cdc6e7745f63a33894ffb4e1273",
+    "test": "the artefact/MicroEntity/hcu/test_local_runtime_materialization_v1.py",
+    "final_test_commit": "8fc5f94fcedbac6e27b77aa5dd2ddc1485bb22af",
+    "test_blob_sha1": "be664c5dffdb2cb27555b2747d2ebbb63b575959",
+    "candidate_sync_commit": "bc5919cf0f38641d62f56318113ad357700a8c01",
+    "candidate_blob_sha1": "b9610b1f3af87c7fcb0463c324251643bb47226f",
+    "positive_scope": [
+      "validates model/runtime candidate schema and preserves non-promoted status",
+      "cross-checks single-file GGUF checkpoint/tokenizer-container identity",
+      "cross-checks runtime source commit and runtime-model pairing",
+      "requires exact local runtime archive SHA-256",
+      "requires exact GGUF SHA-256 and byte count",
+      "rejects symlink/non-regular runtime targets and non-executable runtime binary",
+      "requires canonical extraction-relative paths and rejects path traversal/out-of-root aliases",
+      "requires every runtime binary/dependency to match one unique regular member of the exact tar archive by SHA-256 and byte count",
+      "derives deterministic dependency-set, runtime-build and materialization digests using the existing Entry canonicalization authority",
+      "does not download, execute, load, infer, mutate canonical truth or authorize effects"
+    ]
+  },
+  "verification": {
+    "local_synthetic_regression": "12/12 PASS",
+    "local_environment_class": "CHATGPT_CONTAINER_SOURCE_REGRESSION_ONLY",
+    "canonicalizer_note": "The local synthetic regression used a minimal deterministic canonicalizer stub for the simple ASCII/IJSON-only test objects; therefore this is not claimed as full exact-project integration execution.",
+    "exact_new_source_blob_match": true,
+    "exact_new_test_blob_match": true,
+    "module_local_git_blob_sha1": "0ab2373482ac2cdc6e7745f63a33894ffb4e1273",
+    "test_local_git_blob_sha1": "be664c5dffdb2cb27555b2747d2ebbb63b575959",
+    "authorized_local_or_clay_direct_dev_materialization_execution": "NOT_OBSERVED",
+    "actual_b10566_archive_presence": "UNKNOWN",
+    "actual_qwen_gguf_presence": "UNKNOWN",
+    "actual_archive_member_names": "UNKNOWN_UNTIL_MATERIALIZATION_SURFACE_OBSERVES_ARCHIVE",
+    "runtime_credit_added": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_CONVERGENCE: the pinned local llama.cpp/Qwen candidate now has one deterministic gate from upstream candidate identity to exact local archive/member/GGUF identities before loader/executor work.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_HCU_PROVENANCE_PRIMITIVE: local runtime/build identity can no longer be minted by merely combining a correct archive digest with unrelated extracted bytes; canonical materialization digests reuse the existing Entry canonicalization authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_LOCAL_BACKEND_READINESS: future intervention-capable J-Space execution can bind exact runtime/build/model bytes before loader consumption and activation/control evidence; no model/J-Space causal or training credit follows yet."
+  },
+  "credits": {
+    "external_provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "execution_policy": {
+    "external_llm_provider_network": "QUARANTINED_NOT_USED",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_subscription_unknown_cost": "FAIL_CLOSED_NOT_USED",
+    "new_unusual_intervention": "NONE",
+    "actual_local_model_execution": "NOT_RUN"
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current-facing shared artifact surfaces and retained donor are moving concurrently under multiple organs; the exact bounded delta is preserved in source, tests, synced runtime candidate and this append-only receipt instead of overwriting a rapidly moving whole-product README."
+  },
+  "next_exact_action": "On an exposed authorized zero-cost normal-user local or clay-direct-dev surface, materialize the exact b10566 ubuntu-x64 archive and exact Qwen3-0.6B-Q8_0 GGUF, observe the archive's actual unique member names, run HCU_LOCAL_RUNTIME_MATERIALIZATION/v1 with the real project canonicalizer, and persist the resulting exact materialization/runtime-build identities. Then bind those exact identities into loader_consumption_witness_v1 plus the current physical-engine lease and a real model/intervention backend before canonical ModelExecution -> InferenceReceipt/v4 -> J-Space causal-family evidence. Do not infer member names, host compatibility, loader consumption, hidden-state effect, model benefit or training benefit from source presence."
+}

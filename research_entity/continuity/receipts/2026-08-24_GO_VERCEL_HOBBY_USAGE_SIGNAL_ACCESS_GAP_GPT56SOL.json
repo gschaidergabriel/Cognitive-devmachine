@@ -1,0 +1,56 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "observed_main_before_write": "beac5aab519ef031fed8cce37c0062407e651e8e",
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "8d50b28dbf530ede0f3f4c45316bcee48e38a930",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "2da99e0458809988190c129b04cae913d1f15d92",
+    "executor_deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "executor_deployment_state": "READY"
+  },
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "discriminator": {
+    "question": "Where can a directly authoritative read-only remaining included Vercel Sandbox quota signal come from without opening a paid or Sandbox execution path?",
+    "official_source": "https://vercel.com/academy/optimize-your-vercel-account/read-the-usage-page",
+    "official_source_observation": "Vercel states that the team-level Usage page shows product usage for the current billing cycle and, on Hobby, shows included allotments and how much has been used.",
+    "connected_vercel_surface_observation": "The currently connected Vercel actions expose team, project, deployment, runtime/build logs, protected deployment access and documentation, but no team Usage or remaining Sandbox quota read action.",
+    "plugin_search_observation": "No installable plugin matching Vercel usage/billing/quota was returned by the available plugin search.",
+    "provider_ui_fetch_observation": "The connected deployment-fetch action cannot create access for the authenticated Vercel dashboard Usage URL because it is scoped to deployment access rather than dashboard account data.",
+    "adjudication": "The missing primitive is authenticated read-only access to the team Usage/allotment signal, not additional HCU source guards. Hobby plan identity, deployment readiness, function runtime logs and cumulative per-sandbox metrics remain insufficient to open Sandbox.create.",
+    "remaining_included_sandbox_quota_directly_observed": false,
+    "sandbox_execution_admitted": false,
+    "sandbox_create_performed": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "provider_credential_preflight_attempted": false
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: narrowed the FREE_ONLY runtime blocker from generic quota observability to a specific authenticated team Usage/allotment access gap using current official provider documentation and current connected-tool capability inspection.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: supervisor 8.65 pauses source-guard proliferation; the next higher-information HCU discriminator remains the fixed Sandbox environment capability probe and is blocked before Sandbox.create until direct included-quota authority exists.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: model-specific J-Space/GWT execution remains downstream of the blocked environment gate; no paid training, provider preflight or substitute source-only promotion is admitted."
+  },
+  "credits_after": {
+    "function_runtime_diagnostic_no_sandbox_scope": "PASS_PREEXISTING_EXACT_HEAD_HTTP_200",
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Expose an authenticated read-only Vercel team Usage/allotment value through an admitted connector/CLI/export surface. Only if that directly observed value proves sufficient included Sandbox capacity with no charge/upgrade path may the retained PR810 exact-head fixed Python/sqlite3/_sqlite3 environment probe execute.",
+  "acceptance": "IN_PROGRESS"
+}

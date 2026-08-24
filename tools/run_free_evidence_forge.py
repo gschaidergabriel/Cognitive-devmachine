@@ -198,7 +198,6 @@ def open_questions(limit: int = 16) -> list[str]:
         ]
     return out[:limit]
 
-
 def secret(name: str) -> str:
     try:return str(get_secret(name,required=False) or "").strip()
     except Exception:return ""
@@ -244,7 +243,7 @@ async def discovery_for_question(con: sqlite3.Connection, q: str) -> list[dict]:
     async def openalex():
         key=secret("OPENALEX_API_KEY")
         suffix=("&api_key="+urllib.parse.quote(key)) if key else ""
-        st,b,_=await asyncio.to_thread(http_json,"openalex",f"forge:{qhash[:8]}",f"https://api.openalex.org/works?search={term}&per-page=5{suffix}")
+        st,b,_=await asyncio.to_thread(http_json,"openalex",f"forge:{qhash[:8]}",f"https://api.openalex.org/works?search={term}&per_page=5{suffix}")
         out=[]
         if st==200 and isinstance(b,dict):
             for x in b.get("results",[])[:5]:

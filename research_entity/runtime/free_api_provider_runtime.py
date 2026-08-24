@@ -31,10 +31,13 @@ MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_OUTPUT_TOKENS = 4_096
 MAX_BEARER_TOKEN_CHARACTERS = 8_192
 MAX_ATTEMPT_NONCE_CHARACTERS = 128
-# The smallest valid message under the current default JSON representation is
-# {"role": "user", "content": "x"}, which occupies 32 bytes even before its
-# array separator or the outer request envelope.
-MAX_TEXT_CHAT_MESSAGES = MAX_PROVIDER_REQUEST_BYTES // 32
+# Under the closed alternating schema, 54,792 minimal messages with a leading
+# system message occupy 1,999,970 bytes including separators and the smallest
+# valid model. The next valid cardinality already exceeds the transport cap.
+MAX_TEXT_CHAT_MESSAGES = 54_792
+TEXT_CHAT_REQUEST_ENVELOPE_BYTES = 66
+TEXT_CHAT_MESSAGE_ENVELOPE_BYTES = 27
+JSON_LIST_SEPARATOR_BYTES = 2
 MAX_PROVIDER_COOLDOWN_SECONDS = 86_400
 MAX_RETRY_AFTER_CHARACTERS = 128
 MAX_RECEIPT_DURATION_MS = MAX_PROVIDER_COOLDOWN_SECONDS * 1000
@@ -310,23 +313,28 @@ def _ascii_json_string_payload_size(value: str, stop_after: int) -> int:
 def _enforce_pre_serialization_request_bound(
     messages: tuple[dict[str, str], ...], model: str
 ) -> None:
-    """Reject requests whose JSON lower bound already exceeds the byte cap."""
-    lower_bound = _ascii_json_string_payload_size(
+    """Reject requests whose exact default JSON size exceeds the byte cap."""
+    serialized_size = TEXT_CHAT_REQUEST_ENVELOPE_BYTES
+    serialized_size += _ascii_json_string_payload_size(
         model, MAX_PROVIDER_REQUEST_BYTES
     )
-    for message in messages:
-        # json.dumps defaults to ensure_ascii=True. Count its exact scalar
-        # escape width, while retaining a conservative structural lower bound.
-        lower_bound += 2
-        lower_bound += _ascii_json_string_payload_size(
-            message["role"], MAX_PROVIDER_REQUEST_BYTES - lower_bound
-        )
-        if lower_bound > MAX_PROVIDER_REQUEST_BYTES:
+    for index, message in enumerate(messages):
+        # json.dumps defaults to ensure_ascii=True and separators containing
+        # one space. Count both its exact scalar escapes and fixed structure.
+        serialized_size += TEXT_CHAT_MESSAGE_ENVELOPE_BYTES
+        if index:
+            serialized_size += JSON_LIST_SEPARATOR_BYTES
+        if serialized_size > MAX_PROVIDER_REQUEST_BYTES:
             raise ValueError("provider_request_too_large")
-        lower_bound += _ascii_json_string_payload_size(
-            message["content"], MAX_PROVIDER_REQUEST_BYTES - lower_bound
+        serialized_size += _ascii_json_string_payload_size(
+            message["role"], MAX_PROVIDER_REQUEST_BYTES - serialized_size
         )
-        if lower_bound > MAX_PROVIDER_REQUEST_BYTES:
+        if serialized_size > MAX_PROVIDER_REQUEST_BYTES:
+            raise ValueError("provider_request_too_large")
+        serialized_size += _ascii_json_string_payload_size(
+            message["content"], MAX_PROVIDER_REQUEST_BYTES - serialized_size
+        )
+        if serialized_size > MAX_PROVIDER_REQUEST_BYTES:
             raise ValueError("provider_request_too_large")
 
 

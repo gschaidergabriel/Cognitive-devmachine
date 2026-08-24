@@ -12,7 +12,11 @@ Required stronger discriminator:
 - disjoint holdout;
 - six matched controls plus explicit wrong-layer and lesion/rescue evidence;
 - counterbalanced label-remap holdout families so output-token identity cannot explain transfer;
-- nuisance controls are scored by absolute effect magnitude, not only target-positive drift.
+- nuisance controls are scored by absolute effect magnitude, not only target-positive drift;
+- every matched-control family is bound to exact prompt/seed/label identity;
+- exactly one row per required control is admitted, so contradictory duplicates cannot be
+  resolved by list-order overwrite;
+- wrong-layer and lesion/rescue auxiliary evidence is bound to the canonical +VECTOR row.
 """
 from __future__ import annotations
 
@@ -56,6 +60,60 @@ def _vec(values: Sequence[Any], name: str) -> tuple[float, ...]:
     if isinstance(values, (str, bytes, bytearray)) or len(values) < 2:
         raise IntermediateProtocolError(f"{name}:VECTOR_DIMENSION_REQUIRED")
     return tuple(_finite(x, name) for x in values)
+
+
+def _sha256(value: Any, name: str) -> str:
+    if not isinstance(value, str) or len(value) != 64:
+        raise IntermediateProtocolError(f"{name}:SHA256_REQUIRED")
+    try:
+        int(value, 16)
+    except ValueError as exc:
+        raise IntermediateProtocolError(f"{name}:SHA256_REQUIRED") from exc
+    return value.lower()
+
+
+def _nonempty_text(value: Any, name: str) -> str:
+    if not isinstance(value, str) or not value:
+        raise IntermediateProtocolError(f"{name}:NONEMPTY_TEXT_REQUIRED")
+    return value
+
+
+def _seed(value: Any) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise IntermediateProtocolError("seed:INTEGER_REQUIRED")
+    return value
+
+
+def _family_key(row: Mapping[str, Any], *, holdout: bool) -> tuple[Any, ...]:
+    case_id = _nonempty_text(row.get("case_id"), "case_id")
+    prompt_sha = _sha256(row.get("prompt_sha256"), "prompt_sha256")
+    seed = _seed(row.get("seed"))
+    positive = _nonempty_text(row.get("positive_label"), "positive_label")
+    negative = _nonempty_text(row.get("negative_label"), "negative_label")
+    if positive == negative:
+        raise IntermediateProtocolError("label_identity:DISTINCT_LABELS_REQUIRED")
+    if holdout:
+        label_map_id = _nonempty_text(row.get("label_map_id"), "label_map_id")
+        return (case_id, label_map_id, prompt_sha, seed, positive, negative)
+    return (case_id, prompt_sha, seed, positive, negative)
+
+
+def _control_families(
+    rows: Iterable[Mapping[str, Any]],
+    *,
+    holdout: bool,
+) -> dict[tuple[Any, ...], dict[str, float]]:
+    families: dict[tuple[Any, ...], dict[str, float]] = {}
+    for row in rows:
+        control = str(row.get("control"))
+        if control not in REQUIRED_CONTROLS:
+            continue
+        family_key = _family_key(row, holdout=holdout)
+        family = families.setdefault(family_key, {})
+        if control in family:
+            raise IntermediateProtocolError(f"DUPLICATE_CONTROL_ROW:{control}")
+        family[control] = _finite(row.get("target_score"), "target_score")
+    return families
 
 
 def norm(v: Sequence[float]) -> float:
@@ -145,7 +203,7 @@ def _calibration_rows(rows: Iterable[Mapping[str, Any]]) -> list[Mapping[str, An
 
 
 def select_layer_gain(rows: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
-    """Choose layer/gain only from complete calibration control families."""
+    """Choose layer/gain only from complete, identity-bound calibration control families."""
     xs = _calibration_rows(rows)
     combos = sorted({(int(r["layer"]), float(r["gain"])) for r in xs})
     ranked = []
@@ -154,11 +212,7 @@ def select_layer_gain(rows: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
             r for r in xs
             if int(r["layer"]) == layer and float(r["gain"]) == gain
         ]
-        by_case: dict[str, dict[str, float]] = {}
-        for r in subset:
-            by_case.setdefault(str(r["case_id"]), {})[str(r["control"])] = _finite(
-                r["target_score"], "target_score"
-            )
+        by_case = _control_families(subset, holdout=False)
         margins = []
         for vals in by_case.values():
             if not all(k in vals for k in REQUIRED_CONTROLS):
@@ -228,24 +282,27 @@ def adjudicate_holdout(
     if not mapping_ok:
         return {"pass": False, "classification": "COUNTERBALANCED_LABEL_MAPPING_REQUIRED"}
 
-    by_case: dict[tuple[str, str], dict[str, float]] = {}
-    wrong_layer_seen: set[tuple[str, str]] = set()
-    lesion_rescue_seen: set[tuple[str, str]] = set()
+    by_case = _control_families(frozen, holdout=True)
+    wrong_layer_seen: set[tuple[Any, ...]] = set()
+    lesion_rescue_seen: set[tuple[Any, ...]] = set()
     wrong_layer_ok = True
     lesion_rescue_ok = True
 
     for r in frozen:
-        key = (str(r["case_id"]), str(r["label_map_id"]))
-        if str(r.get("control")) in REQUIRED_CONTROLS:
-            by_case.setdefault(key, {})[str(r["control"])] = _finite(
-                r["target_score"], "target_score"
-            )
-        if r.get("wrong_layer_delta") is not None:
+        key = _family_key(r, holdout=True)
+        control = str(r.get("control"))
+        has_wrong = r.get("wrong_layer_delta") is not None
+        has_lesion = r.get("lesion_delta") is not None or r.get("rescue_delta") is not None
+        if (has_wrong or has_lesion) and control != "+VECTOR":
+            raise IntermediateProtocolError("AUXILIARY_CAUSAL_EVIDENCE_MUST_BIND_PLUS_VECTOR_ROW")
+        if has_wrong:
             wrong_layer_seen.add(key)
             wrong_layer_ok = wrong_layer_ok and _finite(
                 r["wrong_layer_delta"], "wrong_layer_delta"
             ) <= 0
-        if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
+        if has_lesion:
+            if r.get("lesion_delta") is None or r.get("rescue_delta") is None:
+                raise IntermediateProtocolError("LESION_RESCUE_PAIR_REQUIRED")
             lesion_rescue_seen.add(key)
             lesion_rescue_ok = (
                 lesion_rescue_ok
@@ -260,13 +317,13 @@ def adjudicate_holdout(
         return {
             "pass": False,
             "classification": "WRONG_LAYER_EVIDENCE_REQUIRED",
-            "cases_missing_wrong_layer": sorted(case_keys - wrong_layer_seen),
+            "cases_missing_wrong_layer": sorted(case_keys - wrong_layer_seen, key=str),
         }
     if lesion_rescue_seen != case_keys:
         return {
             "pass": False,
             "classification": "LESION_RESCUE_EVIDENCE_REQUIRED",
-            "cases_missing_lesion_rescue": sorted(case_keys - lesion_rescue_seen),
+            "cases_missing_lesion_rescue": sorted(case_keys - lesion_rescue_seen, key=str),
         }
 
     margins = []

@@ -23,43 +23,122 @@ class AssessmentTests(unittest.TestCase):
     def fixture(self):
         target_token = 101
         off_token = 202
+        clean_before = h("clean-before")
+        corrupt_before = h("corrupt-before")
+        clean_off_before = h("clean-off-before")
 
-        def row(name, target_logit, off_logit):
+        def row(name, target_logit, off_logit, *, before, after):
             return {
                 "condition": name,
+                "model_execution_id_derived_local": h("model-exec-" + name),
+                "jspace_trace_id_derived_local": h("trace-" + name),
+                "derived_ids_are_canonical": False,
+                "layer": 7,
+                "activation_site": "decoder_layer:7:position:4",
+                "activation_before_sha256_float32": before,
+                "activation_after_sha256_float32": after,
+                "activation_shape": [64],
+                "activation_dtype": "torch.float32",
+                "final_logits_sha256_float32": h("logits-" + name),
+                "field_classification": "OBSERVED_RUNTIME_MEASUREMENT_WITH_DERIVED_LOCAL_IDS",
                 "target_token_id": target_token,
-                "off_target_token_id": off_token,
                 "target_logit": target_logit,
+                "off_target_token_id": off_token,
                 "off_target_logit": off_logit,
             }
 
+        conditions = [
+            row("BASELINE_CLEAN", 1.2, 0.10, before=clean_before, after=clean_before),
+            row("BASELINE_CORRUPTED", 0.2, 0.10, before=corrupt_before, after=corrupt_before),
+            row(
+                "BASELINE_CLEAN_OFF_TARGET_REFERENCE",
+                1.2,
+                0.10,
+                before=clean_off_before,
+                after=clean_off_before,
+            ),
+            row("INTERVENTION_TARGET", 0.9, 0.12, before=corrupt_before, after=clean_before),
+            row("SHAM_CONTROL", 0.25, 0.10, before=corrupt_before, after=corrupt_before),
+            row("OFF_TARGET_CONTROL", 0.24, 0.10, before=corrupt_before, after=clean_off_before),
+        ]
+
         receipt = {
             "schema": "ENTITYOS_HCU_JSPACE_LOCAL_ACTIVATION_PROBE/v2",
+            "observed_at": "2026-08-24T11:40:00+00:00",
             "probe_mode": "intervention",
+            "classification": "LOCAL_MODEL_SPECIFIC_CAUSAL_CANDIDATE_EVIDENCE_ONLY",
+            "program": "ENTITYOS_HCU",
+            "product": "EntityOS",
+            "architecture": "HCU",
+            "mode": "FREE_ONLY_LOCAL_OFFLINE",
             "source_git_head": g("probe-head"),
             "probe_source_sha256": h("probe-source"),
-            "authority": {"epoch": "8.68"},
-            "post_load_identity": {"loader_consumption_attestation": False},
+            "authority": {
+                "epoch": "8.68",
+                "inbox_sha256": h("inbox"),
+                "steering_sha256": h("steering"),
+            },
+            "atomic_experiment_lease": {
+                "lease_file_validated": True,
+                "trigger_key": "trigger-key",
+                "claim_path": "research_entity/continuity/go_experiment_claims/trigger-key.json",
+                "claim_sha256": h("claim"),
+                "claimant_organ": "test-organ",
+                "experiment_name": "test-intervention",
+                "intervention_contract": "activation-replacement-v1",
+            },
+            "causal_binding": {
+                "generation": "4",
+                "causal_event_id": "event-4",
+                "admission_id": "admission-4",
+                "route_id": "route-4",
+                "inference_receipt_id": "inference-4",
+            },
+            "model_source_identity": {
+                "tree_sha256": h("model-tree"),
+                "files": [{"path": "config.json", "size": 12, "sha256": h("config")}],
+            },
+            "network_attempt_count": 0,
+            "credit": {
+                "entityos_hcu_whole_runtime": 0,
+                "hcu_full_runtime": 0,
+                "jspace_model_runtime": 0,
+                "training": 0,
+                "whole_product_pass": False,
+            },
+            "runtime": {
+                "python": "3.12",
+                "torch": "x",
+                "transformers": "x",
+                "device": "cpu",
+                "model_class": "Test",
+                "tokenizer_class": "Test",
+                "layers": 8,
+            },
+            "post_load_identity": {
+                "post_load_parameter_value_sha256_float32_canonical": h("post-load"),
+                "parameter_tensors": 10,
+                "parameter_elements": 100,
+                "loader_consumption_attestation": False,
+                "field_classification": "OBSERVED_POST_LOAD_VALUE_IDENTITY_PARTIAL",
+            },
             "probe": {
                 "layer": 7,
                 "target_position": 4,
                 "off_target_position": 3,
                 "clean_token_ids_sha256": h("clean-ids"),
                 "corrupted_token_ids_sha256": h("corrupt-ids"),
-                "conditions": [
-                    row("BASELINE_CLEAN", 1.2, 0.10),
-                    row("BASELINE_CORRUPTED", 0.2, 0.10),
-                    row("BASELINE_CLEAN_OFF_TARGET_REFERENCE", 1.2, 0.10),
-                    row("INTERVENTION_TARGET", 0.9, 0.12),
-                    row("SHAM_CONTROL", 0.25, 0.10),
-                    row("OFF_TARGET_CONTROL", 0.24, 0.10),
-                ],
+                "conditions": conditions,
                 "derived_metrics": {
                     "target_patch_effect_on_target_logit": 0.7,
                     "sham_effect_on_target_logit": 0.05,
                     "off_target_patch_effect_on_target_logit": 0.04,
                     "target_patch_effect_on_off_target_logit": 0.02,
                 },
+            },
+            "promotion": {
+                "status": "UNASSESSED_CANDIDATE_ONLY",
+                "reason": "No predeclared threshold or loader-consumption promotion inside raw probe.",
             },
         }
         policy = {
@@ -97,6 +176,14 @@ class AssessmentTests(unittest.TestCase):
             "predeclared_ancestor_of_probe_source_head": True,
         }
         return receipt, policy, identity
+
+    def test_full_fixture_satisfies_current_raw_probe_validator(self):
+        from tools.validate_hcu_jspace_local_activation_probe_v2 import validate
+
+        receipt, _, _ = self.fixture()
+        result = validate(receipt)
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["probe_mode"], "intervention")
 
     def test_pass_is_effect_pattern_only_and_all_credits_zero(self):
         receipt, policy, identity = self.fixture()

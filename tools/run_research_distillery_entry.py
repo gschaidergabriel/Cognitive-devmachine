@@ -5,6 +5,10 @@ Adds typed provider boundaries, efficient free-model selection, fail-soft review
 fallback, and explicit near-miss/underfill instrumentation. Thresholds are not
 silently weakened: near misses are telemetry so a zero-yield pipeline is
 explainable rather than opaque.
+
+Credentialed provider access is deny-by-default. Public noncredentialed research
+is explicit and host-bound so a provider label cannot be reused to smuggle
+credentials or redirect the admitted public-source path to another host.
 """
 from __future__ import annotations
 
@@ -14,6 +18,7 @@ import re
 import sqlite3
 import statistics
 import sys
+import urllib.parse
 
 TOOLS=Path(__file__).resolve().parent
 if str(TOOLS) not in sys.path:
@@ -28,7 +33,8 @@ SECRET_PROVIDER={
 }
 UNTYPED_CREDENTIALED_SECRETS=frozenset({"TAVILY_API_KEY","EXA_API_KEY"})
 UNTYPED_CREDENTIALED_PROVIDERS=frozenset({"tavily","exa"})
-PUBLIC_NONCREDENTIALED_PROVIDERS=frozenset({"github"})
+PUBLIC_NONCREDENTIALED_HOSTS={"github":frozenset({"api.github.com"})}
+SENSITIVE_PUBLIC_HEADERS=frozenset({"authorization","proxy-authorization","x-api-key","api-key","cookie"})
 
 _ORIGINAL_SECRET=d.secret
 _ORIGINAL_REQUEST_JSON=d.request_json
@@ -57,9 +63,17 @@ def admitted_request_json(provider: str, owner: str, url: str, *, key: str = "",
         return _ORIGINAL_REQUEST_JSON(provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout)
     if normalized in UNTYPED_CREDENTIALED_PROVIDERS:
         return 412, {}, {"error":"PROVIDER_NOT_IN_TYPED_FREE_ADMISSION_AUTHORITY"}
-    if normalized not in PUBLIC_NONCREDENTIALED_PROVIDERS:
+
+    admitted_hosts=PUBLIC_NONCREDENTIALED_HOSTS.get(normalized)
+    if admitted_hosts is None:
         return 412, {}, {"error":"PROVIDER_NOT_EXPLICITLY_CLASSIFIED"}
-    return _ORIGINAL_REQUEST_JSON(provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout)
+    header_names={str(k).strip().lower() for k in (headers or {})}
+    if key or header_names.intersection(SENSITIVE_PUBLIC_HEADERS):
+        return 412, {}, {"error":"PUBLIC_SOURCE_CREDENTIALS_FORBIDDEN"}
+    hostname=(urllib.parse.urlparse(str(url)).hostname or "").lower()
+    if hostname not in admitted_hosts:
+        return 412, {}, {"error":"PUBLIC_SOURCE_HOST_NOT_ADMITTED"}
+    return _ORIGINAL_REQUEST_JSON(provider,owner,url,key="",payload=payload,headers=headers,timeout=timeout)
 
 
 d.secret=admitted_secret

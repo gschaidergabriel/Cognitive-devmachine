@@ -1566,6 +1566,43 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_documented_nvidia_choice_metadata_remains_compatible(self):
+        class Response:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"choices":[{"index":0,"message":{"role":"assistant",'
+                    b'"content":"ok"},"logprobs":null,"finish_reason":"stop",'
+                    b'"stop_reason":null}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((50.2, 50.21)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "success")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertIn("VERIFIED", receipt["lifecycle"])
+        self.assertIn("DONE", receipt["lifecycle"])
+        self.assertEqual(result["content"], "ok")
+
     def test_non_bytes_response_body_cannot_reach_verified_state(self):
         class Response:
             status = 200

@@ -1,0 +1,74 @@
+{
+  "schema": "HCU_LOCAL_APPROX_08B_MODEL_CANDIDATE/v1",
+  "status": "CANDIDATE_ONLY_NO_RUNTIME_CREDIT",
+  "date": "2026-08-24",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "purpose": "Pin one exact zero-cost local approximately-0.8B-class model artifact candidate for the real loader/model-executor gate without claiming that the bytes have been downloaded, loaded, consumed, inferred, trained, or admitted at runtime.",
+  "engine_contract_target": {
+    "provider_alias": "hcu",
+    "engine_identity": "hcu_local_08b",
+    "engine_class": "LOCAL_SHARED_WEIGHT_08B"
+  },
+  "upstream_model_artifact": {
+    "publisher": "Qwen",
+    "repository": "Qwen/Qwen3-0.6B-GGUF",
+    "license_observed": "apache-2.0",
+    "artifact": "Qwen3-0.6B-Q8_0.gguf",
+    "upstream_file_change_commit": "1eaf4d9657fe65ad10a51eab76a8db5b363bddaa",
+    "sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "byte_count": 639446688,
+    "xet_hash_observed": "18d608d38b934c86fc3f3a050157b2d4df8d12330de6d13af3ba201edd0e6539",
+    "quantization": "Q8_0",
+    "source_classification": "SOURCE_DIRECT_WEB_NOT_RUNTIME",
+    "source_observed_date": "2026-08-24"
+  },
+  "single_file_role_mapping": {
+    "checkpoint_role": "GGUF_CONTAINER_FILE",
+    "tokenizer_role": "EMBEDDED_IN_SAME_GGUF_CONTAINER_FILE",
+    "checkpoint_expected_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "tokenizer_container_expected_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "role_alias_semantics": "The same immutable GGUF container may satisfy two EngineArtifactPaths roles. This does not claim an independently hashed tokenizer subobject; it binds the tokenizer role to the exact container that embeds its tokenizer metadata.",
+    "regression_required_before_promotion": "test_engine_admission_single_file_gguf_v1.py"
+  },
+  "documented_local_runtime_family": {
+    "family": "llama.cpp",
+    "upstream_qwen_documentation_observed": true,
+    "documented_selector": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+    "exact_runtime_source_commit": null,
+    "exact_runtime_binary_sha256": null,
+    "exact_build_sha256": null,
+    "status": "BLOCKED_RUNTIME_AND_BUILD_IDENTITY_NOT_PINNED"
+  },
+  "loader_consumption_target": {
+    "current_primitive": "loader_consumption_witness_v1.py",
+    "preferred_interface": "SEALED_MEMFD_EXACT_FD_PATH_CALLBACK/v1",
+    "actual_loader_binding_sha256": null,
+    "actual_loader_consumed_checkpoint_sha256": null,
+    "actual_loader_consumed_tokenizer_sha256": null,
+    "status": "BLOCKED_NO_ACTUAL_LOADER_EXECUTION"
+  },
+  "required_promotion_chain": [
+    "download_or_otherwise_materialize exact artifact bytes on an authorized zero-cost local surface",
+    "verify exact artifact SHA-256 and byte count before admission",
+    "pin exact runtime source/binary/build identities",
+    "bind the actual pathname/fd-consuming loader implementation rather than a synthetic callback",
+    "witness loader consumption of the exact sealed artifact bytes",
+    "admit loader consumption through the existing canonical registry/lease path",
+    "observe one actual model-executor invocation",
+    "admit ModelExecution atomically through canonical MiniUnifiedDB",
+    "bind inference receipt and J-Space trace to that exact execution identity"
+  ],
+  "credit_boundary": {
+    "checkpoint_runtime_credit": 0,
+    "loader_runtime_credit": 0,
+    "model_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "epistemic_note": "This file selects and pins a source-level candidate only. FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT. Exact upstream artifact metadata does not prove local presence, loader consumption, inference, causality, or training benefit."
+}

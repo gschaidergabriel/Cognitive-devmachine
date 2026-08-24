@@ -1,38 +1,38 @@
 {
   "schema": "CLAY_FREE_SWARM_METRICS/v1",
-  "generated_at": "2026-08-24T23:02:26.095065+00:00",
+  "generated_at": "2026-08-24T23:17:32.150057+00:00",
   "workers": {
-    "worker_records": 12440,
+    "worker_records": 12526,
     "worker_files": 12,
-    "average_concurrency": 4.3576619078474135,
+    "average_concurrency": 4.296574488914972,
     "peak_concurrency": 136,
-    "observed_seconds": 47674.408982,
-    "exact_usage_rows": 4764,
-    "input_tokens": 26928633,
-    "output_tokens": 7330453,
-    "total_tokens": 34259086,
+    "observed_seconds": 48591.888617,
+    "exact_usage_rows": 4825,
+    "input_tokens": 27267104,
+    "output_tokens": 7423826,
+    "total_tokens": 34690930,
     "models": [
       {
         "provider": "nvidia",
         "model": "nvidia/nemotron-3-super-120b-a12b",
-        "requests": 3569,
-        "success": 2757,
-        "rate_limits": 373,
+        "requests": 3630,
+        "success": 2801,
+        "rate_limits": 390,
         "errors": 439,
-        "input_tokens": 15480176,
-        "output_tokens": 4412155,
-        "total_tokens": 19892331
+        "input_tokens": 15725921,
+        "output_tokens": 4482555,
+        "total_tokens": 20208476
       },
       {
         "provider": "nvidia",
         "model": "nvidia/nemotron-3-ultra-550b-a55b",
-        "requests": 1659,
-        "success": 1043,
+        "requests": 1678,
+        "success": 1057,
         "rate_limits": 5,
-        "errors": 611,
-        "input_tokens": 5896268,
-        "output_tokens": 1629671,
-        "total_tokens": 7525939
+        "errors": 616,
+        "input_tokens": 5974517,
+        "output_tokens": 1649944,
+        "total_tokens": 7624461
       },
       {
         "provider": "nvidia",
@@ -158,9 +158,9 @@
       {
         "provider": "openrouter",
         "model": "openrouter/free",
-        "requests": 194,
+        "requests": 195,
         "success": 52,
-        "rate_limits": 82,
+        "rate_limits": 83,
         "errors": 60,
         "input_tokens": 306274,
         "output_tokens": 84120,
@@ -180,35 +180,35 @@
       {
         "provider": "groq",
         "model": "openai/gpt-oss-20b",
-        "requests": 195,
-        "success": 43,
-        "rate_limits": 32,
+        "requests": 197,
+        "success": 44,
+        "rate_limits": 33,
         "errors": 120,
-        "input_tokens": 232124,
-        "output_tokens": 41238,
-        "total_tokens": 273362
+        "input_tokens": 236832,
+        "output_tokens": 42138,
+        "total_tokens": 278970
       },
       {
         "provider": "groq",
         "model": "openai/gpt-oss-120b",
-        "requests": 182,
-        "success": 40,
+        "requests": 183,
+        "success": 41,
         "rate_limits": 20,
         "errors": 122,
-        "input_tokens": 223245,
-        "output_tokens": 38789,
-        "total_tokens": 262034
+        "input_tokens": 227949,
+        "output_tokens": 39689,
+        "total_tokens": 267638
       },
       {
         "provider": "groq",
         "model": "qwen/qwen3.6-27b",
-        "requests": 176,
-        "success": 39,
-        "rate_limits": 15,
+        "requests": 178,
+        "success": 40,
+        "rate_limits": 16,
         "errors": 122,
-        "input_tokens": 217390,
-        "output_tokens": 37400,
-        "total_tokens": 254790
+        "input_tokens": 222455,
+        "output_tokens": 38300,
+        "total_tokens": 260755
       },
       {
         "provider": "nvidia",
@@ -568,11 +568,11 @@
   },
   "corpus": {
     "text_files": 9968,
-    "characters": 48635728,
-    "approx_tokens_4chars": 12158932,
+    "characters": 48635723,
+    "approx_tokens_4chars": 12158931,
     "sonnet5_input_usd_per_mtok": 2.0,
     "sonnet5_output_usd_per_mtok": 10.0,
-    "output_only_equivalent_usd": 121.58932,
+    "output_only_equivalent_usd": 121.58931,
     "pricing_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output; standard after: $3/M + $15/M"
   }
 }

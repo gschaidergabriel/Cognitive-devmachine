@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_GO_SOURCE_DELTA/v1",
+  "date": "2026-08-24",
+  "local_time": "18:31+07:00",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "organ": "GPT56SOL_CHATGPT_ORGAN",
+  "trigger": "go",
+  "reentry": {
+    "canonical_main_before_sha_guarded_fusion": "d87158d77e1736e4d83cb04b1122d70dae439371",
+    "superseded_draft_prs": [
+      "gschaidergabriel/clay-global-research-entity#1458",
+      "gschaidergabriel/clay-global-research-entity#1460",
+      "gschaidergabriel/clay-global-research-entity#1462"
+    ],
+    "write_strategy": "SHA_GUARDED_SINGLE_FILE_FUSION_ON_CURRENT_MAIN",
+    "parallel_hardening_preserved": "supervisor inherited-provider-environment fence regression retained"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "reproducible_atomic_trigger_key_available": false,
+    "atomic_unusual_experiment_claim": "NOT_ATTEMPTED",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "CURRENT_MAIN_FAIL_CLOSED_SOURCE_FUSION"
+  },
+  "observed_gap": "The latest hardened FREE Swarm bootstrap already bound the inherited-provider-environment fence and blocked getaddrinfo/create_connection/connect/connect_ex, but an unconnected datagram socket can transmit through socket.socket.sendto without connect. Platforms exposing socket.sendmsg also provide an address-bearing datagram egress primitive. The strict outer Python zero-network tripwire therefore still had a concrete direct-socket gap.",
+  "hypothesis": "Fusing sendto plus conditional sendmsg tripwires into the newest inherited-environment-fenced runner closes the direct datagram gap without regressing the newer credential-clearing source guard.",
+  "counterhypothesis": "Current provider clients are HTTP/TCP and canonical per-case tests already assert zero secret/network activity, so the datagram path is not expected to be exercised by today's code.",
+  "counterhypothesis_adjudication": "Likely true for current clients but insufficient for promotion: a zero-network acceptance boundary should fail closed against direct Python datagram egress rather than rely on an unstated TCP-only assumption. This delta is preventive hardening, not evidence of a past UDP attempt.",
+  "bounded_delta": {
+    "runner": "tools/run_free_swarm_admission_boundary_receipt_hardened_868.py",
+    "runner_commit": "faaa113bd37da294a5a8d9f159ae950407dcf498",
+    "runner_blob_sha": "b906a63726a36fb527af42d8b7a1ccfb835cfa26",
+    "test": "tests/test_free_swarm_receipt_runner_hardening_868.py",
+    "test_commit": "2c069ffc2d47298ba01fb85eb1ff1f91334b0dbf",
+    "test_blob_sha": "31a4a6e7e6621c02f7a0e59ccc52fabc8129bbe5",
+    "tripwires_added": [
+      "socket.socket.sendto",
+      "socket.socket.sendmsg_if_available"
+    ],
+    "parallel_guards_preserved": [
+      "socket.getaddrinfo",
+      "socket.create_connection",
+      "socket.socket.connect",
+      "socket.socket.connect_ex",
+      "tests/test_go_868_inherited_provider_secret_fence.py"
+    ],
+    "external_provider_network_performed": false,
+    "provider_secret_lookup_performed": false,
+    "exact_source_runtime_receipt_created": false,
+    "runtime_credit_minted": 0
+  },
+  "evidence": {
+    "scope": "CURRENT_MAIN_SOURCE_FUSION_PLUS_NONCANONICAL_DATAGRAM_MECHANISM_TEST_NOT_EXACT_SOURCE_RUNTIME",
+    "source_inspection": "PASS",
+    "noncanonical_mechanism_test": {
+      "surface": "CHATGPT_LOCAL_TOOL_CONTAINER_NONCANONICAL_COMPONENT_ONLY",
+      "result": "PASS",
+      "observed_blocked_paths": [
+        "socket.sendto",
+        "socket.sendmsg"
+      ],
+      "exception": "CLAY_BOUNDARY_NETWORK_TRIPWIRE",
+      "actual_external_network_required": false,
+      "promotion_credit": 0
+    },
+    "exact_source_boundary_runtime_execution": "NOT_PERFORMED_NO_EXPOSED_AUTHORIZED_NORMAL_USER_OR_CLAY_DIRECT_DEV_SHELL_BRIDGE",
+    "negative_evidence": [
+      "no external provider call",
+      "no provider credential read",
+      "no exact-source FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 PASS",
+      "no whole EntityOS/HCU, HCU, J-Space-model or training runtime evidence"
+    ]
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_FUSION_ONLY: direct datagram egress tripwires are fused into current main's inherited-provider-environment-fenced FREE Swarm acceptance runner and regression.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: current retained/parallel HCU lanes already own the reusable identity/rejection and J-Space envelope frontier; another overlapping HCU source lane would reduce convergence. Exact authorized execution is the higher-information discriminator.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: current main already owns observation-first raw-probe and exact-target approximately-0.8B source gates, while no authorized model-intervention shell is exposed to this organ. The next useful step is executable observation evidence, not another source-only J-Space lane."
+  },
+  "credits": {
+    "free_swarm_provider_admission_runtime": 0,
+    "external_provider_worker_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Refresh main, update the artefact/README.md against its current blob, then on an exposed authorized zero-cost normal-user local or clay-direct-dev clean checkout execute python tools/run_free_swarm_admission_boundary_receipt_hardened_868.py --output <receipt-outside-checkout>.json. Require all canonical/hardening tests PASS, inherited-provider-environment fence PASS, zero secret reads, zero DNS/connect/datagram attempts, stable pre/post source identity and exit 0 before any external provider lane restart.",
+  "acceptance": "IN_PROGRESS"
+}

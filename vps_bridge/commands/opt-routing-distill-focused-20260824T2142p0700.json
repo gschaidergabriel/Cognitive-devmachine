@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"opt-routing-distill-focused-20260824T2142p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"python3 - <<'PY'\nimport json,pathlib,sqlite3\nr=pathlib.Path('/artifacts/clay-entityos-swarm')\nprint('SOURCE_HEAD', __import__('subprocess').check_output(['git','rev-parse','HEAD'],text=True).strip())\nf=r/'forge/STATUS.json'\nif f.exists():\n o=json.loads(f.read_text()); print('FORGE',json.dumps({k:o.get(k) for k in ('accepted_deltas','evaluations','candidate_states')},sort_keys=True))\nd=r/'distillery/STATUS.json'\nif d.exists():\n o=json.loads(d.read_text()); print('DISTILLERY_STATUS',json.dumps(o,sort_keys=True))\ndb=r/'distillery/distillery.sqlite3'\nif db.exists():\n c=sqlite3.connect(db);\n for q in [\"select count(*) from packets\",\"select coalesce(sum(token_count),0) from packets\",\"select count(*) from packets where status='ACCEPTED'\"]:\n  try: print('DB',q,c.execute(q).fetchone()[0])\n  except Exception as e: print('DBERR',q,type(e).__name__,str(e)[:160])\n try:\n  print('TABLES',[x[0] for x in c.execute(\"select name from sqlite_master where type='table' order by name\")])\n except Exception: pass\n c.close()\ns=r/'SUPERVISOR_6000.json'\nif s.exists():\n o=json.loads(s.read_text()); print('SUP_BRIDGE',json.dumps(o.get('forge_distillery_bridge'),sort_keys=True))\nfor p in sorted(r.glob('**/*forge*distill*.json'))[-20:]:\n print('BRIDGE_FILE',p)\n try: print(p.read_text()[:3000])\n except Exception: pass\nPY"
+}

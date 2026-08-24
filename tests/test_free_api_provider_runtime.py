@@ -992,6 +992,37 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(format_calls, [])
         self.assertNotIn(leaked_text, repr(caught.exception))
 
+    def test_surrogate_attempt_nonce_is_rejected_before_network(self):
+        network_calls = []
+
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        def opener(*args, **kwargs):
+            network_calls.append("open")
+            return Response()
+
+        with self.assertRaises(ValueError) as caught:
+            MOD.execute_chat(
+                VALID_MESSAGES, model="mock", environ=env, opener=opener,
+                nonce_factory=lambda: "\ud800",
+            )
+        self.assertEqual(network_calls, [])
+        self.assertEqual(
+            str(caught.exception),
+            "attempt_nonce_must_be_unicode_scalar_string",
+        )
+
     def test_different_equal_length_payloads_have_distinct_request_ids(self):
         class Response:
             status = 200

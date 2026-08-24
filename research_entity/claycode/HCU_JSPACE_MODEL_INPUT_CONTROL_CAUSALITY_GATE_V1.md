@@ -1,10 +1,18 @@
 # HCU J-Space Model-Input Control Causality Gate v1
 
 Status: **CURRENT RESEARCH / ACCEPTANCE GUARD**  
-Authority: subordinate to current owner/supervisor authority; does not replace `SUPERVISOR_STEERING_8_63.json`  
+Authority: subordinate to current owner/supervisor authority; current admitted supervisor is `SUPERVISOR_STEERING_8_65.json`  
 Product: **EntityOS**  
 Compute architecture: **HCU**  
 Mode: **FREE_ONLY**
+
+## Successor authority / runtime update — supervisor 8.65
+
+The current retained executor is `gschaidergabriel/Dr.-Unterweger#810 @ 2da99e0458809988190c129b04cae913d1f15d92`. Provider runtime logs establish HTTP 200 serverless **function-runtime** execution at that exact deployed source, but only at the declared diagnostic no-Sandbox scope.
+
+This narrows the executable blocker without promoting this guard: remaining included Vercel Sandbox quota is still not directly observed, so `Sandbox.create` remains fail-closed. No Python/sqlite3/_sqlite3, HCU execution, local-model execution, Vector-Control consumption, J-Space/GWT causality, training, or whole EntityOS/HCU runtime credit follows from the HTTP 200 observation.
+
+The required `HCU_MODEL_INPUT_CONTROL_BINDING/v1` discriminator below therefore remains current. Source-guard proliferation is paused unless executable counterevidence requires another guard; work should converge this primitive into the single retained donor/executor causal path rather than create a competing lane.
 
 ## Purpose
 
@@ -108,7 +116,7 @@ The retained PR810 `SOURCE_REBOUND_READY` 17-blob capsule remains useful for the
 
 This guard does **not** invalidate that component test and does not force a duplicate executor lane. It only prevents a future green run of that capsule from being over-promoted into proof that the Vector Control packet was consumed by the model.
 
-The next executor extension should occur in the same retained donor/executor lanes after the current exact-source capsule is resolved or when the single-lane source contract is atomically advanced.
+The next executor extension should occur in the same retained donor/executor lanes after the FREE_ONLY Sandbox gate is directly admitted and the current exact-source environment probe passes, or when newer executable counterevidence justifies advancing the single-lane source contract.
 
 ## Coordination / execution boundary for this macrocycle
 
@@ -116,4 +124,4 @@ No shared immutable macrocycle/request ID was exposed to this organ, and availab
 
 `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`
 
-No unusual intervention, paid execution, Together preflight, VPS/self-hosted/production test, or Vercel upgrade path is authorized or used by this guard.
+No unusual intervention, paid execution, Together preflight, VPS/self-hosted/production test, Vercel Sandbox creation while quota is unobserved, or Vercel upgrade path is authorized or used by this guard.

@@ -203,7 +203,7 @@ J-Space improvements must be measured through causal/system-level outcomes, not 
 
 The acceptance marker must bind exact source tree, exact model/tokenizer/runtime identities, test/benchmark receipts and the frozen metric snapshot.
 
-## 10. Infinite recursive development after v1
+## 10. Recursive development after v1
 
 Xeno v1 is not a terminal state.
 
@@ -215,11 +215,13 @@ measure current accepted Xeno
  -> implement
  -> test positive + negative + recovery paths
  -> benchmark full frozen metric vector
- -> compare
- -> promote only if the applicable promotion law passes
- -> increase ClayCode share only through measured strict-dominance migrations
+ -> compare through XENO_PROMOTION_GATE/v2
+ -> promote only if epsilon-Pareto no-regression + cross-group progress passes
+ -> increase ClayCode share only through meaningful ClayCode gain with protected non-regression
  -> update accepted baseline
  -> repeat on the next go
 ```
+
+The comparison gate must not count tiny benchmark jitter as progress and must not allow a single scalar to self-promote. Hard correctness/authority/recovery regressions fail closed. J-Space remains protected and may stay stable on unrelated patches, but material regression is not accepted.
 
 This loop has no built-in terminal iteration count or "finished forever" state. It continues until a newer explicit owner instruction supersedes the objective.

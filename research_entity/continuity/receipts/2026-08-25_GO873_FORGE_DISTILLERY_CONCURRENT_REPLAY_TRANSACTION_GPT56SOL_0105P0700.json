@@ -25,23 +25,54 @@
       "a contender BEGIN IMMEDIATE is locked while admission transaction is active",
       "two concurrent same-replay writers finish without exception",
       "exactly one writer admits and one classifies DUPLICATE",
+      "same replay identity plus concurrent measured mutation yields exactly one admit plus one REPLAY_IDENTITY_CONFLICT",
       "exactly one forge_execution_ingest row persists",
       "accepted_dataset_tokens is incremented only once"
     ]
   },
+  "exact_blob_component_replica": {
+    "surface": "ChatGPT isolated local container replica",
+    "blob_identity_check": "PASS_ALL_FIVE_MATCH_GITHUB_GIT_BLOB_SHA1",
+    "blobs": {
+      "tools/forge_evidence_credit_871.py": "d99567577890d885c8d32840dfe4afc04cbaade1",
+      "tools/ingest_forge_accepts_into_distillery.py": "13aa9e29eda5a65d76a139ba259b9bca059f7320",
+      "tests/test_forge_distillery_replay_identity_873.py": "585e6c698b9821e2a98a36431090d7647a81a7da",
+      "tests/test_forge_distillery_rebuild_stable_packet_873.py": "235791f058c9df50374087d9007ec286d0b18620",
+      "tests/test_forge_distillery_concurrent_replay_874.py": "ee1fb1f0720ee27cb68715cc448d3ac0e1424ee2"
+    },
+    "py_compile": "PASS",
+    "unittest_modules": [
+      "tests.test_forge_distillery_replay_identity_873",
+      "tests.test_forge_distillery_rebuild_stable_packet_873",
+      "tests.test_forge_distillery_concurrent_replay_874"
+    ],
+    "tests_passed": 13,
+    "tests_failed": 0,
+    "scope": "EXACT_BLOB_COMPONENT_REGRESSION_ONLY",
+    "canonical_runtime_credit": 0
+  },
+  "negative_evidence": {
+    "github_pr_head_runs": [32761713891, 32761713942, 32761713940],
+    "classification": "FAILURE_WITH_ZERO_RECORDED_EXECUTION_STEPS_RUNNER_OR_RECORDING_INFRASTRUCTURE_NOT_PRODUCT_FAILURE",
+    "replay_job_id": 97541846561,
+    "replay_job_steps": [],
+    "decoded_job_logs": "BLOBNOTFOUND_404"
+  },
   "go_tracks": {
-    "track_a": "ADVANCED_SOURCE_SCOPE: makes replay admission classification deterministic under concurrent ingestion",
-    "track_b": "ADVANCED: promotes atomic lookup-classify-write-counter semantics as a reusable Typed Entry/HCU causal-admission invariant",
-    "track_c": "ADVANCED_DATASET_SAFETY_SCOPE: prevents parallel J-Space/GWT trace ingestion from degrading into ambiguous process failure or accounting races"
+    "track_a": "ADVANCED_EXACT_BLOB_COMPONENT_SCOPE: serialized concurrent Forge-to-Distillery replay admission passes exact-blob component regression",
+    "track_b": "ADVANCED: atomic lookup-classify-write-counter semantics validated as reusable Typed Entry/HCU causal-admission invariant",
+    "track_c": "ADVANCED_DATASET_SAFETY_SCOPE: parallel trace ingestion duplicate/conflict accounting validated at exact component bytes; no model-specific J-Space execution"
   },
   "coordination": {
     "existing_research_gate": "5fbf7aa1a9a5bb4089166ac787f291122a192b3c",
-    "open_duplicate_implementation_lane_found": false,
+    "pr": 1762,
     "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "prior_duplicate_pr": 1750,
+    "prior_duplicate_action": "CLOSED_UNMERGED_AFTER_MAIN_FUSION_OF_DELTA_ID_REPLAY_FIX",
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "unusual_interventions_executed": 0
   },
-  "evidence_scope": "SOURCE_PLUS_REGRESSION_DEFINITION_ONLY_UNTIL_EXACT_SOURCE_EXECUTION",
+  "evidence_scope": "EXACT_BLOB_COMPONENT_REGRESSION_ONLY_UNTIL_ADMITTED_REPOSITORY_BOUND_RUNTIME_EXECUTION",
   "provider_or_model_execution": false,
   "paid_or_together_execution": false,
   "provider_runtime_credit": 0,
@@ -50,5 +81,5 @@
   "jspace_model_runtime_credit": 0,
   "training_credit": 0,
   "whole_product_pass": false,
-  "next_exact_gate": "Execute the concurrent replay regression and existing replay suite on an admitted exact-source zero-cost surface, then run the repository-bound live Forge-to-Distillery witness requiring one evidence-qualified ACCEPT -> one persistent packet -> accepted_dataset_tokens > 0 -> timestamp/narration/delta_id semantic replay +0."
+  "next_exact_gate": "Fuse PR #1762 if current-main coordination remains nonduplicate, then execute the exact merged head on an admitted zero-cost repository-bound surface and run the live Forge-to-Distillery witness requiring one evidence-qualified ACCEPT -> one persistent packet -> accepted_dataset_tokens > 0 -> timestamp/narration/delta_id semantic replay +0, plus concurrent duplicate/conflict classification without IntegrityError."
 }

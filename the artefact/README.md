@@ -96,6 +96,16 @@ The retained launcher was changed to delegate to that stronger protocol and brid
 
 No new unusual experiment was executed in this macrocycle because no reproducible shared immutable macrocycle/request identity was available beyond minute-level conversation timing. This is a durable source/control-plane/J-Space-readiness delta only and mints zero model-runtime, J-Space-model, HCU-full, training or whole-product credit.
 
+### GO 23:33 promotion-gate metric-modality closure
+
+The current `CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4` previously enforced label counterbalancing only when `holdout.metric_uses_output_tokens` was the literal boolean `true`. Missing or non-boolean values could therefore evade an explicit holdout metric-modality declaration.
+
+Current `main` now requires `metric_uses_output_tokens` to be an explicit boolean. Missing/non-boolean values fail closed with `HOLDOUT_METRIC_OUTPUT_TOKEN_MODALITY_REQUIRED`; token-output metrics still require `label_mapping_counterbalanced=true`. `tests/test_trigger1_jspace_metric_modality_v4.py` locks missing, non-boolean and legitimate counterbalanced cases.
+
+This closes a scientific-independence/evidence-typing bypass without weakening the six-control, disjoint-holdout, wrong-layer or lesion/rescue requirements. The evidence scope remains source/regression-definition only until exact-current test execution is observed; it mints zero provider runtime, whole EntityOS/HCU, HCU-full, J-Space-model or training credit. No unusual Qwen intervention was executed by this organ because this `go` exposes no shared reproducible macrocycle/request identity beyond minute precision.
+
+Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_V4_METRIC_MODALITY_FAILCLOSED_GPT56SOL_2333P0700.json`.
+
 Until a lease-admitted successor dispatch yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
 
 ## Typed Entry / HCU authority convergence
@@ -129,13 +139,14 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 ## Current blockers / next exact gates
 
 1. Execute the **current** Forge -> Distillery workflow revision containing live promotion on canonical `main`; require disposable gate PASS plus `live_distillery_promotion.status=PASS`, exactly one new packet and positive token delta on first promotion, then replay delta 0. The older queued run 32742535392 is insufficient for this new scope.
-2. If that witness or live promotion fails, repair only the measured isolated-executor/bridge/promotion blocker; never weaken evidence admission.
-3. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
-4. On the lease-admitted Qwen run, persist the strongest-intermediate exact-source runtime receipt and classify runner/preflight/dependency/model failure explicitly.
-5. Require all six matched controls, derivation/holdout disjointness, counterbalanced label mapping, wrong-layer and lesion/rescue; reject terminal final-norm/`lm_head`/output-projection and evaluation-label-derived shortcuts as J-Space goal credit.
-6. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
-7. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
-8. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
+2. Execute the new Trigger-1 v4 metric-modality regression plus the existing promotion-gate regression on exact-current source; preserve the fail-closed invariant before any later J-Space promotion review.
+3. If that witness or live promotion fails, repair only the measured isolated-executor/bridge/promotion blocker; never weaken evidence admission.
+4. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
+5. On the lease-admitted Qwen run, persist the strongest-intermediate exact-source runtime receipt and classify runner/preflight/dependency/model failure explicitly.
+6. Require all six matched controls, derivation/holdout disjointness, counterbalanced label mapping, wrong-layer and lesion/rescue; reject terminal final-norm/`lm_head`/output-projection and evaluation-label-derived shortcuts as J-Space goal credit.
+7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
+8. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
+9. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
 
 ## Evidence discipline and reentry
 

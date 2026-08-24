@@ -5,8 +5,11 @@ on:
     paths:
       - "tools/ingest_forge_accepts_into_distillery.py"
       - "tools/forge_evidence_credit_871.py"
+      - "tools/promote_forge_distillery_runtime_gate.py"
       - "tests/test_forge_distillery_replay_identity_873.py"
+      - "tests/test_forge_distillery_replay_restart_873.py"
       - "tests/test_forge_distillery_live_bridge_871.py"
+      - "tests/test_forge_distillery_promotion_872.py"
       - ".github/workflows/go873-forge-distillery-replay-regression.yml"
   workflow_dispatch:
 
@@ -19,9 +22,13 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-      - name: Compile current replay bridge
-        run: python3 -m py_compile tools/ingest_forge_accepts_into_distillery.py tools/forge_evidence_credit_871.py
+      - name: Compile current replay and live-promotion boundaries
+        run: python3 -m py_compile tools/ingest_forge_accepts_into_distillery.py tools/forge_evidence_credit_871.py tools/promote_forge_distillery_runtime_gate.py tests/test_forge_distillery_promotion_872.py
       - name: Execute current 8.73 replay semantics
         run: python3 -m unittest -v tests.test_forge_distillery_replay_identity_873
+      - name: Execute process-restart replay semantics
+        run: python3 -m unittest -v tests.test_forge_distillery_replay_restart_873
       - name: Execute existing live bridge wiring regression
         run: python3 -m unittest -v tests.test_forge_distillery_live_bridge_871
+      - name: Execute live promotion semantic replay and conflict regression
+        run: python3 -m unittest -v tests.test_forge_distillery_promotion_872

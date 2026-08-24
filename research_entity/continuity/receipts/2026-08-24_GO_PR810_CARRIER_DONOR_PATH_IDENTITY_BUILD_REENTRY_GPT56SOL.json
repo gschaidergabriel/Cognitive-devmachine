@@ -1,0 +1,87 @@
+{
+  "schema": "ENTITYOS_HCU_GO_PR810_CARRIER_DONOR_PATH_IDENTITY_BUILD_REENTRY/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "research_main_observed_before_receipt": "b8614abf1b0129f64c72297618923986f4923d55",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "coordination": {
+    "retained_hcu_donor_pr": 1263,
+    "live_donor_head_observed": "299cbdc293244f15e5d75fdf90c13ccb63c29759",
+    "executor_pinned_donor_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "live_executor_head_observed": "bdb1d5116ba3243841c263cc30eb6620e4da3f2c",
+    "duplicate_executor_created": false,
+    "duplicate_semantic_fix_merged": false,
+    "parallel_identical_fix_detected_and_reused": true,
+    "canonical_atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "observation": {
+    "predecessor_deployment": "dpl_26pNV41EYrvFuWKRBFCHUPjQN2Xk",
+    "predecessor_deployment_source": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+    "predecessor_failure": "JSPACE_V4_V3_CURRENT_SUCCESSOR_DONOR_DRIFT:manifest=d371ccaca994f234a4cd127d48c3867cfe10ab56;contract=511d568932bf47828679e3ca6ba05650f18d284d",
+    "classification": "SOURCE_GUARD_FAILURE_BEFORE_SANDBOX_NOT_RUNTIME_OR_SCIENTIFIC_NEGATIVE"
+  },
+  "delta": {
+    "initial_executor_commit": "588315b63f4f4255f6e73bd604cbc1789cbe12c9",
+    "new_guard": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-carrier-donor-path-identity.mjs",
+    "new_invariant": "retained_donor_commit[0:8] must equal the suffix encoded by both jspace-v4-v3-required-blobs-<prefix>.json and jspace-execution-store-<prefix>",
+    "initial_build_result": "ERROR_ENTITYOS_HCU_PREVERCEL_SUCCESSOR_GUARD_CHAIN_DRIFT",
+    "integration_fix": "bdb1d5116ba3243841c263cc30eb6620e4da3f2c",
+    "integration_fix_origin": "parallel worker on same retained executor lane; identical local fix was not duplicated",
+    "effect": "stale or relabelled carrier path provenance now fails closed before any Sandbox creation path"
+  },
+  "exact_head_build_evidence": {
+    "deployment_id": "dpl_7u6VPVhzXpGTWmmDA2PochdG2DCq",
+    "deployment_source_sha": "bdb1d5116ba3243841c263cc30eb6620e4da3f2c",
+    "deployment_state": "READY",
+    "carrier_donor_path_identity": "PASS",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "manifest_carrier": "jspace-v4-v3-required-blobs-511d5689.json",
+    "source_carrier": "jspace-execution-store-511d5689",
+    "exact_blobs_checked": 17,
+    "manifest_contract_identity": "PASS",
+    "historical_5c59891b_carrier_immutable": "PASS",
+    "promotion_guard": "SOURCE_REBOUND_READY_SUCCESSOR_DYNAMIC_17_BLOB_EXACT_14_RESULT_FENCE_PASS",
+    "permission_guard": "SOURCE_REBOUND_READY_SOURCE_VERIFY_PERMISSION_FENCE_PASS",
+    "executor_guard": "CURRENT_EXECUTOR_FREE_ONLY_JSPACE_V4_V3_SOURCE_REBOUND_READY_SUCCESSOR_DYNAMIC_GUARDED",
+    "scope": "BUILD_AND_SOURCE_GUARD_EVIDENCE_ONLY"
+  },
+  "runtime_gate": {
+    "remaining_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_runtime_invocation_by_this_organ": false,
+    "reason": "Supervisor 8.63 forbids inferring remaining included Sandbox quota from Hobby plan identity; the executor now fails closed until direct quota observation exists.",
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_EXACT_HEAD_READY_BUILD_WITH_PROVENANCE_GUARDS_RUNTIME_BLOCKED_FAIL_CLOSED",
+    "track_b_hcu_and_typed_entry_fabric": "ADVANCED_HCU_EXECUTOR_CARRIER_PROVENANCE_IDENTITY_GUARD_REUSABLE_ACROSS_PINNED_CAUSAL_CLOSURE",
+    "track_c_global_jspace_gwt_training_readiness": "ADVANCED_JSPACE_SOURCE_TRACE_PROVENANCE_BY_REJECTING_STALE_CARRIER_RELABEL_WITH_ZERO_MODEL_OR_TRAINING_CREDIT"
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "counterhypothesis_and_discriminator": {
+    "counterhypothesis": "the observed donor mismatch was only a one-off manifest/contract content mismatch and carrier path labels could remain harmless",
+    "discriminator": "bind carrier path suffixes to the retained donor commit prefix and require the same guard in both prevercel-build and the exclusive executor guard",
+    "result": "PASS_AT_EXACT_HEAD_BUILD_SOURCE_SCOPE"
+  },
+  "next_exact_gate": "Keep PR810 pinned to donor 511d5689 and supervisor 8.63 FREE_ONLY. Do not invoke Sandbox while remaining included quota is unobserved. Continue source-level causal DatasetAdmission/JSPACE_VECTOR_CONTROL_ABI/family-split readiness in PR1263 and require a directly observed zero-cost execution allowance before any exact-current Sandbox runtime promotion. Separately require a real zero-cost local approximately-0.8B loader/model-executor I/O boundary before J-Space model-runtime credit."
+}

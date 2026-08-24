@@ -187,8 +187,15 @@ start_distillery(){
 }
 
 start_forge(){
-  local x="$ROOT/tools/run_free_evidence_forge.py"; [[ -f "$x" ]] || return 0
-  pgrep -f '[r]un_free_evidence_forge.py' >/dev/null 2>&1 || nohup python3 "$x" --hours 24 --sleep-seconds 2 --questions-per-cycle 32 --discovery-parallel 24 --candidates-per-cycle 48 --local-parallel 12 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
+  local x="$ROOT/tools/run_free_evidence_forge_safe.py"; [[ -f "$x" ]] || return 0
+  pgrep -f '[r]un_free_evidence_forge_safe.py' >/dev/null 2>&1 && return 0
+  # The legacy Forge permits a weaker execution path. Retire it before the
+  # Supervisor-8.72 safe wrapper starts so 6000-mode cannot keep producing
+  # nominal-but-unqualified acceptance rows from stale process state.
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f '[r]un_free_evidence_forge.py' || true)
+  nohup python3 "$x" --hours 24 --sleep-seconds 2 --questions-per-cycle 32 --discovery-parallel 24 --candidates-per-cycle 48 --local-parallel 12 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
 }
 
 refresh_root_results(){
@@ -307,12 +314,13 @@ print(json.dumps({
  'fabric_admission_binding':admission_binding,
  'fabric_running':running('run_6000_free_swarm_fast.py'),
  'distillery_running':running('run_research_distillery_local.py'),
- 'forge_running':running('run_free_evidence_forge.py'),
+ 'forge_running':running('run_free_evidence_forge_safe.py'),
+ 'legacy_forge_running':running('run_free_evidence_forge.py'),
  'dashboard_running':running('free swarm/evaluate.py.*--watch'),
  'local_model_ready':health(),
  'fabric':fabric,
  'shared_quota':snapshot(),
- 'revocation_policy':'CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; RESTART_CHILD_ON_ADMISSION_OR_ECONOMIC_PROVENANCE_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_ROUTE_CREDENTIAL_AUTHORITY_BEFORE_NETWORK'
+ 'revocation_policy':'CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; SAFE_FORGE_ONLY; LEGACY_FORGE_RETIRED_BEFORE_START; RESTART_CHILD_ON_ADMISSION_OR_ECONOMIC_PROVENANCE_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_ROUTE_CREDENTIAL_AUTHORITY_BEFORE_NETWORK'
 },indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR_6000.json.tmp" "$STATE_DIR/SUPERVISOR_6000.json"

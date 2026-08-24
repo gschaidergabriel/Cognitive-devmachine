@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-24T21:31:53.631825+00:00",
+  "generated_at": "2026-08-24T21:46:59.045363+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -45,16 +45,16 @@
     "policy": "FREE_ONLY; CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; CURRENT_CANONICAL_PROVIDER_ADMISSION; NO_PAID_FALLBACK; TOGETHER_FORBIDDEN"
   },
   "conversion": {
-    "successful": 4470,
-    "delta": 479,
+    "successful": 4512,
+    "delta": 481,
     "ready": 144,
-    "questions": 833,
-    "macrocycles": 273,
-    "delta_rate": 0.10715883668903803,
-    "ready_rate": 0.032214765100671144,
-    "question_rate": 0.18635346756152124,
-    "avg_cycle_delta_rate": 0.08836413502837892,
-    "avg_cycle_ready_rate": 0.010770172281535206
+    "questions": 840,
+    "macrocycles": 278,
+    "delta_rate": 0.10660460992907801,
+    "ready_rate": 0.031914893617021274,
+    "question_rate": 0.18617021276595744,
+    "avg_cycle_delta_rate": 0.08753424451028259,
+    "avg_cycle_ready_rate": 0.010576464146975221
   },
   "go_feedback": {
     "receipts": 0,
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-24T21:31:51.160462+00:00",
+    "generated_at": "2026-08-24T21:46:56.298557+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -74,7 +74,7 @@
     "accepted_packets": 0,
     "rejected_candidates": 0,
     "questions": {
-      "CYCLIC": 810,
+      "CYCLIC": 812,
       "OPEN": 21
     },
     "source_metadata_rows": {
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-24T21:31:51.161153+00:00",
+      "generated_at": "2026-08-24T21:46:56.299161+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -140,13 +140,13 @@
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 319.1867172718048,
-          "total_requests": 128,
-          "total_success": 84,
-          "total_429": 44,
+          "cooldown_seconds": 1844.165783882141,
+          "total_requests": 132,
+          "total_success": 87,
+          "total_429": 45,
           "total_errors": 26,
           "last_status": "429",
-          "last_observed_at": "2026-08-24T20:56:45.347861+00:00"
+          "last_observed_at": "2026-08-24T21:37:19.464983+00:00"
         },
         "huggingface_hub": {
           "max_inflight": 4,
@@ -164,13 +164,13 @@
           "max_inflight": 256,
           "active_leases": 1,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 3.7648160457611084,
-          "total_requests": 5388,
-          "total_success": 4126,
-          "total_429": 323,
-          "total_errors": 903,
+          "cooldown_seconds": 0.0,
+          "total_requests": 5439,
+          "total_success": 4166,
+          "total_429": 332,
+          "total_errors": 905,
           "last_status": "200",
-          "last_observed_at": "2026-08-24T21:31:48.991032+00:00"
+          "last_observed_at": "2026-08-24T21:46:44.634472+00:00"
         },
         "openalex": {
           "max_inflight": 2,
@@ -189,12 +189,12 @@
           "active_leases": 0,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 150,
+          "total_requests": 151,
           "total_success": 70,
-          "total_429": 79,
+          "total_429": 80,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-24T21:22:00.421725+00:00"
+          "last_observed_at": "2026-08-24T21:37:01.026068+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -222,28 +222,28 @@
         }
       }
     },
-    "db_bytes": 823296,
+    "db_bytes": 827392,
     "top_questions": [
-      "Does the concurrency threshold differ between model variants within the same provider (e.g., nemotron-3-super vs nemotron-mini)?",
-      "Is the threshold stable across time-of-day or provider-side load changes?",
-      "What cryptographic binding methods best preserve identity continuity while allowing parameter updates?",
-      "How does dynamic engine configuration affect cross-provider routing decisions in HCU's federated architecture?",
-      "Wie wirkt sich die Speicher‑Überlastung durch mmap‑basiertes Laden auf stabile Inferenz‑Leistung aus?",
-      "Does NVIDIA's NIM API expose any stable, per-call free-tier confirmation marker (header, response field, rate-limit signature) that distinguishes Developer Program free prototyping from paid usage without provider-side cooperation?",
-      "How does provider-side rate-limit signaling (429 headers, retry-after) causally interact with client-side timeout policy to shift the Pareto frontier?",
-      "Does NVIDIA's API surface a reliable, low-latency signal (HTTP status, header, error code) that distinguishes credential-level free vs paid model access at call time, or is billing purely post-hoc?",
-      "Kann das batch‑basierte Laden die Durchsatz‑Steigerung von groq‑Anfragen signifikant erhöhen, ohne die Latenz zu erhöhen?",
-      "Can the load balancing mechanism be applied to other providers with different architectures?"
+      "How to cryptographically bind secret_lookup_count and network_attempt_count to the actual execution context at admission time?",
+      "What is the optimal provider-specific rate limiting and quota management strategy for FREE_ONLY providers in EntityOS/HCU scaling?",
+      "How can dynamic executor rebinding be optimized for maximum performance and availability in FREE_ONLY provider environments?",
+      "How can we quantitatively balance acceptance stringency with model innovation in free swarm environments?",
+      "Can we implement a sandbox‑level eBPF filter to block all outbound connections to provider domains while allowing internal J‑Space traffic?",
+      "What are the optimal resource allocation strategies for minimizing physical decode concurrency?",
+      "How can we effectively monitor and adapt the performance of the system to ensure efficient management of boundaries?",
+      "Can EffectGate composition be made atomic without introducing a new single-point-of-failure in the HCU critical path?",
+      "How does memory bandwidth saturation affect latency for different Nvidia model architectures at varying batch sizes?",
+      "Does NVIDIA's NIM API expose a deterministic per-credential endpoint that returns pricing/tier metadata for the authenticated credential without consuming paid quota?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-24T21:31:51.600237+00:00",
+    "generated_at": "2026-08-24T21:46:57.922639+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
-      "NEW": 335,
+      "NEW": 337,
       "PATCH_REJECTED": 77,
       "VALIDATED_NOT_BETTER": 1
     },
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-24T21:31:51.600853+00:00",
+      "generated_at": "2026-08-24T21:46:57.923137+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -317,13 +317,13 @@
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 318.74701476097107,
-          "total_requests": 128,
-          "total_success": 84,
-          "total_429": 44,
+          "cooldown_seconds": 1842.541796207428,
+          "total_requests": 132,
+          "total_success": 87,
+          "total_429": 45,
           "total_errors": 26,
           "last_status": "429",
-          "last_observed_at": "2026-08-24T20:56:45.347861+00:00"
+          "last_observed_at": "2026-08-24T21:37:19.464983+00:00"
         },
         "huggingface_hub": {
           "max_inflight": 4,
@@ -341,13 +341,13 @@
           "max_inflight": 256,
           "active_leases": 1,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 3.325113534927368,
-          "total_requests": 5388,
-          "total_success": 4126,
-          "total_429": 323,
-          "total_errors": 903,
+          "cooldown_seconds": 0.0,
+          "total_requests": 5439,
+          "total_success": 4166,
+          "total_429": 332,
+          "total_errors": 905,
           "last_status": "200",
-          "last_observed_at": "2026-08-24T21:31:48.991032+00:00"
+          "last_observed_at": "2026-08-24T21:46:44.634472+00:00"
         },
         "openalex": {
           "max_inflight": 2,
@@ -366,12 +366,12 @@
           "active_leases": 0,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 150,
+          "total_requests": 151,
           "total_success": 70,
-          "total_429": 79,
+          "total_429": 80,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-24T21:22:00.421725+00:00"
+          "last_observed_at": "2026-08-24T21:37:01.026068+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -403,11 +403,11 @@
   },
   "costs": {
     "price_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output",
-    "free_swarm_sonnet5_equivalent_usd": 119.219468,
+    "free_swarm_sonnet5_equivalent_usd": 120.36246,
     "distillery_sonnet5_equivalent_usd": 0.015470000000000001,
-    "measured_total_sonnet5_equivalent_usd": 119.234938,
+    "measured_total_sonnet5_equivalent_usd": 120.37792999999999,
     "verified_historical_savings_usd": null,
-    "nominal_avoided_if_zero_cost_usd": 119.234938,
-    "repo_output_only_proxy_usd": 121.58909
+    "nominal_avoided_if_zero_cost_usd": 120.37792999999999,
+    "repo_output_only_proxy_usd": 121.59126
   }
 }

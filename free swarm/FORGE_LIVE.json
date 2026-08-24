@@ -1,20 +1,20 @@
 {
   "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-  "generated_at": "2026-08-24T13:43:33.494208+00:00",
+  "generated_at": "2026-08-24T13:58:50.706410+00:00",
   "candidate_states": {
-    "NEEDS_IMPLEMENTATION": 10,
-    "NEW": 32,
-    "PATCH_REJECTED": 12
+    "NEEDS_IMPLEMENTATION": 47,
+    "NEW": 71,
+    "PATCH_REJECTED": 57
   },
   "discovery_sources": {
-    "crossref": 1205,
-    "github": 2,
-    "openalex": 5,
-    "semantic_scholar": 5
+    "crossref": 1745,
+    "github": 7,
+    "openalex": 10,
+    "semantic_scholar": 6
   },
-  "discovery_queries": 245,
-  "discovery_hits": 1217,
-  "evaluations": 22,
+  "discovery_queries": 353,
+  "discovery_hits": 1768,
+  "evaluations": 104,
   "accepted_deltas": 0,
   "e2b_jobs": 0,
   "e2b_pass": 0,
@@ -22,7 +22,7 @@
   "peak_parallel_tasks": 0,
   "shared_provider_budget": {
     "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-    "generated_at": "2026-08-24T13:43:33.494752+00:00",
+    "generated_at": "2026-08-24T13:58:50.706958+00:00",
     "providers": {
       "arxiv": {
         "max_inflight": 1,
@@ -41,12 +41,12 @@
         "active_leases": 0,
         "min_interval_s": 1.0,
         "cooldown_seconds": 0.0,
-        "total_requests": 245,
-        "total_success": 241,
+        "total_requests": 353,
+        "total_success": 349,
         "total_429": 4,
         "total_errors": 0,
         "last_status": "200",
-        "last_observed_at": "2026-08-24T13:43:09.742669+00:00"
+        "last_observed_at": "2026-08-24T13:54:46.354459+00:00"
       },
       "exa": {
         "max_inflight": 2,
@@ -65,84 +65,84 @@
         "active_leases": 0,
         "min_interval_s": 1.0,
         "cooldown_seconds": 0.0,
-        "total_requests": 249,
-        "total_success": 225,
+        "total_requests": 357,
+        "total_success": 315,
         "total_429": 0,
-        "total_errors": 24,
-        "last_status": "200",
-        "last_observed_at": "2026-08-24T13:43:09.453932+00:00"
+        "total_errors": 42,
+        "last_status": "403",
+        "last_observed_at": "2026-08-24T13:54:46.396686+00:00"
       },
       "groq": {
         "max_inflight": 128,
         "active_leases": 0,
         "min_interval_s": 0.0,
-        "cooldown_seconds": 2021.427574634552,
+        "cooldown_seconds": 1104.2153809070587,
         "total_requests": 83,
         "total_success": 54,
         "total_429": 29,
-        "total_errors": 2,
+        "total_errors": 9,
         "last_status": "GATE_TIMEOUT",
-        "last_observed_at": "2026-08-24T13:42:41.587549+00:00"
+        "last_observed_at": "2026-08-24T13:57:58.785822+00:00"
       },
       "huggingface_hub": {
         "max_inflight": 4,
         "active_leases": 0,
         "min_interval_s": 0.25,
         "cooldown_seconds": 0.0,
-        "total_requests": 245,
-        "total_success": 245,
+        "total_requests": 353,
+        "total_success": 353,
         "total_429": 0,
         "total_errors": 0,
         "last_status": "200",
-        "last_observed_at": "2026-08-24T13:43:07.876692+00:00"
+        "last_observed_at": "2026-08-24T13:54:46.517226+00:00"
       },
       "nvidia": {
         "max_inflight": 256,
-        "active_leases": 62,
+        "active_leases": 35,
         "min_interval_s": 0.0,
         "cooldown_seconds": 0.0,
-        "total_requests": 518,
-        "total_success": 334,
-        "total_429": 0,
-        "total_errors": 122,
-        "last_status": "500",
-        "last_observed_at": "2026-08-24T13:43:33.409575+00:00"
+        "total_requests": 878,
+        "total_success": 645,
+        "total_429": 1,
+        "total_errors": 197,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T13:58:49.947239+00:00"
       },
       "openalex": {
         "max_inflight": 2,
         "active_leases": 0,
         "min_interval_s": 0.25,
         "cooldown_seconds": 0.0,
-        "total_requests": 245,
-        "total_success": 8,
+        "total_requests": 353,
+        "total_success": 9,
         "total_429": 0,
-        "total_errors": 237,
+        "total_errors": 344,
         "last_status": "400",
-        "last_observed_at": "2026-08-24T13:43:07.557218+00:00"
+        "last_observed_at": "2026-08-24T13:54:45.941010+00:00"
       },
       "openrouter": {
         "max_inflight": 16,
-        "active_leases": 6,
+        "active_leases": 0,
         "min_interval_s": 0.5,
-        "cooldown_seconds": 0.0,
-        "total_requests": 40,
-        "total_success": 31,
-        "total_429": 2,
+        "cooldown_seconds": 4.833387851715088,
+        "total_requests": 87,
+        "total_success": 70,
+        "total_429": 16,
         "total_errors": 0,
-        "last_status": "200",
-        "last_observed_at": "2026-08-24T13:43:26.613546+00:00"
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T13:58:45.540434+00:00"
       },
       "semantic_scholar": {
         "max_inflight": 1,
         "active_leases": 0,
         "min_interval_s": 1.0,
-        "cooldown_seconds": 5.474777936935425,
-        "total_requests": 178,
-        "total_success": 7,
-        "total_429": 171,
-        "total_errors": 67,
+        "cooldown_seconds": 0.0,
+        "total_requests": 231,
+        "total_success": 8,
+        "total_429": 223,
+        "total_errors": 122,
         "last_status": "429",
-        "last_observed_at": "2026-08-24T13:43:28.969559+00:00"
+        "last_observed_at": "2026-08-24T13:55:07.954303+00:00"
       },
       "tavily": {
         "max_inflight": 2,
@@ -158,6 +158,6 @@
       }
     }
   },
-  "db_bytes": 675840,
+  "db_bytes": 1536000,
   "state": "LIVE"
 }

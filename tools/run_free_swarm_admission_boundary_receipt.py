@@ -101,6 +101,11 @@ def _git(*args: str) -> str:
     return proc.stdout.strip()
 
 
+def _working_tree_dirty() -> bool:
+    """Include untracked files because they can shadow imports on PYTHONPATH."""
+    return bool(_git("status", "--porcelain", "--untracked-files=all"))
+
+
 def _authority_snapshot() -> dict[str, Any]:
     inbox = _read_json(INBOX_PATH)
     steering_ref = str(inbox.get("steering") or "").strip()
@@ -230,9 +235,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     head = _git("rev-parse", "HEAD")
-    # Exact-source promotion must also reject untracked import-shadowing files
-    # (for example sitecustomize.py or an untracked package/module on PYTHONPATH).
-    dirty = bool(_git("status", "--porcelain", "--untracked-files=all"))
+    dirty = _working_tree_dirty()
     if dirty and not args.allow_dirty:
         raise SystemExit("REFUSING_DIRTY_TREE: rerun from an exact clean checkout")
 
@@ -260,13 +263,32 @@ def main(argv: list[str] | None = None) -> int:
         )
         attempts = _network_attempts(network_log)
 
+    # Rebind exact source after execution. A concurrent checkout update, authority
+    # change, tracked mutation, or untracked import shadow makes the receipt
+    # non-promotable even if the child tests themselves were green.
+    head_after = _git("rev-parse", "HEAD")
+    dirty_after = _working_tree_dirty()
+    source_manifest_after = _source_manifest()
+    source_manifest_sha256_after = _manifest_digest(source_manifest_after)
+    source_stable_during_execution = bool(
+        head_after == head
+        and not dirty_after
+        and source_manifest_sha256_after == source_manifest_sha256
+    )
+
     finished = dt.datetime.now(dt.timezone.utc)
     combined = proc.stdout + "\n" + proc.stderr
     match = re.search(r"Ran\s+(\d+)\s+tests?", combined)
     test_count = int(match.group(1)) if match else None
     unittest_ok = proc.returncode == 0 and re.search(r"(?:^|\n)OK(?:\s|\n|$)", combined) is not None
     sentinel_leaked = SENTINEL in combined
-    pass_boundary = bool(unittest_ok and not attempts and not sentinel_leaked and not dirty)
+    pass_boundary = bool(
+        unittest_ok
+        and not attempts
+        and not sentinel_leaked
+        and not dirty
+        and source_stable_during_execution
+    )
 
     receipt = {
         "schema": "FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1",
@@ -279,10 +301,14 @@ def main(argv: list[str] | None = None) -> int:
         "source": {
             "repository": "gschaidergabriel/clay-global-research-entity",
             "git_head": head,
+            "git_head_after_execution": head_after,
             "clean_tracked_tree": not dirty,
+            "clean_tree_after_execution": not dirty_after,
             "untracked_files_included_in_cleanliness_gate": True,
             "manifest": source_manifest,
             "manifest_sha256": source_manifest_sha256,
+            "manifest_sha256_after_execution": source_manifest_sha256_after,
+            "source_stable_during_execution": source_stable_during_execution,
             "test_modules": list(TEST_MODULES),
             "test_sha256": {path.relative_to(ROOT).as_posix(): _sha256_file(path) for path in TEST_PATHS},
         },
@@ -310,6 +336,7 @@ def main(argv: list[str] | None = None) -> int:
             "malformed_admission_zero_assertions": "ENFORCED_BY_TEST_FREE_SWARM_ADMISSION_BOUNDARY_868_MALFORMED",
             "caller_forgery_non_authority_assertions": "ENFORCED_BY_TEST_FREE_PROVIDER_ADMISSION_FORGERY_868",
             "shared_secret_loader_pretouch_assertions": "ENFORCED_BY_TEST_RAE_SECRET_LOADER_PROVIDER_ADMISSION",
+            "source_toc_tou_guard": "HEAD_CLEAN_TREE_AND_MANIFEST_MUST_MATCH_BEFORE_AND_AFTER_EXECUTION",
         },
         "result": {
             "unittest_ok": unittest_ok,

@@ -2768,6 +2768,68 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertEqual(active_key.comparisons, 0)
                 self.assertNotIn(leaked_text, repr(caught.exception))
 
+    def test_post_network_latch_corruption_cannot_suppress_402_receipt(self):
+        leaked_text = "post-network-latch-equality-must-not-run"
+
+        class ActiveLatchKey(str):
+            __hash__ = str.__hash__
+
+            def __eq__(self, other):
+                raise LookupError(leaked_text)
+
+        class Response:
+            status = 402
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                raise AssertionError("HTTP 402 body must not be read")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        latch_key = MOD._payment_latch_key("nvidia", env)
+        for transport in ("response", "http_error"):
+            with self.subTest(transport=transport):
+                latches = set()
+
+                def opener(request, timeout):
+                    latches.add(ActiveLatchKey(latch_key))
+                    if transport == "http_error":
+                        raise MOD.urllib.error.HTTPError(
+                            request.full_url, 402, "Payment Required", {}, None,
+                        )
+                    return Response()
+
+                result = MOD.execute_chat(
+                    VALID_MESSAGES,
+                    model="mock",
+                    environ=env,
+                    opener=opener,
+                    now=iter((68.3, 68.31)).__next__,
+                    payment_latches=latches,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(
+                    receipt["outcome"], "payment_required_hard_stop"
+                )
+                self.assertEqual(receipt["status"], 402)
+                self.assertFalse(receipt["payment_latch_active"])
+                self.assertTrue(receipt["payment_latch_publication_failed"])
+                self.assertNotIn(leaked_text, repr(result))
+
+                with self.assertRaisesRegex(
+                    ValueError, "payment_latches_must_contain_strings"
+                ):
+                    MOD.route(env, payment_latches=latches)
+
     def test_unreachable_provider_has_no_http_status_or_executed_state(self):
         def opener(request, timeout):
             raise MOD.urllib.error.URLError("connection refused")

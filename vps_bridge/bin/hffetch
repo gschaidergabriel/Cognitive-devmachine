@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -lt 3 || $# -gt 5 ]]; then
+  cat >&2 <<'EOF'
+Usage:
+  hffetch REPO_ID FILENAME DEST [REVISION] [EXPECTED_SHA256]
+
+Example:
+  hffetch Qwen/Qwen3-0.6B-GGUF Qwen3-0.6B-Q8_0.gguf /models/Qwen3-0.6B-Q8_0.gguf <commit> <sha256>
+
+Uses the public Hugging Face resolve endpoint and delegates integrity/receipt work
+to webfetch. Private repositories are intentionally not supported because task
+containers receive no GitHub/Hugging Face credentials.
+EOF
+  exit 2
+fi
+
+REPO="$1"
+FILE="$2"
+DEST="$3"
+REVISION="${4:-main}"
+EXPECTED="${5:-}"
+
+URL="https://huggingface.co/${REPO}/resolve/${REVISION}/${FILE}?download=true"
+if [[ -n "$EXPECTED" ]]; then
+  exec webfetch "$URL" "$DEST" "$EXPECTED"
+else
+  exec webfetch "$URL" "$DEST"
+fi

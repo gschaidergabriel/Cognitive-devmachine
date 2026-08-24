@@ -1,0 +1,58 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "8.72",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_write": "0b3495aed89a86b3b626642aa202367862d0b489",
+  "coordination": {
+    "upstream_immutable_macrocycle_id_available": false,
+    "immutable_user_message_timestamp_precision": "minute",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "reason": "The available immutable trigger timestamp is only minute-precision and no shared request/macrocycle identifier is exposed, so the canonical atomic unusual-experiment lease cannot be reproduced safely."
+  },
+  "observations": [
+    "Supervisor inbox and PROGRAM_STATE select 8.72 FREE_ONLY; the uploaded 8.63 bootstrap is stale cache only.",
+    "Canonical main advanced during this macrocycle from 16fcc38e31188322c953474b6b9e9db4bf8a170f through f7fa8212e633f88b590cb9bb6968505b59eaef7d to 0b3495aed89a86b3b626642aa202367862d0b489.",
+    "Main already contains a semantic-neutral atomic lease gate and a source-attested local Qwen execution envelope with regression coverage.",
+    "A salvage PR created from stale PR #1622 was closed unmerged as duplicate after re-entry showed equivalent canonical-main functionality.",
+    "the artefact/README.md referenced closed duplicate dispatch #1643 while open fused successor dispatch #1647 is current."
+  ],
+  "hypothesis": "The highest-value safe delta in this macrocycle is current-facing convergence and duplicate suppression, not another binder implementation or a new scientific intervention without a reproducible atomic lease.",
+  "counterhypothesis": "The stale PR #1622 binder might still add unique runtime-binding semantics absent from main.",
+  "discriminator": "Compare exact-current main and open overlapping work; canonical main already contains source attestation, Qwen execution envelope, atomic lease gating and regression coverage, making a second binder authority lower-value and potentially conflicting.",
+  "writes": [
+    {
+      "path": "the artefact/README.md",
+      "commit": "b7fa48c1c556b4abd7e760638bd133c2d261b699",
+      "change": "replace stale closed Trigger1 dispatch #1643 with current open fused successor #1647"
+    }
+  ],
+  "coordination_writes": [
+    {
+      "pull_request": 1658,
+      "state": "CLOSED_UNMERGED_DUPLICATE",
+      "reason": "current main already integrates source-attested local Qwen execution binding"
+    }
+  ],
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: removed a current-facing stale execution-dispatch pointer and suppressed a duplicate binding lane after exact-main re-entry.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_FUSION_REENTRY: canonical main is verified to contain reusable source-attestation plus atomic-lease execution primitives; no second HCU binding authority was introduced.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: the current artifact frontier now points to open fused midlayer dispatch #1647; no model runtime/training credit is minted because no terminal receipt was observed and no unusual experiment ran."
+  },
+  "credit_boundary": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Observe the terminal repository-bound result for the current fused Trigger1 midlayer dispatch #1647 and the exact-current Forge-to-Distillery successor witness; classify infrastructure failures separately and promote only the exact measured scope.",
+  "evidence_boundary": "This macrocycle contains source/repository-state convergence and documentation evidence only. It does not claim Qwen execution, J-Space causality, whole-HCU runtime, provider runtime or training PASS."
+}

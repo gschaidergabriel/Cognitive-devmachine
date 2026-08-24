@@ -1,0 +1,86 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EVIDENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_before_write": "1638c428bacbd6ed1a25c3b42b92f9318ade1f54",
+  "retained_executor": {
+    "qualified_identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "live_head_observed": "588315b63f4f4255f6e73bd604cbc1789cbe12c9",
+    "head_message": "guard(hcu): bind carrier paths to retained donor identity"
+  },
+  "exact_head_deployment": {
+    "id": "dpl_3brnpJBb1jq9mQE9yGuHx1ahVM6m",
+    "github_commit_sha": "588315b63f4f4255f6e73bd604cbc1789cbe12c9",
+    "state": "ERROR",
+    "error_code": "BUILD_UTILS_SPAWN_1",
+    "error_step": "buildStep",
+    "runtime_invocation_attempted": false,
+    "sandbox_create_observed": false
+  },
+  "observed_failure": {
+    "error": "ENTITYOS_HCU_PREVERCEL_SUCCESSOR_GUARD_CHAIN_DRIFT",
+    "source": "mcp/vercel-sandbox-mcp/scripts/guard-entityos-hcu-current-executor.mjs",
+    "classification": "EXACT_CURRENT_EXECUTOR_SOURCE_GUARD_COHERENCE_FAILURE_BEFORE_RUNTIME",
+    "product_runtime_negative": false
+  },
+  "source_discriminator": {
+    "package_prevercel_build_observed": "node scripts/guard-hcu-jspace-carrier-donor-path-identity.mjs && node scripts/guard-hcu-jspace-v4-v3-current-donor-exact-blobs.mjs && node scripts/guard-hcu-jspace-v4-v3-promotion-contract-v2.mjs && node scripts/guard-hcu-jspace-rebind-permission-semantics.mjs",
+    "exclusive_guard_expected_prevercel_build_observed": "node scripts/guard-hcu-jspace-v4-v3-current-donor-exact-blobs.mjs && node scripts/guard-hcu-jspace-v4-v3-promotion-contract-v2.mjs && node scripts/guard-hcu-jspace-rebind-permission-semantics.mjs",
+    "result": "The new carrier-donor-path identity guard was inserted into package.json prevercel-build, but the exclusive EntityOS/HCU executor guard still requires the previous three-guard chain exactly. The exact-head build therefore fails closed before successor guards can be re-run or any runtime path can be reached.",
+    "counterhypothesis": "The failure indicates HCU/J-Space component logic or model-runtime regression.",
+    "counterhypothesis_result": "REJECTED_AT_CURRENT_SCOPE: the observed exception is a build-time guard-chain string mismatch before Function invocation, Sandbox.create, model execution, inference or J-Space runtime."
+  },
+  "bounded_repair_direction": {
+    "lane": "SAME_RETAINED_EXECUTOR_ONLY",
+    "required": [
+      "make the exclusive executor guard accept the exact successor prevercel chain including guard-hcu-jspace-carrier-donor-path-identity.mjs",
+      "preserve the carrier donor-path invariant rather than deleting the new guard to make the build green",
+      "ensure the exclusive build guard re-runs the carrier guard together with the existing current-donor, promotion and permission guards so package/prevercel and exclusive-vercel guard authority cannot drift",
+      "rebuild only through naturally available included-tier Vercel Hobby preview; no paid upgrade/fallback",
+      "after a future exact-current READY build, still require the FREE_ONLY quota/billing/upgrade/plan/charge admission fence before any Sandbox.create"
+    ],
+    "source_patch_by_this_organ": false,
+    "reason_no_direct_patch": "The retained executor branch is moving concurrently and the observed failure is safely fail-closed. This organ avoids racing a full shared guard file while another worker owns the single executor lane; durable exact evidence is higher-value than a blind stale overwrite."
+  },
+  "jspace_sequence_reentry": {
+    "current_contract": "research_entity/continuity/JSPACE_EXECUTOR_SEQUENCE_EVIDENCE_CONTRACT.md",
+    "finding": "Do not recreate the reverted caller-labelled temporal binder. Current same-invocation ModelInputControl delivery plus explicit non-BASELINE intervention producers are valid source-level delivery evidence; recurrent t->t+1 credit separately requires executor-owned canonical adjacency evidence.",
+    "runtime_credit_added": 0
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: exact-current executor build blocker narrowed from generic readiness/quota discussion to one reproducible pre-runtime guard-chain coherence failure at SHA 588315b63f4f4255f6e73bd604cbc1789cbe12c9.",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_GUARD_COHERENCE_DISCRIMINATOR: carrier-path donor identity is a useful HCU provenance fence and must be fused into the single exclusive guard chain rather than removed or duplicated.",
+    "track_c_global_jspace_training_readiness": "TRAINING_READINESS_NO_RUNTIME_CHANGE: current explicit intervention -> exact Vector-Control packet -> exact executor-input delivery source chain remains bounded source evidence; recurrent sequence/model-specific causal credit remains blocked by executor-owned sequence evidence and real model-runtime gates."
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable macrocycle/request identity was exposed and available user-message metadata is insufficient for a reproducible canonical create-only lease.",
+    "new_unusual_intervention_count": 0
+  },
+  "execution_fences": {
+    "vps_testing": "FORBIDDEN_NOT_USED",
+    "self_hosted_testing": "FORBIDDEN_NOT_USED",
+    "production_host_testing": "FORBIDDEN_NOT_USED",
+    "together": "FORBIDDEN_NOT_PREFLIGHTED_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vercel_upgrade": "FORBIDDEN_NOT_USED"
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md and canonical frontier are moving concurrently. This append-only exact-head receipt avoids a stale full-file overwrite and is the durable delta for this organ."
+  },
+  "next_exact_action": "Re-enter the live repository-qualified PR810 head. If 588315b63f4f4255f6e73bd604cbc1789cbe12c9 is still current and no parallel repair exists, update the exclusive executor guard so its exact prevercel successor chain includes and re-runs guard-hcu-jspace-carrier-donor-path-identity.mjs without weakening any existing guard. Then require a naturally available exact-current included-tier build. Do not invoke Sandbox unless that then-current deployment is READY and the FREE_ONLY quota/billing/upgrade/plan/charge fence is positively observed; keep any future component PASS scoped and retain zero J-Space model/training credit until real local model/executor and sequence evidence gates pass."
+}

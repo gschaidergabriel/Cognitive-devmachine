@@ -73,11 +73,17 @@ The current source provides:
 
 **Forschungsrun 1 found and removed a hard scientific confound.** The earlier final-norm/`lm_head`-coupled fastpath constructs the steering direction from the same terminal output geometry that is scored, so it is retained only as a technical readout-steering positive control. The promotion gate now fails closed for terminal `lm_head`/output-head/final-norm shortcuts.
 
-The fused current discriminator is `tools/trigger1_local_qwen06_midlayer_causal_execute.py` launched by `tools/trigger1_local_qwen06_midlayer_causal.sh`. It uses a fixed nonterminal middle decoder layer, derives its steering basis from contrastive **internal activations rather than output-head rows**, preserves substantive downstream transformer computation, selects gain only on calibration data, freezes that gain before disjoint holdout, and requires paired specificity against SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM and PERMUTED_SAME_NORM controls. The launcher additionally performs bounded cleanup of disposable Trigger-1/pip cache material before failing closed on insufficient storage.
+The fused V3 discriminator is `tools/trigger1_local_qwen06_midlayer_causal_execute.py`. It uses a fixed nonterminal middle decoder layer, derives its steering basis from contrastive **internal activations rather than output-head rows**, preserves substantive downstream transformer computation, selects gain only on calibration data, freezes that gain before disjoint holdout, and requires paired specificity against SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM and PERMUTED_SAME_NORM controls.
 
-A single owner-only issue dispatcher, `.github/workflows/trigger1-v2-local-fastpath-selfhosted.yml`, is the retained Self-Hosted Linux/X64 Trigger-1 execution lane. Duplicate terminal and tied-embedding runtime workflows were retired after fusion. Owner dispatch **#1643** targets exact-current `main` and the fused midlayer discriminator. Until it produces a repository-bound terminal receipt, source/workflow/dispatch existence alone grants no model/J-Space/runtime promotion.
+**GO 8.72 scientific-independence delta.** Re-entry against Promotion Gate v4 showed that V3 still has two explicit confounds: its vector derivation uses the same A/B/C output-label identities later used for evaluation, and its fixed A-vs-(B,C) output-token metric is not label-counterbalanced. The current successor `tools/trigger1_local_qwen06_semantic_counterbalanced_execute.py` removes those source-level confounds without changing the model identity, truth authority or effect path: it derives an activation-only semantic contrast across APPROVAL / REJECTION / UNCERTAINTY prompts, fails closed if any exact evaluation output-token ID appears in the basis prompts, and counterbalances each semantic class across A, B and C exactly once in gain calibration and once in holdout. Candidate evidence explicitly declares `uses_output_head_weights=false`, `uses_holdout_data=false`, `uses_evaluation_output_labels=false`, `evaluation_independent_of_vector_derivation=true`, and `label_mapping_counterbalanced=true` for the output-token metric. Deterministic regressions are defined in `tests/test_trigger1_local_qwen06_semantic_counterbalanced.py`.
 
-Source/regression evidence is not model runtime evidence. A positive midlayer result can become a model-specific internal-intervention promotion candidate only at its exact bound scope; it still does not mint canonical EntityOS/HCU, full J-Space-model or training credit by itself.
+The retained launcher `tools/trigger1_local_qwen06_midlayer_causal.sh` now routes to that semantic/counterbalanced successor while retaining credential stripping, bounded cache cleanup, disk fail-closed behavior, the same pinned local model path and loopback-only transport.
+
+A single owner-only issue dispatcher, `.github/workflows/trigger1-v2-local-fastpath-selfhosted.yml`, remains the retained Self-Hosted Linux/X64 Trigger-1 execution lane. Duplicate terminal and tied-embedding runtime workflows were retired after fusion. Historical dispatch **#1643** targeted the earlier fused midlayer discriminator. Source/launcher convergence does not retroactively upgrade that run or mint successor runtime evidence.
+
+No new unusual hidden-state experiment was run in this `go`: this organ was not exposed a shared reproducible immutable macrocycle/request identity sufficient for the canonical create-only atomic lease, so the unusual-experiment path remained `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`. The new successor therefore has **source/regression-definition evidence only** until an exact-current authorized zero-cost runtime result is repository-bound and independently passes Promotion Gate v4.
+
+Source/regression evidence is not model runtime evidence. A positive semantic/counterbalanced result can become a model-specific internal-intervention promotion candidate only at its exact bound scope; it still does not mint canonical EntityOS/HCU, full J-Space-model or training credit by itself.
 
 ## Evidence credit
 
@@ -91,7 +97,7 @@ Current bounded credit remains conservative:
 - Distillery accepted Forge packets/tokens in the last published live snapshot: **0 / 0**;
 - Forge->Distillery exact-current runtime credit: **0 pending terminal receipt**;
 - provider runtime credit: **0 unless exact current authority/receipt promotes only its exact scope**;
-- local Qwen3-0.6B hidden-state/runtime J-Space promotion: **0 pending terminal midlayer receipt**;
+- local Qwen3-0.6B semantic/counterbalanced hidden-state runtime promotion: **0 pending terminal successor receipt + Promotion Gate v4**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
 - J-Space model-runtime credit: **0**;
@@ -105,11 +111,12 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 1. Observe a terminal self-hosted runtime-reconciliation receipt on current authority and exact source identity.
 2. Observe the exact-current Forge -> Distillery successor witness: qualified Forge accept = 1 -> exactly one Distillery packet -> `accepted_dataset_tokens > 0` -> replay delta = 0.
 3. If the Forge witness fails, repair the **measured** isolated-executor/bridge blocker only; do not weaken evidence admission.
-4. Observe owner dispatch #1643 and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
-5. Require all six matched controls plus disjoint holdout; require activation-derived nonterminal vector construction and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
-6. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
-7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
-8. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
+4. Run deterministic regressions for the semantic/counterbalanced successor and preserve any failure as source evidence.
+5. With a valid canonical unusual-experiment lease, execute the exact-current clean `tools/trigger1_local_qwen06_midlayer_causal.sh` on an authorized zero-cost local/VPS sandbox and bind a terminal repository result.
+6. Require all six matched controls, downstream transformer computation, disjoint derivation/calibration/holdout identities, zero exact evaluation-token leakage in vector derivation, complete semantic-to-output-label counterbalancing and Promotion Gate v4 before any narrowly scoped model-specific promotion candidate.
+7. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
+8. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
+9. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
 
 ## Evidence discipline and reentry
 

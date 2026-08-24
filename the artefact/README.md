@@ -4,13 +4,13 @@
 
 ## Current authority — 2026-08-24
 
-Observed supervisor epoch: **8.71**. Mode: **FREE_ONLY**.
+Observed supervisor epoch: **8.72**. Mode: **FREE_ONLY**.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not new persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU are compatibility/research aliases only.
 
 Canonical durable state/evidence remains deterministic and outside model-generated cognition/simulation. HCU/J-Space/world-model/workspace outputs are candidate/projection/measurement only. `EffectGate + EffectJournal` remain the real-effect authority. `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
 
-Current owner authority permits zero-cost development/testing on normal-user local Linux and the authorized `clay-direct-dev` VPS sandbox. Paid/subscription/unknown-cost execution, upgrades/credit purchases, Together and paid fallback remain forbidden. Provider labels alone are not economic proof; concrete credential/model/route provenance remains fail-closed.
+Current owner authority permits zero-cost development/testing on normal-user local Linux and the authorized `clay-direct-dev` VPS sandbox. Paid/subscription/unknown-cost execution, upgrades/credit purchases, Together and paid fallback remain forbidden. Provider labels alone are not economic proof; concrete credential/model/route provenance remains fail-closed. Local/VPS component execution does not automatically mint canonical, whole-product, HCU-full, J-Space-model or training credit.
 
 ## Target causal path
 
@@ -20,73 +20,90 @@ Pre-load hashing is not loader-consumption attestation. Logical cell count is no
 
 ## Live 6000 Free-Swarm reentry — weighted model-health routing
 
-The authorized VPS sandbox was preflighted before this delta. Bridge roundtrip, outbound network, RAM and disk checks passed; roughly 10 GiB RAM and 157 GiB disk headroom were retained.
+The authorized VPS sandbox was preflighted before the current blocker-convergence work. Bridge roundtrip, outbound network, RAM and disk checks passed; roughly 10 GiB RAM and 157 GiB disk headroom were retained.
 
-`tools/free_swarm_model_health_v1.py` is now bound into `tools/run_6000_free_swarm_fast.py` **inside** the exact 8.71 FREE credential/model/route gate. Sandbox import verification proved:
+`tools/free_swarm_model_health_v1.py` is bound into `tools/run_6000_free_swarm_fast.py` **inside** the exact FREE credential/model/route gate. The observed sandbox component evidence showed:
 
 - outer selector = `gated_next_key_model`;
 - inner selector = weighted model-health routing;
 - request observer wraps rather than replaces the economic gate;
-- five focused routing/circuit-breaker tests and Python compilation passed.
+- focused routing/circuit-breaker tests and Python compilation passed;
+- NVIDIA `nemotron-3-super-120b-a12b` was healthy and preferred;
+- NVIDIA `nemotron-mini-4b-instruct` was quarantined after deterministic hard 4xx;
+- OpenRouter remained 429-limited and was throttled rather than misclassified as deterministic model failure.
 
-Scheduling now uses measured reliability, latency, architecture-delta yield, Forge-accepted yield and model-specific error evidence. Repeated deterministic hard 4xx quarantines only the exact model. Repeated 5xx/network faults temporarily cool only the exact model instead of collapsing healthy sibling routes. Recent healthy provider concurrency is reused as restart evidence.
-
-Verified post-restart model behavior:
-
-- NVIDIA `nemotron-3-super-120b-a12b`: healthy and strongly preferred. Historical seed included 421/456 successes, 99 delta markers and the one historical nominal Forge acceptance.
-- NVIDIA `nemotron-3-ultra-550b-a55b`: retained at much lower weight because of higher latency/error load. Three consecutive transient failures later triggered a model-local cooldown while Super remained usable.
-- NVIDIA `nemotron-mini-4b-instruct`: **quarantined** as `MODEL_HARD_4XX_CIRCUIT:400`; historical seed had 0 successes and 406 hard 4xx; routing weight = 0.
-- OpenRouter `openrouter/free`: remains 429-limited and is throttled by provider truth rather than falsely treated as a deterministic model failure.
-
-In the first bounded post-restart sample, routing issued 18 calls to NVIDIA Super, 2 to Ultra, **0 to Mini 4B**, and 5 rate-limited OpenRouter attempts; Super returned 15/18 successful calls. This removes the previously measured large waste of NVIDIA slots on the dead 4B route.
-
-The verified live routing runtime is source-bound to sandbox head `bfd3526574b550bfde9944c343a92c020e9fe862`. Canonical `main` advanced afterwards, so this is successor-8.71 live component evidence but **not exact-newest-main runtime credit**.
+That runtime observation was source-bound to an earlier sandbox head. It remains bounded component evidence, not exact-newest-main runtime credit.
 
 ## Forge -> Distillery conversion frontier
 
-Observed live Forge ledger at this stage:
+The historical live ledger contained one nominal `accepted` row, but it predates the exact source/execution-admission contract. It therefore correctly minted **zero** Distillery packets/tokens.
 
-- 141 evaluations;
-- 1 historical nominal `accepted` row;
-- 74 `PATCH_REJECTED`;
-- 65 `NEEDS_IMPLEMENTATION`;
-- 1 `VALIDATED_NOT_BETTER`;
-- the new candidate queue continues to grow.
+Current `main` has now fused the evidence-qualified Forge -> Distillery source path. `tools/ingest_forge_accepts_into_distillery.py` delegates admission to the shared Forge evidence discriminator and requires `CLAY_FORGE_EXECUTION_ADMISSION/v1`, including exact source/evaluation/worker/target identities, complete command admission, isolated execution/network namespace and secret fences. A nominal `status=accepted` is insufficient.
 
-The historical nominal accepted row predates the current exact source/execution-admission contract. Direct deterministic execution of the Forge->Distillery ingester twice correctly admitted **zero** packets: 140 rows were non-accepted and the sole nominal accepted row failed closed as `SOURCE_SCOPE_NOT_EXACT`. Distillery therefore remained at **0 accepted dataset tokens and 0 accepted packets**; replay also added zero.
+The isolated Forge executor was additionally repaired so only strict disposable Forge scratch children are writable inside bubblewrap; repository root and outside paths remain fail-closed.
 
-The Forge process was then restarted on the current sandbox source so future evaluations can carry exact worker-source identity. At the first bounded post-restart observation, the append-only evaluation ledger still had 141 old evaluations and **0 `EXACT_WORKER_PROMPT_HEAD` evaluations**, so there was correctly still no evidence-qualified acceptance to ingest.
+The exact-current successor witness in `tools/run_go871_forge_distillery_runtime_gate.py` now measures the **integrated** source rather than proposing the already-merged patch. It requires:
 
-Current `main` has meanwhile strengthened this boundary further: the Forge->Distillery path now requires the shared evidence discriminator and `CLAY_FORGE_EXECUTION_ADMISSION/v1`, including exact source/evaluation/worker/target identities, complete command admission, isolated execution/network namespace and secret fences. A nominal `status=accepted` is insufficient.
+1. exact source commit/tree/blob binding;
+2. bubblewrap `--unshare-all` admission with secret fences;
+3. two reproducible current-source admission-regression passes;
+4. deterministic nominal-only ablation failure as the causal counterfactual;
+5. rejection of a nominal ACCEPT without execution admission;
+6. one evidence-qualified ACCEPT;
+7. exactly one new Distillery packet;
+8. `accepted_dataset_tokens > 0`;
+9. identical replay adds zero packets/tokens.
 
-`tools/run_forge_distillery_bridge_loop.py` reconciles only evidence-qualified Forge rows into the existing Distillery SQLite database. Packet text contains measured execution evidence only; model-authored hypothesis/falsifier remain candidate-only metadata. No second truth/effect authority is created.
+The self-hosted workflow is bound to all material executor/bridge/admission/test paths and publishes a sanitized result to `research_entity/runtime/go871_forge_distillery_results/`. **No PASS is claimed until that terminal receipt is observed.**
+
+## Provider-independent local Qwen3-0.6B J-Space discriminator
+
+Supervisor 8.72 prioritizes the zero-provider-billing local Qwen3-0.6B hidden-state/vector path as the highest-information J-Space discriminator.
+
+The current source provides:
+
+- pinned Qwen3-0.6B model/revision and tokenizer identity;
+- strict loopback-only local API execution;
+- direct hidden-state/vector intervention;
+- six matched controls: BASELINE, +VECTOR, SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM, PERMUTED_SAME_NORM;
+- disjoint calibration and holdout;
+- exact source/runtime/model/tokenizer/result receipt fields;
+- explicit zero external LLM credential dependency and zero paid-provider billing by experiment design;
+- fail-closed promotion rules that reject terminal output-head/readout shortcuts as J-Space mechanism credit.
+
+Earlier issue dispatches #1589/#1590 were opened before later low-disk receipt and persistent-cache fixes and were closed as superseded/duplicate. A single post-fix owner dispatch, **#1609**, now targets the repaired self-hosted Linux/X64 lane. The workflow persists only bounded sanitized evidence to current canonical source. **No J-Space/model/training promotion is claimed before an executable terminal receipt and promotion-gate result are observed.**
 
 ## Evidence credit
 
-- weighted model-health router at verified sandbox source: component runtime PASS;
-- dead Mini-4B quarantine: observed PASS;
-- model-local transient cooldown: observed PASS;
+Current bounded credit remains conservative:
+
+- weighted model-health router at its verified sandbox source: component runtime PASS;
+- dead Mini-4B quarantine: observed component PASS;
+- model-local transient cooldown: observed component PASS;
 - historical nominal Forge accepted rows: 1;
-- current evidence-qualified Forge accepted rows proven: 0;
-- Distillery accepted Forge packets/tokens: 0;
-- Forge->Distillery exact-current runtime credit: 0;
-- provider runtime credit: 0 unless exact current authority/receipt promotes only its exact scope;
-- whole EntityOS/HCU runtime credit: 0;
-- full HCU runtime credit: 0;
-- J-Space model-runtime credit: 0;
-- training credit: 0;
-- whole-product PASS: false.
+- exact current evidence-qualified Forge acceptance proven by terminal successor receipt: **pending**;
+- Distillery accepted Forge packets/tokens in the last published live snapshot: **0 / 0**;
+- Forge->Distillery exact-current runtime credit: **0 pending terminal receipt**;
+- provider runtime credit: **0 unless exact current authority/receipt promotes only its exact scope**;
+- local Qwen3-0.6B hidden-state runtime/J-Space promotion: **pending terminal receipt**;
+- whole EntityOS/HCU runtime credit: **0**;
+- full HCU runtime credit: **0**;
+- J-Space model-runtime credit: **0**;
+- training credit: **0**;
+- whole-product PASS: **false**.
 
-A source file, test, deployment, provider HTTP success, token count or model consensus never automatically mints broader credit.
+A source file, test, workflow, deployment, provider HTTP success, token count or model consensus never automatically mints broader credit.
 
-## Current frontier
+## Current blockers / next exact gates
 
-1. Re-sync the sandbox to newest `main` without losing generated telemetry, then re-enter the weighted swarm/Forge/Distillery runtime on those exact bytes.
-2. Produce the first **evidence-qualified exact-source Forge acceptance** carrying `CLAY_FORGE_EXECUTION_ADMISSION/v1`.
-3. Require the witness chain: qualified Forge accept = 1 -> Distillery admits exactly one measured packet -> `accepted_dataset_tokens > 0` -> duplicate replay adds zero.
-4. Reduce `PATCH_REJECTED` and `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair; do not weaken acceptance/evidence gates to manufacture yield.
-5. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
-6. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
+1. Observe a terminal self-hosted runtime-reconciliation receipt on current authority and exact source identity.
+2. Observe the exact-current Forge -> Distillery successor witness: qualified Forge accept = 1 -> exactly one Distillery packet -> `accepted_dataset_tokens > 0` -> replay delta = 0.
+3. If the Forge witness fails, repair the **measured** isolated-executor/bridge blocker only; do not weaken evidence admission.
+4. Observe post-fix Trigger-1 dispatch #1609 and persist the local Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
+5. Require all six matched controls plus disjoint holdout and reject final-norm/lm-head/output-projection shortcuts as mechanism credit.
+6. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
+7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
+8. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
 
 ## Evidence discipline and reentry
 

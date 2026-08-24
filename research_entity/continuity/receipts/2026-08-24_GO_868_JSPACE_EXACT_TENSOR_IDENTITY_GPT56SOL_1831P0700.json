@@ -1,0 +1,53 @@
+{
+  "schema": "ENTITYOS_HCU_GO_SOURCE_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.68",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_during_reentry": "7d2df0811906a8bf40989f23df8c64eeb86b287a",
+  "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+  "finding": {
+    "classification": "SOURCE_EVIDENCE_IDENTITY_SEMANTICS_GAP",
+    "source_path": "tools/hcu_jspace_local_activation_probe.py",
+    "source_blob_sha_observed_on_main": "08bbd56af13c20f5a641f70c93b598805d840241",
+    "detail": "The current v1 probe uses tensor_digest() that converts tensors to float32 contiguous CPU bytes before hashing and does not include tensor shape in the digest envelope. The same function is used for clean/corrupted token-ID hashes. Those hashes are value-normalized digests, not general exact dtype+shape+payload tensor identities.",
+    "counterhypothesis": "For the currently selected Qwen-class vocabulary, token IDs are normally below the IEEE-754 float32 consecutive-integer limit, so float32 conversion alone may not collapse present token IDs. This does not close the protocol gap: shape is still not bound into the digest and dtype normalization is semantically incompatible with a claim of exact tensor identity.",
+    "falsifier": "If the current probe or another canonical envelope already binds original dtype, exact shape and exact pre-normalization payload bytes into the identity used by the receipt, this finding should be withdrawn. No such binding was observed in the inspected current source."
+  },
+  "delta": {
+    "helper_path": "tools/hcu_exact_tensor_identity.py",
+    "helper_create_commit": "a4d30ac829b17e4899eb0dff1fe6c7093824bea5",
+    "helper_blob_sha_verified_after_write": "38d1f6457791741eaa4f673035e7fb370a1866dc",
+    "test_path": "tests/test_hcu_exact_tensor_identity.py",
+    "test_create_commit": "b15aa8d1e0e10f39c3e6ae715803d2c0be02d752",
+    "test_blob_sha_verified_after_write": "a8bf8d70c5fa47ae18a04cea47d9c6e7ecfbb7e1",
+    "identity_schema": "ENTITYOS_HCU_EXACT_TENSOR_IDENTITY/v1",
+    "identity_binding": ["schema", "dtype", "shape", "byte_length", "exact_payload_bytes"],
+    "value_digest_fence": "CANONICALIZED_VALUE_DIGEST_NOT_EXACT_TENSOR_IDENTITY"
+  },
+  "validation": {
+    "connector_post_write_readback": "PASS",
+    "assistant_tool_static_semantic_checks": "3/3 PASS",
+    "assistant_tool_static_check_scope": "ORGAN_TOOL_STATIC_CHECK_ONLY_NOT_ENTITYOS_RUNTIME_EVIDENCE",
+    "authorized_local_or_clay_direct_dev_execution_observed": false,
+    "exact_repo_test_execution_observed": false
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_DONOR_SOURCE_ONLY_BY_REMOVING_AN_EXACT_EVIDENCE_BINDING_AMBIGUITY; NOT_CANONICAL_RUNTIME",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_WITH_REUSABLE_EXACT_TENSOR_IDENTITY_PRIMITIVE_AND_FAIL_CLOSED_REGRESSIONS",
+    "C_GLOBAL_JSPACE_GWT_AND_LOCAL_08B_READINESS": "ADVANCED_BY_SEPARATING_EXACT_TOKEN_ACTIVATION_LOGIT_IDENTITY_FROM_NORMALIZED_VALUE_DIGESTS_BEFORE_MODEL_SPECIFIC_CAUSAL_RECEIPTS"
+  },
+  "unusual_experiment": "NONE",
+  "credits": {
+    "external_provider_runtime": 0,
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Integrate ENTITYOS_HCU_EXACT_TENSOR_IDENTITY/v1 into the current activation-probe successor so token IDs, named activations and bound logits carry exact dtype+shape+payload identity while any optional float32-normalized digest is separately labeled value-only; then execute focused regressions on an authorized zero-cost local normal-user or clay-direct-dev surface before any runtime promotion."
+}

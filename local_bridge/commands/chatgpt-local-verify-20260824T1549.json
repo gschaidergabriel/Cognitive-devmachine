@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-local-verify-20260824T1549",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; echo CHATGPT_LOCAL_DIRECT_OK; id; python3 --version; git --version; tmux -V; rm -f /tmp/chatgpt-local-tmux-proof.txt; tmux kill-session -t chatgpt-local-proof 2>/dev/null || true; tmux new-session -d -s chatgpt-local-proof 'printf TMUX_PERSISTENT_OK > /tmp/chatgpt-local-tmux-proof.txt; sleep 20'; sleep 1; cat /tmp/chatgpt-local-tmux-proof.txt; tmux has-session -t chatgpt-local-proof; tmux kill-session -t chatgpt-local-proof; rm -f /tmp/chatgpt-local-tmux-proof.txt; echo LOCAL_PROGRAMMING_SURFACE_OK"
+}

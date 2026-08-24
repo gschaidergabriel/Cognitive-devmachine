@@ -1,38 +1,38 @@
 {
   "schema": "CLAY_FREE_SWARM_METRICS/v1",
-  "generated_at": "2026-08-24T15:44:32.396930+00:00",
+  "generated_at": "2026-08-24T15:59:37.557595+00:00",
   "workers": {
-    "worker_records": 9578,
+    "worker_records": 9628,
     "worker_files": 12,
-    "average_concurrency": 6.645242040812326,
+    "average_concurrency": 6.473830051138626,
     "peak_concurrency": 136,
-    "observed_seconds": 21381.534958,
-    "exact_usage_rows": 2352,
-    "input_tokens": 13474573,
-    "output_tokens": 3513052,
-    "total_tokens": 16987625,
+    "observed_seconds": 22188.800581,
+    "exact_usage_rows": 2392,
+    "input_tokens": 13696964,
+    "output_tokens": 3576618,
+    "total_tokens": 17273582,
     "models": [
       {
         "provider": "nvidia",
         "model": "nvidia/nemotron-3-super-120b-a12b",
-        "requests": 1474,
-        "success": 1002,
-        "rate_limits": 61,
-        "errors": 411,
-        "input_tokens": 5677748,
-        "output_tokens": 1604155,
-        "total_tokens": 7281903
+        "requests": 1512,
+        "success": 1033,
+        "rate_limits": 67,
+        "errors": 412,
+        "input_tokens": 5850120,
+        "output_tokens": 1653755,
+        "total_tokens": 7503875
       },
       {
         "provider": "nvidia",
         "model": "nvidia/nemotron-3-ultra-550b-a55b",
-        "requests": 959,
-        "success": 411,
+        "requests": 970,
+        "success": 420,
         "rate_limits": 5,
-        "errors": 543,
-        "input_tokens": 2365845,
-        "output_tokens": 642659,
-        "total_tokens": 3008504
+        "errors": 545,
+        "input_tokens": 2415864,
+        "output_tokens": 656625,
+        "total_tokens": 3072489
       },
       {
         "provider": "nvidia",
@@ -158,9 +158,9 @@
       {
         "provider": "openrouter",
         "model": "openrouter/free",
-        "requests": 165,
+        "requests": 166,
         "success": 52,
-        "rate_limits": 53,
+        "rate_limits": 54,
         "errors": 60,
         "input_tokens": 306274,
         "output_tokens": 84120,
@@ -568,11 +568,11 @@
   },
   "corpus": {
     "text_files": 9887,
-    "characters": 48153531,
-    "approx_tokens_4chars": 12038383,
+    "characters": 48154357,
+    "approx_tokens_4chars": 12038589,
     "sonnet5_input_usd_per_mtok": 2.0,
     "sonnet5_output_usd_per_mtok": 10.0,
-    "output_only_equivalent_usd": 120.38383,
+    "output_only_equivalent_usd": 120.38589,
     "pricing_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output; standard after: $3/M + $15/M"
   }
 }

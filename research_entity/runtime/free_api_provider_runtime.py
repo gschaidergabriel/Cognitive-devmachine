@@ -230,8 +230,7 @@ def inventory(
             key_name and zero_cost_evidence and ZERO_COST_ONLY
         )
         payment_blocked = bool(
-            latch_capacity_exhausted
-            or _payment_latch_key(spec.provider_id, env) in latches
+            _payment_latch_key(spec.provider_id, env) in latches
         )
         row = asdict(spec)
         row["key_names"] = list(spec.key_names)
@@ -248,7 +247,11 @@ def inventory(
                     latch_capacity_exhausted
                 ),
                 "eligible_before_payment_latch": eligible_before_latch,
-                "eligible": bool(eligible_before_latch and not payment_blocked),
+                "eligible": bool(
+                    eligible_before_latch
+                    and not payment_blocked
+                    and not latch_capacity_exhausted
+                ),
             }
         )
         rows.append(row)
@@ -264,10 +267,20 @@ def _route_from_inventory(rows: list[dict]) -> dict:
         if row["eligible_before_payment_latch"]
         and row["payment_blocked_current_budget_epoch"]
     ]
+    capacity_exhausted = any(
+        row["payment_latch_capacity_exhausted"] for row in rows
+    )
+    capacity_blocks_configured_provider = any(
+        row["eligible_before_payment_latch"]
+        and row["payment_latch_capacity_exhausted"]
+        for row in rows
+    )
     if eligible:
         reason = "highest_priority_configured_zero_cost_provider"
     elif blocked:
         reason = "payment_required_hard_stop_active"
+    elif capacity_blocks_configured_provider:
+        reason = "payment_latch_capacity_exhausted"
     else:
         reason = "no_configured_zero_cost_provider"
     return {
@@ -276,6 +289,7 @@ def _route_from_inventory(rows: list[dict]) -> dict:
         "zero_cost_only": ZERO_COST_ONLY,
         "denied_providers": sorted(DENIED_PROVIDERS),
         "payment_blocked_providers": blocked,
+        "payment_latch_capacity_exhausted": capacity_exhausted,
         "reason": reason,
     }
 
@@ -741,6 +755,8 @@ def _execute_chat_locked(
     if not selected:
         if route_state["reason"] == "payment_required_hard_stop_active":
             raise RuntimeError("payment_required_hard_stop_active")
+        if route_state["reason"] == "payment_latch_capacity_exhausted":
+            raise RuntimeError("payment_latch_capacity_exhausted")
         raise RuntimeError("no_configured_zero_cost_provider")
 
     spec = next(item for item in PROVIDERS if item.provider_id == selected)

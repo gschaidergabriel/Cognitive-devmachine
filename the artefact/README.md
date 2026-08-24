@@ -60,6 +60,18 @@ The stale `tests/test_trigger1_local_qwen_runtime_preflight_872.py` still refere
 
 This is source/control-plane hardening only. It grants zero model-runtime, J-Space-model, HCU-full, training, whole-product or canonical-semantics credit.
 
+### GO 23:33 active-output preservation delta
+
+The retained midlayer launcher had a second deterministic low-disk defect: when `available_kb < 4000000`, its bounded cleanup removed `RUNNER_TEMP/clay-trigger1-v2-*`, while the active self-hosted run itself stores evidence beneath that namespace. The launcher could therefore erase its own current output directory before persisting `disk_preflight.json` or a blocked result.
+
+PR **#1670** merged the repair as canonical `main` commit **`3363aaead6b66a29d40493557515aa2a34058303`**. The launcher now canonicalizes and binds the active `OUT_DIR`, excludes exactly that directory from stale-run cleanup, still removes stale Trigger-1 siblings, fails closed if output identity changes, and records `current_output_preserved=true` in low-disk evidence.
+
+The exact merged launcher/test blobs (`43615073745b90f20fc900d37c8ac40a001f1003`, `26f9f100cd78aa01876ad62cef0a9af0f67921a9`) were reconstructed byte-for-byte and exercised with a deterministic fake-`df` condition at **2,500,000 KiB available**: **1/1 regression PASS**. The current evidence directory and evidence-in-progress file survived; stale V2 and legacy-Qwen siblings were removed; the blocked receipt was persisted; no model was loaded, no external LLM provider was called, and no provider credential was read.
+
+This is **source + deterministic preflight regression evidence only**. It mints zero whole EntityOS/HCU, HCU-full, J-Space-model or training credit. This `go` had no reproducible shared macrocycle/request identity beyond minute precision, so it dispatched **zero** new unusual interventions. The next Trigger-1 action remains lease-gated; do not create a duplicate dispatch merely because the launcher is now repaired.
+
+Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_TRIGGER1_OUTPUTDIR_PRESERVATION_GPT56SOL_2333.json`.
+
 Until a lease-admitted successor dispatch yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
 
 ## Typed Entry / HCU authority convergence
@@ -88,16 +100,25 @@ Current bounded credit remains conservative:
 
 A source file, test, workflow, deployment, provider HTTP success, token count or model consensus never automatically mints broader credit.
 
+### GO 23:34 legacy lease-race fence
+
+Re-entry at `main@1becb77bee28b908ce7a8b48fed09cb92d0beffc` found one residual coordination false-admission class in the newly merged Trigger1 atomic lease gate: sibling claims were compared by literal `trigger_key`, while the canonical protocol explicitly treats historical/noncanonical timestamp + payload encodings as the same macrocycle. Repository history contains both dashed local-time/full-digest and compact-offset/short-digest forms.
+
+The successor delta keeps `tools/trigger1_atomic_lease_gate.py` as the single Trigger1 ingress and ports only the recognized legacy timestamp/digest-prefix parser from stale donor #1461. Recognized historical timestamps are normalized to UTC; 12–64 hex payload suffixes are used only as semantic-race prefixes; matching siblings reject as `EXPERIMENT_BUDGET_RACE_VIOLATION`; malformed legacy JSON can still be fenced by a recognized filename stem. Regression definitions cover full-digest, short-digest, malformed-file and unrelated-timestamp cases.
+
+No hidden-state/model intervention was executed because this user turn exposes no shared immutable request id and only minute-precision message time: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`. Evidence remains source/control-plane + regression-definition only, with whole EntityOS/HCU, HCU-full, J-Space-model and training credit all zero pending exact-head execution.
+
 ## Current blockers / next exact gates
 
 1. Observe a terminal repository-bound result for the open Forge -> Distillery runtime request **#1619**; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
 2. If that witness fails, repair the measured isolated-executor/bridge blocker only; never weaken evidence admission.
-3. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
-4. On the lease-admitted Qwen run, persist the fused nonterminal midlayer exact-source runtime receipt and classify runner/preflight/dependency/model failure explicitly.
-5. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.
-6. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
-7. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
-8. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
+3. Execute the exact successor `tests.test_trigger1_atomic_lease_gate` plus current Trigger1 promotion-gate regression; fuse the legacy semantic race fence only if current/nonduplicate/green.
+4. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
+5. On the lease-admitted Qwen run, persist the fused nonterminal midlayer exact-source runtime receipt and classify runner/preflight/dependency/model failure explicitly.
+6. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.
+7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
+8. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
+9. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
 
 ## Evidence discipline and reentry
 

@@ -3,7 +3,10 @@ import sqlite3
 import unittest
 
 from jspace_vector_control_v1 import encode_vector, packet_bytes
-from model_input_control_binding_v1 import bind_direct_unique_packet_input
+from model_input_control_binding_v1 import (
+    ModelInputControlBindingError,
+    bind_direct_unique_packet_input,
+)
 from jspace_preinvocation_control_admission_v1 import (
     ADMISSION_SCHEMA,
     JSpacePreInvocationControlAdmissionError,
@@ -33,7 +36,7 @@ class JSpacePreInvocationControlAdmissionTests(unittest.TestCase):
     def tearDown(self):
         self.db.close()
 
-    def vector_packet(self, *, control_condition="AMPLIFY", vector=(0.25, -0.5, 1.0)):
+    def vector_packet(self, *, control_condition="SIGN_FLIP", vector=(0.25, -0.5, 1.0)):
         return encode_vector(
             vector,
             basis_id="basis:preinvoke:1",
@@ -129,7 +132,7 @@ class JSpacePreInvocationControlAdmissionTests(unittest.TestCase):
 
     def test_post_binding_input_mutation_fails_before_admission(self):
         binding, prepared = self.binding()
-        with self.assertRaisesRegex(Exception, "EXECUTOR_INPUT_SHA256_MISMATCH"):
+        with self.assertRaisesRegex(ModelInputControlBindingError, "EXECUTOR_INPUT_SHA256_MISMATCH"):
             admit_preinvocation_control(self.db, binding, prepared + b"!", self.plan, current_generation=7)
 
     def test_foreign_keys_must_be_enabled_before_transaction(self):

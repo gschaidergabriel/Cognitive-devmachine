@@ -8,15 +8,13 @@ STATE_DIR="/artifacts/clay-entityos-swarm"
 mkdir -p "$STATE_DIR"
 START="$(date +%s)"
 DEADLINE="${CLAY_SWARM_DEADLINE_EPOCH:-$((START + 24*3600))}"
-ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
 
-provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
+# One successor-dynamic execution boundary. A typed FREE record alone is insufficient
+# while the current supervisor globally runtime-quarantines external LLM traffic.
+provider_admitted(){
+  python3 -c 'import sys; from provider_call_boundary import provider_call_is_allowed; raise SystemExit(0 if provider_call_is_allowed(sys.argv[1]) else 3)' "$1" >/dev/null 2>&1
+}
 
-# Child processes inherit the supervisor environment. Remove credentials belonging
-# to any external LLM provider that is not canonically typed FREE-admitted before
-# spawning local-model/distillery/forge/dashboard/swarm children. `unset` and
-# `compgen -v` operate on variable names only; blocked credential values are never
-# expanded merely to decide whether they should be removed.
 clear_unadmitted_provider_secret_env(){
   local name
   if ! provider_admitted groq; then
@@ -35,6 +33,11 @@ clear_unadmitted_provider_secret_env(){
     unset OPENROUTER_API_KEY OPENROUTER_API_KEYS || true
     while IFS= read -r name; do case "$name" in OPENROUTER_API_KEY_*) unset "$name" || true ;; esac; done < <(compgen -v)
   fi
+  if ! provider_admitted huggingface; then
+    unset HF_TOKEN HUGGINGFACE_API_KEY || true
+  fi
+  # Together is not an admitted provider under current FREE_ONLY authority.
+  unset TOGETHER_API_KEY || true
 }
 
 typed_admission_compat_flags(){
@@ -44,11 +47,12 @@ typed_admission_compat_flags(){
   if provider_admitted mistral; then export CLAY_MISTRAL_FREE_ATTESTED=1; any=1; fi
   if provider_admitted nvidia; then export CLAY_NVIDIA_FREE_ATTESTED=1; any=1; fi
   if provider_admitted openrouter; then any=1; fi
+  if provider_admitted huggingface; then any=1; fi
   (( any )) && export CLAY_FREE_ONLY_ATTESTED=1 || true
 }
 
 load_secret_file(){ local f="$1"; [[ -r "$f" ]] || return 0; set +x; set -a; source "$f"; set +a; }
-all_llm_providers_admitted(){ provider_admitted groq && provider_admitted mistral && provider_admitted nvidia && provider_admitted openrouter; }
+all_llm_providers_admitted(){ provider_admitted groq && provider_admitted mistral && provider_admitted nvidia && provider_admitted openrouter && provider_admitted huggingface; }
 
 load_admitted_secret_sources(){
   if all_llm_providers_admitted; then
@@ -64,15 +68,13 @@ load_admitted_secret_sources(){
 normalize_provider_pool(){
 python3 - <<'PY'
 import os,shlex
-from free_provider_admission import load_provider_admission,provider_is_admitted_free,ProviderAdmissionError
-try:a=load_provider_admission()
-except ProviderAdmissionError:raise SystemExit(0)
+from provider_call_boundary import provider_call_is_allowed
 families={
  'groq':('GROQ_API_KEYS',['GROQ_API_KEY','GROQ2_API_KEY','GROQ3_API_KEY']),
  'mistral':('MISTRAL_API_KEYS',['MISTRAL_API_KEY','MISTRAL2_API_KEY','MISTRAL3_API_KEY']),
  'nvidia':('NVIDIA_API_KEYS',['NVIDIA_API_KEY','NVIDIA_NIM_API_KEY','NVIDIA2_API_KEY','NVIDIA3_API_KEY','NGC_API_KEY'])}
 for provider,(target,names) in families.items():
- if not provider_is_admitted_free(provider,a):continue
+ if not provider_call_is_allowed(provider):continue
  vals=[]
  for n in names:
   v=os.getenv(n,'').strip()
@@ -87,6 +89,8 @@ has_admitted_provider_key(){
   provider_admitted groq && [[ -n "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}" ]] && return 0
   provider_admitted mistral && [[ -n "${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}" ]] && return 0
   provider_admitted nvidia && [[ -n "${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}" ]] && return 0
+  provider_admitted openrouter && [[ -n "${OPENROUTER_API_KEY:-}${OPENROUTER_API_KEYS:-}" ]] && return 0
+  provider_admitted huggingface && [[ -n "${HF_TOKEN:-}${HUGGINGFACE_API_KEY:-}" ]] && return 0
   return 1
 }
 
@@ -110,10 +114,21 @@ start_distillery(){
     nohup python3 "$x" --hours 24 --sleep-seconds 3 >"$STATE_DIR/distillery.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/distillery.pid"; }
 }
 
+stop_unsafe_forge(){
+  local pid cmd
+  while read -r pid; do
+    [[ -n "$pid" ]] || continue
+    cmd="$(tr '\0' ' ' <"/proc/$pid/cmdline" 2>/dev/null || true)"
+    if [[ "$cmd" != *"--e2b-jobs-per-cycle 0"* ]]; then
+      kill "$pid" 2>/dev/null || true
+    fi
+  done < <(pgrep -f '[r]un_free_evidence_forge.py' || true)
+}
+
 start_forge(){
   local x="$ROOT/tools/run_free_evidence_forge.py"; [[ -f "$x" ]] || return 0
   pgrep -f '[r]un_free_evidence_forge.py' >/dev/null 2>&1 || {
-    nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/forge.pid"; }
+    nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-jobs-per-cycle 0 --e2b-parallel 1 >"$STATE_DIR/forge.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/forge.pid"; }
 }
 
 start_go_swarm_if_admitted(){
@@ -131,9 +146,6 @@ PY
 }
 
 stop_unadmitted_go_swarm(){
-  # With `set -e -o pipefail`, a bare `pgrep | while` aborts the whole supervisor
-  # when there is correctly nothing to stop. Process substitution plus `|| true`
-  # makes the zero-match case a normal steady state instead of a supervisor crash.
   if ! has_admitted_provider_key; then
     while IFS= read -r pid; do
       [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
@@ -149,6 +161,7 @@ while (( $(date +%s) < DEADLINE )); do
   start_local_model
   start_dashboard
   start_distillery
+  stop_unsafe_forge
   start_forge
   stop_unadmitted_go_swarm
   start_go_swarm_if_admitted
@@ -156,16 +169,19 @@ while (( $(date +%s) < DEADLINE )); do
   python3 - <<PY >"$STATE_DIR/SUPERVISOR.json.tmp"
 import datetime,json,os,subprocess,urllib.request
 from free_provider_admission import admission_snapshot
+from provider_call_boundary import current_boundary_state
 snap=admission_snapshot()
+try: boundary=current_boundary_state()
+except Exception as exc: boundary={'runtime_quarantined':True,'error':type(exc).__name__}
 def running(pattern):
  p=subprocess.run(['pgrep','-f',pattern],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True);return bool(p.stdout.strip())
 def local_health():
  try:
   with urllib.request.urlopen('http://127.0.0.1:8088/health',timeout=1.2) as r:return 200<=int(r.status)<300
  except Exception:return False
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v9','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'provider_call_boundary':boundary,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'RUNTIME_QUARANTINE_AND_TYPED_FREE_REQUIRED_BEFORE_PROVIDER_SECRETS_OR_NETWORK; E2B_EXTERNAL_SANDBOX_QUARANTINED_ZERO_JOBS; LOOPBACK_4B+PUBLIC_LOCAL_FORGE_CONTINUE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30
 done
-printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v8","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR.json"
+printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v9","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR.json"

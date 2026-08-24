@@ -25,15 +25,25 @@ def holdout_rows(m, *, include_wrong=True, include_lesion=True, counterbalanced=
     mappings=[('A_POS','A','B'),('B_POS','B','A' if counterbalanced else 'C')]
     rows=[]
     for label_map,pos,neg in mappings:
-        for case in ['h1','h2']:
+        for case_index,case in enumerate(['h1','h2']):
+            seed=2700+case_index
+            prompt_sha=(('a' if case == 'h1' else 'b') if label_map == 'A_POS' else ('c' if case == 'h1' else 'd'))*64
             for control in m.REQUIRED_CONTROLS:
                 row={
                     'split':'holdout','layer':8,'gain':2.0,'case_id':case,
+                    'prompt_sha256':prompt_sha,'seed':seed,
                     'label_map_id':label_map,'positive_label':pos,'negative_label':neg,
                     'control':control,'target_score':scores[control],
                 }
-                if include_wrong: row['wrong_layer_delta']=-0.1
-                if include_lesion:
+                if control == '+VECTOR' and include_wrong:
+                    row.update({
+                        'wrong_layer_delta':-0.1,
+                        'wrong_layer':7,
+                        'wrong_layer_vector_source_layer':8,
+                        'wrong_layer_same_selected_vector':True,
+                        'wrong_layer_receipt_sha256':'e'*64,
+                    })
+                if control == '+VECTOR' and include_lesion:
                     row['lesion_delta']=-0.2; row['rescue_delta']=0.5
                 rows.append(row)
     return rows
@@ -64,9 +74,14 @@ class ProtocolTests(unittest.TestCase):
     def test_calibration_selection_and_strict_holdout(self):
         scores={'BASELINE':0.0,'+VECTOR':3.0,'SIGN_FLIP':-3.0,'NULL_VECTOR':0.0,'ORTHOGONAL_SAME_NORM':0.1,'PERMUTED_SAME_NORM':0.2}
         cal=[]
-        for case in ['c1','c2']:
+        for case_index,case in enumerate(['c1','c2']):
             for control in self.m.REQUIRED_CONTROLS:
-                cal.append({'split':'calibration','layer':8,'gain':2.0,'case_id':case,'control':control,'target_score':scores[control]})
+                cal.append({
+                    'split':'calibration','layer':8,'gain':2.0,'case_id':case,
+                    'prompt_sha256':('1' if case == 'c1' else '2')*64,
+                    'seed':1701+case_index,'positive_label':'A','negative_label':'B',
+                    'control':control,'target_score':scores[control],
+                })
         selected=self.m.select_layer_gain(cal)
         self.assertTrue(selected['selected']); self.assertEqual(8,selected['layer'])
         out=self.m.adjudicate_holdout(holdout_rows(self.m),selected_layer=8,selected_gain=2.0)

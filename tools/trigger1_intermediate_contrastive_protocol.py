@@ -183,16 +183,28 @@ def adjudicate_holdout(rows: Iterable[Mapping[str, Any]], *, selected_layer: int
     if len(label_maps) < 2:
         return {"pass": False, "classification": "LABEL_REMAP_HOLDOUT_REQUIRED"}
     by_case: dict[tuple[str,str], dict[str,float]] = {}
+    evidence_by_case: dict[tuple[str,str], dict[str,bool]] = {}
     wrong_layer_ok = True
     lesion_rescue_ok = True
     for r in frozen:
         key = (str(r["case_id"]), str(r["label_map_id"]))
+        evidence = evidence_by_case.setdefault(key, {"wrong_layer": False, "lesion_rescue": False})
         if str(r.get("control")) in REQUIRED_CONTROLS:
             by_case.setdefault(key, {})[str(r["control"])] = _finite(r["target_score"], "target_score")
         if r.get("wrong_layer_delta") is not None:
+            evidence["wrong_layer"] = True
             wrong_layer_ok = wrong_layer_ok and _finite(r["wrong_layer_delta"], "wrong_layer_delta") <= 0
-        if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
+        lesion_present = r.get("lesion_delta") is not None
+        rescue_present = r.get("rescue_delta") is not None
+        if lesion_present != rescue_present:
+            return {"pass": False, "classification": "INCOMPLETE_LESION_RESCUE_EVIDENCE"}
+        if lesion_present and rescue_present:
+            evidence["lesion_rescue"] = True
             lesion_rescue_ok = lesion_rescue_ok and _finite(r["lesion_delta"], "lesion_delta") <= 0 and _finite(r["rescue_delta"], "rescue_delta") > 0
+    if not by_case or any(not evidence_by_case.get(key, {}).get("wrong_layer", False) for key in by_case):
+        return {"pass": False, "classification": "WRONG_LAYER_EVIDENCE_REQUIRED"}
+    if any(not evidence_by_case.get(key, {}).get("lesion_rescue", False) for key in by_case):
+        return {"pass": False, "classification": "LESION_RESCUE_EVIDENCE_REQUIRED"}
     margins = []
     null_drifts = []
     for vals in by_case.values():
@@ -210,6 +222,8 @@ def adjudicate_holdout(rows: Iterable[Mapping[str, Any]], *, selected_layer: int
         "label_map_count": len(label_maps),
         "worst_directional_specificity_margin": min(margins) if margins else None,
         "max_null_drift": max(null_drifts) if null_drifts else None,
+        "wrong_layer_evidence_complete": True,
+        "lesion_rescue_evidence_complete": True,
         "wrong_layer_ok": wrong_layer_ok,
         "lesion_rescue_ok": lesion_rescue_ok,
         "credit_scope": CREDIT_SCOPE,

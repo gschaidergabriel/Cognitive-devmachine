@@ -169,20 +169,19 @@ def _candidate_evidence(con: sqlite3.Connection, cid: str) -> tuple[sqlite3.Row 
     return row,packet,cited,evidence,"OK"
 
 
-def _evidence_prompt(evidence: list[dict]) -> str:
-    blocks=[]; used=0
+def _evidence_prompt(evidence: list[dict]) -> tuple[str | None,str]:
+    blocks=[]
     for item in evidence:
         text=str(item["chunk_text"])
         header=(
             f"SOURCE_ID={item['id']} SHA256={item['chunk_sha256']} "
             f"TYPE={item['source_type']} TITLE={item['title']} URL={item['url']}\n"
         )
-        remaining=MAX_REVIEW_EVIDENCE_CHARS-used-len(header)
-        if remaining<=0:break
-        chunk=text[:remaining]
-        blocks.append(header+chunk)
-        used += len(header)+len(chunk)
-    return "\n\n--- UNTRUSTED_SOURCE_BOUNDARY ---\n\n".join(blocks)
+        blocks.append(header+text)
+    rendered="\n\n--- UNTRUSTED_SOURCE_BOUNDARY ---\n\n".join(blocks)
+    if len(rendered)>MAX_REVIEW_EVIDENCE_CHARS:
+        return None,"CITED_EVIDENCE_REVIEW_BUDGET_EXCEEDED"
+    return rendered,"OK"
 
 
 def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[str,str,str]]):
@@ -196,7 +195,14 @@ def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[st
         d.emit("knowledge_evidence_rejected",candidate=cid,evidence_state=evidence_state)
         return False,agg
 
-    evidence_text=_evidence_prompt(evidence)
+    evidence_text,prompt_state=_evidence_prompt(evidence)
+    if prompt_state!="OK" or evidence_text is None:
+        con.execute("UPDATE candidates SET status='REJECTED_EVIDENCE_BOUNDARY' WHERE id=?",(cid,))
+        _bump(con,"evidence_boundary_rejects"); con.commit()
+        agg={"votes":0,"evidence_state":prompt_state,"fact_credit":0,
+             "knowledge_class":"REVIEWED_RESEARCH_HYPOTHESIS","canonical_acceptance":False}
+        d.emit("knowledge_evidence_rejected",candidate=cid,evidence_state=prompt_state)
+        return False,agg
     votes=[]
     for lane,provider,model in reviewers:
         prompt=f"""You are reviewer lane {lane} for the Clay Research Entity.
@@ -349,25 +355,17 @@ def compress_and_commit(con: sqlite3.Connection,cid: str,agg: dict,small_models:
         "counterevidence":packet.get("counterevidence"),"supported_source_ids":agg.get("supported_source_ids",[]),
     }
     text=json.dumps(compressed,ensure_ascii=False,separators=(",",":"))
-    if small_models and len(text)>1800:
-        prompt=(
-            "Compress this reviewed research hypothesis to <=350 tokens. Preserve knowledge_class, "
-            "fact_credit=0, causal mechanism, GRF relation, falsifier, counterevidence, predicted "
-            "architecture delta and supported_source_ids. Do not add facts. JSON only.\n"+text
-        )
-        ok,out,usage,_=d.chat("openrouter",small_models[0],prompt,max_tokens=420,temperature=0.0)
-        obj=d.parse_json_object(out) if ok else None
-        if isinstance(obj,dict):
-            obj["knowledge_class"]="REVIEWED_RESEARCH_HYPOTHESIS"; obj["fact_credit"]=0
-            obj["supported_source_ids"]=agg.get("supported_source_ids",[])
-            text=json.dumps(obj,ensure_ascii=False,separators=(",",":"))
-            i,o=d.usage_values(usage); _bump(con,"model_input_tokens",i); _bump(con,"model_output_tokens",o)
+    # No post-review model rewrite is allowed here: a second model could mutate an
+    # already-reviewed claim after the entailment decision. Store the deterministic
+    # reviewed representation even when it is larger than the historical compression target.
+    del small_models
     kid="k-"+hashlib.sha256((row["question"]+text).encode()).hexdigest()[:18]
     meta={
         "candidate_id":cid,"approach":row["signature"],"review":agg,
         "knowledge_class":"REVIEWED_RESEARCH_HYPOTHESIS","fact_credit":0,
         "sources":evidence_objects,"source_popularity_used_for_acceptance":False,
         "evidence_retention":"EXACT_BOUNDED_CITED_CHUNKS_HASH_AUDITABLE",
+        "post_review_model_compression":False,
     }
     tok=d.approx_tokens(text)
     con.execute(

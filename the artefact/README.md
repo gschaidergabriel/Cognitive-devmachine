@@ -75,7 +75,7 @@ The current source provides:
 
 The fused current discriminator is `tools/trigger1_local_qwen06_midlayer_causal_execute.py` launched by `tools/trigger1_local_qwen06_midlayer_causal.sh`. It uses a fixed nonterminal middle decoder layer, derives its steering basis from contrastive **internal activations rather than output-head rows**, preserves substantive downstream transformer computation, selects gain only on calibration data, freezes that gain before disjoint holdout, and requires paired specificity against SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM and PERMUTED_SAME_NORM controls. The launcher additionally performs bounded cleanup of disposable Trigger-1/pip cache material before failing closed on insufficient storage.
 
-A single owner-only issue dispatcher, `.github/workflows/trigger1-v2-local-fastpath-selfhosted.yml`, is the retained Self-Hosted Linux/X64 Trigger-1 execution lane. Duplicate terminal and tied-embedding runtime workflows were retired after fusion. Owner dispatch **#1643** targets exact-current `main` and the fused midlayer discriminator. Until it produces a repository-bound terminal receipt, source/workflow/dispatch existence alone grants no model/J-Space/runtime promotion.
+The retained self-hosted Trigger-1 dispatcher is now coordination-gated: a canonical create-once GO unusual-experiment claim must already exist before the intervention can execute. Current `main@f7fa8212e633f88b590cb9bb6968505b59eaef7d` also routes the local terminal/intermediate Qwen executors through a clean-source attestation envelope that binds Git HEAD/tree/dirty-state, executor bytes, Python executable, result bytes and the original local runtime receipt. These are source/control-plane advances only until a terminal repository-bound model execution receipt exists.
 
 Source/regression evidence is not model runtime evidence. A positive midlayer result can become a model-specific internal-intervention promotion candidate only at its exact bound scope; it still does not mint canonical EntityOS/HCU, full J-Space-model or training credit by itself.
 
@@ -91,7 +91,7 @@ Current bounded credit remains conservative:
 - Distillery accepted Forge packets/tokens in the last published live snapshot: **0 / 0**;
 - Forge->Distillery exact-current runtime credit: **0 pending terminal receipt**;
 - provider runtime credit: **0 unless exact current authority/receipt promotes only its exact scope**;
-- local Qwen3-0.6B hidden-state/runtime J-Space promotion: **0 pending terminal midlayer receipt**;
+- local Qwen3-0.6B hidden-state/runtime J-Space promotion: **0 pending terminal source-attested midlayer receipt**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
 - J-Space model-runtime credit: **0**;
@@ -105,7 +105,7 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 1. Observe a terminal self-hosted runtime-reconciliation receipt on current authority and exact source identity.
 2. Observe the exact-current Forge -> Distillery successor witness: qualified Forge accept = 1 -> exactly one Distillery packet -> `accepted_dataset_tokens > 0` -> replay delta = 0.
 3. If the Forge witness fails, repair the **measured** isolated-executor/bridge blocker only; do not weaken evidence admission.
-4. Observe owner dispatch #1643 and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
+4. Observe a lease-admitted, source-attested nonterminal Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
 5. Require all six matched controls plus disjoint holdout; require activation-derived nonterminal vector construction and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
 6. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
 7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
@@ -113,15 +113,17 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 
 ## GO 2026-08-24 23:32 +07 reentry delta
 
-Exact reentry observed canonical `main` at `16fcc38e31188322c953474b6b9e9db4bf8a170f` and inbox-selected supervisor **8.72**. `research_entity/continuity/BOOTSTRAP_MINIMAL.json` was still self-presenting as 8.71 and pointing at `SUPERVISOR_STEERING_8_71.json`, while `PROGRAM_STATE.json`, `SUPERVISOR_INBOX.json` and this product surface were already 8.72. The current GO branch repairs that current-facing bootstrap drift without creating a second authority.
+Initial reentry observed canonical `main@16fcc38e31188322c953474b6b9e9db4bf8a170f` and inbox-selected supervisor **8.72**. `research_entity/continuity/BOOTSTRAP_MINIMAL.json` was still self-presenting as 8.71 and pointing at `SUPERVISOR_STEERING_8_71.json`, while `PROGRAM_STATE.json`, `SUPERVISOR_INBOX.json` and this product surface were already 8.72. The current GO branch repairs that current-facing bootstrap drift without creating a second authority.
 
-The exact Forge -> Distillery runtime carrier PR #1619 has a real workflow run, `32742535392`, with `exact-runtime-gate` still **queued**. The separate Identity Guard run failed before exposing any steps (`steps=null`), so that failure is classified as runner/control-plane admission negative evidence, not a semantic Forge/Distillery failure. No terminal runtime receipt has been observed and no runtime credit is minted.
+The exact Forge -> Distillery runtime carrier PR #1619 has a real workflow run, `32742535392`, with `exact-runtime-gate` observed **queued** during this macrocycle. The separate Identity Guard run failed before exposing any steps (`steps=null`), so that failure is classified as runner/control-plane admission negative evidence, not a semantic Forge/Distillery failure. No terminal Forge/Distillery receipt has been observed and no runtime credit is minted.
 
-- Track A — **ADVANCED:** minimal-bootstrap authority and frontier are synchronized to 8.72 on the current GO branch.
-- Track B — **HCU_NO_CHANGE_WITH_REASON:** the retained Typed Entry/HCU causal source path is already present and the strongest unresolved discriminator is executable evidence, not another parallel source authority. No duplicate HCU/Entry implementation is introduced.
-- Track C — **TRAINING_READINESS_NO_CHANGE_WITH_REASON:** the fused nonterminal Qwen3-0.6B midlayer discriminator and six-control promotion gate are already source-ready; the missing evidence is the repository-bound terminal runtime result. A second source experiment would be lower-information and could violate shared unusual-experiment coordination.
+After the durable write, reentry found `main` advanced to `f7fa8212e633f88b590cb9bb6968505b59eaef7d`. Two parallel successor deltas materially advance the other GO tracks: the current midlayer dispatcher now requires the canonical atomic unusual-experiment lease before intervention, and local Qwen execution now uses exact clean-source/runtime receipt binding. This PR records those landed advances rather than duplicating them.
 
-No new unusual experiment was run: this organ has no shared reproducible immutable macrocycle identity suitable for the canonical create-only lease. Together/paid/provider execution was not used. Whole EntityOS/HCU, HCU-full, provider-runtime, model-specific J-Space and training credit remain zero.
+- Track A — **ADVANCED:** minimal-bootstrap authority/frontier synchronized to 8.72.
+- Track B — **ADVANCED:** reentered current main now binds canonical lease/source identity into the HCU/J-Space execution boundary without introducing a second Typed Entry/HCU authority.
+- Track C — **ADVANCED:** reentered current main now provides a lease-gated, source-attested local Qwen3-0.6B execution envelope; terminal model-runtime evidence is still pending.
+
+No new unusual experiment was run by this organ: no shared reproducible immutable macrocycle identity was exposed here for a create-only claim. Together/paid/provider execution was not used by this organ. Whole EntityOS/HCU, HCU-full, provider-runtime, model-specific J-Space and training credit remain zero.
 
 ## Evidence discipline and reentry
 

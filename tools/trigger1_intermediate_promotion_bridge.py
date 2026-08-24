@@ -3,10 +3,13 @@
 
 The intermediate executor owns the scientific discriminator: calibration-only residual
 contrast directions, six controls, counterbalanced label remaps, wrong-layer evidence,
-and lesion/rescue.  The global Trigger-1 promotion gate owns API/runtime/evidence-shape
-admission.  This bridge does not reinterpret a scientific negative.  It only emits the
-canonical direct-steering candidate when the intermediate protocol already passed and
-its result proves the gate-v4 scientific-independence fields.
+and lesion/rescue. The promotion boundary independently re-admits wrong-layer provenance:
+the intervention site must differ from the frozen selected layer, the vector source must
+be that selected layer, same-selected-vector identity must be explicit, and every case
+must carry a valid wrong-layer runtime receipt. The global Trigger-1 promotion gate owns
+API/runtime/evidence-shape admission. This bridge does not reinterpret a scientific
+negative. It only emits the canonical direct-steering candidate when the intermediate
+protocol already passed and its result proves the gate-v4 scientific-independence fields.
 """
 from __future__ import annotations
 
@@ -162,10 +165,29 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
     applied_shas = {row.get("applied_vector_sha256") for row in plus_rows}
     _require(len(applied_shas) == 1 and _sha(next(iter(applied_shas))), "EXACT_APPLIED_VECTOR_SHA256_REQUIRED")
     applied_vector_sha = next(iter(applied_shas))
+
+    wrong_layer_receipts: list[str] = []
+    for row in plus_rows:
+        wrong_layer = row.get("wrong_layer")
+        _require(isinstance(wrong_layer, int) and wrong_layer != layer, "WRONG_LAYER_INTERVENTION_SITE_REQUIRED")
+        _require(
+            row.get("wrong_layer_vector_source_layer") == layer,
+            "WRONG_LAYER_VECTOR_SOURCE_MUST_EQUAL_SELECTED_LAYER",
+        )
+        _require(
+            row.get("wrong_layer_same_selected_vector") is True,
+            "WRONG_LAYER_SAME_SELECTED_VECTOR_REQUIRED",
+        )
+        wrong_receipt = row.get("wrong_layer_receipt_sha256")
+        _require(_sha(wrong_receipt), "WRONG_LAYER_RUNTIME_RECEIPT_REQUIRED")
+        wrong_layer_receipts.append(wrong_receipt)
+    wrong_layer_receipt_family_sha = digest(wrong_layer_receipts)
+
     hold_receipts = [row.get("runtime_receipt_sha256") for row in holdout]
     _require(all(_sha(value) for value in hold_receipts), "HOLDOUT_RUNTIME_RECEIPTS_REQUIRED")
 
-    # The strongest protocol's PASS itself proves these controls were present for each case.
+    # Protocol summary PASS is necessary but not sufficient: wrong-layer provenance is
+    # independently re-admitted above before a direct candidate can cross this boundary.
     _require(verdict.get("counterbalanced_label_mapping") is True, "PROTOCOL_COUNTERBALANCE_PASS_REQUIRED")
     _require(verdict.get("wrong_layer_evidence_complete") is True and verdict.get("wrong_layer_ok") is True, "PROTOCOL_WRONG_LAYER_PASS_REQUIRED")
     _require(verdict.get("lesion_rescue_evidence_complete") is True and verdict.get("lesion_rescue_ok") is True, "PROTOCOL_LESION_RESCUE_PASS_REQUIRED")
@@ -180,7 +202,11 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
     controls = {name: {"runtime_receipt_sha256": _receipt_family(holdout, name)} for name in REQUIRED_CONTROLS}
     intervention_receipt = digest([row["runtime_receipt_sha256"] for row in plus_rows])
     invocation_id = digest(hold_receipts)
-    analysis_receipt = digest({"verdict": verdict, "runtime_receipts": hold_receipts})
+    analysis_receipt = digest({
+        "verdict": verdict,
+        "runtime_receipts": hold_receipts,
+        "wrong_layer_receipts": wrong_layer_receipts,
+    })
     cal_family = digest({"prompt_sha256": cal_prompt_hashes, "seeds": cal_seeds})
     hold_family = digest({"prompt_sha256": hold_prompt_hashes, "seeds": hold_seeds, "label_maps": sorted(str(x) for x in label_map_ids)})
     source_packet_sha = digest({
@@ -198,6 +224,8 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
         "required_controls": list(REQUIRED_CONTROLS),
         "counterbalanced_label_mapping": True,
         "wrong_layer": True,
+        "wrong_layer_same_selected_vector": True,
+        "wrong_layer_receipt_family_sha256": wrong_layer_receipt_family_sha,
         "lesion_rescue": True,
     })
     local_runtime_receipt = digest({
@@ -247,6 +275,8 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "metric_definition_sha256": digest(METRIC_DEFINITION),
             "metric_uses_output_tokens": True,
             "label_mapping_counterbalanced": True,
+            "wrong_layer_same_selected_vector": True,
+            "wrong_layer_receipt_family_sha256": wrong_layer_receipt_family_sha,
         },
         "vector_derivation": {
             "method": "CALIBRATION_ONLY_INTERMEDIATE_RESIDUAL_CONTRAST",
@@ -277,6 +307,8 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "classification": verdict.get("classification"),
             "counterbalanced_label_mapping": True,
             "wrong_layer": True,
+            "wrong_layer_same_selected_vector": True,
+            "wrong_layer_receipt_family_sha256": wrong_layer_receipt_family_sha,
             "lesion_rescue": True,
         },
     }

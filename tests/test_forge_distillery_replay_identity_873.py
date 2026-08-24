@@ -114,6 +114,30 @@ class ReplayIdentity873Tests(unittest.TestCase):
         self.assertEqual(second["accepted_dataset_tokens_counter"], token_count)
         self.assertEqual(second["forge_execution_packets_total"], 1)
 
+    def test_delta_id_only_rekey_is_duplicate_and_token_stable(self):
+        first_row = accepted_row()
+        replay = accepted_row(delta_id="d-envelope-rekeyed")
+        self.assertEqual(
+            bridge.digest_json(bridge.execution_replay_identity(first_row)),
+            bridge.digest_json(bridge.execution_replay_identity(replay)),
+        )
+        self.assertEqual(
+            bridge.digest_json(bridge.measured_evidence_identity(first_row)),
+            bridge.digest_json(bridge.measured_evidence_identity(replay)),
+        )
+
+        self.write(first_row)
+        first = bridge.ingest(self.eval, self.db)
+        token_count = first["accepted_dataset_tokens_counter"]
+        self.write(replay)
+        second = bridge.ingest(self.eval, self.db)
+
+        self.assertEqual(first["admitted"], 1)
+        self.assertEqual(second["admitted"], 0)
+        self.assertEqual(second["duplicates"], 1)
+        self.assertEqual(second["accepted_dataset_tokens_counter"], token_count)
+        self.assertEqual(second["forge_execution_packets_total"], 1)
+
     def test_same_execution_identity_with_mutated_measurement_fails_closed(self):
         self.write(accepted_row())
         first = bridge.ingest(self.eval, self.db)
@@ -163,7 +187,7 @@ class ReplayIdentity873Tests(unittest.TestCase):
         self.assertIn("measured_evidence_sha256", columns)
 
     def test_possible_replay_against_legacy_row_fails_closed_instead_of_minting_packet(self):
-        row = accepted_row()
+        row = accepted_row(delta_id="d-rekeyed-after-legacy")
         con = sqlite3.connect(self.db)
         bridge.ensure_schema(con)
         con.execute(
@@ -173,7 +197,7 @@ class ReplayIdentity873Tests(unittest.TestCase):
             (
                 "9" * 64,
                 "kf-legacy-existing",
-                row["delta_id"],
+                "d-legacy-original-envelope",
                 row["worker_sha"],
                 row["source_repo_head"],
                 row["evaluation_repo_head"],

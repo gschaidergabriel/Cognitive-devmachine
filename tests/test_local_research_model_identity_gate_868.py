@@ -86,7 +86,7 @@ class LocalResearchModelIdentityGate868(unittest.TestCase):
             "CLAY_LLAMA_SERVER_SHA256": digest(runtime),
             "CLAY_LOCAL_MODEL_FILE": str(model),
             "CLAY_LOCAL_MODEL_SHA256": digest(model),
-            "CLAY_LOCAL_RESEARCH_ARTIFACT_ROOT": str(artifacts),
+            "CLAY_LOCAL_RESEARCH_STATE_DIR": str(artifacts),
             "CLAY_LOCAL_RESEARCH_PORT": str(free_port()),
             "CLAY_LOCAL_RESEARCH_READY_TIMEOUT": "10",
         })

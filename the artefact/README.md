@@ -52,6 +52,12 @@ Commits: `04f11b64e637da256b2d5a95323b40fa80be5545`, `b56767eadce2f12fe05b39176a
 
 The previously known run **32742535392** / job **97480167751** was observed queued and predates this live-promotion workflow wiring. It cannot by itself prove the new persistent-promotion step. No repository-bound result containing `live_distillery_promotion` has yet been observed, so runtime credit remains zero until the current workflow revision actually executes and persists a terminal receipt.
 
+### GO 23:48 self-hosted execution observability delta
+
+The long-queued self-hosted Forge witness exposed a control-plane ambiguity: dispatch/run existence cannot distinguish a healthy-but-busy runner from an unclaimed/offline execution lane. PR **#1698** merged a bounded non-experimental observer at commit **`af317c1a59411df8e92c0ba15c3b720d56d5ca55`**. `tools/go872_selfhosted_health_receipt.py` binds exact source commit/tree/dirty state plus runner/resource/tool readiness; `.github/workflows/go872-selfhosted-health-worker.yml` measures that state on `[self-hosted, Linux, X64]`; and `.github/workflows/go872-selfhosted-health-observer.yml` separates dispatch acceptance from queued/unclaimed, claimed/nonterminal and terminal outcomes while persisting zero-credit evidence. Secret values are never recorded.
+
+At this delta's final observed boundary no terminal `CLAY_GO872_SELFHOSTED_HEALTH_OBSERVER/v1` or worker health receipt had appeared on `main`. Therefore the observability mechanism is merged while actual self-hosted health remains **runtime pending**; queued status alone is not runner failure, semantic product failure or runtime PASS. Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_SELFHOSTED_HEALTH_OBSERVABILITY_GPT56SOL_2348P0700.json`. Stale predecessor PR **#1677** was closed as superseded provenance.
+
 ## Provider-independent local Qwen3-0.6B J-Space discriminator
 
 Supervisor 8.72 prioritizes the zero-provider-billing local Qwen3-0.6B path as the highest-information model-specific J-Space discriminator.

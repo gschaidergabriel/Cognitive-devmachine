@@ -46,19 +46,19 @@ Supervisor 8.72 prioritizes the zero-provider-billing local Qwen3-0.6B path as t
 
 The earlier final-norm/`lm_head`-coupled fastpath remains only a technical readout-steering positive control because its intervention direction is coupled to the same terminal output geometry being scored. It cannot establish an intermediate learned J-Space representation.
 
-The fused current discriminator is `tools/trigger1_local_qwen06_midlayer_causal_execute.py` launched by `tools/trigger1_local_qwen06_midlayer_causal.sh`. It uses a fixed nonterminal middle decoder layer, derives its steering basis from contrastive internal activations rather than output-head rows, preserves substantive downstream transformer computation, selects gain only on calibration data, freezes that gain before disjoint holdout, and requires all six matched controls:
+The strongest current scientific lane is the intermediate contrastive executor `tools/trigger1_local_qwen06_intermediate_execute.py` plus `tools/trigger1_intermediate_contrastive_protocol.py` and `tools/trigger1_intermediate_promotion_bridge.py`. It derives candidate directions from calibration-only intermediate residual activations, freezes layer/gain before disjoint holdout, counterbalances output-label mappings, retains the six matched controls, and adds wrong-layer plus lesion/rescue causal falsifiers.
 
-`BASELINE + +VECTOR + SIGN_FLIP + NULL_VECTOR + ORTHOGONAL_SAME_NORM + PERMUTED_SAME_NORM`
+This GO found one remaining source-level localization confound: the prior wrong-layer call changed both the hook site **and** the direction by selecting `self.directions[wrong_layer]`, even though the promotion contract described the control as the **same selected vector at a different layer**. That could not isolate layer/site specificity. The current GO delta therefore separates `vector_source_layer` from intervention `layer`, injects the exact selected vector at the wrong layer, binds the same applied-vector hash in the raw receipt, and requires a **strictly positive** selected-layer specificity margin; a tie now fails closed. The deterministic protocol and promotion bridge both verify this independently.
 
-The retained owner-only self-hosted dispatcher is `.github/workflows/trigger1-v2-local-fastpath-selfhosted.yml`. During this GO re-entry the redundant open dispatch issues **#1608, #1609, #1627, #1634 and #1643** were closed as duplicates. **#1647** is retained as the single current Trigger-1 V2 dispatch request. Closing duplicates is coordination cleanup only; it does not cancel already-created workflow runs and grants no runtime/science credit.
+The retained owner-only self-hosted dispatcher remains subject to the canonical atomic unusual-experiment lease. The user-trigger metadata exposed to this organ for this GO has minute precision only and no shared reproducible request/macrocycle identity, so this GO executed **zero new Qwen interventions** and records `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` at experiment scope.
 
-Until #1647 yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
+Until a future correctly leased run yields a repository-bound exact-source receipt satisfying the stronger same-vector wrong-layer control, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
 
 ## Typed Entry / HCU authority convergence
 
-`BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json` and `SUPERVISOR_INBOX.json` are required to resolve one successor-dynamic authority surface. This GO observed `BOOTSTRAP_MINIMAL.json` still on 8.71 while `PROGRAM_STATE` and `SUPERVISOR_INBOX` selected 8.72. The minimal bootstrap was synchronized to **8.72** and now points at `SUPERVISOR_STEERING_8_72.json`.
+`BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json` and `SUPERVISOR_INBOX.json` are required to resolve one successor-dynamic authority surface. This GO observed the currently admitted supervisor authority at **8.72** and kept the new causal-control evidence beneath the same deterministic state/effect authority rather than creating a second J-Space or truth path.
 
-This is a control-plane/Typed-Entry-adjacent convergence delta: it removes a stale authority island without creating a second truth/effect/admission authority. It grants no executable HCU/model credit.
+This GO's HCU/Typed-Entry-adjacent delta is reusable causal provenance: the runtime row now distinguishes vector provenance (`vector_source_layer`, direction/vector hashes) from intervention-site identity. The distinction is candidate/evidence metadata only; it grants no executable HCU/model credit.
 
 Retained donor lane **#1263** remains the single HCU / Typed Entry / Global J-Space donor lane. Its engine/loader work is source/donor evidence until exact admitted execution binds loader consumption, inference receipt and downstream causal traces.
 
@@ -71,7 +71,7 @@ Current bounded credit remains conservative:
 - Distillery accepted Forge packets/tokens in the last published live snapshot: **0 / 0**;
 - Forge -> Distillery exact-current runtime credit: **0 pending terminal receipt**;
 - provider runtime credit: **0 unless exact current authority/receipt promotes only its exact scope**;
-- local Qwen3-0.6B midlayer J-Space runtime promotion: **0 pending terminal receipt**;
+- local Qwen3-0.6B intermediate J-Space runtime promotion: **0 pending a correctly leased exact-source runtime receipt**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
 - J-Space model-runtime credit: **0**;
@@ -82,10 +82,10 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 
 ## Current blockers / next exact gates
 
-1. Observe terminal run **32742535392** for PR #1619; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
-2. If that witness fails, repair the measured isolated-executor/bridge blocker only; never weaken evidence admission.
-3. Observe the retained Trigger-1 V2 dispatch **#1647** and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify runner/preflight/dependency/model failure explicitly.
-4. Require all six matched controls plus disjoint holdout and activation-derived nonterminal vector construction; reject terminal final-norm/`lm_head`/output-projection shortcuts as J-Space mechanism credit.
+1. Observe the exact-current Forge -> Distillery witness; require `1 qualified ACCEPT -> exactly 1 packet -> accepted_dataset_tokens > 0 -> replay delta 0` before narrowly promoting Forge/Distillery runtime evidence.
+2. Run the focused deterministic Trigger-1 protocol + bridge regressions on this exact branch/head; fuse only if green/current/nonduplicate.
+3. On a future GO with a reproducible canonical atomic lease, execute the exact merged intermediate Qwen3-0.6B lane on an authorized zero-cost normal-user/`clay-direct-dev` surface and require the same selected vector hash at a distinct wrong layer with `selected effect > wrong-layer effect` for every holdout case.
+4. Preserve all six matched controls, disjoint holdout, counterbalanced labels, lesion/rescue and no output-head-derived vector construction; reject final-norm/`lm_head` shortcuts as J-Space mechanism credit.
 5. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
 6. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
 7. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.

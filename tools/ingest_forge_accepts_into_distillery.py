@@ -10,7 +10,7 @@ command admission and secret fences as current Forge evidence credit.
 Only measured fields enter packet_text. Model-authored hypothesis/falsifier remain
 candidate-only metadata. Distillery idempotence is bound to a replay-stable execution
 evidence identity rather than the byte digest of the full evaluation envelope, so a
-changed observation timestamp or candidate narration cannot mint a second dataset
+changed observation timestamp, candidate narration, or candidate delta identifier cannot mint a second dataset
 packet. If the same execution identity reappears with conflicting measured evidence,
 admission fails closed instead of treating the mutation as a new observation.
 
@@ -94,14 +94,14 @@ def measured_packet(row: dict) -> dict:
 def execution_replay_identity(row: dict) -> dict:
     """Bind one replay-stable Forge execution/evaluation family.
 
-    Volatile observation time and model-authored narration are intentionally excluded.
-    The identity keeps source/candidate/provenance, target bytes, admitted execution
+    Volatile observation time, model-authored narration, and ``delta_id`` are
+    intentionally excluded. ``delta_id`` names an evaluation/candidate envelope, not
+    a new measured execution. The identity keeps source/provenance, target bytes, admitted execution
     surface and the metric definition, so a timestamp-only replay cannot become a new
     Distillery event while a genuinely different source/model/metric remains distinct.
     """
     return {
         "schema": "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1",
-        "delta_id": str(row.get("delta_id") or ""),
         "source_class": str(row.get("source_class") or ""),
         "provider": str(row.get("provider") or ""),
         "model": str(row.get("model") or ""),
@@ -119,12 +119,13 @@ def execution_replay_identity(row: dict) -> dict:
 def measured_evidence_identity(row: dict) -> dict:
     """Return immutable measured evidence for conflict detection.
 
-    ``evaluated_at`` is observation metadata, not evidence. Candidate hypothesis and
-    falsifier are not part of ``measured_packet`` and therefore cannot change this
-    digest either.
+    ``evaluated_at`` is observation metadata, not evidence. ``delta_id`` names the
+    evaluation/candidate envelope. Candidate hypothesis and falsifier are not part of
+    ``measured_packet``. None of those envelope fields may change measured identity.
     """
     packet = measured_packet(row)
     packet.pop("evaluated_at", None)
+    packet.pop("delta_id", None)
     return {
         "schema": "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1",
         "packet": packet,
@@ -197,10 +198,9 @@ def _legacy_replay_collision(con: sqlite3.Connection, row: dict) -> bool:
     return con.execute(
         "SELECT 1 FROM forge_execution_ingest "
         "WHERE execution_replay_identity_sha256 IS NULL "
-        "AND COALESCE(delta_id,'')=? AND worker_sha=? "
+        "AND worker_sha=? "
         "AND source_repo_head=? AND evaluation_repo_head=? LIMIT 1",
         (
-            str(row.get("delta_id") or ""),
             row["worker_sha"],
             row["source_repo_head"],
             row["evaluation_repo_head"],

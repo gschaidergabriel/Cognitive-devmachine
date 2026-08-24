@@ -1,0 +1,92 @@
+{
+  "schema": "FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "observed_supervisor_epoch": "8.67",
+    "supervisor_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "free_only": true,
+    "required_boundary": "BEFORE_SECRET_OR_KEY_LOOKUP_AND_BEFORE_NETWORK_IO"
+  },
+  "source_identity": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "base_main": "ac4bec7257c4857caa2b25be92dba7df2c28936d",
+    "branch": "gpt56sol/go-free-swarm-typed-admission-867-20260824",
+    "candidate_source_commit": "85a71ad7491940ec862f3f680c25cb02973eda46",
+    "git_blobs": {
+      "tools/free_swarm_provider_admission.py": "594ab3030353addc8e7ce361b9bede37528e7b06",
+      "tools/run_free_go_swarm.py": "8086f661059820947f9b972312b2e747cec043df",
+      "tools/run_24h_entityos_swarm.py": "837009bdc773e1937e826ae3b9b9b450c631a440",
+      "tools/run_24h_entityos_swarm_supervisor.sh": "c1b93019b909f05d9b24613e7300213d4009283e",
+      "tests/test_free_swarm_provider_admission_boundary.py": "6bea6c966f5d33b2210183e2d394c387c2573367",
+      "research_entity/claycode/contracts/FREE_SWARM_PROVIDER_ADMISSION_V1.md": "52e846287811a23a6bbd1559c83f00edbcec8256"
+    },
+    "sha256": {
+      "tools/free_swarm_provider_admission.py": "b242d75a8c587b5b81a13f8131df45ac3e17bc9315eac9c07ce0c9203ba7195f",
+      "tools/run_free_go_swarm.py": "30ffa42b1fcad9beffac17aa723462467c137df37ca9b42d7ddbb0f50e2b9fb4",
+      "tools/run_24h_entityos_swarm.py": "8b3061699ec6c2358ec24d878030f1b536650cc1f6621c7bb9597529bf25d7fa",
+      "tools/run_24h_entityos_swarm_supervisor.sh": "4766474d05f7ec41e37cea60bbc3afe045039bd87aa9ef46af26a4ac28dc8514",
+      "tests/test_free_swarm_provider_admission_boundary.py": "d6b618d60d7e996c3f9af4e418f62df617fb2dc1ee21d11736711aeb7b7b8a2d",
+      "tools/run_free_swarm_admission_boundary_receipt_v1.py": "72f2dd57227d4c18ca34771e3f66f64cd7a453387e377a1a99f2946014079b73",
+      "research_entity/claycode/contracts/FREE_SWARM_PROVIDER_ADMISSION_V1.md": "2e11bf371831b758034568dd5ceb2a3d5e9af91c33cefa1dcfec4b0ecd0672a4"
+    }
+  },
+  "deterministic_component_execution": {
+    "result": "PASS",
+    "unittest": "8/8 PASS",
+    "shell_syntax": "bash -n PASS",
+    "scope": "DETERMINISTIC_COMPONENT_BOUNDARY_NO_PROVIDER_CONTACT",
+    "environment": {
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5"
+    },
+    "cases": [
+      {"case": "MISSING_ADMISSION", "expected_pass": false, "network_attempt_count": 0, "observed_reason": "admission_unavailable", "pass": true, "secret_lookup_count": 0},
+      {"case": "UNKNOWN", "expected_pass": false, "network_attempt_count": 0, "observed_reason": "provider_not_explicit_free:groq:UNKNOWN", "pass": true, "secret_lookup_count": 0},
+      {"case": "PAID", "expected_pass": false, "network_attempt_count": 0, "observed_reason": "provider_not_explicit_free:groq:PAID", "pass": true, "secret_lookup_count": 0},
+      {"case": "SUBSCRIPTION", "expected_pass": false, "network_attempt_count": 0, "observed_reason": "provider_not_explicit_free:groq:SUBSCRIPTION", "pass": true, "secret_lookup_count": 0},
+      {"case": "STALE_AUTHORITY", "expected_pass": false, "network_attempt_count": 0, "observed_reason": "admission_authority_epoch_stale_or_mismatched", "pass": true, "secret_lookup_count": 0},
+      {"case": "FREE", "expected_pass": true, "network_attempt_count": 1, "observed_reason": "PASS", "pass": true, "secret_lookup_count": 1}
+    ],
+    "provider_contact": false,
+    "real_secret_read": false,
+    "real_socket_created": false,
+    "spend_usd": 0,
+    "binding": "LOCAL_EXECUTION_OF_HASH_IDENTICAL_CONTENT; NOT A CLONED GITHUB BRANCH RUNTIME"
+  },
+  "repair": {
+    "typed_schema": "ENTITYOS_HCU_PROVIDER_ADMISSION/v1",
+    "cost_classes": ["FREE", "PAID", "SUBSCRIPTION", "UNKNOWN"],
+    "positive_rule": "ONLY_EXPLICIT_CURRENT_FREE_AND_ADMITTED_TRUE",
+    "legacy_environment_attestation": "DERIVED_COMPATIBILITY_ONLY_NOT_AUTHORITY",
+    "mixed_secret_bundles": "NOT_SOURCED_BY_ACTIVE_SUPERVISOR_PATH",
+    "pre_admission_subprocess_environment": "SANITIZED_ENV_I",
+    "credential_boundary": "REVALIDATED_BEFORE_ACTUAL_KEY_COLLECTION",
+    "network_boundary": "REVALIDATED_BEFORE_CATALOG_AND_CHAT_NETWORK",
+    "http_402": "HARD_STOP_NOT_FREE_DISCOVERY"
+  },
+  "go_tracks": {
+    "A": "ENTITYOS_EXECUTABLE_CONVERGENCE: source-close active free-swarm admission ordering defect",
+    "B": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT: reusable typed provider admission contract/control-plane primitive",
+    "C": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY: prevents swarm/model research I/O until current explicit FREE admission; no model/training promotion"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable macrocycle/request identity was available to prove a canonical create-only lease; deterministic regression only."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "evidence_class": "HASH_BOUND_DETERMINISTIC_COMPONENT_PASS_GITHUB_BRANCH_RUNTIME_NOT_YET_EXECUTED",
+  "next_exact_gate": "Execute the exact candidate source in authorized clay-direct-dev or local workstation with the current control plane, using a current evidence-backed typed FREE admission object; preserve 0/0 secret/network counts for blocked classes before any provider request."
+}

@@ -99,6 +99,29 @@ def _registry_exact(registry: Any, sha: str, observed: Mapping[str, Any], field:
         raise JSpaceDatasetAdmissionError(f"{field}:TRACE_REGISTRY_MISMATCH")
 
 
+def _canonical_mapping_sha256(value: Any, field: str) -> str:
+    """Return the RFC8785/JCS identity of an admitted mapping without inventing a second serializer."""
+    value = _mapping(value, field)
+    try:
+        canonical = canonicalize(dict(value))
+    except (CanonicalizationError, TypeError, ValueError) as exc:
+        raise JSpaceDatasetAdmissionError(f"{field}:CANONICALIZATION_FAILED") from exc
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def _verify_prototype_trace_identity(trace: Any, claimed_sha256: str) -> None:
+    """Bind the prototype registry content key to the exact canonical prototype bytes.
+
+    A registry lookup by a string named ``prototype_trace_sha256`` is not cryptographic
+    provenance unless the key is re-derived from the admitted trace preimage.  This check is
+    deliberately local to the existing dataset-admission authority; it creates no second
+    trace store or serializer authority.
+    """
+    observed = _canonical_mapping_sha256(trace, "admitted_prototype_trace")
+    if observed != claimed_sha256:
+        raise JSpaceDatasetAdmissionError("PROTOTYPE_TRACE_IDENTITY_MISMATCH")
+
+
 def _canonical_receipt_sha256(receipt: Any) -> str:
     """Bind an outcome receipt key to the exact admitted RFC8785/JCS receipt bytes."""
     receipt = _mapping(receipt, "admitted_outcome_receipt")
@@ -280,6 +303,7 @@ def admit_for_training_dataset(
         raise JSpaceDatasetAdmissionError("admitted_prototype_traces:TRACE_NOT_ADMITTED")
     if prototype_trace.get("schema") != PROTOTYPE_SCHEMA:
         raise JSpaceDatasetAdmissionError("PROTOTYPE_TRACE_SCHEMA_UNSUPPORTED")
+    _verify_prototype_trace_identity(prototype_trace, prototype_sha)
 
     generation = _same(
         {

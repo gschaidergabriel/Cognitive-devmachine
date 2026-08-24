@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "forschungsrun 1 / Trigger-1",
+  "authority_observed": {
+    "supervisor": "8.72",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "mode": "FREE_ONLY",
+    "owner_trigger1_directive": "research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json"
+  },
+  "source_observation": {
+    "local_fastpath": "tools/trigger1_local_qwen06_activation_api_execute.py",
+    "promotion_gate": "tools/trigger1_jspace_promotion_gate.py",
+    "local_fastpath_commit": "da6e7cf4f3c2024bda880a4edea7402a8147332b",
+    "current_main_observed_during_reentry": "4a1ad90b06cbb08a06c090b037ffcfe0b3b0d0e2",
+    "runtime_result_observed": false
+  },
+  "r0_observed": [
+    "The local fastpath constructs its base vector as normalized lm_head(A) - mean(lm_head(B), lm_head(C)).",
+    "The holdout target score is logit(A) - mean(logit(B), logit(C)).",
+    "The intervention is added at model.model.norm output before the output embedding projection.",
+    "The experiment evaluates deterministic forward logits in model.eval() and torch.no_grad(); no sampling/generation uses the configured seeds.",
+    "The current promotion candidate emitted by this fastpath carries no explicit evidence that vector construction is independent of the evaluation metric.",
+    "Supervisor 8.72 prioritizes this exact local Qwen path, and current main now includes a self-hosted workflow that passes any produced candidate to the promotion gate."
+  ],
+  "r1_inference": {
+    "classification": "METRIC_COUPLED_ACTUATOR_SENTINEL_CAN_FALSELY_LOOK_LIKE_DIRECT_JSPACE_STEERING",
+    "derivation": "Let d = w_A - 0.5(w_B+w_C), v=d/||d||, and score(h)=d·h plus any fixed output-bias term. Injecting +g*v at the final hidden state changes score by +g||d||; SIGN_FLIP changes it by -g||d||. The directional criterion is therefore algebraically built into the intervention/scoring pair and does not require a discovered semantic or Global J-Space causal direction.",
+    "seed_note": "Because the measured quantity is deterministic next-token logits under eval/no_grad rather than stochastic generation, changing manual RNG seeds does not create independent replications of this effect."
+  },
+  "counterhypothesis": "Even though the effect is metric-coupled, the experiment remains useful as an actuator sentinel: a runtime-observed effect can prove that the intended hook/vector bytes were consumed and that sign/null/same-norm plumbing behaves as expected.",
+  "bounded_delta": {
+    "branch": "gpt56sol/trigger1-metric-independence-guard-20260824",
+    "gate_commit": "fb8e6f03fadb714fc52326cdec709e309a3f883e",
+    "test_commit": "ff01fe4a331b0292df6916a69fccf8053b081e21",
+    "behavior": [
+      "Preserve runtime-observed vector intervention as actuator/mechanism candidate evidence.",
+      "Require CLAY_TRIGGER1_METRIC_INDEPENDENCE/v1 before direct Trigger-1 goal promotion.",
+      "Fail closed when vector-estimation and evaluation-metric families are identical.",
+      "Fail closed when evaluation head weights or holdout labels define the promoted vector.",
+      "Explicitly classify OUTPUT_HEAD_TARGET_GRADIENT / EVALUATION_GRADIENT / DIRECT_LOGIT_OBJECTIVE_BASIS as actuator-sentinel-only coupling classes."
+    ]
+  },
+  "tests_defined": [
+    "missing metric-independence evidence -> mechanism/actuator candidate may remain true, direct Trigger-1 goal false",
+    "output-head metric-coupled vector -> actuator-only, direct goal false",
+    "independent latent estimate -> existing positive external/local promotion semantics preserved",
+    "existing transport, split, identity and control negative cases preserved"
+  ],
+  "runtime_and_credit_boundary": {
+    "exact_branch_test_execution_observed": false,
+    "local_qwen_model_execution_observed_by_this_organ": false,
+    "ten_lane_runtime_batch_observed_by_this_organ": false,
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promoted": false
+  },
+  "next_exact_discriminator": "Run the exact local actuator sentinel for loader/hook/runtime validation, but derive a second vector independently from calibration-only hidden-state contrasts (without lm_head evaluation weights or holdout labels), freeze vector/site/gain, then test semantic/behavioral holdout plus sign/null/orthogonal/permuted controls. Only the independent-vector path may satisfy the direct Trigger-1 promotion gate."
+}

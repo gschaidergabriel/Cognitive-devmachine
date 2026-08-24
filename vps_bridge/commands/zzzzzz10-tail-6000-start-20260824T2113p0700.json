@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"zzzzzz10-tail-6000-start-20260824T2113p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":60,
+  "command":"echo PIDS; pgrep -af '[r]un_6000_free_swarm_fast.py' || true; echo WLOG; tail -60 /artifacts/clay-entityos-swarm/swarm6000.log 2>/dev/null || true; echo SLOG; tail -40 /artifacts/clay-entityos-swarm/supervisor6000.log 2>/dev/null || true; echo RUN_DIRS; ls -ltd /artifacts/clay-entityos-swarm/active-fabric6000-v2-* 2>/dev/null | head -5"
+}

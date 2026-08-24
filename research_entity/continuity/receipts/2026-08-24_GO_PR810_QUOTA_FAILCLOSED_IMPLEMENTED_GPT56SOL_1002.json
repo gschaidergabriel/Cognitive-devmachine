@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_GO_EXECUTOR_QUOTA_GUARD_IMPLEMENTATION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority": {
+    "research_main_observed_before_write": "c136a2112d5043250e2c8ca7d1b0f5c3b14e5cf6",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id_available": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "paid_upgrade_or_fallback_attempted": false,
+    "together_preflight_or_credential_lookup_attempted": false
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "16a24bc7fbe50155b76cf618d116b98791e6a581",
+    "bounded_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "bounded_executor_head_observed": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "executor_pinned_donor_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d"
+  },
+  "predecessor_evidence": {
+    "receipt": "research_entity/continuity/receipts/2026-08-24_GO_FREE_ONLY_SANDBOX_QUOTA_ATTESTATION_BLOCKER_GPT56SOL.json",
+    "finding": "Supervisor 8.63 forbids treating Hobby plan identity or a stale static ADMITTED constant as proof of remaining included Sandbox quota."
+  },
+  "implemented_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "file": "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+    "classification": "SOURCE_LEVEL_FREE_ONLY_EXECUTION_AUTHORITY_REPAIR",
+    "remaining_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "remaining_quota_assumption_forbidden": true,
+    "sandbox_execution_admitted_requires_direct_quota_observation": true,
+    "sandbox_create_observed_after_delta": false,
+    "runtime_credit_added": 0
+  },
+  "verification": {
+    "previous_exact_head_ready_snapshot": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "previous_exact_head_ready_deployment": "dpl_98ALxQrZppsRQUqSxCZZyKxTMpy2",
+    "previous_invocation_gate": "AUTH_BLOCKED_BEFORE_FUNCTION_OBSERVATION",
+    "current_executor_is_one_commit_ahead_of_ready_snapshot": true,
+    "current_executor_change_scope": "free-only-sandbox-admission.js only",
+    "connected_vercel_team_plan_observed": "hobby",
+    "connected_surface_direct_remaining_sandbox_quota_observed": false,
+    "runtime_action": "NO_SANDBOX_INVOCATION"
+  },
+  "hypothesis": {
+    "primary": "Fail-closing Sandbox creation until current included quota is directly observed preserves Supervisor 8.63 FREE_ONLY authority and prevents plan identity from silently becoming spend authority.",
+    "counterhypothesis": "Provider-side Hobby enforcement alone is sufficient to guarantee zero monetary execution even when remaining quota is not directly observed.",
+    "discriminator": "A current authoritative remaining-included-quota or equivalent no-charge entitlement observation that can be bound before Sandbox.create. Until such evidence exists, keep BLOCKED_QUOTA_UNOBSERVED."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the retained executor now fails closed at the actual Sandbox cost-admission boundary instead of projecting execution authority from a static admitted surface class.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_EVIDENCE_BOUNDARY: the single fixed Typed Entry -> route -> engine/load -> GRID10 -> execution-store -> inference -> J-Space capsule remains intact while its real execution authority is now explicitly quota-attested rather than assumed.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: J-Space/GWT source contracts continue to advance, but no current Function/Sandbox/model execution is authorized while remaining Sandbox quota is unobserved; model and training credit stay zero."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "This append-only receipt records a narrow executor authority repair during rapid parallel movement. No product semantics or runtime acceptance were promoted."
+  },
+  "next_exact_gate": "Directly observe current included Sandbox quota or an authoritative equivalent no-charge entitlement on the connected FREE_ONLY surface. Only then may a successor exact-head READY deployment open the fixed route cost gate. Require the 17-blob pre-cost source verification, in-Sandbox SHA-256 rehash, exact 14-test fence, secret fence, exit 0 and cleanup; otherwise keep runtime/model/training/whole-product credit at zero."
+}

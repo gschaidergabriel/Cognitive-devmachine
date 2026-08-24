@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "launch-free6000-fullgas-20260824T1938p0700",
-  "command_sha256": "9672c54dfae352c934579e3b603b3dcd74c6c8d23e4b9df07c9c47e12b5c281e",
-  "started_at": "2026-08-24T12:36:11.565789+00:00",
-  "finished_at": "2026-08-24T12:36:11.823117+00:00",
-  "status": "FAIL",
-  "exit_code": 143,
-  "op": "exec",
-  "stdout_sha256": "c7dcf0ec4a1cd63310f179437ee6e4c17a80eade6d403c80a728664da06d5769",
+  "command_id": "canonical-sync-free6000-v2-20260824T1940p0700",
+  "command_sha256": "7096277a792b7ae99384f265e77dd8adb8af5bbb8e5d6295e40b8850dc0da934",
+  "started_at": "2026-08-24T12:37:27.982146+00:00",
+  "finished_at": "2026-08-24T12:37:31.018930+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "canonical_sync",
+  "stdout_sha256": "43b4d45ece6f366b4c20913847e0f456d278d17b36d09aafa036dee68a349387",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "HEAD=5013d36a84cd83cd38d267fc93b253175307e918\n---PREFLIGHT---\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   36G  157G  19% /workspace\n/dev/sda1       193G   36G  157G  19% /cache\n/dev/sda1       193G   36G  157G  19% /artifacts\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.3Gi       5.6Gi       1.7Mi       5.1Gi        10Gi\nSwap:             0B          0B          0B\n---ADMISSION---\n{\"admitted_free_providers\":[\"groq\",\"mistral\",\"nvidia\",\"openrouter\"],\"authority_epoch\":\"8.69\",\"ok\":true,\"providers\":{\"groq\":{\"admitted\":true,\"cost_class\":\"FREE\",\"evidence_ref\":\"governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary\"},\"mistral\":{\"admitted\":true,\"cost_class\":\"FREE\",\"evidence_ref\":\"governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary\"},\"nvidia\":{\"admitted\":true,\"cost_class\":\"FREE\",\"evidence_ref\":\"governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary\"},\"openrouter\":{\"admitted\":true,\"cost_class\":\"FREE\",\"evidence_ref\":\"governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary\"}},\"schema\":\"ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1\",\"steering\":\"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_69.json\"}\n---COMPILE---\nCOMPILE_PASS\n---STOP-LEGACY---\n",
+  "stdout_tail": "eef1532cc1a5b257f41f51c498d0ce9dd1c6db2d\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "eef1532cc1a5b257f41f51c498d0ce9dd1c6db2d",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

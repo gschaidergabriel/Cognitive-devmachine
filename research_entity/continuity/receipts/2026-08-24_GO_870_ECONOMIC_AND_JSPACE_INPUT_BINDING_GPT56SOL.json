@@ -11,6 +11,7 @@
   "reentry": {
     "canonical_main_at_cycle_start": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
     "canonical_main_before_receipt_branch": "b9e59c9dd3d65fd4c56d71978e5ac08d1d41ae16",
+    "canonical_main_after_parallel_reentry": "51048477f0355e0feca243e1b2f668199a70545a",
     "supervisor_inbox_schema": "8.70",
     "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_70.json",
     "owner_authority": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md",
@@ -23,7 +24,8 @@
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "new_unusual_experiments_run": 0,
     "vps_bridge_exec_tool_exposed_to_this_organ": false,
-    "vps_health_claim": "UNOBSERVED_NOT_FAKED"
+    "vps_health_claim": "UNOBSERVED_NOT_FAKED",
+    "parallel_delta_adopted": "DISTILLERY_QUESTION_INSERT_REPAIR_MERGED_AS_PR_1484"
   },
   "observed": [
     {
@@ -32,8 +34,8 @@
     },
     {
       "class": "TRACK_A_FREE_ONLY_ECONOMIC_ALIAS",
-      "finding": "tools/free_lane_provenance.py positively admits Groq economic provenance from same-credential/model rate-limit headers matching documented Free Plan numeric ceilings. Groq primary documentation also permits project custom limits equal to or below organization limits, so a paid Developer/PAYG project can numerically alias the Free Plan table. Rate-header equality is therefore not unique evidence of charge-incapability.",
-      "source_blob": "174c62877a0733b621dcfdb07bfa624a75623507",
+      "finding": "tools/free_lane_provenance.py positively admitted Groq economic provenance from same-credential/model rate-limit headers matching documented Free Plan numeric ceilings on the inspected source. Groq primary documentation also permits project custom limits equal to or below organization limits, so a paid Developer/PAYG project can numerically alias the Free Plan table. Rate-header equality is therefore not unique evidence of charge-incapability.",
+      "source_blob_observed": "174c62877a0733b621dcfdb07bfa624a75623507",
       "durable_issue": 1480,
       "external_primary_sources": [
         "https://console.groq.com/docs/billing-faqs",
@@ -49,8 +51,10 @@
       "required_direction": "Bind exact consumed model-input content identity, including rendered input/token tensor digest or current ModelExecution/model-input-control predecessor identity, and enforce declared clean/corrupted/control input topology."
     },
     {
-      "class": "DISTILLERY_BASE_SOURCE_DEFECT",
-      "finding": "Open issue #1472 records and current source confirms a base add_question SQL cardinality defect in tools/run_research_distillery.py. The live retained donor description additionally notes the current local/entry wrapper monkeypatches a cardinality-correct add_question before main(), so the defect is real base-source debt but must not be inflated into a proven whole supervisor startup failure."
+      "class": "PARALLEL_DISTILLERY_REPAIR",
+      "finding": "The direct Distillery add_question 9-column INSERT defect discovered earlier in the cycle was repaired concurrently and merged to main as PR #1484. Canonical main 51048477f0355e0feca243e1b2f668199a70545a records the cardinality repair plus a no-network seed/provenance regression. This is source/regression evidence only and is not inflated into whole supervisor or product runtime PASS.",
+      "merge_commit": "51048477f0355e0feca243e1b2f668199a70545a",
+      "merged_pr": 1484
     }
   ],
   "hypotheses_and_counterhypotheses": [
@@ -66,7 +70,7 @@
     }
   ],
   "tracks": {
-    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: durable issue #1480 closes a concrete FREE_ONLY economic-admission alias; base Distillery defect #1472 remains open and correctly scoped.",
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: durable issue #1480 closes a concrete FREE_ONLY economic-admission alias; parallel PR #1484 also removed the direct Distillery SQL cardinality defect from canonical main.",
     "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: durable issue #1485 identifies the missing consumed model-input content identity in the retained typed causal family without creating another state/effect/wire authority.",
     "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_AT_SOURCE_PROVENANCE_LEVEL: #1485 strengthens clean/corrupted/target/sham/off-target causal discrimination before any model-specific J-Space credit or training-trace promotion."
   },
@@ -83,12 +87,11 @@
     "No provider credential was read and no provider request was made by this organ.",
     "No paid, subscription, unknown-cost or Together execution was performed.",
     "No unusual experiment was executed.",
-    "Source review and durable issue creation do not constitute runtime acceptance."
+    "Source review, merged source regressions and durable issue creation do not constitute whole-product runtime acceptance."
   ],
   "next_exact_actions": [
-    "Repair Groq economic admission so Free-table rate headers are corroborating quota evidence only, never sole positive charge-incapability proof; add Developer-custom-limit alias regressions.",
+    "Repair or verify the successor Groq economic admission so Free-table rate headers are corroborating quota evidence only, never sole positive charge-incapability proof; add Developer-custom-limit alias regressions.",
     "Extend the retained J-Space causal-family identity with exact consumed model-input content identity and control-topology regressions, then execute the five-condition family only on an admitted zero-cost local/clay-direct-dev surface.",
-    "Repair the direct Distillery add_question 9-column INSERT contract and add a no-network seed/add-question SQLite regression while preserving the wrapper-path evidence distinction.",
     "When a callable clay-direct-dev bridge is exposed, perform the mandatory health roundtrip and then exact-source runtime acceptance rather than inferring health from repository state."
   ],
   "acceptance": "IN_PROGRESS"

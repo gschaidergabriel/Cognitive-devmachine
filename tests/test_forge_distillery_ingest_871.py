@@ -1,0 +1,121 @@
+import importlib.util
+import json
+from pathlib import Path
+import sqlite3
+import tempfile
+import unittest
+
+MODULE_PATH = Path(__file__).resolve().parents[1] / "tools" / "ingest_forge_accepts_into_distillery.py"
+spec = importlib.util.spec_from_file_location("bridge", MODULE_PATH)
+bridge = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(bridge)
+
+
+def accepted_row(**overrides):
+    row = {
+        "schema": "CLAY_FORGE_DELTA_EVALUATION/v1",
+        "delta_id": "d-1",
+        "source_class": "free_swarm",
+        "provider": "openrouter",
+        "model": "qwen/qwen3-0.6b-04-28:free",
+        "role": "RUNTIME",
+        "worker_sha": "b" * 64,
+        "source_repo_head": "a" * 40,
+        "evaluation_repo_head": "c" * 40,
+        "source_scope": "EXACT_WORKER_PROMPT_HEAD",
+        "evaluated_at": "2026-08-24T14:13:00+00:00",
+        "status": "accepted",
+        "metric": "test_pass_rate",
+        "relative_improvement_pct": 50.0,
+        "reproducible_runs": 2,
+        "tests_passed": 4,
+        "tests_failed": 0,
+        "negative_tests_passed": 2,
+        "negative_tests_failed": 0,
+        "static_checks_passed": 1,
+        "static_checks_failed": 0,
+        "benchmark_non_regression": True,
+        "target_blob_identities": {"tools/example.py": "d" * 40},
+        "requires_rebase_to_evaluation_head": True,
+        "proposal_hypothesis": "candidate narration must not become measured packet text",
+        "falsifier": "candidate falsifier also remains metadata-only",
+    }
+    row.update(overrides)
+    return row
+
+
+class BridgeTests(unittest.TestCase):
+    def setUp(self):
+        self.td = tempfile.TemporaryDirectory()
+        self.root = Path(self.td.name)
+        self.eval = self.root / "eval.jsonl"
+        self.db = self.root / "distillery.sqlite3"
+
+    def tearDown(self):
+        self.td.cleanup()
+
+    def write_rows(self, *rows):
+        self.eval.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+
+    def test_exact_accepted_evaluation_becomes_one_packet(self):
+        self.write_rows(accepted_row())
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 1)
+        self.assertGreater(out["accepted_dataset_tokens_counter"], 0)
+        self.assertEqual(out["forge_execution_packets_total"], 1)
+        con = sqlite3.connect(self.db)
+        packet_text, meta = con.execute("SELECT packet_text,metadata_json FROM knowledge_packets").fetchone()
+        con.close()
+        self.assertNotIn("candidate narration", packet_text)
+        self.assertNotIn("candidate falsifier", packet_text)
+        self.assertIn("proposal_hypothesis_candidate_only", meta)
+        self.assertIn("EXECUTION_EVIDENCE_ONLY_NOT_JSPACE_CAUSAL_CREDIT", packet_text)
+
+    def test_idempotent_duplicate_does_not_double_count(self):
+        self.write_rows(accepted_row())
+        first = bridge.ingest(self.eval, self.db)
+        second = bridge.ingest(self.eval, self.db)
+        self.assertEqual(first["admitted"], 1)
+        self.assertEqual(second["admitted"], 0)
+        self.assertEqual(second["duplicates"], 1)
+        self.assertEqual(first["accepted_dataset_tokens_counter"], second["accepted_dataset_tokens_counter"])
+
+    def test_nonaccepted_is_rejected(self):
+        self.write_rows(accepted_row(status="validated_not_better"))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("NOT_ACCEPTED"), 1)
+
+    def test_missing_exact_source_identity_fails_closed(self):
+        self.write_rows(accepted_row(source_repo_head=None))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("SOURCE_HEAD_INVALID"), 1)
+
+    def test_failed_negative_control_fails_closed(self):
+        self.write_rows(accepted_row(negative_tests_failed=1))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("NEGATIVE_TESTS_FAILED_NONZERO_OR_INVALID"), 1)
+
+    def test_no_positive_improvement_fails_closed(self):
+        self.write_rows(accepted_row(relative_improvement_pct=0.0))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("NO_POSITIVE_IMPROVEMENT"), 1)
+
+    def test_path_escape_in_target_identity_fails_closed(self):
+        self.write_rows(accepted_row(target_blob_identities={"../secret": "d" * 40}))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("TARGET_BLOBS_INVALID"), 1)
+
+    def test_invalid_json_is_counted_and_does_not_abort(self):
+        self.eval.write_text("not-json\n" + json.dumps(accepted_row()) + "\n", encoding="utf-8")
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 1)
+        self.assertEqual(out["rejected"].get("INVALID_JSON"), 1)
+
+
+if __name__ == "__main__":
+    unittest.main()

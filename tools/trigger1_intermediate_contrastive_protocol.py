@@ -17,6 +17,7 @@ Required stronger discriminator:
 - nuisance controls are scored by absolute effect magnitude, not only target-positive drift;
 - matched-control families bind exact prompt/seed/label identity;
 - each required control occurs exactly once per family, so contradictory duplicates cannot be resolved by list order;
+- incomplete identity-split families fail closed rather than being silently dropped;
 - wrong-layer and lesion/rescue auxiliary evidence is bound to the canonical +VECTOR row.
 """
 from __future__ import annotations
@@ -120,6 +121,10 @@ def _control_families(
     return families
 
 
+def _families_complete(families: Mapping[tuple[Any, ...], Mapping[str, float]]) -> bool:
+    return bool(families) and all(all(k in vals for k in REQUIRED_CONTROLS) for vals in families.values())
+
+
 def norm(v: Sequence[float]) -> float:
     return math.sqrt(sum(x * x for x in v))
 
@@ -217,10 +222,10 @@ def select_layer_gain(rows: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
             if int(r["layer"]) == layer and float(r["gain"]) == gain
         ]
         by_case = _control_families(subset, holdout=False)
+        if not _families_complete(by_case):
+            continue
         margins = []
         for vals in by_case.values():
-            if not all(k in vals for k in REQUIRED_CONTROLS):
-                continue
             directional = min(
                 vals["+VECTOR"] - vals["BASELINE"],
                 vals["BASELINE"] - vals["SIGN_FLIP"],
@@ -231,8 +236,7 @@ def select_layer_gain(rows: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
                 abs(vals["NULL_VECTOR"] - vals["BASELINE"]),
             )
             margins.append(directional - nuisance)
-        if margins:
-            ranked.append((min(margins), sum(margins) / len(margins), layer, gain))
+        ranked.append((min(margins), sum(margins) / len(margins), layer, gain))
     ranked.sort(reverse=True)
     if not ranked or ranked[0][0] <= 0:
         return {"selected": False, "reason": "NO_POSITIVE_CALIBRATION_MARGIN"}
@@ -287,6 +291,11 @@ def adjudicate_holdout(
         return {"pass": False, "classification": "COUNTERBALANCED_LABEL_MAPPING_REQUIRED"}
 
     by_case = _control_families(frozen, holdout=True)
+    if not by_case:
+        return {"pass": False, "classification": "MATCHED_CONTROL_CASES_REQUIRED"}
+    if not _families_complete(by_case):
+        return {"pass": False, "classification": "INCOMPLETE_MATCHED_CONTROL_FAMILY"}
+
     wrong_layer_seen: set[tuple[Any, ...]] = set()
     lesion_rescue_seen: set[tuple[Any, ...]] = set()
     wrong_layer_ok = True
@@ -338,8 +347,6 @@ def adjudicate_holdout(
             )
 
     case_keys = set(by_case)
-    if not case_keys:
-        return {"pass": False, "classification": "MATCHED_CONTROL_CASES_REQUIRED"}
     if wrong_layer_seen != case_keys:
         return {
             "pass": False,
@@ -363,8 +370,6 @@ def adjudicate_holdout(
     null_drifts = []
     nuisance_effects = []
     for vals in by_case.values():
-        if not all(k in vals for k in REQUIRED_CONTROLS):
-            return {"pass": False, "classification": "INCOMPLETE_MATCHED_CONTROL_FAMILY"}
         directional = min(
             vals["+VECTOR"] - vals["BASELINE"],
             vals["BASELINE"] - vals["SIGN_FLIP"],

@@ -23,7 +23,8 @@ from typing import Any
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
-TEST_FILE = ROOT / "tests/test_free_swarm_admission_boundary_867.py"
+PRIMARY_TEST_FILE = ROOT / "tests/test_free_swarm_admission_boundary_867.py"
+UNIT_PATTERN = "test_free_swarm_admission_boundary_*.py"
 
 SOURCE_PATHS = (
     "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
@@ -34,6 +35,7 @@ SOURCE_PATHS = (
     "tools/run_research_distillery_entry.py",
     "tools/run_24h_entityos_swarm_supervisor.sh",
     "tests/test_free_swarm_admission_boundary_867.py",
+    "tests/test_free_swarm_admission_boundary_868_malformed.py",
     "tools/free_swarm_admission_boundary_receipt_v1.py",
 )
 
@@ -83,7 +85,7 @@ def _git(*args: str) -> str:
 
 
 def _load_test_module():
-    spec = importlib.util.spec_from_file_location("clay_free_boundary_tests", TEST_FILE)
+    spec = importlib.util.spec_from_file_location("clay_free_boundary_tests", PRIMARY_TEST_FILE)
     if spec is None or spec.loader is None:
         raise RuntimeError("boundary_test_module_unloadable")
     module = importlib.util.module_from_spec(spec)
@@ -157,9 +159,11 @@ def _structured_tripwire_matrix() -> list[dict[str, Any]]:
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
         inbox = t._authority(root)
+        # Production resolves the canonical repository-relative path. Deliberately
+        # leave that path absent; the compatibility argument is non-authoritative.
         record(
             "ADMISSION_FILE_MISSING",
-            root / "missing-admission.json",
+            root / "compatibility-nonauthority-missing.json",
             root,
             inbox,
             global_attested=True,
@@ -168,10 +172,12 @@ def _structured_tripwire_matrix() -> list[dict[str, Any]]:
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
         inbox = t._authority(root)
-        malformed = root / "malformed-admission.json"
+        # Write malformed JSON at the exact path production resolves. This avoids
+        # the historical root/admission.json fixture drift repaired on 8.68 main.
+        malformed = t._canonical_admission_path(root)
         malformed.write_text("{not-json", encoding="utf-8")
         record(
-            "ADMISSION_MALFORMED",
+            "ADMISSION_MALFORMED_CANONICAL_PATH",
             malformed,
             root,
             inbox,
@@ -191,7 +197,8 @@ def _structured_tripwire_matrix() -> list[dict[str, Any]]:
         )
 
     # Direct control-plane checks for providers that cannot be selected through the
-    # base swarm provider tuple. Tripwires prove these checks remain secret/socket blind.
+    # base swarm provider tuple. The admission functions themselves do not read
+    # provider secrets or perform provider network I/O.
     direct_secret_reads = 0
     direct_network_attempts = 0
 
@@ -257,7 +264,20 @@ def main() -> int:
     git_tree = _git("rev-parse", "HEAD^{tree}")
     git_status = _git("status", "--porcelain=v1")
 
-    unit = _run([sys.executable, "-B", str(TEST_FILE), "-v"])
+    unit = _run(
+        [
+            sys.executable,
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            UNIT_PATTERN,
+            "-v",
+        ]
+    )
     syntax = _run(["bash", "-n", str(ROOT / "tools/run_24h_entityos_swarm_supervisor.sh")])
 
     python_compile_errors: list[str] = []
@@ -267,6 +287,7 @@ def main() -> int:
         "tools/run_24h_entityos_swarm.py",
         "tools/run_research_distillery_entry.py",
         "tests/test_free_swarm_admission_boundary_867.py",
+        "tests/test_free_swarm_admission_boundary_868_malformed.py",
     ):
         path = ROOT / rel
         try:
@@ -344,7 +365,7 @@ def main() -> int:
         "authority_snapshot": admission_payload,
         "checks": checks,
         "unit_suite": {
-            "test_file": str(TEST_FILE.relative_to(ROOT)),
+            "pattern": UNIT_PATTERN,
             "test_count": test_count,
             "exit_code": unit["exit_code"],
             "stdout_sha256": unit["stdout_sha256"],

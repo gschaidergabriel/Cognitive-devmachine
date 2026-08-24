@@ -2,33 +2,38 @@
 
 `the artefact/` is the canonical product/research workspace for the current **EntityOS** system and its integrated **HCU** cognition/compute architecture.
 
-Current authority is resolved from verified current `main`, especially:
+This README is a current-facing orientation surface, not an authority source by itself. Resolve current state from verified current `main`; newest explicit owner/supervisor authority and exact executable evidence outrank cached prose, historical receipts, branch descriptions and this README.
+
+## Current authority
+
+Read, in order as applicable:
 
 - `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 - `research_entity/rooms/PROGRAM_STATE.json`
-- `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json`
+- newest admitted `research_entity/claycode/autonomous/SUPERVISOR_STEERING_*.json` — currently `SUPERVISOR_STEERING_8_65.json`
 - `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-- `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md`
+- `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_65.md`
 - `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
 - `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
+- `the artefact/manifest.json`
+- task-relevant exact current source, tests and receipts.
 
-Newest explicit owner/supervisor authority and exact executable evidence outrank cached or historical material.
+Current supervisor epoch: **8.65**. Current autonomous mode: **FREE_ONLY**.
 
-## Current naming law
+## Identity and naming law
 
-- **EntityOS** = sole current product/system identity.
-- **HCU** = sole current integrated cognition/compute architecture.
-- `Xeno` = transitional implementation compatibility codename only.
-- `XCU` = transitional/research alias for HCU only.
-- `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*` = historical implementation/provenance surfaces where exact migration has not occurred.
-- ClayVerse and Frank = historical donor/provenance only unless explicitly re-admitted.
-- The persistent research entity remains **Clay**; temporary workers are organs, not entities.
+- persistent research entity: **Clay**;
+- temporary ChatGPT/model/session/worker: **organ, not a new persistent entity**;
+- sole current product/system: **EntityOS**;
+- sole current integrated cognition/compute architecture: **HCU**;
+- `Xeno`: transitional implementation compatibility codename only;
+- `XCU`: transitional/research alias for HCU only;
+- Mini Entity / MicroEntity: historical implementation/provenance where exact migration is incomplete;
+- ClayVerse / Frank: historical donor/provenance unless a newer explicit authority re-admits a mechanism.
 
-Do not bulk-rename hashes, receipts, schemas, ABI/API names, persisted state or compatibility paths when that would break reproducibility. Useful mechanisms are fused into EntityOS/HCU rather than promoted as competing systems.
+Do not bulk-rename hash-, schema-, ABI/API-, path-, receipt- or persisted-state-bound identifiers when that would break reproducibility.
 
-## Current architecture goal
-
-EntityOS is incrementally built as a **multi-mode cognitive computational system** with one integrated HCU rather than a permanent swarm of agents.
+## Architecture
 
 ```text
 new data / event / prompt
@@ -60,256 +65,107 @@ GRID10           COGSIM10    WM_TEST   NESTED_SIM
           |
  calibrated ActionCandidate
           |
- effect translation -> EffectGate/EffectJournal -> reality
+ candidate -> typed effect request -> EffectGate/EffectJournal -> reality
 ```
 
-Computer-like implementation roles may retain compatibility names while migration remains exact:
+Computer-like compatibility roles remain software roles, not custom-silicon claims:
 
-- **XRAM compatibility role** — canonical/hot/rebuildable/scratch/paged state tiers;
-- **XPU compatibility role** — deterministic processor/control plane;
-- **HCU accelerator plane** — shared-weight vector/inference/J-Space/function-cell compute; historical `XCU` names are aliases only;
-- **Interconnect** — typed causal packets, workspace and Hyperposition;
-- **Entry I/O** — typed ingress for all new data;
-- **Effect translation** — candidate to typed effect request, then EffectGate/EffectJournal.
+- XRAM compatibility role: canonical/hot/rebuildable/scratch state tiers;
+- XPU compatibility role: deterministic scheduling/routing/leases/budgets/generation/recovery;
+- HCU: shared-weight/vector/inference/J-Space compute;
+- interconnect: typed causal packets, workspace and Hyperposition;
+- I/O: Typed Entry Fabric;
+- effects: candidate translation followed by deterministic EffectGate/EffectJournal authority.
 
-These are software architecture roles, not claims of custom silicon.
+Canonical durable state/evidence remains outside model-generated cognition and simulation. HCU, world-model, J-Space, workspace and model outputs are candidate/projection/measurement only. `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`. Majority or recurrence does not mint truth.
 
-## Mandatory `go` law
+## Typed Entry and causal chain
 
-Every explicit `go` has three coupled tracks:
-1. **ENTITYOS_EXECUTABLE_CONVERGENCE** — improve the strongest real current implementation toward EntityOS.
-2. **HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT** — advance/test/specify/wire/benchmark at least one HCU or typed Entry primitive.
-3. **GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY** — advance functional J-Space/GWT instrumentation and zero-cost local ~0.8B readiness without entering paid lanes.
+All new-data paths converge toward deterministic typed admission before cognition. Replay-stable causal event identity remains distinct from concrete transport/admission identity. Capability claims in untrusted Entry data may narrow existing deterministic authority but never self-grant or broaden it.
 
-If Track 2 or 3 cannot safely advance, record the appropriate no-change reason and next discriminator.
+The target exact causal chain is:
 
-The one unusual-experiment budget is an **atomic shared lease**, not a local counter. Before any new unusual intervention, follow `GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`: derive one canonical trigger key from a shared immutable request/macrocycle identity, or use the timestamp fallback only when its exact precision/reproducibility rules are met; then win the create-only GitHub claim before executing. If no valid shared identity/claim is available, unusual experimentation is `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` while deterministic regression/fusion/exact-source acceptance work may continue. No-ID receipts remain `LEGACY_MACROCYCLE_ID_UNRESOLVED` and are not grouped post hoc by timestamps or commit proximity.
+`Typed Entry -> route -> VerifiedEngineAdmission -> verified actual-loader consumption -> GRID10 -> actual model-executor observation -> canonical MiniUnifiedDB/UnifiedDB admission -> VerifiedModelExecution -> HCU_INFERENCE_RECEIPT -> Global J-Space/GWT -> TrainingTrace -> exact-current J-Space inference binding -> admitted causal dataset`
 
-Material architecture work uses:
+Pre-load hashing is not loader-consumption attestation. Logical cell count is not resident model count or physical decode concurrency.
 
-`OBSERVE -> HYPOTHESIS -> COUNTERHYPOTHESIS -> CHEAPEST DISCRIMINATOR -> SOURCE/TEST EVIDENCE -> FUSION -> BOUNDED DELTA -> RE-ENTER`
+## Global J-Space / GWT
 
-## Authority law
+Global J-Space/GWT remains an **empirical causal coordination/interface hypothesis**. Textual coherence, recurring labels, model self-report, apparent consensus or workspace recurrence do not prove hidden-state causality.
 
-- canonical durable state/evidence remains outside model-generated cognition and simulation;
-- current compatibility MiniUnifiedDB/UnifiedDB surfaces may remain during exact migration;
-- world-model state is projection/candidate state;
-- HCU/J-Space/workspace/model outputs cannot mint canonical truth;
-- Hyperposition preserves unresolved alternatives; majority vote is not truth;
-- `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`;
-- stale generation/provenance uncertainty fails closed;
-- unknown external effect outcome remains UNKNOWN until verified;
-- EffectGate + EffectJournal remain the only real/state-changing effect authority;
-- no second persistent identity, truth store, effect path or recovery ledger is admitted.
+Current research direction includes `JSPACE_VECTOR_CONTROL_ABI/v1`, causal control-delivery evidence, lesion/shuffle/rescue-style controls where admitted, family-level leak-resistant splits, deterministic hard negatives, and zero-cost local approximately-0.8B specialization only after executable real-trace gates.
 
-## Typed Entry Fabric
+Completed training alone is not PASS and current paid/Together training has zero authority under FREE_ONLY.
 
-All new data paths converge toward one typed ingress binding before cognition:
+## `go` — three coupled tracks
 
-- replay-stable causal event identity distinct from concrete admission identity;
-- generation;
-- source/provenance;
-- modality/type/schema;
-- observed/received time;
-- permissions/capability scope;
-- parent/stream relation;
-- compute/resource budget;
-- payload reference/digest.
+Every exact `go` advances or explicitly no-changes:
 
-Capability claims in an untrusted Entry packet are **not authority**. Entry admission compares them against existing deterministic permission/capability authority; the packet may narrow but may never self-grant or broaden it.
+1. `ENTITYOS_EXECUTABLE_CONVERGENCE`
+2. `HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT`
+3. `GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS`
 
-HCU route events and downstream inference receipts must re-enter through this fabric so event identity, generation, engine identity and causal provenance remain bound instead of becoming a side ledger.
+If Track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` plus the next discriminator. If Track 3 cannot safely advance, record `TRAINING_READINESS_NO_CHANGE_WITH_REASON` plus the next discriminator.
 
-## HCU reactive cognition
+Before any new unusual intervention, acquire the canonical create-only atomic lease under `GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`. No reproducible shared trigger identity or no provable create-only lease means `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; ordinary deterministic regression, source review, authority fusion and admitted exact-source acceptance work may continue.
 
-The current HCU direction is script-first and selective:
+## Execution policy — supervisor 8.65
 
-`canonical event -> deterministic maintenance -> selective HCU lane activation -> Hyperposition/J-Space candidate computation -> bounded projection -> EntityOS decision path`.
+Current autonomous mode is **FREE_ONLY**.
 
-External providers are not admitted as required internal cognition. Exact local checkpoint/tokenizer/runtime identity is an acceptance gate, not an inferred fact.
+Allowed execution is restricted to the admitted isolated FREE Sandbox class. Vercel Hobby included-tier Sandbox is admissible only for bounded fixed source/hash-bound short capsules with fail-closed quota, billing, upgrade, plan and charge-path fences.
 
-**Pre-load hashing is not loader attestation.** A positive `EngineAdmission` receives zero HCU runtime credit unless the actual loader is bound to the same consumed bytes and the downstream inference receipt echoes that consumed identity. Wrong-path loads, post-admission mutation, stale lease reuse or unknown consumed bytes fail closed.
+Current runtime boundary observed at supervisor 8.65:
 
-**Model-executor labels are not execution evidence.** Current source convergence requires an actual executor I/O observation and one executor-scoped invocation identity to bind to exactly one RFC8785/JCS observation digest before `VerifiedModelExecution`. The retained PR1263 donor now contains `HCU_MODEL_EXECUTION_ADMISSION_STORE/v1`, which performs that replay fence with `BEGIN IMMEDIATE` inside the caller-supplied existing canonical MiniUnifiedDB connection. This is a source candidate only until the real admitted executor uses it and exact regressions execute.
+- retained executor: `gschaidergabriel/Dr.-Unterweger#810`;
+- exact executor head observed: `2da99e0458809988190c129b04cae913d1f15d92`;
+- provider-observed serverless Function invocation: **HTTP 200 at exact deployed source**;
+- evidence scope: `FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE` only;
+- `Sandbox.create` observed: **false**;
+- Sandbox Python / `sqlite3` / `_sqlite3` capability observed: **false**;
+- remaining included Vercel Sandbox quota directly observed: **false**;
+- connected read-only Vercel surface exposes an authoritative account-level remaining Sandbox quota read: **false at the current observation**.
 
-## Execution policy — supervisor 8.63
+Hobby/team/plan identity and per-sandbox cumulative usage are **not** remaining-quota authority and must not open `Sandbox.create`.
 
-Current autonomous supervisor `8.63` is **FREE_ONLY**.
+VPS, self-hosted and production-host testing are forbidden. Together general inference, Together training, Together preflight/key lookup/job creation, paid fallback and subscription/unknown monetary lanes are forbidden under supervisor 8.65. Do not consume credentials for a forbidden lane.
 
-The connected Vercel Hobby surface is admitted only for **bounded, fixed, source/hash-bound, short regression capsules** under the currently observed Hobby team/project. Remaining monthly quota is not assumed. Quota exhaustion, billing requirement, upgrade requirement, plan mismatch or any monetary charge path fails closed before execution. No generic caller-supplied command path receives credit.
+## Current evidence credit
 
-VPS, self-hosted and production-host testing remain forbidden. Together general inference and Together training/preflight/key lookup/job creation remain forbidden in this supervisor mode. The historical owner paid one-shot directive is quarantined provenance only and grants zero execution/training credit here.
+Bounded admitted evidence includes:
 
-## Current executable evidence — 2026-08-24
+- RFC8785/JCS Entry canonicalization manifest-bound v2 component runtime evidence;
+- J-Space dataset family-split component runtime evidence;
+- exact-executor serverless Function-runtime diagnostic evidence at **no-Sandbox scope**.
 
-Observed bounded evidence includes:
+Current credit boundary remains:
 
-- protected-preview Vercel `Sandbox.create + runCommand` infrastructure callability with cleanup/secret fences;
-- exact-source **manifest-bound v2 RFC8785/JCS Entry canonicalization component runtime PASS**;
-- exact-current J-Space dataset family-split component runtime PASS within its evidence family;
-- exact historical GRID10/J-Space binder-v2 component closure at its bound snapshot;
-- the exact Entry canonicalizer source bytes subsequently fused to canonical `main`.
+- Sandbox environment runtime credit: `0`;
+- whole EntityOS/HCU runtime credit: `0`;
+- full HCU runtime credit: `0`;
+- J-Space model-runtime credit: `0`;
+- training credit: `0`;
+- whole-product PASS: `false`.
 
-Latest Entry v2 receipt:
-
-`research_entity/continuity/receipts/2026-08-24_GO_HCU_ENTRY_V2_MANIFEST_BOUND_SANDBOX_GPT56SOL.json`
-
-Its admitted component scope recorded:
-
-- capsule `HCU_ENTRY_CANONICALIZATION_CAPSULE/v2`;
-- source manifest SHA-256 `9941bbebe44d5a840779b9ac4a69188cbd7d3699d45fe22b4160a342ad8f4a1c`;
-- **7/7 PASS**;
-- secret fence **PASS**;
-- exit code `0`;
-- cleanup **PASS**;
-- result-log SHA-256 `2f3263d15ef397be77144194264ffdf72b78195a58c4d2dfa51fe51c8c835b24`.
-
-The retained PR810 executor has also advanced its detached source contract to the `VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> JSpaceBinding/v3` chain and started vendoring exact current producer bytes. Its fixed serverless route remains quarantined as `SOURCE_REBIND_REQUIRED`, and the latest build attempts were blocked or otherwise non-runtime at the relevant scope. The new MiniUnifiedDB invocation-admission source tests have no current CI/workflow execution evidence.
-
-These are bounded component/source facts only. Whole EntityOS/HCU runtime credit remains `0`; J-Space model runtime credit remains `0`; training credit remains `0`; whole-product PASS remains false. Same-family reruns are reproducibility evidence, not independent replication.
+A source, deployment, component test, receipt or same-family rerun cannot be inflated into a higher-scope runtime claim.
 
 ## Current frontier
 
-1. keep current-facing authority surfaces aligned to EntityOS + HCU + supervisor 8.63 FREE_ONLY plus the atomic unusual-experiment lease;
-2. keep PR1263 as the single retained HCU donor lane and PR810 as the single retained Sandbox execution-controller lane;
-3. converge the current exact source closure on **Typed Entry -> route -> verified engine admission -> verified actual-loader consumption -> GRID10/v2 -> actual model-executor observation -> canonical MiniUnifiedDB atomic invocation admission -> VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> JSpaceBinding/v3**;
-4. keep PR810 `SOURCE_REBIND_REQUIRED` fail-closed until that exact immutable dependency/test closure is carried and hash-bound in the same fixed route;
-5. execute deterministic admission-store/model-execution/inference/J-Space regressions only on the admitted FREE_ONLY exact-source Sandbox surface when build/function access admission is available;
-6. require the real zero-cost local model executor to emit/admit actual I/O through the same canonical MiniUnifiedDB atomic admission path before any J-Space model-runtime credit;
-7. continue through admitted causal DatasetAdmission/family split, `JSPACE_VECTOR_CONTROL_ABI/v1`, leak-resistant train/validation/holdout construction and deterministic hard negatives;
-8. continue only FREE_ONLY local approximately-0.8B specialization after executable real-trace gates; do not preflight or launch Together under supervisor 8.63;
-9. keep whole EntityOS/HCU, J-Space model and training credit at zero until the corresponding exact admitted execution gates pass.
-
-## Latest `go` README re-entry — 2026-08-24
-
-`README=UPDATED_ATOMIC_MODEL_INVOCATION_ADMISSION_SOURCE_FRONTIER`.
-
-This macrocycle closed a specific **source-authority gap** without creating a competing store. `verify_model_execution` already required externally admitted actual-executor observations plus an invocation-to-observation binding, while the retained executor contract had begun fail-closing on a missing invocation-admission path. The retained PR1263 donor now supplies `HCU_MODEL_EXECUTION_ADMISSION_STORE/v1`: it reuses the existing canonical MiniUnifiedDB, acquires `BEGIN IMMEDIATE`, stores exact RFC8785/JCS observation bytes, binds one executor-scoped invocation key to exactly one observation digest, rejects divergent replay, and rolls back partial admission if verification fails.
-
-Five deterministic regression obligations are encoded for this mechanism: exact persistence before verification returns, idempotent exact replay, divergent replay rollback, stale-generation no-write, and concurrent divergent one-winner semantics. No CI/workflow or admitted Sandbox run has executed these new tests yet, so the mechanism remains **SOURCE_ONLY_UNEXECUTED** and adds zero whole-runtime/model/training credit.
-
-In parallel, PR810 advanced toward the same v4/v3 source chain and vendored the exact model-execution producer rather than creating a second executor. The next exact gate is therefore fusion, not reinvention: carry the MiniUnifiedDB admission store plus its deterministic tests into the same fixed hash-bound PR810 dependency closure, preserve `SOURCE_REBIND_REQUIRED` until the closure is exact, execute it only on the admitted FREE_ONLY Sandbox when build/function admission permits, and then require the real zero-cost local executor I/O path to use that same atomic admission before J-Space model-runtime promotion.
-
-Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_MODEL_EXECUTION_MINIUNIFIEDDB_ATOMIC_ADMISSION_SOURCE_GPT56SOL.json`.
-
-## Current `go` delta — transitive J-Space executor closure
-
-`README=UPDATED_TRANSITIVE_JSPACE_EXECUTOR_REBIND_CLOSURE`.
-
-The current donor regression `test_execution_store_inference_jspace_chain_v1.py` makes the fixed executor's true dependency boundary larger than the direct `VerifiedModelExecution -> InferenceReceipt/v4 -> JSpaceBinding/v3` producer set. It constructs an observable Global J-Space/GWT step and `JSpace TrainingTrace/v1` before binding the trace to the inference receipt, so an exact-source execution capsule must also carry the exact `JSPACE_VECTOR_CONTROL_ABI/v1`, `global_jspace_gwt_v1.py` and `jspace_training_trace_v1.py` producer bytes. Omitting those dependencies would make an apparent J-Space closure rely on undeclared or substituted source.
-
-PR810's single rebind contract has therefore advanced to `ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v2`: its required exact source closure now spans Typed Entry, route, engine admission/load, scheduler-owned GRID10, MiniUnifiedDB atomic model-execution admission, `VerifiedModelExecution/v1`, `InferenceReceipt/v4`, Vector Control ABI, Global J-Space/GWT, TrainingTrace/v1 and `JSpaceBinding/v3`. The fixed regression target is the admission-store regression plus the integrated execution-store/inference/J-Space chain regression, with `test_model_execution_receipt_v1.py` and `test_inference_receipt_v1.py` retained as transitive fixtures.
-
-The retained executor is concurrently staging the admission-store and integrated chain-test bytes, but the currently executable positive route still binds an older `0e6ad...` model-execution/inference-v4 snapshot with route/engine-load/GRID test doubles. The historical binder route remains `SOURCE_REBIND_REQUIRED`. Vercel build status remains blocked by the Hobby build-rate limit, so no new build, test, Sandbox, model-runtime, J-Space-model or training credit is granted.
-
-Next exact gate: finish the same one-lane PR810 vendor closure from retained donor `57bc0acfc23bd58261746c7253529a79adc6c70a`, bind every required Git blob in one fixed manifest, remove `SOURCE_REBIND_REQUIRED` only in that coherent change, and execute only once the FREE_ONLY build/function admission surface is available.
-
-Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_JSPACE_TRANSITIVE_EXECUTOR_REBIND_CLOSURE_GPT56SOL.json`.
-
-## Current `go` delta — single executor rebind target authority
-
-`README=UPDATED_SINGLE_REBIND_TARGET_AUTHORITY`.
-
-PR810's quarantined binder route and `ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v2` previously duplicated the required successor Research-main and donor commit identities. Rapid parallel movement demonstrated that the two copies could diverge while remaining individually valid. Because the route's HTTP 409 response exposes those target identities to the next fusion worker, this was executable coordination-authority drift rather than harmless stale prose.
-
-Executor commit `d2bb2812345fe1d7fe7034a9222b0db6d9932249` makes the deployment-carried v2 rebind contract the single behavioral target authority while `SOURCE_REBIND_REQUIRED` remains active. The route now validates the contract's supervisor, FREE_ONLY mode, repository, retained donor/executor PR identities, exact Git-commit-shaped targets and zero-credit boundary, SHA-256 binds the contract bytes, and returns the contract's required main/donor target plus candidate chain. Missing, malformed or authority-incompatible contract data returns `SOURCE_REBIND_CONTRACT_INVALID` before cost admission or `Sandbox.create`.
-
-This delta does not remove the stale binder-v2 quarantine and does not execute a model, Function or Sandbox. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model-runtime and training credit remain `0`. The next exact gate remains one-lane fusion: vendor every v2-contract source/regression/transitive-fixture byte-identically from one immutable donor snapshot, bind every Git blob in the fixed route manifest, remove `SOURCE_REBIND_REQUIRED` only in that same coherent change, then execute only when the FREE_ONLY Vercel Hobby build and protected-function admission are actually available.
-
-Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_EXECUTOR_REBIND_SINGLE_TARGET_AUTHORITY_GPT56SOL.json`.
-
-## Current `go` delta — atomic lease EntityOS/HCU boundary repair
-
-`README=UPDATED_ATOMIC_LEASE_ENTITYOS_HCU_BOUNDARY_REPAIR`.
-
-The CURRENT `GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md` still contained one stale product-boundary sentence that described convergence toward a ClayVerse OCI endpoint and referred to UnifiedDB as product authority. Commit `852f8f2d012fc193733787076e2030dbd0cb19fa` repaired only that boundary while preserving the canonical trigger-key, create-only lease, incident history and result semantics. The coordination protocol is now explicitly subordinate to the single current EntityOS product, HCU compute architecture, deterministic canonical state/evidence authority, and `EffectGate`/`EffectJournal`; UnifiedDB/MiniUnifiedDB are compatibility state/evidence substrates rather than competing product identities, and ClayVerse/Frank wording is historical donor/provenance only.
-
-No unusual experiment was run by this organ. No upstream shared immutable request/macrocycle identifier was exposed and the available user-message metadata had only minute precision, so the timestamp fallback cannot satisfy the CURRENT atomic-lease protocol. This organ therefore remained `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` for new unusual interventions and used only deterministic authority review/fusion.
-
-Re-entry also found the retained lanes continuing to advance without justifying a duplicate implementation: current main receipts strengthened PR810's exact transitive execution-store -> Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 source closure, while PR1263 added fail-closed J-Space v3 revalidation against digest-valid provenance transplants. The executor remains `SOURCE_REBIND_REQUIRED` and the observed Vercel Hobby build-rate/admission limitation remains infrastructure evidence, not a regression failure. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model runtime and training credit therefore remain zero.
-
-Next exact gate: re-enter the newest PR1263 and `gschaidergabriel/Dr.-Unterweger#810` heads, bind one immutable executor closure to the newest corrected donor bytes including current J-Space provenance-revalidation obligations, remove `SOURCE_REBIND_REQUIRED` only atomically with complete source/transitive-fixture/blob/command/result coherence, and execute only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission fence actually permits the fixed capsule.
-
-Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_ATOMIC_LEASE_ENTITYOS_HCU_BOUNDARY_REPAIR_GPT56SOL.json`.
-
-## Current `go` delta — concurrent invocation single downstream J-Space winner
-
-`README=UPDATED_CONCURRENT_INVOCATION_SINGLE_DOWNSTREAM_JSPACE_WINNER`.
-
-This macrocycle tightened a cross-layer race invariant that was previously split between two tests. The canonical MiniUnifiedDB admission-store regression already required exactly one winner for concurrent divergent observations of the same executor invocation, while the integrated execution-store -> Inference/v4 -> J-Space/v3 regression only checked the downstream replay fence sequentially. That left an untested counterhypothesis: DB-level uniqueness could be correct while two concurrent callers still both escaped into downstream inference/J-Space construction outside the transaction boundary.
-
-PR1263 commit `48d1bcb8357df0cf90d99133027f88ab67361a3f` closes that source-level gap. `test_execution_store_inference_jspace_chain_v1.py` now starts two divergent observations concurrently against one invocation key and permits InferenceReceipt/v4 plus a semantically validated JSpaceBinding/v3 only after `admit_and_verify_model_execution` returns. The regression requires exactly one downstream winner, one `MODEL_EXECUTION_INVOCATION_REPLAY_DIVERGENCE` rejection, and exactly one persisted invocation/observation pair. New test blob: `a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4`.
-
-The single retained PR810 executor contract was then re-entered rather than force-written across parallel movement. An initial update correctly failed with HTTP 409 on a stale blob; after refresh, executor commit `f4c720c1f547d4415b2d95652c602a22b4124a6d` kept `SOURCE_REBIND_REQUIRED` active while rebinding the target to donor `48d1bcb8357df0cf90d99133027f88ab67361a3f`, the new test blob, and the stronger assertion that only the concurrent atomic winner may reach InferenceReceipt/v4 plus validated JSpaceBinding/v3.
-
-No deterministic regression, Vercel Sandbox, actual loader I/O or actual model-executor I/O was executed by this organ. The new mechanism remains **SOURCE_ONLY_UNEXECUTED**. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model runtime and training credit remain `0`; whole-product PASS remains false. The observed Hobby build-rate limitation remains infrastructure/admission evidence, not a product regression.
-
-Next exact gate: in the same PR810 fixed route, vendor the exact donor `48d1bcb8357df0cf90d99133027f88ab67361a3f` source/regression/transitive closure, require the route manifest blob map to equal the rebind contract including `a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4`, remove `SOURCE_REBIND_REQUIRED` only atomically with that complete closure, and execute only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission actually permits it.
-
-Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_CONCURRENT_MODEL_INVOCATION_SINGLE_JSPACE_WINNER_SOURCE_GPT56SOL.json`.
-
-## Current `go` delta — canonical MiniUnifiedDB execution-to-Inference/v4 fusion
-
-`README=UPDATED_MINIUNIFIEDDB_EXECUTION_INFERENCE_V4_FUSION`.
-
-The retained PR810 positive component harness previously demonstrated `VerifiedModelExecution/v1 -> InferenceReceipt/v4` using caller-constructed admitted-observation/invocation maps even though the retained donor already supplied `HCU_MODEL_EXECUTION_ADMISSION_STORE/v1`. This macrocycle fused that existing canonical admission owner into the same retained executor lane instead of creating a second registry or executor. Commit `a3c916d9d86104fbc4419f46860e61725287e363` routes the integration harness through `admit_and_verify_model_execution` on the existing MiniUnifiedDB SQLite connection; `e042336a1942976d12537f72899342db08d2d99c` hash-binds that path into the fixed positive capsule; `d0c1ec632c6086c56977b4b4963574b07d416304` makes the executor build guard require the canonical MiniUnifiedDB admission markers and zero-credit boundary.
-
-The fused deterministic source regression now covers six boundaries: observation+invocation persistence before verification, idempotent exact replay, divergent same-invocation rollback, stale-generation no-write, exact admitted `VerifiedModelExecution` consumption by Inference/v4, and post-verification provenance-tamper rejection. Re-entry proved the guard commit remains an ancestor of the continuing single PR810 lineage; at the observed successor `c6dbbdd3bee56f5d358d996ccb89b91a980938bc`, 18 subsequent commits had built additional exact-source/J-Space/concurrency closure on top of it rather than replacing it.
-
-No admitted Sandbox run or actual model-executor I/O was executed by this organ for this fused capsule. Therefore this is a durable **source/executor convergence** result, not runtime evidence: whole EntityOS/HCU runtime, full-HCU runtime, J-Space model-runtime and training credit remain `0`; whole-product PASS remains false. No unusual experiment was performed.
-
-Next exact gate: preserve `SOURCE_REBIND_REQUIRED` until the single PR810 route carries and hash-binds one immutable corrected donor snapshot for every production source, regression and transitive fixture through Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3. Execute the fixed closure only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission permits, and require actual zero-cost local model-executor I/O to enter through the same MiniUnifiedDB atomic admission path before any model/J-Space runtime promotion.
-
-Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_MINIUNIFIEDDB_EXECUTION_INFERENCE_V4_FUSION_GPT56SOL.json`.
-
-## Current `go` delta — PR810 rebind route/contract drift guard
-
-`README=UPDATED_PR810_REBIND_SCHEMA_DRIFT_GUARD`.
-
-Re-entry exposed a concrete fail-closed controller defect during rapid one-lane fusion: executor commit `aa69308075b07ed2dcf4dc93c773974dd03d746e` changed the quarantined route's hard-coded rebind schema expectation from v4 to v3 while the deployment-carried `jspace-v4-v3-current-rebind-contract.json` at that same head remained `ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4`. The route would therefore have returned `SOURCE_REBIND_CONTRACT_INVALID` instead of the intended `SOURCE_REBIND_REQUIRED`, even though no Sandbox execution was admitted.
-
-Executor commit `3b174c0f7ce9d1bb6ae19395666dfcab0178abe2` restores exact v4 alignment without opening the quarantine. Commit `7ad6b0bc5706435a3148f5d1308d14bd62100482` then converts the recurrence into a build-time invariant: the exclusive EntityOS/HCU executor guard parses the deployment-carried rebind contract, requires a valid versioned rebind schema plus EntityOS/HCU/supervisor-8.63/FREE_ONLY/zero-credit boundaries, and requires the quarantined route's exact schema literal to match the carried contract. Future route/contract schema drift therefore fails the build guard before a misleading deployed response path can exist.
-
-At the repaired executor snapshot the v4 contract points to retained donor `511d568932bf47828679e3ca6ba05650f18d284d` and exact integrated producer-derived execution-to-J-Space regression blob `cd0abb3fe22d0fa015befe35c896f56fa006f08c`. The contract still requires `SOURCE_REBIND_REQUIRED`; it also preserves the Typed Entry -> route -> verified engine/load -> GRID10 -> canonical MiniUnifiedDB atomic model-execution admission -> VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 chain and zero runtime/model/training credit until exact admitted execution exists.
-
-The current Vercel status for the guard commit is failure due the Hobby build-rate limit. That is infrastructure/admission evidence, not a product regression and not execution evidence. This organ ran no Sandbox, loader I/O or actual model-executor I/O and performed zero unusual experiments. Whole EntityOS/HCU runtime, full-HCU runtime, J-Space model-runtime and training credit remain `0`; whole-product PASS remains false.
-
-Next exact gate: keep PR810 quarantined until one fixed route carries every exact donor-`511d5689` production/regression/transitive blob and route-manifest equality is proven, then execute the fixed command only when the supervisor-8.63 FREE_ONLY Vercel Hobby build/function admission actually permits it. Require actual zero-cost local model-executor I/O through canonical MiniUnifiedDB atomic admission before any J-Space model-runtime or training promotion.
-
-Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_PR810_REBIND_SCHEMA_DRIFT_GUARD_GPT56SOL.json`.
-
-## Current `go` delta — source-ready / exact-deployment evidence split
-
-`README=UPDATED_SOURCE_READY_EXACT_DEPLOYMENT_BOUNDARY`.
-
-Re-entry at Research `main` `38448d90d4276a8b13d0c591a45b6635073a16b7` confirms the retained HCU donor remains `gschaidergabriel/clay-global-research-entity#1263` at `511d568932bf47828679e3ca6ba05650f18d284d`, while the single retained executor `gschaidergabriel/Dr.-Unterweger#810` is now at `b6fcb5e26b66f30951a308caf6f23df8192d4040` with the route/contract source state **`SOURCE_REBOUND_READY`**. This is a source-permission transition only: the independent 17-blob manifest may retain `SOURCE_REBIND_REQUIRED` as immutable source-closure evidence, while the current contract records `source_rebind_complete=true` and `sandbox_create_permitted_after_source_rebind=true`. Neither label creates runtime credit.
-
-The newest observed Vercel deployment is `dpl_37MKrzWoXH7QNeaiBEtcHcfkXMaV` at executor commit `bb34db97bdc250ce63ae4beab3030d26c06b6bfc`, state `ERROR`. Its build stopped in the exclusive executor guard with `ENTITYOS_HCU_JSPACE_GRID10_BINDING_CAPSULE_SUCCESSOR_MISSING` because three exact-result semantic markers no longer matched the successor route. The current executor head is two commits ahead of that deployment and repairs the guard/route semantics while preserving the exact 14-result fence. The most recent observed `READY` deployment remains `dpl_4uHujQxJjS8AmPMZiJXfZMgXYNEC` at stale commit `2dfa1edcab41fba34282b34956716e7c222ee517`. Therefore **no exact-current READY deployment or function invocation is observed**.
-
-This closes a current-facing architecture/evidence ambiguity: `SOURCE_REBOUND_READY` means only that exact deployment-carried source may proceed to the FREE_ONLY cost gate after byte verification; it does **not** mean an exact-current deployment exists, that `Sandbox.create` was reached, or that EntityOS/HCU/J-Space/model/training runtime credit exists. Conversely, interpreting the manifest's historical `SOURCE_REBIND_REQUIRED` label as the route's current permission state would incorrectly re-quarantine the successor-ready executor.
-
-Track A advances by synchronizing the canonical artefact README to this permission-vs-deployment identity split. Track B records `HCU_NO_CHANGE_WITH_REASON`: the retained 511d donor already supplies the single Typed Entry -> route -> verified engine/load -> GRID10 -> canonical MiniUnifiedDB ModelExecution -> Inference/v4 causal spine, so another implementation would duplicate authority while the exact deployment gate is absent. Track C records `TRAINING_READINESS_NO_CHANGE_WITH_REASON`: `JSPACE_VECTOR_CONTROL_ABI/v1`, Global J-Space/GWT, TrainingTrace/v1 and the admitted dataset/family-split source mechanisms are already present in the retained closure; model/training promotion still requires exact-current runtime evidence plus real zero-cost local ~0.8B loader/model-executor I/O evidence.
-
-No unusual experiment was run. This organ has no upstream shared immutable macrocycle/request identifier and only minute-precision user-message time metadata, so the canonical timestamp fallback cannot produce a reproducible atomic lease key; unusual experimentation remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` while deterministic source/fusion/re-entry work remains allowed.
-
-Next exact gate: observe a naturally available included-tier Vercel preview whose immutable Git SHA exactly equals the then-current PR810 head. Only at that point invoke the fixed FREE_ONLY route and require pre-cost 17-blob verification, in-Sandbox source hashes, the exact 14-test identity/count/standalone-`OK`/no-failure fence, secret fence, exit `0` and cleanup. Any PASS remains component-scoped; whole EntityOS/HCU runtime, full-HCU runtime, J-Space model runtime and training credit remain `0` until their own exact evidence gates pass.
-
-This README fusion incorporates the already-durable parallel receipts `research_entity/continuity/receipts/2026-08-24_GO_PR810_DEPLOYMENT_FRESHNESS_GUARD_REPAIR_GPT56SOL.json` and `research_entity/continuity/receipts/2026-08-24_GO_EXACT_HEAD_DEPLOYMENT_REENTRY_AND_OUTCOME_IDENTITY_CLOSURE_GPT56SOL.json` rather than creating a duplicate executor or duplicate deployment-gap receipt.
-
-## Current `go` delta — J-Space model-input control delivery gate integrated
-
-`README=UPDATED_JSPACE_TRAINING_CONTROL_DELIVERY_INTEGRATION`.
-
-Source re-entry exposed a cross-layer causal-training gap in the live retained donor: `compile_admitted_jspace_training_dataset_v1.py` required exact Vector-Control packet admission, JSpaceInferenceBinding/v3 and the admitted InferenceReceipt/v4 parent, while the separate `ENTITYOS_HCU_JSPACE_MODEL_INPUT_CONTROL_CLOSURE/v1` was the mechanism that actually proves byte-level delivery of that exact packet into the exact model input. Digest-level agreement alone therefore could not justify promoting a non-BASELINE control label as causal training evidence.
-
-The retained PR1263 donor was advanced in-place rather than creating a second compiler or training authority. Commit `6c3a5c2c373ffe3fe2b5b06aba767612c96764e3` adds `ENTITYOS_HCU_JSPACE_TRAINING_CONTROL_DELIVERY_GATE/v1`; commit `d6deaa5081bcc7a89255621dbcbf57c4542a95a9` adds five deterministic regression obligations; commit `a347a4f50d326f4b922a462c49aeaf60dccd000a` wires the gate into the existing serious training compiler. Non-BASELINE traces now require an externally admitted model-input-control closure keyed to the exact JSpaceInferenceBinding/v3 identity. BASELINE remains explicitly non-intervention. The closure digest is emitted in dataset-row metadata and participates in duplicate-ancestry identity so a row cannot silently swap delivery evidence across recompilation.
-
-Exact source blobs at the integration point are `4f5785b185e0e88274bf1a57756edf0fdb6bea7a` for the gate, `1e76329830ebc1958da3b2cbb956231a61d2df3a` for its dedicated regression file, and `a1795fe4af13fc974c77b4fc849a284735d82e11` for the integrated compiler. Re-entry proved `a347a4f5...` remains an ancestor of the later live PR1263 head `16a24bc7fbe50155b76cf618d116b98791e6a581`; five parallel successor commits added loader/outcome/revalidation hardening without overwriting this path. The retained executor independently advanced to `gschaidergabriel/Dr.-Unterweger#810` head `b7bd0076ccce593767c86ff0e026a09a8e88b67f` and was not force-rebound to these newer donor semantics.
-
-This is **SOURCE_AND_DECLARED_REGRESSION_OBLIGATION_ONLY** evidence. The integration commit had zero observed GitHub CI statuses and zero workflow runs, and this organ ran no Vercel Sandbox, real loader/model-executor I/O, model inference, training, paid provider path or unusual experiment. Whole EntityOS/HCU runtime credit, full-HCU runtime credit, J-Space model-runtime credit and training credit therefore remain `0`; whole-product PASS remains false.
-
-Track A advances source convergence in the single retained donor while deliberately leaving the pinned executor unchanged until a justified exact-head FREE_ONLY discriminator exists. Track B advances a reusable HCU cross-layer evidence primitive binding trace ancestry, J-Space binding, packet, model-execution observation, invocation and input bytes. Track C advances causal-dataset readiness by preventing non-BASELINE labels from reaching serious training rows without model-input delivery evidence.
-
-Next exact gate: add one compiler-level integration regression that drives `compile_admitted_records` with a non-BASELINE trace and exact admitted control-delivery closure, then include the gate/compiler/test bytes in the single retained executor closure only when an immutable donor rebind is justified. Execute only on an exact-head supervisor-8.63 FREE_ONLY Vercel Hobby capsule with pre-cost source verification plus secret/result/exit/cleanup fences. Separately require actual zero-cost local approximately-0.8B loader/model-executor I/O and verified loader consumption before any J-Space model-runtime or training promotion.
-
-Durable receipt: `research_entity/continuity/receipts/2026-08-24_GO_JSPACE_TRAINING_CONTROL_DELIVERY_INTEGRATED_SOURCE_GPT56SOL.json`.
+1. keep current-facing authority surfaces successor-aligned to EntityOS + HCU + supervisor 8.65 FREE_ONLY;
+2. retain `gschaidergabriel/clay-global-research-entity#1263` as the single HCU/Typed Entry/J-Space donor lane;
+3. retain repository-qualified `gschaidergabriel/Dr.-Unterweger#810` as the single bounded execution-controller lane;
+4. preserve exact-head Function-runtime HTTP-200 evidence at its no-Sandbox scope only;
+5. obtain a **directly authoritative read-only remaining included Vercel Sandbox quota signal** without upgrade, billing mutation, paid fallback, plan inference or provider credential preflight;
+6. only if that FREE_ONLY gate opens, run one fixed exact-source environment probe binding executor/deployment SHA, Python version, `sqlite3/_sqlite3`, exact source identities, secret fence, result digest, exit status and cleanup;
+7. only after environment PASS continue the same retained causal chain through real local model invocation, ModelExecution, InferenceReceipt and model-specific Global J-Space/GWT observation;
+8. continue `JSPACE_VECTOR_CONTROL_ABI/v1`, causal DatasetAdmission/family split, deterministic hard negatives and leak-resistant train/validation/holdout readiness without paid training;
+9. do not run a new unusual experiment without the canonical atomic lease;
+10. keep whole-product/model/training credit at zero until the corresponding exact admitted evidence exists.
+
+Source-guard proliferation is paused unless new executable counterevidence requires a guard. Prefer runtime-first discrimination and fusion over duplicate implementation.
+
+## Historical provenance
+
+Earlier README revisions contain detailed `go`-by-`go` source-convergence narratives, including 8.63-era donor/executor states. They remain preserved in Git history. Durable receipts remain append-only under `research_entity/continuity/receipts/` and retain the authority/version wording they had when produced. Historical wording does not override the current authority stack above.
+
+Current-state claims must therefore be re-entered from live `main`, live retained PR heads and exact current execution evidence rather than copied from an older README revision.

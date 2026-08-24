@@ -38,20 +38,21 @@
   },
   "request_pre_serialization_bound": {
     "checked_at": "2026-08-24",
-    "claim": "Validated request text and message structure are checked against an allocation-free lower bound before json.dumps materializes the JSON document. The bound counts the default ensure_ascii escape width of every Unicode scalar, including the six-byte escape for non-printable ASCII DEL, six-byte BMP escapes and twelve-byte non-BMP surrogate pairs. Requests that cannot fit the 2000000-byte envelope are rejected before serialization; the exact serialized UTF-8 byte check remains authoritative for requests that pass the preflight.",
+    "claim": "Validated request text and message structure are checked against their exact default json.dumps size before the JSON document is materialized. The calculation includes the 66-byte fixed request envelope, 27-byte per-message structure, two-byte list separators and ensure_ascii escape width of every Unicode scalar. Requests above 2000000 bytes are rejected before serialization; the serialized UTF-8 byte check remains defense in depth.",
     "source": "https://docs.python.org/3/library/json.html#json.dumps",
     "executable_evidence": [
       "test_oversized_request_is_rejected_before_json_materialization",
       "test_escaped_unicode_overflow_is_rejected_before_json_materialization",
-      "test_del_escape_overflow_is_rejected_before_json_materialization"
+      "test_del_escape_overflow_is_rejected_before_json_materialization",
+      "test_dense_alternating_overflow_is_rejected_before_execution_lock"
     ],
     "internal_measurement": "The repaired scalar-width function matched json.dumps(ensure_ascii=True) for all 1112064 Unicode scalar values.",
-    "counterhypothesis": "Counting Python characters, or treating every ASCII code point as one output byte, is a sufficient pre-serialization lower bound; falsified locally because non-BMP scalars expand twelvefold and U+007F expands from one Python character to the six-byte escape \\u007f before the JSON document is allocated."
+    "counterhypothesis": "Exact string escape widths plus a small structural lower bound are sufficient before serialization; falsified locally because 54793 minimal alternating messages fit the old character estimate but their separators and closed-schema object envelopes exceed 2000000 bytes and reached full snapshot plus json.dumps allocation."
   },
   "request_pre_snapshot_cardinality_bound": {
-    "max_messages": 62500,
-    "checked_at": "2026-08-21",
-    "claim": "An exact built-in message list is rejected before snapshot allocation and before the process-wide execution lock when its cardinality exceeds 62500. The bound is rechecked at the snapshot boundary because caller-owned mutable input can change after early admission. Under the current closed text schema and default JSON representation, the smallest valid message occupies 32 bytes before array separators and the outer request envelope, so no larger valid conversation can fit the 2000000-byte transport envelope.",
+    "max_messages": 54792,
+    "checked_at": "2026-08-24",
+    "claim": "An exact built-in message list is rejected before snapshot allocation and before the process-wide execution lock when its cardinality exceeds 54792. The bound is rechecked at the snapshot boundary because caller-owned mutable input can change after early admission. Under required role alternation, the densest valid 54792-message request with a leading system message occupies 1999970 bytes with the smallest valid model; the next valid cardinality exceeds the 2000000-byte envelope.",
     "sources": [
       "https://docs.python.org/3/library/functions.html#len",
       "https://docs.python.org/3/library/json.html#json.dumps",
@@ -59,9 +60,10 @@
     ],
     "executable_evidence": [
       "test_structurally_oversized_request_is_rejected_before_snapshot",
+      "test_dense_alternating_overflow_is_rejected_before_execution_lock",
       "test_message_count_mutation_is_rechecked_before_snapshot"
     ],
-    "counterhypothesis": "One early cardinality check is sufficient before lock acquisition; falsified locally because a deterministic lock-side mutation grew an admitted one-message request to 62501 valid alternating messages and the runtime copied the entire changed list before rejection."
+    "counterhypothesis": "Dividing the byte cap by the 32-byte smallest isolated message yields a safe maximum of 62500; falsified because that ignores required assistant-role width, list separators and the outer request envelope. A valid 54793-message conversation reached lock, snapshot and serialization before exact rejection."
   },
   "output_token_budget": {
     "max_tokens": 4096,
@@ -648,8 +650,8 @@
     "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
     "The serialized UTF-8 text-chat JSON request is at most 2000000 bytes; oversized payloads fail before runtime-environment snapshot, credential lookup or network access, while the exact boundary remains accepted.",
     "Every Chat Completions request explicitly sets max_tokens to 4096, bounding the combined reasoning and visible generation budget; finish_reason length remains unverified and requires changed input or budget rather than blind replay.",
-    "Requests whose validated text and per-message structure already exceed the transport envelope are rejected before json.dumps can materialize the document; the preflight counts default ensure_ascii escape widths for every Unicode scalar, and an exact serialized UTF-8 byte check remains in force afterward.",
-    "Exact built-in message lists above 62500 entries are rejected before caller-data snapshotting and before the process execution lock because no valid conversation of that cardinality can fit the 2000000-byte envelope.",
+    "Requests above the transport envelope are rejected before json.dumps can materialize the document; the preflight exactly counts the fixed request envelope, per-message objects, list separators and default ensure_ascii escape widths, while the serialized UTF-8 byte check remains defense in depth.",
+    "Exact built-in message lists above 54792 entries are rejected before caller-data snapshotting and before the process execution lock because required role alternation, separators and envelope structure prove that no valid conversation of that cardinality can fit 2000000 bytes.",
     "The message-cardinality bound is rechecked at the snapshot boundary so mutation after early admission cannot turn a small caller-owned list into an oversized allocation under the execution lock.",
     "Text-chat model, role and content values are exact built-in strings; polymorphic string subclasses fail closed before their methods, credential lookup, JSON serialization or network access can run.",
     "Text-chat messages and message objects are exact built-in list and dict containers with exact built-in string field names; polymorphic container subclasses fail closed before iteration or mapping behavior can run.",

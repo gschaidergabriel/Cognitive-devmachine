@@ -18,12 +18,17 @@ def h(char):
     return char * 64
 
 
+def model_input_for(condition):
+    return h("5") if condition == "BASELINE_CLEAN" else h("6")
+
+
 def plan():
     specs = []
     for index, condition in enumerate(REQUIRED_CONDITIONS):
         specs.append(CausalTrialSpec(
             condition=condition,
             input_variant_id="clean" if condition == "BASELINE_CLEAN" else "corrupted",
+            model_input_sha256=model_input_for(condition),
             intervention_sha256=None if condition.startswith("BASELINE_") else f"{index + 70:064x}",
         ))
     return CausalFamilyPlan(
@@ -45,6 +50,7 @@ class FakeExecutor:
             condition=spec.condition,
             family_id=family_id,
             input_variant_id=spec.input_variant_id,
+            model_input_sha256=spec.model_input_sha256,
             generation=generation,
             checkpoint_sha256=h("1"),
             tokenizer_sha256=h("2"),
@@ -76,6 +82,8 @@ class CausalFamilyOrchestratorTests(unittest.TestCase):
         self.assertEqual(result.invocation_count, 5)
         self.assertEqual(len(result.plan_sha256), 64)
         self.assertEqual(result.family_identity_sha256, result.identity_result.family_identity_sha256)
+        self.assertEqual(result.identity_result.clean_model_input_sha256, h("5"))
+        self.assertEqual(result.identity_result.corrupted_model_input_sha256, h("6"))
         self.assertEqual(len(result.trial_identity_sha256), 5)
 
     def test_plan_digest_is_canonical_across_input_order(self):
@@ -95,6 +103,22 @@ class CausalFamilyOrchestratorTests(unittest.TestCase):
             run_causal_family(executor, replace(current, trials=tuple(trials)))
         self.assertEqual(executor.calls, [])
 
+    def test_plan_rejects_input_content_drift_before_executor_invocation(self):
+        current = plan()
+        trials = list(current.trials)
+        target_index = next(i for i, spec in enumerate(trials) if spec.condition == "INTERVENTION_TARGET")
+        trials[target_index] = replace(trials[target_index], model_input_sha256=h("7"))
+        executor = FakeExecutor()
+        with self.assertRaisesRegex(CausalFamilyOrchestratorError, "CORRUPTED_BASE_MODEL_INPUT_REQUIRED"):
+            run_causal_family(executor, replace(current, trials=tuple(trials)))
+        self.assertEqual(executor.calls, [])
+
+        trials = list(current.trials)
+        corrupted_index = next(i for i, spec in enumerate(trials) if spec.condition == "BASELINE_CORRUPTED")
+        trials[corrupted_index] = replace(trials[corrupted_index], model_input_sha256=h("5"))
+        with self.assertRaisesRegex(CausalFamilyOrchestratorError, "BASELINE_CONTENT_COLLISION_FORBIDDEN"):
+            validate_causal_family_plan(replace(current, trials=tuple(trials)))
+
     def test_executor_cannot_relabel_condition_or_input(self):
         executor = FakeExecutor(
             mutate=lambda spec, trial: replace(trial, condition="SHAM_CONTROL")
@@ -108,6 +132,13 @@ class CausalFamilyOrchestratorTests(unittest.TestCase):
             if spec.condition == "BASELINE_CORRUPTED" else trial
         )
         with self.assertRaisesRegex(CausalFamilyOrchestratorError, "EXECUTOR_INPUT_VARIANT_MISMATCH"):
+            run_causal_family(executor, plan())
+
+        executor = FakeExecutor(
+            mutate=lambda spec, trial: replace(trial, model_input_sha256=h("7"))
+            if spec.condition == "INTERVENTION_TARGET" else trial
+        )
+        with self.assertRaisesRegex(CausalFamilyOrchestratorError, "EXECUTOR_MODEL_INPUT_IDENTITY_MISMATCH"):
             run_causal_family(executor, plan())
 
     def test_executor_cannot_substitute_intervention_or_generation(self):

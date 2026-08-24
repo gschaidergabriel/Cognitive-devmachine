@@ -179,28 +179,62 @@ def adjudicate_holdout(rows: Iterable[Mapping[str, Any]], *, selected_layer: int
     frozen = [r for r in xs if int(r["layer"]) == int(selected_layer) and float(r["gain"]) == float(selected_gain)]
     if not frozen:
         return {"pass": False, "classification": "FROZEN_LAYER_GAIN_NOT_PRESENT"}
-    label_maps = {str(r.get("label_map_id")) for r in frozen if r.get("label_map_id") is not None}
+    if any(r.get("label_map_id") is None for r in frozen):
+        return {"pass": False, "classification": "LABEL_REMAP_HOLDOUT_REQUIRED"}
+    label_maps = {str(r.get("label_map_id")) for r in frozen}
     if len(label_maps) < 2:
         return {"pass": False, "classification": "LABEL_REMAP_HOLDOUT_REQUIRED"}
+
     by_case: dict[tuple[str,str], dict[str,float]] = {}
+    wrong_layer_seen: set[tuple[str, str]] = set()
+    lesion_rescue_seen: set[tuple[str, str]] = set()
     wrong_layer_ok = True
     lesion_rescue_ok = True
     for r in frozen:
         key = (str(r["case_id"]), str(r["label_map_id"]))
-        if str(r.get("control")) in REQUIRED_CONTROLS:
-            by_case.setdefault(key, {})[str(r["control"])] = _finite(r["target_score"], "target_score")
-        if r.get("wrong_layer_delta") is not None:
-            wrong_layer_ok = wrong_layer_ok and _finite(r["wrong_layer_delta"], "wrong_layer_delta") <= 0
-        if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
-            lesion_rescue_ok = lesion_rescue_ok and _finite(r["lesion_delta"], "lesion_delta") <= 0 and _finite(r["rescue_delta"], "rescue_delta") > 0
+        control = str(r.get("control"))
+        if control in REQUIRED_CONTROLS:
+            controls = by_case.setdefault(key, {})
+            if control in controls:
+                return {"pass": False, "classification": "DUPLICATE_MATCHED_CONTROL"}
+            controls[control] = _finite(r["target_score"], "target_score")
+
+        wrong_layer_delta = r.get("wrong_layer_delta")
+        if wrong_layer_delta is not None:
+            wrong_layer_seen.add(key)
+            wrong_layer_ok = wrong_layer_ok and _finite(wrong_layer_delta, "wrong_layer_delta") <= 0
+
+        lesion_delta = r.get("lesion_delta")
+        rescue_delta = r.get("rescue_delta")
+        if (lesion_delta is None) != (rescue_delta is None):
+            lesion_rescue_ok = False
+        elif lesion_delta is not None and rescue_delta is not None:
+            lesion_rescue_seen.add(key)
+            lesion_rescue_ok = (
+                lesion_rescue_ok
+                and _finite(lesion_delta, "lesion_delta") <= 0
+                and _finite(rescue_delta, "rescue_delta") > 0
+            )
+
+    required_case_keys = set(by_case)
+    if not required_case_keys:
+        return {"pass": False, "classification": "INCOMPLETE_MATCHED_CONTROL_FAMILY"}
+    if not required_case_keys.issubset(wrong_layer_seen):
+        return {"pass": False, "classification": "WRONG_LAYER_EVIDENCE_REQUIRED"}
+    if not required_case_keys.issubset(lesion_rescue_seen):
+        return {"pass": False, "classification": "LESION_RESCUE_EVIDENCE_REQUIRED"}
+
     margins = []
     null_drifts = []
     for vals in by_case.values():
         if not all(k in vals for k in REQUIRED_CONTROLS):
             return {"pass": False, "classification": "INCOMPLETE_MATCHED_CONTROL_FAMILY"}
         directional = min(vals["+VECTOR"]-vals["BASELINE"], vals["BASELINE"]-vals["SIGN_FLIP"])
-        nuisance = max(vals["ORTHOGONAL_SAME_NORM"]-vals["BASELINE"], vals["PERMUTED_SAME_NORM"]-vals["BASELINE"])
-        margins.append(directional-max(0.0,nuisance))
+        nuisance = max(
+            abs(vals["ORTHOGONAL_SAME_NORM"]-vals["BASELINE"]),
+            abs(vals["PERMUTED_SAME_NORM"]-vals["BASELINE"]),
+        )
+        margins.append(directional-nuisance)
         null_drifts.append(abs(vals["NULL_VECTOR"]-vals["BASELINE"]))
     passed = bool(margins and min(margins) > 0 and max(null_drifts) <= 1e-6 and wrong_layer_ok and lesion_rescue_ok)
     return {
@@ -210,6 +244,8 @@ def adjudicate_holdout(rows: Iterable[Mapping[str, Any]], *, selected_layer: int
         "label_map_count": len(label_maps),
         "worst_directional_specificity_margin": min(margins) if margins else None,
         "max_null_drift": max(null_drifts) if null_drifts else None,
+        "wrong_layer_evidence_complete": required_case_keys.issubset(wrong_layer_seen),
+        "lesion_rescue_evidence_complete": required_case_keys.issubset(lesion_rescue_seen),
         "wrong_layer_ok": wrong_layer_ok,
         "lesion_rescue_ok": lesion_rescue_ok,
         "credit_scope": CREDIT_SCOPE,

@@ -7,6 +7,8 @@ loopback API runtime, provided the same internal-vector, identity, matched-contr
 and disjoint-holdout evidence is present.
 
 Hosted prompt/completion traffic alone can never satisfy a positive verdict.
+Terminal output-projection shortcuts are valid technical positive controls but cannot
+satisfy J-Space mechanism or Trigger-1 promotion credit.
 """
 from __future__ import annotations
 
@@ -37,6 +39,13 @@ OWNER_API_TARGET_CLASS = "ZERO_COST_API_SERVED_MODEL_RUNTIME"
 LEGACY_OWNER_API_TARGET_CLASS = "EXACT_ADMITTED_FREE_API_MODEL_RUNTIME"
 LOCAL_API_SURFACE = "LOCAL_LOOPBACK_API"
 EXTERNAL_API_SURFACE = "FREE_EXTERNAL_API"
+TERMINAL_OUTPUT_SITE_MARKERS = (
+    "lm_head",
+    "output_head",
+    "model.model.norm:output",
+    "final_norm:output",
+    "final_layer_norm:output",
+)
 
 
 def _sha256(value: Any) -> bool:
@@ -61,6 +70,31 @@ def _loopback_url(value: Any) -> bool:
     except Exception:
         return False
     return parsed.scheme in {"http", "https"} and parsed.hostname in {"127.0.0.1", "localhost", "::1"}
+
+
+def _causal_site_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
+    """Reject intervention sites that are only terminal output-projection shortcuts.
+
+    A perturbation applied at the final normalized hidden state or output head can alter
+    logits without any downstream transformer computation. Such a run is useful as a
+    harness/actuator positive control, but it cannot establish an internal J-Space causal
+    mechanism and therefore cannot satisfy Trigger-1 promotion.
+    """
+    failures: list[str] = []
+    intervention = candidate.get("intervention")
+    if not isinstance(intervention, dict):
+        return False, ["INTERVENTION_IDENTITY_REQUIRED"]
+
+    site = intervention.get("activation_site")
+    if not _nonempty(site):
+        return False, ["ACTIVATION_SITE_REQUIRED"]
+
+    normalized = str(site).strip().lower().replace(" ", "")
+    declared_shortcut = intervention.get("terminal_output_projection_shortcut")
+    if declared_shortcut is True or any(marker in normalized for marker in TERMINAL_OUTPUT_SITE_MARKERS):
+        failures.append("TERMINAL_OUTPUT_PROJECTION_SHORTCUT_NOT_JSPACE_CAUSAL_EVIDENCE")
+
+    return not failures, failures
 
 
 def _control_receipts(controls: Any) -> tuple[bool, list[str]]:
@@ -222,9 +256,11 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
     identity_ok, identity_failures = _identity_evidence(candidate)
     controls_ok, control_failures = _control_receipts(candidate.get("controls"))
     split_ok, split_failures = _split_evidence(candidate)
+    site_ok, site_failures = _causal_site_evidence(candidate)
     failures.extend(identity_failures)
     failures.extend(control_failures)
     failures.extend(split_failures)
+    failures.extend(site_failures)
 
     mechanism_pass = (
         candidate.get("schema") == CANDIDATE_SCHEMA
@@ -233,6 +269,7 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         and identity_ok
         and controls_ok
         and split_ok
+        and site_ok
     )
 
     owner_target_ok, target_failures = _owner_target_evidence(candidate)
@@ -252,7 +289,9 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "evidence_boundary": (
             "PASS means promotion-candidate evidence only. The runtime may be an admitted FREE external API "
             "or an exact zero-provider-billing loopback API. Scientific requirements are identical: actual "
-            "internal-vector consumption, exact identities, six matched controls and disjoint holdout."
+            "internal-vector consumption, exact identities, six matched controls, disjoint holdout, and a "
+            "non-terminal intervention site with downstream model computation. Terminal output-projection "
+            "shortcuts remain technical positive controls only."
         ),
     }
 

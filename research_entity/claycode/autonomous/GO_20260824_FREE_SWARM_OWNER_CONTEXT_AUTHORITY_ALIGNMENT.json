@@ -1,0 +1,38 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "trigger": "go",
+  "authority_epoch": "8.71",
+  "canonical_base": "a6e3d2057004a2964e70781fa736f796bac78708",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "track": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+  "observation": {
+    "state": "SOURCE_OBSERVED",
+    "finding": "The active 6000-worker v3/fast path imported run_24h_entityos_swarm, which set run_free_go_swarm.OWNER_DIRECTIVE_PATH to the older dual-machine authority. build_state_context reads that path into CLAY_STATE and worker_prompt embeds CLAY_STATE in worker prompts.",
+    "old_context": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "current_owner_authority": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md"
+  },
+  "counterhypothesis": "The pointer might have been inert compatibility metadata. Source tracing falsified that counterhypothesis for the active worker-prompt path because build_state_context consumes OWNER_DIRECTIVE_PATH.",
+  "delta": {
+    "file": "tools/run_6000_free_swarm_v3.py",
+    "mechanism": "Rebind only the shared worker-context owner directive after compatibility imports, preserving the existing provider economic gates and single shared base module.",
+    "grant_change": false,
+    "provider_network_change": false,
+    "canonical_state_change": false,
+    "effect_authority_change": false
+  },
+  "regression": "tests/test_free_swarm_owner_context_authority_871.py",
+  "evidence_scope": "SOURCE_AND_REGRESSION_DEFINITION_ONLY_UNTIL_CI_EXECUTES",
+  "credits": {
+    "free_swarm_provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "unusual_experiment": "NOT_RUN",
+  "paid_execution": "NOT_USED",
+  "credential_read": "NOT_PERFORMED_BY_THIS_ORGAN",
+  "next_gate": "Execute the deterministic regression on the exact branch bytes; if green, fuse only if current main has not independently superseded the same authority-context defect."
+}

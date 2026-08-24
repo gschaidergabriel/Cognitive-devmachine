@@ -1,0 +1,54 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "base_main": "83a120454107b57aee4813559a6f6961ec477213",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_CONCURRENT_REPLAY_CLASSIFICATION_GAP",
+    "statement": "Forge-to-Distillery replay lookup and write/counter mutation were not serialized under explicit SQLite write intent. The current supervisor research receipt already demonstrated that two same-replay writers can race into a UNIQUE IntegrityError rather than deterministic DUPLICATE/REPLAY_IDENTITY_CONFLICT classification.",
+    "external_crosscheck": "SQLite documents that BEGIN IMMEDIATE starts a write transaction immediately and prevents another connection from acquiring concurrent write intent; in WAL mode IMMEDIATE serializes writers while readers may continue."
+  },
+  "hypothesis": "Commit schema setup and acquire BEGIN IMMEDIATE before the first replay lookup so lookup, measured-evidence conflict classification, packet insert and token counters execute as one serialized admission transaction.",
+  "counterhypothesis": "The unique replay index alone is sufficient to preserve deterministic admission semantics under concurrency.",
+  "counterhypothesis_disposition": "REJECTED_AT_GENERIC_SQLITE_SEMANTICS_SCOPE_BY_EXISTING_GO873_RECEIPT: uniqueness protects durable row cardinality but can expose an IntegrityError race instead of the declared replay classification contract.",
+  "delta": {
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_concurrent_replay_874.py",
+    "source_change": "commit schema DDL, then BEGIN IMMEDIATE before reading any Forge evaluation row or performing replay lookup",
+    "test_invariants": [
+      "write intent is active before first admit_one/replay lookup",
+      "a contender BEGIN IMMEDIATE is locked while admission transaction is active",
+      "two concurrent same-replay writers finish without exception",
+      "exactly one writer admits and one classifies DUPLICATE",
+      "exactly one forge_execution_ingest row persists",
+      "accepted_dataset_tokens is incremented only once"
+    ]
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_SCOPE: makes replay admission classification deterministic under concurrent ingestion",
+    "track_b": "ADVANCED: promotes atomic lookup-classify-write-counter semantics as a reusable Typed Entry/HCU causal-admission invariant",
+    "track_c": "ADVANCED_DATASET_SAFETY_SCOPE: prevents parallel J-Space/GWT trace ingestion from degrading into ambiguous process failure or accounting races"
+  },
+  "coordination": {
+    "existing_research_gate": "5fbf7aa1a9a5bb4089166ac787f291122a192b3c",
+    "open_duplicate_implementation_lane_found": false,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "evidence_scope": "SOURCE_PLUS_REGRESSION_DEFINITION_ONLY_UNTIL_EXACT_SOURCE_EXECUTION",
+  "provider_or_model_execution": false,
+  "paid_or_together_execution": false,
+  "provider_runtime_credit": 0,
+  "entityos_hcu_whole_runtime_credit": 0,
+  "hcu_full_runtime_credit": 0,
+  "jspace_model_runtime_credit": 0,
+  "training_credit": 0,
+  "whole_product_pass": false,
+  "next_exact_gate": "Execute the concurrent replay regression and existing replay suite on an admitted exact-source zero-cost surface, then run the repository-bound live Forge-to-Distillery witness requiring one evidence-qualified ACCEPT -> one persistent packet -> accepted_dataset_tokens > 0 -> timestamp/narration/delta_id semantic replay +0."
+}

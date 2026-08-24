@@ -11,6 +11,8 @@ Required stronger discriminator:
 - layer/gain selected only on calibration rows;
 - disjoint holdout;
 - six matched controls plus explicit wrong-layer and lesion/rescue evidence;
+- wrong-layer localization moves the exact selected vector to a distinct predeclared
+  layer and requires a strictly positive selected-layer specificity margin;
 - counterbalanced label-remap holdout families so output-token identity cannot explain transfer;
 - nuisance controls are scored by absolute effect magnitude, not only target-positive drift.
 """
@@ -50,6 +52,16 @@ def _finite(x: Any, name: str) -> float:
     if not math.isfinite(y):
         raise IntermediateProtocolError(f"{name}:FINITE_NUMBER_REQUIRED")
     return 0.0 if y == 0.0 else y
+
+
+def _sha256(x: Any) -> bool:
+    if not isinstance(x, str) or len(x) != 64:
+        return False
+    try:
+        int(x, 16)
+    except ValueError:
+        return False
+    return True
 
 
 def _vec(values: Sequence[Any], name: str) -> tuple[float, ...]:
@@ -150,10 +162,7 @@ def select_layer_gain(rows: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     combos = sorted({(int(r["layer"]), float(r["gain"])) for r in xs})
     ranked = []
     for layer, gain in combos:
-        subset = [
-            r for r in xs
-            if int(r["layer"]) == layer and float(r["gain"]) == gain
-        ]
+        subset = [r for r in xs if int(r["layer"]) == layer and float(r["gain"]) == gain]
         by_case: dict[str, dict[str, float]] = {}
         for r in subset:
             by_case.setdefault(str(r["case_id"]), {})[str(r["control"])] = _finite(
@@ -217,11 +226,7 @@ def adjudicate_holdout(
     if not frozen:
         return {"pass": False, "classification": "FROZEN_LAYER_GAIN_NOT_PRESENT"}
 
-    label_maps = {
-        str(r.get("label_map_id"))
-        for r in frozen
-        if r.get("label_map_id") is not None
-    }
+    label_maps = {str(r.get("label_map_id")) for r in frozen if r.get("label_map_id") is not None}
     if len(label_maps) < 2:
         return {"pass": False, "classification": "LABEL_REMAP_HOLDOUT_REQUIRED"}
     mapping_ok, explicit_mappings = _counterbalanced_label_maps(frozen)
@@ -230,21 +235,50 @@ def adjudicate_holdout(
 
     by_case: dict[tuple[str, str], dict[str, float]] = {}
     wrong_layer_seen: set[tuple[str, str]] = set()
+    wrong_layer_same_vector_seen: set[tuple[str, str]] = set()
     lesion_rescue_seen: set[tuple[str, str]] = set()
     wrong_layer_ok = True
+    wrong_layer_same_vector_ok = True
     lesion_rescue_ok = True
+    wrong_layer_specificity_margins: list[float] = []
 
     for r in frozen:
         key = (str(r["case_id"]), str(r["label_map_id"]))
-        if str(r.get("control")) in REQUIRED_CONTROLS:
-            by_case.setdefault(key, {})[str(r["control"])] = _finite(
-                r["target_score"], "target_score"
-            )
-        if r.get("wrong_layer_delta") is not None:
+        control = str(r.get("control"))
+        if control in REQUIRED_CONTROLS:
+            by_case.setdefault(key, {})[control] = _finite(r["target_score"], "target_score")
+
+        if r.get("wrong_layer_delta") is not None or r.get("wrong_layer_specificity_margin") is not None:
             wrong_layer_seen.add(key)
-            wrong_layer_ok = wrong_layer_ok and _finite(
-                r["wrong_layer_delta"], "wrong_layer_delta"
-            ) <= 0
+            if control != "+VECTOR":
+                wrong_layer_ok = False
+                continue
+            try:
+                wrong_layer = int(r.get("wrong_layer"))
+                vector_source_layer = int(r.get("wrong_layer_vector_source_layer"))
+            except (TypeError, ValueError):
+                wrong_layer_same_vector_ok = False
+                continue
+            selected_sha = r.get("applied_vector_sha256")
+            wrong_sha = r.get("wrong_layer_applied_vector_sha256")
+            same_vector = (
+                wrong_layer != int(selected_layer)
+                and vector_source_layer == int(selected_layer)
+                and _sha256(selected_sha)
+                and _sha256(wrong_sha)
+                and selected_sha == wrong_sha
+            )
+            if same_vector:
+                wrong_layer_same_vector_seen.add(key)
+            else:
+                wrong_layer_same_vector_ok = False
+
+            margin = _finite(r.get("wrong_layer_specificity_margin"), "wrong_layer_specificity_margin")
+            wrong_layer_specificity_margins.append(margin)
+            # Strict localization: a tie is insufficient evidence that the selected
+            # site matters more than moving the identical vector elsewhere.
+            wrong_layer_ok = wrong_layer_ok and margin > 0
+
         if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
             lesion_rescue_seen.add(key)
             lesion_rescue_ok = (
@@ -261,6 +295,12 @@ def adjudicate_holdout(
             "pass": False,
             "classification": "WRONG_LAYER_EVIDENCE_REQUIRED",
             "cases_missing_wrong_layer": sorted(case_keys - wrong_layer_seen),
+        }
+    if wrong_layer_same_vector_seen != case_keys or not wrong_layer_same_vector_ok:
+        return {
+            "pass": False,
+            "classification": "WRONG_LAYER_SAME_SELECTED_VECTOR_EVIDENCE_REQUIRED",
+            "cases_missing_same_vector_wrong_layer": sorted(case_keys - wrong_layer_same_vector_seen),
         }
     if lesion_rescue_seen != case_keys:
         return {
@@ -292,15 +332,12 @@ def adjudicate_holdout(
         and min(margins) > 0
         and max(null_drifts) <= 1e-6
         and wrong_layer_ok
+        and wrong_layer_same_vector_ok
         and lesion_rescue_ok
     )
     return {
         "pass": passed,
-        "classification": (
-            "INTERMEDIATE_REPRESENTATION_CAUSAL_CANDIDATE"
-            if passed
-            else "INTERMEDIATE_REPRESENTATION_NOT_ESTABLISHED"
-        ),
+        "classification": "INTERMEDIATE_REPRESENTATION_CAUSAL_CANDIDATE" if passed else "INTERMEDIATE_REPRESENTATION_NOT_ESTABLISHED",
         "case_count": len(margins),
         "label_map_count": len(label_maps),
         "explicit_label_mappings": sorted(explicit_mappings),
@@ -309,6 +346,9 @@ def adjudicate_holdout(
         "max_same_norm_nuisance_effect": max(nuisance_effects) if nuisance_effects else None,
         "max_null_drift": max(null_drifts) if null_drifts else None,
         "wrong_layer_evidence_complete": wrong_layer_seen == case_keys,
+        "wrong_layer_same_vector_complete": wrong_layer_same_vector_seen == case_keys,
+        "wrong_layer_same_vector_ok": wrong_layer_same_vector_ok,
+        "min_wrong_layer_specificity_margin": min(wrong_layer_specificity_margins) if wrong_layer_specificity_margins else None,
         "lesion_rescue_evidence_complete": lesion_rescue_seen == case_keys,
         "wrong_layer_ok": wrong_layer_ok,
         "lesion_rescue_ok": lesion_rescue_ok,
@@ -321,11 +361,15 @@ __all__ = [
     "CREDIT_SCOPE",
     "REQUIRED_CONTROLS",
     "IntermediateProtocolError",
+    "digest",
+    "norm",
+    "normalize",
+    "mean",
     "contrastive_direction",
+    "orthogonal_same_norm",
     "control_vectors",
     "lesion",
     "rescue",
     "select_layer_gain",
     "adjudicate_holdout",
-    "digest",
 ]

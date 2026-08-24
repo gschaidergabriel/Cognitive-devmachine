@@ -23,7 +23,7 @@ BOOTSTRAP = ROOT / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
 PROGRAM_STATE = ROOT / "research_entity/rooms/PROGRAM_STATE.json"
 SUPERVISOR_INBOX = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 FREE_PROVIDER_ADMISSION = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
-WORKER_PROTOCOL = ROOT / "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
+WORKER_PROTOCOL = ROOT / "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_70.md"
 ROUTE_PROVENANCE = ROOT / "tools/free_lane_provenance.py"
 CONTROLLER = ROOT / "tools/run_go_zero_swarm_v2.py"
 
@@ -143,9 +143,14 @@ def preflight() -> None:
 
     worker_text = WORKER_PROTOCOL.read_text(encoding="utf-8")
     require(CURRENT_PROTOCOL_MARKER in worker_text, "ENTITYOS_HCU_PROTOCOL_MARKER_MISSING")
-    require("Sole current product/system: EntityOS." in worker_text, "ENTITYOS_PROTOCOL_AUTHORITY_MISSING")
-    require("Sole current integrated cognition/compute architecture: HCU." in worker_text,
+    require("this profile was issued for supervisor 8.70" in worker_text,
+            "WORKER_PROTOCOL_870_BINDING_MISSING")
+    require("Sole current product/system = EntityOS." in worker_text,
+            "ENTITYOS_PROTOCOL_AUTHORITY_MISSING")
+    require("Sole integrated cognition/compute architecture = HCU." in worker_text,
             "HCU_PROTOCOL_AUTHORITY_MISSING")
+    require("FREE_LANE_EXECUTION_RECEIPT/v1" in worker_text,
+            "WORKER_PROTOCOL_FREE_LANE_RECEIPT_MISSING")
 
     provenance_text = ROUTE_PROVENANCE.read_text(encoding="utf-8")
     controller_text = CONTROLLER.read_text(encoding="utf-8")
@@ -155,6 +160,8 @@ def preflight() -> None:
     require("emit_execution_receipt" in controller_text, "TRIGGER_CONTROLLER_RECEIPT_MISSING")
     require("gated_next_key_model" in controller_text, "TRIGGER_CONTROLLER_RESERVATION_GATE_MISSING")
     require("gated_request_chat" in controller_text, "TRIGGER_CONTROLLER_NETWORK_GATE_MISSING")
+    require("CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_70.md" in controller_text,
+            "TRIGGER_CONTROLLER_870_PROTOCOL_MISSING")
 
     # Compatibility attestation remains an additional caller assertion only; it
     # cannot replace canonical typed admission or route-level economic evidence.

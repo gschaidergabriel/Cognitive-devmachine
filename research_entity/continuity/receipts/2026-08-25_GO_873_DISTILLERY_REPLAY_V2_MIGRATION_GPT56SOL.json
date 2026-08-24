@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_clean_donor": "60fb7301bac7a04c9e56defe2c6fcf978cac5bc1",
+  "branch": "gpt56sol/go873-distillery-replay-v2-migration-20260825",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_REPLAY_SCHEMA_SEMANTIC_DRIFT_MIGRATION_GAP",
+    "statement": "Current main has converged the direct replay defect: delta_id/evaluated_at are excluded from replay-stable training packet bytes and delta_id is excluded from execution replay identity. However the execution and measured identity schema strings remain /v1 even though an earlier /v1 implementation used different hash preimages that included delta_id. Persisted old-v1 and newer replay-stable-v1 hashes are therefore semantically different under the same schema name, and a future schema change or rebuild can lose duplicate/conflict recognition unless both historical v1 algorithms are explicitly recognized.",
+    "parallel_convergence": "Main commits e4f1b7c5bbf1e3cdedd5fd66b82fd7b466fbb765 and 91db73dade60d6bc33a900af55c8451a4753d400 superseded this organ's first-pass direct delta_id fix by making training-bearing packet bytes rebuild-stable. This clean donor retains only the nonduplicate identity-version migration boundary."
+  },
+  "hypothesis": "Freeze current semantics as CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v2 and CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v2, store explicit schema columns, and classify existing unversioned/v1 rows against both exact historical v1 preimages before v2 admission. This preserves append-only history while preventing semantic replay or measurement conflict from escaping across the schema transition.",
+  "counterhypothesis": "No migration guard is needed because v1 persisted rows can be treated as legacy unknown or because no historical v1 row can exist.",
+  "counterhypothesis_disposition": "NOT_SAFE_AS_A_GENERAL_SOURCE_INVARIANT: the table already persists replay/measured hashes and delta_id, while source history shows the v1 hash preimage changed in place. Current runtime credit is still zero, so this is not evidence that a conflicting live row exists; it is a reproducible source-level migration hazard and is kept at source/regression-definition scope.",
+  "delta": {
+    "source_commit": "bd4218153a1f3ccdf1ecef0e92373c9ad0c236d9",
+    "test_commit": "9cd14b745dcb2bfd4ec80a7d3db32edd62f42885",
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_replay_identity_v2_migration_873.py",
+    "new_identity_schemas": [
+      "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v2",
+      "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v2"
+    ],
+    "compatibility": [
+      "older delta-bound replay identity v1",
+      "newer replay-stable replay identity v1",
+      "older measured-evidence v1 with delta_id but not evaluated_at",
+      "newer replay-stable measured-evidence v1",
+      "pre-replay-hash legacy rows remain LEGACY_REPLAY_IDENTITY_UNRESOLVED"
+    ],
+    "regressions_defined": 7
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_SCOPE: one canonical Forge->Distillery path gains explicit replay identity version migration instead of silently mutating v1 semantics.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: causal/event identity now has a versioned migration pattern reusable at Typed Entry and evidence boundaries; no second truth/effect authority is created.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_DATASET_SAFETY_SCOPE: future training-bearing packet admission is protected against replay identity drift across software versions; J-Space/model/training credit remains zero."
+  },
+  "coordination": {
+    "initial_branch": "gpt56sol/go873-distillery-delta-id-replay-20260825",
+    "initial_branch_status": "SUPERSEDED_AS_PRIMARY_DONOR_AFTER_PARALLEL_MAIN_CONVERGENCE",
+    "clean_branch_base": "60fb7301bac7a04c9e56defe2c6fcf978cac5bc1",
+    "clean_branch_ahead_by": 2,
+    "open_pr_created": false,
+    "open_pr_reason": "Fail closed: opening a PR may trigger hosted workflows and this session has no concrete zero-cost hosted-runner provenance.",
+    "upstream_macrocycle_id": null,
+    "user_turn_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "execution_evidence": {
+    "exact_branch_tests_executed": false,
+    "reason": "No exposed bridge in this ChatGPT session can execute the user's authorized local workstation or clay-direct-dev VPS sandbox. Vercel access exposes documentation only. GitHub source writes/inspection do not establish runtime execution, and unknown-cost hosted execution remains fail-closed.",
+    "evidence_scope": "SOURCE_PLUS_REGRESSION_DEFINITION_ONLY"
+  },
+  "artifact_readme": {
+    "status": "SYNC_PENDING",
+    "reason": "the artefact/README.md is a large rapidly moving current-facing summary and main changed repeatedly during this macrocycle. Overwriting it from a stale full-file snapshot would risk erasing parallel current deltas; the bounded receipt is the durable handoff until exact-current fusion/reentry."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Re-enter current main; execute tests.test_forge_distillery_replay_identity_873, tests.test_forge_distillery_packet_rebuild_stability if still current, and tests.test_forge_distillery_replay_identity_v2_migration_873 on an admitted zero-cost local/clay-direct-dev surface. Require both historical v1 variants to classify semantic replay as +0 and mutated measured evidence as REPLAY_IDENTITY_CONFLICT, while pre-hash legacy overlap remains fail closed. Fuse only if current main remains nonduplicate."
+}

@@ -1,10 +1,10 @@
 {
   "schema": "CLAY_GO871_FORGE_DISTILLERY_RUNTIME_REQUEST/v1",
-  "authority_epoch": "8.71",
+  "authority_epoch": "8.72",
   "mode": "FREE_ONLY",
-  "exact_base_source_sha": "349f3ee44a431a038b944ea12a24461464e4e25d",
+  "source_resolution": "WORKFLOW_PULL_REQUEST_BASE_SHA_AT_EXECUTION_EVENT",
   "requested_gate": "EXACT_EVIDENCE_QUALIFIED_FORGE_ACCEPT_TO_ONE_DISTILLERY_PACKET_TO_NONZERO_TOKENS_TO_IDEMPOTENT_REPLAY",
-  "purpose": "Successor execution request after evidence-qualified Forge-to-Distillery convergence merged in #1570; prior #1581 base is stale for exact-current credit.",
+  "purpose": "Successor execution request after evidence-qualified Forge-to-Distillery convergence merged in #1570; prior #1581 is stale for exact-current credit. Resolve source from the PR base SHA at the execution event rather than freezing an earlier moving-main SHA in this request payload.",
   "provider_network_allowed": false,
   "paid_fallback_allowed": false,
   "secret_values_may_be_inspected": false,

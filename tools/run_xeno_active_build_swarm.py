@@ -6,20 +6,23 @@ FREE fabric from architecture prose toward shippable Xeno patches, tests, benchm
 ~0.8B specialization, the two-slot core/prestage harness, dashboard, peer/GRID10,
 Global J-Space causal engineering, ClayCode migration, and measured recursive gains.
 
-Economic execution authority is inherited exclusively through the supervisor-8.70
-route/credential-gated v3 fabric. Xeno must never fall back to the older ungated v2
-scheduler merely because it exposes the same scheduler API. Xeno remains an
-implementation codename inside EntityOS/HCU.
+Economic execution authority is inherited exclusively through the current route/
+credential-gated v3 fabric. Worker cognition receives a separately synthesized live
+authority envelope from Supervisor Inbox -> exact steering -> typed provider admission,
+so stale worker-directive prose cannot override a newer supervisor epoch. Xeno remains
+an implementation codename inside EntityOS/HCU.
 """
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import os
 from pathlib import Path
 from typing import Any
 
 import run_6000_free_swarm_v3 as economic
+import xeno_current_authority_protocol as live_authority
 
 # v3 owns the concrete FREE lane reservation + provider-call gates and then
 # delegates scheduling to this underlying v2 work-stealing module. Reuse that
@@ -97,7 +100,7 @@ def _read_json(path: Path) -> dict[str, Any] | None:
 
 
 def _require_free_lane_binding() -> None:
-    """Fail closed if the 8.70 economic gate is bypassed or replaced after import."""
+    """Fail closed if the current economic gate is bypassed or replaced after import."""
     if fabric.base.request_chat is not economic.gated_request_chat:
         raise RuntimeError("XENO_FREE_LANE_REQUEST_GATE_DRIFT")
     if fabric.FastProviderRuntime.next_key_model is not economic.gated_next_key_model:
@@ -129,7 +132,7 @@ v1_acceptance={phase['v1_acceptance']}
 - Every owner `go` executes this improvement objective until a newer explicit owner instruction supersedes it. Xeno v1 is a baseline, not a terminal product state.
 - Before v1: converge on a finished runnable Xeno with specialized ~0.8B core, switchable engine fabric, two-slot CORE/PRESTAGE harness, dashboard, Xeno peer-link, GRID10, Global J-Space/GWT, dataset/training integration and acceptance evidence.
 - After v1: continue measure -> patch -> test -> benchmark -> full-vector compare -> promote/reject across subsequent go cycles until superseded.
-- Every external FREE call must retain the supervisor-8.70 credential+route economic gate and FREE_LANE_EXECUTION_RECEIPT/v1. Provider-level FREE labels, key presence, model consensus or HTTP success cannot bypass that gate. Paid fallback stays zero.
+- Every external FREE call must retain the current credential+route economic gate and FREE_LANE_EXECUTION_RECEIPT/v1. Provider-level FREE labels, key presence, model consensus or HTTP success cannot bypass that gate. Paid fallback stays zero.
 - The internal ~0.8B engine must be independently switchable OFF; admitted external/local LLM profiles may be CORE without resetting canonical state.
 - Persist at most two external credential slots via opaque secret_ref only. Dashboard chooses CORE, optional distinct PRESTAGE, and PRESTAGE ON/OFF. Plaintext credentials never enter prompts, receipts, telemetry, source or ordinary profile state.
 - GRID10 means exactly ten logical cells at v1, not ten model copies. XENO_PEER_LINK/v1 must tolerate stale/duplicate/delayed packets, disconnect/reconnect and peer restart under deterministic admission/recovery fences.
@@ -151,10 +154,23 @@ def configure() -> None:
     _require_free_lane_binding()
     if not BUILD_DIRECTIVE.exists() or not BUILD_STATE.exists() or not HARNESS_CONTRACT.exists():
         raise RuntimeError("XENO_ACTIVE_BUILD_CONTROL_FILES_MISSING")
+
+    # Build once from exact current machine-readable authority and freeze those
+    # bytes for this process. A later authority change is caught again by the
+    # route-level economic gate before any provider request; the next process
+    # restart rebuilds the worker envelope from the new supervisor.
+    protocol = live_authority.build_protocol(ROOT)
+    if not protocol.startswith(fabric.base.PROTOCOL_BEGIN):
+        raise RuntimeError("XENO_LIVE_PROTOCOL_ABI_BEGIN_MISMATCH")
+    if live_authority.LIVE_MARKER not in protocol:
+        raise RuntimeError("XENO_LIVE_PROTOCOL_MARKER_MISSING")
+    fabric.base.load_protocol = lambda: protocol
+
     fabric.base.DEFAULT_ROLES = list(XENO_ROLES)
     fabric.FALLBACK_SHARDS = list(XENO_SHARDS)
     fabric._PREV_PROMPT = xeno_worker_prompt
     os.environ["CLAY_XENO_BUILD_MODE"] = "ACTIVE_INFINITE_RECURSIVE"
+    os.environ["CLAY_XENO_LIVE_PROTOCOL_SHA256"] = hashlib.sha256(protocol.encode("utf-8")).hexdigest()
 
 
 async def main() -> int:

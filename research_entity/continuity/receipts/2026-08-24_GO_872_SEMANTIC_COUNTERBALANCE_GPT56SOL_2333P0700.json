@@ -1,0 +1,86 @@
+{
+  "schema": "CLAY_GO_872_SEMANTIC_COUNTERBALANCE_DELTA/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "branch_rebased_from_exact_main": "1becb77bee28b908ce7a8b48fed09cb92d0beffc"
+  },
+  "coordination": {
+    "shared_immutable_request_id_exposed_to_this_organ": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_qwen_interventions_executed": 0,
+    "provider_calls_executed_by_this_delta": 0
+  },
+  "finding": {
+    "observed_source_issue": "The current nonterminal Qwen3-0.6B experiment derives an internal contrastive direction but evaluates a fixed A-vs-(B,C) output-token contrast. Current promotion hardening already identifies non-counterbalanced output-token evaluation as a remaining scientific-independence blocker.",
+    "counterhypothesis": "A directional effect can partly track fixed physical output-token/readout preference or lexical label coupling rather than a semantic direction that transfers independently of output-label identity.",
+    "discriminator": "Counterbalance one semantic direction target across all six permutations of three physical output labels while keeping the existing nonterminal activation intervention and matched causal controls."
+  },
+  "delta": {
+    "source": "tools/trigger1_semantic_counterbalance_v1.py",
+    "tests": "tests/test_trigger1_semantic_counterbalance_v1.py",
+    "semantic_classes": ["INCREASE", "DECREASE", "SAME"],
+    "physical_output_labels": ["A", "B", "C"],
+    "permutation_count": 6,
+    "per_semantic_per_physical_label_count": 2,
+    "basis_prompts_are_output_label_free": true,
+    "basis_prompts_avoid_target_words_increase_decrease": true,
+    "calibration_holdout_disjoint": true,
+    "metric_uses_output_tokens": true,
+    "label_mapping_counterbalanced": true,
+    "reuses_current_midlayer_executor": true,
+    "creates_second_truth_or_effect_authority": false
+  },
+  "deterministic_evidence": {
+    "classification": "SOURCE_PLUS_LOCAL_DETERMINISTIC_UNIT_EVIDENCE",
+    "unit_tests_passed": 5,
+    "unit_tests_failed": 0,
+    "py_compile": "PASS",
+    "qwen_model_loaded": false,
+    "model_runtime_credit": 0
+  },
+  "external_solution_harvest": [
+    {
+      "title": "Steering Llama 2 via Contrastive Activation Addition",
+      "identifier": "arXiv:2312.06681",
+      "use": "supports contrastive internal-activation-derived steering directions"
+    },
+    {
+      "title": "Steering the Language Axis: From Linear Decodability to Causal Control",
+      "use": "supports layer-specific causal activation intervention and matched control logic"
+    }
+  ],
+  "three_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED",
+      "delta": "Adds a purpose-specific executable wrapper around the existing exact local Qwen midlayer path rather than creating a second executor authority."
+    },
+    "track_b_hcu_and_typed_entry": {
+      "status": "ADVANCED_HCU_REUSABLE_PRIMITIVE",
+      "delta": "Adds a deterministic semantic-to-physical-label permutation/receipt primitive reusable by nonterminal HCU intervention modes; Typed Entry authority is unchanged."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "ADVANCED",
+      "delta": "Implements the actual counterbalanced semantic holdout family required to distinguish fixed readout-label preference from a more transferable internal-direction effect; no model or training promotion is minted."
+    }
+  },
+  "credits_after_cycle": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "evidence_boundary": "This receipt establishes source design plus deterministic counterbalance invariants only. A Qwen runtime result remains unobserved for this wrapper. Even a future positive result is mechanism-candidate evidence and does not by itself establish canonical truth, whole HCU, training readiness, or whole-product PASS.",
+  "next_exact_gate": "Run the semantic-counterbalance tests together with the exact-current Trigger-1 promotion/source-binding regressions on the fused head. Only after a canonical atomic unusual-experiment lease exists, execute the exact merged wrapper on an authorized zero-cost Ubuntu surface and require source/runtime/checkpoint/tokenizer binding, all six causal controls, all six semantic-label permutations, zero external-provider credential access, and disjoint holdout evidence."
+}

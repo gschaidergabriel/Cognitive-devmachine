@@ -20,14 +20,14 @@ def load_module():
 
 
 class Trigger1ContractTests(unittest.TestCase):
-    def test_exactly_ten_distinct_experiments(self):
+    def test_exactly_ten_distinct_dynamic_work_slots(self):
         mod = load_module()
         self.assertEqual(10, len(mod.EXPERIMENTS))
         names = [name for name, _ in mod.EXPERIMENTS]
         self.assertEqual(10, len(set(names)))
-        self.assertIn("runtime_surface", names)
-        self.assertIn("seed_holdout_reproduction", names)
-        self.assertIn("receipt_chain_and_delta_forge", names)
+        self.assertIn("local_runtime_repair", names)
+        self.assertIn("holdout_reproduction", names)
+        self.assertIn("blocker_killer_and_forge", names)
 
     def test_parent_secret_scrub_is_provider_scoped(self):
         mod = load_module()
@@ -63,6 +63,13 @@ class Trigger1ContractTests(unittest.TestCase):
         self.assertIn('"provider_lane_credential_scope": "SWARM_CHILD_ONLY/v1"', py)
         self.assertIn('exec python3 tools/run_trigger1_jspace_10x.py "$@"', sh)
         self.assertNotIn('exec python3 tools/free_swarm_exec_with_vault.py \\\n  python3 tools/run_trigger1_jspace_10x.py', sh)
+
+    def test_primary_fastpath_is_strong_intermediate_causal_path(self):
+        sh = SHELL_PATH.read_text(encoding="utf-8")
+        self.assertIn('bash "$ROOT/tools/trigger1_local_qwen06_midlayer_causal.sh" "$LOCAL_DIR"', sh)
+        self.assertNotIn('bash "$ROOT/tools/trigger1_local_qwen06_activation_api.sh" "$LOCAL_DIR"', sh)
+        self.assertIn('trigger1_jspace_promotion_gate.py', sh)
+        self.assertIn("owner_trigger1_goal_credit_candidate", sh)
 
     def test_no_together_experiment_lane(self):
         mod = load_module()

@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
-"""Epoch-8.70 economic gate for the global work-stealing Free Swarm.
+"""Epoch-8.70+ economic gate for the global work-stealing Free Swarm.
 
 Imports the v2 scheduler, but prevents reservation/network I/O for any concrete
 credential+route lacking provider-side zero-cost/free-entitlement evidence. Every
-executed provider request emits FREE_LANE_EXECUTION_RECEIPT/v1.
+executed provider request emits FREE_LANE_EXECUTION_RECEIPT/v1. Provider catalog
+discovery is deliberately local-only: a provider-level FREE label must never
+create a credentialed catalog network path outside the same economic boundary.
 """
 from __future__ import annotations
 
 import hashlib
 import json
+import os
 import threading
 from typing import Any
 
@@ -29,6 +32,12 @@ _SOURCE = {
     "tree": fabric.base.git_text("rev-parse", "HEAD^{tree}"),
 }
 
+# Worker context must follow the current owner FREE-swarm authority instead of
+# the older dual-machine compatibility pointer installed by the v2 driver.
+fabric.base.OWNER_DIRECTIVE_PATH = (
+    fabric.ROOT / "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md"
+)
+
 
 def _evidence(spec: fabric.base.ProviderSpec, key: str, model: str) -> dict[str, Any]:
     """Cheap reservation filter only; network authorization is always re-read fresh."""
@@ -43,6 +52,59 @@ def _evidence(spec: fabric.base.ProviderSpec, key: str, model: str) -> dict[str,
             artifacts=fabric.ARTIFACT_ROOT,
         )
     return _EVIDENCE_CACHE[ck]
+
+
+def _provider_spec(provider: str) -> fabric.base.ProviderSpec | None:
+    return next((spec for spec in fabric.base.PROVIDERS if spec.name == provider), None)
+
+
+def route_bound_catalog(
+    provider: str,
+    url: str,
+    key: str,
+    timeout: float,
+) -> list[dict[str, Any]]:
+    """Return only locally configured routes with current zero-cost binding.
+
+    ``discover_and_export`` historically fetched credentialed provider catalogs
+    after only provider-level admission. Epoch 8.70 and successors require
+    credential+route economic provenance before provider network I/O, so catalog
+    discovery cannot be a special pre-route exception. The URL and timeout are
+    intentionally ignored and no socket operation is performed here.
+    """
+    del url, timeout
+    spec = _provider_spec(provider)
+    if spec is None:
+        return []
+    fp = fabric.base.key_fingerprint(key)
+    candidates = (
+        fabric.base.split_values(os.getenv(spec.models_env))
+        or list(spec.default_models)
+    )
+    rows: list[dict[str, Any]] = []
+    for model in fabric.base.unique(candidates):
+        binding = current_lane_binding(
+            spec.name,
+            fp,
+            model,
+            spec.endpoint,
+            artifacts=fabric.ARTIFACT_ROOT,
+        )
+        if not binding.get("ok"):
+            continue
+        rows.append({
+            "id": model,
+            "capabilities": {"completion_chat": True},
+            "_clay_catalog_source": "LOCAL_ROUTE_BOUND_NO_PROVIDER_NETWORK",
+            "_clay_admission_epoch": binding.get("admission_epoch"),
+        })
+    return rows
+
+
+# The accelerated launcher already registers OpenRouter. Keep direct v3/v4
+# invocation deterministic too; this URL is metadata only and is never fetched.
+fabric.opt.CATALOGS.setdefault("openrouter", "local://route-bound-openrouter")
+fabric.opt.fetch_catalog = route_bound_catalog
 
 
 def gated_next_key_model(self: fabric.FastProviderRuntime):

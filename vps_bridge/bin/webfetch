@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat >&2 <<'EOF'
+Usage:
+  webfetch URL DEST [EXPECTED_SHA256]
+
+Downloads one URL with retries and resume support. If EXPECTED_SHA256 is supplied,
+the file is accepted only when its SHA-256 matches. A JSON receipt is written to
+DEST.webfetch.json.
+EOF
+  exit 2
+}
+
+[[ $# -ge 2 && $# -le 3 ]] || usage
+URL="$1"
+DEST="$2"
+EXPECTED="${3:-}"
+
+case "$URL" in
+  http://*|https://*) ;;
+  *) echo "WEBFETCH_URL_SCHEME_REJECTED" >&2; exit 3 ;;
+esac
+
+mkdir -p "$(dirname "$DEST")"
+TMP="${DEST}.partial"
+
+curl -fL --retry 5 --retry-all-errors --retry-delay 2 \
+  --connect-timeout 20 --continue-at - "$URL" -o "$TMP"
+
+ACTUAL="$(sha256sum "$TMP" | awk '{print $1}')"
+BYTES="$(stat -c %s "$TMP")"
+
+if [[ -n "$EXPECTED" && "$ACTUAL" != "$EXPECTED" ]]; then
+  echo "WEBFETCH_SHA256_MISMATCH expected=$EXPECTED actual=$ACTUAL" >&2
+  exit 4
+fi
+
+mv "$TMP" "$DEST"
+python3 - "$URL" "$DEST" "$ACTUAL" "$BYTES" "$EXPECTED" <<'PY'
+import datetime, json, pathlib, sys
+url,dest,actual,nbytes,expected=sys.argv[1:]
+receipt={
+  "schema":"CLAY_WEBFETCH_RECEIPT/v1",
+  "observed_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),
+  "url":url,
+  "destination":dest,
+  "sha256":actual,
+  "byte_count":int(nbytes),
+  "expected_sha256":expected or None,
+  "verified_expected_sha256": bool(expected and expected == actual),
+}
+pathlib.Path(dest+".webfetch.json").write_text(json.dumps(receipt,indent=2)+"\n")
+print(json.dumps(receipt,indent=2))
+PY

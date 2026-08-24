@@ -1,0 +1,82 @@
+{
+  "schema": "ENTITYOS_HCU_GO_REENTRY_RECEIPT/v1",
+  "created_at_local": "2026-08-24T18:21:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "trigger": "go",
+  "authority_epoch": "8.68",
+  "reentry_main_sha": "7e69db0190878edf398996d0521657422c2a8a91",
+  "branch": "gpt56sol/go-868-authority-reentry-20260824-1821",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "coordination": {
+    "shared_immutable_macrocycle_id": "UNAVAILABLE_TO_THIS_ORGAN",
+    "timestamp_fallback_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "atomic_claim_created": false
+  },
+  "vps_bridge_health": {
+    "required_by_owner_authority": true,
+    "direct_bridge_tool_exposed_to_this_organ": false,
+    "plugin_discovery_result": "NO_SSH_OR_REMOTE_SHELL_PLUGIN_AVAILABLE",
+    "live_health_observed": false,
+    "classification": "INFRASTRUCTURE_OBSERVABILITY_UNAVAILABLE_NOT_PRODUCT_FAILURE"
+  },
+  "parallel_reentry": {
+    "initial_main_sha": "35111436aad7b1fdb35046f630268e7d914e5c8e",
+    "first_isolation_base": "6426d1ff7d8b03129d0e73c4127e0e63a678fa17",
+    "parallel_main_observed": "3b9d98a8fa7ef075e01b0fc119824f570e18572f",
+    "final_reentry_main": "7e69db0190878edf398996d0521657422c2a8a91",
+    "finding": "Parallel organs repaired the same current-facing 8.68 authority drift and advanced J-Space source contracts while this organ was working.",
+    "action": "Discarded this organ's stale PROGRAM_STATE/manifest/README replacements by repointing the isolated branch to current main; salvaged only the nonduplicate successor-dynamic alignment regression and this receipt.",
+    "stale_island_merged": false
+  },
+  "current_main_observations": {
+    "program_state_epoch": "8.68",
+    "manifest_supervisor_epoch": "8.68",
+    "readme_supervisor_epoch": "8.68",
+    "retained_hcu_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_donor_head_observed": "2badebe78db868c56ef39f0a32d198282cffcd88",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "free_swarm_receipt_runner_commit": "7e69db0190878edf398996d0521657422c2a8a91",
+    "free_swarm_receipt_runner_change": "Binds both tests.test_free_swarm_admission_boundary_867 and tests.test_free_swarm_socket_tripwire_868 plus their source hashes into the receipt runner."
+  },
+  "external_solution_harvest": {
+    "sources": [
+      "Open Policy Agent default-deny authorization pattern",
+      "Cedar explicit permit plus default-deny authorization semantics",
+      "in-toto step/material/product provenance binding"
+    ],
+    "fusion": "Corroborates a Clay-native single typed provider authority with default-deny for unknown/unlisted cases and exact source/step identity in execution receipts. No second policy, truth or effect authority is introduced."
+  },
+  "delta": {
+    "track_a": "ADVANCED_BY_FUSION_AND_STALE_ISLAND_REJECTION",
+    "track_b": "ADVANCED_DETERMINISTIC_SUCCESSOR_DYNAMIC_AUTHORITY_ALIGNMENT_GUARD",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+    "track_c_reason": "Parallel main already added a source-level local J-Space intervention backend gate. The next higher-information discriminator is exact local clean/corrupted/target/sham/off-target activation intervention, but no authorized local or clay-direct-dev bridge is exposed to this organ.",
+    "files": [
+      {
+        "path": "tests/test_current_facing_authority_alignment_v1.py",
+        "sha256": "75ca42437ee9506c4ec4ed86693910a13637ec55822643ec058be21d4a52a892"
+      }
+    ]
+  },
+  "verification": {
+    "alignment_test_python_compile": "PASS_NONCANONICAL_STATIC_ONLY",
+    "canonical_runtime_credit_added": 0,
+    "free_swarm_admission_boundary_executed_by_this_organ": false,
+    "donor_inference_v4_runtime_executed_by_this_organ": false,
+    "jspace_model_runtime_executed_by_this_organ": false,
+    "training_executed_by_this_organ": false
+  },
+  "credits_after": {
+    "external_provider_worker_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On an exposed authorized zero-cost local normal-user or clay-direct-dev bridge, execute tools/run_free_swarm_admission_boundary_receipt.py at exact current source and separately execute the live PR1263 InferenceReceipt/v4 rejection-boundary test set with bound source/environment/result identities; after the local model/runtime/loader gate, run the smallest model-specific J-Space clean/corrupted/target/sham/off-target intervention family."
+}

@@ -162,10 +162,35 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
     applied_shas = {row.get("applied_vector_sha256") for row in plus_rows}
     _require(len(applied_shas) == 1 and _sha(next(iter(applied_shas))), "EXACT_APPLIED_VECTOR_SHA256_REQUIRED")
     applied_vector_sha = next(iter(applied_shas))
+
+    # Bind the summarized protocol PASS back to the executor's concrete one-variable
+    # wrong-layer localization evidence.  A PASS-shaped/tampered result must not be able
+    # to substitute a vector derived from the wrong layer or omit the runtime witness.
+    for row in plus_rows:
+        wrong_layer = row.get("wrong_layer")
+        _require(
+            isinstance(wrong_layer, int) and not isinstance(wrong_layer, bool),
+            "WRONG_LAYER_INDEX_REQUIRED",
+        )
+        _require(wrong_layer != layer, "WRONG_LAYER_MUST_DIFFER_FROM_SELECTED_LAYER")
+        _require(
+            row.get("wrong_layer_vector_source_layer") == layer,
+            "WRONG_LAYER_SELECTED_VECTOR_SOURCE_MISMATCH",
+        )
+        _require(
+            row.get("wrong_layer_same_selected_vector") is True,
+            "WRONG_LAYER_SELECTED_VECTOR_IDENTITY_REQUIRED",
+        )
+        _require(
+            _sha(row.get("wrong_layer_receipt_sha256")),
+            "WRONG_LAYER_RUNTIME_RECEIPT_REQUIRED",
+        )
+
     hold_receipts = [row.get("runtime_receipt_sha256") for row in holdout]
     _require(all(_sha(value) for value in hold_receipts), "HOLDOUT_RUNTIME_RECEIPTS_REQUIRED")
 
-    # The strongest protocol's PASS itself proves these controls were present for each case.
+    # The strongest protocol's PASS itself proves the scientific sign/effect tests;
+    # concrete wrong-layer provenance above is independently fail-closed at this bridge.
     _require(verdict.get("counterbalanced_label_mapping") is True, "PROTOCOL_COUNTERBALANCE_PASS_REQUIRED")
     _require(verdict.get("wrong_layer_evidence_complete") is True and verdict.get("wrong_layer_ok") is True, "PROTOCOL_WRONG_LAYER_PASS_REQUIRED")
     _require(verdict.get("lesion_rescue_evidence_complete") is True and verdict.get("lesion_rescue_ok") is True, "PROTOCOL_LESION_RESCUE_PASS_REQUIRED")

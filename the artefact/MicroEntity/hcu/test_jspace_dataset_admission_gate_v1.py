@@ -9,6 +9,7 @@ from jspace_dataset_admission_gate_v1 import (
     admit_for_training_dataset,
 )
 from jspace_vector_control_v1 import encode_vector
+from outcome_receipt_content_key_v1 import outcome_receipt_content_key
 
 
 def h(ch):
@@ -16,7 +17,7 @@ def h(ch):
 
 
 def receipt_sha(receipt):
-    return hashlib.sha256(canonicalize(dict(receipt))).hexdigest()
+    return outcome_receipt_content_key(receipt)
 
 
 def prototype_sha(prototype):
@@ -352,7 +353,7 @@ class GateTests(unittest.TestCase):
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "CREDIT_LABEL_BINDING:MISMATCH:training"):
             self.admit(transition=transition, training=forged, regs=regs, outcomes={})
 
-    def test_outcome_receipt_key_must_match_canonical_bytes(self):
+    def test_outcome_receipt_key_must_match_selected_content_key(self):
         _, transition, training, regs = self.fixtures()
         credited = deepcopy(training)
         credited["credit_label"] = "POSITIVE"
@@ -370,6 +371,27 @@ class GateTests(unittest.TestCase):
                 outcomes={h("6"): receipt},
             )
 
+    def test_full_receipt_digest_cannot_substitute_for_acyclic_content_key(self):
+        _, transition, training, regs = self.fixtures()
+        credited = deepcopy(training)
+        credited["credit_label"] = "POSITIVE"
+        credited_transition = deepcopy(transition)
+        credited_transition["credit_label"] = "POSITIVE"
+        credited_transition, regs = self.register_transition(regs, credited_transition)
+        receipt = self.bound_outcome(credited, credited_transition)
+        content_key = receipt_sha(receipt)
+        full_digest = hashlib.sha256(canonicalize(dict(receipt))).hexdigest()
+        self.assertNotEqual(full_digest, content_key)
+        credited["outcome_receipt_sha256"] = full_digest
+        regs["admitted_training_traces"][credited["trace_sha256"]] = credited
+        with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_RECEIPT_IDENTITY_MISMATCH"):
+            self.admit(
+                transition=credited_transition,
+                training=credited,
+                regs=regs,
+                outcomes={full_digest: receipt},
+            )
+
     def test_byte_distinct_receipt_cannot_reuse_claimed_sha_identity(self):
         _, transition, training, regs = self.fixtures()
         credited = deepcopy(training)
@@ -381,7 +403,10 @@ class GateTests(unittest.TestCase):
         claimed = receipt_sha(receipt)
         altered = deepcopy(receipt)
         altered["evidence_note"] = "byte-distinct receipt"
-        self.assertNotEqual(receipt_sha(altered), claimed)
+        self.assertNotEqual(
+            hashlib.sha256(canonicalize(dict(altered))).hexdigest(),
+            hashlib.sha256(canonicalize(dict(receipt))).hexdigest(),
+        )
         credited["outcome_receipt_sha256"] = claimed
         regs["admitted_training_traces"][credited["trace_sha256"]] = credited
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_RECEIPT_IDENTITY_MISMATCH"):

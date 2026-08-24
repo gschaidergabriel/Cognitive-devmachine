@@ -1,0 +1,48 @@
+name: GO873 Distillery self-hosted exact-main regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tools/ingest_forge_accepts_into_distillery.py"
+      - "tools/forge_evidence_credit_871.py"
+      - "tests/test_forge_distillery_replay_identity_873.py"
+      - "tests/test_forge_distillery_rebuild_stable_packet_873.py"
+      - "tests/test_forge_distillery_live_bridge_871.py"
+      - ".github/workflows/go873-distillery-selfhosted-main-regression.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: go873-distillery-selfhosted-main
+  cancel-in-progress: false
+
+jobs:
+  exact-main-regression:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact triggering main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          clean: true
+          persist-credentials: false
+      - name: Bind exact source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test -z "$(git status --porcelain=v1)"
+      - name: Compile bridge and admission guard
+        run: python3 -m py_compile tools/ingest_forge_accepts_into_distillery.py tools/forge_evidence_credit_871.py
+      - name: Replay identity regression
+        run: python3 -m unittest -v tests.test_forge_distillery_replay_identity_873
+      - name: Fresh rebuild packet stability regression
+        run: python3 -m unittest -v tests.test_forge_distillery_rebuild_stable_packet_873
+      - name: Existing live bridge wiring regression
+        run: python3 -m unittest -v tests.test_forge_distillery_live_bridge_871

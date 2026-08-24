@@ -21,6 +21,11 @@ from typing import Any
 
 import forge_execution_admission_871 as admission
 import run_free_evidence_forge as base
+import free_swarm_typed_forge_ingress_872 as typed_ingress
+
+# Replace only the base candidate ingestion callback. Executor, validation,
+# isolation, command and evidence authority remain owned by this safe wrapper.
+typed_ingress.install(base)
 
 _ORIGINAL_VALIDATE = base.validate_candidate
 _ORIGINAL_MANIFEST = admission.candidate_execution_manifest
@@ -50,13 +55,9 @@ def _writable_disposable_bwrap_prefix(cwd: Path) -> list[str] | None:
         if prefix[i:i + 3] == ["--ro-bind", host, "/work"]:
             prefix[i] = "--bind"
             return prefix
-    # Donor namespace shape changed: fail closed instead of guessing which host
-    # path should become writable.
     return None
 
 
-# The admission module resolves this helper at execution time. Repo-root backend
-# probes remain read-only because the root itself is not a disposable child.
 admission._bubblewrap_prefix = _writable_disposable_bwrap_prefix
 
 
@@ -119,9 +120,6 @@ def _source_bound_manifest(row: Any, proposal: dict[str, Any], cwd: Path) -> dic
     return manifest
 
 
-# validate_candidate_with_admission resolves this global at call time, so the
-# successor-current manifest reuses the admission mechanism while taking source
-# identity from the canonical Forge row rather than inventing a second authority.
 admission.candidate_execution_manifest = _source_bound_manifest
 
 
@@ -167,11 +165,6 @@ def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
     if not (manifest.get("backend") or {}).get("admitted"):
         return {**record, "status": "execution_blocked_no_isolated_executor", "reason": "BUBBLEWRAP_REQUIRED"}
 
-    # Canonical Forge checks out exactly row.repo_head before patch/application
-    # validation. Its run_cmd/safe_command globals are narrowed to the isolated,
-    # no-shell admission implementation with a writable disposable worktree only.
-    # If the base validator observes a different evaluation checkout after admission,
-    # preserve the measurement but fail closed for evidence-qualified ACCEPT credit.
     result = _ORIGINAL_VALIDATE(con, row)
     if result.get("evaluation_repo_head") != manifest.get("evaluation_checkout_head"):
         return {

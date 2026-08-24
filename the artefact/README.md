@@ -100,16 +100,29 @@ Current bounded credit remains conservative:
 
 A source file, test, workflow, deployment, provider HTTP success, token count or model consensus never automatically mints broader credit.
 
+## GO 8.72 — Trigger1 legacy lease-race fence (23:34 +07)
+
+Exact re-entry base for this bounded successor delta: `0b3495aed89a86b3b626642aa202367862d0b489`.
+
+The just-merged Trigger1 V2 atomic lease gate correctly requires a canonical `rid_…` or `ts_…__p_…` claim before the owner-issue midlayer intervention, but its sibling scan compared only literal `trigger_key` strings. The current atomic-lease protocol is stronger: historical/noncanonical encodings of the same immutable request identity or the same normalized timestamp plus payload digest are the same macrocycle and must fail closed as a race violation.
+
+Historical claim records contain the reachable formats. This cycle therefore ports only the recognized legacy timestamp/digest-prefix race parser from donor PR #1461 into the single canonical `tools/trigger1_atomic_lease_gate.py`. It recognizes dashed local-time and compact-offset historical keys, normalizes them to UTC, treats historical short payload hashes only as semantic-race prefixes, and rejects matching siblings as `EXPERIMENT_BUDGET_RACE_VIOLATION`. A malformed sibling JSON may still be fenced by its recognized legacy filename stem rather than silently reopening a slot.
+
+Regression definitions cover full-digest dashed legacy claims, compact shortened-digest claims, malformed legacy-file fallback, and an unrelated timestamp negative control. No unusual experiment was executed: this user turn exposes no shared immutable request/turn id and only minute-precision message time, so coordination is `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
+
+Evidence scope remains source/control-plane + regression definition until exact-head execution. Whole EntityOS/HCU, HCU-full, J-Space model-runtime and training credit remain zero.
+
 ## Current blockers / next exact gates
 
 1. Observe a terminal self-hosted runtime-reconciliation receipt on current authority and exact source identity.
 2. Observe the exact-current Forge -> Distillery successor witness: qualified Forge accept = 1 -> exactly one Distillery packet -> `accepted_dataset_tokens > 0` -> replay delta = 0.
 3. If the Forge witness fails, repair the **measured** isolated-executor/bridge blocker only; do not weaken evidence admission.
-4. Observe owner dispatch #1643 and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
-5. Require all six matched controls plus disjoint holdout; require activation-derived nonterminal vector construction and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
-6. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
-7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
-8. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
+4. Execute the exact successor `tests.test_trigger1_atomic_lease_gate` plus the current Trigger1 promotion-gate regression; fuse the legacy race fence only if current/nonduplicate/green.
+5. Observe an owner-dispatched, canonically leased nonterminal Qwen3-0.6B exact-source runtime receipt only after the atomic race fence passes; classify preflight/dependency/runtime failures explicitly.
+6. Require all six matched controls plus disjoint holdout; require activation-derived nonterminal vector construction and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
+7. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
+8. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
+9. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
 
 ## Evidence discipline and reentry
 

@@ -18,17 +18,20 @@ if str(TOOLS) not in sys.path:
 import free_provider_admission as admission_mod
 import run_free_go_swarm as base
 import run_24h_entityos_swarm as entityos_driver
+import run_research_distillery_entry as distillery_entry
 
 
 SECRET_ENV_NAMES = {
     "GROQ_API_KEY", "GROQ_API_KEYS", "GROQ2_API_KEY", "GROQ3_API_KEY",
     "MISTRAL_API_KEY", "MISTRAL_API_KEYS", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY",
     "NVIDIA_API_KEY", "NVIDIA_API_KEYS", "NVIDIA_NIM_API_KEY", "NGC_API_KEY",
-    "NVIDIA2_API_KEY", "NVIDIA3_API_KEY",
+    "NVIDIA2_API_KEY", "NVIDIA3_API_KEY", "OPENROUTER_API_KEY",
 }
 
+PROVIDERS=("groq","mistral","nvidia","openrouter")
 
-def _authority(root: Path, epoch: str = "8.67") -> Path:
+
+def _authority(root: Path, epoch: str = "8.68") -> Path:
     rel = Path("research_entity/claycode/autonomous/SUPERVISOR_STEERING_TEST.json")
     steering = root / rel
     steering.parent.mkdir(parents=True, exist_ok=True)
@@ -46,7 +49,7 @@ def _authority(root: Path, epoch: str = "8.67") -> Path:
     return inbox
 
 
-def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.67") -> Path:
+def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.68") -> Path:
     target = root / "admission.json"
     providers = {
         name: {
@@ -54,7 +57,7 @@ def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.67")
             "cost_class": cost_class,
             "evidence_ref": f"test:{name}:{cost_class}",
         }
-        for name in ("groq", "mistral", "nvidia")
+        for name in PROVIDERS
     }
     target.write_text(json.dumps({
         "schema": admission_mod.SCHEMA,
@@ -68,7 +71,7 @@ def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.67")
     return target
 
 
-def _mixed_admission(root: Path, epoch: str = "8.67") -> Path:
+def _mixed_admission(root: Path, epoch: str = "8.68") -> Path:
     target = root / "admission.json"
     target.write_text(json.dumps({
         "schema": admission_mod.SCHEMA,
@@ -81,6 +84,7 @@ def _mixed_admission(root: Path, epoch: str = "8.67") -> Path:
             "groq": {"admitted": True, "cost_class": "FREE", "evidence_ref": "test:groq:free"},
             "mistral": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:mistral:unknown"},
             "nvidia": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:nvidia:unknown"},
+            "openrouter": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:openrouter:unknown"},
         },
     }), encoding="utf-8")
     return target
@@ -203,16 +207,19 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
             with self.assertRaisesRegex(admission_mod.ProviderAdmissionError, "AUTHORITY_EPOCH_MISMATCH"):
                 admission_mod.load_provider_admission(adm, supervisor_inbox_path=inbox, root=root)
 
+    def test_unlisted_provider_fails_closed(self) -> None:
+        self.assertFalse(admission_mod.provider_is_admitted_free("unlisted-provider"))
+
+    def test_openrouter_is_in_typed_authority_and_currently_blocked(self) -> None:
+        self.assertIn("openrouter", admission_mod.ALLOWED_PROVIDERS)
+        self.assertFalse(admission_mod.provider_is_admitted_free("openrouter"))
+
     def test_collect_keys_ignores_caller_forged_admission(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             adm = _admission(root, "UNKNOWN", False)
             inbox = _authority(root)
-            forged = {
-                "providers": {
-                    "groq": {"admitted": True, "cost_class": "FREE"},
-                }
-            }
+            forged = {"providers": {"groq": {"admitted": True, "cost_class": "FREE"}}}
             env = TrapEnv({
                 "CLAY_FREE_ONLY_ATTESTED": "1",
                 "CLAY_GROQ_FREE_ATTESTED": "1",
@@ -233,22 +240,21 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
                 "CLAY_GROQ_FREE_ATTESTED": "1",
                 "GROQ_API_KEY": "g_fake",
                 "NVIDIA_API_KEY": "n_blocked_secret",
+                "OPENROUTER_API_KEY": "or_blocked_secret",
             })
             p_root, p_adm, p_inbox = self._patch_authority(root, adm, inbox)
             with p_root, p_adm, p_inbox, mock.patch.object(base.os, "environ", env):
                 keys = base.collect_keys(base.PROVIDERS[0])
             self.assertEqual(keys, ["g_fake"])
             self.assertNotIn("NVIDIA_API_KEY", env.secret_reads)
+            self.assertNotIn("OPENROUTER_API_KEY", env.secret_reads)
 
     def test_direct_request_chat_is_network_blind_without_canonical_free_admission(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             adm = _admission(root, "UNKNOWN", False)
             inbox = _authority(root)
-            env = {
-                "CLAY_FREE_ONLY_ATTESTED": "1",
-                "CLAY_GROQ_FREE_ATTESTED": "1",
-            }
+            env = {"CLAY_FREE_ONLY_ATTESTED": "1", "CLAY_GROQ_FREE_ATTESTED": "1"}
             network_attempts = 0
 
             def network_tripwire(*args, **kwargs):
@@ -276,6 +282,30 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
                 report = entityos_driver.discover_and_export(0.1)
         self.assertTrue(report)
         self.assertTrue(all(v["source"] == "typed_admission_blocked" for v in report.values()))
+
+    def test_distillery_openrouter_secret_and_network_are_blind_when_unadmitted(self) -> None:
+        secret_reads=0
+        network_attempts=0
+
+        def secret_tripwire(name: str) -> str:
+            nonlocal secret_reads
+            secret_reads += 1
+            raise AssertionError(f"distillery secret reached: {name}")
+
+        def network_tripwire(*args, **kwargs):
+            nonlocal network_attempts
+            network_attempts += 1
+            raise AssertionError("distillery provider network reached")
+
+        with mock.patch.object(distillery_entry, "_ORIGINAL_SECRET", side_effect=secret_tripwire), \
+             mock.patch.object(distillery_entry, "_ORIGINAL_REQUEST_JSON", side_effect=network_tripwire), \
+             mock.patch.object(distillery_entry, "provider_is_admitted_free", return_value=False):
+            self.assertEqual(distillery_entry.admitted_secret("OPENROUTER_API_KEY"), "")
+            status, headers, body = distillery_entry.admitted_request_json("openrouter","test","https://invalid.example")
+        self.assertEqual(status, 412)
+        self.assertEqual(secret_reads, 0)
+        self.assertEqual(network_attempts, 0)
+        self.assertEqual(body.get("error"), "PROVIDER_NOT_TYPED_FREE_ADMITTED")
 
     def test_supervisor_sources_only_through_admission_gated_entrypoint(self) -> None:
         text = (ROOT / "tools/run_24h_entityos_swarm_supervisor.sh").read_text(encoding="utf-8")

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 import os
 from pathlib import Path
@@ -171,12 +172,17 @@ class PromotionSourceGuards872(unittest.TestCase):
             finally:
                 con.close()
 
-            snap = promotion.inspect_db(db, "f" * 64)
+            snap = promotion.inspect_db(
+                db,
+                evaluation_sha256="f" * 64,
+                execution_replay_identity_sha256="e" * 64,
+            )
             self.assertTrue(snap["db_exists"])
             self.assertFalse(snap["evaluation_present"])
+            self.assertFalse(snap["replay_identity_present"])
             self.assertEqual(snap["accepted_dataset_tokens_counter"], 123)
 
-    def test_live_first_promotion_then_immediate_replay_is_idempotent(self):
+    def test_live_first_promotion_proves_semantic_replay_and_measured_conflict_zero_delta(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             gate_path = root / "gate.json"
@@ -192,10 +198,26 @@ class PromotionSourceGuards872(unittest.TestCase):
             self.assertEqual(out["first"]["admitted"], 1)
             self.assertEqual(out["first"]["duplicates"], 0)
             self.assertGreater(out["first_token_delta"], 0)
-            self.assertEqual(out["replay"]["admitted"], 0)
-            self.assertEqual(out["replay"]["duplicates"], 1)
-            self.assertEqual(out["replay_token_delta"], 0)
-            self.assertTrue(out["after"]["evaluation_present"])
+            self.assertEqual(out["semantic_replay"]["admitted"], 0)
+            self.assertEqual(out["semantic_replay"]["duplicates"], 1)
+            self.assertEqual(out["semantic_replay_token_delta"], 0)
+            self.assertEqual(out["conflict_probe"]["admitted"], 0)
+            self.assertEqual(out["conflict_probe"]["duplicates"], 0)
+            self.assertEqual(out["conflict_probe"]["rejected"]["REPLAY_IDENTITY_CONFLICT"], 1)
+            self.assertEqual(out["conflict_token_delta"], 0)
+            self.assertEqual(
+                out["execution_replay_identity_sha256"],
+                out["semantic_replay_execution_identity_sha256"],
+            )
+            self.assertEqual(
+                out["measured_evidence_sha256"],
+                out["semantic_replay_measured_evidence_sha256"],
+            )
+            self.assertNotEqual(
+                out["measured_evidence_sha256"],
+                out["conflict_probe_measured_evidence_sha256"],
+            )
+            self.assertTrue(out["after"]["replay_identity_present"])
             self.assertGreater(out["after"]["packet_tokens"], 0)
 
     def test_first_delta_excludes_preexisting_non_forge_dataset_tokens(self):
@@ -218,9 +240,10 @@ class PromotionSourceGuards872(unittest.TestCase):
             self.assertEqual(out["outcome"], "PROMOTED_NEW_PACKET")
             self.assertGreater(out["first_token_delta"], 0)
             self.assertEqual(out["first_token_delta"], out["after"]["packet_tokens"])
-            self.assertEqual(out["replay_token_delta"], 0)
+            self.assertEqual(out["semantic_replay_token_delta"], 0)
+            self.assertEqual(out["conflict_token_delta"], 0)
 
-    def test_restarting_same_promotion_is_still_zero_delta(self):
+    def test_restarting_same_promotion_is_still_replay_identity_zero_delta(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             gate_path = root / "gate.json"
@@ -233,16 +256,66 @@ class PromotionSourceGuards872(unittest.TestCase):
             self.assertEqual(first_process["outcome"], "PROMOTED_NEW_PACKET")
             self.assertEqual(second_process["status"], "PASS")
             self.assertEqual(second_process["outcome"], "ALREADY_PROMOTED_IDEMPOTENT")
+            self.assertTrue(second_process["before"]["replay_identity_present"])
             self.assertEqual(second_process["first"]["admitted"], 0)
             self.assertEqual(second_process["first"]["duplicates"], 1)
             self.assertEqual(second_process["first_token_delta"], 0)
-            self.assertEqual(second_process["replay"]["admitted"], 0)
-            self.assertEqual(second_process["replay"]["duplicates"], 1)
-            self.assertEqual(second_process["replay_token_delta"], 0)
+            self.assertEqual(second_process["semantic_replay"]["duplicates"], 1)
+            self.assertEqual(second_process["semantic_replay_token_delta"], 0)
+            self.assertEqual(second_process["conflict_probe"]["rejected"]["REPLAY_IDENTITY_CONFLICT"], 1)
+            self.assertEqual(second_process["conflict_token_delta"], 0)
             self.assertEqual(
                 second_process["after"]["accepted_dataset_tokens_counter"],
                 first_process["after"]["accepted_dataset_tokens_counter"],
             )
+
+    def test_changed_full_envelope_with_same_replay_identity_is_already_promoted(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            first_gate_path = root / "gate-first.json"
+            second_gate_path = root / "gate-semantic.json"
+            db = root / "distillery.sqlite3"
+            first_eval = qualified_evaluation()
+            second_eval = copy.deepcopy(first_eval)
+            second_eval["evaluated_at"] = "2026-08-26T12:34:56+00:00"
+            second_eval["proposal_hypothesis"] = "different candidate narration"
+            second_eval["falsifier"] = "different candidate falsifier"
+            first_gate_path.write_text(json.dumps(passing_gate(first_eval)) + "\n", encoding="utf-8")
+            second_gate_path.write_text(json.dumps(passing_gate(second_eval)) + "\n", encoding="utf-8")
+
+            first = promotion.promote(first_gate_path, SOURCE, db, **workflow_context())
+            second = promotion.promote(second_gate_path, SOURCE, db, **workflow_context())
+
+            self.assertEqual(first["outcome"], "PROMOTED_NEW_PACKET")
+            self.assertEqual(second["outcome"], "ALREADY_PROMOTED_IDEMPOTENT")
+            self.assertTrue(second["before"]["replay_identity_present"])
+            self.assertFalse(second["before"]["evaluation_present"])
+            self.assertEqual(first["execution_replay_identity_sha256"], second["execution_replay_identity_sha256"])
+            self.assertEqual(first["after"]["packet_id"], second["after"]["packet_id"])
+            self.assertEqual(second["first_token_delta"], 0)
+            self.assertEqual(second["semantic_replay_token_delta"], 0)
+            self.assertEqual(second["conflict_token_delta"], 0)
+
+    def test_genuinely_different_execution_identity_remains_separately_admissible(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            gate_a = root / "gate-a.json"
+            gate_b = root / "gate-b.json"
+            db = root / "distillery.sqlite3"
+            eval_a = qualified_evaluation()
+            eval_b = copy.deepcopy(eval_a)
+            eval_b["worker_sha"] = "c" * 64
+            gate_a.write_text(json.dumps(passing_gate(eval_a)) + "\n", encoding="utf-8")
+            gate_b.write_text(json.dumps(passing_gate(eval_b)) + "\n", encoding="utf-8")
+
+            first = promotion.promote(gate_a, SOURCE, db, **workflow_context())
+            second = promotion.promote(gate_b, SOURCE, db, **workflow_context())
+
+            self.assertEqual(first["outcome"], "PROMOTED_NEW_PACKET")
+            self.assertEqual(second["outcome"], "PROMOTED_NEW_PACKET")
+            self.assertNotEqual(first["execution_replay_identity_sha256"], second["execution_replay_identity_sha256"])
+            self.assertNotEqual(first["after"]["packet_id"], second["after"]["packet_id"])
+            self.assertGreater(second["first_token_delta"], 0)
 
 
 if __name__ == "__main__":

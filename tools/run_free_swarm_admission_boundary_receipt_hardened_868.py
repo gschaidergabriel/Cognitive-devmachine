@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Successor hardening for FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1.
 
-This wrapper keeps the canonical v1 runner semantics while closing two source-evidence
+This wrapper keeps the canonical v1 runner semantics while closing source-evidence
 holes before the required exact-source runtime execution:
 
 1. bind both the base runner and this hardening wrapper into the source manifest;
 2. extend the child-process socket tripwire to DNS resolution via getaddrinfo() and
-   the connect_ex() path in addition to create_connection()/connect().
+   the connect_ex() path in addition to create_connection()/connect();
+3. bind and execute the supervisor inherited-provider-environment fence regression,
+   so the receipt cannot PASS without checking that the non-admitted credential
+   clearing fence precedes every supervisor child-start path.
 
 It still performs no external provider call and grants no provider/model/HCU/J-Space
 or training credit by source presence alone.
@@ -23,6 +26,8 @@ SELF_REL = "tools/run_free_swarm_admission_boundary_receipt_hardened_868.py"
 BASE_REL = "tools/run_free_swarm_admission_boundary_receipt.py"
 TEST_REL = "tests/test_free_swarm_receipt_runner_hardening_868.py"
 TEST_MODULE = "tests.test_free_swarm_receipt_runner_hardening_868"
+INHERITED_ENV_TEST_REL = "tests/test_go_868_inherited_provider_secret_fence.py"
+INHERITED_ENV_TEST_MODULE = "tests.test_go_868_inherited_provider_secret_fence"
 
 
 def _hardened_bootstrap_text() -> str:
@@ -69,13 +74,22 @@ def _install_hardening() -> None:
     if getattr(base, "_CLAY_868_RECEIPT_HARDENING_INSTALLED", False):
         return
 
-    base.TEST_MODULES = tuple(dict.fromkeys((*base.TEST_MODULES, TEST_MODULE)))
-    base.TEST_PATHS = tuple(dict.fromkeys((*base.TEST_PATHS, ROOT / TEST_REL)))
+    base.TEST_MODULES = tuple(dict.fromkeys((
+        *base.TEST_MODULES,
+        TEST_MODULE,
+        INHERITED_ENV_TEST_MODULE,
+    )))
+    base.TEST_PATHS = tuple(dict.fromkeys((
+        *base.TEST_PATHS,
+        ROOT / TEST_REL,
+        ROOT / INHERITED_ENV_TEST_REL,
+    )))
     base.SOURCE_PATHS = tuple(dict.fromkeys((
         *base.SOURCE_PATHS,
         BASE_REL,
         SELF_REL,
         TEST_REL,
+        INHERITED_ENV_TEST_REL,
     )))
     base._bootstrap_text = _hardened_bootstrap_text
 
@@ -94,7 +108,13 @@ def _install_hardening() -> None:
                 "socket.socket.connect",
                 "socket.socket.connect_ex",
             ],
+            "inherited_provider_environment_fence_test": INHERITED_ENV_TEST_REL,
+            "inherited_provider_environment_fence_required_for_pass": True,
         }
+        fences = receipt.setdefault("fences", {})
+        fences["supervisor_inherited_provider_environment_fence"] = (
+            "ENFORCED_BY_TEST_GO_868_INHERITED_PROVIDER_SECRET_FENCE"
+        )
         original_write_receipt(path, receipt)
 
     base._write_receipt = write_receipt

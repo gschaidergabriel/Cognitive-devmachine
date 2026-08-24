@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""High-I/O-concurrency launcher for the 6000 logical Free-Swarm fabric."""
+"""High-I/O-concurrency launcher for the route-bound 6000 logical Free Swarm."""
 from __future__ import annotations
 import asyncio
 import concurrent.futures
 import os
 import threading
-import run_6000_free_swarm as fabric
+import run_6000_free_swarm_v3 as fabric
 
 
 def main() -> int:
-    workers=max(32,min(1024,int(os.getenv("CLAY_SWARM_HTTP_THREADS","256"))))
-    # Network workers are blocking urllib calls; a larger executor prevents the
-    # default CPU-count-sized pool from becoming an artificial concurrency ceiling.
+    workers=max(64,min(1024,int(os.getenv("CLAY_SWARM_HTTP_THREADS","512"))))
+    # Calls are blocking urllib operations executed via asyncio.to_thread. The
+    # enlarged pool prevents the Python default executor from becoming the local
+    # concurrency ceiling; provider/shared-quota gates remain authoritative.
     try: threading.stack_size(2*1024*1024)
     except (ValueError,RuntimeError): pass
     loop=asyncio.new_event_loop(); asyncio.set_event_loop(loop)

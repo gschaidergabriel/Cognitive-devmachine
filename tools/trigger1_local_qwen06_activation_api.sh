@@ -4,8 +4,9 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-# Trigger-1 V2 primary fast path: normal-user, zero-provider-billing, loopback-only.
-# Do not materialize or consume any external LLM provider credential here.
+# Trigger-1 V2 terminal positive-control path: normal-user, zero-provider-billing,
+# loopback-only. Promotion remains fail-closed because the gate rejects terminal
+# output-projection shortcuts as J-Space causal evidence.
 unset \
   GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
   MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY \
@@ -66,6 +67,7 @@ PY
   exit 3
 fi
 
-exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_activation_api_execute.py" \
+exec "$PYTHON" "$ROOT/tools/trigger1_attested_local_qwen_api.py" \
+  --mode terminal \
   --output-dir "$OUT_DIR" \
   --cache-dir "$HF_HOME"

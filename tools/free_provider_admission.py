@@ -108,23 +108,48 @@ def load_provider_admission(
     return payload
 
 
-def provider_is_admitted_free(provider: str, admission: dict[str, Any] | None = None) -> bool:
+def _provider_is_admitted_free_from_validated_payload(provider: str, payload: dict[str, Any]) -> bool:
+    """Evaluate a payload only after ``load_provider_admission`` validated its authority."""
     if provider not in ALLOWED_PROVIDERS:
         return False
     try:
-        payload = admission if admission is not None else load_provider_admission()
         record = payload["providers"][provider]
-    except (ProviderAdmissionError, KeyError, TypeError):
+    except (KeyError, TypeError):
         return False
     return record.get("admitted") is True and record.get("cost_class") == "FREE"
 
 
-def admitted_provider_names(admission: dict[str, Any] | None = None) -> tuple[str, ...]:
+def provider_is_admitted_free(provider: str, admission: dict[str, Any] | None = None) -> bool:
+    """Resolve provider authority from canonical control-plane state only.
+
+    ``admission`` remains in the signature solely for compatibility with older callers.
+    It is deliberately ignored: caller-supplied Entry/capability data is input, never
+    authority, and therefore cannot self-grant access to provider secrets or network I/O.
+    """
+    del admission
+    if provider not in ALLOWED_PROVIDERS:
+        return False
     try:
-        payload = admission if admission is not None else load_provider_admission()
+        payload = load_provider_admission()
+    except ProviderAdmissionError:
+        return False
+    return _provider_is_admitted_free_from_validated_payload(provider, payload)
+
+
+def admitted_provider_names(admission: dict[str, Any] | None = None) -> tuple[str, ...]:
+    """Return FREE providers from canonical state; ignore caller-supplied authority."""
+    del admission
+    try:
+        payload = load_provider_admission()
     except ProviderAdmissionError:
         return ()
-    return tuple(sorted(name for name in ALLOWED_PROVIDERS if provider_is_admitted_free(name, payload)))
+    return tuple(
+        sorted(
+            name
+            for name in ALLOWED_PROVIDERS
+            if _provider_is_admitted_free_from_validated_payload(name, payload)
+        )
+    )
 
 
 def admission_snapshot() -> dict[str, Any]:
@@ -143,7 +168,11 @@ def admission_snapshot() -> dict[str, Any]:
         "ok": True,
         "authority_epoch": epoch,
         "steering": steering_ref,
-        "admitted_free_providers": list(admitted_provider_names(payload)),
+        "admitted_free_providers": [
+            name
+            for name in sorted(ALLOWED_PROVIDERS)
+            if _provider_is_admitted_free_from_validated_payload(name, payload)
+        ],
         "providers": {
             name: {
                 "admitted": bool(payload["providers"][name]["admitted"]),

@@ -35,6 +35,7 @@ MAX_ZERO_COST_ATTESTATION_CHARACTERS = 1_024
 MAX_BUDGET_EPOCH_CHARACTERS = 256
 MAX_PROVIDER_BASE_URL_CHARACTERS = 2_048
 MAX_LOCAL_TEST_FLAG_CHARACTERS = 1
+MAX_PAYMENT_LATCH_ENTRIES = 1_024
 # Under the closed alternating schema, 54,792 minimal messages with a leading
 # system message occupy 1,999,970 bytes including separators and the smallest
 # valid model. The next valid cardinality already exceeds the transport cap.
@@ -199,6 +200,8 @@ def _passive_payment_latches(
         payment_latches = PROCESS_PAYMENT_LATCHES
     if type(payment_latches) is not set:
         raise ValueError("payment_latches_must_be_set")
+    if len(payment_latches) > MAX_PAYMENT_LATCH_ENTRIES:
+        raise ValueError("payment_latches_too_large")
     if any(type(latch) is not str for latch in payment_latches):
         raise ValueError("payment_latches_must_contain_strings")
     return payment_latches

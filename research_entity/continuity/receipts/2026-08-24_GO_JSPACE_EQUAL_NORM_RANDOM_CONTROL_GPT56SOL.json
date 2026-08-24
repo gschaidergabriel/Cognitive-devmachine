@@ -1,0 +1,76 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch_observed": "8.71",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_receipt": "f74a34f13ead2db8bc8ffcb5c06152c3187978a0",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "canonical_atomic_unusual_experiment_claim": null,
+    "unusual_intervention_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_count": 0
+  },
+  "retained_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "source_path": "the artefact/MicroEntity/hcu/jspace_activation_steering_search_v1.py",
+    "test_path": "the artefact/MicroEntity/hcu/test_jspace_activation_steering_search_v1.py",
+    "source_commit": "19bf8849f8ee3447af732ec9b244123e01197eac",
+    "test_commit": "ce2636eb670da12eaa39214361de5c74f517a886"
+  },
+  "problem": "The existing bounded activation-steering search used sign-paired target intervention and a physical zero-vector no-op, but could still accept a direction when any same-magnitude nonzero activation perturbation produced the same score gain.",
+  "hypothesis": "A genuine direction-specific search signal should beat equal-L2-norm random-direction perturbations at the same selected layer, alpha and seeds.",
+  "counterhypothesis": "The apparent steering gain is generic perturbation sensitivity rather than specificity of the decoded J-Space control direction.",
+  "external_research_input": {
+    "source": "arXiv:2608.12334",
+    "url": "https://arxiv.org/abs/2608.12334",
+    "source_claim_used": "Causal activation-steering evaluation can compare learned intervention directions with equal-magnitude random perturbations and inspect layerwise intervention sensitivity.",
+    "epistemic_class": "SOURCE_DIRECT_AS_METHOD_INPUT_NOT_CLAY_FACT"
+  },
+  "implemented_discriminator": {
+    "name": "EQUAL_L2_NORM_RANDOM_DIRECTION_CONTROL",
+    "requirements": [
+      "same decoded-vector dimensionality",
+      "same L2 norm within explicit tolerance",
+      "not target direction or its sign inverse",
+      "unique vector digest",
+      "same selected target layer",
+      "same selected alpha",
+      "same seed family",
+      "executor hook receipt must bind exact applied random-vector SHA-256"
+    ],
+    "success_gate": "target mean delta must exceed the maximum absolute mean delta of all supplied equal-norm random controls by min_random_specificity_gap",
+    "no_random_control_behavior": "SEARCH_CALL_REMAINS_COMPATIBLE_BUT_SUCCESS_FAILS_CLOSED_FALSE"
+  },
+  "synthetic_regression_definition": {
+    "positive_case": "target vector (1,0) on synthetic target axis with equal-norm random vector (0,1) keeps target-specific gain and zero random mean delta",
+    "negative_case": "executor where every nonzero perturbation gets the same gain must fail because target and equal-norm random control have equal mean delta",
+    "additional_rejections": [
+      "wrong random-control norm",
+      "target or sign-inverse alias",
+      "forged applied-vector hook receipt",
+      "zero-vector control that mutates activation",
+      "missing sign-paired alpha"
+    ]
+  },
+  "execution_evidence": {
+    "github_pr_workflow_runs_for_test_head": 0,
+    "exact_branch_local_clone_attempt": "BLOCKED_BY_LOCAL_CONTAINER_DNS_NO_GITHUB_NETWORK",
+    "test_pass_credit": 0,
+    "note": "Source and regression definitions are durable, but no exact-branch test execution was observed in this macrocycle."
+  },
+  "evidence_boundary": {
+    "evidence_class": "STEERING_SEARCH_ONLY_NOT_JSPACE_CAUSAL",
+    "equal_norm_random_control_is_canonical_sham_control": false,
+    "jspace_causal_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_gate": "Execute the updated donor harness at exact source identity on an available admitted zero-cost development surface. Then bind one actual instrumentable approximately-0.8B backend with exact checkpoint/tokenizer/runtime/build, verified loader consumption and named activation site, and run the full BASELINE_CLEAN + BASELINE_CORRUPTED + INTERVENTION_TARGET + SHAM_CONTROL + OFF_TARGET_CONTROL family before any model-specific J-Space causal promotion."
+}

@@ -1,28 +1,21 @@
 #!/usr/bin/env python3
 """Promote one passing exact-current Forge->Distillery runtime witness into live Distillery.
 
-This is a deterministic, provider-independent successor to the disposable runtime gate.
-It does not weaken Forge evidence admission and does not append a second Forge ledger.
-Instead it re-validates the nested evidence-qualified Forge evaluation from a PASS witness
-and feeds exactly that one row through the existing Distillery admission code against the
-configured canonical Distillery SQLite database.
+This deterministic, provider-independent promoter re-validates the nested evidence-qualified
+Forge evaluation from a PASS witness and feeds exactly that one measured execution through
+the existing Distillery admission code against the configured canonical SQLite database.
+
+Live admission is keyed by CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1, not by volatile Forge
+evaluation-envelope bytes. The promoter therefore proves the stronger end-to-end invariant:
+one qualified execution may mint one packet with positive accepted-dataset tokens; a replay
+with only delta_id / evaluated_at / candidate narration changed must add zero packets and
+zero tokens after the database is reopened; and the same stable execution identity with
+mutated measured evidence must fail closed as REPLAY_IDENTITY_CONFLICT.
 
 The live effect is additionally bound to the GitHub Actions execution context that owns the
 canonical workflow: exact run id, event class, canonical-main source selection, source SHA
-and source tree. The promoter records the SHA-256 of the exact pre-publication gate bytes;
-the later repository publication must preserve and verify the same binding.
-
-Idempotency is bound to the bridge's replay-stable execution identity, not to byte identity of
-the full evaluation envelope. A first promotion must add exactly one packet and nonzero
-accepted-dataset tokens. A timestamp/candidate-narration-only semantic replay must add zero
-packets/tokens even after the SQLite database has been closed and reopened. Reusing the same
-stable execution identity with changed measured evidence must fail closed as a replay-identity
-conflict. Existing prior promotion is accepted only when the same stable replay identity is
-already present with nonzero packet tokens and all replay/conflict guards remain zero-delta.
-
-No provider/network I/O occurs here. This tool grants no whole-product, HCU, J-Space,
-canonical-semantics or training credit; it only closes the measured Forge->Distillery
-execution-evidence path at its exact source and workflow identity.
+and source tree. No provider/network I/O occurs here. This tool grants no whole-product,
+HCU, J-Space, canonical-semantics or training credit.
 """
 from __future__ import annotations
 
@@ -145,16 +138,56 @@ def validate_github_actions_environment(*, github_run_id: str, github_event_name
     _require(os.environ.get("GITHUB_EVENT_NAME") == str(github_event_name), "GITHUB_EVENT_ENV_MISMATCH")
 
 
-def inspect_db(
-    db: Path,
-    evaluation_sha256: str,
-    replay_identity_sha256: str | None = None,
-) -> dict[str, Any]:
+def semantic_replay_variant(evaluation: dict[str, Any]) -> dict[str, Any]:
+    """Re-key only evaluation-envelope metadata; measured execution stays identical."""
+    replay = json.loads(json.dumps(evaluation))
+    replay["delta_id"] = str(evaluation.get("delta_id") or "") + "::semantic-replay-envelope"
+    original_time = str(evaluation.get("evaluated_at") or "")
+    replay["evaluated_at"] = (
+        "2026-08-25T00:00:01+00:00"
+        if original_time != "2026-08-25T00:00:01+00:00"
+        else "2026-08-25T00:00:02+00:00"
+    )
+    replay["proposal_hypothesis"] = "semantic replay envelope narration; candidate-only"
+    replay["falsifier"] = "semantic replay envelope falsifier; candidate-only"
+    _require(
+        bridge.digest_json(bridge.execution_replay_identity(replay))
+        == bridge.digest_json(bridge.execution_replay_identity(evaluation)),
+        "SEMANTIC_REPLAY_CHANGED_EXECUTION_IDENTITY",
+    )
+    _require(
+        bridge.digest_json(bridge.measured_evidence_identity(replay))
+        == bridge.digest_json(bridge.measured_evidence_identity(evaluation)),
+        "SEMANTIC_REPLAY_CHANGED_MEASURED_EVIDENCE",
+    )
+    return replay
+
+
+def measured_conflict_variant(evaluation: dict[str, Any]) -> dict[str, Any]:
+    """Keep stable execution identity while changing one measured field."""
+    conflict = semantic_replay_variant(evaluation)
+    conflict["relative_improvement_pct"] = float(evaluation["relative_improvement_pct"]) + 1.0
+    _require(
+        bridge.digest_json(bridge.execution_replay_identity(conflict))
+        == bridge.digest_json(bridge.execution_replay_identity(evaluation)),
+        "MEASURED_CONFLICT_CHANGED_EXECUTION_IDENTITY",
+    )
+    _require(
+        bridge.digest_json(bridge.measured_evidence_identity(conflict))
+        != bridge.digest_json(bridge.measured_evidence_identity(evaluation)),
+        "MEASURED_CONFLICT_DID_NOT_CHANGE_EVIDENCE",
+    )
+    return conflict
+
+
+def inspect_db(db: Path, replay_identity_sha256: str) -> dict[str, Any]:
     if not db.exists():
         return {
             "db_exists": False,
+            "replay_present": False,
             "evaluation_present": False,
-            "replay_identity_present": False,
+            "evaluation_sha256": None,
+            "measured_evidence_sha256": None,
             "packet_id": None,
             "packet_tokens": 0,
             "accepted_dataset_tokens_counter": 0,
@@ -167,47 +200,33 @@ def inspect_db(
             c = con.execute("SELECT value FROM counters WHERE key='accepted_dataset_tokens'").fetchone()
             counter = int(c[0]) if c else 0
 
-        exact_row = None
-        replay_row = None
+        row = None
         if "forge_execution_ingest" in tables:
-            exact_row = con.execute(
-                "SELECT packet_id, approx_tokens FROM forge_execution_ingest WHERE evaluation_sha256=?",
-                (evaluation_sha256,),
-            ).fetchone()
-            columns = {str(row[1]) for row in con.execute("PRAGMA table_info(forge_execution_ingest)")}
-            if replay_identity_sha256 and "execution_replay_identity_sha256" in columns:
-                replay_row = con.execute(
-                    "SELECT packet_id, approx_tokens FROM forge_execution_ingest "
-                    "WHERE execution_replay_identity_sha256=?",
+            columns = {str(r[1]) for r in con.execute("PRAGMA table_info(forge_execution_ingest)")}
+            if "execution_replay_identity_sha256" in columns:
+                row = con.execute(
+                    "SELECT evaluation_sha256, measured_evidence_sha256, packet_id, approx_tokens "
+                    "FROM forge_execution_ingest WHERE execution_replay_identity_sha256=?",
                     (replay_identity_sha256,),
                 ).fetchone()
-        selected = replay_row or exact_row
         return {
             "db_exists": True,
-            "evaluation_present": exact_row is not None,
-            "replay_identity_present": replay_row is not None if replay_identity_sha256 else exact_row is not None,
-            "packet_id": selected[0] if selected else None,
-            "packet_tokens": int(selected[1]) if selected else 0,
+            "replay_present": row is not None,
+            "evaluation_present": row is not None,
+            "evaluation_sha256": row[0] if row else None,
+            "measured_evidence_sha256": row[1] if row else None,
+            "packet_id": row[2] if row else None,
+            "packet_tokens": int(row[3]) if row else 0,
             "accepted_dataset_tokens_counter": counter,
         }
     finally:
         con.close()
 
 
-def _semantic_replay(evaluation: dict[str, Any]) -> dict[str, Any]:
-    replay = dict(evaluation)
-    replay["evaluated_at"] = "2099-01-01T00:00:00+00:00"
-    replay["proposal_hypothesis"] = "semantic replay candidate narration mutation"
-    replay["falsifier"] = "semantic replay candidate falsifier mutation"
-    return replay
-
-
-def _measured_conflict(evaluation: dict[str, Any]) -> dict[str, Any]:
-    conflict = dict(evaluation)
-    conflict["evaluated_at"] = "2099-01-01T00:00:01+00:00"
-    conflict["relative_improvement_pct"] = float(evaluation["relative_improvement_pct"]) + 1.0
-    conflict["proposal_hypothesis"] = "measured conflict negative control"
-    return conflict
+def _ingest_one(evaluation: dict[str, Any], distillery_db: Path, temp_root: Path, name: str) -> dict[str, Any]:
+    one_row = temp_root / f"{name}.jsonl"
+    one_row.write_text(json.dumps(evaluation, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
+    return bridge.ingest(one_row, distillery_db)
 
 
 def promote(
@@ -236,48 +255,22 @@ def promote(
     evaluation_sha = bridge.digest_json(evaluation)
     replay_identity_sha = bridge.digest_json(bridge.execution_replay_identity(evaluation))
     measured_evidence_sha = bridge.digest_json(bridge.measured_evidence_identity(evaluation))
-    before = inspect_db(distillery_db, evaluation_sha, replay_identity_sha)
-
-    semantic_replay_evaluation = _semantic_replay(evaluation)
-    _require(
-        bridge.digest_json(bridge.execution_replay_identity(semantic_replay_evaluation)) == replay_identity_sha,
-        "SEMANTIC_REPLAY_IDENTITY_CHANGED",
-    )
-    _require(
-        bridge.digest_json(bridge.measured_evidence_identity(semantic_replay_evaluation)) == measured_evidence_sha,
-        "SEMANTIC_REPLAY_MEASURED_EVIDENCE_CHANGED",
-    )
-
-    measured_conflict_evaluation = _measured_conflict(evaluation)
-    _require(
-        bridge.digest_json(bridge.execution_replay_identity(measured_conflict_evaluation)) == replay_identity_sha,
-        "MEASURED_CONFLICT_REPLAY_IDENTITY_CHANGED",
-    )
-    _require(
-        bridge.digest_json(bridge.measured_evidence_identity(measured_conflict_evaluation)) != measured_evidence_sha,
-        "MEASURED_CONFLICT_DID_NOT_CHANGE_EVIDENCE",
-    )
+    semantic_replay = semantic_replay_variant(evaluation)
+    measured_conflict = measured_conflict_variant(evaluation)
+    before = inspect_db(distillery_db, replay_identity_sha)
 
     with tempfile.TemporaryDirectory(prefix="clay-forge-distillery-promote-") as td:
-        one_row = Path(td) / "qualified.jsonl"
-        semantic_row = Path(td) / "semantic-replay.jsonl"
-        conflict_row = Path(td) / "measured-conflict.jsonl"
-        one_row.write_text(json.dumps(evaluation, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
-        semantic_row.write_text(json.dumps(semantic_replay_evaluation, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
-        conflict_row.write_text(json.dumps(measured_conflict_evaluation, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
+        temp_root = Path(td)
+        first = _ingest_one(evaluation, distillery_db, temp_root, "qualified-first")
+        semantic = _ingest_one(semantic_replay, distillery_db, temp_root, "semantic-replay")
+        conflict = _ingest_one(measured_conflict, distillery_db, temp_root, "measured-conflict")
 
-        # Each bridge call opens and closes SQLite independently. The semantic replay
-        # therefore proves persistence across a DB reopen rather than one connection.
-        first = bridge.ingest(one_row, distillery_db)
-        replay = bridge.ingest(semantic_row, distillery_db)
-        measured_conflict = bridge.ingest(conflict_row, distillery_db)
-
-    after = inspect_db(distillery_db, evaluation_sha, replay_identity_sha)
+    after = inspect_db(distillery_db, replay_identity_sha)
     before_tokens = int(before.get("accepted_dataset_tokens_counter") or 0)
     first_tokens = int(first.get("accepted_dataset_tokens_counter") or 0)
-    replay_tokens = int(replay.get("accepted_dataset_tokens_counter") or 0)
-    conflict_tokens = int(measured_conflict.get("accepted_dataset_tokens_counter") or 0)
-    was_present = bool(before.get("replay_identity_present"))
+    semantic_tokens = int(semantic.get("accepted_dataset_tokens_counter") or 0)
+    conflict_tokens = int(conflict.get("accepted_dataset_tokens_counter") or 0)
+    was_present = bool(before.get("replay_present"))
 
     if was_present:
         _require(int(first.get("admitted") or 0) == 0, "EXISTING_PROMOTION_REINGEST_ADMITTED")
@@ -290,18 +283,21 @@ def promote(
         _require(first_tokens > before_tokens, "LIVE_FIRST_PROMOTION_TOKEN_DELTA_NOT_POSITIVE")
         outcome = "PROMOTED_NEW_PACKET"
 
-    _require(int(replay.get("admitted") or 0) == 0, "LIVE_SEMANTIC_REPLAY_ADDED_PACKET")
-    _require(int(replay.get("duplicates") or 0) == 1, "LIVE_SEMANTIC_REPLAY_DUPLICATE_NOT_ONE")
-    _require(replay_tokens == first_tokens, "LIVE_SEMANTIC_REPLAY_TOKEN_DELTA_NONZERO")
-    _require(int(measured_conflict.get("admitted") or 0) == 0, "LIVE_MEASURED_CONFLICT_ADMITTED")
-    _require(int(measured_conflict.get("duplicates") or 0) == 0, "LIVE_MEASURED_CONFLICT_CLASSIFIED_DUPLICATE")
+    _require(int(semantic.get("admitted") or 0) == 0, "LIVE_SEMANTIC_REPLAY_ADDED_PACKET")
+    _require(int(semantic.get("duplicates") or 0) == 1, "LIVE_SEMANTIC_REPLAY_DUPLICATE_NOT_ONE")
+    _require(semantic_tokens == first_tokens, "LIVE_SEMANTIC_REPLAY_TOKEN_DELTA_NONZERO")
+
+    _require(int(conflict.get("admitted") or 0) == 0, "LIVE_MEASURED_CONFLICT_ADMITTED")
+    _require(int(conflict.get("duplicates") or 0) == 0, "LIVE_MEASURED_CONFLICT_MISCLASSIFIED_DUPLICATE")
     _require(
-        int(measured_conflict.get("rejected", {}).get("REPLAY_IDENTITY_CONFLICT") or 0) == 1,
-        "LIVE_MEASURED_CONFLICT_NOT_FAIL_CLOSED",
+        int((conflict.get("rejected") or {}).get("REPLAY_IDENTITY_CONFLICT") or 0) == 1,
+        "LIVE_MEASURED_CONFLICT_NOT_REJECTED",
     )
-    _require(conflict_tokens == replay_tokens, "LIVE_MEASURED_CONFLICT_TOKEN_DELTA_NONZERO")
-    _require(bool(after.get("replay_identity_present")), "LIVE_REPLAY_IDENTITY_NOT_PERSISTED")
+    _require(conflict_tokens == semantic_tokens, "LIVE_MEASURED_CONFLICT_TOKEN_DELTA_NONZERO")
+
+    _require(bool(after.get("replay_present")), "LIVE_REPLAY_IDENTITY_NOT_PERSISTED")
     _require(int(after.get("packet_tokens") or 0) > 0, "LIVE_PACKET_TOKENS_NOT_POSITIVE")
+    _require(after.get("measured_evidence_sha256") == measured_evidence_sha, "LIVE_MEASURED_EVIDENCE_POSTCHECK_MISMATCH")
     _require(int(after.get("accepted_dataset_tokens_counter") or 0) == conflict_tokens, "LIVE_COUNTER_POSTCHECK_MISMATCH")
 
     return {
@@ -314,17 +310,20 @@ def promote(
         "evaluation_sha256": evaluation_sha,
         "execution_replay_identity_sha256": replay_identity_sha,
         "measured_evidence_sha256": measured_evidence_sha,
+        "semantic_replay_evaluation_sha256": bridge.digest_json(semantic_replay),
+        "measured_conflict_evaluation_sha256": bridge.digest_json(measured_conflict),
         "distillery_db": str(distillery_db),
         "before": before,
         "first": first,
-        "replay": replay,
-        "semantic_replay": replay,
-        "measured_conflict": measured_conflict,
+        "replay": semantic,
+        "semantic_replay": semantic,
+        "measured_conflict": conflict,
         "after": after,
         "first_token_delta": first_tokens - before_tokens,
-        "replay_token_delta": replay_tokens - first_tokens,
-        "measured_conflict_token_delta": conflict_tokens - replay_tokens,
-        "semantic_replay_db_reopen_proven": True,
+        "replay_token_delta": semantic_tokens - first_tokens,
+        "semantic_replay_token_delta": semantic_tokens - first_tokens,
+        "measured_conflict_token_delta": conflict_tokens - semantic_tokens,
+        "reopen_persistence_exercised": True,
         "network_used": False,
         "provider_calls": 0,
         "paid_fallback_attempt_count": 0,

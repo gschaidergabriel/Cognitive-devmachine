@@ -2958,6 +2958,62 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             MOD.PROCESS_PAYMENT_LATCHES.clear()
             MOD.PROCESS_PAYMENT_LATCHES.update(original_process_latches)
 
+    def test_successful_external_latch_cannot_be_cleared_for_replay(self):
+        class PaymentResponse:
+            status = 402
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                raise AssertionError("HTTP 402 body must not be read")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+            "FRANK_FREE_ONLY_BUDGET_EPOCH": "successful-mirror-epoch",
+        }
+        latches = set()
+        original_process_latches = set(MOD.PROCESS_PAYMENT_LATCHES)
+        MOD.PROCESS_PAYMENT_LATCHES.clear()
+        try:
+            first = MOD.execute_chat(
+                VALID_MESSAGES,
+                model="mock",
+                environ=env,
+                opener=lambda *args, **kwargs: PaymentResponse(),
+                now=iter((68.5, 68.51)).__next__,
+                payment_latches=latches,
+            )
+            self.assertTrue(first["receipt"]["payment_latch_active"])
+            self.assertFalse(
+                first["receipt"]["payment_latch_publication_failed"]
+            )
+
+            latches.clear()
+            second_opener_calls = []
+            with self.assertRaisesRegex(
+                RuntimeError, "payment_required_hard_stop_active"
+            ):
+                MOD.execute_chat(
+                    VALID_MESSAGES,
+                    model="mock",
+                    environ=env,
+                    opener=lambda *args, **kwargs: (
+                        second_opener_calls.append("open") or PaymentResponse()
+                    ),
+                    payment_latches=latches,
+                )
+            self.assertEqual(second_opener_calls, [])
+        finally:
+            MOD.PROCESS_PAYMENT_LATCHES.clear()
+            MOD.PROCESS_PAYMENT_LATCHES.update(original_process_latches)
+
     def test_unreachable_provider_has_no_http_status_or_executed_state(self):
         def opener(request, timeout):
             raise MOD.urllib.error.URLError("connection refused")

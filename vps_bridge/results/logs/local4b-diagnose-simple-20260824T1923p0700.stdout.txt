@@ -1,0 +1,62 @@
+HEALTH
+
+BOOTLOG
+MODELLOG
+STATE
+{
+  "schema": "CLAY_LOCAL_RESEARCH_MODEL/v1",
+  "observed_at": "2026-08-24T11:32:09.959338+00:00",
+  "state": "STARTING",
+  "backend": "llama.cpp",
+  "backend_commit": "7584430716ee229751771ed0d6bbcb780d105eeb",
+  "model": "Qwen/Qwen3-4B-GGUF:Q4_K_M",
+  "listen": "127.0.0.1:8088",
+  "threads": 4,
+  "parallel": 1,
+  "context": 8192,
+  "cost_class": "LOCAL_ZERO_PROVIDER_BILLING"
+}
+FILES
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-gpt-2.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-llama-spm.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-qwen2.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-command-r.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-aquila.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-falcon.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-nomic-bert-moe.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-baichuan.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-gemma-4.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-deepseek-coder.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-qwen35.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-llama-bpe.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-refact.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-bert-bge.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-starcoder.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-deepseek-llm.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-phi-3.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-mpt.gguf
+/cache/clay-local-research-model/llama.cpp/models/ggml-vocab-gpt-neox.gguf
+/cache/clay-local-research-model/llama.cpp/build/bin/llama-server
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-gpt-2.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-llama-spm.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-qwen2.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-command-r.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-aquila.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-falcon.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-nomic-bert-moe.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-baichuan.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-gemma-4.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-deepseek-coder.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-qwen35.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-llama-bpe.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-refact.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-bert-bge.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-starcoder.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-deepseek-llm.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-phi-3.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-mpt.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/models/ggml-vocab-gpt-neox.gguf
+/cache/xdg/clay-local-research-model/llama.cpp/build/bin/llama-server
+PROCS
+  19835       54:40  0.0  0.0 [llama-server] <defunct>
+  29930       00:00  0.0  0.0 bash -lc echo HEALTH; curl -sS --max-time 2 http://127.0.0.1:8088/health || true; echo; echo BOOTLOG; tail -120 /artifacts/clay-entityos-swarm/local-model-bootstrap.log 2>/dev/null || true; echo MODELLOG; tail -120 /artifacts/clay-entityos-swarm/local-model.log 2>/dev/null || true; echo STATE; cat /artifacts/clay-entityos-swarm/local-model.json 2>/dev/null || true; echo FILES; find /cache -maxdepth 7 -type f -name llama-server -o -name '*.gguf' 2>/dev/null | head -40; echo PROCS; ps -eo pid,etime,%cpu,%mem,args | grep -E '[c]make|[g]make|[l]lama-server|[l]ocal_research_model_server' | head -40

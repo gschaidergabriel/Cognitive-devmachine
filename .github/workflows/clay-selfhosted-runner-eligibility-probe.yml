@@ -1,0 +1,30 @@
+name: Clay Self-Hosted Runner Eligibility Probe
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/clay-selfhosted-runner-eligibility-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clay-selfhosted-runner-eligibility-probe-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  transport-probe:
+    runs-on: self-hosted
+    timeout-minutes: 3
+    steps:
+      - name: Prove runner allocation only
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'CLAY_SELFHOSTED_RUNNER_ALLOCATED=1\n'
+          printf 'repository=%s\n' "$GITHUB_REPOSITORY"
+          printf 'sha=%s\n' "$GITHUB_SHA"
+          printf 'runner_name=%s\n' "${RUNNER_NAME:-UNKNOWN}"
+          printf 'runner_os=%s\n' "${RUNNER_OS:-UNKNOWN}"
+          printf 'runner_arch=%s\n' "${RUNNER_ARCH:-UNKNOWN}"

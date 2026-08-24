@@ -2,15 +2,15 @@
 
 <!-- EVIDENCE_FORGE_AUTO:BEGIN -->
 ## AUTO — Evidence Forge / dritter autonomer Swarm
-Aktualisiert: `2026-08-24T18:30:43.704246+00:00`
+Aktualisiert: `2026-08-24T18:45:49.716167+00:00`
 
 Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur-Evidenz**. Der Forge nutzt primär andere Kapazitäten als die LLM-Swarms: OpenAlex, Crossref, Semantic Scholar, Hugging Face Hub, GitHub, lokale Disposable-Clones und — innerhalb eines harten Free-Credit-Budgets — parallele E2B-Sandboxes.
 
 | Kennzahl | Wert |
 |---|---:|
-| Discovery-Queries | 696 |
-| Discovery-Hits | 3507 |
-| Forge-Evaluierungen | 143 |
+| Discovery-Queries | 703 |
+| Discovery-Hits | 3542 |
+| Forge-Evaluierungen | 144 |
 | evident akzeptierte Forge-Deltas | 1 |
 | akzeptierte Deltas pro 1 Mio. Free-Swarm-Tokens | 0.050 |
 | E2B-Reproduktionsjobs | 0 |
@@ -22,8 +22,8 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 ### Candidate-Zustände
 | Zustand | Anzahl |
 |---|---:|
-| `NEW` | 216 |
-| `PATCH_REJECTED` | 76 |
+| `NEW` | 220 |
+| `PATCH_REJECTED` | 77 |
 | `NEEDS_IMPLEMENTATION` | 65 |
 | `ACCEPTED` | 1 |
 | `VALIDATED_NOT_BETTER` | 1 |
@@ -31,7 +31,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 ### Zusätzliche Tool-Quellen
 | Tool/Quelle | Hits |
 |---|---:|
-| `crossref` | 3455 |
+| `crossref` | 3490 |
 | `github` | 21 |
 | `openalex` | 20 |
 | `semantic_scholar` | 11 |
@@ -40,15 +40,15 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 | Provider/Tool | Max inflight | aktiv | Requests | 200 | 429 | Fehler |
 |---|---:|---:|---:|---:|---:|---:|
 | `arxiv` | 1 | 0 | 4 | 2 | 0 | 0 |
-| `crossref` | 1 | 0 | 698 | 693 | 5 | 0 |
+| `crossref` | 1 | 0 | 705 | 700 | 5 | 0 |
 | `exa` | 2 | 0 | 2 | 2 | 0 | 0 |
-| `github` | 1 | 0 | 702 | 632 | 0 | 70 |
+| `github` | 1 | 0 | 709 | 638 | 0 | 71 |
 | `groq` | 128 | 0 | 113 | 75 | 38 | 26 |
-| `huggingface_hub` | 4 | 0 | 698 | 698 | 0 | 0 |
-| `nvidia` | 256 | 1 | 3465 | 2425 | 154 | 850 |
-| `openalex` | 2 | 0 | 698 | 12 | 0 | 686 |
-| `openrouter` | 16 | 0 | 138 | 70 | 67 | 0 |
-| `semantic_scholar` | 1 | 0 | 509 | 20 | 489 | 187 |
+| `huggingface_hub` | 4 | 0 | 705 | 705 | 0 | 0 |
+| `nvidia` | 256 | 2 | 3521 | 2468 | 162 | 854 |
+| `openalex` | 2 | 0 | 705 | 12 | 0 | 693 |
+| `openrouter` | 16 | 0 | 139 | 70 | 68 | 0 |
+| `semantic_scholar` | 1 | 0 | 516 | 21 | 495 | 187 |
 | `tavily` | 2 | 0 | 6 | 6 | 0 | 0 |
 
 ### Produktivitätsdiagnose
@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-24T18:30:44.139134+00:00`
+Aktualisiert: `2026-08-24T18:45:49.916259+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -94,7 +94,7 @@ Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
 ### Forschungsfragen
 | Status | Anzahl |
 |---|---:|
-| `CYCLIC` | 696 |
+| `CYCLIC` | 701 |
 | `OPEN` | 21 |
 
 ### Kleine Such-/Synthesemodelle
@@ -112,12 +112,12 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-24T18:30:44.494441+00:00`
+Aktualisiert: `2026-08-24T18:45:50.277413+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
 Distillery-Yield: **0.000%** (0/11,621 Tokens). Reinjection-Coverage: **UNKNOWN** über 0 gemessene GO-Zyklen.
-Aus 2759 erfolgreichen historischen GO-Workeroutputs über **110 rekonstruierte 12-Rollen-Makrozyklen** enthalten 359 maschinenlesbare Deltas (13.012%) und 143 forge-ready Deltas (5.183%); Ø pro Makrozyklus: Deltaquote 11.560%, forge-ready 2.582%.
+Aus 2802 erfolgreichen historischen GO-Workeroutputs über **115 rekonstruierte 12-Rollen-Makrozyklen** enthalten 364 maschinenlesbare Deltas (12.991%) und 144 forge-ready Deltas (5.139%); Ø pro Makrozyklus: Deltaquote 11.574%, forge-ready 2.557%.
 Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection-Receipts bleiben zusätzlich UNKNOWN statt erfunden.
 
 ### 2. Was `go` auslöst
@@ -133,9 +133,9 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 | Subsystem | Funktion | Runtime | Messbarer Stand |
 |---|---|---|---|
 | **24h Supervisor** `run_24h_entityos_swarm_supervisor.sh` | hält lokale/public Lanes am Leben, quarantänisiert externe LLMs ohne typed FREE admission | STOPPED/QUARANTINED | policy `FREE_ONLY; CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; CURRENT_CANONICAL_PROVIDER_ADMISSION; NO_PAID_FALLBACK; TOGETHER_FORBIDDEN` |
-| **GO Free Swarm** `run_24h_entityos_swarm.py` + `run_free_go_swarm.py` | parallele Architektur-/Code-/Falsifikationsorgane | RUNNING | 10111 Records; Ø 4.95, Peak 136; 19,887,860 Tokens; 359 Delta-Records |
-| **Research Distillery** `run_research_distillery_local.py` / `run_research_distillery_entry.py` | Quellen + offene Fragen → komprimierte Knowledge-Pakete | RUNNING | 11,621 Quelltokens → 0; Yield 0.000%; OPEN 21, CYCLIC 696 |
-| **Evidence Forge** `run_free_evidence_forge.py` | Suche → Repo/Patch → Test/Benchmark → Evidenz | RUNNING | **696 Queries / 3507 Hits**; 143 Evaluations; 1 akzeptierte Deltas |
+| **GO Free Swarm** `run_24h_entityos_swarm.py` + `run_free_go_swarm.py` | parallele Architektur-/Code-/Falsifikationsorgane | RUNNING | 10167 Records; Ø 4.84, Peak 136; 20,195,995 Tokens; 364 Delta-Records |
+| **Research Distillery** `run_research_distillery_local.py` / `run_research_distillery_entry.py` | Quellen + offene Fragen → komprimierte Knowledge-Pakete | RUNNING | 11,621 Quelltokens → 0; Yield 0.000%; OPEN 21, CYCLIC 701 |
+| **Evidence Forge** `run_free_evidence_forge.py` | Suche → Repo/Patch → Test/Benchmark → Evidenz | RUNNING | **703 Queries / 3542 Hits**; 144 Evaluations; 1 akzeptierte Deltas |
 | **Local 4B lane** `local_research_model_server.sh` | providerunabhängige lokale Synthese/Vorfilterung | NOT_READY | Ready wird nur per Loopback-Health bestätigt; Build ≠ Runtime-PASS |
 | **Shared quota gate** `free_swarm_quota.py` | gemeinsame Concurrency/Cooldown-/429-Koordination | EMBEDDED | 11 beobachtete Provider/Tool-Lanes |
 | **Dashboard** `evaluate.py` + `update_distillery_readme.py` + `update_system_analysis.py` | autonome Messung + README-Publikation | RUNNING | dieses Dashboard wird aus Receipts/SQLite/Runtime neu erzeugt |
@@ -151,28 +151,28 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- Does the NVIDIA Developer Program free-prototyping entitlement actually cover nemotron-3-super/ultra for this specific credential, or is it limited to smaller models like nemotron-mini-4b (which already shows 400 hard errors)?
-- Does NVIDIA expose a programmatic API to query a credential's current tier/entitlement (free vs paid) at runtime, or is the free-tier claim only documented in static Developer Program terms?
-- How can the project's approach to advancing the highest-information nonduplicate EntityOS blocker be improved or optimized?
-- Wie kann die FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 modifiziert werden, um Geheimnis- und Socket-Tripwires zu integrieren?
-- Welche Auswirkungen hat die Verwendung von Umgebungs-Attestations-Flags auf die Sicherheit des EntityOS/HCU-Systems?
-- Wie kann die Global J-Space/GWT-Prototyp-Integration die Entwicklung des EntityOS/HCU-Systems beeinflussen?
-- How can we programmatically detect provider‑specific API rate‑limit responses (e.g., 429) within the sandbox without external network calls?
-- How does dynamic budget reallocation affect long‑term provider cost class stability and overall swarm equilibrium?
-- What is the optimal TTL for verification tokens given provider-specific credential rotation policies (Groq vs NVIDIA vs OpenRouter)?
-- What is the minimal set of process names that truly constitute the swarm execution boundary, and can we derive it from existing logs?
+- Can a lightweight tracing wrapper be integrated into the HCU inference pipeline without exceeding free provider runtime credit limits?
+- Does the added tracing affect the deterministic behavior of J‑Space/GWT inference, potentially invalidating causal trace analysis?
+- What is the minimal set of event identities that must be captured to satisfy the FREE_ONLY constraints while still providing useful instrumentation?
+- What is the optimal token bucket parameters for cooldown backpressure?
+- How do mixed provider workloads affect HCU's global j-space coherence?
+- Can we predict provider cooldown patterns using recent call history?
+- exact-source isolation: how to enforce immutable source snapshot across container restarts?
+- exact-source isolation: what level of OS‑level isolation (PID, network, mount) is required for PASS?
+- exact-source isolation: can a hybrid approach combine read‑only source with dynamic code generation while preserving exact‑source semantics?
+- Wie kann die Genauigkeit der Überprüfung der Admission-Boundary verbessert werden?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
 |---|---:|
-| erfolgreiche GO-Workeroutputs | 2759 |
-| davon Research-Question-Emitter | 592 (21.457%) |
-| maschinenlesbare Architektur-Deltas | 359 (13.012%) |
-| forge-ready Deltas | 143 (5.183%) |
+| erfolgreiche GO-Workeroutputs | 2802 |
+| davon Research-Question-Emitter | 606 (21.627%) |
+| maschinenlesbare Architektur-Deltas | 364 (12.991%) |
+| forge-ready Deltas | 144 (5.139%) |
 | Distillery Quelltokens | 11,621 |
 | akzeptierte Dataset-Tokens | 0 (0.000%) |
-| Forge Discovery-Hits | 3,507 |
-| Forge Evaluations | 143 |
+| Forge Discovery-Hits | 3,542 |
+| Forge Evaluations | 144 |
 | Forge akzeptierte Deltas | 1 |
 | gemeinsames Ledger akzeptiert | 0 |
 
@@ -189,15 +189,15 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output**.
 | Vergleich | Tokenbasis | Sonnet-5 Äquivalent |
 |---|---:|---:|
-| Free-Swarm Usage | 15,733,702 input + 4,154,158 output | **$73.01** |
+| Free-Swarm Usage | 15,973,559 input + 4,222,436 output | **$74.17** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
-| zusammen, gemessener LLM-Tokenmix | — | **$73.02** |
-| persistenter Repo-Korpus, Output-only Proxy | 12,153,802 Proxy-Tokens | **$121.54** |
+| zusammen, gemessener LLM-Tokenmix | — | **$74.19** |
+| persistenter Repo-Korpus, Output-only Proxy | 12,156,593 Proxy-Tokens | **$121.57** |
 
-**Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $73.02. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
+**Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $74.19. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
 ### 8. Kapazität vs. 15 parallele Sonnet-Worker
-Slotvergleich: Ø **4.95/15 = 33.0%**, Peak **136/15 = 906.7%**. Gemessener Free-Swarm Outputdurchsatz: **132.63 Output-Tokens/s**. Das ist kein Qualitäts- oder Sonnet-Durchsatzbenchmark.
+Slotvergleich: Ø **4.84/15 = 32.3%**, Peak **136/15 = 906.7%**. Gemessener Free-Swarm Outputdurchsatz: **130.82 Output-Tokens/s**. Das ist kein Qualitäts- oder Sonnet-Durchsatzbenchmark.
 
 ### 9. Autonome Update-Regel
 Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen dürfen ihn nicht mehr verdrängen. GO-Pass-through, alle Scripts, Forschungsfragen, Funnel, matched Qualitätsvergleich und Sonnet-Kosten werden fortlaufend neu berechnet.
@@ -205,28 +205,28 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-24T18:30:42.890803+00:00`
+Aktualisiert: `2026-08-24T18:45:48.697761+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
-| Worker-Records | 10111 |
-| Ø gleichzeitig laufende Free-Worker | 4.949 |
+| Worker-Records | 10167 |
+| Ø gleichzeitig laufende Free-Worker | 4.841 |
 | Peak Free-Worker | 136 |
-| Free-Swarm Input-Tokens | 15733702 |
-| Free-Swarm Output-Tokens | 4154158 |
-| Free-Swarm Total-Tokens | 19887860 |
-| Usage-exakte Worker-Records | 2759 |
+| Free-Swarm Input-Tokens | 15973559 |
+| Free-Swarm Output-Tokens | 4222436 |
+| Free-Swarm Total-Tokens | 20195995 |
+| Usage-exakte Worker-Records | 2802 |
 | Evident akzeptierte Architektur-Deltas | 0 |
 | Nominal/historisch akzeptierte Architektur-Deltas | 1 |
 | Legacy/unqualifizierte nominale Accepts | 1 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 12153802 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $121.54 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 12156593 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $121.57 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
 |---|---|---:|---:|---:|---:|---:|---:|
-| nvidia | `nvidia/nemotron-3-super-120b-a12b` | 1866 | 1302 | 137 | 7348290 | 2084155 | 9432445 |
-| nvidia | `nvidia/nemotron-3-ultra-550b-a55b` | 1075 | 508 | 5 | 2905941 | 794765 | 3700706 |
+| nvidia | `nvidia/nemotron-3-super-120b-a12b` | 1906 | 1334 | 145 | 7526810 | 2135355 | 9662165 |
+| nvidia | `nvidia/nemotron-3-ultra-550b-a55b` | 1090 | 519 | 5 | 2967278 | 811843 | 3779121 |
 | nvidia | `nvidia/nemotron-3.5-lightning-30b-a3b` | 425 | 71 | 0 | 448462 | 118400 | 566862 |
 | nvidia | `nvidia/ising-calibration-1.5-31b` | 423 | 69 | 0 | 438535 | 58573 | 497108 |
 | nvidia | `openai/gpt-oss-20b` | 422 | 68 | 0 | 372013 | 112050 | 484063 |
@@ -238,7 +238,7 @@ Aktualisiert: `2026-08-24T18:30:42.890803+00:00`
 | nvidia | `nvidia/llama-3.3-nemotron-super-49b-v1` | 428 | 59 | 0 | 318232 | 56593 | 374825 |
 | nvidia | `meta/llama-3.2-90b-vision-instruct` | 425 | 59 | 0 | 317884 | 41664 | 359548 |
 | nvidia | `nvidia/nemotron-nano-12b-v2-vl` | 420 | 55 | 0 | 341519 | 44763 | 386282 |
-| openrouter | `openrouter/free` | 176 | 52 | 64 | 306274 | 84120 | 390394 |
+| openrouter | `openrouter/free` | 177 | 52 | 65 | 306274 | 84120 | 390394 |
 | nvidia | `nvidia/llama-3.3-nemotron-super-49b-v1.5` | 422 | 52 | 0 | 274588 | 73485 | 348073 |
 | groq | `openai/gpt-oss-20b` | 182 | 38 | 24 | 208585 | 36738 | 245323 |
 | groq | `openai/gpt-oss-120b` | 177 | 36 | 19 | 204420 | 35300 | 239720 |
@@ -286,8 +286,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9963 Textdateien / 48615207 Zeichen ≈ **12153802 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$121.54** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9965 Textdateien / 48626372 Zeichen ≈ **12156593 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$121.57** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

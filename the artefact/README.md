@@ -1,16 +1,16 @@
 # the artefact — EntityOS + HCU cognitive computer
 
-`the artefact/` is the current-facing product/research workspace for **EntityOS** and its integrated **HCU** cognition/compute architecture. It is not independent authority and not a historical ledger. Re-enter verified `main`, newest owner/supervisor authority, and exact executable evidence before material work.
+`the artefact/` is the current-facing product/research workspace for **EntityOS** and its integrated **HCU** cognition/compute architecture. It is not independent authority or a historical ledger. Re-enter verified `main`, newest owner/supervisor authority, and exact executable evidence before material work.
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor observed in this macrocycle: **8.73**. Mode: **FREE_ONLY**. Re-entry source head before this status write: `6773bbcf20455b7b4d0a4a84880f997b7b4815f3`.
+Newest inbox-selected supervisor: **8.73**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `67416a37ad2f745584e33c694fa765fb3f85588c`.
 
-Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not new persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU are compatibility/research aliases only.
+Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
-Canonical durable state/evidence remains deterministic and outside model-generated cognition/simulation. HCU/J-Space/world-model/workspace outputs are candidate/projection/measurement only. `EffectGate + EffectJournal` remain the real-effect authority. `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
+Canonical durable state/evidence stays deterministic and outside model-generated cognition/simulation. HCU/J-Space/world-model/workspace outputs are candidate/projection/measurement only. `EffectGate + EffectJournal` remain the only real-effect authority. `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
 
-Current owner authority permits zero-cost development/testing on normal-user local Linux and the authorized `clay-direct-dev` VPS sandbox. Paid/subscription/unknown-cost execution, upgrades/credit purchases, Together, and paid fallback remain forbidden. External free-provider runtime requires concrete credential/model/route economic provenance; provider labels alone are not cost proof.
+Current owner/supervisor authority permits zero-cost normal-user local Linux and authorized `clay-direct-dev` VPS-sandbox development with stated guards. Paid/subscription/unknown-cost execution, upgrades/credit purchases, Together, and paid fallback remain forbidden. External free-provider execution requires concrete credential/model/route economic provenance.
 
 ## Target causal path
 
@@ -18,70 +18,52 @@ Current owner authority permits zero-cost development/testing on normal-user loc
 
 Pre-load hashing is not loader-consumption attestation. Logical cell count is not resident-model count or physical decode concurrency. Global J-Space/GWT remains a model-specific causal hypothesis; coherence, recurrence, self-report, consensus, or output similarity alone do not prove it.
 
-## GO 8.73 — Forge -> Distillery replay-stability convergence
+## GO 8.73 — three-track convergence
 
-The highest-information nonduplicate gate in this macrocycle was the Forge -> Distillery replay identity boundary selected by `SUPERVISOR_INBOX.json` / `SUPERVISOR_STEERING_8_73.json`.
+### Track A — EntityOS executable convergence
 
-### Observed counterexample
+Canonical `main` now contains the replay-stable Forge -> Distillery identity repair **and** the concurrency closure from merged PR #1765 (`67416a37ad2f745584e33c694fa765fb3f85588c`). SQLite write intent is acquired before replay lookup so replay classification, measured-evidence conflict detection, packet insertion, and dataset-token counter mutation occur inside one admission transaction.
 
-The then-current replay suite passed its five defined cases on exact GitHub blob identities, but a stronger counterexample exposed a remaining semantic replay hole: changing only envelope `delta_id` while keeping the measured execution unchanged could admit a second packet. In the deterministic disposable-db probe, `accepted_dataset_tokens` changed **260 -> 520** and packet count **1 -> 2**. This established that candidate/evaluation envelope identity was still contaminating measured execution identity.
+The deterministic concurrency regression covers:
 
-### Fused current-main correction
+1. same replay concurrently -> exactly one admission + one clean `DUPLICATE`;
+2. same replay identity with mutated measured evidence -> one admission + one `REPLAY_IDENTITY_CONFLICT`;
+3. distinct execution identities -> both independently admissible;
+4. `admit_one()` must only be entered while a transaction is active.
 
-Parallel work converged the fix directly onto canonical `main` rather than preserving a duplicate branch:
+This closes the source-level race where two writers could both classify one replay as unseen before the unique-index boundary. Evidence scope remains **source + regression definition/component evidence**, not whole EntityOS runtime acceptance.
 
-- `8835f7a7a45c3e4bb6d28d8c24f7b2f1e4552609` — removes envelope-only `delta_id` from replay/measured execution identity and strengthens replay/legacy guards;
-- `e4f1b7c5bbf1e3cdedd5fd66b82fd7b466fbb765` — removes volatile `evaluated_at` and `delta_id` from training-bearing packet bytes, while retaining them as observation-only metadata;
-- `91db73dade60d6bc33a900af55c8451a4753d400` — adds rebuild/reopen regression coverage for stable packet bytes, `delta_id` rekey duplicate `+0`, and legacy collision fail-closed behavior;
-- `83a120454107b57aee4813559a6f6961ec477213` — fuses the live promoter semantic-replay/reopen and measured-conflict fail-closed closure;
-- `7f473bc29966f39c12e29c805b3945baab695a96` — binds those live semantic regressions into the exact-main self-hosted gate.
+The retained runtime lane remains repository-qualified PR `gschaidergabriel/clay-global-research-entity#1619`. Its exact-current Forge -> Distillery workflow runs `32742535392`, `32752823987`, and `32753831629` were observed **queued**, with no terminal Forge/Distillery witness result. No new run was launched in this macrocycle because GitHub Actions cost provenance was not established as zero monetary cost under current FREE_ONLY authority.
 
-Superseded duplicate/successor lanes were closed rather than promoted once equal-or-stronger semantics landed on `main`; no second ingestion/truth/effect authority was created.
+A contemporaneous Research Entity Identity Guard run `32753831612` completed `failure`; the job-log download returned missing-blob/404 infrastructure evidence, so the semantic cause is **unresolved**. This is negative infrastructure evidence, not an EntityOS/HCU scientific or runtime failure.
 
-Current replay contract:
+### Track B — HCU + Typed Entry Fabric co-development
 
-1. observation timestamp, candidate narration, falsifier narration, and envelope `delta_id` do not define a new measured execution;
-2. semantic replay of the same measured execution is `DUPLICATE` and mints **+0 packets / +0 accepted dataset tokens**;
-3. same replay identity with mutated measured evidence fails closed as `REPLAY_IDENTITY_CONFLICT`;
-4. genuinely different execution identity remains independently admissible;
-5. ambiguous pre-v1 legacy overlap remains `LEGACY_REPLAY_IDENTITY_UNRESOLVED` rather than being guessed into a new event;
-6. fresh database rebuilds from replay-equivalent envelopes must emit identical training-bearing packet bytes and token counts.
+**ADVANCED.** The replay/concurrency repair is a reusable causal-admission primitive adjacent to Typed Entry and HCU dataflow:
 
-This is a reusable HCU/Typed-Entry-adjacent causal identity primitive: replay-stable event/execution identity is separated from volatile transport/evaluation-envelope identity. It also improves future J-Space/GWT dataset safety by preventing nonsemantic envelope churn from multiplying training examples.
+- replay-stable measured execution identity remains separate from volatile transport/evaluation envelope identity;
+- semantic replay mints **+0 packets / +0 accepted dataset tokens**;
+- same replay identity with changed measured evidence fails closed;
+- genuinely different execution identity remains independently admissible;
+- ambiguous legacy overlap remains unresolved rather than guessed;
+- concurrent admission is serialized before classification, preserving the same deterministic authority under two-writer races.
 
-## GO 8.73 — exact-main execution observability delta
+No second truth store, admission authority, effect path, or persistent entity was introduced.
 
-`6773bbcf20455b7b4d0a4a84880f997b7b4815f3` closes a separate evidence-control-plane gap in `.github/workflows/go873-distillery-selfhosted-main-regression.yml`.
+### Track C — Global J-Space/GWT + zero-cost ~0.8B readiness
 
-The self-hosted regression gate now:
+`TRAINING_READINESS_NO_CHANGE_WITH_REASON`: current `main` already contains the relevant J-Space trace/vector-control source contracts, while the strongest model-specific gate remains the local Qwen3-0.6B nonterminal six-control causal discriminator. That intervention is still subject to the canonical unusual-experiment atomic lease. This ChatGPT invocation exposes no reproducible shared immutable macrocycle/request identity suitable for a canonical create-only claim, so:
 
-- binds the exact triggering `main` SHA and a clean checkout before tests;
-- executes compile, replay-identity, rebuild-stability, existing live-bridge, promotion-guard, and live semantic replay/measured-conflict regressions;
-- runs an `if: always()` persistence step so both PASS and NONPASS become first-class evidence;
-- writes one append-only repository-bound receipt per run attempt at `research_entity/runtime/distillery_selfhosted/run-<run_id>-attempt-<attempt>.json`;
-- records exact triggering head, GitHub run/attempt identity, runner identity fields, and each step outcome;
-- classifies only `EXACT_MAIN_DETERMINISTIC_REGRESSION_PASS` versus `EXACT_MAIN_DETERMINISTIC_REGRESSION_NONPASS`;
-- explicitly records `real_safe_forge_accept_observed=false` and `repository_bound_live_accepted_dataset_tokens_gt_zero_observed=false` because regression execution alone is not the real Safe-Forge witness;
-- grants zero whole EntityOS/HCU, full HCU, J-Space-model, training, or whole-product credit.
+`COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`
 
-The append-only receipt path is outside the workflow's path trigger, so evidence persistence does not recursively trigger the gate. The workflow token is used only for this bounded repository evidence write; source checkout remains exact-trigger-head and credential persistence is disabled there.
+No new J-Space/model intervention, provider call, paid execution, or training run was performed. Creating another source-only J-Space lane would duplicate retained donor lane #1263 rather than increase evidence.
 
-At the last direct read in this macrocycle, **no `CLAY_GO873_DISTILLERY_SELFHOSTED_REGRESSION_RECEIPT/v1` file had materialized yet**. Therefore runner claim, test execution, and terminal result remain unobserved. Workflow/source presence is not runtime evidence.
-
-## J-Space / GWT track
-
-Current `main` also contains the 8.73 J-Space architecture convergence work: `JSPACE_TRACE_ABI/v1`, `JSPACE_VECTOR_CONTROL_ABI/v1`, model-specific adapter boundaries, and a latent-packet translation direction. These remain architecture/source contracts, not evidence that models share a native latent geometry or that model-specific J-Space causality has been established.
-
-The strongest model-science gate remains the local Qwen3-0.6B nonterminal six-control discriminator. It is still subject to the canonical unusual-experiment atomic lease. This user turn exposes no shared immutable macrocycle/request ID beyond minute-precision conversation timing, so no new unusual intervention is authorized in this macrocycle: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
-
-`TRAINING_READINESS_NO_CHANGE_WITH_REASON`: the current model-specific J-Space intervention cannot be executed without a canonical atomic lease, and the full vector-control/trace ABI source work has already converged on `main`; creating another source-only J-Space lane would be duplicate work. The next model-specific discriminator remains the leased local Qwen3-0.6B nonterminal six-control intervention after reproducible shared macrocycle identity exists.
-
-## Evidence credit
+## Current evidence credit
 
 Conservative credit remains:
 
-- Forge/Distillery replay-stability: source + deterministic component/regression-definition evidence; exact self-hosted terminal receipt not yet observed in this macrocycle;
-- persistent live Forge -> Distillery promotion witness: **not yet promoted to whole operational runtime acceptance**;
+- Forge/Distillery replay + concurrency: source/regression/component evidence only;
+- persistent live Forge -> Distillery promotion witness: terminal exact-current result unobserved;
 - provider runtime credit: **0**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
@@ -89,20 +71,20 @@ Conservative credit remains:
 - training credit: **0**;
 - whole-product PASS: **false**.
 
-A source file, test definition, workflow, provider HTTP response, token count, model consensus, or component PASS never automatically mints broader credit.
+A source file, test definition, workflow, deployment, token count, model consensus, or component PASS cannot mint broader credit.
 
-## Current blockers / next exact gates
+## Highest-information next gates
 
-1. Observe a newly persisted `CLAY_GO873_DISTILLERY_SELFHOSTED_REGRESSION_RECEIPT/v1` for the exact-current self-hosted gate and require all scoped regression step outcomes to be `success`; classify any NONPASS or missing receipt narrowly rather than as a product/science failure.
-2. Then run/observe the exact-current **persistent live** Forge -> Distillery witness and require one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> timestamp/narration/`delta_id` semantic replay -> exactly **+0 packets / +0 tokens**.
-3. Require same stable replay identity with changed measured evidence to fail closed in that executable live witness, not only in deterministic regressions.
-4. Keep one canonical Distillery admission authority; do not reopen superseded replay/rebuild lanes.
-5. Continue Typed Entry -> verified loader consumption -> actual model execution -> InferenceReceipt -> model-specific J-Space causal trace through the retained HCU donor lane #1263.
-6. Only when a reproducible shared macrocycle identity and create-only atomic claim exist may the local Qwen3-0.6B nonterminal six-control intervention proceed.
-7. Keep external provider routes secondary and fail closed unless exact FREE economic provenance is bound. No paid/Together fallback.
+1. Obtain a repository-bound terminal exact-current Distillery regression receipt and require all scoped replay/concurrency/rebuild/live-semantic steps to succeed; classify missing runner/log evidence narrowly as infrastructure uncertainty.
+2. Observe the persistent live Forge -> Distillery witness on execution-time-current `main`: one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> timestamp/narration/`delta_id` semantic replay -> exactly **+0 packets / +0 tokens**.
+3. Require same stable replay identity with changed measured evidence to fail closed in that executable live witness, not only deterministic regressions.
+4. Diagnose the failing Research Entity Identity Guard without weakening the invariant or treating missing logs as semantic evidence.
+5. Continue one canonical Typed Entry -> verified loader consumption -> actual model execution -> InferenceReceipt -> model-specific J-Space causal trace through retained HCU donor lane #1263.
+6. Execute the local Qwen3-0.6B nonterminal six-control discriminator only after a reproducible shared macrocycle identity and successful canonical create-only atomic lease exist.
+7. Keep all external provider routes secondary and fail closed unless exact FREE economic provenance is bound. No paid/Together fallback.
 
 ## Evidence discipline and reentry
 
-For every material claim distinguish direct observation, source-derived claim, inference, generated hypothesis, counterhypothesis, intervention/test, and verified scope. Negative evidence is first-class. Auth/rate/quota/runner failure is not automatically product/science failure. A component PASS is not whole-product PASS.
+For every material claim distinguish direct observation, source-derived claim, inference, generated hypothesis, counterhypothesis, intervention/test, and verified scope. Negative evidence is first-class. Auth/rate/quota/runner/log failure is not automatically product/science failure. A component PASS is not whole-product PASS.
 
-Before substantive continuation: refresh verified `main`; resolve newest owner/supervisor authority; inspect overlapping work; preserve exact source/runtime identities; execute the cheapest high-information discriminator; persist bounded evidence; and re-enter `main` after every material write.
+Before substantive continuation: refresh verified `main`; resolve newest owner/supervisor authority; inspect overlapping work; preserve exact source/runtime identities; execute the cheapest high-information discriminator allowed by current authority; persist bounded evidence; then re-enter `main` after every material write.

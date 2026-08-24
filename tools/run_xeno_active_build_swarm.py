@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Xeno v1 active-build + recursive-improvement GO fabric.
+"""Xeno v1 active-build + infinite recursive-improvement GO fabric.
 
-This is a specialization layer over the existing 6000-logical-worker EntityOS/HCU
-FREE swarm. It does not create a second product identity: Xeno is the implementation
-codename for the first shippable EntityOS/HCU module. The layer redirects worker
-attention from architecture prose to patches, tests, benchmarks, 0.8B integration,
-training-data/evaluation readiness, ClayCode migration, and measured recursive gains.
+This specialization layer redirects the existing 6000-logical-worker EntityOS/HCU
+FREE fabric from architecture prose toward shippable Xeno patches, tests, benchmarks,
+~0.8B specialization, the two-slot core/prestage harness, dashboard, peer/GRID10,
+Global J-Space causal engineering, ClayCode migration, and measured recursive gains.
+Xeno remains an implementation codename inside EntityOS/HCU.
 """
 from __future__ import annotations
 
@@ -21,30 +21,44 @@ ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT_ROOT = Path(os.getenv("CLAY_SWARM_ARTIFACT_ROOT", "/artifacts/clay-entityos-swarm"))
 BUILD_DIRECTIVE = ROOT / "research_entity/claycode/XENO_V1_ACTIVE_BUILD_AND_RECURSIVE_IMPROVEMENT_DIRECTIVE_2026-08-24.md"
 BUILD_STATE = ROOT / "research_entity/claycode/XENO_ACTIVE_BUILD_STATE.json"
+HARNESS_CONTRACT = ROOT / "the artefact/Xeno/XENO_HARNESS_V1_ACCEPTANCE_CONTRACT.md"
 V1_ACCEPTANCE = ARTIFACT_ROOT / "xeno/XENO_V1_ACCEPTED.json"
 
 XENO_ROLES = [
-    ("XENO_INTEGRATOR", "Build the smallest end-to-end Xeno v1 slice that runs: Typed Entry -> state/route -> ~0.8B engine -> structured result -> receipt/effect boundary. Return an actual patch and tests."),
-    ("XENO_08B_ENGINE", "Advance exact local ~0.8B base/checkpoint/tokenizer/loader/runtime integration, baseline eval, fine-tune integration seam, quantization and reproducible model identity. Prefer executable code over prose."),
-    ("XENO_JSPACE_GWT", "Implement or test the concrete Global J-Space/GWT control path used by Xeno's ~0.8B core: vector-control ABI, causal traces, lesion/sham/off-target controls and receipt binding."),
-    ("XENO_DATASET_COMPILER", "Turn admitted prototype traces into deterministic family-split train/validation/holdout JSONL with hard negatives and hash-bound sidecars. Produce code/tests, not a dataset essay."),
-    ("XENO_TRAIN_EVAL", "Advance pretrain baseline, fine-tune job interface/readiness, post-train frozen evaluation, ablations and promotion criteria. Current monetary/provider authority must be obeyed; never invent a paid authorization."),
-    ("XENO_TYPED_ENTRY", "Implement one missing Typed Entry -> HCU/Xeno route invariant or failure fence with exact causal identity and deterministic tests."),
-    ("XENO_STATE_EFFECT", "Implement one canonical state/recovery/effect-boundary delta required for a finished Xeno; model output remains non-authoritative. Include failure-path tests."),
-    ("XENO_CLAYCODE_MIGRATION", "Convert one currently host-language Xeno module/semantic slice toward ClayCode only when the same candidate can be benchmarked against the old path on the full protected metric vector."),
-    ("XENO_PERF_LATENCY", "Find and implement one bottleneck repair that raises useful work/capability while reducing end-to-end p50 latency; preserve p95, RSS, reliability, authority and ClayCode progress."),
-    ("XENO_CAPABILITY", "Implement or harden one Xeno capability with a frozen positive/negative benchmark and no authority expansion."),
-    ("XENO_FALSIFIER", "Attack the current closest-to-shipping Xeno slice; produce a regression test that fails the current behavior and a minimal repair when possible."),
-    ("XENO_RECURSIVE_IMPROVER", "When Xeno v1 is accepted, propose the next strict-dominance implementation delta: better capabilities/quality, lower latency, better throughput/efficiency, no protected regression, and more ClayCode."),
+    ("XENO_INTEGRATOR", "Build the closest-to-shipping end-to-end Xeno slice: Typed Entry -> state/route -> selected CORE -> structured result -> receipt/effect boundary. Return an actual patch and tests."),
+    ("XENO_08B_ENGINE", "Advance exact local ~0.8B checkpoint/tokenizer/loader/runtime integration, baseline eval, fine-tune integration seam, quantization and reproducible identity. The internal core must remain independently switchable."),
+    ("XENO_ENGINE_FABRIC", "Implement arbitrary-LLM attachment and engine switching through capability-driven adapters. Prove internal-08B OFF + external CORE and hot core swaps without canonical-state reset."),
+    ("XENO_TWO_SLOT_PRESTAGE", "Implement the max-two external slot harness, opaque secret_refs, CORE/PRESTAGE assignment, PRESTAGE ON/OFF, role swap and fail-closed capability/error handling."),
+    ("XENO_DASHBOARD", "Implement the self-hosted dashboard controls for internal 0.8B, slot1/slot2, CORE, PRESTAGE, prestage toggle, engine health, GRID10, peer links and J-Space status. Never persist/display plaintext secrets."),
+    ("XENO_PEER_GRID10", "Implement robust XENO_PEER_LINK/v1 plus exact ten-logical-cell GRID10 composition, reconnect/replay/stale-packet tests and shared-engine scheduling without confusing logical cells with model copies."),
+    ("XENO_JSPACE_GWT", "Aggressively improve the concrete Global J-Space/GWT subsystem: vector-control ABI, causal traces, lesion/sham/off-target/rescue controls, role re-entry, model-switch behavior and cross-Xeno projection without false shared-latent claims."),
+    ("XENO_DATASET_COMPILER", "Turn admitted prototype traces into deterministic family-split train/validation/holdout JSONL with hard negatives, leakage checks and hash-bound sidecars. Produce code/tests, not a dataset essay."),
+    ("XENO_TRAIN_EVAL", "Advance frozen pretrain baseline, fine-tune job interface/readiness, post-train evaluation and ablations. Obey newest monetary/provider authority and never invent a paid authorization."),
+    ("XENO_STATE_EFFECT", "Implement canonical state/recovery/effect-boundary behavior required by Xeno, including engine/prestage/peer failures. Model/J-Space output remains non-authoritative."),
+    ("XENO_CLAYCODE_MIGRATION", "Convert one host-language Xeno slice toward ClayCode only when the converted path strictly improves every metric in the frozen comparison vector through tools/xeno_build_gate.py --claycode-migration."),
+    ("XENO_PERF_LATENCY", "Implement a bottleneck repair that increases useful performance/capability while lowering p50 latency and preserving/improving p95, RSS, recovery, authority, harness, GRID10, peer and J-Space metrics."),
+    ("XENO_CAPABILITY", "Implement or harden one end-user/runtime capability with frozen positive/negative/recovery benchmarks and no authority expansion."),
+    ("XENO_FALSIFIER", "Attack the closest-to-shipping Xeno slice. Produce a failing regression/failure schedule and minimal repair when possible; target hidden regressions across the entire protected metric vector."),
+    ("XENO_RECURSIVE_IMPROVER", "On every go, after current build blockers are handled, search for the next measurable non-regressing Xeno improvement. After v1 this becomes the permanent primary loop until owner supersession."),
 ]
 
 XENO_SHARDS = [
     "v1 executable end-to-end slice",
     "Qwen3.5-0.8B exact model identity and loader",
-    "0.8B baseline benchmark freeze",
+    "internal 0.8B ON/OFF without state reset",
+    "arbitrary external LLM CORE adapter",
+    "slot1/slot2 persistent secret-ref configuration",
+    "CORE/PRESTAGE role selection and swap",
+    "PRESTAGE ON/OFF bypass equivalence",
+    "dashboard harness controls and secret hygiene",
+    "XENO_PEER_LINK/v1 handshake and replay safety",
+    "GRID10 exact ten logical-cell scheduler",
+    "GRID10 partial-cell/peer failure recovery",
     "JSPACE_VECTOR_CONTROL_ABI/v1 codec",
-    "GWT competition/broadcast implementation",
-    "causal trace instrumentation",
+    "Global J-Space causal lesion/sham/off-target/rescue",
+    "GWT competition/broadcast calibration",
+    "J-Space external-core compiled projection",
+    "J-Space cross-Xeno projection without latent-coordinate conflation",
     "dataset compiler and family split",
     "hard-negative generation",
     "fine-tune integration seam and authority gate",
@@ -57,7 +71,7 @@ XENO_SHARDS = [
     "throughput and token-efficiency gain",
     "RSS/quantization optimization",
     "capability expansion without regression",
-    "recursive promotion gate",
+    "recursive full-vector promotion gate",
     "shipping/package/startup acceptance",
 ]
 
@@ -78,7 +92,7 @@ def current_phase() -> dict[str, Any]:
         required = ("metrics_receipt_sha256", "model_identity_sha256", "integration_receipt_sha256")
         if all(isinstance(marker.get(k), str) and len(marker[k]) == 64 for k in required):
             return {
-                "phase": "RECURSIVE_IMPROVEMENT",
+                "phase": "INFINITE_RECURSIVE_IMPROVEMENT",
                 "v1_acceptance": "BOUND_MARKER_PRESENT",
                 "accepted_version": marker.get("accepted_version", "xeno-v1"),
             }
@@ -90,36 +104,37 @@ def xeno_worker_prompt(protocol: str, role: str, task: str, state_context: str, 
     phase = current_phase()
     return original + f"""
 
-XENO ACTIVE BUILD CONTRACT — OWNER PRIORITY
+XENO ACTIVE BUILD / INFINITE RECURSION CONTRACT — OWNER PRIORITY
 phase={phase['phase']}
 v1_acceptance={phase['v1_acceptance']}
 - Xeno is the implementation codename inside EntityOS/HCU, not a second truth/product authority.
-- The primary objective is a finished, runnable Xeno with an integrated fine-tuned ~0.8B cognitive core, not more architecture prose.
-- Until Xeno v1 acceptance, spend the dominant effort on source patches, tests, benchmark harnesses, model integration, trace/dataset compiler, training/eval readiness and packaging.
-- Actual paid/provider training may execute only if the newest current authority explicitly admits that exact lane. Otherwise advance every zero-cost prerequisite and fail closed at the monetary boundary.
-- After Xeno v1 acceptance, continue recursive improvement indefinitely until a newer owner instruction supersedes this contract.
-- Every recursive candidate must improve capability_pass_rate, task_quality_score, p50_latency_ms, throughput_tokens_s and claycode_fraction while regressing NONE of the protected metrics.
-- Every ClayCode migration candidate is stricter: it must show strict directional improvement on the ENTIRE frozen metric vector accepted by tools/xeno_build_gate.py; otherwise reject/rework/revert it.
-- Token volume, worker count, architecture elegance or model consensus are not progress unless converted into an executable/tested delta.
-- If you can write the patch, write the unified diff. If you cannot, set ready_for_forge=false and identify the exact missing evidence. Do not pad with design prose.
-- Prefer modifying the currently closest-to-shipping code path over introducing parallel frameworks.
+- Every owner `go` executes this improvement objective until a newer explicit owner instruction supersedes it. There is NO terminal done state after v1.
+- Before v1: converge on a finished runnable Xeno with fine-tuned ~0.8B core, switchable engine fabric, two-slot CORE/PRESTAGE harness, dashboard, Xeno peer-link, GRID10, improved Global J-Space/GWT, training/integration and acceptance evidence.
+- After v1: immediately continue measure -> patch -> test -> benchmark -> full-vector compare -> promote/reject -> repeat across subsequent go cycles forever until superseded.
+- The internal ~0.8B engine must be independently switchable OFF; external/local arbitrary LLM profiles must be usable as CORE through the adaptive fabric without resetting canonical state.
+- Persist at most two external credential slots via opaque secret_ref only. Dashboard chooses CORE, optional distinct PRESTAGE, and PRESTAGE ON/OFF. Plaintext credentials never enter prompts, receipts, telemetry, source or ordinary profile state.
+- GRID10 means exactly ten logical cells at v1, not ten model copies. Robust XENO_PEER_LINK/v1 connectivity must tolerate stale/duplicate/delayed packets, disconnect/reconnect and peer restart under deterministic admission/recovery fences.
+- Global J-Space is a permanent first-class research+engineering target. Every recursive promotion must improve jspace_causal_gain_score while regressing none of the other protected metrics; do not infer hidden-state access for closed APIs.
+- Actual paid/provider training may execute only if newest authority explicitly admits that exact lane. Otherwise advance every zero-cost prerequisite and fail closed exactly at the monetary boundary.
+- Token volume, worker count, architecture elegance or consensus are not progress unless converted into executable tested deltas.
+- If you can write the patch, emit the unified diff. If not, set ready_for_forge=false and identify exact missing evidence instead of padding.
 
 MANDATORY XENO DELTA CONTENT
-- xeno_gate: one of V1_RUNTIME, V1_08B_ENGINE, V1_JSPACE_GWT, V1_DATASET, V1_TRAINING, V1_INTEGRATION, V1_ACCEPTANCE, RECURSIVE_IMPROVEMENT, CLAYCODE_MIGRATION.
-- before_after_metrics: name the exact benchmark/receipt that will provide before+after values for capability, quality, p50/p95 latency, throughput, RSS, recovery, authority-boundary, token efficiency and ClayCode fraction.
-- target_files + non-empty patch_unified_diff + test_commands are required for ready_for_forge=true.
-- For a ClayCode migration, test_commands MUST include tools/xeno_build_gate.py with --claycode-migration against bound before/after metric snapshots.
-- End with the existing ARCHITECTURE_DELTA_JSON line so Evidence Forge can test the patch. Add these extra JSON keys when relevant: xeno_gate, claycode_migration, before_after_metrics, acceptance_effect.
+- xeno_gate: one of V1_RUNTIME, V1_08B_ENGINE, V1_ENGINE_SWAP, V1_TWO_SLOT_HARNESS, V1_PRESTAGE, V1_DASHBOARD, V1_PEER_LINK, V1_GRID10, V1_JSPACE_GWT, V1_DATASET, V1_TRAINING, V1_INTEGRATION, V1_RECOVERY_EFFECT_AUTHORITY, V1_ACCEPTANCE_METRICS, RECURSIVE_IMPROVEMENT, CLAYCODE_MIGRATION.
+- before_after_metrics must bind the benchmark/receipt for capability, quality, p50/p95 latency, throughput, RSS, recovery, authority boundary, token efficiency, ClayCode fraction, engine swap, two-slot harness, prestage, GRID10, peer link, dashboard and J-Space causal gain.
+- target_files + NONEMPTY patch_unified_diff + test_commands are mandatory for ready_for_forge=true.
+- A ClayCode migration MUST include tools/xeno_build_gate.py --claycode-migration against bound before/after snapshots and is rejected unless every tracked metric strictly improves in its intended direction.
+- End with the existing ARCHITECTURE_DELTA_JSON line so Evidence Forge can test the patch. Add xeno_gate, claycode_migration, before_after_metrics and acceptance_effect when relevant.
 """
 
 
 def configure() -> None:
-    if not BUILD_DIRECTIVE.exists() or not BUILD_STATE.exists():
+    if not BUILD_DIRECTIVE.exists() or not BUILD_STATE.exists() or not HARNESS_CONTRACT.exists():
         raise RuntimeError("XENO_ACTIVE_BUILD_CONTROL_FILES_MISSING")
     fabric.base.DEFAULT_ROLES = list(XENO_ROLES)
     fabric.FALLBACK_SHARDS = list(XENO_SHARDS)
     fabric._PREV_PROMPT = xeno_worker_prompt
-    os.environ["CLAY_XENO_BUILD_MODE"] = "ACTIVE_RECURSIVE"
+    os.environ["CLAY_XENO_BUILD_MODE"] = "ACTIVE_INFINITE_RECURSIVE"
 
 
 async def main() -> int:

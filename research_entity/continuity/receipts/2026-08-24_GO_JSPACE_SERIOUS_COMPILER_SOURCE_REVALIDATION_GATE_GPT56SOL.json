@@ -1,0 +1,59 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_JSPACE_SERIOUS_COMPILER_SOURCE_REVALIDATION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "observed_main_before_guard_write": "1b4238a38fc73004471fc5a15e5914c973608b55",
+  "guard_commit": "7598a7f5d4c10d3005bc5261c56506ae37c8df2e",
+  "guard_path": "research_entity/claycode/HCU_JSPACE_SERIOUS_COMPILER_SOURCE_REVALIDATION_GATE_V1.md",
+  "coordination": {
+    "shared_immutable_macrocycle_id_available": false,
+    "user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "reentry": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed_before_guard": "37fb04122b668d253a4c4eda79925f4d518ce255",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_runtime_credit_projected_from_source": false,
+    "serious_compiler_control_delivery_gate_present": true,
+    "serious_compiler_source_revalidation_gate_present_before_this_write": false
+  },
+  "finding": {
+    "name": "DIGEST_VALID_JSPACE_BINDING_IS_NOT_SOURCE_DERIVATION_PROOF",
+    "observed": "The donor now contains jspace_inference_binding_revalidation_v1.revalidate_binding_against_sources(), which re-derives JSpaceInferenceBinding/v3 from exact TrainingTrace + HCU InferenceReceipt + scheduler GridPlan and rejects correlated relabelling. The serious compiler had already integrated the non-BASELINE model-input control-delivery gate, but no compiler call to the source revalidator was found at re-entry.",
+    "hypothesis": "A self-consistent persisted binding can pass validate_binding() while remaining a correlated caller-controlled relabelling unless exact producer sources are revalidated before row emission.",
+    "counterhypothesis": "DatasetAdmission + validate_binding() + admitted InferenceReceipt parent are sufficient independent provenance for serious row emission.",
+    "discriminator": "Require the serious compiler to reconstruct/revalidate JSpaceInferenceBinding/v3 against exact admitted TrainingTrace, InferenceReceipt/v4 and scheduler GridPlan sources before lower-level compilation; correlated relabel regressions must fail before row emission."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_SOURCE_ACCEPTANCE: one current-facing fail-closed gate now prevents future source/runtime greenness from being over-promoted through a persisted self-consistent binding that was never re-derived from exact producer sources.",
+    "track_b_hcu_typed_entry": "ADVANCED_CAUSAL_INTERCONNECT: required exact trace->inference receipt->scheduler GridPlan source revalidation at the J-Space binding boundary while preserving the single donor/compiler/state/effect authorities.",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "ADVANCED_TRAINING_READINESS: serious training rows are now explicitly gated on source-derived J-Space binding provenance in addition to the already integrated non-BASELINE model-input control-delivery closure."
+  },
+  "execution": {
+    "sandbox_invoked_by_this_organ": false,
+    "reason": "FREE_ONLY runtime remains fail-closed: direct remaining Sandbox quota was not observed and concurrent evidence records an upgrade/build-rate-limit plus protected-route access boundary. No paid or upgrade path was used.",
+    "together_preflight_or_key_lookup": false,
+    "paid_fallback": false,
+    "vps_self_hosted_or_production_test": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving current-facing surface under parallel go organs; append-only guard plus receipt preserve this exact delta without stale whole-file overwrite."
+  },
+  "next_exact_action": "In the single retained donor/compiler path, consume admitted exact typed TrainingTrace + HCU_INFERENCE_RECEIPT/v4 + scheduler GridPlan sources through revalidate_binding_against_sources() before any serious row emission, add correlated cell/role/invocation/engine/GridPlan relabel negative regressions, and keep the existing non-BASELINE model-input control-delivery gate downstream. Execute only on an admitted exact-source FREE_ONLY surface when auth/quota/upgrade fences permit."
+}

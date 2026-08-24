@@ -11,6 +11,7 @@ EffectGate/EffectJournal path for any real effect.
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 from pathlib import Path
 import sys
@@ -18,19 +19,59 @@ import time
 from typing import Any, Callable, Mapping, Sequence
 
 ROOT = Path(__file__).resolve().parents[1]
+TOOLS_DIR = ROOT / "tools"
 HCU_DIR = ROOT / "the artefact" / "MicroEntity" / "hcu"
-if str(HCU_DIR) not in sys.path:
-    sys.path.insert(0, str(HCU_DIR))
+for directory in (TOOLS_DIR, HCU_DIR):
+    if str(directory) not in sys.path:
+        sys.path.insert(0, str(directory))
 
-from entry_canonicalization_v1 import CanonicalizationError, canonicalize  # type: ignore
-from xeno_entry_fabric_v1 import EntryPacket, admit_entry_json  # type: ignore
-import xeno_harness_config
+
+def _import_exact_repo_module(name: str, expected_path: Path):
+    module = importlib.import_module(name)
+    raw_path = getattr(module, "__file__", None)
+    if not raw_path:
+        raise RuntimeError(f"XENO_RUNTIME_AUTHORITY_MODULE_PATH_MISSING:{name}")
+    loaded = Path(raw_path).resolve()
+    expected = expected_path.resolve()
+    if loaded != expected:
+        raise RuntimeError(
+            f"XENO_RUNTIME_AUTHORITY_MODULE_SHADOWED:{name}:{loaded}:{expected}"
+        )
+    return module
+
+
+# Import authority-bearing modules by their normal compatibility names, then
+# fail closed unless Python resolved each one to the exact current repository
+# path. This prevents a preloaded/ambient same-name module from silently
+# replacing Typed Entry, canonicalization, or harness authority in a long-lived
+# Xeno process.
+_canonicalization = _import_exact_repo_module(
+    "entry_canonicalization_v1", HCU_DIR / "entry_canonicalization_v1.py"
+)
+_entry_fabric = _import_exact_repo_module(
+    "xeno_entry_fabric_v1", HCU_DIR / "xeno_entry_fabric_v1.py"
+)
+xeno_harness_config = _import_exact_repo_module(
+    "xeno_harness_config", TOOLS_DIR / "xeno_harness_config.py"
+)
+
+CanonicalizationError = _canonicalization.CanonicalizationError
+canonicalize = _canonicalization.canonicalize
+EntryPacket = _entry_fabric.EntryPacket
+admit_entry_json = _entry_fabric.admit_entry_json
 
 RUNTIME_SCHEMA = "XENO_RUNTIME_RESULT/v1"
 INVOCATION_SCHEMA = "XENO_ENGINE_INVOCATION/v1"
 ENGINE_RESULT_SCHEMA = "XENO_ENGINE_RESULT/v1"
 ACTION_CANDIDATE_SCHEMA = "XENO_ACTION_CANDIDATE/v1"
 TRACE_SCHEMA = "XENO_RUNTIME_TRACE/v1"
+
+COMPONENT_PATHS = {
+    "xeno_runtime": Path(__file__).resolve(),
+    "entry_canonicalization": (HCU_DIR / "entry_canonicalization_v1.py").resolve(),
+    "xeno_entry_fabric": (HCU_DIR / "xeno_entry_fabric_v1.py").resolve(),
+    "xeno_harness_config": (TOOLS_DIR / "xeno_harness_config.py").resolve(),
+}
 
 FORBIDDEN_SECRET_KEYS = {
     "api_key",
@@ -51,6 +92,34 @@ class XenoRuntimeError(ValueError):
 
 
 EngineRunner = Callable[[Mapping[str, Any], Mapping[str, Any]], Mapping[str, Any]]
+
+
+def _file_sha256(path: Path) -> str:
+    try:
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+    except OSError as exc:
+        raise XenoRuntimeError(f"RUNTIME_COMPONENT_UNREADABLE:{path}") from exc
+
+
+def _capture_component_binding() -> dict[str, dict[str, str]]:
+    binding: dict[str, dict[str, str]] = {}
+    for name, path in sorted(COMPONENT_PATHS.items()):
+        try:
+            relative = path.relative_to(ROOT).as_posix()
+        except ValueError as exc:
+            raise XenoRuntimeError(f"RUNTIME_COMPONENT_OUTSIDE_REPO:{name}:{path}") from exc
+        binding[name] = {"path": relative, "sha256": _file_sha256(path)}
+    return binding
+
+
+INITIAL_COMPONENT_BINDING = _capture_component_binding()
+
+
+def _assert_component_binding_current() -> dict[str, dict[str, str]]:
+    current = _capture_component_binding()
+    if current != INITIAL_COMPONENT_BINDING:
+        raise XenoRuntimeError("RUNTIME_COMPONENT_BINDING_CHANGED_SINCE_IMPORT")
+    return current
 
 
 def _canonical_hash(value: Any, field: str) -> str:
@@ -229,6 +298,9 @@ def execute_request(
     harness mode where the deterministic scheduler has already proven model
     inference unnecessary. Neither path may create canonical truth or a real effect.
     """
+    component_binding = _assert_component_binding_current()
+    component_binding_sha256 = _canonical_hash(component_binding, "RUNTIME_COMPONENT_BINDING")
+
     if not isinstance(harness_config, Mapping):
         raise XenoRuntimeError("HARNESS_CONFIG_MAPPING_REQUIRED")
     config = dict(harness_config)
@@ -256,6 +328,7 @@ def execute_request(
             "event_sha256": packet.event_sha256,
             "admission_sha256": packet.admission_sha256,
             "entity_generation": packet.entity_generation,
+            "component_binding_sha256": component_binding_sha256,
         }
     ]
     budgets = _budget(packet)
@@ -285,6 +358,8 @@ def execute_request(
         return {
             "schema": RUNTIME_SCHEMA,
             "mode": "DETERMINISTIC_NO_MODEL",
+            "component_binding": component_binding,
+            "component_binding_sha256": component_binding_sha256,
             "entry": steps[0],
             "prestage_result": None,
             "core_result": None,
@@ -374,6 +449,8 @@ def execute_request(
     result = {
         "schema": RUNTIME_SCHEMA,
         "mode": "CORE_PLUS_PRESTAGE" if prestage_enabled else "CORE_ONLY",
+        "component_binding": component_binding,
+        "component_binding_sha256": component_binding_sha256,
         "entry": steps[0],
         "prestage_result": prestage_result,
         "core_result": core_result,

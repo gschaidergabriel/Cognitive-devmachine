@@ -13,6 +13,24 @@ def load():
     m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m); return m
 
 
+def sha(n:int)->str:
+    return f'{n:064x}'
+
+
+def calibration_rows(m):
+    scores={'BASELINE':0.0,'+VECTOR':3.0,'SIGN_FLIP':-3.0,'NULL_VECTOR':0.0,'ORTHOGONAL_SAME_NORM':0.1,'PERMUTED_SAME_NORM':0.2}
+    rows=[]
+    for case_index,case in enumerate(['c1','c2']):
+        for control in m.REQUIRED_CONTROLS:
+            rows.append({
+                'split':'calibration','layer':8,'gain':2.0,'case_id':case,
+                'prompt_sha256':sha(100+case_index),'seed':1701+case_index,
+                'positive_label':'A','negative_label':'B',
+                'control':control,'target_score':scores[control],
+            })
+    return rows
+
+
 def holdout_rows(m, *, include_wrong=True, include_lesion=True, counterbalanced=True, nuisance_sign=1.0):
     scores={
         'BASELINE':0.0,
@@ -24,16 +42,26 @@ def holdout_rows(m, *, include_wrong=True, include_lesion=True, counterbalanced=
     }
     mappings=[('A_POS','A','B'),('B_POS','B','A' if counterbalanced else 'C')]
     rows=[]
-    for label_map,pos,neg in mappings:
-        for case in ['h1','h2']:
+    for map_index,(label_map,pos,neg) in enumerate(mappings):
+        for case_index,case in enumerate(['h1','h2']):
+            prompt_sha=sha(10+map_index*2+case_index)
+            seed=(2718,3141)[case_index]
             for control in m.REQUIRED_CONTROLS:
                 row={
                     'split':'holdout','layer':8,'gain':2.0,'case_id':case,
                     'label_map_id':label_map,'positive_label':pos,'negative_label':neg,
+                    'prompt_sha256':prompt_sha,'seed':seed,
                     'control':control,'target_score':scores[control],
                 }
-                if include_wrong: row['wrong_layer_delta']=-0.1
-                if include_lesion:
+                if control=='+VECTOR' and include_wrong:
+                    row.update({
+                        'wrong_layer_delta':-0.1,
+                        'wrong_layer':12,
+                        'wrong_layer_vector_source_layer':8,
+                        'wrong_layer_same_selected_vector':True,
+                        'wrong_layer_receipt_sha256':'b'*64,
+                    })
+                if control=='+VECTOR' and include_lesion:
                     row['lesion_delta']=-0.2; row['rescue_delta']=0.5
                 rows.append(row)
     return rows
@@ -62,16 +90,11 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual((2.0,4.0,0.0),res)
 
     def test_calibration_selection_and_strict_holdout(self):
-        scores={'BASELINE':0.0,'+VECTOR':3.0,'SIGN_FLIP':-3.0,'NULL_VECTOR':0.0,'ORTHOGONAL_SAME_NORM':0.1,'PERMUTED_SAME_NORM':0.2}
-        cal=[]
-        for case in ['c1','c2']:
-            for control in self.m.REQUIRED_CONTROLS:
-                cal.append({'split':'calibration','layer':8,'gain':2.0,'case_id':case,'control':control,'target_score':scores[control]})
-        selected=self.m.select_layer_gain(cal)
+        selected=self.m.select_layer_gain(calibration_rows(self.m))
         self.assertTrue(selected['selected']); self.assertEqual(8,selected['layer'])
         out=self.m.adjudicate_holdout(holdout_rows(self.m),selected_layer=8,selected_gain=2.0)
         self.assertTrue(out['pass']); self.assertTrue(out['counterbalanced_label_mapping'])
-        self.assertTrue(out['wrong_layer_evidence_complete']); self.assertTrue(out['lesion_rescue_evidence_complete'])
+        self.assertTrue(out['wrong_layer_evidence_complete']); self.assertTrue(out['wrong_layer_selected_vector_provenance']); self.assertTrue(out['lesion_rescue_evidence_complete'])
 
     def test_holdout_requires_label_remap(self):
         rows=holdout_rows(self.m)
@@ -98,5 +121,51 @@ class ProtocolTests(unittest.TestCase):
         out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
         self.assertFalse(out['pass'])
         self.assertLessEqual(out['worst_directional_specificity_margin'],0)
+
+    def test_duplicate_calibration_control_row_fails_closed(self):
+        rows=calibration_rows(self.m)
+        duplicate=dict(next(row for row in rows if row['case_id']=='c1' and row['control']=='+VECTOR'))
+        duplicate['target_score']=-99.0
+        rows.append(duplicate)
+        with self.assertRaisesRegex(self.m.IntermediateProtocolError,'DUPLICATE_CONTROL_ROW'):
+            self.m.select_layer_gain(rows)
+
+    def test_split_calibration_prompt_cannot_form_matched_family(self):
+        rows=[dict(row) for row in calibration_rows(self.m) if row['case_id']=='c1']
+        next(row for row in rows if row['control']=='+VECTOR')['prompt_sha256']=sha(999)
+        selected=self.m.select_layer_gain(rows)
+        self.assertFalse(selected['selected'])
+
+    def test_duplicate_holdout_control_row_fails_closed(self):
+        rows=holdout_rows(self.m)
+        rows.append(dict(next(row for row in rows if row['case_id']=='h1' and row['label_map_id']=='A_POS' and row['control']=='+VECTOR')))
+        with self.assertRaisesRegex(self.m.IntermediateProtocolError,'DUPLICATE_CONTROL_ROW'):
+            self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
+
+    def test_split_holdout_prompt_is_not_merged_into_matched_family(self):
+        rows=holdout_rows(self.m)
+        next(row for row in rows if row['case_id']=='h1' and row['label_map_id']=='A_POS' and row['control']=='SIGN_FLIP')['prompt_sha256']=sha(998)
+        out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass'])
+        self.assertEqual('WRONG_LAYER_EVIDENCE_REQUIRED',out['classification'])
+
+    def test_split_holdout_seed_is_not_merged_into_matched_family(self):
+        rows=holdout_rows(self.m)
+        next(row for row in rows if row['case_id']=='h1' and row['label_map_id']=='A_POS' and row['control']=='SIGN_FLIP')['seed']=9999
+        out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass'])
+        self.assertEqual('WRONG_LAYER_EVIDENCE_REQUIRED',out['classification'])
+
+    def test_auxiliary_causal_evidence_must_bind_plus_vector_row(self):
+        rows=holdout_rows(self.m)
+        plus=next(row for row in rows if row['case_id']=='h1' and row['label_map_id']=='A_POS' and row['control']=='+VECTOR')
+        baseline=next(row for row in rows if row['case_id']=='h1' and row['label_map_id']=='A_POS' and row['control']=='BASELINE')
+        baseline['wrong_layer_delta']=plus.pop('wrong_layer_delta')
+        baseline['wrong_layer']=plus.pop('wrong_layer')
+        baseline['wrong_layer_vector_source_layer']=plus.pop('wrong_layer_vector_source_layer')
+        baseline['wrong_layer_same_selected_vector']=plus.pop('wrong_layer_same_selected_vector')
+        baseline['wrong_layer_receipt_sha256']=plus.pop('wrong_layer_receipt_sha256')
+        with self.assertRaisesRegex(self.m.IntermediateProtocolError,'AUXILIARY_CAUSAL_EVIDENCE_MUST_BIND_PLUS_VECTOR_ROW'):
+            self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
 
 if __name__=='__main__': unittest.main()

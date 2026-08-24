@@ -140,10 +140,24 @@ jobs:
             if (fs.existsSync(p)) {
               body = fs.readFileSync(p, 'utf8');
             } else {
+              let preflight = null;
+              const preflightPath = `${out}/preflight.json`;
+              if (fs.existsSync(preflightPath)) {
+                try {
+                  preflight = JSON.parse(fs.readFileSync(preflightPath, 'utf8'));
+                } catch (_) {
+                  preflight = { status: 'BLOCKED_PREFLIGHT_RESULT_UNPARSEABLE' };
+                }
+              }
+              const sourceHeadPath = `${out}/source-head.txt`;
+              const sourceTreePath = `${out}/source-tree.txt`;
               body = JSON.stringify({
                 schema:'CLAY_TRIGGER1_LOCAL_QWEN06_SELFHOSTED_RUNTIME_PROOF/v1',
                 github_run_id:String(context.runId),
-                runtime_status:'WORKFLOW_RESULT_MISSING',
+                source_head:fs.existsSync(sourceHeadPath) ? fs.readFileSync(sourceHeadPath, 'utf8').trim() : null,
+                source_tree:fs.existsSync(sourceTreePath) ? fs.readFileSync(sourceTreePath, 'utf8').trim() : null,
+                preflight,
+                runtime_status:preflight?.status || 'WORKFLOW_RESULT_MISSING',
                 canonical_credit_minted:false,
                 whole_entityos_hcu_credit_minted:false,
                 training_credit_minted:false

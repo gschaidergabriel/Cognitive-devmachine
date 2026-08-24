@@ -1,0 +1,77 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.72",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "initial_main": "16fcc38e31188322c953474b6b9e9db4bf8a170f",
+    "intermediate_main": "42b49e27b650b742666523e80063d67ce9524fa5",
+    "newest_main_observed_before_receipt": "e49725d9229fe137367a6abc534fcada11e6532a",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
+    "supervisor_resolution": "SUPERVISOR_INBOX",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_execution_controller": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_id_available_to_this_organ": false,
+    "new_unusual_experiments_run": 0,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "ordinary_work": "SOURCE_REVIEW_PROVENANCE_REPAIR_REGRESSION_FUSION"
+  },
+  "observed_problem": {
+    "workflow": ".github/workflows/trigger1-v2-local-fastpath-selfhosted.yml",
+    "checkout_policy": "ref=main_at_runner_execution_time",
+    "pre_intervention_actual_source_already_captured": true,
+    "receipt_pre_fix_head_binding": "GITHUB_SHA_EVENT_CONTEXT",
+    "counterexample": "issue-dispatch GITHUB_SHA may differ from post-dispatch checkout HEAD when main advances",
+    "existing_issue": 1603,
+    "runtime_result_observed_by_this_organ": false
+  },
+  "fusion": {
+    "reused_canonical_primitive": "tools/git_source_identity_v1.py",
+    "primitive_schema": "CLAY_GIT_SOURCE_IDENTITY/v1",
+    "reason": "main gained a stronger reusable HEAD/tree plus byte-sensitive tracked/untracked dirty-state identity while this go was in progress; the repair was adapted to that primitive instead of maintaining a parallel attestation island",
+    "stale_donor_branch": "gpt56sol/go-872-trigger1-executed-source-receipt-20260824",
+    "current_work_branch": "gpt56sol/go-872-trigger1-git-source-identity-v2-20260824"
+  },
+  "bounded_delta": {
+    "workflow_commit": "b2e04a46f97b8f782e67f02aaebcef4310a09313",
+    "integration_test_commit": "f791ed79908a79c3684cbc9443a0ec24bd3c86ba",
+    "readme_commit": "5d8e78175d80af9eda1d991eb8536e589075402d",
+    "changes": [
+      "pre-intervention source binding now calls git_source_identity_v1.py --require-clean",
+      "actual checkout HEAD/tree, source_identity_sha256 and dirty_state_sha256 are exported from one canonical source manifest",
+      "sanitized runtime receipt head_sha now denotes executed checkout HEAD, not event-context GITHUB_SHA",
+      "dispatch_event_sha is preserved separately as event provenance",
+      "promotion-capable source results without source identity fail closed",
+      "source result HEAD/tree mismatch against the executed checkout fails closed",
+      "canonical lease result source_identity now includes the reusable source and dirty-state digests",
+      "focused workflow integration regression prevents event/executed source identity collapse",
+      "the artefact/README.md records the bounded source/provenance delta"
+    ]
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: evidence emitted by the retained Trigger1 executable lane can bind the actual executed checkout rather than the issue-dispatch event SHA.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the current reusable CLAY_GIT_SOURCE_IDENTITY/v1 primitive is integrated into a model-execution receipt boundary; no second provenance authority is introduced.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: future lease-admitted Qwen midlayer causal evidence fails closed on source drift before J-Space promotion consideration. No model/J-Space/training runtime credit is minted by this source delta."
+  },
+  "verification": {
+    "source_inspection": "COMPLETED",
+    "focused_regression_added": "tests/test_trigger1_workflow_git_source_identity_v1.py",
+    "tests_executed_by_this_organ": false,
+    "reason": "No repository code-execution surface was invoked by this organ. Test/source presence is not represented as executable PASS."
+  },
+  "credits_added": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Merge/reconcile the narrow workflow integration against newest main, then only after a canonical create-only atomic claim exists for a reproducible macrocycle permit one successor Trigger1 dispatch and require its terminal receipt to carry executed checkout identity, all six controls and disjoint holdout."
+}

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""Fail-closed bridge from the strongest intermediate Trigger-1 result to gate-v3.
+"""Fail-closed bridge from the strongest intermediate Trigger-1 result to gate-v4.
 
 The intermediate executor owns the scientific discriminator: calibration-only residual
-contrast directions, six controls, counterbalanced label remaps, wrong-layer evidence,
-and lesion/rescue.  The global Trigger-1 promotion gate owns API/runtime/evidence-shape
-admission.  This bridge does not reinterpret a scientific negative.  It only emits the
-canonical direct-steering candidate when the intermediate protocol already passed and
-its result proves the gate-v3 scientific-independence fields.
+contrast directions, semantic calibration/holdout, six controls, counterbalanced label
+remaps, wrong-layer evidence, and lesion/rescue. The global promotion gate owns
+API/runtime/evidence-shape admission. Historical symbol-only intermediate PASS results
+must not be promoted through this bridge.
 """
 from __future__ import annotations
 
@@ -16,8 +15,14 @@ import json
 from pathlib import Path
 from typing import Any
 
-INTERMEDIATE_SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1"
-INTERMEDIATE_CANDIDATE_SCHEMA = "CLAY_TRIGGER1_INTERMEDIATE_JSPACE_CAUSAL_CANDIDATE/v1"
+INTERMEDIATE_SCHEMAS = {
+    "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1",
+    "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v2",
+}
+INTERMEDIATE_CANDIDATE_SCHEMAS = {
+    "CLAY_TRIGGER1_INTERMEDIATE_JSPACE_CAUSAL_CANDIDATE/v1",
+    "CLAY_TRIGGER1_INTERMEDIATE_JSPACE_CAUSAL_CANDIDATE/v2",
+}
 DIRECT_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
 REQUIRED_CONTROLS = (
     "BASELINE",
@@ -28,8 +33,10 @@ REQUIRED_CONTROLS = (
     "PERMUTED_SAME_NORM",
 )
 METRIC_DEFINITION = {
-    "schema": "TRIGGER1_COUNTERBALANCED_OUTPUT_METRIC/v1",
+    "schema": "TRIGGER1_COUNTERBALANCED_SEMANTIC_OUTPUT_METRIC/v2",
     "score": "logit(positive_label)-logit(negative_label)",
+    "semantic_baseline": "positive stimulus requires score>0; negative stimulus requires score<0 before intervention",
+    "semantic_polarities": ["negative", "positive"],
     "label_maps": [["A", "B"], ["B", "A"]],
     "required_controls": list(REQUIRED_CONTROLS),
     "wrong_layer": "same selected vector at a different predeclared layer must not outperform selected-layer +VECTOR",
@@ -82,9 +89,55 @@ def _receipt_family(rows: list[dict[str, Any]], control: str) -> str:
     return digest(receipts)
 
 
+def _require_semantic_transfer(result: dict[str, Any], intermediate: dict[str, Any], holdout: list[dict[str, Any]]) -> None:
+    verdict = result.get("verdict")
+    _require(isinstance(verdict, dict), "INTERMEDIATE_PROTOCOL_VERDICT_REQUIRED")
+    _require(
+        verdict.get("classification") == "INTERMEDIATE_SEMANTIC_REPRESENTATION_CAUSAL_CANDIDATE",
+        "SEMANTIC_INTERMEDIATE_PROTOCOL_PASS_REQUIRED",
+    )
+    _require(verdict.get("semantic_polarities") == ["negative", "positive"], "SEMANTIC_POLARITY_COVERAGE_REQUIRED")
+    correct = verdict.get("semantic_baseline_correct_count")
+    total = verdict.get("semantic_baseline_case_count")
+    _require(isinstance(correct, int) and isinstance(total, int) and total > 0 and correct == total, "SEMANTIC_BASELINE_DISCRIMINATION_REQUIRED")
+    margin = verdict.get("semantic_baseline_min_signed_margin")
+    _require(isinstance(margin, (int, float)) and not isinstance(margin, bool) and float(margin) > 0, "SEMANTIC_BASELINE_MARGIN_REQUIRED")
+    _require(isinstance(verdict.get("semantic_stimulus_count"), int) and verdict["semantic_stimulus_count"] >= 2, "DISTINCT_SEMANTIC_STIMULI_REQUIRED")
+
+    semantic = result.get("semantic_transfer_evidence")
+    _require(isinstance(semantic, dict), "SEMANTIC_TRANSFER_EVIDENCE_REQUIRED")
+    _require(semantic.get("holdout_polarities") == ["negative", "positive"], "SEMANTIC_HOLDOUT_POLARITIES_REQUIRED")
+    _require(semantic.get("baseline_semantic_discrimination_required") is True, "SEMANTIC_BASELINE_GATE_REQUIRED")
+    _require(isinstance(semantic.get("derivation_family_sha256"), str) and _sha(semantic["derivation_family_sha256"]), "DERIVATION_FAMILY_SHA256_REQUIRED")
+    cal_shas = semantic.get("calibration_stimulus_sha256")
+    hold_shas = semantic.get("holdout_stimulus_sha256")
+    _require(isinstance(cal_shas, list) and len(cal_shas) >= 2 and all(_sha(x) for x in cal_shas), "CALIBRATION_SEMANTIC_STIMULUS_SHA256_REQUIRED")
+    _require(isinstance(hold_shas, list) and len(hold_shas) >= 2 and all(_sha(x) for x in hold_shas), "HOLDOUT_SEMANTIC_STIMULUS_SHA256_REQUIRED")
+    _require(set(cal_shas).isdisjoint(set(hold_shas)), "CALIBRATION_HOLDOUT_SEMANTIC_STIMULI_MUST_BE_DISJOINT")
+
+    intermediate_semantic = intermediate.get("semantic_transfer_evidence")
+    _require(intermediate_semantic == semantic, "INTERMEDIATE_SEMANTIC_EVIDENCE_BINDING_REQUIRED")
+
+    pairs_by_map: dict[str, set[str]] = {}
+    seen_stimuli: set[str] = set()
+    for row in holdout:
+        polarity = row.get("stimulus_polarity")
+        family = row.get("stimulus_family_id")
+        stimulus_sha = row.get("stimulus_sha256")
+        label_map_id = row.get("label_map_id")
+        _require(polarity in {"positive", "negative"}, "HOLDOUT_SEMANTIC_POLARITY_REQUIRED")
+        _require(isinstance(family, str) and bool(family.strip()), "HOLDOUT_SEMANTIC_FAMILY_REQUIRED")
+        _require(_sha(stimulus_sha), "HOLDOUT_SEMANTIC_STIMULUS_SHA256_REQUIRED")
+        _require(isinstance(label_map_id, str) and bool(label_map_id), "HOLDOUT_LABEL_MAP_ID_REQUIRED")
+        pairs_by_map.setdefault(label_map_id, set()).add(str(polarity))
+        seen_stimuli.add(str(stimulus_sha))
+    _require(len(seen_stimuli) >= 2, "DISTINCT_SEMANTIC_STIMULI_REQUIRED")
+    _require(all(p == {"positive", "negative"} for p in pairs_by_map.values()), "SEMANTIC_POLARITY_PER_LABEL_MAP_REQUIRED")
+
+
 def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any]) -> dict[str, Any]:
-    _require(result.get("schema") == INTERMEDIATE_SCHEMA, "INTERMEDIATE_RESULT_SCHEMA_INVALID")
-    _require(intermediate.get("schema") == INTERMEDIATE_CANDIDATE_SCHEMA, "INTERMEDIATE_CANDIDATE_SCHEMA_INVALID")
+    _require(result.get("schema") in INTERMEDIATE_SCHEMAS, "INTERMEDIATE_RESULT_SCHEMA_INVALID")
+    _require(intermediate.get("schema") in INTERMEDIATE_CANDIDATE_SCHEMAS, "INTERMEDIATE_CANDIDATE_SCHEMA_INVALID")
     _require(result.get("status") == "PASS", "INTERMEDIATE_RESULT_PASS_REQUIRED")
     verdict = result.get("verdict")
     _require(isinstance(verdict, dict) and verdict.get("pass") is True, "INTERMEDIATE_PROTOCOL_PASS_REQUIRED")
@@ -125,6 +178,7 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
 
     calibration = _rows(result, "calibration_rows")
     holdout = _rows(result, "holdout_rows")
+    _require_semantic_transfer(result, intermediate, holdout)
     cal_prompt_hashes = _unique_nonempty(calibration, "prompt_sha256")
     hold_prompt_hashes = _unique_nonempty(holdout, "prompt_sha256")
     _require(set(derivation_prompt_hashes).isdisjoint(set(hold_prompt_hashes)), "DERIVATION_HOLDOUT_PROMPTS_MUST_BE_DISJOINT")
@@ -146,7 +200,6 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
     hold_receipts = [row.get("runtime_receipt_sha256") for row in holdout]
     _require(all(_sha(value) for value in hold_receipts), "HOLDOUT_RUNTIME_RECEIPTS_REQUIRED")
 
-    # The strongest protocol's PASS itself proves these controls were present for each case.
     _require(verdict.get("counterbalanced_label_mapping") is True, "PROTOCOL_COUNTERBALANCE_PASS_REQUIRED")
     _require(verdict.get("wrong_layer_evidence_complete") is True and verdict.get("wrong_layer_ok") is True, "PROTOCOL_WRONG_LAYER_PASS_REQUIRED")
     _require(verdict.get("lesion_rescue_evidence_complete") is True and verdict.get("lesion_rescue_ok") is True, "PROTOCOL_LESION_RESCUE_PASS_REQUIRED")
@@ -174,9 +227,10 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
         "metric_definition": METRIC_DEFINITION,
     })
     adapter_sha = digest({
-        "schema": "JSPACE_INTERMEDIATE_CAUSAL_ADAPTER/v1",
+        "schema": "JSPACE_INTERMEDIATE_CAUSAL_ADAPTER/v2",
         "activation_site": f"model.model.layers[{layer}]:output:last_token",
         "required_controls": list(REQUIRED_CONTROLS),
+        "semantic_baseline_discrimination": True,
         "counterbalanced_label_mapping": True,
         "wrong_layer": True,
         "lesion_rescue": True,
@@ -214,10 +268,7 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "layer_end": layer,
         },
         "controls": controls,
-        "calibration": {
-            "family_id": cal_family,
-            "seeds": cal_seeds,
-        },
+        "calibration": {"family_id": cal_family, "seeds": cal_seeds},
         "holdout": {
             "family_id": hold_family,
             "seeds": hold_seeds,
@@ -230,19 +281,14 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "label_mapping_counterbalanced": True,
         },
         "vector_derivation": {
-            "method": "CALIBRATION_ONLY_INTERMEDIATE_RESIDUAL_CONTRAST",
+            "method": "DERIVATION_ONLY_INTERMEDIATE_RESIDUAL_CONTRAST_WITH_DISJOINT_SEMANTIC_EVALUATION",
             "uses_output_head_weights": False,
             "uses_holdout_data": False,
             "uses_evaluation_output_labels": False,
             "derivation_family_id": derivation_family_id,
             "derivation_receipt_sha256": derivation_receipt_sha,
         },
-        "transport": {
-            "hosted_prompt_only": False,
-            "api_served": True,
-            "loopback_only": True,
-            "endpoint": endpoint,
-        },
+        "transport": {"hosted_prompt_only": False, "api_served": True, "loopback_only": True, "endpoint": endpoint},
         "target": {
             "relation": "ZERO_COST_API_SERVED_MODEL_RUNTIME",
             "execution_surface": "LOCAL_LOOPBACK_API",
@@ -255,6 +301,8 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "candidate_sha256": intermediate.get("candidate_sha256") or digest(intermediate),
             "credit_scope": result.get("credit_scope"),
             "classification": verdict.get("classification"),
+            "semantic_transfer": True,
+            "semantic_baseline_min_signed_margin": verdict.get("semantic_baseline_min_signed_margin"),
             "counterbalanced_label_mapping": True,
             "wrong_layer": True,
             "lesion_rescue": True,

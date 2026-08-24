@@ -7,7 +7,9 @@
     "paid_fallback_attempt_count": 0,
     "unknown_route": "FAIL_CLOSED",
     "together": "FORBIDDEN",
-    "provider_label_alone_is_not_cost_proof": true
+    "provider_label_alone_is_not_cost_proof": true,
+    "credential_identity_alone_is_not_entitlement_proof": true,
+    "stale_or_expired_entitlement": "FAIL_CLOSED"
   },
   "providers": {
     "openrouter": {
@@ -20,8 +22,11 @@
     },
     "nvidia": {
       "allowed_endpoint_host": "integrate.api.nvidia.com",
-      "admitted_credential_fingerprints": ["e498d9744e"],
-      "evidence_kind": "EXACT_DEVELOPER_API_CREDENTIAL_PLUS_FREE_HOSTED_NIM_ENDPOINT",
+      "observed_candidate_credential_fingerprints": ["e498d9744e"],
+      "credential_entitlements": {},
+      "max_entitlement_age_seconds": 3600,
+      "entitlement_receipt_schema": "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT/v1",
+      "evidence_kind": "EXACT_CREDENTIAL_PLUS_FRESH_PROVIDER_SIDE_FREE_HOSTED_NIM_ENTITLEMENT",
       "sources": [
         "https://developer.nvidia.com/nim",
         "https://docs.api.nvidia.com/nim/docs/run-anywhere",
@@ -29,11 +34,11 @@
         "https://build.nvidia.com/explore"
       ],
       "source": "https://docs.api.nvidia.com/nim/re/docs/api-quickstart",
-      "provider_statement": "NVIDIA states that Developer Program members get free access to NVIDIA-hosted NIM API endpoints for prototyping; the API Catalog quickstart creates the Developer API key through that Developer Program access flow; build.nvidia.com labels these as free serverless APIs for development.",
-      "credential_binding_observation": "The exact credential fingerprint listed here was materialized by the sandbox credential inventory and authenticated successfully against integrate.api.nvidia.com hosted NIM routes. No other NVIDIA credential fingerprint is admitted by this record.",
+      "provider_statement": "NVIDIA states that Developer Program members get free access to NVIDIA-hosted NIM API endpoints for prototyping. That provider-global statement and successful authentication do not by themselves prove that a concrete credential is currently covered by the free entitlement.",
+      "credential_binding_observation": "The candidate fingerprint was materialized by the sandbox credential inventory and authenticated successfully against integrate.api.nvidia.com hosted NIM routes. It remains non-authoritative economic identity until fresh provider-side entitlement evidence is bound.",
       "credential_plan_needed": true,
-      "credential_plan_proof": "Exact fingerprint allow-list + NVIDIA Developer Program API-key issuance path + free hosted-NIM endpoint host. Any different credential fingerprint fails closed.",
-      "default": "FAIL_CLOSED_FOR_UNLISTED_CREDENTIAL",
+      "credential_plan_proof": "Require a fresh NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT/v1 keyed by the exact credential fingerprint, with provider=nvidia, endpoint_host=integrate.api.nvidia.com, provider_side_zero_cost_confirmed=true, evidence_ref, entitlement_evidence_digest, observed_at, valid_until and exact allowed_models. Fingerprint presence, successful HTTP authentication and public documentation are supporting evidence only.",
+      "default": "FAIL_CLOSED_UNTIL_FRESH_EXACT_CREDENTIAL_ENTITLEMENT_BOUND",
       "scope": "NVIDIA-hosted API Catalog/NIM prototyping endpoint only; no dedicated enterprise endpoint"
     },
     "groq": {

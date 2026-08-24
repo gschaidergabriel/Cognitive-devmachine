@@ -113,6 +113,14 @@ This is **not** loader-consumption attestation. The emitted `CLAY_LOCAL_RESEARCH
 
 This advances a reusable HCU/J-Space identity prerequisite without creating a second truth authority: downstream experiments can now bind a specific runtime binary and post-load model file identity before attempting the stricter loader-consumption and activation-intervention gates.
 
+### Latest FREE Swarm receipt hardening delta — datagram egress
+
+The current source-bound hardened `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` wrapper now also fences direct datagram egress through `socket.socket.sendto` and, where the Python socket implementation exposes it, `socket.socket.sendmsg`. The pre-existing outer fence already covered DNS resolution plus stream connection paths through `socket.getaddrinfo`, `socket.create_connection`, `socket.socket.connect` and `socket.socket.connect_ex`.
+
+This closes a concrete Python-level bypass class in which an unconnected UDP socket can transmit without first calling `connect`. It does **not** claim that current provider clients used such a path, and it does not replace the stronger future OS-level no-network fence. The regression `tests/test_free_swarm_receipt_runner_hardening_868.py` now requires the datagram tripwire markers. The bounded source receipt is `research_entity/continuity/receipts/2026-08-24_GO_868_FREE_SWARM_DATAGRAM_TRIPWIRE_GPT56SOL_1831P0700.json`.
+
+Evidence remains source-only in this branch: no external provider call, credential read, exact-source boundary execution PASS, HCU/J-Space model runtime, or training promotion was produced. The next exact gate is the same high-information discriminator, strengthened by the new datagram fence: run the exact clean current source on an authorized zero-cost normal-user local or `clay-direct-dev` surface and require all canonical/hardening tests PASS, zero secret reads, zero DNS/connect/datagram attempts, stable source identity, and exit 0 before any external provider lane restart.
+
 ## Current evidence credit
 
 Existing bounded evidence remains limited to component/runtime scopes already admitted by canonical receipts, including Entry canonicalization, J-Space family split and the exact PR810 no-Sandbox function-runtime diagnostic.
@@ -133,10 +141,10 @@ A source file, source test, deployment, receipt, model agreement or same-family 
 1. keep all current-facing surfaces successor-aligned to 8.68;
 2. preserve historical unadmitted provider traffic append-only and keep external LLM-provider traffic quarantined;
 3. execute `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` on exact current source using an authorized exposed zero-cost local or `clay-direct-dev` bridge;
-4. prove zero secret lookup and zero network attempts for every blocked provider-admission case, now with test fixtures bound to the canonical production-relative admission path; strengthen the runtime capsule with an OS-level no-network fence where the authorized surface supports it;
+4. prove zero secret lookup and zero Python DNS/connect/datagram attempts for every blocked provider-admission case, with test fixtures bound to the canonical production-relative admission path; strengthen the runtime capsule with an OS-level no-network fence where the authorized surface supports it;
 5. execute live donor InferenceReceipt/v4 rejection-boundary tests before any executor rebind;
-6. verify `CLAY_LOCAL_RESEARCH_MODEL/v2` reaches `READY_IDENTITY_OBSERVED` with a process-bound server executable hash and non-null post-load GGUF hash on an authorized exposed local/VPS sandbox;
-7. keep loader-consumed bytes UNKNOWN until separately attested; do not promote the post-load hash into loader evidence;
+6. verify the current local research-model identity state reaches its exact admitted readiness state with process-bound runtime and model hashes on an authorized exposed local/VPS sandbox;
+7. keep loader-consumed bytes UNKNOWN until separately attested; do not promote post-load path hashing into loader evidence;
 8. retain `llama.cpp` as `LOCAL_INFERENCE_CAPABLE`; use the separate intervention lane for J-Space causality;
 9. on the smallest already-available compatible local HuggingFace/PyTorch model, execute one deterministic NNsight observation-only trace at one named residual-stream/equivalent activation site and bind exact package/model/tokenizer/runtime/input/output/tensor identities;
 10. only if observation identity closes, execute the five-run clean/corrupted/target/sham/off-target intervention family and emit `HCU_JSPACE_LOCAL_INTERVENTION_RECEIPT/v1` or current successor equivalent;

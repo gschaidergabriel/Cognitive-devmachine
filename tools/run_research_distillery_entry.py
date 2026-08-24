@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Stable FREE_ONLY entrypoint for run_research_distillery.py.
 
-Adds typed provider boundaries, efficient free-model selection, fail-soft reviewer
-fallback, and explicit near-miss/underfill instrumentation. Thresholds are not
-silently weakened: near misses are telemetry so a zero-yield pipeline is
-explainable rather than opaque.
+Provider/secret access is deny-by-default. External LLM calls use the successor-dynamic
+provider-call boundary, so runtime quarantine and typed FREE admission are both checked.
+Public noncredentialed research is explicit and host-bound.
 """
 from __future__ import annotations
 
@@ -14,20 +13,20 @@ import re
 import sqlite3
 import statistics
 import sys
+import urllib.parse
 
 TOOLS=Path(__file__).resolve().parent
 if str(TOOLS) not in sys.path:
     sys.path.insert(0,str(TOOLS))
 import run_research_distillery as d
-from free_provider_admission import provider_is_admitted_free
+from provider_call_boundary import provider_call_is_allowed
+from rae_secret_loader import provider_for_secret_name
 
-LLM_PROVIDERS=frozenset({"groq","mistral","nvidia","openrouter"})
-SECRET_PROVIDER={
-    "GROQ_API_KEY":"groq","MISTRAL_API_KEY":"mistral","NVIDIA_API_KEY":"nvidia",
-    "NVIDIA_NIM_API_KEY":"nvidia","NGC_API_KEY":"nvidia","OPENROUTER_API_KEY":"openrouter",
-}
+LLM_PROVIDERS=frozenset({"groq","huggingface","mistral","nvidia","openrouter","together"})
 UNTYPED_CREDENTIALED_SECRETS=frozenset({"TAVILY_API_KEY","EXA_API_KEY"})
 UNTYPED_CREDENTIALED_PROVIDERS=frozenset({"tavily","exa"})
+PUBLIC_NONCREDENTIALED_HOSTS={"github":frozenset({"api.github.com"})}
+SENSITIVE_PUBLIC_HEADERS=frozenset({"authorization","proxy-authorization","x-api-key","api-key","cookie"})
 
 _ORIGINAL_SECRET=d.secret
 _ORIGINAL_REQUEST_JSON=d.request_json
@@ -36,22 +35,33 @@ _ORIGINAL_REVIEW=d.review_candidate
 
 
 def admitted_secret(name: str) -> str:
-    provider=SECRET_PROVIDER.get(name)
+    provider=provider_for_secret_name(name)
     if provider is not None:
-        if not provider_is_admitted_free(provider): return ""
+        if not provider_call_is_allowed(provider): return ""
         return _ORIGINAL_SECRET(name)
     if name in UNTYPED_CREDENTIALED_SECRETS:return ""
-    return _ORIGINAL_SECRET(name)
+    return ""
 
 
 def admitted_request_json(provider: str, owner: str, url: str, *, key: str = "", payload: dict | None = None,
                           headers: dict[str,str] | None = None, timeout: float = 90.0):
     normalized=str(provider).strip().lower()
-    if normalized in LLM_PROVIDERS and not provider_is_admitted_free(normalized):
-        return 412, {}, {"error":"PROVIDER_NOT_TYPED_FREE_ADMITTED"}
+    if normalized in LLM_PROVIDERS:
+        if not provider_call_is_allowed(normalized):
+            return 412, {}, {"error":"PROVIDER_CALL_BOUNDARY_BLOCKED"}
+        return _ORIGINAL_REQUEST_JSON(provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout)
     if normalized in UNTYPED_CREDENTIALED_PROVIDERS:
         return 412, {}, {"error":"PROVIDER_NOT_IN_TYPED_FREE_ADMISSION_AUTHORITY"}
-    return _ORIGINAL_REQUEST_JSON(provider,owner,url,key=key,payload=payload,headers=headers,timeout=timeout)
+    admitted_hosts=PUBLIC_NONCREDENTIALED_HOSTS.get(normalized)
+    if admitted_hosts is None:
+        return 412, {}, {"error":"PROVIDER_NOT_EXPLICITLY_CLASSIFIED"}
+    header_names={str(k).strip().lower() for k in (headers or {})}
+    if key or header_names.intersection(SENSITIVE_PUBLIC_HEADERS):
+        return 412, {}, {"error":"PUBLIC_SOURCE_CREDENTIALS_FORBIDDEN"}
+    hostname=(urllib.parse.urlparse(str(url)).hostname or "").lower()
+    if hostname not in admitted_hosts:
+        return 412, {}, {"error":"PUBLIC_SOURCE_HOST_NOT_ADMITTED"}
+    return _ORIGINAL_REQUEST_JSON(provider,owner,url,key="",payload=payload,headers=headers,timeout=timeout)
 
 
 d.secret=admitted_secret
@@ -101,12 +111,12 @@ def select_small_models(catalog: list[dict]) -> list[str]:
 
 def select_reviewers(catalog: list[dict]) -> list[tuple[str,str,str]]:
     preferred=_ORIGINAL_SELECT_REVIEWERS(catalog)
-    preferred=[x for x in preferred if x[1] not in LLM_PROVIDERS or provider_is_admitted_free(x[1])]
+    preferred=[x for x in preferred if x[1] not in LLM_PROVIDERS or provider_call_is_allowed(x[1])]
     mistral=sum(1 for lane,provider,model in preferred if "mistral" in lane.lower() or "mistral" in model.lower())
     if mistral>=2:return preferred[:3]
     nvidia=next((x for x in preferred if x[0]=="nvidia_reviewer"),None)
     out=[nvidia] if nvidia else []
-    if not provider_is_admitted_free("openrouter"):return out
+    if not provider_call_is_allowed("openrouter"):return out
     used={x[2] for x in out}
     for model in select_small_models(catalog):
         if model in used:continue
@@ -115,13 +125,13 @@ def select_reviewers(catalog: list[dict]) -> list[tuple[str,str,str]]:
     return out
 
 
-def _bump(con: sqlite3.Connection,key: str,n: int=1) -> None:
+def _bump(con: sqlite3.Connection,key:str,n:int=1) -> None:
     try:d.bump(con,key,n)
     except Exception:pass
 
 
 def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[str,str,str]]):
-    reviewers=[r for r in reviewers if r[1] not in LLM_PROVIDERS or provider_is_admitted_free(r[1])]
+    reviewers=[r for r in reviewers if r[1] not in LLM_PROVIDERS or provider_call_is_allowed(r[1])]
     accepted,agg=_ORIGINAL_REVIEW(con,cid,reviewers)
     if accepted:
         agg["panel_class"]="PREFERRED_NVIDIA_PLUS_MISTRAL"; return True,agg
@@ -146,7 +156,6 @@ def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[st
     provisional["score_gaps"]={"intrinsic":gaps[0],"grf":gaps[1],"fit":gaps[2],"novelty":gaps[3]}
     if ok:
         con.execute("UPDATE candidates SET status=? WHERE id=?",("ACCEPTED" if actual_mistral>=2 else "PROVISIONAL_ACCEPTED",cid)); _bump(con,"review_pass"); con.commit(); return True,provisional
-    # Near miss = structurally sound, no hard contradiction, and total threshold gap small.
     if not provisional["hard"] and sum(gaps)<=0.22:
         _bump(con,"near_miss_candidates"); con.commit(); provisional["near_miss"]=True
         d.emit("knowledge_near_miss",candidate=cid,review=provisional)

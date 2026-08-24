@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"00000-diagnose-fabric-stall-20260824T2056p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":90,
+  "command":"set -e; echo PROCS; pgrep -af run_6000_free_swarm_fast.py || true; echo WORKERS; wc -l /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z/workers.jsonl 2>/dev/null || true; echo MTIME; stat -c '%y %s %n' /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z/status.json /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z/workers.jsonl 2>/dev/null || true; echo LOG; tail -100 /artifacts/clay-entityos-swarm/swarm6000.log; echo THREADS; ps -L -p 192705 -o pid,lwp,pcpu,stat,wchan:30,comm | head -80 || true"
+}

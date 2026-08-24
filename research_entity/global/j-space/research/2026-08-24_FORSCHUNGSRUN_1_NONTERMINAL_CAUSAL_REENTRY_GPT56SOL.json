@@ -1,0 +1,72 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_NONTERMINAL_CAUSAL_REENTRY/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch_observed": "8.72",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "user_goal": "Forschungsrun 1; remove any hard blocker within current authority.",
+  "observed_reentry_main_before_receipt": "cb544f3f0f11ba3a255b7cc649c9d051612a036d",
+  "scientific_blocker": {
+    "classification": "TERMINAL_OUTPUT_HEAD_ALGEBRAIC_SHORTCUT",
+    "description": "The earlier positive-control vector was derived from the same final output-head contrast used for scoring and injected at the terminal final-norm output. A positive score shift can therefore be algebraically guaranteed without demonstrating a downstream J-Space/HCU mechanism.",
+    "repair_commit": "a242596701f34b32cec6a794ce45c275bbfbd412",
+    "repair": "Promotion gate now rejects terminal final-norm/output-projection shortcut evidence for J-Space mechanism/goal credit while retaining it as a technical positive control.",
+    "status": "FIXED"
+  },
+  "successor_discriminator": {
+    "canonical_lane_commit": "04f83334e6daf7334e74aeb354db1e74c400bbbf",
+    "launcher": "tools/trigger1_local_qwen06_intermediate_api.sh",
+    "executor": "tools/trigger1_local_qwen06_intermediate_api_execute.py",
+    "properties": [
+      "nonterminal internal transformer intervention",
+      "activation-derived contrastive vector independent of lm_head rows",
+      "substantive downstream transformer computation",
+      "calibration-only layer/gain selection",
+      "disjoint holdout",
+      "BASELINE/+VECTOR/SIGN_FLIP/NULL_VECTOR/ORTHOGONAL_SAME_NORM/PERMUTED_SAME_NORM",
+      "loopback-only API",
+      "exact source/runtime/model/tokenizer/intervention identity binding",
+      "zero paid-provider dependency"
+    ]
+  },
+  "infrastructure_blocker_repair": {
+    "classification": "SELF_HOSTED_LOW_DISK_PRECHECK",
+    "repair_commit": "90177bc3b359e8062226aabf39617c3f38f76a72",
+    "repair": "Canonical intermediate launcher now performs bounded cleanup of disposable Trigger-1 scratch/pip state, preserves the Hugging Face/model cache, records disk_preflight.json, and fails closed with a machine-readable residual low-disk blocker if headroom remains insufficient.",
+    "status": "MITIGATED_IN_SOURCE"
+  },
+  "dispatch": {
+    "latest_observed_issue": 1647,
+    "title": "[CLAY-DISPATCH] Trigger1 V2 local vector fastpath",
+    "state_observed": "open",
+    "duplicate_dispatch_creation_by_this_receipt": false
+  },
+  "runtime_evidence": {
+    "self_hosted_qwen_receipt_observed": false,
+    "promotion_gate_runtime_verdict_observed": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "classification": "EXECUTION_TRANSPORT_OR_RUNNER_RESULT_NOT_YET_OBSERVED"
+  },
+  "fallback_analysis": {
+    "github_repository_visibility": "private",
+    "github_hosted_actions_zero_cost_proven": false,
+    "hosted_fallback_used": false,
+    "reason": "FREE_ONLY forbids converting unknown private-repository Actions quota/billing into an execution path without exact zero-cost evidence."
+  },
+  "remaining_hard_blocker": {
+    "classification": "SELF_HOSTED_RUNNER_OR_TRANSPORT_RESULT_UNOBSERVED",
+    "what_is_needed": "A connected authorized self-hosted Linux/X64 runner must consume the already-dispatched exact-current lane and persist its machine-readable runtime receipt, or an equivalently admitted zero-cost executor must become directly invokable.",
+    "repairability_from_current_connected_tools": "NO_DIRECT_VPS_OR_RUNNER_SERVICE_CONTROL_SURFACE_EXPOSED",
+    "do_not_infer": [
+      "queued/offline state from absence of a receipt alone",
+      "runtime PASS from source readiness",
+      "scientific negative from transport non-observation"
+    ]
+  },
+  "evidence_boundary": "This receipt binds source-level scientific and infrastructure repairs plus the exact remaining execution boundary. It does not claim a Qwen runtime result, J-Space mechanism PASS, whole EntityOS/HCU PASS, or training PASS."
+}

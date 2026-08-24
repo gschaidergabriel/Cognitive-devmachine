@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor: **8.73**. Mode: **FREE_ONLY**. Canonical `main` observed at macrocycle entry: `19576d876cf0843890116f8d525e8e283906abeb`.
+Newest inbox-selected supervisor: **8.73**. Mode: **FREE_ONLY**. Canonical `main` observed at macrocycle entry: `19576d876cf0843890116f8d525e8e283906abeb`; this surface was re-entered again after concurrent writes before the present update.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
@@ -32,9 +32,9 @@ The retained runtime lane is repository-qualified PR `gschaidergabriel/clay-glob
 
 No `CLAY_GO873_DISTILLERY_SELFHOSTED_REGRESSION_RECEIPT/v1` was found in canonical repository search. Therefore exact-current runner execution, deterministic regression completion, and the persistent live Forge -> Distillery witness remain unobserved. No new run was launched: current FREE_ONLY authority does not permit assuming GitHub Actions monetary provenance.
 
-Research Entity Identity Guard run `32753831612` remains completed/failure. Previous log retrieval yielded missing-blob/404 infrastructure evidence, so its semantic cause remains unresolved; this is not promoted to EntityOS/HCU scientific failure.
+Research Entity Identity Guard run `32753831612` remains completed/failure. Its job `97516690619` reports **zero materialized steps**, while canonical workflow source explicitly defines checkout, Python setup, and the identity validation command. Combined with the unavailable job log, this narrows the observed boundary to **pre-step / workflow-runner infrastructure uncertainty**: there is still no evidence that `tools/research_identity_guard_check.py` executed, so the red run must not be interpreted as a semantic identity-guard failure.
 
-**Track A delta:** refreshed exact repository/runtime evidence and persisted the nonterminal boundary. Runtime credit remains unchanged.
+**Track A delta:** refreshed exact repository/runtime evidence and narrowed the red Identity Guard classification without weakening the invariant. Runtime credit remains unchanged.
 
 ### Track B — HCU + Typed Entry Fabric co-development
 
@@ -55,6 +55,7 @@ No J-Space/model intervention, provider call, paid execution, or training run wa
 - Forge/Distillery replay + concurrency: source/regression/component evidence only;
 - exact-current Distillery terminal regression receipt: **unobserved**;
 - persistent live Forge -> Distillery positive-token witness: **unobserved**;
+- Research Entity Identity Guard semantic failure: **unobserved; current red run is pre-step/infrastructure-uncertain**;
 - provider runtime credit: **0**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
@@ -69,7 +70,7 @@ A source file, workflow, queued run, deployment, token count, model consensus, o
 1. Observe a repository-bound terminal exact-current Distillery regression receipt and require replay/concurrency/rebuild/live-semantic scoped steps to succeed.
 2. Observe the persistent live Forge -> Distillery witness: one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly +0 packets/+0 tokens.
 3. Require changed measured evidence under the same stable replay identity to fail closed in executable live evidence.
-4. Diagnose the Research Entity Identity Guard failure without weakening its invariant and without interpreting missing logs as semantic evidence.
+4. For the Research Entity Identity Guard, first obtain a run where steps actually materialize; only then classify the validator result. Do not weaken the invariant to make CI green.
 5. Continue one canonical Typed Entry -> verified loader consumption -> actual model execution -> InferenceReceipt -> model-specific J-Space causal trace through retained HCU donor lane #1263.
 6. Run the local Qwen3-0.6B six-control discriminator only after reproducible macrocycle identity and successful canonical atomic lease.
 

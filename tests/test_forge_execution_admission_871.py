@@ -66,6 +66,36 @@ class ForgeExecutionAdmission871(unittest.TestCase):
         self.assertEqual(126, result["rc"])
         self.assertIn("NO_ISOLATED_EXECUTOR", result["stderr"])
 
+    def test_safe_wrapper_refuses_model_command_outside_disposable_forge_root(self, tmp_path):
+        fake = mock.Mock(return_value={"rc": 0})
+        forge_root = tmp_path / "forge"
+        forge_root.mkdir()
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        with (
+            mock.patch.object(safe.base, "FORGE_ROOT", forge_root),
+            mock.patch.object(safe, "_ORIGINAL_ADMISSION_RUN_CMD", fake),
+        ):
+            result = safe.run_cmd(outside, "pytest -q tests/test_x.py", 5)
+        self.assertEqual(126, result["rc"])
+        self.assertIn("WORKDIR_OUTSIDE_DISPOSABLE_FORGE_ROOT", result["stderr"])
+        fake.assert_not_called()
+
+    def test_only_disposable_forge_worktree_becomes_writable(self, tmp_path):
+        forge_root = tmp_path / "forge"
+        forge_root.mkdir()
+        work = forge_root / "candidate" / "patched"
+        work.mkdir(parents=True)
+        donor = ["bwrap", "--unshare-all", "--ro-bind", str(work.resolve()), "/work", "--chdir", "/work", "--"]
+        with (
+            mock.patch.object(safe.base, "FORGE_ROOT", forge_root),
+            mock.patch.object(safe, "_ORIGINAL_BWRAP_PREFIX", return_value=donor.copy()),
+        ):
+            prefix = safe._writable_disposable_bwrap_prefix(work)
+        self.assertIsNotNone(prefix)
+        self.assertIn("--bind", prefix)
+        self.assertNotIn(["--ro-bind", str(work.resolve()), "/work"], [prefix[i:i+3] for i in range(len(prefix)-2)])
+
     def test_unbound_source_blocks_before_original_validation(self):
         row = {
             "repo_head": "",

@@ -117,6 +117,14 @@ This is **not** loader-consumption attestation. The emitted `CLAY_LOCAL_RESEARCH
 
 This advances a reusable HCU/J-Space identity prerequisite without creating a second truth authority: downstream experiments can now bind a specific runtime binary and post-load model file identity before attempting the stricter loader-consumption and activation-intervention gates.
 
+### Latest FREE Swarm receipt hardening delta — datagram egress
+
+The source-bound hardened `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` wrapper now additionally fences direct datagram egress through `socket.socket.sendto` and, where available, `socket.socket.sendmsg`. This closes a Python-level path in which an unconnected UDP socket can transmit without first calling `connect`, while preserving the existing DNS and stream tripwires.
+
+The dedicated hardening regression now requires these datagram markers. A disposable noncanonical component mechanism check observed both `sendto` and `sendmsg` raise `CLAY_BOUNDARY_NETWORK_TRIPWIRE` before external network transmission was required. This does **not** establish the exact-source FREE admission runtime PASS and does not replace the stronger future OS-level no-network fence. The bounded source receipt is `research_entity/continuity/receipts/2026-08-24_GO_868_FREE_SWARM_DATAGRAM_TRIPWIRE_GPT56SOL_1831P0700.json`.
+
+Evidence remains source/component-only: no external provider call, credential read, provider-runtime promotion, whole EntityOS/HCU runtime, HCU runtime, J-Space model runtime or training credit is produced by this change.
+
 ## Current evidence credit
 
 Existing bounded evidence remains limited to component/runtime scopes already admitted by canonical receipts, including Entry canonicalization, J-Space family split and the exact PR810 no-Sandbox function-runtime diagnostic.
@@ -137,7 +145,7 @@ A source file, source test, deployment, receipt, model agreement or same-family 
 1. keep all current-facing surfaces successor-aligned to 8.68;
 2. preserve historical unadmitted provider traffic append-only and keep external LLM-provider traffic quarantined;
 3. execute `python tools/run_free_swarm_admission_boundary_receipt_hardened_868.py --output <receipt-outside-checkout>.json` on exact current source using an authorized exposed zero-cost local or `clay-direct-dev` bridge;
-4. require zero secret lookup and zero network attempts for every blocked provider-admission case, with canonical production-relative policy fixtures, outer `getaddrinfo`/`connect_ex`/`connect`/`create_connection` tripwires, stable pre/post HEAD+manifest identity, and an OS-level no-network fence where the authorized surface supports it;
+4. require zero secret lookup and zero Python network attempts for every blocked provider-admission case, with canonical production-relative policy fixtures, outer `getaddrinfo`/`connect_ex`/`connect`/`create_connection`/`sendto` and conditional `sendmsg` tripwires, stable pre/post HEAD+manifest identity, and an OS-level no-network fence where the authorized surface supports it;
 5. execute live donor InferenceReceipt/v4 rejection-boundary tests before any executor rebind;
 6. verify `CLAY_LOCAL_RESEARCH_MODEL/v2` reaches `READY_IDENTITY_OBSERVED` with a process-bound server executable hash and non-null post-load GGUF hash on an authorized exposed local/VPS sandbox;
 7. keep loader-consumed bytes UNKNOWN until separately attested; do not promote the post-load hash into loader evidence;

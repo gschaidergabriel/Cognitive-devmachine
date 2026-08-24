@@ -53,6 +53,13 @@ class Trigger1AtomicLeaseGateTests(unittest.TestCase):
         self.assertEqual(self.run_gate("trigger_key: ts_20260824T1506Z__p_abc\n")["reason"], "TRIGGER_KEY_NONCANONICAL")
         self.assertEqual(self.run_gate(f"trigger_key: {RID}\ntrigger_key: {RID}\n")["reason"], "ISSUE_BODY_REQUIRES_EXACTLY_ONE_TRIGGER_KEY")
 
+    def test_impossible_canonical_timestamp_is_noncanonical(self):
+        impossible = "ts_20261340T256199999999Z__p_" + PAYLOAD_SHA
+        self.assertEqual(
+            self.run_gate(f"trigger_key: {impossible}\n")["reason"],
+            "TRIGGER_KEY_NONCANONICAL",
+        )
+
     def test_missing_claim(self):
         self.assertEqual(self.run_gate()["reason"], "CANONICAL_ATOMIC_CLAIM_MISSING")
 
@@ -97,6 +104,12 @@ class Trigger1AtomicLeaseGateTests(unittest.TestCase):
         r = self.run_gate(f"trigger_key: {TS}\n")
         self.assertEqual(r["reason"], "EXPERIMENT_BUDGET_RACE_VIOLATION")
         self.assertEqual(r["semantic_duplicate_claims"], [str(alias)])
+
+    def test_invalid_legacy_calendar_or_offset_is_ignored_deterministically(self):
+        self.put(claim(TS))
+        (self.root / ("2026-99-99T13-35+07-00__go__" + PAYLOAD_SHA[:12] + ".json")).write_text("{bad\n", encoding="utf-8")
+        (self.root / ("2026-08-17T13-35+99-99__go__" + PAYLOAD_SHA[:12] + ".json")).write_text("{bad\n", encoding="utf-8")
+        self.assertTrue(self.run_gate(f"trigger_key: {TS}\n")["pass"])
 
     def test_legacy_alias_requires_same_payload_and_time_bucket(self):
         self.put(claim(TS))

@@ -1,0 +1,71 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXACT_HEAD_FUNCTION_RUNTIME_DIAGNOSTIC_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "18a4ef3acea2ca78de72bca87f595d7569a8e6e9",
+  "coordination": {
+    "shared_immutable_macrocycle_id_exposed": false,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_EXACT_DEPLOYMENT_RUNTIME_LOG_OBSERVATION_AND_SOURCE_REVALIDATION"
+  },
+  "executor": {
+    "qualified_lane": "gschaidergabriel/Dr.-Unterweger#810",
+    "head_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_state": "READY",
+    "deployment_git_sha_matches_head": true,
+    "route": "/api/sandbox-probe"
+  },
+  "runtime_observation": {
+    "source": "VERCEL_RUNTIME_LOGS_EXACT_DEPLOYMENT",
+    "timestamp_utc": "2026-08-24T04:01:43Z",
+    "request_path_observed": "GET /api/sandbox-probe",
+    "http_status": 200,
+    "runtime_class": "serverless",
+    "cache": "MISS",
+    "response_body_observed": false,
+    "query_string_exposed_in_runtime_log": false,
+    "function_boot_observed": true
+  },
+  "exact_source_discriminator": {
+    "route_blob_sha": "6630570d16a62f937a6512d682dfcb86ae8a4102",
+    "admission_supervisor": "SUPERVISOR_STEERING_8_64",
+    "remaining_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_execution_admitted": false,
+    "source_branching": "The exact deployed route returns 200 without Sandbox.create only for case=runtime-admission. Default selftest and family-split cases pass through sandboxExecutionAdmitted() and therefore return the fail-closed admission response while the gate is false. A post-Sandbox 200 is unreachable under this exact admission source because Sandbox.create is downstream of the false gate.",
+    "bounded_inference": "The observed exact-deployment HTTP 200 is sufficient to promote FUNCTION_RUNTIME_BOOT_AT_2DA99E and is source-consistent with the runtime-admission diagnostic branch. Because neither query string nor response body is present in the runtime log, do not claim response-field observation beyond exact deterministic source closure."
+  },
+  "free_only_boundary": {
+    "sandbox_create_observed": false,
+    "sandbox_execution_credit": 0,
+    "direct_remaining_included_quota_observed": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_execution_attempted": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact live PR810 head 2da99e has matching READY deployment plus function-level serverless boot evidence at /api/sandbox-probe; the prior current-head function-evidence=0 boundary is superseded at function-runtime diagnostic scope only. Sandbox execution remains closed by the direct-quota gate.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: no Sandbox, Python, SQLite, HCU, Typed Entry or causal component code executed; supervisor 8.64 requires runtime-first evidence and does not justify new source guards from this observation.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no loader/model execution, J-Space/GWT intervention, causal model trace or training run occurred. Function boot is not model/J-Space runtime credit."
+  },
+  "credits": {
+    "exact_head_deployment_build": "READY_AT_2DA99E",
+    "exact_head_function_runtime_boot": "PASS_AT_SERVERLESS_DIAGNOSTIC_SCOPE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain a directly observed remaining included Vercel Sandbox quota/entitlement signal without inference from Hobby plan identity and without paid/upgrade/fallback. Do not hammer the protection-bypass surface. Only if FREE_ONLY Sandbox admission opens, execute the exact-head Python/sqlite3/_sqlite3 environment probe with source identity, secret fence, result digest and cleanup, then continue toward canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> inference -> Global J-Space/GWT observation.",
+  "evidence_boundary": "This receipt promotes exact-head function runtime boot only. It does not promote Sandbox execution, Python/SQLite capability, HCU runtime, model/J-Space causality, training, canonical truth/effect authority, or whole EntityOS/HCU PASS."
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_before_receipt": "beac5aab519ef031fed8cce37c0062407e651e8e",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_before_receipt": "2a0eec9232d050f61edfcf667b2c629ef006add9",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_team_plan_observed": "hobby"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "READ_ONLY_PROVIDER_CAPABILITY_AND_PRIMARY_DOCUMENTATION_DISCRIMINATOR"
+  },
+  "observations": {
+    "connected_vercel_remaining_sandbox_quota_action_available": false,
+    "alternate_installable_plugin_for_vercel_billing_usage_quota_found": false,
+    "official_provider_usage_ui": "Vercel Academy states that the team-level Usage tab shows product consumption for the billing cycle and, on Hobby, shows included allotments and how much of each has been used.",
+    "official_provider_usage_ui_source": "https://vercel.com/academy/optimize-your-vercel-account/read-the-usage-page",
+    "official_sandbox_metrics_boundary": "Sandbox SDK/REST documentation exposes per-sandbox cumulative duration/CPU/network metrics; these are not a directly authoritative remaining team/account included-quota value.",
+    "official_sandbox_metrics_source": "https://vercel.com/docs/sandbox/sdk-reference",
+    "sandbox_create_performed": false,
+    "paid_upgrade_or_fallback_performed": false,
+    "provider_credential_preflight_performed": false
+  },
+  "hypothesis": "A direct provider-owned remaining-included-usage signal exists in Vercel's team Usage UI, so the runtime blocker is now tool visibility/access to that authoritative UI signal rather than evidence that no provider signal exists.",
+  "counterhypothesis": "Hobby plan identity or summing per-sandbox cumulative usage could safely substitute for the team Usage signal.",
+  "adjudication": "Rejected under supervisor 8.65: plan identity is not remaining-quota authority, and per-sandbox cumulative usage cannot prove remaining team/account included quota, especially across deleted or otherwise unenumerated historical usage.",
+  "discriminator_result": "DIRECT_PROVIDER_UI_SIGNAL_DOCUMENTED_BUT_NOT_EXPOSED_BY_CURRENT_CONNECTED_SURFACE",
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: narrowed the FREE_ONLY Sandbox blocker to a documented provider-owned team Usage signal and verified that the currently connected Vercel/plugin surfaces do not expose that remaining-included-quota value. No unsafe inference or Sandbox.create occurred.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: supervisor 8.65 is runtime-first and parallel donor work is already modifying GRID/data ancestry guards; adding another source guard here would be duplicate/lower-information than resolving the runtime admission signal.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: real model/J-Space execution remains downstream of Sandbox environment admission; paid training and provider preflight remain forbidden, and no model-specific runtime evidence was created."
+  },
+  "credits": {
+    "function_runtime_diagnostic_exact_source_no_sandbox_scope": "PREEXISTING_PASS",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Expose/connect a read-only view of the current Vercel team Usage metric that directly shows Sandbox included allotment and used/remaining amount. Only if that provider-owned signal proves sufficient included quota with no charge/upgrade ambiguity may the exact retained executor proceed to the fixed Python + sqlite3/_sqlite3 environment probe; otherwise remain fail-closed before Sandbox.create.",
+  "acceptance": "IN_PROGRESS"
+}

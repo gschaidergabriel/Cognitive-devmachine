@@ -78,6 +78,7 @@ jobs:
           set -euo pipefail
           python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate
           python3 -m unittest -v tests.test_trigger1_intermediate_promotion_bridge
+          python3 -m unittest -v tests.test_trigger1_experiment_result_classify
 
       - name: Execute fused internal-layer causal discriminator
         id: experiment
@@ -184,7 +185,7 @@ jobs:
           if [[ -s "$candidate" ]]; then
             python3 tools/trigger1_jspace_promotion_gate.py --candidate "$candidate" > "$gate"
           else
-            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4","owner_trigger1_goal_credit_candidate":false,"mechanism_runtime_vector_credit_candidate":false,"failures":["NO_LOCAL_PROMOTION_CANDIDATE"]}' > "$gate"
+            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4","mechanism_runtime_vector_credit_candidate":false,"scientifically_independent_vector_candidate":false,"owner_trigger1_goal_credit_candidate":false,"failures":["NO_LOCAL_PROMOTION_CANDIDATE"]}' > "$gate"
           fi
 
       - name: Persist sanitized exact-source result
@@ -257,6 +258,8 @@ jobs:
           if git cat-file -e "origin/main:${claim_result}" 2>/dev/null || [[ -e "$claim_result" ]]; then exit 0; fi
           python3 - "$claim_result" "$EXPERIMENT_DIR" "$EXPERIMENT_RC" "$runtime_receipt" <<'PY'
           import json, os, pathlib, sys
+          sys.path.insert(0, str(pathlib.Path.cwd() / 'tools'))
+          import trigger1_experiment_result_classify as experiment_classify
           out=pathlib.Path(sys.argv[1]); exp=pathlib.Path(sys.argv[2]) if sys.argv[2] else None
           rc=int(sys.argv[3]) if sys.argv[3] else None
           result={}; gate={}
@@ -268,15 +271,8 @@ jobs:
               if gp.is_file():
                   try: gate=json.loads(gp.read_text(encoding='utf-8'))
                   except Exception: gate={}
-          status=str(result.get('status') or '')
-          if not result or status.startswith('BLOCKED') or rc is None:
-              classification='BLOCKED'
-          elif rc != 0:
-              classification='FAIL'
-          elif gate.get('mechanism_runtime_vector_credit_candidate') is True:
-              classification='PASS'
-          else:
-              classification='FAIL'
+          classification=experiment_classify.classify(result, gate, rc)
+          promotion_summary=experiment_classify.evidence_summary(gate)
           payload={
               'schema':'clay-go-experiment-result/v1',
               'trigger_key':os.environ['TRIGGER1_TRIGGER_KEY'],
@@ -295,6 +291,7 @@ jobs:
                   'runtime_status':result.get('status'),
                   'runtime_verdict':result.get('verdict'),
                   'promotion_gate':gate,
+                  'promotion_summary':promotion_summary,
               },
               'classification':classification,
               'whole_product_evidence_established':False,

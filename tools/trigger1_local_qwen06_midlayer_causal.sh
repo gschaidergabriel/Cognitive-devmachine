@@ -4,6 +4,9 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+# Trigger-1 V4 successor: normal-user, zero-provider-billing, loopback-only.
+# The executor derives a semantic internal activation vector without evaluation-label
+# token leakage and counterbalances A/B/C output labels across calibration/holdout.
 unset \
   GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
   MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY \
@@ -42,7 +45,7 @@ if [[ "$AFTER_KB" -lt 3000000 ]]; then
   python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" "$BEFORE_KB" "$AFTER_KB" <<'PY'
 import json, pathlib, sys
 pathlib.Path(sys.argv[1]).write_text(json.dumps({
-  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
+  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_SEMANTIC_COUNTERBALANCED_EXPERIMENT/v1',
   'status':'BLOCKED_INSUFFICIENT_FREE_DISK_AFTER_BOUNDED_CLEANUP',
   'available_kb_before':int(sys.argv[2]),
   'available_kb_after':int(sys.argv[3]),
@@ -80,17 +83,17 @@ if ! has_runtime "$PYTHON"; then
   python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" <<'PY'
 import json, pathlib, sys
 pathlib.Path(sys.argv[1]).write_text(json.dumps({
-  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
-  'status':'BLOCKED_LOCAL_MIDLAYER_FASTPATH',
+  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_SEMANTIC_COUNTERBALANCED_EXPERIMENT/v1',
+  'status':'BLOCKED_LOCAL_SEMANTIC_COUNTERBALANCED_FASTPATH',
   'reason':'PYTORCH_TRANSFORMERS_NORMAL_USER_RUNTIME_UNAVAILABLE_AFTER_BOOTSTRAP',
   'zero_provider_billing':True,
   'external_provider_credentials_read':False,
-  'next_action':'REPAIR_NOW_OR_ROUTE_AROUND_CURRENT_LOCAL_MIDLAYER_BLOCKER'
+  'next_action':'REPAIR_CURRENT_SEMANTIC_COUNTERBALANCED_LOCAL_BLOCKER'
 }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
 PY
   exit 3
 fi
 
-exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_midlayer_causal_execute.py" \
+exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_semantic_counterbalanced_execute.py" \
   --output-dir "$OUT_DIR" \
   --cache-dir "$HF_HOME"

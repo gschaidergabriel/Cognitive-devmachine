@@ -48,6 +48,11 @@ def test_missing_and_malformed_are_distinct():
     assert parse_worker_delta("ARCHITECTURE_DELTA_JSON={bad")["status"] == "MALFORMED"
 
 
+def test_marker_does_not_skip_untyped_prose_to_later_json():
+    got = parse_worker_delta("ARCHITECTURE_DELTA_JSON=not-the-payload " + json.dumps(proposal()))
+    assert got["status"] == "MALFORMED"
+
+
 def test_ready_requires_patch_targets_and_tests():
     got = parse(proposal(patch_unified_diff=""))
     assert got["status"] == "SCHEMA_INVALID"
@@ -64,6 +69,22 @@ def test_patch_header_path_escape_rejected():
     got = parse(proposal(patch_unified_diff="--- a/tools/x.py\n+++ b/../../escape.py\n@@ -1 +1 @@\n-a\n+b\n"))
     assert got["status"] == "SCHEMA_INVALID"
     assert "INVALID_PATCH" in got["reasons"]
+
+
+def test_ready_patch_cannot_modify_undeclared_file():
+    patch = (
+        "--- a/tools/x.py\n+++ b/tools/x.py\n@@ -1 +1 @@\n-a\n+b\n"
+        "--- a/tools/hidden.py\n+++ b/tools/hidden.py\n@@ -1 +1 @@\n-a\n+b\n"
+    )
+    got = parse(proposal(patch_unified_diff=patch, target_files=["tools/x.py"]))
+    assert got["status"] == "SCHEMA_INVALID"
+    assert "PATCH_TARGET_MISMATCH" in got["reasons"]
+
+
+def test_ready_declared_target_must_be_present_in_patch():
+    got = parse(proposal(target_files=["tools/x.py", "tools/phantom.py"]))
+    assert got["status"] == "SCHEMA_INVALID"
+    assert "PATCH_TARGET_MISMATCH" in got["reasons"]
 
 
 def test_forge_forbidden_command_rejected_at_ingress():

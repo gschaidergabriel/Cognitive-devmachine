@@ -31,6 +31,7 @@ class ProviderSecretAdmissionTests(unittest.TestCase):
              mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
             self.assertIsNone(loader.get_secret("OPENROUTER_API_KEY", required=False))
             self.assertIsNone(loader.get_secret("NVIDIA_API_KEY", required=False))
+            self.assertIsNone(loader.get_secret("HF_TOKEN", required=False))
 
     def test_blocked_required_provider_secret_raises_before_any_secret_lookup(self):
         with mock.patch.object(loader, "_provider_secret_is_admitted", return_value=False), \
@@ -38,12 +39,15 @@ class ProviderSecretAdmissionTests(unittest.TestCase):
              mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
             with self.assertRaisesRegex(loader.SecretError, "denied before lookup"):
                 loader.get_secret("GROQ_API_KEY", required=True)
+            with self.assertRaisesRegex(loader.SecretError, "denied before lookup"):
+                loader.get_secret("HF_TOKEN", required=True)
 
     def test_blocked_provider_secret_source_reports_absent_without_lookup(self):
         with mock.patch.object(loader, "_provider_secret_is_admitted", return_value=False), \
              mock.patch.object(loader.os, "environ", BombEnvironment()), \
              mock.patch.object(loader, "_repo_secrets", side_effect=self.bomb_repo):
             self.assertIsNone(loader.secret_source("MISTRAL_API_KEY"))
+            self.assertIsNone(loader.secret_source("HF_TOKEN"))
 
     def test_admitted_provider_may_read_environment_after_admission(self):
         env = {"OPENROUTER_API_KEY": "synthetic-test-value"}
@@ -69,9 +73,19 @@ class ProviderSecretAdmissionTests(unittest.TestCase):
             loader.PROVIDER_SECRET_NAMES,
             {
                 "GROQ_API_KEY": "groq",
+                "GROQ_API_KEYS": "groq",
+                "GROQ2_API_KEY": "groq",
+                "GROQ3_API_KEY": "groq",
+                "HF_TOKEN": "huggingface",
                 "MISTRAL_API_KEY": "mistral",
+                "MISTRAL_API_KEYS": "mistral",
+                "MISTRAL2_API_KEY": "mistral",
+                "MISTRAL3_API_KEY": "mistral",
                 "NVIDIA_API_KEY": "nvidia",
+                "NVIDIA_API_KEYS": "nvidia",
                 "NVIDIA_NIM_API_KEY": "nvidia",
+                "NVIDIA2_API_KEY": "nvidia",
+                "NVIDIA3_API_KEY": "nvidia",
                 "NGC_API_KEY": "nvidia",
                 "OPENROUTER_API_KEY": "openrouter",
             },

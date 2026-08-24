@@ -2547,6 +2547,29 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertEqual(opener_calls, [])
                 self.assertNotIn(leaked_text, repr(caught.exception))
 
+    def test_process_payment_latch_storage_is_validated_before_membership(self):
+        membership_calls = []
+        original_latches = MOD.PROCESS_PAYMENT_LATCHES
+
+        class ActiveProcessLatches(set):
+            def __contains__(self, value):
+                membership_calls.append(value)
+                raise LookupError("process-latch-membership-must-not-run")
+
+        MOD.PROCESS_PAYMENT_LATCHES = ActiveProcessLatches()
+        try:
+            with self.assertRaisesRegex(
+                ValueError, "payment_latches_must_be_set"
+            ) as caught:
+                MOD.route({"NVIDIA_API_KEY": "secret"})
+        finally:
+            MOD.PROCESS_PAYMENT_LATCHES = original_latches
+
+        self.assertEqual(membership_calls, [])
+        self.assertNotIn(
+            "process-latch-membership-must-not-run", repr(caught.exception)
+        )
+
     def test_active_payment_latch_element_is_rejected_before_execution(self):
         leaked_text = "payment-latch-element-equality-must-not-run"
 

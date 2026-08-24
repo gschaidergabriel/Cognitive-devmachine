@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_SOURCE_DELTA/v1",
+  "date": "2026-08-24",
+  "local_time": "18:31+07:00",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "organ": "GPT56SOL_CHATGPT_ORGAN",
+  "trigger": "go",
+  "reentry": {
+    "canonical_main_before_branch": "a1c36ccddf1cfb6ad71e41698d2899c6248cc53d",
+    "branch": "gpt56sol/go-868-free-swarm-datagram-tripwire-20260824-1831",
+    "prior_hardened_runner_receipt": "research_entity/continuity/receipts/2026-08-24_GO_868_FREE_SWARM_RECEIPT_SELF_BINDING_GPT56SOL_1831P0700.json"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "reproducible_atomic_trigger_key_available": false,
+    "atomic_unusual_experiment_claim": "NOT_ATTEMPTED",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "SOURCE_HARDENING_AND_DETERMINISTIC_REGRESSION_EDIT"
+  },
+  "observed_gap": "The current hardened FREE Swarm child-process bootstrap blocked socket.getaddrinfo, socket.create_connection, socket.socket.connect and socket.socket.connect_ex, but an unconnected datagram socket can transmit through socket.socket.sendto without any connect call. On platforms exposing socket.sendmsg, an address-bearing sendmsg path is another direct datagram egress surface. Therefore the outer Python network tripwire did not yet cover all common direct socket egress primitives implied by a strict zero-network boundary.",
+  "hypothesis": "Adding fail-closed sendto and conditional sendmsg tripwires closes a concrete Python-level datagram egress path while preserving the existing no-provider-call semantics and source-manifest binding of the hardened runner.",
+  "counterhypothesis": "Current HTTP provider clients are stream/TCP based and the canonical per-case tests already assert zero secret/network access, so datagram egress is not expected in today's provider paths.",
+  "counterhypothesis_adjudication": "The counterhypothesis may be true for current implementations, but exact-source admission promotion should fail closed against future or indirect socket usage rather than depend on an unstated TCP-only assumption. This is a boundary hardening delta, not evidence that such egress occurred.",
+  "bounded_delta": {
+    "runner": "tools/run_free_swarm_admission_boundary_receipt_hardened_868.py",
+    "runner_commit": "3bdc47e4f701495be39b390d6a58a7065c07b36a",
+    "runner_blob_sha": "f9f0f454ab3a747764e2b02ed1baeaba7722195e",
+    "test": "tests/test_free_swarm_receipt_runner_hardening_868.py",
+    "test_commit": "715b2c3922e0fa1fa79193aba2f4a202e730d152",
+    "test_blob_sha": "0b2c704475b3cc4400889a66b20458783670d9a3",
+    "tripwires_added": [
+      "socket.socket.sendto",
+      "socket.socket.sendmsg_if_available"
+    ],
+    "existing_tripwires_preserved": [
+      "socket.getaddrinfo",
+      "socket.create_connection",
+      "socket.socket.connect",
+      "socket.socket.connect_ex"
+    ],
+    "external_provider_network_performed": false,
+    "provider_secret_lookup_performed": false,
+    "runtime_receipt_created": false,
+    "runtime_credit_minted": 0
+  },
+  "evidence": {
+    "scope": "SOURCE_REVIEW_AND_GITHUB_WRITE_ONLY_NOT_EXACT_SOURCE_RUNTIME",
+    "source_inspection": "PASS",
+    "runtime_execution": "NOT_PERFORMED_NO_EXPOSED_LOCAL_OR_CLAY_DIRECT_DEV_SHELL_BRIDGE",
+    "negative_evidence": [
+      "no external provider call was made",
+      "no provider credential was read",
+      "no exact-source boundary receipt PASS was observed",
+      "no whole EntityOS/HCU, HCU, J-Space-model or training runtime evidence was produced"
+    ]
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_ONLY: expanded the canonical hardened FREE Swarm receipt runner's outer Python network fence to direct datagram egress primitives before the pending exact-source executable discriminator.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: retained HCU donor and parallel current-main J-Space identity/control work already cover the reusable HCU/Typed Entry frontier; creating another overlapping HCU lane would violate nonduplication. The next higher-information discriminator is exact execution of the current donor rejection/identity boundary on an authorized exposed zero-cost surface.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no model-intervention-capable local/VPS shell surface is exposed to this organ, while parallel current work already defines diagnostic-vs-causal-control and exact tensor/runtime identity gates. Additional source narration is lower-information than one exact local named-activation observation followed by matched causal controls only if observation identity closes."
+  },
+  "credits": {
+    "free_swarm_provider_admission_runtime": 0,
+    "external_provider_worker_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Re-enter latest main and resolve overlap. If this datagram hardening remains unique, execute the hardened boundary runner from an authorized zero-cost normal-user local or clay-direct-dev clean checkout with exact source identity; require all canonical/hardening tests PASS, zero secret reads, zero DNS/connect/datagram attempts, stable source manifest and exit 0 before any external provider lane restart.",
+  "acceptance": "IN_PROGRESS"
+}

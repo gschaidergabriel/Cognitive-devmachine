@@ -1,0 +1,25 @@
+HEAD=9d16b4ef028d1b98319e7cb876c5b6ea1ff3b2f8
+COMPILE_PASS
+--- processes ---
+root       14005  0.0  0.0   4324  3536 ?        SN   10:48   0:00 bash -lc set -e; echo HEAD=$(git rev-parse HEAD); python3 -m py_compile tools/run_research_distillery.py tools/run_research_distillery_entry.py; echo COMPILE_PASS; echo '--- processes ---'; ps auxww | grep '[r]un_research_distillery' || true; echo '--- log ---'; tail -120 /artifacts/clay-entityos-swarm/distillery.log 2>/dev/null || true; echo '--- status mtime ---'; stat -c '%y %s %n' /artifacts/clay-entityos-swarm/distillery/STATUS.json 2>/dev/null || true
+--- log ---
+Traceback (most recent call last):
+  File "/workspace/clay-global-research-entity/tools/run_research_distillery_entry.py", line 149, in <module>
+    raise SystemExit(d.main())
+                     ^^^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_research_distillery.py", line 873, in main
+    catalog=openrouter_catalog(); small=select_small_models(catalog); reviewers=select_reviewers(catalog)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_research_distillery_entry.py", line 86, in select_reviewers
+    preferred=d.select_reviewers(catalog)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_research_distillery_entry.py", line 86, in select_reviewers
+    preferred=d.select_reviewers(catalog)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_research_distillery_entry.py", line 86, in select_reviewers
+    preferred=d.select_reviewers(catalog)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  [Previous line repeated 995 more times]
+RecursionError: maximum recursion depth exceeded
+--- status mtime ---
+2026-08-24 10:45:46.426680490 +0000 3633 /artifacts/clay-entityos-swarm/distillery/STATUS.json

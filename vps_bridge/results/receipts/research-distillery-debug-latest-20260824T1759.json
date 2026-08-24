@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "research-distillery-debug-latest-20260824T1759",
+  "command_sha256": "208c4f9ed91c6ed5f4063776ae288c97498691587f9f388c53a3f20ba8a36101",
+  "started_at": "2026-08-24T10:48:46.649037+00:00",
+  "finished_at": "2026-08-24T10:48:46.839951+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "4a1e5c663da826b0f4056ff6394022360d22698d4fba8009f271eeea34896a99",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "HEAD=9d16b4ef028d1b98319e7cb876c5b6ea1ff3b2f8\nCOMPILE_PASS\n--- processes ---\nroot       14005  0.0  0.0   4324  3536 ?        SN   10:48   0:00 bash -lc set -e; echo HEAD=$(git rev-parse HEAD); python3 -m py_compile tools/run_research_distillery.py tools/run_research_distillery_entry.py; echo COMPILE_PASS; echo '--- processes ---'; ps auxww | grep '[r]un_research_distillery' || true; echo '--- log ---'; tail -120 /artifacts/clay-entityos-swarm/distillery.log 2>/dev/null || true; echo '--- status mtime ---'; stat -c '%y %s %n' /artifacts/clay-entityos-swarm/distillery/STATUS.json 2>/dev/null || true\n--- log ---\nTraceback (most recent call last):\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery_entry.py\", line 149, in <module>\n    raise SystemExit(d.main())\n                     ^^^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery.py\", line 873, in main\n    catalog=openrouter_catalog(); small=select_small_models(catalog); reviewers=select_reviewers(catalog)\n                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery_entry.py\", line 86, in select_reviewers\n    preferred=d.select_reviewers(catalog)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery_entry.py\", line 86, in select_reviewers\n    preferred=d.select_reviewers(catalog)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery_entry.py\", line 86, in select_reviewers\n    preferred=d.select_reviewers(catalog)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  [Previous line repeated 995 more times]\nRecursionError: maximum recursion depth exceeded\n--- status mtime ---\n2026-08-24 10:45:46.426680490 +0000 3633 /artifacts/clay-entityos-swarm/distillery/STATUS.json\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

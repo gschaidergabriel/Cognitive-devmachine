@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_GO_872_QWEN_SEMANTIC_COUNTERBALANCE_SOURCE_DELTA/v1",
+  "authority_epoch": "8.72",
+  "persistent_research_entity": "Clay",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "trigger": "go",
+  "user_turn_time_local": "2026-08-24T23:34:00+07:00",
+  "user_turn_time_used_as_atomic_lease_identity": false,
+  "canonical_main_at_branch_base": "0b3495aed89a86b3b626642aa202367862d0b489",
+  "branch": "go/20260824-qwen-tied-embedding-orthogonal-jspace",
+  "mode": "FREE_ONLY",
+  "material_finding": {
+    "legacy_internal_layer_path": "tools/trigger1_local_qwen06_internal_layer_api_execute.py fails closed when tie_word_embeddings=true and therefore is not the current executable scientific path for the pinned Qwen3-0.6B revision",
+    "current_v3_midlayer_path": "tools/trigger1_local_qwen06_midlayer_causal_execute.py already derives an internal activation basis and avoids the legacy tied-embedding blocker",
+    "remaining_scientific_confounds": [
+      "the V3 vector derivation uses the exact A/B/C evaluation output-label identities in its basis prompts",
+      "the V3 holdout metric privileges a fixed A-vs-(B,C) token mapping without counterbalancing"
+    ],
+    "current_promotion_gate": "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4 requires uses_evaluation_output_labels=false and, for output-token metrics, label_mapping_counterbalanced=true"
+  },
+  "delta": {
+    "successor_executor": "tools/trigger1_local_qwen06_semantic_counterbalanced_execute.py",
+    "launcher": "tools/trigger1_local_qwen06_midlayer_causal.sh",
+    "tests": "tests/test_trigger1_local_qwen06_semantic_counterbalanced.py",
+    "vector_derivation": "INTERMEDIATE_SEMANTIC_ACTIVATION_CONTRAST_MEAN",
+    "semantic_classes": [
+      "APPROVAL",
+      "REJECTION",
+      "UNCERTAINTY"
+    ],
+    "basis_output_head_weights_used": false,
+    "basis_holdout_data_used": false,
+    "basis_evaluation_output_label_identity_used": false,
+    "basis_exact_evaluation_output_token_overlap_guard": "FAIL_CLOSED_AT_RUNTIME",
+    "output_token_metric_counterbalanced": true,
+    "counterbalance_design": "each semantic class maps to A, B and C exactly once in gain calibration and exactly once in holdout",
+    "matched_controls_reused": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM"
+    ],
+    "transport": "LOCAL_LOOPBACK_API_ZERO_PROVIDER_BILLING",
+    "canonical_truth_or_effect_authority_changed": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: the existing local Midlayer launcher now targets a Promotion-Gate-v4-shaped semantic/counterbalanced successor instead of preserving known label-identity confounds",
+    "track_b": "ADVANCED: reusable HCU internal semantic-vector evidence ABI gains fail-closed exact output-token leakage checking and structural counterbalance proof without creating a new Typed Entry, state or effect authority",
+    "track_c": "ADVANCED: Global J-Space/GWT model-specific readiness now has a source-level successor designed to satisfy the two explicit scientific-independence blockers while preserving six matched controls and downstream transformer computation"
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "no shared reproducible immutable upstream macrocycle/request identity was exposed to this organ for the canonical create-only atomic lease",
+    "new_unusual_experiments_run": 0,
+    "provider_model_calls": 0,
+    "paid_provider_calls": 0,
+    "together_calls": 0
+  },
+  "evidence": {
+    "scope": "SOURCE_DESIGN_AND_DETERMINISTIC_REGRESSION_DEFINITION_ONLY",
+    "runtime_model_execution_observed": false,
+    "repository_bound_terminal_qwen_result_observed": false,
+    "bridge_roundtrip_observed_by_this_organ": false,
+    "bridge_limitation": "no direct local/VPS bridge execution connector is exposed in this ChatGPT session",
+    "external_prior_art_used": [
+      "exact pinned Qwen3-0.6B config for tied-embedding identity",
+      "NNsight residual-stream activation steering and matched-control pattern",
+      "pyvene internal-state intervention framing"
+    ]
+  },
+  "runtime_credit": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "run deterministic branch regressions, then execute exact-current clean semantic-counterbalanced launcher on an authorized zero-cost local/VPS sandbox only after canonical unusual-experiment lease is available; bind terminal runtime result to Promotion Gate v4 before considering narrowly scoped model-specific evidence"
+}

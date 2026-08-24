@@ -5,14 +5,22 @@ This module is a producer-side evidence primitive, not authority. It closes one
 specific gap in engine_load_lease_v1: a string label cannot prove that a loader
 received the exact admitted bytes. The witness constructs an anonymous Linux
 memfd, writes one artifact payload, applies irreversible write/grow/shrink/seal
-seals, reads the sealed object back, and passes those exact bytes to one bound
-loader callable.
+seals, and exposes either the exact read-back bytes or the still-sealed memfd to
+one bound loader callback.
 
-A successful witness proves only this adapter supplied the exact sealed bytes to
-that callable and observed unchanged kernel seals. It does not establish model
+The fd/path callback exists for real loaders that require a file descriptor or
+filesystem path (for example mmap/file based model loaders) and avoids copying
+verified bytes into an uncontrolled temporary file. The /proc/self/fd path is
+valid only for the synchronous callback lifetime; deferred/lazy work after the
+callback returns is not witnessed by this primitive.
+
+A successful witness proves only this adapter supplied the exact sealed bytes or
+sealed fd-backed object to that callable and observed unchanged kernel seals. It
+does not by itself prove that opaque loader code read every byte, establish model
 behavior, full checkpoint coverage, inference correctness, canonical truth, or
-training benefit. The downstream canonical loader-consumption registry remains
-the admission boundary. Unsupported platforms fail closed.
+training benefit. Positive runtime credit still requires a separately bound
+loader implementation plus downstream canonical loader-consumption admission and
+model-execution evidence. Unsupported platforms fail closed.
 """
 from __future__ import annotations
 
@@ -24,7 +32,10 @@ import os
 from typing import Any, Callable, Generic, TypeVar
 
 WITNESS_SCHEMA = "HCU_LOADER_CONSUMPTION_WITNESS/v1"
-EVIDENCE_CLASS = "SEALED_MEMFD_EXACT_BYTES_CALLBACK/v1"
+BYTES_CALLBACK_EVIDENCE_CLASS = "SEALED_MEMFD_EXACT_BYTES_CALLBACK/v1"
+FD_PATH_EVIDENCE_CLASS = "SEALED_MEMFD_EXACT_FD_PATH_CALLBACK/v1"
+# Compatibility alias retained for existing callers/tests.
+EVIDENCE_CLASS = BYTES_CALLBACK_EVIDENCE_CLASS
 _REQUIRED_SEALS = (
     fcntl.F_SEAL_WRITE
     | fcntl.F_SEAL_GROW
@@ -60,6 +71,17 @@ class LoaderConsumptionWitness:
             "loader_binding_sha256": self.loader_binding_sha256,
             "observed_seals": self.observed_seals,
         }
+
+
+@dataclass(frozen=True)
+class SealedMemfdHandle:
+    """Ephemeral read-only loader handle valid only during its callback."""
+
+    fd: int
+    proc_path: str
+    sha256: str
+    byte_count: int
+    observed_seals: int
 
 
 @dataclass(frozen=True)
@@ -123,28 +145,9 @@ def _read_exact(fd: int, byte_count: int) -> bytes:
     return b"".join(chunks)
 
 
-def witnessed_load_bytes(
-    payload: bytes | bytearray | memoryview,
-    *,
-    artifact_kind: str,
-    loader_id: str,
-    loader_binding_sha256: str,
-    loader: Callable[[bytes], T],
-) -> WitnessedLoad[T]:
-    """Load from exact bytes supplied by a kernel-sealed memfd witness.
-
-    The callable receives the immutable bytes read from the sealed kernel
-    object. Positive use still requires a separately bound loader implementation
-    whose contract consumes that argument, plus external canonical registry
-    admission of the resulting observation.
-    """
+def _prepare_sealed_memfd(payload: bytes | bytearray | memoryview) -> tuple[int, str, int, int]:
+    """Create and attest one sealed memfd; caller owns and must close the fd."""
     _require_linux_memfd_sealing()
-    artifact_kind = _nonempty_text(artifact_kind, "artifact_kind")
-    loader_id = _nonempty_text(loader_id, "loader_id")
-    loader_binding_sha256 = _sha256_text(loader_binding_sha256, "loader_binding_sha256")
-    if not callable(loader):
-        raise LoaderConsumptionWitnessError("LOADER_CALLABLE_REQUIRED")
-
     exact_payload = bytes(payload)
     expected_sha256 = hashlib.sha256(exact_payload).hexdigest()
     flags = int(os.MFD_ALLOW_SEALING) | int(getattr(os, "MFD_CLOEXEC", 0))
@@ -158,31 +161,65 @@ def witnessed_load_bytes(
             raise LoaderConsumptionWitnessError(
                 f"SEALED_MEMFD_REQUIRED_SEALS_MISSING:{observed_seals}"
             )
-
         consumed = _read_exact(fd, len(exact_payload))
         observed_sha256 = hashlib.sha256(consumed).hexdigest()
         if observed_sha256 != expected_sha256:
             raise LoaderConsumptionWitnessError("SEALED_MEMFD_DIGEST_DRIFT")
+        return fd, observed_sha256, len(consumed), observed_seals
+    except BaseException:
+        os.close(fd)
+        raise
 
+
+def _verify_sealed_memfd_after_callback(fd: int, *, byte_count: int, sha256: str) -> int:
+    final_seals = int(fcntl.fcntl(fd, fcntl.F_GET_SEALS))
+    if final_seals & _REQUIRED_SEALS != _REQUIRED_SEALS:
+        raise LoaderConsumptionWitnessError(
+            f"SEALED_MEMFD_POST_LOAD_SEALS_MISSING:{final_seals}"
+        )
+    post = _read_exact(fd, byte_count)
+    if hashlib.sha256(post).hexdigest() != sha256:
+        raise LoaderConsumptionWitnessError("SEALED_MEMFD_POST_LOAD_DIGEST_DRIFT")
+    return final_seals
+
+
+def witnessed_load_bytes(
+    payload: bytes | bytearray | memoryview,
+    *,
+    artifact_kind: str,
+    loader_id: str,
+    loader_binding_sha256: str,
+    loader: Callable[[bytes], T],
+) -> WitnessedLoad[T]:
+    """Load from exact bytes supplied by a kernel-sealed memfd witness.
+
+    The callable receives immutable bytes read from the sealed kernel object.
+    Positive use still requires a separately bound loader implementation whose
+    contract consumes that argument, plus external canonical registry admission
+    of the resulting observation.
+    """
+    artifact_kind = _nonempty_text(artifact_kind, "artifact_kind")
+    loader_id = _nonempty_text(loader_id, "loader_id")
+    loader_binding_sha256 = _sha256_text(loader_binding_sha256, "loader_binding_sha256")
+    if not callable(loader):
+        raise LoaderConsumptionWitnessError("LOADER_CALLABLE_REQUIRED")
+
+    fd = -1
+    try:
+        fd, observed_sha256, byte_count, observed_seals = _prepare_sealed_memfd(payload)
+        consumed = _read_exact(fd, byte_count)
         value = loader(consumed)
-
-        final_seals = int(fcntl.fcntl(fd, fcntl.F_GET_SEALS))
-        if final_seals & _REQUIRED_SEALS != _REQUIRED_SEALS:
-            raise LoaderConsumptionWitnessError(
-                f"SEALED_MEMFD_POST_LOAD_SEALS_MISSING:{final_seals}"
-            )
-        post = _read_exact(fd, len(exact_payload))
-        if hashlib.sha256(post).hexdigest() != observed_sha256:
-            raise LoaderConsumptionWitnessError("SEALED_MEMFD_POST_LOAD_DIGEST_DRIFT")
-
+        final_seals = _verify_sealed_memfd_after_callback(
+            fd, byte_count=byte_count, sha256=observed_sha256
+        )
         return WitnessedLoad(
             value=value,
             witness=LoaderConsumptionWitness(
                 schema=WITNESS_SCHEMA,
-                evidence_class=EVIDENCE_CLASS,
+                evidence_class=BYTES_CALLBACK_EVIDENCE_CLASS,
                 artifact_kind=artifact_kind,
                 sha256=observed_sha256,
-                byte_count=len(consumed),
+                byte_count=byte_count,
                 loader_id=loader_id,
                 loader_binding_sha256=loader_binding_sha256,
                 observed_seals=final_seals,
@@ -193,7 +230,79 @@ def witnessed_load_bytes(
             f"SEALED_MEMFD_OS_ERROR:{exc.errno}:{exc.strerror}"
         ) from exc
     finally:
-        os.close(fd)
+        if fd >= 0:
+            os.close(fd)
+
+
+def witnessed_load_memfd(
+    payload: bytes | bytearray | memoryview,
+    *,
+    artifact_kind: str,
+    loader_id: str,
+    loader_binding_sha256: str,
+    loader: Callable[[SealedMemfdHandle], T],
+) -> WitnessedLoad[T]:
+    """Supply a real loader with one exact sealed fd/path-backed artifact.
+
+    ``handle.proc_path`` names the same anonymous sealed kernel object as
+    ``handle.fd`` (``/proc/self/fd/<fd>``) and is valid only while ``loader`` is
+    executing. This avoids an uncontrolled temp-file copy for APIs that require
+    a pathname. The callback must complete any load that is intended to receive
+    credit before returning; lazy/deferred reads after return are outside this
+    witness and must fail closed at downstream admission.
+    """
+    artifact_kind = _nonempty_text(artifact_kind, "artifact_kind")
+    loader_id = _nonempty_text(loader_id, "loader_id")
+    loader_binding_sha256 = _sha256_text(loader_binding_sha256, "loader_binding_sha256")
+    if not callable(loader):
+        raise LoaderConsumptionWitnessError("LOADER_CALLABLE_REQUIRED")
+
+    fd = -1
+    try:
+        fd, observed_sha256, byte_count, observed_seals = _prepare_sealed_memfd(payload)
+        proc_path = f"/proc/self/fd/{fd}"
+        try:
+            stat = os.stat(proc_path)
+        except OSError as exc:
+            raise LoaderConsumptionWitnessError(
+                f"SEALED_MEMFD_PROC_PATH_UNAVAILABLE:{exc.errno}:{exc.strerror}"
+            ) from exc
+        if stat.st_size != byte_count:
+            raise LoaderConsumptionWitnessError(
+                f"SEALED_MEMFD_PROC_PATH_SIZE_MISMATCH:{stat.st_size}:{byte_count}"
+            )
+
+        handle = SealedMemfdHandle(
+            fd=fd,
+            proc_path=proc_path,
+            sha256=observed_sha256,
+            byte_count=byte_count,
+            observed_seals=observed_seals,
+        )
+        value = loader(handle)
+        final_seals = _verify_sealed_memfd_after_callback(
+            fd, byte_count=byte_count, sha256=observed_sha256
+        )
+        return WitnessedLoad(
+            value=value,
+            witness=LoaderConsumptionWitness(
+                schema=WITNESS_SCHEMA,
+                evidence_class=FD_PATH_EVIDENCE_CLASS,
+                artifact_kind=artifact_kind,
+                sha256=observed_sha256,
+                byte_count=byte_count,
+                loader_id=loader_id,
+                loader_binding_sha256=loader_binding_sha256,
+                observed_seals=final_seals,
+            ),
+        )
+    except OSError as exc:
+        raise LoaderConsumptionWitnessError(
+            f"SEALED_MEMFD_OS_ERROR:{exc.errno}:{exc.strerror}"
+        ) from exc
+    finally:
+        if fd >= 0:
+            os.close(fd)
 
 
 def assert_memfd_write_is_sealed(payload: bytes = b"seal-probe") -> bool:

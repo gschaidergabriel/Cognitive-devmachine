@@ -1,0 +1,86 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "local_trigger_time": "2026-08-24T18:22:00+07:00",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "bootstrap_reentry": {
+    "uploaded_fast_cache_epoch": "8.63",
+    "cache_treated_as_noncanonical": true,
+    "first_observed_main": "35111436aad7b1fdb35046f630268e7d914e5c8e",
+    "later_reentered_main": [
+      "3b9d98a8fa7ef075e01b0fc119824f570e18572f",
+      "989e1d712d4aee4d6c1722c55923ca0c4093575f"
+    ],
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md"
+  },
+  "vps_bridge_health": {
+    "status": "NOT_DIRECTLY_OBSERVED",
+    "reason": "The current ChatGPT tool surface exposes GitHub/web/container but no local-workstation or clay-direct-dev bridge/SSH execution action. Repository search did not provide a live bridge roundtrip endpoint.",
+    "classification": "TOOL_SURFACE_INFRASTRUCTURE_UNAVAILABLE_NOT_PRODUCT_FAILURE"
+  },
+  "coordination": {
+    "closed_stale_prs": [
+      "gschaidergabriel/clay-global-research-entity#1422",
+      "gschaidergabriel/clay-global-research-entity#1423"
+    ],
+    "successor_pr": "gschaidergabriel/clay-global-research-entity#1431",
+    "successor_branch": "gpt56sol/go-868-free-boundary-receipt-20260824",
+    "successor_head_before_this_receipt": "0574aa92a3777bac0f1a22313b257a4dc0846e25",
+    "successor_pr_mergeable_observed": true,
+    "reason": "Current main already contained the stronger 8.68 provider-admission implementation and 13 boundary tests; only the missing executable receipt harness was salvaged to avoid parallel semantic authority."
+  },
+  "source_delta": {
+    "path": "tools/free_swarm_admission_boundary_receipt_v1.py",
+    "purpose": "Execute exact-source FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 with source hashes, clean-tree identity, current boundary unit suite, canonical admission snapshot, shell/Python syntax checks, and structured secret/socket tripwire counters.",
+    "real_provider_credentials_read_by_design": 0,
+    "real_provider_network_attempts_by_design": 0,
+    "provider_restart_authorized_by_harness": false
+  },
+  "observed_current_control_plane": {
+    "canonical_provider_admission_schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
+    "providers": ["groq", "mistral", "nvidia", "openrouter"],
+    "all_currently_admitted_free": false,
+    "external_provider_execution": "QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS",
+    "existing_boundary_test": "tests/test_free_swarm_admission_boundary_867.py",
+    "existing_boundary_test_count_source_expectation": 13
+  },
+  "external_solution_fusion": {
+    "source": "https://slsa.dev/spec/v1.1/provenance",
+    "principle": "Externally controlled parameters are untrusted, must be verified downstream, and verifiers should reject unrecognized fields.",
+    "clay_native_projection": "Keep provider admission in canonical repository control-plane files and make caller/environment admission objects non-authoritative; bind executable receipts to exact source identities rather than introducing a second attestation authority."
+  },
+  "parallel_main_fusion": {
+    "commit": "3b9d98a8fa7ef075e01b0fc119824f570e18572f",
+    "finding": "Parallel current-main work added a local model post-load identity research receipt binding llama-server runtime/model-path observations while explicitly preserving loader-consumption attestation as unresolved.",
+    "action": "Successor boundary branch was reentered onto this and later main rather than duplicating the local-model/J-Space identity lane."
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: executable EntityOS convergence control now has a dedicated exact-source admission-boundary receipt harness on PR1431; stale overlapping repair lanes were closed.",
+    "track_b": "ADVANCED_BY_FUSION: branch reentry incorporated the parallel reusable HCU post-load runtime/model identity primitive from current main; no competing HCU implementation was created.",
+    "track_c": "ADVANCED_BY_FUSION_AND_GATE_SHARPENING: local model identity evidence is now preserved as the prerequisite for later model-specific J-Space intervention, while provider traffic remains quarantined and the new boundary harness creates the exact executable gate needed before any provider lane can resume."
+  },
+  "runtime_evidence": {
+    "boundary_harness_exact_authorized_local_or_vps_execution": "NOT_EXECUTED_BY_THIS_ORGAN_TOOL_SURFACE_UNAVAILABLE",
+    "source_syntax_compilation_in_chatgpt_container": "PASS_FOR_NEW_HARNESS_SOURCE_ONLY",
+    "canonical_runtime_credit_from_chatgpt_container": false,
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared reproducible immutable macrocycle/request identifier is exposed to this organ for canonical create-only lease derivation; no intervention was attempted."
+  },
+  "hypothesis": "The remaining FREE-swarm blocker is now evidence-production rather than missing source gating: a clean exact-source run of the current 8.68 boundary suite plus structured tripwire receipt should discriminate whether the pre-secret/pre-network control plane actually fails closed at runtime.",
+  "counterhypothesis": "The source tests may still pass while a shell/import/runtime path outside their monkeypatched coverage touches a credential or socket; therefore a PASS remains component evidence and must not restart providers without subsequent bound one-provider execution evidence.",
+  "next_exact_action": "On an exposed authorized clean local normal-user or clay-direct-dev checkout at the exact PR1431 head, run `python3 -B tools/free_swarm_admission_boundary_receipt_v1.py`, persist stdout as an immutable receipt with command/environment/source identity, and require PASS with zero secret/network counters for every negative case before considering any single positively classified FREE provider restart."
+}

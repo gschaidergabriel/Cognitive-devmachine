@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_GO_872_TRIGGER1_SEMANTIC_COUNTERBALANCE_RECEIPT/v1",
+  "recorded_at": "2026-08-24T23:34:00+07:00",
+  "authority": {
+    "supervisor": "8.72",
+    "execution_mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "persistent_entity": "Clay",
+    "organ": "GPT-5.6 Sol / ChatGPT"
+  },
+  "trigger": "go",
+  "canonical_main_at_branch_cut": "60f90b0385cb35bbf4b2c29ce2bf50fd5738429c",
+  "branch": "gpt56sol/go872-trigger1-semantic-counterbalance-20260824-2334",
+  "branch_head_before_receipt": "2300486660c9dc177b9a7fa2b41c0bc8b9ec8333",
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "available_user_timestamp_precision": "minute",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0
+  },
+  "bridge_health": {
+    "fresh_roundtrip_observed_by_this_organ": false,
+    "classification": "UNOBSERVED_TOOL_VISIBILITY",
+    "note": "Current owner authority requires go-start bridge health checking, but this ChatGPT organ exposes no local/VPS shell or clay-direct-dev bridge action. Prior canonical README evidence reported a passing preflight; that historical observation is not promoted to a fresh roundtrip."
+  },
+  "r0_observation": {
+    "promotion_gate": "tools/trigger1_jspace_promotion_gate.py / CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4",
+    "existing_runner": "tools/trigger1_local_qwen06_midlayer_causal_execute.py",
+    "defect": "The current promotion gate requires vector derivation independent of evaluation output-label identities and counterbalanced token-output metrics, while the V3 runner derives its basis from explicit A/B/C-labelled prompts and evaluates the same A/B/C identity family.",
+    "credit_boundary": "A positive V3 runtime may provide bounded mechanism evidence but cannot truthfully satisfy the stronger scientific-independence gate as currently constructed."
+  },
+  "hypothesis": "A nonterminal semantic activation contrast derived without evaluation answer labels, combined with exact A/B/C counterbalancing in disjoint calibration and holdout, removes the fixed-token/readout identity confound while preserving a falsifiable matched-control causal test.",
+  "counterhypothesis": "The semantic activation direction may fail to transfer to counterbalanced disjoint items, or matched orthogonal/permuted/sign controls may erase the apparent effect; that outcome is an admissible SCIENTIFIC_NEGATIVE rather than a reason to weaken the gate.",
+  "delta": {
+    "files": [
+      "tools/trigger1_semantic_counterbalance_v1.py",
+      "tools/trigger1_local_qwen06_semantic_counterbalanced_execute.py",
+      "tests/test_trigger1_semantic_counterbalance_872.py"
+    ],
+    "contract": [
+      "derive living-minus-nonliving vector from internal activations only",
+      "use no output-head weights in vector construction",
+      "use no holdout data in vector construction",
+      "use no evaluation A/B/C output-label identity in vector construction",
+      "balance correct A/B/C labels exactly 2/2/2 in calibration and 2/2/2 in holdout",
+      "score each case by correct semantic label minus mean distractor logits",
+      "retain BASELINE/+VECTOR/SIGN_FLIP/NULL_VECTOR/ORTHOGONAL_SAME_NORM/PERMUTED_SAME_NORM controls",
+      "emit promotion-gate-v4 vector_derivation and holdout scientific-independence metadata",
+      "mint no canonical/runtime/model/training credit from source presence"
+    ]
+  },
+  "supporting_evidence": {
+    "class": "ISOLATED_SOURCE_EQUIVALENT_DETERMINISTIC_SUPPORT_ONLY",
+    "semantic_and_source_wiring_checks": "8/8 PASS",
+    "py_compile": "PASS",
+    "exact_repository_promotion_gate_execution": "DEFINED_IN_TEST_NOT_YET_OBSERVED_ON_BRANCH",
+    "model_runtime": "NOT_EXECUTED",
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "together_calls": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the next Qwen discriminator can now produce a candidate structurally capable of satisfying promotion gate v4 without lying about label independence.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: JSPACE_VECTOR_CONTROL_ABI/v1 source packet now binds semantic derivation family, counterbalanced metric definition, exact intervention identity and source/runtime substrate digests; no second truth/effect authority is introduced.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: removes a Goodhart/readout-label confound from the model-specific causal discriminator and makes a scientific negative informative for later trace/dataset construction."
+  },
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "full_hcu": 0,
+    "provider_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "readme_sync": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Canonical the artefact/README.md was refreshed on main at the branch-cut commit during rapid parallel convergence. This narrow draft does not overwrite that moving authority surface before exact repository test evidence; the receipt and draft PR are the bounded coordination surfaces."
+  },
+  "next_exact_gate": "Run tests/test_trigger1_semantic_counterbalance_872.py against this exact branch with the current promotion gate. Only after that source gate is green and a future go has a valid canonical atomic lease may the semantic counterbalanced Qwen intervention execute behind the existing source-bound/offline/loopback zero-cost fences. A positive model run must then pass promotion gate v4; a negative remains scientific evidence."
+}

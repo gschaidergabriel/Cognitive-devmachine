@@ -56,7 +56,7 @@ class ProviderAdmissionV1Tests(unittest.TestCase):
                 "cost_class": "UNKNOWN",
                 "evidence_ref": "fixture:evidence",
             }
-            for provider in ("groq", "mistral", "nvidia")
+            for provider in sorted(admission.ALLOWED_PROVIDERS)
         }
         for provider, values in (provider_overrides or {}).items():
             providers[provider].update(values)

@@ -56,17 +56,16 @@ jobs:
               rc=$?
               set -e
               if [ ! -s "$out" ]; then
-                python3 - "$out" "$rc" <<'PY'
-import json, pathlib, sys
-pathlib.Path(sys.argv[1]).write_text(json.dumps({
-    'schema':'CLAY_TRIGGER1_OPENROUTER_QWEN06_LOGIT_VECTOR_EXPERIMENT/v1',
-    'status':'BLOCKED_BEFORE_RESULT',
-    'process_exit_code':int(sys.argv[2]),
-    'secret_exposed':False,
-    'paid_fallback_attempt_count':0,
-    'credit_scope':'NONE',
-}, indent=2, sort_keys=True)+'\n')
-PY
+                cat > "$out" <<EOF
+          {
+            "schema": "CLAY_TRIGGER1_OPENROUTER_QWEN06_LOGIT_VECTOR_EXPERIMENT/v1",
+            "status": "BLOCKED_BEFORE_RESULT",
+            "process_exit_code": ${rc},
+            "secret_exposed": false,
+            "paid_fallback_attempt_count": 0,
+            "credit_scope": "NONE"
+          }
+          EOF
               fi
             else
               python tools/openrouter_inference.py --request "$req" >/tmp/openrouter-last.json

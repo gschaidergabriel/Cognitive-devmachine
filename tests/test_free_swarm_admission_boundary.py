@@ -162,12 +162,12 @@ class DriverTripwireTests(unittest.TestCase):
         self.saved_driver_require_provider = self.driver.require_provider_admitted
         self.saved_driver_admitted_providers = self.driver.admitted_providers_from_path
         self.driver.require_provider_admitted = (
-            lambda provider: admission.require_provider_admitted(
+            lambda provider, **_kwargs: admission.require_provider_admitted(
                 provider, path=self.path
             )
         )
         self.driver.admitted_providers_from_path = (
-            lambda: admission.admitted_providers_from_path(self.path)
+            lambda *_args, **_kwargs: admission.admitted_providers_from_path(self.path)
         )
 
         self.original_urlopen = self.driver.urllib.request.urlopen

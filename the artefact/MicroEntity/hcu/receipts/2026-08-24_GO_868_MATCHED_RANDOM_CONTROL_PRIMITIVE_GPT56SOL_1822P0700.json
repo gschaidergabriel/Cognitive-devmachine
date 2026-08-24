@@ -1,0 +1,87 @@
+{
+  "schema": "CLAY_GO_HCU_SOURCE_DELTA_RECEIPT/v1",
+  "observed_date": "2026-08-24",
+  "observed_local_trigger_time": "2026-08-24T18:22:00+07:00",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "organ": "GPT56SOL_CHATGPT_ORGAN",
+  "trigger": "go",
+  "canonical_main_observed_during_reentry": "8f7c6db9e215a31004b399f19aed3289b1af061b",
+  "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+  "donor_head_before_receipt_write": "9d19c443be3b44a8bcde65afc274a96cb30dbee7",
+  "hypothesis": "A claimed J-Space steering direction should exceed a same-layer same-strength matched-norm random-direction control band before direction-specific causal credit is considered.",
+  "counterhypothesis": "Observed steering could be generic residual-stream perturbation or intervention-magnitude damage rather than direction-specific control.",
+  "external_primary_evidence": [
+    {
+      "source": "arXiv:2607.09156",
+      "claim_scope": "Reports matched-norm random-direction controls at the same injection layer/positions and gates direction-specific behavioral results against the random-control band. This is methodology support only, not EntityOS/HCU evidence."
+    },
+    {
+      "source": "ggml-org/llama.cpp current CLI/API documentation",
+      "claim_scope": "Exposes scaled control vectors plus explicit control-vector layer ranges, supporting a concrete local intervention surface. This does not prove the retained donor is executed or causal."
+    }
+  ],
+  "delta": {
+    "classification": "SOURCE_AND_TEST_PRIMITIVE_ONLY",
+    "source_path": "the artefact/MicroEntity/hcu/jspace_matched_random_control_v1.py",
+    "test_path": "the artefact/MicroEntity/hcu/test_jspace_matched_random_control_v1.py",
+    "initial_source_commit": "ab8a55dc0c081a250639e45d110586b3e4fb0871",
+    "initial_test_commit": "53fd1316499a1f3af1fdb21161ca76bd0bb653f0",
+    "integer_identity_hardening_commit": "a3ca846ed61729a23bbd7e8dfa47e871cc4f5092",
+    "integer_identity_test_commit": "9d19c443be3b44a8bcde65afc274a96cb30dbee7",
+    "source_blob_after_hardening": "362ab7cc4dcf39711dce1fafee9fd750066909bb",
+    "test_blob_after_hardening": "dff7dc25e8e8a6c07f5592f12de83a5754d7ff0d",
+    "generator": "SHA256_BOX_MULLER_GAUSSIAN_L2_MATCH/v1",
+    "properties": [
+      "family/seed/domain-separated random direction",
+      "random orientation depends on source only through dimension and L2 magnitude",
+      "matched emitted vector is independently SHA-256 bound",
+      "same exact runtime/family/seed/source replays exactly",
+      "receipt replay validation fails closed on mutation",
+      "inexact integer to binary64 aliasing fails closed",
+      "current canonical JSPACE_VECTOR_CONTROL_ABI/v1 MATCHED_RANDOM absence remains an explicit block",
+      "generated control cannot be laundered through BASELINE or PERMUTED by this primitive"
+    ],
+    "reproducibility_boundary": "Gaussian Box-Muller generation uses runtime/libm transcendental functions. Exact replay is therefore bound to exact runtime/build identity; downstream execution must bind the emitted vector digest rather than assume cross-runtime regeneration identity."
+  },
+  "authoring_smoke": {
+    "result": "PASS",
+    "tests": "7/7",
+    "extra_inexact_integer_fence": "PASS",
+    "environment": "CHATGPT_EPHEMERAL_CONTAINER_WITH_STUB_CANONICALIZER_AND_STUB_CURRENT_ABI",
+    "scope": "MECHANISM_AND_SYNTAX_SMOKE_ONLY_NOT_EXACT_REPOSITORY_OR_CANONICAL_RUNTIME_EVIDENCE"
+  },
+  "execution": {
+    "authorized_local_or_clay_direct_dev_bridge_exposed": false,
+    "github_ci_or_workflow_run_observed_for_new_source": false,
+    "external_llm_provider_calls_performed": false,
+    "provider_credentials_consumed": false,
+    "model_input_control_execution_performed": false,
+    "reason": "No authorized local normal-user or clay-direct-dev shell/bridge executor is exposed to this ChatGPT organ. Tool absence is infrastructure status, not product failure."
+  },
+  "coordination": {
+    "parallel_pr_search_for_isotropic_matched_random_control": "NO_OPEN_DUPLICATE_FOUND",
+    "retained_lane_reused": true,
+    "new_parallel_pr_created": false,
+    "upstream_shared_macrocycle_identity": "UNAVAILABLE_TO_THIS_ORGAN",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "tracks": {
+    "track_a": "ADVANCED_CANONICALLY_IN_PARALLEL_DURING_REENTRY_BY_8F7C6DB9_SOCKET_LEVEL_PROVIDER_QUARANTINE_RECEIPT_AND_BOUNDARY_RUNNER_BINDING; EXACT_RUNTIME_RECEIPT_STILL_BLOCKED_BY_EXECUTOR_TOOL_ABSENCE",
+    "track_b": "ADVANCED_MATCHED_RANDOM_HCU_VECTOR_CONTROL_GENERATION_PRIMITIVE_WITH_IDENTITY_AND_REPLAY_FENCES",
+    "track_c": "ADVANCED_JSPACE_CAUSAL_CONTROL_AND_TRAINING_TRACE_READINESS_BY_ADDING_A_DIRECTION_SPECIFICITY_CONTROL_PRIMITIVE_WHILE_PRESERVING_ZERO_CAUSAL_CREDIT"
+  },
+  "promotion": {
+    "external_provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an exposed authorized zero-cost local normal-user or clay-direct-dev executor, execute the exact live donor matched-random tests together with the retained J-Space rejection/steering-control tests. If exact-source tests pass, successor-admit one explicit MATCHED_RANDOM condition into the single canonical JSPACE_VECTOR_CONTROL_ABI/v1 (or its admitted successor) without creating a second wire, bind the emitted vector digest through real model-input consumption, and evaluate a predeclared clean/corrupted/target/sham/off-target plus matched-random causal family.",
+  "epistemic_boundary": "The generator and tests improve source-level causal-control readiness only. They do not establish a causal J-Space, hidden-state truth, model runtime acceptance, training benefit, whole HCU acceptance, canonical truth, or effect authority."
+}

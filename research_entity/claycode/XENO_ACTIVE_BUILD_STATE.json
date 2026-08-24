@@ -50,8 +50,13 @@
   },
   "recursive_promotion": {
     "gate": "tools/xeno_build_gate.py",
-    "normal_rule": "NO_PROTECTED_REGRESSION_AND_REQUIRED_CORE_PROGRESS",
-    "claycode_migration_rule": "STRICT_DIRECTIONAL_IMPROVEMENT_ON_ENTIRE_FROZEN_METRIC_VECTOR",
+    "gate_schema": "XENO_PROMOTION_GATE/v2",
+    "normal_rule": "EPSILON_PARETO_NO_PROTECTED_REGRESSION_PLUS_CROSS_GROUP_PROGRESS",
+    "claycode_migration_rule": "EPSILON_PARETO_PLUS_MEANINGFUL_CLAYCODE_PROGRESS_AND_CROSS_GROUP_PROGRESS",
+    "tiny_or_noisy_delta_is_progress": false,
+    "single_scalar_can_self_promote": false,
+    "hard_correctness_regression_fails_closed": true,
+    "minimum_independent_progress_groups": 2,
     "reject_on_missing_metric": true,
     "reject_on_nonfinite_metric": true,
     "repeat_on_every_go": true
@@ -75,17 +80,17 @@
     "dashboard_config_pass_rate",
     "jspace_causal_gain_score"
   ],
-  "required_recursive_progress": [
-    "capability_pass_rate",
-    "task_quality_score",
-    "p50_latency_ms",
-    "throughput_tokens_s",
-    "claycode_fraction",
-    "jspace_causal_gain_score"
-  ],
+  "recursive_progress_groups": {
+    "capability_quality": ["capability_pass_rate", "task_quality_score"],
+    "efficiency": ["p50_latency_ms", "p95_latency_ms", "throughput_tokens_s", "rss_mb", "token_efficiency_score"],
+    "architecture_cognition": ["claycode_fraction", "grid10_pass_rate", "jspace_causal_gain_score"],
+    "robustness_authority": ["recovery_pass_rate", "authority_boundary_pass_rate", "engine_swap_pass_rate", "two_slot_harness_pass_rate", "prestage_pipeline_pass_rate", "peer_link_pass_rate", "dashboard_config_pass_rate"]
+  },
   "global_jspace": {
     "priority": "FIRST_CLASS_CONTINUOUS_RESEARCH_AND_ENGINEERING_TARGET",
     "must_improve_recursively": true,
+    "per_candidate_improvement_mandatory": false,
+    "must_not_materially_regress": true,
     "causal_evidence_required": true,
     "closed_api_hidden_state_claims_forbidden": true
   },

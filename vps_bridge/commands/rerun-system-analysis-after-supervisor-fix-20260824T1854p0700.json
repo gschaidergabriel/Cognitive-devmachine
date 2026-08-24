@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"rerun-system-analysis-after-supervisor-fix-20260824T1854p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -euo pipefail; python3 'free swarm/evaluate.py' --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm >/tmp/free_eval.out; python3 'free swarm/update_distillery_readme.py' --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm; python3 - <<'PY'\nimport json\nx=json.load(open('free swarm/SYSTEM_ANALYSIS_LIVE.json'))\nprint(json.dumps({'runtime':x['runtime'],'go_feedback':x['go_feedback'],'conversion':x['free_swarm']['conversion'],'costs':x['costs'],'forge':{k:x.get('evidence_forge',{}).get(k) for k in ('discovery_queries','discovery_hits','evaluations','accepted_deltas')},'distillery':{k:x.get('distillery',{}).get(k) for k in ('collected_source_tokens','accepted_dataset_tokens','dataset_yield','accepted_packets','questions')}},ensure_ascii=False))\nPY"
+}

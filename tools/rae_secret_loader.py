@@ -32,13 +32,25 @@ PRIVATE_STORES = [
 ]
 NAME_RE = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
-# Credential-name -> canonical typed provider identity.  Keep this deliberately
+# Credential-name -> canonical typed provider identity. Keep this deliberately
 # narrow: non-LLM tool credentials are not silently reclassified as LLM providers.
+# Historical numbered/list aliases are included because they can otherwise bypass
+# the shared pre-secret boundary through legacy callers.
 PROVIDER_SECRET_NAMES = {
     "GROQ_API_KEY": "groq",
+    "GROQ_API_KEYS": "groq",
+    "GROQ2_API_KEY": "groq",
+    "GROQ3_API_KEY": "groq",
+    "HF_TOKEN": "huggingface",
     "MISTRAL_API_KEY": "mistral",
+    "MISTRAL_API_KEYS": "mistral",
+    "MISTRAL2_API_KEY": "mistral",
+    "MISTRAL3_API_KEY": "mistral",
     "NVIDIA_API_KEY": "nvidia",
+    "NVIDIA_API_KEYS": "nvidia",
     "NVIDIA_NIM_API_KEY": "nvidia",
+    "NVIDIA2_API_KEY": "nvidia",
+    "NVIDIA3_API_KEY": "nvidia",
     "NGC_API_KEY": "nvidia",
     "OPENROUTER_API_KEY": "openrouter",
 }

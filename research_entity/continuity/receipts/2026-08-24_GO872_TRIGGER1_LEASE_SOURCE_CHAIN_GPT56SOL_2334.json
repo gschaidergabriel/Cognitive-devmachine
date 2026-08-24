@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_GO872_TRIGGER1_LEASE_SOURCE_CHAIN_DELTA/v1",
+  "created_at_local": "2026-08-24T23:34:00+07:00",
+  "authority_epoch": "8.72",
+  "persistent_research_entity": "Clay",
+  "worker": "GPT-5.6 Sol ChatGPT organ",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "observed_main_before_current_delta": "e133494470cb09681d5e9a10f14359d7f5a8a5ef",
+  "branch": "gpt56sol/go872-trigger1-source-identity-20260824-2334",
+  "material_finding": {
+    "observed": "The retained Trigger-1 workflow validates the canonical atomic claim, records TRIGGER1_SOURCE_HEAD/TREE and checks claim-main ancestry before intervention. The retained compatibility launcher independently requires a clean Git identity and checks pre/post source stability, but on the observed main it does not bind that pre-intervention identity back to the workflow-recorded lease source. Its new defense-in-depth guard blocks GitHub Actions runs when TRIGGER1_LEASE_ADMITTED is absent, while direct non-GitHub launcher invocation remains outside that workflow guard.",
+    "risk": "A clean checkout could change between workflow lease admission and launcher source measurement, remain stable thereafter, and produce internally consistent pre/post evidence for a different source than the workflow-bound source. Direct invocation can also bypass the workflow-only lease gate unless the launcher itself revalidates the canonical claim before model intervention.",
+    "counterhypothesis": "Workflow lease admission plus launcher pre/post stability are sufficient because the checkout is expected not to change between steps.",
+    "counterhypothesis_result": "REJECTED_AS_FAIL_OPEN_TO_HANDOFF_CHANGE",
+    "falsifier": "An explicit lease-to-pre-source equality/revalidation check eliminates the gap; without it, the two evidence islands remain separately self-consistent."
+  },
+  "delta": {
+    "binding_helper": "tools/trigger1_lease_source_binding_v1.py",
+    "binding_schema": "CLAY_TRIGGER1_LEASE_SOURCE_BINDING/v1",
+    "launcher": "tools/trigger1_local_qwen06_midlayer_causal.sh",
+    "tests": [
+      "tests/test_trigger1_lease_source_binding_v1.py",
+      "tests/test_trigger1_retained_launcher_fusion.py"
+    ],
+    "authority_reuse": "The binding helper imports and reuses trigger1_atomic_lease_gate.validate_claim; it does not create a second lease authority.",
+    "checks": [
+      "canonical atomic claim revalidates and has no result file",
+      "canonical claim SHA matches workflow-recorded claim SHA",
+      "pre-intervention source is canonical CLAY_GIT_SOURCE_IDENTITY/v1 and clean",
+      "pre-intervention source identity is remeasured against the repository at binding time",
+      "workflow-recorded source HEAD matches measured pre-intervention HEAD",
+      "workflow-recorded source tree matches measured pre-intervention tree",
+      "claim observed main exists and is an ancestor of the measured execution HEAD"
+    ],
+    "launcher_fail_closed": [
+      "missing canonical lease envelope before intervention",
+      "claim revalidation failure",
+      "existing claim result/reuse",
+      "claim SHA mismatch",
+      "workflow source HEAD/tree mismatch",
+      "repository mutation between pre-measurement and lease-source binding"
+    ],
+    "result_binding": "Successful compatibility results embed lease_source_binding together with source_identity_pre/source_identity_post; a non-PASS lease binding forces zero credit and blocked status."
+  },
+  "verification_definition": {
+    "positive": "exact claim SHA + workflow HEAD/tree + clean remeasured execution source",
+    "negative_cases": [
+      "workflow source-head mismatch",
+      "claim SHA mismatch",
+      "repository change after pre-source measurement",
+      "claim result already exists/reuse",
+      "launcher ordering requires binding before intermediate executor"
+    ],
+    "runtime_model_execution_performed": false,
+    "unusual_experiment_performed": false
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_identity": "UNAVAILABLE_IN_THIS_CHAT_TOOL_SURFACE",
+    "user_message_timestamp_precision": "MINUTE_ONLY",
+    "canonical_atomic_claim_created_by_this_organ": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "go_tracks": {
+    "track_a": {
+      "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "status": "ADVANCED_EXECUTION_EVIDENCE_CHAIN",
+      "delta": "Closes the atomic-lease-to-exact-source handoff before the retained executable model path."
+    },
+    "track_b": {
+      "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+      "status": "ADVANCED_REUSABLE_PROVENANCE_BINDING",
+      "delta": "Adds a deterministic causal binding primitive between coordination authority and exact source identity without creating a competing truth/effect authority."
+    },
+    "track_c": {
+      "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+      "status": "ADVANCED_FAIL_CLOSED_INTERVENTION_BOUNDARY",
+      "delta": "The strongest-intermediate Qwen path cannot begin unless the canonical lease and measured execution source are one verified chain."
+    }
+  },
+  "credit_boundary": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false,
+    "note": "Source/control-plane/provenance hardening only. No unusual intervention or model-runtime evidence was executed by this organ."
+  },
+  "next_exact_gate": "Run exact-current lease-source-binding and retained-launcher regressions; if green and nonduplicate, fuse the delta, then only a future canonically claimed Trigger-1 dispatch may execute the strongest-intermediate Qwen discriminator."
+}

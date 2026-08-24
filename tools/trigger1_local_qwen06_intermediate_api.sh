@@ -11,10 +11,10 @@ unset \
   MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY \
   NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY \
   OPENROUTER_API_KEY OPENROUTER_API_KEYS OPENROUTER2_API_KEY OPENROUTER3_API_KEY \
-  TOGETHER_API_KEY TOGETHER_API_KEYS || true
+  TOGETHER_API_KEY TOGETHER_API_KEYS OPENAI_API_KEY ANTHROPIC_API_KEY HF_TOKEN || true
 while IFS= read -r name; do
   case "$name" in
-    GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*) unset "$name" || true ;;
+    GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*|OPENAI*KEY*|ANTHROPIC*KEY*) unset "$name" || true ;;
   esac
 done < <(compgen -v)
 
@@ -28,6 +28,39 @@ HF_HOME="${HF_HOME:-$CACHE_ROOT/huggingface}"
 mkdir -p "$CACHE_ROOT" "$HF_HOME"
 export HF_HOME
 export TOKENIZERS_PARALLELISM=false
+
+available_kb(){
+  df -Pk "$CACHE_ROOT" | awk 'NR==2 {print $4}'
+}
+
+# Historical Trigger-1 self-hosted attempts encountered a low-disk gate. Recover only
+# disposable Trigger-1 scratch/incomplete bootstrap state; preserve the expensive HF cache.
+BEFORE_KB="$(available_kb)"
+if [[ "$BEFORE_KB" -lt 4000000 ]]; then
+  rm -rf \
+    "${RUNNER_TEMP:-/tmp}"/clay-trigger1-v2-* \
+    "${RUNNER_TEMP:-/tmp}"/clay-trigger1-qwen06-* \
+    "$VENV.tmp" 2>/dev/null || true
+  rm -rf "$USER_HOME/.cache/pip" 2>/dev/null || true
+fi
+AFTER_KB="$(available_kb)"
+printf '{"available_kb_before":%s,"available_kb_after":%s}\n' "$BEFORE_KB" "$AFTER_KB" > "$OUT_DIR/disk_preflight.json"
+if [[ "$AFTER_KB" -lt 3000000 ]]; then
+  python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" "$BEFORE_KB" "$AFTER_KB" <<'PY'
+import json, pathlib, sys
+pathlib.Path(sys.argv[1]).write_text(json.dumps({
+  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_ACTIVATION_API_EXPERIMENT/v1',
+  'status':'BLOCKED_INSUFFICIENT_FREE_DISK_AFTER_BOUNDED_CLEANUP',
+  'available_kb_before':int(sys.argv[2]),
+  'available_kb_after':int(sys.argv[3]),
+  'zero_provider_billing':True,
+  'external_provider_credentials_read':False,
+  'terminal_output_projection_shortcut':False,
+  'next_action':'RECLAIM_ADDITIONAL_AUTHORIZED_SANDBOX_CACHE_OR_STORAGE'
+}, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+PY
+  exit 3
+fi
 
 has_runtime(){
   "$1" - <<'PY' >/dev/null 2>&1

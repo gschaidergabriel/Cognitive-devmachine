@@ -130,9 +130,9 @@ class ProtocolTests(unittest.TestCase):
         with self.assertRaisesRegex(self.m.IntermediateProtocolError,'DUPLICATE_CONTROL_ROW'):
             self.m.select_layer_gain(rows)
 
-    def test_split_calibration_prompt_cannot_form_matched_family(self):
-        rows=[dict(row) for row in calibration_rows(self.m) if row['case_id']=='c1']
-        next(row for row in rows if row['control']=='+VECTOR')['prompt_sha256']=sha(999)
+    def test_split_calibration_prompt_rejects_combo_even_with_other_complete_case(self):
+        rows=calibration_rows(self.m)
+        next(row for row in rows if row['case_id']=='c1' and row['control']=='+VECTOR')['prompt_sha256']=sha(999)
         selected=self.m.select_layer_gain(rows)
         self.assertFalse(selected['selected'])
 
@@ -147,14 +147,14 @@ class ProtocolTests(unittest.TestCase):
         next(row for row in rows if row['case_id']=='h1' and row['label_map_id']=='A_POS' and row['control']=='SIGN_FLIP')['prompt_sha256']=sha(998)
         out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
         self.assertFalse(out['pass'])
-        self.assertEqual('WRONG_LAYER_EVIDENCE_REQUIRED',out['classification'])
+        self.assertEqual('INCOMPLETE_MATCHED_CONTROL_FAMILY',out['classification'])
 
     def test_split_holdout_seed_is_not_merged_into_matched_family(self):
         rows=holdout_rows(self.m)
         next(row for row in rows if row['case_id']=='h1' and row['label_map_id']=='A_POS' and row['control']=='SIGN_FLIP')['seed']=9999
         out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
         self.assertFalse(out['pass'])
-        self.assertEqual('WRONG_LAYER_EVIDENCE_REQUIRED',out['classification'])
+        self.assertEqual('INCOMPLETE_MATCHED_CONTROL_FAMILY',out['classification'])
 
     def test_auxiliary_causal_evidence_must_bind_plus_vector_row(self):
         rows=holdout_rows(self.m)

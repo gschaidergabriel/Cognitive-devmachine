@@ -21,8 +21,23 @@
       "admitted": false,
       "cost_class": "UNKNOWN",
       "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+    },
+    "openrouter": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#free_only"
+    },
+    "tavily": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#free_only"
+    },
+    "exa": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#free_only"
     }
   },
   "runtime_provider_credit": 0,
-  "note": "Environment attestations, credential presence, HTTP 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE. A future control-plane update requires direct evidence that the specific execution class cannot create monetary spend or overage."
+  "note": "Environment attestations, credential presence, HTTP 402/429 behavior, zero-priced model catalogs and provider responses cannot self-admit a provider as FREE. Groq, Mistral, NVIDIA, OpenRouter, Tavily and Exa all require a future control-plane update backed by direct evidence that the specific execution class cannot create monetary spend or overage."
 }

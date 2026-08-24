@@ -12,6 +12,31 @@ ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
 
 provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
 
+# Provider credentials may already be present in the supervisor's inherited environment.
+# Remove only credentials whose provider is not canonically typed FREE-admitted. `unset`
+# and `compgen -v` operate on variable names; blocked credential values are never expanded.
+clear_unadmitted_provider_secret_env(){
+  local name
+  if ! provider_admitted groq; then
+    unset GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY || true
+    while IFS= read -r name; do case "$name" in GROQ_API_KEY_*) unset "$name" || true ;; esac; done < <(compgen -v)
+  fi
+  if ! provider_admitted mistral; then
+    unset MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY || true
+    while IFS= read -r name; do case "$name" in MISTRAL_API_KEY_*) unset "$name" || true ;; esac; done < <(compgen -v)
+  fi
+  if ! provider_admitted nvidia; then
+    unset NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY || true
+    while IFS= read -r name; do case "$name" in NVIDIA_API_KEY_*) unset "$name" || true ;; esac; done < <(compgen -v)
+  fi
+  if ! provider_admitted openrouter; then
+    unset OPENROUTER_API_KEY OPENROUTER_API_KEYS || true
+    while IFS= read -r name; do case "$name" in OPENROUTER_API_KEY_*) unset "$name" || true ;; esac; done < <(compgen -v)
+  fi
+  # These credentialed research providers are not in the current typed LLM-provider authority.
+  unset TAVILY_API_KEY EXA_API_KEY || true
+}
+
 typed_admission_compat_flags(){
   unset CLAY_FREE_ONLY_ATTESTED CLAY_GROQ_FREE_ATTESTED CLAY_MISTRAL_FREE_ATTESTED CLAY_NVIDIA_FREE_ATTESTED || true
   local any=0
@@ -106,6 +131,7 @@ stop_unadmitted_go_swarm(){
 }
 
 while (( $(date +%s) < DEADLINE )); do
+  clear_unadmitted_provider_secret_env
   typed_admission_compat_flags
   load_admitted_secret_sources
   eval "$(normalize_provider_pool)"
@@ -121,7 +147,7 @@ from free_provider_admission import admission_snapshot
 snap=admission_snapshot()
 def running(pattern):
  p=subprocess.run(['pgrep','-f',pattern],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True);return bool(p.stdout.strip())
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v7','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'distillery_running':running('run_research_distillery_entry.py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; PUBLIC/LOCAL FORGE CONTINUES DURING QUARANTINE'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v7','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'distillery_running':running('run_research_distillery_entry.py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_SECRETS_REMOVED_BY_NAME_BEFORE_CHILD_START; PUBLIC/LOCAL_FORGE_CONTINUES_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30

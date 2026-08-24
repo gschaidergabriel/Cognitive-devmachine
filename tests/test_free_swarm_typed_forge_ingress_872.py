@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import json
 import sqlite3
@@ -9,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
+import free_swarm_typed_delta_bridge as typed_bridge  # noqa: E402
 import free_swarm_typed_forge_ingress_872 as typed  # noqa: E402
 import run_free_evidence_forge as forge  # noqa: E402
 from free_swarm_delta_ingress import SCHEMA as INGRESS_SCHEMA  # noqa: E402
@@ -150,6 +152,57 @@ def test_pretyped_historical_row_retains_legacy_compatibility(tmp_path, monkeypa
     con = memory_db()
     assert forge.ingest_worker_candidates(con) == 1
     assert counter(con, "legacy_candidates_ingested") == 1
+
+
+def test_typed_bridge_preserves_async_sink_and_writes_sibling_sidecar(tmp_path, monkeypatch):
+    class Sink:
+        def __init__(self, output_dir: Path):
+            self.output_dir = output_dir
+            self.output_dir.mkdir(parents=True, exist_ok=True)
+            self.path = output_dir / "workers.jsonl"
+            self.status_path = output_dir / "status.json"
+            self._lock = asyncio.Lock()
+
+        async def append(self, item):
+            async with self._lock:
+                with self.path.open("a", encoding="utf-8") as fh:
+                    fh.write(json.dumps(item, ensure_ascii=False, separators=(",", ":")) + "\n")
+                    fh.flush()
+
+    class Base:
+        JsonlSink = Sink
+
+    class Core:
+        base = Base
+
+    monkeypatch.setattr(typed_bridge, "_INSTALLED", False)
+    typed_bridge.install(Core)
+    assert asyncio.iscoroutinefunction(Sink.append)
+
+    active = tmp_path / "active-async"
+    obj = proposal()
+    text = "ARCHITECTURE_DELTA_JSON=" + json.dumps(obj, separators=(",", ":"))
+    row = {
+        "http_status": 200,
+        "text": text,
+        "text_sha256": hashlib.sha256(text.encode()).hexdigest(),
+        "provider": "nvidia",
+        "model": "model",
+        "role": "hcu_grid10",
+        "repo_head_at_prompt": "a" * 40,
+    }
+    sink = Sink(active)
+    asyncio.run(sink.append(row))
+
+    sidecar_path = active / "architecture_deltas.jsonl"
+    assert sink.path.is_file()
+    assert sidecar_path.is_file()
+    assert not sidecar_path.is_dir()
+    worker_row = json.loads(sink.path.read_text().splitlines()[0])
+    sidecar_row = json.loads(sidecar_path.read_text().splitlines()[0])
+    assert worker_row["delta_ingress"]["valid"] is True
+    assert sidecar_row["worker_text_sha256"] == row["text_sha256"]
+    assert sidecar_row["proposal_sha256"] == worker_row["delta_ingress"]["proposal_sha256"]
 
 
 def test_fast_launcher_preserves_backpressure_and_installs_typed_bridge():

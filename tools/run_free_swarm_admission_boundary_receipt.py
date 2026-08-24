@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """Emit an exact-source FREE Swarm admission-boundary execution receipt.
 
-Executes the canonical admission-boundary unittest module in a sanitized child
+Executes the canonical admission-boundary unittest modules in a sanitized child
 process. Provider credentials are not inherited. A Python socket tripwire blocks
 and records any unmocked Python network connection attempt. The canonical tests
 retain their own per-case secret/network tripwire assertions.
+
+The suite also binds malformed canonical admission, caller-forged FREE payloads,
+and the shared ``rae_secret_loader`` primitive so direct/legacy callers cannot
+inspect provider environment variables or repository secret stores before
+canonical typed FREE admission.
 
 Component evidence only: this runner does not admit or call any external provider
 and cannot establish whole EntityOS/HCU, HCU, J-Space-model, or training credit.
@@ -27,19 +32,29 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TEST_MODULES = (
     "tests.test_free_swarm_admission_boundary_867",
+    "tests.test_free_swarm_admission_boundary_868_malformed",
+    "tests.test_free_provider_admission_forgery_868",
     "tests.test_free_swarm_socket_tripwire_868",
+    "tests.test_rae_secret_loader_provider_admission",
 )
 TEST_PATHS = (
     ROOT / "tests/test_free_swarm_admission_boundary_867.py",
+    ROOT / "tests/test_free_swarm_admission_boundary_868_malformed.py",
+    ROOT / "tests/test_free_provider_admission_forgery_868.py",
     ROOT / "tests/test_free_swarm_socket_tripwire_868.py",
+    ROOT / "tests/test_rae_secret_loader_provider_admission.py",
 )
 INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
 
 SOURCE_PATHS = (
     "tests/test_free_swarm_admission_boundary_867.py",
+    "tests/test_free_swarm_admission_boundary_868_malformed.py",
+    "tests/test_free_provider_admission_forgery_868.py",
     "tests/test_free_swarm_socket_tripwire_868.py",
+    "tests/test_rae_secret_loader_provider_admission.py",
     "tools/free_provider_admission.py",
+    "tools/rae_secret_loader.py",
     "tools/run_free_go_swarm.py",
     "tools/run_24h_entityos_swarm.py",
     "tools/run_research_distillery_entry.py",
@@ -84,6 +99,11 @@ def _git(*args: str) -> str:
     if proc.returncode != 0:
         raise RuntimeError(f"GIT_FAILED:{' '.join(args)}:{proc.stderr.strip()[:300]}")
     return proc.stdout.strip()
+
+
+def _working_tree_dirty() -> bool:
+    """Include untracked files because they can shadow imports on PYTHONPATH."""
+    return bool(_git("status", "--porcelain", "--untracked-files=all"))
 
 
 def _authority_snapshot() -> dict[str, Any]:
@@ -215,7 +235,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     head = _git("rev-parse", "HEAD")
-    dirty = bool(_git("status", "--porcelain", "--untracked-files=no"))
+    dirty = _working_tree_dirty()
     if dirty and not args.allow_dirty:
         raise SystemExit("REFUSING_DIRTY_TREE: rerun from an exact clean checkout")
 
@@ -243,13 +263,32 @@ def main(argv: list[str] | None = None) -> int:
         )
         attempts = _network_attempts(network_log)
 
+    # Rebind exact source after execution. A concurrent checkout update, authority
+    # change, tracked mutation, or untracked import shadow makes the receipt
+    # non-promotable even if the child tests themselves were green.
+    head_after = _git("rev-parse", "HEAD")
+    dirty_after = _working_tree_dirty()
+    source_manifest_after = _source_manifest()
+    source_manifest_sha256_after = _manifest_digest(source_manifest_after)
+    source_stable_during_execution = bool(
+        head_after == head
+        and not dirty_after
+        and source_manifest_sha256_after == source_manifest_sha256
+    )
+
     finished = dt.datetime.now(dt.timezone.utc)
     combined = proc.stdout + "\n" + proc.stderr
     match = re.search(r"Ran\s+(\d+)\s+tests?", combined)
     test_count = int(match.group(1)) if match else None
     unittest_ok = proc.returncode == 0 and re.search(r"(?:^|\n)OK(?:\s|\n|$)", combined) is not None
     sentinel_leaked = SENTINEL in combined
-    pass_boundary = bool(unittest_ok and not attempts and not sentinel_leaked and not dirty)
+    pass_boundary = bool(
+        unittest_ok
+        and not attempts
+        and not sentinel_leaked
+        and not dirty
+        and source_stable_during_execution
+    )
 
     receipt = {
         "schema": "FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1",
@@ -262,9 +301,14 @@ def main(argv: list[str] | None = None) -> int:
         "source": {
             "repository": "gschaidergabriel/clay-global-research-entity",
             "git_head": head,
+            "git_head_after_execution": head_after,
             "clean_tracked_tree": not dirty,
+            "clean_tree_after_execution": not dirty_after,
+            "untracked_files_included_in_cleanliness_gate": True,
             "manifest": source_manifest,
             "manifest_sha256": source_manifest_sha256,
+            "manifest_sha256_after_execution": source_manifest_sha256_after,
+            "source_stable_during_execution": source_stable_during_execution,
             "test_modules": list(TEST_MODULES),
             "test_sha256": {path.relative_to(ROOT).as_posix(): _sha256_file(path) for path in TEST_PATHS},
         },
@@ -289,6 +333,10 @@ def main(argv: list[str] | None = None) -> int:
             "python_socket_network_attempt_count": len(attempts),
             "python_socket_network_attempts": attempts,
             "per_case_secret_and_network_zero_assertions": "ENFORCED_BY_CANONICAL_TEST_SUITE",
+            "malformed_admission_zero_assertions": "ENFORCED_BY_TEST_FREE_SWARM_ADMISSION_BOUNDARY_868_MALFORMED",
+            "caller_forgery_non_authority_assertions": "ENFORCED_BY_TEST_FREE_PROVIDER_ADMISSION_FORGERY_868",
+            "shared_secret_loader_pretouch_assertions": "ENFORCED_BY_TEST_RAE_SECRET_LOADER_PROVIDER_ADMISSION",
+            "source_toc_tou_guard": "HEAD_CLEAN_TREE_AND_MANIFEST_MUST_MATCH_BEFORE_AND_AFTER_EXECUTION",
         },
         "result": {
             "unittest_ok": unittest_ok,

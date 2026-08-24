@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_GO_SOURCE_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.68",
+  "date": "2026-08-24",
+  "persistent_research_entity": "Clay",
+  "worker_role": "ORGAN_NOT_ENTITY",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "reentry": {
+    "uploaded_bootstrap_is_cache": true,
+    "current_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "main_observed_before_receipt": "bd9cf6d1012057120fe5419157dfbb44d8217f44",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "material_finding": "A concurrent 8.68 hardening correctly changed public provider admission helpers so caller-supplied admission dictionaries cannot self-grant FREE authority, but tests/test_free_provider_admission_v1.py still encoded the predecessor caller-payload contract. That stale test could reject the correct security hardening or encourage restoring the unsafe semantic. The test contract was migrated to patch canonical temporary control-plane paths and a direct caller-forgery regression was added.",
+  "writes": [
+    {
+      "commit": "f737a97197b3465f407a6c59029cf5e8d32cc329",
+      "path": "tests/test_free_provider_admission_v1.py",
+      "blob": "858a2d75f61ef1420886d6a9c358b64e9edb420a",
+      "delta": "Bind provider admission assertions to canonical temporary ROOT/ADMISSION_PATH/SUPERVISOR_INBOX_PATH and prove caller-supplied forged FREE payload cannot self-admit via provider_is_admitted_free or admitted_provider_names."
+    }
+  ],
+  "source_binding": {
+    "canonical_provider_admission_source_blob": "632f13223217d6e62cb2f095785d0128c10e867a",
+    "source_behavior": "public helper compatibility payload is ignored; canonical control-plane state is reloaded",
+    "current_test_blob_reobserved_on_main": "858a2d75f61ef1420886d6a9c358b64e9edb420a"
+  },
+  "verification": {
+    "chatgpt_isolated_exact_source_component_reproduction": {
+      "source_git_blob_identity_matched": "632f13223217d6e62cb2f095785d0128c10e867a",
+      "forged_caller_payload_result": false,
+      "forged_caller_admitted_provider_names": [],
+      "canonical_temp_groq_free_result_after_canonical_file_change": true,
+      "classification": "EXACT_SOURCE_COMPONENT_BEHAVIOR_ONLY"
+    },
+    "canonical_free_swarm_boundary_runner_present": "tools/run_free_swarm_admission_boundary_receipt_v1.py",
+    "canonical_runner_socket_tripwire_fusion_commit": "9d8e93b92ac0c419be187d80bb8053fca148ea03",
+    "runner_execution_on_authorized_local_or_clay_direct_dev_observed_by_this_organ": false,
+    "vps_bridge_health_directly_observable_by_this_organ": false,
+    "vps_bridge_observability_classification": "TOOL_EXPOSURE_UNAVAILABLE_NOT_PRODUCT_FAILURE",
+    "runtime_credit_added": 0,
+    "provider_runtime_credit_added": 0,
+    "whole_entityos_hcu_credit_added": 0,
+    "jspace_model_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "external_solution_fusion": {
+    "principle": "authorization authority must be server/control-plane derived and deny by default; untrusted caller parameters are inputs rather than authority",
+    "use": "donor principle only; no external code imported",
+    "status": "CORROBORATES_CANONICAL_AUTHORITY_DESIGN"
+  },
+  "parallel_fusion": {
+    "provider_forgery_hardening_receipt": "research_entity/continuity/receipts/2026-08-24_GO_868_PROVIDER_FORGERY_MANIFEST_SYNC_GPT56SOL.json",
+    "local_jspace_intervention_contract_commit": "d71b61da7c0b444f2fe4608cdae01f118c53ba6c",
+    "offline_model_specific_jspace_probe_commit": "c51a8f9546dd4a410e3fb21d6bf989333a7f5679",
+    "local_model_postload_identity_delta_observed": true,
+    "duplicate_runner_removed_after_fusion_commit": "bd9cf6d1012057120fe5419157dfbb44d8217f44"
+  },
+  "go_tracks": {
+    "track_a": {
+      "status": "ADVANCED",
+      "delta": "Closed the stale acceptance-test contract left by the caller-forgery hardening and aligned the current central admission test with canonical control-plane authority."
+    },
+    "track_b": {
+      "status": "ADVANCED_AT_TYPED_ADMISSION_BOUNDARY_LEVEL",
+      "delta": "The reusable typed admission/capability boundary now has a canonical-path caller-forgery regression and a single deduplicated exact-source receipt runner with socket-level network fencing; no second authority or effect path was created.",
+      "credit": "SOURCE_AND_ISOLATED_COMPONENT_ONLY"
+    },
+    "track_c": {
+      "status": "ADVANCED_BY_CURRENT_MAIN_FUSION_AT_SOURCE_PROBE_LEVEL",
+      "delta": "Current main now contains an offline-only model-specific activation intervention probe implementing clean/corrupted/intervention/control J-Space candidate evidence with forced offline/network fencing and zero promotion credit.",
+      "credit": "SOURCE_PROBE_ONLY_NO_MODEL_RUNTIME_CREDIT"
+    }
+  },
+  "unusual_experiment": {
+    "performed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable upstream macrocycle/request identity was exposed; no post-hoc trigger key was invented."
+  },
+  "credit_boundary": {
+    "external_provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On an authorized exposed zero-cost normal-user local or clay-direct-dev surface, execute tools/run_free_swarm_admission_boundary_receipt_v1.py from a clean exact-current checkout and persist the resulting FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1. Only after that boundary passes and a provider receives direct canonical FREE classification may one external provider lane be restarted. In parallel, execute the live donor InferenceReceipt/v4 rejection suite and then one offline local model-specific J-Space clean/corrupted/target/sham/off-target family with exact model/runtime/loader/InferenceReceipt bindings."
+}

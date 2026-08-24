@@ -67,7 +67,7 @@ Environment flags, credential presence, `:free` route suffixes, catalog pricing 
 ## Retained convergence lanes
 
 - HCU/Typed Entry/J-Space donor: `gschaidergabriel/clay-global-research-entity#1263`
-  - live head observed in this `go`: `2badebe78db868c56ef39f0a32d198282cffcd88`
+  - live head observed in final reentry of this `go`: `ca3c55708f040b450279ad94050af4b414fa954f`
   - open draft, not merged;
   - donor/source lane only; no automatic runtime credit transfer.
 - bounded execution controller: `gschaidergabriel/Dr.-Unterweger#810`
@@ -85,6 +85,8 @@ Continue under FREE_ONLY with `JSPACE_VECTOR_CONTROL_ABI/v1`, real model-specifi
 
 The current local Qwen3-4B/`llama.cpp` research server is useful as a provider-independent local inference surface, but a successful OpenAI-compatible completion is not sufficient for J-Space causality. `research_entity/claycode/HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1.md` now requires exact model/tokenizer/runtime/loader identity plus named activation-site observation, controlled intervention, sham/off-target controls, output deltas and trace-to-InferenceReceipt binding before a local backend is `JSPACE_INTERVENTION_CAPABLE`.
 
+`research_entity/claycode/HCU_JSPACE_INTERVENTION_BACKEND_SELECTION_V1.md` now selects a separate instrumentable zero-cost local lane instead of overloading `llama.cpp`: direct local NNsight/PyTorch is the first candidate because it exposes named activations and in-trace modification with the fewest moving parts; local NNsight/vLLM is the second candidate if memory/throughput requires a persistent engine. Remote NDIF/hosted inference is explicitly outside this selection under the current provider quarantine. This is a source/research mechanism decision only, not model-runtime credit.
+
 ## `go` — three coupled tracks
 
 Every exact `go` advances or explicitly no-changes:
@@ -95,11 +97,11 @@ Every exact `go` advances or explicitly no-changes:
 
 ### Current `go` delta
 
-**Track A — advanced:** current-facing authority drift was repaired by synchronizing `research_entity/rooms/PROGRAM_STATE.json` from 8.67 to supervisor 8.68 and updating this README from stale 8.65 wording. The provider-admission source boundary was also hardened with `tests/test_free_swarm_admission_boundary_868_malformed.py`, which explicitly requires malformed canonical admission to terminate before any provider secret lookup or network attempt. These are source/current-facing deltas only; no runtime PASS is implied.
+**Track A — advanced:** the exact FREE-provider admission acceptance harness was repaired at the canonical path boundary. `tests/test_free_swarm_admission_boundary_867.py` previously wrote synthetic admission fixtures to `root/admission.json`, while the production `load_provider_admission()` resolves its default admission from `root/research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json`. That mismatch could make the intended acceptance discriminator exercise a missing production path rather than the supplied policy fixture. Commit `a30473990310a8be4d8072337f01eeb3939e9629` moves the fixtures onto the production-relative path and adds full startup tripwires for malformed admission, authority-epoch mismatch and an unlisted-provider record. A parallel 8.68 malformed-admission regression contained the same noncanonical fixture-path defect; commit `989e1d712d4aee4d6c1722c55923ca0c4093575f` repairs it too. These are source/test-fidelity deltas only; no runtime PASS is implied. The new J-Space backend selection also improves executable convergence by keeping the stable local inference service separate from the instrumentable causal research runtime rather than mixing incompatible evidence semantics in one service.
 
-**Track B — HCU_NO_CHANGE_WITH_REASON:** no new HCU/Typed Entry runtime credit was minted because an actual local/VPS bridge execution surface is not exposed to this ChatGPT organ in the current tool set. Static/source work already exists; duplicating the donor implementation would be lower information than executing the exact boundary/rejection tests. Next discriminator: run the current `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` or donor InferenceReceipt/v4 rejection-boundary test set on an authorized exposed local normal-user or `clay-direct-dev` bridge with exact source/environment/result identities.
+**Track B — advanced at typed-admission/HCU interface-contract level:** the reusable Typed Entry/control-plane admission primitive is now exercised through the same canonical repository-relative authority path as production for the central blocked-provider discriminator. The J-Space backend selection adds explicit `LOCAL_INFERENCE_CAPABLE`, `JSPACE_OBSERVATION_CAPABLE`, and `JSPACE_INTERVENTION_CAPABLE` classes with exact causal identity and receipt requirements, without creating another provider authority, truth store, HCU implementation or effect path. HCU/full-runtime credit remains zero. Next discriminator: execute the exact current boundary suite on an authorized exposed local normal-user or `clay-direct-dev` bridge and separately execute the smallest observation-only named-activation probe.
 
-**Track C — advanced at source/research-contract level only:** `HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1.md` now distinguishes opaque local completion serving from an instrumentable causal backend and defines the minimum clean/corrupted/target/sham/off-target intervention family required for model-specific Global J-Space/GWT evidence. External donor research from activation-patching/tracing systems was fused only as a mechanism candidate. No J-Space model-runtime or training credit is granted. Next discriminator: execute one exact local clean/corrupted pair plus target and sham activation intervention with bound model/runtime/loader/InferenceReceipt identities.
+**Track C — advanced at source/research-contract level:** `HCU_JSPACE_INTERVENTION_BACKEND_SELECTION_V1.md` selects direct local NNsight/PyTorch as the cheapest first instrumentable backend candidate, with local NNsight/vLLM as the fallback when resource/throughput constraints justify the extra indirection. It binds the existing five-run clean/corrupted/target/sham/off-target gate to explicit backend capability classes, falsifiers, source/model/runtime/tokenizer identities, activation tensor digests and a bounded receipt schema. No J-Space model-runtime or training credit is granted. Next discriminator: one exact local observation-only trace at a named activation site, followed only on success by the five-run causal family.
 
 No new unusual experiment was performed. The current user trigger lacks an exposed shared immutable high-precision macrocycle identity sufficient to justify inventing a lease key, so unusual-intervention work remains fail-closed.
 
@@ -131,14 +133,15 @@ A source file, source test, deployment, receipt, model agreement or same-family 
 1. keep all current-facing surfaces successor-aligned to 8.68;
 2. preserve historical unadmitted provider traffic append-only and keep external LLM-provider traffic quarantined;
 3. execute `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` on exact current source using an authorized exposed zero-cost local or `clay-direct-dev` bridge;
-4. prove zero secret lookup and zero network attempts for every blocked provider-admission case, including malformed admission;
+4. prove zero secret lookup and zero network attempts for every blocked provider-admission case, now with test fixtures bound to the canonical production-relative admission path; strengthen the runtime capsule with an OS-level no-network fence where the authorized surface supports it;
 5. execute live donor InferenceReceipt/v4 rejection-boundary tests before any executor rebind;
 6. verify `CLAY_LOCAL_RESEARCH_MODEL/v2` reaches `READY_IDENTITY_OBSERVED` with a process-bound server executable hash and non-null post-load GGUF hash on an authorized exposed local/VPS sandbox;
 7. keep loader-consumed bytes UNKNOWN until separately attested; do not promote the post-load hash into loader evidence;
-8. treat the local Qwen3-4B/`llama.cpp` server as local-inference-only until the J-Space intervention backend gate is satisfied;
-9. execute the smallest model-specific causal family: clean, corrupted, target intervention, sham control and off-target control with exact activation-site and output identities;
-10. only after exact component PASS continue real model invocation -> ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT trace;
-11. continue J-Space vector-control ABI, deterministic hard negatives, leak-resistant family splits and zero-cost local approximately-0.8B readiness without paid/provider execution;
-12. preserve whole-product/model/training credit at zero until corresponding exact admitted evidence exists.
+8. retain `llama.cpp` as `LOCAL_INFERENCE_CAPABLE`; use the separate intervention lane for J-Space causality;
+9. on the smallest already-available compatible local HuggingFace/PyTorch model, execute one deterministic NNsight observation-only trace at one named residual-stream/equivalent activation site and bind exact package/model/tokenizer/runtime/input/output/tensor identities;
+10. only if observation identity closes, execute the five-run clean/corrupted/target/sham/off-target intervention family and emit `HCU_JSPACE_LOCAL_INTERVENTION_RECEIPT/v1` or current successor equivalent;
+11. only after exact component PASS continue ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT causal candidate -> admitted family-split dataset;
+12. continue J-Space vector-control ABI, deterministic hard negatives, leak-resistant family splits and zero-cost local approximately-0.8B readiness without paid/provider execution;
+13. preserve whole-product/model/training credit at zero until corresponding exact admitted evidence exists.
 
 Historical README revisions and receipts remain Git provenance only and do not override current authority.

@@ -6,7 +6,10 @@ shared by the main Free Swarm and the research distillery. It does not rotate
 credentials to evade provider limits and it never upgrades billing.
 
 This is deliberately a coarse admission layer. Provider response headers and
-HTTP 429 remain the source of truth for actual dynamic quotas.
+HTTP 429 remain the source of truth for actual dynamic quotas. Explicit provider
+billing-limit denials are not quota truth either; they trigger a bounded fail-closed
+cooldown so FREE_ONLY workers do not immediately retry a surface that just refused
+work for billing reasons.
 """
 from __future__ import annotations
 
@@ -21,6 +24,17 @@ import uuid
 from typing import Iterator
 
 DB_PATH = Path(os.getenv("CLAY_FREE_PROVIDER_BUDGET_DB", "/artifacts/clay-entityos-swarm/provider_budget.sqlite3"))
+DEFAULT_BILLING_LIMIT_COOLDOWN_S = max(
+    60.0,
+    float(os.getenv("CLAY_FREE_PROVIDER_BILLING_LIMIT_COOLDOWN_S", "3600")),
+)
+_BILLING_LIMIT_STATUS_MARKERS = (
+    "exceedsbillinglimit",
+    "billing_limit_exceeded",
+    "billinglimitexceeded",
+    "payment_required",
+    "insufficient_quota",
+)
 DEFAULTS = {
     "groq": (12, 0.0),
     "mistral": (6, 0.0),
@@ -124,6 +138,17 @@ def release(lease_id: str) -> None:
         con.execute("DELETE FROM leases WHERE lease_id=?", (lease_id,))
 
 
+def _is_billing_limit_denial(status_s: str) -> bool:
+    normalized = status_s.strip().lower().replace("-", "_").replace(" ", "_")
+    compact = normalized.replace("_", "")
+    if normalized == "402":
+        return True
+    return any(
+        marker in normalized or marker.replace("_", "") in compact
+        for marker in _BILLING_LIMIT_STATUS_MARKERS
+    )
+
+
 def observe(provider: str, owner: str, status: int | str | None, headers: dict[str, str] | None = None,
             retry_after_s: float | None = None) -> None:
     ensure_provider(provider)
@@ -138,10 +163,23 @@ def observe(provider: str, owner: str, status: int | str | None, headers: dict[s
     now = time.time()
     success = status_s.isdigit() and 200 <= int(status_s) < 300
     rate = status_s == "429"
-    error = not success and not rate
+    billing_limit = _is_billing_limit_denial(status_s)
     remaining = {k: v for k, v in headers.items() if k.startswith("x-ratelimit-") or "remaining" in k or "reset" in k}
     with _connect() as con:
-        if rate:
+        if billing_limit:
+            cooldown = now + max(
+                60.0,
+                float(
+                    retry_after_s
+                    if retry_after_s is not None
+                    else DEFAULT_BILLING_LIMIT_COOLDOWN_S
+                ),
+            )
+            con.execute(
+                "UPDATE provider_state SET cooldown_until=MAX(cooldown_until,?), total_errors=total_errors+1,last_status=?,last_observed_at=? WHERE provider=?",
+                (cooldown, status_s, dt.datetime.now(dt.timezone.utc).isoformat(), provider),
+            )
+        elif rate:
             cooldown = now + max(1.0, float(retry_after_s or 10.0))
             con.execute("UPDATE provider_state SET cooldown_until=MAX(cooldown_until,?), total_429=total_429+1,last_status=?,last_observed_at=? WHERE provider=?",
                         (cooldown, status_s, dt.datetime.now(dt.timezone.utc).isoformat(), provider))

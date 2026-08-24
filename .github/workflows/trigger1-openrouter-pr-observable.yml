@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Execute same bounded FREE experiment
+      - name: Execute route-bound bounded FREE experiment
         id: experiment
         shell: bash
         env:
@@ -32,7 +32,7 @@ jobs:
           mkdir -p /tmp/clay-trigger1-pr
           set +e
           python3 tools/free_swarm_exec_with_vault.py \
-            python3 tools/trigger1_openrouter_qwen06_logit_vector_execute.py \
+            python3 tools/trigger1_openrouter_qwen06_route_bound_execute.py \
             --output /tmp/clay-trigger1-pr/experiment.json \
             > /tmp/clay-trigger1-pr/stdout.log 2>&1
           rc=$?

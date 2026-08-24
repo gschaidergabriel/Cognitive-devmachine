@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-"""Epoch-8.70 economic gate for the global work-stealing Free Swarm.
+"""Route-bound, catalog-safe 6000-worker Free Swarm with typed delta ingress.
 
-Imports the v2 scheduler, but prevents reservation/network I/O for any concrete
-credential+route lacking provider-side zero-cost/free-entitlement evidence. Every
-executed provider request emits FREE_LANE_EXECUTION_RECEIPT/v1.
+The cache/productivity accelerator is installed before importing the v2 fabric so
+its ProviderRuntime/prompt changes are inherited instead of becoming dead code.
+The successor-current FREE_ONLY fences remain stronger than throughput: provider
+catalog discovery is network-free before route binding; every concrete inference
+route revalidates current credential+route economic provenance immediately before
+network I/O and emits FREE_LANE_EXECUTION_RECEIPT/v1.
 
-The v2 scheduler historically performed authenticated provider model-catalog
-network discovery before the per-lane gate ran. Epoch 8.70 does not establish
-catalog-endpoint zero-cost provenance, so this wrapper also replaces that
-pre-route discovery with a network-free environment/static-default resolver.
+Successful model text remains noncanonical. Explicit architecture-delta/question
+markers are deterministically parsed at sink ingress and materialized as bounded
+candidate evidence; malformed/model-asserted readiness cannot mint canonical truth.
 """
 from __future__ import annotations
 
@@ -18,16 +20,27 @@ import os
 import threading
 from typing import Any
 
-import run_6000_free_swarm as fabric
-from free_lane_provenance import (
+# Import order is execution-relevant. run_6000_free_swarm captures both
+# base.ProviderRuntime and base.worker_prompt while importing; install first.
+import run_free_go_swarm as _base
+import run_24h_entityos_swarm as _opt
+from free_swarm_accelerator_v2 import install as _install_accelerator
+
+_install_accelerator(_base, _opt)
+ACCELERATOR_BINDING = "FREE_SWARM_ACCELERATOR_V2_PRE_FABRIC"
+
+import run_6000_free_swarm as fabric  # noqa: E402
+from free_lane_provenance import (  # noqa: E402
     binding_still_current,
     current_lane_binding,
     emit_execution_receipt,
     lane_evidence,
 )
+from free_swarm_delta_ingress import parse_questions, parse_worker_delta  # noqa: E402
 
 _ORIGINAL_REQUEST = fabric.base.request_chat
 _ORIGINAL_NEXT_PAIR = fabric.FastProviderRuntime.next_key_model
+_ORIGINAL_SINK_APPEND = fabric.base.JsonlSink.append
 _RECEIPT_LOCK = threading.Lock()
 _EVIDENCE_CACHE: dict[tuple[str, str, str, str], dict[str, Any]] = {}
 _SOURCE = {
@@ -37,16 +50,12 @@ _SOURCE = {
 
 
 def route_safe_discover_and_export(timeout: float) -> dict[str, dict]:
-    """Resolve candidate models without provider network I/O.
+    """Resolve candidate models without provider catalog network I/O.
 
-    Provider-level admission authorizes only the owner's free contingent; it is
-    not economic proof for an arbitrary authenticated catalog request. Current
-    epoch-8.70 economic provenance binds concrete inference routes, not catalog
-    endpoints. Therefore the active 6000-worker path may use an explicit local
-    model override or the controller's static defaults, while final credential +
-    route admission remains the responsibility of ``current_lane_binding``.
-
-    ``timeout`` is retained for API compatibility with the v2 scheduler.
+    Provider admission does not prove zero-cost semantics for an arbitrary
+    authenticated catalog request. Explicit local model overrides or static
+    defaults are therefore used here; final credential+route admission remains
+    the responsibility of ``current_lane_binding``.
     """
     del timeout
     report: dict[str, dict] = {}
@@ -93,8 +102,8 @@ def route_safe_discover_and_export(timeout: float) -> dict[str, dict]:
             }
             continue
 
-        # Credential material is still collected only through the canonical
-        # provider-admission-aware loader. No provider request is made here.
+        # Credential material still comes only through the admission-aware loader.
+        # No provider request is made by this discovery function.
         keys = fabric.base.collect_keys(spec, admission)
         override = fabric.base.split_values(os.getenv(spec.models_env))
         models = fabric.base.unique(override or list(spec.default_models))
@@ -127,6 +136,68 @@ def _evidence(spec: fabric.base.ProviderSpec, key: str, model: str) -> dict[str,
             artifacts=fabric.ARTIFACT_ROOT,
         )
     return _EVIDENCE_CACHE[ck]
+
+
+async def ingress_aware_sink_append(self: fabric.base.JsonlSink, item: dict[str, Any]) -> None:
+    """Attach deterministic candidate admission without promoting model text."""
+    row = dict(item)
+    text = row.get("text")
+    status = row.get("http_status")
+    candidate = None
+    questions: list[str] = []
+
+    if isinstance(text, str) and isinstance(status, int) and 200 <= status < 300:
+        ingress = parse_worker_delta(text)
+        questions = parse_questions(text)
+        row["delta_ingress"] = {
+            "schema": ingress["schema"],
+            "status": ingress["status"],
+            "valid": ingress["valid"],
+            "ready_for_forge": ingress["ready_for_forge"],
+            "reasons": ingress["reasons"],
+            "proposal_sha256": ingress.get("proposal_sha256"),
+            "question_count": len(questions),
+        }
+        if ingress.get("valid"):
+            candidate = {
+                "schema": "CLAY_ARCHITECTURE_DELTA_CANDIDATE/v1",
+                "ts": row.get("ts"),
+                "provider": row.get("provider"),
+                "model": row.get("model"),
+                "role": row.get("role"),
+                "worker_serial": row.get("worker_serial"),
+                "logical_worker_slot": row.get("logical_worker_slot"),
+                "repo_head_at_prompt": row.get("repo_head_at_prompt"),
+                "worker_text_sha256": row.get("text_sha256"),
+                "proposal_sha256": ingress.get("proposal_sha256"),
+                "ready_for_forge": ingress.get("ready_for_forge"),
+                "proposal": ingress.get("proposal"),
+            }
+
+    # Preserve the historical raw worker ledger first. Candidate streams are
+    # secondary append-only projections bound back by worker/proposal hashes.
+    await _ORIGINAL_SINK_APPEND(self, row)
+
+    if candidate is not None:
+        async with self._lock:
+            path = self.output_dir / "architecture_deltas.jsonl"
+            with path.open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps(candidate, ensure_ascii=False, separators=(",", ":")) + "\n")
+                fh.flush()
+
+    if questions:
+        qrow = {
+            "schema": "CLAY_OPEN_RESEARCH_QUESTIONS/v1",
+            "ts": row.get("ts"),
+            "worker_serial": row.get("worker_serial"),
+            "worker_text_sha256": row.get("text_sha256"),
+            "questions": questions,
+        }
+        async with self._lock:
+            path = self.output_dir / "open_research_questions.jsonl"
+            with path.open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps(qrow, ensure_ascii=False, separators=(",", ":")) + "\n")
+                fh.flush()
 
 
 def gated_next_key_model(self: fabric.FastProviderRuntime):
@@ -176,9 +247,6 @@ def gated_request_chat(
             "reason": binding.get("reason"),
         }
 
-    # Final fail-closed digest check immediately before the provider call. This
-    # prevents a cached reservation decision from surviving a current authority
-    # or economic-provenance update.
     if not binding_still_current(binding):
         return 460, {}, {
             "error": "FREE_LANE_BINDING_CHANGED_BEFORE_NETWORK",
@@ -212,12 +280,12 @@ def gated_request_chat(
     return status, headers, payload
 
 
-# The v2 fabric invokes opt.discover_and_export() at the start of run(). Replace
-# it before exporting run so the active v3 launcher cannot perform authenticated
-# catalog I/O outside the route/credential economic boundary.
+# Preserve #1489's no-catalog-network pre-route boundary, then install the other
+# execution hooks. None of these grants canonical/state/effect authority.
 fabric.opt.discover_and_export = route_safe_discover_and_export
 fabric.FastProviderRuntime.next_key_model = gated_next_key_model
 fabric.base.request_chat = gated_request_chat
+fabric.base.JsonlSink.append = ingress_aware_sink_append
 
 run = fabric.run
 parse_args = fabric.parse_args

@@ -32,12 +32,14 @@ class V3AcceleratorImportOrder871Tests(unittest.TestCase):
         )
         self.assertLess(fabric_import, override)
         self.assertIn('"catalog_network_attempted": False', self.source)
+        self.assertIn("static_defaults_no_catalog_economic_provenance", self.source)
 
     def test_exact_free_lane_boundary_is_preserved(self) -> None:
         self.assertIn("current_lane_binding(", self.source)
         self.assertIn("binding_still_current(binding)", self.source)
+        self.assertIn("FREE_LANE_CURRENT_BINDING_REQUIRED", self.source)
+        self.assertIn("FREE_LANE_BINDING_CHANGED_BEFORE_NETWORK", self.source)
         self.assertIn("emit_execution_receipt(", self.source)
-        self.assertNotIn("FREE_LANE_CURRENT_BINDING_REQUIRED\"\n            )\n        )", self.source)
 
 
 if __name__ == "__main__":

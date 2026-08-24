@@ -18,11 +18,11 @@ evidence, admission fails closed instead of treating the mutation as a new obser
 Replay identity is explicitly versioned. Earlier source revisions changed the preimage of
 ``CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1`` while retaining the same schema label. The
 current authority therefore uses ``.../v2`` plus explicit v2 digest columns. Existing
-rows are backfilled from their durable packet/metadata evidence without guessing the
-historical v1 hash semantics. If historical rows collapse onto the same v2 execution
-identity, migration fails closed rather than silently legitimizing duplicate dataset
-credit. Rows too incomplete to reconstruct v2 remain unresolved and conservatively fence
-overlapping execution coordinates.
+rows may be backfilled only from already replay-stable durable packet/metadata evidence;
+historical packets that still carry now-excluded envelope fields remain unresolved rather
+than being silently promoted. If historical rows collapse onto the same v2 execution
+identity, migration fails closed rather than legitimizing duplicate dataset credit. Rows
+too incomplete to reconstruct v2 conservatively fence overlapping execution coordinates.
 
 The destination is the existing Distillery SQLite database; this module performs no
 provider/network I/O and creates no second truth/effect path.
@@ -138,11 +138,14 @@ def measured_evidence_identity(row: dict) -> dict:
 
 
 def _persisted_v2_identities(packet_text: str, metadata_json: str) -> tuple[str, str] | None:
-    """Reconstruct v2 digests from one already-persisted knowledge packet.
+    """Reconstruct v2 digests from one already-persisted stable knowledge packet.
 
     This deliberately ignores any historical replay hash because the same v1 schema
     label had more than one preimage across earlier source revisions. Durable packet
-    and metadata fields are sufficient to derive the successor identity directly.
+    and metadata fields can derive the successor identity only when the stored packet
+    bytes already satisfy the current replay-stable packet contract. Older packet bytes
+    that still contain volatile envelope fields remain unresolved for explicit
+    reconciliation rather than being silently blessed by identity backfill.
     """
     try:
         packet = json.loads(packet_text)
@@ -167,6 +170,13 @@ def _persisted_v2_identities(packet_text: str, metadata_json: str) -> tuple[str,
         return None
     if not isinstance(packet.get("target_blob_identities"), dict):
         return None
+    if packet.get("schema") != "CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2":
+        return None
+    # These fields were briefly present in historical packet-v2 bytes but are no longer
+    # training-bearing evidence. Do not auto-upgrade such rows because their persisted
+    # packet_text is itself outside the current stable packet contract.
+    if "delta_id" in packet or "evaluated_at" in packet:
+        return None
     admission_sha = str(packet.get("execution_admission_sha256") or "")
     if not admission_sha:
         return None
@@ -185,27 +195,20 @@ def _persisted_v2_identities(packet_text: str, metadata_json: str) -> tuple[str,
         "metric": str(packet.get("metric") or ""),
         "requires_rebase_to_evaluation_head": bool(packet.get("requires_rebase_to_evaluation_head", False)),
     }
-
-    stable_packet = dict(packet)
-    # Historical packet v2 bytes temporarily carried these envelope fields. They are
-    # not part of the current measured packet and must not affect successor identity.
-    stable_packet.pop("delta_id", None)
-    stable_packet.pop("evaluated_at", None)
-    if stable_packet.get("schema") != "CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2":
-        return None
     measured_identity = {
         "schema": MEASURED_EVIDENCE_SCHEMA,
-        "packet": stable_packet,
+        "packet": packet,
     }
     return digest_json(replay_identity), digest_json(measured_identity)
 
 
 def _backfill_v2_identities(con: sqlite3.Connection) -> None:
-    """Backfill successor identity columns from durable packet evidence.
+    """Backfill successor identity columns from durable stable packet evidence.
 
     No packet, counter, historical hash, or observation metadata is rewritten. Any
     historical duplicate/conflict exposed by the stronger v2 identity is left intact
-    and causes fail-closed migration before a unique v2 index is created.
+    and causes fail-closed migration before a unique v2 index is created. Unstable or
+    incomplete historical packets remain unresolved rather than gaining v2 credit.
     """
     rows = con.execute(
         "SELECT f.evaluation_sha256,k.packet_text,k.metadata_json "

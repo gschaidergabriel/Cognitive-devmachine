@@ -43,19 +43,11 @@ jobs:
 
           SOURCE_HEAD="$(git rev-parse HEAD)"
           SOURCE_TREE="$(git rev-parse 'HEAD^{tree}')"
-          if [[ -n "$(git status --porcelain=v1)" ]]; then
-            echo 'BLOCKED_SOURCE_DIRTY_BEFORE_INTERVENTION' >&2
-            exit 2
-          fi
-
+          SOURCE_DIRTY=false
+          [[ -n "$(git status --porcelain=v1)" ]] && SOURCE_DIRTY=true
           claim_main="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["observed_canonical_main"])' "$lease_result")"
-          git cat-file -e "$claim_main^{commit}"
-          git merge-base --is-ancestor "$claim_main" "$SOURCE_HEAD" || {
-            echo 'BLOCKED_CLAIM_MAIN_NOT_ANCESTOR_OF_EXECUTED_SOURCE' >&2
-            exit 2
-          }
 
-          python3 - "$lease_result" "$GITHUB_ENV" "$SOURCE_HEAD" "$SOURCE_TREE" <<'PY'
+          python3 - "$lease_result" "$GITHUB_ENV" "$SOURCE_HEAD" "$SOURCE_TREE" "$SOURCE_DIRTY" <<'PY'
           import json, pathlib, sys
           result=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
           if result.get('pass') is not True:
@@ -69,6 +61,7 @@ jobs:
               'TRIGGER1_EXPERIMENT_NAME':result['experiment_name'],
               'TRIGGER1_SOURCE_HEAD':sys.argv[3],
               'TRIGGER1_SOURCE_TREE':sys.argv[4],
+              'TRIGGER1_SOURCE_DIRTY':sys.argv[5],
               'TRIGGER1_LEASE_ADMITTED':'true',
           }
           with pathlib.Path(sys.argv[2]).open('a',encoding='utf-8') as f:
@@ -77,6 +70,16 @@ jobs:
                       raise SystemExit('UNSAFE_ENV_VALUE')
                   f.write(f'{key}={value}\n')
           PY
+
+          if [[ "$SOURCE_DIRTY" == true ]]; then
+            echo 'BLOCKED_SOURCE_DIRTY_BEFORE_INTERVENTION' >&2
+            exit 2
+          fi
+          git cat-file -e "$claim_main^{commit}"
+          git merge-base --is-ancestor "$claim_main" "$SOURCE_HEAD" || {
+            echo 'BLOCKED_CLAIM_MAIN_NOT_ANCESTOR_OF_EXECUTED_SOURCE' >&2
+            exit 2
+          }
 
       - name: Verify Trigger1 V2 promotion and lease gates
         shell: bash
@@ -225,12 +228,13 @@ jobs:
           exit 1
 
       - name: Finalize admitted lease if later workflow stage blocked
-        if: always() && env.TRIGGER1_LEASE_ADMITTED == 'true'
+        if: always()
         shell: bash
         env:
           JOB_STATUS: ${{ job.status }}
         run: |
           set -euo pipefail
+          [[ "${TRIGGER1_LEASE_ADMITTED:-}" == true ]] || exit 0
           claim_result="research_entity/continuity/go_experiment_claims/${TRIGGER1_TRIGGER_KEY}.result.json"
           git fetch --quiet origin main
           if git cat-file -e "origin/main:${claim_result}" 2>/dev/null || [[ -e "$claim_result" ]]; then
@@ -245,7 +249,11 @@ jobs:
               'claim_sha256':os.environ['TRIGGER1_CLAIM_SHA256'],
               'experiment_name':os.environ['TRIGGER1_EXPERIMENT_NAME'],
               'intervention_identity':None,
-              'source_identity':{'head':os.environ['TRIGGER1_SOURCE_HEAD'],'tree':os.environ['TRIGGER1_SOURCE_TREE'],'dirty':False},
+              'source_identity':{
+                  'head':os.environ['TRIGGER1_SOURCE_HEAD'],
+                  'tree':os.environ['TRIGGER1_SOURCE_TREE'],
+                  'dirty':os.environ.get('TRIGGER1_SOURCE_DIRTY') == 'true',
+              },
               'execution_surface':'SELF_HOSTED_LINUX_X64_ZERO_PROVIDER_BILLING',
               'observed_result':{'workflow_job_status':os.environ.get('JOB_STATUS'),'reason':'ADMITTED_LEASE_WITHOUT_PRIMARY_RESULT_RECORD'},
               'classification':'BLOCKED',

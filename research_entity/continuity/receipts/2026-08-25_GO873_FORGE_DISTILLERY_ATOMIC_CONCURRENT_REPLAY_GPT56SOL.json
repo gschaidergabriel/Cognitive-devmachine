@@ -1,0 +1,65 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date_local": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "observed_canonical_main_before_write": "fb19154fb1b00e8e2c68e24fc09a5d7e1e06bb92",
+  "observation": {
+    "semantic_replay_rebuild_fusion_already_on_main": true,
+    "rebuild_component_evidence_receipt_already_on_main": true,
+    "current_ingest_source_blob": "4b5af6d632d524c9768c76aeee0fefc245891040",
+    "remaining_gap": "Replay lookup occurs before any explicit SQLite write-intent transaction. The generic SQLite/WAL discriminator already admitted on main showed two concurrent same-replay writers can both observe absence and the loser can surface a late UNIQUE IntegrityError instead of the declared DUPLICATE/REPLAY_IDENTITY_CONFLICT semantic classification.",
+    "main_generic_discriminator_commit": "9ce8221be615858dbb2607a47b496578c3cc8c64"
+  },
+  "hypothesis": "Committing schema setup and acquiring BEGIN IMMEDIATE before the first replay lookup serializes replay lookup, measured-evidence conflict classification, packet write and counter increments as one admission transaction while retaining the replay unique index as defense in depth.",
+  "counterhypothesis": "The existing partial unique replay index plus WAL already provides sufficient semantic concurrency behavior and explicit write intent only reduces concurrency.",
+  "counterhypothesis_disposition": "FALSIFIED_AT_GENERIC_SQLITE_TRANSACTION_SEMANTICS_SCOPE_BY_MAIN_DISCRIMINATOR: current SELECT-before-write produced one INSERTED plus one UNIQUE IntegrityError; write intent before lookup produced INSERTED plus clean DUPLICATE with one durable row. Exact repository integration execution remains unobserved.",
+  "delta": {
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "source_blob": "a4ab8a6f90c98779c68da72da8ecdd000ea2bf4d",
+    "test": "tests/test_forge_distillery_concurrent_replay_873.py",
+    "test_blob": "5b5c419dc3551dfe2f28e5707843da8e8bd92e6c",
+    "changes": [
+      "commit schema/migration state before admission transaction",
+      "acquire BEGIN IMMEDIATE before the first replay lookup",
+      "retain one transaction across replay classification, packet insertion and counters",
+      "concurrent semantic replay => one admission plus one clean DUPLICATE",
+      "concurrent same replay identity with mutated measured evidence => one admission plus one clean REPLAY_IDENTITY_CONFLICT",
+      "distinct concurrent execution identities remain separately admissible",
+      "assert write-intent acquisition occurs before replay loop"
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: closes the remaining deterministic concurrent Forge-to-Distillery replay-admission classification gap on the single canonical ingest path.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: makes replay lookup, evidence-conflict classification and durable admission one serialized causal-admission transaction reusable as a Typed Entry/HCU ingress invariant.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_AT_DATASET_SAFETY_SCOPE: parallel ingestion can no longer turn one semantic execution into ambiguous process failure/counter state; current main also contains the J-Space Trace ABI source delta. No model/J-Space/training credit is minted."
+  },
+  "coordination": {
+    "semantic_rebuild_convergence_main": "fb19154fb1b00e8e2c68e24fc09a5d7e1e06bb92",
+    "older_donors": [1745, 1752],
+    "new_concurrency_implementation_overlap_found": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "evidence_scope": "SOURCE_PLUS_INTEGRATION_REGRESSION_DEFINITION_ONLY_UNTIL_EXACT_HEAD_EXECUTION_IS_OBSERVED",
+  "exact_repository_test_execution_observed": false,
+  "provider_or_model_execution": false,
+  "network_execution": false,
+  "paid_or_together_execution": false,
+  "canonical_truth_credit": 0,
+  "provider_runtime_credit": 0,
+  "entityos_hcu_whole_runtime_credit": 0,
+  "hcu_full_runtime_credit": 0,
+  "jspace_model_runtime_credit": 0,
+  "training_credit": 0,
+  "whole_product_pass": false,
+  "authority_surface_note": "SUPERVISOR_INBOX selects 8.73; older BOOTSTRAP_MINIMAL/PROGRAM_STATE mirrors observed earlier in this macrocycle remained 8.72 and must not downgrade current authority.",
+  "artefact_readme": "SYNC_PENDING_CONCURRENT_CURRENT_FACING_DOC; no stale whole-file overwrite performed while main is moving rapidly.",
+  "next_exact_gate": "Execute semantic replay, rebuild-stability and concurrent replay-admission regressions on the exact branch head using an admitted zero-cost source surface. Require no raw SQLite race exception, one durable packet/counter increment for semantic replay, clean measured-evidence conflict, distinct-execution preservation, then proceed to the repository-bound live Forge-to-Distillery 1->1->positive-tokens->semantic-replay+0 witness."
+}

@@ -15,6 +15,12 @@ cannot mint a second dataset packet or alter training-bearing packet bytes for t
 measured evidence. If the same execution identity reappears with conflicting measured
 evidence, admission fails closed instead of treating the mutation as a new observation.
 
+Replay lookup and all packet/counter writes for one ingest invocation are protected by
+SQLite write intent acquired before the first replay lookup. The unique replay index
+remains defense in depth; concurrent equivalent writers serialize into one admission
+plus a clean DUPLICATE or REPLAY_IDENTITY_CONFLICT classification instead of exposing a
+late uniqueness exception as the semantic result.
+
 Legacy ingest rows predate the replay-identity columns. They cannot be safely backfilled
 from the reduced legacy table, so a new evaluation colliding on the available legacy
 execution coordinates fails closed until the historical row is explicitly reconciled.
@@ -314,7 +320,7 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
     summary = {
         "schema": "CLAY_FORGE_TO_DISTILLERY_INGEST_RESULT/v2",
         "acceptance_semantics": "EVIDENCE_QUALIFIED_ONLY",
-        "replay_semantics": "STABLE_EXECUTION_IDENTITY_WITH_MEASURED_CONFLICT_AND_LEGACY_UNKNOWN_REJECTION",
+        "replay_semantics": "STABLE_EXECUTION_IDENTITY_WITH_MEASURED_CONFLICT_LEGACY_UNKNOWN_AND_ATOMIC_WRITE_INTENT",
         "forge_eval_path": str(forge_eval_path),
         "distillery_db": str(distillery_db),
         "seen": 0,
@@ -330,6 +336,11 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
     con = sqlite3.connect(distillery_db, timeout=30)
     try:
         ensure_schema(con)
+        # Schema setup can end or create implicit transactions. Commit it, then acquire
+        # write intent BEFORE replay lookup so classification, packet write and counters
+        # are serialized as one admission transaction across concurrent ingest callers.
+        con.commit()
+        con.execute("BEGIN IMMEDIATE")
         for line in forge_eval_path.read_text(encoding="utf-8", errors="replace").splitlines():
             if limit and summary["seen"] >= limit:
                 break

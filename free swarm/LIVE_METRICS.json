@@ -1,16 +1,16 @@
 {
   "schema": "CLAY_FREE_SWARM_METRICS/v1",
-  "generated_at": "2026-08-24T12:43:25.682153+00:00",
+  "generated_at": "2026-08-24T12:58:30.725674+00:00",
   "workers": {
-    "worker_records": 722,
+    "worker_records": 777,
     "worker_files": 4,
-    "average_concurrency": 3.5797032008344734,
+    "average_concurrency": 3.6120727496772935,
     "peak_concurrency": 14,
-    "observed_seconds": 10556.75677,
-    "exact_usage_rows": 422,
-    "input_tokens": 2648023,
-    "output_tokens": 592243,
-    "total_tokens": 3240266,
+    "observed_seconds": 11450.996939,
+    "exact_usage_rows": 467,
+    "input_tokens": 2900377,
+    "output_tokens": 664028,
+    "total_tokens": 3564405,
     "models": [
       {
         "provider": "groq",
@@ -22,6 +22,83 @@
         "input_tokens": 180344,
         "output_tokens": 30800,
         "total_tokens": 211144
+      },
+      {
+        "provider": "nvidia",
+        "model": "nvidia/nemotron-3-super-120b-a12b",
+        "requests": 30,
+        "success": 30,
+        "rate_limits": 0,
+        "errors": 0,
+        "input_tokens": 201838,
+        "output_tokens": 52965,
+        "total_tokens": 254803
+      },
+      {
+        "provider": "nvidia",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "requests": 30,
+        "success": 29,
+        "rate_limits": 0,
+        "errors": 1,
+        "input_tokens": 195798,
+        "output_tokens": 103124,
+        "total_tokens": 298922
+      },
+      {
+        "provider": "nvidia",
+        "model": "nvidia/llama-3.3-nemotron-super-49b-v1",
+        "requests": 30,
+        "success": 29,
+        "rate_limits": 0,
+        "errors": 1,
+        "input_tokens": 167129,
+        "output_tokens": 26519,
+        "total_tokens": 193648
+      },
+      {
+        "provider": "nvidia",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "requests": 28,
+        "success": 28,
+        "rate_limits": 0,
+        "errors": 0,
+        "input_tokens": 189745,
+        "output_tokens": 49600,
+        "total_tokens": 239345
+      },
+      {
+        "provider": "nvidia",
+        "model": "meta/llama-3.3-70b-instruct",
+        "requests": 31,
+        "success": 28,
+        "rate_limits": 0,
+        "errors": 3,
+        "input_tokens": 162787,
+        "output_tokens": 20004,
+        "total_tokens": 182791
+      },
+      {
+        "provider": "nvidia",
+        "model": "openai/gpt-oss-20b",
+        "requests": 27,
+        "success": 27,
+        "rate_limits": 0,
+        "errors": 0,
+        "input_tokens": 159865,
+        "output_tokens": 47404,
+        "total_tokens": 207269
+      },
+      {
+        "provider": "nvidia",
+        "model": "nvidia/ising-calibration-1.5-31b",
+        "requests": 27,
+        "success": 27,
+        "rate_limits": 0,
+        "errors": 0,
+        "input_tokens": 183205,
+        "output_tokens": 35265,
+        "total_tokens": 218470
       },
       {
         "provider": "groq",
@@ -36,69 +113,58 @@
       },
       {
         "provider": "nvidia",
-        "model": "nvidia/llama-3.3-nemotron-super-49b-v1",
-        "requests": 28,
+        "model": "meta/llama-3.1-70b-instruct",
+        "requests": 30,
         "success": 27,
         "rate_limits": 0,
-        "errors": 1,
-        "input_tokens": 157121,
-        "output_tokens": 24556,
-        "total_tokens": 181677
+        "errors": 3,
+        "input_tokens": 156300,
+        "output_tokens": 19892,
+        "total_tokens": 176192
       },
       {
         "provider": "nvidia",
-        "model": "meta/llama-3.2-90b-vision-instruct",
+        "model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "requests": 29,
+        "success": 26,
+        "rate_limits": 0,
+        "errors": 3,
+        "input_tokens": 176396,
+        "output_tokens": 46200,
+        "total_tokens": 222596
+      },
+      {
+        "provider": "nvidia",
+        "model": "meta/muse-glimmer-30b",
         "requests": 26,
         "success": 26,
         "rate_limits": 0,
         "errors": 0,
+        "input_tokens": 153608,
+        "output_tokens": 46000,
+        "total_tokens": 199608
+      },
+      {
+        "provider": "nvidia",
+        "model": "meta/llama-3.2-90b-vision-instruct",
+        "requests": 30,
+        "success": 26,
+        "rate_limits": 0,
+        "errors": 4,
         "input_tokens": 151451,
         "output_tokens": 18918,
         "total_tokens": 170369
       },
       {
         "provider": "nvidia",
-        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-        "requests": 26,
-        "success": 25,
-        "rate_limits": 0,
-        "errors": 1,
-        "input_tokens": 171784,
-        "output_tokens": 83979,
-        "total_tokens": 255763
-      },
-      {
-        "provider": "nvidia",
-        "model": "nvidia/nemotron-3-super-120b-a12b",
+        "model": "nvidia/nemotron-3-nano-30b-a3b",
         "requests": 25,
         "success": 25,
         "rate_limits": 0,
         "errors": 0,
-        "input_tokens": 171813,
-        "output_tokens": 44965,
-        "total_tokens": 216778
-      },
-      {
-        "provider": "nvidia",
-        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
-        "requests": 24,
-        "success": 24,
-        "rate_limits": 0,
-        "errors": 0,
-        "input_tokens": 165723,
-        "output_tokens": 43200,
-        "total_tokens": 208923
-      },
-      {
-        "provider": "nvidia",
-        "model": "nvidia/nemotron-3-ultra-550b-a55b",
-        "requests": 25,
-        "success": 24,
-        "rate_limits": 0,
-        "errors": 1,
-        "input_tokens": 164389,
-        "output_tokens": 43000,
-        "total_tokens": 207389
+        "input_tokens": 169108,
+        "output_tokens": 44200,
+        "total_tokens": 213308
       },
       {
         "provider": "groq",
@@ -113,99 +179,33 @@
       },
       {
         "provider": "nvidia",
-        "model": "meta/llama-3.1-70b-instruct",
-        "requests": 26,
-        "success": 24,
-        "rate_limits": 0,
-        "errors": 2,
-        "input_tokens": 141238,
-        "output_tokens": 17574,
-        "total_tokens": 158812
-      },
-      {
-        "provider": "nvidia",
-        "model": "meta/llama-3.3-70b-instruct",
-        "requests": 27,
-        "success": 24,
-        "rate_limits": 0,
-        "errors": 3,
-        "input_tokens": 142390,
-        "output_tokens": 17133,
-        "total_tokens": 159523
-      },
-      {
-        "provider": "nvidia",
-        "model": "meta/muse-glimmer-30b",
-        "requests": 23,
-        "success": 23,
-        "rate_limits": 0,
-        "errors": 0,
-        "input_tokens": 138324,
-        "output_tokens": 41200,
-        "total_tokens": 179524
-      },
-      {
-        "provider": "nvidia",
-        "model": "openai/gpt-oss-20b",
-        "requests": 23,
-        "success": 23,
-        "rate_limits": 0,
-        "errors": 0,
-        "input_tokens": 139281,
-        "output_tokens": 41004,
-        "total_tokens": 180285
-      },
-      {
-        "provider": "nvidia",
-        "model": "nvidia/ising-calibration-1.5-31b",
-        "requests": 23,
-        "success": 23,
-        "rate_limits": 0,
-        "errors": 0,
-        "input_tokens": 158847,
-        "output_tokens": 31899,
-        "total_tokens": 190746
-      },
-      {
-        "provider": "nvidia",
         "model": "nvidia/nemotron-nano-12b-v2-vl",
-        "requests": 22,
-        "success": 22,
+        "requests": 24,
+        "success": 24,
         "rate_limits": 0,
         "errors": 0,
-        "input_tokens": 146753,
-        "output_tokens": 21538,
-        "total_tokens": 168291
-      },
-      {
-        "provider": "nvidia",
-        "model": "nvidia/nemotron-3-nano-30b-a3b",
-        "requests": 21,
-        "success": 21,
-        "rate_limits": 0,
-        "errors": 0,
-        "input_tokens": 145051,
-        "output_tokens": 37800,
-        "total_tokens": 182851
+        "input_tokens": 158592,
+        "output_tokens": 22799,
+        "total_tokens": 181391
       },
       {
         "provider": "nvidia",
         "model": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
-        "requests": 24,
-        "success": 15,
+        "requests": 27,
+        "success": 18,
         "rate_limits": 0,
         "errors": 9,
-        "input_tokens": 89267,
-        "output_tokens": 21693,
-        "total_tokens": 110960
+        "input_tokens": 104259,
+        "output_tokens": 25754,
+        "total_tokens": 130013
       },
       {
         "provider": "nvidia",
         "model": "openai/gpt-oss-120b",
-        "requests": 27,
+        "requests": 29,
         "success": 6,
         "rate_limits": 0,
-        "errors": 21,
+        "errors": 23,
         "input_tokens": 35297,
         "output_tokens": 10800,
         "total_tokens": 46097
@@ -213,13 +213,13 @@
       {
         "provider": "nvidia",
         "model": "deepseek-ai/deepseek-v4-flash-0731",
-        "requests": 23,
-        "success": 5,
+        "requests": 25,
+        "success": 6,
         "rate_limits": 0,
-        "errors": 18,
-        "input_tokens": 33934,
-        "output_tokens": 9000,
-        "total_tokens": 42934
+        "errors": 19,
+        "input_tokens": 39639,
+        "output_tokens": 10600,
+        "total_tokens": 50239
       },
       {
         "provider": "nvidia",
@@ -532,7 +532,7 @@
     ]
   },
   "deltas": {
-    "records": 1,
+    "records": 10,
     "accepted": 0,
     "model_scores": [],
     "best_model": null,
@@ -540,12 +540,12 @@
     "source_classes": {}
   },
   "corpus": {
-    "text_files": 9794,
-    "characters": 47258851,
-    "approx_tokens_4chars": 11814713,
+    "text_files": 9795,
+    "characters": 47270448,
+    "approx_tokens_4chars": 11817612,
     "sonnet5_input_usd_per_mtok": 2.0,
     "sonnet5_output_usd_per_mtok": 10.0,
-    "output_only_equivalent_usd": 118.14713,
+    "output_only_equivalent_usd": 118.17612,
     "pricing_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output; standard after: $3/M + $15/M"
   }
 }

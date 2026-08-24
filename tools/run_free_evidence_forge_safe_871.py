@@ -1,25 +1,21 @@
 #!/usr/bin/env python3
-"""Supervisor-8.71 safe entrypoint for Evidence Forge -> Distillery.
+"""Supervisor-8.71 safe entrypoint for Evidence Forge.
 
 The base Forge remains the single candidate/evaluation implementation. This wrapper
-narrows model-authored command execution before validation, binds exact worker-source
-identity, and invokes the existing Distillery bridge after each Forge cycle. The bridge
-independently requires evidence-qualified execution admission, so legacy nominal accepts
-cannot mint dataset tokens.
+narrows model-authored command execution before validation and binds exact worker-source
+identity. The canonical supervisor owns the existing idempotent Forge->Distillery poll,
+so this entrypoint does not create a second conversion loop.
 """
 from __future__ import annotations
 
 import asyncio
 import json
-from pathlib import Path
 from typing import Any
 
 import forge_execution_admission_871 as execution
-import ingest_forge_accepts_into_distillery as distillery_bridge
 import run_free_evidence_forge as base
 
 _ORIGINAL_VALIDATE = base.validate_candidate
-_ORIGINAL_CYCLE = base.cycle
 base.safe_command = execution.safe_command
 base.run_cmd = execution.run_cmd
 
@@ -88,8 +84,8 @@ def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
         return {**record, "status": "execution_blocked_no_isolated_executor", "reason": "BUBBLEWRAP_REQUIRED"}
 
     result = _ORIGINAL_VALIDATE(con, row)
-    # The canonical base evaluator also resolves evaluation_repo_head. A mismatch means
-    # the checkout moved between admission and validation; do not preserve ACCEPTED.
+    # The canonical base evaluator resolves evaluation_repo_head independently. If it
+    # changed after admission, downgrade rather than preserving a nominal ACCEPTED.
     if result.get("evaluation_repo_head") != manifest.get("evaluation_checkout_head"):
         return {
             **result,
@@ -101,27 +97,7 @@ def validate_candidate(con: Any, row: Any) -> dict[str, Any]:
     return result
 
 
-async def safe_cycle(con: Any, args: Any) -> int:
-    work = await _ORIGINAL_CYCLE(con, args)
-    try:
-        summary = await asyncio.to_thread(
-            distillery_bridge.ingest,
-            distillery_bridge.DEFAULT_FORGE_EVAL,
-            distillery_bridge.DEFAULT_DISTILLERY_DB,
-        )
-        base.append_jsonl(base.FORGE_ROOT / "distillery_ingest.jsonl", {"ts": base.now(), **summary})
-    except Exception as exc:
-        # The Forge evaluation ledger is append-only. Downstream conversion failures
-        # are retried idempotently on the next cycle rather than rewriting evidence.
-        base.append_jsonl(
-            base.FORGE_ROOT / "distillery_ingest_errors.jsonl",
-            {"ts": base.now(), "error": f"{type(exc).__name__}:{str(exc)[:1000]}"},
-        )
-    return work
-
-
 base.validate_candidate = validate_candidate
-base.cycle = safe_cycle
 
 
 def main() -> int:

@@ -1,0 +1,73 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.71",
+  "mode": "FREE_ONLY",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "trigger": "go",
+  "branch_base_main": "c4ca738396b618fa0ae953e3283d262403622013",
+  "branch": "gpt56sol/go871-forge-evidence-credit-audit-20260824",
+  "finding": {
+    "classification": "FORGE_ACCEPTANCE_METRIC_EVIDENCE_INFLATION",
+    "observed_dashboard_behavior": "free swarm/evaluate.py accepted_delta() counts positive reproducible status=accepted rows without requiring exact source identity or safe execution-admission evidence",
+    "observed_legacy_acceptance": {
+      "delta_id": "worker-142-latency-batchsize-test",
+      "status": "accepted",
+      "relative_improvement_pct": 100.0,
+      "reproducible_runs": 2,
+      "missing_required_current_evidence": [
+        "source_scope=EXACT_WORKER_PROMPT_HEAD",
+        "source_repo_head",
+        "evaluation_repo_head",
+        "target_blob_identities",
+        "CLAY_FORGE_EXECUTION_ADMISSION/v1"
+      ]
+    },
+    "causal_status": "DIRECT_SOURCE_AND_LEDGER_MECHANISM",
+    "effect": "The nominal historical acceptance is displayed as evident accepted Forge credit even though it cannot satisfy current 8.71 exact-source/safe-execution evidence requirements."
+  },
+  "counterhypothesis": "The historical row may still represent useful measurement, but absent current exact-source and execution-admission bindings it cannot be promoted to evidence-qualified current acceptance credit; append-only history should remain intact.",
+  "delta": {
+    "tool": "tools/forge_evidence_credit_871.py",
+    "test": "tests/test_forge_evidence_credit_871.py",
+    "behavior": [
+      "preserve nominal historical acceptance as a separate count",
+      "grant evidence-qualified Forge acceptance only when exact source/evaluation/worker/target identities are bound",
+      "require CLAY_FORGE_EXECUTION_ADMISSION/v1",
+      "require exact worker-prompt source identity admitted and source-head equality",
+      "require all model-authored commands admitted",
+      "require bubblewrap_unshare_all with isolated network namespace and no inherited/exposed secrets",
+      "keep candidate_is_canonical_truth=false",
+      "report nominal vs evidence-qualified vs legacy/unqualified acceptance without rewriting historical JSONL"
+    ]
+  },
+  "evidence": {
+    "source_equivalent_local_test": "5/5 PASS",
+    "py_compile": "PASS",
+    "network_used_by_test": false,
+    "scope": "SOURCE_COMPONENT_LOGIC_ONLY",
+    "exact_project_runtime_execution": false
+  },
+  "coordination": {
+    "open_pr_1540": "safe Forge execution-admission donor remains open and not active runtime authority",
+    "open_pr_1555": "Forge->Distillery bridge exists but must not treat legacy nominal accepts as evidence-qualified; its current exact-source checks already reject the observed legacy row",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: acceptance metric now has a fail-closed current-evidence discriminator instead of equating nominal historical status with current executable credit",
+    "track_b": "ADVANCED: typed provenance gate binds source/evaluation/worker/target identity plus execution-admission backend and secret/isolation fences",
+    "track_c": "ADVANCED_DATASET_READINESS_ONLY: prevents unbound Forge measurements from being treated as trusted Distillery/J-Space training substrate; J-Space/training credit remains zero"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Wire evidence_reason()/audit semantics into the active dashboard evaluator and Forge->Distillery admission path after successor-current re-entry; then require a new safe-executor exact-source accepted row before evident_accepted or Distillery accepted_dataset_tokens can increase."
+}

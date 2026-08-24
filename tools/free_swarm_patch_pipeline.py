@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-"""Deterministic two-stage patch synthesis support for the Free Swarm.
+"""Deterministic stage-2 patch synthesis/preflight support for the Free Swarm.
 
-This module deliberately contains no provider/network code.  It turns a model's
-stage-1 target selection into exact source capsules, validates the stage-2 diff
-against the same source commit, and can repair only one narrow syntax defect:
-incorrect unified-diff hunk counts.  Repair is accepted only when ``git apply
---recount`` succeeds against the exact source and the re-rendered diff then passes
-ordinary ``git apply --check`` in a fresh clone.
+Exact source rehydration is delegated to the fused ``forge_source_rehydration``
+authority (PR #1542 donor). This module owns only worker-text parsing, stage-2
+prompt construction and deterministic patch preflight. It contains no provider
+or network code.
 
-It does not use fuzzy/3-way application and never promotes model text to authority.
+A patch may be normalized only for one narrow syntax defect: incorrect unified-
+diff hunk counts. Repair is accepted only when ``git apply --recount`` succeeds
+against the exact source and the regenerated diff then passes ordinary
+``git apply --check`` in a fresh exact-source clone. No fuzzy/3-way application
+is used and model output never becomes canonical authority.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 import re
@@ -20,6 +21,8 @@ import shutil
 import subprocess
 import tempfile
 from typing import Any
+
+import forge_source_rehydration as fsr
 
 COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 MAX_TARGET_FILES = 3
@@ -29,7 +32,6 @@ DEFAULT_TOTAL_CHARS = 36_000
 
 
 def balanced_json_span_after(text: str, marker: str) -> tuple[int, int, dict[str, Any]] | None:
-    """Return the exact JSON object span following *marker* without regex parsing."""
     pos = text.find(marker)
     if pos < 0:
         return None
@@ -60,9 +62,9 @@ def balanced_json_span_after(text: str, marker: str) -> tuple[int, int, dict[str
                     obj = json.loads(text[start : index + 1])
                 except Exception:
                     return None
-                if not isinstance(obj, dict):
-                    return None
-                return start, index + 1, obj
+                if isinstance(obj, dict):
+                    return start, index + 1, obj
+                return None
     return None
 
 
@@ -72,7 +74,6 @@ def architecture_delta(text: str) -> dict[str, Any] | None:
 
 
 def canonicalize_architecture_delta(text: str, obj: dict[str, Any]) -> str:
-    """Replace only the machine-readable delta object, preserving human text."""
     found = balanced_json_span_after(text, "ARCHITECTURE_DELTA_JSON=")
     raw = json.dumps(obj, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     if found is None:
@@ -84,13 +85,10 @@ def canonicalize_architecture_delta(text: str, obj: dict[str, Any]) -> str:
 
 def safe_target(raw: str) -> str | None:
     value = str(raw or "").strip()
-    if not value or len(value) > 300 or "\x00" in value or "\\" in value:
+    if not value or len(value) > 300 or not fsr.safe_target(value):
         return None
-    path = Path(value)
-    if path.is_absolute() or ".." in path.parts or ".git" in path.parts:
-        return None
-    normalized = path.as_posix()
-    if normalized.startswith("./") or normalized in {"", "."}:
+    normalized = Path(value).as_posix()
+    if normalized.startswith("./"):
         return None
     return normalized
 
@@ -147,15 +145,7 @@ def _source_exists(repo: Path, source_head: str) -> tuple[bool, str]:
     if not COMMIT_RE.fullmatch(source_head):
         return False, "SOURCE_HEAD_INVALID"
     rc, _, err = _git(repo, "cat-file", "-e", source_head + "^{commit}")
-    return (rc == 0, "" if rc == 0 else "SOURCE_COMMIT_UNAVAILABLE:" + err[-500:])
-
-
-def _bounded_excerpt(text: str, per_file_chars: int) -> tuple[str, bool]:
-    if len(text) <= per_file_chars:
-        return text, False
-    marker = "\n...[EXACT_SOURCE_TRUNCATED_MIDDLE]...\n"
-    half = max(1, (per_file_chars - len(marker)) // 2)
-    return text[:half] + marker + text[-half:], True
+    return rc == 0, "" if rc == 0 else "SOURCE_COMMIT_UNAVAILABLE:" + err[-500:]
 
 
 def rehydrate_targets(
@@ -166,99 +156,60 @@ def rehydrate_targets(
     per_file_chars: int = DEFAULT_PER_FILE_CHARS,
     total_chars: int = DEFAULT_TOTAL_CHARS,
 ) -> dict[str, Any]:
-    """Bind declared target paths to exact Git objects and bounded source text."""
-    ok, reason = _source_exists(repo, source_head)
-    if not ok:
+    """Adapter over the single fused rehydration authority."""
+    proposal = {"target_files": targets}
+    try:
+        got = fsr.rehydrate_candidate(
+            repo,
+            proposal,
+            source_commit=source_head,
+            max_targets=MAX_TARGET_FILES,
+            max_file_bytes=max(1, int(per_file_chars)),
+            max_total_bytes=max(1, int(total_chars)),
+        )
+    except fsr.RehydrationError as exc:
+        message = str(exc)
+        if "unsafe target path" in message:
+            reason = "UNSAFE_TARGET_PATH"
+        elif "source commit" in message or "rev-parse" in message:
+            reason = "SOURCE_COMMIT_UNAVAILABLE"
+        else:
+            reason = "SOURCE_REHYDRATION_FAILED:" + message[-500:]
         return {"ok": False, "reason": reason, "source_head": source_head, "files": []}
 
-    normalized: list[str] = []
-    for raw in targets[:MAX_TARGET_FILES]:
-        value = safe_target(raw)
-        if value is None:
-            return {
-                "ok": False,
-                "reason": "UNSAFE_TARGET_PATH",
-                "source_head": source_head,
-                "files": [],
-            }
-        if value not in normalized:
-            normalized.append(value)
-    if not normalized:
-        return {
-            "ok": False,
-            "reason": "NO_SAFE_TARGET_FILES",
-            "source_head": source_head,
-            "files": [],
+    records = [
+        {
+            "path": row["path"],
+            "state": "BOUND_TEXT_SOURCE" if row.get("utf8") else "BINARY_TARGET_NOT_SUPPORTED",
+            "git_blob": row.get("blob_sha"),
+            "sha256": row.get("sha256"),
+            "chars_total": row.get("size_bytes"),
+            "chars_supplied": row.get("context_bytes"),
+            "truncated": bool(row.get("truncated")),
+            "content": row.get("content") or "",
         }
-
-    remaining = max(0, int(total_chars))
-    records: list[dict[str, Any]] = []
-    for rel in normalized:
-        rc, blob, _ = _git(repo, "rev-parse", f"{source_head}:{rel}")
-        if rc != 0:
-            records.append(
-                {
-                    "path": rel,
-                    "state": "ABSENT_AT_SOURCE",
-                    "git_blob": None,
-                    "sha256": None,
-                    "chars_total": 0,
-                    "chars_supplied": 0,
-                    "truncated": False,
-                    "content": "",
-                }
-            )
-            continue
-
-        rc, raw, err = _git(repo, "show", f"{source_head}:{rel}")
-        if rc != 0:
-            return {
-                "ok": False,
-                "reason": "SOURCE_READ_FAILED:" + err[-500:],
-                "source_head": source_head,
-                "files": records,
-            }
-        if "\x00" in raw:
-            return {
-                "ok": False,
-                "reason": "BINARY_TARGET_NOT_SUPPORTED",
-                "source_head": source_head,
-                "files": records,
-            }
-
-        cap = min(max(1, int(per_file_chars)), remaining) if remaining else 0
-        if cap <= 0:
-            excerpt = ""
-            truncated = True
-        else:
-            excerpt, truncated = _bounded_excerpt(raw, cap)
-        remaining = max(0, remaining - len(excerpt))
-        records.append(
-            {
-                "path": rel,
-                "state": "BOUND_TEXT_SOURCE",
-                "git_blob": blob.strip(),
-                "sha256": hashlib.sha256(raw.encode("utf-8")).hexdigest(),
-                "chars_total": len(raw),
-                "chars_supplied": len(excerpt),
-                "truncated": truncated,
-                "content": excerpt,
-            }
-        )
-
+        for row in got.get("files") or []
+    ]
     return {
-        "ok": True,
-        "reason": None,
-        "source_head": source_head,
+        "ok": got.get("context_state") == "CONTEXT_READY",
+        "reason": None if got.get("context_state") == "CONTEXT_READY" else got.get("context_state"),
+        "source_head": got["source"]["commit"],
+        "source_tree": got["source"]["tree"],
+        "source_binding_sha256": got.get("binding_sha256"),
+        "candidate_sha256": got.get("candidate_sha256"),
         "files": records,
-        "context_complete": all(not row["truncated"] for row in records),
+        "context_complete": got.get("context_state") == "CONTEXT_READY",
+        "execution_state": got.get("execution_state"),
     }
 
 
 def source_capsule_text(binding: dict[str, Any]) -> str:
     chunks = [
-        "EXACT_TARGET_SOURCE_REHYDRATION/v1",
+        "CLAY_FORGE_PATCH_SYNTHESIS_PACKET/v1",
         f"source_head={binding.get('source_head')}",
+        f"source_tree={binding.get('source_tree')}",
+        f"source_binding_sha256={binding.get('source_binding_sha256')}",
+        "execution_authority=NONE",
         "authority=CANDIDATE_INPUT_ONLY",
     ]
     for row in binding.get("files") or []:
@@ -279,32 +230,25 @@ def source_capsule_text(binding: dict[str, Any]) -> str:
     return "\n".join(chunks)
 
 
-def stage2_prompt(
-    protocol: str,
-    proposal: dict[str, Any],
-    binding: dict[str, Any],
-) -> str:
+def stage2_prompt(protocol: str, proposal: dict[str, Any], binding: dict[str, Any]) -> str:
     stable = dict(proposal)
     stable["patch_unified_diff"] = ""
     stable["ready_for_forge"] = False
-    proposal_json = json.dumps(
-        stable, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    )
+    proposal_json = json.dumps(stable, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return f"""{protocol}
 
 ENTITYOS/HCU TWO-STAGE PATCH SYNTHESIS — STAGE 2
 The stage-1 proposal below is noncanonical candidate input. Produce only the
 source-bound implementation delta. Do not change target_files, test_commands,
-hypothesis or falsifier. The exact source head is fixed for this synthesis.
+hypothesis or falsifier. The exact source head/tree/blob binding is fixed.
 
 Fail-closed rules:
 - Modify only the declared target_files.
 - Use only exact visible source bytes below for removals/context; never invent old lines.
-- A creation target marked ABSENT_AT_SOURCE must use /dev/null on the old side.
 - Emit a normal unified diff with exact ---/+++ paths and valid @@ hunk counts.
 - No Markdown fence, ellipsis, prose placeholder, rename/copy metadata or binary patch.
-- If the supplied exact context is insufficient, keep patch_unified_diff empty and ready_for_forge=false.
-- ready_for_forge is only a request for deterministic local preflight; the controller will force it false unless ordinary git apply --check succeeds on the exact source.
+- If supplied exact context is insufficient, keep patch_unified_diff empty and ready_for_forge=false.
+- ready_for_forge is only a request for deterministic local preflight; the controller forces it false unless ordinary git apply --check succeeds on this exact source.
 - End with DEUTSCHE_ZUSAMMENFASSUNG and one compact ARCHITECTURE_DELTA_JSON line.
 
 STAGE1_PROPOSAL_JSON={proposal_json}
@@ -340,7 +284,7 @@ def _patch_declared_paths(patch: str) -> tuple[bool, set[str], str]:
                 if normalized is None:
                     return False, set(), "PATCH_UNSAFE_DIFF_PATH"
                 paths.add(normalized)
-    return (bool(paths), paths, "" if paths else "PATCH_HAS_NO_PATHS")
+    return bool(paths), paths, "" if paths else "PATCH_HAS_NO_PATHS"
 
 
 def _clone_exact(repo: Path, source_head: str, dest: Path) -> tuple[bool, str]:
@@ -367,23 +311,11 @@ def _standard_apply_check(repo: Path, source_head: str, patch: str, temp_root: P
     ok, reason = _clone_exact(repo, source_head, dest)
     if not ok:
         return False, reason
-    rc, _, err = _git(
-        dest,
-        "apply",
-        "--check",
-        "--whitespace=nowarn",
-        "-",
-        input_text=patch,
-    )
+    rc, _, err = _git(dest, "apply", "--check", "--whitespace=nowarn", "-", input_text=patch)
     return rc == 0, err[-1200:]
 
 
-def normalize_patch_against_source(
-    repo: Path,
-    source_head: str,
-    patch: str,
-    targets: list[str],
-) -> dict[str, Any]:
+def normalize_patch_against_source(repo: Path, source_head: str, patch: str, targets: list[str]) -> dict[str, Any]:
     """Preflight a patch and narrowly repair bad hunk counts without fuzzy apply."""
     ok, reason = _source_exists(repo, source_head)
     if not ok:
@@ -392,12 +324,7 @@ def normalize_patch_against_source(
     declared_ok, paths, path_reason = _patch_declared_paths(patch)
     expected = set(targets)
     if not declared_ok:
-        return {
-            "ok": False,
-            "reason": path_reason,
-            "repair_mode": "NONE",
-            "patch": patch,
-        }
+        return {"ok": False, "reason": path_reason, "repair_mode": "NONE", "patch": patch}
     if paths != expected:
         return {
             "ok": False,
@@ -412,32 +339,13 @@ def normalize_patch_against_source(
     try:
         clean, err = _standard_apply_check(repo, source_head, patch, root)
         if clean:
-            return {
-                "ok": True,
-                "reason": None,
-                "repair_mode": "NONE",
-                "patch": patch,
-                "original_apply_error": None,
-            }
+            return {"ok": True, "reason": None, "repair_mode": "NONE", "patch": patch, "original_apply_error": None}
 
         recount_repo = root / "recount"
         cloned, clone_reason = _clone_exact(repo, source_head, recount_repo)
         if not cloned:
-            return {
-                "ok": False,
-                "reason": clone_reason,
-                "repair_mode": "NONE",
-                "patch": patch,
-                "original_apply_error": err,
-            }
-        rc, _, recount_err = _git(
-            recount_repo,
-            "apply",
-            "--recount",
-            "--whitespace=nowarn",
-            "-",
-            input_text=patch,
-        )
+            return {"ok": False, "reason": clone_reason, "repair_mode": "NONE", "patch": patch, "original_apply_error": err}
+        rc, _, recount_err = _git(recount_repo, "apply", "--recount", "--whitespace=nowarn", "-", input_text=patch)
         if rc != 0:
             return {
                 "ok": False,
@@ -448,14 +356,7 @@ def normalize_patch_against_source(
                 "recount_apply_error": recount_err[-1200:],
             }
 
-        for rel in targets:
-            rc, _, _ = _git(recount_repo, "cat-file", "-e", f"{source_head}:{rel}")
-            if rc != 0 and (recount_repo / rel).exists():
-                _git(recount_repo, "add", "-N", "--", rel)
-
-        rc, normalized, diff_err = _git(
-            recount_repo, "diff", "--no-ext-diff", "--binary", "--", *targets
-        )
+        rc, normalized, diff_err = _git(recount_repo, "diff", "--no-ext-diff", "--binary", "--", *targets)
         if rc != 0 or not normalized.strip():
             return {
                 "ok": False,
@@ -477,12 +378,6 @@ def normalize_patch_against_source(
                 "original_apply_error": err,
                 "normalized_apply_error": err2,
             }
-        return {
-            "ok": True,
-            "reason": None,
-            "repair_mode": "RECOUNT_NORMALIZED",
-            "patch": normalized,
-            "original_apply_error": err,
-        }
+        return {"ok": True, "reason": None, "repair_mode": "RECOUNT_NORMALIZED", "patch": normalized, "original_apply_error": err}
     finally:
         shutil.rmtree(root, ignore_errors=True)

@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"launch-free6000-fullgas-20260824T1938p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":300,
+  "command":"set -euo pipefail; echo HEAD=$(git rev-parse HEAD); echo ---PREFLIGHT---; df -h /workspace /cache /artifacts; free -h; echo ---ADMISSION---; python3 tools/free_provider_admission.py --json; echo ---COMPILE---; python3 -m py_compile tools/run_6000_free_swarm.py tools/run_6000_free_swarm_fast.py tools/run_24h_entityos_swarm.py tools/run_free_go_swarm.py; bash -n tools/run_6000_free_swarm_supervisor.sh; echo COMPILE_PASS; echo ---STOP-LEGACY---; for pat in '[r]un_24h_entityos_swarm_supervisor.sh' '[r]un_6000_free_swarm_supervisor.sh' '[r]un_24h_entityos_swarm.py' '[r]un_6000_free_swarm_fast.py'; do pgrep -f \"$pat\" | xargs -r kill || true; done; sleep 2; echo ---START-6000-SUPERVISOR---; export CLAY_LOGICAL_WORKERS=6000 CLAY_SWARM_HTTP_THREADS=256; nohup bash tools/run_6000_free_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor6000.log 2>&1 </dev/null & echo $! >/artifacts/clay-entityos-swarm/supervisor6000.pid; echo PID=$!; sleep 12; echo ---PROCS---; ps -eo pid,etime,%cpu,%mem,args | grep -E '[r]un_6000_free_swarm_supervisor|[r]un_6000_free_swarm_fast|[r]un_research_distillery|[r]un_free_evidence_forge|[f]ree swarm/evaluate.py' | head -40; echo ---SUPERVISOR---; cat /artifacts/clay-entityos-swarm/SUPERVISOR_6000.json 2>/dev/null || true; echo ---SWARMLOG---; tail -100 /artifacts/clay-entityos-swarm/swarm6000.log 2>/dev/null || true"
+}

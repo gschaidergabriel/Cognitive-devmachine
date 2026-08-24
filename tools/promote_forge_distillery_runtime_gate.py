@@ -108,22 +108,16 @@ def inspect_db(db: Path, evaluation_sha256: str) -> dict[str, Any]:
     con = sqlite3.connect(db, timeout=30)
     try:
         tables = {row[0] for row in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        if "forge_execution_ingest" not in tables:
-            return {
-                "db_exists": True,
-                "evaluation_present": False,
-                "packet_id": None,
-                "packet_tokens": 0,
-                "accepted_dataset_tokens_counter": 0,
-            }
-        row = con.execute(
-            "SELECT packet_id, approx_tokens FROM forge_execution_ingest WHERE evaluation_sha256=?",
-            (evaluation_sha256,),
-        ).fetchone()
         counter = 0
         if "counters" in tables:
             c = con.execute("SELECT value FROM counters WHERE key='accepted_dataset_tokens'").fetchone()
             counter = int(c[0]) if c else 0
+        row = None
+        if "forge_execution_ingest" in tables:
+            row = con.execute(
+                "SELECT packet_id, approx_tokens FROM forge_execution_ingest WHERE evaluation_sha256=?",
+                (evaluation_sha256,),
+            ).fetchone()
         return {
             "db_exists": True,
             "evaluation_present": row is not None,

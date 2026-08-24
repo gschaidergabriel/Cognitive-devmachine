@@ -2,8 +2,8 @@
 """Route/credential-level FREE_ONLY economic provenance for the autonomous swarm.
 
 The provider admission file grants owner-authorized access to free contingents.
-This module is the narrower runtime gate required by supervisor epoch 8.70: a
-concrete credential fingerprint + endpoint + model/route must have zero-cost/free
+This module is the narrower runtime gate required by supervisor epochs 8.70/8.71:
+a concrete credential fingerprint + endpoint + model/route must have zero-cost/free
 provider-side evidence before an autonomous network call is allowed.
 """
 from __future__ import annotations
@@ -20,6 +20,7 @@ PROVENANCE_PATH = ROOT / "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.js
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
 DEFAULT_ARTIFACTS = Path("/artifacts/clay-entityos-swarm")
 RECEIPT_SCHEMA = "FREE_LANE_EXECUTION_RECEIPT/v1"
+NVIDIA_ENTITLEMENT_SCHEMA = "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT/v1"
 ADMISSION_SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
 PROVENANCE_SCHEMA = "ENTITYOS_HCU_FREE_LANE_ECONOMIC_PROVENANCE/v1"
 
@@ -34,6 +35,16 @@ def _json_snapshot(path: Path) -> tuple[dict[str, Any], str]:
 
 def _host(endpoint: str) -> str:
     return (urlparse(endpoint).hostname or "").lower()
+
+
+def _canonical_json_digest(value: Any) -> str:
+    raw = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
 
 
 def _int_header(headers: dict[str, Any], key: str) -> int | None:
@@ -90,6 +101,72 @@ def _groq_historical_free_match(
     return newest
 
 
+def _nvidia_entitlement_receipt(
+    *,
+    record: dict[str, Any],
+    credential_fingerprint: str,
+    model_or_route: str,
+    endpoint: str,
+) -> dict[str, Any] | None:
+    """Validate one credential-bound NVIDIA free-entitlement record.
+
+    The economic-provenance authority must bind the exact non-secret credential
+    fingerprint to provider-side entitlement evidence. The evidence itself is
+    digest-bound and the requested model must be explicitly listed. This keeps a
+    provider-global NIM statement, key presence, or HTTP success from self-admitting
+    a concrete credential/model lane.
+    """
+    rows = record.get("credential_entitlements")
+    if not isinstance(rows, dict):
+        return None
+    bound = rows.get(credential_fingerprint)
+    if not isinstance(bound, dict):
+        return None
+    if bound.get("provider_side_zero_cost_confirmed") is not True:
+        return None
+
+    observed_at = bound.get("entitlement_observed_at")
+    evidence = bound.get(
+        "provider_side_developer_program_or_free_hosted_nim_entitlement_evidence"
+    )
+    evidence_digest = bound.get("entitlement_evidence_digest")
+    allowed_models = bound.get("allowed_models")
+
+    if not isinstance(observed_at, str) or not observed_at.strip():
+        return None
+    if not isinstance(evidence, dict) or not evidence:
+        return None
+    if not isinstance(evidence_digest, str) or len(evidence_digest) != 64:
+        return None
+    try:
+        int(evidence_digest, 16)
+    except ValueError:
+        return None
+    if _canonical_json_digest(evidence) != evidence_digest.lower():
+        return None
+    if not isinstance(allowed_models, list) or not allowed_models:
+        return None
+    normalized_models = [str(model).strip() for model in allowed_models if str(model).strip()]
+    if model_or_route not in set(normalized_models):
+        return None
+
+    endpoint_host = _host(endpoint)
+    if endpoint_host != "integrate.api.nvidia.com":
+        return None
+
+    return {
+        "schema": NVIDIA_ENTITLEMENT_SCHEMA,
+        "credential_fingerprint": credential_fingerprint,
+        "provider": "nvidia",
+        "endpoint_host": endpoint_host,
+        "provider_side_developer_program_or_free_hosted_nim_entitlement_evidence": evidence,
+        "entitlement_observed_at": observed_at,
+        "entitlement_evidence_digest": evidence_digest.lower(),
+        "allowed_models": normalized_models,
+        "model_or_route": model_or_route,
+    }
+
+
 def _lane_evidence_from_provenance(
     prov: dict[str, Any],
     provider: str,
@@ -117,17 +194,16 @@ def _lane_evidence_from_provenance(
         }
 
     if provider == "nvidia":
-        # NVIDIA documents free hosted NIM prototyping for Developer Program
-        # members, but the public provider statement does not prove that an
-        # arbitrary credential belongs to that free entitlement.  A provider
-        # hostname plus an unbound fingerprint therefore cannot self-admit.
-        bound = record.get("admitted_credential_fingerprints")
-        if not isinstance(bound, list) or credential_fingerprint not in {
-            str(item).strip() for item in bound if str(item).strip()
-        }:
+        receipt = _nvidia_entitlement_receipt(
+            record=record,
+            credential_fingerprint=credential_fingerprint,
+            model_or_route=model_or_route,
+            endpoint=endpoint,
+        )
+        if receipt is None:
             return {
                 "ok": False,
-                "reason": "NVIDIA_CREDENTIAL_DEVELOPER_FREE_ENTITLEMENT_NOT_BOUND",
+                "reason": "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT_NOT_BOUND",
             }
         return {
             "ok": True,
@@ -135,8 +211,8 @@ def _lane_evidence_from_provenance(
             "source": record.get("source"),
             "endpoint_host": _host(endpoint),
             "scope": record.get("scope"),
-            "credential_fingerprint": credential_fingerprint,
-            "assertion": "BOUND_CREDENTIAL_NVIDIA_DEVELOPER_FREE_NIM_PROTOTYPING_ONLY",
+            "credential_entitlement_receipt": receipt,
+            "assertion": "EXACT_NVIDIA_CREDENTIAL_MODEL_FREE_ENTITLEMENT_BOUND",
         }
 
     if provider == "groq":

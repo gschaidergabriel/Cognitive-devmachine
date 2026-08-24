@@ -243,12 +243,8 @@ def inventory(
     return sorted(rows, key=lambda x: (-x["priority"], x["provider_id"]))
 
 
-def route(
-    environ: dict[str, str] | None = None,
-    *,
-    payment_latches: set[str] | None = None,
-) -> dict:
-    rows = inventory(environ, payment_latches=payment_latches)
+def _route_from_inventory(rows: list[dict]) -> dict:
+    """Derive routing only from the inventory represented in one receipt."""
     eligible = [row for row in rows if row["eligible"]]
     blocked = [
         row["provider_id"]
@@ -272,13 +268,27 @@ def route(
     }
 
 
+def route(
+    environ: dict[str, str] | None = None,
+    *,
+    payment_latches: set[str] | None = None,
+) -> dict:
+    rows = inventory(environ, payment_latches=payment_latches)
+    return _route_from_inventory(rows)
+
+
 def receipt() -> dict:
+    # Inventory and route are one capability claim. Snapshot mutable process
+    # inputs once and derive the route from those exact inventory rows so a
+    # concurrent environment change cannot produce a contradictory receipt.
+    env = _snapshot_runtime_environment(None)
+    rows = inventory(env)
     return {
         "schema_version": "1.1",
         "kind": "FREE_API_CAPABILITY_RECEIPT",
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "inventory": inventory(),
-        "route": route(),
+        "inventory": rows,
+        "route": _route_from_inventory(rows),
         "invariants": {
             "secrets_never_serialized": True,
             "paid_calls_forbidden": True,

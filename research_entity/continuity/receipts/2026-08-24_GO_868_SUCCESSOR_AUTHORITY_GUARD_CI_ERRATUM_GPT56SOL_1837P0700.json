@@ -1,0 +1,32 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT_ERRATUM/v1",
+  "authority_epoch": "8.68",
+  "amends": "research_entity/continuity/receipts/2026-08-24_GO_868_SUCCESSOR_AUTHORITY_GUARD_GPT56SOL_1829P0700.json",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "pr": 1448,
+  "exact_pr_head": "f30ae5ea1bca5cd9b09324db87a247e7cf8c33e9",
+  "ci_observation": {
+    "identity_guard": {
+      "run_id": 32722502637,
+      "job_id": 97416715455,
+      "conclusion": "failure",
+      "executed_steps": 0,
+      "job_log": "BLOB_NOT_FOUND_404"
+    },
+    "verify": {
+      "run_id": 32722502583,
+      "job_id": 97416715495,
+      "conclusion": "failure",
+      "steps": "NONE_EXPOSED"
+    }
+  },
+  "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_TEST_EXECUTION",
+  "semantic_test_failure_observed": false,
+  "validator_exact_branch_executable_pass": false,
+  "runtime_credit_added": 0,
+  "reentry_note": "Do not interpret the red workflow conclusion as validator counterevidence. The exact branch tests remain unexecuted at admitted scope. Current main independently folded DNS/connect_ex tripwires into the canonical FREE admission boundary runner after source review, so no duplicate runner repair is added to PR1448.",
+  "next_exact_action": "execute the PR1448 exact head validator regression set on an admitted exact-source zero-cost execution surface, or rebase/salvage the successor-dynamic mechanism onto current main before execution if parallel movement has changed the current-facing surfaces."
+}

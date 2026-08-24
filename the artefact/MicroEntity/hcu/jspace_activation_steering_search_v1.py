@@ -2,9 +2,13 @@
 """Bounded provider-independent search harness for direct HCU/J-Space activation steering.
 
 The harness assumes a validated JSPACE_VECTOR_CONTROL_ABI/v1 packet has already been decoded
-into the vector passed here. It can only claim a steering result when the executor returns a
-hook receipt that binds the exact applied vector, layer, alpha and seed. This module does not
-itself provide a model hook and cannot mint model-runtime or hidden-state-causality credit.
+into the vector passed here. It can only claim a bounded *steering-search* result when the
+executor returns a hook receipt that binds the exact applied vector, layer, alpha and seed.
+
+Important supervisor-8.68 evidence boundary: this module does not implement the full causal
+family required for J-Space intervention promotion (clean + corrupted + target + sham +
+off-target controls). Therefore even ``SearchResult.success`` is explicitly search-level only
+and can never mint J-Space causal/model-runtime credit by itself.
 """
 from __future__ import annotations
 
@@ -21,6 +25,22 @@ except ImportError:
 
 HOOK_RECEIPT_SCHEMA = "HCU_ACTIVATION_STEERING_HOOK_RECEIPT/v1"
 SEARCH_RESULT_SCHEMA = "HCU_JSPACE_ACTIVATION_STEERING_SEARCH/v1"
+EVIDENCE_CLASS = "STEERING_SEARCH_ONLY_NOT_JSPACE_CAUSAL"
+REQUIRED_CAUSAL_CONTROLS = (
+    "BASELINE_CLEAN",
+    "BASELINE_CORRUPTED",
+    "INTERVENTION_TARGET",
+    "SHAM_CONTROL",
+    "OFF_TARGET_CONTROL",
+)
+# This v1 search has a baseline, directional target intervention, sign control and physical
+# zero-vector control. Those are useful discriminators, but they are not substitutes for the
+# three missing controls below under the current HCU J-Space intervention gate.
+MISSING_CAUSAL_CONTROLS = (
+    "BASELINE_CORRUPTED",
+    "SHAM_CONTROL",
+    "OFF_TARGET_CONTROL",
+)
 MAX_TRIALS = 4096
 
 
@@ -72,6 +92,10 @@ class Candidate:
 @dataclass(frozen=True)
 class SearchResult:
     schema: str
+    evidence_class: str
+    jspace_causal_credit: bool
+    required_causal_controls: tuple[str, ...]
+    missing_causal_controls: tuple[str, ...]
     vector_control_packet_sha256: str
     applied_vector_sha256: str
     baseline_scores: tuple[float, ...]
@@ -154,7 +178,11 @@ def search_activation_steering(
     min_directional_gap: float = 0.1,
     max_zero_drift: float = 1e-9,
 ) -> SearchResult:
-    """Search layer/alpha coordinates and require sign + zero controls for SUCCESS.
+    """Search layer/alpha coordinates with sign + zero controls.
+
+    ``success`` means the bounded steering-search criteria passed. It deliberately does not
+    mean J-Space causality. Current causal promotion separately requires the full clean /
+    corrupted / target / sham / off-target family and exact model/runtime/loader/trace binding.
 
     This is intentionally bounded. A caller wanting broader search must explicitly provide a
     larger finite grid while remaining below MAX_TRIALS.
@@ -244,6 +272,10 @@ def search_activation_steering(
     )
     return SearchResult(
         schema=SEARCH_RESULT_SCHEMA,
+        evidence_class=EVIDENCE_CLASS,
+        jspace_causal_credit=False,
+        required_causal_controls=REQUIRED_CAUSAL_CONTROLS,
+        missing_causal_controls=MISSING_CAUSAL_CONTROLS,
         vector_control_packet_sha256=packet_sha,
         applied_vector_sha256=vector_sha,
         baseline_scores=tuple(baseline_scores),

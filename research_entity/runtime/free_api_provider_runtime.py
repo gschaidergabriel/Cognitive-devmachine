@@ -196,7 +196,7 @@ def _passive_payment_latches(
 ) -> set[str]:
     """Return latch storage only when membership and mutation are passive."""
     if payment_latches is None:
-        return PROCESS_PAYMENT_LATCHES
+        payment_latches = PROCESS_PAYMENT_LATCHES
     if type(payment_latches) is not set:
         raise ValueError("payment_latches_must_be_set")
     if any(type(latch) is not str for latch in payment_latches):

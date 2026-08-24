@@ -115,12 +115,27 @@
   },
   "latest_go_runtime_gate": {
     "authority_epoch": "8.72",
-    "gate": "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2",
-    "workflow_run_id": 32742535392,
-    "workflow_job_id": 97480167751,
-    "job_status_observed": "QUEUED",
-    "terminal_repository_bound_result_observed": false,
-    "required_witness": "1 evidence-qualified ACCEPT -> exactly 1 Distillery packet -> accepted_dataset_tokens > 0 -> identical replay +0",
+    "gate": "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2_PLUS_LIVE_PROMOTION",
+    "source_workflow": ".github/workflows/go871-forge-distillery-runtime-gate.yml",
+    "source_selection": "CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME",
+    "current_terminal_repository_bound_result_observed": false,
+    "required_current_scope": [
+      "promotion_source_guards_pass",
+      "disposable_exact_current_gate_pass",
+      "live_distillery_promotion_status_pass",
+      "first_new_packet_exactly_one_or_existing_same_digest_idempotent",
+      "first_token_delta_positive_for_new_promotion",
+      "replay_packet_delta_zero",
+      "replay_token_delta_zero",
+      "provider_and_paid_fallback_counts_zero"
+    ],
+    "previous_run_provenance": {
+      "workflow_run_id": 32742535392,
+      "workflow_job_id": 97480167751,
+      "last_observed_status": "QUEUED",
+      "current_scope_credit": 0,
+      "reason": "RUN_PREDATES_LIVE_PROMOTION_WORKFLOW_WIRING"
+    },
     "runtime_credit_added": 0,
     "jspace_model_runtime_credit_added": 0,
     "training_credit_added": 0,
@@ -128,8 +143,8 @@
   },
   "forge_distillery_live_promotion": {
     "source_tool": "tools/promote_forge_distillery_runtime_gate.py",
-    "status": "SOURCE_READY_RUNTIME_PASS_REQUIRED",
-    "rule": "Only an exact-source PASS runtime witness may be revalidated and promoted into the canonical Distillery DB; first promotion must add exactly one nonzero-token packet and replay must add zero.",
+    "status": "SOURCE_WIRED_CURRENT_WORKFLOW_TERMINAL_RECEIPT_PENDING",
+    "rule": "Only an exact-source PASS runtime witness may be revalidated and promoted into the canonical Distillery DB; first new promotion must add exactly one nonzero-token packet and immediate replay must add zero.",
     "provider_network_io": false,
     "runtime_credit_added": 0
   },
@@ -139,7 +154,17 @@
     "current_discriminator": "NONTERMINAL_MIDLAYER_INTERNAL_ACTIVATION_CONTRAST",
     "vector_control_abi": "JSPACE_VECTOR_CONTROL_ABI/v1",
     "required_controls": ["BASELINE", "+VECTOR", "SIGN_FLIP", "NULL_VECTOR", "ORTHOGONAL_SAME_NORM", "PERMUTED_SAME_NORM"],
-    "stronger_protocol_requirements": ["COUNTERBALANCED_LABEL_MAPPING", "WRONG_LAYER", "LESION_RESCUE", "DERIVATION_HOLDOUT_DISJOINTNESS"],
+    "stronger_protocol_requirements": [
+      "COUNTERBALANCED_LABEL_MAPPING",
+      "WRONG_LAYER",
+      "LESION_RESCUE",
+      "DERIVATION_HOLDOUT_DISJOINTNESS",
+      "UPSTREAM_LABEL_INDEPENDENCE_RECEIPT",
+      "HOLDOUT_METRIC_MODALITY_EXPLICIT_BOOL",
+      "TOKEN_OUTPUT_METRIC_REQUIRES_COUNTERBALANCED_LABEL_MAPPING",
+      "BYTE_EXACT_CLEAN_SOURCE_IDENTITY",
+      "EXECUTOR_AND_SOURCE_EXECUTION_ENVELOPE_IDENTITY"
+    ],
     "atomic_lease_gate_required_before_unusual_intervention": true,
     "source_execution_binding_required": true,
     "terminal_repository_bound_result_observed": false,
@@ -147,8 +172,8 @@
     "training_credit": 0
   },
   "live_funnel_observed": {
-    "snapshot_generated_at": "2026-08-24T16:29:50Z",
-    "free_swarm_total_tokens": 17792298,
+    "snapshot_generated_at": "2026-08-24T16:45:00Z",
+    "free_swarm_total_tokens": 18035888,
     "forge_nominal_accepted_deltas": 1,
     "distillery_accepted_packets": 0,
     "distillery_accepted_dataset_tokens": 0
@@ -176,11 +201,11 @@
   },
   "current_frontier": [
     "keep all current-facing authority mirrors aligned to SUPERVISOR_STEERING_8_72 FREE_ONLY and active owner zero-cost execution authority",
-    "observe terminal self-hosted Forge->Distillery runtime witness at exact source identity; source/workflow/queued status is not PASS",
-    "after an exact PASS, promote only that evidence-qualified Forge evaluation into live Distillery and prove exactly one nonzero-token packet plus idempotent replay +0",
+    "execute and observe a terminal repository-bound result from the current Forge->Distillery workflow revision containing live promotion; the older queued run 32742535392 predates that scope and has zero current-scope credit",
+    "require disposable exact-current gate PASS plus live Distillery promotion PASS with exactly one nonzero-token new packet and immediate replay +0 before Forge operational runtime credit",
     "retain gschaidergabriel/clay-global-research-entity#1263 as the single HCU donor lane and avoid duplicate HCU/Typed Entry implementation while exact runtime closure is pending",
     "retain the provider-independent local Qwen3-0.6B nonterminal midlayer causal discriminator; require canonical atomic lease before unusual intervention and exact source-execution binding",
-    "require counterbalanced label mapping, wrong-layer, lesion/rescue and six matched controls before J-Space mechanism promotion",
+    "require upstream label-independence proof, explicit holdout metric modality, counterbalanced token labels when applicable, wrong-layer, lesion/rescue and six matched controls before J-Space scientific promotion",
     "continue Typed Entry -> route -> verified engine/load -> GRID10 -> actual model execution -> InferenceReceipt -> model-specific Global J-Space/GWT -> TrainingTrace -> admitted causal dataset",
     "keep external provider lanes secondary and fail closed unless concrete FREE credential/model/route economic provenance is bound",
     "whole EntityOS/HCU, full HCU, provider runtime, J-Space model and training credit remain zero until exact executable evidence promotes only its measured scope"

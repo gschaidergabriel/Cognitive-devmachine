@@ -14,6 +14,7 @@ import trigger1_jspace_promotion_gate as gate
 
 HEX64 = "a" * 64
 ALT64 = "c" * 64
+OTHER64 = "d" * 64
 HEAD40 = "b" * 40
 
 
@@ -39,7 +40,15 @@ def passing_inputs() -> tuple[dict, dict]:
                 "hook_calls": 1,
             }
             if control == "+VECTOR":
-                row["applied_vector_sha256"] = ALT64
+                row.update(
+                    {
+                        "applied_vector_sha256": ALT64,
+                        "wrong_layer": 18,
+                        "wrong_layer_direction_layer": 12,
+                        "wrong_layer_applied_vector_sha256": ALT64,
+                        "wrong_layer_receipt_sha256": HEX64,
+                    }
+                )
             holdout.append(row)
 
     verdict = {
@@ -51,10 +60,12 @@ def passing_inputs() -> tuple[dict, dict]:
         "lesion_rescue_evidence_complete": True,
         "lesion_rescue_ok": True,
     }
+    derivation_prompt_hashes = ["5" * 64, "6" * 64]
     result = {
         "schema": bridge.INTERMEDIATE_SCHEMA,
         "status": "PASS",
         "credit_scope": "INTERMEDIATE_REPRESENTATION_CAUSAL_CANDIDATE_ONLY",
+        "wrong_layer_semantics": "SAME_SELECTED_DIRECTION_AT_DIFFERENT_INTERVENTION_LAYER",
         "source": {"repo_head": HEAD40},
         "runtime_build_sha256": HEX64,
         "checkpoint_sha256": HEX64,
@@ -63,11 +74,15 @@ def passing_inputs() -> tuple[dict, dict]:
         "model_revision": "exact-revision",
         "selected": {"selected": True, "layer": 12, "gain": 4.0},
         "derivation": {
-            "sources": [
-                {"prompt_sha256": "5" * 64},
-                {"prompt_sha256": "6" * 64},
-            ],
+            "sources": [{"prompt_sha256": value} for value in derivation_prompt_hashes],
             "directions": {"12": {"direction_sha256": ALT64}},
+            "label_independence": {
+                "schema": bridge.LABEL_INDEPENDENCE_SCHEMA,
+                "derivation_input_family_sha256": bridge.digest(derivation_prompt_hashes),
+                "evaluation_output_labels_resolved_before_derivation": False,
+                "uses_evaluation_output_labels": False,
+                "construction": "semantic calibration activations only",
+            },
         },
         "calibration_rows": calibration,
         "holdout_rows": holdout,
@@ -82,17 +97,19 @@ def passing_inputs() -> tuple[dict, dict]:
         "schema": bridge.INTERMEDIATE_CANDIDATE_SCHEMA,
         "verdict": {"pass": True},
         "candidate_sha256": HEX64,
+        "wrong_layer_same_selected_vector": True,
     }
     return result, intermediate
 
 
 class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
-    def test_bridge_binds_label_independence_and_reaches_gate_v4_goal_candidate(self):
+    def test_bridge_binds_same_vector_wrong_layer_and_reaches_gate_v4_goal_candidate(self):
         result, intermediate = passing_inputs()
         direct = bridge.build_direct_candidate(result, intermediate)
 
         self.assertIs(False, direct["vector_derivation"]["uses_evaluation_output_labels"])
         self.assertIs(True, direct["holdout"]["label_mapping_counterbalanced"])
+        self.assertIs(True, direct["intermediate_protocol"]["wrong_layer_same_selected_vector"])
 
         verdict = gate.adjudicate(direct)
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
@@ -103,6 +120,22 @@ class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
         self.assertFalse(verdict["whole_entityos_hcu_credit"])
         self.assertFalse(verdict["jspace_model_runtime_credit"])
         self.assertFalse(verdict["training_credit"])
+
+    def test_bridge_rejects_wrong_layer_using_different_vector(self):
+        result, intermediate = passing_inputs()
+        for row in result["holdout_rows"]:
+            if row["control"] == "+VECTOR":
+                row["wrong_layer_applied_vector_sha256"] = OTHER64
+        with self.assertRaisesRegex(bridge.BridgeError, "WRONG_LAYER_MUST_REUSE_EXACT_SELECTED_VECTOR"):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_bridge_rejects_wrong_layer_direction_from_wrong_layer(self):
+        result, intermediate = passing_inputs()
+        for row in result["holdout_rows"]:
+            if row["control"] == "+VECTOR":
+                row["wrong_layer_direction_layer"] = row["wrong_layer"]
+        with self.assertRaisesRegex(bridge.BridgeError, "WRONG_LAYER_DIRECTION_SOURCE_MUST_BE_SELECTED_LAYER"):
+            bridge.build_direct_candidate(result, intermediate)
 
 
 if __name__ == "__main__":

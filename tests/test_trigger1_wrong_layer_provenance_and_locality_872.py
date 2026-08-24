@@ -29,8 +29,11 @@ def rows(
         "PERMUTED_SAME_NORM": 0.2,
     }
     out: list[dict] = []
-    for map_id, positive, negative in (("MAP_AB", "A", "B"), ("MAP_BA", "B", "A")):
-        for case_id in ("h1", "h2"):
+    maps = (("MAP_AB", "A", "B"), ("MAP_BA", "B", "A"))
+    for map_index, (map_id, positive, negative) in enumerate(maps):
+        for case_index, case_id in enumerate(("h1", "h2")):
+            prompt_sha256 = f"{100 + map_index * 2 + case_index:064x}"
+            seed = (2718, 3141)[case_index]
             for control in protocol.REQUIRED_CONTROLS:
                 row = {
                     "split": "holdout",
@@ -40,6 +43,8 @@ def rows(
                     "label_map_id": map_id,
                     "positive_label": positive,
                     "negative_label": negative,
+                    "prompt_sha256": prompt_sha256,
+                    "seed": seed,
                     "control": control,
                     "target_score": scores[control],
                 }

@@ -1,0 +1,98 @@
+{
+  "schema_version": "ENTITYOS_HCU_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "other",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor_mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "e00494f607927233e43ac9f406919d4d5fa8e02c",
+  "user_goal": "Attempt direct multi-instance steering through vectors/J-Space using free execution where possible and iterate until a steering mechanism works.",
+  "coordination": {
+    "new_unusual_model_intervention": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable macrocycle/request ID is exposed and available user-message metadata is only minute precision; current atomic-lease law therefore blocks a new model-specific unusual intervention.",
+    "work_executed": "DETERMINISTIC_LOCAL_SHARED_WEIGHT_SURROGATE_REGRESSION",
+    "external_provider_credentials_used": false,
+    "paid_execution_used": false,
+    "together_used": false,
+    "vps_or_production_used": false
+  },
+  "reentry": {
+    "retained_hcu_lane": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_head_observed": "6f3017f233c3f05c4befcc1d5c5fde30499949f6",
+    "retained_executor_lane": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "6a15601183f9bb61d445368e4d239e90a47b300c"
+  },
+  "existing_source_boundary": {
+    "model_input_binding": "HCU_MODEL_INPUT_CONTROL_BINDING/v1 already proves exact Vector-Control packet bytes are present exactly once in exact executor-observed input bytes at source/regression scope.",
+    "control_consumption_binding": "HCU_JSPACE_CONTROL_CONSUMPTION_BINDING/v1 cross-binds TrainingTrace packet identity to exact ModelInputControlBinding/executor input bytes.",
+    "remaining_gap": "Neither source primitive proves hidden-state causal use or a counterfactual model effect."
+  },
+  "surrogate": {
+    "source_path": "research_entity/claycode/experiments/JSPACE_SHARED_WEIGHT_SURROGATE_VECTOR_CONTROL_V1.py",
+    "source_commit": "e00494f607927233e43ac9f406919d4d5fa8e02c",
+    "local_source_sha256": "7cbe5aae625090f6bd2729f6ca3f5f277a307c49578f10b3bbf3002c1a771510",
+    "local_result_sha256": "d17d013e85f5e5db76e41b255817439f1d6065f43c777aef60f52ce167bf22cb",
+    "environment": {
+      "python": "3.13.5",
+      "torch": "2.10.0+cpu",
+      "platform": "Linux x86_64 CPU"
+    },
+    "design": {
+      "shared_weight_logical_cells": true,
+      "direct_hidden_vector_injection": true,
+      "learned_low_dimensional_jspace": true,
+      "holdout_states": true,
+      "controls": ["matched-rank random subspace", "orthogonal lesion subspace"],
+      "seeds": [0, 1, 2, 3],
+      "nonlinear_holdout_trials_per_seed": 240,
+      "jspace_rank": 12,
+      "hidden_dimension": 64,
+      "control_norm_cap": 3.5
+    },
+    "aggregate_result": {
+      "learned_jspace_success_rate": 0.6916666626930237,
+      "random_subspace_success_rate": 0.0010416667209938169,
+      "orthogonal_lesion_success_rate": 0.0,
+      "learned_mean_initial_target_probability": 0.11043320596218109,
+      "learned_mean_final_target_probability": 0.5925767421722412,
+      "random_mean_final_target_probability": 0.28232666105031967,
+      "lesion_mean_final_target_probability": 0.14603166654706,
+      "linear_broadcast_mean_cells_targeted_of_10": 10,
+      "linear_broadcast_median_cells_targeted_of_10": 10,
+      "linear_broadcast_max_cells_targeted_of_10": 10
+    }
+  },
+  "interpretation": {
+    "observed": "A learned low-dimensional hidden-state control subspace strongly outperformed equally bounded random and orthogonal-lesion controls on unseen states in the deterministic shared-weight surrogate.",
+    "inference": "This supports J-Space as a plausible actuator geometry for coordinating many shared-weight logical cells, provided a real model runtime exposes a validated hidden-state intervention boundary.",
+    "not_proven": [
+      "external API/model instance steering",
+      "LLM hidden-state causal control",
+      "semantic benefit",
+      "EntityOS/HCU runtime acceptance",
+      "J-Space model-runtime credit",
+      "training benefit"
+    ]
+  },
+  "external_api_attempt_boundary": {
+    "result": "NOT_EXECUTED",
+    "reason": "This ChatGPT session has no authorized surface exposing arbitrary user free-provider API tokens/keys for spawning inference instances; current FREE_ONLY authority also requires fail-closed execution and the atomic lease before a new unusual model intervention.",
+    "classification": "TOOL_AUTHORITY_AND_COORDINATION_BLOCK, NOT_SCIENTIFIC_NEGATIVE"
+  },
+  "next_exact_gate": "At the exact live donor/executor identities, integrate the existing pre-invocation control path with one real zero-cost local approximately-0.8B model executor that exposes a validated hidden-state injection point; then run preregistered baseline vs learned-J-Space vs shuffled/orthogonal-lesion vs rescue controls under a successful canonical atomic lease and exact loader/input/invocation receipts.",
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Append-only research receipt and explicitly noncanonical surrogate code capture this experiment without overwriting rapidly moving current-facing product state."
+  },
+  "acceptance": "SURROGATE_MECHANISM_PASS_REAL_MODEL_GATE_OPEN"
+}

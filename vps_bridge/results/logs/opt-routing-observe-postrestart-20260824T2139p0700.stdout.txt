@@ -1,0 +1,15 @@
+RUN /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T143836Z
+ACTIVE 9 TARGET 10 SUCCESS 12
+PROVIDER groq target 1 active 1 success 0 429 0 errors 0
+HEALTH groq qwen/qwen3.6-27b disabled False weight 2.0 success 1 hard4xx 0 5xx 0 delta 0 accepted 0 lat 2.461
+HEALTH groq openai/gpt-oss-20b disabled False weight 2.0 success 1 hard4xx 0 5xx 0 delta 1 accepted 0 lat 1.668
+PROVIDER nvidia target 8 active 8 success 12 429 3 errors 1
+HEALTH nvidia nvidia/nemotron-3-super-120b-a12b disabled False weight 0.099738 success 433 hard4xx 0 5xx 14 delta 100 accepted 1 lat 25.525961726136916
+HEALTH nvidia nvidia/nemotron-3-ultra-550b-a55b disabled False weight 0.012952 success 262 hard4xx 0 5xx 110 delta 154 accepted 0 lat 58.26500869255869
+HEALTH nvidia nvidia/nemotron-mini-4b-instruct disabled True weight 0.0 success 0 hard4xx 406 5xx 0 delta 0 accepted 0 lat 0.14903467385715977
+PROVIDER openrouter target 1 active 0 success 0 429 5 errors 0
+RUN_COUNTS
+('nvidia', 'nvidia/nemotron-3-super-120b-a12b') total 18 ok 15 delta 1
+('openrouter', 'openrouter/free') total 5 ok 0 delta 0
+('nvidia', 'nvidia/nemotron-3-ultra-550b-a55b') total 2 ok 1 delta 0
+FORGE_ACCEPTED 1 EVALS 141 STATES {'ACCEPTED': 1, 'NEEDS_IMPLEMENTATION': 65, 'NEW': 148, 'PATCH_REJECTED': 74, 'VALIDATED_NOT_BETTER': 1}

@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "opt-routing-observe-postrestart-20260824T2139p0700",
+  "command_sha256": "cf8a8ca2f31b1aadaac4d3ef4173d39bbe0b6c2f0f1fb4c2fd685c545d77dc5e",
+  "started_at": "2026-08-24T14:39:15.696375+00:00",
+  "finished_at": "2026-08-24T14:39:40.875601+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "8d2d886220f50601b8ea8700d39c295e186d9d03703a7139c159ca0a1e8aa5aa",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "RUN /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T143836Z\nACTIVE 9 TARGET 10 SUCCESS 12\nPROVIDER groq target 1 active 1 success 0 429 0 errors 0\nHEALTH groq qwen/qwen3.6-27b disabled False weight 2.0 success 1 hard4xx 0 5xx 0 delta 0 accepted 0 lat 2.461\nHEALTH groq openai/gpt-oss-20b disabled False weight 2.0 success 1 hard4xx 0 5xx 0 delta 1 accepted 0 lat 1.668\nPROVIDER nvidia target 8 active 8 success 12 429 3 errors 1\nHEALTH nvidia nvidia/nemotron-3-super-120b-a12b disabled False weight 0.099738 success 433 hard4xx 0 5xx 14 delta 100 accepted 1 lat 25.525961726136916\nHEALTH nvidia nvidia/nemotron-3-ultra-550b-a55b disabled False weight 0.012952 success 262 hard4xx 0 5xx 110 delta 154 accepted 0 lat 58.26500869255869\nHEALTH nvidia nvidia/nemotron-mini-4b-instruct disabled True weight 0.0 success 0 hard4xx 406 5xx 0 delta 0 accepted 0 lat 0.14903467385715977\nPROVIDER openrouter target 1 active 0 success 0 429 5 errors 0\nRUN_COUNTS\n('nvidia', 'nvidia/nemotron-3-super-120b-a12b') total 18 ok 15 delta 1\n('openrouter', 'openrouter/free') total 5 ok 0 delta 0\n('nvidia', 'nvidia/nemotron-3-ultra-550b-a55b') total 2 ok 1 delta 0\nFORGE_ACCEPTED 1 EVALS 141 STATES {'ACCEPTED': 1, 'NEEDS_IMPLEMENTATION': 65, 'NEW': 148, 'PATCH_REJECTED': 74, 'VALIDATED_NOT_BETTER': 1}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

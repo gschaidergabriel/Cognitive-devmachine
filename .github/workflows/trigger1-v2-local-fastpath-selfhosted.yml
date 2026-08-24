@@ -36,35 +36,40 @@ jobs:
         run: |
           set -euo pipefail
           lease_result="${RUNNER_TEMP}/trigger1-lease-${GITHUB_RUN_ID}.json"
+          source_identity="${RUNNER_TEMP}/trigger1-source-identity-${GITHUB_RUN_ID}.json"
           python3 tools/trigger1_atomic_lease_gate.py --issue-body "$ISSUE_BODY" --output "$lease_result"
-          SOURCE_HEAD="$(git rev-parse HEAD)"
-          SOURCE_TREE="$(git rev-parse 'HEAD^{tree}')"
-          SOURCE_DIRTY=false
-          [[ -n "$(git status --porcelain=v1)" ]] && SOURCE_DIRTY=true
+          python3 tools/git_source_identity_v1.py --repo . --require-clean > "$source_identity"
           claim_main="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["observed_canonical_main"])' "$lease_result")"
-          python3 - "$lease_result" "$GITHUB_ENV" "$SOURCE_HEAD" "$SOURCE_TREE" "$SOURCE_DIRTY" <<'PY'
+          python3 - "$lease_result" "$source_identity" "$GITHUB_ENV" <<'PY'
           import json, pathlib, sys
-          r=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
+          lease=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
+          source=json.loads(pathlib.Path(sys.argv[2]).read_text(encoding='utf-8'))
+          dirty=source.get('dirty_state') if isinstance(source.get('dirty_state'),dict) else {}
+          if source.get('schema') != 'CLAY_GIT_SOURCE_IDENTITY/v1':
+              raise SystemExit('TRIGGER1_SOURCE_IDENTITY_SCHEMA_INVALID')
+          if dirty.get('dirty') is not False:
+              raise SystemExit('BLOCKED_SOURCE_DIRTY_BEFORE_INTERVENTION')
           values={
-              'TRIGGER1_TRIGGER_KEY':r['trigger_key'],
-              'TRIGGER1_CLAIM_PATH':r['claim_path'],
-              'TRIGGER1_CLAIM_SHA256':r['claim_sha256'],
-              'TRIGGER1_CLAIM_OBSERVED_MAIN':r['observed_canonical_main'],
-              'TRIGGER1_CLAIMANT_ORGAN':str(r['claimant_organ']),
-              'TRIGGER1_EXPERIMENT_NAME':r['experiment_name'],
-              'TRIGGER1_SOURCE_HEAD':sys.argv[3],
-              'TRIGGER1_SOURCE_TREE':sys.argv[4],
-              'TRIGGER1_SOURCE_DIRTY':sys.argv[5],
+              'TRIGGER1_TRIGGER_KEY':lease['trigger_key'],
+              'TRIGGER1_CLAIM_PATH':lease['claim_path'],
+              'TRIGGER1_CLAIM_SHA256':lease['claim_sha256'],
+              'TRIGGER1_CLAIM_OBSERVED_MAIN':lease['observed_canonical_main'],
+              'TRIGGER1_CLAIMANT_ORGAN':str(lease['claimant_organ']),
+              'TRIGGER1_EXPERIMENT_NAME':lease['experiment_name'],
+              'TRIGGER1_SOURCE_HEAD':source['repo_head'],
+              'TRIGGER1_SOURCE_TREE':source['repo_tree'],
+              'TRIGGER1_SOURCE_IDENTITY_SHA256':source['source_identity_sha256'],
+              'TRIGGER1_DIRTY_STATE_SHA256':source['dirty_state_sha256'],
+              'TRIGGER1_SOURCE_DIRTY':'false',
               'TRIGGER1_LEASE_ADMITTED':'true',
           }
-          with pathlib.Path(sys.argv[2]).open('a',encoding='utf-8') as f:
+          with pathlib.Path(sys.argv[3]).open('a',encoding='utf-8') as f:
               for k,v in values.items():
                   if '\n' in v or '\r' in v: raise SystemExit('UNSAFE_ENV_VALUE')
                   f.write(f'{k}={v}\n')
           PY
-          [[ "$SOURCE_DIRTY" == false ]] || { echo 'BLOCKED_SOURCE_DIRTY_BEFORE_INTERVENTION' >&2; exit 2; }
           git cat-file -e "$claim_main^{commit}"
-          git merge-base --is-ancestor "$claim_main" "$SOURCE_HEAD" || { echo 'BLOCKED_CLAIM_MAIN_NOT_ANCESTOR_OF_EXECUTED_SOURCE' >&2; exit 2; }
+          git merge-base --is-ancestor "$claim_main" "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["repo_head"])' "$source_identity")" || { echo 'BLOCKED_CLAIM_MAIN_NOT_ANCESTOR_OF_EXECUTED_SOURCE' >&2; exit 2; }
 
       - name: Verify atomic lease gate implementation
         shell: bash
@@ -77,6 +82,8 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate
+          python3 -m unittest -v tests.test_git_source_identity_v1
+          python3 -m unittest -v tests.test_trigger1_workflow_git_source_identity_v1
 
       - name: Execute fused nonterminal midlayer causal discriminator
         id: experiment
@@ -206,6 +213,27 @@ jobs:
               fence=json.loads(pathlib.Path(sys.argv[5]).read_text(encoding='utf-8'))
           except Exception:
               fence={'schema':'CLAY_TRIGGER1_PROVIDER_CREDENTIAL_FENCE/v1','status':'MISSING'}
+          executed_head=os.environ.get('TRIGGER1_SOURCE_HEAD')
+          executed_tree=os.environ.get('TRIGGER1_SOURCE_TREE')
+          source_identity_sha=os.environ.get('TRIGGER1_SOURCE_IDENTITY_SHA256')
+          dirty_state_sha=os.environ.get('TRIGGER1_DIRTY_STATE_SHA256')
+          if not all(isinstance(v,str) and v for v in (executed_head,executed_tree,source_identity_sha,dirty_state_sha)):
+              raise SystemExit('EXECUTED_SOURCE_IDENTITY_REQUIRED')
+          if os.environ.get('TRIGGER1_SOURCE_DIRTY') != 'false':
+              raise SystemExit('EXECUTED_SOURCE_DIRTY_BEFORE_INTERVENTION')
+          source=result.get('source') if isinstance(result.get('source'),dict) else None
+          status=str(result.get('status') or '')
+          promotion_capable = status in {'PASS','SCIENTIFIC_NEGATIVE'} or isinstance(result.get('verdict'),dict)
+          source_result_identity_verified=False
+          if source is None:
+              if promotion_capable:
+                  raise SystemExit('EXECUTED_SOURCE_IDENTITY_REQUIRED')
+          else:
+              if source.get('repo_head') != executed_head:
+                  raise SystemExit('EXECUTED_SOURCE_HEAD_MISMATCH')
+              if source.get('repo_tree') != executed_tree:
+                  raise SystemExit('EXECUTED_SOURCE_TREE_MISMATCH')
+              source_result_identity_verified=True
           runtime=result.get('runtime_manifest') if isinstance(result.get('runtime_manifest'),dict) else {}
           runtime.pop('python_executable',None)
           result.pop('snapshot_path',None)
@@ -217,10 +245,17 @@ jobs:
               'provider_credential_fence':fence,
               'source_claim_external_provider_credentials_read':result.get('external_provider_credentials_read'),
               'source_claim_promoted_without_fence':False,
+              'source_result_identity_verified':source_result_identity_verified,
               'github_actions':{
                   'run_id':os.environ.get('GITHUB_RUN_ID'),
                   'run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
-                  'head_sha':os.environ.get('GITHUB_SHA'),
+                  'head_sha':executed_head,
+                  'executed_tree_sha':executed_tree,
+                  'git_source_identity_sha256':source_identity_sha,
+                  'dirty_state_sha256':dirty_state_sha,
+                  'executed_source_dirty':False,
+                  'dispatch_event_sha':os.environ.get('GITHUB_SHA'),
+                  'lease_claim_observed_main':os.environ.get('TRIGGER1_CLAIM_OBSERVED_MAIN'),
                   'issue_number':int('${{ github.event.issue.number }}'),
                   'process_exit_code':int(sys.argv[4]),
                   'runner_environment':'SELF_HOSTED_LINUX_X64',
@@ -287,6 +322,8 @@ jobs:
                   'head':os.environ['TRIGGER1_SOURCE_HEAD'],
                   'tree':os.environ['TRIGGER1_SOURCE_TREE'],
                   'dirty':os.environ.get('TRIGGER1_SOURCE_DIRTY') == 'true',
+                  'git_source_identity_sha256':os.environ.get('TRIGGER1_SOURCE_IDENTITY_SHA256'),
+                  'dirty_state_sha256':os.environ.get('TRIGGER1_DIRTY_STATE_SHA256'),
               },
               'execution_surface':'SELF_HOSTED_LINUX_X64_ZERO_PROVIDER_BILLING',
               'observed_result':{

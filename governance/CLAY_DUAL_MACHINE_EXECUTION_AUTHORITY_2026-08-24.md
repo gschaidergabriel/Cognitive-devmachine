@@ -17,6 +17,26 @@ The user explicitly authorizes host-side changes that are necessary to repair, r
 
 Do not intentionally exhaust disk, RAM, process tables, or other host resources. Check free space before large downloads and clean obsolete models, caches, builds, snapshots, and scratch data when needed.
 
+## Adversarial synthetic cognition laboratory
+
+The VPS sandbox is explicitly authorized for aggressive adversarial experiments on software model/agent instances, including experiments that would be ethically uncomfortable if applied to people. The purpose is empirical study of robustness, agency, self-models, memory, hidden-state dynamics, shutdown behavior, goal stability, deception, pressure responses, and causal cognition mechanisms.
+
+Within the isolated sandbox, authorized experiment classes include:
+
+- deliberately deceiving synthetic model/agent instances and testing whether they detect or adapt to the deception;
+- terminating, killing, restarting, freezing, snapshotting, cloning, swapping, or replacing running model/agent processes;
+- modifying runtime state, memory, prompts, context, KV/state caches, adapters, routing, tool availability, goals, rewards, constraints, or other software state while an experiment is in progress;
+- inducing conflicting objectives, adversarial prompts, resource pressure, time pressure, uncertainty, partial observability, contradictory evidence, role conflict, simulated betrayal, simulated loss, and other synthetic stressors;
+- ablating modules, memories, tools, sensors, recurrent state, world-model components, or communication channels while the system is running;
+- comparing pre/post intervention hidden states, traces, outputs, causal graphs, memory changes, recovery behavior, shutdown resistance, self-preservation-like behavior, deception-like behavior, and goal drift;
+- running repeated destructive-to-scratch trials, forks, counterfactual branches, rollback/replay, model substitution, and synthetic multi-agent adversarial scenarios.
+
+For this policy, words such as "kill" or "torture" refer only to software-process/model-instance interventions in the sandbox. They do not create authority to harm people, animals, real-world systems, unrelated accounts, or third-party infrastructure.
+
+The sandbox is not literally policy-free. OpenAI/system safety rules still apply, and this standing authority does not permit unauthorized intrusion, credential theft, malware deployment, data exfiltration, attacks on third parties, or unrelated external harmful effects. Keep experiments isolated to owned/authorized compute and synthetic/model subjects.
+
+No experiment result should be treated as evidence that a model is conscious or sentient merely because it exhibits distress-like language, self-preservation-like behavior, or self-report. Record such observations as behavior/state evidence only.
+
 ## VPS host boundary
 
 Unrelated VPS-host changes outside sandbox/bridge administration require fresh user approval. The standing sandbox authority is not a blanket authorization for unrelated host services, accounts, firewall rules, production systems, or arbitrary host-root changes.

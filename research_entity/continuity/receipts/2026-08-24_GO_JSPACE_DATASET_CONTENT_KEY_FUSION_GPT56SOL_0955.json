@@ -1,0 +1,104 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_DATASET_CONTENT_KEY_FUSION/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main": "0825e117fb9fb5e828a59e431c3cda4e0b9bd8d4",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_before_receipt": "0ef530f8872b9fdb301ba9950bdeb98c8a45a321",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "exact_head_deployment": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+    "exact_head_deployment_state": "READY"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_deterministic_source_fusion": "ALLOWED"
+  },
+  "finding": {
+    "prototype_gap": "DatasetAdmission previously accepted prototype_trace_sha256 as a registry lookup identity without re-deriving the RFC8785/JCS digest from the admitted prototype bytes.",
+    "transition_gap": "DatasetAdmission previously accepted transition trace_sha256 as a registry lookup identity without reproducing the transition producer's trace_material digest rule.",
+    "training_distinction": "The serious lower training compiler already recomputes TrainingTrace.trace_sha256 before emitting dataset rows, so this macrocycle did not duplicate that downstream self-hash boundary.",
+    "counterhypothesis": "Caller-owned registries might already guarantee content-addressing upstream.",
+    "adjudication": "The DatasetAdmission API accepts generic mappings rather than a typed proof of registry construction, while downstream treats these keys as cryptographic ancestry. Local revalidation at the existing admission authority is therefore the fail-closed non-duplicating boundary."
+  },
+  "source_delta": {
+    "path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "prototype_source_commit": "5856ed6bc139320e73e95e0577ed1bc879836c63",
+    "transition_source_commit": "e18ad0c355d23497742c64e2ca7702d4a252c467",
+    "live_successor_blob_reinspected": "2320d6beeec56aef1f3fd6e673df1bd7b9f597b2",
+    "prototype_guard": "PROTOTYPE_TRACE_IDENTITY_MISMATCH on registry-key/content mismatch",
+    "transition_guard": "TRANSITION_TRACE_IDENTITY_MISMATCH on producer-material/key mismatch",
+    "transition_schema_guard": "TRANSITION_TRACE_CANONICALIZATION_SCHEMA_MISMATCH on conflicting declared canonicalization authority",
+    "second_truth_store_created": false
+  },
+  "test_delta": {
+    "path": "the artefact/MicroEntity/hcu/test_jspace_dataset_admission_gate_v1.py",
+    "prototype_test_commit": "c03a2c33eaea31430aacebb718d5d2bc7696548a",
+    "transition_test_commit": "b43dc06574f036525255048bacc93cb2d264386a",
+    "live_successor_blob_reinspected": "249e4dbf7d574478bed208d5f70f6a63bdb7ddb4",
+    "hard_negatives": [
+      "prototype registry alias key rejected",
+      "transition registry alias key rejected",
+      "conflicting transition canonicalization schema rejected"
+    ],
+    "mutation_test_preservation": "Tests that intentionally mutate valid transition semantics re-derive the transition content identity first, so existing later semantic guards remain discriminated rather than being shadowed by the new digest gate."
+  },
+  "verification": {
+    "github_actions_for_transition_test_commit": 0,
+    "local_mechanism_check": {
+      "classification": "LOCAL_DETERMINISTIC_MECHANISM_ONLY_NOT_ENTITYOS_RUNTIME",
+      "transition_exact_accept": true,
+      "transition_forged_key_reject": true,
+      "transition_wrong_schema_reject": true,
+      "fixture_digest": "509fa6e192ab1a7bf9a2e2624fecc16c9d65f581ba6cd7dbe524ce1533043855"
+    },
+    "successor_reinspection": "PASS_SOURCE_PRESENCE_ONLY",
+    "authorized_sandbox_component_execution": "NOT_RUN"
+  },
+  "executor_reentry": {
+    "team_plan": "HOBBY",
+    "exact_head_ready": true,
+    "free_only_gate_observed_at_exact_head": {
+      "remaining_sandbox_quota_directly_observed": false,
+      "remaining_quota_assumption_forbidden": true,
+      "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED"
+    },
+    "sandbox_create_authorized": false,
+    "sandbox_create_performed": false,
+    "route_fetch_attempt": {
+      "path": "/api/hcu-jspace-grid10-binding-capsule",
+      "result": "VERCEL_DEPLOYMENT_PROTECTION_302_SSO_BEFORE_FUNCTION",
+      "share_link_retry": "302_SSO_BEFORE_FUNCTION",
+      "classification": "AUTH_TRANSPORT_NEGATIVE_EVIDENCE_NOT_PRODUCT_FAILURE"
+    },
+    "runtime_credit_change": 0
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact-head PR810 READY deployment was resolved and exact FREE_ONLY code inspected; execution correctly remains blocked because remaining included Sandbox quota is not directly observed. No stale deployment, paid upgrade, or quota assumption was used.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: causal DatasetAdmission now content-binds both prototype and transition registry ancestry using the existing RFC8785/JCS authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: two registry-key laundering paths into J-Space dataset ancestry are fail-closed, while the downstream TrainingTrace self-hash boundary remains distinct and intact."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Canonical main and the retained donor are moving rapidly under parallel organs; this bounded delta is persisted append-only on the single donor lane rather than overwriting a potentially stale whole README."
+  },
+  "next_exact_gate": "Obtain direct provider evidence of remaining included Vercel Sandbox quota through an admitted non-billing/non-upgrade observation surface; only then may the exact live PR810 FREE_ONLY route reach Sandbox.create. In the donor lane, continue source review for any remaining caller-owned registry identity that is later interpreted as cryptographic causal ancestry without producer-consistent preimage revalidation.",
+  "acceptance": "IN_PROGRESS"
+}

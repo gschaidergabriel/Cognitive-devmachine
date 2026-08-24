@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Deterministic token/byte J-Space Vector Control ABI for EntityOS/HCU.
+"""Deterministic Q8 wire J-Space Vector Control ABI for EntityOS/HCU.
 
 This is an observable control codec, not hidden-state evidence and not a truth/state/effect
 authority. It converts a finite binary64 vector into a versioned q8 packet whose identity is
 RFC8785/JCS hash-bound. The packet can be reproduced by text-token SFT and by a local HCU
 runtime without claiming direct residual-stream injection.
+
+The wire ABI name is intentionally distinct from ``JSPACE_VECTOR_CONTROL_ABI/v1``, which
+canonical main already uses for a model-specific Trigger-1 source/derivation descriptor.
+The historical colliding name is not accepted as an alias by this codec.
 """
 from __future__ import annotations
 
@@ -20,7 +24,8 @@ try:
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
 
-ABI_SCHEMA = "JSPACE_VECTOR_CONTROL_ABI/v1"
+ABI_SCHEMA = "JSPACE_Q8_VECTOR_CONTROL_WIRE_ABI/v1"
+LEGACY_COLLIDING_ABI_SCHEMA = "JSPACE_VECTOR_CONTROL_ABI/v1"
 PACKET_SCHEMA = "JSPACE_VECTOR_CONTROL_PACKET/v1"
 CODEC_SCHEMA = "JSPACE_Q8_SYMMETRIC_RATIONAL/v1"
 WIRE_FORMAT = "RFC8785_JCS_JSON_UTF8"

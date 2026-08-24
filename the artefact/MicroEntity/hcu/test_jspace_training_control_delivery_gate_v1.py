@@ -135,6 +135,17 @@ class JSpaceTrainingControlDeliveryGateTests(unittest.TestCase):
             require_model_input_control_closure(_trace(condition="BASELINE"), _binding(), None)
         )
 
+    def test_baseline_can_revalidate_supplied_delivery_closure_without_temporal_claim(self):
+        closure = _closure()
+        self.assertEqual(
+            require_model_input_control_closure(
+                _trace(condition="BASELINE"),
+                _binding(),
+                closure,
+            ),
+            closure.closure_sha256,
+        )
+
     def test_non_baseline_requires_model_input_control_closure(self):
         with self.assertRaisesRegex(
             JSpaceTrainingControlDeliveryError,
@@ -142,12 +153,12 @@ class JSpaceTrainingControlDeliveryGateTests(unittest.TestCase):
         ):
             require_model_input_control_closure(_trace(condition="LESION"), _binding(), None)
 
-    def test_exact_non_baseline_delivery_closure_is_admitted(self):
-        closure = _closure()
-        self.assertEqual(
-            require_model_input_control_closure(_trace(), _binding(), closure),
-            closure.closure_sha256,
-        )
+    def test_same_step_non_baseline_delivery_closure_cannot_mint_forward_causality(self):
+        with self.assertRaisesRegex(
+            JSpaceTrainingControlDeliveryError,
+            "FORWARD_TEMPORAL_CONTROL_EDGE_REQUIRED_FOR_NON_BASELINE_TRAINING",
+        ):
+            require_model_input_control_closure(_trace(), _binding(), _closure())
 
     def test_vector_control_label_cannot_launder_different_delivered_packet(self):
         with self.assertRaisesRegex(

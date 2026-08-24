@@ -1,0 +1,40 @@
+{
+  "schema_version": "8.67",
+  "cycle": "go-20260824-free-swarm-admission-ordering",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "finding": "The new 24h FREE_ONLY swarm supervisor sources provider secret files before evaluating CLAY_FREE_ONLY_ATTESTED, while the underlying worker controller accepts provider-specific FREE attestation from environment variables and then performs live catalog/network calls. This conflicts with the active FREE_ONLY admission law requiring PAID/SUBSCRIPTION/UNKNOWN to fail closed before any secret/key lookup and before network I/O. Current clay-direct-dev inventory shows zero Groq/Mistral/NVIDIA credentials and zero provider workers, so this is a source/control boundary defect, not a new executed paid-provider breach.",
+  "evidence": {
+    "repo_head_inspected": "7daa2056ace1d19bc2e361ff2af6e7df51239671",
+    "swarm_supervisor_commit": "99c1e62ab514fb2234009702a49cab62dcf0b740",
+    "swarm_driver_commit": "db96114b9aae8c3f2c196c9842164f3e89829530",
+    "swarm_policy_commit": "35b71f72f031bc5f2e7d13bb57c404feb88287ea",
+    "measurement_dashboard_commit": "b6714100ef9ba10bfd91dc440544443b2a8fe6ab",
+    "runtime_inventory": "0 visible Groq credentials; 0 visible Mistral credentials; 0 visible NVIDIA/NGC credentials; 0 external provider workers",
+    "runtime_provider_credit": 0
+  },
+  "classification": "SOURCE_CONFIRMED_FREE_ONLY_ADMISSION_ORDERING_GAP",
+  "required_next_cycle": [
+    "Do not start external swarm workers merely because CLAY_FREE_ONLY_ATTESTED or provider-specific attestation environment variables are set.",
+    "Move FREE_ONLY cost-class/admission resolution before loading or sourcing any provider secret file and before reading provider key environment variables.",
+    "Require a typed provider admission object sourced from the active EntityOS/HCU control plane with cost_class=FREE; PAID, SUBSCRIPTION and UNKNOWN must fail closed.",
+    "Run FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 with secret-access and socket tripwires. Negative cases must prove secret_lookup_count=0 and network_attempt_count=0 for global attestation missing, provider admission missing, UNKNOWN, PAID and SUBSCRIPTION.",
+    "Only after that boundary passes may provider catalog discovery or chat requests occur. HTTP 402 remains a hard stop and cannot retroactively establish FREE status.",
+    "Preserve zero-worker inventory as the current runtime truth until an executable worker receipt exists.",
+    "Do not mint BASE, canonical semantics, Whole-EntityOS or Whole-HCU credit from swarm model consensus or architecture rankings alone.",
+    "Apply Goodman ancestry collapse to swarm workers sharing provider/model-family/orchestration ancestry."
+  ],
+  "free_only": {
+    "enabled": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "admission_boundary": "BEFORE_SECRET_OR_KEY_LOOKUP_AND_BEFORE_NETWORK_IO"
+  },
+  "promotion": {
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "canonical_semantics_promotion": false,
+    "provider_runtime_credit": 0
+  }
+}

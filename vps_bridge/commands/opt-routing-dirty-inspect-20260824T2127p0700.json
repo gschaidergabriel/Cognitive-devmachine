@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"opt-routing-dirty-inspect-20260824T2127p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -e; echo STATUS; git status --short; echo DIFFSTAT; git diff --stat -- 'free swarm/LIVE_METRICS.json' 'free swarm/README.md'; echo README_DIFF; git diff -- 'free swarm/README.md' | head -220; echo METRICS_DIFF; git diff -- 'free swarm/LIVE_METRICS.json' | head -120"
+}

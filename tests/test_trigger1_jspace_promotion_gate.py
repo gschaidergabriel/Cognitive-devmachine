@@ -48,6 +48,7 @@ def valid_candidate() -> dict:
             "method": "ACTIVATION_CONTRAST_MEAN",
             "uses_output_head_weights": False,
             "uses_holdout_data": False,
+            "uses_evaluation_output_labels": False,
             "derivation_family_id": "derivation-family",
             "derivation_receipt_sha256": HEX64,
         },
@@ -155,6 +156,17 @@ class Trigger1PromotionGateTests(unittest.TestCase):
         self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertIn(
             "VECTOR_DERIVATION_MUST_NOT_USE_HOLDOUT_DATA",
+            verdict["scientific_independence_failures"],
+        )
+
+    def test_vector_derivation_may_not_use_evaluation_output_labels(self):
+        candidate = valid_local_api_candidate()
+        candidate["vector_derivation"]["uses_evaluation_output_labels"] = True
+        verdict = gate.adjudicate(candidate)
+        self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn(
+            "VECTOR_DERIVATION_MUST_NOT_USE_EVALUATION_OUTPUT_LABELS",
             verdict["scientific_independence_failures"],
         )
 

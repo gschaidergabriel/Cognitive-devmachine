@@ -77,6 +77,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate
+          python3 -m unittest -v tests.test_trigger1_workflow_executed_source_identity
 
       - name: Execute fused nonterminal midlayer causal discriminator
         id: experiment
@@ -206,6 +207,19 @@ jobs:
               fence=json.loads(pathlib.Path(sys.argv[5]).read_text(encoding='utf-8'))
           except Exception:
               fence={'schema':'CLAY_TRIGGER1_PROVIDER_CREDENTIAL_FENCE/v1','status':'MISSING'}
+          executed_head=os.environ.get('TRIGGER1_SOURCE_HEAD')
+          executed_tree=os.environ.get('TRIGGER1_SOURCE_TREE')
+          executed_dirty=os.environ.get('TRIGGER1_SOURCE_DIRTY')
+          if executed_dirty != 'false':
+              raise SystemExit('EXECUTED_SOURCE_DIRTY_BEFORE_INTERVENTION')
+          source=result.get('source') if isinstance(result.get('source'),dict) else None
+          source_result_identity_verified=False
+          if source is not None:
+              if source.get('repo_head') != executed_head:
+                  raise SystemExit('EXECUTED_SOURCE_HEAD_MISMATCH')
+              if source.get('repo_tree') != executed_tree:
+                  raise SystemExit('EXECUTED_SOURCE_TREE_MISMATCH')
+              source_result_identity_verified=True
           runtime=result.get('runtime_manifest') if isinstance(result.get('runtime_manifest'),dict) else {}
           runtime.pop('python_executable',None)
           result.pop('snapshot_path',None)
@@ -217,10 +231,15 @@ jobs:
               'provider_credential_fence':fence,
               'source_claim_external_provider_credentials_read':result.get('external_provider_credentials_read'),
               'source_claim_promoted_without_fence':False,
+              'source_result_identity_verified':source_result_identity_verified,
               'github_actions':{
                   'run_id':os.environ.get('GITHUB_RUN_ID'),
                   'run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
-                  'head_sha':os.environ.get('GITHUB_SHA'),
+                  'head_sha':executed_head,
+                  'executed_tree_sha':executed_tree,
+                  'executed_source_dirty':False,
+                  'dispatch_event_sha':os.environ.get('GITHUB_SHA'),
+                  'lease_claim_observed_main':os.environ.get('TRIGGER1_CLAIM_OBSERVED_MAIN'),
                   'issue_number':int('${{ github.event.issue.number }}'),
                   'process_exit_code':int(sys.argv[4]),
                   'runner_environment':'SELF_HOSTED_LINUX_X64',

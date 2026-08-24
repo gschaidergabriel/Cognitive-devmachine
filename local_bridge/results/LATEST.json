@@ -1,15 +1,15 @@
 {
   "schema": "CLAY_LOCAL_RECEIPT/v1",
-  "command_id": "vps-host-vault-presence-20260824T1715",
-  "command_sha256": "5699442510791bb9c9ef0b6b3b4e9499b96573a3b92ba556114ada8814258304",
-  "started_at": "2026-08-24T09:51:59.255991+00:00",
-  "finished_at": "2026-08-24T09:52:02.957360+00:00",
+  "command_id": "refresh-free-swarm-dashboard-20260824T1717",
+  "command_sha256": "e46ae6668fbf6eba2709319c5dc794f3d4685edc5e61825ed24a8eca777c9e5f",
+  "started_at": "2026-08-24T09:52:59.267282+00:00",
+  "finished_at": "2026-08-24T09:53:08.761738+00:00",
   "status": "PASS",
   "exit_code": 0,
   "op": "exec",
-  "stdout_sha256": "fea62ba0f9903c0b3a1a4c30e47831fe0551a52863efa7f64e37976119095bcf",
+  "stdout_sha256": "80bfd5a06565b0658149201714846a875d625cba4308c23fa6f046231787a696",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "/etc/entityos/tresor exists=no\n/etc/clayverse/freie-zugaenge.env exists=no\n/etc/clayverse/keys.env exists=no\n/etc/clayverse/github-token.env exists=no\n",
+  "stdout_tail": "active\nAug 24 09:47:19 srv1563149 clay-free-swarm-publisher[70593]: [main 0c31a130a] metrics: autonomous Free Swarm refresh\nAug 24 09:47:19 srv1563149 clay-free-swarm-publisher[70593]:  2 files changed, 71 insertions(+)\nAug 24 09:47:19 srv1563149 clay-free-swarm-publisher[70593]:  create mode 100644 free swarm/LIVE_METRICS.json\nAug 24 09:47:21 srv1563149 clay-free-swarm-publisher[70635]: To github.com:gschaidergabriel/clay-global-research-entity.git\nAug 24 09:47:21 srv1563149 clay-free-swarm-publisher[70635]:    4bae928b9..0c31a130a  HEAD -> main\nAug 24 09:53:02 srv1563149 systemd[6766]: Stopping clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher...\nAug 24 09:53:02 srv1563149 systemd[6766]: Stopped clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.\nAug 24 09:53:02 srv1563149 systemd[6766]: clay-free-swarm-publisher.service: Consumed 1.494s CPU time, 16.7M memory peak, 0B memory swap peak.\nAug 24 09:53:02 srv1563149 systemd[6766]: Started clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.\nAug 24 09:53:03 srv1563149 clay-free-swarm-publisher[77511]: From github.com:gschaidergabriel/clay-global-research-entity\nAug 24 09:53:03 srv1563149 clay-free-swarm-publisher[77511]:  * branch                main       -> FETCH_HEAD\nAug 24 09:53:03 srv1563149 clay-free-swarm-publisher[77511]:    0c31a130a..80c00b0ca  main       -> origin/main\nAug 24 09:53:03 srv1563149 clay-free-swarm-publisher[77564]: Reset branch 'main'\nAug 24 09:53:03 srv1563149 clay-free-swarm-publisher[77564]: branch 'main' set up to track 'origin/main'.\nAug 24 09:53:03 srv1563149 clay-free-swarm-publisher[77564]: Your branch is up to date with 'origin/main'.\nAug 24 09:53:03 srv1563149 clay-free-swarm-publisher[77605]: HEAD is now at 80c00b0ca research: adapt Free Swarm request budgets to provider limits\nAug 24 09:53:05 srv1563149 clay-free-swarm-publisher[77629]: [main 2ac363789] metrics: autonomous Free Swarm refresh\nAug 24 09:53:05 srv1563149 clay-free-swarm-publisher[77629]:  2 files changed, 232 insertions(+), 28 deletions(-)\nAug 24 09:53:07 srv1563149 clay-free-swarm-publisher[77671]: To github.com:gschaidergabriel/clay-global-research-entity.git\nAug 24 09:53:07 srv1563149 clay-free-swarm-publisher[77671]:    80c00b0ca..2ac363789  HEAD -> main\n",
   "stderr_tail": "",
   "meta": {
     "cwd": "/home/ai-core-node"

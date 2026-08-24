@@ -7,7 +7,8 @@
   "product": "EntityOS",
   "architecture": "HCU",
   "mode": "FREE_ONLY",
-  "canonical_main_observed": "16fcc38e31188322c953474b6b9e9db4bf8a170f",
+  "canonical_main_first_observed": "16fcc38e31188322c953474b6b9e9db4bf8a170f",
+  "canonical_main_reentered_after_write": "f7fa8212e633f88b590cb9bb6968505b59eaef7d",
   "supervisor_inbox_epoch_observed": "8.72",
   "observed": {
     "program_state_epoch": "8.72",
@@ -26,29 +27,39 @@
     "identity_guard_run": 32742535479,
     "identity_guard_conclusion": "failure",
     "identity_guard_steps": null,
-    "identity_guard_classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_SEMANTIC_PRODUCT_FAILURE"
+    "identity_guard_classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_SEMANTIC_PRODUCT_FAILURE",
+    "parallel_main_advances_after_first_reentry": [
+      {
+        "commit": "8b6f695f12ba3577165e76d53e138077d56892d3",
+        "finding": "Trigger1 V2 owner dispatcher now requires an already-created canonical atomic go lease before the midlayer intervention and records a create-once result sidecar."
+      },
+      {
+        "commit": "f7fa8212e633f88b590cb9bb6968505b59eaef7d",
+        "finding": "Local Qwen terminal/intermediate execution now passes through a clean-source attestation envelope binding Git HEAD/tree/dirty-state, executor, Python executable, result and original runtime receipt identity."
+      }
+    ]
   },
   "delta": {
     "bootstrap_minimal_epoch_after_delta": "8.72",
     "bootstrap_minimal_authority_pointer_after_delta": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
-    "frontier_sync": "8.72 forge/distillery conversion plus provider-independent local Qwen3-0.6B nonterminal midlayer causal discriminator",
+    "frontier_sync": "8.72 Forge/Distillery conversion plus lease-gated source-attested provider-independent local Qwen3-0.6B midlayer causal discriminator",
     "artefact_readme_updated": true
   },
   "go_tracks": {
     "track_a": "ADVANCED_BOOTSTRAP_AUTHORITY_AND_CURRENT_FRONTIER_SYNC",
-    "track_b": "HCU_NO_CHANGE_WITH_REASON_EXISTING_TYPED_ENTRY_HCU_SOURCE_PATH_PRESENT_STRONGEST_OPEN_GATE_IS_RUNTIME_EVIDENCE_NOT_SECOND_SOURCE_AUTHORITY",
-    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON_NONTERMINAL_QWEN06_MIDLAYER_SIX_CONTROL_PATH_ALREADY_SOURCE_READY_TERMINAL_RUNTIME_RECEIPT_MISSING"
+    "track_b": "ADVANCED_BY_REENTERED_CURRENT_MAIN_SOURCE_ATTESTATION_AND_CANONICAL_LEASE_BINDINGS_WITHOUT_SECOND_HCU_OR_TYPED_ENTRY_AUTHORITY",
+    "track_c": "ADVANCED_BY_REENTERED_CURRENT_MAIN_LEASE_GATED_SOURCE_ATTESTED_QWEN06_MIDLAYER_EXECUTION_ENVELOPE; TERMINAL_MODEL_RUNTIME_RECEIPT_STILL_MISSING"
   },
   "coordination": {
-    "shared_reproducible_macrocycle_identity_available": false,
-    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
-    "new_unusual_experiments_run": 0,
+    "shared_reproducible_macrocycle_identity_available_to_this_organ": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT_BY_THIS_ORGAN",
+    "new_unusual_experiments_run_by_this_organ": 0,
     "duplicate_runtime_lane_created": false
   },
   "execution": {
-    "provider_calls": 0,
-    "together_calls": 0,
-    "paid_execution": 0,
+    "provider_calls_by_this_organ": 0,
+    "together_calls_by_this_organ": 0,
+    "paid_execution_by_this_organ": 0,
     "local_or_vps_runtime_executed_by_this_organ": false
   },
   "credits_after": {
@@ -59,5 +70,5 @@
     "training": 0,
     "whole_product_pass": false
   },
-  "next_exact_action": "Observe terminal repository-bound result of PR1619 run 32742535392; if still queued, observe the retained owner Qwen midlayer dispatch result without creating duplicate execution lanes. Only measured failure should trigger source repair."
+  "next_exact_action": "Observe terminal repository-bound result of PR1619 run 32742535392 and the retained lease-admitted source-attested Qwen midlayer runtime lane. Only measured terminal failure should trigger another source repair; do not create duplicate execution lanes."
 }

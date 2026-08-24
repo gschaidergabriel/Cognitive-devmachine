@@ -2,9 +2,14 @@
 """Route/credential-level FREE_ONLY economic provenance for the autonomous swarm.
 
 The provider admission file grants owner-authorized access to free contingents.
-This module is the narrower runtime gate required by supervisor epoch 8.70: a
+This module is the narrower runtime gate required by supervisor epoch 8.71: a
 concrete credential fingerprint + endpoint + model/route must have zero-cost/free
 provider-side evidence before an autonomous network call is allowed.
+
+Provider-global availability statements, provider labels, successful responses and
+credential presence are not concrete economic entitlement proof. Where a credential
+could reach paid capacity, the concrete credential must be bound to fresh provider-side
+evidence before network I/O.
 """
 from __future__ import annotations
 
@@ -20,8 +25,10 @@ PROVENANCE_PATH = ROOT / "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.js
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
 DEFAULT_ARTIFACTS = Path("/artifacts/clay-entityos-swarm")
 RECEIPT_SCHEMA = "FREE_LANE_EXECUTION_RECEIPT/v1"
+NVIDIA_ENTITLEMENT_SCHEMA = "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT/v1"
 ADMISSION_SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
 PROVENANCE_SCHEMA = "ENTITYOS_HCU_FREE_LANE_ECONOMIC_PROVENANCE/v1"
+_MAX_CLOCK_SKEW_SECONDS = 300
 
 
 def _json_snapshot(path: Path) -> tuple[dict[str, Any], str]:
@@ -44,6 +51,30 @@ def _int_header(headers: dict[str, Any], key: str) -> int | None:
         return int(str(raw).strip())
     except (TypeError, ValueError):
         return None
+
+
+def _sha256_text(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    value = value.strip().lower()
+    if len(value) != 64 or any(ch not in "0123456789abcdef" for ch in value):
+        return None
+    return value
+
+
+def _utc_timestamp(value: Any) -> dt.datetime | None:
+    if not isinstance(value, str) or not value.strip():
+        return None
+    text = value.strip()
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        parsed = dt.datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return None
+    return parsed.astimezone(dt.timezone.utc)
 
 
 def _iter_worker_rows(artifacts: Path):
@@ -90,6 +121,80 @@ def _groq_historical_free_match(
     return newest
 
 
+def _nvidia_credential_entitlement(
+    *,
+    record: dict[str, Any],
+    credential_fingerprint: str,
+    model_or_route: str,
+    endpoint_host: str,
+    now: dt.datetime | None = None,
+) -> dict[str, Any] | None:
+    """Return one fresh exact NVIDIA credential entitlement or fail closed.
+
+    Historical fingerprint allowlists are deliberately ignored: a fingerprint is
+    identity, not provider-side proof that the credential is currently covered by
+    a free Developer Program / hosted-NIM entitlement.
+    """
+    rows = record.get("credential_entitlements")
+    if not isinstance(rows, dict):
+        return None
+    bound = rows.get(credential_fingerprint)
+    if not isinstance(bound, dict):
+        return None
+    if bound.get("schema") != NVIDIA_ENTITLEMENT_SCHEMA:
+        return None
+    if bound.get("provider") != "nvidia":
+        return None
+    if bound.get("credential_fingerprint") != credential_fingerprint:
+        return None
+    if bound.get("endpoint_host") != endpoint_host:
+        return None
+    if bound.get("provider_side_zero_cost_confirmed") is not True:
+        return None
+
+    evidence_ref = bound.get("evidence_ref")
+    evidence_digest = _sha256_text(bound.get("entitlement_evidence_digest"))
+    if not isinstance(evidence_ref, str) or not evidence_ref.strip() or evidence_digest is None:
+        return None
+
+    observed_at = _utc_timestamp(bound.get("observed_at"))
+    valid_until = _utc_timestamp(bound.get("valid_until"))
+    if observed_at is None or valid_until is None or valid_until <= observed_at:
+        return None
+
+    max_age = record.get("max_entitlement_age_seconds", 3600)
+    if isinstance(max_age, bool) or not isinstance(max_age, int) or max_age <= 0:
+        return None
+    max_age = min(max_age, 24 * 3600)
+    current = (now or dt.datetime.now(dt.timezone.utc)).astimezone(dt.timezone.utc)
+    if observed_at > current + dt.timedelta(seconds=_MAX_CLOCK_SKEW_SECONDS):
+        return None
+    if current > valid_until:
+        return None
+    if (current - observed_at).total_seconds() > max_age:
+        return None
+
+    allowed_models = bound.get("allowed_models")
+    if not isinstance(allowed_models, list) or model_or_route not in {
+        str(item).strip() for item in allowed_models if isinstance(item, str) and item.strip()
+    }:
+        return None
+
+    return {
+        "schema": NVIDIA_ENTITLEMENT_SCHEMA,
+        "provider": "nvidia",
+        "credential_fingerprint": credential_fingerprint,
+        "endpoint_host": endpoint_host,
+        "model_or_route": model_or_route,
+        "evidence_ref": evidence_ref.strip(),
+        "entitlement_evidence_digest": evidence_digest,
+        "observed_at": observed_at.isoformat(),
+        "valid_until": valid_until.isoformat(),
+        "account_scope": bound.get("account_scope"),
+        "kind": "EXACT_CREDENTIAL_PROVIDER_SIDE_ZERO_COST_BINDING",
+    }
+
+
 def _lane_evidence_from_provenance(
     prov: dict[str, Any],
     provider: str,
@@ -102,7 +207,8 @@ def _lane_evidence_from_provenance(
     record = ((prov.get("providers") or {}).get(provider) or {})
     if not record:
         return {"ok": False, "reason": "PROVIDER_NOT_IN_ECONOMIC_PROVENANCE"}
-    if _host(endpoint) != str(record.get("allowed_endpoint_host") or ""):
+    endpoint_host = _host(endpoint)
+    if endpoint_host != str(record.get("allowed_endpoint_host") or ""):
         return {"ok": False, "reason": "ENDPOINT_NOT_ZERO_COST_BOUND"}
 
     if provider == "openrouter":
@@ -117,14 +223,13 @@ def _lane_evidence_from_provenance(
         }
 
     if provider == "nvidia":
-        # NVIDIA documents free hosted NIM prototyping for Developer Program
-        # members, but the public provider statement does not prove that an
-        # arbitrary credential belongs to that free entitlement.  A provider
-        # hostname plus an unbound fingerprint therefore cannot self-admit.
-        bound = record.get("admitted_credential_fingerprints")
-        if not isinstance(bound, list) or credential_fingerprint not in {
-            str(item).strip() for item in bound if str(item).strip()
-        }:
+        bound = _nvidia_credential_entitlement(
+            record=record,
+            credential_fingerprint=credential_fingerprint,
+            model_or_route=model_or_route,
+            endpoint_host=endpoint_host,
+        )
+        if not bound:
             return {
                 "ok": False,
                 "reason": "NVIDIA_CREDENTIAL_DEVELOPER_FREE_ENTITLEMENT_NOT_BOUND",
@@ -133,10 +238,10 @@ def _lane_evidence_from_provenance(
             "ok": True,
             "kind": record.get("evidence_kind"),
             "source": record.get("source"),
-            "endpoint_host": _host(endpoint),
+            "endpoint_host": endpoint_host,
             "scope": record.get("scope"),
-            "credential_fingerprint": credential_fingerprint,
-            "assertion": "BOUND_CREDENTIAL_NVIDIA_DEVELOPER_FREE_NIM_PROTOTYPING_ONLY",
+            "credential_binding": bound,
+            "assertion": "EXACT_NVIDIA_CREDENTIAL_BOUND_TO_FRESH_PROVIDER_SIDE_FREE_NIM_ENTITLEMENT",
         }
 
     if provider == "groq":
